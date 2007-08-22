@@ -108,6 +108,18 @@ color:#ccc;
 
 
 
+---++ vCard
+
+%STARTSECTION{"vcard"}%%SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="begin:vcard
+fn:$formfield(FirstName) $formfield(LastName)
+n:$formfield(LastName);$formfield(FirstName)
+tel;type=work:$formfield(WorkPhone)
+tel;type=cell:$formfield(WorkPhoneMobile)
+email;type=WORK:$formfield(WorkEmail)
+end:vcard"}%%ENDSECTION{"vcard"}%
+
+
+
 ---++ directSearch
 
 <verbatim>
@@ -263,9 +275,13 @@ margin:1em 0;
 #pISearchResultsGrid .pIimage {
 text-align:center;
 display:block;
+%IF{"defined imgWidth" then="width:%imgWidth%px;"}%%IF{"defined imgHeight" then="height:%imgHeight%px;"}%
 }
-#pISearchResultsGrid .pIimage img {%IF{"defined imgWidth" then="width:%imgWidth%px;"}%%IF{"defined imgHeight" then="height:%imgHeight%px;"}%
+#pISearchResultsGrid .pIimage img {
 text-align:center;
+}
+.pISearchResultsGridItem {
+overflow:hidden;
 }
 a.pISearchResultsGridItem {
 display:block;
@@ -284,14 +300,17 @@ border-color:#eee;
 border-color:#d6000f;
 background-color:transparent;
 }
-.pISearchResultsGridInfo {
-display:block;
+p.pISearchResultsGridInfo {
 text-align:center;
+margin:.5em 0 0 0;
 color:#06c; /* link color */
+%IF{"defined imgWidth" then="width:%imgWidth%px;"}%
+line-height:100%;
+height:2.25em; /* allow 2 lines */
+overflow:hidden;
 }
 </style>
-<div id="pISearchResultsGrid">
-%SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" order="formfield(FirstName)" format="<a href='%SCRIPTURL{view}%/$web/$topic' class='pISearchResultsGridItem' id='pISearch$topic' title='$formfield(FirstName) $formfield(LastName)'><span class='pIimage'>$percntINCLUDE{$quotLayoutModules$quot section=$quotimage$quot imgType=$quotnolink$quot imgWeb=$quot$web$quot imgTopic=$quot$topic$quot imgHeight=$quot%imgHeight%$quot imgTitle=$quot$formfield(FirstName) $formfield(LastName)$quot imgName=$quot$percntFORMFIELD{$quotPicture$quot topic=$quot$web.$topic$quot format=$quot$value$quot default=$quot$quot alttext=$quot$quot}$percnt$quot}$percnt</span><span class='pISearchResultsGridInfo'>$formfield(FirstName) $formfield(LastName)</span></a>" "}%<br class="twikiClear" /></div>%ENDSECTION{"pictures"}%
+<div id="pISearchResultsGrid">%SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,PersonalInfoFaceBook,TWikiContributor,TWikiGuest,UnknownUser%IF{'defined exclude' then=',%exclude%'}%" order="topic" format="<a href='%SCRIPTURL{view}%/$web/$topic' class='pISearchResultsGridItem' id='pISearch$topic' title='$formfield(FirstName) $formfield(LastName)'><span class='pIimage'>$percntINCLUDE{$quotLayoutModules$quot section=$quotLBimage$quot imgType=$quotnolink$quot imgWeb=$quot$web$quot imgTopic=$quot$topic$quot imgHeight=$quot%imgHeight%$quot imgTitle=$quot$formfield(FirstName) $formfield(LastName)$quot imgName=$quot$percntFORMFIELD{$quotPicture$quot topic=$quot$web.$topic$quot format=$quot$value$quot default=$quot$quot alttext=$quot$quot}$percnt$quot}$percnt</span><p class='pISearchResultsGridInfo'>$formfield(FirstName) $formfield(LastName)</p></a>" "}%<br class="twikiClear" /></div>%ENDSECTION{"pictures"}%
 
 
 
@@ -300,9 +319,10 @@ color:#06c; /* link color */
 <verbatim>
 %STARTSECTION{"pictureFilterSearch"}%%IF{"context AttachContentPluginEnabled" then='%INCLUDE{"PersonalInfo" section="directSearchScriptFile"}%' else='%INCLUDE{"PersonalInfo" section="directSearchScript" raw="on" literal="on"}%'}%<script language="javascript" type="text/javascript">
 // <![CDATA[
+var MAX_RESULTS=%IF{"defined maxresults" then="%maxresults%" else="12"}%;
+pISearch.pictureSet = {};
 pISearch.initSearch = function() {
 	MAX_RESULTS = -1;
-	pISearch.pictureSet = {};
 	var pictureElems = document.getElementById('pISearchResultsGrid').getElementsByTagName('a');
 	var i=0;
 	while ( i < userData.length) {
@@ -314,20 +334,29 @@ pISearch.initSearch = function() {
 	}
 }
 pISearch.startSearch = function() {
+	if (pISearch.pictureSet == null) return;
 	for (var s in pISearch.pictureSet) {
-		pISearch.pictureSet[s].style.display = 'none';
+		if (pISearch.pictureSet[s] != null) {
+			pISearch.pictureSet[s].style.display = 'none';
+		}
 	}
 }
 pISearch.processZeroResults = function() {
+	if (pISearch.pictureSet == null) return;
 	for (var s in pISearch.pictureSet) {
-		pISearch.pictureSet[s].style.display = 'inline';
+		if (pISearch.pictureSet[s] != null) {
+			pISearch.pictureSet[s].style.display = 'inline';
+		}
 	}
 }
 pISearch.endSearch = function() {}
 pISearch.processResult = function(inName, inUserData) {
+	if (pISearch.pictureSet == null) return;
 	var re = new RegExp(/(.*?)\//g);
 	var topic = inUserData.topic.replace(re, "");
-	pISearch.pictureSet[topic].style.display = 'inline';
+	if (pISearch.pictureSet[topic] != null) {
+		pISearch.pictureSet[topic].style.display = 'inline';
+	}
 }
 twiki.Event.addLoadEvent(pISearch.initSearch);
 // ]]>
