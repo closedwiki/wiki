@@ -220,12 +220,13 @@ sub test_render_for_edit {
     my $formDef = new TWiki::Form(
         $this->{twiki}, $this->{test_web}, "InitializationForm" );
     my $res = $formDef->renderForEdit($this->{test_web}, $testtopic1, $meta);
-    $this->assert_html_equals(<<'HERE', $res);
+
+my $expected = <<'HERE'
 <div class="twikiForm twikiEditForm">
 <table class="twikiFormTable">
  <tr>
   <th class="twikiFormTableHRow" colspan="2">
-   <a rel="nofollow" target="InitializationForm" href="/MAIN/bin/view/TemporaryRenderFormTestsTestWebRenderFormTests/InitializationForm" title="Click to see details in separate window" onclick="return launchWindow(&quot;TemporaryRenderFormTestsTestWebRenderFormTests&quot;,&quot;InitializationForm&quot;)">TemporaryRenderFormTestsTestWebRenderFormTests.InitializationForm</a>
+   <a rel="nofollow" target="InitializationForm" href="%SCRIPTURLPATH%/view/TemporaryRenderFormTestsTestWebRenderFormTests/InitializationForm" title="Click to see details in separate window" onclick="return launchWindow(&quot;TemporaryRenderFormTestsTestWebRenderFormTests&quot;,&quot;InitializationForm&quot;)">TemporaryRenderFormTestsTestWebRenderFormTests.InitializationForm</a>
    <input type="submit" name="action_replaceform" value='Replace form...' class="twikiChangeFormButton twikiButton" />
   </th>
  </tr>
@@ -302,7 +303,11 @@ Defect
  </tr>
 </table>
 </div>
-HERE
+HERE;
+
+    my $cgiBinUrl = $TWiki::cfg{ScriptUrlPath};
+    $expected =~ s/%SCRIPTURLPATH%/$cgiBinUrl/e;
+    $this->assert_html_equals($expected, $res);
 }
 
 sub test_render_hidden {
