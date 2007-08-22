@@ -17,7 +17,7 @@ unless ( -e 'MAIN' ) {
    print STDERR "using existing checkout, removing ? files";
    chdir('MAIN');
    `svn status | grep ? | sed 's/?/rm -r/' | sh`;
-   `svn up`;
+   `svn up > checkouMAIN.log`;
 }
 
 my $twikihome = `pwd`;
@@ -43,11 +43,16 @@ close(LS);
 #run unit tests
 #TODO: testrunner should exit == 0 if no errors?
 chdir('test/unit');
-my $unitTests = "export TWIKI_LIBS=; export TWIKI_HOME=$twikihome;perl ../bin/TestRunner.pl -clean TWikiSuite.pm 2&> ../../../unittestMAIN.log";
+my $unitTests = "export TWIKI_LIBS=; export TWIKI_HOME=$twikihome;perl ../bin/TestRunner.pl -clean TWikiSuite.pm 2>1 > ../../../unittestMAIN.log";
 my $return = `$unitTests`;
 my $errorcode = $? >> 8;
 unless ($errorcode == 0) {
-#    `mail -s 'TWiki MAIN branch Unit test FAILURES' twiki-dev@home.org.au <  ../../../unittestMAIN.log`;
+    open(UNIT, '../../../unittestMAIN.log');
+    local $/ = undef;
+    my $unittestErrors = <UNIT>;
+    close(UNIT);
+    
+    sendEmail("Subject: TWiki MAIN branch has Unit test FAILURES\n".$unittestErrors);
     die "\n\n$errorcode: unit test failures - need to fix them first\n" 
 }
 
@@ -94,5 +99,25 @@ sub getLocalSite {
    $localsite =~ s|# \$TWiki|\$TWiki|g;
 
    return $localsite;
+}
+
+#Yes, this email setup only works for Sven - will look at re-using the .settings file CC made for BuildContrib
+sub sendEmail {
+    my $text = shift;
+    use Net::SMTP;
+    my $twikiDev = 'twiki-dev@lists.sourceforge.net';
+
+    my $smtp = Net::SMTP->new('mail.iinet.net.au', Hello=>'sven.home.org.au', Debug=>0);
+
+    $smtp->mail('SvenDowideit@WikiRing.com');
+    $smtp->to($twikiDev);
+
+    $smtp->data();
+    $smtp->datasend("To: $twikiDev\n");
+    $smtp->datasend("\n");
+    $smtp->datasend($text);
+    $smtp->dataend();
+
+    $smtp->quit;
 }
 1;
