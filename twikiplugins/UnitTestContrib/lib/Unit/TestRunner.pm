@@ -64,7 +64,7 @@ sub start {
         print "$passes of ",$passes + scalar(@{$this->{failures}})," test cases passed\n";
         return scalar(@{$this->{failures}});
     } else {
-        print "All tests passed\n";
+        print "All tests passed ($passes)\n";
 	return 0;
     }
 }
