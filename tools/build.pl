@@ -264,7 +264,10 @@ sub stage_rcsfiles() {
     #foreach file in data|pub in tmpDir, cp ,v file from svnCo 
     #do a ci
     #if there was no existing ,v file, make one and ci
-    my $lastReleaseDir = $this->{tmpDir}.'/lastRel'.($$ +1);
+    #my $lastReleaseDir = $this->{tmpDir}.'/lastRel'.($$ +1);
+    #TODO: too unixy - but I'd like to stop checking out the entire release every nightly build
+    #TODO: verify that this is an unadulterated version of the checkout
+    my $lastReleaseDir = '/tmp/'.$this->{lastName};
 
     $this->makepath($lastReleaseDir);
     $this->pushd($lastReleaseDir);

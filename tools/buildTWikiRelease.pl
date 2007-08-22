@@ -43,13 +43,16 @@ close(LS);
 #run unit tests
 #TODO: testrunner should exit == 0 if no errors?
 chdir('test/unit');
-my $unitTests = "export TWIKI_LIBS=; export TWIKI_HOME=$twikihome;perl ../bin/TestRunner.pl -clean TWikiSuite.pm > ../../unittestMAIN.log";
+my $unitTests = "export TWIKI_LIBS=; export TWIKI_HOME=$twikihome;perl ../bin/TestRunner.pl -clean TWikiSuite.pm 2&> ../../../unittestMAIN.log";
 my $return = `$unitTests`;
 my $errorcode = $? >> 8;
-die "\n\n$errorcode: unit test failures - need to fix them first\n" unless ($errorcode == 0);
+unless ($errorcode == 0) {
+#    `mail -s 'TWiki MAIN branch Unit test FAILURES' twiki-dev@home.org.au <  ../../../unittestMAIN.log`;
+    die "\n\n$errorcode: unit test failures - need to fix them first\n" 
+}
 
 chdir($twikihome);
-#`perl tools/MemoryCycleTests.pl > memoryCycleTests.log`;
+#`perl tools/MemoryCycleTests.pl > ../memoryCycleTests.log`;
 #`cd tools; perl check_manifest.pl`;
 #`cd data; grep '%META:TOPICINFO{' */*.txt | grep -v TestCases | grep -v 'author="TWikiContributor".*version="\$Rev'`;
 
