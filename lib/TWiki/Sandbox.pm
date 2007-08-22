@@ -179,33 +179,60 @@ file names to legal server names.
 =cut
 
 sub sanitizeAttachmentName {
-    my $fileName = shift;		# Full pathname if browser is IE
+    my $fileName = shift;
     
-    # Homegrown split equivalent because File::Spec functions will assume that
-    # directory path is using / in UNIX and \ in Windows as defined in the HOST
-    # environment.  And we don't know the client OS. Problem is specific to IE
-    # which sends the full original client path when you upload files. See
-    # Item2859 and Item2225 before trying again to use File::Spec functions and
-    # remember to test with IE.  
-    $fileName =~ s{[\\/]+$}{};		# Get rid of trailing slash/backslash (unlikely)
-    $fileName =~ s!^.*[\\/]!!;		# Get rid of directory part
+    # homegrown split because File::Spec functions will assume that directory path
+    # is using / in UNIX and \ in Windows as defined in the HOST environment.
+    # And we don't know the client OS. Problem is specific to IE which sends the full
+    # original client path when you upload files. See Item2859 and Item2225 before
+    # trying again to use File::Spec functions and remember to test with IE.
+    # Cut path from filepath name (Windows '\' and Unix "/" format)
+    my @pathz = ( split( /\\/, $fileName ) );
+    my $filetemp = $pathz[$#pathz];
+    my @pathza = ( split( '/', $filetemp ) );
+    $filetemp = $pathza[$#pathza];
 
     my $origName = $fileName;
+    # Change spaces to underscore
+    $fileName =~ s/ /_/go;
+    # Strip dots and slashes at start
+    # untaint at the same time
+    $fileName =~ s/^([\.\/\\]*)*(.*?)$/$2/go;
 
-    if ( $TWiki::cfg{UseLocale} ) {
-	# Filter out (less secure) only if using locales
-	# TODO: Make this use filtering in, using locales or full Codev.UnicodeSupport
-	$fileName =~ s/$TWiki::cfg{NameFilter}//goi;
-    } else {
-    	# No I18N, so just filter in alphanumeric etc 
-	$fileName =~ s/$TWiki::regex{filenameInvalidCharRegex}//g;
+    # If in iso8859 surroundings and Unicode::Normalize is available, let's get rid of 8-bit chars in filenames
+    if ( defined  $TWiki::cfg{Site}{CharSet} &&
+           $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?15?$/i ) {
+        if( $] >= 5.008 && eval { require Unicode::Normalize } ) {
+            require Encode;
+            eval 'use Unicode::Normalize';
+            # Some normalizations need to be intercepted early
+            $fileName =~ s/\xc4/AE/g;
+            $fileName =~ s/\xc5/AA/g;
+            $fileName =~ s/\xd6/OE/g;
+            $fileName =~ s/\xdc/UE/g;
+            $fileName =~ s/\xe4/ae/g;
+            $fileName =~ s/\xe5/aa/g;
+            $fileName =~ s/\xf6/oe/g;
+            $fileName =~ s/\xfc/ue/g;
+            #  convert to Unicode
+            $fileName = NFD( $fileName );  # decompose (Unicode Normalization Form D)
+            $fileName =~ s/\pM//g;         # strip combining characters
+            # normalizations, Latin-1
+            $fileName =~ s/\x{00c6}/AE/g;
+            $fileName =~ s/\x{00d8}/OE/g;
+            $fileName =~ s/\x{00df}/ss/g;
+            $fileName =~ s/\x{00e6}/ae/g;
+            $fileName =~ s/\x{00f8}/oe/g;
+            $fileName =~ s/\x{0152}/OE/g;
+            $fileName =~ s/\x{0153}/ae/g;
+            # clear everything left that is 8-bit
+            $fileName =~ s/[^\0-\x80]//g;
+        }
     }
-
+    # Remove problematic chars
+    $fileName =~ s/$TWiki::cfg{NameFilter}//goi;
     # Append .txt to some files
     $fileName =~ s/$TWiki::cfg{UploadFilter}/$1\.txt/goi;
-    
-    # Untaint
-    $fileName = untaintUnchecked($fileName);
 
     return ($fileName, $origName);
 }
