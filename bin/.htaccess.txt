@@ -92,6 +92,6 @@ Options ExecCGI FollowSymLinks
 # They do their own validation of the user and therefore
 # should not use "require valid-user"
 
-<FilesMatch "(attach|edit|manage|rename|save|upload|mail|logon|.*auth).*">
+<FilesMatch "(attach|edit|manage|rename|save|upload|mail|logon|rest|.*auth).*">
        require valid-user
 </FilesMatch>

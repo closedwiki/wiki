@@ -81,7 +81,7 @@ BrowserMatchNoCase ^$ blockAccess
 # When using Apache type login the following defines the TWiki scripts
 # that makes Apache ask the browser to authenticate. It is correct that
 # scripts such as view are not authenticated. (un-comment to activate)
-#<FilesMatch "(attach|edit|manage|rename|save|upload|mail|logon|.*auth).*">
+#<FilesMatch "(attach|edit|manage|rename|save|upload|mail|logon|rest|.*auth).*">
 #	require valid-user
 #</FilesMatch>
 
