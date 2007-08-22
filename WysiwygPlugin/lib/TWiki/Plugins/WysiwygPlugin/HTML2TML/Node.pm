@@ -172,7 +172,8 @@ sub rootGenerate {
             $protect--;
             next;
         }
-my $before = $tml;
+        #my $before = $tml;
+
         # isolate whitespace checks and convert to $NBSP
         $tml =~ s/$WC::CHECKw$WC::CHECKw+/$WC::CHECKw/go;
         $tml =~ s/(?<=[$WC::CHECKn$WC::CHECKs$WC::NBSP $WC::TAB$WC::NBBR])$WC::CHECKw//go;
@@ -237,7 +238,8 @@ my $before = $tml;
 
         $tml =~ s/$WC::CHECK1/ /go;
         $tml =~ s/$WC::CHECK2/ /go;
-        #print STDERR WC::debugEncode($before)," -> '",WC::debugEncode($tml),"'\n";
+        #print STDERR WC::debugEncode($before);
+        #print STDERR " -> '",WC::debugEncode($tml),"'\n";
         $text .= $tml;
     }
     # Top and tail, and terminate with a single newline
@@ -752,11 +754,11 @@ sub _handleBR {
     if ($options & $WC::BR2NL) {
     } elsif ($options & $WC::NO_BLOCK_TML) {
         $sep = '<br />';
-    } elsif ($this->{prev} && $this->{prev}->isInline()) {
+    } elsif ($this->prevIsInline()) {
         if ($this->isInline()) {
+            # Both <br> and </br> cause a NL
             # if this is empty, look at next
-            if ($kids !~ /^[\000-\037]*$/ ||
-                ($this->{next} && $this->{next}->isInline())) {
+            if ($kids !~ /^[\000-\037]*$/ || $this->nextIsInline()) {
                 $sep = '<br />';
             }
         }

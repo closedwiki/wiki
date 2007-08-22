@@ -173,6 +173,7 @@ sub cleanParseTree {
         $kid->cleanParseTree($opts);
         $prev = $kid;
     }
+    return ($this->{children}->[0], $this->{children}->[0]);
 }
 
 sub stringify {
@@ -182,13 +183,35 @@ sub stringify {
 # Determine if the node - and all it's child nodes - satisfy the criteria
 # for an HTML inline element.
 sub isInline {
-    # This imnpl is actually for Nodes; Leaf overrides it
+    # This impl is actually for Nodes; Leaf overrides it
     my $this = shift;
-    return 0 if $isOnlyBlockType{lc($this->{tag})};
+    return 0 if $isOnlyBlockType{uc($this->{tag})};
     foreach my $kid ( @{$this->{children}} ) {
         return 0 unless $kid->isInline();
     }
     return 1;
+}
+
+# Determine if the previous node qualifies as an inline node
+sub prevIsInline {
+    my $this = shift;
+    if ($this->{prev}) {
+        return $this->{prev}->isInline();
+    } elsif ($this->{parent}) {
+        return $this->{parent}->prevIsInline();
+    }
+    return 0;
+}
+
+# Determine if the next node qualifies as an inline node
+sub nextIsInline {
+    my $this = shift;
+    if ($this->{next}) {
+        return $this->{next}->isInline();
+    } elsif ($this->{parent}) {
+        return $this->{parent}->nextIsInline();
+    }
+    return 0;
 }
 
 1;

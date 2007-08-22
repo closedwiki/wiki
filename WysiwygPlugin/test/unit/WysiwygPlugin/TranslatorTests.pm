@@ -1141,7 +1141,22 @@ HERE
       * Set NOAUTOLINK =
    * The <code><noautolink>...</noautolink></code> syntax
 ',
-         },
+      },
+      {
+          exec => $HTML2TML,
+          name => 'losethatdamnBR',
+          html => <<'JUNK',
+TinyMCE sticks in a BR where it isn't wanted before a P<br>
+<p>
+We should only have a P.
+</p>
+JUNK
+          tml => <<JUNX,
+TinyMCE sticks in a BR where it isn't wanted before a P
+
+We should only have a P.
+JUNX
+      },
      ];
 
 sub gen_compare_tests {
@@ -1335,7 +1350,7 @@ sub convertImage {
     }
 }
 
-gen_compare_tests('blah');
+gen_compare_tests();
 #gen_file_tests();
 
 1;
