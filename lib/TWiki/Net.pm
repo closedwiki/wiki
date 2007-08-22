@@ -108,7 +108,7 @@ sub getExternalResource {
 
     eval "use LWP";
     unless( $@ ) {
-        return _GETUsingLWP( $this, $url );
+       return _GETUsingLWP( $this, $url );
     }
 
     # Fallback mechanism
@@ -162,6 +162,7 @@ sub getExternalResource {
             $port = $proxyPort;
         }
 
+        $req .= 'User-Agent: TWiki::Net/$Id$'."\r\n";
         $req .= "\r\n\r\n";
 
         my ( $iaddr, $paddr, $proto );
@@ -207,10 +208,10 @@ sub _GETUsingLWP {
     if ($url =~ s!([^/\@:]+)(?::([^/\@:]+))?@!!) {
         ( $user, $pass ) = ( $1, $2 );
     }
-
     my $request;
     require HTTP::Request;
     $request = HTTP::Request->new(GET => $url);
+    $request->header('User-Agent' => 'TWiki::Net/$Id$ '."libwww-perl/$LWP::VERSION");
     require TWiki::Net::UserCredAgent;
     my $ua = new TWiki::Net::UserCredAgent($user, $pass);
     my $response = $ua->request($request);
