@@ -151,8 +151,7 @@ sub _createTextfield {
 
     my $results = CGI::div( { id => $params->{name} . 'Results',
                               class => 'autoCompleteResults',
-                              style => "width:$size;" } );
-    $results .= '</div>';
+                              style => "width:$size;" }, '' );
 
     return ($js . $textfield . "\n" . $results);
 
