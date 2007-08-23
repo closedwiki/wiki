@@ -93,9 +93,15 @@ var startPos, endPos;
                                 var dul = sel.duplicate(); 
                                 dul.moveToElementText(txtarea);
                                 sel.text = c;
-                                startPos  = (dul.text.indexOf(c));
+//seems there is a problem with counting \r's IE
+//                               startPos  = (dul.text.indexOf(c));
+                                 var tempText = dul.text;
                                 sel.moveStart('character',-1);
                                 sel.text = original;
+
+                                var tempText = tempText.substring(0, tempText.indexOf(c));
+                                //tempText = tempText.replace(/[\r]/g, ''); 
+                                startPos  = tempText.length;
                         }
                         endPos+=startPos;
     
@@ -240,6 +246,34 @@ function natEditInit() {
         var natEditTableDialog = $('#natEditTableDialog')[0]; 
  
         $('#natEditTableButtonLink').click(function() { 
+            if (!txtarea.selectionStart) {          //IE
+                        var originalRange = document.selection.createRange().duplicate();
+                        var mySelection = originalRange.text;
+                        if(mySelection != null){
+                                $.endPos = mySelection.length;
+                        } else {
+                            $.endPos = 0;
+                        }
+                        {//nasty cursor stuff - as createRange stuff breaks when you don't have a selection
+                                txtarea.focus();
+                                var c  = "\001";
+                                var sel = document.selection.createRange();
+                                var original = sel.text;
+                                var dul = sel.duplicate(); 
+                                dul.moveToElementText(txtarea);
+                                sel.text = c;
+//seems there is a problem with counting \r's IE
+//                                $.startPos  = (dul.text.indexOf(c));
+                                 var tempText = dul.text;
+                                sel.moveStart('character',-1);
+                                sel.text = original;
+
+                                var tempText = tempText.substring(0, tempText.indexOf(c));
+                                tempText = tempText.replace(/[\r]/g, ''); 
+                                $.startPos  = tempText.length;
+                        }                
+                        $.endPos += $.startPos; 
+            }
             $.blockUI(natEditTableDialog, { width: '275px' }); 
         }); 
  
@@ -262,13 +296,31 @@ function natEditInit() {
                 }
                 newTable += '\n';
             }
+            txtarea.focus();
+            //help IE out by re-selecting what was selected before :(
+            if (!txtarea.selectionStart) {          //IE
+                 var range = txtarea.createTextRange();
+                 range.collapse(true);
+                 range.moveStart("character", $.startPos);
+                 range.moveEnd("character", $.endPos - $.startPos);
+                 range.select();
+             }
             natInsertTags('','',newTable);
-            //txtarea.value += 'NEWTABLE\n\n' + newTable;
 
             return false; 
         }); 
  
-         $('#cancel').click($.unblockUI); 
+         $('#cancel').click(function() {
+                $.unblockUI();
+                
+                //help IE out by re-selecting what was selected before :(
+                txtarea.focus();
+                 var range = txtarea.createTextRange();
+                 range.collapse(true);
+                 range.moveStart("character", $.startPos);
+                 range.moveEnd("character", $.endPos - $.startPos);
+                 range.select();
+            }); 
         }); 
     }
   
