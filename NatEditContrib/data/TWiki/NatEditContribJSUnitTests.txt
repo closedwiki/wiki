@@ -65,6 +65,64 @@ function testLineLineNumberedBullet2() {
     assertStringEquals("   1 b", "\n\n   1 numbered bullet\n\n\n", txtarea.value.valueOf());
 }
 
+
+function testEmptytextAreaNumberedBullet_noSelection() {
+    txtarea.value = '';
+    //textareaSelectLine(2, 'line');
+    natInsertListTag('   1 ','numbered bullet','');
+    assertStringEquals("   1 b", '   1 numbered bullet', txtarea.value.valueOf());
+}
+function testNoNewLinetextAreaNumberedBullet_noSelection1() {
+    txtarea.value = 'a';
+    //textareaSelectLine(2, 'line');
+    natInsertListTag('   1 ','numbered bullet','');
+    assertStringEquals("   1 b", "   1 a", txtarea.value.valueOf());
+}
+function testNoNewLinetextAreaNumberedBullet_noSelection2() {
+    txtarea.value = 'asdf';
+    //textareaSelectLine(2, 'line');
+    natInsertListTag('   1 ','numbered bullet','');
+    assertStringEquals("   1 b", "   1 asdf", txtarea.value.valueOf());
+}
+function testNewLinetextAreaNumberedBullet_noSelection2() {
+    txtarea.value = 'asdf\nasdf\nasdf\nasdf\nasdf\nasdf\n';
+    //textareaSelectLine(2, 'line');
+    natInsertListTag('   1 ','numbered bullet','');
+    assertStringEquals("   1 b", "asdf\nasdf\nasdf\nasdf\nasdf\nasdf\n   1 numbered bullet",txtarea.value.valueOf());
+}
+function testNewLinetextAreaNumberedBullet_noSelection2() {
+    txtarea.value = 'asdf\nasdf\nasdf\nasdf\nasdf\nasdf';
+    //textareaSelectLine(2, 'line');
+    natInsertListTag('   1 ','numbered bullet','');
+    assertStringEquals("   1 b", "asdf\nasdf\nasdf\nasdf\nasdf\n   1 asdf",txtarea.value.valueOf());
+}
+
+function testNoNewLinetextAreaNumberedBullet_SelectionAll1() {
+    txtarea.value = 'a';
+    textareaSelect(txtarea.value);
+    natInsertListTag('   1 ','numbered bullet','');
+    assertStringEquals("   1 b", "   1 a", txtarea.value.valueOf());
+}
+function testNoNewLinetextAreaNumberedBullet_SelectionAll2() {
+    txtarea.value = 'asdf';
+    textareaSelect(txtarea.value);
+    natInsertListTag('   1 ','numbered bullet','');
+    assertStringEquals("   1 b", "   1 asdf", txtarea.value.valueOf());
+}
+function testNewLinetextAreaNumberedBullet_Selection2All() {
+    txtarea.value = 'asdf\nasdf\nasdf\nasdf\nasdf\nasdf\n';
+    textareaSelect(txtarea.value);
+    natInsertListTag('   1 ','numbered bullet','');
+    assertStringEquals("   1 b", "   1 asdf\n   1 asdf\n   1 asdf\n   1 asdf\n   1 asdf\n   1 asdf\n   1 ", txtarea.value.valueOf());
+}
+function testNewLinetextAreaNumberedBullet_Selection3All() {
+    txtarea.value = 'asdf\nasdf\nasdf\nasdf\nasdf\nasdf';
+    textareaSelect(txtarea.value);
+    natInsertListTag('   1 ','numbered bullet','');
+    assertStringEquals("   1 b", "   1 asdf\n   1 asdf\n   1 asdf\n   1 asdf\n   1 asdf\n   1 asdf", txtarea.value.valueOf());
+}
+
+
 ///////////////////////////////////////////////////////////////////////////
 //support functions
 function textareaSelect(selected) {
