@@ -22,8 +22,9 @@
 %TMPL:END%
 
 %{ Footer for topic attachment table }%
-%TMPL:DEF{ATTACH:files:footer}%%ENDTWISTY%</div><!--//twikiAttachments-->
-<script type="text/javascript">
+%TMPL:DEF{ATTACH:files:footer}%%ENDTWISTY%</div><!--//twikiAttachments-->%TMPL:P{ATTACH:files:footer:script}%%TMPL:END%
+
+%TMPL:DEF{ATTACH:files:footer:script}%%TMPL:END%<script type="text/javascript">
 //<![CDATA[
 	var table = document.getElementById("tabletwikiAttachmentsTable");
 	if (table) {
@@ -41,5 +42,4 @@
 		}
 	}
 //]]>
-</script>
-%TMPL:END%
+</script>%TMPL:END%
