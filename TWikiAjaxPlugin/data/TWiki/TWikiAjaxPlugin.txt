@@ -84,8 +84,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ArthurClemens |
-|  Plugin Version: | 28 May 2007  |
+|  Plugin Version: | 1.0.1, 23 Aug 2007  |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  23 Aug 2007 | 1.0.1 Fixed leftover static file references. |
 |  28 May 2007 | 1.0 First release. |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: |- |
