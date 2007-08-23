@@ -36,7 +36,7 @@ use vars qw( $headerDone );
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
 $VERSION = '$Rev: 11069$';
-$RELEASE = '1.0';
+$RELEASE = '1.0.1';
 
 # Name of this Plugin, only used in this module
 $pluginName = 'TWikiAjaxPlugin';
