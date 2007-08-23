@@ -70,12 +70,12 @@ color:#ccc;
 <verbatim>
 %STARTSECTION{"personalInfo"}%<div class="pIparagraphFrame personalInfo">
 ---+!! <nop>%FORMFIELD{"FirstName" topic="%BASETOPIC%"}% %FORMFIELD{"LastName" topic="%BASETOPIC%"}%
-%INCLUDE{"LayoutModules" section="paragraphWithImageLeftStyle"}%
+%INCLUDE{"PersonalInfoLayoutModules" section="paragraphWithImageLeftStyle"}%
 <form name="main" action="%SCRIPTURLPATH{"save"}%/%BASEWEB%/%BASETOPIC%" method="post">
 <input type="hidden" name="editaction" value="form" />
 <!-- if !AllowRedirectUrl is enabled in configure, !PersonalInfo is updated to save the search data as javascript file -->
 %IF{"context AttachContentPluginEnabled" then='<input type="hidden" name="redirectto" value="%SCRIPTURL{save}%/%WEB%/PersonalInfo?redirectto=%BASETOPIC%" />'}%
-%INCLUDE{"LayoutModules" section="paragraphWithImageLeft" imgName="%FORMFIELD{"Picture" topic="%BASEWEB%.%BASETOPIC%" format="$value" default="" alttext=""}%" imgWeb="%BASEWEB%" imgTopic="%BASETOPIC%" imgWidth="120" imgTitle="%FORMFIELD{FirstName}% %FORMFIELD{LastName}%" text="%INCLUDE{"PersonalInfo" section="personalInfoFields"}%
+%INCLUDE{"PersonalInfoLayoutModules" section="paragraphWithImageLeft" imgName="%FORMFIELD{"Picture" topic="%BASEWEB%.%BASETOPIC%" format="$value" default="" alttext=""}%" imgWeb="%BASEWEB%" imgTopic="%BASETOPIC%" imgWidth="120" imgTitle="%FORMFIELD{FirstName}% %FORMFIELD{LastName}%" text="%INCLUDE{"PersonalInfo" section="personalInfoFields"}%
 %IF{"not defined editUserData" then="<div class='personalInfoFormDataActions twikiUnvisited'>[[%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?editUserData=on][Edit data]] <span class='twikiSeparator'>|</span> [[%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?template=PersonalInfoPictureView][Change picture]]</div>" }% %IF{"defined editUserData" then="<div class='personalInfoFormDataActions'><input type='submit' class='twikiSubmit' name='action_save' id='save' value='Save' /> <input type='submit' class='twikiButton' name='action_cancel' id='cancel' value='Cancel' /></div>" }%" }% </form></div><!--/pIparagraphFrame-->%ENDSECTION{"personalInfo"}%
 </verbatim>
 
@@ -110,14 +110,15 @@ color:#ccc;
 
 ---++ vCard
 
-%STARTSECTION{"vcard"}%%SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="begin:vcard
+<verbatim>
+%STARTSECTION{"vCard"}%%SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="begin:vcard
 fn:$formfield(FirstName) $formfield(LastName)
 n:$formfield(LastName);$formfield(FirstName)
 tel;type=work:$formfield(WorkPhone)
 tel;type=cell:$formfield(WorkPhoneMobile)
 email;type=WORK:$formfield(WorkEmail)
-end:vcard"}%%ENDSECTION{"vcard"}%
-
+end:vcard"}%%ENDSECTION{"vCard"}%
+</verbatim>
 
 
 ---++ directSearch
@@ -126,6 +127,10 @@ end:vcard"}%%ENDSECTION{"vcard"}%
 %STARTSECTION{"directSearch" title="%title%" maxresults="%maxresults%" layout="%layout%" showpictures="%showpictures%" inputfieldsize="%inputfieldsize%" pictureheight="%PICTUREHEIGHT%"}% <div> %title% </div>
 <input type="text" class="twikiInputField" size="%IF{"defined inputfieldsize" then="%inputfieldsize%" else="12"}%" id="personalInfoSearchBox" name="personalInfoSearchBox" />
 <div id="personalInfoSearchResults"><!-- search results will be displayed here --></div>
+<!-- Compatibility for TWiki 4.1 that does not have twikiEvent.js -->
+<script language="javascript" type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikilib.js"></script>
+<script language="javascript" type="text/javascript" src="%PUBURL%/%TWIKIWEB%/PersonalInfoAddOn/twikiEvent.js"></script>
+<!-- END compatibility  -->
 %IF{"context AttachContentPluginEnabled" then='%INCLUDE{"PersonalInfo" section="directSearchScriptFile"}%' else='%INCLUDE{"PersonalInfo" section="directSearchScript" raw="on" literal="on"}%'}%
 %INCLUDE{"PersonalInfoModules" section="initSearchBox" raw="on" literal="on"}%
 <style type="text/css" media="all">
@@ -138,7 +143,11 @@ end:vcard"}%%ENDSECTION{"vcard"}%
 </verbatim>
 
 <verbatim>
-%STARTSECTION{"initSearchBox"}%<script language="javascript" type="text/javascript">
+%STARTSECTION{"initSearchBox"}%<!-- Compatibility for TWiki 4.1 that does not have twikiEvent.js -->
+<script language="javascript" type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikilib.js"></script>
+<script language="javascript" type="text/javascript" src="%PUBURL%/%TWIKIWEB%/PersonalInfoAddOn/twikiEvent.js"></script>
+<!-- END compatibility  -->
+<script language="javascript" type="text/javascript">
 // <![CDATA[
 	function personalInfoHandleKeyUp() {
 		pISearch.showResults(this.value);
@@ -310,14 +319,18 @@ height:2.25em; /* allow 2 lines */
 overflow:hidden;
 }
 </style>
-<div id="pISearchResultsGrid">%SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,PersonalInfoFaceBook,TWikiContributor,TWikiGuest,UnknownUser%IF{'defined exclude' then=',%exclude%'}%" order="topic" format="<a href='%SCRIPTURL{view}%/$web/$topic' class='pISearchResultsGridItem' id='pISearch$topic' title='$formfield(FirstName) $formfield(LastName)'><span class='pIimage'>$percntINCLUDE{$quotLayoutModules$quot section=$quotLBimage$quot imgType=$quotnolink$quot imgWeb=$quot$web$quot imgTopic=$quot$topic$quot imgHeight=$quot%imgHeight%$quot imgTitle=$quot$formfield(FirstName) $formfield(LastName)$quot imgName=$quot$percntFORMFIELD{$quotPicture$quot topic=$quot$web.$topic$quot format=$quot$value$quot default=$quot$quot alttext=$quot$quot}$percnt$quot}$percnt</span><p class='pISearchResultsGridInfo'>$formfield(FirstName) $formfield(LastName)</p></a>" "}%<br class="twikiClear" /></div>%ENDSECTION{"pictures"}%
+<div id="pISearchResultsGrid">%SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,PersonalInfoFaceBook,TWikiContributor,TWikiGuest,UnknownUser%IF{'defined exclude' then=',%exclude%'}%" order="topic" format="<a href='%SCRIPTURL{view}%/$web/$topic' class='pISearchResultsGridItem' id='pISearch$topic' title='$formfield(FirstName) $formfield(LastName)'><span class='pIimage'>$percntINCLUDE{$quotPersonalInfoLayoutModules$quot section=$quotimage$quot imgType=$quotnolink$quot imgWeb=$quot$web$quot imgTopic=$quot$topic$quot imgHeight=$quot%imgHeight%$quot imgTitle=$quot$formfield(FirstName) $formfield(LastName)$quot imgName=$quot$percntFORMFIELD{$quotPicture$quot topic=$quot$web.$topic$quot format=$quot$value$quot default=$quot$quot alttext=$quot$quot}$percnt$quot}$percnt</span><p class='pISearchResultsGridInfo'>$formfield(FirstName) $formfield(LastName)</p></a>" "}%<br class="twikiClear" /></div>%ENDSECTION{"pictures"}%
 
 
 
 ---+++ pictureFilterSearch
 
 <verbatim>
-%STARTSECTION{"pictureFilterSearch"}%%IF{"context AttachContentPluginEnabled" then='%INCLUDE{"PersonalInfo" section="directSearchScriptFile"}%' else='%INCLUDE{"PersonalInfo" section="directSearchScript" raw="on" literal="on"}%'}%<script language="javascript" type="text/javascript">
+%STARTSECTION{"pictureFilterSearch"}%%IF{"context AttachContentPluginEnabled" then='%INCLUDE{"PersonalInfo" section="directSearchScriptFile"}%' else='%INCLUDE{"PersonalInfo" section="directSearchScript" raw="on" literal="on"}%'}%<!-- Compatibility for TWiki 4.1 that does not have twikiEvent.js -->
+<script language="javascript" type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikilib.js"></script>
+<script language="javascript" type="text/javascript" src="%PUBURL%/%TWIKIWEB%/PersonalInfoAddOn/twikiEvent.js"></script>
+<!-- END compatibility  -->
+<script language="javascript" type="text/javascript">
 // <![CDATA[
 var MAX_RESULTS=%IF{"defined maxresults" then="%maxresults%" else="12"}%;
 pISearch.pictureSet = {};

@@ -62,6 +62,11 @@ To use a custom implementation: replace INCLUDE variable by custom text
 %STARTSECTION{"personalSearch"}%%INCLUDE{"PersonalInfoModules" section="personalSearch"}%%ENDSECTION{"personalSearch"}%
 </verbatim>
 
+---+++ vCard
+<verbatim>
+%STARTSECTION{"vCard"}%%INCLUDE{"PersonalInfoModules" section="vCard"}%%ENDSECTION{"vCard"}%
+</verbatim>
+
 ---+++ createDirectSearchAttachment
 <verbatim>
 %STARTATTACH{"directSearch.js"}%%INCLUDE{"PersonalInfoModules" section="directSearchScriptCode"}%%ENDATTACH%

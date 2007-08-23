@@ -14,7 +14,7 @@
 </verbatim>
 
 <verbatim>
-%STARTSECTION{"image"}%%IF{"context ImagePluginEnabled" then="$percntINCLUDE{$quot$percntTOPIC$percnt$quot section=$quotimagePluginImage$quot}$percnt" else="$percntINCLUDE{$quot$percntTOPIC$percnt$quot section=$quotpubImage$quot}$percnt"}%%ENDSECTION{"image"}%
+%STARTSECTION{"image"}%%INCLUDE{"%TOPIC%" section="%IF{"context ImagePluginEnabled" then="imagePluginImage" else="pubImage"}%"}%%ENDSECTION{"image"}%
 </verbatim>
 
 <verbatim>
