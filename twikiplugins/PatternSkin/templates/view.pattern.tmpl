@@ -34,7 +34,7 @@
 
 %TMPL:DEF{"breadcrumb:annotation"}%%IF{"defined rev" then=" %MAKETEXT{"(revision [_1]" args="%URLPARAM{"rev"}%)"}%" else=" <span class='patternRevInfo'>(%REVINFO{format="$date, $wikiusername"}%)</span>"}%%IF{"defined raw" then=" %MAKETEXT{"(raw view)"}%"}%%TMPL:END%
 
-%TMPL:DEF{"breadcrumb:currenttopic"}%%TMPL:P{"breadcrumb:separator"}%[[%TOPIC%]]%TMPL:P{"breadcrumb:annotation"}%%TMPL:END%
+%TMPL:DEF{"breadcrumb:currenttopic"}%%TMPL:P{"breadcrumb:separator"}%<a href="%TOPIC%" title='%MAKETEXT{"Topic revision:"}% %REVINFO{format="$rev ($date - $time)"}%'><nop>%TOPIC%</a>%TMPL:P{"breadcrumb:annotation"}%%TMPL:END%
 
 %{ DEPRECATED: beforetext and aftertext }%
 %{ compatibility transition older than 4.2: }%
