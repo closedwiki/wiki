@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1183830381" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date=""1187864474" format="1.1" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Templates
@@ -99,7 +99,7 @@ Template names are usually derived from the name of the currently executing scri
    * =EDIT_TEMPLATE= sets the template for editing a topic.
 If these preferences are set locally (using _Local_ instead of _Set_) for a topic, in WebPreferences, in [[%LOCALSITEPREFS%]], or [[%TWIKIWEB%.TWikiPreferences]] (using _Set_), the indicated templates will be chosen for =view= and =edit= respectively. The template search order is as specified above.
 
----+++ TMPL:INCLUDE recusion for piecewise customisation, or mixing in new features
+---+++ TMPL:INCLUDE recursion for piecewise customisation, or mixing in new features
 
 If there is recursion in the TMPL:INCLUDE chain (eg twiki.classic.tmpl contains =%<nop>TMPL:INCLUDE{"twiki"}%=, the templating system will include the next twiki.SKIN in the skin path. 
 For example, to create a customisation of pattern skin, where you _only_ want to over-ride the breadcrumbs for the view script, you can create only a view.yourlocal.tmpl:
