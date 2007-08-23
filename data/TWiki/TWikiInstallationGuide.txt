@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1180816858" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1187845362" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+!! TWiki Installation Guide
 
@@ -102,7 +102,7 @@ Preferences for customizing many aspects of TWiki are set simply by editing a sp
 
 Each TWiki web has an automatic email notification service that sends you an email with links to all of the topics modified since the last alert. To enable this service:
    1 Confirm the Mail and Proxies settings in the Configure interface.
-   1 Setup a cron job (or equivalent) to call the =bin/mailnotify= script as described in the =TWiki.MailerContrib= topic.
+   1 Setup a cron job (or equivalent) to call the =tools/mailnotify= script as described in the =TWiki.MailerContrib= topic.
 
 ---++ Enable !WebStatistics
 
