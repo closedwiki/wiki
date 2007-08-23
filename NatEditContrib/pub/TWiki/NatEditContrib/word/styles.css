@@ -19,8 +19,8 @@
 .natEditEditButton a:hover { background-image:url(button_edit_hi.png); width:67px;height:27px; }
 .natEditBoldButton a { background-image:url(button_bold.png); }
 .natEditBoldButton a:hover { background-image:url(button_bold_hi.png); }
-.natEditCancelButton a { background-image:url(button_cancel.png); __width:56px;}
-.natEditCancelButton a:hover { background-image:url(button_cancel_hi.png); __width:56px;}
+.natEditCancelButton a { background-image:url(button_cancel.png); }
+.natEditCancelButton a:hover { background-image:url(button_cancel_hi.png); }
 .natEditCenterButton a { background-image:url(button_center.png); }
 .natEditCenterButton a:hover { background-image:url(button_center_hi.png); }
 .natEditCheckpointButton a { background-image:url(button_floppy.png); }
@@ -57,8 +57,8 @@
 .natEditPreviewButton a:hover { background-image:url(button_preview_hi.png); }
 .natEditRightButton a { background-image:url(button_right.png); }
 .natEditRightButton a:hover { background-image:url(button_right_hi.png); }
-.natEditSaveButton a { background-image:url(button_save.png); __width:46px;}
-.natEditSaveButton a:hover { background-image:url(button_save_hi.png); __width:46px;}
+.natEditSaveButton a { background-image:url(button_save.png); }
+.natEditSaveButton a:hover { background-image:url(button_save_hi.png);}
 .natEditSignatureButton a { background-image:url(button_signature.png); }
 .natEditSignatureButton a:hover { background-image:url(button_signature_hi.png); }
 .natEditStrikeButton a { background-image:url(button_strike.png); }
