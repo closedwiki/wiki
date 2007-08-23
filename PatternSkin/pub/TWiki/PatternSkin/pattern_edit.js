@@ -1,4 +1,5 @@
 
+var Pattern;
 if (!Pattern) Pattern = {};
 
 Pattern.Edit = {
