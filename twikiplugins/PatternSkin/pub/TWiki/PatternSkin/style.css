@@ -168,6 +168,8 @@ select {
 .twikiSubmit,
 .twikiSubmitDisabled,
 .twikiButton,
+.twikiButtonDisabled,
+.twikiButtonCancel,
 a.twikiButton,
 a.twikiSubmit,
 .twikiCheckbox {
@@ -181,6 +183,8 @@ a.twikiSubmit,
 .twikiSubmit,
 .twikiSubmitDisabled,
 .twikiButton,
+.twikiButtonDisabled,
+.twikiButtonCancel,
 .twikiSubmit:hover,
 .twikiSubmitDisabled:hover,
 .twikiButton:hover,
@@ -342,7 +346,7 @@ a.twikiSubmit:visited:active {
 	border-style:solid;
 	margin:0;
 }
-.twikiAttachments table,
+.twikiAttachments .twikiTable,
 table.twikiFormTable {
 	margin:5px 0;
 	border-collapse:collapse;
@@ -359,11 +363,11 @@ table.twikiFormTable {
 	voice-family:inherit;
 	width:100%;
 }
-.twikiAttachments th {
+.twikiAttachments .twikiTable th {
 	border-style:none none solid solid;
 	border-width:1px;
 }
-.twikiAttachments th,
+.twikiAttachments .twikiTable th,
 table.twikiFormTable th.twikiFormTableHRow {
 	padding:3px 6px;
 	height:2.5em;
@@ -373,20 +377,20 @@ table.twikiFormTable th.twikiFormTableHRow {
 	text-align:center;
 }
 .twikiFormTableFooter {}
-.twikiAttachments td,
+.twikiAttachments .twikiTable td,
 table.twikiFormTable td {
 	padding:3px 6px;
 	height:1.5em; /*S1*/
 	text-align:left;
 	vertical-align:top;
 }
-.twikiAttachments th.twikiFirstCol,
-.twikiAttachments td.twikiFirstCol {
+.twikiAttachments .twikiTable th.twikiFirstCol,
+.twikiAttachments .twikiTable td.twikiFirstCol {
 	/* make more width for the icon column */
 	width:26px;
 	text-align:center;
 }
-.twikiAttachments caption {
+.twikiAttachments .twikiTable caption {
 	display:none;
 }
 table.twikiFormTable th.twikiFormTableHRow a:link,
@@ -986,7 +990,7 @@ h4.patternSearchResultsHeader {
 
 /* attach.pattern.tmpl */
 
-.patternAttachPage .twikiAttachments table {
+.patternAttachPage .twikiAttachments .twikiTable {
 	width:auto;
 }
 .patternAttachPage .twikiAttachments {
