@@ -137,7 +137,7 @@ Testing has been carried out using Safari, Firefox, Opera and Internet Explorer.
 Sponsored by [[http://www.trivadis.com][Trivadis AG]] & [[http://twiki.net][TWIKI.NET]]
 
 |  Author: | TWiki:Main/MichaelDaum |
-|  Copyright &copy;: | 2007 Michael Daum http://wikiring.de & [[http://twiki.net][TWIKI.NET]] |
+|  Copyright &copy;: | 2007 Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Version: | v1.41 |
 |  Change History: | |
@@ -171,4 +171,4 @@ Sponsored by [[http://www.trivadis.com][Trivadis AG]] & [[http://twiki.net][TWIK
 
 -- TWiki:Main.MichaelDaum - 21 May 2007
 
-%META:FILEATTACHMENT{name="screenshot1.png" attachment="screenshot1.png" attr="" comment="" date="1175688869" path="screenshot1.png" size="61040" stream="screenshot1.png" user="Main.TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="screenshot1.png" attachment="screenshot1.png" attr="" comment="" date="1175688869" path="screenshot1.png" size="61040" stream="screenshot1.png" user="TWikiContributor" version="1"}%

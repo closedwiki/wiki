@@ -67,4 +67,7 @@ ul.natEditHelpTools {
 .revComment input {
   width:80%;
 }
-
+.natEditDoneButton img,
+.natEditCancelButton  img {
+  border:0px;
+}
