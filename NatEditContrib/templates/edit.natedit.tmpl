@@ -3,6 +3,8 @@
 %TMPL:INCLUDE{"edittoolbar"}%
 %TMPL:INCLUDE{"edithelp"}%
 
+%TMPL:DEF{"twikistyle"}%%TMPL:P{"styles"}%%TMPL:END%
+
 %TMPL:DEF{"styles"}%
 %TMPL:P{"stylesscreen"}%
 <style type="text/css" media="all">
@@ -22,7 +24,6 @@
 </div> %TMPL:END%
 
 %TMPL:DEF{"content"}%
-%TMPL:P{"pagetitle"}%
 %TMPL:P{"formstart"}%%TMPL:P{"formattop"}%
 %TMPL:P{"edittoolbar"}%
 %TMPL:P{"textarea"}% %TMPL:P{"fontbuttons"}%
@@ -32,6 +33,8 @@
 <input type="hidden" name="action_cancel" value="" />
 %TMPL:P{"revCommentPluginOptions"}%
 %TMPL:P{"formatbottom"}%%TMPL:P{"formend"}%
+%TWISTYSHOW{id="edithelp" link="%MAKETEXT{"Show help"}%" imgleft="%ICONURLPATH{toggleopen-small}%"}%
+%TWISTYHIDE{id="edithelp" link="%MAKETEXT{"Hide help"}%" imgleft="%ICONURLPATH{toggleclose-small}%"}%
 %TMPL:P{"pagehelp"}%
 %TMPL:END%
 
@@ -46,11 +49,11 @@
 
 %TMPL:DEF{"help"}%%TMPL:P{"edithelp"}%%TMPL:END%
 %TMPL:DEF{"pagehelp"}%<!-- -->
-%TWISTYSHOW{id="edithelp" link="%MAKETEXT{"Show help"}%" imgleft="%ICONURLPATH{toggleopen-small}%"}%
-%TWISTYHIDE{id="edithelp" link="%MAKETEXT{"Hide help"}%" imgleft="%ICONURLPATH{toggleclose-small}%"}%
 %TWISTYTOGGLE{id="edithelp" mode="div" class="twikiHelp" remember="on" noscript="hide"}%
 %TMPL:P{"help"}%
 %ENDTWISTYTOGGLE%
 %TMPL:END%
 
 %TMPL:DEF{"revCommentPluginOptions"}%%IF{ "context RevCommentPluginEnabled" then="<div class='revComment'><label for='comment'>Summary of changes</label> <input class='twikiEditComment twikiInputField' size='50' type='text' name='comment' id='comment' /></div><!--/revComment-->" else=""}%%TMPL:END%
+
+%TMPL:DEF{"sig_textareabuttons"}%%TMPL:END%

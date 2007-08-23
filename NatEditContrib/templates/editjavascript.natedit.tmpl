@@ -1,18 +1,23 @@
+%TMPL:DEF{"templatescript"}%%TMPL:P{"templatejavascript"}%%TMPL:END%
 %TMPL:DEF{"templatejavascript"}%
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twikiPref.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twikiCSS.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twikiEvent.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki_edit.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/edit.js"></script>
 <script type="text/javascript">
 // button functions
 
 function natEditTableButtonAction() {
-//this function get replaced if JQueryPlugin is installed
+  // this function gets replaced if JQueryPlugin is installed
   natInsertTags(%IF{"defined NATEDIT_TABLE" then="%NATEDIT_TABLE%" else="'\n| ** | ** | ** |\n|    |    |    |\n|    |    |    |\n', '', ''"}%);
 }
 function natEditNumberedButtonAction() {
-  natInsertListTag(%IF{"defined NATEDIT_NUMBERED" then="%NATEDIT_NUMBERED%" else="'   1 ','numbered bullet',''"}%);
+  natInsertListTag(%IF{"defined NATEDIT_NUMBERED" then="%NATEDIT_NUMBERED%" else="'   1 ','enumerated item',''"}%);
 }
 function natEditBulletButtonAction() {
-  natInsertListTag(%IF{"defined NATEDIT_BULLET" then="%NATEDIT_BULLET%" else="'   * ','bullet',''"}%);
+  natInsertListTag(%IF{"defined NATEDIT_BULLET" then="%NATEDIT_BULLET%" else="'   * ','bullet item',''"}%);
 }
 function natEditIndentButtonAction() {
   natInsertListTag(%IF{"defined NATEDIT_INDENT" then="%NATEDIT_INDENT%" else="'   ','', ''"}%);
@@ -20,8 +25,6 @@ function natEditIndentButtonAction() {
 function natEditUndentButtonAction() {
   natInsertListTag(%IF{"defined NATEDIT_UNDENT" then="%NATEDIT_UNDENT%" else="'','', ''"}%);
 }
-
-
 
 function natEditSignatureButtonAction() {
   natInsertTags(%IF{"defined NATEDIT_SIGNATURE" then="%NATEDIT_SIGNATURE%" else="'-- ','%WIKIUSERNAME%',' - %DATE%'"}%);
