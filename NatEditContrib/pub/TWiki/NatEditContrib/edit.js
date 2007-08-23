@@ -89,7 +89,8 @@ var startPos, endPos;
                                 txtarea.focus();
                                 var c  = "\001";
                                 var sel = document.selection.createRange();
-                                var original = sel.text;
+var txtareaText = txtarea.value;
+//                                var original = sel.text;
                                 var dul = sel.duplicate(); 
                                 dul.moveToElementText(txtarea);
                                 sel.text = c;
@@ -97,7 +98,8 @@ var startPos, endPos;
 //                               startPos  = (dul.text.indexOf(c));
                                  var tempText = dul.text;
                                 sel.moveStart('character',-1);
-                                sel.text = original;
+txtarea.value = txtareaText;
+//                                sel.text = original;
 
                                 var tempText = tempText.substring(0, tempText.indexOf(c));
                                 //tempText = tempText.replace(/[\r]/g, ''); 
@@ -258,7 +260,10 @@ function natEditInit() {
                                 txtarea.focus();
                                 var c  = "\001";
                                 var sel = document.selection.createRange();
-                                var original = sel.text;
+                                
+var txtareaText = txtarea.value;
+                                                                
+                                //var original = sel.text;
                                 var dul = sel.duplicate(); 
                                 dul.moveToElementText(txtarea);
                                 sel.text = c;
@@ -266,7 +271,9 @@ function natEditInit() {
 //                                $.startPos  = (dul.text.indexOf(c));
                                  var tempText = dul.text;
                                 sel.moveStart('character',-1);
-                                sel.text = original;
+                                //sel.text = original;
+                                
+txtarea.value = txtareaText;                                
 
                                 var tempText = tempText.substring(0, tempText.indexOf(c));
                                 tempText = tempText.replace(/[\r]/g, ''); 
