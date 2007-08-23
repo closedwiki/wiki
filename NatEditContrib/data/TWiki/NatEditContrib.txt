@@ -141,6 +141,7 @@ Sponsored by [[http://www.trivadis.com][Trivadis AG]] & [[http://twiki.net][TWIK
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Version: | v1.41 |
 |  Change History: | |
+|  23 Aug 2007 | bug fixes for IE6&7 - [[http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4430][Item4430]] |
 |  04 Aug 2007 | added Word theme \
                  added bullet and numbered lists buttons & Javascript \
                  added create Table button and Javascript \
