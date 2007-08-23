@@ -57,10 +57,10 @@ This block is included on every user page when PersonalInfoUserViewTemplate is s
 </verbatim>
    1 Edit PersonalInfo and write the fields and field labels by editing the =INCLUDE= variables. The variable =fieldName= corresponds to the field names in %MAINWEB%.UserForm. The variable =label= can be any text you wish.
    1 If you want to change the layout:
-      * The base style sheets are included from LayoutModules - install TWiki:Plugins/LayoutModulesAddOn if you haven't already, and modify the styles in that topic.
+      * The base style sheets are included from PersonalInfoLayoutModules - install TWiki:Plugins/LayoutModulesAddOn if you haven't already, and modify the styles in that topic.
       * The styles for =personalInfo= are included from PersonalInfo.
       * The default picture [[%PUBURL%/%TWIKIWEB%/PersonalInfoAddOn/silhouette.gif][silhouette.gif]] is attached to %TWIKIWEB%.PersonalInfoAddOn.
-      * Pictures are 120 px wide and may vary in height. This is set in LayoutModules.
+      * Pictures are 120 px wide and may vary in height. This is set in PersonalInfoLayoutModules.
    
 *Some more indepth information what happens when the user saves her data:*
    * When =AllowRedirectUrl= is enabled in configure, topic PersonalInfo will be saved as well. This setting is not advisable for public installations, but is ok for intranets.
