@@ -90,13 +90,13 @@ sub _addHeader {
     return if $headerDone;
 
     my $header = <<'END';
-<script type="text/javascript" src="http://arthurs-snelle-powerbook.local/~webserver/twiki/pub/TWiki/YahooUserInterfaceContrib/build/yahoo/yahoo.js"></script>
-<script type="text/javascript" src="http://arthurs-snelle-powerbook.local/~webserver/twiki/pub/TWiki/YahooUserInterfaceContrib/build/connection/connection.js"></script>
-<script type="text/javascript" src="http://arthurs-snelle-powerbook.local/~webserver/twiki/pub/TWiki/TWikiJavascripts/twikilib.js"></script>
-<script type="text/javascript" src="http://arthurs-snelle-powerbook.local/~webserver/twiki/pub/TWiki/TWikiJavascripts/twikiArray.js"></script>
-<script type="text/javascript" src="http://arthurs-snelle-powerbook.local/~webserver/twiki/pub/TWiki/TWikiJavascripts/twikiHTML.js"></script>
-<script type="text/javascript" src="http://arthurs-snelle-powerbook.local/~webserver/twiki/pub/TWiki/TWikiAjaxContrib/twikiAjaxRequest.compressed.js"></script>
-<script type="text/javascript" src="http://arthurs-snelle-powerbook.local/~webserver/twiki/pub/TWiki/BehaviourContrib/behaviour.compressed.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/YahooUserInterfaceContrib/build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/YahooUserInterfaceContrib/build/connection/connection.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikilib.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiArray.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiHTML.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiAjaxContrib/twikiAjaxRequest.compressed.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/BehaviourContrib/behaviour.compressed.js"></script>
 <script type="text/javascript">
 // <![CDATA[
 	twiki.AjaxRequest.setDefaultIndicatorHtml("<img src='%PUBURL%/%TWIKIWEB%/TWikiAjaxContrib/indicator.gif' alt='' />");
