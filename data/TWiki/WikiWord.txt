@@ -64,8 +64,8 @@ When you write the name of a topic, it becomes a link. There are more ways
    * To link to a topic in *another web*, write: =Sandbox.WebSearch= - this becomes: Sandbox.WebSearch
    * To show the web name in the link use bracket notation: =[<nop>[Sandbox.%HOMETOPIC%]]= - this becomes: [[Sandbox.%HOMETOPIC%]]
    * To link to a topic on *another Wiki site*, use: =TWiki:Main/WebHome= - this becomes: TWiki:Main/WebHome (sites are defined in the InterwikiPlugin)
-   * To link to a part on the *same page*, write a "#" followed by the name of an anchor. The anchor is a "#" followed by a name which must be a !WikiName. Example =#MyAnchor=. You can also link to an anchor on another page: =%TWIKIWEB%.%HOMETOPIC%#MyAnchor=.
-   * To link to a header on the *same page*, write a "#" followed by the header text, with spaces replaced by underscores (and =!= removed): =[<nop>[#Good_examples_of_WikiWords]]= becomes: [[#Good_examples_of_WikiWords]]. You can also link to a header on another page: =%TWIKIWEB%.%HOMETOPIC%#Disclaimer= becomes: %TWIKIWEB%.%HOMETOPIC%#Disclaimer.
+   * To link to a part on the *same page*, write a "#" followed by the name of an anchor. The anchor is a "#" followed by a name which must be a !WikiName. Example =#MyAnchor=. You can also link to an anchor on another page: =%SYSTEMWEB%.%HOMETOPIC%#MyAnchor=.
+   * To link to a header on the *same page*, write a "#" followed by the header text, with spaces replaced by underscores (and =!= removed): =[<nop>[#Good_examples_of_WikiWords]]= becomes: [[#Good_examples_of_WikiWords]]. You can also link to a header on another page: =%SYSTEMWEB%.%HOMETOPIC%#Disclaimer= becomes: %SYSTEMWEB%.%HOMETOPIC%#Disclaimer.
 
 ---++ Hints
    * Insert !WikiWords wherever you can. Rich linking helps to make a Wiki successful.

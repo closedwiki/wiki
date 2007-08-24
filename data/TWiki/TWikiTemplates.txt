@@ -70,8 +70,8 @@ TWiki uses the following search order to determine which template file or topic 
    1 The TWiki topic aweb.atopic if the template name can be parsed into aweb.atopic
    1 The TWiki topic %RED%web%ENDCOLOR%.%RED%Skin%ENDCOLOR%Skin%RED%Script%ENDCOLOR%Template for each %RED%skin%ENDCOLOR% on the skin path
    1 The TWiki topic %RED%web%ENDCOLOR%.%RED%Script%ENDCOLOR%Template
-   1 The TWiki topic %<nop>TWIKIWEB%.%RED%Skin%ENDCOLOR%Skin%RED%Script%ENDCOLOR%Template for each %RED%skin%ENDCOLOR% on the skin path
-   1 The TWiki topic %<nop>TWIKIWEB%.%RED%Script%ENDCOLOR%Template
+   1 The TWiki topic %<nop>SYSTEMWEB%.%RED%Skin%ENDCOLOR%Skin%RED%Script%ENDCOLOR%Template for each %RED%skin%ENDCOLOR% on the skin path
+   1 The TWiki topic %<nop>SYSTEMWEB%.%RED%Script%ENDCOLOR%Template
 *Legend:*
    * %RED%script%ENDCOLOR% refers to the script name, e.g =view=, =edit=
    * %RED%Script%ENDCOLOR% refers to the same, but with the first character capitalized, e.g =View=
@@ -90,14 +90,14 @@ For example, the =example= template file will be searched for in the following p
    I. =Thisweb.PrintSkinExampleTemplate=
    I. =Thisweb.PatternSkinExampleTemplate=
    I. =Thisweb.ExampleTemplate=
-   I. =%TWIKIWEB%.PrintSkinExampleTemplate=
-   I. =%TWIKIWEB%.PatternSkinExampleTemplate=
-   I. =%TWIKIWEB%.ExampleTemplate=
+   I. =%SYSTEMWEB%.PrintSkinExampleTemplate=
+   I. =%SYSTEMWEB%.PatternSkinExampleTemplate=
+   I. =%SYSTEMWEB%.ExampleTemplate=
 
 Template names are usually derived from the name of the currently executing script; however it is also possible to override these settings in the =view= and =edit= scripts, for example when a topic-specific template is required. Two preference variables can be used to override the templates used:
    * =VIEW_TEMPLATE= sets the template to be used for viewing a topic
    * =EDIT_TEMPLATE= sets the template for editing a topic.
-If these preferences are set locally (using _Local_ instead of _Set_) for a topic, in WebPreferences, in [[%LOCALSITEPREFS%]], or [[%TWIKIWEB%.TWikiPreferences]] (using _Set_), the indicated templates will be chosen for =view= and =edit= respectively. The template search order is as specified above.
+If these preferences are set locally (using _Local_ instead of _Set_) for a topic, in WebPreferences, in [[%LOCALSITEPREFS%]], or [[%SYSTEMWEB%.TWikiPreferences]] (using _Set_), the indicated templates will be chosen for =view= and =edit= respectively. The template search order is as specified above.
 
 ---+++ TMPL:INCLUDE recursion for piecewise customisation, or mixing in new features
 
@@ -132,9 +132,9 @@ The second type of template in TWiki are template topics. Template topics define
 
 When you create a new topic using the =edit= script, TWiki locates a topic to use as a content template according to the following search order:
    1 A topic name specified by the =templatetopic= CGI parameter
-      * if no web is specified, the current web is searched first and then the %TWIKIWEB% web
+      * if no web is specified, the current web is searched first and then the %SYSTEMWEB% web
    1 <nop>WebTopicEditTemplate in the current web
-   1 <nop>WebTopicEditTemplate in the %TWIKIWEB% web
+   1 <nop>WebTopicEditTemplate in the %SYSTEMWEB% web
 
 #TemplateTopicsVars
 ---+++ Variable Expansion
@@ -158,7 +158,7 @@ When the following variables are used in a template topic, they automatically ge
 <pre>
 %<nop>STARTSECTION{type="templateonly"}%
 This template can only be changed by:
-   * Set <nop>ALLOWTOPICCHANGE = %<nop>MAINWEB%.TWikiAdminGroup
+   * Set <nop>ALLOWTOPICCHANGE = TWikiAdminGroup
 %<nop>ENDSECTION{type="templateonly"}%
 </pre>
 This will restrict who can edit the template topic, but will get removed when a new topic based on that template topic is created.

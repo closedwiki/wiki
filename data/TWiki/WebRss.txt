@@ -3,6 +3,6 @@
 %IF{ "$'URLPARAM{search}'!=''" then="<title><nop>%WIKITOOLNAME% search results for <nop>%URLPARAM{search}%</title>" else="<title><nop>%WIKITOOLNAME%'s <nop>%WEB% web</title>"}%
   <link>%SCRIPTURL{"view"}%/%WEB%</link>
   <description>The Documentation Web of TWiki. TWiki is an Enterprise Collaboration Platform.</description>
-%INCLUDE{"%TWIKIWEB%.WebRssBase"}%<!--
+%INCLUDE{"%SYSTEMWEB%.WebRssBase"}%<!--
    * Set SKIN = rss
 -->

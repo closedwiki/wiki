@@ -14,7 +14,7 @@
       * =%<nop>MAKETEXT{"If you have any questions, please contact [_1]." args="%<nop>WIKIWEBMASTER%"}%=
         %BR% expands to %BR%
         <em> %MAKETEXT{"If you have any questions, please contact [_1]." args="%WIKIWEBMASTER%"}% </em>
-      * =%<nop>MAKETEXT{"Did you want to [<nop>[<nop>[<nop>_1]<nop>]<nop>[reset [_2]'s password]<nop>]<nop>?" args="%<nop>TWIKIWEB%.ResetPassword,%<nop>WIKIUSERNAME%"}%=
+      * =%<nop>MAKETEXT{"Did you want to [<nop>[<nop>[<nop>_1]<nop>]<nop>[reset [_2]'s password]<nop>]<nop>?" args="%<nop>SYSTEMWEB%.ResetPassword,%<nop>WIKIUSERNAME%"}%=
         %BR% expands to %BR%
         <em> %MAKETEXT{"Did you want to [[[_1]][reset [_2]'s password]]?" args="TWiki.ResetPassword,%WIKIUSERNAME%"}% </em>
    * __Notes:__

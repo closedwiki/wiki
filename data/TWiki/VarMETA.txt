@@ -6,7 +6,7 @@
    * Syntax: =%<nop>META{ "item" ...}%=
    * Parameters:
      | *Item* | *Options* | *Description* |
-     | ="formfield"= | =name="..."=: name of the field. The field value can be shortened as described in %TWIKIWEB%.FormattedSearch for =$formfield= %BR% \
+     | ="formfield"= | =name="..."=: name of the field. The field value can be shortened as described in %SYSTEMWEB%.FormattedSearch for =$formfield= %BR% \
                        =newline="..."=: by default, each newline character will be rewritten to =&lt;br /&gt;= to allow metadata that contains newlines to be used in tables, etc. =$n= indicates a newline character. %BR% \
                        =bar="..."=: by default, each vertical bar is rewritten to an HTML entity so as to not be mistaken for a table separator. \
                     | Show a single form field |

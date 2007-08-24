@@ -124,7 +124,7 @@ It will also usually contain a number of 'links' that you can click on. You will
 You may also see in the header (usually at the top right) a list of the TWiki "webs". A web is a collection of pages that are related closely together
    * For example, we might have a web called "Enemies", where we keep all we know about our enemies, and another called "Friends"
    * There's usually a safe play web called something like "Sandbox" or "Scratch", where you can create pages just to try things out
-   * And some admin areas, like "%MAINWEB%" and "%TWIKIWEB%"
+   * And some admin areas, like "%USERSWEB%" and "%SYSTEMWEB%"
 
 ---++ The Page Footer
 The footer of the page is also highlighted in colour, and is usually where you will find the links that let you change the content.
@@ -165,7 +165,7 @@ The footer of the page is also highlighted in colour, and is usually where you w
 ---++ Formatting just makes pages prettier
 ... and easier to read<br /><br />
 <code>_Actually_ it is <nop>*perfectly* and <nop>__absolutely__ flat</code><br /><br /> appears as <br /><br /> _Actually_ it is *perfectly* and __absolutely__ flat
-   * A full description of all the formatting can be found in the %TWIKIWEB%.TextFormattingRules and %TWIKIWEB%.TextFormattingFAQ
+   * A full description of all the formatting can be found in the %SYSTEMWEB%.TextFormattingRules and %SYSTEMWEB%.TextFormattingFAQ
    * The best thing to do is just to type until you get stuck
       * then follow the link on the edit page to the help.
 
@@ -219,10 +219,10 @@ TWiki understands pages in plain text just fine, but you can %RED% __jazz__ %END
    * An ordinary URL pasted into text will appear as a link - http://www.google.com
       * You can also prettify URLs using square brackets:
          * <code>[<nop>[http://www.google.com/][Google]]</code> appears as [[http://www.google.com/][Google]]
-   * Use %<nop>SEARCH. This is an interface to a sophisticated search engine that embeds the results of the search in your page. See %TWIKIWEB%.TWikiVariables for full details.
+   * Use %<nop>SEARCH. This is an interface to a sophisticated search engine that embeds the results of the search in your page. See %SYSTEMWEB%.TWikiVariables for full details.
 
 ---++ More formatting
-   * There's *lots* more formatting available, see %TWIKIWEB%.TextFormattingRules and %TWIKIWEB%.TextFormattingFAQ
+   * There's *lots* more formatting available, see %SYSTEMWEB%.TextFormattingRules and %SYSTEMWEB%.TextFormattingFAQ
    * _If you are a real masochist, you can even enter raw HTML tags!_
    * *Important* to _disable_ unwanted formatting, use =&lt;nop&gt;=
       * <code>&lt;nop&gt;_word_</code> appears as <nop>_word_

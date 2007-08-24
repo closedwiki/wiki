@@ -28,8 +28,8 @@ __%X% Note:__ *Keep the number of webs to a minimum!* Don't create a new web for
 |  *Based on web:* | <select name="baseweb"> %WEBLIST{ "<option $marker>$name</option>" webs="webtemplate,public" selection="_default" separator=" "}% </select> | Select a TemplateWeb |
 |  *Web color:* | <input name="WEBBGCOLOR" type="text" value="#D0D0D0" size="16" /> | Enter a StandardColors code for the web |
 |  *Site Map:* | <input type="radio" name="SITEMAPLIST" value="on" checked="checked" /> Yes &nbsp; <input type="radio" name="SITEMAPLIST" value="" /> No | Include this web in the site map |
-|  *Description:<br /> &nbsp;<br /> &nbsp;* | <input type="text" name="SITEMAPWHAT" value="" size="60" /><br /> Enter a short description of the web. Write =Web.TopicName= instead of just =TopicName= if you include links. This description will be used in the %TWIKIWEB%.SiteMap ||
-|  *Use to...<br /> &nbsp;* | <input type="text" name="SITEMAPUSETO" value="...collaborate on" size="60" /><br /> Continue the sentence describing the intended use. This is also for the %TWIKIWEB%.SiteMap ||
+|  *Description:<br /> &nbsp;<br /> &nbsp;* | <input type="text" name="SITEMAPWHAT" value="" size="60" /><br /> Enter a short description of the web. Write =Web.TopicName= instead of just =TopicName= if you include links. This description will be used in the %SYSTEMWEB%.SiteMap ||
+|  *Use to...<br /> &nbsp;* | <input type="text" name="SITEMAPUSETO" value="...collaborate on" size="60" /><br /> Continue the sentence describing the intended use. This is also for the %SYSTEMWEB%.SiteMap ||
 |  *Hidden:* | <input type="radio" name="NOSEARCHALL" value="on" /> Yes &nbsp; <input type="radio" name="NOSEARCHALL" value="" checked="checked" /> No | Specify if you want to exclude the web from a "search all webs" search. *This will not prevent users accessing the web*. It will simply hide it from searches. |
 | *&nbsp;* | <input type="submit" class="twikiSubmit" value="Create new web" /> ||
 <input name="newtopic" type="hidden" value="%URLPARAM{"newtopic"}%" />
@@ -54,12 +54,12 @@ To create a subweb named =Bar= inside a web named =Foo=, use =Foo/Bar= or =Foo.B
 
 ---+++ Subweb Preferences are Inherited
 
-The preferences of a subweb are inherited from the parent web and overridden locally.  Preferences are ultimately inherited from the [[%TWIKIWEB%.TWikiPreferences]] topic.
+The preferences of a subweb are inherited from the parent web and overridden locally.  Preferences are ultimately inherited from the [[%SYSTEMWEB%.TWikiPreferences]] topic.
 
 *Example Preference Inheritance for =Sandbox/TestWeb/SubWeb.SubWebTopic= topic:*
 
-   1. =%TWIKIWEB%.TWikiPreferences= site-wide preferences
-   2. =Sandbox.%WEBPREFSTOPIC%= inherits from and overrides settings in =%TWIKIWEB%.TWikiPreferences=
+   1. =%SYSTEMWEB%.TWikiPreferences= site-wide preferences
+   2. =Sandbox.%WEBPREFSTOPIC%= inherits from and overrides settings in =%SYSTEMWEB%.TWikiPreferences=
    3. =Sandbox/TestWeb.%WEBPREFSTOPIC%= inherits from and overrides settings in =Sandbox.%WEBPREFSTOPIC%=
    4. =Sandbox/TestWeb/SubWeb.%WEBPREFSTOPIC%= inherits from and overrides settings in =Sandbox/TestWeb.%WEBPREFSTOPIC%= 
    5. =Sandbox/TestWeb/SubWeb.SubWebTopic= inherits from and overrides settings in =Sandbox/TestWeb/SubWeb.%WEBPREFSTOPIC%= 
@@ -85,9 +85,9 @@ If anyone is editing a topic which requires updating, or which lives in the web 
 
 It is possible, though not recommended, to change the names of the webs in the distribution.
 
-If you plan to rename the %MAINWEB% web, remember that TWiki stores user topics in this web. That means that every WikiName signature - =%MAINWEB%.<nop>SomeUserName= - points to it and would need updating (unless the variable, =%<nop>MAINWEB%.<nop>SomeUserName=, is used throughout). This potentially large change can be performed automatically if you rename the web from the Tools section of %WEBPREFSTOPIC%, as described above.
+If you plan to rename the %USERSWEB% web, remember that TWiki stores user topics in this web. That means that every WikiName signature - =%USERSWEB%.<nop>SomeUserName= - points to it and would need updating (unless the variable, =%<nop>USERSWEB%.<nop>SomeUserName=, is used throughout). This potentially large change can be performed automatically if you rename the web from the Tools section of %WEBPREFSTOPIC%, as described above.
 
-%X% If you want to rename the %TWIKIWEB% or %MAINWEB% webs, remember they are referred to in the TWiki configuration. You will need to change the ={SystemWebName}=, ={UsersWebName}= and/or ={LocalSitePreferences}= settings in the configuration using the [[%SCRIPTURL{configure}%][configure]] interface.
+%X% If you want to rename the %SYSTEMWEB% or %USERSWEB% webs, remember they are referred to in the TWiki configuration. You will need to change the ={SystemWebName}=, ={UsersWebName}= and/or ={LocalSitePreferences}= settings in the configuration using the [[%SCRIPTURL{configure}%][configure]] interface.
 
 %X% Renaming the webs in the distribution is not recommended because it makes upgrades much more complicated.
 

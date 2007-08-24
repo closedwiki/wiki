@@ -270,7 +270,7 @@ CGI gateway to the =%<nop>SEARCH%= functionality driven by the following CGI par
 | *Parameter:* | *Description:* | *Default:* |
 | ="text"= | Search term. Is a keyword search, literal search or regular expression search, depending on the =type= parameter. SearchHelp has more | required |
 | =search="text"= | (Alternative to above) | N/A |
-| =web="Name"= <br /> =web="%MAINWEB%, Know"= <br /> =web="all"= | Comma-separated list of webs to search. See TWikiVariables#VarSEARCH for more details. | Current web |
+| =web="Name"= <br /> =web="%USERSWEB%, Know"= <br /> =web="all"= | Comma-separated list of webs to search. See TWikiVariables#VarSEARCH for more details. | Current web |
 | =topic="%WEBPREFSTOPIC%"= <br /> =topic="*Bug"= | Limit search to topics: A topic, a topic with asterisk wildcards, or a list of topics separated by comma. | All topics in a web |
 | =excludetopic="Web*"= <br /> =excludetopic="%HOMETOPIC%, <nop>WebChanges"= | Exclude topics from search: A topic, a topic with asterisk wildcards, or a list of topics separated by comma. | None |
 | =type="keyword"= <br /> =type="literal"= <br /> =type="regex"= | Do a keyword search like =soap "web service" -shampoo=; a literal search like =web service=; or RegularExpression search like =soap;web service;!shampoo= | =%<nop>SEARCHVAR- DEFAULTTYPE%= [[TWikiPreferences][preferences]] setting (%SEARCHVARDEFAULTTYPE%) |
@@ -333,7 +333,7 @@ Used for viewing topics.
 | =raw=debug= | As =raw=on=, but also shows the metadata (forms etc) associated with the topic. | |
 | =raw=text= | Shows only the source of the topic, as plain text (Content-type: text/plain). Only shows the body text, *not* the form or other meta-data. |
 | =raw=all= | Shows only the source of the topic, as plain text (Content-type: text/plain), *with embedded meta-data*. This may be useful if you want to extract the source of a topic to a local file on disc. | |
-| =section= | Allows to view only a part of the topic delimited by a named section (see %TWIKIWEB%.VarSTARTSECTION). If the given section is not present, no topic content is displayed. | |
+| =section= | Allows to view only a part of the topic delimited by a named section (see %SYSTEMWEB%.VarSTARTSECTION). If the given section is not present, no topic content is displayed. | |
 | =contenttype= | Allows you to specify a different *Content-Type:* (e.g. =contenttype=text/plain=) | |
 | =rev= | Revision to view (e.g. =rev=45=) | |
 | =template= | Allows you to specify a different skin template, overriding the 'view' template the view script would normally use. The default template is =view=. For example, you could specify [[%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?template=edit][%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?template=edit]]. This is mainly useful when you have specialised templates for a TWiki Application. | |

@@ -3,6 +3,6 @@
 #VarWIKIUSERSTOPIC
 ---+++ WIKIUSERSTOPIC -- name of topic listing all registers users
    * Syntax: =%<nop>WIKIUSERSTOPIC%=
-   * Expands to: =%WIKIUSERSTOPIC%=, with %MAINWEB% prefix renders as %MAINWEB%.%WIKIUSERSTOPIC%
+   * Expands to: =%WIKIUSERSTOPIC%=, with %USERSWEB% prefix renders as %USERSWEB%.%WIKIUSERSTOPIC%
    * Related: [[#VarWIKIUSERNAME][WIKIUSERNAME]]
 

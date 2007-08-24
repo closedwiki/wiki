@@ -30,21 +30,21 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
       * Set WEBLOGOURL = %WIKILOGOURL%
       * Set WEBLOGOALT = %WIKILOGOALT%
 
-   * List this web in the %TWIKIWEB%.SiteMap:
+   * List this web in the %SYSTEMWEB%.SiteMap:
       * If yes, set SITEMAPLIST to =on=, do not set NOSEARCHALL, and add the "what" and "use to..." description for the site map. Make sure to list only links that include the name of the web, e.g. <nop>%WEB%.Topic links.
       * Set SITEMAPLIST = on
       * Set SITEMAPWHAT = Describe what this web does.
       * Set SITEMAPUSETO = ...to do something.
 
    * Copyright notice:
-      * Set WEBCOPYRIGHT = <span class="twikiRight"> <a href="http://twiki.org/"><img src="%PUBURLPATH%/%TWIKIWEB%/TWikiLogos/T-logo-80x15.gif" alt="This site is powered by the TWiki collaboration platform" width="80" height="15" title="This site is powered by the TWiki collaboration platform" border="0" /></a></span>%MAKETEXT{"Copyright &&copy; by the contributing authors. All material on this collaboration platform is the property of the contributing authors." args="1999-%GMTIME{$year}%"}% <br /> %MAKETEXT{"Ideas, requests, problems regarding [_1]? <a href='[_2]'>Send feedback</a>" args="<nop>%WIKITOOLNAME%,mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%%20Feedback%20on%20%BASEWEB%.%BASETOPIC%"}% %IF{"$ WEB= $ TWIKIWEB" then="<br /> __Note:__ Please contribute updates to this topic on TWiki.org at TWiki:TWiki.%BASETOPIC%"}%
+      * Set WEBCOPYRIGHT = <span class="twikiRight"> <a href="http://twiki.org/"><img src="%PUBURLPATH%/%SYSTEMWEB%/TWikiLogos/T-logo-80x15.gif" alt="This site is powered by the TWiki collaboration platform" width="80" height="15" title="This site is powered by the TWiki collaboration platform" border="0" /></a></span>%MAKETEXT{"Copyright &&copy; by the contributing authors. All material on this collaboration platform is the property of the contributing authors." args="1999-%GMTIME{$year}%"}% <br /> %MAKETEXT{"Ideas, requests, problems regarding [_1]? <a href='[_2]'>Send feedback</a>" args="<nop>%WIKITOOLNAME%,mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%%20Feedback%20on%20%BASEWEB%.%BASETOPIC%"}% %IF{"$ WEB= $ SYSTEMWEB" then="<br /> __Note:__ Please contribute updates to this topic on TWiki.org at TWiki:TWiki.%BASETOPIC%"}%
 
    * Simplified Copyright notice for the WebRss feed (don't use any special characters, html tags, entities, wiki markup or WikiWords)
       * Set WEBRSSCOPYRIGHT = Copyright %GMTIME{"$year"}% by contributing authors
 
    * Exclude web from a =web="all"= search: (Set to =on= for hidden webs; is overwritten by web preferences) __Note__ it is much better to use TWikiAccessControls in individual webs to control who can and can't view the contents of a web. NOSEARCHALL is retained for compatibility, but you should avoid using it.
       * Set NOSEARCHALL = 
-   * Prevent automatic linking of [[%TWIKIWEB%.WikiWords][WikiWords]] and acronyms (if set to =on=); link <nop>WikiWords (if empty); can be overwritten by web preferences:
+   * Prevent automatic linking of [[%SYSTEMWEB%.WikiWords][WikiWords]] and acronyms (if set to =on=); link <nop>WikiWords (if empty); can be overwritten by web preferences:
       * Set NOAUTOLINK = 
       * __Note:__ Use the =[<nop>[...][...]]= syntax to link topics in case you disabled <nop>WikiWord linking. The =&lt;noautolink&gt; ... &lt;/noautolink&gt;= syntax can be used to prevents links within a block of text.
    * If you use non !WikiWords for topic names (for example "Expenses" or "Mighty1") and if you use bracket notation to link to those topics, it is useful to *turn of all warnings* (like: "WARNING: This topic name is not recommended because it will not be linked automatically") and checkboxes ("Allow non !WikiWord for the new topic name"). Can be overwritten by web preferences. Set to =on= to activate:
@@ -62,12 +62,12 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
          * Set TOC_MAX_DEPTH =
             * If not set: =6=
             * Possible values: =1= to =6=
-            * Can be overridden by =depth= parameter of [[%TWIKIWEB%.VarTOC2][variable TOC]]
+            * Can be overridden by =depth= parameter of [[%SYSTEMWEB%.VarTOC2][variable TOC]]
       * The default TOC title:
          * Set TOC_TITLE =
             * If not set: nothing
             * Possible values: any string, for example =On this page:=
-            * Can be overridden by =title= parameter of [[%TWIKIWEB%.VarTOC2][variable TOC]]
+            * Can be overridden by =title= parameter of [[%SYSTEMWEB%.VarTOC2][variable TOC]]
       * Do not show a TOC if the topic it contains is included in another topic:
          * Set TOC_HIDE_IF_INCLUDED =
             * If not set: included TOC is shown
@@ -75,9 +75,9 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
             
 ---++ Default User Settings
 
-%X% *NOTE:* They are typically redefined in topics of individual %MAINWEB%.TWikiUsers
+%X% *NOTE:* They are typically redefined in topics of individual %USERSWEB%.TWikiUsers
 
-   * Show tool-tip topic info on mouse-over of WikiWord links. Setting can be on, off, or customized. An empty setting or off setting disables the tool-tips (for better performance). The setting can contain $summary to show the topic summary, $date for the last change date, $rev for the revision, $username for the login name of the last editor, $wikiname for the <nop>WikiName, $wikiusername for <nop>%MAINWEB%.WikiName, $topic for the topic name, and $web for the web name
+   * Show tool-tip topic info on mouse-over of WikiWord links. Setting can be on, off, or customized. An empty setting or off setting disables the tool-tips (for better performance). The setting can contain $summary to show the topic summary, $date for the last change date, $rev for the revision, $username for the login name of the last editor, $wikiname for the <nop>WikiName, $wikiusername for <nop>%USERSWEB%.WikiName, $topic for the topic name, and $web for the web name
       * Set LINKTOOLTIPINFO = off
       * #Set LINKTOOLTIPINFO = $username - $date - $rev: $summary
 
@@ -125,27 +125,27 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
       * Set WIKITOOLNAME = TWiki
 
    * Image, URL and alternate tooltip text of the logo *for this installation*: you should change these settings for your site, or they can be overwridden in !WebPreferences for individual webs by defining these variables there.
-      * Set WIKILOGOIMG = %PUBURL%/%TWIKIWEB%/TWikiLogos/T-logo-140x40-t.gif
+      * Set WIKILOGOIMG = %PUBURL%/%SYSTEMWEB%/TWikiLogos/T-logo-140x40-t.gif
       * Set WIKILOGOURL = http://TWiki.org/
       * Set WIKILOGOALT = Powered by <nop>%WIKITOOLNAME%
 
    * Home page of this site
       * Set WIKIHOMEURL = %SCRIPTURLPATH{"view"}%
 
-   * List of <nop>%WIKITOOLNAME% webs - on the first line of the upper toolbar (to add a new web, see ManagingWebs and %TWIKIWEB%.SiteMap):
-      * Set WIKIWEBLIST = [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] %SEP% [[%TWIKIWEB%.%HOMETOPIC%][%TWIKIWEB%]] %SEP% [[Sandbox.%HOMETOPIC%][Sandbox]]
+   * List of <nop>%WIKITOOLNAME% webs - on the first line of the upper toolbar (to add a new web, see ManagingWebs and %SYSTEMWEB%.SiteMap):
+      * Set WIKIWEBLIST = [[%USERSWEB%.%HOMETOPIC%][%USERSWEB%]] %SEP% [[%SYSTEMWEB%.%HOMETOPIC%][%SYSTEMWEB%]] %SEP% [[Sandbox.%HOMETOPIC%][Sandbox]]
       * %T% *NOTE:* To automatically list all non-hidden webs in alphabetical order, use the =%<nop>WEBLIST{}%= variable instead: <br />
         %WEBLIST{"[[$name.%HOMETOPIC%][$name]]" separator=" | "}%
 
-   * Maximum size of %TWIKIWEB%.FileAttachments in KB, 0 for no limit:
+   * Maximum size of %SYSTEMWEB%.FileAttachments in KB, 0 for no limit:
       * Set ATTACHFILESIZELIMIT = 10000
 
    * Broadcast message for skins supporting a %<nop>BROADCASTMESSAGE% at the top of the page: (IMPORTANT: Set to empty message if not used; #Comment out unused messages)
       * Set BROADCASTMESSAGE = 
       * #Set BROADCASTMESSAGE = *NOTE:* Edit and Attach will be disabled today between 05:00 PM and 06:00 PM PDT (00:00 to 01:00 GMT) for a scheduled <nop>%WIKITOOLNAME% maintenance.
 
-   * Users or groups allowed to [[%TWIKIWEB%.ManagingWebs][create new top-level webs]]: (ex: %MAINWEB%.WebCreatorsGroup). If set to nothing, only administrators will be able to do this.
-      * Set ALLOWROOTCHANGE = %MAINWEB%.TWikiAdminGroup
+   * Users or groups allowed to [[%SYSTEMWEB%.ManagingWebs][create new top-level webs]]: (ex: %USERSWEB%.WebCreatorsGroup). If set to nothing, only administrators will be able to do this.
+      * Set ALLOWROOTCHANGE = %USERSWEB%.TWikiAdminGroup
 
 ---+++ Search Settings
 
@@ -194,9 +194,9 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
 ---+++ PatternSkin
 
    * Default TWiki styles       
-      * Set TWIKILAYOUTURL = %PUBURLPATH%/%TWIKIWEB%/PatternSkin/layout.css
-      * Set TWIKISTYLEURL = %PUBURLPATH%/%TWIKIWEB%/PatternSkin/style.css
-      * Set TWIKICOLORSURL = %PUBURLPATH%/%TWIKIWEB%/PatternSkin/colors.css
+      * Set TWIKILAYOUTURL = %PUBURLPATH%/%SYSTEMWEB%/PatternSkin/layout.css
+      * Set TWIKISTYLEURL = %PUBURLPATH%/%SYSTEMWEB%/PatternSkin/style.css
+      * Set TWIKICOLORSURL = %PUBURLPATH%/%SYSTEMWEB%/PatternSkin/colors.css
 
    * Custom overriding styles (enabled pr. default but empty, to prevent browsers from fetching %<nop>USERLAYOUTURL%-style URLs)
       * Set USERLAYOUTURL = 
@@ -204,13 +204,13 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
       * Set USERCOLORSURL = 
 
    * *PatternSkin header settings*
-      * #Set WEBHEADERART = %PUBURLPATH%/%TWIKIWEB%/PatternSkin/TWiki_header.gif
+      * #Set WEBHEADERART = %PUBURLPATH%/%SYSTEMWEB%/PatternSkin/TWiki_header.gif
       * #Set WEBHEADERBGCOLOR = #faf8f0
       
 ---+++ Skin icons
 
    * Topic containing the icon graphics library. Icons can easily be rendered with =%<nop>ICON{name}%=.
-      * Set ICONTOPIC = %TWIKIWEB%.TWikiDocGraphics
+      * Set ICONTOPIC = %SYSTEMWEB%.TWikiDocGraphics
 
 ---+++ Legacy support
    * Support for legacy "EDITTOPIC", used to be hard-coded, now replaced by TMPL:P conditional instantiation
@@ -322,38 +322,36 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
       * alternative setting:
          * #Set NEWLINKFORMAT = <a class="twikiNewLink" href="%SCRIPTURLPATH{"edit"}%/$web/$topic?topicparent=%WEB%.%TOPIC%" rel="nofollow" title="%MAKETEXT{"Create this topic"}%">$text</a>
 
-   * %TWIKIWEB%.PreviewBackground image:
-      * Set PREVIEWBGIMAGE = %PUBURLPATH%/%TWIKIWEB%/PreviewBackground/preview2bg.gif
+   * %SYSTEMWEB%.PreviewBackground image:
+      * Set PREVIEWBGIMAGE = %PUBURLPATH%/%SYSTEMWEB%/PreviewBackground/preview2bg.gif
 
-   * User-friendly synonyms for MAINWEB and TWIKIWEB
-      * Set USERSWEB = %MAINWEB%
-      * Set SYSTEMWEB = %TWIKIWEB%
-      * Set DOCWEB = %TWIKIWEB%
+   * User-friendly synonyms for system webs
+      * Set DOCWEB = %SYSTEMWEB%
 
 ---++ Access Control Settings
 
    * No-one (except admins) should change this topic
-      * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
-      * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+      * Set ALLOWTOPICCHANGE = %USERSWEB%.TWikiAdminGroup
+      * Set ALLOWTOPICRENAME = %USERSWEB%.TWikiAdminGroup
 
 ---++ Creating New Preference Variables
  
 You can introduce new VARIABLES and use them in your topics and templates. There is no need to change the TWiki engine (Perl scripts).
    * A preference is defined in a TWikiShorthand bullet item: ==[3 spaces] * [space] Set NAME = value== <br /> Example (as a nested bullet item, indented 6 spaces):
       * S<nop>et WEBBGCOLOR = #FFFFC0
-   * Preferences are used as %TWIKIWEB%.TWikiVariables by enclosing the name in percent signs: ==%==. Example:
+   * Preferences are used as %SYSTEMWEB%.TWikiVariables by enclosing the name in percent signs: ==%==. Example:
       * When you write variable ==%WEB<nop>BGCOLOR%==, it gets expanded to =%WEBBGCOLOR%= .
 
    * %X% The sequential order of the preference settings is significant. Define preferences that use other preferences FIRST. For example, set ==<nop>WEBCOPYRIGHT== before ==<nop>WIKIWEBMASTER== since the copyright notice uses the TWiki administrator e-mail address.
-   * %X% In order to protect your custom variables from being overwritten when upgrading the [[%TWIKIWEB%.%TOPIC%]] topic, it is recommended that custom variables are defined in [[%MAINWEB%.%TOPIC%]].
+   * %X% In order to protect your custom variables from being overwritten when upgrading the [[%SYSTEMWEB%.%TOPIC%]] topic, it is recommended that custom variables are defined in [[%USERSWEB%.%TOPIC%]].
 
 
 ---++ Related Topics
 
    * %WEBPREFSTOPIC% has preferences of the <nop>%WEB% web.
-   * %MAINWEB%.%WIKIUSERSTOPIC% has a list of user topics. User topics can have optional user preferences.
-   * %TWIKIWEB%.TWikiVariables has a list of common =%<nop>VARIABLES%=.
-   * %TWIKIWEB%.TWikiAccessControl explains how to restrict access by users or groups.
+   * User topics in %USERSWEB% can have optional user preferences.
+   * %SYSTEMWEB%.TWikiVariables has a list of common =%<nop>VARIABLES%=.
+   * %SYSTEMWEB%.TWikiAccessControl explains how to restrict access by users or groups.
    * TWiki:Plugins.PreferencesPlugin makes editing preferences a snap.
 
 __Note__: Can't edit?

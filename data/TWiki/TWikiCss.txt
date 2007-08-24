@@ -126,8 +126,8 @@ A wide range of standard styles are used in the TWiki core code and topics, and 
 
 ---+++ TWiki Styles in topics
 
-|.twikiBroadcastMessage  |%TWIKIWEB%.TWikiPreferences  |
-|#twikiSearchTable  |%TWIKIWEB%.WebSearch, %TWIKIWEB%.WebSearchAdvanced  |
+|.twikiBroadcastMessage  |%SYSTEMWEB%.TWikiPreferences  |
+|#twikiSearchTable  |%SYSTEMWEB%.WebSearch, %SYSTEMWEB%.WebSearchAdvanced  |
 
 ---+++ TWiki Styles in Skins
 |#twikiLogin  | login.pattern.tmpl  | |

@@ -17,7 +17,7 @@ Open, freeform editing is the essence of WikiCulture - what makes TWiki differen
    * *Peer influence* is enough to ensure that only relevant content is posted.
    * *Peer editing* - the ability for anyone to rearrange all content on a page - keeps topics focused.
    * In TWiki, content is transparently preserved under *revision control*:
-      * Edits can be undone by the administrator (per default a member of %MAINWEB%.TWikiAdminGroup; see [[#ManagingGroups]]).
+      * Edits can be undone by the administrator (per default a member of %USERSWEB%.TWikiAdminGroup; see [[#ManagingGroups]]).
       * Users are encouraged to edit and refactor (condense a long topic), since there's a safety net.
 As a *collaboration guideline*:
    * Create broad-based Groups (for more and varied input), and...
@@ -43,25 +43,25 @@ Access control is based on the familiar concept of Users and Groups. Users are d
 A user can create an account in TWikiRegistration. The following actions are performed:
    * WikiName and encrypted password are recorded using the password manager if authentication is enabled.
    * A confirmation e-mail is sent to the user.
-   * A user home page with the WikiName of the user is created in the %MAINWEB% web.
-   * The user is added to the %MAINWEB%.%WIKIUSERSTOPIC% topic.
+   * A user home page with the WikiName of the user is created in the %USERSWEB% web.
+   * The user is added to the %USERSWEB%.%WIKIUSERSTOPIC% topic.
 
-The default visitor name is %MAINWEB%.TWikiGuest. This is the non-authenticated user.
+The default visitor name is %USERSWEB%.TWikiGuest. This is the non-authenticated user.
 
 #ManagingGroups
 ---+++ Managing Groups
 
 The following describes the standard TWiki support for groups. Your local TWiki may have an alternate group mapping manager installed. Check with your TWiki administrator if you are in doubt.
 
-Groups are defined by group topics located in the ==%MAINWEB%== web. To create a new group, visit  %MAINWEB%.TWikiGroups and enter the name of the new group ending in ==Group== into the "new group" form field. This will create a new group topic with two important settings:
+Groups are defined by group topics located in the ==%USERSWEB%== web. To create a new group, visit  %USERSWEB%.TWikiGroups and enter the name of the new group ending in ==Group== into the "new group" form field. This will create a new group topic with two important settings:
    * ==Set <nop>GROUP = &lt; list of Users and/or Groups &gt;==
    * ==Set <nop>ALLOWTOPICCHANGE = &lt; list of Users and/or Groups &gt;==
 
 The GROUP setting is a comma-separated list of users and/or other groups. Example:
-   * ==Set GROUP = %MAINWEB%.<nop>SomeUser, %MAINWEB%.<nop>OtherUser, %MAINWEB%.<nop>SomeGroup==
+   * ==Set GROUP = %USERSWEB%.<nop>SomeUser, %USERSWEB%.<nop>OtherUser, %USERSWEB%.<nop>SomeGroup==
 
 The ALLOWTOPICCHANGE setting defines who is allowed to change the group topic; it is a comma delimited list of users and groups. You typically want to restrict that to the members of the group itself, so it should contain the name of the topic. This prevents users not in the group from editing the topic to give themselves or others access. For example, for the <nop>KasabianGroup topic write:
-   * ==Set <nop>ALLOWTOPICCHANGE = %MAINWEB%.<nop>KasabianGroup==
+   * ==Set <nop>ALLOWTOPICCHANGE = %USERSWEB%.<nop>KasabianGroup==
 
 __%X% Note:__ TWiki has strict formatting rules. Make sure you have three spaces, an asterisk, and an extra space in front of any access control rule.
 
@@ -70,8 +70,8 @@ __%X% Note:__ TWiki has strict formatting rules. Make sure you have three spaces
 
 A number of TWiki functions (for example, renaming webs) are only available to administrators. Administrators are simply users who belong to the *SuperAdminGroup*. This is a standard user group, the name of which is defined by {SuperAdminGroup} setting in [[%SCRIPTURLPATH{"configure"}%][configure]]. The default name of this group is the =TWikiAdminGroup=. The system administrator may have chosen a different name for this group if your local TWiki uses an alternate group mapping manager but for simplicity we will use the default name !TWikiAdminGroup in the rest of this topic.
 
-You can create new administrators simply by adding them to the %MAINWEB%.TWikiAdminGroup topic. For example,
-   * ==Set <nop>GROUP = <nop>%MAINWEB%.ElizabethWindsor, <nop>%MAINWEB%.TonyBlair==
+You can create new administrators simply by adding them to the %USERSWEB%.TWikiAdminGroup topic. For example,
+   * ==Set <nop>GROUP = <nop>%USERSWEB%.ElizabethWindsor, <nop>%USERSWEB%.TonyBlair==
 A member of the Super Admin Group has unrestricted access throughout the TWiki, so only trusted staff should be added to this group.
 
 ---++ Restricting Access
@@ -103,7 +103,7 @@ If your site allows hierarchical webs, then access to sub-webs is determined fro
 
 Creation and renaming of sub-webs is controlled by the WEBCHANGE setting on the parent web (or ROOTCHANGE for [[#RootWebs][root webs]]). Renaming is additionally restricted by the setting of WEBRENAME in the web itself.
 
-__Note:__  If you restrict access to the %MAINWEB%, make sure to add the =TWikiRegistrationAgent= so that users can register. Example:
+__Note:__  If you restrict access to the %USERSWEB%, make sure to add the =TWikiRegistrationAgent= so that users can register. Example:
       * ==Set <nop>ALLOWWEBCHANGE = !TWikiAdminGroup, !TWikiRegistrationAgent==
 
 __Note:__  For Web level access rights Setting any of these settings to an empty value has the same effect as not setting them at all. Please note that the documentation of TWiki 4.0 and earlier versions of TWiki 4.1 did not reflect the actual implementation, e.g. an empty ALLOWWEBVIEW does _not_ prevent anyone from viewing the web, and an an empty DENYWEBVIEW does _not_ allow all to view the web.
@@ -155,7 +155,7 @@ __Note:__ Images embedded in topics will load much slower since each image will 
 ---+++ Controlling who can manage top-level webs
 
 Top level webs are a special case, because they don't have a parent web with a %WEBPREFSTOPIC%. So there has to be a special control just for the root level.
-   * You can define these settings in the %MAINWEB%.%TWIKIPREFSTOPIC% topic, preferable towards the end of the topic:
+   * You can define these settings in the %USERSWEB%.%TWIKIPREFSTOPIC% topic, preferable towards the end of the topic:
       * ==Set <nop>DENYROOTCHANGE = &lt; comma-delimited list of Users and Groups &gt;==
       * ==Set <nop>ALLOWROOTCHANGE = &lt; comma-delimited list of Users and Groups &gt;==
 Note that you do *not* require =ROOTCHANGE= access to rename an existing top-level web. You just need =WEBCHANGE= in the web itself.
@@ -234,7 +234,7 @@ Alternatively, place them in HTML comment markers, but this exposes the access s
 
 <blockquote>
 ==&lt;!--== <br />
-==&nbsp;  * Set <nop>DENYTOPICCHANGE = %MAINWEB%.<nop>SomeGroup== <br />
+==&nbsp;  * Set <nop>DENYTOPICCHANGE = %USERSWEB%.<nop>SomeGroup== <br />
 ==--&gt;==
 </blockquote>
 

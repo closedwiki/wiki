@@ -2,7 +2,7 @@
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarWIKIUSERNAME
 ---+++ WIKIUSERNAME -- your Wiki username with web prefix
-   * Your %<nop>WIKINAME% with %MAINWEB% web prefix, useful to point to your <nop>%WIKITOOLNAME% home page
+   * Your %<nop>WIKINAME% with %USERSWEB% web prefix, useful to point to your <nop>%WIKITOOLNAME% home page
    * Syntax: =%<nop>WIKIUSERNAME%=
    * Expands to: =%WIKIUSERNAME%=, renders as %WIKIUSERNAME%
    * __%X% Note:__ When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details

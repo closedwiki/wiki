@@ -38,7 +38,7 @@
    * WikiCulture looks at the unique type of collaboration Wiki systems offer.
    * WikiReferences links to articles and books about collaboration and Wiki technology.
 
-<blockquote> %X% If you have to log-in to use TWiki, for example, if TWiki is running on an intranet, it automatically signs pages you edit and create with your WikiName. If your TWiki installation doesn't require a log-in, TWiki gives everyone the same username: %MAINWEB%.TWikiGuest.</blockquote>
+<blockquote> %X% If you have to log-in to use TWiki, for example, if TWiki is running on an intranet, it automatically signs pages you edit and create with your WikiName. If your TWiki installation doesn't require a log-in, TWiki gives everyone the same username: %USERSWEB%.TWikiGuest.</blockquote>
 
 ---++ Disclaimer
 

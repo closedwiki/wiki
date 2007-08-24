@@ -44,11 +44,11 @@ InstalledPlugins shows which Plugins are: 1) installed, 2) loading properly, and
 
 ---+++ Some Notes on Plugin Performance
 
-The performance of the system depends to some extent on the number of Plugins installed and on the Plugin implementation. Some Plugins impose no measurable performance decrease, some do. For example, a Plugin might use many Perl libraries that need to be initialized with each page view (unless you run mod_perl). You can only really tell the performance impact by installing the Plugin and by measuring the performance with and without the new Plugin. Use the TWiki:Plugins.PluginBenchmarkAddOn, or test manually with the Apache =ab= utility. Example on Unix:%BR% =time wget -qO /dev/null <nop>%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/AbcPlugin=
+The performance of the system depends to some extent on the number of Plugins installed and on the Plugin implementation. Some Plugins impose no measurable performance decrease, some do. For example, a Plugin might use many Perl libraries that need to be initialized with each page view (unless you run mod_perl). You can only really tell the performance impact by installing the Plugin and by measuring the performance with and without the new Plugin. Use the TWiki:Plugins.PluginBenchmarkAddOn, or test manually with the Apache =ab= utility. Example on Unix:%BR% =time wget -qO /dev/null <nop>%SCRIPTURLPATH{"view"}%/%SYSTEMWEB%/AbcPlugin=
 
 %T% If you need to install an "expensive" Plugin, but you only need its functionality only in a subset of your data, you can disable it elsewhere by defining the %<nop>DISABLEDPLUGINS% TWiki variable.
 
-Define =DISABLEDPLUGINS= to be a comma-separated list of names of plugins to disable. Define it in %MAINWEB%.<nop>TWikiPreferences to disable those plugins everywhere, in the !WebPreferences topic to disable them in an individual web, or in a topic to disable them in that topic. For example,
+Define =DISABLEDPLUGINS= to be a comma-separated list of names of plugins to disable. Define it in %USERSWEB%.<nop>TWikiPreferences to disable those plugins everywhere, in the !WebPreferences topic to disable them in an individual web, or in a topic to disable them in that topic. For example,
 <pre>
    * <nop>Set DISABLEDPLUGINS = SpreadSheetPlugin, EditTablePlugin
 </pre>
@@ -171,14 +171,14 @@ $var = MyFirstPlugin::Attrs->new();
 #CreatePluginTopic
 ---+++ Writing the Documentation Topic
 
-The Plugin documentation topic contains usage instructions and version details. It serves the Plugin files as %TWIKIWEB%.FileAttachments for downloading. (The doc topic is also included _in_ the [[#CreatePluginPackage][distribution package]].) To create a documentation topic:
+The Plugin documentation topic contains usage instructions and version details. It serves the Plugin files as %SYSTEMWEB%.FileAttachments for downloading. (The doc topic is also included _in_ the [[#CreatePluginPackage][distribution package]].) To create a documentation topic:
 
    1. *Copy* the Plugin topic template from TWiki.org. To copy the text, go to TWiki:Plugins/PluginPackage and:
       * enter the Plugin name in the "How to Create a Plugin" section
       * click Create
       * select all in the Edit box &amp; copy 
       * Cancel the edit
-      * go back to your site to the %TWIKIWEB% web
+      * go back to your site to the %SYSTEMWEB% web
       * In the GoBox enter your Plugin name, for example =MyFirstPlugin=, press enter and create the new topic
       * paste &amp; save new Plugin topic on your site
    1. *Customize* your Plugin topic.
@@ -196,7 +196,7 @@ Check the Plugins web on TWiki.org for the latest Plugin doc topic template. Her
 
 *Plugin Settings:* &lt;<i>Description and settings for custom Plugin %<nop>VARIABLES%, and those required by TWiki.</i>&gt;"
 
-   * *Plugins Preferences* &lt;<i>If user settings are needed, explain... Entering values works exactly like %TWIKIWEB%.TWikiPreferences and WebPreferences: six (6) spaces and then:</i>&gt;"
+   * *Plugins Preferences* &lt;<i>If user settings are needed, explain... Entering values works exactly like %SYSTEMWEB%.TWikiPreferences and WebPreferences: six (6) spaces and then:</i>&gt;"
       * *Set &lt;<i>EXAMPLE = value added</i>&gt;*
 
 *Plugin Installation Instructions:* &lt;<i>Step-by-step set-up guide, user help, whatever it takes to install and run, goes here.</i>&gt;"

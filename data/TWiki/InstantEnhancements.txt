@@ -58,7 +58,7 @@ TWikiDocGraphics has a whole collection of ready icon images. You can use these 
 
 *Creating image variables*
 
-You may find it easier to write shorthand graphic notation. You can create your own image variables by defining them in a preference topic (most likely [[%MAINWEB%.%WIKIPREFSTOPIC%]].)
+You may find it easier to write shorthand graphic notation. You can create your own image variables by defining them in a preference topic (most likely [[%USERSWEB%.%WIKIPREFSTOPIC%]].)
 
 A variable name may be one letter, like =Y=, or may be longer like =HELP=, =WARN= etc. You can also add your own images, e.g. a =NEW=, or a =ASK= to ask question.
 
@@ -150,7 +150,7 @@ Here are the last 15 changed pages, formatted into a neat table.
 ---++ Hidden Edit Lock for Individual Topics
 
 When you're creating main gateway pages, you may want to temporarily (or permanently) restrict editing to yourself or a limited group of people. You can do this with a Preference setting that includes one or more users and groups. Only auhorized users will be able to use ==Edit==.
-   * __Example:__ ==Set ALLOWTOPICCHANGE = <nop>%MAINWEB%.UserName, <nop>%MAINWEB%.GroupName==
+   * __Example:__ ==Set ALLOWTOPICCHANGE = <nop>%USERSWEB%.UserName, <nop>%USERSWEB%.GroupName==
    * %T% *To hide the setting:* Use HTML comment tags - put ==&lt;!--== on the line _above the setting, and ==--&gt;== on the line below.
 
 ---
@@ -162,7 +162,7 @@ If you want to change the logo per TWiki web, simply attach a new logo.gif to th
 Other cusomtisations are possible using =WEBLOGOIMG=, =WEBLOGOURL=, and =WEBLOGOALT= (they mirror the =WIKILOGO*= TWiki variables, but are applied to each web, rather than to the %<nop>WIKITOOLNAME%-based references)
 
 If you'd like to have the same customised logo for all the webs, make these changes in %LOCALSITEPREFS% instead of each web's <nop>WebPreferences, e.g.,
-   * =Set WEBLOGOIMG = %<nop>PUBURLPATH%/%MAINWEB%/WebPreferences/mylogo.gif=
+   * =Set WEBLOGOIMG = %<nop>PUBURLPATH%/%USERSWEB%/WebPreferences/mylogo.gif=
 
 ----
 ---++ Customize Topic Classification Forms

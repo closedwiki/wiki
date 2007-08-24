@@ -19,7 +19,7 @@ limit="%URLPARAM{limit}%"
 zeroresults="%IF{ "defined search" then="on" else="off" }%"
 }%
 
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiHTML.js"></script>
+<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikiHTML.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 	var linkText='<a href="#" onclick="location.hash=\'twikiSearchForm\'; return false;"><span class="twikiLinkLabel twikiSmallish">%MAKETEXT{"Modify search"}%</span></a>';
@@ -35,7 +35,7 @@ zeroresults="%IF{ "defined search" then="on" else="off" }%"
 <tr>
 <td colspan="2" class="twikiFirstRow">
   <input class="twikiInputField" type="text" name="search" value="%URLPARAM{ "search" encode="entity" }%" size="40" /> 
-  <input type="submit" class="twikiSubmit" value='%MAKETEXT{"Search"}%' /><span class="twikiSmall">&nbsp;&nbsp;[[%INCLUDINGWEB%.WebSearch][%MAKETEXT{"Simple search"}%]]&nbsp;|&nbsp;[[%TWIKIWEB%.SearchHelp][%MAKETEXT{"Help"}%]]</span>
+  <input type="submit" class="twikiSubmit" value='%MAKETEXT{"Search"}%' /><span class="twikiSmall">&nbsp;&nbsp;[[%INCLUDINGWEB%.WebSearch][%MAKETEXT{"Simple search"}%]]&nbsp;|&nbsp;[[%SYSTEMWEB%.SearchHelp][%MAKETEXT{"Help"}%]]</span>
 <div class="twikiSmall" style="padding:1em 0 0 0;">%MAKETEXT{"TIP: to search for all topics that contain =\"SOAP\"=, =\"WSDL\"=, a literal =\"web service\"=, but not =\"shampoo\"=, write:"}% <code>soap wsdl "web service" -shampoo</code></div>
 </td>
 </tr>
@@ -62,7 +62,7 @@ zeroresults="%IF{ "defined search" then="on" else="off" }%"
 <tr>
 <th>%MAKETEXT{"Make search:"}%</th>
 <td><input type="checkbox" class="twikiCheckbox" id="casesensitive" name="casesensitive" %IF{" '%URLPARAM{casesensitive}%' = 'on' " then="checked=\"checked\"" else=""}% /><label for="casesensitive"> %MAKETEXT{"Case sensitive"}%</label><br />
-<input type="checkbox" class="twikiCheckbox" id="regex" name="regex"%IF{" '%URLPARAM{regex}%' = 'on' or '%URLPARAM{type}%' = 'regex'" then="checked=\"checked\"" else=""}% /><label for="regex"> %MAKETEXT{"Regular expression search"}%</label> <span class="twikiSmall">%MAKETEXT{"(semicolon =;= for and)"}% [[%TWIKIWEB%.RegularExpression][%MAKETEXT{"about regular expression search"}%]]</span>
+<input type="checkbox" class="twikiCheckbox" id="regex" name="regex"%IF{" '%URLPARAM{regex}%' = 'on' or '%URLPARAM{type}%' = 'regex'" then="checked=\"checked\"" else=""}% /><label for="regex"> %MAKETEXT{"Regular expression search"}%</label> <span class="twikiSmall">%MAKETEXT{"(semicolon =;= for and)"}% [[%SYSTEMWEB%.RegularExpression][%MAKETEXT{"about regular expression search"}%]]</span>
 </td>
 </tr>
 <tr>
@@ -74,7 +74,7 @@ zeroresults="%IF{ "defined search" then="on" else="off" }%"
 </tr>
 <tr>
 <th>%MAKETEXT{"Do show:"}%</th>
-<td><input type="checkbox" class="twikiCheckbox" id="bookview" name="bookview" %IF{" '%URLPARAM{bookview}%' = 'on' " then="checked=\"checked\"" else=""}% /><label for="bookview"> !BookView</label> <span class="twikiSmall">[[%TWIKIWEB%.BookView][%MAKETEXT{"about !BookView"}%]]</span>
+<td><input type="checkbox" class="twikiCheckbox" id="bookview" name="bookview" %IF{" '%URLPARAM{bookview}%' = 'on' " then="checked=\"checked\"" else=""}% /><label for="bookview"> !BookView</label> <span class="twikiSmall">[[%SYSTEMWEB%.BookView][%MAKETEXT{"about !BookView"}%]]</span>
 </td>
 </tr>
 <tr>
@@ -89,9 +89,9 @@ zeroresults="%IF{ "defined search" then="on" else="off" }%"
 
 <div class="twikiHelp">
 *%MAKETEXT{"Other search options:"}%*
-   * %MAKETEXT{"If you already know the name of the topic, enter the name of the topic into the ~[~[[_1]~]~[Jump box~]~] at the top" args="%TWIKIWEB%.GoBox"}%
+   * %MAKETEXT{"If you already know the name of the topic, enter the name of the topic into the ~[~[[_1]~]~[Jump box~]~] at the top" args="%SYSTEMWEB%.GoBox"}%
    * <a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&regex=on&search=\.*">%MAKETEXT{"List all topics in the [_1] web in alphabetical order" args="<nop>%INCLUDINGWEB%"}%</a>
    * %MAKETEXT{"List topics that start with the letter:"}% <a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ea">A</a><span class="twikiSeparator"> | </span><a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eb">B</a><span class="twikiSeparator"> | </span><a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ec">C</a><span class="twikiSeparator"> | </span><a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ed">D</a><span class="twikiSeparator"> | </span><a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ee">E</a><span class="twikiSeparator"> | </span><a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ef">F</a><span class="twikiSeparator"> | </span><a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eg">G</a><span class="twikiSeparator"> | </span><a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eh">H</a><span class="twikiSeparator"> | </span><a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ei">I</a><span class="twikiSeparator"> | </span><a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ej">J</a><span class="twikiSeparator"> | </span><a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ek">K</a><span class="twikiSeparator"> | </span><a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5El">L</a><span class="twikiSeparator"> | </span><a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Em">M</a><span class="twikiSeparator"> | </span><a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5En">N</a><span class="twikiSeparator"> | </span><a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eo">O</a><span class="twikiSeparator"> | </span><a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ep">P</a><span class="twikiSeparator"> | </span><a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eq">Q</a><span class="twikiSeparator"> | </span><a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Er">R</a><span class="twikiSeparator"> | </span><a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Es">S</a><span class="twikiSeparator"> | </span><a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Et">T</a><span class="twikiSeparator"> | </span><a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eu">U</a><span class="twikiSeparator"> | </span><a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ev">V</a><span class="twikiSeparator"> | </span><a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ew">W</a><span class="twikiSeparator"> | </span><a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ex">X</a><span class="twikiSeparator"> | </span><a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ey">Y</a><span class="twikiSeparator"> | </span><a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ez">Z</a>
-   * <a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;bookview=on&amp;search=\.*">%MAKETEXT{"All topics in [_1]" args="<nop>BookView"}%</a> <span class="twikiSmall">([[%TWIKIWEB%.BookView][%MAKETEXT{"about !BookView"}%]])</span>
+   * <a href="%SCRIPTURLPATH{"search"}%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;bookview=on&amp;search=\.*">%MAKETEXT{"All topics in [_1]" args="<nop>BookView"}%</a> <span class="twikiSmall">([[%SYSTEMWEB%.BookView][%MAKETEXT{"about !BookView"}%]])</span>
    * [[%INCLUDINGWEB%.WebChanges][%MAKETEXT{"Recently changed topics"}%]]
 </div>

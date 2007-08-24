@@ -67,7 +67,7 @@ You can also retrieve possible values for =select=, =checkbox= or =radio= types 
 Field values can also be set using the result of expanding other TWiki variables. For example,
 
 <blockquote>
-=%<nop>SEARCH{"Office$" scope="topic" web="%<nop>MAINWEB%" nonoise="on" type="regex" format="$web.$topic" separator=", " }%=
+=%<nop>SEARCH{"Office$" scope="topic" web="%<nop>USERSWEB%" nonoise="on" type="regex" format="$web.$topic" separator=", " }%=
 </blockquote>
 
 When used in the value field of the form definition, this will find all topic names in the Main web which end in "Office" and use them as the legal field values.
@@ -162,7 +162,7 @@ For example, a simple form just supporting entry of a name and a date would look
 *Field Value Notes:*
    * The field value will be used to initialize a field when a form is created, unless specific values are given by the topic template or query parameters. The first item in the list for a select or radio type is the default item. For =label=, =text=, and =textarea= fields the value may also contain commas. =checkbox= fields cannot be initialized through the form template.
    * Leading and trailing spaces are _not_ significant.
-   * Field values can also be generated through a %TWIKIWEB%.FormattedSearch, which must yield a suitable table as the result.
+   * Field values can also be generated through a %SYSTEMWEB%.FormattedSearch, which must yield a suitable table as the result.
    * Variables in the initial values of a form definition get expanded when the form definition is loaded.
       * If you want to use a =|= character in the initial values field, you have to precede it with a backslash, thus: =\|=.
       * You can use =&lt;nop>= to prevent TWiki variables from being expanded.
@@ -211,7 +211,7 @@ TWiki Forms accept user-input data, stored as TWikiMetaData. Meta data also cont
 TWiki users often want to have an overview of topics they contributed to. With the ==$formfield== parameter it is easy to display the value of a classification field next to the topic link:
 <verbatim>
 | *Topic* | *Classification* |
-%SEARCH{"%MAINWEB%.UserName" scope="text" nosearch="on" nototal="on" order="modified" reverse="on"
+%SEARCH{"%USERSWEB%.UserName" scope="text" nosearch="on" nototal="on" order="modified" reverse="on"
 format="|<b>[[$web.$topic][$topic]]</b> |<nop>$formfield(TopicClassification) |" web="Sandbox"}%
 </verbatim>
 </blockquote> 

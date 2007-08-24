@@ -38,25 +38,16 @@ TWiki 4.2.0 is shipped with
 
 
    * *Miscellaneous Feature Enhancements*
-
+TODO: document user mapping changes
 
    * *Enhancements of Pre-installed Plugins*
 
 
 ---++ Important Changes since 4.1.2
 
-The =resetpasswd= and =passwd= scripts have been removed. You are unlikely
-to encounter any problems with this unless you have local customised versions
-of any of the following topics:
-   * %SYSTEMWEB%.BulkResetPassword
-   * %SYSTEMWEB%.ChangeEmailAddress
-   * %SYSTEMWEB%.ResetPassword
-   * %SYSTEMWEB%.ChangePassword
-If you do, you will have to modify those topics to use the =manage= script
-with an appropriate =action= parameter. See the versions of these topics
-shipped with this release for an example that you can copy.
+TODO: the default user form has moved
 
-   * NEWTOPICLINKSYMBOL preference which was deprecated in 4.1 has now been removed from the code. If you used this simply modify the !TWikiPreference NEWLINKFORMAT setting which allows you much more control of the appearance of new links.
+   * The NEWTOPICLINKSYMBOL preference which was deprecated in 4.1 has now been removed from the code. If you want to control the appearance of new links, you can use [[%SYSTEMWEB%.VarNEWLINKFORMAT][NEWLINKFORMAT]]
 
 ---++ !UserForm and !NewUserTemplate Customization
 
@@ -74,7 +65,7 @@ From 4.2.0 this file is no longer included in the TWiki distribution. When you r
 
 ---++ Deprecation Notices
 
-
+The %<nop>MAINWEB% and %<nop>TWIKIWEB% variables have been deprecated. For compatibility reasons they are unlikely to ever be removed completely, but you should use the %<nop>USERSWEB% and %<nop>SYSTEMWEB% variables instead.
 
 
 ---++ Bug Fix Highlights

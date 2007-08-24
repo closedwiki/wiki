@@ -2,7 +2,7 @@
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarWIKINAME
 ---+++ WIKINAME -- your Wiki username
-   * The WikiName is the same as =%<nop>USERNAME%= if not defined in the %MAINWEB%.%WIKIUSERSTOPIC% topic
+   * The WikiName is the same as =%<nop>USERNAME%= if not defined in the %USERSWEB%.%WIKIUSERSTOPIC% topic
    * Syntax: =%<nop>WIKINAME%=
    * Expands to: =%WIKINAME%=
    * __%X% Note:__ When used in a template topic, this variable will be expanded when the template is used to create  new topic. See TWikiTemplates#TemplateTopicsVars for details.

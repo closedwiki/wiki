@@ -9,7 +9,7 @@
      | *Parameter:* | *Description:* | *Default:* |
      | ="text"= | Search term. Is a keyword search, literal search, regular expression search, or query, depending on the =type= parameter. SearchHelp has more | required |
      | =search="text"= | (Alternative to above) | N/A |
-     | =web="Name"= <br /> =web="%MAINWEB%, Know"= <br /> =web="all"= | Comma-separated list of webs to search. You can specifically *exclude* webs from an =all= search using a minus sign - for example, =web="all,-Secretweb"=. The special word =all= means all webs that do *not* have the =NOSEARCHALL= variable set to =on= in their %WEBPREFSTOPIC%. Note that TWikiAccessControls are respected when searching webs; it is *much* better to use them than =NOSEARCHALL=. | Current web |
+     | =web="Name"= <br /> =web="%USERSWEB%, Know"= <br /> =web="all"= | Comma-separated list of webs to search. You can specifically *exclude* webs from an =all= search using a minus sign - for example, =web="all,-Secretweb"=. The special word =all= means all webs that do *not* have the =NOSEARCHALL= variable set to =on= in their %WEBPREFSTOPIC%. Note that TWikiAccessControls are respected when searching webs; it is *much* better to use them than =NOSEARCHALL=. | Current web |
      | =topic="%WEBPREFSTOPIC%"= <br /> =topic="*Bug"= | Limit search to topics: A topic, a topic with asterisk wildcards, or a list of topics separated by comma. __Note__ this is a list of *topic names* and must *not* include web names. | All topics in a web |
      | =excludetopic="Web*"= <br /> =excludetopic="%HOMETOPIC%, <nop>WebChanges"= | Exclude topics from search: A topic, a topic with asterisk wildcards, or a list of topics separated by comma. __Note__ this is a list of *topic names* and must *not* include web names. | None |
      | =scope="topic"= <br /> =scope="text"= <br /> =scope="all"= | Search topic name (title); the text (body) of topic; or all (title and body) | ="text"= |
@@ -34,7 +34,7 @@
      | =recurse="on"= | Recurse into subwebs, if subwebs are enabled. | =off= |
      | =separator=", "= | Line separator _between_ search hits | ="$n"= (Newline) |
      | =newline="%<nop>BR%"= | Line separator _within_ a search hit. Useful if the format="" parameter contains a $pattern() that captures more than one line, i.e. contents of a textfield in a form.| ="$n"= (Newline) |
-   * Example: =%<nop>SEARCH{"wiki" web="%MAINWEB%" scope="topic"}%=
+   * Example: =%<nop>SEARCH{"wiki" web="%USERSWEB%" scope="topic"}%=
    * Example with format: =%<nop>SEARCH{"FAQ" scope="topic" nosearch="on" nototal="on" header="| *Topic: * | *Summary: * |" format="<nop>| $topic | $summary |"%= _(displays results in a table with header - [[FormattedSearch][details]])_
    * %H% Hint: If the TWiki:Plugins.TablePlugin is installed, you may set a =%<nop>TABLE{}%= variable just before the =%<nop>SEARCH{}%= to alter the output of a search.  Example: =%<nop>TABLE{ tablewidth="90%" }%=
    * Related: [[#VarMETASEARCH][METASEARCH]], [[#VarTOPICLIST][TOPICLIST]], [[#VarWEBLIST][WEBLIST]], FormattedSearch, SearchHelp, SearchPatternCookbook, RegularExpression

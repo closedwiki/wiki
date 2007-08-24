@@ -35,10 +35,10 @@ Unlike predefined variables, preferences variables can be defined by the user in
 
 ---+++ Setting Preferences Variables
 You can set variables in all the following places:
-   1 local site level in [[%TWIKIWEB%.TWikiPreferences][%TWIKIWEB%.TWikiPreferences]]
+   1 local site level in [[%SYSTEMWEB%.TWikiPreferences][%SYSTEMWEB%.TWikiPreferences]]
    1 plugin topics (see TWikiPlugins)
    1 local site level in [[%LOCALSITEPREFS%][%LOCALSITEPREFS%]]
-   1 user level in individual user topics in %MAINWEB% web
+   1 user level in individual user topics in %USERSWEB% web
    1 web level in %WEBPREFSTOPIC% of each web
    1 topic level in topics in webs
    1 session variables (if sessions are enabled)

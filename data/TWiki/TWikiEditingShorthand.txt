@@ -259,7 +259,7 @@ Each row of the table is a line containing of one or more cells. Each cell start
    * Contents of table cells wrap automatically as determined by the browser
    * Use =%<nop>VBAR%= or =&amp;#124;= to add =&#124;= characters in tables.
    * Use =%<nop>CARET%= or =&amp;#94;= to add =&#94;= characters in tables.
-%T% The %TWIKIWEB%.TablePlugin provides the =|^|= multiple-span row functionality and additional rendering features
+%T% The %SYSTEMWEB%.TablePlugin provides the =|^|= multiple-span row functionality and additional rendering features
 </td><td>
 <verbatim>
 | *L* | *C* | *R* |
@@ -295,7 +295,7 @@ Each row of the table is a line containing of one or more cells. Each cell start
 %T% If you want to link to a topic in a different web write =Otherweb.TopicName=. %BR%
 %H% The link label excludes the name of the web, e.g. only the topic name is shown. As an exception, the name of the web is shown for the <nop>%HOMETOPIC% topic.
 
-It's generally a good idea to use the TWikiVariables %<nop>TWIKIWEB% and %<nop>MAINWEB% instead of TWiki and Main.
+It's generally a good idea to use the TWikiVariables %<nop>SYSTEMWEB% and %<nop>USERSWEB% instead of TWiki and Main.
 </td><td>
 <verbatim>
 WebStatistics
@@ -353,7 +353,7 @@ escaped:
 </td><td>
 [[wiki syntax]]
 
-[[%MAINWEB%.TWiki users]]
+[[%USERSWEB%.TWiki users]]
 
 escaped:
 ![[wiki syntax]]

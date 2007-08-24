@@ -77,7 +77,7 @@ CSS and Javascript are used in most skins, although there is a low-fat skin (Cla
 SMELL: what are some actual known good version number requirements for these browsers (eg, FireFox 1.0, or 1.0.3, or 1.0.7, or ???), etc.
 -->
 
-You can easily select a balance of browser capability versus look and feel. Try the installed skins at %TWIKIWEB%.TWikiSkinBrowser and more at TWiki:Plugins.SkinPackage.
+You can easily select a balance of browser capability versus look and feel. Try the installed skins at %SYSTEMWEB%.TWikiSkinBrowser and more at TWiki:Plugins.SkinPackage.
 
 ---++ Important note about TWiki Plugins
 

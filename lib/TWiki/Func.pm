@@ -621,8 +621,10 @@ sub getDefaultUserName {
 
 ---+++ getCanonicalUserID( $user ) -> $cUID
 
-return the cUID of the specified user
-if $user is undefined Get the cUID of logged in user
+Return the cUID of the specified user. A cUID is a unique identifier which
+is assigned by TWiki for each user.
+
+If $user is undefined Get the cUID of logged in user
 
    * $user can be a cUID, login, wikiname or web.wikiname
 
@@ -689,8 +691,7 @@ sub getWikiUserName {
 
 ---+++ wikiToUserName( $wikiName ) -> $loginName
 
-Translate a Wiki name (or login/cUID if it can) to a login name based on 
-[[%MAINWEB%.TWikiUsers]] topic
+Translate a Wiki name (or login name or cUID, if it can) to a login name.
    * =$wikiName= - Wiki name, e.g. ='Main.JohnDoe'= or ='JohnDoe'=
 Return: =$loginName=   Login name of user, e.g. ='jdoe'=, or undef if not
 matched.
@@ -718,7 +719,7 @@ sub wikiToUserName {
 
 ---+++ userToWikiName( $loginName, $dontAddWeb ) -> $wikiName
 
-Translate a login name to a Wiki name based on [[%MAINWEB%.TWikiUsers]] topic
+Translate a login name to a Wiki name
    * =$loginName=  - Login name, e.g. ='jdoe'=
    * =$dontAddWeb= - Do not add web prefix if ="1"=
 Return: =$wikiName=      Wiki name of user, e.g. ='Main.JohnDoe'= or ='JohnDoe'=
@@ -1238,7 +1239,7 @@ Test if topic exists
    * =$topic= - Topic name, required, e.g. ='TokyoOffice'=, or ="Main.TokyoOffice"=
 
 $web and $topic are parsed as described in the documentation for =normalizeWebTopicName=.
-Specifically, the %MAINWEB% is used if $web is not specified and $topic has no web specifier.
+Specifically, the %USERSWEB% is used if $web is not specified and $topic has no web specifier.
 To get an expected behaviour it is recommened to specify the current web for $web; don't leave it empty.
 
 *Since:* TWiki::Plugins::VERSION 1.000 (14 Jul 2001)

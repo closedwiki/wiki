@@ -105,10 +105,10 @@ How to populate a list box with all usernames of registered TWiki users
 ---+++ Solution 1: Appropriate for Sep 2004 TWiki (Cairo)
 
 <verbatim>
-<form name="testing" action="%SCRIPTURLPATH{"view"}%/%MAINWEB%" method="get">
+<form name="testing" action="%SCRIPTURLPATH{"view"}%/%USERSWEB%" method="get">
 <select name="topic">
 <option>Select user...</option>
-%SEARCH{ "Name:;Email:;Country:" web="%MAINWEB%" type="regex" nosearch="on" nototal="on" format="<option>$topic</option>" }%
+%SEARCH{ "Name:;Email:;Country:" web="%USERSWEB%" type="regex" nosearch="on" nototal="on" format="<option>$topic</option>" }%
 </select>
 <input type="submit" value="Go" />
 </form>
@@ -116,15 +116,15 @@ How to populate a list box with all usernames of registered TWiki users
 
 Which expands to this: (here limited to all Z* users because TWiki.org has so many)
 
-<form name="testing" action="%SCRIPTURLPATH{"view"}%/%MAINWEB%" method="get">
+<form name="testing" action="%SCRIPTURLPATH{"view"}%/%USERSWEB%" method="get">
 <select name="topic">
 <option>Select user...</option>
-%SEARCH{ "Name:;Email:;Country:" web="%MAINWEB%" type="regex" topic="Z*" nosearch="on" nototal="on" format="<option>$topic</option>" }%
+%SEARCH{ "Name:;Email:;Country:" web="%USERSWEB%" type="regex" topic="Z*" nosearch="on" nototal="on" format="<option>$topic</option>" }%
 </select>
 <input type="submit" value="Go" />
 </form>
 
-This searches all topics in the Main web that contain "Name", "Email" and "Country" bullets. Alternatively, do a %TWIKIWEB%.FormattedSearch with =multiple="on"= on the [[%MAINWEB%.TWikiUsers]] topic.
+This searches all topics in the Main web that contain "Name", "Email" and "Country" bullets. Alternatively, do a %SYSTEMWEB%.FormattedSearch with =multiple="on"= on the [[%USERSWEB%.TWikiUsers]] topic.
 
 ---+++ Solution 2: As Solution 1, but with possibility for multi-selecting usernames
 
@@ -136,10 +136,10 @@ The example of Solution 1 produces the list box.  Add a MULTIPLE to the _select_
 Please note that the Search pattern is unchanged compared to Solution 1. The change is in the HTML form element.
 
 The abovementioned modification is, in effect:
-<form name="testing" action="%SCRIPTURLPATH{"view"}%/%MAINWEB%" method="get">
+<form name="testing" action="%SCRIPTURLPATH{"view"}%/%USERSWEB%" method="get">
 <select name="topic" size="2" MULTIPLE>
 <option>Select user...</option>
-%SEARCH{ "Name:;Email:;Country:" web="%MAINWEB%" type="regex" topic="Z*" nosearch="on" nototal="on" format="<option>$topic</option>" }%
+%SEARCH{ "Name:;Email:;Country:" web="%USERSWEB%" type="regex" topic="Z*" nosearch="on" nototal="on" format="<option>$topic</option>" }%
 </select>
 <input type="submit" value="Go" />
 </form>
@@ -149,10 +149,10 @@ The abovementioned modification is, in effect:
 When the User information is stored in a UserForm (as is default in Dakar) then this list can be generated as follows:
 
 <verbatim>
-<form name="testing" action="%SCRIPTURLPATH{"view"}%/%MAINWEB%" method="get">
+<form name="testing" action="%SCRIPTURLPATH{"view"}%/%USERSWEB%" method="get">
 <select name="topic">
 <option>Select user...</option>
-%SEARCH{"%META:FORM.*[U]serForm" web="%MAINWEB%" type="regex" casesensitive="on" nosearch="on" format="<option>$topic</option>" sort="topic" excludetopic="Test*, TWiki*"}%
+%SEARCH{"%META:FORM.*[U]serForm" web="%USERSWEB%" type="regex" casesensitive="on" nosearch="on" format="<option>$topic</option>" sort="topic" excludetopic="Test*, TWiki*"}%
 </select>
 <input type="submit" value="Go" />
 </form>

@@ -36,9 +36,9 @@ To start creating a new skin, copy the default TWikiTemplates (like =view.tmpl=)
 
 If you use PatternSkin as your starting point, and you want to modify the layout, colors or even the templates to suit your own needs, have a look first at the topics PatternSkinCustomization and PatternSkinCssCookbook.
 
-For your own TWiki skin you are encouraged to show a small 80x31 pixel <a href="http://twiki.org/"><img src="%PUBURL%/%TWIKIWEB%/TWikiLogos/T-logo-80x15.gif" alt="This site is powered by the TWiki collaboration platform" width="80" height="15" title="This site is powered by the TWiki collaboration platform" border="0" /></a> logo at the bottom of your skin:
+For your own TWiki skin you are encouraged to show a small 80x31 pixel <a href="http://twiki.org/"><img src="%PUBURL%/%SYSTEMWEB%/TWikiLogos/T-logo-80x15.gif" alt="This site is powered by the TWiki collaboration platform" width="80" height="15" title="This site is powered by the TWiki collaboration platform" border="0" /></a> logo at the bottom of your skin:
 
-=&lt;a href="http://twiki.org/"&gt;&lt;img src="%<nop>PUBURL%/%<nop>TWIKIWEB%/TWikiLogos/T-logo-80x15.gif" alt="This site is powered by the TWiki collaboration platform" width="80" height="15" title="This site is powered by the TWiki collaboration platform" border="0" /&gt;&lt;/a&gt;=
+=&lt;a href="http://twiki.org/"&gt;&lt;img src="%<nop>PUBURL%/%<nop>SYSTEMWEB%/TWikiLogos/T-logo-80x15.gif" alt="This site is powered by the TWiki collaboration platform" width="80" height="15" title="This site is powered by the TWiki collaboration platform" border="0" /&gt;&lt;/a&gt;=
 
 The standard TWiki skins show the logo in the =%<nop>WEBCOPYRIGHT%= variable.
 
@@ -103,7 +103,7 @@ For example, to create a customisation of pattern skin, where you _only_ want to
 </verbatim>
 and then set =SKIN=yourlocal,pattern=.
 
-Because ClassicSkin and the default templates use the same Template definition names, you can over-ride the edit links in them (or any skin derived from them) using the same =view.yourlocal.tmpl= (just set SKIN=yourlocal,classic either in %MAINWEB%.TWikiPreferences for globally, or a Web's <nop>Webname.<nop>WebPreferences for a particular web) 
+Because ClassicSkin and the default templates use the same Template definition names, you can over-ride the edit links in them (or any skin derived from them) using the same =view.yourlocal.tmpl= (just set SKIN=yourlocal,classic either in %USERSWEB%.TWikiPreferences for globally, or a Web's <nop>Webname.<nop>WebPreferences for a particular web) 
 
 ---++ Variables in Skins
 
@@ -153,9 +153,9 @@ Navigate:
 <select name="sel" onchange="this.form.topic.value=this.options[this.selectedIndex].value; this.form.submit()">
 <option selected="selected" value="">...</option>
 <option value="http://twiki.org/">Intranet home</option>
-<option value="%MAINWEB%.%WIKIUSERSTOPIC%">Employee index</option>
-<option value="%MAINWEB%.%HOMETOPIC%">%MAINWEB% web</option>
-<option value="%TWIKIWEB%.%HOMETOPIC%">%TWIKIWEB% web</option>
+<option value="%USERSWEB%.%WIKIUSERSTOPIC%">Employee index</option>
+<option value="%USERSWEB%.%HOMETOPIC%">%USERSWEB% web</option>
+<option value="%SYSTEMWEB%.%HOMETOPIC%">%SYSTEMWEB% web</option>
 <option value="http://www.google.com/">Google</option>
 <option value="http://www.yahoo.com/">Yahoo!</option>
 </select>
@@ -175,7 +175,7 @@ CSS files are gererally attachments to the skin topic that are included in the t
    * To see how CSS is used in the default TWiki skin, see: PatternSkin
    * If you write a complete new skin, this is the syntax to use in a template file:
 <verbatim>
-<style type='text/css' media='all'>@import url('%PUBURLPATH%/%TWIKIWEB%/MySkin/mystyle.css');</style>
+<style type='text/css' media='all'>@import url('%PUBURLPATH%/%SYSTEMWEB%/MySkin/mystyle.css');</style>
 </verbatim>
 
 ---++ Attachment Tables

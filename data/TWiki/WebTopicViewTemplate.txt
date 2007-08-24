@@ -10,7 +10,7 @@
 <tr>
 <td class="twikiFirstCol">
 <form name="jumpAgain" action="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%">
-*%MAKETEXT{"Did you spell the [_1] correctly?" args="%TWIKIWEB%.WikiWord"}%* %MAKETEXT{"Remember, a [_1] is case sensitive." args="<nop>WikiWord"}% %BR%     <input type="text" class="twikiInputField" name="topic" size="36" value="%BASETOPIC%" /> <input type="submit" class="twikiSubmit" value="Jump to topic" />
+*%MAKETEXT{"Did you spell the [_1] correctly?" args="%SYSTEMWEB%.WikiWord"}%* %MAKETEXT{"Remember, a [_1] is case sensitive." args="<nop>WikiWord"}% %BR%     <input type="text" class="twikiInputField" name="topic" size="36" value="%BASETOPIC%" /> <input type="submit" class="twikiSubmit" value="Jump to topic" />
 </form>
 </td>
 </tr>
@@ -28,4 +28,4 @@
 %ICON{arrowbright}% [[%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?create=on&newtopic=%BASETOPIC%][%MAKETEXT{"Create '[_1]'" args="<nop>%BASETOPIC%"}%]]
 %ENDSECTION{"options"}%
 %IF{"$'URLPARAM{create}'='on'" then='</pre>'}%
-%INCLUDE{"%TWIKIWEB%.%IF{"$'URLPARAM{create}'='on'" then='WebTopicCreator' else='IGNOREINCLUDE'}%" warn="off"}%
+%INCLUDE{"%SYSTEMWEB%.%IF{"$'URLPARAM{create}'='on'" then='WebTopicCreator' else='IGNOREINCLUDE'}%" warn="off"}%

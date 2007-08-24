@@ -2,6 +2,6 @@
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarLOCALSITEPREFS
 ---+++ LOCALSITEPREFS -- web.topicname of site preferences topic
-   * The full name of the local site preferences topic. These local site preferences overload the system level preferences defined in [[%TWIKIWEB%.%WIKIPREFSTOPIC%]].
+   * The full name of the local site preferences topic. These local site preferences overload the system level preferences defined in [[%SYSTEMWEB%.%WIKIPREFSTOPIC%]].
    * Syntax: =%<nop>LOCALSITEPREFS%=
    * Expands to: =%LOCALSITEPREFS%=, renders as %LOCALSITEPREFS%

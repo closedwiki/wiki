@@ -204,7 +204,7 @@ Other usage: [[%TOPIC%#Usage_extended][see below]].
 | <img src="%ATTACHURLPATH%/toggleclose-mini.gif" alt="Close toggle, Twisty close toggle" title="Close toggle, Twisty close toggle" />  | =toggleclose-mini.gif= | Close toggle, Twisty close toggle | =&lt;img src="%<nop>ICONURL{toggleclose-mini}%" width="7" height="9" alt="Close" border="0" /&gt;= |
 | <img src="%ATTACHURLPATH%/toggleopenleft.gif" alt="Open toggle, Twisty open toggle" title="Open toggle, Twisty open toggle" />  | =toggleopenleft.gif= | Open toggle, Twisty open toggle | =%<nop>ICON{toggleopenleft}%= |
 | <img src="%ATTACHURLPATH%/toggleopenleft-small.gif" alt="Open toggle, Twisty open toggle" title="Open toggle, Twisty open toggle" />  | =toggleopenleft-small.gif= | Open toggle, Twisty open toggle | =%<nop>ICON{toggleopenleft-small}%= |
-| <img src="%ATTACHURLPATH%/web-bg.gif" alt="Web" title="Web" />  | =web-bg.gif= | Web background, used in %TWIKIWEB%.WebLeftBarWebsList | =%<nop>ICON{web-bg}%= |
+| <img src="%ATTACHURLPATH%/web-bg.gif" alt="Web" title="Web" />  | =web-bg.gif= | Web background, used in %SYSTEMWEB%.WebLeftBarWebsList | =%<nop>ICON{web-bg}%= |
 | <img src="%ATTACHURLPATH%/web-bg-small.gif" alt="Web" title="Web" />  | =web-bg-small.gif= | Web background, 13x13 | =&lt;img src="%<nop>ICONURL{web-bg-small}%" width="13" height="13" alt="Web" border="0" /&gt;= |
 
 ---+++ %ICON{twiki}% TWiki icons
@@ -306,7 +306,7 @@ There are several other ways to put an image in a topic.
 
 Shorthand notation:
 <blockquote>
-In [[%MAINWEB%.TWikiPreferences]] set a variable to an ICON, for example:
+In [[%USERSWEB%.TWikiPreferences]] set a variable to an ICON, for example:
 
 =<nop>   * Set H = %<nop>ICON{help}%=
 
@@ -317,7 +317,7 @@ For extended use, check out TWiki:Plugins.SmiliesPlugin that uses a different sh
 
 Full path:
 <blockquote>
-In any topic, write =%<nop>PUBURL%/%<nop>TWIKIWEB%/TWikiDocGraphics/help.gif= to show %PUBURL%/%TWIKIWEB%/TWikiDocGraphics/help.gif
+In any topic, write =%<nop>PUBURL%/%<nop>SYSTEMWEB%/TWikiDocGraphics/help.gif= to show %PUBURL%/%SYSTEMWEB%/TWikiDocGraphics/help.gif
 
 You are not restricted to use the !TWikiDocGraphics topic - in a similar way you can show attached images by replacing =TWikiDocGraphics= with the topic name.
 </blockquote>

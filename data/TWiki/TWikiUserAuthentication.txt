@@ -55,7 +55,7 @@ Login management controls the way users have to log in. There are three basic op
 #NoLogin
 ---+++ No Login (select =none= in configure)
 
-Does exactly what it says on the tin. Forget about authentication to make your site completely public - anyone can browse and edit freely, in classic Wiki style. All visitors are given the %MAINWEB%.TWikiGuest default identity, so you can't track individual user activity.
+Does exactly what it says on the tin. Forget about authentication to make your site completely public - anyone can browse and edit freely, in classic Wiki style. All visitors are given the %USERSWEB%.TWikiGuest default identity, so you can't track individual user activity.
 
 __%X% Note:__ This setup is *not* recommended on public websites for security reasons; anyone would be able to change system settings and perform tasks usually restricted to administrators.
 
@@ -71,7 +71,7 @@ Template Login asks for a username and password in a web page, and processes the
    1 Register yourself in the TWikiRegistration topic.
     <br /> %H% Check that the password manager recognises the new user. If you are using =.htpasswd= files, check that a new line with the username and encrypted password is added to the =.htpasswd= file. If not, you probably got a path wrong, or the permissions may not allow the webserver user to write to that file.
    1 Create a new topic to check if authentication works.
-   1 *Edit the %MAINWEB%.TWikiAdminGroup topic in the %MAINWEB% web to include users with system administrator status.*
+   1 *Edit the %USERSWEB%.TWikiAdminGroup topic in the %USERSWEB% web to include users with system administrator status.*
     <br /> %X% *This is a very important step*, as users in this group can access _all_ topics, independent of TWiki access controls.
 
 TWikiAccessControl has more information on setting up access controls.
@@ -91,7 +91,7 @@ The advantage of this scheme is that if you have an existing website authenticat
 
 The disadvantage is that because the user identity is cached in the browser, you can log in, but you can't log out again unless you restart the browser.
 
-TWiki maps the =REMOTE_USER= that was used to log in to the webserver to a WikiName using the table in %MAINWEB%.TWikiUsers. This table is updated whenever a user registers, so users can choose not to register (in which case their webserver login name is used for their signature) or register (in which case that login name is mapped to their WikiName).
+TWiki maps the =REMOTE_USER= that was used to log in to the webserver to a WikiName using the table in %USERSWEB%.TWikiUsers. This table is updated whenever a user registers, so users can choose not to register (in which case their webserver login name is used for their signature) or register (in which case that login name is mapped to their WikiName).
 
 The same private =.htpasswd= file used in TWiki Template Login can be used to authenticate Apache users, using the Apache Basic Authentication support.
 
@@ -108,7 +108,7 @@ You can use any other Apache authentication module that sets REMOTE_USER.
    1 Register yourself in the TWikiRegistration topic.
     <br /> %H% Check that a new line with the username and encrypted password is added to the =.htpasswd= file. If not, you may have got a path wrong, or the permissions may not allow the webserver user to write to that file.
    1 Create a new topic to check if authentication works.
-   1 *Edit the %MAINWEB%.TWikiAdminGroup topic in the %MAINWEB% web to include users with system administrator status.*
+   1 *Edit the %USERSWEB%.TWikiAdminGroup topic in the %USERSWEB% web to include users with system administrator status.*
     <br /> %X% *This is a very important step*, as users in this group can access _all_ topics, independent of TWiki access controls.
 TWikiAccessControl has more information on setting up access controls.
 
@@ -156,13 +156,13 @@ This section applies only if you are using authentication with existing login na
 
    * *Login Username:* When you login to the intranet, you use your existing login username, ex: ==pthoeny==. This name is normally passed to TWiki by the ==REMOTE_USER== environment variable, and used internally. Login Usernames are maintained by your system administrator.
 
-   * *TWiki Username:* Your name in WikiNotation, ex: ==PeterThoeny==, is recorded when you register using TWikiRegistration; doing so also generates a personal home page in the %MAINWEB% web.
+   * *TWiki Username:* Your name in WikiNotation, ex: ==PeterThoeny==, is recorded when you register using TWikiRegistration; doing so also generates a personal home page in the %USERSWEB% web.
 
 TWiki can automatically map an Intranet (Login) Username to a TWiki Username if the {AllowLoginName} is enabled in [[%SCRIPTURLPATH{"configure"}%][configure]]. The default is to use your WikiName as a login name.
 
 <blockquote>
-__NOTE:__ *To correctly enter a WikiName* - your own or someone else's - be sure to include the %MAINWEB% web name in front of the Wiki username, followed by a period, and no spaces, for example ==%MAINWEB%.<nop>WikiUsername== or ==%<nop>MAINWEB%.<nop>WikiUsername==.
-This points ==<nop>WikiUsername== to the %MAINWEB% web, where user home pages are located, no matter which web it's entered in. Without the web prefix, the name appears as a NewTopic everywhere but in the %MAINWEB% web.
+__NOTE:__ *To correctly enter a WikiName* - your own or someone else's - be sure to include the %USERSWEB% web name in front of the Wiki username, followed by a period, and no spaces, for example ==%USERSWEB%.<nop>WikiUsername== or ==%<nop>USERSWEB%.<nop>WikiUsername==.
+This points ==<nop>WikiUsername== to the %USERSWEB% web, where user home pages are located, no matter which web it's entered in. Without the web prefix, the name appears as a NewTopic everywhere but in the %USERSWEB% web.
 </blockquote>
 
 #ChangingPasswords

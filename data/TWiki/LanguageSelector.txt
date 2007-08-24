@@ -8,7 +8,7 @@ Test: %IF{"context i18n_enabled" then='<span style="color:green; font-weight:bol
 
 Usage:
 <verbatim>
-%INCLUDE{%TWIKIWEB%.LanguageSelector}%
+%INCLUDE{%SYSTEMWEB%.LanguageSelector}%
 </verbatim>
 
 Result:
