@@ -1,8 +1,10 @@
 lib/TWiki/Contrib/UnitTestContrib.pm 0644
+lib/Unit/Eavesdrop.pm 0644
+lib/Unit/HTMLDiffer.pm 0644
 lib/Unit/TestCase.pm 0644
 lib/Unit/TestRunner.pm 0644
 lib/Unit/TestSuite.pm 0644
-lib/Unit/HTMLDiffer.pm 0644
+test/bin/TestRunner.pl 0755
 test/unit/AccessControlTests.pm 0644
 test/unit/AttrsTests.pm 0644
 test/unit/AutoAttachTests.pm 0644
@@ -19,7 +21,10 @@ test/unit/Fn_SCRIPTURL.pm 0644
 test/unit/Fn_SEARCH.pm 0644
 test/unit/Fn_SECTION.pm 0644
 test/unit/Fn_SEP.pm 0644
+test/unit/Fn_URLPARAM.pm 0644
+test/unit/Fn_URLPARAM.pm.rej 0644
 test/unit/Fn_USERINFO.pm 0644
+test/unit/Fn_VAR.pm 0644
 test/unit/FormDefTests.pm 0644
 test/unit/FormattingTests.pm 0644
 test/unit/FuncTests.pm 0644
@@ -46,12 +51,8 @@ test/unit/TOCTests.pm 0644
 test/unit/TWikiFnTestCase.pm 0644
 test/unit/TWikiSuite.pm 0644
 test/unit/TWikiTestCase.pm 0644
-test/unit/TableRenderingTests.pm 0755
 test/unit/TemplatesTests.pm 0644
 test/unit/TimeTests.pm 0644
-test/unit/UserMappingTests.pm 0755
 test/unit/VariableTests.pm 0644
 test/unit/ViewParamSectionTests.pm 0755
 test/unit/ViewScriptTests.pm 0644
-test/bin/TestRunner.pl 0755
-

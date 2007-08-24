@@ -16,11 +16,22 @@ sub set_up {
     $this->SUPER::set_up();
     $this->{twiki} = new TWiki();
     $slash = ($TWiki::cfg{OS} eq 'WINDOWS') ? '\\' : '/';
+    # NOTE: this test pokes the *shared* sandbox, so we have to be extra
+    # careful about restoring state. We store the state, rather than
+    # just destroying the sandbox object, so that we can
+    # still pick up on potential mod_perl problems in the tests.
+    $this->{RSPO} = $TWiki::sandbox->{REAL_SAFE_PIPE_OPEN};
+    $this->{ESPO} = $TWiki::sandbox->{EMULATED_SAFE_PIPE_OPEN};
 }
 
 sub tear_down {
     my $this = shift;
+    # NOTE: this test pokes the *shared* sandbox, so we have to be extra
+    # careful about restoring state.
+    $TWiki::sandbox->{REAL_SAFE_PIPE_OPEN} = $this->{RSPO};
+    $TWiki::sandbox->{EMULATED_SAFE_PIPE_OPEN} = $this->{ESPO};
     $this->{twiki}->finish();
+    $this->SUPER::tear_down();
 }
 
 sub test_untaint {
@@ -108,54 +119,54 @@ sub test_sanitizeAttachmentName {
 sub test_buildCommandLine {
     my $this = shift;
     $this->assert_deep_equals(["a", "b", "c"],
-                              [$this->{twiki}->{sandbox}->_buildCommandLine("a b c", ())]);
+                              [$TWiki::sandbox->_buildCommandLine("a b c", ())]);
     $this->assert_deep_equals(["a", "b", "c"],
-                              [$this->{twiki}->{sandbox}->_buildCommandLine(" a  b  c ", ())]);
+                              [$TWiki::sandbox->_buildCommandLine(" a  b  c ", ())]);
     $this->assert_deep_equals([1, 2, 3],
-                              [$this->{twiki}->{sandbox}->_buildCommandLine(" %A%  %B%  %C% ", (A => 1, B => 2, C => 3))]);
+                              [$TWiki::sandbox->_buildCommandLine(" %A%  %B%  %C% ", (A => 1, B => 2, C => 3))]);
     $this->assert_deep_equals([1, "./-..", "a${slash}b"],
-                              [$this->{twiki}->{sandbox}->_buildCommandLine(" %A|U%  %B|F%  %C|F% ", (A => 1, B => "-..", C => "a/b"))]);
+                              [$TWiki::sandbox->_buildCommandLine(" %A|U%  %B|F%  %C|F% ", (A => 1, B => "-..", C => "a/b"))]);
     $this->assert_deep_equals([1, "2:3"],
-                              [$this->{twiki}->{sandbox}->_buildCommandLine(" %A%  %B%:%C% ", (A => 1, B => 2, C => 3))]);
+                              [$TWiki::sandbox->_buildCommandLine(" %A%  %B%:%C% ", (A => 1, B => 2, C => 3))]);
     $this->assert_deep_equals([1, "-n2:3"],
-                              [$this->{twiki}->{sandbox}->_buildCommandLine(" %A%  -n%B%:%C% ", (A => 1, B => 2, C => 3))]);
+                              [$TWiki::sandbox->_buildCommandLine(" %A%  -n%B%:%C% ", (A => 1, B => 2, C => 3))]);
     $this->assert_deep_equals([1, "-r2:HEAD", 3],
-                              [$this->{twiki}->{sandbox}->_buildCommandLine(" %A%  -r%B%:HEAD %C% ", (A => 1, B => 2, C => 3))]);
+                              [$TWiki::sandbox->_buildCommandLine(" %A%  -r%B%:HEAD %C% ", (A => 1, B => 2, C => 3))]);
     $this->assert_deep_equals(["a", "b", "${slash}c"],
-                              [$this->{twiki}->{sandbox}->_buildCommandLine(" %A|F%  ", (A => ["a", "b", "/c"]))]);
+                              [$TWiki::sandbox->_buildCommandLine(" %A|F%  ", (A => ["a", "b", "/c"]))]);
 
     $this->assert_deep_equals(
             ["1", "2.3", "4", '"string"', "-09AZaz.+_"],
-            [$this->{twiki}->{sandbox}->_buildCommandLine(" %A|N% %B|S% %C|S%",
+            [$TWiki::sandbox->_buildCommandLine(" %A|N% %B|S% %C|S%",
                  (A => [1, 2.3, 4], B => '"string"', C => "-09AZaz.+_"))]);
 
     $this->assert_deep_equals(["2004/11/20 09:57:41"],
-                              [$this->{twiki}->{sandbox}->_buildCommandLine("%A|D%", A => TWiki::Time::formatTime (1100944661, '$rcs', 'gmtime'))]);
-    eval { $this->{twiki}->{sandbox}->_buildCommandLine('%A|%') };
+                              [$TWiki::sandbox->_buildCommandLine("%A|D%", A => TWiki::Time::formatTime (1100944661, '$rcs', 'gmtime'))]);
+    eval { $TWiki::sandbox->_buildCommandLine('%A|%') };
     $this->assert_not_null($@, '');
-    eval { $this->{twiki}->{sandbox}->_buildCommandLine('%A|X%') };
+    eval { $TWiki::sandbox->_buildCommandLine('%A|X%') };
     $this->assert_not_null($@, '');
-    eval { $this->{twiki}->{sandbox}->_buildCommandLine(' %A|N%  ', A => '2/3') };
+    eval { $TWiki::sandbox->_buildCommandLine(' %A|N%  ', A => '2/3') };
     $this->assert_not_null($@, '');
-    eval { $this->{twiki}->{sandbox}->_buildCommandLine(' %A|S%  ', A => '2/3') };
+    eval { $TWiki::sandbox->_buildCommandLine(' %A|S%  ', A => '2/3') };
     $this->assert_not_null($@, '');
 }
 
 sub verify {
     my $this = shift;
-    my($out, $exit) = $this->{twiki}->{sandbox}->sysCommand(
+    my($out, $exit) = $TWiki::sandbox->sysCommand(
         'sh -c %A%', A => 'echo OK; echo BOSS');
     $this->assert_str_equals("OK\nBOSS\n", $out);
     $this->assert_equals(0, $exit);
-    ($out, $exit) = $this->{twiki}->{sandbox}->sysCommand(
+    ($out, $exit) = $TWiki::sandbox->sysCommand(
         'sh -c %A%', A => 'echo JUNK ON STDERR 1>&2');
     $this->assert_equals(0, $exit);
     $this->assert_str_equals("", $out);
-    ($out, $exit) = $this->{twiki}->{sandbox}->sysCommand(
+    ($out, $exit) = $TWiki::sandbox->sysCommand(
         'test %A% %B% %C%', A => '1', B=>'-eq', C=>'2');
     $this->assert_equals(1, $exit, $exit.' '.$out);
     $this->assert_str_equals("", $out);
-    ( $out, $exit) = $this->{twiki}->{sandbox}->sysCommand(
+    ( $out, $exit) = $TWiki::sandbox->sysCommand(
         'sh -c %A%', A => 'echo urmf; exit 7');
     $this->assert($exit != 0);
     $this->assert_str_equals("urmf\n", $out);
@@ -164,24 +175,24 @@ sub verify {
 sub test_executeRSP {
     my $this = shift;
     return if $TWiki::cfg{OS} eq 'WINDOWS';
-    $this->{twiki}->{sandbox}->{REAL_SAFE_PIPE_OPEN} = 1;
-    $this->{twiki}->{sandbox}->{EMULATED_SAFE_PIPE_OPEN} = 0;
+    $TWiki::sandbox->{REAL_SAFE_PIPE_OPEN} = 1;
+    $TWiki::sandbox->{EMULATED_SAFE_PIPE_OPEN} = 0;
     $this->verify();
 }
 
 sub test_executeESP {
     my $this = shift;
     return if $TWiki::cfg{OS} eq 'WINDOWS';
-    $this->{twiki}->{sandbox}->{REAL_SAFE_PIPE_OPEN} = 0;
-    $this->{twiki}->{sandbox}->{EMULATED_SAFE_PIPE_OPEN} = 1;
+    $TWiki::sandbox->{REAL_SAFE_PIPE_OPEN} = 0;
+    $TWiki::sandbox->{EMULATED_SAFE_PIPE_OPEN} = 1;
     $this->verify();
 }
 
 sub test_executeNSP {
     my $this = shift;
     return if $TWiki::cfg{OS} eq 'WINDOWS';
-    $this->{twiki}->{sandbox}->{REAL_SAFE_PIPE_OPEN} = 0;
-    $this->{twiki}->{sandbox}->{EMULATED_SAFE_PIPE_OPEN} = 0;
+    $TWiki::sandbox->{REAL_SAFE_PIPE_OPEN} = 0;
+    $TWiki::sandbox->{EMULATED_SAFE_PIPE_OPEN} = 0;
     $this->verify();
 }
 

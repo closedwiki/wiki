@@ -9,7 +9,7 @@ One line description, required for extensions repository catalog.
 
 The TWiki Unit Test Framework consists of a set of test support packages and scripts, and a number of unit test packages that test many of the features of TWiki.
 
-At the time of writing this package can only be used with TWiki-4.2 and later, and will only run to completion on a Linux platform (though most tests will run on other platforms as well)
+At the time of writing this package can only be used with TWiki-4.2 and later.
 
 This Contrib replaces the old Test::Unit based framework that we used previously. That framework works fine, but is overweight for what we require, and hard to install for non-subversion developers.
 
@@ -17,7 +17,11 @@ This Contrib replaces the old Test::Unit based framework that we used previously
 
 To run the unit tests, =cd= to =test/unit= and type =perl ../bin/TestRunner.pl TWikiSuite.pm=. The TWikiSuite package will collect all the other tests in the =test/unit= directory and run them. Any test failures are reported during the test run and again at the end of the run.
 
-Sometimes sessions in a live TWiki hang around, or a test can fail leaving fragments of fixtures behind. These sessions and fragments may stop the tests from being run again, as the tests require an cleanroom environment to run in. You can instruct the test runner to clean up any fragments passing =-clean= to =TestRunner.pl= - but use it with great care, as it deletes webs and files from =/tmp= without waiting for confirmation from you!
+---+++ Options
+
+*-clean*: Sometimes sessions in a live TWiki hang around, or a test can fail leaving fragments of fixtures behind. These sessions and fragments may stop the tests from being run again, as the tests require an cleanroom environment to run in. You can instruct the test runner to clean up any fragments passing =-clean= to =TestRunner.pl= - but use it with great care, as it deletes webs and files from =/tmp= without waiting for confirmation from you!
+
+*-log*: Normal test output is printed to the console, so you can redirect it to a file. This is hard to do on some platforms, so the =-log= option is provided. This saves all the test output (STDOUT and STDERR) to a logfile. The logfile is named for the exact time the test run started. Remember that logfiles can get quite large. The logfile can also be useful when you are analysing unexpected output from subprocesses, as it blocks any attempt to redirect to the null device.
 
 ---++ Details
 
@@ -40,6 +44,7 @@ One test file, =SemiAutomaticTestCaseTests.pm=, reads the semi-automatic tests f
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Contrib Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  | Added logging |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Contrib Home: | http://twiki.org/cgi-bin/view/Plugins/UnitTestContrib |
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/UnitTestContribDev |
