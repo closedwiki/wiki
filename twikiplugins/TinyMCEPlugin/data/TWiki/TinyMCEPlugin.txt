@@ -40,7 +40,6 @@ For a full explanation of the available options, and guidance on reconfiguring T
    remove_script_host : false,
    plugins : "table,searchreplace,autosave",
    setupcontent_callback : "tinymce_plugin_setUpContent",
-   init_instance_callback : "tinymce_plugin_addWysiwygTagToForm",
    theme_advanced_toolbar_align : "left",
    theme_advanced_buttons1 : "bold,italic,separator,bullist,numlist,separator,outdent,indent,separator,undo,redo,separator,search,replace,separator,link,unlink,removeformat,hr,separator,styleselect,formatselect,anchor,image,help,code,charmap",
    theme_advanced_buttons2: "tablecontrols",

@@ -79,6 +79,7 @@ TablePlugin is %IF{ "context TablePluginEnabled" then="enabled" else="disabled" 
 | rss | if this is an RSS skin rendering |
 | save | in save script (see TWikiScripts) |
 | search | in search script (see TWikiScripts) |
+| textareas_hijacked | provided for use by editors that highjack textareas, and want to signal this fact. This is used by skins, for example, so they can suppress extra controls when textareas have been hijacked. |
 | view | in view script (see TWikiScripts) |
 | rest | in rest script (see TWikiScripts) |
 | registration_supported | registration is supported by the current UserMapper |
