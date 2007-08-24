@@ -242,7 +242,6 @@ sub createField {
     $class = 'TWiki::Form::'.ucfirst($1);
     eval 'require '.$class;
     if( $@ ) {
-        ASSERT(0, $@) if DEBUG;
         # Type not available; use base type
         require TWiki::Form::FieldDefinition;
         $class = 'TWiki::Form::FieldDefinition';

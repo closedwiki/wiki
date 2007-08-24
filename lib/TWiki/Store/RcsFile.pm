@@ -327,7 +327,7 @@ sub searchInWebContent {
 
     no strict 'refs';
     return &{$this->{searchFn}}($searchString, $topics, $options,
-               $sDir, $this->{session}->{sandbox});
+               $sDir, $TWiki::sandbox);
     use strict 'refs';
 }
 

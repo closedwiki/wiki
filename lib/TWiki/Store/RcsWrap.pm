@@ -71,7 +71,7 @@ sub initBinary {
     return if -e $this->{rcsFile};
 
     my ( $rcsOutput, $exit ) =
-      $this->{session}->{sandbox}->sysCommand(
+      $TWiki::sandbox->sysCommand(
           $TWiki::cfg{RCS}{initBinaryCmd}, FILENAME => $this->{file} );
     if( $exit ) {
         throw Error::Simple( $TWiki::cfg{RCS}{initBinaryCmd}.
@@ -96,7 +96,7 @@ sub initText {
     return if -e $this->{rcsFile};
 
     my ( $rcsOutput, $exit ) =
-      $this->{session}->{sandbox}->sysCommand
+      $TWiki::sandbox->sysCommand
         ( $TWiki::cfg{RCS}{initTextCmd},
           FILENAME => $this->{file} );
     if( $exit ) {
@@ -158,7 +158,7 @@ sub replaceRevision {
 
     _lock( $this );
     my ($rcsOut, $exit) =
-      $this->{session}->{sandbox}->sysCommand(
+      $TWiki::sandbox->sysCommand(
           $TWiki::cfg{RCS}{ciDateCmd},
           DATE => $date,
           USERNAME => $user,
@@ -184,13 +184,13 @@ sub _deleteRevision {
 
     # delete latest revision (unlock (may not be needed), delete revision)
     my ($rcsOut, $exit) =
-      $this->{session}->{sandbox}->sysCommand(
+      $TWiki::sandbox->sysCommand(
           $TWiki::cfg{RCS}{unlockCmd},
           FILENAME => $this->{file} );
 
     chmod( $TWiki::cfg{RCS}{filePermission}, $this->{file} );
 
-    ($rcsOut, $exit) = $this->{session}->{sandbox}->sysCommand(
+    ($rcsOut, $exit) = $TWiki::sandbox->sysCommand(
         $TWiki::cfg{RCS}{delRevCmd},
         REVISION => '1.'.$rev,
         FILENAME => $this->{file} );
@@ -203,7 +203,7 @@ sub _deleteRevision {
 
     # Update the checkout
     $rev--;
-    ($rcsOut, $exit) = $this->{session}->{sandbox}->sysCommand(
+    ($rcsOut, $exit) = $TWiki::sandbox->sysCommand(
         $TWiki::cfg{RCS}{coCmd},
         REVISION => '1.'.$rev,
         FILENAME => $this->{file} );
@@ -238,13 +238,13 @@ sub getRevision {
         $tmpfile = TWiki::Store::RcsFile::mkTmpFilename( $this );
         $tmpRevFile = $tmpfile.',v';
         copy( $this->{rcsFile}, $tmpRevFile );
-        my ($tmp, $status) = $this->{session}->{sandbox}->sysCommand(
+        my ($tmp, $status) = $TWiki::sandbox->sysCommand(
             $TWiki::cfg{RCS}{tmpBinaryCmd},
             FILENAME => $tmpRevFile );
         $file = $tmpfile;
         $coCmd =~ s/-p%REVISION/-r%REVISION/;
     }
-    my ($text, $status) = $this->{session}->{sandbox}->sysCommand(
+    my ($text, $status) = $TWiki::sandbox->sysCommand(
         $coCmd,
         REVISION => '1.'.$version,
         FILENAME => $file );
@@ -269,7 +269,7 @@ sub numRevisions {
     }
 
     my ($rcsOutput, $exit) =
-      $this->{session}->{sandbox}->sysCommand
+      $TWiki::sandbox->sysCommand
         ( $TWiki::cfg{RCS}{histCmd},
           FILENAME => $this->{rcsFile} );
     if( $exit ) {
@@ -294,7 +294,7 @@ sub getRevisionInfo {
         if( !$version || $version > $this->numRevisions()) {
             $version = $this->numRevisions();
         }
-        my( $rcsOut, $exit ) = $this->{session}->{sandbox}->sysCommand
+        my( $rcsOut, $exit ) = $TWiki::sandbox->sysCommand
           ( $TWiki::cfg{RCS}{infoCmd},
             REVISION => '1.'.$version,
             FILENAME => $this->{rcsFile} );
@@ -329,7 +329,7 @@ sub revisionDiff {
         }
     } else {
         $contextLines = 3 unless defined($contextLines);
-        ( $tmp, $exit ) = $this->{session}->{sandbox}->sysCommand(
+        ( $tmp, $exit ) = $TWiki::sandbox->sysCommand(
             $TWiki::cfg{RCS}{diffCmd},
             REVISION1 => '1.'.$rev1,
             REVISION2 => '1.'.$rev2,
@@ -413,7 +413,7 @@ sub _ci {
         require TWiki::Time;
         $date = TWiki::Time::formatTime( $date , '$rcs', 'gmtime');
         $cmd = $TWiki::cfg{RCS}{ciDateCmd};
-        ($rcsOutput, $exit)= $this->{session}->{sandbox}->sysCommand(
+        ($rcsOutput, $exit)= $TWiki::sandbox->sysCommand(
             $cmd,
             USERNAME => $user,
             FILENAME => $this->{file},
@@ -421,7 +421,7 @@ sub _ci {
             DATE => $date );
     } else {
         $cmd = $TWiki::cfg{RCS}{ciCmd};
-        ($rcsOutput, $exit)= $this->{session}->{sandbox}->sysCommand(
+        ($rcsOutput, $exit)= $TWiki::sandbox->sysCommand(
             $cmd,
             USERNAME => $user,
             FILENAME => $this->{file},
@@ -443,7 +443,7 @@ sub _lock {
     return unless -e $this->{rcsFile};
 
     # Try and get a lock on the file
-    my ($rcsOutput, $exit) = $this->{session}->{sandbox}->sysCommand(
+    my ($rcsOutput, $exit) = $TWiki::sandbox->sysCommand(
         $TWiki::cfg{RCS}{lockCmd}, FILENAME => $this->{file} );
 
     if( $exit ) {
@@ -452,9 +452,9 @@ sub _lock {
         # scenarios - see Item2102
         if ((time - (stat($this->{rcsFile}))[9]) > 3600) {
             warn 'Automatic recovery: breaking lock for ' . $this->{file} ;
-            $this->{session}->{sandbox}->sysCommand(
+            $TWiki::sandbox->sysCommand(
                 $TWiki::cfg{RCS}{breaklockCmd}, FILENAME => $this->{file} );
-        ($rcsOutput, $exit) = $this->{session}->{sandbox}->sysCommand(
+        ($rcsOutput, $exit) = $TWiki::sandbox->sysCommand(
                 $TWiki::cfg{RCS}{lockCmd}, FILENAME => $this->{file} );
         }
        if ( $exit ) {
@@ -476,7 +476,7 @@ sub getRevisionAtTime {
     }
     require TWiki::Time;
 	$date = TWiki::Time::formatTime( $date , '$rcs', 'gmtime');
-    my ($rcsOutput, $exit) = $this->{session}->{sandbox}->sysCommand(
+    my ($rcsOutput, $exit) = $TWiki::sandbox->sysCommand(
         $TWiki::cfg{RCS}{rlogDateCmd},
         DATE => $date,
         FILENAME => $this->{file} );

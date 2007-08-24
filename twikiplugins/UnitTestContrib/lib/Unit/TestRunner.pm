@@ -1,3 +1,4 @@
+# See bottom of file for more information
 package Unit::TestRunner;
 
 use strict;
@@ -31,7 +32,10 @@ sub start {
         }
         print "Running $suite\n";
         my $tester = $suite->new($suite);
-        if ($tester->isa('TWikiTestCase')) {
+        if ($tester->isa('Unit::TestSuite')) {
+            # Get a list of included tests
+            push(@files, $tester->include_tests());
+        } else {
             # Get a list of the test methods in the class
             my @tests = $tester->list_tests($suite);
             unless (scalar(@tests)) {
@@ -51,9 +55,6 @@ sub start {
                 };
                 $tester->tear_down();
             }
-        } else {
-            # Assume it's a suite
-            push(@files, $tester->include_tests());
         }
     }
 
@@ -65,8 +66,32 @@ sub start {
         return scalar(@{$this->{failures}});
     } else {
         print "All tests passed ($passes)\n";
-	return 0;
+        return 0;
     }
 }
 
 1;
+
+__DATA__
+
+=pod
+
+Test run controller
+Author: Crawford Currie, http://c-dot.co.uk
+
+Copyright (C) 2007 WikiRing, http://wikiring.com
+All Rights Reserved.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version. For
+more details read LICENSE in the root of this distribution.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+As per the GPL, removal of this notice is prohibited.
+
+=cut

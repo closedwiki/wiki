@@ -39,7 +39,6 @@ sub list_tests {
 
 sub run_testcase {
     my ( $this, $testcase ) = @_;
-
     my $query = new CGI({
         test=>'compare',
         debugenableplugins=>'TestFixturePlugin,InterwikiPlugin',
@@ -51,10 +50,15 @@ sub run_testcase {
         $twiki->{user}, $this->{users_web}, 'TWikiContributor', 'none');
     my ($text, $result) = $this->capture( \&TWiki::UI::View::view, $twiki);
     unless( $text =~ m#<font color="green">ALL TESTS PASSED</font># ) {
-        open(F,">$testcase.html");
+        open(F,">${testcase}_run.html");
         print F $text;
         close F;
-        $this->assert(0, "$testcase FAILED - output in $testcase.html");
+        $query->delete('test');
+        ($text, $result) = $this->capture( \&TWiki::UI::View::view, $twiki);
+        open(F,">${testcase}.html");
+        print F $text;
+        close F;
+        $this->assert(0, "$testcase FAILED - output in ${testcase}.html and ${testcase}_run.html");
     }
     $twiki->finish();
 }

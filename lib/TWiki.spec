@@ -923,12 +923,12 @@ $TWiki::cfg{RCS}{SearchAlgorithm} = 'TWiki::Store::SearchAlgorithms::Forking';
 # to -i for case-sensitive search or to the empty string otherwise.
 # Similarly for %DET, which controls whether matching lines are required.
 # (see the documentation on these options with GNU grep for details).
-$TWiki::cfg{RCS}{EgrepCmd} = '/bin/egrep %CS{|-i}% %DET{|-l}% -H -- %TOKEN|U% %FILES|F%';
+$TWiki::cfg{RCS}{EgrepCmd} = '/bin/grep -E %CS{|-i}% %DET{|-l}% -H -- %TOKEN|U% %FILES|F%';
 
 # **COMMAND EXPERT**
 # Full path to GNU-compatible fgrep program. This is used for searching when
 # {SearchAlgorithm} is 'TWiki::Store::SearchAlgorithms::Forking'.
-$TWiki::cfg{RCS}{FgrepCmd} = '/bin/fgrep %CS{|-i}% %DET{|-l}% -H -- %TOKEN|U% %FILES|F%';
+$TWiki::cfg{RCS}{FgrepCmd} = '/bin/grep -F %CS{|-i}% %DET{|-l}% -H -- %TOKEN|U% %FILES|F%';
 
 # **BOOLEAN**
 # Set to enable hierarchical webs. Without this setting, TWiki will only

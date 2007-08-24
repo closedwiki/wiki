@@ -26,6 +26,11 @@ This object provides an interface to the outside world. All calls to
 system functions, or handling of file names, should be brokered by
 this object.
 
+NOTE: TWiki creates a singleton sandbox that is *shared* by all TWiki
+runs under a single mod_perl instance. If any TWiki run modifies the
+sandbox, that modification will carry over in to subsequent runs.
+Be very, very careful!
+
 =cut
 
 package TWiki::Sandbox;
@@ -416,6 +421,12 @@ sub sysCommand {
 
             # Despite documentation apparently to the contrary, closing
             # STDOUT first makes the subsequent open useless. So don't.
+            # When running tests -log, then STDOUT is tied to an object
+            # that tees the output. Unfortunately, what we need here is a plain
+            # file handle, so we need to make sure we untie it. untie is a
+            # NOP if STDOUT is not tied.
+            untie( *STDOUT ); untie( *STDERR );
+
             open(STDOUT, ">&=".fileno( $writeHandle )) or die;
 
             open (STDERR, '>'.File::Spec->devnull());

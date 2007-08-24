@@ -1,3 +1,4 @@
+# See bottom of file for description
 package Unit::TestCase;
 
 use strict;
@@ -277,23 +278,17 @@ sub capture {
     require File::Temp;
     my $tmpdir = File::Temp::tempdir(CLEANUP => 1);
 
-    # take copy of the file descriptor
-    open(OLDOUT, ">&STDOUT");
-    open(STDOUT, ">$tmpdir/data");
-
     my $text = undef;
     my @params = @_;
     my $result;
 
-    try {
-        $result = &$proc( @params );
-    } finally {
-        close(STDOUT)            or die "Can't close STDOUT: $!";
-        open(STDOUT, ">&OLDOUT") or die "Can't restore stderr: $!";
-        close(OLDOUT)            or die "Can't close OLDOUT: $!";
-    };
+    {
+        local *STDOUT;
+        open(STDOUT, ">$tmpdir/data");
 
-    $text = '';
+        $result = &$proc( @params );
+    }
+
     open(FH, "$tmpdir/data");
     local $/ = undef;
     $text = <FH>;
@@ -303,3 +298,28 @@ sub capture {
 }
 
 1;
+
+__DATA__
+
+=pod
+
+Base class for unit testcases
+Author: Crawford Currie, http://c-dot.co.uk
+
+
+Copyright (C) 2007 WikiRing, http://wikiring.com
+All Rights Reserved.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version. For
+more details read LICENSE in the root of this distribution.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+As per the GPL, removal of this notice is prohibited.
+
+=cut

@@ -520,7 +520,7 @@ Get the wikiname to display for a canonical user identifier.
 
 sub getWikiName {
     my ($this, $cUID ) = @_;
-    ASSERT($cUID) if DEBUG;
+    return 'UnknownUser' unless $cUID;
 	return $this->{getWikiName}->{$cUID} if (defined($this->{getWikiName}->{$cUID}));
 
 	my $legacycUID = $this->getCanonicalUserID($cUID);
@@ -541,7 +541,8 @@ Return the fully qualified wikiname of the user
 sub webDotWikiName {
     my( $this, $user ) = @_;
  	#$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
-   return "$TWiki::cfg{UsersWebName}.".getWikiName( $this, $user );
+    return $TWiki::cfg{UsersWebName}.'.'
+      .getWikiName( $this, $user );
 }
 
 =pod

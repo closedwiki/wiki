@@ -71,7 +71,7 @@ use vars qw(
             $VERSION $RELEASE
             $TRUE
             $FALSE
-            $sharedSandbox
+            $sandbox
             $ifParser
            );
 
@@ -462,9 +462,6 @@ BEGIN {
     # initialize lib directory early because of later 'cd's
     getTWikiLibDir();
 
-    # "shared" between mod_perl instances
-    $sharedSandbox = new TWiki::Sandbox(
-        $TWiki::cfg{OS}, $TWiki::cfg{DetailedOS} );
     Monitor::MARK('Static configuration loaded');
 };
 
@@ -1251,7 +1248,11 @@ sub new {
     $this->{context} = $initialContext || {};
 
     # create the various sub-objects
-    $this->{sandbox} = $sharedSandbox;
+    unless ($sandbox) {
+        # "shared" between mod_perl instances
+        $sandbox = new TWiki::Sandbox(
+            $TWiki::cfg{OS}, $TWiki::cfg{DetailedOS} );
+    }
     require TWiki::Plugins;
     $this->{plugins} = new TWiki::Plugins( $this );
     require TWiki::Store;
@@ -1585,7 +1586,6 @@ sub finish {
     $this->{prefs}->finish() if $this->{prefs};
     $this->{templates}->finish() if $this->{templates};
     $this->{renderer}->finish() if $this->{renderer};
-    $this->{sandbox}->finish() if $this->{sandbox};
     $this->{net}->finish() if $this->{net};
     $this->{store}->finish() if $this->{store};
     $this->{search}->finish() if $this->{search};

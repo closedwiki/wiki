@@ -80,7 +80,7 @@ sub init {
         }
         close(F);
 
-        my ($output, $exit) = $this->{session}->{sandbox}->sysCommand(
+        my ($output, $exit) = $TWiki::sandbox->sysCommand(
             'svn add %FILENAME|F%',
             FILENAME => $this->{file});
         if( $exit ) {
@@ -102,7 +102,7 @@ sub _mkPathTo {
             $path .= '/';
         } elsif( $path ) {
             if(  ! -e "$path$dir" && -e "$path/.svn" ) {
-                my($output, $exit) = $this->{session}->{sandbox}->sysCommand(
+                my($output, $exit) = TWiki::sandbox->sysCommand(
                     'svn mkdir %FILENAME|F%',
                     FILENAME => $path.$dir);
                 if( $exit ) {
@@ -292,10 +292,9 @@ sub searchInWebContent {
     my $maxTopicsInSet = 512; # max number of topics for a grep call
     my @take = @$topics;
     my @set = splice( @take, 0, $maxTopicsInSet );
-    my $sandbox = $this->{session}->{sandbox};
     while( @set ) {
         @set = map { "$sDir/$_.txt" } @set;
-        my ($matches, $exit ) = $sandbox->sysCommand(
+        my ($matches, $exit ) = $TWiki::sandbox->sysCommand(
             $program,
             TOKEN => $searchString,
             FILES => \@set);
@@ -554,7 +553,7 @@ sub _copyFile {
 
     _mkPathTo( $this, $to );
 
-    my($output, $exit) = $this->{session}->{sandbox}->sysCommand(
+    my($output, $exit) = $TWiki::sandbox->sysCommand(
         'svn cp %FROM|F% %TO|F%',
         FROM => $from, TO => $to);
     if( $exit ) {
@@ -567,7 +566,7 @@ sub _moveFile {
     my( $this, $from, $to ) = @_;
 
     _mkPathTo( $this, $to );
-    my($output, $exit) = $this->{session}->{sandbox}->sysCommand(
+    my($output, $exit) = $TWiki::sandbox->sysCommand(
         'svn mv %FROM|F% %TO|F%',
         FROM => $from, TO => $to);
     if( $exit ) {
@@ -659,7 +658,7 @@ sub _mktemp {
 sub _rmtree {
     my ($this, $root) = @_;
 
-    my ($output, $exit) = $this->{session}->{sandbox}->sysCommand(
+    my ($output, $exit) = $TWiki::sandbox->sysCommand(
         'svn rm %FILENAME|F%',
         FILENAME => $root);
     if( $exit ) {
@@ -703,7 +702,7 @@ sub deleteRevision {
 sub numRevisions {
     my $this = shift;
 
-    my($output, $exit) = $this->{session}->{sandbox}->sysCommand(
+    my($output, $exit) = $TWiki::sandbox->sysCommand(
         'svn info %FILE|F%',
         FILE => $this->{file} );
     if( $exit ) {
@@ -729,7 +728,7 @@ sub revisionDiff {
         return [];
     }
 
-    my($output, $exit) = $this->{session}->{sandbox}->sysCommand(
+    my($output, $exit) = $TWiki::sandbox->sysCommand(
         'svn diff -r%FT|U% --non-interactive %FILE|F%',
         FT => $ft,
         FILE => $this->{file} );
