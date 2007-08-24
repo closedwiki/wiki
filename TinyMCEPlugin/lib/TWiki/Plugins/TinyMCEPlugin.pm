@@ -36,7 +36,7 @@ sub _isAvailable {
 
     # Check the client browser to see if it is supported by TinyMCE
     my $query = TWiki::Func::getCgiQuery();
-    if ($query && $query->user_agent() &&
+    if (!$query || $query->user_agent() &&
           $query->user_agent() =~ /(Konqueror|Opera)/i) {
         $disabled = 1;
     }
@@ -72,6 +72,8 @@ SCRIPT
 
     $_[0] = '<!--'.$secret_id.'-->'.
       TWiki::Plugins::WysiwygPlugin::TranslateTML2HTML($_[0]);
+
+    TWiki::Func::getContext()->{textareas_hijacked} = 1;
 }
 
 sub afterEditHandler {
