@@ -70,9 +70,12 @@ tinyMCE.init({ $init });
 </script>
 SCRIPT
 
-    $_[0] = '<!--'.$secret_id.'-->'.
-      TWiki::Plugins::WysiwygPlugin::TranslateTML2HTML($_[0]);
+    my $sid = '<!--'.$secret_id.'-->';
+    unless ($_[0] =~ /^$sid/) {
+        $_[0] = $sid.TWiki::Plugins::WysiwygPlugin::TranslateTML2HTML($_[0]);
+    }
 
+    # See TWiki.IfStatements for a description of this context id.
     TWiki::Func::getContext()->{textareas_hijacked} = 1;
 }
 
