@@ -24,7 +24,7 @@
 %TMPL:DEF{"help"}%%INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}%%TMPL:END%
 
 
-%TMPL:DEF{"textarea"}%<div class="twikiEditTextarea"><textarea class="twikiTextarea twikiEditboxStyleProportional" id="topic" name="text" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style='%EDITBOXSTYLE%' onkeydown='handleKeyDown(event)'>%TEXT%</textarea></div><!--/twikiEditTextarea-->%TMPL:END%
+%TMPL:DEF{"textarea"}%%IF{"defined 'EDITOR_MESSAGE'" then="<div class='twikiAlert'>%EDITOR_MESSAGE%</div>"}%<div class="twikiEditTextarea"><textarea class="twikiTextarea twikiEditboxStyleProportional" id="topic" name="text" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style='%EDITBOXSTYLE%' onkeydown='handleKeyDown(event)'>%TEXT%</textarea></div><!--/twikiEditTextarea-->%TMPL:END%
 
 
 %TMPL:DEF{"form"}%%FORMFIELDS%%TMPL:END%
