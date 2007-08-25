@@ -4,11 +4,13 @@
 
 var txtarea;
 
+var isOpera=window.opera?1:0;
+
 // apply tagOpen/tagClose to selection in textarea,
 // use sampleText instead of selection if there is none
 function natInsertTags(tagOpen, sampleText, tagClose) {
   // IE
-  if (document.selection) {
+  if (document.selection && !isOpera) {
     var theSelection = document.selection.createRange().text;
 
     if (!theSelection) {
@@ -76,7 +78,7 @@ function natInsertListTag(tagOpen, sampleText, tagClose) {
 
   var startPos, endPos;
 
-  if (document.selection) {
+   if (document.selection && !isOpera) {
     // IE
     
     var originalRange = document.selection.createRange().duplicate();
@@ -168,7 +170,7 @@ function natInsertListTag(tagOpen, sampleText, tagClose) {
 
   txtarea.value = pre + modifiedSelection + post;
 
-  if (document.selection) {
+  if (document.selection && !isOpera) {
     //IE
     txtarea.focus();
     var range = txtarea.createTextRange();
@@ -271,7 +273,9 @@ function natEditInit() {
       // table button 
       $('#natEditTableButtonLink').click(function() { 
 
-        if (!txtarea.selectionStart) { //IE
+       if (document.selection && !isOpera) {
+
+        //IE
           var originalRange = document.selection.createRange().duplicate();
           var mySelection = originalRange.text;
           if(mySelection != null){
