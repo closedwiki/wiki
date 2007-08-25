@@ -11,7 +11,9 @@
 
 function natEditTableButtonAction() {
   // this function gets replaced if JQueryPlugin is installed
-  natInsertTags(%IF{"defined NATEDIT_TABLE" then="%NATEDIT_TABLE%" else="'\n| ** | ** | ** |\n|    |    |    |\n|    |    |    |\n', '', ''"}%);
+  if (!twiki.JQueryPluginEnabled) {
+    natInsertTags(%IF{"defined NATEDIT_TABLE" then="%NATEDIT_TABLE%" else="'\n| ** | ** | ** |\n|    |    |    |\n|    |    |    |\n', '', ''"}%);
+  }
 }
 function natEditNumberedButtonAction() {
   natInsertListTag(%IF{"defined NATEDIT_NUMBERED" then="%NATEDIT_NUMBERED%" else="'   1 ','enumerated item',''"}%);
