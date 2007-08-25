@@ -43,7 +43,7 @@ sub start {
                 next;
             }
             foreach my $test (@tests) {
-                print STDERR "\t$test\n";
+                print "\t$test\n";
                 $tester->set_up();
                 try {
                     $tester->$test();

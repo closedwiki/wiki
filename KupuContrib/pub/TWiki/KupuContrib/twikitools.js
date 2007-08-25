@@ -562,11 +562,11 @@ TWikiIconsTool.prototype = new KupuTool;
  
 /* Tool for inserting a new NOP region, around whatever is selected */
 /* if already in a region of that type, remove the region */
+/* DEPRECATED since changes for simpler editing model
 function TWikiNOPTool(buttonid){
   this.button = getFromSelector(buttonid);
 
   this.initialize = function(editor) {
-    /* tool initialization : nothing */
     this.editor = editor;
     addEventHandler(this.button, "click", this.insert, this);
     this.editor.logMessage('NOP tool initialized');
@@ -581,8 +581,8 @@ function TWikiNOPTool(buttonid){
   };
 }
 
-
 TWikiNOPTool.prototype = new KupuTool;
+*/
 
 /* Tool for inserting wikiwords */
 function TWikiWikiWordTool() {

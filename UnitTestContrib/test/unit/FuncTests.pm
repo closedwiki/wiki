@@ -675,5 +675,36 @@ sub test_4411 {
     $this->assert(!TWiki::Func::isGuest(), $this->{twiki}->{user});
 }
 
+sub test_setPreferences {
+    my $this = shift;
+    $this->assert(!TWiki::Func::getPreferencesValue("PSIBG"));
+    $this->assert(TWiki::Func::setPreferencesValue("PSIBG", "KJHD"));
+    $this->assert_str_equals("KJHD", TWiki::Func::getPreferencesValue("PSIBG"));
+    my $q = TWiki::Func::getCgiQuery();
+
+    ####
+	TWiki::Func::saveTopicText( $this->{test_web}, $TWiki::cfg{WebPrefsTopicName}, <<HERE);
+   * Set PSIBG = naff
+   * Set FINALPREFERENCES = PSIBG
+HERE
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki($TWiki::cfg{GuestUserLogin}, $q);
+    $this->assert_str_equals("naff",
+                             TWiki::Func::getPreferencesValue("PSIBG"));
+    $this->assert(!TWiki::Func::setPreferencesValue("PSIBG", "KJHD"));
+    $this->assert_str_equals("naff", TWiki::Func::getPreferencesValue("PSIBG"));
+    ###
+	TWiki::Func::saveTopicText( $this->{test_web}, $TWiki::cfg{WebPrefsTopicName}, <<HERE);
+   * Set PSIBG = naff
+HERE
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki($TWiki::cfg{GuestUserLogin}, $q);
+    $this->assert_str_equals("naff",
+                             TWiki::Func::getPreferencesValue("PSIBG"));
+    $this->assert(TWiki::Func::setPreferencesValue("PSIBG", "KJHD"));
+    $this->assert_str_equals("KJHD", TWiki::Func::getPreferencesValue("PSIBG"));
+
+}
+
 1;
 

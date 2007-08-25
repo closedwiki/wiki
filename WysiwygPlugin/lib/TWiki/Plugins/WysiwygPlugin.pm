@@ -46,7 +46,7 @@ require TWiki::Plugins; # For the API version
 
 use Assert;
 
-use vars qw( $VERSION $RELEASE $SKIN $SHORTDESCRIPTION );
+use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION );
 use vars qw( $html2tml $tml2html $recursionBlock $imgMap );
 use vars qw( %TWikiCompatibility @refs );
 
@@ -58,8 +58,6 @@ $RELEASE = 'TWiki-4.2';
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
-
-    $SKIN = TWiki::Func::getPreferencesValue( 'WYSIWYGPLUGIN_WYSIWYGSKIN' );
 
     # %OWEB%.%OTOPIC% is the topic where the initial content should be
     # grabbed from, as defined in templates/edit.skin.tmpl
@@ -112,20 +110,22 @@ sub _OTOPICTAG {
 }
 
 # This handler is used to determine whether the topic is editable by
-# Wysiwyg or not. The only thing it does is to redirect to a normal edit
-# url if the skin is set to $SKIN and nasty content is found.
+# a WYSIWYG editor or not. The only thing it does is to redirect to a
+# normal edit url if the skin is set to WYSIWYGPLUGIN_WYSIWYGSKIN and
+# nasty content is found.
 sub beforeEditHandler {
     #my( $text, $topic, $web, $meta ) = @_;
-    return unless $SKIN;
 
-    if( TWiki::Func::getSkin() =~ /\b$SKIN\b/o ) {
-        unless( isWysiwygEditable($_[0])) {
+    my $skin = TWiki::Func::getPreferencesValue( 'WYSIWYGPLUGIN_WYSIWYGSKIN' );
+
+    if( $skin && TWiki::Func::getSkin() =~ /\b$skin\b/o ) {
+        if( notWysiwygEditable($_[0])) {
 
             # redirect
             my $query = TWiki::Func::getCgiQuery();
             foreach my $p qw( skin cover ) {
                 my $arg = $query->param( $p );
-                if( $arg && $arg =~ s/\b$SKIN\b//o ) {
+                if( $arg && $arg =~ s/\b$skin\b// ) {
                     if( $arg =~ /^[\s,]*$/ ) {
                         $query->delete( $p );
                     } else {
@@ -149,7 +149,7 @@ sub beforeSaveHandler {
 
     return unless defined( $query->param( 'wysiwyg_edit' ));
 
-    $_[0] = postProcess( @_ );
+    $_[0] = TranslateHTML2TML( @_ );
 }
 
 # This handler is invoked *before* a merge, and only from the edit
@@ -165,11 +165,11 @@ sub afterEditHandler {
     # the beforeSaveHandler
     $query->delete( 'wysiwyg_edit' );
 
-    $_[0] = postProcess( @_ );
+    $_[0] = TranslateHTML2TML( @_ );
 }
 
 # Invoked to convert HTML to TML (best efforts)
-sub postProcess {
+sub TranslateHTML2TML {
     my( $text, $topic, $web ) = @_;
 
     unless( $html2tml ) {
@@ -454,7 +454,17 @@ sub _dropBack {
     return $text;
 }
 
-sub isWysiwygEditable {
+=pod
+
+---++ StaticMethod notWysiwygEditable($text) -> $boolean
+Determine if the given =$text= is WYSIWYG editable, based on the topic content
+and the value of the TWiki preferences WYSIWYG_EXCLUDE and
+WYSIWYG_EDITABLE_CALLS. Returns a descriptive string if the text is not
+editable, 0 otherwise.
+
+=cut
+
+sub notWysiwygEditable {
     #my ($text, $exclusions) = @_;
 
     my $exclusions = $_[1];
@@ -462,35 +472,36 @@ sub isWysiwygEditable {
         $exclusions = TWiki::Func::getPreferencesValue('WYSIWYG_EXCLUDE')
           || '';
     }
-    return 1 unless $exclusions;
+    return 0 unless $exclusions;
 
     my $calls_ok = TWiki::Func::getPreferencesValue(
-        'WYSIWYG_EDITABLE_CALLS' ) || 'DO NOT MATCH';
+        'WYSIWYG_EDITABLE_CALLS' ) || '---';
+    $calls_ok =~ s/\s//g;
 
     my $ok = 1;
     if( $exclusions =~ /calls/
           && $_[0] =~ /%((?!($calls_ok){)[A-Z_]+{.*?})%/s ) {
-        print STDERR "WYSIWYG_DEBUG: has calls $1\n";
-        $ok = 0;
+        #print STDERR "WYSIWYG_DEBUG: has calls $1 (not in $calls_ok)\n";
+        return "Text contains calls";
     }
     if( $exclusions =~ /variables/ && $_[0] =~ /%([A-Z_]+)%/s ) {
-        print STDERR "$exclusions WYSIWYG_DEBUG: has variables $1\n";
-        $ok = 0;
+        #print STDERR "$exclusions WYSIWYG_DEBUG: has variables $1\n";
+        return "Text contains variables";
     }
     if( $exclusions =~ /html/ &&
           $_[0] =~ /<\/?((?!literal|verbatim|noautolink|nop|br)\w+)/ ) {
-        print STDERR "WYSIWYG_DEBUG: has html: $1\n";
-        $ok = 0;
+        #print STDERR "WYSIWYG_DEBUG: has html: $1\n";
+        return "Text contains HTML";
     }
     if( $exclusions =~ /comments/ && $_[0] =~ /<[!]--/ ) {
-        print STDERR "WYSIWYG_DEBUG: has comments\n";
-        $ok = 0;
+        #print STDERR "WYSIWYG_DEBUG: has comments\n";
+        return "Text contains comments";
     }
     if( $exclusions =~ /pre/ && $_[0] =~ /<pre\w/ ) {
-        print STDERR "WYSIWYG_DEBUG: has pre\n";
-        $ok = 0;
+        #print STDERR "WYSIWYG_DEBUG: has pre\n";
+        return "Text contains PRE";
     }
-    return $ok;
+    return 0;
 }
 
 sub TranslateTML2HTML {
