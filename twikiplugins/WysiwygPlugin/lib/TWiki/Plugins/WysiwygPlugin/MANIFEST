@@ -5,5 +5,6 @@ lib/TWiki/Plugins/WysiwygPlugin/HTML2TML.pm 0444 Perl module
 lib/TWiki/Plugins/WysiwygPlugin.pm 0444 Perl module
 lib/TWiki/Plugins/WysiwygPlugin/TML2HTML.pm 0444 Perl module
 data/TWiki/WysiwygPlugin.txt 0644 Documentation and settings
+data/TWiki/WysiwygPluginSettings.txt 0644 Documentation and settings
 data/TWiki/WysiwygPluginTopicLister.txt 0644 Special AJAX topic
 tools/html2tml.pl 0555 Stand-alone convertor script

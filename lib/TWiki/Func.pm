@@ -553,6 +553,25 @@ sub getPluginPreferencesFlag {
 
 =pod
 
+---+++ setPreferencesValue($name, $val)
+
+Set the preferences value so that future calls to getPreferencesValue will
+return this value, and =%$name%= will expand to the preference when used in
+future variable expansions.
+
+The preference only persists for the rest of this request. Finalised
+preferences cannot be redefined using this function.
+
+Returns 1 if the preference was defined, and 0 otherwise.
+
+=cut
+
+sub setPreferencesValue {
+    return $TWiki::Plugins::SESSION->{prefs}->setPreferencesValue(@_);
+}
+
+=pod
+
 ---+++ getWikiToolName( ) -> $name
 
 Get toolname as defined in TWiki.cfg

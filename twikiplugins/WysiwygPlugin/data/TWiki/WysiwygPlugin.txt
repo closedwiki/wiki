@@ -26,13 +26,13 @@ The package includes the following pieces:
 ---+++ How it works
 The plugin works by translating the topic text into HTML when someone edits a topic. The HTML is then fed to the WYSIWYG editor. On save, the edited HTML is run through the reverse translation before saving to the topic. TWiki syntax is used in preference to HTML in the stored topic wherever possible, though HTML may be used if the translator can't find a suitable TML equivalent..
 
-The default rendering that TWiki uses to generate HTML for display in browsers is 'lossy' - information in the TWiki syntax is lost in the HTML output, and a round-trip (recovering the original TWiki syntax from the HTML) is impossible. To solve this problem the plugin instead uses its own translation of TWiki syntax to pure XHTML. The generated XHTML is annotated with CSS classes that support the accurate recovery of the original TWiki syntax.
+The default rendering that TWiki uses to generate HTML for display in browsers is 'lossy' - information in the TWiki syntax is lost in the HTML output, and a round-trip (recovering the original TWiki syntax from the HTML) is impossible. To solve this problem the plugin instead uses its own translation of TWiki syntax to XHTML. The generated XHTML is annotated with CSS classes that support the accurate recovery of the original TWiki syntax.
 
 _Before you ask the obvious question, yes, the translator *could* be used to replace the TWiki rendering pipeline for generating HTML pages. In fact, the translator is taken almost directly from the implementation of the rendering pipeline for the TWiki-4 release_
 
-Translation of the HTML back to TWiki syntax uses the CPAN:HTML::Parser. This parser is used in preference to a more modern XML parser, because the HTML may not generate fully compliant XHTML. A strict parser would risk losing content. CPAN:HTML::Parser is better at handling malformed HTML.
+Translation of the HTML back to TWiki syntax uses the CPAN:HTML::Parser. This parser is used in preference to a more modern XML parser, because the WYSIWYG editor may not generate fully compliant XHTML. A strict parser would risk losing content. CPAN:HTML::Parser is better at handling malformed HTML.
 
-There is also the advantage that the translator can be used to import HTML from other sources - for example, existing web pages. Due to the simple nature of TWiki syntax and the potential complexity of web pages, this translation is often lossy - i.e there will be HTML features that can be entered by editors that will be lost in this translation step. This is especially noticeable with HTML tables.
+There is also the advantage that the translator can be used to *import* HTML from other sources - for example, existing web pages. Due to the simple nature of TWiki syntax and the potential complexity of web pages, this translation is often lossy - i.e there will be HTML features that can be entered by editors that will be lost in this translation step. This is especially noticeable with HTML tables.
 
 ---+++ Using the translators from Perl scripts
 
@@ -42,54 +42,71 @@ Stand-alone convertor scripts for HTML to TWiki and TWiki to HTML are included i
 
 ---+++ Integrating a HTML Editor
 The plugin can be used to integrate an HTML editor in a number of different ways.
-   1 The HTML for the content-to-be-edited can be generated directly in the edit template.
+   1 The HTML for the content-to-be-edited can be generated directly in the standard edit template.
+   1 The HTML for the content-to-be-edited can be generated directly in a specialised edit template.
    1 A URL can be used to fetch the content-to-be-edited from the server, for use in an IFRAME.
    1 REST handlers can be called from Javacript to convert content.
 
----++++ Generating content directly in the edit template
-This is the scenario used by the standard TWiki text editor, except that the text is pre-converted to HTML before inclusion in the template.
+---++++ Generating content directly in the standard edit template
+This is the technique used by WYSIWYG editors that can sit on top of HTML
+textareas, such as !TinyMCE. The topic content is pre-converted to HTML before inclusion in the standard edit template. These editors use plugins that have a =beforeEditHandler= and an =afterEditHandler=. These handlers are responsible for the conversion of topic text to HTML, and post-conversion of HTML back to TML.
+   1 User hits "edit".
+   1 Editor-specific plugin =beforeEditHandler= converts topic content to HTML by calling =TWiki::Plugins::WysiwygPlugin::TranslateTML2HTML=.
+   1 User edits and saves
+   1 Editor-specific plugin =afterEditHandler= converts HTML back to TML by calling =TWiki::Plugins::WysiwygPlugin::TranslateHTML2TML=.
+   * !WysiwygPlugin should *not* be enabled in =configure=.
+   * =WYSIWYGPLUGIN_WYSIWYGSKIN= should *not* be set.
+   * Your plugin should set the =textareas_hijacked= context id, to signal to skins to suppress their textarea manipulation functions.
+This is the recommended integration technique, if your editor can support it.
+
+---++++ Generating content directly in a specialised edit template
+This technique is useful when the editor requires the topic content in a variety of different formats at the same time. In this scenario the editor uses a custom edit template. The WYSIWYG content is made available for instantiation in that template in a number of different formats. =WYSIWYGPLUGIN_WYSIWYGSKIN= *must* be set for this to work.
 
 The flow of control is as follows:
-   1 User hits "edit".
-   1 The =beforeEditHandler= filters the edit
-   1 The =edit= template containing the JS editor is instantiated. The following variables are available for expansion in the template:
+   1 User hits "edit" with the skin (or cover) set the same as =WYSIWYGPLUGIN_WYSIWYGSKIN=.
+   1 The !WysiwygPlugin =beforeEditHandler= determines if the topic is WYSIWYG editable, and vetos the edit if not by redirecting to the standard edit skin.
+ the edit
+   1 The =edit= template containing the JS editor is instantiated.
+   1 The following variables are available for expansion in the template:
       * =%<nop>WYSIWYG_TEXT%= expands to the HTML of the content-to-be-edited. This is suitable for use in a =textarea=.
       * =%<nop>JAVASCRIPT_TEXT%= expands to the HTML of the content-to-be-edited in a javascript constant.
+   1 User edits and saves
+   1 The =afterEditHandler= in the !WyswiygPlugin sees that =wysiwyg_edit= is set, which triggers the conversion back to TML.
 
-=WYSIWYGPLUGIN_WYSIWYGSKIN= *must* be set for this to work.
+   * The HTML form in the edit template *must* include an =&lt;input= called =wysiwyg_edit= and set it to 1, to trigger the conversion from HTML back to TML.
+   * =WYSIWYGPLUGIN_WYSIWYGSKIN= must be set to the name of the skin used for WYSIWYG editing. This is usually the name of the editor e.g. =kupu=.
 
 ---++++ Fetching content from a URL
 In this scenario, the edit template is generated *without* the content-to-be-edited. The content is retrieved from the server using a URL e.g. from an =IFRAME=.
 
 The flow of control is as follows:
-   1 User hits "edit".
-   1 If the current skin = =WYWIWYGPLUGIN_WYWIWYGSKIN=, the =beforeEditHandler=
-      filters the edit, blocking any attempt to edit restricted content.
-   1 The =edit= template containing the JS editor is instantiated.
-   1 JS editor invokes content URL to obtain the HTML document to be edited
+   1 As _Generating content directly in a specialised edit template_
+   1 As _Generating content directly in a specialised edit template_
+   1 As _Generating content directly in a specialised edit template_
+   1 When the document loads in the browser, the JS editor invokes a content URL (using an =IFRAME= or a =XmlHttpRequest=) to obtain the HTML document to be edited
       * The content URL is just a TWiki =view= URL with the =wysiwyg_edit=
         parameter set.
-      * The plugin recognises the =wysiwyg_edit= parameter and uses the
+      * The !WysiwygPlugin recognises the =wysiwyg_edit= parameter and uses the
         TML2HTML translator to prepare the text, which is then returned
         as =text/plain= to the browser.
-      * Two TWiki variables, =%<nop>OWEB%= and %<nop>OTOPIC%=, should be used in
-        the content URL to refer to the source topic for the content.
+      * Two TWiki variables, =%<nop>OWEB%= and %<nop>OTOPIC%=, can be used in the content URL in the edit template to refer to the source topic for the content.
+   1 After edit handling is as for _Generating content directly in a specialised edit template_
 
----+++ Handling Saves
-Saves are invoked by the editor POSTing to the TWiki =save= script with the =wysiwyg_edit=
-parameter set to =1=. This parameter tells the =beforeSaveHandler= in the plugin to convert the HTML back to TML. See %TWIKIWEB%.TWikiScripts for details of the other parameters to the =save= script.
+---+++ Other techniques
+---++++ Asynchronous saves
+Editors can use =XmlHttpRequest= to perform saves, by POSTing to the TWiki =save= script with the =wysiwyg_edit= parameter set to =1=. This parameter tells the =beforeSaveHandler= in the !WysiwygPlugin to convert the content back to TML. See %TWIKIWEB%.TWikiScripts for details of the other parameters to the =save= script.
 
 Once the save script has completed it responds with a redirect, either to an Oops page if the save failed, or to the appropriate post-save URL (usually a =view=). The editor must be ready to handle this redirect.
 
 ---++++ Handling Attachments
-Attachment uploads can be handled by URL requests from the editor to the TWiki
+Attachment uploads can be handled by URL requests from the editor template to the TWiki
 =upload= script. The =upload= script normally redirects to the containing topic; a behaviour that you usually don't want in an editor! There are two ways to handle this:
    * If the uploads are done in an =IFRAME= or via =XmlHttpRequest=, then the
      302 redirect at the end of the upload can simply be ignored.
    * You can pass =noredirect= to the =upload= script to suppress the redirect. In this case
      you will get a =text/plain= response of =OK= followed by a message if everything went well, or an error message if it did not.
 
----+++ REST handlers
+---++++ REST handlers
 If you are confident in Javascript you can use REST handlers with =XmlHttpRequest= to convert content from TML to HTML and back again.
 
 The plugin defines the following REST handlers:
@@ -108,25 +125,9 @@ Converts the TML text to HTML. =topic= *must* be specified. The response is a =t
 ---++ Plugin Configuration Settings
 
 ---+++ Translator control
-For any of the following controls to work, you must tell %TOPIC% the name of
-the skin being used to invoke the Wysiwyg editor, for example =kupu= or =wikiwyg=.
-	* Set WYSIWYGSKIN =
-Note that is can be set differently in different areas by defining
-=WYSWIYGPLUGIN_WYSIWYGSKIN= locally (e.g. in !WebPreferences).
+%INCLUDE{"%SYSTEMWEB%.WysiwygPluginSettings"}%
 
-The *global* TWiki Variable =WYSIWYG_EXCLUDE= can be set to make the plugin sensitive to what is in a topic before allowing it to be edited. You can set it up to refuse to edit if the topic contains
-   * =html= - some or all of HTML tags (e.g. =&lt;br /&gt;= or =&lt;div&gt;=), or 
-   * =variabes= - simple variables (e.g. =%<nop>VAR%=) or 
-   * =calls= - TWiki variables with parameters e.g. =%<nop>VARIABLE{...}%=
-   * =pre= blocks (=&lt;pre&gt;=)
-   * HTML =comments= (=&lt;!--= ... =--&gt;=)
-   
-are used in the topic. If the plugin detects an excluded construct in the topic, it will redirect to the default editor. Comma-separated list of one or more of =html=, =variables=, =calls=, =pre= or =comments= e.g.
-   * Set WYSIWYG_EXCLUDE = calls,html
-Set =WYSIWYG_EXCLUDE= in %MAINWEB%.TWikiPreferences, or in %WEBPREFSTOPIC% for each web.
-
-If you excluded =calls= in =WYSIWYG_EXCLUDE=, you can still define a subset of TWiki variables that do *not* block edits. this is done in the *global* preference variable =WYSIWYG_EDITABLE_CALLS=, which should be a list of TWiki variable names separated by vertical bars, with no spaces, e.g:
-   * Set WYSIWYG_EDITABLE_CALLS = COMMENT|CALENDAR|INCLUDE
+*Implementors note* if you are using your own before/after edit handlers, you can call =TWiki::Plugins::WysiwygPlugin::isWysiwygEditable()= to check these controls.
 
 ---++ Known issues
 
@@ -151,6 +152,8 @@ which gets translated back to TML as
 which is correct by construction, but does not render correctly in TWiki. This problem is unfortunately unavoidable due to the way TWiki syntax works.
 
 ---++ Plugin Info
+
+This plugin is brought to you by a [[http://wikiring.com][WikiRing <a href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiringlogo20x20.png" title="WikiRing: Professional Wiki Innovation and Support" /></a>]] partner - working together to improve your wiki experience!
 
 |  Plugin Authors: | TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk |
 |  Copyright | &copy; ILOG 2005 http://www.ilog.fr |

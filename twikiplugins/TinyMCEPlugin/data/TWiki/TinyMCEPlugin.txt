@@ -49,10 +49,14 @@ For a full explanation of the available options, and guidance on reconfiguring T
    content_css : "%PUBURLPATH%/%TWIKIWEB%/TinyMCEPlugin/wysiwyg.css,%PUBURLPATH%/%TWIKIWEB%/TWikiTemplates/base.css,%TWIKISTYLEURL%,%TWIKICOLORSURL%"
 You can override this setting in the same way as any other TWiki variable, by setting =TINYMCEPLUGIN_INIT= in the site, web or topic preferences. You are *not* recommended to edit the setting here.
    * You can *disable* the plugin in any web or topic, or for any specific user, by setting the =TINYMCEPLUGIN_DISABLE= variable to 1.
+   * Some browsers don't support !TinyMCE. You can prevent the editor from
+     being invoked on these browsers by setting =TINYMCEPLUGIN_BAD_BROWSERS= to a regular expression that matches the user-agent string for any broken browsers. The default is =(?i-xsm:Konqueror|Opera)=.
 
-This plugin is brought to you by a [[http://wikiring.com][WikiRing <a href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiringlogo20x20.png" title="WikiRing: Professional Wiki Innovation and Support" /></a>]] partner - working together to improve your wiki experience!
+%INCLUDE{"%SYSTEMWEB%.WysiwygPluginSettings"}%
 
 ---++ Plugin Info
+
+This extension is brought to you by a [[http://wikiring.com][WikiRing <a href="http://wikiring.com"><img src="%PUBURLPATH%/%SYSTEMWEB%/WysiwygPlugin/wikiringlogo20x20.png" title="WikiRing: Professional Wiki Innovation and Support" /></a>]] partner - working together to improve your wiki experience!
 
 |  Plugin Author(s): | TWiki:Main.CrawfordCurrie |
 |  Plugin Version: | %$VERSION% |

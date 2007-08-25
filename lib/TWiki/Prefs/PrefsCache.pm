@@ -198,7 +198,7 @@ sub loadPrefsFromText {
 
 =pod
 
----++ ObjectMethod insert($type, $key, $val)
+---++ ObjectMethod insert($type, $key, $val) -> $boolean
 
 Adds a key-value pair of the given type to the object. Type is Set or Local.
 Callback used for the Prefs::Parser object, or can be used to add
@@ -206,12 +206,14 @@ arbitrary new entries to a prefs cache.
 
 Note that attempts to redefine final preferences will be ignored.
 
+Returns 1 if the preference was defined, 0 otherwise.
+
 =cut
 
 sub insert {
     my( $this, $type, $key, $value ) = @_;
 
-    return if $this->{CONTEXT}->isFinalised( $key );
+    return 0 if $this->{CONTEXT}->isFinalised( $key );
 
     $value =~ tr/\r//d;                 # Delete \r
     $value =~ tr/\t/ /;                 # replace TAB by space
@@ -224,6 +226,8 @@ sub insert {
         $this->{values}{$key} = $value;
     }
     $this->{SetHere}{$key} = 1;
+
+    return 1;
 }
 
 =pod

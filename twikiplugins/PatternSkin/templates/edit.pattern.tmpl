@@ -9,8 +9,7 @@
 
 
 
-%TMPL:DEF{"toolbar"}%%IF{"context 'textareas_hijacked'" then="" else ="<div class='patternTop'>%TWISTYBUTTON{id='edithelp' firststart='show' mode='div' remember='on' link='%MAKETEXT{'Edit help'}%' showimgleft='%ICONURLPATH{toggleopen}%'
-hideimgleft='%ICONURLPATH{toggleclose}%'}%</div>"}%<!--//patternTop-->%TMPL:END%
+%TMPL:DEF{"toolbar"}%%IF{"context 'textareas_hijacked'" then="" else ="<div class='patternTop'>$percntTWISTYBUTTON{id='edithelp' firststart='show' mode='div' remember='on' link='$percntMAKETEXT{Edit help}$percnt' showimgleft='$percntICONURLPATH{toggleopen}$percnt' hideimgleft='$percntICONURLPATH{toggleclose}$percnt'}$percnt</div><!--//patternTop-->"}%%TMPL:END%
 
 
 %TMPL:DEF{"bodyclassname"}%patternNoViewPage patternEditPage%TMPL:END%
@@ -68,8 +67,8 @@ hideimgleft='%ICONURLPATH{toggleclose}%'}%</div>"}%<!--//patternTop-->%TMPL:END%
 
 %TMPL:DEF{"pagehelp_nojavascript"}%<br />%TWISTYTOGGLE{id="pagehelp_nojavascript" mode="div" start="hide"}%<div class="twikiHelp">%TMPL:P{"help"}%</div>%ENDTWISTYTOGGLE%%TMPL:END%
 
-
 %TMPL:DEF{"content"}%%TMPL:P{"formstart"}%%TMPL:P{"formtop"}%
+%IF{"defined 'EDITOR_MESSAGE'" then="<div class='twikiAlert'>%EDITOR_MESSAGE%</div>"}%
 %TMPL:P{"toolbar"}%
 %TMPL:P{"pagehelp"}%
 %TMPL:P{"textarea"}%

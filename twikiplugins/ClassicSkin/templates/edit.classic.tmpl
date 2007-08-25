@@ -23,6 +23,7 @@
 
 
 %TMPL:DEF{"content"}%<form name="main" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%" method="post">
+%IF{"defined 'EDITOR_MESSAGE'" then="<div class='twikiAlert'>%EDITOR_MESSAGE%</div>"}%
 <div class"twikiEditTextarea">
 <textarea id='topic' name='text' wrap='virtual' rows='%EDITBOXHEIGHT%' cols='%EDITBOXWIDTH%' style='%EDITBOXSTYLE%' onkeydown='handleKeyDown(event)'>%TEXT%</textarea><br />
 </div>

@@ -354,6 +354,24 @@ sub getWebPreferencesValue {
 
 =pod
 
+---+++ setPreferencesValue($name, $val)
+
+Set a preferences value. The preference is set in the context at the
+top of the preference stack, whatever the current state may be.
+
+The preference is not serialised.
+
+=cut
+
+sub setPreferencesValue {
+    my ($this, $name, $value) = @_;
+
+    my $top = $this->{PREFS}[$#{$this->{PREFS}}];
+    return $top->insert( 'Set', $name, $value );
+}
+
+=pod
+
 ---++ObjectMethod stringify() -> $text
 
 Generate a TML-formatted version of the current preferences

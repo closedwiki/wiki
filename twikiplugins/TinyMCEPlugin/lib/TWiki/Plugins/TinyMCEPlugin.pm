@@ -27,27 +27,40 @@ use TWiki::Func;
 my $secret_id = 'TinyMCE WYSIWYG content - do not remove this comment';
 
 sub initPlugin {
-    return _isAvailable();
+    return 1;
 }
 
-sub _isAvailable {
-    my $disabled = TWiki::Func::getPreferencesValue(
-        'TINYMCEPLUGIN_DISABLE');
+sub _notAvailable {
+    return 0 if TWiki::Func::getPreferencesValue('TINYMCEPLUGIN_DISABLE');
 
-    # Check the client browser to see if it is supported by TinyMCE
+    # Disable TinyMCE if we are on a specialised edit skin
+    my $skin = TWiki::Func::getPreferencesValue( 'WYSIWYGPLUGIN_WYSIWYGSKIN' );
+    return "$skin is active"
+      if( $skin && TWiki::Func::getSkin() =~ /\b$skin\b/o );
+
+    # Check the client browser to see if it is supported
     my $query = TWiki::Func::getCgiQuery();
-    if (!$query || $query->user_agent() &&
-          $query->user_agent() =~ /(Konqueror|Opera)/i) {
-        $disabled = 1;
-    }
+    return "No CGI query" if !$query;
+    my $ua = TWiki::Func::getPreferencesValue('TINYMCEPLUGIN_BAD_BROWSERS') ||
+      '(?i-xsm:Konqueror|Opera)';
+    return 'Unsupported browser: '.$query->user_agent()
+      if $ua && $query->user_agent() && $query->user_agent() =~ /$ua/;
 
-    return $disabled ? 0 : 1;
+    return 0;
 }
 
 sub beforeEditHandler {
     #my ($text, $topic, $web) = @_;
 
-    return unless _isAvailable();
+    my $mess = _notAvailable();
+    if ($mess) {
+        if (defined &TWiki::Func::setPreferencesValue) {
+            TWiki::Func::setPreferencesValue(
+                'EDITOR_MESSAGE',
+                'WYSIWYG could not be started: '.$mess);
+        }
+        return;
+    }
 
     my $init = TWiki::Func::getPreferencesValue('TINYMCEPLUGIN_INIT')
       || <<'HERE';
@@ -55,6 +68,16 @@ sub beforeEditHandler {
 HERE
 
     require TWiki::Plugins::WysiwygPlugin;
+
+    $mess = TWiki::Plugins::WysiwygPlugin::notWysiwygEditable($_[0]);
+    if ($mess) {
+        if (defined &TWiki::Func::setPreferencesValue) {
+            TWiki::Func::setPreferencesValue(
+                'EDITOR_MESSAGE',
+                'WYSIWYG could not be started: '.$mess);
+        }
+        return;
+    }
 
     # _src.js for debug
     TWiki::Func::addToHEAD('tinyMCE', <<SCRIPT);
@@ -82,7 +105,7 @@ SCRIPT
 sub afterEditHandler {
     #my( $text, $topic, $web ) = @_;
 
-    return unless _isAvailable();
+    return if (_notAvailable());
 
     my $query = TWiki::Func::getCgiQuery();
     return unless $query;
@@ -99,7 +122,7 @@ sub afterEditHandler {
     }
 
     require TWiki::Plugins::WysiwygPlugin;
-    $_[0] = TWiki::Plugins::WysiwygPlugin::postProcess( @_ );
+    $_[0] = TWiki::Plugins::WysiwygPlugin::TranslateHTML2TML( @_ );
 }
 
 1;
