@@ -75,48 +75,10 @@ function natInsertTags(tagOpen, sampleText, tagClose) {
 // if there is no selection, select the entire current line
 // if there is a selection, select the entire line for each line selected
 function natInsertListTag(tagOpen, sampleText, tagClose) {
-
+  var cursorPos = getCursorPosition();
   var startPos, endPos;
-
-   if (document.selection && !isOpera) {
-    // IE
-    
-    var originalRange = document.selection.createRange().duplicate();
-    var mySelection = originalRange.text;
-
-    if (mySelection != null) {
-      endPos = mySelection.length;
-    } else {
-      endPos = 0;
-    }
-
-    { // SMELL: put that in a local function to prevent redundancy further down
-      // nasty cursor stuff - as createRange stuff breaks when you don't have a selection
-      txtarea.focus();
-      var txtareaText = txtarea.value; // backup
-      var c  = "\001";
-      var sel = document.selection.createRange();
-      var dul = sel.duplicate(); 
-      dul.moveToElementText(txtarea);
-      sel.text = c;
-      // seems there is a problem with counting \r's IE
-      // startPos  = (dul.text.indexOf(c));
-      var tempText = dul.text;
-      sel.moveStart('character',-1);
-      var tempText = tempText.substring(0, tempText.indexOf(c));
-      // tempText = tempText.replace(/[\r]/g, ''); 
-      startPos  = tempText.length;
-      txtarea.value = txtareaText; // restore
-    }
-    endPos+=startPos;
-    
-    //alert(startPos+', '+endPos);
-  } else { 
-    // FF, opera safari, etc
- 
-    startPos = txtarea.selectionStart;
-    endPos = txtarea.selectionEnd;
-  }
+  startPos = cursorPos.startPos;
+  endPos = cursorPos.endPos;
 
   // at this point we need to expand the selection to the \n before the startPos, and after the endPos
   var adjustedStartPos = txtarea.value.lastIndexOf('\n', startPos-1);
@@ -271,41 +233,18 @@ function natEditInit() {
       var natEditTableDialog = $('#natEditTableDialog')[0]; 
  
       // table button 
+      $('#natEditTableButtonLink').href='';
       $('#natEditTableButtonLink').click(function() { 
 
        if (document.selection && !isOpera) {
+          var cursorPos = getCursorPosition();
+          $.startPos = cursorPos.startPos;
+          $.endPos = cursorPos.endPos;
 
-        //IE
-          var originalRange = document.selection.createRange().duplicate();
-          var mySelection = originalRange.text;
-          if(mySelection != null){
-            $.endPos = mySelection.length;
-          } else {
-            $.endPos = 0;
-          }
-          // SMELL: redundant, see above
-          // nasty cursor stuff - as createRange stuff breaks when you don't have a selection
-          {
-            txtarea.focus();
-            var txtareaText = txtarea.value; // backup
-            var c  = "\001";
-            var sel = document.selection.createRange();
-            var dul = sel.duplicate(); 
-            dul.moveToElementText(txtarea);
-            sel.text = c;
-            //seems there is a problem with counting \r's IE
-            //$.startPos  = (dul.text.indexOf(c));
-            var tempText = dul.text;
-            sel.moveStart('character',-1);
-            var tempText = tempText.substring(0, tempText.indexOf(c));
-            tempText = tempText.replace(/[\r]/g, ''); 
-            $.startPos  = tempText.length;
-            txtarea.value = txtareaText; // restore
-          }                
-          $.endPos += $.startPos; 
         } // end IE
 
         $.blockUI(natEditTableDialog, { width: '275px' }); 
+        return false; 
       }); 
  
       // dialog buttons
@@ -315,7 +254,7 @@ function natEditInit() {
         var cols = $('#columns').val();
         $.unblockUI(); 
             
-        var newTable = '';
+        var newTable = '\n';
         for (var i = 0; i < rows; i++) {
           newTable += '|';
           for (var j = 0; j < cols; j++) {
@@ -328,15 +267,12 @@ function natEditInit() {
           }
           newTable += '\n';
         }
-            txtarea.focus();
-            //help IE out by re-selecting what was selected before :(
-            if (!txtarea.selectionStart) {          //IE
-                 var range = txtarea.createTextRange();
-                 range.collapse(true);
-                 range.moveStart("character", $.startPos);
-                 range.moveEnd("character", $.endPos - $.startPos);
-                 range.select();
-             }
+        txtarea.focus();
+        //TODO: where in the table shall we place the cursor?
+        // help IE out by re-selecting what was selected before :(
+        if (document.selection && !isOpera) {          //IE
+            ieSelect($.startPos, $.endPos);
+         }
         natInsertTags('','',newTable);
 
         return false; 
@@ -345,13 +281,11 @@ function natEditInit() {
       $('#cancel').click(function() {
         $.unblockUI();
                 
-        // help IE out by re-selecting what was selected before :(
         txtarea.focus();
-        var range = txtarea.createTextRange();
-        range.collapse(true);
-        range.moveStart("character", $.startPos);
-        range.moveEnd("character", $.endPos - $.startPos);
-        range.select();
+        // help IE out by re-selecting what was selected before :(
+        if (document.selection && !isOpera) {          //IE
+            ieSelect($.startPos, $.endPos);
+         }
       }); 
     }); 
   }
@@ -370,6 +304,61 @@ function setEditBoxFontStyle(inFontStyle) {
     replaceClass(document.getElementById(EDITBOX_ID), EDITBOX_FONTSTYLE_MONO_STYLE, EDITBOX_FONTSTYLE_PROPORTIONAL_STYLE);
     writeCookie(COOKIE_PREFIX + EDITBOX_COOKIE_FONTSTYLE_ID, inFontStyle, COOKIE_EXPIRES);
   }
+}
+
+
+function getCursorPosition() {
+   var cursorPos = {};
+   if (document.selection && !isOpera) {    // IE
+    var originalRange = document.selection.createRange().duplicate();
+    var mySelection = originalRange.text;
+
+    if (mySelection != null) {
+      cursorPos.endPos = mySelection.length;
+    } else {
+      cursorPos.endPos = 0;
+    }
+
+    { // SMELL: put that in a local function to prevent redundancy further down
+      // nasty cursor stuff - as createRange stuff breaks when you don't have a selection
+      txtarea.focus();
+      var txtareaText = txtarea.value; // backup
+      var c  = "\001";
+      var sel = document.selection.createRange();
+      var dul = sel.duplicate(); 
+      dul.moveToElementText(txtarea);
+      sel.text = c;
+      // seems there is a problem with counting \r's IE
+      var tempText = dul.text;
+      sel.moveStart('character',-1);
+      var tempText = tempText.substring(0, tempText.indexOf(c));
+      cursorPos.startPos  = tempText.length;
+      txtarea.value = txtareaText; // restore
+    }
+    cursorPos.endPos+= cursorPos.startPos;
+    
+    //alert(startPos+', '+endPos);
+  } else { 
+    // FF, opera safari, etc
+ 
+    cursorPos.startPos = txtarea.selectionStart;
+    cursorPos.endPos = txtarea.selectionEnd;
+  }
+  return cursorPos;
+}
+
+function ieSelect(startPos, endPos) {
+   var range = txtarea.createTextRange();
+   range.collapse(true);
+   //adjust start&end for \r's
+   var tempStart = txtarea.value.substring(0, startPos);
+   tempStart = tempStart.replace(/[\r]/g, ''); 
+   var temp = txtarea.value.substring(startPos, endPos);
+   temp = temp.replace(/[\r]/g, ''); 
+
+    range.moveStart("character", tempStart.length);
+    range.moveEnd("character", temp.length);
+    range.select();
 }
 
 addLoadEvent(natEditInit);
