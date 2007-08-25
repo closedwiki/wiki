@@ -27,7 +27,7 @@
 <input type="hidden" name="t" value="%GMTIME{"$epoch"}%" />
    * *%MAKETEXT{"Set new topic parent"}%*
       * Step 1: Select topic parent: %BR%
-%IF{"defined pickparent" then="<select name='topicparent' size='10' class='twikiSelect' tabindex='12'>$percntTOPICLIST{$quot<option $marker value='$name'>$name</option>$quot separator=$quot$quot selection=$quot$percntMETASEARCH{type=$quotparent$quot}$percnt$quot}$percnt<option value=$quot$quot>$percntMAKETEXT{$quot(no parent, orphaned topic)$quot}$percnt</option></select>" else="&nbsp;<input type='text' size='40' class='twikiInputField' /><a href='$percntSCRIPTURLPATH{oops}$percnt/$percntWEB$percnt/$percntTOPIC$percnt?template=oopsmore;$percntQUERYSTRING$percnt;pickparent=1'>%MAKETEXT{"Pick from a list"}%</a>"}%
+%IF{"defined pickparent" then="<select name='topicparent' size='10' class='twikiSelect' tabindex='12'>$percntTOPICLIST{$quot<option $marker value='$name'>$name</option>$quot separator=$quot$quot selection=$quot$percntMETASEARCH{type=$quotparent$quot}$percnt$quot}$percnt<option value=$quot$quot>$percntMAKETEXT{$quot(no parent, orphaned topic)$quot}$percnt</option></select>" else="&nbsp;<input type='text' name='topicparent' size='40' class='twikiInputField' /><a href='$percntSCRIPTURLPATH{oops}$percnt/$percntWEB$percnt/$percntTOPIC$percnt?template=oopsmore;$percntQUERYSTRING$percnt;pickparent=1'>%MAKETEXT{"Pick from a list"}%</a>"}%
       * Step 2: Continue to <input type="submit" class="twikiSubmit" value="Edit" /> and save <nop>%TOPIC% to activate the new parent
         <input type="hidden" name="t" value="%SERVERTIME{$year$mo$day$hour$min$sec}%" />
 </form>
