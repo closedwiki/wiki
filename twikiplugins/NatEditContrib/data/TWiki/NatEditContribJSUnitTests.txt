@@ -134,13 +134,25 @@ function textareaSelect(selected) {
    var start = txtarea.value.indexOf(selected);
    var end = start+selected.length;
    
-//   if (document.selection) {
-//      //IE
-//   } else {
+   if (document.selection && !(window.opera?1:0)) {
+      //IE
+        var pretest = txtarea.value.substring(0, start);
+        pretest = pretest.replace(/[^\r]/g, '');
+        var inner = txtarea.value.substring(start, end);
+        inner = inner.replace(/[^\r]/g, '');
+        txtarea.focus();
+        var range = txtarea.createTextRange();
+        range.collapse(true);
+        var s = (start-pretest.length);
+        var e = (end-inner.length) - (start-pretest.length) -1;
+        range.moveStart("character", s);
+        range.moveEnd("character", e);
+        range.select();
+   } else {
       //non-IE
       txtarea.selectionStart = start;
       txtarea.selectionEnd = end;
-//   }
+   }
 }
 function textareaSelectLine(linenumber, type) {   //type == 'start', 'end', 'line'
 // opera and IE use \r\n so need to modify selected to add \r
@@ -166,13 +178,26 @@ function textareaSelectLine(linenumber, type) {   //type == 'start', 'end', 'lin
       end = start;
    }
    
-//   if (txtarea.selectionStart) {
+   if (document.selection && !(window.opera?1:0)) {
 //      //IE
-//   } else {
+        var pretest = txtarea.value.substring(0, start);
+        pretest = pretest.replace(/[^\r]/g, '');
+        var inner = txtarea.value.substring(start, end);
+        inner = inner.replace(/[^\r]/g, '');
+        txtarea.focus();
+        var range = txtarea.createTextRange();
+        range.collapse(true);
+        var s = (start-pretest.length);
+        var e = (end-inner.length) - (start-pretest.length) -1;
+//        if (s > e) {e=s;}
+        range.moveStart("character", s);
+        range.moveEnd("character", e);
+        range.select();
+   } else {
       //non-IE (opera too)
       txtarea.selectionStart = start;
       txtarea.selectionEnd = end;
-//   }
+   }
 }
 //take care of the lack of platform independance in strings (opera and IE seem to use \r\n. whereas the rest use \n)
 function assertStringEquals(msg, str1, str2) {
