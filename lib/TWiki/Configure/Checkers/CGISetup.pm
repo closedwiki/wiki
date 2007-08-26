@@ -161,7 +161,7 @@ HERE
 For a URL such as <strong>$url/foo/bar</strong>,
 the correct PATH_INFO is <strong>/foo/bar</strong>, without any prefixed path
 components. <a rel="nofollow" href="$url/foo/bar#PATH_INFO">
-<strong>Click here to test this</strong></a>
+<strong>Test PATH_INFO now</strong></a>
 - particularly if you are using mod_perl, Apache or IIS, or are using
 a web hosting provider.
 Look at the new path info here. It should be <strong>/foo/bar</strong>.

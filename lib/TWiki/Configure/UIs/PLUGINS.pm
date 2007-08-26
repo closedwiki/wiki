@@ -27,8 +27,8 @@ sub close_html {
     my ($this, $section) = @_;
 
     my $button = <<HERE;
-Click here to consult the online plugins repository for
-new plugins. <b>Warning:</b>Unsaved changes will be lost!
+Consult the online plugins repository for
+new plugins. <b>If you made any changes, save them first!<b>
 HERE
     # Check that the extensions UI is loadable
     my $bad = 0;
