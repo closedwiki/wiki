@@ -500,7 +500,7 @@ table.twikiFormTable th.twikiFormTableHRow font {
 	background-color:transparent;
 }
 .twikiActionFormStepSign {
-	color:%LINK_TEXT_NORMAL%;
+	color:%HEADER_TEXT%;
 }
 .twikiToc .twikiTocTitle {
 	color:%MUTED_TEXT%;
