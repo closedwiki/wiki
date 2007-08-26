@@ -84,11 +84,17 @@ These are the steps for enabling "Template Login" which asks for a username and 
       1 Register yourself using the =TWiki.TWikiRegistration= topic.<br />
      %H% Check that the password manager recognizes the new user. Check that a new line with the username and encrypted password is added to the =data/.htpasswd= file. If not, you probably got a path wrong, or the permissions may not allow the webserver user to write to that file.
    1 Edit a topic (by clicking on the =Edit= link at beginning or end of topic) to check if authentication works.
-   1 Edit the =Main.TWikiAdminGroup= topic to include users with system administrator status. Additional instructions are provided in that topic.<br />
-   %X% This is a very important step, as users in this group can access all topics, independent of TWiki access controls.
-   1 Clear admin notes: Some pages are meant to be customized after choice of authentication - check and update these topics (remove notice): =Main.TWikiAdminGroup=, =TWiki.ChangePassword=, =TWiki.ResetPassword=, and =TWiki.ChangeEmailAddress=.
 
 You are strongly encouraged to read =TWiki.TWikiUserAuthentication=, TWiki:TWiki.TWikiUserAuthenticationSupplement, and TWiki:TWiki.SecuringTWikiSite for further information about managing users and security of your TWiki site. 
+
+#DefineAdminUser   
+---++ Define the Administrator User(s)
+
+Administrators have read and write access to any topic in TWiki, independent of TWiki access controls. When you install TWiki one of the first things you will want to do is define yourself as an administrator. You become an administrator simply by adding yourself to the =TWikiAdminGroup=. It is the WikiName and not the login name you add to the group. Editing the =Main.TWikiAdminGroup= topic requires that you are an administrator. So to add the first administrator you need to login using the internal TWiki admin user login and the password you defined in configure.
+
+   * Navigate to the =Main.TWikiAdminGroup= topic
+   * Follow carefully the steps =Main.TWikiAdminGroup= of how to 
+   * Note that you have to be registered and logged in already before you use the _internal admin login_
 
 #SetPreferences
 ---++ Set TWiki Preferences
@@ -130,12 +136,20 @@ You activate installed plugin in the _Plugins_ section of =configure=. In this s
 
 Some plugins require that you define their settings in =configure=. You fill find these under the _Extensions_ section of configure.
 
----++ Customize your TWiki!
+---++ Customize Your TWiki!
 
 The real power of TWiki lies in it's flexibility to be customized to meet your needs. You can with small means change the looks of the default skin (called !PatternSkin) by reading the =TWiki.PatternSkinCustomization=
 
 At the official TWiki website you can find more resources. A good place to start for exploring what's possible is <a href="http://twiki.org/cgi-bin/view/TWiki/TWikiAdminCookBook" title="'TWiki/TWikiAdminCookBook' on TWiki.org">TWiki:TWiki.TWikiAdminCookBook</a> which offers tips and tricks for customizing your TWiki site. Many of these are appropriate to implement immediately after installing TWiki and before adding content so now's a good time to look at these.
 
+---++ Customization of Special Pages
+
+Some pages are meant to be customized after choice of authentication. If you do not use the internal TWiki password manager the topics that contains the features for changing and resetting passwords and changing the email address should be changed to a note describing how to perform these tasks in your organization. The topics are:
+
+   * =TWiki.ChangePassword=
+   * =TWiki.ResetPassword=
+   * =TWiki.ChangeEmailAddress=
+   
 ---++ Copyright, License and Classification Statements
 
 In the bottom of each topic you will find a default copyright messages saying "Copyright &&copy; by the contributing authors. All material on this collaboration platform is the property of the contributing authors." It is a setting WEBCOPYRIGHT that defines this. This is often not adequate.
