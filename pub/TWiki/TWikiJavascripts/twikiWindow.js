@@ -14,10 +14,11 @@ twiki.Window = {
 		template : (String) name of template
 		cover : (String) name of cover
 		section : (String) name of section
+		urlparams : (String) additional url params to pass to the window
 		name : (String) name of window; may be set if 'topic' has not been set
 		width : (String) width of new window; overrides default value POPUP_WINDOW_WIDTH
 		height : (String) height of new window; overrides default value POPUP_WINDOW_HEIGHT
-		attributes : (String) additional window attributes; overrides default value POPUP_ATTRIBUTES
+		attributes : (String) additional window attributes; overrides default value POPUP_ATTRIBUTES. Each attribute/value pair is separated by a comma. Example attributes string: "width=500,height=400,resizable=1,scrollbars=1,status=1,toolbar=1"
 	@param inAltWindow : (Window) Window where url is loaded into if no pop-up could be created. The original window contents is replaced with the passed url (plus optionally web, topic, skin path)
 	@use
 	<pre>
@@ -65,6 +66,9 @@ twiki.Window = {
 			if (inOptions.cover != undefined) {
 				params.push("cover=" + inOptions.cover);
 			}
+			if (inOptions.urlparams != undefined) {
+				params.push(inOptions.urlparams);
+			}
 			paramsString = params.join(";");
 			if (paramsString.length > 0) {
 				// add query string
@@ -81,13 +85,15 @@ twiki.Window = {
 			if (inOptions.height != undefined) height = inOptions.height;
 			if (inOptions.attributes != undefined) attributes = inOptions.attributes;
 		}
-		
+	
 		windowAttributes.push("width=" + width);
 		windowAttributes.push("height=" + height);
+
 		windowAttributes.push(attributes);
 		var attributesString = windowAttributes.join(",");
+		var url = pathString + paramsString;
 		
-		var window = open(pathString + paramsString, name, attributesString);
+		var window = open(url, name, attributesString);
 		if (window) {
 			window.focus();
 			return window;
