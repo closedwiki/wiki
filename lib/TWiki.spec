@@ -292,14 +292,17 @@ $TWiki::cfg{DefaultUserLogin} = 'guest';
 $TWiki::cfg{DefaultUserWikiName} = 'TWikiGuest';
 
 # **STRING 20 EXPERT**
-# An admin user login is is required by the install script for some addons and 
-# plugins, usually to gain write access to the TWiki web.
-# If you change this you risk making topics uneditable. This user is also used by the 
-# sudo admin login (matched with the configure password, if set) 
-# see: Main.TWikiAdminGroup
+# An internal admin user login name (matched with the configure password, if set)
+# which is used as a temporary login to enable adding the first users to the
+# TWikiAdminGroup (see: Main.TWikiAdminGroup).
+# This login name is additionally required by the install script for some addons
+# and plugins, usually to gain write access to the TWiki web.
+# If you change this you risk making topics uneditable.
 $TWiki::cfg{AdminUserLogin} = 'admin';
+
 # **STRING 20 EXPERT**
 # An admin user WikiName what is displayed for actions done by the AdminUserLogin
+# You should normally not need to change this.
 $TWiki::cfg{AdminUserWikiName} = 'TWikiAdminUser';
 
 # **STRING 20 EXPERT**
@@ -307,7 +310,9 @@ $TWiki::cfg{AdminUserWikiName} = 'TWikiAdminUser';
 # on =save= and ALWAYS have edit powers. See TWiki.TWikiDocumentation
 # for an explanation of twiki groups. This user will also run all the
 # standard cron jobs, such as statistics and mail notification.
-# <b>Make sure you edit this topic if you enable authentication</b>
+# The default value "TWikiAdminGroup" is used everywhere in TWiki to
+# protect important settings so you would need a really special reason to
+# change this setting.
 $TWiki::cfg{SuperAdminGroup} = 'TWikiAdminGroup';
 
 # **STRING 20 EXPERT**
