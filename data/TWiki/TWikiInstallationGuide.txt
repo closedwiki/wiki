@@ -64,7 +64,7 @@ Before you continue any further there are some basic and very important security
    * Make sure that you deny access to all other twiki directories than the =bin= and =pub= directories. When you have access to the Apache config files the =twiki_httpd_conf.txt= file mentioned above also contains protection of these directories.<br />
      For those that do not have access to the Apache config files a sample =subdir-htaccess.txt= file can be copied as =.htaccess= to the data, lib, locale, templates and tools directories.
 
-The TWIki:TWiki.ApacheConfigGenerator will help you address all 3 security elements.
+The TWiki:TWiki.ApacheConfigGenerator will help you address all 3 security elements.
 
 ---++ Next Steps
 
@@ -124,10 +124,12 @@ TWiki now supports displaying of national (non-ascii) characters and presentatio
 
 ---++ Tailor New Users Home Topic
 
-When a new users registers on your TWiki, a home topic is created for them based on the =TWiki.NewUserTemplate= topic. It contains additional resources you can use to:
+When a new users registers on your TWiki, a home topic is created for them based on the =TWiki.NewUserTemplate= topic (and its =TWiki.UserForm=). It contains additional resources you can use to:
    * Localise the user topic.
    * Add a default ALLOWTOPICCHANGE so only the user can edit their own home topic. We do not encourage this for Intranet sites as it sends a wrong signal to new users, but it can be necessary on a public TWiki to prevent spam.
-You can create a custom new user template topic by creating the =Main.NewUserTemplate= topic, which will then override the default NewUserTemplate.
+   * Add and remove fields defined in the =TWiki.UserForm=
+
+If you choose to tailor anything you are strongly adviced to copy =NewUserTemplate= and =UserForm= to the Main web and tailor the Main web copies. TWiki will look for the =NewUserTemplate= in the Main web first and if it does not exist it uses the default from the TWiki web. By creating a =Main.NewUserTemplate= and its =Main.UserForm= you will not loose your tailorings next time you upgrade TWiki.
 
 ---++ Install Plugins
 TWiki:Plugins is an extensive library of Plugins for TWiki, that enhance functionality in a huge number of ways. A few plugins are pre-installed in the TWiki distribution. For more information on these, see =TWiki.InstalledPlugins=.
