@@ -139,33 +139,63 @@ if (!inButton) return;
 	twiki.CSS.addClass(inButton, "twikiSubmitDisabled");
 	inButton.disabled = true;
 }
+function passFormValuesToNewLocation (inUrl) {
+	var url = inUrl;
+	// remove current parameters so we can override these with newly entered values
+	url = url.split("?")[0];
+	// read values from form
+	var params = "";
+	var newtopic = document.forms.newtopicform.topic.value;
+	params += ";newtopic=" + newtopic;
+	var topicparent = document.forms.newtopicform.topicparent.value;
+	params += ";topicparent=" + topicparent;
+	var templatetopic = document.forms.newtopicform.templatetopic.value;
+	params += ";templatetopic=" + templatetopic;
+	var pickparent = "%URLPARAM{"pickparent"}%";
+	params += ";pickparent=" + pickparent;
+	url += "?" + params;
+	document.location.href = url;
+	return false;
+}
+function openTemplateWindow () {
+	var window = twiki.Window.openPopup(
+		"%SCRIPTURL{view}%/",
+			{
+    			topic:"WebTemplateTopics",
+    			web:"%SYSTEMWEB%",
+    			template:"viewplain",
+    			attributes:"resizable=1,scrollbars=1,status=1,toolbar=1",
+    			urlparams:"web=%BASEWEB%"
+    		}
+    	);
+	return false;
+}
 /* ]]> */
 </script>
 %ENDSECTION{"javascriptfunctions"}%
-<form name="newtopic" id="newtopic" action="%SCRIPTURLPATH{edit}%/%BASEWEB%/" onsubmit="return canSubmit(this,true);"><input type="hidden" name="onlywikiname" /><input type="hidden" name="onlynewtopic" value="on" />%ENDSECTION{"formstart"}%
+<form name="newtopicform" id="newtopicform" action="%SCRIPTURLPATH{edit}%/%BASEWEB%/" onsubmit="return canSubmit(this,true);"><input type="hidden" name="onlywikiname" /><input type="hidden" name="onlynewtopic" value="on" />%ENDSECTION{"formstart"}%
 %STARTSECTION{"topicname"}%<input type="text" class="twikiInputField" name="topic" id="topic" size="40" %IF{"'%PREFILLTOPIC%'='1'" then="value=\"%BASETOPIC%\""}% %IF{"'%URLPARAM{"newtopic"}%'" then="value=\"%URLPARAM{"newtopic"}%\""}% onkeyup="canSubmit(this.form,false);" onchange="canSubmit(this.form,false);"  onblur="canSubmit(this.form,true);" /> <span id="webTopicCreatorFeedback" class="twikiGrayText"><!--generated name will be put here--></span>%ENDSECTION{"topicname"}%
 %STARTSECTION{"allownonwikiword"}%<input type="checkbox" class="twikiCheckbox" id="nonwikiword" name="nonwikiword" onchange="canSubmit(this.form,false);" onmouseup="canSubmit(this.form,false);" /><label for="nonwikiword">%MAKETEXT{"Allow non <nop>WikiWord for the new topic name"}%</label><br />
-<span class="twikiGrayText">%MAKETEXT{"It's usually best to choose a <a target='WikiWord' onclick=\"return launchWindow('[_1]','WikiWord')\" href='[_1]' rel='nofollow'>WikiWord</a> for the new topic name, otherwise automatic linking may not work. Characters not allowed in topic names, such as spaces will automatically be removed." args="%SYSTEMWEB%,%SCRIPTURLPATH{"view"}%/%SYSTEMWEB%/WikiWord"}%</span>
+<span class="twikiGrayText">%MAKETEXT{"It's usually best to choose a <a target='WikiWord' onclick=\"launchWindow('%SYSTEMWEB%','WikiWord'); return false;\" href='%SCRIPTURLPATH{"view"}%/%SYSTEMWEB%/WikiWord' rel='nofollow'>WikiWord</a> for the new topic name, otherwise automatic linking may not work. Characters not allowed in topic names, such as spaces will automatically be removed."}%</span>
 <script type="text/javascript">
 /* <![CDATA[ */
 // Read url param "allowsnonwikiword" to set the initial checkbox value
 var allowsNonWikiWord = "%URLPARAM{"allowsnonwikiword" default=off}%";
-setCheckBoxState(document.forms.newtopic.nonwikiword, twiki.String.isBoolean(allowsNonWikiWord) ? true : false);
+setCheckBoxState(document.forms.newtopicform.nonwikiword, twiki.String.isBoolean(allowsNonWikiWord) ? true : false);
 /* ]]> */
 </script>%ENDSECTION{"allownonwikiword"}%
 %STARTSECTION{"topicparent"}%
-%IF{"defined pickparent" then="<select name='topicparent' size='10' class='twikiSelect'>$percntTOPICLIST{$quot<option $marker value='$name'>$name</option>$quot separator=$quot$quot selection=$quot$percntURLPARAM{ $quotparent$quot default=$quot%MAKETEXT{"(no parent, orphaned topic)"}%$quot }$percnt$quot}$percnt<option value=$quot$quot>$percntMAKETEXT{$quot(no parent, orphaned topic)$quot}$percnt</option></select>" else="<input type='text' size='40' class='twikiInputField' />&nbsp;<a href='$percntSCRIPTURLPATH{view}$percnt/$percntBASEWEB$percnt/$percntBASETOPIC$percnt?$percntQUERYSTRING$percnt;pickparent=1'>%MAKETEXT{"Pick from a list"}%</a>"}%%ENDSECTION{"topicparent"}%
-%STARTSECTION{"topictemplate"}%<select name="templatetopic" class="twikiSelect">
-%IF{"$templatetopic" then='<option value="%URLPARAM{templatetopic}%" selected="selected"></option>'}%<option value="">%MAKETEXT{"Default template"}%</option>%SEARCH{".*Template$" scope="topic" type="regex" nonoise="on" format="<option>$topic</option>"}%</select> <a href="%SCRIPTURL{view}%/%SYSTEMWEB%/WebTemplateTopics?web=%BASEWEB%">%MAKETEXT{"View templates"}%</a> %ENDSECTION{"topictemplate"}%
+%IF{"defined pickparent" then="<select name='topicparent' size='10' class='twikiSelect'>$percntTOPICLIST{$quot<option $marker value='$name'>$name</option>$quot marker=$quotselected$quot separator=$quot$quot selection=$quot$percntURLPARAM{ $quottopicparent$quot default=$quot%MAKETEXT{"(no parent, orphaned topic)"}%$quot }$percnt$quot}$percnt<option value=$quot$quot>$percntMAKETEXT{$quot(no parent, orphaned topic)$quot}$percnt</option></select>" else="<input type='text' size='40' name='topicparent' class='twikiInputField' value='%URLPARAM{topicparent}%' />&nbsp;<a href='$percntSCRIPTURLPATH{view}$percnt/$percntBASEWEB$percnt/$percntBASETOPIC$percnt?$percntQUERYSTRING$percnt;pickparent=1' onclick='return passFormValuesToNewLocation($quot$percntSCRIPTURLPATH{view}$percnt/$percntBASEWEB$percnt/$percntBASETOPIC$percnt?$percntQUERYSTRING$percnt;pickparent=1$quot);'>%MAKETEXT{"Pick from a list"}%</a>"}%%ENDSECTION{"topicparent"}%
+%STARTSECTION{"topictemplate"}%<select name="templatetopic" class="twikiSelect">%IF{"'%URLPARAM{"templatetopic"}%'" then='<option selected="selected">%URLPARAM{"templatetopic"}%</option>'}%<option value="">%MAKETEXT{"Default template"}%</option>%SEARCH{".*Template$" scope="topic" type="regex" nonoise="on" format="<option>$topic</option>"}%</select> <a href="%SCRIPTURL{view}%/%SYSTEMWEB%/WebTemplateTopics?web=%BASEWEB%" onclick="openTemplateWindow(); return false;" >%MAKETEXT{"View templates"}%</a> %ENDSECTION{"topictemplate"}%
 %STARTSECTION{"submit"}%<input id="submit" type="submit" class="twikiSubmit" value='%MAKETEXT{"Create this topic"}%' />%ENDSECTION{"submit"}%
 %STARTSECTION{"formend"}%
 </form>
 <script type="text/javascript">
 //<![CDATA[
 // start with a check
-canSubmit(document.forms.newtopic,false);
+canSubmit(document.forms.newtopicform,false);
 // focus input field
-document.forms.newtopic.topic.focus();
+document.forms.newtopicform.topic.focus();
 //]]>
 </script>%ENDSECTION{"formend"}%
 %ENDSECTION{"newtopicform"}%
