@@ -62,6 +62,9 @@ BrowserMatchNoCase ^$ blockAccess
 	# By convention this is the TWikiRegistration page, that allows users
 	# to register with the TWiki. Apache requires this to be a *local* path.
 	ErrorDocument 401 /twiki/bin/view/TWiki/TWikiRegistration
+	# Alternatively if your users are all known to be registered you may want
+	# to redirect them to the ResetPassword page.
+	# ErrorDocument 401 /twiki/bin/view/TWiki/ResetPassword
 
 # Limit access to configure to specific IP addresses and or users.
 # Make sure configure is not open to the general public.

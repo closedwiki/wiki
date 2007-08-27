@@ -64,6 +64,9 @@ AuthType Basic
 # By convention this is the TWikiRegistration page, that allows users
 # to register with the TWiki. Apache requires this to be a *local* path.
 ErrorDocument 401 {ScriptUrlPath}/view/TWiki/TWikiRegistration
+# Alternatively if your users are all known to be registered you may want
+# to redirect them to the ResetPassword page.
+# ErrorDocument 401 {ScriptUrlPath}/view/TWiki/ResetPassword 
 
 # Set options for excuting CGI and allow symlinks for e.g. viewauth
 # This also unsets any options allowing directory indexing etc.
