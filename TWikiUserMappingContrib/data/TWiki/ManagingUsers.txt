@@ -28,12 +28,16 @@ work - see TWikiUserAuthentication for details.
 
 ---++ Change, Reset and Install Passwords
 
+_Note that the below features are only relevant when you use an internal password manager where TWiki can set and reset passwords._
+
    * ChangePassword is for users who _can_ remember their password and want to
      change it
    * ResetPassword is for users who _cannot_ remember their password; a system
      generated password is e-mailed to them
    * BulkResetPassword if for administrators who want to reset many passwords
      at once
+   * ChangeEmailAddress changes the hidden email address stored in the password
+     file
 
 ---++ Changing User Account Names
 
