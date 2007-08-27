@@ -105,6 +105,14 @@ The main steps are:
    * Compare the =WebPreferences= topics in the old TWiki Installation with the default from the new TWiki installation and add any new Preferences that may be relevant.
    * Compare the =WebLeftBar= topics in the old TWiki Installation with the default from the new TWiki installation and add any new feature that you desire.
 
+---++ Customization of Special Pages
+
+Some pages in the TWiki web are meant to be customized after choice of authentication. If you do not use the internal TWiki password manager the topics that contains the features for changing and resetting passwords and changing the email address should be changed to a note describing how to perform these tasks in your organization. If you have made such customizations remember to replace these topics in the TWiki web with the tailored versions from your old installation. The topics are:
+
+   * =TWiki.ChangePassword=
+   * =TWiki.ResetPassword=
+   * =TWiki.ChangeEmailAddress=
+
 ---++ Upgrading from Cairo to TWiki4 (additional advice)
 
 ---+++ Favicon
