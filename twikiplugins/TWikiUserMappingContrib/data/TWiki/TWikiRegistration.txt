@@ -301,6 +301,3 @@ return sOut;
    * %ICON{info}% %MAKETEXT{"If you have any questions about registration, send an e-mail to [_1]." args="<a href='mailto:%WIKIWEBMASTER%?subject=%TOPIC%&#32;Question'>%WIKIWEBMASTER%</a>"}%
 </div>
 
-<table bgcolor="yellow"><tr><td>
-__Note to administrator:__ The form fields can be customized to the needs of your organization. See also TWikiUserAuthentication. In case you are registering users through other means, replace this topic with a note describing how to get registered in TWiki. In any case, remove this note.
-</td></tr></table>
