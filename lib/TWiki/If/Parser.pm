@@ -29,6 +29,11 @@ sub new {
         exec => 'OP_context',
        );
     $this->addOperator(
+        name => 'allows',
+        prec => 600, arity => 2, casematters => 0,
+        exec => 'OP_allows',
+       );
+    $this->addOperator(
         name => '$',
         prec => 600, arity => 1,
         exec => 'OP_dollar',
@@ -37,6 +42,16 @@ sub new {
         name => 'defined',
         prec => 600, arity => 1, casematters => 0,
         exec => 'OP_defined',
+       );
+    $this->addOperator(
+        name => 'istopic',
+        prec => 600, arity => 1, casematters => 0,
+        exec => 'OP_istopic',
+       );
+    $this->addOperator(
+        name => 'isweb',
+        prec => 600, arity => 1, casematters => 0,
+        exec => 'OP_isweb',
        );
 
     return $this;

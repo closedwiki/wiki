@@ -12,6 +12,9 @@ Note that because of the way TWiki evaluates, then whatever is in the THEN and E
 The basic syntax of a condition is the same as [[QuerySearch][the syntax used for queries]], with the addition of the following special operators:
 
 | context | True if the current context is set (see below) |
+| allows | ='X' allows 'Y'= is true if web/topic 'X' exists and allows access mode 'Y' for the current user. Web access rights are only checked if there is no topic called 'X'. |
+| istopic | =istopic 'X'= is true if topic 'X' exists |
+| isweb | =isweb 'X'= is true if web 'X' exists |
 | defined | True if a preference variable or url parameter of this name is defined. |
 | $ | expands a URL parameter or [[TWikiVariables][TWikiVariable]] name. Plugin handlers *are not called*. Built-in variables and user-defined preferences are supported. You can pass a limited subset of parameters to TWiki variables by enclosing the variable name in single quotes; for example, =$ 'VARIABLE{value}'=. The ='VARIABLE{value}'= string may *not* contain quotes (' or "). |
 | {X} | expands to the value of the configuration variable {X} - for example, ={ScriptUrlPath}= |
@@ -55,6 +58,26 @@ TablePlugin is %IF{ "context TablePluginEnabled" then="enabled" else="disabled" 
 </verbatim>
 expands to: %BR%
 TablePlugin is %IF{ "context TablePluginEnabled" then="enabled" else="disabled" }%.
+
+8. Check access permissions
+<verbatim>
+You %IF{"'%TOPIC%' allows 'change'" then="can" else="cannot"}% change this topic.
+You %IF{"'Sandbox.TestTopic' allows 'change'" then="can" else="cannot"}% change Sandbox.TestTopic.
+You %IF{"'Sandbox' allows 'change'" then="can" else="cannot"}% change Sandbox web
+</verbatim>
+expands to: %BR%
+You %IF{"'%TOPIC%' allows 'change'" then="can" else="cannot"}% change this topic.
+You %IF{"'Sandbox.TestTopic' allows 'change'" then="can" else="cannot"}% change Sandbox.TestTopic.
+You %IF{"'Sandbox' allows 'change'" then="can" else="cannot"}% change Sandbox web
+
+8. Check topic existance
+<verbatim>
+Topic Sandbox.TestTopic %IF{"istopic 'Sandbox.TestTopic'" then="exists" else="does not exist"}%
+Web Sandbox.TestTopic %IF{"isweb 'Sandbox'" then="exists" else="does not exist"}%
+</verbatim>
+expands to: %BR%
+Topic Sandbox.TestTopic %IF{"istopic 'Sandbox.TestTopic'" then="exists" else="does not exist"}%
+Web Sandbox.TestTopic %IF{"isweb 'Sandbox'" then="exists" else="does not exist"}%
 
 *Configuration items* are defined in [[%SCRIPTURLPATH{"configure"}%][configure]]. You cannot see the value of a configuration item, you can only see if the item is set or not.
 

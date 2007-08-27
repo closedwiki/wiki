@@ -3058,9 +3058,11 @@ sub IF {
             $meta = new TWiki::Meta( $this, $web, $topic );
         }
         if( $expr->evaluate( tom=>$meta, data=>$meta )) {
-            $result = expandStandardEscapes( $params->{then} || '' );
+            $params->{then} = '' unless defined $params->{then};
+            $result = expandStandardEscapes( $params->{then} );
         } else {
-            $result = expandStandardEscapes( $params->{else} || '' );
+            $params->{else} = '' unless defined $params->{else};
+            $result = expandStandardEscapes( $params->{else} );
         }
     } catch TWiki::Infix::Error with {
         my $e = shift;

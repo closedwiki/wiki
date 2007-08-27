@@ -33,6 +33,52 @@ sub OP_context {
     return $session->inContext($text) || 0;
 }
 
+sub OP_allows {
+    my( $this, %domain ) = @_;
+    my $a = $this->{params}->[0]; # topic name (string)
+    my $b = $this->{params}->[1]; # access mode (string)
+    my $mode = $b->evaluate() || 'view';
+    my $session = $domain{tom}->session;
+    throw Error::Simple('No context in which to evaluate "'.
+                          $a->stringify().'"') unless $session;
+    my $str = $a->evaluate();
+    return 0 unless $str;
+    my ($web, $topic) = $session->normalizeWebTopicName(
+        $session->{webName}, $str);
+    my $ok = 0;
+    if ($session->{store}->topicExists($web, $topic)) {
+        $ok = $session->security->checkAccessPermission(
+            uc($mode), $session->{user}, undef, undef, $topic, $web);
+    } elsif ($session->{store}->webExists($str)) {
+        $ok = $session->security->checkAccessPermission(
+            uc($mode), $session->{user}, undef, undef, undef, $str);
+    } else {
+        $ok = 0;
+    }
+    return $ok ? 1 : 0;
+}
+
+sub OP_istopic {
+    my( $this, %domain ) = @_;
+    my $a = $this->{params}->[0];
+    my $session = $domain{tom}->{_session};
+    throw Error::Simple('No context in which to evaluate "'.
+                          $a->stringify().'"') unless $session;
+    my ($web, $topic) = $session->normalizeWebTopicName(
+        $session->{webName}, $a->evaluate() || '');
+    return $session->{store}->topicExists($web, $topic) ? 1 : 0;
+}
+
+sub OP_isweb {
+    my( $this, %domain ) = @_;
+    my $a = $this->{params}->[0];
+    my $session = $domain{tom}->{_session};
+    throw Error::Simple('No context in which to evaluate "'.
+                          $a->stringify().'"') unless $session;
+    my $web = $a->evaluate() || '';
+    return $session->{store}->webExists($web) ? 1 : 0;
+}
+
 sub OP_dollar {
     my( $this, %domain ) = @_;
     my $a = $this->{params}->[0];
