@@ -136,4 +136,89 @@ PONG
     $this->assert_matches(qr/^\s*one 1\s*$/s, $result);
 }
 
+sub test_ALLOWS_and_EXISTS{
+    my $this = shift;
+    my $wn = $this->{twiki}->{users}->getWikiName($this->{twiki}->{user});
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user},
+        $this->{test_web},
+        "DeadDog",
+        <<PONG);
+   * Set ALLOWTOPICVIEW = WibbleFloon
+   * Set ALLOWTOPICCHANGE = $wn
+PONG
+    my @tests;
+    push(@tests, {
+        test => "'%TOPIC%' allows 'change'",
+        expect => "1"
+       });
+    push(@tests, {
+        test => "istopic '%TOPIC%'",
+        expect => "1"
+       });
+    push(@tests, {
+            test => "'%TOPIC%' allows 'view'",
+            expect => "1",
+        });
+    push(@tests, {
+            test => "'%WEB%.%TOPIC%' ALLOWS 'change'",
+            expect => "1",
+        });
+    push(@tests, {
+            test => "'%WEB%.%TOPIC%' allows 'view'",
+            expect => "1",
+        });
+    push(@tests, {
+            test => "'DeadDog' ALLOWS 'view'",
+            expect => "0",
+        });
+    push(@tests, {
+        test => "'$this->{test_web}' allows 'view'",
+        expect => "1"
+       });
+    push(@tests, {
+            test => '\''.$this->{test_web}.'.DeadDog\' allows \'change\'',
+            expect => "1"
+        });
+    push(@tests, {
+        test => "istopic 'LazyFox'",
+        expect => "0"
+       });
+    push(@tests, {
+        test => "istopic '$this->{test_web}.LazyFox'",
+        expect => "0"
+       });
+    push(@tests, {
+        test => "istopic '$this->{test_web}.DeadDog'",
+        expect => "1"
+       });
+    push(@tests, {
+        test => "isweb '$this->{test_web}'",
+        expect => "1"
+       });
+    push(@tests, {
+        test => "isweb '%WEB%'",
+        expect => "1"
+       });
+    push(@tests, {
+        test => "isweb 'NotAHopeInHellPal'",
+        expect => "0"
+       });
+    push(@tests, {
+        test => "'NotAHopeInHellPal' allows 'view'",
+        expect => "0"
+       });
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki();
+    $this->{twiki}->{webName} = $this->{test_web}; # hack
+
+    foreach my $test (@tests) {
+        my $text = '%IF{"'.$test->{test}.'" then="1" else="0"}%';
+        my $result = $this->{twiki}->handleCommonTags(
+            $text, $this->{test_web}, $this->{test_topic});
+        $this->assert_str_equals($test->{expect}, $result,
+                                 "$text: '$result'");
+    }
+}
+
 1;
