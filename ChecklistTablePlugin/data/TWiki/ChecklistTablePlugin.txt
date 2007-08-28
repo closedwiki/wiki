@@ -3,7 +3,7 @@
 
 This plugin helps you to create a checklist with tables. A HTML form for a quick add of new entries and a table editor are also available.
 
-<nop>%TOPIC% depends on the %TWIKIWEB%.ChecklistPlugin if you use the =item= table cell format type.
+<nop>%TOPIC% depends on the TWiki:Plugins.ChecklistPlugin if you use the =item= table cell format type.
 
 %TOC%
 *Example:* <br/>
@@ -19,7 +19,7 @@ This plugin helps you to create a checklist with tables. A HTML form for a quick
 
 Simply put a =%<nop>CHECKLISTTABLE%= tag to a topic. You get a HTML form to create a checklist table.
 
-You can use the =%<nop>CHECKLIST%= tag to customize the checklist states, icons ... (see %TWIKIWEB%.ChecklistPlugin)
+You can use the =%<nop>CHECKLIST%= tag to customize the checklist states, icons ... (see TWiki:Plugins.ChecklistPlugin)
 
 
 ---++ Usage Examples
@@ -60,7 +60,7 @@ You can use the =%<nop>CHECKLIST%= tag to customize the checklist states, icons 
 | header | table header: a TWiki table like header or 'off' to disable header | =header="&#124;*State*&#124;*Item*&#124;*Comment*&#124;"= |
 | headerislabel | table headers are read-only (labels) if set to 'on' | =headerislabel="on"= |
 | name | name of the checklist | =name="_default"= |
-| template | use template configuration; see =template= attribute of %TWIKIWEB%.ChecklistPlugin topic | =template="patchday"= |
+| template | use template configuration; see =template= attribute of TWiki:Plugins.ChecklistPlugin topic | =template="patchday"= |
 | quietsave | enables/disables Quiet Save button (Quiet Save disables email notification) | =quietsave="on"= |
 | *Icons* ||||
 | deleterowicon | delete icon (%ICON{choice-no}%) | =deleterowicon="%<nop>ICONURL{choice-no}%"= |
@@ -83,7 +83,7 @@ The table format syntax of <nop>%TOPIC% uses the %TWIKIWEB%.EditTablePlugin synt
 | *Type* | *Paramter* | *Default* |^| 
 | checkbox | _size_ | item1, item2, ... | a checkbox group; _size_ indicates the number of checkboxes per line | 
 | date | _size_ | _default date_, _date format_ | a date |
-| item | 0 | _unused_ | a checklist item column; use the =%<nop>CHECKLIST%= tag of the %TWIKIWEB%.ChecklistPlugin to customize the checklist |
+| item | 0 | _unused_ | a checklist item column; use the =%<nop>CHECKLIST%= tag of the TWiki:Plugins.ChecklistPlugin to customize the checklist |
 | label | 0 | _default text_ | unchangeable text | 
 | radio | _size_ | item1, item2, ... | radio buttons; _size_ indicates the number of buttons per line |
 | row | 0 | _unused_ | a label field with the row number | 
@@ -125,7 +125,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
 
-	* Install (or upgrade to) the latest %TWIKIWEB%.ChecklistPlugin plugin 
+	* Install (or upgrade to) the latest TWiki:Main.ChecklistPlugin plugin 
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
@@ -149,7 +149,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  V1.002 (BETA): | TWiki:Main.DanielRohde: fixed major pre/verbatim bug; fixed and added documentation |
 |  V1.001 (28 Aug 2007): | Initial version |
-|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 <br/> %TWIKIWEB%.ChecklistPlugin, %TWIKIWEB%.JSCalendarContrib |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 <br/> TWiki:Plugins.ChecklistPlugin, TWiki:Plugins.JSCalendarContrib |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
@@ -158,7 +158,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.ChecklistPlugin, %TWIKIWEB%.SmiliesPlugin
+__Related Topics:__ TWiki:Plugins.TWikiPlugins, TWiki:Plugins.ChecklistPlugin
 
 -- TWiki:Main.DanielRohde - 20 Aug 2007
 
