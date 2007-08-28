@@ -38,7 +38,7 @@ For a full explanation of the available options, and guidance on reconfiguring T
    convert_urls : false,
    relative_urls : false,
    remove_script_host : false,
-   plugins : "table,searchreplace,autosave",
+   plugins : "table,searchreplace,autosave,paste",
    setupcontent_callback : "tinymce_plugin_setUpContent",
    theme_advanced_toolbar_align : "left",
    theme_advanced_buttons1 : "bold,italic,separator,bullist,numlist,separator,outdent,indent,separator,undo,redo,separator,search,replace,separator,link,unlink,removeformat,hr,separator,styleselect,formatselect,anchor,image,help,code,charmap",
