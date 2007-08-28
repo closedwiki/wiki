@@ -17,7 +17,7 @@
 package TWiki::Plugins::DpSyntaxHighlighterPlugin;
 use strict;
 
-use vars qw( $VERSION $RELEASE $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION $pluginName $rootDir $doScript $doneCore);
+use vars qw( $VERSION $RELEASE $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION $pluginName $rootDir $doneHead );
 
 $VERSION = '$Rev: 9813$';
 $RELEASE = 'Dakar';
@@ -38,8 +38,7 @@ sub initPlugin {
 	       $pluginName . '/' . # DpSyntaxHighlighterPlugin
                'dp.SyntaxHighlighter';
 
-    $doScript = 0;
-    $doneCore = 0;
+    $doneHead = 0;
 
     # Plugin correctly initialized
     return 1;
@@ -51,21 +50,6 @@ sub commonTagsHandler {
 
 }
 
-# adds the script at the bottom of the
-# page to get it all working
-sub afterCommonTagsHandler {
-
-    # only if needed
-    unless (!$doScript){
-	my $script = "<script type=\"text/javascript\">"  
-                   . "dp.SyntaxHighlighter.ClipboardSwf = '$rootDir/Scripts/clipboard.swf';"
-	           . "dp.SyntaxHighlighter.HighlightAll('code');"  
-                   . "</script>";
-
-	$_[0] =~ s!</body>!$script</body>\n!o;
-    }
-}
-
 # handles the tag
 sub _handleTag {
 
@@ -73,12 +57,6 @@ sub _handleTag {
     my $el = $params{el} || 'pre';
     my $lang = lc$params{lang} || lc$params{_DEFAULT}; # language
     my $code = $2; # code to highlight
-
-    # style sheet
-    my $style = "<style type='text/css' media='all'>"
-              . "\@import url($rootDir/Styles/SyntaxHighlighter.css);"
-              . "</style>";
-    TWiki::Func::addToHEAD($pluginName . '_STYLE',$style);
 
     # start
     my $out = "<$el name='code' class='$lang";
@@ -105,11 +83,6 @@ sub _handleTag {
     # end
     $out .= "</$el>";
 
-    # core javascript file
-    $out .= "<script type=\"text/javascript\" src='$rootDir/Scripts/shCore.js'></script>"
-	unless($doneCore);
-    $doneCore = 1;
-
     # brush
     my $brush = '';
     for ($lang){
@@ -122,15 +95,58 @@ sub _handleTag {
 	/^java$/ and $brush = "Java", last;
 	/php/ and $brush = "Php", last;
 	/py|python/ and $brush = "Python", last;
-	/ruby/ and $brush = "Ruby", last;
+	/ruby|ror|rails/ and $brush = "Ruby", last;
 	/sql/ and $brush = "Sql", last;
 	/xml|xhtml|xslt|html/ and $brush = "Xml", last;
     }
-    $out .= "<script type=\"text/javascript\" src='$rootDir/Scripts/shBrush$brush.js'></script>\n";
+    $out .= "<script type=\"text/javascript\" src='$rootDir/Scripts/shBrush$brush.js'></script>";
 		
-    $doScript = 1;
+    _doHead();
 	
     return $out;
+}
+
+# adds styles and core js to head
+sub _doHead {
+
+    return if $doneHead;
+    $doneHead = 1;
+
+    # style sheet
+    TWiki::Func::addToHEAD(
+        $pluginName . '_STYLE',
+        "<style type='text/css' media='all'>\@import url($rootDir/Styles/SyntaxHighlighter.css);</style>"
+    );
+            
+    # core javascript file
+    TWiki::Func::addToHEAD(
+        $pluginName . '_CORE',
+        "<script type=\"text/javascript\" src='$rootDir/Scripts/shCore.js'></script>"
+    );
+
+    my $script = <<"EOT";
+<script type="text/javascript">
+// use dp.SyntaxHighlighter namespace
+dp.SyntaxHighlighter.twikirender = function(){
+  dp.SyntaxHighlighter.ClipboardSwf = '$rootDir/Scripts/clipboard.swf';
+  dp.SyntaxHighlighter.HighlightAll('code');
+}
+if (typeof YAHOO != "undefined") {
+  // YUI
+  YAHOO.util.Event.onDOMReady(dp.SyntaxHighlighter.twikirender);
+} else if (typeof twiki != "undefined"){
+  // TWiki 4.2
+  twiki.Event.addLoadEvent(dp.SyntaxHighlighter.twikirender);
+} else if (typeof addLoadEvent != "undefined") {
+  // TWiki 4.1
+  addLoadEvent(dp.SyntaxHighlighter.twikirender);
+} else {
+  alert("Can't add load event for DpSyntaxHighlighterPlugin. Please contact your System Administrator.");
+}
+</script>
+EOT
+
+    TWiki::Func::addToHEAD($pluginName . '_RENDER',$script);
 }
 
 1;
