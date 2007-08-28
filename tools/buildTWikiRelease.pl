@@ -43,21 +43,21 @@ close(LS);
 #run unit tests
 #TODO: testrunner should exit == 0 if no errors?
 chdir('test/unit');
-my $unitTests = "export TWIKI_LIBS=; export TWIKI_HOME=$twikihome;perl ../bin/TestRunner.pl -clean TWikiSuite.pm 2>1 > ../../../unittestMAIN.log";
+my $unitTests = "export TWIKI_LIBS=; export TWIKI_HOME=$twikihome;perl ../bin/TestRunner.pl -clean TWikiSuite.pm 2>1 > $twikihome/unittestMAIN.log";
 my $return = `$unitTests`;
 my $errorcode = $? >> 8;
 unless ($errorcode == 0) {
-    open(UNIT, '../../../unittestMAIN.log');
+    open(UNIT, '$twikihome/unittestMAIN.log');
     local $/ = undef;
     my $unittestErrors = <UNIT>;
     close(UNIT);
     
-    sendEmail("Subject: TWiki MAIN branch has Unit test FAILURES\n".$unittestErrors);
+    sendEmail("Subject: TWiki MAIN branch has Unit test FAILURES\n\n".$unittestErrors);
     die "\n\n$errorcode: unit test failures - need to fix them first\n" 
 }
 
 chdir($twikihome);
-#`perl tools/MemoryCycleTests.pl > ../memoryCycleTests.log`;
+#`perl tools/MemoryCycleTests.pl > $twikihome/memoryCycleTests.log`;
 #`cd tools; perl check_manifest.pl`;
 #`cd data; grep '%META:TOPICINFO{' */*.txt | grep -v TestCases | grep -v 'author="TWikiContributor".*version="\$Rev'`;
 
@@ -83,7 +83,11 @@ print "\n\n ready to build release\n";
 chdir('lib');
 `perl ../tools/build.pl release -auto`;
 
-
+chdir($twikihome);
+my $buildOutput = `ls -alh *auto*`;
+$buildOutput .= "\n";
+$buildOutput .= `grep 'All tests passed' twikiplugins/unittestMAIN.log`;
+sendEmail("Subject: TWiki MAIN built OK\n\n".$buildOutput);
 
 
 sub getLocalSite {
@@ -114,7 +118,6 @@ sub sendEmail {
 
     $smtp->data();
     $smtp->datasend("To: $twikiDev\n");
-    $smtp->datasend("\n");
     $smtp->datasend($text);
     $smtp->dataend();
 
