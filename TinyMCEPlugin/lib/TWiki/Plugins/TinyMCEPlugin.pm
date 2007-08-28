@@ -31,7 +31,7 @@ sub initPlugin {
 }
 
 sub _notAvailable {
-    return 0 if TWiki::Func::getPreferencesValue('TINYMCEPLUGIN_DISABLE');
+    return "Disabled" if TWiki::Func::getPreferencesValue('TINYMCEPLUGIN_DISABLE');
 
     # Disable TinyMCE if we are on a specialised edit skin
     my $skin = TWiki::Func::getPreferencesValue( 'WYSIWYGPLUGIN_WYSIWYGSKIN' );
@@ -93,9 +93,17 @@ tinyMCE.init({ $init });
 </script>
 SCRIPT
 
-    my $sid = '<!--'.$secret_id.'-->';
-    unless ($_[0] =~ /^$sid/) {
-        $_[0] = $sid.TWiki::Plugins::WysiwygPlugin::TranslateTML2HTML($_[0]);
+    my $useJSTranslator = 0;
+    if ($useJSTranslator) {
+        TWiki::Func::addToHEAD('tinyMCEJS', <<SCRIPT);
+        <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TinyMCEPlugin/TML2HTML.js"></script>
+SCRIPT
+    } else {
+        my $sid = '<!--'.$secret_id.'-->';
+        unless ($_[0] =~ /^$sid/) {
+            $_[0] =
+              $sid.TWiki::Plugins::WysiwygPlugin::TranslateTML2HTML($_[0]);
+        }
     }
 
     # See TWiki.IfStatements for a description of this context id.

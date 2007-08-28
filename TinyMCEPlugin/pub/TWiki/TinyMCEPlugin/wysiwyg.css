@@ -16,7 +16,8 @@
 }
 /* Verbatim sections are painted with this */
 .TMLverbatim { 
-  font-family:"Courier New", courier, monaco, monospace;
+  font-family: "Courier New", courier, monaco, monospace;
+  font-size: 12pt;
   background-image:url(verbatim.png);
   white-space: pre nowrap;
 }
