@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1188308811" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1188308931" format="1.0" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 
 This plugin helps you to create a checklist with tables. A HTML form for a quick add of new entries and a table editor are also available.
@@ -24,15 +24,30 @@ You can use the =%<nop>CHECKLIST%= tag to customize the checklist states, icons 
 
 ---++ Usage Examples
 	1 a simple checklist table:
+	  <verbatim>
+%CHECKLISTTABLE%
 	  </verbatim>
 	1 a checklist table with your own table format:
+	  <verbatim>
+%CHECKLISTTABLE{format="|text,20|item|" header="|*Item*|*State*|"}%
 	  </verbatim>
 	1 a checklist table with special states and icons:
+	  <verbatim>
+%CHECKLIST{states="todo|doing|done" stateicons=":-(|:-I|%<nop>Y%"}%
+%CHECKLISTTABLE%
 	  </verbatim>
 	1 multiple checklist tables on the same topic with special states and icons:
-	 <br/>%X% attend to the =name= attribute:
-	  </verbatim>
+		ALERT! attend to the name attribute:
+		<verbatim>
+---++ Checklist Table ONE
+		%CHECKLIST{name="checklist one" states="not ok|ok" stateicons=":-(|:ok:"}%
+		%CHECKLISTTABLE{name="checklist one"}%
+|%CLI{id="1188302375-003-000" name="checklist one"}%|a|b|
 
+---++ Checklist Table TWO
+		%CHECKLIST{name="checklist two" states="todo|doing|done" stateicons=":-(|:-I|%<nop>Y%"}%
+		%CHECKLISTTABLE{name="checklist two"}%
+		</verbatim>
 ---++ Attributes
 *Syntax:* =%<nop>CHECKLISTTABLE{attribute1="value1" attribute2="value" ... }%=
 
@@ -131,7 +146,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2007, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 28 Aug 2007 (V1.001) |
+|  Plugin Version: | V1.001 (28 Aug 2007 ) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  V1.001 (28 Aug 2007): | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 <br/> %TWIKIWEB%.ChecklistPlugin, %TWIKIWEB%.JSCalendarContrib |
