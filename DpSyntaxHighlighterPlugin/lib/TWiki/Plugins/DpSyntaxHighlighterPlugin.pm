@@ -57,7 +57,7 @@ sub afterCommonTagsHandler {
 
     # only if needed
     unless (!$doScript){
-	my $script = "<script language='javascript'>"  
+	my $script = "<script type=\"text/javascript\">"  
                    . "dp.SyntaxHighlighter.ClipboardSwf = '$rootDir/Scripts/clipboard.swf';"
 	           . "dp.SyntaxHighlighter.HighlightAll('code');"  
                    . "</script>";
@@ -77,8 +77,8 @@ sub _handleTag {
     # style sheet
     my $style = "<style type='text/css' media='all'>"
               . "\@import url($rootDir/Styles/SyntaxHighlighter.css);"
-              . "</style>\n";
-    TWiki::Func::addToHEAD('DpSyntaxHighlighterPlugin',$style);
+              . "</style>";
+    TWiki::Func::addToHEAD($pluginName . '_STYLE',$style);
 
     # start
     my $out = "<$el name='code' class='$lang";
@@ -91,22 +91,22 @@ sub _handleTag {
     $out .= ":showcolumns" if lc$params{showcolumns} eq 'on';
     $out .= "'";
 
-    if ($el =~ /textarea/) {
+    if ($el eq 'textarea') {
         # used to give sensible size if javascript not available
         $out .= " cols='$params{cols}'" if $params{cols};
         $out .= " rows='$params{rows}'" if $params{rows};
     }
 
-    $out .= ">\n";
+    $out .= ">";
 
     # code
-    $out .= "$code\n";
+    $out .= "$code";
 
     # end
-    $out .= "</$el>\n";
+    $out .= "</$el>";
 
     # core javascript file
-    $out .= "<script language='javascript' src='$rootDir/Scripts/shCore.js'></script>\n"
+    $out .= "<script type=\"text/javascript\" src='$rootDir/Scripts/shCore.js'></script>"
 	unless($doneCore);
     $doneCore = 1;
 
@@ -126,7 +126,7 @@ sub _handleTag {
 	/sql/ and $brush = "Sql", last;
 	/xml|xhtml|xslt|html/ and $brush = "Xml", last;
     }
-    $out .= "<script class='javascript' src='$rootDir/Scripts/shBrush$brush.js'></script>\n";
+    $out .= "<script type=\"text/javascript\" src='$rootDir/Scripts/shBrush$brush.js'></script>\n";
 		
     $doScript = 1;
 	
