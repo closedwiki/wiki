@@ -15,7 +15,4 @@ pub/TWiki/DpSyntaxHighlighterPlugin/dp.SyntaxHighlighter/Scripts/shBrushSql.js 0
 pub/TWiki/DpSyntaxHighlighterPlugin/dp.SyntaxHighlighter/Scripts/shBrushVb.js 0644
 pub/TWiki/DpSyntaxHighlighterPlugin/dp.SyntaxHighlighter/Scripts/shBrushXml.js 0644
 pub/TWiki/DpSyntaxHighlighterPlugin/dp.SyntaxHighlighter/Scripts/shCore.js 0644
-pub/TWiki/DpSyntaxHighlighterPlugin/dp.SyntaxHighlighter/Scripts/shCore.uncompressed.js 0644
 pub/TWiki/DpSyntaxHighlighterPlugin/dp.SyntaxHighlighter/Styles/SyntaxHighlighter.css 0644
-pub/TWiki/DpSyntaxHighlighterPlugin/dp.SyntaxHighlighter/Styles/TestPages.css 0644
-pub/TWiki/DpSyntaxHighlighterPlugin/dp.SyntaxHighlighter/Templates/Test.dwt 0644

@@ -63,11 +63,13 @@ function hello () {
 
 |  Plugin Author(s): | TWiki:Main.AndrewRJones |
 |  Plugin Version: | %$VERSION% |
-|  Dp Syntax Highlighter Version: | 1.5 (11 May 2007) |
+|  Dp Syntax Highlighter Version: | 1.5.1 (5 Aug 2007) |
 |  Copyright: | &copy; 2007 TWiki:Main.AndrewRJones |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Dp Syntax Highlighter License: | [[http://www.gnu.org/licenses/lgpl.html][LGPL (Gnu Lesser General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  14642 | Bugs:Item4516: Upgrade highlighter to 1.5.1 |
+|  14046 | Bugs:Item4215: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  Dp Syntax Highlighter Home | http://code.google.com/p/syntaxhighlighter |
 |  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/DpSyntaxHighlighterPlugin |
