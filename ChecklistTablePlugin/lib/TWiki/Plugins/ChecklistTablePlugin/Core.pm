@@ -460,7 +460,10 @@ sub _handleChangeAction {
                 $insidePRE = 1 if $line =~ /<(pre|verbatim)\b/i;
                 $insidePRE = 0 if $line =~ /<\/(pre|verbatim)>/i; 
 
-		next if $insidePRE;
+		if ($insidePRE) {
+			$newText .= "$line\n";
+			next;
+		}
 
 		if ($line =~ /\%CHECKLISTTABLE({(.*?)})?\%/) {
 			my $attributes = $2;
