@@ -311,28 +311,29 @@ sub _renderTableHeader {
 	} else {
 		return "";
 	}
-	my @cells = split(/\s*\|\s*/, $header);
-	shift @cells;
-	$header = "|";
-	for (my $c=0; $c<=$#cells; $c++) {
-		my $param = "cltp_${tablenum}_sort";
-		my $cell = $cells[$c];
-		$cell=~s/^\s*\*//;
-		$cell=~s/\*\s*$//;
-		my $dir = 'asc';
-		$dir = 'desc' if (defined $cgi->param($param) && $cgi->param($param)=~/^${c}_asc/);
-		$dir = "default" if (defined $cgi->param($param) && $cgi->param($param)=~/^${c}_desc/);
+	if ($options{'sort'}) {
+		my @cells = split(/\s*\|\s*/, $header);
+		shift @cells;
+		$header = "|";
+		for (my $c=0; $c<=$#cells; $c++) {
+			my $param = "cltp_${tablenum}_sort";
+			my $cell = $cells[$c];
+			$cell=~s/^\s*\*//;
+			$cell=~s/\*\s*$//;
+			my $dir = 'asc';
+			$dir = 'desc' if (defined $cgi->param($param) && $cgi->param($param)=~/^${c}_asc/);
+			$dir = "default" if (defined $cgi->param($param) && $cgi->param($param)=~/^${c}_desc/);
 
-		my $sortmarker="";
-		$sortmarker=$dir eq "desc" ? $cgi->span({-title=>'ascending order'},'^') :  $cgi->span({-title=>'descending order'},'v') 
-					if (defined $cgi->param($param) && $cgi->param($param)=~/^${c}_(asc|desc)$/);
-		my $ncgi=new CGI($cgi);
-		$ncgi->param($param,"${c}_${dir}");
-		$cell = "$sortmarker " . $cgi->a({-href=>$ncgi->self_url()."#CLTP_TABLE_$tablenum", -title=>"sort table"}, $cell);
+			my $sortmarker="";
+			$sortmarker=$dir eq "desc" ? $cgi->span({-title=>'ascending order'},'^') :  $cgi->span({-title=>'descending order'},'v') 
+						if (defined $cgi->param($param) && $cgi->param($param)=~/^${c}_(asc|desc)$/);
+			my $ncgi=new CGI($cgi);
+			$ncgi->param($param,"${c}_${dir}");
+			$cell = "$sortmarker " . $cgi->a({-href=>$ncgi->self_url()."#CLTP_TABLE_$tablenum", -title=>"sort table"}, $cell);
 
-		$header.="*$cell*|";
+			$header.="*$cell*|";
+		}
 	}
-
 	my $text ="$header*&nbsp;&nbsp;*|";
 
 	return "$text\n";
