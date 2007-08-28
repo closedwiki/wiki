@@ -118,18 +118,31 @@ sub _trim {
 }
 
 sub _hasClass {
-    my ($this, $class) = @_;
-    return undef unless $this->{attrs} && defined $this->{attrs}->{class};
-    return $this->{attrs}->{class} =~ /\b$class\b/;
+    my ($attrs, $class) = @_;
+    return 0 unless $attrs && defined $attrs->{class};
+    return $attrs->{class} =~ /\b$class\b/ ? 1 : 0;
+}
+
+sub _removeClass {
+    my ($attrs, $class) = @_;
+    return 0 unless _hasClass($attrs, $class);
+    $attrs->{class} =~ s/\b$class\b//;
+    $attrs->{class} =~ s/\s+/ /g;
+    $attrs->{class} =~ s/^\s+//;
+    $attrs->{class} =~ s/\s+$//;
+    if (!$attrs->{class}) {
+        delete $attrs->{class};
+    }
+    return 1;
 }
 
 sub _addClass {
-    my ($this, $class) = @_;
-    $this->_removeClass($class);
-    if ($this->{attrs} && $this->{attrs}->{class}) {
-        $this->{attrs}->{class} .= ' '.$class;
+    my ($attrs, $class) = @_;
+    _removeClass($attrs, $class); # avoid duplication
+    if ($attrs->{class}) {
+        $attrs->{class} .= ' '.$class;
     } else {
-        $this->{attrs}->{class} = $class;
+        $attrs->{class} = $class;
     }
 }
 
@@ -297,7 +310,7 @@ sub _flatten {
     my $text = '';
     my $flags = 0;
     my $protected = ($options & $WC::PROTECTED) ||
-      $this->_hasClass('WYSIWYG_PROTECTED') || 0;
+      _hasClass($this->{attrs}, 'WYSIWYG_PROTECTED') || 0;
 
     if ($protected) {
         # Expand brs, which are used in the protected encoding in place of
@@ -578,7 +591,7 @@ sub _deduceAlignment {
               $td->{attrs}->{style} =~ /text-align\s*:\s*(left|right|center)/ ) {
             return $1;
         }
-        if ($td->_hasClass(qr/align-(left|right|center)/)) {
+        if (_hasClass($td->{attrs}, qr/align-(left|right|center)/)) {
             return $1;
         }
     }
@@ -591,7 +604,7 @@ sub _H {
     my( $flags, $contents ) = $this->_flatten( $options );
     return ( 0, undef ) if( $flags & $WC::BLOCK_TML );
     my $notoc = '';
-    if( $this->_hasClass('notoc')) {
+    if(_hasClass($this->{attrs}, 'notoc')) {
         $notoc = '!!';
     }
     $contents =~ s/^\s+/ /;
@@ -788,6 +801,7 @@ sub _handleDFN { return _flatten( @_ ); };
 
 sub _handleDIV {
     my( $this, $options ) = @_;
+    # TODO: Remove if no attributes? Just remove? Replace with a P?
     return (0, undef);
 }
 
@@ -806,10 +820,8 @@ sub _handleEM {
 sub _handleFIELDSET { return _flatten( @_ ); };
 sub _handleFONT {
     my( $this, $options ) = @_;
-    if( defined( $this->{attrs}->{class} ) &&
-          scalar( %{$this->{attrs}}) == 1 &&
-            ($options & $WC::VERY_CLEAN)) {
-        # Only defines class. Ignore it if we are cleaning.
+    # Ignore font tags
+    if( $options & $WC::VERY_CLEAN ) {
         return $this->_flatten( $options );
     }
     return ( 0, undef );
@@ -897,7 +909,7 @@ sub _handlePRE {
     my( $this, $options ) = @_;
 
     my $tag = 'pre';
-    if( $this->_hasClass('TMLverbatim')) {
+    if( _hasClass($this->{attrs}, 'TMLverbatim')) {
         $options |= $WC::PROTECTED;
         $tag = 'verbatim';
     }
@@ -920,29 +932,37 @@ sub _handleSAMP { return _handleTT( @_ ); };
 sub _handleSPAN {
     my( $this, $options ) = @_;
 
-    if ($this->_hasClass('TMLverbatim')) {
+    my %atts = %{$this->{attrs}};
+    if (_removeClass(\%atts, 'TMLverbatim')) {
         $options |= $WC::PROTECTED;
         my( $flags, $text ) = $this->_flatten($options);
-        my $p = _htmlParams($this->{attrs}, $options);
+        my $p = _htmlParams(\%atts, $options);
         return ($flags, "<verbatim$p>$text</verbatim>");
     }
 
-    if( defined( $this->{attrs}->{class} ) &&
-          $this->_hasClass('WYSIWYG_NOAUTOLINK')) {
+    if( _removeClass(\%atts, 'WYSIWYG_NOAUTOLINK')) {
         my( $flags, $text ) = $this->_flatten( $options );
         my $p = _htmlParams( $this->{attrs}, $options);
         return ($flags, "<noautolink$p>".$text.
                   "</noautolink>");
     }
 
-    if( $this->_hasClass('WYSIWYG_LINK')) {
+    if( _removeClass(\%atts, 'WYSIWYG_LINK')) {
         $options |= $WC::NO_BLOCK_TML;
     }
 
-    my ($f, $t) = $this->_flatten( $options );
-    # ignore the span tag if there are no other attrs than the class
-    if( !scalar( grep { !/class/ } keys %{$this->{attrs}}) ) {
-        return ($f, $t);
+    # Remove all other classes
+    delete $atts{class};
+
+    if( $options & $WC::VERY_CLEAN ) {
+        # remove style attribute if cleaning aggressively. Have to do this
+        # because TWiki generates these.
+        delete $atts{style} if defined $atts{style}
+    }
+
+    # ignore the span tag if there are no other attrs
+    if( scalar(keys %atts) == 0 ) {
+        return $this->_flatten( $options );
     }
 
     # otherwise use the default generator.
