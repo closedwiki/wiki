@@ -20,8 +20,12 @@ The code goes between the tags =%<nop>CODE{...}%= and =%ENDCODE%=.
 | =collapse="on"= | Will collapse the block by default. |
 | =firstline="value"= | Will begin line count at value. Default value is 1. |
 | =showcolumns="on"= | Will show row columns in the first line. |
-| =el="..."= | HTML element to display the code in. Can be =pre= or =textarea=. Default is =pre=. %BR% Note that if you use display HTML using =pre=, you will need to escape all &lt; for the code to display correctly, or use a textarea. |
+| =el="..."= | HTML element to display the code in. Can be =pre= or =textarea=. Default is =pre=. See [[#Pre_vs_Textarea]]. |
 | =rows="value"= %BR% =cols="value"= | Sets the rows and columns attributes. %BR% Recommend if using textarea so the code can be seen clearly when !JavaScript is not available. |
+
+---+++ Pre vs Textarea
+
+There are known problems when displaying XML (and HTML) in a =pre= element. See http://code.google.com/p/syntaxhighlighter/wiki/PreAndTextarea for more information.
 
 ---++ Supported Languages
 
@@ -68,7 +72,7 @@ function hello () {
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Dp Syntax Highlighter License: | [[http://www.gnu.org/licenses/lgpl.html][LGPL (Gnu Lesser General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  14645 | Bugs:Item4460: Fixed adding JS into highlighted HTML (#3) |
+|  14646 | Bugs:Item4460: Fixed adding JS into highlighted HTML (#3) |
 |  14642 | Bugs:Item4516: Upgrade highlighter to 1.5.1 |
 |  14046 | Bugs:Item4215: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
