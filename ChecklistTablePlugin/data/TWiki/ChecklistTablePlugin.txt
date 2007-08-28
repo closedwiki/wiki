@@ -60,6 +60,7 @@ You can use the =%<nop>CHECKLIST%= tag to customize the checklist states, icons 
 | header | table header: a TWiki table like header or 'off' to disable header | =header="&#124;*State*&#124;*Item*&#124;*Comment*&#124;"= |
 | headerislabel | table headers are read-only (labels) if set to 'on' | =headerislabel="on"= |
 | name | name of the checklist | =name="_default"= |
+| sort | switch table sort feature 'on' or 'off' | =sort="on"= |
 | template | use template configuration; see =template= attribute of TWiki:Plugins.ChecklistPlugin topic | =template="patchday"= |
 | quietsave | enables/disables Quiet Save button (Quiet Save disables email notification) | =quietsave="on"= |
 | *Icons* ||||

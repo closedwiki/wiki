@@ -57,13 +57,13 @@ sub _render {
 	my $tablenum = -1;
 	my $row = -1;
 	foreach my $line (split /\r?\n/, "$_[0]\n<nop>\n") {
-                $insidePRE = 1 if $line =~ /<(pre|verbatim)\b/i;
-                $insidePRE = 0 if $line =~ /<\/(pre|verbatim)>/i; 
+		$insidePRE = 1 if $line =~ /<(pre|verbatim)\b/i;
+		$insidePRE = 0 if $line =~ /<\/(pre|verbatim)>/i; 
 
-                if ($insidePRE) {
-                        $text .= "$line\n";
-                        next;
-                }
+		if ($insidePRE) {
+			$text .= "$line\n";
+			next;
+		}
 
 		if ($line =~ s/%CHECKLISTTABLE({(.*?)})?%/_initOptions($2,$_[1],$_[2])/eg) {
 			@table = ();
@@ -76,7 +76,8 @@ sub _render {
 				_collectTableData(\@table, $tablenum, $line, $row);
 				$line = undef;
 			}  else {
-				$line = _renderTable(\@table, $tablenum).$line;
+				
+				$line = _renderTable( _sortTable($tablenum,\@table), $tablenum).$line;
 				$foundTable = 0;
 			}
 		}
@@ -129,7 +130,7 @@ sub _renderTable {
 		}
 
 	}
-	$text.=qq@%TABLE{sort="off"}%@ if !$options{'headerislabel'};
+	$text.=qq@%TABLE{sort="off"}%@; ##  if !$options{'headerislabel'}; ## generally switched off
 	$text.="\n";
 	$text.=_renderTableHeader($tablenum);
 
@@ -159,6 +160,12 @@ sub _renderTable {
 	$text.= _renderForm('addrow',$tablenum,undef,$#$tableRef + 1) unless defined $cgi->param("cltp_action_$tablenum");
 	$text.= _renderButtons('edittable', $tablenum) unless defined $cgi->param("cltp_action_$tablenum") || $#$tableRef<0;
 	$text.= _renderButtons('savetable', $tablenum) if defined $cgi->param("cltp_action_${tablenum}_edittable");
+
+	### preserve table sort order of all checklist tables:
+	foreach my $param (grep(/^cltp_\d+_sort/,$cgi->param())) {
+		$text .= $cgi->hidden(-name=>$param,-value=>$cgi->param($param));
+	}
+
 
 	$text.=$cgi->end_form();
 
@@ -237,7 +244,7 @@ sub _renderForm {
 			$text.= $evalue;
 		}
 		
-		$text .=' | ';
+		$text .='|';
 
 	}
 	$text.= '*&nbsp;'._renderButtons($what,$tablenum, $row).'&nbsp;* |';
@@ -295,19 +302,38 @@ sub _renderTableHeader {
 	my ($tablenum, $entryRef) = @_;
 
 
-	my $rowcount = $options{"_RowCount_$tablenum"};
-	my $text = "";
+	my $header = "";
 
 	if (defined $entryRef) {
-		$text .= $$entryRef{'line'};
+		$header = $$entryRef{'line'};
 	} elsif ($options{'header'} ne 'off') {
-		$text .= $options{'header'};
+		$header = $options{'header'};
 	} else {
 		return "";
 	}
+	my @cells = split(/\s*\|\s*/, $header);
+	shift @cells;
+	$header = "|";
+	for (my $c=0; $c<=$#cells; $c++) {
+		my $param = "cltp_${tablenum}_sort";
+		my $cell = $cells[$c];
+		$cell=~s/^\s*\*//;
+		$cell=~s/\*\s*$//;
+		my $dir = 'asc';
+		$dir = 'desc' if (defined $cgi->param($param) && $cgi->param($param)=~/^${c}_asc/);
+		$dir = "default" if (defined $cgi->param($param) && $cgi->param($param)=~/^${c}_desc/);
 
-	$text.=" *&nbsp;";
-	$text.="&nbsp;*|";
+		my $sortmarker="";
+		$sortmarker=$dir eq "desc" ? $cgi->span({-title=>'ascending order'},'^') :  $cgi->span({-title=>'descending order'},'v') 
+					if (defined $cgi->param($param) && $cgi->param($param)=~/^${c}_(asc|desc)$/);
+		my $ncgi=new CGI($cgi);
+		$ncgi->param($param,"${c}_${dir}");
+		$cell = "$sortmarker " . $cgi->a({-href=>$ncgi->self_url()."#CLTP_TABLE_$tablenum", -title=>"sort table"}, $cell);
+
+		$header.="*$cell*|";
+	}
+
+	my $text ="$header*&nbsp;&nbsp;*|";
 
 	return "$text\n";
 }
@@ -390,25 +416,25 @@ sub _handleActions {
 	my @cltpactions = grep(/^cltp_action_\d+_(ins|first|edittable|editrow|addrow|delrow|up|down|cancel|saverow|qsaverow|savetable|qsavetable|insertfirst)(_\d+)?$/, $cgi->param());
 	return 0 if ($#cltpactions != 0);
 
-        #### Check access permissions (before any action...):
-        my $mainWebName=&TWiki::Func::getMainWebname();
-        my $user =TWiki::Func::getWikiName();
-        $user = "$mainWebName.$user" unless $user =~ m/^$mainWebName\./;
+	#### Check access permissions (before any action...):
+	my $mainWebName=&TWiki::Func::getMainWebname();
+	my $user =TWiki::Func::getWikiName();
+	$user = "$mainWebName.$user" unless $user =~ m/^$mainWebName\./;
 
-        if (! TWiki::Func::checkAccessPermission("CHANGE",$user,undef,$theTopic, $theWeb)) {
-                eval { require TWiki::AccessControlException; };
-                if ($@) {
-                        TWiki::Func::redirectCgiQuery($cgi,TWiki::Func::getOopsUrl($theWeb,$theTopic,"oopsaccesschange"));
-                } else {
-                        require Error;
-                        throw TWiki::AccessControlException(
-                                        'CHANGE', 
-                                        $TWiki::Plugins::SESSION->{user},
-                                        $theTopic, $theWeb, 'denied'
-                                );
-                }
-                return;
-        }
+	if (! TWiki::Func::checkAccessPermission("CHANGE",$user,undef,$theTopic, $theWeb)) {
+		eval { require TWiki::AccessControlException; };
+		if ($@) {
+			TWiki::Func::redirectCgiQuery($cgi,TWiki::Func::getOopsUrl($theWeb,$theTopic,"oopsaccesschange"));
+		} else {
+			require Error;
+			throw TWiki::AccessControlException(
+					'CHANGE', 
+					$TWiki::Plugins::SESSION->{user},
+					$theTopic, $theWeb, 'denied'
+				);
+		}
+		return;
+	}
 
 
 	my $action = $cltpactions[0];
@@ -422,16 +448,28 @@ sub _handleActions {
 		my $error;
 		$error = _handleChangeAction($theTopic, $theWeb, $action, $tablenum, $rownum) unless $action eq 'cancel';
 
-                TWiki::Func::setTopicEditLock($theWeb, $theTopic, 0);
-		TWiki::Func::redirectCgiQuery($cgi, $error ? $error : TWiki::Func::getViewUrl($theWeb,$theTopic) );
+		TWiki::Func::setTopicEditLock($theWeb, $theTopic, 0);
+
+		my $url = TWiki::Func::getViewUrl($theWeb,$theTopic);
+		## preserve sort order:
+		if (!$error) {
+			$url=~s/(\#.*)$//;
+			my $anchor = $1;
+			$url.="?";
+			foreach my $param (grep(/^cltp_\d+_sort$/,$cgi->param())) {
+				$url.="$param=".$cgi->param($param).";";
+			}
+			$url.=$anchor if defined $anchor;
+		}
+		TWiki::Func::redirectCgiQuery($cgi, $error ? $error : $url );
 		return 1;
 	} else { # ins|first|editrow|edittable
 		
-                my $oopsUrl = TWiki::Func::setTopicEditLock($theWeb, $theTopic, 1);
-                if ($oopsUrl) {
-                        TWiki::Func::redirectCgiQuery($cgi, $oopsUrl);
-                        return 1;
-                }
+		my $oopsUrl = TWiki::Func::setTopicEditLock($theWeb, $theTopic, 1);
+		if ($oopsUrl) {
+			TWiki::Func::redirectCgiQuery($cgi, $oopsUrl);
+			return 1;
+		}
 	}
 
 	return 0; ### no actions (better: redirects) done
@@ -457,8 +495,8 @@ sub _handleChangeAction {
 	my $firstInserted = 0;
 	foreach my $line ( @topic ) {
 		$linenumber++;
-                $insidePRE = 1 if $line =~ /<(pre|verbatim)\b/i;
-                $insidePRE = 0 if $line =~ /<\/(pre|verbatim)>/i; 
+		$insidePRE = 1 if $line =~ /<(pre|verbatim)\b/i;
+		$insidePRE = 0 if $line =~ /<\/(pre|verbatim)>/i; 
 
 		if ($insidePRE) {
 			$newText .= "$line\n";
@@ -574,15 +612,15 @@ sub _createRowFromCgi {
 
 # =========================
 sub _initDefaults {
-        %defaults = ( 
+	%defaults = ( 
 		'_DEFAULT' => undef,
 		'unknownparamsmsg' => '%RED% %TWIKIWEB%.ChecklistTablePlugin: Sorry, some parameters are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR% <br/> Allowed parameters are (see TWiki.ChecklistTablePlugin topic for more details): %KNOWNPARAMSLIST%',
-                'header' => '|*State*|*Item*|*Comment*|',
-                'format' => '|item|text,30|textarea,3x30|',
-                'name' => '_default',
-                'template'=> undef,
-                'defaultcellformat'=> 'textarea,3x20',
-                'allowmove' => 0,
+		'header' => '|*State*|*Item*|*Comment*|',
+		'format' => '|item|text,30|textarea,3x30|',
+		'name' => '_default',
+		'template'=> undef,
+		'defaultcellformat'=> 'textarea,3x20',
+		'allowmove' => 0,
 		##'edittableicon'=>'%PUBURLPATH%/%TWIKIWEB%/EditTablePlugin/edittable.gif',
 		'edittableicon'=>'%ICONURL{edittopic}%',
 		'moverowupicon'=>'%ICONURL{up}%',
@@ -593,68 +631,69 @@ sub _initDefaults {
 		'dummyicon'=>'%ICONURL{empty}%',
 		'quietsave'=>'on',
 		'headerislabel'=>'on',
-        );
-        @flagOptions = ('allowmove', 'quietsave', 'headerislabel');
-        $cgi = TWiki::Func::getCgiQuery();
-        $defaultsInitialized = 1;
+		'sort'=>'on',
+	);
+	@flagOptions = ('allowmove', 'quietsave', 'headerislabel', 'sort');
+	$cgi = TWiki::Func::getCgiQuery();
+	$defaultsInitialized = 1;
 }
 # =========================
 sub _initOptions {
-        my ($attributes,$topic,$web) = @_;
-        my %params = TWiki::Func::extractParameters($attributes);
+	my ($attributes,$topic,$web) = @_;
+	my %params = TWiki::Func::extractParameters($attributes);
 
-        my @allOptions = keys %defaults;
+	my @allOptions = keys %defaults;
 
 	@unknownParams= ( );
-        foreach my $option (keys %params) {
-                push (@unknownParams, $option) unless grep(/^\Q$option\E$/, @allOptions);
-        }
+	foreach my $option (keys %params) {
+		push (@unknownParams, $option) unless grep(/^\Q$option\E$/, @allOptions);
+	}
 
 	## _DEFAULT:
 	$params{'name'} = $params{'_DEFAULT'} if defined $params{'_DEFAULT'} && ! defined $params{'name'};
 
 	## all options:
-        foreach my $option (@allOptions) {
-                my $v = $params{$option};
-                if (defined $v) {
-                        if (grep /^\Q$option\E$/, @flagOptions) {
-                                $options{$option} = ($v!~/(false|no|off|0|disable)/i);
-                        } else {
-                                $options{$option} = $v;
-                        }
-                } else {
-                        if (grep /^\Q$option\E$/, @flagOptions) {
-                                $v = ( TWiki::Func::getPreferencesFlag("\U${TWiki::Plugins::ChecklistTablePlugin::pluginName}_$option\E") || undef );
-                        } else {
-                                $v = TWiki::Func::getPreferencesValue("\U${TWiki::Plugins::ChecklistTablePlugin::pluginName}_$option\E"); 
-                        }
-                        $v = undef if (defined $v) && ($v eq "");
-                        $options{$option}= (defined $v?$v:$defaults{$option});
-                }
-        }
+	foreach my $option (@allOptions) {
+		my $v = $params{$option};
+		if (defined $v) {
+			if (grep /^\Q$option\E$/, @flagOptions) {
+				$options{$option} = ($v!~/(false|no|off|0|disable)/i);
+			} else {
+				$options{$option} = $v;
+			}
+		} else {
+			if (grep /^\Q$option\E$/, @flagOptions) {
+				$v = ( TWiki::Func::getPreferencesFlag("\U${TWiki::Plugins::ChecklistTablePlugin::pluginName}_$option\E") || undef );
+			} else {
+				$v = TWiki::Func::getPreferencesValue("\U${TWiki::Plugins::ChecklistTablePlugin::pluginName}_$option\E"); 
+			}
+			$v = undef if (defined $v) && ($v eq "");
+			$options{$option}= (defined $v?$v:$defaults{$option});
+		}
+	}
 
-        $options{"theWeb"}=$web;
-        $options{"theTopic"}=$topic;
+	$options{"theWeb"}=$web;
+	$options{"theTopic"}=$topic;
 
 	return $#unknownParams>-1?_createUnknownParamsMessage():"";
 
 }
 # =========================
 sub _createUnknownParamsMessage {
-        my $msg="";
-        $msg = TWiki::Func::getPreferencesValue('UNKNOWNPARAMSMSG') || undef;
-        $msg = $defaults{'unknownparamsmsg'} unless defined $msg;
-        $msg =~ s/\%UNKNOWNPARAMSLIST\%/join(', ', sort @unknownParams)/eg;
+	my $msg="";
+	$msg = TWiki::Func::getPreferencesValue('UNKNOWNPARAMSMSG') || undef;
+	$msg = $defaults{'unknownparamsmsg'} unless defined $msg;
+	$msg =~ s/\%UNKNOWNPARAMSLIST\%/join(', ', sort @unknownParams)/eg;
 	my @params = sort grep {!/^(_DEFAULT|unknownparamsmsg)$/} keys %defaults;
-        $msg =~ s/\%KNOWNPARAMSLIST\%/join(', ',@params)/eg;
+	$msg =~ s/\%KNOWNPARAMSLIST\%/join(', ',@params)/eg;
 
-        return $msg;
+	return $msg;
 }
 # =========================
 sub _editencode  {
 	my ($text,$html) = @_;
 	
-        $text = _encode($text);
+	$text = _encode($text);
 	$text =~ s/<br\s*\/?>/&#10;/g;	
 	$text =~ s/\*/&#35;/g;
 	$text =~ s/_/&#95;/g;
@@ -664,6 +703,7 @@ sub _editencode  {
 
 	return $text;
 }
+# =========================
 sub _encode {
 	my ($text) =@_;
 
@@ -674,6 +714,7 @@ sub _encode {
 	
 	return $text;
 }
+# =========================
 sub _editdecode {
 	my ($text) = @_;
 	$text =~ s/&(amp;)?#124;/\|/g;
@@ -685,8 +726,38 @@ sub _editdecode {
 	$text =~ s/&(amp;)#(\d+);/&#$2;/g; ## fix encoded characters &amp;#....;
 	return $text;
 }
+# =========================
 sub handlePost {
 	$_[0] =~ s/\Q$STARTENCODE\E(.*?)\Q$ENDENCODE\E/_editdecode($1)/esg;
 }
+# =========================
+sub _sortTable {
+	my ($tablenum, $tabledataRef) = @_;
+	
+	return $tabledataRef if !$options{'sort'};
+	my @newtabledata = @{$tabledataRef};
+
+	my ($column, $dir) = (undef, undef);
+	foreach my $param (grep /^cltp_\Q$tablenum\E_sort$/, $cgi->param()) {
+		($column,$dir)=split(/\_/,$cgi->param($param));
+	}
+	if (defined $column && defined $dir && $dir ne "default") {
+
+		sub _mysort {
+			my ($dir,$column) = @_;
+			if ($$a{'header'}) {
+				return -1;
+			} elsif ($$b{'header'}) {
+				return +1;
+			}
+			return uc($$a{'data'}[$column]) cmp uc($$b{'data'}[$column]) if $dir eq 'asc';
+			return uc($$b{'data'}[$column]) cmp uc($$a{'data'}[$column]);
+		};
+
+		@newtabledata = sort { _mysort($dir,$column); }  @{$tabledataRef};
+	}
+	return \@newtabledata;
+}
+
 
 1;
