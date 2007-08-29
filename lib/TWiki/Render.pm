@@ -1176,8 +1176,7 @@ sub _filterLiteral {
 sub _filterScript {
     my $val = shift;
     return $val if( $TWiki::cfg{AllowInlineScript} );
-    return CGI::span({class => 'twikiAlert'},
-                     '&lt;script&gt; is not allowed on this site');
+    return CGI::comment('<script> is not allowed on this site');
 }
 
 =pod
