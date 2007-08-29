@@ -41,6 +41,7 @@ sub _notAvailable {
     # Check the client browser to see if it is supported
     my $query = TWiki::Func::getCgiQuery();
     return "No CGI query" if !$query;
+    return "Disabled" if $query->param('nowysiwyg');
     my $ua = TWiki::Func::getPreferencesValue('TINYMCEPLUGIN_BAD_BROWSERS') ||
       '(?i-xsm:Konqueror|Opera)';
     return 'Unsupported browser: '.$query->user_agent()
