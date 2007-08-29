@@ -3,7 +3,7 @@
 
 This plugin helps you to create a checklist with tables. A HTML form for a quick add of new entries and a table editor are also available.
 
-<nop>%TOPIC% depends on the TWiki:Plugins.ChecklistPlugin if you use the =item= table cell format type.
+<nop>%TOPIC% depends on the ChecklistPlugin if you use the =item= table cell format type.
 
 %TOC%
 *Example:* <br/>
@@ -19,7 +19,7 @@ This plugin helps you to create a checklist with tables. A HTML form for a quick
 
 Simply put a =%<nop>CHECKLISTTABLE%= tag to a topic. You get a HTML form to create a checklist table.
 
-You can use the =%<nop>CHECKLIST%= tag to customize the checklist states, icons ... (see TWiki:Plugins.ChecklistPlugin)
+You can use the =%<nop>CHECKLIST%= tag to customize the checklist states, icons ... (see ChecklistPlugin)
 
 
 ---++ Usage Examples
@@ -55,13 +55,14 @@ You can use the =%<nop>CHECKLIST%= tag to customize the checklist states, icons 
 %TABLE{sort="off"}%
 | *Attribute* | *Description* | *Example/Default* |
 | allowmove | enables/disables buttons for move a entry (row) up or down | =allowmove="off"= |
+| changerows | enables/disables row changes (add/insert/remove); allowed values: on, off, add (= allow only add not remove) | =changerows="on"= |
 | defaultcellformat | if the =format= attribute does not match with a given TWiki table the format of a table cell will be changed to this default | =defaultcellformat="textarea,3x30"= | 
 | format | table format (see Table Format section) | =format="&#124;item&#124;text,30&#124;textarea,3x30&#124;"= |
 | header | table header: a TWiki table like header or 'off' to disable header | =header="&#124;*State*&#124;*Item*&#124;*Comment*&#124;"= |
 | headerislabel | table headers are read-only (labels) if set to 'on' | =headerislabel="on"= |
 | name | name of the checklist | =name="_default"= |
 | sort | switch table sort feature 'on' or 'off' | =sort="on"= |
-| template | use template configuration; see =template= attribute of TWiki:Plugins.ChecklistPlugin topic | =template="patchday"= |
+| template | use template configuration; see =template= attribute of ChecklistPlugin topic | =template="patchday"= |
 | quietsave | enables/disables Quiet Save button (Quiet Save disables email notification) | =quietsave="on"= |
 | *Icons* ||||
 | deleterowicon | delete icon (%ICON{choice-no}%) | =deleterowicon="%<nop>ICONURL{choice-no}%"= |
@@ -78,19 +79,22 @@ The table format syntax of <nop>%TOPIC% uses the %TWIKIWEB%.EditTablePlugin synt
 
 *Attribute Syntax:* format="| _Type_ , _Parameter_ , _Default_ | ..."
 
-*Example:* =format="|label,0,#|row|item|text,30|textarea,2x3|radio,3,a,b,c,d,e,f|checkbox,3,A,B,C,D,E,F|date,20,,%Y/%d/%m|"=
+*Example:* =format="|label,0,#|row|item|text,20|textarea,2x20|select,1,0,1,2,3,4,5|radio,3,a,b,c,d,e,f|checkbox,3,A,B,C,D,E,F|date,20,,%Y/%d/%m|"=
 
 | *Format* ||| *Description* |
 | *Type* | *Paramter* | *Default* |^| 
 | checkbox | _size_ | item1, item2, ... | a checkbox group; _size_ indicates the number of checkboxes per line | 
 | date | _size_ | _default date_, _date format_ | a date |
-| item | 0 | _unused_ | a checklist item column; use the =%<nop>CHECKLIST%= tag of the TWiki:Plugins.ChecklistPlugin to customize the checklist |
+| item | 0 | _unused_ | a checklist item column; use the =%<nop>CHECKLIST%= tag of the ChecklistPlugin to customize the checklist |
 | label | 0 | _default text_ | unchangeable text | 
 | radio | _size_ | item1, item2, ... | radio buttons; _size_ indicates the number of buttons per line |
 | row | 0 | _unused_ | a label field with the row number | 
+| select | _size_ | item1, item2, ... | drop down box |
 | text | _size_ | _default text_ | a editable text | 
 | textarea | <i>rows</i><b>x</b><i>cols</i> | _default text_ | a editable text box |
 
+---++ Per Cell Format
+You can define a special edit field type if you place an =%<nop>EDITCELL{"type,paramer,default"}%= variable at the end of a cell content. 
 
 ---++ Examples
 
@@ -148,9 +152,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | V1.002 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  V1.002 (BETA): | TWiki:Main.DanielRohde: fixed major pre/verbatim bug; fixed and added documentation |
+|  V1.002 (BETA): | TWiki:Main.DanielRohde: fixed major pre/verbatim bug; fixed and added documentation; added sort feature; added changerows attribute |
 |  V1.001 (28 Aug 2007): | Initial version |
-|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 <br/> TWiki:Plugins.ChecklistPlugin, TWiki:Plugins.JSCalendarContrib |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 <br/> ChecklistPlugin, JSCalendarContrib |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
@@ -159,7 +163,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ TWiki:Plugins.TWikiPlugins, TWiki:Plugins.ChecklistPlugin
+__Related Topics:__ TWikiPlugins, ChecklistPlugin
 
 -- TWiki:Main.DanielRohde - 20 Aug 2007
 

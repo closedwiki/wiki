@@ -30,7 +30,7 @@ $TWikiCompatibility{endRenderingHandler} = 1.1;
 
 $VERSION = '$Rev$';
 
-$RELEASE = 'v1.002'; # dro - fixed major pre/verbatim bug; fixed and added documenation; added sort feature
+$RELEASE = 'v1.002'; # dro - fixed major pre/verbatim bug; fixed and added documenation; added sort feature; added changerows attribute; added EDITCELL feature
 #$RELEASE = 'v1.001'; # dro - initial version
 
 $pluginName = 'ChecklistTablePlugin';
