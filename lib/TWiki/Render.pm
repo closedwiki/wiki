@@ -1169,8 +1169,7 @@ sub verbatimCallBack {
 sub _filterLiteral {
     my $val = shift;
     return $val if( $TWiki::cfg{AllowInlineScript} );
-    return CGI::span({class => 'twikiAlert'},
-                     '&lt;literal&gt; is not allowed on this site');
+    return CGI::comment('<literal> is not allowed on this site');
 }
 
 sub _filterScript {
