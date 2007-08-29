@@ -155,9 +155,10 @@ sub _renderTable {
 		if (defined $cgi->param("cltp_action_${tablenum}_ins_$$tableEntry{'row'}")) {
 			$row.=_renderForm('insertrow',$tablenum, undef, $$tableEntry{'row'});
 		}
+		$row=~s/%EDITCELL{(.*?)}%/_handleEditCell($tablenum,$1)/eg;
 		$text.=$row;
 	}
-	$text.= _renderForm('addrow',$tablenum,undef,$#$tableRef + 1) unless defined $cgi->param("cltp_action_$tablenum");
+	$text.= _renderForm('addrow',$tablenum,undef,$#$tableRef + 1) if (!defined $cgi->param("cltp_action_$tablenum"))&&($options{'changerows'}!~/^(off|false|0|no)$/i);
 	$text.= _renderButtons('edittable', $tablenum) unless defined $cgi->param("cltp_action_$tablenum") || $#$tableRef<0;
 	$text.= _renderButtons('savetable', $tablenum) if defined $cgi->param("cltp_action_${tablenum}_edittable");
 
@@ -171,6 +172,20 @@ sub _renderTable {
 
 	$text.="\n";
 	return $text;
+}
+# =========================
+sub _handleEditCell {
+	my ($tablenum, $attributes) = @_;
+	$attributes=~s/^\s*\"//; $attributes=~s/\"\s*$//;
+	my ($type,$param,$default) = split(/\s*,\s*/,$attributes,3);
+
+	if ($type eq 'editbutton') {
+		my ($text,$url) = split(/\s*,\s*/,$default);
+		$url = $options{'edittableicon'} unless defined $url;
+		$text='EDIT' if !defined $text || $text eq "" ;
+		return $cgi->image_button(-name=>"cltp_action_${tablenum}_edittable", -value=>$text, -src=>$url);
+	} 
+	return "";
 }
 # =========================
 sub _renderForm {
@@ -187,21 +202,32 @@ sub _renderForm {
 	
 	$dataRef = $$entryRef{'data'} if defined $entryRef;
 
-	my $text = "| ";
+	my $text = '| ';
 	for (my $c=0; $c<=$#formats; $c++) {
-		my $format = $formats[$c];
+		my $valname = "cltp_val_${tablenum}_${row}_${c}";
 
+		my $format = $formats[$c];
 		$format = $defaults{'defaultcellformat'} if defined $entryRef && $$entryRef{'header'} && !$options{'headerislabel'};
 
-		my ($type, $param, $default) = split(/\s*,\s*/,$format,3);
-
-
 		my $value;
-		$value = $$dataRef[$c] if defined $dataRef;
+		if (defined $dataRef) {
+			$value = $$dataRef[$c]; 
+			$value =~s/^\s//; $value=~s/\s$//;
+			if ($value=~s/%EDITCELL{(.*?)}%//) {
+				my $param = $1;
+				$param=~s/^\s*\"//; $param=~s/\"\s*$//;
+				if ($param !~ /^editbutton/i) {
+					$format = $param; 
+				}
+				$text.=$cgi->hidden(-name=>$valname."_f",-value=>$param);
+			}
+		}
+
+		my ($type, $param, $default) = split(/,/,$format,3);
+
+		
 		$value = $default unless defined $value;
 		$value = "" unless defined $value;
-
-		my $valname = "cltp_val_${tablenum}_${row}_${c}";
 
 		my $evalue = $STARTENCODE._editencode($value).$ENDENCODE;
 
@@ -219,21 +245,21 @@ sub _renderForm {
 			my ($rows,$cols) = split(/x/i,$param);
 			$text .= $cgi->textarea(-name=>$valname, -value=> $evalue, -rows=>$rows, -columns=>$cols);
 		} elsif ($type eq 'select') {
-			my @selopts = split(/,\s*/,$default);
+			my @selopts = split(/,/,$default);
 			$text .= $STARTENCODE._editencode($cgi->popup_menu(-name=>$valname, -size=>$param, -values=>\@selopts, -default=>($default ne $value)?$value:""),1).$ENDENCODE;
 		} elsif ($type eq 'checkbox') {
-			my @selopts = split(/,\s*/,$default);
-			my @values = split(/,\s*/,$value);
+			my @selopts = split(/,/,$default);
+			my @values = split(/,\s?/,$value);
 			$text .= $STARTENCODE._editencode($cgi->checkbox_group(-name=>$valname, -values=>\@selopts, -columns=>$param,-defaults=>(defined $entryRef)?\@values:$selopts[0]),1).$ENDENCODE;
 		} elsif ($type eq 'radio') {
-			my @selopts = split(/,\s*/,$default);
+			my @selopts = split(/,/,$default);
 			$value = $selopts[0] unless defined $value && $value ne "" && grep /^\Q$value\E$/,@selopts;
 			$text .= $STARTENCODE._editencode(
 				$cgi->radio_group(-name=>$valname, -columns=>$param, -values=>\@selopts, -default=>$value), 1
 				).$ENDENCODE;
 		} elsif ($type eq 'date') {
 			my($initval,$dateformat);
-			($initval,$dateformat) = split(/\s*,\s*/,$default,2) if defined $default;
+			($initval,$dateformat) = split(/,/,$default,2) if defined $default;
 			$initval="" unless defined $initval;
 			$dateformat=TWiki::Func::getPreferencesValue('JSCALENDARDATEFORMAT') if (!defined $dateformat || $dateformat eq "");
 			$dateformat=~s/'/\\'/g if defined $dateformat;
@@ -241,10 +267,10 @@ sub _renderForm {
 			$text .= $cgi->textfield(-name=>$valname, -value=>$evalue, -size=>$param, -id=>$valname);
 			$text .= $cgi->image_button(-name=>'calendar', -src=>'%PUBURLPATH%/TWiki/JSCalendarContrib/img.gif', -alt=>'Calendar', -title=>'Calendar', -onClick=>qq@return showCalendar('$valname','$dateformat')@);
 		} else { # label or unkown:
-			$text.= $evalue;
+			$text.= $evalue.$cgi->hidden(-name=>$valname, -value=>$evalue);
 		}
 		
-		$text .='|';
+		$text .=' | ';
 
 	}
 	$text.= '*&nbsp;'._renderButtons($what,$tablenum, $row).'&nbsp;* |';
@@ -259,7 +285,6 @@ sub _fixFormatAndHeaderOptions {
 	my @header = split(/\|/, $options{'header'});
 	shift @format; 
 	shift @header;
-
 
 	my $columns = 0;
 	if (defined $entryRef) {
@@ -295,7 +320,9 @@ sub _fixFormatAndHeaderOptions {
 
 		$options{'header'} = 'off' if $columns != $#header;
 	}
-	
+
+	$options{'format'} =~ s/\%<nop>/\%/g;
+
 }
 # =========================
 sub _renderTableHeader {
@@ -366,13 +393,13 @@ sub _renderButtons {
 		## e:
 		$text.=$cgi->image_button(-name=>"cltp_action_${tablenum}_editrow_${row}", -title=>'Edit Entry', -value=>' E ', -src=>$options{'editrowicon'});
 		## +:
-		if ($row < $rowcount) {
+		if (($row < $rowcount)&&($options{'changerows'}!~/^(off|no|false|0)$/i)) {
 			$text.=$cgi->image_button(-name=>"cltp_action_${tablenum}_ins_${row}", -title=>'Insert Entry', -value=>' + ',-src=>$options{'insertrowicon'});
 		} else {
 			$text.=$cgi->image_button(-name=>"cltp_action_${tablenum}_cancel", -title=>'Insert Entry', -value=>'   ',-src=>$options{'dummyicon'}); 
 		}
 		## ^ v:
-		if ($options{'allowmove'}) {
+		if ($options{'allowmove'} && $options{'changerows'}!~/^(off|no|false|0)$/i) {
 			if ($row > 0 ) {
 				$text.=$cgi->image_button(-name=>"cltp_action_${tablenum}_up_".($row-1), -title=>'Move Entry Up', -value=>' ^ ',-src=>$options{'moverowupicon'}); 
 			} else {
@@ -385,7 +412,8 @@ sub _renderButtons {
 				$text.=$cgi->image_button(-name=>"cltp_action_${tablenum}_cancel", -title=>'Move Entry Down', -value=>'   ',-src=>$options{'dummyicon'});
 			}
 		}
-		$text.=$cgi->image_button(-name=>"cltp_action_${tablenum}_delrow_${row}", -title=>'Remove Entry', -value=>' - ',-src=>$options{'deleterowicon'}); 
+		$text.=$cgi->image_button(-name=>"cltp_action_${tablenum}_delrow_${row}", -title=>'Remove Entry', -value=>' - ',-src=>$options{'deleterowicon'}) 
+				if ($options{'changerows'}!~/^(off|0|no|false|add)$/i);
 	} elsif ($what eq 'addrow') {
 		$text.=$cgi->submit(-name=>"cltp_action_${tablenum}_addrow_${row}", -value=>'Add');
 	} elsif ($what eq 'insertrow') {
@@ -396,7 +424,8 @@ sub _renderButtons {
 		$text.=$cgi->submit(-name=>"cltp_action_${tablenum}_qsaverow_${row}", -value=>'Quiet Save') if $options{'quietsave'};
 		$text.=$cgi->submit(-name=>"cltp_action_${tablenum}_cancel", -value=>'Cancel');
 	} elsif ($what eq 'first') {
-		$text.=$cgi->image_button(-name=>"cltp_action_${tablenum}_first", -title=>"Insert entry", -value=>' + ',-src=>$options{'insertrowicon'});
+		$text.=$cgi->image_button(-name=>"cltp_action_${tablenum}_first", -title=>"Insert entry", -value=>' + ',-src=>$options{'insertrowicon'})
+			if $options{'changerows'} !~ /^(off|no|0|false)$/i;
 	} elsif ($what eq 'insertfirst') {
 		$text.=$cgi->submit(-name=>"cltp_action_${tablenum}_insertfirst", -value=>"Insert");
 		$text.=$cgi->submit(-name=>"cltp_action_${tablenum}_cancel", -value=>"Cancel");
@@ -441,8 +470,6 @@ sub _handleActions {
 	my $action = $cltpactions[0];
 	$action =~ s/^cltp_action_(\d+)_([^_]+)(_(\d+))?/$2/;
 	my ($tablenum, $rownum) = ($1,$4);
-
-	$cgi->delete("etedit");
 
 	$cgi->param("cltp_action_$tablenum","1");
 	if ($action =~ /^(cancel|saverow|qsaverow|savetable|qsavetable|addrow|delrow|up|down|insertfirst)$/) {
@@ -577,18 +604,25 @@ sub _createRowFromCgi {
 	my @formats = split(/\|/, $options{'format'});
 	shift @formats; 
 	
-	my $text = '|';
+	my $text = '| ';
 	for (my $c=0; $c<=$#formats; $c++) {
-		my $format = $formats[$c];
-		my ($type,$attribute,$val) = split(/\s*,\s*/,$format);
 		my $paramname = "cltp_val_${tablenum}_${row}_$c";
 
 		my $value;
-		$value  = _encode(join(", ",$cgi->param($paramname))) if defined $cgi->param($paramname);
+		$value  = _encode(join(', ',$cgi->param($paramname))) if defined $cgi->param($paramname);
+
+		my $format = $formats[$c];
+		if (defined $cgi->param($paramname.'_f')) {
+			$format = $cgi->param($paramname.'_f');
+			$value.=qq@%EDITCELL{"$format"}%@;
+		}
+		my ($type,$attribute,$val) = split(/,/,$format);
+
+		$value = $val unless defined $value;
+
 
 		$cgi->delete($paramname);
 
-		$value = $val unless defined $value;
 
 		if ($action eq 'new') {
 			if ($type eq 'item') {
@@ -602,10 +636,11 @@ sub _createRowFromCgi {
 		} else {
 			if (($type eq 'item')||($type eq 'row')) {
 				$value = $$dataRef[$c];
+				$value =~ s/^\s//; $value =~ s/\s$//;
 			}
 		}
 
-		$text.="$value|";
+		$text.="$value | ";
 		
 	}
 	return $text;
@@ -633,6 +668,7 @@ sub _initDefaults {
 		'quietsave'=>'on',
 		'headerislabel'=>'on',
 		'sort'=>'on',
+		'changerows'=>'on',
 	);
 	@flagOptions = ('allowmove', 'quietsave', 'headerislabel', 'sort');
 	$cgi = TWiki::Func::getCgiQuery();
