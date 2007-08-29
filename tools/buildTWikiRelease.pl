@@ -9,15 +9,15 @@
 # Copyright (C) TWikiContributors, 2005
 
 unless ( -e 'MAIN' ) {
-   print STDERR "doing a fresh checkout\n";
-   `svn co http://svn.twiki.org/svn/twiki/branches/MAIN > checkouMAIN.log`;
+   print STDERR "doing a fresh checkout\n"
+   `svn co http://svn.twiki.org/svn/twiki/branches/MAIN > TWiki-svn.log`;
    chdir('MAIN');
 } else {
 #TODO: should really do an svn revert..
    print STDERR "using existing checkout, removing ? files";
    chdir('MAIN');
    `svn status | grep ? | sed 's/?/rm -r/' | sh`;
-   `svn up > checkouMAIN.log`;
+   `svn up > TWiki-svn.log`;
 }
 
 my $twikihome = `pwd`;
@@ -43,11 +43,11 @@ close(LS);
 #run unit tests
 #TODO: testrunner should exit == 0 if no errors?
 chdir('test/unit');
-my $unitTests = "export TWIKI_LIBS=; export TWIKI_HOME=$twikihome;perl ../bin/TestRunner.pl -clean TWikiSuite.pm 2>1 > $twikihome/unittestMAIN.log";
+my $unitTests = "export TWIKI_LIBS=; export TWIKI_HOME=$twikihome;perl ../bin/TestRunner.pl -clean TWikiSuite.pm 2>1 > $twikihome/TWiki-UnitTests.log";
 my $return = `$unitTests`;
 my $errorcode = $? >> 8;
 unless ($errorcode == 0) {
-    open(UNIT, '$twikihome/unittestMAIN.log');
+    open(UNIT, '$twikihome/TWiki-UnitTests.log');
     local $/ = undef;
     my $unittestErrors = <UNIT>;
     close(UNIT);
@@ -84,9 +84,12 @@ chdir('lib');
 `perl ../tools/build.pl release -auto`;
 
 chdir($twikihome);
+#push the files to my server - http://distributedinformation.com/TWikiBuilds/
+`scp TWiki* distributedinformation@distributedinformation.com:/home/distributedinformation/www/TWikiBuilds`;
+
 my $buildOutput = `ls -alh *auto*`;
 $buildOutput .= "\n";
-$buildOutput .= `grep 'All tests passed' twikiplugins/unittestMAIN.log`;
+$buildOutput .= `grep 'All tests passed' twikiplugins/TWiki-UnitTests.log`;
 sendEmail("Subject: TWiki MAIN built OK\n\n".$buildOutput);
 
 
