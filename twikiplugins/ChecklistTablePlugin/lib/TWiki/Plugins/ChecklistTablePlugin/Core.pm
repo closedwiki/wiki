@@ -213,7 +213,7 @@ sub _renderForm {
 		if (defined $dataRef) {
 			$value = $$dataRef[$c]; 
 			$value =~s/^\s//; $value=~s/\s$//;
-			if ($value=~s/%EDITCELL{(.*?)}%//) {
+			if ($value=~/%EDITCELL{(.*?)}%/) {
 				my $param = $1;
 				$param=~s/^\s*\"//; $param=~s/\"\s*$//;
 				if ($param !~ /^editbutton/i) {
@@ -612,10 +612,7 @@ sub _createRowFromCgi {
 		$value  = _encode(join(', ',$cgi->param($paramname))) if defined $cgi->param($paramname);
 
 		my $format = $formats[$c];
-		if (defined $cgi->param($paramname.'_f')) {
-			$format = $cgi->param($paramname.'_f');
-			$value.=qq@%EDITCELL{"$format"}%@;
-		}
+		$format = $cgi->param($paramname.'_f') if (defined $cgi->param($paramname.'_f')); 
 		my ($type,$attribute,$val) = split(/,/,$format);
 
 		$value = $val unless defined $value;

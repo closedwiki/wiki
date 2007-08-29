@@ -11,7 +11,7 @@ This plugin helps you to create a checklist with tables. A HTML form for a quick
 ---++ Features
 
 	* table based checklists with persistent item states: you can add or remove items without state lost
-	* a simple way to add, insert or (re)move table entries (rows)
+	* table row editor: a simple way to add, insert or (re)move table entries (rows)
 	* various table cell formats are supported (item, text, textarea, date, ...) 
 	* automatic table format detection: simply put the =%<nop>CHECKLISTTABLE%= tag before an existing TWiki table to get a table editor
 
@@ -152,7 +152,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | V1.002 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  V1.002 (BETA): | TWiki:Main.DanielRohde: fixed major pre/verbatim bug; fixed and added documentation; added sort feature; added changerows attribute |
+|  V1.002 (BETA): | TWiki:Main.DanielRohde: fixed major pre/verbatim bug; fixed and added documentation; added sort feature; added changerows attribute; added EDITCELL feature |
 |  V1.001 (28 Aug 2007): | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 <br/> ChecklistPlugin, JSCalendarContrib |
 |  CPAN Dependencies: | none |
