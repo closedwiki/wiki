@@ -443,8 +443,8 @@ sub _handleActions {
 	my ($text,$theTopic,$theWeb) = @_;
 	
 
-	my @cltpactions = grep(/^cltp_action_\d+_(ins|first|edittable|editrow|addrow|delrow|up|down|cancel|saverow|qsaverow|savetable|qsavetable|insertfirst)(_\d+)?$/, $cgi->param());
-	return 0 if ($#cltpactions != 0);
+	my @cltpactions = grep(/^cltp_action_\d+_(ins|first|edittable|editrow|addrow|delrow|up|down|cancel|saverow|qsaverow|savetable|qsavetable|insertfirst)(_\d+)?/, $cgi->param());
+	return 0 if ($#cltpactions < 0);
 
 	#### Check access permissions (before any action...):
 	my $mainWebName=&TWiki::Func::getMainWebname();
@@ -457,19 +457,34 @@ sub _handleActions {
 			TWiki::Func::redirectCgiQuery($cgi,TWiki::Func::getOopsUrl($theWeb,$theTopic,"oopsaccesschange"));
 		} else {
 			require Error;
-			throw TWiki::AccessControlException(
+			 throw TWiki::AccessControlException(
 					'CHANGE', 
 					$TWiki::Plugins::SESSION->{user},
 					$theTopic, $theWeb, 'denied'
 				);
 		}
-		return;
+		return 1;
 	}
 
+	my( $oopsUrl, $lockUser ) = TWiki::Func::checkTopicEditLock( $theWeb, $theTopic );
+	if (defined $lockUser && $lockUser ne "" && $lockUser ne TWiki::Func::wikiToUserName($user)) {
+		TWiki::Func::redirectCgiQuery($cgi, $oopsUrl);
+		return 1;
+	}
 
 	my $action = $cltpactions[0];
-	$action =~ s/^cltp_action_(\d+)_([^_]+)(_(\d+))?/$2/;
+	$cgi->param($action,"1") if $action =~ s/\.(x|y)$//;
+
+	$action =~ s/^cltp_action_(\d+)_([^_]+)(_(\d+))?.*$/$2/;
 	my ($tablenum, $rownum) = ($1,$4);
+
+	if ($action ne 'cancel') {
+		$oopsUrl = TWiki::Func::setTopicEditLock($theWeb, $theTopic, 1);
+		if ($oopsUrl) {
+			TWiki::Func::redirectCgiQuery($cgi, $oopsUrl);
+			return 1;
+		}
+	}
 
 	$cgi->param("cltp_action_$tablenum","1");
 	if ($action =~ /^(cancel|saverow|qsaverow|savetable|qsavetable|addrow|delrow|up|down|insertfirst)$/) {
@@ -481,8 +496,8 @@ sub _handleActions {
 		my $url = TWiki::Func::getViewUrl($theWeb,$theTopic);
 		## preserve sort order:
 		if (!$error) {
-			$url=~s/(\#.*)$//;
-			my $anchor = $1;
+			my $anchor;
+			$anchor = $1 if ($url=~s/(\#.*)$//);
 			$url.="?";
 			foreach my $param (grep(/^cltp_\d+_sort$/,$cgi->param())) {
 				$url.="$param=".$cgi->param($param).";";
@@ -491,13 +506,6 @@ sub _handleActions {
 		}
 		TWiki::Func::redirectCgiQuery($cgi, $error ? $error : $url );
 		return 1;
-	} else { # ins|first|editrow|edittable
-		
-		my $oopsUrl = TWiki::Func::setTopicEditLock($theWeb, $theTopic, 1);
-		if ($oopsUrl) {
-			TWiki::Func::redirectCgiQuery($cgi, $oopsUrl);
-			return 1;
-		}
 	}
 
 	return 0; ### no actions (better: redirects) done
