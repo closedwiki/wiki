@@ -1,15 +1,5 @@
 %{ This is a default template }%%TMPL:INCLUDE{"twiki"}%
 
-%TMPL:DEF{"templatescript"}%
-<script type="text/javascript">
-//<![CDATA[
-	twiki.Event.addLoadEvent(initForm, true);
-	function initForm() {
-		document.loginform.username.focus();
-	}
-//]]>
-</script>%TMPL:END%
-
 %TMPL:DEF{"webaction"}%%MAKETEXT{"TWiki User Authentication"}%%TMPL:END%
 %TMPL:DEF{"topicaction"}%%TMPL:END%
 %TMPL:DEF{"titleaction"}%%MAKETEXT{"(login)"}% %TMPL:END%

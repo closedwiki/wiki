@@ -15,11 +15,10 @@
 %TMPL:DEF{"htmldoctype"}%<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="%LANG%" lang="%LANG%">%TMPL:END%
 
-%TMPL:DEF{"script"}%<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/BehaviourContrib/behaviour.compressed.js"></script>
-<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twikilib.js"></script>
+%TMPL:DEF{"script"}%%TMPL:P{"skinscript"}%%TMPL:P{"templatescript"}%%TMPL:P{"topictemplatescript"}%%TMPL:END%
+
+%TMPL:DEF{"skinscript"}%<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twikilib.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twikiWindow.js"></script>
-<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twikiEvent.js"></script>
-<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twikiHTML.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 	function launchWindow(inWeb, inTopic) {
@@ -30,7 +29,10 @@
 			} );
 	}
 //]]>
-</script>%TMPL:P{"skinscript"}%%TMPL:P{"templatescript"}%%TMPL:END%
+</script>%TMPL:END%
+
+%TMPL:DEF{"templatescript"}%%TMPL:END%
+%TMPL:DEF{"topictemplatescript"}%%TMPL:END%
 
 %TMPL:DEF{"windowtitle"}%<title>%TMPL:P{"titleaction"}% <nop>%TOPIC%%TMPL:P{"titlesep"}%%WEB%%TMPL:P{"titlesep"}%<nop>%WIKITOOLNAME%</title>%TMPL:END%
 
