@@ -898,6 +898,15 @@ sub _handleOL       { return _LIST( @_ ); }
 sub _handleP {
     my( $this, $options ) = @_;
 
+    my %atts = %{$this->{attrs}};
+    if (!($options & $WC::NO_BLOCK_TML) &&
+          _removeClass(\%atts, 'TMLverbatim')) {
+        $options |= $WC::PROTECTED;
+        my( $flags, $text ) = $this->_flatten($options);
+        my $p = _htmlParams(\%atts, $options);
+        return ($flags, "<verbatim$p>$text</verbatim>");
+    }
+
     my( $f, $kids ) = $this->_flatten( $options );
     return ($f, '<p>'.$kids.'</p>') if( $options & $WC::NO_BLOCK_TML );
     return ($f | $WC::BLOCK_TML, $WC::NBBR.$kids.$WC::NBBR);

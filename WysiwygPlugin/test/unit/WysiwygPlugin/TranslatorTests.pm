@@ -189,6 +189,38 @@ class CatAnimal {
 HERE
       },
       {
+          exec => $HTML2TML,
+          name => 'spanVerbatim',
+          html => <<'HERE',
+<span class="TMLverbatim">
+Oh....<br />&nbsp;&nbsp;&nbsp;my....<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gaaaaaawd!
+</span>
+HERE
+          tml => <<'HERE',
+<verbatim>
+Oh....
+   my....
+      gaaaaaawd!
+</verbatim>
+HERE
+      },
+      {
+          exec => $HTML2TML,
+          name => 'pVerbatim',
+          html => <<'HERE',
+<p class="TMLverbatim">
+Oh....<br />&nbsp;&nbsp;&nbsp;my....<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gaaaaaawd!
+</p>
+HERE
+          tml => <<'HERE',
+<verbatim>
+Oh....
+   my....
+      gaaaaaawd!
+</verbatim>
+HERE
+      },
+      {
           exec => $ROUNDTRIP,
           name => 'simpleHR',
           html => '<hr class="TMLhr"/><hr class="TMLhr"/>--',
@@ -1350,7 +1382,7 @@ sub convertImage {
     }
 }
 
-gen_compare_tests();
+gen_compare_tests('pVerbatim');
 #gen_file_tests();
 
 1;
