@@ -216,6 +216,7 @@ handler.
 
 =cut
 
+require TWiki::Plugins::RackPlannerPlugin::RackPlanner;
 sub commonTagsHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $text, $topic, $web ) = @_;
@@ -227,7 +228,6 @@ sub commonTagsHandler {
     # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/ge;
 
     eval {
-	    require TWiki::Plugins::RackPlannerPlugin::RackPlanner;
 
             $_[0] =~ s/<\/head>/<script src="%PUBURL%\/%TWIKIWEB%\/$pluginName\/rackplannertooltips.js" language="javascript" type="text\/javascript"><\/script><\/head>/is unless ($_[0]=~/rackplannertooltips.js/);
 
