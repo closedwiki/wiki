@@ -1,5 +1,15 @@
 %TMPL:INCLUDE{"login"}%
 
+%TMPL:DEF{"templatescript"}%
+<script type="text/javascript">
+//<![CDATA[
+	twiki.Event.addLoadEvent(initForm, true);
+	function initForm() {
+		document.loginform.username.focus();
+	}
+//]]>
+</script>%TMPL:END%
+
 %TMPL:DEF{"bodyclassname"}%patternNoViewPage%TMPL:END%
 
 %TMPL:DEF{"pagetitle"}%%TMPL:END%
