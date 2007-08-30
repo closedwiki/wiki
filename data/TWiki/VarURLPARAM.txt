@@ -20,3 +20,5 @@
    * __%X% Note:__ When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
    * __%X% Note:__ There is a risk that this variable could be misused for cross-site scripting.
    * Related: [[#VarENCODE][ENCODE]], [[#VarSEARCH][SEARCH]], FormattedSearch, [[#VarQUERYSTRING][QUERYSTRING]]
+
+__Note__ If you have =%<nop>URLPARAM{= in the value of a URL parameter, it will be modified to =%&lt;nop&gt;URLPARAM{=. This is to prevent an infinite loop during expansion.

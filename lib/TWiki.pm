@@ -3537,6 +3537,8 @@ sub URLPARAM {
         $value = $params->{default};
         $value = '' unless defined $value;
     }
+    # Block expansion of %URLPARAM in the value to prevent recursion
+    $value =~ s/%URLPARAM{/%<nop>URLPARAM{/g;
     return $value;
 }
 
