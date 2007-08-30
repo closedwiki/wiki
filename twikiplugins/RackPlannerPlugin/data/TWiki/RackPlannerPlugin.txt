@@ -155,9 +155,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2006, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | V1.006 (BETA) |
+|  Plugin Version: | V1.006 (30 Aug 2007) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  V1.006 (BETA) | fixed minor tooltip foreground/background color bug; added device icon shortcut feature; added some base device icons; |
+|  V1.006 (30 Aug 2007) | fixed minor tooltip foreground/background color bug; added device icon shortcut feature; added some base device icons; |
 |  V1.005 (5 Jun 2007) | TWiki:Main.DanielRohde: fixed links in 'connected to' or 'owner' field bug; added new attribute (clicktooltip...); added documentation |
 |  V1.004 (20 Apr 2007) | TWiki:Main.DanielRohde: fixed replacement in =tooltipformat= bug; improved =tooltipformat=; improved HTML rendering performance; added and fixed documenation; | 
 |  V1.003 (6 Mar 2007) | TWiki:Main.DanielRohde: fixed displayowner/displaynotes bug reported by TWiki:Main.PatrickTuite; added horizontal rendering feature requested by TWiki:Main.OlofStockhaus; added new attributes (tooltip..., columnwidth, textdir); fixed HTML validation bug; |
