@@ -19,6 +19,7 @@ data/TWiki/PatternSkinCustomization.txt 0644
 data/TWiki/PatternSkinElements.txt 0644
 data/TWiki/PatternSkinGraphics.txt 0644
 data/TWiki/PatternSkinHeaderArt.txt 0644
+data/TWiki/PatternSkinWebTopicCreatorTemplate.txt 0644
 data/TWiki/WebBottomBar.txt 0644
 data/TWiki/WebLeftBar.txt 0644
 data/TWiki/WebLeftBarCookbook.txt 0644
@@ -55,6 +56,7 @@ pub/TWiki/PatternSkin/patternskin_screenshot.jpg 0644
 pub/TWiki/PatternSkin/print.css 0644
 pub/TWiki/PatternSkin/style.css 0644
 pub/TWiki/PatternSkin/TWiki_header.gif 0644
+pub/TWiki/PatternSkin/webtopiccreator.js 0644
 pub/TWiki/PatternSkinGraphics/bg_action_gradient.psd 0644
 pub/TWiki/PatternSkinGraphics/bg_button_16x16_generic.psd 0644
 pub/TWiki/PatternSkinGraphics/bg_button_gradient.psd 0644
