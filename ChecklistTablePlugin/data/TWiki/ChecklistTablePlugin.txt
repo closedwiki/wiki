@@ -75,7 +75,7 @@ You can use the =%<nop>CHECKLIST%= tag to customize the checklist states, icons 
 
 
 ---++ Table Format
-The table format syntax of <nop>%TOPIC% uses the %TWIKIWEB%.EditTablePlugin syntax.
+The table format syntax of <nop>%TOPIC% uses the EditTablePlugin syntax.
 
 *Attribute Syntax:* format="| _Type_ , _Parameter_ , _Default_ | ..."
 
