@@ -32,9 +32,11 @@ sub set_up {
 
     TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("3 Jun 2002");
 
+    my $meta = new TWiki::Meta($this->{twiki}, $this->{test_web}, "Topic1");
+    $meta->putKeyed('FIELD', {name=>'Who', title=>'Leela', value=>'Turanaga'});
     $this->{twiki}->{store}->saveTopic(
         $this->{twiki}->{user}, $this->{test_web}, "Topic1", "
-%ACTION{who=$this->{users_web}.Sam,due=\"3 Jan 02\",open}% Test0: Sam_open_late");
+%ACTION{who=$this->{users_web}.Sam,due=\"3 Jan 02\",open}% Test0: Sam_open_late", $meta);
 
     $this->{twiki}->{store}->saveTopic(
         $this->{twiki}->{user}, $this->{test_web}, "Topic2", "
@@ -287,6 +289,18 @@ EOF
     $this->assert_matches($re, $text); $text =~ s/$re//;
     $re = qr/ who=\"$this->{users_web}.TWikiGuest\"/o;
     $this->assert_matches($re, $text); $text =~ s/$re//;
+}
+
+sub test_formfield_format {
+    my $this = shift;
+
+    my $text = <<HERE;
+%ACTIONSEARCH{who="$this->{users_web}.Sam" state="open" header="|Who|" format="|\$formfield(Who)|"}%
+HERE
+    $TWiki::Plugins::ActionTrackerPlugin::pluginInitialized = 1;
+    TWiki::Plugins::ActionTrackerPlugin::commonTagsHandler(
+        $text, "Finagle", $this->{test_web});
+    $this->assert($text =~ /<td>Turanaga<\/td>/, $text);
 }
 
 1;

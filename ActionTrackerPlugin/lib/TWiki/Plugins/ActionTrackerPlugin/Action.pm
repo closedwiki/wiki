@@ -630,14 +630,29 @@ sub matches {
 
 # PRIVATE format the given time type
 sub _formatType_date {
-    my ( $this, $fld ) = @_;
+    my ( $this, $fld, $args, $asHTML ) = @_;
     return formatTime( $this->{$fld}, 'string' );
+}
+
+sub _formatField_formfield {
+    my ( $this, $args, $asHTML ) = @_;
+
+    my ($meta, $text) = TWiki::Func::readTopic($this->{web}, $this->{topic});
+    my $name = $args;
+    my $breakArgs = '';
+    my @params = split( /\,\s*/, $args, 2 );
+    if( @params > 1 ) {
+        $name = $params[0] || '';
+        $breakArgs = $params[1] || 1;
+    }
+    return $meta->renderFormFieldForDisplay(
+        $name, '$value', { break => $breakArgs, protectdollar => 1 } );
 }
 
 # PRIVATE format the given field (takes precedence over standard
 # date formatting)
 sub _formatField_due {
-    my ( $this, $asHTML ) = @_;
+    my ( $this, $args, $asHTML ) = @_;
     my $text = formatTime( $this->{due}, 'string' );
 
     if( !$this->{due} ) {
@@ -665,7 +680,7 @@ sub _formatField_due {
 }
 
 sub _formatField_state {
-    my ( $this, $asHTML ) = @_;
+    my ( $this, $args, $asHTML ) = @_;
     return $this->{state} unless $asHTML;
     return $this->{state} unless $this->{uid};
     # SMELL: assumes a prior call has loaded the options
@@ -691,8 +706,14 @@ sub _formatField_state {
 
 # PRIVATE format text field
 sub _formatField_text {
-    my ( $this, $asHTML, $type ) = @_;
-    my $text = $this->{text};
+    my ( $this, $args, $asHTML, $type ) = @_;
+    return $this->{text};
+}
+
+# PRIVATE format link field
+sub _formatField_link {
+    my ( $this, $args, $asHTML, $type ) = @_;
+    my $text = '';
 
     if ( $asHTML && defined( $type ) && $type eq 'href' ) {
         # Generate a jump-to in wiki syntax
@@ -703,7 +724,9 @@ sub _formatField_text {
                     TWiki::Func::getViewUrl( $this->{web},
                                              $this->{topic} ) .
                     '#' . $this->getAnchor() },
-                  '(go to action)' );
+                  CGI::img( {
+                      src=>'%PUBURL%/TWiki/TWikiDocGraphics/target.gif',
+                      alt=>'(go to action)'} ));
         $text .= $jump;
     }
     return $text;
@@ -711,7 +734,7 @@ sub _formatField_text {
 
 # PRIVATE format edit field
 sub _formatField_edit {
-    my ( $this, $asHTML, $type, $newWindow ) = @_;
+    my ( $this, $args, $asHTML, $type, $newWindow ) = @_;
 
     if ( !$asHTML ) {
         # Can't edit from plain text

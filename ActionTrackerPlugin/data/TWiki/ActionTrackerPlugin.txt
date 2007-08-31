@@ -14,7 +14,15 @@ Never in history have people had more diverse demands on them as in the modern d
 
 This plugin provides support for tracking actions embedded in TWiki topics. Actions captured this way can then be tracked from anywhere you want.
 
-This is particularly useful for [[http://en.wikipedia.org/wiki/Minutes][meeting minutes]]. As you write the minutes during the meeting, you simply enter the actions into the text and as soon as the topic is saved, the actions "go live". But that's not the only application. The action tracker can also be used for:
+This is particularly useful for [[http://en.wikipedia.org/wiki/Minutes][meeting minutes]]. As you write the minutes during the meeting, you simply enter the actions into the text and as soon as the topic is saved, the actions "go live". For example, at a recent meeting of the British Cabinet:
+<verbatim>
+GordonBrown agreed to a zero tax rate for all self-employed software engineers, in retitution for past unfair treatment.
+%ACTION{who="GordonBrown" due="1st April 2008"}% Repay all unfairly levied taxes
+%ACTION{who="AlistairDarling" due="25th Dec 2007"}% Contact Santa to find out who is going to pay for it
+AlistairDarling observed that this might adversely impact the government hors d'ouvres budget.
+</verbatim>
+
+But that's not the only application. The action tracker can also be used for:
    * personal to-do lists
    * highlighting things for attention
    * reminding you of important events
@@ -272,6 +280,7 @@ The available =$formattingtokens= are:
 | =$web= | Name of the web containing the action |
 | =$topic= | Topic name containing the action |
 | =$text= | Formatted action text |
+| =$link= | An icon that links to tha actual action |
 | =$n= or =$n()= | New line |
 | =$nop= or =$nop()= | Is a "no operation". This variable gets removed. |
 | =$quot= | Double quote (="=). |
@@ -339,7 +348,7 @@ You can override the defaults for these values in %USERSWEB%.<nop>TWikiPreferenc
 ---++ Formatting how actions are displayed
 The format of an action output. The following fields can be output: =web=, =topic=, =text=, =who=, =due=, =notify=, =uid=, =creator=, =state=, =edit=, and any =ACTIOPNTRACKERPLUGIN_EXTRAS= you may have. These settings can be overridden in an =ACTIONSEARCH= command using the =format= and =header= attributes. =TABLEHEADER= defines the column headings, =TABLEFORMAT= defines the contents of the columns, and if =TABLEORIENT= is set to =rows=, action tables will be aligned as rows of values instead of the default columns of values.
    * ACTIONTRACKERPLUGIN_TABLEHEADER =| Assigned to | Due date | Description | State | Notify ||=
-   * ACTIONTRACKERPLUGIN_TABLEFORMAT =| $who | $due | $text | $state | $notify | $edit |=
+   * ACTIONTRACKERPLUGIN_TABLEFORMAT =| $who | $due | $text $link | $state | $notify | $edit |=
    * ACTIONTRACKERPLUGIN_TABLEORIENT =cols=
 The alternative text format of an action, as seen by a mail recipient who doesn't accept HTML in mail. Used when mailing action or change notifications.
    * ACTIONTRACKERPLUGIN_TEXTFORMAT =Action for $who, due $due, $state$n$text$n=
@@ -383,14 +392,15 @@ Set to 1 to enable debug features, including the undocumented =%<nop>ACTIONNOTIF
 	* If the plugin is installed and enabled correctly you should see a formatted action below:
 %ACTION{who=TWikiGuest,due="1 Jan 2003",open}% Example action
 	* ... and the result of a formatted search below:
-%ACTIONSEARCH{topic=ActionTrackerPlugin who=TWikiGuest header="|Who|Due|State|Description|" format="| $who |$due|$state|$text|" orient="rows" }%
+%ACTIONSEARCH{topic=ActionTrackerPlugin who=TWikiGuest header="|Who|Due|State|Description|" format="| $who |$due|$state|$text $link|" orient="rows" }%
 
 ---+ Plugin Info
 
 |  Plugin Author: | TWiki:Main/CrawfordCurrie, http://c-dot.co.uk |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
-|              | Bugs:Item4373 - added TBD action dates; in the process, changed default date store format to ISO for consistency with TWiki. |
+|  31 Aug 2007 | Bugs:Item4528 - Support $formfield in ACTIONSEARCH (same semantics as for formatted search) Bugs:Item4529 - Remove link from description of action in the $text field of format |
+|  13 Aug 2007 | Bugs:Item4086 - =header= and =format= parameters give more control over formatting, improved mail sent for notifications (Richard Vinke)<br /> Bugs:Item4373 - added support for TBD action dates; in the process, changed default date store format to ISO for consistency with TWiki. (Crawford Currie)<br /> Bugs:Item4374 - support AJAX-like state changes from the view screen (Crawford Currie)<br /> Bugs:Item4442 - moved preference defaults out of the plugin topic, and verified correct function (Crawford Currie) |
 |  21 May 2007 | Bugs:Item3969 - 8bit email fix (TWiki:Main.WillNorris) |
 |  12958 | Bugs:Item3638 Fixed edit link for IE7 |
 |  12878 | putting styles.css file at the top of the html header so that \

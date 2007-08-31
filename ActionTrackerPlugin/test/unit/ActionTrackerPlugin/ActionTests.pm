@@ -4,8 +4,6 @@ use base qw( TWikiFnTestCase );
 
 use strict;
 
-use HTMLDiffer;
-
 use TWiki::Plugins::ActionTrackerPlugin::Action;
 use TWiki::Plugins::ActionTrackerPlugin::Format;
 use Time::ParseDate;
@@ -449,8 +447,7 @@ sub test_HTMLFormattingOpen {
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format(
         "", "| \$text |", "");
     $s = $fmt->formatHTMLTable([$action], "href", 0, 'XXX');
-    $this->assert_html_matches(
-        '<td> A new action <a href="{*.*?*}/Test/Topic#AcTion0">(go to action)</a> </td>',
+    $this->assert( $s =~ /<td> A new action <a href="$TWiki::cfg{DefaultUrlHost}$TWiki::cfg{ScriptUrlPath}\/view$TWiki::cfg{ScriptSuffix}\/Test\/Topic#AcTion0">/,
         $s );
 
     $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format(
