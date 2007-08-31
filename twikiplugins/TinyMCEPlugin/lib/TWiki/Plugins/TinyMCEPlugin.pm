@@ -34,17 +34,19 @@ sub initPlugin {
     return 0 unless $query;
     # Identify the browser from the user agent string
     my $ua = $query->user_agent();
-    $browserInfo{isMSIE} = $ua =~ /MSIE/;
-    $browserInfo{isMSIE5} = $browserInfo{isMSIE} && ($ua =~ /MSIE 5/);
-    $browserInfo{isMSIE5_0} = $browserInfo{isMSIE} && ($ua =~ /MSIE 5.0/);
-    $browserInfo{isMSIE6} = $browserInfo{isMSIE} && $ua =~ /MSIE 6/;
-    $browserInfo{isMSIE7} = $browserInfo{isMSIE} && $ua =~ /MSIE 7/;
-    $browserInfo{isGecko} = $ua =~ /Gecko/; # Will also be true on Safari
-    $browserInfo{isSafari} = $ua =~ /Safari/;
-    $browserInfo{isOpera} = $ua =~ /Opera/;
-    $browserInfo{isMac} = $ua =~ /Mac/;
-    $browserInfo{isNS7} = $ua =~ /Netscape\/7/;
-    $browserInfo{isNS71} = $ua =~ /Netscape\/7.1/;
+    if ($ua) {
+        $browserInfo{isMSIE} = $ua =~ /MSIE/;
+        $browserInfo{isMSIE5} = $browserInfo{isMSIE} && ($ua =~ /MSIE 5/);
+        $browserInfo{isMSIE5_0} = $browserInfo{isMSIE} && ($ua =~ /MSIE 5.0/);
+        $browserInfo{isMSIE6} = $browserInfo{isMSIE} && $ua =~ /MSIE 6/;
+        $browserInfo{isMSIE7} = $browserInfo{isMSIE} && $ua =~ /MSIE 7/;
+        $browserInfo{isGecko} = $ua =~ /Gecko/; # Will also be true on Safari
+        $browserInfo{isSafari} = $ua =~ /Safari/;
+        $browserInfo{isOpera} = $ua =~ /Opera/;
+        $browserInfo{isMac} = $ua =~ /Mac/;
+        $browserInfo{isNS7} = $ua =~ /Netscape\/7/;
+        $browserInfo{isNS71} = $ua =~ /Netscape\/7.1/;
+    }
     return 1;
 }
 
