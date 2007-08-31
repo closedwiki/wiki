@@ -33,6 +33,7 @@ First follow the installation instructions to install the Plugin:
 This setting contains all the options passed to the TinyMCE editor on startup. 
 For a full explanation of the available options, and guidance on reconfiguring TinyMCE, see the [[http://wiki.moxiecode.com/index.php/TinyMCE:Configuration][Moxicode TinyMCE Wiki]]. Note the inclusion of the Pattern Skin standard CSS files in the =content_css= setting.
    * Set INIT = mode : "textareas",
+   debug : true,
    cleanup : false,
    theme : "advanced",
    convert_urls : false,
@@ -44,8 +45,6 @@ For a full explanation of the available options, and guidance on reconfiguring T
    theme_advanced_toolbar_align : "left",
    paste_create_paragraphs : true,
    paste_create_linebreaks : false,
-   paste_use_dialog : false,
-   paste_auto_cleanup_on_paste : true,
    paste_convert_middot_lists : true,
    paste_convert_headers_to_strong : false,
    paste_remove_spans: true,
@@ -58,7 +57,15 @@ For a full explanation of the available options, and guidance on reconfiguring T
    theme_advanced_toolbar_location: "top",
    theme_advanced_styles : "NOAUTOLINK=WYSIWYG_NOAUTOLINK;VERBATIM=TMLverbatim;PROTECTED=WYSIWYG_PROTECTED",
    content_css : "%PUBURLPATH%/%TWIKIWEB%/TinyMCEPlugin/wysiwyg.css,%PUBURLPATH%/%TWIKIWEB%/TWikiTemplates/base.css,%TWIKISTYLEURL%,%TWIKICOLORSURL%"
-You can override this setting in the same way as any other TWiki variable, by setting =TINYMCEPLUGIN_INIT= in the site, web or topic preferences. You are *not* recommended to edit the setting here.
+   * Additional settings for specific browsers.
+      * Warning: if you enable =paste_auto_cleanup_on_paste then it automatically implies =past_use_dialog= on all non-MSIE browsers.
+      * Set INIT_MSIE = paste_auto_cleanup_on_paste : true
+      * Set INIT_OPERA = 
+      * Set INIT_GECKO = 
+      * Set INIT_SAFARI = 
+
+You can override these settings in the same way as any other TWiki variable, by setting e.g. =TINYMCEPLUGIN_INIT= in the site, web or topic preferences. You are *not* recommended to edit the setting here.
+
    * You can *disable* the plugin in any web or topic, or for any specific user, by setting the =TINYMCEPLUGIN_DISABLE= variable to 1.
    * Some browsers don't support !TinyMCE. You can prevent the editor from
      being invoked on these browsers by setting =TINYMCEPLUGIN_BAD_BROWSERS= to a regular expression that matches the user-agent string for any broken browsers. The default is =(?i-xsm:Konqueror|Opera)=.
