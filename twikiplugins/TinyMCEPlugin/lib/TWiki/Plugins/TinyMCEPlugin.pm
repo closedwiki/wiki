@@ -25,8 +25,26 @@ $SHORTDESCRIPTION = 'Integration of TinyMCE with WysiwygPlugin';
 use TWiki::Func;
 
 my $secret_id = 'TinyMCE WYSIWYG content - do not remove this comment';
+my $query;
+# Info about browser type
+my %browserInfo;
 
 sub initPlugin {
+    $query = TWiki::Func::getCgiQuery();
+    return 0 unless $query;
+    # Identify the browser from the user agent string
+    my $ua = $query->user_agent();
+    $browserInfo{isMSIE} = $ua =~ /MSIE/;
+    $browserInfo{isMSIE5} = $browserInfo{isMSIE} && ($ua =~ /MSIE 5/);
+    $browserInfo{isMSIE5_0} = $browserInfo{isMSIE} && ($ua =~ /MSIE 5.0/);
+    $browserInfo{isMSIE6} = $browserInfo{isMSIE} && $ua =~ /MSIE 6/;
+    $browserInfo{isMSIE7} = $browserInfo{isMSIE} && $ua =~ /MSIE 7/;
+    $browserInfo{isGecko} = $ua =~ /Gecko/; # Will also be true on Safari
+    $browserInfo{isSafari} = $ua =~ /Safari/;
+    $browserInfo{isOpera} = $ua =~ /Opera/;
+    $browserInfo{isMac} = $ua =~ /Mac/;
+    $browserInfo{isNS7} = $ua =~ /Netscape\/7/;
+    $browserInfo{isNS71} = $ua =~ /Netscape\/7.1/;
     return 1;
 }
 
@@ -39,11 +57,9 @@ sub _notAvailable {
       if( $skin && TWiki::Func::getSkin() =~ /\b$skin\b/o );
 
     # Check the client browser to see if it is supported
-    my $query = TWiki::Func::getCgiQuery();
-    return "No CGI query" if !$query;
     return "Disabled" if $query->param('nowysiwyg');
     my $ua = TWiki::Func::getPreferencesValue('TINYMCEPLUGIN_BAD_BROWSERS') ||
-      '(?i-xsm:Konqueror|Opera)';
+      '(?i-xsm:Konqueror)';
     return 'Unsupported browser: '.$query->user_agent()
       if $ua && $query->user_agent() && $query->user_agent() =~ /$ua/;
 
@@ -67,6 +83,25 @@ sub beforeEditHandler {
       || <<'HERE';
 '
 HERE
+    my $extras;
+    # The order of these conditions is important, because browsers
+    # spoof eachother
+    if ($browserInfo{isSafari}) {
+        $extras = 'SAFARI';
+    } elsif ($browserInfo{isOpera}) {
+        $extras = 'OPERA';
+    } elsif ($browserInfo{isGecko}) {
+        $extras = 'GECKO';
+    } elsif ($browserInfo{isMSIE}) {
+        $extras = 'MSIE';
+    }
+    if ($extras) {
+        $extras = TWiki::Func::getPreferencesValue(
+            'TINYMCEPLUGIN_INIT_'.$extras);
+        if (defined $extras) {
+            $init = join(',', (split(',',$init), split(',',$extras)));
+        }
+    }
 
     require TWiki::Plugins::WysiwygPlugin;
 
@@ -80,15 +115,21 @@ HERE
         return;
     }
 
+    my $brinf = join(' ',map { "$_=$browserInfo{$_}" } keys %browserInfo);
+    my $ua = $query->user_agent();
+
     # _src.js for debug
     TWiki::Func::addToHEAD('tinyMCE', <<SCRIPT);
-<script language="javascript" type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script language="javascript" type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/tiny_mce_src.js"></script>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TinyMCEPlugin/twiki.js"></script>
 <script type="text/javascript">
 // <![CDATA[
 function initTextArea () {
 	textareaInited = true;
 }
+// BROWSER $brinf
+// UA '$ua'
+// EXTRAS $extras
 tinyMCE.init({ $init });
 // ]]>
 </script>
