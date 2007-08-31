@@ -52,6 +52,8 @@ unless ($errorcode == 0) {
     my $unittestErrors = <UNIT>;
     close(UNIT);
     
+    chdir($twikihome);
+    `scp TWiki* distributedinformation\@distributedinformation.com:/home/distributedinformation/www/TWikiBuilds`;
     sendEmail("Subject: TWiki MAIN branch has Unit test FAILURES\n\n".$unittestErrors);
     die "\n\n$errorcode: unit test failures - need to fix them first\n" 
 }
