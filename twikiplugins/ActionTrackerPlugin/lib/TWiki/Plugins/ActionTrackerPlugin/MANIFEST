@@ -9,6 +9,7 @@ templates/edit.action.tmpl 0440 Action editor page template
 templates/actionform.tmpl 0440 Action editor page subtemplate
 lib/TWiki/Plugins/ActionTrackerPlugin.pm 0440 Plugin Perl module
 lib/TWiki/Plugins/ActionTrackerPlugin/Action.pm 0440 Perl support module
+lib/TWiki/Plugins/ActionTrackerPlugin/Options.pm 0440 Perl support module
 lib/TWiki/Plugins/ActionTrackerPlugin/ActionNotify.pm 0440 Perl support module
 lib/TWiki/Plugins/ActionTrackerPlugin/ActionSet.pm 0440 Perl support module
 lib/TWiki/Plugins/ActionTrackerPlugin/AttrDef.pm 0440 Perl support module

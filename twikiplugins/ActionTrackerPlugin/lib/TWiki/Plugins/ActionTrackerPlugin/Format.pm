@@ -141,11 +141,12 @@ sub stringify() {
 sub _expandVar {
     my $object = shift;
     my $vbl = shift;
+    my $args = shift;
     my $asHTML = shift;
     if ( defined( &{ref( $object ) . "::_formatField_$vbl"} ) ) {
         # special format for this field
         my $fn = "_formatField_$vbl";
-        return $object->$fn( $asHTML, @_ );
+        return $object->$fn( $args, $asHTML, @_ );
     }
     my $type = $object->getType( $vbl );
     if( $type ) {
@@ -153,10 +154,10 @@ sub _expandVar {
         if ( defined( &{ref( $object ) . "::_formatType_$typename"} ) ) {
             # special format for this type
             my $fn = "_formatType_$typename";
-            return $object->$fn( $vbl, $asHTML, @_ );
+            return $object->$fn( $vbl, $args, $asHTML, @_ );
         }
     }
-    if ( defined( $object->{$vbl} ) ) {
+    if( defined( $object->{$vbl} ) && !defined($args) ) {
         # just expand as a string
         return $object->{$vbl};
     }
@@ -172,6 +173,7 @@ sub _expandVar {
 sub _expandString {
     my $object = shift;
     my $var = shift;
+    my $args = shift;
 
     if ( $var eq "dollar") {
         return "\$";
@@ -184,7 +186,7 @@ sub _expandString {
     } elsif ($var eq "quot") {
         return "\"";
     }
-    my $t = _expandVar( $object, $var, @_ );
+    my $t = _expandVar( $object, $var, $args, @_ );
     return $t;
 }
 
@@ -195,7 +197,8 @@ sub _formatAsString {
     my $object = shift;
 
     my $fmt = $this->{TEXTFORM} || '';
-    $fmt =~ s/\$(\w+\b)(\(\))?/&_expandString( $object, $1, 0, @_ )/geos;
+    $fmt =~ s/\$(\w+\b)(?:\((.*?)\))?/
+      _expandString( $object, $1, $2, 0, @_ )/geos;
 
     return $fmt;
 }
@@ -206,6 +209,7 @@ sub _formatAsString {
 sub _expandHTML {
     my $object = shift;
     my $var = shift;
+    my $args = shift;
 
     if ( $var eq "dollar") {
         return "\$";
@@ -219,7 +223,7 @@ sub _expandHTML {
         return "\"";
     }
 
-    my $t = _expandVar( $object, $var, @_ );
+    my $t = _expandVar( $object, $var, $args, @_ );
 
     return $t;
 }
@@ -243,8 +247,8 @@ sub formatHTMLTable {
         foreach $i ( @{$this->{FIELDS}} ) {
             my $c;
             my $entry = $i;
-            $entry =~ s/\$(\w+)(\(\))?/
-              _expandHTML( $object, $1, 1, $jump, $newWindow )/ges;
+            $entry =~ s/\$(\w+)(?:\((.*?)\))?/
+              _expandHTML( $object, $1, $2, 1, $jump, $newWindow )/ges;
             if( !$anchored ) {
                 $entry = CGI::a( { name=>$object->getAnchor() } ).$entry;
                 $anchored = 1;
@@ -315,20 +319,20 @@ sub formatChangesAsHTML {
     foreach my $field ( @{$this->{CHANGEFIELDS}} ) {
         my $row = '';
         if ( defined( $old->{$field} ) && defined( $new->{$field} )) {
-            my $oldval = _expandVar( $old, $field, 1 );
-            my $newval = _expandVar( $new, $field, 1 );
+            my $oldval = _expandVar( $old, $field, undef, 1 );
+            my $newval = _expandVar( $new, $field, undef, 1 );
             if ( $oldval ne $newval ) {
                 $row = CGI::td( $a, $field ).
                   CGI::td( $a, $oldval ).
                       CGI::td( $a, $newval );
             }
         } elsif ( defined( $old->{$field} ) ) {
-            my $oldval = _expandVar( $old, $field, 1 );
+            my $oldval = _expandVar( $old, $field, undef, 1 );
             $row = CGI::td( $a, $field ).
               CGI::td( $a, $oldval ).
                   CGI::td( $a, ' *removed* ');
         } elsif ( defined( $new->{$field} )) {
-            my $newval = _expandVar( $new, $field, 1 );
+            my $newval = _expandVar( $new, $field, undef, 1 );
             $row = CGI::td( $a, $field ).
               CGI::td( $a, ' *missing* ').
                   CGI::td( $a, $newval );
@@ -352,16 +356,16 @@ sub formatChangesAsString {
     my $tbl = "";
     foreach my $field ( @{$this->{CHANGEFIELDS}} ) {
         if ( defined( $old->{$field} ) && defined( $new->{$field} ) ) {
-            my $oldval = _expandVar( $old, $field, 0 );
-            my $newval = _expandVar( $new, $field, 0 );
+            my $oldval = _expandVar( $old, $field, undef, 0 );
+            my $newval = _expandVar( $new, $field, undef, 0 );
             if ( $oldval ne $newval ) {
                 $tbl .= "\t- Attribute \"$field\" changed, was \"$oldval\", now \"$newval\"\n";
             }
         } elsif ( defined( $old->{$field} ) ) {
-            my $oldval = _expandVar( $old, $field, 0 );
+            my $oldval = _expandVar( $old, $field, undef, 0 );
             $tbl .= "\t- Attribute \"$field\" was \"$oldval\" now removed\n";
         } elsif ( defined( $new->{$field} ) ) {
-            my $newval = _expandVar( $new, $field, 0 );
+            my $newval = _expandVar( $new, $field, undef, 0 );
             $tbl .= "\t- Attribute \"$field\" added with value \"$newval\"\n";
         }
     }
@@ -377,7 +381,8 @@ sub formatEditableFields {
     my @fields;
     foreach my $col ( @{$this->{FIELDS}} ) {
         my $entry = $col;
-        $entry =~ s/\$(\w+\b)(\(\))?/&_expandEditField( $this, $object, $1, $expanded )/geos;
+        $entry =~ s/\$(\w+\b)(?:\((.*?)\))?/
+          _expandEditField( $this, $object, $1, $2, $expanded )/geos;
         $entry = CGI::td( {class => 'atpEdit' }, $entry );
         push @fields, $entry;
     }
@@ -391,7 +396,7 @@ sub formatEditableFields {
 # returns a non-zero color, then fill in the passed-by-reference color
 # variable $col with the value returned.
 sub _expandEditField {
-    my ( $this, $object, $var, $expanded ) = @_;
+    my ( $this, $object, $var, $args, $expanded ) = @_;
 
     # record the fact that we expanded this field, so it doesn't get
     # generated as a hidden
@@ -431,7 +436,7 @@ sub _formatFieldForEdit {
         }
         return CGI::Select( { name=>$attrname, size=>$size }, $fields );
     } elsif ( $type->{type} !~ m/noload/ ) {
-        my $val = _expandVar( $object, $attrname, 0 );
+        my $val = _expandVar( $object, $attrname, undef, 0 );
         my $content = '';
         my @extras = ();
         if ( $type->{type} eq 'date' ) {
@@ -467,7 +472,7 @@ sub _formatFieldForEdit {
 sub formatHidden {
     my ( $this, $object, $attrname ) = @_;
 
-    my $v = _expandVar( $object, $attrname, 0 );
+    my $v = _expandVar( $object, $attrname, undef, 0 );
     if ( defined( $v ) ) {
         return CGI::hidden( { name=>$attrname, value=>$v } );
     }
