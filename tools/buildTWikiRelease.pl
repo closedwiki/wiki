@@ -43,7 +43,7 @@ close(LS);
 #run unit tests
 #TODO: testrunner should exit == 0 if no errors?
 chdir('test/unit');
-my $unitTests = "export TWIKI_LIBS=; export TWIKI_HOME=$twikihome;perl ../bin/TestRunner.pl -clean TWikiSuite.pm 2&>1 > $twikihome/TWiki-UnitTests.log";
+my $unitTests = "export TWIKI_LIBS=; export TWIKI_HOME=$twikihome;perl ../bin/TestRunner.pl -clean TWikiSuite.pm 2>&1 > $twikihome/TWiki-UnitTests.log";
 my $return = `$unitTests`;
 my $errorcode = $? >> 8;
 unless ($errorcode == 0) {
@@ -85,7 +85,7 @@ chdir('lib');
 
 chdir($twikihome);
 #push the files to my server - http://distributedinformation.com/TWikiBuilds/
-`scp TWiki* distributedinformation@distributedinformation.com:/home/distributedinformation/www/TWikiBuilds`;
+`scp TWiki* distributedinformation\@distributedinformation.com:/home/distributedinformation/www/TWikiBuilds`;
 
 my $buildOutput = `ls -alh *auto*`;
 $buildOutput .= "\n";
