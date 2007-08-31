@@ -368,6 +368,10 @@ sub _fixHtml {
       $html =~ s/$url(#\w*)/$1/g; # anchored
    }
 
+   # change <li type=> to <ol type=> 
+   $html =~ s/<ol>\s+<li\s+type="([AaIi])">/<ol type="\1">\n<li>/g;
+   $html =~ s/<li\s+type="[AaIi]">/<li>/g;
+
    return $html;
 }
 
