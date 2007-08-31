@@ -44,6 +44,9 @@ my $TT2 = chr(2);
 
 my $STARTWW = qr/^|(?<=[\s\(])/m;
 my $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
+# HTML elements singled  out for protection. These will be rendered in
+# 'protected' regions to prevent the WYSIWYG editor mussing them up.
+my $PROTECTED_HTML = 'APPLET|AREA|BUTTON|FIELDSET|FORM|FRAME|FRAMESET|IFRAME|INPUT|OBJECT|PARAM|SCRIPT|SELECT|TEXTAREA|VAR';
 
 =pod
 
@@ -222,21 +225,16 @@ sub _getRenderedVersion {
     # Protect comments
     $text =~ s/(<!--.*?-->)/$this->_liftOut($1, 'PROTECTED')/ges;
 
-    # Remove TML pseudo-tags so they don't get protected like HTML tags
-    # (verbatim and pre have already been handled, above)
-    $text =~ s/<(.?(noautolink|nop).*?)>/$TT1($1)$TT1/gi;
-
     # Handle inline IMG tags specially
     $text =~ s/(<img [^>]*>)/$this->_takeOutIMGTag($1)/gei;
+    $text =~ s/<\/img>//gi;
 
-    # protect HTML tags
-    $text =~ s/(<\/?[a-z]+(\s[^>]*)?>)/ $this->_liftOut($1, 'PROTECTED') /gei;
-
-    # Replace TML pseudo-tags
-    $text =~ s/$TT1\((.*?)\)$TT1/<$1>/go;
-
-    # Convert TWiki tags to spans outside prtected text
+    # Convert TWiki tags to spans outside protected text
     $text = $this->_processTags( $text );
+
+    # protect some HTML tags.
+    $text =~ s/(<\/?($PROTECTED_HTML)(\s[^>]*)?>)/
+      $this->_liftOut($1, 'PROTECTED')/gei;
 
     $text =~ s/\\\n//gs;  # Join lines ending in '\'
 

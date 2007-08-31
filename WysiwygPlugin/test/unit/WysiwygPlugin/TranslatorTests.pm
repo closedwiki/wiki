@@ -1142,8 +1142,14 @@ Paraone',
           exec => $TML2HTML | $ROUNDTRIP,
           tml => 'pilf<br />flip',
           html => '<p>
-pilf<span class="WYSIWYG_PROTECTED">&#60;br&nbsp;/&#62;</span>flip
+pilf<br />flip
 </p>',
+      },
+      {
+          name => 'Item4481',
+          exec => $TML2HTML | $ROUNDTRIP,
+          tml => '<blockquote>pilf<br />flip</blockquote>',
+          html => '<p><blockquote>pilf<br />flip</blockquote></p>',
       },
       {
           exec => $ROUNDTRIP,
@@ -1382,7 +1388,7 @@ sub convertImage {
     }
 }
 
-gen_compare_tests('pVerbatim');
+gen_compare_tests();
 #gen_file_tests();
 
 1;
