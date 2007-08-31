@@ -160,6 +160,7 @@ This plugin is brought to you by a [[http://wikiring.com][WikiRing <a href="http
 |  License | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
+|  14679 | Bugs:Item4481 Bugs:Item4524 fixed |
 |  14668 | Bugfixes and refinements done as part of 4.2 release |
 |  14585 | Bugs:Item4435 - further fixes to newlines; this time to remove excess BRs |
 |  14548 | Bugs:Item4453 - noautolink was breaking lists |
