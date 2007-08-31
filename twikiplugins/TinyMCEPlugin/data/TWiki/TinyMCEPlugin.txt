@@ -82,6 +82,7 @@ This extension is brought to you by a [[http://wikiring.com][WikiRing <a href="h
 |             | This package also includes the complete sources for version 2.1.1.1 of the !TinyMCE editor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  14679 | Bugs:Item4481 Bugs:Item4524 fixed |
 |  14668 | Bugfixes and refinements done as part of 4.2 release |
 |  14543 | Added PROTECTED style, to allow protection of special text. Disable on unsupported browsers (untested) |
 |  14538 | First release |
