@@ -536,7 +536,7 @@ ACTUAL
 
     $TWiki::cfg{AllowInlineScript} = 0;
     $expected = <<EXPECTED;
-<span class='twikiAlert'>&#60;script&#62; is not allowed on this site</span>
+<!-- <script> is not allowed on this site -->
 EXPECTED
     $this->do_test($expected, $actual);
 
@@ -546,7 +546,7 @@ your words
 </literal>
 ACTUAL
     $expected = <<EXPECTED;
-<span class='twikiAlert'>&#60;literal&#62; is not allowed on this site</span>
+<!-- <literal> is not allowed on this site -->
 EXPECTED
     $this->do_test($expected, $actual);
 
