@@ -62,6 +62,7 @@ When you write the name of a topic, it becomes a link. There are more ways
 
    * To write a custom *link label*, use bracket notation: =[<nop>[TWikiAccessControl][access control]]= - this becomes: [[TWikiAccessControl][access control]]
    * To link to a topic in *another web*, write: =Sandbox.WebSearch= - this becomes: Sandbox.WebSearch
+   * To link to a topic in *another subweb* write: =Sandbox.Subweb.WebSearch=.
    * To show the web name in the link use bracket notation: =[<nop>[Sandbox.%HOMETOPIC%]]= - this becomes: [[Sandbox.%HOMETOPIC%]]
    * To link to a topic on *another Wiki site*, use: =TWiki:Main/WebHome= - this becomes: TWiki:Main/WebHome (sites are defined in the InterwikiPlugin)
    * To link to a part on the *same page*, write a "#" followed by the name of an anchor. The anchor is a "#" followed by a name which must be a !WikiName. Example =#MyAnchor=. You can also link to an anchor on another page: =%SYSTEMWEB%.%HOMETOPIC%#MyAnchor=.
@@ -78,6 +79,7 @@ When you write the name of a topic, it becomes a link. There are more ways
    * Turn acronyms into !WikiWords, i.e. take =FaqIndex= for a "FAQ index" topic.
    * It is possible to turn off the auto-linking of !WikiWords and to rely only on the bracket notation. See NOAUTOLINK setting in TWikiPreferences#Default_Web_Preferences.
    * %X% When linking to a <nop>%HOMETOPIC% topic _in another web_, the link will be rendered as the name of the web, e.g. =Sandbox.%HOMETOPIC%= becomes Sandbox.%HOMETOPIC%.
+   * %X% Dots (.) are used as seperators between webs, subwebs, and topics. It is not possible to use dots in topic names. TWiki does not attempt to guess if a dot could be part of a topic name.
 
 __Related Topics:__ WikiSyntax, TextFormattingRules
 %STOPINCLUDE%
