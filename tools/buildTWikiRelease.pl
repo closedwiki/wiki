@@ -9,7 +9,7 @@
 # Copyright (C) TWikiContributors, 2005
 
 unless ( -e 'MAIN' ) {
-   print STDERR "doing a fresh checkout\n"
+   print STDERR "doing a fresh checkout\n";
    `svn co http://svn.twiki.org/svn/twiki/branches/MAIN > TWiki-svn.log`;
    chdir('MAIN');
 } else {
@@ -59,7 +59,10 @@ unless ($errorcode == 0) {
 }
 
 chdir($twikihome);
-#`perl tools/MemoryCycleTests.pl > $twikihome/memoryCycleTests.log`;
+#TODO: add a performance BM & compare to something golden.
+`perl tools/MemoryCycleTests.pl > $twikihome/TWiki-MemoryCycleTests.log`;
+`perlcritic lib/ > $twikihome/TWiki-PerlCritic.log`;
+`perlcritic bin/ >> $twikihome/TWiki-PerlCritic.log`;
 #`cd tools; perl check_manifest.pl`;
 #`cd data; grep '%META:TOPICINFO{' */*.txt | grep -v TestCases | grep -v 'author="TWikiContributor".*version="\$Rev'`;
 
@@ -91,7 +94,7 @@ chdir($twikihome);
 
 my $buildOutput = `ls -alh *auto*`;
 $buildOutput .= "\n";
-$buildOutput .= `grep 'All tests passed' twikiplugins/TWiki-UnitTests.log`;
+$buildOutput .= `grep 'All tests passed' $twikihome/TWiki-UnitTests.log`;
 sendEmail("Subject: TWiki MAIN built OK\n\n".$buildOutput);
 
 
