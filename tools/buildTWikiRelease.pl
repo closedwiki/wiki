@@ -1,21 +1,23 @@
 #!/usr/bin/perl -w
 #
-# Build a TWiki Release from the MAIN svn repository - see http://twiki.org/cgi-bin/view/Codev/BuildingARelease
-# checkout TWiki MAIN
+# Build a TWiki Release from branches in the TWiki  svn repository - see http://twiki.org/cgi-bin/view/Codev/BuildingARelease
+# checkout TWiki Branch
 # run the unit tests
 # run other tests
 # build a release tarball & upload...
 # Sven Dowideit
 # Copyright (C) TWikiContributors, 2005
+#
+my $twikiBranch = 'MAIN';
 
-unless ( -e 'MAIN' ) {
+unless ( -e $twikiBranch ) {
    print STDERR "doing a fresh checkout\n";
-   `svn co http://svn.twiki.org/svn/twiki/branches/MAIN > TWiki-svn.log`;
-   chdir('MAIN');
+   `svn co http://svn.twiki.org/svn/twiki/branches/$twikiBranch > TWiki-svn.log`;
+   chdir($twikiBranch);
 } else {
 #TODO: should really do an svn revert..
    print STDERR "using existing checkout, removing ? files";
-   chdir('MAIN');
+   chdir($twikiBranch);
    `svn status | grep ? | sed 's/?/rm -r/' | sh`;
    `svn up > TWiki-svn.log`;
 }
@@ -54,7 +56,7 @@ unless ($errorcode == 0) {
     
     chdir($twikihome);
     `scp TWiki* distributedinformation\@distributedinformation.com:/home/distributedinformation/www/TWikiBuilds`;
-    sendEmail("Subject: TWiki MAIN branch has Unit test FAILURES\n\n".$unittestErrors);
+    sendEmail("Subject: TWiki $twikiBranch branch has Unit test FAILURES\n\n see http://distributedinformation.com/TWikiBuilds/ for output files.\n".$unittestErrors);
     die "\n\n$errorcode: unit test failures - need to fix them first\n" 
 }
 
@@ -95,7 +97,7 @@ chdir($twikihome);
 my $buildOutput = `ls -alh *auto*`;
 $buildOutput .= "\n";
 $buildOutput .= `grep 'All tests passed' $twikihome/TWiki-UnitTests.log`;
-sendEmail("Subject: TWiki MAIN built OK\n\n".$buildOutput);
+sendEmail("Subject: TWiki $twikiBranch built OK\n\n see http://distributedinformation.com/TWikiBuilds/ for output files.\n".$buildOutput);
 
 
 sub getLocalSite {
