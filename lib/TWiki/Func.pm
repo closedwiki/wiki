@@ -243,7 +243,7 @@ sub getCgiQuery {
 
 =pod
 
----++ getSessionKeys() -> @keys
+---+++ getSessionKeys() -> @keys
 Get a list of all the names of session variables. The list is unsorted.
 
 Session keys are stored and retrieved using =setSessionValue= and
@@ -838,7 +838,7 @@ sub isGuest {
 
 =pod
 
----++ isAnAdmin( $login ) -> $boolean
+---+++ isAnAdmin( $login ) -> $boolean
 
 Find out if the user is an admin or not. If the user is not given,
 the currently logged-in user is assumed.
@@ -858,7 +858,7 @@ sub isAnAdmin {
 
 =pod
 
----++ isGroupMember( $group, $login ) -> $boolean
+---+++ isGroupMember( $group, $login ) -> $boolean
 
 Find out if $login is in the named group. e.g.
 <verbatim>
@@ -891,7 +891,7 @@ sub isGroupMember {
 
 =pod
 
----++ eachUser() -> $iterator
+---+++ eachUser() -> $iterator
 Get an iterator over the list of all the registered users *not* including
 groups. The iterator will return each wiki name in turn (e.g. 'FredBloggs').
 
@@ -920,7 +920,7 @@ sub eachUser {
 
 =pod
 
----++ eachMembership($wikiname) -> $iterator
+---+++ eachMembership($wikiname) -> $iterator
 Get an iterator over the names of all groups that the user is a member of.
 If =$wikiname= is =undef=, defaults to the currently logged-in user.
 
@@ -945,7 +945,7 @@ sub eachMembership {
 
 =pod
 
----++ eachGroup() -> $iterator
+---+++ eachGroup() -> $iterator
 Get an iterator over all groups.
 
 Use it as follows:
@@ -971,7 +971,7 @@ sub eachGroup {
 
 =pod
 
----++ isGroup( $group ) -> $boolean
+---+++ isGroup( $group ) -> $boolean
 
 Checks if =$group= is the name of a group known to TWiki.
 
@@ -985,7 +985,7 @@ sub isGroup {
 
 =pod
 
----++ eachGroupMember($group) -> $iterator
+---+++ eachGroupMember($group) -> $iterator
 Get an iterator over all the members of the named group. Returns undef if
 $group is not a valid group.
 
@@ -1195,7 +1195,7 @@ sub moveWeb {
 
 =pod
 
----++ eachChangeSince($web, $time) -> $iterator
+---+++ eachChangeSince($web, $time) -> $iterator
 
 Get an iterator over the list of all the changes in the given web between
 =$time= and now. $time is a time in seconds since 1st Jan 1970, and is not
@@ -2293,7 +2293,7 @@ sub registerRESTHandler {
 
 =pod
 
----++ decodeFormatTokens($str) -> $unencodedString
+---+++ decodeFormatTokens($str) -> $unencodedString
 
 TWiki has an informal standard set of tokens used in =format=
 parameters that are used to block evaluation of paramater strings.
@@ -2548,7 +2548,7 @@ sub normalizeWebTopicName {
 
 =pod
 
----++ StaticMethod sanitizeAttachmentName($fname) -> ($fileName, $origName)
+---+++ StaticMethod sanitizeAttachmentName($fname) -> ($fileName, $origName)
 
 Given a file namer, sanitise it according to the rules for transforming
 attachment names. Returns
