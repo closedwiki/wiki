@@ -143,3 +143,7 @@ BrowserMatchNoCase ^$ blockAccess
 <Directory "/home/httpd/twiki/locale">
 	deny from all
 </Directory>
+
+<Directory "/home/httpd/twiki/working">
+	deny from all
+</Directory>

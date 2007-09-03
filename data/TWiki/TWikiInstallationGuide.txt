@@ -62,7 +62,7 @@ Before you continue any further there are some basic and very important security
    * You absolutely must turn off any kind of PHP, Perl, Python, Server Side Includes etc in the =pub= directory. TWiki has some builtin protection which renames files with dangerous filenames by appending .txt to the filename. But this is a secondary security measure. The essential action that you must take is to turn off any possible execution of any of the attached files.<br /> Most Linux distributions have a default Apache installation which has PHP and server side include (SSI) enabled. The =twiki_httpd_conf.txt= file provided in the root of the twiki directory is an example of an Apache config file which you would normally include from httpd.conf. In many distributions this happens automatically if the file is copied to a specific directory (Example !RedHat/Fedora/Centos: /etc/httpd/conf.d) and has suffix =.conf=. This example file shows how to protect the =pub= directory from executing both PHP scripts and server side includes.<br />
      If you do not have access to the apache config files you can normally control control access by placing a file called =.htaccess= in the directory you want to protect. The =pub-htaccess.txt= file provided in the root of the twiki directory is an example of an Apache =.htaccess= file which protects against execusion of PHP and SSI scripts.
    * Make sure that you deny access to all other twiki directories than the =bin= and =pub= directories. When you have access to the Apache config files the =twiki_httpd_conf.txt= file mentioned above also contains protection of these directories.<br />
-     For those that do not have access to the Apache config files a sample =subdir-htaccess.txt= file can be copied as =.htaccess= to the data, lib, locale, templates and tools directories.
+     For those that do not have access to the Apache config files a sample =subdir-htaccess.txt= file can be copied as =.htaccess= to the data, lib, locale, templates, tools and working directories.
 
 The TWiki:TWiki.ApacheConfigGenerator will help you address all 3 security elements.
 
@@ -294,6 +294,7 @@ Referring to the <a href="#StandardInstallation" class="twikiAnchorLink">Basic I
 | =twiki/data= | topic data | dir secure from public access | =/home/smith/twiki/data= |
 | =twiki/templates= | web templates | dir secure from public access | =/home/smith/twiki/templates= |
 | =twiki/tools= | TWiki utlilities | dir secure from public access | =/home/smith/twiki/tools= |
+| =twiki/working= | Temporary and internal files | dir secure from public access | =/home/smith/twiki/working= |
 
 </blockquote>
 
