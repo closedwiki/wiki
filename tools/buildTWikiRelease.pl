@@ -31,7 +31,7 @@ chomp($twikihome);
 
 #TODO: replace this code with 'configure' from comandline
 my $localsite = getLocalSite($twikihome);
-open(LS, '>lib/LocalSite.cfg');
+open(LS, ">$twikihome/lib/LocalSite.cfg");
 print LS $localsite;
 close(LS);
 
@@ -47,7 +47,7 @@ my $unitTests = "export TWIKI_LIBS=; export TWIKI_HOME=$twikihome;perl ../bin/Te
 my $return = `$unitTests`;
 my $errorcode = $? >> 8;
 unless ($errorcode == 0) {
-    open(UNIT, '$twikihome/TWiki-UnitTests.log');
+    open(UNIT, "$twikihome/TWiki-UnitTests.log");
     local $/ = undef;
     my $unittestErrors = <UNIT>;
     close(UNIT);
@@ -101,7 +101,7 @@ sendEmail("Subject: TWiki MAIN built OK\n\n".$buildOutput);
 sub getLocalSite {
    my $twikidir = shift;
 
-#   open(TS, $twikidir.'/lib/TWiki.spec');
+#   open(TS, "$twikidir/lib/TWiki.spec");
 #   local $/ = undef;
 #   my $localsite = <TS>;
 #   close(TS);
