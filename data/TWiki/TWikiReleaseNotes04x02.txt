@@ -3,32 +3,44 @@
 
 %TOC%
 
+---++ BETA RELEASE 1
+
+   * This is the first beta release of TWiki 4.2.0. At the release of this beta there are still some open release blocking bugs open. However we have chosen to make this beta available because we really need our users to test the new WYSIWYG editor and report back all the errors that for sure will be found.
+
 ---++ Introduction
 
 TWiki Release 4.2.0 is a minor release. TWiki releases are either major (major new features and changes in architecture), minor (enhancements and bug fixes), or patch releases (bug fixes only) which can be installed as upgrades on production installations.
 
 TWiki Release 4.2.0 introduces some good enhancements and quite many bug fixes since 4.1.2.
 
-The development team has done everything to maintain full compatibility with topics generated in TWiki-4.0 and there are no changes to the topic format.
+The development team has done everything to maintain full compatibility with topics generated in TWiki-4.0 and there are no changes to the topic format when using normal !TWikiUserMapping
 
 ---++ Pre-installed Extensions
 
 TWiki 4.2.0 is shipped with
 
    * *Plugins:* !CommentPlugin, !EditTablePlugin, !EmptyPlugin, !InterwikiPlugin, !PreferencesPlugin, !RenderListPlugin, !SlideShowPlugin, !SmiliesPlugin, !SpreadSheetPlugin, !TablePlugin, !TwistyPlugin, !WysiwygPlugin
-   * *Contribs:* !BehaviourContrib !JSCalendarContrib, !KupuContrib, !MailerContrib, !NatEditContrib, !TipsContrib, !TwistyContrib
+   * *Contribs:* !BehaviourContrib !JSCalendarContrib, !TinyMCEContrib, !MailerContrib, !NatEditContrib, !TipsContrib, !TwistyContrib
    * *Skins:* !ClassicSkin, !PatternSkin
 
 ---++ New Features Highlights
 
    * *Easier Installation and Upgrade*
-
+      * !ResetPassword, !ChangePassword, !ChangeEmailAddress, and !TWikiRegistration no longer contains yellow text that you have to remove.
+      * Configure can now authenticate when connecting to local plugins repository
+      * A new directory =working= which per default is located in the twiki root, has been introduced which contains:
+         * registration_approvals - with 4.2.0 it is moved to here from the data directory)
+         * tmp - so we now avoid having to fight with special access rights and /tmp directory that gets cleaned out when booting.
+         * work_areas - with 4.2.0 it is moved to here from the pub directory. Configure automatically moved the directory when you upgrade.
+         * Note: Remember to restrict access to this new directory when you upgrade.
+      * New Internal Admin Login feature which uses "admin" (configurable) as username and the password used for configure to become temporary administrator. When you do a new installation you need to use this feature as !Main.TWikiAdminGroup is now access restricted by default to avoid security attacks during the hours an installation may take. From configure there is a link to the !TWikiAdminGroup topic and on !TWikiAdminGroup the step by step instructions are written in a yellow box. Our advice is not to remove this help text in case you need it later.
 
    * *Usability Enhancements*
 
 
    * *Application Platform Enhancements*
-
+      * Enhancements to IF: allows, istopic, and isweb
+      
 
    * *Search Enhancements*
       * New =query= search mode supports SQL-style queries over form fields
@@ -36,6 +48,9 @@ TWiki 4.2.0 is shipped with
 
    * *Skins and Templates Enhancements*
 
+   * *API Enhancements (Func)
+      * setPreferencesValue($name, $val)
+      *  
 
    * *Miscellaneous Feature Enhancements*
 TODO: document user mapping changes
