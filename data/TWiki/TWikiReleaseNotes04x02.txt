@@ -26,45 +26,51 @@ TWiki 4.2.0 is shipped with
 ---++ New Features Highlights
 
    * *Easier Installation and Upgrade*
+      * New Internal Admin Login feature. See below.
+      * The !Main.TWikiUsers topic is no longer distributed as a default topic in Main. See below. 
+      * A new directory =working= which per default is located in the twiki root which contains registration_approvals, tmp, and work_areas. See below
       * !ResetPassword, !ChangePassword, !ChangeEmailAddress, and !TWikiRegistration no longer contains yellow text that you have to remove.
-      * Configure can now authenticate when connecting to local plugins repository
-      * A new directory =working= which per default is located in the twiki root, has been introduced which contains:
-         * registration_approvals - with 4.2.0 it is moved to here from the data directory)
-         * tmp - so we now avoid having to fight with special access rights and /tmp directory that gets cleaned out when booting.
-         * work_areas - with 4.2.0 it is moved to here from the pub directory. Configure automatically moved the directory when you upgrade.
-         * Note: Remember to restrict access to this new directory when you upgrade.
-      * New Internal Admin Login feature which uses "admin" (configurable) as username and the password used for configure to become temporary administrator. When you do a new installation you need to use this feature as !Main.TWikiAdminGroup is now access restricted by default to avoid security attacks during the hours an installation may take. From configure there is a link to the !TWikiAdminGroup topic and on !TWikiAdminGroup the step by step instructions are written in a yellow box. Our advice is not to remove this help text in case you need it later.
+      * Configure can now authenticate when connecting to local plugins repository.
 
    * *Usability Enhancements*
-
+      * New WYSIWYG editor based on !TinyMCE replaces the Kupu based editor. See below.
+      * New "Restore topic" feature has been added to the _More Topic Actions_ menu. You can now much more easily restore an older version of a topic including the values a topic form.
+      * Attachment comments no longer has a limit to the length of the text.
+      * The viewfile script now accepts similar simple URL path as used to access a topic. E.g. =http:<nop>//example.com/twiki/bin/viewfile/TWiki/TWikiDocGraphics/addon.gif= means the same as =http<nop>://example.com/twiki/bin/viewfile/TWiki/TWikiDocGraphics?filename=addon.gif=. This make it simpler to use command line tools like =wget= in Linux to download attachments.
 
    * *Application Platform Enhancements*
       * Enhancements to IF: allows, istopic, and isweb
-      
 
    * *Search Enhancements*
       * New =query= search mode supports SQL-style queries over form fields
-        and other meta-data
+        and other meta-data.
 
    * *Skins and Templates Enhancements*
-
-   * *API Enhancements (Func)
-      * setPreferencesValue($name, $val)
-      *  
+      * The !PatternSkin which is the default skin for TWiki has got a face lift.
+      * The template have been heavily refactored. This will break some tailorings and home made skins but it was needed to make it easier to make skins in the future.
 
    * *Miscellaneous Feature Enhancements*
-TODO: document user mapping changes
-
-   * *Enhancements of Pre-installed Plugins*
-
+      * Many new functions in the API for plugin developers.
+      * Table of Content (TOC) feature enhanced 
+      * User Mapping (mapping between login name and !WikiName) code has been extended to allow pluggable modules to integrate with all sorts of alternative authentication schemes. For normal cases you use the default !TWikiUserMapping which is using the !Main.TWikiUsers topic to map between login and !WikiName. A new !BaseUserMapping is provided for TWikis where you only have guests and an administrator. In this case you use the login and password given in configure to login as an admin.
 
 ---++ Important Changes since 4.1.2
 
-TODO: the default user form has moved
+---+++ New WYSIWYG Editor
 
-   * The NEWTOPICLINKSYMBOL preference which was deprecated in 4.1 has now been removed from the code. If you want to control the appearance of new links, you can use [[%SYSTEMWEB%.VarNEWLINKFORMAT][NEWLINKFORMAT]]
+TWiki now ships with a new WYSIWYG editor based on !TinyMCE replaces the Kupu based editor.%BR% !TinyMCE is not a perfect Wysiwyg editor but it is magnitudes better than the Kupu editor
 
----++ !UserForm and !NewUserTemplate Customization
+The !WysiwygPlugin that drives the engine behind both !TinyMCE has additionally been heavily improved so that less TWiki Applications are negatively affected by editing WYSIWYG
+
+When !TinyMCEPlugin is enabled the Edit button per default becomes WYSIWYG editing mode. A new Raw Edit link has been added to enable application developers to edit the good old way
+
+The WYSIWYG button is removed when using !TinyMCE instead of Kupu.
+
+---+++ NEWTOPICLINKSYMBOL removed
+
+The NEWTOPICLINKSYMBOL preference which was deprecated in 4.1 has now been removed from the code. If you want to control the appearance of new links, you can use [[%SYSTEMWEB%.VarNEWLINKFORMAT][NEWLINKFORMAT]]
+
+---+++ !UserForm and !NewUserTemplate Customization
 
 When a new user registers on TWiki his user topic is created based on the =NewUserTemplate= and =UserForm=.
 
@@ -72,27 +78,67 @@ The =NewUserTemplate= was located in the TWiki web and the =UserForm= in the Mai
 
 From 4.2.0 the =UserForm= and =NewUserTemplate= are distributed in the TWiki web. If you create the two in the Main web the Main web version will be used instead. So if you tailor the user topic format or the form then you should always copy the two files to the Main web and modify the ones in the Main web. When you later upgrade TWiki your tailored template and form will not be overwritten.
 
----++ !TWikiUsers no longer distributed
+---+++ !TWikiUsers no longer distributed
 
 The =Main.TWikiUsers= topic contains all the registered users. It is a topic you do not want to overwrite when you upgrade TWiki.
 
 From 4.2.0 this file is no longer included in the TWiki distribution. When you register the first time TWiki creates the =Main.TWikiUsers= topic in the Main web if it does not exist already. This means that you can now upgrade TWiki without risk of overwriting the important =TWikiUsers= topic.
 
+   * For new installers this makes no difference at all
+   * For upgraders this is one less problem to worry about as your important !Main.TWikiUsers topic now no longer gets overwritten when upgrading.
+   
+---+++ New =working= directory
+
+A new directory =working= which per default is located in the twiki root, has been introduced which contains:
+
+   * registration_approvals - with 4.2.0 it is moved to here from the data directory)
+   * tmp - so we now avoid having to fight with special access rights and /tmp directory that gets cleaned out when booting.
+   * work_areas - with 4.2.0 it is moved to here from the pub directory. Configure automatically moved the directory when you upgrade.
+
+Note: Remember to restrict access to this new directory when you upgrade.
+   
+---+++ New Internal Admin Login
+
+TWiki 4.2 introduces a new _Internal Admin Login_ feature which uses "admin" (configurable) as username and the password used for configure to become temporary administrator. When you do a new installation you need to use this feature as !Main.TWikiAdminGroup is now access restricted by default to avoid security attacks during the hours an installation may take. From configure there is a link to the !TWikiAdminGroup topic and on !TWikiAdminGroup the step by step instructions are written in a yellow box. Our advice is not to remove this help text in case you need it later.
+
+---++ API Enhancements (Func)
+
+   * $TWiki::Plugins::VERSION is now 1.2
+   * Added =decodeFormatTokens($str) -> $unencodedString=
+   * Added =eachChangeSince($web, $time) -> $iterator=
+   * Added =eachGroup() -> $iterator=
+   * Added =eachGroupMember($group) -> $iterator=
+   * Added =eachMembership($wikiname) -> $iterator=
+   * Added =eachUser() -> $iterator=
+   * Added =emailToWikiNames( $email, $dontAddWeb ) -> @wikiNames=
+   * Added =meta= parameter to =expandCommonVariables( $text, $topic, $web, $meta ) -> $text=
+   * Added =getCanonicalUserID( $user ) -> $cUID=
+   * Added =getExternalResource( $url ) -> $response=
+   * Added =getSessionKeys() -> @keys=
+   * Added =user= parameter to =getWikiName( $user ) -> $wikiName=
+   * Added =user= parameter to =getWikiUserName($user ) -> $wikiName=
+   * Added =isAnAdmin( $login ) -> $boolean=
+   * Added =isGroup( $group ) -> $boolean=
+   * Added =isGroupMember( $group, $login ) -> $boolean=
+   * Added =isTrue( $value, $default ) -> $boolean=
+   * Added =popTopicContext()=
+   * Added =pushTopicContext($web, $topic)=
+   * Added =setPreferencesValue($name, $val)=
+   * Added =sanitizeAttachmentName($fname) -> ($fileName, $origName)=
+   * Added =spaceOutWikiWord( $word, $sep ) -> $text=
+   * Added =wikiNameToEmails( $wikiname ) -> @emails=
+   * Deprecated getOopsUrl( $web, $topic, $template, $param1, $param2, $param3, $param4 ) -> $url
+   * Deprecated permissionsSet( $web ) -> $boolean
+
 ---++ Deprecation Notices
 
 The %<nop>MAINWEB% and %<nop>TWIKIWEB% variables have been deprecated. For compatibility reasons they are unlikely to ever be removed completely, but you should use the %<nop>USERSWEB% and %<nop>SYSTEMWEB% variables instead.
 
-
----++ Bug Fix Highlights
-
-
-
-
-The full list of bug fixes can be seen below
+In Func getOopsUrl and permissionsSet have been declared deprecated. There is no plan to remove them yet.
 
 ---++  TWiki 4.2.0 Minor Release - Details
 
-The 4.1.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/Patch04x02 revision FIXME.
+The 4.2.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x02 revision FIXME.
 
 ---+++ TWiki 4.2.0 Fixes
 <noautolink>
