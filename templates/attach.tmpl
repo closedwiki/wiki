@@ -3,11 +3,7 @@
 
 
 %TMPL:DEF{"notes"}%
-__Notes:__
-
-   * *Help:* Please see <a target='TWikiVariables' onclick="return launchWindow('%TWIKIWEB%','FileAttachment')" href='[_1]' rel='nofollow'>FileAttachment</a> for more information about attaching files.
-   * *File size:* %IF{"$ATTACHFILESIZELIMIT > 0" then="You can upload files up to %ATTACHFILESIZELIMIT% KB in size."}%
-   * *Link checkbox:* If the attached file is a JPG, GIF or PNG image and you check the box, it will create an inline image (e.g. show the image) at the end of the topic.  For other file types a simple link will be created.
+   * %MAKETEXT{"Please see <a target='TWikiVariables' onclick=\"return launchWindow('[_1]','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a> for more information about attaching files." args="%TWIKIWEB%"}%
 %TMPL:END%
 
 %TMPL:DEF{"existingattachments"}%%META{"attachments" all="on" title="<h2>%MAKETEXT{"Attachments of [_1]" args="<nop>%TOPIC%"}%</h2>"}%%TMPL:END%
@@ -20,7 +16,7 @@ __Notes:__
 
 %TMPL:DEF{"newfile"}%<tr>
   <td align="right">
-   Local file:
+   %MAKETEXT{"Attach new file"}%
   </td><td>
    <input type="file" name="filepath" value="%FILEPATH%" size="50" />
   </td>
@@ -28,7 +24,7 @@ __Notes:__
 
 %TMPL:DEF{"comment"}%<tr>
   <td align="right">
-   Comment:
+   %MAKETEXT{"Comment"}%
   </td><td>
    <input type="text" name="filecomment" value="%FILECOMMENT%" size="50" />
   </td>
@@ -39,17 +35,17 @@ __Notes:__
 
 %TMPL:DEF{"createlink"}%<tr>
   <td align="right">
-   Link:
+   %MAKETEXT{"Link"}%
   </td><td>
-   <input type="checkbox" name="createlink" %ATTACHLINKBOX% /> Create a link to the attached file at the end of the topic.
+   <input type="checkbox" class="twikiCheckbox" id="createlink" name="createlink" %ATTACHLINKBOX% /><label for="createlink">%MAKETEXT{"Create a link to the attached file"}%</label> <span class="twikiGrayText">%MAKETEXT{"Images will be displayed, for other attachments a link will be created."}%</span>
   </td>
  </tr>%TMPL:END%
 
 %TMPL:DEF{"hidefile"}%<tr>
   <td align="right">
-   Hide file:
+   %MAKETEXT{"Hide file"}%
   </td><td>
-   <input type="checkbox" name="hidefile" %HIDEFILE% /> Hide attachment in normal topic view.
+   <input type="checkbox" class="twikiCheckbox" id="hidefile" name="hidefile" %HIDEFILE% /><label for="hidefile">%MAKETEXT{"Do not show attachment in table"}%</label> <span class="twikiGrayText">%MAKETEXT{"Attachments will not be shown in topic view page."}%</span>
   </td>
  </tr>%TMPL:END%
 

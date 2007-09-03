@@ -1,9 +1,9 @@
 %{ This is a default template }%%TMPL:INCLUDE{"twiki"}%
 %TMPL:INCLUDE{"search"}%
 
-%TMPL:DEF{"titleaction"}%(%REVTITLE2% vs. %REVTITLE1%) %TMPL:END%
+%TMPL:DEF{"titleaction"}%%MAKETEXT{"([_1] vs. [_2])" args="%REVTITLE2%, %REVTITLE1%"}%%TMPL:END%
 
-%TMPL:DEF{"topicactionbuttons"}%<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">View</a>%TMPL:P{"sep"}%%TMPL:P{"revisions"}%%TMPL:P{"sep"}%<a href="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=oopsmore&amp;param1=%MAXREV%&amp;param2=%CURRREV%" rel='nofollow'>More</a>%TMPL:END%
+%TMPL:DEF{"topicactionbuttons"}%<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">%MAKETEXT{"View topic"}%</a>%TMPL:P{"sep"}%%TMPL:P{"revisions"}%%TMPL:P{"sep"}%<a href="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=oopsmore&amp;param1=%MAXREV%&amp;param2=%CURRREV%" rel='nofollow'>%MAKETEXT{"More topic actions..."}%</a>%TMPL:END%
 
 %TMPL:DEF{"searchbody"}%%TMPL:P{"repeatedsearchblock"}%%TMPL:END%
 

@@ -1,7 +1,8 @@
 %{ This is a default template }%%SPLIT%
 Search: %SEARCHSTRING%
 %SPLIT%
-Topics in <nop>%WEB% web:
+%MAKETEXT{"Topics in [_1] web:" args="<nop>%WEB%"}%
+
 
 %REPEAT%
 
@@ -11,5 +12,5 @@ Topics in <nop>%WEB% web:
 
 %REPEAT%
 %SPLIT%
-Number of topics: %NTOPICS%
+%MAKETEXT{"Number of topics:"}% <b>%NTOPICS%</b>
 %SPLIT%

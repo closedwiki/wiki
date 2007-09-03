@@ -30,7 +30,7 @@
 
 %MAKETEXT{"You can see the differences ~[~[[_1]~]~[here~]~]." args="%SCRIPTURLPATH{"rdiff"}%/%WEB%/%TOPIC%?rev1=%PARAM1%;rev2=%PARAM3%"}%
 
-*[[%WEB%.%TOPIC%][%MAKETEXT{"OK"}%]]*
+%TMPL:P{"oktopicaction"}%
 %TMPL:END%
 %TMPL:DEF{"missing_action"}%
 ---+++ %MAKETEXT{"Missing action command"}%
@@ -351,7 +351,7 @@ __%MAKETEXT{"Note:"}%__
    * %MAKETEXT{"International (8-bit) characters are removed (replaced by US-ASCII equivalents for Latin-1)"}%
 %MAKETEXT{"You may be able to get your TWiki administrator to change the settings if they are inappropriate for your environment."}%
 
-*[[%WEB%.%TOPIC%][%MAKETEXT{"OK"}%]]*
+%TMPL:P{"oktopicaction"}%
 %TMPL:END%
 %TMPL:DEF{"zero_size_upload"}%
 ---+++ %MAKETEXT{"Either you did not specify a file name, or the file you are trying to upload [_1] has no content. You may not upload an empty file." args="<code>%PARAM1%</code>"}%

@@ -8,12 +8,6 @@
 %TMPL:DEF{"attachments"}%
 %META{"attachments"}%%TMPL:END%
 
-%TMPL:DEF{"footernote"}%
-<div class="TWikiFooterNote">
-%META{"parent" prefix="<br />Parents: "}%
-%META{"moved"}%
-</div>%TMPL:END%
-
 %TMPL:DEF{"main"}%
 %TMPL:P{"content"}%
 %TMPL:END%
@@ -24,5 +18,3 @@
 #TopicEnd
 %TMPL:P{"form"}%%TMPL:P{"attachments"}%
 %TMPL:END%
-
-%TMPL:DEF{"topicactionbuttons"}%%TMPL:P{context="inactive" then="inactive_edit" else="active_edit"}%%TMPL:P{"sep"}%%TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}%%TMPL:P{"sep"}%Backlinks: <a href="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=backlinksweb" title="Search the <nop>%WEB% Web for topics that link to here">Web</a> <a href="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=backlinksallwebs" title="Search all webs for topics that link to here">All webs</a>%TMPL:P{"sep"}%<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?cover=print%REVARG%" rel='nofollow'>Printable</a>%TMPL:P{"sep"}%%TMPL:P{"revisions"}%%TMPL:P{context="inactive" then="inactive_more" else="active_more"}%%TMPL:END%

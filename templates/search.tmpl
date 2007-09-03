@@ -14,9 +14,9 @@
 %TABLE%
 <table width="100%" border="0" cellpadding="0" cellspacing="4">
 	<tr bgcolor="%WEBBGCOLOR%">
-		<td width="50%"><b>Topics in <nop>%WEB% web:</b></td>
-		<td width="30%"><b>Changed:</b> now %DISPLAYTIME{"$hour:$min"}%   </td>
-		<td width="20%"><b>Changed by:</b></td>
+		<td width="50%"><b>%MAKETEXT{"Topics in [_1] web" args="<nop>%WEB%"}%</b></td>
+		<td width="30%"><b>%MAKETEXT{"Changed"}%</b></td>
+		<td width="20%"><b>%MAKETEXT{"Changed by"}%</b></td>
 	</tr>
 </table>
 %REPEAT%
@@ -33,7 +33,7 @@
 </table>%REPEAT%<br clear="all" />%TMPL:END%
 
 %TMPL:DEF{"content"}%
-%SPLIT%Search: <b> %SEARCHSTRING% </b>
+%SPLIT%%MAKETEXT{"Searched:"}% <b> %SEARCHSTRING% </b>
 <p />%TMPL:P{"searchbody"}%
 <p />%SPLIT%
 %TMPL:P{"topicinfo"}%%TMPL:END%

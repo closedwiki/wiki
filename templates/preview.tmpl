@@ -14,7 +14,7 @@
 %TMPL:DEF{"webaction"}%%TMPL:END%
 
 
-%TMPL:DEF{"topicactionbuttons"}%<input type="submit" class="twikiSubmit" value="Save Changes" /> %MAKETEXT{"or"}% <a href="#" onclick="history.go(-1); return false;">%MAKETEXT{"Go back"}%</a> %FORMFIELDS% %TMPL:END%
+%TMPL:DEF{"topicactionbuttons"}%<input type="submit" class="twikiSubmit" value="Save Changes" /> %MAKETEXT{"or"}% %TMPL:P{"gobacktopicaction"}% %FORMFIELDS% %TMPL:END%
 
 
 %TMPL:DEF{"formparameters"}%%TMPL:P{"formparameters:edit"}%%TMPL:P{"formparameters:preview"}%%TMPL:END%
