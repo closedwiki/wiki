@@ -2642,6 +2642,28 @@ sub formatTime {
 
 =pod
 
+---+++ isTrue( $value, $default ) -> $boolean
+
+Returns 1 if =$value= is true, and 0 otherwise. "true" means set to
+something with a Perl true value, with the special cases that "off",
+"false" and "no" (case insensitive) are forced to false. Leading and
+trailing spaces in =$value= are ignored.
+
+If the value is undef, then =$default= is returned. If =$default= is
+not specified it is taken as 0.
+
+*Since:* $TWiki::Plugins::VERSION 1.2
+
+=cut
+
+sub isTrue {
+#   my ( $value, $default ) = @_;
+
+    return TWiki::isTrue( @_ );
+}
+
+=pod
+
 ---+++ isValidWikiWord ( $text ) -> $boolean
 
 Check for a valid WikiWord or WikiName
@@ -2878,30 +2900,6 @@ sub formatGmTime {
 
     require TWiki::Time;
     return TWiki::Time::formatTime( @_, 'gmtime' );
-}
-
-=pod
-
-=pod
-
----+++ isTrue( $value, $default ) -> $boolean
-
-Returns 1 if =$value= is true, and 0 otherwise. "true" means set to
-something with a Perl true value, with the special cases that "off",
-"false" and "no" (case insensitive) are forced to false. Leading and
-trailing spaces in =$value= are ignored.
-
-If the value is undef, then =$default= is returned. If =$default= is
-not specified it is taken as 0.
-
-*Since:* $TWiki::Plugins::VERSION 1.2
-
-=cut
-
-sub isTrue {
-#   my ( $value, $default ) = @_;
-
-    return TWiki::isTrue( @_ );
 }
 
 =pod
