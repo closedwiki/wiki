@@ -3183,6 +3183,7 @@ $TWiki::Plugins::VERSION 1.2
    * =eachUser() -> $iterator=
    * =emailToWikiNames($email, $dontAddWeb) -> @wikiNames=
    * =expandCommonVariables($text, $topic, $web, $meta) -> $text=
+   * =getCanonicalUserID( $user ) -> $cUID=
    * =getExternalResource($url) -> $response=
    * =getSessionKeys() -> @keys=
    * =isAnAdmin($login) -> $boolean=
@@ -3192,7 +3193,9 @@ $TWiki::Plugins::VERSION 1.2
    * =popTopicContext()=
    * =pushTopicContext($web, $topic)=
    * =sanitizeAttachmentName($fname) -> ($fileName, $origName)=
+   * =setPreferencesValue($name, $val)=
    * =spaceOutWikiWord($word, $sep) -> $text=
    * =wikiNameToEmails($wikiname) -> @emails=
    * <strike> =permissionsSet($web) -> $boolean= </strike>
+   * <strike> =getOopsUrl( $web, $topic, $template, $param1, $param2, $param3, $param4 ) -> $url= </strike>
 
