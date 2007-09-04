@@ -59,8 +59,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.SvenDowideit - http:///www.WikiRing.com|
-|  Plugin Version: | 22 Jul 2006 (V1.1) |
+|  Plugin Version: | 4 Sept 2007 (V1.2) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  4 Sept 2007: | updated to 4.2 |
 |  22 Jul 2006: | resurected it for TWiki 4.0 due to demand for a low resource AntiSpam solution |
 |  22 Aug 2005: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |

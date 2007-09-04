@@ -38,11 +38,11 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.1';
+$RELEASE = '1.2';
 
 $pluginName = 'AntiWikiSpamPlugin';  # Name of this Plugin
 
-$debug = 0; # toggle me
+$debug = 1; # toggle me
 
 =pod
 
@@ -195,7 +195,7 @@ sub downloadRegexUpdate {
         my $getListTimeOut = TWiki::Func::getPluginPreferencesValue( 'GETLISTTIMEOUT' ) || 61;
         #has it been more than $getListTimeOut minutes since the last get?
         my $lastTimeWeCheckedForUpdate = readWorkFile(${pluginName}.'_timeOfLastCheck');
-        #print STDERR "time > ($lastTimeWeCheckedForUpdate + ($getListTimeOut * 60))";
+        writeDebug("time > ($lastTimeWeCheckedForUpdate + ($getListTimeOut * 60))");
         $timesUp = time > ($lastTimeWeCheckedForUpdate + ($getListTimeOut * 60));
     }
     return unless $timesUp || !$topicExists;
@@ -204,14 +204,18 @@ sub downloadRegexUpdate {
   writeDebug("downloading new spam data");
   my $lock = readWorkFile(${pluginName}.'_lock'); # SMELL: that's no good way to do locking
   if ( $lock eq '' ) {
+      writeDebug("downloading new spam data");
       saveWorkFile(${pluginName}.'_lock', 'lock');
       my $listUrl = TWiki::Func::getPluginPreferencesValue( 'ANTISPAMREGEXLISTURL' );
       my $list = includeUrl($listUrl);
       if (defined ($list)) {
+          #writeDebug("$list");
           saveWorkFile(${pluginName}.'_regexs', $list);
           saveWorkFile(${pluginName}.'_timeOfLastCheck', time);
       }
       saveWorkFile(${pluginName}.'_lock', '');
+  } else {
+      writeDebug("downloading new spam data");
   }
 }
 
@@ -225,6 +229,9 @@ simplified version of INCLUDE
 
 sub includeUrl($) {
     my $theUrl = shift;
+
+    return TWiki::Func::getExternalResource($theUrl)->content()
+        if $TWiki::Plugins::VERSION >= 1.2;
 
     my $text = '';
     my $host = '';
@@ -256,6 +263,8 @@ sub includeUrl($) {
     } catch Error with {
         my $e = shift->stringify();
         TWiki::Func::writeWarning("$pluginName - $e");
+        writeDebug("$pluginName - $e");
+        print STDERR "$pluginName - $e";
     };
     
     return $text;
@@ -282,7 +291,10 @@ sub getUrl {
     if $TWiki::Plugins::VERSION < 1.11;
   
   # TWiki 4.1
-  return $TWiki::Plugins::SESSION->{net}->getUrl($protocol, $host, $port, $path, $user, $pass);
+  return $TWiki::Plugins::SESSION->{net}->getUrl($protocol, $host, $port, $path, $user, $pass)
+    if $TWiki::Plugins::VERSION < 1.2;
+
+  die "should not be here - TWiki 4.2 defines TWiki::Func::getExternalResource";
 }
 
 
