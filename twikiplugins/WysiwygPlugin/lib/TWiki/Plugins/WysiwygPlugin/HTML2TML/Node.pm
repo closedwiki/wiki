@@ -700,8 +700,10 @@ sub _handleA {
     if( $text && $text =~ /\S/ && $this->{attrs}->{href}) {
         # there's text and an href
         my $href = $this->{attrs}->{href};
+        # decode URL params in the href
+        $href =~ s/%([0-9A-F]{2})/chr(hex($1))/gei;
         if( $this->{context} && $this->{context}->{rewriteURL} ) {
-            $href = &{$this->{context}->{rewriteURL}}(
+            $href = $this->{context}->{rewriteURL}->(
                 $href, $this->{context} );
         }
         $reww = TWiki::Func::getRegularExpression('wikiWordRegex')
@@ -858,6 +860,8 @@ sub _handleIMG {
 
     if( $this->{context} && $this->{context}->{rewriteURL} ) {
         my $href = $this->{attrs}->{src};
+        # decode URL params in the href
+        $href =~ s/%([0-9A-F]{2})/chr(hex($1))/gei;
         $href = &{$this->{context}->{rewriteURL}}(
             $href, $this->{context} );
         $this->{attrs}->{src} = $href;
