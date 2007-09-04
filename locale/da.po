@@ -1,14 +1,16 @@
+# translation of da.po to Danish
+#   TWiki:Main/SteffenPoulsen, 2007.
+# Steffen Poulsen <N/A>, 2007.
 # TWiki translation for Danish
 # This file is distributed under the same license as TWiki itself
 # Copyright (C) 2005 Peter Thoeny, peter@thoeny.com and TWiki Contributors.
 # Translators:
-#   TWiki:Main/SteffenPoulsen, 2007.
 msgid ""
 msgstr ""
 "Project-Id-Version: da\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2007-09-04 22:42+0200\n"
+"PO-Revision-Date: 2007-09-05 00:23+0200\n"
 "Last-Translator: Steffen Poulsen <N/A>\n"
 "Language-Team: Danish <N/A>\n"
 "MIME-Version: 1.0\n"
@@ -442,8 +444,8 @@ msgid ""
 "*external links* =http://yahoo.com= or =[<nop>[http://yahoo.com/][link to "
 "Yahoo]]="
 msgstr ""
-"*eksterne links* brug et sidenavn eller URL: =%HOMETOPIC%=, =http://yahoo.com=, eller "
-"=[<nop>[http://yahoo.com/][link til Yahoo]]="
+"*eksterne links* brug et sidenavn eller URL: =%HOMETOPIC%=, =http://yahoo."
+"com=, eller =[<nop>[http://yahoo.com/][link til Yahoo]]="
 
 #: data/TWiki/WikiSyntaxSummary.txt:11
 msgid "*headings* 3 dashes, 1 to 6 pluses, 1 space: =---++&&nbsp;Your Heading="
@@ -1656,7 +1658,12 @@ msgid ""
 "a> for the new topic name, otherwise automatic linking may not work. "
 "Characters not allowed in topic names, such as spaces will automatically be "
 "removed."
-msgstr "Det anbefales at vælge et <a target='WikiWord' onclick=\"launchWindow('%SYSTEMWEB%','WikiWord'); return false;\" href='%1' rel='nofollow'>WikiWord</a> som nyt sidenavn, da dette gør det nemmere at linke til det senere hen. Karakterer der ikke er tilladte i side-navne, som fx mellemrum, fjernes automatisk. "
+msgstr ""
+"Det anbefales at vælge et <a target='WikiWord' onclick=\"launchWindow('%"
+"SYSTEMWEB%','WikiWord'); return false;\" href='%1' rel='nofollow'>WikiWord</"
+"a> som nyt sidenavn, da dette gør det nemmere at linke til det senere hen. "
+"Karakterer der ikke er tilladte i side-navne, som fx mellemrum, fjernes "
+"automatisk. "
 
 #: templates/renameweb.tmpl:17
 msgid ""
@@ -1733,7 +1740,9 @@ msgstr "Log ud"
 msgid ""
 "Log in as [[%SCRIPTURL{login}%?sudo=sudo][internal admin]] if you need to "
 "quickly fix something"
-msgstr "Log ind som [[%SCRIPTURL{login}%?sudo=sudo][intern admin]] hvis du har brug for at rette noget"
+msgstr ""
+"Log ind som [[%SCRIPTURL{login}%?sudo=sudo][intern admin]] hvis du har brug "
+"for at rette noget"
 
 #: templates/mailresetpassword.tmpl:9
 #: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:9
@@ -2077,9 +2086,9 @@ msgid ""
 "1','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a> for more "
 "information about attaching files."
 msgstr ""
-"Se venligst siden <a target='TWikiVariables' onclick=\"return "
-"launchWindow('%1','FileAttachment')\" href='' rel='nofollow'>FileAttachment</"
-"a> for mere information om vedhæftning af filer."
+"Se venligst siden <a target='TWikiVariables' onclick=\"return launchWindow('%"
+"1','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a> for mere "
+"information om vedhæftning af filer."
 
 #: templates/mailresetpassword.tmpl:12
 #: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:12
@@ -2108,7 +2117,9 @@ msgstr "Ekstra muligheder"
 msgid ""
 "Quick edit of existing preferences (edit the topic text to set new "
 "preferences)"
-msgstr "Direkte editering af eksisterende preferencer (editér siden for at lave nye præferencer)"
+msgstr ""
+"Direkte editering af eksisterende preferencer (editér siden for at lave nye "
+"præferencer)"
 
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:10
 #: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:10
@@ -2315,14 +2326,12 @@ msgstr "S = Gem (Save), C = (Fortryd) Cancel"
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:14
 msgid "S = Save, Q = Quiet save, K = Checkpoint, D = Discard"
 msgstr ""
-"S = Gem (Save), Q = Gem uden notificering (Quiet save), K = Checkpoint, D = "
+"S = Gem (Save), Q = Gem stille (Uden notificering), K = Checkpoint, D = "
 "Annullér (Discard)"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:53
 msgid "S = Save, Q = Quiet save, K = Checkpoint, P = Preview, C = Cancel"
-msgstr ""
-"S = Gem (Save), Q = Gem uden notificering (Quiet save), K = Checkpoint, P = "
-"Udkast (Preview), C = Fortryd (Cancel)"
+msgstr "S = Gem (Save), Q = Gem stille (Uden notificering), K = Checkpoint, P = Vis udkast (Preview), C = Fortryd (Cancel)"
 
 #: templates/registernotifyadmin.tmpl:16
 #: twikiplugins/ClassicSkin/templates/registernotifyadmin.classic.tmpl:16
@@ -2482,7 +2491,13 @@ msgid ""
 "for easier upgrades as you don't need to worry about the shipped preferences "
 "clobbering yours. It's easier to keep a handle on if you only copy over the "
 "settings you actually change."
-msgstr "Generelle præferencer for hele sitet findes i %1, men det er muligt at overskrive disse præferencer i denne side, %2 - det er meningen at den skal bruges til lokale tilretninger. Dette muliggør nemmere opgraderinger da ikke behøver bekymre dig om hvorvidt præferencer i lokale filer overskrives ved opdateringer. Det er nemmest at holde styr på præferencerne hvis du kun kopierer præcist de præferencer du aktivt overskriver."
+msgstr ""
+"Generelle præferencer for hele sitet findes i %1, men det er muligt at "
+"overskrive disse præferencer i denne side, %2 - det er meningen at den skal "
+"bruges til lokale tilretninger. Dette muliggør nemmere opgraderinger da ikke "
+"behøver bekymre dig om hvorvidt præferencer i lokale filer overskrives ved "
+"opdateringer. Det er nemmest at holde styr på præferencerne hvis du kun "
+"kopierer præcist de præferencer du aktivt overskriver."
 
 #: templates/attachtables.tmpl:4
 msgid "Size"
@@ -2931,7 +2946,7 @@ msgstr "Side-forælder:"
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:37
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:62
 msgid "Topic revision:"
-msgstr "Side version:"
+msgstr "Version:"
 
 #: templates/oopssaveerr.tmpl:12
 msgid "Topic save error"
@@ -3543,7 +3558,9 @@ msgstr "søger efter lignende sider i _alle offentlige webs_"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:19
 msgid "title='Attach an image or document to this topic' accesskey='a'>&Attach"
-msgstr "title='Vedhæft fx et billede eller et dokument til denne side' accesskey='a'>Vedhæft (&A) "
+msgstr ""
+"title='Vedhæft fx et billede eller et dokument til denne side' "
+"accesskey='a'>Vedhæft (&A) "
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:4
 msgid "title='Create new topic' accesskey='c'>&Create"
@@ -3585,7 +3602,7 @@ msgid ""
 "accesskey='b'>&Backlinks"
 msgstr ""
 "title='Søg i %1-webbet efter sider der linker til denne side' "
-"accesskey='b'>We&b"
+"accesskey='b'>Referencer (&B)"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:31
 msgid "title='Search the %1 Web for topics that link to here' accesskey='b'>We&b"
@@ -3624,15 +3641,15 @@ msgstr "value='Fortryd (Discard)' accesskey='d'"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:45
 msgid "value='Preview' accesskey='p'"
-msgstr "value='Preview' accesskey='p'"
+msgstr "value='Vis udkast' accesskey='p'"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:41
 msgid "value='Quiet save' accesskey='q'"
-msgstr "value='Gem uden notificering (Quiet save)' accesskey='q'"
+msgstr "value='Gem stille' accesskey='q'"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:39
 msgid "value='Save' accesskey='s'"
-msgstr "value='Save' accesskey='s'"
+msgstr "value='Gem' accesskey='s'"
 
 #: templates/attachtables.tmpl:42
 #: twikiplugins/ClassicSkin/templates/attachtables.classic.tmpl:42
