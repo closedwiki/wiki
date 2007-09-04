@@ -258,7 +258,7 @@ sub _link {
 
     $topic ||= $string;
     my $defaultToolTip = $this->{session}->i18n->maketext(
-        'Click to see details in separate window');
+        'Details in separate window');
     $tooltip ||= $defaultToolTip;
 
     my $web;
