@@ -6,7 +6,7 @@
 
 %TMPL:DEF{"nonwikiwordwarning"}%<p><input type="checkbox" id="nonwikiword" name="nonwikiword" %NONWIKIWORDFLAG% /><label for="nonwikiword">%MAKETEXT{"Allow non <nop>WikiWord for the new topic name"}%</label><br />%TMPL:P{"nonwikiwordhelp"}%</p>%TMPL:END%
 
-%TMPL:DEF{"nonwikiwordhelp"}% %MAKETEXT{"It's usually best to choose a <a target='WikiWord' onclick=\"launchWindow('%SYSTEMWEB%','WikiWord'); return false;\" href='%SCRIPTURLPATH{"view"}%/%SYSTEMWEB%/WikiWord' rel='nofollow'>WikiWord</a> for the new topic name, otherwise automatic linking may not work. Characters not allowed in topic names, such as spaces will automatically be removed."}%%TMPL:END%
+%TMPL:DEF{"nonwikiwordhelp"}% %MAKETEXT{"It's usually best to choose a <a target='WikiWord' onclick=\"launchWindow('%SYSTEMWEB%','WikiWord'); return false;\" href='[_1]' rel='nofollow'>WikiWord</a> for the new topic name, otherwise automatic linking may not work. Characters not allowed in topic names, such as spaces will automatically be removed." args="%SCRIPTURLPATH{"view"}%/%SYSTEMWEB%/WikiWord"}%%TMPL:END%
 
 %TMPL:DEF{"nonwikiwordallowed"}%<input type="hidden" name="nonwikiword" value="on" />%TMPL:END%
 
