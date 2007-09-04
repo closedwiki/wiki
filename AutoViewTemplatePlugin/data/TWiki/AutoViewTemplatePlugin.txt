@@ -8,7 +8,7 @@ This Plugin sets the VIEW_TEMPLATE variable according to a corresponding form de
       * When =MyTopic= gets rendered, this plugin looks for a =MyViewTemplate= and sets it as its view template.
    * Mode "section":
       * Topic =MyTopic= uses =MyForm=.
-      * =MyForm= insists of a =viewtemplate= section whose only content is the name of a view template topic name
+      * =MyForm= contains a =viewtemplate= section whose only content is the name of a view template topic name
       * When =MyTopic= gets rendered, that topic name is set as its view template.
       
 By default existing values for VIEW_TEMPLATE have priority. You can override this behaviour in =configure=.
@@ -30,6 +30,7 @@ By default existing values for VIEW_TEMPLATE have priority. You can override thi
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 04 Jun 2007 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  04 Sep 2007: | Added build script and installer, minor doc changes |
 |  05 Jun 2007: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.026 |
 |  CPAN Dependencies: | none |

@@ -15,7 +15,7 @@ use strict;
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $mode $override $pluginName $NO_PREFS_IN_TOPIC );
 
 $VERSION = '$Rev$';
-$RELEASE = 'sunny-day';
+$RELEASE = 'ipo';
 $SHORTDESCRIPTION = 'Sets VIEW_TEMPLATE according to the topic type';
 $NO_PREFS_IN_TOPIC = 1;
 
