@@ -78,13 +78,12 @@ my $twiki = new TWiki( undef, $query, $initialContext );
 local $SIG{__DIE__} = \&Carp::confess;
 
 if ($login) {
-    my $passwordHandler = $twiki->{users}->{passwords};
-    my $validation = $passwordHandler->checkPassword($login, $pass);
+    my $validation = $twiki->{users}->checkPassword($login, $pass);
     unless ($validation) {
         die "Can't login as $login";
     }
 
-    $twiki->{user} = $twiki->{users}->findUser($login);
+    $twiki->{user} = $twiki->{users}->getCanonicalUserID($login);
 }
 
 my $pathInfo = $query->path_info();
