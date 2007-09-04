@@ -186,8 +186,9 @@ sub _processTags {
 
 sub _expandURL {
     my( $this, $url ) = @_;
+
     return $url unless ( $this->{opts}->{expandVarsInURL} );
-    return &{$this->{opts}->{expandVarsInURL}}( $url, $this->{opts} );
+    return $this->{opts}->{expandVarsInURL}->( $url, $this->{opts} );
 }
 
 # Lifted straight out of DevelopBranch Render.pm
@@ -458,7 +459,10 @@ sub _takeOutIMGTag {
     my ($this, $text) = @_;
     # Expand selected TWiki variables in IMG tags so that images appear in the
     # editor as images
-    $text =~ s/(<img [^>]*src=)(["'])(.*?)\2/$1.$2.$this->_expandURL($3).$2/gie;
+    $text =~ s/(<img [^>]*\bsrc=)(["'])(.*?)\2/$1.$2.$this->_expandURL($3).$2/gie;
+    # Take out mce_src - it just causes problems.
+    $text =~ s/(<img [^>]*)\bmce_src=(["'])(.*?)\2/$1/gie;
+
     return $this->_liftOut($text, '', 'NONE');
 }
 

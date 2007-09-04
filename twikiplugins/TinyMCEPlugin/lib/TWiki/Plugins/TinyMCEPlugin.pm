@@ -121,8 +121,12 @@ HERE
     my $ua = $query->user_agent();
 
     # _src.js for debug
+    my $TINYMCE_SCRIPT = 'tinymce/jscripts/tiny_mce/tiny_mce_src.js';
+    # Stripped for production
+    #my $TINYMCE_SCRIPT = 'tinymce/jscripts/tiny_mce/tiny_mce.js';
+
     TWiki::Func::addToHEAD('tinyMCE', <<SCRIPT);
-<script language="javascript" type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/tiny_mce_src.js"></script>
+<script language="javascript" type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TinyMCEPlugin/$TINYMCE_SCRIPT"></script>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TinyMCEPlugin/twiki.js"></script>
 <script type="text/javascript">
 // <![CDATA[
@@ -135,6 +139,8 @@ function initTextArea () {
 tinyMCE.init({ $init });
 // ]]>
 </script>
+<script language="javascript" type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TinyMCEPlugin//tinymce/jscripts/tiny_mce/plugins/twikiimage/jscripts/functions.js"></script>
+<script language="javascript" type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TinyMCEPlugin//tinymce/jscripts/tiny_mce/plugins/twikiimage/editor_plugin.js"></script>
 SCRIPT
 
     my $useJSTranslator = 0;
@@ -156,8 +162,9 @@ SCRIPT
 
 sub afterEditHandler {
     #my( $text, $topic, $web ) = @_;
-
-    return if (_notAvailable());
+    if (_notAvailable()) {
+        return;
+    }
 
     my $query = TWiki::Func::getCgiQuery();
     return unless $query;

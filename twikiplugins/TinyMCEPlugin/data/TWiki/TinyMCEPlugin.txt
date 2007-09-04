@@ -36,12 +36,14 @@ For a full explanation of the available options, and guidance on reconfiguring T
    debug : true,
    cleanup : false,
    theme : "advanced",
-   convert_urls : false,
-   convert_fonts_to_spans: true,
+   convert_urls : true,
    relative_urls : false,
    remove_script_host : false,
-   plugins : "table,searchreplace,autosave,paste",
+   urlconverter_callback : "twikiConvertURL",
+   convert_fonts_to_spans: true,
+   plugins : "table,searchreplace,autosave,paste,twikiimage",
    setupcontent_callback : "tinymce_plugin_setUpContent",
+   twiki_vars : "PUBURLPATH=%PUBURLPATH%,PUBURL=%PUBURL%,WEB=%WEB%,TOPIC=%TOPIC%,ATTACHURL=%ATTACHURL%,ATTACHURLPATH=%ATTACHURLPATH%,VIEWSCRIPTURL=%SCRIPTURL{view}%",
    theme_advanced_toolbar_align : "left",
    paste_create_paragraphs : true,
    paste_create_linebreaks : false,
@@ -94,3 +96,4 @@ This extension is brought to you by a [[http://wikiring.com][WikiRing <a href="h
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
 
 %META:FILEATTACHMENT{name="tinymce.gif" attr="h" comment="screenshot"}%
+http://wiki.moxiecode.com
