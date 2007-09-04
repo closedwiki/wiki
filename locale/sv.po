@@ -93,15 +93,12 @@ msgstr "%1 för att byta din e-postadress"
 msgid "%1 for changing your password"
 msgstr "%1 för att byta ditt lösenord"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:85
-msgid "%1 has a list of other TWiki users"
-msgstr "%1 är en lista över andra TWiki-användare"
-
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:40
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:30
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:85
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:28
-msgid "%1 has a list of other TWiki users."
-msgstr "%1 är en lista över andra TWiki-användare."
+msgid "%1 has a list of other TWiki users"
+msgstr "%1 är en lista över andra TWiki-användare"
 
 #: templates/messages.tmpl:416
 msgid ""
@@ -126,7 +123,7 @@ msgstr "%1 är en lista på TWiki-användardokumentation"
 msgid "%1 is an invalid name for a new web"
 msgstr "%1 är inte ett tillåtet namn på en ny avdelning"
 
-#: templates/login.tmpl:17
+#: templates/login.tmpl:7
 msgid "%1 is currently logged in"
 msgstr "%1 är inloggad just nu"
 
@@ -186,12 +183,11 @@ msgstr "Avbryt (&C)"
 msgid "&Edit text"
 msgstr "Redig&era text"
 
-#: templates/twiki.tmpl:99
+#: templates/twiki.tmpl:103
 #: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:159
 msgid "&History"
 msgstr "&Historik"
 
-#: templates/view.tmpl:30
 #: twikiplugins/ClassicSkin/templates/view.classic.tmpl:28
 msgid "&WYSIWYG"
 msgstr "&WYSIWYG"
@@ -200,10 +196,11 @@ msgstr "&WYSIWYG"
 msgid "'%1' is not a valid %2 "
 msgstr "'%1' är inte en giltig %2 "
 
-#: templates/login.tmpl:21
+#: templates/login.tmpl:11
 msgid "(%1 login)"
 msgstr ""
 
+#: templates/rdiff.tmpl:4
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:6
 msgid "(%1 vs. %2)"
 msgstr "(%1 jämfört med %2)"
@@ -225,6 +222,7 @@ msgstr "(__Förslag:__ Ladda upp en bild av dig själv till din sida?)"
 msgid "(access denied)"
 msgstr "Åtkomst nekad"
 
+#: templates/attachnew.tmpl:2
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:8
 msgid "(attach)"
 msgstr "(bifoga)"
@@ -236,6 +234,11 @@ msgstr "(referenser i avdelning %1)"
 #: templates/backlinksallwebs.tmpl:4
 msgid "(backlinks in all Webs)"
 msgstr "(referenser från alla avdelningar)"
+
+#: templates/searchbookview.tmpl:3
+#, fuzzy
+msgid "(book view)"
+msgstr "Källtext"
 
 #: templates/changeform.tmpl:4
 msgid "(change form)"
@@ -262,11 +265,11 @@ msgstr "(ta bort)"
 msgid "(edit form)"
 msgstr "(redigera formulär)"
 
-#: templates/edittext.tmpl:7
+#: templates/edittext.tmpl:4 templates/edittext.tmpl:7
 msgid "(edit text)"
 msgstr "(redigera text)"
 
-#: templates/edit.tmpl:15 templates/edit.tmpl:21
+#: templates/edit.tmpl:10 templates/edit.tmpl:4
 msgid "(edit)"
 msgstr "(redigera)"
 
@@ -278,7 +281,7 @@ msgstr "(Ditt inloggingsnamn) LoginName:"
 msgid "(identifies you to others) WikiName:"
 msgstr "(det namn som syns för andra) WikiName:"
 
-#: templates/login.tmpl:15
+#: templates/login.tmpl:5
 #, fuzzy
 msgid "(login)"
 msgstr "Logga in"
@@ -286,10 +289,6 @@ msgstr "Logga in"
 #: templates/moveattachment.tmpl:4
 msgid "(move attachment)"
 msgstr "(flytta bifogad fil)"
-
-#: data/TWiki/WebTopicCreator.txt:157
-msgid "(no parent, orphaned topic)"
-msgstr "(ingen förälder, föräldralös sida)"
 
 #: lib/TWiki/UI/Manage.pm:1013 lib/TWiki/UI/Manage.pm:1016
 #: lib/TWiki/UI/Manage.pm:1019 lib/TWiki/UI/Manage.pm:1053
@@ -331,13 +330,18 @@ msgstr "(döp om)"
 
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:35
 #, fuzzy
-msgid "(revision %1"
+msgid "(revision %1)"
 msgstr "Version"
 
 #: templates/oopssaveerr.tmpl:8
 #, fuzzy
 msgid "(save error)"
 msgstr "Fel vid försök att spara sidan"
+
+#: templates/searchformat.tmpl:3
+#, fuzzy
+msgid "(search result)"
+msgstr "(sökresultat)"
 
 #: twikiplugins/PatternSkin/templates/search.pattern.tmpl:9
 msgid "(search results)"
@@ -364,6 +368,7 @@ msgstr "(efternamn med en bokstav)"
 msgid "(skipped)"
 msgstr "(överhoppat)"
 
+#: templates/attachagain.tmpl:19
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:31
 msgid ""
 "*Change comment:* If you use _Change Properties_ to change a comment, the "
@@ -398,6 +403,7 @@ msgstr ""
 "tveksam kan du kontakta %1 for mer detaljer angående dataskyddsreglerna för "
 "denna TWiki-server."
 
+#: templates/attachagain.tmpl:20
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:32
 msgid ""
 "*Local file:* If you select a different file in _Local file:_, it is this "
@@ -406,6 +412,7 @@ msgstr ""
 "*Lokal fil:* Om du väljer en fil från din hårddisk (i fältet _Lokal fil_) så "
 "kommer denna fil att uppdateras eller läggas till."
 
+#: templates/attachagain.tmpl:18
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:30
 msgid ""
 "*Properties:* The comment and visibility (i.e. is attachment hidden) can be "
@@ -541,6 +548,10 @@ msgstr ""
 "2) har skickats till den registrerade e-postadressen. Om den inte längre är "
 "giltig så  kontakta %3"
 
+#: data/TWiki/WebTemplateTopics.txt:4
+msgid "A topic template defines the initial content of a newly created topic."
+msgstr ""
+
 #: templates/oopsaccessdenied.tmpl:6
 #: twikiplugins/ClassicSkin/templates/oopsaccessdenied.classic.tmpl:5
 msgid "Access Denied"
@@ -550,7 +561,7 @@ msgstr "Åtkomst nekad"
 msgid "Access check on %1 failed"
 msgstr "Åtkomstkontroll till %1 misslyckades"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:45
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:53
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:14
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:19
 msgid "Access keys"
@@ -619,7 +630,7 @@ msgstr "Alla publika avdelningar"
 msgid "All topics in %1"
 msgstr "Alla sidor i %1"
 
-#: data/TWiki/WebTopicCreator.txt:147 templates/twiki.tmpl:7
+#: templates/twiki.tmpl:7
 msgid "Allow non <nop>WikiWord for the new topic name"
 msgstr "Tillåt ord som inte är <nop>WikiOrd på nya sidor"
 
@@ -659,6 +670,7 @@ msgstr "Alla ändringar du gjort innan du kom till denna sidan bevaras."
 msgid "Attach"
 msgstr "Bifoga fil"
 
+#: templates/attachnew.tmpl:4
 #: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:4
 msgid "Attach file to %1"
 msgstr "Bifoga en fil till sidan %1"
@@ -667,6 +679,8 @@ msgstr "Bifoga en fil till sidan %1"
 msgid "Attach image or document on %1"
 msgstr "Bifoga bild eller dokument till %1"
 
+#: templates/attach.tmpl:19 templates/attachnew.tmpl:6
+#: templates/attachnew.tmpl:8
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:38
 msgid "Attach new file"
 msgstr "Bifoga en ny fil"
@@ -704,11 +718,12 @@ msgstr "Bifogade filer"
 msgid "Attachments help"
 msgstr "Bifogade filer"
 
-#: templates/attach.tmpl:13
+#: templates/attach.tmpl:9
 #, fuzzy
 msgid "Attachments of %1"
 msgstr "Andra bifogade filer på %1"
 
+#: templates/attach.tmpl:48
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:58
 msgid "Attachments will not be shown in topic view page."
 msgstr "Filen kommer inte att visas när man tittar på sidan."
@@ -738,6 +753,11 @@ msgstr "Information i denna avdening:"
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:13
 #, fuzzy
 msgid "Available form templates"
+msgstr "Möjliga formulärmallar"
+
+#: data/TWiki/WebTemplateTopics.txt:6
+#, fuzzy
+msgid "Available templates in %1 Web:"
 msgstr "Möjliga formulärmallar"
 
 #: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:11
@@ -795,7 +815,11 @@ msgid "Can't get an e-mail address for %1 (required for password reset)"
 msgstr ""
 "Hittar inte e-postadressen för %1 (nödvändig för lösenordsnollställning)"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:39
+#: templates/twiki.tmpl:81
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:47
 msgid "Cancel editing and discard changes"
 msgstr "Avbryt redigering utan att spara ändringar"
 
@@ -856,10 +880,20 @@ msgstr "Uppdatera sidor som refererar till %1 (bara i %2-avdelningen)"
 msgid "Change password"
 msgstr "Byt lösenord"
 
-#: templates/edit.tmpl:18
+#: templates/attachagain.tmpl:22
+#, fuzzy
+msgid "Change properties only"
+msgstr "Uppdatera egenskaper"
+
+#: templates/edit.tmpl:7
 msgid "Change topic"
 msgstr "Uppdatera sida"
 
+#: templates/search.tmpl:18
+msgid "Changed"
+msgstr "Ändrat"
+
+#: templates/search.tmpl:19
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:18
 msgid "Changed by"
 msgstr "Ändrat av"
@@ -912,20 +946,6 @@ msgstr "Välj en ny mall för %1"
 msgid "Clear all"
 msgstr "Nollställ alla"
 
-#: data/Main/TWikiPreferences.txt:7
-msgid ""
-"Click for quick editing of existing preferences. Edit the topic text to set "
-"new preferences."
-msgstr ""
-
-#: templates/messages.tmpl:486
-msgid "Click here"
-msgstr "Klicka här"
-
-#: templates/messages.tmpl:326
-msgid "Click on [[%1][Debug topic text]]."
-msgstr "Klicka på [[%1][felsök sidtext]]."
-
 #: lib/TWiki/Render.pm:182
 msgid ""
 "Click to move topic back to previous location, with option to change "
@@ -933,10 +953,6 @@ msgid ""
 msgstr ""
 "Klicka för att flytta tillbaka sidan till föregående plats, med möjlighet "
 "att ändra referenser."
-
-#: lib/TWiki/Form.pm:262
-msgid "Click to see details in separate window"
-msgstr "Klicka för att se detaljer i ett separat fönster"
 
 #: twikiplugins/TwistyPlugin/data/TWiki/TwistyPlugin.txt:407
 msgid "Close"
@@ -946,7 +962,8 @@ msgstr "Stäng"
 msgid "Color %1 has an invalid format"
 msgstr "Färgen %1 har ogiltigt format"
 
-#: templates/attachtables.tmpl:37 templates/attachtables.tmpl:4
+#: templates/attach.tmpl:27 templates/attachtables.tmpl:37
+#: templates/attachtables.tmpl:4
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:46
 msgid "Comment"
 msgstr "Kommentar"
@@ -1020,10 +1037,11 @@ msgstr "Skapa <nop>TestTopic###"
 msgid "Create New Topic"
 msgstr "Skapa ny sida"
 
-#: data/TWiki/WebTopicCreator.txt:7
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:40
 msgid "Create New Topic in %1 Web"
 msgstr "Skapa ny sida i avdelning %1"
 
+#: templates/attach.tmpl:40
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:56
 msgid "Create a link to the attached file"
 msgstr "Skapa en länk till den bifogade filen"
@@ -1045,8 +1063,13 @@ msgstr "Skapa med namn"
 msgid "Create personal sidebar"
 msgstr "Skapa en personlig sidomeny"
 
+#: templates/messages.tmpl:486
+#, fuzzy
+msgid "Create the topic"
+msgstr "Skapa denna sida"
+
 #: data/TWiki/TWikiPreferences.txt:321 data/TWiki/TWikiPreferences.txt:323
-#: data/TWiki/WebTopicCreator.txt:160 lib/TWiki/Render.pm:88
+#: lib/TWiki/Render.pm:88
 msgid "Create this topic"
 msgstr "Skapa denna sida"
 
@@ -1088,10 +1111,6 @@ msgstr "Kära %1"
 msgid "Debug"
 msgstr "Felsökning"
 
-#: data/TWiki/WebTopicCreator.txt:159
-msgid "Default template"
-msgstr "Förvald mall"
-
 #: templates/renamedelete.tmpl:17 templates/renamedelete.tmpl:44
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:37
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:25
@@ -1117,6 +1136,11 @@ msgstr "Radera sida..."
 msgid "Describe the file so other people know what it is."
 msgstr "Beskriv filen så att andra vet vad det är."
 
+#: lib/TWiki/Form.pm:261
+#, fuzzy
+msgid "Details in separate window"
+msgstr "Klicka för att se detaljer i ett separat fönster"
+
 #: data/TWiki/WebTopicViewTemplate.txt:13
 msgid "Did you spell the %1 correctly?"
 msgstr "Stavade du %1 rätt?"
@@ -1134,6 +1158,7 @@ msgstr "Skillnad:"
 msgid "Do not forget to save your changes"
 msgstr "glöm inte att kontrollera dina sidinställningar"
 
+#: templates/attach.tmpl:48
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:58
 msgid "Do not show attachment in table"
 msgstr "Visa inte i tabellen över bifogade filer"
@@ -1186,18 +1211,10 @@ msgstr ""
 "Vid omdöpning av avdelningen %1 till %2 upptäcktes ett fel (%3). Informera "
 "din %4-administratör."
 
-#: templates/messages.tmpl:366
+#: templates/messages.tmpl:366 templates/oopssaveerr.tmpl:17
 msgid ""
 "During save of %1 an error was found by the version control system. Please "
 "notify your %2 administrator."
-msgstr ""
-"Vid försök att spara %1 upptäcktes ett fel i versionskontrollsystemet. "
-"Informera din %2-administratör."
-
-#: templates/oopssaveerr.tmpl:17
-msgid ""
-"During save of file %1 an error was found by the version control system. "
-"Please notify your %2 administrator."
 msgstr ""
 "Vid försök att spara %1 upptäcktes ett fel i versionskontrollsystemet. "
 "Informera din %2-administratör."
@@ -1223,7 +1240,7 @@ msgstr "Redigera"
 msgid "Edit Anyway"
 msgstr "Redigera ändå"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:12
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:20
 #, fuzzy
 msgid "Edit help"
 msgstr "Redigera text"
@@ -1236,7 +1253,6 @@ msgstr "Uppdatera användarinformation"
 msgid "Edit text"
 msgstr "Redigera text"
 
-#: templates/view.tmpl:30
 #: twikiplugins/ClassicSkin/templates/view.classic.tmpl:28
 #: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:18
 msgid "Edit this topic text"
@@ -1263,11 +1279,11 @@ msgstr ""
 "Antingen specificerade du inget filnamn eller så är filen %1 som du försöker "
 "ladda upp tom. Det går inte att ladda upp tomma filer."
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:66
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:74
 msgid "Enlarge edit box"
 msgstr "Förstora redigeringsruta"
 
-#: templates/login.tmpl:18
+#: templates/login.tmpl:8
 #, fuzzy
 msgid "Enter a new username and password to change identity"
 msgstr "Ange ett nytt användarnamn och lösenord för att byta identitet:"
@@ -1294,7 +1310,7 @@ msgstr "Fel vid registrering av användaren %1"
 msgid "Error saving topic"
 msgstr "Fel vid försök att spara sidan"
 
-#: templates/login.tmpl:38
+#: templates/login.tmpl:28
 #, fuzzy
 msgid "Error: %1"
 msgstr "Fel:"
@@ -1352,7 +1368,7 @@ msgstr ""
 msgid "First Name:"
 msgstr "Förnamn:"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:22
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:30
 msgid "Force new revision"
 msgstr "Tvinga fram ny version"
 
@@ -1382,8 +1398,7 @@ msgstr ""
 #, fuzzy
 msgid ""
 "Get help on <a target='ManagingWebs' onclick=\"return launchWindow('%"
-"1','ManagingTopics')\" href=\"%2\" rel='nofollow'>Renaming and moving webs</"
-"a>."
+"1','ManagingWebs')\" href=\"%2\" rel='nofollow'>Renaming and moving webs</a>."
 msgstr ""
 "Hjälp om <a target='ManagingTopics' onclick=\"return launchWindow('%"
 "1','ManagingTopics')\" href=\"%2\" rel='nofollow'>omdöpning och flytt av "
@@ -1399,7 +1414,7 @@ msgstr ""
 "1','TWikiVariables')\" href='%2' rel='nofollow'>att göra inställningar för "
 "en sida</a>."
 
-#: templates/changeform.tmpl:13 templates/preview.tmpl:17
+#: templates/twiki.tmpl:83
 msgid "Go back"
 msgstr "Gå tillbaka"
 
@@ -1424,19 +1439,20 @@ msgstr "Grupper"
 msgid "Hello %1"
 msgstr "Hej %1"
 
+#: templates/twiki.tmpl:107
 #: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:9
 #, fuzzy
 msgid "Hello %1!"
 msgstr "Hej %1"
 
-#: templates/twiki.tmpl:103
-#, fuzzy
-msgid "Hello %1!</strong>"
-msgstr "Hej %1"
-
 #: data/TWiki/WebSearch.txt:30 data/TWiki/WebSearchAdvanced.txt:38
 msgid "Help"
 msgstr "Hjälp"
+
+#: templates/attach.tmpl:46
+#, fuzzy
+msgid "Hide file"
+msgstr "Göm fil:"
 
 #: templates/registernotify.tmpl:16
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:16
@@ -1454,7 +1470,7 @@ msgid ""
 "it."
 msgstr "Filnamnet ändrades dock från %1 till %2. _Observera detta_."
 
-#: templates/login.tmpl:54
+#: templates/login.tmpl:44
 msgid "I forgot my password"
 msgstr "Jag har glömt mitt lösenord"
 
@@ -1509,12 +1525,16 @@ msgstr ""
 msgid "If you have any questions about registration, send an e-mail to %1."
 msgstr "Eventuella frågor om registreringen skickas till %1."
 
-#: data/TWiki/VarMAKETEXT.txt:16 templates/login.tmpl:62
-#: templates/mailresetpassword.tmpl:14
-#: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:14
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:39
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:29
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:29
+#, fuzzy
+msgid "If you have any questions, please contact %1"
+msgstr "Kontakta %1 om du har frågor."
+
+#: data/TWiki/VarMAKETEXT.txt:16 templates/login.tmpl:52
+#: templates/mailresetpassword.tmpl:14
+#: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:14
 msgid "If you have any questions, please contact %1."
 msgstr "Kontakta %1 om du har frågor."
 
@@ -1558,6 +1578,7 @@ msgstr ""
 "inte registrerar en e-postadress i detta formulär, så kan ditt konto kapas "
 "av någon annan."
 
+#: templates/attach.tmpl:40
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:56
 msgid "Images will be displayed, for other attachments a link will be created."
 msgstr "Bilder visas direkt på sidan. För andra bifogade filer skapas en länk."
@@ -1633,25 +1654,14 @@ msgstr ""
 "Formulärdata kan dock inte slås samman på enkelt sätt så kolla med %1 först "
 "i detta fall."
 
-#: data/TWiki/WebTopicCreator.txt:148
-msgid ""
-"It's usually best to choose a <a target='WikiWord' onclick=\"return "
-"launchWindow('%1','WikiWord')\" href='%1' rel='nofollow'>WikiWord</a> for "
-"the new topic name, otherwise automatic linking may not work. Characters not "
-"allowed in topic names, such as spaces will automatically be removed."
-msgstr ""
-"Du bör använda ett <a target='WikiWord' onclick=\"return launchWindow('%"
-"1','WikiWord')\" href='%1' rel='nofollow'>WikiOrd</a> som sidnamn, annars "
-"fungerar inte automatisk länkning. Tecken som inte är tillåtna, t ex "
-"mellanslag tas automatiskt bort."
-
 #: templates/twiki.tmpl:9
 #, fuzzy
 msgid ""
-"It's usually best to choose a <a target='WikiWord' onclick=\"return "
-"launchWindow('%1','WikiWord')\" href='%2' rel='nofollow'>WikiWord</a> for "
-"the new topic name, otherwise automatic linking may not work. Characters not "
-"allowed in topic names, such as spaces will automatically be removed."
+"It's usually best to choose a <a target='WikiWord' onclick=\"launchWindow('%"
+"SYSTEMWEB%','WikiWord'); return false;\" href='%1' rel='nofollow'>WikiWord</"
+"a> for the new topic name, otherwise automatic linking may not work. "
+"Characters not allowed in topic names, such as spaces will automatically be "
+"removed."
 msgstr ""
 "Du bör använda ett <a target='WikiWord' onclick=\"return launchWindow('%"
 "1','WikiWord')\" href='%1' rel='nofollow'>WikiOrd</a> som sidnamn, annars "
@@ -1670,6 +1680,7 @@ msgstr ""
 
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarSearch.txt:2
 #: twikiplugins/PatternSkin/data/TWiki/WebTopBar.txt:7
+#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:56
 msgid "Jump"
 msgstr "Hoppa"
 
@@ -1699,6 +1710,11 @@ msgstr "Rad: %1"
 #: lib/TWiki/UI/RDiff.pm:299
 msgid "Line: %1 to %2"
 msgstr "Rad: %1 till %2"
+
+#: templates/attach.tmpl:38
+#, fuzzy
+msgid "Link"
+msgstr "Länk:"
 
 #: data/TWiki/WebSearch.txt:50 data/TWiki/WebSearchAdvanced.txt:93
 msgid "List all topics in the %1 web in alphabetical order"
@@ -1736,7 +1752,7 @@ msgstr ""
 msgid "Login name %1"
 msgstr "Användarnamn %1"
 
-#: templates/login.tmpl:60
+#: templates/login.tmpl:50
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:193
 msgid "Logon"
 msgstr "Logga in"
@@ -1765,6 +1781,7 @@ msgstr "Anpassa sökning"
 msgid "More formatting help"
 msgstr "Mer formateringshjälp"
 
+#: templates/rdiff.tmpl:6
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:29
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:84
 msgid "More topic actions..."
@@ -1789,6 +1806,11 @@ msgstr "Flytta bifogad fil till avdelning:"
 
 #: templates/moveattachment.tmpl:7
 msgid "Move file attachment"
+msgstr "Flytta bifogad fil"
+
+#: templates/attachagain.tmpl:22
+#, fuzzy
+msgid "Move or delete attachment"
 msgstr "Flytta bifogad fil"
 
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:21
@@ -1884,11 +1906,6 @@ msgstr ""
 "Observera att länkar som refererar direkt till den bifogade filen (t ex från "
 "externa sidor) inte kommer att fungera efter flytten."
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:38
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:36
-msgid "Note to administrator"
-msgstr "Information till administratören"
-
 #: templates/messages.tmpl:294 templates/messages.tmpl:346
 #: templates/registerconfirm.tmpl:13 templates/registernotify.tmpl:22
 #: twikiplugins/ClassicSkin/templates/registerconfirm.classic.tmpl:13
@@ -1912,15 +1929,15 @@ msgstr "Observera:"
 msgid "Notifications"
 msgstr "Meddelanden"
 
+#: templates/search.text.tmpl:15 templates/searchformat.tmpl:10
 #: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:16
 #: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:5
 msgid "Number of topics:"
 msgstr "Antal sidor:"
 
 #: templates/messages.tmpl:168 templates/messages.tmpl:175
-#: templates/messages.tmpl:33 templates/messages.tmpl:354
-#: templates/oopsaccessdenied.tmpl:7 templates/oopslanguagechanged.tmpl:7
-#: templates/oopssaveerr.tmpl:14
+#: templates/oopsaccessdenied.tmpl:7 templates/oopssaveerr.tmpl:14
+#: templates/twiki.tmpl:82
 #: twikiplugins/ClassicSkin/templates/oopsaccessdenied.classic.tmpl:6
 msgid "OK"
 msgstr "OK"
@@ -1933,23 +1950,15 @@ msgstr "Tidligere version:"
 msgid "Once registered you can login using your %1 and password."
 msgstr "När du registrerat dig kan du logga in med ditt %1 och lösenord."
 
-#: data/TWiki/WebTopicCreator.txt:29
-msgid ""
-"Once you have created the topic, consider adding links in related topics to "
-"the new topic so that there are more ways people can discover it."
-msgstr ""
-"När du skapat en sida är det lämpligt att skapa länkar från relaterade sidor "
-"till den nya sidan så att andra hittar den."
-
 #: templates/messages.tmpl:462
 msgid "Only members of the %1 are allowed to perform this action."
 msgstr "Bara medlemmar av %1 får göra detta."
 
 #: twikiplugins/ClassicSkin/templates/edit.classic.tmpl:18
 #: twikiplugins/ClassicSkin/templates/preview.classic.tmpl:10
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:19
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:22
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:45
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:27
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:30
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:53
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:14
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:19
 msgid "Opens page in new window"
@@ -1984,9 +1993,9 @@ msgid "Otherwise, use this form to get a new one e-mailed to you."
 msgstr ""
 "Annars kan du använda detta formulär för att få ett nytt lösenord per e-post."
 
-#: templates/login.tmpl:49
+#: templates/login.tmpl:39
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:188
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:15
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:25
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:27
 msgid "Password"
 msgstr "Lösenord"
@@ -2012,7 +2021,7 @@ msgstr "Lösenorden är inte samma"
 msgid "Personal Preferences"
 msgstr "Personliga inställningar"
 
-#: data/TWiki/WebTopicCreator.txt:157 templates/oopsmore.tmpl:55
+#: templates/oopsmore.tmpl:55
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:30
 msgid "Pick from a list"
 msgstr ""
@@ -2034,7 +2043,7 @@ msgstr "Kontakta %1 om du har frågor."
 msgid "Please contact %1."
 msgstr "Kontakta %1."
 
-#: templates/login.tmpl:16
+#: templates/login.tmpl:6
 #, fuzzy
 msgid "Please enter your username and password"
 msgstr "Ange användarnamn och lösenord:"
@@ -2075,6 +2084,7 @@ msgstr ""
 "Kontrollera att du stavat %1 korrekt och försökg igen. Om du skör fast så "
 "skicka e-post till %2."
 
+#: templates/attach.tmpl:6
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:24
 #, fuzzy
 msgid ""
@@ -2110,6 +2120,12 @@ msgstr "Inställningar för"
 msgid "Properties"
 msgstr "Egenskaper"
 
+#: data/Main/TWikiPreferences.txt:7
+msgid ""
+"Quick edit of existing preferences (edit the topic text to set new "
+"preferences)"
+msgstr ""
+
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:10
 #: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:10
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:11
@@ -2126,7 +2142,7 @@ msgstr ""
 "Läs %1 för en överblick om sammarbetsplattformen. För djupare insikt kan du "
 "läsa TWikiTutorial som kan nås från samma länk."
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:22
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:30
 msgid "Read new revision help text in new window"
 msgstr "Läs hjälpen om ny version i nytt fönster"
 
@@ -2143,7 +2159,7 @@ msgstr "Senast ändrade sidor"
 msgid "Refresh"
 msgstr "Uppdatera"
 
-#: templates/twiki.tmpl:103
+#: templates/twiki.tmpl:107
 #: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:9
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
 msgid "Register"
@@ -2184,7 +2200,7 @@ msgstr "Relaterade sidor:"
 msgid "Remember me"
 msgstr ""
 
-#: templates/login.tmpl:56
+#: templates/login.tmpl:46
 msgid "Remember me on this computer"
 msgstr ""
 
@@ -2321,7 +2337,7 @@ msgstr ""
 "S = Spara, Q = Spara i tysthet, K = Spara och fortsätt redigera, D = Ångra "
 "ändringar"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:45
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:53
 msgid "S = Save, Q = Quiet save, K = Checkpoint, P = Preview, C = Cancel"
 msgstr ""
 "S = Spara, Q = Spara i tysthet, K = Spara och fortsätt redigera, P = "
@@ -2339,9 +2355,10 @@ msgstr "Sparat i:"
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:8
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:6
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarSearch.txt:3
-#: twikiplugins/PatternSkin/data/TWiki/WebTopBar.txt:8
+#: twikiplugins/PatternSkin/data/TWiki/WebTopBar.txt:9
 #: twikiplugins/PatternSkin/data/Trash/WebLeftBar.txt:5
 #: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:6
+#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:57
 msgid "Search"
 msgstr "Sök"
 
@@ -2378,6 +2395,7 @@ msgstr "Sök i avdelning %1 efter sidor som länkar till denna"
 msgid "Search where:"
 msgstr "Sök var:"
 
+#: templates/search.tmpl:36 templates/searchformat.tmpl:9
 #: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:1
 msgid "Searched:"
 msgstr "Sök efter:"
@@ -2396,11 +2414,6 @@ msgstr ""
 msgid "See %1 for information about Form Definitions."
 msgstr "Se %1 för information om formulärdefinitioner."
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:38
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:36
-msgid "See %1 for more information."
-msgstr "Se %1 för mer information"
-
 #: data/TWiki/WebIndex.txt:4
 msgid "See also the faster %1"
 msgstr "Se också den snabbare %1."
@@ -2412,6 +2425,10 @@ msgstr "Se också den utförligare %1."
 #: data/TWiki/RenameWeb.txt:3 data/TWiki/WebChanges.txt:6
 msgid "See also:"
 msgstr "Se också:"
+
+#: templates/edit.tmpl:58
+msgid "See below for help in editing this page."
+msgstr ""
 
 #: templates/changeform.tmpl:13
 msgid "Select"
@@ -2430,8 +2447,8 @@ msgstr "Välj alla"
 msgid "Select topic parent:"
 msgstr "Steg 1: Välj sidans förälder"
 
-#: templates/edit.tmpl:58
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:63
+#: templates/edit.tmpl:47
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:71
 msgid "Select, copy and paste your signature text to the bottom of your entry"
 msgstr ""
 "Välj texten i fältet och kopiera din signatur till botten av ditt inlägg"
@@ -2466,7 +2483,7 @@ msgstr "Visa hjälp"
 msgid "Show tool-tip topic info on mouse-over of %1 links, on or off:"
 msgstr "Visa hjälpinformation när du för musen över %1-länkar, på eller av.)"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:66
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:74
 msgid "Shrink edit box"
 msgstr "Minska redigeringsrutan"
 
@@ -2563,7 +2580,7 @@ msgstr "Prenumerera / avprenumerera i:"
 msgid "Summaries"
 msgstr "Sammanställningar"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:66
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:74
 msgid "Switch to monotype or propotional font"
 msgstr ""
 
@@ -2575,7 +2592,7 @@ msgstr ""
 "TIPS: För att söka efter sidor, som innehåller =\"SOAP\"=, =\"WSDL\"= och "
 "strängen =\"web service\"= men inte =\"shampoo\"=, skriv följande:"
 
-#: templates/login.tmpl:13
+#: templates/login.tmpl:3
 msgid "TWiki User Authentication"
 msgstr ""
 
@@ -2790,17 +2807,6 @@ msgstr "Detta kan automatiskt uppdateras genom att:"
 msgid "This could be for several reasons:"
 msgstr "Detta kan ha flera orsaker:"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:38
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:36
-msgid ""
-"This form applies only if TWiki uses a {PasswordManager} that supports "
-"changing passwords. Otherwise replace this topic with a note describing how "
-"to change the password in your organization."
-msgstr ""
-"Detta formulär gäller endast om TWiki använder en {PasswordManager} som "
-"stöder att byta lösenord. Om detta inte är fallet så ersätt detta ämne med "
-"ett meddelande om hur man byter lösenord i din organisation."
-
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:5
 msgid ""
 "This form is used to change your registered e-mail addresses. Your "
@@ -2933,15 +2939,16 @@ msgstr "Sidan kan inte uppdateras från den gamla kategoritabellstilen"
 msgid "Topic name"
 msgstr "Sidnamn"
 
-#: data/TWiki/WebTopicCreator.txt:10
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:44
 msgid "Topic name:"
 msgstr "Sidnamn:"
 
-#: data/TWiki/WebTopicCreator.txt:15
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:51
 msgid "Topic parent:"
 msgstr "Sidans förälder:"
 
 #: templates/viewprint.tmpl:14
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:37
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:62
 #, fuzzy
 msgid "Topic revision:"
@@ -2951,6 +2958,11 @@ msgstr "Sidans förälder:"
 msgid "Topic save error"
 msgstr "Fel vid försök att spara sidan"
 
+#: data/TWiki/WebTemplateTopics.txt:2
+#, fuzzy
+msgid "Topic templates in %1 Web"
+msgstr "Sidor i avdelning %1:"
+
 #: data/TWiki/WebSearch.txt:37 data/TWiki/WebSearchAdvanced.txt:46
 msgid "Topic title"
 msgstr "Sidnamn"
@@ -2959,10 +2971,16 @@ msgstr "Sidnamn"
 msgid "Topic was merged"
 msgstr "Sidan blev sammanslagen"
 
-#: data/TWiki/WebTopicCreator.txt:98
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:25
 msgid "Topic will be named: "
 msgstr "Sidan kommer att få namnet:"
 
+#: templates/search.tmpl:17
+#, fuzzy
+msgid "Topics in %1 web"
+msgstr "Sidor i avdelning %1:"
+
+#: templates/search.text.tmpl:4
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:14
 msgid "Topics in %1 web:"
 msgstr "Sidor i avdelning %1:"
@@ -3006,7 +3024,7 @@ msgstr ""
 "Ta bort #-tecknet framför inställningsvariabler för att aktivera dem. Hjälp "
 "och detaljer om inställningsvariabler finns på %1."
 
-#: templates/login.tmpl:19
+#: templates/login.tmpl:9
 #, fuzzy
 msgid "Unrecognised user and/or password"
 msgstr "Okänt användarnamn och/eller lösenord."
@@ -3024,6 +3042,7 @@ msgstr "Uppdatera den bifogade filen %1 på sidan %2"
 msgid "Update links"
 msgstr "Uppdatera hänvisning:"
 
+#: templates/attachagain.tmpl:22 templates/attachnew.tmpl:9
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:41
 #: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:7
 msgid "Upload file"
@@ -3046,7 +3065,7 @@ msgstr "Den uppladdade filen är för stor"
 msgid "Use %1 instead."
 msgstr "Använd %1 istället."
 
-#: data/TWiki/WebTopicCreator.txt:19
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:58
 msgid "Use template:"
 msgstr "Använd mall:"
 
@@ -3058,9 +3077,9 @@ msgstr "Användarnamn %1 raderat"
 msgid "User Reference"
 msgstr "Användarhjälp"
 
-#: templates/login.tmpl:42
+#: templates/login.tmpl:32
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:182
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:8
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:18
 msgid "Username"
 msgstr "Användarnamn"
 
@@ -3106,18 +3125,14 @@ msgstr "Visa en tidigare version af sidan"
 msgid "View revision:"
 msgstr "Visa version"
 
-#: data/TWiki/WebTopicCreator.txt:159
-msgid "View templates"
-msgstr "Visa mallar"
-
-#: templates/oopsleaseconflict.tmpl:28
+#: templates/oopsleaseconflict.tmpl:28 templates/rdiff.tmpl:6
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:33
 #: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:10
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:29
 msgid "View topic"
 msgstr "Visa sida"
 
-#: templates/twiki.tmpl:99
+#: templates/twiki.tmpl:103
 #: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:159
 msgid "View total topic history"
 msgstr "Visa komplett historik för sidan"
@@ -3340,9 +3355,10 @@ msgstr ""
 "(Koden har formen \"DitNamn.xxxxxxxxxx\")"
 
 #: templates/oopslanguagechanged.tmpl:20
+#, fuzzy
 msgid ""
 "Your language will be changed to %1 from the next screen. You will be "
-"redirected to there right now. If you aren't, [[%2][click here]] to proceed."
+"redirected to there right now. If you aren't, [[%2][click to proceed]]."
 msgstr ""
 "Språket byts till %1 från nästa skärmbild. Du blir nu omdirigerad. Klicka "
 "annars [[%2][här]] för att fortsätta."
@@ -3372,8 +3388,8 @@ msgstr ""
 msgid "Your registered e-mail address(es) are updated to: %1."
 msgstr "Din(a) registrerede e-postadress(er) ändrades till: %1"
 
-#: templates/edit.tmpl:58
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:63
+#: templates/edit.tmpl:47
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:71
 msgid "Your signature to copy/paste:"
 msgstr "Din signatur (att kopiera och klistra in)"
 
@@ -3394,6 +3410,11 @@ msgid "Your user topic has not been renamed. Please e-mail %1 to request this."
 msgstr ""
 "Din personliga sida har inte tagits bort. Skicka e-post till %1 för att få "
 "det gjort."
+
+#: templates/messages.tmpl:326
+#, fuzzy
+msgid "[[%1][Debug topic text]]."
+msgstr "Klicka på [[%1][felsök sidtext]]."
 
 #: templates/settings.tmpl:28
 msgid ""
@@ -3467,8 +3488,8 @@ msgstr "glöm inte att kontrollera dina sidinställningar"
 msgid "fields are required."
 msgstr "fälten är obligatoriska"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:19
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:22
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:27
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:30
 msgid "help"
 msgstr "hjälp"
 
@@ -3512,13 +3533,13 @@ msgstr "nu %1"
 #: templates/preview.tmpl:17 templates/rename.tmpl:20
 #: templates/renameconfirm.tmpl:29 templates/renamedelete.tmpl:44
 #: templates/renameweb.tmpl:33 templates/renamewebconfirm.tmpl:16
-#: templates/twiki.tmpl:103
+#: templates/twiki.tmpl:107
 #: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:9
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:37
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:41
 #: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:7
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:28
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:36
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:10
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:25
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:16
@@ -3621,15 +3642,15 @@ msgstr "title='Visa sida' accesskey='v'>&Visa sida"
 msgid "title='View total topic history' accesskey='h'>&History"
 msgstr "title='Visa komplett historik för sidan' accesskey='h'>&Historik"
 
-#: lib/TWiki.pm:3913
+#: lib/TWiki.pm:3917
 msgid "user list truncated"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:39
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:47
 msgid "value='Cancel' accesskey='c'"
 msgstr "value='Avbryt' accesskey='c'"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:35
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:43
 msgid "value='Checkpoint' accesskey='k'"
 msgstr "value='Spara och fortsätt redigera' accesskey='k'"
 
@@ -3637,19 +3658,20 @@ msgstr "value='Spara och fortsätt redigera' accesskey='k'"
 msgid "value='Discard' accesskey='d'"
 msgstr "value='Ångra ändringar' accesskey='d'"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:37
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:45
 msgid "value='Preview' accesskey='p'"
 msgstr "value='Förhandsgranska' accesskey='p'"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:33
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:41
 msgid "value='Quiet save' accesskey='q'"
 msgstr "value='Spara i tysthet' accesskey='q'"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:31
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:39
 msgid "value='Save' accesskey='s'"
 msgstr "value='Spara' accesskey='s'"
 
 #: templates/attachtables.tmpl:42
+#: twikiplugins/ClassicSkin/templates/attachtables.classic.tmpl:42
 msgid "view"
 msgstr "visa"
 
@@ -3662,6 +3684,66 @@ msgstr ""
 "du *måste* ha minst en registrerad e-postadress för att kunna nollställa "
 "ditt lösenord. Om ingen av dina registrerade e-postadresser är giltig och du "
 "glömt ditt lösenord så kontakta %1."
+
+#~ msgid "%1 has a list of other TWiki users."
+#~ msgstr "%1 är en lista över andra TWiki-användare."
+
+#~ msgid "(no parent, orphaned topic)"
+#~ msgstr "(ingen förälder, föräldralös sida)"
+
+#~ msgid "Click here"
+#~ msgstr "Klicka här"
+
+#~ msgid "Default template"
+#~ msgstr "Förvald mall"
+
+#~ msgid ""
+#~ "During save of file %1 an error was found by the version control system. "
+#~ "Please notify your %2 administrator."
+#~ msgstr ""
+#~ "Vid försök att spara %1 upptäcktes ett fel i versionskontrollsystemet. "
+#~ "Informera din %2-administratör."
+
+#, fuzzy
+#~ msgid "Hello %1!</strong>"
+#~ msgstr "Hej %1"
+
+#, fuzzy
+#~ msgid ""
+#~ "It's usually best to choose a <a target='WikiWord' onclick=\"return "
+#~ "launchWindow('%1','WikiWord')\" href='%2' rel='nofollow'>WikiWord</a> for "
+#~ "the new topic name, otherwise automatic linking may not work. Characters "
+#~ "not allowed in topic names, such as spaces will automatically be removed."
+#~ msgstr ""
+#~ "Du bör använda ett <a target='WikiWord' onclick=\"return launchWindow('%"
+#~ "1','WikiWord')\" href='%1' rel='nofollow'>WikiOrd</a> som sidnamn, annars "
+#~ "fungerar inte automatisk länkning. Tecken som inte är tillåtna, t ex "
+#~ "mellanslag tas automatiskt bort."
+
+#~ msgid "Note to administrator"
+#~ msgstr "Information till administratören"
+
+#~ msgid ""
+#~ "Once you have created the topic, consider adding links in related topics "
+#~ "to the new topic so that there are more ways people can discover it."
+#~ msgstr ""
+#~ "När du skapat en sida är det lämpligt att skapa länkar från relaterade "
+#~ "sidor till den nya sidan så att andra hittar den."
+
+#~ msgid "See %1 for more information."
+#~ msgstr "Se %1 för mer information"
+
+#~ msgid ""
+#~ "This form applies only if TWiki uses a {PasswordManager} that supports "
+#~ "changing passwords. Otherwise replace this topic with a note describing "
+#~ "how to change the password in your organization."
+#~ msgstr ""
+#~ "Detta formulär gäller endast om TWiki använder en {PasswordManager} som "
+#~ "stöder att byta lösenord. Om detta inte är fallet så ersätt detta ämne "
+#~ "med ett meddelande om hur man byter lösenord i din organisation."
+
+#~ msgid "View templates"
+#~ msgstr "Visa mallar"
 
 #~ msgid "(more)"
 #~ msgstr "(mer)"
@@ -3691,9 +3773,6 @@ msgstr ""
 
 #~ msgid "Added"
 #~ msgstr "Tillagt"
-
-#~ msgid "Changed"
-#~ msgstr "Ändrat"
 
 #~ msgid "Deleted"
 #~ msgstr "Borttaget"
@@ -3957,9 +4036,6 @@ msgstr ""
 #~ msgid "Can't get an email address for %1"
 #~ msgstr "Hittar inte e-postadressen för %1"
 
-#~ msgid "Cancel"
-#~ msgstr "Avbryt"
-
 #~ msgid "Cancel and abandon changes"
 #~ msgstr "Avbryt och överge ändringar"
 
@@ -3980,9 +4056,6 @@ msgstr ""
 
 #~ msgid "Change links in topics that refer to %1.%2 in any Web:"
 #~ msgstr "Uppdatera sidor som refererar till %1.%2 (i alla avdelningar)"
-
-#~ msgid "Change properties"
-#~ msgstr "Uppdatera egenskaper"
 
 #~ msgid "Change references"
 #~ msgstr "Ändra hänvisningar"
@@ -4192,9 +4265,6 @@ msgstr ""
 #~ msgid "Hide attachment in normal topic view."
 #~ msgstr "Filen kommer inte att visas när man tittar på sidan."
 
-#~ msgid "Hide file:"
-#~ msgstr "Göm fil:"
-
 #~ msgid "Hiding Attachments"
 #~ msgstr "Gömma bifogade filer"
 
@@ -4248,9 +4318,6 @@ msgstr ""
 
 #~ msgid "Level 4 headline"
 #~ msgstr "Rubriknivå 4"
-
-#~ msgid "Link:"
-#~ msgstr "Länk:"
 
 #~ msgid "Linking to Attachments"
 #~ msgstr "Länka till bifogade filer"
