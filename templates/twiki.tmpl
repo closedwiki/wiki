@@ -17,8 +17,8 @@
 
 %TMPL:DEF{"script"}%%TMPL:P{"script:skinbase"}%%TMPL:P{"script:skintemplate"}%%TMPL:P{"script:topictemplate"}%%TMPL:END%
 
-%TMPL:DEF{"script:skinbase"}%<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twikilib.js"></script>
-<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twikiWindow.js"></script>
+%TMPL:DEF{"script:skinbase"}%<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiJavascripts/twikilib.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiJavascripts/twikiWindow.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 	function launchWindow(inWeb, inTopic) {
@@ -104,7 +104,7 @@
 
 %TMPL:DEF{"login"}%%TMPL:P{context="can_login" then="login_actions"}%%TMPL:END%
 
-%TMPL:DEF{"login_actions"}%%IF{"context authenticated" then='<strong>%MAKETEXT{"Hello [_1]!" args="[[%WIKIUSERNAME%][%SPACEOUT{%WIKINAME%}%]]"}%</strong> %LOGOUT%' else='%LOGIN% %MAKETEXT{"or"}% [[%TWIKIWEB%.TWikiRegistration][%MAKETEXT{"Register"}%]]'}%%TMPL:END%
+%TMPL:DEF{"login_actions"}%%IF{"context authenticated" then='<strong>%MAKETEXT{"Hello [_1]!" args="[[%WIKIUSERNAME%][%SPACEOUT{%WIKINAME%}%]]"}%</strong> %LOGOUT%' else='%LOGIN% %MAKETEXT{"or"}% [[%SYSTEMWEB%.TWikiRegistration][%MAKETEXT{"Register"}%]]'}%%TMPL:END%
 
 %{ app-style page layout }%
 %{ additional style }%
