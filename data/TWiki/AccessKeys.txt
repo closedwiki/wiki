@@ -18,8 +18,12 @@ This depends on the browser you are using (see also cross-browser support below)
       * Press the required letter
       * Release the keys and press the 'ENTER' key
 
-   * If you use Netscape Navigator, Mozilla, or Firefox
+   * If you use Netscape Navigator, Mozilla, or Firefox, v1.0
       * Press and hold the 'Alt' key
+      * Press the required letter
+
+   * If you use Firefox, v2.0 or later: 
+      * Press and hold the 'Alt' and 'Shift' key
       * Press the required letter
 
    * If you are using a Mac
