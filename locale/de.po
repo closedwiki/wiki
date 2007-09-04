@@ -207,7 +207,7 @@ msgstr "'%1' ist kein gültiges %2 "
 #, fuzzy
 #: templates/login.tmpl:21
 msgid "(%1 login)"
-msgstr ""
+msgstr "(%1 Login)"
 
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:6
 msgid "(%1 vs. %2)"
@@ -775,7 +775,7 @@ msgstr "Beides, Text und Titel"
 msgid ""
 "But existing form data will be lost (you can always retrieve this data "
 "through the topic history)"
-msgstr ""
+msgstr "Vorhandene Formular-Daten gehen jedoch verloren (Sie können diese jederzeit aus der Topic-Historie entnehmen)"
 
 #: data/Trash/WebHome.txt:7
 msgid ""
@@ -924,7 +924,7 @@ msgstr "Alles abwählen"
 msgid ""
 "Click for quick editing of existing preferences. Edit the topic text to set "
 "new preferences."
-msgstr ""
+msgstr "Klicken Sie, um vorhandene Einstellungen schnell zu editieren. Editieren Sie den Topic Text, um neue Einstellungen zu definieren."
 
 #: templates/messages.tmpl:486
 msgid "Click here"
@@ -1007,7 +1007,7 @@ msgstr "Template konnte nicht gefunden werden"
 
 #: templates/messages.tmpl:448
 msgid "Could not perform search. Error was: %1"
-msgstr ""
+msgstr "Die Suche konnte nicht durchgeführt werden. Fehler: %1"
 
 #: templates/messages.tmpl:307
 msgid "Could not save %1."
@@ -1231,10 +1231,9 @@ msgstr "Editieren"
 msgid "Edit Anyway"
 msgstr "Trotzdem bearbeiten"
 
-#, fuzzy
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:12
 msgid "Edit help"
-msgstr "Text editieren"
+msgstr "Hilfe fürs Editieren"
 
 #: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:5
 msgid "Edit personal data"
@@ -1273,11 +1272,10 @@ msgstr "Entweder haben Sie keinen Dateinamen angegeben oder die Datei, welche Si
 msgid "Enlarge edit box"
 msgstr "Editier-Box vergrößern"
 
-#, fuzzy
 #: templates/login.tmpl:18
 msgid "Enter a new username and password to change identity"
-msgstr "Geben Sie einen neuen Benutzernamen und ein Passwort ein, um die Identität "
-"zu wechseln:"
+msgstr "Geben Sie einen neuen Benutzernamen und ein Passwort ein, um Ihre Identität "
+"zu wechseln"
 
 #: twikiplugins/ClassicSkin/templates/login.classic.tmpl:21
 msgid ""
@@ -1382,15 +1380,14 @@ msgstr "Hilfe für das <a target='ManagingTopics' onclick=\"return launchWindow(
 "1','ManagingTopics')\" href=\"%2\" rel='nofollow'>Umbenennen und Verschieben "
 "von Topics</a>."
 
-#, fuzzy
 #: templates/renamewebbase.tmpl:50
 msgid ""
 "Get help on <a target='ManagingWebs' onclick=\"return launchWindow('%"
 "1','ManagingTopics')\" href=\"%2\" rel='nofollow'>Renaming and moving webs</"
 "a>."
-msgstr "Hilfe für das <a target='ManagingTopics' onclick=\"return launchWindow('%"
+msgstr "Hilfe für das <a target='ManagingWebs' onclick=\"return launchWindow('%"
 "1','ManagingTopics')\" href=\"%2\" rel='nofollow'>Umbenennen und Verschieben "
-"von Topics</a>."
+"von Webs</a>."
 
 #: templates/settings.tmpl:26
 msgid ""
@@ -1650,7 +1647,6 @@ msgstr "Es ist meist besser ein <a target='WikiWord' onclick=\"return launchWind
 "in Topic Namen nicht erlaubt sind (z.B. Leerzeichen) werden automatisch "
 "entfernt."
 
-#, fuzzy
 #: templates/twiki.tmpl:9
 msgid ""
 "It's usually best to choose a <a target='WikiWord' onclick=\"return "
@@ -1658,7 +1654,7 @@ msgid ""
 "the new topic name, otherwise automatic linking may not work. Characters not "
 "allowed in topic names, such as spaces will automatically be removed."
 msgstr "Es ist meist besser ein <a target='WikiWord' onclick=\"return launchWindow('%"
-"1','WikiWord')\" href='%1' rel='nofollow'>WikiWord</a> für das neue Topic zu "
+"1','WikiWord')\" href='%2' rel='nofollow'>WikiWord</a> für das neue Topic zu "
 "wählen, da ansonsten automatische Verweise nicht funktionieren. Zeichen die "
 "in Topic Namen nicht erlaubt sind (z.B. Leerzeichen) werden automatisch "
 "entfernt."
@@ -1735,7 +1731,7 @@ msgstr "Ausloggen"
 msgid ""
 "Log in as [[%SCRIPTURL{login}%?sudo=sudo][internal admin]] if you need to "
 "quickly fix something"
-msgstr ""
+msgstr "Loggin Sie sich als [[%SCRIPTURL{login}%?sudo=sudo][interner Admin]] ein, wenn Sie etwas schnell korrigieren wollen"
 
 #: templates/mailresetpassword.tmpl:9
 #: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:9
@@ -1824,11 +1820,11 @@ msgstr "Der Names des neuen Webs fehlt"
 
 #: templates/messages.tmpl:143
 msgid "New User Registration disabled"
-msgstr ""
+msgstr "Die Registrierung für neue Benutzer ist abgeschaltet"
 
 #: templates/messages.tmpl:134
 msgid "New User Registration not supported"
-msgstr ""
+msgstr "Die Registrierung für neue Benutzer wird nicht unterstützt"
 
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:28
 msgid "New e-mails (space-separated list)"
@@ -2028,7 +2024,7 @@ msgstr "Persönliche Einstellungen"
 #: templates/oopsmore.tmpl:55
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:30
 msgid "Pick from a list"
-msgstr ""
+msgstr "Von der Liste auswählen"
 
 #: templates/messages.tmpl:123
 msgid "Pick one of the %1."
@@ -2135,7 +2131,7 @@ msgstr "Eigenschaften"
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:11
 #: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:9
 msgid "RSS Feed"
-msgstr ""
+msgstr "RSS Feed"
 
 #: templates/registernotify.tmpl:10
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:10
@@ -2204,11 +2200,11 @@ msgstr "Verwandte Topics"
 
 #: twikiplugins/ClassicSkin/templates/login.classic.tmpl:11
 msgid "Remember me"
-msgstr ""
+msgstr "Eingeloggt bleiben"
 
 #: templates/login.tmpl:56
 msgid "Remember me on this computer"
-msgstr ""
+msgstr "Auf diesem Computer eingeloggt bleiben"
 
 #: templates/messages.tmpl:180
 msgid ""
@@ -2333,7 +2329,7 @@ msgstr "Revisionen"
 
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:19
 msgid "S = Save, C = Cancel"
-msgstr ""
+msgstr "S = Speichern, C = Abbrechen"
 
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:14
 msgid "S = Save, Q = Quiet save, K = Checkpoint, D = Discard"
@@ -2505,7 +2501,7 @@ msgid ""
 "for easier upgrades as you don't need to worry about the shipped preferences "
 "clobbering yours. It's easier to keep a handle on if you only copy over the "
 "settings you actually change."
-msgstr ""
+msgstr "Einstellungen auf Seiten-Ebene befinden sich in %1, jedoch überschreibt das %2 Topic mit seinen Einstellungen diese und sollte daher für lokale Anpassungen genutzt werden. Dies erlaubt eine einfachere Aktualisierung, da Sie sich nicht um darum kümmern müssen ob die mitgelieferten Einstellung Ihre durcheinander bringen. Es ist einfacher lediglich die Einstellungen rüber zu kopieren, welche Sie wirklich geändert haben."
 
 #: templates/attachtables.tmpl:4
 msgid "Size"
@@ -2541,7 +2537,7 @@ msgstr "Manche verwandeln es in ein persönliches Portal mit Verweisen zu ihren 
 
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:5
 msgid "Sorry, Registration has been temporarily disabled"
-msgstr ""
+msgstr "Entschuldigung, die Registrierung wurde temporär abgeschaltet"
 
 #: data/TWiki/WebSearchAdvanced.txt:53
 msgid "Sort results by:"
@@ -2583,7 +2579,7 @@ msgstr "Zusammenfassungen"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:66
 msgid "Switch to monotype or propotional font"
-msgstr ""
+msgstr "Zeichensatz in monotype oder proportional wechseln"
 
 #: data/TWiki/WebSearch.txt:31
 #: data/TWiki/WebSearchAdvanced.txt:39
@@ -2596,7 +2592,7 @@ msgstr "TIPP: Um nach Topics zu suchen die =\"SOAP\"=, =\"WSDL\"= und den Begrif
 
 #: templates/login.tmpl:13
 msgid "TWiki User Authentication"
-msgstr ""
+msgstr "TWiki Benutzer Authentifizierung"
 
 #: templates/mailresetpassword.tmpl:3
 #: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:3
@@ -2688,7 +2684,7 @@ msgstr "Das %1 Web von TWiki. TWiki ist eine webbasierte Kollaborations-Plattfor
 
 #: templates/messages.tmpl:145
 msgid "The Administrator has disabled new user registration."
-msgstr ""
+msgstr "Der Administrator hat die Registrierung für neue Benutzer abgeschaltet."
 
 #: templates/messages.tmpl:290
 msgid "The activation code %1 is invalid."
@@ -2768,7 +2764,7 @@ msgstr "Das benötigte Feld %1 wurde nicht ausgefüllt."
 
 #: templates/messages.tmpl:136
 msgid "The selected User System does not support new user registration."
-msgstr ""
+msgstr "Das ausgewählte Benutzer System unterstützt keine Registrierung von neuen Benutzern."
 
 #: data/TWiki/WebTopicViewTemplate.txt:6
 msgid "The topic %1 you are trying to access does not exist, yet."
@@ -2797,7 +2793,7 @@ msgstr "Es sollte eine Zeile geben, die %1 inkludiert, bitte nach %2 (oder %2) "
 
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:6
 msgid "This TWiki does _not_ support new User Registration"
-msgstr ""
+msgstr "Dieses TWiki unterstützt _keine_ Registrierung von neuen Benutzern"
 
 # Punkt setzen?
 #: templates/messages.tmpl:334
@@ -3330,7 +3326,7 @@ msgstr "Es wird Ihnen empfohlen ein gültige E-Mail Adresse zu registrieren. Fal
 #: templates/oopsmore.tmpl:105
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:53
 msgid "You will be able to review the topic before saving it to a new revision"
-msgstr ""
+msgstr "Bevor Sie das Topic in einer neuen Revision speichern können Sie es überprüfen "
 
 #: templates/messages.tmpl:339
 msgid "You will probably have to ask your administrator, %1, to do this."
@@ -3378,7 +3374,7 @@ msgstr "Ihr persönliches %1 Topic befindet sich auf der Seite %2. Sie können e
 
 #: templates/messages.tmpl:153
 msgid "Your personal TWiki topic %1 has been created"
-msgstr ""
+msgstr "Ihr persönliches TWiki Topic %1 wurde angelegt"
 
 #: templates/messages.tmpl:182
 msgid "Your registered e-mail address(es) are updated to: %1."
@@ -3600,7 +3596,6 @@ msgid ""
 msgstr "title='Alle Webs nach Topics durchsuchen, die hierher verweisen' "
 "accesskey='l'>A&lle Webs"
 
-#, fuzzy
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:35
 msgid ""
 "title='Search the %1 Web for topics that link to here' "
@@ -3629,7 +3624,7 @@ msgstr "title='Topic Historie ansehen' accesskey='h'>&Historie"
 
 #: lib/TWiki.pm:3913
 msgid "user list truncated"
-msgstr ""
+msgstr "Gekürzte Benutzerliste"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:39
 msgid "value='Cancel' accesskey='c'"
