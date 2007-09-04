@@ -121,6 +121,7 @@ url="%SCRIPTURL{view}%/%WEB%/%TOPIC%?raw=on"
 |  Copyright: | &copy; 2001-2007, SvenDowideit@wikiring.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+| 9 Sept 2007 | fixed it to use the yui event handling, rather than the moved addLoadEvent |
 | 12 Feb 2007 | added POPUPLINK tag |
 |  23 Oct 2006 | added delay by TWiki:Main.OliverKrueger, and added use of TWiki:Plugins.YahooUserInterfaceContrib |
 |  01 May 2006 | Initial version |
