@@ -14,19 +14,19 @@
 
 *Comment Plugin lets users quickly post comments to a page without an edit/preview/save cycle.*
 
-<div class="twikiBroadcastMessage" style="background-color:#ffc;">WARNING: TWiki-4 only. If you want to use this plugin with an earlier version of TWiki, please use [[http://twiki.org/cgi-bin/attach/Plugins/CommentPlugin?filename=CommentPlugin.zip&revInfo=1][revision 31 of the zip]].</div>
-
-Child topics: CommentPluginTemplates, CommentPluginExamples
-
 %TOC{title="On this page:"}%
+
+Related topics: CommentPluginTemplates, CommentPluginExamples
+
+<div class="twikiBroadcastMessage" style="background-color:#ffc;">WARNING: TWiki-4 only. If you want to use this plugin with an earlier version of TWiki, please use [[http://twiki.org/cgi-bin/attach/Plugins/CommentPlugin?filename=CommentPlugin.zip&revInfo=1][revision 31 of the zip]].</div>
 
 ---++ Features
 
 Inserts an edit box into the page that allows users to type in and save comments. Comments can be made
-	* in different formats (as defined by a template),
-	* in both forward and reverse chronological order,  
-	* signed or unsigned, dated or undated (as defined by a template),
-	* in other topics, or other positions within the current topic.
+   * in different formats (as defined by a template),
+   * in both forward and reverse chronological order,  
+   * signed or unsigned, dated or undated (as defined by a template),
+   * in other topics, or other positions within the current topic.
 
 ---++ Syntax
 #StandardAttrs
@@ -243,9 +243,12 @@ These can be set in !TWikiPreferences, in !WebPreferences or in individual topic
 
 ---++ Plugin Info
 
+Another great TWiki extension from the <a style="text-decoration:none" href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiringlogo20x20.png" alt="" /> *WikiRing* </a> - working together to improve your wiki experience!
+
 |  Plugin Author: | TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk inspired by the work of TWiki:Main.DavidWeller and TWiki:Main.PeterMasiar |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
+|  5 Sep 2007 | Bugs:Item3689 corrected =location= handling Bugs:Item4181 added VarCOMMENT Bugs:Item4402 corrected access check |
 |  22 Jun 2007 | Removed the long-deprecated =%TIME= (use %GMTIME instead). Minor doc changes |
 |  14021 | Bugs:Item3755 Fixed incorrect handling of line terminators when targeting an anchor |
 |  13311 | Added option to define a comment template in any topic. Pass the topic location with =templatetopic= (either =topic= or =web.topic=). See an example in [[CommentPluginExamples#TemplateTopic][CommentPluginExamples:templatetopic]]. |
@@ -277,3 +280,4 @@ These can be set in !TWikiPreferences, in !WebPreferences or in individual topic
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
+%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="" version="1"}%

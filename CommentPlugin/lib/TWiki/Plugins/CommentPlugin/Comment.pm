@@ -38,8 +38,8 @@ package TWiki::Plugins::CommentPlugin::Comment;
 sub save {
     #my ( $text, $topic, $web ) = @_;
 
-    my $wikiUserName = TWiki::Func::getWikiUserName();
-    if( ! TWiki::Func::checkAccessPermission( 'change', $wikiUserName, '',
+    my $wikiName = TWiki::Func::getWikiName();
+    if( ! TWiki::Func::checkAccessPermission( 'change', $wikiName, '',
 											  $_[1], $_[2] ) ) {
         # user has no permission to change the topic
         throw TWiki::OopsException( 'accessdenied',
