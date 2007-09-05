@@ -1,8 +1,8 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111930902" format="1.0" version="$Rev: 7490 $"}%
 
----+!! %TWIKIWEB%.SpacedWikiWordPlugin tests
+---+!! %SYSTEMWEB%.SpacedWikiWordPlugin tests
 
-Description: visual test output from %TWIKIWEB%.SpacedWikiWordPlugin.
+Description: visual test output from %SYSTEMWEB%.SpacedWikiWordPlugin.
 
 Tests in this topic expect =NOAUTOLINK= to be off.
 

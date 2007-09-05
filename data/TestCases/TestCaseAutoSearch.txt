@@ -16,12 +16,12 @@ Designed by: Crawford Currie
 <p></p>
 <div class="patternSearchResult"><div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH{"view"}%/TestCases/TestCaseAutoSearch"><b>TestCaseAutoSearch</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
-<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
+<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%USERSWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH{"rdiff"}%/TestCases/TestCaseAutoSearch" rel='nofollow'>@DATE - @TIME</a>&nbsp;</div><br class="twikiClear" /></div><!--/twikiTopRow--><div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText">Description: Automated search function tests. Results dependent on templates used to render search results. Tests only make sense when this topic is viewed with "pattern ...</div><!--/twikiSummary-->
 </div><!--/twikiBottomRow--></div><!--/patternSearchResult--><div class="patternSearchResult"><div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH{"view"}%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a></div>
 <div class="twikiRight twikiSRAuthor">
-<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
+<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%USERSWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH{"rdiff"}%/TestCases/WhatIsWikiWiki" rel='nofollow'>@DATE - @TIME</a>&nbsp;</div><br class="twikiClear" /></div>
 <!--/twikiTopRow--><div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText">This is a test fixture topic, used in TestCaseAutoSearch hit me with your rhythm stick hit me! hit me! schmerz ist gut, ich liebe dich hit me! hit me! hit me! ...</div><!--/twikiSummary--></div><!--/twikiBottomRow--></div>
@@ -78,13 +78,13 @@ Same as last test
 <p></p><div class="patternSearchResult">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH{"view"}%/TestCases/WebPreferences"><b>WebPreferences</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
-<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
+<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%USERSWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH{"rdiff"}%/TestCases/WebPreferences" rel='nofollow'>@DATE - @TIME</a></div><br class="twikiClear" /></div>
 <!--/twikiTopRow--><div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div><!--/twikiSummary--></div><!--/twikiBottomRow--></div><!--/patternSearchResult--><div class="patternSearchResult">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH{"view"}%/TWiki/WebPreferences"><b>WebPreferences</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
-<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
+<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%USERSWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH{"rdiff"}%/TWiki/WebPreferences" rel='nofollow'>@DATE - @TIME</a></div><br class="twikiClear" /></div>
 <!--/twikiTopRow--><div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div><!--/twikiSummary--></div><!--/twikiBottomRow--></div><!--/patternSearchResult-->
@@ -100,13 +100,13 @@ Same as last test
 <p></p><div class="patternSearchResult">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH{"view"}%/TWiki/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
-<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
+<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%USERSWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH{"rdiff"}%/TWiki/WhatIsWikiWiki" rel='nofollow'>@DATE - @TIME</a></div><br class="twikiClear" /></div>
 <!--/twikiTopRow--><div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div><!--/twikiSummary--></div><!--/twikiBottomRow--></div><!--/patternSearchResult--><div class="patternSearchResult">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH{"view"}%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
-<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
+<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%USERSWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH{"rdiff"}%/TestCases/WhatIsWikiWiki" rel='nofollow'>@DATE - @TIME</a> </div><br class="twikiClear" /></div>
 <!--/twikiTopRow--><div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div><!--/twikiSummary--></div><!--/twikiBottomRow--></div><!--/patternSearchResult-->
@@ -122,7 +122,7 @@ Same as last test
 <p></p><div class="patternSearchResult">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH{"view"}%/TestCases/TestCaseAutoSearch"><b>TestCaseAutoSearch</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
-<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
+<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%USERSWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> -
 <a href="%SCRIPTURLPATH{"rdiff"}%/TestCases/TestCaseAutoSearch" rel='nofollow'>@DATE - @TIME</a></div><br class="twikiClear" /></div>
 <!--/twikiTopRow--><div class="twikiBottomRow">
@@ -139,7 +139,7 @@ Same as last test
 <p></p><div class="patternSearchResult">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH{"view"}%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
-<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
+<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%USERSWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH{"rdiff"}%/TestCases/WhatIsWikiWiki" rel='nofollow'>@DATE - @TIME</a> </div><br class="twikiClear" /></div>
 <!--/twikiTopRow--><div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div><!--/twikiSummary--></div><!--/twikiBottomRow--></div><!--/patternSearchResult-->
@@ -183,32 +183,32 @@ Same as last test
 <p></p><div class="patternSearchResult">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH{"view"}%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
-<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
+<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%USERSWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH{"rdiff"}%/TestCases/WhatIsWikiWiki" rel='nofollow'>@DATE - @TIME</a></div><br class="twikiClear" /></div>
 <!--/twikiTopRow--><div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div><!--/twikiSummary--></div><!--/twikiBottomRow--></div><!--/patternSearchResult--><div class="patternSearchResult">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH{"view"}%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
-<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
+<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%USERSWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH{"rdiff"}%/TestCases/WhatIsWikiWiki" rel='nofollow'>@DATE - @TIME</a> </div><br class="twikiClear" /></div>
 <!--/twikiTopRow--><div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div><!--/twikiSummary--></div><!--/twikiBottomRow--></div><!--/patternSearchResult--><div class="patternSearchResult">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH{"view"}%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
-<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
+<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%USERSWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH{"rdiff"}%/TestCases/WhatIsWikiWiki" rel='nofollow'>@DATE - @TIME</a></div><br class="twikiClear" /></div>
 <!--/twikiTopRow--><div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div><!--/twikiSummary--></div><!--/twikiBottomRow--></div><!--/patternSearchResult--><div class="patternSearchResult">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH{"view"}%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>
 
 <div class="twikiRight twikiSRAuthor">
-<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
+<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%USERSWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH{"rdiff"}%/TestCases/WhatIsWikiWiki" rel='nofollow'>@DATE - @TIME</a> </div><br class="twikiClear" /></div>
 <!--/twikiTopRow--><div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div><!--/twikiSummary--></div><!--/twikiBottomRow--></div><!--/patternSearchResult--><div class="patternSearchResult">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH{"view"}%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
-<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
+<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%USERSWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH{"rdiff"}%/TestCases/WhatIsWikiWiki" rel='nofollow'>@DATE - @TIME</a></div><br class="twikiClear" /></div>
 <!--/twikiTopRow--><div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div><!--/twikiSummary--></div><!--/twikiBottomRow--></div><!--/patternSearchResult-->
@@ -224,13 +224,13 @@ Same as last test
 <p></p><div class="patternSearchResult">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH{"view"}%/TestCases/TestCaseAutoSearch"><b>TestCaseAutoSearch</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
-<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
+<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%USERSWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH{"rdiff"}%/TestCases/TestCaseAutoSearch" rel='nofollow'>@DATE - @TIME</a> </div><br class="twikiClear" /></div>
 <!--/twikiTopRow--><div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div><!--/twikiSummary--></div><!--/twikiBottomRow--></div><!--/patternSearchResult--><div class="patternSearchResult">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH{"view"}%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
-<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
+<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%USERSWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH{"rdiff"}%/TestCases/WhatIsWikiWiki" rel='nofollow'>@DATE - @TIME</a></div><br class="twikiClear" /></div>
 <!--/twikiTopRow--><div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div><!--/twikiSummary--></div><!--/twikiBottomRow--></div><!--/patternSearchResult-->
@@ -246,13 +246,13 @@ Same as last test
 <p></p><div class="patternSearchResult">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH{"view"}%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
-<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
+<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%USERSWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH{"rdiff"}%/TestCases/WhatIsWikiWiki" rel='nofollow'>@DATE - @TIME</a> </div><br class="twikiClear" /></div>
 <!--/twikiTopRow--><div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div><!--/twikiSummary--></div><!--/twikiBottomRow--></div><!--/patternSearchResult--><div class="patternSearchResult">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH{"view"}%/TestCases/TestCaseAutoSearch"><b>TestCaseAutoSearch</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
-<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
+<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%USERSWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH{"rdiff"}%/TestCases/TestCaseAutoSearch" rel='nofollow'>@DATE - @TIME</a></div><br class="twikiClear" /></div>
 <!--/twikiTopRow--><div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div><!--/twikiSummary--></div><!--/twikiBottomRow--></div><!--/patternSearchResult-->
@@ -268,7 +268,7 @@ Same as last test
 <p></p><div class="patternSearchResult">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH{"view"}%/TestCases/TestCaseAutoSearch"><b>TestCaseAutoSearch</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
-<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
+<a class='twikiLink' href="%SCRIPTURLPATH{"view"}%/%USERSWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH{"rdiff"}%/TestCases/TestCaseAutoSearch" rel='nofollow'>@DATE - @TIME</a> </div><br class="twikiClear" /></div>
 <!--/twikiTopRow--><div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div><!--/twikiSummary--></div><!--/twikiBottomRow--></div><!--/patternSearchResult-->

@@ -4,15 +4,15 @@
 
 These tests require TWiki:Plugins.JSUnitContrib to run.
 
-*[[%PUBURL%/%TWIKIWEB%/JSUnitContrib/testRunner.html?testpage=%SCRIPTURL{"view"}%/%BASEWEB%/%TOPIC%][Run tests]]*
+*[[%PUBURL%/%SYSTEMWEB%/JSUnitContrib/testRunner.html?testpage=%SCRIPTURL{"view"}%/%BASEWEB%/%TOPIC%][Run tests]]*
 
-<script language="javascript" src="%PUBURL%/%TWIKIWEB%/JSUnitContrib/app/jsUnitCore.js"></script>
-<script language="javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikilib.js"></script>
+<script language="javascript" src="%PUBURL%/%SYSTEMWEB%/JSUnitContrib/app/jsUnitCore.js"></script>
+<script language="javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikilib.js"></script>
 
 %TOC%
 
 ---++ twiki.Array
-<script language="javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiArray.js"></script>
+<script language="javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikiArray.js"></script>
 
 ---+++ twiki.Array.remove
 
@@ -114,7 +114,7 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
 
 
 ---++ twiki.Form
-<script language="javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiForm.js"></script>
+<script language="javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikiForm.js"></script>
 
 <form id="testForm" name="testForm">
 
@@ -205,7 +205,7 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
 
 ---++ twiki.HTML
 
-<script language="javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiHTML.js"></script>
+<script language="javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikiHTML.js"></script>
 
 
 ---+++ twiki.HTML.setHtmlOfElementWithId
@@ -539,13 +539,13 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
 
 
 ---++ twiki.Window
-<script language="javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiWindow.js"></script>
+<script language="javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikiWindow.js"></script>
 
 ---+++ twiki.Window.openPopup
 
 <button class="twikiButton testopenPopup">Test open window</button>
 
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/BehaviourContrib/behaviour.compressed.js"></script>
+<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/BehaviourContrib/behaviour.compressed.js"></script>
 
 
 <script language="javascript">
@@ -555,7 +555,7 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
     		"%SCRIPTURL{view}%/",
     		{
     			topic:"WebChanges",
-    			web:"%TWIKIWEB%",
+    			web:"%SYSTEMWEB%",
     			name:"TEST_WINDOW",
     			width:"700",
     			height:"200",
@@ -598,7 +598,7 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
 </script>
 
 ---++ twiki.Event
-<script language="javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiEvent.js"></script>
+<script language="javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikiEvent.js"></script>
 
 ---+++ twiki.Event.addLoadEvent
 
@@ -640,7 +640,7 @@ twiki.Event.addLoadEvent("createTextNode");
 </script>
 
 ---++ twiki.Function
-<script language="javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiFunction.js"></script>
+<script language="javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikiFunction.js"></script>
 
 ---+++ twiki.Function.extendClass
 <script language="javascript">
@@ -674,7 +674,7 @@ twiki.Event.addLoadEvent("createTextNode");
 
 
 ---++ twiki.Pref
-<script language="javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiPref.js"></script>
+<script language="javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikiPref.js"></script>
 
 ---+++ twiki.Pref.setCookie, twiki.Pref.getCookie
 <script language="javascript">
@@ -758,7 +758,7 @@ twiki.Event.addLoadEvent("createTextNode");
 </script>
 
 ---++ twiki.CSS
-<script language="javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiCSS.js"></script>
+<script language="javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikiCSS.js"></script>
 
 ---+++ twiki.CSS.removeClass, twiki.CSS.getClassList
 
@@ -849,7 +849,7 @@ twiki.Event.addLoadEvent("createTextNode");
 
 
 ---++ twiki.String
-<script language="javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiString.js"></script>
+<script language="javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikiString.js"></script>
 
 ---+++ twiki.String.isWikiWord
 <script language="javascript">
@@ -1048,7 +1048,7 @@ twiki.Event.addLoadEvent("createTextNode");
 
 
 ---++ twiki.String (unicode chars)
-<script language="javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiStringUnicodeChars.js"></script>
+<script language="javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikiStringUnicodeChars.js"></script>
 
 ---+++ twiki.String.makeWikiWord
 <script language="javascript">

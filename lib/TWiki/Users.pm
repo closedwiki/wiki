@@ -476,7 +476,7 @@ sub isInList {
     return 0 unless $userlist;
 
     # comma delimited list of users or groups
-    # i.e.: "%MAINWEB%.UserA, UserB, Main.UserC  # something else"
+    # i.e.: "%USERSWEB%.UserA, UserB, Main.UserC  # something else"
     $userlist =~ s/(<[^>]*>)//go;     # Remove HTML tags
 
     my $wn = getWikiName( $this, $user );

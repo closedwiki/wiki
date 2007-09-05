@@ -2532,7 +2532,7 @@ Return: the parsed Web/Topic pair
 
 Note that hierarchical web names (Web.SubWeb) are only available if hierarchical webs are enabled in =configure=.
 
-The symbols %<nop>USERSWEB%, %<nop>SYSTEMWEB%, %<nop>DOCWEB%, %<nop>MAINWEB% and %<nop>TWIKIWEB% can be used in the input to represent the web names set in $cfg{UsersWebName} and $cfg{SystemWebName}. For example:
+The symbols %<nop>USERSWEB%, %<nop>SYSTEMWEB% and %<nop>DOCWEB% can be used in the input to represent the web names set in $cfg{UsersWebName} and $cfg{SystemWebName}. For example:
 | *Input*                               | *Return* |
 | <tt>( '%<nop>USERSWEB%', 'Topic' )</tt>     | <tt>( 'Main', 'Topic' ) </tt>  |
 | <tt>( '%<nop>SYSTEMWEB%', 'Topic' )</tt>    | <tt>( 'TWiki', 'Topic' ) </tt>  |

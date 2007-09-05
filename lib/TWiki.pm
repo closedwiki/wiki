@@ -3030,7 +3030,7 @@ sub VAR {
     my $key = $params->{_DEFAULT};
     return '' unless $key;
     my $web = $params->{web} || $inweb;
-    # handle %MAINWEB%-type cases
+    # handle %USERSWEB%-type cases
     ( $web, $topic ) = $this->normalizeWebTopicName( $web, $topic );
     # always return a value, even when the key isn't defined
     return $this->{prefs}->getWebPreferencesValue( $key, $web ) || '';

@@ -26,7 +26,7 @@ twiki.Window = {
 		"%SCRIPTURL{view}%/",
 			{
     			topic:"WebChanges",
-    			web:"%TWIKIWEB%"
+    			web:"%SYSTEMWEB%"
     		}
     	);
 	</pre>

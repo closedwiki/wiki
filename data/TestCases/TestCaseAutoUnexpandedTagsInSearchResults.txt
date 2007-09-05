@@ -8,13 +8,13 @@ Description: Search results can contain tags. These tags must be correctly expan
 Designed by: Crawford Currie
 
 <!--
-TAGME %TWIKIWEB%
+TAGME %SYSTEMWEB%
 -->
 <table border=1>
 <tr><th>Expected</th><th>Actual</th></tr>
 <tr><td>
 <!-- expected expand -->
-%TWIKIWEB%
+%SYSTEMWEB%
 <!-- /expected -->
 <td>
 <!-- actual -->

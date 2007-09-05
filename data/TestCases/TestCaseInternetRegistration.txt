@@ -29,8 +29,8 @@ If you get it wrong takes you to oopsregcode
 
 ---++ Results of a successful registration
 
-	1 Topic named as %<nop>WIKINAME% written to %MAINWEB%
-	2 Entry written to [[%MAINWEB%.TWikiUsers]]
+	1 Topic named as %<nop>WIKINAME% written to %USERSWEB%
+	2 Entry written to [[%USERSWEB%.TWikiUsers]]
 	3 There *is* .htpasswd entry for the user
 	4 Email is sent to administrator
 	5 Email is sent to user
