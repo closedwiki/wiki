@@ -291,6 +291,10 @@ msgstr "登录为"
 msgid "(move attachment)"
 msgstr "(移动附件)"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:49
+msgid "(no parent, orphaned topic)"
+msgstr "(无父主题，孤立文章)"
+
 #: lib/TWiki/UI/Manage.pm:1013 lib/TWiki/UI/Manage.pm:1016
 #: lib/TWiki/UI/Manage.pm:1019 lib/TWiki/UI/Manage.pm:1053
 #: lib/TWiki/UI/Manage.pm:1076 lib/TWiki/UI/Manage.pm:632
@@ -641,6 +645,7 @@ msgid ""
 "Any changes you made to the topic before coming to this page are preserved."
 msgstr "所有您对当前主题的修改已经被保留。"
 
+#: templates/viewtopicactionbuttons.tmpl:74
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:74
 msgid "Attach"
 msgstr "附件"
@@ -740,7 +745,7 @@ msgstr "可能的表单模板"
 msgid "Back to topic"
 msgstr "回到主题"
 
-#: templates/oopsmore.tmpl:37
+#: templates/oopsmore.tmpl:37 templates/viewtopicactionbuttons.tmpl:97
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:17
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:97
 msgid "Backlinks"
@@ -1007,6 +1012,7 @@ msgstr "创建<nop>TestTopic###"
 msgid "Create New Topic"
 msgstr "创建新主题"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:20
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:40
 msgid "Create New Topic in %1 Web"
 msgstr "Neues Topic im %1 Web anlegen"
@@ -1039,7 +1045,7 @@ msgid "Create the topic"
 msgstr "创建这个主题"
 
 #: data/TWiki/TWikiPreferences.txt:321 data/TWiki/TWikiPreferences.txt:323
-#: lib/TWiki/Render.pm:88
+#: data/TWiki/WebTopicCreatorTemplate.txt:53 lib/TWiki/Render.pm:88
 msgid "Create this topic"
 msgstr "创建这个主题"
 
@@ -1078,6 +1084,10 @@ msgstr "尊敬的 %1"
 #: templates/oopsmore.tmpl:98
 msgid "Debug"
 msgstr "调试"
+
+#: data/TWiki/WebTopicCreatorTemplate.txt:51
+msgid "Default template"
+msgstr "缺省模板"
 
 #: templates/renamedelete.tmpl:17 templates/renamedelete.tmpl:44
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:37
@@ -1189,6 +1199,7 @@ msgstr "电子邮件修改成功!"
 msgid "Each preference has the syntax"
 msgstr "每个属性都符合语法"
 
+#: templates/viewtopicactionbuttons.tmpl:50
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:50
 msgid "Edit"
 msgstr "编辑"
@@ -1715,7 +1726,7 @@ msgstr "修改搜索:"
 msgid "More formatting help"
 msgstr "更多格式帮助"
 
-#: templates/rdiff.tmpl:6
+#: templates/rdiff.tmpl:6 templates/viewtopicactionbuttons.tmpl:84
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:29
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:84
 msgid "More topic actions..."
@@ -1952,7 +1963,7 @@ msgstr "密码不匹配"
 msgid "Personal Preferences"
 msgstr "个人设置"
 
-#: templates/oopsmore.tmpl:55
+#: data/TWiki/WebTopicCreatorTemplate.txt:49 templates/oopsmore.tmpl:55
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:30
 msgid "Pick from a list"
 msgstr ""
@@ -2821,10 +2832,12 @@ msgstr "主题无法从旧风格的目录表格更新"
 msgid "Topic name"
 msgstr "主题名称"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:22
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:44
 msgid "Topic name:"
 msgstr "主题名称:"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:27
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:51
 msgid "Topic parent:"
 msgstr "父主题:"
@@ -2942,6 +2955,7 @@ msgstr "上传的文件过大"
 msgid "Use %1 instead."
 msgstr "用 %1 代替"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:32
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:58
 msgid "Use template:"
 msgstr "使用模板："
@@ -3001,6 +3015,10 @@ msgstr "查看主题的前一个版本"
 msgid "View revision:"
 msgstr "查看修订"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:51
+msgid "View templates"
+msgstr "查看模板"
+
 #: templates/oopsleaseconflict.tmpl:28 templates/rdiff.tmpl:6
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:33
 #: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:10
@@ -3017,7 +3035,7 @@ msgstr "主题完整修订历史"
 msgid "WARNING:"
 msgstr "警告:"
 
-#: data/TWiki/TWikiPreferences.txt:84
+#: data/TWiki/TWikiPreferences.txt:84 templates/viewtopicactionbuttons.tmpl:52
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:52
 msgid "WYSIWYG"
 msgstr "WYSIWYG"
@@ -3419,18 +3437,22 @@ msgstr "查看在 _%1 目录_ 中的配置"
 msgid "scans links in _all public webs_"
 msgstr "搜索所有目录"
 
+#: templates/viewtopicactionbuttons.tmpl:19
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:19
 msgid "title='Attach an image or document to this topic' accesskey='a'>&Attach"
 msgstr "title='添加一个图片或者文档到这个主题' accesskey='a'>添加附件"
 
+#: templates/viewtopicactionbuttons.tmpl:4
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:4
 msgid "title='Create new topic' accesskey='c'>&Create"
 msgstr "title='创建新主题' accesskey='c'>创建"
 
+#: templates/viewtopicactionbuttons.tmpl:13
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:13
 msgid "title='Create this topic' accesskey='w'>Create (&WYSIWYG)"
 msgstr "title='Create this topic text' accesskey='w'>Create (&WYSIWYG)"
 
+#: templates/viewtopicactionbuttons.tmpl:22
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:22
 msgid ""
 "title='Delete or rename this topic; set parent topic; view and compare "
@@ -3439,24 +3461,29 @@ msgstr ""
 "title='删除或重命名此主题，设置父主题，查看和比较版本' accesskey='m'>更多主题"
 "操作"
 
+#: templates/viewtopicactionbuttons.tmpl:7
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:7
 msgid "title='Edit this topic text' accesskey='e'>&Edit"
 msgstr "title='编辑主题' accesskey='e'>&编辑"
 
+#: templates/viewtopicactionbuttons.tmpl:10
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:10
 msgid "title='Edit this topic text' accesskey='w'>&WYSIWYG"
 msgstr "title='编辑主题文本' accesskey='w'>&所见即所得编辑"
 
+#: templates/viewtopicactionbuttons.tmpl:26
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:26
 #, fuzzy
 msgid "title='Printable version of this topic' accesskey='p'>&Print version"
 msgstr "title='本主题的打印版' accesskey='p'>打印版"
 
+#: templates/viewtopicactionbuttons.tmpl:33
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:33
 msgid ""
 "title='Search all webs for topics that link to here' accesskey='l'>A&ll Webs"
 msgstr "title='在所有目录中搜索链接到这里的主题' accesskey='l'>全站搜索"
 
+#: templates/viewtopicactionbuttons.tmpl:35
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:35
 #, fuzzy
 msgid ""
@@ -3464,19 +3491,24 @@ msgid ""
 "accesskey='b'>&Backlinks"
 msgstr "title='在%1目录中搜索链接到这里的主题' accesskey='b'>搜索"
 
+#: templates/viewtopicactionbuttons.tmpl:31
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:31
 msgid ""
 "title='Search the %1 Web for topics that link to here' accesskey='b'>We&b"
 msgstr "title='在%1目录中搜索链接到这里的主题' accesskey='b'>搜索"
 
+#: templates/viewtopicactionbuttons.tmpl:43
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:43
 msgid "title='View raw text without formatting' accesskey='r'>&Raw View"
 msgstr "title='查看没有格式的源码' accesskey='r'>没有格式的源代码"
 
+#: templates/viewtopicactionbuttons.tmpl:16
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:16
 msgid "title='View topic' accesskey='v'>&View topic"
 msgstr "title='查看主题' accesskey='v'>&查看主题"
 
+#: templates/viewtopicactionbuttons.tmpl:38
+#: templates/viewtopicactionbuttons.tmpl:40
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:38
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:40
 msgid "title='View total topic history' accesskey='h'>&History"
@@ -3527,14 +3559,8 @@ msgstr ""
 #~ msgid "%1 has a list of other TWiki users."
 #~ msgstr "其他TWiki用户的列表 %1"
 
-#~ msgid "(no parent, orphaned topic)"
-#~ msgstr "(无父主题，孤立文章)"
-
 #~ msgid "Click here"
 #~ msgstr "点击这里"
-
-#~ msgid "Default template"
-#~ msgstr "缺省模板"
 
 #~ msgid ""
 #~ "During save of file %1 an error was found by the version control system. "
@@ -3577,9 +3603,6 @@ msgstr ""
 #~ msgstr ""
 #~ "这个表单只会被{PasswordManager}用做修改密码，如果更改密码在另外一个主题"
 #~ "中，提示您的组织成员如何更改密码。"
-
-#~ msgid "View templates"
-#~ msgstr "查看模板"
 
 #~ msgid "(more)"
 #~ msgstr "(更多)"

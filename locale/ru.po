@@ -299,6 +299,10 @@ msgstr "(пусто/ничего)"
 msgid "(move attachment)"
 msgstr "(переместить файл)"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:49
+msgid "(no parent, orphaned topic)"
+msgstr "(нет родителя, тема-сирота)"
+
 #: lib/TWiki/UI/Manage.pm:1013 lib/TWiki/UI/Manage.pm:1016
 #: lib/TWiki/UI/Manage.pm:1019 lib/TWiki/UI/Manage.pm:1053
 #: lib/TWiki/UI/Manage.pm:1076 lib/TWiki/UI/Manage.pm:632
@@ -684,6 +688,7 @@ msgstr ""
 "Все изменения, которые Вы внесли на страницу темы, перед тем, как попасть на "
 "эту страницу, сохранены."
 
+#: templates/viewtopicactionbuttons.tmpl:74
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:74
 msgid "Attach"
 msgstr "Прикрепить файл"
@@ -783,7 +788,7 @@ msgstr "Возможные шаблоны формы"
 msgid "Back to topic"
 msgstr "Вернуться к теме"
 
-#: templates/oopsmore.tmpl:37
+#: templates/oopsmore.tmpl:37 templates/viewtopicactionbuttons.tmpl:97
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:17
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:97
 msgid "Backlinks"
@@ -1066,6 +1071,7 @@ msgstr "Создать пробную тему"
 msgid "Create New Topic"
 msgstr "Создать новую тему"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:20
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:40
 msgid "Create New Topic in %1 Web"
 msgstr "Создать новую тему в разделе %1"
@@ -1098,7 +1104,7 @@ msgid "Create the topic"
 msgstr "Создать эту тему"
 
 #: data/TWiki/TWikiPreferences.txt:321 data/TWiki/TWikiPreferences.txt:323
-#: lib/TWiki/Render.pm:88
+#: data/TWiki/WebTopicCreatorTemplate.txt:53 lib/TWiki/Render.pm:88
 msgid "Create this topic"
 msgstr "Создать эту тему"
 
@@ -1139,6 +1145,10 @@ msgstr "Дорогой(ая) %1"
 #: templates/oopsmore.tmpl:98
 msgid "Debug"
 msgstr "Отладка"
+
+#: data/TWiki/WebTopicCreatorTemplate.txt:51
+msgid "Default template"
+msgstr "Шаблон по умолчанию"
 
 #: templates/renamedelete.tmpl:17 templates/renamedelete.tmpl:44
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:37
@@ -1260,6 +1270,7 @@ msgstr "Адрес электронной почты успешно изменё
 msgid "Each preference has the syntax"
 msgstr "Каждый параметр имеет синтаксис"
 
+#: templates/viewtopicactionbuttons.tmpl:50
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:50
 msgid "Edit"
 msgstr "Редактировать"
@@ -1830,7 +1841,7 @@ msgstr "Изменить поиск"
 msgid "More formatting help"
 msgstr "Дополнительная информация по разметке текста"
 
-#: templates/rdiff.tmpl:6
+#: templates/rdiff.tmpl:6 templates/viewtopicactionbuttons.tmpl:84
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:29
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:84
 msgid "More topic actions..."
@@ -2072,7 +2083,7 @@ msgstr "Пароли не совпадают"
 msgid "Personal Preferences"
 msgstr "Личные Параметры"
 
-#: templates/oopsmore.tmpl:55
+#: data/TWiki/WebTopicCreatorTemplate.txt:49 templates/oopsmore.tmpl:55
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:30
 msgid "Pick from a list"
 msgstr ""
@@ -3018,10 +3029,12 @@ msgstr "Тема не может быть обновлена из таблицы
 msgid "Topic name"
 msgstr "Название темы"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:22
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:44
 msgid "Topic name:"
 msgstr "Название темы:"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:27
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:51
 msgid "Topic parent:"
 msgstr "Родительская тема:"
@@ -3144,6 +3157,7 @@ msgstr "Загружаемый файл слишком большой"
 msgid "Use %1 instead."
 msgstr "Тогда воспользуйтесь [[%1][Изменить пароль]]. "
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:32
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:58
 msgid "Use template:"
 msgstr "Использовать шаблон:"
@@ -3205,6 +3219,10 @@ msgstr "Просмотреть предыдущую редакцию"
 msgid "View revision:"
 msgstr "Просмотреть редакцию"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:51
+msgid "View templates"
+msgstr "Просмотреть шаблоны"
+
 #: templates/oopsleaseconflict.tmpl:28 templates/rdiff.tmpl:6
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:33
 #: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:10
@@ -3221,7 +3239,7 @@ msgstr "Просмотреть полную историю изменений с
 msgid "WARNING:"
 msgstr "ВНИМАНИЕ:"
 
-#: data/TWiki/TWikiPreferences.txt:84
+#: data/TWiki/TWikiPreferences.txt:84 templates/viewtopicactionbuttons.tmpl:52
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:52
 msgid "WYSIWYG"
 msgstr "Визуальный редактор"
@@ -3655,22 +3673,26 @@ msgstr "отслеживая ссылки только в _разделе %1_"
 msgid "scans links in _all public webs_"
 msgstr "Искать похожие темы во всех открытых разделах"
 
+#: templates/viewtopicactionbuttons.tmpl:19
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:19
 msgid "title='Attach an image or document to this topic' accesskey='a'>&Attach"
 msgstr ""
 "title='Прикрепить изображение или документ к этой странице' "
 "accesskey='a'>Прикрепить"
 
+#: templates/viewtopicactionbuttons.tmpl:4
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:4
 msgid "title='Create new topic' accesskey='c'>&Create"
 msgstr "title='Создать новую тему' accesskey='c'>Создать"
 
+#: templates/viewtopicactionbuttons.tmpl:13
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:13
 msgid "title='Create this topic' accesskey='w'>Create (&WYSIWYG)"
 msgstr ""
 "title='Редактировать текст этой темы в визуальном редакторе' "
 "accesskey='w'>Создать (в визуальном редакторе)"
 
+#: templates/viewtopicactionbuttons.tmpl:22
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:22
 msgid ""
 "title='Delete or rename this topic; set parent topic; view and compare "
@@ -3679,21 +3701,25 @@ msgstr ""
 "title='Удалить или переименовать эту тему; установить родительскую тему; "
 "посмотреть и сравнить редакции' accesskey='m'>Другие действия над темой"
 
+#: templates/viewtopicactionbuttons.tmpl:7
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:7
 msgid "title='Edit this topic text' accesskey='e'>&Edit"
 msgstr "title='Редактировать текст этой темы' accesskey='e'>Редактировать"
 
+#: templates/viewtopicactionbuttons.tmpl:10
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:10
 msgid "title='Edit this topic text' accesskey='w'>&WYSIWYG"
 msgstr ""
 "title='Редактировать текст этой темы в визуальном редакторе' "
 "accesskey='w'>Визуально"
 
+#: templates/viewtopicactionbuttons.tmpl:26
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:26
 #, fuzzy
 msgid "title='Printable version of this topic' accesskey='p'>&Print version"
 msgstr "title='Версия для печати' accesskey='p'>Для печати"
 
+#: templates/viewtopicactionbuttons.tmpl:33
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:33
 msgid ""
 "title='Search all webs for topics that link to here' accesskey='l'>A&ll Webs"
@@ -3701,6 +3727,7 @@ msgstr ""
 "title='Найти ссылающиеся сюда темы во всех разделах' accesskey='l'>Все "
 "разделы"
 
+#: templates/viewtopicactionbuttons.tmpl:35
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:35
 #, fuzzy
 msgid ""
@@ -3709,22 +3736,27 @@ msgid ""
 msgstr ""
 "title='Искать в разделе %1 темы, которые сюда ссылаются' accesskey='b'>Раздел"
 
+#: templates/viewtopicactionbuttons.tmpl:31
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:31
 msgid ""
 "title='Search the %1 Web for topics that link to here' accesskey='b'>We&b"
 msgstr ""
 "title='Искать в разделе %1 темы, которые сюда ссылаются' accesskey='b'>Раздел"
 
+#: templates/viewtopicactionbuttons.tmpl:43
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:43
 msgid "title='View raw text without formatting' accesskey='r'>&Raw View"
 msgstr ""
 "title='Просмотреть исходный текст, без форматирования' "
 "accesskey='r'>Исходный текст"
 
+#: templates/viewtopicactionbuttons.tmpl:16
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:16
 msgid "title='View topic' accesskey='v'>&View topic"
 msgstr "title='Просмотр темы' accesskey='v'>Посмотреть тему"
 
+#: templates/viewtopicactionbuttons.tmpl:38
+#: templates/viewtopicactionbuttons.tmpl:40
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:38
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:40
 msgid "title='View total topic history' accesskey='h'>&History"
@@ -3778,14 +3810,8 @@ msgstr ""
 #~ msgid "%1 has a list of other TWiki users."
 #~ msgstr "%1 содержит список других пользователей TWiki."
 
-#~ msgid "(no parent, orphaned topic)"
-#~ msgstr "(нет родителя, тема-сирота)"
-
 #~ msgid "Click here"
 #~ msgstr "Нажмите здесь"
-
-#~ msgid "Default template"
-#~ msgstr "Шаблон по умолчанию"
 
 #~ msgid ""
 #~ "During save of file %1 an error was found by the version control system. "
@@ -3834,9 +3860,6 @@ msgstr ""
 #~ "поддерживает смену паролей. В противном случае Вам следует заменить "
 #~ "содержимое этой страницы примечанием, которое бы описывало метод смены "
 #~ "пароля, принятый в Вашей организации."
-
-#~ msgid "View templates"
-#~ msgstr "Просмотреть шаблоны"
 
 #~ msgid "(more)"
 #~ msgstr "(больше)"

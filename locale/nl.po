@@ -288,6 +288,10 @@ msgstr "Log in"
 msgid "(move attachment)"
 msgstr "(bijlage verplaatsen)"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:49
+msgid "(no parent, orphaned topic)"
+msgstr "(geen bovenliggende pagina, verweesde pagina)"
+
 #: lib/TWiki/UI/Manage.pm:1013 lib/TWiki/UI/Manage.pm:1016
 #: lib/TWiki/UI/Manage.pm:1019 lib/TWiki/UI/Manage.pm:1053
 #: lib/TWiki/UI/Manage.pm:1076 lib/TWiki/UI/Manage.pm:632
@@ -670,6 +674,7 @@ msgid ""
 msgstr ""
 "Alle wijzigingen die je hebt gedaan voor je op deze pagina kwam zijn bewaard."
 
+#: templates/viewtopicactionbuttons.tmpl:74
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:74
 msgid "Attach"
 msgstr "&Bijlage bijvoegen"
@@ -768,7 +773,7 @@ msgstr "Mogelijke formuliertemplates"
 msgid "Back to topic"
 msgstr "Terug naar pagina"
 
-#: templates/oopsmore.tmpl:37
+#: templates/oopsmore.tmpl:37 templates/viewtopicactionbuttons.tmpl:97
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:17
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:97
 msgid "Backlinks"
@@ -1046,6 +1051,7 @@ msgstr "<nop>Testpagina### aanmaken"
 msgid "Create New Topic"
 msgstr "Nieuwe pagina"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:20
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:40
 msgid "Create New Topic in %1 Web"
 msgstr "Maak nieuwe pagina aan in %1 Web"
@@ -1078,7 +1084,7 @@ msgid "Create the topic"
 msgstr "Maak deze pagina aan"
 
 #: data/TWiki/TWikiPreferences.txt:321 data/TWiki/TWikiPreferences.txt:323
-#: lib/TWiki/Render.pm:88
+#: data/TWiki/WebTopicCreatorTemplate.txt:53 lib/TWiki/Render.pm:88
 msgid "Create this topic"
 msgstr "Maak deze pagina aan"
 
@@ -1119,6 +1125,10 @@ msgstr "Beste %1"
 #: templates/oopsmore.tmpl:98
 msgid "Debug"
 msgstr "Debuggen"
+
+#: data/TWiki/WebTopicCreatorTemplate.txt:51
+msgid "Default template"
+msgstr "Standaard template"
 
 #: templates/renamedelete.tmpl:17 templates/renamedelete.tmpl:44
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:37
@@ -1240,6 +1250,7 @@ msgstr "E-mail succesvol gewijzigd!"
 msgid "Each preference has the syntax"
 msgstr "Elke voorkeurinstelling heeft de syntax"
 
+#: templates/viewtopicactionbuttons.tmpl:50
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:50
 msgid "Edit"
 msgstr "Bewerken"
@@ -1804,7 +1815,7 @@ msgstr "Pas zoekactie aan"
 msgid "More formatting help"
 msgstr "Meer opmaakhulp"
 
-#: templates/rdiff.tmpl:6
+#: templates/rdiff.tmpl:6 templates/viewtopicactionbuttons.tmpl:84
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:29
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:84
 msgid "More topic actions..."
@@ -2048,7 +2059,7 @@ msgstr "Wachtwoorden komen niet overeen"
 msgid "Personal Preferences"
 msgstr "Persoonlijke voorkeuren"
 
-#: templates/oopsmore.tmpl:55
+#: data/TWiki/WebTopicCreatorTemplate.txt:49 templates/oopsmore.tmpl:55
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:30
 msgid "Pick from a list"
 msgstr ""
@@ -2984,10 +2995,12 @@ msgstr ""
 msgid "Topic name"
 msgstr "Paginanaam"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:22
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:44
 msgid "Topic name:"
 msgstr "Paginanaam:"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:27
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:51
 msgid "Topic parent:"
 msgstr "Bovenliggende pagina:"
@@ -3113,6 +3126,7 @@ msgstr "Geupload bestand is te groot"
 msgid "Use %1 instead."
 msgstr "Ga dan naar %1."
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:32
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:58
 msgid "Use template:"
 msgstr "Gebruik template:"
@@ -3173,6 +3187,10 @@ msgstr "Bekijk vorige paginarevisie"
 msgid "View revision:"
 msgstr "Bekijk revisie"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:51
+msgid "View templates"
+msgstr "Bekijk templates"
+
 #: templates/oopsleaseconflict.tmpl:28 templates/rdiff.tmpl:6
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:33
 #: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:10
@@ -3189,7 +3207,7 @@ msgstr "Bekijk totale paginageschiedenis"
 msgid "WARNING:"
 msgstr "WAARSCHUWING:"
 
-#: data/TWiki/TWikiPreferences.txt:84
+#: data/TWiki/TWikiPreferences.txt:84 templates/viewtopicactionbuttons.tmpl:52
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:52
 msgid "WYSIWYG"
 msgstr "WYSIWYG"
@@ -3618,20 +3636,24 @@ msgstr "zoeken naar verwijzingen alleen in _%1 web_"
 msgid "scans links in _all public webs_"
 msgstr "Zoek in alle publieke webs"
 
+#: templates/viewtopicactionbuttons.tmpl:19
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:19
 msgid "title='Attach an image or document to this topic' accesskey='a'>&Attach"
 msgstr ""
 "title='Voeg een afbeelding of document toe aan deze pagina' "
 "accesskey='b'>&Bijlage"
 
+#: templates/viewtopicactionbuttons.tmpl:4
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:4
 msgid "title='Create new topic' accesskey='c'>&Create"
 msgstr "title='Creer nieuwe pagina' accesskey='c'>&Creer"
 
+#: templates/viewtopicactionbuttons.tmpl:13
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:13
 msgid "title='Create this topic' accesskey='w'>Create (&WYSIWYG)"
 msgstr "title='Creer nieuwe pagina' accesskey='c'>&Creer (WYSIWYG)"
 
+#: templates/viewtopicactionbuttons.tmpl:22
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:22
 msgid ""
 "title='Delete or rename this topic; set parent topic; view and compare "
@@ -3640,20 +3662,24 @@ msgstr ""
 "title='Verwijder of hernoem deze pagina; bovenliggende pagina instellen; "
 "bekijk en vergelijk revisies' accesskey='m'>&Meer pagina-acties"
 
+#: templates/viewtopicactionbuttons.tmpl:7
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:7
 msgid "title='Edit this topic text' accesskey='e'>&Edit"
 msgstr "title='Bewerk deze paginatekst' accesskey='b'>&Bewerken"
 
+#: templates/viewtopicactionbuttons.tmpl:10
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:10
 msgid "title='Edit this topic text' accesskey='w'>&WYSIWYG"
 msgstr ""
 "title='Bewerk deze paginatekst WYSIWYG' accesskey='b'>&Bewerken (WYSIWYG)"
 
+#: templates/viewtopicactionbuttons.tmpl:26
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:26
 #, fuzzy
 msgid "title='Printable version of this topic' accesskey='p'>&Print version"
 msgstr "title='Printbare versie van deze pagina' accesskey='p'>&Printbaar"
 
+#: templates/viewtopicactionbuttons.tmpl:33
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:33
 msgid ""
 "title='Search all webs for topics that link to here' accesskey='l'>A&ll Webs"
@@ -3661,6 +3687,7 @@ msgstr ""
 "title='Zoek in alle webs naar pagina's die hierheen linken' "
 "accesskey='l'>A&lle Webs"
 
+#: templates/viewtopicactionbuttons.tmpl:35
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:35
 #, fuzzy
 msgid ""
@@ -3669,20 +3696,25 @@ msgid ""
 msgstr ""
 "title='Zoek in %1 Web naar pagina's die hierheen linken' accesskey='w'>&Web"
 
+#: templates/viewtopicactionbuttons.tmpl:31
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:31
 msgid ""
 "title='Search the %1 Web for topics that link to here' accesskey='b'>We&b"
 msgstr ""
 "title='Zoek in %1 Web naar pagina's die hierheen linken' accesskey='w'>&Web"
 
+#: templates/viewtopicactionbuttons.tmpl:43
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:43
 msgid "title='View raw text without formatting' accesskey='r'>&Raw View"
 msgstr "title='Bekijk brontekst zonder opmaak' accesskey='r'>B&rontekst"
 
+#: templates/viewtopicactionbuttons.tmpl:16
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:16
 msgid "title='View topic' accesskey='v'>&View topic"
 msgstr "title='Bekijk pagina' accesskey='k'>Be&kijk pagina"
 
+#: templates/viewtopicactionbuttons.tmpl:38
+#: templates/viewtopicactionbuttons.tmpl:40
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:38
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:40
 msgid "title='View total topic history' accesskey='h'>&History"
@@ -3735,14 +3767,8 @@ msgstr ""
 #~ msgid "%1 has a list of other TWiki users."
 #~ msgstr "%1 heeft een lijst van andere TWikigebruikers."
 
-#~ msgid "(no parent, orphaned topic)"
-#~ msgstr "(geen bovenliggende pagina, verweesde pagina)"
-
 #~ msgid "Click here"
 #~ msgstr "Klik hier"
-
-#~ msgid "Default template"
-#~ msgstr "Standaard template"
 
 #~ msgid ""
 #~ "During save of file %1 an error was found by the version control system. "
@@ -3791,9 +3817,6 @@ msgstr ""
 #~ "gebruikt dat het veranderen van wachtwoorden ondersteunt. Vervang anders "
 #~ "deze pagina met een notitie waarin wordt beschreven hoe in je organisatie "
 #~ "een wachtwoord kan worden gewijzigd."
-
-#~ msgid "View templates"
-#~ msgstr "Bekijk templates"
 
 #~ msgid "(more)"
 #~ msgstr "(meer)"

@@ -290,6 +290,10 @@ msgstr "Logga in"
 msgid "(move attachment)"
 msgstr "(flytta bifogad fil)"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:49
+msgid "(no parent, orphaned topic)"
+msgstr "(ingen förälder, föräldralös sida)"
+
 #: lib/TWiki/UI/Manage.pm:1013 lib/TWiki/UI/Manage.pm:1016
 #: lib/TWiki/UI/Manage.pm:1019 lib/TWiki/UI/Manage.pm:1053
 #: lib/TWiki/UI/Manage.pm:1076 lib/TWiki/UI/Manage.pm:632
@@ -666,6 +670,7 @@ msgid ""
 "Any changes you made to the topic before coming to this page are preserved."
 msgstr "Alla ändringar du gjort innan du kom till denna sidan bevaras."
 
+#: templates/viewtopicactionbuttons.tmpl:74
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:74
 msgid "Attach"
 msgstr "Bifoga fil"
@@ -764,7 +769,7 @@ msgstr "Möjliga formulärmallar"
 msgid "Back to topic"
 msgstr "Tillbaka till sidan"
 
-#: templates/oopsmore.tmpl:37
+#: templates/oopsmore.tmpl:37 templates/viewtopicactionbuttons.tmpl:97
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:17
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:97
 msgid "Backlinks"
@@ -1037,6 +1042,7 @@ msgstr "Skapa <nop>TestTopic###"
 msgid "Create New Topic"
 msgstr "Skapa ny sida"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:20
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:40
 msgid "Create New Topic in %1 Web"
 msgstr "Skapa ny sida i avdelning %1"
@@ -1069,7 +1075,7 @@ msgid "Create the topic"
 msgstr "Skapa denna sida"
 
 #: data/TWiki/TWikiPreferences.txt:321 data/TWiki/TWikiPreferences.txt:323
-#: lib/TWiki/Render.pm:88
+#: data/TWiki/WebTopicCreatorTemplate.txt:53 lib/TWiki/Render.pm:88
 msgid "Create this topic"
 msgstr "Skapa denna sida"
 
@@ -1110,6 +1116,10 @@ msgstr "Kära %1"
 #: templates/oopsmore.tmpl:98
 msgid "Debug"
 msgstr "Felsökning"
+
+#: data/TWiki/WebTopicCreatorTemplate.txt:51
+msgid "Default template"
+msgstr "Förvald mall"
 
 #: templates/renamedelete.tmpl:17 templates/renamedelete.tmpl:44
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:37
@@ -1231,6 +1241,7 @@ msgstr "E-postadress ändrad!"
 msgid "Each preference has the syntax"
 msgstr "Alla inställningar har syntaxen"
 
+#: templates/viewtopicactionbuttons.tmpl:50
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:50
 msgid "Edit"
 msgstr "Redigera"
@@ -1781,7 +1792,7 @@ msgstr "Anpassa sökning"
 msgid "More formatting help"
 msgstr "Mer formateringshjälp"
 
-#: templates/rdiff.tmpl:6
+#: templates/rdiff.tmpl:6 templates/viewtopicactionbuttons.tmpl:84
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:29
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:84
 msgid "More topic actions..."
@@ -2021,7 +2032,7 @@ msgstr "Lösenorden är inte samma"
 msgid "Personal Preferences"
 msgstr "Personliga inställningar"
 
-#: templates/oopsmore.tmpl:55
+#: data/TWiki/WebTopicCreatorTemplate.txt:49 templates/oopsmore.tmpl:55
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:30
 msgid "Pick from a list"
 msgstr ""
@@ -2939,10 +2950,12 @@ msgstr "Sidan kan inte uppdateras från den gamla kategoritabellstilen"
 msgid "Topic name"
 msgstr "Sidnamn"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:22
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:44
 msgid "Topic name:"
 msgstr "Sidnamn:"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:27
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:51
 msgid "Topic parent:"
 msgstr "Sidans förälder:"
@@ -3065,6 +3078,7 @@ msgstr "Den uppladdade filen är för stor"
 msgid "Use %1 instead."
 msgstr "Använd %1 istället."
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:32
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:58
 msgid "Use template:"
 msgstr "Använd mall:"
@@ -3125,6 +3139,10 @@ msgstr "Visa en tidigare version af sidan"
 msgid "View revision:"
 msgstr "Visa version"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:51
+msgid "View templates"
+msgstr "Visa mallar"
+
 #: templates/oopsleaseconflict.tmpl:28 templates/rdiff.tmpl:6
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:33
 #: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:10
@@ -3141,7 +3159,7 @@ msgstr "Visa komplett historik för sidan"
 msgid "WARNING:"
 msgstr "VARNING:"
 
-#: data/TWiki/TWikiPreferences.txt:84
+#: data/TWiki/TWikiPreferences.txt:84 templates/viewtopicactionbuttons.tmpl:52
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:52
 msgid "WYSIWYG"
 msgstr "WYSIWYG"
@@ -3569,20 +3587,24 @@ msgstr "letar efter referenser (bara i _avdelning <nop/>%1_)"
 msgid "scans links in _all public webs_"
 msgstr "Sök i alla avdelningar"
 
+#: templates/viewtopicactionbuttons.tmpl:19
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:19
 msgid "title='Attach an image or document to this topic' accesskey='a'>&Attach"
 msgstr ""
 "title='Bifoga en bild eller ett dokument till denna sida "
 "accesskey='a'>Bifog&a"
 
+#: templates/viewtopicactionbuttons.tmpl:4
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:4
 msgid "title='Create new topic' accesskey='c'>&Create"
 msgstr "title='Skapa ny sida' accesskey='c'>Skapa (&c)"
 
+#: templates/viewtopicactionbuttons.tmpl:13
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:13
 msgid "title='Create this topic' accesskey='w'>Create (&WYSIWYG)"
 msgstr "title='Skapa denna sida' accesskey='w'>Skapa (&WYSIWYG)"
 
+#: templates/viewtopicactionbuttons.tmpl:22
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:22
 msgid ""
 "title='Delete or rename this topic; set parent topic; view and compare "
@@ -3591,14 +3613,17 @@ msgstr ""
 "title='Radera eller döp om denna sida; sätt föräldrasida; se och jämför "
 "versioner' accesskey='m'>Fler val för denna sida (&M)"
 
+#: templates/viewtopicactionbuttons.tmpl:7
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:7
 msgid "title='Edit this topic text' accesskey='e'>&Edit"
 msgstr "title='Redigera denna sida' accesskey='e'>Redig&era"
 
+#: templates/viewtopicactionbuttons.tmpl:10
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:10
 msgid "title='Edit this topic text' accesskey='w'>&WYSIWYG"
 msgstr "title='Redigera denna sida' accesskey='w'>&WYSIWYG"
 
+#: templates/viewtopicactionbuttons.tmpl:26
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:26
 #, fuzzy
 msgid "title='Printable version of this topic' accesskey='p'>&Print version"
@@ -3606,6 +3631,7 @@ msgstr ""
 "title='Utskriftsvänlig version av denna sida' accesskey='p'>Utskriftsvänlig "
 "(&P)"
 
+#: templates/viewtopicactionbuttons.tmpl:33
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:33
 msgid ""
 "title='Search all webs for topics that link to here' accesskey='l'>A&ll Webs"
@@ -3613,6 +3639,7 @@ msgstr ""
 "title='Sök i alla avdelningar efter sidor som länkar till denna' "
 "accesskey='l'>A&lla Avdelningar"
 
+#: templates/viewtopicactionbuttons.tmpl:35
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:35
 #, fuzzy
 msgid ""
@@ -3622,6 +3649,7 @@ msgstr ""
 "title='Sök i avdelning %1 efter sidor som länkar hit' "
 "accesskey='b'>Avdelning (&B)"
 
+#: templates/viewtopicactionbuttons.tmpl:31
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:31
 msgid ""
 "title='Search the %1 Web for topics that link to here' accesskey='b'>We&b"
@@ -3629,14 +3657,18 @@ msgstr ""
 "title='Sök i avdelning %1 efter sidor som länkar hit' "
 "accesskey='b'>Avdelning (&B)"
 
+#: templates/viewtopicactionbuttons.tmpl:43
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:43
 msgid "title='View raw text without formatting' accesskey='r'>&Raw View"
 msgstr "title='Visa källtext utan formatering' accesskey='r'>Källtext (&R)"
 
+#: templates/viewtopicactionbuttons.tmpl:16
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:16
 msgid "title='View topic' accesskey='v'>&View topic"
 msgstr "title='Visa sida' accesskey='v'>&Visa sida"
 
+#: templates/viewtopicactionbuttons.tmpl:38
+#: templates/viewtopicactionbuttons.tmpl:40
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:38
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:40
 msgid "title='View total topic history' accesskey='h'>&History"
@@ -3688,14 +3720,8 @@ msgstr ""
 #~ msgid "%1 has a list of other TWiki users."
 #~ msgstr "%1 är en lista över andra TWiki-användare."
 
-#~ msgid "(no parent, orphaned topic)"
-#~ msgstr "(ingen förälder, föräldralös sida)"
-
 #~ msgid "Click here"
 #~ msgstr "Klicka här"
-
-#~ msgid "Default template"
-#~ msgstr "Förvald mall"
 
 #~ msgid ""
 #~ "During save of file %1 an error was found by the version control system. "
@@ -3741,9 +3767,6 @@ msgstr ""
 #~ "Detta formulär gäller endast om TWiki använder en {PasswordManager} som "
 #~ "stöder att byta lösenord. Om detta inte är fallet så ersätt detta ämne "
 #~ "med ett meddelande om hur man byter lösenord i din organisation."
-
-#~ msgid "View templates"
-#~ msgstr "Visa mallar"
 
 #~ msgid "(more)"
 #~ msgstr "(mer)"

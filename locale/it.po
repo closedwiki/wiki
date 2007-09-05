@@ -292,6 +292,10 @@ msgstr "Login"
 msgid "(move attachment)"
 msgstr "(sposta allegato)"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:49
+msgid "(no parent, orphaned topic)"
+msgstr "(nessun genitore, pagina orfana)"
+
 #: lib/TWiki/UI/Manage.pm:1013 lib/TWiki/UI/Manage.pm:1016
 #: lib/TWiki/UI/Manage.pm:1019 lib/TWiki/UI/Manage.pm:1053
 #: lib/TWiki/UI/Manage.pm:1076 lib/TWiki/UI/Manage.pm:632
@@ -675,6 +679,7 @@ msgstr ""
 "Ogni cambiamento fatto alla pagina prima di arrivare a questa pagina è stato "
 "preservato."
 
+#: templates/viewtopicactionbuttons.tmpl:74
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:74
 msgid "Attach"
 msgstr "Allegato"
@@ -773,7 +778,7 @@ msgstr "Possibile dai template"
 msgid "Back to topic"
 msgstr "Indietro alla pagina"
 
-#: templates/oopsmore.tmpl:37
+#: templates/oopsmore.tmpl:37 templates/viewtopicactionbuttons.tmpl:97
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:17
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:97
 msgid "Backlinks"
@@ -1053,6 +1058,7 @@ msgstr "Crea  il testo della pagina###"
 msgid "Create New Topic"
 msgstr "Crea nuova pagina"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:20
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:40
 msgid "Create New Topic in %1 Web"
 msgstr "Crea una nuova pagina nel Web %1"
@@ -1085,7 +1091,7 @@ msgid "Create the topic"
 msgstr "Crea questa pagina"
 
 #: data/TWiki/TWikiPreferences.txt:321 data/TWiki/TWikiPreferences.txt:323
-#: lib/TWiki/Render.pm:88
+#: data/TWiki/WebTopicCreatorTemplate.txt:53 lib/TWiki/Render.pm:88
 msgid "Create this topic"
 msgstr "Crea questa pagina"
 
@@ -1126,6 +1132,10 @@ msgstr "Caro %1"
 #: templates/oopsmore.tmpl:98
 msgid "Debug"
 msgstr "Debug"
+
+#: data/TWiki/WebTopicCreatorTemplate.txt:51
+msgid "Default template"
+msgstr "Template di default"
 
 #: templates/renamedelete.tmpl:17 templates/renamedelete.tmpl:44
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:37
@@ -1247,6 +1257,7 @@ msgstr "E-mail cambiata con successo!"
 msgid "Each preference has the syntax"
 msgstr "Ogni preferenza ha la sintassi"
 
+#: templates/viewtopicactionbuttons.tmpl:50
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:50
 msgid "Edit"
 msgstr "Edit"
@@ -1799,7 +1810,7 @@ msgstr "Ricerca modifica"
 msgid "More formatting help"
 msgstr "Ulteriore aiuto sulla formattazione"
 
-#: templates/rdiff.tmpl:6
+#: templates/rdiff.tmpl:6 templates/viewtopicactionbuttons.tmpl:84
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:29
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:84
 msgid "More topic actions..."
@@ -2038,7 +2049,7 @@ msgstr "Le password non corrispondono"
 msgid "Personal Preferences"
 msgstr "Preferenze personali"
 
-#: templates/oopsmore.tmpl:55
+#: data/TWiki/WebTopicCreatorTemplate.txt:49 templates/oopsmore.tmpl:55
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:30
 msgid "Pick from a list"
 msgstr ""
@@ -2965,10 +2976,12 @@ msgstr ""
 msgid "Topic name"
 msgstr "Nome pagina"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:22
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:44
 msgid "Topic name:"
 msgstr ":Nome pagina"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:27
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:51
 msgid "Topic parent:"
 msgstr "Pagina genitore:"
@@ -3092,6 +3105,7 @@ msgstr "Il file da caricare è troppo grande"
 msgid "Use %1 instead."
 msgstr "Piuttosto usa %1."
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:32
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:58
 msgid "Use template:"
 msgstr "Usa il template:"
@@ -3153,6 +3167,10 @@ msgstr "Mostra la revisione precedente della pagina"
 msgid "View revision:"
 msgstr "Mostra la revisione"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:51
+msgid "View templates"
+msgstr "Vedi i templates"
+
 #: templates/oopsleaseconflict.tmpl:28 templates/rdiff.tmpl:6
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:33
 #: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:10
@@ -3169,7 +3187,7 @@ msgstr "Mostra tutta la storia della pagina"
 msgid "WARNING:"
 msgstr "ATTENZIONE:"
 
-#: data/TWiki/TWikiPreferences.txt:84
+#: data/TWiki/TWikiPreferences.txt:84 templates/viewtopicactionbuttons.tmpl:52
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:52
 msgid "WYSIWYG"
 msgstr "WYSIWYG"
@@ -3597,20 +3615,24 @@ msgstr "cerca riferimenti solo nel _web %1 _"
 msgid "scans links in _all public webs_"
 msgstr "Cerca in tutti i webs"
 
+#: templates/viewtopicactionbuttons.tmpl:19
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:19
 msgid "title='Attach an image or document to this topic' accesskey='a'>&Attach"
 msgstr ""
 "title='Allega a questa pagina una immagine o un documento' "
 "accesskey='a'>&Allega"
 
+#: templates/viewtopicactionbuttons.tmpl:4
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:4
 msgid "title='Create new topic' accesskey='c'>&Create"
 msgstr "title='Crea pagina' accesskey='c'>&Crea"
 
+#: templates/viewtopicactionbuttons.tmpl:13
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:13
 msgid "title='Create this topic' accesskey='w'>Create (&WYSIWYG)"
 msgstr "title='Crea pagina' accesskey='w'>Crea (&WYSIWYG)"
 
+#: templates/viewtopicactionbuttons.tmpl:22
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:22
 msgid ""
 "title='Delete or rename this topic; set parent topic; view and compare "
@@ -3619,19 +3641,23 @@ msgstr ""
 "title='Cancella o rinomina la pagina; definisci la pagina genitore; vedi e "
 "confronta le revisioni accesskey='m'>&Manutenzioni"
 
+#: templates/viewtopicactionbuttons.tmpl:7
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:7
 msgid "title='Edit this topic text' accesskey='e'>&Edit"
 msgstr "title='Edit this topic text' accesskey='e'>&Edit"
 
+#: templates/viewtopicactionbuttons.tmpl:10
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:10
 msgid "title='Edit this topic text' accesskey='w'>&WYSIWYG"
 msgstr "title='Edit this topic text' accesskey='w'>&WYSIWYG"
 
+#: templates/viewtopicactionbuttons.tmpl:26
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:26
 #, fuzzy
 msgid "title='Printable version of this topic' accesskey='p'>&Print version"
 msgstr "title='Versione stampabile della pagina' accesskey='p'>Stam&pabile"
 
+#: templates/viewtopicactionbuttons.tmpl:33
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:33
 msgid ""
 "title='Search all webs for topics that link to here' accesskey='l'>A&ll Webs"
@@ -3639,6 +3665,7 @@ msgstr ""
 "title='Cerca le pagine collegate in tutti i web' accesskey='t'>&lTutti i  "
 "Webs"
 
+#: templates/viewtopicactionbuttons.tmpl:35
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:35
 #, fuzzy
 msgid ""
@@ -3646,19 +3673,24 @@ msgid ""
 "accesskey='b'>&Backlinks"
 msgstr "title='Cerca nel web %1 la pagina collegata qui' accesskey='b'>We&b"
 
+#: templates/viewtopicactionbuttons.tmpl:31
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:31
 msgid ""
 "title='Search the %1 Web for topics that link to here' accesskey='b'>We&b"
 msgstr "title='Cerca nel web %1 la pagina collegata qui' accesskey='b'>We&b"
 
+#: templates/viewtopicactionbuttons.tmpl:43
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:43
 msgid "title='View raw text without formatting' accesskey='r'>&Raw View"
 msgstr "title='Wedi raw text senza formattazione' accesskey='r'>Vista &Raw"
 
+#: templates/viewtopicactionbuttons.tmpl:16
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:16
 msgid "title='View topic' accesskey='v'>&View topic"
 msgstr "title='View topic' accesskey='v'>&Vedi pagina"
 
+#: templates/viewtopicactionbuttons.tmpl:38
+#: templates/viewtopicactionbuttons.tmpl:40
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:38
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:40
 msgid "title='View total topic history' accesskey='h'>&History"
@@ -3710,14 +3742,8 @@ msgstr ""
 #~ msgid "%1 has a list of other TWiki users."
 #~ msgstr "%1 contiene una lista di altri utenti TWiki"
 
-#~ msgid "(no parent, orphaned topic)"
-#~ msgstr "(nessun genitore, pagina orfana)"
-
 #~ msgid "Click here"
 #~ msgstr "Clicca qui"
-
-#~ msgid "Default template"
-#~ msgstr "Template di default"
 
 #~ msgid ""
 #~ "During save of file %1 an error was found by the version control system. "
@@ -3764,9 +3790,6 @@ msgstr ""
 #~ "Questo form funziona solo TWiki usa un {PasswordManager} che supporta il "
 #~ "cambiamento delle password. Se così non è sostituiscilo con una nota che "
 #~ "spieghi come ottenere il cambio password."
-
-#~ msgid "View templates"
-#~ msgstr "Vedi i templates"
 
 #~ msgid "(more)"
 #~ msgstr "(in più...)"

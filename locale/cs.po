@@ -287,6 +287,10 @@ msgstr "(nic)"
 msgid "(move attachment)"
 msgstr "(přesun přílohy)"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:49
+msgid "(no parent, orphaned topic)"
+msgstr "(bez rodiče, osiřelý článek)"
+
 #: lib/TWiki/UI/Manage.pm:1013 lib/TWiki/UI/Manage.pm:1016
 #: lib/TWiki/UI/Manage.pm:1019 lib/TWiki/UI/Manage.pm:1053
 #: lib/TWiki/UI/Manage.pm:1076 lib/TWiki/UI/Manage.pm:632
@@ -661,6 +665,7 @@ msgstr ""
 "Všechny změny provedené do článku před příchodem na tuto stránku budou "
 "zachovány."
 
+#: templates/viewtopicactionbuttons.tmpl:74
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:74
 msgid "Attach"
 msgstr "Příloha"
@@ -760,7 +765,7 @@ msgstr "Možné vzory pro formulář"
 msgid "Back to topic"
 msgstr "Zpět na článek"
 
-#: templates/oopsmore.tmpl:37
+#: templates/oopsmore.tmpl:37 templates/viewtopicactionbuttons.tmpl:97
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:17
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:97
 msgid "Backlinks"
@@ -1037,6 +1042,7 @@ msgstr "Vytvořit <nop>TestTopic###"
 msgid "Create New Topic"
 msgstr "Nový članek"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:20
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:40
 msgid "Create New Topic in %1 Web"
 msgstr "Nový článek v %1"
@@ -1069,7 +1075,7 @@ msgid "Create the topic"
 msgstr "Vytvořit tento článek"
 
 #: data/TWiki/TWikiPreferences.txt:321 data/TWiki/TWikiPreferences.txt:323
-#: lib/TWiki/Render.pm:88
+#: data/TWiki/WebTopicCreatorTemplate.txt:53 lib/TWiki/Render.pm:88
 msgid "Create this topic"
 msgstr "Vytvořit tento článek"
 
@@ -1110,6 +1116,11 @@ msgstr "Vážený %1"
 #: templates/oopsmore.tmpl:98
 msgid "Debug"
 msgstr "Ladění"
+
+#: data/TWiki/WebTopicCreatorTemplate.txt:51
+#, fuzzy
+msgid "Default template"
+msgstr "Nemohu nalézt šablonu"
 
 #: templates/renamedelete.tmpl:17 templates/renamedelete.tmpl:44
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:37
@@ -1232,6 +1243,7 @@ msgstr "Email byl úspěšně změněn!"
 msgid "Each preference has the syntax"
 msgstr "Každá preference má syntaxi"
 
+#: templates/viewtopicactionbuttons.tmpl:50
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:50
 msgid "Edit"
 msgstr "Změň"
@@ -1777,7 +1789,7 @@ msgstr "Změň hledání"
 msgid "More formatting help"
 msgstr "Více nápovědy k formátování"
 
-#: templates/rdiff.tmpl:6
+#: templates/rdiff.tmpl:6 templates/viewtopicactionbuttons.tmpl:84
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:29
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:84
 msgid "More topic actions..."
@@ -2019,7 +2031,7 @@ msgstr "Hesla si neodpovídají"
 msgid "Personal Preferences"
 msgstr "Osobní preference"
 
-#: templates/oopsmore.tmpl:55
+#: data/TWiki/WebTopicCreatorTemplate.txt:49 templates/oopsmore.tmpl:55
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:30
 msgid "Pick from a list"
 msgstr ""
@@ -2936,10 +2948,12 @@ msgstr "Článek nemůže být upgradován ze starého stylu tabulky kategorií"
 msgid "Topic name"
 msgstr "Jméno článku"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:22
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:44
 msgid "Topic name:"
 msgstr "Jméno článku:"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:27
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:51
 msgid "Topic parent:"
 msgstr "Nadřízený článek"
@@ -3062,6 +3076,7 @@ msgstr "Příloha je příliš veliká"
 msgid "Use %1 instead."
 msgstr "Použijte spíše %1."
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:32
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:58
 #, fuzzy
 msgid "Use template:"
@@ -3125,6 +3140,11 @@ msgstr "Prohlédni předchozí revize článku"
 msgid "View revision:"
 msgstr "Ukaž revize"
 
+#: data/TWiki/WebTopicCreatorTemplate.txt:51
+#, fuzzy
+msgid "View templates"
+msgstr "Možné vzory pro formulář"
+
 #: templates/oopsleaseconflict.tmpl:28 templates/rdiff.tmpl:6
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:33
 #: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:10
@@ -3141,7 +3161,7 @@ msgstr "Ukaž celou historii článku"
 msgid "WARNING:"
 msgstr "VAROVÁNÍ"
 
-#: data/TWiki/TWikiPreferences.txt:84
+#: data/TWiki/TWikiPreferences.txt:84 templates/viewtopicactionbuttons.tmpl:52
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:52
 msgid "WYSIWYG"
 msgstr "WYSIWIG"
@@ -3568,20 +3588,24 @@ msgstr "hledám odkazy pouze v _%1 webu_"
 msgid "scans links in _all public webs_"
 msgstr "Hledej podobné články ve všech veřejných webech"
 
+#: templates/viewtopicactionbuttons.tmpl:19
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:19
 #, fuzzy
 msgid "title='Attach an image or document to this topic' accesskey='a'>&Attach"
 msgstr "Připoj obrázek nebo soubor k tomuto ćlánku"
 
+#: templates/viewtopicactionbuttons.tmpl:4
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:4
 #, fuzzy
 msgid "title='Create new topic' accesskey='c'>&Create"
 msgstr "value='Přerušit' accesskey='c'"
 
+#: templates/viewtopicactionbuttons.tmpl:13
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:13
 msgid "title='Create this topic' accesskey='w'>Create (&WYSIWYG)"
 msgstr ""
 
+#: templates/viewtopicactionbuttons.tmpl:22
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:22
 #, fuzzy
 msgid ""
@@ -3591,25 +3615,30 @@ msgstr ""
 "Smazat nebo přejmenovat tento článek; nastavit nadřízený článek; ukaž a "
 "porovnej revize"
 
+#: templates/viewtopicactionbuttons.tmpl:7
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:7
 msgid "title='Edit this topic text' accesskey='e'>&Edit"
 msgstr ""
 
+#: templates/viewtopicactionbuttons.tmpl:10
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:10
 msgid "title='Edit this topic text' accesskey='w'>&WYSIWYG"
 msgstr ""
 
+#: templates/viewtopicactionbuttons.tmpl:26
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:26
 #, fuzzy
 msgid "title='Printable version of this topic' accesskey='p'>&Print version"
 msgstr "Verze pro vytištění tohoto článku"
 
+#: templates/viewtopicactionbuttons.tmpl:33
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:33
 #, fuzzy
 msgid ""
 "title='Search all webs for topics that link to here' accesskey='l'>A&ll Webs"
 msgstr "Prohledej všechny weby pro články, které odkazují sem"
 
+#: templates/viewtopicactionbuttons.tmpl:35
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:35
 #, fuzzy
 msgid ""
@@ -3617,21 +3646,26 @@ msgid ""
 "accesskey='b'>&Backlinks"
 msgstr "Hledej články ve webu %1 které sem odkazují"
 
+#: templates/viewtopicactionbuttons.tmpl:31
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:31
 #, fuzzy
 msgid ""
 "title='Search the %1 Web for topics that link to here' accesskey='b'>We&b"
 msgstr "Hledej články ve webu %1 které sem odkazují"
 
+#: templates/viewtopicactionbuttons.tmpl:43
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:43
 #, fuzzy
 msgid "title='View raw text without formatting' accesskey='r'>&Raw View"
 msgstr "Prohlédni nepracovaný text (bez formátování)"
 
+#: templates/viewtopicactionbuttons.tmpl:16
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:16
 msgid "title='View topic' accesskey='v'>&View topic"
 msgstr ""
 
+#: templates/viewtopicactionbuttons.tmpl:38
+#: templates/viewtopicactionbuttons.tmpl:40
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:38
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:40
 #, fuzzy
@@ -3684,15 +3718,8 @@ msgstr ""
 #~ msgid "%1 has a list of other TWiki users."
 #~ msgstr "%1 má seznam ostatních uživatelů TWiki."
 
-#~ msgid "(no parent, orphaned topic)"
-#~ msgstr "(bez rodiče, osiřelý článek)"
-
 #~ msgid "Click here"
 #~ msgstr "Klikni zde"
-
-#, fuzzy
-#~ msgid "Default template"
-#~ msgstr "Nemohu nalézt šablonu"
 
 #~ msgid ""
 #~ "During save of file %1 an error was found by the version control system. "
@@ -3739,10 +3766,6 @@ msgstr ""
 #~ "Tento formulář se uplatní pouze pokud TWiki užívá {PasswordManager}, "
 #~ "který podporujezměny hesel. Jinak nahraďte tento článek postupem jak "
 #~ "změnit heslo ve Vaší organizaci."
-
-#, fuzzy
-#~ msgid "View templates"
-#~ msgstr "Možné vzory pro formulář"
 
 #~ msgid "(more)"
 #~ msgstr "(více)"
