@@ -419,9 +419,6 @@ sub viewfile {
 
     my $query = $session->{cgiQuery};
 
-    my $topic = $session->{topicName};
-    my $webName = $session->{webName};
-
     my @path = split( '/', $query->path_info() );
     shift( @path )unless $path[0];
     my $fileName;
@@ -437,6 +434,9 @@ sub viewfile {
                                     topic => 'Unknown',
                                     params => [ 'viewfile', '?' ] );
     }
+
+    my $topic = pop( @path );
+    my $webName = join('.', @path );
 
     $fileName = TWiki::Sandbox::sanitizeAttachmentName( $fileName );
 
