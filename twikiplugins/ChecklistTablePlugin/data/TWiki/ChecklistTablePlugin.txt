@@ -63,6 +63,8 @@ You can use the =%<nop>CHECKLIST%= tag to customize the checklist states, icons 
 | name | name of the checklist | =name="_default"= |
 | sort | switch table sort feature 'on' or 'off' | =sort="on"= |
 | template | use template configuration; see =template= attribute of ChecklistPlugin topic | =template="patchday"= |
+| quickadd | enables/disables the quick add formular below the table | =quickadd="on"= |
+| quickinsert | enables/disables the quick insert formular if the mouse is over the insert button (%ICON{plus}%) | =quickinsert="on"= |
 | quietsave | enables/disables Quiet Save button (Quiet Save disables email notification) | =quietsave="on"= |
 | *Icons* ||||
 | deleterowicon | delete icon (%ICON{choice-no}%) | =deleterowicon="%<nop>ICONURL{choice-no}%"= |
@@ -72,8 +74,6 @@ You can use the =%<nop>CHECKLIST%= tag to customize the checklist states, icons 
 | insertrowicon | insert row icon (%ICON{plus}%) | =insertrowicon="%<nop>ICONURL{plus}%"= |
 | moverowdownicon | move row down icon (%ICON{down}%) | =moverowdownicon="%<nop>ICONURL{down}%"= |
 | moverowupicon | move row up icon (%ICON{up}%) | =moverowupicon="%<nop>ICONURL{up}%"= |
-| quickadd | enables/disables the quick add formular below the table | =quickadd="on"= |
-| quickinsert | enables/disables the quick insert formular if the mouse is over the insert button (%ICON{'plus'}%) | =quickinsert="on"= |
 
 
 ---++ Table Format
@@ -140,6 +140,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==data/TWiki/VarCHECKLISTTABLE.txt== | Plugin tag documentation | 
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	  | ==lib/TWiki/Plugins/%TOPIC%/Core.pm== | Perl module |
+          | ==pub/TWiki/%TOPIC%/cltpinsertform.js== | <nop>JavaScript module |
 	  | ==pub/TWiki/%TOPIC%/example.png== | example image |
 	* Configure the Plugin:
 		* TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
@@ -154,7 +155,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | V1.003 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  V1.003 (BETA) | TWiki:Main.DanielRohde: add quick insert feature; added quickadd attribute; fixed typos |
+|  V1.003 (BETA) | TWiki:Main.DanielRohde: added quick insert feature; added quickadd attribute; fixed typos |
 |  V1.002 (30 Aug 2007): | TWiki:Main.DanielRohde: fixed major pre/verbatim bug; fixed and added documentation; added sort feature; added changerows attribute; added EDITCELL feature; fixed Opera bug; fixed topic lock bug |
 |  V1.001 (28 Aug 2007): | TWiki:Main.DanielRohde Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 <br/> ChecklistPlugin, JSCalendarContrib |
