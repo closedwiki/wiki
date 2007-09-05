@@ -903,34 +903,34 @@ a.twikiButton:active {
 	background-color:#e5bdb1;
 	color:#222;
 }
-.patternToolBar .patternButton a:link,
-.patternToolBar .patternButton a:visited,
-.patternToolBar .patternButton s,
-.patternToolBar .patternButton strike {
+.patternToolBar span a:link,
+.patternToolBar span a:visited,
+.patternToolBar span s,
+.patternToolBar span strike {
 	background-image:url(bg_button_small_gradient.gif);
 	background-repeat:repeat-x;
 }
-.patternToolBar .patternButton a:link,
-.patternToolBar .patternButton a:visited {
+.patternToolBar span a:link,
+.patternToolBar span a:visited {
 	background-position:0px 0px;
 	border-color:#f8f6ec #b8b6ad #b8b6ad #f8f6ec;
 	background-color:#dbd9cf;
 	color:#333;
 }
-.patternToolBar .patternButton a:hover {
+.patternToolBar span a:hover {
 	background-position:0px -80px;
 	border-color:#f4f2eb #a3a092 #a3a092 #f4f2eb;
 	background-color:#c2bfae;
 	color:#222;
 }
-.patternToolBar .patternButton a:active {
+.patternToolBar span a:active {
 	background-position:0px -160px;
 	border-color:#a3a092 #f4f2eb #f4f2eb #a3a092;
 	background-color:#e8e5d7;
 	color:#222;
 }
-.patternToolBar .patternButton s,
-.patternToolBar .patternButton strike {
+.patternToolBar span s,
+.patternToolBar span strike {
 	background-position:0px -240px;
 	border-color:#fcfbf9 #e3e2dd #e3e2dd #fcfbf9;
 	background-color:#edece6;
