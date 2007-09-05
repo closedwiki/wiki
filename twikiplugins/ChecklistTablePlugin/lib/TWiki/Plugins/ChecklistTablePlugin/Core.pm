@@ -17,7 +17,9 @@
 # =========================
 #
 # TODO
-#    + own sort instead of table sort (allows EDIT/+ buttons to stay within table header, CAUTION!: what happenz if there is no table header?)
+#    + performance fix: no sort -> render direct (without collect)
+#    + define button panel position 
+#    + own icons
 #    + JavaScript based adds/inserts/moves/edits (maybe AJAX too)
 #
 
@@ -158,7 +160,7 @@ sub _renderTable {
 		$row=~s/%EDITCELL{(.*?)}%/_handleEditCell($tablenum,$1)/eg;
 		$text.=$row;
 	}
-	$text.= _renderForm('addrow',$tablenum,undef,$#$tableRef + 1) if (!defined $cgi->param("cltp_action_$tablenum"))&&($options{'changerows'}!~/^(off|false|0|no)$/i);
+	$text.= _renderForm('addrow',$tablenum,undef,$#$tableRef + 1) if (!defined $cgi->param("cltp_action_$tablenum"))&&($options{'changerows'}!~/^(off|false|0|no)$/i)&&($options{'quickadd'});
 	$text.= _renderButtons('edittable', $tablenum) unless defined $cgi->param("cltp_action_$tablenum") || $#$tableRef<0;
 	$text.= _renderButtons('savetable', $tablenum) if defined $cgi->param("cltp_action_${tablenum}_edittable");
 
@@ -169,6 +171,18 @@ sub _renderTable {
 
 
 	$text.=$cgi->end_form();
+
+	### add a hidden form for a quick insert:
+	if ($options{'quickinsert'}) {
+		my $hiddenTable="";
+		$hiddenTable.=$cgi->div({-style=>'text-align:left;background-color:gray;width:auto;'},
+			$cgi->a({-style=>'color:yellow;',-title=>'Close Insert Window',-onClick=>"cltpCloseInputForm('CLTP_HIDDEN_$tablenum')"},'[x]')
+			. $cgi->span({-style=>'color:white;'},"&nbsp;&nbsp;Insert a new entry (row)"));
+		$hiddenTable.=$cgi->start_form('post',TWiki::Func::getScriptUrl($options{'theWeb'},$options{'theTopic'},'viewauth')."#$an");
+		$hiddenTable.=_renderForm('hidden',$tablenum,undef,0);
+		$hiddenTable.=$cgi->end_form();
+		$text.=$cgi->div({-id=>"CLTP_HIDDEN_$tablenum",-style=>'visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal 8pt sans-serif;padding: 3px; border: solid 3px gray;background-color:#ffffff;min-width:95%;overflow:scroll;'}, $hiddenTable);
+	}
 
 	$text.="\n";
 	return $text;
@@ -393,8 +407,11 @@ sub _renderButtons {
 		## e:
 		$text.=$cgi->image_button(-name=>"cltp_action_${tablenum}_editrow_${row}", -title=>'Edit Entry', -value=>' E ', -src=>$options{'editrowicon'});
 		## +:
-		if (($row < $rowcount)&&($options{'changerows'}!~/^(off|no|false|0)$/i)) {
-			$text.=$cgi->image_button(-name=>"cltp_action_${tablenum}_ins_${row}", -title=>'Insert Entry', -value=>' + ',-src=>$options{'insertrowicon'});
+		if ((!$options{'quickadd'}) || (($row < $rowcount)&&($options{'changerows'}!~/^(off|no|false|0)$/i))) {
+			$text.=$cgi->image_button(-id=>"cltp_action_${tablenum}_ins_${row}",-name=>"cltp_action_${tablenum}_ins_${row}", -title=>'Insert Entry', -value=>' + ',-src=>$options{'insertrowicon'}, 
+					-onMouseOver=>$options{'quickinsert'}?"cltpShowInsertForm('CLTP_HIDDEN_${tablenum}','cltp_action_${tablenum}_ins_${row}',0,15,1,$tablenum,$row);":""
+					);
+			##$text.=$cgi->button(-id=>"cltp_action_${tablenum}_ins_${row}",-alt=>"cltp_action_${tablenum}_ins_${row}", -title=>'Insert Entry', -src=>$options{'insertrowicon'}, -onClick=>"cltpTooltipShow('CLTP_TABLE_HIDDEN_0','cltp_action_${tablenum}_ins_${row}',0,0,1);");
 		} else {
 			$text.=$cgi->image_button(-name=>"cltp_action_${tablenum}_cancel", -title=>'Insert Entry', -value=>'   ',-src=>$options{'dummyicon'}); 
 		}
@@ -424,8 +441,9 @@ sub _renderButtons {
 		$text.=$cgi->submit(-name=>"cltp_action_${tablenum}_qsaverow_${row}", -value=>'Quiet Save') if $options{'quietsave'};
 		$text.=$cgi->submit(-name=>"cltp_action_${tablenum}_cancel", -value=>'Cancel');
 	} elsif ($what eq 'first') {
-		$text.=$cgi->image_button(-name=>"cltp_action_${tablenum}_first", -title=>"Insert entry", -value=>' + ',-src=>$options{'insertrowicon'})
-			if $options{'changerows'} !~ /^(off|no|0|false)$/i;
+		$text.=$cgi->image_button(-id=>"cltp_action_${tablenum}_first",-name=>"cltp_action_${tablenum}_first", -title=>"Insert entry", -value=>' + ',-src=>$options{'insertrowicon'},
+				-onMouseOver=>$options{'quickinsert'}?"cltpShowInsertForm('CLTP_HIDDEN_${tablenum}','cltp_action_${tablenum}_first',0,15,1,$tablenum,-1);":""
+				) if $options{'changerows'} !~ /^(off|no|0|false)$/i;
 	} elsif ($what eq 'insertfirst') {
 		$text.=$cgi->submit(-name=>"cltp_action_${tablenum}_insertfirst", -value=>"Insert");
 		$text.=$cgi->submit(-name=>"cltp_action_${tablenum}_cancel", -value=>"Cancel");
@@ -435,6 +453,10 @@ sub _renderButtons {
 		$text.=$cgi->submit(-name=>"cltp_action_${tablenum}_savetable", -value=>"Save");
 		$text.=$cgi->submit(-name=>"cltp_action_${tablenum}_qsavetable", -value=>"Quiet Save") if $options{'quietsave'};
 		$text.=$cgi->submit(-name=>"cltp_action_${tablenum}_cancel", -value=>"Cancel");
+	} elsif ($what eq 'hidden') {
+		$text.=$cgi->submit(-name=>"cltp_action_${tablenum}_addrow_${row}", -value=>"Insert");
+		$text.=$cgi->button(-name=>"cltp_action_${tablenum}_cancel", -onClick=>"cltpCloseInputForm('CLTP_HIDDEN_$tablenum')", -value=>"Cancel");
+		
 	}
 	return $text;
 }
@@ -514,6 +536,8 @@ sub _handleActions {
 # =========================
 sub _handleChangeAction {
 	my ($theTopic, $theWeb, $action, $tablenum, $rownum) = @_;
+
+	local(%options);
 
 	return if $action eq 'cancel';
 	my $newText = "";
@@ -670,12 +694,14 @@ sub _initDefaults {
 		'editrowicon'=>'%ICONURL{pencil}%',
 		'deleterowicon'=>'%ICONURL{choice-no}%',
 		'dummyicon'=>'%ICONURL{empty}%',
-		'quietsave'=>'on',
-		'headerislabel'=>'on',
-		'sort'=>'on',
-		'changerows'=>'on',
+		'quietsave'=>1,
+		'headerislabel'=>1,
+		'sort'=>1,
+		'changerows'=>1,
+		'quickinsert'=>1,
+		'quickadd'=>1,
 	);
-	@flagOptions = ('allowmove', 'quietsave', 'headerislabel', 'sort');
+	@flagOptions = ('allowmove', 'quietsave', 'headerislabel', 'sort','quickadd','quickinsert');
 	$cgi = TWiki::Func::getCgiQuery();
 	$defaultsInitialized = 1;
 }
@@ -699,7 +725,7 @@ sub _initOptions {
 		my $v = $params{$option};
 		if (defined $v) {
 			if (grep /^\Q$option\E$/, @flagOptions) {
-				$options{$option} = ($v!~/(false|no|off|0|disable)/i);
+				$options{$option} = ($v!~/^(false|no|off|0|disable)$/i);
 			} else {
 				$options{$option} = $v;
 			}

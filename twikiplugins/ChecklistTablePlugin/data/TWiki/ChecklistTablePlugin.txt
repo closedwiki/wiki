@@ -72,6 +72,8 @@ You can use the =%<nop>CHECKLIST%= tag to customize the checklist states, icons 
 | insertrowicon | insert row icon (%ICON{plus}%) | =insertrowicon="%<nop>ICONURL{plus}%"= |
 | moverowdownicon | move row down icon (%ICON{down}%) | =moverowdownicon="%<nop>ICONURL{down}%"= |
 | moverowupicon | move row up icon (%ICON{up}%) | =moverowupicon="%<nop>ICONURL{up}%"= |
+| quickadd | enables/disables the quick add formular below the table | =quickadd="on"= |
+| quickinsert | enables/disables the quick insert formular if the mouse is over the insert button (%ICON{'plus'}%) | =quickinsert="on"= |
 
 
 ---++ Table Format
@@ -121,7 +123,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
 
 	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Create a checklist table.
+		* Set SHORTDESCRIPTION = Create a checklist table
 
 	* Debug plugin: (See output in =data/debug.txt=)
 		* Set DEBUG = 0
@@ -130,7 +132,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
 
-	* Install (or upgrade to) the latest TWiki:Main.ChecklistPlugin plugin 
+	* Install (or upgrade to) the latest TWiki:Plugins.ChecklistPlugin plugin 
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
@@ -150,10 +152,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2007, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | V1.002 (30 Aug 2007) |
+|  Plugin Version: | V1.003 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  V1.003 (BETA) | TWiki:Main.DanielRohde: add quick insert feature; added quickadd attribute; fixed typos |
 |  V1.002 (30 Aug 2007): | TWiki:Main.DanielRohde: fixed major pre/verbatim bug; fixed and added documentation; added sort feature; added changerows attribute; added EDITCELL feature; fixed Opera bug; fixed topic lock bug |
-|  V1.001 (28 Aug 2007): | Initial version |
+|  V1.001 (28 Aug 2007): | TWiki:Main.DanielRohde Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 <br/> ChecklistPlugin, JSCalendarContrib |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
@@ -166,5 +169,3 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 __Related Topics:__ TWikiPlugins, ChecklistPlugin
 
 -- TWiki:Main.DanielRohde - 20 Aug 2007
-
-%META:FILEATTACHMENT{name="example.png" attachment="example.png" attr="" comment="Example image" date="1188310463" path="example.png" size="12580" stream="example.png" user="Main.DanielRohde" version="1"}%
