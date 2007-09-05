@@ -100,7 +100,7 @@ sub merge {
 
 
 # read the top-level MANIFEST, and any other included by it
-my @sources = read_MANIFEST('tools/MANIFEST', '');
+my @sources = read_MANIFEST('lib/MANIFEST', '');
 
 # handle --list: only list files to be scanned
 if ($ARGV[0] eq '--list') {
