@@ -718,13 +718,13 @@ html>body #patternLeftBarContents li { /* Mozilla */
 
 .patternToolBar {
 }
-.patternToolBar .patternButton {
+.patternToolBar span {
 	float:left;
 }
-.patternToolBar .patternButton s,
-.patternToolBar .patternButton strike,
-.patternToolBar .patternButton a:link,
-.patternToolBar .patternButton a:visited {
+.patternToolBar span s,
+.patternToolBar span strike,
+.patternToolBar span a:link,
+.patternToolBar span a:visited {
 	display:block;
 	border-width:1px;
 	border-style:solid;
@@ -732,25 +732,30 @@ html>body #patternLeftBarContents li { /* Mozilla */
 	margin:-.2em 0 .2em .25em;
 	font-weight:bold;
 }
-.patternToolBar .patternButton a:link,
-.patternToolBar .patternButton a:visited {
+.patternToolBar span a:link,
+.patternToolBar span a:visited {
 	text-decoration:none;
 	outline:none;
 }
-.patternToolBar .patternButton a:hover,
-.patternToolBar .patternButton a:hover {
+.patternToolBar span a:hover,
+.patternToolBar span a:hover {
 	border-width:1px;
 	border-style:solid;
 }
-.patternToolBar .patternButton a:active {
+.patternToolBar span a:active {
 	outline:none;
+}
+.patternToolBar span.twikiAccessKey {
+	padding:0;
+	margin:0;
+	float:none;
 }
 .patternToolBar a:hover .twikiAccessKey {
 	border-width:0 0 1px 0;
 	border-style:solid;
 }
-.patternToolBar .patternButton s,
-.patternToolBar .patternButton strike {
+.patternToolBar span s,
+.patternToolBar span strike {
 	text-decoration:none;
 }
 
@@ -781,8 +786,8 @@ html>body #patternLeftBarContents li { /* Mozilla */
 .patternTopicAction .patternActionButtons a:visited {
 	text-decoration:none;
 }
-.patternTopicAction .patternActionButtons .patternButton s,
-.patternTopicAction .patternActionButtons .patternButton strike {
+.patternTopicAction .patternActionButtons span s,
+.patternTopicAction .patternActionButtons span strike {
 	text-decoration:none;
 }
 .patternTopicAction .patternSaveOptions {
