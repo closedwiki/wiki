@@ -35,170 +35,37 @@ msgstr "%*(%1,minut) "
 msgid "%*(%1,second) "
 msgstr "%*(%1,sekund) "
 
-#: templates/oopsgeneric.tmpl:12 templates/oopsgeneric.tmpl:14
-#: templates/oopsgeneric.tmpl:16 templates/oopsgeneric.tmpl:7
-msgid "%1"
-msgstr ""
-
 #: templates/registernotify.tmpl:3 templates/registernotifyadmin.tmpl:3
-#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:3
-#: twikiplugins/ClassicSkin/templates/registernotifyadmin.classic.tmpl:3
 msgid "%1 - Registration for %2 (%3)"
 msgstr "%1 - Registrace pro %2 (%3)"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:68
-msgid "%1 - complete TWiki documentation, Quick Start to Reference"
-msgstr "%1 - kompletní dokumentace TWiki, od přehledu k podrobné referenci"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:70
-msgid "%1 - just for me"
-msgstr "%1 - pouze pro mne"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:67
-msgid "%1 - starting points on TWiki"
-msgstr "1 - výchozí bod v TWiki"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:69
-msgid "%1 - try out TWiki on your own"
-msgstr "%1 - zkuste si TWiki sami"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:66
-msgid "%1 - view a short introductory presentation on TWiki for beginners"
-msgstr "%1 - krátká prezentace TWiki pro začátečníky"
 
 #: data/TWiki/WebChanges.txt:2
 #, fuzzy
 msgid "%1 Recent Changes in %2 Web"
 msgstr "Zkontrolujte poslední změny v:"
 
-#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:4
-#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:4
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:4
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:2
-#: twikiplugins/PatternSkin/data/Trash/WebLeftBar.txt:3
-#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:3
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:33
-msgid "%1 Web"
-msgstr "%1 Web"
-
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:3
-msgid "%1 Web Home"
-msgstr "%1 Domů"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:84
-msgid "%1 for changing your email address"
-msgstr "%1 pro změnu Vaší elektronické adresy"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:83
-msgid "%1 for changing your password"
-msgstr "%1 pro změnu Vašeho hesla"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:40
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:30
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:85
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:28
-msgid "%1 has a list of other TWiki users"
-msgstr "%1 má seznam ostatních uživatelů TWiki"
-
-#: templates/messages.tmpl:416
-msgid ""
-"%1 has been editing the topic for %2 and the lease is still active for "
-"another %3."
-msgstr "%1 editoval článek %2 a pravděpodobně na něm stále pracuje jiný %3."
-
 #: templates/registernotifyadmin.tmpl:10
-#: twikiplugins/ClassicSkin/templates/registernotifyadmin.classic.tmpl:10
 msgid "%1 has been registered with e-mail %2"
 msgstr "%1 byl zaregistrován s e-mailem %2"
-
-#: templates/messages.tmpl:23
-msgid "%1 home"
-msgstr "%1 Domů"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:86
-msgid "%1 is a list of TWiki user documentation"
-msgstr "%1 je seznam uživatelské dokumentace"
-
-#: templates/messages.tmpl:106
-msgid "%1 is an invalid name for a new web"
-msgstr "%1 je chybné jm´´eno pro nový web"
 
 #: templates/login.tmpl:7
 msgid "%1 is currently logged in"
 msgstr "%1 je v současnosti přihlášen"
-
-#: templates/messages.tmpl:397
-msgid "%1 is currently set to %2"
-msgstr "%1 je nastaven na %2"
-
-#: templates/messages.tmpl:414
-msgid "%1 is editing %2."
-msgstr "%1 edituje %2."
-
-#: templates/messages.tmpl:49
-msgid "%1 is in at least one group and cannot be removed"
-msgstr "%1 je nejméně v jedné skupině a nemůže být smazán"
-
-#: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:40
-msgid "%1 is the default topic for deleted attachments."
-msgstr "%1 je přednastaveným článkem pro smazané přílohy."
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:87
-msgid "%1 lists all TWiki user tools"
-msgstr "%1 ukáže všechny uživatelské nástroje"
-
-#: templates/messages.tmpl:422
-msgid "%1 may still be editing %2."
-msgstr "%1 stále může editovat %2."
 
 #. ("<nop>$toWeb.<nop>$toTopic",                                             "<nop>$fromWeb.<nop>$fromTopic",                                             $date,                                             $by)
 #: lib/TWiki/Render.pm:199
 msgid "%1 moved from %2 on %3 by %4"
 msgstr "uživatel  %4 přesunul %1 z %2 do %3"
 
-#: templates/messages.tmpl:22
-msgid "%1 to create another web"
-msgstr "%1 pro vytvoření nového webu"
-
-#: templates/messages.tmpl:21
-msgid "%1 to customize the web specific preferences"
-msgstr "%1 pro změnu preferencí webu"
-
-#: templates/messages.tmpl:20
-msgid "%1 to start working on the new web"
-msgstr "%1 pro začátek práce na novém webu"
-
-#: templates/messages.tmpl:482
-msgid "%1 topic does not exist"
-msgstr "článek %1 neexistuje"
-
-#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:11
-msgid "&Cancel"
-msgstr "Pře&rušit"
-
-#: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:14
-msgid "&Edit text"
-msgstr "&Editovat text"
-
 #: templates/twiki.tmpl:103
-#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:159
 msgid "&History"
 msgstr "Historie"
-
-#: twikiplugins/ClassicSkin/templates/view.classic.tmpl:28
-msgid "&WYSIWYG"
-msgstr "&Editovat(WYSIWYG)"
-
-#: templates/messages.tmpl:257
-msgid "'%1' is not a valid %2 "
-msgstr ""
 
 #: templates/login.tmpl:11
 msgid "(%1 login)"
 msgstr ""
 
 #: templates/rdiff.tmpl:4
-#: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:6
 msgid "(%1 vs. %2)"
 msgstr "(%1 oproti %2)"
 
@@ -210,17 +77,12 @@ msgstr "(=all= pro všechny články)"
 msgid "(Use a topic name in TWiki.WikiNotation)"
 msgstr "Použijte jméno článku ve tvaru TWiki.JmenoClanku"
 
-#: templates/messages.tmpl:154
-msgid "(__Suggestion:__ How about uploading your picture to your topic?)"
-msgstr "(__Doporučení:__ Nechtěl by jste nahrát svojí fotografii ?)"
-
 #: templates/oopsaccessdenied.tmpl:4
 #, fuzzy
 msgid "(access denied)"
 msgstr "Přístup odepřen"
 
 #: templates/attachnew.tmpl:2
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:8
 msgid "(attach)"
 msgstr "(připoj)"
 
@@ -246,13 +108,8 @@ msgid "(change language)"
 msgstr "(změň jazyk)"
 
 #: templates/changes.tmpl:5
-#: twikiplugins/PatternSkin/templates/changes.pattern.tmpl:4
 msgid "(changes)"
 msgstr "(změny)"
-
-#: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:5
-msgid "(delete attachment)"
-msgstr "(smazat přílohu)"
 
 #: templates/renamedelete.tmpl:14
 msgid "(delete)"
@@ -269,14 +126,6 @@ msgstr "(editovat text)"
 #: templates/edit.tmpl:10 templates/edit.tmpl:4
 msgid "(edit)"
 msgstr "(editovat)"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:105
-msgid "(how you log in) LoginName:"
-msgstr "(jak jste se přihlásil) Účet:"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:100
-msgid "(identifies you to others) WikiName:"
-msgstr "(identifikuje Vás ostatním) WikiName:"
 
 #: templates/login.tmpl:5
 #, fuzzy
@@ -296,27 +145,11 @@ msgstr "(přesun přílohy)"
 msgid "(none)"
 msgstr "(nic)"
 
-#: twikiplugins/ClassicSkin/templates/oopsaccessdenied.classic.tmpl:3
-#: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:3
-msgid "(oops)"
-msgstr "(Ou)"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:274
-msgid "(optional)"
-msgstr "(volitelně)"
-
 #: data/TWiki/WebSearch.txt:39 data/TWiki/WebSearchAdvanced.txt:49
 msgid "(otherwise search %1 Web only)"
 msgstr "(jinak hledá pouze v %1 webu)"
 
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:35
-#, fuzzy
-msgid "(raw view)"
-msgstr "Nefo&rmátovaně"
-
 #: templates/oopsmore.tmpl:21 templates/oopsmore.tmpl:30
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:13
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:7
 msgid "(recommended)"
 msgstr "(doporučené)"
 
@@ -324,11 +157,6 @@ msgstr "(doporučené)"
 #: templates/renameweb.tmpl:4 templates/renamewebconfirm.tmpl:4
 msgid "(rename)"
 msgstr "(přejmenovat)"
-
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:35
-#, fuzzy
-msgid "(revision %1)"
-msgstr "Revize"
 
 #: templates/oopssaveerr.tmpl:8
 #, fuzzy
@@ -340,33 +168,19 @@ msgstr "Chyba uložení článku"
 msgid "(search result)"
 msgstr "(výsledky hledání)"
 
-#: twikiplugins/PatternSkin/templates/search.pattern.tmpl:9
-msgid "(search results)"
-msgstr "(výsledky hledání)"
-
 #: data/TWiki/WebSearchAdvanced.txt:65
 msgid "(semicolon =;= for and)"
 msgstr "(středník =;= pro *a*)"
 
 #: templates/settings.tmpl:4
-#: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:4
 msgid "(set preferences)"
 msgstr "(nastavit předvolby)"
-
-#: templates/messages.tmpl:270
-msgid "(single character first name)"
-msgstr "(první písmeno křestního jména)"
-
-#: templates/messages.tmpl:269
-msgid "(single character last name)"
-msgstr "(první písmeno přijmení)"
 
 #: lib/TWiki/UI/Manage.pm:864
 msgid "(skipped)"
 msgstr "(přeskočeno)"
 
 #: templates/attachagain.tmpl:19
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:31
 msgid ""
 "*Change comment:* If you use _Change Properties_ to change a comment, the "
 "comment shown in the topic will change, but the comment shown against the "
@@ -380,27 +194,7 @@ msgstr ""
 msgid "*Formatting help:*"
 msgstr "*Nápověda k formátování:*"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:15
-msgid ""
-"*Important:* the information provided in this form will be stored in a "
-"database on the TWiki server. This database is accessible to anyone who can "
-"access the server through the web (though passwords will be encrypted, and e-"
-"mail addresses will be obfusticated to help prevent spamming). Your country, "
-"or the country where the server is hosted, may have Data Protection laws "
-"governing the maintenance of such databases. If you are in doubt, you should "
-"contact %1 for details of the Data Protection Policy of this TWiki server "
-"before registering."
-msgstr ""
-"*Důležité:* informace poskytované v tomto formuláři budou uloženy v databázi "
-"na TWiki serveru. Tato databáze je přístupná komukoli kdo může přistoupit k "
-"serveru přes web (ačkoli hesla budou zašifrována a emailovéadresy budou "
-"pozměněny kvůli spamování). Vaše země nebo země, kde je server může mít "
-"zákony týkající se administrace takové databáze. Pokud máte pochybnosti,"
-"kontaktujte prosím %1 kvůli detailům, týkajících se ochrany dat na tomto "
-"serverupřed registrací."
-
 #: templates/attachagain.tmpl:20
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:32
 msgid ""
 "*Local file:* If you select a different file in _Local file:_, it is this "
 "that will be updated or added."
@@ -409,7 +203,6 @@ msgstr ""
 "ten, který bude změněn nebo přidán."
 
 #: templates/attachagain.tmpl:18
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:30
 msgid ""
 "*Properties:* The comment and visibility (i.e. is attachment hidden) can be "
 "changed without uploading a file by pressing \"Change Properties only\"; see "
@@ -482,49 +275,17 @@ msgid ""
 msgstr ""
 
 #: templates/oopsmore.tmpl:41
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:21
 msgid "<em>in %1 web</em> only"
 msgstr "pouze <em>v %1 webu</em>"
 
 #: templates/oopsmore.tmpl:39
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:19
 msgid "<em>in all public webs</em>"
 msgstr "<em>ve všech veřejných webech</em>"
-
-#: templates/messages.tmpl:471
-msgid ""
-"A %1 is divided into webs; each one represents one subject, one area of "
-"collaboration. You are trying to %2 in a web that does not exist."
-msgstr ""
-"%1 je rozdělen do více webů; každý reprezentuje jedno téma, jednu oblast "
-"spolupráce. Zkoušíte %2 ve webu, který neexistuje."
-
-#: templates/messages.tmpl:349
-msgid "A =.txt= extension is appended to some filenames for security reasons"
-msgstr "Přiloha =.txt= je připojena k některým souborům, kvůli bezpečnosti"
-
-#: templates/messages.tmpl:121
-msgid ""
-"A color starts with a # sign, followed by 6 hexadecimal numbers, e.g. "
-"=#FFFF00=."
-msgstr ""
-"Barva začíná znakem # , následovaným 6 hexadecimálními čísly, např. "
-"=#FFFF00=."
 
 #. ($data->{Email})
 #: lib/TWiki/UI/Register.pm:795
 msgid "A confirmation e-mail has been sent to %1"
 msgstr "Potvrzovací e-mail byl odeslán %1"
-
-#: templates/messages.tmpl:475
-msgid ""
-"A link to a topic located in another web is written like %1. Make sure that "
-"the name of the web is not spelt wrongly on the previous page; fix the link "
-"if necessary."
-msgstr ""
-"Odkaz na článek, který je v jiném webu se zapisuje takto: %1. Ujistěte se, "
-"že jméno webu je správné na předchozí stránce; opravte odkaz, pokud je to "
-"nezbytné."
 
 #: data/Sandbox/WebHome.txt:25
 #, fuzzy
@@ -533,60 +294,18 @@ msgstr ""
 "Rozšířený výpis změn je dostupný přes odkaz [[%1][Současné změny]] v menu "
 "navigace."
 
-#: templates/messages.tmpl:445
-msgid ""
-"A new *system-generated* password for your login name %1 (<nop>WikiName %2) "
-"has been sent to your registered e-mail address. If your e-mail address is "
-"no longer valid, please contact %3"
-msgstr ""
-"Nové *systémem vygenerované* heslo pro Váš účet %1 (<nop>WikiName %2) byl "
-"odeslán na Vaši registrovanou e-mailovou adresu. Pokud Vaše adresa není dále "
-"platná, kontaktujte prosím %3"
-
-#: data/TWiki/WebTemplateTopics.txt:4
-msgid "A topic template defines the initial content of a newly created topic."
-msgstr ""
-
 #: templates/oopsaccessdenied.tmpl:6
-#: twikiplugins/ClassicSkin/templates/oopsaccessdenied.classic.tmpl:5
 msgid "Access Denied"
 msgstr "Přístup odepřen"
-
-#: templates/messages.tmpl:453
-msgid "Access check on %1 failed"
-msgstr "Přístup k %1 byl odepřen"
-
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:53
-#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:14
-#: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:19
-msgid "Access keys"
-msgstr "Přístupový klíč"
 
 #: templates/attachtables.tmpl:37 templates/attachtables.tmpl:4
 #: templates/changeform.tmpl:10
 msgid "Action"
 msgstr "Akce"
 
-#: templates/messages.tmpl:454
-msgid "Action %1: %2."
-msgstr "Akce %1: %2."
-
 #: templates/addform.tmpl:1
-#: twikiplugins/ClassicSkin/templates/addform.classic.tmpl:1
 msgid "Add form"
 msgstr "Přidej formulář"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:283
-msgid "Add your name to the list of users in the %1 topic in the %2 web."
-msgstr "Přidejte Vaše jméno do seznamu uživatelů ve článku %1 na webu %2."
-
-#: templates/messages.tmpl:337
-msgid "Adding a %1 variable in WebPreferences"
-msgstr "Přidána proměnná %1 ve vlastnostech webu"
-
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:24
-msgid "Admin Maintenance"
-msgstr "Administrátorská údržba"
 
 #: data/TWiki/WebSearchAdvanced.txt:3
 msgid "Advanced Search"
@@ -595,26 +314,6 @@ msgstr "Rozšířené hledání"
 #: data/TWiki/WebSearch.txt:30
 msgid "Advanced search"
 msgstr "Rozšířené hledání"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:18
-msgid ""
-"After submitting this form your e-mail will be changed, and you will be "
-"returned to this form."
-msgstr ""
-"Po odeslání tohoto formuláře bude Váš email změněn a Vy se vrátíte zpět do "
-"tohoto formuláře."
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:10
-msgid "After submitting this form your password will be changed."
-msgstr "Po odeslání tohoto formuláře Vaše heslo bude změněno."
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:10
-msgid ""
-"After submitting this form, you will receive an e-mail with your new, "
-"*system-generated* password, and a link to a page where you can change it."
-msgstr ""
-"Po odeslání tohoto formuláře obdržíte email s Vaším novým, *systémem "
-"vygenerovaným* heslem a odkazem na stránku, kde ho můžete změnit."
 
 #: data/TWiki/WebSearch.txt:39 data/TWiki/WebSearchAdvanced.txt:49
 msgid "All public webs"
@@ -628,19 +327,6 @@ msgstr "Všechny články v %1"
 msgid "Allow non <nop>WikiWord for the new topic name"
 msgstr "Povolí ne <nop>WikiWord pro nový název článku"
 
-#: templates/messages.tmpl:251
-msgid ""
-"Alternatively hit back to go back to TWiki.TWikiRegistration and choose a "
-"different username."
-msgstr ""
-"Alternativně stiskněte Zpět, pro návrat zpět do TWiki.TWikiRegistration a "
-"vyberte jiné jméno."
-
-#: templates/messages.tmpl:238
-msgid ""
-"An e-mail could not be delivered. Please notify your %1 administrator, %2"
-msgstr "Email nemohl být doručen. Uvědomte prosím Vašeho administrátora %1, %2"
-
 #: templates/moveattachment.tmpl:30
 msgid ""
 "An error page will be shown if either of the topics are locked by another "
@@ -648,10 +334,6 @@ msgid ""
 msgstr ""
 "Chybová stránka se ukáže, pokud některý z článků je alokován jiným  "
 "uživatelem."
-
-#: templates/messages.tmpl:17
-msgid "And populated with topics from the base web"
-msgstr "Naplněno ćlánky ze základního webu"
 
 #: templates/changeform.tmpl:27
 #, fuzzy
@@ -661,22 +343,12 @@ msgstr ""
 "Všechny změny provedené do článku před příchodem na tuto stránku budou "
 "zachovány."
 
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:74
-msgid "Attach"
-msgstr "Příloha"
-
 #: templates/attachnew.tmpl:4
-#: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:4
 msgid "Attach file to %1"
 msgstr "Připoj soubor k %1"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:11
-msgid "Attach image or document on %1"
-msgstr "Připoj obrázek nebo soubor k %1"
-
 #: templates/attach.tmpl:19 templates/attachnew.tmpl:6
 #: templates/attachnew.tmpl:8
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:38
 msgid "Attach new file"
 msgstr "Připoj nový soubor"
 
@@ -684,35 +356,13 @@ msgstr "Připoj nový soubor"
 msgid "Attachment"
 msgstr "Příloha"
 
-#: templates/messages.tmpl:491
-msgid "Attachment '%1' does not exist"
-msgstr "Přiloha '%1' neexistuje"
-
 #: lib/TWiki/UI/Manage.pm:347
 msgid "Attachment already exists in new topic"
 msgstr "Přiloha už v novém článku existuje"
 
-#: templates/messages.tmpl:62
-msgid "Attachment delete failed"
-msgstr "Vymazání přílohy selhalo"
-
 #: lib/TWiki/UI/Manage.pm:328
 msgid "Attachment does not exist"
 msgstr "Příloha neexistuje"
-
-#: templates/messages.tmpl:54
-msgid "Attachment move failed"
-msgstr "Přesun přílohy selhal"
-
-#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:7
-#, fuzzy
-msgid "Attachments"
-msgstr "Příloha"
-
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:14
-#, fuzzy
-msgid "Attachments help"
-msgstr "Příloha"
 
 #: templates/attach.tmpl:9
 #, fuzzy
@@ -720,16 +370,12 @@ msgid "Attachments of %1"
 msgstr "Ostatní přílohy článku %1"
 
 #: templates/attach.tmpl:48
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:58
 msgid "Attachments will not be shown in topic view page."
 msgstr "Přílohy se nezobrazují na stránce Prohlížení článku"
 
 #: templates/oopsaccessdenied.tmpl:5 templates/oopsattention.tmpl:5
 #: templates/oopslanguagechanged.tmpl:17 templates/oopsleaseconflict.tmpl:4
 #: templates/oopssaveerr.tmpl:10
-#: twikiplugins/ClassicSkin/templates/oopsaccessdenied.classic.tmpl:4
-#: twikiplugins/ClassicSkin/templates/oopsattention.classic.tmpl:4
-#: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:4
 msgid "Attention"
 msgstr "Pozor"
 
@@ -737,32 +383,16 @@ msgstr "Pozor"
 msgid "Attribute"
 msgstr "Vlastnosti"
 
-#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:62
-msgid "Automated notification of topic changes"
-msgstr "Automatické upozorňování na změny článku"
-
 #: data/_default/WebHome.txt:4
 msgid "Available Information"
 msgstr "Dostupné informace"
 
 #: templates/changeform.tmpl:33
-#: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:13
 #, fuzzy
 msgid "Available form templates"
 msgstr "Možné vzory pro formulář"
 
-#: data/TWiki/WebTemplateTopics.txt:6
-#, fuzzy
-msgid "Available templates in %1 Web:"
-msgstr "Možné vzory pro formulář"
-
-#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:11
-msgid "Back to topic"
-msgstr "Zpět na článek"
-
 #: templates/oopsmore.tmpl:37
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:17
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:97
 msgid "Backlinks"
 msgstr "Zpětné odkazy"
 
@@ -773,15 +403,6 @@ msgstr "Zpětné odkazy na %1 v %2 Webu"
 #: templates/backlinksallwebs.tmpl:7
 msgid "Backlinks to %1 in all Webs"
 msgstr "Zpětné odkazy na %1 ve všech Webech"
-
-#: templates/messages.tmpl:275
-#, fuzzy
-msgid "Bad password"
-msgstr "Nové heslo"
-
-#: templates/messages.tmpl:116
-msgid "Base web %1 is missing or does not exist"
-msgstr "Základní web %1 není dostupný nebo neexistuje"
 
 #: data/TWiki/WebSearch.txt:37 data/TWiki/WebSearchAdvanced.txt:47
 msgid "Both body and title"
@@ -803,58 +424,21 @@ msgstr ""
 "všichni uživatelé viděli Trash web, odstraňte =ALLOWWEBVIEW= restrikci ve "
 "WebPreferences."
 
-#: templates/messages.tmpl:44 templates/messages.tmpl:443
-msgid "Can't find user %1"
-msgstr "Nemohu nalézt uživatele %1"
-
-#: templates/messages.tmpl:444
-msgid "Can't get an e-mail address for %1 (required for password reset)"
-msgstr ""
-"Nemohu zjistit emailovou adresu pro %1 (požadovaná pro nové nastavení hesla)"
-
 #: templates/twiki.tmpl:81
 #, fuzzy
 msgid "Cancel"
 msgstr "Pře&rušit"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:47
-msgid "Cancel editing and discard changes"
-msgstr "Zrušit editování a zahodit změny"
-
-#: templates/messages.tmpl:69
-msgid "Cannot create %1 because it already exists."
-msgstr "Nemohu vytvořit %1 protože už existuje."
-
-#: templates/messages.tmpl:112
-msgid "Cannot create web %1 because it already exists"
-msgstr "Web %1 nelze vytvoŕít, protože už existuje"
-
-#: templates/messages.tmpl:75 templates/messages.tmpl:81
-msgid "Cannot rename %1 to %2 because it already exists."
-msgstr "Nelze přejmenovat %1 do %2 protože už existuje."
-
 #: data/TWiki/WebSearchAdvanced.txt:64
 msgid "Case sensitive"
 msgstr "Citlivé na velikost"
-
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:33
-msgid "Categories"
-msgstr "Kategorie"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:2
-msgid "Change Password"
-msgstr "Změň heslo"
-
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:21
-msgid "Change comment and properties only"
-msgstr "Změna pouze komentáře a vlastností"
 
 #: templates/renamebase.tmpl:18
 msgid "Change from:"
 msgstr "Změň z:"
 
-#: data/TWiki/LanguageSelector.txt:16 templates/oopschangelanguage.tmpl:20
-#: templates/oopschangelanguage.tmpl:4 templates/oopslanguagechanged.tmpl:5
+#: templates/oopschangelanguage.tmpl:20 templates/oopschangelanguage.tmpl:4
+#: templates/oopslanguagechanged.tmpl:5
 msgid "Change language"
 msgstr "Změň jazyk"
 
@@ -874,10 +458,6 @@ msgstr "Změní odkazy v článcích, které odkazují na !%1 ve všech webech:"
 msgid "Change links in topics that refer to %1 in the %2 Web:"
 msgstr "Změní odkazy v článcích, které odkazují na !%1 ve webu %2:"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:23
-msgid "Change password"
-msgstr "Změň heslo"
-
 #: templates/attachagain.tmpl:22
 #, fuzzy
 msgid "Change properties only"
@@ -892,37 +472,14 @@ msgid "Changed"
 msgstr "Změněno"
 
 #: templates/search.tmpl:19
-#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:18
 #, fuzzy
 msgid "Changed by"
 msgstr "Změněno:"
-
-#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:16
-msgid "Changed:"
-msgstr "Změněno"
-
-#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:8
-#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:8
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:9
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:4
-#: twikiplugins/PatternSkin/data/Trash/WebLeftBar.txt:6
-#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:7
-msgid "Changes"
-msgstr "Změny"
 
 #. ($r2, $r1)
 #: lib/TWiki/UI/RDiff.pm:482
 msgid "Changes from r%1 to r%2"
 msgstr "Změněno z verze r%1 to r%2"
-
-#: templates/messages.tmpl:395
-msgid ""
-"Check your configuration setting for {TemplateDir}. If that's not the "
-"problem, it may be because you have a setting of %1 that is pointing to a "
-"template that doesn't exist."
-msgstr ""
-"Zkontrolujte Vaše nastavení pro {TemplateDir}. Pokud toto není problém, "
-"problémem může být, že %1 ukazuje na šablonu, která neexistuje."
 
 #: templates/renamebase.tmpl:46 templates/renamedelete.tmpl:41
 msgid "Checked topics will be updated to point to the new topic location."
@@ -933,7 +490,6 @@ msgid "Checked topics will be updated to point to the new web name."
 msgstr "Označené články budou aktualizovány do bodu do nového jména webu."
 
 #: templates/oopsmore.tmpl:112
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:23
 msgid "Child topics in %1 web"
 msgstr "Podřízené články v %1 webu"
 
@@ -942,7 +498,7 @@ msgstr "Podřízené články v %1 webu"
 msgid "Choose a new form for %1"
 msgstr "Vyberte novou šablonu formuláře"
 
-#: lib/TWiki/Form/Checkbox.pm:39 templates/renamebase.tmpl:43
+#: templates/renamebase.tmpl:43
 msgid "Clear all"
 msgstr "Vymaž vše"
 
@@ -953,26 +509,12 @@ msgid ""
 msgstr ""
 "Klikni na přesun článku zpět na předchozí umístění s možností změnit odkazy."
 
-#: twikiplugins/TwistyPlugin/data/TWiki/TwistyPlugin.txt:407
-msgid "Close"
-msgstr ""
-
-#: templates/messages.tmpl:120
-msgid "Color %1 has an invalid format"
-msgstr "Barva %1 má nesprávný formát"
-
 #: templates/attach.tmpl:27 templates/attachtables.tmpl:37
 #: templates/attachtables.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:46
 msgid "Comment"
 msgstr "Komentář"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:274
-msgid "Comments:"
-msgstr "Komentáře:"
-
 #: templates/oopsmore.tmpl:94
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:44
 msgid "Compare revisions"
 msgstr "Porovnejte revize"
 
@@ -981,18 +523,8 @@ msgid "Confirm rename or move"
 msgstr "Podvrďte přejmenování nebo přesun"
 
 #: templates/oopsleaseconflict.tmpl:6
-#: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:5
 msgid "Conflict"
 msgstr "Konflikt"
-
-#: templates/messages.tmpl:456 templates/messages.tmpl:464
-#: templates/messages.tmpl:488 templates/messages.tmpl:494
-msgid "Contact %1 if you have any questions."
-msgstr "Kontaktujte %1 pokud máte nějaké otázky."
-
-#: templates/messages.tmpl:387
-msgid "Continue and try to rename web?"
-msgstr "Pokračujte a zkuste přejmenovat web?"
 
 #: data/TWiki/TWikiPreferences.txt:40 data/TWiki/WebPreferences.txt:27
 msgid ""
@@ -1001,26 +533,6 @@ msgid ""
 msgstr ""
 "Copyright &&copy; podle přispívajících autorů. Všechen materiál na této "
 "platformě pro spolupráci je vlastnictvím přispívajících autorů."
-
-#: templates/messages.tmpl:130
-msgid "Could not create the new web %1"
-msgstr "Nemohu vytvořit nový web %1"
-
-#: templates/messages.tmpl:393
-msgid "Could not find template"
-msgstr "Nemohu nalézt šablonu"
-
-#: templates/messages.tmpl:448
-msgid "Could not perform search. Error was: %1"
-msgstr ""
-
-#: templates/messages.tmpl:307
-msgid "Could not save %1."
-msgstr "Nemohu uložit %1"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:125
-msgid "Country:"
-msgstr "Země:"
 
 #: data/TWiki/WebTopicViewTemplate.txt:28
 #, fuzzy
@@ -1031,18 +543,7 @@ msgstr "Vy&tvořit"
 msgid "Create <nop>TestTopic###"
 msgstr "Vytvořit <nop>TestTopic###"
 
-#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:5
-#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:5
-#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:4
-msgid "Create New Topic"
-msgstr "Nový članek"
-
-#: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:40
-msgid "Create New Topic in %1 Web"
-msgstr "Nový článek v %1"
-
 #: templates/attach.tmpl:40
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:56
 msgid "Create a link to the attached file"
 msgstr "Odkaz na přilohu"
 
@@ -1058,35 +559,12 @@ msgstr "Nový dokument pod jménem:"
 msgid "Create by Name"
 msgstr "Vytvořit pod jménem"
 
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:11
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:4
-msgid "Create personal sidebar"
-msgstr "Vaše osobní stránka"
-
-#: templates/messages.tmpl:486
-#, fuzzy
-msgid "Create the topic"
-msgstr "Vytvořit tento článek"
-
 #: data/TWiki/TWikiPreferences.txt:321 data/TWiki/TWikiPreferences.txt:323
 #: lib/TWiki/Render.pm:88
 msgid "Create this topic"
 msgstr "Vytvořit tento článek"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:282
-msgid ""
-"Create your personal %1 topic using your WikiName as topic name, and add the "
-"data you submitted to the topic."
-msgstr ""
-"Vytvořte Váš osobní %1 článek použitím Vašeho WikiName jako jména článku,a "
-"přidejte data které jste odeslali do článku."
-
-#: templates/messages.tmpl:336
-msgid "Creating a suitable Form Definition topic"
-msgstr "Vytvořte vhodný Definiční článek formuláře"
-
 #: templates/renamedelete.tmpl:20
-#: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:9
 msgid "Current location:"
 msgstr "Nyní jste zde:"
 
@@ -1094,16 +572,11 @@ msgstr "Nyní jste zde:"
 msgid "Current parent:"
 msgstr "Současný nadřízený:"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:16
-msgid "Current password"
-msgstr "Současné heslo"
-
 #: templates/attachtables.tmpl:37 templates/attachtables.tmpl:4
 msgid "Date"
 msgstr "Datum"
 
 #: templates/mailresetpassword.tmpl:5
-#: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:5
 msgid "Dear %1"
 msgstr "Vážený %1"
 
@@ -1112,29 +585,16 @@ msgid "Debug"
 msgstr "Ladění"
 
 #: templates/renamedelete.tmpl:17 templates/renamedelete.tmpl:44
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:37
-#: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:25
 msgid "Delete"
 msgstr "Smazat"
 
-#: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:28
-msgid "Delete attachment"
-msgstr "Smazat přílohu"
-
 #: templates/oopsmore.tmpl:19
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:5
 msgid "Delete topic"
 msgstr "Vymazat článek"
 
 #: templates/oopsmore.tmpl:20 templates/oopsmore.tmpl:22
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:6
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:8
 msgid "Delete topic..."
 msgstr "Vymazat článek..."
-
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:48
-msgid "Describe the file so other people know what it is."
-msgstr "Popište soubor, tak aby ostatní lidé věděli o co jde."
 
 #: lib/TWiki/Form.pm:261
 #, fuzzy
@@ -1145,21 +605,12 @@ msgstr "Klikněte pro zobrazení detailů v odděleném okně"
 msgid "Did you spell the %1 correctly?"
 msgstr ""
 
-#: data/TWiki/VarMAKETEXT.txt:19
-msgid "Did you want to [[%1][reset %2's password]]?"
-msgstr "Chtěl jste  [[%1][vynulovat %2 heslo]]?"
-
-#: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:14
-msgid "Difference:"
-msgstr "Rozdíly:"
-
 #: templates/preview.tmpl:10
 #, fuzzy
 msgid "Do not forget to save your changes"
 msgstr "<span class='twikiAlert'><b>Nezapomeňte</b></span> uložit Vaše změny."
 
 #: templates/attach.tmpl:48
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:58
 msgid "Do not show attachment in table"
 msgstr "Neukazovat přílohu v tabulce"
 
@@ -1180,39 +631,7 @@ msgstr ""
 msgid "Don't show:"
 msgstr "Neukazuj:"
 
-#: templates/messages.tmpl:63
-msgid ""
-"During deletion of attachment =%1= an error was found. Please notify your %2 "
-"administrator."
-msgstr ""
-"Během mazání přílohy =%1= byla nalezena chyba. Prosím uvědomte Vašeho "
-"administratora %2."
-
-#: templates/messages.tmpl:55
-msgid ""
-"During move of attachment %1 to %2 an error was found. Please notify your %3 "
-"administrator."
-msgstr ""
-"Během přesunu Vaší přílohy %1 do %2 byla nalezena chyba. Prosím "
-"uvědomteVašeho administratora %3."
-
-#: templates/messages.tmpl:91
-msgid ""
-"During rename of topic %1 to %2 an error (%3) was found. Please notify your %"
-"4 administrator."
-msgstr ""
-"Během přejmenování Vašeho článku %1 na %2 se objevila chyba (%3). Prosím "
-"uvědomte Vašeho %4 administratora."
-
-#: templates/messages.tmpl:94
-msgid ""
-"During rename of web %1 to %2 an error (%3) was found. Please notify your %4 "
-"administrator."
-msgstr ""
-"Během přejmenování webu %1 na %2 se objevila chyba (%3). Prosím uvědomte %4 "
-"- administrátora."
-
-#: templates/messages.tmpl:366 templates/oopssaveerr.tmpl:17
+#: templates/oopssaveerr.tmpl:17
 msgid ""
 "During save of %1 an error was found by the version control system. Please "
 "notify your %2 administrator."
@@ -1220,166 +639,31 @@ msgstr ""
 "Během ukládání %1 se objevila chyba u version control systému. Prosím "
 "uvědomte %2 - administrátora."
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:109
-msgid "E-mail address:"
-msgstr "Emailová adresa:"
-
-#: templates/messages.tmpl:178
-msgid "E-mail changed successfully!"
-msgstr "Email byl úspěšně změněn!"
-
 #: templates/settings.tmpl:27
 msgid "Each preference has the syntax"
 msgstr "Každá preference má syntaxi"
 
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:50
-msgid "Edit"
-msgstr "Změň"
-
 #: templates/oopsleaseconflict.tmpl:25
-#: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:27
 msgid "Edit Anyway"
 msgstr "Přesto změň"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:20
-#, fuzzy
-msgid "Edit help"
-msgstr "Změňte text"
-
-#: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:5
-msgid "Edit personal data"
-msgstr "Změňte vaše osobní údaje"
-
-#: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:10
-msgid "Edit text"
-msgstr "Změňte text"
-
-#: twikiplugins/ClassicSkin/templates/view.classic.tmpl:28
-#: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:18
-msgid "Edit this topic text"
-msgstr "Změňte text tohoto článku"
-
 #: templates/oopsmore.tmpl:13
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:60
 msgid "Edit topic preference settings"
 msgstr "Změňte nastavení tohoto článku"
-
-#: templates/messages.tmpl:292
-msgid ""
-"Either the code is not valid, or you have already confirmed your "
-"registration using it."
-msgstr ""
-
-#: templates/messages.tmpl:357
-msgid ""
-"Either you did not specify a file name, or the file you are trying to upload "
-"%1 has no content. You may not upload an empty file."
-msgstr ""
-"Buď jste nevložil jméno souboru nebo soubor %1, který se pokoušíte nahrát "
-"nemá žádný obsah. Nemůžete nahrát prázdný soubor."
-
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:74
-msgid "Enlarge edit box"
-msgstr "Zvětšit editovací prostor"
 
 #: templates/login.tmpl:8
 #, fuzzy
 msgid "Enter a new username and password to change identity"
 msgstr "Vložte nový účet a heslo pro změnu identity:"
 
-#: twikiplugins/ClassicSkin/templates/login.classic.tmpl:21
-msgid ""
-"Enter your TWiki.LoginName. (Typically First name and last name, no space, "
-"no dots, capitalized, e.g. !JohnSmith, unless you chose otherwise). Visit %"
-"TWIKIWEB%.TWikiRegistration if you do not have one."
-msgstr ""
-
-#: templates/messages.tmpl:228
-#, fuzzy
-msgid "Error registering new user"
-msgstr "Chyba při registraci uživatele %1"
-
-#: templates/messages.tmpl:219
-msgid "Error registering user %1"
-msgstr "Chyba při registraci uživatele %1"
-
-#: templates/messages.tmpl:365
-msgid "Error saving topic"
-msgstr "Chyba při uložení ćlánku"
-
 #: templates/login.tmpl:28
 #, fuzzy
 msgid "Error: %1"
 msgstr "Chyby"
 
-#: templates/messages.tmpl:436
-msgid "Error: File attachment at %1,%2 does not exist"
-msgstr "Chyba: Příloha v %1,%2 neexistuje"
-
-#: templates/messages.tmpl:438
-msgid ""
-"Error: Unsupported content type: %1 (Must be =text/html=, =text/plain= or "
-"=text/css=)"
-msgstr ""
-"Chyba: Nepodporovaný typ souboru: %1 (Musí být =text/html=, =text/plain= "
-"nebo =text/css=)"
-
-#: templates/messages.tmpl:437
-msgid "Error: Unsupported protocol. (Must be 'http://domain/...')"
-msgstr "Chyba: Nepodporovaný protokol. (Musí být 'http://domain/...')"
-
-#: templates/messages.tmpl:242
-msgid "Errors"
-msgstr "Chyby"
-
-#: templates/messages.tmpl:446
-msgid "Failed to include URL %1"
-msgstr "Chyba při vložení URL %1"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:25
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:14
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:16
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:90
-msgid "Fields marked %1 are required"
-msgstr "Pole označená %1 jsou nutná"
-
-#: templates/messages.tmpl:342
-msgid "File has been uploaded with different name"
-msgstr "Soubor byl nahrán pod odlišným jménem"
-
 #: templates/oopsmore.tmpl:38 templates/oopsmore.tmpl:40
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:18
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:20
 msgid "Find topics that link to %1 ..."
 msgstr "Najít články které odkazují na %1 ..."
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:281
-msgid ""
-"Finish creating an account for you, so that you can start editing pages "
-"using your WikiName."
-msgstr ""
-"Dokončete vytvoření Vašeho úćtu, tak, aby jste mohl začít měnit stránkys "
-"pouźitím Vašeho WikiName."
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:93
-msgid "First Name:"
-msgstr "Křestní jméno:"
-
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:30
-msgid "Force new revision"
-msgstr "Vynucení nové revize"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:5
-msgid "Forgotten your password?"
-msgstr "Zapomněl jste Vaše heslo?"
-
-#: templates/messages.tmpl:314
-msgid "Form Definition %1 missing"
-msgstr "Definice formuláře %1 chybí"
-
-#: templates/messages.tmpl:319
-msgid "Form definition missing"
-msgstr "Definice formuláře chybí"
 
 #: templates/renamebase.tmpl:70
 msgid ""
@@ -1415,29 +699,11 @@ msgstr ""
 msgid "Go back"
 msgstr "Jdi zpět"
 
-#: templates/messages.tmpl:311
-msgid ""
-"Go back in your browser and insert information for all mandatory fields."
-msgstr "Jděte zpět v prohlížeči a vložte informace pro všechny nutné pole."
-
-#: templates/messages.tmpl:370 templates/oopssaveerr.tmpl:21
+#: templates/oopssaveerr.tmpl:21
 msgid "Go back in your browser and save your changes locally."
 msgstr "Jděte zpět ve svém prohlížeči a uložte Vaše změny lokálně."
 
-#: templates/messages.tmpl:266
-msgid "Good examples:"
-msgstr "Dobré příklady:"
-
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:6
-msgid "Groups"
-msgstr "Skupiny"
-
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
-msgid "Hello %1"
-msgstr "Vítejte %1"
-
 #: templates/twiki.tmpl:107
-#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:9
 #, fuzzy
 msgid "Hello %1!"
 msgstr "Vítejte %1"
@@ -1452,20 +718,12 @@ msgid "Hide file"
 msgstr "Skryj nápovědu"
 
 #: templates/registernotify.tmpl:16
-#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:16
 msgid "How about attaching your photo?"
 msgstr "Nechtěl by jste připojit Vaší fotografii?"
 
 #: templates/registerconfirm.tmpl:4
-#: twikiplugins/ClassicSkin/templates/registerconfirm.classic.tmpl:4
 msgid "How to activate your %1 registration"
 msgstr "Jak aktivovat Vaši %1 registraci"
-
-#: templates/messages.tmpl:344
-msgid ""
-"However, the filename has been changed from %1 to %2. Please make a note of "
-"it."
-msgstr "Jakkoliv, soubor byl změněn z %1 na %2. Prosím učiňte o tom poznámku."
 
 #: templates/login.tmpl:44
 msgid "I forgot my password"
@@ -1477,14 +735,6 @@ msgstr ""
 "Nápady, požadavky, problémy týkající se %1? <a href='%2'>Pošli svoji reakci</"
 "a>"
 
-#: templates/messages.tmpl:328
-msgid "If this line isn't present see _upgrade_ section below"
-msgstr "Pokud se tato řádka neukazuje, zkontroluj _upgrade_ sekci dole"
-
-#: templates/messages.tmpl:322
-msgid "If this topic is missing create it, otherwise check it for errors."
-msgstr "Pokud tento článek chybí, vytvořte ho, jinak ho zkontrolujte na chyby."
-
 #: data/TWiki/WebSearch.txt:49 data/TWiki/WebSearchAdvanced.txt:92
 msgid ""
 "If you already know the name of the topic, enter the name of the topic into "
@@ -1492,25 +742,7 @@ msgid ""
 msgstr ""
 "Jestliže znáte název článku, vložte název článku do [[%1][Jump box]] nahoře"
 
-#: templates/messages.tmpl:407
-msgid ""
-"If you are developing a <nop>TWikiApplication, see %1 for a description of "
-"the correct parameters."
-msgstr ""
-"Pokud vytváříte <nop>TWikiApplication, podívejte se na  %1 pro popis "
-"správných parametrů."
-
-#: templates/messages.tmpl:473
-msgid "If you came here by clicking on a question mark link"
-msgstr "Pokud jste sem přišel stiskem otazníku"
-
-#: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:40
-msgid "If you enter a different name, make sure the topic does  exist."
-msgstr "Pokud vložíte rozdílné jméno, ujistěte se, že článek existuje."
-
 #: templates/registerconfirm.tmpl:14 templates/registernotify.tmpl:23
-#: twikiplugins/ClassicSkin/templates/registerconfirm.classic.tmpl:14
-#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:23
 msgid ""
 "If you got this e-mail by mistake: Somebody (%1) registered at the %2 site "
 "using your mail address %3. Contact %4 if this is in error."
@@ -1518,136 +750,22 @@ msgstr ""
 "Pokud jste dostal tento mail omylem: Někdo (%1) se zaregistroval na %2 "
 "serveru s použitím Vaší emailové adresy %3. Kontaktujte %4 pokud je to chyba."
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:301
-msgid "If you have any questions about registration, send an e-mail to %1."
-msgstr "Pokud máte libovolné otázky o registraci, pošlete email %1."
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:39
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:29
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:29
-#, fuzzy
-msgid "If you have any questions, please contact %1"
-msgstr "Pokud máte libovolné otázky, kontaktujte prosím %1."
-
-#: data/TWiki/VarMAKETEXT.txt:16 templates/login.tmpl:52
-#: templates/mailresetpassword.tmpl:14
-#: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:14
+#: templates/login.tmpl:52 templates/mailresetpassword.tmpl:14
 msgid "If you have any questions, please contact %1."
 msgstr "Pokud máte libovolné otázky, kontaktujte prosím %1."
 
 #: templates/registernotify.tmpl:25
-#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:25
 msgid "If you haven't set a password yet or you want to reset it, go to: %1"
 msgstr ""
 "Pokud jste zatím nenastavil heslo nebo ho chcete znovu nastavit, jděte na: %1"
 
-#: templates/messages.tmpl:405
-msgid ""
-"If you received a link to this topic in an e-mail or just want to look at "
-"the topic, [[%1][cancel save]] to go to %2."
-msgstr ""
-"Pokud jste obdržel odkaz na tento článek v emailu nebo se chcete pouze "
-"podívat na článek, stiskněte [[%1][přerušit uložit]] aby jste přešli na %2."
-
-#: templates/messages.tmpl:485
-msgid "If you want to create the topic"
-msgstr "Pokud chcete vytvořit článek"
-
-#: templates/messages.tmpl:478
-msgid "If you would like to create this web"
-msgstr "Pokud chcete vytvořit tento web"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:13
-msgid ""
-"If your old e-mail addresses are all invalid (you can't receive mail there "
-"any more) and you have forgotten your password, please contact %1 for help."
-msgstr ""
-"Pokud je Vaše emailová adresa nefunkční (nemůžete odsud přijímat žádnou "
-"poštu) a zapomněl jste své heslo, pro pomoc kontaktujte %1."
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:11
-msgid ""
-"If your user topic is not protected from changes by other people, and you "
-"don't register an e-mail address using this form, then your user account "
-"could be hijacked by someone else."
-msgstr ""
-"Pokud Váš osobní článek není chráněn před změnamiod ostatních lidí a vy jste "
-"nezaregistroval Váš email pomocí tohoto formuláře, potom by Váš účet mohl "
-"být převzat někým jiným."
-
 #: templates/attach.tmpl:40
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:56
 msgid "Images will be displayed, for other attachments a link will be created."
 msgstr "Obrázky budou zobrazeny, pro ostatní přílohy bude vytvořen odkaz."
 
 #: data/TWiki/WebSearchAdvanced.txt:59
 msgid "In reversed order"
 msgstr "V obráceném pořadí"
-
-#: templates/messages.tmpl:347
-msgid ""
-"In some cases, TWiki changes the name of the uploaded file to make it safe "
-"and accessible across all platforms:"
-msgstr ""
-"V některých případech, TWiki změní jméno nahraného souboru tak, aby ho "
-"udělal bezpečným a přístupným ze všech platforem:"
-
-#: templates/messages.tmpl:256 templates/messages.tmpl:263
-msgid "Incorrect %1"
-msgstr "Chybné %1"
-
-#: templates/messages.tmpl:266
-msgid "Incorrect %1.WikiNames:"
-msgstr "Chybné %1.WikiNames:"
-
-#: templates/messages.tmpl:97
-msgid "Incorrect Password"
-msgstr "Chybné heslo"
-
-#: templates/messages.tmpl:403
-msgid "Incorrect parameters to the =%1= script"
-msgstr "Chybné parametry pro =%1= skript"
-
-#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:6
-#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:6
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:7
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:5
-#: twikiplugins/PatternSkin/data/Trash/WebLeftBar.txt:4
-#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:5
-msgid "Index"
-msgstr "Index"
-
-#: templates/messages.tmpl:230
-msgid "Internal error when sending email to %1."
-msgstr ""
-
-#: templates/messages.tmpl:351
-msgid ""
-"International (8-bit) characters are removed (replaced by US-ASCII "
-"equivalents for Latin-1)"
-msgstr ""
-
-#: templates/messages.tmpl:289
-msgid "Invalid Activation Code"
-msgstr "Chybný aktivační kód"
-
-#: templates/messages.tmpl:281
-msgid "Invalid e-mail address"
-msgstr "Chybná emailová adresa"
-
-#: templates/messages.tmpl:418
-msgid ""
-"It is probably OK to go ahead and edit - unless you intend to change data in "
-"a form attached to the topic. If %1 actually _does_ save the topic while you "
-"are editing, your changes will be merged, and nothing will be lost. Form "
-"data cannot easily be merged though, so in this case you are recommended to "
-"check with %1 first."
-msgstr ""
-"Pravděpodobně je v pořádku pokračovat a upravovat - pokud neplánujete měnit "
-"datave formuláři připojeném ke článku. Pokud %1 _uloží článek_ dokud ho Vy "
-"editujete, Vaše změny budou sloućeny a nic se neztratí. Data formuláře "
-"bohužel nemohou být jednoduše sloučena, proto se Vám v tomto případě "
-"doporučuje zkontrolovat nejdřive %1."
 
 #: templates/twiki.tmpl:9
 #, fuzzy
@@ -1672,16 +790,6 @@ msgstr ""
 "Obvykle je nejlepší vybrat krátké jméno pro nový web, protože je lehčí "
 "tvořitodkazy na něj. Písmena nepovolená ve jménu článku, jako jsou mezery "
 "budou automaticky odstraněna."
-
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarSearch.txt:2
-#: twikiplugins/PatternSkin/data/TWiki/WebTopBar.txt:7
-#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:56
-msgid "Jump"
-msgstr "Přejdi na"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:97
-msgid "Last Name:"
-msgstr "Poslední jméno"
 
 #: data/TWiki/WebSearchAdvanced.txt:57
 msgid "Last editor"
@@ -1729,45 +837,17 @@ msgstr "Články, které začínají písmenem:"
 msgid "Local customisations of site-wide preferences"
 msgstr "%1 pro změnu preferencí webu"
 
-#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:6
-msgid "Log In"
-msgstr "Přihlásit"
-
-#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:7
-msgid "Log Out"
-msgstr "Odhlásit"
-
-#: templates/messages.tmpl:458
-msgid ""
-"Log in as [[%SCRIPTURL{login}%?sudo=sudo][internal admin]] if you need to "
-"quickly fix something"
-msgstr ""
-
 #: templates/mailresetpassword.tmpl:9
-#: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:9
 msgid "Login name %1"
 msgstr "Přihlášen %1"
 
 #: templates/login.tmpl:50
-#: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:193
 msgid "Logon"
 msgstr "Přihlásit"
-
-#: templates/messages.tmpl:240
-msgid "Mail to"
-msgstr "Odeslat mail"
 
 #: data/TWiki/WebSearchAdvanced.txt:63
 msgid "Make search:"
 msgstr "Hledání:"
-
-#: templates/messages.tmpl:207
-msgid "Missing Fields"
-msgstr "Chybějící pole"
-
-#: templates/messages.tmpl:36
-msgid "Missing action command"
-msgstr "Chybí příkaz akce"
 
 #: data/TWiki/WebSearch.txt:17 data/TWiki/WebSearchAdvanced.txt:25
 msgid "Modify search"
@@ -1778,18 +858,10 @@ msgid "More formatting help"
 msgstr "Více nápovědy k formátování"
 
 #: templates/rdiff.tmpl:6
-#: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:29
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:84
 msgid "More topic actions..."
 msgstr "Další akce..."
 
-#: twikiplugins/TwistyPlugin/data/TWiki/TwistyPlugin.txt:405
-#, fuzzy
-msgid "More..."
-msgstr "více..."
-
 #: templates/moveattachment.tmpl:36
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:37
 msgid "Move"
 msgstr "Přesun"
 
@@ -1810,10 +882,6 @@ msgstr "Přesun přílohy"
 msgid "Move or delete attachment"
 msgstr "Přesun přílohy"
 
-#: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:21
-msgid "Move to web:"
-msgstr "Přesun do:"
-
 #: templates/renamedelete.tmpl:26
 msgid "Move topic to web:"
 msgstr "Přesun článku do:"
@@ -1823,46 +891,13 @@ msgstr "Přesun článku do:"
 msgid "Move/Rename"
 msgstr "Přejmenovat"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:64
-msgid "My Links"
-msgstr "Mé odkazy"
-
 #: lib/TWiki/Search.pm:855
 msgid "NEW"
 msgstr "NOVÝ"
 
-#: templates/messages.tmpl:103
-msgid "Name of new web is missing"
-msgstr "Chybí jméno nového webu"
-
-#: templates/messages.tmpl:143
-msgid "New User Registration disabled"
-msgstr ""
-
-#: templates/messages.tmpl:134
-msgid "New User Registration not supported"
-msgstr ""
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:28
-msgid "New e-mails (space-separated list)"
-msgstr "Nové emailové adresy (mezerou oddělený seznam)"
-
-#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:73
-#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:9
-msgid "New or changed topics in %1, since %2:"
-msgstr "Nový nebo změněný článek v %1, od %2:"
-
 #: templates/renamewebbase.tmpl:10
 msgid "New parent web:"
 msgstr "Nový nadřízený web"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:17
-msgid "New password"
-msgstr "Nové heslo"
-
-#: templates/messages.tmpl:87
-msgid "New topic name %1 is not a %2"
-msgstr "Nové jméno článku %1 není %2"
 
 #: templates/renamewebbase.tmpl:7
 msgid "New web name:"
@@ -1873,23 +908,13 @@ msgid "Newer revision:"
 msgstr "Novější revize:"
 
 #: templates/oopsmore.tmpl:113
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:24
 msgid "No child topics"
 msgstr "Žádné podřízené články"
 
-#: templates/messages.tmpl:435
-msgid "No permission to view %1"
-msgstr "Nemáte právo pro prohlížení %1"
-
 #: templates/oopsmore.tmpl:108
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:57
 #, fuzzy
 msgid "No previous revision exists."
 msgstr "Prohlédni předchozí revize článku"
-
-#: templates/messages.tmpl:200
-msgid "No users to reset passwords for."
-msgstr "%Žádní uživatelé pro znovunastavení hesla"
 
 #: templates/renamedelete.tmpl:41
 msgid "Not recommended when deleting a topic."
@@ -1903,11 +928,7 @@ msgstr ""
 "Bohužel všechny odkazy (URL), které ukazují na tuto přílohu budou chybné po "
 "tomto přesunu."
 
-#: templates/messages.tmpl:294 templates/messages.tmpl:346
 #: templates/registerconfirm.tmpl:13 templates/registernotify.tmpl:22
-#: twikiplugins/ClassicSkin/templates/registerconfirm.classic.tmpl:13
-#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:22
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:13
 msgid "Note:"
 msgstr "Poznámka:"
 
@@ -1916,27 +937,12 @@ msgstr "Poznámka:"
 msgid "Note: This topic does not exist"
 msgstr "POZNÁMKA: Tento článek ještě neexistuje"
 
-#: data/TWiki/VarMAKETEXT.txt:13
-msgid "Notes:"
-msgstr "Poznámky:"
-
-#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:9
-#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:9
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:10
-#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:8
-msgid "Notifications"
-msgstr "Upozornění:"
-
-#: templates/search.text.tmpl:15 templates/searchformat.tmpl:10
-#: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:16
-#: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:5
+#: templates/searchformat.tmpl:10
 msgid "Number of topics:"
 msgstr "Počet článků"
 
-#: templates/messages.tmpl:168 templates/messages.tmpl:175
 #: templates/oopsaccessdenied.tmpl:7 templates/oopssaveerr.tmpl:14
 #: templates/twiki.tmpl:82
-#: twikiplugins/ClassicSkin/templates/oopsaccessdenied.classic.tmpl:6
 msgid "OK"
 msgstr "OK"
 
@@ -1944,147 +950,32 @@ msgstr "OK"
 msgid "Older revision:"
 msgstr "Starší revize"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:289
-msgid "Once registered you can login using your %1 and password."
-msgstr "Po zaregistrování se můžete přihlášit jako %1 s Vaším heslem."
-
-#: templates/messages.tmpl:462
-msgid "Only members of the %1 are allowed to perform this action."
-msgstr "Pouze členové %1 jsou oprávnění provést tuto akci."
-
-#: twikiplugins/ClassicSkin/templates/edit.classic.tmpl:18
-#: twikiplugins/ClassicSkin/templates/preview.classic.tmpl:10
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:27
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:30
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:53
-#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:14
-#: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:19
-msgid "Opens page in new window"
-msgstr "Otevře stránku v nvém okně"
-
 #: templates/renamedelete.tmpl:29
 msgid "Optionally change topic name:"
 msgstr "Volitelně změní jméno článku:"
-
-#: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:32
-msgid "Optionally enter a different topic name:"
-msgstr "Volitelně vložte odlišné jméno článku:"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:122
-msgid "Organisation URL:"
-msgstr "URL organizace:"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:119
-msgid "Organisation name:"
-msgstr "Jméno organizace:"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:269
-msgid "Other Country"
-msgstr "Ostatní země"
 
 #: data/TWiki/WebSearch.txt:48 data/TWiki/WebSearchAdvanced.txt:91
 msgid "Other search options:"
 msgstr "Ostatní možnosti při hledání:"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:5
-msgid "Otherwise, use this form to get a new one e-mailed to you."
-msgstr "Jinak použijte tento formulář aby jste dostal nový emailem."
-
 #: templates/login.tmpl:39
-#: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:188
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:25
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:27
 msgid "Password"
 msgstr "Heslo"
 
-#: templates/messages.tmpl:164
-msgid "Password changed successfully!"
-msgstr "Změna hesla byla úspěšná!"
-
-#: templates/messages.tmpl:171
-#, fuzzy
-msgid "Password could not be changed"
-msgstr "Hesla si neodpovídají"
-
-#: templates/messages.tmpl:199 templates/messages.tmpl:203
-msgid "Password reset failed"
-msgstr "Znovunastavení hesla bylo neúspěšné"
-
-#: templates/messages.tmpl:213
-msgid "Passwords do not match"
-msgstr "Hesla si neodpovídají"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:60
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:74
-msgid "Personal Preferences"
-msgstr "Osobní preference"
-
 #: templates/oopsmore.tmpl:55
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:30
 msgid "Pick from a list"
 msgstr ""
-
-#: templates/messages.tmpl:123
-msgid "Pick one of the %1."
-msgstr "Vyberte jedno z %1."
 
 #: data/Trash/TrashAttachment.txt:3
 msgid "Placeholder for trashed attachments"
 msgstr "Místo pro vymazané přílohy"
-
-#: templates/messages.tmpl:253 templates/messages.tmpl:303
-msgid "Please contact %1 if you have any questions."
-msgstr "Prosím kontatujte %1 pokud máte libovolné otázky."
-
-#: templates/messages.tmpl:138 templates/messages.tmpl:147
-#: templates/messages.tmpl:223 templates/messages.tmpl:232
-msgid "Please contact %1."
-msgstr ""
 
 #: templates/login.tmpl:6
 #, fuzzy
 msgid "Please enter your username and password"
 msgstr "Vložte prosím Váš účet a heslo:"
 
-#: templates/messages.tmpl:71 templates/messages.tmpl:77
-#: templates/messages.tmpl:83
-msgid "Please go _back_ in your browser and try a new name."
-msgstr "Prosím jděte _zpět_ ve vašem prohlížeči a zkuste nové jméno."
-
-#: templates/messages.tmpl:358
-msgid "Please go back in your browser and check again."
-msgstr "Prosím jděte zpět ve Vašem prohlížeči a zkontrolujte to znova."
-
-#: templates/messages.tmpl:88
-#, fuzzy
-msgid ""
-"Please go back in your browser and choose a topic name that is a %1.WikiWord "
-"or check the allow non-Wiki Word box"
-msgstr ""
-"Prosím jděte zpět ve Vašem prohlížeči a vyberte název článku, který je %1."
-"WikiWord nebo zaškrtněte Nemusí být WikiWord volbu"
-
-#: templates/messages.tmpl:100 templates/messages.tmpl:104
-#: templates/messages.tmpl:109 templates/messages.tmpl:113
-#: templates/messages.tmpl:117 templates/messages.tmpl:127
-#: templates/messages.tmpl:210 templates/messages.tmpl:216
-#: templates/messages.tmpl:260 templates/messages.tmpl:272
-#: templates/messages.tmpl:278 templates/messages.tmpl:286
-#: templates/messages.tmpl:37 templates/messages.tmpl:41
-#: templates/messages.tmpl:59
-msgid "Please go back in your browser and try again."
-msgstr "Jděte zpět ve Vašem browseru a zkuste to znova."
-
-#: templates/messages.tmpl:45
-msgid ""
-"Please make sure you spelled the %1 correctly and try again. If you get "
-"stuck, please mail %2."
-msgstr ""
-"Ujistéte se prosím, že jste napsal %1 správně, ješté jednou. Pokud jste se "
-"opravdu zasekl, prosím zašlete mail %2."
-
 #: templates/attach.tmpl:6
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:24
 #, fuzzy
 msgid ""
 "Please see <a target='TWikiVariables' onclick=\"return launchWindow('%"
@@ -2096,27 +987,14 @@ msgstr ""
 "více informací o připojených souborech."
 
 #: templates/mailresetpassword.tmpl:12
-#: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:12
 msgid ""
 "Please visit %1 to change your password to something more memorable for you."
 msgstr ""
 "Přejděte prosím na %1 a změňte Vaše heslo na něco, co si snáže zapamatujete."
 
-#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:12
-#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:12
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:13
-#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:11
-msgid "Preferences"
-msgstr "Preference"
-
 #: templates/settings.tmpl:7
-#: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:7
 msgid "Preferences for"
 msgstr "Preference pro"
-
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:54
-msgid "Properties"
-msgstr "Vlastnosti"
 
 #: data/Main/TWikiPreferences.txt:7
 msgid ""
@@ -2124,15 +1002,7 @@ msgid ""
 "preferences)"
 msgstr ""
 
-#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:10
-#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:10
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:11
-#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:9
-msgid "RSS Feed"
-msgstr ""
-
 #: templates/registernotify.tmpl:10
-#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:10
 msgid ""
 "Read %1 to get a quick overview of this collaboration platform. To learn "
 "more, study the TWikiTutorial, which is accessible from the same link."
@@ -2140,14 +1010,6 @@ msgstr ""
 "Přečtěte si prosím %1 aby jste získal přehled o této platformě ke "
 "spolupráci. Aby jste se naučil více, čtěte TWikiTutorial, který je odtud "
 "přístupný."
-
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:30
-msgid "Read new revision help text in new window"
-msgstr "Přečtěte si nápovědu k nové revizi v novém okně"
-
-#: twikiplugins/TipsContrib/data/TWiki/TWikiTipsOfTheDayInclude.txt:12
-msgid "Read on"
-msgstr "Pročtěte si"
 
 #: data/Sandbox/WebHome.txt:21 data/TWiki/WebSearch.txt:52
 #: data/TWiki/WebSearchAdvanced.txt:96
@@ -2159,81 +1021,31 @@ msgid "Refresh"
 msgstr ""
 
 #: templates/twiki.tmpl:107
-#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:9
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
 msgid "Register"
 msgstr "Registruj"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:13
-msgid "Registered users can [[%1][change]] and [[%2][reset]] their passwords."
-msgstr ""
-"Registrovaní uživatelé mohou [[%1][změnit]] a [[%2][znovunastavit]] jejich "
-"hesla."
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:2
-msgid "Registration"
-msgstr "Registrace"
-
-#: templates/messages.tmpl:292
-msgid "Registration codes can only be used once."
-msgstr ""
 
 #: data/TWiki/WebSearchAdvanced.txt:65
 msgid "Regular expression search"
 msgstr "Hledání pomocí regulárních výrazů"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:81
-msgid "Related Topics"
-msgstr "Podobné články"
-
 #: data/Sandbox/WebNotify.txt:10 data/Trash/WebNotify.txt:9
-#: data/_default/WebNotify.txt:8 templates/messages.tmpl:460
-#: templates/messages.tmpl:467
-#: twikiplugins/TWikiUserMappingContrib/data/Main/TWikiGroupTemplate.txt:10
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:45
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:35
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:33
+#: data/_default/WebNotify.txt:8
 msgid "Related topics:"
 msgstr "Podobné články:"
-
-#: twikiplugins/ClassicSkin/templates/login.classic.tmpl:11
-msgid "Remember me"
-msgstr ""
 
 #: templates/login.tmpl:46
 msgid "Remember me on this computer"
 msgstr ""
 
-#: templates/messages.tmpl:180
-msgid ""
-"Remember to update your user topic if you want your e-mail change to be "
-"reflected there as well."
-msgstr ""
-"Nezapomeňte změnit článek o Vás, pokud chcete aby Váš email tam byl také "
-"změněn."
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:5
-msgid "Remember your password?"
-msgstr "Pamatujete si Vaše heslo?"
-
 #: data/TWiki/WebTopicViewTemplate.txt:13
 msgid "Remember, a %1 is case sensitive."
 msgstr ""
-
-#: templates/messages.tmpl:51
-msgid "Remove the user from the group(s) %1 first."
-msgstr "Odstraň nejdřive uživatele ze skupiny(skupin) %1."
 
 #: templates/rename.tmpl:7 templates/renameweb.tmpl:7
 msgid "Rename"
 msgstr "Přejmenovat"
 
-#: templates/messages.tmpl:74 templates/messages.tmpl:80
-msgid "Rename failed"
-msgstr "Přejmenování selhalo"
-
 #: templates/oopsmore.tmpl:28
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:11
 msgid "Rename or move topic"
 msgstr "Přejmenovat nebo přesunout článek"
 
@@ -2247,8 +1059,6 @@ msgid "Rename/Move"
 msgstr "Přejmenovat/Přesunout"
 
 #: templates/oopsmore.tmpl:29 templates/oopsmore.tmpl:31
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:12
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:14
 msgid "Rename/move topic..."
 msgstr "Přejmenovat/přesunout článek..."
 
@@ -2257,20 +1067,10 @@ msgid "Rename/move/delete web..."
 msgstr "Přejmenovat/přesunout/smazat web..."
 
 #: templates/form.tmpl:1
-#: twikiplugins/ClassicSkin/templates/form.classic.tmpl:1
 msgid "Replace form..."
 msgstr "Nahraď formulář..."
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:3
-msgid "Reset Password"
-msgstr "Znovunastav heslo"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:22
-msgid "Reset password"
-msgstr "Znovunastav heslo"
-
 #: templates/oopsmore.tmpl:105
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:53
 #, fuzzy
 msgid "Restore"
 msgstr "Registruj"
@@ -2281,81 +1081,26 @@ msgid "Restore topic"
 msgstr "Vymazat článek"
 
 #: templates/oopsmore.tmpl:103
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:51
 #, fuzzy
 msgid "Restore topic to revision:"
 msgstr "Prohlédni předchozí revize článku"
 
 #: templates/oopsmore.tmpl:105
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:53
 #, fuzzy
 msgid "Restore topic to this revision"
 msgstr "Prohlédni předchozí revize článku"
 
-#: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:32
-msgid "Results from %1 web"
-msgstr "Výsledky z webu %1"
-
-#: templates/messages.tmpl:184
-msgid "Return to %1."
-msgstr "Návrat do %1."
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:18
-msgid "Retype new password"
-msgstr "Zopakujte Vaše nové heslo"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:115
-msgid "Retype password:"
-msgstr "Zopakujte Vaše heslo:"
-
-#: templates/messages.tmpl:27
-msgid "Rev %1 was saved by %2, while you were still editing."
-msgstr ""
-"Revize %1 byla uložena uživatelem %2, v době kdy Vy jste stále editoval."
-
-#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:44
-#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:76
-msgid "Review recent changes in:"
-msgstr "Zkontrolujte poslední změny v:"
-
-#: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:19
-msgid "Revision"
-msgstr "Revize"
-
 #: templates/oopsmore.tmpl:87
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:56
 #, fuzzy
 msgid "Revisions"
 msgstr "Revize"
 
-#: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:19
-msgid "S = Save, C = Cancel"
-msgstr ""
-
-#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:14
-msgid "S = Save, Q = Quiet save, K = Checkpoint, D = Discard"
-msgstr "S = Ulož, Q = Ulož potichu, K = Bod návratu, D = Neukládat"
-
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:53
-msgid "S = Save, Q = Quiet save, K = Checkpoint, P = Preview, C = Cancel"
-msgstr "S = Ulož, Q = Ulož potichu, K = Bod návratu, P = Ukázka, C = Přerušit"
-
 #: templates/registernotifyadmin.tmpl:16
-#: twikiplugins/ClassicSkin/templates/registernotifyadmin.classic.tmpl:16
 msgid "Saved to:"
 msgstr "Uloženo do:"
 
 #: data/TWiki/WebSearch.txt:30 data/TWiki/WebSearchAdvanced.txt:38
 #: data/_default/WebHome.txt:11
-#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:7
-#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:7
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:8
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:6
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarSearch.txt:3
-#: twikiplugins/PatternSkin/data/TWiki/WebTopBar.txt:9
-#: twikiplugins/PatternSkin/data/Trash/WebLeftBar.txt:5
-#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:6
-#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:57
 msgid "Search"
 msgstr "Hledej"
 
@@ -2371,7 +1116,6 @@ msgstr "H&ledej ve všech webech"
 
 #: templates/backlinksallwebs.tmpl:7 templates/backlinksweb.tmpl:7
 #: templates/oopsmore.tmpl:38
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:18
 msgid "Search all webs for topics that link to here"
 msgstr "Prohledej všechny weby pro články, které odkazují sem"
 
@@ -2385,7 +1129,6 @@ msgid "Search string"
 msgstr "Hledej řetězec"
 
 #: templates/oopsmore.tmpl:40
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:20
 msgid "Search the %1 Web for topics that link to here"
 msgstr "Hledej články ve webu %1 které sem odkazují"
 
@@ -2394,23 +1137,12 @@ msgid "Search where:"
 msgstr "Kde hledat:"
 
 #: templates/search.tmpl:36 templates/searchformat.tmpl:9
-#: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:1
 msgid "Searched:"
 msgstr "Prohledáno:"
 
 #: data/Trash/WebHome.txt:5
 msgid "Security Note:"
 msgstr "Bezpečnostní poznámka:"
-
-#: templates/messages.tmpl:47
-msgid "See %1 for a list of existing users or register as new user in %2."
-msgstr ""
-"Zkontrolujte %1 v seznamu existujících uživatelů nebo se zaregistrujte jako "
-"nový uživatel v %2."
-
-#: templates/messages.tmpl:315
-msgid "See %1 for information about Form Definitions."
-msgstr "Přečtěte si %1 pro informaci o definici formuláře."
 
 #: data/TWiki/WebIndex.txt:4
 msgid "See also the faster %1"
@@ -2432,10 +1164,6 @@ msgstr ""
 msgid "Select"
 msgstr "Vyber"
 
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:25
-msgid "Select a new local file to update attachment"
-msgstr "Vyberte nový lokální soubor pro změnu přílohy"
-
 #: templates/renamebase.tmpl:43
 msgid "Select all"
 msgstr "Vyber vše"
@@ -2446,21 +1174,12 @@ msgid "Select topic parent:"
 msgstr "Krok 1: Vyberte nadřízený článek"
 
 #: templates/edit.tmpl:47
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:71
 msgid "Select, copy and paste your signature text to the bottom of your entry"
 msgstr "Vyberte, zkopírujte a vložte Váš podpis na konec Vašeho zápisu"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:284
-msgid "Send you a confirmation of your registration by e-mail."
-msgstr "Odešle Vám potvrzení o Vaší registraci emailem."
 
 #: templates/oopsmore.tmpl:98
 msgid "Sequential"
 msgstr "Sekvenčně"
-
-#: lib/TWiki/Form/Checkbox.pm:34
-msgid "Set all"
-msgstr "Nastav vše"
 
 #: templates/oopsmore.tmpl:58
 #, fuzzy
@@ -2468,22 +1187,8 @@ msgid "Set new parent"
 msgstr "Nastavit nový nadřízený článek"
 
 #: templates/oopsmore.tmpl:47
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:28
 msgid "Set new topic parent"
 msgstr "Nastavit nový nadřízený článek"
-
-#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:7
-msgid "Show help"
-msgstr "Ukaž nápovědu"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:78
-msgid "Show tool-tip topic info on mouse-over of %1 links, on or off:"
-msgstr ""
-"Ukazovat krátký popis při přejetí myší přes odkaz %1, zapnout nebo vypnout:"
-
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:74
-msgid "Shrink edit box"
-msgstr "Zmenšit editovací oblast"
 
 #: templates/oopsmore.tmpl:98
 msgid "Side by side"
@@ -2511,23 +1216,10 @@ msgid "Size"
 msgstr "Velikost"
 
 #: templates/registernotify.tmpl:15
-#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:15
 msgid "Some add schedule information and vacation notice."
 msgstr "Někdo přidal informace o rozvrhu a poznámky o volnu."
 
-#: templates/messages.tmpl:350
-msgid "Some characters such as =&#126;=, =$=, =@=, =%= are removed"
-msgstr "Některé znaky jako je =&#126;=, =$=, =@=, =%= jsou mazány"
-
-#: templates/messages.tmpl:295
-msgid ""
-"Some mail tools have an error that causes them to send the same request "
-"twice when you click on a link. It you did this, it is possible that you "
-"actually *have* registered successfully."
-msgstr ""
-
 #: templates/registernotify.tmpl:14
-#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:14
 msgid ""
 "Some people turn it into a personal portal with favorite links, what they "
 "work on, what help they'd like, etc."
@@ -2535,49 +1227,17 @@ msgstr ""
 "Někteří lidé to změní na svůj personální portál s nejoblíbenějšími odkazy, "
 "na čem pracují, apod."
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:5
-msgid "Sorry, Registration has been temporarily disabled"
-msgstr ""
-
 #: data/TWiki/WebSearchAdvanced.txt:53
 msgid "Sort results by:"
 msgstr "Seřaď výsledky podle:"
 
-#: templates/messages.tmpl:348
-msgid "Spaces are replaced by underscores"
-msgstr "Mezery jsou nahrazeny podtržítky"
-
-#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:11
-#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:11
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:12
-#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:10
-msgid "Statistics"
-msgstr "Statistiky"
-
-#: templates/messages.tmpl:194 templates/messages.tmpl:300
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:295
-msgid "Submit"
-msgstr "Potvrdit"
-
 #: templates/registernotify.tmpl:18 templates/registernotifyadmin.tmpl:12
-#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:18
-#: twikiplugins/ClassicSkin/templates/registernotifyadmin.classic.tmpl:12
 msgid "Submitted content:"
 msgstr "Potvrzený obsah:"
-
-#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:47
-#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:79
-#: twikiplugins/MailerContrib/templates/newsletter.tmpl:20
-msgid "Subscribe / Unsubscribe in:"
-msgstr "Příhlásit/ Odhlásit z:"
 
 #: data/TWiki/WebSearchAdvanced.txt:71
 msgid "Summaries"
 msgstr "Shrnutí"
-
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:74
-msgid "Switch to monotype or propotional font"
-msgstr ""
 
 #: data/TWiki/WebSearch.txt:31 data/TWiki/WebSearchAdvanced.txt:39
 msgid ""
@@ -2592,7 +1252,6 @@ msgid "TWiki User Authentication"
 msgstr ""
 
 #: templates/mailresetpassword.tmpl:3
-#: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:3
 msgid "TWiki password reset for %1"
 msgstr "TWiki znovunastavení hesla pro %1"
 
@@ -2616,12 +1275,7 @@ msgstr "Testovací články"
 msgid "Text body"
 msgstr "Tělo článku"
 
-#: templates/messages.tmpl:152 templates/messages.tmpl:187
-msgid "Thank you for registering"
-msgstr "Díky za Vaši registraci"
-
 #: templates/registernotify.tmpl:8
-#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:8
 msgid ""
 "Thank you for registering in the %1 collaboration platform. Please save this "
 "e-mail for future reference."
@@ -2630,33 +1284,12 @@ msgstr ""
 "si tento email."
 
 #: templates/registerconfirm.tmpl:9
-#: twikiplugins/ClassicSkin/templates/registerconfirm.classic.tmpl:9
 msgid ""
 "Thank you for registering in the %1 collaboration platform. Your "
 "verification code is %2."
 msgstr ""
 "Díky za Vaši registraci v %1 - platformě pro spolupráci. Váš verifikační kód "
 "je %2."
-
-#: templates/messages.tmpl:264
-msgid ""
-"The %1 field must be your first and last name in %2, e.g. your capitalized "
-"first and last name with spaces removed."
-msgstr ""
-"%1 je Vaše křestní jméno, %2 Vaše příjmení, tj. Vaše Křestní jméno a "
-"příjmení bez mezer a s prvními písmeny velkými."
-
-#: templates/messages.tmpl:258
-msgid "The %1 field must match the {LoginNameFilterIn} filter for this site"
-msgstr ""
-
-#: templates/messages.tmpl:68
-msgid "The %1 topic already exists"
-msgstr "Článek %1 už existuje"
-
-#: templates/messages.tmpl:470
-msgid "The %1 web does not exist"
-msgstr "Web %1 neexistuje"
 
 #: data/Sandbox/WebHome.txt:4
 msgid ""
@@ -2670,8 +1303,7 @@ msgstr ""
 "pomůckách %3. Dobrý zvyk je podepsat se na konci stránky spolu s datumem a %"
 "4."
 
-#: data/Sandbox/WebRss.txt:5 data/Trash/WebRss.txt:5
-#: data/_default/WebAtom.txt:3 data/_default/WebRss.txt:5
+#: data/Sandbox/WebRss.txt:5 data/_default/WebRss.txt:5
 msgid ""
 "The %1 web of TWiki. TWiki is a Web-Based Collaboration Platform for the "
 "Enterprise."
@@ -2679,23 +1311,9 @@ msgstr ""
 "Web %1 vytvořený ve TWiki. TWiki je webově založená platforma pro spolupráci "
 "pro libovolné prostředí."
 
-#: templates/messages.tmpl:145
-msgid "The Administrator has disabled new user registration."
-msgstr ""
-
-#: templates/messages.tmpl:290
-msgid "The activation code %1 is invalid."
-msgstr "Aktivační kód %1 je neplatný."
-
 #: templates/moveattachment.tmpl:29
 msgid "The attachment and any history will be moved to the new topic."
 msgstr "Přiloha a veškerá historie změn budou přesunuty do nového článku."
-
-#: templates/messages.tmpl:426
-msgid ""
-"The chances are good that %1 has simply navigated away from the edit page "
-"without saving."
-msgstr "%1 pravděpodobně odešel pryč z editování stránky bez uložení změn."
 
 #: templates/renamebase.tmpl:74
 msgid ""
@@ -2705,114 +1323,14 @@ msgstr ""
 "Označené články budou změněny (ukáže se další formulář, který Vám _nakonec_ "
 "umožní přejmenovat libovolný článek, který byl zamknut)"
 
-#: templates/messages.tmpl:282
-msgid "The e-mail address for this account is not valid."
-msgstr "Emailová adresa pro tento účet není správná."
-
-#: templates/messages.tmpl:442
-msgid "The entry for user %1 was missing in the password system."
-msgstr "Záznam pro uživatele %1 chyběl systému."
-
-#: templates/messages.tmpl:343
-msgid "The file has been uploaded and attached properly to the %1 topic."
-msgstr "Soubor byl nahrán a v poŕadku připojen ke článku %1"
-
-#: templates/messages.tmpl:377
-msgid "The following topics are locked for edit, and cannot be moved:"
-msgstr "Následující ćlánky jsou zamćeny pro editování a nemohou být přesunuty:"
-
-#: templates/messages.tmpl:383
-msgid "The following topics refer to topics in this web, but are being edited:"
-msgstr ""
-"Následující články odkazují na články v tomto webu, ale nyní jsou editovány:"
-
-#: templates/messages.tmpl:380
-msgid ""
-"The following topics refer to topics in this web, but you are denied access "
-"to them:"
-msgstr ""
-"Následující články odkazují na články v tomto webu, ale Vy k nim máte "
-"zakázán přístup:"
-
-#: templates/messages.tmpl:321
-msgid "The form should be defined in the topic %1"
-msgstr "Formulář měl být definován ve článku %1"
-
-#: templates/messages.tmpl:424
-msgid "The lease on this topic expired %1 ago."
-msgstr "Zámek na tomto článku vypršel před %1"
-
 #: templates/moveattachment.tmpl:16
 msgid "The new topic chosen must already exist."
 msgstr "Nový vybraný článek už musí existovat."
-
-#: templates/messages.tmpl:16
-msgid "The new web has been created"
-msgstr "Nový web byl vytvořen"
-
-#: templates/messages.tmpl:98
-msgid "The password you entered in the *old password* field is incorrect."
-msgstr "Heslo, které jste vložil do *předchozího hesla* je nesprávná."
-
-#: templates/messages.tmpl:309
-msgid "The required field %1 was not filled in."
-msgstr "Požadované pole %1 nebylo vyplněno."
-
-#: templates/messages.tmpl:136
-msgid "The selected User System does not support new user registration."
-msgstr ""
 
 #: data/TWiki/WebTopicViewTemplate.txt:6
 #, fuzzy
 msgid "The topic %1 you are trying to access does not exist, yet."
 msgstr "Zkoušíte %1 k článku, který neexistuje."
-
-#: templates/messages.tmpl:324
-msgid "The topic is in an old format"
-msgstr "Článek je ve starém formátu"
-
-#: templates/messages.tmpl:214
-msgid "The two passwords you entered do not match."
-msgstr "Hesla, která jste vložil nesouhlasí."
-
-#: templates/messages.tmpl:373
-msgid "There are problems with renaming this web:"
-msgstr "Problémy s přejmenováním tohoto webu:"
-
-#: templates/messages.tmpl:221
-#, fuzzy
-msgid "There has been a problem adding your user id to the Password system."
-msgstr ""
-"Objevil se problém v přidání Vašeho účtu do systému. Prosím kontaktujte %1."
-
-#: templates/messages.tmpl:327
-msgid "There should be a line that includes %1, look for %2 (or %3)"
-msgstr "Měly by zde být řádky, které obsahují %1, hledejte %2 (nebo%3)"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:6
-msgid "This TWiki does _not_ support new User Registration"
-msgstr ""
-
-#: templates/messages.tmpl:334
-msgid "This can be automatically upgraded by:"
-msgstr "Toto může být automaticky upgradováno na:"
-
-#: templates/messages.tmpl:317
-msgid "This could be for several reasons:"
-msgstr "Mohlo se stát z několika příčin:"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:5
-msgid ""
-"This form is used to change your registered e-mail addresses. Your "
-"registered e-mails are used by TWiki for sending you e-mails, include "
-"notifications of password changes. The addresses you register via this form "
-"are kept secret and will *not* be published anywhere on this site."
-msgstr ""
-"Tento formulář je použit pro změnu Vaší zaregistrované emailové adresy. Vaše "
-"zaregistrované emaily jsou použity TWiki pro zasílání zpráv, zahrnující "
-"upozornění na změny hesla. Adresa, kterou jste zaregistroval přes tento "
-"formuláŕ jsou bezpečně uložena a *nebudou* publikována nikde na tomto "
-"serveru."
 
 #: data/Sandbox/WebNotify.txt:4 data/Trash/WebNotify.txt:3
 #: data/_default/WebNotify.txt:2
@@ -2827,13 +1345,7 @@ msgstr ""
 "článek v tomto %1 webu. Pro přihlášení, prosím přidejte odrážku s Vaším %2 v "
 "abecedním pořádku do tohoto seznamu:"
 
-#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:7
-#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:71
-msgid "This is an automated e-mail from %1."
-msgstr "Toto je automatický email od %1."
-
 #: templates/registernotifyadmin.tmpl:8
-#: twikiplugins/ClassicSkin/templates/registernotifyadmin.classic.tmpl:8
 msgid "This is an automated e-mail notification of user registration in %1."
 msgstr "Toto je automatické upozornění na registraci uživatele v %1"
 
@@ -2852,14 +1364,6 @@ msgstr ""
 "Toto jméno bylo zvoleno tak, aby nekolidovalo s žádným článkem, který už je "
 "v %1 webu"
 
-#: templates/messages.tmpl:332
-msgid "This requires the form definition to be present."
-msgstr "Toto vyžaduje aby existovala definice formuláře."
-
-#: templates/messages.tmpl:276
-msgid "This site requires at least %1 character passwords"
-msgstr ""
-
 #: data/TWiki/WebTopicViewTemplate.txt:25
 msgid "This topic has moved to %1."
 msgstr "Článek byl přesunut do %1"
@@ -2872,43 +1376,11 @@ msgstr ""
 "Takovéto jméno článku není doporučeno, protože nebude automaticky spojováno. "
 "Podívejte se na %1 na detaily"
 
-#: templates/viewprint.tmpl:13
-msgid "This topic:"
-msgstr "Tento článek:"
-
-#: templates/messages.tmpl:29
-msgid ""
-"Those changes have been merged with yours to create Rev %1. Text fields will "
-"have been merged, but other data such as form fields may have overwritten "
-"the other users changes. Please inspect the topic to make sure it is OK, "
-"especially if you made any changes to form fields."
-msgstr ""
-"Změny byly spojeny s Vašimi, pro vytvoření revize %1. Textové pole budou "
-"spojeny, ale ostatní data jako jsou pole formulářů mohou být přepsány "
-"změnami ostatních uživatelů. Prosím zkontrolujte článek aby jste se "
-"ujistili, že je vše v pořádku, obzvláště pokud jste udělal změny do polí "
-"formulářů."
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:5
-msgid ""
-"To edit pages on this TWikiSite, you must have a registered user name and "
-"password."
-msgstr ""
-"Pro editování stránek na tomto Webu musíte mít registrované uživatelské "
-"jméno aheslo."
-
 #: templates/oopsleaseconflict.tmpl:20
-#: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:22
 msgid "To edit the topic anyway, click "
 msgstr "Pokud chcete článek přesto editovat, stiskněte "
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:84
-msgid "To register as a new user, simply fill out this form:"
-msgstr ""
-"Pro zaregistrování jako nový uživatel, jednoduše vyplňte tento formulář:"
-
 #: templates/oopsleaseconflict.tmpl:16
-#: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:18
 msgid "To see if %1 has finished editing yet, click "
 msgstr "Pro kontrolu, jestli %1 už ukončil editaci, stiskněte "
 
@@ -2920,67 +1392,21 @@ msgstr "K článku:"
 msgid "To web:"
 msgstr "K webu:"
 
-#: templates/messages.tmpl:306
-msgid "Topic Save Error"
-msgstr "Chyba při uložení článku"
-
-#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:15
-msgid "Topic attachments"
-msgstr "Přílohy článku"
-
-#: templates/messages.tmpl:330
-msgid "Topic can not be upgraded from old style category table"
-msgstr "Článek nemůže být upgradován ze starého stylu tabulky kategorií"
-
 #: data/TWiki/WebSearchAdvanced.txt:55
 msgid "Topic name"
 msgstr "Jméno článku"
-
-#: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:44
-msgid "Topic name:"
-msgstr "Jméno článku:"
-
-#: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:51
-msgid "Topic parent:"
-msgstr "Nadřízený článek"
-
-#: templates/viewprint.tmpl:14
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:37
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:62
-#, fuzzy
-msgid "Topic revision:"
-msgstr "Nadřízený článek"
 
 #: templates/oopssaveerr.tmpl:12
 msgid "Topic save error"
 msgstr "Chyba uložení článku"
 
-#: data/TWiki/WebTemplateTopics.txt:2
-#, fuzzy
-msgid "Topic templates in %1 Web"
-msgstr "Články ve webu %1"
-
 #: data/TWiki/WebSearch.txt:37 data/TWiki/WebSearchAdvanced.txt:46
 msgid "Topic title"
 msgstr "Název článku"
 
-#: templates/messages.tmpl:26
-msgid "Topic was merged"
-msgstr "Článek byl spojen"
-
-#: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:25
-#, fuzzy
-msgid "Topic will be named: "
-msgstr "Jméno článku:"
-
 #: templates/search.tmpl:17
 #, fuzzy
 msgid "Topics in %1 web"
-msgstr "Články ve webu %1"
-
-#: templates/search.text.tmpl:4
-#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:14
-msgid "Topics in %1 web:"
 msgstr "Články ve webu %1"
 
 #: data/TWiki/WebSearchAdvanced.txt:82
@@ -3010,101 +1436,29 @@ msgid "Total matches"
 msgstr "Celkem vyhovuje"
 
 #: templates/oopsleaseconflict.tmpl:17
-#: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:19
 msgid "Try Again"
 msgstr "Zkuste znova"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:76
-msgid ""
-"Uncomment preferences variables to activate them (remove the #-sign). Help "
-"and details on preferences variables are available in %1."
-msgstr ""
-"Odkomentujte preferenční proměnné aby jste je aktivovali(odeberte značku #). "
-"Nápověda a detaily o preferenčních proměnných jsou dostupné v %1."
 
 #: templates/login.tmpl:9
 #, fuzzy
 msgid "Unrecognised user and/or password"
 msgstr "Nerozeznaný účet nebo heslo"
 
-#: templates/messages.tmpl:40
-msgid "Unrecognized action command %1"
-msgstr "Nerozeznaný příkaz akce: %1"
-
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:9
-msgid "Update attachment %1 on %2"
-msgstr "Změna přílohy %1 v %2"
-
 #: templates/renamebase.tmpl:53 templates/renamewebbase.tmpl:27
 msgid "Update links"
 msgstr ""
 
 #: templates/attachagain.tmpl:22 templates/attachnew.tmpl:9
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:41
-#: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:7
 msgid "Upload file"
 msgstr "Nahraj přílohu"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:40
-msgid "Upload up to %1 KB."
-msgstr "Maximální velikost přílohy je %1 KB."
-
-#: templates/messages.tmpl:362
-msgid "Uploaded file %1 exceeds limit of %2 KB"
-msgstr "Velikost přílohy %1 přesáhla limit %2 KB"
-
-#: templates/messages.tmpl:361
-msgid "Uploaded file is too big"
-msgstr "Příloha je příliš veliká"
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:5
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:5
-msgid "Use %1 instead."
-msgstr "Použijte spíše %1."
-
-#: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:58
-#, fuzzy
-msgid "Use template:"
-msgstr "Možné vzory pro formulář"
-
-#: templates/messages.tmpl:10
-msgid "User Account %1 Deleted"
-msgstr "Účet %1 byl vymazán"
-
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:15
-msgid "User Reference"
-msgstr "Uživatelské reference"
-
 #: templates/login.tmpl:32
-#: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:182
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:18
 msgid "Username"
 msgstr "Váš účet"
-
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:5
-msgid "Users"
-msgstr "Uživatelé"
-
-#: templates/messages.tmpl:161
-msgid ""
-"Users with automatically generated passwords should proceed immediately to "
-"[[%1][change password]] to change their password to something memorable."
-msgstr ""
-"Uživatelé s automaticky generovanými hesly by měli pokračovat do [[%1][změň "
-"heslo]] a změnit své heslo na něco zapamatovatelného."
 
 #: templates/attachtables.tmpl:37
 msgid "Version"
 msgstr "Verze"
-
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:15
-#, fuzzy
-msgid "Version history"
-msgstr "Historické verze %1"
-
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:13
-msgid "Version history of %1"
-msgstr "Historické verze %1"
 
 #: templates/oopsmore.tmpl:92
 #, fuzzy
@@ -3116,7 +1470,6 @@ msgid "View difference"
 msgstr "Zobraz rozdíly"
 
 #: templates/oopsmore.tmpl:89
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:37
 msgid "View previous topic revision"
 msgstr "Prohlédni předchozí revize článku"
 
@@ -3126,14 +1479,10 @@ msgid "View revision:"
 msgstr "Ukaž revize"
 
 #: templates/oopsleaseconflict.tmpl:28 templates/rdiff.tmpl:6
-#: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:33
-#: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:10
-#: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:29
 msgid "View topic"
 msgstr "Ukaž článek"
 
 #: templates/twiki.tmpl:103
-#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:159
 msgid "View total topic history"
 msgstr "Ukaž celou historii článku"
 
@@ -3142,142 +1491,32 @@ msgid "WARNING:"
 msgstr "VAROVÁNÍ"
 
 #: data/TWiki/TWikiPreferences.txt:84
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:52
 msgid "WYSIWYG"
 msgstr "WYSIWIG"
-
-#: templates/messages.tmpl:440
-msgid "Warning: Can't INCLUDE %1 repeatedly, topic is already included. %2"
-msgstr "Varování: INCLUDE %1 nelze provést opakovaně, článek je už zahrnut. %2"
-
-#: templates/messages.tmpl:439
-#, fuzzy
-msgid "Warning: Can't find topic %1.%2"
-msgstr "Varování: Nemohu najít článek %1"
 
 #: lib/TWiki/UI/Register.pm:792
 msgid "Warning: Could not send confirmation email"
 msgstr ""
 
-#: templates/messages.tmpl:447
-msgid "Warning: This site does not allow %<nop>INCLUDE% of URLs"
-msgstr "Varování: Tento server nepovoluje %<nop>INCLUDE% odkazů"
-
 #: data/TWiki/WebSearch.txt:3
 msgid "Web Search"
 msgstr "Hledání ve webu"
-
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:8
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarWebsList.txt:2
-msgid "Webs"
-msgstr "Weby"
 
 #: data/Sandbox/WebHome.txt:2 data/_default/WebHome.txt:2
 msgid "Welcome to the %1 web"
 msgstr "Vítejte do %1 webu"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:280
-msgid ""
-"When %1 receives the form, it will mail an account activation code to the e-"
-"mail address you gave above. Enter that activation code in the following "
-"screen, or follow the link in the e-mail, to activate your account. Once "
-"your account is activated, %1 will:"
-msgstr ""
-"Když %1 obdrží formulář, odešle aktivační kód účtu na emailovou adresu, "
-"kterou jste zadal výše. Vložte tento aktivační kód na následující obrazovku "
-"nebo klikněte na odkaz v emailu, aby jste aktivoval váš účet. Jakmile je Váš "
-"úćet aktivován, %1 provede:"
-
 #: templates/attachtables.tmpl:37 templates/attachtables.tmpl:4
 msgid "Who"
 msgstr "Kdo"
 
-#: templates/messages.tmpl:19
-msgid "Would you like to go to:"
-msgstr "Chcete jít na:"
-
-#: templates/messages.tmpl:246
-msgid "You are already registered"
-msgstr "Už jste registrován"
-
-#: templates/messages.tmpl:155
-msgid "You are also listed in the %1 topic"
-msgstr "Také jste uveden v článku %1"
-
-#: templates/messages.tmpl:374
-msgid "You are denied access to the following topics in the web:"
-msgstr "Nemáte přístup k tomuto článku:"
-
-#: templates/messages.tmpl:428
-msgid ""
-"You are encouraged to go ahead and edit - unless you intend to change data "
-"in a form attached to the topic. If %1 actually _does_ save while you are "
-"editing, your changes will be merged, and nothing will be lost. Form data "
-"cannot easily be merged though, so in this case you are recommended to check "
-"with %1 first."
-msgstr ""
-"Povzbuzujeme Vás k editaci článků - pokud nechcete změnit data ve formuláři "
-"připojenému ke článku. Pokud %1 nakonec uloží článek pokud vy editujete, "
-"Vaše změny budou spojeny a nic se neztratí. Data formulářů nemohou být tak "
-"lehce spojena, proto v tomto případě Vám doporučujeme nejdříve kontaktovat %"
-"1."
-
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:29
-msgid "You are here:"
-msgstr "Jste zde:"
-
-#: templates/messages.tmpl:107
-msgid ""
-"You are recommended to choose short names, preferably less than 10 "
-"characters, starting with an upper-case alphabetic character and using only "
-"alphanumeric characters. If you want to create a template web (a web just "
-"used as a base to create new webs) choose a name that starts with an "
-"underscore and has only alphanumeric characters."
-msgstr ""
-"Doporučujeme Vám vybrat krátké jméno, nejlépe kratší než 10 znaků, "
-"začínající velkým písmenem a použít pouze písmena a číslice. Pokud chcete "
-"vytvořit vzorový web (web použitý pouze jako základ pro vytvoření nových "
-"webů), vyberte jméno, které  začíná podtržitkem a obsahuje pouze "
-"alfanumerické znaky."
-
-#: templates/messages.tmpl:483
-msgid "You are trying to %1 a topic that does not exist."
-msgstr "Zkoušíte %1 k článku, který neexistuje."
-
-#: templates/messages.tmpl:492
-msgid "You are trying to %1 an attachment that does not exist."
-msgstr "Zkoušíte %1 k příloze, která neexistuje."
-
-#: templates/messages.tmpl:479
-msgid ""
-"You can [[%1][create a new web]] if you have permission. Contact %2 if you "
-"have any questions."
-msgstr ""
-"Můžete [[%1][vytvoř nový web]] pokud k tomu máte práva. Kontaktujte %2, "
-"pokud máte nějaké otázky."
-
-#: templates/messages.tmpl:125
-msgid ""
-"You can also use the names of the standard HTML colors (black, silver, gray, "
-"white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, blue, "
-"teal, or aqua)"
-msgstr ""
-"Můžete také použít jména standardních HTML barev  (black, silver, gray, "
-"white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, blue, "
-"teal, or aqua)"
-
 #: templates/registernotify.tmpl:24
-#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:24
 msgid "You can change your password at via %1"
 msgstr "Můžete změnit Vaše heslo přes %1"
 
 #: templates/renameweb.tmpl:21
 msgid "You can give this web a different name."
 msgstr "Webu můžete dát jiné jméno."
-
-#: templates/messages.tmpl:31
-msgid "You can see the differences [[%1][here]]."
-msgstr "Zde můžete vidět rozdíly [[%1][zde]]."
 
 #: templates/oopschangelanguage.tmpl:7
 msgid ""
@@ -3287,30 +1526,7 @@ msgstr ""
 "Váš jazyk můžete permanentně nastavit nastavením proměnné %1 ve Vašem "
 "osobním článku."
 
-#: templates/messages.tmpl:247
-msgid "You cannot register twice, the name %1 is already registered."
-msgstr "Nemůžete se registrovat dvakrát, účet %1 už je zaregistrováno."
-
-#: templates/messages.tmpl:140 templates/messages.tmpl:149
-#: templates/messages.tmpl:225 templates/messages.tmpl:234
-#, fuzzy
-msgid "You have *not* been registered."
-msgstr "Už jste registrován"
-
-#: templates/messages.tmpl:352
-msgid ""
-"You may be able to get your TWiki administrator to change the settings if "
-"they are inappropriate for your environment."
-msgstr ""
-"Váš TWiki administrátor může změnit nastavení, pokud jsou nevhodné pro Vaše "
-"prostředí."
-
-#: templates/messages.tmpl:166
-msgid "You may need to close your browser to make this change take effect."
-msgstr "Musíte zavřít Váš prohlížeč, aby se změny projevily."
-
 #: templates/registerconfirm.tmpl:11
-#: twikiplugins/ClassicSkin/templates/registerconfirm.classic.tmpl:11
 msgid ""
 "You now need to verify your e-mail address. You can do so by entering %1 in "
 "the form presented to you when this e-mail was sent, or by visiting %2"
@@ -3319,42 +1535,9 @@ msgstr ""
 "do formuláře, který se Vám zobrazil, když tento email byl odeslán nebo "
 "navštívením %2"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:7
-msgid ""
-"You really ought to register a valid e-mail address. If TWiki can't find a "
-"registered e-mail for you in the secret database, it will look in your user "
-"topic for a line like this:"
-msgstr ""
-"Opravdu by jste měl zaregistrovat pravou emailovou adresu. Pokud TWiki "
-"nebude moci najít registrovaný email pro Vás ve své databázi, podívá se do "
-"Vašeho osobního článku pro ŕádek jako je tento:"
-
 #: templates/oopsmore.tmpl:105
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:53
 msgid "You will be able to review the topic before saving it to a new revision"
 msgstr ""
-
-#: templates/messages.tmpl:339
-msgid "You will probably have to ask your administrator, %1, to do this."
-msgstr ""
-"Pravděpodobně se budete muset zeptat Vašeho administrátora - %1, aby jste "
-"toto mohl udělat."
-
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:26
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:15
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:17
-msgid "Your %1.LoginName"
-msgstr "Vaše %1.PřihlašovacíJméno"
-
-#: templates/messages.tmpl:189
-msgid ""
-"Your activation code has been sent to %1.  Either click on the link in your "
-"e-mail or enter the code in the box below to activate your membership. (This "
-"code is of the form \"YourName.xxxxxxxxxx\")"
-msgstr ""
-"Váš aktivační kód byl odeslán do %1. Buď klikněte na odkaz ve Vašem emailu "
-"nebo vložte kód do pole níže, aby jste aktivoval Vaše členství. (Tento kód "
-"je ve formě \"VašeJméno.xxxxxxxxxx\")"
 
 #: templates/oopslanguagechanged.tmpl:20
 #, fuzzy
@@ -3366,53 +1549,17 @@ msgstr ""
 "přesměrováni. Pokud ne, [[%2][klikněte zde]] pro pokračování."
 
 #: templates/mailresetpassword.tmpl:10
-#: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:10
 msgid "Your password has been changed to %1."
 msgstr "Vaše heslo bylo změnéno na %1."
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:114
-msgid "Your password:"
-msgstr "Vaše heslo:"
-
 #: templates/registernotify.tmpl:12
-#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:12
 msgid ""
 "Your personal %1 topic is located at %2. You can customize it as you like:"
 msgstr "Váš osobní článek %1 je umístěn v %2. Můžete ho změnit, jak chcete:"
 
-#: templates/messages.tmpl:153
-msgid "Your personal TWiki topic %1 has been created"
-msgstr ""
-
-#: templates/messages.tmpl:182
-msgid "Your registered e-mail address(es) are updated to: %1."
-msgstr "Vaše zaregistrovaná adresa(y) jsou změnény na: %1"
-
 #: templates/edit.tmpl:47
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:71
 msgid "Your signature to copy/paste:"
 msgstr "Vaše značka pro kopírování/vložení:"
-
-#: templates/messages.tmpl:173
-msgid ""
-"Your system may not support changing passwords through TWiki. Check with "
-"your TWiki administrator."
-msgstr ""
-
-#: templates/messages.tmpl:11
-msgid "Your user name has been removed from the Authentication System."
-msgstr "Váš účet byl smazán z autentifikačního systému."
-
-#: templates/messages.tmpl:13
-msgid "Your user topic has not been renamed. Please e-mail %1 to request this."
-msgstr ""
-"Váš osobní článek nebyl pŕejmenován. Prosím pošlete email %1 s tímto "
-"požadavkem."
-
-#: templates/messages.tmpl:326
-#, fuzzy
-msgid "[[%1][Debug topic text]]."
-msgstr "Klikni na [[%1][Debug topic text]]."
 
 #: templates/settings.tmpl:28
 msgid ""
@@ -3458,10 +1605,6 @@ msgstr "přístup ke článku nepovolen"
 msgid "access not allowed on web"
 msgstr "přístup nepovolen k webu"
 
-#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:11
-msgid "accesskey='c'"
-msgstr "accesskey='c'"
-
 #: data/_default/WebHome.txt:11
 msgid "advanced search"
 msgstr "pokročilé hledání"
@@ -3478,19 +1621,6 @@ msgstr "změnit, aktualizovat, předchozí revize, přesunout, vymazat..."
 msgid "checkboxes of referenced topics"
 msgstr "zatržení u odkazovaných článků"
 
-#: templates/messages.tmpl:399
-msgid "don't forget to check your Topic Settings"
-msgstr ""
-
-#: templates/messages.tmpl:208
-msgid "fields are required."
-msgstr "pole jsou povinná"
-
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:27
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:30
-msgid "help"
-msgstr "nápověda"
-
 #: data/TWiki/WikiSyntaxSummary.txt:17
 msgid "hints on good style"
 msgstr "nápověda k dobrému stylu"
@@ -3500,18 +1630,10 @@ msgid "in raw text format"
 msgstr "v neupraveném textovém formátu"
 
 #: templates/form.tmpl:3
-#: twikiplugins/ClassicSkin/templates/form.classic.tmpl:3
 msgid "indicates mandatory fields"
 msgstr "označuje povinné pole"
 
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:15
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:9
-msgid "looking for references in _%1 web_ only"
-msgstr "hledám odkazy pouze v _%1 webu_"
-
 #: data/TWiki/RenameWeb.txt:3
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:13
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:7
 msgid "looking for references in _all public webs_"
 msgstr "hledám odkazy ve _všech veřejných webech_"
 
@@ -3523,24 +1645,11 @@ msgstr "řídit"
 msgid "more..."
 msgstr "více..."
 
-#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:16
-msgid "now %1"
-msgstr "nyní je %1"
-
 #: templates/changeform.tmpl:13 templates/moveattachment.tmpl:36
 #: templates/preview.tmpl:17 templates/rename.tmpl:20
 #: templates/renameconfirm.tmpl:29 templates/renamedelete.tmpl:44
 #: templates/renameweb.tmpl:33 templates/renamewebconfirm.tmpl:16
 #: templates/twiki.tmpl:107
-#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:9
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:37
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:41
-#: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:7
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:36
-#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:10
-#: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:25
-#: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:16
 msgid "or"
 msgstr "nebo"
 
@@ -3554,7 +1663,6 @@ msgid "put it back"
 msgstr "vložit zpátky"
 
 #: data/TWiki/WebChanges.txt:2
-#: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:32
 msgid "retrieved at %1"
 msgstr "nalezeno v %1"
 
@@ -3568,118 +1676,1324 @@ msgstr "hledám odkazy pouze v _%1 webu_"
 msgid "scans links in _all public webs_"
 msgstr "Hledej podobné články ve všech veřejných webech"
 
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:19
-#, fuzzy
-msgid "title='Attach an image or document to this topic' accesskey='a'>&Attach"
-msgstr "Připoj obrázek nebo soubor k tomuto ćlánku"
-
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:4
-#, fuzzy
-msgid "title='Create new topic' accesskey='c'>&Create"
-msgstr "value='Přerušit' accesskey='c'"
-
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:13
-msgid "title='Create this topic' accesskey='w'>Create (&WYSIWYG)"
-msgstr ""
-
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:22
-#, fuzzy
-msgid ""
-"title='Delete or rename this topic; set parent topic; view and compare "
-"revisions' accesskey='m'>&More topic actions"
-msgstr ""
-"Smazat nebo přejmenovat tento článek; nastavit nadřízený článek; ukaž a "
-"porovnej revize"
-
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:7
-msgid "title='Edit this topic text' accesskey='e'>&Edit"
-msgstr ""
-
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:10
-msgid "title='Edit this topic text' accesskey='w'>&WYSIWYG"
-msgstr ""
-
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:26
-#, fuzzy
-msgid "title='Printable version of this topic' accesskey='p'>&Print version"
-msgstr "Verze pro vytištění tohoto článku"
-
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:33
-#, fuzzy
-msgid ""
-"title='Search all webs for topics that link to here' accesskey='l'>A&ll Webs"
-msgstr "Prohledej všechny weby pro články, které odkazují sem"
-
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:35
-#, fuzzy
-msgid ""
-"title='Search the %1 Web for topics that link to here' "
-"accesskey='b'>&Backlinks"
-msgstr "Hledej články ve webu %1 které sem odkazují"
-
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:31
-#, fuzzy
-msgid ""
-"title='Search the %1 Web for topics that link to here' accesskey='b'>We&b"
-msgstr "Hledej články ve webu %1 které sem odkazují"
-
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:43
-#, fuzzy
-msgid "title='View raw text without formatting' accesskey='r'>&Raw View"
-msgstr "Prohlédni nepracovaný text (bez formátování)"
-
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:16
-msgid "title='View topic' accesskey='v'>&View topic"
-msgstr ""
-
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:38
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:40
-#, fuzzy
-msgid "title='View total topic history' accesskey='h'>&History"
-msgstr "Ukaž celou historii článku"
-
 #: lib/TWiki.pm:3917
 msgid "user list truncated"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:47
-msgid "value='Cancel' accesskey='c'"
-msgstr "value='Přerušit' accesskey='c'"
-
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:43
-msgid "value='Checkpoint' accesskey='k'"
-msgstr "value='Kontrolní bod' accesskey='k'"
-
-#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:12
-msgid "value='Discard' accesskey='d'"
-msgstr "value='Zruš' accesskey='d'"
-
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:45
-msgid "value='Preview' accesskey='p'"
-msgstr "value='Ukázka' accesskey='p'"
-
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:41
-msgid "value='Quiet save' accesskey='q'"
-msgstr "value='Ulož a pokračuj' accesskey='q'"
-
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:39
-msgid "value='Save' accesskey='s'"
-msgstr "value='Ulož' accesskey='s'"
-
 #: templates/attachtables.tmpl:42
-#: twikiplugins/ClassicSkin/templates/attachtables.classic.tmpl:42
 msgid "view"
 msgstr "náhled"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:12
-msgid ""
-"you *must* have at least one valid registered e-mail to be able to reset "
-"your password. If none of your registered e-mail addresses is valid, and you "
-"have forgotten your password, contact %1."
-msgstr ""
-"*Musíte* mít alespoň jeden funkční registrovaný email, aby jste byl schopen "
-"resetovat Vaše heslo. Pokud žádný z Vašich registrovaných emailových adres "
-"není správný a Vy jste změnil Vaše heslo, kontaktujte %1."
+#~ msgid "%1 - complete TWiki documentation, Quick Start to Reference"
+#~ msgstr "%1 - kompletní dokumentace TWiki, od přehledu k podrobné referenci"
+
+#~ msgid "%1 - just for me"
+#~ msgstr "%1 - pouze pro mne"
+
+#~ msgid "%1 - starting points on TWiki"
+#~ msgstr "1 - výchozí bod v TWiki"
+
+#~ msgid "%1 - try out TWiki on your own"
+#~ msgstr "%1 - zkuste si TWiki sami"
+
+#~ msgid "%1 - view a short introductory presentation on TWiki for beginners"
+#~ msgstr "%1 - krátká prezentace TWiki pro začátečníky"
+
+#~ msgid "%1 Web"
+#~ msgstr "%1 Web"
+
+#~ msgid "%1 Web Home"
+#~ msgstr "%1 Domů"
+
+#~ msgid "%1 for changing your email address"
+#~ msgstr "%1 pro změnu Vaší elektronické adresy"
+
+#~ msgid "%1 for changing your password"
+#~ msgstr "%1 pro změnu Vašeho hesla"
+
+#~ msgid "%1 has a list of other TWiki users"
+#~ msgstr "%1 má seznam ostatních uživatelů TWiki"
+
+#~ msgid ""
+#~ "%1 has been editing the topic for %2 and the lease is still active for "
+#~ "another %3."
+#~ msgstr "%1 editoval článek %2 a pravděpodobně na něm stále pracuje jiný %3."
+
+#~ msgid "%1 home"
+#~ msgstr "%1 Domů"
+
+#~ msgid "%1 is a list of TWiki user documentation"
+#~ msgstr "%1 je seznam uživatelské dokumentace"
+
+#~ msgid "%1 is an invalid name for a new web"
+#~ msgstr "%1 je chybné jm´´eno pro nový web"
+
+#~ msgid "%1 is currently set to %2"
+#~ msgstr "%1 je nastaven na %2"
+
+#~ msgid "%1 is editing %2."
+#~ msgstr "%1 edituje %2."
+
+#~ msgid "%1 is in at least one group and cannot be removed"
+#~ msgstr "%1 je nejméně v jedné skupině a nemůže být smazán"
+
+#~ msgid "%1 is the default topic for deleted attachments."
+#~ msgstr "%1 je přednastaveným článkem pro smazané přílohy."
+
+#~ msgid "%1 lists all TWiki user tools"
+#~ msgstr "%1 ukáže všechny uživatelské nástroje"
+
+#~ msgid "%1 may still be editing %2."
+#~ msgstr "%1 stále může editovat %2."
+
+#~ msgid "%1 to create another web"
+#~ msgstr "%1 pro vytvoření nového webu"
+
+#~ msgid "%1 to customize the web specific preferences"
+#~ msgstr "%1 pro změnu preferencí webu"
+
+#~ msgid "%1 to start working on the new web"
+#~ msgstr "%1 pro začátek práce na novém webu"
+
+#~ msgid "%1 topic does not exist"
+#~ msgstr "článek %1 neexistuje"
+
+#~ msgid "&Cancel"
+#~ msgstr "Pře&rušit"
+
+#~ msgid "&Edit text"
+#~ msgstr "&Editovat text"
+
+#~ msgid "&WYSIWYG"
+#~ msgstr "&Editovat(WYSIWYG)"
+
+#~ msgid "(__Suggestion:__ How about uploading your picture to your topic?)"
+#~ msgstr "(__Doporučení:__ Nechtěl by jste nahrát svojí fotografii ?)"
+
+#~ msgid "(delete attachment)"
+#~ msgstr "(smazat přílohu)"
+
+#~ msgid "(how you log in) LoginName:"
+#~ msgstr "(jak jste se přihlásil) Účet:"
+
+#~ msgid "(identifies you to others) WikiName:"
+#~ msgstr "(identifikuje Vás ostatním) WikiName:"
+
+#~ msgid "(oops)"
+#~ msgstr "(Ou)"
+
+#~ msgid "(optional)"
+#~ msgstr "(volitelně)"
+
+#, fuzzy
+#~ msgid "(raw view)"
+#~ msgstr "Nefo&rmátovaně"
+
+#, fuzzy
+#~ msgid "(revision %1)"
+#~ msgstr "Revize"
+
+#~ msgid "(search results)"
+#~ msgstr "(výsledky hledání)"
+
+#~ msgid "(single character first name)"
+#~ msgstr "(první písmeno křestního jména)"
+
+#~ msgid "(single character last name)"
+#~ msgstr "(první písmeno přijmení)"
+
+#~ msgid ""
+#~ "*Important:* the information provided in this form will be stored in a "
+#~ "database on the TWiki server. This database is accessible to anyone who "
+#~ "can access the server through the web (though passwords will be "
+#~ "encrypted, and e-mail addresses will be obfusticated to help prevent "
+#~ "spamming). Your country, or the country where the server is hosted, may "
+#~ "have Data Protection laws governing the maintenance of such databases. If "
+#~ "you are in doubt, you should contact %1 for details of the Data "
+#~ "Protection Policy of this TWiki server before registering."
+#~ msgstr ""
+#~ "*Důležité:* informace poskytované v tomto formuláři budou uloženy v "
+#~ "databázi na TWiki serveru. Tato databáze je přístupná komukoli kdo může "
+#~ "přistoupit k serveru přes web (ačkoli hesla budou zašifrována a "
+#~ "emailovéadresy budou pozměněny kvůli spamování). Vaše země nebo země, kde "
+#~ "je server může mít zákony týkající se administrace takové databáze. Pokud "
+#~ "máte pochybnosti,kontaktujte prosím %1 kvůli detailům, týkajících se "
+#~ "ochrany dat na tomto serverupřed registrací."
+
+#~ msgid ""
+#~ "A %1 is divided into webs; each one represents one subject, one area of "
+#~ "collaboration. You are trying to %2 in a web that does not exist."
+#~ msgstr ""
+#~ "%1 je rozdělen do více webů; každý reprezentuje jedno téma, jednu oblast "
+#~ "spolupráce. Zkoušíte %2 ve webu, který neexistuje."
+
+#~ msgid ""
+#~ "A =.txt= extension is appended to some filenames for security reasons"
+#~ msgstr "Přiloha =.txt= je připojena k některým souborům, kvůli bezpečnosti"
+
+#~ msgid ""
+#~ "A color starts with a # sign, followed by 6 hexadecimal numbers, e.g. "
+#~ "=#FFFF00=."
+#~ msgstr ""
+#~ "Barva začíná znakem # , následovaným 6 hexadecimálními čísly, např. "
+#~ "=#FFFF00=."
+
+#~ msgid ""
+#~ "A link to a topic located in another web is written like %1. Make sure "
+#~ "that the name of the web is not spelt wrongly on the previous page; fix "
+#~ "the link if necessary."
+#~ msgstr ""
+#~ "Odkaz na článek, který je v jiném webu se zapisuje takto: %1. Ujistěte "
+#~ "se, že jméno webu je správné na předchozí stránce; opravte odkaz, pokud "
+#~ "je to nezbytné."
+
+#~ msgid ""
+#~ "A new *system-generated* password for your login name %1 (<nop>WikiName %"
+#~ "2) has been sent to your registered e-mail address. If your e-mail "
+#~ "address is no longer valid, please contact %3"
+#~ msgstr ""
+#~ "Nové *systémem vygenerované* heslo pro Váš účet %1 (<nop>WikiName %2) byl "
+#~ "odeslán na Vaši registrovanou e-mailovou adresu. Pokud Vaše adresa není "
+#~ "dále platná, kontaktujte prosím %3"
+
+#~ msgid "Access check on %1 failed"
+#~ msgstr "Přístup k %1 byl odepřen"
+
+#~ msgid "Access keys"
+#~ msgstr "Přístupový klíč"
+
+#~ msgid "Action %1: %2."
+#~ msgstr "Akce %1: %2."
+
+#~ msgid "Add your name to the list of users in the %1 topic in the %2 web."
+#~ msgstr "Přidejte Vaše jméno do seznamu uživatelů ve článku %1 na webu %2."
+
+#~ msgid "Adding a %1 variable in WebPreferences"
+#~ msgstr "Přidána proměnná %1 ve vlastnostech webu"
+
+#~ msgid "Admin Maintenance"
+#~ msgstr "Administrátorská údržba"
+
+#~ msgid ""
+#~ "After submitting this form your e-mail will be changed, and you will be "
+#~ "returned to this form."
+#~ msgstr ""
+#~ "Po odeslání tohoto formuláře bude Váš email změněn a Vy se vrátíte zpět "
+#~ "do tohoto formuláře."
+
+#~ msgid "After submitting this form your password will be changed."
+#~ msgstr "Po odeslání tohoto formuláře Vaše heslo bude změněno."
+
+#~ msgid ""
+#~ "After submitting this form, you will receive an e-mail with your new, "
+#~ "*system-generated* password, and a link to a page where you can change it."
+#~ msgstr ""
+#~ "Po odeslání tohoto formuláře obdržíte email s Vaším novým, *systémem "
+#~ "vygenerovaným* heslem a odkazem na stránku, kde ho můžete změnit."
+
+#~ msgid ""
+#~ "Alternatively hit back to go back to TWiki.TWikiRegistration and choose a "
+#~ "different username."
+#~ msgstr ""
+#~ "Alternativně stiskněte Zpět, pro návrat zpět do TWiki.TWikiRegistration a "
+#~ "vyberte jiné jméno."
+
+#~ msgid ""
+#~ "An e-mail could not be delivered. Please notify your %1 administrator, %2"
+#~ msgstr ""
+#~ "Email nemohl být doručen. Uvědomte prosím Vašeho administrátora %1, %2"
+
+#~ msgid "And populated with topics from the base web"
+#~ msgstr "Naplněno ćlánky ze základního webu"
+
+#~ msgid "Attach"
+#~ msgstr "Příloha"
+
+#~ msgid "Attach image or document on %1"
+#~ msgstr "Připoj obrázek nebo soubor k %1"
+
+#~ msgid "Attachment '%1' does not exist"
+#~ msgstr "Přiloha '%1' neexistuje"
+
+#~ msgid "Attachment delete failed"
+#~ msgstr "Vymazání přílohy selhalo"
+
+#~ msgid "Attachment move failed"
+#~ msgstr "Přesun přílohy selhal"
+
+#, fuzzy
+#~ msgid "Attachments"
+#~ msgstr "Příloha"
+
+#, fuzzy
+#~ msgid "Attachments help"
+#~ msgstr "Příloha"
+
+#~ msgid "Automated notification of topic changes"
+#~ msgstr "Automatické upozorňování na změny článku"
+
+#, fuzzy
+#~ msgid "Available templates in %1 Web:"
+#~ msgstr "Možné vzory pro formulář"
+
+#~ msgid "Back to topic"
+#~ msgstr "Zpět na článek"
+
+#, fuzzy
+#~ msgid "Bad password"
+#~ msgstr "Nové heslo"
+
+#~ msgid "Base web %1 is missing or does not exist"
+#~ msgstr "Základní web %1 není dostupný nebo neexistuje"
+
+#~ msgid "Can't find user %1"
+#~ msgstr "Nemohu nalézt uživatele %1"
+
+#~ msgid "Can't get an e-mail address for %1 (required for password reset)"
+#~ msgstr ""
+#~ "Nemohu zjistit emailovou adresu pro %1 (požadovaná pro nové nastavení "
+#~ "hesla)"
+
+#~ msgid "Cancel editing and discard changes"
+#~ msgstr "Zrušit editování a zahodit změny"
+
+#~ msgid "Cannot create %1 because it already exists."
+#~ msgstr "Nemohu vytvořit %1 protože už existuje."
+
+#~ msgid "Cannot create web %1 because it already exists"
+#~ msgstr "Web %1 nelze vytvoŕít, protože už existuje"
+
+#~ msgid "Cannot rename %1 to %2 because it already exists."
+#~ msgstr "Nelze přejmenovat %1 do %2 protože už existuje."
+
+#~ msgid "Categories"
+#~ msgstr "Kategorie"
+
+#~ msgid "Change Password"
+#~ msgstr "Změň heslo"
+
+#~ msgid "Change comment and properties only"
+#~ msgstr "Změna pouze komentáře a vlastností"
+
+#~ msgid "Change password"
+#~ msgstr "Změň heslo"
+
+#~ msgid "Changed:"
+#~ msgstr "Změněno"
+
+#~ msgid "Changes"
+#~ msgstr "Změny"
+
+#~ msgid ""
+#~ "Check your configuration setting for {TemplateDir}. If that's not the "
+#~ "problem, it may be because you have a setting of %1 that is pointing to a "
+#~ "template that doesn't exist."
+#~ msgstr ""
+#~ "Zkontrolujte Vaše nastavení pro {TemplateDir}. Pokud toto není problém, "
+#~ "problémem může být, že %1 ukazuje na šablonu, která neexistuje."
+
+#~ msgid "Color %1 has an invalid format"
+#~ msgstr "Barva %1 má nesprávný formát"
+
+#~ msgid "Comments:"
+#~ msgstr "Komentáře:"
+
+#~ msgid "Contact %1 if you have any questions."
+#~ msgstr "Kontaktujte %1 pokud máte nějaké otázky."
+
+#~ msgid "Continue and try to rename web?"
+#~ msgstr "Pokračujte a zkuste přejmenovat web?"
+
+#~ msgid "Could not create the new web %1"
+#~ msgstr "Nemohu vytvořit nový web %1"
+
+#~ msgid "Could not find template"
+#~ msgstr "Nemohu nalézt šablonu"
+
+#~ msgid "Could not save %1."
+#~ msgstr "Nemohu uložit %1"
+
+#~ msgid "Country:"
+#~ msgstr "Země:"
+
+#~ msgid "Create New Topic"
+#~ msgstr "Nový članek"
+
+#~ msgid "Create New Topic in %1 Web"
+#~ msgstr "Nový článek v %1"
+
+#~ msgid "Create personal sidebar"
+#~ msgstr "Vaše osobní stránka"
+
+#, fuzzy
+#~ msgid "Create the topic"
+#~ msgstr "Vytvořit tento článek"
+
+#~ msgid ""
+#~ "Create your personal %1 topic using your WikiName as topic name, and add "
+#~ "the data you submitted to the topic."
+#~ msgstr ""
+#~ "Vytvořte Váš osobní %1 článek použitím Vašeho WikiName jako jména článku,"
+#~ "a přidejte data které jste odeslali do článku."
+
+#~ msgid "Creating a suitable Form Definition topic"
+#~ msgstr "Vytvořte vhodný Definiční článek formuláře"
+
+#~ msgid "Current password"
+#~ msgstr "Současné heslo"
+
+#~ msgid "Delete attachment"
+#~ msgstr "Smazat přílohu"
+
+#~ msgid "Describe the file so other people know what it is."
+#~ msgstr "Popište soubor, tak aby ostatní lidé věděli o co jde."
+
+#~ msgid "Did you want to [[%1][reset %2's password]]?"
+#~ msgstr "Chtěl jste  [[%1][vynulovat %2 heslo]]?"
+
+#~ msgid "Difference:"
+#~ msgstr "Rozdíly:"
+
+#~ msgid ""
+#~ "During deletion of attachment =%1= an error was found. Please notify your "
+#~ "%2 administrator."
+#~ msgstr ""
+#~ "Během mazání přílohy =%1= byla nalezena chyba. Prosím uvědomte Vašeho "
+#~ "administratora %2."
+
+#~ msgid ""
+#~ "During move of attachment %1 to %2 an error was found. Please notify your "
+#~ "%3 administrator."
+#~ msgstr ""
+#~ "Během přesunu Vaší přílohy %1 do %2 byla nalezena chyba. Prosím "
+#~ "uvědomteVašeho administratora %3."
+
+#~ msgid ""
+#~ "During rename of topic %1 to %2 an error (%3) was found. Please notify "
+#~ "your %4 administrator."
+#~ msgstr ""
+#~ "Během přejmenování Vašeho článku %1 na %2 se objevila chyba (%3). Prosím "
+#~ "uvědomte Vašeho %4 administratora."
+
+#~ msgid ""
+#~ "During rename of web %1 to %2 an error (%3) was found. Please notify your "
+#~ "%4 administrator."
+#~ msgstr ""
+#~ "Během přejmenování webu %1 na %2 se objevila chyba (%3). Prosím uvědomte %"
+#~ "4 - administrátora."
+
+#~ msgid "E-mail address:"
+#~ msgstr "Emailová adresa:"
+
+#~ msgid "E-mail changed successfully!"
+#~ msgstr "Email byl úspěšně změněn!"
+
+#~ msgid "Edit"
+#~ msgstr "Změň"
+
+#, fuzzy
+#~ msgid "Edit help"
+#~ msgstr "Změňte text"
+
+#~ msgid "Edit personal data"
+#~ msgstr "Změňte vaše osobní údaje"
+
+#~ msgid "Edit text"
+#~ msgstr "Změňte text"
+
+#~ msgid "Edit this topic text"
+#~ msgstr "Změňte text tohoto článku"
+
+#~ msgid ""
+#~ "Either you did not specify a file name, or the file you are trying to "
+#~ "upload %1 has no content. You may not upload an empty file."
+#~ msgstr ""
+#~ "Buď jste nevložil jméno souboru nebo soubor %1, který se pokoušíte nahrát "
+#~ "nemá žádný obsah. Nemůžete nahrát prázdný soubor."
+
+#~ msgid "Enlarge edit box"
+#~ msgstr "Zvětšit editovací prostor"
+
+#, fuzzy
+#~ msgid "Error registering new user"
+#~ msgstr "Chyba při registraci uživatele %1"
+
+#~ msgid "Error registering user %1"
+#~ msgstr "Chyba při registraci uživatele %1"
+
+#~ msgid "Error saving topic"
+#~ msgstr "Chyba při uložení ćlánku"
+
+#~ msgid "Error: File attachment at %1,%2 does not exist"
+#~ msgstr "Chyba: Příloha v %1,%2 neexistuje"
+
+#~ msgid ""
+#~ "Error: Unsupported content type: %1 (Must be =text/html=, =text/plain= or "
+#~ "=text/css=)"
+#~ msgstr ""
+#~ "Chyba: Nepodporovaný typ souboru: %1 (Musí být =text/html=, =text/plain= "
+#~ "nebo =text/css=)"
+
+#~ msgid "Error: Unsupported protocol. (Must be 'http://domain/...')"
+#~ msgstr "Chyba: Nepodporovaný protokol. (Musí být 'http://domain/...')"
+
+#~ msgid "Errors"
+#~ msgstr "Chyby"
+
+#~ msgid "Failed to include URL %1"
+#~ msgstr "Chyba při vložení URL %1"
+
+#~ msgid "Fields marked %1 are required"
+#~ msgstr "Pole označená %1 jsou nutná"
+
+#~ msgid "File has been uploaded with different name"
+#~ msgstr "Soubor byl nahrán pod odlišným jménem"
+
+#~ msgid ""
+#~ "Finish creating an account for you, so that you can start editing pages "
+#~ "using your WikiName."
+#~ msgstr ""
+#~ "Dokončete vytvoření Vašeho úćtu, tak, aby jste mohl začít měnit stránkys "
+#~ "pouźitím Vašeho WikiName."
+
+#~ msgid "First Name:"
+#~ msgstr "Křestní jméno:"
+
+#~ msgid "Force new revision"
+#~ msgstr "Vynucení nové revize"
+
+#~ msgid "Forgotten your password?"
+#~ msgstr "Zapomněl jste Vaše heslo?"
+
+#~ msgid "Form Definition %1 missing"
+#~ msgstr "Definice formuláře %1 chybí"
+
+#~ msgid "Form definition missing"
+#~ msgstr "Definice formuláře chybí"
+
+#~ msgid ""
+#~ "Go back in your browser and insert information for all mandatory fields."
+#~ msgstr "Jděte zpět v prohlížeči a vložte informace pro všechny nutné pole."
+
+#~ msgid "Good examples:"
+#~ msgstr "Dobré příklady:"
+
+#~ msgid "Groups"
+#~ msgstr "Skupiny"
+
+#~ msgid "Hello %1"
+#~ msgstr "Vítejte %1"
+
+#~ msgid ""
+#~ "However, the filename has been changed from %1 to %2. Please make a note "
+#~ "of it."
+#~ msgstr ""
+#~ "Jakkoliv, soubor byl změněn z %1 na %2. Prosím učiňte o tom poznámku."
+
+#~ msgid "If this line isn't present see _upgrade_ section below"
+#~ msgstr "Pokud se tato řádka neukazuje, zkontroluj _upgrade_ sekci dole"
+
+#~ msgid "If this topic is missing create it, otherwise check it for errors."
+#~ msgstr ""
+#~ "Pokud tento článek chybí, vytvořte ho, jinak ho zkontrolujte na chyby."
+
+#~ msgid ""
+#~ "If you are developing a <nop>TWikiApplication, see %1 for a description "
+#~ "of the correct parameters."
+#~ msgstr ""
+#~ "Pokud vytváříte <nop>TWikiApplication, podívejte se na  %1 pro popis "
+#~ "správných parametrů."
+
+#~ msgid "If you came here by clicking on a question mark link"
+#~ msgstr "Pokud jste sem přišel stiskem otazníku"
+
+#~ msgid "If you enter a different name, make sure the topic does  exist."
+#~ msgstr "Pokud vložíte rozdílné jméno, ujistěte se, že článek existuje."
+
+#~ msgid "If you have any questions about registration, send an e-mail to %1."
+#~ msgstr "Pokud máte libovolné otázky o registraci, pošlete email %1."
+
+#, fuzzy
+#~ msgid "If you have any questions, please contact %1"
+#~ msgstr "Pokud máte libovolné otázky, kontaktujte prosím %1."
+
+#~ msgid ""
+#~ "If you received a link to this topic in an e-mail or just want to look at "
+#~ "the topic, [[%1][cancel save]] to go to %2."
+#~ msgstr ""
+#~ "Pokud jste obdržel odkaz na tento článek v emailu nebo se chcete pouze "
+#~ "podívat na článek, stiskněte [[%1][přerušit uložit]] aby jste přešli na %"
+#~ "2."
+
+#~ msgid "If you want to create the topic"
+#~ msgstr "Pokud chcete vytvořit článek"
+
+#~ msgid "If you would like to create this web"
+#~ msgstr "Pokud chcete vytvořit tento web"
+
+#~ msgid ""
+#~ "If your old e-mail addresses are all invalid (you can't receive mail "
+#~ "there any more) and you have forgotten your password, please contact %1 "
+#~ "for help."
+#~ msgstr ""
+#~ "Pokud je Vaše emailová adresa nefunkční (nemůžete odsud přijímat žádnou "
+#~ "poštu) a zapomněl jste své heslo, pro pomoc kontaktujte %1."
+
+#~ msgid ""
+#~ "If your user topic is not protected from changes by other people, and you "
+#~ "don't register an e-mail address using this form, then your user account "
+#~ "could be hijacked by someone else."
+#~ msgstr ""
+#~ "Pokud Váš osobní článek není chráněn před změnamiod ostatních lidí a vy "
+#~ "jste nezaregistroval Váš email pomocí tohoto formuláře, potom by Váš účet "
+#~ "mohl být převzat někým jiným."
+
+#~ msgid ""
+#~ "In some cases, TWiki changes the name of the uploaded file to make it "
+#~ "safe and accessible across all platforms:"
+#~ msgstr ""
+#~ "V některých případech, TWiki změní jméno nahraného souboru tak, aby ho "
+#~ "udělal bezpečným a přístupným ze všech platforem:"
+
+#~ msgid "Incorrect %1"
+#~ msgstr "Chybné %1"
+
+#~ msgid "Incorrect %1.WikiNames:"
+#~ msgstr "Chybné %1.WikiNames:"
+
+#~ msgid "Incorrect Password"
+#~ msgstr "Chybné heslo"
+
+#~ msgid "Incorrect parameters to the =%1= script"
+#~ msgstr "Chybné parametry pro =%1= skript"
+
+#~ msgid "Index"
+#~ msgstr "Index"
+
+#~ msgid "Invalid Activation Code"
+#~ msgstr "Chybný aktivační kód"
+
+#~ msgid "Invalid e-mail address"
+#~ msgstr "Chybná emailová adresa"
+
+#~ msgid ""
+#~ "It is probably OK to go ahead and edit - unless you intend to change data "
+#~ "in a form attached to the topic. If %1 actually _does_ save the topic "
+#~ "while you are editing, your changes will be merged, and nothing will be "
+#~ "lost. Form data cannot easily be merged though, so in this case you are "
+#~ "recommended to check with %1 first."
+#~ msgstr ""
+#~ "Pravděpodobně je v pořádku pokračovat a upravovat - pokud neplánujete "
+#~ "měnit datave formuláři připojeném ke článku. Pokud %1 _uloží článek_ "
+#~ "dokud ho Vy editujete, Vaše změny budou sloućeny a nic se neztratí. Data "
+#~ "formuláře bohužel nemohou být jednoduše sloučena, proto se Vám v tomto "
+#~ "případě doporučuje zkontrolovat nejdřive %1."
+
+#~ msgid "Jump"
+#~ msgstr "Přejdi na"
+
+#~ msgid "Last Name:"
+#~ msgstr "Poslední jméno"
+
+#~ msgid "Log In"
+#~ msgstr "Přihlásit"
+
+#~ msgid "Log Out"
+#~ msgstr "Odhlásit"
+
+#~ msgid "Mail to"
+#~ msgstr "Odeslat mail"
+
+#~ msgid "Missing Fields"
+#~ msgstr "Chybějící pole"
+
+#~ msgid "Missing action command"
+#~ msgstr "Chybí příkaz akce"
+
+#, fuzzy
+#~ msgid "More..."
+#~ msgstr "více..."
+
+#~ msgid "Move to web:"
+#~ msgstr "Přesun do:"
+
+#~ msgid "My Links"
+#~ msgstr "Mé odkazy"
+
+#~ msgid "Name of new web is missing"
+#~ msgstr "Chybí jméno nového webu"
+
+#~ msgid "New e-mails (space-separated list)"
+#~ msgstr "Nové emailové adresy (mezerou oddělený seznam)"
+
+#~ msgid "New or changed topics in %1, since %2:"
+#~ msgstr "Nový nebo změněný článek v %1, od %2:"
+
+#~ msgid "New password"
+#~ msgstr "Nové heslo"
+
+#~ msgid "New topic name %1 is not a %2"
+#~ msgstr "Nové jméno článku %1 není %2"
+
+#~ msgid "No permission to view %1"
+#~ msgstr "Nemáte právo pro prohlížení %1"
+
+#~ msgid "No users to reset passwords for."
+#~ msgstr "%Žádní uživatelé pro znovunastavení hesla"
+
+#~ msgid "Notes:"
+#~ msgstr "Poznámky:"
+
+#~ msgid "Notifications"
+#~ msgstr "Upozornění:"
+
+#~ msgid "Once registered you can login using your %1 and password."
+#~ msgstr "Po zaregistrování se můžete přihlášit jako %1 s Vaším heslem."
+
+#~ msgid "Only members of the %1 are allowed to perform this action."
+#~ msgstr "Pouze členové %1 jsou oprávnění provést tuto akci."
+
+#~ msgid "Opens page in new window"
+#~ msgstr "Otevře stránku v nvém okně"
+
+#~ msgid "Optionally enter a different topic name:"
+#~ msgstr "Volitelně vložte odlišné jméno článku:"
+
+#~ msgid "Organisation URL:"
+#~ msgstr "URL organizace:"
+
+#~ msgid "Organisation name:"
+#~ msgstr "Jméno organizace:"
+
+#~ msgid "Other Country"
+#~ msgstr "Ostatní země"
+
+#~ msgid "Otherwise, use this form to get a new one e-mailed to you."
+#~ msgstr "Jinak použijte tento formulář aby jste dostal nový emailem."
+
+#~ msgid "Password changed successfully!"
+#~ msgstr "Změna hesla byla úspěšná!"
+
+#, fuzzy
+#~ msgid "Password could not be changed"
+#~ msgstr "Hesla si neodpovídají"
+
+#~ msgid "Password reset failed"
+#~ msgstr "Znovunastavení hesla bylo neúspěšné"
+
+#~ msgid "Passwords do not match"
+#~ msgstr "Hesla si neodpovídají"
+
+#~ msgid "Personal Preferences"
+#~ msgstr "Osobní preference"
+
+#~ msgid "Pick one of the %1."
+#~ msgstr "Vyberte jedno z %1."
+
+#~ msgid "Please contact %1 if you have any questions."
+#~ msgstr "Prosím kontatujte %1 pokud máte libovolné otázky."
+
+#~ msgid "Please go _back_ in your browser and try a new name."
+#~ msgstr "Prosím jděte _zpět_ ve vašem prohlížeči a zkuste nové jméno."
+
+#~ msgid "Please go back in your browser and check again."
+#~ msgstr "Prosím jděte zpět ve Vašem prohlížeči a zkontrolujte to znova."
+
+#, fuzzy
+#~ msgid ""
+#~ "Please go back in your browser and choose a topic name that is a %1."
+#~ "WikiWord or check the allow non-Wiki Word box"
+#~ msgstr ""
+#~ "Prosím jděte zpět ve Vašem prohlížeči a vyberte název článku, který je %1."
+#~ "WikiWord nebo zaškrtněte Nemusí být WikiWord volbu"
+
+#~ msgid "Please go back in your browser and try again."
+#~ msgstr "Jděte zpět ve Vašem browseru a zkuste to znova."
+
+#~ msgid ""
+#~ "Please make sure you spelled the %1 correctly and try again. If you get "
+#~ "stuck, please mail %2."
+#~ msgstr ""
+#~ "Ujistéte se prosím, že jste napsal %1 správně, ješté jednou. Pokud jste "
+#~ "se opravdu zasekl, prosím zašlete mail %2."
+
+#~ msgid "Preferences"
+#~ msgstr "Preference"
+
+#~ msgid "Properties"
+#~ msgstr "Vlastnosti"
+
+#~ msgid "Read new revision help text in new window"
+#~ msgstr "Přečtěte si nápovědu k nové revizi v novém okně"
+
+#~ msgid "Read on"
+#~ msgstr "Pročtěte si"
+
+#~ msgid ""
+#~ "Registered users can [[%1][change]] and [[%2][reset]] their passwords."
+#~ msgstr ""
+#~ "Registrovaní uživatelé mohou [[%1][změnit]] a [[%2][znovunastavit]] "
+#~ "jejich hesla."
+
+#~ msgid "Registration"
+#~ msgstr "Registrace"
+
+#~ msgid "Related Topics"
+#~ msgstr "Podobné články"
+
+#~ msgid ""
+#~ "Remember to update your user topic if you want your e-mail change to be "
+#~ "reflected there as well."
+#~ msgstr ""
+#~ "Nezapomeňte změnit článek o Vás, pokud chcete aby Váš email tam byl také "
+#~ "změněn."
+
+#~ msgid "Remember your password?"
+#~ msgstr "Pamatujete si Vaše heslo?"
+
+#~ msgid "Remove the user from the group(s) %1 first."
+#~ msgstr "Odstraň nejdřive uživatele ze skupiny(skupin) %1."
+
+#~ msgid "Rename failed"
+#~ msgstr "Přejmenování selhalo"
+
+#~ msgid "Reset Password"
+#~ msgstr "Znovunastav heslo"
+
+#~ msgid "Reset password"
+#~ msgstr "Znovunastav heslo"
+
+#~ msgid "Results from %1 web"
+#~ msgstr "Výsledky z webu %1"
+
+#~ msgid "Return to %1."
+#~ msgstr "Návrat do %1."
+
+#~ msgid "Retype new password"
+#~ msgstr "Zopakujte Vaše nové heslo"
+
+#~ msgid "Retype password:"
+#~ msgstr "Zopakujte Vaše heslo:"
+
+#~ msgid "Rev %1 was saved by %2, while you were still editing."
+#~ msgstr ""
+#~ "Revize %1 byla uložena uživatelem %2, v době kdy Vy jste stále editoval."
+
+#~ msgid "Review recent changes in:"
+#~ msgstr "Zkontrolujte poslední změny v:"
+
+#~ msgid "Revision"
+#~ msgstr "Revize"
+
+#~ msgid "S = Save, Q = Quiet save, K = Checkpoint, D = Discard"
+#~ msgstr "S = Ulož, Q = Ulož potichu, K = Bod návratu, D = Neukládat"
+
+#~ msgid "S = Save, Q = Quiet save, K = Checkpoint, P = Preview, C = Cancel"
+#~ msgstr ""
+#~ "S = Ulož, Q = Ulož potichu, K = Bod návratu, P = Ukázka, C = Přerušit"
+
+#~ msgid "See %1 for a list of existing users or register as new user in %2."
+#~ msgstr ""
+#~ "Zkontrolujte %1 v seznamu existujících uživatelů nebo se zaregistrujte "
+#~ "jako nový uživatel v %2."
+
+#~ msgid "See %1 for information about Form Definitions."
+#~ msgstr "Přečtěte si %1 pro informaci o definici formuláře."
+
+#~ msgid "Select a new local file to update attachment"
+#~ msgstr "Vyberte nový lokální soubor pro změnu přílohy"
+
+#~ msgid "Send you a confirmation of your registration by e-mail."
+#~ msgstr "Odešle Vám potvrzení o Vaší registraci emailem."
+
+#~ msgid "Set all"
+#~ msgstr "Nastav vše"
+
+#~ msgid "Show help"
+#~ msgstr "Ukaž nápovědu"
+
+#~ msgid "Show tool-tip topic info on mouse-over of %1 links, on or off:"
+#~ msgstr ""
+#~ "Ukazovat krátký popis při přejetí myší přes odkaz %1, zapnout nebo "
+#~ "vypnout:"
+
+#~ msgid "Shrink edit box"
+#~ msgstr "Zmenšit editovací oblast"
+
+#~ msgid "Some characters such as =&#126;=, =$=, =@=, =%= are removed"
+#~ msgstr "Některé znaky jako je =&#126;=, =$=, =@=, =%= jsou mazány"
+
+#~ msgid "Spaces are replaced by underscores"
+#~ msgstr "Mezery jsou nahrazeny podtržítky"
+
+#~ msgid "Statistics"
+#~ msgstr "Statistiky"
+
+#~ msgid "Submit"
+#~ msgstr "Potvrdit"
+
+#~ msgid "Subscribe / Unsubscribe in:"
+#~ msgstr "Příhlásit/ Odhlásit z:"
+
+#~ msgid "Thank you for registering"
+#~ msgstr "Díky za Vaši registraci"
+
+#~ msgid ""
+#~ "The %1 field must be your first and last name in %2, e.g. your "
+#~ "capitalized first and last name with spaces removed."
+#~ msgstr ""
+#~ "%1 je Vaše křestní jméno, %2 Vaše příjmení, tj. Vaše Křestní jméno a "
+#~ "příjmení bez mezer a s prvními písmeny velkými."
+
+#~ msgid "The %1 topic already exists"
+#~ msgstr "Článek %1 už existuje"
+
+#~ msgid "The %1 web does not exist"
+#~ msgstr "Web %1 neexistuje"
+
+#~ msgid "The activation code %1 is invalid."
+#~ msgstr "Aktivační kód %1 je neplatný."
+
+#~ msgid ""
+#~ "The chances are good that %1 has simply navigated away from the edit page "
+#~ "without saving."
+#~ msgstr "%1 pravděpodobně odešel pryč z editování stránky bez uložení změn."
+
+#~ msgid "The e-mail address for this account is not valid."
+#~ msgstr "Emailová adresa pro tento účet není správná."
+
+#~ msgid "The entry for user %1 was missing in the password system."
+#~ msgstr "Záznam pro uživatele %1 chyběl systému."
+
+#~ msgid "The file has been uploaded and attached properly to the %1 topic."
+#~ msgstr "Soubor byl nahrán a v poŕadku připojen ke článku %1"
+
+#~ msgid "The following topics are locked for edit, and cannot be moved:"
+#~ msgstr ""
+#~ "Následující ćlánky jsou zamćeny pro editování a nemohou být přesunuty:"
+
+#~ msgid ""
+#~ "The following topics refer to topics in this web, but are being edited:"
+#~ msgstr ""
+#~ "Následující články odkazují na články v tomto webu, ale nyní jsou "
+#~ "editovány:"
+
+#~ msgid ""
+#~ "The following topics refer to topics in this web, but you are denied "
+#~ "access to them:"
+#~ msgstr ""
+#~ "Následující články odkazují na články v tomto webu, ale Vy k nim máte "
+#~ "zakázán přístup:"
+
+#~ msgid "The form should be defined in the topic %1"
+#~ msgstr "Formulář měl být definován ve článku %1"
+
+#~ msgid "The lease on this topic expired %1 ago."
+#~ msgstr "Zámek na tomto článku vypršel před %1"
+
+#~ msgid "The new web has been created"
+#~ msgstr "Nový web byl vytvořen"
+
+#~ msgid "The password you entered in the *old password* field is incorrect."
+#~ msgstr "Heslo, které jste vložil do *předchozího hesla* je nesprávná."
+
+#~ msgid "The required field %1 was not filled in."
+#~ msgstr "Požadované pole %1 nebylo vyplněno."
+
+#~ msgid "The topic is in an old format"
+#~ msgstr "Článek je ve starém formátu"
+
+#~ msgid "The two passwords you entered do not match."
+#~ msgstr "Hesla, která jste vložil nesouhlasí."
+
+#~ msgid "There are problems with renaming this web:"
+#~ msgstr "Problémy s přejmenováním tohoto webu:"
+
+#, fuzzy
+#~ msgid "There has been a problem adding your user id to the Password system."
+#~ msgstr ""
+#~ "Objevil se problém v přidání Vašeho účtu do systému. Prosím kontaktujte %"
+#~ "1."
+
+#~ msgid "There should be a line that includes %1, look for %2 (or %3)"
+#~ msgstr "Měly by zde být řádky, které obsahují %1, hledejte %2 (nebo%3)"
+
+#~ msgid "This can be automatically upgraded by:"
+#~ msgstr "Toto může být automaticky upgradováno na:"
+
+#~ msgid "This could be for several reasons:"
+#~ msgstr "Mohlo se stát z několika příčin:"
+
+#~ msgid ""
+#~ "This form is used to change your registered e-mail addresses. Your "
+#~ "registered e-mails are used by TWiki for sending you e-mails, include "
+#~ "notifications of password changes. The addresses you register via this "
+#~ "form are kept secret and will *not* be published anywhere on this site."
+#~ msgstr ""
+#~ "Tento formulář je použit pro změnu Vaší zaregistrované emailové adresy. "
+#~ "Vaše zaregistrované emaily jsou použity TWiki pro zasílání zpráv, "
+#~ "zahrnující upozornění na změny hesla. Adresa, kterou jste zaregistroval "
+#~ "přes tento formuláŕ jsou bezpečně uložena a *nebudou* publikována nikde "
+#~ "na tomto serveru."
+
+#~ msgid "This is an automated e-mail from %1."
+#~ msgstr "Toto je automatický email od %1."
+
+#~ msgid "This requires the form definition to be present."
+#~ msgstr "Toto vyžaduje aby existovala definice formuláře."
+
+#~ msgid "This topic:"
+#~ msgstr "Tento článek:"
+
+#~ msgid ""
+#~ "Those changes have been merged with yours to create Rev %1. Text fields "
+#~ "will have been merged, but other data such as form fields may have "
+#~ "overwritten the other users changes. Please inspect the topic to make "
+#~ "sure it is OK, especially if you made any changes to form fields."
+#~ msgstr ""
+#~ "Změny byly spojeny s Vašimi, pro vytvoření revize %1. Textové pole budou "
+#~ "spojeny, ale ostatní data jako jsou pole formulářů mohou být přepsány "
+#~ "změnami ostatních uživatelů. Prosím zkontrolujte článek aby jste se "
+#~ "ujistili, že je vše v pořádku, obzvláště pokud jste udělal změny do polí "
+#~ "formulářů."
+
+#~ msgid ""
+#~ "To edit pages on this TWikiSite, you must have a registered user name and "
+#~ "password."
+#~ msgstr ""
+#~ "Pro editování stránek na tomto Webu musíte mít registrované uživatelské "
+#~ "jméno aheslo."
+
+#~ msgid "To register as a new user, simply fill out this form:"
+#~ msgstr ""
+#~ "Pro zaregistrování jako nový uživatel, jednoduše vyplňte tento formulář:"
+
+#~ msgid "Topic Save Error"
+#~ msgstr "Chyba při uložení článku"
+
+#~ msgid "Topic attachments"
+#~ msgstr "Přílohy článku"
+
+#~ msgid "Topic can not be upgraded from old style category table"
+#~ msgstr "Článek nemůže být upgradován ze starého stylu tabulky kategorií"
+
+#~ msgid "Topic name:"
+#~ msgstr "Jméno článku:"
+
+#~ msgid "Topic parent:"
+#~ msgstr "Nadřízený článek"
+
+#, fuzzy
+#~ msgid "Topic revision:"
+#~ msgstr "Nadřízený článek"
+
+#, fuzzy
+#~ msgid "Topic templates in %1 Web"
+#~ msgstr "Články ve webu %1"
+
+#~ msgid "Topic was merged"
+#~ msgstr "Článek byl spojen"
+
+#, fuzzy
+#~ msgid "Topic will be named: "
+#~ msgstr "Jméno článku:"
+
+#~ msgid "Topics in %1 web:"
+#~ msgstr "Články ve webu %1"
+
+#~ msgid ""
+#~ "Uncomment preferences variables to activate them (remove the #-sign). "
+#~ "Help and details on preferences variables are available in %1."
+#~ msgstr ""
+#~ "Odkomentujte preferenční proměnné aby jste je aktivovali(odeberte značku "
+#~ "#). Nápověda a detaily o preferenčních proměnných jsou dostupné v %1."
+
+#~ msgid "Unrecognized action command %1"
+#~ msgstr "Nerozeznaný příkaz akce: %1"
+
+#~ msgid "Update attachment %1 on %2"
+#~ msgstr "Změna přílohy %1 v %2"
+
+#~ msgid "Upload up to %1 KB."
+#~ msgstr "Maximální velikost přílohy je %1 KB."
+
+#~ msgid "Uploaded file %1 exceeds limit of %2 KB"
+#~ msgstr "Velikost přílohy %1 přesáhla limit %2 KB"
+
+#~ msgid "Uploaded file is too big"
+#~ msgstr "Příloha je příliš veliká"
+
+#~ msgid "Use %1 instead."
+#~ msgstr "Použijte spíše %1."
+
+#, fuzzy
+#~ msgid "Use template:"
+#~ msgstr "Možné vzory pro formulář"
+
+#~ msgid "User Account %1 Deleted"
+#~ msgstr "Účet %1 byl vymazán"
+
+#~ msgid "User Reference"
+#~ msgstr "Uživatelské reference"
+
+#~ msgid "Users"
+#~ msgstr "Uživatelé"
+
+#~ msgid ""
+#~ "Users with automatically generated passwords should proceed immediately "
+#~ "to [[%1][change password]] to change their password to something "
+#~ "memorable."
+#~ msgstr ""
+#~ "Uživatelé s automaticky generovanými hesly by měli pokračovat do [[%1]"
+#~ "[změň heslo]] a změnit své heslo na něco zapamatovatelného."
+
+#, fuzzy
+#~ msgid "Version history"
+#~ msgstr "Historické verze %1"
+
+#~ msgid "Version history of %1"
+#~ msgstr "Historické verze %1"
+
+#~ msgid "Warning: Can't INCLUDE %1 repeatedly, topic is already included. %2"
+#~ msgstr ""
+#~ "Varování: INCLUDE %1 nelze provést opakovaně, článek je už zahrnut. %2"
+
+#, fuzzy
+#~ msgid "Warning: Can't find topic %1.%2"
+#~ msgstr "Varování: Nemohu najít článek %1"
+
+#~ msgid "Warning: This site does not allow %<nop>INCLUDE% of URLs"
+#~ msgstr "Varování: Tento server nepovoluje %<nop>INCLUDE% odkazů"
+
+#~ msgid "Webs"
+#~ msgstr "Weby"
+
+#~ msgid ""
+#~ "When %1 receives the form, it will mail an account activation code to the "
+#~ "e-mail address you gave above. Enter that activation code in the "
+#~ "following screen, or follow the link in the e-mail, to activate your "
+#~ "account. Once your account is activated, %1 will:"
+#~ msgstr ""
+#~ "Když %1 obdrží formulář, odešle aktivační kód účtu na emailovou adresu, "
+#~ "kterou jste zadal výše. Vložte tento aktivační kód na následující "
+#~ "obrazovku nebo klikněte na odkaz v emailu, aby jste aktivoval váš účet. "
+#~ "Jakmile je Váš úćet aktivován, %1 provede:"
+
+#~ msgid "Would you like to go to:"
+#~ msgstr "Chcete jít na:"
+
+#~ msgid "You are already registered"
+#~ msgstr "Už jste registrován"
+
+#~ msgid "You are also listed in the %1 topic"
+#~ msgstr "Také jste uveden v článku %1"
+
+#~ msgid "You are denied access to the following topics in the web:"
+#~ msgstr "Nemáte přístup k tomuto článku:"
+
+#~ msgid ""
+#~ "You are encouraged to go ahead and edit - unless you intend to change "
+#~ "data in a form attached to the topic. If %1 actually _does_ save while "
+#~ "you are editing, your changes will be merged, and nothing will be lost. "
+#~ "Form data cannot easily be merged though, so in this case you are "
+#~ "recommended to check with %1 first."
+#~ msgstr ""
+#~ "Povzbuzujeme Vás k editaci článků - pokud nechcete změnit data ve "
+#~ "formuláři připojenému ke článku. Pokud %1 nakonec uloží článek pokud vy "
+#~ "editujete, Vaše změny budou spojeny a nic se neztratí. Data formulářů "
+#~ "nemohou být tak lehce spojena, proto v tomto případě Vám doporučujeme "
+#~ "nejdříve kontaktovat %1."
+
+#~ msgid "You are here:"
+#~ msgstr "Jste zde:"
+
+#~ msgid ""
+#~ "You are recommended to choose short names, preferably less than 10 "
+#~ "characters, starting with an upper-case alphabetic character and using "
+#~ "only alphanumeric characters. If you want to create a template web (a web "
+#~ "just used as a base to create new webs) choose a name that starts with an "
+#~ "underscore and has only alphanumeric characters."
+#~ msgstr ""
+#~ "Doporučujeme Vám vybrat krátké jméno, nejlépe kratší než 10 znaků, "
+#~ "začínající velkým písmenem a použít pouze písmena a číslice. Pokud chcete "
+#~ "vytvořit vzorový web (web použitý pouze jako základ pro vytvoření nových "
+#~ "webů), vyberte jméno, které  začíná podtržitkem a obsahuje pouze "
+#~ "alfanumerické znaky."
+
+#~ msgid "You are trying to %1 a topic that does not exist."
+#~ msgstr "Zkoušíte %1 k článku, který neexistuje."
+
+#~ msgid "You are trying to %1 an attachment that does not exist."
+#~ msgstr "Zkoušíte %1 k příloze, která neexistuje."
+
+#~ msgid ""
+#~ "You can [[%1][create a new web]] if you have permission. Contact %2 if "
+#~ "you have any questions."
+#~ msgstr ""
+#~ "Můžete [[%1][vytvoř nový web]] pokud k tomu máte práva. Kontaktujte %2, "
+#~ "pokud máte nějaké otázky."
+
+#~ msgid ""
+#~ "You can also use the names of the standard HTML colors (black, silver, "
+#~ "gray, white, maroon, red, purple, fuchsia, green, lime, olive, yellow, "
+#~ "navy, blue, teal, or aqua)"
+#~ msgstr ""
+#~ "Můžete také použít jména standardních HTML barev  (black, silver, gray, "
+#~ "white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, "
+#~ "blue, teal, or aqua)"
+
+#~ msgid "You can see the differences [[%1][here]]."
+#~ msgstr "Zde můžete vidět rozdíly [[%1][zde]]."
+
+#~ msgid "You cannot register twice, the name %1 is already registered."
+#~ msgstr "Nemůžete se registrovat dvakrát, účet %1 už je zaregistrováno."
+
+#, fuzzy
+#~ msgid "You have *not* been registered."
+#~ msgstr "Už jste registrován"
+
+#~ msgid ""
+#~ "You may be able to get your TWiki administrator to change the settings if "
+#~ "they are inappropriate for your environment."
+#~ msgstr ""
+#~ "Váš TWiki administrátor může změnit nastavení, pokud jsou nevhodné pro "
+#~ "Vaše prostředí."
+
+#~ msgid "You may need to close your browser to make this change take effect."
+#~ msgstr "Musíte zavřít Váš prohlížeč, aby se změny projevily."
+
+#~ msgid ""
+#~ "You really ought to register a valid e-mail address. If TWiki can't find "
+#~ "a registered e-mail for you in the secret database, it will look in your "
+#~ "user topic for a line like this:"
+#~ msgstr ""
+#~ "Opravdu by jste měl zaregistrovat pravou emailovou adresu. Pokud TWiki "
+#~ "nebude moci najít registrovaný email pro Vás ve své databázi, podívá se "
+#~ "do Vašeho osobního článku pro ŕádek jako je tento:"
+
+#~ msgid "You will probably have to ask your administrator, %1, to do this."
+#~ msgstr ""
+#~ "Pravděpodobně se budete muset zeptat Vašeho administrátora - %1, aby jste "
+#~ "toto mohl udělat."
+
+#~ msgid "Your %1.LoginName"
+#~ msgstr "Vaše %1.PřihlašovacíJméno"
+
+#~ msgid ""
+#~ "Your activation code has been sent to %1.  Either click on the link in "
+#~ "your e-mail or enter the code in the box below to activate your "
+#~ "membership. (This code is of the form \"YourName.xxxxxxxxxx\")"
+#~ msgstr ""
+#~ "Váš aktivační kód byl odeslán do %1. Buď klikněte na odkaz ve Vašem "
+#~ "emailu nebo vložte kód do pole níže, aby jste aktivoval Vaše členství. "
+#~ "(Tento kód je ve formě \"VašeJméno.xxxxxxxxxx\")"
+
+#~ msgid "Your password:"
+#~ msgstr "Vaše heslo:"
+
+#~ msgid "Your registered e-mail address(es) are updated to: %1."
+#~ msgstr "Vaše zaregistrovaná adresa(y) jsou změnény na: %1"
+
+#~ msgid "Your user name has been removed from the Authentication System."
+#~ msgstr "Váš účet byl smazán z autentifikačního systému."
+
+#~ msgid ""
+#~ "Your user topic has not been renamed. Please e-mail %1 to request this."
+#~ msgstr ""
+#~ "Váš osobní článek nebyl pŕejmenován. Prosím pošlete email %1 s tímto "
+#~ "požadavkem."
+
+#, fuzzy
+#~ msgid "[[%1][Debug topic text]]."
+#~ msgstr "Klikni na [[%1][Debug topic text]]."
+
+#~ msgid "accesskey='c'"
+#~ msgstr "accesskey='c'"
+
+#~ msgid "fields are required."
+#~ msgstr "pole jsou povinná"
+
+#~ msgid "help"
+#~ msgstr "nápověda"
+
+#~ msgid "looking for references in _%1 web_ only"
+#~ msgstr "hledám odkazy pouze v _%1 webu_"
+
+#~ msgid "now %1"
+#~ msgstr "nyní je %1"
+
+#, fuzzy
+#~ msgid ""
+#~ "title='Attach an image or document to this topic' accesskey='a'>&Attach"
+#~ msgstr "Připoj obrázek nebo soubor k tomuto ćlánku"
+
+#, fuzzy
+#~ msgid "title='Create new topic' accesskey='c'>&Create"
+#~ msgstr "value='Přerušit' accesskey='c'"
+
+#, fuzzy
+#~ msgid ""
+#~ "title='Delete or rename this topic; set parent topic; view and compare "
+#~ "revisions' accesskey='m'>&More topic actions"
+#~ msgstr ""
+#~ "Smazat nebo přejmenovat tento článek; nastavit nadřízený článek; ukaž a "
+#~ "porovnej revize"
+
+#, fuzzy
+#~ msgid "title='Printable version of this topic' accesskey='p'>&Print version"
+#~ msgstr "Verze pro vytištění tohoto článku"
+
+#, fuzzy
+#~ msgid ""
+#~ "title='Search all webs for topics that link to here' accesskey='l'>A&ll "
+#~ "Webs"
+#~ msgstr "Prohledej všechny weby pro články, které odkazují sem"
+
+#, fuzzy
+#~ msgid ""
+#~ "title='Search the %1 Web for topics that link to here' "
+#~ "accesskey='b'>&Backlinks"
+#~ msgstr "Hledej články ve webu %1 které sem odkazují"
+
+#, fuzzy
+#~ msgid ""
+#~ "title='Search the %1 Web for topics that link to here' accesskey='b'>We&b"
+#~ msgstr "Hledej články ve webu %1 které sem odkazují"
+
+#, fuzzy
+#~ msgid "title='View raw text without formatting' accesskey='r'>&Raw View"
+#~ msgstr "Prohlédni nepracovaný text (bez formátování)"
+
+#, fuzzy
+#~ msgid "title='View total topic history' accesskey='h'>&History"
+#~ msgstr "Ukaž celou historii článku"
+
+#~ msgid "value='Cancel' accesskey='c'"
+#~ msgstr "value='Přerušit' accesskey='c'"
+
+#~ msgid "value='Checkpoint' accesskey='k'"
+#~ msgstr "value='Kontrolní bod' accesskey='k'"
+
+#~ msgid "value='Discard' accesskey='d'"
+#~ msgstr "value='Zruš' accesskey='d'"
+
+#~ msgid "value='Preview' accesskey='p'"
+#~ msgstr "value='Ukázka' accesskey='p'"
+
+#~ msgid "value='Quiet save' accesskey='q'"
+#~ msgstr "value='Ulož a pokračuj' accesskey='q'"
+
+#~ msgid "value='Save' accesskey='s'"
+#~ msgstr "value='Ulož' accesskey='s'"
+
+#~ msgid ""
+#~ "you *must* have at least one valid registered e-mail to be able to reset "
+#~ "your password. If none of your registered e-mail addresses is valid, and "
+#~ "you have forgotten your password, contact %1."
+#~ msgstr ""
+#~ "*Musíte* mít alespoň jeden funkční registrovaný email, aby jste byl "
+#~ "schopen resetovat Vaše heslo. Pokud žádný z Vašich registrovaných "
+#~ "emailových adres není správný a Vy jste změnil Vaše heslo, kontaktujte %1."
 
 #~ msgid "%1 has a list of other TWiki users."
 #~ msgstr "%1 má seznam ostatních uživatelů TWiki."

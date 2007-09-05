@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: TWiki $Id\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2007-01-03 18:00+0800\n"
+"PO-Revision-Date: 2007-09-05 13:54-0300\n"
 "Last-Translator: Ken <ken.yuminaga@gmail.com>;\n"
 "Language-Team: TWiki Japanese &lt;<ken.yuminaga@gmail.com>&gt;\n"
 "MIME-Version: 1.0\n"
@@ -2505,7 +2505,7 @@ msgstr " %1 の編集が完了したかどうかを確認したい場合、こ�
 
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:11
 msgid "To see if %1 has finished editing yet, click 'Try Again'."
-msgstr "%1 の編集が完了したかどうかを確認したい場合、'Try Again'をクリックしてください"。"
+msgstr "%1 の編集が完了したかどうかを確認したい場合、'Try Again'をクリックしてください。"
 
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:25
 msgid "To topic:"
@@ -2791,7 +2791,7 @@ msgstr "%1しようとするトピックは存在しません。"
 
 #: templates/messages.tmpl:469
 msgid "You are trying to %1 an attachment that does not exist."
-msgstr ""%1しようとする添付ファイルは存在しません。"
+msgstr "%1しようとする添付ファイルは存在しません。"
 
 #: templates/messages.tmpl:456
 msgid "You can [[%1][create a new web]] if you have permission. Contact %2 if you have any questions."
@@ -3382,7 +3382,7 @@ msgstr "パスワードをリセットするには有効なメールアドレス
 #, fuzzy
 #~ msgid ""
 #~ "During save of file %1 an error was found by the version control system."
-#~ msgstr ""%1を保存するときにバージョンコントロールエラーが発生しました。%2管理者までご連絡ください"
+#~ msgstr "%1を保存するときにバージョンコントロールエラーが発生しました。%2管理者までご連絡ください"
 
 #, fuzzy
 #~ msgid "Edit preference settings for %1"
@@ -4230,8 +4230,6 @@ msgstr "パスワードをリセットするには有効なメールアドレス
 #~ "Certain characters are not permitted in attachment filenames, and other "
 #~ "filenames are not permitted, for security reasons."
 #~ msgstr "添付ファイル名として、一部の文字が認められません。また、その他のファイル名はセキュリティの原因で認められません。"
-#~ msgid "Change links in topics that refer to !%1 in the %2 Web:"
-#~ msgstr ""!%1トピックを参照する全てのリンクを変更します(%2ウェブの中で)"
 #~ msgid "Filename %1 is not legal for a TWiki attachment."
 #~ msgstr "ファイル名%1は正しいTwikiの添付ファイル名ではありません。"
 #~ msgid "Rename the file on your local machine and try uploading again."
