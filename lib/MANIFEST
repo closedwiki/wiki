@@ -44,6 +44,7 @@ bin/preview 0555
 bin/rdiff 0555
 bin/register 0555
 bin/rename 0555
+bin/resetpasswd 0555
 bin/rest 0555
 bin/save 0555
 bin/search 0555
@@ -99,6 +100,7 @@ data/TWiki/DeveloperDocumentationCategory.txt 0644
 data/TWiki/DontNotify.txt 0644
 data/TWiki/EditDoesNotIncreaseTheRevision.txt 0644
 data/TWiki/ExampleTopicTemplate.txt 0644
+data/TWiki/FormatTokens.txt
 data/TWiki/FileAttachment.txt 0644
 data/TWiki/FileAttribute.txt 0644
 data/TWiki/ForceNewRevision.txt 0644
@@ -214,6 +216,7 @@ data/TWiki/VarDISPLAYTIME2.txt 0644
 data/TWiki/VarENCODE.txt 0644
 data/TWiki/VarENDCOLOR.txt 0644
 data/TWiki/VarENDSECTION.txt 0644
+data/TWiki/VarENV.txt 0644
 data/TWiki/VarFAILEDPLUGINS.txt 0644
 data/TWiki/VarFORMFIELD.txt 0644
 data/TWiki/VarGMTIME.txt 0644
@@ -288,6 +291,7 @@ data/TWiki/VarSTARTINCLUDE.txt 0644
 data/TWiki/VarSTARTSECTION.txt 0644
 data/TWiki/VarSTATISTICSTOPIC.txt 0644
 data/TWiki/VarSTOPINCLUDE.txt 0644
+data/TWiki/VarSYSTEMWEB.txt 0644
 data/TWiki/VarT.txt 0644
 data/TWiki/VarTEAL.txt 0644
 data/TWiki/VarTOC.txt 0644
@@ -300,6 +304,7 @@ data/TWiki/VarU.txt 0644
 data/TWiki/VarURLPARAM.txt 0644
 data/TWiki/VarUSERINFO.txt 0644
 data/TWiki/VarUSERNAME.txt 0644
+data/TWiki/VarUSERSWEB.txt 0644
 data/TWiki/VarVAR.txt 0644
 data/TWiki/VarVBAR.txt 0644
 data/TWiki/VarWEB.txt 0644
@@ -396,6 +401,7 @@ lib/TWiki.pm 0444
 lib/DEPENDENCIES 0444
 lib/TWiki/Access.pm 0444
 lib/TWiki/AccessControlException.pm 0444
+lib/TWiki/AggregateIterator.pm 0444
 lib/TWiki/Attach.pm 0444
 lib/TWiki/Attrs.pm 0444
 lib/TWiki/Compatibility.pm 0444
@@ -443,7 +449,9 @@ lib/TWiki/Configure/Checkers/RCS/lockCmd.pm 0444
 lib/TWiki/Configure/Checkers/RCS/rlogDateCmd.pm 0444
 lib/TWiki/Configure/Checkers/RCS/tmpBinaryCmd.pm 0444
 lib/TWiki/Configure/Checkers/RCS/unlockCmd.pm 0444
+lib/TWiki/Configure/Checkers/Register/AllowLoginName.pm 0444
 lib/TWiki/Configure/Checkers/RegistrationApprovals.pm 0444
+lib/TWiki/Configure/Checkers/SafeEnvPath.pm 0444
 lib/TWiki/Configure/Checkers/ScriptSuffix.pm 0444
 lib/TWiki/Configure/Checkers/ScriptUrlPath.pm 0444
 lib/TWiki/Configure/Checkers/Sessions/ExpireAfter.pm 0444
@@ -457,6 +465,7 @@ lib/TWiki/Configure/Checkers/UseClientSessions.pm 0444
 lib/TWiki/Configure/Checkers/UseLocale.pm 0444
 lib/TWiki/Configure/Checkers/WarningFileName.pm 0444
 lib/TWiki/Configure/Checkers/WebMasterEmail.pm 0444
+lib/TWiki/Configure/Checkers/WorkingDir.pm 0444
 lib/TWiki/Configure/Checkers/cygwin.pm 0444
 lib/TWiki/Configure/Item.pm 0444
 lib/TWiki/Configure/JS.pm 0444
@@ -515,12 +524,16 @@ lib/TWiki/If/Parser.pm 0444
 lib/TWiki/Infix/Parser.pm 0444
 lib/TWiki/Infix/Error.pm 0444
 lib/TWiki/Infix/Node.pm 0444
+lib/TWiki/LineIterator.pm 0444
+lib/TWiki/ListIterator.pm 0444
 lib/TWiki/LoginManager.pm 0444
 lib/TWiki/LoginManager/ApacheLogin.pm 0444
 lib/TWiki/LoginManager/TemplateLogin.pm 0444
 lib/TWiki/Merge.pm 0444
 lib/TWiki/Meta.pm 0444
 lib/TWiki/Net.pm 0444
+lib/TWiki/Net/HTTPResponse.pm 0444
+lib/TWiki/Net/UserCredAgent.pm 0444
 lib/TWiki/OopsException.pm 0444
 lib/TWiki/Plugin.pm 0444
 lib/TWiki/Plugins.pm 0444
@@ -564,6 +577,7 @@ lib/TWiki/Users/HtPasswdUser.pm 0444
 lib/TWiki/Users/Password.pm 0444
 lib/TWiki/Users/BaseUserMapping.pm 0444
 locale/TWiki.pot 0444
+locale/bg.po 0444
 locale/cs.po 0444
 locale/da.po 0444
 locale/de.po 0444
@@ -603,6 +617,24 @@ pub/TWiki/PreviewBackground/previewbg.gif 0644
 pub/TWiki/PrintSkin/fullscreen.gif 0644
 pub/TWiki/PrintSkin/screenshot.gif 0644
 pub/TWiki/TWiki/thoth_baboon.gif 0644
+pub/TWiki/TWikiDocGraphics/TWikiDocGraphics_13x11_photo.psd 0644
+pub/TWiki/TWikiDocGraphics/TWikiDocGraphics_13x11_video.psd 0644
+pub/TWiki/TWikiDocGraphics/TWikiDocGraphics_13x13_changes-small.psd 0644
+pub/TWiki/TWikiDocGraphics/TWikiDocGraphics_13x13_detail-small.psd 0644
+pub/TWiki/TWikiDocGraphics/TWikiDocGraphics_13x13_search-small.psd 0644
+pub/TWiki/TWikiDocGraphics/TWikiDocGraphics_16x16.psd 0644
+pub/TWiki/TWikiDocGraphics/TWikiDocGraphics_7x5_bullet-blue.psd 0644
+pub/TWiki/TWikiDocGraphics/TWikiDocGraphics_FileTypeIcons.psd 0644
+pub/TWiki/TWikiDocGraphics/TWikiDocGraphics_Plugins_FormPlugin_error.psd 0644
+pub/TWiki/TWikiDocGraphics/TWikiDocGraphics_Plugins_TablePlugin_sort_icons.psd 0644
+pub/TWiki/TWikiDocGraphics/TWikiDocGraphics_Plugins_TagMePlugin_buttons_gradient.psd 0644
+pub/TWiki/TWikiDocGraphics/TWikiDocGraphics_Text_RSS_XML.psd 0644
+pub/TWiki/TWikiDocGraphics/TWikiDocGraphics_Text_closed.psd 0644
+pub/TWiki/TWikiDocGraphics/TWikiDocGraphics_Text_done.psd 0644
+pub/TWiki/TWikiDocGraphics/TWikiDocGraphics_Text_new.psd 0644
+pub/TWiki/TWikiDocGraphics/TWikiDocGraphics_Text_todo.psd 0644
+pub/TWiki/TWikiDocGraphics/TWikiDocGraphics_Text_updated.psd 0644
+pub/TWiki/TWikiDocGraphics/map.gif 0644
 pub/TWiki/TWikiDocGraphics/_filetypes.txt 0644
 pub/TWiki/TWikiDocGraphics/addon.gif 0644
 pub/TWiki/TWikiDocGraphics/application.gif 0644
@@ -920,6 +952,7 @@ templates/editform.tmpl 0444
 templates/edittext.tmpl 0444
 templates/form.tmpl 0444
 templates/formtables.tmpl 0444
+templates/login.sudo.tmpl 0444
 templates/login.tmpl 0444
 templates/mailresetpassword.tmpl 0444
 templates/messages.tmpl 0444
