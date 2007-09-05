@@ -26,12 +26,13 @@ sub set_up {
     $this->SUPER::set_up();
 
     #default settings	
-	$TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';
+    $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';
     $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
     $TWiki::cfg{UseClientSessions} = 1;
     $TWiki::cfg{PasswordManager} = "TWiki::Users::HtPasswdUser";
     $TWiki::cfg{Register}{EnableNewUserRegistration} = 1; 
     $TWiki::cfg{Register}{AllowLoginName} = 0; 
+    $TWiki::cfg{DisplayTimeValues} = 'gmtime'; 
 }
 
 sub setup_new_session() {
@@ -198,7 +199,7 @@ sub std_tests {
 my $output = <<'THIS';
 <div class="twikiAttachments">
 | *I* | *%MAKETEXT{"Attachment"}%* | *%MAKETEXT{"Action"}%* | *%MAKETEXT{"Size"}%* | *%MAKETEXT{"Date"}%* | *%MAKETEXT{"Who"}%* | *%MAKETEXT{"Comment"}%* |
-| <img width="16" alt="png" align="top" src="%EXPANDEDPUBURL%/TWiki/TWikiDocGraphics/png.gif" height="16" border="0" /><span class="twikiHidden">png</span> | <a href="%PUBURL%/%WEB%/%TOPIC%/home.org.au.png">home.org.au.png</a> | <a href="%SCRIPTURLPATH{"attach"}%/%WEB%/%TOPIC%?filename=%URLENCODE{"home.org.au.png"}%;revInfo=1" title='%MAKETEXT{"change, update, previous revisions, move, delete..."}%'rel='nofollow'>%MAKETEXT{"manage"}%</a> |  4.1&nbsp;K|<span class="twikiNoBreak">31 May 2007 - 21:58</span> |UUUUUUUUUU  |&nbsp;  |
+| <img width="16" alt="png" align="top" src="/twiki/pub/TWiki/TWikiDocGraphics/png.gif" height="16" border="0" /><span class="twikiHidden">png</span> | <a href="%ATTACHURLPATH%/%ENCODE{home.org.au.png}%">home.org.au.png</a> | <a href="%SCRIPTURLPATH{"attach"}%/%WEB%/%TOPIC%?filename=%ENCODE{"home.org.au.png"}%;revInfo=1" title='%MAKETEXT{"change, update, previous revisions, move, delete..."}%'rel='nofollow'>%MAKETEXT{"manage"}%</a> |  4.1&nbsp;K|<span class="twikiNoBreak">31 May 2007 - 21:58</span> |TemporaryTWikiuserMappingContribTestsUsersWeb.JoeDoe  |&nbsp;  |
 </div>
 THIS
 	$output =~ s/UUUUUUUUUU/$displayedName/e;
