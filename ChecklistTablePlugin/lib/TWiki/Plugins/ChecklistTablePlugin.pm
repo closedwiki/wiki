@@ -30,7 +30,8 @@ $TWikiCompatibility{endRenderingHandler} = 1.1;
 
 $VERSION = '$Rev$';
 
-$RELEASE = 'v1.002'; # dro - fixed major pre/verbatim bug; fixed and added documenation; added sort feature; added changerows attribute; added EDITCELL feature; fixed Opera bug; fixed topic lock bug
+$RELEASE = 'v1.003'; # dro -  add quick insert feature; added quickadd attribute; fixed typos
+#$RELEASE = 'v1.002'; # dro - fixed major pre/verbatim bug; fixed and added documenation; added sort feature; added changerows attribute; added EDITCELL feature; fixed Opera bug; fixed topic lock bug
 #$RELEASE = 'v1.001'; # dro - initial version
 
 $pluginName = 'ChecklistTablePlugin';
@@ -70,6 +71,8 @@ sub postRenderingHandler {
             TWiki::Contrib::JSCalendarContrib::addHEAD( 'twiki' );
         }
     };
+    my $jsscripturl = TWiki::Func::getPubUrlPath().'/TWiki/'.$pluginName.'/cltpinsertform.js';
+    $_[0]=~s/<\/head>/<script src="$jsscripturl" language="javascript" type="text\/javascript"><\/script><\/head>/is unless ($_[0]=~/cltpinsertform.js/);
 
     TWiki::Plugins::ChecklistTablePlugin::Core::handlePost(@_);
 }
