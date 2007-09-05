@@ -67,7 +67,7 @@ sub _render {
 			next;
 		}
 
-		if ($line =~ s/%CHECKLISTTABLE({(.*?)})?%/_initOptions($2,$_[1],$_[2])/eg) {
+		if ($line =~ s/%CHECKLISTTABLE({(.*)})?%/_initOptions($2,$_[1],$_[2])/eg) {
 			@table = ();
 			$foundTable = 1;
 			$row = -1;
@@ -237,7 +237,9 @@ sub _renderForm {
 			}
 		}
 
-		my ($type, $param, $default) = split(/,/,$format,3);
+		my ($type, $param, $default) = split(/\s?,\s?/,$format,3);
+
+		$type=~s/^\s*//; $type=~s/\s*$//; ## remove whitespaces
 
 		
 		$value = $default unless defined $value;
@@ -281,7 +283,7 @@ sub _renderForm {
 			$text .= $cgi->textfield(-name=>$valname, -value=>$evalue, -size=>$param, -id=>$valname);
 			$text .= $cgi->image_button(-name=>'calendar', -src=>'%PUBURLPATH%/TWiki/JSCalendarContrib/img.gif', -alt=>'Calendar', -title=>'Calendar', -onClick=>qq@return showCalendar('$valname','$dateformat')@);
 		} else { # label or unkown:
-			$text.= $evalue.$cgi->hidden(-name=>$valname, -value=>$evalue);
+			$text.= $value.'<noautolink>'.$cgi->hidden(-name=>$valname, -value=>$value).'</noautolink>';
 		}
 		
 		$text .=' | ';
@@ -563,7 +565,7 @@ sub _handleChangeAction {
 			next;
 		}
 
-		if ($line =~ /\%CHECKLISTTABLE({(.*?)})?\%/) {
+		if ($line =~ /\%CHECKLISTTABLE({(.*)})?\%/) {
 			my $attributes = $2;
 			$table++; $row=-1;
 			$tablefound = ($tablenum == $table);
@@ -790,7 +792,6 @@ sub _editdecode {
 	$text =~ s/&(amp;)?#35;/*/g;
 	$text =~ s/&(amp;)?#95;/_/g;
 	$text =~ s/&(amp;)?#61;/=/g;
-	# $text =~ s/&(amp;)?#60;/</g;
 	$text =~ s/&(amp;)#(\d+);/&#$2;/g; ## fix encoded characters &amp;#....;
 	return $text;
 }

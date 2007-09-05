@@ -30,7 +30,7 @@ $TWikiCompatibility{endRenderingHandler} = 1.1;
 
 $VERSION = '$Rev$';
 
-$RELEASE = 'v1.003'; # dro - added quick insert feature; added quickadd attribute; fixed typos
+$RELEASE = 'v1.003'; # dro - added quick insert feature; added quickadd attribute; fixed typos; fixed whitespaces in format bug;
 #$RELEASE = 'v1.002'; # dro - fixed major pre/verbatim bug; fixed and added documenation; added sort feature; added changerows attribute; added EDITCELL feature; fixed Opera bug; fixed topic lock bug
 #$RELEASE = 'v1.001'; # dro - initial version
 
