@@ -5,7 +5,6 @@
 !include twikiplugins/EmptyPlugin/lib/TWiki/Plugins/EmptyPlugin
 !include twikiplugins/InterwikiPlugin/lib/TWiki/Plugins/InterwikiPlugin
 !include twikiplugins/JSCalendarContrib/lib/TWiki/Contrib/JSCalendarContrib
-!include twikiplugins/KupuContrib/lib/TWiki/Contrib/KupuContrib
 !include twikiplugins/MailerContrib/lib/TWiki/Contrib/MailerContrib
 !include twikiplugins/PatternSkin/lib/TWiki/Contrib/PatternSkin
 !include twikiplugins/PreferencesPlugin/lib/TWiki/Plugins/PreferencesPlugin
