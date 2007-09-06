@@ -217,6 +217,7 @@ pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/print/readme.txt 0644
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/readme.txt 0644
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/save/editor_plugin.js 0644
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/save/editor_plugin_src.js 0644
+pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/save/images/cancel.gif 0644
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/save/images/save.gif 0644
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/save/langs/en.js 0644
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/save/readme.txt 0644
@@ -277,6 +278,14 @@ pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/template/images/templa
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/template/jscripts/template.js 0644
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/template/langs/en.js 0644
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/template/template.htm 0644
+pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikiimage/css/advimage.css 0644
+pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikiimage/editor_plugin.js 0644
+pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikiimage/image.htm 0644
+pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikiimage/images/sample.gif 0644
+pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikiimage/jscripts/functions.js 0644
+pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikiimage/langs/en.js 0644
+pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikiimage/editor_plugin_src.js 0644
+pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikiimage/readme.txt 0644
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/visualchars/editor_plugin.js 0644
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/visualchars/editor_plugin_src.js 0644
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/visualchars/images/visualchars.gif 0644
@@ -447,6 +456,9 @@ pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/utils/mclayer.js 0644
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/utils/mctabs.js 0644
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/utils/validate.js 0644
 pub/TWiki/TinyMCEPlugin/tinymce/readme 0644
+pub/TWiki/TinyMCEPlugin/tinymce.gif 0644
+pub/TWiki/TinyMCEPlugin/screenshot.gif 0644
 pub/TWiki/TinyMCEPlugin/wysiwyg.css 0644
 pub/TWiki/TinyMCEPlugin/verbatim.png 0644
 pub/TWiki/TinyMCEPlugin/twiki.js 0644
+pub/TWiki/TinyMCEPlugin/wikiringlogo20x20.png 0660
