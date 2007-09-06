@@ -28,7 +28,7 @@ package TWiki::Plugins::ChecklistTablePlugin::Core;
 use strict;
 ## use warnings;
 
-use vars qw( %defaults @flagOptions $defaultsInitialized  %options $cgi $STARTENCODE $ENDENCODE @unknownParams);
+use vars qw( %defaults @flagOptions $defaultsInitialized  %options $cgi $STARTENCODE $ENDENCODE @unknownParams );
 
 $STARTENCODE = "--CHECKLISTTABLEPLUGIN_ENCODED[";
 $ENDENCODE = "]CHECKLISTTABLEPLUGIN_ENCODED--";
@@ -72,6 +72,8 @@ sub _render {
 			$foundTable = 1;
 			$row = -1;
 			$tablenum++;
+			$options{'_EDITTABLE_'} = ($cgi->param('ettablenr') == $tablenum+1)
+						 && (grep(/^et(save|qsave|addrow|delrow|edit)$/,$cgi->param()));
 		} elsif ($foundTable) {
 			if ($line =~ /^\s*\|[^\|]*\|/) {
 				$row++;
@@ -125,9 +127,11 @@ sub _renderTable {
 	$text.=$cgi->a({-name=>$an});
 
 
-	if (!defined $cgi->param("cltp_action_$tablenum")) {
+	if (!defined $cgi->param("cltp_action_$tablenum") && !$options{'_EDITTABLE_'}) {
 		if ($#$tableRef>-1) {
 			$text.=_renderButtons('edittable',$tablenum);
+			$text.=_renderButtons('first',$tablenum);
+		} elsif (!$options{'quickadd'}) {
 			$text.=_renderButtons('first',$tablenum);
 		}
 
@@ -161,7 +165,7 @@ sub _renderTable {
 		$text.=$row;
 	}
 	$text.= _renderForm('addrow',$tablenum,undef,$#$tableRef + 1) if (!defined $cgi->param("cltp_action_$tablenum"))&&($options{'changerows'}!~/^(off|false|0|no)$/i)&&($options{'quickadd'});
-	$text.= _renderButtons('edittable', $tablenum) unless defined $cgi->param("cltp_action_$tablenum") || $#$tableRef<0;
+	$text.= _renderButtons('edittable', $tablenum) unless defined $cgi->param("cltp_action_$tablenum") || $#$tableRef<0 || $options{'_EDITTABLE_'};
 	$text.= _renderButtons('savetable', $tablenum) if defined $cgi->param("cltp_action_${tablenum}_edittable");
 
 	### preserve table sort order of all checklist tables:
@@ -219,6 +223,7 @@ sub _renderForm {
 	my $text = '| ';
 	for (my $c=0; $c<=$#formats; $c++) {
 		my $valname = "cltp_val_${tablenum}_${row}_${c}";
+		$valname = "cltp_val_ins_${tablenum}_${row}_${c}" if $what eq 'hidden';
 
 		my $format = $formats[$c];
 		$format = $defaults{'defaultcellformat'} if defined $entryRef && $$entryRef{'header'} && !$options{'headerislabel'};
@@ -244,8 +249,9 @@ sub _renderForm {
 		
 		$value = $default unless defined $value;
 		$value = "" unless defined $value;
-
 		my $evalue = $STARTENCODE._editencode($value).$ENDENCODE;
+		$value=~s/\%<nop>(\w+)/\%$1/g; ## _EDITTABLE_
+
 
 		if ($type eq 'item') {
 			$text .=  (defined $entryRef)? $value 
@@ -350,11 +356,12 @@ sub _renderTableHeader {
 	if (defined $entryRef) {
 		$header = $$entryRef{'line'};
 	} elsif ($options{'header'} ne 'off') {
+		return "" if ($options{'_EDITTABLE_'}); 
 		$header = $options{'header'};
 	} else {
 		return "";
 	}
-	if ($options{'sort'}) {
+	if ($options{'sort'} && !$options{'_EDITTABLE_'}) {
 		my @cells = split(/\s*\|\s*/, $header);
 		shift @cells;
 		$header = "|";
@@ -377,7 +384,9 @@ sub _renderTableHeader {
 			$header.="*$cell*|";
 		}
 	}
-	my $text ="$header*&nbsp;&nbsp;*|";
+	my $text =$header;
+
+	$text .= "*&nbsp;&nbsp;*|" unless $options{'_EDITTABLE_'};
 
 	return "$text\n";
 }
@@ -391,13 +400,24 @@ sub _renderTableData {
 
 	my $text = "";
 
-	$text .= $$entryRef{'line'};
+	if (!$options{'_EDITTABLE_'})  {
+		$text .= $$entryRef{'line'};
+		$text =~ s/\%<nop>(\w+)/\%$1/g; ## _EDITTABE_
 
-	$text .= "*&nbsp;";
-	$text .= _renderButtons('show', $tablenum, $row, $rowcount) unless defined $cgi->param("cltp_action_$tablenum");
-	$text .= "&nbsp;* |";
+		$text .= "*&nbsp;";
+		$text .= _renderButtons('show', $tablenum, $row, $rowcount) unless defined $cgi->param("cltp_action_$tablenum");
+		$text .= "&nbsp;* |";
 
-	$text=~s/\%CLTP_ROWNUMBER\%/($row+1)/ge;
+		$text=~s/\%CLTP_ROWNUMBER\%/($row+1)/ge;
+	} else { # _EDITTABLE_
+		$text.='|';
+		foreach my $cell (@{$$entryRef{'data'}}) {
+			$cell =~s /\%(?!<nop>)(\w+)/\%<nop>$1/sg;
+			$text.="$cell|";
+			#$text.=_editencode($cell).'|';
+
+		}
+	}
 
 	return "$text\n";
 }
@@ -469,6 +489,9 @@ sub _handleActions {
 
 	my @cltpactions = grep(/^cltp_action_\d+_(ins|first|edittable|editrow|addrow|delrow|up|down|cancel|saverow|qsaverow|savetable|qsavetable|insertfirst)(_\d+)?/, $cgi->param());
 	return 0 if ($#cltpactions < 0);
+
+	#### support for EDITTABLE tag before CHECKLISTTABLE
+	$cgi->delete('etedit','ettablenr','etrows'); 
 
 	#### Check access permissions (before any action...):
 	my $mainWebName=&TWiki::Func::getMainWebname();
@@ -609,6 +632,9 @@ sub _handleChangeAction {
 			} else {
 				if (($row == $rownum)&&($action eq 'addrow')) {
 					$line = _createRowFromCgi('new',$tablenum, $row)."\n$line";
+				} elsif (!$firstInserted && ($action eq 'insertfirst')) {
+					$line = _createRowFromCgi('new',$tablenum, $row)."\n$line";
+					$firstInserted = 1;
 				}
 		
 				$tablefound = 0;
@@ -641,6 +667,8 @@ sub _createRowFromCgi {
 	my $text = '| ';
 	for (my $c=0; $c<=$#formats; $c++) {
 		my $paramname = "cltp_val_${tablenum}_${row}_$c";
+
+		$paramname = "cltp_val_ins_${tablenum}_${row}_$c" unless defined $cgi->param($paramname);
 
 		my $value;
 		$value  = _encode(join(', ',$cgi->param($paramname))) if defined $cgi->param($paramname);
@@ -701,7 +729,7 @@ sub _initDefaults {
 		'sort'=>1,
 		'changerows'=>1,
 		'quickinsert'=>1,
-		'quickadd'=>1,
+		'quickadd'=>0,
 	);
 	@flagOptions = ('allowmove', 'quietsave', 'headerislabel', 'sort','quickadd','quickinsert');
 	$cgi = TWiki::Func::getCgiQuery();
@@ -742,8 +770,8 @@ sub _initOptions {
 		}
 	}
 
-	$options{"theWeb"}=$web;
-	$options{"theTopic"}=$topic;
+	$options{'theWeb'}=$web;
+	$options{'theTopic'}=$topic;
 
 	return $#unknownParams>-1?_createUnknownParamsMessage():"";
 
