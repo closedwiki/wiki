@@ -44,7 +44,7 @@ function cltpShowInsertForm(tooltipId, parentId, posX, posY,closeAll, tablenum, 
 		newForm = it.innerHTML.replace(/cltp_action_\d+_(addrow_\d+|insertfirst)/g, 'cltp_action_'+tablenum+'_insertfirst');
 		rownum=0;
 	}
-	newForm = newForm.replace(/cltp_val_\d+_\d+_(\d+)/g,'cltp_val_'+tablenum+'_'+rownum+'_$1');
+	newForm = newForm.replace(/cltp_val_ins_\d+_\d+_(\d+)/g,'cltp_val_ins_'+tablenum+'_'+rownum+'_$1');
 
 	it.innerHTML = newForm;
 
