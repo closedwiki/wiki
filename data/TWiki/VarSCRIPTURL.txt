@@ -4,5 +4,5 @@
 ---+++ SCRIPTURL -- base URL of TWiki scripts
    * Syntax: =%<nop>SCRIPTURL%=
    * Expands to: =%SCRIPTURL%=
-   * Related: [[#VarPUBURL][PUBURL]], [[#VarSCRIPTNAME][SCRIPTNAME]], [[#VarSCRIPTSUFFIX][SCRIPTSUFFIX]], [[#VarSCRIPTURL2][SCRIPTURL{"script"}]], [[#VarSCRIPTURLPATH][SCRIPTURLPATH]]
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarPUBURL][PUBURL]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSCRIPTNAME][SCRIPTNAME]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSCRIPTSUFFIX][SCRIPTSUFFIX]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSCRIPTURL2][SCRIPTURL{"script"}]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSCRIPTURLPATH][SCRIPTURLPATH]]
 

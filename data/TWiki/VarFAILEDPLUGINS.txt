@@ -4,5 +4,5 @@
 ---+++ FAILEDPLUGINS -- debugging for plugins that failed to load, and handler list
    * Syntax: =%<nop>FAILEDPLUGINS%=
    * Expands to: See TWikiPlugins#FAILEDPLUGINS
-   * Related: [[#VarPLUGINDESCRIPTIONS][PLUGINDESCRIPTIONS]], [[#ACTIVATEDPLUGINS][ACTIVATEDPLUGINS]], [[#PLUGINVERSION2][PLUGINVERSION]]
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarPLUGINDESCRIPTIONS][PLUGINDESCRIPTIONS]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%ACTIVATEDPLUGINS][ACTIVATEDPLUGINS]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%PLUGINVERSION2][PLUGINVERSION]]
 

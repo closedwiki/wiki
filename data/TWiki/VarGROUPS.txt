@@ -6,5 +6,5 @@
    * Syntax: =%<nop>GROUPS%=
    * The variable is intended to be used in %USERSWEB%.TWikiGroups, to allow a
      group listing for various user mapping managers.
-   * Related: [[TWikiVariables#VarREMOTEUSER][REMOTE_USER]], [[TWikiVariables#VarUSERINFO][USERINFO]], [[TWikiVariables#VarUSERNAME][USERNAME]], [[TWikiVariables#VarWIKIUSERNAME][WIKIUSERNAME]], [[TWikiVariables#VarWIKIUSERSTOPIC][WIKIUSERSTOPIC]]
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarREMOTEUSER][REMOTE_USER]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarUSERINFO][USERINFO]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarUSERNAME][USERNAME]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarWIKIUSERNAME][WIKIUSERNAME]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarWIKIUSERSTOPIC][WIKIUSERSTOPIC]]
 

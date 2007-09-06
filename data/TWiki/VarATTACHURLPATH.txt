@@ -4,5 +4,5 @@
 ---+++ ATTACHURLPATH -- path of the attachment URL of the current topic
    * Syntax: =%<nop>ATTACHURLPATH%=
    * Expands to: =%ATTACHURLPATH%=
-   * Related: [[#VarATTACHURL][ATTACHURL]], [[#VarPUBURL][PUBURL]], [[#VarPUBURLPATH][PUBURLPATH]], [[#VarSCRIPTURL][SCRIPTURL]], [[#VarSCRIPTURL][SCRIPTURLPATH]], FileAttachments
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarATTACHURL][ATTACHURL]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarPUBURL][PUBURL]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarPUBURLPATH][PUBURLPATH]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSCRIPTURL][SCRIPTURL]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSCRIPTURL][SCRIPTURLPATH]], FileAttachments
 

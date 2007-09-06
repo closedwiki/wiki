@@ -4,5 +4,5 @@
 ---+++ WIKITOOLNAME -- name of your TWiki site
    * Syntax: =%<nop>WIKITOOLNAME%=
    * Expands to: =%WIKITOOLNAME%=
-   * Related: [[#VarWIKIHOMEURL][WIKIHOMEURL]], [[#VarWIKIVERSION][WIKIVERSION]]
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarWIKIHOMEURL][WIKIHOMEURL]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarWIKIVERSION][WIKIVERSION]]
 

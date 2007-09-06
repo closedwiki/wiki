@@ -4,4 +4,4 @@
 ---+++ REMOTE_ADDR -- environment variable
    * Syntax: =%<nop>REMOTE_ADDR%=
    * Expands to: =%REMOTE_ADDR%=
-   * Related: [[#VarENV][ENV]], [[#VarHTTPHOST][HTTP_HOST]], [[#VarREMOTEPORT][REMOTE_PORT]], [[#VarREMOTEUSER][REMOTE_USER]]
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarENV][ENV]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarHTTPHOST][HTTP_HOST]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarREMOTEPORT][REMOTE_PORT]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarREMOTEUSER][REMOTE_USER]]

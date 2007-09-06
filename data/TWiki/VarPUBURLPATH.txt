@@ -4,5 +4,5 @@
 ---+++ PUBURLPATH -- the base URL path of attachments
    * Syntax: =%<nop>PUBURLPATH%=
    * Expands to: =%PUBURLPATH%=
-   * Related: [[#VarATTACHURL][ATTACHURL]], [[#VarATTACHURLPATH][ATTACHURLPATH]], [[#VarPUBURL][PUBURL]], [[#VarSCRIPTURL][SCRIPTURL]], [[#VarSCRIPTURL][SCRIPTURLPATH]], FileAttachments
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarATTACHURL][ATTACHURL]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarATTACHURLPATH][ATTACHURLPATH]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarPUBURL][PUBURL]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSCRIPTURL][SCRIPTURL]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSCRIPTURL][SCRIPTURLPATH]], FileAttachments
 

@@ -4,5 +4,5 @@
 ---+++ WIKIPREFSTOPIC -- name of site-wide preferences topic
    * Syntax: =%<nop>WIKIPREFSTOPIC%=
    * Expands to: =%WIKIPREFSTOPIC%=, renders as [[%WIKIPREFSTOPIC%]]
-   * Related: [[#VarHOMETOPIC][HOMETOPIC]], [[#VarWEBPREFSTOPIC][WEBPREFSTOPIC]]
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarHOMETOPIC][HOMETOPIC]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarWEBPREFSTOPIC][WEBPREFSTOPIC]]
 

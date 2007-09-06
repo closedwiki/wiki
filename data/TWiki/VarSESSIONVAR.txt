@@ -4,5 +4,5 @@
 ---+++ SESSIONVAR -- name of CGI and session variable that stores the session ID
    * Syntax: =%<nop>SESSIONVAR%=
    * Expand to: <tt>%SESSIONVAR%</tt>
-   * Related: TWikiUserAuthentication, [[#VarAUTHREALM][AUTHREALM]], [[#VarSESSIONID][SESSIONID]], [[#VarLOGIN][LOGIN]], [[#VarLOGOUT][LOGOUT]], [[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
+   * Related: TWikiUserAuthentication, [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarAUTHREALM][AUTHREALM]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSESSIONID][SESSIONID]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarLOGIN][LOGIN]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarLOGOUT][LOGOUT]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSESSION_VARIABLE][SESSION_VARIABLE]]
 

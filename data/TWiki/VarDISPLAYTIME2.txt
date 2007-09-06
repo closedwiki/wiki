@@ -5,5 +5,5 @@
    * Formatted time - either GMT or Local server time, depending on setting in [[%SCRIPTURLPATH{"configure"}%][configure]]. Same format qualifiers as =%<nop>GMTIME%=
    * Syntax: =%<nop>DISPLAYTIME{"format"}%=
    * Example: =%<nop>DISPLAYTIME{"$hou:$min"}%= expands to =%DISPLAYTIME{"$hou:$min"}%=
-   * Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME][GMTIME]], [[#VarSERVERTIME][SERVERTIME]]
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarDISPLAYTIME][DISPLAYTIME]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarGMTIME][GMTIME]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSERVERTIME][SERVERTIME]]
 

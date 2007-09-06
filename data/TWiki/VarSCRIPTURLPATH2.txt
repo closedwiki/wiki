@@ -5,5 +5,5 @@
    * As =%<nop>SCRIPTURL{"script"}%=, but doesn't include the protocol and host part of the URL
    * Syntax: =%<nop>SCRIPTURLPATH{"script"}%=
    * Expands to: =%SCRIPTURLPATH{"script"}%=
-   * Related: [[#VarPUBURLPATH][PUBURLPATH]], [[#VarSCRIPTNAME][SCRIPTNAME]], [[#VarSCRIPTSUFFIX][SCRIPTSUFFIX]], [[#VarSCRIPTURL][SCRIPTURL]], [[#VarSCRIPTURL2][SCRIPTURL{"script"}]], [[#VarSCRIPTURLPATH][SCRIPTURLPATH]]
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarPUBURLPATH][PUBURLPATH]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSCRIPTNAME][SCRIPTNAME]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSCRIPTSUFFIX][SCRIPTSUFFIX]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSCRIPTURL][SCRIPTURL]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSCRIPTURL2][SCRIPTURL{"script"}]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSCRIPTURLPATH][SCRIPTURLPATH]]
 

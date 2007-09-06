@@ -5,5 +5,5 @@
    * The name of the current script is shown, including script suffix, if any (for example =viewauth.cgi=)
    * Syntax: =%<nop>SCRIPTNAME%=
    * Expands to: =%SCRIPTNAME%=
-   * Related: [[#VarSCRIPTSUFFIX][SCRIPTSUFFIX]], [[#VarSCRIPTURL][SCRIPTURL]], [[#VarSCRIPTURLPATH][SCRIPTURLPATH]]
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSCRIPTSUFFIX][SCRIPTSUFFIX]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSCRIPTURL][SCRIPTURL]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSCRIPTURLPATH][SCRIPTURLPATH]]
 

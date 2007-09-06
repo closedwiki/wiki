@@ -4,4 +4,4 @@
 ---+++ REMOTE_USER -- environment variable
    * Syntax: =%<nop>REMOTE_USER%=
    * Expands to: <code>%REMOTE_USER%</code>
-   * Related: [[#VarENV][ENV]], [[#VarHTTPHOST][HTTP_HOST]], [[#VarREMOTEADDR][REMOTE_ADDR]], [[#VarREMOTEPORT][REMOTE_PORT]], [[#VarUSERNAME][USERNAME]], [[#VarWIKINAME][WIKINAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]]
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarENV][ENV]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarHTTPHOST][HTTP_HOST]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarREMOTEADDR][REMOTE_ADDR]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarREMOTEPORT][REMOTE_PORT]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarUSERNAME][USERNAME]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarWIKINAME][WIKINAME]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarWIKIUSERNAME][WIKIUSERNAME]]

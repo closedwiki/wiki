@@ -4,4 +4,4 @@
 ---+++ HTTP_HOST -- environment variable
    * Syntax: =%<nop>HTTP_HOST%=
    * Expands to: =%HTTP_HOST%=
-   * Related: [[#VarENV][ENV]], [[#VarREMOTEADDR][REMOTE_ADDR]], [[#VarREMOTEPORT][REMOTE_PORT]], [[#VarREMOTEUSER][REMOTE_USER]]
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarENV][ENV]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarREMOTEADDR][REMOTE_ADDR]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarREMOTEPORT][REMOTE_PORT]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarREMOTEUSER][REMOTE_USER]]
