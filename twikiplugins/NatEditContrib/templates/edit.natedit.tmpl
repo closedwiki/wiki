@@ -8,8 +8,8 @@
 %TMPL:DEF{"styles"}%
 %TMPL:P{"stylesscreen"}%
 <style type="text/css" media="all">
-  @import url("%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/styles.css");
-  @import url("%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/%IF{"defined NATEDIT_THEME" then="%NATEDIT_THEME%" else="default"}%/styles.css");
+  @import url("%PUBURLPATH%/%SYSTEMWEB%/NatEditContrib/styles.css");
+  @import url("%PUBURLPATH%/%SYSTEMWEB%/NatEditContrib/%IF{"defined NATEDIT_THEME" then="%NATEDIT_THEME%" else="default"}%/styles.css");
 </style>
 %TMPL:END%
 
@@ -40,10 +40,10 @@
 
 %TMPL:DEF{"fontbuttons"}%<div class="natEditFontButtons">
 <a href="javascript:setEditBoxFontStyle('mono');">
-<img width="16" alt="%MAKETEXT{"Use monospace font"}%" title="%MAKETEXT{"Use monospace font"}%" align="top" src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/monospace.gif" height="16" border="0" />
+<img width="16" alt="%MAKETEXT{"Use monospace font"}%" title="%MAKETEXT{"Use monospace font"}%" align="top" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/monospace.gif" height="16" border="0" />
 </a> 
 <a href="javascript:setEditBoxFontStyle('proportional');">
-<img width="16" alt="%MAKETEXT{"Use proportional spaced font"}%" title="%MAKETEXT{"Use proportional spaced font"}%" align="top" src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/proportional.gif" height="16" border="0" >
+<img width="16" alt="%MAKETEXT{"Use proportional spaced font"}%" title="%MAKETEXT{"Use proportional spaced font"}%" align="top" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/proportional.gif" height="16" border="0" >
 </a>
 </div>%TMPL:END%
 

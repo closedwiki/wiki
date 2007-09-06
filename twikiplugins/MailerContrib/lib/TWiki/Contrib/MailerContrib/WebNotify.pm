@@ -286,11 +286,11 @@ sub _load {
     $this->{meta} = $meta;
     # join \ terminated lines
     $text =~ s/\\\r?\n//gs;
-    my $webRE = qr/$TWiki::cfg{UsersWebName}\.|%MAINWEB%\./o;
+    my $webRE = qr/$TWiki::cfg{UsersWebName}\.|%USERSWEB%\./o;
     foreach my $line ( split ( /\r?\n/, $text )) {
         if ( $line =~ /^\s+\*\s$webRE?($TWiki::regex{wikiWordRegex})\s+\-\s+($TWiki::cfg{MailerContrib}{EmailFilterIn})/ ) {
             # * Main.WikiName - email@domain
-            # * %MAINWEB%.WikiName - email@domain
+            # * %USERSWEB%.WikiName - email@domain
             if ( $1 ne $TWiki::cfg{DefaultUserWikiName} ) {
                 # Add email address to list if non-guest and non-duplicate
                 $this->subscribe( $2, '*', 0 );
@@ -299,7 +299,7 @@ sub _load {
         }
         elsif ( $line =~ /^\s+\*\s$webRE?($TWiki::regex{wikiWordRegex})\s*$/o ) {
             # * Main.WikiName
-            # %MAINWEB%.WikiName
+            # %USERSWEB%.WikiName
             # WikiName
             $this->subscribe($1, '*', 0 );
             $in_pre = 0;
@@ -316,7 +316,7 @@ sub _load {
         }
         elsif ( $line =~ /^\s+\*\s$webRE?([$TWiki::regex{mixedAlphaNum}]+)\s*:(.*)$/o ) {
             # * Main.WikiName: topics
-            # * %MAINWEB%.WikiName: topics
+            # * %USERSWEB%.WikiName: topics
             if ( $2 ne $TWiki::cfg{DefaultUserWikiName} ) {
                 $this->_parsePages( $1, $2 );
             }

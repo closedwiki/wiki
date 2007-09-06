@@ -157,13 +157,13 @@ When you want to use links, write:
 	* !TwistyContrib uses these header includes:
 	<verbatim>
 <style type="text/css" media="all">
-@import url("%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.css");
+@import url("%PUBURL%/%SYSTEMWEB%/TwistyContrib/twist.css");
 </style>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikilib.js"></script>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiPref.js"></script>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiCSS.js"></script>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/BehaviourContrib/behaviour.compressed.js"></script>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.compressed.js"></script>
+<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikilib.js"></script>
+<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikiPref.js"></script>
+<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikiCSS.js"></script>
+<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/BehaviourContrib/behaviour.compressed.js"></script>
+<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TwistyContrib/twist.compressed.js"></script>
 </verbatim>
 
 
@@ -184,7 +184,7 @@ When you want to use links, write:
 | Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 | Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences
  
 %META:FILEATTACHMENT{name="twist.js" attachment="twist.js" attr="" comment="!JavaScript library" date="1126427179" path="twist.js" size="3441" stream="twist.js" user="TWikiContributor" version="0"}%
 %META:FILEATTACHMENT{name="twist.compressed.js" attachment="twist.compressed.js" attr="" comment="Compressed version of the !JavaScript library" date="1126427179" path="twist.compressed.js" size="3441" stream="twist.compressed.js" user="TWikiContributor" version="0"}%

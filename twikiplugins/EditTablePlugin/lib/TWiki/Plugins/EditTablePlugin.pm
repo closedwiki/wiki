@@ -116,9 +116,9 @@ sub addEditModeHeadersToHead {
 
     my $header=<<'EOF'; 
 <style type="text/css" media="all">
-@import url("%PUBURL%/%TWIKIWEB%/EditTablePlugin/edittable.css");
+@import url("%PUBURL%/%SYSTEMWEB%/EditTablePlugin/edittable.css");
 </style>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/EditTablePlugin/edittable.js"></script>
+<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/EditTablePlugin/edittable.js"></script>
 EOF
   TWiki::Func::addToHEAD('EDITTABLEPLUGIN',$header)
 }

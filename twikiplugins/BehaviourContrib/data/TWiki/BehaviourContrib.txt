@@ -62,7 +62,7 @@ Include the javascript file:
 
 <blockquote>
 <verbatim>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/BehaviourContrib/behaviour.compressed.js"></script>
+<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/BehaviourContrib/behaviour.compressed.js"></script>
 </verbatim>
 </blockquote>
 
@@ -110,16 +110,16 @@ Behaviour.register(myrules);
 
 
 ---+++ Example
-If we have a 'normal' link to TWiki Web hometopic: [[%TWIKIWEB%.%HOMETOPIC%][TWiki Web Home]], we can use javascript to make it open a popup window. When javascript is not available the link behaviour defaults to opening the page in the current window.
+If we have a 'normal' link to TWiki Web hometopic: [[%SYSTEMWEB%.%HOMETOPIC%][TWiki Web Home]], we can use javascript to make it open a popup window. When javascript is not available the link behaviour defaults to opening the page in the current window.
 
 <blockquote>
 <verbatim>
-<span class="link%TWIKIWEB%%HOMETOPIC%">[[%TWIKIWEB%.%HOMETOPIC%][TWiki Web Home]]</span>
+<span class="link%SYSTEMWEB%%HOMETOPIC%">[[%SYSTEMWEB%.%HOMETOPIC%][TWiki Web Home]]</span>
 
 <script type="text/javascript">
 // <![CDATA[
 var myrules = {
-	'.link%TWIKIWEB%%HOMETOPIC% a' : function(el){
+	'.link%SYSTEMWEB%%HOMETOPIC% a' : function(el){
 		el.onclick = function() {
 			// open in a popup with no other attributes than template 'viewplain'
 			twiki.Window.openPopup(this.href,{template:"viewplain"});
@@ -133,18 +133,18 @@ Behaviour.register(myrules);
 </script>
 </verbatim>
 
-The class name =link%<nop>TWIKIWEB%%<nop>HOMETOPIC%= will get expanded to =link%TWIKIWEB%%HOMETOPIC%=
+The class name =link%<nop>SYSTEMWEB%%<nop>HOMETOPIC%= will get expanded to =link%SYSTEMWEB%%HOMETOPIC%=
 </blockquote>
 
 Creates:
 
-<span class="link%TWIKIWEB%%HOMETOPIC%">[[%TWIKIWEB%.%HOMETOPIC%][TWiki Web Home]]</span>
+<span class="link%SYSTEMWEB%%HOMETOPIC%">[[%SYSTEMWEB%.%HOMETOPIC%][TWiki Web Home]]</span>
 
-<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twikiWindow.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiJavascripts/twikiWindow.js"></script>
 <script type="text/javascript">
 // <![CDATA[
 var myrules = {
-	'.link%TWIKIWEB%%HOMETOPIC% a' : function(el){
+	'.link%SYSTEMWEB%%HOMETOPIC% a' : function(el){
 		el.onclick = function() {
 			// open in a popup with no other attributes than template 'viewplain'
 			twiki.Window.openPopup(this.href,{template:"viewplain"});
@@ -207,8 +207,8 @@ For details see the Behaviour website.
 
 
 ---++ Distribution files
-   * [[%PUBURL%/%TWIKIWEB%/%TOPIC%/behaviour.compressed.js][compressed javascript file]] (3.6K) - processed by [[http://alex.dojotoolkit.org/shrinksafe/][ShrinkSafe]]
-   * [[%PUBURL%/%TWIKIWEB%/%TOPIC%/behaviour.js][behaviour.js]] (9.7K) - original javascript source
+   * [[%PUBURL%/%SYSTEMWEB%/%TOPIC%/behaviour.compressed.js][compressed javascript file]] (3.6K) - processed by [[http://alex.dojotoolkit.org/shrinksafe/][ShrinkSafe]]
+   * [[%PUBURL%/%SYSTEMWEB%/%TOPIC%/behaviour.js][behaviour.js]] (9.7K) - original javascript source
 
 
 ---++ Contrib Settings
@@ -229,7 +229,7 @@ For details see the Behaviour website.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences
 
 %META:FILEATTACHMENT{name="behaviour.compressed.js" attr="" autoattached="1" comment="" date="1162075796" path="behaviour.compressed.js" size="2902" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="behaviour.js" attr="" autoattached="1" comment="" date="1161199153" path="behaviour.js" size="8149" user="UnknownUser" version=""}%
