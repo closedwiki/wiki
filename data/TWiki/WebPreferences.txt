@@ -16,6 +16,12 @@ These settings override the defaults for this web only. See [[%SYSTEMWEB%.TWikiP
       * Set SITEMAPLIST = on
       * Set SITEMAPWHAT = [[%WEB%.WelcomeGuest][Welcome]], [[%WEB%.TWikiRegistration][Registration]], and other %WEB%.StartingPoints; TWiki history &amp; Wiki style; All the docs...
       * Set SITEMAPUSETO = ...discover TWiki details, and how to start your own site.
+      * Hide Table of Contents if the topic is included
+         * Set TOC_HIDE_IF_INCLUDED = on
+      * Set default Table of Contents title
+         * Set TOC_TITLE = On this page:
+      * The first header level to appear in the TOC:
+         * Set TOC_MIN_DEPTH = 2
 
    * Default template for *new topics* for this web:
       * WebTopicEditTemplate: Site-level default topic template

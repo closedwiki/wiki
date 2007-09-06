@@ -1,10 +1,11 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
-%TOC%
 %STARTINCLUDE%
----# Managing Topics
+---+ Managing Topics
 
 _Browser-based rename, move, and delete for individual topics_
+
+%TOC%
 
 ---++ Overview
 

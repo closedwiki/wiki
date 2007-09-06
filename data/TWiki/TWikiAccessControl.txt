@@ -1,14 +1,14 @@
 %META:TOPICINFO{author="TWikiContributor" date="1183870141" format="1.1" version="$Rev$"}%
-%TOC%
 %STARTINCLUDE%
-
----# TWiki Access Control
+---+ TWiki Access Control
 
 _Restricting read and write access to topics and webs, by Users and groups_
 
 TWiki Access Control allows you restrict access to single topics and entire webs, by individual user and by user Groups. Access control, combined with TWikiUserAuthentication, lets you easily create and manage an extremely flexible, fine-grained privilege system.
 
 __%T% Tip:__ TWiki:TWiki.TWikiAccessControlSupplement on TWiki.org has additional documentation on access control.
+
+%TOC%
 
 #ImportantConsideration
 ---++ An Important Control Consideration

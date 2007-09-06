@@ -1,6 +1,6 @@
 %META:TOPICINFO{author="TWikiContributor" date="1187845362" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
----+!! TWiki Installation Guide
+---+ TWiki Installation Guide
 
 *The following is installation instructions for the TWiki 4.2 production release on an Apache web server on Linux.* Visit TWiki:TWiki.InstallingTWiki for the latest updates to this guide and supplemental information for installing or upgrading TWiki, including notes on installing TWiki on different platforms, environments and web hosting sites.
 

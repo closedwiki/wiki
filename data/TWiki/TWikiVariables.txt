@@ -1,14 +1,15 @@
 %META:TOPICINFO{author="TWikiContributor" date="1173217738" format="1.0" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
-%TOC%
 %STARTSECTION{type="include"}%
----# TWiki Variables
+---+ TWiki Variables
 
 _Special text strings expand on the fly to display user data or system info_
 
 <nop>TWikiVariables are text strings - =%<nop>VARIABLE%= or =%<nop>VARIABLE{ parameter="value" }%= - that expand into content whenever a topic is rendered for viewing. There are two types of variables:
    1 Preferences variables: Can be defined and changed by the user
    1 Predefined variables: Defined by the TWiki system or by Plugins (for example, the SpreadSheetPlugin introduces a =%<nop>CALC{}%= variable)
+
+%TOC%
 
 ---++ Using Variables
 

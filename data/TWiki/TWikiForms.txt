@@ -1,9 +1,10 @@
 %META:TOPICINFO{author="TWikiContributor" date="1177881299" format="1.1" version="$Rev$"}%
-%TOC%
 %STARTINCLUDE%
----# TWiki Forms
+---+ TWiki Forms
 
 _Add structure to content with forms attached to twiki topics. TWiki forms (with form fields) and formatted search are the base for building database applications._
+
+%TOC%
 
 ---++ Overview
 

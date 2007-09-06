@@ -1,6 +1,6 @@
 %META:TOPICINFO{author="TWikiContributor" date="1145168838" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
----+!! TWiki Upgrade Guide
+---+ TWiki Upgrade Guide
 
 _This guide covers upgrading from a previous version of TWiki (such as Cairo or TWiki4.0) to TWiki 4.2__
 

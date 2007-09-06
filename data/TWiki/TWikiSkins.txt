@@ -1,9 +1,10 @@
 %META:TOPICINFO{author="TWikiContributor" date="1168736701" format="1.1" version="$Rev$"}%
-%TOC%
 %STARTINCLUDE%
----# TWiki Skins
+---+ TWiki Skins
 
 _Skins overlay regular templates to give different looks and feels to TWiki screens._
+
+%TOC%
 
 ---++ Overview
 

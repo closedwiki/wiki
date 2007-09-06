@@ -1,8 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1168735492" format="1.1" version="$Rev: 12524 $"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
-%TOC%
 %STARTINCLUDE%
----# Query Search
+---+ Query Search
 
 Query searches help you search the contents of forms attached to your topics, as well as the values of other meta-data attached to the topic. Using query searches you can search:
    1 The fields of forms
@@ -10,6 +9,8 @@ Query searches help you search the contents of forms attached to your topics, as
    1 File attachment information (but *not* the attached files themselves)
 
 Query searches are defined using a simple SQL-like query language. The language consists of _field specifiers_ and _constants_ joined with _operators_.
+
+%TOC%
 
 ---++ Field specifiers
 You use field specifiers to say what value from the topic you are interested

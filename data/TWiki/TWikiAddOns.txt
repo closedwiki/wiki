@@ -1,9 +1,10 @@
 %META:TOPICINFO{author="TWikiContributor" date="1177803014" format="1.1" version="$Rev$"}%
-%TOC%
 %STARTINCLUDE%
----# TWiki Add-Ons
+---+ TWiki Add-Ons
 
 _Add functionality to TWiki with extensions not based on the TWiki scripts._
+
+%TOC%
 
 ---++ Overview
 

@@ -1,9 +1,10 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-%TOC%
 %STARTINCLUDE%
----# 20-Minute TWiki Tutorial
+---+ 20-Minute TWiki Tutorial
 
 This step-by-step, hands-on tutorial gets you up to speed with all the TWikiSite basics, in _mere minutes_...
+
+%TOC%
 
 ---++ 1. Get set...
 Open two browser windows, so that you can follow these steps in one window, while trying things out in the other.

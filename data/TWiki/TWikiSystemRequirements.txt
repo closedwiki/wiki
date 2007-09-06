@@ -1,11 +1,12 @@
 %META:TOPICINFO{author="TWikiContributor" date="1178317477" format="1.1" version="$Rev$"}%
-%TOC%
 %STARTINCLUDE%
----# TWiki System Requirements
+---+ TWiki System Requirements
 
 _Server and client requirements_
 
 Low client and server base requirements are core features that keep TWiki widely deployable, particularly across a range of browser platforms and versions.  Many [[TWiki:Plugins.PluginPackage][Plugins]] and [[TWiki:Plugins.ContribPackage][contrib modules]] exist which enhance and expand TWiki's capabilities; they may have additional requirements.
+
+%TOC%
 
 ---++ Server Requirements
 
