@@ -329,7 +329,7 @@ sub handleTableEnd {
                 $text .= $helpText;
             }
         }
-        my $assetUrl  = '%PUBURL%/%TWIKIWEB%/EditTablePlugin';
+        my $assetUrl  = '%PUBURL%/%SYSTEMWEB%/EditTablePlugin';
 
         &TWiki::Plugins::EditTablePlugin::addEditModeHeadersToHead();
 		# table specific script
@@ -372,8 +372,8 @@ sub viewEditCell {
         $img = '';
         if( $value =~ s/(.+),\s*(.+)/$1/o ) {
             $img = $2;
-            $img =~ s|%ATTACHURL%|%PUBURL%/%TWIKIWEB%/EditTablePlugin|o;
-            $img =~ s|%WEB%|%TWIKIWEB%|o;
+            $img =~ s|%ATTACHURL%|%PUBURL%/%SYSTEMWEB%/EditTablePlugin|o;
+            $img =~ s|%WEB%|%SYSTEMWEB%|o;
         }
     }
 

@@ -17,7 +17,7 @@ Add a =%<nop>EDITTABLE{...}%= variable just before an existing table to make it 
 | =include= | Other topic defining the EDITTABLE parameters. The first %<nop>EDITTABLE% in the topic is used. This is useful if you have many topics with the same table format and you want to update the format in one place. | (none) |
 | =helptopic= | Topic name containing help text shown below the table when editing a table. The %<nop>STARTINCLUDE% and %<nop>STOPINCLUDE% variables can be used in the topic to specify what is shown. | (no help text) |
 | =headerislabel= | Table header cells are read-only (labels) if ="on"=; header cells can be edited if ="off"= or "0" | ="on"= |
-| =editbutton= | Set edit button text, e.g. ="Edit this table"=; set button image with alt text, e.g. ="Edit table, %<nop>PUBURL%/%<nop>TWIKIWEB%/TWikiDocGraphics/edittopic.gif"=; hide edit button at the end of the table with ="hide"= (Note: Button is automatically hidden if an edit button is present in a cell) | =EDITBUTTON= %BR% Plugin setting |
+| =editbutton= | Set edit button text, e.g. ="Edit this table"=; set button image with alt text, e.g. ="Edit table, %<nop>PUBURL%/%<nop>SYSTEMWEB%/TWikiDocGraphics/edittopic.gif"=; hide edit button at the end of the table with ="hide"= (Note: Button is automatically hidden if an edit button is present in a cell) | =EDITBUTTON= %BR% Plugin setting |
 
 ---+++ Initial Values
 
@@ -108,7 +108,7 @@ Screenshot in edit mode:
 Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>EDITTABLEPLUGIN_SHORTDESCRIPTION%==
 
-   * One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
+   * One line description, shown in the %SYSTEMWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = Edit TWiki tables using edit fields, date pickers and drop down boxes
 
    * Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
@@ -147,7 +147,7 @@ __Note:__ The Plugin uses base settings like date format, language and style fro
    * Alternatively,
       * Manually resolve the dependencies listed below.
       %$DEPENDENCIES%
-   * The Plugin depends on the =viewauth= script to authenticate the user. As described in %TWIKIWEB%.TWikiAccessControl, copy the =view= script to =viewauth= (or better, create a symbolic link) and add =viewauth= to the list of authenticated scripts in the =.htaccess= file.
+   * The Plugin depends on the =viewauth= script to authenticate the user. As described in %SYSTEMWEB%.TWikiAccessControl, copy the =view= script to =viewauth= (or better, create a symbolic link) and add =viewauth= to the list of authenticated scripts in the =.htaccess= file.
    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
    * Test if the Plugin is correctly installed:
       * Check above example if there is an *[&nbsp;Edit&nbsp;table&nbsp;]* button below the table in above example
@@ -196,12 +196,12 @@ __Note:__ The Plugin uses base settings like date format, language and style fro
 |  05 Apr 2002: | Initial version |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Perl Version: | 5.0 |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 98%, %TWIKIWEB%.FormattedSearch 98%, %TOPIC% 95% |
+|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle 98%, %SYSTEMWEB%.FormattedSearch 98%, %TOPIC% 95% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
 -- TWiki:Main/PeterThoeny - 02 Oct 2006
 

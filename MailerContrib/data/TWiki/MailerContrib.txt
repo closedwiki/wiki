@@ -30,9 +30,9 @@ This script is designed to be run from =cron= (or an equivalent off-line job sch
 The script collates the changes emails so that each subscriber only receives one changes notification for all changes in all webs in the TWiki. Furthermore, users can elect to receive just summaries of changes, or the entire content of topics that have changed.
 
 Each web can optionally contain a topic called <nop>%NOTIFYTOPIC%.
-<!-- Included by %TWIKIWEB%.WebChangesAlert -->
+<!-- Included by %SYSTEMWEB%.WebChangesAlert -->
 %STARTINCLUDE%
-Users subscribe to email notifications using their %TWIKIWEB%.WikiName or an alternative email address, and can specify the webs/topics they wish to track using one of these bullet list formats:
+Users subscribe to email notifications using their %SYSTEMWEB%.WikiName or an alternative email address, and can specify the webs/topics they wish to track using one of these bullet list formats:
 
 _three spaces_ * [ _webname_ . ] _wikiName_ - _SMTP mail address_ <br />
 _three spaces_ * [ _webName_ . ] _wikiName_ <br />
