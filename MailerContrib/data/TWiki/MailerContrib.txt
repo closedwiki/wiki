@@ -1,6 +1,7 @@
 ---+!! %TOPIC%
+<a href="http://wikiring.com"><img src="%ATTACHURL%/logo.gif" style="float:right" /></a>
 
-Add-on to the TWiki kernel that allows users to "subscribe" to regularly scheduled e-mails containing either:
+Allows users to "subscribe" to regularly scheduled e-mails containing either:
    * A report on changes to all topics that have changed within a particular TWiki web.
    * A report on changes to a specific topic or set of topics the user can define flexibly.
    * The entire content of a specific topic or set of topics. This is referred to as "news mode."
@@ -17,7 +18,7 @@ Add-on to the TWiki kernel that allows users to "subscribe" to regularly schedul
 -->
 
 
-*WARNING: TWiki-4 only. If you want to use this extension with an earlier version of TWiki, please see [[http://twiki.org/cgi-bin/view/Plugins/%TOPIC%?rev=1.17][here]]*
+<div class="twikiBroadcastMessage" style="background-color:#ffc;">WARNING: TWiki-4 only. If you want to use this extension with an earlier version of TWiki, please use [[http://twiki.org/cgi-bin/attach/Plugins/%TOPIC%?filename=%TOPIC%.zip&revInfo=1][revision 17 of the zip]].</div>
 
 %TOC%
 
@@ -40,20 +41,21 @@ _three spaces_ * _SMTP mail address_ <br />
 _three spaces_ * _SMTP mail address_ : _topics_ <br />
 _three spaces_ * [ _webname_ . ] _wikiName_ : _topics_
 
-In the above examples, _topics_ is a space-separated list of topic names. The user may further customize the specific content they will receive using the following formats:
-   * Specify topics without a _Web._ prefix
-   * Topics must exist in this web.
-   * Topics may be specified using * wildcards
-   * Each topic may optionally be preceded by a '+' or '-' sign. The '+' sign means "subscribe to this topic" (the same as not putting anything). The '-' sign means "unsubscribe" or "don't send notifications regarding this topic". This allows users to elect to filter out certain topics (and their children, to an arbitrary depth). Topic filters ('-') take precedence over topic includes ('+') (i.e. if you unsubscribe from a topic it will cancel out any subscriptions to that topic).
+In the above, _topics_ is a space-separated list of topics:
+   * ... *without* a _Web._ prefix
+   * ...that exist in this web.
+Users may further customize the specific content they will receive using the following controls:
+   * You can use =*= in a topic name, where it is treated as a [[http://en.wikipedia.org/wiki/Wildcard_character][wildcard character]]. A =*= will match zero or more other characters - so, for example, =Fred*= will match all topic names starting with =Fred=, =*Fred= will match all topic names _ending_ with =Fred=, and =*= will match _all_ topic names.
+   * Each topic may optionally be preceded by a '+' or '-' sign. The '+' sign means "subscribe to this topic". The '-' sign means "unsubscribe" or "don't send notifications regarding this particular topic". This allows users to elect to filter out certain topics. Topic filters ('-') take precedence over topic includes ('+') i.e. if you unsubscribe from a topic it will cancel out any subscriptions to that topic.
    * Each topic may optionally be followed by an integer in parentheses, indicating the depth of the tree of children below that topic. Changes in all these children will be detected and reported along with changes to the topic itself. _Note_ This uses the TWiki "Topic parent" feature.
-   * Each topic may optionally be immediately followed by an exclamation mark ! or a question mark ? with no intervening spaces, indicating that the topic (and children if there is a tree depth specifier as well) should be mailed out as *complete topics* instead of change summaries. ! causes the topic to be mailed every time even if there have been no changes, ? will mail the topic only if there have been changes to it. This only makes sense for subscriptions.
+   * Each topic may optionally be immediately followed by an exclamation mark ! or a question mark ? with no intervening spaces, indicating that the topic (and children if there is a tree depth specifier as well) should be mailed out as *complete topics* instead of change summaries. ! causes the topic to be mailed every time _even if there have been no changes_, and ? will mail the topic only if there have been changes to it. This only makes sense for subscriptions, and is intended for mailshotting regular newletters.
 
 For example:
 Subscribe Daisy to all changes to topics in this web.
 <verbatim>
    * daisy.cutter@flowers.com
 </verbatim>
-Subscribe Daisy to all changes in all webs that start with =Web=.
+Subscribe Daisy to all changes to topics that start with =Web=.
 <verbatim>
    * daisy.cutter@flowers.com: Web*
 </verbatim>
@@ -89,11 +91,9 @@ __%T% Tip:__ List names in alphabetical order to make it easier to find the name
 
 In the future it is intended that individual users will be able to control the frequency with which they are notified of topic changes, by changing a schedule specification in their home topic. However at present, the notification schedule is controlled by the frequency of activation of the =cron= job that runs the =mailnotify= script.
 
-%RED% __Note__ =mailnotify= ignores permissions in webs. It is entirely possible for a user to get added to one of the subscription topics in a web, when they are not authorised to view the topics in that web. This could result in them having access to sensitive information, particularly with news mode. %ENDCOLOR%
-
 Note that when using the "news mode" =!= or =?= specifiers the entire topic text is mailed out as HTML. The =newsletter= template is used to generate the content in this mail, using whatever skin is selected in the topic being mailed.
 
-In addition, the %<nop>STARTPUBLISH% and %<nop>STOPPUBLISH% markers used by TWiki:Plugins.PublishContrib to delimit the text to be published are respected.
+In addition, the %<nop>STARTPUBLISH% and %<nop>STOPPUBLISH% markers used by TWiki:Plugins.PublishContrib to delimit the text to be published are respected in news mode.
 
 ---+ <code>TWiki/Contrib/MailerContrib</code> code library
 The second part of the module is a code library that provides the services for other applications to modify the subscription topics through a clean, well documented API. This allows (for example) plugin developers to add (for example) a "Register me for this newsletter" button to their pages. The main interface is the =Web<nop>Notify= package described below.
@@ -146,11 +146,18 @@ Newsletters are sent after formatting using the standard =view= template, using 
 
 ---++ Contrib Info
 
+Another great TWiki extension from the <a style="text-decoration:none" href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiring.png" alt="" /> *WikiRing* </a> - working together to improve your wiki experience!
+
+Many thanks to the following sponsors for supporting this work:
+   * [[http://www.windriver.com][Wind River]]
+   * [[http://wikigardens.com][WikiGardens]]
+
 |  Author: | TWiki:Main/CrawfordCurrie (http://c-dot.co.uk) |
 |  Copyright &copy;: | 2004, Wind River Systems; 2006, http://WikiRing.com |
 |  License: | GPL |
 |  Version: | %$VERSION% |
 |  Change History: | |
+|  6 Sep 2007 | Bugs:Item4488 doc tweaks |
 |  14550 | Bugs:Item4461 - 'Changed' link now points to most recent changes, not the entire history |
 |  22 Jun 2007 | Bugs:Item4284 - added access control checks and email filter |
 |  21 May 2007 | Bugs:Item3969 - 8bit email fix (TWiki:Main.WillNorris) |
@@ -192,4 +199,5 @@ Newsletters are sent after formatting using the standard =view= template, using 
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-
+%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="" version="1"}%
+%META:FILEATTACHMENT{name="logo.gif" attr="h" comment="" version="1"}%
