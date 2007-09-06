@@ -1,17 +1,15 @@
-# translation of pt.po to português brasileiro
-#   TWiki:Main/AntonioTerceiro, 2005, 2006, 2007.
-#   TWiki:Main/CarlinhosCecconi, 2005, 2006, 2007.
-# carlinhos cecconi <carlinux@terra.com.br>, 2007.
 # TWiki translation for Portuguese (português)
 # This file is distributed under the same license as TWiki itself
 # Copyright (C) 2005 Peter Thoeny, peter@thoeny.com and TWiki Contributors.
 # Translators:
+#   TWiki:Main/AntonioTerceiro, 2005, 2006, 2007.
+#   TWiki:Main/CarlinhosCecconi, 2005, 2006, 2007.
 msgid ""
 msgstr ""
 "Project-Id-Version: pt\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2007-09-04 22:31-0300\n"
+"PO-Revision-Date: 2007-09-06 06:54-0300\n"
 "Last-Translator: carlinhos cecconi <carlinux@terra.com.br>\n"
 "Language-Team: português brasileiro <twikibr@listas.softwarelivre.org>\n"
 "MIME-Version: 1.0\n"
