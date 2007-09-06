@@ -1,9 +1,11 @@
 ---+!! !TinyMCEPlugin
 <!--
 One line description, required for extensions repository catalog.
-   * Set SHORTDESCRIPTION = Integration of the TinyMCE Wysiwym Editor
+   * Set SHORTDESCRIPTION = Integration of the !TinyMCE WYSIWYG Editor
 -->
 %SHORTDESCRIPTION%
+
+<img src="%ATTACHURL%/screenshot.gif"/>
 
 %TOC%
 This is an integration of the <a href="http://tinymce.moxiecode.com?id=powered_by_tinymce_mini"><img src="http://tinymce.sourceforge.net/buttons/tinymce_button.png" border="0" width="80" height="15" alt="TinyMCE" /></a> WYSIWYG editor. This is great little editor, fast and highly functional, and supporting a wide range of browsers, including Firefox, IE and Safari. At the time of writing it doesn't work with Opera or Konqueror.
@@ -76,7 +78,7 @@ You can override these settings in the same way as any other TWiki variable, by 
 
 ---++ Plugin Info
 
-This extension is brought to you by a [[http://wikiring.com][WikiRing <a href="http://wikiring.com"><img src="%PUBURLPATH%/%SYSTEMWEB%/WysiwygPlugin/wikiringlogo20x20.png" title="WikiRing: Professional Wiki Innovation and Support" /></a>]] partner - working together to improve your wiki experience!
+Another great TWiki extension from the <a style="text-decoration:none" href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiringlogo20x20.png" alt="" /> *WikiRing* </a> - working together to improve your wiki experience!
 
 |  Plugin Author(s): | TWiki:Main.CrawfordCurrie |
 |  Plugin Version: | %$VERSION% |
@@ -84,6 +86,7 @@ This extension is brought to you by a [[http://wikiring.com][WikiRing <a href="h
 |             | This package also includes the complete sources for version 2.1.1.1 of the !TinyMCE editor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  6 Sep 2007 | Bugs:Item4557 added missing files to package |
 |  4 Sep 2007 | Bugs:Item4534 Bugs:Item4535 fixed |
 |  14679 | Bugs:Item4481 Bugs:Item4524 fixed |
 |  14668 | Bugfixes and refinements done as part of 4.2 release |
@@ -94,7 +97,13 @@ This extension is brought to you by a [[http://wikiring.com][WikiRing <a href="h
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/TinyMCEPluginDev |
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/TinyMCEPluginAppraisal |
 
+Many thanks to the following sponsors for supporting this work:
+   * [[http://ilog.fr][ILOG]]
+   * [[http://www.carrier.com][Carrier Corporation]]
+   * [[http://twiki.net][TWIKI.NET]]
+
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
 
 %META:FILEATTACHMENT{name="tinymce.gif" attr="h" comment="screenshot"}%
-http://wiki.moxiecode.com
+%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="" version="1"}%
+%META:FILEATTACHMENT{name="screenshot.gif" attr="h" comment="" version="1"}%
