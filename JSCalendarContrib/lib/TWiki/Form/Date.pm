@@ -47,7 +47,7 @@ sub renderForEdit {
         $value .= '%ENDTWISTY%';
     }
     my $session = $this->{session};
-    $value = $session->{renderer}->getRenderedVersion(
+    $value = $session->renderer->getRenderedVersion(
         $session->handleCommonTags( $value, $web, $topic ));
 
     return ( '', $value );

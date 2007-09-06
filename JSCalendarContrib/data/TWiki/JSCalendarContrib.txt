@@ -1,4 +1,5 @@
 ---+!! %TOPIC%
+<img src="%ATTACHURL%/screenshot.gif" style="float:right"/>
 
 %SHORTDESCRIPTION%
 
@@ -14,76 +15,31 @@
 
 %TOC%
 
-<img src="%ATTACHURL%/screenshot.gif" style="float:right"/>
 ---++ Summary of Contents
 This module packages the [[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCalendar]] Javascript in a form suitable for use with TWiki.
 
-
 ---++ Detailed Documentation
-Read [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] or [[%ATTACHURL%][visit the demo page]].
+%$POD%
 
-This package also includes a small Perl module to make using the calendar
-easier from TWiki plugins. This module includes the functions:
-
----++++ TWiki::Contrib::JSCalendarContrib::renderDateForEdit($name, $value, $format) -> $html
-This is the simplest way to use calendars from a plugin.
-   * =$name= is the name of the CGI parameter for the calendar
-     (it should be unique),
-   * =$value= is the current value of the parameter (may be undef)
-   * =$format= is the format to use (optional; the default is set
-     in =configure=). The
-HTML returned will display a date field and a drop-down calendar.
-Example:
+---+++ Using the Calendar in user forms
+You can also use the calendar directly in your own hand-built forms, without
+having to write any code. Just add this inline in the topic text:
 <verbatim>
-use TWiki::Contrib::JSCalendarContrib;
-...
-my $fromDate = TWiki::Contrib::JSCalendarContrib::renderDateForEdit(
-   'from', '1 April 1999');
-my $toDate = TWiki::Contrib::JSCalendarContrib::renderDateForEdit(
-   'to', undef, '%Y');
+%INCLUDE{"%SYSTEMWEB%/JSCalendarContribInline"}%
 </verbatim>
-
----+++ TWiki::Contrib::JSCalendarContrib::addHEAD( $setup )
-This function will automatically add the required headers to the page being
-rendered. It's intended for use when you want more control over the formatting
-of your calendars than =renderDateForEdit= affords. =$setup= is the name of
-the calendar setup module; it can either be omitted, in which case the method
-described in the Mishoo documentation can be used to create calendars, or it
-can be ='twiki'=, in which case a Javascript helper function called
-'showCalendar' is added that simplifies using calendars to set a value in a
-text field. For example, say we wanted to display the date with the calendar
-icon _before_ the text field, using the format =%Y %b %e=
+Then, to display a calendar icon next to a text input field:
 <verbatim>
-# Add styles and javascript for the calendar
-use TWiki::Contrib::JSCalendarContrib;
-...
-
-sub commonTagsHandler {
-  ....
-  # Enable 'showCalendar'
-  TWiki::Contrib::JSCalendarContrib::addHEAD( 'twiki' );
-
-  my $cal = CGI::image_button(
-      -name => 'img_datefield',
-      -onclick =>
-       "return showCalendar('id_datefield','%Y %b %e')",
-      -src=> TWiki::Func::getPubUrlPath() . '/' .
-             TWiki::Func::getTwikiWebname() .
-             '/JSCalendarContrib/img.gif',
-      -alt => 'Calendar',
-      -align => 'MIDDLE' )
-    . CGI::textfield(
-      { name => 'date', id => "id_datefield" });
-  ....
-}
+<input type="text" id="cal_val_here" />
+<input type="image" src="%PUBURL%/%SYSTEMWEB%/JSCalendarContrib/img.gif" onclick="javascript: return showCalendar('cal_val_here','%e %B %Y')" />
 </verbatim>
-The first parameter to =showCalendar= is the id of the textfield, and the second parameter is the . See the Mishoo documentation for details of the '$e %B %Y' parameter.
+If the contrib is installed, you will see such a field here:
+%INCLUDE{"%SYSTEMWEB%/JSCalendarContribInline"}%
+<input type="text" id="cal_val_here" />
+<input type="image" src="%PUBURL%/%SYSTEMWEB%/JSCalendarContrib/img.gif" onclick="javascript: return showCalendar('cal_val_here','%e %B %Y')" />
 
-=addHEAD= can be called from =commonTagsHandler= for adding the header to all pages, or from =beforeEditHandler= just for edit pages etc.
-
----+++ Settings
-	* What do I do
-		* Set SHORTDESCRIPTION = [[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCalendar]], packaged for use by plugins, skins and add-ons.
+<!--
+   * Set SHORTDESCRIPTION = [[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCalendar]], packaged for use by plugins, skins and add-ons.
+-->
 
 ---+++ Installation Instructions
 %$INSTALL_INSTRUCTIONS%
@@ -95,12 +51,15 @@ The first parameter to =showCalendar= is the id of the textfield, and the second
 
 ---+++ Contrib Info
 
-|  Author: | TWiki:Main/CrawfordCurrie http://www.c-dot.co.uk |
+Another great TWiki extension from the <a style="text-decoration:none" href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiringlogo20x20.png" alt="" /> *WikiRing* </a> - working together to improve your wiki experience!
+
+|  Author: | TWiki:Main/CrawfordCurrie http://c-dot.co.uk |
 |  Version: | %$VERSION% of the Mishoo calendar |
 |  Copyright &copy;: | See [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dependencies: | %$DEPENDENCIES% |
 | Change History: | |
+|  6 Sep 2007 | Bugs:Item4030 Added doc for using the calendar in user forms |
 |  13603 | Bugs:Item2982 cleaned up the interface to the contrib, re-added a date rendering function with a more generic interface |
 |  11594 | Allow format to be configured. |
 |  11415 | Add a =renderFormFieldForEditHandler= so other plugins can forward to this handler to add the date field to the TWikiForms. (TWiki:Main.ThomasWeigert) |
@@ -115,6 +74,7 @@ The first parameter to =showCalendar= is the id of the textfield, and the second
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPreferences
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences
 
 %META:FILEATTACHMENT{name="screenshot.gif" attr="h" comment="" version="1"}%
+%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="" version="1"}%
