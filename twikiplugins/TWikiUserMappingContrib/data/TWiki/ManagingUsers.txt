@@ -1,9 +1,10 @@
 %META:TOPICINFO{author="TWikiContributor" date="1158277691" format="1.1" version="$Rev$"}%
-%TOC%
 %STARTINCLUDE%
----# Manage Users
+---+ Manage Users
 
 _Register users on your TWiki site; change/reset/install passwords; remove user accounts_
+
+%TOC%
 
 %X% Some of the features below may be disabled, depending on your TWiki
 configuration.
