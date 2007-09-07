@@ -23,11 +23,11 @@ Then, in the topic where you want to reference and get a references list, you ca
      <code>%<nop/>CITEINLINE{}%</code>: this can have unpredicted results.
 	* =%<nop/>BIBLIOGRAPHY{...}%= to get a list of references. =%<nop/>BIBLIOGRAPHY{...}%= accepts the following arguments:
      | *Argument* | *Description* | *Default value* |
-     | =header= | the header for the references list (like "References", "Referências" (in portuguese), and so on. | DEFAULTHEADER setting (see below). |
+     | =header= | the header for the references list (like "References", "Referï¿½ncias" (in portuguese), and so on. | DEFAULTHEADER setting (see below). |
      | =referencesTopic= | indicates the topic bibliography must be taken from. Can be a comma-separated list of topics. | DEFAULTBIBLIOGRAPHYTOPIC setting (see below). |
      | =order= | in which order the references should appear. Accepted values are =citation= (references appear in citation order) and =alpha= (references appear in alphabetical order). | DEFAULTSORTING setting (see below). |
      | *Usage example:* |||
-     | =%<nop/>BIBLIOGRAPHY{header="---++ Referências" referencesTopic="<nop/>MinhaBibliografia" order="citation"}%= %BR% The above usage tells BibliographyPlugin to use "Referências" (in portuguese) as the title of the references list, to take bibliography from a topic names <nop/>MinhaBibliografia and to list the references in citation order.  |||
+     | =%<nop/>BIBLIOGRAPHY{header="---++ Referï¿½ncias" referencesTopic="<nop/>MinhaBibliografia" order="citation"}%= %BR% The above usage tells BibliographyPlugin to use "Referï¿½ncias" (in portuguese) as the title of the references list, to take bibliography from a topic names <nop/>MinhaBibliografia and to list the references in citation order.  |||
 
 ---++ Example
 
@@ -76,7 +76,7 @@ that are not in your bibliography
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+	* One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
 	* Set SHORTDESCRIPTION = cite bibliography in one topic and get a references list automatically created.
 
 	* Debug plugin: (See output in =data/debug.txt=)
@@ -115,11 +115,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 97%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC% 97% |
+|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle 97%, %SYSTEMWEB%.FormattedSearch 99%, %TOPIC% 97% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
 -- TWiki:Main/AntonioTerceiro - 17 Jun 2004
 

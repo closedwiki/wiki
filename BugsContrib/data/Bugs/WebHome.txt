@@ -15,7 +15,7 @@ You create a new bug by clicking the "Create New Item" link in the left bar.
 ---+ Configuring the Bugs Web
 
 The web is configured as a simple bug tracker, but can easily be customised to meet your own requirements. Here are some pointers:
-   1 ItemTemplate contains the basic bug form. This is a [[%TWIKIWEB%.TWikiForms][TWikiForm]].
+   1 ItemTemplate contains the basic bug form. This is a [[%SYSTEMWEB%.TWikiForms][TWikiForm]].
    1 WebLeftBar contains the left menu bar
    1 AppliesTo contains the list of areas that an issue might apply to. Configure this to your own requirements
    1 [[Priority]] contains a list of valid priorities
