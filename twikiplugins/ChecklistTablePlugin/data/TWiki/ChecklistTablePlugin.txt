@@ -55,7 +55,8 @@ You can use the =%<nop>CHECKLIST%= tag to customize the checklist states, icons 
 %TABLE{sort="off"}%
 | *Attribute* | *Description* | *Example/Default* |
 | allowmove | enables/disables buttons for move a entry (row) up or down | =allowmove="off"= |
-| changerows | enables/disables row changes (add/insert/remove); allowed values: on, off, add (= allow only add not remove) | =changerows="on"= |
+| buttonpos | defines the button position of the row actions (edit, insert, move up/down, delete), allowed values: left, right (default), both  | =buttonpos="right"= |
+| changerows | enables/disables row changes (add/insert/remove); allowed values: on, off, add (= allows only add not remove) | =changerows="on"= |
 | defaultcellformat | if the =format= attribute does not match with a given TWiki table the format of a table cell will be changed to this default | =defaultcellformat="textarea,3x30"= | 
 | format | table format (see Table Format section) | =format="&#124;item&#124;text,30&#124;textarea,3x30&#124;"= |
 | header | table header: a TWiki table like header or 'off' to disable header | =header="&#124;*State*&#124;*Item*&#124;*Comment*&#124;"= |
@@ -155,7 +156,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | V1.003 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  V1.003 (BETA) | TWiki:Main.DanielRohde: added quick insert feature; added quickadd attribute; fixed typos; fixed whitespaces in format bug |
+|  V1.003 (BETA) | TWiki:Main.DanielRohde: added quick insert feature; added new attributes (quickadd, quickinsert, buttonpos); fixed typos; fixed whitespaces in format bug; fixed (forced) link in text(area) bug; |
 |  V1.002 (30 Aug 2007): | TWiki:Main.DanielRohde: fixed major pre/verbatim bug; fixed and added documentation; added sort feature; added changerows attribute; added EDITCELL feature; fixed Opera bug; fixed topic lock bug |
 |  V1.001 (28 Aug 2007): | TWiki:Main.DanielRohde Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 <br/> ChecklistPlugin, JSCalendarContrib |

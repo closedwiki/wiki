@@ -18,9 +18,8 @@
 #
 # TODO
 #    + performance fix: no sort -> render direct (without collect)
-#    + define button panel position 
 #    + own icons
-#    + JavaScript based adds/inserts/moves/edits (maybe AJAX too)
+#    + JavaScript based moves/edits (maybe AJAX too)
 #
 
 package TWiki::Plugins::ChecklistTablePlugin::Core;
@@ -30,8 +29,8 @@ use strict;
 
 use vars qw( %defaults @flagOptions $defaultsInitialized  %options $cgi $STARTENCODE $ENDENCODE @unknownParams );
 
-$STARTENCODE = "--CHECKLISTTABLEPLUGIN_ENCODED[";
-$ENDENCODE = "]CHECKLISTTABLEPLUGIN_ENCODED--";
+$STARTENCODE = '--CHECKLISTTABLEPLUGIN_ENCODED[ ';
+$ENDENCODE = ' ]CHECKLISTTABLEPLUGIN_ENCODED--';
 
 
 # =========================
@@ -295,7 +294,12 @@ sub _renderForm {
 		$text .=' | ';
 
 	}
-	$text.= '*&nbsp;'._renderButtons($what,$tablenum, $row).'&nbsp;* |';
+	if ($options{'buttonpos'} =~ /^(left|both)$/i) {
+		$text = '| *&nbsp;'._renderButtons($what,$tablenum, $row,undef,'left').'&nbsp;* '.$text;
+	} 
+	if ($options{'buttonpos'} =~ /^(right|both)$/i) {
+		$text .= '*&nbsp;'._renderButtons($what,$tablenum, $row,undef,'right').'&nbsp;* |';
+	}
 	return "$text\n";
 }
 
@@ -379,14 +383,21 @@ sub _renderTableHeader {
 						if (defined $cgi->param($param) && $cgi->param($param)=~/^${c}_(asc|desc)$/);
 			my $ncgi=new CGI($cgi);
 			$ncgi->param($param,"${c}_${dir}");
-			$cell = "$sortmarker " . $cgi->a({-href=>$ncgi->self_url()."#CLTP_TABLE_$tablenum", -title=>"sort table"}, $cell);
+			$cell = $cgi->a({-href=>$ncgi->self_url()."#CLTP_TABLE_$tablenum", -title=>"sort table"}, $cell) . " $sortmarker";
 
 			$header.="*$cell*|";
 		}
 	}
 	my $text =$header;
 
-	$text .= "*&nbsp;&nbsp;*|" unless $options{'_EDITTABLE_'};
+	if (!$options{'_EDITTABLE_'}) {
+		if ($options{'buttonpos'} =~ /^(left|both)$/i) {
+			$text = '|*&nbsp;*'.$text
+		} 
+		if ($options{'buttonpos'} =~ /^(right|both)$/i) {
+			$text .= '*&nbsp;*|';
+		}
+	}
 
 	return "$text\n";
 }
@@ -404,9 +415,17 @@ sub _renderTableData {
 		$text .= $$entryRef{'line'};
 		$text =~ s/\%<nop>(\w+)/\%$1/g; ## _EDITTABE_
 
-		$text .= "*&nbsp;";
-		$text .= _renderButtons('show', $tablenum, $row, $rowcount) unless defined $cgi->param("cltp_action_$tablenum");
-		$text .= "&nbsp;* |";
+		if ($options{'buttonpos'}=~/^(left|both)$/i) {
+			my $ntext = '| *&nbsp;';
+			$ntext .= _renderButtons('show', $tablenum, $row, $rowcount, 'left') unless defined $cgi->param("cltp_action_$tablenum");
+			$ntext .= '&nbsp;*';
+			$text = $ntext.$text;
+		} 
+		if ($options{'buttonpos'}=~/^(right|both)$/i) {
+			$text .= '*&nbsp;';
+			$text .= _renderButtons('show', $tablenum, $row, $rowcount, 'right') unless defined $cgi->param("cltp_action_$tablenum");
+			$text .= '&nbsp;* |';
+		}
 
 		$text=~s/\%CLTP_ROWNUMBER\%/($row+1)/ge;
 	} else { # _EDITTABLE_
@@ -423,36 +442,69 @@ sub _renderTableData {
 }
 # =========================
 sub _renderButtons {
-	my ($what, $tablenum, $row, $rowcount) = @_;
+	my ($what, $tablenum, $row, $rowcount, $pos) = @_;
 	my $text = "";
 	if ($what eq 'show') {
-		## e:
-		$text.=$cgi->image_button(-name=>"cltp_action_${tablenum}_editrow_${row}", -title=>'Edit Entry', -value=>' E ', -src=>$options{'editrowicon'});
-		## +:
-		if ((!$options{'quickadd'}) || (($row < $rowcount)&&($options{'changerows'}!~/^(off|no|false|0)$/i))) {
-			$text.=$cgi->image_button(-id=>"cltp_action_${tablenum}_ins_${row}",-name=>"cltp_action_${tablenum}_ins_${row}", -title=>'Insert Entry', -value=>' + ',-src=>$options{'insertrowicon'}, 
-					-onMouseOver=>$options{'quickinsert'}?"cltpShowInsertForm('CLTP_HIDDEN_${tablenum}','cltp_action_${tablenum}_ins_${row}',0,15,1,$tablenum,$row);":""
-					);
-			##$text.=$cgi->button(-id=>"cltp_action_${tablenum}_ins_${row}",-alt=>"cltp_action_${tablenum}_ins_${row}", -title=>'Insert Entry', -src=>$options{'insertrowicon'}, -onClick=>"cltpTooltipShow('CLTP_TABLE_HIDDEN_0','cltp_action_${tablenum}_ins_${row}',0,0,1);");
+		sub _renderEditRowButton {
+			my ($tablenum,$row) = @_;
+			return $cgi->image_button(-name=>"cltp_action_${tablenum}_editrow_${row}", -title=>'Edit Entry', -value=>' E ', -src=>$options{'editrowicon'});
+		}
+		sub _renderInsertRowButton {
+			my ($tablenum,$row,$rowcount) = @_;
+			my $text ="";
+			if ((!$options{'quickadd'}) || (($row < $rowcount)&&($options{'changerows'}!~/^(off|no|false|0)$/i))) {
+				$text.=$cgi->img({-id=>"cltp_action_${tablenum}_ins_${row}",-name=>"cltp_action_${tablenum}_ins_${row}", -title=>'Insert Entry', -alt=>' + ',-src=>$options{'insertrowicon'}, 
+						-onClick=>$options{'quickinsert'}?"cltpShowInsertForm('CLTP_HIDDEN_${tablenum}','cltp_action_${tablenum}_ins_${row}',0,15,1,$tablenum,$row);":""
+						});
+			} else {
+				$text.=$cgi->image_button(-border=>0,-name=>"cltp_action_${tablenum}_cancel", -title=>'Insert Entry', -value=>'   ',-src=>$options{'dummyicon'}); 
+			}
+			return $text;
+		};
+		sub _renderMoveButtons {
+			my ($tablenum, $row, $rowcount) = @_;
+			my $text = "";
+			if ($options{'allowmove'} && $options{'changerows'}!~/^(off|no|false|0)$/i) {
+				if ($row > 0 ) {
+					$text.=$cgi->image_button(-name=>"cltp_action_${tablenum}_up_".($row-1), -title=>'Move Entry Up', -value=>' ^ ',-src=>$options{'moverowupicon'}); 
+				} else {
+					$text.=$cgi->image_button(-name=>"cltp_action_${tablenum}_cancel", -title=>'Move Entry Up', -value=>'   ',-src=>$options{'dummyicon'}); 
+				}
+				if ($row < $rowcount) {
+					$text.=$cgi->image_button(-name=>"cltp_action_${tablenum}_down_${row}", -title=>'Move Entry Down', -value=>' v ',-src=>$options{'moverowdownicon'});
+					
+				} else {
+					$text.=$cgi->image_button(-name=>"cltp_action_${tablenum}_cancel", -title=>'Move Entry Down', -value=>'   ',-src=>$options{'dummyicon'});
+				}
+			}
+			return $text;
+		};
+		sub _renderDeleteButton {
+			my ($tablenum, $row) = @_;
+			return $cgi->image_button(-name=>"cltp_action_${tablenum}_delrow_${row}", -title=>'Remove Entry', -value=>' - ',-src=>$options{'deleterowicon'}) 
+					if ($options{'changerows'}!~/^(off|0|no|false|add)$/i);
+			return "";
+		}
+		if (defined $pos) {
+			if (! defined $options{"_CODE_${tablenum}_${pos}_"}) {
+				$options{"_CODE_${tablenum}_${pos}_"} = <<'EOT'
+					my $buttonpositions = $options{"buttonorder$pos"};
+					for (my $i=0; $i<length($buttonpositions);$i++) {
+						my $b=substr($buttonpositions,$i,1);
+						$text.=_renderEditRowButton($tablenum, $row) if ($b eq 'E');
+						$text.=_renderInsertRowButton($tablenum, $row, $rowcount) if ($b eq 'I');
+						$text.=_renderMoveButtons($tablenum, $row, $rowcount) if ($b eq 'M');
+						$text.=_renderDeleteButton($tablenum, $row, $rowcount) if ($b eq 'D');
+					}
+EOT
+			}
+			eval $options{"_CODE_${tablenum}_${pos}_"};
 		} else {
-			$text.=$cgi->image_button(-name=>"cltp_action_${tablenum}_cancel", -title=>'Insert Entry', -value=>'   ',-src=>$options{'dummyicon'}); 
+			$text.=_renderEditRowButton($tablenum, $row);
+			$text.=_renderInsertRowButtons($tablenum, $row, $rowcount);
+			$text.=_renderMoveButtons($tablenum, $row, $rowcount);
+			$text.=_renderDeleteButton($tablenum, $row, $rowcount);
 		}
-		## ^ v:
-		if ($options{'allowmove'} && $options{'changerows'}!~/^(off|no|false|0)$/i) {
-			if ($row > 0 ) {
-				$text.=$cgi->image_button(-name=>"cltp_action_${tablenum}_up_".($row-1), -title=>'Move Entry Up', -value=>' ^ ',-src=>$options{'moverowupicon'}); 
-			} else {
-				$text.=$cgi->image_button(-name=>"cltp_action_${tablenum}_cancel", -title=>'Move Entry Up', -value=>'   ',-src=>$options{'dummyicon'}); 
-			}
-			if ($row < $rowcount) {
-				$text.=$cgi->image_button(-name=>"cltp_action_${tablenum}_down_${row}", -title=>'Move Entry Down', -value=>' v ',-src=>$options{'moverowdownicon'});
-				
-			} else {
-				$text.=$cgi->image_button(-name=>"cltp_action_${tablenum}_cancel", -title=>'Move Entry Down', -value=>'   ',-src=>$options{'dummyicon'});
-			}
-		}
-		$text.=$cgi->image_button(-name=>"cltp_action_${tablenum}_delrow_${row}", -title=>'Remove Entry', -value=>' - ',-src=>$options{'deleterowicon'}) 
-				if ($options{'changerows'}!~/^(off|0|no|false|add)$/i);
 	} elsif ($what eq 'addrow') {
 		$text.=$cgi->submit(-name=>"cltp_action_${tablenum}_addrow_${row}", -value=>'Add');
 	} elsif ($what eq 'insertrow') {
@@ -462,10 +514,16 @@ sub _renderButtons {
 		$text.=$cgi->submit(-name=>"cltp_action_${tablenum}_saverow_${row}", -value=>'Save');
 		$text.=$cgi->submit(-name=>"cltp_action_${tablenum}_qsaverow_${row}", -value=>'Quiet Save') if $options{'quietsave'};
 		$text.=$cgi->submit(-name=>"cltp_action_${tablenum}_cancel", -value=>'Cancel');
-	} elsif ($what eq 'first') {
-		$text.=$cgi->image_button(-id=>"cltp_action_${tablenum}_first",-name=>"cltp_action_${tablenum}_first", -title=>"Insert entry", -value=>' + ',-src=>$options{'insertrowicon'},
+	} elsif ($what eq 'first' && ($options{'changerows'} !~ /^(off|no|0|false)$/i)) {
+		if ($options{'quickinsert'}) {
+			$text.=$cgi->img({-id=>"cltp_action_${tablenum}_first",-name=>"cltp_action_${tablenum}_first", -title=>"Insert entry", -alt=>' + ',-src=>$options{'insertrowicon'},
+				-onClick=>$options{'quickinsert'}?"cltpShowInsertForm('CLTP_HIDDEN_${tablenum}','cltp_action_${tablenum}_first',0,15,1,$tablenum,-1);":""
+				}); 
+		} else {
+			$text.=$cgi->image_button(-id=>"cltp_action_${tablenum}_first",-name=>"cltp_action_${tablenum}_first", -title=>"Insert entry", -value=>' + ',-src=>$options{'insertrowicon'},
 				-onMouseOver=>$options{'quickinsert'}?"cltpShowInsertForm('CLTP_HIDDEN_${tablenum}','cltp_action_${tablenum}_first',0,15,1,$tablenum,-1);":""
-				) if $options{'changerows'} !~ /^(off|no|0|false)$/i;
+				); 
+		}
 	} elsif ($what eq 'insertfirst') {
 		$text.=$cgi->submit(-name=>"cltp_action_${tablenum}_insertfirst", -value=>"Insert");
 		$text.=$cgi->submit(-name=>"cltp_action_${tablenum}_cancel", -value=>"Cancel");
@@ -729,7 +787,10 @@ sub _initDefaults {
 		'sort'=>1,
 		'changerows'=>1,
 		'quickinsert'=>1,
-		'quickadd'=>0,
+		'quickadd'=>1,
+		'buttonpos'=>'right',
+		'buttonorderright'=>'EIMD', # Edit, Insert, Move (up/down), Delete
+		'buttonorderleft' =>'DMIE', 
 	);
 	@flagOptions = ('allowmove', 'quietsave', 'headerislabel', 'sort','quickadd','quickinsert');
 	$cgi = TWiki::Func::getCgiQuery();
@@ -788,20 +849,6 @@ sub _createUnknownParamsMessage {
 	return $msg;
 }
 # =========================
-sub _editencode  {
-	my ($text,$html) = @_;
-	
-	$text = _encode($text);
-	$text =~ s/<br\s*\/?>/&#10;/g;	
-	$text =~ s/\*/&#35;/g;
-	$text =~ s/_/&#95;/g;
-	$text =~ s/=/&#61;/g;
-	$text =~ s/</&#60;/g if ! defined $html;
-	$text =~ s/(\%)/'&#'.ord($1).';'/eg;
-
-	return $text;
-}
-# =========================
 sub _encode {
 	my ($text) =@_;
 
@@ -813,6 +860,23 @@ sub _encode {
 	return $text;
 }
 # =========================
+sub _editencode  {
+	my ($text,$html) = @_;
+	
+	$text = _encode($text);
+	$text =~ s/<br\s*\/?>/&#10;/g;	 ## prevent <br/> -> \r\n
+	$text =~ s/\*/&#35;/g; ## prevent *..* -> <strong>...
+	$text =~ s/_/&#95;/g; ## prevent _.._ -> <i>...
+	$text =~ s/=/&#61;/g;
+	$text =~ s/:/&#58;/g; ## -> http: 
+	$text =~ s/\[/&#91;/g; ## -> [[ForcedLink]]
+	
+	$text =~ s/</&#60;/g if ! defined $html;
+	$text =~ s/(\%)/'&#'.ord($1).';'/eg;
+
+	return $text;
+}
+# =========================
 sub _editdecode {
 	my ($text) = @_;
 	$text =~ s/&(amp;)?#124;/\|/g;
@@ -820,6 +884,9 @@ sub _editdecode {
 	$text =~ s/&(amp;)?#35;/*/g;
 	$text =~ s/&(amp;)?#95;/_/g;
 	$text =~ s/&(amp;)?#61;/=/g;
+	$text =~ s/&(amp;)?#58;/:/g;
+	$text =~ s/&(amp;)?#91;/[/g;
+
 	$text =~ s/&(amp;)#(\d+);/&#$2;/g; ## fix encoded characters &amp;#....;
 	return $text;
 }
