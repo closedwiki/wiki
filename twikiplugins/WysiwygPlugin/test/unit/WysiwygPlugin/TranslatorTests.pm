@@ -770,7 +770,7 @@ Inside
  Inside
  </noautolink>
  Outside',
-          finaltml => 'Outside <noautolink>Inside</noautolink> Outside',
+          finaltml => 'Outside <noautolink> Inside </noautolink> Outside',
       },
       {
           exec => $ROUNDTRIP,
@@ -786,7 +786,7 @@ Inside
  Inside
  </noautolink>
  Outside',
-          finaltml => 'Outside <noautolink class="twikiAlert">Inside</noautolink> Outside',
+          finaltml => 'Outside <noautolink class="twikiAlert"> Inside </noautolink> Outside',
       },
       {
           exec => $ROUNDTRIP,
@@ -803,7 +803,7 @@ Inside
     </noautolink>
  Outside
  ',
-          finaltml => 'Outside <noautolink>Inside</noautolink> Outside',
+          finaltml => 'Outside <noautolink> Inside </noautolink> Outside',
       },
       {
           exec => $ROUNDTRIP,
@@ -1235,7 +1235,26 @@ Here is some text. Here a new line of text.
 
 If you edit this page with TMCE, then save it, this line will become part of the previous paragraph.
 JUNSX
-      }
+      },
+      {
+          exec => $TML2HTML,
+          name => 'Item4550',
+          tml => <<FGFG,
+---+ A
+<section>
+---++ B
+C
+</section>
+X
+FGFG
+          html =>'<h1 class="TML">  A </h1>
+<span class="WYSIWYG_PROTECTED">&lt;section&gt;</span>
+<h2 class="TML">  B </h2>
+C
+<span class="WYSIWYG_PROTECTED">&lt;/section&gt;</span>
+X
+',
+      },
      ];
 
 sub gen_compare_tests {

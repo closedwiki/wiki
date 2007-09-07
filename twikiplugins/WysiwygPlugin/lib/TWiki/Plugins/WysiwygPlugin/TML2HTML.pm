@@ -44,9 +44,11 @@ my $TT2 = chr(2);
 
 my $STARTWW = qr/^|(?<=[\s\(])/m;
 my $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
-# HTML elements singled  out for protection. These will be rendered in
-# 'protected' regions to prevent the WYSIWYG editor mussing them up.
-my $PROTECTED_HTML = 'APPLET|AREA|BUTTON|FIELDSET|FORM|FRAME|FRAMESET|IFRAME|INPUT|OBJECT|PARAM|SCRIPT|SELECT|TEXTAREA|VAR';
+
+# HTML elements that are palatable to editors. Other HTM tags will be
+# rendered in 'protected' regions to prevent the WYSIWYG editor mussing
+# them up.
+my $PALATABLE_HTML = qr/(A|ABBR|ACRONYM|ADDRESS|B|BDO|BIG|BLOCKQUOTE|BR|CAPTION|CENTER|CITE|CODE|COL|COLGROUP|DD|DEL|DFN|DIR|DIV|DL|DT|EM|FONT|H1|H2|H3|H4|H5|H6|HR|HTML|I|IMG|INS|ISINDEX|KBD|LABEL|LEGEND|LI|OL|P|PRE|Q|S|SAMP|SMALL|SPAN|STRONG|SUB|SUP|TABLE|TBODY|TD|TFOOT|TH|THEAD|TITLE|TR|TT|U|UL)/i;
 
 =pod
 
@@ -234,7 +236,7 @@ sub _getRenderedVersion {
     $text = $this->_processTags( $text );
 
     # protect some HTML tags.
-    $text =~ s/(<\/?($PROTECTED_HTML)(\s[^>]*)?>)/
+    $text =~ s/(<\/?(?!($PALATABLE_HTML)\b)[A-Z]+(\s[^>]*)?>)/
       $this->_liftOut($1, 'PROTECTED')/gei;
 
     $text =~ s/\\\n//gs;  # Join lines ending in '\'
