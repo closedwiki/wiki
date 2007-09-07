@@ -4,7 +4,7 @@
 %TMPL:DEF{"topicaction"}% %TMPL:END%
 %TMPL:DEF{"titleaction"}%(login) %TMPL:END%
 %TMPL:DEF{"LOG_IN_BANNER"}%Please enter your username and password%TMPL:END%
-%TMPL:DEF{"LOGGED_IN_BANNER"}% %MAINWEB%.%WIKINAME% is currently logged in%TMPL:END%
+%TMPL:DEF{"LOGGED_IN_BANNER"}% %USERSWEB%.%WIKINAME% is currently logged in%TMPL:END%
 %TMPL:DEF{"NEW_USER_NOTE"}%Enter a new username and password to change identity%TMPL:END%
 %TMPL:DEF{"UNRECOGNISED_USER"}%Unrecognised user and/or password.%TMPL:END%
 
@@ -18,7 +18,7 @@
 
 %TMPL:DEF{"content"}%---+ %BANNER%
 %NOTE%
-%MAKETEXT{"Enter your TWiki.LoginName. (Typically First name and last name, no space, no dots, capitalized, e.g. !JohnSmith, unless you chose otherwise). Visit %TWIKIWEB%.TWikiRegistration if you do not have one."}%
+%MAKETEXT{"Enter your TWiki.LoginName. (Typically First name and last name, no space, no dots, capitalized, e.g. !JohnSmith, unless you chose otherwise). Visit %SYSTEMWEB%.TWikiRegistration if you do not have one."}%
 <form action='%SCRIPTURLPATH{"login"}%/%WEB%/%TOPIC%' method='post'>
 <table border='0'>
 <tr><th>Username</th><td>
