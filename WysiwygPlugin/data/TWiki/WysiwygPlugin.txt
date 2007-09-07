@@ -155,11 +155,17 @@ which is correct by construction, but does not render correctly in TWiki. This p
 
 This plugin is brought to you by a [[http://wikiring.com][WikiRing <a href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiringlogo20x20.png" title="WikiRing: Professional Wiki Innovation and Support" /></a>]] partner - working together to improve your wiki experience!
 
+Many thanks to the following sponsors for supporting this work:
+   * [[http://ilog.fr][ILOG]]
+   * [[http://www.carrier.com][Carrier Corporation]]
+   * [[http://twiki.net][TWIKI.NET]]
+
 |  Plugin Authors: | TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk |
 |  Copyright | &copy; ILOG 2005 http://www.ilog.fr |
 |  License | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
+|  7 Sep 2007 | Bugs:Item4503 excess empty lines Bugs:Item4486 no toc headers with unofficial syntax Bugs:Item4560: empty lines lost Bugs:Item4566: corrupted table on save |
 |  4 Sep 2007 | Bugs:Item4534 Bugs:Item4535 fixed |
 |  14679 | Bugs:Item4481 Bugs:Item4524 fixed |
 |  14668 | Bugfixes and refinements done as part of 4.2 release |
@@ -295,3 +301,4 @@ __Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
 
+%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="" version="1"}%
