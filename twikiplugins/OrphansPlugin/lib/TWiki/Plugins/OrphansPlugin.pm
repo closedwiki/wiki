@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2004 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2004 Wind River
 # Plugin written by http://TWiki.org/cgi-bin/view/Main/CrawfordCurrie
 #
 # This program is free software; you can redistribute it and/or
@@ -18,12 +18,11 @@
 #
 package TWiki::Plugins::OrphansPlugin;
 
-use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $ready );
+use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION );
 
 $VERSION = '$Rev$';
-$RELEASE = '4.0.4';
+$RELEASE = '4.2.0';
 $SHORTDESCRIPTION = 'Locate and manage orphaned topics';
-$ready = 0;
 
 sub initPlugin {
 
@@ -40,12 +39,7 @@ sub initPlugin {
 # Handle the "FINDORPHANS" tag
 sub _findOrphans {
     my ( $session, $params, $topic, $web ) = @_;
-    unless( $ready ) {
-        # Lazy-use
-        eval 'use TWiki::Plugins::OrphansPlugin::Orphans';
-        die $@ if $@;
-        $ready = 1;
-    }
+    require TWiki::Plugins::OrphansPlugin::Orphans;
     my $orphans = new TWiki::Plugins::OrphansPlugin::Orphans( $web, $params );
     return $orphans->tabulate( $params );
 }

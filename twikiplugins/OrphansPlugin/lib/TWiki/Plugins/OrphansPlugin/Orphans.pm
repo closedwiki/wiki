@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2004 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2004 Wind River
 #
 # Plugin written for Wind River Systems by CrawfordCurrie
 # http://c-dot.co.uk - http://wikiring.com
@@ -51,9 +51,6 @@ sub new {
     my ( $class, $theWeb, $params ) = @_;
     my $this = bless( {}, $class );
 
-    $this->{_wikiWordRE} = TWiki::Func::getRegularExpression('wikiWordRegex');
-    $this->{_abbrevRE} = TWiki::Func::getRegularExpression('abbrevRegex');
-
     $this->{_allwebs} = ( $params->{allwebs} &&
       $params->{allwebs} =~ m/^(on|true|yes|1)$/io );
     $this->{_web} = $params->{web} || $theWeb;
@@ -89,30 +86,30 @@ sub new {
             my $text = TWiki::Func::readTopicText( $fromweb, $topic, undef, 1 );
 
             # kill anchors
-            $text =~ s/^\#$this->{_wikiWordRE}//go;
-            # kill verbatim
-            $text =~ s/\n<verbatim>.*?\n<\/verbatim>//sgo;
+            $text =~ s/^\#$TWiki::regex{wikiWordRegex}//go;
+            # kill verbatim & noautolink
+            $text =~ s/<(verbatim|noautolink)>.*?<\/\1>//sgo;
             # kill topic parent & info
             $text =~ s/^%META:TOPIC.*$//go;
 
             # Handle absolute URLs
-            $text =~ s/(^|[\-\*\s\(])[a-z]+:\/\/\S*\/$this->{_web}\/($this->{_wikiWordRE})\//$this->_wikiword($2,$fromweb,$topic)/geo;
+            $text =~ s/(^|[\-\*\s\(])[a-z]+:\/\/\S*\/$this->{_web}\/($TWiki::regex{wikiWordRegex})\//$this->_wikiword($2,$fromweb,$topic)/geo;
             # Handle [[]]
             $text =~ s/\[\[([^\]]+)\](\[[^\]]+\])?\]/$this->_spaced($1,$fromweb,$topic)/geo;
             # Note that we add " to the following RE's to ensure we pick up topic
             # references embedded in parameters to tags
-            $text =~ s/[\s\(\"]$this->{_web}\.($this->{_wikiWordRE})/$this->_wikiword($1,$this->{_web},$topic)/ge;
+            $text =~ s/[\s\(\"]$this->{_web}\.($TWiki::regex{wikiWordRegex})/$this->_wikiword($1,$this->{_web},$topic)/ge;
 
             # Kill <noautolink>
             $text =~ s/\n<noautolink>.*?\n<\/noautolink>//sgo;
 
             # Handle plain wikiwords
-            $text =~ s/[\s\(\"]($this->{_wikiWordRE})/$this->_wikiword($1,$fromweb,$topic)/geo;
+            $text =~ s/[\s\(\"]($TWiki::regex{wikiWordRegex})/$this->_wikiword($1,$fromweb,$topic)/geo;
 
             # Handle acronyms/abbreviations of three or more letters
             # 'Web.ABBREV' link:
-            $text =~ s/[\s\(\"]$this->{_web}\.($this->{_abbrevRE})/$this->_wikiword($1,$fromweb,$topic)/ge;
-            $text =~ s/[\s\(\"]($this->{_abbrevRE})/$this->_wikiword($1,$fromweb,$topic)/geo;
+            $text =~ s/[\s\(\"]$this->{_web}\.($TWiki::regex{abbrevRegex})/$this->_wikiword($1,$fromweb,$topic)/ge;
+            $text =~ s/[\s\(\"]($TWiki::regex{abbrevRegex})/$this->_wikiword($1,$fromweb,$topic)/geo;
         }
     }
     return $this;
@@ -135,7 +132,7 @@ sub _link {
     my ( $this, $text, $web, $topic ) = @_;
     my $thisweb = $this->{_web};
 
-    $text =~ s/^.*\b$thisweb[\/\.]($this->{_wikiWordRE})\b/$1/;
+    $text =~ s/^.*\b$thisweb[\/\.]($TWiki::regex{wikiWordRegex})\b/$1/;
     if( $text ne "" ) {
         $this->_wikiword( $text, $web, $topic ) if ( $text =~ m/^\w+$/o );
     }
