@@ -26,7 +26,7 @@ Configuration of this plugin is done by writing
 your aliases into a specific topic which defaults to the topic defined
 by the =DEFAULT_ALIASES= variable (see below). This topic is looked up
 in the current web. If it does not exist in the current web, the plugin will fallback to
-the =DEFAULT_ALIASES= in the %TWIKIWEB%. 
+the =DEFAULT_ALIASES= in the %SYSTEMWEB%. 
 Aliases defined in =DEFAULT_ALIASES= will be
 used within the current web.
 Aliases can be defined temporarily also, that is
