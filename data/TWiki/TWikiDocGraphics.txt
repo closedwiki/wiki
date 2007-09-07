@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1178746198" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1189119684" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and Filetype icons
 
 This is the TWiki icon library. The graphics can be used in topics and by web applications. 
@@ -43,6 +43,7 @@ Other usage: [[%TOPIC%#Usage_extended][see below]].
 | <img src="%ATTACHURLPATH%/photo.gif" alt="Photo" title="Photo" />  | =photo.gif= | Photo, 13x11 | =&lt;img src="%<nop>ICONURL{photo}%" width="13" height="11" alt="Photo" border="0" /&gt;= |
 | <img src="%ATTACHURLPATH%/puzzle.gif" alt="Puzzle" title="Puzzle" />  | =puzzle.gif= | Puzzle | =%<nop>ICON{puzzle}%= |
 | <img src="%ATTACHURLPATH%/question.gif" alt="Question" title="Question" />  | =question.gif= | Question | =%<nop>ICON{question}%= |
+| <img src="%ATTACHURLPATH%/quiet.gif" alt="Quiet" title="Quiet" />  | =quiet.gif= | Quiet | =%<nop>ICON{quiet}%= |
 | <img src="%ATTACHURLPATH%/rfc.gif" alt="Request for comments" title="Request for comments" />  | =rfc.gif= | Request for comments | =%<nop>ICON{rfc}%= |
 | <img src="%ATTACHURLPATH%/sort.gif" alt="Sort" title="Sort" />  | =sort.gif= | Sort | =%<nop>ICON{sort}%= |
 | <img src="%ATTACHURLPATH%/stargold.gif" alt="Gold star, favorites" title="Gold star, favorites" />  | =stargold.gif= | Gold star, favorites | =%<nop>ICON{stargold}%= |
@@ -67,7 +68,6 @@ Other usage: [[%TOPIC%#Usage_extended][see below]].
 | <img src="%ATTACHURLPATH%/newtopic.gif" alt="New topic" title="New topic" />  | =newtopic.gif= | New topic | =%<nop>ICON{newtopic}%= |
 | <img src="%ATTACHURLPATH%/edittopic.gif" alt="Edit topic" title="Edit topic" />  | =edittopic.gif= | Edit topic | =%<nop>ICON{edittopic}%= |
 | <img src="%ATTACHURLPATH%/save.gif" alt="Save" title="Save" />  | =save.gif= | Save | =%<nop>ICON{save}%= |
-| <img src="%ATTACHURLPATH%/quiet.gif" alt="Quiet" title="Quiet" />  | =quiet.gif= | Quiet | =%<nop>ICON{quiet}%= |
 | <img src="%ATTACHURLPATH%/attachfile.gif" alt="Attach file" title="Attach file" />  | =attachfile.gif= | Attach file | =%<nop>ICON{attachfile}%= |
 | <img src="%ATTACHURLPATH%/download.gif" alt="Download" title="Download" />  | =download.gif= | Download | =%<nop>ICON{download}%= |
 | <img src="%ATTACHURLPATH%/trash.gif" alt="Trash" title="Trash" />  | =trash.gif= | Trash | =%<nop>ICON{trash}%= |
@@ -80,6 +80,8 @@ Other usage: [[%TOPIC%#Usage_extended][see below]].
 | <img src="%ATTACHURLPATH%/indexlist.gif" alt="Index list" title="Index list" />  | =indexlist.gif= | Index list | =%<nop>ICON{indexlist}%= |
 | <img src="%ATTACHURLPATH%/cachetopic.gif" alt="Cache topic" title="Cache topic" />  | =cachetopic.gif= | Cache topic | =%<nop>ICON{cachetopic}%= |
 | <img src="%ATTACHURLPATH%/folder.gif" alt="Folder" title="Folder" />  | =folder.gif= | Folder | =%<nop>ICON{folder}%= |
+| <img src="%ATTACHURLPATH%/table.gif" alt="Table" title="Table" />  | =table.gif= | Table | =%<nop>ICON{table}%= |
+| <img src="%ATTACHURLPATH%/edittable.gif" alt="Edit table" title="Edit table" />  | =edittable.gif= | Edit table | =%<nop>ICON{edittable}%= |
 
 
 ---+++ %ICON{person}% Person, %ICON{group}% group, %ICON{lock}% access icons
