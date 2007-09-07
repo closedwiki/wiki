@@ -105,7 +105,7 @@ sub handleDrawDrawing {
     "onmouseover=\"window.status='$edittext';return true;\" ".
       "onmouseout=\"window.status='';return true;\"";
 
-    my $artworkURLPath = "%PUBURLPATH%/%TWIKIWEB%/AnyWikiDrawPlugin";
+    my $artworkURLPath = "%PUBURLPATH%/%SYSTEMWEB%/AnyWikiDrawPlugin";
 
   if ( -e $mapFile ) {
 	my $mapname = $nameVal;
@@ -170,7 +170,7 @@ sub handleAnyDrawing {
     "onmouseover=\"window.status='$edittext';return true;\" ".
       "onmouseout=\"window.status='';return true;\"";
 
-    my $artworkURLPath = "%PUBURLPATH%/%TWIKIWEB%/AnyWikiDrawPlugin";
+    my $artworkURLPath = "%PUBURLPATH%/%SYSTEMWEB%/AnyWikiDrawPlugin";
 
   if ( -e $mapFile ) {
 	my $mapname = $nameVal;

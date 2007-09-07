@@ -309,7 +309,7 @@ sub getAliases {
   #writeDebug("looking for $thisWeb.$thisTopic");
   if (!&TWiki::Func::topicExists($thisWeb, $thisTopic)) {
 
-    # look for TWIKIWEB.thisTopic
+    # look for SYSTEMWEB.thisTopic
     $thisWeb = &TWiki::Func::getTwikiWebname();
     #writeDebug("looking for $thisWeb.$thisTopic");
     if (!&TWiki::Func::topicExists($thisWeb, $thisTopic)) {
