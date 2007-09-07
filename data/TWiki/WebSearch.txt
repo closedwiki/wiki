@@ -2,6 +2,8 @@
 %META:TOPICPARENT{name="WebHome"}%
 ---+ %MAKETEXT{"Web Search"}%
 
+%IF{"defined search" then='%ICON{feed}% <a href="%SCRIPTURL{"view"}%/%BASEWEB%/WebRss?search=%URLPARAM{search}%;type=%URLPARAM{"type" default="word"}%;excludetopic=%BASETOPIC%,WebHome,WebStatistics;web=%URLPARAM{"web" default="%BASEWEB%"}%;limit=%URLPARAM{"limit" default="all"}%;scope=%URLPARAM{"scope" deafult="text"}%;casesensitive=%URLPARAM{"casesensitive" default="off"}%">%MAKETEXT{"Get notified on changes on this search"}%</a>'}%
+
 %SEARCH{ 
 "%URLPARAM{search}%" 
 type="%URLPARAM{"type" default="word"}%"
