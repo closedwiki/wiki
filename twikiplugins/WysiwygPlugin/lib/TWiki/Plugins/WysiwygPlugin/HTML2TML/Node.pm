@@ -201,11 +201,14 @@ sub rootGenerate {
         $tml =~ s/$WC::CHECKs( |$WC::NBSP)/$1/go;
         $tml =~ s/($WC::CHECKs)+/$WC::NBSP/go;
 
-        # isolate $NBBR and convert to \n. First clean out empty paras
+        # isolate $NBBR and convert to \n.
         unless ($protect) {
+            $tml =~ s/\n$WC::NBBR/$WC::NBBR$WC::NBBR/go;
+            $tml =~ s/$WC::NBBR\n/$WC::NBBR$WC::NBBR/go;
             $tml =~ s/$WC::NBBR( |$WC::NBSP)+$WC::NBBR/$WC::NBBR$WC::NBBR/go;
-            $tml =~ s/ +$WC::NBBR/$WC::NBBR/g;
-            $tml =~ s/$WC::NBBR +/$WC::NBBR/g;
+            $tml =~ s/ +$WC::NBBR/$WC::NBBR/go;
+            $tml =~ s/$WC::NBBR +/$WC::NBBR/go;
+            $tml =~ s/$WC::NBBR$WC::NBBR+/$WC::NBBR$WC::NBBR/go;
 
             # Now convert adjacent NBBRs to recreate empty lines
             # 1 NBBR  -> 1 newline
@@ -230,7 +233,7 @@ sub rootGenerate {
         $tml =~ s/$WC::NBBR/\n/gos;
 
         # Convert tabs to NBSP
-        $tml =~ s/$WC::TAB/$WC::NBSP$WC::NBSP$WC::NBSP/g;
+        $tml =~ s/$WC::TAB/$WC::NBSP$WC::NBSP$WC::NBSP/go;
 
         # isolate $NBSP and convert to space
         unless ($protect) {
@@ -239,9 +242,9 @@ sub rootGenerate {
         }
         $tml =~ s/$WC::NBSP/ /go;
 
-        $tml =~ s/$WC::CHECK1$WC::CHECK1+/$WC::CHECK1/g;
-        $tml =~ s/$WC::CHECK2$WC::CHECK2+/$WC::CHECK2/g;
-        $tml =~ s/$WC::CHECK2$WC::CHECK1/$WC::CHECK2/g;
+        $tml =~ s/$WC::CHECK1$WC::CHECK1+/$WC::CHECK1/go;
+        $tml =~ s/$WC::CHECK2$WC::CHECK2+/$WC::CHECK2/go;
+        $tml =~ s/$WC::CHECK2$WC::CHECK1/$WC::CHECK2/go;
 
         $tml =~ s/(^|[\s\(])$WC::CHECK1/$1/gso;
         $tml =~ s/$WC::CHECK2($|[\s\,\.\;\:\!\?\)\*])/$1/gso;
@@ -619,10 +622,14 @@ sub _emphasis {
     my( $this, $options, $ch ) = @_;
     my( $flags, $contents ) = $this->_flatten( $options | $WC::NO_BLOCK_TML );
     return ( 0, undef ) if( !defined( $contents ) || ( $flags & $WC::BLOCK_TML ));
+    $contents =~ s/&nbsp;/$WC::NBSP/go;
+    $contents =~ /^([\000- ]*)(.*?)([\000- ]*)$/;
+    my ($pre, $post) = ($1, $3);
+    $contents = $2;
     #$contents = _trim( $contents );
     return (0, undef) if( $contents =~ /^</ || $contents =~ />$/ );
     return (0, '') unless( $contents =~ /\S/ );
-    return ( $flags, $WC::CHECKw.$ch.$contents.$ch.$WC::CHECK2 );
+    return ( $flags, $pre.$WC::CHECKw.$ch.$contents.$ch.$WC::CHECK2.$post );
 }
 
 # pseudo-tags that may leak through in TWikiVariables
@@ -781,7 +788,7 @@ sub _handleBR {
     return ($f, $sep.$kids);
 }
 
-# CAPTION
+sub _handleCAPTION { return (0, '' ); }
 # CENTER
 # CITE
 
@@ -917,7 +924,11 @@ sub _handleP {
 
     my( $f, $kids ) = $this->_flatten( $options );
     return ($f, '<p>'.$kids.'</p>') if( $options & $WC::NO_BLOCK_TML );
-    return ($f | $WC::BLOCK_TML, $WC::NBBR.$kids.$WC::NBBR);
+    my $pre = '';
+    if ($this->prevIsInline()) {
+        $pre = $WC::NBBR;
+    }
+    return ($f | $WC::BLOCK_TML, $pre.$WC::NBBR.$kids.$WC::NBBR);
 }
 
 sub _handlePARAM { return ( 0, '' ); }
@@ -1036,22 +1047,22 @@ sub _handleTABLE {
     return ( $WC::BLOCK_TML, $text );
 }
 
-sub _handleTBODY { return _flatten( @_ ); }
-sub _handleTD { return _flatten( @_ ); }
+#sub _handleTBODY { return _flatten( @_ ); }
+#sub _handleTD { return _flatten( @_ ); }
 
-sub _handleTEXTAREA {
-    my( $this, $options ) = @_;
-    if( $options & $WC::VERY_CLEAN ) {
-        return $this->_flatten( $options );
-    }
-    return (0, undef);
-}
-
-sub _handleTFOOT { return _flatten( @_ ); }
-sub _handleTH    { return _flatten( @_ ); }
-sub _handleTHEAD { return _flatten( @_ ); }
+#sub _handleTEXTAREA {
+#    my( $this, $options ) = @_;
+#    if( $options & $WC::VERY_CLEAN ) {
+#        return $this->_flatten( $options );
+#    }
+#    return (0, undef);
+#}
+#
+#sub _handleTFOOT { return _flatten( @_ ); }
+#sub _handleTH    { return _flatten( @_ ); }
+#sub _handleTHEAD { return _flatten( @_ ); }
 sub _handleTITLE { return (0, '' ); }
-sub _handleTR    { return _flatten( @_ ); }
+#sub _handleTR    { return _flatten( @_ ); }
 sub _handleTT    { return _handleCODE( @_ ); }
 # U
 sub _handleUL    { return _LIST( @_ ); }

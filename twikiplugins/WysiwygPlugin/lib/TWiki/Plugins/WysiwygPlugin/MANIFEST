@@ -8,3 +8,4 @@ data/TWiki/WysiwygPlugin.txt 0644 Documentation and settings
 data/TWiki/WysiwygPluginSettings.txt 0644 Documentation and settings
 data/TWiki/WysiwygPluginTopicLister.txt 0644 Special AJAX topic
 tools/html2tml.pl 0555 Stand-alone convertor script
+pub/TWiki/WysiwygPlugin/wikiringlogo20x20.png 0660

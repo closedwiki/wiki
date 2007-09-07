@@ -390,7 +390,7 @@ sub postConvertURL {
         $url =~ s/^$opts->{exp}->[$i]/$VARS[$i]/;
     }
 
-    if ($url =~ m#^%SCRIPTURL(?:PATH)?(?:{"view"}%|%/view[^/]*)/(\w+)(?:/(\w+))?$# && !$parameters) {
+    if ($url =~ m#^%SCRIPTURL(?:PATH)?(?:{"view"}%|%/+view[^/]*)/+(\w+)(?:/+(\w+))?$# && !$parameters) {
         my( $web, $topic );
 
         if( $2 ) {

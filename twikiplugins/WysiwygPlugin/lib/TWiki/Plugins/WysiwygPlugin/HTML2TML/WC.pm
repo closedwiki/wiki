@@ -192,11 +192,32 @@ sub isInline {
     return 1;
 }
 
+sub isLeftInline {
+    # This impl is actually for Nodes; Leaf overrides it
+    my $this = shift;
+    return 0 if $isOnlyBlockType{uc($this->{tag})};
+    if (scalar(@{$this->{children}})) {
+        my $kid = $this->{children}->[0];
+        return 0 unless $kid->isInline();
+    }
+    return 1;
+}
+
+sub isRightInline {
+    my $this = shift;
+    return 0 if $isOnlyBlockType{uc($this->{tag})};
+    if (scalar(@{$this->{children}})) {
+        my $kid = $this->{children}->[$#{$this->{children}}];
+        return 0 unless $kid->isInline();
+    }
+    return 1;
+}
+
 # Determine if the previous node qualifies as an inline node
 sub prevIsInline {
     my $this = shift;
     if ($this->{prev}) {
-        return $this->{prev}->isInline();
+        return $this->{prev}->isRightInline();
     } elsif ($this->{parent}) {
         return $this->{parent}->prevIsInline();
     }
@@ -207,7 +228,7 @@ sub prevIsInline {
 sub nextIsInline {
     my $this = shift;
     if ($this->{next}) {
-        return $this->{next}->isInline();
+        return $this->{next}->isLeftInline();
     } elsif ($this->{parent}) {
         return $this->{parent}->nextIsInline();
     }

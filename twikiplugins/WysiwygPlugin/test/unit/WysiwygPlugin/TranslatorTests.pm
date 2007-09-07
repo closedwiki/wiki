@@ -173,13 +173,15 @@ HERE
           exec => $ROUNDTRIP,
           name => 'simpleVerbatim',
           html => <<'HERE',
-<span class="TMLverbatim"><br />&#60;verbatim&#62;<br />Description<br />&#60;/verbatim&#62;<br />class&nbsp;CatAnimal&nbsp;{<br />&nbsp;&nbsp;void&nbsp;purr()&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;code&nbsp;&#60;here&#62;<br />&nbsp;&nbsp;}<br />}<br /></span>
+<span class="TMLverbatim"><br />&#60;verbatim&#62;<br />Description<br />&#60;/verbatim&#62;<br /><br /><br />class&nbsp;CatAnimal&nbsp;{<br />&nbsp;&nbsp;void&nbsp;purr()&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;code&nbsp;&#60;here&#62;<br />&nbsp;&nbsp;}<br />}<br /></span>
 HERE
           tml => <<'HERE',
 <verbatim>
 <verbatim>
 Description
 </verbatim>
+
+
 class CatAnimal {
   void purr() {
     code <here>
@@ -507,6 +509,13 @@ EVERYWHERE
       },
       {
           exec => $ROUNDTRIP,
+          name => 'headerly',
+          html => "<h1 class='notoc'><span class='WYSIWYG_PROTECTED'>%TOPIC%</span></h1>",
+          tml => '---+!!%TOPIC%',
+          finaltml => '---+!! %TOPIC%',
+      },
+      {
+          exec => $ROUNDTRIP,
           name => 'WEBvar',
           html => "${protecton}%WEB%${protectoff}",
           tml => '%WEB%',
@@ -704,15 +713,21 @@ Outside <pre class="twikiAlert TMLverbatim"><br />&nbsp;&nbsp;Inside<br />&nbsp;
           html => 'Outside
  <pre>
  Inside
+
+Snide
  </pre>
  Outside',
           tml => 'Outside
  <pre>
  Inside
+
+Snide
  </pre>
 Outside',
           finaltml => 'Outside <pre>
  Inside
+
+Snide
  </pre> Outside',
       },
       {
@@ -915,6 +930,7 @@ HERE
           name => 'tinyMCESetCommand',
           tml => <<HERE,
 Before
+
    * Set FLIBBLE = phlegm
 After
 HERE
@@ -1062,7 +1078,6 @@ HTML
    * Test tools 
 Garbles Bargles Smargles
 
-
 Flame grilled
 
 -- Main.JohnSilver - 05 Aug 2007
@@ -1097,7 +1112,6 @@ Parafour',
 
 Parathree
 
-
 Parafour',
       },
       {
@@ -1115,12 +1129,10 @@ Paratwo
 
 Parathree
 
-
 Parafour',
           finaltml => 'Paraone Paratwo
 
 Parathree
-
 
 Parafour',
       },
@@ -1195,6 +1207,35 @@ TinyMCE sticks in a BR where it isn't wanted before a P
 We should only have a P.
 JUNX
       },
+      {
+          exec => $HTML2TML,
+          name => 'tableInnaBun',
+          html => <<'JUNK',
+<ul>
+<li> List item</li><li><table><tbody><tr><td>&nbsp;11</td><td>&nbsp;21</td></tr><tr><td>12&nbsp;</td><td>&nbsp;22</td></tr></tbody></table></li><li>crap</li>
+</ul>
+JUNK
+          tml => <<JUNX,
+   * List item
+   * <table><tbody><tr><td> 11</td><td> 21</td></tr><tr><td>12 </td><td> 22</td></tr></tbody></table>
+   * crap
+JUNX
+      },
+      {
+          exec => $HTML2TML,
+          name => 'Item4560',
+          html => <<JUNSK,
+Here is some text. Here a new line of text.
+<p>
+If you edit this page with TMCE, then save it, this line will become part of the previous paragraph.
+</p>
+JUNSK
+          tml => <<JUNSX,
+Here is some text. Here a new line of text.
+
+If you edit this page with TMCE, then save it, this line will become part of the previous paragraph.
+JUNSX
+      }
      ];
 
 sub gen_compare_tests {

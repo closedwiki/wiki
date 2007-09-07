@@ -214,14 +214,14 @@ sub _getRenderedVersion {
     # Remove PRE to prevent TML interpretation of text inside it
     $text = $this->_takeOutBlocks( $text, 'pre' );
 
-    # change !%XXX to %<nop>XXX
-    $text =~ s/!%(?=[A-Z][A-Z0-9_]*[{%])/%<nop>/g;
+    # change '!%XXX' to '%<nop>XXX' (but not if preceded by !)
+    $text =~ s/(?<!\+!)!%(?=[A-Z][A-Z0-9_]*[{%])/%<nop>/g;
 
     # Change ' !AnyWord' to ' <nop>AnyWord',
     $text =~ s/$STARTWW!(?=[\w\*\=])/<nop>/gm;
 
     # Change ' ![[...' to ' [<nop>[...'
-    $text =~ s/(^|\s)\!\[\[/$1\[<nop>\[/gm;
+    $text =~ s/(^|\s)!\[\[/$1\[<nop>\[/gm;
 
     # Protect comments
     $text =~ s/(<!--.*?-->)/$this->_liftOut($1, 'PROTECTED')/ges;
