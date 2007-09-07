@@ -1,5 +1,5 @@
 
-%INCLUDE{"%IF{"context can_login" then="%TWIKIWEB%.WebLeftBarLogin"}%" warn="off"}%
+%INCLUDE{"%IF{"context can_login" then="%SYSTEMWEB%.WebLeftBarLogin"}%" warn="off"}%
    * *[[%SCRIPTURL{"view"}%/Bugs/AllOutStandingItems?class=.*&amp;amp=&amp;sortcol=3;table=1;up=1#sorted_table][%X% Items  by urgency]]*
 
    * *[[WebHome][%ICON{"home"}% %INCLUDINGWEB% Web]]*
@@ -10,7 +10,7 @@
    * [[WebChanges][ %ICON{"changes"}% Changes]] 
       (<a href="%SCRIPTURLPATH{"view"}%/%WEB%/WebChanges?limit=50" rel=nofollow>50</a>,
        <a href="%SCRIPTURLPATH{"view"}%/%WEB%/WebChanges?limit=100" rel=nofollow>100</a>)
-      <!-- [[%SCRIPTURL%/view/%INCLUDINGWEB%/WebRss?skin=rss][ %PUBURL%/%TWIKIWEB%/TWikiDocGraphics/rss-small.gif ]] -->
+      <!-- [[%SCRIPTURL%/view/%INCLUDINGWEB%/WebRss?skin=rss][ %PUBURL%/%SYSTEMWEB%/TWikiDocGraphics/rss-small.gif ]] -->
    * [[WebSearch][ %ICON{"searchtopic"}% Search]]
 
    * *List by CurrentState*
@@ -25,6 +25,6 @@
 ----
    * [[WebAdmin][ %ICON{"wrench"}% Admin]]
 ----
-%INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
+%INCLUDE{ "%SYSTEMWEB%.WebLeftBarWebsList" }%
 
 
