@@ -19,12 +19,12 @@
 ---++ Creating your own look
 
 ---+++ Template customization
-%TWIKIWEB%.PatternSkinCustomization - how to configure page elements
-%TOC{"%TWIKIWEB%.PatternSkinCustomization"}%
+%SYSTEMWEB%.PatternSkinCustomization - how to configure page elements
+%TOC{"%SYSTEMWEB%.PatternSkinCustomization"}%
 
 ---+++ Style sheet customization
-%TWIKIWEB%.PatternSkinCssCookbook - how to customize the visual style
-%TOC{"%TWIKIWEB%.PatternSkinCssCookbook"}%
+%SYSTEMWEB%.PatternSkinCssCookbook - how to customize the visual style
+%TOC{"%SYSTEMWEB%.PatternSkinCssCookbook"}%
 
 ---+++ Changing graphics
 The original Photoshop files of the skin graphics (mainly background images) are attached to PatternSkinGraphics.
@@ -50,7 +50,7 @@ The original Photoshop files of the skin graphics (mainly background images) are
    * Download the ZIP file from the Skin Home page (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory
    * Test if installed: %SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?skin=pattern
-   * For skin activation see %TWIKIWEB%.TWikiSkins
+   * For skin activation see %SYSTEMWEB%.TWikiSkins
 
 ---+++ Troubleshooting
 
@@ -62,15 +62,15 @@ Check these variables here:
    * TWIKICOLORSURL = %TWIKICOLORSURL%
    * SKIN = %SKIN%
 
-If TWIKILAYOUTURL or TWIKISTYLEURL don't give a value or point to non-existing files, check in %TWIKIWEB%.TWikiPreferences that the following variables do exist and that they are set to on:
+If TWIKILAYOUTURL or TWIKISTYLEURL don't give a value or point to non-existing files, check in %SYSTEMWEB%.TWikiPreferences that the following variables do exist and that they are set to on:
 <pre>
-   * %<nop>TWIKIWEB%.PatternSkin settings:
-      * <nop>Set TWIKILAYOUTURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/PatternSkin/layout.css
-      * <nop>Set TWIKISTYLEURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/PatternSkin/style.css
-      * <nop>Set TWIKICOLORSURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/PatternSkin/colors.css
+   * %<nop>SYSTEMWEB%.PatternSkin settings:
+      * <nop>Set TWIKILAYOUTURL = %<nop>PUBURLPATH%/%<nop>SYSTEMWEB%/PatternSkin/layout.css
+      * <nop>Set TWIKISTYLEURL = %<nop>PUBURLPATH%/%<nop>SYSTEMWEB%/PatternSkin/style.css
+      * <nop>Set TWIKICOLORSURL = %<nop>PUBURLPATH%/%<nop>SYSTEMWEB%/PatternSkin/colors.css
 </pre>
 
-*NOTE:* customization of these values should be done in [[%MAINWEB%.TWikiPreferences]]
+*NOTE:* customization of these values should be done in [[%USERSWEB%.TWikiPreferences]]
 
 If this still does not work, contact the administrator who installs skins.
 
@@ -100,30 +100,30 @@ For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Re
 
 ---++ Related topics
 
-   * %TWIKIWEB%.TWikiCss
-   * %TWIKIWEB%.PatternSkinCss
-   * %TWIKIWEB%.PatternSkinCssCookbook
-   * %TWIKIWEB%.PatternSkinCssCookbookCenterPage
-   * %TWIKIWEB%.PatternSkinCssCookbookEditTableStyle
-   * %TWIKIWEB%.PatternSkinCssCookbookFonts
-   * %TWIKIWEB%.PatternSkinCssCookbookNoLeftBar
-   * %TWIKIWEB%.PatternSkinCssCookbookNoTopBar
-   * %TWIKIWEB%.PatternSkinCustomization
-   * %TWIKIWEB%.PatternSkinGraphics
-   * %TWIKIWEB%.WebBottomBar
-   * %TWIKIWEB%.WebLeftBar
-   * %TWIKIWEB%.WebLeftBarCookbook
-   * %TWIKIWEB%.WebLeftBarExample
-   * %TWIKIWEB%.WebLeftBarLogin
-   * %TWIKIWEB%.WebLeftBarPersonalTemplate
-   * %TWIKIWEB%.WebLeftBarSearch
-   * %TWIKIWEB%.WebLeftBarWebsList
-   * %TWIKIWEB%.WebTopBar
-   * %TWIKIWEB%.AdminDocumentationCategory
+   * %SYSTEMWEB%.TWikiCss
+   * %SYSTEMWEB%.PatternSkinCss
+   * %SYSTEMWEB%.PatternSkinCssCookbook
+   * %SYSTEMWEB%.PatternSkinCssCookbookCenterPage
+   * %SYSTEMWEB%.PatternSkinCssCookbookEditTableStyle
+   * %SYSTEMWEB%.PatternSkinCssCookbookFonts
+   * %SYSTEMWEB%.PatternSkinCssCookbookNoLeftBar
+   * %SYSTEMWEB%.PatternSkinCssCookbookNoTopBar
+   * %SYSTEMWEB%.PatternSkinCustomization
+   * %SYSTEMWEB%.PatternSkinGraphics
+   * %SYSTEMWEB%.WebBottomBar
+   * %SYSTEMWEB%.WebLeftBar
+   * %SYSTEMWEB%.WebLeftBarCookbook
+   * %SYSTEMWEB%.WebLeftBarExample
+   * %SYSTEMWEB%.WebLeftBarLogin
+   * %SYSTEMWEB%.WebLeftBarPersonalTemplate
+   * %SYSTEMWEB%.WebLeftBarSearch
+   * %SYSTEMWEB%.WebLeftBarWebsList
+   * %SYSTEMWEB%.WebTopBar
+   * %SYSTEMWEB%.AdminDocumentationCategory
 
 Other skins:
-   * %TWIKIWEB%.TWikiSkins
-   * %TWIKIWEB%.TWikiSkinBrowser
+   * %SYSTEMWEB%.TWikiSkins
+   * %SYSTEMWEB%.TWikiSkinBrowser
 
 ---++ Feedback
 
