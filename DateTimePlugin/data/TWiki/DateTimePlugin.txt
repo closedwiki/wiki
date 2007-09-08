@@ -1,7 +1,7 @@
 ---+!! <nop>DateTimePlugin
 <table cellpadding="5" cellspacing="5"><tr bgcolor="#F0F0F0">
-<th width="50%">English</th><th width="50%">Portugês</th></tr><tr><td>
-This plugin is an extension of the [[%TWIKIWEB%.TWikiVariables][TWiki variable]] =%<nop>GMTIME{"format"}%= that allows to show dates and hours with free formatting (with extra options), Internationalization and with a displacement of relative time.
+<th width="50%">English</th><th width="50%">Portugï¿½s</th></tr><tr><td>
+This plugin is an extension of the [[%SYSTEMWEB%.TWikiVariables][TWiki variable]] =%<nop>GMTIME{"format"}%= that allows to show dates and hours with free formatting (with extra options), Internationalization and with a displacement of relative time.
 
 With DateTimePlugin you can write: %BR%
 In five days will be: ==%<nop>DATETIME{incdays="5"}%==. %BR%
@@ -9,13 +9,13 @@ and will have a always coherent phrase.
 
 This plugin was born by the necessity of making searches with dates in the relative past, but I believe that other people will be able use it for several other cases.
 </td><td>
-Esse plugin é uma extensão da [[%TWIKIWEB%.TWikiVariables][variável TWiki]] =%<nop>GMTIME{"format"}%= que permite apresentar datas e horas com formatação livre (com opções extras), Internacionalização e com um deslocamento de tempo relativo.
+Esse plugin ï¿½ uma extensï¿½o da [[%SYSTEMWEB%.TWikiVariables][variï¿½vel TWiki]] =%<nop>GMTIME{"format"}%= que permite apresentar datas e horas com formataï¿½ï¿½o livre (com opï¿½ï¿½es extras), Internacionalizaï¿½ï¿½o e com um deslocamento de tempo relativo.
 
-Com DateTimePlugin você pode escrever: %BR%
-==Daqui a 5 dias será: %<nop>DATETIME{incdays="5"}%.== %BR%
-e terá uma frase sempre coerente.
+Com DateTimePlugin vocï¿½ pode escrever: %BR%
+==Daqui a 5 dias serï¿½: %<nop>DATETIME{incdays="5"}%.== %BR%
+e terï¿½ uma frase sempre coerente.
 
-Esse plugin nasceu por necessidade de se fazer buscas com datas no passado relativo, mas acredito que outras pessoas poderão usa-lo para vários outros casos.
+Esse plugin nasceu por necessidade de se fazer buscas com datas no passado relativo, mas acredito que outras pessoas poderï¿½o usa-lo para vï¿½rios outros casos.
 </td></tr></table>
 
 %TOC%
@@ -26,14 +26,14 @@ Esse plugin nasceu por necessidade de se fazer buscas com datas no passado relat
 
 <table border="1" cellpadding="2" cellspacing="0" width="100%"><tr bgcolor="#E8E8E8">
 <th colspan="3">Parameters</th></tr><tr bgcolor="#E0E0E0">
-<th width="18%">Parameter:</th><th width="41%">Description:</th><th width="41%">Descrição:</th>
+<th width="18%">Parameter:</th><th width="41%">Description:</th><th width="41%">Descriï¿½ï¿½o:</th>
 </tr><tr>
 <td>
 =="format"==
 </td><td>
 It defines how the date and hour will be represented.
 </td><td>
-Define como a data e hora será representada.
+Define como a data e hora serï¿½ representada.
 </td>
 </tr><tr>
 <td>
@@ -55,11 +55,11 @@ If not defined the value is the current date and hour.
 The input can be in the paterns:
 </td><td>
 Indica a data base para ser formatada e incrementada.
-Se não definido o valor é a data e hora atual.
+Se nï¿½o definido o valor ï¿½ a data e hora atual.
 
-(Não implementado ainda)
+(Nï¿½o implementado ainda)
 
-A entrada pode ser nos padões:
+A entrada pode ser nos padï¿½es:
 </td>
 </tr><tr>
 <td colspan="2">
@@ -112,43 +112,43 @@ Incremententa os segundos.
 <td align="center"> ==$day== </td><td>
 The day of the month
 </td><td>
-O dia do mês.
+O dia do mï¿½s.
 </td><td align="center"> ==2== </td>
 </tr><tr>
 <td align="center"> ==$day2== </td><td>
 The day of the month with two digits
 </td><td>
-O dia do mês com dois dígitos.
+O dia do mï¿½s com dois dï¿½gitos.
 </td><td align="center"> ==02== </td>
 </tr><tr>
 <td align="center"> ==$mo== </td><td>
 The number of the month with two digits.
 </td><td>
-O número do mês com dois dígitos.
+O nï¿½mero do mï¿½s com dois dï¿½gitos.
 </td><td align="center"> ==07== </td>
 </tr><tr>
 <td align="center"> ==$month== </td><td>
 The summarized name of the month in English.
 </td><td>
-O nome resumido do mês em inglês.
+O nome resumido do mï¿½s em inglï¿½s.
 </td><td align="center"> ==Jul== </td>
 </tr><tr>
 <td align="center"> ==$i_month== </td><td>
 The summarized and internationalized name of the month.
 </td><td>
-O nome resumido do mês internacionalizado.
+O nome resumido do mï¿½s internacionalizado.
 </td><td align="center"> ==Jul== </td>
 </tr><tr>
 <td align="center"> ==$lmonth== </td><td>
 The extensive name of the month in English.
 </td><td>
-O nome extenso do mês em inglês.
+O nome extenso do mï¿½s em inglï¿½s.
 </td><td align="center"> ==July== </td>
 </tr><tr>
 <td align="center"> ==$i_lmonth== </td><td>
 The extensive and internationalized name of the month.
 </td><td>
-O nome extenso do mês em internacionalizado.
+O nome extenso do mï¿½s em internacionalizado.
 </td><td align="center"> ==Julho== </td>
 </tr><tr>
 <td align="center"> ==$year== </td><td>
@@ -160,25 +160,25 @@ O ano em 4 digitos.
 <td align="center"> ==$ye== </td><td>
 The 2 digit year. (Care with the century...)
 </td><td>
-O ano em 2 digitos. (Cuidado com o século...)
+O ano em 2 digitos. (Cuidado com o sï¿½culo...)
 </td><td align="center"> ==23== </td>
 </tr><tr>
 <td align="center"> ==$century== </td><td>
 The Century number. (Not implemented yet)
 </td><td>
-O número do século. (Não implentado ainda)
+O nï¿½mero do sï¿½culo. (Nï¿½o implentado ainda)
 </td><td align="center"> ==19== </td>
 </tr><tr>
 <td align="center"> ==$romancentury== </td><td>
 The Roman Century number. (Not implemented yet)
 </td><td>
-O número do século em romanos. (Não implentado ainda)
+O nï¿½mero do sï¿½culo em romanos. (Nï¿½o implentado ainda)
 </td><td align="center"> ==IX== </td>
 </tr><tr>
 <td align="center"> ==$wday== </td><td>
 The summarized name of the day of the week in English.
 </td><td>
-O nome resumido do dia da semana em inglês.
+O nome resumido do dia da semana em inglï¿½s.
 </td>
 <td align="center"> ==Wed== </td>
 </tr><tr>
@@ -192,7 +192,7 @@ O nome resumido do dia da semana internacionalizado.
 <td align="center"> ==$lwday== </td><td>
 The extensive name of the day of the week in English.
 </td><td>
-O nome extenso do dia da semana em inglês.
+O nome extenso do dia da semana em inglï¿½s.
 </td>
 <td align="center"> ==Wednesday== </td>
 </tr><tr>
@@ -213,21 +213,21 @@ O dia do ano.
 <td align="center"> ==$hours== %BR% or ==$hour== </td><td>
 The hour in 2 digits.
 </td><td>
-A hora em 2 dígitos.
+A hora em 2 dï¿½gitos.
 </td>
 <td align="center"> ==14== </td>
 </tr><tr>
 <td align="center"> ==$minutes== %BR% or ==$min== </td><td>
 The minutes in 2 digits
 </td><td>
-Os minutos em 2 dígitos
+Os minutos em 2 dï¿½gitos
 </td>
 <td align="center"> ==15== </td>
 </tr><tr>
 <td align="center"> ==$seconds== %BR% or ==$sec== </td><td>
 The seconds in 2 digits.
 </td><td>
-Os segundos em 2 dígitos.
+Os segundos em 2 dï¿½gitos.
 </td>
 <td align="center"> ==32== </td>
 </tr><tr>
@@ -256,9 +256,9 @@ Formato predefinido, RCS Timestamp
 =Yesterday was %<nop>DATETIME{"$day $month $year" incdays="-1"}%.= ==-&gt;==
 Yesterday was %DATETIME{"$lwday, $day $month $year" incdays="-1"}%.
 
-_(Baianês)_
-=De hoje a oito será %<nop>DATETIME{"$day de $i_lmonth" incdays="7"}%.= ==-&gt;==
-De hoje a oito será %DATETIME{"$day de $i_lmonth" incdays="7"}%.
+_(Baianï¿½s)_
+=De hoje a oito serï¿½ %<nop>DATETIME{"$day de $i_lmonth" incdays="7"}%.= ==-&gt;==
+De hoje a oito serï¿½ %DATETIME{"$day de $i_lmonth" incdays="7"}%.
 
 Using <nop>ShortHand and Variables:
 
@@ -296,30 +296,30 @@ All the variables for now:
 ---++ <nop>%TOPIC% Global Settings
 
 <table cellpadding="5" cellspacing="5"><tr bgcolor="#F0F0F0">
-<th width="50%">English</th><th width="50%">Portugês</th></tr><tr><td>
+<th width="50%">English</th><th width="50%">Portugï¿½s</th></tr><tr><td>
 Plugin settings are stored as preferences variables.
 To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==,
 for example, ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==.
 
 For the internacionalization, insert the names of the months and weekdays separated by one white space.
 </td><td>
-Configurações de plugins são guardadas como variáveis de preferências.
-Para referênciar uma configuração de plugin escreva ==%<nop>&lt;plugin&gt;_&lt;configuração&gt;%==,
+Configuraï¿½ï¿½es de plugins sï¿½o guardadas como variï¿½veis de preferï¿½ncias.
+Para referï¿½nciar uma configuraï¿½ï¿½o de plugin escreva ==%<nop>&lt;plugin&gt;_&lt;configuraï¿½ï¿½o&gt;%==,
 por examplo, ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==.
 
-Para a internacionalização, insira os nomes dos meses e dias da semana separados por um espaço em branco.
+Para a internacionalizaï¿½ï¿½o, insira os nomes dos meses e dias da semana separados por um espaï¿½o em branco.
 </td></tr></table>
 
 	* The Internacionalization Setings:
-		* Set monthLongNames = Janeiro Fevereiro Março Abril Maio Junho Julho Agosto Setembro Outubro Novembro Dezembro
+		* Set monthLongNames = Janeiro Fevereiro Marï¿½o Abril Maio Junho Julho Agosto Setembro Outubro Novembro Dezembro
 		* Set monthShortNames = Jan Fev Mar Abr Mai Jun Jul Ago Set Out Nov Dez
-		* Set weekdayLongNames = Domingo Segunda-feira Terça-feira Quarta-feira Quinta-feira Sexta-feira Sabado
+		* Set weekdayLongNames = Domingo Segunda-feira Terï¿½a-feira Quarta-feira Quinta-feira Sexta-feira Sabado
 		* Set weekdayShortNames = Dom Seg Ter Qua Qui Sex Sab
 
 	* Localize my clock:
 		* Set myGreenwich = -3
 
-	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
+	* One line description, shown in the %SYSTEMWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = Supports date display with free formatting, extra options and internationalization.
 
 	* Set DEBUG to 1 to get debug messages in =data/debug.txt=. Default: =0=
@@ -327,16 +327,16 @@ Para a internacionalização, insira os nomes dos meses e dias da semana separados
 
 ---++ <nop>ToDo
 
-A lista de a-fazeres para a versão 1.0 estável:
-	1 Corrigir o dia da semana quando o mês e/ou o ano é incrementado.
-	1 Implementar a variável de formatação =$roman=
-	1 Implementar a variável de formatação =$romancentury=
+A lista de a-fazeres para a versï¿½o 1.0 estï¿½vel:
+	1 Corrigir o dia da semana quando o mï¿½s e/ou o ano ï¿½ incrementado.
+	1 Implementar a variï¿½vel de formataï¿½ï¿½o =$roman=
+	1 Implementar a variï¿½vel de formataï¿½ï¿½o =$romancentury=
 	1 Inplementar a entrada de Data. ( efetivar o agumento =date="a date"= )
 
 ---++ Plugin Installation Instructions
 
 <table cellpadding="5" cellspacing="5"><tr bgcolor="#F0F0F0">
-<th width="50%">English</th><th width="50%">Portugês</th></tr><tr><td>
+<th width="50%">English</th><th width="50%">Portugï¿½s</th></tr><tr><td>
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. %BR%\
 	  Contents:
@@ -347,12 +347,12 @@ A lista de a-fazeres para a versão 1.0 estável:
 	* Test if the plugin is correctly installed: you should see rendered dates on the [[#Examples][example session]].
 </td><td>
 	* Baixe o arquivo ZIP da web Plugin (veja abaixo)
-	* Descompacte ==%TOPIC%.zip== no seu diretório de instalação do twiki. %BR%\
+	* Descompacte ==%TOPIC%.zip== no seu diretï¿½rio de instalaï¿½ï¿½o do twiki. %BR%\
 	  Conteudo:
-	  | *Arquivo:* | *Descrição:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Tópico do plugin |
+	  | *Arquivo:* | *Descriï¿½ï¿½o:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Tï¿½pico do plugin |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Modulo Perl do plugin |
-	* Teste se o plugin está corretamente instalado. Você deverá ver datas renderizadas na [[#Examples][sessão de exemplos]].
+	* Teste se o plugin estï¿½ corretamente instalado. Vocï¿½ deverï¿½ ver datas renderizadas na [[#Examples][sessï¿½o de exemplos]].
 </td></tr></table>
 
 ---++ Plugin Info
