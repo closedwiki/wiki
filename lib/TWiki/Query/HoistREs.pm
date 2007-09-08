@@ -170,11 +170,21 @@ sub _hoistDOT {
                 return '^%'.$lhs.'{.*\\b'.$rhs."=\"\000RHS\001\"";
             }
             # Otherwise assume the term before the dot is the form name
-            return "^%META:FIELD{name=\"$rhs\".*\\bvalue=\"\000RHS\001\"";
+            if ($rhs eq 'text') {
+                # Special case for the text body
+                return "\000RHS\001";
+            } else {
+                return "^%META:FIELD{name=\"$rhs\".*\\bvalue=\"\000RHS\001\"";
+            }
 
         }
     } elsif (!ref($node->{op}) && $node->{op} eq $TWiki::Infix::Node::NAME) {
-        return "^%META:FIELD{name=\"$node->{params}[0]\".*\\bvalue=\"\0RHS\1\"";
+        if ($node->{params}[0] eq 'text') {
+            # Special case for the text body
+            return "\000RHS\001";
+        } else {
+            return "^%META:FIELD{name=\"$node->{params}[0]\".*\\bvalue=\"\0RHS\1\"";
+        }
     }
 
     print STDERR "\tFAILED\n" if MONITOR_HOIST;

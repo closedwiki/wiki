@@ -82,11 +82,15 @@ sub _getField {
         } elsif ($realField eq 'name') {
             # Special accessor to compensate for lack of a topic
             # name anywhere in the saved fields of meta
-            return $data->{_topic};
+            return $data->topic();
+        } elsif ($realField eq 'text') {
+            # Special accessor to compensate for lack of the topic text
+            # name anywhere in the saved fields of meta
+            return $data->text();
         } elsif ($realField eq 'web') {
             # Special accessor to compensate for lack of a web
             # name anywhere in the saved fields of meta
-            return $data->{_web};
+            return $data->web();
         } else {
             # The field name isn't an alias, check to see if it's
             # the form name

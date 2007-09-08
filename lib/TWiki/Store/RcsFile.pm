@@ -342,6 +342,8 @@ to the result of the query expression (e.g. if the query expression is
 'TOPICPARENT.name' then you will get back a hash that maps topic names
 to their parent.
 
+SMELL: this is *really* inefficient!
+
 =cut
 
 sub searchInWebMetaData {
@@ -380,7 +382,7 @@ sub searchInWebMetaData {
         next unless open(FILE, "<$sDir/$topic.txt");
         my $text = <FILE>;
         my $meta = new TWiki::Meta( $this->{session}, $this->{web}, $topic);
-        $store->extractMetaData( $meta, \$text );
+        $store->extractMetaData( $meta, $text );
         my $match = $query->evaluate( tom=>$meta, data=>$meta );
         if( $match ) {
             $matches{$topic} = $match;

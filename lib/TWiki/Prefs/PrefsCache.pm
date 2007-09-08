@@ -188,11 +188,11 @@ sub loadPrefsFromText {
     unless( $meta ) {
         require TWiki::Meta;
         $meta = new TWiki::Meta( $session, $web, $topic );
-        $session->{store}->extractMetaData( $meta, \$text );
+        $session->{store}->extractMetaData( $meta, $text );
     }
 
     my $parser = new TWiki::Prefs::Parser();
-    $parser->parseText( $text, $this, '' );
+    $parser->parseText( $meta->text(), $this, '' );
     $parser->parseMeta( $meta, $this, '' );
 }
 

@@ -3,13 +3,17 @@
 #TWikiMetaData
 ---+ TWiki Meta Data
 
-_Additional topic data, program-generated or from TWikiForms, is stored in =META= variable name/value pairs_
+_Additional topic data, program-generated or from TWikiForms, is stored embedded in the topic text using =META:= tags_
 
 %TOC%
 
 ---++ Overview
 
-TWikiMetaData uses =META= variables to store topic data that's separate from the main free-form content. This includes program-generated info like FileAttachment and topic movement data, and user-defined TWikiForms info. Use =META= variables to format and display Meta Data.  
+By default, TWiki stores topics in files on disk, in a really simple and obvious directory structure. The big advantage of this approach is that it makes it really easy to manipulate topics from outside TWiki, and is also very safe; there are no complex binary indexes to maintain, and moving a topic from one TWiki to another is as simple as copying a couple of text files.
+
+To keep eveything together in one place, TWiki uses a simple method for embedding additional data (program-generated or from TWikiForms) in topics. It does this using =META:= tags.
+
+=META:= data includes program-generated info like FileAttachment and topic movement data, and user-defined TWikiForms info.
 
 ---++ Meta Data Syntax
 
@@ -20,7 +24,7 @@ TWikiMetaData uses =META= variables to store topic data that's separate from the
 
    * Each meta variable is on one line.
 
-   * =\n= (new line) is represented in values by =%<nop>_<nop>N_<nop>= and ="= (double-quotes) by =%<nop>_Q_%=.
+   * Values in meta-data are URL encoded so that characters such as \n can be stored.
 
 <blockquote>
 *Example of Format*
@@ -152,11 +156,5 @@ Current support covers:
 
 __Note:__ SEARCH can also be used to render meta data, see examples in FormattedSearch and SearchPatternCookbook.
 
----++ Known Issues
-
-At present, there is no Meta Data support for Plugins. However, the format is readily extendable and the =Meta.pm= code that supports the format needs only minor alteration.
-
-
 __Related Topics:__ DeveloperDocumentationCategory, UserDocumentationCategory
 
--- __Contributors:__ TWiki:Main.JohnTalintyre, TWiki:Main.MikeMannix, TWiki:Main.PeterThoeny, TWiki:Main.CrawfordCurrie

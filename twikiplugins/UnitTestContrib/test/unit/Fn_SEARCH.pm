@@ -503,7 +503,7 @@ sub set_up_for_queries {
     my $text = <<'HERE';
 %META:TOPICINFO{author="TWikiUserMapping_guest" date="1178612772" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="WebHome"}%
-This is QueryTopic
+This is QueryTopic FURTLE
 %META:FORM{name="TestForm"}%
 %META:FIELD{name="Field1" attributes="H" title="A Field" value="A Field"}%
 %META:FIELD{name="Field2" attributes="" title="Another Field" value="2"}%
@@ -518,7 +518,7 @@ HERE
 
     $text = <<'HERE';
 %META:TOPICINFO{author="TWikiUserMapping_guest" date="12" format="1.1" version="1.2"}%
-This is QueryTopicTwo
+This is QueryTopicTwo SMONG
 %META:TOPICPARENT{name="QueryTopic"}%
 %META:FORM{name="TestyForm"}%
 %META:FIELD{name="FieldA" attributes="H" title="B Field" value="7"}%
@@ -587,6 +587,26 @@ sub test_gropeQuery {
         '%SEARCH{"Lastname=\'Peel\'"'.$stdCrap,
         $this->{test_web}, $this->{test_topic});
     $this->assert_str_equals('QueryTopic QueryTopicTwo', $result);
+}
+
+sub test_4580Query1 {
+    my $this = shift;
+
+    $this->set_up_for_queries();
+    my $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"text ~ \'*SMONG*\' AND Lastname=\'Peel\'"'.$stdCrap,
+        $this->{test_web}, $this->{test_topic});
+    $this->assert_str_equals('QueryTopicTwo', $result);
+}
+
+sub test_4580Query2 {
+    my $this = shift;
+
+    $this->set_up_for_queries();
+    my $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"text ~ \'*FURTLE*\' AND Lastname=\'Peel\'"'.$stdCrap,
+        $this->{test_web}, $this->{test_topic});
+    $this->assert_str_equals('QueryTopic', $result);
 }
 
 sub test_gropeQuery2 {

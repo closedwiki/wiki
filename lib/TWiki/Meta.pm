@@ -35,6 +35,9 @@ Pictorially,
       * [0] -> { name => '...' ... }
       * [1] -> { name => '...' ... }
 
+As well as the meta-data, the object also stores the web name, topic
+name and remaining text after meta-data extraction.
+
 =cut
 
 package TWiki::Meta;
@@ -64,6 +67,7 @@ sub new {
 
     $this->{_web} = $web;
     $this->{_topic} = $topic;
+    $this->{_text} = '';
 
     $this->{FILEATTACHMENT} = [];
 
@@ -84,12 +88,13 @@ sub finish {
     my $this = shift;
     undef $this->{_web};
     undef $this->{_topic};
+    undef $this->{_text};
     undef $this->{_session};
 }
 
 =pod
 
----++ ClassMethod session()
+---++ ObjectMethod session()
 
 Get the session
 
@@ -101,7 +106,7 @@ sub session {
 
 =pod
 
----++ ClassMethod web()
+---++ ObjectMethod web()
 
 Get the web name
 
@@ -113,7 +118,7 @@ sub web {
 
 =pod
 
----++ ClassMethod topic()
+---++ ObjectMethod topic()
 
 Get the topic name
 
@@ -121,6 +126,23 @@ Get the topic name
 
 sub topic {
     return $_[0]->{_topic};
+}
+
+=pod
+
+---++ ObjectMethod text([$text]) -> $text
+
+Get/set the topic body text. If $text is undef, gets the value, if it is
+defined, sets the value to that and returns the new text.
+
+=cut
+
+sub text {
+    my ($this, $val) = @_;
+    if (defined($val)) {
+        $this->{_text} = $val;
+    }
+    return $this->{_text};
 }
 
 =pod
@@ -322,6 +344,8 @@ If $type is undef, will copy ALL TYPES.
 If $nameFilter is defined (a perl refular expression), it will copy
 only data where ={name}= matches $nameFilter.
 
+Does *not* copy web, topic or text.
+
 =cut
 
 sub copyFrom {
@@ -337,6 +361,7 @@ sub copyFrom {
         }
     } else {
         foreach my $k ( keys %$otherMeta ) {
+            # Don't copy the web and topic fields, this may be a new topic
             unless( $k =~ /^_/ ) {
                 $this->copyFrom( $otherMeta, $k );
             }
@@ -621,6 +646,119 @@ sub renderFormFieldForDisplay {
         $format =~ s/\$value/$value/;
     }
     return $format;
+}
+
+=pod
+
+---++ ObjectMethod getEmbeddedStoreForm() -> $text
+
+Generate the embedded store form of the topic. The embedded store
+form has meta-data values embedded using %META: lines. The text
+stored in the meta is taken as the topic text.
+
+=cut
+
+sub getEmbeddedStoreForm {
+    my $this = shift;
+    $this->{_text} ||= '';
+
+    require TWiki::Store;
+
+    my $start = $this->_writeTypes( qw/TOPICINFO TOPICPARENT/ );
+    my $end = $this->_writeTypes( qw/FORM FIELD FILEATTACHMENT TOPICMOVED/ );
+    # append remaining meta data
+    $end .= $this->_writeTypes( qw/not TOPICINFO TOPICPARENT FORM FIELD FILEATTACHMENT TOPICMOVED/ );
+    my $text = $start . $this->{_text};
+    $end = "\n".$end if $end;
+    $text .= $end;
+    return $text;
+}
+
+# STATIC Write a meta-data key=value pair
+# The encoding is reversed in _readKeyValues
+sub _writeKeyValue {
+    my( $key, $value ) = @_;
+
+    if( defined( $value )) {
+        $value = TWiki::Store::dataEncode( $value );
+    } else {
+        $value = '';
+    }
+
+    return $key.'="'.$value.'"';
+}
+
+# STATIC: Write all the key=value pairs for the types listed
+sub _writeTypes {
+    my( $this, @types ) = @_;
+
+    my $text = '';
+
+    if( $types[0] eq 'not' ) {
+        # write all types that are not in the list
+        my %seen;
+        @seen{ @types } = ();
+        @types = ();  # empty "not in list"
+        foreach my $key ( keys %$this ) {
+            push( @types, $key ) unless
+              (exists $seen{ $key } || $key =~ /^_/);
+        }
+    }
+
+    foreach my $type ( @types ) {
+        my $data = $this->{$type};
+        foreach my $item ( @$data ) {
+            my $sep = '';
+            $text .= '%META:'.$type.'{';
+            my $name = $item->{name};
+            if( $name ) {
+                # If there's a name field, put first to make regexp based searching easier
+                $text .= _writeKeyValue( 'name', $item->{name} );
+                $sep = ' ';
+            }
+            foreach my $key ( sort keys %$item ) {
+                if( $key ne 'name' ) {
+                    $text .= $sep;
+                    $text .= _writeKeyValue( $key, $item->{$key} );
+                    $sep = ' ';
+                }
+            }
+            $text .= '}%'."\n";
+        }
+    }
+
+    return $text;
+}
+
+# Note: not published as part of the interface; private to TWiki
+# Add TOPICINFO type data to the object, as specified by the parameters.
+#    * =$rev= - the revision number
+#    * =$time= - the time stamp
+#    * =$user= - the user id
+#    * =$repRev= - is the save in progress a repRev
+# SMELL: Duplicate rev control info in the topic
+sub addTOPICINFO {
+    my( $this, $rev, $time, $user, $repRev, $format ) = @_;
+    $rev = 1 if $rev < 1;
+    my $users = $this->{_session}->{users};
+
+    my %options =
+      (
+          # compatibility; older versions of the code use
+          # RCS rev numbers save with them so old code can
+          # read these topics
+          version   => '1.'.$rev,
+          date      => $time,
+          author    => $user,
+          format    => $format,
+         );
+    # if this is a reprev, then store the revision that was affected.
+    # Required so we can tell when a merge is based on something that
+    # is *not* the original rev where another users' edit started.
+    # See Bugs:Item1897.
+    $options{reprev} = '1.'.$rev if $repRev;
+
+    $this->put( 'TOPICINFO', \%options );
 }
 
 1;

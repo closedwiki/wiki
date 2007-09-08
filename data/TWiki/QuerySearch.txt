@@ -20,6 +20,7 @@ All meta-data in a topic is referenced according to a to a simple plan.
  
    * =name= - name of the topic
    * =web= - name of the web the topic is within
+   * =text= - the body text of the topic
    * =META:FILEATTACHMENT=
       * _for each attachment_
          * =name=
@@ -139,4 +140,8 @@ Find all topics that have form =ColourForm= where the form field 'Shades' is 'gr
 Find all topics that have PNG attachments that have been added since 26th March 2007
 <verbatim>
 %SEARCH{"attachments[name ~ '*.png' AND date >= d2n('2007-03-26')"}%
+</verbatim>
+Find all topics that have a field 'Threat' set to 'Amber' and 'cold virus' somewhere in the topic text.
+<verbatim>
+%SEARCH{"Threat='Amber' AND text ~ '*cold virus*'"}%
 </verbatim>

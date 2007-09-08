@@ -490,7 +490,8 @@ WARN
         # text is expected to contain %META as well as text.
         my $textQueryParam = $query->param( 'text' );
         my $meta = new TWiki::Meta( $session, $web, $topic );
-        $store->extractMetaData( $meta, \$textQueryParam );
+        $store->extractMetaData( $meta, $textQueryParam );
+        $textQueryParam = $meta->text();
         my $saveOpts = {
             timetravel => 1,
             operation => 'cmd',

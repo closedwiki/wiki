@@ -452,7 +452,7 @@ sub test_simpleFormSave2 {
 
     my $oldmeta = new TWiki::Meta( $this->{twiki}, $this->{test_web}, 'SimpleFormSave2');
     my $oldtext = $testtext1;
-    $this->{twiki}->{store}->extractMetaData( $oldmeta, \$oldtext );
+    $this->{twiki}->{store}->extractMetaData( $oldmeta, $oldtext );
     $this->{twiki}->{store}->saveTopic( $this->{test_user_login}, $this->{test_web}, 'SimpleFormSave2',
                                 $testform1, $oldmeta );
     my $query = new CGI({
@@ -483,11 +483,13 @@ sub test_simpleFormSave3 {
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki();
 
-    my $oldmeta = new TWiki::Meta( $this->{twiki}, $this->{test_web}, 'SimpleFormSave3');
+    my $oldmeta = new TWiki::Meta(
+        $this->{twiki}, $this->{test_web}, 'SimpleFormSave3');
     my $oldtext = $testtext1;
-    $this->{twiki}->{store}->extractMetaData( $oldmeta, \$oldtext );
-    $this->{twiki}->{store}->saveTopic( $this->{test_user_login}, $this->{test_web}, 'SimpleFormSave3',
-                                $testform1, $oldmeta );
+    $this->{twiki}->{store}->extractMetaData( $oldmeta, $oldtext );
+    $this->{twiki}->{store}->saveTopic(
+        $this->{test_user_login}, $this->{test_web}, 'SimpleFormSave3',
+        $testform1, $oldmeta );
     my $query = new CGI(
         {
             action => [ 'save' ],
@@ -505,6 +507,7 @@ sub test_simpleFormSave3 {
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
     $this->assert($this->{twiki}->{store}->topicExists($this->{test_web}, 'SimpleFormSave3'));
     my($meta, $text) = $this->{twiki}->{store}->readTopic(undef, $this->{test_web}, 'SimpleFormSave3');
+    $this->assert($meta);
     $this->assert_str_equals('UserTopic', $meta->get('PREFERENCE', 'VIEW_TEMPLATE' )->{value});
 
 }
@@ -541,7 +544,7 @@ sub test_merge {
     my $oldmeta = new TWiki::Meta(
         $this->{twiki}, $this->{test_web}, 'MergeSave');
     my $oldtext = $testtext1;
-    $this->{twiki}->{store}->extractMetaData( $oldmeta, \$oldtext );
+    $this->{twiki}->{store}->extractMetaData( $oldmeta, $oldtext );
     $this->{twiki}->{store}->saveTopic( $this->{test_user_2_login},
                                 $this->{test_web}, 'MergeSave',
                                 $testform4, $oldmeta );
@@ -752,7 +755,7 @@ sub test_1897 {
         $this->{twiki}, $this->{test_web}, 'MergeSave');
     my $oldtext = $testtext1;
     my $query;
-    $this->{twiki}->{store}->extractMetaData( $oldmeta, \$oldtext );
+    $this->{twiki}->{store}->extractMetaData( $oldmeta, $oldtext );
 
     # First, user A saves to create rev 1
     $this->{twiki}->{store}->saveTopic(

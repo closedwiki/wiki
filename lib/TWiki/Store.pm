@@ -138,7 +138,8 @@ sub readTopic {
     # SMELL: assumes that the backend can't store meta outside the topic
     my $text = $this->readTopicRaw( $user, $web, $topic, $version );
     my $meta = new TWiki::Meta( $this->{session}, $web, $topic);
-    $this->extractMetaData( $meta, \$text );
+    $this->extractMetaData( $meta, $text );
+    $text = $meta->text();
 
     # Override meta with that blended from pub.
     if ($TWiki::cfg{AutoAttachPubFiles} &&
@@ -841,13 +842,15 @@ sub saveTopic {
         if( $meta ) {
             # write the meta into the topic text. Nasty compatibility
             # requirement.
-            $text = _writeMeta( $meta, $text );
+            $meta->text($text);
+            $text = $meta->getEmbeddedStoreForm();
             $before = $meta->stringify();
         }
         $plugins->beforeSaveHandler( $text, $topic, $web, $meta );
         # remove meta again
         my $after = new TWiki::Meta( $this->{session}, $web, $topic);
-        $this->extractMetaData( $after, \$text );
+        $this->extractMetaData( $after, $text );
+        $text = $after->text();
         # If there are no changes in the $meta object, take the meta
         # from the text. Nasty compatibility requirement.
         if( !$meta || $meta->stringify() eq $before ){
@@ -866,7 +869,8 @@ sub saveTopic {
     # TWiki:Codev.BugBeforeSaveHandlerBroken
     if( $plugins->haveHandlerFor( 'afterSaveHandler' )) {
         if( $meta ) {
-            $text = _writeMeta( $meta, $text );
+            $meta->text($text);
+            $text = $meta->getEmbeddedStoreForm();
         }
         $plugins->afterSaveHandler( $text, $topic, $web,
                                     $error?$error->{-text}:'', $meta );
@@ -1043,8 +1047,9 @@ sub _noHandlersSave {
     }
 
     if( $meta ) {
-        addTOPICINFO( $meta, $nextRev, time(), $user, 0 );
-        $text = _writeMeta( $meta, $text );
+        $meta->addTOPICINFO( $nextRev, time(), $user, 0, $STORE_FORMAT_VERSION );
+        $meta->text($text);
+        $text = $meta->getEmbeddedStoreForm();
     }
 
     # will block
@@ -1113,9 +1118,9 @@ sub repRev {
         $revdate = time();
         $revuser = $user;
     }
-    addTOPICINFO( $meta, $rev, $revdate, $revuser, 1 );
-
-    $text = _writeMeta( $meta, $text );
+    $meta->addTOPICINFO( $rev, $revdate, $revuser, 1, $STORE_FORMAT_VERSION );
+    $meta->text($text);
+    $text = $meta->getEmbeddedStoreForm();
 
     $this->lockTopic( $user, $web, $topic );
     try {
@@ -1296,22 +1301,21 @@ sub topicExists {
 # Expect meta data at top of file, but willing to accept it anywhere.
 # If we have an old file format without meta data, then convert.
 #
-# If autoattachments is on then get this from the filestore rather than meta data
-#
-# SMELL: SIDE-EFFECTING FUNCTION meta-data is stripped from the $rtext
+# If autoattachments is on then get this from the filestore rather
+# than meta data
 #
 # SMELL: Calls to this method from outside of Store
 # should be avoided at all costs, as it exports the assumption that
 # meta-data is embedded in text.
 #
 sub extractMetaData {
-    my( $this, $meta, $rtext ) = @_;
-    ASSERT(defined($$rtext)) if DEBUG;
+    my( $this, $meta, $text ) = @_;
+
     my $users = $this->{session}->{users};
 
     my $format = $STORE_FORMAT_VERSION;
     # head meta-data
-    $$rtext =~ s(^%META:TOPICINFO{(.*)}%\r?\n)
+    $text =~ s(^%META:TOPICINFO{(.*)}%\r?\n)
       ($meta->put( 'TOPICINFO', _readKeyValues( $1 ));'')gem;
 
     my $ti = $meta->get( 'TOPICINFO' );
@@ -1323,7 +1327,7 @@ sub extractMetaData {
 
     my $endMeta = 0;
 
-    $$rtext =~ s(^%META:([^{]+){(.*)}%\r?\n)
+    $text =~ s(^%META:([^{]+){(.*)}%\r?\n)
       (
           $endMeta = 1;
           my $keys = _readKeyValues( $2, $format );
@@ -1333,35 +1337,34 @@ sub extractMetaData {
           } else {
               $meta->put( $1, $keys);
 	  }
-	  
           '';
          )gem;
 
     # eat the extra newline put in to separate text from tail meta-data
-    $$rtext =~ s/\n$//s if $endMeta;
+    $text =~ s/\n$//s if $endMeta;
 
     # If there is no meta data then convert from old format
     if( ! $meta->count( 'TOPICINFO' ) ) {
-        if ( $$rtext =~ /<!--TWikiAttachment-->/ ) {
+        if ( $text =~ /<!--TWikiAttachment-->/ ) {
             require TWiki::Compatibility;
-            $$rtext = TWiki::Compatibility::migrateToFileAttachmentMacro(
-                $this->{session}, $meta, $$rtext );
+            $text = TWiki::Compatibility::migrateToFileAttachmentMacro(
+                $this->{session}, $meta, $text );
         }
 
-        if ( $$rtext =~ /<!--TWikiCat-->/ ) {
+        if ( $text =~ /<!--TWikiCat-->/ ) {
             require TWiki::Compatibility;
-            $$rtext = TWiki::Compatibility::upgradeCategoryTable(
+            $text = TWiki::Compatibility::upgradeCategoryTable(
                 $this->{session}, $meta->web(), $meta->topic(),
-                $meta, $$rtext );
+                $meta, $text );
         }
     } elsif( $format eq '1.0beta' ) {
         require TWiki::Compatibility;
         # This format used live at DrKW for a few months
-        if( $$rtext =~ /<!--TWikiCat-->/ ) {
-            $$rtext = TWiki::Compatibility::upgradeCategoryTable(
+        if( $text =~ /<!--TWikiCat-->/ ) {
+            $text = TWiki::Compatibility::upgradeCategoryTable(
                 $this->{session}, $meta->web(), $meta->topic(),
                 $meta,
-                $$rtext );
+                $text );
         }
         TWiki::Compatibility::upgradeFrom1v0beta(
             $this->{session}, $meta );
@@ -1375,8 +1378,10 @@ sub extractMetaData {
     if( $format && $format < 1.1 ) {
         # compatibility; topics version 1.0 and earlier equivalenced tab
         # with three spaces. Respect that.
-        $$rtext =~ s/\t/   /g;
+        $text =~ s/\t/   /g;
     }
+
+    $meta->{_text} = $text;
 
     return $meta;
 }
@@ -1413,7 +1418,8 @@ sub getTopicParent {
     close( $strm );
 
     my $meta = new TWiki::Meta( $this->{session}, $web, $topic );
-    $this->extractMetaData( $meta, \$data );
+    $this->extractMetaData( $meta, $data );
+    $data = $meta->text();
     my $parentMeta = $meta->get( 'TOPICPARENT' );
     return $parentMeta->{name} if $parentMeta;
     return undef;
@@ -1454,35 +1460,6 @@ sub eachChange {
 
     my $handler = _getHandler( $this, $web );
     return $handler->eachChange( $time );
-}
-
-# Add TOPICINFO type data to the object, as specified by the parameters.
-#    * =$rev= - the revision number
-#    * =$time= - the time stamp
-#    * =$user= - the user id
-# SMELL: Duplicate rev control info in the topic
-sub addTOPICINFO {
-    my( $meta, $rev, $time, $user, $repRev ) = @_;
-    $rev = 1 if $rev < 1;
-    my $users = $meta->{_session}->{users};
-
-    my %options =
-      (
-          # compatibility; older versions of the code use
-          # RCS rev numbers save with them so old code can
-          # read these topics
-          version   => '1.'.$rev,
-          date      => $time,
-          author    => $user,
-          format    => $STORE_FORMAT_VERSION,
-         );
-    # if this is a reprev, then store the revision that was affected.
-    # Required so we can tell when a merge is based on something that
-    # is *not* the original rev where another users' edit started.
-    # See Bugs:Item1897.
-    $options{reprev} = '1.'.$rev if $repRev;
-
-    $meta->put( 'TOPICINFO', \%options );
 }
 
 =pod
@@ -1677,95 +1654,6 @@ sub removeWeb {
     $handler->removeWeb();
 }
 
-# STATIC Write a meta-data key=value pair
-# The encoding is reversed in _readKeyValues
-sub _writeKeyValue {
-    my( $key, $value ) = @_;
-
-    if( defined( $value )) {
-        $value = dataEncode( $value );
-    } else {
-        $value = '';
-    }
-
-    return $key.'="'.$value.'"';
-}
-
-# Write all the key=value pairs for the types listed
-sub _writeTypes {
-    my( $meta, @types ) = @_;
-    ASSERT($meta->isa('TWiki::Meta')) if DEBUG;
-
-    my $text = '';
-
-    if( $types[0] eq 'not' ) {
-        # write all types that are not in the list
-        my %seen;
-        @seen{ @types } = ();
-        @types = ();  # empty "not in list"
-        foreach my $key ( keys %$meta ) {
-            push( @types, $key ) unless
-              (exists $seen{ $key } || $key =~ /^_/);
-        }
-    }
-
-    foreach my $type ( @types ) {
-        my $data = $meta->{$type};
-        foreach my $item ( @$data ) {
-            my $sep = '';
-            $text .= '%META:'.$type.'{';
-            my $name = $item->{name};
-            if( $name ) {
-                # If there's a name field, put first to make regexp based searching easier
-                $text .= _writeKeyValue( 'name', $item->{name} );
-                $sep = ' ';
-            }
-            foreach my $key ( sort keys %$item ) {
-                if( $key ne 'name' ) {
-                    $text .= $sep;
-                    $text .= _writeKeyValue( $key, $item->{$key} );
-                    $sep = ' ';
-                }
-            }
-            $text .= '}%'."\n";
-        }
-    }
-
-    return $text;
-}
-
-# STATIC Meta data for start of topic
-sub _writeStart {
-    my( $meta ) = @_;
-
-    return _writeTypes( $meta, qw/TOPICINFO TOPICPARENT/ );
-}
-
-# STATIC Meta data for end of topic
-sub _writeEnd {
-    my( $meta ) = @_;
-
-    my $text = _writeTypes($meta, qw/FORM FIELD FILEATTACHMENT TOPICMOVED/ );
-    # append remaining meta data
-    $text .= _writeTypes( $meta, qw/not TOPICINFO TOPICPARENT FORM FIELD FILEATTACHMENT TOPICMOVED/ );
-    return $text;
-}
-
-# STATIC Prepend/append meta data to topic
-sub _writeMeta {
-    my( $meta, $text ) = @_;
-    ASSERT($meta->isa('TWiki::Meta')) if DEBUG;
-    $text ||= '';
-
-    my $start = _writeStart( $meta );
-    my $end = _writeEnd( $meta );
-    $text = $start . $text;
-    $end = "\n".$end if $end;
-    $text .= $end;
-
-    return $text;
-}
-
 =pod
 
 ---++ ObjectMethod getDebugText($meta, $text) -> $text
@@ -1778,7 +1666,8 @@ by annotating the text with meta informtion.
 sub getDebugText {
     my ( $this, $meta, $text ) = @_;
 
-    return _writeMeta( $meta, $text );
+    $meta->text($text);
+    return $meta->getEmbeddedStoreForm();
 }
 
 =pod
