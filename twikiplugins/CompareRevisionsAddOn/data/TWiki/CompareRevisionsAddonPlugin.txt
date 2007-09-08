@@ -37,6 +37,6 @@ It has two purposes:
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/CompareRevisionsAddOnDev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/CompareRevisionsAddOnAppraisal |
 
-__Related Topics:__ DeveloperDocumentationCategory, AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+__Related Topics:__ DeveloperDocumentationCategory, AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
 %META:REVCOMMENT{ncomments="0"}%
