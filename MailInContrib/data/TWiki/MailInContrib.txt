@@ -1,6 +1,6 @@
-%META:TOPICINFO{author="TWikiAdminGroup" date="1142879833" format="1.1" version="1.2"}%
 ---+!! <nop>MailInContrib for TWiki
-
+%SHORTDESCRIPTION%
+<a href="http://wikiring.com"><img src="%ATTACHURL%/logo.gif" style="float:right" /></a>
 This Contrib supports the submission of content to TWiki topics via e-mail.
 
 <!--
@@ -13,7 +13,7 @@ This Contrib supports the submission of content to TWiki topics via e-mail.
    Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
 -->
 
-*WARNING: TWiki-4 only. If you want to use this plugin with an earlier version of TWiki, please use http://twiki.org/cgi-bin/viewfile/Plugins/MailInContrib?rev=1.7&filename=MailInContrib.zip*
+<div class="twikiBroadcastMessage" style="background-color:#ffc;">WARNING: TWiki-4 only. If you want to use this extension with an earlier version of TWiki, please use [[http://twiki.org/cgi-bin/attach/Plugins/%TOPIC%?filename=%TOPIC%.zip&revInfo=1][revision 7 of the zip]].</div>
 
 Mails for twiki can be pulled out of mail folders using [[CPAN:Email::Folder::POP3][POP3]], [[CPAN:Email::Folder::IMAP][IMAP]], or anything else supported by CPAN:Email::Folder.
 
@@ -65,13 +65,9 @@ You can configure the module to look at the =From:= entry in the email, and if a
 
 You can also optionally set a default user for an inbox, so if the user can't be identified from the mail, it will fall back to the default.
 
-See <a href="#Installation">Installation</a> for help on settings.
-
----++ Settings
-   * One line description:
+<!--
       * Set SHORTDESCRIPTION = Supports submissions to TWiki via e-mail
-	* Name of the perl package
-		* Set STUB = %$STUB%
+-->
 
 ---++ Installation
 %$INSTALL_INSTRUCTIONS%
@@ -99,12 +95,18 @@ This is a brand-new development, not related in any to the original TWiki:Plugin
 
 ---++ Contrib Info
 
+Another great TWiki extension from the <a style="text-decoration:none" href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiringlogo20x20.png" alt="" /> *WikiRing* </a> - working together to improve your wiki experience!
+
+Many thanks to the following sponsors for supporting this work:
+   * [[http://www.evolvedmedianetwork.com][Evolved Media Network]]
+
 |  Author: | TWiki:Main/CrawfordCurrie (http://c-dot.co.uk) |
 |  Copyright &copy;: | 2005, TWiki Contributors |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 | Change History: | |
+|  8 Sep 2007 | Bugs:Item4575 various ideas from Dev topic, tested against 4.2.0 |
 |  12412 | Fixed Bugs:Item3334 by removing dependency on !FuncUsersContrib |
 |  10239 | Added support for listing attachments in-line with the mail |
 |  10182 | Fixed parser failures on multipart MIME messages |
@@ -118,11 +120,12 @@ This is a brand-new development, not related in any to the original TWiki:Plugin
 |  5961 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item181'>Item181</a>  minor formatting issue fixed |
 |  5960 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item181'>Item181</a>  new version, supports DEVELOP and Cairo, and adds support for attachments (you can now mail attachments to topics) |
 |  31 July 2005 | 1.001 Back-ported to Cairo, added spambox (work generously supported by the [[http://www.evolvedmedianetwork.com/][Evolved Media Network]]) |
-|  10 Mar 2005 | 1.000 Initial version ||  Home: | TWiki:Plugins/%TOPIC% |
+|  10 Mar 2005 | 1.000 Initial version |
+|  Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences
 
--- TWiki:Main/CrawfordCurrie - %$DATE%
-
+%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="" version="1"}%
+%META:FILEATTACHMENT{name="logo.gif" attr="h" comment="" version="1"}%

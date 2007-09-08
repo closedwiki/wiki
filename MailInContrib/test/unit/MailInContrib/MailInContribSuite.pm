@@ -1,8 +1,8 @@
 use strict;
 
-package MailInTests;
+package MailInContribSuite;
 
-use base qw( TWikiTestCase );
+use base qw( TWikiFnTestCase );
 
 use TWiki;
 use Error qw( :try );
@@ -10,70 +10,47 @@ use File::Path;
 use Error qw( :try );
 use TWiki::Contrib::MailInContrib;
 
-my $twiki;
-
-my $testWeb = 'MailInContribTests';
-my $testTopic = 'TestTopic';
-my $testUsersWeb = "${testWeb}UsersWeb";
-my $testSysWeb = "${testWeb}TWikiWeb";
-
 my $box;
 
 my @mails; # sent mails
-
-my $users = {
-    alligator => {
-        pass =>'hissss',
-        emails=>'ally@masai.mara',
-        wikiname => 'AllyGator'
-       },
-    mole => {
-        pass =>'',
-        emails=>'mole@hill',
-        wikiname => "MoleInnaHole"
-       },
-};
 
 sub set_up {
     my $this = shift;
 
     $this->SUPER::set_up();
 
-    my $original = $TWiki::cfg{SystemWebName};
-    $TWiki::cfg{SystemWebName} = $testSysWeb;
-    $TWiki::cfg{UsersWebName} = $testUsersWeb;
-    $TWiki::cfg{MapUserToWikiName} = 1;
-    $TWiki::cfg{Htpasswd}{FileName} = '/tmp/junkpasswd';
-    $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
-    $TWiki::cfg{Htpasswd}{Encoding} = 'plain';
-    $TWiki::cfg{TemplatePath} =~ s/TWiki\./$testSysWeb\./g;
-    open(F,">$TWiki::cfg{Htpasswd}{FileName}");
+    $this->{system_web} = 'TemporaryMailInContribSuiteSystemWeb';
+    $this->{twiki}->{store}->createWeb(
+        $this->{twiki}->{user}, $this->{system_web},
+        $TWiki::cfg{SystemWebName} );
+    $this->{twiki}->{store}->saveTopic(
+        $TWiki::cfg{AdminUserWikiName}, $this->{system_web},
+        'WebPreferences', "");
+
+    $TWiki::cfg{SystemWebName} = $this->{system_web};
+
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki();
+
+    my $workdir = TWiki::Func::getWorkArea('MailInContrib');
+    open(F, ">$workdir/timestamp") || die $!;
+    print F "0\n";
     close(F);
-    my $query = new CGI("");
-    $query->path_info("/$testWeb/$testTopic");
+    $this->registerUser('alig',
+                        'Ally',
+                        'Gator',
+                        'ally@masai.mara');
+    $this->registerUser('mole',
+                        'Mole',
+                        'InnaHole',
+                        'mole@hill');
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $this->{test_web},
+        $this->{test_topic}, "");
 
-    $twiki = new TWiki(undef, $query);
-    $twiki->{store}->saveMetaData( '', 'mailincron', '0' );
-    $twiki->{store}->createWeb( $twiki->{user}, $testWeb );
-    $twiki->{store}->createWeb( $twiki->{user}, $testUsersWeb );
-    $twiki->{store}->createWeb( $twiki->{user}, $testSysWeb );
-    my $impl = new TWiki::Users::HtPasswdUser($twiki);
-    my $me =  $twiki->{users}->findUser("TWikiTester");
-    foreach my $user ( keys %$users ) {
-        $impl->passwd( $user, $users->{$user}->{pass} );
-        $impl->setEmails($user, $users->{$user}->{emails});
-        my $uo = $twiki->{users}->findUser($user,$users->{$user}->{wikiname} );
-        $twiki->{users}->addUserToMapping($uo, $me);
-    }
-    $twiki->{store}->copyTopic(
-        $me, $original, $TWiki::cfg{SitePrefsTopicName},
-        $testSysWeb, $TWiki::cfg{SitePrefsTopicName} );
-    $twiki->{store}->copyTopic(
-        $me, $original, "MailInContribTemplate",
-        $testSysWeb, "MailInContribTemplate" );
-
-    $twiki = new TWiki("TWikiTester", $query);
-    $twiki->{net}->setMailHandler(\&sentMail);
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki();
+    $this->{twiki}->net->setMailHandler(\&sentMail);
 
     $box = {};
 
@@ -91,16 +68,9 @@ sub set_up {
 sub tear_down {
     my $this = shift;
 
-    $twiki->{store}->removeWeb( $twiki->{user}, $testWeb );
-    $twiki->{store}->removeWeb($twiki->{user}, $testUsersWeb);
-    $twiki->{store}->removeWeb($twiki->{user}, $testSysWeb);
+    $this->removeWebFixture( $this->{twiki}, $this->{system_web} );
     File::Path::rmtree($box->{folder});
     $this->SUPER::tear_down();
-}
-
-sub new {
-    my $self = shift()->SUPER::new(@_);
-    return $self;
 }
 
 sub sendTestMail {
@@ -122,7 +92,8 @@ sub sentMail {
 }
 
 sub cron {
-    my $min = new TWiki::Contrib::MailInContrib( $twiki, 0 );
+    my $this = shift;
+    my $min = new TWiki::Contrib::MailInContrib( $this->{twiki}, 0 );
     $min->processInbox( $box );
     $min->wrapUp();
     return $min;
@@ -134,22 +105,22 @@ sub testBadUserFetch {
     my $mail = <<HERE;
 Message-ID: message1
 Reply-To: sender1\@example.com
-To: $testWeb.$testTopic\@example.com
-Subject: $testWeb.NotHere
+To: $this->{test_web}.$this->{test_topic}\@example.com
+Subject: $this->{test_web}.NotHere
 From: notauser\@example.com
 
 Message 1 text here
 HERE
     $this->sendTestMail($mail);
     $box->{topicPath} = 'to';
-    my $c = cron();
+    my $c = $this->cron();
     $this->assert_str_equals('Could not determine submitters WikiName from
 From: notauser@example.com
 and there is no valid default username', $c->{error});
 
-    my( $m, $t ) = TWiki::Func::readTopic($testWeb,$testTopic);
+    my( $m, $t ) = TWiki::Func::readTopic($this->{test_web},$this->{test_topic});
 
-    $this->assert_str_equals('', $t);
+    $this->assert($t !~ /\S/, $t);
     $this->assert_equals(0, scalar(@mails));
 }
 
@@ -161,8 +132,8 @@ sub testTopicPathTo {
     my $mail = <<HERE;
 Message-ID: message1
 Reply-To: sender1\@example.com
-To: $testWeb.$testTopic\@example.com
-Subject: $testWeb.NotHere
+To: $this->{test_web}.$this->{test_topic}\@example.com
+Subject: $this->{test_web}.NotHere
 From: mole\@hill
 
 Message 1 text here
@@ -171,21 +142,21 @@ HERE
     $mail = <<HERE;
 Message-ID: message2
 Reply-To: sender2\@example.com
-To: "$testTopic $testWeb" <$testWeb.$testTopic\@example.com>
-Subject: $testWeb.IgnoreThis
+To: "$this->{test_topic} $this->{test_web}" <$this->{test_web}.$this->{test_topic}\@example.com>
+Subject: $this->{test_web}.IgnoreThis
 From: ally\@masai.mara
 
 Message 2 text here
 HERE
     $this->sendTestMail($mail);
     $box->{topicPath} = 'to';
-    my $c = cron();
+    my $c = $this->cron();
     $this->assert_null($c->{error});
 
-    my( $m, $t ) = TWiki::Func::readTopic($testWeb,$testTopic);
+    my( $m, $t ) = TWiki::Func::readTopic($this->{test_web},$this->{test_topic});
 
-    $this->assert($t =~ s/^ *\* \*$testWeb\.NotHere\*: Message 1 text here\s*-- $testUsersWeb\.MoleInnaHole -\s+\d+\s+\w+\s+\d+\s+-\s+\d+:\d+\n//s);
-    $this->assert($t =~ s/^ *\* \*$testWeb\.IgnoreThis\*: Message 2 text here\s*-- $testUsersWeb\.AllyGator -\s+\d+\s+\w+\s+\d+\s+-\s+\d+:\d+\n//s);
+    $this->assert($t =~ s/^ *\* \*$this->{test_web}\.NotHere\*: Message 1 text here\s*-- $this->{users_web}\.MoleInnaHole -\s+\d+\s+\w+\s+\d+\s+-\s+\d+:\d+\n//m, $t);
+    $this->assert($t =~ s/^ *\* \*$this->{test_web}\.IgnoreThis\*: Message 2 text here\s*-- $this->{users_web}\.AllyGator -\s+\d+\s+\w+\s+\d+\s+-\s+\d+:\d+\n//m, $t);
 
     $this->assert_matches(qr/^\s*$/, $t);
     $this->assert_equals(0, scalar(@mails));
@@ -197,8 +168,8 @@ sub testTopicPathSubject {
     my $mail = <<HERE;
 Message-ID: message1
 Reply-To: sender1\@example.com
-To: $testWeb.NotHere\@example.com
-Subject: $testWeb.$testTopic
+To: $this->{test_web}.NotHere\@example.com
+Subject: $this->{test_web}.$this->{test_topic}
 From: mole\@hill
 
 Message 1 text here
@@ -207,21 +178,21 @@ HERE
     $mail = <<HERE;
 Message-ID: message2
 Reply-To: sender2\@example.com
-To: "$testTopic IgnoreThis" <$testWeb.IgnoreThis\@example.com>
-Subject: $testWeb.$testTopic: SPAM
+To: "$this->{test_topic} IgnoreThis" <$this->{test_web}.IgnoreThis\@example.com>
+Subject: $this->{test_web}.$this->{test_topic}: SPAM
 From: ally\@masai.mara
 
 Message 2 text here
 HERE
     $this->sendTestMail($mail);
     $box->{topicPath} = 'subject';
-    my $c = cron();
+    my $c = $this->cron();
     $this->assert_null($c->{error});
 
-    my( $m, $t ) = TWiki::Func::readTopic($testWeb,$testTopic);
+    my( $m, $t ) = TWiki::Func::readTopic($this->{test_web},$this->{test_topic});
 
-    $this->assert($t =~ s/^\s*\* \*\*: Message 1 text here\s* -- $testUsersWeb\.MoleInnaHole -\s+\d+\s+\w+\s+\d+\s+-\s+\d+:\d+\n//s, $t);
-    $this->assert($t =~ s/^ *\* \*SPAM\*: Message 2 text here\s*-- $testUsersWeb\.AllyGator -\s+\d+\s+\w+\s+\d+\s+-\s+\d+:\d+$//s);
+    $this->assert($t =~ s/^\s*\* \*\*: Message 1 text here\s* -- $this->{users_web}\.MoleInnaHole -\s+\d+\s+\w+\s+\d+\s+-\s+\d+:\d+$//m, $t);
+    $this->assert($t =~ s/^ *\* \*SPAM\*: Message 2 text here\s*-- $this->{users_web}\.AllyGator -\s+\d+\s+\w+\s+\d+\s+-\s+\d+:\d+$//m);
 
     $this->assert_matches(qr/^\s*$/, $t);
     $this->assert_equals(0, scalar(@mails));
@@ -237,7 +208,7 @@ sub testOnNoTopicSpam {
     my $mail = <<HERE;
 Message-ID: message1
 Reply-To: sender1\@example.com
-To: $testWeb.$testTopic\@example.com
+To: $this->{test_web}.$this->{test_topic}\@example.com
 Subject: no valid topic
 From: ally\@masai.mara
 
@@ -246,14 +217,14 @@ HERE
     $this->sendTestMail($mail);
     $box->{topicPath} = 'subject';
     $box->{onNoTopic} = 'spam';
-    $box->{spambox} = $testWeb.'.DangleBerries';
-    $box->{defaultWeb} = $testWeb;
-    my $c = cron();
+    $box->{spambox} = $this->{test_web}.'.DangleBerries';
+    $box->{defaultWeb} = $this->{test_web};
+    my $c = $this->cron();
     $this->assert_null($c->{error});
 
-    my( $m, $t ) = TWiki::Func::readTopic($testWeb,'DangleBerries');
+    my( $m, $t ) = TWiki::Func::readTopic($this->{test_web},'DangleBerries');
 
-    $t =~ s/\* \*no valid topic\*: Message 1 text here\s*-- $testUsersWeb.AllyGator -\s+\d+\s+\w+\s+\d+\s+-\s+\d+:\d+//s;
+    $t =~ s/\* \*no valid topic\*: Message 1 text here\s*-- $this->{users_web}.AllyGator -\s+\d+\s+\w+\s+\d+\s+-\s+\d+:\d+//s;
     $this->assert_matches(qr/^\s*$/, $t);
     $this->assert_equals(0, scalar(@mails));
 }
@@ -263,8 +234,8 @@ sub testOnErrorReplyDelete {
     my $mail = <<HERE;
 Message-ID: message1
 Reply-To: sender1\@example.com
-To: $testWeb.$testTopic\@example.com
-Subject: $testWeb.NotHere
+To: $this->{test_web}.$this->{test_topic}\@example.com
+Subject: $this->{test_web}.NotHere
 From: notauser\@example.com
 
 Message 1 text here
@@ -272,7 +243,7 @@ HERE
     $this->sendTestMail($mail);
     $box->{topicPath} = 'to';
     $box->{onError} = 'reply delete';
-    my $c = cron();
+    my $c = $this->cron();
     $this->assert_equals(1, scalar(@mails));
 }
 
@@ -281,8 +252,8 @@ sub testOnSuccessReplyDelete {
     my $mail = <<HERE;
 Message-ID: message1
 Reply-To: sender1\@example.com
-To: $testWeb.$testTopic\@example.com
-Subject: $testWeb.NotHere
+To: $this->{test_web}.$this->{test_topic}\@example.com
+Subject: $this->{test_web}.NotHere
 From: mole\@hill
 
 Message 1 text here
@@ -291,7 +262,7 @@ HERE
     $box->{topicPath} = 'to';
     $box->{topicPath} = 'to';
     $box->{onSuccess} = 'reply delete';
-    my $c = cron();
+    my $c = $this->cron();
     $this->assert_null($c->{error});
     $this->assert_equals(1, scalar(@mails));
     $this->assert_matches(qr/Thank you for your successful/, $mails[0]);
@@ -324,7 +295,7 @@ Message-ID: <b293fda70602270033u2665f098l872ecbc52aa8d27e@gmail.com>
 Date: Mon, 27 Feb 2006 00:33:58 -0800
 From: "Ally Gator" <ally@masai.mara>
 To: "Dick Head" <dhead@twiki.com>
-Subject: $testWeb.AnotherTopic: attachment test
+Subject: $this->{test_web}.AnotherTopic: attachment test
 Cc: another.idiot@twiki.com>
 MIME-Version: 1.0
 Content-Type: multipart/mixed; 
@@ -388,22 +359,22 @@ YQp0RjZMQXNIcUFLQ0VPZmxQTllrYXlTVllMVkNGdzBMZnhIQytidz09Cj0rSi84Ci0tLS0tRU5E
 IFBHUCBQVUJMSUMgS0VZIEJMT0NLLS0tLS0K
 ------=_Part_21658_5579231.1141029238540--
 HERE
-    $mail =~ s/\$testWeb/$testWeb/g;
+    $mail =~ s/\$this->{test_web}/$this->{test_web}/g;
     $this->sendTestMail($mail);
     $box->{topicPath} = 'subject';
     $box->{onError} = 'reply';
     $box->{onSuccess} = 'reply';
-    my $c = cron();
+    my $c = $this->cron();
 
     $this->assert_equals(1, scalar(@mails));
     $this->assert_matches(qr/Thank you for your successful/, $mails[0]);
 
-    my( $m, $t ) = TWiki::Func::readTopic($testWeb,'AnotherTopic');
+    my( $m, $t ) = TWiki::Func::readTopic($this->{test_web},'AnotherTopic');
     my @a = $m->get('FILEATTACHMENT');
     $this->assert_equals(1, scalar(@a));
     $this->assert_str_equals("data.asc", $a[0]->{attachment});
 
-    $this->assert(-e "$TWiki::cfg{PubDir}/$testWeb/AnotherTopic/data.asc");
+    $this->assert(-e "$TWiki::cfg{PubDir}/$this->{test_web}/AnotherTopic/data.asc");
 }
 
 # templates
@@ -413,7 +384,7 @@ sub testUserTemplate {
     my $mail = <<HERE;
 Message-ID: message1
 Reply-To: sender1\@example.com
-To: $testWeb.TargetTopic\@example.com
+To: $this->{test_web}.TargetTopic\@example.com
 Subject: Object
 From: mole\@hill
 
@@ -422,26 +393,27 @@ HERE
     $this->sendTestMail($mail);
     $box->{topicPath} = 'to';
     $box->{onSuccess} = 'reply delete';
-    $twiki->{store}->saveTopic(
-        $twiki->{user}, $testSysWeb, 'MailInContribUserTemplate', <<'HERE');
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $TWiki::cfg{SystemWebName},
+        'MailInContribUserTemplate', <<'HERE');
 %TMPL:DEF{MAILIN:wierd}%
 Subject: %SUBJECT%
 Body: %TEXT%
 %TMPL:END%
 HERE
 
-    $twiki->{store}->saveTopic(
-        $twiki->{user}, $testWeb, 'TargetTopic', <<'HERE');
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $this->{test_web}, 'TargetTopic', <<'HERE');
 BEGIN
 <!--MAIL{template="wierd" where="above"}-->
 END
 HERE
-    my $c = cron();
+    my $c = $this->cron();
     $this->assert_null($c->{error});
     $this->assert_equals(1, scalar(@mails));
     $this->assert_matches(qr/Thank you for your successful/, $mails[0]);
 
-    my( $m, $t ) = TWiki::Func::readTopic($testWeb,'TargetTopic');
+    my( $m, $t ) = TWiki::Func::readTopic($this->{test_web},'TargetTopic');
 
     $this->assert_matches(qr/BEGIN\s*Subject: Object\s*Body: Message 1 text here\s*<!--MAIL{/s, $t);
 }
