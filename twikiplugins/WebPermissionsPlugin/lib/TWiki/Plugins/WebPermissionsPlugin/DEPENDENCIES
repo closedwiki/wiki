@@ -1,2 +1,3 @@
-TWiki::Plugins,>=1.1,perl,TWiki-4
-TWiki::Contrib::FuncUsersContrib,>=1.0,perl,Required, available from TWiki.org
+TWiki::Plugins,>=1.10,perl,TWiki-4
+TWiki::Contrib::FuncUsersContrib,>=0,perl,Optional, only used for TWiki-4.1.2 and earlier
+

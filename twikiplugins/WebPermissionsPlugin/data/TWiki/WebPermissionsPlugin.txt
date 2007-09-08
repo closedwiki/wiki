@@ -1,10 +1,6 @@
 ---+ Web Permissions Plugin
-
-This plugin provides a centralised interface to TWiki permissions that are applied on a web level, or topic level.
-
-Web permissions are presented as a matrix that has columns of webs and rows of users. For each web, you can control which users can view or change that web. All user webs, every registered user (except admin users), and every group (except admin groups) are shown in the matrix.
-
-To interactivly edit topic permissions, it adds an "Edit topic ACLs" option to the "More Actions" page.
+%SHORTDESCRIPTION%
+<a href="http://wikiring.com"><img src="%ATTACHURL%/logo.gif" style="float:right" /></a>
 
 <!--
    * Set C = <img src="%ATTACHURL%/CHANGE.gif" />
@@ -12,29 +8,35 @@ To interactivly edit topic permissions, it adds an "Edit topic ACLs" option to t
    * Set Y = <input checked="checked" type="checkbox" />
    * Set N = <input type="checkbox" />
 -->
+This plugin provides a centralised interface to TWiki permissions.
+
+Web permissions are presented as a matrix that has columns of webs and rows of users. For each web, you can control which users can view or change that web. All user webs, every registered user (except admin users), and every group (except admin groups) are shown in the matrix.
+
+To interactivly edit topic permissions, it adds an "Edit topic ACLs" option to the "More Actions" page.
+
 ---++++ Web Permissions
-<table class="twikiTable" border="0">
+<table class="twikiTable">
 <tr><th width="50%"> Viewing </th><th width="50%"> Editing </th></tr>
 <tr><td>
 VIEW = %V% CHANGE = %C%
-<table class="twikiTable" border="1">
+<table class="twikiTable">
 <tr><th></th><th>Albums</th><th>Singles</th><th>Reviews</th><th>Statistics</th></tr>
-<tr><th> <a href="">AnnieLennox</a> </th><td>%V%%C%</td><td>%V%%C%</td><td>%V%%C%</td><td>%V%</td></tr>
-<tr><th> <a href="">BillyBragg</a> </th><td>%V%<td>%V%</td><td>%V%</td><td></td></tr>
-<tr><th> <a href="">ColinTowns</a> </th><td>%V%%C%</td><td>%V%%C%</td><td>%V%%C%</td><td>%V%</td></tr>
-<tr><th> <a href="">DavidSoul</a> </th><td></td><td>%V%%C%</td><td></td><td>%V%</td></tr>
-<tr><th> <a href="">EaglesGroup</a> </th><td>%C%<td></td><td>%V%%C%</td><td>%V%</td></tr>
+<tr><th>AnnieLennox<td>%V%%C%</td><td>%V%%C%</td><td>%V%%C%</td><td>%V%</td></tr>
+<tr><th>BillyBragg </th><td>%V%<td>%V%</td><td>%V%</td><td></td></tr>
+<tr><th>ColinTowns </th><td>%V%%C%</td><td>%V%%C%</td><td>%V%%C%</td><td>%V%</td></tr>
+<tr><th>DavidSoul </th><td></td><td>%V%%C%</td><td></td><td>%V%</td></tr>
+<tr><th>EaglesGroup </th><td>%C%<td></td><td>%V%%C%</td><td>%V%</td></tr>
 </table>
 <button>Edit</button>
 </td><td>
 VIEW = %V% CHANGE = %C%
 <table class="twikiTable" border="1">
 <tr><th></th><th>Albums</th><th>Singles</th><th>Reviews</th><th>Statistics</th></tr>
-<tr><th> <a href="">AnnieLennox</a> </th><td>%V%%Y% %C%%Y%</td><td>%V%%Y%%C%%Y%</td><td>%V%%Y%%C%%Y%</td><td>%V%%Y%%C%%N%</td></tr>
-<tr><th> <a href="">BillyBragg</a> </th><td>%V%%Y%%C%%N%<td>%V%%Y%%C%%N%</td><td>%V%%Y%%C%%N%</td><td>%V%%N%%C%%N%</td></tr>
-<tr><th> <a href="">ColinTowns</a> </th><td>%V%%Y%%C%%Y%</td><td>%V%%Y%%C%%Y%</td><td>%V%%Y%%C%%Y%</td><td>%V%%Y%%C%%N%</td></tr>
-<tr><th> <a href="">DavidSoul</a> </th><td>%V%%N%%C%%N%</td><td>%V%%Y%%C%%Y%</td><td>%V%%N%%C%%N%</td><td>%V%%Y%%C%%N%</td></tr>
-<tr><th> <a href="">EaglesGroup</a> </th><td>%V%%N%%C%%Y%<td>%V%%N%%C%%N%</td><td>%V%%Y%%C%%Y%</td><td>%V%%Y%%C%%N%</td></tr>
+<tr><th> AnnieLennox </th><td>%V%%Y% %C%%Y%</td><td>%V%%Y%%C%%Y%</td><td>%V%%Y%%C%%Y%</td><td>%V%%Y%%C%%N%</td></tr>
+<tr><th> BillyBragg </th><td>%V%%Y%%C%%N%<td>%V%%Y%%C%%N%</td><td>%V%%Y%%C%%N%</td><td>%V%%N%%C%%N%</td></tr>
+<tr><th> ColinTowns </th><td>%V%%Y%%C%%Y%</td><td>%V%%Y%%C%%Y%</td><td>%V%%Y%%C%%Y%</td><td>%V%%Y%%C%%N%</td></tr>
+<tr><th> DavidSoul </th><td>%V%%N%%C%%N%</td><td>%V%%Y%%C%%Y%</td><td>%V%%N%%C%%N%</td><td>%V%%Y%%C%%N%</td></tr>
+<tr><th> EaglesGroup </th><td>%V%%N%%C%%Y%<td>%V%%N%%C%%N%</td><td>%V%%Y%%C%%Y%</td><td>%V%%Y%%C%%N%</td></tr>
 </table>
 <button>Save</button> <button>Cancel</button>
 </td></tr></table>
@@ -126,10 +128,10 @@ Select the webs you want to change permissions for from the list below. Ctrl+cli
 <!-- TO HERE -->
 
 ---++ Plugin Settings
-
+<!--
    * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = View and edit web permissions
-
+-->
 By default, the plugin only supports VIEW and CHANGE permissions on webs. You can change the set of access modes handled by the plugin by defining a configuration variable (in !LocalSite.cfg) to be a comma-separated list of access modes. For example,
 <verbatim>
 $TWiki::cfg{Plugins}{WebPermissionsPlugin}{modes} = 'VIEW,CHANGE,RENAME';
@@ -152,12 +154,19 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.CrawfordCurrie http://c-dot.co.uk & TWiki:Main.SvenDowideit http://www.WikiRing.com |
+Another great TWiki extension from the <a style="text-decoration:none" href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiringlogo20x20.png" alt="" /> *WikiRing* </a> - working together to improve your wiki experience!
+
+Many thanks to the following sponsors for supporting this work:
+   * This plugin was developed on behalf of <a href="http://www.evolvedmedianetwork.com">Evolved Media Network</a>
+   * Further work supported by [[http://www.spanlink.com/][Spanlink Communications]]
+
+|  Plugin Author: | TWiki:Main.CrawfordCurrie & TWiki:Main.SvenDowideit, http://wikiring.com |
 |  Copyright: | &copy; 2006, Evolved Media Network, Spanlink Communications and WikiRing |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
-| July 2006 | add Topic ACLs userinterface via More topic actions - SvenDowideit@WikiRing.com |
+| 8 Sep 2007 | Updated for TWiki-4.2.0 |
+| July 2006 | add Topic ACLs user interface via More topic actions - SvenDowideit@WikiRing.com |
 |  10216 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1766'>Item2291</a> Added repeatheads and webs parameters |
 |  9048 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1766'>Item1766</a> corrected problems with passing incorrect parameters to setACLs and not interpreting values from the form correctly. |
 |  8877 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1701'>Item1701</a>  first release |
@@ -167,11 +176,7 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-This plugin was developed on behalf of <a href="http://www.evolvedmedianetwork.com">Evolved Media Network</a>
-
 __Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
--- %TWIKIWEB%.TWikiContributor - 01 Feb 2006
-
-%META:FILEATTACHMENT{name="VIEW.gif" date="0" size="577" version="1"}%
-%META:FILEATTACHMENT{name="CHANGE.gif" date="0" size="539" version=""}%
+%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="" version="1"}%
+%META:FILEATTACHMENT{name="logo.gif" attr="h" comment="" version="1"}%
