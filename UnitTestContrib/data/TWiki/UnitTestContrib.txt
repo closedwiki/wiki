@@ -3,6 +3,7 @@
 One line description, required for extensions repository catalog.
    * Set SHORTDESCRIPTION = TWiki Unit-Test Framework
 -->
+<a href="http://wikiring.com"><img src="%ATTACHURL%/logo.gif" style="float:right" /></a>
 %SHORTDESCRIPTION%
 
 %TOC%
@@ -39,12 +40,14 @@ One test file, =SemiAutomaticTestCaseTests.pm=, reads the semi-automatic tests f
 
 ---++ Contrib Info
 
+Another great TWiki extension from the <a style="text-decoration:none" href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiringlogo20x20.png" alt="" /> *WikiRing* </a> - working together to improve your wiki experience!
+
 |  Contrib Author(s): | Crawford Currie http://c-dot.co.uk and test authors |
 |  Copyright: | &copy; 2007 TWiki Contributors |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Contrib Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  | Added logging |
+|  5 Sep 2007 | Added logging |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Contrib Home: | http://twiki.org/cgi-bin/view/Plugins/UnitTestContrib |
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/UnitTestContribDev |
@@ -53,3 +56,6 @@ One test file, =SemiAutomaticTestCaseTests.pm=, reads the semi-automatic tests f
 __Related Topics:__ %TWIKIWEB%.TWikiContribs, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the feedback topic on twiki.org instead. -->
+
+%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="" version="1"}%
+%META:FILEATTACHMENT{name="logo.gif" attr="h" comment="" version="1"}%

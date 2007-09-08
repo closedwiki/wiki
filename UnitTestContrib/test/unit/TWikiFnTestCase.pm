@@ -68,7 +68,7 @@ sub set_up {
                         $this->{test_user_email});
     $this->{twiki}->{store}->saveTopic(
         $this->{twiki}->{user}, $this->{test_web},
-        $this->{test_topic}, "BLEEGLE");
+        $this->{test_topic}, "BLEEGLE\n");
 }
 
 sub tear_down {

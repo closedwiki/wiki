@@ -63,6 +63,8 @@ sub set_up {
     $meta->putKeyed('FIELD',
                     {name=>"boolean", title=>"Boolean", value=>"1"});
 
+    $meta->{_text} = "Green ideas sleep furiously";
+
     $this->{meta} = $meta;
 }
 
@@ -93,6 +95,7 @@ sub test_atoms {
     $this->check("-1", -1);
     $this->check("-1.1965432e-3", "-1.1965432e-3");
     $this->check("number", 99);
+    $this->check("text", "Green ideas sleep furiously");
     $this->check("string", 'String');
     $this->check("boolean", 1);
 }
@@ -310,6 +313,19 @@ sub test_hoistFormField {
     require TWiki::Query::HoistREs;
     my @filter = TWiki::Query::HoistREs::hoist( $query ) || 'undef';
     $this->assert_str_equals('^%META:FIELD{name="number".*\bvalue="99"',
+                             join(';', @filter));
+    my $meta = $this->{meta};
+    my $val = $query->evaluate( tom=>$meta, data=>$meta );
+}
+
+sub test_hoistText {
+    my $this = shift;
+    my $s = "text ~ '*Green*'";
+    my $queryParser = new TWiki::Query::Parser();
+    my $query = $queryParser->parse($s);
+    require TWiki::Query::HoistREs;
+    my @filter = TWiki::Query::HoistREs::hoist( $query ) || 'undef';
+    $this->assert_str_equals('.*Green.*',
                              join(';', @filter));
     my $meta = $this->{meta};
     my $val = $query->evaluate( tom=>$meta, data=>$meta );

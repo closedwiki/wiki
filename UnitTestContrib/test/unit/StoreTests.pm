@@ -156,6 +156,7 @@ sub test_CreateSimpleCompoundTopic {
 	
 	my $text = "This is some test text\n   * some list\n   * content\n :) :)";
 	my $meta = new TWiki::Meta($this->{twiki}, $web, $topic);
+    $meta->{_text} = $text;
 	$this->{twiki}->{store}->saveTopic( $this->{test_user_login}, $web, $topic, $text, $meta );
 	$this->assert( $this->{twiki}->{store}->topicExists($web, $topic) );
 	
