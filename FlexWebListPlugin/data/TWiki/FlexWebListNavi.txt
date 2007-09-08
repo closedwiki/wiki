@@ -5,7 +5,7 @@ The fragment below can be used in a sidebar navigation to establish a "twisted" 
 Use it by adding =%<nop>INCLUDE{"%WEB%.%TOPIC%"}%= to your WebLeftBar or TWikiWebSideBar.
 
 If you want to hide the web navigation from TWikiGuests then uncomment the following:
-   * #Set ALLOWTOPICVIEW = %MAINWEB%.TWikiGuest
+   * #Set ALLOWTOPICVIEW = %USERSWEB%.TWikiGuest
 
 <verbatim>
 %STARTINCLUDE%<nop><h2>Webs
@@ -19,7 +19,7 @@ If you want to hide the web navigation from TWikiGuests then uncomment the follo
 </h2>
 %TWISTYTOGGLE{id="subwebs"}%
 %~~ FLEXWEBLIST{
-~~~   webs="%MAINWEB%,User,People,public,%TWIKIWEB%" 
+~~~   webs="%USERSWEB%,User,People,public,%SYSTEMWEB%" 
 ~~~   exclude="TestCases|Trash.*" 
 ~~~   header="<ul>"
 ~~~   format="<li

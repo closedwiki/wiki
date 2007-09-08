@@ -7,13 +7,13 @@ This is useful for a TWiki site that wants to implement a glossar/dictionary web
 
 	* Each web would need to create their own topic for a common term 
 	* Link to or INCLUDE the topic from where it is defined
-	* Authors need to remember to put the Web name in front of the topic name, such as [[%TWIKIWEB%.WikiWord]]
+	* Authors need to remember to put the Web name in front of the topic name, such as [[%SYSTEMWEB%.WikiWord]]
 
 Without this kind of plugin, it's likely that common terms used within an organization will be defined in multiple webs or the common terms will be unlinked wiki words (as if they didn't exist).
 
 ---+++ Syntax Rules
 
-No new rules are introduced.  However, new automatic %TWIKIWEB%.WikiWord linking will occur.  
+No new rules are introduced.  However, new automatic %SYSTEMWEB%.WikiWord linking will occur.  
 
 If a topic is not found in the current web, this plugin will look through the webs listed in the LOOKELSEWHEREWEBS variable.  If the topic is found (as it looks through the webs in their listed order), it will create one or more links, depending on the number of topics found.
 
@@ -21,11 +21,11 @@ If a topic is not found in the current web, this plugin will look through the we
 __New functionality, single hit__
 
 | *Test case*         | *Input*             | *Output<br/>(if installed)* | *Expected*       |
-| Found here          | =<nop>WebHome=        | WebHome        | %TWIKIWEB%.WebHome     |
-| Found singular here | =<nop>WebHomes=       | WebHomes       | [[%TWIKIWEB%.WebHome][WebHomes]] |
-| Found elsewhere     | =<nop>TWikiAdminGroup= | TWikiAdminGroup | [[%MAINWEB%.TWikiAdminGroup][TWikiAdminGroup]] |
-| Found singular  elsewhere     | =<nop>TWikiAdminGroups= | TWikiAdminGroups | [[%MAINWEB%.TWikiAdminGroup][TWikiAdminGroups]] | 
-| Found elsewhere, spaced wiki word | =[<nop/>[TWiki admin group]]= | [[TWiki admin group]] | [[%MAINWEB%.TWikiAdminGroup][TWiki admin group]] |
+| Found here          | =<nop>WebHome=        | WebHome        | %SYSTEMWEB%.WebHome     |
+| Found singular here | =<nop>WebHomes=       | WebHomes       | [[%SYSTEMWEB%.WebHome][WebHomes]] |
+| Found elsewhere     | =<nop>TWikiAdminGroup= | TWikiAdminGroup | [[%USERSWEB%.TWikiAdminGroup][TWikiAdminGroup]] |
+| Found singular  elsewhere     | =<nop>TWikiAdminGroups= | TWikiAdminGroups | [[%USERSWEB%.TWikiAdminGroup][TWikiAdminGroups]] | 
+| Found elsewhere, spaced wiki word | =[<nop/>[TWiki admin group]]= | [[TWiki admin group]] | [[%USERSWEB%.TWikiAdminGroup][TWiki admin group]] |
 | Found elsewhere, abbrev | =<nop/>ACRONYM= | ACRONYM | (If <nop/>ACRONYM is a topic defined in one of the LOOKELSEWHERE webs, a link to it should show up) |
 | Escaped with &lt;noautolink> | =&lt;noautolink> <nop>TWikiAdminGroup &lt;/noautolink>= | <noautolink> TWikiAdminGroup </noautolink> | <nop>TWikiAdminGroup  (Note: <nop>%TOPIC% doesn't support =&lt;noautolink>= in Cairo; <nop>TWikiAdminGroup will be found anyway if you're in this codebase) |
 
@@ -33,15 +33,15 @@ __New functionality, multiple hits__
 
 If a word is found in two or more LOOKELSEWHERE webs, a special syntax is used:
 
-	* Standard <nop/>WikiWord: <nop/>TWikiPreferences<sup>([[%TWIKIWEB%.TWikiPreferences][%TWIKIWEB%]],[[%MAINWEB%.TWikiPreferences][%MAINWEB%]])</sup> 
-	* [<nop/>[Spaced wiki word]]: <em>TWiki preferences</em><sup>([[%TWIKIWEB%.TWikiPreferences][%TWIKIWEB%]],[[%MAINWEB%.TWikiPreferences][%MAINWEB%]])</sup> 
+	* Standard <nop/>WikiWord: <nop/>TWikiPreferences<sup>([[%SYSTEMWEB%.TWikiPreferences][%SYSTEMWEB%]],[[%USERSWEB%.TWikiPreferences][%USERSWEB%]])</sup> 
+	* [<nop/>[Spaced wiki word]]: <em>TWiki preferences</em><sup>([[%SYSTEMWEB%.TWikiPreferences][%SYSTEMWEB%]],[[%USERSWEB%.TWikiPreferences][%USERSWEB%]])</sup> 
 
 Create this table in [[Sandbox.FindElsewherePluginTest]] to try it out:
 
 <verbatim>
 | *Test case* | *Input* | *Output<br/>(if installed)* | *Expected* |
-| Found elsewhere | <nop>TWikiPreferences | TWikiPreferences | <nop/>TWikiPreferences<sup>([[%TWIKIWEB%.TWikiPreferences][%TWIKIWEB%]],[[%MAINWEB%.TWikiPreferences][%MAINWEB%]])</sup> |
-| Found elsewhere, spaced wiki word | [<nop/>[TWiki preferences]] | [[TWiki preferences]] | <em>TWiki preferences</em><sup>([[%TWIKIWEB%.TWikiPreferences][%TWIKIWEB%]],[[%MAINWEB%.TWikiPreferences][%MAINWEB%]])</sup> |
+| Found elsewhere | <nop>TWikiPreferences | TWikiPreferences | <nop/>TWikiPreferences<sup>([[%SYSTEMWEB%.TWikiPreferences][%SYSTEMWEB%]],[[%USERSWEB%.TWikiPreferences][%USERSWEB%]])</sup> |
+| Found elsewhere, spaced wiki word | [<nop/>[TWiki preferences]] | [[TWiki preferences]] | <em>TWiki preferences</em><sup>([[%SYSTEMWEB%.TWikiPreferences][%SYSTEMWEB%]],[[%USERSWEB%.TWikiPreferences][%USERSWEB%]])</sup> |
 </verbatim>
 
 __Internationalization__
@@ -52,14 +52,14 @@ __Don't break other types of links__
 
 | *Input*								 | *Output*				  |
 | <nop>%TOPIC%#TopicAnchor		  | %TOPIC%#NewFunctionalityTest  |
-| <nop>%TWIKIWEB%.WebHome			| %TWIKIWEB%.WebHome	 |
+| <nop>%SYSTEMWEB%.WebHome			| %SYSTEMWEB%.WebHome	 |
 | <nop>WebHome						  | WebHome					|
-| [<nop>[%TWIKIWEB%.WebHome]]	  | [[%TWIKIWEB%.WebHome]]	  |
-| [<nop>[%TWIKIWEB%.WikiWord]]	 | [[%TWIKIWEB%.WikiWord]]	 |
-| [<nop>[%TWIKIWEB%.WikiWords]]	| [[%TWIKIWEB%.WikiWords]]	|
-| <nop>%TWIKIWEB%.WikiWord		  | %TWIKIWEB%.WikiWord	|
-| <nop>%TWIKIWEB%.WikiWords		 | %TWIKIWEB%.WikiWords  |
-| [<nop/>[%MAINWEB%.TWikiAdminGroup][This is a link to <nop/>TWikiAdminGroup in <nop/>%MAINWEB%]] | [[%MAINWEB%.TWikiAdminGroup][This is a link to TWikiAdminGroup in %MAINWEB%]] |
+| [<nop>[%SYSTEMWEB%.WebHome]]	  | [[%SYSTEMWEB%.WebHome]]	  |
+| [<nop>[%SYSTEMWEB%.WikiWord]]	 | [[%SYSTEMWEB%.WikiWord]]	 |
+| [<nop>[%SYSTEMWEB%.WikiWords]]	| [[%SYSTEMWEB%.WikiWords]]	|
+| <nop>%SYSTEMWEB%.WikiWord		  | %SYSTEMWEB%.WikiWord	|
+| <nop>%SYSTEMWEB%.WikiWords		 | %SYSTEMWEB%.WikiWords  |
+| [<nop/>[%USERSWEB%.TWikiAdminGroup][This is a link to <nop/>TWikiAdminGroup in <nop/>%USERSWEB%]] | [[%USERSWEB%.TWikiAdminGroup][This is a link to TWikiAdminGroup in %USERSWEB%]] |
 
 ---+++ <nop>%TOPIC% Hints
 
@@ -69,7 +69,7 @@ __Don't break other types of links__
 
 ---+++ <nop>%TOPIC% Settings
 
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+	* One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
 		* Set SHORTDESCRIPTION = Create links by looking first in the current web, then in a predefined list of other webs
 
 	* Disable look elsewhere - sitewide (here), per web (in <nop/>WebPreferences) or pr. topic
@@ -110,11 +110,11 @@ __Don't break other types of links__
 |  Other Dependencies: | none |
 |  Perl Version: | 5.0 |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 99%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC% 99% |
+|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle 99%, %SYSTEMWEB%.FormattedSearch 99%, %TOPIC% 99% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, DefaultPlugin
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins, DefaultPlugin
 
 -- TWiki:Main.MikeBarton - 1 Feb 2002

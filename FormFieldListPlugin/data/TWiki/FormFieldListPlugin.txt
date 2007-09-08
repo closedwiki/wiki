@@ -2,7 +2,7 @@
 ---+ <nop>%TOPIC%
 
 FORMFIELDLIST{"field names"} renders a list of fields in the form attached to some topic.
-It is an extended version of the predefined variable [[%TWIKIWEB%.TWikiDocumentation#FORMFIELD][FORMFIELD{"fieldname"}]]
+It is an extended version of the predefined variable [[%SYSTEMWEB%.TWikiDocumentation#FORMFIELD][FORMFIELD{"fieldname"}]]
 to render more than one form field.
 
 
@@ -11,7 +11,7 @@ to render more than one form field.
 	* =%<nop>FORMFIELDLIST{"field names"}%=
 	* Supported parameters:
 	 | *Parameter:* | *Description:* | *Default:* |
-	 | ="field names"= | A list of [[%TWIKIWEB%.TWikiForms][TWiki form]] field names separated by comma. | required |
+	 | ="field names"= | A list of [[%SYSTEMWEB%.TWikiForms][TWiki form]] field names separated by comma. | required |
 	 | =topic="..."= | Topic where form data is located. May be of the form =Web.<nop>TopicName=. | Current topic |
 	 | =format="..."= | Format string. =$value= expands to the field value. =$title= and =$name= expand to the field title as specified in the TWiki form and the field title without spaces. | ="$title=$value "= |
 	 | =default="..."= | Text shown when no value is defined for the field. | =""= |
@@ -30,8 +30,8 @@ to render more than one form field.
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Renders a list of fields in the form attached to some topic (extending the predefined variable [[%TWIKIWEB%.TWikiDocumentation#FORMFIELD][FORMFIELD]])
+	* One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = Renders a list of fields in the form attached to some topic (extending the predefined variable [[%SYSTEMWEB%.TWikiDocumentation#FORMFIELD][FORMFIELD]])
 
 	* Debug plugin: (See output in =data/debug.txt=)
 		* Set DEBUG = 0
@@ -63,11 +63,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topics:__ [[%TWIKIWEB%.TWikiDocumentation#FORMFIELD][Predefined variable FORMFIELD]] %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+__Related Topics:__ [[%SYSTEMWEB%.TWikiDocumentation#FORMFIELD][Predefined variable FORMFIELD]] %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
 -- TWiki:Main/BerndRaichle - 01 Oct 2004
 
