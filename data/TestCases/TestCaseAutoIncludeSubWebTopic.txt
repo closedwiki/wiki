@@ -7,7 +7,6 @@ Description: include a topic from a subweb
 
 <!-- expected -->
 SUCCESS
-<p />
 <!-- /expected -->
 
 ----

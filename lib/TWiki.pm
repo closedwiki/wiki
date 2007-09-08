@@ -3156,8 +3156,12 @@ sub INCLUDE {
     }
 
     ( $meta, $text ) =
-      $this->{store}->readTopic( undef, $includedWeb, $includedTopic,
-                                 $rev );
+      $this->{store}->readTopic( undef, $includedWeb, $includedTopic, $rev );
+
+    # Simplify leading, and remove trailing, newlines. If we don't remove
+    # trailing, it becomes impossible to %INCLUDE a topic into a table.
+    $text =~ s/^[\r\n]+/\n/;
+    $text =~ s/[\r\n]+$//;
 
     unless( $this->security->checkAccessPermission(
         'VIEW', $this->{user}, $text, $meta, $includedTopic, $includedWeb )) {
@@ -3233,8 +3237,6 @@ sub INCLUDE {
     %{$this->{SESSION_TAGS}} = %saveTags;
 
     $this->{prefs}->restore( $prefsMark );
-    $text =~ s/^[\r\n]+/\n/;
-    $text =~ s/[\r\n]+$/\n/;
 
     return $text;
 }
