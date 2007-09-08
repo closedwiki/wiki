@@ -174,7 +174,7 @@ sub afterSaveHandler {
 
     my $notifyTopic = TWiki::Func::readTopicText( $web, "WebImmediateNotify" );
     my $mainWeb = TWiki::Func::getMainWebname();
-    while ( $notifyTopic =~ /(\t+|(   )+)\* (?:\%MAINWEB\%|$mainWeb)\.([^\r\n]+)/go )
+    while ( $notifyTopic =~ /(\t+|(   )+)\* (?:\%USERSWEB\%|$mainWeb)\.([^\r\n]+)/go )
     {
         push @names, $3 if $3;
     }
