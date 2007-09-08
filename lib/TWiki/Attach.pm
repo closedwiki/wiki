@@ -311,10 +311,11 @@ sub getAttachmentLink {
     $fileLink =~ s/\$name/$fileURL/;
     $fileLink =~ s/\$name/$attName/;
 
-    $fileLink =~ s/\$comment/$fileComment/g;
-    $fileLink =~ s/\$size/$imgSize/g;
+    # Expand \t and \n early (only in the format, not in the comment) - Bugs:Item4581
     $fileLink =~ s/\\t/\t/go;
     $fileLink =~ s/\\n/\n/go;
+    $fileLink =~ s/\$comment/$fileComment/g;
+    $fileLink =~ s/\$size/$imgSize/g;
     $fileLink =~ s/([^\n])$/$1\n/;
 
     return $fileLink;
