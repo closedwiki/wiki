@@ -141,6 +141,11 @@ sub initPlugin {
         die "SearchSummaryPlugin could not load the TWiki::Render module. The error message was $@";
     }
 
+    eval "use TWiki::Search";
+    if ($@) {
+        die "SearchSummaryPlugin could not load the TWiki::Search module. The error message was $@";
+    }
+
     # Monkey-patch the core
 
     if ( !defined(&TWiki::Render::makeTopicSummary)

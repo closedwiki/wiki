@@ -28,13 +28,14 @@ This plugin uses a technique called [[http://en.wikipedia.org/wiki/Monkey_patch]
 
 ---++ Plugin Info
 
-Another great plugin from the <a href="http://wikiring.com"><b>WikiRing</b> <img src="%ATTACHURLPATH%/wikiringlogo20x20.png" /> partnership</a>!
+Another great TWiki extension from the <a style="text-decoration:none" href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiringlogo20x20.png" alt="" /> *WikiRing* </a> - working together to improve your wiki experience!
 
 |  Plugin Author(s): | Crawford Currie http://c-dot.co.uk for Escape Studios http://www.escapestudios.co.uk/ |
 |  Plugin Version: | %$VERSION% |
 |  Copyright: | &copy; 2007 Escape Studios |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  8 Sep 2007 | Bugs:Item4211 fixed for 4.2.0 |
 |  11 Jun 2007 | Bugs:Item4237 fixed a couple of corner-cases |
 |  8 Jun 2007 | Minor bugfixes |
 |  6 Jun 2007 | First version |
