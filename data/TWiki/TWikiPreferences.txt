@@ -81,13 +81,6 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
       * Set LINKTOOLTIPINFO = off
       * #Set LINKTOOLTIPINFO = $username - $date - $rev: $summary
 
-   * Some skins have two editors available; the default editor, and a second editor which is usually a WYSIWYG editor (the second editor is used by hitting the %MAKETEXT{"WYSIWYG"}% link in =pattern= or =classic= skins). If COMPOSER is not set, the second editor will work the same as the _default_ editor. If the !WysiwygPlugin is installed and it is set to 'kupu' (the default), then the *Kupu* WYSIWYG editor will be enabled. You can change the setting to use any editor that is enabled by setting the =cover= parameter on the edit URL.
-      * Set COMPOSER = kupu
-      * Enable content checks before editing
-      * Set WYSWIYGPLUGIN_WYSIWYGSKIN = kupu
-      * Disable WYSIWYG on pages that contain complex TML. On pages that have complex TML, WYSIWYG will fall back to the default text editor.
-      * Set WYSIWYG_EXCLUDE = calls
-
    * Horizontal size of text edit box: (can be overwritten by user preferences)
       * Set EDITBOXWIDTH = 70
 
