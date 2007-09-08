@@ -74,8 +74,15 @@ sub new {
     $this->{debug} = $debug;
 
     # Find out when we last processed mail
-    $this->{lastMailIn} = $session->{store}->readMetaData(
-        '', 'mailincron' ) || 0;
+    my $workdir = TWiki::Func::getWorkArea('MailInContrib');
+    if (-e "$workdir/timestamp") {
+        open(F, "<$workdir/timestamp") || die $!;
+        $this->{lastMailIn} = <F>;
+        chomp($this->{lastMailIn});
+        close(F);
+    } else {
+        $this->{lastMailIn} = 0;
+    }
 
     return $this;
 }
@@ -93,9 +100,20 @@ sub wrapUp {
     my $this = shift;
 
     # re-stamp
+    my $workdir = TWiki::Func::getWorkArea('MailInContrib');
+    open(F, ">$workdir/timestamp") || die $!;
+    print F time(),"\n";
+    close(F);
+}
 
-    $this->{session}->{store}->saveMetaData
-      ('', 'mailincron', time() );
+sub _getUser {
+    my $u = shift;
+
+    if ($TWiki::Plugins::SESSION->{users}->can('getCanonicalUserID')) {
+        return $TWiki::Plugins::SESSION->{users}->getCanonicalUserID($u);
+    } else {
+        return $TWiki::Plugins::SESSION->{users}->findUser( $u );
+    }
 }
 
 =pod
@@ -176,8 +194,7 @@ sub processInbox {
         $to =~ s/^.*<(.*)>.*$/$1/;
 
         unless( $user ) {
-            unless( $box->{user} &&
-                      ($user = $TWiki::Plugins::SESSION->findUser( $box->{user} ))) {
+            unless( $box->{user} && ($user = _getUser( $box->{user} ))) {
                 $this->_onError(
                     $box, $mail, 'Could not determine submitters WikiName from'.
                       "\nFrom: $from\nand there is no valid default username",
@@ -186,7 +203,7 @@ sub processInbox {
             }
         }
 
-        print STDERR "User ",$user->stringify(),"\n" if( $user && $this->{debug} );
+        print STDERR "User ",($user||'undefined'),"\n" if( $this->{debug} );
 
         if( $box->{topicPath} =~ /\bto\b/ &&
               $to =~ /^(?:($TWiki::regex{webNameRegex})\.)($TWiki::regex{wikiWordRegex})@/i) {
@@ -336,6 +353,11 @@ sub _saveTopic {
         }
         $opts->{template} ||= 'normal';
         $opts->{where} ||= 'bottom';
+        # the $insert variable is initialized from
+        # %TWIKIWEB%/MailInContribTemplate and the recommended way to change
+        # the look and feel of the output pages is to copy
+        # MailInContribTemplate as MailInContribUserTemplate and edit to
+        # taste. - VickiBrown - 07 Sep 2007
         my $insert = TWiki::Func::expandTemplate( 'MAILIN:'.$opts->{template} );
         $insert ||= "   * *%SUBJECT%*: %TEXT% _%WIKIUSERNAME% @ %SERVERTIME%_\n";
         $insert =~ s/%SUBJECT%/$subject/g;
