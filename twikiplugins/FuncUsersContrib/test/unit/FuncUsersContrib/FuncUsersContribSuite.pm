@@ -179,7 +179,7 @@ sub test_lookupUser {
     $u = TWiki::Func::lookupUser(wikiname=>'UserB');
     $this->assert_str_equals('userb/TemporaryFuncUsersTestsUsersWeb.UserB',
                              $u->stringify());
-    $u = TWiki::Func::lookupUser(wikiname=>'%MAINWEB%.UserB');
+    $u = TWiki::Func::lookupUser(wikiname=>'%USERSWEB%.UserB');
     $this->assert_str_equals('userb/TemporaryFuncUsersTestsUsersWeb.UserB',
                              $u->stringify());
     $u = TWiki::Func::lookupUser(wikiname=>$testUsersWeb.'.UserB');
