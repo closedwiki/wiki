@@ -80,3 +80,4 @@ Many thanks to the following sponsors for supporting this work:
 __Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
 %META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="" version="1"}%
+%META:FILEATTACHMENT{name="logo.png" attr="h" comment="" version="1"}%
