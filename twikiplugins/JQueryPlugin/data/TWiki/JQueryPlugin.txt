@@ -164,7 +164,7 @@ nisi. Mauris est urna, fermentum vel, luctus sed, luctus eu, elit. In nulla.
      | *File:* | *Description:* |
 %$MANIFEST%
    * add the following line to the =twiki.tmpl= file
-     <verbatim><script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/JQueryContrib/jquery.js"></script></verbatim>
+     <verbatim><script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/JQueryContrib/jquery.js"></script></verbatim>
 
 ---++ Contrib Info
 |  Contrib Author(s): | TWiki:Main/MichaelDaum - http://wikiring.de |
