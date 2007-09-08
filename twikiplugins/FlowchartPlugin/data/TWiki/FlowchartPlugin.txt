@@ -2,7 +2,7 @@
 
 You can create flowcharts from textual content on the topic.
 <div align="right">
-  <small>[[TWiki:Plugins.FlowchartPluginPtbr][Este tópico em Português do Brasil]]</small>
+  <small>[[TWiki:Plugins.FlowchartPluginPtbr][Este tï¿½pico em Portuguï¿½s do Brasil]]</small>
 </div>
 %TOC%
 
@@ -69,7 +69,7 @@ To personalize a flowchart, is enough to add parametros to the variable: =%<nop>
 
 ---+++ Tips
 
-%I% The web bowsers normally make cache of the web page and of the elements contained in that (images, animações, sounds...). It is possible that after to save the modification in the definition of the flowchart you do not see the effect of the modification in the image. In this case click "Reload" in your web browser.
+%I% The web bowsers normally make cache of the web page and of the elements contained in that (images, animaï¿½ï¿½es, sounds...). It is possible that after to save the modification in the definition of the flowchart you do not see the effect of the modification in the image. In this case click "Reload" in your web browser.
 
 %I% Some flowcharts can become so complex and will be difficult to follow its lines. In this case, increase the area of itens, giving a bigger space between them. _eg:_ =%<nop>FLOWCHART{ area-w="220" area-h="100" }%=
 
@@ -89,7 +89,7 @@ The files (SVG, PNG and Map) are generated when the topic contend =%<nop>FLOWCHA
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+	* One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
 	* Set SHORTDESCRIPTION = Bilds a flowchart from information on the topic
 
 	* Standard width for the flowchart's itens
@@ -145,11 +145,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Other Dependencies: | [[http://www.imagemagick.org][ImageMagick]] |
 |  Perl Version: | 5.005 |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 <!-- FIM Plugin Info -->
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
