@@ -585,7 +585,7 @@ sub _matchField_state {
     if ( $val eq 'late' ) {
         return ( $this->secsToGo() < 0 && $this->{state} ne 'closed' ) ? 1 : 0;
     } else {
-        return ( $this->{state} eq $val );
+        return ( eval "\$this->{state} =~ /^$val\$/" );
     }
 }
 
@@ -747,6 +747,7 @@ sub _formatField_edit {
         $this->{web}, $this->{topic}, 'edit',
         skin => $skin,
         atp_action => $this->getAnchor(),
+        nowysiwyg => 1, # SMELL: could do better!
         t => time());
     my $attrs = { href => $url };
     if ( $newWindow ) {

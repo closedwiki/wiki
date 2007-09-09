@@ -61,7 +61,7 @@ sub commonTagsHandler {
     return unless ( $_[0] =~ m/%ACTION.*{.*}%/o );
 
     if ( !$initialised ) {
-        return unless _lazyInit();
+        return unless _lazyInit($web, $topic);
     }
 
     TWiki::Func::addToHEAD('ACTIONTRACKERPLUGIN_CSS', <<HERE);
@@ -168,7 +168,7 @@ sub beforeEditHandler {
     return unless ( TWiki::Func::getSkin() =~ /\baction\b/ );
 
     if ( !$initialised ) {
-        return unless _lazyInit();
+        return unless _lazyInit($web, $topic);
     }
     my $query = TWiki::Func::getCgiQuery();
 
@@ -261,6 +261,7 @@ sub beforeEditHandler {
 
     $tmpl =~ s/%TEXT%/$text/go;
     $tmpl =~ s/%HIDDENFIELDS%/$fields/go;
+
     $_[0] = $tmpl;
 
     # Add styles and javascript for the calendar
@@ -298,7 +299,7 @@ sub afterEditHandler {
     return unless ( $query->param( 'closeactioneditor' ));
 
     if ( !$initialised ) {
-        return unless _lazyInit();
+        return unless _lazyInit($_[2], $_[1]);
     }
 
     my $pretext = $query->param( 'pretext' ) || "";
@@ -338,7 +339,7 @@ sub beforeSaveHandler {
     return unless $text;
 
     if ( !$initialised ) {
-        return unless _lazyInit();
+        return unless _lazyInit($web, $topic);
     }
 
     my $query = TWiki::Func::getCgiQuery();
@@ -460,6 +461,7 @@ sub _handleActionSearch {
 
 # Lazy initialize of plugin 'cause of performance
 sub _lazyInit {
+    my ($web, $topic) = @_;
 
     require TWiki::Attrs;
     require Time::ParseDate;
@@ -469,7 +471,7 @@ sub _lazyInit {
     require TWiki::Plugins::ActionTrackerPlugin::Format;
     require TWiki::Plugins::ActionTrackerPlugin::ActionNotify;
 
-    $options = TWiki::Plugins::ActionTrackerPlugin::Options::load();
+    $options = TWiki::Plugins::ActionTrackerPlugin::Options::load($web, $topic);
 
     $defaultFormat = new TWiki::Plugins::ActionTrackerPlugin::Format(
         $options->{TABLEHEADER},
@@ -515,9 +517,12 @@ sub _updateRESTHandler {
     my $session = shift;
     my $query = TWiki::Func::getCgiQuery();
     try {
-        _lazyInit();
+        my $topic = $query->param('topic');
+        my $web;
+        ($web, $topic) = TWiki::Func::normalizeWebTopicName(undef, $topic);
+        _lazyInit($web, $topic);
         _updateSingleAction(
-            $query->param('topic'),
+            $web, $topic,
             $query->param('uid'),
             $query->param('field') => $query->param('value'));
         print CGI::header('text/plain', 200); # simple message
@@ -534,10 +539,8 @@ sub _updateRESTHandler {
 }
 
 sub _updateSingleAction {
-    my ( $topic, $uid, %changes ) = @_;
+    my ( $web, $topic, $uid, %changes ) = @_;
 
-    my $web;
-    ($web, $topic) = TWiki::Func::normalizeWebTopicName(undef, $topic);
     my ($meta, $text) = TWiki::Func::readTopic($web, $topic);
 
     my $descr;
