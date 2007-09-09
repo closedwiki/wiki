@@ -15,6 +15,8 @@ var textareaInited = false;
 function initForm() {
 	try { document.main.text.focus(); } catch (er) {}
 	initTextArea();
+	initTextAreaHeight();
+	initTextAreaStyles();
 }
 
 /**
@@ -35,6 +37,11 @@ function initTextArea () {
 	initTextAreaFontStyle();
 	textareaInited = true;
 }
+
+/**
+Hook for plugins.
+*/
+function initTextAreaStyles() {}
 
 /**
 Sets the font style (monospace or proportional space) of the edit box to style read from cookie.
