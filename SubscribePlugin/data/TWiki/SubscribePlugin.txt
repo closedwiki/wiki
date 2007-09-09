@@ -1,3 +1,4 @@
+<a href="http://wikiring.com"><img src="%ATTACHURL%/logo.gif" style="float:right" /></a>
 ---+ Subscribe Plugin
 
 <!--
@@ -22,7 +23,7 @@ You don't need =VIEW= access to the WebNotify topic in order to subscribe to cha
 
 ---++ Plugin Info
 
-This plugin is brought to you by the [[http://wikiring.com][WikiRing]] - working together to improve your wiki experience!
+Another great TWiki extension from the <a style="text-decoration:none" href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiringlogo20x20.png" alt="" /> *WikiRing* </a> - working together to improve your wiki experience!
 
 |  Plugin Author: | TWiki:Main.CrawfordCurrie |
 |  Copyright: | &copy; 2007, Crawford Currie http://c-dot.co.uk |
@@ -30,6 +31,7 @@ This plugin is brought to you by the [[http://wikiring.com][WikiRing]] - working
 |  Plugin Version: | %$VERSION% |
 |  Dependencies: | %$DEPENDENCIES% |
 | Change&nbsp;History: | |
+|  9 Sep 2007 | Bugs:Item4175 added MAKETEXT in case the string is available |
 |  13966 | Bugs:Item4155 Fixed for 4.0.x and 4.1.x |
 |  13787 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item4010'>Item4010</a>fix web subscription, and =format= parameters. - TWiki:Main.SvenDowideit |
 |  13525 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item3731'>Item3731</a> Update documentation topic. |
@@ -45,3 +47,5 @@ This plugin is brought to you by the [[http://wikiring.com][WikiRing]] - working
 
 __Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
+%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="" version="1"}%
+%META:FILEATTACHMENT{name="logo.gif" attr="h" comment="" version="1"}%

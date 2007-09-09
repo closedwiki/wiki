@@ -76,12 +76,13 @@ sub _getbutton{
         my $topics = $params->{topic} || $topic;
 
         # checking if the has subscribed for that topic already
-		eval { require TWiki::Contrib::MailerContrib::WebNotify };
+		require TWiki::Contrib::MailerContrib::WebNotify;
 		my ($sweb, $stopics) = TWiki::Func::normalizeWebTopicName($web, $topics);
 		my $wn = new TWiki::Contrib::MailerContrib::WebNotify( $TWiki::Plugins::SESSION, $sweb, $TWiki::cfg{NotifyTopicName} );
         my $subscriber = $wn->getSubscriber($who);
         my $unsubscribe = 0;
-        # user hase allready subscribed..so if he clicks again, he want to delete that subsciprtion
+        # user has already subscribed.. so if he clicks again, he wants
+        # to delete that subsciprtion
         if ( $subscriber->isSubscribedTo($stopics) ) {
         	$unsubscribe = 'yes';
         }	
@@ -103,14 +104,15 @@ sub _getbutton{
         $form = $params->{format};
         my $actionName = 'Subscribe';
         if ($unsubscribe eq 'yes') {
-	        $form = $params->{formatunsubscribe} if ($params->{formatunsubscribe});
+	        $form = $params->{formatunsubscribe}
+              if ($params->{formatunsubscribe});
 	        $actionName = 'Unsubscribe';
         }
         if ($form) {
             $form =~ s/\$url/$url/g;
             $form =~ s/\$wikiname/$who/g;
             $form =~ s/\$topics/$topics/g;
-            $form =~ s/\$action/$actionName/g;
+            $form =~ s/\$action/%MAKETEXT{"$actionName"}%/g;
         } else {
             $form = CGI::a({href => $url},
                            $actionName);
@@ -130,9 +132,7 @@ sub _alert {
 sub _subscribe {
     my( $web, $topics, $subscriber, $cur_user, $unsubscribe ) = @_;
 
-    eval { require TWiki::Contrib::MailerContrib::WebNotify };
-    return _alert("Failed to load MailerContrib")
-      if $@;
+    require TWiki::Contrib::MailerContrib::WebNotify;
 
     return _alert("bad subscriber '$subscriber'") if
       !(($TWiki::cfg{LoginNameFilterIn} &&
