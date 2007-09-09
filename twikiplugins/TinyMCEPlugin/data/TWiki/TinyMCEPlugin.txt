@@ -34,7 +34,8 @@ First follow the installation instructions to install the Plugin:
 ---++ Settings
 This setting contains all the options passed to the TinyMCE editor on startup. 
 For a full explanation of the available options, and guidance on reconfiguring TinyMCE, see the [[http://wiki.moxiecode.com/index.php/TinyMCE:Configuration][Moxicode TinyMCE Wiki]]. Note the inclusion of the Pattern Skin standard CSS files in the =content_css= setting.
-   * Set INIT = mode : "textareas",
+   * Set INIT = mode : mode : "exact",
+   elements : "topic",
    debug : true,
    cleanup : false,
    theme : "advanced",
