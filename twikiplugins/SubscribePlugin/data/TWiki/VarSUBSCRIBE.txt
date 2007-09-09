@@ -12,5 +12,4 @@ Anywhere in a topic or template:
 
    * The button toggles subscribe/unsubscribe if the user is already subscribed or vice versa. So after the next click on the button, the user will be unsubscribed.
    * The plugin will do the best it can to optimise the subscription lists in WebNotify.
-   * Subscription events will return to the topic originally being viewed.
 %ENDSECTION{"subscribe_attributes"}%

@@ -54,7 +54,7 @@ sub new {
     my $this = bless( {}, $class );
 
     $this->{web} = $web;
-    $this->{topic} = $topic || $TWiki::cfg{NotifyTopicName};
+    $this->{topic} = $topic || $TWiki::cfg{NotifyTopicName} || 'WebNotify';
     $this->{pretext} = '';
     $this->{posttext} = '';
 

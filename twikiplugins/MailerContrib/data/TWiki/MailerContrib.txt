@@ -157,6 +157,7 @@ Many thanks to the following sponsors for supporting this work:
 |  License: | GPL |
 |  Version: | %$VERSION% |
 |  Change History: | |
+|  9 Sep 2007 | Bugs:Item4326 workaround for possible error in !WebNotify API in old releases, Should not affect most users. |
 |  6 Sep 2007 | Bugs:Item4488 doc tweaks |
 |  14550 | Bugs:Item4461 - 'Changed' link now points to most recent changes, not the entire history |
 |  22 Jun 2007 | Bugs:Item4284 - added access control checks and email filter |
