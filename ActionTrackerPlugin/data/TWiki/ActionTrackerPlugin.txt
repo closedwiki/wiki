@@ -9,28 +9,27 @@
 
    Instead, you could check your fix in, raise a bug in the Bugs web, or mail thge author.
 -->
-<img src="%ATTACHURLPATH%/juggle.gif" style="float:right">
-Never in history have people had more diverse demands on them as in the modern day, and it takes the skills of a juggler to keep track of it all. Wouldn't it be great if we could capture what we have to do _at the time we think of it_, and be able to get a to-do list on demand? No more fighting with post-it notes, no more forgetting actions from the minutes of obscure meetings, and remember your partners birthday every year into the bargain! 
+<div style="float:right">
+<a href="http://wikiring.com"><img src="%ATTACHURLPATH%/juggle.gif" title="WikiRing: Professional Wiki Innovation and Support" /></a>
+</div>
+It takes the skills of a juggler to keep track of all the demands that modern life makes on us. Wouldn't it be great if we could capture what we have to do _at the time we think of it_, and be able to get a to-do list on demand? No more fighting with post-it notes, no more forgetting actions from the minutes of obscure meetings, and remember your partners birthday every year into the bargain! 
 
 This plugin provides support for tracking actions embedded in TWiki topics. Actions captured this way can then be tracked from anywhere you want.
 
 This is particularly useful for [[http://en.wikipedia.org/wiki/Minutes][meeting minutes]]. As you write the minutes during the meeting, you simply enter the actions into the text and as soon as the topic is saved, the actions "go live". For example, at a recent meeting of the British Cabinet:
 <verbatim>
-GordonBrown agreed to a zero tax rate for all self-employed software engineers, in retitution for past unfair treatment.
+GordonBrown agreed to a zero tax rate for all self-employed software engineers, to make up for past unfair treatment.
 %ACTION{who="GordonBrown" due="1st April 2008"}% Repay all unfairly levied taxes
 %ACTION{who="AlistairDarling" due="25th Dec 2007"}% Contact Santa to find out who is going to pay for it
 AlistairDarling observed that this might adversely impact the government hors d'ouvres budget.
 </verbatim>
-
 But that's not the only application. The action tracker can also be used for:
    * personal to-do lists
    * highlighting things for attention
    * reminding you of important events
 Actions are nicely formatted for display, and automatic notification of actions is supported using 'cron'.
 
-*WARNING:* TWiki-4 and later only. If you want to use this plugin with an earlier version of TWiki, you can try the old version from http://twiki.org/cgi-bin/viewfile/Plugins/ActionTrackerPlugin?rev=1.22;filename=ActionTrackerPlugin.zip
-
-_( Discussion in TWiki:Plugins/ActionTrackerPluginDev )_
+<div class="twikiBroadcastMessage" style="background-color:#ffc;">WARNING: TWiki-4 only. If you want to use this plugin with an earlier version of TWiki, please use [[http://twiki.org/cgi-bin/attach/Plugins/ActionTrackerPlugin?filename=ActionTrackerPlugin.zip&revInfo=1][revision 22 of the zip]].</div>
 
 %TOC%
 
@@ -83,7 +82,7 @@ Write the command =%<nop>ACTIONSEARCH{= _attributes_ =}%= anywhere in a TWiki to
 	| *Name* | *Value* | *Description* |
 	| =who= | See [[#PeopleAnchor][People]] | Person responsible for closing the action. |
 	| =notify= | See [[#PeopleAnchor][People]] | Persons who want to be notified of a change |
-	| =state= | =late=, or any legal state value | Set to =late= to search for late actions; set to any any legal state value to search for actions in that state. See [[#SettingsAnchor][Settings]] for details on how to extend the state set. |
+	| =state= | =late=, or any legal state value | Set to =late= to search for late actions; set to any any legal state value to search for actions in that state. See [[#SettingsAnchor][Settings]] for details on how to extend the state set. <br /> You can also use a Perl regular expression, which must match the entire state name e.g. =state="open&#124;closed"= will match either open or closed states, but no other states, and =state="(?!closed).*"= will match every state except =closed=. Google for =perlre= for help with Perl regular expressions. |
     | =within= | a number of days | Search for actions that are within a number of days of their due date. Usually used in conjunction with other attributes, such as <code>state="open"</code>. If you give it a simple number _N_, it will match actions that are due within _N_ days *either side* of the current date. If you give _N_ with a leading '+', this restricts the search to _N_ days in the future. If you give _N_ with a leading '-', it matches only actions that _fell due_ in the last _N_ days. |
 	| =web= | Perl regular expression | A regular expression that matches the names of all the webs to search. If this attribute is omitted, the default is to search only the current web. Searching many webs is much slower, especially in a large installation. Webs marked NOSEARCHALL will not be searched. | 
 	| =topic= | Perl regular expression | A regular expression that matches the names of all the topics to search. If this attribute is omitted, the default is to search all the topics in the selected webs. | 
@@ -396,11 +395,19 @@ Set to 1 to enable debug features, including the undocumented =%<nop>ACTIONNOTIF
 
 ---+ Plugin Info
 
+Another great TWiki extension from the <a style="text-decoration:none" href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiringlogo20x20.png" alt="" /> *WikiRing* </a> - __Working together to improve your wiki experience__!
+
+Thanks are due to the following sponsors, who have helped make this plugin possible:
+   * [[http://motorola.com][Motorola]]
+   * [[http://windriver.com][Wind River Systems]]
+   * [[http://www.goldstarevents.com][Goldstar Events]]
+
 |  Plugin Author: | TWiki:Main/CrawfordCurrie, http://c-dot.co.uk |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
-|  31 Aug 2007 | Bugs:Item4528 - Support $formfield in ACTIONSEARCH (same semantics as for formatted search) Bugs:Item4529 - Remove link from description of action in the $text field of format |
-|  13 Aug 2007 | Bugs:Item4086 - =header= and =format= parameters give more control over formatting, improved mail sent for notifications (Richard Vinke)<br /> Bugs:Item4373 - added support for TBD action dates; in the process, changed default date store format to ISO for consistency with TWiki. (Crawford Currie)<br /> Bugs:Item4374 - support AJAX-like state changes from the view screen (Crawford Currie)<br /> Bugs:Item4442 - moved preference defaults out of the plugin topic, and verified correct function (Crawford Currie) |
+|  9 Sep 2007 | Bugs:Item4427, Bugs:Item4591 add the ability to search for multiple states using a regular expression Bugs:Item4574 fix interaction with !TinyMCEPlugin |
+|  31 Aug 2007 | Bugs:Item4528 - Support $formfield in ACTIONSEARCH (same semantics as for formatted search) Bugs:Item4529 - Remove link from description of action in the $text field of format. Sponsored by [[http://www.goldstarevents.com][Goldstar Events]]. |
+|  13 Aug 2007 | Bugs:Item4086 - =header= and =format= parameters give more control over formatting, improved mail sent for notifications (Richard Vinke)<br /> Bugs:Item4373 - added support for TBD action dates; in the process, changed default date store format to ISO for consistency with TWiki. (Crawford Currie)<br /> Bugs:Item4374 - support AJAX-like state changes from the view screen (Crawford Currie)<br /> Bugs:Item4442 - moved preference defaults out of the plugin topic, and verified correct function (Crawford Currie, sponsored by [[http://www.goldstarevents.com][Goldstar Events]]) |
 |  21 May 2007 | Bugs:Item3969 - 8bit email fix (TWiki:Main.WillNorris) |
 |  12958 | Bugs:Item3638 Fixed edit link for IE7 |
 |  12878 | putting styles.css file at the top of the html header so that \
@@ -461,4 +468,4 @@ http://www.gnu.org/copyleft/gpl.html
 
 %META:FILEATTACHMENT{name="styles.css" attr="" comment="Stylesheet for actions"}%
 %META:FILEATTACHMENT{name="juggle.gif" attr="h" comment="Logo"}%
-
+%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="" version="1"}%

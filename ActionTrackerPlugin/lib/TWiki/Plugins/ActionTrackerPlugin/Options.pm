@@ -14,7 +14,7 @@ my %defaults = (
     EDITBOXWIDTH  => '%EDITBOXWIDTH%',
     EDITFORMAT    => '| $who | $due | $state | $notify |',
     EDITHEADER    => '| Assigned to | Due date | State | Notify |',
-    EDITORIENT    => 'cols',
+    EDITORIENT    => 'rows',
     ENABLESTATESHORTCUT => '1',
     EXTRAS        => '',
     NOPREVIEW     => '1',
@@ -29,6 +29,8 @@ my %defaults = (
 %options = %defaults;
 
 sub load {
+    my ($web, $topic) = @_;
+
     # Set defaults, will be overwritten by user prefs
     %options = %defaults;
 
@@ -37,6 +39,8 @@ sub load {
         my $sk = 'ACTIONTRACKERPLUGIN_'.$ky;
         $sk = TWiki::Func::getPreferencesValue( $sk );
         $options{$ky} = $sk if (defined $sk);
+        $options{$ky} = TWiki::Func::expandCommonVariables(
+            $options{$ky}, $topic, $web );
     }
 
     return \%options;

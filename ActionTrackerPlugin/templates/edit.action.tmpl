@@ -7,22 +7,9 @@
  <meta http-equiv="Pragma" content="no-cache" />
  <meta http-equiv="Cache-Control" content="no-cache" />
  <style type="text/css" media="all">
-  %IF{ "$ TWIKILAYOUTURL" then="@import url('%TWIKILAYOUTURL%');"}%
-  %IF{ "$ TWIKISTYLEURL"  then="@import url('%TWIKISTYLEURL%');"}%
-  %IF{ "$ TWIKICOLORSURL" then="@import url('%TWIKICOLORSURL%');"}%
+@import url('http://daphne/MAIN/pub/TWiki/TWikiTemplates/base.css');
+@import url('http://daphne/MAIN/pub/TWiki/TWikiTemplates/default.css');
  </style>
-<!-- INCLUDEJSCALENDAR -->
-<script type="text/javascript">
-<!--HIDE
-function launchWindow( theWeb, theTopic ) {
-  win = open( "%SCRIPTURLPATH{"view"}%/" + theWeb + "/" + theTopic + "?skin=plain",
-              theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
-  if( win ) {
-    win.focus();
-  }
-  return false;
-}
-//STOP HIDING-->
 </script>
 </head>
 <body>

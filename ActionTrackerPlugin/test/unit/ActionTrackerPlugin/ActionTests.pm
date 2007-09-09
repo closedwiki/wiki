@@ -153,6 +153,8 @@ sub test_MatchesOpen {
     $this->assert($action->matches($attrs));
     $attrs = new TWiki::Attrs("openday",1);
     $this->assert(!$action->matches($attrs));
+    $attrs = new TWiki::Attrs('state="(?!closed).*"',0);
+    $this->assert($action->matches($attrs));
 
     TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("4 Jun 2002");
     $attrs = new TWiki::Attrs("within='+2'",1);
