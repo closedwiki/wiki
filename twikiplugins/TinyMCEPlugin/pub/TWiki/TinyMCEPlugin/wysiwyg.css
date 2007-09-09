@@ -18,6 +18,6 @@
 .TMLverbatim { 
   font-family: "Courier New", courier, monaco, monospace;
   font-size: 12pt;
-  background-image:url(verbatim.png);
+  background-image:url(verbatim.gif);
   white-space: pre nowrap;
 }
