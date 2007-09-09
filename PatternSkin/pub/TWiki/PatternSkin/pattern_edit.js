@@ -10,12 +10,8 @@ Pattern.Edit = {
 	EDITBOX_FONTSTYLE_PROPORTIONAL:"proportional",
 	EDITBOX_FONTSTYLE_MONO_CLASSNAME:"patternButtonFontSelectorMonospace",
 	EDITBOX_FONTSTYLE_PROPORTIONAL_CLASSNAME:"patternButtonFontSelectorProportional",
-
-	setTextAreaFontStyleState:function(el) {			
-		var pref  = twiki.Pref.getPref(Pattern.Edit.EDIT_PREF_NAME + Pattern.Edit.EDITBOX_PREF_FONTSTYLE_ID);
-		if (!pref) return;
-		Pattern.Edit.setEditBoxFontStyle(pref);
-	},
+	
+	buttons:{"font":null,"enlarge":null, "shrink":null},
 	
 	setFontStyleState:function(el, inShouldUpdateEditBox, inButtonState) {			
 		var pref  = twiki.Pref.getPref(Pattern.Edit.EDIT_PREF_NAME + Pattern.Edit.EDITBOX_PREF_FONTSTYLE_ID);
@@ -57,12 +53,21 @@ Pattern.Edit = {
 			twiki.Pref.setPref(PREF_NAME + Pattern.Edit.EDITBOX_PREF_FONTSTYLE_ID, inFontStyle);
 			return;
 		}
+	},
+	
+	initTextAreaStyles:function (inNames) {
+		var i, ilen=inNames.length;
+		for (i=0; i<ilen; ++i) {
+			Pattern.Edit.buttons[inNames[i]].style.display = 'inline';
+		}
 	}
 
 }
 
 var patternEditPageRules = {
 	'.patternButtonFontSelector' : function(el) {
+		el.style.display = 'none';
+		Pattern.Edit.buttons["font"] = el;
 		Pattern.Edit.setFontStyleState(el, false, 'out');
 		el.onclick = function(){
 			return Pattern.Edit.setFontStyleState(el, true);
@@ -75,14 +80,22 @@ var patternEditPageRules = {
 		}
 	},
 	'.patternButtonEnlarge' : function(el) {
+		el.style.display = 'none';
+		Pattern.Edit.buttons["enlarge"] = el;
 		el.onclick = function(){
 			return changeEditBox(1);
 		}
 	},
 	'.patternButtonShrink' : function(el) {
+		el.style.display = 'none';
+		Pattern.Edit.buttons["shrink"] = el;
 		el.onclick = function(){
 			return changeEditBox(-1);
 		}
 	}
 };
 Behaviour.register(patternEditPageRules);
+
+function initTextAreaStyles() {
+	Pattern.Edit.initTextAreaStyles(["font", "enlarge", "shrink"]);
+}
