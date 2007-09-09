@@ -18,11 +18,13 @@
 # A checker is a special case of a UI tailored to perform checks
 # on setup.
 #
+package TWiki::Configure::Checker;
+use base qw(TWiki::Configure::UI);
+
 use strict;
 
-package TWiki::Configure::Checker;
-
-use base qw(TWiki::Configure::UI);
+require File::Spec;
+require CGI;
 
 sub guessed {
     my ($this, $error) = @_;
@@ -51,7 +53,7 @@ sub guessMajorDir {
     my ($this, $cfg, $dir, $silent ) = @_;
     my $msg = '';
     if( !$TWiki::cfg{$cfg} || $TWiki::cfg{$cfg} eq 'NOT SET') {
-        use FindBin;
+        require FindBin;
         $FindBin::Bin =~ /^(.*)$/;
         my @root = File::Spec->splitdir($1);
         pop(@root);
@@ -191,7 +193,8 @@ sub checkPerlModules {
         $mod->{disposition} ||= '';
         my $n = '';
         my $mod_version;
-        eval 'use '.$mod->{name};
+        # require instead of use = see Bugs:Item4585
+        eval 'require '.$mod->{name};
         if ($@) {
             $n = 'Not installed. '. $mod->{usage};
         } else {

@@ -1,6 +1,6 @@
-use strict;
-
 package TWiki::Configure::CSS;
+
+use strict;
 
 use vars qw( $css );
 

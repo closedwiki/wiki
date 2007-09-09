@@ -15,11 +15,10 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 #
-use strict;
-
 package TWiki::Configure::Checkers::BasicSanity;
-
 use base 'TWiki::Configure::Checker';
+
+use strict;
 
 sub new {
     my ($class, $item) = @_;

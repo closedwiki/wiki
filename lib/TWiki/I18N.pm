@@ -17,8 +17,6 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
-use strict;
-
 =pod
 
 ---+ package TWiki::I18N
@@ -29,6 +27,7 @@ Support for strings translation and language detection.
 
 package TWiki::I18N;
 
+use strict;
 use Assert;
 
 use vars qw( $initialised @initErrors );

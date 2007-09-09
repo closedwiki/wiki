@@ -14,13 +14,10 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
 # As per the GPL, removal of this notice is prohibited.
-use strict;
-
 package TWiki::Configure::Checkers::Site::Locale;
-
-use TWiki::Configure::Checker;
-
 use base 'TWiki::Configure::Checker';
+
+use strict;
 
 my @required = (
 

@@ -22,9 +22,9 @@
 #
 # $defaults is a reference to the hash of defaults
 # $values is a reference to the hash of current values
-use strict;
-
 package TWiki::Configure::Valuer;
+
+use strict;
 
 use TWiki::Configure::Type;
 

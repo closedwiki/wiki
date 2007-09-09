@@ -21,9 +21,9 @@
 # are sections, containing values and other sections. If this isn't
 # appropriate, you will have to implement a new visit() function for
 # saving configuration data.
-use strict;
-
 package TWiki::Configure::Pluggable;
+
+use strict;
 
 use TWiki::Configure::Section;
 

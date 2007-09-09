@@ -17,8 +17,6 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
-use strict;
-
 =pod
 
 ---+ package TWiki::I18N::Extract
@@ -29,6 +27,8 @@ Depends on Locale::Maketext::Extract (part of CPAN::Locale::Maketext::Lexicon).
 =cut
 
 package TWiki::I18N::Extract;
+
+use strict;
 
 use vars qw( $initialised $initError );
 BEGIN {

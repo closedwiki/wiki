@@ -17,10 +17,9 @@
 #
 # UI generating package for simple values
 #
-use strict;
-
 package TWiki::Configure::UIs::Value;
 
+use strict;
 use base 'TWiki::Configure::UI';
 
 # Generates the appropriate HTML for getting a value to configure the

@@ -1,6 +1,6 @@
-use strict;
-
 package TWiki::Configure::JS;
+
+use strict;
 
 use vars qw( $js1 $js2 );
 

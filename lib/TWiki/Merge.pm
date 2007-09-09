@@ -17,8 +17,6 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
-use strict;
-
 =pod
 
 ---+ package TWiki::Merge
@@ -29,6 +27,7 @@ Support for merging strings
 
 package TWiki::Merge;
 
+use strict;
 use Assert;
 
 require CGI;

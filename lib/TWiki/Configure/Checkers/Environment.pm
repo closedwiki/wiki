@@ -15,13 +15,10 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 #
-use strict;
-
 package TWiki::Configure::Checkers::Environment;
-
-use TWiki::Configure::Checker;
-
 use base 'TWiki::Configure::Checker';
+
+use strict;
 
 sub ui {
     my $this = shift;

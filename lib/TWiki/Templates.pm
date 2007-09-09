@@ -17,8 +17,6 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
-use strict;
-
 =pod
 
 ---+ package TWiki::Templates
@@ -49,6 +47,7 @@ easily be coverted into a true singleton (template manager).
 
 package TWiki::Templates;
 
+use strict;
 use Assert;
 
 require TWiki::Attrs;

@@ -1,6 +1,6 @@
-use strict;
-
 package TWiki::Configure::Checkers::MSWin32;
+
+use strict;
 
 sub check {
     my $this = shift;

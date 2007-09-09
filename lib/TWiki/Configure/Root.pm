@@ -16,14 +16,13 @@
 # As per the GPL, removal of this notice is prohibited.
 #
 # The root of all configurations
-
-use strict;
-
 package TWiki::Configure::Root;
 
 use TWiki::Configure::Section;
 
 use base 'TWiki::Configure::Section';
+
+use strict;
 
 sub new {
     my $class = shift;

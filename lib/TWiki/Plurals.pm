@@ -21,8 +21,6 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
-use strict;
-
 =pod
 
 ---+ package TWiki::Plurals
@@ -32,6 +30,8 @@ Handle conversion of plural topic names to singular form.
 =cut
 
 package TWiki::Plurals;
+
+use strict;
 
 =pod
 

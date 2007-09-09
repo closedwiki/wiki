@@ -16,11 +16,11 @@
 # As per the GPL, removal of this notice is prohibited.
 #
 # Collection of configuration items
-use strict;
-
 package TWiki::Configure::Section;
 
 use base 'TWiki::Configure::Item';
+
+use strict;
 
 sub new {
     my ($class, $head) = @_;

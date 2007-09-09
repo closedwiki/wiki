@@ -14,10 +14,10 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
 # As per the GPL, removal of this notice is prohibited.
-use strict;
-
 package TWiki::Configure::Checkers::RCS::coCmd;
 use base 'TWiki::Configure::Checker';
+
+use strict;
 
 sub check {
     my $this = shift;

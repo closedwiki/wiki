@@ -14,11 +14,10 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
 # As per the GPL, removal of this notice is prohibited.
-use strict;
-
 package TWiki::Configure::UIs::EXTEND;
 use base 'TWiki::Configure::UI';
 
+use strict;
 use File::Temp;
 use File::Copy;
 use File::Spec;

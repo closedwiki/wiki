@@ -21,11 +21,10 @@
 # layout of a configuration page is depth-sensitive, so we have slightly
 # different behaviours for each of level 0 (the root), level 1 (twisty
 # sections) and level > 1 (subsection).
-use strict;
-
 package TWiki::Configure::UIs::Section;
-
 use base 'TWiki::Configure::UI';
+
+use strict;
 
 # depth == 1 is the root
 # depth == 2 are twisty sections
