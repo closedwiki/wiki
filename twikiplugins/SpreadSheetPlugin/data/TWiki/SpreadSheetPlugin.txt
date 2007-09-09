@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1180825029" format="1.0" version="1.54"}%
+%META:TOPICINFO{author="PeterThoeny" date="1189326448" format="1.0" version="1.55"}%
 ---+!! TWiki Spreadsheet Plugin
 
 This Plugin adds spreadsheet capabilities to %WIKITOOLNAME% topics. Formulae like ==%<nop>CALC{"$INT(7/3)"}%== are evaluated at page view time. They can be placed in table cells and outside of tables. In other words, this Plugin provides general formula evaluation capability, not just classic spreadsheet functions.
@@ -121,6 +121,7 @@ Conventions for Syntax:
 #FuncEVAL
 ---+++ EVAL( formula ) -- evaluate a simple mathematical formula
 	* Addition, substraction, multiplication, division and modulus of numbers are supported. Any nesting is permitted
+	* Numbers may be decimal integers (=1234=), binary integers (=0b1110011=), octal integers (=01234=), hexadecimal integers (=0x1234=) or of exponential notation (=12.34e-56=)
 	* Syntax: ==$EVAL( formula )==
 	* Example: ==%<nop>CALC{"$EVAL( (5 * 3) / 2 + 1.1 )"}%== returns ==8.6==
 	* Related: =[[#FuncEXEC][$EXEC()]]=, =[[#FuncINT][$INT()]]=, =[[#FuncMOD][$MOD()]]=, =[[#FuncROUND][$ROUND()]]=, =[[#FuncVALUE][$VALUE()]]=
@@ -218,8 +219,11 @@ Conventions for Syntax:
 #FuncINT
 ---+++ INT( formula ) -- evaluate formula and round down to nearest integer
 	* Addition, substraction, multiplication, division and modulus of numbers are supported. Any nesting is permitted
+	* Numbers may be decimal integers (=1234=), binary integers (=0b1110011=), octal integers (=01234=), hexadecimal integers (=0x1234=) or of exponential notation (=12.34e-56=)
+	* If you expect a single decimal integer value with leading zeros, use ==$INT( $VALUE( number ) )==
 	* Syntax: ==$INT( formula )==
 	* Example: ==%<nop>CALC{"$INT(10 / 4)"}%== returns ==2==
+	* Example: ==%<nop>CALC{"$INT($VALUE(09))"}%== returns ==9==
 	* Related: =[[#FuncEVAL][$EVAL()]]=, =[[#FuncROUND][$ROUND()]]=, =[[#FuncVALUE][$VALUE()]]=
 
 #FuncLEFT
@@ -690,10 +694,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Copyright: | &copy; 2001-2007, Peter@Thoeny.org, [[http://www.structuredwikis.com/][StructuredWikis LLC]] |
+|  Copyright: | &copy; 2001-2007, Peter@Thoeny.org, [[http://www.twiki.net/][TWIKI.NET]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 02 Jun 2007 (14018) |
+|  Plugin Version: | 09 Sep 2007 (14798) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  09 Sep 2007: | Enhanced documentation for $EVAL() and $INT() |
 |  02 Jun 2007: | Added %TWIKIWEB%.VarCALC to have =%<nop>CALC{}%= listed in %TWIKIWEB%.TWikiVariables |
 |  14 Apr 2007: | Fixing bug in $EXISTS() that required full =web.topic= instead of just =topic= |
 |  11 Mar 2007: | Fixing bug in $VALUE() and $INT(), introduced by version 09 Mar 2007 |
@@ -742,5 +747,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.VarCALC
 
--- TWiki:Main/PeterThoeny - 02 Jun 2007
+-- TWiki:Main/PeterThoeny - 09 Sep 2007
 
