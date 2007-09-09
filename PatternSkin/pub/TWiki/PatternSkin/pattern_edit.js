@@ -58,7 +58,10 @@ Pattern.Edit = {
 	initTextAreaStyles:function (inNames) {
 		var i, ilen=inNames.length;
 		for (i=0; i<ilen; ++i) {
-			Pattern.Edit.buttons[inNames[i]].style.display = 'inline';
+			var button = Pattern.Edit.buttons[inNames[i]];
+			if (button != null) {
+				Pattern.Edit.buttons[inNames[i]].style.display = 'inline';
+			}
 		}
 	}
 
