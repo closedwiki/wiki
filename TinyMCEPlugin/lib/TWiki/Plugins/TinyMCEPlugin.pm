@@ -130,9 +130,6 @@ HERE
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TinyMCEPlugin/twiki.js"></script>
 <script type="text/javascript">
 // <![CDATA[
-function initTextArea () {
-	textareaInited = true;
-}
 // BROWSER $brinf
 // UA '$ua'
 // EXTRAS $extras
