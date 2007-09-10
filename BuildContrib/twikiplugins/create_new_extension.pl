@@ -278,6 +278,9 @@ One line description, required for extensions repository catalog.
 
 ---++ %$TYPE% Info
 
+Many thanks to the following sponsors for supporting this work:
+   * Acknowledge any sponsors here
+
 |  %$TYPE% Author(s): | |
 |  Copyright: | &copy; |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
