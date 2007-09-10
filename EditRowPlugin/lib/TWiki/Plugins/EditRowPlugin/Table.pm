@@ -3,6 +3,7 @@ package TWiki::Plugins::EditRowPlugin::Table;
 
 use strict;
 use Assert;
+use TWiki::Attrs;
 
 use TWiki::Func;
 use TWiki::Plugins::EditRowPlugin::TableRow;
@@ -138,6 +139,25 @@ sub parseTables {
         $active_table = undef;
         push(@tables, $line);
     }
+
+    # Legacy: add a header if the header param is defined and the table
+    # has no rows.
+    foreach my $t (@tables) {
+        if (ref($t) eq 'TWiki::Plugins::EditRowPlugin::Table' &&
+              !scalar(@{$t->{rows}}) &&
+                defined($t->{attrs}->{header})) {
+            my $line = $t->{attrs}->{header};
+            my $precruft = '';
+            $precruft = $1 if $line =~ s/^(\s*\|)//;
+            my $postcruft = '';
+            $postcruft = $1 if $line =~ s/(\|\s*)$//;
+            my @cols = split(/\|/, $line, -1);
+            my $row = new TWiki::Plugins::EditRowPlugin::TableRow(
+                $t, 1, $precruft, $postcruft, \@cols);
+            push(@{$t->{rows}}, $row);
+        }
+    }
+
     return \@tables;
 }
 
@@ -206,6 +226,48 @@ sub stringify {
     return $s;
 }
 
+sub getHeaderRows {
+    my $this = shift;
+    return $this->{attrs}->{headerrows} || 0;
+}
+
+sub getFooterRows {
+    my $this = shift;
+    return $this->{attrs}->{footerrows} || 0;
+}
+
+sub getWeb {
+    my $this = shift;
+    return $this->{web};
+}
+
+sub getTopic {
+    my $this = shift;
+    return $this->{topic};
+}
+
+sub getNumber {
+    my $this = shift;
+    return $this->{number};
+}
+
+sub isEditable {
+    my $this = shift;
+    return $this->{editable};
+}
+
+sub getFirstLiveRow {
+    my $this = shift;
+
+    return $this->{attrs}->{headerrows} + 1;
+}
+
+sub getLastLiveRow {
+    my $this = shift;
+
+    return scalar(@{$this->{rows}}) - $this->{attrs}->{footerrows};
+}
+
 # Run after all rows have been added to set header and footer rows
 sub _finalise {
     my $this = shift;
@@ -224,7 +286,7 @@ sub _finalise {
         $tails--;
     }
     # Assign row index numbers to body cells
-    my $index = 0;
+    my $index = 1;
     foreach my $row (@{$this->{rows}}) {
         if ($row->{isHeader} || $row->{isFooter}) {
             $row->{index} = '';
@@ -401,23 +463,21 @@ sub renderForDisplay {
 sub _getCols {
     my ($this, $urps, $row) = @_;
     my $attrs = $this->{attrs};
-    my $firstRow = 1;
-    $firstRow = 0 unless TWiki::isTrue($attrs->{headerislabel});
-    my $n = $firstRow ? 0 : 1;
+    my $headRows = $attrs->{headerrows};
     my $count = scalar(@{$this->{rows}->[$row - 1]->{cols}});
     my $defs = scalar(@{$this->{colTypes}});
     $count = $defs if $defs > $count;
     my @cols;
-    for (my $i = 1; $i <= $count; $i++) {
-        my $colDef = $this->{colTypes}->[$i - 1];
-        my $cellName = "erp_cell_$this->{number}_${row}_$i";
+    for (my $i = 0; $i < $count; $i++) {
+        my $colDef = $this->{colTypes}->[$i];
+        my $cellName = 'erp_cell_'.$this->{number}.'_'.$row.'_'.($i + 1);
         if ($colDef->{type} eq 'row') {
             # Force numbering if this is an auto-numbered column
-            $urps->{$cellName} = $row - $firstRow;
+            $urps->{$cellName} = $row - $headRows + $colDef->{size};
         } elsif ($colDef->{type} eq 'label') {
             # Label cells are uneditable, so we have to keep any existing
             # value for them.
-            my $cell = $this->{rows}->[$row - 1]->{cols}->[$i - 1];
+            my $cell = $this->{rows}->[$row - 1]->{cols}->[$i];
             $urps->{$cellName} = $cell->{text};
         }
         # CGI returns multi-values separated by \0. Replace with
@@ -437,12 +497,12 @@ sub change {
         $this->{rows}->[$row - 1]->set($this->_getCols($urps, $row));
     } else {
         # Whole table
-        for (my $i = 1; $i <= scalar(@{$this->{rows}}); $i++) {
+        for (my $i = 0; $i < scalar(@{$this->{rows}}); $i++) {
             # Skip the header row
-            if ($i == 1 && $this->{attrs}->{headerislabel}) {
+            if ($i < $this->{attrs}->{headerrows}) {
                 next;
             }
-            $this->{rows}->[$i - 1]->set($this->_getCols($urps, $i));
+            $this->{rows}->[$i]->set($this->_getCols($urps, $i + 1));
         }
     }
 }
@@ -475,7 +535,7 @@ sub addRow {
     my @cols;
     my $row = $urps->{erp_active_row};
     if ($row < 0) {
-        $row = scalar(@{$this->{rows}}) - $this->{attrs}->{footerrows};
+        $row = $this->getLastLiveRow();
     }
 
     my @vals = map { $_->{initial_value} } @{$this->{colTypes}};
@@ -495,21 +555,32 @@ sub addRow {
         $this->{rows}->[$i]->{number}++;
     }
     $urps->{erp_active_row} = $row + 1;
+
 }
 
 # Action on row deleted
 sub deleteRow {
     my ($this, $urps) = @_;
     my $row = $urps->{erp_active_row};
-    my @dead;
-    if ($row > 0) {
-        @dead = splice(@{$this->{rows}}, $urps->{erp_active_row} - 1, 1);
-        $urps->{erp_active_row}-- if
-          $urps->{erp_active_row} >= scalar(@{$this->{rows}});
-    } else {
-        push(@dead, pop(@{$this->{rows}}));
+    if ($row < $this->getFirstLiveRow()) {
+        $row = $this->getLastLiveRow();
     }
+    return unless $row >= $this->getFirstLiveRow();
+    my @dead = splice(@{$this->{rows}}, $row - 1, 1);
     map { $_->finish() } @dead;
+    return if $urps->{erp_active_row} < 0; # full table edit?
+    $urps->{erp_active_row} = $row;
+    # Make sure that the active row is a non-header, non-footer row
+    if ($urps->{erp_active_row} < $this->getFirstLiveRow()) {
+        $urps->{erp_active_row} = $this->getFirstLiveRow();
+    }
+    if ($urps->{erp_active_row} > $this->getLastLiveRow()) {
+        $urps->{erp_active_row} = $this->getLastLiveRow();
+        if ($urps->{erp_active_row} < $this->getFirstLiveRow()) {
+            # No active rows left
+            $urps->{erp_active_row} = -1;
+        }
+    }
 }
 
 # Action on edit cancelled
