@@ -149,7 +149,8 @@ twiki.Form = {
 	*/
 	setFocus:function(inFormName, inInputFieldName) {
 		try {
-			twiki.Form.getFormElement(inFormName, inInputFieldName).focus();
+			var el = twiki.Form.getFormElement(inFormName, inInputFieldName);
+			el.focus();
 		} catch (er) {}
 	},
 	
@@ -176,6 +177,7 @@ twiki.Form = {
 		if (el.FP_defaultValue == el.value) {
 			el.value = "";
 		}
+		twiki.CSS.addClass(el, "twikiInputFieldFocus");
 		twiki.CSS.removeClass(el, "twikiInputFieldBeforeFocus");
 	},
 	
@@ -187,6 +189,7 @@ twiki.Form = {
 		if (!el.value && el.FP_defaultValue) {
 			twiki.Form._setDefaultStyle(el);
 		}
+		twiki.CSS.removeClass(el, "twikiInputFieldFocus");
 	},
 	
 	/**
