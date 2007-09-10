@@ -11,17 +11,21 @@ var Pattern = {
 	}
 }
 
-var myrules = {
+var patternRules = {
 	'.twikiFormStep h3' : function(el) {
 		Pattern.createTwikiActionFormStepSign(el);
 	},
 	'#jumpFormField' : function(el) {
 		twiki.Form.initBeforeFocusText(el,TEXT_JUMP);
+		el.onfocus = function() {
+			twiki.Form.clearBeforeFocusText(this);
+		}
+		el.onblur = function() {
+			twiki.Form.restoreBeforeFocusText(this);
+		}
 	},
 	'#quickSearchBox' : function(el) {
 		twiki.Form.initBeforeFocusText(el,TEXT_SEARCH);
-	},
-	'.patternMetaMenu .twikiInputField' : function(el) {
 		el.onfocus = function() {
 			twiki.Form.clearBeforeFocusText(this);
 		}
@@ -30,4 +34,4 @@ var myrules = {
 		}
 	}
 };
-Behaviour.register(myrules);
+Behaviour.register(patternRules);
