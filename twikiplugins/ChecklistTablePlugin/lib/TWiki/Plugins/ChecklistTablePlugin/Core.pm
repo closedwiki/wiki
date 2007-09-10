@@ -267,16 +267,16 @@ sub _renderForm {
 			$text .= $cgi->textarea(-name=>$valname, -value=> $evalue, -rows=>$rows, -columns=>$cols);
 		} elsif ($type eq 'select') {
 			my @selopts = split(/,/,$default);
-			$text .= $STARTENCODE._editencode($cgi->popup_menu(-name=>$valname, -size=>$param, -values=>\@selopts, -default=>($default ne $value)?$value:""),1).$ENDENCODE;
+			$text .= $STARTENCODE._editencode($cgi->popup_menu(-name=>$valname, -size=>$param, -values=>\@selopts, -default=>($default ne $value)?$value:"")).$ENDENCODE;
 		} elsif ($type eq 'checkbox') {
 			my @selopts = split(/,/,$default);
 			my @values = split(/,\s?/,$value);
-			$text .= $STARTENCODE._editencode($cgi->checkbox_group(-name=>$valname, -values=>\@selopts, -columns=>$param,-defaults=>(defined $entryRef)?\@values:$selopts[0]),1).$ENDENCODE;
+			$text .= $STARTENCODE._editencode($cgi->checkbox_group(-name=>$valname, -values=>\@selopts, -columns=>$param,-defaults=>(defined $entryRef)?\@values:$selopts[0])).$ENDENCODE;
 		} elsif ($type eq 'radio') {
 			my @selopts = split(/,/,$default);
 			$value = $selopts[0] unless defined $value && $value ne "" && grep /^\Q$value\E$/,@selopts;
 			$text .= $STARTENCODE._editencode(
-				$cgi->radio_group(-name=>$valname, -columns=>$param, -values=>\@selopts, -default=>$value), 1
+				$cgi->radio_group(-name=>$valname, -columns=>$param, -values=>\@selopts, -default=>$value)
 				).$ENDENCODE;
 		} elsif ($type eq 'date') {
 			my($initval,$dateformat);
@@ -767,14 +767,14 @@ sub _createRowFromCgi {
 sub _initDefaults {
 	%defaults = ( 
 		'_DEFAULT' => undef,
-		'unknownparamsmsg' => '%RED% %SYSTEMWEB%.ChecklistTablePlugin: Sorry, some parameters are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR% <br/> Allowed parameters are (see TWiki.ChecklistTablePlugin topic for more details): %KNOWNPARAMSLIST%',
+		'unknownparamsmsg' => '%RED% %TWIKIWEB%.ChecklistTablePlugin: Sorry, some parameters are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR% <br/> Allowed parameters are (see TWiki.ChecklistTablePlugin topic for more details): %KNOWNPARAMSLIST%',
 		'header' => '|*State*|*Item*|*Comment*|',
 		'format' => '|item|text,30|textarea,3x30|',
 		'name' => '_default',
 		'template'=> undef,
 		'defaultcellformat'=> 'textarea,3x20',
 		'allowmove' => 0,
-		##'edittableicon'=>'%PUBURLPATH%/%SYSTEMWEB%/EditTablePlugin/edittable.gif',
+		##'edittableicon'=>'%PUBURLPATH%/%TWIKIWEB%/EditTablePlugin/edittable.gif',
 		'edittableicon'=>'%ICONURL{edittopic}%',
 		'moverowupicon'=>'%ICONURL{up}%',
 		'moverowdownicon'=>'%ICONURL{down}%',
@@ -870,8 +870,10 @@ sub _editencode  {
 	$text =~ s/=/&#61;/g;
 	$text =~ s/:/&#58;/g; ## -> http: 
 	$text =~ s/\[/&#91;/g; ## -> [[ForcedLink]]
+	$text =~ s/!/&#33;/g;
 	
-	$text =~ s/</&#60;/g if ! defined $html;
+	
+	$text =~ s/</&#60;/g;
 	$text =~ s/(\%)/'&#'.ord($1).';'/eg;
 
 	return $text;
@@ -886,6 +888,8 @@ sub _editdecode {
 	$text =~ s/&(amp;)?#61;/=/g;
 	$text =~ s/&(amp;)?#58;/:/g;
 	$text =~ s/&(amp;)?#91;/[/g;
+	$text =~ s/&(amp;)?#33;/!/g;
+	$text =~ s/&(amp;)?#60;/</g;
 
 	$text =~ s/&(amp;)#(\d+);/&#$2;/g; ## fix encoded characters &amp;#....;
 	return $text;
