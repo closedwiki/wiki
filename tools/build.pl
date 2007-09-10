@@ -43,7 +43,7 @@ sub new {
 		#build a name from major.minor.patch.-auto.svnrev
 		my $rev=`svn info ..`;
 		$rev =~ /Revision: (\d*)/m;
-		$name = 'TWiki'.getCurrentTWikiRELEASE().'-auto'.$1;
+		$name = 'TWiki-'.getCurrentTWikiRELEASE().'-auto'.$1;
 		$autoBuild = 1;
 	}
     }
