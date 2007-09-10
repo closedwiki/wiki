@@ -38,18 +38,37 @@ sub stringify {
     return $this->{precruft}.$this->{text}.$this->{postcruft};
 }
 
-# Get the HTMl for the cell
+# Row index offset by size in the columnn definition
+sub rowIndex {
+    my ($this, $colDef) = @_;
+    if ($this->{row}->{index}) {
+        my $i = $this->{row}->{index} || 0;
+        $i += $colDef->{size} - 1 if ($colDef->{size} =~ /^\d+$/);
+        $this->{text} = $i;
+    } else {
+        $this->{text} = '';
+    }
+}
+
+sub getCellName {
+    my $this = shift;
+    return 'erp_cell_'.$this->{row}->{table}->getNumber().'_'.
+      $this->{row}->{number}.'_'.$this->{number};
+}
+
+# Get the HTML for the cell
 sub _getCell {
     my ($this, $isHeader) = @_;
     my $text = $this->{text};
     $text = '-' unless defined $text;
     if ($isHeader) {
         $text = CGI::span(
-            { class => 'erpSort',
-              onclick => 'javascript: return sortTable(this, false, '.
-                  $this->{row}->{table}->{attrs}->{headerrows}.','.
-                    $this->{row}->{table}->{attrs}->{footerrows}.');',
-          }, $text);
+            {
+                class => 'erpSort',
+                onclick => 'javascript: return sortTable(this, false, '.
+                  $this->{row}->{table}->getHeaderRows().','.
+                    $this->{row}->{table}->getFooterRows().')',
+            }, $text);
     }
     return $this->{precruft}.$text.$this->{postcruft};
 }
@@ -60,7 +79,7 @@ sub renderForDisplay {
 
     if (!$this->{isHeader} && !$this->{isFooter} &&
           $colDef->{type} eq 'row') {
-        $this->{text} = $this->{row}->{index};
+        $this->{text} = $this->rowIndex( $colDef );
     }
     return $this->_getCell($isHeader);
 }
@@ -74,8 +93,7 @@ sub renderForEdit {
     $expandedValue =~ s/^\s*(.*?)\s*$/$1/;
 
     my $text = '';
-    my $cellName = 'erp_cell_'.$this->{row}->{table}->{number}.'_'.
-      $this->{row}->{number}.'_'.$this->{number};
+    my $cellName = $this->getCellName();
 
     if( $colDef->{type} eq 'select' ) {
 
@@ -138,7 +156,7 @@ sub renderForEdit {
 
     } elsif( $colDef->{type} eq 'row' ) {
 
-        $text = $isHeader ? '' : $this->{row}->{index};
+        $text = $isHeader ? '' : $this->rowIndex($colDef);
 
     } elsif( $colDef->{type} eq 'textarea' ) {
 

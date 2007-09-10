@@ -28,6 +28,32 @@ sub new {
     return $this;
 }
 
+sub getID {
+    my $this = shift;
+    return $this->{table}->getNumber().'_'.$this->{number};
+}
+
+sub getAnchor {
+    my $this = shift;
+    return 'erp_'.$this->getID();
+}
+
+sub getEditAnchor {
+    my $this = shift;
+    return 'erp_edit_'.$this->getID();
+}
+
+# Find a row anchor within range of the row being edited that gives a
+# reasonable amount of context (3 rows) above the edited row
+sub getRowAnchor {
+    my $this = shift;
+    my $row_anchor = 1;
+    if ($this->{number} > 3) {
+        $row_anchor = $this->{number} - 1;
+    }
+    return 'erp_'.$this->{table}->getNumber().'_'.$row_anchor;
+}
+
 # break cycles to ensure we release back to garbage
 sub finish {
     my $this = shift;
@@ -66,8 +92,8 @@ sub stringify {
 sub renderForEdit {
     my ($this, $colDefs, $showControls, $orient) = @_;
 
-    my $id = "$this->{table}->{number}_$this->{number}";
-    my $anchor = CGI::a({ name=>"erp_$id" }).' ';
+    my $id = $this->getID();
+    my $anchor = CGI::a({ name => $this->getAnchor() }).' ';
     my @rows;
     my $empties = '|' x (scalar(@{$this->{cols}}) - 1);
     my $help = '';
@@ -120,9 +146,9 @@ sub renderForEdit {
 sub renderForDisplay {
     my ($this, $colDefs, $withControls) = @_;
     my @out;
-    my $id = "$this->{table}->{number}_$this->{number}";
-    my $addAnchor = $this->{table}->{editable};
-    my $anchor = "<a name='erp_$id'></a>";
+    my $id = $this->getID();
+    my $addAnchor = $this->{table}->isEditable();
+    my $anchor = '<a name="'.$this->getAnchor().'"></a>';
 
     foreach my $cell (@{$this->{cols}}) {
         # Add the row anchor for editing. It's added to the first non-empty
@@ -153,29 +179,26 @@ sub renderForDisplay {
             }
             unshift(@out, " *$text* ");
         } else {
-            # Use a row anchor within range of the row being edited
-            my $row_anchor = 1;
-            if ($this->{number} > 5) {
-                $row_anchor = $this->{number} - 1;
-            }
-            $row_anchor = "$this->{table}->{number}_$row_anchor";
             my $url;
             if ($TWiki::Plugins::VERSION < 1.11) {
                 $url = TWiki::Func::getScriptUrl(
-                    $this->{table}->{web}, $this->{table}->{topic}, 'view').
-                      "?erp_active_table=$this->{table}->{number}".
-                        ";erp_active_row=$this->{number}#erp_$row_anchor";
+                    $this->{table}->getWeb(),
+                    $this->{table}->getTopic(), 'view').
+                      "?erp_active_table=".$this->{table}->getNumber().
+                        ";erp_active_row=$this->{number}#".
+                          $this->getRowAnchor();
             } else {
                 $url = TWiki::Func::getScriptUrl(
-                    $this->{table}->{web}, $this->{table}->{topic}, 'view',
-                    erp_active_table => $this->{table}->{number},
+                    $this->{table}->getWeb(),
+                    $this->{table}->getTopic(), 'view',
+                    erp_active_table => $this->{table}->getNumber(),
                     erp_active_row => $this->{number},
-                    '#' => "erp_$row_anchor");
+                    '#' => $this->getRowAnchor());
             }
 
             my $button =
               "<a href='$url'>" . CGI::img({
-                  -name => "erp_edit_$id",
+                  -name => $this->getEditAnchor(),
                   -border => 0,
                   -src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/edittopic.gif'
                  }) . "</a>";

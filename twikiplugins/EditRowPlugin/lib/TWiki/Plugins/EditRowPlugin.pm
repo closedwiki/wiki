@@ -241,13 +241,14 @@ sub save {
                                    { minor => $minor });
         }
 
-        # Use a row anchor within range of the row being edited
-        my $anchor = "erp_$urps->{erp_active_table}";
+        # Use a row anchor within range of the row being edited as
+        # the goto target
+        my $anchor = 'erp_'.$urps->{erp_active_table};
         if ($urps->{erp_active_row} > 5) {
             my $before = $urps->{erp_active_row} - 1;
-            $anchor .= "_$before";
+            $anchor .= '_'.$before;
         } else {
-            $anchor .= "_1";
+            $anchor .= '_1';
         }
         if ($TWiki::Plugins::VERSION < 1.11) {
             my $p = '';
