@@ -380,7 +380,7 @@ Another great TWiki extension from the <a style="text-decoration:none" href="htt
 |  License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 |  Version: | %$VERSION% |
 |  Change History: | |
-|  10 Sep 2007 | Bugs:Item4600 upload !VarXXX topics to Plugins web, to support pluggable documentation architecture. Minor doc improvements. |
+|  10 Sep 2007 | Bugs:Item4600 upload !VarXXX topics to Plugins web, to support pluggable documentation architecture. Minor doc improvements. Bugs:Item3839 add build script at the root to help with building several plugins in one session Bugs:Item4601 remove duplicate installer script (.pl) |
 |  13599 | Bugs:Item2006 fixed default permissions to allow group write, and rewrote the main (this) doc to be more useful. Bugs:Item3624 added a pause between uploads (20s) |
 |  12953 | Bugs:Item3118 Remember last upload target for each extension you upload. Handle upload to sites that use Template login. Bugs:Item3445 Carry attributes over for files that are uploaded with the topic, so they remain hidden. Also added date to default version string. |
 |  12821 | Bugs:Item3597 Duplicated _installer in _installer.pl, so that 4.1 extensions installer can use it |
