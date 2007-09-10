@@ -96,6 +96,7 @@ A wide range of standard styles are used in the TWiki core code and topics, and 
 |.twikiInputField  | |
 |.twikiInputFieldDisabled  | |
 |.twikiInputFieldReadOnly  | |
+|.twikiInputFieldFocus | For Internet Explorer that does not recognize the =:focus= pseudo class selector |
 |.twikiInputFieldBeforeFocus  |for use with Javascript: the color of the input text when not clicked in the field |
 |.twikiTextarea | |
 |.twikiTextareaRawView | |
