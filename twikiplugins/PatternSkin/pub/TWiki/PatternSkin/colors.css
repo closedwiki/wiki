@@ -173,7 +173,8 @@ select {
 	background-color:#fff;
 }
 .twikiInputField:active,
-.twikiInputField:focus {
+.twikiInputField:focus,
+.twikiInputFieldFocus {
 	background-color:#fff9d1;
 }
 
