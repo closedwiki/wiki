@@ -48,9 +48,8 @@ If you don't like reading documentation, and just want a fast route to creating 
    1 =cd= to the =twikiplugins= directory under the root of your twiki installation
    1 =perl create_new_extension.pl= <i>extension_name</i>
 then modify the extension files as required (including MANIFEST). Then when you are ready to create archives,
-   1 =cd twikiplugins/<i>extension_name</i>/lib/TWiki/Plugins/<i>extension_name</i>=
-      * (or =.../lib/TWiki/Contrib/...= for a non-plugin extension e.g. a skin or TWiki Application)
-   1 =perl build.pl release=
+   1 =cd twikiplugins=
+   1 =perl build.pl <i>extension_name</i> release
       * Archives (.zip, .tgz) will be created in =twikiplugins/<i>extension_name</i>=
 
 #DevelopmentModel
@@ -174,6 +173,8 @@ __Notes__
    * This topic, and all the embedded POD documentation, are generated using
      this build module.
    * The =test= target assumes you are using CPAN:Test::Unit.
+
+Note that there is a shortcut script, =twikiplugins/build.pl=, that can be very helpful when you are building several extensions in one session. Run the script without parameters for documentation.
 
 ---++ MANIFEST
 The =MANIFEST= file contains a list of all the files that are wanted in the

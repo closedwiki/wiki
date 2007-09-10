@@ -1,7 +1,6 @@
 #!perl
-# Install script for %$MODULE%
 #
-# Note that %$MODULE%_installer and %$MODULE%_installer.pl are THE SAME FILE
+# Install script for %$MODULE%
 #
 # Copyright (C) 2004-2007 Crawford Currie http://c-dot.co.uk
 #
@@ -17,7 +16,7 @@ use File::Path;
 
 =pod
 
----+ %$MODULE%_Installer.pl
+---+ %$MODULE%_installer
 This is the installer script. The basic function of this script is to
 locate an archive and unpack it.
 
