@@ -58,4 +58,3 @@ function cltpCloseInputForm(id) {
         var it = document.getElementById(id); 
         if (it) it.style.visibility = 'hidden'; 
 }
-
