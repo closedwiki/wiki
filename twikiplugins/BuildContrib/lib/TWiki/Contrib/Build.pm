@@ -57,7 +57,7 @@ my $TWIKIORGSUFFIX = '';
 my $TWIKIORGBUGS = 'http://develop.twiki.org/~develop/cgi-bin/view/Bugs';
 my $TWIKIORGEXTENSIONSWEB = "Plugins";
 
-my $GLACIERMELT = 20; # number of seconds to sleep between uploads,
+my $GLACIERMELT = 10; # number of seconds to sleep between uploads,
                       # to reduce average load on server
 
 $SIG{__DIE__} = sub { Carp::confess $_[0] };
@@ -1117,7 +1117,8 @@ END
         foreach my $line ( split(/\n/, $response->content() )) {
             if ( $line =~ m/META:FIELD{name="(.*?)".*?value="(.*?)"}/ ) {
                 my $val = $2;
-                if ($val && $val ne '') {
+                # Trim null values or we end up damaging the form
+                if (defined $val && length($val)) {
                     $newform{$1} = $val;
                 }
             }
@@ -1128,8 +1129,9 @@ END
         print "Basing new topic on ".$this->{basedir}.'/'.$to.'.txt'."\n";
         $newform{'text'} = <IN_FILE>;
         close( IN_FILE );
-        #Hack to avoid revisions to be overwritten on twiki.org. Can be removed when
-        #it is upgraded to 4.1.0. Item3216, Item3454
+        # Hack to avoid revisions being overwritten on twiki.org.
+        # Can be removed when twiki.org is upgraded to 4.1.0.
+        # Item3216, Item3454
         $newform{'text'} =~ s/^%META:TOPICINFO{.*}%$//m;
     } else {
         print STDERR 'Failed to open base topic: '.$!;
@@ -1139,9 +1141,98 @@ END
         print "Basing new topic on some default text:\n$newform{text}\n";
     }
 
-    print "Uploading new topic\n";
-    $url =~ s./view/./save/.;
-    $response = $userAgent->post( $url, \%newform );
+    $this->_uploadTopic($userAgent, $user, $pass, $topic, \%newform);
+
+    # Upload any 'Var*.txt' topics published by the extension
+    my $dataDir = $this->{basedir}.'/data/TWiki';
+    if (opendir(DIR, $dataDir)) {
+        foreach my $f (grep(/^Var\w+\.txt$/, readdir DIR)) {
+            if (open(IN_FILE, '<'.$this->{basedir}.'/data/TWiki/'.$f)) {
+                %newform = ( text => <IN_FILE> );
+                close(IN_FILE);
+                $f =~ s/\.txt$//;
+                $this->_uploadTopic($userAgent, $user, $pass, $f, \%newform);
+            }
+        }
+    }
+
+    return if($this->{-topiconly});
+
+    # upload any attachments to the developer's version of the topic. Any other
+    # attachments to the topic on t.o. will still be there.
+    my @attachments;
+    my %uploaded; # flag already uploaded
+
+    $newform{text} =~ s/%META:FILEATTACHMENT(.*)%/push(@attachments, $1)/ge;
+    foreach my $a (@attachments) {
+        $a =~ /name="([^"]*)"/;
+        my $name = $1;
+        next if $uploaded{$name};
+        next if $name =~ /^$to(\.zip|\.tgz|_installer|\.md5)$/;
+        $a =~ /comment="([^"]*)"/;
+        my $comment = $1;
+        $a =~ /attr="([^"]*)"/;
+        my $attrs = $1 || '';
+
+        $this->_uploadAttachment(
+            $userAgent, $user, $pass,
+            $name, $this->{basedir}.'/pub/TWiki/'.$this->{project}.'/'.$name,
+            $comment, $attrs =~ /h/ ? 1 : 0);
+        $uploaded{$name} = 1;
+    }
+
+    my $doup = ask("Do you want to upload the archives and installers?", 1);
+    return unless $doup;
+
+    # Upload the standard files
+    foreach my $ext qw(.zip .tgz _installer .md5) {
+        my $name = $to.$ext;
+        next if $uploaded{$name};
+        $this->_uploadAttachment(
+            $userAgent, $user, $pass,
+            $to.$ext, $this->{basedir}.'/'.$to.$ext,'');
+        $uploaded{$name} = 1;
+    }
+}
+
+sub _uploadTopic {
+    my ($this, $userAgent, $user, $pass, $topic, $form) = @_;
+    my $url = "$this->{UPLOADTARGETSCRIPT}/save$this->{UPLOADTARGETSUFFIX}/$this->{UPLOADTARGETWEB}/$topic";
+    $form->{text} = <<EXTRA.$form->{text};
+<!--
+This topic is part of the documentation for $this->{project} and is
+automatically generated from Subversion. Do not edit it! Your edits
+will be lost the next time the topic is uploaded!
+
+If you want to report an error in the topic, please raise a report at
+http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/$this->{project}
+-->
+EXTRA
+    print "Saving $topic\n";
+    $this->_postForm( $userAgent, $user, $pass, $url, $form );
+}
+
+sub _uploadAttachment {
+    my ($this, $userAgent, $user, $pass,
+        $filename, $filepath, $filecomment, $hide) = @_;
+    my $url = "$this->{UPLOADTARGETSCRIPT}/upload$this->{UPLOADTARGETSUFFIX}/$this->{UPLOADTARGETWEB}/$this->{project}";
+    my $form = [
+        'filename' => $filename,
+        'filepath' => [ $filepath ],
+        'filecomment' => $filecomment,
+        'hidefile' => $hide || 0,
+       ];
+
+    print "Uploading $this->{UPLOADTARGETWEB}/$this->{project}/$filename\n";
+    $this->_postForm($userAgent, $user, $pass, $url, $form);
+}
+
+sub _postForm {
+    my ($this, $userAgent, $user, $pass, $url, $form) = @_;
+    my $response = $userAgent->post(
+        $url, $form,
+        'Content_Type' => 'form-data' );
+
     if ($response->is_redirect() &&
           $response->headers->header('Location') =~ /oopsaccessdenied/) {
         # Try login if we got access denied despite passing creds
@@ -1155,62 +1246,18 @@ END
         #      $response->content().$NL,
         #        $response->headers->header('Set-Cookie').$NL;
         # Post the upload again; we should be logged in
-        $response = $userAgent->post( $url, \%newform );
+        $response = $userAgent->post( $url, $form );
     }
 
-    die 'Update of topic failed ', $response->request->uri(),
-      ' -- ', $response->status_line(), "\n",
-        $response->headers->header('Location')."\n".
-          $response->content()
-            unless $response->is_redirect() &&
-              $response->headers->header('Location') !~ /oops/;
-
-    return if($this->{-topiconly});
-
-    # upload any attachments to the developer's version of the topic. Any other
-    # attachments to the topic on t.o. will still be there.
-    my @attachments;
-    my %uploaded;
-    my $doup = ask("Do you want to upload the archives and installers?", 1);
-
-    # Upload the standard files
-    foreach my $ext qw(.zip .tgz _installer .md5) {
-        if ($doup) {
-            # Deep breath before the next one
-            $this->_uploadFile($userAgent, $response,
-                               $this->{UPLOADTARGETWEB}, $to, $to.$ext,
-                               $this->{basedir}.'/'.$to.$ext,'');
-        }
-        # Say it was uploaded to block the META:FILEATTACHMENT attempt
-        $uploaded{$to.$ext} = 1;
-    }
-
-    # Upload other files described in the attachments list. They must be
-    # in the pub directory.
-    $newform{'text'} =~ s/%META:FILEATTACHMENT(.*)%/push(@attachments, $1)/ge;
-    for my $a (@attachments) {
-        $a =~ /name="([^"]*)"/;
-        my $name = $1;
-        next if $uploaded{$name};
-        $a =~ /comment="([^"]*)"/;
-        my $comment = $1;
-        $a =~ /attr="([^"]*)"/;
-        my $attrs = $1 || '';
-
-        $this->_uploadFile(
-            $userAgent, $response, $this->{UPLOADTARGETWEB}, $to, $name,
-            $this->{basedir}.'/pub/TWiki/'.$this->{project}.'/'.$name,
-            $comment, $attrs =~ /h/ ? 1 : 0);
-    }
-}
-
-sub _uploadFile {
-    my ($this, $userAgent, $response, $web, $to, $filename, $filepath, $filecomment, $hide) = @_;
+    die 'Upload failed ', $response->request->uri,
+      ' -- ', $response->status_line, $NL, 'Aborting',$NL, $response->as_string
+        unless $response->is_redirect &&
+          $response->headers->header('Location') !~ /oops/;
 
     my $sleep = $GLACIERMELT;
     if ($sleep > 0) {
         local $| = 1;
-        print "Taking a deep breath before the next upload";
+        print "Taking a deep breath after the upload";
         while ($sleep > 0) {
             print '.';
             sleep(2);
@@ -1218,21 +1265,6 @@ sub _uploadFile {
         }
         print "\n";
     }
-    print "Uploading $filename from $filepath\n";
-    $response = $userAgent->post(
-        "$this->{UPLOADTARGETSCRIPT}/upload$this->{UPLOADTARGETSUFFIX}/$web/$to",
-        [
-            'filename' => $filename,
-            'filepath' => [ $filepath ],
-            'filecomment' => $filecomment,
-            'hidefile' => $hide || 0,
-           ],
-        'Content_Type' => 'form-data' );
-
-    die 'Update of '.$filename.' failed ', $response->request->uri,
-      ' -- ', $response->status_line, $NL, 'Aborting',$NL, $response->as_string
-        unless $response->is_redirect &&
-          $response->headers->header('Location') !~ /oops/;
 }
 
 sub _unhtml {

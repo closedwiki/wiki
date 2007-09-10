@@ -20,11 +20,9 @@ Automates build and packaging process, including installer generation, for TWiki
 
 !BuildContrib can be used to create a build script for your TWiki extension.
 It is inspired by the Java ANT build tool developed by the Apache project,
-but is targeted specifically at building TWiki.
-
-!BuildContrib is designed mainly for building TWiki extensions, and it is also
+but is targeted specifically at building TWiki extensions. It is also
 used for TWiki release builds. The advantage of using !BuildContrib is that it
-dictates a standard build procedure for extensions, which makes your extension
+dictates a standard structure and build procedure, which makes your extension
 easier for you, and others, to build and maintain.
 
 Features:
@@ -43,6 +41,17 @@ __Notes__
      Cygwin OK.
    * !BuildContrib has *only been tested with TWiki-4*. It *might* work
      with earlier TWiki versions.
+
+---++ Fast Start
+If you don't like reading documentation, and just want a fast route to creating a new TWiki extension, then:
+   1 Install the contrib using the instructions below
+   1 =cd= to the =twikiplugins= directory under the root of your twiki installation
+   1 =perl create_new_extension.pl= <i>extension_name</i>
+then modify the extension files as required (including MANIFEST). Then when you are ready to create archives,
+   1 =cd twikiplugins/<i>extension_name</i>/lib/TWiki/Plugins/<i>extension_name</i>=
+      * (or =.../lib/TWiki/Contrib/...= for a non-plugin extension e.g. a skin or TWiki Application)
+   1 =perl build.pl release=
+      * Archives (.zip, .tgz) will be created in =twikiplugins/<i>extension_name</i>=
 
 #DevelopmentModel
 ---++ Development Model
@@ -336,7 +345,9 @@ upload it.
    * =perl build.pl upload=
 By default the =upload= target will upload to TWiki.org. You will be prompted
 to enter an alternate upload target, should you require it (e.g. to upload to
-private corporate repository).
+private corporate repository). The upload updates the topic and any associated
+Var topics published by the extension, and uploads zip, tgz, md5 and installer
+files.
 
 ---++ Install support
 Installer scripts build by !BuildContrib are important for the full
@@ -361,12 +372,14 @@ You are strongly recommended to use this Contrib to help split your code develop
 %$INSTALL_INSTRUCTIONS%
 
 ---++ Contrib Info
+Another great TWiki extension from the <a style="text-decoration:none" href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiringlogo20x20.png" alt="" /> *WikiRing* </a> - __Working together to improve your wiki experience__!
 
 |  Authors: | TWiki:Main.CrawfordCurrie |
-|  Copyright &copy;: | 2004-2006, Crawford Currie http://wikiring.com |
+|  Copyright &copy;: | 2004-2007, Crawford Currie http://wikiring.com |
 |  License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 |  Version: | %$VERSION% |
 |  Change History: | |
+|  10 Sep 2007 | Bugs:Item4600 upload !VarXXX topics to Plugins web, to support pluggable documentation architecture. Minor doc improvements. |
 |  13599 | Bugs:Item2006 fixed default permissions to allow group write, and rewrote the main (this) doc to be more useful. Bugs:Item3624 added a pause between uploads (20s) |
 |  12953 | Bugs:Item3118 Remember last upload target for each extension you upload. Handle upload to sites that use Template login. Bugs:Item3445 Carry attributes over for files that are uploaded with the topic, so they remain hidden. Also added date to default version string. |
 |  12821 | Bugs:Item3597 Duplicated _installer in _installer.pl, so that 4.1 extensions installer can use it |
@@ -421,3 +434,4 @@ __Related Topics:__ %SYSTEMWEB%.TWikiPreferences
 -- TWiki:Main/CrawfordCurrie - %$DATE% %BR%
 
 %META:FILEATTACHMENT{name="logo.gif" comment="logo" path="logo.gif"}%
+%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="" version="1"}%
