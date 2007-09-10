@@ -162,7 +162,10 @@ sub getExternalResource {
             $port = $proxyPort;
         }
 
-        $req .= 'User-Agent: TWiki::Net/$Rev$'."\r\n";
+	'$Rev$'=~/([0-9]+)/;
+	my $revstr=$1;
+
+        $req .= 'User-Agent: TWiki::Net/'.$revstr."\r\n";
         $req .= "\r\n\r\n";
 
         my ( $iaddr, $paddr, $proto );
@@ -211,7 +214,9 @@ sub _GETUsingLWP {
     my $request;
     require HTTP::Request;
     $request = HTTP::Request->new(GET => $url);
-    $request->header('User-Agent' => 'TWiki::Net/$Rev$ '."libwww-perl/$LWP::VERSION");
+    '$Rev$'=~/([0-9]+)/;
+    my $revstr=$1;
+    $request->header('User-Agent' => 'TWiki::Net/'.$revstr." libwww-perl/$LWP::VERSION");
     require TWiki::Net::UserCredAgent;
     my $ua = new TWiki::Net::UserCredAgent($user, $pass);
     my $response = $ua->request($request);

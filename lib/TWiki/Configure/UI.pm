@@ -69,9 +69,9 @@ sub getRepository {
 # UIs *must* exist
 sub loadUI {
     my ($id, $item) = @_;
-
     $id = 'TWiki::Configure::UIs::'.$id;
     my $ui;
+
     eval "use $id; \$ui = new $id(\$item);";
 
     return undef if (!$ui && $@);
