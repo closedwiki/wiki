@@ -651,7 +651,17 @@ Basic build target.
 
 sub target_build {
     my $this = shift;
+}
 
+=pod
+
+---++++ target_compress
+Compress Javascript and CSS files
+
+=cut
+
+sub target_compress {
+    my $this = shift;
   FILE:
     foreach my $file (@{$this->{files}}) {
         # Find files that match the build filter and try to update
