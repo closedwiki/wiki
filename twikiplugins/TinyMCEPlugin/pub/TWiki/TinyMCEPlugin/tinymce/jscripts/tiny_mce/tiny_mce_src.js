@@ -1150,19 +1150,21 @@ TinyMCE_Engine.prototype = {
 
 				// Fixes odd MSIE bug where drag/droping elements in a iframe with height 100% breaks
 				// This logic forces the width/height to be in pixels while the user is drag/dropping
-				if (tinyMCE.isRealIE) {
-					var ife = tinyMCE.selectedInstance.iframeElement;
-
-					/*if (ife.style.width.indexOf('%') != -1) {
-						ife._oldWidth = ife.width.height;
-						ife.style.width = ife.clientWidth;
-					}*/
-
-					if (ife.style.height.indexOf('%') != -1) {
-						ife._oldHeight = ife.style.height;
-						ife.style.height = ife.clientHeight;
-					}
-				}
+// NOTE: This has been disabled for now since it messes up copy/paste
+// that is far more important than image drag
+//				if (tinyMCE.isRealIE) {
+//					var ife = tinyMCE.selectedInstance.iframeElement;
+//
+//					/*if (ife.style.width.indexOf('%') != -1) {
+//						ife._oldWidth = ife.width.height;
+//						ife.style.width = ife.clientWidth;
+//					}*/
+//
+//					if (ife.style.height.indexOf('%') != -1) {
+//						ife._oldHeight = ife.style.height;
+//						ife.style.height = ife.clientHeight;
+//					}
+//				}
 
 				window.setTimeout("tinyMCE.selectedInstance.setBaseHREF(tinyMCE.settings.base_href);tinyMCE._resetIframeHeight();", 1);
 				return;

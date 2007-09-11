@@ -459,6 +459,8 @@ pub/TWiki/TinyMCEPlugin/tinymce/readme 0644
 pub/TWiki/TinyMCEPlugin/tinymce.gif 0644
 pub/TWiki/TinyMCEPlugin/screenshot.gif 0644
 pub/TWiki/TinyMCEPlugin/wysiwyg.css 0644
+pub/TWiki/TinyMCEPlugin/wysiwyg_src.css 0644
 pub/TWiki/TinyMCEPlugin/verbatim.gif 0644
+pub/TWiki/TinyMCEPlugin/twiki_src.js 0644
 pub/TWiki/TinyMCEPlugin/twiki.js 0644
 pub/TWiki/TinyMCEPlugin/wikiringlogo20x20.png 0660
