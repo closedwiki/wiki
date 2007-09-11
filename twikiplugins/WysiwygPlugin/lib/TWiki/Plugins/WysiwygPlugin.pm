@@ -390,17 +390,14 @@ sub postConvertURL {
         $url =~ s/^$opts->{exp}->[$i]/$VARS[$i]/;
     }
 
-    if ($url =~ m#^%SCRIPTURL(?:PATH)?(?:{"view"}%|%/+view[^/]*)/+(\w+)(?:/+(\w+))?$# && !$parameters) {
-        my( $web, $topic );
-
-        if( $2 ) {
-            ($web, $topic) = ($1, $2);
-        } else {
-            $topic = $1;
-        }
+    if ($url =~ m#^%SCRIPTURL(?:PATH)?(?:{"view"}%|%/+view[^/]*)/+([/\w.]+)$#
+          && !$parameters) {
+        my $orig = $1;
+        my( $web, $topic ) = TWiki::Func::normalizeWebTopicName(
+            $opts->{web}, $orig);
 
         if( $web && $web ne $opts->{web} ) {
-            #print STDERR "$orig -> $web.$topic$anchor\n"; #debug
+            print STDERR "$orig -> $web+$topic$anchor\n"; #debug
             return $web.'.'.$topic.$anchor;
         }
         #print STDERR "$orig -> $topic$anchor\n"; #debug

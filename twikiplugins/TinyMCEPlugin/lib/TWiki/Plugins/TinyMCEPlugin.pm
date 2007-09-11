@@ -58,6 +58,8 @@ sub _notAvailable {
     return "$skin is active"
       if( $skin && TWiki::Func::getSkin() =~ /\b$skin\b/o );
 
+    return "No browser" unless $query;
+
     # Check the client browser to see if it is supported
     return "Disabled" if $query->param('nowysiwyg');
     my $ua = TWiki::Func::getPreferencesValue('TINYMCEPLUGIN_BAD_BROWSERS') ||
@@ -85,7 +87,7 @@ sub beforeEditHandler {
       || <<'HERE';
 '
 HERE
-    my $extras;
+    my $extras = '';
     # The order of these conditions is important, because browsers
     # spoof eachother
     if ($browserInfo{isSafari}) {
@@ -118,16 +120,16 @@ HERE
     }
 
     my $brinf = join(' ',map { "$_=$browserInfo{$_}" } keys %browserInfo);
-    my $ua = $query->user_agent();
+    my $ua = $query->user_agent() || '';
 
     # _src.js for debug
-    my $TINYMCE_SCRIPT = 'tinymce/jscripts/tiny_mce/tiny_mce_src.js';
+    #my $TINYMCE_SCRIPT = 'tinymce/jscripts/tiny_mce/tiny_mce_src.js';
     # Stripped for production
-    #my $TINYMCE_SCRIPT = 'tinymce/jscripts/tiny_mce/tiny_mce.js';
+    my $TINYMCE_SCRIPT = 'tinymce/jscripts/tiny_mce/tiny_mce.js';
 
     TWiki::Func::addToHEAD('tinyMCE', <<SCRIPT);
-<script language="javascript" type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TinyMCEPlugin/$TINYMCE_SCRIPT"></script>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TinyMCEPlugin/twiki.js"></script>
+<script language="javascript" type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TinyMCEPlugin/$TINYMCE_SCRIPT"></script>
+<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TinyMCEPlugin/twiki.js"></script>
 <script type="text/javascript">
 // <![CDATA[
 // BROWSER $brinf
@@ -136,14 +138,14 @@ HERE
 tinyMCE.init({ $init });
 // ]]>
 </script>
-<script language="javascript" type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TinyMCEPlugin//tinymce/jscripts/tiny_mce/plugins/twikiimage/jscripts/functions.js"></script>
-<script language="javascript" type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TinyMCEPlugin//tinymce/jscripts/tiny_mce/plugins/twikiimage/editor_plugin.js"></script>
+<script language="javascript" type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TinyMCEPlugin//tinymce/jscripts/tiny_mce/plugins/twikiimage/jscripts/functions.js"></script>
+<script language="javascript" type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TinyMCEPlugin//tinymce/jscripts/tiny_mce/plugins/twikiimage/editor_plugin.js"></script>
 SCRIPT
 
     my $useJSTranslator = 0;
     if ($useJSTranslator) {
         TWiki::Func::addToHEAD('tinyMCEJS', <<SCRIPT);
-        <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TinyMCEPlugin/TML2HTML.js"></script>
+        <script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TinyMCEPlugin/TML2HTML.js"></script>
 SCRIPT
     } else {
         my $sid = '<!--'.$secret_id.'-->';
