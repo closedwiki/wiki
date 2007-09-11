@@ -151,6 +151,7 @@ in control files to build the various targets. Perl is used rather than
 
 The targets you will normally use are:
 | =build= | perform basic build steps |
+| =compress= | Generate compressed versions of JavaScript and CSS files |
 | =test= | run [[#UnitTesting][unit tests]] |
 | =release= | =build=, =pod= and package a release zip |
 | =upload= | =build=, =pod=, =release= and upload |
@@ -162,10 +163,14 @@ The default target is =test=. The !BuildContrib is designed so that most common 
 Note that there is a shortcut script, =twikiplugins/build.pl=, that can be very helpful when you are building several extensions in one session. Run the script without parameters for documentation.
 
 ---+++ The =build= target
-Usually only used if your extension includes Javascript or CSS, this target looks for =XXX.js= files listed in MANIFEST that have a corresponding =XXX_src.js= in the directory structure. When it finds one, it automatically compresses the =XXX_src.js= file to create =XXX.js=. Also works on CSS files, for the file extensions =.css=. Compression improves the performance of Javascript and CSS.
-   * Do *not* check =XXX.js= or =XXX.css= into Subversion
-   * The =XXX_src.js= and =XXX_src.css= do *not* have to be listed in the MANIFEST.
-   * Uses CPAN:JavaScript::Minifier and CPAN:CSS::Minifier to perform the compression
+Does nothing by default. This is the first target executed, and can be overridden by your build.pl to do something unusual - for example, executing an ANT file to build some Java.
+
+---+++ The =compress= target
+Usually only used if your extension includes Javascript or CSS, this target looks for =XXX.js= files listed in MANIFEST that have a corresponding =XXX_src.js= in the directory structure. When it finds one, it automatically compresses the =XXX_src.js= file to create/refresh =XXX.js=. If you are using Subversion, the generated file should then by checked in.
+
+Also works on CSS files, for the file extensions =.css=. Compression improves the performance of Javascript and CSS.
+
+Uses CPAN:JavaScript::Minifier and CPAN:CSS::Minifier to perform the compression
 
 ---+++ The =test= target
 The test target is designed for use with extensions that have unit tests written using the !UnitTestContrib. It automatically runs the unit tests found in the =test/unit/<i>extension_name</i>= directory.
