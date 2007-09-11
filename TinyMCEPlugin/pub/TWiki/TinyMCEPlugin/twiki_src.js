@@ -1,17 +1,15 @@
-// Content manipulation on startup
-var tinymce_plugin_setUpContent = function(editor_id, body, doc) {
-    //body.innerHTML = TML2HTML.convert(body.innerHTML);
+var tinymce_plugin_setUpContent = function(editor_id,body,doc) {
 };
 
-function pasteWordContentCallback(type, content) {
+function pasteWordContentCallback(type,content){
     return content;
 }
 
 // Called on URL insertion, but not on image sources. Expand TWiki variables
 // in the url. If the URL is a simple filename, then assume it's an attachment
 // on the current topic.
-function twikiConvertURL(url, node, onSave) {
-    if (onSave == null)
+function twikiConvertURL(url,node,onSave){
+    if(onSave == null)
         onSave = false;
     var orig = url;
     var vars = tinyMCE.getParam("twiki_vars", "");
@@ -24,8 +22,7 @@ function twikiConvertURL(url, node, onSave) {
             url = url.replace('%' + v[0] + '%', v[1]);
         }
         if (onSave) {
-            // Convert site url to wikiword
-            if (url.indexOf(vbls['VIEWSCRIPTURL']+'/') == 0) {
+            if (url.indexOf(vbls['VIEWSCRIPTURL'] + '/') == 0) {
                 url = url.substr(vbls['VIEWSCRIPTURL'].length + 1);
                 url = url.replace('/', '.', 'g');
                 if (url.indexOf(vbls['WEB'] + '.') == 0) {
@@ -34,9 +31,6 @@ function twikiConvertURL(url, node, onSave) {
             }
         } else {
             if (url.indexOf('/') == -1) {
-                // Simple string with possible web prefix? Note we don't
-                // support / web separators, as they may be confused
-                // with a URL path
                 var match = /^((?:\w+\.)*)(\w+)$/.exec(url);
                 if (match != null) {
                     var web = match[1];
@@ -44,20 +38,16 @@ function twikiConvertURL(url, node, onSave) {
                     if (web == null || web.length == 0) {
                         web = vbls['WEB'];
                     }
-                    // Convert to / separated path
                     web = web.replace('.', '/', 'g');
-                    // Remove trailing /'s from web
                     web = web.replace(/\/+$/, '');
                     url = vbls['VIEWSCRIPTURL'] + '/' + web + '/' + topic;
                 } else {
-                    // Treat as attachment name
                     url = vbls['PUBURL'] + '/' + vbls['WEB'] + '/'+
                         vbls['TOPIC'] + '/' + url;
                 }
             }
         }
     }
-    //alert("Convert "+orig+" to"+url);
     return url;
 }
 
@@ -104,5 +94,4 @@ function initTextAreaStyles () {
 	}
 	
 }
-
 
