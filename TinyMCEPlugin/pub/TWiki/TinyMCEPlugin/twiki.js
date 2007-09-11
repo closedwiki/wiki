@@ -21,32 +21,38 @@ function twikiConvertURL(url, node, onSave) {
         for (var i = 0; i < sets.length; i++) {
             var v = sets[i].split('=');
             vbls[v[0]] = v[1];
-            url = url.replace('%'+v[0]+'%', v[1]);
+            url = url.replace('%' + v[0] + '%', v[1]);
         }
         if (onSave) {
             // Convert site url to wikiword
             if (url.indexOf(vbls['VIEWSCRIPTURL']+'/') == 0) {
                 url = url.substr(vbls['VIEWSCRIPTURL'].length + 1);
-                url = url.replace('/', '.');
-                if (url.indexOf(vbls['WEB']+'.') == 0) {
+                url = url.replace('/', '.', 'g');
+                if (url.indexOf(vbls['WEB'] + '.') == 0) {
                     url = url.substr(vbls['WEB'].length + 1);
                 }
             }
         } else {
             if (url.indexOf('/') == -1) {
-                // Simple wikiword?
-                var match = /^(?:([A-Z][a-z0-9A-Z_]+)\.)?([A-Z][a-z0-9A-Z]+[A-Z][a-z0-9A-Z]*)$/.exec(url);
+                // Simple string with possible web prefix? Note we don't
+                // support / web separators, as they may be confused
+                // with a URL path
+                var match = /^((?:\w+\.)*)(\w+)$/.exec(url);
                 if (match != null) {
                     var web = match[1];
                     var topic = match[2];
-                    if (web == null) {
+                    if (web == null || web.length == 0) {
                         web = vbls['WEB'];
                     }
-                    url = vbls['VIEWSCRIPTURL']+'/'+web+'/'+topic;
+                    // Convert to / separated path
+                    web = web.replace('.', '/', 'g');
+                    // Remove trailing /'s from web
+                    web = web.replace(/\/+$/, '');
+                    url = vbls['VIEWSCRIPTURL'] + '/' + web + '/' + topic;
                 } else {
                     // Treat as attachment name
-                    url = vbls['PUBURL']+'/'+vbls['WEB']+'/'+
-                        vbls['TOPIC']+'/'+url;
+                    url = vbls['PUBURL'] + '/' + vbls['WEB'] + '/'+
+                        vbls['TOPIC'] + '/' + url;
                 }
             }
         }
