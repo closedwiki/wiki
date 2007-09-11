@@ -16,6 +16,7 @@ DOC
 }
 
 my $extension = shift(@ARGV);
+$extension =~ s./+$..;
 
 my $extdir = "Contrib";
 if ($extension =~ /Plugin$/) {
@@ -24,7 +25,7 @@ if ($extension =~ /Plugin$/) {
 
 my $scriptDir = "$extension/lib/TWiki/$extdir/$extension";
 unless (-e "$scriptDir/build.pl") {
-    die "$script not found";
+    die "$scriptDir/build.pl not found";
 }
 
 use Cwd;
