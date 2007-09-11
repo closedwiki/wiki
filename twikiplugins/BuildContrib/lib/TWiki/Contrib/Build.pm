@@ -62,6 +62,16 @@ my $GLACIERMELT = 10; # number of seconds to sleep between uploads,
 
 $SIG{__DIE__} = sub { Carp::confess $_[0] };
 
+my @stageFilters = (
+    { RE => qr/\.txt$/,    filter => 'filter_txt' },
+    { RE => qr/\.pm$/,     filter => 'filter_pm' },
+   );
+
+my @buildFilters = (
+    { RE => qr/\.js$/, filter => 'build_js' },
+    { RE => qr/\.css$/, filter => 'build_css' },
+   );
+
 sub _findRelativeTo {
     my( $startdir, $name ) = @_;
 
@@ -221,8 +231,8 @@ sub new {
         $v =~ s/>/&gt;/go;
         $v =~ s/</&lt;/go;
         my $cells = CGI::td({align=>'left'}, $dep->{name} ).
-           CGI::td({align=>'left'}, $v ).
-          CGI::td({align=>'left'}, $dep->{description});
+          CGI::td({align=>'left'}, $v ).
+              CGI::td({align=>'left'}, $dep->{description});
         $deptable .= CGI::Tr( $cells );
     }
     $this->{RAW_DEPENDENCIES} = $rawdeps;
@@ -635,14 +645,29 @@ sub perl_action {
 =pod
 
 ---++++ target_build
-Basic build target. By default does nothing, but subclasses may want to
-extend on that.
+Basic build target.
 
 =cut
 
 sub target_build {
     my $this = shift;
-    # does nothing
+
+  FILE:
+    foreach my $file (@{$this->{files}}) {
+        # Find files that match the build filter and try to update
+        # them
+        foreach my $filter (@buildFilters) {
+            if ($file->{name} =~ /$filter->{RE}/) {
+                no strict 'refs';
+                my $ok = &{$filter->{filter}}(
+                    $this, $this->{basedir}.'/'.$file->{name});
+                use strict 'refs';
+                if ($ok) {
+                    next FILE;
+                }
+            }
+        }
+    }
 }
 
 =pod
@@ -735,10 +760,95 @@ sub _expand {
 
 =pod
 
+---++++ build_js
+Uses JavaScript::Minifier to optimise javascripts
+
+=cut
+
+sub build_js {
+    my ($this, $to) = @_;
+
+    my $from = $to;
+    $from =~ s/.js$/_src.js/;
+
+    return 0 unless -e $from;
+
+    open(IF, '<'.$from) || die $!;
+    local $/ = undef;
+    my $text = <IF>;
+    close(IF);
+
+    eval "require JavaScript::Minifier";
+    if ($@) {
+        print STDERR "Cannot squish: no JavaScript::Minifier found\n";
+    } else {
+        $text = JavaScript::Minifier::minify(input => $text);
+
+        if (open(IF, '<'.$to)) {
+            my $ot = <IF>;
+            close($ot);
+            return 1 if $text eq $ot; # no changes?
+        }
+
+        unless ($this->{-n}) {
+            open(OF, '>'.$to) || die "$to: $!";
+        }
+        print OF $text unless ($this->{-n});
+        close(OF) unless ($this->{-n});
+        print STDERR "Generated $to from $from\n";
+    }
+    return 1;
+}
+
+=pod
+
+---++++ build_css
+Uses CSS::Minifier to optimise CSS files
+
+=cut
+
+sub build_css {
+    my ($this, $to) = @_;
+
+    my $from = $to;
+    $from =~ s/\.css$/_src.css/;
+
+    return 0 unless -e $from;
+
+    open(IF, '<'.$from) || die $!;
+    local $/ = undef;
+    my $text = <IF>;
+    close(IF);
+
+    eval "require CSS::Minifier";
+    if ($@) {
+        print STDERR "Cannot squish: no CSS::Minifier found\n";
+    } else {
+        $text = CSS::Minifier::minify(input => $text);
+
+        if (open(IF, '<'.$to)) {
+            my $ot = <IF>;
+            close($ot);
+            return 1 if $text eq $ot; # no changes?
+        }
+
+        unless ($this->{-n}) {
+            open(OF, '>'.$to) || die "$to: $!";
+        }
+        print OF $text unless ($this->{-n});
+        close(OF) unless ($this->{-n});
+        print STDERR "Generated $to from $from\n";
+    }
+    return 1;
+}
+
+=pod
+
 ---++++ filter_pm($from, $to)
 Filters expanding SVN rev number with correct version from repository
 Note: unlike subversion, this puts in the version number of the whole
 repository, not just this file.
+
 =cut
 
 sub filter_pm {
@@ -797,17 +907,17 @@ sub target_stage {
     $this->makepath($this->{tmpDir});
 
     $this->copy_fileset($this->{files}, $this->{basedir}, $this->{tmpDir});
+
     foreach my $file (@{$this->{files}}) {
-        my $txt;
-        if ($file->{name} =~ /\.txt$/) {
-            $txt = $file->{name};
-            $this->filter_txt($this->{basedir}.'/'.$txt,
-                              $this->{tmpDir}.'/'.$txt);
-        } elsif (
-            $file->{name} =~ /\.pm$/) {
-            $txt = $file->{name};
-            $this->filter_pm($this->{basedir}.'/'.$txt,
-                             $this->{tmpDir}.'/'.$txt);
+        foreach my $filter (@stageFilters) {
+            if ($file->{name} =~ /$filter->{RE}/) {
+                no strict 'refs';
+                &{$filter->{filter}}(
+                    $this,
+                    $this->{basedir}.'/'.$file->{name},
+                    $this->{tmpDir}.'/'.$file->{name});
+                use strict 'refs';
+            }
         }
     }
     if( -e $this->{tmpDir}.'/'.$this->{data_twiki_module}.'.txt' ) {
@@ -888,10 +998,11 @@ sub copy_fileset {
     foreach my $file (@$set) {
         my $name = $file->{name};
         if (! -e $from.'/'.$name) {
-            die $from.'/'.$name.' does not exist - cannot copy';
+            die $from.'/'.$name.' does not exist';
+        } else {
+            $this->cp($from.'/'.$name, $to.'/'.$name);
+            $uncopied--;
         }
-        $this->cp($from.'/'.$name, $to.'/'.$name);
-        $uncopied--;
     }
     die 'Files left uncopied' if ($uncopied);
 }

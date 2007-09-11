@@ -49,7 +49,7 @@ If you don't like reading documentation, and just want a fast route to creating 
    1 =perl create_new_extension.pl= <i>extension_name</i>
 then modify the extension files as required (including MANIFEST). Then when you are ready to create archives,
    1 =cd twikiplugins=
-   1 =perl build.pl <i>extension_name</i> release
+   1 =perl build.pl <i>extension_name</i> release=
       * Archives (.zip, .tgz) will be created in =twikiplugins/<i>extension_name</i>=
 
 #DevelopmentModel
@@ -99,7 +99,9 @@ installation tree. Every plugin has some _key files_:
       * =unit/=
          * <code><i>name</i>/</code> - directory containing unit tests for the
            extension
-
+   * =pub/=
+      * =TWiki/=
+         * <code><i>name</i>/</code> - directory where all your images, css, and Javascript files should go
 Contribs are held in the =lib/TWiki/Contrib= directory instead of =lib/TWiki/Plugins= but otherwise in exactly work the same way.
 
 Other directories normally found in a TWiki installation may also exist under
@@ -132,7 +134,7 @@ The approach we _recommend_ is to set =TWIKI_LIBS= in your login script (e.g. =.
 *EXPERTS* =build.pl= does *not* read =bin/setlib.cfg=. It uses =$TWIKI_LIBS= only to find the modules for the !BuildContrib.
 </blockquote>
 
----++ Build scripts
+---++ Build script
 Each individual extension has its own build script, called =build.pl=, in its
 module directory. A build script is a perl script that takes a number of
  _targets_ as its parameters. For example, =perl build.pl test= will run unit
@@ -148,16 +150,27 @@ in control files to build the various targets. Perl is used rather than
 =make= for portability reasons.
 
 The targets you will normally use are:
+| =build= | perform basic build steps |
 | =test= | run [[#UnitTesting][unit tests]] |
-| =release= | build, pod and package a release zip |
-| =upload= | build, pod, package and upload |
+| =release= | =build=, =pod= and package a release zip |
+| =upload= | =build=, =pod=, =release= and upload |
 | =manifest= | print a guess at the MANIFEST |
 | =dependencies= | Find and print a best-guess dependencies list (for DEPENDENCIES) |
 
-The default target is =test=.
+The default target is =test=. The !BuildContrib is designed so that most common behaviour is catered for. It is also easy to _override_ any of the default targets in your =build.pl= and add extra behaviours.
 
-The !BuildContrib is designed so that most common behaviour is catered for. It is also easy to _override_ any of the default targets in your =build.pl= and add extra behaviours.
+Note that there is a shortcut script, =twikiplugins/build.pl=, that can be very helpful when you are building several extensions in one session. Run the script without parameters for documentation.
 
+---+++ The =build= target
+Usually only used if your extension includes Javascript or CSS, this target looks for =XXX.js= files listed in MANIFEST that have a corresponding =XXX_src.js= in the directory structure. When it finds one, it automatically compresses the =XXX_src.js= file to create =XXX.js=. Also works on CSS files, for the file extensions =.css=. Compression improves the performance of Javascript and CSS.
+   * Do *not* check =XXX.js= or =XXX.css= into Subversion
+   * The =XXX_src.js= and =XXX_src.css= do *not* have to be listed in the MANIFEST.
+   * Uses CPAN:JavaScript::Minifier and CPAN:CSS::Minifier to perform the compression
+
+---+++ The =test= target
+The test target is designed for use with extensions that have unit tests written using the !UnitTestContrib. It automatically runs the unit tests found in the =test/unit/<i>extension_name</i>= directory.
+
+---+++ The =release= target
 The results of the =release= target are:
    * a Zip format archive,
    * a gzipped tar archive,
@@ -169,12 +182,13 @@ The archives will each contain the following:
    1 All the files listed in the =MANIFEST=
    1 Another copy of the install/uninstall scripts
 
-__Notes__
-   * This topic, and all the embedded POD documentation, are generated using
-     this build module.
-   * The =test= target assumes you are using CPAN:Test::Unit.
+---+++ The =upload= target
+This target builds a release, and then tries to upload it to a target repository. The target uploads all the files in the release, and also tries to upload any attachments to the extension topic (as found by scanning the topic for META:FILEATTACHMENT).
 
-Note that there is a shortcut script, =twikiplugins/build.pl=, that can be very helpful when you are building several extensions in one session. Run the script without parameters for documentation.
+You can control what server the upload is done to. This lets you - for example - set up your own corporate extensions server.
+
+---+++ The =manifest= and =dependencies= targets
+These are used when you are unsure of the correct contents of MANIFEST and DEPENDENCIES. They make a best-guess at the required contents for these files.
 
 ---++ MANIFEST
 The =MANIFEST= file contains a list of all the files that are wanted in the
@@ -212,6 +226,8 @@ MANIFESTs can also include other extensions that have been packages using
 </verbatim>
 This will include the !WysiwygPlugin in the release package.
 
+Note that there is a script in the TWiki =tools= directory (TWiki 4.2 and later) called =check_manifest.pl= that can be run at any time to check the contents of your MANIFEST against what is checked into Subversion.
+
 ---++ DEPENDENCIES
 The =DEPENDENCIES= file specifies dependencies on other extensions and
 perl modules. Each line of the file is a single dependency:
@@ -221,11 +237,11 @@ name, version, type, description
 where
    * name is the name of the module,
    * version is the version constraint (e.g. ">1.5"),
-   * type is its type (CPAN, perl, C etc) and
+   * type is its type (cpan, perl, C etc) and
    * description is a short description of the module and where to get it.
 The installer script written by the build process uses the dependency type
 to decide how to install dependant modules. 'cpan' means 'get the module
-from CPAN and 'perl' means 'get the module from the Plugins web on TWiki.org'
+from CPAN' and 'perl' means 'get the module from the Plugins web on TWiki.org'
 (or whatever other repositories the admin has specified using =$TWIKI_PACKAGES=
 or =$PLUGINS_URL=).
 
@@ -434,5 +450,5 @@ __Related Topics:__ %SYSTEMWEB%.TWikiPreferences
 
 -- TWiki:Main/CrawfordCurrie - %$DATE% %BR%
 
-%META:FILEATTACHMENT{name="logo.gif" comment="logo" path="logo.gif"}%
+%META:FILEATTACHMENT{name="logo.gif" comment="logo" attr="h" path="logo.gif"}%
 %META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="" version="1"}%

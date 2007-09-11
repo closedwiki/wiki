@@ -8,3 +8,5 @@ Error,>=0,cpan,May be required for lib/TWiki/Contrib/Build.pm
 Exporter,>=0,cpan,May be required for lib/TWiki/Contrib/BuildContrib/BaseBuild.pm
 LWP,>=0,cpan,May be required for lib/TWiki/Contrib/Build.pm
 POSIX,>=0,cpan,Required for lib/TWiki/Contrib/Build.pm
+JavaScript::Minifier,>=0,cpan,Optional, used to build .js from _src.js
+CSS::Minifier,>=0,cpan,Optional, used to build .css from _src.css
