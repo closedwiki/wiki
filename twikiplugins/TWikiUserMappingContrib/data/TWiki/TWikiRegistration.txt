@@ -10,7 +10,7 @@ else="*%MAKETEXT{"This TWiki does _not_ support new User Registration"}%*"
       * Set NOREGISTRATION = %IF{"context registration_supported" then="%IF{"{Register}{EnableNewUserRegistration}" then="" else="DISABLED"}%" else="DISABLED"}%
 -->
 
-%H% *%MAKETEXT{"Note:"}%* %MAKETEXT{"Registered users can [[[_1]][change]] and [[[_2]][reset]] their passwords." args="%TWIKIWEB%.ChangePassword,%TWIKIWEB%.ResetPassword"}%
+%H% *%MAKETEXT{"Note:"}%* %MAKETEXT{"Registered users can [[[_1]][change]] and [[[_2]][reset]] their passwords." args="%SYSTEMWEB%.ChangePassword,%SYSTEMWEB%.ResetPassword"}%
 
 %MAKETEXT{"*Important:* the information provided in this form will be stored in a database on the TWiki server. This database is accessible to anyone who can access the server through the web (though passwords will be encrypted, and e-mail addresses will be obfusticated to help prevent spamming). Your country, or the country where the server is hosted, may have Data Protection laws governing the maintenance of such databases. If you are in doubt, you should contact [_1] for details of the Data Protection Policy of this TWiki server before registering." args="<a href='mailto:%WIKIWEBMASTER%?subject=Data%20Protection%20Policy'>%WIKIWEBMASTER%</a>"}%
 
@@ -78,7 +78,7 @@ return sOut;
 //-->
 </script>
 
-<form action="%SCRIPTURLPATH{"register"}%/%MAINWEB%/%HOMETOPIC%" method="post">
+<form action="%SCRIPTURLPATH{"register"}%/%USERSWEB%/%HOMETOPIC%" method="post">
 <div class="twikiFormSteps">
 <div class="twikiFormStep">
 *%MAKETEXT{"To register as a new user, simply fill out this form:"}%*
@@ -280,7 +280,7 @@ return sOut;
 %MAKETEXT{"When [_1] receives the form, it will mail an account activation code to the e-mail address you gave above. Enter that activation code in the following screen, or follow the link in the e-mail, to activate your account. Once your account is activated, [_1] will:" args="%WIKITOOLNAME%"}%
    * %MAKETEXT{"Finish creating an account for you, so that you can start editing pages using your WikiName."}%
    * %MAKETEXT{"Create your personal [_1] topic using your WikiName as topic name, and add the data you submitted to the topic." args="<nop>%WIKITOOLNAME%"}%
-   * %MAKETEXT{"Add your name to the list of users in the [_1] topic in the [_2] web." args="%MAINWEB%.%WIKIUSERSTOPIC%,%MAINWEB%"}%
+   * %MAKETEXT{"Add your name to the list of users in the [_1] topic in the [_2] web." args="%USERSWEB%.%WIKIUSERSTOPIC%,%USERSWEB%"}%
    * %MAKETEXT{"Send you a confirmation of your registration by e-mail."}%
 <!--
    # login method used by this site:
