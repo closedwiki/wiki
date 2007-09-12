@@ -39,7 +39,6 @@ var tinymce_plugin_setUpContent = function(editor_id, body, doc) {
         "Content-type", "application/x-www-form-urlencoded");
     // get the content of the associated textarea
     var editor = tinyMCE.getInstanceById(editor_id);
-					elements = document.getElementsByTagName("textarea");
     var text = editor.oldTargetElement.value;
     var params = "topic=" + escape(path) + "&text=" + escape(text);
     request.req.setRequestHeader("Content-length", params.length);
@@ -62,7 +61,7 @@ function contentReadCallback(request) {
             request.body.innerHTML =
                 "<div class='twikiAlert'>"
                 + "There was a problem retrieving the page: "
-                + request.req.statusText + "</div>");
+                + request.req.statusText + "</div>";
         }
     }
 }
