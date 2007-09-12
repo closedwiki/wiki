@@ -177,8 +177,8 @@ sub dbQuery {
   # parse & fetch
   my $wikiUserName = TWiki::Func::getWikiUserName();
   my %hits = ();
+  my $search;
   if ($theSearch) {
-    my $search;
     try {
       $search = new TWiki::Contrib::DBCacheContrib::Search($theSearch);
     } catch Error::Simple with {
@@ -187,41 +187,46 @@ sub dbQuery {
     unless ($search) {
       return (undef, undef, "ERROR: can't parse query \"$theSearch\"");
     }
+  }
+
+  my $doNumericalSort = 1;
     foreach my $topicName (@topicNames) {
       my $topicObj = $this->fastget($topicName);
-      if ($search->matches($topicObj)) {
+      if (!$search || $search->matches($topicObj)) {
         if (TWiki::Func::checkAccessPermission('VIEW', $wikiUserName, undef, $topicName, $this->{web})) {
-	  $hits{$topicName} = $topicObj;
+	  $hits{$topicName} = $topicObj if $topicObj;
+      
+      
+        #pre-fetch the sorting key - thus we only do it N times
+    if ($theSort eq 'name') {
+       $hits{$topicName}->{sort} = $topicName if $topicObj;
+       $doNumericalSort = 0;
+    } elsif ($theSort =~ /^created/) {
+      $hits{$topicName}->{sort} = $this->expandPath($hits{$topicName}, 'createdate') if $topicObj;
+    } elsif ($theSort =~ /^modified/) {
+      $hits{$topicName}->{sort} = $this->expandPath($hits{$topicName}, 'info.date') if $topicObj;
+    } else {
+      $hits{$topicName}->{sort} = $this->expandPath($hits{$topicName}, $theSort) if $topicObj;
+      if ( ($doNumericalSort==1)  && !($hits{$topicName}->{sort} =~ /^[+-]?\d+(\.\d+)?$/ )  ) {
+        $doNumericalSort = 0;
+      }
+    }
+    
 	}
       }
     }
-  } else {
-    foreach my $topicName (@topicNames) {
-      my $topicObj = $this->fastget($topicName);
-      if (TWiki::Func::checkAccessPermission('VIEW', $wikiUserName, undef, $topicName, $this->{web})) {
-	$hits{$topicName} = $topicObj if $topicObj;
-      }
-    }
-  }
 
-  # sort
   @topicNames = keys %hits;
   if (@topicNames > 1) {
-    if ($theSort eq 'name') {
-      @topicNames = sort {$a cmp $b} @topicNames;
-    } elsif ($theSort =~ /^created/) {
-      @topicNames = sort {
-	$this->expandPath($hits{$a}, 'createdate') <=> $this->expandPath($hits{$b}, 'createdate')
-      } @topicNames;
-    } elsif ($theSort =~ /^modified/) {
-      @topicNames = sort {
-	$this->expandPath($hits{$a}, 'info.date') <=> $this->expandPath($hits{$b}, 'info.date')
-      } @topicNames;
-    } else {
-      @topicNames = sort {
-	flexCmp($this->expandPath($hits{$a}, $theSort), $this->expandPath($hits{$b}, $theSort))
-      } @topicNames;
-    }
+       if ( $doNumericalSort == 1 ) {
+        @topicNames = sort {
+        	$hits{$a}->{sort}  <=> $hits{$b}->{sort} 
+        } @topicNames;
+      } else {
+        @topicNames = sort {
+        	$hits{$a}->{sort}  cmp $hits{$b}->{sort} 
+        } @topicNames;
+      }
     @topicNames = reverse @topicNames if $theReverse eq 'on';
   }
   #print STDERR "DEBUG: result topicNames=@topicNames\n";
@@ -230,7 +235,7 @@ sub dbQuery {
 }
 
 ###############################################################################
-sub flexCmp {
+sub DONT_DO_THIS_ITS_SLOW_flexCmp {
 
   return $_[0] <=> $_[1] 
     if $_[0] =~ /^[+-]?\d+(\.\d+)?$/ && 
