@@ -32,7 +32,7 @@ my %browserInfo;
 sub initPlugin {
     $query = TWiki::Func::getCgiQuery();
     return 0 unless $query;
-    unless( $TWiki::cfg{WysiwygPlugin}{Enabled} ) {
+    unless( $TWiki::cfg{Plugins}{WysiwygPlugin}{Enabled} ) {
         TWiki::Func::writeWarning("WysiwygPlugin must be enabled for TinyMCEPlugin to work");
     }
 
