@@ -1172,7 +1172,7 @@ sub _canChange {
     my @groupsAndUsers = split( ",", $allowModifyPrefNames );
     foreach (@groupsAndUsers) {
         my $name = $_;
-        $name =~ s/(Main\.|\%MAINWEB\%\.)//go;
+        $name =~ s/(Main\.|\%USERSWEB\%\.)//go;
         return 1 if ( $name eq TWiki::Func::getWikiName(undef) ); # user is listed
         return 1 if _isGroupMember( $name );
     }

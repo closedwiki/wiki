@@ -87,7 +87,7 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 | compatmode | if set to "1" all TWiki:Plugins.CalendarPlugin event types are supported (related: compatibility mode attributes); %X% the description field can contain a time range (without any whitespaces, e.g. 1pm-2pm) or a %<nop>TTCM%-Tag (e.g. ==%<nop>TTCM{"7:00-1:00pm,white,black"}%== ) with a time range and optional foreground and background color and *without* any *whitespaces* | compatmode="0" |
 | days    | days to show | days="7" |
 | endtime | a end time, e.g. 18:00, 6:00pm, ...  | endtime="8:00pm" |
-| lang | Language used for weekdays in the table header and for event entries (e.g: English, Deutsch, Français, Español, Nederlands, Dansk, suomi, ...) | lang="English" |
+| lang | Language used for weekdays in the table header and for event entries (e.g: English, Deutsch, Franï¿½ais, Espaï¿½ol, Nederlands, Dansk, suomi, ...) | lang="English" |
 | showweekend | show weekend if set to '1' | showweekend="1" |
 | starttime | a start time, e.g. 7:00, 8a.m., 9:15a.m. ... | starttime="7:00am" |
 | textwrapper | sets the text wrapper for the event entry text (default: =browser=); =plugin=: text is wrapped by the TimeTablePlugin (old behavior but stable); =browser=: text is wrapped by the web browser | textwrapper="plugin" |
@@ -101,10 +101,10 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 | workingstarttime | working hours start time | workingstarttime="9:00am" |
 |  *Compatibility Mode:*  |||
 | cmheaderformat | table header format of a day; a subset of strftime conversion specifiers is supported (only date not time specifiers; see manual page or TWiki:Codev.ConvergeDateTimeFormattingModels) | cmheaderformat="&lt;font&nbsp;title=\"%A - %d %b %Y\" size=\"-2\">%a&lt;br/&gt;%e&lt;/font&gt;" |
-| daynames | custom day names (a list separated by a '¦' and starting on Monday; overwrites lang attribute) | daynames="M¦T¦W¦T¦F¦S¦S" |
+| daynames | custom day names (a list separated by a 'ï¿½' and starting on Monday; overwrites lang attribute) | daynames="Mï¿½Tï¿½Wï¿½Tï¿½Fï¿½Sï¿½S" |
 | forcestartdate | if set to 1 the timetable starts with the given startdate ('0' means: the timetable view starts with Monday') | forcestartdate="0" |
 | month | set a month (e.g. Jan, Feb ... or 01, 02, ... 12 ) or a month offset (e.g. +0, +1, -2,...) | month="+1" |
-| monthnames | custom month names (a list separated by '¦' and starting on January; overwrites lang attribute) | monthnames="J¦F¦M¦A¦M¦J¦J¦A¦S¦O¦N¦D" |
+| monthnames | custom month names (a list separated by 'ï¿½' and starting on January; overwrites lang attribute) | monthnames="Jï¿½Fï¿½Mï¿½Aï¿½Mï¿½Jï¿½Jï¿½Aï¿½Sï¿½Oï¿½Nï¿½D" |
 | navnext | navigation button to the next n days | navnext="&amp;gt;&amp;gt;" |
 | navnexttitle | title text (tooltip text) for the navigation button to the next n days | navnexttitle="Next %n day(s)" |
 | navprev | navigation button to the previous n days | navprev="&amp;lt;&amp;lt;" |
@@ -196,7 +196,7 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>NEWPLUGIN_SHORTDESCRIPTION%==
 
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = Render a weekly timetable
 
    * Debug plugin: (See output in =data/debug.txt=)
@@ -223,7 +223,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
    * Show timeline on the =left=, =right= or =both= sides (default: both):
       * # Set SHOWTIMELINE = left
 
-   * Language (default: English - see manual page of Date::Calc perl module, e.g: English, Deutsch, Français, Español, Nederlands, Dansk, suomi, ...): 
+   * Language (default: English - see manual page of Date::Calc perl module, e.g: English, Deutsch, Franï¿½ais, Espaï¿½ol, Nederlands, Dansk, suomi, ...): 
       * # Set LANG = Deutsch
 
    * Enable/Disable compatibility mode (default: off) to (dis)allow TWiki:Plugins.CalendarPlugin event types:
@@ -295,11 +295,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  CPAN Dependencies: | CPAN:Date::Calc %BR% CPAN:POSIX |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle 92%, %TWIKIWEB%.FormattedSearch 98%, %TOPIC% 80% |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %SYSTEMWEB%.GoodStyle 92%, %SYSTEMWEB%.FormattedSearch 98%, %TOPIC% 80% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
 
 -- TWiki:Main.DanielRohde - 16 May 2006
