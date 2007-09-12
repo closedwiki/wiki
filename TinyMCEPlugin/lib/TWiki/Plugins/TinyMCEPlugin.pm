@@ -32,6 +32,10 @@ my %browserInfo;
 sub initPlugin {
     $query = TWiki::Func::getCgiQuery();
     return 0 unless $query;
+    unless( $TWiki::cfg{WysiwygPlugin}{Enabled} ) {
+        TWiki::Func::writeWarning("WysiwygPlugin must be enabled for TinyMCEPlugin to work");
+    }
+
     # Identify the browser from the user agent string
     my $ua = $query->user_agent();
     if ($ua) {
@@ -127,6 +131,9 @@ HERE
     # Stripped for production
     my $TINYMCE_SCRIPT = 'tinymce/jscripts/tiny_mce/tiny_mce.js';
 
+    # Add the Javascript for the editor. When it starts up the editor will
+    # use a REST call to the WysiwygPlugin tml2html REST handler to convert
+    # the textarea content from TML to HTML.
     TWiki::Func::addToHEAD('tinyMCE', <<SCRIPT);
 <script language="javascript" type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TinyMCEPlugin/$TINYMCE_SCRIPT"></script>
 <script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TinyMCEPlugin/twiki.js"></script>
@@ -142,45 +149,8 @@ tinyMCE.init({ $init });
 <script language="javascript" type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TinyMCEPlugin//tinymce/jscripts/tiny_mce/plugins/twikiimage/editor_plugin.js"></script>
 SCRIPT
 
-    my $useJSTranslator = 0;
-    if ($useJSTranslator) {
-        TWiki::Func::addToHEAD('tinyMCEJS', <<SCRIPT);
-        <script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TinyMCEPlugin/TML2HTML.js"></script>
-SCRIPT
-    } else {
-        my $sid = '<!--'.$secret_id.'-->';
-        unless ($_[0] =~ /^$sid/) {
-            $_[0] =
-              $sid.TWiki::Plugins::WysiwygPlugin::TranslateTML2HTML($_[0]);
-        }
-    }
-
     # See TWiki.IfStatements for a description of this context id.
     TWiki::Func::getContext()->{textareas_hijacked} = 1;
-}
-
-sub afterEditHandler {
-    #my( $text, $topic, $web ) = @_;
-    if (_notAvailable()) {
-        return;
-    }
-
-    my $query = TWiki::Func::getCgiQuery();
-    return unless $query;
-    # Check for our flag
-    return unless $_[0] =~ s/<!--$secret_id-->//so;
-
-    if ($TWiki::cfg{Plugins}{WysiwygPlugin}{Enabled}) {
-        # if the wysiwyg plugin is enabled, we don't want to do anything
-        # if wysiwyg_edit is enabled, as the WysiwygPlugin afterEditHandler
-        # will deal with it.
-        return if ($query->param( 'wysiwyg_edit' ));
-        # otherwise wysiwygplugin isn't going to do anything, so we can
-        # post-process.
-    }
-
-    require TWiki::Plugins::WysiwygPlugin;
-    $_[0] = TWiki::Plugins::WysiwygPlugin::TranslateHTML2TML( @_ );
 }
 
 1;

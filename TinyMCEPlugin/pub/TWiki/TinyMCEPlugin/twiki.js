@@ -1,8 +1,64 @@
-var tinymce_plugin_setUpContent = function(editor_id,body,doc) {
-};
+/*
+ Copyright (C) 2007 Crawford Currie http://wikiring.com and Arthur Clemens
+ All Rights Reserved.
 
-function pasteWordContentCallback(type,content){
-    return content;
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version. For
+ more details read LICENSE in the root of the TWiki distribution.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+ As per the GPL, removal of this notice is prohibited.
+*/
+
+// Asynchronous fetch of the topic content using the Wysiwyg REST handler.
+var tinymce_plugin_setUpContent = function(editor_id, body, doc) {
+    var request = new Object();
+    request.doc = doc;
+    request.body = body;
+    // Work out the rest URL from the location
+    var url = location.pathname;
+    var match = /^(.*)\/edit(\.[^\/]*)?\/([^?]*).*$/.exec(url);
+    var suffix = match[2]; if (suffix == null) suffix = '';
+    url = match[1] + "/rest" + suffix + "/WysiwygPlugin/tml2html";
+    var path = match[3];
+    path = path.replace('/', '.', 'g');
+    if (tinyMCE.isIE) {
+        // branch for IE/Windows ActiveX version
+        request.req = new ActiveXObject("Microsoft.XMLHTTP");
+    } else {
+        // branch for native XMLHttpRequest object
+        request.req = new XMLHttpRequest();
+    }
+    request.req.open("POST", url, true);
+    request.req.setRequestHeader(
+        "Content-type", "application/x-www-form-urlencoded");
+    var params = "topic=" + escape(path) + "&text=" + escape(body.innerHTML);
+    request.req.setRequestHeader("Content-length", params.length);
+    request.req.setRequestHeader("Connection", "close");
+    request.req.onreadystatechange = function() {
+        contentReadCallback(request);
+    };
+    body.innerHTML = "<span class='twikiAlert'>Please wait... retrieving page from server</span>";
+    request.req.send(params);
+}
+
+// Callback for XMLHttpRequest
+function contentReadCallback(request) {
+    // only if request.req shows "complete"
+    if (request.req.readyState == 4) {
+        // only if "OK"
+        if (request.req.status == 200) {
+            request.body.innerHTML = request.req.responseText;
+        } else {
+            alert("There was a problem retrieving the page:\n" +
+                  request.req.statusText);
+        }
+    }
 }
 
 // Called on URL insertion, but not on image sources. Expand TWiki variables

@@ -25,12 +25,9 @@
 %TMPL:DEF{"create_topic"}%Cr<span class="twikiAccessKey">e</span>ate%TMPL:END%
 %TMPL:DEF{"edit_topic"}%<span class="twikiAccessKey">E</span>dit%TMPL:END%
 
-%TMPL:DEF{"edit_wysiwyg_link"}%%TMPL:P{"sep"}% <a href="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?cover=%COMPOSER%" rel="nofollow" title='%MAKETEXT{"Edit this topic text"}%'>%MAKETEXT{"&WYSIWYG"}%</a>%TMPL:END%
-
-
 %TMPL:DEF{"url_param_editaction"}%%IF{"defined EDITACTION" then="&action=%EDITACTION%" else=""}%%TMPL:END%
 
-%TMPL:DEF{"edit_topic_link"}%<a href='%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%%TMPL:P{"url_param_editaction"}%' rel='nofollow' title='Edit this topic text' accesskey='e'><b>%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</b></a> %TMPL:P{context="WysiwygPluginEnabled" then="edit_wysiwyg_link"}%%TMPL:END%
+%TMPL:DEF{"edit_topic_link"}%<a href='%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%%TMPL:P{"url_param_editaction"}%' rel='nofollow' title='Edit this topic text' accesskey='e'><b>%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</b></a> %TMPL:END%
 
 %TMPL:DEF{"inactive_attach"}%<strike>Attach</strike>%TMPL:END%
 %TMPL:DEF{"active_attach"}%<a href="%SCRIPTURLPATH{"attach"}%/%WEB%/%TOPIC%" title="Attach an image or document to this topic" rel='nofollow'>Attach</a>%TMPL:END%
