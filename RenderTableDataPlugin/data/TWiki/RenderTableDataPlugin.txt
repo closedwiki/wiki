@@ -87,23 +87,23 @@ Likewise use =show="..-5"= to show results up to the fifth item from the end. | 
 %IF{"context RenderTablePluginEnabled" then="" else="!RenderTablePlugin is not installed. To see the example below follow the installation instructions."}%
 
 <verbatim>
-%TABLEDATA{ topic="%TWIKIWEB%.TWikiMetaData"
+%TABLEDATA{ topic="%SYSTEMWEB%.TWikiMetaData"
             rows="2.."
             format=" *$C1* $percntBR$percnt _$C2_ $percntBR$percnt$percntBR$percnt"
             sortcolumn="1"
             beforetext="---+++!! TOPICINFO $n"
-            aftertext="From [[%TWIKIWEB%.TWikiMetaData#META_TOPICINFO][TWikiMetaData]]"
+            aftertext="From [[%SYSTEMWEB%.TWikiMetaData#META_TOPICINFO][TWikiMetaData]]"
           }%
 </verbatim>
 
 Results in:
 
-%TABLEDATA{ topic="%TWIKIWEB%.TWikiMetaData"
+%TABLEDATA{ topic="%SYSTEMWEB%.TWikiMetaData"
             rows="2.."
             format=" *$C1* $percntBR$percnt _$C2_ $percntBR$percnt$percntBR$percnt"
             sortcolumn="1"
             beforetext="---+++!! TOPICINFO $n"
-            aftertext="From [[%TWIKIWEB%.TWikiMetaData#META_TOPICINFO][TWikiMetaData]]"
+            aftertext="From [[%SYSTEMWEB%.TWikiMetaData#META_TOPICINFO][TWikiMetaData]]"
           }%
 
 

@@ -36,7 +36,7 @@ The cache can be configured to refresh at a certain hit rate or manually here:
 </center>
 
 Tip: You can add this button on any page by adding
-=%<nop>INCLUDE{"%TWIKIWEB%.LdapContrib"}%= to it.
+=%<nop>INCLUDE{"%SYSTEMWEB%.LdapContrib"}%= to it.
 
 
 ---++ Configuration
@@ -117,7 +117,7 @@ These are:
      <verbatim>$TWiki::cfg{Ldap}{GroupBase} = 'ou=group,dc=my,dc=domain,dc=com'; </verbatim>
    * define the user login name attribute;
      note, that the uid will be mapped to the correct <nop>WikiUserName using
-     the %MAINWEB%.TWikiUsers topic.
+     the %USERSWEB%.TWikiUsers topic.
      <verbatim>$TWiki::cfg{Ldap}{LoginAttribute} = 'uid'; </verbatim>
    * filter to be used to find login accounts
      <verbatim>$TWiki::cfg{Ldap}{LoginFilter} = 'objectClass=posixAccount'; </verbatim>
@@ -199,7 +199,7 @@ $TWiki::cfg{Ldap}{WikiNameAttribute} = 'givenName, sn';
 $TWiki::cfg{Ldap}{NormalizeWikiName} = 1;
 </verbatim>
 The =givenName= and =sn= (surname) LDAP attributes will be fetched and concatenated
-to form a <nop>WikiName, so that "givenName=Hans-Peter,sn=Leuthäuser-Schnarrenberg" will
+to form a <nop>WikiName, so that "givenName=Hans-Peter,sn=Leuthï¿½user-Schnarrenberg" will
 result in the <nop>WikiName "<nop>HansPeterLeuthaeuserSchnarrenberg".
 If one of the <nop>WikiNameAttributes is 'mail' the =@mydomain.com= part will be removed
 all together.

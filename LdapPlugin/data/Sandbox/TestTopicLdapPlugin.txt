@@ -4,7 +4,7 @@
     * %LDAP{host="myldap.myco.com" base="ou=finance,o=MYCO" filter="fullName=Johnson*" format="| $ou | $telephoneNumber |" header="| *Phone* | *OU* |"}%
     * %LDAP{format="Name : $cn <IMG SRC=$jpegPhoto width=100 > " header="" JPEGPHOTO="jpegPhoto"}%
 
-<FORM action="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/LdapPeople">
+<FORM action="%SCRIPTURL%/view%SCRIPTSUFFIX%/%USERSWEB%/LdapPeople">
 Filter: <input type="text" name="ldapfilter" size="25">
 <input type="submit" value="LDAP Search" >
 </FORM>

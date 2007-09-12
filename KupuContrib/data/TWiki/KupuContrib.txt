@@ -44,7 +44,7 @@ As you can see this is just a standard edit link with the 'kupu' skin in place o
 
 The editor template includes a number of files that can be used for other settings. These files are *not* included in the distribution, so that you can easily create your own local content.
 
----+++ %TWIKIWEB%.<nop>WysiwygPluginIcons
+---+++ %SYSTEMWEB%.<nop>WysiwygPluginIcons
 You can define a list of icons that will be available in the Kupu editor when the %ATTACHURL%/smiley.png toolbar button is pressed. This topic has to contain a list of &lt;IMG&gt; tags. If present, the 'alt' text will be used in place of the &lt;IMG&gt; tag when translating from HTML to TML. Example:
 <verbatim>
 	<img src="%PUBURL%/TWiki/TWikiDocGraphics/tip.gif" />
@@ -58,7 +58,7 @@ You can define a list of icons that will be available in the Kupu editor when th
 	<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowright.gif" />
 </verbatim>
 
----+++ %TWIKIWEB%.<nop>WysiwygPluginStrings
+---+++ %SYSTEMWEB%.<nop>WysiwygPluginStrings
 You can also define a list of strings that will be available for insertion in topics using the %ATTACHURL%/strings.png toolbar button. This topic has to contain a list of HTML 'option' tags. Example:
 <verbatim>
 	<option value='-- <nop>%WIKIUSERNAME% - %DATE%'>Signature</option>
@@ -71,7 +71,7 @@ You can also define a list of strings that will be available for insertion in to
 	<option value="%<nop>DATE%"> Date (variable)</option>
 </verbatim>
 The bit between the &gt; &lt; =value= defines text in the drop-down box in the editor, and the =value= defines the actual string inserted in the topic.			
----+++ %TWIKIWEB%.<nop>WysiwygPluginLocalHelp
+---+++ %SYSTEMWEB%.<nop>WysiwygPluginLocalHelp
 If it exists, the contents of this topic will be included and shown on the edit screen below the status bar. It is intended to be used for site-specific quick help information.
 
 ---++ Known problems
@@ -169,7 +169,7 @@ This extension is brought to you by a [[http://wikiring.com][WikiRing <a href="h
 |  7452 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item876'>Item876</a>  Item945: Item876: spacing around table cells, correct handling of variables. Had to compromise on handling [[]] but I think it's for the best. |
 |  7430 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item871'>Item871</a>  made sure that brackets are generated for non-wikiwords |
 |  7425 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item928'>Item928</a>  removed special interpretation of mailto links |
-|  7424 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item866'>Item866</a>  extended URL parsing to handle MAINWEB and TWIKIWEB twiki variables, in the same hacky way as the core. |
+|  7424 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item866'>Item866</a>  extended URL parsing to handle USERSWEB and SYSTEMWEB twiki variables, in the same hacky way as the core. |
 |  7416 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item870'>Item870</a>  a couple of corner-cases for correct handling of twiki variables |
 |  7401 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item899'>Item899</a>  changed list generation to use spaces instead of tabs |
 |  7265 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item180'>Item180</a>  removed pointless, outdated dependency check from DateFieldPlugin |

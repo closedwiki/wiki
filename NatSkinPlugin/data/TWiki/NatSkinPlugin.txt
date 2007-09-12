@@ -58,7 +58,7 @@ get the current skin style; the priority is
    3 preference value =SKINSTYLE= set in 
       (a) the user preferences 
       (b) the WebPreferences or 
-      (c) %TWIKIWEB%.TWikiPreferences 
+      (c) %SYSTEMWEB%.TWikiPreferences 
 
 ---+++ IFSKINSTATE
 *Syntax*: =%<nop>IFSKINSTATE{&lt;tests> then="..." else="..."}%= 
@@ -167,14 +167,14 @@ the =...NAME%= cases will return the string only.
 
 So given you want to have the string <nop>%WIKITOOLNAME% in the logo position
 when using NatSkin but not so when using a different skin on the same site.
-Then add the following to the %MAINWEB%.TWikiPreferences:
+Then add the following to the %USERSWEB%.TWikiPreferences:
 <verbatim>
   * Set NATWEBLOGONAME = %WIKITOOLNAME%
   * Set WEBLOGOIMG = /path/to/your/defaultlogo.gif
 </verbatim>
 
 If you want to have a different logo using NatSkin than using another skin on the same site
-then add the following to  the %MAINWEB%.TWikiPreferences:
+then add the following to  the %USERSWEB%.TWikiPreferences:
 <verbatim>
   * Set NATWEBLOGOIMG = /path/to/your/natskinlogo.gif
   * Set WEBLOGOIMG = /path/to/your/defaultlogo.gif
@@ -241,24 +241,24 @@ The "guest" and "format" format strings can use the following variables
 
 display a web component. A web component "<nop>MyComponent" is searched looking for
    1 <nop>MyComponent in the current web,
-   2 <nop>TWikiMyComponent in the %MAINWEB% web,
-   3 <nop>TWikiMyComponent in the %TWIKIWEB% web and
-   4 <nop>MyComponent in the %TWIKIWEB% web.
+   2 <nop>TWikiMyComponent in the %USERSWEB% web,
+   3 <nop>TWikiMyComponent in the %SYSTEMWEB% web and
+   4 <nop>MyComponent in the %SYSTEMWEB% web.
 
 The WEBCOMPONENT tag will retrieve the component where it was found
 first. Thereby every web can define a component of its own but if it is
 not defined locally a predefined component will be returned. Components
-can be predefined in the %MAINWEB% and the %TWIKIWEB% where the name
+can be predefined in the %USERSWEB% and the %SYSTEMWEB% where the name
 of the component is prefix with "TWiki" to distinguish them from the
-local web components that may be present in the %MAINWEB% and the %TWIKIWEB%.
-As a last resort the local components of the %TWIKIWEB% are used.
+local web components that may be present in the %USERSWEB% and the %SYSTEMWEB%.
+As a last resort the local components of the %SYSTEMWEB% are used.
 
 By default the NatSkin comes with predefined components 
-   * [[%TWIKIWEB%.TWikiWebSideBar]]
-   * [[%TWIKIWEB%.TWikiWebButtons]]
-   * [[%TWIKIWEB%.TWikiWebLinks]]
-   * [[%TWIKIWEB%.TWikiWebTopicActions]]
-   * [[%TWIKIWEB%.TWikiWebCss]]
+   * [[%SYSTEMWEB%.TWikiWebSideBar]]
+   * [[%SYSTEMWEB%.TWikiWebButtons]]
+   * [[%SYSTEMWEB%.TWikiWebLinks]]
+   * [[%SYSTEMWEB%.TWikiWebTopicActions]]
+   * [[%SYSTEMWEB%.TWikiWebCss]]
 
 Example: 
    * use =%<nop>WEBCOMPONENT{"WebSideBar"}%= to display a the sidebar component
@@ -298,12 +298,12 @@ returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin 
 %$DEPENDENCIES%
    * Optionally install the TWiki:Plugins/RedDotPlugin to ease editing the sidebar navigation
    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-   * on [[%TWIKIWEB%.TWikiPreferences]] change the SKIN variable to "nat";
+   * on [[%SYSTEMWEB%.TWikiPreferences]] change the SKIN variable to "nat";
      customize the default style adding the variables SKINSTYLE, STYLEBORDER,
      STYLEBUTTONS and STYLESIDEBAR (see NatSkin)
    * If you are using TWiki version <= 4.0.4 and want TWiki table's appearance to match
      the selected style then apply this
-     [[%PUBURLPATH%/%TWIKIWEB%/NatSkin/TablePlugin_Core_pm.diff][TablePlugin_Core_pm.diff]] patch.
+     [[%PUBURLPATH%/%SYSTEMWEB%/NatSkin/TablePlugin_Core_pm.diff][TablePlugin_Core_pm.diff]] patch.
    * to enable the NatSkin's logon scheme disable TWiki's <nop>LoginManager
      and remove all lines containing "require valid-user" (except for the =configure= cgi script)
      from the file =bin/.htaccess=

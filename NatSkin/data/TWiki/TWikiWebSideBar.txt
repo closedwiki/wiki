@@ -6,8 +6,8 @@
 .navButton { %IFSKINSTATE{buttons="on" then="display:none"}% }
 </style>
 %~~ FLEXWEBLIST{
-~~~   webs="%MAINWEB%,User,publiccurrent,%TWIKIWEB%" 
-~~~   map="%TWIKIWEB%=System"
+~~~   webs="%USERSWEB%,User,publiccurrent,%SYSTEMWEB%" 
+~~~   map="%SYSTEMWEB%=System"
 ~~~   include="\w+|%BASEWEB%"
 ~~~   exclude="TestCases|Trash" 
 ~~~   selection="%BASEWEB%" 
@@ -51,7 +51,7 @@
 </div>
 %FISKINSTATE%
 <div class="natSideBarPersonal"> 
-%IFDEFINEDTHEN{"$percntINCLUDE{\"%MAINWEB%.%WIKINAME%SideBar\" warn=\"off\"}$percnt"}%
+%IFDEFINEDTHEN{"$percntINCLUDE{\"%USERSWEB%.%WIKINAME%SideBar\" warn=\"off\"}$percnt"}%
 $test
 %ELSEDEFINED%
 %$nopWEBCOMPONENT{"MySideBar"}%

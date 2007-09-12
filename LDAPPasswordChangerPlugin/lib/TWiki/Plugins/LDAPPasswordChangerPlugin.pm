@@ -116,7 +116,7 @@ sub pwChanger{
 sub talkToLDAP{
   use Net::LDAP;
   my( $old, $new, $ldap, $dn ) = ( shift, shift, new Net::LDAP( $ldap_server ), undef );
-  return q"%X% %RED%Can't contact LDAP Server. Please review %MAINWEB%.LDAPPasswordChangerPlugin configuration.%ENDCOLOR%" unless $ldap;
+  return q"%X% %RED%Can't contact LDAP Server. Please review %USERSWEB%.LDAPPasswordChangerPlugin configuration.%ENDCOLOR%" unless $ldap;
   my $msg;
   $msg = $ldap->bind;
   return q{%X% %RED%LDAP Error:}.$msg->error.q{%ENDCOLOR%}
