@@ -14,8 +14,8 @@ To enable any of these settings, replace the explanation with the value you want
 %INCLUDE{"%TCAOWEB%.RenderClassificationTopic" ADD_FILTER="RenderStandardFilter" }%
 
 <!-- Topic Permissions
-   * Set ALLOWTOPICCHANGE = %MAINWEB%.ModeratorGroup
-   * Set ALLOWTOPICRENAME = %MAINWEB%.ModeratorGroup
+   * Set ALLOWTOPICCHANGE = %USERSWEB%.ModeratorGroup
+   * Set ALLOWTOPICRENAME = %USERSWEB%.ModeratorGroup
 -->
 
 

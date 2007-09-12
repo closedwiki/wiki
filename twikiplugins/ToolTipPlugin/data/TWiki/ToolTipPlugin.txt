@@ -59,7 +59,7 @@ I have added TWiki specific parameter INCLUDE to fill <nop>ToolTip with content 
 
 ---++ General Settings
 
-	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
+	* One line description, shown in the %SYSTEMWEB%.TextFormattingRules topic:
 		* Set SHORTDESCRIPTION = create Tool Tips for links
 
 	* Debug plugin: (See output in =data/debug.txt=)
@@ -105,7 +105,7 @@ Without plugin :
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
 -- TWiki:Main/PatrickNomblot - 21 Nov 2003
 

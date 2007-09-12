@@ -10,8 +10,8 @@
 
 %STARTSE%NOP%CTION{type="templateonly"}% 
 <!-- Topic Permissions
-	* Set ALLOWTOPICCHANGE = %MAINWEB%.ModeratorGroup
-	* Set ALLOWTOPICRENAME = %MAINWEB%.ModeratorGroup
+	* Set ALLOWTOPICCHANGE = %USERSWEB%.ModeratorGroup
+	* Set ALLOWTOPICRENAME = %USERSWEB%.ModeratorGroup
 -->
 %ENDSEC%NOP%TION{type="templateonly"}%
 

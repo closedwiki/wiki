@@ -22,8 +22,8 @@ You can modify the options for creating new topics of this type by changing the 
 </div>
 
 <!-- Topic Permissions
-	* Set ALLOWTOPICCHANGE = %MAINWEB%.ModeratorGroup
-	* Set ALLOWTOPICRENAME = %MAINWEB%.ModeratorGroup
+	* Set ALLOWTOPICCHANGE = %USERSWEB%.ModeratorGroup
+	* Set ALLOWTOPICRENAME = %USERSWEB%.ModeratorGroup
 -->
 
 %META:FORM{name="TopicClassForm"}%

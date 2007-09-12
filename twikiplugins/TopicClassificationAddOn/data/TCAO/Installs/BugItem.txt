@@ -6,7 +6,7 @@
 To enable any of these settings, replace the explanation with the value you want and remove the "#" before "Set". 
    * Set CLASS_DESCRIPTION = Identify and track resolution of software application bugs.
    * Set ADD_FILTER = %TCAOWEB%.RenderStandardFilter
-   * Set SEARCH_FORMAT = | [[$web.$topic][$topic]] | <noautolink>$formfield(Summary)</noautolink>  | $formfield(Status)  | $formfield(Priority)  | %MAINWEB%.$expand(info.author)  | $formatTime(info.date) | %BASEWEB%.$formfield(Application)  |
+   * Set SEARCH_FORMAT = | [[$web.$topic][$topic]] | <noautolink>$formfield(Summary)</noautolink>  | $formfield(Status)  | $formfield(Priority)  | %USERSWEB%.$expand(info.author)  | $formatTime(info.date) | %BASEWEB%.$formfield(Application)  |
    * Set HEADER_FORMAT = | *Item* | *Summary* | *Status* | *Priority* | *Modifed by* | *Date/Time* | *Application* |$n
    * #Set FOOTER_FORMAT - Optional custom format for search results footer. Defaults to "Number of topics found = $count".
    * #Set SEARCH_ORDER = Option for changing the default order for the search. Defaults to "name."
@@ -24,8 +24,8 @@ You can modify the options for creating new topics of this type by changing the 
 </div>
 
 <!-- Topic Permissions
-	* Set ALLOWTOPICCHANGE = %MAINWEB%.ModeratorGroup
-	* Set ALLOWTOPICRENAME = %MAINWEB%.ModeratorGroup
+	* Set ALLOWTOPICCHANGE = %USERSWEB%.ModeratorGroup
+	* Set ALLOWTOPICRENAME = %USERSWEB%.ModeratorGroup
 -->
  
 
