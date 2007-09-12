@@ -409,6 +409,7 @@ following is the default paramenter (omitting the #)
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | v1.60 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  12 Sep 2007  | made significant speedups to DBQuery - SvenDowideit@home.org.au |
 |  19 Jun 2007: | added TWiki-4.2 upwards compatibility hack to display users as <nop>WikiNames; \
                   added expand(%TML%) feature |
 |  08 May 2007: | fixed loading db cache file since recent changes in <nop>DBCacheContrib |
