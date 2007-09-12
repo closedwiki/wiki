@@ -405,6 +405,7 @@ Thanks are due to the following sponsors, who have helped make this plugin possi
 |  Plugin Author: | TWiki:Main/CrawfordCurrie, http://c-dot.co.uk |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
+|  12 Sep 2007 | Bugs:Item4609 fixed IE cacheing of edit screen - TWiki:Main.JoaquinBuendia |
 |  9 Sep 2007 | Bugs:Item4427, Bugs:Item4591 add the ability to search for multiple states using a regular expression Bugs:Item4574 fix interaction with !TinyMCEPlugin |
 |  31 Aug 2007 | Bugs:Item4528 - Support $formfield in ACTIONSEARCH (same semantics as for formatted search) Bugs:Item4529 - Remove link from description of action in the $text field of format. Sponsored by [[http://www.goldstarevents.com][Goldstar Events]]. |
 |  13 Aug 2007 | Bugs:Item4086 - =header= and =format= parameters give more control over formatting, improved mail sent for notifications (Richard Vinke)<br /> Bugs:Item4373 - added support for TBD action dates; in the process, changed default date store format to ISO for consistency with TWiki. (Crawford Currie)<br /> Bugs:Item4374 - support AJAX-like state changes from the view screen (Crawford Currie)<br /> Bugs:Item4442 - moved preference defaults out of the plugin topic, and verified correct function (Crawford Currie, sponsored by [[http://www.goldstarevents.com][Goldstar Events]]) |

@@ -15,6 +15,7 @@ function atp_update(element, url, field) {
     }else{
         var xml = new ActiveXObject("MSXML2.XMLHTTP.3.0");
     }
+    url += ";nocache="+parseInt(Math.random() * 10000000000);
     url += ";field="+field;
     url += ";value="+element.value;
     xml.open("GET", url, true);
