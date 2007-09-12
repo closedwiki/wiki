@@ -467,8 +467,8 @@ sub _cleanField {
 
 sub getWebTopicName {
     my( $theWebName, $theTopicName ) = @_;
-    $theTopicName =~ s/%MAINWEB%/$theWebName/go;
-    $theTopicName =~ s/%TWIKIWEB%/$theWebName/go;
+    $theTopicName =~ s/%USERSWEB%/$theWebName/go;
+    $theTopicName =~ s/%SYSTEMWEB%/$theWebName/go;
     if( $theTopicName =~ /[\.]/ ) {
         $theWebName = "";  # to suppress warning
     } else {
