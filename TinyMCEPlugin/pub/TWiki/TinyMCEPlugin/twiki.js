@@ -40,7 +40,9 @@ var tinymce_plugin_setUpContent = function(editor_id, body, doc) {
     // get the content of the associated textarea
     var editor = tinyMCE.getInstanceById(editor_id);
     var text = editor.oldTargetElement.value;
-    var params = "topic=" + escape(path) + "&text=" + escape(text);
+    var params = "nocache=" + parseInt(Math.random() * 10000000000) +
+    "&topic=" + escape(path) + "&text=" + escape(text);
+    
     request.req.setRequestHeader("Content-length", params.length);
     request.req.setRequestHeader("Connection", "close");
     request.req.onreadystatechange = function() {
