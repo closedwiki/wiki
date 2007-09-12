@@ -17,17 +17,17 @@ the %<nop>TIMELINE% variable has the following parmeters:
 Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>TIMELINEPLUGIN_SHORTDESCRIPTION%==
 
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = Show a scrolling Timeline from a TWiki SEARCH
 
    * Debug plugin: (See output in =data/debug.txt=)
       * Set DEBUG = 0
       
 ---++ Example (shows when Plugin is installed and running successfully)
-The first example shows a timeline based on a pre-esisting xml file (%PUBURL%/%TWIKIWEB%/TimelinePlugin/monet.xml)
+The first example shows a timeline based on a pre-esisting xml file (%PUBURL%/%SYSTEMWEB%/TimelinePlugin/monet.xml)
 
 %TIMELINE{
-"%PUBURL%/%TWIKIWEB%/TimelinePlugin/monet.xml"
+"%PUBURL%/%SYSTEMWEB%/TimelinePlugin/monet.xml"
 interval="DECADE"
 height="450px"
 width="700px"
@@ -35,13 +35,13 @@ date="1870"
 }%
 
 
-This example uses the %TWIKIWEB%.TimeLineSearch topic to show the last 50 modified topics in all webs.
+This example uses the %SYSTEMWEB%.TimeLineSearch topic to show the last 50 modified topics in all webs.
 *(DISABLED - currently can only show one timeline per page)*
 
 *WARNING: at the moment IE will only work with xml file, not from generated xml as below*
 
 %<nop>TIMELINE{
-"%SCRIPTURL{view}%/%TWIKIWEB%/TimeLineSearch"
+"%SCRIPTURL{view}%/%SYSTEMWEB%/TimeLineSearch"
 interval="YEAR"
 height="450px"
 width="700px"
@@ -51,7 +51,7 @@ date="%DISPLAYTIME{"$day $month $year"}%"
  
 <verbatim>
 %TIMELINE{
-"%SCRIPTURL{view}%/%TWIKIWEB%/TimeLineSearch"
+"%SCRIPTURL{view}%/%SYSTEMWEB%/TimeLineSearch"
 interval="DAY"
 height="450px"
 width="450px"
@@ -99,12 +99,12 @@ format="<event start='$date' title='$topic' link='%SCRIPTURL{"view"}%/$web/$topi
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 99%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC% 99% |
+|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle 99%, %SYSTEMWEB%.FormattedSearch 99%, %TOPIC% 99% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
 
 %META:FILEATTACHMENT{name="ttt" attr="" autoattached="1" comment="" date="1157250308" path="ttt" size="4096" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="" autoattached="1" comment="" date="1153741461" path="wikiringlogo20x20.png" size="1343" user="Main.TWikiGuest" version="1"}%
