@@ -1277,7 +1277,7 @@ Versions 1.x support only the Athens (Dec 2001) Stable TWiki release.
 		* empty groups by declaration. Suggestion of  Matt Wilkie.
 		  Put the word EMPTY at the start of the Web description.
 		* cosmetic: attachements table left-aligned in view mode
-		* %<nop>MAINWEB% everywhere, instead of Main.
+		* %<nop>USERSWEB% everywhere, instead of Main.
 		  variable main settable in the script also. 
 		* Wiki Name syntax is checked on create topic by menu
 		* CSS declarations trimmed (and bugfixed) to be smaller.

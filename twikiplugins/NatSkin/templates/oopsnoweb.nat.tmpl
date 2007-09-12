@@ -17,12 +17,12 @@ link if necessary."}%
 ---++ %MAKETEXT{"If you would like to create this web"}%
 <blockquote>
 %MAKETEXT{"You can [[[_1]][create a new web]] if you have the permission. Contact [_2] if you have any questions."
- args="%SCRIPTURLPATH{\"view\"}%/%TWIKIWEB%/ManagingWebs?newweb=%WEB%&amp;newtopic=%TOPIC%#CreateNewWeb,%WIKIWEBMASTER%"}%
+ args="%SCRIPTURLPATH{\"view\"}%/%SYSTEMWEB%/ManagingWebs?newweb=%WEB%&amp;newtopic=%TOPIC%#CreateNewWeb,%WIKIWEBMASTER%"}%
 </blockquote>
 
 ---++ %MAKETEXT{"If you intend to do a full text search:"}%
 <blockquote>
-<form name="search" action="%SCRIPTURLPATH{"search"}%/%MAINWEB%/">
+<form name="search" action="%SCRIPTURLPATH{"search"}%/%USERSWEB%/">
 <input type="text" name="search" size="32" value="%WEB%.%TOPIC%">&nbsp;
 <input type="submit" value='%MAKETEXT{"Search"}%'>
 <input type="hidden" name="web" value="all">

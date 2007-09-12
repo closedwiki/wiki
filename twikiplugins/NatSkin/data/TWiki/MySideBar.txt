@@ -5,7 +5,7 @@
 
 <div class="natNotes">
 %MAKETEXT{"<a href='[_1]' title='[_2]'>Create</a> your personalized sidebar."
- args="%SCRIPTURLPATH{"edit"}%/%MAINWEB%/%WIKINAME%SideBar?t=%GMTIME{"$year$mo$day$hours$minutes$seconds"}%;topicparent=%WIKINAME%;templatetopic=%TWIKIWEB%.MySideBarTemplate,<nop>%WIKINAME%SideBar"}%
+ args="%SCRIPTURLPATH{"edit"}%/%USERSWEB%/%WIKINAME%SideBar?t=%GMTIME{"$year$mo$day$hours$minutes$seconds"}%;topicparent=%WIKINAME%;templatetopic=%SYSTEMWEB%.MySideBarTemplate,<nop>%WIKINAME%SideBar"}%
 </div>
 %STOPINCLUDE%
 

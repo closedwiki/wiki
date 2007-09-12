@@ -9,7 +9,7 @@ Standard links in sidebar navigation.
    * [[%BASEWEB%.WebChanges][%MAKETEXT{"Changes"}%]]
    * [[%BASEWEB%.WebNotify][%MAKETEXT{"Notifications"}%]]
    * [[%BASEWEB%.WebStatistics][%MAKETEXT{"Statistics"}%]]
-%IFDEFINEDTHEN{"%IFACCESS{"%TWIKIWEB%.TWikiWebLinks" type="change"}%" as="1"}%
+%IFDEFINEDTHEN{"%IFACCESS{"%SYSTEMWEB%.TWikiWebLinks" type="change"}%" as="1"}%
 <!-- -->
    * [[%BASEWEB%.WebPreferences][%MAKETEXT{"Preferences"}%]]
 %FIDEFINED%

@@ -3,10 +3,10 @@
 %TMPL:DEF{"action"}%view%TMPL:END%
 %TMPL:DEF{"heading"}%%MAKETEXT{"Access Denied"}%%TMPL:END%
 %TMPL:DEF{"message"}% <!-- -->
-%MAKETEXT{"Only members of the [_1] are allowed to perform this action." args="%MAINWEB%.%PARAM1%"}%
+%MAKETEXT{"Only members of the [_1] are allowed to perform this action." args="%USERSWEB%.%PARAM1%"}%
 
 %TMPL:P{"logon"}%
 
-%MAKETEXT{"See also:"}% %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl, %TWIKIREGISTRATION%, 
-%MAINWEB%.%PARAM1%
+%MAKETEXT{"See also:"}% %USERSWEB%.TWikiGroups, %SYSTEMWEB%.TWikiAccessControl, %TWIKIREGISTRATION%, 
+%USERSWEB%.%PARAM1%
 %TMPL:END%

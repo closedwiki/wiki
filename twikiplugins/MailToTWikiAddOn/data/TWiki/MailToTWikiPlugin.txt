@@ -26,14 +26,14 @@ The email will be inserted immediately before this variable.
 
 ---++ Authentication and Access Control
 
-Unlike the normal HTTP access to TWiki, there is no way of authenticating a user via the normal TWiki username/password prompt when an email is received for insertion into TWiki, and sending passwords via email is inadvisable.  ==mailtotwiki== therefore uses the email address of the sender for authentication.  The address is looked up in %MAINWEB%.%WIKIUSERSTOPIC% and mapped to the appropriate TWiki user, which will then be used for subsequent TWiki access control.  This means that the sender *must* be registered and have the *correct* email address in %MAINWEB%.%WIKIUSERSTOPIC%.  This is obviously not as secure as the normal TWiki authentication, so several additional access controls are provided:
+Unlike the normal HTTP access to TWiki, there is no way of authenticating a user via the normal TWiki username/password prompt when an email is received for insertion into TWiki, and sending passwords via email is inadvisable.  ==mailtotwiki== therefore uses the email address of the sender for authentication.  The address is looked up in %USERSWEB%.%WIKIUSERSTOPIC% and mapped to the appropriate TWiki user, which will then be used for subsequent TWiki access control.  This means that the sender *must* be registered and have the *correct* email address in %USERSWEB%.%WIKIUSERSTOPIC%.  This is obviously not as secure as the normal TWiki authentication, so several additional access controls are provided:
 
 	* Email insertion is restricted to a specific set of Webs (==ALLOWEDWEBS==).
 	* Creation of new topics by email is disabled by default (==ALLOWTOPICCREATE==).
 	* Topic names must be a valid WikiName by default (==WIKITOPICNAMES==)
 	* Topic names can be filtered, and unacceptable ones rejected (==TOPICSMUSTMATCH==)
 
-It may be acceptable in some contexts (e.g. intranet usage) to allow unregistered users email access.  If this is required, set ==MapUnknownToGuest== to true and any unknown senders will be authenticated as the %MAINWEB%.TWikiGuest user, and subject to the normal %MAINWEB%.TWikiGuest access controls.
+It may be acceptable in some contexts (e.g. intranet usage) to allow unregistered users email access.  If this is required, set ==MapUnknownToGuest== to true and any unknown senders will be authenticated as the %USERSWEB%.TWikiGuest user, and subject to the normal %USERSWEB%.TWikiGuest access controls.
 
 ---++ Topic Locking and Mail Spooling
 
@@ -124,7 +124,7 @@ The Plugin can be configured by modifying the following configuration variables.
 | Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/MailToTWikiAddOn |
 | Feedback: | http://TWiki.org/cgi-bin/view/Plugins/MailToTWikiAddOnDev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
 -- TWiki:Main.AlanBurlison - 27 Jan 2003
 

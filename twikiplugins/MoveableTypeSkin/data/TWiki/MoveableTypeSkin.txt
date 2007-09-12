@@ -64,25 +64,25 @@ The fastest way to develop your own css, is to use [[http://styles.movalog.com/g
       * This file contains most TWiki specific styles, such as tables, forms and diffs. (WORK in progress)
    3 to customise the common text sections in your design edit the _Moveable Type Common Text sections_ in your new design's topic (=YourSitesMoveableTypeDesign=).
 
-Once you are done, you will be able to set the following in your %MAINWEB%.TWikiPreferences to roll the skin out to everyone:
+Once you are done, you will be able to set the following in your %USERSWEB%.TWikiPreferences to roll the skin out to everyone:
 
 ---++ Settings
 
-Skin Settings are stored as preferences variables that must be added to %MAINWEB%.TWikiPreferences. They are:
+Skin Settings are stored as preferences variables that must be added to %USERSWEB%.TWikiPreferences. They are:
 
 set TWiki to use the moveabletype skin
       * Set SKIN=moveabletype
 set the moveabletype skin to use this topic to get the _moveabletype Common Text sections_ from this topic
       * Set MOVEABLETYPESKIN_DESIGNTOPIC = %URLPARAM{"moveabletypetopic" default="MoveableTypeSampleDesign"}%
-set the moveabletype skin to use this topic to get the css and images from here (must be in the %TWIKIWEB%)
+set the moveabletype skin to use this topic to get the css and images from here (must be in the %SYSTEMWEB%)
       * Set MOVEABLETYPESKIN_CSSFILE = %URLPARAM{"cssfile" default="%CSS41%"}%
-      * Set MOVEABLETYPESKIN_TWIKICSSFILE = %URLPARAM{"twikicssfile" default="%PUBURLPATH%/%TWIKIWEB%/%MOVEABLETYPESKIN_DESIGNTOPIC%/TWiki.css"}%
+      * Set MOVEABLETYPESKIN_TWIKICSSFILE = %URLPARAM{"twikicssfile" default="%PUBURLPATH%/%SYSTEMWEB%/%MOVEABLETYPESKIN_DESIGNTOPIC%/TWiki.css"}%
    * is the css one-column, two-column-left, two-column-right, three-column (if not set, either as TWikiVariable or the UrlParameter moveabletypecolumns, it defaults to one-column)
       * Set MOVEABLETYPESKIN_COLUMNS = %URLPARAM{"moveabletypecolumns" default="two-column-left"}%
 
 
 
-There are static text sections in the MoveableType css that can be customised by editing the named sections on the %TWIKIWEB%.MoveableTypeSampleDesign topic - each section can be re-defined either inline, or using INCLUDEs.
+There are static text sections in the MoveableType css that can be customised by editing the named sections on the %SYSTEMWEB%.MoveableTypeSampleDesign topic - each section can be re-defined either inline, or using INCLUDEs.
 
 ---+++ Skin variables
 If you set =PAGETOPIC= in your preferences or in your topic, it will be used as the page's HTML title, in preference to the Topic's name. This is useful to make userfriendly titles for AUTO topic name TWikiApps like TWiki:Plugins:BugsContrib.
@@ -91,7 +91,7 @@ If you set =PAGETOPIC= in your preferences or in your topic, it will be used as 
    * skin - must be set to moveabletype
    * cssfile - the url to the moveabletype css file you want to view
    * twikicssfile - the url to the TWiki.css file
-   * moveabletypetopic - the topic (in the %TWIKIWEB% only) that the moveabletype common sections come from
+   * moveabletypetopic - the topic (in the %SYSTEMWEB% only) that the moveabletype common sections come from
    * moveabletypecolumns - column setting (one-column, two-column-left, two-column-right, three-column)
    
 ---+++ Technical details
@@ -136,7 +136,7 @@ You can use this technique to create a TWikiSkin that matches closely the HTML o
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences
 
 -- TWiki:Main/SvenDowideit - %DATE%
 

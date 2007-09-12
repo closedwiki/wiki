@@ -123,7 +123,7 @@ done
 Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>DEFAULTPLUGIN_SHORTDESCRIPTION%==
 
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+	* One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
 		* Set SHORTDESCRIPTION = This Plugin is used to emphasize the rendering of your wiki text according to several languages.
 
 	* Debug plugin: (See output in =data/debug.txt=)
@@ -185,6 +185,6 @@ Adding a newline at the end of input stops TWiki in its greedy matching, but thi
 |  Plugin Home: | http://www.lrde.epita.fr/cgi-bin/twiki/view/TWiki/SyntaxHighlightingPlugin |
 |  Feedback: | TWiki:Main.NicolasTisserand |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
 -- TWiki:Main.NicolasTisserand - 12 Jul 2002

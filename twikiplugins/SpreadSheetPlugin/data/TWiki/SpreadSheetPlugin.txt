@@ -699,7 +699,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Version: | 09 Sep 2007 (14798) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
 |  09 Sep 2007: | Enhanced documentation for $EVAL() and $INT() |
-|  02 Jun 2007: | Added %TWIKIWEB%.VarCALC to have =%<nop>CALC{}%= listed in %TWIKIWEB%.TWikiVariables |
+|  02 Jun 2007: | Added %SYSTEMWEB%.VarCALC to have =%<nop>CALC{}%= listed in %SYSTEMWEB%.TWikiVariables |
 |  14 Apr 2007: | Fixing bug in $EXISTS() that required full =web.topic= instead of just =topic= |
 |  11 Mar 2007: | Fixing bug in $VALUE() and $INT(), introduced by version 09 Mar 2007 |
 |  09 Mar 2007: | Added $EXP(), $LN(), $LOG(), $PI(), $SQRT(); fixed $ROUND() bug, contributed by TWiki:Main/SergejZnamenskij |
