@@ -21,5 +21,5 @@
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="MasterTopic"}%
 %META:FIELD{name="SubjectArea" attributes="" title="SubjectArea" value="TcaoUse"}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="Displays topic parent-child relationships as tree."}%
-%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%
-%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%25USERSWEB%25.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%25USERSWEB%25.TWikiAdminGroup"}%

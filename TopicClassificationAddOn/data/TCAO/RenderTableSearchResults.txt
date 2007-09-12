@@ -10,7 +10,7 @@
 %RED%TODO%ENDCOLOR%
 
 ---+++++ Parameters
-   * BASESEARCH - %RED% REQUIRED:%ENDCOLOR% Base search string (in %TWIKIWEB%.DBCachePlugin DBQUERY format). For example: ==name = '.*'== - e.g. finds all topics.
+   * BASESEARCH - %RED% REQUIRED:%ENDCOLOR% Base search string (in %SYSTEMWEB%.DBCachePlugin DBQUERY format). For example: ==name = '.*'== - e.g. finds all topics.
    * EXCLUDE - Option regex for results to exclude. Defaults to ==\bWeb*== - e.g. excludes topics starting with "Web".
    * FACETS - Optional list of facets to use in the filter bar and search results.
    * INITSORT - Optionally set initial sort. Defaults to "modified".
@@ -52,7 +52,7 @@
 *~~                 $percntIFDEFINED{\"$expand(TopicType or Classification)\" 
 ~~~                       then=\"<noautolink>$expand(TopicType or Classification)</noautolink>\" glue=\"off\"}$percnt</em></span>  |
 ~~~                <noautolink>$formfield(Summary)</noautolink>   | 
-~~~                $percntMAINWEB$percnt.$expand(info.author) | $formatTime(info.date, '$day $month') |
+~~~                $percntUSERSWEB$percnt.$expand(info.author) | $formatTime(info.date, '$day $month') |
 ~~~         $percntFIDEFINED$percnt"
 ~~~     }%
 

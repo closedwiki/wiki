@@ -15,8 +15,8 @@
 %STARTSECTION{name="documentation" type="section"}%
 %TOPIC% is INCLUDED in TopicClassification and provides interface for adding new classifications to a web where TopicClassificationApplication is used.
 
-Restrict view to %MAINWEB%.ModeratorGroup. This makes this form invisible for anyone not authorized to add TopicClassifications.
-   * Set ALLOWTOPICVIEW = %MAINWEB%.ModeratorGroup
+Restrict view to %USERSWEB%.ModeratorGroup. This makes this form invisible for anyone not authorized to add TopicClassifications.
+   * Set ALLOWTOPICVIEW = %USERSWEB%.ModeratorGroup
 
 ---+++++ Parameters
    * TYPE = %RED% Required %ENDCOLOR% - type of Classification form is form

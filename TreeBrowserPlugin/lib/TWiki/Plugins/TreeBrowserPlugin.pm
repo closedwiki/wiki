@@ -170,8 +170,8 @@ sub renderTreeView
     $attachUrl .= "/$installWeb/$pluginName";
     $theParams =~ s/%ATTACHURL%/$attachUrl/go;
     $theParams =~ s/%WEB%/$installWeb/go;
-    $theParams =~ s/%MAINWEB%/TWiki::Func::getMainWebname()/geo;
-    $theParams =~ s/%TWIKIWEB%/TWiki::Func::getTwikiWebname()/geo;      
+    $theParams =~ s/%USERSWEB%/TWiki::Func::getMainWebname()/geo;
+    $theParams =~ s/%SYSTEMWEB%/TWiki::Func::getTwikiWebname()/geo;      
 
     my ( $rooticon, $docicon, $fldricon, $fldropenicon )
        = split( /, */, $theParams );

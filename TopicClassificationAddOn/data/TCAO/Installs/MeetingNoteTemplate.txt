@@ -34,8 +34,8 @@
 
 %STARTSECTION{type="templateonly"}% 
 <!-- Topic Permissions
-	* Set ALLOWTOPICCHANGE = %MAINWEB%.ModeratorGroup
-	* Set ALLOWTOPICRENAME = %MAINWEB%.ModeratorGroup
+	* Set ALLOWTOPICCHANGE = %USERSWEB%.ModeratorGroup
+	* Set ALLOWTOPICRENAME = %USERSWEB%.ModeratorGroup
 -->
 %ENDSECTION{type="templateonly"}%
 

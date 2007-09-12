@@ -12,4 +12,4 @@ _This is an list of the weblinks recorded in %BASEWEB%.WebLogs, grouped by %BASE
 %META:FIELD{name="Summary" attributes="" title="Summary" value="Used with <nop>WebLog TopicType"}%
 %META:REVCOMMENT{comment_1=" " minor_1="1" ncomments="1" rev_1="5" t_1="1167752408"}%
 %META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="Main.TWikiAdminGroup"}%
-%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%25USERSWEB%25.TWikiAdminGroup"}%

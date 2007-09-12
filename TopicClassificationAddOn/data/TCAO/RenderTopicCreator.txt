@@ -33,7 +33,7 @@ This TopicFunction is for creating new topics. It is mostly called indirectly fr
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
-%INCLUDE{"%TWIKIWEB%.WebTopicCreator" section="javascriptfunctions" }%
+%INCLUDE{"%SYSTEMWEB%.WebTopicCreator" section="javascriptfunctions" }%
 <script type="text/javascript">
 //<![CDATA[
 /**

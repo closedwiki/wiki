@@ -23,7 +23,7 @@ This section preceeds the comments.
 %STARTINCLUDE%
 ---+++!! Post a Comment
 %IFDEFINEDTHEN{"%RESTRICTCOMMENTS%" as="yes" glue="off"}%
-%IFDEFINED{"%WIKINAME%" as="TWikiGuest" then=" _Please $percntLOGIN$percnt or [[$percntTWIKIWEB$percnt.TWikiRegistration][register]] to post comments._ " else="$percntCOMMENT{type=\"tocdiscuss\" target=\"$percntBASEWEB$percnt.$percntBASETOPIC$percnt#AddComments\" }$percnt" }%
+%IFDEFINED{"%WIKINAME%" as="TWikiGuest" then=" _Please $percntLOGIN$percnt or [[$percntSYSTEMWEB$percnt.TWikiRegistration][register]] to post comments._ " else="$percntCOMMENT{type=\"tocdiscuss\" target=\"$percntBASEWEB$percnt.$percntBASETOPIC$percnt#AddComments\" }$percnt" }%
 %ELSEDEFINED%
 %COMMENT{type="tocdiscuss" target="%BASEWEB%.%BASETOPIC%#AddComments" }%
 %FIDEFINED%

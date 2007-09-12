@@ -41,7 +41,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
       * Set TCAOWEB = TCAO
       * Set HELP_BACKGROUND_COLOR = #E0B9A6
 </verbatim>
-   4 Go to %MAINWEB%.TWikiGroups and create a new group called ==ModeratorGroup==. This group can add new classifications within webs where TCAO is enabled. 
+   4 Go to %USERSWEB%.TWikiGroups and create a new group called ==ModeratorGroup==. This group can add new classifications within webs where TCAO is enabled. 
    5 Add the following TWiki.CommentPlugin templates definitions to TWiki.UserCommentsTemplate (create this topic if you have not already).
 <verbatim>
 ---------------------------------------------------------------------------
@@ -65,7 +65,7 @@ Discussion with heading for Table of Content - People.LynnwoodBrown
 </verbatim>
 ---------------------------------------------------------------------------
 ---+++ Removable help section 
-This template is used by %TWIKIWEB%.TopicClassificationAddOn
+This template is used by %SYSTEMWEB%.TopicClassificationAddOn
 <verbatim>
 %TMPL:DEF{PROMPT:removeable_help}%
 <div style="background-color:%HELP_BACKGROUND_COLOR%;padding:1em;">
@@ -88,7 +88,7 @@ This template is used by %TWIKIWEB%.TopicClassificationAddOn
 %INCLUDE{"%TCAOWEB%.RenderInstallTopicClassification" warm="off"}%
 
 ---+++ Setting up Topic Classification within a web
-Once %TOPIC% is enabled within a web, you're ready to start defining *TopicTypes* and *SubjectAreas* to be used in that web. To do this, go to those respective topics (e.g. go to !TopicType to add new !TopicTypes) and use form at bottom that is only visible to members of !ModeratorGroup (or %MAINWEB%.TWikiAdminGroup, of course).
+Once %TOPIC% is enabled within a web, you're ready to start defining *TopicTypes* and *SubjectAreas* to be used in that web. To do this, go to those respective topics (e.g. go to !TopicType to add new !TopicTypes) and use form at bottom that is only visible to members of !ModeratorGroup (or %USERSWEB%.TWikiAdminGroup, of course).
 
 ---++ Add-On Info
 
@@ -104,6 +104,6 @@ Once %TOPIC% is enabled within a web, you're ready to start defining *TopicTypes
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Demo url: | http://skyloom.com/Demo/TopicClassification |
 
-__Related Topic:__ %TWIKIWEB%.TWikiAddOns
+__Related Topic:__ %SYSTEMWEB%.TWikiAddOns
 
 %META:REVCOMMENT{ncomments="0"}%

@@ -5,8 +5,8 @@
 %DBCALL{"%TCAOWEB%.RenderAddClassification" TYPE="SubjectArea" }%
 
 <!-- Topic Permissions
-	* Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
-	* Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+	* Set ALLOWTOPICCHANGE = %USERSWEB%.TWikiAdminGroup
+	* Set ALLOWTOPICRENAME = %USERSWEB%.TWikiAdminGroup
 -->
 
 %META:FORM{name="TopicClassForm"}%
@@ -14,5 +14,5 @@
 %META:FIELD{name="Summary" attributes="" title="Summary" value="TCAO/Installs web content subject areas."}%
 %META:FIELD{name="Facets" attributes="" title="Facets" value=""}%
 %META:REVCOMMENT{ncomments="0"}%
-%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%
-%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%25USERSWEB%25.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%25USERSWEB%25.TWikiAdminGroup"}%
