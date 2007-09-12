@@ -37,7 +37,11 @@ var tinymce_plugin_setUpContent = function(editor_id, body, doc) {
     request.req.open("POST", url, true);
     request.req.setRequestHeader(
         "Content-type", "application/x-www-form-urlencoded");
-    var params = "topic=" + escape(path) + "&text=" + escape(body.innerHTML);
+    // get the content of the associated textarea
+    var editor = tinyMCE.getInstanceById(editor_id);
+					elements = document.getElementsByTagName("textarea");
+    var text = editor.oldTargetElement.value;
+    var params = "topic=" + escape(path) + "&text=" + escape(text);
     request.req.setRequestHeader("Content-length", params.length);
     request.req.setRequestHeader("Connection", "close");
     request.req.onreadystatechange = function() {
@@ -55,8 +59,10 @@ function contentReadCallback(request) {
         if (request.req.status == 200) {
             request.body.innerHTML = request.req.responseText;
         } else {
-            alert("There was a problem retrieving the page:\n" +
-                  request.req.statusText);
+            request.body.innerHTML =
+                "<div class='twikiAlert'>"
+                + "There was a problem retrieving the page: "
+                + request.req.statusText + "</div>");
         }
     }
 }
