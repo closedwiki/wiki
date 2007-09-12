@@ -622,13 +622,26 @@ sub _emphasis {
     my( $this, $options, $ch ) = @_;
     my( $flags, $contents ) = $this->_flatten( $options | $WC::NO_BLOCK_TML );
     return ( 0, undef ) if( !defined( $contents ) || ( $flags & $WC::BLOCK_TML ));
+    # Remove whitespace from either side of the contents, retaining the
+    # whitespace
     $contents =~ s/&nbsp;/$WC::NBSP/go;
     $contents =~ /^([\000- ]*)(.*?)([\000- ]*)$/;
     my ($pre, $post) = ($1, $3);
     $contents = $2;
-    #$contents = _trim( $contents );
     return (0, undef) if( $contents =~ /^</ || $contents =~ />$/ );
     return (0, '') unless( $contents =~ /\S/ );
+
+    # Now see if we can collapse the emphases
+    if ($ch eq '_' && $contents =~ s/^\*(.*)\*$/$1/ ||
+          $ch eq '*' && $contents =~ s/^_(?!_)(.*)(?<!_)_$/$1/) {
+        $ch = '__';
+    } elsif ($ch eq '=' && $contents =~ s/^\*(.*)\*$/$1/ ||
+          $ch eq '*' && $contents =~ s/^=(?!=)(.*)(?<!=)=$/$1/) {
+        $ch = '==';
+    } elsif ($contents =~ /^([*_=]).*\1$/) {
+        return (0, '');
+    }
+
     return ( $flags, $pre.$WC::CHECKw.$ch.$contents.$ch.$WC::CHECK2.$post );
 }
 
@@ -755,7 +768,7 @@ sub _handleADDRESS { return _flatten( @_ ); };
 sub _handleAPPLET { return( 0, '' ); };
 sub _handleAREA { return( 0, '' ); };
 
-sub _handleB { return _handleSTRONG( @_ ); }
+sub _handleB { return _emphasis( @_, '*' ); }
 sub _handleBASE { return ( 0, '' ); }
 sub _handleBASEFONT { return ( 0, '' ); }
 sub _handleBDO { return( 0, '' ); };
@@ -792,14 +805,7 @@ sub _handleCAPTION { return (0, '' ); }
 # CENTER
 # CITE
 
-sub _handleCODE {
-    my( $this, $options ) = @_;
-    if( scalar( @{$this->{children}} ) == 1 &&
-        $this->{children}->[0]->{tag} =~ /^(b|strong)$/i ) {
-        return _emphasis( $this->{children}->[0], $options, '==' );
-    }
-    return _emphasis( @_, '=' );
-}
+sub _handleCODE { return _emphasis( @_, '=' ); }
 
 sub _handleCOL { return _flatten( @_ ); };
 sub _handleCOLGROUP { return _flatten( @_ ); };
@@ -817,14 +823,7 @@ sub _handleDIV {
 sub _handleDL { return _LIST( @_ ); }
 sub _handleDT { return _flatten( @_ ); };
 
-sub _handleEM {
-    my( $this, $options ) = @_;
-    if( scalar( @{$this->{children}} ) == 1 &&
-        $this->{children}->[0]->{tag} =~ /^(b|strong)$/i ) {
-        return _emphasis( $this->{children}->[0], $options, '__' );
-    }
-    return _emphasis( @_, '_' );
-}
+sub _handleEM { return _emphasis( @_, '_' ); }
 
 sub _handleFIELDSET { return _flatten( @_ ); };
 sub _handleFONT {
@@ -855,7 +854,7 @@ sub _handleH3     { return _H( @_, 3 ); }
 sub _handleH4     { return _H( @_, 4 ); }
 sub _handleH5     { return _H( @_, 5 ); }
 sub _handleH6     { return _H( @_, 6 ); }
-sub _handleI      { return _handleEM( @_ ); }
+sub _handleI      { return _emphasis( @_, '_' ); }
 sub _handleIFRAME { return( 0, '' ); };
 
 sub _handleIMG {
@@ -999,17 +998,7 @@ sub _handleSPAN {
 
 # STRIKE
 
-sub _handleSTRONG {
-    my( $this, $options ) = @_;
-    if( scalar( @{$this->{children}} ) == 1 ) {
-        if( $this->{children}->[0]->{tag} =~ /^(i|em)$/i ) {
-            return _emphasis( $this->{children}->[0], $options, '__' );
-        } elsif( $this->{children}->[0]->{tag} =~ /^(code|tt)$/i ) {
-            return _emphasis( $this->{children}->[0], $options, '==' );
-        }
-    }
-    return _emphasis( @_, '*' );
-}
+sub _handleSTRONG { return _emphasis( @_, '*' ); }
 
 sub _handleSTYLE { return ( 0, '' ); }
 # SUB
