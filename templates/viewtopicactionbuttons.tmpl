@@ -1,4 +1,4 @@
-%TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"action_activatable_edit_or_create"}%%TMPL:P{"action_wysiwyg"}%%TMPL:P{"action_activatable_attach"}%%TMPL:P{"action_printable"}%%TMPL:P{"action_revisions"}%%TMPL:P{"action_backlinks_simple"}%%TMPL:P{"action_raw_or_view"}%%TMPL:P{"action_activatable_raw_edit"}%%TMPL:P{"activatable_more"}%%TMPL:END%
+%TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"action_activatable_edit_or_create"}%%TMPL:P{"action_activatable_attach"}%%TMPL:P{"action_printable"}%%TMPL:P{"action_revisions"}%%TMPL:P{"action_backlinks_simple"}%%TMPL:P{"action_raw_or_view"}%%TMPL:P{"action_activatable_raw_edit"}%%TMPL:P{"activatable_more"}%%TMPL:END%
 
 
 %TMPL:DEF{"create_topic_link"}%<span><a href='%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%%TMPL:P{"url_param_editaction"}%%IF{"context TinyMCEPluginEnabled" else=";nowysiwyg=1"}%' rel='nofollow' %MAKETEXT{"title='Create new topic' accesskey='c'>&Create"}%</a></span>%TMPL:END%
@@ -7,12 +7,6 @@
 %TMPL:DEF{"edit_topic_link"}%<span><a href='%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%%TMPL:P{"url_param_editaction"}%%IF{"context TinyMCEPluginEnabled" then="" else=";nowysiwyg=1"}%' rel='nofollow' %MAKETEXT{"title='Edit this topic text' accesskey='e'>&Edit"}%</a></span>%TMPL:END%
 
 %TMPL:DEF{"raw_edit_link"}%<span><a href='%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%;nowysiwyg=1"}%' rel='nofollow' %MAKETEXT{"title='Raw Edit this topic text' accesskey='w'>Ra&w edit"}%</a></span>%TMPL:END%
-
-%TMPL:DEF{"edit_wysiwyg_link"}%<span><a href='%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?cover=%COMPOSER%&t=%GMTIME{"$epoch"}%' rel='nofollow' %MAKETEXT{"title='Edit this topic text' accesskey='w'>&WYSIWYG"}%</a></span>%TMPL:END%
-
-
-%TMPL:DEF{"wysiwyg_create_topic_link"}%<span><a href='%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?cover=%COMPOSER%&t=%GMTIME{"$epoch"}%' rel='nofollow' %MAKETEXT{"title='Create this topic' accesskey='w'>Create (&WYSIWYG)"}%</a></span>%TMPL:END%
-
 
 %TMPL:DEF{"view_topic_link"}%<span><a href='%SCRIPTURL{"view"}%/%WEB%/%TOPIC%' rel='nofollow' %MAKETEXT{"title='View topic' accesskey='v'>&View topic"}%</a></span>%TMPL:END%
 
@@ -50,21 +44,11 @@
 
 %TMPL:DEF{"inactive_edit_with_view_topic"}%<span><strike>%MAKETEXT{"Edit"}%</strike></span>%TMPL:END%
 
-%TMPL:DEF{"inactive_wysiwyg"}%<span><strike>%MAKETEXT{"WYSIWYG"}%</strike></span>%TMPL:END%
-
 %TMPL:DEF{"url_param_editaction"}%%IF{"defined EDITACTION" then="&action=%EDITACTION%" else=""}%%TMPL:END%
 
 %TMPL:DEF{"edit_or_create"}%%TMPL:P{context="new_topic" then="create_topic_link" else="edit_topic_link"}%%TMPL:END%
 
 %TMPL:DEF{"raw_edit"}%%TMPL:P{context="new_topic" then="" else="raw_edit_link"}%%TMPL:END%
-
-%TMPL:DEF{"action_wysiwyg"}%%TMPL:P{"wysiwyg"}%%IF{"context WysiwygPluginEnabled and $COMPOSER" then="$percntTMPL:P{$quotsep$quot}$percnt"}%%TMPL:END%
-
-%TMPL:DEF{"wysiwyg"}%%IF{"context WysiwygPluginEnabled and $COMPOSER" then="$percntTMPL:P{$quotactivatable_edit_wysiwyg$quot}$percnt"}%%TMPL:END%
-
-%TMPL:DEF{"activatable_edit_wysiwyg"}%%TMPL:P{context="inactive" then="inactive_wysiwyg" else="wysiwyg_edit_or_create"}%%TMPL:END%
-
-%TMPL:DEF{"wysiwyg_edit_or_create"}%%TMPL:P{context="new_topic" then="wysiwyg_create_topic_link" else="edit_wysiwyg_link"}%%TMPL:END%
 
 %TMPL:DEF{"action_activatable_edit_or_create"}%%TMPL:P{"activatable_edit_or_create"}%%TMPL:P{"sep"}%%TMPL:END%
 

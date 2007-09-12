@@ -56,6 +56,8 @@ $VERSION = '$Rev$';
 
 $RELEASE = 'TWiki-4.2';
 
+my $secret_id = '<!-- WYSIWYG content - do not remove this comment, and never use this identical text in your topics -->';
+
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
 
@@ -159,7 +161,8 @@ sub afterEditHandler {
     my $query = TWiki::Func::getCgiQuery();
     return unless $query;
 
-    return unless defined( $query->param( 'wysiwyg_edit' ));
+    return unless defined( $query->param( 'wysiwyg_edit' )) ||
+      $_[0] =~ s/$secret_id//go;
 
     # Switch off wysiwyg_edit so it doesn't try to transform again in
     # the beforeSaveHandler
@@ -526,8 +529,10 @@ sub _restTML2HTML {
     my $tml = TWiki::Func::getCgiQuery()->param('text');
     my $html = TranslateTML2HTML(
         $tml, $session->{webName}, $session->{topicName} );
-    print CGI::header('text/plain');
-    print $html;
+    # Add the secret id to trigger reconversion. Doesn't work if the
+    # editor eats HTML comments, so the editor may need to put it back
+    # in during final cleanup.
+    return $secret_id.$html;
 }
 
 # Rest handler for use from Javascript
@@ -539,6 +544,8 @@ sub _restHTML2TML {
         $html2tml = new TWiki::Plugins::WysiwygPlugin::HTML2TML();
     }
     my $html = TWiki::Func::getCgiQuery()->param('text');
+    $html =~ s/$secret_id//go;
+
     my $tml = $html2tml->convert(
         $html,
         {
@@ -548,8 +555,7 @@ sub _restHTML2TML {
             expandVarsInURL => \&expandVarsInURL,
             very_clean => 1,
         });
-    print CGI::header('text/plain');
-    print $tml;
+    return $tml;
 }
 
 1;
