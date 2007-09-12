@@ -201,7 +201,7 @@ sub _get_report_item {
 
         my $author = ' - ';
         my $wikiname = $attribute->{author};
-        $author = '%MAINWEB%.'.$wikiname if $wikiname;
+        $author = '%USERSWEB%.'.$wikiname if $wikiname;
 
         my $intDate = $attribute->{date};    # Last topic revision date
 	    my $date = TWiki::Time::formatTime($intDate, '$day $mon $year');
@@ -374,9 +374,9 @@ The table is sorted alphabetically by topic name. Locale is used if enabled.
 ---++++ Sample Report:
 |*%MAKETEXT{"Topic"}%*|*%MAKETEXT{"Status"}%*|*%MAKETEXT{"Date"}%*|*%MAKETEXT{"History:"}%*|*%MAKETEXT{"Revision"}%*|*%MAKETEXT{"Last modified time"}%*|*%MAKETEXT{"Last editor"}%*|*%MAKETEXT{"Topic parent:"}%*|
 |[[Issue1]]|ASSIGNED|08 Oct 2006 - 01:32|<verbatim>ASSIGNED -- 07 Oct 2006 - 23:46
-CLOSED -- 08 Oct 2006 - 00:29</verbatim>|1.1|08 Oct 2006 - 01:32:50|%MAINWEB%.PaulHoesli|WebHome|
+CLOSED -- 08 Oct 2006 - 00:29</verbatim>|1.1|08 Oct 2006 - 01:32:50|%USERSWEB%.PaulHoesli|WebHome|
 |[[Issue2]]|CONFIRMED|08 Oct 2006 - 01:24|<verbatim>REJECTED
-CONFIRMED </verbatim>|1.1|08 Oct 2006 - 01:24:06|%MAINWEB%.PaulHoesli|WebHome|
+CONFIRMED </verbatim>|1.1|08 Oct 2006 - 01:24:06|%USERSWEB%.PaulHoesli|WebHome|
 
 ---++ Missing Features
    * Add application programming interface
