@@ -1255,6 +1255,21 @@ C
 X
 ',
       },
+      {
+          exec => $HTML2TML,
+          name => 'Item4588',
+          tml => <<XYZ,
+A __here__ A B __here__ B C __here__ C D __here__ D E __here__ E F __here__ F
+XYZ
+          html => <<XWYZ,
+A <i><b>here</b> </i>A
+B <b><i>here</i> </b>B
+C <b><i>here</i></b> C
+D <b> <i>here</i></b>D
+E  <b><i>here</i></b>E
+F <i> <b>here</b></i>F
+XWYZ
+      },
      ];
 
 sub gen_compare_tests {
