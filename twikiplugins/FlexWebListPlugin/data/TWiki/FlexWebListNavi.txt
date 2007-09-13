@@ -1,26 +1,28 @@
-%META:TOPICINFO{author="TWikiContributor" date="1179758113" format="1.1" reprev="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1185226497" format="1.1" reprev="1.2" version="$Rev$"}%
 ---+!! %TOPIC%
 
 The fragment below can be used in a sidebar navigation to establish a "twisted" subweb navigation.
 Use it by adding =%<nop>INCLUDE{"%WEB%.%TOPIC%"}%= to your WebLeftBar or TWikiWebSideBar.
 
-If you want to hide the web navigation from TWikiGuests then uncomment the following:
-   * #Set ALLOWTOPICVIEW = %USERSWEB%.TWikiGuest
+If you want to hide the web navigation from <nop>TWikiGuests then uncomment the following:
+   * #Set DENYTOPICVIEW = %USERSWEB%.TWikiGuest
 
 <verbatim>
-%STARTINCLUDE%<nop><h2>Webs
-%TWISTYBUTTON{id="subwebs" 
+%STARTINCLUDE%%TWISTY{
+  prefix="<h2>"
+  suffix="</h2>"
   remember="on" 
   firststart="show"
-  link=""
+  link="Webs "
+  buttonmode="span"
+  mode="div"
   showimg="%ICONURLPATH{"toggleclose-mini"}%"
   hideimg="%ICONURLPATH{"toggleopen-mini"}%"
 }%
-</h2>
-%TWISTYTOGGLE{id="subwebs"}%
 %~~ FLEXWEBLIST{
 ~~~   webs="%USERSWEB%,User,People,public,%SYSTEMWEB%" 
-~~~   exclude="TestCases|Trash.*" 
+~~~   exclude="(TestCases|Trash).*" 
+~~~   adminwebs="Applications.*"
 ~~~   header="<ul>"
 ~~~   format="<li
 ~~~       $percntIFDEFINED{\"%BASEWEB%\" as=\"$web\"
@@ -41,12 +43,10 @@ If you want to hide the web navigation from TWikiGuests then uncomment the follo
 ~~~         link=\"\"
 ~~~       }$percnt
 ~~~     $percntFIDEFINED$percnt"
-~~~   footer="</ul>"
+~~~   footer="</li></ul>"
 ~~~   separator="</li>"
-~~~   subheader="$percntTWISTYTOGGLE{id=\"subweb_$web\"}$percnt<ul class=\"natSubWebs\">"
+~~~   subheader="$percntTWISTYTOGGLE{id=\"subweb_$web\" mode=\"div\"}$percnt<ul class=\"natSubWebs\">"
 ~~~   subfooter="</li></ul>$percntENDTWISTYTOGGLE$percnt"
 ~~~ }%
-%ENDTWISTYTOGGLE%%STOPINCLUDE%
+%ENDTWISTY%%STOPINCLUDE%
 </verbatim>
-
-%META:TOPICMOVED{by="MichaelDaum" date="1179757874" from="TWiki.FlexWebNavigation" to="TWiki.FlexWebListNavi"}%

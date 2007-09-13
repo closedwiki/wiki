@@ -63,6 +63,13 @@ sub handler {
   $this->{exclude} = $params->{exclude} || '';
   $this->{include} = $params->{include} || '';
   $this->{subWebs} = $params->{subwebs} || 'all';
+  $this->{adminwebs} = $params->{adminwebs} || '';
+
+  if ($this->{adminwebs}) {
+    $this->{isAdmin} = isAdmin();
+  } else {
+    $this->{isAdmin} = '';
+  }
 
   $this->{selection} =~ s/\,/ /go;
   $this->{selection} = ' '.$this->{selection}.' ';
@@ -150,12 +157,13 @@ sub formatWeb {
   # check conditions to format this web
   return '' if $web->{done};
 
-
   # filter webs
   unless ($this->{isExplicit}{$web->{key}}) {
     return '' if $web->{isSubWeb} && $this->{subWebs} eq 'none';
     return '' if $this->{exclude} ne '' && $web->{key} =~ /^($this->{exclude})$/;
     return '' if $this->{include} ne '' && $web->{key} !~ /^($this->{include})$/;
+    return '' if $this->{adminwebs} ne '' && !$this->{isAdmin} &&
+      $web->{key} =~ /^($this->{adminwebs})$/;
   }
 
   $web->{done} = 1;
@@ -278,6 +286,24 @@ sub hashWebs {
   #writeDebug("keys=".join(',',sort keys %webs));
 
   return \%webs;
+}
+
+###############################################################################
+# compatibility wrapper
+sub isAdmin { 
+
+  if ($TWiki::Plugins::VERSION >= 1.2) {
+    return TWiki::Func::isAnAdmin();
+  }
+
+  my $user = $TWiki::Plugins::SESSION->{user};
+  if ($user) {
+    return $user->isAdmin();
+  }
+
+  # do we need to support more legacy apis
+
+  return 0;
 }
 
 ###############################################################################
