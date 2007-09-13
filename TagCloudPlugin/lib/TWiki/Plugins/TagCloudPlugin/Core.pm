@@ -42,7 +42,7 @@ sub handleTagCloud {
   my $theBuckets = $params->{buckets} || 10;
   my $theSort = $params->{sort} || 'alpha';
   my $theReverse = $params->{reverse} || 'off';
-  my $theMin = $params->{min} || 1;
+  my $theMin = $params->{min} || 0;
   my $theOffset = $params->{offset} || 10;
   my $theStopWords = $params->{stopwords} || 'off';
   my $theSplit = $params->{split} || '[/,\.?\s]+';
@@ -98,6 +98,8 @@ sub handleTagCloud {
     $theTerms =~ s/\&[a-z]+;/ /go;
     $theTerms =~ s/\&#[0-9]+;/ /go;
     $theTerms =~ s/[\*\.=\[\]\(\);&#\\\/\~\-\+`!}{"\$\>\<_]/ /go;
+    $theTerms =~ s/[:<>%]//go;
+    $theTerms =~ s/\d//go;
   } else {
     $theTerms =~ s/$theFilter/ /g;
   }
@@ -108,12 +110,8 @@ sub handleTagCloud {
       $term = $1;
       $weight = $2;
     }
-    $term =~ s/[:<>%]//go;
-    $term =~ s/\d//go;
     $term =~ s/^\s*(.*?)\s*$/$1/o;
-    next if $term =~ /^\s*$/;
-    next if $term =~ /^.$/;
-    next if $term =~ /^\d+$/;
+    next if $term =~ /^.?$/;
 
     # filter
     my $lcterm = lc($term);

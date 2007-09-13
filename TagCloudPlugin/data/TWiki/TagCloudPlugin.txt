@@ -199,9 +199,10 @@ Cloud for the above text:
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.00|
+|  Plugin Version: | v1.01|
 |  Change History: | &nbsp; |
-|  05 June 2007: | better default values, e.g. filter is off by default now; \
+|  13 Sep 2007: | don't remove numericals from terms |
+|  05 Jun 2007: | better default values, e.g. filter is off by default now; \
                    fixed expansion of standard escapes |
 |  31 Aug 2006: | added filter parameter to customize special chars to be excluded; \
                   added NO_PREFS_IN_TOPIC |
@@ -222,7 +223,7 @@ Cloud for the above text:
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
--- TWiki:Main/MichaelDaum - 05 June 2007
+-- TWiki:Main/MichaelDaum - 13 Sep 2007
 
 
 %META:FILEATTACHMENT{name="TagCloud.jpg" attachment="TagCloud.jpg" attr="" comment="" date="1141219293" path="TagCloud.jpg" size="22049" stream="TagCloud.jpg" user="TWikiContributor" version="1"}%
