@@ -165,6 +165,7 @@ Many thanks to the following sponsors for supporting this work:
 |  License | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
+|  13 Sep 2007 | Bugs:Item4613 cleaned up spurious message when navigating away Bugs:Item4615 fixed incorrect rendering of emphasis next to br |
 |  12 Sep 2007 | Bugs:Item4604 Fixes to REST handler, and add ability to trigger HTML2TML conversion from a content comment alone (required for some editors) Bugs:Item4588 fixes to conversion of double-character emphases |
 |  7 Sep 2007 | Bugs:Item4503 excess empty lines Bugs:Item4486 no toc headers with unofficial syntax Bugs:Item4560: empty lines lost Bugs:Item4566: corrupted table on save Bugs:Item4550 section tags being eaten |
 |  4 Sep 2007 | Bugs:Item4534 Bugs:Item4535 fixed |
