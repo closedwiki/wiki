@@ -56,6 +56,12 @@ Parameters:
    * =exclude=: regular expression of items excluded from the output
    * =include=: regular expressions of items that must match in order to be
      included in the output
+   * =adminwebs=: a regular expression of webs that are considered to be only relevant for 
+     <nop>TWikiAdmins and are hiddend to non-admin users. In general it is recommended to
+     hide webs by restricting access rights to it. There are however cases when you want to hide a web
+     but still _use_ it although the user is not aware of it. Best example is
+     and Application web holding <nop>TWikiApplications. Users are using those
+     applications but should not be bothered with their implementation.
    * =map=: list of =key=value= pairs to map the name of a web to a different value
      (e.g. map="TWiki=System,Main=Home" will expand the variable =$name= as "System" instead of TWiki
      and as "Home" instead "Main")
@@ -146,8 +152,9 @@ See the FlexWebListExamples.
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006-2007, MichaelDaum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.10 |
+|  Plugin Version: | v1.20 |
 |  Change History: | &nbsp; |
+|  13 Sep 2007: | added adminwebs feature |
 |  21 May 2007: | added <nop>FlexWebListNavi |
 |  08 May 2007: | docu fixes, respect HOMETOPIC in the examples |
 |  10 Mar 2007: | fixed expansion of $n and $nop |
@@ -172,4 +179,4 @@ See the FlexWebListExamples.
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main/MichaelDaum - 21 May 2007
+-- TWiki:Main/MichaelDaum - 13 Sep 2007
