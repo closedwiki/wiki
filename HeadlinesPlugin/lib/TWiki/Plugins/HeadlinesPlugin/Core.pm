@@ -293,8 +293,8 @@ $debug = 0; # toggle me
 
 # =========================
 sub writeDebug {
-  &TWiki::Func::writeDebug('HeadlinesPlugin - ' . $_[0]) if $debug;
-  #print STDERR 'HeadlinesPlugin - ' . $_[0] . "\n" if $debug;
+  #&TWiki::Func::writeDebug('HeadlinesPlugin - ' . $_[0]) if $debug;
+  print STDERR 'HeadlinesPlugin - ' . $_[0] . "\n" if $debug;
 }
 
 # =========================
@@ -889,7 +889,7 @@ sub parseCONTENT {
   #writeDebug("- HeadlinesPlugin::parseCONTENT called");
   #writeDebug("input=$$input");
 
-  if ($$input =~ /<content:encoded>(.*?)<\/content:encoded>/) {
+  if ($$input =~ /<content:encoded[^>]*>(.*?)<\/content:encoded>/) {
     #writeDebug("found content:encoded");
     $val = &recode($1);
     if ($val) {

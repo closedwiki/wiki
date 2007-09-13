@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1148716603" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1148716603" format="1.1" version="$Rev$"}%
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -173,10 +173,11 @@ defining the default CSS properties  (indentation illustrates enclosure).
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2002-2006, Peter Thoeny; 2005-2006, Michael Daum |
+|  Copyright &copy;: | 2002-2006, Peter Thoeny; 2005-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v2.11 |
+|  Plugin Version: | v2.12 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  13 Sep 2007: | fixed parsing of content:encoded |
 |  23 Jul 2006: | improved atom parser; if a posting has no title default to 'Untitled' |
 |  26 Apr 2006: | added lazy compilation |
 |  10 Feb 2006: | packaged using the TWiki:Plugins/BuildContrib; \
@@ -209,6 +210,4 @@ defining the default CSS properties  (indentation illustrates enclosure).
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 -- TWiki:Main.PeterThoeny - 11 May 2005 %BR%
--- TWiki:Main.MichaelDaum - 23 Jul 2006
-
-%META:FILEATTACHMENT{name="style.css" attr="" comment="" date="1132593600" path="style.css" size="1372" user="TWikiContributor" version="1.1"}%
+-- TWiki:Main.MichaelDaum - 13 Sep 2007
