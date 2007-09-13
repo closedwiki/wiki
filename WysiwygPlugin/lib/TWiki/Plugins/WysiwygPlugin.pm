@@ -527,6 +527,11 @@ sub TranslateTML2HTML {
 sub _restTML2HTML {
     my ($session) = @_;
     my $tml = TWiki::Func::getCgiQuery()->param('text');
+
+    # if the secret ID is present, to convert again. We are probably
+    # going 'back' to this page.
+    return $tml if $tml =~ /$secret_id/;
+
     my $html = TranslateTML2HTML(
         $tml, $session->{webName}, $session->{topicName} );
     # Add the secret id to trigger reconversion. Doesn't work if the
