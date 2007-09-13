@@ -18,6 +18,7 @@
 // Asynchronous fetch of the topic content using the Wysiwyg REST handler.
 var tinymce_plugin_setUpContent = function(editor_id, body, doc) {
     var request = new Object();
+    request.editor_id = editor_id;
     request.doc = doc;
     request.body = body;
     // Work out the rest URL from the location
@@ -60,6 +61,8 @@ function contentReadCallback(request) {
         // only if "OK"
         if (request.req.status == 200) {
             request.body.innerHTML = request.req.responseText;
+            var editor = tinyMCE.getInstanceById(request.editor_id);
+            editor.isNotDirty = true;
         } else {
             request.body.innerHTML =
                 "<div class='twikiAlert'>"
