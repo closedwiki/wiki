@@ -193,9 +193,25 @@ sub dbQuery {
     foreach my $topicName (@topicNames) {
       my $topicObj = $this->fastget($topicName);
       if (!$search || $search->matches($topicObj)) {
-        if (TWiki::Func::checkAccessPermission('VIEW', $wikiUserName, undef, $topicName, $this->{web})) {
-	  $hits{$topicName} = $topicObj if $topicObj;
-      
+
+        my $cachedText = $this->expandPath($topicObj, 'text') ;
+        #TODO: re-code DBCacheContrib to add '   * Set ALLOW... perms into the META 'preferences' , then recode to just use that.
+        my $topicHasPerms = $cachedText =~ /(ALLOW|DENY)/;
+        my $cachedPrefsMap = $topicObj->fastget('preferences');
+        if (defined($cachedPrefsMap)) {
+              print STDERR "-----------------$topicName----$cachedPrefsMap";
+              my @cachedPrefs = $cachedPrefsMap->getValues() ;
+              $topicHasPerms = (grep('DENY', @cachedPrefs)) || (grep('ALLOW', @cachedPrefs));
+         }
+         #don't check access perms on a topic that does not contain any
+         #WARNING: this is hardcoded to assume TWiki-Core permissions - anyone doing pluggable Permissions need to
+         #                   work out howto abstract this concept - or to disable it (its worth about 400mS per topic in the set. (if you're not TWikiAdmin))
+         if (
+            ( !$topicHasPerms  && $webViewPermission )
+            || TWiki::Func::checkAccessPermission('VIEW', $wikiUserName, undef, $topicName, $this->{web})
+	    ) {
+
+	$hits{$topicName} = $topicObj if $topicObj;
       
         #pre-fetch the sorting key - thus we only do it N times
     if ($theSort eq 'name') {
