@@ -220,7 +220,7 @@ sub _getRenderedVersion {
     $text =~ s/(?<!\+!)!%(?=[A-Z][A-Z0-9_]*[{%])/%<nop>/g;
 
     # Change ' !AnyWord' to ' <nop>AnyWord',
-    $text =~ s/$STARTWW!(?=[\w\*\=])/<nop>/gm;
+    $text =~ s/$STARTWW!(?=[$TWiki::regex{mixedAlphaNum}\*\=])/<nop>/gm;
 
     # Change ' ![[...' to ' [<nop>[...'
     $text =~ s/(^|\s)!\[\[/$1\[<nop>\[/gm;
@@ -267,11 +267,11 @@ sub _getRenderedVersion {
     $text =~ s/((^|(?<=[-*\s(]))$TWiki::regex{linkProtocolPattern}:[^\s<>"]+[^\s*.,!?;:)<])/$this->_liftOut($1, 'LINK')/geo;
 
     # other entities
-    $text =~ s/&(\w+);/$TT0$1;/g;      # "&abc;"
-    $text =~ s/&(#[0-9]+);/$TT0$1;/g;  # "&#123;"
+    $text =~ s/&([$TWiki::regex{mixedAlphaNum}]+;)/$TT0$1/g;      # "&abc;"
+    $text =~ s/&(#[0-9]+;)/$TT0$1/g;  # "&#123;"
     #$text =~ s/&/&amp;/g;             # escape standalone "&"
     $text =~ s/$TT0(#[0-9]+;)/&$1/go;
-    $text =~ s/$TT0(\w+;)/&$1/go;
+    $text =~ s/$TT0([$TWiki::regex{mixedAlphaNum}]+;)/&$1/go;
 
     # Horizontal rule
     my $hr = CGI::hr({class => 'TMLhr'});
@@ -585,7 +585,7 @@ sub _putBackBlocks {
 sub _parseParams {
     my $p = shift;
     my $params = {};
-    while( $p =~ s/^\s*(\w+)=(".*?"|'.*?')// ) {
+    while( $p =~ s/^\s*([$TWiki::regex{mixedAlphaNum}]+)=(".*?"|'.*?')// ) {
         my $name = $1;
         my $val = $2;
         $val =~ s/['"](.*)['"]/$1/;
