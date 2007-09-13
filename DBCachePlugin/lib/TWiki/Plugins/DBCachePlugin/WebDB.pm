@@ -198,6 +198,8 @@ sub dbQuery {
     }
   }
 
+  my $webViewPermission = TWiki::Func::checkAccessPermission('VIEW', $wikiUserName, undef, undef, $this->{web}) ;
+
   my $doNumericalSort = 1;
   foreach my $topicName (@topicNames) {
     my $topicObj = $this->fastget($topicName);
