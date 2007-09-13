@@ -68,8 +68,9 @@ sub handleDBQUERY {
   my $theLimit = $params->{limit} || '';
   my $theSkip = $params->{skip} || 0;
   my $theHideNull = $params->{hidenull} || 'off';
-  my $theRemote = $params->remove('remote') || 'on';
-  $theRemote = ($theRemote eq 'on')?1:(($theRemote eq 'force')?2:0);
+  my $theRemote = $params->remove('remote') || 'off';
+  $theRemote = ($theRemote =~ /^(on|force|1|yes)$/)?1:0;
+  $theRemote = ($theRemote eq 'on')?1:0;
 
   # get web and topic(s)
   my @topicNames = ();
@@ -79,7 +80,7 @@ sub handleDBQUERY {
     push @topicNames, $thisTopic;
   } else {
     if ($theTopics) {
-      @topicNames = split(/, /, $theTopics);
+      @topicNames = split(/[,\s+]/, $theTopics);
     }
   }
   my $theDB = getDB($thisWeb);
@@ -145,12 +146,13 @@ sub handleDBQUERY {
   $theHeader = _expandVariables($theHeader, $theWeb, $theTopic, count=>$count, web=>$thisWeb) if $theHeader;
   $theFooter = _expandVariables($theFooter, $theWeb, $theTopic, count=>$count, web=>$thisWeb) if $theFooter;
 
-  $text = &TWiki::Func::expandCommonVariables("$theHeader$text$theFooter", 
-    $theTopic, $theWeb);
+## DISABLED
+#  $text = &TWiki::Func::expandCommonVariables("$theHeader$text$theFooter", 
+#    $theTopic, $theWeb);
+##
+  $text = $theHeader.$text.$theFooter;
 
-  if($theRemote == 2 || ($theRemote == 0 && $thisWeb ne $theWeb)) {
-    _fixInclude($session, $thisWeb, $text);
-  }
+  _fixInclude($session, $thisWeb, $text) if $theRemote;
 
   return $text;
 }
@@ -175,7 +177,7 @@ sub handleDBCALL {
   my $warn = $params->remove('warn') || 'on';
   $warn = ($warn eq 'on')?1:0;
   my $remote = $params->remove('remote') || 'off';
-  $remote = ($remote eq 'on')?1:(($remote eq 'force')?2:0);
+  $remote = ($remote =~ /^(on|force|1|yes)$/)?1:0;
 
   #writeDebug("thisWeb=$thisWeb thisTopic=$thisTopic theWeb=$theWeb theTopic=$theTopic");
 
@@ -233,10 +235,7 @@ sub handleDBCALL {
   $sectionText = TWiki::Func::expandCommonVariables($sectionText, $thisTopic, $thisWeb);
 
   # fix local linx
-  if($remote == 2 || ($remote == 0 && $thisWeb ne $theWeb)) {
-    _fixInclude($session, $thisWeb, $sectionText);
-  }
-
+  _fixInclude($session, $thisWeb, $sectionText) if $remote;
 
   # cleanup
   delete $session->{dbcalls}->{$key};
@@ -516,7 +515,7 @@ sub handleATTACHMENTS {
   my $theUser = $params->{user} || '.*';
   my $theHeader = $params->{header} || '';
   my $theFooter = $params->{footer} || '';
-  my $theFormat = $params->{format} || '| [[$url][$name]] |  $sizeK | <nobr>$date</nobr> | $user | $comment |';
+  my $theFormat = $params->{format} || '| [[$url][$name]] |  $sizeK | <nobr>$date</nobr> | $wikiuser | $comment |';
   my $theSeparator = $params->{separator} || $params->{sep} || "\n";
   my $theSort = $params->{sort} || $params->{order} || 'name';
   my $theHideNull = $params->{hidenull} || 'off';
@@ -573,6 +572,10 @@ sub handleATTACHMENTS {
     next if $theMaxDate && $date > $theMaxDate;
 
     my $user = $attachment->fastget('user');
+    if (defined(&TWiki::Users::getWikiName)) {# TWiki-4.2 onwards
+      my $session = $TWiki::Plugins::SESSION;
+      $user = $session->{users}->getWikiName($user);
+    }
     #writeDebug("user=$user");
     next unless $user =~ /^($theUser)$/;
     my ($userWeb, $userTopic) = TWiki::Func::normalizeWebTopicName('', $user);

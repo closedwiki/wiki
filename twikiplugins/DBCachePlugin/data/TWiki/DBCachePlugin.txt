@@ -407,7 +407,7 @@ following is the default paramenter (omitting the #)
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2005-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.60 |
+|  Plugin Version: | v1.61 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  12 Sep 2007  | made significant speedups to DBQuery \
                   fixed sorting to be O(N log(N)) \
@@ -473,4 +473,4 @@ following is the default paramenter (omitting the #)
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 19 Jun 2007
+-- TWiki:Main.MichaelDaum - 13 Sep 2007
