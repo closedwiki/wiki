@@ -98,7 +98,7 @@ function twikiConvertURL(url,node,onSave){
             }
         } else {
             if (url.indexOf('/') == -1) {
-                var match = /^((?:[^$-_.+!*'(),\/]*\.)*)([^$-_.+!*'(),\/]+)$/.exec(url);
+                var match = /^((?:\w+\.)*)(\w+)$/.exec(url);
                 if (match != null) {
                     var web = match[1];
                     var topic = match[2];
