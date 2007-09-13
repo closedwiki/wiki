@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2005-2006 MichaelDaum@WikiRing.com
+# Copyright (C) 2005-2007 Michael Daum http://wikiring.de
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
