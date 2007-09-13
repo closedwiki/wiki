@@ -31,6 +31,7 @@ sub new {
   my $this = bless({}, $class);
 
   eval 'use Image::Magick;';
+  $web =~ s/\//\./go;
 
   # init
   $this->{id} = $id;
@@ -44,6 +45,7 @@ sub new {
 
   $this->{wikiUserName} = &TWiki::Func::getWikiUserName();
   $this->{pubDir} = &TWiki::Func::getPubDir();
+  $this->{imagesDir} = $this->{pubDir}.'/images';
   $this->{pubUrlPath} = &TWiki::Func::getPubUrlPath();
   $this->{twikiWebName} = &TWiki::Func::getTwikiWebname();
   
@@ -65,16 +67,17 @@ sub new {
     }
   }
 
-  my $topicPubDir = $this->normalizeFileName($this->{pubDir} . "/$web/$topic");
-  mkdir "$this->{pubDir}/$web" unless -d "$this->{pubDir}/$web";
+  my $topicPubDir = $this->normalizeFileName($this->{imagesDir} . "/$web/$topic");
+  mkdir $this->{imagesDir} unless -d $this->{imagesDir};
+  mkdir "$this->{imagesDir}/$web" unless -d "$this->{imagesDir}/$web";
   mkdir $topicPubDir unless -d $topicPubDir;
 
   if ($this->{id}) {
-    $this->{igpDir} = $this->normalizeFileName("$topicPubDir/_igp$this->{id}");
+    $this->{igpDir} = $this->normalizeFileName("$topicPubDir/$this->{id}");
     mkdir $this->{igpDir} unless -d $this->{igpDir};
 
-    $this->{igpPubUrl} = $this->{pubUrlPath} .
-      "/$this->{web}/$this->{topic}/_igp$this->{id}";
+    $this->{imagesPubUrl} = $this->{pubUrlPath} .
+      "/images/$this->{web}/$this->{topic}/$this->{id}";
     $this->{infoFile} = $this->normalizeFileName("$this->{igpDir}/info.txt");
   }
 
@@ -85,13 +88,18 @@ sub new {
 # test if a file is an image
 sub isImage {
   my ($this, $attachment) = @_;
+     
+  writeDebug("called isImage(". $attachment->{name}.")");
 
   my $suffix = '';
   if ($attachment->{name} =~ /\.(.+)$/) {
     $suffix = lc($1);
   }
 
-  return defined $this->{isImageSuffix}{$suffix};
+  my $result = defined $this->{isImageSuffix}{$suffix};
+  writeDebug("not an image") unless $result;
+  writeDebug("this is an image") if $result;
+  return $result;
 }
 
 # =========================
@@ -163,10 +171,8 @@ sub init {
     $this->{doThumbTitles} = $this->{doTitles};
   }
 
-  $this->{limit} = $params->{limit};
-  unless ($this->{limit}) {
-    $this->{limit} = 0;
-  }
+  $this->{limit} = $params->{limit} || 0;
+  $this->{skip} = $params->{skip} || 0;
 
   my $refresh = $this->{query}->param("refresh") || '';
   $this->{doRefresh} = ($refresh eq 'on')?1:0;
@@ -377,12 +383,13 @@ sub renderThumbnails {
   my $result = "<div class=\"igpThumbNails\"><table class=\"igpThumbNailsTable\"><tr>\n";
   my $imageNr = 0;
   my @rowOfImages = ();
+  my $skip = $this->{skip};
   foreach my $image (@{$this->{images}}) {
     $this->computeImageSize($image);
 
-    if ($this->{limit} && $imageNr >= $this->{limit}) {
-      last;
-    }
+    $skip--;
+    next if $skip >= 0;
+    last if $this->{limit} && $imageNr >= $this->{limit};
 
     if ($this->{doThumbTitles}) {
       push @rowOfImages, $image;
@@ -391,7 +398,7 @@ sub renderThumbnails {
     $result .= "<td width=\"" . (100 / $maxCols) . "%\" class=\"igpThumbNail\"><a href=\""
       .  &TWiki::Func::getScriptUrl($this->{web}, $this->{topic}, "view")
       . "?id=$this->{id}&filename=$image->{name}#igp$this->{id}\">"
-      . "<img src=\"$this->{igpPubUrl}/thumb_$image->{name}\" "
+      . "<img src=\"$this->{imagesPubUrl}/thumb_$image->{name}\" "
       . "title=\"$image->{IGP_comment}\" alt=\"$image->{name}\"/></a></td>\n";
 
     if (!$this->createImg($image, 1)) {
@@ -465,12 +472,12 @@ sub getImages {
   my @images;
   foreach my $webtopic (@{$this->{topics}}) {
     my ($theWeb, $theTopic) = TWiki::Func::normalizeWebTopicName($this->{web}, $webtopic);
-    #writeDebug("reading from $theWeb.$theTopic}");
+    writeDebug("reading from $theWeb.$theTopic}");
     my $viewAccessOK = &TWiki::Func::checkAccessPermission("view", $this->{wikiUserName}, undef, 
       $theTopic, $theWeb);
 
     if (!$viewAccessOK) {
-      #writeDebug("no view access to ... skipping");
+      writeDebug("no view access to ... skipping");
       next;
     }
 
@@ -478,7 +485,6 @@ sub getImages {
 
     foreach my $image ($meta->find('FILEATTACHMENT')) {
       next unless $this->isImage($image);
-
       next if $this->{exclude} && $image->{$this->{field}} =~ /$this->{exclude}/;
       next if $this->{include} && $image->{$this->{field}} !~ /$this->{include}/;
       
@@ -510,6 +516,7 @@ sub getImages {
       push @images, $image;
     }
   }
+  writeDebug("found ".scalar(@images)." images");
 
   # order images
   my @sortedImages;
@@ -695,8 +702,8 @@ sub replaceVars {
     $format =~ s/\$size/$image->{size}/gos;
     $format =~ s/\$wikiusername/$image->{user}/gos;
     $format =~ s/\$username/TWiki::Func::wikiToUserName($image->{user})/geos;
-    $format =~ s,\$thumburl,$this->{igpPubUrl}/thumb_$image->{name},gos;
-    $format =~ s,\$imageurl,$this->{igpPubUrl}/$image->{name},gos;
+    $format =~ s,\$thumburl,$this->{imagesPubUrl}/thumb_$image->{name},gos;
+    $format =~ s,\$imageurl,$this->{imagesPubUrl}/$image->{name},gos;
     $format =~ s,\$origurl,$image->{IGP_url},gos;
     $format =~ s/\$web/$image->{IGP_web}/gos;
     $format =~ s/\$topic/$image->{IGP_topic}/gos;

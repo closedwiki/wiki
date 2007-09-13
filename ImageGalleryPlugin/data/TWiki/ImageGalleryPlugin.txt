@@ -176,11 +176,12 @@ Note, that the $comment variable will only display =&lt;comment&gt;= , that is w
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/MichaelDaum, TWiki:Main/WillNorris |
-|  Copyright &copy;: | 2002-2003, Will Norris; 2005-2007, Michael Daum |
+|  Copyright &copy;: | 2002-2003, Will Norris; 2005-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v3.5 |
+|  Plugin Version: | v3.6 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  19 Feb 2006 | make proper use TWiki-4 API; \
+|  19 Sep 2007 | store auto-computed images in an images subdir of its own |
+|  19 Feb 2007 | make proper use TWiki-4 API; \
                  don't use inline css, put them into the html header instead |
 |  24 Jul 2006 | working around Image::Magick crashes reading svg image files |
 |  20 Mar 2006 | added =sort= and =reverse= arguments; \
@@ -210,7 +211,4 @@ Note, that the $comment variable will only display =&lt;comment&gt;= , that is w
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 19 Feb 2007
-
-
-%META:FILEATTACHMENT{name="style.css" attr="" comment="" date="1114698585" path="style.css" size="1039" user="Main.TWikiContributor" version="1"}%
+-- TWiki:Main.MichaelDaum - 19 Sep 2007
