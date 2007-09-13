@@ -1270,6 +1270,12 @@ E  <b><i>here</i></b>E
 F <i> <b>here</b></i>F
 XWYZ
       },
+      {
+          exec => $ROUNDTRIP,
+          name => "Item4615",
+          tml => 'ABC<br /> _DEF_',
+          html => 'ABC<br /><i>DEF</i>',
+      },
      ];
 
 sub gen_compare_tests {
