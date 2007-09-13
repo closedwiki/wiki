@@ -112,8 +112,8 @@ sub addChild {
 sub _trim {
     my $s = shift;
 
-    $s =~ s/^[ \t\n$WC::CHECKn$WC::CHECKw$WC::CHECKs]+//o;
-    $s =~ s/[ \t\n$WC::CHECKn$WC::CHECKw]+$//o;
+    $s =~ s/^[ \t\n$WC::CHECKn$WC::CHECKw$WC::CHECKs]+/$WC::CHECKw/o;
+    $s =~ s/[ \t\n$WC::CHECKn$WC::CHECKw]+$/$WC::CHECKw/o;
     return $s;
 }
 
@@ -413,7 +413,7 @@ sub _convertList {
         if( $isdl && ( lc( $kid->{tag} ) eq 'dt' )) {
             # DT, set the bullet type for subsequent DT
             $basebullet = $kid->_flatten( $WC::NO_BLOCK_TML );
-            $basebullet =~ s/\s+$//;
+            $basebullet =~ s/[\s$WC::CHECKw$WC::CHECKs]+$//;
             $basebullet .= ':';
             $basebullet =~ s/$WC::CHECKn/ /g;
             $basebullet =~ s/^\s+//;
