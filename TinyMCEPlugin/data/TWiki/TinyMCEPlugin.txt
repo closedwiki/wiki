@@ -48,6 +48,7 @@ For a full explanation of the available options, and guidance on reconfiguring T
    convert_fonts_to_spans: true,
    plugins : "table,searchreplace,autosave,paste,twikiimage",
    setupcontent_callback : "tinymce_plugin_setUpContent",
+   twiki_secret_id : "%WYSIWYG_SECRET_ID%",
    twiki_vars : "PUBURLPATH=%PUBURLPATH%,PUBURL=%PUBURL%,WEB=%WEB%,TOPIC=%TOPIC%,ATTACHURL=%ATTACHURL%,ATTACHURLPATH=%ATTACHURLPATH%,VIEWSCRIPTURL=%SCRIPTURL{view}%",
    theme_advanced_toolbar_align : "left",
    paste_create_paragraphs : true,
