@@ -57,8 +57,12 @@ sub addString {
 sub addFile {
     my( $this, $from, $to ) = @_;
     my $f = "$this->{web}/$to";
-    eval { File::Copy::copy( $from, "$this->{path}/$f" ); };
+    my $dest = "$this->{path}/$f";
+    eval { File::Copy::copy( $from, $dest ); };
     $this->{logger}->logError($@) if $@;
+    my @stat = stat( $from );
+    $this->{logger}->logError("Unable to stat $from") unless @stat;
+    utime( @stat[8,9], $dest );
     push( @{$this->{files}}, $f );
 }
 
