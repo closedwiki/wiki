@@ -15,6 +15,9 @@
  As per the GPL, removal of this notice is prohibited.
 */
 
+// This *must* be consistent with WysiwygPlugin.pm
+var WYSWIYG_secret_id = '<!-- WYSIWYG content - do not remove this comment, and never use this identical text in your topics -->';
+
 // Asynchronous fetch of the topic content using the Wysiwyg REST handler.
 var tinymce_plugin_setUpContent = function(editor_id, body, doc) {
     var request = new Object();
@@ -70,6 +73,16 @@ function contentReadCallback(request) {
                 + request.req.statusText + "</div>";
         }
     }
+}
+
+// Callback on save. Make sure the WYSIWYG flag ID is there.
+var twikiSaveCallback = function(element_id, html, body) {
+    if (html.indexOf(WYSIWYG_secret_id) == -1) {
+        // Something ate the ID. Probably IE. Add it back.
+        html = WYSWIYG_secret_id + html;
+    }
+
+	return html;
 }
 
 // Called on URL insertion, but not on image sources. Expand TWiki variables
