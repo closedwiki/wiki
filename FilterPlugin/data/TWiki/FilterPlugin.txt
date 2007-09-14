@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1173599521" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1184776904" format="1.1" version="$Rev$"}%
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -10,11 +10,25 @@
 -->
 ---+!! <nop>%TOPIC%
 %TOC%
+---++ Description
+<table style="float:right">
+<tr>
+  <td><img src="%ATTACHURLPATH%/wikiringlogo40x40.png"></td>
+  <td><a href="http://wikiring.de" title="Lets your Wiki Ring" style="text-decoration:none">
+      Powered by <br /> <nop>WikiRing Consultants </a>
+  </td>
+</tr>
+</table>
 This plugin allows to substitute and extract information from content by
-using regular expressions.
+using regular expressions. There are three different types of new functions:
+   1 FORMATLIST: maniplulate a list of items; it is highly configurable to 
+     define what constitutes a list and how to extract items from it
+   1 SUBST, STARTSUBST/STOPSUBST: substiture a pattern in a chunk of text
+   1 EXTRACT, STARTEXTRACT/STOPEXTRACT: extract a pattern from a text
+While the START-STOP versions of SUBST and EXTRACT work on inline text,
+the normal versions process a source topic before including it into the current one.
 
 ---++ Syntax Rules
-
 ---+++ SUBST
 *Syntax*: =%<nop>SUBST{topic="..." ...}%= 
 
@@ -28,7 +42,8 @@ insert a topic by processing its content.
    * =limit="&lt;n>"= maximum number of occurences to extract or substitute counted from the 
      start of the text (defaults to =100000= aka all hits) 
    * =skip="&lt;n>"= skip the first n occurences
-   * =exclude="...": skip occurences that match this regular expression
+   * =exclude="..."=: skip occurences that match this regular expression
+   * sort="on,off,alpha,num" order of the formatted items (default "off")
    * =expand="on,off"=: toggle expansion of TWiki markup before filtering
      (defaults to =on=) 
 
@@ -65,19 +80,19 @@ formats a list of items. The &lt;list> argument is separated into items by using
 a split expression; each item is matched agains a pattern and then formatted
 using a format string while being separated by a separator string; the result is
 prepended with a header and appended with a footer in case the list is not empty.
-	* &lt;list>: the list 
-	* split="...": the split expression (default ",")
-	* pattern="...": pattern applied to each item (default "\s(.*)\s")
-	* format="...": the format string for each item (default "$1")
-	* header="...": header string
-	* footer="...": footer string
-	* separator="...": string to be inserted between list items
-	* limit="...": max number of items to be taken out of the list (default "-1")
-        * skip="...": number of list items to skip, not adding them to the result
-	* sort="on,off,alpha,num" order of the formatted items (default "off")
-	* reverse="on,off": reverse the sortion of the list
-	* unique="on,off": remove dupplicates from the list
-	* exclude="...": remove list items that match this regular expression
+   * &lt;list>: the list 
+   * split="...": the split expression (default ",")
+   * pattern="...": pattern applied to each item (default "\s(.*)\s")
+   * format="...": the format string for each item (default "$1")
+   * header="...": header string
+   * footer="...": footer string
+   * separator="...": string to be inserted between list items
+   * limit="...": max number of items to be taken out of the list (default "-1")
+   * skip="...": number of list items to skip, not adding them to the result
+   * sort="on,off,alpha,num" order of the formatted items (default "off")
+   * reverse="on,off": reverse the sortion of the list
+   * unique="on,off": remove dupplicates from the list
+   * exclude="...": remove list items that match this regular expression
 The pattern string shall group matching substrings in the list item to which you can refer to by 
 using $1, $2, ... in the format string. Any format string (=format=, =header=, =footer=) may
 contain variables =$percnt$=, =$nop=, =$dollar= and =$n=. The variable
@@ -110,19 +125,28 @@ This is a second comment.
 </div><div class="posted">
 -- TWiki:Main.MichaelDaum on 22 Aug 2005
 </div></div>
+
+---+++ Extract table data
+| *Pos* | *Description* | *Hours* | 
+|  1 | onsite troubleshooting |  3 | 
+|  2 | normalizing data to new format |  10 |
+|  3 | testing server performace |  5 |
 %STOPINCLUDE%
 
-
+%EXTRACT{topic="%TOPIC%" 
+  expand="off" 
+  pattern="\|\s*(.*?)\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\|" 
+  format="   * it took $3 hours $2$n"
+  skip="1"
+}%
 
 
 ---++ Plugin Installation Instructions
-
-	* [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] the ZIP file
-	* Unzip it in your twiki installation directory. Content: 
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] the ZIP file
+   * Unzip it in your twiki installation directory. Content: 
+     | *File:* | *Description:* |
+%$MANIFEST%
+   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 ---++ Plugin Info
 <!-- provided for compatibility only
@@ -130,10 +154,11 @@ This is a second comment.
 -->
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2005-2007, MichaelDaum http://wikiring.com |
+|  Copyright &copy;: | 2005-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.21 |
+|  Plugin Version: | v1.30 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  14 Sep 2007: | added sorting for EXTRACT and SUBST |
 |  02 May 2007: | using registerTagHandler() as far as possible; \
                   enhanced parameters to EXCTRACT and SUBST |
 |  05 Feb 2007: | fixed escapes in format strings; \
@@ -158,4 +183,6 @@ This is a second comment.
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 02 May 2007
+-- TWiki:Main.MichaelDaum - 14 Sep 2007
+
+%META:FILEATTACHMENT{name="wikiringlogo40x40.png" attachment="wikiringlogo40x40.png" attr="h" comment="" date="1189787359" path="wikiringlogo40x40.png" size="2571" stream="wikiringlogo40x40.png" tmpFilename="" user="TWikiContributor" version="1"}%

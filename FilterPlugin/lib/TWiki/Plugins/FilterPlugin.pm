@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2005-2007 Michael Daum <micha@nats.informatik.uni-hamburg.de>
+# Copyright (C) 2005-2007 Michael Daum http://wikiring.de
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '1.21';
+$RELEASE = '1.30';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Substitute and extract information from content by using regular expressions';
 $debug = 0; # toggle me
@@ -100,6 +100,8 @@ sub handleFilter {
   my $theExpand = $params->{expand} || 'on';
   my $theSeparator = $params->{separator} || '';
   my $theExclude = $params->{exclude} || '';
+  my $theSort = $params->{sort} || 'off';
+  my $theReverse = $params->{reverse} || '';
 
   # get the source text
   my $text = "";
@@ -145,6 +147,14 @@ sub handleFilter {
       $hits--;
       last if $theLimit > 0 && $hits <= 0;
     }
+    if ($theSort ne 'off') {
+      if ($theSort eq 'alpha' || $theSort eq 'on') {
+	@result = sort {uc($a) cmp uc($b)} @result;
+      } elsif ($theSort eq 'num') {
+	@result = sort {$a <=> $b} @result;
+      }
+    }
+    @result = reverse @result if $theReverse eq 'on';
     $result = join($theSeparator, @result);
   } elsif ($theMode == 1) {
     # substitution mode
@@ -281,7 +291,7 @@ sub handleFormatList {
 
   if ($theSort ne 'off') {
     if ($theSort eq 'alpha' || $theSort eq 'on') {
-      @result = sort {$a cmp $b} @result;
+      @result = sort {uc($a) cmp uc($b)} @result;
     } elsif ($theSort eq 'num') {
       @result = sort {$a <=> $b} @result;
     }
