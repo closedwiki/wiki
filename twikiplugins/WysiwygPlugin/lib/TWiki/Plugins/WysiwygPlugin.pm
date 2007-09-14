@@ -46,7 +46,7 @@ require TWiki::Plugins; # For the API version
 
 use Assert;
 
-use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION );
+use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $SECRET_ID );
 use vars qw( $html2tml $tml2html $recursionBlock $imgMap );
 use vars qw( %TWikiCompatibility @refs );
 
@@ -56,17 +56,18 @@ $VERSION = '$Rev$';
 
 $RELEASE = 'TWiki-4.2';
 
-my $secret_id = '<!-- WYSIWYG content - do not remove this comment, and never use this identical text in your topics -->';
+$SECRET_ID = 'WYSIWYG content - do not remove this comment, and never use this identical text in your topics';
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
 
     # %OWEB%.%OTOPIC% is the topic where the initial content should be
     # grabbed from, as defined in templates/edit.skin.tmpl
-    TWiki::Func::registerTagHandler('OWEB',\&_OWEBTAG);
-    TWiki::Func::registerTagHandler('OTOPIC',\&_OTOPICTAG);
-    TWiki::Func::registerTagHandler('WYSIWYG_TEXT',\&_WYSIWYG_TEXT);
-    TWiki::Func::registerTagHandler('JAVASCRIPT_TEXT',\&_JAVASCRIPT_TEXT);
+    TWiki::Func::registerTagHandler('OWEB', \&_OWEBTAG);
+    TWiki::Func::registerTagHandler('OTOPIC', \&_OTOPICTAG);
+    TWiki::Func::registerTagHandler('WYSIWYG_TEXT', \&_WYSIWYG_TEXT);
+    TWiki::Func::registerTagHandler('JAVASCRIPT_TEXT', \&_JAVASCRIPT_TEXT);
+    TWiki::Func::registerTagHandler('WYSIWYG_SECRET_ID', sub { $SECRET_ID });
 
     TWiki::Func::registerRESTHandler('tml2html', \&_restTML2HTML);
     TWiki::Func::registerRESTHandler('html2tml', \&_restHTML2TML);
@@ -162,7 +163,7 @@ sub afterEditHandler {
     return unless $query;
 
     return unless defined( $query->param( 'wysiwyg_edit' )) ||
-      $_[0] =~ s/$secret_id//go;
+      $_[0] =~ s/<!--$SECRET_ID-->//go;
 
     # Switch off wysiwyg_edit so it doesn't try to transform again in
     # the beforeSaveHandler
@@ -528,16 +529,19 @@ sub _restTML2HTML {
     my ($session) = @_;
     my $tml = TWiki::Func::getCgiQuery()->param('text');
 
-    # if the secret ID is present, to convert again. We are probably
-    # going 'back' to this page.
-    return $tml if $tml =~ /$secret_id/;
-
+    # if the secret ID is present, don't convert again. We are probably
+    # going 'back' to this page (doesn't work on IE :-( )
+    if ($tml =~ /<!--$SECRET_ID-->/) {
+        return $tml;
+    }
     my $html = TranslateTML2HTML(
         $tml, $session->{webName}, $session->{topicName} );
+    # Encode unicode characters
+    $html =~ s/([^\x00-\x7E])/'&#'.ord($1).';'/ge;
     # Add the secret id to trigger reconversion. Doesn't work if the
     # editor eats HTML comments, so the editor may need to put it back
     # in during final cleanup.
-    return $secret_id.$html;
+    return '<!--'.$SECRET_ID.'-->'.$html;
 }
 
 # Rest handler for use from Javascript
@@ -549,7 +553,7 @@ sub _restHTML2TML {
         $html2tml = new TWiki::Plugins::WysiwygPlugin::HTML2TML();
     }
     my $html = TWiki::Func::getCgiQuery()->param('text');
-    $html =~ s/$secret_id//go;
+    $html =~ s/<!--$SECRET_ID-->//go;
 
     my $tml = $html2tml->convert(
         $html,

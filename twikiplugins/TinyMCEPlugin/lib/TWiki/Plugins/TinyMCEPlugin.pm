@@ -24,7 +24,6 @@ $SHORTDESCRIPTION = 'Integration of TinyMCE with WysiwygPlugin';
 
 use TWiki::Func;
 
-my $secret_id = 'TinyMCE WYSIWYG content - do not remove this comment';
 my $query;
 # Info about browser type
 my %browserInfo;
@@ -127,9 +126,9 @@ HERE
     my $ua = $query->user_agent() || '';
 
     # _src.js for debug
-    #my $TINYMCE_SCRIPT = 'tinymce/jscripts/tiny_mce/tiny_mce_src.js';
+    my $TINYMCE_SCRIPT = 'tinymce/jscripts/tiny_mce/tiny_mce_src.js';
     # Stripped for production
-    my $TINYMCE_SCRIPT = 'tinymce/jscripts/tiny_mce/tiny_mce.js';
+    #my $TINYMCE_SCRIPT = 'tinymce/jscripts/tiny_mce/tiny_mce.js';
 
     # Add the Javascript for the editor. When it starts up the editor will
     # use a REST call to the WysiwygPlugin tml2html REST handler to convert

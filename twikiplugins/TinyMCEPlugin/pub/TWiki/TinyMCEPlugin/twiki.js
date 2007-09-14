@@ -77,11 +77,16 @@ function contentReadCallback(request) {
 
 // Callback on save. Make sure the WYSIWYG flag ID is there.
 var twikiSaveCallback = function(element_id, html, body) {
-    if (html.indexOf(WYSIWYG_secret_id) == -1) {
+    var secret_id = tinyMCE.getParam('twiki_secret_id');
+    if (secret_id != null && html.indexOf('<!--' + secret_id + '-->') == -1) {
         // Something ate the ID. Probably IE. Add it back.
-        html = WYSIWYG_secret_id + html;
+        html = '<!--' + secret_id + '-->' + html;
     }
-
+    try {
+        html = decodeURIComponent(escape(html));
+    } catch (e) {
+        // does nothing, but need it for IE
+    }
     return html;
 }
 

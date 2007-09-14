@@ -504,52 +504,48 @@ sub _takeOutSets {
     return join("\n", @outtext);
 }
 
-# Lifted straight out of DevelopBranch Render.pm
 sub _takeOutBlocks {
     my( $this, $intext, $tag ) = @_;
     die unless $tag;
     return '' unless $intext;
     return $intext unless ( $intext =~ m/<$tag\b/ );
 
-    my $open = qr/^(.*)<$tag\b([^>]*)>(.*)$/i;
-    my $close = qr/^(.*)<\/$tag>(.*)$/i;
+    my $open = qr/<$tag\b[^>]*>/i;
+    my $close = qr/<\/$tag>/i;
     my $out = '';
     my $depth = 0;
     my $scoop;
     my $tagParams;
     my $n = 0;
 
-    foreach my $line ( split/\r?\n/, $intext ) {
-        if( $line =~ m/$open/ ) {
+    foreach my $chunk (split/($open|$close)/, $intext) {
+        next unless defined($chunk);
+        if( $chunk =~ m/<$tag\b([^>]*)>/ ) {
             unless( $depth++ ) {
-                $out .= $1;
-                $tagParams = $2;
+                $tagParams = $1;
                 $scoop = '';
-                $line = $3;
+                next;
             }
         }
-        if( $depth && $line =~ m/$close/ ) {
-            $scoop .= $1;
-            my $rest = $2;
-            unless ( --$depth ) {
+        elsif( $depth && $chunk =~ m/$close/ ) {
+            unless( --$depth ) {
                 my $placeholder = $tag.$n;
                 $this->{removed}->{$placeholder} = {
                     params => _parseParams( $tagParams ),
                     text => $scoop,
                 };
-
-                $line = $TT0.$placeholder.$TT0.$rest;
+                $chunk = $TT0.$placeholder.$TT0;
                 $n++;
             }
         }
-        if ( $depth ) {
-            $scoop .= $line."\n";
+        if( $depth ) {
+            $scoop .= $chunk;
         } else {
-            $out .= $line."\n";
+            $out .= $chunk;
         }
     }
 
-    if ( $depth ) {
+    if( $depth ) {
         # This would generate matching close tags
         # while ( $depth-- ) {
         #     $scoop .= "</$tag>\n";
@@ -561,6 +557,11 @@ sub _takeOutBlocks {
         };
         $out .= $TT0.$placeholder.$TT0;
     }
+
+    # Filter spurious tags without matching open/close
+    $out =~ s/$open/&lt;$tag$1&gt;/g;
+    $out =~ s/$close/&lt;\/$tag&gt;/g;
+    $out =~ s/<($tag\s+\/)>/&lt;$1&gt;/g;
 
     return $out;
 }

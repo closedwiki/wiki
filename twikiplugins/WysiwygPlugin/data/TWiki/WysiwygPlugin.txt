@@ -1,6 +1,6 @@
 ---+!! Wysiwyg Plugin
 <!--
-	* Set SHORTDESCRIPTION = Translator framework for Wysiwyg editors
+   * Set SHORTDESCRIPTION = Translator framework for Wysiwyg editors
 -->
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
 %SHORTDESCRIPTION%
