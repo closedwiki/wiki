@@ -31,7 +31,7 @@ use vars qw(
 use TWiki::Attrs;
 
 $VERSION = '$Rev$';
-$RELEASE = '2.00';
+$RELEASE = '2.10';
 
 $START = '(?:^|(?<=[\w\b\s\,\.\;\:\!\?\)\(]))';
 $STOP = '(?:$|(?=[\w\b\s\,\.\;\:\!\?\)\(]))';
@@ -136,8 +136,8 @@ sub preRenderingHandler {
 
 # =========================
 sub postRenderingHandler {
-  $_[0] =~ s/%STARTALIASAREA%//go;
-  $_[0] =~ s/%STOPALIASAREA%//go;
+  $_[0] =~ s/%(START|STOP)ALIASAREA%//go;
+  $insideAliasArea = 0;
 }
 
 # =========================

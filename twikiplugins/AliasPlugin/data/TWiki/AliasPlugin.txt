@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1185746555" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1189787359" format="1.1" version="$Rev$"}%
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -11,6 +11,14 @@
 ---+!! <nop>AliasPlugin
 %TOC%
 ---++ Description
+<table style="float:right">
+<tr>
+  <td><img src="%ATTACHURLPATH%/wikiringlogo40x40.png"></td>
+  <td><a href="http://wikiring.de" title="Let your Wiki Ring" style="text-decoration:none">
+      Powered by <br /> <nop>WikiRing Consultants </a>
+  </td>
+</tr>
+</table>
 This plugin allows you to create arbitrary word aliases.
 If you write down a word that has a defined alias, it will then be replaced with 
 the given text string. If that string is a string of the format =&lt;web&gt;.&lt;topic&gt;=
@@ -96,19 +104,15 @@ macro or listed in the following way:
 ---++ Plugin Installation Instructions
 
    * [[%ATTACHURL%/AliasPlugin.zip][Download]] the ZIP file
-
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
-     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-     | ==data/TWiki/WebAliases.txt== | definition of site-wide aliases |
-     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-
-   * On TWiki/Dakar:
-     Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-     You might add %<nop>STARTALIASAREA% and %<nop>STOPALIASAREA% surrounding the %<nop>TEXT% tag
-     of the view and preview templates of your TWiki.TWikiSkins 
-     (e.g. =view.pattern.tmpl= and =preview.pattern.tmpl=) 
-     to enable the AliasPlugin sitewide.
+%$MANIFEST%
+   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * Edit your %USERSWEB%.TWikiPreferences and prepend to your SKIN variable the =alias= identifier,
+     for example to
+     <verbatim>   * Set SKIN = alias,pattern</verbatim>
+     This surrounds the textarea with the STARTALIASAREA, STOPALIASAREA tags to mark the area where
+     aliases are inserted.
 
 ---++ Test-Cases
 %STARTALIASAREA%
@@ -141,8 +145,10 @@ macro or listed in the following way:
 |  Plugin Author: | TWiki:Main/OthelloMaurer, TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003, Othello Maurer; 2003-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v2.00 |
+|  Version: | v2.10 |
 |  Change History: | &nbsp; |
+|  14 Sep 2007: | added view.alias.tmpl |
+|  13 Sep 2007: | rewrite for modern TWiki engines |
 |  10 Feb 2006: | fixed use of uninitialized value (outch) |
 |  03 Feb 2006: | prevent nested alias expansion; \
                   support convenience aliases for anchors on the same page |
@@ -173,4 +179,6 @@ macro or listed in the following way:
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
 -- TWiki:Main/OthelloMaurer - 09 Oct 2003 %BR%
--- TWiki:Main/MichaelDaum - 10 Feb 2006
+-- TWiki:Main/MichaelDaum - 14 Sep 2007
+
+%META:FILEATTACHMENT{name="wikiringlogo40x40.png" attachment="wikiringlogo40x40.png" attr="h" comment="" date="1189787359" path="wikiringlogo40x40.png" size="2571" stream="wikiringlogo40x40.png" tmpFilename="" user="TWikiContributor" version="1"}%
