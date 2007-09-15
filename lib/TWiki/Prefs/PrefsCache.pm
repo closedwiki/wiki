@@ -244,7 +244,7 @@ sub stringify {
 
     if( $html ) {
         $res = CGI::Tr( 
-                   CGI::th( {colspan=>2}, CGI::H3($this->{TYPE}.' '.
+                   CGI::th( {colspan=>2, class=>'twikiFirstCol'}, CGI::H3($this->{TYPE}.' '.
                               $this->{SOURCE} )))."\n";
     } else {
         $res = '******** '.$this->{TYPE}.' '.$this->{SOURCE}."\n";
@@ -259,7 +259,7 @@ sub stringify {
         my $val = $this->{values}{$key};
         $val =~ s/^(.{32}).*$/$1..../s;
         if( $html ) {
-            $val = "\n<verbatim>\n$val\n</verbatim>\n" if $val;
+            $val = "\n<verbatim style='margin:0;'>\n$val\n</verbatim>\n" if $val;
             $res .= CGI::Tr( {valign=>'top'},
                              CGI::td(" Set $final $key").
                                  CGI::td( $val ))."\n";
@@ -273,7 +273,7 @@ sub stringify {
         my $val = $this->{locals}{$key};
         $val =~ s/^(.{32}).*$/$1..../s;
         if( $html ) {
-            $val = "\n<verbatim>\n$val\n</verbatim>\n" if $val;
+            $val = "\n<verbatim style='margin:0;'>\n$val\n</verbatim>\n" if $val;
             $res .= CGI::Tr( {valign=>'top'},
                              CGI::td(" Local $key").
                                  CGI::td( $val ))."\n";

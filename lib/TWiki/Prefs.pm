@@ -17,6 +17,8 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
+use strict;
+
 =pod
 
 ---+ package TWiki::Prefs
@@ -40,7 +42,6 @@ a user to override protections from their home topic!)
 
 package TWiki::Prefs;
 
-use strict;
 use Assert;
 
 require TWiki::Prefs::PrefsCache;
@@ -389,7 +390,7 @@ sub stringify {
     }
 
     if( $html ) {
-        return CGI::table({style=>'width: 100%',class=>'twikiTable'}, $s);
+        return CGI::table({class=>'twikiTable'}, $s);
     } else {
         return $s;
     }
