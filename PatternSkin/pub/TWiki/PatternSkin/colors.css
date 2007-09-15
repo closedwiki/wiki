@@ -213,7 +213,7 @@ select {
 	border-color:#e7e2da;
 }
 .twikiTable th {
-	border-color-bottom: #fff;
+	border-color:#e7e2da #fff;
 }
 .twikiTable th.twikiFirstCol {
 	border-left-color:#e7e2da;
