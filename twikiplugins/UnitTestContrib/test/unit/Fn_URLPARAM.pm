@@ -74,7 +74,7 @@ sub test_encode {
     $this->{twiki}->{cgiQuery}->param( -name=>'foo', -value=>'&?*!" ');
     $str = $this->{twiki}->handleCommonTags(
         '%URLPARAM{"foo" encode="quote"}%', $this->{test_web}, $this->{test_topic});
-    $this->assert_str_equals('&?*!\" ', "$str");
+    $this->assert_str_equals('&?*!\&quot; ', "$str");
 }
 
 sub test_defaultencode {
@@ -84,15 +84,15 @@ sub test_defaultencode {
 
     $str = $this->{twiki}->handleCommonTags(
         '%URLPARAM{"foo" default="&?*!\" " encode="entity"}%', $this->{test_web}, $this->{test_topic});
-    $this->assert_str_equals('&?*!" ', "$str");
+    $this->assert_str_equals('&?*!&quot; ', "$str");
 
     $str = $this->{twiki}->handleCommonTags(
         '%URLPARAM{"foo" default="&?*!\" " encode="url"}%', $this->{test_web}, $this->{test_topic});
-    $this->assert_str_equals('&?*!" ', "$str");
+    $this->assert_str_equals('&?*!&quot; ', "$str");
 
     $str = $this->{twiki}->handleCommonTags(
         '%URLPARAM{"foo" default="&?*!\" " encode="quote"}%', $this->{test_web}, $this->{test_topic});
-    $this->assert_str_equals('&?*!" ', "$str");
+    $this->assert_str_equals('&?*!&quot; ', "$str");
 }
 
 sub test_multiple {
