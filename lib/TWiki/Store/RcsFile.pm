@@ -790,6 +790,17 @@ sub saveFile {
 
     mkPathTo( $name );
 
+    if ($name =~ /TestAC\.txt$/) {
+        open(F, ">/tmp/saved");
+        binmode(F,":utf8");
+        print F $text;
+        close(F);
+        # force the error without killing the file
+        open( F, ">/tmp/blah" );
+        print F $text;
+        close(F);
+    }
+
     open( FILE, '>'.$name ) ||
       throw Error::Simple( 'RCS: failed to create file '.$name.': '.$! );
     binmode( FILE ) ||

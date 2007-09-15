@@ -1176,7 +1176,7 @@ sub delRev {
         $handler->deleteRevision();
 
         # restore last topic from repository
-        $handler->restoreLatestRevision($user->{wikiname});
+        $handler->restoreLatestRevision($user);
     } finally {
         $this->unlockTopic( $user, $web, $topic );
     };
