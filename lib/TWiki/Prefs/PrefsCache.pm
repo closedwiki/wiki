@@ -243,9 +243,9 @@ sub stringify {
     my $res;
 
     if( $html ) {
-        $res = CGI::Tr( {style=>'background-color: yellow'},
-                   CGI::th( {colspan=>2}, $this->{TYPE}.' '.
-                              $this->{SOURCE} ))."\n";
+        $res = CGI::Tr( 
+                   CGI::th( {colspan=>2}, CGI::H3($this->{TYPE}.' '.
+                              $this->{SOURCE} )))."\n";
     } else {
         $res = '******** '.$this->{TYPE}.' '.$this->{SOURCE}."\n";
     }
