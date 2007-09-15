@@ -45,8 +45,11 @@ var tinymce_plugin_setUpContent = function(editor_id, body, doc) {
     var editor = tinyMCE.getInstanceById(editor_id);
     var text = editor.oldTargetElement.value;
 
-    var params = "nocache=" + parseInt(Math.random() * 10000000000) +
-    "&topic=" + encodeURIComponent(path) + "&text=" + encodeURIComponent(text);
+    var params = "nocache=" + encodeURIComponent((new Date()).getTime())
+    + "&topic=" + encodeURIComponent(path)
+    // The double-encoding is to overcome flaws in XMLHttpRequest. It makes
+    // the request much larger than it needs to be, but at least it works.
+    + "&text=" + encodeURIComponent(escape(text));
     
     request.req.setRequestHeader("Content-length", params.length);
     request.req.setRequestHeader("Connection", "close");
@@ -81,11 +84,6 @@ var twikiSaveCallback = function(element_id, html, body) {
     if (secret_id != null && html.indexOf('<!--' + secret_id + '-->') == -1) {
         // Something ate the ID. Probably IE. Add it back.
         html = '<!--' + secret_id + '-->' + html;
-    }
-    try {
-        html = decodeURIComponent(escape(html));
-    } catch (e) {
-        // does nothing, but need it for IE
     }
     return html;
 }

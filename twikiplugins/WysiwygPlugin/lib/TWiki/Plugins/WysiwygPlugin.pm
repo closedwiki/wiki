@@ -524,20 +524,40 @@ sub TranslateTML2HTML {
        );
 }
 
-# Rest handler for use from Javascript
+# Rest handler for use from Javascript. The 'text' parameter is used to
+# pass the text for conversion. The text must be URI-encoded (this is
+# to support use of this handler from XMLHttpRequest, which gets it
+# wrong). Example:
+#
+# var req = new XMLHttpRequest();
+# req.open("POST", url, true);
+# req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+# var params = "text=" + encodeURIComponent(escape(text));
+# request.req.setRequestHeader("Content-length", params.length);
+# request.req.setRequestHeader("Connection", "close");
+# request.req.onreadystatechange = ...;
+# req.send(params);
+#
+# Note how the text has been double-encoded; once (encodeURIComponent) for
+# the transfer encoding, and the second (escape) to protect it from unicode
+# problems.
+#
 sub _restTML2HTML {
     my ($session) = @_;
     my $tml = TWiki::Func::getCgiQuery()->param('text');
+
+    # Text is a assumed to be URL-encoded
+    $tml = TWiki::urlDecode($tml);
 
     # if the secret ID is present, don't convert again. We are probably
     # going 'back' to this page (doesn't work on IE :-( )
     if ($tml =~ /<!--$SECRET_ID-->/) {
         return $tml;
     }
+
     my $html = TranslateTML2HTML(
         $tml, $session->{webName}, $session->{topicName} );
-    # Encode unicode characters
-    $html =~ s/([^\x00-\x7E])/'&#'.ord($1).';'/ge;
+
     # Add the secret id to trigger reconversion. Doesn't work if the
     # editor eats HTML comments, so the editor may need to put it back
     # in during final cleanup.

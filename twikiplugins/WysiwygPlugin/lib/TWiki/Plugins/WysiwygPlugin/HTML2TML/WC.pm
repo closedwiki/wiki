@@ -40,20 +40,23 @@ package WC;
 | $VERY_CLEAN | Flag passed to indicate that HTML must be aggressively cleaned (unrecognised or unuseful tags stripped out) |
 | $BR2NL | Flag set to force BR tags to be converted to newlines. |
 | $KEEP_WS | Set to force the generator to keep all whitespace. Otherwise whitespace gets collapsed (as it is when HTML is rendered) |
+| $PROTECTED | In a block marked as PROTECTED |
+| $KEEP_ENTITIES | Don't decode HTML entities |
 
 =cut
 
 use vars qw( $NO_TML $NO_BLOCK_TML $NOP_ALL $BLOCK_TML $BR2NL );
 use vars qw( $CHECKn $CHECKw $CHECKs $NBSP $NBBR $TAB $PON $POFF );
 
-$NO_HTML      = 1 << 0;
-$NO_TML       = 1 << 1;
-$NO_BLOCK_TML = 1 << 2;
-$NOP_ALL      = 1 << 3;
-$VERY_CLEAN   = 1 << 4;
-$BR2NL        = 1 << 5;
-$KEEP_WS      = 1 << 6;
-$PROTECTED    = 1 << 7;
+$NO_HTML       = 1 << 0;
+$NO_TML        = 1 << 1;
+$NO_BLOCK_TML  = 1 << 2;
+$NOP_ALL       = 1 << 3;
+$VERY_CLEAN    = 1 << 4;
+$BR2NL         = 1 << 5;
+$KEEP_WS       = 1 << 6;
+$PROTECTED     = 1 << 7;
+$KEEP_ENTITIES = 1 << 8;
 
 $BLOCK_TML    = $NO_BLOCK_TML;
 

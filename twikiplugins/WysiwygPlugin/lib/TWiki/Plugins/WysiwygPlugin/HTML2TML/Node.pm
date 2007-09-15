@@ -39,7 +39,7 @@ use base 'WC';
 use strict;
 
 use TWiki::Func; # needed for regular expressions
-use HTML::Entities;
+use Assert;
 
 use vars qw( $reww );
 
@@ -334,9 +334,13 @@ sub _flatten {
     }
     if ($protected) {
         $text =~ s/[$WC::PON$WC::POFF]//g;
-        $text = HTML::Entities::decode_entities($text);
-        # &nbsp; decodes to \240, which we want to make a space.
-        $text =~ s/\240/$WC::NBSP/g;
+
+        unless ($options & $WC::KEEP_ENTITIES) {
+            require HTML::Entities;
+            $text = HTML::Entities::decode_entities($text);
+            # &nbsp; decodes to \240, which we want to make a space.
+            $text =~ s/\240/$WC::NBSP/g;
+        }
         $text =~ s/ /$WC::NBSP/g;
         $text =~ s/\n/$WC::NBBR/g;
         $text = $WC::PON.$text.$WC::POFF;
@@ -645,6 +649,21 @@ sub _emphasis {
     return ( $flags, $pre.$WC::CHECKw.$ch.$contents.$ch.$WC::CHECK2.$post );
 }
 
+# generate verbatim for P, SPAN or PRE
+sub _verbatim {
+    my ($this, $options) = @_;
+
+    $options |= $WC::PROTECTED|$WC::KEEP_ENTITIES|$WC::BR2NL | $WC::KEEP_WS;
+    my( $flags, $text ) = $this->_flatten($options);
+    # decode once, and once only
+    require HTML::Entities;
+    $text = HTML::Entities::decode_entities($text);
+    # &nbsp; decodes to \240, which we want to make a space.
+    $text =~ s/\240/$WC::NBSP/g;
+    my $p = _htmlParams($this->{attrs}, $options);
+    return ($flags, "<verbatim$p>$text</verbatim>");
+}
+
 # pseudo-tags that may leak through in TWikiVariables
 # We have to handle this to avoid a matching close tag </nop>
 sub _handleNOP {
@@ -912,13 +931,8 @@ sub _handleOL       { return _LIST( @_ ); }
 sub _handleP {
     my( $this, $options ) = @_;
 
-    my %atts = %{$this->{attrs}};
-    if (!($options & $WC::NO_BLOCK_TML) &&
-          _removeClass(\%atts, 'TMLverbatim')) {
-        $options |= $WC::PROTECTED;
-        my( $flags, $text ) = $this->_flatten($options);
-        my $p = _htmlParams(\%atts, $options);
-        return ($flags, "<verbatim$p>$text</verbatim>");
+    if (_hasClass($this->{attrs}, 'TMLverbatim')) {
+        return $this->_verbatim($options);
     }
 
     my( $f, $kids ) = $this->_flatten( $options );
@@ -937,14 +951,13 @@ sub _handlePRE {
 
     my $tag = 'pre';
     if( _hasClass($this->{attrs}, 'TMLverbatim')) {
-        $options |= $WC::PROTECTED;
-        $tag = 'verbatim';
+        return $this->_verbatim($options);
     }
     unless( $options & $WC::NO_BLOCK_TML ) {
         my( $flags, $text ) = $this->_flatten(
             $options | $WC::NO_BLOCK_TML | $WC::BR2NL | $WC::KEEP_WS );
         my $p = _htmlParams( $this->{attrs}, $options);
-        return ($WC::BLOCK_TML, "<$tag$p>".$text."</$tag>");
+        return ($WC::BLOCK_TML, "<$tag$p>$text</$tag>");
     }
     return ( 0, undef );
 }
@@ -961,10 +974,7 @@ sub _handleSPAN {
 
     my %atts = %{$this->{attrs}};
     if (_removeClass(\%atts, 'TMLverbatim')) {
-        $options |= $WC::PROTECTED;
-        my( $flags, $text ) = $this->_flatten($options);
-        my $p = _htmlParams(\%atts, $options);
-        return ($flags, "<verbatim$p>$text</verbatim>");
+        return $this->_verbatim($options);
     }
 
     if( _removeClass(\%atts, 'WYSIWYG_NOAUTOLINK')) {

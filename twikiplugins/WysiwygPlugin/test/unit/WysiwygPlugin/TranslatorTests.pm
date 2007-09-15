@@ -1271,6 +1271,18 @@ F <i> <b>here</b></i>F
 XWYZ
       },
       {
+          exec => $HTML2TML,
+          name => 'Item4622',
+          tml => <<'XYZ',
+<verbatim>
+<img width="392" alt="Ê¯Â.png" src="√&#65533;bleGr√\u017ed/P√•nKake/√\u0160√\u017e√•.png" height="129" />
+</verbatim>
+XYZ
+          html => <<'XWYZ',
+<pre class="TMLverbatim"><br />&lt;img&nbsp;width="392"&nbsp;alt="Ê¯Â.png"&nbsp;src="√&amp;#65533;bleGr√\u017ed/P√•nKake/√\u0160√\u017e√•.png"&nbsp;height="129"&nbsp;/&gt;<br /></pre>
+XWYZ
+      },
+      {
           exec => $ROUNDTRIP,
           name => "Item4615",
           tml => 'ABC<br /> _DEF_',
