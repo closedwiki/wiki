@@ -3541,6 +3541,11 @@ sub URLPARAM {
     }
     # Block expansion of %URLPARAM in the value to prevent recursion
     $value =~ s/%URLPARAM{/%<nop>URLPARAM{/g;
+    #Item4523: You can add all sorts of scripting via URL and get it shown on any topic with URLPARAM
+    $value =~ s/>/&gt;/g;
+    $value =~ s/</&lt;/g;
+    $value =~ s/"/&quot;/g;
+    $value =~ s/'/%27/g;
     return $value;
 }
 

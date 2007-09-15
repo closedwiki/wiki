@@ -4,6 +4,7 @@
 ---+++ URLPARAM{"name"} -- get value of a URL parameter
    * Returns the value of a URL parameter.
    * Syntax: =%<nop>URLPARAM{"name"}%=
+   * *Note:* due to [[][Cross site scripting]] problems, the characters =<= =>= ="= and ='= will _always_ be encoded. There is _no_ workaround, as this will be exploited by hackers.
    * Supported parameters:
      | *Parameter:* | *Description:* | *Default:* |
      | ="name"= | The name of a URL parameter | required |
