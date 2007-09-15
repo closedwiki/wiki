@@ -28,6 +28,7 @@ BEGIN {
 
 use strict;
 use TWiki;
+use Error qw( :try );
 
 # Use unbuffered IO
 $| = 1;
@@ -83,8 +84,19 @@ if ($login) {
         die "Can't login as $login";
     }
 
-    $twiki->{user} = $twiki->{users}->getCanonicalUserID($login);
+    my $cUID = $twiki->{users}->getCanonicalUserID($login);
+    my $WikiName = $twiki->{users}->getWikiName($cUID);
+    $twiki->{users}->{loginManager}->userLoggedIn($login, $WikiName);
+    #TODO: its a bit odd that $twiki->{user} has to be manually set (expected userLoggedIn would do it)
+    $twiki->{user} = $cUID;
 }
+
+try {
+    $twiki->{users}->{loginManager}->checkAccess();
+} catch Error with {
+    my $e = shift;
+    die $e;
+};
 
 my $pathInfo = $query->path_info();
 my $cgiScriptName = $ENV{'SCRIPT_NAME'} || '';

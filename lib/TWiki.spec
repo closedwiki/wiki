@@ -336,7 +336,7 @@ $TWiki::cfg{UsersTopicName} = 'TWikiUsers';
 # TWiki Permissions to control access. Users wishing to make changes will
 # have to log in by clicking a "log in" link instead of being automatically
 # redirected when they try to edit.
-$TWiki::cfg{AuthScripts} = 'attach,edit,manage,rename,save,upload,viewauth,rdiffauth';
+$TWiki::cfg{AuthScripts} = 'attach,edit,manage,rename,save,upload,viewauth,rdiffauth,rest';
 
 # **STRING 80 EXPERT**
 # Authentication realm. This is
