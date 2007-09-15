@@ -1,7 +1,7 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 1999-2007 Peter Thoeny, peter@thoeny.org
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
+# Copyright (C) 1999-2007 TWiki Contributors.
+# All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
 #
@@ -437,6 +437,11 @@ sub diff {
     my $maxrev = $session->{store}->getRevisionNumber( $webName, $topic );
     $maxrev =~ s/r?1\.//go;  # cut 'r' and major
 
+    if ( $diffType eq 'last' ) {
+        $rev1 = $maxrev;
+        $rev2 = $maxrev-1;
+    }
+
     $rev1 = $session->{store}->cleanUpRevID( $rev1 );
     $rev1 = $maxrev if( $rev1 < 1 );
     $rev1 = $maxrev if( $rev1 > $maxrev );
@@ -444,11 +449,6 @@ sub diff {
     $rev2 = $session->{store}->cleanUpRevID( $rev2 );
     $rev2 = 1 if( $rev2 < 1 );
     $rev2 = $maxrev if( $rev2 > $maxrev );
-
-    if ( $diffType eq 'last' ) {
-        $rev1 = $maxrev;
-        $rev2 = $maxrev-1;
-    }
 
     my $revTitle1 = $rev1;
     my $revTitle2 = ( $rev1 != $rev2 ) ? $rev2 : '';
