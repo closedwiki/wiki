@@ -149,4 +149,31 @@ sub test_newline {
     $this->assert_str_equals("foobarbaz", "$str");
 }
 
+sub test_XSS_encode {
+    my $this = shift;
+
+    my $str;
+
+    $this->{twiki}->{cgiQuery}->param( -name=>'foo', -value=>" \n<script>alert('EVIL%20%20XSS%20RUNNING')</script>");
+
+    $str = $this->{twiki}->handleCommonTags(
+        '%URLPARAM{"foo"}%', $this->{test_web}, $this->{test_topic});
+    $this->assert_str_equals(" \n&lt;script&gt;alert(%27EVIL%20%20XSS%20RUNNING%27)&lt;/script&gt;", "$str");
+
+    $this->{twiki}->{cgiQuery}->param( -name=>'foo', -value=>" \n<script>alert('EVIL%20%20XSS%20RUNNING')</script>");
+    $str = $this->{twiki}->handleCommonTags(
+        '%URLPARAM{"foo" encode="entity"}%', $this->{test_web}, $this->{test_topic});
+    $this->assert_str_equals(" \n&#60;script&#62;alert(&#39;EVIL&#37;20&#37;20XSS&#37;20RUNNING&#39;)&#60;/script&#62;", "$str");
+
+    $this->{twiki}->{cgiQuery}->param( -name=>'foo', -value=>" \n<script>alert('EVIL%20%20XSS%20RUNNING')</script>");
+    $str = $this->{twiki}->handleCommonTags(
+        '%URLPARAM{"foo" encode="url"}%', $this->{test_web}, $this->{test_topic});
+    $this->assert_str_equals('%20%3cbr%20/%3e%3cscript%3ealert%28%27EVIL%20%20XSS%20RUNNING%27%29%3c/script%3e', $str);
+
+    $this->{twiki}->{cgiQuery}->param( -name=>'foo', -value=>" \n<script>alert('EVIL%20%20XSS%20RUNNING')</script>");
+    $str = $this->{twiki}->handleCommonTags(
+        '%URLPARAM{"foo" encode="quote"}%', $this->{test_web}, $this->{test_topic});
+    $this->assert_str_equals(" \n&lt;script&gt;alert(%27EVIL%20%20XSS%20RUNNING%27)&lt;/script&gt;", $str);
+}
+
 1;
