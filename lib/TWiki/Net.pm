@@ -313,14 +313,12 @@ sub sendEmail {
             $retries = 0;
         } catch Error::Simple with {
             my $e = shift->stringify();
+            $this->{session}->writeWarning( $e );
             # be nasty to errors that we didn't throw. They may be
             # caused by SMTP or perl, and give away info about the
             # install that we don't want to share.
             unless( $e =~ /^ERROR/ ) {
-                if ($this->{session}) {
-                    $this->{session}->writeWarning( $e );
-                    $e = "Mail could not be sent - see TWiki warning log.";
-                }
+                $e = "Mail could not be sent - see TWiki warning log.";
             }
             $errors .= $e."\n";
             sleep( $back_off );
