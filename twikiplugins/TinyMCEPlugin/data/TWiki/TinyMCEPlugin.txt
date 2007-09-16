@@ -97,6 +97,7 @@ Another great TWiki extension from the <a style="text-decoration:none" href="htt
 |             | This package also includes the complete sources for version 2.1.1.1 of the !TinyMCE editor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  16 Sep 2007 | Bugs:Item4630: polished up the way the secret string is done, to ensure synch between perl and JS. Bugs:Item4622: added UTF-8 handling steps that fixup malformed UTF8 strings before presenting them to the editor (saves Moz) and stops the editor passing them back to TWiki (saves IE). Bugs:Item4603: added the draft help, so we can at least build the beta without the nasty warning |
 |  13 Sep 2007 | Bugs:Item4613 fixed navigate-away prompt when unchanged Bugs:Item4583 Bugs:Item4604 Bugs:Item4614 Bugs:Item4616 A clutch of issues caused by use of the wrong encoding function when passing UTF8 parameters to REST using XMLHttpRequest. |
 |  12 Sep 2007 | Bugs:Item4604 Converted to REST call for content conversion, to provide safe callback if JS is disabled in the browser Bugs:Item4583 relaxed regex to try and make it work for UTF-8 topic names |
 |  11 Sep 2007 | Bugs:Item4535 refinements to link handling to improve topic name recognition |

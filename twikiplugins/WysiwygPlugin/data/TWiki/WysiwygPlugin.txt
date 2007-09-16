@@ -165,6 +165,7 @@ Many thanks to the following sponsors for supporting this work:
 |  License | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
+|  16 Sep 2007 | Bugs:Item4630: polished up the way the secret string is done, to ensure synch between perl and JS. Item4622: added UTF-8 handling steps that fixup malformed UTF8 strings before presenting them to the editor (saves Moz) and stops the editor passing them back to TWiki (saves IE). Removed extra entity decoding steps that were causing problems. Bugs:Item4629: fixed issues with verbatim, highlighted by previous mangling of this topic |
 |  13 Sep 2007 | Bugs:Item4613 cleaned up spurious message when navigating away Bugs:Item4615 fixed incorrect rendering of emphasis next to br |
 |  12 Sep 2007 | Bugs:Item4604 Fixes to REST handler, and add ability to trigger HTML2TML conversion from a content comment alone (required for some editors) Bugs:Item4588 fixes to conversion of double-character emphases |
 |  7 Sep 2007 | Bugs:Item4503 excess empty lines Bugs:Item4486 no toc headers with unofficial syntax Bugs:Item4560: empty lines lost Bugs:Item4566: corrupted table on save Bugs:Item4550 section tags being eaten |
