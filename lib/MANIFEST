@@ -338,7 +338,7 @@ data/TWiki/WebSiteTools.txt 0644
 data/TWiki/WebStatistics.txt 0644
 data/TWiki/WebTemplateTopics.txt 0644
 data/TWiki/WebTopicCreator.txt 0644
-data/TWiki/WebTopicCreatorTemplate.txt 0644
+data/TWiki/WebTopicCreatorViewTemplate.txt 0644
 data/TWiki/WebTopicEditTemplate.txt 0644
 data/TWiki/WebTopicList.txt 0644
 data/TWiki/WebTopicNonWikiTemplate.txt 0644
