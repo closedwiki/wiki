@@ -137,9 +137,7 @@ sub readTopic {
 
     # SMELL: assumes that the backend can't store meta outside the topic
     my $text = $this->readTopicRaw( $user, $web, $topic, $version );
-    my $meta = new TWiki::Meta( $this->{session}, $web, $topic);
-    $this->extractMetaData( $meta, $text );
-    $text = $meta->text();
+    my $meta = new TWiki::Meta( $this->{session}, $web, $topic, $text );
 
     # Override meta with that blended from pub.
     if ($TWiki::cfg{AutoAttachPubFiles} &&
@@ -151,7 +149,7 @@ sub readTopic {
       $meta->putAll('FILEATTACHMENT', @attachmentsFoundInPub) if @attachmentsFoundInPub;
     }
 
-    return( $meta, $text );
+    return( $meta, $meta->text() );
 }
 
 =pod 
@@ -848,8 +846,7 @@ sub saveTopic {
         }
         $plugins->beforeSaveHandler( $text, $topic, $web, $meta );
         # remove meta again
-        my $after = new TWiki::Meta( $this->{session}, $web, $topic);
-        $this->extractMetaData( $after, $text );
+        my $after = new TWiki::Meta( $this->{session}, $web, $topic, $text );
         $text = $after->text();
         # If there are no changes in the $meta object, take the meta
         # from the text. Nasty compatibility requirement.
@@ -1417,9 +1414,7 @@ sub getTopicParent {
     }
     close( $strm );
 
-    my $meta = new TWiki::Meta( $this->{session}, $web, $topic );
-    $this->extractMetaData( $meta, $data );
-    $data = $meta->text();
+    my $meta = new TWiki::Meta( $this->{session}, $web, $topic, $data );
     my $parentMeta = $meta->get( 'TOPICPARENT' );
     return $parentMeta->{name} if $parentMeta;
     return undef;

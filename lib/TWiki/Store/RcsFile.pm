@@ -380,10 +380,9 @@ sub searchInWebMetaData {
     my %matches;
     foreach my $topic ( @$topics ) {
         next unless open(FILE, "<$sDir/$topic.txt");
-        my $text = <FILE>;
-        my $meta = new TWiki::Meta( $this->{session}, $this->{web}, $topic);
-        $store->extractMetaData( $meta, $text );
-        my $match = $query->evaluate( tom=>$meta, data=>$meta );
+        my $meta = new TWiki::Meta(
+            $this->{session}, $this->{web}, $topic, <FILE> );
+        my $match = $query->evaluate( tom => $meta, data => $meta );
         if( $match ) {
             $matches{$topic} = $match;
         }

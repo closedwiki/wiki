@@ -187,8 +187,7 @@ sub loadPrefsFromText {
     my $session = $this->{MANAGER}->{session};
     unless( $meta ) {
         require TWiki::Meta;
-        $meta = new TWiki::Meta( $session, $web, $topic );
-        $session->{store}->extractMetaData( $meta, $text );
+        $meta = new TWiki::Meta( $session, $web, $topic, $text );
     }
 
     my $parser = new TWiki::Prefs::Parser();

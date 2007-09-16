@@ -1459,9 +1459,7 @@ sub saveTopicText {
 
     # extract meta data and merge old attachment meta data
     require TWiki::Meta;
-    my $meta = new TWiki::Meta( $session, $web, $topic );
-    $session->{store}->extractMetaData( $meta, $text );
-    $text = $meta->{_text};
+    my $meta = new TWiki::Meta( $session, $web, $topic, $text );
 
     $meta->remove( 'FILEATTACHMENT' );
 
@@ -1471,7 +1469,7 @@ sub saveTopicText {
     # save topic
     my $error =
       $session->{store}->saveTopic
-        ( $session->{user}, $web, $topic, $text, $meta,
+        ( $session->{user}, $web, $topic, $meta->text(), $meta,
           { notify => $dontNotify } );
     return getScriptUrl(
         $web, $topic, 'oops', template => 'oopsattention', def => 'save_error',

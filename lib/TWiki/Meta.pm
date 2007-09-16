@@ -48,15 +48,15 @@ use Assert;
 
 =pod
 
----++ ClassMethod new($session, $web, $topic)
+---++ ClassMethod new($session, $web, $topic, $text)
    * =$session= - a TWiki object (e.g. =$TWiki::Plugins::SESSION)
    * =$web=, =$topic= - the topic that the metadata relates to
 Construct a new, empty object to contain meta-data for the given topic.
-
+   * $text - optional raw text to convert to meta-data form
 =cut
 
 sub new {
-    my ( $class, $session, $web, $topic ) = @_;
+    my ( $class, $session, $web, $topic, $text ) = @_;
     my $this = bless( { _session => $session }, $class );
 
     # Note: internal fields are prepended with _. All uppercase
@@ -70,6 +70,10 @@ sub new {
     $this->{_text} = '';
 
     $this->{FILEATTACHMENT} = [];
+
+    if (defined $text) {
+        $session->{store}->extractMetaData($this, $text);
+    }
 
     return $this;
 }

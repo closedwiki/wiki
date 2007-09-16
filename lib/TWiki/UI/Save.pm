@@ -488,17 +488,15 @@ WARN
         # replace top revision with the text from the query, trying to
         # make it look as much like the original as possible. The query
         # text is expected to contain %META as well as text.
-        my $textQueryParam = $query->param( 'text' );
-        my $meta = new TWiki::Meta( $session, $web, $topic );
-        $store->extractMetaData( $meta, $textQueryParam );
-        $textQueryParam = $meta->text();
+        my $meta = new TWiki::Meta( $session, $web, $topic,
+                                    $query->param( 'text' ));
         my $saveOpts = {
             timetravel => 1,
             operation => 'cmd',
            };
         try {
             $store->repRev( $user, $web, $topic,
-                            $textQueryParam, $meta, $saveOpts );
+                            $meta->text(), $meta, $saveOpts );
         } catch Error::Simple with {
             throw TWiki::OopsException(
                 'attention',
