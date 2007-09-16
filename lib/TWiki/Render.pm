@@ -11,6 +11,7 @@ This module provides most of the actual HTML rendering code in TWiki.
 
 use strict;
 use Assert;
+use Error qw(:try);
 
 require TWiki::Time;
 
@@ -814,10 +815,18 @@ sub renderFORMFIELD {
     my $meta = $this->{ffCache}{$formWeb.'.'.$formTopic};
     my $store = $this->{session}->{store};
     unless ( $meta ) {
-        my $dummyText;
-        ( $meta, $dummyText ) =
-          $store->readTopic( $this->{session}->{user}, $formWeb, $formTopic, $rev );
-        $this->{ffCache}{$formWeb.'.'.$formTopic} = $meta;
+        try {
+            my $dummyText;
+            ( $meta, $dummyText ) =
+              $store->readTopic(
+                  $this->{session}->{user}, $formWeb, $formTopic, $rev );
+            $this->{ffCache}{$formWeb.'.'.$formTopic} = $meta;
+        } catch TWiki::AccessControlException with {
+            # Ignore access exceptions; just don't read the data.
+            my $e = shift;
+            $this->{session}->writeWarning(
+                "Attempt to read form data failed: ".$e->stringify());
+        };
     }
 
     my $text = '';
