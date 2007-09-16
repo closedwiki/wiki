@@ -3,8 +3,8 @@
 
 
 %TMPL:DEF{"content"}%
+---+ %MAKETEXT{"Create New Topic in [_1] Web" args="<nop>%BASEWEB%"}%
 %TMPL:P{"formstartstep"}%
-%TMPL:P{"titlestep"}%
 %TMPL:P{"topicnamestep"}%
 %TMPL:P{"topicparentstep"}%
 %TMPL:P{"topictemplatestep"}%
@@ -13,11 +13,18 @@
 %TMPL:END%
 
 
+%{ do not show the following elements }%
+%TMPL:DEF{"topicaction"}%%TMPL:END%
+%TMPL:DEF{"topicinfo"}%%TMPL:END%
+%TMPL:DEF{"toolbar"}%%TMPL:END%
+%TMPL:DEF{"topicpathinfo"}%%TMPL:END%
+%TMPL:DEF{"breadcrumb"}%%TMPL:END%
+%TMPL:DEF{"top:toolbarbuttons"}%%TMPL:END%
+
+
 %TMPL:DEF{"formstartstep"}%%TMPL:P{"formstart"}%%TMPL:END%
 
 %TMPL:DEF{"formendstep"}%%TMPL:P{"formend"}%%TMPL:END%
-
-%TMPL:DEF{"titlestep"}%---++ %MAKETEXT{"Create New Topic in [_1] Web" args="<nop>%BASEWEB%"}%%TMPL:END%
 
 %TMPL:DEF{"topicnamestep"}%---+++ %MAKETEXT{"Topic name:"}%
 <p>
