@@ -10,7 +10,7 @@
 /* Import plugin specific language pack */
 tinyMCE.importPluginLanguagePack('twikiimage');
 
-var TinyMCE_AdvancedImagePlugin = {
+var TinyMCE_TWikiImagePlugin = {
 	getInfo : function() {
 		return {
 			longname : 'TWiki image',
@@ -66,15 +66,13 @@ var TinyMCE_AdvancedImagePlugin = {
 					var onmouseout = tinyMCE.cleanupEventStr(tinyMCE.getAttrib(imgs[i], 'onmouseout'));
 
 					if ((src = this._getImageSrc(onmouseover)) != "") {
-						if (tinyMCE.getParam('convert_urls'))
-							src = tinyMCE.convertRelativeToAbsoluteURL(tinyMCE.settings['base_href'], src);
+                        src = eval(tinyMCE.settings['twikipuburl_callback'] + "(src);");
 
 						imgs[i].setAttribute('onmouseover', "this.src='" + src + "';");
 					}
 
 					if ((src = this._getImageSrc(onmouseout)) != "") {
-						if (tinyMCE.getParam('convert_urls'))
-							src = tinyMCE.convertRelativeToAbsoluteURL(tinyMCE.settings['base_href'], src);
+                        src = eval(tinyMCE.settings['twikipuburl_callback'] + "(src);");
 
 						imgs[i].setAttribute('onmouseout', "this.src='" + src + "';");
 					}
@@ -88,15 +86,13 @@ var TinyMCE_AdvancedImagePlugin = {
 					var onmouseout = tinyMCE.cleanupEventStr(tinyMCE.getAttrib(imgs[i], 'onmouseout'));
 
 					if ((src = this._getImageSrc(onmouseover)) != "") {
-						if (tinyMCE.getParam('convert_urls'))
-							src = eval(tinyMCE.settings['urlconverter_callback'] + "(src, null, true);");
+                        src = eval(tinyMCE.settings['twikipuburl_callback'] + "(src);");
 
 						imgs[i].setAttribute('onmouseover', "this.src='" + src + "';");
 					}
 
 					if ((src = this._getImageSrc(onmouseout)) != "") {
-						if (tinyMCE.getParam('convert_urls'))
-							src = eval(tinyMCE.settings['urlconverter_callback'] + "(src, null, true);");
+                        src = eval(tinyMCE.settings['twikipuburl_callback'] + "(src, null, true);");
 
 						imgs[i].setAttribute('onmouseout', "this.src='" + src + "';");
 					}
@@ -147,4 +143,4 @@ var TinyMCE_AdvancedImagePlugin = {
 	}
 };
 
-tinyMCE.addPlugin("twikiimage", TinyMCE_AdvancedImagePlugin);
+tinyMCE.addPlugin("twikiimage", TinyMCE_TWikiImagePlugin);

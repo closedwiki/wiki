@@ -32,6 +32,9 @@ First follow the installation instructions to install the Plugin:
    * *Click* on edit of any topic.
 
 ---++ Settings
+You can override this setting by defining TINYMCEPLUGIN_DEBUG to enable some simple debug features.
+   * Set DEBUG = 0
+
 This setting contains all the options passed to the TinyMCE editor on startup. 
 For a full explanation of the available options, and guidance on reconfiguring TinyMCE, see the [[http://wiki.moxiecode.com/index.php/TinyMCE:Configuration][Moxicode TinyMCE Wiki]]. Note the inclusion of the Pattern Skin standard CSS files in the =content_css= setting.
    * Set INIT = mode : "exact",
@@ -43,10 +46,11 @@ For a full explanation of the available options, and guidance on reconfiguring T
    convert_urls : true,
    relative_urls : false,
    remove_script_host : false,
-   urlconverter_callback : "twikiConvertURL",
+   urlconverter_callback : "twikiConvertLink",
+   twikipuburl_callback : "twikiConvertPubURL",
    save_callback : "twikiSaveCallback",
    convert_fonts_to_spans: true,
-   plugins : "table,searchreplace,autosave,paste,twikiimage",
+   plugins : "table,searchreplace,autosave,paste,twikiimage%IF{"'%TINYMCEPLUGIN_DEBUG%'" then=",devkit"}%",
    setupcontent_callback : "tinymce_plugin_setUpContent",
    twiki_secret_id : "%WYSIWYG_SECRET_ID%",
    twiki_vars : "PUBURLPATH=%PUBURLPATH%,PUBURL=%PUBURL%,WEB=%WEB%,TOPIC=%TOPIC%,ATTACHURL=%ATTACHURL%,ATTACHURLPATH=%ATTACHURLPATH%,VIEWSCRIPTURL=%SCRIPTURL{view}%",
