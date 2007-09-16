@@ -15,14 +15,11 @@
 hideimgleft="%ICONURLPATH{toggleclose}%"}%</div><!--//patternTop-->%TMPL:END%
 
 
-%TMPL:DEF{"pagehelp"}%%TWISTYTOGGLE{id="attachhelp" mode="div" remember="on" noscript="hide"}%<div class="twikiHelp">%TMPL:P{"notes"}%</div>%TMPL:P{"extranotes"}%%ENDTWISTYTOGGLE%%TMPL:END%
+%TMPL:DEF{"pagehelp"}%%TWISTYTOGGLE{id="attachhelp" mode="div" remember="on" noscript="hide"}%<div class="twikiHelp">
+%TMPL:P{"notes"}%
+%TMPL:P{"extranotes"}%</div>%ENDTWISTYTOGGLE%%TMPL:END%
 
-%TMPL:DEF{"pagehelp_nojavascript"}%<br />%TWISTYTOGGLE{id="pagehelp_nojavascript" mode="div" start="hide"}%<div class="twikiHelp">%TMPL:P{"notes"}%</div>%TMPL:P{"extranotes"}%%ENDTWISTYTOGGLE%%TMPL:END%
-
-
-%TMPL:DEF{"notes"}%
-   * %MAKETEXT{"Please see <a target='TWikiVariables' onclick=\"return launchWindow('[_1]','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a> for more information about attaching files." args="%SYSTEMWEB%"}%
-%TMPL:END%
+%TMPL:DEF{"pagehelp_nojavascript"}%<br />%TWISTYTOGGLE{id="pagehelp_nojavascript" mode="div" start="hide"}%<div class="twikiHelp">%TMPL:P{"notes"}%%TMPL:P{"extranotes"}</div>%%ENDTWISTYTOGGLE%%TMPL:END%
 
 
 %TMPL:DEF{"formstart"}%<div class="patternAttachForm"><form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH{"upload"}%/%WEB%/%TOPIC%" method="post">%TMPL:END%
