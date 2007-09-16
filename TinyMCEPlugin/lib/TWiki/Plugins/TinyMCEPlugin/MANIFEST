@@ -280,9 +280,11 @@ pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/template/langs/en.js 0
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/template/template.htm 0644
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikiimage/css/advimage.css 0644
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikiimage/editor_plugin.js 0644
+pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikiimage/editor_plugin_src.js 0644
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikiimage/image.htm 0644
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikiimage/images/sample.gif 0644
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikiimage/jscripts/functions.js 0644
+pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikiimage/jscripts/functions_src.js 0644
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikiimage/langs/en.js 0644
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikiimage/editor_plugin_src.js 0644
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikiimage/readme.txt 0644
@@ -460,5 +462,6 @@ pub/TWiki/TinyMCEPlugin/tinymce.gif 0644
 pub/TWiki/TinyMCEPlugin/screenshot.gif 0644
 pub/TWiki/TinyMCEPlugin/wysiwyg.css 0644
 pub/TWiki/TinyMCEPlugin/verbatim.gif 0644
+pub/TWiki/TinyMCEPlugin/twiki_src.js 0644
 pub/TWiki/TinyMCEPlugin/twiki.js 0644
 pub/TWiki/TinyMCEPlugin/wikiringlogo20x20.png 0660
