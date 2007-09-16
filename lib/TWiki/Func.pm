@@ -1460,7 +1460,9 @@ sub saveTopicText {
     # extract meta data and merge old attachment meta data
     require TWiki::Meta;
     my $meta = new TWiki::Meta( $session, $web, $topic );
-    $session->{store}->extractMetaData( $meta, \$text );
+    $session->{store}->extractMetaData( $meta, $text );
+    $text = $meta->{_text};
+
     $meta->remove( 'FILEATTACHMENT' );
 
     my( $oldMeta, $oldText ) =
@@ -2791,14 +2793,20 @@ Return: =$url=                     URL, e.g. ="http://example.com:80/cgi-bin/oop
 <verbatim>
    use Error qw( :try );
 
-   throw TWiki::OopsException($web, $topic, undef, 0, [ 'I made a boo-boo' ]);
+   throw TWiki::OopsException(
+      'toestuckerror',
+      web => $web,
+      topic => $topic,
+      params => [ 'I got my toe stuck' ]);
+</verbatim>
+(this example will use the =oopstoestuckerror= template.)
 
 If this is not possible (e.g. in a REST handler that does not trap the exception)
 then you can use =getScriptUrl= instead:
 <verbatim>
    my $url = TWiki::Func::getScriptUrl($web, $topic, 'oops',
-            template => 'oopsmistake',
-            param1 => 'I made a boo-boo');
+            template => 'oopstoestuckerror',
+            param1 => 'I got my toe stuck');
    TWiki::Func::redirectCgiQuery( undef, $url );
    return 0;
 </verbatim>
