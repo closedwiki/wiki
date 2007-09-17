@@ -284,6 +284,10 @@ Like many other TWiki extensions, this module is shipped with a fully automatic 
       1 Manually edit !LocalSite.cfg to set any configuration variables.
       1 Run =configure= and enable the module, if it is a plugin.
       1 Repeat from step 1 for any missing dependencies.
+
+__Note__ if you are installing an extension in a TWiki version before 4.2, please make sure you have a definition of SYSTEMWEB in your Main<nop>.WebPreferences, thus:
+   * <nop>Set SYSTEMWEB = %<nop>TWIKIWEB%
+
 HERE
     my $config = $this->_loadConfig();
     my $rep = $config->{repositories}->{$this->{project}};
