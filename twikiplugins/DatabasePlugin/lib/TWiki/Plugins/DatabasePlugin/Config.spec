@@ -19,8 +19,8 @@
 # Specifies where to get database configuration information from. 'Local'
 # gets it here, 'Remote' looks up a database.
 $TWiki::cfg{Plugins}{DatabasePlugin}{ConfigSource} = 'Local';
-#---++ Setup for Remote database table
 # **STRING 30**
+# <h2> Setup for Remote database table</h2>
 # If {ConfigSource} is Remote, specifies the name of the host that
 # serves the database info table
 $TWiki::cfg{Plugins}{DatabasePlugin}{ConfigHost} = '';
@@ -47,15 +47,15 @@ $TWiki::cfg{Plugins}{DatabasePlugin}{ConfigUsername} = '';
 # If {ConfigSource} is Remote, specifies the password to the database that
 # contains the database info table
 $TWiki::cfg{Plugins}{DatabasePlugin}{ConfigPassword} = '';
-# ---++ Setup for DATABASE_EDIT (optional)
 # **STRING 30**
+# <h2> Setup for DATABASE_EDIT (optional)</h2>
 $TWiki::cfg{Plugins}{DatabasePlugin}{EditURLPrefix} = 'https';
 # **STRING 50**
 # This can either be a relative path or absolute.  If absolute, then it
 # would look something like machine.com/path_to_place_for/phpMyAdmin
 $TWiki::cfg{Plugins}{DatabasePlugin}{EditURLPath} = 'phpMyAdmin-2.2.2-rc1';
-#---++ Setup for Local databases table
 # **PERL**
+# <h2>Setup for Local databases table</h2>
 # Table of configuration info for all the databases you might access.
 # Used if {ConfigSource} is Local.
 # This structure is an array of database definitions. Each database

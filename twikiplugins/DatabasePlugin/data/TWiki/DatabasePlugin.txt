@@ -78,6 +78,7 @@ Or let's say you wanted to display the next two upcoming scheduled events in the
 |  Plugin Author: | TWiki:Main.TaitCyrus |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
+|  17 Sep 2007 | Bugs:Item4343 Minor corrections to Config.spec - TWiki:Main.CrawfordCurrie |
 |  18 March 2007 | Rewritten for efficiency and clarity, and added DATABASE_SQL - TWiki:Main.CrawfordCurrie |
 |  5 May 2003 (v1.3) | Add support for the primary DB to be in a local file instead of in a DB.  It is acknowledged that this reduces security somewhat<BR>Also added support for Oracle (by adding in the concept of a SID) |
 |  20 Mar 2002 (v1.2) | Added table editing ability |
