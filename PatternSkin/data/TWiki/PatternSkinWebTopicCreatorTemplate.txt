@@ -25,6 +25,7 @@ function getQueryUrl() {
 var TEXT_FEEDBACK_HEADER = "%MAKETEXT{"Topic will be named: "}%";
 /* Url params */
 var URL_PICK_PARENT = "%URLPARAM{"pickparent"}%";
+var URL_TEMPLATE = "%URLPARAM{"template"}%";
 //]]>
 </script>
 <script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/PatternSkin/webtopiccreator.js"></script>%TMPL:END%
