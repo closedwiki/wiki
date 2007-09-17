@@ -285,8 +285,9 @@ Like many other TWiki extensions, this module is shipped with a fully automatic 
       1 Run =configure= and enable the module, if it is a plugin.
       1 Repeat from step 1 for any missing dependencies.
 
-__Note__ if you are installing an extension in a TWiki version before 4.2, please make sure you have a definition of SYSTEMWEB in your Main<nop>.WebPreferences, thus:
+__Note__ if you are installing this extension in TWiki version < 4.2, please add these definitions to your Main<nop>.WebPreferences, if they are not already there:
    * <nop>Set SYSTEMWEB = %<nop>TWIKIWEB%
+   * <nop>Set USERSWEB = %<nop>MAINWEB%
 
 HERE
     my $config = $this->_loadConfig();
