@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2006 Michael Daum http://wikiring.com
+# Copyright (C) 2006-2007 Michael Daum http://wikiring.de
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $NO_PREFS_IN_TOPIC $done
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
 $VERSION = '$Rev$';
-$RELEASE = 'v0.11';
+$RELEASE = 'v1.00';
 $SHORTDESCRIPTION = 'Create a user topic if it does not exist yet';
 $NO_PREFS_IN_TOPIC = 1;
 $debug = 0; # toggle me
@@ -98,7 +98,7 @@ sub createUserTopic {
   writeDebug("topic $tmplWeb.$tmplTopic exists");
 
   # read the template
-  my ($meta, $text) = TWiki::Func::readTopic($tmplWeb, $tmplTopic);
+  my $text = TWiki::Func::readTopicText($tmplWeb, $tmplTopic);
   unless ($text) {
     writeWarning("can't read $tmplWeb.$tmplTopic");
     return;
@@ -113,7 +113,7 @@ sub createUserTopic {
   $text =~ s/\%WIKIUSERNAME\%/$wikiUserName/go;
 
   writeDebug("saving new home topic $mainWeb.$wikiName");
-  my $errorMsg = TWiki::Func::saveTopic($mainWeb, $wikiName, $meta, $text);
+  my $errorMsg = TWiki::Func::saveTopicText($mainWeb, $wikiName, $text);
 
   if ($errorMsg) {
     writeWarning("error during save of $tmplWeb.$tmplTopic: $errorMsg");
