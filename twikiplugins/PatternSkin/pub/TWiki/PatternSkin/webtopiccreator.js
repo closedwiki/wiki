@@ -145,6 +145,7 @@ function passFormValuesToNewLocation (inUrl) {
 	params += ";templatetopic=" + templatetopic;
 	var pickparent = URL_PICK_PARENT;
 	params += ";pickparent=" + pickparent;
+	params += ";template=" + URL_TEMPLATE;
 	url += "?" + params;
 	document.location.href = url;
 	return false;
