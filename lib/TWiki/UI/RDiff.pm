@@ -476,6 +476,7 @@ sub diff {
         $diff =~ s/%REVTITLE1%/$r1/go;
 
         my $rInfo = '';
+        my $rInfo2 = '';
         my $text;
         if ( $r1 > $r2 + 1) {
             $rInfo = $session->i18n->maketext(
@@ -483,14 +484,18 @@ sub diff {
         } else {
             $rInfo = $session->renderer->renderRevisionInfo(
                 $webName, $topic, undef, $r1, '$date - $wikiusername' );
+            $rInfo2 = $session->renderer->renderRevisionInfo(
+                $webName, $topic, undef, $r1, '$rev ($date - $time) - $wikiusername' );
         }
         # eliminate white space to prevent wrap around in HR table:
         $rInfo =~ s/\s+/&nbsp;/g;
+        $rInfo2 =~ s/\s+/&nbsp;/g;
         my $diffArrayRef = $session->{store}->getRevisionDiff(
             $session->{user}, $webName, $topic, $r2, $r1, $contextLines );
         $text = _renderRevisionDiff( $session, $webName, $topic,
                                      $diffArrayRef, $renderStyle );
         $diff =~ s/%REVINFO1%/$rInfo/go;
+        $diff =~ s/%REVINFO2%/$rInfo2/go;
         $diff =~ s/%TEXT%/$text/go;
         $page .= $diff;
         $r1 = $r1 - 1;
