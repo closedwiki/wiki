@@ -89,7 +89,7 @@ sub initPlugin {
     # Get plugin preferences from InterwikiPlugin topic
     $interLinkFormat =
       TWiki::Func::getPreferencesValue( 'INTERWIKIPLUGIN_INTERLINKFORMAT' ) ||
-      '<a href="$url" title="$tooltip">$label</a>';
+      '<a href="$url" title="$tooltip"><noautolink>$label</noautolink></a>';
 
     my $interTopic =
       TWiki::Func::getPreferencesValue( 'INTERWIKIPLUGIN_RULESTOPIC' )

@@ -34,7 +34,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
      | $url | Site URL (might contain $page) |
      | $label | Equal to $site:$page |
      | $tooltip | Tooltip message |
-      * Set INTERLINKFORMAT = <a href="$url" title="$tooltip" class="interwikiLink">$label</a>
+      * Set INTERLINKFORMAT = <a href="$url" title="$tooltip" class="interwikiLink"><noautolink>$label</noautolink></a>
 
 ---++ Plugin Installation Instructions
 
