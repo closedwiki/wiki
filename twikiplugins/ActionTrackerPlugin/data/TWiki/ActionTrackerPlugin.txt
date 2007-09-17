@@ -1,4 +1,3 @@
-%META:TOPICINFO{author="TWikiContributor" date="1121939551" format="1.1" version="$Rev$"}%
 ---+!! Action Tracker Plugin
 <!--
 
@@ -405,6 +404,7 @@ Thanks are due to the following sponsors, who have helped make this plugin possi
 |  Plugin Author: | TWiki:Main/CrawfordCurrie, http://c-dot.co.uk |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
+|  17 Sep 2007 | Bugs:Item4648 $formfield wasn't working on 4.1.2 |
 |  12 Sep 2007 | Bugs:Item4609 fixed IE cacheing of edit screen - TWiki:Main.JoaquinBuendia |
 |  9 Sep 2007 | Bugs:Item4427, Bugs:Item4591 add the ability to search for multiple states using a regular expression Bugs:Item4574 fix interaction with !TinyMCEPlugin |
 |  31 Aug 2007 | Bugs:Item4528 - Support $formfield in ACTIONSEARCH (same semantics as for formatted search) Bugs:Item4529 - Remove link from description of action in the $text field of format. Sponsored by [[http://www.goldstarevents.com][Goldstar Events]]. |

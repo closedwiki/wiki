@@ -638,15 +638,21 @@ sub _formatField_formfield {
     my ( $this, $args, $asHTML ) = @_;
 
     my ($meta, $text) = TWiki::Func::readTopic($this->{web}, $this->{topic});
-    my $name = $args;
-    my $breakArgs = '';
-    my @params = split( /\,\s*/, $args, 2 );
-    if( @params > 1 ) {
-        $name = $params[0] || '';
-        $breakArgs = $params[1] || 1;
+
+    if (!$meta->can('renderFormFieldForDisplay')) {
+        # 4.1 compatibility
+        return TWiki::Render::renderFormFieldArg($meta, $args);
+    } else {
+        my $name = $args;
+        my $breakArgs = '';
+        my @params = split( /\,\s*/, $args, 2 );
+        if( @params > 1 ) {
+            $name = $params[0] || '';
+            $breakArgs = $params[1] || 1;
+        }
+        return $meta->renderFormFieldForDisplay(
+            $name, '$value', { break => $breakArgs, protectdollar => 1 } );
     }
-    return $meta->renderFormFieldForDisplay(
-        $name, '$value', { break => $breakArgs, protectdollar => 1 } );
 }
 
 # PRIVATE format the given field (takes precedence over standard
