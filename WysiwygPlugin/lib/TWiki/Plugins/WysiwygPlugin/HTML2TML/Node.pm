@@ -833,11 +833,7 @@ sub _handleDEL { return _flatten( @_ ); };
 sub _handleDFN { return _flatten( @_ ); };
 # DIR
 
-sub _handleDIV {
-    my( $this, $options ) = @_;
-    # TODO: Remove if no attributes? Just remove? Replace with a P?
-    return (0, undef);
-}
+sub _handleDIV { return _handleP(@_); }
 
 sub _handleDL { return _LIST( @_ ); }
 sub _handleDT { return _flatten( @_ ); };

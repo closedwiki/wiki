@@ -161,11 +161,11 @@ sub _processTags {
         if( $token eq '%' ) {
             if( $stackTop =~ /}$/ ) {
                 while( scalar( @stack) &&
-                         $stackTop !~ /^%([A-Z0-9_:]+){.*}$/o ) {
+                         $stackTop !~ /^%([A-Z0-9_:]+){.*}$/os ) {
                     $stackTop = pop( @stack ) . $stackTop;
                 }
             }
-            if( $stackTop =~ m/^%([A-Z0-9_:]+)({.*})?$/o ) {
+            if( $stackTop =~ m/^%([A-Z0-9_:]+)({.*})?$/os ) {
                 my $tag = $1 . ( $2 || '' );
                 $tag = '%'.$tag.'%';
                 $stackTop = pop( @stack ).
