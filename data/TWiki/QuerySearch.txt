@@ -93,7 +93,7 @@ Field specifiers and constants are combined using _operators_ to create queries.
 | *Operator* | *Meaning* |
 | <code>=</code> | Left-hand side (LHS) exactly matches the value on the Right-hand side (RHS). Numbers and strings can be compared. |
 | <code>!=</code> | Inverse of <code>=</code>. |
-| =~= | wildcard match ('*' will match any number of characters, '?' will match any single character e.g. "PersonForm.Surname ~ '*Smit?'") |
+| =~= | wildcard match ('*' will match any number of characters, '?' will match any single character e.g. "PersonForm.Surname ~ '*Smit?'") Note: Surname ~ 'Smith' is the same as Surname = 'Smith' |
 | <code>&lt;</code> | LHS is less that RHS. If both sides are numbers, the order is numeric. Otherwise it is alphabetic (applies to all comparison operators) |
 | <code>&gt;</code> | &gt; |
 | <code>&gt;=</code> | &gte; |
