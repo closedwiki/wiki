@@ -29,7 +29,6 @@ var URL_PICK_PARENT = "%URLPARAM{"pickparent"}%";
 </script>
 <script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/PatternSkin/webtopiccreator.js"></script>%TMPL:END%
 
-
 %TMPL:DEF{"formstartstep"}%%TMPL:P{"formstart"}%
 <div class="twikiFormSteps">%TMPL:END%
 
