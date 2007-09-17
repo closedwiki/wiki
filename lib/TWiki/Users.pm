@@ -526,7 +526,11 @@ sub getWikiName {
 	my $legacycUID = $this->getCanonicalUserID($cUID);
 
     my $wikiname = $this->_getMapping($legacycUID)->getWikiName($legacycUID) if ($legacycUID && $this->_getMapping($legacycUID));
-	$this->{getWikiName}->{$cUID} = $wikiname || "UnknownUser (<nop>$cUID)";
+	if (defined($TWiki::cfg{RenderLoggedInButUnknownUsers} ) || ($TWiki::cfg{RenderLoggedInButUnknownUsers}) ) {
+		$this->{getWikiName}->{$cUID} = $wikiname || "UnknownUser (<nop>$cUID)";
+	} else {
+		$this->{getWikiName}->{$cUID} = $wikiname || "$cUID";
+	}
     return $this->{getWikiName}->{$cUID};
 }
 

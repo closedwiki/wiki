@@ -417,13 +417,14 @@ sub verify_getWikiName_extended {
     $this->assert_str_equals('UserA', TWiki::Func::getWikiName($TWiki::cfg{UsersWebName}.'.'.'UserA'));
 
     #TODO: consider how to render unkown user's
-    $this->assert_str_equals('UnknownUser (<nop>'.'TWikiUserMapping_NonExistantUser'.')', TWiki::Func::getWikiName('TWikiUserMapping_NonExistantUser'));
+    #$TWiki::cfg{RenderLoggedInButUnknownUsers} is false, or undefined
+    $this->assert_str_equals('TWikiUserMapping_NonExistantUser', TWiki::Func::getWikiName('TWikiUserMapping_NonExistantUser'));
     my $nonexistantuser_cUID = $this->{twiki}->{users}->getCanonicalUserID('nonexistantuser');
     $this->annotate($nonexistantuser_cUID);			#returns guest
     $this->assert_str_equals($TWiki::cfg{DefaultUserWikiName}, TWiki::Func::getWikiName($nonexistantuser_cUID));
-    $this->assert_str_equals('UnknownUser (<nop>'.'nonexistantuser'.')', TWiki::Func::getWikiName('nonexistantuser'));
-    $this->assert_str_equals('UnknownUser (<nop>'.'NonExistantUser'.')', TWiki::Func::getWikiName('NonExistantUser'));
-    $this->assert_str_equals('UnknownUser (<nop>'.$TWiki::cfg{UsersWebName}.'.'.'NonExistantUser'.')', TWiki::Func::getWikiName($TWiki::cfg{UsersWebName}.'.'.'NonExistantUser'));
+    $this->assert_str_equals('nonexistantuser', TWiki::Func::getWikiName('nonexistantuser'));
+    $this->assert_str_equals('NonExistantUser', TWiki::Func::getWikiName('NonExistantUser'));
+    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.NonExistantUser', TWiki::Func::getWikiName($TWiki::cfg{UsersWebName}.'.'.'NonExistantUser'));
 
     #TODO: consider how to render unkown user's
     #my $AandBGroup_cUID = $this->{twiki}->{users}->getCanonicalUserID('AandBGroup');
@@ -458,13 +459,13 @@ sub verify_getWikiUserName_extended {
     $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'UserA', TWiki::Func::getWikiUserName($TWiki::cfg{UsersWebName}.'.'.'UserA'));
 
     #TODO: consider how to render unkown user's
-    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'UnknownUser (<nop>'.'TWikiUserMapping_NonExistantUser'.')', TWiki::Func::getWikiUserName('TWikiUserMapping_NonExistantUser'));
+    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'TWikiUserMapping_NonExistantUser', TWiki::Func::getWikiUserName('TWikiUserMapping_NonExistantUser'));
     my $nonexistantuser_cUID = $this->{twiki}->{users}->getCanonicalUserID('nonexistantuser');
     $this->annotate($nonexistantuser_cUID);			#returns guest
     $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{DefaultUserWikiName}, TWiki::Func::getWikiUserName($nonexistantuser_cUID));
-    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'UnknownUser (<nop>'.'nonexistantuser'.')', TWiki::Func::getWikiUserName('nonexistantuser'));
-    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'UnknownUser (<nop>'.'NonExistantUser'.')', TWiki::Func::getWikiUserName('NonExistantUser'));
-    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'UnknownUser (<nop>'.$TWiki::cfg{UsersWebName}.'.'.'NonExistantUser'.')', TWiki::Func::getWikiUserName($TWiki::cfg{UsersWebName}.'.'.'NonExistantUser'));
+    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'nonexistantuser', TWiki::Func::getWikiUserName('nonexistantuser'));
+    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'NonExistantUser', TWiki::Func::getWikiUserName('NonExistantUser'));
+    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{UsersWebName}.'.'.'NonExistantUser', TWiki::Func::getWikiUserName($TWiki::cfg{UsersWebName}.'.'.'NonExistantUser'));
 
     #TODO: consider how to render unkown user's
     #my $AandBGroup_cUID = $this->{twiki}->{users}->getCanonicalUserID('AandBGroup');

@@ -371,6 +371,13 @@ $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
 # (if it supports mappings, that is).
 $TWiki::cfg{Register}{AllowLoginName} = $FALSE;
 
+# **BOOLEAN EXPERT**
+# If Logins are managed from outside TWiki, and their TWikiName
+# mapping does not exist, You can highlight this (for security reasons)
+# by setting this to true 
+# adds UnknownUser (<nop>$cUID)
+$TWiki::cfg{RenderLoggedInButUnknownUsers} = $FALSE;
+
 # **BOOLEAN**
 # by turning this option off, you can temporarily disable new user registration.
 # it will have no effect on existing users.
