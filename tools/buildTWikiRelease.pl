@@ -21,7 +21,7 @@ if ( grep('-sven', @ARGV) ) {
 
 
 
-my $twikiBranch = 'MAIN';
+my $twikiBranch = 'TWikiRelease04x02';
 
 unless ( -e $twikiBranch ) {
    print STDERR "doing a fresh checkout\n";
@@ -68,8 +68,9 @@ unless ($errorcode == 0) {
     close(UNIT);
     
     chdir($twikihome);
-    `scp TWiki* distributedinformation\@distributedinformation.com:/home/distributedinformation/www/TWikiBuilds`;
-    sendEmail("Subject: TWiki $twikiBranch branch has Unit test FAILURES\n\n see http://distributedinformation.com/TWikiBuilds/ for output files.\n".$unittestErrors);
+    `scp -v TWiki* distributedinformation\@distributedinformation.com:/home/distributedinformation/www/$twikiBranch`
+		if ($SvensAutomatedBuilds);
+    sendEmail("Subject: TWiki $twikiBranch branch has Unit test FAILURES\n\n see http://distributedinformation.com/$twikiBranch/ for output files.\n".$unittestErrors);
     die "\n\n$errorcode: unit test failures - need to fix them first\n" 
 }
 
@@ -104,14 +105,14 @@ chdir('lib');
 `perl ../tools/build.pl release -auto`;
 
 chdir($twikihome);
-#push the files to my server - http://distributedinformation.com/TWikiBuilds/
-`scp TWiki* distributedinformation\@distributedinformation.com:/home/distributedinformation/www/TWikiBuilds` 
+#push the files to my server - http://distributedinformation.com/$twikiBranch/
+`scp -v TWiki* distributedinformation\@distributedinformation.com:/home/distributedinformation/www/$twikiBranch` 
 		if ($SvensAutomatedBuilds);
 
 my $buildOutput = `ls -alh *auto*`;
 $buildOutput .= "\n";
 $buildOutput .= `grep 'All tests passed' $twikihome/TWiki-UnitTests.log`;
-sendEmail("Subject: TWiki $twikiBranch built OK\n\n see http://distributedinformation.com/TWikiBuilds/ for output files.\n".$buildOutput);
+sendEmail("Subject: TWiki $twikiBranch built OK\n\n see http://distributedinformation.com/$twikiBranch/ for output files.\n".$buildOutput);
 
 
 sub getLocalSite {
