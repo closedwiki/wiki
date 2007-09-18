@@ -23,6 +23,12 @@ ScriptAlias /twiki/bin/ "/home/httpd/twiki/bin/"
 #### Change the path to match your local installation
 Alias /twiki/ "/home/httpd/twiki/"
 
+# Block access to typical spam related attachments (.htm and .html files)
+# Except the TWiki directory which is read only and does have attached html files.
+# You should uncomment the two lines below if the TWiki is on the public Internet
+#SetEnvIf Request_URI "twiki/pub/.*\.[hH][tT][mM]?$" blockAccess
+#SetEnvIf Request_URI "twiki/pub/TWiki/.*\.[hH][tT][mM]?$" !blockAccess
+
 # We set an environment variable called blockAccess.
 #
 # Setting a BrowserMatchNoCase to ^$ is important. It prevents TWiki from
@@ -117,7 +123,7 @@ BrowserMatchNoCase ^$ blockAccess
 
 	# This line will redefine the mime type for the most common types of scripts
 	# It will also deliver HTML files as if they are text files
-	AddType text/plain .html .htm .shtml .php .php3 .phtml .phtm .pl .py .cgi
+	AddType text/plain .shtml .php .php3 .phtml .phtm .pl .py .cgi
 </Directory>
 
 # Security note: All other directories should be set so
