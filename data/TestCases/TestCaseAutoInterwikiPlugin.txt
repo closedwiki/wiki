@@ -9,9 +9,9 @@ Requires "TWiki" to be defined in InterWikis.
 
 ---+ Expected
 <!-- expected -->
-<a  class=interwikiLink href="http://twiki.org/cgi-bin/view/Codev_Target" title="'Codev_Target' on TWiki.org">TWiki:Codev_Target</a>
-<a  class=interwikiLink href="http://twiki.org/cgi-bin/view/Codev/Target" title="'Codev/Target' on TWiki.org">TWiki:Codev/Target</a>
-<a  class=interwikiLink href="http://twiki.org/cgi-bin/view/Codev/m./+_,;:!?%#-" title="'Codev/m./+_,;:!?%#-' on TWiki.org">TWiki:Codev/m./+_,;:!?%#-</a>
+<a  class=interwikiLink href="http://twiki.org/cgi-bin/view/Codev_Target" title="'Codev_Target' on TWiki.org"><noautolink>TWiki:Codev_Target</noautolink></a>
+<a  class=interwikiLink href="http://twiki.org/cgi-bin/view/Codev/Target" title="'Codev/Target' on TWiki.org"><noautolink>TWiki:Codev/Target</noautolink></a>
+<a  class=interwikiLink href="http://twiki.org/cgi-bin/view/Codev/m./+_,;:!?%#-" title="'Codev/m./+_,;:!?%#-' on TWiki.org"><noautolink>TWiki:Codev/m./+_,;:!?%#-</noautolink></a>
 <!-- /expected -->
 ---+ Actual
 <!-- actual -->
