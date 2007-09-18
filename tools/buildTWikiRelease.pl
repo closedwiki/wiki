@@ -8,6 +8,19 @@
 # Sven Dowideit
 # Copyright (C) TWikiContributors, 2005
 #
+# If you are Sven (used by Sven's automated nightly build system) - call with perl ./buildTWikiRelease.pl -sven
+# everyone else, can just run perl ./buildTWikiRelease.pl
+#
+#
+
+my $SvensAutomatedBuilds = 0;
+if ( grep('-sven', @ARGV) ) {
+   $SvensAutomatedBuilds = 1;
+   print STDERR "doing an automated Sven build";
+}
+
+
+
 my $twikiBranch = 'MAIN';
 
 unless ( -e $twikiBranch ) {
@@ -92,7 +105,8 @@ chdir('lib');
 
 chdir($twikihome);
 #push the files to my server - http://distributedinformation.com/TWikiBuilds/
-`scp TWiki* distributedinformation\@distributedinformation.com:/home/distributedinformation/www/TWikiBuilds`;
+`scp TWiki* distributedinformation\@distributedinformation.com:/home/distributedinformation/www/TWikiBuilds` 
+		if ($SvensAutomatedBuilds);
 
 my $buildOutput = `ls -alh *auto*`;
 $buildOutput .= "\n";
@@ -117,6 +131,7 @@ sub getLocalSite {
 
 #Yes, this email setup only works for Sven - will look at re-using the .settings file CC made for BuildContrib
 sub sendEmail {
+    return unless ($SvensAutomatedBuilds);
     my $text = shift;
     use Net::SMTP;
     my $twikiDev = 'twiki-dev@lists.sourceforge.net';
