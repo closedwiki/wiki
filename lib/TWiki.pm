@@ -2331,7 +2331,7 @@ sub urlEncodeAttachment {
 
     my $usingEBCDIC = ( 'A' eq chr(193) ); 	# Only true on EBCDIC mainframes
 
-    if( $TWiki::cfg{Site}{CharSet} eq "utf-8" or $usingEBCDIC ) {
+    if( (defined($TWiki::cfg{Site}{CharSet}) and $TWiki::cfg{Site}{CharSet} eq "utf-8") or $usingEBCDIC ) {
 	# Just let browser do UTF-8 URL encoding 
 	return $text;
     }
