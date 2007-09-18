@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1189119684" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1190096994" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and Filetype icons
 
 This is the TWiki icon library. The graphics can be used in topics and by web applications. 
@@ -26,6 +26,7 @@ Other usage: [[%TOPIC%#Usage_extended][see below]].
 | <img src="%ATTACHURLPATH%/bubble.gif" alt="Speech bubble" title="Speech bubble" />  | =bubble.gif= | Speech bubble | =%<nop>ICON{bubble}%= |
 | <img src="%ATTACHURLPATH%/days.gif" alt="Days / Calendar" title="Days / Calendar" />  | =days.gif= | Days, Calendar | =%<nop>ICON{days}%= |
 | <img src="%ATTACHURLPATH%/download.gif" alt="Download" title="Download" />  | =download.gif= | Download | =%<nop>ICON{download}%= |
+| <img src="%ATTACHURLPATH%/fax.gif" alt="Fax" title="Fax" />  | =fax.gif= | Fax | =%<nop>ICON{fax}%= |
 | <img src="%ATTACHURLPATH%/filter.gif" alt="Filter" title="Filter" />  | =filter.gif= | Filter | =%<nop>ICON{filter}%= |
 | <img src="%ATTACHURLPATH%/gear.gif" alt="Gear" title="Gear" />  | =gear.gif= | Gear | =%<nop>ICON{gear}%= |
 | <img src="%ATTACHURLPATH%/globe.gif" alt="Globe" title="Globe" />  | =globe.gif= | Globe | =%<nop>ICON{globe}%= |
@@ -34,17 +35,20 @@ Other usage: [[%TOPIC%#Usage_extended][see below]].
 | <img src="%ATTACHURLPATH%/help.gif" alt="Help" title="Help" />  | =help.gif= | Help | =%<nop>H%=, =%<nop>ICON{help}%= |
 | <img src="%ATTACHURLPATH%/info.gif" alt="Information" title="Information" />  | =info.gif= | Info | =%<nop>ICON{info}%= |
 | <img src="%ATTACHURLPATH%/hourglass.gif" alt="Hour glass (clock)" title="Hour glass (clock)" />  | =hourglass.gif= | Hour glass (clock) | =%<nop>ICON{hourglass}%= |
+| <img src="%ATTACHURLPATH%/mobile.gif" alt="Mobile" title="Mobile" />  | =mobile.gif= | Mobile | =%<nop>ICON{mobile}%= |
 | <img src="%ATTACHURLPATH%/more.gif" alt="Read more" title="Read more" />  | =more.gif= | Read more | =%<nop>ICON{more}%= |
 | <img src="%ATTACHURLPATH%/more-small.gif" alt="Read more" title="Read more" />  | =more-small.gif= | Read more, 13x13 | =&lt;img src="%<nop>ICONURL{more-small}%" width="13" height="13" alt="Read more" border="0" /&gt;= |
 | <img src="%ATTACHURLPATH%/move.gif" alt="Move" title="Move" />  | =move.gif= | Move | =%<nop>ICON{move}%= |
 | <img src="%ATTACHURLPATH%/note.gif" alt="Note" title="Note" />  | =note.gif= | Note | =%<nop>ICON{note}%= |
 | <img src="%ATTACHURLPATH%/parked.gif" alt="Parked" title="Parked" />  | =parked.gif= | Parked | =%<nop>ICON{parked}%= |
 | <img src="%ATTACHURLPATH%/pencil.gif" alt="Pencil / Refactor / Edit" title="Pencil / Refactor / Edit" />  | =pencil.gif= | Pencil / Refactor / Edit | =%<nop>P%=, =%<nop>ICON{pencil}%= |
+| <img src="%ATTACHURLPATH%/phone.gif" alt="Phone" title="Phone" />  | =phone.gif= | Phone | =%<nop>ICON{phone}%= |
 | <img src="%ATTACHURLPATH%/photo.gif" alt="Photo" title="Photo" />  | =photo.gif= | Photo, 13x10 | =&lt;img src="%<nop>ICONURL{photo}%" width="13" height="10" alt="Photo" border="0" /&gt;= |
 | <img src="%ATTACHURLPATH%/puzzle.gif" alt="Puzzle" title="Puzzle" />  | =puzzle.gif= | Puzzle | =%<nop>ICON{puzzle}%= |
 | <img src="%ATTACHURLPATH%/question.gif" alt="Question" title="Question" />  | =question.gif= | Question | =%<nop>ICON{question}%= |
 | <img src="%ATTACHURLPATH%/quiet.gif" alt="Quiet" title="Quiet" />  | =quiet.gif= | Quiet | =%<nop>ICON{quiet}%= |
 | <img src="%ATTACHURLPATH%/rfc.gif" alt="Request for comments" title="Request for comments" />  | =rfc.gif= | Request for comments | =%<nop>ICON{rfc}%= |
+| <img src="%ATTACHURLPATH%/skype.gif" alt="Skype" title="Skype" />  | =skype.gif= | Skype | =%<nop>ICON{skype}%= |
 | <img src="%ATTACHURLPATH%/sort.gif" alt="Sort" title="Sort" />  | =sort.gif= | Sort | =%<nop>ICON{sort}%= |
 | <img src="%ATTACHURLPATH%/stargold.gif" alt="Gold star, favorites" title="Gold star, favorites" />  | =stargold.gif= | Gold star, favorites | =%<nop>ICON{stargold}%= |
 | <img src="%ATTACHURLPATH%/starred.gif" alt="Red star, highlight" title="Red star, highlight" />  | =starred.gif= | Red star, highlight | =%<nop>S%=, =%<nop>ICON{starred}%= |
