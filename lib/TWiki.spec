@@ -528,8 +528,16 @@ $TWiki::cfg{RemovePortNumber}  = $FALSE;
 # very easy to build phishing pages using the wiki, so in general, 
 # public sites should <b>not</b> enable it. Note: It is possible to 
 # redirect to a topic regardless of this setting, such as 
-# <tt>redirectto=OtherTopic</tt> or <tt>redirectto=Web.OtherTopic</tt>.
+# <tt>topic=OtherTopic</tt> or <tt>redirectto=Web.OtherTopic</tt>.
 $TWiki::cfg{AllowRedirectUrl}  = $FALSE;
+
+
+# **STRING  EXPERT**
+#  If your host has aliases (such as both www.twiki.org and twiki.org, and some IP addresses)
+# you can tell TWiki that redirecting to them is OK
+# redirects have been resricted to prevent TWiki from being used in phishing attacks
+# and protect it from middleman exploits. Enter as comma seperated list of URL's or hostnames
+$TWiki::cfg{PermittedRedirectHostUrls} = '';
 
 # **REGEX EXPERT**
 # Defines the filter-in regexp that must match the names of environment

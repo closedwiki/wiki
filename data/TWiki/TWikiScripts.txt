@@ -338,6 +338,7 @@ Used for viewing topics.
 | =contenttype= | Allows you to specify a different *Content-Type:* (e.g. =contenttype=text/plain=) | |
 | =rev= | Revision to view (e.g. =rev=45=) | |
 | =template= | Allows you to specify a different skin template, overriding the 'view' template the view script would normally use. The default template is =view=. For example, you could specify [[%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?template=edit][%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?template=edit]]. This is mainly useful when you have specialised templates for a TWiki Application. | |
+| =topic= | redirects (at the beging of the cgi script running) to show the spcified Web.Topic, or, redirects to a URL, if allowed by {AllowRedirectUrl} and {PermittedRedirectHostUrls} | |
 
 %X% For historical reasons, the view script has a special interpretation of the =text= skin. In earlier TWiki versions the =skin=text= parameter was used like this:
 =http<nop>://.../view/MyWeb/MyTopic?skin=text&contenttype=text/plain&raw=on=

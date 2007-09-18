@@ -694,14 +694,20 @@ tests if the $redirect is an external URL, returning false if AllowRedirectUrl i
 
 sub isRedirectSafe {
     my $redirect = shift;
-
+    
     #TODO: this should really use URI
-    #TODO: this should also grok aliases for the current host. (127.0.0.1, ip, multi-homed, localhost etc) though this raises the danger level somewhat.
     if ((!$TWiki::cfg{AllowRedirectUrl}) && ( $redirect =~ m!^([^:]*://[^/]*)/*(.*)?$! )) {
         my $host = $1;
         #remove trailing /'s to match
         $TWiki::cfg{DefaultUrlHost} =~ m!^([^:]*://[^/]*)/*(.*)?$!;
         my $expected = $1;
+        
+        if (defined($TWiki::cfg{PermittedRedirectHostUrls} ) && $TWiki::cfg{PermittedRedirectHostUrls}  ne '') {
+            my @permitted =
+                map { s!^([^:]*://[^/]*)/*(.*)?$!$1!; $1 }
+                        split(/,\s*/, $TWiki::cfg{PermittedRedirectHostUrls});
+            return 1 if ( grep ( { uc($host) eq uc($_) } @permitted));
+        }
         return (uc($host) eq uc($expected));
     }
     return 1;
@@ -768,7 +774,6 @@ server.
 sub redirect {
     my( $this, $url, $passthru, $action_redirectto ) = @_;
 
-
     my $query = $this->{cgiQuery};
     # if we got here without a query, there's not much more we can do
     return unless $query;
@@ -825,7 +830,7 @@ sub redirect {
              def => 'topic_access',
              param1 => 'redirect',
              param2 => 'unsafe redirect to '.$url.
-               ': host does not match {DefaultUrlHost} "'.
+               ': host does not match {DefaultUrlHost} , and is not in {PermittedRedirectHostUrls}"'.
                  $TWiki::cfg{DefaultUrlHost}.'"'
             );
     }
@@ -1285,7 +1290,7 @@ sub new {
             $this->{cgiQuery} ) {
             # redirect to URI
                 print $this->redirect( $topic );
-                return;
+                exit;   #we seriously don't want to go through normal TWiki operations if we're redirecting..
         } elsif( $topic =~ /((?:.*[\.\/])+)(.*)/ ) {
             # is 'bin/script?topic=Webname.SomeTopic'
             $web   = $1;
