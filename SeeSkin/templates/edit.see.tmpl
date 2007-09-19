@@ -75,7 +75,7 @@ This is your signature for easy copy &amp; paste operation
 %TMPL:DEF{"titleaction"}%(editing)%TMPL:END%
 %TMPL:DEF{"titlehelp"}% %TMPL:END%
 %TMPL:DEF{"topicaction"}%
-<fieldset><legend><span class="deem"> [[Plugins.SeeSkinAccessKeys][AccessKeys]]: S = Save, Q = Quiet Save, K = Checkpoint, P = Preview, C = Cancel</span></legend>
+<fieldset><legend><span class="deem"> [[Plugins.SeeSkinAccessKeys][AccessKeys]]: S = Save, Q = Quiet Save, K = Save and Continue, P = Preview, C = Cancel</span></legend>
    <label accesskey="s" for="save">
       <input type="submit" name="action" value="Save" id="save" />
    </label>
@@ -83,7 +83,7 @@ This is your signature for easy copy &amp; paste operation
       <input type="submit" name="action" value="QuietSave" id="quietsave" />
    </label>
    <label accesskey="k" for="checkpoint">
-      <input type="submit" name="action" value="Checkpoint" id="checkpoint" />
+      <input type="submit" name="action" value="Save and Continue" id="checkpoint" />
    </label>
    <label accesskey="p" for="preview">
       <input type="submit" name="action" value="Preview" id="preview" />
@@ -96,7 +96,7 @@ This is your signature for easy copy &amp; paste operation
 %TMPL:DEF{"help"}%
    <dd><strong>Save:</strong> Save topic and return to normal view
 	<dd><strong>QuietSave:</strong> Save but will not trigger email notification to people monitoring the page (checks the "Minor changes" checkbox)
-	<dd><strong>Checkpoint:</strong> Save, and re-edit immediately
+	<dd><strong>Save and Continue:</strong> Save, and re-edit immediately
 	<dd><strong>Preview:</strong> Do not save yet, but show what the topic would look if saved
 	<dd><strong>Cancel:</strong> Discard changes and return to view mode, release lock
 	<dd><strong>Do not use BACK in your browser to cancel</strong> instead, or the topic will stay locked, preventing other people to edit it for one hour%TMPL:END%
