@@ -104,21 +104,21 @@ Save the topic. This will generate an [[%PUBURLPATH%/%SYSTEMWEB%/PatternSkin/the
 ---++++ GENERAL_BACKGROUND General background color (if not set in  MAIN_BACKGROUND_COLOR) (white)
    * Set GENERAL_BACKGROUND = #fff
 ---++++ SIDE_BAR_BACKGROUND Side bar background
-   * Set SIDE_BAR_BACKGROUND = #f5f9fb
+   * Set SIDE_BAR_BACKGROUND = #f6f7f8
 ---++++ NEUTRAL_BACKGROUND
    * Set NEUTRAL_BACKGROUND = #fdfaf1
 ---++++ TOP_BAR_BACKGROUND Top bar background
    * Set TOP_BAR_BACKGROUND = #fefcf7
----++++ TOPIC_ACTION_BACKGROUND Topic action row
-   * Set TOPIC_ACTION_BACKGROUND = #fdfaf2
 ---++++ HEADER_BACKGROUND h2, h3
    * Set HEADER_BACKGROUND = %TOPIC_ACTION_BACKGROUND%
----++++ ATTACHMENT_AND_FORM_BACKGROUND Attachment, form (light yellow, same as top bar)
-   * Set ATTACHMENT_AND_FORM_BACKGROUND = #fefcf6
+---++++ ATTACHMENT_AND_FORM_BACKGROUND Attachment, form
+   * Set ATTACHMENT_AND_FORM_BACKGROUND = #f6f7f8
+---++++ TOPIC_ACTION_BACKGROUND Topic action row
+   * Set TOPIC_ACTION_BACKGROUND = %ATTACHMENT_AND_FORM_BACKGROUND%
 ---++++ DIFF_HEADER_BACKGROUND Diff header (dark gray)
    * Set DIFF_HEADER_BACKGROUND = #ccc
 ---++++ NOTIFICATION_BACKGROUND Info, broadcast message and notifications
-   * Set NOTIFICATION_BACKGROUND = #fff9d1
+   * Set NOTIFICATION_BACKGROUND = #fff0c4
 ---++++ INFO_BACKGROUND
    * Set INFO_BACKGROUND = %NOTIFICATION_BACKGROUND%
 	
@@ -126,7 +126,7 @@ Save the topic. This will generate an [[%PUBURLPATH%/%SYSTEMWEB%/PatternSkin/the
 ---++++ NEUTRAL_BORDER Info (light gray)
    * Set NEUTRAL_BORDER = #ddd
 ---++++ SEPARATOR_BORDER 
-   * Set SEPARATOR_BORDER = #e7e2da
+   * Set SEPARATOR_BORDER = #e1e5e9
 ---++++ MINOR_SEPARATOR_BORDER Header H3..H6 bottom
    * Set MINOR_SEPARATOR_BORDER = %SEPARATOR_BORDER%
 ---++++ LAYOUT_ELEMENT_BORDER Main layout elements (neutral tone) 
@@ -134,7 +134,7 @@ Save the topic. This will generate an [[%PUBURLPATH%/%SYSTEMWEB%/PatternSkin/the
 ---++++ IMAGE_BORDER Image border
    * Set IMAGE_BORDER = #eee
 ---++++ FORM_STEP_BORDER Form step border
-   * Set FORM_STEP_BORDER = #d9e8ef
+   * Set FORM_STEP_BORDER = %SEPARATOR_BORDER%
 ---++++ NOTIFICATION_BORDER Broadcast message
    * Set NOTIFICATION_BORDER = #ffdf4c
    
@@ -176,9 +176,11 @@ Save the topic. This will generate an [[%PUBURLPATH%/%SYSTEMWEB%/PatternSkin/the
 ---++++ FORM_BORDER Form (same as twikiTable border)
    * Set FORM_BORDER = #cfcfcf
 ---++++ ACTIVE_FORM_BACKGROUND Edit form, form steps
-   * Set ACTIVE_FORM_BACKGROUND = #f1f6fa
+   * Set ACTIVE_FORM_BACKGROUND = #f0f7fc
 ---++++ FORMFIELD_ACTIVE Active form field
-   * Set FORMFIELD_ACTIVE = %NOTIFICATION_BACKGROUND%
+   * Set FORMFIELD_ACTIVE = #ffffe0
+---++++ FORM_HEADER_TEXT Header text on form background
+   * Set FORM_HEADER_TEXT = #036
    
 <!-- END OF COLOR VARIABLES -->
 
@@ -461,7 +463,7 @@ table.twikiFormTable td.twikiFormTableRow {
 .patternContent .twikiAttachments,
 .patternContent .twikiForm {
 	background-color:%ATTACHMENT_AND_FORM_BACKGROUND%;
-	border-color:%MINOR_SEPARATOR_BORDER%;
+	border-color:%TABLE_BORDER%;
 }
 .twikiAttachments table,
 table.twikiFormTable {
@@ -489,14 +491,14 @@ table.twikiFormTable th.twikiFormTableHRow font {
 }
 .twikiFormStep h3,
 .twikiFormStep h4 {
-	color:%GRAYED_TEXT_COLOR%;
+	color:%FORM_HEADER_TEXT%;
 }
 .twikiFormStep h3,
 .twikiFormStep h4 {
 	background-color:transparent;
 }
 .twikiActionFormStepSign {
-	color:%HEADER_TEXT%;
+	color:%FORM_HEADER_TEXT%;
 }
 .twikiToc .twikiTocTitle {
 	color:%MUTED_TEXT%;
@@ -510,6 +512,10 @@ table.twikiFormTable th.twikiFormTableHRow font {
 }
 .twikiHelp {
 	background-color:%INFO_BACKGROUND%;
+}
+.twikiHelp {
+	background-color:%ATTACHMENT_AND_FORM_BACKGROUND%;
+	border-color:%SEPARATOR_BORDER%;
 }
 .twikiBroadcastMessage b,
 .twikiBroadcastMessage strong {
@@ -594,12 +600,12 @@ a:hover .twikiAccessKey {
 }
 
 .patternTopicActions {
-	border-color:%MINOR_SEPARATOR_BORDER%;
+	border-color:%TABLE_BORDER%;
 	background-color:%TOPIC_ACTION_BACKGROUND%;
 	color:%MUTED_TEXT%;
 }
 .patternTopicAction {
-	border-color:%MINOR_SEPARATOR_BORDER%;
+	border-color:%TABLE_BORDER%;
 }
 .patternTopicAction s,
 .patternTopicAction strike {
