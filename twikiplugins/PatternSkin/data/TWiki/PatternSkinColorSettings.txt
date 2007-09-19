@@ -156,7 +156,7 @@ Save the topic. This will generate an [[%PUBURLPATH%/%SYSTEMWEB%/PatternSkin/the
 ---+++++ TABLE_DATA_MIX_BACKGROUND Table data background (mix between even and odd)
    * Set TABLE_DATA_MIX_BACKGROUND = #f7fafc
 ---++++ TABLE_BORDER Table border, sup (light neutral tone)
-   * Set TABLE_BORDER = %SEPARATOR_BORDER%
+   * Set TABLE_BORDER = #e1e5e9
 ---++++ LINK_TEXT_NORMAL_TABLE_HEADER Table header link text
    * Set LINK_TEXT_NORMAL_TABLE_HEADER = #fff
 ---++++ LINK_TEXT_NORMAL_BORDER_TABLE_HEADER Table header link border
@@ -396,14 +396,9 @@ select {
 
 /* TablePlugin */
 .twikiTable,
-.twikiTable td {
-	border-color:%TABLE_BORDER%;
-}
+.twikiTable td,
 .twikiTable th {
-	border-color:%TABLE_BORDER% %LIGHT_ON_DARK_TEXT_COLOR%;
-}
-.twikiTable th.twikiFirstCol {
-	border-left-color:%LIGHT_ON_DARK_TEXT_COLOR%;
+	border-color:%TABLE_BORDER%;
 }
 .twikiTable th a:link,
 .twikiTable th a:visited,
