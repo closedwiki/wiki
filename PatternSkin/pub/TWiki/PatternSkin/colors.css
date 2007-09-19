@@ -209,14 +209,9 @@ select {
 
 /* TablePlugin */
 .twikiTable,
-.twikiTable td {
-	border-color:#e7e2da;
-}
+.twikiTable td,
 .twikiTable th {
-	border-color:#e7e2da #fff;
-}
-.twikiTable th.twikiFirstCol {
-	border-left-color:#e7e2da;
+	border-color:#e1e5e9;
 }
 .twikiTable th a:link,
 .twikiTable th a:visited,
