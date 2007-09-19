@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: da\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2007-09-07 00:10+0200\n"
+"PO-Revision-Date: 2007-09-18 22:40+0200\n"
 "Last-Translator: Steffen Poulsen <N/A>\n"
 "Language-Team: Danish <N/A>\n"
 "MIME-Version: 1.0\n"
@@ -158,7 +158,7 @@ msgstr "%1 editerer muligvis stadig %2"
 #   $date,
 #   $by)
 #. ("<nop>$toWeb.<nop>$toTopic",                                             "<nop>$fromWeb.<nop>$fromTopic",                                             $date,                                             $by)
-#: lib/TWiki/Render.pm:199
+#: lib/TWiki/Render.pm:200
 msgid "%1 moved from %2 on %3 by %4"
 msgstr "%1 blev flyttet fra %2 den %3 af %4"
 
@@ -190,10 +190,6 @@ msgstr "&Editér tekst"
 #: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:159
 msgid "&History"
 msgstr "&Historik"
-
-#: twikiplugins/ClassicSkin/templates/view.classic.tmpl:28
-msgid "&WYSIWYG"
-msgstr "&WYSIWYG"
 
 #: templates/messages.tmpl:257
 msgid "'%1' is not a valid %2 "
@@ -290,7 +286,7 @@ msgstr "(login)"
 msgid "(move attachment)"
 msgstr "(flyt vedhæftet fil)"
 
-#: data/TWiki/WebTopicCreatorTemplate.txt:49
+#: data/TWiki/WebTopicCreatorTemplate.txt:56
 msgid "(no parent, orphaned topic)"
 msgstr "(ingen forælder, forældreløs side)"
 
@@ -368,8 +364,7 @@ msgstr "(første bogstav i efternavn)"
 msgid "(skipped)"
 msgstr "(skippet)"
 
-#: templates/attachagain.tmpl:19
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:31
+#: templates/attachagain.tmpl:18
 msgid ""
 "*Change comment:* If you use _Change Properties_ to change a comment, the "
 "comment shown in the topic will change, but the comment shown against the "
@@ -404,8 +399,7 @@ msgstr ""
 "tvivl kan du kontakte %1 for nærmere detaljer angående "
 "databeskyttelsesreglerne for denne TWiki-server."
 
-#: templates/attachagain.tmpl:20
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:32
+#: templates/attachagain.tmpl:19
 msgid ""
 "*Local file:* If you select a different file in _Local file:_, it is this "
 "that will be updated or added."
@@ -416,8 +410,7 @@ msgstr ""
 "vedhæftet fil på serveren med det nye filnavn. Omdøb evt. filen lokalt (så "
 "navnet matcher den aktuelle vedhæftede fils navn) og prøv igen."
 
-#: templates/attachagain.tmpl:18
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:30
+#: templates/attachagain.tmpl:17
 msgid ""
 "*Properties:* The comment and visibility (i.e. is attachment hidden) can be "
 "changed without uploading a file by pressing \"Change Properties only\"; see "
@@ -669,7 +662,7 @@ msgstr "Og populeret med sider fra skabelon-webbet"
 msgid "Any changes you made to the topic before coming to this page are preserved."
 msgstr "Alle ændringer, som du har lavet før du skiftede til denne side er gemt."
 
-#: templates/viewtopicactionbuttons.tmpl:80
+#: templates/viewtopicactionbuttons.tmpl:64
 msgid "Attach"
 msgstr "Vedhæft"
 
@@ -682,9 +675,9 @@ msgstr "Vedhæft en fil til siden %1"
 msgid "Attach image or document on %1"
 msgstr "Vedhæft billede eller dokument til %1"
 
-#: templates/attach.tmpl:19 templates/attachnew.tmpl:6
+#: templates/attach.tmpl:17 templates/attachnew.tmpl:6
 #: templates/attachnew.tmpl:8
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:38
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:35
 msgid "Attach new file"
 msgstr "Vedhæft ny fil"
 
@@ -720,12 +713,12 @@ msgstr "Vedhæftede filer"
 msgid "Attachments help"
 msgstr "Hjælp til vedhæftede filer"
 
-#: templates/attach.tmpl:9
+#: templates/attach.tmpl:7
 msgid "Attachments of %1"
 msgstr "Vedhæftede filer på %1"
 
-#: templates/attach.tmpl:49
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:59
+#: templates/attach.tmpl:47
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:56
 msgid "Attachments will not be shown in topic view page."
 msgstr "Filen vil ikke blive vist ved almindelig sidevisning."
 
@@ -763,7 +756,7 @@ msgstr "Tilgængelige formular-skabeloner i %1-webbet"
 msgid "Back to topic"
 msgstr "Tilbage til siden"
 
-#: templates/oopsmore.tmpl:37 templates/viewtopicactionbuttons.tmpl:103
+#: templates/oopsmore.tmpl:37 templates/viewtopicactionbuttons.tmpl:87
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:17
 msgid "Backlinks"
 msgstr "Referencer"
@@ -881,7 +874,7 @@ msgstr "Opdater links fra sider, der peger på %1 (kun i %2-webbet)"
 msgid "Change password"
 msgstr "Skift password"
 
-#: templates/attachagain.tmpl:22
+#: templates/attachagain.tmpl:21
 msgid "Change properties only"
 msgstr "Opdatér kun attributter"
 
@@ -912,7 +905,7 @@ msgid "Changes"
 msgstr "Seneste ændringer"
 
 #. ($r2, $r1)
-#: lib/TWiki/UI/RDiff.pm:482
+#: lib/TWiki/UI/RDiff.pm:483
 msgid "Changes from r%1 to r%2"
 msgstr "Ændringer fra r%1 til r%2"
 
@@ -947,7 +940,7 @@ msgstr "Vælg en ny formular for %1"
 msgid "Clear all"
 msgstr "Nulstil alle"
 
-#: lib/TWiki/Render.pm:182
+#: lib/TWiki/Render.pm:183
 msgid ""
 "Click to move topic back to previous location, with option to change "
 "references."
@@ -963,9 +956,9 @@ msgstr "Luk"
 msgid "Color %1 has an invalid format"
 msgstr "Farven %1 er et ugyldigt format"
 
-#: templates/attach.tmpl:28 templates/attachtables.tmpl:37
+#: templates/attach.tmpl:26 templates/attachtables.tmpl:37
 #: templates/attachtables.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:47
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:44
 msgid "Comment"
 msgstr "Kommentar"
 
@@ -989,6 +982,7 @@ msgstr "Konflikt"
 
 #: templates/messages.tmpl:456 templates/messages.tmpl:464
 #: templates/messages.tmpl:488 templates/messages.tmpl:494
+#: templates/messages.tmpl:503
 msgid "Contact %1 if you have any questions."
 msgstr "Hvis du har spørgsmål, så kontakt venligst %1."
 
@@ -1024,7 +1018,7 @@ msgstr "%1 kunne ikke gemmes."
 msgid "Country:"
 msgstr "Land:"
 
-#: data/TWiki/WebTopicViewTemplate.txt:28
+#: data/TWiki/WebTopicViewTemplate.txt:27
 msgid "Create '%1'"
 msgstr "Opret '%1'"
 
@@ -1038,13 +1032,13 @@ msgstr "Opret <nop>TestTopic###"
 msgid "Create New Topic"
 msgstr "Opret ny side"
 
-#: data/TWiki/WebTopicCreatorTemplate.txt:20
+#: data/TWiki/WebTopicCreatorTemplate.txt:6
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:40
 msgid "Create New Topic in %1 Web"
 msgstr "Opret ny side i %1-webbet"
 
-#: templates/attach.tmpl:41
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:57
+#: templates/attach.tmpl:39
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:54
 msgid "Create a link to the attached file"
 msgstr ""
 "Lav et link til den vedhæftede fil (indsættes i bunden af siden, men kan "
@@ -1072,7 +1066,7 @@ msgid "Create the topic"
 msgstr "Opret siden"
 
 #: data/TWiki/TWikiPreferences.txt:314 data/TWiki/TWikiPreferences.txt:316
-#: data/TWiki/WebTopicCreatorTemplate.txt:53 lib/TWiki/Render.pm:88
+#: data/TWiki/WebTopicCreatorTemplate.txt:60 lib/TWiki/Render.pm:89
 msgid "Create this topic"
 msgstr "Opret denne side"
 
@@ -1114,12 +1108,12 @@ msgstr "Kære %1"
 msgid "Debug"
 msgstr "Debug"
 
-#: data/TWiki/WebTopicCreatorTemplate.txt:51
+#: data/TWiki/WebTopicCreatorTemplate.txt:58
 msgid "Default template"
 msgstr "Standard-skabelon"
 
 #: templates/renamedelete.tmpl:17 templates/renamedelete.tmpl:44
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:37
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:29
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:25
 msgid "Delete"
 msgstr "Slet"
@@ -1139,7 +1133,7 @@ msgstr "Slet side"
 msgid "Delete topic..."
 msgstr "Slet side..."
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:49
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:46
 msgid "Describe the file so other people know what it is."
 msgstr "Beskriv filen så andre får et indtryk af hvad den indeholder."
 
@@ -1147,7 +1141,7 @@ msgstr "Beskriv filen så andre får et indtryk af hvad den indeholder."
 msgid "Details in separate window"
 msgstr "Detaljer i separat vindue"
 
-#: data/TWiki/WebTopicViewTemplate.txt:13
+#: data/TWiki/WebTopicViewTemplate.txt:11
 msgid "Did you spell the %1 correctly?"
 msgstr "Stavede du det brugte %1 korrekt?"
 
@@ -1163,8 +1157,8 @@ msgstr "Ændringer:"
 msgid "Do not forget to save your changes"
 msgstr "glem ikke at gemme dine ændringer"
 
-#: templates/attach.tmpl:49
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:59
+#: templates/attach.tmpl:47
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:56
 msgid "Do not show attachment in table"
 msgstr "Vis ikke den vedhæftede fil i tabellen over vedhæftede filer på siden"
 
@@ -1172,11 +1166,11 @@ msgstr "Vis ikke den vedhæftede fil i tabellen over vedhæftede filer på siden
 msgid "Do show:"
 msgstr "Vis:"
 
-#: data/TWiki/WebTopicViewTemplate.txt:27
+#: data/TWiki/WebTopicViewTemplate.txt:26
 msgid "Do you wish to create the topic %1?"
 msgstr "Ønsker du at oprette siden %1?"
 
-#: data/TWiki/WebTopicViewTemplate.txt:20
+#: data/TWiki/WebTopicViewTemplate.txt:18
 msgid "Do you wish to navigate quickly to a similar topic?"
 msgstr "Ønsker du at navigere nemt til en lignende side?"
 
@@ -1236,7 +1230,7 @@ msgstr "E-mail-adressen er opdateret!"
 msgid "Each preference has the syntax"
 msgstr "Alle præferencer har syntaksen"
 
-#: templates/viewtopicactionbuttons.tmpl:51
+#: templates/viewtopicactionbuttons.tmpl:45
 msgid "Edit"
 msgstr "Editér"
 
@@ -1257,7 +1251,6 @@ msgstr "Opdater bruger-information"
 msgid "Edit text"
 msgstr "Editér teksten"
 
-#: twikiplugins/ClassicSkin/templates/view.classic.tmpl:28
 #: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:18
 msgid "Edit this topic text"
 msgstr "Editér denne sides tekst"
@@ -1293,7 +1286,7 @@ msgstr "Angiv et nyt brugernavn og password for at skifte identitet:"
 
 #: templates/login.sudo.tmpl:16
 msgid "Enter the TWiki Administrator user or login as set in configure."
-msgstr ""
+msgstr "Benyt en TWiki Administrator-bruger eller det login som er indtastet i configure."
 
 #: twikiplugins/ClassicSkin/templates/login.classic.tmpl:21
 msgid ""
@@ -1422,7 +1415,7 @@ msgstr ""
 
 #: data/TWiki/WebSearch.txt:5 data/TWiki/WebSearchAdvanced.txt:5
 msgid "Get notified on changes on this search"
-msgstr ""
+msgstr "Få notificering om ændringer i resultaterne af denne søgning"
 
 #: templates/twiki.tmpl:83
 msgid "Go back"
@@ -1459,7 +1452,7 @@ msgstr "Hej %1!"
 msgid "Help"
 msgstr "Hjælp"
 
-#: templates/attach.tmpl:47
+#: templates/attach.tmpl:45
 msgid "Hide file"
 msgstr "Skjul fil"
 
@@ -1587,8 +1580,8 @@ msgstr ""
 "og du ikke registrerer en e-mail ved hjælp af denne formular, er der "
 "mulighed for at din brugerkonto kan overtages af andre."
 
-#: templates/attach.tmpl:41
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:57
+#: templates/attach.tmpl:39
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:54
 msgid "Images will be displayed, for other attachments a link will be created."
 msgstr ""
 "Vedhæftede billeder vises direkte på siden, for andre typer vedhæftede filer "
@@ -1723,7 +1716,7 @@ msgstr "Linie: %1"
 msgid "Line: %1 to %2"
 msgstr "Linie: %1 til %2"
 
-#: templates/attach.tmpl:39
+#: templates/attach.tmpl:37
 msgid "Link"
 msgstr "Link"
 
@@ -1793,7 +1786,7 @@ msgstr "Tilpas søgning"
 msgid "More formatting help"
 msgstr "Mere formateringshjælp"
 
-#: templates/rdiff.tmpl:6 templates/viewtopicactionbuttons.tmpl:90
+#: templates/rdiff.tmpl:6 templates/viewtopicactionbuttons.tmpl:74
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:29
 msgid "More topic actions..."
 msgstr "Flere muligheder med denne side..."
@@ -1803,7 +1796,7 @@ msgid "More..."
 msgstr "Mere..."
 
 #: templates/moveattachment.tmpl:36
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:37
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:29
 msgid "Move"
 msgstr "Flyt"
 
@@ -1819,7 +1812,7 @@ msgstr "Flyt vedhæftet fil til web:"
 msgid "Move file attachment"
 msgstr "Flyt vedhæftet fil"
 
-#: templates/attachagain.tmpl:22
+#: templates/attachagain.tmpl:21
 msgid "Move or delete attachment"
 msgstr "Flyt eller slet vedhæftet fil"
 
@@ -1923,7 +1916,7 @@ msgstr ""
 msgid "Note:"
 msgstr "Note:"
 
-#: data/TWiki/WebTopicViewTemplate.txt:4
+#: data/TWiki/WebTopicViewTemplate.txt:2
 msgid "Note: This topic does not exist"
 msgstr "BEMÆRK: Denne Wiki-side er ikke oprettet endnu"
 
@@ -2031,7 +2024,7 @@ msgstr "Passwords matcher ikke"
 msgid "Personal Preferences"
 msgstr "Personlige præferencer"
 
-#: data/TWiki/WebTopicCreatorTemplate.txt:49 templates/oopsmore.tmpl:55
+#: data/TWiki/WebTopicCreatorTemplate.txt:56 templates/oopsmore.tmpl:55
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:30
 msgid "Pick from a list"
 msgstr "Vælg fra en liste"
@@ -2097,8 +2090,7 @@ msgstr ""
 "Dobbelt-tjek venligst at du har stavet %1 korrekt og forsøg igen. Hvis du må "
 "opgive, send venligst en mail til %2."
 
-#: templates/attach.tmpl:6
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:24
+#: templates/attach.tmpl:5
 msgid ""
 "Please see <a target='TWikiVariables' onclick=\"return launchWindow('%"
 "1','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a> for more "
@@ -2127,7 +2119,7 @@ msgstr "Præferencer"
 msgid "Preferences for"
 msgstr "Præferencer for"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:55
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:52
 msgid "Properties"
 msgstr "Ekstra muligheder"
 
@@ -2231,7 +2223,7 @@ msgstr ""
 msgid "Remember your password?"
 msgstr "Kan du huske dit password?"
 
-#: data/TWiki/WebTopicViewTemplate.txt:13
+#: data/TWiki/WebTopicViewTemplate.txt:11
 msgid "Remember, a %1 is case sensitive."
 msgstr "Husk, store og små bogstaver gør en forskel for et %1."
 
@@ -2658,6 +2650,10 @@ msgstr ""
 "Tak fordi du registrerede dig som bruger i e-samarbejds-platformen %1. Din "
 "aktiveringskode er %2."
 
+#: templates/messages.tmpl:497
+msgid "That user has already been activated "
+msgstr "Denne bruger er allerede aktiveret"
+
 #: templates/messages.tmpl:264
 msgid ""
 "The %1 field must be your first and last name in %2, e.g. your capitalized "
@@ -2787,7 +2783,7 @@ msgstr "Det obligatoriske felt %1 er ikke udfyldt."
 msgid "The selected User System does not support new user registration."
 msgstr "Det valgte bruger-system understøtter ikke nye brugerregistreringer."
 
-#: data/TWiki/WebTopicViewTemplate.txt:6
+#: data/TWiki/WebTopicViewTemplate.txt:4
 msgid "The topic %1 you are trying to access does not exist, yet."
 msgstr "Du forsøger at udføre handlingen på en side %1 der ikke er oprettet endnu."
 
@@ -2798,6 +2794,10 @@ msgstr "Siden er i et gammelt format"
 #: templates/messages.tmpl:214
 msgid "The two passwords you entered do not match."
 msgstr "De to passwords du har indtastet er ikke ens."
+
+#: templates/messages.tmpl:499
+msgid "The user %1 has already been activated, and should be able to log in."
+msgstr "Brugeren %1 er allerede aktiveret, og skulle nu være godkendt til at logge ind."
 
 #: templates/messages.tmpl:373
 msgid "There are problems with renaming this web:"
@@ -2883,7 +2883,7 @@ msgstr "Dette kræver at formular-definitionen er tilgængelig."
 msgid "This site requires at least %1 character passwords"
 msgstr "Dette site kræver at et password er mindst%1 karakterer langt"
 
-#: data/TWiki/WebTopicViewTemplate.txt:25
+#: data/TWiki/WebTopicViewTemplate.txt:19
 msgid "This topic has moved to %1."
 msgstr "Denne side er flyttet til %1."
 
@@ -2958,17 +2958,18 @@ msgstr "Siden kan ikke opgraderes fra den gamle 'category table'-stil"
 msgid "Topic name"
 msgstr "Sidenavn"
 
-#: data/TWiki/WebTopicCreatorTemplate.txt:22
+#: data/TWiki/WebTopicCreatorTemplate.txt:29
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:44
 msgid "Topic name:"
 msgstr "Sidenavn:"
 
-#: data/TWiki/WebTopicCreatorTemplate.txt:27
+#: data/TWiki/WebTopicCreatorTemplate.txt:34
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:51
 msgid "Topic parent:"
 msgstr "Side-forælder:"
 
 #: templates/viewprint.tmpl:14
+#: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:19
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:37
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:62
 msgid "Topic revision:"
@@ -3056,13 +3057,13 @@ msgstr "Opdatér den vedhæftede fil %1 på siden %2"
 msgid "Update links"
 msgstr "Opdatér links"
 
-#: templates/attachagain.tmpl:22 templates/attachnew.tmpl:9
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:41
+#: templates/attachagain.tmpl:21 templates/attachnew.tmpl:9
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:33
 #: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:7
 msgid "Upload file"
 msgstr "Upload fil"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:40
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:37
 msgid "Upload up to %1 KB."
 msgstr "Upload op til %1 KB."
 
@@ -3079,7 +3080,7 @@ msgstr "Den angivne fil er for stor"
 msgid "Use %1 instead."
 msgstr "Brug %1 i stedet."
 
-#: data/TWiki/WebTopicCreatorTemplate.txt:32
+#: data/TWiki/WebTopicCreatorTemplate.txt:39
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:58
 msgid "Use template:"
 msgstr "Brug skabelon:"
@@ -3135,11 +3136,16 @@ msgstr "Vis forskel"
 msgid "View previous topic revision"
 msgstr "Vis en tidligere version af siden"
 
+#: templates/oopsleaseconflict.tmpl:28
+#: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:33
+msgid "View raw text without formatting"
+msgstr "Vis rå kildetekst uden formatering"
+
 #: templates/oopsmore.tmpl:91
 msgid "View revision:"
 msgstr "Vis version:"
 
-#: data/TWiki/WebTopicCreatorTemplate.txt:51
+#: data/TWiki/WebTopicCreatorTemplate.txt:58
 msgid "View templates"
 msgstr "Se skabeloner"
 
@@ -3158,10 +3164,6 @@ msgstr "Vis komplet historik for siden"
 #: data/TWiki/WebTopicNonWikiTemplate.txt:6
 msgid "WARNING:"
 msgstr "ADVARSEL:"
-
-#: templates/viewtopicactionbuttons.tmpl:53
-msgid "WYSIWYG"
-msgstr "WYSIWYG"
 
 #: templates/messages.tmpl:440
 msgid "Warning: Can't INCLUDE %1 repeatedly, topic is already included. %2"
@@ -3324,6 +3326,12 @@ msgstr ""
 "Du kan muligvis overtale din TWiki-administrator til at opdatere de aktuelle "
 "regler, hvis de forekommer uhensigtsmæssige eller synes for restriktive."
 
+#: templates/messages.tmpl:501
+msgid ""
+"You may have clicked a registration verification link that you had already "
+"visited."
+msgstr "Du har muligvis fulgt et aktiveringslink som allerede er blevet fulgt én gang."
+
 #: templates/messages.tmpl:166
 msgid "You may need to close your browser to make this change take effect."
 msgstr "Alle browservinduer skal muligvis lukkes ned før denne ændring slår igennem."
@@ -3443,7 +3451,7 @@ msgstr ""
 "[mellemrum] = [værdi]"
 
 # please enter the name of your language here (written in the native language):
-#: lib/TWiki/I18N.pm:293
+#: lib/TWiki/I18N.pm:292
 msgid "_language_name"
 msgstr "Dansk"
 
@@ -3555,8 +3563,8 @@ msgstr "nu %1"
 #: templates/twiki.tmpl:107
 #: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:9
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:37
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:41
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:29
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:33
 #: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:7
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:36
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:10
@@ -3569,7 +3577,7 @@ msgstr "eller"
 msgid "preview"
 msgstr "vis udkast"
 
-#: lib/TWiki/Render.pm:192
+#: lib/TWiki/Render.pm:193
 msgid "put it back"
 msgstr "flyt siden tilbage"
 
@@ -3586,7 +3594,7 @@ msgstr "finder referencer (kun i _<nop/>%1-webbet_)"
 msgid "scans links in _all public webs_"
 msgstr "søger efter lignende sider i _alle offentlige webs_"
 
-#: templates/viewtopicactionbuttons.tmpl:20
+#: templates/viewtopicactionbuttons.tmpl:14
 msgid "title='Attach an image or document to this topic' accesskey='a'>&Attach"
 msgstr ""
 "title='Vedhæft fx et billede eller et dokument til denne side' "
@@ -3596,11 +3604,7 @@ msgstr ""
 msgid "title='Create new topic' accesskey='c'>&Create"
 msgstr "title='Opret ny side' accesskey='c'>Opret (&C)"
 
-#: templates/viewtopicactionbuttons.tmpl:14
-msgid "title='Create this topic' accesskey='w'>Create (&WYSIWYG)"
-msgstr "title='Opret ny side' accesskey='w'>Opret (&WYSIWYG)"
-
-#: templates/viewtopicactionbuttons.tmpl:23
+#: templates/viewtopicactionbuttons.tmpl:17
 msgid ""
 "title='Delete or rename this topic; set parent topic; view and compare "
 "revisions' accesskey='m'>&More topic actions"
@@ -3612,11 +3616,7 @@ msgstr ""
 msgid "title='Edit this topic text' accesskey='e'>&Edit"
 msgstr "title='Editér denne side' accesskey='e'>&Editér"
 
-#: templates/viewtopicactionbuttons.tmpl:11
-msgid "title='Edit this topic text' accesskey='w'>&WYSIWYG"
-msgstr "title='Editér denne side' accesskey='w'>&WYSIWYG"
-
-#: templates/viewtopicactionbuttons.tmpl:27
+#: templates/viewtopicactionbuttons.tmpl:21
 msgid "title='Printable version of this topic' accesskey='p'>&Print version"
 msgstr "title='Printbar version af denne side' accesskey='p'>&Printable"
 
@@ -3624,13 +3624,13 @@ msgstr "title='Printbar version af denne side' accesskey='p'>&Printable"
 msgid "title='Raw Edit this topic text' accesskey='w'>Ra&w edit"
 msgstr "title='Editér denne sides kildetekst' accesskey='w'>Rå editéring (&w)"
 
-#: templates/viewtopicactionbuttons.tmpl:34
+#: templates/viewtopicactionbuttons.tmpl:28
 msgid "title='Search all webs for topics that link to here' accesskey='l'>A&ll Webs"
 msgstr ""
 "title='Søg i alle webs efter sider der linker til denne side ' "
 "accesskey='l'>A&lle webs"
 
-#: templates/viewtopicactionbuttons.tmpl:36
+#: templates/viewtopicactionbuttons.tmpl:30
 msgid ""
 "title='Search the %1 Web for topics that link to here' "
 "accesskey='b'>&Backlinks"
@@ -3638,26 +3638,28 @@ msgstr ""
 "title='Søg i %1-webbet efter sider der linker til denne side' "
 "accesskey='b'>Referencer (&B)"
 
-#: templates/viewtopicactionbuttons.tmpl:32
+#: templates/viewtopicactionbuttons.tmpl:26
 msgid "title='Search the %1 Web for topics that link to here' accesskey='b'>We&b"
 msgstr ""
 "title='Søg i %1-webbet efter sider der linker til denne side ' "
 "accesskey='b'>We&b"
 
-#: templates/viewtopicactionbuttons.tmpl:44
+#: templates/viewtopicactionbuttons.tmpl:38
 msgid "title='View raw text without formatting' accesskey='r'>&Raw View"
-msgstr "title='Vis denne sides kildetekst (uden formatering)' accesskey='r'>&Rå visning"
+msgstr ""
+"title='Vis denne sides kildetekst (uden formatering)' accesskey='r'>&Rå "
+"visning"
 
-#: templates/viewtopicactionbuttons.tmpl:17
+#: templates/viewtopicactionbuttons.tmpl:11
 msgid "title='View topic' accesskey='v'>&View topic"
 msgstr "title='Vis side' accesskey='v'>&Vis side"
 
-#: templates/viewtopicactionbuttons.tmpl:39
-#: templates/viewtopicactionbuttons.tmpl:41
+#: templates/viewtopicactionbuttons.tmpl:33
+#: templates/viewtopicactionbuttons.tmpl:35
 msgid "title='View total topic history' accesskey='h'>&History"
 msgstr "title='Vis komplet historik for siden' accesskey='h'>&Historik "
 
-#: lib/TWiki.pm:3919
+#: lib/TWiki.pm:3924
 msgid "user list truncated"
 msgstr "brugerliste afkortet"
 
