@@ -1188,6 +1188,8 @@ $TWiki::cfg{Plugins}{TablePlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{EditTablePlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{SlideShowPlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{TwistyPlugin}{Enabled} = 1;
+$TWiki::cfg{Plugins}{TinyMCEPlugin}{Enabled} = 1;
+$TWiki::cfg{Plugins}{WysiwygPlugin}{Enabled} = 1;
 
 # **STRING 80**
 # Plugins evaluation order. If set to a comma-separated list of plugin names,
