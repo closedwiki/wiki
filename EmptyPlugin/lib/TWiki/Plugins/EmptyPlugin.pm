@@ -68,6 +68,9 @@ package TWiki::Plugins::EmptyPlugin;
 # Always use strict to enforce variable scoping
 use strict;
 
+require TWiki::Func;    # The plugins API
+require TWiki::Plugins; # For the API version
+
 # $VERSION is referred to by TWiki, and is the only global variable that
 # *must* exist in this package.
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC );
@@ -704,10 +707,16 @@ should be done by the built-in type handlers.
      any. May be a scalar (one legal value) or a ref to an array
      (several legal values)
 
-Return HTML text that renders this field. If false, form rendering 
+Return HTML text that renders this field. If false, form rendering
 continues by considering the built-in types.
 
 *Since:* TWiki::Plugins::VERSION 1.1
+
+Note that since TWiki-4.2, you can also extend the range of available
+types by providing a subclass of =TWiki::Form::FieldDefinition= to implement
+the new type (see =TWiki::Plugins.JSCalendarContrib= and
+=TWiki::Plugins.RatingContrib= for examples). This is the preferred way to
+extend the form field types, but does not work for TWiki < 4.2.
 
 =cut
 
@@ -734,6 +743,21 @@ Return the new link text.
 sub DISABLE_renderWikiWordHandler {
     my( $linkText, $hasExplicitLinkLabel, $web, $topic ) = @_;
     return $linkText;
+}
+
+=pod
+
+---++ completePageHandler($text, $contentType)
+
+This handler is called on the complete HTML page of every page that is
+output by the standard TWiki scripts. It is designed primarily for use by
+cache and security plugins.
+
+=cut
+
+sub DISABLE_completePageHandler {
+    #my( $text, $contentType) = @_;
+    # modify $_[0] or $_[1] if you must change the HTML or content type
 }
 
 =pod
