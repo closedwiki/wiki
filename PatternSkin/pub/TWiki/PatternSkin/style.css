@@ -387,7 +387,7 @@ table.twikiFormTable th.twikiFormTableHRow {
 .twikiFormTableFooter {}
 .twikiAttachments .twikiTable td,
 table.twikiFormTable td {
-	padding:3px 6px;
+	padding:3px 2em 3px 1em;
 	height:1.5em; /*S1*/
 	text-align:left;
 	vertical-align:top;
@@ -524,7 +524,9 @@ table.twikiFormTable th.twikiFormTableHRow a:visited {
 .twikiHelp {
 	height:1%; /* for IE */
 	padding:1em;
-	margin:0 0 -1px 0;
+	margin:0;
+	border-style:solid;
+	border-width:4px;
 }
 .twikiHelp ul {
 	margin:0;
@@ -1020,11 +1022,11 @@ h4.patternSearchResultsHeader {
 	/* same as patternBookView */
 	border-width:0 0 2px 2px;
 	border-style:solid;
-	margin:.5em 0 1.5em -5px;
-	padding:0 0 0 5px;
+	margin:.5em 0 1.5em 0;
+	padding:0 0 0 10px;
 }
 .patternDiff h4.patternSearchResultsHeader {
-	padding:.5em;
+	padding:.5em 10px;
 }
 .patternDiffPage .patternRevInfo ul {
 	padding:0;
