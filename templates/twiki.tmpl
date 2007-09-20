@@ -58,18 +58,20 @@
 
 %TMPL:DEF{"attachments"}%%TMPL:END%
 
-%TMPL:DEF{"standardheader"}%<div>
-<div class="twikiLeft"><noautolink><a href="%WEBLOGOURL%" rel='nofollow'><img src="%WEBLOGOIMG%" border="0" alt="%WEBLOGOALT%" /></a></noautolink></div>
+%TMPL:DEF{"standardheader"}%
+<div style="margin:0 0 0 0em; padding:3px; background-color:%WEBBGCOLOR%">
+<div>
+<div class="twikiLeft" style="padding-right:2em;"><noautolink><a href="%WEBLOGOURL%" rel='nofollow'><img src="%WEBLOGOIMG%" border="0" alt="%WEBLOGOALT%" /></a></noautolink></div>
 <div class="twikiLeft">
-<span style="margin:0 0 0 1em; padding:3px; background-color:%WEBBGCOLOR%"><a href="%SCRIPTURLPATH{"view"}%/%WEB%/%HOMETOPIC%">%WEB%</a></span> &gt; %META{"parent" nowebhome="on" suffix=" &gt;"}% <b>%TOPIC%</b> %TMPL:P{"titleaction"}%</div>
+<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%HOMETOPIC%">%WEB%</a> &gt; %META{"parent" nowebhome="on" suffix=" &gt;"}% <b>%TOPIC%</b> %TMPL:P{"titleaction"}%</div>
 <div class="twikiRight twikiSmall">%WIKITOOLNAME% webs: %WIKIWEBLIST% &nbsp; %TMPL:P{"login"}%</div><br class="twikiClear" /></div>
 <form name="main" action="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">
-%TMPL:P{"webaction"}%</form>%TMPL:END%
+%TMPL:P{"webaction"}%</form></div>%TMPL:END%
 
-%TMPL:DEF{"simpleheader"}%<div><div class="twikiLeft"><noautolink><img src="%WEBLOGOIMG%" border="0" alt="%WEBLOGOALT%" /></noautolink></div>
-<div class="twikiLeft">
-<span style="margin:0 0 0 1em; padding:3px; background-color:%WEBBGCOLOR%">%WEB%&nbsp;</span> %TOPIC% %TMPL:P{"titleaction"}%</div><br class="twikiClear" />
-</div>%TMPL:P{"headerhelp"}%%TMPL:END%
+%TMPL:DEF{"simpleheader"}%
+<div style="margin:0 0 0 0em; padding:3px; background-color:%WEBBGCOLOR%">
+<div><div class="twikiLeft"  style="padding-right:2em;"><noautolink><img src="%WEBLOGOIMG%" border="0" alt="%WEBLOGOALT%" /></noautolink></div>
+<div class="twikiLeft"> %WEB%&nbsp; %TOPIC% %TMPL:P{"titleaction"}%</div><br class="twikiClear" /> </div></div>%TMPL:P{"headerhelp"}%%TMPL:END%
 
 %TMPL:DEF{"copyright"}%<div class="twikiCopyright">%WEBCOPYRIGHT%</div>%TMPL:END%
 
