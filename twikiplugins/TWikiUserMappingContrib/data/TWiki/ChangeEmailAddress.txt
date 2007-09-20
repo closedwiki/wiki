@@ -21,9 +21,9 @@
 Registered e-mail addresses for currently logged in user (=%USERINFO{format="$wikiname"}%=): %USERINFO{format="$emails"}% 
 </div>
 <div class="twikiFormStep">
-%TABLE{databg="" cellborder="0" tableborder="0"}%
+%TABLE{databg="transparent" tableborder="0" tablerules="none"}%
 | | %MAKETEXT{"Fields marked [_1] are required" args="=<font color='red'>**</font>="}% |
-|  %MAKETEXT{"Your [_1].LoginName" args="%SYSTEMWEB%"}%: | <input type="text" name="username" value="%URLPARAM{"username" default="%USERNAME%"}%" size="40" class="twikiInputField" /> =<font color="red">**</font>= |
+|  %MAKETEXT{"Your [_1].LoginName" args="%TWIKIWEB%"}%: | <input type="text" name="username" value="%URLPARAM{"username" default="%USERNAME%"}%" size="40" class="twikiInputField" /> =<font color="red">**</font>= |
 |  %MAKETEXT{"Password"}%: | <input type="password" name="oldpassword" value="%URLPARAM{oldpassword}%" size="40" class="twikiInputField" /> =<font color="red">**</font>= |
 |  %MAKETEXT{"New e-mails (space-separated list)"}%: | <input type="text" name="email" size="40" class="twikiInputField" /> =<font color="red">**</font>= |
 </div>
@@ -37,7 +37,7 @@ Registered e-mail addresses for currently logged in user (=%USERINFO{format="$wi
 
 <div class="twikiHelp">
    * %ICON{info}% %MAKETEXT{"If you have any questions, please contact [_1]" args="%WIKIWEBMASTER%"}%
-   * %ICON{info}% %MAKETEXT{"[_1] has a list of other TWiki users" args="%USERSWEB%.%WIKIUSERSTOPIC%"}%
+   * %ICON{info}% %MAKETEXT{"[_1] has a list of other TWiki users" args="%MAINWEB%.%WIKIUSERSTOPIC%"}%
 </div>
 
 %STOPINCLUDE%
