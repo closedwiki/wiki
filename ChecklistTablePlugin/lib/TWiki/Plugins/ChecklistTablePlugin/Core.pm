@@ -863,7 +863,9 @@ sub _encode {
 sub _editencode  {
 	my ($text,$html) = @_;
 	
-	$text = _encode($text);
+	#$text =~ s/\&/&amp;/g;
+	$text =~ s/\|/&#124;/g;
+	$text =~ s/\r?\n/<br\/>/g;
 	$text =~ s/<br\s*\/?>/&#10;/g;	 ## prevent <br/> -> \r\n
 	$text =~ s/\*/&#35;/g; ## prevent *..* -> <strong>...
 	$text =~ s/_/&#95;/g; ## prevent _.._ -> <i>...
@@ -874,6 +876,7 @@ sub _editencode  {
 	
 	
 	$text =~ s/</&#60;/g;
+	$text =~ s/>/&#62;/g;
 	$text =~ s/(\%)/'&#'.ord($1).';'/eg;
 
 	return $text;
@@ -890,8 +893,9 @@ sub _editdecode {
 	$text =~ s/&(amp;)?#91;/[/g;
 	$text =~ s/&(amp;)?#33;/!/g;
 	$text =~ s/&(amp;)?#60;/</g;
+	$text =~ s/&(amp;)?#62;/>/g;
 
-	$text =~ s/&(amp;)#(\d+);/&#$2;/g; ## fix encoded characters &amp;#....;
+	$text =~ s/&amp;#(\d+);/&#$1;/g; ## fix encoded characters &amp;#....;
 	return $text;
 }
 # =========================
