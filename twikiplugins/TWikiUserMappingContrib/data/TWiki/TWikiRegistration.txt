@@ -124,7 +124,7 @@ return sOut;
 </tr><tr>
   <td align="right"> %MAKETEXT{"Country:"}% </td>
   <td>
-  <select %NOREGISTRATION%  name="Twk1Country" size="1">
+  <select class="twikiSelect" %NOREGISTRATION%  name="Twk1Country" size="1">
   <option selected value="">Select...</option>
   <option>USA</option>
   <option>Albania</option>
