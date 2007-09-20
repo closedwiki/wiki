@@ -1,4 +1,5 @@
-%{ This is a default template }%%TMPL:INCLUDE{"edit"}%
+%{ This is a default template }%
+%TMPL:INCLUDE{"edit"}%
 
 
 %TMPL:DEF{"templatestyle"}%<style type="text/css" media="all">
@@ -22,6 +23,8 @@
 
 %TMPL:DEF{"formparameters:preview"}%<input type="hidden" name="text" value="%HIDDENTEXT%"/>%FORMFIELDS%%TMPL:END%
 
+%{ disable the wysiwyg edit help in preview }%
+%TMPL:DEF{"help"}%%TMPL:END%
 
 %TMPL:DEF{"content"}%%TMPL:P{"alert"}%%TMPL:P{"formstart"}%
 <div class="twikiPreviewArea">
