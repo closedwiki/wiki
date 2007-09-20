@@ -41,7 +41,7 @@
 %TMPL:P{"form"}%%TMPL:P{"attachments"}%
 %TMPL:P{"topicinfo"}%%TMPL:END%
 
-%TMPL:DEF{"topicaction"}%  %TMPL:P{context="inactive" then="inactive_edit" else="edit_topic_link"}%  %TMPL:P{"sep"}% %TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}%
+%TMPL:DEF{"topicactionbuttons"}%  %TMPL:P{context="inactive" then="inactive_edit" else="edit_topic_link"}%  %TMPL:P{"sep"}% %TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}%
   %TMPL:P{"sep"}% Backlinks: <a href="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=backlinksweb" title="Search the <nop>%WEB% Web for topics that link to here">Web</a> <a href="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=backlinksallwebs" title="Search all webs for topics that link to here">All webs</a>
   %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?cover=print%REVARG%" rel='nofollow'>Printable</a>
   %TMPL:P{"sep"}% %TMPL:P{"revisions"}%
