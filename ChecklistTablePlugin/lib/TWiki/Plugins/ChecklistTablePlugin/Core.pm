@@ -861,7 +861,7 @@ sub _encode {
 }
 # =========================
 sub _editencode  {
-	my ($text,$html) = @_;
+	my ($text) = @_;
 	
 	#$text =~ s/\&/&amp;/g;
 	$text =~ s/\|/&#124;/g;
@@ -873,10 +873,10 @@ sub _editencode  {
 	$text =~ s/:/&#58;/g; ## -> http: 
 	$text =~ s/\[/&#91;/g; ## -> [[ForcedLink]]
 	$text =~ s/!/&#33;/g;
-	
-	
 	$text =~ s/</&#60;/g;
 	$text =~ s/>/&#62;/g;
+	$text =~ s/ /&#32;/g; ## -> prevent WikiWord substitions
+	
 	$text =~ s/(\%)/'&#'.ord($1).';'/eg;
 
 	return $text;
@@ -894,6 +894,7 @@ sub _editdecode {
 	$text =~ s/&(amp;)?#33;/!/g;
 	$text =~ s/&(amp;)?#60;/</g;
 	$text =~ s/&(amp;)?#62;/>/g;
+	$text =~ s/&(amp;)?#32;/ /g;
 
 	$text =~ s/&amp;#(\d+);/&#$1;/g; ## fix encoded characters &amp;#....;
 	return $text;
