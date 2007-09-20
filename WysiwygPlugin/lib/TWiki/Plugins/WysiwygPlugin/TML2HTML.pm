@@ -209,6 +209,8 @@ sub _getRenderedVersion {
 
     $this->{removed} = {}; # Map of placeholders to tag parameters and text
 
+    $text = $this->_takeOutBlocks( $text, 'literal' );
+
     $text = $this->_takeOutBlocks( $text, 'verbatim' );
 
     $text = $this->_takeOutSets( $text );
@@ -405,21 +407,12 @@ sub _getRenderedVersion {
     $text =~ s/$STARTWW(($TWiki::regex{webNameRegex}\.)?$TWiki::regex{wikiWordRegex}($TWiki::regex{anchorRegex})?)/$this->_liftOut($1, 'LINK')/geom;
 
     while (my ($placeholder, $val) = each %{$this->{removed}} ) {
-        my $pm = $val->{params}->{class};
         if( $placeholder =~ /^noautolink/i ) {
-            if( $pm ) {
-                $pm = join(' ', ( split( /\s+/, $pm ), 'WYSIWYG_NOAUTOLINK' ));
-            } else {
-                $pm = 'WYSIWYG_NOAUTOLINK';
-            }
-            $val->{params}->{class} = $pm;
+            _addClass( $val->{params}->{class}, 'WYSIWYG_NOAUTOLINK' );
         } elsif( $placeholder =~ /^verbatim/i ) {
-            if( $pm ) {
-                $pm = join(' ', ( split( /\s+/, $pm ), 'TMLverbatim' ));
-            } else {
-                $pm = 'TMLverbatim';
-            }
-            $val->{params}->{class} = $pm;
+            _addClass( $val->{params}->{class}, 'TMLverbatim');
+        } elsif( $placeholder =~ /^literal/i ) {
+            _addClass( $val->{params}->{class}, 'WYSIWYG_LITERAL');
         }
     }
 
@@ -430,9 +423,19 @@ sub _getRenderedVersion {
     # replace verbatim with pre in the final output, with encoded entities
     $this->_putBackBlocks( $text, 'verbatim', 'pre', \&_encodeEntities );
 
+    $this->_putBackBlocks( $text, 'literal', 'div' );
+
     $text =~ s/(<nop>)/$this->_liftOut($1, 'PROTECTED')/ge;
 
     return $text;
+}
+
+sub _addClass {
+    if( $_[0] ) {
+        $_[0] = join(' ', ( split( /\s+/, $_[0] ), $_[1] ));
+    } else {
+        $_[0] = $_[1];
+    }
 }
 
 sub _encodeEntities {

@@ -122,9 +122,6 @@ HERE
         return;
     }
 
-    my $brinf = join(' ',map { "$_=$browserInfo{$_}" } keys %browserInfo);
-    my $ua = $query->user_agent() || '';
-
     my $USE_SRC = '';
     if (TWiki::Func::getPreferencesValue('TINYMCEPLUGIN_DEBUG')) {
         $USE_SRC = '_src';
@@ -133,19 +130,15 @@ HERE
     # Add the Javascript for the editor. When it starts up the editor will
     # use a REST call to the WysiwygPlugin tml2html REST handler to convert
     # the textarea content from TML to HTML.
+    my $pluginURL = '%PUBURL%/%SYSTEMWEB%/TinyMCEPlugin';
+    my $tmceURL = $pluginURL.'/tinymce/jscripts/tiny_mce';
+    # expand and URL-encode the init string
+    my $metainit = TWiki::Func::expandCommonVariables($init);
+    $metainit =~ s/([^0-9a-zA-Z-_.:~!*'\/%])/'%'.sprintf('%02x',ord($1))/ge;
     TWiki::Func::addToHEAD('tinyMCE', <<SCRIPT);
-<script language="javascript" type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/tiny_mce$USE_SRC.js"></script>
-<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TinyMCEPlugin/twiki$USE_SRC.js"></script>
-<script type="text/javascript">
-// <![CDATA[
-// BROWSER $brinf
-// UA '$ua'
-// EXTRAS $extras
-tinyMCE.init({ $init });
-// ]]>
-</script>
-<script language="javascript" type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TinyMCEPlugin//tinymce/jscripts/tiny_mce/plugins/twikiimage/jscripts/functions$USE_SRC.js"></script>
-<script language="javascript" type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TinyMCEPlugin//tinymce/jscripts/tiny_mce/plugins/twikiimage/editor_plugin$USE_SRC.js"></script>
+<meta name="TINYMCEPLUGIN_INIT" content="$metainit">
+<script language="javascript" type="text/javascript" src="$tmceURL/tiny_mce$USE_SRC.js"></script>
+<script language="javascript" type="text/javascript" src="$pluginURL/twiki$USE_SRC.js"></script>
 SCRIPT
 
     # See TWiki.IfStatements for a description of this context id.

@@ -273,6 +273,20 @@ sub generate {
     my $text;
 
     my $tag = uc( $this->{tag} );
+
+    if (_hasClass($this->{attrs}, 'WYSIWYG_LITERAL')) {
+        if ($tag eq 'DIV' || $tag eq 'P') {
+            $text = '';
+            foreach my $kid ( @{$this->{children}} ) {
+                $text .= $kid->stringify();
+            }
+        } else {
+            _removeClass($this->{attrs}, 'WYSIWYG_LITERAL');
+            $text = $this->stringify();
+        }
+        return ( 0, '<literal>'.$text.'</literal>' );
+    }
+
     if( $options & $WC::NO_HTML ) {
         # NO_HTML implies NO_TML
         my $brats = $this->_flatten( $options );
@@ -312,6 +326,7 @@ sub _flatten {
     my( $this, $options ) = @_;
     my $text = '';
     my $flags = 0;
+
     my $protected = ($options & $WC::PROTECTED) ||
       _hasClass($this->{attrs}, 'WYSIWYG_PROTECTED') || 0;
 

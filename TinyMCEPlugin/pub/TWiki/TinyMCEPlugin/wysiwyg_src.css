@@ -1,0 +1,28 @@
+.WYSIWYG_LINK {
+  color:blue;
+  text-decoration:underline;
+}
+
+.WYSIWYG_NOAUTOLINK {
+  color:green;
+}
+
+.WYSIWYG_PROTECTED {
+  font-family:"Courier New", courier, monaco, monospace;
+//  background-image:url(protected.gif);
+  color:#7A4707;
+  white-space:pre;
+}
+
+.WYSIWYG_LITERAL {
+  font-family:"Courier New", courier, monaco, monospace;
+//  background-image:url(literal.gif);
+  color:#606060;
+}
+
+.TMLverbatim {
+  font-family:"Courier New", courier, monaco, monospace;
+  font-size:12pt;
+  background-image:url(verbatim.gif);
+  white-space:pre nowrap;
+}
