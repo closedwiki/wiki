@@ -1,2 +1,3 @@
-TWiki::Plugins::NatSkinPlugin,>=3.0-pre1,perl,Required. Download from the TWiki:Plugins/NatSkinPlugin code library.
+TWiki::Plugins::NatSkinPlugin,>=3.0-pre14,perl,Required. Download from the TWiki:Plugins/NatSkinPlugin code library.
 TWiki::Plugins::NatEditContrib,>=1.33,twiki,Required. Download from the TWiki:Plugins/NatEditContrib add-on. 
+TWiki::Plugins::JQueryPlugin,>=0.2,twiki,Required. Download from the TWiki:Plugins/JQueryPlugin add-on. 

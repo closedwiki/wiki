@@ -12,6 +12,14 @@
 %TOC%
 
 ---++ Description
+<table style="float:right">
+<tr>
+  <td><img src="%ATTACHURLPATH%/wikiringlogo40x40.png"></td>
+  <td><a href="http://wikiring.de" title="Make your Wiki ring!" style="text-decoration:none;color:#0065CD">
+      Powered by <br /> <nop>WikiRing Consultants </a>
+  </td>
+</tr>
+</table>
 NatSkin is a skin driven by cascading stylesheets shipping 12 predefined styles
 (themes) and 11 variations that can be applied to each of it. Most of these are
 inspired by [[http://www.movabletype.org][MovableType]] and
@@ -23,6 +31,8 @@ the TWiki/Cairo release. While offering a decent appearance NatSkin offers an in
 TWiki usability and customizability in several respects to quickly accomplish a
 personalized wiki experience.
 
+NatSkin allows you to switch between several kinds of page layouts. All of the
+predefined themes come with support for a 1,2 and 3 columns designs.
 To get a first impression check out the NatSkinStyleBrowser:
    * select one of the predefined styles
    * alter the header art by selecting a style variation
@@ -74,6 +84,7 @@ the templates by using the NatSkin as a base skin to create template modificatio
    * <nop>WebButtons: navigation tabs above the topic area
    * <nop>MySideBar: every user can extend the sidebar with a personalized navigation
    * <nop>WebCss: additional css code per web
+   * <nop>WebJavaScript: additional javascript code per web
    * <nop>WebTopicActions: actions to manipulate TWiki topics
    * <nop>WebMoreTopicActions: actions when clicking on "More"
 
@@ -129,7 +140,7 @@ allways open an extra window.
 |  Skin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Skin Version: | v3.0-pre14 |
+|  Skin Version: | v3.0-pre15 |
 |  Dependencies: | TWiki:Plugins/NatSkinPlugin |
 |  Description: | Driven by cascading stylesheets, Comes with 12 alternative styles, <nop>MoveableType and Wordpress Look-n-Feel |
 |  Base Name: | nat |
@@ -145,6 +156,21 @@ allways open an extra window.
    <div class="screenshotter"><a href="%ATTACHURL%/SquashThin.jpeg"><img src="%ATTACHURL%/SquashThin.jpeg" title="SquashThin" /></a></div>\
    <div class="screenshotter"><a href="%ATTACHURL%/StormyThin.jpeg"><img src="%ATTACHURL%/StormyThin.jpeg" title="StormyThin" /></a></div> |
 |  Change&nbsp;History: | <!-- specify latest version first -->&nbsp; |
+|  21 Sep 2007: | removed own NatEdit implementation, \
+                  improved move/rename usability, \
+                  improved searching usability, \
+                  added suport for plucene addon, \
+                  improved sidebar navigation, \
+                  simplified templating, \
+                  reworked font sizing, \
+                  improved default theme (Clean), \
+                  removed workarounds for legacy TablePlugins, \
+                  fixed css for IE7, \
+                  fixed empty line in weblinks component, \
+                  fixed reparenting issue in edit dialog, \
+                  reworked javascript to use jquery instead, \
+                  numerous markup and css fixes, \
+                  better attachment table at bottom of topics |
 |  21 May 2007: | Bugs:Item3969 - 8bit email fix (TWiki:Main.WillNorris) |
 |  08 Mar 2007: | fixed sidebar navigation in IE; fixed twikiPageForms width for FF |
 |  06 Mar 2007: | fixed renameweb; nicened all rename dialogs; \
@@ -380,4 +406,6 @@ allways open an extra window.
 
 __Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki:TWiki/TWikiSkinBrowser
 
--- TWiki:Main/MichaelDaum - 08 Mar 2007
+-- TWiki:Main/MichaelDaum - 21 Sep 2007
+
+%META:FILEATTACHMENT{name="wikiringlogo40x40.png" attachment="wikiringlogo40x40.png" attr="h" comment="" date="1189787359" path="wikiringlogo40x40.png" size="2571" stream="wikiringlogo40x40.png" tmpFilename="" user="TWikiContributor" version="1"}%

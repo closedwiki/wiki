@@ -56,7 +56,6 @@ pub/TWiki/NatSkin/GettysburgThin.css 0644
 pub/TWiki/NatSkin/GettysburgThin.jpeg 0644
 pub/TWiki/NatSkin/Gettysburg.jpeg 0644
 pub/TWiki/NatSkin/GrayBlend.png 0644
-pub/TWiki/NatSkin/HeadingBlend.png 0644
 pub/TWiki/NatSkin/IndependenceBorder.css 0644
 pub/TWiki/NatSkin/IndependenceButtons.css 0644
 pub/TWiki/NatSkin/IndependenceStyle.css 0644
@@ -124,7 +123,6 @@ pub/TWiki/NatSkin/SubwayBar.jpg 0644
 pub/TWiki/NatSkin/SubwayVariation.css 0644
 pub/TWiki/NatSkin/WaterBar.jpg 0644
 pub/TWiki/NatSkin/WaterVariation.css 0644
-pub/TWiki/NatSkin/bottom-shade.png 0644
 pub/TWiki/NatSkin/button_cancel.png 0644
 pub/TWiki/NatSkin/button_done.png 0644
 pub/TWiki/NatSkin/dots.gif 0644
@@ -151,6 +149,7 @@ pub/TWiki/NatSkin/q_gray.gif 0644
 pub/TWiki/NatSkin/q_red.gif 0644
 pub/TWiki/NatSkin/quote.gif 0644
 pub/TWiki/NatSkin/quote.png 0644
+pub/TWiki/NatSkin/wikiringlogo40x40.png 0644
 templates/addform.nat.tmpl 0644
 templates/attachagain.nat.tmpl 0644
 templates/attach.nat.tmpl 0644
