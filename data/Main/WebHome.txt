@@ -1,7 +1,10 @@
 %META:TOPICINFO{author="TWikiContributor" date="1120846368" format="1.1" version="$Rev$"}%
 ---+!! Welcome to the <nop>%USERSWEB% web 
-Congratulations, you have finished the TWiki installation. If you want to learn
-more about TWiki then visit the [[%SYSTEMWEB%.WebHome][TWiki web]]. Please ensure that the read/write
+Congratulations, you have finished installing TWiki.
+
+This site is running TWiki version *%WIKIVERSION%*, Plugin API version *%PLUGINVERSION{}%*
+
+To learn more about TWiki, visit the [[%SYSTEMWEB%.WebHome][TWiki web]]. Please ensure that the read/write
 permissions for each web on your site match your access control policies (see TWiki.SitePermissions
 and [[%SYSTEMWEB%.TWikiPreferences]]). Replace this text with a description of your new
 %IF{"defined WIKITOOLNAME" then="<nop>%WIKITOOLNAME%" else="TWiki"}% site. 

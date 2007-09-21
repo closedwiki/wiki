@@ -77,6 +77,9 @@ Then these settings can be retrieved as preferences variables like =%&lt;pluginn
 
 Plugin status variables let you list all active Plugins wherever needed.
 
+This site is running TWiki version *%WIKIVERSION%*, Plugin API version
+*%PLUGINVERSION{}%*
+
 #ActivatedPlugins
 ---++++ =%<nop>ACTIVATEDPLUGINS%=
 On this TWiki site, the enabled Plugins are: %ACTIVATEDPLUGINS%.
@@ -369,4 +372,3 @@ If the currently-running TWiki version is 1.1 _or later_, then the _handler will
 %STOPINCLUDE%
 __Related Topics:__ DeveloperDocumentationCategory, AdminDocumentationCategory, TWiki:TWiki.TWikiPluginsSupplement
 
--- __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.AndreaSterbini, TWiki:MainMikeMannix, TWiki:CrawfordCurrie
