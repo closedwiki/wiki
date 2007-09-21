@@ -1877,7 +1877,7 @@ sub replaceTopicReferences {
 
     my $re = getReferenceRE( $oldWeb, $oldTopic );
 
-    $text =~ s/$re/$repl/g;
+    $text =~ s/($re)/_doReplace($1, $newWeb, $repl)/ge;
 
     # Now URL form
     $repl = "/$newWeb/$newTopic";
@@ -1885,6 +1885,16 @@ sub replaceTopicReferences {
     $text =~ s/$re/$repl/g;
 
     return $text;
+}
+
+sub _doReplace {
+    my ($match, $web, $repl) = @_;
+    # Bugs:Item4661 If there is a web defined in the match, then
+    # make sure there's a web defined in the replacement.
+    if ($match =~ /\./ && $repl !~ /\./) {
+        $repl = "$web.$repl";
+    }
+    return $repl;
 }
 
 =pod
