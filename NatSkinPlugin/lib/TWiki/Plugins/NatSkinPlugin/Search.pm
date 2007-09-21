@@ -71,7 +71,7 @@ sub new {
     excludeTopic => TWiki::Func::getPreferencesValue('NATSEARCHEXCLUDETOPIC') || '',
     searchTemplate => TWiki::Func::getPreferencesValue('NATSEARCHTEMPLATE') || '',
     ignoreCase => TWiki::Func::getPreferencesFlag('NATSEARCHIGNORECASE'),
-    limit => TWiki::Func::getPreferencesFlag('NATSEARCHLIMIT') || 10,
+    limit => TWiki::Func::getPreferencesFlag('NATSEARCHLIMIT') || 0,
     globalSearch => TWiki::Func::getPreferencesFlag('NATSEARCHGLOBAL'),
     keywordSearch => TWiki::Func::getPreferencesFlag('NATSEARCHKEYWORDS'),
     egrepCmd=> $TWiki::cfg{NatSearch}{EgrepCmd} || '/bin/egrep',
@@ -136,7 +136,7 @@ sub search {
     &TWiki::Func::redirectCgiQuery($query, $editUrl);
     return '';
   }
-  $this->{ignoreCase} = ($options =~ /u/ || $this->{ignoreCase}) ? 1 : 0;
+  $this->{keywordSearch} = ($options =~ /k/ || $this->{keywordSearch}) ? 1 : 0;
 
   # construct the list of webs to search in
   $this->{globalSearch} = 1 if $theWeb eq 'all';
