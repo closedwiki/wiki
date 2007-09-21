@@ -12,6 +12,14 @@
 %TOC%
 
 ---++ Description
+<table style="float:right">
+<tr>
+  <td><img src="%PUBURLPATH%/%SYSTEMWEB%/NatSkin/wikiringlogo40x40.png"></td>
+  <td><a href="http://wikiring.de" title="Make your Wiki ring!" style="text-decoration:none;color:#0065CD">
+      Powered by <br /> <nop>WikiRing Consultants </a>
+  </td>
+</tr>
+</table>
 This is the supplemental plugin for the NatSkin. Its main purpose is to supply
 "skin states" to control different styles and variations to be switched
 dynamically while you are online. 
@@ -88,7 +96,7 @@ conditionally returns content depending on the current skin state;
 The tag will render the "then" content if all tests evaluate to true and 
 the "else" content otherwise. Tested strings can be regular expressions. 
 
----+++ IFSKINSTATETHEN, ELSIFSKINSTATE, ELSESKINSTATE, FISKINSTATE
+---+++ Sectional IFSKINSTATETHEN
 *Syntax*: 
 <verbatim>
 %IFSKINSTATETHEN{<tests>}% 
@@ -282,14 +290,7 @@ returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin 
    * [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] the ZIP file
    * Unzip it in your twiki installation directory. Content: 
      | *File:* | *Description:* |
-     | ==bin/natlogon== | logon cgi script |
-     | ==bin/natsearch== | search cgi script |
-     | ==data/TWiki/%TOPIC%.txt== | plugin topic |
-     | ==lib/TWiki/Plugins/NatSkinPlugin.pm== | main module |
-     | ==lib/TWiki/Plugins/NatSkinPlugin/Search.pm== | <nop>NatSearch module |
-     | ==lib/TWiki/Plugins/NatSkinPlugin/Auth.pm== | authentication module |
-   * If you are installing this plugin on a TWiki release prior to TWiki-4.0, then
-     you need the TWiki:Plugins/SessionPlugin too.
+%$MANIFEST%
    * Optionally, run ==%TOPIC%_installer== to automatically check and
      install other TWiki modules that this module depends on. You can also do
      this step manually.
@@ -297,22 +298,14 @@ returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin 
      below are resolved.
 %$DEPENDENCIES%
    * Optionally install the TWiki:Plugins/RedDotPlugin to ease editing the sidebar navigation
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-   * on [[%SYSTEMWEB%.TWikiPreferences]] change the SKIN variable to "nat";
+   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * Edit [[%SYSTEMWEB%.TWikiPreferences]] and change the SKIN variable to "nat";
      customize the default style adding the variables SKINSTYLE, STYLEBORDER,
      STYLEBUTTONS and STYLESIDEBAR (see NatSkin)
-   * If you are using TWiki version <= 4.0.4 and want TWiki table's appearance to match
-     the selected style then apply this
-     [[%PUBURLPATH%/%SYSTEMWEB%/NatSkin/TablePlugin_Core_pm.diff][TablePlugin_Core_pm.diff]] patch.
-   * to enable the NatSkin's logon scheme disable TWiki's <nop>LoginManager
-     and remove all lines containing "require valid-user" (except for the =configure= cgi script)
-     from the file =bin/.htaccess=
-   * make sure that the scripts =natlogon= and =natsearch= are recognized as cgi scripts
-     in your server configuration
-   * if you have set up ssl for your server add the following variable to your <nop>TWikiPreferences:
+   * If you have set up ssl for your server add the following variable to your <nop>TWikiPreferences:
      <verbatim> * Set HTTPSLOGON = on </verbatim>
      This will prevent passwords being sent in clear-text over a possibly insecure net.
-   * to enable ssl as soon as you logged in use the following rewrite rules in =bin/.htaccess=:
+   * To enable ssl as soon as you logged in use the following rewrite rules in =bin/.htaccess=:
      <verbatim>
  RewriteEngine On
  RewriteCond %{SERVER_PORT} !443
@@ -329,8 +322,11 @@ returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin 
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v3.00-pre12 |
+|  Plugin Version: | v3.00-pre15 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  21 Sep 2007: | made external link detection optional, \
+                  fixed mod_perl/speedy issue detecting new themes on the stylepath, \
+                  recoded natsearch to be a lot simpler | 
 |  06 Mar 2007: | improved USERACTIONS tag for more flexibility; \
                   added NATSEARCHGLOBAL and NATSEARCHCONTENT flags for NatSearch |
 |  05 Feb 2007: | new option NATSEARCHIGNORECASE; |
@@ -465,5 +461,4 @@ returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin 
 |  Feedback: | TWiki:Plugins/NatSkinPluginDev  |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
-
--- TWiki:Main/MichaelDaum - 06 Mar 2007 
+-- TWiki:Main/MichaelDaum - 21 Sep 2007 
