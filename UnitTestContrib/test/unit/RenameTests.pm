@@ -328,15 +328,15 @@ sub test_rename_oldwebnewtopic {
     $this->assert(!$this->{twiki}->{store}->topicExists(
         $this->{test_web}, 'OldTopic' ));
     $this->check($this->{test_web}, 'NewTopic', undef, <<THIS, 1);
-1 NewTopic
-NewTopic 2
-3 NewTopic more
+1 $this->{test_web}.NewTopic
+$this->{test_web}.NewTopic 2
+3 $this->{test_web}.NewTopic more
 NewTopic 4
 5 NewTopic
 7 (NewTopic)
-8 [[NewTopic]]
+8 [[$this->{test_web}.NewTopic]]
 9 [[NewTopic]]
-10 [[NewTopic][the text]]
+10 [[$this->{test_web}.NewTopic][the text]]
 11 [[NewTopic][the text]]
 12 $this->{test_web}.NewTopic
 13 $this->{new_web}.OldTopic
@@ -352,22 +352,22 @@ NewTopic 4
 protected $this->{test_web}.OldTopic
 </verbatim>
 <pre>
-pre NewTopic
+pre $this->{test_web}.NewTopic
 </pre>
 <noautolink>
 protected $this->{test_web}.OldTopic
 </noautolink>
 THIS
     $this->check($this->{test_web}, 'OtherTopic', undef, <<THIS, 2);
-1 NewTopic
-NewTopic 2
-3 NewTopic more
+1 $this->{test_web}.NewTopic
+$this->{test_web}.NewTopic 2
+3 $this->{test_web}.NewTopic more
 NewTopic 4
 5 NewTopic
 7 (NewTopic)
-8 [[NewTopic]]
+8 [[$this->{test_web}.NewTopic]]
 9 [[NewTopic]]
-10 [[NewTopic][the text]]
+10 [[$this->{test_web}.NewTopic][the text]]
 11 [[NewTopic][the text]]
 12 $this->{test_web}.NewTopic
 13 $this->{new_web}.OldTopic
@@ -383,7 +383,7 @@ NewTopic 4
 protected $this->{test_web}.OldTopic
 </verbatim>
 <pre>
-pre NewTopic
+pre $this->{test_web}.NewTopic
 </pre>
 <noautolink>
 protected $this->{test_web}.OldTopic
@@ -448,21 +448,21 @@ sub test_rename_newweboldtopic {
         $this->{test_web}, 'OldTopic' ));
 
     $this->check($this->{new_web}, 'OldTopic', undef, <<THIS, 4);
-1 OldTopic
-OldTopic 2
-3 OldTopic more
+1 $this->{new_web}.OldTopic
+$this->{new_web}.OldTopic 2
+3 $this->{new_web}.OldTopic more
 OldTopic 4
 5 OldTopic
 7 (OldTopic)
-8 [[OldTopic]]
+8 [[$this->{new_web}.OldTopic]]
 9 [[OldTopic]]
-10 [[OldTopic][the text]]
+10 [[$this->{new_web}.OldTopic][the text]]
 11 [[OldTopic][the text]]
 12 $this->{test_web}.NewTopic
-13 OldTopic
+13 $this->{new_web}.OldTopic
 14 $this->{test_web}.OtherTopic
 15 $this->{test_web}.OtherTopic
-16 OtherTopic
+16 $this->{new_web}.OtherTopic
 17 MeMeOldTopicpick$this->{test_web}.OldTopicme
 18 http://site/$this->{new_web}/OldTopic
 19 [[http://blah/OldTopic/blah][ref]]
@@ -472,22 +472,22 @@ OldTopic 4
 protected $this->{test_web}.OldTopic
 </verbatim>
 <pre>
-pre OldTopic
+pre $this->{new_web}.OldTopic
 </pre>
 <noautolink>
 protected $this->{test_web}.OldTopic
 </noautolink>
 THIS
     $this->check($this->{new_web}, 'OtherTopic', undef, <<THIS, 5);
-1 OldTopic
-OldTopic 2
-3 OldTopic more
+1 $this->{new_web}.OldTopic
+$this->{new_web}.OldTopic 2
+3 $this->{new_web}.OldTopic more
 OldTopic 4
 5 OldTopic
 7 (OldTopic)
-8 [[OldTopic]]
+8 [[$this->{new_web}.OldTopic]]
 9 [[OldTopic]]
-10 [[OldTopic][the text]]
+10 [[$this->{new_web}.OldTopic][the text]]
 11 [[OldTopic][the text]]
 12 $this->{test_web}.NewTopic
 13 $this->{new_web}.OldTopic
@@ -503,7 +503,7 @@ OldTopic 4
 protected $this->{test_web}.OldTopic
 </verbatim>
 <pre>
-pre OldTopic
+pre $this->{new_web}.OldTopic
 </pre>
 <noautolink>
 protected $this->{test_web}.OldTopic
