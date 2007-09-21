@@ -1,7 +1,7 @@
 ###############################################################################
 # TWiki WikiClone ($wikiversion has version info)
 #
-# Copyright (C) 2003-2006 MichaelDaum@WikiRing.com
+# Copyright (C) 2003-2007 MichaelDaum http://wikiring.de
 #
 # Based on photonsearch
 # Copyright (C) 2001 Esteban Manchado Velázquez, zoso@foton.es
@@ -21,189 +21,205 @@
 package TWiki::Plugins::NatSkinPlugin::Search;
 
 use strict;
-use vars qw($isInitialized $debug $includeWeb $excludeWeb 
-            $includeTopic $excludeTopic $dataDir $wikiToolName $wikiUserName
-	    $sandbox  $specialCharPattern);
-use URI::Escape;
 use TWiki::Plugins::NatSkinPlugin;
 
-$debug = 0; # toggle me
-$specialCharPattern = qr/([^\\])([\$\@\%\&\#\'\`\/])/o;
+sub DEBUG { 0; }
 
 ###############################################################################
 sub writeDebug {
-  #&TWiki::Func::writeDebug("- NatSkinPlugin::Search - " . $_[0]) if $debug;
-  print STDERR "NatSkinPlugin::Search - $_[0]\n" if $debug;
-}
-
-##############################################################################
-sub doInit {
-  return if $isInitialized;
-  $isInitialized = 1;
-
-  unless (defined &TWiki::Sandbox::new) {
-    eval "use TWiki::Contrib::DakarContrib;";
-    $sandbox = new TWiki::Sandbox();
-  } else {
-    $sandbox = $TWiki::sharedSandbox;
-  }
-  $dataDir = &TWiki::Func::getDataDir();
-  $wikiToolName = &TWiki::Func::getWikiToolName() || '';
-  $wikiUserName = &TWiki::Func::getWikiUserName();
-
-  &TWiki::Plugins::NatSkinPlugin::doInit();
-  #writeDebug("done init()");
+  DEBUG && print STDERR "NatSkinPlugin::Search - $_[0]\n";
 }
 
 ##############################################################################
 # wrapper for dakar's TWiki::UI:run interface
-sub natSearchCgi {
+sub searchCgi {
   my $session = shift;
+
   $TWiki::Plugins::SESSION = $session;
-  my $text = natSearch($session->{cgiQuery}, $session->{topicName}, $session->{webName});
+  my $searcher = new TWiki::Plugins::NatSkinPlugin::Search($session);
+  my $text = $searcher->search();
+
   $session->writeCompletePage($text, 'view');
 }
 
 ##############################################################################
-# returns the full text of the search
-sub natSearch {
-  my ($query, $topic, $web) = @_;
+sub new {
+  my $class = shift;
+  my $session = shift;
 
-  #writeDebug("called natSearch()");
-  &doInit();
+  TWiki::Plugins::NatSkinPlugin::doInit();
+
+  my $sandbox;
+  unless (defined &TWiki::Sandbox::new) {
+    writeDebug("this is this");
+    eval "use TWiki::Contrib::DakarContrib;";
+    $sandbox = new TWiki::Sandbox();
+  } else {
+    $sandbox = $TWiki::sharedSandbox # 4.0 - 4.1.2
+      || $TWiki::sandbox; # 4.2
+  }
+
+  my $this = {
+    session => $session,
+    dataDir => TWiki::Func::getDataDir(),
+    userName => TWiki::Func::getWikiUserName(),
+    homeTopic => $TWiki::Plugins::NatSkinPlugin::homeTopic,
+    sandbox => $sandbox,
+    includeWeb => TWiki::Func::getPreferencesValue('NATSEARCHINCLUDEWEB') || '',
+    excludeWeb => TWiki::Func::getPreferencesValue('NATSEARCHEXCLUDEWEB') || '',
+    includeTopic => TWiki::Func::getPreferencesValue('NATSEARCHINCLUDETOPIC') || '',
+    excludeTopic => TWiki::Func::getPreferencesValue('NATSEARCHEXCLUDETOPIC') || '',
+    searchTemplate => TWiki::Func::getPreferencesValue('NATSEARCHTEMPLATE') || '',
+    ignoreCase => TWiki::Func::getPreferencesFlag('NATSEARCHIGNORECASE'),
+    limit => TWiki::Func::getPreferencesFlag('NATSEARCHLIMIT') || 10,
+    globalSearch => TWiki::Func::getPreferencesFlag('NATSEARCHGLOBAL'),
+    keywordSearch => TWiki::Func::getPreferencesFlag('NATSEARCHKEYWORDS'),
+    egrepCmd=> $TWiki::cfg{NatSearch}{EgrepCmd} || '/bin/egrep',
+    @_
+  };
+  $this->{includeWeb} =~ s/^\s*(.*)\s*$/$1/o;
+  $this->{excludeWeb} =~ s/^\s*(.*)\s*$/$1/o;
+  $this->{includeTopic} =~ s/^\s*(.*)\s*$/$1/o;
+  $this->{excludeTopic} =~ s/^\s*(.*)\s*$/$1/o;
+
+  $this->{ignoreCase} = 1 unless defined $this->{ignoreCase};
+
+  return bless ($this, $class);
+}
+
+##############################################################################
+# returns the full text of the search
+sub search {
+  my $this = shift;
+
+  writeDebug("called search()");
+
+  my $query = $this->{session}->{cgiQuery};
+  my $topic = $this->{session}->{topicName};
+  my $web = $this->{session}->{webName};
 
   my $theSearchString = $query->param('search') || '';
   my $theWeb = $query->param('web') || $web;
-  my $theIgnoreCase = $query->param('ignorecase') || '';
+  my $theSearchBox = $query->param('searchbox') || 'on';
+  my $theLimit = $query->param('limit');
   my $origSearch = $theSearchString;
   my $searchTemplate;
-  my $theGlobalSearch;
-  my $theContentSearch;
 
-  # get web preferences
-  $includeWeb = &TWiki::Func::getPreferencesValue('NATSEARCHINCLUDEWEB') || '';
-  $excludeWeb = &TWiki::Func::getPreferencesValue('NATSEARCHEXCLUDEWEB') || '';
-  $includeTopic = &TWiki::Func::getPreferencesValue('NATSEARCHINCLUDETOPIC') || '';
-  $excludeTopic = &TWiki::Func::getPreferencesValue('NATSEARCHEXCLUDETOPIC') || '';
-  $searchTemplate = &TWiki::Func::getPreferencesValue('NATSEARCHTEMPLATE') || '';
-  $theIgnoreCase = &TWiki::Func::getPreferencesFlag('NATSEARCHIGNORECASE') unless $theIgnoreCase;
-  $theGlobalSearch = &TWiki::Func::getPreferencesFlag('NATSEARCHGLOBAL') || 0;
-  $theContentSearch = &TWiki::Func::getPreferencesFlag('NATSEARCHCONTENT') || 0;
-  $includeWeb =~ s/^\s*(.*)\s*$/$1/o;
-  $excludeWeb =~ s/^\s*(.*)\s*$/$1/o;
-  $includeTopic =~ s/^\s*(.*)\s*$/$1/o;
-  $excludeTopic =~ s/^\s*(.*)\s*$/$1/o;
+  if (defined($theLimit)) {
+    $this->{limit} = 0 if $theLimit eq 'all';
+    $theLimit =~ s/[^\d]//g;
+    $this->{limit} = $theLimit;
+  }
+  writeDebug("limit=$this->{limit}");
 
   #writeDebug("searchTemplate name =$searchTemplate");
-  if ($searchTemplate) {
-    $searchTemplate = &TWiki::Func::readTemplate($searchTemplate);
-  }
-  unless ($searchTemplate) {
-    $searchTemplate =  &TWiki::Func::readTemplate('search');
-  }
-  $searchTemplate =~ s/^\s*(.*)\s*$/$1/os;
-  #writeDebug("searchTemplate='$searchTemplate'");
-  writeDebug("search=$theSearchString");
-  writeDebug("wikiUserName=$wikiUserName");
   writeDebug("theWeb=$theWeb");
-  writeDebug("theIgnoreCase=$theIgnoreCase");
-  writeDebug("includeWeb=$includeWeb");
-  writeDebug("excludeWeb=$excludeWeb");
-  writeDebug("includeTopic=$includeTopic");
-  writeDebug("excludeTopic=$excludeTopic");
+  $searchTemplate = &TWiki::Func::readTemplate($searchTemplate) if $searchTemplate;
+  $searchTemplate =  &TWiki::Func::readTemplate('search') unless $searchTemplate;
+  $searchTemplate =~ s/^\s*(.*)\s*$/$1/os;
   
   # separate and process options
   my $options = "";
-  if ($theSearchString =~ s/^(.*?)://) {
-    $options = $1;
+  $options = $1 if $theSearchString =~ s/^(.*?)://;
+  writeDebug("options=$options");
+
+  # check for topic actions
+  if ($options =~ /^e(dit)?$/) {
+    my ($editWeb, $editTopic) = TWiki::Func::normalizeWebTopicName($web, $theSearchString);
+    my $editUrl = TWiki::Func::getScriptUrl($editWeb, $editTopic, 'edit', 't', time());
+    &TWiki::Func::redirectCgiQuery($query, $editUrl);
+    return '';
   }
-  #writeDebug("options=$options");
-  my $doIgnoreCase = ($options =~ /u/ || $theIgnoreCase) ? 1 : 0;
+  if ($options =~ /^n(ew)?$/) {
+    my ($editWeb, $editTopic) = TWiki::Func::normalizeWebTopicName($web, $theSearchString);
+    my $editUrl = TWiki::Func::getScriptUrl($editWeb, $editTopic, 'edit', 'onlynewtopic', 'on', 't', time());
+    &TWiki::Func::redirectCgiQuery($query, $editUrl);
+    return '';
+  }
+  $this->{ignoreCase} = ($options =~ /u/ || $this->{ignoreCase}) ? 1 : 0;
 
   # construct the list of webs to search in
-  my @webList = ($theWeb);
-  if (($options =~ /g/ || $theGlobalSearch) && !($options =~ /l/)) {
+  $this->{globalSearch} = 1 if $theWeb eq 'all';
+  writeDebug("globalSearch=$this->{globalSearch}");
+  my @webList;
+  if (($options =~ /g/ || $this->{globalSearch}) && $options !~ /l/) {
+    writeDebug("getting public weblist ");
     @webList = TWiki::Func::getPublicWebList();
-    @webList = grep (/^$includeWeb$/, @webList) if $includeWeb;
-    @webList = grep (!/^$excludeWeb$/, @webList) if $excludeWeb;
-    @webList = grep (!/^$theWeb$/, @webList);
-    unshift @webList, $theWeb;
+    @webList = grep (/^$this->{includeWeb}$/, @webList) if $this->{includeWeb};
+    @webList = grep (!/^$this->{excludeWeb}$/, @webList) if $this->{excludeWeb};
   }
+  unshift(@webList, $web) unless grep (/^$web$/, @webList);
+  writeDebug("webList=@webList");
 
-  # redirect according to the look of the string
-  # (1) the string starts with an uppercase letter: 
-  #     (1.1) try a GO
-  #     (1.2) fallback to a topic search when (1.1) fails
-  #     (1.3) fallback to content search when (1.2) fails
-  # (2) the string starts with a / 
-  #     normal content search
-  # (3) the string does not start with an upper case letter or /
-  #     (3.1) try a topic search
-  #     (3.2) fallback to content search
-  my ($results, $nrHits);
+  # (1) If the string starts with an uppercase letter, try a jump
+  # (2) do a topic search; if there's only one match then go there
+  # (3) merge a content search into the results of the topic search
+
+  my $nrHits = 0;
+  my %results = ();
+
+  # upper case
   if ($theSearchString =~ /^[A-Z]/) {
     if ($theSearchString =~ /^(.*)\.(.*?)$/) {  # Special web.topic notation
       @webList = ($1);
       $theSearchString = $2;
     }
-
-    # (1.1) normal Go behaviour
+    # (1) try a jump
+    writeDebug("(1) try a jump");
     foreach my $thisWeb (@webList) {
       if (&TWiki::Func::topicExists($thisWeb, $theSearchString)) {
 	my $viewUrl = &TWiki::Func::getViewUrl($thisWeb, $theSearchString);
 	&TWiki::Func::redirectCgiQuery($query, $viewUrl);
-	#writeDebug("done");
+	writeDebug("jump");
 	return '';
       } 
     }
-    
-    # (1.2) fallback to topic search
-    ($results, $nrHits) = 
-      natTopicSearch($theSearchString, \@webList, $doIgnoreCase, $wikiUserName);
 
-    # (1.3) fallback to content search
-    if ($nrHits == 0) { 
-      ($results, $nrHits) = 
-	natContentsSearch($theSearchString, \@webList, $doIgnoreCase, $wikiUserName);
-    } 
+    # (2) to topic search
+    writeDebug("(2.1) topic search");
+    $this->topicSearch($theSearchString, \@webList, \%results);
+    foreach my $topics (values %results) {
+      $nrHits += scalar(keys %$topics);
+    }
+    writeDebug("found $nrHits hits");
+
+    # If there is only one result, redirect to that node
+    if ($nrHits == 1) {
+      my $resultWeb = (keys %results)[0];
+      my $resultTopic = (keys %{$results{$resultWeb}})[0];
+      my $viewUrl = &TWiki::Func::getViewUrl($resultWeb, $resultTopic);
+      &TWiki::Func::redirectCgiQuery($query, $viewUrl);
+      writeDebug("jump");
+      return '';
+    }
+    # (3) add content search
+    writeDebug("(3.1) content search");
+    $this->contentSearch($theSearchString, \@webList, \%results);
   } 
   
-  # (2) content search
-  elsif ($theSearchString =~ /^\/(.+)$/ || $theContentSearch) { # Normal search
-    $theSearchString = $1; 
-    ($results, $nrHits) = 
-      natContentsSearch($theSearchString, \@webList, $doIgnoreCase, $wikiUserName);
-  }
-  
-  # (3)
-  else { 
-  
-    # (3.1) topic name search
-    ($results, $nrHits) = 
-      natTopicSearch($theSearchString, \@webList, $doIgnoreCase, $wikiUserName);
+  # lowercase
+  else {
 
-    # (3.2) fallback to content search
-    if ($nrHits == 0) { 
-      ($results, $nrHits) = 
-	natContentsSearch($theSearchString, \@webList, $doIgnoreCase, $wikiUserName);
-    }
-  }
-      
-  # If there is only one result, redirect to that node
-  if ($nrHits == 1) {
-    my $resultWeb = (keys %$results)[0];
-    my $resultTopic = $results->{$resultWeb}[0];
-    my $viewUrl = &TWiki::Func::getViewUrl($resultWeb, $resultTopic);
-    &TWiki::Func::redirectCgiQuery($query, $viewUrl);
-    #writeDebug("done");
-    return '';
+    # (2) to topic search
+    writeDebug("(2.2) topic search");
+    $this->topicSearch($theSearchString, \@webList, \%results);
+
+    # (3) add content search
+    writeDebug("(3.2) content search");
+    $this->contentSearch($theSearchString, \@webList, \%results);
   }
 
-  # Else, print them
+  # count hits (again)
+  $nrHits = 0;
+  foreach my $topics (values %results) {
+    $nrHits += scalar(keys %$topics);
+  }
+  writeDebug("found $nrHits hits");
+
+  # print them
   my $result = '';
   my ($tmplHead, $tmplSearch, $tmplTable, $tmplNumber, $tmplTail) = 
     split(/%SPLIT%/,$searchTemplate);
-
 
   #writeDebug("tmplHead='$tmplHead'");
   #writeDebug("tmplSearch='$tmplSearch'");
@@ -211,7 +227,7 @@ sub natSearch {
   #writeDebug("tmplNumber='$tmplNumber'");
   #writeDebug("tmplTail='$tmplTail'");
 
-  $tmplHead = &TWiki::Func::expandCommonVariables($tmplHead, $topic);
+  $tmplHead = &TWiki::Func::expandCommonVariables($tmplHead, $topic, $web);
   $tmplHead = &TWiki::Func::renderText($tmplHead);
   $tmplHead =~ s|</*nop/*>||goi;
   $tmplHead =~ s/%TOPIC%/$topic/go;
@@ -220,54 +236,61 @@ sub natSearch {
 
   if ($nrHits) {
     $tmplNumber =~ s/%NTOPICS%/$nrHits/go;
-    $tmplNumber = &TWiki::Func::expandCommonVariables($tmplNumber, $topic);
+    $tmplNumber .= $tmplSearch if $theSearchBox eq 'on';
+    $tmplNumber = &TWiki::Func::expandCommonVariables($tmplNumber, $topic, $web);
+    $tmplNumber = &TWiki::Func::renderText($tmplNumber);
     $result .= $tmplNumber;
-    $result .= _getSearchResult($tmplTable, $results, $theSearchString);
+    $result .= $this->formatSearchResult($tmplTable, \%results, $theSearchString);
   } else {
-    my $text = &TWiki::Func::expandCommonVariables('%TMPL:P{"NOTHING_FOUND"}%');
-    $result .= '<div class="natSearchMessage">'.$text."</div>\n";
+    my $text;
+    if (TWiki::isValidTopicName($theSearchString)) { # SMELL
+      $text = TWiki::Plugins::NatSkinPlugin::getWebComponent('WebNothingFound', $web);
+    } else {
+      $text = '<div class="natSearch twikiAlert">%TMPL:P{"NOTHING_FOUND"}%</div>';
+    }
+    $text .= $tmplSearch if $theSearchBox eq 'on';
+    $text = TWiki::Func::expandCommonVariables($text, $theSearchString, $web);
+    $result .= TWiki::Func::renderText($text);
   }
 
   # get last part of full HTML page
-  $tmplTail = &TWiki::Func::expandCommonVariables($tmplTail, $topic);
+  $tmplTail = &TWiki::Func::expandCommonVariables($tmplTail, $topic, $web);
   $tmplTail = &TWiki::Func::renderText($tmplTail);
   $tmplTail =~ s|</*nop/*>||goi;   # remove <nop> tag
   $result .= $tmplTail;
 
-  #writeDebug("done natSearch()");
+  writeDebug("done search()");
 
   return $result;
 }
 
 ##############################################################################
-sub natTopicSearch {
-  my ($theSearchString, $theWebList, $doIgnoreCase, $theUser) = @_;
+sub topicSearch {
+  my ($this, $theSearchString, $theWebList, $results) = @_;
 
-  my $nrHits = 0;
-  my $results = {};
-
-  if ($debug) {
-    #writeDebug("called natTopicSearch()");
-    #writeDebug("doIgnoreCase=$doIgnoreCase");
-    #writeDebug("theWebList=" . join(" ", @$theWebList));
-  }
+  writeDebug("called topicSearch()");
+  DEBUG && writeDebug("theWebList=" . join(" ", @$theWebList));
 
   if ($theSearchString eq '') {
     #writeDebug("empty search string");
-    return ($results, $nrHits);
+    return;
   }
 
-  my @searchTerms = _getSearchTerms($theSearchString);
+  my @searchTerms = parseQuery($theSearchString);
 
-  # collect the results for each web, put them in $results->{}
+  # collect the results for each web, put them into $results
   foreach my $thisWebName (@$theWebList) {
     # get all topics
     $thisWebName =~ s/\./\//go;
-    my $webDir = TWiki::Sandbox::normalizeFileName("$dataDir/$thisWebName");
+    my $webDir = TWiki::Sandbox::normalizeFileName("$this->{dataDir}/$thisWebName");
+    unless (-d $webDir) {
+      #writeDebug("no such directory");
+      return;
+    }
     opendir(DIR, $webDir) || die "can't opendir $webDir: $!";
     my @topics = map {s/\.txt$//; $_} grep {/\.txt$/} readdir(DIR);
-    @topics = grep(/$includeTopic/, @topics) if $includeTopic;
-    @topics = grep(!/$excludeTopic/, @topics) if $excludeTopic;
+    @topics = grep(/$this->{includeTopic}/, @topics) if $this->{includeTopic};
+    @topics = grep(!/$this->{excludeTopic}/, @topics) if $this->{excludeTopic};
     closedir DIR;
 
     # filter topics
@@ -276,13 +299,13 @@ sub natTopicSearch {
       #writeDebug("pattern=$pattern");
       eval {
 	if ($pattern =~ s/^-//) {
-	  if ($doIgnoreCase) {
+	  if ($this->{ignoreCase}) {
 	    @topics = grep(!/$pattern/i, @topics);
 	  } else {
 	    @topics = grep(!/$pattern/, @topics);
 	  }
 	} else {
-	  if ($doIgnoreCase) {
+	  if ($this->{ignoreCase}) {
 	    @topics = grep(/$pattern/i, @topics);
 	  } else {
 	    @topics = grep(/$pattern/, @topics);
@@ -291,82 +314,74 @@ sub natTopicSearch {
       };
       if ($@) {
 	&TWiki::Func::writeWarning("natsearch: pattern=$pattern failed to compile");
-	return ({}, 0);
+	return;
       }
     }
 
     # filter out non-viewable topics
     @topics = 
-      grep {&TWiki::Func::checkAccessPermission("view", $theUser, undef, $_, $thisWebName);}
+      grep {&TWiki::Func::checkAccessPermission("view", $this->{userName}, undef, $_, $thisWebName);}
       @topics;
 
-
-    if (@topics) {
-      $nrHits += scalar @topics;
-      $results->{$thisWebName} = [@topics] ;
-      #writeDebug("in $thisWebName: found topics " . join(", ", @topics));
-    } else {
-      #writeDebug("nothing found in $thisWebName");
+    foreach my $topic (@topics) {
+      $results->{$thisWebName}{$topic} = 1;
     }
   }
 
-  #writeDebug("done natTopicSearch()");
-  return ($results, $nrHits);
+  writeDebug("done topicSearch()");
 }
 
 ##############################################################################
-sub natContentsSearch {
-  my ($theSearchString, $theWebList, $doIgnoreCase, $theUser) = @_;
+sub contentSearch {
+  my ($this, $theSearchString, $theWebList, $results) = @_;
 
-  if ($debug) {
-    #writeDebug("called natContentsSearch()");
-    #writeDebug("doIgnoreCase=$doIgnoreCase");
-    #writeDebug("theWebList=" . join(" ", @$theWebList));
-  }
+  writeDebug("called contentSearch()");
 
-  my $cmdTemplate = "/bin/egrep -l$doIgnoreCase %PATTERN|U% %FILES|F%";
-  my $results = {};
-  my $nrHits = 0;
-  my @searchTerms = _getSearchTerms($theSearchString);
+  my $ignoreCaseFlag = $this->{ignoreCase}?'i':'';
+  my $keywordSearchFlag = $this->{keywordSearch}?'w':'';
+  my $cmdTemplate = "$this->{egrepCmd} -Hl$ignoreCaseFlag -- %PATTERN|U% %FILES|F%";
+  my @searchTerms = parseQuery($theSearchString);
+  return unless @searchTerms;
 
-  if (!@searchTerms) {
-    return ($results, $nrHits);
-  }
-
-  # Collect the results for each web, put them in $results->{}
+  # Collect the results for each web, put them into $results
   foreach my $thisWebName (@$theWebList) {
 
-    #writeDebug("searching in $thisWebName");
+    writeDebug("searching in $thisWebName");
 
     # get all topics
     $thisWebName =~ s/\./\//go;
-    my $webDir = TWiki::Sandbox::normalizeFileName("$dataDir/$thisWebName");
+    my $webDir = TWiki::Sandbox::normalizeFileName("$this->{dataDir}/$thisWebName");
+    unless (-d $webDir) {
+      writeDebug("no such directory");
+      return;
+    }
     opendir(DIR, $webDir) || die "can't opendir $webDir: $!";
     my @bag = grep {/\.txt$/} readdir(DIR);
-    @bag = grep(/$includeTopic/, @bag) if $includeTopic;
-    @bag = grep(!/$excludeTopic/, @bag) if $excludeTopic;
+    @bag = grep(/$this->{includeTopic}/, @bag) if $this->{includeTopic};
+    @bag = grep(!/$this->{excludeTopic}/, @bag) if $this->{excludeTopic};
     closedir DIR;
     chdir($webDir);
 
     # grep files in bag
     foreach my $searchTerm (@searchTerms) {
       next unless $searchTerm;
-      #writeDebug("before bag=@bag");
 
       # can't modify $searchTerm directly
       my $pattern = $searchTerm;
-      #writeDebug("pattern=$pattern");
+      writeDebug("pattern=$pattern");
+      #writeDebug("bag=".@bag);
 
       if ($pattern =~ s/^-//) {
 	my @notfiles = "";
 	eval {
-	  my ($result, $code) = $sandbox->sysCommand($cmdTemplate,
+	  my ($result, $code) = $this->{sandbox}->sysCommand($cmdTemplate,
 	    PATTERN => $pattern, FILES => \@bag);
+	  #writeDebug("code=$code, result=$result");
 	  @notfiles = split(/\r?\n/, $result);
 	};
 	if ($@) {
 	  &TWiki::Func::writeWarning("natsearch: pattern=$pattern files=@bag - $@");
-	  return ({}, 0);
+	  return;
 	}
 	chomp(@notfiles);
 
@@ -379,18 +394,18 @@ sub natContentsSearch {
       } else {
 	eval {
 	  my ($result, $code) = 
-	    $sandbox->sysCommand($cmdTemplate, PATTERN => $pattern, FILES => \@bag); 
-	  @bag = split(/\r?\n/, $result);
+	    $this->{sandbox}->sysCommand($cmdTemplate, PATTERN => $pattern, FILES => \@bag); 
 	  #writeDebug("code=$code, result=$result");
+	  @bag = split(/\r?\n/, $result);
 	};
 	if ($@) {
 	  &TWiki::Func::writeWarning("natsearch: pattern=$pattern files=@bag - $@");
-	  return ({}, 0);
+	  return;
 	}
 	chomp(@bag);
       }
     }
-    #writeDebug("after bag=@bag");
+    #writeDebug("after bag=".@bag);
 
     # strip ".txt" extension
     @bag = map { s/\.txt$//; $_ } @bag;
@@ -398,21 +413,19 @@ sub natContentsSearch {
 
     # filter out non-viewable topics
     @bag = 
-      grep {&TWiki::Func::checkAccessPermission("view", $theUser, "", $_, $thisWebName);} @bag;
+      grep {&TWiki::Func::checkAccessPermission("view", $this->{userName}, "", $_, $thisWebName);} @bag;
 
-    if (@bag) {
-      $nrHits += scalar @bag;
-      $results->{$thisWebName} = [ @bag ] ;
+    foreach my $topic (@bag) {
+      $results->{$thisWebName}{$topic} = 1;
     }
   }
 
-  #writeDebug("done natContentsSearch()");
-  return ($results, $nrHits);
+  writeDebug("done contentSearch()");
 }
 
 ##############################################################################
-sub _getSearchResult {
-  my ($theTemplate, $theResults, $theSearchString) = @_;
+sub formatSearchResult {
+  my ($this, $theTemplate, $theResults, $theSearchString) = @_;
 
   my $noSpamPadding = $TWiki::cfg{AntiSpam}{EmailPadding};
   my $result = '';
@@ -423,31 +436,33 @@ sub _getSearchResult {
 
     # get web header
     $beforeText =~ s/%WEB%/$thisWeb/o;
-    $beforeText = &TWiki::Func::expandCommonVariables($beforeText, $thisWeb);
-    $afterText  = &TWiki::Func::expandCommonVariables($afterText, $thisWeb);
+    $beforeText = &TWiki::Func::expandCommonVariables($beforeText, $this->{homeTopic}, $thisWeb);
+    $afterText  = &TWiki::Func::expandCommonVariables($afterText, $this->{homeTopic}, $thisWeb);
     $beforeText = &TWiki::Func::renderText($beforeText, $thisWeb);
     $beforeText =~ s|</*nop/*>||goi;   # remove <nop> tag
     $result .= $beforeText;
 
     # sort topics by modification time, reverse
+    my %modificationTime =
+      map { $_=>$this->getModificationTime($this, $_) }
+        keys %{$theResults->{$thisWeb}};
     my @sortedTopics =
-	  map { $_->[1] }
-	    sort {$b->[0] <=> $a->[0] }
-	      map { [ &getModificationTime($thisWeb, $_ ), $_ ] }
-		@{$theResults->{$thisWeb}};
+      sort {$modificationTime{$b} <=> $modificationTime{$a}}
+          keys %{$theResults->{$thisWeb}};
 
     # get hits in all topics
     my $index = 0;
+    my $limit = $this->{limit};
     foreach my $thisTopic (@sortedTopics) {
+      $limit--;
       my $tempVal = $repeatText;
 
       # get topic information
       my ($meta, $text) = &TWiki::Func::readTopic($thisWeb, $thisTopic);
       my ($revDate, $revUser, $revNum ) = $meta->getRevisionInfo();
-      $revUser = $revUser->webDotWikiName() if $revUser;
-      $revUser = &TWiki::Func::userToWikiName($revUser);
       $revDate = &TWiki::Func::formatTime($revDate);
-      #writeDebug("revDate=$revDate, revUser=$revUser, revNum=$revNum");
+      $revUser ||= 'UnknownUser';
+      $revUser = TWiki::Func::getWikiUserName($revUser);
 
       # insert the topic information into the template
       $tempVal =~ s/%WEB%/$thisWeb/go;
@@ -462,15 +477,14 @@ sub _getSearchResult {
       $tempVal =~ s/%AUTHOR%/$revUser/go;
 
       # render twiki markup
-      $tempVal = &TWiki::Func::expandCommonVariables($tempVal, $thisTopic);
+      $tempVal = &TWiki::Func::expandCommonVariables($tempVal, $thisTopic, $thisWeb);
       $tempVal = &TWiki::Func::renderText($tempVal);
 
       # remove mail trace
       $text =~ s/([A-Za-z0-9\.\+\-\_]+)\@([A-Za-z0-9\.\-]+\..+?)/$1$noSpamPadding$2/go;
 
       # render search hit
-      my @searchTerms = _getSearchTerms($theSearchString);
-      my $summary = _getTopicSummary($text, $thisTopic, $thisWeb, @searchTerms);
+      my $summary = $this->makeTopicSummary($text, $thisTopic, $thisWeb, $theSearchString);
       
       $tempVal =~ s/%TEXTHEAD%/$summary/go;
       $tempVal =~ s|</*nop/*>||goi;   # remove <nop> tag
@@ -482,6 +496,7 @@ sub _getSearchResult {
 
       # get this hit
       $result .= $tempVal;
+      last if $limit == 0;
     }
 
     $afterText = &TWiki::Func::renderText($afterText, $thisWeb);
@@ -492,33 +507,48 @@ sub _getSearchResult {
 }
 
 ##############################################################################
-sub _getTopicSummary {
-  my ($theText, $theTopic, $theWeb, @theKeywords) = @_;
+sub makeTopicSummary {
+  my ($this, $theText, $theTopic, $theWeb, $theSearchString) = @_;
 
-  my $htext = $theText;
-  $htext =~ s/<\!\-\-.*?\-\->//gos;  # remove all HTML comments
-  $htext =~ s/<\!\-\-.*$//os;        # remove cut HTML comment
-  $htext =~ s/<[^>]*>//go;           # remove all HTML tags
-  $htext =~ s/%WEB%/$theWeb/go;      # resolve web
-  $htext =~ s/%TOPIC%/$theTopic/go;  # resolve topic
-  $htext =~ s/%WIKITOOLNAME%/$wikiToolName/go; # resolve TWiki tool
-  $htext =~ s/%META:.*?%//go;        # Remove meta data variables
-  $htext =~ s/[\%\[\]\*\|=_]/ /go;   # remove Wiki formatting chars & defuse %VARS%
-  $htext =~ s/\-\-\-+\+*/ /go;       # remove heading formatting
-  $htext =~ s/\s+[\+\-]*/ /go;       # remove newlines and special chars
+  my @searchTerms = parseQuery($theSearchString);
+  my $wikiToolName = TWiki::Func::getWikiToolName() || '';
+  my $linkProtocolPattern = TWiki::Func::getRegularExpression('linkProtocolPattern');
+
+  #writeDebug("before, text=$theText");
+
+  # remove glue
+  $theText =~ s/%~~\s+([A-Z]+{)/%$1/gos;  # %~~
+  $theText =~ s/\s*[\n\r]+~~~\s+/ /gos;   # ~~~
+  $theText =~ s/\s*[\n\r]+\*~~\s+//gos;   # *~~
+
+  $theText =~ s/\[\[$linkProtocolPattern\:([^\s<>"]+[^\s*.,!?;:)<|])\s+(.*?)\]\]/$3/g;
+  $theText =~ s/\[\[([^\]]*\]\[)(.*?)\]\]/$2/g;
+  $theText =~ s/<\!\-\-.*?\-\->//gos;  # remove all HTML comments
+  $theText =~ s/<\!\-\-.*$//os;        # remove cut HTML comment
+  $theText =~ s/<[^>]*>//go;           # remove all HTML tags
+  $theText =~ s/%WEB%/$theWeb/go;      # resolve web
+  $theText =~ s/%TOPIC%/$theTopic/go;  # resolve topic
+  $theText =~ s/%WIKITOOLNAME%/$wikiToolName/go; # resolve TWiki tool
+  $theText =~ s/%META:.*?%//go;        # Remove meta data variables
+  $theText =~ s/[\%\[\]\*\|=_]/ /go;   # remove Wiki formatting chars & defuse %VARS%
+  $theText =~ s/\-\-\-+\+*/ /go;       # remove heading formatting
+  $theText =~ s/\s+[\+\-]*/ /go;       # remove newlines and special chars
 
   # store first found word (some of them can be found in metadata instead of
   # in the text)
   my $firstfound = undef;
   my $errorFound = 0;
-  foreach my $keyWord (@theKeywords) {
+  foreach my $pattern (@searchTerms) {
+    $pattern = '\b'.$pattern.'\b' if $this->{keywordSearch};
     eval {
-      if ($htext =~ /$keyWord/i) {
-	$firstfound = $keyWord;
+      if ($this->{ignoreCase}) {
+        $firstfound = $pattern if $theText =~ /$pattern/i;
+      } else {
+        $firstfound = $pattern if $theText =~ /$pattern/;
       }
     };
     if ($@) {
-      &TWiki::Func::writeWarning("natsearch: keyWord=$keyWord failed to compile");
+      &TWiki::Func::writeWarning("natsearch: pattern=$pattern failed to compile");
       $errorFound = 1;
       last;
     }
@@ -528,32 +558,44 @@ sub _getTopicSummary {
 
   # limit to 162 chars, according to the position of the first keyword ...
   if (defined $firstfound) {
-    $htext =~ s/^.*?([a-zA-Z0-9]*.{0,81})($firstfound)(.{0,81}[a-zA-Z0-9]*).*?$/$1$2$3/gi;
+    if ($this->{ignoreCase}) {
+      $theText =~ s/^.*?([a-zA-Z0-9]*.{0,120})($firstfound)(.{0,120}[a-zA-Z0-9]*).*?$/$1$2$3/gi;
+    } else {
+      $theText =~ s/^.*?([a-zA-Z0-9]*.{0,120})($firstfound)(.{0,120}[a-zA-Z0-9]*).*?$/$1$2$3/gi;
+    }
   } else {
-    $htext =~ s/(.{162})([a-zA-Z0-9]*)(.*?)$/$1$2/go;
+    $theText =~ s/(.{240})([a-zA-Z0-9]*)(.*?)$/$1$2/go;
   }
-  $htext = substr($htext, 0, 300) . " ..."; # Limit string length
+  $theText = substr($theText, 0, 500); # Limit string length
 
   # ... but hilight all of them
-  foreach my $k (@theKeywords) {
-    $htext =~ s:($k):<font color="#cc0000">$1</font>:gi;
+  foreach my $term (@searchTerms) {
+    $term = '\b'.$term.'\b' if $this->{keywordSearch};
+    if ($this->{ignoreCase}) {
+      $theText =~ s:($term):<span class="twikiAlert">$1</span>:gi;
+    } else {
+      $theText =~ s:($term):<span class="twikiAlert">$1</span>:g;
+    }
   }
 
   # inline search renders text, 
   # so prevent linking of external and internal links:
-  $htext =~ s/([\-\*\s])((http|ftp|gopher|news|file|https)\:)/$1<nop>$2/go;
-  $htext =~ s/([\s\(])([A-Z]+[a-z0-9]*\.[A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/$1<nop>$2/go;
-  $htext =~ s/([\s\(])([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/$1<nop>$2/go;
-  $htext =~ s/([\s\(])([A-Z]{3,})/$1<nop>$2/go;
-  $htext =~ s/@([a-zA-Z0-9\-\_\.]+)/@<nop>$1/go;
+  $theText =~ s/([\-\*\s])((http|ftp|gopher|news|file|https)\:)/$1<nop>$2/go;
+  $theText =~ s/([\s\(])([A-Z]+[a-z0-9]*\.[A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/$1<nop>$2/go;
+  $theText =~ s/([\s\(])([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/$1<nop>$2/go;
+  $theText =~ s/([\s\(])([A-Z]{3,})/$1<nop>$2/go;
+  $theText =~ s/@([a-zA-Z0-9\-\_\.]+)/@<nop>$1/go;
 
-  $htext = &TWiki::Func::renderText($htext, $theWeb);
-  return $htext;
+  #writeDebug("after, text=$theText");
+  return $theText;
 }
 
 ##############################################################################
-sub _getSearchTerms {
+sub parseQuery {
   my $theSearchString = shift ;
+
+  #writeDebug("called parseQuery($theSearchString)");
+  my $specialCharPattern = qr/([^\\])([\$\@\%\&\#\'\`\/])/o;
 
   # Figure out search terms
   my @searchTerms = ();
@@ -569,6 +611,7 @@ sub _getSearchTerms {
     $pattern =~ s/$specialCharPattern/$1\\$2/go;  # escape some special chars
     push @searchTerms, $pattern;
   }
+  #writeDebug("search terms: ".join(',', @searchTerms));
 
   return @searchTerms;
 }
@@ -576,13 +619,14 @@ sub _getSearchTerms {
 ##############################################################################
 # own filebased checker, breaks on other storage impls, breaks before anyway
 sub getModificationTime {
+  my $this = shift;
+
   my $date = 0;
-  my $file = $dataDir.'/'.$_[0].'/'.$_[1].'.txt';
+  my $file = $this->{dataDir}.'/'.$_[0].'/'.$_[1].'.txt';
   if (-e $file) {
     $date = (stat $file)[9] || 600000000;
   }
   return $date;
 }
-
 
 1;

@@ -327,7 +327,7 @@ returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin 
    * Set SHORTDESCRIPTION = Supplements the bare bones NatSkin theme for TWiki
 -->
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Copyright &copy;: | 2003-2006, MichaelDaum http://wikiring.com |
+|  Copyright &copy;: | 2003-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | v3.00-pre12 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |

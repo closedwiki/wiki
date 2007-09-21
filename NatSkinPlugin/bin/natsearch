@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 # TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2003-2006 Michael Daum <micha@nats.informatik.uni-hamburg.de>
+# Copyright (C) 2003-2007 Michael Daum http://wikiring.de
 # 
 # based on photonsearch
 # Copyright (C) 2001 Esteban Manchado Velázquez, zoso@foton.es
@@ -21,31 +21,16 @@
 # perform different functions based on the "name" value
 # searched text is in var "search"
 
-BEGIN { 
-  if ($ENV{GATEWAY_INTERFACE} !~ /^CGI-Perl/) {
-    unshift @INC, '.'; require 'setlib.cfg'; 
-  }
+BEGIN {
+    # Set default current working directory (needed for mod_perl)
+    if( $ENV{"SCRIPT_FILENAME"} && $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
+        chdir $1;
+    }
+    # Set library paths in @INC, at compile time
+    unshift @INC, '.';
+    require 'setlib.cfg';
 }
 
-if ($ENV{GATEWAY_INTERFACE} !~ /^CGI-Perl/) {
-  use CGI;
-  use CGI::Carp qw( fatalsToBrowser );
-  use TWiki;
-}
 use TWiki::UI;
 use TWiki::Plugins::NatSkinPlugin::Search;
-use strict;
-
-&main();
-
-sub main {
-  my $query = new CGI;
-  my $thePathInfo = $query->path_info();
-  my $theRemoteUser = $query->remote_user();
-  my $theUrl = $query->url;
-
-  my ($topic, $web, $dummy, $userName) =
-    &TWiki::initialize($thePathInfo, $theRemoteUser, '', $theUrl, $query);
-
-  &TWiki::UI::run(\&TWiki::Plugins::NatSkinPlugin::Search::natSearchCgi, 'natsearch' => 1);
-}
+TWiki::UI::run(\&TWiki::Plugins::NatSkinPlugin::Search::searchCgi, 'natsearch' => 1);
