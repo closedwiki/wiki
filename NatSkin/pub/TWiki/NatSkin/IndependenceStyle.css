@@ -20,7 +20,6 @@ hr {
   padding:0;
 }
 .natBodyContents {
-  line-height: 140%;
   padding: 0px;
   background: #FFFFFF;
   border: 1px solid #FFFFFF;
@@ -37,7 +36,7 @@ hr {
   margin:15px 0px 15px 20px;
 }
 .natTopRightContents {
-  margin:15px 20px 15px 0px;
+  margin:15px 20px 15px 15px;
 }
 
 .natMainHeaderContents,
@@ -86,6 +85,7 @@ hr {
 }
 
 .natSearchBox input {
+  font-size:12px;
   margin-top:5px;
   width:170px;
   background:#B22222;
@@ -119,32 +119,38 @@ hr {
   line-height:1.4em;
 }
 
-.natSideBar h1 {
-  padding: 3px;
+.natSideBar h2 {
   padding-left:0px;
 }
-.natSideBar h1 a,
-.natSideBar h1 {
+.natSideBar a {
+  font-weight:normal;
+}
+.natSideBar h3,
+.natSideBar h3 a,
+.natSideBar h2,
+.natSideBar h2 a {
+  font-size:15px;
+  color: #666666;
+  font-weight:bold;
+}
+.natSideBarPersonal h2 a,
+h2.natSideBarTitle {
   color: #B22222;
   font-size: 15px;
   font-weight: bold;
   text-transform: uppercase;
   text-decoration:none;
   letter-spacing: .3em;
-}
-
-.natSideBar h2 {
-  padding-left:0px;
-}
-.natSideBar h2,
-.natSideBar h2 a {
-  font-size:15px;
-  color: #666666;
+  padding:3px 0px;
 }
 
 .natSideBar ul {
+  margin:0px 0px 10px 3px;
+}
+.natSideBar ul ul {
+  margin-left:0px;
   padding-left:0px;
-  margin:0px 0px 10px 1.2em;
+  list-style-type:none;
 }
 
 .natNotes {
@@ -225,11 +231,9 @@ hr {
   letter-spacing:.3em;
   font-size:10px;
   font-family: 'Trebuchet MS', sans-serif;
-  line-height: 150%;
+  line-height:140%;
   color: #666666;
-  margin-bottom:5px;
-  margin-left:10px;
-  margin-right:10px;
+  margin:20px;
 }
 .natCopyRight {
   display:inline;
@@ -329,6 +333,11 @@ hr {
 }
 .twikiPageForm table {
   border:1px #B22222 solid;
+  margin:0px;
+}
+.twikiPageForm table th,
+.twikiPageForm table td {
+  padding:2px 5px;
 }
 .twikiPageForm .twikiFirstCol,
 .twikiPageForm th {
@@ -410,6 +419,22 @@ hr {
 .blogAbout {
   line-height:1.3em;
 }
+.blogSideBarHeader {
+  color: #B22222 !important;
+  font-size: 15px;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-decoration:none;
+  letter-spacing: .3em;
+  padding:3px 0px;
+}
+.blogSideBarHeader h2 {
+  color: #B22222 !important;
+  font-size: 15px;
+  letter-spacing: .3em;
+  padding:0px;
+  margin:0px;
+}
 .blogSideBarSection {
   line-height:1.4em;
 }
@@ -419,7 +444,6 @@ hr {
 .blogSideBarSection ol {
   padding-left:2em;
 }
-.blogHeadline h1,
 .blogHeadline h2,
 .blogHeadline a {
   text-decoration:none;
@@ -437,7 +461,6 @@ hr {
 }
 .blogInfo {
   font-size:0.9em;
-  margin-bottom:0.5em;
 }
 .blogCommentOdd {
   background:#eee;

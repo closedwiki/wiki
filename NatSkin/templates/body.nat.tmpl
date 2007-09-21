@@ -1,4 +1,4 @@
-<!-- template: defaultbody.nat.tmpl -->
+<!-- template: body.nat.tmpl -->
 %TMPL:DEF{"defaultbody"}% 
 <a name="PageTop"></a>
 <table class="natPageBox" cellpadding="0" cellspacing="0" border="0" width="100%">
@@ -7,7 +7,7 @@
   <td class="natBoxBorderLeft">
     <div class="natBodyContents">
       <table class="natLayoutTable natHeaderArt" id="natHeaderArt" cellpadding="0" cellspacing="0" border="0" width="100%">
-%TMPL:P{"topbar"}%
+%TMPL:P{"topbar"}% <!-- -->
       %IFSKINSTATETHEN{sidebar="left|both|off"}%
       </table>
       <table class="natLayoutTable" cellpadding="0" cellspacing="0" border="0" width="100%">
@@ -16,21 +16,21 @@
 	  %IFSKINSTATETHEN{sidebar="left|both"}%
 	  <td class="natMiddle natMiddleLeft natSideBar natSideBarLeft" rowspan="2" valign="top">
 	    <div class="natSideBarContents">
-%TMPL:P{"leftsidebar"}%
+%TMPL:P{"leftsidebar"}% <!-- -->
 	    </div>
 	  </td>
 	  %FISKINSTATE%
 	  <td class="natMain natMiddle %IFSKINSTATE{sidebar="right|off" then="natMiddleLeft natMainLeft"}% %IFSKINSTATE{sidebar="left|off" then="natMiddleRight natMainRight"}% %IFSKINSTATE{sidebar="off" then="natMiddleBoth natMainBoth"}%" valign="top">
 	    <div class="natMainHeaderContents">
-%TMPL:P{"contentheader"}%
+%TMPL:P{"contentheader"}% <!-- -->
 	    </div>
 %TMPL:P{"broadcast"}% <!-- -->
-	    <div class="natMainContents"> %TMPL:P{"content"}% </div>
+	    <div class="natMainContents" id="natMainContents">%STARTALIASAREA%%TMPL:P{"content"}%%STOPALIASAREA%</div>
 	  </td> 
 	  %IFSKINSTATETHEN{sidebar="right|both"}%
 	  <td class="natMiddle natMiddleRight natSideBar natSideBarRight"  rowspan="2" valign="top">
 	    <div class="natSideBarContents">
-%TMPL:P{"rightsidebar"}%
+%TMPL:P{"rightsidebar"}% <!-- -->
 	    </div>
 	  </td> 
 	  %FISKINSTATE%
@@ -60,6 +60,10 @@
 </tr>
 <tr><td class="natBoxBorderBottomLeft"> </td><td class="natBoxBorderBottomRight"> </td></tr>
 </table>
+<div class="natExtraDiv1"></div>
+<div class="natExtraDiv2"></div>
+<div class="natExtraDiv3"></div>
+<div class="natExtraDiv4"></div>
 <a name="PageBottom"></a>
 %TMPL:END%
 %TMPL:DEF{"body"}%%TMPL:P{"defaultbody"}%%TMPL:END%

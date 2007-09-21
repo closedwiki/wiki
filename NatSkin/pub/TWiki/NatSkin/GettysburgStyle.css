@@ -16,6 +16,9 @@ a:hover, a:active {
 hr {
   border-bottom:1px solid #aaaaaa;
 }
+body, input, textarea, select {
+  font-size:14px;
+}
 
 .natBody {
   margin:0;
@@ -23,7 +26,7 @@ hr {
   background:#eeeeee; 
 }
 .natBodyContents {
-  font-family:arial,sans-serif;
+  font-family:georgia,serif;
 }
 
 /* page layout */
@@ -33,6 +36,7 @@ hr {
 .natTopRightContents,
 .natTopLeftContents {
   margin:10px 20px 20px 20px;
+  font-family:arial,sans-serif;
 }
 
 .natSideBar {
@@ -67,7 +71,6 @@ hr {
 
 .twikiTable th {
   font-weight:bold;
-  font-family:georgia,serif;
   text-align:left;
   background: #eeeeee;
   line-height:170%;
@@ -77,7 +80,7 @@ hr {
 .twikiTable th span,
 .twikiTable th font,
 .twikiTable th a {
-  color:#003366 !important; /* SMELL: breaks %TABLE% */
+  color:#003366;
 }
 .twikiTable th a:hover {
   color:#ffcc66;
@@ -103,7 +106,6 @@ hr {
 .natTopicForm .twikiFirstCol,
 .natTopicForm th {
   font-weight:bold;
-  font-family:georgia,serif;
   background: #eeeeee;
 }
 .natTopicForm th a {
@@ -125,14 +127,16 @@ hr {
 }
 
 /* twiki page form */
-.twikiPageForm table {
+.twikiPageForm {
+  padding:5px;
   border:1px #aaaaaa solid;
+}
+.twikiPageForm table {
   border-collapse:collapse;
 }
 
 .twikiPageForm th {
   font-weight:bold;
-  font-family:georgia,serif;
   background: #eeeeee;
 }
 .twikiPageForm th a {
@@ -142,7 +146,6 @@ hr {
 /* search */
 .natSearchTable {
   border:1px #aaaaaa solid;
-  font-size:0.9em;
   margin-top:1em;
 }
 .natSearchTable:first-child {
@@ -154,7 +157,6 @@ hr {
   background: #eeeeee;
 }
 .natSearchHit {
-  font-size:0.9em;
   border:1px #aaaaaa solid;
 }
 .natSearchHit th {
@@ -199,6 +201,13 @@ hr {
 .natWebSlogan {
   margin-left:3px;
 }
+.natTopRightContents {
+  font-size:12px;
+  margin-top:15px;
+}
+.natSearchBoxTop input {
+  font-size:12px;
+}
 
 .natTopRight {
   color:#ffffff;
@@ -209,10 +218,6 @@ hr {
 }
 .natTopRight a:hover {
   color:#ffcc66;
-}
-.natTopicActions a,
-.natTopicActions {
-  line-height:140%;
 }
 
 .natSearchBox input {
@@ -246,42 +251,46 @@ hr {
   background:#999999;
 }
 .natSideBarContents {
-  font-family:georgia,serif;
 }
 
-.natSideBar h1 {
-  border-bottom:1px dotted #ffffff;
-  _border-bottom:1px solid #ffffff; /* IE only */
-}
-.natSideBar h1 a,
-.natSideBar h1 {
-  color:#ffffff;
-  font:normal 20px georgia,serif;
-  letter-spacing:.1em;
-  padding-bottom:2px;
-  text-align:left;
-  text-transform:none;
-  text-decoration:none;
-}
 .natSideBar h2 a:hover,
 .natSideBar li a:hover,
 .natWebLink a:hover {
   text-decoration:underline;
 }
 
-.natWebLink,
-.natSideBar h2 {
+.natSideBar h2,
+.natSideBar h3 {
   padding-left:0px;
   font:bold 14px georgia,serif;
   padding:0px;
   color:#003366;
 }
+.natSideBarPersonal h2,
+h2.natSideBarTitle {
+  border-bottom:1px dotted #ffffff;
+  _border-bottom:1px solid #ffffff; /* IE only */
+  color:#ffffff;
+  font:normal 20px georgia,serif;
+  letter-spacing:.1em;
+  padding-bottom:2px;
+  margin-bottom:12px;
+  text-align:left;
+  color:white;
+}
+.natSideBarPersonal h2 a {
+  color:white;
+}
 
-.natSideBar ol,
 .natSideBar ul {
   color:#003366;
   padding-left:0px;
   margin:0px 0px 10px 1.2em;
+}
+.natSideBar ul ul {
+  margin-left:0px;
+  padding-left:0px;
+  list-style-type:none;
 }
 .natSideBar ol {
   padding-left:2em;
@@ -311,10 +320,7 @@ hr {
 .natMainFooterContents {
   margin:20px;
   color:#444444;
-  font:normal 15px/150% georgia,serif
-}
-.natMainHeaderContents {
-  font-size:95%;
+  font:normal 14px/140% georgia,serif
 }
 
 .natMain a,
@@ -343,10 +349,13 @@ hr {
 }
 
 /* bottom */
+.natBottomBarContents {
+  margin:20px;
+  font-size:95%;
+}
 .natBottomBarContents a:hover,
 .natBottomBarContents {
   color:#666666;
-  font-family:georgia,serif;
 }
 
 /* supported plugins */
@@ -372,7 +381,6 @@ hr {
 /* RedDotPlugin */
 .natSideBar .redDot a {
   color:darkred;
-  font-size:15px;
 }
 
 /* blogging */
@@ -380,23 +388,32 @@ hr {
 .natSideBar .blogAuthorButtons {
   background:#888888;
 }
-.blogAbout {
-  font-size:14px;
-}
 .blogHeadline .blogCommentCount {
   font-size:26px;
   line-height:50%;
   padding-top:3px;
   vertical-align:top;
 }
-.natSideBar .blogSideBarHeader h1 {
-  border-bottom:0px;
-  margin-bottom:0px;
-}
 .blogSideBarHeader {
+  margin-bottom:5px;
   border-bottom:1px dotted #ffffff;
   _border-bottom:1px solid #ffffff; /* IE only */
-  margin-bottom:5px;
+  color:#ffffff;
+  font:normal 20px georgia,serif !important;
+  letter-spacing:.1em;
+  padding-bottom:2px;
+  text-align:left;
+  color:white !important;
+}
+.blogSideBarSection h2 {
+  color:#ffffff;
+  font:normal 20px georgia,serif !important;
+  letter-spacing:.1em;
+  padding-bottom:2px;
+  text-align:left;
+  color:white !important;
+  margin:0px;
+  padding:0px;
 }
 .blogSideBarSection {
   margin-bottom:1.5em;
@@ -413,8 +430,7 @@ hr {
   color:#003366;
 }
 .blogInfo {
-  margin-bottom:1.0em;
-  font-size:14px;
+  margin:1.0em 0em;
 }
 .blogEntry {
   margin-bottom:1.0em;

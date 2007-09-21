@@ -27,10 +27,10 @@
   color:#99ff66; 
 }
 
-.natWebButtons ul li.current a:hover {
+.natWebButtons ul a.current:hover {
   color:#99ff66; 
 }
-.natWebButtons ul li.current a {
+.natWebButtons ul a.current {
   text-decoration: none;
   background:#555555;
   color:#eeeeee;

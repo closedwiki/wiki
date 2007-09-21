@@ -2,17 +2,18 @@
 <div class="natOopsMore">
 <table border="0" cellpadding="5">
 <form name="main" action="%SCRIPTURLPATH{"manage"}%/%BASEWEB%/%BASETOPIC%" method="post">
+<input type="hidden" name="action" value="editSettings" />
 <tr>
 <td colspan="2">
----++ %MAKETEXT{"Topic preferences"}%</td></tr>
-  <input type="hidden" name="action" value="editSettings" />
+---++ %MAKETEXT{"Topic preferences"}%
+</td></tr>
 <tr>
   <td valign="top">
-    <ul style="margin:0px"><li>%MAKETEXT{"Edit preference settings for [_1]" args="[[%BASEWEB%.%BASETOPIC%]]"}%</li></ul>
+    <ul><li>%MAKETEXT{"Edit preference settings for [_1]" args="[[%BASEWEB%.%BASETOPIC%]]"}%</li></ul>
   </td>
-  <td><input type="submit" class="natAltButton" style="width:100%" value='%MAKETEXT{"Edit"}%'>
+  <td><input type="submit" class="natAltButton" value='%MAKETEXT{"Edit"}%'>
     <p />
-    <input type="button" class="natCancelButton" style="width:100%" value='%MAKETEXT{"Cancel"}%' onclick="self.location.href = '%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%';">
+    <input type="button" class="natCancelButton" value='%MAKETEXT{"Cancel"}%' onclick="window.location.href = '%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%';">
   </td>
 </tr>
 </form>
@@ -30,52 +31,65 @@
     <input type="hidden" name="refresh" value="on" />
   </td>
   <td valign="top">
-    <input class="natOkButton" style="width:100%" type="submit" value="%MAKETEXT{"OK"}%" />
+    <input class="natOkButton" type="submit" value="%MAKETEXT{"OK"}%" />
     </form><p />
     <form name="%BASEWEB%%BASETOPIC%ChangeLanguage" action="%SCRIPTURLPATH{"oops"}%/%BASEWEB%/%BASETOPIC%" method="get">
       <input type="hidden" name="template" value="oopslanguagechanged" />
       <input type="hidden" name="language" value="default" />
-      <input class="natAltButton" style="width:100%" type="submit" value="%MAKETEXT{"Reset"}%" />
+      <input class="natAltButton" type="submit" value="%MAKETEXT{"Reset"}%" />
     </form>
   </td>
 </tr>
-<form name="main" action="%SCRIPTURLPATH{"search"}%/%BASEWEB%/SearchResult">
 <tr>
 <td colspan="2">
----++ %MAKETEXT{"Backlinks"}%</td></tr>
+---++ %MAKETEXT{"Backlinks"}%
+</td></tr>
 <tr>
   <td>
-    <input type="hidden" name="scope" value="text">
-    <input type="hidden" name="regex" value="on">
-    <input type="hidden" name="search" value="%BASETOPIC%[^A-Za-z]">
-    <ul style="margin:0px"><li>%MAKETEXT{"Find topics that link to [_1] ..." args="[[%BASEWEB%.%BASETOPIC%]]"}%</li></ul>
+    <ul><li>%MAKETEXT{"Find topics that link to [_1] ..." args="[[%BASEWEB%.%BASETOPIC%]]"}%</li></ul>
   </td>
   <td>
-    <input type="submit" class="natAltButton" style="width:100%" value='%MAKETEXT{"Find"}%'>
+    <input type="button" class="natAltButton" value='%MAKETEXT{"Find"}%' onclick="if (document.getElementById('searchall').checked) {window.location.href='%SCRIPTURLPATH{"oops"}%/%BASEWEB%/%BASETOPIC%?template=backlinksallwebs';} else {window.location.href='%SCRIPTURLPATH{"oops"}%/%BASEWEB%/%BASETOPIC%?template=backlinksweb';}">
   </td>
 </tr>
 <tr>
   <td>
-    <ul style="margin:0px"><li>%MAKETEXT{"Search in all public webs"}%</li></ul>
+    <ul><li>%MAKETEXT{"Search in all public webs"}%</li></ul>
   </td>
   <td>
-    <input type="checkbox" name="web">
+    <input type="checkbox" id="searchall" name="web">
   </td>
 </tr>     
-</form>
-<tr style="%IF{"not {Cache}{Enabled}" then="display:none"}%">
+<tr>
+<td colspan="2">
+---++ %MAKETEXT{"Rename, move or delete this web:"}%
+</td></tr>
+<tr>
+<tr>
+  <td>
+    <ul>
+      <li>%MAKETEXT{"Rename the <nop>[_1] web" args="%BASEWEB%"}%</li>
+      <li>%MAKETEXT{"See also:"}% %TWIKIWEB%.ManagingWebs </li>
+    </ul>
+  </td>
+  <td>
+    <input type="button" class="natAltButton" onclick="window.location.href='%SCRIPTURLPATH{"rename"}%/%BASEWEB%/%BASETOPIC%?action=renameweb'" value="%MAKETEXT{"Rename"}%" />
+  </td>
+</tr>
+<tr>
 <td colspan="2">
 ---++ %MAKETEXT{"Topic Caching"}%
 </td>
+</tr>
 <tr style="%IF{"not {Cache}{Enabled}" then="display:none"}%">
 <td>
-<ul style="margin:0px;">
+<ul>
   <li>%MAKETEXT{"Get a fresh page of the topic [_1]" args="[[%BASEWEB%.%BASETOPIC%]]"}%&nbsp;</li>
 </ul>
 <td>
   <form action="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%" method="post">
   <input type="hidden" name="refresh" value="on" />
-  <input type="submit" class="natAltButton" style="width:100%" value='%MAKETEXT{"Refresh"}%' />
+  <input type="submit" class="natAltButton" value='%MAKETEXT{"Refresh"}%' />
   </form>
 </td>
 </tr>

@@ -165,6 +165,7 @@ function getWindowWidth () {
 }
 
 function fixHeightOfTheText() {
+  window.onresize = null; /* disable onresize handler */
   var height = getWindowHeight();
   var topBarHeight = document.getElementById("natTopLeftBarSizer").clientHeight || 0;
   var offset;
@@ -174,7 +175,10 @@ function fixHeightOfTheText() {
     txtarea.style.height = height + "px";
   }
   //alert("height="+height+", offset="+offset+", topBarHeight="+topBarHeight);
-  return height;
+  setTimeout("establishOnResize()", 100); /* add a slight timeout not to DoS IE */
+}
+function establishOnResize() {
+  window.onresize = fixHeightOfTheText;
 }
 
 function natSetupEdit() {
@@ -182,11 +186,11 @@ function natSetupEdit() {
     txtarea = document.EditForm.natEditTextArea;
   } else {
     // some alternate form? take the first one we can find
-    var areas = document.getElementsByTagName('textarea');
+    //var areas = document.getElementsByTagName('textarea');
     txtarea = areas[0];
   }
-  window.onresize = fixHeightOfTheText;
   fixHeightOfTheText();
+  establishOnResize();
 
 
   return true;

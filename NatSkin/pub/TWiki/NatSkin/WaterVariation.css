@@ -55,11 +55,11 @@
   border-bottom:0px !important;
   color:white;
 }
-.natWebButtons ul li.current a:hover {
+.natWebButtons ul a.current:hover {
   background:white;
   color:black;
 }
-.natWebButtons ul li.current a {
+.natWebButtons ul a.current {
   background:white;
   color:black;
 }

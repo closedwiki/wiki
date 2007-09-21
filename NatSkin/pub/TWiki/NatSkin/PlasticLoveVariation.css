@@ -56,11 +56,11 @@
   padding:2px 5px;
   border-bottom:0px !important;
 }
-.natWebButtons ul li.current a:hover {
+.natWebButtons ul a.current:hover {
   background:white;
   color:#FE1C70;
 }
-.natWebButtons ul li.current a {
+.natWebButtons ul a.current {
   background:white;
   color:black;
 }

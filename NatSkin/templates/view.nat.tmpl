@@ -1,24 +1,18 @@
-%TMPL:INCLUDE{"page"}%
-<!-- template: view.nat.tmpl -->
-<!-- include viewbody -->%TMPL:INCLUDE{"viewbody"}%
-<!-- include viewtopicactions -->%TMPL:INCLUDE{"viewtopicactions"}%
-<!-- include viewsidebar -->%TMPL:INCLUDE{"viewsidebar"}%
-<!-- include viewjavascript -->%TMPL:INCLUDE{"viewjavascript"}%
-<!-- include viewjavascript -->%TMPL:INCLUDE{"viewstyles"}%
-<!-- include viewjavascript -->%TMPL:INCLUDE{"searchbox"}%
+%TMPL:INCLUDE{"page"}%<!-- template: view.nat.tmpl -->
+%TMPL:INCLUDE{"viewbody"}%<!-- -->
+%TMPL:INCLUDE{"viewtopicactions"}%<!-- -->
+%TMPL:INCLUDE{"viewsidebar"}%<!-- -->
+%TMPL:INCLUDE{"viewjavascript"}%<!-- -->
+%TMPL:INCLUDE{"viewstyles"}%<!-- -->
+%TMPL:INCLUDE{"searchbox"}%<!-- -->
 %TMPL:DEF{"bodyclass"}%natViewBody%TMPL:END%
-
-%TMPL:DEF{"title"}%%IFDEFINED{"%PAGETITLE%" then="$test" else="%TOPIC% - %WEB%"}%%TMPL:END%
-
+%TMPL:DEF{"title"}%%IFDEFINED{"%PAGETITLE%" then="$test" else="%TOPIC% - %WEB%" glue="off"}%%TMPL:END%
 %TMPL:DEF{"meta"}%%HTTP_EQUIV_ON_VIEW%
 %IFDEFINED{"%METAKEYWORDS%" then="<meta name=\"keywords\" content=\"$test\" />$n<meta http-equiv=\"keywords\" content=\"$test\" />"}%
 %IFDEFINED{"%METAAUTHOR%" glue="off" then="<meta name=\"author\" content=\"$test\" />"}%
 %IFDEFINED{"%METADESCRIPTION%" then="<meta name=\"description\" content=\"$test\" />"}%%TMPL:END%
-
-%TMPL:DEF{"content"}%%STARTALIASAREA%%TEXT%
-%META{"form"}%
-%STOPALIASAREA%%TMPL:END%
-
+%TMPL:DEF{"content"}%%TEXT%
+%META{"form"}% %TMPL:END%
 %TMPL:DEF{"contentheader"}% <!-- -->
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
@@ -42,10 +36,9 @@
     </dirtyarea>
   </td>
 </tr></table>%TMPL:END%
-
-%TMPL:DEF{"contentfooter"}%<div class="natTopicAttachments"> %META{"attachments"}% </div>
+%TMPL:DEF{"contentfooter"}%
+%IFDEFINED{"$percntMETA{\"attachments\"}$percnt" then="<div class=\"natTopicAttachments\"> $test </div>"}%
 <div class="natRevision"> %REVINFO% </div>%TMPL:END%
-
 %TMPL:DEF{"broadcast"}%<!-- -->
 %IFDEFINEDTHEN{"$percntBROADCASTMESSAGE$percnt"}%
   %$nopTWISTYTOGGLE{id="broadcastmessage"

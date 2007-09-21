@@ -9,13 +9,13 @@
 %TMPL:DEF{"meta"}% <meta name="robots" content="noindex, nofollow" /> %TMPL:END%
 %TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"edit"}%)%TMPL:END%
 %TMPL:DEF{"content"}% <!-- -->
+---+ %MAKETEXT{"Choose a new form for [_1]" args="[[%TOPIC%]]"}%
 <form name="EditForm" method="post" action="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$year$mo$day$hours$minutes$seconds"}%">
   <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
   <input type="hidden" name="redirectto" value="%REDIRECTTO%" />
 %TEXT%
   <input type="hidden" name="skin" value="%URLPARAM{"skin"}%" />
   <input type="hidden" name="cover" value="%URLPARAM{"cover"}%" />
----+ %MAKETEXT{"Choose a new form for [_1]" args="[[%TOPIC%]]"}%
 <ul>
 %FORMLIST%
 </ul>

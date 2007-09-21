@@ -44,18 +44,15 @@ hr {
 
 
 /* top */
-.natHeaderArt {
-  background:#336699;
-}
 .natTopBar {
   border-top:3px solid #99ccff;
+  background:#336699;
 }
 .natWebTitle a {
   color:#ffffff;
 }
 .natWebTitle {
   font:bold 34px "Century Schoolbook l", georgia, "Times New Roman", serif;
-  line-height:110%;
 }
 
 .natWebSlogan,
@@ -111,7 +108,7 @@ hr {
 .twikiTable th span,
 .twikiTable th font,
 .twikiTable th a {
-  color:#999966 !important; /* SMELL: breaks %TABLE{}% */
+  color:#999966;
 }
 .twikiDiffTable td {
   border:0px;
@@ -212,20 +209,6 @@ hr {
   color:#99cc66;
 }
 
-.natSideBar h1 {
-  border-bottom:1px dotted #999999;
-  _border-bottom:1px solid #cccccc; /* IE only */
-  padding-left:15px;
-}
-.natSideBar h1 a,
-.natSideBar h1 {
-  text-align:left;
-  font:normal 14px verdana,arial,sans-serif;
-  letter-spacing:.3em;
-  text-transform:uppercase;
-  color:#555;
-  text-decoration:none;
-}
 .natSideBar h2 {
   padding:2px 5px 2px 15px;
 }
@@ -236,6 +219,28 @@ hr {
   color:#666;
   font:bold 12px verdana,arial,sans-serif;
   text-transform:uppercase;
+}
+.natSideBarPersonal h2,
+h2.natSideBarTitle {
+  background-color:inherit;
+  border-bottom:1px dotted #999999;
+  _border-bottom:1px solid #cccccc; /* IE only */
+  padding-left:15px;
+  text-align:left;
+  font:normal 14px verdana,arial,sans-serif;
+  letter-spacing:.3em;
+  text-transform:uppercase;
+  text-decoration:none;
+  color:#555;
+}
+.natSideBarPersonal h2 a {
+  color:#555;
+  background:white;
+  font:normal 14px verdana,arial,sans-serif;
+  letter-spacing:.3em;
+}
+.natSideBar h3 {
+  font:bold 12px verdana,arial,sans-serif;
 }
 
 .natSideBar ol,
@@ -253,6 +258,7 @@ hr {
 .natSideBar ul ul {
   margin-left:0px;
   padding-left:0px;
+  list-style-type:none;
 }
 
 .natSubWebs .natWebLink a {
@@ -310,7 +316,7 @@ hr {
 /* search tables */
 .natSearchTable {
   border:1px #aaaaaa solid;
-  font-size:0.9em;
+  font-size:95%;
   margin-top:1em;
 }
 .natSearchTable:first-child {
@@ -323,11 +329,11 @@ hr {
   font-family:verdana,arial,sans-serif;
   text-transform:uppercase;
   border-bottom:1px #aaaaaa solid;
-  font-size:0.9em;
+  font-size:95%;
 }
 .natSearchHit {
   border:1px #aaaaaa solid;
-  font-size:0.9em;
+  font-size:95%;
 }
 .natSearchHit th {
   padding-bottom:0px;
@@ -377,21 +383,24 @@ hr {
 }
 
 /* blogging */
-.blogAbout {
-  padding-left:15px;
-}
-.blogSideBarLatest h1,
-.blogSideBarComments h1 {
-  border-bottom:0px;
-  margin-bottom:0px;
-}
-.natSideBar .blogSideBarHeader h1 {
-  border:0px;
-}
 .blogSideBarHeader {
   border-bottom:1px dotted #999999;
   _border-bottom:1px solid #cccccc; /* IE only */
-  margin-bottom:5px;
+  padding-left:15px;
+  text-align:left;
+  font:normal 14px verdana,arial,sans-serif !important;
+  letter-spacing:.3em;
+  text-transform:uppercase;
+  text-decoration:none;
+  color:#555;
+  background:white !important;
+}
+.blogSideBarHeader h2 {
+  display:inline;
+  background:white;
+  padding:0px;
+  font:normal 14px verdana,arial,sans-serif !important;
+  letter-spacing:.3em;
 }
 .blogSideBar {
   color:#444444;
@@ -412,7 +421,7 @@ hr {
 .blogSideBar ul li {
 }
 .blogInfo {
-  font-size:0.9em;
+  font-size:95%;
 }
 .blogText {
   margin-top:5px;
@@ -424,7 +433,7 @@ hr {
   border-top:1px #aaaaaa solid;
 }
 .blogComment .blogDate {
-  font-size:0.8em;
+  font-size:95%;
   color:#666;
   font-weight:normal;
 }
@@ -434,7 +443,7 @@ hr {
 }
 .blogCommentCount {
   color:#666;
-  font-size:0.9em;
+  font-size:95%;
   width:2em;
   text-align:right;
 }
@@ -448,18 +457,14 @@ hr {
   border-left:1px solid #777;
   padding-left:5px;
 }
-.blogAddComment {
-  font-size:0.9em;
-}
 .blogAddComment textarea,
 .blogAddComment input {
   font-family: Arial, Sans-Serif;
   color:#444444;
-  font-size:1.0em;
 }
 .blogArchiveDescription {
   margin-bottom:20px;
-  font-size:0.9em;
+  font-size:95%;
 }
 .blogSideBarSection {
   margin-top:1em;
@@ -476,12 +481,12 @@ hr {
 }
 .blogSideBarRelated ul,
 .blogSideBarLatest ul {
-  margin-left:15px;
 }
 .blogSideBarRelated li,
 .blogSideBarLatest li {
-  list-style:disc;
-  color:#999999;
+  padding-bottom:5px;
+  margin-bottom:5px;
+  border-bottom:1px solid #99ccff;
 }
 .natSideBar .blogAuthorButtons,
 .natSideBar .blogAdminButtons {

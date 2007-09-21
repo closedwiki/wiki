@@ -9,6 +9,7 @@
   margin:0;
   padding:0;
   voice-family:inherit;
+  font-size:12px;
 }
 
 p {
@@ -244,7 +245,6 @@ label {
 .natTopRightContents {
   margin:25px 20px 10px 5px;
   font-family:arial, sans-serif;
-  font-size:12px;
   line-height:135%;
 }
 .natSearchBox input {
@@ -257,6 +257,9 @@ label {
 }
 .natSearchBoxTop {
   margin-bottom:0.4em;
+}
+.natSideBar .natSearchBox a {
+  display:none;
 }
 .natSearchBoxPos1 input {
   width:190px;
@@ -303,7 +306,6 @@ label {
   padding:0px;
 }
 .natSideBarContents {
-  font-size:95%;
   font-weight:normal;
   margin:0;
   padding:1em 1em 1.7em 1em;
@@ -320,30 +322,24 @@ label {
 .natSideBar a:hover {
   text-decoration:none;
 }
-.natSideBarTitle {
-  margin:-1em -1em 0 -1em;
+.natSideBar h2 {
+  line-height:1.4em;
+  padding:2px 5px;
+  color:black;
+  margin-bottom:0.3em;
+}
+h2.natSideBarTitle {
+  margin:-1em -1em 1em -1em;
   border-bottom:3px solid #22638C;
   color:black;
   text-align:center;
   font-weight:bold;
-}
-.natSideBarTitle h1 {
   font-family:"Lucida Grande", verdana, lucida, arial, sans-serif;
-  font-size:110%;
-  margin:0px;
-  line-height:1.4em;
-  padding:0.3em 0;
+  font-size:120%;
+  line-height:120%;
+  padding:0.5em 0;
   color:black;
-  margin-bottom:2px;
   background:#FFD8AA;
-}
-.natSideBar h2 {
-  font-size:95%;
-  line-height:1.4em;
-  padding:0;
-  color:black;
-  text-align:center;
-  margin-bottom:0.3em;
 }
 .natSideBar h2 a {
   color:black;
@@ -378,7 +374,7 @@ html>body .natSideBar li a {
   border-top:1px solid #ccc;
   border-bottom:1px solid #ccc;
 }
-.natSideBarPersonal h1 {
+.natSideBarPersonal h2 {
   font-family:"Lucida Grande", verdana, lucida, arial, sans-serif;
   font-size:110%;
   line-height:1.4em;
@@ -390,9 +386,9 @@ html>body .natSideBar li a {
   padding-bottom:0.4em;
   margin-bottom:0.4em;
 }
-.natSideBarPersonal h1 a,
-.natSideBarPersonal h1 a:visited,
-.natSideBarPersonal h1 a:link {
+.natSideBarPersonal h2 a,
+.natSideBarPersonal h2 a:visited,
+.natSideBarPersonal h2 a:link {
   color:black;
 }
 .natSideBarPersonal .redDot a,
@@ -516,7 +512,7 @@ html>body .natSideBar li a {
 .twikiTable th font,
 .twikiTable th a {
   color:#444444;
-  color:#1e5bbd !important; /* SMELL: breaks %TABLE{}% */
+  color:#1e5bbd;
 }
 .twikiTable th a:hover {
   background-color:transparent;
@@ -683,6 +679,15 @@ html>body .twikiToc li a {
 .blogSideBar li a {
   display:inline;
 }
+.blogSideBarHeader h2,
+.blogSideBarHeader {
+  background-color:#DFEDFD;
+  padding:2px 5px;
+}
+.blogSideBarHeader h2 {
+  margin:0px;
+  padding:0px;
+}
 .blogCommentOdd {
   background:#F8F4F1;
 }
@@ -698,16 +703,14 @@ html>body .twikiToc li a {
 .blogSubComment {
   border-left:2px solid #ddd;
 }
-.blogHeadline h1 a:hover,
-.blogHeadline h1 a,
-.blogHeadline h1 {
+.blogHeadline h2 a:hover,
+.blogHeadline h2 a,
+.blogHeadline h2 {
   line-height:100%;
 }
 .blogInfo {
   font-size:0.9em;
   line-height:130%;
-  margin-top:0.5em;
-  margin-bottom:1.0em;
 }
 .blogHeadline .blogCommentCount {
   padding-top:5px;

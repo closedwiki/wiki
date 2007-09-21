@@ -8,52 +8,70 @@ a:active, a:link, a {
   text-decoration:none;
 }
 a:hover {
-  color:#003366;
+  color:#B22222;
   text-decoration:underline;
 }
 
 hr {
-  border-bottom:1px solid #aaaaaa;
+  border-bottom:1px solid #ccc;
 }
 
 /* twiki styles */
 .twikiTable {
-  border:1px #aaaaaa solid;
-  font-size:12px;
+  margin:0px;
+  border:1px #bbb solid;
+  line-height:140%;
+  border-spacing:0px;
 }
 .twikiTable th {
-  border:1px #aaaaaa solid;
-  background:#e5e5e5;
+  padding:2px 5px;
+  background-color:#eeecee;
+}
+.twikiTableEven td {
+  background:#eeecee;
 }
 .twikiTable th a {
   text-decoration:none;
   font-weight:bold;
 }
 .twikiTable th,
+.twikiTable th h2,
+.twikiTable th h3,
+.twikiTable th h4,
 .twikiTable th a,
 .twikiTable th span,
 .twikiTable th font {
-  color:#444444 !important; /* SMELL temporary hack */
+  color:#444444;
+  font-weight:bold;
 }
-.twikiTable td {
-  border:1px #aaaaaa solid;
-  background:white;
+.twikiTable th h4 {
+  margin:0px;
 }
-.twikiTableEven td {
-  background:#eeeeee;
+
+th.twikiSortedDescendingCol,
+th.twikiSortedAscendingCol {
+  background:#c5c5c5;
+}
+.twikiTableOdd td.twikiSortedDescendingCol,
+.twikiTableOdd td.twikiSortedAscendingCol {
+  background:#eeecee;
+}
+.twikiTableEven td.twikiSortedDescendingCol,
+.twikiTableEven td.twikiSortedAscendingCol {
+  background:#d7d7d7;
 }
 
 /* twikiDiff */
 .twikiDiffTable { 
-  border:1px solid #aaaaaa;
-  background:#fafafa;
+  border:1px solid #ccc;
+  background:#f6f6f6;
 }
 .twikiDiffTable td,
 .twikiDiffTable th {
   border:0px;
 }
 .twikiDiffTable th { 
-  border-bottom:1px solid #aaaaaa;
+  border-bottom:1px solid #ccc;
 }
 
 .twikiDiffChangedHeader { }
@@ -74,33 +92,34 @@ hr {
 
 
 /* twiki page form */
-.twikiPageForm table {
-  border:1px #aaaaaa solid;
-  border-collapse:collapse;
-}
-.twikiPageForm table th,
-.twikiPageForm table td {
+.twikiPageForm {
   padding:5px;
+  border:1px #ccc solid;
+  background-image:url(GrayBlend.png);
+  background-repeat:repeat-x;
+  background-position:0px 0px;
+}
+.twikiPageForm table {
+  margin:0px;
 }
 
 .twikiPageForm th {
-  border-right:1px #aaaaaa solid;
   color:#444444;
-  background: #eeeeee;
-  padding-top:2px;
-  padding-bottom:2px;
 }
 .twikiPageForm th a {
   color:#444444;
   text-decoration:none;
   font-weight:bold;
 }
-.twikiPageForm td {
+#natEditTextArea,
+.twikiPageForm textarea,
+.twikiPageForm input {
+  border:1px #ccc solid;
 }
 
 /* helpers */
 .natErrorMsg {
-  background:#eeeeee;
+  background:#eeecee;
 }
 
 /* page layout */
@@ -108,21 +127,32 @@ hr {
   margin:0;
   padding:0;
   background:#e5e5e5;
+  font-size:12px;
+  font-family:arial,sans-serif;
+}
+.natTopBar {
+  padding:0px;
 }
 .natTopLeftContents {
-  margin:15px 0px 15px 20px;
+  margin:20px 0px 20px 20px;
 }
 .natTopRightContents {
-  margin:15px 20px 15px 0px;
+  margin:20px;
 }
-.natMiddle {
-  padding:20px 10px 20px 10px;
+.natMainContents {
+  margin:0px;
+  padding:10px 1px 10px 1px;
 }
-.natMain,
+.natSideBarContents  {
+  margin:0px;
+  padding:20px 10px 10px 20px;
+}
 .natMainFooter,
-.natSideBar {
-  padding-left:20px;
-  padding-right:20px;
+.natMain {
+  padding:20px 10px 10px 20px;
+}
+.natMainHeaderContents {
+  margin:0px;
 }
 
 /* login */
@@ -132,12 +162,18 @@ hr {
   _border:1px #aaa solid; /* IE only */
 }
 .natLoginBody hr {
-  border-bottom:1px solid #eee;
+  border-bottom:1px solid #eeecee;
+}
+
+/* oops */
+.natOopsMessage {
+  width:700px;
+  margin:0px auto;
 }
 
 /* top */
 .natHeaderArt {
-  background:#eeeeee;
+  background:#eeecee;
 }
 .natTopBar {
   color:#333333;
@@ -145,20 +181,15 @@ hr {
   border-bottom:1px #aaaaaa dotted;
   _border-bottom:1px #aaaaaa solid; /* IE only */
 }
-.natTopLeftContents, .natTopRightContents {
-  font-family:arial,sans-serif;
-}
 .natWebTitle {
   font-weight:normal;
   font-family:verdana,arial,sans-serif;
   letter-spacing:1px;
+  padding:10px 0px;
 }
 .natWebSlogan {
-  font-family:arial,sans-serif;
   font-weight:bold;
-  font-size:12px;
   color:#333333;
-  margin-left:3px;
 }
 .natSearchBox input {
   width:170px;
@@ -173,6 +204,24 @@ hr {
 .natSearchBoxPos3 {
   padding:10px 0px;
 }
+.natTopRightContents {
+  color:#eeecee;
+}
+.natTopicActions {
+  line-height:140%;
+}
+.natTopicActions .natSep {
+  display:none;
+}
+.natTopicActions a {
+  padding:2px 4px;
+  margin:0px 2px 0px -4px;
+}
+.natTopicActions a:hover {
+  text-decoration:none;
+  background:#ddd;
+  color:#010101;
+}
 
 /* sidebar */
 .natTopRight, 
@@ -182,32 +231,47 @@ hr {
 }
 .natSideBarContents {
   color:#003366;
-  font-family:arial,sans-serif;
+}
+.natSideBar a {
   font-weight:normal;
 }
-.natSideBar h1,
-.natSideBar h1 a {
-  color:#444444;
-  font-weight:normal;
-  font-family:verdana,arial,sans-serif;
-  font-size:14px;
-}
-.natSideBar h1 {
-  text-transform:uppercase;
-  letter-spacing:.3em;
-  border-bottom:1px dotted #444444;
-  _border-bottom:1px solid #aaaaaa; /* IE only */
-}
-.natWebLink,
-.natWebLink a,
 .natSideBar h2 a,
 .natSideBar h2 {
   font-weight:bold;
   font-size:14px;
 }
-.natSideBar ul {
-  margin-left:15px;
-  padding-left:17px;
+.natSideBar h3 a,
+.natSideBar h3 {
+  font-weight:bold;
+  font-size:14px;
+}
+h2.natSideBarTitle a,
+h2.natSideBarTitle {
+  font-weight:normal;
+  text-transform:uppercase;
+  letter-spacing:.3em;
+  color:#444444;
+}
+h2.natSideBarTitle {
+  border-bottom:1px dotted #444444;
+  _border-bottom:1px solid #aaaaaa; /* IE only */
+  margin:0px 0px 10px 0px;
+}
+.natSideBar ul li {
+  background-image:url(q_black.gif);
+  background-position:0px 5px;
+  background-repeat:no-repeat;
+  padding-left:10px;
+}
+.natSideBar ul ul {
+  margin-left:0px;
+  padding-left:0px;
+  list-style-type:none;
+}
+.natSideBar ul ol li,
+.natSideBar ul ul li {
+  background-image:none;
+  padding-left:0px;
 }
 .natSideBar li {
   margin-top:0px;
@@ -216,7 +280,6 @@ hr {
 .natNotes p {
   border-bottom:1px #444444 dotted;
   _border-bottom:1px #444444 solid; /* IE only */
-  margin-left:15px;
   margin-top:10px;
   margin-bottom:0px;
   padding-bottom:10px;
@@ -231,32 +294,74 @@ hr {
 .natMainHeaderContents,
 .natMainContents table {
   color:#444444;
-  font-family:arial,sans-serif;
-}
-.natMainHeaderContents {
-  margin-top:3px;
-  margin-bottom:1em;
-  font-size:13px;
 }
 
 .natMain select,
 .natMain input,
 .natMain textarea {
-  font-size:13px;
-
+  font-size:12px;
+}
+.natMain input,
+.natMain select {
+  vertical-align:middle;
+}
+.natMain pre {
+  background:#f6f6f6;
+  padding:5px;
+  border:1px solid #ccc;
+  font-size:11px;
+}
+.natMainContents dl {
+  padding:0px;
+  border:1px #ccc solid;
+}
+.natMainContents dl dt {
+  line-height:150%;
+  background:#eeecee;
+  background-image:url(../TWikiDocGraphics/stargold.gif);
+  background-position:2px 3px;
+  background-repeat:no-repeat;
+  padding:2px 5px 2px 23px;
+}
+.natMainContents dl dd {
+  margin:0px 0px 0px 18px;
+  padding:7px 0px 7px 5px;
 }
 
-/* anchors in natMain */
 .natMain .twikiEmulatedLink,
 .natMain a,
 .natMainFooter a {
   font-weight:normal;
   text-decoration:none;
-  color:#003366;
 }
-.natMainFooter a:hover,
-.natMain a:hover {
+.natMainContents a {
   text-decoration:underline;
+}
+.natMainContents .twikiNewLink,
+.twikiToc a:hover,
+.natTopicForm a:hover,
+.natMainHeaderContents a:hover,
+.natMainFooterContents a:hover,
+.natSideBarContents a:hover,
+.natMainContents a:hover {
+  /*
+  background-image:url(dots.gif);
+  background-position:bottom;
+  background-repeat:repeat-x;
+  text-decoration:none;
+  */
+  color:#B22222;
+}
+.natMainContents .twikiNewLink {
+  background-color:#eeecee;
+}
+.twikiToc a {
+  background-image:none;
+  text-decoration:none;
+}
+.natTopicForm a,
+.natMainContents th a {
+  background-image:none;
 }
 
 .natMain h1, .natMain h2, .natMain h3, .natMain h4, .natMain h5, .natMain h6,
@@ -266,23 +371,31 @@ hr {
 .natMain h4 a:hover, .natMain h5 a:hover, .natMain h6 a:hover {
   color:#003366;
   font-weight:normal;
+  margin-bottom:5px;
+  background-image:none;
+  clear:both;
+}
+.natMain h2 {
+  border-bottom:1px solid #ccc;
 }
 
-.natMain input,
-.natMain select {
-  vertical-align:middle;
-}
 
 /* bottom */
+.natSyndicate {
+  display:inline;
+}
 .natBottomBar {
-  padding-left:5px;
-  padding-right:5px;
+  padding:20px;
   background:white;
 }
 .natBottomBarContents {
-  color:#444444;
   height:5em;
   width:100%;
+  text-align:left;
+}
+.natBottomBarContents,
+.natBottomBarContents a {
+  color:#999;
 }
 .natCopyRight {
   display:inline;
@@ -292,23 +405,38 @@ hr {
 }
 
 /* forms */
+.natTopicForm {
+  padding:10px;
+  border-top:1px #ccc solid;
+  background:#f6f6f6;
+  border-bottom:1px #ccc solid;
+}
 .natTopicForm td,
 .natTopicForm th,
 .natTopicForm {
   font-size:12px;
 }
+.natTopicForm td,
 .natTopicForm table {
-  border:1px #aaaaaa solid;
+  border:1px #ccc solid;
+  background:#fff;
 }
 
+.natTopicEditForm .twikiFirstCol a,
+.natTopicEditForm .twikiFirstCol ,
 .natTopicForm .natTopicFormFirstCol,
 .natTopicForm .twikiFirstCol,
+.natTopicForm .twikiFirstCol a,
 .natTopicForm table th {
-  color:#444444;
-  background: #eeeeee;
   vertical-align:top;
-  padding-top:2px;
-  border:0px;
+  font-weight:bold;
+}
+
+.natTopicEditForm .natTopicFormTitle {
+  border-bottom:1px solid #ccc;
+}
+.natTopicForm .natTopicFormFirstCol {
+  text-align:left;
 }
 .natTopicForm table th a {
   color:#444444;
@@ -316,13 +444,26 @@ hr {
   font-weight:bold;
 }
 
-.natTopicEditForm table td {
-  border:0px;
+.natTopicEditForm {
+  margin-top:10px;
+  padding:15px 10px;
+  border-top:1px #ccc solid;
+  background:#f6f6f6;
+  border-bottom:1px #ccc solid;
 }
-.natTopicEditForm .twikiFirstCol a,
-.natTopicEditForm .twikiFirstCol {
-  font-weight:bold;
-  color:#444444;
+
+/* attachments */
+.natTopicAttachments {
+  padding:0px 10px 15px 10px;
+  border-top:1px #ccc solid;
+  border-bottom:1px #ccc solid;
+  background:#f6f6f6;
+}
+.natTopicAttachments h2 {
+  margin:5px 0px 5px 0px;
+}
+.natTopicAttachments table {
+  background:white;
 }
 
 /* search tables */
@@ -336,7 +477,7 @@ hr {
 }
 
 .natSearchTableTitle th {
-  background:#eeeeee;
+  background:#eeecee;
   border-bottom:1px #aaaaaa solid;
   border-left:1px #aaaaaa solid;
   border-right:1px #aaaaaa solid;
@@ -344,59 +485,85 @@ hr {
 .natSearchHit {
   border:1px #aaaaaa solid;
 }
+.natSearchHit th {
+  font-weight:normal;
+}
 
 .natSearchHitEven {
-  background:#eeeeee;
+  background:#eeecee;
 }
 
 /* TOC */
+.twikiToc {
+  margin:0px 10px 10px 0px;
+  padding:5px 10px;
+  border:1px #ccc solid;
+  background-image:url(GrayBlend.png);
+  background-repeat:repeat-x;
+  background-position:0px 0px;
+  float:left;
+}
 .twikiTocTitle {
   color:#003366;
+  margin:0px 0px 5px 0px;
+  padding-bottom:2px;
+  display:block;
+  font-weight:normal;
+  text-align:center;
+  border-bottom:1px #ccc solid;
+}
+.twikiToc ul {
+  margin:0px;
+  padding:0px;
+}
+.twikiToc ul ul {
+  margin-top:0px;
+}
+.twikiToc ul li {
+  background-image:url(q_black.gif);
+  background-position:0px 5px;
+  background-repeat:no-repeat;
+  padding-left:10px;
 }
 
 /* supported plugins and applications */
 
 /* Blogging */
 .alt {
-  border-top:1px #aaaaaa solid;
-  border-bottom:1px #aaaaaa solid;
+  margin:5px 0px;
+  background:#f6f6f6;
+  border-top:1px #ccc solid;
+  border-bottom:1px #ccc solid;
 }
 .border {
-  border:1px #aaaaaa solid;
-}
-/* BlackListPlugin */
-.blackList {
-  border:1px solid #acaaac;
-  background:#eeeeee;
-}
-.blackListComments {
-  border-top:1px dashed #aaaaaa;
-  margin-top:5px;
-}
-.blackListTitle {
-  border-bottom:1px dashed #aaaaaa;
+  border:1px #ccc solid;
 }
 
 /* blogging */
 .blogAbout {
-  font-size:0.9em;
+  font-size:95%;
   line-height:1.3em;
 }
-.blogAbout h1 {
-  line-height:1.4em;
-}
-.blogSideBarLatest h1,
-.blogSideBarComments h1 {
+.blogSideBarLatest h2,
+.blogSideBarComments h2 {
   border-bottom:0px;
   margin-bottom:0px;
 }
-.natSideBar .blogSideBarHeader h1 {
-  border:0px;
+.blogSideBarHeader,
+.blogSideBarHeader h2,
+.blogSideBarHeader a {
+  font-family:verdana,arial,sans-serif;
+  font-size:14px;
+  text-transform:uppercase;
+  color:#444444;
+  font-weight:normal !important;
+  letter-spacing:.3em;
 }
 .blogSideBarHeader {
+  line-height:1.4em;
   border-bottom:1px dotted #444444;
   _border-bottom:1px solid #aaaaaa; /* IE only */
-  margin-bottom:5px;
+  margin:0px 0px 10px 0px;
 }
 .blogSideBar {
   line-height:1.4em;
@@ -411,17 +578,18 @@ hr {
   margin-top:0px;
   margin-left:0px;
 }
-.blogInfo {
-  font-size:0.9em;
-}
 .blogText {
   margin-top:5px;
   padding:1px; /* fix for konqueror */
 }
+.blogComment {
+  margin:5px 0px;
+  padding:10px;
+  border:1px #ccc solid;
+}
 .blogCommentOdd {
-  background:#fafafa;
-  border-bottom:1px #eeeeee solid;
-  border-top:1px #eeeeee solid;
+  background:#f6f6f6;
+  border:1px #ccc solid;
 }
 .blogComment .blogDate {
   font-size:0.8em;
@@ -440,12 +608,18 @@ hr {
 .blogHeadline .blogCommentCount {
   font-size:20px;
 }
-.blogSubComments {
-  padding:5px;
-}
 .blogSubComment {
-  border-left:5px solid #eeeeee;
   padding-left:5px;
+  border-left:5px solid #ddd;
+}
+.blogCommentOdd .blogSubComment {
+  border-color:#ccc;
+}
+.blogCommentEven .blogSubComment {
+  border-color:#ddd;
+}
+.blogAddComment {
+  margin:10px 0px;
 }
 .blogAddComment textarea,
 .blogAddComment input {
@@ -457,9 +631,22 @@ hr {
 }
 .blogAdminButtons,
 .blogAuthorButtons {
-  background:#fafafa;
-  border:1px #eeeeee solid;
+  background:#f6f6f6;
+  border:1px #ccc solid;
 }
 .blogSideBarSection ol {
   padding-left:2em;
+}
+
+/* EmployeePortalApp */
+.empSkillSelector {
+  border-top:1px #bbb solid;
+  border-bottom:1px #bbb solid;
+  margin:-2px -5px;
+}
+
+/* ClassificationPlugin */
+.clsBrowser a,
+.clsTagCloud a {
+  text-decoration:none;
 }

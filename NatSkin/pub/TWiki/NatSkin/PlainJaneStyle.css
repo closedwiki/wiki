@@ -20,18 +20,20 @@ hr {
 .natBody {
   margin:0;
   padding:0;
+  font-size:12px;
+  font-family:arial,sans-serif;
 }
 .natBodyContents {
   padding:10px;
   background:white;
-  font-family:arial,sans-serif;
 }
 
 .natTopLeftContents {
-  margin:10px 0px 10px 10px
+  margin:10px 0px 10px 10px;
 }
 .natTopRightContents {
-  margin:10px 10px 10px 0px
+  margin:10px;
+  font-size:11px;
 }
 
 .natMain {
@@ -83,7 +85,7 @@ hr {
 .twikiTable th span,
 .twikiTable th font,
 .twikiTable th a {
-  color:#666666 !important; /* SMELL: breaks %TABLE{}% */
+  color:#666666;
 }
 .twikiTable th a:hover,
 .twikiTable th a {
@@ -160,9 +162,8 @@ hr {
 }
 .twikiTocTitle {
   display:block;
-  padding:5px 25px 8px;
-  font-size:24px;
-  border-bottom:2px solid #3f59bb;
+  padding:5px 25px 5px 10px;
+  font-size:16px;
   font-weight:bold;
   margin-top:0px;
   margin-bottom:0px;
@@ -245,33 +246,21 @@ hr {
 .natSideBarRight {
   width:230px;
 }
-.natSideBarTitle,
-.natSideBarTitle h1 {
-  margin:0px;
-  padding:0px;
-}
 .natSideBarContents {
   color:#666666;
 }
-.natSideBar h1 a {
-  color:#3f59bb;
-  font-weight:bold;
-  text-decoration:none;
-}
-.natSideBar h1 a:hover {
-  color:#ffffff;
-  background:#3f59bb;
-}
-.natSideBar h1 {
-  color:#3f59bb;
-  font-weight:bold;
-  font-size:1.2em;
-  padding-left:2px;
-}
 .natSideBar h2 {
   padding:0px;
-  font-size:1em;
+  font-size:16px;
+}
+.natSideBarPersonal h2 a,
+.natSideBarPersonal h2,
+.natSideBarTitle {
   margin:0px;
+  padding:0px;
+  color:#3f59bb;
+  font-weight:bold;
+  padding-left:2px;
 }
 .natSideBar ul {
   margin-left:0px;
@@ -282,9 +271,8 @@ hr {
   _border:1px solid white; /* IE fix */
 }
 
-.natSideBar h2 a,
-.natSideBar li a {
-  display:block;
+.natSideBar h2,
+.natSideBar li {
   padding:2px;
 }
 .natSideBar li {
@@ -337,14 +325,15 @@ hr {
 }
 .natMain h2 {
   border-bottom:2px solid #3f59bb;
+  padding-bottom:0.2em;
   margin-bottom:0.5em;
 }
-.natMain h1 {font-size:30px;}
-.natMain h2 {font-size:24px;}
-.natMain h3 {font-size:20px;}
-.natMain h4 {font-size:18px;}
-.natMain h5 {font-size:16px;}
-.natMain h6 {font-size:16px; margin-top:5px}
+.natMain h1 {font-size:18px;}
+.natMain h2 {font-size:16px;}
+.natMain h3 {font-size:15px;}
+.natMain h4 {font-size:14px;}
+.natMain h5 {font-size:14px;}
+.natMain h6 {font-size:12px; margin-top:5px}
 
 .natMain input,
 .natMain select,
@@ -385,6 +374,12 @@ hr {
 .blogAbout {
   font-size:0.9em;
   line-height:1.3em;
+}
+.blogSideBarHeader {
+  color:#3f59bb;
+  font-weight:bold;
+  padding-left:2px;
+  font-size:18px !important;
 }
 .blogSideBarSection {
   margin-bottom:1.3em;

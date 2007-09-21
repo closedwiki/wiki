@@ -1,9 +1,7 @@
-<!-- template: defaultsidebar.nat.tmpl -->
+<!-- template: sidebar.nat.tmpl -->
 %TMPL:DEF{"defaultsidebar"}% 
 %IFSKINSTATETHEN{style="Pattern"}%
-<div class="natSideBarTitle">
-  <h1 style="background:%WEBBGCOLOR%">%BASEWEB%</h1>
-</div>
+<h2 class="natSideBarTitle" style="background:%WEBBGCOLOR%">%BASEWEB%</h2>
 %$nopIFSKINSTATETHEN{searchbox="pos1"}%
 <div class="natSearchBox natSearchBoxPos1">
 %$nopTMPL:P{"searchbox"}%

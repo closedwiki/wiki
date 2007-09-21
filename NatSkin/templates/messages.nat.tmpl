@@ -260,7 +260,9 @@ However, the filename has been changed from <b><code>[_2]</code></b> to
    * Some characters such as =~=, =$=, =@=, =%= are removed\"
 You may be able to get your TWiki administrator to change the settings if they are inappropriate for your environment."}%
 
-%TMPL:P{"goback"}%
+<form action="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">
+<input type="submit" class="natOkButton" value='%MAKETEXT{"OK"}%' />
+</form>
 %TMPL:END%
 %TMPL:DEF{"rename_web_prerequisites"}%<!-- better buttons -->
 ---+++ %MAKETEXT{"There are problems with renaming this web:"}%

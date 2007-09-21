@@ -10,12 +10,12 @@
   text-align:left;
 }
 .natWebButtonsContents {
-  padding:2px 0px 3px 0px;
+  padding:3px 0px 3px 0px;
   color:#414483;
   font-weight:bold;
   font-family: Verdana, Arial, sans-serif;
 }
-.natWebButtons ul li.current a {
+.natWebButtons ul a.current {
   border-bottom:0px;
   color: #FFCE00;
   background:#7B7DBD;
@@ -28,6 +28,6 @@
 .natWebButtons ul li a:hover {
   color:#FFCE00;
 }
-.natWebButtons ul li.current a:hover {
+.natWebButtons ul a.current:hover {
   color:white;
 }

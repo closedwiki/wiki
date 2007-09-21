@@ -1,21 +1,21 @@
-%TMPL:INCLUDE{"page"}% 
+%TMPL:INCLUDE{"page"}% <!-- -->
 <!-- template: moveattachment.nat.tmpl -->
-<!-- -->%TMPL:INCLUDE{"moveattachmentbody"}% 
-<!-- -->%TMPL:INCLUDE{"moveattachmentsidebar"}% 
-<!-- -->%TMPL:INCLUDE{"moveattachmenttopicactions"}% 
-<!-- -->%TMPL:INCLUDE{"moveattachmentjavascript"}%
-<!-- -->%TMPL:INCLUDE{"moveattachmentstyles"}%
+%TMPL:INCLUDE{"moveattachmentbody"}%<!-- -->
+%TMPL:INCLUDE{"moveattachmentsidebar"}%<!-- -->
+%TMPL:INCLUDE{"moveattachmenttopicactions"}%<!-- -->
+%TMPL:INCLUDE{"moveattachmentjavascript"}%<!-- -->
+%TMPL:INCLUDE{"moveattachmentstyles"}%<!-- -->
 %TMPL:DEF{"bodyclass"}%natMoveAttachmentBody%TMPL:END%
-%TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"move"}%)%TMPL:END%
+%TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"move attachment"}%)%TMPL:END%
 %TMPL:DEF{"meta"}% <meta name="robots" content="noindex, nofollow" /> %TMPL:END%
 %TMPL:DEF{"onloadscript"}%document.rename.newtopic.focus();%TMPL:END%
 %TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>[[%TOPIC%]]%TMPL:END%
-%TMPL:DEF{"content"}% <!-- -->
+%TMPL:DEF{"content"}%<!-- -->
 <form name="rename" action="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%">
-%IFDEFINEDTHEN{"%URLPARAM{"newweb"}%" as="Trash" glue="off"}%
----+ %MAKETEXT{"Delete File \"[_1]\"" args="<nop>%FILENAME%"}%
+%IFDEFINEDTHEN{"%URLPARAM{"newweb"}%" as="Trash"}%
+---+ %MAKETEXT{"Delete attachment \"[_1]\"" args="<nop>%FILENAME%"}%
 %ELSEDEFINED%
----+ %MAKETEXT{"Move or Delete File \"[_1]\"" args="<nop>%FILENAME%"}%
+---+ %MAKETEXT{"Move attachment \"[_1]\"" args="<nop>%FILENAME%"}%
 %FIDEFINED%
 
 %IFDEFINEDTHEN{"%URLPARAM{"newweb"}%" as="Trash" glue="off"}%
@@ -27,14 +27,24 @@
 <input type="button" class="natCancelButton" value='%MAKETEXT{"No"}%' onclick="window.location.href='%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%'">
 %ELSEDEFINED%
 <div class="twikiPageForm">
-<table>
+<table cellpadding="5px">
 <tr>
   <th>%MAKETEXT{"From"}%:</th>
-  <td><nop>%WEB%.%TOPIC%</td>
+  <td><span class="twikiAlert"><nop>%WEB%.%TOPIC%</span></td>
 </tr>
 <tr>
   <th>%MAKETEXT{"To"}%:</th>
   <td><select name="newweb" onchange="if (document.rename.newweb.value == 'Trash') { document.rename.newtopic.value = 'TrashAttachment'; }"> %WEBLIST{"<option $marker value='$name'>$name</option>" webs="Trash,%NEW_WEB%,public" selection="%NEW_WEB%" separator=" "}% </select>&nbsp;<input type="text" name="newtopic" value="%TOPIC%" size="40"/></td>
+</tr>
+<tr>
+  <th>&nbsp;</th>
+  <td><table style="width:auto" border="0">
+    <tr>
+      <td align="right">%ICON{"trash"}%</td>
+      <td><a href="javascript:document.forms['rename'].newweb.value='Trash'; document.forms['rename'].newtopic.value='TrashAttachment';">To Trash</a></td>
+    </tr>
+    </table>
+  </td>
 </tr>
 <tr>
   <th>&nbsp;</th>

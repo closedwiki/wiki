@@ -15,6 +15,7 @@ a:hover {
 .natSideBar a,
 a, h2 a:hover, h3 a:hover {
   color: #06c;
+  font-weight:normal;
 }
 hr {
   border-bottom: 1px solid #999;
@@ -27,12 +28,13 @@ hr {
   background:#eee;
   background:#d5d6d7;
   text-align: center;
+  font-size:11px;
+  line-height:150%;
 }
 .natBodyContents {
   background:white;
   text-align:left;
   /*border: 1px solid #959596;*/
-  font-size: 80%;
   font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
 }
 .natSideBarRight,
@@ -40,21 +42,11 @@ hr {
   width:230px;
 }
 
-.natSideBarContents,
-.natMainContents {
-  padding:0px 15px 15px 15px;
-  /*padding:15px 15px 15px 20px;*/
-}
-.natMainFooterContents,
-.natMainHeaderContents {
-  margin:0px;
-  padding:0px 15px 10px;
+.natMiddle {
+  padding:15px;
 }
 
-.natMiddleLeft {
-  padding-right:0px;
-}
-
+/* top bar */
 .natTopLeft, .natTopRight {
   padding:0px;
 }
@@ -62,16 +54,17 @@ hr {
   margin:40px 0px 30px 20px;
 }
 .natTopRightContents {
-  margin:40px 20px 30px 0px;
+  margin:40px 20px 30px 15px;
 }
 .natSearchBox input {
   width:150px;
+  border:0px;
+  font-family:arial,sans-serif;
 }
 .natSearchBoxTop {
   margin-bottom:3px;
 }
 
-/* top bar */
 .natHeaderArt,
 .natSearchBox input {
   background:#3388CC;
@@ -89,7 +82,7 @@ hr {
   margin-left:2px;
 }
 .natTopRight form {
-  font-weight:bold;
+  font-weight:normal;
   margin:0px;
 }
 .natTopicActions {
@@ -104,10 +97,6 @@ hr {
   color:white;
   /*text-shadow:1px 1px 1px black;*/
 
-}
-.natSearchBox input {
-  border:0px;
-  font-family:arial,sans-serif;
 }
 .natAction {
   color:darkblue;
@@ -125,12 +114,6 @@ hr {
   color: #666;
   font-size:1em;
 }
-.natSideBar h1 {
-  font-size: 1.5em;
-  font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
-  /*text-shadow:2px 2px 2px #ccc;*/
-  color:#444444;
-}
 .natSideBar h2 {
   font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
   font-size: 1.5em;
@@ -138,10 +121,13 @@ hr {
   margin-top:5px;
   padding:0;
   text-decoration: none;
+  color:#444444;
 }
 
-.natSideBar h1,
-.natSideBar h1 a {
+.natSideBarTitle {
+  display:none;
+}
+.natSideBarPersonal h2 a {
   font-weight:normal;
   color:#444444;
 }
@@ -160,6 +146,12 @@ hr {
   list-style-type: none;
   text-indent:-2ex;
 }
+.natSideBar ul ul {
+  margin-left:0px;
+  padding-left:0px;
+  text-indent:0px;
+}
+
 .natSideBar ol {
   margin-top:0px;
   margin-bottom:0px;
@@ -174,17 +166,9 @@ html>body .natSideBar ol { /* hide from IE */
   content: "\00BB \0020";
   color:#777;
 }
-.natSideBarContents .natSkinStyleBrowser ul li {
-  padding-left:10px;
+.natSideBar ul ul > li:before { 
+  content: "";
 }
-.natSideBarContents .natSkinStyleBrowser ul {
-  padding-top:0px;
-  white-space:nowrap;
-}
-.natSideBarContents .natSkinStyleBrowser ul li:before {
-  content:"";
-}
-
 .natSideBarSearch {
   margin-top:1em;
   margin-bottom:1em;
@@ -202,23 +186,21 @@ html>body .natSideBar ol { /* hide from IE */
   font-family:arial,sans-serif;
   font-size:1.2em;
 }
-.natSubWebs h1 {
-  margin-bottom:0px;
+*:first-child+html .natSearchBox input { /* IE7 fix */
+  width:150px;
 }
-.natSubWebs .natWebLink a {
-  color: #06c;
-}
+
 /* main */
 .natMiddle {
   background-color: white;
   font-weight:normal;
   color:#444;
-  padding-top:15px;
 }
 .natMainContents {
   /*color:#777;*/
-  line-height:1.5em;
-  font: 1.2em/1.5em Verdana, Arial, Sans-Serif;
+  font-family:Verdana, Arial, Sans-Serif;
+  font-size: 1.2em;
+  line-height:1.5em:
 }
 .natMainFooterContents {
   text-align:left;
@@ -238,15 +220,15 @@ html>body .natSideBar ol { /* hide from IE */
   color:#444444;
   font-weight:normal;
 }
-.natMain h1 {font-size:2.0em}
-.natMain h2 {font-size:1.7em}
-.natMain h3 {font-size:1.5em}
-.natMain h4 {font-size:1.3em}
-.natMain h5 {font-size:1.2em}
-.natMain h6 {font-size:1.2em}
+.natMain h1 {font-size:2.0em;}
+.natMain h2 {font-size:1.7em;}
+.natMain h3 {font-size:1.5em;}
+.natMain h4 {font-size:1.3em;}
+.natMain h5 {font-size:1.2em;}
+.natMain h6 {font-size:1.2em;}
 
 .natMain h1 {
-  /*text-shadow:2px 2px 2px #ccc;*/
+  /* text-shadow:2px 2px 2px #ccc; */ /* only konqueror implements this by now */
 }
 
 .natMain h1,
@@ -257,7 +239,7 @@ html>body .natSideBar ol { /* hide from IE */
 .natMain h6 {
   font-family: 'Trebuchet MS', Verdana, sans-serif;
   letter-spacing:-1px;
-  margin-bottom:0px;
+  margin-bottom:2px;
 }
 
 .natMainContents pre {
@@ -278,9 +260,6 @@ html>body .natSideBar ol { /* hide from IE */
 .natMain .natNoteHeading {
   color: #0055aa;
 }
-.natRevision {
-  font-size:0.9em;
-}
 
 /* bottom bar */
 .natBottomBarContents {
@@ -294,11 +273,14 @@ html>body .natSideBar ol { /* hide from IE */
 .natCopyRight {
   display:inline;
 }
+.natRevision {
+  margin-top:10px;
+}
 
 /* tables */
 .twikiTable {
   border:1px solid #d9d6e7;
-  font-size:0.9em;
+  font-size:11px;
 }
 
 .twikiTable th {
@@ -311,7 +293,7 @@ html>body .natSideBar ol { /* hide from IE */
 .twikiTable th span,
 .twikiTable th font,
 .twikiTable th a {
-  color:#0055aa !important; /* SMELL breaks %TABLE{}% */
+  color:#0055aa;
 }
 .twikiTable td {
   background:white;
@@ -324,7 +306,7 @@ html>body .natSideBar ol { /* hide from IE */
 .natTopicForm table {
   border:0px;
 }
-.twikiPageForm table,
+.twikiPageForm,
 .natTopicForm {
   background:#fff6bf;
   border-top:2px solid #ffd324;
@@ -332,14 +314,12 @@ html>body .natSideBar ol { /* hide from IE */
   border-left:0px;
   border-right:0px;
   font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
+  padding:5px;
 }
 .twikiPageForm table table {
   margin-top:2px;
   margin-bottom:2px;
   border:0px;
-}
-.natTopicForm {
-  padding:5px;
 }
 .twikiPageForm input,
 .natTopicForm input {
@@ -383,12 +363,13 @@ html>body .natSideBar ol { /* hide from IE */
   border:1px solid #d9d6e7;
   margin:2px;
   font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
-  font-size:14px;
   color:#444;
   padding:2px;
 }
+.natTopicFormFirstCol a,
 .natTopicFormFirstCol {
   color:#06c;
+  font-weight:bold;
 }
 /* attachments */
 .natTopicAttachments table th,
@@ -530,9 +511,6 @@ html>body .natSideBar ol { /* hide from IE */
 /* supported plugins */
 
 /* blogging */
-.blogAbout h1 {
-  margin-top:5px;
-}
 .blogHeadline {
   border-bottom:1px solid #ddd;
   margin-bottom:5px;

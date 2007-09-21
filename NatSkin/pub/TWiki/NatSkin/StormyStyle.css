@@ -21,6 +21,7 @@ hr {
   background:#333333;
   margin:0;
   padding:0;
+  font-size:12px;
 }
 .natBodyContents {
   font-family:arial,sans-serif;
@@ -30,7 +31,7 @@ hr {
   margin:20px 0px 20px 20px;
 }
 .natTopRightContents {
-  margin:20px 20px 20px 0px;
+  margin:20px 0px 20px 20px;
 }
 .natMiddle {
   padding:20px 10px 20px 10px;
@@ -72,7 +73,7 @@ hr {
 .twikiTable th span,
 .twikiTable th a {
   font-weight:bold;
-  color:#cccccc !important; /* SMELL: breaks %TABLE{}% */
+  color:#cccccc;
 }
 .twikiDiffTable td {
   border:0px;
@@ -207,6 +208,9 @@ hr {
 .natSearchBox {
   font-weight:bold;
 }
+.natSearchBox input {
+  font-size:12px;
+}
 .natSearchBoxTop input {
   color:white;
   background:black;
@@ -246,23 +250,27 @@ hr {
   color:#99ccff;
 }
 
-.natSideBar h1 a,
-.natSideBar h1 {
-  color:#cccccc;
-  letter-spacing:0.2px;
-  font-family:verdana,arial,sans-serif;
-  font-weight:bold;
-  font-size:14px;
-  text-transform:uppercase;
-}
 .natSideBar h2 {
   padding-left:0px;
   font-size:14px;
   margin-top:5px;
 }
+.natSideBarPersonal h2 a,
+.natSideBarTitle {
+  color:#cccccc;
+  letter-spacing:0.2px;
+  font-family:verdana,arial,sans-serif;
+  font-weight:bold;
+  text-transform:uppercase;
+}
 .natSideBar ul {
   margin-left:0px;
   padding-left:20px;
+}
+.natSideBar ul ul {
+  margin-left:0px;
+  padding-left:0px;
+  list-style-type:none;
 }
 
 .natNotes {
@@ -314,7 +322,7 @@ hr {
   background:#222222;
   color:#cccccc;
   border:1px solid #cccccc;
-  font-size:13px;
+  font-size:12px;
 }
 .natMiddle input[type="submit"] {
   background:white;
@@ -342,7 +350,6 @@ hr {
   font-family:verdana,arial,sans-serif;
   font-weight:bold;
   line-height:140%;
-  font-size:12px;
 }
 
 /* TOC */
@@ -458,9 +465,6 @@ hr {
 .blogEntry {
   margin-bottom:1em;
 }
-.blogInfo {
-  margin-bottom:0.5em;
-}
 .blogCommentOdd {
   background:#555555;
   border:1px solid #cccccc;
@@ -473,4 +477,12 @@ hr {
 }
 .blogCommentOdd h3 {
   border-bottom:2px solid black;
+}
+.blogSideBarHeader {
+  color:#cccccc;
+  letter-spacing:0.2px;
+  font-family:verdana,arial,sans-serif;
+  font-weight:bold;
+  font-size:14px;
+  text-transform:uppercase;
 }

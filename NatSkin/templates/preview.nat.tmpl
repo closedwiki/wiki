@@ -27,12 +27,13 @@
   <input type="hidden" name="originalrev" value="%URLPARAM{"originalrev"}%" />
   <input type="hidden" name="redirectto" value="%REDIRECTTO%" />
   <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
+  <input type="hidden" name="templatetopic" value="%URLPARM{"templatetopic"}%" />
   <input type="hidden" name="cmd" value="%CMD%" />
   <input type="hidden" name="rev" value="%URLPARAM{"rev"}%" />
   <textarea name="text" rows="10" cols="80" style="display:none">%HIDDENTEXT%</textarea>
   %TMPL:P{"bottomtopicactions"}% </form> %TMPL:END%
 %TMPL:DEF{"bottomtopicactions"}%<div class="natSubmitOptions">
-  <input type="checkbox" id="dontnotify" name="dontnotify" %DONTNOTIFYCHECKBOX% />
+  <input type="checkbox" class="twikiCheckbox" id="dontnotify" name="dontnotify" %DONTNOTIFYCHECKBOX% />
   <label for="dontnotify">%MAKETEXT{"Minor changes"}%</label> <!-- -->
   <input type="checkbox" class="twikiCheckbox" title='%MAKETEXT{"Creates a new topic revision when saving"}%' id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% />
   <label for="forcenewrevision">%MAKETEXT{"Force new revision"}%</label>

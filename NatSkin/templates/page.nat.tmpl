@@ -4,25 +4,24 @@
 <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" />
 <meta http-equiv="Content-Style-Type" content="text/css" />
 <meta name="generator" content="TWiki/NatSkin" /> %TMPL:P{"meta"}%
-<title>%TMPL:P{"title"}%&nbsp;-&nbsp;<nop>%WIKITOOLNAME%</title>
+<title>%TMPL:P{"title"}% - %WIKITOOLNAME%</title>
 <base href="%SCRIPTURL{view}%/%WEB%/%TOPIC%"></base>
+%IFDEFINEDTHEN{"%FAVICON%"}%
 <link rel="icon" href="%FAVICON%" type="image/x-icon" />
 <link rel="shortcut icon" href="%FAVICON%" type="image/x-icon" />
+%FIDEFINED%
 %GETSKINSTYLE%
-<!-- template javascript -->
 %TMPL:P{"javascript"}%
-<!-- template styles -->
-<style type="text/css">
+%WEBCOMPONENT{"WebJavaScript"}%
 %TMPL:P{"styles"}%
 %WEBCOMPONENT{"WebCss"}%
-</style>
 </head>
-<body class="natBody %TMPL:P{"bodyclass"}%">%TMPL:P{"body"}%</body>
+<body class="natBody %TMPL:P{"bodyclass"}% %IFSKINSTATE{border="thin" then="natBodyThin"}% %IFSKINSTATE{border="on" then="natBodyBorder"}%">%TMPL:P{"body"}%</body>
 </html>
-<!-- template: page.nat.tmpl -->
 %TMPL:INCLUDE{"strings"}%
-%TMPL:INCLUDE{"defaultbody"}%
-%TMPL:INCLUDE{"defaultsidebar"}%
-%TMPL:INCLUDE{"defaulttopbar"}%
-%TMPL:INCLUDE{"defaultjavascript"}%
-%TMPL:INCLUDE{"defaultstyles"}%
+%TMPL:INCLUDE{"body"}%
+%TMPL:INCLUDE{"sidebar"}%
+%TMPL:INCLUDE{"topbar"}%
+%TMPL:INCLUDE{"styles"}%
+%TMPL:INCLUDE{"javascript"}%
+<!-- template: page.nat.tmpl -->

@@ -1,13 +1,13 @@
-<!-- template: defaulttopbar.nat.tmpl -->
+<!-- template: topbar.nat.tmpl -->
 %TMPL:DEF{"defaulttopbar"}% <tr>
       <td class="natTopBar natTopLeft %IFSKINSTATE{action="oops" then="natTopRight"}%" valign="top">
 	<div class="natTopBarSizer natTopLeftBarSizer" id="natTopLeftBarSizer">
 	  <div class="natTopLeftContents">
-	    <h1 class="natWebTitle"><!--
+	    <div class="natWebTitle"><!--
       	      --><a href="%IFDEFINED{"%WEBLOGOURL%" then="%WEBLOGOURL%" else="%WIKILOGOURL%"}%" title="%WEBLOGOALT%" accesskey="h"><!--
 	      -->%NATWEBLOGO%<!--
 	      --></a><!--
-	    --></h1>
+	    --></div>
 	    <div class="natWebSlogan">%SITEMAPUSETO%</div>
 	  </div>
 	</div>
@@ -29,11 +29,10 @@
     </tr>
 %IFSKINSTATETHEN{buttons="on"}%
     <tr>
-      <td class="natWebButtons" style="%IFSKINSTATE{action="login|logon|oops" then="display:none"}%" colspan="2" align="%IFSKINSTATE{sidebar="left" then="right" else="left"}%">
+      <td class="natWebButtons" style="%IFSKINSTATE{action="login|logon" then="display:none"}%" colspan="2" align="%IFSKINSTATE{sidebar="left" then="right" else="left"}%">
 	<div class="natWebButtonsContents"> %$nopWEBCOMPONENT{"WebButtons"}% </div>
       </td>
     </tr>
 %FISKINSTATE%
 %TMPL:END%
 %TMPL:DEF{"topbar"}%%TMPL:P{"defaulttopbar"}%%TMPL:END%
-%TMPL:DEF{"locatorDISABLED"}%%BREADCRUMBS{header="<span class='natSep'>&middot;</span>" separator="<span class='natSep'>&middot;</span>" recurse="topicoff"}%%TMPL:END%

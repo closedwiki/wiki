@@ -7,7 +7,7 @@
 %TMPL:P{"content"}%
     </div>
     <div class="natMainFooterContents">
-      <div class="natTopicAttachments"> %META{"attachments"}% </div>
+%IFDEFINED{"$percntMETA{\"attachments\"}$percnt" then="<div class=\"natTopicAttachments\"> $test </div>"}%
     </div>
   </div>
     <div class="natBottomBarContents">

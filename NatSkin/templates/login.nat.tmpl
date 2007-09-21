@@ -1,12 +1,12 @@
 %TMPL:INCLUDE{"page"}%
 %TMPL:INCLUDE{"loginbase"}%
 <!-- template: login.nat.tmpl -->
-<!-- -->%TMPL:INCLUDE{"loginbody"}%
-<!-- -->%TMPL:INCLUDE{"logintopicactions"}%
-<!-- -->%TMPL:INCLUDE{"loginsidebar"}%
-<!-- -->%TMPL:INCLUDE{"loginjavascript"}%
-<!-- -->%TMPL:INCLUDE{"loginstyles"}%
-%TMPL:DEF{"title"}%%TOPIC% (note)%TMPL:END%
+%TMPL:INCLUDE{"loginbody"}%<!-- -->
+%TMPL:INCLUDE{"logintopicactions"}%<!-- -->
+%TMPL:INCLUDE{"loginsidebar"}%<!-- -->
+%TMPL:INCLUDE{"loginjavascript"}%<!-- -->
+%TMPL:INCLUDE{"loginstyles"}%<!-- -->
+%TMPL:DEF{"title"}%Login%TMPL:END%
 %TMPL:DEF{"bodyclass"}%natLoginBody%TMPL:END%
 %TMPL:DEF{"meta"}% <meta name="robots" content="noindex, nofollow" /> %TMPL:END%
 %TMPL:DEF{"locator"}% %TMPL:END%
@@ -19,16 +19,18 @@
 %NOTE%
 
 %TMPL:P{"logon"}%
-
-*%MAKETEXT{"See also:"}%* %TWIKIREGISTRATION%, %SYSTEMWEB%.ResetPassword, %SYSTEMWEB%.ChangePassword 
+%TMPL:P{"seealso"}%
 %TMPL:END%
 %TMPL:DEF{"content"}%<div class="natLogin">
 <div class="natLoginMessage">
 <h1 class="natLoginHeading">%TMPL:P{"heading"}%</h1>
-%TMPL:P{"message"}% <div class="natContact"> 
+%TMPL:P{"message"}% 
+%TMPL:P{"contact"}% 
+</div></div> %TMPL:END%
+%TMPL:DEF{"contact"}% <div class="natContact"> 
 <hr />
-%MAKETEXT{"Contact [_1] if you have any questions." args="<a href='mailto:%WIKIWEBMASTER%?subject=%ENCODE{\"%WIKITOOLNAME%: Request for support\"}%&&body=%ENCODE{\"Hello, i've got a question ...\"}%'>%WIKIWEBMASTER%</a>"}%
-</div>
-</div>
-%SETSKINSTATE{buttons="off" sidebar="off"}% 
+%MAKETEXT{"Contact [_1] if you have any questions." args="<a href='mailto:%WIKIWEBMASTER%?subject=%ENCODE{\"%WIKITOOLNAME%: Request for support\"}%&&body=%ENCODE{\"Hello, I have got a question ...\"}%'>%WIKIWEBMASTER%</a>"}%
 </div> %TMPL:END%
+%TMPL:DEF{"seealso"}%
+*%MAKETEXT{"See also:"}%* %TWIKIREGISTRATION%, %SYSTEMWEB%.ResetPassword, %SYSTEMWEB%.ChangePassword 
+%TMPL:END%

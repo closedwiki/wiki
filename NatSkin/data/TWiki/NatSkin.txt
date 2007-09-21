@@ -110,35 +110,7 @@ allways open an extra window.
 ---++ Installation Instructions
    * Get the TWiki:Plugins/NatSkinPlugin supplementary package and install it.
    * [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] the !NatSkin ZIP file
-   * Unzip it in your twiki installation directory. Content: 
-| *File:* | *Description:* |
-| ==data/Main/NatSkinUserViewTemplate.txt== | skin specific user view |
-| ==data/Main/TWikiGuestSideBar.txt== | empty <no>MySideBar for guests |
-| ==data/Main/WebLinks.txt== | navigation component for the Main web |
-| ==data/TWiki/MySideBarTemplate.txt== | <nop>MySideBar template sidebar |
-| ==data/TWiki/MySideBar.txt== | <nop>MySidebar creator |
-| ==data/TWiki/NatSearch.txt== | documentation |
-| ==data/TWiki/NatSkinConfiguration.txt== | documentation |
-| ==data/TWiki/NatSkinCss.txt== | documentation |
-| ==data/TWiki/NatSkinFAQ.txt== | documentation |
-| ==data/TWiki/NatSkinStyleBrowser.txt== | style browser |
-| ==data/TWiki/NatSkinTemplates.txt== | documentation |
-| ==data/TWiki/NatSkin.txt== | skin topic |
-| ==data/TWiki/TWikiWebButtons.txt== | default <nop>WebButtons component |
-| ==data/TWiki/TWikiWebCss.txt== | default <nop>WebCcss component |
-| ==data/TWiki/TWikiWebLinks.txt== | default <nop>WebLinks component |
-| ==data/TWiki/TWikiWebRightBar.txt== | default <nop>WebRightBar component |
-| ==data/TWiki/TWikiWebSideBar.txt== | default <nop>WebSideBar component |
-| ==data/TWiki/TWikiWebTopicActions.txt== | default <nop>WebTopicActions component |
-| ==data/TWiki/WebLinks.txt== | navigation component for the TWiki web |
-| ==lib/TWiki/Contrib/NatSkin.pm== | dummy perl module |
-| ==pub/TWiki/NatSkin/Base(Border,Buttons,Shadow,StylemThin).css== | base style files |
-| ==pub/TWiki/NatSkin/*(Border,Buttons,Shadow,StylemThin).css== | style files |
-| ==pub/TWiki/NatSkin/*Variation.css== | style variation files |
-| ==pub/TWiki/NatSkin/*.png,jpeg,gif== | various graphics resources |
-| ==pub/TWiki/NatSkin/edit.js== | edit javascript code |
-| ==pub/TWiki/NatSkin/obfuscator.js== | email obfuscation code |
-| ==templates/*.nat.tmpl== | <nop>NatSkin template files |
+   * Unzip it in your twiki installation directory. 
    * Test if installed: [[%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?skin=nat&style=Kubrick][click here]]
 
 ---++ Skin Info
@@ -155,7 +127,7 @@ allways open an extra window.
 </style>
 
 |  Skin Author: | TWiki:Main/MichaelDaum |
-|  Copyright &copy;: | 2003-2006, MichaelDaum@WikiRing.com |
+|  Copyright &copy;: | 2003-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Skin Version: | v3.0-pre14 |
 |  Dependencies: | TWiki:Plugins/NatSkinPlugin |

@@ -20,8 +20,8 @@ updated or added."}%
 <p> %MAKETEXT{"*Move attachment*: An attachment can be deleted by moving it to the Trash.TrashAttachment."}%  </p>
 %TMPL:END%
 %TMPL:DEF{"attachaction"}% <!-- -->
-<input type="submit" class="natFormOkButton" value='%MAKETEXT{"Upload file"}%' />
-<input type="submit" class="natFormActionButton" name="changeproperties" value='%MAKETEXT{"Change properties"}%' />
-<input type="button" class="natFormCancelButton" value='%MAKETEXT{"Cancel"}%' onclick="window.location.href = '%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%';">
-%TMPL:END%
+<input type="submit" class="natOkButton" value='%MAKETEXT{"Upload file"}%' /><!--
+--><input type="submit" class="natAltButton" name="changeproperties" value='%MAKETEXT{"Change properties"}%' /><!--
+--><input type="button" class="natCancelButton" value='%MAKETEXT{"Cancel"}%' onclick="window.location.href = '%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%';"><!--
+-->%TMPL:END%
 %TMPL:DEF{"fileuser"}%(%FILEUSER%)%TMPL:END%

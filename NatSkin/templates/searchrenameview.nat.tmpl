@@ -8,14 +8,14 @@
   <th width="10%">%MAKETEXT{"Update ref:"}%</th>
   <th width="45%">%MAKETEXT{"[_1] web:" args="%WEB%"}% </th>
   <th width="25%">%MAKETEXT{"Changed:"}%</th>
-  <th width="20%">%MAKETEXT{"Changed by"}%:</th>
+  <th width="20%">%MAKETEXT{"By"}%:</th>
 </tr>
 </table> 
 <!-- debug: searchrenameview header end -->%REPEAT%<!-- debug: searchrenameview repeat start -->
 <table class="natSearchHit" border="0" cellspacing="0" cellpadding="0">
 <tr>
   <th width="10%">
-    %SELECTION%<input type="checkbox" name="RENAME%LABEL%%TOPIC_NUMBER%" checked="checked" />
+    %SELECTION%<input type="checkbox" class="twikiCheckbox" name="RENAME%LABEL%%TOPIC_NUMBER%" checked="checked" />
     <input type="hidden" name="TOPIC%LABEL%%TOPIC_NUMBER%" value="%WEB%.%TOPICNAME%" />%SELECTION%
   </th><th width="45%">
     <a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPICNAME%">%TOPICNAME%</a> 
