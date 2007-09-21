@@ -302,7 +302,8 @@ $TWiki::cfg{AdminUserLogin} = 'admin';
 
 # **STRING 20 EXPERT**
 # An admin user WikiName what is displayed for actions done by the AdminUserLogin
-# You should normally not need to change this.
+# You should normally not need to change this. (you will need to move the 
+# %USERSWEB%.TWikiAdminUser topic to match)
 $TWiki::cfg{AdminUserWikiName} = 'TWikiAdminUser';
 
 # **STRING 20 EXPERT**
