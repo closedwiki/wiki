@@ -274,7 +274,7 @@ $TWiki::cfg{Sessions}{MapIP2SID} = 0;
 #   Apache can be configured to ask for authorization information. Does
 #   not require client sessions, but works best with them enabled.
 # </li></ol>
-$TWiki::cfg{LoginManager} = 'none';
+$TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';
 
 # **REGEX EXPERT**
 # The perl regular expression used to constrain user login names. Some
