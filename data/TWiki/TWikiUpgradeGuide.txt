@@ -187,14 +187,19 @@ The advantage of the spec change is that now you can add leading and trailing wh
 
 ---++ Important Changes since 4.1.0
 
----+++ New location for session files
+---+++ New location for session and other temporary files
 
-An upgrader upgrading to 4.1.1 should note the following important change
+*An upgrader upgrading to 4.1.1 should note the following important change*
 
 The directory for passthrough files and session files have been replaced by a common directory for temporary files used by TWiki. Previously the two configure settings ={PassthroughDir}= and ={Sessions}{Dir}= were by default set to =/tmp=. These config settings have been replaced by ={TempfileDir}= with the default setting value =/tmp/twiki=. If the =twiki= directory does not exist twiki will create it first time it needs it.
 
 It is highly recommended no longer to use the tmp directory common to other web applications and the new default will work fine for most. You may want to delete all the old session files in /tmp after the upgrade to 4.1.1. They all start with cgisess_. It is additionally highly recommended to limit write access to the ={TempfileDir}= for security reasons if you have non-admin users with login access to the webserver just like you would do with the other webserver directories.
 
+*An upgrader to 4.2.0 should note the following important change*
+
+The directory for work files has been moved under TWiki's installation path.  The configuration setting ={WorkingDir}= defines the container directory for temporary files, extensions' work areas, and intermediate registration data.  The default is =working= under your installation root.
+
+Take care for that change if you run your own routine to delete obsolete session files, which will now be found under =working/tmp/cgisess*=.
 
 %STOPINCLUDE%
 
