@@ -35,8 +35,8 @@
 	.patternWebIndicator a:hover img {
 		background-color:%WEBBGCOLOR%;
 	}
-	%IF{ "defined WEBHEADERART and $ WEBHEADERART != ''" then='#patternTopBar { background-image:url("%WEBHEADERART%"); background-repeat:no-repeat;}'}%
-	%IF{ 'defined WEBHEADERBGCOLOR' then='#patternTopBar { background-color:%WEBHEADERBGCOLOR%;}'}%
+	%IF{ "defined WEBHEADERART and $ WEBHEADERART != ''" then='#patternTopBarContents { background-image:url(%WEBHEADERART%); background-repeat:no-repeat;}'}%
+	%IF{ 'defined WEBHEADERBGCOLOR' then='#patternTopBarContents { background-color:%WEBHEADERBGCOLOR%;}'}%
 	.patternBookView {
 		border-color:%WEBBGCOLOR%;
 	}
