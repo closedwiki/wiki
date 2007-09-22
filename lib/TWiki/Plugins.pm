@@ -775,8 +775,6 @@ sub afterAttachmentSaveHandler {
 
 ---++ ObjectMethod writeHeaderHandler () -> $headers
 
-Called by TWiki::writePageHeader. *DEPRECATED* do not use!
-
 *DEPRECATED* Use modifyHeaderHandler instead. it is a lot 
 more flexible, and allows you to modify existing headers 
 as well as add new ones. It also works correctly when 
@@ -798,6 +796,17 @@ sub writeHeaderHandler {
 sub modifyHeaderHandler {
     my $this = shift;
     return _dispatch( $this, 'modifyHeaderHandler', @_ );
+}
+
+=pod
+
+---++ ObjectMethod completePageHandler ( $text, $pageType, $contentType )
+
+=cut
+
+sub completePageHandler {
+    my $this = shift;
+    return _dispatch( $this, 'completePageHandler', @_ );
 }
 
 =pod

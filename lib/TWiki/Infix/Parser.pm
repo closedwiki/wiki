@@ -184,7 +184,7 @@ sub _parse {
     my( $this, $expr, $input, $term ) = @_;
 
     throw TWiki::Infix::Error("Empty expression")
-      unless $expr =~ /\S/;
+      unless $expr && $expr =~ /\S/;
 
     my @opers = ();
     my @opands = ();

@@ -190,7 +190,7 @@ sub login {
     $tmpl = $twiki->handleCommonTags( $tmpl, $web, $topic );
     $tmpl = $twiki->renderer->getRenderedVersion( $tmpl, '' );
     $tmpl =~ s/<nop>//g;
-    $twiki->writePageHeader( $query );
+    print $twiki->generateHTTPHeaders( $query );
     print $tmpl;
 }
 

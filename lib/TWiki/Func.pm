@@ -1902,8 +1902,8 @@ sub expandTemplate {
 ---+++ writeHeader( $query, $contentLength )
 
 Prints a basic content-type HTML header for text/html to standard out
-   * =$query= - CGI query object. If not given, the default CGI query will be used. In most cases you should _not_ pass this parameter.
-   * =$contentLength= - Length of content
+   * =$query= - CGI query object. If not given, the default CGI query will be used (optional, in most cases you should _not_ pass this parameter)
+   * =$contentLength= - Length of content (optional, in most cases you should _not_ pass this parameter)
 Return:             none
 
 *Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
@@ -1911,9 +1911,11 @@ Return:             none
 =cut
 
 sub writeHeader {
-    my( $query ) = @_;
+    my( $query, $len ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    return $TWiki::Plugins::SESSION->writePageHeader( $query );
+    my $hdr = $TWiki::Plugins::SESSION->generateHTTPHeaders( $query );
+    $hdr =~ s/\n\n/\nContent-Length: $len\n\n/ if $len;
+    print $hdr;
 }
 
 =pod

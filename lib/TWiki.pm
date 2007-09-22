@@ -586,18 +586,29 @@ sub writeCompletePage {
         chomp($text);
     }
 
-    unless( $this->inContext('command_line')) {
-	# FIXME: Defer next line until we have Codev.UnicodeSupport - too 5.8 dependent
+    my $hdr = $this->generateHTTPHeaders( undef, $pageType, $contentType );
+
+    # Call final handler
+    $this->{plugins}->completePageHandler($text, $hdr);
+
+    # HTTP1.1 says a content-length should _not_ be specified unless
+    # the length is known. There is a bug in Netscape such that it
+    # interprets a 0 content-length as "download until disconnect"
+    # but that is a bug. The correct way is to not set a content-length.
+    unless( $this->inContext('command_line') ) {
+        # FIXME: Defer next line until we have Codev.UnicodeSupport
+        # - too 5.8 dependent
         # my $len = do { use bytes; length( $text ); };
-        my $len = length( $text ); 
-        $this->writePageHeader( undef, $pageType, $contentType, $len );
+        my $len = length($text);
+        $hdr =~ s/\n$/Content-Length: $len\n\n/s if $len;
     }
-    print $text;
+
+    print $hdr.$text;
 }
 
 =pod
 
----++ ObjectMethod writePageHeader( $query, $pageType, $contentType, $contentLength )
+---++ ObjectMethod generateHTTPHeaders( $query, $pageType, $contentType, $contentLength ) -> $header
 
 All parameters are optional.
 
@@ -611,11 +622,12 @@ writeHeaderHandler in plugin to return a string of HTTP headers, CR/LF
 delimited. Filters any illegal headers. Plugin headers will override
 core settings.
 
+Does *not* add a =Content-length= header.
+
 =cut
 
-sub writePageHeader {
-    my( $this, $query, $pageType, $contentType, $contentLength ) = @_;
-
+sub generateHTTPHeaders {
+    my( $this, $query, $pageType, $contentType ) = @_;
 
     $query = $this->{cgiQuery} unless $query;
 
@@ -624,13 +636,6 @@ sub writePageHeader {
     my( $pluginHeaders, $coreHeaders );
 
     my $hopts = {};
-
-    # Add a content-length if one has been provided. HTTP1.1 says a
-    # content-length should _not_ be specified unless the length is
-    # known. There is a bug in Netscape such that it interprets a
-    # 0 content-length as "download until disconnect" but that is
-    # a bug. The correct way is to not set a content-length.
-    $hopts->{'Content-Length'} = $contentLength if $contentLength;
 
     if ($pageType && $pageType eq 'edit') {
         # Get time now in HTTP header format
@@ -658,7 +663,7 @@ sub writePageHeader {
     # modifyHeaderHandler instead.
     $pluginHeaders = $this->{plugins}->writeHeaderHandler( $query ) || '';
     if( $pluginHeaders ) {
-        foreach ( split /\r\n/, $pluginHeaders ) {
+        foreach ( split /\r?\n/, $pluginHeaders ) {
             if ( m/^([\-a-z]+): (.*)$/i ) {
                 $hopts->{$1} = $2;
             }
@@ -679,9 +684,7 @@ sub writePageHeader {
     # add cookie(s)
     $this->{users}->{loginManager}->modifyHeader( $hopts );
 
-    my $hdr = CGI::header( $hopts );
-
-    print $hdr;
+    return CGI::header( $hopts );
 }
 
 =pod

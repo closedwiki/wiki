@@ -113,8 +113,6 @@ sub search {
     $attrWeb =~ tr/+/ /;       # pluses become spaces
     $attrWeb =~ s/%([0-9a-fA-F]{2})/pack('c',hex($1))/ge;  # %20 becomes space
 
-#    $session->writePageHeader();
-
     # 'scalar' is used below to get the scalar value of the parameter
     # because it returns the empty string for undef.
 

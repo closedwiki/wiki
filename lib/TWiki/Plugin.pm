@@ -42,6 +42,7 @@ use vars qw( @registrableHandlers %deprecated );
    'beforeEditHandler',            # 1.010
    'beforeSaveHandler',            # 1.010
    'commonTagsHandler',            # 1.000
+   'completePageHandler',          # 1.100
    'earlyInitPlugin',              # 1.020
    'endRenderingHandler',          # 1.000 DEPRECATED
    'initPlugin',                   # 1.000

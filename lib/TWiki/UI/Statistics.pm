@@ -78,7 +78,7 @@ sub statistics {
 
     unless( $session->inContext( 'command_line' )) {
         # running from CGI
-        $session->writePageHeader();
+        print $session->generateHTTPHeaders();
         print CGI::start_html(-title=>'TWiki: Create Usage Statistics');
     }
     # Initial messages
