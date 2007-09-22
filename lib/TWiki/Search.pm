@@ -167,7 +167,8 @@ sub _getTopicList {
             $topics =~ s/\)\$//o;
 
             # build list from topic pattern
-            @topicList = split( /\|/, $topics );
+            @topicList = grep( $store->topicExists($web, $_),
+                               split( /\|/, $topics ));
         }
         else {
 
@@ -188,6 +189,7 @@ sub _getTopicList {
     else {
         @topicList = $store->getTopicNames($web);
     }
+    return @topicList;
 }
 
 # Run a query over a list of topics
