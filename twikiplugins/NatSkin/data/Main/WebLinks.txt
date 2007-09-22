@@ -7,7 +7,7 @@ Sidebar navigation in the %WEB% web. See also the %SYSTEMWEB%.TWikiWebLinks
 %STARTINCLUDE% <!-- -->
    * [[%SYSTEMWEB%.WelcomeGuest][%MAKETEXT{"Welcome"}%]]
    * [[%TWIKIREGISTRATION%][%MAKETEXT{"Registration"}%]]
-   * [[%USERSWEB%.TWikiUsers][%MAKETEXT{"Users"}%]]
+   * %IF{"istopic '%USERSWEB%.TWikiUsers'" else="$percntMAKETEXT{\"Users\"}$percnt" then="[[$percntUSERSWEB$percnt.TWikiUsers][$percntMAKETEXT{\"Users\"}$percnt]]"}%
    * [[%USERSWEB%.TWikiGroups][%MAKETEXT{"Groups"}%]]
    * [[%SYSTEMWEB%.ChangePassword][%MAKETEXT{"Password"}%]]
 %IFDEFINEDTHEN{"%IFACCESS{"%USERSWEB%.WebLinks" type="change"}%" as="1"}%
