@@ -74,6 +74,16 @@ sub verify_simple  {
     $this->assert_matches(qr/Ok\+Topic/, $result);
 }
 
+sub verify_Item4692  {
+    my $this = shift;
+
+    my $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"BLEEGLE" topic="NonExistant" nonoise="on" format="$topic"}%',
+        $this->{test_web}, $this->{test_topic});
+
+    $this->assert_str_equals('', $result);
+}
+
 sub verify_angleb {
     my $this = shift;
     # Test regex with \< and \>, used in rename searches
