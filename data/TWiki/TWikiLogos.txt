@@ -57,6 +57,9 @@ The official TWiki logo is a big "T" in a speech bubble conveying "working toget
 
 =T-logo-80x15.gif=: <br />
     <img src="%ATTACHURLPATH%/T-logo-80x15.gif" alt="T-logo, 80x15" />
+    
+=T-badge-88x31.gif=: <br />
+    <img src="%ATTACHURLPATH%/T-badge-88x31.gif" alt="T-badge, 88x31" />
 
 </td></tr></table>
 %STOPINCLUDE%
@@ -91,4 +94,4 @@ TWiki&trade;, the TWiki logo and the "Collaborate with TWiki" tagline are a trad
 The logo was created by TWiki:Main.PeterThoeny and TWiki:Main.ArthurClemens in September 2005, based on a lot of feedback from the TWiki community. See history and provide feedback at TWiki:Codev.TWikiLogoDevelopment.
 
 %STOPINCLUDE%
--- __Contribtors:__ TWiki:Main.ArthurClemens, TWiki:Main.PeterThoeny - 02 Oct 2005
+-- __Contributors:__ TWiki:Main.ArthurClemens, TWiki:Main.PeterThoeny - 02 Oct 2005
