@@ -873,17 +873,28 @@ sub _rmtree {
             $entry = $root.'/'.$1;
             if( -d $entry ) {
                 _rmtree( $entry );
-            } else {
-                unless( unlink( $entry ) ) {
+            } elsif( !unlink( $entry ) && -e $entry ) {
+                if ($TWiki::cfg{OS} ne 'WINDOWS') {
                     throw Error::Simple( 'RCS: Failed to delete file '.
                                            $entry.': '.$! );
+                } else {
+                    # Windows sometimes fails to delete files when
+                    # subprocesses haven't exited yet, because the
+                    # subprocess still has the file open. Live with it.
+                    print STDERR 'WARNING: Failed to delete file ',
+                                           $entry,": $!\n";
                 }
             }
         }
         closedir(D);
 
-        rmdir( $root ) ||
-          throw Error::Simple( 'RCS: Failed to delete '.$root.': '.$! );
+        if (!rmdir( $root )) {
+            if ($TWiki::cfg{OS} ne 'WINDOWS') {
+                throw Error::Simple( 'RCS: Failed to delete '.$root.': '.$! );
+            } else {
+                print STDERR 'WARNING: Failed to delete '.$root.': '.$!,"\n";
+            }
+        }
     }
 }
 
