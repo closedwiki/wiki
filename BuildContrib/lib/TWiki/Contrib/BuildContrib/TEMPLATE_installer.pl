@@ -101,27 +101,30 @@ BEGIN {
     # read setlib.cfg
     chdir('bin');
     require 'setlib.cfg';
-    chdir($installationRoot);
+
     # See if we can make a TWiki. If we can, then we can save topic
     # and attachment histories. Key off TWiki::Merge because it was
     # added in Dakar.
     if( &$check_perl_module( 'TWiki::Merge' )) {
-        eval "use TWiki";
+        require TWiki;
         # We have to get the admin user, as a guest user may be blocked.
         # TWiki 4.2 has AdminUserLogin; for earlier releases, we need to
         # do something a bit different.
-        my $user = $TWiki::cfg{AdminUserLogin} || '';
+        my $user = $TWiki::cfg{AdminUserLogin} || 'admin';
         $twiki = new TWiki($user);
-        unless (defined $TWiki::cfg{AdminUserLogin}) {
-            # Compatibility with 3.0 < TWiki < 4.2
+        # Compatibility with 4.0 <= TWiki::VERSION < 4.2
+        if ($twiki->{users}->can('findUser')) {
             $TWiki::Plugins::SESSION = $twiki;
             $twiki->{user} =
-              $twiki->{users}->findUser($TWiki::cfg{AdminUserWikiName},
-                                        $TWiki::cfg{AdminUserWikiName});
+              $twiki->{users}->findUser(
+                  $TWiki::cfg{AdminUserWikiName},
+                  $TWiki::cfg{AdminUserWikiName});
         }
+        chdir($installationRoot);
         $twiki4OrMore = 1;
     } else {
         # Not TWiki-4
+        chdir($installationRoot);
         no strict;
         do 'lib/TWiki.cfg';
         if( -e 'lib/LocalSite.cfg') {
@@ -853,7 +856,9 @@ sub emplace {
             }
             my @path = split(/[\/\\]+/, $target);
             pop(@path);
-            File::Path::mkpath(join('/',@path));
+            if (scalar(@path)) {
+                File::Path::mkpath(join('/',@path));
+            }
             File::Copy::move($source, $target) || die "Install failed: $!\n";
         }
         if( $target =~ /^data\/(\w+)\/(\w+).txt$/ ) {
