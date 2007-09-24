@@ -38,11 +38,11 @@ sub afterSaveHandler {
   #TODO: re-do this so it only reparses the topic that was saved
 
   # force reload
-  my $theDB = getDB($TWiki::Plugins::DBCachePlugin::currentWeb, 1);
+  my $theDB = getDB($TWiki::Plugins::DBCachePlugin::currentWeb);
   #writeDebug("touching webdb for $TWiki::Plugins::DBCachePlugin::currentWeb");
   $theDB->touch();
   if ($TWiki::Plugins::DBCachePlugin::currentWeb ne $_[2]) {
-    $theDB = getDB($_[2], 1); 
+    $theDB = getDB($_[2]); 
     #writeDebug("touching webdb for $_[2]");
     $theDB->touch();
   }
@@ -121,13 +121,13 @@ sub handleDBQUERY {
       $isFirst = 0;
       $format .= $theFormat;
       $format =~ s/\$formfield\((.*?)\)/
-	my $temp = $theDB->getFormField($topicName, $1);
+        my $temp = $theDB->getFormField($topicName, $1);
 	$temp =~ s#\)#${TranslationToken}#g;
 	$temp/geo;
       $format =~ s/\$expand\((.*?)\)/
-         my $temp = $1;
-         $temp = _expandVariables($temp, $topicWeb, $topicName,
-           topic=>$topicName, web=>$topicWeb, index=>$index, count=>$count);
+        my $temp = $1;
+        $temp = _expandVariables($temp, $topicWeb, $topicName,
+          topic=>$topicName, web=>$topicWeb, index=>$index, count=>$count);
         $temp = $theDB->expandPath($topicObj, $temp);
 	$temp =~ s#\)#${TranslationToken}#g;
 	$temp/geo;
@@ -832,7 +832,6 @@ sub _formatRecursive {
 ###############################################################################
 sub getDB {
   my $theWeb = shift;
-  my $isModified = shift || $TWiki::cfg{DBCache}{alwaysUpdateCache};
   
   #writeDebug("called getDB($theWeb, $isModified)");
 
@@ -840,10 +839,10 @@ sub getDB {
   # whatever perl accelerator that keeps our global variables and 
   # the database wasn't modified!
 
-  my $needsToBeLoaded = 0;
+  my $isModified = 0;
   unless (defined $webDB{$theWeb}) {
     # never loaded
-    $needsToBeLoaded = 1;
+    $isModified = 1;
     writeDebug("fresh reload of $theWeb ($isModified)");
   } else {
     unless (defined $webDBIsModified{$theWeb}) {
@@ -857,11 +856,10 @@ sub getDB {
         }
       }
     }
-    $isModified |= $webDBIsModified{$theWeb};
-    $needsToBeLoaded = $isModified;
+    $isModified = $webDBIsModified{$theWeb};
   }
 
-  if ($needsToBeLoaded) {
+  if ($isModified) {
     my $impl = TWiki::Func::getPreferencesValue('WEBDB', $theWeb)
       || 'TWiki::Plugins::DBCachePlugin::WebDB';
     $impl =~ s/^\s+//go;
@@ -870,7 +868,7 @@ sub getDB {
     #writeDebug("impl='$impl'");
     $webDB{$theWeb}->DESTROY() if $webDB{$theWeb};
     $webDB{$theWeb} = new $impl($theWeb);
-    $webDB{$theWeb}->load( $isModified );
+    $webDB{$theWeb}->load();
     $webDBIsModified{$theWeb} = 0;
   }
 

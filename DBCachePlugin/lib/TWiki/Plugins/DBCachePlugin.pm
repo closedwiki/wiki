@@ -47,8 +47,7 @@ sub initPlugin {
   TWiki::Func::registerTagHandler('DBDUMP', \&_DBDUMP); # for debugging
   TWiki::Func::registerTagHandler('DBRECURSE', \&_DBRECURSE);
   TWiki::Func::registerTagHandler('ATTACHMENTS', \&_ATTACHMENTS);
-  
-  TWiki::Func::registerRESTHandler( 'UpdateCache', \&UpdateCache );
+  TWiki::Func::registerRESTHandler('UpdateCache', \&updateCache );
 
   # SMELL: remove this when TWiki::Cache got into the core
   if (defined $TWiki::Plugins::SESSION->{cache}) {
@@ -89,13 +88,14 @@ sub initCore {
 }
 
 ###############################################################################
-#REST handler to allow offline cache updates 
-sub UpdateCache {
+# REST handler to allow offline cache updates 
+sub updateCache {
   my $session = shift;
   my $web = $session->{webName};
 
-  print STDERR "force cache update of $web\n";
-  getDB($web, 1);
+  #print STDERR "force cache update of $web\n";
+  my $db = getDB($web);
+  $db->load(1) if $db;
 }
 
 ###############################################################################
