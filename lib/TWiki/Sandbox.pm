@@ -440,9 +440,15 @@ sub sysCommand {
         # earlier filtering in unless administrator forced filtering out)
 
         # This appears to be the only way to get ActiveStatePerl working
-
         # Escape the cmd quote using \
-        $cmd = $path.' '.$cq.join($cq.' '.$cq, map { s/$cq/\\$cq/g; $_ } @args).$cq;
+        if ($cq eq '"') {
+            # DOS shell :-( Tried dozens of ways of trying to get the quotes
+            # right, but it just won't play nicely
+            $cmd = $path.' "'.join('" "', @args).'"';
+        } else {
+            $cmd = $path.' '.$cq.
+              join($cq.' '.$cq, map { s/$cq/\\$cq/g; $_ } @args).$cq;
+        }
         open( OLDERR, '>&STDERR' ) || die "Can't steal STDERR: $!";
         open( STDERR, '>'.File::Spec->devnull());
         $data = `$cmd`;
