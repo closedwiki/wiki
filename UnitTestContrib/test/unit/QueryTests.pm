@@ -236,7 +236,7 @@ sub test_hoistSimple {
     require TWiki::Query::HoistREs;
     my @filter = TWiki::Query::HoistREs::hoist( $query ) || 'undef';
     #print STDERR "HoistS ",$query->stringify()," -> /",join(';', @filter),"/\n";
-    $this->assert_str_equals('^%META:FIELD{name="number".*\bvalue="99"',
+    $this->assert_str_equals('^%META:FIELD{name=\"number\".*\bvalue=\"99\"',
                             join(';', @filter));
     my $meta = $this->{meta};
     my $val = $query->evaluate( tom=>$meta, data=>$meta );
@@ -250,7 +250,7 @@ sub test_hoistSimple2 {
     require TWiki::Query::HoistREs;
     my @filter = TWiki::Query::HoistREs::hoist( $query ) || 'undef';
     #print STDERR "HoistS ",$query->stringify()," -> /",join(';', @filter),"/\n";
-    $this->assert_str_equals('^%META:FIELD{name="number".*\bvalue="99"',
+    $this->assert_str_equals('^%META:FIELD{name=\"number\".*\bvalue=\"99\"',
                             join(';', @filter));
     my $meta = $this->{meta};
     my $val = $query->evaluate( tom=>$meta, data=>$meta );
@@ -264,11 +264,11 @@ sub test_hoistCompound {
     require TWiki::Query::HoistREs;
     my @filter = TWiki::Query::HoistREs::hoist( $query );
     #print STDERR "HoistC ",$query->stringify()," -> /",join(';', @filter),"/\n";
-    $this->assert_str_equals('^%META:FIELD{name="number".*\bvalue="99"',
+    $this->assert_str_equals('^%META:FIELD{name=\"number\".*\bvalue=\"99\"',
                              $filter[0]);
-    $this->assert_str_equals('^%META:FIELD{name="string".*\bvalue="String"',
+    $this->assert_str_equals('^%META:FIELD{name=\"string\".*\bvalue=\"String\"',
                              $filter[1]);
-    $this->assert_str_equals('^%META:TOPICMOVED{.*\bby="AlbertCamus"|^%META:TOPICMOVED{.*\bby=".*bert.*"',
+    $this->assert_str_equals('^%META:TOPICMOVED{.*\bby=\"AlbertCamus\"|^%META:TOPICMOVED{.*\bby=\".*bert.*\"',
                              $filter[2]);
     my $meta = $this->{meta};
     my $val = $query->evaluate( tom=>$meta, data=>$meta );
@@ -282,11 +282,11 @@ sub test_hoistCompound2 {
     require TWiki::Query::HoistREs;
     my @filter = TWiki::Query::HoistREs::hoist( $query );
     #print STDERR "HoistC ",$query->stringify()," -> /",join(';', @filter),"/\n";
-    $this->assert_str_equals('^%META:TOPICMOVED{.*\bby="AlbertCamus"|^%META:TOPICMOVED{.*\bby=".*bert.*"',
+    $this->assert_str_equals('^%META:TOPICMOVED{.*\bby=\"AlbertCamus\"|^%META:TOPICMOVED{.*\bby=\".*bert.*\"',
                              $filter[0]);
-    $this->assert_str_equals('^%META:FIELD{name="number".*\bvalue="99"',
+    $this->assert_str_equals('^%META:FIELD{name=\"number\".*\bvalue=\"99\"',
                              $filter[1]);
-    $this->assert_str_equals('^%META:FIELD{name="string".*\bvalue="String"',
+    $this->assert_str_equals('^%META:FIELD{name=\"string\".*\bvalue=\"String\"',
                              $filter[2]);
     my $meta = $this->{meta};
     my $val = $query->evaluate( tom=>$meta, data=>$meta );
@@ -299,7 +299,7 @@ sub test_hoistAlias {
     my $query = $queryParser->parse($s);
     require TWiki::Query::HoistREs;
     my @filter = TWiki::Query::HoistREs::hoist( $query ) || 'undef';
-    $this->assert_str_equals('^%META:TOPICINFO{.*\bdate="12345"',
+    $this->assert_str_equals('^%META:TOPICINFO{.*\bdate=\"12345\"',
                              join(';', @filter));
     my $meta = $this->{meta};
     my $val = $query->evaluate( tom=>$meta, data=>$meta );
@@ -312,7 +312,7 @@ sub test_hoistFormField {
     my $query = $queryParser->parse($s);
     require TWiki::Query::HoistREs;
     my @filter = TWiki::Query::HoistREs::hoist( $query ) || 'undef';
-    $this->assert_str_equals('^%META:FIELD{name="number".*\bvalue="99"',
+    $this->assert_str_equals('^%META:FIELD{name=\"number\".*\bvalue=\"99\"',
                              join(';', @filter));
     my $meta = $this->{meta};
     my $val = $query->evaluate( tom=>$meta, data=>$meta );
