@@ -550,7 +550,6 @@ lib/TWiki/Store.pm 0444
 lib/TWiki/Store/RcsFile.pm 0444
 lib/TWiki/Store/RcsLite.pm 0444
 lib/TWiki/Store/RcsWrap.pm 0444
-lib/TWiki/Store/SearchAlgorithms/Native.pm 0444
 lib/TWiki/Store/SearchAlgorithms/PurePerl.pm 0444
 lib/TWiki/Store/SearchAlgorithms/Forking.pm 0444
 lib/TWiki/Templates.pm 0444
@@ -1004,15 +1003,11 @@ templates/view.xml.tmpl 0444
 templates/viewplain.tmpl 0444
 templates/viewprint.tmpl 0444
 templates/viewtopicactionbuttons.tmpl 0444
+tools/extender.pl 0555
 tools/geturl.pl 0555
 tools/rewriteshbang.pl 0555
 tools/tick_twiki.pl 0555
 tools/upgrade_emails.pl 0555
-tools/native_search/NativeTWikiSearch.pm 0555
-tools/native_search/cgrep.c 0555
-tools/native_search/Makefile.PL 0555
-tools/native_search/test.pl 0555
-tools/native_search/NativeTWikiSearch.xs 0555
 twiki_httpd_conf.txt 0444
 working/tmp/README 0444
 working/registration_approvals/README 0444
