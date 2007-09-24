@@ -167,14 +167,14 @@ sub _hoistDOT {
             }
             if ($lhs =~ /^META:/) {
                 # \000RHS\001 is a placholder for the RHS term
-                return '^%'.$lhs.'{.*\\b'.$rhs."=\"\000RHS\001\"";
+                return '^%'.$lhs.'{.*\\b'.$rhs."=\\\"\000RHS\001\\\"";
             }
             # Otherwise assume the term before the dot is the form name
             if ($rhs eq 'text') {
                 # Special case for the text body
                 return "\000RHS\001";
             } else {
-                return "^%META:FIELD{name=\"$rhs\".*\\bvalue=\"\000RHS\001\"";
+                return "^%META:FIELD{name=\\\"$rhs\\\".*\\bvalue=\\\"\000RHS\001\\\"";
             }
 
         }
@@ -183,7 +183,7 @@ sub _hoistDOT {
             # Special case for the text body
             return "\000RHS\001";
         } else {
-            return "^%META:FIELD{name=\"$node->{params}[0]\".*\\bvalue=\"\0RHS\1\"";
+            return "^%META:FIELD{name=\\\"$node->{params}[0]\\\".*\\bvalue=\\\"\0RHS\1\\\"";
         }
     }
 
