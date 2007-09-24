@@ -77,13 +77,21 @@ sub installModule {
     } else {
         print STDERR "---> No MANIFEST in $module (at $manifest)\n";
     }
+    if( -d "$moduleDir/test/unit/$module" ) {
+        opendir(D, "$moduleDir/test/unit/$module");
+        foreach my $f (grep(/\.pm$/, readdir(D))) {
+            &$install(
+                $moduleDir, "test/unit/$module", "test/unit/$module/$f" );
+        }
+        closedir(D);
+    }
 }
 
 sub copy_in {
     my( $moduleDir, $dir, $file ) = @_;
     File::Path::mkpath( $dir );
     File::Copy::copy( "$moduleDir/$file", $file ) ||
-        die "Couldn't install $file";
+        die "Couldn't install $file: $!";
     print "Copied $file\n";
 }
 
