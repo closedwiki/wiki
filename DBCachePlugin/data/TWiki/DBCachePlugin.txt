@@ -327,7 +327,7 @@ its own where it caches the createdate of a topic being either specified in a fo
 given in the timestamp of the first revision of a topic.
 
 ---+++ DBCachePlugin 
----++++ getDB()
+---++++ getDB($updateCache)
 Returns a database object used for further queries.  This function must be
 called ahead of any actual database access. If your <nop>TWikiApplication is
 using a derived <nop>WebDB then use the =WEBDB= variable in your WebPreferences
@@ -339,7 +339,13 @@ is rather a design decision; otherwise each DBQUERY and DBCALL tag would have to
 declare which database it operated on. So currently the rule of thumb is: one
 web one <nop>TWikiApplication making use of this plugin.
 
-| *$webDB = getDB($web)* ||
+   * $updateCache - if  {DBCache}{alwaysUpdateCache} is set to false, the 
+     $updateCache parameter is used by DBCacheContrib to determine whether to
+     update teh Cache from the filesystem. This is an expensive operation even
+     if no topics have changed (it checks the timestamps of every file) defaults to false.
+
+
+| *$webDB = getDB($web, $updateCache)* ||
 | =web= | name of the web whose database is to be loaded |
 
 returns a database object. See the TWiki:Plugins::DBCacheContrib documentation
@@ -389,6 +395,13 @@ To specify it you have to set the =WEBDB= variable in the WebPreferences. If not
 following is the default paramenter (omitting the #)
    * #Set WEBDB = TWiki::Plugins::DBCachePlugin::WebDB
    
+---+++ {DBCache}{alwaysUpdateCache} (DBCacheContrib setting)
+If  $TWiki::cfg{DBCache}{alwaysUpdateCache}  is set to FALSE (defaults to TRUE for compatibility)
+then DBCacheContrib will avoid calling _updateCache unless requested with =getDB($web, 1)=. _updateCache_ accesses every topic file in the web, so its an unnecessary performance hit.
+DBCacePlugin will then only request full _updateCache from the afterSaveHandler and from the new REST [[%SCRIPTURL{rest}%/DBCachePlugin/UpdateCache?topic=Web.WebHome][updateCache]] 
+handler (change 'Web' to set which web to update).
+You can also call the update from the command line - from the twiki/bin dir -
+=./rest DBCachePlugin.UpdateCache topic=Web.WebHome=
 
 ---++ Plugin Installation Instructions
 
@@ -409,6 +422,9 @@ following is the default paramenter (omitting the #)
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | v1.61 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  24 Set 2007  | added updateCache parameter to getDB, to implement \
+			{DBCache}{alwaysUpdateCache} setting \
+			SvenDowideit@home.org.au |
 |  12 Sep 2007  | made significant speedups to DBQuery \
                   fixed sorting to be O(N log(N)) \
 		  removed topic access check unless absolutly necessary \

@@ -14,6 +14,11 @@
 
 package TWiki::Plugins::DBCachePlugin;
 
+#use Monitor;
+#Monitor::MonitorMethod('TWiki::Contrib::DBCachePlugin');
+#Monitor::MonitorMethod('TWiki::Contrib::DBCachePlugin::Core');
+#Monitor::MonitorMethod('TWiki::Contrib::DBCachePlugin::WebDB');
+
 use strict;
 use vars qw( 
   $VERSION $RELEASE $SHORTDESCRIPTION $NO_PREFS_IN_TOPIC
@@ -22,7 +27,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = '1.61';
+$RELEASE = '1.62';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Lightweighted frontend to the DBCacheContrib';
 
@@ -42,6 +47,8 @@ sub initPlugin {
   TWiki::Func::registerTagHandler('DBDUMP', \&_DBDUMP); # for debugging
   TWiki::Func::registerTagHandler('DBRECURSE', \&_DBRECURSE);
   TWiki::Func::registerTagHandler('ATTACHMENTS', \&_ATTACHMENTS);
+  
+  TWiki::Func::registerRESTHandler( 'UpdateCache', \&UpdateCache );
 
   # SMELL: remove this when TWiki::Cache got into the core
   if (defined $TWiki::Plugins::SESSION->{cache}) {
@@ -79,6 +86,16 @@ sub initCore {
     TWiki::Func::getRegularExpression('defaultWebNameRegex');
   $TWiki::Plugins::DBCachePlugin::Core::linkProtocolPattern = 
     TWiki::Func::getRegularExpression('linkProtocolPattern');
+}
+
+###############################################################################
+#REST handler to allow offline cache updates 
+sub UpdateCache {
+  my $session = shift;
+  my $web = $session->{webName};
+
+  print STDERR "force cache update of $web\n";
+  getDB($web, 1);
 }
 
 ###############################################################################

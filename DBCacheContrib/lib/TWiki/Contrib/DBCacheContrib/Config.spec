@@ -9,3 +9,16 @@
 # relatively slow and insecure).
 $TWiki::cfg{DBCacheContrib}{Archivist} =
     'TWiki::Contrib::DBCacheContrib::Archivist::Storable';
+
+
+# **BOOLEAN**
+# if  $TWiki::cfg{DBCache}{alwaysUpdateCache}  is set to FALSE (defaults to TRUE for compatibility)
+# then avoid calling _updateCache unless requested. DBCachePlugin now only asked for it from
+# the afterSaveHandler and from the new REST updateCache handler
+$TWiki::cfg{DBCache}{alwaysUpdateCache} = $TRUE;
+
+# **NUMBER**
+# $TWiki::cfg{DBCache}{loadFileLimit} can be used to prevent the _updateCache from parsing all of the changed and new files in one hit.
+# thus reducing the impact on individual topic views, or spreading the upadte over several UpdateCache rest requests.
+# default of 0 removes the limit
+$TWiki::cfg{DBCache}{loadFileLimit} = 0;

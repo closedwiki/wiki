@@ -12,6 +12,11 @@ use TWiki::Contrib::DBCacheContrib::FileTime;
 use TWiki::Attrs;
 use Assert;
 
+#use Monitor;
+#Monitor::MonitorMethod('TWiki::Contrib::DBCacheContrib');
+#Monitor::MonitorMethod('TWiki::Contrib::DBCacheContrib::Search');
+#Monitor::MonitorMethod('TWiki::Contrib::DBCacheContrib::Archive');
+
 =pod
 
 ---++ class DBCacheContrib
@@ -94,6 +99,8 @@ sub _loadTopic {
     my ( $this, $dataDir, $topic ) = @_;
     my $filename = "$dataDir/$topic.txt";
     my $fh;
+
+print STDERR "DBCacheContrib::_loadTopic($filename)\n";
 
     unless (open( $fh, "<$filename" )) {
         print STDERR "WARNING: Failed to open $dataDir/$topic.txt\n";
@@ -245,17 +252,24 @@ sub _onReload {
 
 =pod
 
----+++ load() -> ($readFromCache, $readFromFile, $removed)
+---+++ load( [updateCache]  ) -> ($readFromCache, $readFromFile, $removed)
 
 Load the web into the database.
 Returns a list containing 3 numbers that give the number of topics
 read from the cache, the number read from file, and the number of previously
 cached topics that have been removed.
 
+if  $TWiki::cfg{DBCache}{alwaysUpdateCache}  is set to FALSE (defaults to TRUE for compatibility)
+then avoid calling _updateCache unless requested. DBCachePlugin now only asked for it from
+the afterSaveHandler and from the new REST updateCache handler
+
 =cut
 
 sub load {
     my $this = shift;
+    my $updateCache = shift || $TWiki::cfg{DBCache}{alwaysUpdateCache};
+    $updateCache = 1 unless (defined($updateCache));
+    #print STDERR "called load($updateCache)\n";
 
     return (0, 0, 0) if ( $this->{loaded} );
 
@@ -281,7 +295,7 @@ sub load {
     my $readFromFile = 0;
     my $removed = 0;
 
-    if ( $cache ) {
+    if ( $cache && $updateCache ) {
         eval {
             ( $readFromCache, $readFromFile, $removed ) =
               $this->_updateCache( $cache, $dataDir );
@@ -295,6 +309,9 @@ sub load {
         if ( $readFromFile || $removed ) {
             $writeCache = 1;
         }
+    } elsif ( $cache ) {
+        $this->{keys} = $cache->{keys};        
+        $readFromCache = $cache->size();
     }
 
     if ( !$cache ) {
@@ -318,6 +335,7 @@ sub load {
 
     $this->{loaded} = 1;
 
+    print STDERR "DBCacheContrib::load read $readFromFile files,  $readFromCache topics read from cache , $removed topics removed from cache\n";
     return ($readFromCache, $readFromFile, $removed);
 }
 
@@ -353,6 +371,7 @@ sub _updateCache {
             }
         }
         $topcache->set( '.fresh', 1 ) if $topcache;
+	last if ( defined($TWiki::cfg{DBCache}{loadFileLimit} ) && ($TWiki::cfg{DBCache}{loadFileLimit} > 0) && ( $readFromFile > $TWiki::cfg{DBCache}{loadFileLimit} )); #don't disadvantage users just because the cache is off
     }
     closedir(D);
 

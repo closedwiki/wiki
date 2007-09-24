@@ -44,7 +44,7 @@ sub load {
   my $this = shift;
 
   # first load
-  my $result = $this->SUPER::load();
+  my $result = $this->SUPER::load(@_);
 
   # then get the time stamp
   $this->{_loadTime} = $this->_getModificationTime();

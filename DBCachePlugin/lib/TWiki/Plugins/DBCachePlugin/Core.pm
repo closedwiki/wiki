@@ -35,13 +35,14 @@ sub writeDebug {
 
 ###############################################################################
 sub afterSaveHandler {
+  #TODO: re-do this so it only reparses the topic that was saved
 
   # force reload
-  my $theDB = getDB($TWiki::Plugins::DBCachePlugin::currentWeb);
+  my $theDB = getDB($TWiki::Plugins::DBCachePlugin::currentWeb, 1);
   #writeDebug("touching webdb for $TWiki::Plugins::DBCachePlugin::currentWeb");
   $theDB->touch();
   if ($TWiki::Plugins::DBCachePlugin::currentWeb ne $_[2]) {
-    $theDB = getDB($_[2]); 
+    $theDB = getDB($_[2], 1); 
     #writeDebug("touching webdb for $_[2]");
     $theDB->touch();
   }
@@ -124,10 +125,10 @@ sub handleDBQUERY {
 	$temp =~ s#\)#${TranslationToken}#g;
 	$temp/geo;
       $format =~ s/\$expand\((.*?)\)/
-        my $temp = $1;
-        $temp = _expandVariables($temp, $topicWeb, $topicName,
-          topic=>$topicName, web=>$topicWeb, index=>$index, count=>$count);
-	$temp = $theDB->expandPath($topicObj, $temp);
+         my $temp = $1;
+         $temp = _expandVariables($temp, $topicWeb, $topicName,
+           topic=>$topicName, web=>$topicWeb, index=>$index, count=>$count);
+        $temp = $theDB->expandPath($topicObj, $temp);
 	$temp =~ s#\)#${TranslationToken}#g;
 	$temp/geo;
       $format =~ s/\$formatTime\((.*?)(?:,\s*'([^']*?)')?\)/TWiki::Func::formatTime($theDB->expandPath($topicObj, $1), $2)/geo; # single quoted
@@ -831,42 +832,45 @@ sub _formatRecursive {
 ###############################################################################
 sub getDB {
   my $theWeb = shift;
-
-  #writeDebug("called getDB($theWeb)");
+  my $isModified = shift || $TWiki::cfg{DBCache}{alwaysUpdateCache};
+  
+  #writeDebug("called getDB($theWeb, $isModified)");
 
   # We do not need to reload the cache if we run on mod_perl or speedy_cgi or
   # whatever perl accelerator that keeps our global variables and 
   # the database wasn't modified!
-  my $isModified = 0;
+
+  my $needsToBeLoaded = 0;
   unless (defined $webDB{$theWeb}) {
     # never loaded
-    $isModified = 1;
-    writeDebug("fresh reload of $theWeb");
+    $needsToBeLoaded = 1;
+    writeDebug("fresh reload of $theWeb ($isModified)");
   } else {
     unless (defined $webDBIsModified{$theWeb}) {
       # never checked
       $webDBIsModified{$theWeb} = $webDB{$theWeb}->isModified();
       if ($debug) {
-	if ($webDBIsModified{$theWeb}) {
-	  writeDebug("reloading modified $theWeb");
-	} else {
-	  writeDebug("don't need to load webdb for $theWeb");
-	}
+        if ($webDBIsModified{$theWeb}) {
+          writeDebug("reloading modified $theWeb");
+        } else {
+          writeDebug("don't need to load webdb for $theWeb");
+        }
       }
     }
-    $isModified = $webDBIsModified{$theWeb};
+    $isModified |= $webDBIsModified{$theWeb};
+    $needsToBeLoaded = $isModified;
   }
 
-  if ($isModified) {
+  if ($needsToBeLoaded) {
     my $impl = TWiki::Func::getPreferencesValue('WEBDB', $theWeb)
       || 'TWiki::Plugins::DBCachePlugin::WebDB';
     $impl =~ s/^\s+//go;
     $impl =~ s/\s+$//go;
-    #writeDebug("loading new webdb for '$theWeb'");
+    #writeDebug("loading new webdb for '$theWeb($isModified) '");
     #writeDebug("impl='$impl'");
     $webDB{$theWeb}->DESTROY() if $webDB{$theWeb};
     $webDB{$theWeb} = new $impl($theWeb);
-    $webDB{$theWeb}->load();
+    $webDB{$theWeb}->load( $isModified );
     $webDBIsModified{$theWeb} = 0;
   }
 
