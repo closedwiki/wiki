@@ -335,7 +335,7 @@ sub load {
 
     $this->{loaded} = 1;
 
-    print STDERR "DBCacheContrib::load read $readFromFile files,  $readFromCache topics read from cache , $removed topics removed from cache\n";
+    #print STDERR "DBCacheContrib::load read $readFromFile files,  $readFromCache topics read from cache , $removed topics removed from cache\n";
     return ($readFromCache, $readFromFile, $removed);
 }
 
