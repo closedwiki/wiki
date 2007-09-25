@@ -23,5 +23,12 @@ pub/TWiki/MoveableTypeSkin/splattered_edit.gif
 
 data/TWiki/MoveableTypeSampleDesign.txt
 pub/TWiki/MoveableTypeSampleDesign/base-weblog.css
+pub/TWiki/MoveableTypeSampleDesign/theme.css
 pub/TWiki/MoveableTypeSampleDesign/TWiki.css
+pub/TWiki/MoveableTypeSampleDesign/userpic.gif
 
+data/TWiki/MoveableTypeSample2Design.txt
+pub/TWiki/MoveableTypeSample2Design/base-weblog.css
+pub/TWiki/MoveableTypeSample2Design/theme.css
+pub/TWiki/MoveableTypeSample2Design/TWiki.css
+pub/TWiki/MoveableTypeSample2Design/userpic.gif

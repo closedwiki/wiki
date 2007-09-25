@@ -19,22 +19,22 @@
 %{ ******************************************* }%
 %TMPL:DEF{"moveabletypetext"}%%URLPARAM{"moveabletypetopic" default="%IF{"defined MOVEABLETYPESKIN_DESIGNTOPIC" then="%MOVEABLETYPESKIN_DESIGNTOPIC%" else="MoveableTypeSampleDesign"}%"}%%TMPL:END%
 %{ ******************************************* }%
-%TMPL:DEF{"moveabletypecolumns"}%%URLPARAM{"moveabletypecolumns" default="%IF{"defined MOVEABLETYPESKIN_COLUMNS" then="%MOVEABLETYPESKIN_COLUMNS%" else="one-column"}%"}%%TMPL:END%
+%TMPL:DEF{"moveabletypecolumns"}%%URLPARAM{"moveabletypecolumns" default="%IF{"defined MOVEABLETYPESKIN_COLUMNS" then="%MOVEABLETYPESKIN_COLUMNS%" else="two-column-right"}%"}%%TMPL:END%
 
 %{ "firstsidebarclass" = 'alpha' if (two-column-left || three-column || '')   }%
 %TMPL:DEF{"firstsidebarclass"}%%IF{"$'URLPARAM{moveabletypecolumns}' = 'two-column-left' OR $MOVEABLETYPESKIN_COLUMNS = 'two-column-left'" then="alpha" else=""}%%IF{"$'URLPARAM{moveabletypecolumns}' = 'three-column' OR $MOVEABLETYPESKIN_COLUMNS = 'three-column'" then="alpha" else=""}%%TMPL:END%
 
 %{ TMPL:DEF{"secondsidebarclass" = 'beta' if (two-column-right) }%
 %{ TMPL:DEF{"secondsidebarclass"} = 'gamma' if (three-column or '') }%
-%TMPL:DEF{"secondsidebarclass"}%%IF{"$'URLPARAM{moveabletypecolumns}' = 'two-column-right' OR $MOVEABLETYPESKIN_COLUMNS = 'two-column-right'" then="beta" else=""}%%IF{"$'URLPARAM{moveabletypecolumns}' = 'three-column' OR $MOVEABLETYPESKIN_COLUMNS = 'three-column'" then="gamma" else=""}%%TMPL:END%
+%TMPL:DEF{"secondsidebarclass"}%%IF{"$'URLPARAM{moveabletypecolumns}' = 'two-column-right' OR $MOVEABLETYPESKIN_COLUMNS = 'two-column-right'" then="beta" else=""}%%IF{"$'URLPARAM{moveabletypecolumns}' = 'three-column' OR $MOVEABLETYPESKIN_COLUMNS = 'three-column'" then="gamma" else=""}%%IF{"defined moveabletypecolumns OR defined MOVEABLETYPESKIN_COLUMNS" else="beta"}%%TMPL:END%
 
 %{ TMPL:DEF{"mainclass"} = 'beta' if (two-column-left || three-column || '') else = 'alpha' }%
-%TMPL:DEF{"mainclass"}%%IF{"$'URLPARAM{moveabletypecolumns}' = 'one-column' OR $MOVEABLETYPESKIN_COLUMNS = 'one-column'" then="alpha" else=""}%%IF{"$'URLPARAM{moveabletypecolumns}' = 'two-column-left' OR $MOVEABLETYPESKIN_COLUMNS = 'two-column-left'" then="beta" else=""}%%IF{"$'URLPARAM{moveabletypecolumns}' = 'two-column-right' OR $MOVEABLETYPESKIN_COLUMNS = 'two-column-right'" then="alpha" else=""}%%IF{"$'URLPARAM{moveabletypecolumns}' = 'three-column' OR $MOVEABLETYPESKIN_COLUMNS = 'three-column'" then="beta" else=""}%%TMPL:END%
+%TMPL:DEF{"mainclass"}%%IF{"$'URLPARAM{moveabletypecolumns}' = 'one-column' OR $MOVEABLETYPESKIN_COLUMNS = 'one-column'" then="alpha" else=""}%%IF{"$'URLPARAM{moveabletypecolumns}' = 'two-column-left' OR $MOVEABLETYPESKIN_COLUMNS = 'two-column-left'" then="beta" else=""}%%IF{"$'URLPARAM{moveabletypecolumns}' = 'two-column-right' OR $MOVEABLETYPESKIN_COLUMNS = 'two-column-right'" then="alpha" else=""}%%IF{"$'URLPARAM{moveabletypecolumns}' = 'three-column' OR $MOVEABLETYPESKIN_COLUMNS = 'three-column'" then="beta" else=""}%%IF{"defined moveabletypecolumns OR defined MOVEABLETYPESKIN_COLUMNS" else="alpha"}%%TMPL:END%
 
 
 
 %{ ******************************************* }%
-%TMPL:DEF{"moveabletypecss"}%%URLPARAM{"cssfile" default="%IF{"defined MOVEABLETYPESKIN_CSSFILE" then="%MOVEABLETYPESKIN_CSSFILE%" else="%PUBURLPATH%/%SYSTEMWEB%/%TMPL:P{moveabletypetext}%/sample.css"}%"}%%TMPL:END%
+%TMPL:DEF{"moveabletypecss"}%%URLPARAM{"cssfile" default="%IF{"defined MOVEABLETYPESKIN_CSSFILE" then="%MOVEABLETYPESKIN_CSSFILE%" else="%PUBURLPATH%/%SYSTEMWEB%/%TMPL:P{moveabletypetext}%/theme.css"}%"}%%TMPL:END%
 %{ ******************************************* }%
 %TMPL:DEF{"moveabletypetwikicss"}%%URLPARAM{"twikicssfile" default="%IF{"defined MOVEABLETYPESKIN_TWIKICSSFILE" then="%MOVEABLETYPESKIN_TWIKICSSFILE%" else="%PUBURLPATH%/%SYSTEMWEB%/%TMPL:P{moveabletypetext}%/TWiki.css"}%"}%%TMPL:END%
 %{ ******************************************* }%
