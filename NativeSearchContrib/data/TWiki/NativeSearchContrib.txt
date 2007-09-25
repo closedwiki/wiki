@@ -8,33 +8,38 @@ One line description, required for extensions repository catalog.
 
 By default TWiki searches its database by forking the standard GNU =grep= program in a subprocess to search through the text files in the database cache. This is usually pretty fast, but unfortunately in some environments (specifically with =mod_perl=) forking a sub-process is very expensive, and another approach is needed.
 
-!NativeSearch is a c-code module that can be plugged into TWiki to replace the default searching method. It publishes an XS interface that allows it to be called from Perl. It has comparable performance to the standard forked search in most environments, but is significantly faster than forked search when TWiki is run under a CGI accelerator. The effect is most pronounced with =mod_perl=, but is also there for !SpeedyCGI.
+!NativeSearch is a c-code module that can be plugged into TWiki to replace the default searching algorithm. It publishes an XS interface that allows it to be called from Perl, without having to spawn a subprocess. It has comparable performance to the standard forked search in most environments, but is often significantly faster than forked search when TWiki is run under a CGI accelerator. The effect is most pronounced with =mod_perl=, but is also there for !SpeedyCGI.
+
+Refer to TWiki:Codev.NativeSearch for a list of systems where the module has been successfully compiled and installed (and please update it if you find a new one).
 
 ---++ Installation Instructions
 
 Before you start, there are some prerequisites. 
-   1 you have to have a C compiler (=gcc= has been tested). Most Unix/Linux systems will have this already. 
-   2 you will need =make= (a standard development tool). Unix/Linux users will have this already; others may have to search. 
-   3 Finally you will need the development versions of the [[http://www.pcre.org/][pcre]] library (required for perl compatible regular expressions). This is a standard Linux library and will be available in an RPM or Debian package or whatever for your system.
+   1 you must have a C compiler (=gcc= has been tested). Most Unix/Linux systems will have this already. On Win32 you !MinGW is recommended.
+   2 you will need =make= (a standard development tool). Unix/Linux users will have this already; others may have to search. Use =nmake= on Win32. 
+   3 Finally you will need the development versions of the [[http://www.pcre.org/][pcre]] library (required for perl compatible regular expressions). This is a standard Linux library and will be available in an RPM or Debian package or whatever for your system. It is available for !GnuWin32 for Windows.
 
 %$INSTALL_INSTRUCTIONS%
 
 ---+++ Building the c-code
 
- =cd= to the root directory in your TWiki installation. Now:
+=cd= to the root directory in your TWiki installation. Now:
 <verbatim>
 $ cd tools/native_search
 $ perl Makefile.PL
 $ make install
 $ perl test.pl -i -l NativeTWikiSearch test.pl Makefile.PL NativeTWikiSearch.xs
 </verbatim>
+(on Win32 you make have to use =nmake=)
 
 Make sure that the =perl test.pl= returns something sane, and _NOT_ a =Segmentation fault= (in which case you'll need to debug it and fix it before going further).
 (=test.pl= is simply a stub interface to the native search, so it behaves like =grep=. The test above simply greps for the string "NativeSearch" in the files Makefile.PL and NativeTWikiSearch.xs)
 
 Easy, huh? Unless, maybe you aren't root, and couldn't install? If so, you can use =perl Makefile.PL INSTALL_BASE=/your/dir= to install to a different directory.
 
-Now, in =configure= under "Store Settings" you can select the search algorithm ='TWiki::Store::SearchAlgorithms::Native'=. Watch the web server error log to see if there are any issues.
+Now, in =configure=, click "Yes, I have read all the documention". Under "Store Settings" you can now select the search algorithm ='TWiki::Store::SearchAlgorithms::Native'=. Watch the web server error log to see if there are any issues.
+
+Because performance can differ widely between two similar webserver configurations, you are recommended to do your own benchmarking and select the search algorithm that performs best for you.
 
 ---++ Contrib Info
 
