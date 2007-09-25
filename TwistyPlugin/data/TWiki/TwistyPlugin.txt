@@ -428,11 +428,12 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 ---++ Plugin Info
 
 | Authors: | TWiki:Main.RafaelAlvarez, TWiki:Main.ArthurClemens |
-| Copyright &copy;: | 2005 Rafael Alvarez, 2006, 2007 Arthur Clemens |
+| Copyright &copy;: | 2005 Rafael Alvarez; 2006, 2007 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
-| Plugin&nbsp;Version: | 11 Jul 2007 (version 1.4.3)  |
+| Plugin&nbsp;Version: | 25 Sep 2007 (version 1.4.4)  |
 | Change&nbsp;History: | <!-- versions below in reverse order -->&nbsp; |
+| 25 Sep 2007 | 1.4.4 Arthur Clemens - Fix rendering of headers when =prefix= is used. |
 | 11 Jul 2007 | 1.4.3 Arthur Clemens - Fix invalid html when =prefix= and =suffix= is used. |
 | 23 Jun 2007 | 1.4.2 Arthur Clemens - Fixed bugs with parameters =firststart= and =noscript= (since version 1.4). |
 | 20 Jun 2007 | 1.4 Arthur Clemens - Updated to work without ugly inserted javascript 'init' calls. This will change nothing to the functionality, but it will produce cleaner HTML, while at the same time the twisty is still set immediately (not at page onload) and graceful fallback in case of no javascript is maintained. |
