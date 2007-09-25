@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1190672540" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1190703677" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and Filetype icons
 
 This is the TWiki icon library. The graphics can be used in topics and by web applications. 
@@ -88,6 +88,15 @@ Other usage: [[%TOPIC%#Usage_extended][see below]].
 | <img src="%ATTACHURLPATH%/folder.gif" alt="Folder" title="Folder" />  | =folder.gif= | Folder | =%<nop>ICON{folder}%= |
 | <img src="%ATTACHURLPATH%/table.gif" alt="Table" title="Table" />  | =table.gif= | Table | =%<nop>ICON{table}%= |
 | <img src="%ATTACHURLPATH%/edittable.gif" alt="Edit table" title="Edit table" />  | =edittable.gif= | Edit table | =%<nop>ICON{edittable}%= |
+| <img src="%ATTACHURLPATH%/uweb-bo.gif" alt="Edit" title="Edit" />  | =uweb-bo.gif= | UWEB ([[http://www.aboutus.org/UniversalWikiEditButton][Universal Wiki Edit Button]]), blue, outline | =%<nop>ICON{uweb-bo}%= |
+| <img src="%ATTACHURLPATH%/uweb-bo12.gif" alt="Edit" title="Edit" />  | =uweb-bo12.gif= | UWEB, blue, outline, small 12x12 | =&lt;img src="%<nop>ICONURL{uweb-bo12}%" width="12" height="12" alt="Edit" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/uweb-g.gif" alt="Edit" title="Edit" />  | =uweb-g.gif= | UWEB, green (default) | =%<nop>ICON{uweb-g}%= |
+| <img src="%ATTACHURLPATH%/uweb-gs.gif" alt="Edit" title="Edit" />  | =uweb-gs.gif= | UWEB, green, square | =%<nop>ICON{uweb-gs}%= |
+| <img src="%ATTACHURLPATH%/uweb-m12.gif" alt="Edit" title="Edit" />  | =uweb-m12.gif= | UWEB, black, small 12x12 | =&lt;img src="%<nop>ICONURL{uweb-m12}%" width="12" height="12" alt="Edit" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/uweb-o.gif" alt="Edit" title="Edit" />  | =uweb-o.gif= | UWEB, orange | =%<nop>ICON{uweb-o}%= |
+| <img src="%ATTACHURLPATH%/uweb-o12.gif" alt="Edit" title="Edit" />  | =uweb-o12.gif= | UWEB, orange, small 12x12 | =&lt;img src="%<nop>ICONURL{uweb-o12}%" width="12" height="12" alt="Edit" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/uweb-oo.gif" alt="Edit" title="Edit" />  | =uweb-oo.gif= | UWEB, orange, outline | =%<nop>ICON{uweb-oo}%= |
+| <img src="%ATTACHURLPATH%/uweb-os.gif" alt="Edit" title="Edit" />  | =uweb-os.gif= | UWEB, orange, square | =%<nop>ICON{uweb-os}%= |
 
 
 ---+++ %ICON{person}% Person, %ICON{group}% group, %ICON{lock}% access icons
