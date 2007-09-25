@@ -110,19 +110,21 @@ sub END {
 		$methods{$call->{method}}{count} +=1;
 		my $diff = timediff($call->{out}, $call->{in});
 		#my $diff = $call->{out}{rss} - $call->{in}{rss};
-		#$methods{$call->{method}}{min} = $diff if ($methods{$call->{method}}{min} > $diff);
-		#$methods{$call->{method}}{max} = $diff if ($methods{$call->{method}}{max} < $diff);
+		$methods{$call->{method}}{min} = ${$diff}[0] if ($methods{$call->{method}}{min} > ${$diff}[0]);
+		$methods{$call->{method}}{max} = ${$diff}[0] if ($methods{$call->{method}}{max} < ${$diff}[0]);
 		if (defined($methods{$call->{method}}{total})) {
 			$methods{$call->{method}}{total} = Benchmark::timesum($methods{$call->{method}}{total}, $diff);
 		} else {
 			$methods{$call->{method}}{total} = $diff;
 		}
 	}
-	print STDERR "\n| method | count | min | max | total |";
+	print STDERR "\n| count | min | max | total | method |";
 	foreach my $method (sort keys %methods) {
-		print STDERR "\n| $method | $methods{$method}{count} | "
-			#methods{$method}{min} | methods{$method}{max} | "
-			.timestr($methods{$method}{total})." |";
+		print STDERR "\n| "
+			.sprintf('%6u', $methods{$method}{count}).' | '
+			.sprintf('%6.3f', $methods{$method}{min}).' | '
+            .sprintf('%6.3f', $methods{$method}{max}).' | '
+			.timestr($methods{$method}{total})." | $method |";
 	}
     print STDERR "\n";
 }
