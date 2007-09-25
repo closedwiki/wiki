@@ -9,6 +9,7 @@ There are several advantages to this skin
    1 Its very lightweight, and only contains the bare minimum html required to implement the Moveable type classes and IDs
    2 Its not implemented specifically for TWiki, so any theme you develop for this skin, will work for _all_ versions of TWiki in the future
    3 It reuses TWiki's base 'default' skin, so any new functionality will automatically become available for your use.
+   4 it means you can share your style between your TWiki, and your SixApart based blog!
 
 Through this reusable design, you can also preview ideas for a design _using_ the themes from [[http://www.sixapart.com/movabletype/styles/library][The Moveable tpe Style library]]. (The Style contest guys have changed their site to make this more difficult, so to see or use those styles, you will need to download them to your system as per the Customisation instructions)
 
@@ -139,8 +140,8 @@ __Related Topics:__ %SYSTEMWEB%.TWikiPreferences
 
 <!--
 
-      * Set CSS148 = %PUBURL%/%TWIKIWEB%/MoveableTypeSampleDesign/theme.css
-      * Set CSS149 = %PUBURL%/%TWIKIWEB%/MoveableTypeSample2Design/theme.css
+      * Set CSS148 = %PUBURL%/%TWIKIWEB%/MoveableTypeSample2Design/theme.css
+      * Set CSS149 = %PUBURL%/%TWIKIWEB%/MoveableTypeSampleDesign/theme.css
       * Set CSS150 = http://www.sixapart.com/movabletype/styles/vicksburg_variations/theme-vicksburg_desert/theme-vicksburg_desert.css
       * Set CSS151 = http://www.sixapart.com/movabletype/styles/vicksburg_variations/theme-vicksburg_khaki/theme-vicksburg_khaki.css
       * Set CSS152 = http://www.sixapart.com/movabletype/styles/vicksburg_variations/theme-vicksburg_violet/theme-vicksburg_violet.css
