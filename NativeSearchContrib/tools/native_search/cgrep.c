@@ -15,6 +15,10 @@
 
 int _getline (char **lineptr, size_t *n, FILE *stream);
 
+#ifndef warn
+#define warn printf
+#endif
+
 /* Copy the static match buffer into heap memory, resizing as required */
 char** _backup(int mc, char** m, char** r) {
     int curlen = 0;
@@ -246,7 +250,7 @@ int _getstr(char **lineptr,
            always (unless we get an error while reading the first char)
            NUL-terminate the line buffer.  */
 
-        assert((*lineptr + *n) == (read_pos + nchars_avail));
+        /*assert((*lineptr + *n) == (read_pos + nchars_avail));*/
         if (nchars_avail < 2) {
             if (*n > MIN_CHUNK)
                 *n *= 2;
@@ -260,7 +264,7 @@ int _getstr(char **lineptr,
                 return -1;
             }
             read_pos = *n - nchars_avail + *lineptr;
-            assert((*lineptr + *n) == (read_pos + nchars_avail));
+            /*assert((*lineptr + *n) == (read_pos + nchars_avail));*/
         }
 
         if (ferror (stream)) {
