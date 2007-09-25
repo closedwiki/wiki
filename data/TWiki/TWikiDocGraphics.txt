@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1190096994" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1190672540" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and Filetype icons
 
 This is the TWiki icon library. The graphics can be used in topics and by web applications. 
@@ -23,6 +23,8 @@ Other usage: [[%TOPIC%#Usage_extended][see below]].
 %TABLE{headeralign="left" databg="#ffffff,#ffffff" databgsorted="#f5f5f5"}%
 | *&nbsp;* | *File Name* | *Description* | *Write...* |
 | <img src="%ATTACHURLPATH%/book.gif" alt="Book" title="Book" />  | =book.gif= | Book | =%<nop>ICON{book}%= |
+| <img src="%ATTACHURLPATH%/blank.gif" alt="Blank" title="Blank" />  | =blank.gif= | Blank box | =%<nop>ICON{blank}%= |
+| <img src="%ATTACHURLPATH%/blank-bg.gif" alt="Blank" title="Blank" />  | =blank-bg.gif= | Blank box, transparent | =%<nop>ICON{blank-bg}%= |
 | <img src="%ATTACHURLPATH%/bubble.gif" alt="Speech bubble" title="Speech bubble" />  | =bubble.gif= | Speech bubble | =%<nop>ICON{bubble}%= |
 | <img src="%ATTACHURLPATH%/days.gif" alt="Days / Calendar" title="Days / Calendar" />  | =days.gif= | Days, Calendar | =%<nop>ICON{days}%= |
 | <img src="%ATTACHURLPATH%/download.gif" alt="Download" title="Download" />  | =download.gif= | Download | =%<nop>ICON{download}%= |
