@@ -345,6 +345,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 11 Sep 2007 (V1.045) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  26 Sep 2007: | TWiki:Main.CrawfordCurrie Bugs:Item4728 fixed incorrect cloud font sizes to reflect relative importance of tags actually being displayed |
 |  11 Sep 2007: | Arthur Clemens: updated example template to TWiki template convention. |
 |  11 Jun 2007: | Arthur Clemens: fixed sizing of tags with the same tag count; fixed CSS class for select box; updated documentation with "How to put tags on every page". |
 |  07 Jun 2007: | Arthur Clemens: removed dependency on (unreleased) TWiki 4.2. |

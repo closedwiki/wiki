@@ -480,7 +480,7 @@ sub _showAllTags {
               . "vote on an existing tag.";
         }
 
-        my @ordered = sort { $tagCount{$a} <=> $tagCount{$b} } keys(%tagCount);
+        my @ordered = sort { $tagCount{$a} <=> $tagCount{$b} } @tags;
         my %order = map { ( $_, $tagCount{$_} ) }
           @ordered;
         my $smallestItem = $ordered[0];
@@ -494,7 +494,7 @@ sub _showAllTags {
         $text = join(
             $separator,
             map {
-                $size = int( $minSize + ( $order{$_} * $sizingFactor ) );                
+                $size = int( $minSize + ( $order{$_} * $sizingFactor ) );
                 $size = $minSize if ( $size < $minSize );
                 $line = $format;
                 $line =~ s/(tag\=)\$tag/$1$tmpSep\$tag$tmpSep/go;
