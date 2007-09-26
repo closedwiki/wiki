@@ -197,7 +197,7 @@ sub renderForDisplay {
             }
 
             my $button =
-              "<a href='$url'>" . CGI::img({
+              "<a href='$url' class='EditRowPluginDiscardAction'>" . CGI::img({
                   -name => $this->getEditAnchor(),
                   -border => 0,
                   -src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/edittopic.gif'

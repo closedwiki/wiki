@@ -98,6 +98,7 @@ STYLE
     }
 
     my $hasTables = 0;
+    my $needHead = 0;
     foreach (@$content) {
         if (ref($_) eq 'TWiki::Plugins::EditRowPlugin::Table') {
             my $line = '';
@@ -116,6 +117,7 @@ STYLE
                 $line .= CGI::hidden('erp_active_row', $active_row);
                 $line .= "\n".$table->renderForEdit($active_row)."\n";
                 $line .= CGI::end_form();
+                $needHead = 1;
             } else {
                 $line = $table->renderForDisplay(!$displayOnly);
             }
@@ -130,6 +132,27 @@ STYLE
             }
             $_ = $precruft.$line.$postcruft;
             $hasTables = 1;
+        }
+    }
+
+    if ($needHead) {
+        eval {
+            my $pub = TWiki::Func::getPubUrlPath();
+            my $web = TWiki::Func::getTwikiWebname();
+            require TWiki::Contrib::BehaviourContrib;
+            if (defined(&TWiki::Contrib::BehaviourContrib::addHEAD)) {
+                TWiki::Contrib::BehaviourContrib::addHEAD();
+            } else {
+                TWiki::Func::addToHEAD('BEHAVIOURCONTRIB', <<HEAD);
+<script type='text/javascript' src='$pub/$web/BehaviourContrib/behaviour.compressed.js'></script>
+HEAD
+            }
+            TWiki::Func::addToHEAD('EDITROWPLUGIN_JSVETO', <<HEAD);
+<script type='text/javascript' src='$pub/$web/EditRowPlugin/twiki.js'></script>
+HEAD
+        };
+        if ($@) {
+            TWiki::Func::writeDebug("EditRowPlugin: failed to add JS headers: $@");
         }
     }
 

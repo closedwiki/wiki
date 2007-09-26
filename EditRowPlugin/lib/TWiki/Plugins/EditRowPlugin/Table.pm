@@ -714,6 +714,7 @@ sub generateEditButtons {
         }
         $buttons .= CGI::image_button({
             name => 'erp_addRow',
+            class => 'EditRowPluginDiscardAction',
             value => $ADD_ROW,
             title => $ADD_ROW,
             src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/plus.gif'
@@ -721,6 +722,7 @@ sub generateEditButtons {
 
         $buttons .= CGI::image_button({
             name => 'erp_deleteRow',
+            class => 'EditRowPluginDiscardAction',
             value => $DELETE_ROW,
             title => $DELETE_ROW,
             src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/minus.gif'

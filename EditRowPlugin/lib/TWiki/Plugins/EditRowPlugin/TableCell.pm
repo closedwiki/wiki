@@ -97,7 +97,7 @@ sub renderForEdit {
 
     if( $colDef->{type} eq 'select' ) {
 
-        $text = "<select name='$cellName' size='$colDef->{size}'>";
+        $text = "<select name='$cellName' size='$colDef->{size}' class='EditRowPluginInput'>";
         foreach my $option ( @{$colDef->{values}} ) {
             my $expandedOption =
               TWiki::Func::expandCommonVariables($option);
@@ -126,10 +126,10 @@ sub renderForEdit {
             $expandedOption =~ s/(\W)/\\$1/g;
             $attrs{$option}{label} = $expandedOption;
             if ($colDef->{type} eq 'checkbox') {
-                $attrs{$option}{class} = 'twikiEditFormCheckboxField';
+                $attrs{$option}{class} = 'twikiEditFormCheckboxField EditRowPluginInput';
             } else {
                 $attrs{$option}{class} =
-                  'twikiRadioButton twikiEditFormRadioField';
+                  'twikiRadioButton twikiEditFormRadioField EditRowPluginInput';
             }
 
             if ($expandedValue =~ /,\s*$expandedOption\s*,/) {
@@ -166,11 +166,12 @@ sub renderForEdit {
         $rows = 3 if $rows < 1;
         $cols = 30 if $cols < 1;
 
-        $text = CGI::textarea(
-            -rows => $rows,
-            -columns => $cols,
-            -name => $cellName,
-            -default => $this->{text});
+        $text = CGI::textarea({
+            class => 'EditRowPluginInput',
+            rows => $rows,
+            columns => $cols,
+            name => $cellName,
+            value => $this->{text}});
 
     } elsif( $colDef->{type} eq 'date' ) {
 
@@ -178,10 +179,13 @@ sub renderForEdit {
 
         if ($@) {
             # Calendars not available
-            $text = CGI::textfield(-name => $cellName, -size => 10);
+            $text = CGI::textfield({ name => $cellName, size => 10,
+ class => 'EditRowPluginInput'});
         } else {
             $text = TWiki::Contrib::JSCalendarContrib::renderDateForEdit(
                 $cellName, $this->{text}, $colDef->{values}->[1]);
+            # SMELL: there should be a better way to add the class
+            $text =~ s/<input /<input class="EditRowPluginInput" /;
         }
 
     } elsif( $colDef->{type} eq 'label' ) {
@@ -192,6 +196,7 @@ sub renderForEdit {
 
         my $val = $this->{text};
         $text = CGI::textfield({
+            class => 'EditRowPluginInput',
             name => $cellName,
             size => $colDef->{size},
             value => $val });
