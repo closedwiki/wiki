@@ -174,7 +174,7 @@ sub renderForEdit {
 
     } elsif( $colDef->{type} eq 'date' ) {
 
-        eval 'use TWiki::Contrib::JSCalendarContrib';
+        eval 'require TWiki::Contrib::JSCalendarContrib';
 
         if ($@) {
             # Calendars not available

@@ -554,8 +554,9 @@ sub addRow {
     for (my $i = $row + 1; $i < scalar(@{$this->{rows}}); $i++) {
         $this->{rows}->[$i]->{number}++;
     }
-    $urps->{erp_active_row} = $row + 1;
-
+    if ($urps->{erp_active_row} >= 0) {
+        $urps->{erp_active_row} = $row + 1;
+    }
 }
 
 # Action on row deleted
