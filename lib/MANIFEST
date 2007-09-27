@@ -552,6 +552,7 @@ lib/TWiki/Store/RcsLite.pm 0444
 lib/TWiki/Store/RcsWrap.pm 0444
 lib/TWiki/Store/SearchAlgorithms/PurePerl.pm 0444
 lib/TWiki/Store/SearchAlgorithms/Forking.pm 0444
+lib/TWiki/Store/QueryAlgorithms/BruteForce.pm 0444
 lib/TWiki/Templates.pm 0444
 lib/TWiki/Time.pm 0444
 lib/TWiki/UI.pm 0444

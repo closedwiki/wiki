@@ -937,6 +937,13 @@ $TWiki::cfg{RCS}{delRevCmd} =
 # algorithm, which may work better on your configuration.
 $TWiki::cfg{RCS}{SearchAlgorithm} = 'TWiki::Store::SearchAlgorithms::Forking';
 
+# **SELECTCLASS TWiki::Store::QueryAlgorithms::* EXPERT**
+# The standard TWiki algorithm for performing queries is not particularly
+# fast (it is based on plain-text searching). You may be able to select
+# a different algorithm here, depending on what alternative implementations
+# may have been installed.
+$TWiki::cfg{RCS}{QueryAlgorithm} = 'TWiki::Store::QueryAlgorithms::BruteForce';
+
 # **COMMAND EXPERT**
 # Full path to GNU-compatible egrep program. This is used for searching when
 # {SearchAlgorithm} is 'TWiki::Store::SearchAlgorithms::Forking'.

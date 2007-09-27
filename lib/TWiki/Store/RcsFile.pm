@@ -348,46 +348,18 @@ SMELL: this is *really* inefficient!
 
 sub searchInWebMetaData {
     my( $this, $query, $topics ) = @_;
-    require TWiki::Meta;
 
-    my $sDir = $TWiki::cfg{DataDir}.'/'.$this->{web}.'/';
-    local $/;
     my $store = $this->{session}->{store};
 
-    # Optimisation: hoist regular expressions out of the query to use with
-    # grep, so we can narrow down the set of topics that we have to evaluate
-    # the query on.
-
-    # SMELL: not sure exactly where the breakpoint is between the
-    # costs of hoisting and the advantages of hoisting. Benchmarks suggest
-    # that it's around 6 topics, though this may vary depending on disk
-    # speed and memory size. It also depends on the complexity of the query.
-    if (scalar(@$topics) > 6) {
-        require TWiki::Query::HoistREs;
-        my @filter = TWiki::Query::HoistREs::hoist( $query );
-        foreach my $token (@filter) {
-            my $m = $this->searchInWebContent(
-                $token, $topics,
-                {
-                    type => 'regex',
-                    casesensitive => 1,
-                    files_without_match => 1,
-                });
-            @$topics = keys %$m;
-        }
+    unless ($this->{queryFn}) {
+        eval "require $TWiki::cfg{RCS}{QueryAlgorithm}";
+        die "Bad {RCS}{QueryAlgorithm}; suggest you run configure and select a different algorithm\n$@" if $@;
+        $this->{queryFn} = $TWiki::cfg{RCS}{QueryAlgorithm}.'::query';
     }
 
-    my %matches;
-    foreach my $topic ( @$topics ) {
-        next unless open(FILE, "<$sDir/$topic.txt");
-        my $meta = new TWiki::Meta(
-            $this->{session}, $this->{web}, $topic, <FILE> );
-        my $match = $query->evaluate( tom => $meta, data => $meta );
-        if( $match ) {
-            $matches{$topic} = $match;
-        }
-    }
-    return \%matches;
+    no strict 'refs';
+    return &{$this->{queryFn}}($query, $this->{web}, $topics, $store);
+    use strict 'refs';
 }
 
 =pod
