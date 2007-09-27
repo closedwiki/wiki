@@ -443,6 +443,7 @@ WARN
 
     if( $saveaction eq 'quietsave' ) {
         $query->param( -name=>'dontnotify', -value=>'checked' );
+        $saveaction = 'save';
         # drop through
     }
 
