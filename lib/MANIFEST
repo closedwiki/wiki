@@ -53,6 +53,7 @@ bin/twiki 0555
 bin/upload 0555
 bin/view 0555
 bin/viewfile 0555
+data/Main/TWikiAdminUser.txt 0644
 data/Main/TWikiContributor.txt 0644
 data/Main/TWikiGroups.txt 0644
 data/Main/TWikiGuest.txt 0644
