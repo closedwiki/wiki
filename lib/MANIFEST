@@ -1032,3 +1032,23 @@ working/registration_approvals/README 0444
 working/.htaccess 0660
 working/README 0444
 working/work_areas/README 0444
+CGI/Session/Driver/db_file.pm 0444
+CGI/Session/Driver/DBI.pm 0444
+CGI/Session/Driver/file.pm 0444
+CGI/Session/Driver/mysql.pm 0444
+CGI/Session/Driver/postgresql.pm 0444
+CGI/Session/Driver/sqlite.pm 0444
+CGI/Session/Driver.pm 0444
+CGI/Session/ErrorHandler.pm 0444
+CGI/Session/ID/incr.pm 0444
+CGI/Session/ID/md5.pm 0444
+CGI/Session/ID/static.pm 0444
+CGI/Session/Serialize/default.pm 0444
+CGI/Session/Serialize/freezethaw.pm 0444
+CGI/Session/Serialize/json.pm 0444
+CGI/Session/Serialize/storable.pm 0444
+CGI/Session/Serialize/yaml.pm 0444
+CGI/Session/Test/Default.pm 0444
+CGI/Session/Tutorial.pm 0444
+CGI/Session.pm
+
