@@ -105,6 +105,8 @@ Add a child node to the ordered list of children of this node
 sub addChild {
     my( $this, $node ) = @_;
 
+    ASSERT($node != $this) if DEBUG;
+
     push( @{$this->{children}}, $node );
 }
 
@@ -257,6 +259,10 @@ sub rootGenerate {
         #print STDERR WC::debugEncode($before);
         #print STDERR " -> '",WC::debugEncode($tml),"'\n";
         $text .= $tml;
+    }
+    # Collapse adjacent tags
+    foreach my $tag qw(noautolink verbatim literal) {
+        $text =~ s#</$tag>(\s*)<$tag>#$1#gs;
     }
     # Top and tail, and terminate with a single newline
     $text =~ s/^\n*//s;
@@ -584,10 +590,11 @@ sub _isConvertableTableRow {
             }
         }
         $text =~ s/&nbsp;/$WC::NBSP/g;
-        if (--$ignoreCols > 0) {
-            # colspanned
-            $text = '';
-        } elsif ($text =~ /^$WC::NBSP*$/) {
+        #if (--$ignoreCols > 0) {
+        #    # colspanned
+        #    $text = '';
+        #} els
+        if ($text =~ /^$WC::NBSP*$/) {
             $text = $WC::NBSP;
         } else {
             $text = $WC::NBSP.$text.$WC::NBSP;
@@ -598,6 +605,10 @@ sub _isConvertableTableRow {
         }
         # Pad to allow wikiwords to work
         push( @row, $text );
+        while ($ignoreCols > 1) {
+            push( @row, '' );
+            $ignoreCols--;
+        }
     }
     return \@row;
 }
