@@ -535,9 +535,9 @@ $TWiki::cfg{AllowRedirectUrl}  = $FALSE;
 
 # **STRING  EXPERT**
 #  If your host has aliases (such as both www.twiki.org and twiki.org, and some IP addresses)
-# you can tell TWiki that redirecting to them is OK
-# redirects have been resricted to prevent TWiki from being used in phishing attacks
-# and protect it from middleman exploits. Enter as comma seperated list of URL's or hostnames
+# you can tell TWiki that redirecting to them is OK.
+# Redirects have been restricted to prevent TWiki from being used in phishing attacks
+# and to protect it from middleman exploits. Enter as comma separated list of URLs or hostnames.
 $TWiki::cfg{PermittedRedirectHostUrls} = '';
 
 # **REGEX EXPERT**
