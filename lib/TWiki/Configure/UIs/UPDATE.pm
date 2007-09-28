@@ -62,7 +62,7 @@ sub logChange {
     if ($this->{updated}->{$keys}) {
         $this->{output} .= CGI::h3($keys).CGI::code($value);
         $this->{changed}++;
-        $this->{log} .= '| ',gmtime(),' | ',$this->{user},' | ',$keys,' | ',
+        $this->{log} .= '| '.gmtime().' | '.$this->{user}.' | '.$keys.' | '.
           $value," |\n";
     }
 }
