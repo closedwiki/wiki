@@ -162,25 +162,46 @@ sub addChild {
 sub cleanNode {
 }
 
+sub hasClass {
+    return 0;
+}
+
 sub cleanParseTree {
     my( $this, $opts ) = @_;
 
-    $this->cleanNode($opts);
+    my @jobs = ( $this );
 
-    # thread siblings and parents
-    my $prev;
-    foreach my $kid (@{$this->{children}}) {
-        $kid->{parent} = $this;
-        $kid->{prev} = $prev;
-        $prev->{next} = $kid if $prev;
-        $kid->cleanParseTree($opts);
-        $prev = $kid;
+    while (scalar(@jobs)) {
+        my $node = shift(@jobs);
+        $node->cleanNode($opts);
+
+        my $prev;
+        my $kid = $node->{head};
+        while ($kid) {
+            push(@jobs, $kid);
+            $kid = $kid->{next};
+        }
     }
-    return ($this->{children}->[0], $this->{children}->[0]);
+    return ($this->{head}, $this->{head});
 }
 
 sub stringify {
     return '';
+}
+
+sub _remove {
+    my ($this) = @_;
+    if ($this->{prev}) {
+        $this->{prev}->{next} = $this->{next};
+    } else {
+        $this->{parent}->{head} = $this->{next};
+    }
+    if ($this->{next}) {
+        $this->{next}->{prev} = $this->{prev};
+    } else {
+        $this->{parent}->{tail} = $this->{prev};
+    }
+    $this->{parent} = $this->{prev} = $this->{next} = undef;
 }
 
 # Determine if the node - and all it's child nodes - satisfy the criteria
@@ -189,8 +210,10 @@ sub isInline {
     # This impl is actually for Nodes; Leaf overrides it
     my $this = shift;
     return 0 if $isOnlyBlockType{uc($this->{tag})};
-    foreach my $kid ( @{$this->{children}} ) {
+    my $kid = $this->{head};
+    while ($kid) {
         return 0 unless $kid->isInline();
+        $kid = $kid->{next};
     }
     return 1;
 }
@@ -199,20 +222,16 @@ sub isLeftInline {
     # This impl is actually for Nodes; Leaf overrides it
     my $this = shift;
     return 0 if $isOnlyBlockType{uc($this->{tag})};
-    if (scalar(@{$this->{children}})) {
-        my $kid = $this->{children}->[0];
-        return 0 unless $kid->isInline();
-    }
+    return 1 unless ($this->{head});
+    return 0 unless $this->{head}->isInline();
     return 1;
 }
 
 sub isRightInline {
     my $this = shift;
     return 0 if $isOnlyBlockType{uc($this->{tag})};
-    if (scalar(@{$this->{children}})) {
-        my $kid = $this->{children}->[$#{$this->{children}}];
-        return 0 unless $kid->isInline();
-    }
+    return 1 unless $this->{tail};
+    return 0 unless $this->{tail}->isInline();
     return 1;
 }
 
