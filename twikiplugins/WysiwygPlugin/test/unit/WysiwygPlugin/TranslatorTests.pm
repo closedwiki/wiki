@@ -1288,6 +1288,30 @@ XWYZ
           tml => 'ABC<br /> _DEF_',
           html => 'ABC<br /><i>DEF</i>',
       },
+      {
+          exec => $HTML2TML | $ROUNDTRIP,
+          name => 'collapse',
+          html => <<COLLAPSE,
+blah<pre class="TMLverbatim">flub</pre> <pre class="TMLverbatim">wheep</pre> <pre class="TMLverbatim">spit</pre>blah
+COLLAPSE
+          tml => <<ESPALLOC,
+blah<verbatim>flub
+wheep
+spit</verbatim>blah
+ESPALLOC
+      },
+      {
+          exec => $HTML2TML | $ROUNDTRIP,
+          name => 'collapse',
+          html => <<COLLAPSE,
+blah<pre class="TMLverbatim">flub</pre> <pre class="TMLverbatim">wheep</pre> <pre class="TMLverbatim">spit</pre>blah
+COLLAPSE
+          tml => <<ESPALLOC,
+blah<verbatim>flub
+wheep
+spit</verbatim>blah
+ESPALLOC
+      },
      ];
 
 sub gen_compare_tests {

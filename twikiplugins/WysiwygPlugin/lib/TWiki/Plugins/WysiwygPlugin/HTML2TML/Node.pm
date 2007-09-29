@@ -65,7 +65,7 @@ sub new {
             $this->{attrs}->{$attr} = $attrs->{$attr};
         }
     }
-    $this->{children} = [];
+    $this->{head} = $this->{tail} = undef;
 
     return bless( $this, $class );
 }
@@ -84,8 +84,10 @@ sub stringify {
     if( $shallow ) {
         $r .= '...';
     } else {
-        foreach my $kid ( @{$this->{children}} ) {
+        my $kid = $this->{head};
+        while ($kid) {
             $r .= $kid->stringify();
+            $kid = $kid->{next};
         }
     }
     if( $this->{tag} ) {
@@ -105,7 +107,17 @@ Add a child node to the ordered list of children of this node
 sub addChild {
     my( $this, $node ) = @_;
 
-    push( @{$this->{children}}, $node );
+    $node->{next} = undef;
+    $node->{parent} = $this;
+    my $kid = $this->{tail};
+    if ($kid) {
+        $kid->{next} = $node;
+        $node->{prev} = $kid;
+    } else {
+        $node->{prev} = undef;
+        $this->{head} = $node;
+    }
+    $this->{tail} = $node;
 }
 
 # top and tail a string
@@ -117,7 +129,7 @@ sub _trim {
     return $s;
 }
 
-sub _hasClass {
+sub hasClass {
     my ($attrs, $class) = @_;
     return 0 unless $attrs && defined $attrs->{class};
     return $attrs->{class} =~ /\b$class\b/ ? 1 : 0;
@@ -125,7 +137,7 @@ sub _hasClass {
 
 sub _removeClass {
     my ($attrs, $class) = @_;
-    return 0 unless _hasClass($attrs, $class);
+    return 0 unless hasClass($attrs, $class);
     $attrs->{class} =~ s/\b$class\b//;
     $attrs->{class} =~ s/\s+/ /g;
     $attrs->{class} =~ s/^\s+//;
@@ -166,6 +178,8 @@ sub rootGenerate {
     my( $this, $opts ) = @_;
 
     $this->cleanParseTree();
+
+    $this->_collapseVerbatim();
 
     my( $f, $text ) = $this->generate($opts);
 
@@ -265,6 +279,65 @@ sub rootGenerate {
     return $text;
 }
 
+# Collapse adjacent VERBATIM nodes together
+sub _collapseVerbatim {
+    my $this = shift;
+
+    my @jobs = ( $this );
+    while (scalar(@jobs)) {
+        my $node = shift(@jobs);
+        if (defined($node->{tag}) && hasClass($node->{attrs}, 'TMLverbatim')) {
+            my $next = $node->{next};
+            my @edible;
+            my $collapsible;
+            while ($next &&
+                     ((!$next->{tag} && $next->{text} =~ /^\s*$/) ||
+                          ($node->{tag} eq $next->{tag} &&
+                             hasClass($next->{attrs}, 'TMLverbatim')))) {
+                push(@edible, $next);
+                $collapsible ||= hasClass($next->{attrs}, 'TMLverbatim');
+                $next = $next->{next};
+            }
+            if ($collapsible) {
+                foreach my $meal (@edible) {
+                    $meal->_remove();
+                    if ($meal->{tag}) {
+                        require TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf;
+                        $node->addChild(new TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf($WC::NBBR));
+                        $node->_eat($meal);
+                    }
+                }
+            }
+        }
+        my $kid = $node->{head};
+        while ($kid) {
+            push(@jobs, $kid);
+            $kid = $kid->{next};
+        }
+    }
+}
+
+# Move the content of $node into $this
+sub _eat {
+    my ($this, $node) = @_;
+    my $kid = $this->{tail};
+    if ($kid) {
+        $kid->{next} = $node->{head};
+        if ($node->{head}) {
+            $node->{head}->{prev} = $kid;
+        }
+    } else {
+        $this->{head} = $node->{head};
+    }
+    $this->{tail} = $node->{tail};
+    $kid = $node->{head};
+    while ($kid) {
+        $kid->{parent} = $node->{parent};
+        $kid = $kid->{next};
+    }
+    $node->{head} = $node->{tail} = undef;
+}
+
 # the actual generate function. rootGenerate is only applied to the root node.
 sub generate {
     my( $this, $options ) = @_;
@@ -273,6 +346,22 @@ sub generate {
     my $text;
 
     my $tag = uc( $this->{tag} );
+
+    if (hasClass($this->{attrs}, 'WYSIWYG_LITERAL')) {
+        if ($tag eq 'DIV' || $tag eq 'P') {
+            $text = '';
+            my $kid = $this->{head};
+            while ($kid) {
+                $text .= $kid->stringify();
+                $kid = $kid->{next};
+            }
+        } else {
+            _removeClass($this->{attrs}, 'WYSIWYG_LITERAL');
+            $text = $this->stringify();
+        }
+        return ( 0, '<literal>'.$text.'</literal>' );
+    }
+
     if( $options & $WC::NO_HTML ) {
         # NO_HTML implies NO_TML
         my $brats = $this->_flatten( $options );
@@ -313,7 +402,7 @@ sub _flatten {
     my $text = '';
     my $flags = 0;
     my $protected = ($options & $WC::PROTECTED) ||
-      _hasClass($this->{attrs}, 'WYSIWYG_PROTECTED') || 0;
+      hasClass($this->{attrs}, 'WYSIWYG_PROTECTED') || 0;
 
     if ($protected) {
         # Expand brs, which are used in the protected encoding in place of
@@ -321,7 +410,8 @@ sub _flatten {
         $options |= $WC::BR2NL | $WC::KEEP_WS;
     }
 
-    foreach my $kid ( @{$this->{children}} ) {
+    my $kid = $this->{head};
+    while ($kid) {
         my( $f, $t ) = $kid->generate( $options );
         if (!($options & $WC::KEEP_WS)
               && $text && $text =~ /\w$/ && $t =~ /^\w/) {
@@ -331,6 +421,7 @@ sub _flatten {
         }
         $text .= $t;
         $flags |= $f;
+        $kid = $kid->{next};
     }
     if ($protected) {
         $text =~ s/[$WC::PON$WC::POFF]//g;
@@ -407,13 +498,18 @@ sub _convertList {
     my $f;
     my $text = '';
     my $pendingDT = 0;
-    foreach my $kid ( @{$this->{children}} ) {
+    my $kid = $this->{head};
+    while ($kid) {
         # be tolerant of dl, ol and ul with no li
         if( $kid->{tag} =~ m/^[dou]l$/i ) {
             $text .= $kid->_convertList( $indent.$WC::TAB );
+            $kid = $kid->{next};
             next;
         }
-        next unless $kid->{tag} =~ m/^(dt|dd|li)$/i;
+        unless ($kid->{tag} =~ m/^(dt|dd|li)$/i) {
+            $kid = $kid->{next};
+            next;
+        }
         if( $isdl && ( lc( $kid->{tag} ) eq 'dt' )) {
             # DT, set the bullet type for subsequent DT
             $basebullet = $kid->_flatten( $WC::NO_BLOCK_TML );
@@ -423,6 +519,7 @@ sub _convertList {
             $basebullet =~ s/^\s+//;
             $basebullet = '$ '.$basebullet;
             $pendingDT = 1; # remember in case there is no DD
+            $kid = $kid->{next};
             next;
         }
         my $bullet = $basebullet;
@@ -430,7 +527,8 @@ sub _convertList {
             $bullet = $kid->{attrs}->{type}.'.';
         }
         my $spawn = '';
-        foreach my $grandkid ( @{$kid->{children}} ) {
+        my $grandkid = $kid->{head};
+        while ($grandkid) {
             my $t;
             if( $grandkid->{tag} =~ /^[dou]l$/i ) {
                 #$spawn = _trim( $spawn );
@@ -440,11 +538,13 @@ sub _convertList {
                 $t =~ s/$WC::CHECKn/ /g;
             }
             $spawn .= $t;
+            $grandkid = $grandkid->{next};
         }
         #$spawn = _trim($spawn);
         $text .= $WC::CHECKn.$indent.$bullet.$WC::CHECKs.$spawn.$WC::CHECKn;
         $pendingDT = 0;
         $basebullet = '' if $isdl;
+        $kid = $kid->{next};
     }
     if( $pendingDT ) {
         # DT with no corresponding DD
@@ -458,18 +558,19 @@ sub _convertList {
 sub _isConvertableList {
     my( $this, $options ) = @_;
 
-    foreach my $kid ( @{$this->{children}} ) {
+    my $kid = $this->{head};
+    while ($kid) {
         # check for malformed list. We can still handle it,
         # by simply ignoring illegal text.
         # be tolerant of dl, ol and ul with no li
         if( $kid->{tag} =~ m/^[dou]l$/i ) {
             return 0 unless $kid->_isConvertableList( $options );
-            next;
+        } elsif( $kid->{tag} =~ m/^(dt|dd|li)$/i ) {
+            unless( $kid->_isConvertableListItem( $options, $this )) {
+                return 0;
+            }
         }
-        next unless( $kid->{tag} =~ m/^(dt|dd|li)$/i );
-        unless( $kid->_isConvertableListItem( $options, $this )) {
-            return 0;
-        }
+        $kid = $kid->{next};
     }
     return 1;
 }
@@ -486,7 +587,8 @@ sub _isConvertableListItem {
         return 0 unless( lc( $this->{tag} ) eq 'li' );
     }
 
-    foreach my $kid ( @{$this->{children}} ) {
+    my $kid = $this->{head};
+    while ($kid) {
         if( $kid->{tag} =~ /^[oud]l$/i ) {
             unless( $kid->_isConvertableList( $options )) {
                 return 0;
@@ -497,6 +599,7 @@ sub _isConvertableListItem {
                 return 0;
             }
         }
+        $kid = $kid->{next};
     }
     return 1;
 }
@@ -505,18 +608,17 @@ sub _isConvertableListItem {
 # can be converted to TML.
 sub _isConvertableTable {
     my( $this, $options, $table ) = @_;
-    my @process = ( @{$this->{children}} );
-    foreach my $kid ( @{$this->{children}} ) {
+    my $kid = $this->{head};
+    while ($kid) {
         if( $kid->{tag} =~ /^(colgroup|thead|tbody|tfoot|col)$/i ) {
             return 0 unless( $kid->_isConvertableTable( $options, $table ));
-        } elsif( !$kid->{tag} ) {
-            next;
-        } else {
+        } elsif( $kid->{tag} ) {
             return 0 unless( lc( $kid->{tag} ) eq 'tr' );
             my $row = $kid->_isConvertableTableRow( $options );
             return 0 unless $row;
             push( @$table, $row );
         }
+        $kid = $kid->{next};
     }
     return 1;
 }
@@ -539,7 +641,8 @@ sub _isConvertableTableRow {
 
     my @row;
     my $ignoreCols = 0;
-    foreach my $kid ( @{$this->{children}} ) {
+    my $kid = $this->{head};
+    while ($kid) {
         if (lc($kid->{tag}) eq 'th') {
             ( $flags, $text ) = $kid->_flatten( $options );
             $text = _TDtrim( $text );
@@ -548,6 +651,7 @@ sub _isConvertableTableRow {
             ( $flags, $text ) = $kid->_flatten( $options );
             $text = _TDtrim( $text );
         } elsif( !$kid->{tag} ) {
+            $kid = $kid->{next};
             next;
         } else {
             # some other sort of (unexpected) tag
@@ -583,6 +687,7 @@ sub _isConvertableTableRow {
         }
         # Pad to allow wikiwords to work
         push( @row, $text );
+        $kid = $kid->{next};
     }
     return \@row;
 }
@@ -598,7 +703,7 @@ sub _deduceAlignment {
               $td->{attrs}->{style} =~ /text-align\s*:\s*(left|right|center)/ ) {
             return $1;
         }
-        if (_hasClass($td->{attrs}, qr/align-(left|right|center)/)) {
+        if (hasClass($td->{attrs}, qr/align-(left|right|center)/)) {
             return $1;
         }
     }
@@ -611,7 +716,7 @@ sub _H {
     my( $flags, $contents ) = $this->_flatten( $options );
     return ( 0, undef ) if( $flags & $WC::BLOCK_TML );
     my $notoc = '';
-    if(_hasClass($this->{attrs}, 'notoc')) {
+    if(hasClass($this->{attrs}, 'notoc')) {
         $notoc = '!!';
     }
     $contents =~ s/^\s+/ /;
@@ -927,7 +1032,7 @@ sub _handleOL       { return _LIST( @_ ); }
 sub _handleP {
     my( $this, $options ) = @_;
 
-    if (_hasClass($this->{attrs}, 'TMLverbatim')) {
+    if (hasClass($this->{attrs}, 'TMLverbatim')) {
         return $this->_verbatim($options);
     }
 
@@ -946,7 +1051,7 @@ sub _handlePRE {
     my( $this, $options ) = @_;
 
     my $tag = 'pre';
-    if( _hasClass($this->{attrs}, 'TMLverbatim')) {
+    if( hasClass($this->{attrs}, 'TMLverbatim')) {
         return $this->_verbatim($options);
     }
     unless( $options & $WC::NO_BLOCK_TML ) {
