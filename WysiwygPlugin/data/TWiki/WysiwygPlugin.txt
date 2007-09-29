@@ -165,7 +165,7 @@ Many thanks to the following sponsors for supporting this work:
 |  License | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
-|              | Bugs:Item4700: fixed colspans Bugs:Item4706: merge adjacent verbatim blocks separated only by whitespace Bugs:Item4712: fixed eating of noautolink and literal |
+|              | Bugs:Item4700: fixed colspans Bugs:Item4705: fixed spacing around literal and verbatim blocks Bugs:Item4706: merge adjacent verbatim blocks separated only by whitespace Bugs:Item4712: fixed eating of noautolink and literal |
 |  17 Sep 2007 | Bugs:Item4647: Bugs:Item4652: problems related to DIV fixed. Bugs:Item4653: fixed multi-line twiki variables |
 |  16 Sep 2007 | Bugs:Item4630: polished up the way the secret string is done, to ensure synch between perl and JS. Item4622: added UTF-8 handling steps that fixup malformed UTF8 strings before presenting them to the editor (saves Moz) and stops the editor passing them back to TWiki (saves IE). Removed extra entity decoding steps that were causing problems. Bugs:Item4629: fixed issues with verbatim, highlighted by previous mangling of this topic |
 |  13 Sep 2007 | Bugs:Item4613 cleaned up spurious message when navigating away Bugs:Item4615 fixed incorrect rendering of emphasis next to br |
