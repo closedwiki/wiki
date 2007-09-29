@@ -1312,6 +1312,50 @@ wheep
 spit</verbatim>blah
 ESPALLOC
       },
+      {
+          exec => $TML2HTML,
+          name => 'Item4705_A',
+          tml => <<SPACED,
+A
+
+<literal><b>B</b> </literal>
+
+C
+SPACED
+          html => <<DECAPS,
+<p>
+A
+</p>
+<p>
+<span class="WYSIWYG_LITERAL"><b>B</b> </span>
+</p>
+<p>
+C
+</p>
+DECAPS
+      },
+      {
+          exec => $TML2HTML,
+          name => 'Item4705_B',
+          tml => <<SPACED,
+A
+
+<verbatim>B</verbatim>
+
+C
+SPACED
+          html => <<DECAPS,
+<p>
+A
+</p>
+<p>
+<pre class="TMLverbatim">B</pre>
+</p>
+<p>
+C
+</p>
+DECAPS
+      },
      ];
 
 sub gen_compare_tests {

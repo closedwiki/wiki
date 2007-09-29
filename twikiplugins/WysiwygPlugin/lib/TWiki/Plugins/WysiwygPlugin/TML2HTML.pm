@@ -283,6 +283,7 @@ sub _getRenderedVersion {
     my $inTable = 0;     # True when within a table type
     my $inParagraph = 1; # True when within a P
     my @result = ( '<p>' );
+
     foreach my $line ( split( /\n/, $text )) {
         # Table: | cell | cell |
         # allow trailing white space after the last |
@@ -426,6 +427,8 @@ sub _getRenderedVersion {
     $this->_putBackBlocks( $text, 'noautolink', 'span' );
 
     $this->_putBackBlocks( $text, 'pre' );
+
+    $this->_putBackBlocks( $text, 'literal', 'span' );
 
     # replace verbatim with pre in the final output, with encoded entities
     $this->_putBackBlocks( $text, 'verbatim', 'pre', \&_encodeEntities );
