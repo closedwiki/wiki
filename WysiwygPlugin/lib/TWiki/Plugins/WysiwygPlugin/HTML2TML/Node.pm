@@ -354,7 +354,7 @@ sub generate {
     my $tag = uc( $this->{tag} );
 
     if (hasClass($this->{attrs}, 'WYSIWYG_LITERAL')) {
-        if ($tag eq 'DIV' || $tag eq 'P') {
+        if ($tag eq 'DIV' || $tag eq 'P' || $tag eq 'SPAN') {
             $text = '';
             my $kid = $this->{head};
             while ($kid) {

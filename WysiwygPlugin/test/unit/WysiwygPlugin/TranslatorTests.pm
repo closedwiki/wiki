@@ -1343,7 +1343,7 @@ spit</verbatim>blah
 ESPALLOC
       },
       {
-          exec => $TML2HTML,
+          exec => $TML2HTML | $ROUNDTRIP,
           name => 'Item4705_A',
           tml => <<SPACED,
 A
