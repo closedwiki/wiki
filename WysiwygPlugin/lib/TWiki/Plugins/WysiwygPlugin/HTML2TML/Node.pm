@@ -131,33 +131,69 @@ sub _trim {
     return $s;
 }
 
+# Both object method and static method
 sub hasClass {
-    my ($attrs, $class) = @_;
-    return 0 unless $attrs && defined $attrs->{class};
-    return $attrs->{class} =~ /\b$class\b/ ? 1 : 0;
+    my ($this, $class) = @_;
+    return 0 unless $this;
+    if (UNIVERSAL::isa($this, 'TWiki::Plugins::WysiwygPlugin::HTML2TML::Node')) {
+        return hasClass($this->{attrs}, $class);
+    }
+    return 0 unless defined $this->{class};
+    return $this->{class} =~ /\b$class\b/ ? 1 : 0;
 }
 
+# Both object method and static method
 sub _removeClass {
-    my ($attrs, $class) = @_;
-    return 0 unless hasClass($attrs, $class);
-    $attrs->{class} =~ s/\b$class\b//;
-    $attrs->{class} =~ s/\s+/ /g;
-    $attrs->{class} =~ s/^\s+//;
-    $attrs->{class} =~ s/\s+$//;
-    if (!$attrs->{class}) {
-        delete $attrs->{class};
+    my ($this, $class) = @_;
+    return 0 unless $this;
+    if (UNIVERSAL::isa($this, 'TWiki::Plugins::WysiwygPlugin::HTML2TML::Node')) {
+        return _removeClass($this->{attrs}, $class);
+    }
+    return 0 unless hasClass($this, $class);
+    $this->{class} =~ s/\b$class\b//;
+    $this->{class} =~ s/\s+/ /g;
+    $this->{class} =~ s/^\s+//;
+    $this->{class} =~ s/\s+$//;
+    if (!$this->{class}) {
+        delete $this->{class};
     }
     return 1;
 }
 
+# Both object method and static method
 sub _addClass {
-    my ($attrs, $class) = @_;
-    _removeClass($attrs, $class); # avoid duplication
-    if ($attrs->{class}) {
-        $attrs->{class} .= ' '.$class;
-    } else {
-        $attrs->{class} = $class;
+    my ($this, $class) = @_;
+    if (UNIVERSAL::isa($this, 'TWiki::Plugins::WysiwygPlugin::HTML2TML::Node')) {
+        _addClass($this->{attrs}, $class);
+        return;
     }
+    _removeClass($this, $class); # avoid duplication
+    if ($this->{class}) {
+        $this->{class} .= ' '.$class;
+    } else {
+        $this->{class} = $class;
+    }
+}
+
+# Move the content of $node into $this
+sub _eat {
+    my ($this, $node) = @_;
+    my $kid = $this->{tail};
+    if ($kid) {
+        $kid->{next} = $node->{head};
+        if ($node->{head}) {
+            $node->{head}->{prev} = $kid;
+        }
+    } else {
+        $this->{head} = $node->{head};
+    }
+    $this->{tail} = $node->{tail};
+    $kid = $node->{head};
+    while ($kid) {
+        $kid->{parent} = $this;
+        $kid = $kid->{next};
+    }
+    $node->{head} = $node->{tail} = undef;
 }
 
 =pod
@@ -181,7 +217,8 @@ sub rootGenerate {
 
     $this->cleanParseTree();
 
-    $this->_collapseVerbatim();
+    # Perform some transformations on the parse tree
+    $this->_collapse();
 
     my( $f, $text ) = $this->generate($opts);
 
@@ -286,22 +323,23 @@ sub rootGenerate {
 }
 
 # Collapse adjacent VERBATIM nodes together
-sub _collapseVerbatim {
+# Collapse a <p> than contains only a protected span into a protected P
+sub _collapse {
     my $this = shift;
 
     my @jobs = ( $this );
     while (scalar(@jobs)) {
         my $node = shift(@jobs);
-        if (defined($node->{tag}) && hasClass($node->{attrs}, 'TMLverbatim')) {
+        if (defined($node->{tag}) && $node->hasClass('TMLverbatim')) {
             my $next = $node->{next};
             my @edible;
             my $collapsible;
             while ($next &&
                      ((!$next->{tag} && $next->{text} =~ /^\s*$/) ||
                           ($node->{tag} eq $next->{tag} &&
-                             hasClass($next->{attrs}, 'TMLverbatim')))) {
+                             $next->hasClass('TMLverbatim')))) {
                 push(@edible, $next);
-                $collapsible ||= hasClass($next->{attrs}, 'TMLverbatim');
+                $collapsible ||= $next->hasClass('TMLverbatim');
                 $next = $next->{next};
             }
             if ($collapsible) {
@@ -315,33 +353,21 @@ sub _collapseVerbatim {
                 }
             }
         }
+        if ($node->{tag} eq 'P' && $node->{head} == $node->{tail}) {
+            my $kid = $node->{head};
+            if ($kid->{tag} eq 'SPAN' &&
+                  $kid->hasClass('WYSIWYG_PROTECTED')) {
+                $kid->_remove();
+                $node->_eat($kid);
+                $node->_addClass('WYSIWYG_PROTECTED');
+            }
+        }
         my $kid = $node->{head};
         while ($kid) {
             push(@jobs, $kid);
             $kid = $kid->{next};
         }
     }
-}
-
-# Move the content of $node into $this
-sub _eat {
-    my ($this, $node) = @_;
-    my $kid = $this->{tail};
-    if ($kid) {
-        $kid->{next} = $node->{head};
-        if ($node->{head}) {
-            $node->{head}->{prev} = $kid;
-        }
-    } else {
-        $this->{head} = $node->{head};
-    }
-    $this->{tail} = $node->{tail};
-    $kid = $node->{head};
-    while ($kid) {
-        $kid->{parent} = $node->{parent};
-        $kid = $kid->{next};
-    }
-    $node->{head} = $node->{tail} = undef;
 }
 
 # the actual generate function. rootGenerate is only applied to the root node.
@@ -353,7 +379,7 @@ sub generate {
 
     my $tag = uc( $this->{tag} );
 
-    if (hasClass($this->{attrs}, 'WYSIWYG_LITERAL')) {
+    if ($this->hasClass('WYSIWYG_LITERAL')) {
         if ($tag eq 'DIV' || $tag eq 'P' || $tag eq 'SPAN') {
             $text = '';
             my $kid = $this->{head};
@@ -362,7 +388,7 @@ sub generate {
                 $kid = $kid->{next};
             }
         } else {
-            _removeClass($this->{attrs}, 'WYSIWYG_LITERAL');
+            $this->_removeClass('WYSIWYG_LITERAL');
             $text = $this->stringify();
         }
         return ( 0, '<literal>'.$text.'</literal>' );
@@ -409,7 +435,7 @@ sub _flatten {
     my $flags = 0;
 
     my $protected = ($options & $WC::PROTECTED) ||
-      hasClass($this->{attrs}, 'WYSIWYG_PROTECTED') || 0;
+      $this->hasClass('WYSIWYG_PROTECTED') || 0;
 
     if ($protected) {
         # Expand brs, which are used in the protected encoding in place of
@@ -715,7 +741,7 @@ sub _deduceAlignment {
               $td->{attrs}->{style} =~ /text-align\s*:\s*(left|right|center)/ ) {
             return $1;
         }
-        if (hasClass($td->{attrs}, qr/align-(left|right|center)/)) {
+        if ($td->hasClass(qr/align-(left|right|center)/)) {
             return $1;
         }
     }
@@ -728,7 +754,7 @@ sub _H {
     my( $flags, $contents ) = $this->_flatten( $options );
     return ( 0, undef ) if( $flags & $WC::BLOCK_TML );
     my $notoc = '';
-    if(hasClass($this->{attrs}, 'notoc')) {
+    if($this->hasClass('notoc')) {
         $notoc = '!!';
     }
     $contents =~ s/^\s+/ /;
@@ -1044,7 +1070,7 @@ sub _handleOL       { return _LIST( @_ ); }
 sub _handleP {
     my( $this, $options ) = @_;
 
-    if (hasClass($this->{attrs}, 'TMLverbatim')) {
+    if ($this->hasClass('TMLverbatim')) {
         return $this->_verbatim($options);
     }
 
@@ -1063,7 +1089,7 @@ sub _handlePRE {
     my( $this, $options ) = @_;
 
     my $tag = 'pre';
-    if( hasClass($this->{attrs}, 'TMLverbatim')) {
+    if( $this->hasClass('TMLverbatim')) {
         return $this->_verbatim($options);
     }
     unless( $options & $WC::NO_BLOCK_TML ) {
