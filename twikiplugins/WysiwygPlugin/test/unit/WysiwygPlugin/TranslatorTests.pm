@@ -422,7 +422,7 @@ RedHat & SuSE
 </noautolink>
 HERE
           finaltml => <<'HERE',
-<noautolink>RedHat & SuSE</noautolink>
+<noautolink> RedHat & SuSE </noautolink>
 HERE
       },
       {
@@ -841,7 +841,7 @@ Inside
           html => '<table cellspacing="0" cellpadding="8" border="1" class="plain" _moz_resizing="true">
 <tbody>
 <tr>a0<td>a1</td><td>a2</td><td>a3</td></tr>
-<tr>b0<td colspan="2">b1</td><td></td><td>b3</td></tr>
+<tr>b0<td colspan="2">b1</td><td>b3</td></tr>
 <tr>c0<td>c1</td><td>c2</td><td>c3</td></tr>
 </tbody>
 </table>',
@@ -894,8 +894,8 @@ HERE
           html => '<p>abcd
 </p>
 <table cellspacing="1" cellpadding="0" border="1">
-<tr><td colspan="2">efg</td><td></td><td>&nbsp;</td></tr>
-<tr><td colspan="3"></td><td></td><td></td></tr></table>
+<tr><td colspan="2">efg</td><td>&nbsp;</td></tr>
+<tr><td colspan="3"></td></tr></table>
 hijk',
           tml  => 'abcd
 | efg || |
@@ -1289,16 +1289,46 @@ XWYZ
           html => 'ABC<br /><i>DEF</i>',
       },
       {
-          exec => $HTML2TML | $ROUNDTRIP,
-          name => 'collapse',
-          html => <<COLLAPSE,
-blah<pre class="TMLverbatim">flub</pre> <pre class="TMLverbatim">wheep</pre> <pre class="TMLverbatim">spit</pre>blah
-COLLAPSE
-          tml => <<ESPALLOC,
-blah<verbatim>flub
-wheep
-spit</verbatim>blah
-ESPALLOC
+          exec => $TML2HTML | $HTML2TML,
+          name => 'Item4700',
+          tml => <<EXPT,
+| ex | per | iment |
+| exper | iment ||
+| expe || riment |
+|| exper | iment |
+EXPT
+          finaltml => <<EXPT,
+| ex | per | iment |
+| exper | iment ||
+| expe || riment |
+| | exper | iment |
+EXPT
+          html => <<HEXPT,
+<table cellspacing="1" cellpadding="0" border="1">
+<tr><td>ex</td><td>per</td><td>iment</td></tr>
+<tr><td>exper</td><td colspan="2">iment</td></tr>
+<tr><td colspan="2">expe</td><td>riment</td></tr>
+<tr><td></td><td>exper</td><td>iment</td></tr>
+</table>
+HEXPT
+      },
+      {
+          exec => $ROUNDTRIP,
+          name => 'Item4700_2',
+          tml => <<EXPT,
+| ex | per | iment |
+| exper | iment ||
+| expe || riment |
+| | exper | iment |
+EXPT
+          html => <<HEXPT,
+<table cellspacing="1" cellpadding="0" border="1">
+<tr><td>ex</td><td>per</td><td>iment</td></tr>
+<tr><td>exper</td><td colspan="2">iment</td></tr>
+<tr><td colspan="2">expe</td><td>riment</td></tr>
+<tr><td></td><td>exper</td><td>iment</td></tr>
+</table>
+HEXPT
       },
       {
           exec => $HTML2TML | $ROUNDTRIP,

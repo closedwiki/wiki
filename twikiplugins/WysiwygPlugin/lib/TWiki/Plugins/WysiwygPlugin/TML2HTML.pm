@@ -47,8 +47,10 @@ my $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 # HTML elements that are palatable to editors. Other HTM tags will be
 # rendered in 'protected' regions to prevent the WYSIWYG editor mussing
-# them up.
-my $PALATABLE_HTML = qr/(A|ABBR|ACRONYM|ADDRESS|B|BDO|BIG|BLOCKQUOTE|BR|CAPTION|CENTER|CITE|CODE|COL|COLGROUP|DD|DEL|DFN|DIR|DIV|DL|DT|EM|FONT|H1|H2|H3|H4|H5|H6|HR|HTML|I|IMG|INS|ISINDEX|KBD|LABEL|LEGEND|LI|OL|P|PRE|Q|S|SAMP|SMALL|SPAN|STRONG|SUB|SUP|TABLE|TBODY|TD|TFOOT|TH|THEAD|TITLE|TR|TT|U|UL)/i;
+# them up. Note that as well as the HTML tags we also consider NOAUTOLINK
+# palatable, even though it isn't HTML, because it will be used later in
+# the rendering process to generate a span.
+my $PALATABLE_HTML = qr/(A|ABBR|ACRONYM|ADDRESS|B|BDO|BIG|BLOCKQUOTE|BR|CAPTION|CENTER|CITE|CODE|COL|COLGROUP|DD|DEL|DFN|DIR|DIV|DL|DT|EM|FONT|H1|H2|H3|H4|H5|H6|HR|HTML|I|IMG|INS|ISINDEX|KBD|LABEL|LEGEND|LI|OL|P|PRE|Q|S|SAMP|SMALL|SPAN|STRONG|SUB|SUP|TABLE|TBODY|TD|TFOOT|TH|THEAD|TITLE|TR|TT|U|UL|NOAUTOLINK)/i;
 
 =pod
 
@@ -210,6 +212,8 @@ sub _getRenderedVersion {
     $this->{removed} = {}; # Map of placeholders to tag parameters and text
 
     $text = $this->_takeOutBlocks( $text, 'verbatim' );
+
+    $text = $this->_takeOutBlocks( $text, 'literal' );
 
     $text = $this->_takeOutSets( $text );
 
@@ -406,21 +410,12 @@ sub _getRenderedVersion {
     $text =~ s/$STARTWW(($TWiki::regex{webNameRegex}\.)?$TWiki::regex{wikiWordRegex}($TWiki::regex{anchorRegex})?)/$this->_liftOut($1, 'LINK')/geom;
 
     while (my ($placeholder, $val) = each %{$this->{removed}} ) {
-        my $pm = $val->{params}->{class};
         if( $placeholder =~ /^noautolink/i ) {
-            if( $pm ) {
-                $pm = join(' ', ( split( /\s+/, $pm ), 'WYSIWYG_NOAUTOLINK' ));
-            } else {
-                $pm = 'WYSIWYG_NOAUTOLINK';
-            }
-            $val->{params}->{class} = $pm;
+            _addClass( $val->{params}->{class}, 'WYSIWYG_NOAUTOLINK' );
         } elsif( $placeholder =~ /^verbatim/i ) {
-            if( $pm ) {
-                $pm = join(' ', ( split( /\s+/, $pm ), 'TMLverbatim' ));
-            } else {
-                $pm = 'TMLverbatim';
-            }
-            $val->{params}->{class} = $pm;
+            _addClass( $val->{params}->{class}, 'TMLverbatim');
+        } elsif( $placeholder =~ /^literal/i ) {
+            _addClass( $val->{params}->{class}, 'WYSIWYG_LITERAL');
         }
     }
 
@@ -436,6 +431,14 @@ sub _getRenderedVersion {
     $text =~ s/(<nop>)/$this->_liftOut($1, 'PROTECTED')/ge;
 
     return $text;
+}
+
+sub _addClass {
+    if( $_[0] ) {
+        $_[0] = join(' ', ( split( /\s+/, $_[0] ), $_[1] ));
+    } else {
+        $_[0] = $_[1];
+    }
 }
 
 sub _encodeEntities {
@@ -680,17 +683,20 @@ sub _emitTR {
     }
     # Work out colspans
     my $colspan = 0;
+    my @row;
     for (my $i = $#tr; $i >= 0; $i--) {
         if ($i && length($tr[$i]->{text}) == 0) {
             $colspan++;
+            next;
         } elsif ($colspan) {
             $tr[$i]->{attr}->{colspan} = $colspan + 1;
             $colspan = 0;
         }
+        unshift(@row, $tr[$i]);
     }
     no strict 'refs';
     return $pre.CGI::Tr(join('', map { &{$_->{fn}}($_->{attr}, $_->{text}) }
-                               @tr));
+                               @row));
     use strict 'refs';
 }
 
