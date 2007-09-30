@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2001-2006 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2001-2007 Peter Thoeny, peter@thoeny.org
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ use vars qw(
         $debug $pubUrl $attachUrl
     );
 
-$VERSION = '1.034';
+$VERSION = '$Rev$';
 $RELEASE = 'any TWiki';
 $pluginName = 'RenderListPlugin';  # Name of this Plugin
 
