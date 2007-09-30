@@ -1,4 +1,5 @@
 data/TWiki/RenderListPlugin.txt 0644
+data/TWiki/VarRENDERLIST.txt 0644
 lib/TWiki/Plugins/RenderListPlugin.pm 0444
 pub/TWiki/RenderListPlugin/doc.gif 0644
 pub/TWiki/RenderListPlugin/dot_ud.gif 0644
