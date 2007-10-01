@@ -66,7 +66,7 @@
 
 # NOTE FOR DEVELOPERS: you can use $TWiki::cfg variables in other settings,
 # but you must be sure they are only evaluated under program control and
-# not when this fie is loaded. For example:
+# not when this file is loaded. For example:
 ## $TWiki::cfg{Blah} = "$TWiki::cfg{DataDir}/blah.dat"; # BAD
 ## $TWiki::cfg{Blah} = '$TWiki::cfg{DataDir}/blah.dat'; # GOOD
 
@@ -985,6 +985,10 @@ $TWiki::cfg{TrashWebName} = 'Trash';
 $TWiki::cfg{UsersWebName} = 'Main';
 
 #---+ Mail and Proxies
+# **BOOLEAN**
+# Enable email globally.
+$TWiki::cfg{EnableEmail} = $TRUE;
+
 # **STRING 30**
 # TWiki administrator's e-mail address e.g. <code>webmaster@example.com</code>
 # (used in <code>%WIKIWEBMASTER%</code>)

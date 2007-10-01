@@ -293,6 +293,10 @@ Date: ...\nFrom: ...\nTo: ...\nCC: ...\nSubject: ...\n\nMailBody...
 sub sendEmail {
     my( $this, $text, $retries ) = @_;
     $retries ||= 1;
+   
+    unless( $TWiki::cfg{EnableEmail} ) {
+        return 'Trying to send email while email functionality is disabled';
+    }
 
     unless( defined $this->{mailHandler} ) {
         _installMailHandler( $this );

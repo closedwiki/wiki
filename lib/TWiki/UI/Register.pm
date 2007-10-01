@@ -399,17 +399,30 @@ sub _requireVerification {
         'regstart', $TWiki::cfg{UsersWebName}.'.'.$data->{WikiName},
         $data->{Email}, $data->{WikiName} );
 
-    my $err = _sendEmail( $session, 'registerconfirm', $data );
     my $em = $data->{Email};
 
-    if($err) {
+    if($TWiki::cfg{EnableEmail}) {
+        my $err = _sendEmail( $session, 'registerconfirm', $data );
+
+        if($err) {
+            throw TWiki::OopsException(
+                'attention',
+                def => 'registration_mail_failed',
+                web => $data->{webName},
+                topic => $topic,
+                params => [ $em, $err ]);
+        };
+    } else {
+        my $err=$session->i18n->maketext(
+                  'Email has been disabled for this TWiki installation');
+
         throw TWiki::OopsException(
             'attention',
-            def => 'registration_mail_failed',
+            def => 'send_mail_error',
             web => $data->{webName},
             topic => $topic,
             params => [ $em, $err ]);
-    };
+    }
 
 
     throw TWiki::OopsException(
@@ -435,6 +448,15 @@ sub resetPassword {
     my $topic = $session->{topicName};
     my $web = $session->{webName};
     my $user = $session->{user};
+
+    unless( $TWiki::cfg{EnableEmail} ) {
+        my $err=$session->i18n->maketext(
+                  'Email has been disabled for this TWiki installation');
+        throw TWiki::OopsException( 'attention',
+                                    topic => $TWiki::cfg{UsersTopicName},
+                                    def => 'reset_bad',
+                                    params => [ $err ] );
+    }
 
     my @userNames = $query->param( 'LoginName' ) ;
     unless( @userNames ) {
@@ -777,22 +799,31 @@ sub complete {
     # but we'll leave them both in here for now.)
     $users->{loginManager}->userLoggedIn( $data->{LoginName}, $data->{WikiName} );
 
-    # inform user and admin about the registration.
-    my $status = _emailRegistrationConfirmations( $session, $data );
 
-    # write log entry
-    if ($TWiki::cfg{Log}{register}) {
-        $session->writeLog(
-            'register', $TWiki::cfg{UsersWebName}.'.'.$data->{WikiName},
-            $data->{Email}, $data->{WikiName} );
-    }
+    my $status;
 
-    if( $status ) {
-        $status = $session->i18n->maketext(
-            'Warning: Could not send confirmation email')."\n\n$status";
+    if($TWiki::cfg{EnableEmail}) {
+
+        # inform user and admin about the registration.
+        $status = _emailRegistrationConfirmations( $session, $data );
+
+        # write log entry
+        if ($TWiki::cfg{Log}{register}) {
+            $session->writeLog(
+                'register', $TWiki::cfg{UsersWebName}.'.'.$data->{WikiName},
+                $data->{Email}, $data->{WikiName} );
+        }
+
+        if( $status ) {
+            $status = $session->i18n->maketext(
+                'Warning: Could not send confirmation email')."\n\n$status";
+        } else {
+            $status = $session->i18n->maketext(
+                'A confirmation e-mail has been sent to [_1]', $data->{Email} );
+        }
     } else {
         $status = $session->i18n->maketext(
-            'A confirmation e-mail has been sent to [_1]', $data->{Email} );
+                'Warning: Could not send confirmation email, email has been disabled');
     }
 
     # and finally display thank you page
