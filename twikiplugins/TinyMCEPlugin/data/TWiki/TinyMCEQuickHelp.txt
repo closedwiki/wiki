@@ -31,6 +31,7 @@
    * ==NOAUTOLINK== - Wraps &lt;noautolink&gt; tags around the selected text. Prevents !WikiWords from becoming links.
    * ==VERBATIM== - Wraps &lt;verbatim&gt; tags around the selected text. Verbatim text is shown in monospace with line breaks. No TWiki Variables are interpreted inside verbatim tags.
    * ==PROTECTED== - Text is saved exactly as it is typed. Use this to save advanced TWiki Variables where you do not want the Wysiwyg editor to interpret or modify the text.
+   * ==LITERAL== - HTML is saved exactly as it appears in the editor. Wraps thee HTML in &lt;literal> tags.
     </td>
   </tr>
   <tr>

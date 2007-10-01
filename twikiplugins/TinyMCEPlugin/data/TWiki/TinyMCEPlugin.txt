@@ -50,7 +50,7 @@ For a full explanation of the available options, and guidance on reconfiguring T
    twikipuburl_callback : "twikiConvertPubURL",
    save_callback : "twikiSaveCallback",
    convert_fonts_to_spans: true,
-   plugins : "table,searchreplace,autosave,paste,twikiimage%IF{"'%TINYMCEPLUGIN_DEBUG%'" then=",devkit"}%",
+   plugins : "table,searchreplace,autosave,paste,twikiimage%IF{"$TINYMCEPLUGIN_DEBUG" then=",devkit"}%",
    setupcontent_callback : "tinymce_plugin_setUpContent",
    twiki_secret_id : "%WYSIWYG_SECRET_ID%",
    twiki_vars : "PUBURLPATH=%PUBURLPATH%,PUBURL=%PUBURL%,WEB=%WEB%,TOPIC=%TOPIC%,ATTACHURL=%ATTACHURL%,ATTACHURLPATH=%ATTACHURLPATH%,VIEWSCRIPTURL=%SCRIPTURL{view}%",
@@ -70,7 +70,7 @@ For a full explanation of the available options, and guidance on reconfiguring T
    theme_advanced_resizing : true,
    theme_advanced_path: false,
    theme_advanced_statusbar_location : "bottom",
-   theme_advanced_styles : "NOAUTOLINK=WYSIWYG_NOAUTOLINK;VERBATIM=TMLverbatim;PROTECTED=WYSIWYG_PROTECTED",
+   theme_advanced_styles : "NOAUTOLINK=WYSIWYG_NOAUTOLINK;VERBATIM=TMLverbatim;PROTECTED=WYSIWYG_PROTECTED,LITERAL=WYSIWYG_LITERAL",
    content_css : "%PUBURLPATH%/%SYSTEMWEB%/TinyMCEPlugin/wysiwyg.css,%PUBURLPATH%/%SYSTEMWEB%/TWikiTemplates/base.css,%TWIKISTYLEURL%,%TWIKICOLORSURL%"
    * Additional settings for specific browsers.
       * Warning: if you enable =paste_auto_cleanup_on_paste then it automatically implies =past_use_dialog= on all non-MSIE browsers.
