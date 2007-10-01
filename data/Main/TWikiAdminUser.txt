@@ -1,20 +1,23 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev: 14936 $"}%
 ---+ TWiki Administrator User
 
+The %TOPIC% has been added to TWiki 4.2.0 to make it possible to login without needing to create a TWiki User, or to temporarily login as %TOPIC%, and then log back out to the same User and Group as before.
+
+This means it is no longer necessary to add yourself to the TWikiAdminGroup, and you will be able to quicky change to Admin (and back to your user) only when you need to.
+
+%STARTSECTION{"sudo_login"}%
+   * If your TWiki is configured to use !ApacheLogin, you first need to log in as a normal registered user
+   * Login as the internal TWiki administrator using the [[%SCRIPTURL{login}%?sudo=sudo][internal admin login]] (use the username already suggested and the password set in configure).
+   * to logout from Administrator, click the [[%LOGOUTURL%][Logout link]].
+%ENDSECTION{"sudo_login"}%
+
+---+++ Prerequisites
+   * =Security Setup : Sessions : {UserClientSession}= needs to be enabled in configure
+   * a configure password (otherwise the Admin login is automatically disabled.)
+   * If your TWiki is configured to use !ApacheLoginManager, you will need to log in as a valid user first.
+   
+__Related topics:__ %WIKIUSERSTOPIC%, TWikiAdminGroup, TWikiGroups, %SYSTEMWEB%.TWikiAccessControl
+---
+__%X% NOTE:__ If you lock yourself out of <nop>TWikiAdminUser during setup activities or have forgotten the configure password, you can unset the configure password by editing the =lib/LocalSite.cfg= file and deleting the line that starts with =$TWiki::cfg{Password}= and then set it again by saving your settings in =configure=.
 
 
-__Related topics:__ %WIKIUSERSTOPIC%, TWikiGroups, %SYSTEMWEB%.TWikiAccessControl
-
-%STARTINCLUDE%
-__%X% NOTE:__ You can login as the built-in Admin user using the password set in configure.
-   * Unless your TWiki is configured to use !TemplateLogin, you first need to be logged in as a normal registered user
-   * Authenticate as the internal TWiki administrator using the [[%SCRIPTURL{login}%?sudo=sudo][internal admin login]] (use the username already suggested and the password set in configure).
-   * Once you are a member of the !TWikiAdminGroup you automatically get admin privileges when you do a normal login.
-
-__%X% NOTE:__ If you lock yourself out of <nop>TWikiAdminGroup during setup activities and have forgotten the configure password, you can edit this group topic at file system level using any text file editor (as a last resort.)
-
-
-%TABLE{databg="#ffff00"}%
-| __How add the first Administrator:__ <ol> <li type="a">To add yourself as the member of the admin group you must be [[%SYSTEMWEB%.TWikiRegistration][registered]] as a normal user </li> <li type="a">Next you must %LOGIN% as this normal user </li> <li type="a">Authenticate as the internal TWiki administrator using the [[%SCRIPTURL{login}%/%WEB%/%TOPIC%?sudo=sudo][internal admin login]] (use the username already suggested and use the password set in configure). </li> <li type="a">You can now edit this topic </li> <li type="a">Insert wanted users in the TWiki Administrator Group by listing them in the GROUP setting %BR% (example =* Set GROUP = <nop>JohnSmith, <nop>JamesBond=) </li> <li type="a">Save this topic </li> <li type="a">Verify that new members show up properly in the group listing at %USERSWEB%.TWikiGroups </li> <li type="a">Make sure always to keep this topic write protected by keeping the already defined ALLOWTOPICCHANGE setting </li> <li type="a">The ALLOWTOPICHANGE and ALLOWTOPICRENAME settings in [[%SYSTEMWEB%.TWikiPreferences]] and [[%USERSWEB%.TWikiPreferences]] have already been set to this group (<nop>TWikiAdminGroup), restricting edit of site-wide preferences to the TWiki Administrator Group</li></ol> |
-
-%STOPINCLUDE%

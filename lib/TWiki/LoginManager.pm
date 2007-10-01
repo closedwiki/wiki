@@ -171,6 +171,7 @@ sub new {
     TWiki::registerTagHandler('LOGINURL', \&_LOGINURL);
     TWiki::registerTagHandler('LOGIN', \&_LOGIN);
     TWiki::registerTagHandler('LOGOUT', \&_LOGOUT);
+    TWiki::registerTagHandler('LOGOUTURL', \&_LOGOUTURL);
     TWiki::registerTagHandler('SESSION_VARIABLE', \&_SESSION_VARIABLE);
     TWiki::registerTagHandler('AUTHENTICATED', \&_AUTHENTICATED);
     TWiki::registerTagHandler('CANLOGIN', \&_CANLOGIN);
