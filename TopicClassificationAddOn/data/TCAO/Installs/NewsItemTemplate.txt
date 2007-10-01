@@ -9,5 +9,6 @@ See also: Recent News, [[NewsItem][All News for %INCLUDINGWEB%]], [[AllNews][All
 
 ---+++ Comments
 
-#AddComments
-%INCLUDE{"%TCAOWEB%.RenderAddComment" }%
+---+++ Comments
+%DBCALL{"%TCAOWEB%.RenderCommentCountBar" warn="off"}% 
+%COMMENT{type="comment"}%

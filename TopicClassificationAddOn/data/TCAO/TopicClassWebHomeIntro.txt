@@ -7,7 +7,7 @@ _This topic is intended to be included in WebHome topics to provide a quick over
 
 %TABLE{ dataalign="right,left" columnwidths="15%, 85%"}%
 |  *[[%BASEWEB%.TopicType][Topic Types]]:* | %DBQUERY{"Classification = 'TopicType'" web="%BASEWEB%" format="[[$web.$topic][$percntSPACEOUT{$topic}$percnts <span class=\"twikiSmall\">($percntDBQUERY{\"TopicType='$topic'\" web=\"$web\" format=\"none\" footer=\"$dollarcount\"}$percnt)</span>]]" separator=", "}%   |
-%DBQUERY{"Classification = 'Classification'" exclude="TopicType" web="%BASEWEB%" separator="$n" format="|  *[[$web.$topic][$percntSPACEOUT{$topic}$percnt]]:* | $percntDBQUERY{\"Classification = '$topic'\" format=\"[[$dollarweb.$dollartopic][$dollarpercntSPACEOUT{$dollartopic}$dollarpercnt <span class=\\"twikiSmall\\">($dollarpercntDBQUERY{\\"$topic='$dollartopic'\\" web=\\"$dollarweb\\" format=\\"none\\" footer=\\"$dollardollarcount\\"}$dollarpercnt)</span>]]\" separator=\", \" }$percnt   |" }%
+%DBQUERY{"Classification = 'Classification'" exclude="TopicType" web="%BASEWEB%" separator="$n" format="|  *[[$web.$topic][$percntSPACEOUT{$topic}$percnt]]:* | $percntDBQUERY{\"Classification = '$topic'\" format=\"[[$dollarweb.$dollartopic][$dollarpercntSPACEOUT{$dollartopic}$dollarpercnt <span class=\\"twikiSmall\\">($dollarpercntDBQUERY{\\"$topic =~ '$dollartopic'\\" web=\\"$dollarweb\\" format=\\"none\\" footer=\\"$dollardollarcount\\"}$dollarpercnt)</span>]]\" separator=\", \" }$percnt   |" }%
 
 _See also %BASEWEB%.TopicTree for a tree-outline of topics._
 

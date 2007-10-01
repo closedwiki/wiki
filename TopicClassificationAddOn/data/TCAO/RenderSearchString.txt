@@ -35,7 +35,7 @@
 ~~~   "%BASESEARCH% 
 *~~   
 %~~    FORMATLIST{"%FACETS%" separator=" " 
-~~~          format="$percntIF{ \"$'URLPARAM{$1}'!=''\" then=\" AND $1 = '$percntURLPARAM{$1}$percnt'\" }$percnt"
+~~~          format="$percntIF{ \"$'URLPARAM{$1}'!=''\" then=\" AND $1 =~ '$percntURLPARAM{$1}$percnt'\" }$percnt"
 ~~~    }%" 
 ~~~   %FIDEFINED%
 ~~~    order="%URLPARAM{"sort" default="%INITSORT%"}%"  

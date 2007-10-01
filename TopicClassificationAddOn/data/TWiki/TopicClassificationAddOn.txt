@@ -83,6 +83,15 @@ Once %TOPIC% is enabled within a web, you're ready to start defining *TopicTypes
 |  Copyright: | &copy; |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 | Change&nbsp;History: | |
+|  13160 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1715'>Item1715</a>  Fixing change in name of removeSpacesAndPunctuation function, and changing form for creation new classes to table. |
+|  13112 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1715'>Item1715</a>  Add new format for display of search results in table |
+|  13111 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1715'>Item1715</a>  Further improvements to TopicTypes and navigation |
+|  13058 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1715'>Item1715</a>  various fixes and improvements. Changed discussion topic format. |
+|  13047 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1715'>Item1715</a>  removing files not intended for distribution |
+|  12981 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1715'>Item1715</a>  Minor fixes |
+|  12980 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1715'>Item1715</a> Further updates to ver 2.0 |
+|  12966 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1715'>Item1715</a>  Misc fixes to MANIFEST, the plugin topic, and some TopicTypes. |
+|  12965 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1715'>Item1715</a>  Clean up plugin topic. |
 |  12949 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1715'>Item1715</a>  Uploading Version 2.0 of TopicClassificationAddOn |
 |  <!-- versions below in reverse order -->&nbsp;' | <!-- versions below in reverse order -->&nbsp; |
 |  Dependencies: | %$DEPENDENCIES% |

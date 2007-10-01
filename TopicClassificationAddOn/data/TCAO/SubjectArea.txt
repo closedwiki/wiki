@@ -1,18 +1,24 @@
-%META:TOPICINFO{author="LynnwoodBrown" date="1165967999" format="1.1" version="1.5"}%
-%META:TOPICPARENT{}%
-%DBCALL{"%TCAOWEB%.RenderClassificationTopic" }%
+%META:TOPICINFO{author="LynnwoodBrown" date="1160083624" format="1.1" version="1.4"}%
+<!-- Optional Topic Settings
+To enable any of these settings, replace the explanation with the value you want and remove the "#" before "Set". 
+   * Set CLASS_DESCRIPTION = <b><i>%FORMFIELD{"Summary" topic="%BASEWEB%.%BASETOPIC%"}%</b></i>
+   * #Set ADD_FILTER = Optional setting for setting different sort/filter bar for topic list.
+   * #Set SEARCH_FORMAT = Optional custom format for search results. Defaults to bulleted list with topic name and the !Summary formfield.
+   * #Set HEADER_FORMAT = Optional custom format for search results header. Defaults to empty header.
+   * #Set FOOTER_FORMAT = Optional custom format for search results footer. Defaults to "Number of topics found = $count".
+   * #Set SEARCH_ORDER = Option for changing the default order for the search. Defaults to "name."
+   * #Set SEARCH_REVERSE = Option to reverse the search order. Defaults to "off."
+-->
+%INCLUDE{"%TCAOWEB%.RenderClassificationTopic" }%
 
 %DBCALL{"%TCAOWEB%.RenderAddClassification" TYPE="SubjectArea" }%
 
 <!-- Topic Permissions
-	* Set ALLOWTOPICCHANGE = %USERSWEB%.TWikiAdminGroup
-	* Set ALLOWTOPICRENAME = %USERSWEB%.TWikiAdminGroup
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.ModeratorGroup
+   * Set ALLOWTOPICRENAME = %MAINWEB%.ModeratorGroup
 -->
 
 %META:FORM{name="TopicClassForm"}%
-%META:FIELD{name="Classification" attributes="" title="Classification" value="Classification"}%
-%META:FIELD{name="Summary" attributes="" title="Summary" value="TCAO/Installs web content subject areas."}%
-%META:FIELD{name="Facets" attributes="" title="Facets" value=""}%
-%META:REVCOMMENT{ncomments="0"}%
-%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%25USERSWEB%25.TWikiAdminGroup"}%
-%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%25USERSWEB%25.TWikiAdminGroup"}%
+%META:FIELD{name="Classification" attributes="" title="Classification" value="SubjectArea"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value=""}%
+%META:FIELD{name="Facets" attributes="" title="Facets" value="TopicType"}%

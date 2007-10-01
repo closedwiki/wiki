@@ -31,14 +31,44 @@ The following parameters allow customization of how specific Classification topi
 <select name="subject" size="1" onchange="document.location=this.value;"> <option>Jump to different <nop>%FORMFIELD{"Classification" topic="%BASEWEB%.%BASETOPIC%"}%...</option>%DBQUERY{ "Classification='%FORMFIELD{"Classification" topic="%BASEWEB%.%BASETOPIC%"}%'" web="%BASEWEB%"  exclude="%BASETOPIC%" regex= "on" noheader="on" nosearch="on" nosummary="on" nototal="on" order="topic" format= "<option>$topic</option>" }% </select></form> </span>
 ---++!! %SPACEOUT{%BASETOPIC%}%
 %IF{"defined CLASS_DESCRIPTION" then="%CLASS_DESCRIPTION%"}%
-%IFDEFINED{"%FORMFIELD{"Classification" topic="%BASEWEB%.%BASETOPIC%"}%" as="TopicType" then="<p /><form method=\"link\" action=\"$percntSCRIPTURL{view}$percnt/$percntBASEWEB$percnt/CreateNewTopic\"><input type=hidden name=type value=$percntBASETOPIC$percnt><input type=hidden name=step value=two><input type=hidden name=parent value=$percntBASETOPIC$percnt><input type=\"submit\" class=\"twikiButton\" value=\"Create new <nop>$percntBASETOPIC$percnt \" /></form>" else="" glue="off"}%
+%~~   IFDEFINED{"%FORMFIELD{"Classification" topic="%BASEWEB%.%BASETOPIC%"}%" 
+~~~         as="TopicType" 
+~~~         then="<p /><form method=\"link\" 
+~~~             action=\"$percntSCRIPTURL{view}$percnt/$percntBASEWEB$percnt/CreateNewTopic\">
+~~~             <input type=hidden name=type value=$percntBASETOPIC$percnt>
+~~~             <input type=hidden name=step value=two>
+~~~            <input type=hidden name=parent value=$percntBASETOPIC$percnt>
+~~~            <input type=\"submit\" class=\"twikiButton\" value=\"Create new <nop>$percntBASETOPIC$percnt \" />
+~~~            </form>" 
+~~~        glue="off"
+~~~    }%
+
+%~~   IFDEFINED{"
+*~~
+%~~      DBQUERY{"parent = '%BASETOPIC%' 
+~~~            AND Classification = '%FORMFIELD{"Classification" topic="%BASEWEB%.%BASETOPIC%"}%'"
+~~~         web="%BASEWEB%"
+~~~         format="none"
+~~~         header="$count"
+~~~         hidenull="on"
+~~~       }%"
+~~~      then="<em>See also sub-%FORMFIELD{"Classification" topic="%BASEWEB%.%BASETOPIC%"}%s: 
+~~~         $percntDBQUERY{\"parent = '%BASETOPIC%'
+~~~            AND Classification = '%FORMFIELD{"Classification" topic="%BASEWEB%.%BASETOPIC%"}%'\"
+~~~            web=\"%BASEWEB%\"
+~~~            format=\"$web.$topic\"
+~~~            separator=\", \" 
+~~~         }$percnt</em>"
+~~~      glue="off"
+~~~    }%
 
 %IFDEFINEDTHEN{"%LISTFORMAT%" glue="off" }%
 %INCLUDE{"%LISTFORMAT%"}%
 %ELSEDEFINED%
 %~~  INCLUDE{"%TCAOWEB%.RenderTableSearchResults" 
+~~~       remote="on"
 ~~~       FACETS="%FORMFIELD{"Facets" topic="%BASEWEB%.%BASETOPIC%"}%" 
-~~~       BASESEARCH="%FORMFIELD{"Classification" topic="%BASEWEB%.%BASETOPIC%"}% = '%BASETOPIC%'" }%
+~~~       BASESEARCH="%FORMFIELD{"Classification" topic="%BASEWEB%.%BASETOPIC%"}% =~ '%BASETOPIC%'" }%
 ~~~  %FIDEFINED%
 _For more information on content organization within the *%BASEWEB%* web, see %BASEWEB%.TopicClassification._
 

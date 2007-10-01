@@ -38,11 +38,13 @@ After the !TopicType is selected, the "new" section of that !TopicType in the lo
 <input name="step" type="hidden" value="two">
 <input type="hidden" name="parent" value="<nop>%URLPARAM{parent}%" />
 </form>
-%BR% _%ICON{help}% For more information about how topics are organized within the <nop>%BASEWEB% web, see %BASEWEB%.TopicClassification._
 
 %IFDEFINEDTHEN{"%URLPARAM{step}%" as="two" glue="off"}%
 %INCLUDE{ %IFDEFINED{ "%URLPARAM{type}%" as="Blank Topic" then="\"%TCAOWEB%.RenderTopicCreator\" FORM=\"none\"" else="\"%BASEWEB%.%URLPARAM{type}%\" section=\"new\"" }% }%
 %FIDEFINED%
+
+%BR% _%ICON{help}% For more information about how topics are organized within the <nop>%BASEWEB% web, see %BASEWEB%.TopicClassification._
+
 %STOPINCLUDE%
 </verbatim>
 

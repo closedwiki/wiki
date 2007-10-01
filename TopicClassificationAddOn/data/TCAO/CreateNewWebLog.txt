@@ -10,7 +10,7 @@ __This topic is the master topic for creating new !WebLog topics]. It is it's on
 <input type="hidden" name="TopicType" value="WebLog" />
 <input type="hidden" name="templatetopic" value="%TCAOWEB%/Installs.WebLogTemplate" />
 <input type="hidden" name="formtemplate" value="%BASEWEB%.WebLogForm" />
-|    *Log Headline:* | <input type="text" name="Summary" size="50" onchange="document.newWebLog.topic.value=removeSpacesAndPunctiation(capitalize(this.value));" />   | _This is displayed as the <nop>WebLog's title._     |
+|    *Log Headline:* | <input type="text" name="Summary" size="50" onchange="document.newWebLog.topic.value=removeSpacesAndPunctuation(capitalize(this.value));" />   | _This is displayed as the <nop>WebLog's title._     |
 |    *URL:* | <input type="text" name="Url" size="50" value="%URLPARAM{url}%"/>  | _Address of web page post refers to (if applicable)._    |
 |     *Page title:* | <input type="text" name="Title" size="50" value="%URLPARAM{title}%"/>  | _Name of web page post refers to (if applicable)._     |
 |     *SubjectArea:* | <select name="SubjectArea" size="1"><option value=" "> Select... </option>%DBQUERY{ "Classification = 'SubjectArea'" web="%BASEWEB%" regex="on" separator=" " format="<option>$topic</option>" }% </select> _Optional: select a subject area this post relates to._     ||
