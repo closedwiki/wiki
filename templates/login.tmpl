@@ -16,7 +16,7 @@
 
 %TMPL:DEF{"note"}%%TMPL:P{"error"}%<p>%NOTE%</p>%TMPL:END%
 
-%TMPL:DEF{"authrealm"}%%AUTHREALM%%TMPL:END%
+%TMPL:DEF{"authrealm"}%%AUTHREALM%<font size="-2" style="float:right">[[%SCRIPTURL{login}%?sudo=sudo;origurl=%ORIGURL%][internal admin login]]</font>%TMPL:END%
 
 %TMPL:DEF{"formstart"}%<form action='%SCRIPTURLPATH{"login"}%/%WEB%/%TOPIC%' name='loginform' method='post'>%TMPL:END%
 

@@ -7,7 +7,7 @@ This means it is no longer necessary to add yourself to the TWikiAdminGroup, and
 
 %STARTSECTION{"sudo_login"}%
    * If your TWiki is configured to use !ApacheLogin, you first need to log in as a normal registered user
-   * Login as the internal TWiki administrator using the [[%SCRIPTURL{login}%?sudo=sudo][internal admin login]] (use the username already suggested and the password set in configure).
+   * Login as the internal TWiki administrator using the [[%SCRIPTURL{login}%?sudo=sudo;origurl=%SCRIPTURL{"view"}%/%BASEWEB%/%BASETOPIC%][internal admin login]] (use the username already suggested and the password set in configure).
    * to logout from Administrator, click the [[%LOGOUTURL%][Logout link]].
 %ENDSECTION{"sudo_login"}%
 
