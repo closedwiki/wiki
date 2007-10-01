@@ -293,8 +293,7 @@ $TWiki::cfg{DefaultUserWikiName} = 'TWikiGuest';
 
 # **STRING 20 EXPERT**
 # An internal admin user login name (matched with the configure password, if set)
-# which is used as a temporary login to enable adding the first users to the
-# TWikiAdminGroup (see: Main.TWikiAdminGroup).
+# which can be used as a temporary Admin login (see: Main.TWikiAdminUser).
 # This login name is additionally required by the install script for some addons
 # and plugins, usually to gain write access to the TWiki web.
 # If you change this you risk making topics uneditable.

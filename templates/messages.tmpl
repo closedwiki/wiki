@@ -106,6 +106,8 @@
 ---+++ %MAKETEXT{"[_1] is an invalid name for a new web" args="\"%PARAM1%\""}%
 %MAKETEXT{"You are recommended to choose short names, preferably less than 10 characters, starting with an upper-case alphabetic character and using only alphanumeric characters. If you want to create a template web (a web just used as a base to create new webs) choose a name that starts with an underscore and has only alphanumeric characters."}%
 
+%IF{"NOT {EnableHierarchicalWebs}" then="%MAKETEXT{"Hierarchical Webs is currently disabled, you cannot create Nested webs."}%"}%
+
 %MAKETEXT{"Please go back in your browser and try again."}%
 %TMPL:END%
 %TMPL:DEF{"web_exists"}%

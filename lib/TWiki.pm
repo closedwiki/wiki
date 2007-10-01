@@ -385,7 +385,11 @@ BEGIN {
     # TWiki concept regexes
     $regex{wikiWordRegex} = qr/[$regex{upperAlpha}]+[$regex{lowerAlphaNum}]+[$regex{upperAlpha}]+[$regex{mixedAlphaNum}]*/o;
     $regex{webNameBaseRegex} = qr/[$regex{upperAlpha}]+[$regex{mixedAlphaNum}_]*/o;
-    $regex{webNameRegex} = qr/$regex{webNameBaseRegex}(?:(?:[\.\/]$regex{webNameBaseRegex})+)*/o;
+    if ($TWiki::cfg{EnableHierarchicalWebs}) {
+        $regex{webNameRegex} = qr/$regex{webNameBaseRegex}(?:(?:[\.\/]$regex{webNameBaseRegex})+)*/o;
+    } else {
+        $regex{webNameRegex} = $regex{webNameBaseRegex};
+    }
     $regex{defaultWebNameRegex} = qr/_[$regex{mixedAlphaNum}_]+/o;
     $regex{anchorRegex} = qr/\#[$regex{mixedAlphaNum}_]+/o;
     $regex{abbrevRegex} = qr/[$regex{upperAlpha}]{3,}s?\b/o;
@@ -929,6 +933,9 @@ sub isValidAbbrev {
 STATIC Check for a valid web name. If $system is true, then
 system web names are considered valid (names starting with _)
 otherwise only user web names are valid
+
+If $TWiki::cfg{EnableHierarchicalWebs} is off, it will also return false
+when a nested web name is passed to it.
 
 =cut
 
