@@ -263,7 +263,11 @@ sub findBestTranslation {
 sub checkRedirection {
     # we only want to be redirected in view or viewauth, and when there is no
     # extra parameters to the request:
-    if (($ENV{SCRIPT_NAME} =~ m#/view(auth)?$#) and (! $ENV{QUERY_STRING})) {
+
+    # fake to '/view' if no script name (e.g. when using shorter URL's)
+    my $script = $ENV{SCRIPT_NAME} || '/view'; 
+
+    if (($script =~ m#/view(auth)?$#) and (! $ENV{QUERY_STRING})) {
         my $query = TWiki::Func::getCgiQuery();
     
         # several checks
