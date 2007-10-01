@@ -38,9 +38,24 @@ my %headNames = (
 sub _getListOfExtensions {
     my $this = shift;
 
+    unless (defined($this->{repositories})) {
+        my $replist = '';
+        $replist .= $TWiki::cfg{ExtensionsRepositories}
+          if defined $TWiki::cfg{ExtensionsRepositories};
+        $replist .= "$ENV{TWIKI_REPOSITORIES};" # DEPRECATED
+          if defined $ENV{TWIKI_REPOSITORIES};  # DEPRECATED
+        $replist = ";$replist;";
+        while ($replist =~ s/[;\s]+(.*?)=\((.*?),(.*?)(?:,(.*?),(.*?))?\)\s*;/;/) {
+            push(@{$this->{repositories}},
+                 { name => $1, data => $2, pub => $3});
+        }
+    }
+
     if (!$this->{list}) {
         $this->{list} = {};
+        $this->{errors} = [];
         foreach my $place ( @{$this->{repositories}} ) {
+            $place->{data} =~ s#/*$#/#;
             print CGI::div("Consulting $place->{name}...");
             my $url = $place->{data}.
                   'FastReport?skin=text&contenttype=text/plain';
@@ -48,8 +63,9 @@ sub _getListOfExtensions {
             if (!$response->is_error()) {
                 my $page = $response->content();
                 $page =~ s/{(.*?)}/$this->_parseRow($1, $place)/ges;
-            #} else {
-            #    die "$url ".$response->message();
+            } else {
+                push(@{$this->{errors}},
+                     "Error accessing $place->{name}: ".$response->message());
             }
         }
     }
@@ -71,13 +87,20 @@ sub _parseRow {
 
 sub ui {
     my $this = shift;
-    my $table =
-      CGI::Tr(join('', map { CGI::th({valign=>'bottom' },
-                                     $headNames{$_}) } @tableHeads));
+    my $table = '';
 
     my $rows = 0;
     my $installed = 0;
     my $exts = $this->_getListOfExtensions();
+    foreach my $error (@{$this->{errors}}) {
+        $table .= CGI::Tr({class=>'twikiAlert'},CGI::td(
+            {colspan => 7},
+            $error));
+    }
+
+    $table .=
+      CGI::Tr(join('', map { CGI::th({valign=>'bottom' },
+                                     $headNames{$_}) } @tableHeads));
     foreach my $key (sort keys %$exts) {
         my $ext = $exts->{$key};
         my $row = '';
@@ -120,28 +143,6 @@ write files everywhere in your TWiki installation. Otherwise you may see
 'No permission to write' errors during extension installation.
 INTRO
     $page .= CGI::table({class=>'twikiForm'},$table);
-    $page .= <<'HELP';
-<p />
-TWiki exctension repositories are just TWiki webs which contain published
-extensions, same as the Plugins web on TWiki.org.
-
-You can add more repositories to the search path by defining the
-environment variable <code>$TWIKI_REPOSITORIES</code> in
-<tt>bin/LocalLib.cfg</tt>, thus:<br />
-<tt>$ENV{TWIKI_REPOSITORIES} = '<i>repositories</i>';</tt><p />
-<code>$TWIKI_REPOSITORIES</code> has to be a semicolon-separated list of repository specifications, <i>name=(list,pub)</i>, where:
-<ul>
-<li><i>name</i> is the symbolic name of the repository e.g. TWiki.org</li>
-<li><i>list</i> is the URL of a TWiki page that lists the available
-extensions in a special parseable format (see the
-<a href="http://twiki.org/cgi-bin/view/Plugins/FastReport?raw=on">Plugins.FastReport</a> page), and</li>
-<li><i>pub</i> is the root of a download URL on the repository site.</li>
-</ul>
-For example,<code>
-twiki.org=(http://twiki.org/cgi-bin/view/Plugins/FastReport?skin=text&contenttype=text/plain,http://twiki.org/p/pub/Plugins/);
-wikiring.com=(http://wikiring.com/bin/view/Extensions/FastReport?skin=text&contenttype=text/plain,http://wikiring.com/bin/viewfile/Extensions/)</code><p />
-Note that you can pass authentication information in the URL, for example: <tt>http://User:password\@the.server.com/</tt>.
-HELP
     return $page;
 }
 

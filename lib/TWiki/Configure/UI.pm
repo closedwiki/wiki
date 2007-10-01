@@ -39,16 +39,6 @@ sub new {
     my $this = bless( { item => $item }, $class);
     $this->{item} = $item;
 
-    my $replist = <<DEFAULTS;
-;TWiki.org=(http://twiki.org/cgi-bin/view/Plugins/,http://twiki.org/p/pub/Plugins/);
-DEFAULTS
-    $replist .= "$ENV{TWIKI_REPOSITORIES};"
-      if defined $ENV{TWIKI_REPOSITORIES};
-    while ($replist =~ s/[;\s]+(.*?)=\((.*?),(.*?)(?:,(.*?),(.*?))?\)\s*;/;/) {
-        push(@{$this->{repositories}},
-             { name => $1, data => $2, pub => $3, user => $4, pass => $5});
-    }
-
     $this->{bin} = $FindBin::Bin;
     my @root = File::Spec->splitdir($this->{bin});
     pop(@root);

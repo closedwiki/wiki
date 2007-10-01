@@ -47,7 +47,7 @@ bin/resetpasswd 0555
 bin/rest 0555
 bin/save 0555
 bin/search 0555
-bin/setlib.cfg 0555
+bin/setlib.cfg 0444
 bin/statistics 0555
 bin/twiki 0555
 bin/upload 0555
@@ -385,6 +385,7 @@ data/_empty/WebPreferences.txt 0644
 data/mime.types 0644
 index.html 0444
 lib/Assert.pm 0444
+lib/MANIFEST 0444
 lib/Monitor.pm 0444
 lib/CPAN/lib/Algorithm/Diff.pm 0444
 lib/CPAN/lib/Error.pm 0444
@@ -467,6 +468,7 @@ lib/TWiki/Configure/Checkers/WarningFileName.pm 0444
 lib/TWiki/Configure/Checkers/WebMasterEmail.pm 0444
 lib/TWiki/Configure/Checkers/WorkingDir.pm 0444
 lib/TWiki/Configure/Checkers/cygwin.pm 0444
+lib/TWiki/Configure/FINDEXTENSIONS.pm 0444
 lib/TWiki/Configure/Item.pm 0444
 lib/TWiki/Configure/JS.pm 0444
 lib/TWiki/Configure/LANGUAGES.pm 0444
@@ -496,6 +498,7 @@ lib/TWiki/Configure/UI.pm 0444
 lib/TWiki/Configure/UIs/AUTH.pm 0444
 lib/TWiki/Configure/UIs/EXTEND.pm 0444
 lib/TWiki/Configure/UIs/EXTENSIONS.pm 0444
+lib/TWiki/Configure/UIs/FINDEXTENSIONS.pm 0444
 lib/TWiki/Configure/UIs/LANGUAGES.pm 0444
 lib/TWiki/Configure/UIs/PLUGINS.pm 0444
 lib/TWiki/Configure/UIs/PasswordProtected.pm 0444
@@ -1016,7 +1019,7 @@ templates/view.xml.tmpl 0444
 templates/viewplain.tmpl 0444
 templates/viewprint.tmpl 0444
 templates/viewtopicactionbuttons.tmpl 0444
-tools/extender.pl 0555
+tools/extender.pl 0444
 tools/geturl.pl 0555
 tools/native_search/NativeTWikiSearch.pm 0555
 tools/native_search/cgrep.c 0555

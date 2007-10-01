@@ -16,46 +16,8 @@
 # As per the GPL, removal of this notice is prohibited.
 #
 package TWiki::Configure::UIs::PLUGINS;
-
-use strict;
-use TWiki::Configure::UIs::Section;
-
 use base 'TWiki::Configure::UIs::Section';
 
-sub close_html {
-    my ($this, $section) = @_;
-
-    my $button = <<HERE;
-Consult the online plugins repository for
-new plugins. <b>If you made any changes, save them first!<b>
-HERE
-    # Check that the extensions UI is loadable
-    my $bad = 0;
-    foreach my $module qw(TWiki::Configure::UIs::EXTEND TWiki::Configure::UIs::EXTENSIONS) {
-        eval "use $module";
-        if ($@) {
-            $bad = 1;
-            last;
-        }
-    }
-    my $actor;
-    if (!$bad) {
-        # Can't use a submit here, because if we do, it is invoked when
-        # the user presses Enter in a text field.
-        my $scriptName = $ENV{SCRIPT_NAME} || 'THISSCRIPT';
-        $actor = CGI::a({ href => $scriptName.'?action=FindMoreExtensions',
-                          class=>'twikiSubmit',
-                          accesskey => 'P' },
-                        'Find More Extensions');
-    } else {
-        $actor = $this->WARN(<<MESSAGE);
-Cannot load the extensions installer.
-Check 'Perl Modules' in the 'CGI Setup' section above, and install any
-missing modules required for the Extensions Installer.
-MESSAGE
-    }
-    return CGI::Tr(CGI::td($button),CGI::td($actor)).
-      $this->SUPER::close_html($section);
-}
+use strict;
 
 1;

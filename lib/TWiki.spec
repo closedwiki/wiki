@@ -1186,7 +1186,7 @@ $TWiki::cfg{MimeTypesFileName} = '$TWiki::cfg{DataDir}/mime.types';
 # who should develop with it switched on.
 $TWiki::cfg{WarningsAreErrors} = $FALSE;
 
-#---+ Extensions
+#---+ Plugins
 # *PLUGINS* Marker used by bin/configure script - do not remove!
 # The plugins listed below were discovered by searching the @INC path for
 # modules that match the TWiki standard e.g. TWiki/Plugins/MyPlugin.pm.
@@ -1201,12 +1201,41 @@ $TWiki::cfg{Plugins}{SlideShowPlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{TwistyPlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{TinyMCEPlugin}{Enabled} = 1;
 $TWiki::cfg{Plugins}{WysiwygPlugin}{Enabled} = 1;
-
 # **STRING 80**
 # Plugins evaluation order. If set to a comma-separated list of plugin names,
 # will change the execution order of plugins so the listed subset of plugins
 # are executed first. The default execution order is alphabetical on plugin
 # name.
 $TWiki::cfg{PluginsOrder} = 'SpreadSheetPlugin';
+
+#---+ Extensions
+# *FINDEXTENSIONS*
+# **STRING 80 EXPERT**
+# <b>Extensions Repositories Search List</b><br />
+# TWiki extension repositories are just TWiki webs that are organised in the
+# same way as the Plugins web on TWiki.org. The 'Find more extensions' link
+# above searches these repositories for installable extensions. To set up an
+# extensions repository:
+# <ol>
+# <li>Create a TWiki web to contain the repository</li>
+# <li>Copy the <tt>FastReport</tt> page from <a href="http://twiki.org/cgi-bin/view/Plugins/FastReport?raw=on">TWiki:Plugins.FastReport</a> to your new web</li>
+# <li> Copy the <tt>PackageForm</tt> page from <a href="http://twiki.org/cgi-bin/view/Plugins/PackageForm?raw=on">TWiki:Plugins.PackageForm</a> to your new web</li>
+# <li> Set the <tt>WEBFORMS</tt> variable in WebPreferences to <tt>PackageForm</tt></li>
+# </ol>
+# The page for each extension must have the TWiki form <tt>PackageForm</tt>,
+# and should have the packaged extension attached as a <tt>zip</tt> and/or
+# <tt>tgz</tt> file.
+# <p />
+# This setting is a semicolon-separated list of repository specifications, each in the format: <i>name=(listurl,puburl)</i>,
+# where:
+# <ul>
+# <li><i>name</i> is the symbolic name of the repository e.g. TWiki.org</li>
+# <li><i>listurl</i> is the root of a view URL
+# <li><i>puburl</i> is the root of a download URL
+# </ul>
+# For example,<code>
+# twiki.org=(http://twiki.org/cgi-bin/view/Plugins/,http://twiki.org/p/pub/Plugins/);
+# wikiring.com=(http://wikiring.com/bin/view/Extensions/,http://wikiring.com/bin/viewfile/Extensions/)</code><p />
+$TWiki::cfg{ExtensionsRepositories} = 'TWiki.org=(http://twiki.org/cgi-bin/view/Plugins/,http://twiki.org/p/pub/Plugins/)';
 
 1;
