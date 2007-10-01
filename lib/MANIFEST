@@ -451,6 +451,7 @@ lib/TWiki/Configure/Checkers/RCS/rlogDateCmd.pm 0444
 lib/TWiki/Configure/Checkers/RCS/tmpBinaryCmd.pm 0444
 lib/TWiki/Configure/Checkers/RCS/unlockCmd.pm 0444
 lib/TWiki/Configure/Checkers/Register/AllowLoginName.pm 0444
+lib/TWiki/Configure/Checkers/Register/NeedVerification.pm 0444
 lib/TWiki/Configure/Checkers/RegistrationApprovals.pm 0444
 lib/TWiki/Configure/Checkers/SafeEnvPath.pm 0444
 lib/TWiki/Configure/Checkers/ScriptSuffix.pm 0444
