@@ -1022,11 +1022,6 @@ templates/viewprint.tmpl 0444
 templates/viewtopicactionbuttons.tmpl 0444
 tools/extender.pl 0444
 tools/geturl.pl 0555
-tools/native_search/NativeTWikiSearch.pm 0555
-tools/native_search/cgrep.c 0555
-tools/native_search/Makefile.PL 0555
-tools/native_search/test.pl 0555
-tools/native_search/NativeTWikiSearch.xs 0555
 tools/rewriteshbang.pl 0555
 tools/tick_twiki.pl 0555
 tools/upgrade_emails.pl 0555
