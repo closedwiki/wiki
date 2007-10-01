@@ -6,15 +6,24 @@
    * Persons/group who can change the list:
       * Set ALLOWTOPICCHANGE = TWikiAdminGroup
 
-__Related topics:__ %WIKIUSERSTOPIC%, TWikiGroups, %SYSTEMWEB%.TWikiAccessControl
-
+__Related topics:__ %WIKIUSERSTOPIC%, TWikiAdminUser, TWikiGroups, %SYSTEMWEB%.TWikiAccessControl
+---
 __%X% NOTE:__ You can login as the built-in Admin user using the password set in configure.
-   * Unless your TWiki is configured to use !TemplateLogin, you first need to be logged in as a normal registered user
-   * Authenticate as the internal TWiki administrator using the [[%SCRIPTURL{login}%?sudo=sudo][internal admin login]] (use the username already suggested and the password set in configure).
-   * Once you are a member of the !TWikiAdminGroup you automatically get admin privileges when you do a normal login.
-
-__%X% NOTE:__ If you lock yourself out of <nop>TWikiAdminGroup during setup activities and have forgotten the configure password, you can edit this group topic at file system level using any text file editor (as a last resort.)
-
+%INCLUDE{"%USERSWEB%.TWikiAdminUser" section="sudo_login"}%
+---
+__%X% NOTE:__ If you lock yourself out of <nop>TWikiAdminUser during setup activities or have forgotten the configure password, you can edit this group topic at file system level using any text file editor (as a last resort.)
+---
 
 %TABLE{databg="#ffff00"}%
-| __How add the first Administrator:__ <ol> <li type="a">To add yourself as the member of the admin group you must be [[%SYSTEMWEB%.TWikiRegistration][registered]] as a normal user </li> <li type="a">Next you must %LOGIN% as this normal user </li> <li type="a">Authenticate as the internal TWiki administrator using the [[%SCRIPTURL{login}%/%WEB%/%TOPIC%?sudo=sudo][internal admin login]] (use the username already suggested and use the password set in configure). </li> <li type="a">You can now edit this topic </li> <li type="a">Insert wanted users in the TWiki Administrator Group by listing them in the GROUP setting %BR% (example =* Set GROUP = <nop>JohnSmith, <nop>JamesBond=) </li> <li type="a">Save this topic </li> <li type="a">Verify that new members show up properly in the group listing at %USERSWEB%.TWikiGroups </li> <li type="a">Make sure always to keep this topic write protected by keeping the already defined ALLOWTOPICCHANGE setting </li> <li type="a">The ALLOWTOPICHANGE and ALLOWTOPICRENAME settings in [[%SYSTEMWEB%.TWikiPreferences]] and [[%USERSWEB%.TWikiPreferences]] have already been set to this group (<nop>TWikiAdminGroup), restricting edit of site-wide preferences to the TWiki Administrator Group</li></ol> |
+| __How add the first Administrator:__ \
+<ol> \
+   <li type="a">To add yourself as the member of the admin group you must be [[%SYSTEMWEB%.TWikiRegistration][registered]] as a normal user </li> \
+   <li type="a">Next you must %LOGIN% as this normal user </li> \
+   <li type="a">Authenticate as the internal TWiki administrator using the [[%SCRIPTURL{login}%/%WEB%/%TOPIC%?sudo=sudo][internal admin login]] (use the username already suggested and use the password set in configure). </li> \
+   <li type="a">You can now edit this topic </li>  \
+   <li type="a">Insert wanted users in the TWiki Administrator Group by listing them in the GROUP setting %BR% (example =* Set GROUP = <nop>JohnSmith, <nop>JamesBond=) </li>  \
+   <li type="a">Save this topic </li> \
+   <li type="a">[[%LOGOUTURL%][Logout]] from the Internal TWikiAdminUser</li> \
+   <li type="a">Verify that new members show up properly in the group listing at %USERSWEB%.TWikiGroups </li> <li type="a">Make sure always to keep this topic write protected by keeping the already defined ALLOWTOPICCHANGE setting </li> \
+   <li type="a">The ALLOWTOPICHANGE and ALLOWTOPICRENAME settings in [[%SYSTEMWEB%.TWikiPreferences]] and [[%USERSWEB%.TWikiPreferences]] have already been set to this group (<nop>TWikiAdminGroup), restricting edit of site-wide preferences to the TWiki Administrator Group</li></ol> |
+   
