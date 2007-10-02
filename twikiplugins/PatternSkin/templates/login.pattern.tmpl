@@ -1,16 +1,6 @@
 %TMPL:INCLUDE{"login"}%
 
-%TMPL:DEF{"script:skintemplate"}%
-<script type="text/javascript">
-//<![CDATA[
-	twiki.Event.addLoadEvent(initForm, true);
-	function initForm() {
-		document.loginform.username.focus();
-	}
-//]]>
-</script>%TMPL:END%
-
-%TMPL:DEF{"bodyclassname"}%patternNoViewPage%TMPL:END%
+%TMPL:DEF{"bodyclassname"}%patternNoViewPage patternLoginPage%TMPL:END%
 
 %TMPL:DEF{"pagetitle"}%%TMPL:END%
 

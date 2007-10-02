@@ -23,23 +23,3 @@
 
 %{ Footer for topic attachment table }%
 %TMPL:DEF{ATTACH:files:footer}%%ENDTWISTY%</div><!--//twikiAttachments-->%TMPL:P{ATTACH:files:footer:script}%%TMPL:END%
-
-%TMPL:DEF{ATTACH:files:footer:script}%%TMPL:END%<script type="text/javascript">
-//<![CDATA[
-	var table = document.getElementById("tabletwikiAttachmentsTable");
-	if (table) {
-		var count = table.getElementsByTagName("tr").length - 1;
-		var countStr = " " + "<span class='patternAttachmentCount'>" + " ("  + count + ")" + "<\/span>";
-		var showElem = document.getElementById('topicattachmentslistshow');
-		if (showElem != undefined) {
-			var labelElem = showElem.getElementsByTagName('a')[0].getElementsByTagName('span')[0];
-			labelElem.innerHTML += countStr;
-		}
-		var hideElem = document.getElementById('topicattachmentslisthide');
-		if (hideElem != undefined) {
-			var labelElem = hideElem.getElementsByTagName('a')[0].getElementsByTagName('span')[0];
-			labelElem.innerHTML += countStr;
-		}
-	}
-//]]>
-</script>%TMPL:END%
