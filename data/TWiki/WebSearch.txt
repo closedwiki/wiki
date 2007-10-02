@@ -13,23 +13,15 @@ nosearch="%URLPARAM{nosearch}%"
 zeroresults="%IF{ "defined search" then="on" else="off" }%"
 }%
 
-<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikiHTML.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-	var linkText='<a href="#" onclick="location.hash=\'twikiSearchForm\'; return false;"><span class="twikiLinkLabel twikiSmallish">%MAKETEXT{"Modify search"}%</span></a>';
-	%IF{"defined search" then="twiki.HTML.setHtmlOfElementWithId('twikiModifySearchContainer', '&nbsp;&nbsp;' + linkText);"}%
-//]]>
-</script>
-
 <a name="twikiSearchForm"></a>
 <noautolink>
 <div class="twikiPageForm">
-<form action="%SCRIPTURLPATH{view}%/%INCLUDINGWEB%/%INCLUDINGTOPIC%">
+<form id="twikiWebSearchForm" action="%SCRIPTURLPATH{view}%/%INCLUDINGWEB%/%INCLUDINGTOPIC%">
 <table id="twikiSearchTable" border="0" cellspacing="0" cellpadding="0">
 <tr>
 <td colspan="2" class="twikiFirstRow">
   <input type="text" class="twikiInputField" name="search" value="%URLPARAM{ "search" encode="entity" }%" size="40" /> 
-  <input type="submit" class="twikiSubmit" value='%MAKETEXT{"Search"}%' /><span class="twikiSmall">&nbsp;&nbsp;[[%INCLUDINGWEB%.WebSearchAdvanced][%MAKETEXT{"Advanced search"}%]] | [[%SYSTEMWEB%.SearchHelp][%MAKETEXT{"Help"}%]]</span>
+  <input type="submit" class="twikiSubmit" value='%MAKETEXT{"Search"}%' /><span class="twikiSmall">&nbsp;&nbsp;<a href='%SCRIPTURL{view}%/%INCLUDINGWEB%/WebSearchAdvanced?search=%URLPARAM{search}%;type=%URLPARAM{"type" default="word"}%;scope=%URLPARAM{scope}%;web=%URLPARAM{web}%;nosearch=%URLPARAM{nosearch}%'>%MAKETEXT{"Advanced search"}%</a> | [[%SYSTEMWEB%.SearchHelp][%MAKETEXT{"Help"}%]]</span>
 <div class="twikiSmall" style="padding:1em 0 0 0;">%MAKETEXT{"TIP: to search for all topics that contain =\"SOAP\"=, =\"WSDL\"=, a literal =\"web service\"=, but not =\"shampoo\"=, write:"}% <code>soap wsdl "web service" -shampoo</code></div>
 </td>
 </tr>
