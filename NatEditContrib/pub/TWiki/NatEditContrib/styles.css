@@ -17,8 +17,14 @@ ul.natEditHelpTools {
 ul.natEditHelpTools {
   float:right;
 }
-.natEditToolBar li {
+.natEditToolBarReduced {
+  float:right;
+}
+
+.natEditToolBar ul li {
   display:inline;
+  padding:0px;
+  margin:0px;
 }
 .natEditToolBar ul li a span {
   display:none;

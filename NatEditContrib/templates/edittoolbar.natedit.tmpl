@@ -1,7 +1,9 @@
-%TMPL:DEF{"edittoolbar"}%<div class="natEditToolBar">
+%TMPL:DEF{"edittoolbar"}%%TMPL:P{context="WysiwygPluginEnabled" then="reduced_edittoolbar" else="full_edittoolbar"}%<br clear="both" />%TMPL:END%
+
+%TMPL:DEF{"full_edittoolbar"}%<div class="natEditToolBar natEditToolBarFull">
 %TMPL:P{"helptools"}%
-%TMPL:P{"texttools"}%
 %TMPL:P{"headlinetools"}% 
+%TMPL:P{"texttools"}%
 %TMPL:P{"paragraphtools"}% 
 %TMPL:P{"objecttools"}% 
 %TMPL:P{"edittools"}%
@@ -9,14 +11,27 @@
 %TMPL:P{"forcenewrevision"}%
 </div>%TMPL:END%
 
+%TMPL:DEF{"reduced_edittoolbar"}%<div class="natEditToolBar natEditToolBarReduced">
+%TMPL:P{"edittools"}%
+%TMPL:P{"exittools"}%
+%TMPL:P{"forcenewrevision"}%</div>%TMPL:END%
+
+%TMPL:DEF{"natedittoolbar"}%
+%TMPL:P{"helptools"}%
+%TMPL:P{"headlinetools"}% 
+%TMPL:P{"texttools"}%
+%TMPL:P{"paragraphtools"}% 
+%TMPL:P{"objecttools"}% 
+%TMPL:P{"edittools"}%
+%TMPL:P{"exittools"}%
+%TMPL:P{"forcenewrevision"}%%TMPL:END%
+
 %TMPL:DEF{"texttools"}%<ul class="natEditTextTools">
 %TMPL:P{"boldbutton"}%
 %TMPL:P{"italicbutton"}%
 %TMPL:P{"monobutton"}%
 %TMPL:P{"underlinebutton"}%
 %TMPL:P{"strikebutton"}%
-%TMPL:P{"subbutton"}%
-%TMPL:P{"superbutton"}%
 </ul>%TMPL:END%
 
 %TMPL:DEF{"boldbutton"}%<li class="natEditBoldButton"><a accesskey="b" href="javascript:natEditBoldButtonAction()" title="%MAKETEXT{"Bold"}%"><span>%MAKETEXT{"Bold"}%</span></a></li>%TMPL:END%
@@ -91,7 +106,6 @@
 </ul>%TMPL:END%
 
 %TMPL:DEF{"helpbutton"}%<li class="natEditHelpButton"><a accesskey="?" href="javascript:launchWindow('%SYSTEMWEB%', 'TextFormattingRules')" title='%MAKETEXT{"Help"}%'/><span>%MAKETEXT{"Help"}%</span></a></li>%TMPL:END%
-
 
 %TMPL:DEF{"tablebutton"}%<li class="natEditTableButton"><a id="natEditTableButtonLink"  accesskey="1" href="javascript:natEditTableButtonAction()" title="%MAKETEXT{"Add Table"}%"><span>%MAKETEXT{"Table"}%</span></a></li>%TMPL:END%
 %TMPL:DEF{"numberedbutton"}%<li class="natEditNumberedButton"><a accesskey="1" href="javascript:natEditNumberedButtonAction()" title="%MAKETEXT{"Numbered List"}%"><span>%MAKETEXT{"Numbered List"}%</span></a></li>%TMPL:END%
