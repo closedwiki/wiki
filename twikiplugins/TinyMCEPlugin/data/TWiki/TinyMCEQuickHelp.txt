@@ -1,110 +1,126 @@
 ---+!! !TinyMCE Editor Help Summary 
 %STARTINCLUDE%
 <table>
-  <tr>
-    <td colspan="2">
----+++ Format 
-    </td>
-  </tr>
-  <tr>
-    <td style="vertical-align:top;">
-     <img src="%ATTACHURLPATH%/Format_Drop_Down.png" alt="Format_Drop_Down.png" width='92' height='151' />
-    </td>
-    <td style="vertical-align:top;">
-   * ==Paragraph== - Normal text style
-   * ==Address== - Address style is normally shown as italic in most browsers
-   * ==Preformatted== - Puts text inside &lt;pre&gt; HTML tags. Shown as monospace but TWiki variables are working inside a preformatted area. To show text raw and uninterpreted use the VERBATIM Style.
-   * ==Heading 1-6== - Headings. 1 is largest.
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2">
----+++ Styles
-    </td>
-  </tr>
-  <tr>
-    <td style="vertical-align:top;">
-     <img src="%ATTACHURLPATH%/Styles_Drop_Down.png" alt="Styles_Drop_Down.png" />
-    </td>
-    <td style="vertical-align:top;">
-   * ==--Styles--== Use this to remove a style in the selected text
-   * ==NOAUTOLINK== - Wraps &lt;noautolink&gt; tags around the selected text. Prevents !WikiWords from becoming links.
-   * ==VERBATIM== - Wraps &lt;verbatim&gt; tags around the selected text. Verbatim text is shown in monospace with line breaks. No TWiki Variables are interpreted inside verbatim tags.
-   * ==PROTECTED== - Text is saved exactly as it is typed. Use this to save advanced TWiki Variables where you do not want the Wysiwyg editor to interpret or modify the text.
-   * ==LITERAL== - HTML is saved exactly as it appears in the editor. Wraps thee HTML in &lt;literal> tags.
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2">
----+++ Indent
-    </td>
-  </tr>
-  <tr>
-    <td style="vertical-align:top; ">
-     <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/indent.gif" alt="indent.gif" />
-     <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/outdent.gif" alt="outdent.gif" />
-    </td>
-    <td>
-   * Change the indent of list items.
-   * You cannot indent normal text the same way as you do in a word processor. 
-      * The indent icon puts the selected text inside &lt;BLOCKQUOTE&gt; tags. 
-      * The default TWiki skin shows the text indented with a blue background. Unindenting turns the text into normal text.
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2">
----+++ Links
-    </td>
-  </tr>
-  <tr>
-    <td style="vertical-align:top; ">
-     <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/link.gif" alt="link.gif" alt="link.gif" />
-     <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/link.gif" alt="link.gif" alt="unlink.gif" />
-    </td>
-    <td>
-   * Links can either point to a URL or to the name of a TWiki topic.
-   * E.g. =http://twiki.org=, =TopicNames=, =Webname.TopicNames=, or =Webname.Subweb.WebName=.
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2">
----+++ Images
-    </td>
-  </tr>
-  <tr>
-    <td style="vertical-align:top; ">
-     <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/image.gif" alt="image.gif" />
-    </td>
-    <td>
-   * Type the name of an image file that you have attached to the current topic. You can also put a real URL as an image link.
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2">
----+++ Anchors
-    </td>
-  </tr>
-  <tr>
-    <td style="vertical-align:top; ">
-     <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/anchor.gif" alt="anchor.gif" />
-    </td>
-    <td>
-   * An anchor is a hidden mark you can use to link to a certain part of a topic, e.g a heading or a paragraph. An anchor must be a !WikiWord.
-    </td>
-  </tr>
+ <tr>
+  <td colspan="2">
+   <h3> Format </h3>
+  </td>
+ </tr>
+ <tr>
+  <td style="vertical-align:top;">
+   <img src="%ATTACHURLPATH%/Format_Drop_Down.png" alt="Format_Drop_Down.png" width='92' height='151' />
+  </td>
+  <td style="vertical-align:top">
+   <ul>
+    <li> ==Paragraph== - Normal text style </li>
+    <li> ==Address== - Address style is normally shown as italic in most browsers </li>
+    <li> ==Preformatted== - Puts text inside &lt;pre&gt; HTML tags. Shown as monospace but TWiki variables are working inside a preformatted area. To show text raw and uninterpreted use the VERBATIM Style. </li>
+    <li> ==Heading 1-6== - Headings. 1 is largest. </li>
+   </ul>
+  </td>
+ </tr>
+ <tr>
+  <td colspan="2">
+   <h3> Styles </h3>
+  </td>
+ </tr>
+ <tr>
+  <td style="vertical-align:top;">
+   <img src="%ATTACHURLPATH%/Styles_Drop_Down.png" alt="Styles_Drop_Down.png" />
+  </td>
+  <td style="vertical-align:top;"><ul>
+   <li> ==--Styles--== Use this to remove a style in the selected text </li>
+   <li> ==NOAUTOLINK== - Wraps &lt;noautolink&gt; tags around the selected text. Prevents !WikiWords from becoming links. </li>
+   <li> ==VERBATIM== - Wraps &lt;verbatim&gt; tags around the selected text. Verbatim text is shown in monospace with line breaks. No TWiki Variables are interpreted inside verbatim tags. </li>
+   <li> ==PROTECTED== - Text is saved exactly as it is typed. Use this to save advanced TWiki Variables where you do not want the Wysiwyg editor to interpret or modify the text. </li>
+   <li> ==LITERAL== - HTML is saved exactly as it appears in the editor. Wraps thee HTML in &lt;literal> tags. </li></ul>
+  </td>
+ </tr>
+ <tr>
+  <td colspan="2">
+   <h3> Indent </h3>
+  </td>
+ </tr>
+ <tr>
+  <td style="vertical-align:top; ">
+   <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/indent.gif" alt="indent.gif" />
+   <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/outdent.gif" alt="outdent.gif" />
+  </td>
+  <td>
+   <ul>
+    <li> Change the indent of list items. </li>
+    <li> You cannot indent normal text the same way as you do in a word processor.  </li>
+    <li> The indent icon puts the selected text inside &lt;BLOCKQUOTE&gt; tags.  </li>
+    <li> The default TWiki skin shows the text indented with a blue background. Unindenting turns the text into normal text. </li>
+   </ul>
+  </td>
+ </tr>
+ <tr>
+  <td colspan="2">
+   <h3> Links </h3>
+  </td>
+ </tr>
+ <tr>
+  <td style="vertical-align:top; ">
+   <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/link.gif" alt="link.gif" alt="link.gif" />
+   <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/link.gif" alt="link.gif" alt="unlink.gif" />
+  </td>
+  <td>
+   <ul>
+    <li> Links can either point to a URL or to the name of a TWiki topic. </li>
+    <li> E.g. =http://twiki.org=, =TopicNames=, =Webname.TopicNames=, or =Webname.Subweb.WebName=. </li>
+   </ul>
+  </td>
+ </tr>
+ <tr>
+  <td colspan="2">
+   <h3> Images </h3>
+  </td>
+ </tr>
+ <tr>
+  <td style="vertical-align:top; ">
+   <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/image.gif" alt="image.gif" />
+  </td>
+  <td>
+   <ul>
+    <li> Type the name of an image file that you have attached to the current topic. You can also put a real URL as an image link. </li>
+   </ul>
+  </td>
+ </tr>
+ <tr>
+  <td colspan="2">
+   <h3> Anchors </h3>
+  </td>
+ </tr>
+ <tr>
+  <td style="vertical-align:top; ">
+   <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/anchor.gif" alt="anchor.gif" />
+  </td>
+  <td>
+   <ul>
+    <li> An anchor is a hidden mark you can use to link to a certain part of a topic, e.g a heading or a paragraph. An anchor must be a !WikiWord. </li>
+   </ul>
+  </td>
+ </tr>
 </table>
----+++ Setting a TWiki variable
-   1 Create a list item using the toolbar button
-   1 In the list item, type =Set NAME = value=
-   1 (Optional) Select the value, and assign the ==PROTECTED== style to it.
-      * Step 3 is required if the value contains any TWiki Markup Language or if you style it e.g. to add bold, or if it's sensitive to the correct number of spaces.
+<h3> Setting a TWiki variable </h3>
+<ol>
+ <li> Create a list item using the toolbar button</li>
+ <li> In the list item, type =Set NAME = value= </li>
+ <li> (Optional) Select the value, and assign the ==PROTECTED== style to it.
+  <ul>
+   <li> Step 3 is required if the value contains any TWiki Markup Language or if you style it e.g. to add bold, or if it's sensitive to the correct number of spaces.
+   </li>
+  </ul>
+ </li>
+</ol>
 
----+++ Using a TWiki Variable
-   * Just type it in. When the topic is saved, what you type will be saved just as you wrote it. 
-   * If any part of your variable parameters is sensitive to spacing, then select the entire TWiki variable and assign the ==PROTECTED== style to it before you save.
+<h3> Using a TWiki Variable </h3><ul>
+<li> Just type it in. When the topic is saved, what you type will be saved just as you wrote it.  </li>
+<li> If any part of your variable parameters is sensitive to spacing, then select the entire TWiki variable and assign the ==PROTECTED== style to it before you save. </li></ul>
 
----+++ Editing the raw text instead of Wysiwyg
-   * Use the _Raw Edit_ link at the bottom action bar.
+<h3> Editing the raw text instead of Wysiwyg </h3><ul>
+<li> Use the _Raw Edit_ link at the bottom action bar. </li></ul>
 %STOPINCLUDE%
 
 %META:FILEATTACHMENT{name="Format_Drop_Down.png" attr="" comment="" version="1"}%

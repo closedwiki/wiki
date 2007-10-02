@@ -136,7 +136,7 @@ HERE
     my $metainit = TWiki::Func::expandCommonVariables($init);
     $metainit =~ s/([^0-9a-zA-Z-_.:~!*'\/%])/'%'.sprintf('%02x',ord($1))/ge;
     TWiki::Func::addToHEAD('tinyMCE', <<SCRIPT);
-<meta name="TINYMCEPLUGIN_INIT" content="$metainit">
+<meta name="TINYMCEPLUGIN_INIT" content="$metainit" />
 <script language="javascript" type="text/javascript" src="$tmceURL/tiny_mce$USE_SRC.js"></script>
 <script language="javascript" type="text/javascript" src="$pluginURL/twiki$USE_SRC.js"></script>
 SCRIPT
