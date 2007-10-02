@@ -111,7 +111,7 @@ th.twikiSortedAscendingCol {
   text-decoration:none;
   font-weight:bold;
 }
-#natEditTextArea,
+.natEditTextArea,
 .twikiPageForm textarea,
 .twikiPageForm input {
   border:1px #ccc solid;
@@ -650,3 +650,14 @@ h2.natSideBarTitle {
 .clsTagCloud a {
   text-decoration:none;
 }
+
+/* HistoryPlugin */
+.natOopsHistoryBody form {
+  margin:0px 10px 10px 0px;
+  padding:5px 10px;
+  border:1px #ccc solid;
+  background-image:url(GrayBlend.png);
+  background-repeat:repeat-x;
+  background-position:0px 0px;
+}
+

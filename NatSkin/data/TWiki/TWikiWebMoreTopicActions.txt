@@ -11,7 +11,7 @@
   <td valign="top">
     <ul><li>%MAKETEXT{"Edit preference settings for [_1]" args="[[%BASEWEB%.%BASETOPIC%]]"}%</li></ul>
   </td>
-  <td><input type="submit" class="natAltButton" value='%MAKETEXT{"Edit"}%'>
+  <td><input type="submit" class="natOkButton" value='%MAKETEXT{"Edit"}%'>
     <p />
     <input type="button" class="natCancelButton" value='%MAKETEXT{"Cancel"}%' onclick="window.location.href = '%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%';">
   </td>
@@ -87,10 +87,7 @@
   <li>%MAKETEXT{"Get a fresh page of the topic [_1]" args="[[%BASEWEB%.%BASETOPIC%]]"}%&nbsp;</li>
 </ul>
 <td>
-  <form action="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%" method="post">
-  <input type="hidden" name="refresh" value="on" />
-  <input type="submit" class="natAltButton" value='%MAKETEXT{"Refresh"}%' />
-  </form>
+  <input type="button" class="natAltButton" onclick="window.location.href='%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%?refresh=on'" value='%MAKETEXT{"Refresh"}%' />
 </td>
 </tr>
 <tr style="%IF{"not {Cache}{Enabled}" then="display:none"}%">

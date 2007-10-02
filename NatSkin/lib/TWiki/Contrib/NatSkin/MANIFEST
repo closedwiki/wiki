@@ -194,6 +194,7 @@ templates/oopsblacklist.nat.tmpl 0644
 templates/oopschangepasswd.nat.tmpl 0644
 templates/oopsempty.nat.tmpl 0644
 templates/oopserrbase.nat.tmpl 0644
+templates/oopshistory.nat.tmpl 0644
 templates/oopslanguagechanged.nat.tmpl 0644
 templates/oopsleaseconflict.nat.tmpl 0644
 templates/oopslocked.nat.tmpl 0644

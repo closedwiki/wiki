@@ -4,7 +4,7 @@
 
 Standard links in sidebar navigation. 
 
-%STARTINCLUDE%<!-- twiki.twikiweblinks -->%IFDEFINEDTHEN{"%BASEWEB%" as="%SYSTEMWEB%|%USERSWEB%" glue="off"}%%ELSEDEFINED%
+%STARTINCLUDE%%IFDEFINEDTHEN{"%BASEWEB%" as="%SYSTEMWEB%|%USERSWEB%" glue="off"}%%ELSEDEFINED%
    * [[%BASEWEB%.WebTopicCreator][%MAKETEXT{"New Topic"}%]]%FIDEFINED%
    * [[%BASEWEB%.WebTopicList][%MAKETEXT{"Index"}%]]
    * [[%BASEWEB%.WebChanges][%MAKETEXT{"Changes"}%]]
@@ -12,5 +12,4 @@ Standard links in sidebar navigation.
    * [[%BASEWEB%.WebStatistics][%MAKETEXT{"Statistics"}%]]
 %IFDEFINEDTHEN{"%IFACCESS{"%BASEWEB%.WebPreferences" type="change"}%" as="1"}%
    * [[%BASEWEB%.WebPreferences][%MAKETEXT{"Preferences"}%]]
-%FIDEFINED% 
-<!--  //twiki.twikiweblinks -->%STOPINCLUDE%
+%FIDEFINED%%STOPINCLUDE%

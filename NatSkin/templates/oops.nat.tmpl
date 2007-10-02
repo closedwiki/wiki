@@ -1,10 +1,9 @@
-%TMPL:INCLUDE{"page"}%
-<!-- template: oops.nat.tmpl -->
-<!-- -->%TMPL:INCLUDE{"oopsbody"}%
-<!-- -->%TMPL:INCLUDE{"oopstopicactions"}%
-<!-- -->%TMPL:INCLUDE{"oopssidebar"}%
-<!-- -->%TMPL:INCLUDE{"oopsjavascript"}%
-<!-- -->%TMPL:INCLUDE{"oopsstyles"}%
+%TMPL:INCLUDE{"page"}%<!-- template: oops.nat.tmpl -->
+%TMPL:INCLUDE{"oopsbody"}%<!-- -->
+%TMPL:INCLUDE{"oopstopicactions"}%<!-- -->
+%TMPL:INCLUDE{"oopssidebar"}%<!-- -->
+%TMPL:INCLUDE{"oopsjavascript"}%<!-- -->
+%TMPL:INCLUDE{"oopsstyles"}%<!-- -->
 %TMPL:DEF{"bodyclass"}%natOopsBody%TMPL:END%
 %TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"oops"}%)%TMPL:END%
 %TMPL:DEF{"meta"}% <meta name="robots" content="noindex, nofollow" /> %TMPL:END%
@@ -17,7 +16,7 @@
 
 <form class="natOopsButtons" name="ButtonBox" action="%WIKILOGOURL%">
   <input type="button" class="natOkButton" value='%MAKETEXT{"OK"}%' onclick="history.back()" />&nbsp;
-  <input type="submit" class="natCancelButton"  value='%MAKETEXT{"Cancel"}%' />
+  <input type="button" class="natCancelButton"  value='%MAKETEXT{"Cancel"}%' onclick="window.location.href='%WIKILOGOURL%'"/>
 </form> %TMPL:END%
 %TMPL:DEF{"content"}%<div class="natOops">
 <div class="natOopsMessage">

@@ -4,16 +4,14 @@
 
 Sidebar navigation in the %WEB% web. See also the %SYSTEMWEB%.TWikiWebLinks
 
-%STARTINCLUDE% <!-- -->
+%STARTINCLUDE%<!-- main.weblinks -->
    * [[%SYSTEMWEB%.WelcomeGuest][%MAKETEXT{"Welcome"}%]]
-   * [[%TWIKIREGISTRATION%][%MAKETEXT{"Registration"}%]]
-   * %IF{"istopic '%USERSWEB%.TWikiUsers'" else="$percntMAKETEXT{\"Users\"}$percnt" then="[[$percntUSERSWEB$percnt.TWikiUsers][$percntMAKETEXT{\"Users\"}$percnt]]"}%
+   * [[%TWIKIREGISTRATION%][%MAKETEXT{"Registration"}%]] %IFDEFINEDTHEN{"%IFEXISTS{"%USERSWEB%.%WIKIUSERSTOPIC%"}%" glue="off"}%
+   * [[%USERSWEB%.%WIKIUSERSTOPIC%][%MAKETEXT{"Users"}%]] %FIDEFINED%
    * [[%USERSWEB%.TWikiGroups][%MAKETEXT{"Groups"}%]]
-   * [[%SYSTEMWEB%.ChangePassword][%MAKETEXT{"Password"}%]]%WEBCOMPONENT{"TWikiWebLinks"}%
-%IFDEFINEDTHEN{"%IFACCESS{"%LOCALSITEPREFS%" type="change"}%" as="1"}%<!-- -->
-   * [[%LOCALSITEPREFS%][%MAKETEXT{"SitePreferences"}%]]
-%FIDEFINED%
-%STOPINCLUDE%
+   * [[%SYSTEMWEB%.ChangePassword][%MAKETEXT{"Password"}%]]%WEBCOMPONENT{"TWikiWebLinks"}% %IFDEFINEDTHEN{"%IFACCESS{"%LOCALSITEPREFS%" type="change"}%" as="1"}%
+   * [[%LOCALSITEPREFS%][%MAKETEXT{"SitePreferences"}%]] %FIDEFINED%
+<!-- //main.weblinks -->%STOPINCLUDE%
 
 
 <!--
