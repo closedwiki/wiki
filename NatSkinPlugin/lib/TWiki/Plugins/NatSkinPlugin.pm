@@ -51,7 +51,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '3.00-pre15';
+$RELEASE = '3.00-pre16';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Supplements the bare bones NatSkin theme for TWiki';
 
@@ -191,7 +191,7 @@ sub doInit {
     &TWiki::Func::clearSessionValue('STYLESEARCHBOX');
 
     #TWiki::Func::writeWarning("NatSkinPlugin used with skin $skin");
-    $isEnabled = 0; # disable the plugin if it is used with a foreign skin, i.e. kupu
+    $isEnabled = 0; # disable the plugin if it is used with a foreign skin
     writeDebug("... disabled");
     return 0;
   } 
@@ -873,13 +873,7 @@ sub renderUserActions {
     my $whiteBoard = TWiki::Func::getPreferencesValue('WHITEBOARD');
     $whiteBoard = TWiki::isTrue($whiteBoard, 1); # too bad getPreferencesFlag does not have a default param
     my $editUrlParams = '';
-    my $useWysiwyg = TWiki::Func::getPreferencesFlag('USEWYSIWYG');
-    if (defined $TWiki::cfg{Plugins}{WysiwygPlugin} &&
-	$TWiki::cfg{Plugins}{WysiwygPlugin}{Enabled} && $useWysiwyg) {
-      $editUrlParams = '&skin=kupu';
-    }  else {
-      $editUrlParams = '&action=form' unless $whiteBoard;
-    }
+    $editUrlParams = '&action=form' unless $whiteBoard;
     $editString = 
       '<a class="natEditTopicAction" rel="nofollow" href="'
       . &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "edit") 
@@ -912,10 +906,12 @@ sub renderUserActions {
   }
   
   # get strings for diff, print, more, login, register
+  my $diffTemplate = $session->inContext("HistoryPluginEnabled")?'oopshistory':'oopsrev';
   $diffString =
       '<a class="natDiffTopicAction" rel="nofollow" href="' . 
       &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "oops") . 
-      '?template=oopsrev&param1=%PREVREV%&param2=%CURREV%&param3=%NATMAXREV%" accesskey="d" title="'.
+      '?template='.$diffTemplate.
+      '&param1=%PREVREV%&param2=%CURREV%&param3=%NATMAXREV%" accesskey="d" title="'.
       '%TMPL:P{"DIFF_HELP"}%"><span>%TMPL:P{"DIFF"}%</span></a>';
 
   $moreString =
