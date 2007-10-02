@@ -71,6 +71,7 @@ sub new {
     $this = bless( $this, $class );
 
     $this->xml_mode( 1 );
+    $this->empty_element_tags( 1 );
     $this->unbroken_text( 1 );
 
     return $this;
