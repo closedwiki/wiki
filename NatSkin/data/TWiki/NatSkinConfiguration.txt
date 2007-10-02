@@ -101,19 +101,6 @@ to your %SYSTEMWEB%.TWikiPreferences like
   * Set OBFUSCATEEMAIL = on
 </verbatim>
 
----+++ <nop>WysiwygPlugin support
-When the TWiki:Plugins/WysiwygPlugin is installed on your <nop>%WIKITOOLNAME% installation
-the "Edit" topicaction can be enabled to start the Kupu wysiwyg html editor instead of the 
-normal TWiki textarea by setting the USEWYSIWYG variable to "on" (in your %WIKIUSERNAME% topic,
-WebPreferences or %SYSTEMWEB%.TWikiPreferences) 
-
-<verbatim>
-  * Set USEWYSIWYG = off
-</verbatim>
-
-By default this value is set to "off"
-
-
 ---++ Misc preference variables
 There is a set of variables that can be used influence how NatSkin behaves or renders pages.
 
