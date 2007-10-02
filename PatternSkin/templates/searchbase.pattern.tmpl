@@ -2,27 +2,7 @@
 
 
 
-%TMPL:DEF{"count"}%<div class="patternSearchResultCount" id="twikiBottomResultCount">%MAKETEXT{"Number of topics:"}% <b>%NTOPICS%</b></div><!--/patternSearchResultCount-->
-<script type="text/javascript">
-// write results at the top
-//<![CDATA[
-	var results;
-	if (!results) results = [];
-	results.push(%NTOPICS%);
-	var total=0;
-	for (var i=0; i<results.length; ++i) {
-		total += results[i];
-	}
-	var text = "<br />" + "%MAKETEXT{"Number of topics:"}%" + " <b>" + total + " <\/b>";
-	var elem = document.getElementById('twikiNumberOfResultsContainer');
-	if (elem) {
-		elem.innerHTML = text;
-		if (total < 10) {
-			elem.innerHTML = '';
-		}
-	}
-//]]>
-</script>%TMPL:END%
+%TMPL:DEF{"count"}%<div class="patternSearchResultCount" class="twikiBottomResultCount">%MAKETEXT{"Number of topics:"}% <b><span class="twikiSearchResultCount">%NTOPICS%</span></b></div><!--/patternSearchResultCount-->%TMPL:END%
 
 
 
