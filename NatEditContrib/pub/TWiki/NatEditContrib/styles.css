@@ -17,8 +17,8 @@ ul.natEditHelpTools {
 ul.natEditHelpTools {
   float:right;
 }
-.natEditToolBarReduced {
-  float:right;
+.natEditToolBar {
+  visibility:hidden; /* becomes visible during load event */
 }
 
 .natEditToolBar ul li {

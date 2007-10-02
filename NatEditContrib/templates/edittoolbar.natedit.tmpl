@@ -1,6 +1,4 @@
-%TMPL:DEF{"edittoolbar"}%%TMPL:P{context="WysiwygPluginEnabled" then="reduced_edittoolbar" else="full_edittoolbar"}%<br clear="both" />%TMPL:END%
-
-%TMPL:DEF{"full_edittoolbar"}%<div class="natEditToolBar natEditToolBarFull">
+%TMPL:DEF{"edittoolbar"}%<div class="natEditToolBar" id="natEditToolBar">
 %TMPL:P{"helptools"}%
 %TMPL:P{"headlinetools"}% 
 %TMPL:P{"texttools"}%
@@ -10,11 +8,6 @@
 %TMPL:P{"exittools"}%
 %TMPL:P{"forcenewrevision"}%
 </div>%TMPL:END%
-
-%TMPL:DEF{"reduced_edittoolbar"}%<div class="natEditToolBar natEditToolBarReduced">
-%TMPL:P{"edittools"}%
-%TMPL:P{"exittools"}%
-%TMPL:P{"forcenewrevision"}%</div>%TMPL:END%
 
 %TMPL:DEF{"natedittoolbar"}%
 %TMPL:P{"helptools"}%
@@ -26,7 +19,7 @@
 %TMPL:P{"exittools"}%
 %TMPL:P{"forcenewrevision"}%%TMPL:END%
 
-%TMPL:DEF{"texttools"}%<ul class="natEditTextTools">
+%TMPL:DEF{"texttools"}%<ul class="natEditTextTools" name="hide_in_wysiwyg">
 %TMPL:P{"boldbutton"}%
 %TMPL:P{"italicbutton"}%
 %TMPL:P{"monobutton"}%
@@ -42,7 +35,7 @@
 %TMPL:DEF{"subbutton"}%<li class="natEditSubButton"><a accesskey="l" href="javascript:natEditSubButtonAction()" title="%MAKETEXT{"Subscript"}%"><span>%MAKETEXT{"Subscript"}%</span></a></li>%TMPL:END%
 %TMPL:DEF{"superbutton"}%<li class="natEditSupButton"><a accesskey="^" href="javascript:natEditSupButtonAction()" title="%MAKETEXT{"Superscript"}%"><span>%MAKETEXT{"Superscript"}%</span></a></li>%TMPL:END%
 
-%TMPL:DEF{"headlinetools"}%<ul class="natEditHeadlineTools">
+%TMPL:DEF{"headlinetools"}%<ul class="natEditHeadlineTools" name="hide_in_wysiwyg">
 %TMPL:P{"h1button"}%
 %TMPL:P{"h2button"}%
 %TMPL:P{"h3button"}%
@@ -54,7 +47,7 @@
 %TMPL:DEF{"h3button"}%<li class="natEditH3Button"><a accesskey="3" href="javascript:natEditHeadlineButtonAction(3)" title="%MAKETEXT{"Level 3 headline"}%"><span>%MAKETEXT{"H3"}%</span></a></li>%TMPL:END%
 %TMPL:DEF{"h4button"}%<li class="natEditH4Button"><a accesskey="4" href="javascript:natEditHeadlineButtonAction(4)" title="%MAKETEXT{"Level 4 headline"}%"><span>%MAKETEXT{"H4"}%</span></a></li>%TMPL:END%
 
-%TMPL:DEF{"paragraphtools"}%<ul class="natEditParagraphTools">
+%TMPL:DEF{"paragraphtools"}%<ul class="natEditParagraphTools" name="hide_in_wysiwyg">
 %TMPL:P{"leftbutton"}%
 %TMPL:P{"centerbutton"}%
 %TMPL:P{"rightbutton"}%
@@ -66,7 +59,7 @@
 %TMPL:DEF{"rightbutton"}%<li class="natEditRightButton"><a accesskey="&gt;" href="javascript:natEditRightButtonAction()" title="%MAKETEXT{"Align right"}%"><span>%MAKETEXT{"Right"}%</span></a></li>%TMPL:END%
 %TMPL:DEF{"justifybutton"}%<li class="natEditJustifyButton"><a accesskey="j" href="javascript:natEditJustifyButtonAction()" title="%MAKETEXT{"Justify text"}%"><span>%MAKETEXT{"Justify"}%</span></a></li>%TMPL:END%
 
-%TMPL:DEF{"objecttools"}%<ul class="natEditObjectTools">
+%TMPL:DEF{"objecttools"}%<ul class="natEditObjectTools" name="hide_in_wysiwyg">
 %TMPL:P{"extbutton"}%
 %TMPL:P{"intbutton"}%
 %TMPL:P{"imagebutton"}%%TMPL:P{context="MathModePluginEnabled" then="mathbutton"}%
@@ -101,7 +94,7 @@
 
 %TMPL:DEF{"forcenewrevision"}%<ul class="natEditOptionTools"><li class="natEditForceNewRevision"><label for="forcenewrevision"><input type="checkbox" title="Creates a new topic revision when saving" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% />%MAKETEXT{"New revision"}%</label></li></ul>%TMPL:END%
 
-%TMPL:DEF{"helptools"}%<ul class="natEditHelpTools">
+%TMPL:DEF{"helptools"}%<ul class="natEditHelpTools" name="hide_in_wysiwyg">
 %TMPL:P{"helpbutton"}%
 </ul>%TMPL:END%
 
@@ -112,7 +105,3 @@
 %TMPL:DEF{"bulletbutton"}%<li class="natEditBulletButton"><a accesskey="1" href="javascript:natEditBulletButtonAction()" title="%MAKETEXT{"List"}%"><span>%MAKETEXT{"List"}%</span></a></li>%TMPL:END%
 %TMPL:DEF{"indentbutton"}%<li class="natEditIndentButton"><a accesskey="1" href="javascript:natEditIndentButtonAction()" title="%MAKETEXT{"Indent List"}%"><span>%MAKETEXT{"Indent"}%</span></a></li>%TMPL:END%
 %TMPL:DEF{"undentbutton"}%<li class="natEditUndentButton"><a accesskey="1" href="javascript:natEditUndentButtonAction()" title="%MAKETEXT{"Undent List"}%"><span>%MAKETEXT{"Undent"}%</span></a></li>%TMPL:END%
-
-
-
-
