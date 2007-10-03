@@ -363,6 +363,9 @@ sub _getRenderedVersion {
             $this->_addListItem( \@result, 'ol', 'li', $1, $ot );
             $inList = 1;
 
+        } elsif ($inList && $line =~ /^[ \t]/) {
+            # Extend text of previous list item by dropping through
+
         } else {
             # Other line
             $this->_addListItem( \@result, '', '', '' ) if $inList;

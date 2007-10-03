@@ -1386,6 +1386,25 @@ C
 </p>
 DECAPS
       },
+      {
+          exec => $TML2HTML,
+          name => 'Item4763',
+          tml => <<SPACED,
+   1 One item
+     spanning several lines
+   1 And another item
+ with one space
+No more
+SPACED
+          html => <<DECAPS,
+<ol>
+<li> One item     spanning several lines
+
+</li> <li> And another item with one space
+</li></ol> 
+No more
+DECAPS
+      },
      ];
 
 sub gen_compare_tests {
