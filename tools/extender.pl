@@ -508,7 +508,7 @@ HERE
     }
 
     my $url = "$PACKAGES_URL/$module/$module";
-    my $downloadDir = '.';
+    my $downloadDir = $installationRoot;
 
     if ($ENV{TWIKI_PACKAGES} && -d $ENV{TWIKI_PACKAGES}) {
         # see if we can write in $TWIKI_PACKAGES
@@ -673,6 +673,7 @@ sub untar {
 
     eval 'use Archive::Tar';
     unless ( $@ ) {
+print STDERR `pwd;ls`;
         my $tar = Archive::Tar->new( $archive, $compressed );
         unless ( $tar ) {
             print STDERR "Could not open tar file $archive\n";
