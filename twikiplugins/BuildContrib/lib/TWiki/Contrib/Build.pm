@@ -713,7 +713,10 @@ sub target_test {
         }
     }
     unless($testrunner) {
-        warn 'WARNING: CANNOT RUN TESTS; TestRunner.pl not found';
+        warn <<MESSY;
+WARNING: CANNOT RUN TESTS; TestRunner.pl not found.
+Did you remember to install UnitTestContrib?
+MESSY
         return;
     }
     my $inc = join(' -I', @INC);

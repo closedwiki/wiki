@@ -8,9 +8,9 @@ script will build the BuildContrib-enabled extension named in the
 first parameter. The second parameter is the build target for the extension.
 
 Examples:
-perl build.pl ActionTrackerPlugin
-perl build.pl SubscribePlugin upload
-for f in FirstPlugin SecondPlugin; do perl build.pl $f release; done
+$ perl build.pl ActionTrackerPlugin
+$ perl build.pl SubscribePlugin upload
+$ for f in FirstPlugin SecondPlugin; do perl build.pl $f release; done
 DOC
     exit 1;
 }
