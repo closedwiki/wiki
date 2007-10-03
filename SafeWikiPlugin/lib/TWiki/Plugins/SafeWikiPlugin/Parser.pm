@@ -30,6 +30,22 @@ sub parseHTML {
     return $this->{stackTop};
 }
 
+sub stringify {
+    my $this = shift;
+    my $s;
+
+    if ($this->{stackTop}) {
+        $s = "0: ".$this->{stackTop}->stringify();
+        my $n = 1;
+        foreach my $entry (reverse @{$this->{stack}}) {
+            $s .= "\n".($n++).': '.$entry->stringify();
+        }
+    } else {
+        $s = 'empty stack';
+    }
+    return $s;
+}
+
 sub _resetStack {
     my $this = shift;
 
@@ -61,7 +77,7 @@ sub _closeTag {
     if ($TWiki::cfg{Plugins}{SafeWikiPlugin}{CheckPurity}) {
         if (!$this->{stackTop} || $this->{stackTop}->{tag} ne $tag) {
             die "Unclosed <$this->{stackTop}->{tag} at </$tag\n".
-              $this->{stackTop}->stringify();
+              $this->stringify();
         }
     }
     $this->_apply( $tag );
@@ -72,7 +88,8 @@ sub _text {
     return unless length($text);
     my $l = new TWiki::Plugins::SafeWikiPlugin::Leaf($text);
     if (defined $this->{stackTop}) {
-        die "Unexpected leaf" if $this->{stackTop}->isLeaf();
+        die "Unexpected leaf: ".$this->stringify()
+          if $this->{stackTop}->isLeaf();
         $this->{stackTop}->addChild( $l );
     } else {
         $this->{stackTop} = $l;
@@ -92,8 +109,10 @@ sub _apply {
     while( $this->{stack} && scalar( @{$this->{stack}} )) {
         my $top = $this->{stackTop};
         $this->{stackTop} = pop( @{$this->{stack}} );
-        die unless $this->{stackTop};
-        die if $this->{stackTop}->isLeaf();
+        die 'Stack underflow: '.$this->stringify()
+          unless $this->{stackTop};
+        die 'Stack top is leaf: '.$this->stringify()
+          if $this->{stackTop}->isLeaf();
         $this->{stackTop}->addChild( $top );
         last if( $tag && $top->{tag} eq $tag );
     }

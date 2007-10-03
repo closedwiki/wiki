@@ -52,6 +52,9 @@ sub initPlugin {
 # Handle the complete HTML page about to be sent to the browser
 sub completePageHandler {
     #my($html, $httpHeaders) = @_;
+
+    return unless $_[1] =~ m#^Content-type: text/html#m;
+
     # Parse the HTML and generate a parse tree
     # This handler can be patched into pre-4.2 revs of TWiki
     my $tree = $parser->parseHTML( $_[0] );
