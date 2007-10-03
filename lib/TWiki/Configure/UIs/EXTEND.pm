@@ -30,6 +30,9 @@ sub ui {
     my $extension = $query->param('extension');
     my $ext = '.tgz';
     my $repository = $this->getRepository($query->param('repository'));
+    if (!defined($repository)) {
+        return $this->ERROR("Repository not found. <pre> ".$query->param('repository')." </pre>");
+    }
     my $arf = $repository->{pub}.$extension.'/'.$extension.$ext;
 
     print "<br/>Fetching $arf...<br />\n";
