@@ -311,9 +311,6 @@ for example:
 
 see TWikiSiteTools#WebStatistics_site_statistics for updating statistics using cron.
 
----+++ =twiki=
-Single-script interface to the functionality of all the other scripts. Experimental, not for production use. Read the code if you want to know more.
-
 ---+++ =upload=
 Uploads an attachment to a topic. The HTTP request is expected to be in =multipart/form-data= format.
 | *Parameter* | *Description* | *Default* |

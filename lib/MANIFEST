@@ -49,7 +49,6 @@ bin/save 0555
 bin/search 0555
 bin/setlib.cfg 0444
 bin/statistics 0555
-bin/twiki 0555
 bin/upload 0555
 bin/view 0555
 bin/viewfile 0555
