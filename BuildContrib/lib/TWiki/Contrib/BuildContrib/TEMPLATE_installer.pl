@@ -97,7 +97,7 @@ sub postinstall {
 }
 
 TWiki::Extender::install(
-    '%$PACKAGES_URL%', '%$MODULE%', '%$ROOTMODULE%', @DATA);
+    $PACKAGES_URL, '%$MODULE%', '%$ROOTMODULE%', @DATA);
 
 1;
 
