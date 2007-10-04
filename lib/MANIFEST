@@ -950,8 +950,6 @@ pub/Trash/WebPreferences/favicon.ico 0644
 pub/Trash/WebPreferences/logo.gif 0644
 pub/_default/WebPreferences/favicon.ico 0644
 pub/_default/WebPreferences/logo.gif 0644
-pub/_work_areas/.htaccess 0444
-pub/_work_areas/README 0444
 readme.txt 0444
 robots.txt 0444
 root-htaccess.txt 0444
