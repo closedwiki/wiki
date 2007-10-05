@@ -156,6 +156,7 @@ The targets you will normally use are:
 | =release= | =build=, =pod= and package a release zip |
 | =upload= | =build=, =pod=, =release= and upload |
 | =manifest= | print a guess at the MANIFEST |
+| =history= | Generates a list of svn checkins with comments and adds it to the history section of the plugin/contrib topic. |
 | =dependencies= | Find and print a best-guess dependencies list (for DEPENDENCIES) |
 
 The default target is =test=. The !BuildContrib is designed so that most common behaviour is catered for. It is also easy to _override_ any of the default targets in your =build.pl= and add extra behaviours.
