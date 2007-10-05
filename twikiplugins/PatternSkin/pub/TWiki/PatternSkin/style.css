@@ -562,6 +562,9 @@ a.twikiLinkInHeaderRight {
 .twikiNoBreak {
 	white-space:nowrap;
 }
+.twikiSearchResultCount {
+	font-weight:bold;
+}
 
 /*	-----------------------------------------------------------
 	Pattern skin specific elements
