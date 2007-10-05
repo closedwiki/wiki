@@ -13,6 +13,14 @@
 %TOC%
 
 ---++ Description
+<table style="float:right">
+<tr>
+  <td><img src="%ATTACHURLPATH%/wikiringlogo40x40.png"></td>
+  <td><a href="http://wikiring.de" title="Make your Wiki ring!" style="text-decoration:none">
+      Powered by <br /> <nop>WikiRing Consultants </a>
+  </td>
+</tr>
+</table>
 This plugin adds a couple of tags that allow to render content conditionally.
 There are two different ways to do that: either by using the inline 
 =%<nop>IFDEFINED{"string" then="..." else="..."}%= tag that returns the 
