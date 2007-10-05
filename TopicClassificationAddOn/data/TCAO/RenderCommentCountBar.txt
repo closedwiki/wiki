@@ -19,10 +19,12 @@
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%<h2 style="padding: 2px 4px;color: #fff;background: #888;font-size: .9em;border-bottom: 1px solid #666;margin: 0;">
-%IFDEFINEDTHEN{"%SEARCH{"%BASETOPIC%" scope="topic" web="%BASEWEB%" nonoise="on" format="$count(.*?([C]OMMENT_TAG) .*)"}%" as="1" glue="off" }%
+%IFDEFINEDTHEN{"%SEARCH{"%BASETOPIC%" scope="topic" web="%BASEWEB%" nonoise="on" format="$count(.*?([C]OMMENT_TAG) .*)"}%" as="[1]" glue="off" }%
 1 comment so far
+%ELSIFDEFINED{"%SEARCH{"%BASETOPIC%" scope="topic" web="%BASEWEB%" nonoise="on" format="$count(.*?([C]OMMENT_TAG) .*)"}%" as="[123456789].*" glue="off" }%
+$test comments so far.
 %ELSEDEFINED%
-%IFDEFINED{"%SEARCH{"%BASETOPIC%" scope="topic" web="%BASEWEB%" nonoise="on" format="$count(.*?([C]OMMENT_TAG) .*)"}%" as="[0]" then="Be the first to post a comment." else="$test comments so far" glue="off" }%
+Be the first to post a comment.
 %FIDEFINED%</h2>%STOPINCLUDE%
 </verbatim>
 

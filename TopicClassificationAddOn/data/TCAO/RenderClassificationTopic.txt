@@ -15,7 +15,7 @@ The following parameters allow customization of how specific Classification topi
 
 
    * CLASS_DESCRIPTION - Optional introductory information about the particular category.
-   * LISTFORMAT - Optional designation of topic that defines how the list of classification topics are displayed. Defaults to RenderTableSearchResults.
+   * LISTFORMAT - Optional designation of topic that defines how the list of topics are displayed. Defaults to RenderTableSearchResults. RenderBlogList is an example of alternative format.
    * INITSORT - Optionally set initial sort. Defaults to "modified".
    * INITLIMIT - Optionally set initial limit to # of results. Defaults to "all".
    * REVERSE - Optionally to reverse the search order. Defaults to "off."
@@ -63,7 +63,7 @@ The following parameters allow customization of how specific Classification topi
 ~~~    }%
 
 %IFDEFINEDTHEN{"%LISTFORMAT%" glue="off" }%
-%INCLUDE{"%LISTFORMAT%"}%
+%INCLUDE{"%LISTFORMAT%" %IFDEFINED{"%FACET%" then="FACETS=\"$test\"" glue="off"}% }%
 %ELSEDEFINED%
 %~~  INCLUDE{"%TCAOWEB%.RenderTableSearchResults" 
 ~~~       remote="on"

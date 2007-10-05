@@ -26,7 +26,12 @@
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
-%INCLUDE{"%TCAOWEB%.RenderBarFilterWithSort"  INITSORT="%IFDEFINED{"%INITSORT%" then="$percntINITSORT$percnt" else="modified" glue="off"}%" INITLIMIT="%IFDEFINED{"%INITLIMIT%" then="$percntINITLIMIT$percnt" else="all" glue="off"}%" }%
+%~~  INCLUDE{"%TCAOWEB%.RenderBarFilterWithSort"  
+~~~     INITSORT="%IFDEFINED{"%INITSORT%" 
+~~~          then="$percntINITSORT$percnt" else="modified" glue="off"}%" 
+~~~    INITLIMIT="%IFDEFINED{"%INITLIMIT%" 
+~~~          then="$percntINITLIMIT$percnt" else="all" glue="off"}%" 
+~~~   }%
 %TABLE{tablewidth="100%" columnwidths=",,,50px"}%
 %~~   DBQUERY{
 *~~       

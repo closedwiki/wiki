@@ -7,22 +7,21 @@
 
 ---++ Documentation
 %STARTSECTION{name="documentation" type="section"}%
-%RED%TODO%ENDCOLOR%
 
 ---+++++ Parameters
-   * BLOGENTRY - Specifies the !WebLog topic to be displayed. 
-   * BLOGWEB - Specifies the web where the !WebLog topic is located.
+   * BLOGENTRY - Required - Specifies the !WebLog topic to be displayed. 
+   * BLOGWEB - SRequired -pecifies the web where the !WebLog topic is located.
 
 ---+++++ Css
-   * 
+   * None
 %ENDSECTION{name="documentation" type="section"}%
 
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
 <hr align="left">
----++ [[%BLOGWEB%.%BLOGENTRY%][%FORMFIELD{"Summary" topic="%BLOGWEB%.%BLOGENTRY%"}%]] 
-<span class="twikiGrayText twikiSmallish">Posted on %REVINFO{"$date by $wikiusername" rev="1.1" web="%BLOGWEB%" topic="%BLOGENTRY%"}% <noautolink>%FORMFIELD{"SubjectArea" topic="%BLOGWEB%.%BLOGENTRY%" format=" under $value"}%</noautolink> with %SEARCH{"%BLOGENTRY%" nonoise="on" scope="topic" web="%BLOGWEB%" format="$count(.*?(---[+][+][+][+]) .*) [[%BLOGWEB%.%BLOGENTRY%#Comments_and_Discussion][comment(s)]]"}%. </span>  
+---++ <noautolink>[[%BLOGWEB%.%BLOGENTRY%][%FORMFIELD{"Summary" topic="%BLOGWEB%.%BLOGENTRY%"}%]] </noautolink>
+<span class="twikiGrayText twikiSmallish">Posted on %REVINFO{"$date by $wikiusername" rev="1.1" web="%BLOGWEB%" topic="%BLOGENTRY%"}% <noautolink>%FORMFIELD{"SubjectArea" topic="%BLOGWEB%.%BLOGENTRY%" format=" under $value"}%</noautolink> with %SEARCH{"%BLOGENTRY%" nonoise="on" scope="topic" web="%BLOGWEB%" format="$count(.*?([C]OMMENT_TAG) .*) [[%BLOGWEB%.%BLOGENTRY%#Comments_and_Discussion][comment(s)]]"}%. </span>  
 
 %INCLUDE{"%BLOGWEB%.%BLOGENTRY%" section="introtext"}% 
 _[[%BLOGWEB%.%BLOGENTRY%][Read more...]]_
@@ -46,13 +45,6 @@ _[[%BLOGWEB%.%BLOGENTRY%][Read more...]]_
 </div>
 
 
-<!--
-   * Set SIDEBAR = TopicType
-   * Set SIDEBARARG = TopicFunction
--->
-
-
 %META:FORM{name="TopicForm"}%
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicFunction"}%
-%META:FIELD{name="Summary" attributes="" title="Summary" value="For rendering an individual !WebLog entry within a list."}%
-%META:REVCOMMENT{comment_1=" " minor_1="1" ncomments="1" rev_1="4" t_1="1167760359"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="For rendering an individual !WebLog entry within RenderBlogList."}%
