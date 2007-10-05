@@ -30,7 +30,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = 'v1.00';
+$RELEASE = 'v1.01';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Render content conditionally';
 $debug = 0; # toggle me
@@ -72,12 +72,15 @@ sub handleIfDefined {
 
   $args ||= '';
   my $params = new TWiki::Attrs($args);
-  my $theVariable = $params->{_DEFAULT} || '';
+  my $theVariable = $params->{_DEFAULT};
   my $theAction = $params->{action} || '';
   my $theThen = $params->{then} || $theVariable;
   my $theElse = $params->{else} || '';
   my $theGlue = $params->{glue} || 'on';
-  my $theAs = $params->{as} || '.+';
+  my $theAs = $params->{as};
+
+  $theVariable = '' unless defined $theVariable;
+  $theAs = '.+' unless defined $theAs;
 
   &escapeParameter($theThen);
   &escapeParameter($theElse);
@@ -95,10 +98,13 @@ sub handleIfDefinedThen {
 
   $args ||= '';
   my $params = new TWiki::Attrs($args);
-  my $theVariable = $params->{_DEFAULT} || '';
+  my $theVariable = $params->{_DEFAULT};
   my $theAction = $params->{action} || '';
   my $theGlue = $params->{glue} || 'on'; 
-  my $theAs = $params->{as} || '.+'; 
+  my $theAs = $params->{as};
+
+  $theVariable = '' unless defined $theVariable;
+  $theAs = '.+' unless defined $theAs;
 
   my $theThen = $text; 
   my $theElse = '';
@@ -122,13 +128,13 @@ sub handleIfDefinedThen {
 sub ifDefinedImpl {
   my ($theVariable, $theAction, $theThen, $theElse, $theElsIfArgs, $before, $after, $theGlue, $theAs) = @_;
 
-  #writeDebug("called ifDefinedImpl()");
-  #writeDebug("theVariable='$theVariable'");
+  writeDebug("called ifDefinedImpl()");
+  writeDebug("theVariable='$theVariable'");
   #writeDebug("theAction='$theAction'");
   #writeDebug("theThen='$theThen'");
   #writeDebug("theElse='$theElse'");
   #writeDebug("theElsIfArgs='$theElsIfArgs'") if $theElsIfArgs;
-  #writeDebug("theAs='$theAs'");
+  writeDebug("theAs='$theAs'");
   
   $before = '' if ($theGlue eq 'on') || !$before;
   $after = '' if ($theGlue eq 'on') || !$after;

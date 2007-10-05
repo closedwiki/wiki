@@ -167,8 +167,9 @@ and allows more complex <nop>TWikiMarkup in the then/else branches.
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.00 |
+|  Plugin Version: | v1.01 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  05 Oct 2007: | fixed a rookie perl error |
 |  20 Jun 2007: | added IFEXISTS ;\
                   make use of TWiki-4 APIs for speed improvements |
 |  18 Dec 2006: | removed support for cairo and beijing; added IFACCESS tag: checks access of some user on a topic |
@@ -188,4 +189,4 @@ and allows more complex <nop>TWikiMarkup in the then/else branches.
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
 
--- TWiki:Main.MichaelDaum - 20 Jun 2007
+-- TWiki:Main.MichaelDaum - 05 Oct 2007
