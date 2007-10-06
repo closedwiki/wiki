@@ -747,17 +747,23 @@ sub DISABLE_renderWikiWordHandler {
 
 =pod
 
----++ completePageHandler($text, $contentType)
+---++ completePageHandler($html, $httpHeaders)
 
-This handler is called on the complete HTML page of every page that is
+This handler is called on the ingredients of every page that is
 output by the standard TWiki scripts. It is designed primarily for use by
 cache and security plugins.
+   * =$html= - the body of the page (normally &lt;html>..$lt;/html>)
+   * =$httpHeaders= - the HTTP headers. Note that the headers do not contain
+     a =Content-length=. That will be computed and added immediately before
+     the page is actually written. This is a string, which must end in \n\n.
+
+*Since:* TWiki::Plugins::VERSION 1.2
 
 =cut
 
 sub DISABLE_completePageHandler {
-    #my( $text, $contentType) = @_;
-    # modify $_[0] or $_[1] if you must change the HTML or content type
+    #my($html, $httpHeaders) = @_;
+    # modify $_[0] or $_[1] if you must change the HTML or headers
 }
 
 =pod
