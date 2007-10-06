@@ -196,6 +196,7 @@ sub _getMapping {
 	my ($this, $cUID, $login, $wikiname, $noFallBack) = @_;
 
 	$cUID = '' unless defined $cUID;
+	$cUID = forceCUID($cUID);
 	$login = '' unless defined $login;
 	$wikiname = '' unless defined $wikiname;
 	
@@ -304,6 +305,29 @@ sub addUser {
 
 =pod
 
+---++ StaticMethod forceCUID( $cUID ) -> $cUID
+
+This function ensures that any cUID's are able to be used for rcs, and other internals
+not capable of coping with user identifications that contain more than 7 bit ascii.
+
+repeated calls must result in the same result (sorry, can't spell the word for it)so the '_' must not be re-encoded
+
+Please, call this function in any custom Usermapper to simplifyyour mapping code.
+
+=cut
+
+sub forceCUID {
+	my $cUID = shift;
+	
+	use bytes;
+    # use bytes to ignore character encoding
+    $cUID =~ s/([^a-zA-Z0-9_])/'_'.sprintf('%02d', ord($1))/ge;
+    no bytes;
+	return $cUID;
+}
+
+=pod
+
 ---++ ObjectMethod getCanonicalUserID( $login ) -> $user
 
 Works out the unique TWiki identifier for the user who logs in with the
@@ -330,7 +354,7 @@ sub getCanonicalUserID {
     my $testMapping = $this->_getMapping($login, $login, undef, 1);
 
     # passed a valid cUID?
-    return $login if ($testMapping && $testMapping->getLoginName($login));
+    return forceCUID($login) if ($testMapping && $testMapping->getLoginName($login));
 
     my $cUID;
     my $mapping = $this->_getMapping(undef, $login, $login);
@@ -347,7 +371,7 @@ sub getCanonicalUserID {
 
 	#print STDERR "\nTWiki::Users::getCanonicalUserID($login) => ".($cUID || '(NO cUID)');	
 
-    return $cUID;
+    return forceCUID($cUID);
 }
 
 =pod

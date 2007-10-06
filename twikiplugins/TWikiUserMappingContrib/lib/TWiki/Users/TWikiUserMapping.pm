@@ -156,10 +156,8 @@ sub getCanonicalUserID {
                      defined($this->{L2U}->{$login}) ||
                        (defined($this->{passwords}->fetchPass( $login ))) );
 
-    use bytes;
-    # use bytes to ignore character encoding
-    $login =~ s/([^a-zA-Z0-9])/'_'.sprintf('%02d', ord($1))/ge;
-    no bytes;
+    $login = TWiki::Users::forceCUID($login);
+
     $login = $this->{mapping_id}.$login;
 #print STDERR " OK ($login)";
     return $login;
