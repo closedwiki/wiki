@@ -185,6 +185,11 @@ sub view {
       $session->{prefs}->getPreferencesValue( 'VIEW_TEMPLATE' ) ||
         'view';
 
+    # Item4756: Always use default view template for raw=debug and raw=all
+    if( $raw eq 'debug' || $raw eq 'all' ) {
+        $template = 'view';
+    }
+
     my $tmpl = $session->templates->readTemplate( $template, $skin );
     if( !$tmpl && $template ne 'view' ) {
         $tmpl = $session->templates->readTemplate( 'view', $skin );
