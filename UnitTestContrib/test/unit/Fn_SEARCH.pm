@@ -31,35 +31,51 @@ sub set_up {
         'Ok+Topic', "BLEEGLE dont.matchmeblah");
 }
 
-sub Forking {
-    require TWiki::Store::SearchAlgorithms::Forking;
-
-    $TWiki::cfg{RCS}{SearchAlgorithm} =
-      "TWiki::Store::SearchAlgorithms::Forking";
-}
-
-sub Native {
-    $TWiki::cfg{RCS}{SearchAlgorithm} =
-      "TWiki::Store::SearchAlgorithms::Native";
-}
-
-sub PurePerl {
-    require TWiki::Store::SearchAlgorithms::PurePerl;
-
-    $TWiki::cfg{RCS}{SearchAlgorithm} =
-      "TWiki::Store::SearchAlgorithms::PurePerl";
-}
-
 sub fixture_groups {
-    my $groups = [ 'Forking', 'PurePerl' ];
-    eval "require TWiki::Store::SearchAlgorithms::Native";
-    if ($@ || !defined(&NativeTWikiSearch::cgrep)) {
-        print STDERR "\nWARNING: unable to test native search, module may not be installed\n";
-    } else {
-        push(@$groups, 'Native');
+    my (%salgs, %qalgs);
+    foreach my $dir (@INC) {
+        if (opendir(D, "$dir/TWiki/Store/SearchAlgorithms")) {
+            foreach my $alg (readdir D) {
+                next unless $alg =~ /^(.*)\.pm$/;
+                $alg = $1;
+                $salgs{$alg} = 1;
+            }
+            closedir(D);
+        }
+        if (opendir(D, "$dir/TWiki/Store/QueryAlgorithms")) {
+            foreach my $alg (readdir D) {
+                next unless $alg =~ /^(.*)\.pm$/;
+                $alg = $1;
+                $qalgs{$alg} = 1;
+            }
+            closedir(D);
+        }
+    }
+    my @groups;
+    foreach my $alg (keys %salgs) {
+        my $fn = $alg.'Search';
+        push(@groups, $fn);
+        next if (defined(&$fn));
+        eval <<SUB;
+sub $fn {
+require TWiki::Store::SearchAlgorithms::$alg;
+\$TWiki::cfg{RCS}{SearchAlgorithm} = 'TWiki::Store::SearchAlgorithms::$alg'; }
+SUB
+        die $@ if $@;
+    }
+    foreach my $alg (keys %qalgs) {
+        my $fn = $alg.'Query';
+        push(@groups, $fn);
+        next if (defined(&$fn));
+        eval <<SUB;
+sub $fn {
+require TWiki::Store::QueryAlgorithms::$alg;
+\$TWiki::cfg{RCS}{QueryAlgorithm} = 'TWiki::Store::QueryAlgorithms::$alg'; }
+SUB
+        die $@ if $@;
     }
 
-    return ( $groups );
+    return \@groups;
 }
 
 sub verify_simple  {
@@ -549,7 +565,7 @@ HERE
 
 my $stdCrap = 'type="query" nonoise="on" format="$topic" separator=" "}%';
 
-sub test_parentQuery {
+sub verify_parentQuery {
     my $this = shift;
 
     $this->set_up_for_queries();
@@ -559,7 +575,7 @@ sub test_parentQuery {
     $this->assert_str_equals('QueryTopic', $result);
 }
 
-sub test_attachmentSizeQuery1 {
+sub verify_attachmentSizeQuery1 {
     my $this = shift;
 
     $this->set_up_for_queries();
@@ -569,7 +585,7 @@ sub test_attachmentSizeQuery1 {
     $this->assert_str_equals('QueryTopic QueryTopicTwo', $result);
 }
 
-sub test_attachmentSizeQuery2 {
+sub verify_attachmentSizeQuery2 {
     my $this = shift;
 
     $this->set_up_for_queries();
@@ -579,7 +595,7 @@ sub test_attachmentSizeQuery2 {
     $this->assert_str_equals('QueryTopicTwo', $result);
 }
 
-sub test_indexQuery {
+sub verify_indexQuery {
     my $this = shift;
 
     $this->set_up_for_queries();
@@ -589,7 +605,7 @@ sub test_indexQuery {
     $this->assert_str_equals('QueryTopicTwo', $result);
 }
 
-sub test_gropeQuery {
+sub verify_gropeQuery {
     my $this = shift;
 
     $this->set_up_for_queries();
@@ -599,7 +615,7 @@ sub test_gropeQuery {
     $this->assert_str_equals('QueryTopic QueryTopicTwo', $result);
 }
 
-sub test_4580Query1 {
+sub verify_4580Query1 {
     my $this = shift;
 
     $this->set_up_for_queries();
@@ -609,7 +625,7 @@ sub test_4580Query1 {
     $this->assert_str_equals('QueryTopicTwo', $result);
 }
 
-sub test_4580Query2 {
+sub verify_4580Query2 {
     my $this = shift;
 
     $this->set_up_for_queries();
@@ -619,7 +635,7 @@ sub test_4580Query2 {
     $this->assert_str_equals('QueryTopic', $result);
 }
 
-sub test_gropeQuery2 {
+sub verify_gropeQuery2 {
     my $this = shift;
 
     $this->set_up_for_queries();
@@ -629,7 +645,7 @@ sub test_gropeQuery2 {
     $this->assert_str_equals('QueryTopic QueryTopicTwo', $result);
 }
 
-sub test_formQuery {
+sub verify_formQuery {
     my $this = shift;
 
     $this->set_up_for_queries();
@@ -639,7 +655,7 @@ sub test_formQuery {
     $this->assert_str_equals('QueryTopicTwo', $result);
 }
 
-sub test_formQuery2 {
+sub verify_formQuery2 {
     my $this = shift;
 
     $this->set_up_for_queries();
@@ -649,7 +665,7 @@ sub test_formQuery2 {
     $this->assert_str_equals('QueryTopic', $result);
 }
 
-sub test_formQuery3 {
+sub verify_formQuery3 {
     my $this = shift;
 
     $this->set_up_for_queries();
@@ -659,7 +675,7 @@ sub test_formQuery3 {
     $this->assert_str_equals('QueryTopic', $result);
 }
 
-sub test_formQuery4 {
+sub verify_formQuery4 {
     my $this = shift;
 
     $this->set_up_for_queries();
@@ -669,7 +685,7 @@ sub test_formQuery4 {
     $this->assert_str_equals('QueryTopic', $result);
 }
 
-sub test_formQuery5 {
+sub verify_formQuery5 {
     my $this = shift;
 
     $this->set_up_for_queries();
@@ -683,7 +699,7 @@ sub test_formQuery5 {
     $this->assert_str_equals('QueryTopicTwo', $result);
 }
 
-sub test_refQuery {
+sub verify_refQuery {
     my $this = shift;
 
     $this->set_up_for_queries();
@@ -773,7 +789,7 @@ HERE
     print STDERR "Query ".Benchmark::timestr($querytime),"\nRE ".Benchmark::timestr($retime),"\n";
 }
 
-sub test_4347 {
+sub verify_4347 {
     my $this = shift;
 
     my $result = $this->{twiki}->handleCommonTags(
