@@ -136,9 +136,9 @@ sub test_buildCommandLine {
                               [$TWiki::sandbox->_buildCommandLine(" %A|F%  ", (A => ["a", "b", "/c"]))]);
 
     $this->assert_deep_equals(
-            ["1", "2.3", "4", '"string"', "-09AZaz.+_"],
+            ["1", "2.3", "4", 'str-.+_ing', "-09AZaz.+_"],
             [$TWiki::sandbox->_buildCommandLine(" %A|N% %B|S% %C|S%",
-                 (A => [1, 2.3, 4], B => '"string"', C => "-09AZaz.+_"))]);
+                 (A => [1, 2.3, 4], B => 'str-.+_ing', C => "-09AZaz.+_"))]);
 
     $this->assert_deep_equals(["2004/11/20 09:57:41"],
                               [$TWiki::sandbox->_buildCommandLine("%A|D%", A => TWiki::Time::formatTime (1100944661, '$rcs', 'gmtime'))]);

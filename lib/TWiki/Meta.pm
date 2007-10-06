@@ -765,6 +765,27 @@ sub addTOPICINFO {
     $this->put( 'TOPICINFO', \%options );
 }
 
+=begin twiki
+
+---++ ObjectMethod getMetaFor() -> $meta
+
+This method will load (or otherwise fetch) the meta-data for a named web/topic.
+The request might be satisfied by a read from the store, or it might be
+satisfied from a cache. The caller doesn't care.
+
+This is an object method rather than a static method because it depends on
+the implementation of Meta - it might be this base class, or it might be a
+caching subclass, for example.
+
+=cut
+
+sub getMetaFor {
+    my ($this, $web, $topic) = @_;
+
+    my ($m, $t) =  $this->session->{store}->readTopic(undef, $web, $topic);
+    return $m; # $t is already in $m->text()
+}
+
 1;
 
 __DATA__

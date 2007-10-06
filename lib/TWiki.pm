@@ -3395,7 +3395,7 @@ sub SEARCH {
     try {
         $s = $this->search->searchWeb( %$params );
     } catch Error::Simple with {
-        my $message = shift->{-text};
+        my $message = (DEBUG) ? shift->stringify() : shift->{-text};
         # Block recursions kicked off by the text being repeated in the
         # error message
         $message =~ s/%([A-Z]*[{%])/%<nop>$1/g;

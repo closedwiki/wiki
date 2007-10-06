@@ -62,7 +62,7 @@ sub _getField {
     my( $this, $data, $field ) = @_;
 
     my $result;
-    if (ref($data) eq 'TWiki::Meta') {
+    if (UNIVERSAL::isa($data, 'TWiki::Meta')) {
         # The object being indexed is a TWiki::Meta object, so
         # we have to use a different approach to treating it
         # as an associative array. The first thing to do is to
@@ -158,7 +158,7 @@ sub toString {
     return 'undef' unless defined($a);
     if (ref($a) eq 'ARRAY') {
         return '['.join(',', map { toString($_) } @$a).']'
-    } elsif (ref($a) eq 'TWiki::Meta') {
+    } elsif (UNIVERSAL::isa($a, 'TWiki::Meta')) {
         return $a->stringify();
     } elsif (ref($a) eq 'HASH') {
         return '{'.join(',', map { "$_=>".toString($a->{$_}) } keys %$a).'}'
@@ -403,8 +403,7 @@ sub OP_ref {
             $session->{webName}, $v );
         my $result = undef;
         try {
-            my( $submeta, $subtext ) = $session->{store}->readTopic(
-                undef, $w, $t );
+            my $submeta = $domain{tom}->getMetaFor( $w, $t );
             my $b = $this->{params}[1];
             my $res = $b->evaluate( tom=>$submeta, data=>$submeta );
             if( ref($res) eq 'ARRAY') {
