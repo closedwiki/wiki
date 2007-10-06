@@ -318,6 +318,7 @@ Please, call this function in any custom Usermapper to simplifyyour mapping code
 
 sub forceCUID {
 	my $cUID = shift;
+	return unless (defined($cUID));
 	
 	use bytes;
     # use bytes to ignore character encoding
