@@ -172,30 +172,28 @@ function setEditBoxHeight(inRowCount) {}
    Give the iframe table holder auto-height.
 */
 function initTextAreaStyles() {
+    var iframe = document.getElementById(IFRAME_ID);
+    if (iframe == null) return;
     
-	var iframe = document.getElementById(IFRAME_ID);
-	if (iframe == null) return;
-    
-	// walk up to the table
-	var node = iframe.parentNode;
-	var counter = 0;
-	while (node != document) {
-		if (node.nodeName == 'TABLE') {
-			node.style.height = 'auto';
+    // walk up to the table
+    var node = iframe.parentNode;
+    var counter = 0;
+    while (node != document) {
+        if (node.nodeName == 'TABLE') {
+            node.style.height = 'auto';
+           
+            // get select boxes
+            var selectboxes = node.getElementsByTagName('SELECT');
+            var i, ilen = selectboxes.length;
+            for (i=0; i<ilen; ++i) {
+                selectboxes[i].style.marginLeft = selectboxes[i].style.marginRight = '2px';
+                selectboxes[i].style.fontSize = '94%';
+            }
             
-			// get select boxes
-			var selectboxes = node.getElementsByTagName('SELECT');
-			var i, ilen = selectboxes.length;
-			for (i=0; i<ilen; ++i) {
-				selectboxes[i].style.marginLeft = selectboxes[i].style.marginRight = '2px';
-				selectboxes[i].style.fontSize = '94%';
-			}
-            
-			break;
-		}
-		node = node.parentNode;
-	}
-    
+            break;
+        }
+        node = node.parentNode;
+    }
 }
 
 function install_TMCE() {
@@ -205,9 +203,21 @@ function install_TMCE() {
         if (metatags[i].name == 'TINYMCEPLUGIN_INIT') {
             var tmce_init = unescape(metatags[i].content);
             eval("tinyMCE.init({" + tmce_init + "});");
-            break;
+            return;
         }
     }
+    // Didn't find the tag that way; possibly this is the problem
+    // seen sporadically on Bugs where the DOM appears complete, but
+    // the META tags are not all found by getElementsByTagName
+    metatags = metatags[0].parentNode.childNodes;
+    for (var i = 0; i < metatags.length; i++) {
+        if (metatags[i].name == 'TINYMCEPLUGIN_INIT') {
+            var tmce_init = unescape(metatags[i].content);
+            eval("tinyMCE.init({" + tmce_init + "});");
+            return;
+        }
+    }
+    alert("Unable to install TinyMCE; <META name='TINYMCEPLUGIN_INIT' is missing"); 
 }
 
 install_TMCE();
