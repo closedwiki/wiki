@@ -44,7 +44,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.4.4';
+$RELEASE = '1.4.5';
 
 $pluginName = 'TwistyPlugin';
 
@@ -95,10 +95,10 @@ sub initPlugin {
 }
 
 sub _setDefaults {
-    $defaultMode     = 'span';
-    $defaultShowLink = '';
-    $defaultHideLink = '';
-    $defaultRemember =
+    $defaultMode        = 'span';
+    $defaultShowLink    = '';
+    $defaultHideLink    = '';
+    $defaultRemember    =
       '';    # do not default to 'off' or all cookies will be cleared!
 }
 
@@ -137,24 +137,31 @@ EOF
 }
 
 sub _TWISTYSHOW {
+    my ( $session, $params, $theTopic, $theWeb ) = @_;
+    my $mode = $params->{'mode'} || $prefMode;
+    
     my $btn = _twistyBtn( 'show', @_ );
-    return _wrapInButtonHtml( $btn );
+    return _wrapInButtonHtml( $btn, $mode );
 }
 
 sub _TWISTYHIDE {
+    my ( $session, $params, $theTopic, $theWeb ) = @_;
+    my $mode = $params->{'mode'} || $prefMode;
+    
     my $btn = _twistyBtn( 'hide', @_ );
-    return _wrapInButtonHtml( $btn );
+    return _wrapInButtonHtml( $btn, $mode );
 }
 
 sub _TWISTYBUTTON {
     my ( $session, $params, $theTopic, $theWeb ) = @_;
+    my $mode = $params->{'mode'} || $prefMode;
 
     my $btnShow = _twistyBtn( 'show', @_ );
     my $btnHide = _twistyBtn( 'hide', @_ );
     my $prefix = $params->{'prefix'} || '';
     my $suffix = $params->{'suffix'} || '';
     my $btn = $prefix . ' ' . $btnShow . $btnHide . ' ' . $suffix;
-    return _wrapInButtonHtml( $btn );
+    return _wrapInButtonHtml( $btn, $mode );
 }
 
 sub _TWISTY {
@@ -176,7 +183,7 @@ sub _TWISTYTOGGLE {
         return '';
     }
     my $idTag = $id . 'toggle';
-    my $mode = $params->{'mode'} || $prefMode;
+    my $mode = 'div'; #$params->{'mode'} || $prefMode;
     unshift @modes, $mode;
 
     my $isTrigger = 0;
@@ -402,9 +409,9 @@ sub _readCookie {
 }
 
 sub _wrapInButtonHtml {
-    my ($text) = @_;
-    return _wrapInDivHideIfNoJavascripOpen() . "\n" . $text
-      . _wrapInHideDivIfNoJavascripClose();
+    my ($text, $mode) = @_;
+    return _wrapInContainerHideIfNoJavascripOpen($mode) . "\n" . $text
+      . _wrapInContainerDivIfNoJavascripClose($mode);
 }
 
 sub _wrapInContentHtmlOpen {
@@ -415,12 +422,14 @@ sub _wrapInContentHtmlClose {
     return '</div><!--/twistyPlugin-->';
 }
 
-sub _wrapInDivHideIfNoJavascripOpen {
-    return '<div class="twistyPlugin twikiMakeVisibleInline">';
+sub _wrapInContainerHideIfNoJavascripOpen {
+    my ($mode) = @_;
+    return '<' . $mode . ' class="twistyPlugin twikiMakeVisibleInline">';
 }
 
-sub _wrapInHideDivIfNoJavascripClose {
-    return '</div><!--/twistyPlugin twikiMakeVisibleInline-->';
+sub _wrapInContainerDivIfNoJavascripClose {
+    my ($mode) = @_;
+    return '</' . $mode . '><!--/twistyPlugin twikiMakeVisibleInline-->';
 }
 
 1;

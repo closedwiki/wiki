@@ -222,7 +222,7 @@ Generates: %BR%
 To be able to use header tags like =&lt;h2>=, use the properties =prefix= and =suffix=. Because we have identical show and hide links we can use the shorthand property =link=.
 
 <verbatim>
-%TWISTY{prefix="<h4>!!" link="Header"
+%TWISTY{prefix="<h4>!!" mode="div" link="Header"
 showimgleft="%ICONURLPATH{toggleopen}%"
 hideimgleft="%ICONURLPATH{toggleclose}%" suffix="</h4>"}%
 my twisty content
@@ -431,8 +431,9 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 | Copyright &copy;: | 2005 Rafael Alvarez; 2006, 2007 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
-| Plugin&nbsp;Version: | 25 Sep 2007 (version 1.4.4)  |
+| Plugin&nbsp;Version: | 07 Oct 2007 (version 1.4.5)  |
 | Change&nbsp;History: | <!-- versions below in reverse order -->&nbsp; |
+| 07 Oct 2007 | 1.4.5 Arthur Clemens - Fix html tag with show/hide controls. |
 | 25 Sep 2007 | 1.4.4 Arthur Clemens - Fix rendering of headers when =prefix= is used. |
 | 11 Jul 2007 | 1.4.3 Arthur Clemens - Fix invalid html when =prefix= and =suffix= is used. |
 | 23 Jun 2007 | 1.4.2 Arthur Clemens - Fixed bugs with parameters =firststart= and =noscript= (since version 1.4). |
