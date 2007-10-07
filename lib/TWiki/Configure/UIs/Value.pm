@@ -40,20 +40,25 @@ sub open_html {
     my $keys = $value->getKeys();
 
     my $checker = TWiki::Configure::UI::loadChecker($keys, $value);
-    my $broken = 0;
+    my $isUnused = 0;
+    my $isBroken = 0;
     if ($checker) {
         my $check = $checker->check($value);
         if ($check) {
             # something wrong
             $info .= $check;
-            $broken = 1;
+            $isBroken = 1;
+        }
+        if ($check eq 'NOT USED IN THIS CONFIGURATION') {
+            $isUnused = 1;
         }
     }
 
 	# Hide rows if this is an EXPERT setting in non-experts mode, or
-    # this is a hidden value
+    # this is a hidden or unused value
 	my $hiddenClass = '';
-    if( !$broken && ($isExpert && !$expert || $value->{hidden})) {
+    if ($isUnused ||
+          !$isBroken && ($isExpert && !$expert || $value->{hidden})) {
         $hiddenClass = ' twikiHidden';
     }
 
@@ -73,7 +78,7 @@ sub open_html {
 
     # Generate col2 of the prompter row
     my $row2col2;
-    if ($broken || !$isExpert || $expert) {
+    if (!$isUnused && ($isBroken || !$isExpert || $expert)) {
         # Generate a prompter for the value.
         my $class = $value->{typename};
         $class .= ' mandatory' if ($value->{mandatory});

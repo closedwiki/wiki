@@ -284,7 +284,7 @@ my $rcsverRequired = 5.7;
 sub checkRCSProgram {
     my ($this, $key) = @_;
 
-    return 'Not used in this configuration.'
+    return 'NOT USED IN THIS CONFIGURATION'
       unless $TWiki::cfg{StoreImpl} eq 'RcsWrap';
 
     my $mess = '';
