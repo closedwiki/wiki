@@ -21,5 +21,7 @@ function setEditBoxHeight(inRowCount){}
 function initTextAreaStyles(){var iframe=document.getElementById(IFRAME_ID);if(iframe==null)return;var node=iframe.parentNode;var counter=0;while(node!=document){if(node.nodeName=='TABLE'){node.style.height='auto';var selectboxes=node.getElementsByTagName('SELECT');var i,ilen=selectboxes.length;for(i=0;i<ilen;++i){selectboxes[i].style.marginLeft=selectboxes[i].style.marginRight='2px';selectboxes[i].style.fontSize='94%';}
 break;}
 node=node.parentNode;}}
-function install_TMCE(){var metatags=document.getElementsByTagName("META");for(var i=0;i<metatags.length;i++){if(metatags[i].name=='TINYMCEPLUGIN_INIT'){var tmce_init=unescape(metatags[i].content);eval("tinyMCE.init({"+tmce_init+"});");break;}}}
+var metaTags;var getMetaTag=function(inKey){if(metaTags==null||metaTags.length==0){var head=document.getElementsByTagName("META");head=head[0].parentNode.childNodes;metaTags=new Array();for(var i=0;i<head.length;i++){if(head[i].tagName!=null&&head[i].tagName.toUpperCase()=='META'){metaTags[head[i].name]=head[i].content;}}}
+return metaTags[inKey];};function install_TMCE(){var tmce_init=getMetaTag('TINYMCEPLUGIN_INIT');if(tmce_init!=null){eval("tinyMCE.init({"+unescape(tmce_init)+"});");return;}
+alert("Unable to install TinyMCE; <META name='TINYMCEPLUGIN_INIT' is missing");}
 install_TMCE();

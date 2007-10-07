@@ -5,46 +5,44 @@
   <td colspan="2">
    <h3> Format </h3>
   </td>
- </tr>
- <tr>
-  <td style="vertical-align:top;">
-   <img src="%ATTACHURLPATH%/Format_Drop_Down.png" alt="Format_Drop_Down.png" width='92' height='151' />
-  </td>
-  <td style="vertical-align:top">
-   <ul>
-    <li> ==Paragraph== - Normal text style </li>
-    <li> ==Address== - Address style is normally shown as italic in most browsers </li>
-    <li> ==Preformatted== - Puts text inside &lt;pre&gt; HTML tags. Shown as monospace but TWiki variables are working inside a preformatted area. To show text raw and uninterpreted use the VERBATIM Style. </li>
-    <li> ==Heading 1-6== - Headings. 1 is largest. </li>
-   </ul>
-  </td>
- </tr>
- <tr>
   <td colspan="2">
    <h3> Styles </h3>
   </td>
  </tr>
  <tr>
+  <td width="100px" style="vertical-align:top;">
+   <img src="%ATTACHURLPATH%/Format_Drop_Down.png" alt="Format_Drop_Down.png" width='92' height='151' />
+  </td>
   <td style="vertical-align:top;">
+   <ul>
+    <li> ==Paragraph== - Normal text style </li>
+    <li> ==Heading 1-6== - Headings. 1 is largest </li>
+   </ul>
+  </td>
+  <td width="100px" style="vertical-align:top;">
    <img src="%ATTACHURLPATH%/Styles_Drop_Down.png" alt="Styles_Drop_Down.png" />
   </td>
-  <td style="vertical-align:top;"><ul>
+  <td>
+   <ul>
    <li> ==--Styles--== Use this to remove a style in the selected text </li>
-   <li> ==NOAUTOLINK== - Wraps &lt;noautolink&gt; tags around the selected text. Prevents !WikiWords from becoming links. </li>
-   <li> ==VERBATIM== - Wraps &lt;verbatim&gt; tags around the selected text. Verbatim text is shown in monospace with line breaks. No TWiki Variables are interpreted inside verbatim tags. </li>
-   <li> ==PROTECTED== - Text is saved exactly as it is typed. Use this to save advanced TWiki Variables where you do not want the Wysiwyg editor to interpret or modify the text. </li>
-   <li> ==LITERAL== - HTML is saved exactly as it appears in the editor. Wraps thee HTML in &lt;literal> tags. </li></ul>
+   <li> ==NOAUTOLINK== - Wraps &lt;noautolink&gt; tags around the selected text. Prevents !WikiWords from becoming links </li>
+   <li> ==VERBATIM== - Wraps &lt;verbatim&gt; tags around the selected text. Verbatim text is shown in monospace with line breaks. No TWiki Variables are interpreted inside verbatim tags </li>
+   <li> ==LITERAL== - Styled content is saved exactly as it appears in the editor. Wraps the content in &lt;literal> tags </li>
+   <li> ==Protect on save== - Text is saved exactly as it is typed. Use this to save advanced TWiki Variables where you do not want the Wysiwyg editor to interpret or modify the text during save </li></ul>
   </td>
  </tr>
  <tr>
   <td colspan="2">
    <h3> Indent </h3>
   </td>
+  <td>
+   <h3 colspan="2"> Links </h3>
+  </td>
  </tr>
  <tr>
   <td style="vertical-align:top; ">
-   <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/indent.gif" alt="indent.gif" />
-   <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/outdent.gif" alt="outdent.gif" />
+   <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/indent.gif" alt="indent" />
+   <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/outdent.gif" alt="outdent" />
   </td>
   <td>
    <ul>
@@ -54,18 +52,11 @@
     <li> The default TWiki skin shows the text indented with a blue background. Unindenting turns the text into normal text. </li>
    </ul>
   </td>
- </tr>
- <tr>
-  <td colspan="2">
-   <h3> Links </h3>
-  </td>
- </tr>
- <tr>
   <td style="vertical-align:top; ">
-   <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/link.gif" alt="link.gif" alt="link.gif" />
-   <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/link.gif" alt="link.gif" alt="unlink.gif" />
+   <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/link.gif" alt="link" />
+   <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/unlink.gif" alt="unlink" />
   </td>
-  <td>
+  <td style="vertical-align:top; ">
    <ul>
     <li> Links can either point to a URL or to the name of a TWiki topic. </li>
     <li> E.g. =http://twiki.org=, =TopicNames=, =Webname.TopicNames=, or =Webname.Subweb.WebName=. </li>
@@ -76,27 +67,23 @@
   <td colspan="2">
    <h3> Images </h3>
   </td>
- </tr>
- <tr>
-  <td style="vertical-align:top; ">
-   <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/image.gif" alt="image.gif" />
-  </td>
-  <td>
-   <ul>
-    <li> Type the name of an image file that you have attached to the current topic. You can also put a real URL as an image link. </li>
-   </ul>
-  </td>
- </tr>
- <tr>
   <td colspan="2">
    <h3> Anchors </h3>
   </td>
  </tr>
  <tr>
   <td style="vertical-align:top; ">
-   <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/anchor.gif" alt="anchor.gif" />
+   <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/image.gif" alt="image" />
   </td>
   <td>
+   <ul>
+    <li> Type the name of an image file that you have attached to the current topic. You can also put a real URL as an image link. </li>
+   </ul>
+  </td>
+  <td style="vertical-align:top; ">
+   <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/anchor.gif" alt="anchor" />
+  </td>
+  <td style="vertical-align:top; ">
    <ul>
     <li> An anchor is a hidden mark you can use to link to a certain part of a topic, e.g a heading or a paragraph. An anchor must be a !WikiWord. </li>
    </ul>
@@ -107,11 +94,7 @@
 <ol>
  <li> Create a list item using the toolbar button</li>
  <li> In the list item, type =Set NAME = value= </li>
- <li> (Optional) Select the value, and assign the ==PROTECTED== style to it.
-  <ul>
-   <li> Step 3 is required if the value contains any TWiki Markup Language or if you style it e.g. to add bold, or if it's sensitive to the correct number of spaces.
-   </li>
-  </ul>
+ <li> Select the value, and assign the ==Protect on save== style to it (only required if the value contains any TWiki Markup Language or if you style it e.g. to add bold, or if it's sensitive to the number of spaces)
  </li>
 </ol>
 
