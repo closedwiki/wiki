@@ -1,5 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
+%META:TOPICINFO{author="TWikiContributor" date="1191730164" format="1.0" version="$Rev$"}%
 ---+ Table Plugin
 
 Gives extra control of table display:
@@ -60,35 +59,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 ---++ Table Attributes
 
 Attributes are defined as a =TABLEATTRIBUTES= Plugin setting in this topic, a =TABLEATTRIBUTES= preferences setting, or on line before the table using =%<nop>TABLE{...}%=:
-
-| *Argument*       | *Comment*  | *Default&nbsp;value*  | *Example*  |
-| =sort=           | Set table sorting ="on"= or ="off"=. | <span class="twikiGrayText">unspecified</span> | =sort="on"= |
-| =initsort=       | Column to sort initially (="1"= to number of columns). | <span class="twikiGrayText">unspecified</span> | =initsort="2"= |
-| =initdirection=  | Initial sorting direction for =initsort=, set to  ="up"= (descending) or ="down"= (ascending). | <span class="twikiGrayText">unspecified</span> | =initdirection="up"= |
-| =headerbg=       | Header cell background colour. | ="#6b7f93"= | =headerbg="#999999"= |
-| =headerbgsorted= | Header cell background colour of a sorted column. | the value of =headerbg= | =headerbgsorted="#32596c"= |
-| =headercolor=    | Header cell text colour. | ="#ffffff"= | =headercolor="#0000cc"= |
-| =databg=	       | Data cell background colour, a comma separated list. Specify ="none"= for no colour, that is to use the colour/background of the page the table is on. | ="#edf4f9,#ffffff"= | =databg="#f2f2f2,#ffffff"= |
-| =databgsorted=   | Data cell background colour of a sorted column; see =databg=. | the values of =databg= | =databgsorted="#d4e8e4,#e5f5ea"= |
-| =datacolor=      | Data cell text colour, a comma separated list. | <span class="twikiGrayText">unspecified</span> | =datacolor="#0000CC, #000000"= |
-| =tableborder=    | Table border width (pixels). | ="1"= | =tableborder="2"= |
-| =tableframe=     | Table frame, set to ="void"= (no sides), ="above"= (the top side only), ="below"= (the bottom side only), ="hsides"= (the top and bottom sides only), ="lhs"= (the left-hand side only), ="rhs"= (the right-hand side only), ="vsides"= (the right and left sides only), ="box"= (all four sides), ="border"= (all four sides). | <span class="twikiGrayText">unspecified</span> | =tableframe="hsides"= |
-| =tablerules=     | Table rules, set to ="none"= (no rules), ="groups"= (rules will appear between row groups and column groups only), ="rows"= (rules will appear between rows only), ="cols"= (rules will appear between columns only), ="all"= (rules will appear between all rows and columns). | <span class="twikiGrayText">unspecified</span>  | =tablerules="rows"= |		  
-| =cellpadding=    | Cell padding (pixels). | ="0"= | =cellpadding="0"= |
-| =cellspacing=    | Cell spacing (pixels). | ="0"= | =cellspacing="3"= |
-| =cellborder=     | Cell border width (pixels). | <span class="twikiGrayText">unspecified</span> | =cellborder="0"= |
-| =valign=         | Vertical alignment of cells and headers, set to ="top"=, ="middle"=, ="bottom"= or ="baseline"=. | <span class="twikiGrayText">unspecified</span>  | =valign="top"= |
-| =headervalign=   | Vertical alignment of header cells; overrides =valign=. | <span class="twikiGrayText">unspecified</span>  | =headervalign="top"= |
-| =datavalign=     | Vertical alignment of data cells; overrides =valign=. | <span class="twikiGrayText">unspecified</span>  | =datavalign="top"= |
-| =headeralign=    | Header cell alignment, one value for all columns, or a comma separated list for different alignment of individual columns. Set to ="left"=, ="center"=, ="right"= or ="justify"=. Overrides individual cell settings. | <span class="twikiGrayText">unspecified</span>  | =headeralign="left,right"= |
-| =dataalign=      | Data cell alignment, one value for all columns, or a comma separated list for different alignment of individual columns. Set to ="left"=, ="center"=, ="right"= or ="justify"=. Overrides individual cell settings. | <span class="twikiGrayText">unspecified</span>  | =dataalign="center"= |
-| =tablewidth=     | Table width: Percentage of window width, or absolute pixel value. | <span class="twikiGrayText">unspecified</span>  | =tablewidth="100%"= |
-| =columnwidths=   | Column widths: Comma delimited list of column widths, percentage or absolute pixel value. | <span class="twikiGrayText">unspecified</span>  | =columnwidths="80%,20%"= |
-| =headerrows=     | Number of header rows to exclude from sort. (will be rendered in a HTML =thead= section) | ="1"=  | =headerrows="1"= |
-| =footerrows=     | Number of footer rows to exclude from sort. (will be rendered in a HTML =tfoot= section) | ="0"=  | =footerrows="1"= |
-| =id=             | Table identifier string. | <span class="twikiGrayText">unspecified</span> | =id="userTable"= |
-| =summary=        | Table summary used by screenreaders: A summary of what the table presents. It should provide an orientation for someone who listens to the table. | <span class="twikiGrayText">unspecified</span> | =summary="List of subscribed users"= |
-| =caption=        | Table caption: A title that will be displayed just above the table.| <span class="twikiGrayText">unspecified</span> | =caption="Users"= |
+%INCLUDE{"%SYSTEMWEB%.VarTABLE" section="table_attributes"}%
 
 The =%<nop>TABLE{...}%= settings override =TABLEATTRIBUTES= preferences settings, which override the =TABLEATTRIBUTES= Plugin settings. 
 
@@ -154,8 +125,11 @@ This plugin is pre-installed with your TWiki release. You should not have to ins
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/JohnTalintyre, TWiki:Main/PeterThoeny |
-|  Plugin Version: | 1.032 |
+|  Copyright: | &copy; 2001-2007, TWiki:Main/JohnTalintyre, Peter@Thoeny.org ([[http://www.twiki.net/][TWIKI.NET]]), TWiki Contributors |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 06 Oct 2007 (15180) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  06 Oct 2007 | 15180: PTh: Added %SYSTEMWEB%.VarTABLE to have it listed in %SYSTEMWEB%.TWikiVariables |
 |  27 Jun 2007 | 1.024 - 1.027 Various small bug fixes. |
 |  24 Jun 2007 | 1.023: Arthur Clemens: Inline styles are now written to the head; updated default sort icons (from %SYSTEMWEB%.TWikiDocGraphics). |
 |  23 Jun 2007 | 1.022: Arthur Clemens: Fixed styling of param =tablerules= on Internet Explorer. |
@@ -190,6 +164,6 @@ This plugin is pre-installed with your TWiki release. You should not have to ins
 |  Perl Version: | 5.0 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.StandardColors
-
