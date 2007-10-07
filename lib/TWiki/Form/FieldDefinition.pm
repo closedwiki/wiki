@@ -200,6 +200,8 @@ sub populateMetaFromQueryData {
     my( $this, $query, $meta, $old ) = @_;
     my $value;
 
+    return unless $this->{name};
+
     if( defined( $query->param( $this->{name} ))) {
 
         if( $this->isMultiValued() ) {
