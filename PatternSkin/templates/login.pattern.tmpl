@@ -4,32 +4,51 @@
 
 %TMPL:DEF{"pagetitle"}%%TMPL:END%
 
+%TMPL:DEF{"script:skintemplate"}%<style type="text/css" media="all">
+@import url("%PUBURL%/%SYSTEMWEB%/TwistyContrib/twist.css");
+</style>
+<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikilib.js"></script>
+<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikiPref.js"></script>
+<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikiCSS.js"></script>
+<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TwistyContrib/twist.compressed.js"></script>
+<script type="text/javascript">
+// <![CDATA[
+var styleText = '<style type="text/css" media="all">.twikiMakeVisible{display:inline;}.twikiMakeVisibleInline{display:inline;}.twikiMakeVisibleBlock{display:block;}.twikiMakeHidden{display:none;}</style>';
+document.write(styleText);
+// ]]>
+</script>%TMPL:END%
+
+%TMPL:DEF{"loginasadministratorstep"}%<div class="twikiFormStep">
+%TMPL:P{"loginasadministratorlink"}%
+</div><!-- /twikiFormStep-->%TMPL:END%
+
 %TMPL:DEF{"usernamestep"}%<div class="twikiFormStep">
 ---+++ %MAKETEXT{"Username"}%
 
-%TMPL:P{"usernamefield"}%
-<p><div class="twikiGrayText">%TMPL:P{"usernamenote"}%</div><div class="twikiGrayText">%TMPL:P{"authrealm"}%</div></p>
+%TMPL:P{"usernamefield"}% %TMPL:P{"usernamefieldhelp"}%
+
+<p class="twikiGrayText">%TMPL:P{"loginasadministratorlink"}%</p>
 </div><!-- /twikiFormStep-->%TMPL:END%
+
+%TMPL:DEF{"usernamefieldhelp"}%%TWISTY{mode="span" showlink="%MAKETEXT{"Help"}%" hidelink="%MAKETEXT{"Hide help"}%" remember="on"}% <div class="twikiHelp">%TMPL:P{"usernamenote"}%</div> %ENDTWISTY%%TMPL:END%
+
 
 %TMPL:DEF{"passwordstep"}%<div class="twikiFormStep">
 ---+++ %MAKETEXT{"Password"}%
 
-%TMPL:P{"passwordfield"}% %BR% %TMPL:P{"passwordnote"}%
-%TMPL:P{context="can_remember_login" then="rememberbox"}%
+%TMPL:P{"passwordfieldnoteremember"}%
 </div><!-- /twikiFormStep-->%TMPL:END%
 
 %TMPL:DEF{"notestep"}%<div class="twikiFormStep">
 ---++ %BANNER%
-<p>
-%TMPL:P{"note"}%
-</p>
-</div><!-- /twikiFormStep-->%TMPL:END%
+%TMPL:P{"note"}%</div><!-- /twikiFormStep-->%TMPL:END%
 
 %TMPL:DEF{"submitstep"}%<div class="twikiFormStep twikiLast">%TMPL:P{"submit"}%</div><!-- /twikiFormStep-->%TMPL:END%
 
 %TMPL:DEF{"form"}%<div id="twikiLogin">
 %TMPL:P{"formstart"}%
-<div class="twikiFormSteps">%TMPL:P{"notestep"}%%TMPL:P{"usernamestep"}%%TMPL:P{"passwordstep"}%%TMPL:P{"submitstep"}%</div><!-- /twikiFormSteps-->
+<div class="twikiFormSteps">%TMPL:P{"notestep"}%
+%TMPL:P{"usernamestep"}%%TMPL:P{"passwordstep"}%%TMPL:P{"submitstep"}%</div><!-- /twikiFormSteps-->
 %TMPL:P{"formend"}%
 <span class="twikiGrayText">%TMPL:P{"seealsonote"}%</span>
 </div><!-- /twikiLogin-->%TMPL:END%
