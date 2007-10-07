@@ -12,28 +12,7 @@ var Pattern = {
 		);
 		newEl.className = 'twikiActionFormStepSign';
 	},
-	
-	launchWindow:function(inWeb, inTopic) {
-		var scriptUrl = Pattern.getMetaTag('SCRIPTURLPATH');
-		return twiki.Window.openPopup(scriptUrl + "/",
-			{ web:inWeb,
-			  topic:inTopic,
-			  template:"viewplain"
-			} );
-	},
-	
-	getMetaTag:function(inKey) {
-		if (!Pattern.metaTags || Pattern.metaTags.length == 0) {
-			Pattern.metaTags = document.getElementsByTagName("META");
-		}
-		for (var i in Pattern.metaTags) { 
-			if (Pattern.metaTags[i].name == inKey) { 
-				return Pattern.metaTags[i].content; 
-   			}
-   		}
-		return null; 
-	},
-	
+
 	/**
 	Creates a attachment counter in the attachment table twisty.
 	*/
@@ -122,11 +101,7 @@ var patternRules = {
 };
 Behaviour.register(patternRules);
 
-function launchWindow(inWeb, inTopic) {
-	Pattern.launchWindow(inWeb, inTopic);
-}
-
-var TEXT_JUMP = Pattern.getMetaTag('TEXT_JUMP');
-var TEXT_SEARCH = Pattern.getMetaTag('TEXT_SEARCH');
-var TEXT_NUM_TOPICS = Pattern.getMetaTag('TEXT_NUM_TOPICS');
-var TEXT_MODIFY_SEARCH = Pattern.getMetaTag('TEXT_MODIFY_SEARCH');
+var TEXT_JUMP = twiki.getMetaTag('TEXT_JUMP');
+var TEXT_SEARCH = twiki.getMetaTag('TEXT_SEARCH');
+var TEXT_NUM_TOPICS = twiki.getMetaTag('TEXT_NUM_TOPICS');
+var TEXT_MODIFY_SEARCH = twiki.getMetaTag('TEXT_MODIFY_SEARCH');

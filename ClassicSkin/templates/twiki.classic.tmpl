@@ -20,17 +20,7 @@
 %TMPL:DEF{"script"}%<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiJavascripts/twikilib.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiJavascripts/twikiWindow.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiJavascripts/twikiEvent.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-	function launchWindow(inWeb, inTopic) {
-		return twiki.Window.openPopup("%SCRIPTURLPATH{"view"}%/",
-			{ web:inWeb,
-			  topic:inTopic,
-			  template:"viewplain"
-			} );
-	}
-//]]>
-</script>%TMPL:P{"templatescript"}%%TMPL:END%
+%TMPL:P{"templatescript"}%%TMPL:END%
 
 
 
@@ -45,6 +35,8 @@
 %TMPL:DEF{"head"}%<head>
  %TMPL:P{"windowtitle"}%
 	<meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" /> <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
+    <meta name="SCRIPTURLPATH" content="%SCRIPTURLPATH%" />
+    <meta name="SCRIPTSUFFIX" content="%SCRIPTSUFFIX%" />
 	<link rel="icon" href="%FAVICON%" type="image/x-icon" /> <link rel="shortcut icon" href="%FAVICON%" type="image/x-icon" />
 	<base href="%SCRIPTURL{%SCRIPTNAME%}%/%WEB%/%TOPIC%"></base>
 	%TMPL:P{"script"}%
