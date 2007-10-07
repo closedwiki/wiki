@@ -102,3 +102,5 @@ Behaviour.register(patternEditPageRules);
 function initTextAreaStyles() {
 	Pattern.Edit.initTextAreaStyles(["font", "enlarge", "shrink"]);
 }
+
+twiki.Event.addLoadEvent(initTextArea, false);

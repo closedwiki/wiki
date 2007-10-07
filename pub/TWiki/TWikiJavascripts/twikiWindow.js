@@ -109,20 +109,11 @@ twiki.Window = {
 // Unfortunate global function required because so many translated
 // strings use it
 function launchWindow(inWeb, inTopic) {
-    var scripturl;
-    var scriptsuffix;
-    var metas = document.getElementsByTagName('META');
-    for (var i = 0; i < metas.length; i++) {
-        alert(metas[i].name+" = "+metas[i].content);
-        if (metas[i].name == 'scripturl') {
-            scripturl = metas[i].content;
-        }
-        if (metas[i].name == 'scriptsuffix') {
-            scriptsuffix = metas[i].content;
-        }
-    }
-    return twiki.Window.openPopup(scripturl+'/view'+
-                                  scriptsuffix+'/',
-                                  { web:inWeb, topic:inTopic,
-                                          template:"viewplain" } );
+    var scripturlpath = twiki.getMetaTag('SCRIPTURLPATH');
+    var scriptsuffix = twiki.getMetaTag('SCRIPTSUFFIX');
+    twiki.Window.openPopup(scripturlpath+'/view'+
+                           scriptsuffix+'/',
+                           { web:inWeb, topic:inTopic,
+                                   template:"viewplain" } );
+    return false;
 }

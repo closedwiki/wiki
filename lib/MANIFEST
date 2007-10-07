@@ -898,6 +898,7 @@ pub/TWiki/TWikiJavascripts/twikiStyles.js 0644
 pub/TWiki/TWikiJavascripts/twikiWindow.js 0644
 pub/TWiki/TWikiJavascripts/twiki_edit.js 0644
 pub/TWiki/TWikiJavascripts/twiki_renamebase.js 0644
+pub/TWiki/TWikiJavascripts/twiki_renamedelete.js 0644
 pub/TWiki/TWikiJavascripts/twikiuiToggle.js 0644
 pub/TWiki/TWikiJavascripts/unicode_chars.js 0644
 pub/TWiki/TWikiLogos/T-badge-88x31.gif 0644
