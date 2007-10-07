@@ -1,4 +1,5 @@
 data/TWiki/EditTablePlugin.txt 0644
+data/TWiki/VarEDITTABLE.txt 0644
 lib/TWiki/Plugins/EditTablePlugin.pm 0444
 lib/TWiki/Plugins/EditTablePlugin/Core.pm 0444
 pub/TWiki/EditTablePlugin/btn_delete_disabled.gif 0644
