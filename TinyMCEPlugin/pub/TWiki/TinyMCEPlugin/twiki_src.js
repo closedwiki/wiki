@@ -196,26 +196,31 @@ function initTextAreaStyles() {
     }
 }
 
-function install_TMCE() {
-    // find the TINYMCEPLUGIN_INIT META
-    var metatags = document.getElementsByTagName("META");
-    for (var i = 0; i < metatags.length; i++) {
-        if (metatags[i].name == 'TINYMCEPLUGIN_INIT') {
-            var tmce_init = unescape(metatags[i].content);
-            eval("tinyMCE.init({" + tmce_init + "});");
-            return;
+var metaTags;
+var getMetaTag = function(inKey) {
+    if (metaTags == null || metaTags.length == 0) {
+        // Do this the brute-force way becasue of the problem
+        // seen sporadically on Bugs where the DOM appears complete, but
+        // the META tags are not all found by getElementsByTagName
+        var head = document.getElementsByTagName("META");
+        head = head[0].parentNode.childNodes;
+        metaTags = new Array();
+        for (var i = 0; i < head.length; i++) {
+            if (head[i].tagName != null &&
+                head[i].tagName.toUpperCase() == 'META') {
+                metaTags[head[i].name] = head[i].content;
+            }
         }
     }
-    // Didn't find the tag that way; possibly this is the problem
-    // seen sporadically on Bugs where the DOM appears complete, but
-    // the META tags are not all found by getElementsByTagName
-    metatags = metatags[0].parentNode.childNodes;
-    for (var i = 0; i < metatags.length; i++) {
-        if (metatags[i].name == 'TINYMCEPLUGIN_INIT') {
-            var tmce_init = unescape(metatags[i].content);
-            eval("tinyMCE.init({" + tmce_init + "});");
-            return;
-        }
+    return metaTags[inKey]; 
+};
+
+function install_TMCE() {
+    // find the TINYMCEPLUGIN_INIT META
+    var tmce_init = getMetaTag('TINYMCEPLUGIN_INIT');
+    if (tmce_init != null) {
+        eval("tinyMCE.init({" + unescape(tmce_init) + "});");
+        return;
     }
     alert("Unable to install TinyMCE; <META name='TINYMCEPLUGIN_INIT' is missing"); 
 }
