@@ -16,5 +16,5 @@
      | =nopost= | Set to "on" to disable insertion of the posted text into the topic. | =off= |
      | =remove= | Set to "on" to remove the comment prompt after the first time it is clicked. | =off= |
      | =button= | Button label text | =Add comment= |
-%ENDSECTION%
+%ENDSECTION{"comment_attributes"}%
    * See CommentPlugin for more information
