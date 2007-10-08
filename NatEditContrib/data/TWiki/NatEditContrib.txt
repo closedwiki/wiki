@@ -14,6 +14,14 @@
 %TOC%
 
 ---++ Description
+<table style="float:right">
+<tr>
+  <td><img src="%ATTACHURLPATH%/wikiringlogo40x40.png"></td>
+  <td><a href="http://wikiring.de" title="Make your Wiki ring!" style="text-decoration:none">
+      Powered by <br /> <nop>WikiRing Consultants </a>
+  </td>
+</tr>
+</table>
 The <nop>NatEdit is an wiki editor that helps in learning the <nop>TWikiMarkup Language
 by providing a GUI. By design, this is not a wysiwyg editor that tries to generate the
 correct TML in the background. Instead, the user is still in charge of writing correct
