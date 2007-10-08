@@ -147,9 +147,11 @@ Sponsored by [[http://www.trivadis.com][Trivadis AG]] & [[http://twiki.net][TWIK
 |  Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2007 Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v1.51 |
+|  Version: | v1.53 |
 |  Change History: | |
-|  08 Oct 2007 | fixed word toolbar together with <nop>TinyMCEPlugin |
+|  08 Oct 2007 | fixed word toolbar together with <nop>TinyMCEPlugin; \
+                 fixed launching a popup by not relying on twiki's javascript; \
+                 using css sprites instead of individual buttons |
 |  02 Oct 2007 | be compatible with <nop>TinyMCEPlugin |
 |  23 Aug 2007 | bug fixes for IE6&7 - [[http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4430][Item4430]] |
 |  04 Aug 2007 | added Word theme \

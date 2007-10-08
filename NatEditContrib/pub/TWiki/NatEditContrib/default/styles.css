@@ -1,61 +1,54 @@
 /* default theme */
 .natEditToolBar { height:26px; margin:0px;}
-.natEditToolBar a {width:24px; height:24px;}
-.natEditEditButton a { background-image:url(button_edit.png); }
-.natEditEditButton a:hover { background-image:url(button_edit_hi.png); }
-.natEditBoldButton a { background-image:url(button_bold.png); }
-.natEditBoldButton a:hover { background-image:url(button_bold_hi.png); }
-.natEditCancelButton a { background-image:url(button_cancel.png); width:56px;}
-.natEditCancelButton a:hover { background-image:url(button_cancel_hi.png); width:56px;}
-.natEditCenterButton a { background-image:url(button_center.png); }
-.natEditCenterButton a:hover { background-image:url(button_center_hi.png); }
-.natEditCheckpointButton a { background-image:url(button_floppy.png); }
-.natEditCheckpointButton a:hover { background-image:url(button_floppy_hi.png); }
-.natEditExtButton a { background-image:url(button_ext.png); }
-.natEditExtButton a:hover { background-image:url(button_ext_hi.png); }
-.natEditFormButton a { background-image:url(button_form.png);}
-.natEditFormButton a:hover { background-image:url(button_form_hi.png);}
-.natEditH1Button a { background-image:url(button_h1.png); }
-.natEditH1Button a:hover { background-image:url(button_h1_hi.png); }
-.natEditH2Button a { background-image:url(button_h2.png); }
-.natEditH2Button a:hover { background-image:url(button_h2_hi.png); }
-.natEditH3Button a { background-image:url(button_h3.png); }
-.natEditH3Button a:hover { background-image:url(button_h3_hi.png); }
-.natEditH4Button a { background-image:url(button_h4.png); }
-.natEditH4Button a:hover { background-image:url(button_h4_hi.png); }
-.natEditHelpButton a { background-image:url(button_help.png);}
-.natEditHelpButton a:hover { background-image:url(button_help_hi.png);}
-.natEditImageButton a { background-image:url(button_image.png); }
-.natEditImageButton a:hover { background-image:url(button_image_hi.png); }
-.natEditIntButton a { background-image:url(button_int.png); }
-.natEditIntButton a:hover { background-image:url(button_int_hi.png); }
-.natEditItalicButton a { background-image:url(button_italic.png); }
-.natEditItalicButton a:hover { background-image:url(button_italic_hi.png); }
-.natEditJustifyButton a { background-image:url(button_justify.png); }
-.natEditJustifyButton a:hover { background-image:url(button_justify_hi.png); }
-.natEditLeftButton a { background-image:url(button_left.png); }
-.natEditLeftButton a:hover { background-image:url(button_left_hi.png); }
-.natEditMathButton a { background-image:url(button_formula.png); }
-.natEditMathButton a:hover { background-image:url(button_formula_hi.png); }
-.natEditMonoButton a { background-image:url(button_mono.png); }
-.natEditMonoButton a:hover { background-image:url(button_mono_hi.png); }
-.natEditPreviewButton a { background-image:url(button_eye.png); }
-.natEditPreviewButton a:hover { background-image:url(button_eye_hi.png); }
-.natEditRightButton a { background-image:url(button_right.png); }
-.natEditRightButton a:hover { background-image:url(button_right_hi.png); }
-.natEditSaveButton a { background-image:url(button_save.png); width:46px;}
-.natEditSaveButton a:hover { background-image:url(button_save_hi.png); width:46px;}
-.natEditSignatureButton a { background-image:url(button_signature.png); }
-.natEditSignatureButton a:hover { background-image:url(button_signature_hi.png); }
-.natEditStrikeButton a { background-image:url(button_strike.png); }
-.natEditStrikeButton a:hover { background-image:url(button_strike_hi.png); }
-.natEditSubButton a { background-image:url(button_sub.png); }
-.natEditSubButton a:hover { background-image:url(button_sub_hi.png); }
-.natEditSupButton a { background-image:url(button_super.png); }
-.natEditSupButton a:hover { background-image:url(button_super_hi.png); }
-.natEditUnderlineButton a { background-image:url(button_underlined.png); }
-.natEditUnderlineButton a:hover { background-image:url(button_underlined_hi.png); }
-.natEditUndoButton a { background-image:url(button_undo.png); }
-.natEditUndoButton a:hover { background-image:url(button_undo_hi.png); }
-.natEditVerbatimButton a { background-image:url(button_verbatim.png); }
-.natEditVerbatimButton a:hover { background-image:url(button_verbatim_hi.png); }
+.natEditToolBar a:hover,
+.natEditToolBar a {width:24px; height:24px; background-image:url(buttons_sprite.png);}
+.natEditH1Button a { background-position:0px 0px; }
+.natEditH1Button a:hover { background-position:0px -25px; }
+.natEditH2Button a { background-position:-25px 0px; }
+.natEditH2Button a:hover { background-position:-25px -25px; }
+.natEditH3Button a { background-position:-50px 0px; }
+.natEditH3Button a:hover { background-position:-50px -25px; }
+.natEditH4Button a { background-position:-75px 0px; }
+.natEditH4Button a:hover { background-position:-75px -25px; }
+.natEditBoldButton a { background-position:-100px 0px; }
+.natEditBoldButton a:hover { background-position:-100px -25px; }
+.natEditItalicButton a { background-position:-125px 0px; }
+.natEditItalicButton a:hover { background-position:-125px -25px; }
+.natEditMonoButton a { background-position:-150px 0px; }
+.natEditMonoButton a:hover { background-position:-150px -25px; }
+.natEditUnderlineButton a { background-position:-175px 0px; }
+.natEditUnderlineButton a:hover { background-position:-175px -25px; }
+.natEditStrikeButton a { background-position:-200px 0px; }
+.natEditStrikeButton a:hover { background-position:-200px -25px; }
+.natEditLeftButton a { background-position:-225px 0px; }
+.natEditLeftButton a:hover { background-position:-225px -25px; }
+.natEditCenterButton a { background-position:-250px 0px; }
+.natEditCenterButton a:hover { background-position:-250px -25px; }
+.natEditRightButton a { background-position:-275px 0px; }
+.natEditRightButton a:hover { background-position:-275px -25px; }
+.natEditJustifyButton a { background-position:-300px 0px; }
+.natEditJustifyButton a:hover { background-position:-300px -25px; }
+.natEditExtButton a { background-position:-325px 0px; }
+.natEditExtButton a:hover { background-position:-325px -25px; }
+.natEditIntButton a { background-position:-350px 0px; }
+.natEditIntButton a:hover { background-position:-350px -25px; }
+.natEditImageButton a { background-position:-375px 0px; }
+.natEditImageButton a:hover { background-position:-375px -25px; }
+.natEditMathButton a { background-position:-400px 0px; }
+.natEditMathButton a:hover { background-position:-400px -25px; }
+.natEditVerbatimButton a { background-position:-425px 0px; }
+.natEditVerbatimButton a:hover { background-position:-425px -25px; }
+.natEditSignatureButton a { background-position:-450px 0px; }
+.natEditSignatureButton a:hover { background-position:-450px -25px; }
+.natEditFormButton a { background-position:-475px 0px;}
+.natEditFormButton a:hover { background-position:-475px -25px;}
+.natEditPreviewButton a { background-position:-500px 0px; }
+.natEditPreviewButton a:hover { background-position:-500px -25px; }
+.natEditCheckpointButton a { background-position:-525px 0px; }
+.natEditCheckpointButton a:hover { background-position:-525px -25px; }
+.natEditSaveButton a { background-position:-550px 0px; width:46px;}
+.natEditSaveButton a:hover { background-position:-550px -25px;width:46px;}
+.natEditCancelButton a { background-position:-595px 0px; width:56px;}
+.natEditCancelButton a:hover { background-position:-595px -25px; width:56px;}
+.natEditHelpButton a { background-position:-655px 0px;}
+.natEditHelpButton a:hover { background-position:-655px -25px;}

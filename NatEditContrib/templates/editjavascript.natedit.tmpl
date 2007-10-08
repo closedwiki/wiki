@@ -100,6 +100,10 @@ function natEditHeadlineButtonAction(level) {
 function natEditMathButtonAction() {
   natInsertTags(%IF{"defined NATEDIT_MATH" then="%NATEDIT_MATH%" else="'<<nop>latex title=\"Example\">\n','\\sum_{x=1}^{n}\\frac{1}{x}','\n</latex>'"}%); 
 }
+function openWindow(web, topic) {
+  var win = window.open("%SCRIPTURL{"view"}%/"+web+"/"+topic+"?skin=plain", "HelpWindow", "menubar=no,toolbar=no,scrollbars=yes,status=no");
+  win.focus();
+}
 
 addLoadEvent(function() {
   if (typeof(tinyMCE) != 'undefined') {
