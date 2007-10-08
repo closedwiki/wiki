@@ -109,7 +109,8 @@ addLoadEvent(function() {
     }
   }
   var elem = document.getElementById('natEditToolBar');
-  elem.style['visibility'] = 'visible';
+  if (elem)
+    elem.style['visibility'] = 'visible';
 });
 </script>
 <!-- //templatejavascript -->%TMPL:END%

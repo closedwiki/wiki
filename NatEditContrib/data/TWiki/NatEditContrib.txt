@@ -139,8 +139,9 @@ Sponsored by [[http://www.trivadis.com][Trivadis AG]] & [[http://twiki.net][TWIK
 |  Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2007 Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v1.50 |
+|  Version: | v1.51 |
 |  Change History: | |
+|  08 Oct 2007 | fixed word toolbar together with <nop>TinyMCEPlugin |
 |  02 Oct 2007 | be compatible with <nop>TinyMCEPlugin |
 |  23 Aug 2007 | bug fixes for IE6&7 - [[http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4430][Item4430]] |
 |  04 Aug 2007 | added Word theme \
@@ -170,6 +171,6 @@ Sponsored by [[http://www.trivadis.com][Trivadis AG]] & [[http://twiki.net][TWIK
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 02 Oct 2007
+-- TWiki:Main.MichaelDaum - 08 Oct 2007
 
 %META:FILEATTACHMENT{name="screenshot1.png" attachment="screenshot1.png" attr="" comment="" date="1175688869" path="screenshot1.png" size="61040" stream="screenshot1.png" user="TWikiContributor" version="1"}%
