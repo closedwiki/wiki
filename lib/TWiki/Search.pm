@@ -1020,6 +1020,7 @@ s/\$pattern\((.*?\s*\.\*)\)/getTextPattern( $text, $1 )/ges;
 
     if ( $format && !$finalTerm ) {
         if ($separator) {
+            $separator = quotemeta($separator);
             $searchResult =~ s/$separator$//s;    # remove separator at end
         }
         else {
