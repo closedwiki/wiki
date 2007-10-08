@@ -4,4 +4,4 @@
 %INCLUDE{"UserListHeader"}%
 
 %TABLE{initsort="1"}%
-%SEARCH{"%META:FORM.*[U]serForm" type="regex" header="|*Country* | *State* | *FirstName* | *LastName* | *Organization* |" format="| $formfield(Country) | $formfield(State) | [[$topic][$formfield(FirstName)]] | [[$topic][$formfield(LastName)]] | $formfield(OrganisationName) |" excludetopic="Web*" nosearch="on" order="formfield(Country)"}%
+%SEARCH{"form.name~'*UserForm'" type="query" header="|*Country* | *State* | *FirstName* | *LastName* | *Organization* |" format="| $formfield(Country) | $formfield(State) | [[$topic][$formfield(FirstName)]] | [[$topic][$formfield(LastName)]] | $formfield(OrganisationName) |" excludetopic="Web*, *Template" nosearch="on" order="formfield(Country)"}%
