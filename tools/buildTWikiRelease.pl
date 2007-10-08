@@ -31,8 +31,8 @@ unless ( -e $twikiBranch ) {
 #TODO: should really do an svn revert..
    print STDERR "using existing checkout, removing ? files";
    chdir($twikiBranch);
-   `svn status | grep ? | sed 's/?/rm -r/' | sh`;
-   `svn up > TWiki-svn.log`;
+   `svn status | grep ? | sed 's/?/rm -r/' | sh > TWiki-svn.log`;
+   `svn up >> TWiki-svn.log`;
 }
 
 my $twikihome = `pwd`;
@@ -68,9 +68,10 @@ unless ($errorcode == 0) {
     close(UNIT);
     
     chdir($twikihome);
-    `scp -v TWiki* distributedinformation\@distributedinformation.com:/home/distributedinformation/www/$twikiBranch`
-		if ($SvensAutomatedBuilds);
-    sendEmail("Subject: TWiki $twikiBranch branch has Unit test FAILURES\n\n see http://distributedinformation.com/$twikiBranch/ for output files.\n".$unittestErrors);
+    if ($SvensAutomatedBuilds) {
+    	`scp TWiki* distributedinformation\@distributedinformation.com:/home/distributedinformation/www/TWikiBuilds`;
+    	sendEmail('twiki-dev@lists.sourceforge.net', "Subject: TWiki $twikiBranch branch has Unit test FAILURES\n\n see http://distributedinformation.com/$twikiBranch/ for output files.\n".$unittestErrors);
+    }
     die "\n\n$errorcode: unit test failures - need to fix them first\n" 
 }
 
@@ -105,14 +106,14 @@ chdir('lib');
 `perl ../tools/build.pl release -auto`;
 
 chdir($twikihome);
-#push the files to my server - http://distributedinformation.com/$twikiBranch/
-`scp -v TWiki* distributedinformation\@distributedinformation.com:/home/distributedinformation/www/$twikiBranch` 
-		if ($SvensAutomatedBuilds);
-
-my $buildOutput = `ls -alh *auto*`;
-$buildOutput .= "\n";
-$buildOutput .= `grep 'All tests passed' $twikihome/TWiki-UnitTests.log`;
-sendEmail("Subject: TWiki $twikiBranch built OK\n\n see http://distributedinformation.com/$twikiBranch/ for output files.\n".$buildOutput);
+if ($SvensAutomatedBuilds) {
+	#push the files to my server - http://distributedinformation.com/TWikiBuilds/
+	`scp TWiki* distributedinformation\@distributedinformation.com:/home/distributedinformation/www/$twikiBranch` ;
+	my $buildOutput = `ls -alh *auto*`;
+	$buildOutput .= "\n";
+	$buildOutput .= `grep 'All tests passed' $twikihome/TWiki-UnitTests.log`;
+	sendEmail('Builds@distributedINFORMATION.com', "Subject: TWiki $twikiBranch built OK\n\n see http://distributedinformation.com/$twikiBranch/ for output files.\n".$buildOutput);
+}
 
 
 sub getLocalSite {
@@ -133,6 +134,7 @@ sub getLocalSite {
 #Yes, this email setup only works for Sven - will look at re-using the .settings file CC made for BuildContrib
 sub sendEmail {
     return unless ($SvensAutomatedBuilds);
+    my $toAddress = shift;
     my $text = shift;
     use Net::SMTP;
     my $twikiDev = 'twiki-dev@lists.sourceforge.net';
@@ -140,10 +142,10 @@ sub sendEmail {
     my $smtp = Net::SMTP->new('mail.iinet.net.au', Hello=>'sven.home.org.au', Debug=>0);
 
     $smtp->mail('SvenDowideit@WikiRing.com');
-    $smtp->to($twikiDev);
+    $smtp->to($toAddress);
 
     $smtp->data();
-    $smtp->datasend("To: $twikiDev\n");
+    $smtp->datasend("To: $toAddress\n");
     $smtp->datasend($text);
     $smtp->dataend();
 
