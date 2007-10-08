@@ -29,6 +29,9 @@ sub ui {
     my $ar;
     my $extension = $query->param('extension');
     my $ext = '.tgz';
+
+    $this->findRepositories();
+
     my $repository = $this->getRepository($query->param('repository'));
     if (!defined($repository)) {
         return $this->ERROR("Repository not found. <pre> ".$query->param('repository')." </pre>");

@@ -47,6 +47,22 @@ sub new {
     return $this;
 }
 
+sub findRepositories {
+    my $this = shift;
+    unless (defined($this->{repositories})) {
+        my $replist = '';
+        $replist .= $TWiki::cfg{ExtensionsRepositories}
+          if defined $TWiki::cfg{ExtensionsRepositories};
+        $replist .= "$ENV{TWIKI_REPOSITORIES};" # DEPRECATED
+          if defined $ENV{TWIKI_REPOSITORIES};  # DEPRECATED
+        $replist = ";$replist;";
+        while ($replist =~ s/[;\s]+(.*?)=\((.*?),(.*?)(?:,(.*?),(.*?))?\)\s*;/;/) {
+            push(@{$this->{repositories}},
+                 { name => $1, data => $2, pub => $3});
+        }
+    }
+}
+
 sub getRepository {
     my ($this, $reponame) = @_;
     foreach my $place (@{$this->{repositories}}) {
