@@ -656,13 +656,12 @@ sub _isConvertableTable {
     return 1;
 }
 
-# Tidy up whitespace in a table cell. We use [\000-\040] to catch
-# all the WC:: special characters, and also strip trailing BRs, as
-# added by some table editors.
+# Tidy up whitespace on the sides of a table cell, and also strip trailing
+# BRs, as added by some table editors.
 sub _TDtrim {
     my $td = shift;
-    $td =~ s/^[\000-\040]+//;
-    $td =~ s/(<br \/>|<br>|[\000-\040])+$//;
+    $td =~ s/^($WC::NBSP|$WC::NBBR|$WC::CHECKn|$WC::CHECKs|$WC::CHECKw|$WC::CHECK1|$WC::CHECK2|$WC::TAB|\s)+//so;
+    $td =~ s/(<br \/>|<br>|$WC::NBSP|$WC::NBBR|$WC::CHECKn|$WC::CHECKs|$WC::CHECKw|$WC::CHECK1|$WC::CHECK2|$WC::TAB|\s)+$//so;
     return $td;
 }
 

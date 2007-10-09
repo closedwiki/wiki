@@ -165,7 +165,8 @@ Many thanks to the following sponsors for supporting this work:
 |  License | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
-|              | Bugs:Item4700: fixed colspans Bugs:Item4701: removed extra line between %TABLE and the table Bugs:Item4705: fixed spacing around literal and verbatim blocks Bugs:Item4706: merge adjacent verbatim blocks separated only by whitespace Bugs:Item4712: fixed eating of noautolink and literal Bugs:Item4763: list items spanning multiple lines fixed |
+|             | Bugs:Item4788: fixed unbalanced protect, which could cause loss of protected status |
+|  6 Oct 2007 | Bugs:Item4700: fixed colspans Bugs:Item4701: removed extra line between %TABLE and the table Bugs:Item4705: fixed spacing around literal and verbatim blocks Bugs:Item4706: merge adjacent verbatim blocks separated only by whitespace Bugs:Item4712: fixed eating of noautolink and literal Bugs:Item4763: list items spanning multiple lines fixed |
 |  17 Sep 2007 | Bugs:Item4647: Bugs:Item4652: problems related to DIV fixed. Bugs:Item4653: fixed multi-line twiki variables |
 |  16 Sep 2007 | Bugs:Item4630: polished up the way the secret string is done, to ensure synch between perl and JS. Item4622: added UTF-8 handling steps that fixup malformed UTF8 strings before presenting them to the editor (saves Moz) and stops the editor passing them back to TWiki (saves IE). Removed extra entity decoding steps that were causing problems. Bugs:Item4629: fixed issues with verbatim, highlighted by previous mangling of this topic |
 |  13 Sep 2007 | Bugs:Item4613 cleaned up spurious message when navigating away Bugs:Item4615 fixed incorrect rendering of emphasis next to br |
@@ -183,108 +184,108 @@ Many thanks to the following sponsors for supporting this work:
 |  12161 | Added support for embedded editable HTML in the edit template |
 |  12119 | Split into WysiwygPlugin and KupuContrib |
 |  11538 | Minor doc updates, minor fixes to spacing in lists, integrated Koen Marten's template topic patch |
-|  9671 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2025'>Item2025</a>  corrected handling of SPAN and FONT tags used for colour changes |
-|  9566 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1890'>Item1890</a>  doc update |
-|  9565 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1890'>Item1890</a> <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1041'>Item1041</a> <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item944'>Item944</a> Much more aggressive cleanup of HTML pasted in from external sources. Excessively verbose HTML (e.g. from Outlook) was causing apparent infinite looing behaviour. |
-|  8867 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1176'>Item1176</a>  commented out Cairo version of header handler |
-|  8780 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1625'>Item1625</a>  disable expansion of twiki variables in urls where there are other twiki variables that can't be expanded |
-|  8779 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1530'>Item1530</a>  support for templatetopic when editing new topics |
-|  8592 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1532'>Item1532</a>  WysiwygPlugin: Added two more do-not-edit-if-topic-contains parameters, pre+comments |
-|  8590 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1532'>Item1532</a>  WysiwygPlugin: Kenneths suggestion on proper handling of HTML comments (incl. change to kupu) |
-|  8572 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1529'>Item1529</a>  evil, evil. The XMLSerializer in IE isn't happy serializing the DOM. I have no idea why. Kupu manages to get away with this because it passes the DOM through the XML validator, which I had to disable because it strips comments. So, for now, the IE implementation will strip comments - but at least you can save again |
-|  8538 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1501'>Item1501</a>  table handling was a bit spazzy. Several problems fixed. |
-|  8535 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1518'>Item1518</a>  moved icon and string lists into topics, updated screenshot |
-|  8531 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1392'>Item1392</a>  reversed the sense of the navigate-away condition, again |
-|  8466 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1486'>Item1486</a>  added WYSIWYG_EXCLUDE to allow exclusion of 'uneditable' content |
-|  8463 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1486'>Item1486</a>  was stripping comments, wrongly. Had to disable the kupu filters completely, they just do too much damage. |
-|  8401 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1457'>Item1457</a>  corrected problem with bullet list at top of topic |
-|  8388 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1445'>Item1445</a>  fix for a javascript error, introduced by previous fix |
-|  8387 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1445'>Item1445</a>  small usability improvements |
-|  8334 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item663'>Item663</a>  TWiki.org doc merge: Fix incorrect link to kupu website |
-|  8327 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1411'>Item1411</a>  handle case of the result of a TWiki variable being nopped |
-|  8312 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1317'>Item1317</a>  wrong result returned from generation function when expanding HTML embedded in verbatim block |
-|  8301 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1397'>Item1397</a>  removed excess space after sqaub links |
-|  8300 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1231'>Item1231</a>  added %SPAN% to indicate a spanned-over cell in the editor. Improved handling of HTML in verbatim tags by inserting line breaks is the tag type calls for it, before removing the HTML. |
-|  8276 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1215'>Item1215</a>  added WYSIWYG_ICONS and WYSIWYG_TAGS to support user customisation of icon images and twiki variables that can be inserted |
-|  8274 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1314'>Item1314</a>  debugging in case the hang happens again; and made sure to default the editor just in case |
-|  8273 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1315'>Item1315</a>  short forms must be terminated by one of the same characters that terminate wikiwords |
-|  8272 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1391'>Item1391</a>  added special interpretation of IMG tags to expand selected TWiki variables within SRC attributes |
-|  8271 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1340'>Item1340</a>  refined handling of NOP to cover abbrevs |
-|  8270 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1311'>Item1311</a>  removed excess space inserted in headings |
-|  8269 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1339'>Item1339</a>  changed from using arbitrary attribute for notoc to a new CSS class. Arbitrary attributes are stripped by Kupu before save. |
-|  8268 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1344'>Item1344</a>  strip ^Ms inserted by Sarissa during serialisation on IE |
-|  8267 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1394'>Item1394</a>  still can't get text styles to work properly in IE; but I am now firmly of the opinion that the fault lies with the browser, and not with Kupu. |
-|  8232 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1341'>Item1341</a>  added appropriate CSS class |
-|  8152 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1313'>Item1313</a>  added caveat about editing complex HTML and mixed HTML-TML |
-|  8151 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1334'>Item1334</a>  headers not handled properly in Cairo version |
-|  8108 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1318'>Item1318</a>  corrected table/list parser for tables embedded in bulleted lists |
-|  8106 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1310'>Item1310</a>  support for &lt;nop/> |
-|  8105 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1317'>Item1317</a>  support for limited case of nopped variable |
-|  8104 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1320'>Item1320</a>  corrected interpretation of relative URL path in [[]] |
-|  8091 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1259'>Item1259</a>  changed comment handling; rather than trying to create HTML, which gets munged, create an HTML comment. This will only be editable by switching to source view, but hey, it's supposed to be WYSIWYG. Note that this also means that comments in pasted HTML should be retained now |
-|  8063 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1042'>Item1042</a>  spec of SCRIPTURL changed |
-|  7904 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1189'>Item1189</a>  reverting accidental checkin of experimental code |
-|  7903 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1189'>Item1189</a>  filter whitelist is not good enough; need to generate B and I nodes. templates/ pub/TWiki/WysiwygPlugin |
-|  7902 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1189'>Item1189</a>  it took bloody ages to track down, but finally discovered that bold and italic were being filtered out of spans by Kupu 1.3.2.... too smart for it's own good. So added them to the filter whitelist, and it works again. |
-|  7873 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1189'>Item1189</a>  added pre save filter to try and find where the attributes are disappearing to in FF |
-|  7872 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1187'>Item1187</a>  for lack of an s on an RE, the nation was lost (well, the multi-line comment actually). Thanks Kenneth! |
-|  7871 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item859'>Item859</a>  solved issue with non-display of inserted images. Was due to the use of an onSubmit handler to close the dialog, rather than an onLoad handler triggered when the IFRAME that contains the result is loaded. |
-|  7869 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1172'>Item1172</a>  had to rewrite big chunk of the table popup to get it working with 1.3.2 |
-|  7858 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1151'>Item1151</a>  rewrote link handlings stuff to leverage browser better |
-|  7854 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1175'>Item1175</a>  escape wikiwords within squabs |
-|  7815 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1158'>Item1158</a>  works for Cairo now as well |
-|  7814 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1158'>Item1158</a>  first implementation of AJAX interface to allow selectoin of topics from other webs |
-|  7812 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1154'>Item1154</a>  removed non-existent scull.gif |
-|  7811 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1155'>Item1155</a>  added extra recursion block, as Item1155 suggests it is needed |
-|  7801 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1042'>Item1042</a>  All sorts of clever tricks to handle expansion/compression of a subset of TWiki variables when they are used in URLs. Not a complete solution, but better than it was. |
-|  7799 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1024'>Item1024</a>  caught out by recursive call to beforeCommonTagsHandler in Cairo (nasty) |
-|  7798 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1042'>Item1042</a>  whoops, broke \t conversion in Cairo |
-|  7789 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1140'>Item1140</a>  testcase for 1140 |
-|  7788 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1140'>Item1140</a>  fix rewriting of img src urls (and updated MANIFEST for Kupu1.3.2) |
-|  7786 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1042'>Item1042</a>  extensive improvements to variable and URL recognition and conversion |
-|  7766 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item856'>Item856</a>  added doc on EDIT_SKIN to the plugin |
-|  7712 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1074'>Item1074</a>  upgrade to Kupu 1.3.2 complete (at last) |
-|  7710 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1074'>Item1074</a>  Fixed source edit mode |
-|  7709 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1074'>Item1074</a>  tidied up broken toolbar. There are still known issues |
-|  7700 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1074'>Item1074</a>  first pass at moving to Kupu 1.3.2. |
-|  7673 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1037'>Item1037</a>  insert wikiword only if selection is zero length |
-|  7672 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item977'>Item977</a>  changed to remove dangerous Cairo-based assumption, and use context ids instead |
-|  7630 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1025'>Item1025</a>  added 'escape clause' for old handlers implemented to support old TWiki releases without warnings |
-|  7506 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item941'>Item941</a>  Eliminated the last of the dynamic globals to try and solve saving problem. Can;t test with mod_perl, but is fine with speedycgi AFAICT |
-|  7456 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item873'>Item873</a>  minor issue; replace br with \n in pre |
-|  7455 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item873'>Item873</a>  obvious problem parsing closing pre tag on same line as open tag |
-|  7453 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item710'>Item710</a>  Handling HTML comments |
-|  7452 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item876'>Item876</a>  Item945: Item876: spacing around table cells, correct handling of variables. Had to compromise on handling [[]] but I think it's for the best. |
-|  7430 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item871'>Item871</a>  made sure that brackets are generated for non-wikiwords |
-|  7425 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item928'>Item928</a>  removed special interpretation of mailto links |
-|  7424 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item866'>Item866</a>  extended URL parsing to handle USERSWEB and SYSTEMWEB twiki variables, in the same hacky way as the core. |
-|  7416 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item870'>Item870</a>  a couple of corner-cases for correct handling of twiki variables |
-|  7401 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item899'>Item899</a>  changed list generation to use spaces instead of tabs |
-|  7265 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item180'>Item180</a>  removed pointless, outdated dependency check from DateFieldPlugin |
-|  6935 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item622'>Item622</a>  reverted 3 specs to tabs in Set lines in plugins topics for kompatterbility with Kigh-roe |
-|  6905 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item622'>Item622</a>  tabs -> 3 spacesto avoid confusing the users |
-|  6850 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item638'>Item638</a>  added instruction to run configure to all install docs (I hope) |
-|  6827 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item569'>Item569</a>  added default RELEASE to everything that had a version, and removed a load of dead code that was getting in the way |
-|  6758 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item569'>Item569</a>  computed version numbers for plugins from the repository rev they were built from. |
-|  6504 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item436'>Item436</a>  incremented vernos of all changed plugins |
-|  6485 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item429'>Item429</a>  trying to make access controls clearer |
-|  6401 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item340'>Item340</a>  re-initialisation bug found by ColasNahaboo when using mod_perl; fixed by correctly re-initialising the parse stack for each run of the convertor |
-|  6284 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item340'>Item340</a>  Release 0.16 of WysiwygPlugin |
-|  6279 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item340'>Item340</a>  bugfixes for release 0.16 of WysiwygPlugin |
-|  6261 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item335'>Item335</a>  Switched PNGs to indexed mode, as transparency doesn't work on IE for RGB images |
-|  6238 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item332'>Item332</a>  Added context identifier to WysiwygPlugin, and a button to the pattern view template. If WysiwygPlugin is enabled, then the button will appear. Neat, huh? |
-|  6195 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item196'>Item196</a>  getting plugin test suites to pass. Doesn't mean the plugins actually work, just that the test suites run (which is a good indicator) |
-|  6174 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item168'>Item168</a>  checkpoint checking for 0.16 |
-|  6151 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item186'>Item186</a>  more minor updates |
-|  6150 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item168'>Item168</a>  new icons, and a couple of bugfixes, to WysiwygPlugin |
-|  6092 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item196'>Item196</a>  more plugin and contrib fixes for develop; mainly just moving tests around and making sure they all pass. |
-|  6067 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item138'>Item138</a>  had to change to using beforeCommonTagsHandler and also escape % signs to prevent TWiki from rendering internal tags (as reported by Colas) |
-|  5979 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item168'>Item168</a>  corrected stupid error on IE; added screenshot |
-|  5977 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item168'>Item168</a>  release 0.13 |
-|  5948 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item168'>Item168</a>  nearly ready for 0.13 |
-|  5937 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item168'>Item168</a>  corrected images, twikified all images |
-|  5936 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item168'>Item168</a>  the import from cvs has screwed images |
-|  5934 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item168'>Item168</a>  twikified icon images, and renamed some images to be more intention-revealing |
+|  9671 | Bugs:Item2025:  corrected handling of SPAN and FONT tags used for colour changes |
+|  9566 | Bugs:Item1890:  doc update |
+|  9565 | Bugs:Item1890: Bugs:Item1041: Bugs:Item944: Much more aggressive cleanup of HTML pasted in from external sources. Excessively verbose HTML (e.g. from Outlook) was causing apparent infinite looing behaviour. |
+|  8867 | Bugs:Item1176:  commented out Cairo version of header handler |
+|  8780 | Bugs:Item1625:  disable expansion of twiki variables in urls where there are other twiki variables that can't be expanded |
+|  8779 | Bugs:Item1530:  support for templatetopic when editing new topics |
+|  8592 | Bugs:Item1532:  WysiwygPlugin: Added two more do-not-edit-if-topic-contains parameters, pre+comments |
+|  8590 | Bugs:Item1532:  WysiwygPlugin: Kenneths suggestion on proper handling of HTML comments (incl. change to kupu) |
+|  8572 | Bugs:Item1529:  evil, evil. The XMLSerializer in IE isn't happy serializing the DOM. I have no idea why. Kupu manages to get away with this because it passes the DOM through the XML validator, which I had to disable because it strips comments. So, for now, the IE implementation will strip comments - but at least you can save again |
+|  8538 | Bugs:Item1501:  table handling was a bit spazzy. Several problems fixed. |
+|  8535 | Bugs:Item1518:  moved icon and string lists into topics, updated screenshot |
+|  8531 | Bugs:Item1392:  reversed the sense of the navigate-away condition, again |
+|  8466 | Bugs:Item1486:  added WYSIWYG_EXCLUDE to allow exclusion of 'uneditable' content |
+|  8463 | Bugs:Item1486:  was stripping comments, wrongly. Had to disable the kupu filters completely, they just do too much damage. |
+|  8401 | Bugs:Item1457:  corrected problem with bullet list at top of topic |
+|  8388 | Bugs:Item1445:  fix for a javascript error, introduced by previous fix |
+|  8387 | Bugs:Item1445:  small usability improvements |
+|  8334 | Bugs:Item663:  TWiki.org doc merge: Fix incorrect link to kupu website |
+|  8327 | Bugs:Item1411:  handle case of the result of a TWiki variable being nopped |
+|  8312 | Bugs:Item1317:  wrong result returned from generation function when expanding HTML embedded in verbatim block |
+|  8301 | Bugs:Item1397:  removed excess space after sqaub links |
+|  8300 | Bugs:Item1231:  added %SPAN% to indicate a spanned-over cell in the editor. Improved handling of HTML in verbatim tags by inserting line breaks is the tag type calls for it, before removing the HTML. |
+|  8276 | Bugs:Item1215:  added WYSIWYG_ICONS and WYSIWYG_TAGS to support user customisation of icon images and twiki variables that can be inserted |
+|  8274 | Bugs:Item1314:  debugging in case the hang happens again; and made sure to default the editor just in case |
+|  8273 | Bugs:Item1315:  short forms must be terminated by one of the same characters that terminate wikiwords |
+|  8272 | Bugs:Item1391:  added special interpretation of IMG tags to expand selected TWiki variables within SRC attributes |
+|  8271 | Bugs:Item1340:  refined handling of NOP to cover abbrevs |
+|  8270 | Bugs:Item1311:  removed excess space inserted in headings |
+|  8269 | Bugs:Item1339:  changed from using arbitrary attribute for notoc to a new CSS class. Arbitrary attributes are stripped by Kupu before save. |
+|  8268 | Bugs:Item1344:  strip ^Ms inserted by Sarissa during serialisation on IE |
+|  8267 | Bugs:Item1394:  still can't get text styles to work properly in IE; but I am now firmly of the opinion that the fault lies with the browser, and not with Kupu. |
+|  8232 | Bugs:Item1341:  added appropriate CSS class |
+|  8152 | Bugs:Item1313:  added caveat about editing complex HTML and mixed HTML-TML |
+|  8151 | Bugs:Item1334:  headers not handled properly in Cairo version |
+|  8108 | Bugs:Item1318:  corrected table/list parser for tables embedded in bulleted lists |
+|  8106 | Bugs:Item1310:  support for &lt;nop/> |
+|  8105 | Bugs:Item1317:  support for limited case of nopped variable |
+|  8104 | Bugs:Item1320:  corrected interpretation of relative URL path in [[]] |
+|  8091 | Bugs:Item1259:  changed comment handling; rather than trying to create HTML, which gets munged, create an HTML comment. This will only be editable by switching to source view, but hey, it's supposed to be WYSIWYG. Note that this also means that comments in pasted HTML should be retained now |
+|  8063 | Bugs:Item1042:  spec of SCRIPTURL changed |
+|  7904 | Bugs:Item1189:  reverting accidental checkin of experimental code |
+|  7903 | Bugs:Item1189:  filter whitelist is not good enough; need to generate B and I nodes. templates/ pub/TWiki/WysiwygPlugin |
+|  7902 | Bugs:Item1189:  it took bloody ages to track down, but finally discovered that bold and italic were being filtered out of spans by Kupu 1.3.2.... too smart for it's own good. So added them to the filter whitelist, and it works again. |
+|  7873 | Bugs:Item1189:  added pre save filter to try and find where the attributes are disappearing to in FF |
+|  7872 | Bugs:Item1187:  for lack of an s on an RE, the nation was lost (well, the multi-line comment actually). Thanks Kenneth! |
+|  7871 | Bugs:Item859:  solved issue with non-display of inserted images. Was due to the use of an onSubmit handler to close the dialog, rather than an onLoad handler triggered when the IFRAME that contains the result is loaded. |
+|  7869 | Bugs:Item1172:  had to rewrite big chunk of the table popup to get it working with 1.3.2 |
+|  7858 | Bugs:Item1151:  rewrote link handlings stuff to leverage browser better |
+|  7854 | Bugs:Item1175:  escape wikiwords within squabs |
+|  7815 | Bugs:Item1158:  works for Cairo now as well |
+|  7814 | Bugs:Item1158:  first implementation of AJAX interface to allow selectoin of topics from other webs |
+|  7812 | Bugs:Item1154:  removed non-existent scull.gif |
+|  7811 | Bugs:Item1155:  added extra recursion block, as Item1155 suggests it is needed |
+|  7801 | Bugs:Item1042:  All sorts of clever tricks to handle expansion/compression of a subset of TWiki variables when they are used in URLs. Not a complete solution, but better than it was. |
+|  7799 | Bugs:Item1024:  caught out by recursive call to beforeCommonTagsHandler in Cairo (nasty) |
+|  7798 | Bugs:Item1042:  whoops, broke \t conversion in Cairo |
+|  7789 | Bugs:Item1140:  testcase for 1140 |
+|  7788 | Bugs:Item1140:  fix rewriting of img src urls (and updated MANIFEST for Kupu1.3.2) |
+|  7786 | Bugs:Item1042:  extensive improvements to variable and URL recognition and conversion |
+|  7766 | Bugs:Item856:  added doc on EDIT_SKIN to the plugin |
+|  7712 | Bugs:Item1074:  upgrade to Kupu 1.3.2 complete (at last) |
+|  7710 | Bugs:Item1074:  Fixed source edit mode |
+|  7709 | Bugs:Item1074:  tidied up broken toolbar. There are still known issues |
+|  7700 | Bugs:Item1074:  first pass at moving to Kupu 1.3.2. |
+|  7673 | Bugs:Item1037:  insert wikiword only if selection is zero length |
+|  7672 | Bugs:Item977:  changed to remove dangerous Cairo-based assumption, and use context ids instead |
+|  7630 | Bugs:Item1025:  added 'escape clause' for old handlers implemented to support old TWiki releases without warnings |
+|  7506 | Bugs:Item941:  Eliminated the last of the dynamic globals to try and solve saving problem. Can;t test with mod_perl, but is fine with speedycgi AFAICT |
+|  7456 | Bugs:Item873:  minor issue; replace br with \n in pre |
+|  7455 | Bugs:Item873:  obvious problem parsing closing pre tag on same line as open tag |
+|  7453 | Bugs:Item710:  Handling HTML comments |
+|  7452 | Bugs:Item876:  Item945: Item876: spacing around table cells, correct handling of variables. Had to compromise on handling [[]] but I think it's for the best. |
+|  7430 | Bugs:Item871:  made sure that brackets are generated for non-wikiwords |
+|  7425 | Bugs:Item928:  removed special interpretation of mailto links |
+|  7424 | Bugs:Item866:  extended URL parsing to handle USERSWEB and SYSTEMWEB twiki variables, in the same hacky way as the core. |
+|  7416 | Bugs:Item870:  a couple of corner-cases for correct handling of twiki variables |
+|  7401 | Bugs:Item899:  changed list generation to use spaces instead of tabs |
+|  7265 | Bugs:Item180:  removed pointless, outdated dependency check from DateFieldPlugin |
+|  6935 | Bugs:Item622:  reverted 3 specs to tabs in Set lines in plugins topics for kompatterbility with Kigh-roe |
+|  6905 | Bugs:Item622:  tabs -> 3 spacesto avoid confusing the users |
+|  6850 | Bugs:Item638:  added instruction to run configure to all install docs (I hope) |
+|  6827 | Bugs:Item569:  added default RELEASE to everything that had a version, and removed a load of dead code that was getting in the way |
+|  6758 | Bugs:Item569:  computed version numbers for plugins from the repository rev they were built from. |
+|  6504 | Bugs:Item436:  incremented vernos of all changed plugins |
+|  6485 | Bugs:Item429:  trying to make access controls clearer |
+|  6401 | Bugs:Item340:  re-initialisation bug found by ColasNahaboo when using mod_perl; fixed by correctly re-initialising the parse stack for each run of the convertor |
+|  6284 | Bugs:Item340:  Release 0.16 of WysiwygPlugin |
+|  6279 | Bugs:Item340:  bugfixes for release 0.16 of WysiwygPlugin |
+|  6261 | Bugs:Item335:  Switched PNGs to indexed mode, as transparency doesn't work on IE for RGB images |
+|  6238 | Bugs:Item332:  Added context identifier to WysiwygPlugin, and a button to the pattern view template. If WysiwygPlugin is enabled, then the button will appear. Neat, huh? |
+|  6195 | Bugs:Item196:  getting plugin test suites to pass. Doesn't mean the plugins actually work, just that the test suites run (which is a good indicator) |
+|  6174 | Bugs:Item168:  checkpoint checking for 0.16 |
+|  6151 | Bugs:Item186:  more minor updates |
+|  6150 | Bugs:Item168:  new icons, and a couple of bugfixes, to WysiwygPlugin |
+|  6092 | Bugs:Item196:  more plugin and contrib fixes for develop; mainly just moving tests around and making sure they all pass. |
+|  6067 | Bugs:Item138:  had to change to using beforeCommonTagsHandler and also escape % signs to prevent TWiki from rendering internal tags (as reported by Colas) |
+|  5979 | Bugs:Item168:  corrected stupid error on IE; added screenshot |
+|  5977 | Bugs:Item168:  release 0.13 |
+|  5948 | Bugs:Item168:  nearly ready for 0.13 |
+|  5937 | Bugs:Item168:  corrected images, twikified all images |
+|  5936 | Bugs:Item168:  the import from cvs has screwed images |
+|  5934 | Bugs:Item168:  twikified icon images, and renamed some images to be more intention-revealing |
 |  5739 | 0.12 beta release |
 |  5730 | V0.11 |
 |  5714 | Tidied up installer, documentation. Release 0.10 |
