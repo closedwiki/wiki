@@ -2,6 +2,7 @@ data/TWiki/JQueryPlugin.txt 0644
 lib/TWiki/Plugins/JQueryContrib.pm 0644
 lib/TWiki/Plugins/JQueryPlugin/Core.pm 0644
 lib/TWiki/Plugins/JQueryPlugin.pm 0644
+pub/TWiki/JQueryPlugin/Makefile 0644
 pub/TWiki/JQueryPlugin/blend.png 0644
 pub/TWiki/JQueryPlugin/button1.png 0644
 pub/TWiki/JQueryPlugin/cross.png 0644
@@ -31,7 +32,11 @@ pub/TWiki/JQueryPlugin/images/tv-expandable.gif 0644
 pub/TWiki/JQueryPlugin/images/tv-expandable-last.gif 0644
 pub/TWiki/JQueryPlugin/images/tv-item.gif 0644
 pub/TWiki/JQueryPlugin/images/tv-item-last.gif 0644
+pub/TWiki/JQueryPlugin/jquery-all.css 0644
+pub/TWiki/JQueryPlugin/jquery-all.js 0644
 pub/TWiki/JQueryPlugin/jquery.bgiframe.js 0644
+pub/TWiki/JQueryPlugin/jquery.bgiframe.js 0644
+pub/TWiki/JQueryPlugin/jquery.blockUI.js 0644
 pub/TWiki/JQueryPlugin/jquery.dimensions.js 0644
 pub/TWiki/JQueryPlugin/jquery.dimensions.uncompressed.js 0644
 pub/TWiki/JQueryPlugin/jquery.dom.js 0644
@@ -47,9 +52,10 @@ pub/TWiki/JQueryPlugin/jquery.tooltip.js 0644
 pub/TWiki/JQueryPlugin/jquery.tooltip.uncompressed.js 0644
 pub/TWiki/JQueryPlugin/jquery.treeview.js 0644
 pub/TWiki/JQueryPlugin/jquery.treeview.uncompressed.js 0644
-pub/TWiki/JQueryPlugin/jquery.blockUI.js 0644
 pub/TWiki/JQueryPlugin/jquery.twiki.css 0644
 pub/TWiki/JQueryPlugin/jquery.twiki.js 0644
 pub/TWiki/JQueryPlugin/jquery.uncompressed.js 0644
 pub/TWiki/JQueryPlugin/shade1.png 0644
 templates/javascript.jquery.tmpl 0644
+tools/minifycss 0755
+tools/minifyjs 0755

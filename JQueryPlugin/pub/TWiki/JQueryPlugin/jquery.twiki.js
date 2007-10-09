@@ -165,7 +165,7 @@ $.fn.extend({
       if (foundh2) {
         $("h2",this).nifty(h2args);
       }
-      //$(this).nifty(divargs);
+      $(this).nifty(divargs);
     });
   }
 });
@@ -178,6 +178,13 @@ $(function(){
    */
   if (true) {
     $(".jqTreeview > ul").each(function(){
+      $("a,span,input", this).Tooltip({
+        delay:250,
+        track:true,
+        showURL:false,
+        extraClass:'twiki',
+        showBody:": "
+      });
       var args = Array();
       var parentClass = $(this).parent().attr('class');
       args['speed'] = 'fast';
@@ -197,7 +204,7 @@ $(function(){
   /********************************************************
    * shrink urls in TWikiTables lists
    */
-  if (true) {
+  if (false) {
     $(".twikiTable a").shrinkUrls({size:25});
   }
 
@@ -218,7 +225,7 @@ $(function(){
   /********************************************************
    * tooltips 
    */
-  if (true) { /* lazy initialization */
+  if (false) { /* lazy initialization */
     $("body").one('mouseover',
       function(event) {
         $("a,span,input").Tooltip({

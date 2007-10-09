@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1185440968" format="1.1" reprev="1.6" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1186412852" format="1.1" reprev="1.1" version="$Rev$"}%
 ---+!! %TOPIC%
 <!--
    * Set SHORTDESCRIPTION = jQuery <nop>JavaScript library for TWiki
@@ -170,8 +170,9 @@ nisi. Mauris est urna, fermentum vel, luctus sed, luctus eu, elit. In nulla.
 |  Contrib Author(s): | TWiki:Main/MichaelDaum - http://wikiring.de |
 |  Copyright: | &copy; 2007 John Resig (jquery.com) |
 |  License: | Dual licensed under the MIT and GPL |
-|  Contrib Version: | v0.1 |
+|  Contrib Version: | v0.3 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  10 Oct 2007: | upgraded to jQuery-1.1.4; compressed js and css |
 |  12 Jul 2007: | initial package containing jQuery-1.1.3.1 |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Contrib Home: | http://twiki.org/cgi-bin/view/Plugins/JQueryContrib |
