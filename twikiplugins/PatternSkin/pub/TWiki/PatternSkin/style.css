@@ -309,12 +309,18 @@ a.twikiSubmit:visited:active {
 	-----------------------------------------------------------	*/
 
 #twikiLogin {
-	width:40em;
+	width:41em;
 	margin:0 auto;
 	text-align:center;
 }
 #twikiLogin .twikiFormSteps {
 	border-width:5px;
+}
+#twikiLogin .patternLoginNotification {
+	padding-left:.5em;
+	padding-right:.5em;
+	border-style:solid;
+	border-width:2px;
 }
 .twikiAttachments,
 .twikiForm {
@@ -427,7 +433,7 @@ table.twikiFormTable th.twikiFormTableHRow a:visited {
 .twikiFormStep h3,
 .twikiFormStep h4 {
 	border:none;
-	margin:0;
+	margin:0 0 .1em 0;
 	padding:0;
 	background:none;
 }

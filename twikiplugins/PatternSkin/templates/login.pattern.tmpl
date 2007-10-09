@@ -18,6 +18,16 @@ document.write(styleText);
 // ]]>
 </script>%TMPL:END%
 
+%TMPL:DEF{"titlestep"}%<div class="twikiFormStep">
+%TMPL:P{"title"}%
+%TMPL:P{"notestep"}%
+%TMPL:P{"errorstep"}%</div><!-- /twikiFormStep-->%TMPL:END%
+
+%TMPL:DEF{"notestep"}%<div style="display:%IF{'$ERROR or $NOTE or $BANNER' then='block' else='none'}%;">
+%IF{"$NOTE" then='---+++ %NOTE%'}%</div>%TMPL:END%
+
+%TMPL:DEF{"errorstep"}%%IF{"$BANNER" then='<div class="twikiNotification twikiAlert twikiUnvisited patternLoginNotification">%BANNER%%IF{"$ERROR" then='<!--%TMPL:P{"error"}%-->'}%</div>'}%%TMPL:END%
+
 %TMPL:DEF{"loginasadministratorstep"}%<div class="twikiFormStep">
 %TMPL:P{"loginasadministratorlink"}%
 </div><!-- /twikiFormStep-->%TMPL:END%
@@ -27,7 +37,7 @@ document.write(styleText);
 
 %TMPL:P{"usernamefield"}% %TMPL:P{"usernamefieldhelp"}%
 
-<p class="twikiGrayText">%TMPL:P{"loginasadministratorlink"}%</p>
+<p>%TMPL:P{"loginasadministratorlink"}%</p>
 </div><!-- /twikiFormStep-->%TMPL:END%
 
 %TMPL:DEF{"usernamefieldhelp"}%%TWISTY{mode="span" showlink="%MAKETEXT{"Help"}%" hidelink="%MAKETEXT{"Hide help"}%" remember="on"}% <div class="twikiHelp">%TMPL:P{"usernamenote"}%</div> %ENDTWISTY%%TMPL:END%
@@ -39,18 +49,17 @@ document.write(styleText);
 %TMPL:P{"passwordfieldnoteremember"}%
 </div><!-- /twikiFormStep-->%TMPL:END%
 
-%TMPL:DEF{"notestep"}%<div class="twikiFormStep">
----++ %BANNER%
-%TMPL:P{"note"}%</div><!-- /twikiFormStep-->%TMPL:END%
-
 %TMPL:DEF{"submitstep"}%<div class="twikiFormStep twikiLast">%TMPL:P{"submit"}%</div><!-- /twikiFormStep-->%TMPL:END%
 
 %TMPL:DEF{"form"}%<div id="twikiLogin">
 %TMPL:P{"formstart"}%
-<div class="twikiFormSteps">%TMPL:P{"notestep"}%
+<div class="twikiFormSteps">%TMPL:P{"titlestep"}%
 %TMPL:P{"usernamestep"}%%TMPL:P{"passwordstep"}%%TMPL:P{"submitstep"}%</div><!-- /twikiFormSteps-->
 %TMPL:P{"formend"}%
+
 <span class="twikiGrayText">%TMPL:P{"seealsonote"}%</span>
 </div><!-- /twikiLogin-->%TMPL:END%
 
 %TMPL:DEF{"content"}%%TMPL:P{"form"}%%TMPL:END%
+
+%TMPL:DEF{"bottombar"}%%TMPL:END%
