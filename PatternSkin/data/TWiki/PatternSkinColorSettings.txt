@@ -510,6 +510,10 @@ table.twikiFormTable th.twikiFormTableHRow font {
 .twikiNotification {
    background-color:%NOTIFICATION_BACKGROUND%;
 }
+#twikiLogin .patternLoginNotification {
+   background-color:%MAIN_BACKGROUND_COLOR%;
+   border-color:%ALERT_BORDER%;
+}
 .twikiHelp {
    background-color:%INFO_BACKGROUND%;
 }
