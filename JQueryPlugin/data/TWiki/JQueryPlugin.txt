@@ -7,7 +7,15 @@
 
 %TOC%
 
----++ Summary
+---++ Description
+<table style="float:right">
+<tr>
+  <td><img src="%ATTACHURLPATH%/wikiringlogo40x40.png"></td>
+  <td><a href="http://wikiring.de" title="Make your Wiki ring!" style="text-decoration:none">
+      Powered by <br /> <nop>WikiRing Consultants </a>
+  </td>
+</tr>
+</table>
 This contrib contains the latest version of the [[http://jquery.com][jQuery]]
 <nop>JavaScript library. 
 
@@ -182,3 +190,5 @@ nisi. Mauris est urna, fermentum vel, luctus sed, luctus eu, elit. In nulla.
 
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add
 comments/questions/remarks to the feedback topic on twiki.org instead. -->
+
+%META:FILEATTACHMENT{name="wikiringlogo40x40.png" attachment="wikiringlogo40x40.png" attr="h" comment="" date="1189787359" path="wikiringlogo40x40.png" size="2571" stream="wikiringlogo40x40.png" tmpFilename="" user="TWikiContributor" version="1"}%

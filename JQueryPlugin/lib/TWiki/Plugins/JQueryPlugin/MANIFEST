@@ -56,6 +56,7 @@ pub/TWiki/JQueryPlugin/jquery.twiki.css 0644
 pub/TWiki/JQueryPlugin/jquery.twiki.js 0644
 pub/TWiki/JQueryPlugin/jquery.uncompressed.js 0644
 pub/TWiki/JQueryPlugin/shade1.png 0644
+pub/TWiki/JQueryPlugin/wikiringlogo40x40.png 0644
 templates/javascript.jquery.tmpl 0644
 tools/minifycss 0755
 tools/minifyjs 0755
