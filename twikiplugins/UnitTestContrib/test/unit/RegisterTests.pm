@@ -56,9 +56,6 @@ sub set_up {
      $this->{new_user_fullname} =
       "$this->{new_user_fname} $this->{new_user_sname}";
 
-	#if $TWiki::cfg{AllowLoginName} is false, wikiname must == loginname
-    $this->{new_user_login} = $this->{new_user_wikiname} if (!$TWiki::cfg{AllowLoginName});
-
     try {
         $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},
                                      $this->{users_web},
@@ -170,11 +167,13 @@ sub registerAccount {
 
 sub AllowLoginName {
     my $this = shift;
-    $TWiki::cfg{AllowLoginName} = 1;
+    $TWiki::cfg{Register}{AllowLoginName} = 1;
 }
 sub DontAllowLoginName {
     my $this = shift;
-    $TWiki::cfg{AllowLoginName} = 0;
+    $TWiki::cfg{Register}{AllowLoginName} = 0;
+    $this->{new_user_login}  = $this->{new_user_wikiname};
+    #$this->{test_user_login} = $this->{test_user_wikiname};
 }
 
 sub TemplateLoginManager {
