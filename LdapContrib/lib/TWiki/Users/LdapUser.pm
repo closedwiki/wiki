@@ -1,6 +1,6 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2006 Michael Daum http://wikiring.com
+# Copyright (C) 2006-2007 Michael Daum http://wikiring.de
 # Portions Copyright (C) 2006 Spanlink Communications
 #
 # This program is free software; you can redistribute it and/or
@@ -29,23 +29,16 @@ use TWiki::Contrib::LdapContrib;
 
 Password manager that uses Net::LDAP to manage users and passwords.
 
-Subclass of [[TWikiUsersPasswordDotPm][ =TWiki::Users::Password= ]].
+Subclass of =TWiki::Users::Password=.
 
 This class does not grant any write access to the ldap server for security reasons. 
-So you need to use your ldap tools to create user accounts or change passwords.
+So you need to use your ldap tools to create user accounts.
 
 Configuration: add the following variables to your <nop>LocalSite.cfg 
    * $TWiki::cfg{Ldap}{server} = &lt;ldap-server uri>, defaults to localhost
    * $TWiki::cfg{Ldap}{base} = &lt;base dn> subtree that holds the user accounts
      e.g. ou=people,dc=your,dc=domain,dc=com
 
-Implemented Interface:
-   * checkPassword(login, password)
-   * error()
-   * fetchPass(login)
-   * getEmails(login)
-   * setEmails(login, @emails)
-   
 =cut
 
 =pod
@@ -62,6 +55,13 @@ sub new {
 
   my $this = bless($class->SUPER::new( $session ), $class);
   $this->{ldap} = &TWiki::Contrib::LdapContrib::getLdapContrib($session);
+
+  my $secondaryImpl = $this->{ldap}->{secondaryPasswordManager};
+  if ($secondaryImpl) {
+    eval "use $secondaryImpl";
+    die "Secondary Password Manager: $@" if $@;
+    $this->{secondaryPasswordManager} = $secondaryImpl->new($session);
+  }
 
   return $this;
 }
@@ -96,7 +96,12 @@ sub fetchPass {
   $this->{ldap}->writeDebug("called fetchPass($login)");
 
   my $entry = $this->{ldap}->getAccount($login);
-  return $entry->get_value('userPassword') if $entry;
+  return $entry->get_value('userPassword') 
+    if $entry;
+
+  return $this->{secondaryPasswordManager}->fetchPass($login)
+    if $this->{secondaryPasswordManager};
+
   return 0;
 }
 
@@ -116,17 +121,17 @@ sub checkPassword {
   # guest has no password
   return 1 if $login eq $TWiki::cfg{DefaultUserWikiName};
 
+  # get user record
+  my $dn = $this->{ldap}->getDnOfLogin($login);
+  $this->{ldap}->writeDebug("dn not found") unless $dn;
 
-  # lookup cache
-  my $dn = $this->{ldap}{cache}{DN2U}{$login};
-  unless ($dn) {
-    my $entry = $this->{ldap}->getAccount($login);
-    return 0 unless $entry;
-    $dn = $entry->dn();
-    $this->{ldap}{cache}{DN2U}{$login} = $dn;
-    $this->{ldap}{cache}{U2DN}{$dn} = $login;
-  }
-  return $this->{ldap}->connect($dn, $passU);
+  return $this->{ldap}->connect($dn, $passU)
+    if $dn;
+
+  return $this->{secondaryPasswordManager}->checkPassword($login, $passU)
+    if $this->{secondaryPasswordManager};
+
+  return 0;
 }
 
 =pod 
@@ -142,31 +147,23 @@ if this is not the case we fallback to twiki's default behavior
 sub getEmails {
   my ($this, $login) = @_;
 
-  $this->{ldap}->writeDebug("getEmails($login)");
-
   # guest has no email addrs
   return () if $login eq $TWiki::cfg{DefaultUserWikiName};
 
-  # lookup cache
-  $login = lc($login);
-  my $emails = $this->{ldap}{cache}{U2EMAILS}{$login};
-  return @$emails if $emails;
+  # get emails from ldap
+  my $emails = $this->{ldap}->getEmails($login);
 
-  my $entry = $this->{ldap}->getAccount($login);
-  @{$emails} = $entry->get_value($this->{ldap}{mailAttribute}) if $entry;
+  return @{$emails} if $emails;
 
-  unless ($emails) {
-    # fall back to the default approach
-    $this->{ldap}->writeDebug("fall back to default approach to get email addresses");
-    @{$emails} = $this->SUPER::getEmails($login) || ();
-    $this->{ldap}->writeDebug("found emails for $login: ".join(',',@{$emails}));
-  }
-  $this->{ldap}{cache}{U2EMAILS}{$login} = $emails;
+  return $this->{secondaryPasswordManager}->getEmails($login)
+    if $this->{secondaryPasswordManager};
 
-  return @{$emails};
+  return ();
 }
 
-=pod ObjectMethod finish()
+=pod 
+
+---++++ ObjectMethod finish()
 
 Complete processing after the client's HTTP request has been responded.
 i.e. destroy the ldap object.
@@ -178,7 +175,131 @@ sub finish {
 
   $this->{ldap}->finish() if $this->{ldap};
   $this->{ldap} = undef;
-  $this->SUPER::finish();
+  $this->{secondaryPasswordManager}->finish(@_)
+    if $this->{secondaryPasswordManager};
+}
+
+=pod
+
+---++++ ObjectMethod deleteUser( $user ) -> $boolean
+
+LDAP users can't be deleted by TWiki.
+So this will call the deleteUser interface of the secondary
+password manager only
+
+Returns 1 on success, undef on failure.
+
+=cut
+
+sub deleteUser {
+  my $this = shift;
+
+  return $this->{secondaryPasswordManager}->deleteUser(@_)
+    if $this->{secondaryPasswordManager};
+
+  $this->{error} = 'System does not support deleting users';
+  return undef;
+}
+
+=pod
+
+---++++ ObjectMethod passwd( $user, $newPassword, $newPassword ) -> $boolean
+
+This method can only change the LDAP password. It can not
+add the user to the LDAP directory. To change the password the
+old password must always be correct. There's no mode to force the
+change irrespective of the existing password.
+
+In any other case the secondary password manager gets the job.
+
+=cut
+
+sub passwd {
+  my ( $this, $user, $newPassword, $oldPassword ) = @_;
+
+  if ($this->{ldap}->{allowChangePassword} && defined($oldPassword) && $oldPassword ne '1') {
+    if ($this->{ldap}->getDnOfLogin($user)) {
+      return 1 if $this->{ldap}->changePassword($user, $newPassword, $oldPassword);
+      $this->{error} = $this->{ldap}->getError();
+      return undef;
+    }
+  }
+
+  if ($this->{secondaryPasswordManager}) {
+    my $result = $this->{secondaryPasswordManager}->passwd($user, $newPassword, $oldPassword);
+    unless ($result) {
+      $this->{error} = $this->{secondaryPasswordManager}->{error};
+    }
+    return $result;
+  }
+
+  $this->{error} = 'System does not support adding a user or forcing a  password change';
+  return undef;
+}
+
+=pod
+
+---++++ encrypt( $user, $passwordU, $fresh ) -> $passwordE
+
+LDAP can't encrypt passwords. But maybe the secondary
+password manager can.
+
+
+=cut
+
+sub encrypt {
+  my $this = shift;
+
+  return $this->{secondaryPasswordManager}->encrypt(@_)
+    if $this->{secondaryPasswordManager};
+  
+  $this->{error} = 'System does not support encrypting passwords';
+  return '';
+}
+
+=pod
+
+---++++ ObjectMethod setEmails($user, @emails)
+
+Set the email address(es) for the given username.
+TWiki can't set the email stored in LDAP. But may be the secondary
+password manager can.
+
+=cut
+
+sub setEmails {
+  my $this = shift;
+
+  return $this->{secondaryPasswordManager}->setEmails(@_)
+    if $this->{secondaryPasswordManager};
+  
+  $this->{error} = 'System does not support setting the email adress';
+  return '';
+}
+
+=pod
+
+---++ ObjectMethod findUserByEmail( $email ) -> \@users
+   * =$email= - email address to look up
+Return a list of user objects for the users that have this email registered
+with the password manager. This will concatenate the result list of the
+LDAP manager with the secondary password manager
+
+=cut
+
+sub findUserByEmail {
+  my $this = shift;
+
+  my $users = $this->SUPER::findUserByEmail(@_);
+  return $users unless $this->{secondaryPasswordManager};
+
+  # add those from the secondary
+  push @$users, $this->{secondaryPasswordManager}->findUserByEmail(@_);
+
+  # remove duplicates
+  my %users = map {$_ => 1} @$users;
+  my @users = keys %users;
+  return \@users;
 }
 
 1;

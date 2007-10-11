@@ -1,4 +1,5 @@
-Net::LDAP,>=0.33,cpan,Required
+Authen::SASL,>=2.00,cpan,Optional
+DB_File,>=1.00,cpan,Required
 Digest::MD5,>=2.36,cpan,Required
-Unicode::MapUTF8,>=1.11,cpan,Required. Download from CPAN:Unicode::MapUTF8 
-Storable,>=2.07,cpan,Required; Download from CPAN:Storable 
+Net::LDAP,>=0.33,cpan,Required
+Unicode::MapUTF8,>=1.11,cpan,Required

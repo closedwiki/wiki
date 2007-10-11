@@ -1,6 +1,6 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2006 Michael Daum http://wikiring.com
+# Copyright (C) 2006-2007 Michael Daum http://wikiring.de
 # Portions Copyright (C) 2006 Spanlink Communications
 #
 # This program is free software; you can redistribute it and/or
@@ -19,16 +19,16 @@ package TWiki::Contrib::LdapContrib;
 
 use strict;
 use Net::LDAP;
-use Net::LDAP::Control::Paged;
 use Net::LDAP::Constant qw(LDAP_SUCCESS LDAP_SIZELIMIT_EXCEEDED LDAP_CONTROL_PAGED);
-use Digest::MD5 qw( md5_hex );
+use Digest::MD5 qw(md5_hex);
 use Unicode::MapUTF8 qw(from_utf8 to_utf8);
-use TWiki::Contrib::LdapContrib::Cache;
+use DB_File;
+use Net::LDAP::Control::Paged;
 
-use vars qw($VERSION $RELEASE $sharedLdapContrib);
+use vars qw($VERSION $RELEASE %sharedLdapContrib);
 
 $VERSION = '$Rev$';
-$RELEASE = 'v1.11';
+$RELEASE = 'v2.0.2';
 
 =begin text
 
@@ -130,13 +130,17 @@ sub new {
       || '',
 
     loginAttribute=>$TWiki::cfg{Ldap}{LoginAttribute} || 'uid',
-
+    allowChangePassword=>$TWiki::cfg{Ldap}{AllowChangePassword} || 0,
 
     wikiNameAttribute=>$TWiki::cfg{Ldap}{WikiNameAttributes} 
       || $TWiki::cfg{Ldap}{WikiNameAttribute} || 'cn',
 
     normalizeWikiName=>$TWiki::cfg{Ldap}{NormalizeWikiNames}
       || $TWiki::cfg{Ldap}{NormalizeWikiName},
+    normalizeLoginName=>$TWiki::cfg{Ldap}{NormalizeLoginNames}
+      || $TWiki::cfg{Ldap}{NormalizeLoginName},
+    normalizeGroupName=>$TWiki::cfg{Ldap}{NormalizeGroupNames}
+      || $TWiki::cfg{Ldap}{NormalizeGroupName},
 
     loginFilter=>$TWiki::cfg{Ldap}{LoginFilter} || 'objectClass=posixAccount',
     groupAttribute=>$TWiki::cfg{Ldap}{GroupAttribute} || 'cn',
@@ -156,22 +160,49 @@ sub new {
 
     pageSize=>$TWiki::cfg{Ldap}{PageSize} || 200,
     isConnected=>0,
+    maxCacheAge=>$TWiki::cfg{Ldap}{MaxCacheAge} || 86400,
+
+    useSASL=>$TWiki::cfg{Ldap}{UseSASL} || 0,
+    saslMechanism=>$TWiki::cfg{Ldap}{SASLMechanism} || 'PLAIN CRAM-MD4 EXTERNAL ANONYMOUS',
+
+    secondaryPasswordManager=>$TWiki::cfg{Ldap}{SecondaryPasswordManager} || '',
     @_
   };
+  bless($this, $class);
+
+  $this->{session} = $session;
+
+  if ($this->{useSASL}) {
+    $this->writeDebug("will use SASL authentication");
+    require Authen::SASL;
+  }
+
+  # protect against actidental misconfiguration, that might lead
+  # to an infinite loop during authorization etc.
+  if ($this->{secondaryPasswordManager} eq 'TWiki::Users::LdapUser') {
+    TWiki::Func::writeWarning("hey, you want infinite loops? naw.");
+    $this->{secondaryPasswordManager} = '';
+  }
+  
+  if ($this->{secondaryPasswordManager} eq 'none') {
+    $this->{secondaryPasswordManager} = '';
+  }
+
+  my $workArea = $session->{store}->getWorkArea('LdapContrib');
+  mkdir $workArea unless -d $workArea;
+  $this->{cacheFile} = $workArea.'/cache.db';
+
   $this->{normalizeWikiName} = 1 unless defined $this->{normalizeWikiName};
   @{$this->{wikiNameAttributes}} = split(/,\s/, $this->{wikiNameAttribute});
-  %{$this->{groupNames}} = (); # caches known groups
-  $this->{cachedGroupNames} = 0; # flag to indicate that the cache is filled
 
   # create exclude map
   my %excludeMap = map {$_ => 1} split(/,\s/, $this->{exclude});
   $this->{excludeMap} = \%excludeMap;
 
-  bless($this, $class);
-  $this->writeDebug("constructed a new LdapContrib object");
+  #$this->writeDebug("constructed a new LdapContrib object");
 
   # init the ldap cache
-  $this->{cache} = TWiki::Contrib::LdapContrib::Cache::init($session);
+  $this->initCache();
 
   return $this;
 }
@@ -188,12 +219,10 @@ configuration.
 sub getLdapContrib {
   my $session = shift;
 
-  if ($sharedLdapContrib) {
-    $sharedLdapContrib->{cache} = TWiki::Contrib::LdapContrib::Cache::init($session);
-  } else {
-    $sharedLdapContrib = new TWiki::Contrib::LdapContrib($session);
-  }
-  return $sharedLdapContrib;
+  $sharedLdapContrib{$session} = new TWiki::Contrib::LdapContrib($session)
+    unless $sharedLdapContrib{$session};
+
+  return $sharedLdapContrib{$session};
 }
 
 =begin text
@@ -209,17 +238,17 @@ by calling this method. The methods below will do that automatically when needed
 sub connect {
   my ($this, $dn, $passwd) = @_;
 
-  $this->writeDebug("called connect");
-  $this->writeDebug("dn=$dn", 2) if $dn;
-  $this->writeDebug("passwd=***", 2) if $passwd;
+  #$this->writeDebug("called connect");
+  #$this->writeDebug("dn=$dn", 2) if $dn;
+  #$this->writeDebug("passwd=***", 2) if $passwd;
 
   $this->{ldap} = Net::LDAP->new($this->{host},
     port=>$this->{port},
     version=>$this->{version},
   );
-  die $@ if $@;
   unless ($this->{ldap}) {
     $this->{error} = "failed to connect to $this->{host}";
+    $this->{error} .= ": $@" if $@;
     return 0;
   }
 
@@ -233,13 +262,28 @@ sub connect {
 
   # proxy user 
   elsif ($this->{bindDN} && $this->{bindPassword}) {
-    $this->writeDebug("proxy bind");
-    $msg = $this->{ldap}->bind($this->{bindDN},password=>$this->{bindPassword});
+
+    if ($this->{useSASL}) {
+      # sasl bind
+      my $sasl = Authen::SASL->new(
+	mechanism => $this->{saslMechanism}, #'DIGEST-MD5 PLAIN CRAM-MD5 EXTERNAL ANONYMOUS',
+	callback => {
+	  user => $this->{bindDN},
+	  pass => $this->{bindPassword},
+	},
+      );
+      $this->writeDebug("sasl bind to $this->{bindDN}");
+      $msg = $this->{ldap}->bind($this->{bindDN}, sasl=>$sasl, version=>$this->{version} );
+    } else {
+      # simple bind
+      $this->writeDebug("proxy bind");
+      $msg = $this->{ldap}->bind($this->{bindDN},password=>$this->{bindPassword});
+    }
   }
   
   # anonymous bind
   else {
-    $this->writeDebug("anonymous bind");
+    #$this->writeDebug("anonymous bind");
     $msg = $this->{ldap}->bind;
   }
 
@@ -261,7 +305,7 @@ sub disconnect {
   my $this = shift;
 
   if (defined($this->{ldap}) && $this->{isConnected}) {
-    $this->writeDebug("called disconnect()");
+    #$this->writeDebug("called disconnect()");
 
     $this->{ldap}->unbind();
     $this->{ldap} = undef;
@@ -279,7 +323,11 @@ finalize this ldap object.
 
 sub finish {
   my $this = shift;
-  TWiki::Contrib::LdapContrib::Cache::finish();
+
+  #$this->writeDebug("finishing");
+  delete $sharedLdapContrib{$this->{session}};
+  undef $this->{cacheDB};
+  untie %{$this->{data}};
   $this->disconnect();
 }
 
@@ -339,7 +387,7 @@ sub getAccount {
   my ($this, $login) = @_;
 
   $login = lc($login);
-  $this->writeDebug("called getAccount($login)");
+  #$this->writeDebug("called getAccount($login)");
   return undef if $this->{excludeMap}{$login};
 
   my $filter = '(&('.$this->{loginFilter}.')('.$this->{loginAttribute}.'='.$login.'))';
@@ -348,143 +396,16 @@ sub getAccount {
     base=>$this->{userBase}
   );
   unless ($msg) {
-    $this->writeDebug("no such account");
+    #$this->writeDebug("no such account");
     return undef;
   }
   if ($msg->count() != 1) {
     $this->{error} = 'Login invalid';
-    $this->writeDebug($this->{error});
+    #$this->writeDebug($this->{error});
     return undef;
   }
 
   return $msg->entry(0);
-}
-
-=begin text
-
----++++ getAccount() -> $search
-
-CAUTION this can get expensive, don't use.
-
-Returns a Net::LDAP::Search object searching for all user accounts in the database.
-
-=cut
-
-sub getAccounts {
-  my $this = shift;
-
-  $this->writeDebug("called getAccounts()");
-  return $this->search(
-    filter=>$this->{loginFilter}, 
-    base=>$this->{userBase}
-  );
-}
-
-
-=begin text
-
----++++ getGroup($name) -> $entry
-
-Returns the named group as a NET::LDAP::Entry object on success and undef otherwise.
-Check the error message using $ldap->getError().
-
-=cut
-
-sub getGroup {
-  my ($this, $wikiName) = @_;
-
-  $this->writeDebug("called getGroup($wikiName)");
-  return undef if $this->{excludeMap}{$wikiName};
-
-  my $filter = '(&('.$this->{groupFilter}.')('.$this->{groupAttribute}.'='.$wikiName.'))';
-  my $msg = $this->search(
-    filter=>$filter, 
-    base=>$this->{groupBase}
-  );
-  unless ($msg) {
-    $this->writeDebug("no such group");
-    return undef;
-  }
-  return $msg->entry(0);
-}
-
-=begin text
-
----++++ getGroups() -> $search
-
-Returns a Net::LDAP::Search object searching for all groups defined in the database.
-
-CAUTION: this can get expensive, if you are only interested in the groups' ids
-the use getGroupNames()
-
-=cut
-
-sub getGroups {
-  my $this = shift;
-
-  $this->writeDebug("called getGroups()");
-  return $this->search(
-    filter=>$this->{groupFilter}, 
-    base=>$this->{groupBase}
-  );
-}
-
-=begin text
-
----++++ getGroupNames() -> @array
-
-Returns a list of known group names.
-
-=cut
-
-sub getGroupNames {
-  my $this = shift;
-
-  return keys %{$this->{groupNames}} if $this->{cachedGroupNames};
-  $this->{cachedGroupNames} = 1;
-
-  $this->writeDebug("called getGroupNames()");
-
-  my $groupAttribute = $this->{groupAttribute};
-  my $msg = $this->search(
-    filter=>$this->{groupFilter}, 
-    base=>$this->{groupBase}, 
-    attrs=>[$groupAttribute]
-  );
-  
-  unless ($msg) {
-    $this->writeDebug("nothing found");
-    return undef;
-  }
-
-  while (my $entry = $msg->pop_entry()) {
-    my $groupName = $entry->get_value($groupAttribute);
-    $groupName = from_utf8(-string=>$groupName, -charset=>$TWiki::cfg{Site}{CharSet})
-      unless $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i;
-    $this->{groupNames}{$groupName} = 1;
-  }
-
-  return keys %{$this->{groupNames}};
-}
-
-=begin text
-
----++++ isGroup($user) -> $boolean
-
-check if a given user is an ldap group actually
-
-=cut
-
-sub isGroup {
-  my ($this, $user) = @_;
-
-  # may be called using a user object or a wikiName string
-  my $wikiName = (ref $user)?$user->wikiName():$user;
-  #$this->writeDebug("called isGroup($wikiName)");
-  return undef if $this->{excludeMap}{$wikiName};
-
-  $this->getGroupNames(); # populate cache
-  return defined($this->{groupNames}{$wikiName})?1:0;
 }
 
 
@@ -522,28 +443,30 @@ sub search {
 
   if ($this->{debug}) {
     my $attrString = join(',', @{$args{attrs}});
-    $this->writeDebug("called search(filter=$args{filter}, base=$args{base}, scope=$args{scope}, limit=$args{limit}, attrs=$attrString)");
+    #$this->writeDebug("called search(filter=$args{filter}, base=$args{base}, scope=$args{scope}, limit=$args{limit}, attrs=$attrString)");
   }
 
-  $this->connect() unless $this->{ldap};
+  unless ($this->{ldap}) {
+    unless ($this->connect()) {
+      #$this->writeDebug("error in search: ".$this->getError());
+      return undef;
+    }
+  }
+
   my $msg = $this->{ldap}->search(%args);
   my $errorCode = $this->checkError($msg);
 
   # we set a limit so it is ok that it exceeds
   if ($args{limit} && $errorCode == LDAP_SIZELIMIT_EXCEEDED) {
-    $this->writeDebug("limit exceeded");
+    #$this->writeDebug("limit exceeded");
     return $msg;
   }
   
   if ($errorCode != LDAP_SUCCESS) {
-    $this->writeDebug("error in search: ".$this->getError());
+    #$this->writeDebug("error in search: ".$this->getError());
     return undef;
   }
-  if ($this->{debug}) {
-    $this->writeDebug("found ".$msg->count." entries");
-    $this->writeDebug("done search");
-  }
-
+  #$this->writeDebug("found ".$msg->count." entries");
 
   return $msg;
 }
@@ -572,7 +495,7 @@ my $blobUrlPath = $ldap->cacheBlob($entry, $attr);
 sub cacheBlob {
   my ($this, $entry, $attr, $refresh) = @_;
 
-  $this->writeDebug("called cacheBlob()");
+  #$this->writeDebug("called cacheBlob()");
 
   my $twikiWeb = &TWiki::Func::getTwikiWebname();
   my $dir = &TWiki::Func::getPubDir().'/'.$twikiWeb.'/LdapContrib';
@@ -580,7 +503,7 @@ sub cacheBlob {
   my $fileName = $dir.'/'.$key;
 
   if ($refresh || !-f $fileName) {
-    $this->writeDebug("caching blob");
+    #$this->writeDebug("caching blob");
     my $value = $entry->get_value($attr);
     return undef unless defined $value;
     mkdir($dir, 0775) unless -e $dir;
@@ -590,34 +513,528 @@ sub cacheBlob {
     print FILE $value;
     close (FILE);
   } else {
-    $this->writeDebug("already got blob");
+    #$this->writeDebug("already got blob");
   }
   
-  $this->writeDebug("done cacheBlob()");
-
+  #$this->writeDebug("done cacheBlob()");
   return &TWiki::Func::getPubUrlPath().'/'.$twikiWeb.'/LdapContrib/'.$key;
 }
 
 =begin text
 
----++++ getPageControl($size) -> $pageControl
+---++++ initCache()
 
-Constructs a new page control object of type Net::LDAP::Control::Paged 
-useful to do paged queries on large datasets.
-
-# TODO: write a better api for paged results and move it out of _loadMapping
-# to a place where it is reusable, e.g. an object of its own bundling
-# the search, page and cookie bits.
+loads/connects to the LDAP cache
 
 =cut
 
-sub getPageControl {
-  my ($this, $size) = @_;
+sub initCache {
+  my $this = shift;
 
-  $size ||= $this->{pageSize};
+  # open database
+  #$this->writeDebug("opening ldap cache from $this->{cacheFile}");
+  $this->{cacheDB} = 
+    tie %{$this->{data}}, 'DB_File', $this->{cacheFile}, O_CREAT|O_RDWR, 0664, $DB_HASH
+    or die "Cannot open file $this->{cacheFile}: $!";
 
-  return Net::LDAP::Control::Paged->new(size=>$size) 
+
+  # refresh by user interaction
+  my $refresh = $this->{session}->{cgiQuery}->param('refreshldap') || '';
+  $refresh = $refresh eq 'on'?1:0;
+
+  # compute age
+  my $cacheAge = 9999999999;
+  my $now = time();
+  my $lastUpdate = $this->{data}{lastUpdate} || 0;
+  $cacheAge = $now - $lastUpdate if $lastUpdate;
+
+  #$this->writeDebug("cacheAge=$cacheAge");
+
+  # clear to reload it
+  if (!$lastUpdate || 
+      ($this->{maxCacheAge} > 0 && $cacheAge > $this->{maxCacheAge}) || 
+      $refresh) {
+    #$this->writeDebug("updating cache");
+    $this->refreshCache(1)
+  }
 }
 
+=pod
+
+---++++ refreshCache() -> $boolean
+
+download all relevant records from the LDAP server and
+store it into a database
+
+=cut
+
+sub refreshCache {
+  my ($this, $force) = @_;
+
+  %{$this->{data}} = ();
+  $this->{data}{lastUpdate} = time();
+
+  my $doSave = $this->refreshUsersCache($force);
+  if ($this->{mapGroups}) {
+    $doSave = $this->refreshGroupsCache($force) || $doSave;
+  }
+
+  return 0 unless $doSave;
+
+  #$this->writeDebug("flushing db to disk");
+  $this->{cacheDB}->sync();
+  return 1;
+}
+
+=pod
+
+---++++ refreshUsersCache($force) -> $boolean
+
+download all user records from the LDAP server
+
+returns true if new records have been loaded
+
+=cut
+
+sub refreshUsersCache {
+  my ($this, $force) = @_;
+
+  $force ||= 0;
+  return 0 if defined($this->{data}{lastUpdate}) && !$force;
+
+  #$this->writeDebug("called refreshUsers($force)");
+
+  # prepare search
+  my $page = Net::LDAP::Control::Paged->new(size=>$this->{pageSize});
+  my $cookie;
+  my @args = (
+    filter=>$this->{loginFilter}, 
+    base=>$this->{userBase},
+    attrs=>[$this->{loginAttribute}, 
+            $this->{mailAttribute},
+            @{$this->{wikiNameAttributes}}
+          ],
+    control=>[$page],
+  );
+
+  # read pages
+  my $nrRecords = 0;
+  my %wikiNames;
+  while (1) {
+
+    # perform search
+    my $mesg = $this->search(@args);
+    unless ($mesg) {
+      #$this->writeDebug("oops, no result");
+      last;
+    }
+
+    # process each entry on a page
+    while (my $entry = $mesg->pop_entry()) {
+      my $dn = $entry->dn();
+      my $loginName = $entry->get_value($this->{loginAttribute});
+      unless ($loginName) {
+	#$this->writeDebug("no loginName for $dn ... skipping");
+	next;
+      }
+      $loginName = lc($loginName);
+      $loginName = from_utf8(-string=>$loginName, -charset=>$TWiki::cfg{Site}{CharSet})
+        unless $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i;
+
+      if ($this->{normalizeLoginName}) {
+	$loginName = $this->normalizeLoginName($loginName);
+      }
+
+      # construct the wikiName
+      my $wikiName;
+      foreach my $attr (@{$this->{wikiNameAttributes}}) {
+        my $value = $entry->get_value($attr);
+        next unless $value;
+
+        $value = from_utf8(-string=>$value, -charset=>$TWiki::cfg{Site}{CharSet})
+          unless $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i;
+
+	#$this->writeDebug("$attr=$value");
+
+        if ($this->{normalizeWikiName}) {
+	  $wikiName .= $this->normalizeWikiName($value);
+        } else {
+          $wikiName .= $value;
+	}
+      }
+      $wikiName ||= $loginName;
+      if (defined($wikiNames{$wikiName})) {
+        $this->writeDebug("WARNING: $dn clashes with $wikiNames{$wikiName} on $wikiName");
+        next;
+      }
+      $wikiNames{$wikiName} = $dn;
+
+      # get email addrs
+      my $emails;
+      @{$emails} = $entry->get_value($this->{mailAttribute});
+
+      # store it
+      $this->writeDebug("adding wikiName='$wikiName', loginName='$loginName', dn=$dn");
+      $this->{data}{"U2W::$loginName"} = $wikiName;
+      $this->{data}{"W2U::$wikiName"} = $loginName;
+      $this->{data}{"DN2U::$dn"} = $loginName;
+      $this->{data}{"U2DN::$loginName"} = $dn;
+      $this->{data}{"U2EMAILS::$loginName"} = join(',',@$emails);
+      $nrRecords++;
+
+    } # end reading entries
+
+    # get cookie from paged control to remember the offset
+    my ($resp) = $mesg->control(LDAP_CONTROL_PAGED) or last;
+    $cookie = $resp->cookie or last;
+    if ($cookie) {
+      # set cookie in paged control
+      $page->cookie($cookie);
+    } else {
+      # found all
+      #$this->writeDebug("ok, no more cookie");
+      last;
+    }
+  } # end reading pages
+
+  # clean up
+  if ($cookie) {
+    $page->cookie($cookie);
+    $page->size(0);
+    $this->search(@args);
+  }
+
+  # remember list of all groups
+  $this->{data}{USERS} = join(',', keys %wikiNames);
+
+  $this->writeDebug("got $nrRecords keys in cache");
+
+  return 1;
+}
+
+=pod 
+
+---++++ normalizeWikiName($name) -> $string
+
+normalizes a string to form a proper <nop>WikiName
+
+=cut
+
+sub normalizeWikiName {
+  my ($this, $name) = @_;
+
+  # remove a trailing mail domain
+  $name =~ s/@.*//o;
+
+  # remove @mydomain.com part for special mail attrs
+  # SMELL: you may have a different attribute name for the email address
+  
+  # replace umlaute
+  $name =~ s/ä/ae/go;
+  $name =~ s/ö/oe/go;
+  $name =~ s/ü/ue/go;
+  $name =~ s/Ä/Ae/go;
+  $name =~ s/Ö/Oe/go;
+  $name =~ s/Ü/Ue/go;
+  $name =~ s/ß/ss/go;
+
+  my $wikiName = '';
+  foreach my $part (split(/[^$TWiki::regex{mixedAlphaNum}]/, $name)) {
+    $wikiName .= ucfirst($part);
+  }
+
+  return $wikiName;
+}
+
+=pod 
+
+---++++ normalizeLoginName($name) -> $string
+
+normalizes a string to form a proper login
+
+=cut
+
+sub normalizeLoginName {
+  my ($this, $name) = @_;
+
+  # remove a trailing mail domain
+  $name =~ s/@.*//o;
+
+  # remove @mydomain.com part for special mail attrs
+  # SMELL: you may have a different attribute name for the email address
+  
+  # replace umlaute
+  $name =~ s/ä/ae/go;
+  $name =~ s/ö/oe/go;
+  $name =~ s/ü/ue/go;
+  $name =~ s/Ä/Ae/go;
+  $name =~ s/Ö/Oe/go;
+  $name =~ s/Ü/Ue/go;
+  $name =~ s/ß/ss/go;
+  $name =~ s/[^$TWiki::cfg{LoginNameFilterIn}]//;
+
+  return $name;
+}
+
+
+=pod
+
+---++++ refreshGroups($force) -> $boolean
+
+download all group records from the LDAP server
+
+returns true if new records have been loaded
+
+=cut
+
+sub refreshGroupsCache {
+  my ($this, $force) = @_;
+
+  $force ||= 0;
+  return 0 if defined($this->{data}{lastUpdate}) && !$force;
+
+  # prepare search
+  my $page = Net::LDAP::Control::Paged->new(size=>$this->{pageSize});
+  my $cookie;
+  my $groupAttribute = $this->{groupAttribute};
+  my $memberAttribute = $this->{memberAttribute};
+  my @args = (
+    filter=>$this->{groupFilter}, 
+    base=>$this->{groupBase}, 
+    attrs=>[$groupAttribute, $memberAttribute],
+    control=>[$page],
+  );
+
+  # read pages
+  my $nrRecords = 0;
+  my @groupNames;
+  while (1) {
+
+    # perform search
+    my $mesg = $this->search(@args);
+    unless ($mesg) {
+      #$this->writeDebug("oops, no result");
+      last;
+    }
+
+    # process each entry on a page
+    while (my $entry = $mesg->pop_entry()) {
+
+      my $groupName = $entry->get_value($groupAttribute);
+      $groupName = from_utf8(-string=>$groupName, -charset=>$TWiki::cfg{Site}{CharSet})
+        unless $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i;
+
+      if ($this->{normalizeGroupName}) {
+	$groupName = $this->normalizeWikiName($groupName);
+      }
+
+      # fetch all members of this group
+      my %members;
+      my $members;
+      foreach my $member ($entry->get_value($memberAttribute)) {
+
+        # groups may store DNs to members instead of a memberUid, in this case we
+        # have to lookup the corresponding loginAttribute
+        if ($this->{memberIndirection}) {
+          my $found = 0;
+          #$this->writeDebug("following indirection for $member");
+          $member = $this->{data}{"DN2U::$member"};
+          unless ($member) {
+            #$this->writeDebug("oops, member not found");
+            next;
+          }
+        }
+        $members{$member} = 1;
+      }
+      @{$members} = sort keys %members;
+      $this->{data}{"GROUPS::$groupName"} = join(',',@$members);
+      push @groupNames, $groupName;
+
+      # store it
+      $nrRecords++;
+    } # end reading entries
+
+    # get cookie from paged control to remember the offset
+    my ($resp) = $mesg->control(LDAP_CONTROL_PAGED) or last;
+    $cookie = $resp->cookie or last;
+    if ($cookie) {
+      # set cookie in paged control
+      $page->cookie($cookie);
+    } else {
+      # found all
+      #$this->writeDebug("ok, no more cookie");
+      last;
+    }
+  } # end reading pages
+
+  # clean up
+  if ($cookie) {
+    $page->cookie($cookie);
+    $page->size(0);
+    $this->search(@args);
+  }
+
+  # remember list of all groups
+  $this->{data}{GROUPS} = join(',', @groupNames);
+
+  #$this->writeDebug("got $nrRecords keys in cache");
+
+  return 1;
+}
+
+=begin text
+
+---++++ getGroupNames() -> @array
+
+Returns a list of known group names.
+
+=cut
+
+sub getGroupNames {
+  my $this = shift;
+
+  #$this->writeDebug("called getGroupNames()");
+
+  my $groupNames = TWiki::Sandbox::untaintUnchecked($this->{data}{GROUPS}) || '';
+  my @groupNames = split(/,/,$groupNames);
+
+  return \@groupNames;
+}
+
+=begin text
+
+---++++ isGroup($wikiName) -> $boolean
+
+check if a given user is an ldap group actually
+
+=cut
+
+sub isGroup {
+  my ($this, $wikiName) = @_;
+
+  #$this->writeDebug("called isGroup($wikiName)");
+  return undef if $this->{excludeMap}{$wikiName};
+  return defined($this->{data}{"GROUPS::$wikiName"})?1:0;
+}
+
+=begin text
+
+---++++ getEmails($login) -> @emails
+
+fetch emails from LDAP
+
+=cut
+
+sub getEmails {
+  my ($this, $login) = @_;
+
+  my $emails = TWiki::Sandbox::untaintUnchecked($this->{data}{"U2EMAILS::".lc($login)}) || '';
+  my @emails = split(/,/,$emails);
+  return \@emails;
+}
+
+=begin text
+
+---++++ getGroupMembers($groupName) -> \@array
+
+=cut
+
+sub getGroupMembers {
+  my ($this, $groupName) = @_;
+  return undef if $this->{excludeMap}{$groupName};
+
+  my $members = TWiki::Sandbox::untaintUnchecked($this->{data}{"GROUPS::$groupName"}) || '';
+  my @members = split(/,/, $members);
+
+  return \@members;
+}
+
+=pod 
+
+---++++ getWikiNameOfLogin($loginName) -> $wikiName
+
+returns the wikiName of a loginName or undef if it does not exist
+
+=cut
+
+sub getWikiNameOfLogin {
+  my ($this, $loginName) = @_;
+  $loginName = lc($loginName);
+  return TWiki::Sandbox::untaintUnchecked($this->{data}{"U2W::$loginName"});
+}
+
+=pod 
+
+---++++ getLoginOfWikiName($wikiName) -> $loginName
+
+returns the loginNAme of a wikiName or undef if it does not exist
+
+=cut
+
+sub getLoginOfWikiName {
+  my ($this, $wikiName) = @_;
+  return TWiki::Sandbox::untaintUnchecked($this->{data}{"W2U::$wikiName"});
+}
+
+=pod 
+
+---++++ getAllWikiNames() -> \@array
+
+returns a list of all known wikiNames
+
+=cut
+
+sub getAllWikiNames {
+  my $this = shift;
+
+  my $wikiNames = TWiki::Sandbox::untaintUnchecked($this->{data}{USERS});
+  my @wikiNames = split(/,/,$wikiNames);
+  return \@wikiNames;
+}
+
+=pod 
+
+---++++ getDnOfLogin($loginName) -> $dn
+
+returns the Distinguished Name of the LDAP record of the given name
+
+=cut
+
+sub getDnOfLogin {
+  my ($this, $loginName) = @_;
+  $loginName = lc($loginName);
+  return TWiki::Sandbox::untaintUnchecked($this->{data}{"U2DN::$loginName"});
+}
+
+=pod 
+
+---++++ changePassword($loginName, $newPassword, $oldPassword) -> $boolean
+
+=cut
+
+sub changePassword {
+  my ($this, $loginName, $newPassword, $oldPassword ) = @_;
+
+  return undef unless 
+    $this->{allowChangePassword} && defined($oldPassword) && $oldPassword ne '1';
+
+  my $dn = $this->getDnOfLogin($loginName);
+  return undef unless $dn;
+
+  return undef unless $this->connect($dn, $oldPassword);
+
+  my $msg = $this->{ldap}->modify( $dn, 
+    replace => { 'userPassword' => $newPassword } 
+  );
+
+  my $errorCode = $this->checkError($msg);
+
+  if ($errorCode != LDAP_SUCCESS) {
+    $this->writeDebug("error in changePassword: ".$this->getError());
+    return undef;
+  }
+
+  return 1;
+}
 
 1;
