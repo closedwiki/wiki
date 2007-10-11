@@ -19,7 +19,7 @@ use strict;
 use vars qw($VERSION $RELEASE $isInitialized $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION);
 
 $VERSION = '$Rev$';
-$RELEASE = 'v1.01';
+$RELEASE = 'v2.00';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Query and display data from an LDAP directory';
 
@@ -28,28 +28,28 @@ sub initPlugin {
   $isInitialized = 0;
 
   TWiki::Func::registerTagHandler('LDAP', \&handleLdap);
+  TWiki::Func::registerTagHandler('LDAPUSERS', \&handleLdapUsers);
   return 1; 
 }
 
 ###############################################################################
-sub afterCommonTagsHandler {
-  return unless $isInitialized;
-  return TWiki::Plugins::LdapNgPlugin::Core::afterCommonTagsHandler(@_);
+sub initCore {
+  return if $isInitialized;
+  eval 'use TWiki::Plugins::LdapNgPlugin::Core;';
+  die $@ if $@;
+  $isInitialized = 1;
 }
 
 ###############################################################################
 sub handleLdap {
-
-  unless ($isInitialized) {
-    eval 'use TWiki::Plugins::LdapNgPlugin::Core;';
-    die $@ if $@;
-    $isInitialized = 1;
-  }
-
+  initCore();
   return TWiki::Plugins::LdapNgPlugin::Core::handleLdap(@_);
 }
 
-
-
+###############################################################################
+sub handleLdapUsers {
+  initCore();
+  return TWiki::Plugins::LdapNgPlugin::Core::handleLdapUsers(@_);
+}
 
 1;

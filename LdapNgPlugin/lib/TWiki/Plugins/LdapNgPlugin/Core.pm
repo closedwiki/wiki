@@ -16,7 +16,7 @@
 package TWiki::Plugins::LdapNgPlugin::Core;
 
 use strict;
-use vars qw($ldap $debug);
+use vars qw($debug);
 use Unicode::MapUTF8 qw(from_utf8);
 use TWiki::Contrib::LdapContrib;
 
@@ -52,6 +52,7 @@ sub handleLdap {
   my $theLimit = $params->{limit} || 0;
   my $theSkip = $params->{skip} || 0;
   my $theHideNull = $params->{hidenull} || 'off';
+  my $theClear = $params->{clear} || '';
 
   my $query = &TWiki::Func::getCgiQuery();
   my $theRefresh = $query->param('refresh') || 0;
@@ -66,8 +67,7 @@ sub handleLdap {
   writeDebug("format=$theFormat");
 
   # new connection
-  $ldap->disconnect() if $ldap;
-  $ldap = new TWiki::Contrib::LdapContrib(
+  my $ldap = new TWiki::Contrib::LdapContrib(
     $session,
     base=>$theBase,
     host=>$theHost,
@@ -116,8 +116,10 @@ sub handleLdap {
     $result .= $text;
     last if $index == $theLimit;
   }
-  $theHeader = expandVars($theHeader.$theSep,count=>$count) if $theHeader;
-  $theFooter = expandVars($theSep.$theFooter,count=>$count) if $theFooter;
+  $ldap->disconnect();
+
+  $theHeader = expandVars($theHeader,count=>$count) if $theHeader;
+  $theFooter = expandVars($theFooter,count=>$count) if $theFooter;
 
   #$result = $session->UTF82SiteCharSet($result) || $result;
   $result = from_utf8(-string=>$result, -charset=>$TWiki::cfg{Site}{CharSet})
@@ -128,12 +130,68 @@ sub handleLdap {
   writeDebug("done handleLdap()");
   writeDebug("result=$result");
 
+  if ($theClear) {
+    $theClear =~ s/\$/\\\$/g;
+    my $regex = join('|',split(/[\s,]+/,$theClear));
+    $result =~ s/$regex//g;
+  }
+
   return $result;
 }
 
 ###############################################################################
-sub afterCommonTagsHandler {
-  $ldap->disconnect() if $ldap;
+sub handleLdapUsers {
+  my ($session, $params, $topic, $web) = @_;
+
+  writeDebug("called handleLdapUsers($web, $topic)");
+
+  my $ldap = TWiki::Contrib::LdapContrib::getLdapContrib($session);
+  my $theHeader = $params->{header} || ''; 
+  my $theFormat = $params->{format} || '   1 $displayName';
+  my $theFooter = $params->{footer} || '';
+  my $theSep = $params->{sep} || '$n';
+  my $theLimit = $params->{limit} || 0;
+  my $theSkip = $params->{skip} || 0;
+  my $theInclude = $params->{include};
+  my $theExclude = $params->{exclude};
+  my $theHideUnknownUsers = $params->{hideunknown} || 'on';
+  $theHideUnknownUsers = ($theHideUnknownUsers eq 'on')?1:0;
+
+  my $mainWeb = TWiki::Func::getMainWebname();
+  my $wikiNames = $ldap->getAllWikiNames();
+  my $result = '';
+  $theSkip =~ s/[^\d]//go;
+  $theLimit =~ s/[^\d]//go;
+
+  my $index = 0;
+  foreach my $wikiName (sort @$wikiNames) {
+    next if $theExclude && $wikiName =~ /$theExclude/;
+    next if $theInclude && $wikiName !~ /$theInclude/;
+    $index++;
+    next if $index <= $theSkip;
+    my $loginName = $ldap->getLoginOfWikiName($wikiName);
+    my $emailAddrs = $ldap->getEmails($loginName);
+    my $displayName;
+    if (TWiki::Func::topicExists($mainWeb, $wikiName)) {
+      $displayName = "[[$mainWeb.$wikiName][$wikiName]]";
+    } else {
+      next if $theHideUnknownUsers;
+      $displayName ="<nop>$wikiName";
+    }
+    my $line;
+    $line = $theSep if $result;
+    $line .= $theFormat;
+    $line = expandVars($line,
+      index=>$index,
+      wikiName=>$wikiName,
+      displayName=>$displayName,
+      loginName=>$loginName,
+      emails=>$emailAddrs);
+    $result .= $line;
+    last if $index == $theLimit;
+  }
+
+  return expandVars($theHeader).$result.expandVars($theFooter);
 }
 
 ###############################################################################
@@ -149,6 +207,7 @@ sub expandVars {
 
   foreach my $key (keys %data) {
     my $value = $data{$key};
+    next unless $value;
     $value = join(', ', sort @$value) if ref($data{$key}) eq 'ARRAY';
 
     # Format list values using the '$' delimiter in multiple lines; see rfc4517
