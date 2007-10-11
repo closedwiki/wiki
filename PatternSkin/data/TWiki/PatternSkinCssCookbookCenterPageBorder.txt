@@ -46,5 +46,5 @@ background-repeat:repeat-x;
 background-image:url("%PUBURLPATH%/%SYSTEMWEB%/PatternSkin/striped_pageshadow.gif");
 }</style>
 
-%META:FILEATTACHMENT{name="centerpageborder.css" attr="" autoattached="1" comment="css to frame the page centered on the screen" date="1129323328" path="centerpage.css" size="259" user="ArthurClemens" version=""}%
-%META:FILEATTACHMENT{name="gradient_page.gif" attachment="gradient_page.gif" attr="" comment="background image" date="1141771401" path="gradient_page.gif" size="3854" stream="gradient_page.gif" user="Main.ArthurClemens" version="1"}%
+%META:FILEATTACHMENT{name="centerpageborder.css" attr="" autoattached="1" comment="css to frame the page centered on the screen" date="1129323328" path="centerpage.css" size="259" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="gradient_page.gif" attachment="gradient_page.gif" attr="" comment="background image" date="1141771401" path="gradient_page.gif" size="3854" stream="gradient_page.gif" user="TWikiContributor" version="1"}%

@@ -25,4 +25,4 @@ You can write this line in %SYSTEMWEB%.TWikiPreferences, in WebPreferences, in y
 
 
 
-%META:FILEATTACHMENT{name="edittable.css" attachment="edittable.css" attr="" comment="" date="1134249078" path="edittable.css" size="388" stream="edittable.css" user="Main.ArthurClemens" version="1"}%
+%META:FILEATTACHMENT{name="edittable.css" attachment="edittable.css" attr="" comment="" date="1134249078" path="edittable.css" size="388" stream="edittable.css" user="TWikiContributor" version="1"}%

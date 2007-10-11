@@ -33,4 +33,4 @@ You can always write a =&lt;style>= in a topic - all current browsers support th
 </style>
 
 
-%META:FILEATTACHMENT{name="notopbar.css" attachment="notopbar.css" attr="" comment="" date="1130024123" path="notopbar.css" size="395" stream="notopbar.css" user="Main.ArthurClemens" version="1"}%
+%META:FILEATTACHMENT{name="notopbar.css" attachment="notopbar.css" attr="" comment="" date="1130024123" path="notopbar.css" size="395" stream="notopbar.css" user="TWikiContributor" version="1"}%
