@@ -111,7 +111,7 @@ MESS
                 print "$file<br />";
             }
             if( $file =~ /^${extension}_installer(\.pl)?$/) {
-                $installScript = $file;
+                $installScript = $this->_findTarget($file);
             }
         }
         unless ($installScript) {
@@ -150,10 +150,14 @@ MESS
         # will just hang :-(
         chdir($this->{root});
         unshift(@ARGV, '-a');
+        print "<pre>\n";
         eval {
+            no warnings 'redefine';
             do $installScript;
+            use warnings 'redefine';
             die $@ if $@; # propagate
         };
+        print "</pre>\n";
         if ($@) {
             print $this->ERROR(<<HERE);
 Installer returned errors:

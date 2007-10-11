@@ -33,6 +33,8 @@ use File::Temp;
 use File::Copy;
 use File::Path;
 
+no warnings 'redefine';
+
 my $noconfirm = 0;
 my $inactive = 0;
 my $twiki;
@@ -74,22 +76,24 @@ BEGIN {
     # and attachment histories. Key off TWiki::Merge because it was
     # added in Dakar.
     if( &$check_perl_module( 'TWiki::Merge' )) {
-        require TWiki;
-        # We have to get the admin user, as a guest user may be blocked.
-        # TWiki 4.2 has AdminUserLogin; for earlier releases, we need to
-        # do something a bit different.
-        my $user = $TWiki::cfg{AdminUserLogin} || 'admin';
-        $twiki = new TWiki($user);
-        # Compatibility with 4.0 <= TWiki::VERSION < 4.2
-        if ($twiki->{users}->can('findUser')) {
-            $TWiki::Plugins::SESSION = $twiki;
-            $twiki->{user} =
-              $twiki->{users}->findUser(
-                  $TWiki::cfg{AdminUserWikiName},
-                  $TWiki::cfg{AdminUserWikiName});
-        }
-        chdir($installationRoot);
-        $twiki4OrMore = 1;
+        eval {
+            require TWiki;
+            # We have to get the admin user, as a guest user may be blocked.
+            # TWiki 4.2 has AdminUserLogin; for earlier releases, we need to
+            # do something a bit different.
+            my $user = $TWiki::cfg{AdminUserLogin} || 'admin';
+            $twiki = new TWiki($user);
+            # Compatibility with 4.0 <= TWiki::VERSION < 4.2
+            if ($twiki->{users}->can('findUser')) {
+                $TWiki::Plugins::SESSION = $twiki;
+                $twiki->{user} =
+                  $twiki->{users}->findUser(
+                      $TWiki::cfg{AdminUserWikiName},
+                      $TWiki::cfg{AdminUserWikiName});
+            }
+            chdir($installationRoot);
+            $twiki4OrMore = 1;
+        }; # if it fails, fall back to old behaviour
     } else {
         # Not TWiki-4
         chdir($installationRoot);
@@ -790,8 +794,8 @@ sub _uninstall {
             }
         }
         TWiki::postuninstall();
+        print "### $MODULE uninstalled ###\n";
     }
-    print "### $MODULE uninstalled ###\n";
     return 1;
 }
 
@@ -824,7 +828,8 @@ sub _emplace {
             if (scalar(@path)) {
                 File::Path::mkpath(join('/',@path));
             }
-            File::Copy::move($source, $target) || die "Install failed: $!\n";
+            File::Copy::move($source, $target) ||
+                die "Failed to move $source to $target: $!\n";
         }
         if( $target =~ /^data\/(\w+)\/(\w+).txt$/ ) {
             push(@topic, $target);
