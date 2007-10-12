@@ -3451,8 +3451,7 @@ sub WEBLIST {
 
 sub TOPICLIST {
     my( $this, $params ) = @_;
-    my $format = $params->{_DEFAULT} || $params->{'format'} || '$name';
-    $format ||= '$name';
+    my $format = $params->{_DEFAULT} || $params->{'format'} || '$topic';
     my $separator = $params->{separator} || "\n";
     $separator =~ s/\$n/\n/;
     my $web = $params->{web} || $this->{webName};
@@ -3470,13 +3469,15 @@ sub TOPICLIST {
     foreach my $item ( $this->{store}->getTopicNames( $web ) ) {
         my $line = $format;
         $line =~ s/\$web\b/$web/g;
-        $line =~ s/\$name\b/$item/g;
-        $line =~ s/\$qname/"$item"/g;
+        $line =~ s/\$topic\b/$item/g;
+        $line =~ s/\$name\b/$item/g; # DEPRECATED
+        $line =~ s/\$qname/"$item"/g; # DEPRECATED
         my $mark = ( $selection =~ / \Q$item\E / ) ? $marker : '';
         $line =~ s/\$marker/$mark/g;
+        $line = expandStandardEscapes( $line );
         push( @items, $line );
     }
-    return join( $separator, @items );
+    return join( $separator, @items);
 }
 
 sub QUERYSTRING {
