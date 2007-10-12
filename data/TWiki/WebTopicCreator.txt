@@ -8,9 +8,10 @@
 ---+++ TWiki admins
 
 Please replace all web's !WebTopicCreator topic contents with this text:
+
 <textarea style="width:99%; background:#ffe;" rows="3">
 <!--
-   * Local VIEW_TEMPLATE = CreateNewTopic
+   * Local VIEW_TEMPLATE = <nop>WebCreateNewTopic
 -->
 </textarea>
 
