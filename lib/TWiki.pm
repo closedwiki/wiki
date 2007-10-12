@@ -3470,8 +3470,8 @@ sub TOPICLIST {
         my $line = $format;
         $line =~ s/\$web\b/$web/g;
         $line =~ s/\$topic\b/$item/g;
-        $line =~ s/\$name\b/$item/g; # DEPRECATED
-        $line =~ s/\$qname/"$item"/g; # DEPRECATED
+        $line =~ s/\$name\b/$item/g; # Undocumented, DO NOT REMOVE
+        $line =~ s/\$qname/"$item"/g; # Undocumented, DO NOT REMOVE
         my $mark = ( $selection =~ / \Q$item\E / ) ? $marker : '';
         $line =~ s/\$marker/$mark/g;
         $line = expandStandardEscapes( $line );
