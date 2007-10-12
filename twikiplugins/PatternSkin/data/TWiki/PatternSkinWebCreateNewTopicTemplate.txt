@@ -1,5 +1,5 @@
 %META:TOPICINFO{author="TWikiContributor" date="1131431859" format="1.1" version="$Rev$"}%
-%TMPL:INCLUDE{"CreateNewTopic"}%
+%TMPL:INCLUDE{"WebCreateNewTopic"}%
 
 %TMPL:DEF{"script:topictemplate"}%<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikiString.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiJavascripts/unicode_chars.js"></script>
