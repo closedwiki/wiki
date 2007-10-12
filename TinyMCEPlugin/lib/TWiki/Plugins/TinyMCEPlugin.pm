@@ -32,7 +32,8 @@ sub initPlugin {
     $query = TWiki::Func::getCgiQuery();
     return 0 unless $query;
     unless( $TWiki::cfg{Plugins}{WysiwygPlugin}{Enabled} ) {
-        TWiki::Func::writeWarning("WysiwygPlugin must be enabled for TinyMCEPlugin to work");
+        TWiki::Func::writeWarning("TinyMCEPlugin is enabled but WysiwygPlugin is not enabled. Both plugins must be installed and enabled for TinyMCE.");
+        return 0;
     }
 
     # Identify the browser from the user agent string
