@@ -1,3 +1,8 @@
+/* View mode */
+.editTable {
+	padding-bottom:1em;
+}
+/* Edit mode */
 .editTableInput,
 .editTableTextarea {
 	font-family:monospace;
