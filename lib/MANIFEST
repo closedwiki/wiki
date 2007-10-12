@@ -60,6 +60,7 @@ data/Main/TWikiPreferences.txt 0644
 data/Main/UnknownUser.txt 0644
 data/Main/WebAtom.txt 0644
 data/Main/WebChanges.txt 0644
+data/Main/WebCreateNewTopic.txt 0644
 data/Main/WebHome.txt 0644
 data/Main/WebIndex.txt 0644
 data/Main/WebNotify.txt 0644
@@ -68,10 +69,10 @@ data/Main/WebRss.txt 0644
 data/Main/WebSearch.txt 0644
 data/Main/WebSearchAdvanced.txt 0644
 data/Main/WebStatistics.txt 0644
-data/Main/WebTopicCreator.txt 0644
 data/Main/WebTopicList.txt 0644
 data/Sandbox/WebAtom.txt 0644
 data/Sandbox/WebChanges.txt 0644
+data/Sandbox/WebCreateNewTopic.txt 0644
 data/Sandbox/WebHome.txt 0644
 data/Sandbox/WebIndex.txt 0644
 data/Sandbox/WebNotify.txt 0644
@@ -80,7 +81,6 @@ data/Sandbox/WebRss.txt 0644
 data/Sandbox/WebSearch.txt 0644
 data/Sandbox/WebSearchAdvanced.txt 0644
 data/Sandbox/WebStatistics.txt 0644
-data/Sandbox/WebTopicCreator.txt 0644
 data/Sandbox/WebTopicList.txt 0644
 data/TWiki/ATasteOfTWiki.txt 0644
 data/TWiki/AccessKeys.txt 0644
