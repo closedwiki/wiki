@@ -541,7 +541,7 @@ WARN
             'attention',
             def => 'merge_notice',
             web => $web, topic => $topic,
-            params => [ $merged ] );
+            params => $merged );
     }
 
     $session->redirect( $redirecturl, undef, ( $saveaction ne 'checkpoint' ) );
