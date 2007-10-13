@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2001-2006 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2001-2007 Peter Thoeny, peter@thoeny.org
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -670,28 +670,79 @@ sub doFunc
         }
 
     } elsif ( $theFunc eq "TIME" ) {
-       $result = $theAttr;
-       $result =~ s/^\s+//o;
-       $result =~ s/\s+$//o;
-       if( $result ) {
-           $result = _date2serial( $result );
-       } else {
-           $result = time();
-       }
+        $result = $theAttr;
+        $result =~ s/^\s+//o;
+        $result =~ s/\s+$//o;
+        if( $result ) {
+            $result = _date2serial( $result );
+        } else {
+            $result = time();
+        }
 
     } elsif ( $theFunc eq "TODAY" ) {
-       $result = _date2serial( _serial2date( time(), '$year/$month/$day GMT', 1 ) );
+        $result = _date2serial( _serial2date( time(), '$year/$month/$day GMT', 1 ) );
 
     } elsif( $theFunc =~ /^(FORMATTIME|FORMATGMTIME)$/ ) {
-       my( $time, $str ) = split( /,\s*/, $theAttr, 2 );
-       if( $time =~ /([0-9]+)/ ) {
-           $time = $1;
-       } else {
-           $time = time();
-       }
-       my $isGmt = 0;
-       $isGmt = 1 if( ( $str =~ m/ gmt/i ) || ( $theFunc eq "FORMATGMTIME" ) );
-       $result = _serial2date( $time, $str, $isGmt );
+        my( $time, $str ) = split( /,\s*/, $theAttr, 2 );
+        if( $time =~ /([0-9]+)/ ) {
+            $time = $1;
+        } else {
+            $time = time();
+        }
+        my $isGmt = 0;
+        $isGmt = 1 if( ( $str =~ m/ gmt/i ) || ( $theFunc eq "FORMATGMTIME" ) );
+        $result = _serial2date( $time, $str, $isGmt );
+
+    } elsif( $theFunc eq "FORMATTIMEDIFF" ) {
+        my( $scale, $prec, $time ) = split( /,\s*/, $theAttr, 3 );
+        $scale = "" unless( $scale );
+        $prec = int( _getNumber( $prec ) - 1 );
+        $prec = 0 if( $prec < 0 );
+        $time = _getNumber( $time );
+        $time = 0 if( $time < 0 );
+        my @unit  = ( 0, 0, 0, 0, 0, 0 ); # sec, min, hours, days, month, years
+        my @factor = ( 1, 60, 60, 24, 30.4166, 12 ); # sec, min, hours, days, month, years
+        my @singular = ( 'second',  'minute',  'hour',  'day',  'month', 'year' );
+        my @plural =   ( 'seconds', 'minutes', 'hours', 'days', 'month', 'years' );
+        my $min = 0;
+        my $max = $prec;
+        if( $scale =~ /^min/i ) {
+            $min = 1;
+            $unit[1] = $time;
+        } elsif( $scale =~ /^hou/i ) {
+            $min = 2;
+            $unit[2] = $time;
+        } elsif( $scale =~ /^day/i ) {
+            $min = 3;
+            $unit[3] = $time;
+        } elsif( $scale =~ /^mon/i ) {
+            $min = 4;
+            $unit[4] = $time;
+        } elsif( $scale =~ /^yea/i ) {
+            $min = 5;
+            $unit[5] = $time;
+        } else {
+            $unit[0] = $time;
+        }
+        my @arr = ();
+        my $i = 0;
+        my $val1 = 0;
+        my $val2 = 0;
+        for( $i = $min; $i < 5; $i++ ) {
+            $val1 = $unit[$i];
+            $val2 = $unit[$i+1] = int($val1 / $factor[$i+1]);
+            $val1 = $unit[$i] = $val1 - int($val2 * $factor[$i+1]);
+            
+            push( @arr, "$val1 $singular[$i]" ) if( $val1 == 1 );
+            push( @arr, "$val1 $plural[$i]" )   if( $val1 > 1 );
+        }
+        push( @arr, "$val2 $singular[$i]" ) if( $val2 == 1 );
+        push( @arr, "$val2 $plural[$i]" )   if( $val2 > 1 );
+        push( @arr, "0 $plural[$min]" )   unless( @arr );
+        my @reverse = reverse( @arr );
+        $#reverse = $prec if( @reverse > $prec );
+        $result = join( ', ', @reverse );
+        $result =~ s/(.+)\, /$1 and /;
 
     } elsif( $theFunc eq "TIMEADD" ) {
        my( $time, $value, $scale ) = split( /,\s*/, $theAttr, 3 );
