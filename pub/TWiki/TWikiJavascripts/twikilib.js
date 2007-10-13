@@ -19,3 +19,21 @@ twiki.getMetaTag = function(inKey) {
     }
     return twiki.metaTags[inKey]; 
 };
+
+// Get all elements under root that have the given tag and include the
+// given class
+twiki.getElementsByClassName = function(root, tag, className) {
+	var elms = root.getElementsByTagName(tag);
+	className = className.replace(/\-/g, "\\-");
+	var re = new RegExp("\\b" + className + "\\b");
+	var el;
+	var hits = new Array();
+	for (var i = 0; i < elms.length; i++) {
+		el = elms[i];
+		if (re.test(el.className)) {
+			hits.push(el);
+		}
+	}
+	return hits;
+}
+

@@ -102,3 +102,31 @@ function setEditBoxFontStyle(inFontStyle) {
 		return;
 	}
 }
+
+// Provided for use by editors that need to validate form elements before
+// navigating away
+function validateTWikiMandatoryFields(event) {
+    if (twiki.Pref.validateSuppressed) {
+        return true;
+    }
+    var taglist = new Array('input', 'select', 'textarea');
+    var ok = true;
+    for (var i = 0; i < taglist.length; i++) {
+        var els = twiki.getElementsByClassName(document, taglist[i],
+                                               'twikiMandatory');
+        for (var j = 0; j < els.length; j++) {
+            if (els[j].value == null || els[j].value.length == 0) {
+                alert("The required form field '" + els[j].name +
+                      "' has no value.");
+                ok = false;
+            }
+        }
+    }
+    return ok;
+}
+
+// Used to dynamically set validation suppression, depending on which submit
+// button is pressed (i.e. call this n 'Cancel').
+function suppressTWikiSaveValidation() {
+    twiki.Pref.validateSuppressed = true;
+}
