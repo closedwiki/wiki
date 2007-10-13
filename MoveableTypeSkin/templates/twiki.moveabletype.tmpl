@@ -38,17 +38,8 @@
 %{ ******************************************* }%
 %TMPL:DEF{"moveabletypetwikicss"}%%URLPARAM{"twikicssfile" default="%IF{"defined MOVEABLETYPESKIN_TWIKICSSFILE" then="%MOVEABLETYPESKIN_TWIKICSSFILE%" else="%PUBURLPATH%/%SYSTEMWEB%/%TMPL:P{moveabletypetext}%/TWiki.css"}%"}%%TMPL:END%
 %{ ******************************************* }%
-%TMPL:DEF{"NOdemojavascript"}%%IF{"defined cssfile or defined skin" then="<script type='text/javascript' src='%PUBURLPATH%/%SYSTEMWEB%/MOVEABLETYPESKIN/skindemo.js'></script>
-<script type='text/javascript' src='%PUBURLPATH%/%SYSTEMWEB%/TWikiJavascripts/twiki.js'></script> %{ it seems that this is sometimes missing from the default tmpls? }%
-<script language='JavaScript' type='text/javascript'>
-var twikiScriptUrlBase = '%SCRIPTURL%';
-var currentTWikiCss = '%TMPL:P{moveabletypetwikicss}%';
-var currentCss = '%TMPL:P{moveabletypecss}%';
-var currentText = '%TMPL:P{moveabletypetext}%';
-addLoadEvent(InitZenCssUrls);
-</script>" }%%TMPL:END%
-%{ ******************************************* }%
-%TMPL:DEF{"defaultstyle"}%<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="%SCRIPTURL{view}%/%BASEWEB%/WebRss" />
+%TMPL:DEF{"twikistyle"}%
+<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="%SCRIPTURL{view}%/%BASEWEB%/WebRss" />
 <link rel="alternate" type="application/atom+xml" title="Atom" href="%SCRIPTURL{view}%/%BASEWEB%/WebAtom" />
 <link rel="alternate" type="application/rss+xml" title="RSS" href="%SCRIPTURL{view}%/%BASEWEB%/WebRss" />
 <!-- to correct the unsightly Flash of Unstyled Content. http://www.bluerobot.com/web/css/fouc.asp -->
@@ -59,8 +50,7 @@ addLoadEvent(InitZenCssUrls);
 <style type="text/css" title="currentStyle" media="screen">
 @import "%TMPL:P{moveabletypetwikicss}%";
 @import "%TMPL:P{moveabletypecss}%";
-</style> 
-%IF{"MOVEABLETYPESKIN_DEMOJAVASCRIPT = 'off'" then="then" else="%TMPL:P{demojavascript}%"}% %TMPL:END%
+</style> <!-- this is the MAIN --> %TMPL:END%
 
 %{ **************************************************************************************************************************************************************************** }%
 %{ ******************************************* }%
