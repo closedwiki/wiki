@@ -21,7 +21,7 @@ package TWiki::Plugins::EditTablePlugin;
 
 use vars qw(
             $web $topic $user $VERSION $RELEASE $debug
-            $query $renderingWeb $usesJavascriptInterface $editModeHeaderDone
+            $query $renderingWeb $usesJavascriptInterface $viewModeHeaderDone $editModeHeaderDone
     );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -54,6 +54,7 @@ sub initPlugin {
     # Get plugin debug flag
     $debug = TWiki::Func::getPreferencesFlag( 'EDITTABLEPLUGIN_DEBUG' );
     $usesJavascriptInterface = TWiki::Func::getPreferencesFlag( 'EDITTABLEPLUGIN_JAVASCRIPTINTERFACE' );
+    $viewModeHeaderDone = 0;
     $editModeHeaderDone = 0;
     $prefsInitialized = 0;
     $renderingWeb = $web;
@@ -73,6 +74,7 @@ sub commonTagsHandler {
 
     return unless $_[0] =~ /%EDIT(TABLE|CELL){(.*)}%/os;
 
+    addViewModeHeadersToHead();
     require TWiki::Plugins::EditTablePlugin::Core;
 
     TWiki::Plugins::EditTablePlugin::Core::process( @_ );
@@ -107,6 +109,19 @@ sub decodeValue {
     $theText =~ s/\"/\&quot;/go;          # change " to entity
 
     return $theText;
+}
+
+sub addViewModeHeadersToHead {
+    return if $viewModeHeaderDone;
+    
+    $viewModeHeaderDone = 1;
+
+    my $header=<<'EOF'; 
+<style type="text/css" media="all">
+@import url("%PUBURL%/%SYSTEMWEB%/EditTablePlugin/edittable.css");
+</style>
+EOF
+  TWiki::Func::addToHEAD('EDITTABLEPLUGIN',$header)
 }
 
 sub addEditModeHeadersToHead {
