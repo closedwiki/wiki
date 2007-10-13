@@ -15,6 +15,7 @@ The basic syntax of a condition is the same as [[QuerySearch][the syntax used fo
 | allows | ='X' allows 'Y'= is true if web/topic 'X' exists and allows access mode 'Y' for the current user. Web access rights are only checked if there is no topic called 'X'. |
 | istopic | =istopic 'X'= is true if topic 'X' exists |
 | isweb | =isweb 'X'= is true if web 'X' exists |
+| ingroup | ='X' ingroup 'Y'= is true if user 'X' is in group 'Y' |
 | defined | True if a preference variable or url parameter of this name is defined. |
 | $ | expands a URL parameter or [[TWikiVariables][TWikiVariable]] name. Plugin handlers *are not called*. Built-in variables and user-defined preferences are supported. You can pass a limited subset of parameters to TWiki variables by enclosing the variable name in single quotes; for example, =$ 'VARIABLE{value}'=. The ='VARIABLE{value}'= string may *not* contain quotes (' or "). |
 | {X} | expands to the value of the configuration variable {X} - for example, ={ScriptUrlPath}= |
@@ -70,7 +71,7 @@ You %IF{"'%TOPIC%' allows 'change'" then="can" else="cannot"}% change this topic
 You %IF{"'Sandbox.TestTopic' allows 'change'" then="can" else="cannot"}% change Sandbox.TestTopic.
 You %IF{"'Sandbox' allows 'change'" then="can" else="cannot"}% change Sandbox web
 
-8. Check topic existance
+9. Check topic existance
 <verbatim>
 Topic Sandbox.TestTopic %IF{"istopic 'Sandbox.TestTopic'" then="exists" else="does not exist"}%
 Web Sandbox.TestTopic %IF{"isweb 'Sandbox'" then="exists" else="does not exist"}%
@@ -78,6 +79,13 @@ Web Sandbox.TestTopic %IF{"isweb 'Sandbox'" then="exists" else="does not exist"}
 expands to: %BR%
 Topic Sandbox.TestTopic %IF{"istopic 'Sandbox.TestTopic'" then="exists" else="does not exist"}%
 Web Sandbox.TestTopic %IF{"isweb 'Sandbox'" then="exists" else="does not exist"}%
+
+10. Group membership
+<verbatim>
+You %IF{"'%USERNAME%' ingroup 'TWikiAdminGroup'" then="are an admin" else="are a normal user"}% 
+</verbatim>
+expands to: %BR%
+You %IF{"'%USERNAME%' ingroup 'TWikiAdminGroup'" then="are an admin" else="are a normal user"}% 
 
 *Configuration items* are defined in [[%SCRIPTURLPATH{"configure"}%][configure]]. You cannot see the value of a configuration item, you can only see if the item is set or not.
 

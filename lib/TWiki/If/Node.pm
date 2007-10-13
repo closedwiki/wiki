@@ -111,6 +111,21 @@ sub OP_defined {
     return 0;
 }
 
+sub OP_ingroup {
+    my( $this, %domain ) = @_;
+    my $a = $this->{params}->[0]; # user cUID/ loginname / WikiName / WebDotWikiName :( (string)
+    my $b = $this->{params}->[1]; # group name (string
+    my $session = $domain{tom}->{_session};
+    throw Error::Simple('No context in which to evaluate "'.
+                          $a->stringify().'"') unless $session;
+    my $user =  $session->{users}->getCanonicalUserID($a->evaluate());
+    return 0 unless $user;
+    my $group =  $b->evaluate();
+    return 0 unless $group;
+    return 1 if( $session->{users}->isInGroup($user, $group) );
+    return 0;
+}
+
 1;
 
 __DATA__

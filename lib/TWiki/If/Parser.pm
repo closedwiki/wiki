@@ -53,6 +53,11 @@ sub new {
         prec => 600, arity => 1, casematters => 0,
         exec => 'OP_isweb',
        );
+    $this->addOperator(
+        name => 'ingroup',
+        prec => 600, arity => 2, casematters => 1,
+        exec => 'OP_ingroup',
+       );       
 
     return $this;
 }
