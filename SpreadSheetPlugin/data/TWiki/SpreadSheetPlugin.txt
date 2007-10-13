@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1192240017" format="1.0" version="1.56"}%
+%META:TOPICINFO{author="PeterThoeny" date="1192240197" format="1.0" version="1.56"}%
 ---+!! TWiki Spreadsheet Plugin
 
 This Plugin adds spreadsheet capabilities to %WIKITOOLNAME% topics. Formulae like ==%<nop>CALC{"$INT(7/3)"}%== are evaluated at page view time. They can be placed in table cells and outside of tables. In other words, this Plugin provides general formula evaluation capability, not just classic spreadsheet functions.
@@ -173,7 +173,7 @@ Conventions for Syntax:
 	* Related: =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncSEARCH][$SEARCH()]]=
 
 #FuncFORMAT
----++ FORMAT( type, precision, number ) -- format a number to a certain type and precision
+---+++ FORMAT( type, precision, number ) -- format a number to a certain type and precision
 	* Supported =type=:
 		* =COMMA= for comma format, such as =12,345.68=
 		* =DOLLAR= for Dollar format, such as =$12,345.68=
@@ -209,7 +209,7 @@ Conventions for Syntax:
 	* Related: =[[#FuncFORMATGMTIME][$FORMATGMTIME()]]=, =[[#FuncTIME][$TIME()]]=, =[[#FuncFORMATTIMEDIFF][$FORMATTIMEDIFF()]]=, =[[#FuncTIMEADD][$TIMEADD()]]=, =[[#FuncTIMEDIFF][$TIMEDIFF()]]=, =[[#FuncTODAY][$TODAY()]]=
 
 #FuncFORMATTIMEDIFF
----++ FORMATTIMEDIFF( unit, precision, time ) -- convert elapsed time to a string
+---+++ FORMATTIMEDIFF( unit, precision, time ) -- convert elapsed time to a string
 	* Convert elapsed =time= to a human readable format, such as: =12 hours and 3 minutes=
 	* The input =unit= can be =second=, =minute=, =hour=, =day=, =month=, =year=. Note: An approximation is used for month and year calculations.
 	* The =precision= indicates the number of output units to use
@@ -717,7 +717,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2001-2007, Peter Thoeny, [[http://www.twiki.net/][TWIKI.NET]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 13 Oct 2007 (15269) |
+|  Plugin Version: | 13 Oct 2007 (15270) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
 |  13 Oct 2007: | Added $FORMATTIMEDIFF() |
 |  09 Sep 2007: | Enhanced documentation for $EVAL() and $INT() |
