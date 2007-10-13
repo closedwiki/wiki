@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1189326448" format="1.0" version="1.55"}%
+%META:TOPICINFO{author="PeterThoeny" date="1192240017" format="1.0" version="1.56"}%
 ---+!! TWiki Spreadsheet Plugin
 
 This Plugin adds spreadsheet capabilities to %WIKITOOLNAME% topics. Formulae like ==%<nop>CALC{"$INT(7/3)"}%== are evaluated at page view time. They can be placed in table cells and outside of tables. In other words, this Plugin provides general formula evaluation capability, not just classic spreadsheet functions.
@@ -173,8 +173,16 @@ Conventions for Syntax:
 	* Related: =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncSEARCH][$SEARCH()]]=
 
 #FuncFORMAT
----+++ FORMAT( type, prec, number ) -- format a number to a certain type and precision
-	* Type can be COMMA for comma format, DOLLAR for Dollar format, KB for Kilo Byte format, MB for Mega Byte format, KBMB for Kilo/Mega/Giga/Tera Byte auto-adjust format, NUMBER for number, and PERCENT for percent format. For PERCENT, the number is multiplied by 100 and add a percent sign is added.
+---++ FORMAT( type, precision, number ) -- format a number to a certain type and precision
+	* Supported =type=:
+		* =COMMA= for comma format, such as =12,345.68=
+		* =DOLLAR= for Dollar format, such as =$12,345.68=
+		* =KB= for Kilo Byte format, such as =1205.63 KB=
+		* =MB= for Mega Byte format, such as =1.18 MB=
+		* =KBMB= for Kilo/Mega/Giga/Tera Byte auto-adjust format
+		* =NUMBER= for number, such as =12345.7=
+		* =PERCENT= for percent format, such as =12.3%=
+	* The =precision= indicates the the number of digits after the dot
 	* Syntax: ==$FORMAT( type, prec, number )==
 	* Example: ==%<nop>CALC{"$FORMAT(COMMA, 2, 12345.6789)"}%== returns ==12,345.68==
 	* Example: ==%<nop>CALC{"$FORMAT(DOLLAR, 2, 12345.67)"}%== returns ==$12,345.68==
@@ -184,21 +192,34 @@ Conventions for Syntax:
 	* Example: ==%<nop>CALC{"$FORMAT(KBMB, 2, 1234567890)"}%== returns ==1.15 GB==
 	* Example: ==%<nop>CALC{"$FORMAT(NUMBER, 1, 12345.67)"}%== returns ==12345.7==
 	* Example: ==%<nop>CALC{"$FORMAT(PERCENT, 1, 0.1234567)"}%== returns ==12.3%==
-	* Related: =[[#FuncROUND][$ROUND()]]=
-
-#FuncFORMATTIME
----+++ FORMATTIME( serial, text ) -- convert a serialized date into a date string
-	* The following variables in =text= are expanded: =$second= (seconds, 00..59); =$minute= (minutes, 00..59); =$hour= (hours, 00..23); =$day= (day of month, 01..31); =$month= (month, 01..12); =$mon= (month in text format, Jan..Dec); =$year= (4 digit year, 1999); =$ye= (2 digit year, 99), =$wd= (day number of the week, 1 for Sunday, 2 for Monday, etc), =$wday= (day of the week, Sun..Sat), =$weekday= (day of the week, Sunday..Saturday), =$yearday= (day of the year, 1..365, or 1..366 in leap years). Date is assumed to be server time; add =GMT= to indicate Greenwich time zone.
-	* Syntax: ==$FORMATTIME( serial, text )==
-	* Example: ==%<nop>CALC{"$FORMATTIME(0, $year/$month/$day GMT)"}%== returns ==1970/01/01 GMT==
-	* Related: =[[#FuncFORMATGMTIME][$FORMATGMTIME()]]=, =[[#FuncTIME][$TIME()]]=, =[[#FuncTIMEADD][$TIMEADD()]]=, =[[#FuncTIMEDIFF][$TIMEDIFF()]]=, =[[#FuncTODAY][$TODAY()]]=
+	* Related: =[[#FuncFORMATTIME][$FORMATTIME()]]=, =[[#FuncFORMATTIMEDIFF][$FORMATTIMEDIFF()]]=, =[[#FuncROUND][$ROUND()]]=
 
 #FuncFORMATGMTIME
 ---+++ FORMATGMTIME( serial, text ) -- convert a serialized date into a GMT date string
 	* The date string represents the time in Greenwich time zone. Same variable expansion as in =$FORMATTIME()=.
 	* Syntax: ==$FORMATGMTIME( serial, text )==
 	* Example: ==%<nop>CALC{"$FORMATGMTIME(1041379200, $day $mon $year)"}%== returns ==01 Jan 2003==
-	* Related: =[[#FuncFORMATTIME][$FORMATTIME()]]=, =[[#FuncTIME][$TIME()]]=, =[[#FuncTIMEADD][$TIMEADD()]]=, =[[#FuncTIMEDIFF][$TIMEDIFF()]]=, =[[#FuncTODAY][$TODAY()]]=
+	* Related: =[[#FuncFORMATTIME][$FORMATTIME()]]=, =[[#FuncFORMATTIMEDIFF][$FORMATTIMEDIFF()]]=, =[[#FuncTIME][$TIME()]]=, =[[#FuncTIMEADD][$TIMEADD()]]=, =[[#FuncTIMEDIFF][$TIMEDIFF()]]=, =[[#FuncTODAY][$TODAY()]]=
+
+#FuncFORMATTIME
+---+++ FORMATTIME( serial, text ) -- convert a serialized date into a date string
+	* The following variables in =text= are expanded: =$second= (seconds, 00..59); =$minute= (minutes, 00..59); =$hour= (hours, 00..23); =$day= (day of month, 01..31); =$month= (month, 01..12); =$mon= (month in text format, Jan..Dec); =$year= (4 digit year, 1999); =$ye= (2 digit year, 99), =$wd= (day number of the week, 1 for Sunday, 2 for Monday, etc), =$wday= (day of the week, Sun..Sat), =$weekday= (day of the week, Sunday..Saturday), =$yearday= (day of the year, 1..365, or 1..366 in leap years). Date is assumed to be server time; add =GMT= to indicate Greenwich time zone.
+	* Syntax: ==$FORMATTIME( serial, text )==
+	* Example: ==%<nop>CALC{"$FORMATTIME(0, $year/$month/$day GMT)"}%== returns ==1970/01/01 GMT==
+	* Related: =[[#FuncFORMATGMTIME][$FORMATGMTIME()]]=, =[[#FuncTIME][$TIME()]]=, =[[#FuncFORMATTIMEDIFF][$FORMATTIMEDIFF()]]=, =[[#FuncTIMEADD][$TIMEADD()]]=, =[[#FuncTIMEDIFF][$TIMEDIFF()]]=, =[[#FuncTODAY][$TODAY()]]=
+
+#FuncFORMATTIMEDIFF
+---++ FORMATTIMEDIFF( unit, precision, time ) -- convert elapsed time to a string
+	* Convert elapsed =time= to a human readable format, such as: =12 hours and 3 minutes=
+	* The input =unit= can be =second=, =minute=, =hour=, =day=, =month=, =year=. Note: An approximation is used for month and year calculations.
+	* The =precision= indicates the number of output units to use
+	* Syntax: ==$FORMATTIMEDIFF( unit, precision, time )==
+	* Example: ==%<nop>CALC{"$FORMATTIMEDIFF(min, 1, 200)"}%== returns ==3 hours==
+	* Example: ==%<nop>CALC{"$FORMATTIMEDIFF(min, 2, 200)"}%== returns ==3 hours and 20 minutes==
+	* Example: ==%<nop>CALC{"$FORMATTIMEDIFF(min, 1, 1640)"}%== returns ==1 day==
+	* Example: ==%<nop>CALC{"$FORMATTIMEDIFF(min, 2, 1640)"}%== returns ==1 day and 3 hours==
+	* Example: ==%<nop>CALC{"$FORMATTIMEDIFF(min, 3, 1640)"}%== returns ==1 day, 3 hours and 20 minutes==
+	* Related: =[[#FuncFORMATTIME][$FORMATTIME()]]=, =[[#FuncTIME][$TIME()]]=, =[[#FuncTIMEADD][$TIMEADD()]]=, =[[#FuncTIMEDIFF][$TIMEDIFF()]]=
 
 #FuncGET
 ---+++ GET( name ) -- get the value of a previously set variable
@@ -560,21 +581,21 @@ Conventions for Syntax:
 	* Serialized date is seconds since the Epoch, e.g. midnight, 01 Jan 1970. Current time is taken if the date string is empty. Supported date formats: =31 Dec 2009=; =31 Dec 2009 GMT=; =31 Dec 09=; =31-Dec-2009=; =31/Dec/2009=; =2009/12/31=; =2009-12-31=; =2009/12/31=; =2009/12/31 23:59=; =2009/12/31 - 23:59=; =2009-12-31-23-59=; =2009/12/31 - 23:59:59=; =2009.12.31.23.59.59=. Date is assumed to be server time; add =GMT= to indicate Greenwich time zone
 	* Syntax: ==$TIME( _text_ )==
 	* Example: ==%<nop>CALC{"$TIME(2003/10/14 GMT)"}%== returns ==1066089600==
-	* Related: =[[#FuncFORMATTIME][$FORMATTIME()]]=, =[[#FuncFORMATGMTIME][$FORMATGMTIME()]]=, =[[#FuncTIMEADD][$TIMEADD()]]=, =[[#FuncTIMEDIFF][$TIMEDIFF()]]=, =[[#FuncTODAY][$TODAY()]]=, =[[#FuncWORKINGDAYS][$WORKINGDAYS()]]=
+	* Related: =[[#FuncFORMATGMTIME][$FORMATGMTIME()]]=, =[[#FuncFORMATTIME][$FORMATTIME()]]=, =[[#FuncFORMATTIMEDIFF][$FORMATTIMEDIFF()]]=, =[[#FuncTIMEADD][$TIMEADD()]]=, =[[#FuncTIMEDIFF][$TIMEDIFF()]]=, =[[#FuncTODAY][$TODAY()]]=, =[[#FuncWORKINGDAYS][$WORKINGDAYS()]]=
 
 #FuncTIMEADD
 ---+++ TIMEADD( serial, value, unit ) -- add a value to a serialized date
-	* The unit is seconds if not specified; unit can be =second=, =minute=, =hour=, =day=, =week=, =month=, =year=. Note: An approximation is used for month and year calculations
+	* The =unit= is seconds if not specified; unit can be =second=, =minute=, =hour=, =day=, =week=, =month=, =year=. Note: An approximation is used for month and year calculations
 	* Syntax: ==$TIMEADD( serial, value, _unit_ )==
 	* Example: ==%<nop>CALC{"$TIMEADD($TIME(), 2, week)"}%== returns the serialized date two weeks from now
 	* Related: =[[#FuncFORMATTIME][$FORMATTIME()]]=, =[[#FuncFORMATGMTIME][$FORMATGMTIME()]]=, =[[#FuncTIME][$TIME()]]=, =[[#FuncTIMEDIFF][$TIMEDIFF()]]=, =[[#FuncTODAY][$TODAY()]]=
 
 #FuncTIMEDIFF
 ---+++ TIMEDIFF( serial_1, serial_2, unit ) -- time difference between two serialized dates
-	* The unit is seconds if not specified; unit can be specified as in =$TIMEADD()=. Note: An approximation is used for month and year calculations. Use =$FORMAT()= or =$INT()= to format real numbers
+	* The =unit= is seconds if not specified; unit can be specified as in =$TIMEADD()=. Note: An approximation is used for month and year calculations. Use =$FORMAT()=, =$FORMATTIMEDIFF()= or =$INT()= to format real numbers
 	* Syntax: ==$TIMEDIFF( serial_1, serial_2, _unit_ )==
 	* Example: ==%<nop>CALC{"$TIMEDIFF($TIME(), $EVAL($TIME()+90), minute)"}%== returns ==1.5==
-	* Related: =[[#FuncFORMAT][$FORMAT()]]=, =[[#FuncFORMATTIME][$FORMATTIME()]]=, =[[#FuncFORMATGMTIME][$FORMATGMTIME()]]=, =[[#FuncINT][$INT()]]=, =[[#FuncTIME][$TIME()]]=, =[[#FuncTIMEADD][$TIMEADD()]]=, =[[#FuncTODAY][$TODAY()]]=, =[[#FuncWORKINGDAYS][$WORKINGDAYS()]]=
+	* Related: =[[#FuncFORMAT][$FORMAT()]]=, =[[#FuncFORMATGMTIME][$FORMATGMTIME()]]=, =[[#FuncFORMATTIME][$FORMATTIME()]]=, =[[#FuncFORMATTIMEDIFF][$FORMATTIMEDIFF()]]=, =[[#FuncINT][$INT()]]=, =[[#FuncTIME][$TIME()]]=, =[[#FuncTIMEADD][$TIMEADD()]]=, =[[#FuncTODAY][$TODAY()]]=, =[[#FuncWORKINGDAYS][$WORKINGDAYS()]]=
 
 #FuncTODAY
 ---+++ TODAY( ) -- serialized date of today at midnight GMT
@@ -694,12 +715,13 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Copyright: | &copy; 2001-2007, Peter@Thoeny.org, [[http://www.twiki.net/][TWIKI.NET]] |
+|  Copyright: | &copy; 2001-2007, Peter Thoeny, [[http://www.twiki.net/][TWIKI.NET]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 09 Sep 2007 (14798) |
+|  Plugin Version: | 13 Oct 2007 (15269) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  13 Oct 2007: | Added $FORMATTIMEDIFF() |
 |  09 Sep 2007: | Enhanced documentation for $EVAL() and $INT() |
-|  02 Jun 2007: | Added %SYSTEMWEB%.VarCALC to have =%<nop>CALC{}%= listed in %SYSTEMWEB%.TWikiVariables |
+|  02 Jun 2007: | Added %TWIKIWEB%.VarCALC to have =%<nop>CALC{}%= listed in %TWIKIWEB%.TWikiVariables |
 |  14 Apr 2007: | Fixing bug in $EXISTS() that required full =web.topic= instead of just =topic= |
 |  11 Mar 2007: | Fixing bug in $VALUE() and $INT(), introduced by version 09 Mar 2007 |
 |  09 Mar 2007: | Added $EXP(), $LN(), $LOG(), $PI(), $SQRT(); fixed $ROUND() bug, contributed by TWiki:Main/SergejZnamenskij |
@@ -747,5 +769,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.VarCALC
 
--- TWiki:Main/PeterThoeny - 09 Sep 2007
+-- TWiki:Main/PeterThoeny - 13 Oct 2007
 
