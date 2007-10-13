@@ -1,7 +1,7 @@
 %{ This is a default template }%
 
-%TMPL:DEF{"twikistyle"}%%TMPL:P{"twikibase"}%
-%TMPL:P{"defaultstyle"}%
+%TMPL:DEF{"defaultstyle"}%%TMPL:P{"twikibase"}%
+%TMPL:P{"twikistyle"}%
 %TMPL:P{"iespecificstyle"}%
 %TMPL:P{"javascriptaffectedstyle"}%
 %TMPL:P{"templatestyle"}%%TMPL:END%
@@ -12,7 +12,7 @@
 </style>%TMPL:END%
 
 
-%TMPL:DEF{"defaultstyle"}%<style type="text/css" media="all">
+%TMPL:DEF{"twikistyle"}%<style type="text/css" media="all">
 @import url('%PUBURL%/%SYSTEMWEB%/TWikiTemplates/default.css');
 </style>%TMPL:END%
 
