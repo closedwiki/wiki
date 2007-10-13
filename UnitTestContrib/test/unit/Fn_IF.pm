@@ -14,6 +14,17 @@ sub new {
     return $self;
 }
 
+sub set_up {
+    my $this = shift;
+    $this->SUPER::set_up(@_);
+    
+    my $u = $this->{twiki}->{users};
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $this->{users_web},
+        "GropeGroup",
+        "   * Set GROUP = ".$u->getWikiName($this->{twiki}->{user})."\n");
+}
+
 sub test_correctIF {
     my $this = shift;
     $this->{twiki}->enterContext('test');
@@ -63,6 +74,55 @@ sub test_correctIF {
         { test => "not 1 = 2", then=>1, else=>0 },
         { test => "not not 1 and 1", then=>1, else=>0 },
         { test => "0 or not not 1 and 1", then=>1, else=>0 },
+        { test => $this->{twiki}->{user}." ingroup TWikiGuest", then=>0, else=>1 },
+        { test => $this->{twiki}->{user}." ingroup ThereHadBetterBeNoSuchGroup", then=>0, else=>1 },
+        { test => $this->{twiki}->{user}." ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>0, else=>1 },
+        { test => $this->{twiki}->{user}." ingroup GropeGroup", then=>1, else=>0 },
+        { test => "%USERNAME% ingroup TWikiGuest", then=>0, else=>1 },
+        { test => "%USERNAME% ingroup ThereHadBetterBeNoSuchGroup", then=>0, else=>1 },
+        { test => "%USERNAME% ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>0, else=>1 },
+        { test => "%USERNAME% ingroup GropeGroup", then=>1, else=>0 },
+        { test => "%USERINFO{format=\"\$username\"}% ingroup TWikiGuest", then=>0, else=>1 },
+        { test => "%USERINFO{format=\"\$username\"}% ingroup ThereHadBetterBeNoSuchGroup", then=>0, else=>1 },
+        { test => "%USERINFO{format=\"\$username\"}% ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>0, else=>1 },
+        { test => "%USERINFO{format=\"\$username\"}% ingroup GropeGroup", then=>1, else=>0 },
+        { test => "%USERINFO{format=\"\$wikiname\"}% ingroup TWikiGuest", then=>0, else=>1 },
+        { test => "%USERINFO{format=\"\$wikiname\"}% ingroup ThereHadBetterBeNoSuchGroup", then=>0, else=>1 },
+        { test => "%USERINFO{format=\"\$wikiname\"}% ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>0, else=>1 },
+        { test => "%USERINFO{format=\"\$wikiname\"}% ingroup GropeGroup", then=>1, else=>0 },
+        { test => "%USERINFO{format=\"\$wikiusername\"}% ingroup TWikiGuest", then=>0, else=>1 },
+        { test => "%USERINFO{format=\"\$wikiusername\"}% ingroup ThereHadBetterBeNoSuchGroup", then=>0, else=>1 },
+        { test => "%USERINFO{format=\"\$wikiusername\"}% ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>0, else=>1 },
+        { test => "%USERINFO{format=\"\$wikiusername\"}% ingroup GropeGroup", then=>1, else=>0 },
+
+        { test => $u->getWikiName($this->{twiki}->{user})." ingroup TWikiGuest", then=>0, else=>1 },
+        { test => $u->getWikiName($this->{twiki}->{user})." ingroup ThereHadBetterBeNoSuchGroup", then=>0, else=>1 },
+        { test => $u->getWikiName($this->{twiki}->{user})." ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>0, else=>1 },
+        { test => $u->getWikiName($this->{twiki}->{user})." ingroup GropeGroup", then=>1, else=>0 },
+        { test => "'".$TWiki::cfg{AdminUserWikiName}."' ingroup 'TWikiGuest'", then=>0, else=>1 },
+        { test => "'".$TWiki::cfg{AdminUserWikiName}."' ingroup 'ThereHadBetterBeNoSuchGroup'", then=>0, else=>1 },
+        { test => "'".$TWiki::cfg{AdminUserWikiName}."' ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>1, else=>0 },
+        { test => "'".$TWiki::cfg{AdminUserWikiName}."' ingroup 'GropeGroup'", then=>0, else=>1 },
+        { test => "'".$TWiki::cfg{DefaultUserWikiName}."' ingroup 'TWikiGuest'", then=>0, else=>1 },
+        { test => "'".$TWiki::cfg{DefaultUserWikiName}."' ingroup 'ThereHadBetterBeNoSuchGroup'", then=>0, else=>1 },
+        { test => "'".$TWiki::cfg{DefaultUserWikiName}."' ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>0, else=>1 },
+        { test => "'".$TWiki::cfg{DefaultUserWikiName}."' ingroup 'GropeGroup'", then=>1, else=>0 },        
+        { test => "'".$TWiki::cfg{AdminUserLogin}."' ingroup 'TWikiGuest'", then=>0, else=>1 },
+        { test => "'".$TWiki::cfg{AdminUserLogin}."' ingroup 'ThereHadBetterBeNoSuchGroup'", then=>0, else=>1 },
+        { test => "'".$TWiki::cfg{AdminUserLogin}."' ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>1, else=>0 },
+        { test => "'".$TWiki::cfg{AdminUserLogin}."' ingroup 'GropeGroup'", then=>0, else=>1 },
+        { test => "'".$TWiki::cfg{DefaultUserLogin}."' ingroup 'TWikiGuest'", then=>0, else=>1 },
+        { test => "'".$TWiki::cfg{DefaultUserLogin}."' ingroup 'ThereHadBetterBeNoSuchGroup'", then=>0, else=>1 },
+        { test => "'".$TWiki::cfg{DefaultUserLogin}."' ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>0, else=>1 },
+        { test => "'".$TWiki::cfg{DefaultUserLogin}."' ingroup 'GropeGroup'", then=>1, else=>0 },        
+        { test => "'".$u->getCanonicalUserID($TWiki::cfg{AdminUserLogin})."' ingroup 'TWikiGuest'", then=>0, else=>1 },
+        { test => "'".$u->getCanonicalUserID($TWiki::cfg{AdminUserLogin})."' ingroup 'ThereHadBetterBeNoSuchGroup'", then=>0, else=>1 },
+        { test => "'".$u->getCanonicalUserID($TWiki::cfg{AdminUserLogin})."' ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>1, else=>0 },
+        { test => "'".$u->getCanonicalUserID($TWiki::cfg{AdminUserLogin})."' ingroup 'GropeGroup'", then=>0, else=>1 },
+        { test => "'".$u->getCanonicalUserID($TWiki::cfg{DefaultUserLogin})."' ingroup 'TWikiGuest'", then=>0, else=>1 },
+        { test => "'".$u->getCanonicalUserID($TWiki::cfg{DefaultUserLogin})."' ingroup 'ThereHadBetterBeNoSuchGroup'", then=>0, else=>1 },
+        { test => "'".$u->getCanonicalUserID($TWiki::cfg{DefaultUserLogin})."' ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>0, else=>1 },
+        { test => "'".$u->getCanonicalUserID($TWiki::cfg{DefaultUserLogin})."' ingroup 'GropeGroup'", then=>1, else=>0 },        
        );
 
     my $meta = new TWiki::Meta($this->{twiki}, $this->{test_web},
@@ -220,5 +280,6 @@ PONG
                                  "$text: '$result'");
     }
 }
+
 
 1;
