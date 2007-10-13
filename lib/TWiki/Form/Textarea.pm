@@ -39,7 +39,8 @@ sub renderForEdit {
 
     return ( '',
              CGI::textarea(
-                 -class => 'twikiInputField twikiEditFormTextAreaField',
+                 -class => $this->cssClasses('twikiInputField',
+                                             'twikiEditFormTextAreaField'),
                  -cols => $this->{cols},
                  -rows => $this->{rows},
                  -name => $this->{name},

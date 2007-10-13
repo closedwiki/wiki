@@ -218,7 +218,7 @@ sub _parseFormDefinition {
                 attributes => $attributes,
                 definingTopic => $definingTopic,
                 web => $this->{web},
-                topic => $this->{topic} );
+                topic => $this->{topic});
             push( @fields, $fieldDef);
 
             $this->{mandatoryFieldsPresent} ||= $fieldDef->isMandatory();

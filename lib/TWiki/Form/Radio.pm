@@ -23,7 +23,8 @@ sub renderForEdit {
     my %attrs;
     foreach my $item ( @{$this->getOptions()} ) {
         $attrs{$item} =
-          { class=>'twikiRadioButton twikiEditFormRadioField',
+          { class=> $this->cssClasses('twikiRadioButton',
+                                      'twikiEditFormRadioField'),
             label=>$session->handleCommonTags(
                 $item, $web, $topic ) };
 

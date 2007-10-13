@@ -121,10 +121,27 @@ sub renderForEdit {
     # Treat like text, make it reasonably long, add a warning
     return ( '<br /><span class="twikiAlert">MISSING TYPE '.
                $this->{type}.'</span>',
-            CGI::textfield( -class => 'twikiEditFormError',
+            CGI::textfield( -class => $this->cssClasses('twikiEditFormError'),
                             -name => $this->{name},
                             -size => 80,
                             -value => $value ));
+}
+
+=pod
+
+---++ cssClasses(@classes) -> $classes
+Construct a list of the CSS classes for the form field. Adds additional
+class specifiers related to the attributes of the field e.g mandatory.
+Pass it a list of the other classnames you want on the field.
+
+=cut
+
+sub cssClasses {
+    my $this = shift;
+    if ($this->isMandatory()) {
+        push(@_, 'twikiMandatory');
+    }
+    return join(' ', @_);
 }
 
 =pod

@@ -47,7 +47,7 @@ sub renderForEdit {
         # NOTE: Does not expand $item in label
         $attrs{$item} =
           {
-              class => 'twikiEditFormCheckboxField',
+              class => $this->cssClasses('twikiEditFormCheckboxField'),
               label => $session->handleCommonTags( $item, $web, $topic ),
           };
 
@@ -64,8 +64,8 @@ sub renderForEdit {
     # Item2410: We need a dummy control to detect the case where
     #           all checkboxes have been deliberately unchecked
     # Item3061:
-    # Don't use CGI, it will insert the value from the query
-    # once again and we need an empt field here.
+    # Don't use CGI, it will insert the sticky value from the query
+    # once again and we need an empty field here.
     $value .= '<input type="hidden" name="'.$this->{name}.'" value="" />';
     return ( $extra, $value );
 }

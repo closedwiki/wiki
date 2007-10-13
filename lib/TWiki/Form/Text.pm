@@ -20,7 +20,8 @@ sub renderForEdit {
     return (
         '',
         CGI::textfield(
-            -class => 'twikiInputField twikiEditFormTextField',
+            -class => $this->cssClasses('twikiInputField',
+                                        'twikiEditFormTextField'),
             -name => $this->{name},
             -size => $this->{size},
             -value => $value ));
