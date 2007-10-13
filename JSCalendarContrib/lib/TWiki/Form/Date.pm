@@ -27,7 +27,9 @@ sub renderForEdit {
           id => 'id'.$this->{name},
           size=> $this->{size},
           value => $value,
-          class=> 'twikiInputField twikiEditFormDateField'});
+          class => $this->can('cssClasses') ?
+            $this->cssClasses('twikiInputField', 'twikiEditFormDateField') :
+              'twikiInputField twikiEditFormDateField'});
     my $ifFormat = $TWiki::cfg{JSCalendarContrib}{format} || '%e %b %Y';
     TWiki::Contrib::JSCalendarContrib::addHEAD( 'twiki' );
     if( $TWiki::cfg{Plugins}{TwistyPlugin}{Enabled} ) {
