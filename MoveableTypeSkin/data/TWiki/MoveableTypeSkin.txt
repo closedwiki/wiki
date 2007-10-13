@@ -17,6 +17,7 @@ To try it out, install the contrib, then use the =next= and =previous= design li
 
 Some css designs are not suitable for generic useage, as they make assumptions about the number of pixels that the text is long, but you should be able to get inspiration from these works anyway. 
 
+
 %STARTSECTION{"css-browser"}%
 <!--
       * Set FIRSTCSS=148
@@ -180,16 +181,6 @@ __Related Topics:__ %SYSTEMWEB%.TWikiPreferences
 -->
 
 
-%META:FORM{name="SkinPackage"}%
-%META:FIELD{name="TopicClassification" attributes="" title="TopicClassification" value="IncompletePackage"}%
-%META:FIELD{name="TestedOnTWiki" attributes="" title="TestedOnTWiki" value="4.1"}%
-%META:FIELD{name="TestedOnOS" attributes="" title="TestedOnOS" value="AnyOS"}%
-%META:FIELD{name="ShouldRunOnOS" attributes="" title="ShouldRunOnOS" value="AnyOS"}%
-%META:FIELD{name="InstalledOnTWikiOrg" attributes="" title="InstalledOnTWikiOrg" value="No"}%
-%META:FIELD{name="DemoUrl" attributes="" title="DemoUrl" value="http://home.org.au"}%
-%META:FIELD{name="DevelopedInSVN" attributes="" title="DevelopedInSVN" value="No"}%
-%META:FIELD{name="ModificationPolicy" attributes="" title="ModificationPolicy" value="ContactAuthorFirst"}%
-%META:FIELD{name="RelatedTopics" attributes="" title="RelatedTopics" value=""}%
 %META:FILEATTACHMENT{name="skindemo.js" attachment="skindemo.js" attr="H" comment="" date="1174054380" path="skindemo.js" user="SvenDowideit" version="1"}%
 %META:FILEATTACHMENT{name="wikiringlogo20x20.png" attachment="wikiringlogo20x20.png" attr="H" comment="" date="1174054380" path="wikiringlogo20x20.png" user="SvenDowideit" version="1"}%
 %META:FILEATTACHMENT{name="screenshot.gif" attachment="screenshot.gif" attr="H" comment="" date="1174054380" path="screenshot.gif" user="SvenDowideit" version="1"}%
