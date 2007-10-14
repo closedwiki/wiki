@@ -1112,7 +1112,7 @@ EOM
 
     $query->path_info( "/$this->{test_web}/$regTopic" );
     $this->{twiki}->finish();
-    $this->{twiki} = new TWiki( $this->{test_user_login}, $query);
+    $this->{twiki} = new TWiki( $TWiki::cfg{SuperAdminGroup}, $query);
     $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
     $this->{twiki}->{topicName} = $regTopic;
     $this->{twiki}->{webName} = $this->{test_web};
