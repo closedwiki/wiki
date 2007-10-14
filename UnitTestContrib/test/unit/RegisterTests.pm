@@ -56,9 +56,6 @@ sub set_up {
      $this->{new_user_fullname} =
       "$this->{new_user_fname} $this->{new_user_sname}";
 
-	#if $TWiki::cfg{AllowLoginName} is false, wikiname must == loginname
-    $this->{new_user_login} = $this->{new_user_wikiname} if (!$TWiki::cfg{AllowLoginName});
-
     try {
         $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},
                                      $this->{users_web},
@@ -170,11 +167,13 @@ sub registerAccount {
 
 sub AllowLoginName {
     my $this = shift;
-    $TWiki::cfg{AllowLoginName} = 1;
+    $TWiki::cfg{Register}{AllowLoginName} = 1;
 }
 sub DontAllowLoginName {
     my $this = shift;
-    $TWiki::cfg{AllowLoginName} = 0;
+    $TWiki::cfg{Register}{AllowLoginName} = 0;
+    $this->{new_user_login}  = $this->{new_user_wikiname};
+    #$this->{test_user_login} = $this->{test_user_wikiname};
 }
 
 sub TemplateLoginManager {
@@ -1113,7 +1112,7 @@ EOM
 
     $query->path_info( "/$this->{test_web}/$regTopic" );
     $this->{twiki}->finish();
-    $this->{twiki} = new TWiki( $this->{test_user_login}, $query);
+    $this->{twiki} = new TWiki( $TWiki::cfg{SuperAdminGroup}, $query);
     $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
     $this->{twiki}->{topicName} = $regTopic;
     $this->{twiki}->{webName} = $this->{test_web};
