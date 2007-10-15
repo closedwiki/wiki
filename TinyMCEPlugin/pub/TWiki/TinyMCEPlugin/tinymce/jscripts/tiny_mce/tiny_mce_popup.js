@@ -116,7 +116,7 @@ TinyMCE_Popup.prototype = {
 	},
 
 	executeOnLoad : function(str) {
-		if (tinyMCE.isOpera)
+		if (tinyMCE.isOpera || tinyMCE.isSafari)
 			this.onLoadEval = str;
 		else
 			eval(str);
