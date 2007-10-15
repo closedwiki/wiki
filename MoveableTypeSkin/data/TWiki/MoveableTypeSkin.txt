@@ -55,22 +55,32 @@ View the Moveable Type equivalent:
 %ENDSECTION{"css-browser"}%
 
 ---++ Settings
+<noautolink>
 <!--
    * Set SHORTDESCRIPTION = a TWiki skin based on the HTML used by [[http://www.thestylecontest.com][The Style Archive]] and [[http://www.sixapart.com/movabletype/styles/library][The Six Apart style library]]
--->
-Once you have chosen your CSS and layout, you must tell TWiki to use those options. If you have used the Theme Browser to select your preferred setup, you can simply copy and paste the following section to your %USERSWEB%.TWikiPreferences topic (or !WebPreferences, or your personal topic)
-
-<textarea rows="12" cols="80">
-Select the moveabletype skin:
-   *<nop> Set SKIN = moveabletype
-Get the common text section definitions from this topic (see the "customisation" section in %WEB%.%TOPIC% for more information on what this means):
    * Set MOVEABLETYPESKIN_DESIGNTOPIC = %URLPARAM{"moveabletypetopic" default="MoveableTypeSampleDesign"}%
 Get the CSS and images from this topic (must be in the %SYSTEMWEB%):
    * Set MOVEABLETYPESKIN_CSSFILE = %URLPARAM{"cssfile" default="%CSS%FIRSTCSS%%"}%
    * Set MOVEABLETYPESKIN_TWIKICSSFILE = %URLPARAM{"twikicssfile" default="%PUBURLPATH%/%SYSTEMWEB%/%MOVEABLETYPESKIN_DESIGNTOPIC%/TWiki.css"}%
 Set the column preference:
    * Set MOVEABLETYPESKIN_COLUMNS = %URLPARAM{"moveabletypecolumns" default="two-column-left"}%
+-->
+</noautolink>
+Once you have chosen your CSS and layout, you must tell TWiki to use those options. If you have used the Theme Browser to select your preferred setup, you can simply copy and paste the following section to your %USERSWEB%.TWikiPreferences topic (or !WebPreferences, or your personal topic)
+
+<noautolink>
+<textarea rows="12" cols="80">
+Select the moveabletype skin:
+   *<nop> Set SKIN = moveabletype
+Get the common text section definitions from this topic (see the "customisation" section in %WEB%.%TOPIC% for more information on what this means):
+   *<nop> Set MOVEABLETYPESKIN_DESIGNTOPIC = %URLPARAM{"moveabletypetopic" default="MoveableTypeSampleDesign"}%
+Get the CSS and images from this topic (must be in the %SYSTEMWEB%):
+   *<nop> Set MOVEABLETYPESKIN_CSSFILE = <nop>%URLPARAM{"cssfile" default="%CSS%FIRSTCSS%%"}%
+   *<nop> Set MOVEABLETYPESKIN_TWIKICSSFILE = %URLPARAM{"twikicssfile" default="%PUBURLPATH%/%SYSTEMWEB%/%MOVEABLETYPESKIN_DESIGNTOPIC%/TWiki.css"}%
+Set the column preference:
+   *<nop> Set MOVEABLETYPESKIN_COLUMNS = %URLPARAM{"moveabletypecolumns" default="two-column-left"}%
 </textarea>
+</noautolink>
 
 There are static text sections in the MoveableType css that can be customised by editing the named sections on the %SYSTEMWEB%.MoveableTypeSampleDesign topic - each section can be re-defined either inline, or using INCLUDEs.
 
