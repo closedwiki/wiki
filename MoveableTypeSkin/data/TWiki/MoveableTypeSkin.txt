@@ -92,7 +92,8 @@ For more radical customisations you will want to create your own _design topic_.
 
 Optionally you can also customise the TWiki.css attached to your design topic. This file contains most TWiki specific styles, such as tables, forms and diffs.
 
-Finally you can also customise the common text sections in your design by editing the _Moveable Type Common Text sections_. There are two sample design topics 
+Finally you can also customise the common text sections in your design by editing the _Moveable Type Common Text sections_. There are two sample design topics , MoveableTypeSampleDesign and  MoveableTypeSample2Design.
+
 Once you are done, you will be able to follow the instructions under 'Enable this design' in your design topic to roll out your design.
 
 ---+++ Skin URL Parameters for testing skin designs
