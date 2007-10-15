@@ -4,7 +4,7 @@ The [[http://styles.movabletype.org/][Moveable Type style repository]] was set u
 
 <img src="%ATTACHURL%/fullscreen.gif" alt="Screenshot" />
 
-!%TOPIC% is a simple TWiki Skin that re-uses these style and HTML definitions, so making designs done for Moveable Type available to TWiki sites.
+<nop>%TOPIC% is a simple TWiki Skin that re-uses these style and HTML definitions, so making designs done for Moveable Type available to TWiki sites.
 
 Aside from the ability to re-use these designs, there are several other advantages to this skin:
    1 Its very lightweight, only generating the bare minimum html required to implement the Moveable type classes and IDs. This means it is *fast*, *portable* and *easy to upgrade*.
@@ -16,7 +16,7 @@ You can preview some design ideas at the [[http://www.sixapart.com/movabletype/s
 
 Alternatively you can visit [[http://www.home.org.au/cgi-bin/view/TWiki/MoveableTypeSkin][Sven's personal Blog]] for a *DEMO*.
 
-!%TOPIC% is a <img src="%ATTACHURLPATH%/wikiringlogo20x20.png" /> [[http://www.wikiring.com][WikiRing]] partner production.
+<nop>%TOPIC% is a <img src="%ATTACHURLPATH%/wikiringlogo20x20.png" /> [[http://www.wikiring.com][WikiRing]] partner production.
 
 #CssBrowser
 ---++ Theme Browser
@@ -128,7 +128,7 @@ You can use this technique to create a TWikiSkin that matches closely the HTML o
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  %DATE%: | Initial version |
+|  15 Oct 2007: | Doc rewrite - TWiki:Main.CrawfordCurrie |
 |  30 Mar 2007: | initial release of Skin | 
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
@@ -139,6 +139,7 @@ __Related Topics:__ %SYSTEMWEB%.TWikiPreferences
 -- TWiki:Main/SvenDowideit - %DATE%
 
 <!--
+CSS available to the browser:
    * Set CSS148 = %PUBURL%/%TWIKIWEB%/MoveableTypeSample2Design/theme.css
    * Set NAME148 = MoveableTypeSample2Design
    * Set CSS149 = %PUBURL%/%TWIKIWEB%/MoveableTypeSampleDesign/theme.css
