@@ -171,22 +171,28 @@ The Plugin handles a =%<nop>TAGME{}%= variable that performs different actions. 
 
 To show the tag interface at the top of the page directly below the breadcrumb (like on twiki.org), use the default template =view.tagme.tmpl= in the templates directory.
 
-This template is in fact a 'skin' template. To enable it, write in [[%USERSWEB%.TWikiPreferences]]:
+This template is in fact a 'skin' template. To enable it, write in [[%MAINWEB%.TWikiPreferences]]:
 <pre>
    * Set S<nop>KIN = tagme,pattern
 </pre>
 The list of skins can be appended, for instance: =tagme,corporate,pattern=.
 
+<div class="twikiNotification" style="padding:.5em 20px; margin:1em 0; background-color:#ffc;">
+*For TWiki 4.1, use:*
+<pre>
+   * Set S<nop>KIN = tagme04x01,pattern
+</pre>
+</div>
 
 ---+++ Customizing the appearance
 If you customize your site you probably want to change overall appearance. You can find instructions how to do that - at least for default pattern skin - in [[%SYSTEMWEB%.PatternSkinCssCookbook]]. %BR%
 The short summary is:
    * Create an empty CSS file, for instance =sitestyle.css=
    * Copy the CSS styles for =tagmetags= (see below at [[%TOPIC%#ExampleStyle][Example styles used on twiki.org]]) into the file
-   * Attach the file to [[%USERSWEB%.TWikiPreferences]]
-   * In [[%USERSWEB%.TWikiPreferences]], write: 
+   * Attach the file to [[%MAINWEB%.TWikiPreferences]]
+   * In [[%MAINWEB%.TWikiPreferences]], write: 
    <verbatim>
-   * Set USERSTYLEURL = %PUBURL%/%USERSWEB%/TWikiPreferences/sitestyle.css
+   * Set USERSTYLEURL = %PUBURL%/%MAINWEB%/TWikiPreferences/sitestyle.css
    </verbatim>
 
 ---+++ Other places for the tag interface
@@ -197,7 +203,7 @@ Tags: %TAGME{ tpaction="%URLPARAM{tpaction}%" web="%WEB%" tag="%URLPARAM{tag}%" 
 </div>
 </verbatim>
 
-To show the tags at the bottom of every page, write in [[%USERSWEB%.TWikiPreferences]]:
+To show the tags at the bottom of every page, write in [[%MAINWEB%.TWikiPreferences]]:
 <verbatim>
  * Set WEBCOPYRIGHT = Tags: %TAGME{ tpaction="%URLPARAM{tpaction}%" web="%WEB%" tag="%URLPARAM{tag}%" }%, [[TWiki.TagMeViewAllTags][view all tags]] %BR% Copyright &copy; 1999-%GMTIME{"$year"}% by... etc
 </verbatim>
@@ -343,8 +349,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.TWikiContributor ([[http://www.structuredwikis.com/peter.html][blog]]) |
 |  Copyright: | &copy; 2006, Peter@Thoeny.org, [[http://www.structuredwikis.com/][StructuredWikis LLC]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 11 Sep 2007 (V1.045) |
+|  Plugin Version: | 16 Oct 2007 (V1.046) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  16 Oct 2007: | Arthur Clemens: added backward compatible example template. |
 |  11 Sep 2007: | Arthur Clemens: updated example template to TWiki template convention. |
 |  11 Jun 2007: | Arthur Clemens: fixed sizing of tags with the same tag count; fixed CSS class for select box; updated documentation with "How to put tags on every page". |
 |  07 Jun 2007: | Arthur Clemens: removed dependency on (unreleased) TWiki 4.2. |
