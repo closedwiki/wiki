@@ -6,6 +6,7 @@
 // manipulating rows within a table.
 // 
 // Small refactoring by Arthur Clemens
+// TODO: all functions should be moved from global space to a twiki.EditTable object
 
 /**
 
@@ -74,21 +75,6 @@ function edittableInit(form_name, asset_url) {
 	sRowSelection = new RowSelectionObject(asset_url);
 	retrieveAlternatingRowColors();
 	fixStyling();
-  
-  	var Behaviour;
-	if (Behaviour) {
-		var myrules = {
-			// catch click on button "Add row"
-			'#etaddrow' : function(element) {
-				element.onclick = function() {
-					addHandler(); // not implemented
-					return true;
-				}
-				element = null;
-			}
-		};
-		Behaviour.register(myrules);
-	}
 }
 
 /**
@@ -679,6 +665,40 @@ function updateRowlabels(rownum, delta) {
   }
 
 }
+
+/**
+Grabs the values from <meta> tags and inits the table with the table id and topic url.
+*/
+function init () {
+	var currentTableId = twiki.getMetaTag('EDITTABLEPLUGIN_EditTableId');
+	var url = twiki.getMetaTag('EDITTABLEPLUGIN_EditTableUrl');
+	edittableInit(currentTableId, url);
+}
+
+/**
+Copied from twikiEvent.js.
+*/
+function addLoadEvent (inFunction, inDoPrepend) {
+	if (typeof(inFunction) != "function") {
+		return;
+	}
+	var oldonload = window.onload;
+	if (typeof window.onload != 'function') {
+		window.onload = function() {
+			inFunction();
+		};
+	} else {
+		var prependFunc = function() {
+			inFunction(); oldonload();
+		};
+		var appendFunc = function() {
+			oldonload(); inFunction();
+		};
+		window.onload = inDoPrepend ? prependFunc : appendFunc;
+	}
+}
+
+addLoadEvent(init);
 
 /**
 

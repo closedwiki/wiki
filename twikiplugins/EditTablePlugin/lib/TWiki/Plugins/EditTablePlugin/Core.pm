@@ -29,14 +29,51 @@ use vars qw(
   $nrCols $encodeStart $encodeEnd $table $query %regex
 );
 
-$regex{empty_line}   = '^\s*$';
-$regex{table_plugin} = '%TABLE(?:{(.*?)})?%';
+$preSp = '';
+
+$regex{edit_table_plugin} = '%EDITTABLE{(.*)}%';
+$regex{table_plugin}      = '%TABLE(?:{(.*?)})?%';
+$regex{table_row_full}    = '^(\s*)\|.*\|\s*$';
+$regex{table_row}         = '^(\s*)\|(.*)';
+
+my $renderHack = "\n<nop>\n";
+
+=pod
+
+---+++ process( $doSave, $saveTableNr, $doSaveQuiet, $text, $topic, $web )
+
+Called from commonTagsHandler. Pass over to processText in 'no Save' mode.
+
+=cut
 
 sub process {
+    processText( 0, 0, 0, @_ );
+}
+
+=pod
+
+---+++ processText( $doSave, $saveTableNr, $doSaveQuiet, $text, $topic, $web )
+
+Process the text line by line.
+When a EditTablePlugin table is encountered, its contents is rendered according to the view: 
+   * View mode - default
+   * Edit mode - when an Edit button is clicked, renders the rest of the table in edit mode
+   * Save mode - when called from a Save button: calls processText again, only renders the selected table number, then saves the topic text
+
+=cut
+
+sub processText {
+
+    my $doSave      = shift;
+    my $saveTableNr = shift;
+    my $doSaveQuiet = shift;
+
     $query = TWiki::Func::getCgiQuery();
+
     TWiki::Func::writeDebug(
         "- EditTablePlugin::commonTagsHandler( $_[2].$_[1] )")
       if $TWiki::Plugins::EditTablePlugin::debug;
+
     unless ($prefsInitialized) {
         $prefCHANGEROWS = TWiki::Func::getPreferencesValue('CHANGEROWS')
           || TWiki::Func::getPreferencesValue('EDITTABLEPLUGIN_CHANGEROWS')
@@ -50,35 +87,80 @@ sub process {
         $prefsInitialized = 1;
     }
 
-    my $theWeb      = $_[2];
-    my $theTopic    = $_[1];
-    my $result      = '';
-    my $tableNr     = 0;
-    my $rowNr       = 0;
+    my $theWeb   = $_[2];
+    my $theTopic = $_[1];
+    my $theText;
+    if ($doSave) {
+        $theText = TWiki::Func::readTopicText( $theWeb, $theTopic );
+    }
+    else {
+        $theText = $_[0];
+    }
+    my $result = '';
+
+    my $insidePRE   = 0;
+    my $tableNr     = 0;       # current EditTable table
+    my $rowNr       = 0;       # current row number; starting at 1
     my $enableForm  = 0;
     my $insideTable = 0;
-    my $doEdit      = 0;
-    my $cgiRows     = -1;
-    my $addRows     = 0;
+    my $doEdit      = $doSave;
+    my $etrows      = -1;
+    my $hasTableRow = 0;       # the current line has a row with '| some text |'
+    my $createdNewTable = 0;
 
-    $_[0] =~ s/\r//go;
-    $_[0] =~ s/\\\n//go;    # Join lines ending in "\"
-    $_[0] .= "\n<nop>\n"
+    $theText =~
+      s/\r//go;    # strip out all \r chars (may be pasted into a table cell)
+    $theText =~ s/\\\n//go;    # Join lines ending in "\"
+    $theText .= $renderHack
       ;    # appended stuff is a hack to handle EDITTABLE correctly if at end
 
-    my @lines = split( /\r?\n/, "$_[0]" );
+    my @lines = split( /\n/, $theText );
     for (@lines) {
 
-        #foreach( split( /\n/, "$_[0]\n<nop>\n" ) ) {
-        if (
-s/(\s*)%EDITTABLE{(.*)}%/&handleEditTableTag( $theWeb, $theTopic, $1, $2 )/geo
-          )
-        {
+        # Check if we are inside <pre> or <verbatim> tags
+        # if so, do not process
+        m|<pre>|i       && ( $insidePRE = 1 );
+        m|<verbatim>|i  && ( $insidePRE = 1 );
+        m|</pre>|i      && ( $insidePRE = 0 );
+        m|</verbatim>|i && ( $insidePRE = 0 );
+
+        if ($insidePRE) {
+
+            # no need to process, just copy the line
+            $result .= "$_\n";
+            next;
+        }
+
+        $hasTableRow = 0;
+
+        my $hasEditTableTag = m/(\s*)$regex{edit_table_plugin}/go;
+        if ($hasEditTableTag) {
+
+            # this is an EDITTABLE tag
+            if ($doSave) {
+
+                # no need to process, just copy the line
+                $result .= "$_\n";
+            }
+            else {
+
+                # process the tag contents
+s/(.*?)$regex{edit_table_plugin}/&handleEditTableTag( $theWeb, $theTopic, $1, $2 )/geo;
+
+                # TODO: something strange has happened to the prefix
+                # it is no longer used by handleEditTableTag
+                # we add it here:
+                $result .= $1 if $1;
+            }
+            $tableNr++;
+
+            next if ( $doSave && $tableNr != $saveTableNr );
+
             $enableForm = 1;
-            $tableNr += 1;
 
             my $cgiTableNr = $query->param('ettablenr') || 0;
-            $cgiRows = $query->param('etrows') || -1;
+
+            $etrows = $query->param('etrows') || -1;
             if (
                 ( $cgiTableNr == $tableNr )
                 && (  $theWeb . '.'
@@ -88,19 +170,15 @@ s/(\s*)%EDITTABLE{(.*)}%/&handleEditTableTag( $theWeb, $theTopic, $1, $2 )/geo
               )
             {
 
-                if ( $query->param('etsave') ) {
+                if ( !$doSave && $query->param('etsave') ) {
 
                     # [Save table] button pressed
-                    doSaveTable( $theWeb, $theTopic, $tableNr, '' );
-                    ASSERT(0) if DEBUG;
-                    return;
+                    return processText( 1, $tableNr, 0, @_ );
                 }
-                elsif ( $query->param('etqsave') ) {
+                elsif ( !$doSave && $query->param('etqsave') ) {
 
                     # [Quiet save] button pressed
-                    doSaveTable( $theWeb, $theTopic, $tableNr, 'on' );
-                    ASSERT(0) if DEBUG;
-                    return;
+                    return processText( 1, $tableNr, 1, @_ );
 
                 }
                 elsif ( $query->param('etcancel') ) {
@@ -114,7 +192,7 @@ s/(\s*)%EDITTABLE{(.*)}%/&handleEditTableTag( $theWeb, $theTopic, $1, $2 )/geo
                 elsif ( $query->param('etaddrow') ) {
 
                     # [Add row] button pressed
-                    $addRows++ if ( $cgiRows >= 0 );
+                    $etrows++ if ( $etrows >= 0 );
                     $doEdit = doEnableEdit( $theWeb, $theTopic, 0 );
                     return unless ($doEdit);
 
@@ -122,7 +200,7 @@ s/(\s*)%EDITTABLE{(.*)}%/&handleEditTableTag( $theWeb, $theTopic, $1, $2 )/geo
                 elsif ( $query->param('etdelrow') ) {
 
                     # [Delete row] button pressed
-                    $cgiRows-- if ( $cgiRows > 1 );
+                    $etrows--;
                     $doEdit = doEnableEdit( $theWeb, $theTopic, 0 );
                     return unless ($doEdit);
 
@@ -134,12 +212,9 @@ s/(\s*)%EDITTABLE{(.*)}%/&handleEditTableTag( $theWeb, $theTopic, $1, $2 )/geo
 
                     # never return if locked or no permission
                     return unless ($doEdit);
-                    $cgiRows = -1;  # make sure to get the actual number of rows
+                    $etrows = -1;   # make sure to get the actual number of rows
                 }
             }
-
-# we've just parsed the EDITTABLE variable, no need to continue on the same line
-            next;
         }
         if (/$regex{table_plugin}/) {
 
@@ -148,78 +223,101 @@ s/(\s*)%EDITTABLE{(.*)}%/&handleEditTableTag( $theWeb, $theTopic, $1, $2 )/geo
             $result .= "$_\n";
             next;
         }
-        if ($enableForm) {
-            if (/^(\s*)\|.*\|\s*$/) {
+        if (m/$regex{table_row_full}/) {
+            $hasTableRow = 1;
+        }
 
-                # found table row
+        if ($enableForm) {
+            if ( !$hasTableRow && !$insideTable && !$createdNewTable ) {
+
+                # start new table
+                $createdNewTable = 1;
                 $result .=
                   handleTableStart( $theWeb, $theTopic, $tableNr, $doEdit )
-                  unless $insideTable;
+                  if !$doSave;
+                $insideTable = 1;
+                $hasTableRow = 1;
+                next;
+            }
+            if ($hasTableRow) {
                 $insideTable = 1;
                 $rowNr++;
-                if ( $doEdit && $cgiRows >= 0 && $rowNr > $cgiRows ) {
+
+                if ( $doSave
+                    || ( $doEdit && $etrows >= 0 ) && ( $rowNr > $etrows ) )
+                {
 
                     # deleted row
                     $rowNr--;
                     next;
                 }
-s/^(\s*)\|(.*)/handleTableRow( $1, $2, $tableNr, 0, $rowNr, $doEdit, 0, $theWeb, $theTopic )/eo;
+                my $isNewRow = ( $rowNr > $rowNr ) ? 1 : 0;
+s/$regex{table_row}/handleTableRow( $1, $2, $tableNr, $isNewRow, $rowNr, $doEdit, $doSave, $theWeb, $theTopic )/eo;
 
             }
             elsif ($insideTable) {
 
                 # end of table
-                $insideTable = 0;
-                if ( $doEdit && $cgiRows >= 0 ) {
-                    while ( $rowNr < $cgiRows + $addRows ) {
-                        $rowNr++;
-                        $result .=
-                          handleTableRow( '', '', $tableNr, $rowNr > $cgiRows,
-                            $rowNr, $doEdit, 0, $theWeb, $theTopic )
-                          . "\n";
-                    }
+
+                # if we are starting with an empty table, we force
+                # create a row, with an optional header row
+                if (   !$doSave
+                    && $doEdit
+                    && $etrows == -1
+                    && $rowNr == 0
+                    && !$query->param('etdelrow') )
+                {
+                    $etrows = 1;
+                    $etrows++ if $params{'header'};
                 }
-                $result .= handleTableEnd( $theWeb, $rowNr, $doEdit );
-                $enableForm = 0;
-                $doEdit     = 0;
-                $rowNr      = 0;
-            }
-            else {
-                $result .=
-                  handleTableStart( $theWeb, $theTopic, $tableNr, $doEdit );
-                $rowNr = 0;
-                if ($doEdit) {
-                    if ( $params{'header'} ) {
+
+                if ( $doEdit && $etrows >= 0 ) {
+                    while ( $rowNr < $etrows ) {
                         $rowNr++;
+                        my $isNewRow = ( $rowNr > $etrows ) ? 1 : 0;
+
                         $result .= handleTableRow(
-                            $preSp, '',      $tableNr, 2,
-                            $rowNr, $doEdit, 0,        $theWeb,
+                            '',     '',      $tableNr, $isNewRow,
+                            $rowNr, $doEdit, $doSave,  $theWeb,
                             $theTopic
                         ) . "\n";
                     }
-                    do {
-                        $rowNr++;
-                        $result .= handleTableRow(
-                            $preSp, '',      $tableNr, 3,
-                            $rowNr, $doEdit, 0,        $theWeb,
-                            $theTopic
-                        ) . "\n";
-                    } while ( $rowNr < $cgiRows );
                 }
-                $result .= handleTableEnd( $theWeb, $rowNr, $doEdit );
-                $enableForm = 0;
-                $doEdit     = 0;
-                $rowNr      = 0;
+                $result .= handleTableEnd( $theWeb, $rowNr, $doEdit )
+                  if !$doSave;
+                $insideTable     = 0;
+                $enableForm      = 0;
+                $doEdit          = 0;
+                $rowNr           = 0;
+                $createdNewTable = 0;
             }
-        }    #/if( $enableForm ) {
+        }    #/ if $enableForm
         $result .= "$_\n";
     }
 
     # clean up hack that handles EDITTABLE correctly if at end
-    $result =~ s|\n?<nop>\n$||o;
+    $result =~ s/($renderHack)+$//go;
 
+    if ($doSave) {
+
+        my $error = TWiki::Func::saveTopicText( $theWeb, $theTopic, $result, '',
+            $doSaveQuiet );
+
+        TWiki::Func::setTopicEditLock( $theWeb, $theTopic, 0 );   # unlock Topic
+        my $url = TWiki::Func::getViewUrl( $theWeb, $theTopic );
+        if ($error) {
+            $url = TWiki::Func::getOopsUrl( $theWeb, $theTopic, 'oopssaveerr',
+                $error );
+        }
+        TWiki::Func::redirectCgiQuery( $query, $url );
+        return;
+    }
     $_[0] = $result;
 }
+
+=pod
+
+=cut
 
 sub extractParams {
     my ( $theArgs, $theHashRef ) = @_;
@@ -253,6 +351,10 @@ sub extractParams {
     return;
 }
 
+=pod
+
+=cut
+
 sub parseFormat {
     my ( $theFormat, $theTopic, $theWeb, $doExpand ) = @_;
     $theFormat =~ s/\$nop(\(\))?//gos;         # remove filler
@@ -272,10 +374,15 @@ sub parseFormat {
     return @aFormat;
 }
 
+=pod
+
+=cut
+
 sub handleEditTableTag {
     my ( $theWeb, $theTopic, $thePreSpace, $theArgs ) = @_;
 
-    $preSp = $thePreSpace || '';
+    #$preSp = $thePreSpace || '';
+
     %params = (
         'header'        => '',
         'footer'        => '',
@@ -296,7 +403,7 @@ sub handleEditTableTag {
             $iTopic = $2;
         }
         my $text = TWiki::Func::readTopicText( $theWeb, $iTopic );
-        $text =~ /%EDITTABLE{(.*)}%/os;
+        $text =~ /$regex{edit_table_plugin}/os;
         if ($1) {
             my $args = $1;
             if (   $theWeb ne $TWiki::Plugins::EditTablePlugin::web
@@ -330,12 +437,15 @@ sub handleEditTableTag {
 
     # FIXME: No handling yet of footer
 
-    return "$preSp<nop>";
+    return "$preSp";
 }
+
+=pod
+
+=cut
 
 sub handleTableStart {
     my ( $theWeb, $theTopic, $theTableNr, $doEdit ) = @_;
-
     my $viewUrl = TWiki::Func::getScriptUrl( $theWeb, $theTopic, 'viewauth' )
       . "\#edittable$theTableNr";
     my $text = '';
@@ -361,11 +471,14 @@ sub handleTableStart {
     return $text;
 }
 
+=pod
+
+=cut
+
 sub handleTableEnd {
     my ( $theWeb, $theRowNr, $doEdit ) = @_;
-
     my $text =
-      "$preSp<input type=\"hidden\" name=\"etrows\"   value=\"$theRowNr\" />\n";
+      "$preSp<input type=\"hidden\" name=\"etrows\" value=\"$theRowNr\" />\n";
     if ($doEdit) {
 
         # Edit mode
@@ -405,16 +518,13 @@ sub handleTableEnd {
         }
         my $assetUrl = '%PUBURL%/%SYSTEMWEB%/EditTablePlugin';
 
-        &TWiki::Plugins::EditTablePlugin::addEditModeHeadersToHead();
-
         # table specific script
         my $tableNr = $query->param('ettablenr');
-        $text .=
-          &TWiki::Plugins::EditTablePlugin::dynamicJavascriptForTable( $tableNr,
+        &TWiki::Plugins::EditTablePlugin::addEditModeHeadersToHead( $tableNr,
             $assetUrl );
-
     }
     else {
+        $params{editbutton} |= '';
 
         # View mode
         if ( $params{editbutton} eq "hide" ) {
@@ -435,10 +545,18 @@ sub handleTableEnd {
     return $text;
 }
 
+=pod
+
+=cut
+
 sub parseEditCellFormat {
     $_[1] = TWiki::Func::extractNameValuePair( $_[0] );
     return '';
 }
+
+=pod
+
+=cut
 
 sub viewEditCell {
     my ($theAttr) = @_;
@@ -455,15 +573,14 @@ sub viewEditCell {
     $img = $bits[3] if ( @bits > 3 );
 
     unless ($value) {
-        $value = $prefEDITBUTTON;
-        $img   = '';
+        $value = $prefEDITBUTTON || '';
+        $img = '';
         if ( $value =~ s/(.+),\s*(.+)/$1/o ) {
             $img = $2;
             $img =~ s|%ATTACHURL%|%PUBURL%/%SYSTEMWEB%/EditTablePlugin|o;
             $img =~ s|%WEB%|%SYSTEMWEB%|o;
         }
     }
-
     if ($img) {
         return
 "<input class=\"editTableEditImageButton\" type=\"image\" src=\"$img\" alt=\"$value\" />";
@@ -474,12 +591,22 @@ sub viewEditCell {
     }
 }
 
+=pod
+
+=cut
+
 sub saveEditCellFormat {
     my ( $theFormat, $theName ) = @_;
     return '' unless ($theFormat);
     $theName =~ s/cell/format/;
     return "<input type=\"hidden\" name=\"$theName\" value=\"$theFormat\" />";
 }
+
+=pod
+
+digestedCellValue: properly handle labels whose rows may have been moved around by javascript, and therefore no longer correspond to the raw saved table text.
+
+=cut
 
 sub inputElement {
     my ( $theTableNr, $theRowNr, $theCol, $theName, $theValue,
@@ -520,8 +647,9 @@ sub inputElement {
         my $expandedValue =
           TWiki::Func::expandCommonVariables( $theValue, $theTopic, $theWeb );
         $size = 1 if $size < 1;
-        $text = "<select name=\"$theName\" size=\"$size\">";
-        $i    = 2;
+        $text =
+          "<select class=\"twikiSelect\" name=\"$theName\" size=\"$size\">";
+        $i = 2;
         while ( $i < @bits ) {
             $val         = $bits[$i]         || '';
             $valExpanded = $bitsExpanded[$i] || '';
@@ -546,7 +674,8 @@ sub inputElement {
         my $elements = ( @bits - 2 );
         my $lines    = $elements / $size;
         $lines = ( $lines == int($lines) ) ? $lines : int( $lines + 1 );
-        $text .= "<table><tr><td valign=\"top\">" if ( $lines > 1 );
+        $text .= "<table class=\"editTableInnerTable\"><tr><td valign=\"top\">"
+          if ( $lines > 1 );
         $i = 2;
         while ( $i < @bits ) {
             $val         = $bits[$i]         || "";
@@ -580,7 +709,8 @@ sub inputElement {
         my $lines    = $elements / $size;
         my $names    = "Chkbx:";
         $lines = ( $lines == int($lines) ) ? $lines : int( $lines + 1 );
-        $text .= "<table><tr><td valign=\"top\">" if ( $lines > 1 );
+        $text .= "<table class=\"editTableInnerTable\"><tr><td valign=\"top\">"
+          if ( $lines > 1 );
         $i = 2;
 
         while ( $i < @bits ) {
@@ -664,7 +794,7 @@ sub inputElement {
         $theValue = TWiki::Plugins::EditTablePlugin::encodeValue($theValue)
           unless ( $theValue eq '' );
         $text .=
-"<textarea class=\"editTableTextarea\" rows=\"$rows\" cols=\"$cols\" name=\"$theName\">$theValue</textarea>";
+"<textarea class=\"twikiTextarea editTableTextarea\" rows=\"$rows\" cols=\"$cols\" name=\"$theName\">$theValue</textarea>";
         $text .= saveEditCellFormat( $cellFormat, $theName );
 
     }
@@ -689,8 +819,7 @@ sub inputElement {
         eval 'use TWiki::Contrib::JSCalendarContrib';
 
         unless ($@) {
-            $text .=
-              '%TWISTY{link="" noscript="hide" start="show" prefix="&nbsp;"}%';
+            $text .= '<span class="twikiMakeVisible">';
             $text .= CGI::image_button(
                 -class   => 'editTableCalendarButton',
                 -name    => 'calendar',
@@ -701,7 +830,7 @@ sub inputElement {
                 -alt   => 'Calendar',
                 -align => 'MIDDLE'
             );
-            $text .= '%ENDTWISTY%';
+            $text .= '</span>';
         }
 
         $query->{'jscalendar'} = 1;
@@ -718,13 +847,16 @@ sub inputElement {
     return $text;
 }
 
+=pod
+
+=cut
+
 sub handleTableRow {
     my (
-        $thePre, $theRow, $theTableNr, $newRow, $theRowNr,
+        $thePre, $theRow, $theTableNr, $isNewRow, $theRowNr,
         $doEdit, $doSave, $theWeb,     $theTopic
     ) = @_;
-
-    $thePre = '' unless ( defined($thePre) );
+    $thePre |= '';
     my $text = "$thePre\|";
 
     if ($doEdit) {
@@ -743,7 +875,7 @@ sub handleTableRow {
         while ( $col < $nrCols ) {
             $col += 1;
             $cellDefined = 0;
-            $val = $newRow ? undef : $query->param("etcell${rowID}x$col");
+            $val = $isNewRow ? undef : $query->param("etcell${rowID}x$col");
             if ( $val && $val =~ /^Chkbx: (etcell.*)/ ) {
 
       # Multiple checkboxes, val has format "Chkbx: etcell4x2x2 etcell4x2x3 ..."
@@ -838,99 +970,9 @@ sub handleTableRow {
     return $text;
 }
 
-sub doSaveTable {
-    my ( $theWeb, $theTopic, $theTableNr, $quiet ) = @_;
+=pod
 
-    TWiki::Func::writeDebug(
-"- EditTablePlugin::doSaveTable( $theWeb, $theTopic, $theTableNr, $quiet )"
-    ) if $TWiki::Plugins::EditTablePlugin::debug;
-
-    my $text = TWiki::Func::readTopicText( $theWeb, $theTopic );
-
-    my $cgiRows     = $query->param('etrows') || 1;
-    my $tableNr     = 0;
-    my $rowNr       = 0;
-    my $insideTable = 0;
-    my $doSave      = 0;
-    my $result      = '';
-
-    # appended stuff is a hack to handle EDITTABLE correctly if at end
-    foreach ( split( /\n/, "$text\n<nop>\n" ) ) {
-        if (/%EDITTABLE{(.*)}%/o) {
-            $tableNr += 1;
-            if ( $tableNr == $theTableNr ) {
-                $doSave = 1;
-            }
-        }
-        if ($doSave) {
-            if (/^(\s*)\|.*\|\s*$/) {
-                $insideTable = 1;
-                $rowNr++;
-                if ( $rowNr > $cgiRows ) {
-
-                    # deleted row
-                    $rowNr--;
-                    next;
-                }
-s/^(\s*)\|(.*)/&handleTableRow( $1, $2, $tableNr, 0, $rowNr, 1, 1, $theWeb, $theTopic )/eo;
-
-            }
-            elsif ($insideTable) {
-                $insideTable = 0;
-                if ( $rowNr < $cgiRows ) {
-                    while ( $rowNr < $cgiRows ) {
-                        $rowNr++;
-                        $result .= handleTableRow(
-                            $preSp, '', $tableNr, 0,
-                            $rowNr, 1,  1,        $theWeb,
-                            $theTopic
-                        ) . "\n";
-                    }
-                }
-                $doSave = 0;
-                $rowNr  = 0;
-            }
-            if (/^\s*$/) {    # empty line
-                if ($doSave) {
-
-                    # empty %EDITTABLE%, so create a default table
-                    $rowNr = 0;
-                    if ( $params{'header'} ) {
-                        $rowNr++;
-                        $result .= handleTableRow(
-                            $preSp, '', $tableNr, 0,
-                            $rowNr, 1,  1,        $theWeb,
-                            $theTopic
-                        ) . "\n";
-                    }
-                    while ( $rowNr < $cgiRows ) {
-                        $rowNr++;
-                        $result .= handleTableRow(
-                            $preSp, '', $tableNr, 0,
-                            $rowNr, 1,  1,        $theWeb,
-                            $theTopic
-                        ) . "\n";
-                    }
-                }
-                $doSave = 0;
-                $rowNr  = 0;
-            }
-        }
-        $result .= "$_\n";
-    }
-    $result =~ s|\n<nop>\n$||o
-      ;    # clean up hack that handles EDITTABLE correctly if at end
-
-    my $error =
-      TWiki::Func::saveTopicText( $theWeb, $theTopic, $result, '', $quiet );
-    TWiki::Func::setTopicEditLock( $theWeb, $theTopic, 0 );    # unlock Topic
-    my $url = TWiki::Func::getViewUrl( $theWeb, $theTopic );
-    if ($error) {
-        $url =
-          TWiki::Func::getOopsUrl( $theWeb, $theTopic, 'oopssaveerr', $error );
-    }
-    TWiki::Func::redirectCgiQuery( $query, $url );
-}
+=cut
 
 sub doCancelEdit {
     my ( $theWeb, $theTopic ) = @_;
@@ -944,6 +986,10 @@ sub doCancelEdit {
     TWiki::Func::redirectCgiQuery( $query,
         TWiki::Func::getViewUrl( $theWeb, $theTopic ) );
 }
+
+=pod
+
+=cut
 
 sub doEnableEdit {
     my ( $theWeb, $theTopic, $doCheckIfLocked ) = @_;
@@ -991,9 +1037,16 @@ sub doEnableEdit {
     return 1;
 }
 
-# SMELL: The following code is copied from the ChartPlugin Table object.
-
 package TWiki::Plugins::Table;
+
+use vars qw(
+  %regex
+);
+$regex{edit_table_plugin} = '%EDITTABLE{(.*)}%';
+
+=pod
+
+=cut
 
 sub new {
     my ( $class, $topicContents ) = @_;
@@ -1003,23 +1056,29 @@ sub new {
     return $this;
 }
 
-# The guts of this routine was initially copied from SpreadSheetPlugin.pm
-# and were used in the ChartPlugin Table object which this was copied from,
-# but this has been modified to support the functionality needed by the
-# EditTablePlugin.  One major change is to only count and save tables
-# following an %EDITTABLE{.*}% tag.
-#
-# This routine basically returns an array of hashes where each hash
-# contains the information for a single table.  Thus the first hash in the
-# array represents the first table found on the topic page, the second hash
-# in the array represents the second table found on the topic page, etc.
+=pod
+
+TODO: this is currently only used for label tags, so this seams a lot of overhead for such a small thing
+
+The guts of this routine was initially copied from SpreadSheetPlugin.pm
+and were used in the ChartPlugin Table object which this was copied from,
+but this has been modified to support the functionality needed by the
+EditTablePlugin.  One major change is to only count and save tables
+following an %EDITTABLE{.*}% tag.
+
+This routine basically returns an array of hashes where each hash
+contains the information for a single table.  Thus the first hash in the
+array represents the first table found on the topic page, the second hash
+in the array represents the second table found on the topic page, etc.
+
+=cut
+
 sub _parseOutTables {
     my ( $this, $topic ) = @_;
     my $tableNum = 1;    # Table number (only count tables with EDITTABLE tag)
     my @tableMatrix;     # Currently parsed table.
 
     my $inEditTable = 0; # Flag to keep track if in an EDITTABLE table
-    my $result      = '';
     my $insidePRE   = 0;
     my $insideTABLE = 0;
     my $line        = '';
@@ -1034,7 +1093,7 @@ sub _parseOutTables {
         m|</verbatim>|i && ( $insidePRE = 0 );
 
         if ( !$insidePRE ) {
-            $inEditTable = 1 if (/%EDITTABLE{(.*)}%/);
+            $inEditTable = 1 if (/$regex{edit_table_plugin}/);
             if ($inEditTable) {
                 if (/^\s*\|.*\|\s*$/) {
 
@@ -1063,17 +1122,20 @@ sub _parseOutTables {
                             $tableNum++;
                         }
                         undef @tableMatrix;    # reset table matrix
-                        $result .= '</div>';
                     }
                 }
             }
         }
-        $result .= "$_\n";
     }
     $$this{NUM_TABLES} = $tableNum;
 }
 
-# Trim any leading and trailing white space and/or '*'.
+=pod
+
+Trim any leading and trailing white space and/or '*'.
+
+=cut
+
 sub _trim {
     my ($totrim) = @_;
     for my $element (@$totrim) {
@@ -1082,7 +1144,12 @@ sub _trim {
     }
 }
 
-# Return the contents of the specified cell
+=pod
+
+Return the contents of the specified cell
+
+=cut
+
 sub getCell {
     my ( $this, $tableNum, $row, $column ) = @_;
 
@@ -1090,6 +1157,10 @@ sub getCell {
     my $value         = $selectedTable[$row][$column];
     return $value;
 }
+
+=pod
+
+=cut
 
 sub getTable {
     my ( $this, $tableNumber ) = @_;
