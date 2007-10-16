@@ -109,10 +109,26 @@ function validateTWikiMandatoryFields(event) {
     if (twiki.Pref.validateSuppressed) {
         return true;
     }
-    var taglist = new Array('input', 'select', 'textarea');
     var ok = true;
+    var els = twiki.getElementsByClassName(document, 'select',
+                                               'twikiMandatory');
+    for (var j = 0; j < els.length; j++) {
+        var one = false;
+        for (var k = 0; k < els[j].options.length; k++) {
+            if (els[j].options[k].selected) {
+                one = true;
+                break;
+            }
+        }
+        if (!one) {
+            alert("The required form field '" + els[j].name +
+                  "' has no value.");
+            ok = false;
+        }
+    }
+    var taglist = new Array('input', 'textarea');
     for (var i = 0; i < taglist.length; i++) {
-        var els = twiki.getElementsByClassName(document, taglist[i],
+        els = twiki.getElementsByClassName(document, taglist[i],
                                                'twikiMandatory');
         for (var j = 0; j < els.length; j++) {
             if (els[j].value == null || els[j].value.length == 0) {
