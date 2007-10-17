@@ -114,48 +114,123 @@ If we have a 'normal' link to TWiki Web hometopic: [[%SYSTEMWEB%.%HOMETOPIC%][TW
 
 <blockquote>
 <verbatim>
-<span class="link%SYSTEMWEB%%HOMETOPIC%">[[%SYSTEMWEB%.%HOMETOPIC%][TWiki Web Home]]</span>
+<div id="demoblock" style="padding:1em; width:100px; text-align:center;">
+MOUSE OVER ME
+</div>
 
 <script type="text/javascript">
 // <![CDATA[
 var myrules = {
-	'.link%SYSTEMWEB%%HOMETOPIC% a' : function(el){
-		el.onclick = function() {
-			// open in a popup with no other attributes than template 'viewplain'
-			twiki.Window.openPopup(this.href,{template:"viewplain"});
+	'#demoblock' : function(el) {
+		var defaultColor = '#A3D6F8';
+		var highlightColor = '#4A7FB5';
+		
+		el.style.backgroundColor = defaultColor;
+		
+		el.onmouseover = function() {
+			this.style.backgroundColor = highlightColor;
+			return false;
+		}
+		el.onmouseout = function() {
+			this.style.backgroundColor = defaultColor;
+			return false;
+		}
+	},
+	'#demoblock span' : function(el) {
+		
+		var text = el.innerHTML;
+		
+		var fisherYates = function (inArray) {
+		  var i = inArray.length;
+		  if ( i == 0 ) return false;
+		  while ( --i ) {
+			 var j = Math.floor( Math.random() * ( i + 1 ) );
+			 var tempi = inArray[i];
+			 var tempj = inArray[j];
+			 inArray[i] = tempj;
+			 inArray[j] = tempi;
+		   }
+		}
+		
+		var randomize = function(inText) {
+			var letters = inText.split('');
+			fisherYates(letters);
+			return letters.join('');
+		}
+		el.onmouseover = function() {
+			this.innerHTML = randomize(text);
+			return false;
+		}
+		el.onmouseout = function() {
+			this.innerHTML = text;
 			return false;
 		}
 	}
 };
-
 Behaviour.register(myrules);
 // ]]>
 </script>
 </verbatim>
 
-The class name =link%<nop>SYSTEMWEB%%<nop>HOMETOPIC%= will get expanded to =link%SYSTEMWEB%%HOMETOPIC%=
-</blockquote>
-
 Creates:
 
-<span class="link%SYSTEMWEB%%HOMETOPIC%">[[%SYSTEMWEB%.%HOMETOPIC%][TWiki Web Home]]</span>
+<div id="demoblock" style="padding:1em; width:150px; text-align:center;">
+<span>MOUSE OVER ME</span>
+</div>
 
-<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiJavascripts/twikiWindow.js"></script>
 <script type="text/javascript">
 // <![CDATA[
 var myrules = {
-	'.link%SYSTEMWEB%%HOMETOPIC% a' : function(el){
-		el.onclick = function() {
-			// open in a popup with no other attributes than template 'viewplain'
-			twiki.Window.openPopup(this.href,{template:"viewplain"});
+	'#demoblock' : function(el) {
+		var defaultColor = '#A3D6F8';
+		var highlightColor = '#4A7FB5';
+		
+		el.style.backgroundColor = defaultColor;
+		
+		el.onmouseover = function() {
+			this.style.backgroundColor = highlightColor;
+			return false;
+		}
+		el.onmouseout = function() {
+			this.style.backgroundColor = defaultColor;
+			return false;
+		}
+	},
+	'#demoblock span' : function(el) {
+		
+		var text = el.innerHTML;
+		
+		var fisherYates = function (inArray) {
+		  var i = inArray.length;
+		  if ( i == 0 ) return false;
+		  while ( --i ) {
+			 var j = Math.floor( Math.random() * ( i + 1 ) );
+			 var tempi = inArray[i];
+			 var tempj = inArray[j];
+			 inArray[i] = tempj;
+			 inArray[j] = tempi;
+		   }
+		}
+		
+		var randomize = function(inText) {
+			var letters = inText.split('');
+			fisherYates(letters);
+			return letters.join('');
+		}
+		el.onmouseover = function() {
+			this.innerHTML = randomize(text);
+			return false;
+		}
+		el.onmouseout = function() {
+			this.innerHTML = text;
 			return false;
 		}
 	}
 };
-
 Behaviour.register(myrules);
 // ]]>
 </script>
+
 
 ---+++ Leaking danger
 Behaviour code leaks memory on Windows Explorer prior to version 7. To prevent leaking, set the element variable to =null=:
@@ -164,10 +239,8 @@ Behaviour code leaks memory on Windows Explorer prior to version 7. To prevent l
 var myrules = {
 	'table.test td' : function(element) {
 		element.onmouseover = function() {
-			this.style.backgroundColor = "yellow";
-		},
-		element.onmouseout = function() {
-			this.style.backgroundColor = "";
+			this.style.backgroundColor = highlightColor;
+			return false;
 		}
 		element = null; // by setting this IE will not leak  
 	}
@@ -175,18 +248,6 @@ var myrules = {
 Behaviour.register(myrules);
 </verbatim>
 </blockquote>
-
-
-
-#CodeUpdate
----++ Code update notes
----+++ Version 1.1 with faster DOM queries
-Windows Explorer suffers from slow DOM querying. That means that IE will choke on long pages whenever Behaviour code is used.
-
-Dean Edwards has written up code to [[http://dean.edwards.name/weblog/2006/03/faster/][let IE run faster DOM queries]], with a speed-up hack to Behaviour. This code - updated to make it run cross platform - is now integrated into the distributed javascript. Firefox and Safari won't get any faster than they are, but on IE the speed difference is significant.
-
----+++ Version 1.2 with faster DOM queries (again)
-Another speed update to call Behaviour's =apply= earlier than on page =onload= (which happens when all images have been downloaded). Support for Explorer, Firefox, Safari and Opera 9.0b2.
 
 
 ---++ Development
@@ -220,8 +281,9 @@ For details see the Behaviour website.
 | Copyright: | Code: =behaviour.js= version 1.1 - Copyright (c) Ben Nolan and Simon Willison. TWiki distribution and updates/additions: TWiki:Main.ArthurClemens. |
 | License: | BSD |
 | Dependencies: | %$DEPENDENCIES% |
-| Contrib&nbsp;Version: | 1.2.3 |
+| Contrib&nbsp;Version: | 1.3 |
 | Change&nbsp;History: | <!-- specify latest version first -->&nbsp; |
+| 17 Oct 2007 | 1.3 Replaced "faster code" by other code from Dean Edwards, [[ packed by http://groups.google.com/group/behaviour/browse_thread/thread/85137977bedf5ed/3cf3ba8065d41a8c#3cf3ba8065d41a8c][Raymond Irving]]. |
 | 02 Jul 2007 | 1.2 Integrated other faster code by Dean Edwards: [[http://dean.edwards.name/weblog/2006/06/again/][faster onload (again)]]. |
 | 08 Mar 2007 | 1.1 Integrated code by Dean Edwards (see [[#CodeUpdate][Code update version 1.1 with faster DOM queries]]). |
 | 04 Jun 2006 | 1.0  First Version. Included Behaviour version: 1.1. |
