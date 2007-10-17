@@ -51,11 +51,12 @@ sub parseTables {
             $line = "$openRow$line";
             $openRow = undef;
         }
-        if (!$disable && $line =~ /%EDITTABLE{([^\n]*)}%/ ) {
+        if (!$disable && $line =~ s/(%EDITTABLE{(.*?)}%)// ) {
+            my $spec = $1;
+            my $attrs = new TWiki::Attrs($2);
+            push(@tables, $line) if $line =~ /\S/;
             # Editable table
             $nTables++;
-            my $attrs;
-            $attrs = new TWiki::Attrs($1);
             my %read = ( "$web.$topic" => 1 );
             while ($attrs->{include}) {
                 my ($iw, $it) = TWiki::Func::normalizeWebTopicName(
@@ -103,7 +104,7 @@ sub parseTables {
             }
             $active_table =
               new TWiki::Plugins::EditRowPlugin::Table(
-                  $nTables, 1, $line, $attrs, $_[2], $_[1]);
+                  $nTables, 1, $spec, $attrs, $_[2], $_[1]);
             push(@tables, $active_table);
             next;
         }
@@ -424,7 +425,8 @@ sub renderForDisplay {
             push(@out,
                  "<a name='erp_$this->{number}'></a>".
                    "<a href='$url' title='$title'>" . $button . '</a><br />');
-        } elsif ($this->{attrs}->{changerows}) {
+        } elsif ($this->{attrs}->{changerows} &&
+                   $this->{attrs}->{disable} !~ /row/) {
             my $title = "Add row to end of table";
             my $button = CGI::img({
                 -name => "erp_edit_$this->{number}",
@@ -534,7 +536,11 @@ sub addRow {
     my ($this, $urps) = @_;
     my @cols;
     my $row = $urps->{erp_active_row};
+
+    $this->change($urps); # in case data has changed
+
     if ($row < 0) {
+        # Full table edit
         $row = $this->getLastLiveRow();
     }
 
@@ -562,6 +568,9 @@ sub addRow {
 # Action on row deleted
 sub deleteRow {
     my ($this, $urps) = @_;
+
+    $this->change($urps); # in case data hase changed
+
     my $row = $urps->{erp_active_row};
     if ($row < $this->getFirstLiveRow()) {
         $row = $this->getLastLiveRow();
@@ -714,7 +723,6 @@ sub generateEditButtons {
         }
         $buttons .= CGI::image_button({
             name => 'erp_addRow',
-            class => 'EditRowPluginDiscardAction',
             value => $ADD_ROW,
             title => $ADD_ROW,
             src => '%PUBURLPATH%/TWiki/TWikiDocGraphics/plus.gif'
