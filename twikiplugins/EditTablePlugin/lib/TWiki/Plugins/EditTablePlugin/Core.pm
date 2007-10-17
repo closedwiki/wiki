@@ -828,7 +828,7 @@ sub inputElement {
                   . TWiki::Func::getTwikiWebname()
                   . '/JSCalendarContrib/img.gif',
                 -alt   => 'Calendar',
-                -align => 'MIDDLE'
+                -align => 'middle'
             );
             $text .= '</span>';
         }
