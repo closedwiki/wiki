@@ -2818,7 +2818,6 @@ then you can use =getScriptUrl= instead:
 sub getOopsUrl {
     my( $web, $topic, $template, @params ) = @_;
 
-    $template = "oops$template" unless $template =~ /^oops/;
     my $n = 1;
     @params = map { 'param'.($n++) => $_ } @params;
     return getScriptUrl( $web, $topic, 'oops',
