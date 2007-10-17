@@ -74,7 +74,7 @@ sub renderFormFieldForEditHandler {
             TWiki::Func::getTwikiWebname() .
                 '/JSCalendarContrib/img.gif',
           -alt => 'Calendar',
-          -align => 'MIDDLE' );
+          -align => 'middle' );
     return CGI::textfield( { name => $name,
                              value => $value,
                              size => 30,

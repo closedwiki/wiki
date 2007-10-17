@@ -101,7 +101,7 @@ sub renderDateForEdit {
               TWiki::Func::getTwikiWebname() .
                   '/JSCalendarContrib/img.gif',
           -alt => 'Calendar',
-          -align => 'MIDDLE');
+          -align => 'middle');
 }
 
 =begin twiki
@@ -136,7 +136,7 @@ sub commonTagsHandler {
              TWiki::Func::getTwikiWebname() .
              '/JSCalendarContrib/img.gif',
       -alt => 'Calendar',
-      -align => 'MIDDLE' )
+      -align => 'middle' )
     . CGI::textfield(
       { name => 'date', id => "id_datefield" });
   ....

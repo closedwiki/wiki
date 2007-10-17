@@ -456,7 +456,7 @@ sub _formatFieldForEdit {
                         TWiki::Func::getTwikiWebname() .
                             '/JSCalendarContrib/img.gif',
                       -alt => 'Calendar',
-                      -align => 'MIDDLE' );
+                      -align => 'middle' );
             }
         }
         return CGI::textfield( { name => $attrname,
