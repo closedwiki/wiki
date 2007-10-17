@@ -107,7 +107,7 @@ sub test_getOopsUrl {
                              'Wurble', 'Murble');
     $this->assert_str_equals(
       TWiki::Func::getScriptUrl('Incy', 'Wincy', 'oops').
-      "?template=oopsSpider;param1=Hurble;param2=Burble;param3=Wurble;param4=Murble",
+      "?template=Spider;param1=Hurble;param2=Burble;param3=Wurble;param4=Murble",
       $url);
     $url =
       TWiki::Func::getOopsUrl('Incy','Wincy', 'oopspider', 'Hurble', 'Burble',
