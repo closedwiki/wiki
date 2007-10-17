@@ -106,6 +106,17 @@ sub _addHeader {
     return if $doneHeader;
     $doneHeader = 1;
 
+    eval {
+        require TWiki::Contrib::BehaviourContrib;
+    };
+    if (!$@ && defined(&TWiki::Contrib::BehaviourContrib::addHEAD)) {
+        TWiki::Contrib::BehaviourContrib::addHEAD();
+    } else {
+        TWiki::Func::addToHEAD('BEHAVIOURCONTRIB', <<HEAD);
+<script type='text/javascript' src='%PUBURL%/%SYSTEMWEB%/BehaviourContrib/behaviour.compressed.js'></script>
+HEAD
+    }
+
     my $header = <<'EOF';
 <style type="text/css" media="all">
 @import url("%PUBURL%/%SYSTEMWEB%/TwistyContrib/twist.css");
@@ -113,7 +124,6 @@ sub _addHeader {
 <script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikilib.js"></script>
 <script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikiPref.js"></script>
 <script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikiCSS.js"></script>
-<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/BehaviourContrib/behaviour.compressed.js"></script>
 <script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TwistyContrib/twist.compressed.js"></script>
 <script type="text/javascript">
 // <![CDATA[
