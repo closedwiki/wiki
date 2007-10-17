@@ -17,7 +17,7 @@
 }
 .editTableActionButton {
 	margin:0 2px 2px 0;
-	cursor:pointer; cursor:hand;
+	cursor:pointer;
 }
 td.editTableActionCell {
 	vertical-align:middle;
@@ -26,7 +26,7 @@ td.editTableActionCell {
 	background:none;
 }
 .editTableActionSelectedCell {
-	background-color:#006699;
+	background-color:#069;
 }
 .twikiTableEven textarea,
 .twikiTableEven .editTableTextarea,
@@ -40,4 +40,17 @@ td.editTableActionCell {
 }
 .editTableCalendarButton {
 	margin:0 2px;
+}
+.editTableRowSeparator {
+	padding:0;
+	margin:0;
+	line-height:1px;
+	border:none;
+	background-color:#fff;
+	height:4px;
+	cursor:default;
+}
+.editTableRowSeparatorHover {
+	background-color:#069;
+	cursor:move;
 }
