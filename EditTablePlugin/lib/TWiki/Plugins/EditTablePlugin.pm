@@ -134,9 +134,6 @@ sub addEditModeHeadersToHead {
     return if $editModeHeaderDone;
     return if !$usesJavascriptInterface;
 
-    require TWiki::Contrib::BehaviourContrib;
-    TWiki::Contrib::BehaviourContrib::addHEAD();
-
     $editModeHeaderDone = 1;
 
     my $tableId = "edittable$tableNr";
