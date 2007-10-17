@@ -655,6 +655,8 @@ sub inputElement {
             $valExpanded = $bitsExpanded[$i] || '';
             $expandedValue =~ s/^\s+//;
             $expandedValue =~ s/\s+$//;
+            $valExpanded =~ s/^\s+//;
+            $valExpanded =~ s/\s+$//;
             if ( $valExpanded eq $expandedValue ) {
                 $text .= " <option selected=\"selected\">$val</option>";
             }
@@ -663,7 +665,7 @@ sub inputElement {
             }
             $i++;
         }
-        $text .= " </select>";
+        $text .= "</select>";
         $text .= saveEditCellFormat( $cellFormat, $theName );
 
     }
@@ -682,6 +684,8 @@ sub inputElement {
             $valExpanded = $bitsExpanded[$i] || "";
             $expandedValue =~ s/^\s+//;
             $expandedValue =~ s/\s+$//;
+            $valExpanded =~ s/^\s+//;
+            $valExpanded =~ s/\s+$//;
             $text .= " <input type=\"radio\" name=\"$theName\" value=\"$val\"";
             $text .= " checked=\"checked\""
               if ( $valExpanded eq $expandedValue );
@@ -718,6 +722,8 @@ sub inputElement {
             $valExpanded = $bitsExpanded[$i] || "";
             $expandedValue =~ s/^\s+//;
             $expandedValue =~ s/\s+$//;
+            $valExpanded =~ s/^\s+//;
+            $valExpanded =~ s/\s+$//;
             $names .= " ${theName}x$i";
             $text .=
               " <input type=\"checkbox\" name=\"${theName}x$i\" value=\"$val\"";
