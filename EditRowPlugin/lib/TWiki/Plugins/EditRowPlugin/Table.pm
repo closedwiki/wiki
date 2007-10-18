@@ -174,7 +174,7 @@ sub new {
     $this->{web} = $web;
 
     if ($attrs->{format}) {
-        $this->{colTypes} = $this->_parseFormat($attrs->{format});
+        $this->{colTypes} = $this->parseFormat($attrs->{format});
     } else {
         $this->{colTypes} = [];
     }
@@ -597,8 +597,8 @@ sub deleteRow {
 sub cancel {
 }
 
-# Private method that parses a column type specification
-sub _parseFormat {
+# Package private method that parses a column type specification
+sub parseFormat {
     my ($this, $format) = @_;
     my @cols;
 

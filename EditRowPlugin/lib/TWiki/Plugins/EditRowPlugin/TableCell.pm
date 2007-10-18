@@ -56,12 +56,19 @@ sub getCellName {
       $this->{row}->{number}.'_'.$this->{number};
 }
 
-# Get the HTML for the cell
-sub _getCell {
-    my ($this, $isHeader) = @_;
-    my $text = $this->{text};
-    $text = '-' unless defined $text;
-    if ($isHeader) {
+sub renderForDisplay {
+    my ($this, $colDefs, $isHeader) = @_;
+    my $colDef = $colDefs->[$this->{number} - 1] || $defCol;
+    my $text = $this->{text} || '-';
+
+    if (!$this->{isHeader} && !$this->{isFooter}) {
+        if ($colDef->{type} eq 'row') {
+            $text = $this->rowIndex( $colDef );
+        } else {
+            $text =~ s/%EDITCELL{(.*?)}%\s*$//;
+        }
+    }
+    if ($this->{isHeader}) {
         $text = CGI::span(
             {
                 class => 'erpSort',
@@ -73,23 +80,17 @@ sub _getCell {
     return $this->{precruft}.$text.$this->{postcruft};
 }
 
-sub renderForDisplay {
-    my ($this, $colDefs, $isHeader) = @_;
-    my $colDef = $colDefs->[$this->{number} - 1] || $defCol;
-
-    if (!$this->{isHeader} && !$this->{isFooter} &&
-          $colDef->{type} eq 'row') {
-        $this->{text} = $this->rowIndex( $colDef );
-    }
-    return $this->_getCell($isHeader);
-}
-
 sub renderForEdit {
     my ($this, $colDefs, $isHeader) = @_;
     my $colDef = $colDefs->[$this->{number} - 1] || $defCol;
+    my $unexpandedValue = $this->{text} || '';
 
-    my $expandedValue = TWiki::Func::expandCommonVariables(
-        $this->{text} || '');
+    if ($unexpandedValue =~ s/%EDITCELL{(.*?)}%\s*$//) {
+        my $cd = $this->{row}->{table}->parseFormat($1);
+        $colDef = $cd->[0];
+    }
+
+    my $expandedValue = TWiki::Func::expandCommonVariables($unexpandedValue);
     $expandedValue =~ s/^\s*(.*?)\s*$/$1/;
 
     my $text = '';
@@ -97,7 +98,9 @@ sub renderForEdit {
 
     if( $colDef->{type} eq 'select' ) {
 
-        $text = "<select name='$cellName' size='$colDef->{size}' class='EditRowPluginInput'>";
+        # Explicit HTML used because CGI gets it wrong
+        $text = "<select name='$cellName' size='".$colDef->{size}.
+          "' class='EditRowPluginInput'>";
         foreach my $option ( @{$colDef->{values}} ) {
             my $expandedOption =
               TWiki::Func::expandCommonVariables($option);
@@ -171,7 +174,7 @@ sub renderForEdit {
             rows => $rows,
             columns => $cols,
             name => $cellName,
-            value => $this->{text}});
+            value => $unexpandedValue});
 
     } elsif( $colDef->{type} eq 'date' ) {
 
@@ -180,26 +183,24 @@ sub renderForEdit {
         if ($@) {
             # Calendars not available
             $text = CGI::textfield({ name => $cellName, size => 10,
- class => 'EditRowPluginInput'});
+                                     class => 'EditRowPluginInput'});
         } else {
             $text = TWiki::Contrib::JSCalendarContrib::renderDateForEdit(
-                $cellName, $this->{text}, $colDef->{values}->[1]);
-            # SMELL: there should be a better way to add the class
-            $text =~ s/<input /<input class="EditRowPluginInput" /;
+                $cellName, $unexpandedValue, $colDef->{values}->[1],
+                { class => 'EditRowPluginInput' });
         }
 
     } elsif( $colDef->{type} eq 'label' ) {
 
-        $text = $this->{text};
+        $text = $unexpandedValue;
 
     } else { #  if( $colDef->{type} =~ /^text.*$/)
 
-        my $val = $this->{text};
         $text = CGI::textfield({
             class => 'EditRowPluginInput',
             name => $cellName,
             size => $colDef->{size},
-            value => $val });
+            value => $unexpandedValue });
 
     }
     return $this->{precruft}.TWiki::Plugins::EditRowPlugin::defend($text)

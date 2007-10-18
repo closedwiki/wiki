@@ -9,7 +9,7 @@ One line description, required for extensions repository catalog.
 
 %TOC%
 
-A replacement for some of !EditTablePlugin, some of !EditTablerowPlugin and
+A replacement for most of !EditTablePlugin, some of !EditTablerowPlugin and
 some of !TablePlugin. Features:
    1 You can edit one row at a time, instead of having to edit the entire
      table. This solves the problem with the long page rendering times
@@ -103,6 +103,13 @@ settings of =changerows= and =quietsave=.
    * %ICON{arrowdown}% Move this row down one row in the table
    * %ICON{stop}% cancels the open edit
 
+---++ Per Cell Settings
+
+An individual edit field type can be defined for each individual table cell. Place an =%<nop>EDITCELL{ "type, ..." }%= variable at the end of the cell content. This is useful to override the per column =%<nop>EDITTABLE{ format="..." }%= settings, or to create tables with key/value rows. All edit field types of the =format="..."= parameter are supported. For example, to define a text field, type: =| cell content %<nop>EDITCELL{ "text, 20" }% |=
+
+__Note:__ The =%<nop>EDITCELL{ }%=variable cannot be used by itself; place an =%<nop>EDITTABLE{ }%=variable at the beginning of a table where you want to use =%<nop>EDITCELL{ }%= variables.
+
+---++ Examples
 Copy the following examples and paste them into a topic in the Sandbox web
 (or another web where you have write access). The !EditRowPlugin is
 %IF{"{Plugins}{EditRowPlugin}{Enabled}"
@@ -139,6 +146,16 @@ then="enabled in this TWiki. Click on the buttons to try it out."}%
 </verbatim>
 <img src="%ATTACHURLPATH%/example4.gif" alt='Example 3'/>
 
+---+++ Example 4
+<verbatim<
+%EDITTABLE{ format="| label | text, 40 |" }%
+|*Key*|*Value*|
+| Name: | John Smith |
+| Gender: | M %EDITCELL{select, 1, , F, M}% |
+| DOB: | 18 October 2007 %EDITCELL{date, 10}% |
+| City: | New York |
+</verbatim>
+
 ---++ Preferences
 The plugin interprets a couple of [[%SYSTEMWEB%.TWikiVariables][preferences]], in common with the !EditTablePlugin.
 | =QUIETSAVE= | Gives a default value for the =quietsave= parameter. Default is =off=. |
@@ -152,7 +169,6 @@ These preferences can be defined in %USERSWEB%.TWikiPreferences, in !WebPreferen
 At this time most features of !EditTablePlugin are supported. Known exceptions
 are:
    * the =editbutton= parameter,
-   * the =EDITCELL= feature,
    * Plugin preferences (though global preferences are compatible)
 ---+++ !TablePlugin
 Javascript sorting in !EditRowPlugin is much faster than !TablePlugin. However
@@ -197,7 +213,7 @@ Another great TWiki extension from the <a style="text-decoration:none" href="htt
 |  Copyright: | &copy; 2007 Wind<nop>River Inc. |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  17 Oct 2007 | Bugs:Item4834: added automatic save on row add |
+|  18 Oct 2007 | Bugs:Item4834: added automatic save on row add Bugs:Item4853: added %EDITCELL support Bugs:Item4651: fixed validation of date change |
 |  26 Sep 2007 | Bugs:Item4696 Keep table in full-table edit mode after a row is added Bugs:Item4651 add JS to handle navigating away with pending changes (requires BehaviourContrib) |
 |  10 Sep 2007 | Bugs:Item4552 Can use row buttons to delete the header, even though headderrows is set Bugs:Item4565 "row" parameter not supported Bugs:Item4567 header parameter not correctly handled Bugs:Item4602 Header row gets eaten |
 |  13685 | Bugs:Item4040 Support for =helptopic= and =disable=, which allows more flexible configuration of the UI, especially when vertical editing |
