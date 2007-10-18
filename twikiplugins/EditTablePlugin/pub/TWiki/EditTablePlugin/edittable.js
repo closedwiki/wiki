@@ -8,12 +8,10 @@
 // Small refactoring by Arthur Clemens
 // TODO: all functions should be moved from global space to a twiki.EditTable object
 
-
 /**
 
 */
 // Global variables
-
 
 var sEditTable;
 // array of edittables
@@ -26,7 +24,6 @@ var sAlternatingColors = [];
 // Here's a custom version of getElementByTagName.  I find it easier
 // to debug certain problems this way when a script doesn't seem to be
 // finding the node we'd expect.
-
 
 function searchNodeTreeForTagName(node, tag_name) {
     if (node.tagName == tag_name) {
@@ -71,7 +68,6 @@ function removeClass(el, className) {
 /**
 Create user control elements and initialize table manipulation objects.
 */
-
 
 // Build the list of edittables.
 function edittableInit(form_name, asset_url) {
@@ -189,8 +185,15 @@ function insertActionButtonsMove(asset_url) {
                 action_butt.setAttribute('title', 'Move row');
                 action_butt.enableButtonSrc = asset_url + '/btn_move.gif';
                 action_butt.disableButtonSrc = asset_url + '/btn_move_disabled.gif';
+                action_butt.hoverButtonSrc = asset_url + '/btn_move_over.gif';
                 action_butt.moveButtonSrc = asset_url + '/btn_move.gif';
                 action_butt.setAttribute('src', action_butt.enableButtonSrc);
+                
+                action_butt.mohandler = mouseOverButtonHandler;
+                attachEvent(action_butt, 'mouseover', action_butt.mohandler);
+                action_butt.mouthandler = mouseOutButtonHandler;
+                attachEvent(action_butt, 'mouseout', action_butt.mouthandler);
+                
                 action_butt.handler = moveHandler;
                 attachEvent(action_butt, 'click', action_butt.handler);
                 addClass(action_butt, 'editTableActionButton');
@@ -210,10 +213,8 @@ function insertActionButtonsMove(asset_url) {
 */
 function insertActionButtonsDelete(asset_url) {
     
-    
     var action_cell,
     action_butt;
-    
     
     for (var rowpos = 0; rowpos < sEditTable.numrows; rowpos++) {
         var rownr = sEditTable.revidx[rowpos];
@@ -226,9 +227,17 @@ function insertActionButtonsDelete(asset_url) {
                 action_butt.setAttribute('title', 'Delete row');
                 action_butt.enableButtonSrc = asset_url + '/btn_delete.gif';
                 action_butt.disableButtonSrc = asset_url + '/btn_delete_disabled.gif';
+                action_butt.hoverButtonSrc = asset_url + '/btn_delete_over.gif';
                 action_butt.setAttribute('src', action_butt.enableButtonSrc);
+                
+                action_butt.mohandler = mouseOverButtonHandler;
+                attachEvent(action_butt, 'mouseover', action_butt.mohandler);
+                action_butt.mouthandler = mouseOutButtonHandler;
+                attachEvent(action_butt, 'mouseout', action_butt.mouthandler);
+                
                 action_butt.handler = deleteHandler;
                 attachEvent(action_butt, 'click', action_butt.handler);
+                
                 addClass(action_butt, 'editTableActionButton');
                 action_butt.rownr = rownr;
                 action_cell.deleteButton = action_butt;
@@ -239,15 +248,12 @@ function insertActionButtonsDelete(asset_url) {
     }
     // set styling for the last action_cell to remove the bottom border
     addClass(action_cell, 'twikiLast');
-    
-    
 }
 
 /**
 
 */
 function insertRowSeparators() {
-    
     
     var child;
     var sep_row,
@@ -265,7 +271,6 @@ function insertRowSeparators() {
     child.parentNode.appendChild(sep_row);
     sEditTable.last_separator = sep_row;
 }
-
 
 /**
 
@@ -372,11 +377,20 @@ function selectRow(rownr) {
     }
 }
 
+function mouseOverButtonHandler(evt) {
+    var target = evt.srcElement ? evt.srcElement: evt.target;
+	target.src = target['hoverButtonSrc'];
+}
+
+function mouseOutButtonHandler(evt) {
+    var target = evt.srcElement ? evt.srcElement: evt.target;
+	target.src = target['enableButtonSrc'];
+}
+
 /**
 TODO: explorer fires twice, so nothing happens visually
 */
 function moveHandler(evt) {
-    
     
     if (sRowSelection.rownum != null) {
         // switch back
@@ -680,7 +694,6 @@ function insertBefore(newnode, oldnode) {
 // IE will reset checkboxes to their default state when they are moved around
 // in the DOM tree, so we have to override the default state.
 
-
 function workaroundIECheckboxBug(container) {
     var elems = container.getElementsByTagName('INPUT');
     for (var i = 0; elems[i] != null; i++) {
@@ -694,7 +707,6 @@ function workaroundIECheckboxBug(container) {
 /**
 
 */
-
 
 function RowSelectionObject(asset_url) {
     //  this.topImage    = asset_url + '/dash_right.gif';
@@ -711,7 +723,6 @@ Construct an EditTable object.  This includes building an array of all the
 rows in a table, and making a map of row numbers to row positions (and the
 reverse).
 */
-
 
 function EditTableObject(tableform, row_container) {
     this.tableform = tableform;
@@ -774,7 +785,6 @@ function EditTableObject(tableform, row_container) {
 
 */
 
-
 function etsubmit(formid) {
     var form = document.getElementById(formid);
     var table_num = parseInt(form.tablenum.value);
@@ -796,7 +806,6 @@ function etsubmit(formid) {
 
 */
 // Update all row labels in a row by adding a delta amount to each one.
-
 
 function updateRowlabels(rownum, delta) {
     var row = sEditTable.rows[rownum];
