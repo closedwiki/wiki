@@ -25,10 +25,11 @@
   <td>
    <ul>
    <li> ==--Styles--== Use this to remove a style in the selected text </li>
-   <li> ==NOAUTOLINK== - Wraps &lt;noautolink&gt; tags around the selected text. Prevents !WikiWords from becoming links </li>
    <li> ==VERBATIM== - Wraps &lt;verbatim&gt; tags around the selected text. Verbatim text is shown in monospace with line breaks. No TWiki Variables are interpreted inside verbatim tags </li>
    <li> ==LITERAL== - Styled content is saved exactly as it appears in the editor. Wraps the content in &lt;literal> tags </li>
    <li> ==Protect on save== - Text is saved exactly as it is typed. Use this to save advanced TWiki Variables where you do not want the Wysiwyg editor to interpret or modify the text during save </li></ul>
+  </td>
+   <li> ==Protect forever== - Text is saved exactly as it is typed, but unlike Protect on save this protection is still there in future edit sessions. Use this to save blocks of advanced TWiki Variables or TML where you do not want the Wysiwyg editor to interpret or modify the text </li></ul>
   </td>
  </tr>
  <tr>
