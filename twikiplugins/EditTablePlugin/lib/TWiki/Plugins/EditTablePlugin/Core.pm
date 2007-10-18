@@ -24,7 +24,7 @@ use Assert;
 
 use vars qw(
   $preSp %params @format @formatExpanded
-  $prefsInitialized $prefCHANGEROWS $prefEDITBUTTON
+  $prefsInitialized $prefCHANGEROWS $prefEDIT_BUTTON $prefSAVE_BUTTON $prefQUIET_SAVE_BUTTON $prefADD_ROW_BUTTON $prefDELETE_LAST_ROW_BUTTON $prefCANCEL_BUTTON
   $prefQUIETSAVE
   $nrCols $encodeStart $encodeEnd $table $query %regex
 );
@@ -81,9 +81,29 @@ sub processText {
         $prefQUIETSAVE = TWiki::Func::getPreferencesValue('QUIETSAVE')
           || TWiki::Func::getPreferencesValue('EDITTABLEPLUGIN_QUIETSAVE')
           || 'on';
-        $prefEDITBUTTON = TWiki::Func::getPreferencesValue('EDITBUTTON')
-          || TWiki::Func::getPreferencesValue('EDITTABLEPLUGIN_EDITBUTTON')
+        $prefEDIT_BUTTON = TWiki::Func::getPreferencesValue('EDIT_BUTTON')
+          || TWiki::Func::getPreferencesValue('EDITTABLEPLUGIN_EDIT_BUTTON')
           || 'Edit table';
+        $prefSAVE_BUTTON = TWiki::Func::getPreferencesValue('SAVE_BUTTON')
+          || TWiki::Func::getPreferencesValue('EDITTABLEPLUGIN_SAVE_BUTTON')
+          || 'Save table';
+        $prefQUIET_SAVE_BUTTON =
+          TWiki::Func::getPreferencesValue('QUIET_SAVE_BUTTON')
+          || TWiki::Func::getPreferencesValue(
+            'EDITTABLEPLUGIN_QUIET_SAVE_BUTTON')
+          || 'Quiet save';
+        $prefADD_ROW_BUTTON = TWiki::Func::getPreferencesValue('ADD_ROW_BUTTON')
+          || TWiki::Func::getPreferencesValue('EDITTABLEPLUGIN_ADD_ROW_BUTTON')
+          || 'Add row';
+        $prefDELETE_LAST_ROW_BUTTON =
+          TWiki::Func::getPreferencesValue('DELETE_LAST_ROW_BUTTON')
+          || TWiki::Func::getPreferencesValue(
+            'EDITTABLEPLUGIN_DELETE_LAST_ROW_BUTTON')
+          || 'Delete last row';
+        $prefCANCEL_BUTTON = TWiki::Func::getPreferencesValue('CANCEL_BUTTON')
+          || TWiki::Func::getPreferencesValue('EDITTABLEPLUGIN_CANCEL_BUTTON')
+          || 'Cancel';
+
         $prefsInitialized = 1;
     }
 
@@ -483,20 +503,20 @@ sub handleTableEnd {
 
         # Edit mode
         $text .=
-"$preSp<input type=\"submit\" name=\"etsave\" id=\"etsave\" value=\"Save table\" class=\"twikiSubmit\" />\n";
+"$preSp<input type=\"submit\" name=\"etsave\" id=\"etsave\" value=\"$prefSAVE_BUTTON\" class=\"twikiSubmit\" />\n";
         if ( $params{'quietsave'} ) {
             $text .=
-"$preSp<input type=\"submit\" name=\"etqsave\" id=\"etqsave\" value=\"Quiet save\" class=\"twikiButton\" />\n";
+"$preSp<input type=\"submit\" name=\"etqsave\" id=\"etqsave\" value=\"$prefQUIET_SAVE_BUTTON\" class=\"twikiButton\" />\n";
         }
         if ( $params{'changerows'} ) {
             $text .=
-"$preSp<input type=\"submit\" name=\"etaddrow\" id=\"etaddrow\" value=\"Add row\" class=\"twikiButton\" />\n";
+"$preSp<input type=\"submit\" name=\"etaddrow\" id=\"etaddrow\" value=\"$prefADD_ROW_BUTTON\" class=\"twikiButton\" />\n";
             $text .=
-"$preSp<input type=\"submit\" name=\"etdelrow\" id=\"etdelrow\" value=\"Delete last row\" class=\"twikiButton\" />\n"
+"$preSp<input type=\"submit\" name=\"etdelrow\" id=\"etdelrow\" value=\"$prefDELETE_LAST_ROW_BUTTON\" class=\"twikiButton\" />\n"
               unless ( $params{'changerows'} =~ /^add$/oi );
         }
         $text .=
-"$preSp<input type=\"submit\" name=\"etcancel\" id=\"etcancel\" value=\"Cancel\" class=\"twikiButton twikiButtonCancel\" />\n";
+"$preSp<input type=\"submit\" name=\"etcancel\" id=\"etcancel\" value=\"$prefCANCEL_BUTTON\" class=\"twikiButton twikiButtonCancel\" />\n";
 
         if ( $params{'helptopic'} ) {
 
@@ -573,7 +593,7 @@ sub viewEditCell {
     $img = $bits[3] if ( @bits > 3 );
 
     unless ($value) {
-        $value = $prefEDITBUTTON || '';
+        $value = $prefEDIT_BUTTON || '';
         $img = '';
         if ( $value =~ s/(.+),\s*(.+)/$1/o ) {
             $img = $2;
@@ -655,8 +675,8 @@ sub inputElement {
             $valExpanded = $bitsExpanded[$i] || '';
             $expandedValue =~ s/^\s+//;
             $expandedValue =~ s/\s+$//;
-            $valExpanded =~ s/^\s+//;
-            $valExpanded =~ s/\s+$//;
+            $valExpanded   =~ s/^\s+//;
+            $valExpanded   =~ s/\s+$//;
             if ( $valExpanded eq $expandedValue ) {
                 $text .= " <option selected=\"selected\">$val</option>";
             }
@@ -684,12 +704,13 @@ sub inputElement {
             $valExpanded = $bitsExpanded[$i] || "";
             $expandedValue =~ s/^\s+//;
             $expandedValue =~ s/\s+$//;
-            $valExpanded =~ s/^\s+//;
-            $valExpanded =~ s/\s+$//;
+            $valExpanded   =~ s/^\s+//;
+            $valExpanded   =~ s/\s+$//;
             $text .= " <input type=\"radio\" name=\"$theName\" value=\"$val\"";
+
             # make space to expand variables
             $val = " $val ";
-            $val =~ s/^\s+/ /; # remove extra spaces
+            $val =~ s/^\s+/ /;    # remove extra spaces
             $val =~ s/\s+$/ /;
             $text .= " checked=\"checked\""
               if ( $valExpanded eq $expandedValue );
@@ -726,16 +747,17 @@ sub inputElement {
             $valExpanded = $bitsExpanded[$i] || "";
             $expandedValue =~ s/^\s+//;
             $expandedValue =~ s/\s+$//;
-            $valExpanded =~ s/^\s+//;
-            $valExpanded =~ s/\s+$//;
+            $valExpanded   =~ s/^\s+//;
+            $valExpanded   =~ s/\s+$//;
             $names .= " ${theName}x$i";
             $text .=
               " <input type=\"checkbox\" name=\"${theName}x$i\" value=\"$val\"";
+
             # make space to expand variables
             $val = " $val ";
-            $val =~ s/^\s+/ /; # remove extra spaces
+            $val =~ s/^\s+/ /;    # remove extra spaces
             $val =~ s/\s+$/ /;
-            
+
             $text .= " checked=\"checked\""
               if ( $expandedValue =~ /(^|\s*,\s*)\Q$valExpanded\E(\s*,\s*|$)/ );
             $text .= " />$val";
@@ -751,8 +773,7 @@ sub inputElement {
             $i++;
         }
         $text .= "</td></tr></table>" if ( $lines > 1 );
-        $text .=
-          "<input type=\"hidden\" name=\"$theName\" value=\"$names\" />";
+        $text .= "<input type=\"hidden\" name=\"$theName\" value=\"$names\" />";
         $text .= saveEditCellFormat( $cellFormat, $theName );
 
     }
@@ -803,8 +824,8 @@ sub inputElement {
     }
     elsif ( $type eq 'textarea' ) {
         my ( $rows, $cols ) = split( /x/, $size );
-        
-        $rows |= 3 if !defined $rows;
+
+        $rows |= 3  if !defined $rows;
         $cols |= 30 if !defined $cols;
 
         $theValue = TWiki::Plugins::EditTablePlugin::encodeValue($theValue)
@@ -899,11 +920,13 @@ sub handleTableRow {
                 my $chkBoxVals   = "";
                 foreach ( split( /\s/, $chkBoxeNames ) ) {
                     $val = $query->param($_);
+
                     #$chkBoxVals .= "$val," if ( defined $val );
                     if ( defined $val ) {
+
                         # make space to expand variables
                         $val = " $val ";
-                        $val =~ s/^\s+/ /; # remove extra spaces
+                        $val =~ s/^\s+/ /;    # remove extra spaces
                         $val =~ s/\s+$/ /;
                         $chkBoxVals .= $val . ',';
                     }
