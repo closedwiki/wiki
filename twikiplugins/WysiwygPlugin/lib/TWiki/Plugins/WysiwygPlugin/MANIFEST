@@ -1,3 +1,4 @@
+lib/TWiki/Plugins/WysiwygPlugin/Constants.pm 0444 Perl module
 lib/TWiki/Plugins/WysiwygPlugin/HTML2TML/WC.pm 0444 Perl module
 lib/TWiki/Plugins/WysiwygPlugin/HTML2TML/Leaf.pm 0444 Perl module
 lib/TWiki/Plugins/WysiwygPlugin/HTML2TML/Node.pm 0444 Perl module
