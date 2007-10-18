@@ -413,5 +413,65 @@ END
     $twiki->finish();
 }
 
+=pod
+
+Test select dropdown box
+
+=cut
+
+sub test_VariableExpansionInCheckboxAndRadioButtons {
+    my $this = shift;
+
+    my $topicName = $this->{test_topic};
+    my $webName   = $this->{test_web};
+    my $viewUrl = TWiki::Func::getScriptUrl( $webName, $topicName, 'viewauth' );
+    my $pubUrlTWikiWeb =
+      TWiki::Func::getUrlHost() . TWiki::Func::getPubUrlPath() . '/TWiki';
+
+    my $query = new CGI(
+        {
+            etedit    => ['on'],
+            ettablenr => ['1'],
+        }
+    );
+	$query->path_info("/$webName/$topicName");
+
+    #TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
+    #    $input );
+        
+        my $text = <<INPUT;
+%EDITTABLE{format="| radio, 1, :skull:, :cool: | checkbox, 1, :skull:, :cool: |"}%
+INPUT
+
+    my $twiki = new TWiki( undef, $query );
+    $TWiki::Plugins::SESSION = $twiki;
+    my $result =
+      TWiki::Func::expandCommonVariables( $text, $topicName, $webName, undef );
+
+    my $expected = <<END;
+<noautolink>
+<a name="edittable1"></a>
+
+<div class="editTable editTableEdit"><form name="edittable1" action="$viewUrl#edittable1" method="post">
+<input class="twikiInputField" type="hidden" name="ettablenr" value="1" />
+<nop>
+<table cellspacing="0" id="default" cellpadding="0" class="twikiTable" rules="rows" border="1">
+	<tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+		<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <table class="editTableInnerTable"><tr><td valign="top"> <input type="radio" name="etcell1x1" value=":skull:" /> <img src="http://tarazona.local/~webserver/twiki/pub/TWiki/SmiliesPlugin/skull.gif" alt="skull" title="skull" border="0" /> <br /> <input type="radio" name="etcell1x1" value=":cool:" /> <img src="http://tarazona.local/~webserver/twiki/pub/TWiki/SmiliesPlugin/cool.gif" alt="cool!" title="cool!" border="0" /> </td></tr></table> </td>
+		<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> <table class="editTableInnerTable"><tr><td valign="top"> <input type="checkbox" name="etcell1x2x2" value=":skull:" checked="checked" /> <img src="http://tarazona.local/~webserver/twiki/pub/TWiki/SmiliesPlugin/skull.gif" alt="skull" title="skull" border="0" /> <br /> <input type="checkbox" name="etcell1x2x3" value=":cool:" checked="checked" /> <img src="http://tarazona.local/~webserver/twiki/pub/TWiki/SmiliesPlugin/cool.gif" alt="cool!" title="cool!" border="0" /> </td></tr></table><input type="hidden" name="etcell1x2" value="Chkbx: etcell1x2x2 etcell1x2x3" /> </td>
+	</tr></table>
+<input type="hidden" name="etrows" value="1" />
+<input type="submit" name="etsave" id="etsave" value="Save table" class="twikiSubmit" />
+<input type="submit" name="etqsave" id="etqsave" value="Quiet save" class="twikiButton" />
+<input type="submit" name="etaddrow" id="etaddrow" value="Add row" class="twikiButton" />
+<input type="submit" name="etdelrow" id="etdelrow" value="Delete last row" class="twikiButton" />
+<input type="submit" name="etcancel" id="etcancel" value="Cancel" class="twikiButton twikiButtonCancel" />
+</form>
+</div><!-- /editTable --></noautolink>
+END
+
+    $this->do_testHtmlOutput( $expected, $result, 1 );
+    $twiki->finish();
+}
 
 1;
