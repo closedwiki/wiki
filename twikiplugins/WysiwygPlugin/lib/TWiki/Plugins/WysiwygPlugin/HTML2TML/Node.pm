@@ -33,8 +33,7 @@ See also TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf
 =cut
 
 package TWiki::Plugins::WysiwygPlugin::HTML2TML::Node;
-use TWiki::Plugins::WysiwygPlugin::HTML2TML::WC;
-use base 'WC';
+use base 'TWiki::Plugins::WysiwygPlugin::HTML2TML::WC';
 
 use strict;
 
@@ -42,6 +41,9 @@ use TWiki::Func; # needed for regular expressions
 use Assert;
 
 use vars qw( $reww );
+
+use TWiki::Plugins::WysiwygPlugin::Constants;
+use TWiki::Plugins::WysiwygPlugin::HTML2TML::WC;
 
 =pod
 
@@ -91,7 +93,7 @@ sub stringify {
         }
     }
     if( $this->{tag} ) {
-        $r .= '</'.lc($this->{tag}).'>';
+        $r .= '</'.$this->{tag}.'>';
     }
     return $r;
 }
@@ -227,6 +229,20 @@ sub rootGenerate {
 
     $text =~ s/&nbsp;/$WC::NBSP/go;
 
+    # isolate whitespace checks and convert to $NBSP
+    $text =~ s/$WC::CHECKw$WC::CHECKw+/$WC::CHECKw/go;
+    $text =~ s/(?<=[$WC::CHECKn$WC::CHECKs$WC::NBSP $WC::TAB$WC::NBBR])$WC::CHECKw//go;
+    $text =~ s/$WC::CHECKw(?=[$WC::CHECKn$WC::CHECKs$WC::NBSP $WC::NBBR])//go;
+    $text =~ s/^($WC::CHECKw)+//gos;
+    $text =~ s/($WC::CHECKw)+$//gos;
+    $text =~ s/($WC::CHECKw)+/$WC::NBSP/go;
+
+    # isolate $CHECKs and convert to $NBSP
+    $text =~ s/$WC::CHECKs$WC::CHECKs+/$WC::CHECKs/go;
+    $text =~ s/([ $WC::NBSP$WC::TAB])$WC::CHECKs/$1/go;
+    $text =~ s/$WC::CHECKs( |$WC::NBSP)/$1/go;
+    $text =~ s/($WC::CHECKs)+/$WC::NBSP/go;
+
     my @regions = split(/([$WC::PON$WC::POFF])/o, $text);
     my $protect = 0;
     $text = '';
@@ -238,21 +254,6 @@ sub rootGenerate {
             $protect--;
             next;
         }
-        #my $before = $tml;
-
-        # isolate whitespace checks and convert to $NBSP
-        $tml =~ s/$WC::CHECKw$WC::CHECKw+/$WC::CHECKw/go;
-        $tml =~ s/(?<=[$WC::CHECKn$WC::CHECKs$WC::NBSP $WC::TAB$WC::NBBR])$WC::CHECKw//go;
-        $tml =~ s/$WC::CHECKw(?=[$WC::CHECKn$WC::CHECKs$WC::NBSP $WC::NBBR])//go;
-        $tml =~ s/^($WC::CHECKw)+//gos;
-        $tml =~ s/($WC::CHECKw)+$//gos;
-        $tml =~ s/($WC::CHECKw)+/$WC::NBSP/go;
-
-        # isolate $CHECKs and convert to $NBSP
-        $tml =~ s/$WC::CHECKs$WC::CHECKs+/$WC::CHECKs/go;
-        $tml =~ s/([ $WC::NBSP$WC::TAB])$WC::CHECKs/$1/go;
-        $tml =~ s/$WC::CHECKs( |$WC::NBSP)/$1/go;
-        $tml =~ s/($WC::CHECKs)+/$WC::NBSP/go;
 
         # isolate $NBBR and convert to \n.
         unless ($protect) {
@@ -377,10 +378,13 @@ sub generate {
     my $flags;
     my $text;
 
-    my $tag = uc( $this->{tag} );
+    return $this->_defaultTag($options) if
+      $this->_isProtectedByAttrs();
+
+    my $tag = $this->{tag};
 
     if ($this->hasClass('WYSIWYG_LITERAL')) {
-        if ($tag eq 'DIV' || $tag eq 'P' || $tag eq 'SPAN') {
+        if ($tag eq 'div' || $tag eq 'p' || $tag eq 'span') {
             $text = '';
             my $kid = $this->{head};
             while ($kid) {
@@ -406,7 +410,7 @@ sub generate {
 
     # make the names of the function versions
     $tag =~ s/!//; # DOCTYPE
-    my $tmlFn = '_handle'.$tag;
+    my $tmlFn = '_handle'.uc($tag);
 
     # See if we have a TML translation function for this tag
     # the translation functions will work out the rendering
@@ -435,7 +439,8 @@ sub _flatten {
     my $flags = 0;
 
     my $protected = ($options & $WC::PROTECTED) ||
-      $this->hasClass('WYSIWYG_PROTECTED') || 0;
+      $this->hasClass('WYSIWYG_PROTECTED') ||
+        $this->hasClass('WYSIWYG_STICKY') || 0;
 
     if ($protected) {
         # Expand brs, which are used in the protected encoding in place of
@@ -485,7 +490,7 @@ sub _htmlParams {
         if( $k eq 'class' ) {
             # if cleaning aggressively, remove class attributes completely
             next if ($options & $WC::VERY_CLEAN);
-            foreach my $c qw(WYSIWYG_PROTECTED WYSIWYG_NOAUTOLINK TMLverbatim WYSIWYG_LINK) {
+            foreach my $c qw(WYSIWYG_PROTECTED WYSIWYG_STICKY TMLverbatim WYSIWYG_LINK) {
                 $v =~ s/\b$c\b//;
             }
             $v =~ s/\s+/ /;
@@ -504,25 +509,39 @@ sub _htmlParams {
 sub _defaultTag {
     my( $this, $options ) = @_;
     my( $flags, $text ) = $this->_flatten( $options );
-    my $tag = lc( $this->{tag} );
+    my $tag = $this->{tag};
     my $p = _htmlParams( $this->{attrs}, $options );
 
-    if( $text =~ /^\s*$/ ) {
+    if( $text =~ /^\s*$/ && $WC::selfClosing{$tag}) {
         return ( $flags, '<'.$tag.$p.' />' );
     } else {
         return ( $flags, '<'.$tag.$p.'>'.$text.'</'.$tag.'>' );
     }
 }
 
+# Check to see if the HTML tag is protected by the presence of
+# specific attributes that block conversion to TML. The conversion
+# table is defined in 
+sub _isProtectedByAttrs {
+    my $this = shift;
+
+    require TWiki::Plugins::WysiwygPlugin;
+    foreach my $attr (keys %{$this->{attrs}}) {
+        return 1 if TWiki::Plugins::WysiwygPlugin::protectedByAttr(
+            $this->{tag}, $attr);
+    }
+    return 0;
+}
+
 # perform conversion on a list type
 sub _convertList {
     my( $this, $indent ) = @_;
     my $basebullet;
-    my $isdl = ( lc( $this->{tag} ) eq 'dl' );
+    my $isdl = ( $this->{tag} eq 'dl' );
 
     if( $isdl ) {
         $basebullet = '';
-    } elsif( lc( $this->{tag} ) eq 'ol' ) {
+    } elsif( $this->{tag} eq 'ol' ) {
         $basebullet = '1';
     } else {
         $basebullet = '*';
@@ -543,7 +562,7 @@ sub _convertList {
             $kid = $kid->{next};
             next;
         }
-        if( $isdl && ( lc( $kid->{tag} ) eq 'dt' )) {
+        if( $isdl && ( $kid->{tag} eq 'dt' )) {
             # DT, set the bullet type for subsequent DT
             $basebullet = $kid->_flatten( $WC::NO_BLOCK_TML );
             $basebullet =~ s/[\s$WC::CHECKw$WC::CHECKs]+$//;
@@ -591,6 +610,8 @@ sub _convertList {
 sub _isConvertableList {
     my( $this, $options ) = @_;
 
+    return 0 if ($this->_isProtectedByAttrs());
+
     my $kid = $this->{head};
     while ($kid) {
         # check for malformed list. We can still handle it,
@@ -614,10 +635,12 @@ sub _isConvertableListItem {
     my( $this, $options, $parent ) = @_;
     my( $flags, $text );
 
-    if( lc( $parent->{tag} ) eq 'dl' ) {
+    return 0 if ($this->_isProtectedByAttrs());
+
+    if( $parent->{tag} eq 'dl' ) {
         return 0 unless( $this->{tag} =~ /^d[td]$/i );
     } else {
-        return 0 unless( lc( $this->{tag} ) eq 'li' );
+        return 0 unless( $this->{tag} eq 'li' );
     }
 
     my $kid = $this->{head};
@@ -641,12 +664,15 @@ sub _isConvertableListItem {
 # can be converted to TML.
 sub _isConvertableTable {
     my( $this, $options, $table ) = @_;
+
+    return 0 if ($this->_isProtectedByAttrs());
+
     my $kid = $this->{head};
     while ($kid) {
-        if( $kid->{tag} =~ /^(colgroup|thead|tbody|tfoot|col)$/i ) {
+        if( $kid->{tag} =~ /^(colgroup|thead|tbody|tfoot|col)$/ ) {
             return 0 unless( $kid->_isConvertableTable( $options, $table ));
         } elsif( $kid->{tag} ) {
-            return 0 unless( lc( $kid->{tag} ) eq 'tr' );
+            return 0 unless( $kid->{tag} eq 'tr' );
             my $row = $kid->_isConvertableTableRow( $options );
             return 0 unless $row;
             push( @$table, $row );
@@ -669,17 +695,19 @@ sub _TDtrim {
 # containing table can be converted to TML.
 sub _isConvertableTableRow {
     my( $this, $options ) = @_;
-    my( $flags, $text );
 
+    return 0 if ($this->_isProtectedByAttrs());
+
+    my( $flags, $text );
     my @row;
     my $ignoreCols = 0;
     my $kid = $this->{head};
     while ($kid) {
-        if (lc($kid->{tag}) eq 'th') {
+        if ($kid->{tag} eq 'th') {
             ( $flags, $text ) = $kid->_flatten( $options );
             $text = _TDtrim( $text );
             $text = "*$text*" if length($text);
-        } elsif (lc($kid->{tag}) eq 'td' ) {
+        } elsif ($kid->{tag} eq 'td' ) {
             ( $flags, $text ) = $kid->_flatten( $options );
             $text = _TDtrim( $text );
         } elsif( !$kid->{tag} ) {
@@ -793,7 +821,7 @@ sub _emphasis {
 
 # generate verbatim for P, SPAN or PRE
 sub _verbatim {
-    my ($this, $options) = @_;
+    my ($this, $tag, $options) = @_;
 
     $options |= $WC::PROTECTED|$WC::KEEP_ENTITIES|$WC::BR2NL | $WC::KEEP_WS;
     my( $flags, $text ) = $this->_flatten($options);
@@ -803,7 +831,7 @@ sub _verbatim {
     # &nbsp; decodes to \240, which we want to make a space.
     $text =~ s/\240/$WC::NBSP/g;
     my $p = _htmlParams($this->{attrs}, $options);
-    return ($flags, "<verbatim$p>$text</verbatim>");
+    return ($flags, "<$tag$p>$text</$tag>");
 }
 
 # pseudo-tags that may leak through in TWikiVariables
@@ -926,13 +954,11 @@ sub _handleA {
 sub _handleABBR { return _flatten( @_ ); };
 sub _handleACRONYM { return _flatten( @_ ); };
 sub _handleADDRESS { return _flatten( @_ ); };
-sub _handleAPPLET { return( 0, '' ); };
-sub _handleAREA { return( 0, '' ); };
 
 sub _handleB { return _emphasis( @_, '*' ); }
 sub _handleBASE { return ( 0, '' ); }
 sub _handleBASEFONT { return ( 0, '' ); }
-sub _handleBDO { return( 0, '' ); };
+
 sub _handleBIG { return( 0, '' ); };
 # BLOCKQUOTE
 sub _handleBODY { return _flatten( @_ ); }
@@ -954,7 +980,9 @@ sub _handleBR {
         if ($this->isInline()) {
             # Both <br> and </br> cause a NL
             # if this is empty, look at next
-            if ($kids !~ /^[\000-\037]*$/ || $this->nextIsInline()) {
+            if ($kids !~ /^[\000-\037]*$/ &&
+                  $kids !~ /^[\000-\037]*$WC::NBBR/ ||
+                    $this->nextIsInline()) {
                 $sep = '<br />';
             }
         }
@@ -1012,7 +1040,6 @@ sub _handleH4     { return _H( @_, 4 ); }
 sub _handleH5     { return _H( @_, 5 ); }
 sub _handleH6     { return _H( @_, 6 ); }
 sub _handleI      { return _emphasis( @_, '_' ); }
-sub _handleIFRAME { return( 0, '' ); };
 
 sub _handleIMG {
     my( $this, $options ) = @_;
@@ -1042,18 +1069,11 @@ sub _handleIMG {
     return ( 0, undef );
 }
 
-sub _handleINPUT {
-    my( $this, $options ) = @_;
-    if( $options & $WC::VERY_CLEAN ) {
-        return $this->_flatten( $options );
-    }
-    return (0, undef);
-}
-
+# INPUT
 # INS
-sub _handleISINDEX  { return( 0, '' ); };
+# ISINDEX
 sub _handleKBD      { return _handleTT( @_ ); }
-sub _handleLABEL    { return( 0, '' ); };
+# LABEL
 # LI
 sub _handleLINK     { return( 0, '' ); };
 # MAP
@@ -1061,7 +1081,6 @@ sub _handleLINK     { return( 0, '' ); };
 sub _handleMETA     { return ( 0, '' ); }
 sub _handleNOFRAMES { return ( 0, '' ); }
 sub _handleNOSCRIPT { return ( 0, '' ); }
-sub _handleOBJECT   { return ( 0, '' ); }
 sub _handleOL       { return _LIST( @_ ); }
 # OPTGROUP
 # OPTION
@@ -1070,7 +1089,10 @@ sub _handleP {
     my( $this, $options ) = @_;
 
     if ($this->hasClass('TMLverbatim')) {
-        return $this->_verbatim($options);
+        return $this->_verbatim('verbatim', $options);
+    }
+    if ($this->hasClass('WYSIWYG_STICKY')) {
+        return $this->_verbatim('sticky', $options);
     }
 
     my( $f, $kids ) = $this->_flatten( $options );
@@ -1082,14 +1104,17 @@ sub _handleP {
     return ($f | $WC::BLOCK_TML, $pre.$WC::NBBR.$kids.$WC::NBBR);
 }
 
-sub _handlePARAM { return ( 0, '' ); }
+# PARAM
 
 sub _handlePRE {
     my( $this, $options ) = @_;
 
     my $tag = 'pre';
     if( $this->hasClass('TMLverbatim')) {
-        return $this->_verbatim($options);
+        return $this->_verbatim('verbatim', $options);
+    }
+    if ($this->hasClass('WYSIWYG_STICKY')) {
+        return $this->_verbatim('sticky', $options);
     }
     unless( $options & $WC::NO_BLOCK_TML ) {
         my( $flags, $text ) = $this->_flatten(
@@ -1112,14 +1137,10 @@ sub _handleSPAN {
 
     my %atts = %{$this->{attrs}};
     if (_removeClass(\%atts, 'TMLverbatim')) {
-        return $this->_verbatim($options);
+        return $this->_verbatim('verbatim', $options);
     }
-
-    if( _removeClass(\%atts, 'WYSIWYG_NOAUTOLINK')) {
-        my( $flags, $text ) = $this->_flatten( $options );
-        my $p = _htmlParams( $this->{attrs}, $options);
-        return ($flags, "<noautolink$p>".$text.
-                  "</noautolink>");
+    if (_removeClass(\%atts, 'WYSIWYG_STICKY')) {
+        return $this->_verbatim('sticky', $options);
     }
 
     if( _removeClass(\%atts, 'WYSIWYG_LINK')) {
@@ -1184,22 +1205,15 @@ sub _handleTABLE {
     return ( $WC::BLOCK_TML, $text );
 }
 
-#sub _handleTBODY { return _flatten( @_ ); }
-#sub _handleTD { return _flatten( @_ ); }
+# TBODY
+# TD
 
-#sub _handleTEXTAREA {
-#    my( $this, $options ) = @_;
-#    if( $options & $WC::VERY_CLEAN ) {
-#        return $this->_flatten( $options );
-#    }
-#    return (0, undef);
-#}
-#
-#sub _handleTFOOT { return _flatten( @_ ); }
-#sub _handleTH    { return _flatten( @_ ); }
-#sub _handleTHEAD { return _flatten( @_ ); }
+# TEXTAREA {
+# TFOOT
+# TH
+# THEAD
 sub _handleTITLE { return (0, '' ); }
-#sub _handleTR    { return _flatten( @_ ); }
+# TR
 sub _handleTT    { return _handleCODE( @_ ); }
 # U
 sub _handleUL    { return _LIST( @_ ); }

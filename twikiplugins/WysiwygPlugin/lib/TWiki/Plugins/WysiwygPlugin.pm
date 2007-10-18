@@ -112,6 +112,10 @@ sub _OTOPICTAG {
     return $theTopic;
 }
 
+sub startRenderingHandler {
+    $_[0] =~ s#</?sticky>##g;
+}
+
 # This handler is used to determine whether the topic is editable by
 # a WYSIWYG editor or not. The only thing it does is to redirect to a
 # normal edit url if the skin is set to WYSIWYGPLUGIN_WYSIWYGSKIN and
@@ -585,6 +589,60 @@ sub _restHTML2TML {
             very_clean => 1,
         });
     return $tml;
+}
+
+# PACKAGE PRIVATE
+# Determine if sticky attributes prevent a tag being converted to
+# TML when this attribute is present.
+my @protectedByAttr;
+sub protectedByAttr {
+    my ($tag, $attr) = @_;
+
+    unless (scalar(@protectedByAttr)) {
+        my $protection =
+          TWiki::Func::getPreferencesValue('WYSIWYGPLUGIN_STICKYBITS') ||
+              <<'DEFAULT';
+.*=id,lang,title,dir,on.*;
+a=accesskey,coords,shape,target;
+bdo=dir;
+br=clear;
+col=char,charoff,span,valign,width;
+colgroup=align,char,charoff,span,valign,width;
+dir=compact;
+div=align;
+dl=compact;
+font=color,size,face;
+h\d=align;
+hr=align,noshade,size,width;
+legend=accesskey,align;
+li=value;
+ol=compact,start,type;
+p=align;
+param=name,type,value,valuetype;
+pre=width;
+q=cite;
+table=align,bgcolor,frame,rules,summary,width;
+tbody=align,char,charoff,valign;
+td=abbr,align,axis,bgcolor,char,charoff,headers,height,nowrap,rowspan,scope,valign,width;
+tfoot=align,char,charoff,valign;
+th=abbr,align,axis,bgcolor,char,charoff,height,nowrap,rowspan,scope,valign,width,headers;
+thead=align,char,charoff,valign;
+tr=bgcolor,char,charoff,valign;
+ul=compact,type;
+DEFAULT
+        foreach my $def (split(/;\s*/s, $protection)) {
+            my ($re, $ats) = split(/\s*=\s*/s, $def, 2);
+            push(@protectedByAttr,
+                 { tag => qr/$re/,
+                   attrs => join('|', split(/\s*,\s*/, $ats)) });
+        }
+    }
+    foreach my $row (@protectedByAttr) {
+        if ($tag =~ /^$row->{tag}$/i) {
+            return 1 if ($attr =~ /^($row->{attrs})$/i);
+        }
+    }
+    return 0;
 }
 
 1;

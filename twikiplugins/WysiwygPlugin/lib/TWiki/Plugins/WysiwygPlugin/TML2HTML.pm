@@ -35,22 +35,26 @@ TML syntax is not supported.
 package TWiki::Plugins::WysiwygPlugin::TML2HTML;
 
 use strict;
-use TWiki;
 use CGI qw( -any );
+
+require TWiki;
+use TWiki::Plugins::WysiwygPlugin::Constants;
 
 my $TT0 = chr(0);
 my $TT1 = chr(1);
 my $TT2 = chr(2);
 
-my $STARTWW = qr/^|(?<=[\s\(])/m;
-my $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
-
-# HTML elements that are palatable to editors. Other HTM tags will be
+# HTML elements that are palatable to editors. Other HTML tags will be
 # rendered in 'protected' regions to prevent the WYSIWYG editor mussing
-# them up. Note that as well as the HTML tags we also consider NOAUTOLINK
-# palatable, even though it isn't HTML, because it will be used later in
-# the rendering process to generate a span.
-my $PALATABLE_HTML = qr/(A|ABBR|ACRONYM|ADDRESS|B|BDO|BIG|BLOCKQUOTE|BR|CAPTION|CENTER|CITE|CODE|COL|COLGROUP|DD|DEL|DFN|DIR|DIV|DL|DT|EM|FONT|H1|H2|H3|H4|H5|H6|HR|HTML|I|IMG|INS|ISINDEX|KBD|LABEL|LEGEND|LI|OL|P|PRE|Q|S|SAMP|SMALL|SPAN|STRONG|SUB|SUP|TABLE|TBODY|TD|TFOOT|TH|THEAD|TITLE|TR|TT|U|UL|NOAUTOLINK)/i;
+# them up.
+my @PALATABLE_TAGS = qw(
+A ABBR ACRONYM ADDRESS B BDO BIG BLOCKQUOTE BR CAPTION CENTER CITE CODE COL
+COLGROUP DD DEL DFN DIR DIV DL DT EM FONT H1 H2 H3 H4 H5 H6 HR HTML I IMG INS
+ISINDEX KBD LABEL LEGEND LI OL P PRE Q S SAMP SMALL SPAN STRONG SUB SUP TABLE
+TBODY TD TFOOT TH THEAD TITLE TR TT U UL STICKY
+                       );
+
+my $PALATABLE_HTML = '('.join('|', @PALATABLE_TAGS).')';
 
 =pod
 
@@ -138,7 +142,9 @@ sub _dropIn {
     my $method = 'CGI::'.$thing->{encoding};
     my $text = $thing->{text};
     $text = _encodeEntities($text) if
-      $thing->{type} eq 'PROTECTED' || $thing->{type} eq 'VERBATIM';
+      $thing->{type} eq 'PROTECTED' ||
+        $thing->{type} eq 'STICKY' ||
+          $thing->{type} eq 'VERBATIM';
     no strict 'refs';
     return &$method({class => 'WYSIWYG_'.$thing->{type} }, $text);
     use strict 'refs';
@@ -215,6 +221,8 @@ sub _getRenderedVersion {
 
     $text = $this->_takeOutBlocks( $text, 'literal' );
 
+    $text = $this->_takeOutBlocks( $text, 'sticky' );
+
     $text = $this->_takeOutSets( $text );
 
     # Remove PRE to prevent TML interpretation of text inside it
@@ -224,7 +232,7 @@ sub _getRenderedVersion {
     $text =~ s/(?<!\+!)!%(?=[A-Z][A-Z0-9_]*[{%])/%<nop>/g;
 
     # Change ' !AnyWord' to ' <nop>AnyWord',
-    $text =~ s/$STARTWW!(?=[$TWiki::regex{mixedAlphaNum}\*\=])/<nop>/gm;
+    $text =~ s/(^|(?<=[ \t\n\(]))!(?=[$TWiki::regex{mixedAlphaNum}\*\=])/<nop>/gm;
 
     # Change ' ![[...' to ' [<nop>[...'
     $text =~ s/(^|\s)!\[\[/$1\[<nop>\[/gm;
@@ -240,7 +248,7 @@ sub _getRenderedVersion {
     $text = $this->_processTags( $text );
 
     # protect some HTML tags.
-    $text =~ s/(<\/?(?!($PALATABLE_HTML)\b)[A-Z]+(\s[^>]*)?>)/
+    $text =~ s/(<\/?(?!(?i:$PALATABLE_HTML)\b)[A-Z]+(\s[^>]*)?>)/
       $this->_liftOut($1, 'PROTECTED')/gei;
 
     $text =~ s/\\\n//gs;  # Join lines ending in '\'
@@ -389,15 +397,15 @@ sub _getRenderedVersion {
     $text =~ s#^(\s*<p>\s*</p>)+##s;
     $text =~ s#(<p>\s*</p>\s*)+$##s;
 
-    $text =~ s(${STARTWW}==([^\s]+?|[^\s].*?[^\s])==$ENDWW)
+    $text =~ s(${WC::STARTWW}==([^\s]+?|[^\s].*?[^\s])==$WC::ENDWW)
       (CGI::b(CGI::code($1)))gem;
-    $text =~ s(${STARTWW}__([^\s]+?|[^\s].*?[^\s])__$ENDWW)
+    $text =~ s(${WC::STARTWW}__([^\s]+?|[^\s].*?[^\s])__$WC::ENDWW)
       (CGI::b(CGI::i($1)))gem;
-    $text =~ s(${STARTWW}\*([^\s]+?|[^\s].*?[^\s])\*$ENDWW)
+    $text =~ s(${WC::STARTWW}\*([^\s]+?|[^\s].*?[^\s])\*$WC::ENDWW)
       (CGI::b($1))gem;
-    $text =~ s(${STARTWW}\_([^\s]+?|[^\s].*?[^\s])\_$ENDWW)
+    $text =~ s(${WC::STARTWW}\_([^\s]+?|[^\s].*?[^\s])\_$WC::ENDWW)
       (CGI::i($1))gem;
-    $text =~ s(${STARTWW}\=([^\s]+?|[^\s].*?[^\s])\=$ENDWW)
+    $text =~ s(${WC::STARTWW}\=([^\s]+?|[^\s].*?[^\s])\=$WC::ENDWW)
       (CGI::code($1))gem;
 
     # Handle [[][] and [[]] links
@@ -407,26 +415,23 @@ sub _getRenderedVersion {
     # [[][]]
     $text =~ s/(\[\[[^\]]*\](\[[^\]]*\])?\])/$this->_liftOut($1, 'LINK')/ge;
 
-    # Handle WikiWords
-    $text = $this->_takeOutBlocks( $text, 'noautolink' );
-
-    $text =~ s/$STARTWW(($TWiki::regex{webNameRegex}\.)?$TWiki::regex{wikiWordRegex}($TWiki::regex{anchorRegex})?)/$this->_liftOut($1, 'LINK')/geom;
+    $text =~ s/$WC::STARTWW(($TWiki::regex{webNameRegex}\.)?$TWiki::regex{wikiWordRegex}($TWiki::regex{anchorRegex})?)/$this->_liftOut($1, 'LINK')/geom;
 
     while (my ($placeholder, $val) = each %{$this->{removed}} ) {
-        if( $placeholder =~ /^noautolink/i ) {
-            _addClass( $val->{params}->{class}, 'WYSIWYG_NOAUTOLINK' );
-        } elsif( $placeholder =~ /^verbatim/i ) {
+        if( $placeholder =~ /^verbatim/i ) {
             _addClass( $val->{params}->{class}, 'TMLverbatim');
         } elsif( $placeholder =~ /^literal/i ) {
             _addClass( $val->{params}->{class}, 'WYSIWYG_LITERAL');
+        } elsif( $placeholder =~ /^sticky/i ) {
+            _addClass( $val->{params}->{class}, 'WYSIWYG_STICKY');
         }
     }
 
-    $this->_putBackBlocks( $text, 'noautolink', 'span' );
-
     $this->_putBackBlocks( $text, 'pre' );
 
-    $this->_putBackBlocks( $text, 'literal', 'span' );
+    $this->_putBackBlocks( $text, 'literal', 'div' );
+
+    $this->_putBackBlocks( $text, 'sticky', 'div', \&_encodeEntities );
 
     # replace verbatim with pre in the final output, with encoded entities
     $this->_putBackBlocks( $text, 'verbatim', 'pre', \&_encodeEntities );
@@ -577,13 +582,19 @@ sub _takeOutBlocks {
 
 sub _putBackBlocks {
     my( $this, $text, $tag, $newtag, $callback ) = @_;
-    my $fn = 'CGI::'.($newtag || $tag);
     $newtag ||= $tag;
+    my $fn;
     while (my ($placeholder, $val) = each %{$this->{removed}}) {
         if( $placeholder =~ /^$tag\d+$/ ) {
             my $params = $val->{params};
             my $val = $val->{text};
             $val = &$callback( $val ) if ( defined( $callback ));
+            # Use div instead of span if the block contains block HTML
+            if ($newtag eq 'span' && $val =~ m#</?($WC::ALWAYS_BLOCK_S)\b#io) {
+                $fn = 'CGI::div';
+            } else {
+                $fn = 'CGI::'.$newtag;
+            }
             no strict 'refs';
             $_[1] =~ s/$TT0$placeholder$TT0/&$fn($params, $val)/e;
             use strict 'refs';
