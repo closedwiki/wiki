@@ -54,15 +54,17 @@ my %w = (
 
 =begin twiki
 
----+++ TWiki::Contrib::JSCalendarContrib::renderDateForEdit($name, $value, $format) -> $html
+---+++ TWiki::Contrib::JSCalendarContrib::renderDateForEdit($name, $value, $format [, \%cssClass]) -> $html
 
 This is the simplest way to use calendars from a plugin.
    * =$name= is the name of the CGI parameter for the calendar
      (it should be unique),
    * =$value= is the current value of the parameter (may be undef)
    * =$format= is the format to use (optional; the default is set
-     in =configure=). The
-HTML returned will display a date field and a drop-down calendar.
+     in =configure=). The HTML returned will display a date field
+     and a drop-down calendar.
+   * =\%options= is an optional hash containing base options for
+     the textfield.
 Example:
 <verbatim>
 use TWiki::Contrib::JSCalendarContrib;
@@ -76,7 +78,7 @@ my $toDate = TWiki::Contrib::JSCalendarContrib::renderDateForEdit(
 =cut
 
 sub renderDateForEdit {
-    my ($name, $value, $format) = @_;
+    my ($name, $value, $format, $options) = @_;
 
     $format ||= $TWiki::cfg{JSCalendarContrib}{format} || '%e %B %Y';
 
@@ -87,12 +89,13 @@ sub renderDateForEdit {
     # box half a character too narrow if the exact size is used
     my $wide = $format.' ';
     $wide =~ s/(%(.))/$w{$2} ? ('_' x $w{$2}) : $1/ge;
+    $options ||= {};
+    $options->{name} = $name;
+    $options->{id} = 'id_'.$name;
+    $options->{value} = $value || '';
+    $options->{size} ||= length($wide);
 
-    return CGI::textfield(
-        -name => $name,
-        -id => 'id_'.$name,
-        -size => length($wide),
-        -default => $value || '')
+    return CGI::textfield($options)
       . CGI::image_button(
           -name => 'img_'.$name,
           -onclick =>
@@ -154,6 +157,16 @@ sub addHEAD {
     my $style = $TWiki::cfg{JSCalendarContrib}{style} || 'blue';
     my $lang = $TWiki::cfg{JSCalendarContrib}{lang} || 'en';
     my $base = '%PUBURLPATH%/%SYSTEMWEB%/JSCalendarContrib';
+    eval {
+        require TWiki::Contrib::BehaviourContrib;
+        if (defined(&TWiki::Contrib::BehaviourContrib::addHEAD)) {
+            TWiki::Contrib::BehaviourContrib::addHEAD();
+        } else {
+            TWiki::Func::addToHEAD(
+                'BEHAVIOURCONTRIB',
+                '<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/BehaviourContrib/behaviour.compressed.js"></script>');
+        }
+    };
     my $head = <<HERE;
 <style type='text/css' media='all'>
   \@import url('$base/calendar-$style.css');
@@ -162,14 +175,14 @@ sub addHEAD {
 <script type='text/javascript' src='$base/calendar.js'></script>
 <script type='text/javascript' src='$base/lang/calendar-$lang.js'></script>
 HERE
-    TWiki::Func::addToHEAD( 'JSCALENDAR_HEAD', $head );
+    TWiki::Func::addToHEAD( 'JSCALENDARCONTRIB', $head );
 
     # Add the setup separately; there might be different setups required
     # in a single HTML page.
     $head = <<HERE;
 <script type='text/javascript' src='$base/$setup.js'></script>
 HERE
-    TWiki::Func::addToHEAD( 'JSCALENDAR_HEAD_'.$setup, $head );
+    TWiki::Func::addToHEAD( 'JSCALENDARCONTRIB_'.$setup, $head );
 }
 
 1;
