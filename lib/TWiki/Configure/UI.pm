@@ -202,25 +202,25 @@ sub authorised {
     # won't have been defined yet; so the authorisation must fail to force
     # a prompt.
     if (!defined($pass)) {
-        if (!$TWiki::cfg{Password}) {
-            # No password passed in, and TWiki::cfg doesn't contain a password
-            # Suggest that a password should be set.
-            print CGI::div({class=>'error'}, <<'HERE');
-WARNING: You have not defined a password. Your TWiki can be reconfigured
-by anyone who can run <code>configure</code>!
-HERE
-        }
         return 0;
     }
 
     # If we get this far, a password has been given. Check it.
-    if ($TWiki::cfg{Password} &&
-          crypt($pass, $TWiki::cfg{Password}) ne $TWiki::cfg{Password}) {
+    if (!$TWiki::cfg{Password} && !$TWiki::query->param('confCfgP')) {
+        # No password passed in, and TWiki::cfg doesn't contain a password
+        print CGI::div({class=>'error'}, <<'HERE');
+WARNING: You have not defined a password. You must define a password before
+you can save.
+HERE
+        return 0;
+    }
+
+    if (crypt($pass, $TWiki::cfg{Password}) ne $TWiki::cfg{Password}) {
         print CGI::div({class=>'error'}, "Password incorrect");
         return 0;
     }
 
-    # Password is correct, or no password has been defined.
+    # Password is correct
     # Change the password if so requested
     my $newPass = $TWiki::query->param('newCfgP');
 

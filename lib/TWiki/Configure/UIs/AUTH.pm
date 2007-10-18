@@ -34,7 +34,7 @@ sub ui {
 
     $output .= CGI::start_form({ action=>$ENV{SCRIPT_NAME}, method=>'post' });
 
-    # Pass URL params through, escept those below
+    # Pass URL params through, except those below
     foreach my $param ( $TWiki::query->param ) {
         next if ($nonos{$param});
         $output .= $this->hidden( $param, $TWiki::query->param( $param ));
@@ -59,7 +59,7 @@ sub ui {
         	CGI::p( CGI::strong('Forgotten your password?' )) .
         	CGI::p(<<'HERE'));
 To reset the password, log in to the server and delete the
-<code>$TWiki::cfg{Password} = '...';</code> line in
+<code>$TWiki::cfg{Password} = '...';</code> line from
 <code>lib/LocalSite.cfg</code>
 HERE
     }
