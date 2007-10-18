@@ -37,13 +37,13 @@ __Note:__ The =%<nop>EDITCELL{ }%=variable cannot be used by itself; place an =%
 
 <form>
    * In page view mode:
-      * <input type="submit" name="et"   value="Edit table" onclick="return(false);" /> - turn the table into edit mode
+      * <input type="submit" class="twikiSubmit" name="et"   value="Edit table" onclick="return(false);" /> - turn the table into edit mode
    * In edit mode:
-      * <input type="submit" name="etsave"   value="Save table"  onclick="return(false);" /> - save your changes
-      * <input type="submit" name="etqsave"   value="Quiet save"  onclick="return(false);" /> - save your changes without alerting subscribed WebNotify users
-      * <input type="submit" name="etaddrow" value="Add row" onclick="return(false);" /> - add row to the table (if enabled)
-      * <input type="submit" name="etdelrow" value="Delete last row" onclick="return(false);" /> - remove last row from the table (if enabled)
-      * <input type="submit" name="etcancel" value="Cancel" onclick="return(false);" /> - cancel without saving and release edit lock
+      * <input type="submit" class="twikiButton" name="etsave"   value="Save table"  onclick="return(false);" /> - save your changes
+      * <input type="submit" class="twikiButton" name="etqsave"   value="Quiet save"  onclick="return(false);" /> - save your changes without alerting subscribed WebNotify users
+      * <input type="submit" class="twikiButton" name="etaddrow" value="Add row" onclick="return(false);" /> - add row to the table (if enabled)
+      * <input type="submit" class="twikiButton" name="etdelrow" value="Delete last row" onclick="return(false);" /> - remove last row from the table (if enabled)
+      * <input type="submit" class="twikiButtonCancel" name="etcancel" value="Cancel" onclick="return(false);" /> - cancel without saving and release edit lock
       * <img src="%ATTACHURLPATH%/btn_move.gif"> - Move a row by clicking this button next to the row to
          be moved, then at a destination.
       * <img src="%ATTACHURLPATH%/btn_delete.gif"> - Deletes the row next to this button.
@@ -114,9 +114,14 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
    * Default flag for quiet save option: =on= to show the Quiet Save button, =off= to hide
       * Set QUIETSAVE = on
 
-   * Default edit button: Specify =button text=, or specify =alternate text, image URL=
-      * #Set EDITBUTTON = Edit table
-      * Set EDITBUTTON = Edit this table, %ATTACHURL%/edittable.gif
+   * Default edit button: Specify =button text=, or specify =alternate text, image URL=. Note: Texts inside =%<nop>MAKETEXT{}%= are translated into other languages.
+      * #Set EDIT_BUTTON = %MAKETEXT{"Edit table"}%
+      * Set EDIT_BUTTON = %MAKETEXT{"Edit this table"}%, %ATTACHURL%/edittable.gif
+      * Set SAVE_BUTTON = %MAKETEXT{"Save table"}%
+      * Set QUIET_SAVE_BUTTON = %MAKETEXT{"Quiet save"}%
+      * Set ADD_ROW_BUTTON = %MAKETEXT{"Add row"}%
+      * Set DELETE_LAST_ROW_BUTTON = %MAKETEXT{"Delete last row"}%
+      * Set CANCEL_BUTTON = %MAKETEXT{"Cancel"}%
 
 __Note:__ The Plugin uses base settings like date format, language and style from the JSCalendarContrib.
 
