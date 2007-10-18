@@ -169,6 +169,8 @@ function insertActionButtons(asset_url) {
 */
 function insertActionButtonsMove(asset_url) {
     
+    // do not show a move button for just one row
+    if (sEditTable.numrows <= 1 ) return;
     
     var action_cell,
     action_butt;
