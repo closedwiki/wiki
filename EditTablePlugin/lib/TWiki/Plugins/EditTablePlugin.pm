@@ -98,7 +98,7 @@ sub encodeValue {
     $theText =~ s/(.)/\.$1/gos;
 
     # convert <br /> markup to unicode linebreak character for text areas
-    $theText =~ s/.<.b.r. .\/.>/&#10;/gos;
+    $theText =~ s/.<.b.r. .\/.>\.*\s*/&#10;/gos;
     return $encodeStart . $theText . $encodeEnd;
 }
 
