@@ -185,6 +185,7 @@ sub renderForEdit {
             $text = CGI::textfield({ name => $cellName, size => 10,
                                      class => 'EditRowPluginInput'});
         } else {
+            # NOTE: old versions of JSCalendarContrib won't fire onchange
             $text = TWiki::Contrib::JSCalendarContrib::renderDateForEdit(
                 $cellName, $unexpandedValue, $colDef->{values}->[1],
                 { class => 'EditRowPluginInput' });

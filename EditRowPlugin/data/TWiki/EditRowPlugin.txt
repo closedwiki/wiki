@@ -5,6 +5,7 @@ One line description, required for extensions repository catalog.
 -->
 
 %SHORTDESCRIPTION%
+
 <img src="%ATTACHURLPATH%/screenshot.gif" alt="screenshot.gif" style="float:right" />
 
 %TOC%
@@ -118,10 +119,12 @@ then="enabled in this TWiki. Click on the buttons to try it out."}%
 
 ---+++ Example 1
 <verbatim>
-%EDITTABLE{ format="| row, -1 | text, 20, init | select, 1, one, two, three, four | radio, 3,:-),:-I,:-( | label, 20 |" changerows="on" quietsave="on" }%
-| *Nr* | *Text field* | *Drop down* | *Mood* | *Timestamp* |
-| 1 | hello table | one | :-) | 26 Jun 2002 12:30 |
-| 2 |  | two | :-( | 27 Jun 2002 12:40 |
+%EDITTABLE{ format="| row, -1 | text, 20, init | select, 1, not started, starting, ongoing, completed | radio, 3,:-),:-I,:-( | date, 20 |" changerows="on" quietsave="on"}%
+| *Nr* | *Project* | *State* | *Progress* | *Timestamp* |
+| 1 | Sliced yoghourt | completed | :-) | 26 Jun 2002 |
+| 2 | Cubical turkeys | not started | :-( | 27 Oct 2007 |
+| 3 | Self-eating burritos | ongoing | :-D | 1 Apr 2008 | 
+| 4 | Unified field theory | completed | :-) | 1 Apr 2012 |
 </verbatim>
 <img src="%ATTACHURLPATH%/screenshot.gif" alt='Example 2' />
 
@@ -147,7 +150,7 @@ then="enabled in this TWiki. Click on the buttons to try it out."}%
 <img src="%ATTACHURLPATH%/example4.gif" alt='Example 3'/>
 
 ---+++ Example 4
-<verbatim<
+<verbatim>
 %EDITTABLE{ format="| label | text, 40 |" }%
 |*Key*|*Value*|
 | Name: | John Smith |
@@ -155,6 +158,7 @@ then="enabled in this TWiki. Click on the buttons to try it out."}%
 | DOB: | 18 October 2007 %EDITCELL{date, 10}% |
 | City: | New York |
 </verbatim>
+<img src="%ATTACHURLPATH%/example5.gif" alt='Example 4'/>
 
 ---++ Preferences
 The plugin interprets a couple of [[%SYSTEMWEB%.TWikiVariables][preferences]], in common with the !EditTablePlugin.
@@ -243,3 +247,4 @@ Another great TWiki extension from the <a style="text-decoration:none" href="htt
 %META:FILEATTACHMENT{name="addrow.gif" attr="h" comment="" version="1"}%
 %META:FILEATTACHMENT{name="example3.gif" attr="h" comment="" version="1"}%
 %META:FILEATTACHMENT{name="example4.gif" attr="h" comment="" version="1"}%
+%META:FILEATTACHMENT{name="example5.gif" attr="h" comment="" version="1"}%
