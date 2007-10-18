@@ -687,16 +687,18 @@ sub inputElement {
             $valExpanded =~ s/^\s+//;
             $valExpanded =~ s/\s+$//;
             $text .= " <input type=\"radio\" name=\"$theName\" value=\"$val\"";
+            $val = " $val "; # make space to expand variables
             $text .= " checked=\"checked\""
               if ( $valExpanded eq $expandedValue );
-            $text .= " /> $val";
+            $text .= " />$val";
+TWiki::Func::writeDebug("val=$val");
             if ( $lines > 1 ) {
 
                 if ( ( $i - 1 ) % $lines ) {
-                    $text .= " <br />";
+                    $text .= "<br />";
                 }
                 elsif ( $i - 1 < $elements ) {
-                    $text .= " </td><td valign=\"top\">";
+                    $text .= "</td><td valign=\"top\">";
                 }
             }
             $i++;
@@ -727,23 +729,24 @@ sub inputElement {
             $names .= " ${theName}x$i";
             $text .=
               " <input type=\"checkbox\" name=\"${theName}x$i\" value=\"$val\"";
+            $val = " $val "; # make space to expand variables
             $text .= " checked=\"checked\""
               if ( $expandedValue =~ /(^|, )\Q$valExpanded\E(,|$)/ );
-            $text .= " /> $val";
+            $text .= " />$val";
 
             if ( $lines > 1 ) {
                 if ( ( $i - 1 ) % $lines ) {
-                    $text .= " <br />";
+                    $text .= "<br />";
                 }
                 elsif ( $i - 1 < $elements ) {
-                    $text .= " </td><td valign=\"top\">";
+                    $text .= "</td><td valign=\"top\">";
                 }
             }
             $i++;
         }
         $text .= "</td></tr></table>" if ( $lines > 1 );
         $text .=
-          " <input type=\"hidden\" name=\"$theName\" value=\"$names\" />";
+          "<input type=\"hidden\" name=\"$theName\" value=\"$names\" />";
         $text .= saveEditCellFormat( $cellFormat, $theName );
 
     }
