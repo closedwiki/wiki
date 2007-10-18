@@ -136,6 +136,19 @@ HERE
     # expand and URL-encode the init string
     my $metainit = TWiki::Func::expandCommonVariables($init);
     $metainit =~ s/([^0-9a-zA-Z-_.:~!*'\/%])/'%'.sprintf('%02x',ord($1))/ge;
+    my $behaving;
+    eval {
+        require TWiki::Contrib::BehaviourContrib;
+        if (defined(&TWiki::Contrib::BehaviourContrib::addHEAD)) {
+            TWiki::Contrib::BehaviourContrib::addHEAD();
+            $behaving = 1;
+        }
+    };
+    unless ($behaving) {
+        TWiki::Func::addToHEAD(
+            'BEHAVIOURCONTRIB',
+            '<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/BehaviourContrib/behaviour.compressed.js"></script>');
+    }
     TWiki::Func::addToHEAD('tinyMCE', <<SCRIPT);
 <meta name="TINYMCEPLUGIN_INIT" content="$metainit" />
 <script language="javascript" type="text/javascript" src="$tmceURL/tiny_mce$USE_SRC.js"></script>
