@@ -47,7 +47,7 @@ my $linkon = '<span class="WYSIWYG_LINK">';
 my $protectoff = '</span>';
 my $linkoff = '</span>';
 my $preoff = '</span>';
-my $nop = '<nop>';
+my $nop = "$protecton<nop>$protectoff";
 
 # The following big table contains all the testcases. These are
 # used to add a bunch of functions to the symbol table of this
@@ -390,9 +390,9 @@ HERE
 HERE
       },
       {
-          exec => $ROUNDTRIP,
+          exec => $TML2HTML | $ROUNDTRIP,
           name => 'noppedWikiword',
-          html => "${nop}SunOS",
+          html => "<p>${nop}SunOS</p>",
           tml => '!SunOS',
           finaltml => '<nop>SunOS',
       },
@@ -411,10 +411,14 @@ HERE
           tml => '%<nop>USERSWEB%'
          },
       {
-          exec => $ROUNDTRIP,
+          exec => $TML2HTML|$HTML2TML|$ROUNDTRIP,
           name => 'noAutoLunk',
           html => <<'HERE',
-<div class="WYSIWYG_NOAUTOLINK">RedHat & SuSE</div>
+<p>
+<span class="WYSIWYG_PROTECTED">&lt;noautolink&gt;</span>
+RedHat & SuSE
+<span class="WYSIWYG_PROTECTED">&lt;/noautolink&gt;</span>
+</p>
 HERE
           tml => <<'HERE',
 <noautolink>
@@ -758,13 +762,13 @@ Inside
     </pre> Outside',
       },
       {
-          exec => $ROUNDTRIP,
+          exec => $TML2HTML|$ROUNDTRIP,
           name => 'NAL',
-          html => 'Outside
- <div class="WYSIWYG_NOAUTOLINK">
+          html => '<p>Outside
+ <span class="WYSIWYG_PROTECTED">&lt;noautolink&gt;</span>
  Inside
- </div>
- Outside',
+ <span class="WYSIWYG_PROTECTED">&lt;/noautolink&gt;</span>
+ Outside</p>',
           tml => 'Outside
  <noautolink>
  Inside
@@ -773,28 +777,32 @@ Inside
           finaltml => 'Outside <noautolink> Inside </noautolink> Outside',
       },
       {
-          exec => $ROUNDTRIP,
+          exec => $TML2HTML|$ROUNDTRIP,
           name => 'classifiedNAL',
-          html => 'Outside
- <div class="twikiAlert WYSIWYG_NOAUTOLINK">
- Inside
- </div>
+          html => '<p>Outside
+<span class="WYSIWYG_PROTECTED">&lt;noautolink&nbsp;class="twikiAlert"&gt;</span></p>
+  <ul>
+   <li> Inside </li>
+  </ul>
+<span class="WYSIWYG_PROTECTED">&lt;/noautolink&gt;</span>
  Outside
  ',
           tml => 'Outside
- <noautolink class="twikiAlert">
- Inside
- </noautolink>
+<noautolink class="twikiAlert">
+   * Inside
+</noautolink>
  Outside',
-          finaltml => 'Outside <noautolink class="twikiAlert"> Inside </noautolink> Outside',
+          finaltml => 'Outside <noautolink class="twikiAlert">
+   * Inside
+</noautolink> Outside',
       },
       {
           exec => $ROUNDTRIP,
           name => 'indentedNAL',
           html => 'Outside
- <div class="WYSIWYG_NOAUTOLINK">
+ <span class="WYSIWYG_PROTECTED">&lt;noautolink&gt;</span>
  Inside
- </div>
+ <span class="WYSIWYG_PROTECTED">&lt;/noautolink&gt;</span>
  Outside
  ',
           tml => 'Outside
@@ -1068,10 +1076,28 @@ HERE
           tml => "what\n\nthef",
       },
       {
-          exec => $HTML2TML | $ROUNDTRIP,
+          exec => $HTML2TML,# | $ROUNDTRIP,
           name => 'Item4435',
           html => <<HTML,
-<ul><li> Clean up toolbar </li> </ul><ul><li>  Test tools </li> </ul><p> Garbles Bargles         Smargles</p>      <p /><p>Flame grilled </p><p>-- <span class="WYSIWYG_LINK">Main.JohnSilver</span> - 05 Aug 2007</p><p>Extra spaces???</p><p><span class="WYSIWYG_PROTECTED">%COMMENT%</span></p>
+<ul>
+<li> Clean up toolbar 
+</li>
+<li> Test tools 
+</li>
+</ul>
+Garbles Bargles Smargles
+<p>
+Flame grilled
+</p>
+<p>
+-- <span class="WYSIWYG_LINK">Main.JohnSilver</span> - 05 Aug 2007
+</p>
+<p>
+Extra spaces???
+</p>
+<p>
+<span class="WYSIWYG_PROTECTED">%COMMENT%</span>
+</p>
 HTML
           tml => <<TML,
    * Clean up toolbar 
@@ -1183,7 +1209,7 @@ HERE
 </li>
 </ul>
 </li>
-<li> The <span class="WYSIWYG_PROTECTED">&#60;code&#62;</span><span class="WYSIWYG_NOAUTOLINK">...</span><span class="WYSIWYG_PROTECTED">&#60;/code&#62;</span> syntax
+<li> The <span class="WYSIWYG_PROTECTED">&#60;code&#62;</span><span class="WYSIWYG_PROTECTED">&lt;noautolink&gt;</span>...<span class="WYSIWYG_PROTECTED">&lt;/noautolink&gt;</span><span class="WYSIWYG_PROTECTED">&#60;/code&#62;</span> syntax
 </li>
 </ul>
 ',
@@ -1357,12 +1383,23 @@ SPACED
 A
 </p>
 <p>
-<span class="WYSIWYG_LITERAL"><b>B</b> </span>
+<div class="WYSIWYG_LITERAL"><b>B</b> </div>
 </p>
 <p>
 C
 </p>
 DECAPS
+      },
+      {
+          exec => $TML2HTML | $ROUNDTRIP | $HTML2TML,
+          name => 'sticky',
+          tml => <<GLUED,
+<sticky><font color="blue"> *|B|* </font></sticky>
+GLUED
+          html => '<p>
+<div class="WYSIWYG_STICKY">&#60;font color="blue"&#62; *|B|* &#60;/font&#62;</div>
+</p>
+'
       },
       {
           exec => $TML2HTML,
@@ -1404,6 +1441,16 @@ SPACED
 </li></ol> 
 No more
 DECAPS
+      },
+      {
+          exec => $ROUNDTRIP,
+          name => 'Item4789',
+          tml => "%EDITTABLE{}%\n| 1 | 2 |\n| 3 | 4 |",
+      },
+      {
+          exec => $ROUNDTRIP,
+          name => 'ProtectAndSurvive',
+          tml => '<ul type="compact">Fred</ul><h1 align="right">HAH</h1><ol onclick="burp">Joe</ol>',
       },
      ];
 
