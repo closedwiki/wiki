@@ -687,11 +687,13 @@ sub inputElement {
             $valExpanded =~ s/^\s+//;
             $valExpanded =~ s/\s+$//;
             $text .= " <input type=\"radio\" name=\"$theName\" value=\"$val\"";
-            $val = " $val "; # make space to expand variables
+            # make space to expand variables
+            $val = " $val ";
+            $val =~ s/^\s+/ /; # remove extra spaces
+            $val =~ s/\s+$/ /;
             $text .= " checked=\"checked\""
               if ( $valExpanded eq $expandedValue );
             $text .= " />$val";
-TWiki::Func::writeDebug("val=$val");
             if ( $lines > 1 ) {
 
                 if ( ( $i - 1 ) % $lines ) {
@@ -729,9 +731,13 @@ TWiki::Func::writeDebug("val=$val");
             $names .= " ${theName}x$i";
             $text .=
               " <input type=\"checkbox\" name=\"${theName}x$i\" value=\"$val\"";
-            $val = " $val "; # make space to expand variables
+            # make space to expand variables
+            $val = " $val ";
+            $val =~ s/^\s+/ /; # remove extra spaces
+            $val =~ s/\s+$/ /;
+            
             $text .= " checked=\"checked\""
-              if ( $expandedValue =~ /(^|, )\Q$valExpanded\E(,|$)/ );
+              if ( $expandedValue =~ /(^|\s*,\s*)\Q$valExpanded\E(\s*,\s*|$)/ );
             $text .= " />$val";
 
             if ( $lines > 1 ) {
@@ -797,8 +803,9 @@ TWiki::Func::writeDebug("val=$val");
     }
     elsif ( $type eq 'textarea' ) {
         my ( $rows, $cols ) = split( /x/, $size );
-        $rows = 3  if $rows < 1;
-        $cols = 30 if $cols < 1;
+        
+        $rows |= 3 if !defined $rows;
+        $cols |= 30 if !defined $cols;
 
         $theValue = TWiki::Plugins::EditTablePlugin::encodeValue($theValue)
           unless ( $theValue eq '' );
@@ -892,9 +899,16 @@ sub handleTableRow {
                 my $chkBoxVals   = "";
                 foreach ( split( /\s/, $chkBoxeNames ) ) {
                     $val = $query->param($_);
-                    $chkBoxVals .= "$val, " if ( defined $val );
+                    #$chkBoxVals .= "$val," if ( defined $val );
+                    if ( defined $val ) {
+                        # make space to expand variables
+                        $val = " $val ";
+                        $val =~ s/^\s+/ /; # remove extra spaces
+                        $val =~ s/\s+$/ /;
+                        $chkBoxVals .= $val . ',';
+                    }
                 }
-                $chkBoxVals =~ s/, $//;
+                $chkBoxVals =~ s/,\s*$//;
                 $val = $chkBoxVals;
             }
             $cellFormat = $query->param("etformat${rowID}x$col");
