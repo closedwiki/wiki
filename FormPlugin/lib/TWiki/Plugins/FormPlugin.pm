@@ -38,7 +38,7 @@ use vars
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
 $VERSION = '$Rev: 11069$';
-$RELEASE = '1.0.5';
+$RELEASE = '1.1';
 
 # Name of this Plugin, only used in this module
 $pluginName = 'FormPlugin';
@@ -51,8 +51,7 @@ $defaultFormat      = '<p>$titleformat $e $m $h </p>';
 %errorForms         = ();
 %noErrorForms       = ();
 %uncheckedForms     = ();
-%substitutedForms =
-  ()
+%substitutedForms   = ()
   ; # hash of forms names that have their field tokens substituted by the corresponding field values
 %errorFields = ();    # for each field entry: ...
 
@@ -158,7 +157,7 @@ sub beforeCommonTagsHandler {
     if ($submittedFormName) {
         return
           if $substitutedForms{$submittedFormName}
-          && $validatedForms{$submittedFormName};
+              && $validatedForms{$submittedFormName};
     }
 
     # substitute dynamic values
@@ -292,7 +291,7 @@ sub _startForm {
 
     _addHeader();
 
-    my $name = $params->{'name'};
+    my $name = $params->{'name'} || '';
     return if $expandedForms{$name};
 
     # else
@@ -489,15 +488,15 @@ sub _method {
 sub _displayForm {
     my ( $session, $params, $topic, $web ) = @_;
 
-    my $name = $params->{'name'};
+    my $name = $params->{'name'} || '';
 
-    my $actionParam = $params->{'action'};
-    my $method      = _method( $params->{'method'} );
+    my $actionParam = $params->{'action'} || '';
+    my $method      = _method( $params->{'method'} || '');
     my $redirectto  = $params->{'redirectto'} || '';
     $elementcssclass = $params->{'elementcssclass'} || '';
     my $formcssclass = $params->{'formcssclass'} || '';
-    my $webParam     = $params->{'web'};
-    my $topicParam   = $params->{'topic'};
+    my $webParam     = $params->{'web'} || '';
+    my $topicParam   = $params->{'topic'} || '';
 
     # store for element rendering
     $currentForm{'name'} = $name;
@@ -514,7 +513,7 @@ sub _displayForm {
 
     my $anchor = $params->{'anchor'} || $NOTIFICATION_ANCHOR_NAME;
     $anchor = undef if !$topicParam;
-    
+
     my $actionUrl = '';
     if ( $actionParam eq 'save' ) {
         $actionUrl = "%SCRIPTURL{save}%/$web/$topic";
@@ -536,7 +535,7 @@ sub _displayForm {
     }
 
     my $currentUrl = _currentUrl(@_);
-    $currentUrl .= '#' . $anchor;
+    $currentUrl .= '#' . $anchor if ( defined $anchor );
 
     my $onSubmit = $params->{'onSubmit'} || undef;
 
@@ -544,10 +543,13 @@ sub _displayForm {
     $startFormParameters{'-name'}     = $name;
     $startFormParameters{'-method'}   = $method;
     $startFormParameters{'-onSubmit'} = $onSubmit if $onSubmit;
-    
-    my $disableValidation = $params->{'validate'} eq 'off';
-    # with validation (default on), first post to current topic and retrieve dynamic values
-    $startFormParameters{'-action'} = $disableValidation ? $actionUrl : $currentUrl;
+
+    my $disableValidation = $params->{'validate'} eq 'off'
+      if ( defined $params->{'validate'} );
+
+# with validation (default on), first post to current topic and retrieve dynamic values
+    $startFormParameters{'-action'} =
+      $disableValidation ? $actionUrl : $currentUrl;
 
     # multi-part is needed for upload. Why not always use it?
     #my $formStart = CGI::start_form(%startFormParameters);
@@ -613,7 +615,8 @@ sub _formElement {
     my $element = _getFormElementHtml(@_);
 
     $element =
-        '<noautolink>' . $element
+        '<noautolink>' 
+      . $element
       . '</noautolink>';    # prevent wiki words inside form fields
     my $type = $params->{'type'};
     my $name = $params->{'name'};
@@ -727,7 +730,7 @@ sub _getFormElementHtml {
     $type =~ s/^(.*?)multi$/$1/;
     my $value = $params->{'default'} || $params->{'buttonlabel'};
 
-    my $size = $params->{'size'} || '40';
+    my $size = $params->{'size'} || ( $type eq 'date' ? '15' : '40' );
     my $maxlength = $params->{'maxlength'};
     $size = $maxlength if defined $maxlength && $maxlength < $size;
 
@@ -735,7 +738,7 @@ sub _getFormElementHtml {
       _parseOptions( $params->{'options'}, $params->{'labels'} );
 
     my $itemformat = $params->{'fieldformat'};
-    my $cssClass   = $params->{'cssclass'};
+    my $cssClass   = $params->{'cssclass'} || '';
     $cssClass = _normalizeCssClassName($cssClass);
 
     my $selectedoptions = $params->{'default'} || undef;
@@ -798,15 +801,15 @@ sub _getFormElementHtml {
             %extraAttributes );
     }
     elsif ( $type eq 'upload' ) {
-        $element = _getUploadHtml( $session, $name, 'starting value', $size, $maxlength, %extraAttributes );
+        $element = _getUploadHtml( $session, $name, 'starting value',
+            $size, $maxlength, %extraAttributes );
     }
     elsif ( $type eq 'submit' ) {
         $element =
           _getSubmitButtonHtml( $session, $name, $value, %extraAttributes );
     }
     elsif ( $type eq 'radio' ) {
-        $element =
-          _getRadioButtonGroupHtml( $session, $name, $options, $labels,
+        $element = _getRadioButtonGroupHtml( $session, $name, $options, $labels,
             $selectedoptions, $itemformat, %extraAttributes );
     }
     elsif ( $type eq 'checkbox' ) {
@@ -829,12 +832,16 @@ sub _getFormElementHtml {
     elsif ( $type eq 'textarea' ) {
         my $rows = $params->{'rows'};
         my $cols = $params->{'cols'};
-        $element =
-          _getTextareaHtml( $session, $name, $value, $rows, $cols,
+        $element = _getTextareaHtml( $session, $name, $value, $rows, $cols,
             %extraAttributes );
     }
     elsif ( $type eq 'hidden' ) {
         $element = _getHiddenHtml( $session, $name, $value );
+    }
+    elsif ( $type eq 'date' ) {
+        $element =
+          _getDateFieldHtml( $session, $name, $value, $size, $maxlength,
+            %extraAttributes );
     }
     return $element;
 }
@@ -927,7 +934,7 @@ sub _getUploadHtml {
     my ( $session, $name, $value, $size, $maxlength, %extraAttributes ) = @_;
 
     my %attributes = _textfieldAttributes(@_);
-	return CGI::filefield(%attributes);
+    return CGI::filefield(%attributes);
 }
 
 =pod
@@ -945,7 +952,7 @@ sub _textfieldAttributes {
     );
     %attributes = ( %attributes, %extraAttributes );
 
-    my $cssClass = $attributes{'class'};
+    my $cssClass = $attributes{'class'} || '';
     $cssClass = 'twikiInputFieldDisabled'
       if ( !$cssClass && $attributes{'disabled'} );
     $cssClass = 'twikiInputFieldReadOnly'
@@ -982,7 +989,7 @@ sub _getSubmitButtonHtml {
     );
     %attributes = ( %attributes, %extraAttributes );
 
-    my $cssClass = $attributes{'class'};
+    my $cssClass = $attributes{'class'} || '';
     $cssClass = 'twikiSubmitDisabled'
       if ( !$cssClass && $attributes{'disabled'} );
     $cssClass ||= 'twikiSubmit';
@@ -1006,7 +1013,7 @@ sub _getTextareaHtml {
     );
     %attributes = ( %attributes, %extraAttributes );
 
-    my $cssClass = $attributes{'class'};
+    my $cssClass = $attributes{'class'} || '';
     $cssClass = 'twikiInputFieldDisabled'
       if ( !$cssClass && $attributes{'disabled'} );
     $cssClass = 'twikiInputFieldReadOnly'
@@ -1053,7 +1060,7 @@ sub _getCheckboxButtonGroupHtml {
     );
     %attributes = ( %attributes, %extraAttributes );
 
-    my $cssClass = $attributes{'class'};
+    my $cssClass = $attributes{'class'} || '';
     $cssClass = 'twikiCheckbox ' . $cssClass;
     $cssClass = _normalizeCssClassName($cssClass);
     $attributes{'-class'} = $cssClass if $cssClass;
@@ -1101,7 +1108,7 @@ sub _getRadioButtonGroupHtml {
     );
     %attributes = ( %attributes, %extraAttributes );
 
-    my $cssClass = $attributes{'class'};
+    my $cssClass = $attributes{'class'} || '';
     $cssClass = 'twikiInputFieldDisabled'
       if ( !$cssClass && $attributes{'disabled'} );
     $cssClass = 'twikiRadioButton ' . $cssClass;
@@ -1169,7 +1176,7 @@ sub _getSelectHtml {
     );
     %attributes = ( %attributes, %extraAttributes );
 
-    my $cssClass = $attributes{'class'};
+    my $cssClass = $attributes{'class'} || '';
     $cssClass = 'twikiSelectDisabled'
       if ( !$cssClass && $attributes{'disabled'} );
     $cssClass = 'twikiSelect ' . $cssClass;
@@ -1178,6 +1185,48 @@ sub _getSelectHtml {
 
     my @items = CGI::scrolling_list(%attributes);
     return _mapToItemFormatString( \@items );
+}
+
+=pod
+
+=cut
+
+sub _getDateFieldHtml {
+    my ( $session, $name, $value, $size, $maxlength, %extraAttributes ) = @_;
+
+    my %attributes = _textfieldAttributes(@_);
+    my $id = $attributes{'id'} || 'cal' . $currentForm{'name'} . $name;
+    $attributes{'id'} |= $id;
+
+    my $text = CGI::textfield(%attributes);
+
+    eval 'use TWiki::Contrib::JSCalendarContrib';
+    {
+        if ($@) {
+            my $mess = "WARNING: JSCalendar not installed: $@";
+            print STDERR "$mess\n";
+            TWiki::Func::writeWarning($mess);
+        }
+        else {
+            TWiki::Contrib::JSCalendarContrib::addHEAD('twiki');
+
+            my $format = $TWiki::cfg{JSCalendarContrib}{format} || '%e %B %Y';
+            $text .= ' <span class="twikiMakeVisible">';
+            $text .= CGI::image_button(
+                -class   => 'editTableCalendarButton',
+                -name    => 'calendar',
+                -onclick => "return showCalendar('$id','$format')",
+                -src     => TWiki::Func::getPubUrlPath() . '/'
+                  . TWiki::Func::getTwikiWebname()
+                  . '/JSCalendarContrib/img.gif',
+                -alt   => 'Calendar',
+                -align => 'middle'
+            );
+            $text .= '</span>';
+        }
+    };
+
+    return $text;
 }
 
 =pod

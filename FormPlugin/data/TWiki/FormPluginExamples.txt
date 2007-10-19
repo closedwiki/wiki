@@ -514,6 +514,18 @@ buttonlabel="Upload file"
 %ENDFORM%
 
 
+---++ Date
+
+%STARTFORM{{}%
+%FORMELEMENT{
+type="date"
+name="publishing_date"
+default="02 Oct 2006"
+title="Publishing date"
+}%
+%ENDFORM%
+
+
 
 ---++ !SendEmailPlugin form
 
