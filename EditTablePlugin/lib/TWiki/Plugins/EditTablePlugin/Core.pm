@@ -36,7 +36,8 @@ $regex{table_plugin}      = '%TABLE(?:{(.*?)})?%';
 $regex{table_row_full}    = '^(\s*)\|.*\|\s*$';
 $regex{table_row}         = '^(\s*)\|(.*)';
 
-my $renderHack = "\n<nop>\n";
+my $RENDER_HACK        = "\n<nop>\n";
+my $DEFAULT_FIELD_SIZE = 16;
 
 =pod
 
@@ -131,7 +132,7 @@ sub processText {
     $theText =~
       s/\r//go;    # strip out all \r chars (may be pasted into a table cell)
     $theText =~ s/\\\n//go;    # Join lines ending in "\"
-    $theText .= $renderHack
+    $theText .= $RENDER_HACK
       ;    # appended stuff is a hack to handle EDITTABLE correctly if at end
 
     my @lines = split( /\n/, $theText );
@@ -316,10 +317,9 @@ s/$regex{table_row}/handleTableRow( $1, $2, $tableNr, $isNewRow, $rowNr, $doEdit
     }
 
     # clean up hack that handles EDITTABLE correctly if at end
-    $result =~ s/($renderHack)+$//go;
+    $result =~ s/($RENDER_HACK)+$//go;
 
     if ($doSave) {
-
         my $error = TWiki::Func::saveTopicText( $theWeb, $theTopic, $result, '',
             $doSaveQuiet );
 
@@ -377,10 +377,11 @@ sub extractParams {
 
 sub parseFormat {
     my ( $theFormat, $theTopic, $theWeb, $doExpand ) = @_;
-    $theFormat =~ s/\$nop(\(\))?//gos;         # remove filler
-    $theFormat =~ s/\$quot(\(\))?/\"/gos;      # expand double quote
-    $theFormat =~ s/\$percnt(\(\))?/\%/gos;    # expand percent
-    $theFormat =~ s/\$dollar(\(\))?/\$/gos;    # expand dollar
+
+    #$theFormat =~ s/\$nop(\(\))?//gos;         # remove filler
+    #$theFormat =~ s/\$quot(\(\))?/\"/gos;      # expand double quote
+    #$theFormat =~ s/\$percnt(\(\))?/\%/gos;    # expand percent
+    #$theFormat =~ s/\$dollar(\(\))?/\$/gos;    # expand dollar
     if ($doExpand) {
 
         # expanded form to be able to use %-vars in format
@@ -389,9 +390,34 @@ sub parseFormat {
           TWiki::Func::expandCommonVariables( $theFormat, $theTopic, $theWeb );
     }
     my @aFormat = split( /\s*\|\s*/, $theFormat );
-    $aFormat[0] = "text,16" unless @aFormat;
+    $aFormat[0] = "text,$DEFAULT_FIELD_SIZE" unless @aFormat;
 
     return @aFormat;
+}
+
+=pod
+
+=cut
+
+sub unProtectVariablePlaceholders {
+    return if ( !$_[0] );
+    $_[0] =~ s/\$nop//go;
+    $_[0] =~ s/\$n/\n/go;
+    $_[0] =~ s/\$dollarpercnt/%/go;
+    $_[0] =~ s/\$dollar/\$/go;
+    $_[0] =~ s/\$percnt/%/go;
+    $_[0] =~ s/\$quot/\"/go;
+}
+
+=pod
+
+=cut
+
+sub protectVariablePlaceholders {
+    return if ( !$_[0] );
+    $_[0] =~ s/%/\$percnt/go;
+    $_[0] =~ s/\$/\$dollar/go;
+    $_[0] =~ s/\"/\$quot/go;
 }
 
 =pod
@@ -874,7 +900,7 @@ sub inputElement {
 
     }
     else {    #  if( $type eq 'text')
-        $size = 16 if $size < 1;
+        $size = $DEFAULT_FIELD_SIZE if $size < 1;
         $theValue = TWiki::Plugins::EditTablePlugin::encodeValue($theValue)
           unless ( $theValue eq '' );
         $text =
@@ -913,6 +939,7 @@ sub handleTableRow {
             $col += 1;
             $cellDefined = 0;
             $val = $isNewRow ? undef : $query->param("etcell${rowID}x$col");
+
             if ( $val && $val =~ /^Chkbx: (etcell.*)/ ) {
 
       # Multiple checkboxes, val has format "Chkbx: etcell4x2x2 etcell4x2x3 ..."
@@ -1013,6 +1040,10 @@ sub handleTableRow {
         $theRow =~ s/%EDITCELL{(.*?)}%/viewEditCell($1)/geo;
         $text .= $theRow;
     }
+
+    # render final value in view mode (not edit or save)
+    unProtectVariablePlaceholders($text) if ( !$doSave && !$doEdit );
+
     return $text;
 }
 
