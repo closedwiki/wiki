@@ -200,7 +200,7 @@ SOMETHING <noautolink>
 </form>
 </div><!-- /editTable --></noautolink>
 EXPECTED
-    $this->do_testHtmlOutput( $expected, $result, 0 );
+    $this->do_testHtmlOutput( lc $expected, lc $result, 0 );
     $twiki->finish();
 }
 
@@ -457,8 +457,8 @@ INPUT
 <nop>
 <table cellspacing="0" id="default" cellpadding="0" class="twikiTable" rules="rows" border="1">
 	<tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
-		<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <table class="editTableInnerTable"><tr><td valign="top"> <input type="radio" name="etcell1x1" value=":skull:" /> <img src="http://tarazona.local/~webserver/twiki/pub/TWiki/SmiliesPlugin/skull.gif" alt="skull" title="skull" border="0" /> <br /> <input type="radio" name="etcell1x1" value=":cool:" /> <img src="http://tarazona.local/~webserver/twiki/pub/TWiki/SmiliesPlugin/cool.gif" alt="cool!" title="cool!" border="0" /> </td></tr></table> </td>
-		<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> <table class="editTableInnerTable"><tr><td valign="top"> <input type="checkbox" name="etcell1x2x2" value=":skull:" checked="checked" /> <img src="http://tarazona.local/~webserver/twiki/pub/TWiki/SmiliesPlugin/skull.gif" alt="skull" title="skull" border="0" /> <br /> <input type="checkbox" name="etcell1x2x3" value=":cool:" checked="checked" /> <img src="http://tarazona.local/~webserver/twiki/pub/TWiki/SmiliesPlugin/cool.gif" alt="cool!" title="cool!" border="0" /> </td></tr></table><input type="hidden" name="etcell1x2" value="Chkbx: etcell1x2x2 etcell1x2x3" /> </td>
+		<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <table class="editTableInnerTable"><tr><td valign="top"> <input type="radio" name="etcell1x1" value=":skull:" /> <img src="$pubUrlTWikiWeb/SmiliesPlugin/skull.gif" alt="skull" title="skull" border="0" /> <br /> <input type="radio" name="etcell1x1" value=":cool:" /> <img src="$pubUrlTWikiWeb/SmiliesPlugin/cool.gif" alt="cool!" title="cool!" border="0" /> </td></tr></table> </td>
+		<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> <table class="editTableInnerTable"><tr><td valign="top"> <input type="checkbox" name="etcell1x2x2" value=":skull:" checked="checked" /> <img src="$pubUrlTWikiWeb/SmiliesPlugin/skull.gif" alt="skull" title="skull" border="0" /> <br /> <input type="checkbox" name="etcell1x2x3" value=":cool:" checked="checked" /> <img src="$pubUrlTWikiWeb/SmiliesPlugin/cool.gif" alt="cool!" title="cool!" border="0" /> </td></tr></table><input type="hidden" name="etcell1x2" value="Chkbx: etcell1x2x2 etcell1x2x3" /> </td>
 	</tr></table>
 <input type="hidden" name="etrows" value="1" />
 <input type="submit" name="etsave" id="etsave" value="Save table" class="twikiSubmit" />
