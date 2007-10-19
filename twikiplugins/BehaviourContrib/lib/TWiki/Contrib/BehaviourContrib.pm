@@ -1,7 +1,7 @@
 package TWiki::Contrib::BehaviourContrib;
 use vars qw( $VERSION );
 $VERSION = '$Rev$';
-$RELEASE = '1.3';
+$RELEASE = '1.3.1';
 
 =begin twiki
 
