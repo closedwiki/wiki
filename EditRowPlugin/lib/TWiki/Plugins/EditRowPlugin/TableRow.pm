@@ -184,17 +184,21 @@ sub renderForDisplay {
             unshift(@out, " *$text* ");
         } else {
             my $url;
+            my $script = 'view';
+            if (!TWiki::Func::getContext()->{authenticated}) {
+                $script = 'viewauth';
+            }
             if ($TWiki::Plugins::VERSION < 1.11) {
                 $url = TWiki::Func::getScriptUrl(
                     $this->{table}->getWeb(),
-                    $this->{table}->getTopic(), 'view').
+                    $this->{table}->getTopic(), $script).
                       "?erp_active_table=".$this->{table}->getNumber().
                         ";erp_active_row=$this->{number}#".
                           $this->getRowAnchor();
             } else {
                 $url = TWiki::Func::getScriptUrl(
                     $this->{table}->getWeb(),
-                    $this->{table}->getTopic(), 'view',
+                    $this->{table}->getTopic(), $script,
                     erp_active_table => $this->{table}->getNumber(),
                     erp_active_row => $this->{number},
                     '#' => $this->getRowAnchor());
