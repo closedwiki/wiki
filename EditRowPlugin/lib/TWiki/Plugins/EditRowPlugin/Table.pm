@@ -23,8 +23,9 @@ $DOWN_ROW   = 'Move this row down';
 # Returns an array of lines, with those lines that represent editable
 # tables plucked out and replaced with references to table objects
 sub parseTables {
-    my ($text, $topic, $web, $meta, $urps) = @_;
+    my ($text, $web, $topic, $meta, $urps) = @_;
     my $active_table = undef;
+    my $hasRows = 0;
     my @tables;
     my $nTables = 0;
     my $disable = 0;
@@ -51,6 +52,9 @@ sub parseTables {
             $line = "$openRow$line";
             $openRow = undef;
         }
+
+        # Process an EDITTABLE. The tag will be associated with the
+        # next table encountered in the topic.
         if (!$disable && $line =~ s/(%EDITTABLE{(.*?)}%)// ) {
             my $spec = $1;
             my $attrs = new TWiki::Attrs($2);
@@ -104,10 +108,12 @@ sub parseTables {
             }
             $active_table =
               new TWiki::Plugins::EditRowPlugin::Table(
-                  $nTables, 1, $spec, $attrs, $_[2], $_[1]);
+                  $nTables, 1, $spec, $attrs, $web, $topic);
             push(@tables, $active_table);
+            $hasRows = 0;
             next;
         }
+
         elsif (!$disable && $line =~ /^\s*\|/) {
             if ($line =~ s/\\$//) {
                 # Continuation
@@ -124,38 +130,51 @@ sub parseTables {
                 my $attrs => new TWiki::Attrs('');
                 $active_table =
                   new TWiki::Plugins::EditRowPlugin::Table(
-                      $nTables, 0, $line, $attrs, $_[2], $_[1]);
+                      $nTables, 0, $line, $attrs, $web, $topic);
                 push(@tables, $active_table);
             }
-            # Note use of -1 on the split so we don't lose empty columns
-            my @cols = split(/\|/, $line, -1);
+            # Note use of LIMIT=-1 on the split so we don't lose empty columns
+            my @cols;
+            if (length($line)) {
+                @cols = split(/\|/, $line, -1);
+            } else {
+                # Splitting an EXPR that evaluates to the empty string always
+                # returns the empty list, regardless of the LIMIT specified.
+                push(@cols, '');
+            }
             my $row = new TWiki::Plugins::EditRowPlugin::TableRow(
                 $active_table, scalar(@{$active_table->{rows}}) + 1,
                 $precruft, $postcruft,
                 \@cols);
             push(@{$active_table->{rows}}, $row);
+            $hasRows = 1;
             next;
         }
 
-        $active_table = undef;
+        elsif (!$disable && $hasRows) {
+            # associated table has been terminated
+            $active_table = undef;
+        }
+
         push(@tables, $line);
     }
 
-    # Legacy: add a header if the header param is defined and the table
-    # has no rows.
     foreach my $t (@tables) {
-        if (ref($t) eq 'TWiki::Plugins::EditRowPlugin::Table' &&
-              !scalar(@{$t->{rows}}) &&
-                defined($t->{attrs}->{header})) {
-            my $line = $t->{attrs}->{header};
-            my $precruft = '';
-            $precruft = $1 if $line =~ s/^(\s*\|)//;
-            my $postcruft = '';
-            $postcruft = $1 if $line =~ s/(\|\s*)$//;
-            my @cols = split(/\|/, $line, -1);
-            my $row = new TWiki::Plugins::EditRowPlugin::TableRow(
-                $t, 1, $precruft, $postcruft, \@cols);
-            push(@{$t->{rows}}, $row);
+        if (UNIVERSAL::isa($t, 'TWiki::Plugins::EditRowPlugin::Table')) {
+            if (!scalar(@{$t->{rows}}) &&
+                  defined($t->{attrs}->{header})) {
+                # Legacy: add a header if the header param is defined and
+                # the table has no rows.
+                my $line = $t->{attrs}->{header};
+                my $precruft = '';
+                $precruft = $1 if $line =~ s/^(\s*\|)//;
+                my $postcruft = '';
+                $postcruft = $1 if $line =~ s/(\|\s*)$//;
+                my @cols = split(/\|/, $line, -1);
+                my $row = new TWiki::Plugins::EditRowPlugin::TableRow(
+                    $t, 1, $precruft, $postcruft, \@cols);
+                push(@{$t->{rows}}, $row);
+            }
         }
     }
 

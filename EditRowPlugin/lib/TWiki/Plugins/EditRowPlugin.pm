@@ -13,6 +13,7 @@ $SHORTDESCRIPTION = 'Inline edit for tables';
 $NO_PREFS_IN_TOPIC = 1;
 
 my $pluginName = 'EditRowPlugin';
+my $USE_SRC = '';
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
@@ -27,23 +28,50 @@ sub initPlugin {
     TWiki::Func::registerRESTHandler('save', \&save);
     $headed = 0;
 
+    if (TWiki::Func::getPreferencesValue('EDITROWPLUGIN_DEBUG')) {
+        $USE_SRC = '_src';
+    }
+
     # Plugin correctly initialized
     return 1;
 }
 
-# Handler run when viewing a topic
+sub beforeCommonTagsHandler {
+    my ($text, $topic, $web, $meta) = @_;
+
+    if (_process($text, $web, $topic, $meta)) {
+        $_[0] = $text;
+    }
+}
+
+# The handler has to be run from both beforeCommonTagsHandler and
+# commonTagsHandler, because beforeCommonTagsHandler allows us to
+# process tables before TWiki variables in their data are expanded,
+# while the second call allos us to handle tables that have been
+# included from other topics. Both handlers only fire when the topic
+# text contains %EDITTABLE, thus constraining the problem.
 sub commonTagsHandler {
-    # my ( $text, $topic, $web, $included, $meta ) = @_;
+    my ($text, $topic, $web, $included, $meta) = @_;
+
+    if (_process($text, $web, $topic, $meta)) {
+        $_[0] = $text;
+    }
+}
+
+sub _process {
+    my ($text, $web, $topic, $meta) = @_;
+
+    return 0 unless $text =~ /%EDITTABLE{.*}%/;
 
     my $context = TWiki::Func::getContext();
-    return unless $context->{view};
+    return 0 unless $context->{view};
 
     unless ($headed) {
-        $headed = 1;
+        $headed = 1; # recursion block
         my $header = '<script type="text/javascript" src="';
         $header .= TWiki::Func::getPubUrlPath().'/'.
           TWiki::Func::getTwikiWebname().
-              '/EditRowPlugin/TableSort.js"></script>';
+              '/EditRowPlugin/TableSort$USE_SRC.js"></script>';
         $header .= <<STYLE;
 <style>
 .erpSort {
@@ -55,18 +83,12 @@ STYLE
     }
 
     my $query = TWiki::Func::getCgiQuery();
-    return unless $query;
+    return 0 unless $query;
 
-    # SMELL: hack to get around not having a proper topic object model
-    my $meta = $_[4] || $context->{can_render_meta};
-    return unless $meta;
-
-    return if TWiki::Func::getPreferencesFlag('EDITROWPLUGIN_DISABLE');
-
-    my ($topic, $web) = ($_[1], $_[2]);
+    return 0 if TWiki::Func::getPreferencesFlag('EDITROWPLUGIN_DISABLE');
 
     require TWiki::Plugins::EditRowPlugin::Table;
-    return if $@;
+    return 0 if $@;
 
     my $vars = $query->Vars();
     my $urps = {};
@@ -74,12 +96,10 @@ STYLE
         $urps->{$key} = $value if $key =~ /^erp_/;
     }
 
-    my $endsWithNewline = ($_[0] =~ /\n$/)?1:0;
+    my $endsWithNewline = ($text =~ /\n$/) ? 1 : 0;
 
     my $content = TWiki::Plugins::EditRowPlugin::Table::parseTables(
-        @_, $urps);
-
-    $_[0] =~ s/\\\n//gs;
+        $text, $web, $topic, $meta, $urps);
 
     $urps->{erp_active_table} ||= 0;
     $urps->{erp_active_row} ||= 0;
@@ -93,7 +113,7 @@ STYLE
     # Without change access, there is no way you can edit.
     if (!TWiki::Func::checkAccessPermission(
         'CHANGE', TWiki::Func::getWikiName(),
-        $_[0], $_[1], $_[2], $meta)) {
+        $text, $topic, $web, $meta)) {
         $displayOnly = 1;
     }
 
@@ -148,7 +168,7 @@ STYLE
 HEAD
             }
             TWiki::Func::addToHEAD('EDITROWPLUGIN_JSVETO', <<HEAD);
-<script type='text/javascript' src='$pub/$web/EditRowPlugin/twiki.js'></script>
+<script type='text/javascript' src='$pub/$web/EditRowPlugin/twiki$USE_SRC.js'></script>
 HEAD
         };
         if ($@) {
@@ -156,7 +176,11 @@ HEAD
         }
     }
 
-    $_[0] = join("\n", @$content).($endsWithNewline?"\n":'') if $hasTables;
+    if ($hasTables) {
+        $_[0] = join("\n", @$content).($endsWithNewline?"\n":'');
+        return 1;
+    }
+    return 0;
 }
 
 # Replace content with a marker to prevent it being munged by TWiki

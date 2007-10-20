@@ -59,7 +59,8 @@ sub getCellName {
 sub renderForDisplay {
     my ($this, $colDefs, $isHeader) = @_;
     my $colDef = $colDefs->[$this->{number} - 1] || $defCol;
-    my $text = $this->{text} || '-';
+    my $text = $this->{text};
+    $text = '-' unless defined($text);
 
     if (!$this->{isHeader} && !$this->{isFooter}) {
         if ($colDef->{type} eq 'row') {

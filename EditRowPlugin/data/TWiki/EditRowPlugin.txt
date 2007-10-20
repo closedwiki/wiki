@@ -37,7 +37,12 @@ some of !TablePlugin. Features:
 Works like the !EditTablePlugin (it uses exactly the same =%EDITTABLE= tags)
 and you can use it to edit the entire table, or just one row at a time.
 
-Add =%<nop>EDITTABLE{...}%= on the line before the first row of an existing table to make it editable. Parameters:
+A =%<nop>EDITTABLE{...}%= in the topic will be associated with the next table
+in the topic. If there is no existing table, or another
+=%<nop>EDITTABLE{...}%= is seen before the next table, then a new table will
+be created.
+
+Parameters:
 
    * ==format== - The format of the cells in a row of the table. The format is
      defined like a table row, where the cell data specify the type for each
@@ -217,6 +222,7 @@ Another great TWiki extension from the <a style="text-decoration:none" href="htt
 |  Copyright: | &copy; 2007 Wind<nop>River Inc. |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  20 Oct 2007 | Bugs:Item4853: support %EDITCELL Bugs:Item4861: rework the rules for associating tag with adjacent table Bugs:Item4862: avoid expanding TWiki variables on edit |
 |  18 Oct 2007 | Bugs:Item4834: added automatic save on row add Bugs:Item4853: added %EDITCELL support Bugs:Item4651: fixed validation of date change |
 |  26 Sep 2007 | Bugs:Item4696 Keep table in full-table edit mode after a row is added Bugs:Item4651 add JS to handle navigating away with pending changes (requires BehaviourContrib) |
 |  10 Sep 2007 | Bugs:Item4552 Can use row buttons to delete the header, even though headderrows is set Bugs:Item4565 "row" parameter not supported Bugs:Item4567 header parameter not correctly handled Bugs:Item4602 Header row gets eaten |
