@@ -147,7 +147,7 @@ HERE
     unless ($behaving) {
         TWiki::Func::addToHEAD(
             'BEHAVIOURCONTRIB',
-            '<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/BehaviourContrib/behaviour.compressed.js"></script>');
+            '<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/BehaviourContrib/behaviour.js"></script>');
     }
     TWiki::Func::addToHEAD('tinyMCE', <<SCRIPT);
 <meta name="TINYMCEPLUGIN_INIT" content="$metainit" />
