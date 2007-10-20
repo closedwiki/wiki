@@ -1,1 +1,2 @@
+TWiki::Plugins::BehaviourContrib,>=15357,perl,Javascript module
 TWiki::Plugins::WysiwygPlugin,>=14523,perl,Translator module
