@@ -23,8 +23,11 @@ sub commonTagsHandler {
 
 sub addHEAD {
     my $base = '%PUBURLPATH%/%SYSTEMWEB%/BehaviourContrib';
+    my $USE_SRC =
+      TWiki::Func::getPreferencesValue('BEHAVIOURCONTRIB_DEBUG') ?
+          '_src' : '';
     my $head = <<HERE;
-<script type='text/javascript' src='$base/behaviour.compressed.js'></script>
+<script type='text/javascript' src='$base/behaviour$USE_SRC.js'></script>
 HERE
     TWiki::Func::addToHEAD( 'BEHAVIOURCONTRIB', $head );
 }

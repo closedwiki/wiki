@@ -1,3 +1,4 @@
+// THIS FILE SHOULD BE IDENTICAL TO behaviour_src.js (EXCEPT FOR THIS LINE)
 /*
 To compress this file you can use Dojo ShrinkSafe compressor at
 http://alex.dojotoolkit.org/shrinksafe/
