@@ -138,6 +138,7 @@ sub nextIsInline {
     return 0;
 }
 
+############################################################################
 # Constants, defined in a simpler-named package for the sake of
 # readability
 package WC;
@@ -158,9 +159,7 @@ package WC;
 =cut
 
 our ($NO_TML, $NO_HTML, $NO_BLOCK_TML, $NOP_ALL, $BLOCK_TML, $BR2NL);
-our ($CHECKn, $CHECKw, $CHECKs, $NBSP, $NBBR, $TAB, $PON, $POFF);
-
-@EXPORTS = qw($NO_TML $NO_HTML $NO_BLOCK_TML $NOP_ALL $BLOCK_TML $BR2NL $CHECKn $CHECKw $CHECKs $NBSP $NBBR $TAB $PON $POFF);
+our ($CHECKn, $CHECKw, $CHECKs, $NBSP, $NBBR, $TAB, $PON, $POFF, $WS);
 
 $NO_HTML       = 1 << 0;
 $NO_TML        = 1 << 1;
@@ -228,6 +227,7 @@ $CHECK2 = chr($cc{CHECK2});
 $TAB    = chr($cc{TAB});
 $PON    = chr($cc{PON});
 $POFF   = chr($cc{POFF});
+$WS     = qr/[$NBSP$NBBR$CHECKn$CHECKs$CHECKw$CHECK1$CHECK2$TAB\s]*/;
 
 =pod
 
@@ -240,12 +240,6 @@ REs for matching delimiters of wikiwords, must be consistent with TML2HTML.pm
 
 =cut
 
-use vars qw( $STARTWW $ENDWW $PROTOCOL );
-
-$STARTWW = TWiki::Plugins::WysiwygPlugin::Constants::STARTWW;
-$ENDWW = TWiki::Plugins::WysiwygPlugin::Constants::ENDWW;
-$PROTOCOL = TWiki::Plugins::WysiwygPlugin::Constants::PROTOCOL;
-
 sub debugEncode {
     my $string = shift;
     while (my ($k, $v) = each %cc) {
@@ -255,7 +249,7 @@ sub debugEncode {
     return $string;
 }
 
-use vars qw(%selfClosing);
+our (%selfClosing);
 
 %selfClosing = (img => 1);
 

@@ -599,6 +599,7 @@ sub protectedByAttr {
     my ($tag, $attr) = @_;
 
     unless (scalar(@protectedByAttr)) {
+        # See the WysiwygPluginSettings for information on stickybits
         my $protection =
           TWiki::Func::getPreferencesValue('WYSIWYGPLUGIN_STICKYBITS') ||
               <<'DEFAULT';
@@ -633,7 +634,7 @@ DEFAULT
         foreach my $def (split(/;\s*/s, $protection)) {
             my ($re, $ats) = split(/\s*=\s*/s, $def, 2);
             push(@protectedByAttr,
-                 { tag => qr/$re/,
+                 { tag => qr/$re/i,
                    attrs => join('|', split(/\s*,\s*/, $ats)) });
         }
     }

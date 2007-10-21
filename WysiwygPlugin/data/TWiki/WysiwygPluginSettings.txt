@@ -1,4 +1,4 @@
----+ Settings for WysiwygPlugin that should common to most editor integrations
+---+ Settings for WysiwygPlugin that are common to most editor integrations
 %STARTINCLUDE%
 The *global* TWiki Variable =WYSIWYG_EXCLUDE= can be set to make the plugin sensitive to what is in a topic, before allowing it to be edited. You can set it up to veto an edit if the topic contains:
    * =html= - HTML tags (e.g. =&lt;div&gt;=, not including &lt;br&gt;), or 
@@ -18,9 +18,8 @@ HTML when certain specific attributes are present on the tag. This is most
 useful when you have styling or alignment information in tags that must be
 preserved.
 
-To do this, you must . This variable is used to
-tell the translator which attributes, when present on a tag, make it "stick"
-i.e. block conversion. For example, setting it to
+This variable is used to tell the translator which attributes, when present
+on a tag, make it "stick" i.e. block conversion. For example, setting it to
 =table=background,lang;tr=valign= will stop the translator from trying to
 handle any =table= tag that has =background= or =lang= attributes, and any
 =tr= tag that has a =valign= attribute.
@@ -57,4 +56,7 @@ The default setting for this variable is:
     TR=bgcolor,char,charoff,valign;
     UL=compact,type
 </verbatim>
+
+If you edit using the plain-text editor, you can use the &lt;sticky&gt;..&lt;/sticky&gt; tags to delimit HTML (or TML) that you do *not* want to be WYSIWYG edited.
+
 %STOPINCLUDE%

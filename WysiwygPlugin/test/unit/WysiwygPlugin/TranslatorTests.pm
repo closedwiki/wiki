@@ -29,9 +29,9 @@ use base qw(TWikiTestCase);
 
 use strict;
 
-use TWiki::Plugins::WysiwygPlugin;
-use TWiki::Plugins::WysiwygPlugin::TML2HTML;
-use TWiki::Plugins::WysiwygPlugin::HTML2TML;
+require TWiki::Plugins::WysiwygPlugin;
+require TWiki::Plugins::WysiwygPlugin::TML2HTML;
+require TWiki::Plugins::WysiwygPlugin::HTML2TML;
 
 # Bits for test type
                         # Fields in test records:
@@ -416,7 +416,7 @@ HERE
           html => <<'HERE',
 <p>
 <span class="WYSIWYG_PROTECTED">&lt;noautolink&gt;</span>
-RedHat & SuSE
+<span class="WYSIWYG_LINK">RedHat</span> & <span class="WYSIWYG_LINK">SuSE</span>
 <span class="WYSIWYG_PROTECTED">&lt;/noautolink&gt;</span>
 </p>
 HERE
@@ -447,9 +447,9 @@ HERE
           tml => 'a@z.com',
       },
       {
-          exec => $ROUNDTRIP,
+          exec => $TML2HTML|$ROUNDTRIP,
           name => 'variousWikiWords',
-          html => "${linkon}WebPreferences${linkoff}<p />$protecton%USERSWEB%$protectoff.TWikiUsers<p />${linkon}CompleteAndUtterNothing${linkoff}<p />${linkon}LinkBox$linkoff${linkon}LinkBoxs${linkoff}${linkon}LinkBoxies${linkoff}${linkon}LinkBoxess${linkoff}${linkon}LinkBoxesses${linkoff}${linkon}LinkBoxes${linkoff}",
+          html => "<p>${linkon}WebPreferences${linkoff}</p><p>$protecton<br />%USERSWEB%$protectoff.TWikiUsers</p><p>${linkon}CompleteAndUtterNothing${linkoff}</p><p>${linkon}LinkBox$linkoff${linkon}LinkBoxs${linkoff}${linkon}LinkBoxies${linkoff}${linkon}LinkBoxess${linkoff}${linkon}LinkBoxesses${linkoff}${linkon}LinkBoxes${linkoff}</p>",
           tml => <<'YYY',
 WebPreferences
 
@@ -922,7 +922,7 @@ hijk',
           finaltml => '<img src="%ATTACHURLPATH%/T-logo-16x16.gif" />',
       },
       {
-          exec => $ROUNDTRIP,
+          exec => $TML2HTML|$HTML2TML|$ROUNDTRIP,
           name => 'setCommand',
           tml => <<HERE,
    * Set FLIBBLE = <break> <cake/>
@@ -1052,10 +1052,10 @@ HERE
 HERE
       },
       {
-          exec => $ROUNDTRIP,
+          exec => $HTML2TML|$ROUNDTRIP,
           name => 'Item3735',
           tml => "fred *%WIKINAME%* fred",
-          html => "fred <b>$protecton%WIKINAME%$protectoff</b> fred",
+          html => "<p>fred <b>$protecton%WIKINAME%$protectoff</b> fred</p>",
       },
       {
           exec => $ROUNDTRIP,
@@ -1209,13 +1209,17 @@ HERE
 </li>
 </ul>
 </li>
-<li> The <span class="WYSIWYG_PROTECTED">&#60;code&#62;</span><span class="WYSIWYG_PROTECTED">&lt;noautolink&gt;</span>...<span class="WYSIWYG_PROTECTED">&lt;/noautolink&gt;</span><span class="WYSIWYG_PROTECTED">&#60;/code&#62;</span> syntax
+<li> The <code><span class="WYSIWYG_PROTECTED">&lt;noautolink&gt;</span>...<span class="WYSIWYG_PROTECTED">&lt;/noautolink&gt;</span></code> syntax
 </li>
 </ul>
 ',
           tml => '   * Prevent
       * Set NOAUTOLINK =
    * The <code><noautolink>...</noautolink></code> syntax
+',
+          finaltml => '   * Prevent
+      * Set NOAUTOLINK =
+   * The =<noautolink>...</noautolink>= syntax
 ',
       },
       {
@@ -1452,6 +1456,22 @@ DECAPS
           name => 'ProtectAndSurvive',
           tml => '<ul type="compact">Fred</ul><h1 align="right">HAH</h1><ol onclick="burp">Joe</ol>',
       },
+      {
+          name => 'Item4855',
+          exec => $TML2HTML,
+          tml => <<HERE,
+| [[LegacyTopic1]] | Main.SomeGuy |
+%TABLESEP%
+%SEARCH{"legacy" nonoise="on" format="| [[\$topic]] | [[\$wikiname]] |"}%
+HERE
+          html => <<THERE,
+<table cellspacing="1" cellpadding="0" border="1">
+<tr><td><span class="WYSIWYG_LINK">[[LegacyTopic1]]</span></td><td>Main.SomeGuy</td></tr>
+</table>
+<span class="WYSIWYG_PROTECTED"><br />%TABLESEP%</span>
+<span class="WYSIWYG_PROTECTED"><br />%SEARCH{"legacy" nonoise="on" format="| [[\$topic]] | [[\$wikiname]] |"}%</span>
+THERE
+      },
      ];
 
 sub gen_compare_tests {
@@ -1645,7 +1665,7 @@ sub convertImage {
     }
 }
 
-gen_compare_tests();
+gen_compare_tests('Item4855');
 #gen_file_tests();
 
 1;

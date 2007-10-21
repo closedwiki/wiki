@@ -38,14 +38,13 @@ the final TML.
 =cut
 
 package TWiki::Plugins::WysiwygPlugin::HTML2TML;
+use base 'HTML::Parser';
 
 use strict;
 
-use TWiki::Plugins::WysiwygPlugin::HTML2TML::Node;
-use TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf;
-use HTML::Parser;
-
-@TWiki::Plugins::WysiwygPlugin::HTML2TML::ISA = ( 'HTML::Parser' );
+require TWiki::Plugins::WysiwygPlugin::HTML2TML::Node;
+require TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf;
+require HTML::Parser;
 
 =pod
 
@@ -123,10 +122,13 @@ my %autoclose = ( 'li' => 1, 'td' => 1, 'th' => 1, 'tr' => 1 );
 
 sub _openTag {
     my( $this, $tag, $attrs ) = @_;
-    if( $autoclose{ lc( $tag )} &&
+
+    $tag = lc($tag);
+
+    if ($autoclose{$tag} &&
           $this->{stackTop} &&
-            lc($this->{stackTop}->{tag}) eq lc($tag) ) {
-        $this->_apply( $tag );
+            $this->{stackTop}->{tag} eq $tag) {
+        $this->_apply($tag);
     }
 
     push( @{$this->{stack}}, $this->{stackTop} ) if $this->{stackTop};
@@ -137,7 +139,7 @@ sub _openTag {
 sub _closeTag {
     my( $this, $tag ) = @_;
 
-    $this->_apply( $tag );
+    $this->_apply(lc($tag));
 }
 
 sub _text {
