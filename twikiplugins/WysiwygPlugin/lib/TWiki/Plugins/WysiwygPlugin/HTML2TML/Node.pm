@@ -42,8 +42,7 @@ use Assert;
 
 use vars qw( $reww );
 
-use TWiki::Plugins::WysiwygPlugin::Constants;
-use TWiki::Plugins::WysiwygPlugin::HTML2TML::WC;
+require TWiki::Plugins::WysiwygPlugin::Constants;
 
 =pod
 
@@ -64,7 +63,7 @@ sub new {
     $this->{attrs} = {};
     if( $attrs ) {
         foreach my $attr ( keys %$attrs ) {
-            $this->{attrs}->{$attr} = $attrs->{$attr};
+            $this->{attrs}->{lc($attr)} = $attrs->{$attr};
         }
     }
     $this->{head} = $this->{tail} = undef;
@@ -229,10 +228,14 @@ sub rootGenerate {
 
     $text =~ s/&nbsp;/$WC::NBSP/go;
 
+    # Move leading \n out of protected region. Delicate hack fix required to
+    # maintain TWiki variables at the start of lines.
+    $text =~ s/$WC::PON$WC::NBBR/$WC::CHECKn$WC::PON/g;
+
     # isolate whitespace checks and convert to $NBSP
     $text =~ s/$WC::CHECKw$WC::CHECKw+/$WC::CHECKw/go;
-    $text =~ s/(?<=[$WC::CHECKn$WC::CHECKs$WC::NBSP $WC::TAB$WC::NBBR])$WC::CHECKw//go;
-    $text =~ s/$WC::CHECKw(?=[$WC::CHECKn$WC::CHECKs$WC::NBSP $WC::NBBR])//go;
+    $text =~ s/([$WC::CHECKn$WC::CHECKs$WC::NBSP $WC::TAB$WC::NBBR]($WC::PON|$WC::POFF)?)$WC::CHECKw/$1/go;
+    $text =~ s/$WC::CHECKw(($WC::PON|$WC::POFF)?[$WC::CHECKn$WC::CHECKs$WC::NBSP $WC::NBBR])/$1/go;
     $text =~ s/^($WC::CHECKw)+//gos;
     $text =~ s/($WC::CHECKw)+$//gos;
     $text =~ s/($WC::CHECKw)+/$WC::NBSP/go;
@@ -378,8 +381,9 @@ sub generate {
     my $flags;
     my $text;
 
-    return $this->_defaultTag($options) if
-      $this->_isProtectedByAttrs();
+     if ($this->_isProtectedByAttrs()) {
+         return $this->_defaultTag($options);
+     }
 
     my $tag = $this->{tag};
 
@@ -665,16 +669,24 @@ sub _isConvertableListItem {
 sub _isConvertableTable {
     my( $this, $options, $table ) = @_;
 
-    return 0 if ($this->_isProtectedByAttrs());
+    if ($this->_isProtectedByAttrs()) {
+        return 0;
+    }
 
     my $kid = $this->{head};
     while ($kid) {
         if( $kid->{tag} =~ /^(colgroup|thead|tbody|tfoot|col)$/ ) {
-            return 0 unless( $kid->_isConvertableTable( $options, $table ));
+            unless ($kid->_isConvertableTable( $options, $table )) {
+                return 0;
+            }
         } elsif( $kid->{tag} ) {
-            return 0 unless( $kid->{tag} eq 'tr' );
+            unless ($kid->{tag} eq 'tr') {
+                return 0;
+            }
             my $row = $kid->_isConvertableTableRow( $options );
-            return 0 unless $row;
+            unless ($row) {
+                return 0;
+            }
             push( @$table, $row );
         }
         $kid = $kid->{next};
@@ -799,7 +811,7 @@ sub _emphasis {
     # Remove whitespace from either side of the contents, retaining the
     # whitespace
     $contents =~ s/&nbsp;/$WC::NBSP/go;
-    $contents =~ /^([\000- ]*)(.*?)([\000- ]*)$/;
+    $contents =~ /^($WC::WS)(.*?)($WC::WS)$/;
     my ($pre, $post) = ($1, $3);
     $contents = $2;
     return (0, undef) if( $contents =~ /^</ || $contents =~ />$/ );

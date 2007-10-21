@@ -38,7 +38,7 @@ use strict;
 use CGI qw( -any );
 
 require TWiki;
-use TWiki::Plugins::WysiwygPlugin::Constants;
+require TWiki::Plugins::WysiwygPlugin::Constants;
 
 my $TT0 = chr(0);
 my $TT1 = chr(1);
@@ -160,27 +160,35 @@ sub _processTags {
 
     return '' unless defined( $text );
 
-    my @queue = split( /(%)/, $text );
+    my @queue = split( /(\n?%)/s, $text );
     my @stack;
     my $stackTop = '';
 
     while( scalar( @queue )) {
         my $token = shift( @queue );
-        if( $token eq '%' ) {
-            if( $stackTop =~ /}$/ ) {
+        if( $token =~ /^\n?%$/s ) {
+            if( $token eq '%' && $stackTop =~ /}$/ ) {
                 while( scalar( @stack) &&
-                         $stackTop !~ /^%([A-Z0-9_:]+){.*}$/os ) {
+                         $stackTop !~ /^\n?%([A-Z0-9_:]+){.*}$/os ) {
                     $stackTop = pop( @stack ) . $stackTop;
                 }
             }
-            if( $stackTop =~ m/^%([A-Z0-9_:]+)({.*})?$/os ) {
-                my $tag = $1 . ( $2 || '' );
-                $tag = '%'.$tag.'%';
-                $stackTop = pop( @stack ).
-                  $this->_liftOut($tag, 'PROTECTED');
+            if( $token eq '%' &&
+                  $stackTop =~ m/^(\n?)%([A-Z0-9_:]+)({.*})?$/os ) {
+                my $nl = $1;
+                my $tag = $2 . ( $3 || '' );
+                $tag = "$nl%$tag%";
+# The commented out lines disable PROTECTED for %SIMPLE% vars. See
+# Bugs: Item4828 for the sort of problem this would help to avert.
+#                if ($tag =~ /^\n?%\w+{.*}%/) {
+                    $stackTop = pop( @stack ).
+                      $nl.$this->_liftOut($tag, 'PROTECTED');
+#                } else {
+#                    $stackTop = pop( @stack ).$tag;
+#                }
             } else {
                 push( @stack, $stackTop );
-                $stackTop = '%'; # push a new context
+                $stackTop = $token; # push a new context
             }
         } else {
             $stackTop .= $token;
@@ -403,6 +411,7 @@ sub _getRenderedVersion {
       (CGI::b(CGI::i($1)))gem;
     $text =~ s(${WC::STARTWW}\*([^\s]+?|[^\s].*?[^\s])\*$WC::ENDWW)
       (CGI::b($1))gem;
+
     $text =~ s(${WC::STARTWW}\_([^\s]+?|[^\s].*?[^\s])\_$WC::ENDWW)
       (CGI::i($1))gem;
     $text =~ s(${WC::STARTWW}\=([^\s]+?|[^\s].*?[^\s])\=$WC::ENDWW)
