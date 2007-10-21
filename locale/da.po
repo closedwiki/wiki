@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: da\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2007-10-21 22:19+0200\n"
+"PO-Revision-Date: 2007-10-21 22:49+0200\n"
 "Last-Translator: Steffen Poulsen <N/A>\n"
 "Language-Team: Danish <N/A>\n"
 "MIME-Version: 1.0\n"
@@ -1324,9 +1324,7 @@ msgstr "Angiv et nyt brugernavn og password for at skifte identitet:"
 
 #: templates/login.sudo.tmpl:18
 msgid "Enter the TWiki Administrator user or login as set in %1"
-msgstr ""
-"Brug den TWiki Administrator-bruger eller det login som er benyttet i "
-"%1"
+msgstr "Brug den TWiki Administrator-bruger eller det login som er benyttet i %1"
 
 #: twikiplugins/ClassicSkin/templates/login.classic.tmpl:21
 msgid ""
@@ -1504,7 +1502,9 @@ msgstr "Skjul hjælp"
 
 #: templates/messages.tmpl:109
 msgid "Hierarchical Webs is currently disabled, you cannot create Nested webs."
-msgstr "Hierarkiske webs er for øjeblikket slået fra, du kan ikke oprette underordnede webs."
+msgstr ""
+"Hierarkiske webs er for øjeblikket slået fra, du kan ikke oprette "
+"underordnede webs."
 
 #: templates/registernotify.tmpl:16
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:16
@@ -1712,15 +1712,11 @@ msgstr ""
 #: templates/twiki.tmpl:9
 msgid ""
 "It's usually best to choose a <a target='WikiWord' onclick=\"launchWindow('%"
-"SYSTEMWEB%','WikiWord'); return false;\" href='%1' rel='nofollow'>WikiWord</"
-"a> for the new topic name, otherwise automatic linking may not work. "
-"Characters not allowed in topic names, such as spaces will automatically be "
-"removed."
+"1','WikiWord'); return false;\" href='%2' rel='nofollow'>WikiWord</a> for "
+"the new topic name, otherwise automatic linking may not work. Characters not "
+"allowed in topic names, such as spaces will automatically be removed."
 msgstr ""
-"Det anbefales at vælge et <a target='WikiWord' onclick=\"launchWindow('%"
-"SYSTEMWEB%','WikiWord'); return false;\" href='%1' rel='nofollow'>WikiWord</"
-"a> som nyt sidenavn, da dette gør det nemmere at linke til det senere hen. "
-"Karakterer der ikke er tilladte i side-navne, som fx mellemrum, fjernes "
+"Det anbefales at vælge et <a target='WikiWord' onclick=\"launchWindow('%1','WikiWord'); return false;\" href='%2' rel='nofollow'>WikiWord</a> som nyt sidenavn, da dette gør det nemmere at linke til det senere hen. Karakterer der ikke er tilladte i side-navne, som fx mellemrum, fjernes "
 "automatisk. "
 
 #: templates/renameweb.tmpl:17
@@ -2008,8 +2004,10 @@ msgid "Only members of the %1 are allowed to perform this action."
 msgstr "Kun medlemmer af %1 må udføre denne handling."
 
 #: templates/login.tmpl:8
-msgid "Oops: we could not recognize you. Try again or %1."
-msgstr "Oops: Vi kunne ikke genkende dig. Forsøg igen eller %1"
+msgid "Oops: we could not recognize you. Try again or [[%1][reset your password]]."
+msgstr ""
+"Oops: Vi kunne ikke genkende dig. Forsøg igen eller [[%1][nulstil dit "
+"password]]."
 
 #: twikiplugins/ClassicSkin/templates/preview.classic.tmpl:10
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:22
@@ -2389,8 +2387,8 @@ msgstr ""
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:48
 msgid "S = Save, Q = Quiet save, K = Save and Continue, P = Preview, C = Cancel"
 msgstr ""
-"S = Gem (Save), Q = Gem stille (Uden notificering), K = Gem og fortsæt, P = Vis "
-"udkast (Preview), C = Fortryd (Cancel)"
+"S = Gem (Save), Q = Gem stille (Uden notificering), K = Gem og fortsæt, P = "
+"Vis udkast (Preview), C = Fortryd (Cancel)"
 
 #: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:120
 msgid "Save table"
@@ -3635,8 +3633,8 @@ msgid "or"
 msgstr "eller"
 
 #: templates/login.tmpl:59
-msgid "or %1"
-msgstr "eller %1"
+msgid "or [[%1][log in as administrator]]"
+msgstr "eller [[%1][log ind som administrator]]"
 
 #: templates/preview.tmpl:13 templates/preview.tmpl:9
 msgid "preview"
@@ -3763,7 +3761,7 @@ msgid ""
 "your password. If none of your registered e-mail addresses is valid, and you "
 "have forgotten your password, contact %1."
 msgstr ""
-"du *skal* have mindst en registreret e-mail-adresse for at kunne nulstille "
+"Du *skal* have mindst en registreret e-mail-adresse for at kunne nulstille "
 "dit password. Hvis ingen af dine registrerede e-mail-adresser er valide, og "
 "du har glemt dit password, kontakt da %1."
 
