@@ -1743,10 +1743,9 @@ msgstr ""
 #, fuzzy
 msgid ""
 "It's usually best to choose a <a target='WikiWord' onclick=\"launchWindow('%"
-"SYSTEMWEB%','WikiWord'); return false;\" href='%1' rel='nofollow'>WikiWord</"
-"a> for the new topic name, otherwise automatic linking may not work. "
-"Characters not allowed in topic names, such as spaces will automatically be "
-"removed."
+"1','WikiWord'); return false;\" href='%2' rel='nofollow'>WikiWord</a> for "
+"the new topic name, otherwise automatic linking may not work. Characters not "
+"allowed in topic names, such as spaces will automatically be removed."
 msgstr ""
 "新トピックを作成する時、&lt;a target='WikiWord' onclick=\"return launchWindow"
 "('%1','WikiWord')\" href='%1' rel='nofollow'&gt;WikiWord&lt;/a&gt;を使用した"
@@ -2039,7 +2038,8 @@ msgid "Only members of the %1 are allowed to perform this action."
 msgstr "%1のメンバーのみこの操作を行うことが許可されます"
 
 #: templates/login.tmpl:8
-msgid "Oops: we could not recognize you. Try again or %1."
+msgid ""
+"Oops: we could not recognize you. Try again or [[%1][reset your password]]."
 msgstr ""
 
 #: twikiplugins/ClassicSkin/templates/preview.classic.tmpl:10
@@ -3663,8 +3663,8 @@ msgstr "又は"
 
 #: templates/login.tmpl:59
 #, fuzzy
-msgid "or %1"
-msgstr "現在 %1"
+msgid "or [[%1][log in as administrator]]"
+msgstr "管理者への注意"
 
 #: templates/preview.tmpl:13 templates/preview.tmpl:9
 #, fuzzy
@@ -3816,6 +3816,10 @@ msgstr ""
 "絡ください。"
 
 #, fuzzy
+#~ msgid "or %1"
+#~ msgstr "現在 %1"
+
+#, fuzzy
 #~ msgid "&WYSIWYG"
 #~ msgstr "WYSIWYG"
 
@@ -3923,9 +3927,6 @@ msgstr ""
 
 #~ msgid "Not recommended when deleting a web."
 #~ msgstr "ウェブを削除する時に推薦しません。"
-
-#~ msgid "Note to administrator"
-#~ msgstr "管理者への注意"
 
 #~ msgid "Notices:"
 #~ msgstr "知らせ:"

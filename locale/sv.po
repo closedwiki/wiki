@@ -1699,12 +1699,12 @@ msgstr ""
 "i detta fall."
 
 #: templates/twiki.tmpl:9
+#, fuzzy
 msgid ""
 "It's usually best to choose a <a target='WikiWord' onclick=\"launchWindow('%"
-"SYSTEMWEB%','WikiWord'); return false;\" href='%1' rel='nofollow'>WikiWord</"
-"a> for the new topic name, otherwise automatic linking may not work. "
-"Characters not allowed in topic names, such as spaces will automatically be "
-"removed."
+"1','WikiWord'); return false;\" href='%2' rel='nofollow'>WikiWord</a> for "
+"the new topic name, otherwise automatic linking may not work. Characters not "
+"allowed in topic names, such as spaces will automatically be removed."
 msgstr ""
 "Du bör använda ett <a target='WikiWord' onclick=\"return launchWindow('%"
 "1','WikiWord')\" href='%1' rel='nofollow'>WikiOrd</a> som sidnamn, annars "
@@ -1995,7 +1995,8 @@ msgid "Only members of the %1 are allowed to perform this action."
 msgstr "Bara medlemmar av %1 får göra detta."
 
 #: templates/login.tmpl:8
-msgid "Oops: we could not recognize you. Try again or %1."
+msgid ""
+"Oops: we could not recognize you. Try again or [[%1][reset your password]]."
 msgstr ""
 
 #: twikiplugins/ClassicSkin/templates/preview.classic.tmpl:10
@@ -3619,8 +3620,8 @@ msgstr "eller"
 
 #: templates/login.tmpl:59
 #, fuzzy
-msgid "or %1"
-msgstr "nu %1"
+msgid "or [[%1][log in as administrator]]"
+msgstr "Information till administratören"
 
 #: templates/preview.tmpl:13 templates/preview.tmpl:9
 msgid "preview"
@@ -3755,6 +3756,10 @@ msgstr ""
 "ditt lösenord. Om ingen av dina registrerade e-postadresser är giltig och du "
 "glömt ditt lösenord så kontakta %1."
 
+#, fuzzy
+#~ msgid "or %1"
+#~ msgstr "nu %1"
+
 #~ msgid "&WYSIWYG"
 #~ msgstr "&WYSIWYG"
 
@@ -3809,9 +3814,6 @@ msgstr ""
 #~ "1','WikiWord')\" href='%2' rel='nofollow'>WikiOrd</a> som sidnamn, annars "
 #~ "fungerar inte automatisk länkning. Tecken som inte är tillåtna, t ex "
 #~ "mellanslag tas automatiskt bort."
-
-#~ msgid "Note to administrator"
-#~ msgstr "Information till administratören"
 
 #~ msgid ""
 #~ "Once you have created the topic, consider adding links in related topics "

@@ -1717,10 +1717,9 @@ msgstr ""
 #, fuzzy
 msgid ""
 "It's usually best to choose a <a target='WikiWord' onclick=\"launchWindow('%"
-"SYSTEMWEB%','WikiWord'); return false;\" href='%1' rel='nofollow'>WikiWord</"
-"a> for the new topic name, otherwise automatic linking may not work. "
-"Characters not allowed in topic names, such as spaces will automatically be "
-"removed."
+"1','WikiWord'); return false;\" href='%2' rel='nofollow'>WikiWord</a> for "
+"the new topic name, otherwise automatic linking may not work. Characters not "
+"allowed in topic names, such as spaces will automatically be removed."
 msgstr ""
 "Obvykle je nejlépe vybrat <a target='WikiWord' onclick=\"return launchWindow"
 "('%1','WikiWord')\" href='%1' rel='nofollow'>WikiWord</a> pro nové jméno "
@@ -2017,7 +2016,8 @@ msgid "Only members of the %1 are allowed to perform this action."
 msgstr "Pouze členové %1 jsou oprávnění provést tuto akci."
 
 #: templates/login.tmpl:8
-msgid "Oops: we could not recognize you. Try again or %1."
+msgid ""
+"Oops: we could not recognize you. Try again or [[%1][reset your password]]."
 msgstr ""
 
 #: twikiplugins/ClassicSkin/templates/preview.classic.tmpl:10
@@ -3651,8 +3651,8 @@ msgstr "nebo"
 
 #: templates/login.tmpl:59
 #, fuzzy
-msgid "or %1"
-msgstr "nyní je %1"
+msgid "or [[%1][log in as administrator]]"
+msgstr "Poznámka administrátoru"
 
 #: templates/preview.tmpl:13 templates/preview.tmpl:9
 #, fuzzy
@@ -3789,6 +3789,10 @@ msgstr ""
 "resetovat Vaše heslo. Pokud žádný z Vašich registrovaných emailových adres "
 "není správný a Vy jste změnil Vaše heslo, kontaktujte %1."
 
+#, fuzzy
+#~ msgid "or %1"
+#~ msgstr "nyní je %1"
+
 #~ msgid "&WYSIWYG"
 #~ msgstr "&Editovat(WYSIWYG)"
 
@@ -3836,9 +3840,6 @@ msgstr ""
 #~ "launchWindow('%1','WikiWord')\" href='%1' rel='nofollow'>WikiWord</a> pro "
 #~ "nové jméno článku, jinak nebude fungovat automatické odkazování. Písmena "
 #~ "nepovolená ve jménu článku, jako jsou mezery budou automaticky odstraněna."
-
-#~ msgid "Note to administrator"
-#~ msgstr "Poznámka administrátoru"
 
 #~ msgid ""
 #~ "Once you have created the topic, consider adding links in related topics "

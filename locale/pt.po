@@ -1734,12 +1734,12 @@ msgstr ""
 "facilmente, nesse caso é recomendável que você verifique com ele(a) primeiro."
 
 #: templates/twiki.tmpl:9
+#, fuzzy
 msgid ""
 "It's usually best to choose a <a target='WikiWord' onclick=\"launchWindow('%"
-"SYSTEMWEB%','WikiWord'); return false;\" href='%1' rel='nofollow'>WikiWord</"
-"a> for the new topic name, otherwise automatic linking may not work. "
-"Characters not allowed in topic names, such as spaces will automatically be "
-"removed."
+"1','WikiWord'); return false;\" href='%2' rel='nofollow'>WikiWord</a> for "
+"the new topic name, otherwise automatic linking may not work. Characters not "
+"allowed in topic names, such as spaces will automatically be removed."
 msgstr ""
 "Normalmente é melhor escolher uma <a target='WikiWord' onclick=\"launchWindow"
 "('%SYSTEMWEB%','WikiWord'); return false;\" href='%1' "
@@ -2032,7 +2032,8 @@ msgid "Only members of the %1 are allowed to perform this action."
 msgstr "Apenas integrantes do %1 têm permissão para realizar essa ação."
 
 #: templates/login.tmpl:8
-msgid "Oops: we could not recognize you. Try again or %1."
+msgid ""
+"Oops: we could not recognize you. Try again or [[%1][reset your password]]."
 msgstr ""
 
 #: twikiplugins/ClassicSkin/templates/preview.classic.tmpl:10
@@ -3680,9 +3681,8 @@ msgid "or"
 msgstr "ou"
 
 #: templates/login.tmpl:59
-#, fuzzy
-msgid "or %1"
-msgstr "agora %1"
+msgid "or [[%1][log in as administrator]]"
+msgstr ""
 
 #: templates/preview.tmpl:13 templates/preview.tmpl:9
 msgid "preview"
@@ -3813,6 +3813,10 @@ msgstr ""
 "você *precisa* ter ao menos um e-mail válido registado para poder restaurar "
 "sua senha.  Se nenhum de seus endereços registados for um e-mail válido, e "
 "você esqueceu sua senha, contate %1. "
+
+#, fuzzy
+#~ msgid "or %1"
+#~ msgstr "agora %1"
 
 #~ msgid "&WYSIWYG"
 #~ msgstr "&WYSIWYG"

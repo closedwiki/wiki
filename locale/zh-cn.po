@@ -1629,12 +1629,12 @@ msgstr ""
 "合并，所以在这种情况下建议您先和 %1 联系。"
 
 #: templates/twiki.tmpl:9
+#, fuzzy
 msgid ""
 "It's usually best to choose a <a target='WikiWord' onclick=\"launchWindow('%"
-"SYSTEMWEB%','WikiWord'); return false;\" href='%1' rel='nofollow'>WikiWord</"
-"a> for the new topic name, otherwise automatic linking may not work. "
-"Characters not allowed in topic names, such as spaces will automatically be "
-"removed."
+"1','WikiWord'); return false;\" href='%2' rel='nofollow'>WikiWord</a> for "
+"the new topic name, otherwise automatic linking may not work. Characters not "
+"allowed in topic names, such as spaces will automatically be removed."
 msgstr ""
 "最好使用一个<a target='WikiWord' onclick=\"return launchWindow('%"
 "1','WikiWord')\" href='%1' rel='nofollow'>WikiWord</a>创建新主题，否则自动链"
@@ -1922,7 +1922,8 @@ msgid "Only members of the %1 are allowed to perform this action."
 msgstr "只有%1的成员允许进行这些操作"
 
 #: templates/login.tmpl:8
-msgid "Oops: we could not recognize you. Try again or %1."
+msgid ""
+"Oops: we could not recognize you. Try again or [[%1][reset your password]]."
 msgstr ""
 
 #: twikiplugins/ClassicSkin/templates/preview.classic.tmpl:10
@@ -3455,8 +3456,8 @@ msgstr "或"
 
 #: templates/login.tmpl:59
 #, fuzzy
-msgid "or %1"
-msgstr "现在 %1"
+msgid "or [[%1][log in as administrator]]"
+msgstr "给管理员的提示"
 
 #: templates/preview.tmpl:13 templates/preview.tmpl:9
 msgid "preview"
@@ -3580,6 +3581,10 @@ msgstr ""
 "您*必须*拥有1个经过验证的电子邮箱地址以便于重新设置密码，如果你没有邮箱地址，"
 "忘记密码后请联系 %1"
 
+#, fuzzy
+#~ msgid "or %1"
+#~ msgstr "现在 %1"
+
 #~ msgid "&WYSIWYG"
 #~ msgstr "可视化编辑"
 
@@ -3630,9 +3635,6 @@ msgstr ""
 #~ "launchWindow('%1','WikiWord')\" href='%1' rel='nofollow'>WikiWord</a>, 否"
 #~ "则自动链接生成可能不起作用。而其他不被允许作为主题名称的字符，例如：空格将"
 #~ "被自动删除。"
-
-#~ msgid "Note to administrator"
-#~ msgstr "给管理员的提示"
 
 #~ msgid ""
 #~ "Once you have created the topic, consider adding links in related topics "

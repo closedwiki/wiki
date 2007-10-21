@@ -1770,10 +1770,9 @@ msgstr ""
 #, fuzzy
 msgid ""
 "It's usually best to choose a <a target='WikiWord' onclick=\"launchWindow('%"
-"SYSTEMWEB%','WikiWord'); return false;\" href='%1' rel='nofollow'>WikiWord</"
-"a> for the new topic name, otherwise automatic linking may not work. "
-"Characters not allowed in topic names, such as spaces will automatically be "
-"removed."
+"1','WikiWord'); return false;\" href='%2' rel='nofollow'>WikiWord</a> for "
+"the new topic name, otherwise automatic linking may not work. Characters not "
+"allowed in topic names, such as spaces will automatically be removed."
 msgstr ""
 "Для новой темы лучше всего выбрать <a target='WikiWord' onclick=\"return "
 "launchWindow('%1','WikiWord')\" href='%1' rel='nofollow'>WikiWord</a> "
@@ -2069,7 +2068,8 @@ msgid "Only members of the %1 are allowed to perform this action."
 msgstr "Только членам %1 позволено выполнить это действие."
 
 #: templates/login.tmpl:8
-msgid "Oops: we could not recognize you. Try again or %1."
+msgid ""
+"Oops: we could not recognize you. Try again or [[%1][reset your password]]."
 msgstr ""
 
 #: twikiplugins/ClassicSkin/templates/preview.classic.tmpl:10
@@ -3737,8 +3737,8 @@ msgstr "или"
 
 #: templates/login.tmpl:59
 #, fuzzy
-msgid "or %1"
-msgstr "сейчас %1"
+msgid "or [[%1][log in as administrator]]"
+msgstr "Примечание администратору"
 
 #: templates/preview.tmpl:13 templates/preview.tmpl:9
 #, fuzzy
@@ -3878,6 +3878,10 @@ msgstr ""
 "зарегистрированных Вами адресов электронной почты не правилен и Вы забыли "
 "свой пароль, пишите %1."
 
+#, fuzzy
+#~ msgid "or %1"
+#~ msgstr "сейчас %1"
+
 #~ msgid "&WYSIWYG"
 #~ msgstr "Визуальный редактор"
 
@@ -3937,9 +3941,6 @@ msgstr ""
 #~ "название, в противном случае автоматическая генерация ссылок может не "
 #~ "работать. Символы, недопустимые в названии темы, такие как пробелы, будут "
 #~ "автоматически удалены."
-
-#~ msgid "Note to administrator"
-#~ msgstr "Примечание администратору"
 
 #~ msgid ""
 #~ "Once you have created the topic, consider adding links in related topics "
