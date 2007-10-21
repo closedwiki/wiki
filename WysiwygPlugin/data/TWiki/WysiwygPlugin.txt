@@ -38,7 +38,7 @@ There is also the advantage that the translator can be used to *import* HTML fro
 
 Both translators can be used directly from Perl scripts, for example to build your own stand-alone translators.
 
-Stand-alone convertor scripts for HTML to TWiki and TWiki to HTML are included in the installation. They can be found in the top-level =tools= directory and is called =html2tml.pl=.
+A stand-alone convertor script for HTML to TWiki is included in the installation. It can be found in =tools/html2tml.pl=.
 
 ---+++ Integrating a HTML Editor
 The plugin can be used to integrate an HTML editor in a number of different ways.
@@ -166,7 +166,7 @@ Many thanks to the following sponsors for supporting this work:
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
 |  21 Oct 2007 | Bugs:Item4788: fixed unbalanced protect, which could cause loss of protected status Bugs:Item4811: noautolink *looks* like an HTML construct but in fact is not; the tag is infact an "on-off" switch and does not imply any HTML structure, so cannot be converted to a DIV or a span, so has to be removed. Bugs:Item4747: added &lt;sticky&gt; to try to overcome limitations in translation Bugs:Item4831: added increased flexibility in deciding what HTML get converted to TML, and what does not. Analysed all the HTML4 tags to establish initial settings. Bugs:Item4847: don't call non-existent function with older HTML::Parser releases Bugs:Item4844: Saving a table from IE didn't convert it back to TML Bugs:Item4855: table rows generated from TWiki variables were being eaten |
-|  6 Oct 2007 | Bugs:Item4700: fixed colspans Bugs:Item4701: removed extra line between %TABLE and the table Bugs:Item4705: fixed spacing around literal and verbatim blocks Bugs:Item4706: merge adjacent verbatim blocks separated only by whitespace Bugs:Item4712: fixed eating of noautolink and literal Bugs:Item4763: list items spanning multiple lines fixed |
+|  6 Oct 2007 | Bugs:Item4700: fixed colspans Bugs:Item4701: removed extra line between %TABLE and the table Bugs:Item4705: fixed spacing around literal and verbatim blocks Bugs:Item4706: merge adjacent verbatim blocks separated only by whitespace Bugs:Item4712: fixed eating of noautolink and literal Bugs:Item4763: list items spanning multiple lines fixed Bugs:Item4867: released tml2html |
 |  17 Sep 2007 | Bugs:Item4647: Bugs:Item4652: problems related to DIV fixed. Bugs:Item4653: fixed multi-line twiki variables |
 |  16 Sep 2007 | Bugs:Item4630: polished up the way the secret string is done, to ensure synch between perl and JS. Item4622: added UTF-8 handling steps that fixup malformed UTF8 strings before presenting them to the editor (saves Moz) and stops the editor passing them back to TWiki (saves IE). Removed extra entity decoding steps that were causing problems. Bugs:Item4629: fixed issues with verbatim, highlighted by previous mangling of this topic |
 |  13 Sep 2007 | Bugs:Item4613 cleaned up spurious message when navigating away Bugs:Item4615 fixed incorrect rendering of emphasis next to br |
