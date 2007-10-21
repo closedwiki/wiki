@@ -68,10 +68,10 @@ sub _process {
 
     unless ($headed) {
         $headed = 1; # recursion block
-        my $header = '<script type="text/javascript" src="';
+        my $header = "<script type='text/javascript' src='";
         $header .= TWiki::Func::getPubUrlPath().'/'.
           TWiki::Func::getTwikiWebname().
-              '/EditRowPlugin/TableSort$USE_SRC.js"></script>';
+              "/EditRowPlugin/TableSort$USE_SRC.js'></script>";
         $header .= <<STYLE;
 <style>
 .erpSort {
