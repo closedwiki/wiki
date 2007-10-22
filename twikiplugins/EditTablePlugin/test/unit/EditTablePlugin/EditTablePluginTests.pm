@@ -346,7 +346,7 @@ EXPECTED
 
     $expected = <<NEWEXPECTED;
 %EDITTABLE{format="| row, -1 | text, 10, init|"}%
-|  | test1 |
+| 0 | test1 |
 |  | test2 |
 |  | test3 |
 NEWEXPECTED
@@ -580,4 +580,64 @@ END
     $twiki->finish();
 }
 
+sub test_saveNoFormat {
+    my $this = shift;
+
+    my $topicName = $this->{test_topic};
+    my $webName   = $this->{test_web};
+    my $viewUrlAuth =
+      TWiki::Func::getScriptUrl( $webName, $topicName, 'viewauth' );
+    my $pubUrlTWikiWeb =
+      TWiki::Func::getUrlHost() . TWiki::Func::getPubUrlPath() . '/TWiki';
+
+    my $input = <<INPUT;
+%EDITTABLE{}%
+| *URL* | *Name* | *By* | *Comment* |
+| http://twiki.org | TWiki | me | dodo |
+INPUT
+    my $query = new CGI(
+        {
+            etedit    => ['on'],
+            ettablenr => ['1'],
+        }
+    );
+
+    $query->path_info("/$webName/$topicName");
+
+    my $twiki = new TWiki( undef, $query );
+    $TWiki::Plugins::SESSION = $twiki;
+
+    $query = new CGI(
+        {
+            etsave    => ['on'],
+            ettablenr => ['1'],
+        }
+    );
+
+    $query->path_info("/$webName/$topicName");
+
+    TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
+        $input );
+
+    my $twiki = new TWiki( undef, $query );
+    $TWiki::Plugins::SESSION = $twiki;
+
+    my ( $saveResult, $ecode ) = $this->capture(
+        sub {
+            print TWiki::Func::expandCommonVariables( $input,
+                $this->{test_topic}, $this->{test_web}, undef );
+        }
+    );
+
+    my ( $meta, $newtext ) = TWiki::Func::readTopic( $webName, $topicName );
+
+    my $expected = <<NEWEXPECTED;
+%EDITTABLE{}%
+| *URL* | *Name* | *By* | *Comment* |
+| http://twiki.org | TWiki | me | dodo |
+NEWEXPECTED
+    $this->assert_str_equals( $expected, $newtext, 0 );
+
+    $twiki->finish();
+}
 1;
