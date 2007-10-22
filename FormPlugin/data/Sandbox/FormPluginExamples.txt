@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="BaseUserMapping_333" date="1181390096" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICINFO{author="ArthurClemens" date="1193067440" format="1.1" reprev="1.2" version="1.2"}%
 
 ---+!! Form Plugin Examples
-See [[FormPlugin]]
+See [[%SYSTEMWEB%.FormPlugin]]
 
 Please view the raw text of this topic to learn how these forms are created.
 
@@ -529,7 +529,7 @@ title="Publishing date"
 
 ---++ !SendEmailPlugin form
 
-E-mail form for SendEmailPlugin - form works if the plugin is installed and enabled.
+E-mail form for !SendEmailPlugin - form works if the plugin is installed and enabled.
 
 %SENDEMAIL%
 
@@ -598,3 +598,79 @@ buttonlabel="Show me photos!"
 %ENDFORM%
 
 
+
+---++ Working together with <nop>CommentPlugin
+
+This form uses [[%SYSTEMWEB%.CommentPlugin]] to write submitted values to a table. A user-friendly display of table data is not included in the example.
+
+#NewArticles
+%STARTFORM{
+name="new_article_prependtotable"
+action="save"
+topic="%WEB%.%TOPIC%"
+anchor="NewArticles"
+method="POST"
+validate="on"
+onSubmit="return (twiki.Form.makeSafeForTableEntry) ? twiki.Form.makeSafeForTableEntry(this) : true;"
+}%
+<!-- <nop>CommentPlugin attributes -->
+<input type="hidden" name="comment_action" value="save"  />
+<input type="hidden" name="comment_type" value="new_article_prependtotable"  />
+<input type="hidden" name="comment_templatetopic" value="%WEB%.%TOPIC%"  />
+<input type="hidden" name="comment_location" value="&lt;!--InsertPoint--&gt;"  />
+<div class="twikiFormSteps">
+<div class="twikiFormStep">
+---++!! Enter a new article
+
+Attach a file first, then enter the data below.
+</div><div class="twikiFormStep">
+%FORMELEMENT{
+type="text"
+name="title"
+title="Title"
+hint="Link will have this label"
+validate="nonempty"
+mandatory="on"
+}%
+%FORMELEMENT{
+type="text"
+name="source"
+title="Source name"
+}%
+%FORMELEMENT{
+type="text"
+name="source_url"
+title="Source url"
+}%
+%FORMELEMENT{
+type="date"
+name="date"
+default="%DATE%"
+title="Publishing date"
+}%
+%FORMELEMENT{
+type="hidden"
+name="entry_date"
+default="%DATE%"
+}%
+</div><div class="twikiFormStep twikiLast">
+%FORMELEMENT{
+type="submit"
+buttonlabel="Save"
+}%
+</div>
+</div>
+%ENDFORM%
+
+
+---++!! Article data
+%EDITTABLE{}%
+%TABLE{id="datatable"}%
+| *Title* | *Source name* | *Source url* | *Publishing date* | *Entry date* |
+<!--InsertPoint-->
+
+
+<verbatim style="display:none;">
+%TMPL:DEF{OUTPUT:new_article_prependtotable}%%POS:BEFORE%| %URLPARAM{"title"}% | %URLPARAM{"source"}% | %URLPARAM{"source_url"}% | %URLPARAM{"date"}% | %URLPARAM{"entry_date"}% |
+%TMPL:END%
+</verbatim>

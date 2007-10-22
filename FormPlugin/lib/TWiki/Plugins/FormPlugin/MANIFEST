@@ -1,5 +1,5 @@
 data/TWiki/FormPlugin.txt 0644 Documentation
-data/TWiki/FormPluginExamples.txt 0644 Documentation
+data/Sandbox/FormPluginExamples.txt 0644 Documentation examples
 lib/TWiki/Plugins/FormPlugin.pm 0644 Perl module
 lib/TWiki/Plugins/FormPlugin/Validate.pm 0644 Perl module
 pub/TWiki/FormPlugin/formplugin.css 0644 CSS styles

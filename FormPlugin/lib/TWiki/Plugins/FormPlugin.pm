@@ -38,7 +38,7 @@ use vars
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
 $VERSION = '$Rev: 11069$';
-$RELEASE = '1.1';
+$RELEASE = '1.1.1';
 
 # Name of this Plugin, only used in this module
 $pluginName = 'FormPlugin';
@@ -271,6 +271,7 @@ sub _addHeader {
 <script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikilib.js"></script>
 <script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikiCSS.js"></script>
 <script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikiForm.js"></script>
+<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikiString.js"></script>
 END
 
     TWiki::Func::addToHEAD( 'FORMPLUGIN', $header );
@@ -487,7 +488,7 @@ sub _method {
 
 sub _displayForm {
     my ( $session, $params, $topic, $web ) = @_;
-
+    
     my $name = $params->{'name'} || '';
 
     my $actionParam = $params->{'action'} || '';
@@ -611,6 +612,8 @@ Lifted out:
 
 sub _formElement {
     my ( $session, $params, $topic, $web ) = @_;
+
+    _addHeader();
 
     my $element = _getFormElementHtml(@_);
 
@@ -1212,7 +1215,7 @@ sub _getDateFieldHtml {
 
             my $format = $TWiki::cfg{JSCalendarContrib}{format} || '%e %B %Y';
             $text .= ' <span class="twikiMakeVisible">';
-            $text .= CGI::image_button(
+            my $control = CGI::image_button(
                 -class   => 'editTableCalendarButton',
                 -name    => 'calendar',
                 -onclick => "return showCalendar('$id','$format')",
@@ -1222,10 +1225,12 @@ sub _getDateFieldHtml {
                 -alt   => 'Calendar',
                 -align => 'middle'
             );
+            #fix generated html
+            $control =~ s/MIDDLE/middle/go;
+            $text .= $control;
             $text .= '</span>';
         }
     };
-
     return $text;
 }
 
