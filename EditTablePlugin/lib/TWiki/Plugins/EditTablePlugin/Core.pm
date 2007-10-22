@@ -154,10 +154,10 @@ sub processText {
 
         $hasTableRow = 0;
 
-        my $hasEditTableTag = m/(\s*)$regex{edit_table_plugin}/go;
-        if ($hasEditTableTag) {
+        my $isLineWithEditTableTag = m/(\s*)$regex{edit_table_plugin}/go;
+        if ($isLineWithEditTableTag) {
 
-            # this is an EDITTABLE tag
+            # this is a line with an EDITTABLE tag
             if ($doSave) {
 
                 # no need to process, just copy the line
@@ -236,7 +236,8 @@ s/(.*?)$regex{edit_table_plugin}/&handleEditTableTag( $theWeb, $theTopic, $1, $2
                     $etrows = -1;   # make sure to get the actual number of rows
                 }
             }
-        }
+        }    # /if ($isLineWithEditTableTag)
+
         if (/$regex{table_plugin}/) {
 
             # match with a TablePlugin line
@@ -249,6 +250,7 @@ s/(.*?)$regex{edit_table_plugin}/&handleEditTableTag( $theWeb, $theTopic, $1, $2
         }
 
         if ($enableForm) {
+
             if ( !$hasTableRow && !$insideTable && !$createdNewTable ) {
 
                 # start new table
@@ -264,17 +266,16 @@ s/(.*?)$regex{edit_table_plugin}/&handleEditTableTag( $theWeb, $theTopic, $1, $2
                 $insideTable = 1;
                 $rowNr++;
 
-                if ( $doSave
-                    || ( $doEdit && $etrows >= 0 ) && ( $rowNr > $etrows ) )
-                {
+                if ( $doSave || $doEdit ) {
+                    if ( ( $etrows >= 0 ) && ( $rowNr > $etrows ) ) {
 
-                    # deleted row
-                    $rowNr--;
-                    next;
+                        # deleted row
+                        $rowNr--;
+                        next;
+                    }
                 }
                 my $isNewRow = ( $rowNr > $rowNr ) ? 1 : 0;
 s/$regex{table_row}/handleTableRow( $1, $2, $tableNr, $isNewRow, $rowNr, $doEdit, $doSave, $theWeb, $theTopic )/eo;
-
             }
             elsif ($insideTable) {
 
@@ -318,11 +319,9 @@ s/$regex{table_row}/handleTableRow( $1, $2, $tableNr, $isNewRow, $rowNr, $doEdit
 
     # clean up hack that handles EDITTABLE correctly if at end
     $result =~ s/($RENDER_HACK)+$//go;
-
     if ($doSave) {
         my $error = TWiki::Func::saveTopicText( $theWeb, $theTopic, $result, '',
             $doSaveQuiet );
-
         TWiki::Func::setTopicEditLock( $theWeb, $theTopic, 0 );   # unlock Topic
         my $url = TWiki::Func::getViewUrl( $theWeb, $theTopic );
         if ($error) {
@@ -921,9 +920,9 @@ sub handleTableRow {
     ) = @_;
     $thePre |= '';
     my $text = "$thePre\|";
-
     if ($doEdit) {
         $theRow =~ s/\|\s*$//o;
+
         my $rowID = $query->param("etrow_id$theRowNr");
         if ( !defined $rowID ) { $rowID = $theRowNr; }
         my @cells = split( /\|/, $theRow );
@@ -939,7 +938,6 @@ sub handleTableRow {
             $col += 1;
             $cellDefined = 0;
             $val = $isNewRow ? undef : $query->param("etcell${rowID}x$col");
-
             if ( $val && $val =~ /^Chkbx: (etcell.*)/ ) {
 
       # Multiple checkboxes, val has format "Chkbx: etcell4x2x2 etcell4x2x3 ..."
