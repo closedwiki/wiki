@@ -103,7 +103,7 @@ print "\n\n ready to build release\n";
 #      * Note: if you specify a release name the script will attempt to commit to svn 
 `perl pseudo-install.pl BuildContrib`;
 chdir('lib');
-`perl ../tools/build.pl release -auto`;
+`perl ../tools/build.pl release -auto 2>&1 > $twikihome/TWiki-build.log`;
 
 chdir($twikihome);
 if ($SvensAutomatedBuilds) {
