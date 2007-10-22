@@ -189,7 +189,6 @@ data/TWiki/TextFormattingRules.txt 0644
 data/TWiki/TimBernersLee.txt 0644
 data/TWiki/TimeSpecifications.txt 0644
 data/TWiki/UserDocumentationCategory.txt 0644
-data/TWiki/UserToolsCategory.txt 0644
 data/TWiki/UsingHTML.txt 0644
 data/TWiki/VarACTIVATEDPLUGINS.txt 0644
 data/TWiki/VarALLVARIABLES.txt 0644
@@ -1023,7 +1022,6 @@ tools/extender.pl 0444
 tools/geturl.pl 0555
 tools/rewriteshbang.pl 0555
 tools/tick_twiki.pl 0555
-tools/upgrade_emails.pl 0555
 twiki_httpd_conf.txt 0444
 working/tmp/README 0444
 working/registration_approvals/README 0444
