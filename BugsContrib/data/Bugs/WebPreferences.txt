@@ -15,7 +15,7 @@ __Preferences:__
 	* Web specific background color: (Pick a lighter one of the %SYSTEMWEB%.StandardColors)
 		* Set WEBBGCOLOR = #D2D2FF
 
-      * Set WEBLOGONAME = logo.png
+      * Set WEBLOGOIMG = %PUBURL%/%BASEWEB%/WebPreferences/logo.png
 
 	* List this web in the %SYSTEMWEB%.SiteMap:
 		* If yes, set SITEMAPLIST to =on=, do not set NOSEARCHALL, and add the "what" and "use to..." description for the site map. Make sure to list only links that include the name of the web, e.g. <nop>%WEB%.Topic links.
@@ -36,10 +36,18 @@ __Preferences:__
 		* %SYSTEMWEB%.TWikiForms: How to enable form(s)
 		* Set WEBFORMS = ItemTemplate
 
+   * backward compatibility settings
+   * SYSTEMWEB -  %SYSTEMWEB% - 
+      * #Set %IF{"$SYSTEMWEB != ''" then="#"}%SYSTEMWEB = %TWIKIWEB%asdf
+   * USERSWEB -  %USERSWEB% - 
+      * #Set %IF{"$USERSWEB != ''" then="#"}%USERSWEB = %MAINWEB%asdf
+   * NEWTOPICNAME -  %NEWTOPICNAME%
+      * #Set NEWTOPICNAME = %IF{"defined AUTOINC1" then="AUTOINC1" else="XXXXXXXXXX"}%
+
 	* Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the <nop>%WEB% web: (See %SYSTEMWEB%.TWikiAccessControl)
 		* Set DENYWEBVIEW = 
 		* Set ALLOWWEBVIEW = 
-		* Set DENYWEBCHANGE = Main.TWikiGuest
+		* Set DENYWEBCHANGE = %USERSWEB%.TWikiGuest
 		* Set ALLOWWEBCHANGE = 
 		* Set DENYWEBRENAME = 
 		* Set ALLOWWEBRENAME = 
@@ -66,5 +74,5 @@ __Related Topics:__
 	* %SYSTEMWEB%.TWikiAccessControl explains how to restrict access by users or groups.
 
 
-%META:FILEATTACHMENT{name="logo.png" attachment="logo.png" attr="" comment="" date="1127687271" path="logo.png" size="2572" stream="logo.png" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="favicon.ico" attachment="favicon.ico" attr="" comment="" date="1167353172" path="favicon.ico" size="3638" stream="favicon.ico" user="Main.PeterThoeny" version="3"}%
+%META:FILEATTACHMENT{name="logo.png" attachment="logo.png" attr="" comment="" date="1127687271" path="logo.png" user="TWikiContributor" version="2"}%
+%META:FILEATTACHMENT{name="favicon.ico" attachment="favicon.ico" attr="" comment="" date="1167353172"  user="TWikiContributor" version="4"}%

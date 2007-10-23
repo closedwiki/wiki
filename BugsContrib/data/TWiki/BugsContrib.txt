@@ -1,4 +1,6 @@
-Item Tracking system implemented as a TWiki Application
+<img src="%PUBURL%/%WEB%/%TOPIC%/wikiring-bugscontrib.png" style="float:right;" />
+
+---+ Item Tracking system implemented as a TWiki Application
 
 <!--
 
@@ -10,11 +12,11 @@ Item Tracking system implemented as a TWiki Application
    Instead, you could check your fix in, raise a bug in the Bugs web, or mail thge author.
 -->
 
-This is a simple Tracking System implemented using TWiki.TWikiForms. It has been implemented to be used in a web on its own, but could be intermingled with a discussion style !TWikiWeb.
+This is a Tracking System implemented using TWiki.TWikiForms. It has been implemented to be used in a web on its own, but could be intermingled with a discussion style !TWikiWeb.
 
-See http://develop.twiki.org/~develop/cgi-bin/view/Bugs for an example of it in use (though please don't change anything; it's a live Bug DB!)
+It has been used as TWiki's bug tracking and shakeout system since 2005 - See http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs.
 
-The BugsContrib is a _TWikiApplication_ (an application that is implemented entirely in TWiki topics). It is designed to use the left bars supported by "pattern" skin, though could easily be converted to another skin. It's ideal for a small bug database (we have used it with over 2000 items with no problems) for a disciplined team.
+The BugsContrib is a _TWikiApplication_ (an application that is implemented entirely in TWiki topics). It is designed to use the left bars supported by "pattern" skin, though could easily be converted to another skin. It's ideal for a small bug database (we have used it with over 4000 items with no problems) for a disciplined team, and should scale well when used in conjunction with the soon to be released TWiki:Codev.DatabaseStore.
 
 ---++ Installation
 
@@ -32,13 +34,18 @@ See the Bugs.WebHome topic in the new web for help in configuring the applicatio
 
    * Set SHORTDESCRIPTION = Item Tracking system implemented as a TWiki Application
 
-|  Authors: | Main.SvenDowideit http://wikiring.com partners & others |
+|  Authors: | TWiki:Main.SvenDowideit of [[http://distributedINFORMATION.com][distributedINFORMATION.com]], %PUBURL%/%WEB%/%TOPIC%/wikiring.png http://wikiring.com partners & others |
+| Plasticbug logo | by [[http://liquisoft.com][Ryan Ford]] |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 |  License: | GPL |
 |  Change History: | |
-| 12856 | 13 Feb 2007 - Sven Dowideit - update with lessons learned from longer term use |
-|  9804 | Crawford Currie - packaged for release |
+|  | Oct 2007 - TWiki:Main.SvenDowideit - updated to use the 4.2 TWiki.QuerySearch when available. |
+|  12856 | 13 Feb 2007 - TWiki:Main.SvenDowideit - update with lessons learned from longer term use |
+|  9804 | TWiki:Main.CrawfordCurrie - packaged for Release |
 |  Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
-|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+|  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
+
+%META:FILEATTACHMENT{name="wikiring-bugscontrib.png" attachment="wikiring-bugscontrib.png" attr="" comment="" date="" path="logo.png" user="TWikiContributor" version="2"}%
+%META:FILEATTACHMENT{name="wikiring.png" attachment="wikiring.png" attr="" comment="" date=""  user="TWikiContributor" version="4"}%
