@@ -5,7 +5,7 @@
 <table style="float:right">
 <tr>
   <td><img src="%ATTACHURLPATH%/wikiringlogo40x40.png"></td>
-  <td><a href="http://wikiring.de" title="Lets your Wiki Ring" style="text-decoration:none">
+  <td><a href="http://wikiring.de" title="Make your Wiki ring!" style="text-decoration:none">
       Powered by <br /> <nop>WikiRing Consultants </a>
   </td>
 </tr>
@@ -40,8 +40,9 @@ This work is partly funded by [[http://www.hennerich.de][T+T Hennerich <nop>GmbH
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2006-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.00 |
+|  Plugin Version: | v1.01 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  23 Oct 2007 | work around infinite loop in combination with <nop>ActionTrackerPlugin |
 |  17 Sep 2007 | replace usernames in formtemplates as well as in the topic text |
 |  18 Dec 2006 | initial release |
 |  Dependencies: | None |

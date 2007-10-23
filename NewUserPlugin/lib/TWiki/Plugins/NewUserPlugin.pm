@@ -24,7 +24,7 @@ use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $NO_PREFS_IN_TOPIC $done
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
 $VERSION = '$Rev$';
-$RELEASE = 'v1.00';
+$RELEASE = 'v1.01';
 $SHORTDESCRIPTION = 'Create a user topic if it does not exist yet';
 $NO_PREFS_IN_TOPIC = 1;
 $debug = 0; # toggle me
@@ -54,8 +54,10 @@ sub initPlugin {
 # a half-init state in the middle of TWiki::new. so we have to wait for
 # the TWiki object to be fully initialized, i.e. its i18n subsystem
 sub beforeCommonTagsHandler {
-  return unless $TWiki::Plugins::SESSION->{i18n} || $done;
+  return if !defined($TWiki::Plugins::SESSION->{i18n}) || $done;
   $done = 1;
+
+  writeDebug("called beforeCommonTagsHandler");
 
   my $wikiUserName = TWiki::Func::getWikiUserName();
   my $mainWeb = TWiki::Func::getMainWebname();
