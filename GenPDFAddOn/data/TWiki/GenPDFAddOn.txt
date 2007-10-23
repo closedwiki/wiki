@@ -151,8 +151,9 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 ---++ Add-On Info
 
 |  Add-on Author: | TWiki:Main/BrianSpinar, TWiki:Main/WadeTurland |
-|  Add-on Version: | 31 Aug 2007 |
+|  Add-on Version: | 23 Oct 2007 |
 |  Change History: | |
+|  23 Oct 2007 | Fixed Bugs:Item4453 & Bugs:Item4885,compatibility with Perl 5.6 and  missing images with SSL certificates |
 |  31 Aug 2007 | Fixed Bugs:Item4530, improper rendering of lists | 
 |  13196 | Removed =nop= tags before sending to htmldoc, fixed Bugs:Item3549 |
 |  11673 | TWiki:Main/RickMach updated MIME type to pdf from x-pdf, fixed bug preventing disabling the TOC |

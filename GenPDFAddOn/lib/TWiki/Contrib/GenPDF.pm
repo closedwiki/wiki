@@ -50,7 +50,7 @@ use strict;
 use CGI;
 use TWiki::Func;
 use TWiki::UI::View;
-use File::Temp;
+use File::Temp qw( tempfile );
 use Error qw( :try );
 
 use vars qw( $VERSION $RELEASE );
@@ -245,19 +245,27 @@ sub _createTitleFile {
    # FIXME - should this be a preference?
    $text =~ s/<span class="twikiNewLink".*?>([\w\s]+)<.*?\/span>/$1/gs;
 
-   # Fix the image tags for links relative to web server root and
-   # fully qualify any unqualified URLs (to make it portable to another host)
+   # Fix the image tags to use hard-desk path range than url paths.
+   # This is needed in case wiki requires read authentication like SSL client
+   # certificates.
+   # Fully qualify any unqualified URLs (to make it portable to another host)
    my $url = TWiki::Func::getUrlHost();
-   $text =~ s/<img(.*?) src="\//<img$1 src="$url\//sgi;
+   my $pdir = TWiki::Func::getPubDir();
+   my $purlp = TWiki::Func::getPubUrlPath();
+
+   $text =~ s!<img(.*?) src="($url)?$purlp!<img$1 src="$pdir\/!sgi;
    $text =~ s/<a(.*?) href="(?!#)\//<a$1 href="$url\//sgi;
 
    # Save it to a file
-   my $fh = new File::Temp(TEMPLATE => 'GenPDFAddOnXXXXXXXXXX',
-                           DIR => File::Spec->tmpdir(),
-                           SUFFIX => '.html');
+   my ($fh, $name) = tempfile('GenPDFAddOnXXXXXXXXXX',
+                               DIR => File::Spec->tmpdir(),
+	                       SUFFIX => '.html');
+   open $fh, ">$name";
+
    print $fh $text;
 
-   return $fh;
+   close $fh; 
+   return $name;
 }
 
 
@@ -356,10 +364,14 @@ sub _fixHtml {
    # FIXME - should this be a preference?
    $html =~ s/<span class="twikiNewLink".*?>([\w\s]+)<.*?\/span>/$1/gs;
 
-   # Fix the image tags for links relative to web server root and
-   # fully qualify any unqualified URLs (to make it portable to another host)
+   # Fix the image tags to use hard-disk path rather than relative url paths for
+   # images.  Needed if wiki requires authentication like SSL client certifcates.
+   # Fully qualify any unqualified URLs (to make it portable to another host)
    my $url = TWiki::Func::getUrlHost();
-   $html =~ s/<img(.*?) src="\//<img$1 src="$url\//sgi;
+   my $pdir = TWiki::Func::getPubDir();
+   my $purlp = TWiki::Func::getPubUrlPath();
+
+   $html =~ s!<img(.*?) src="($url)?$purlp!<img$1 src="$pdir\/!sgi;
    $html =~ s/<a(.*?) href="\//<a$1 href="$url\//sgi;
    # link internally if we include the topic
    for my $wikiword (@$refTopics) {
@@ -391,33 +403,32 @@ sub _getPrefs {
    # HTMLDOC location
    # $TWiki::htmldocCmd must be set in TWiki.cfg
 
-    use constant {
-       BANNER => "",
-       TITLE => "",
-       SUBTITLE => "",
-       HEADERTOPIC => "",
-       TITLETOPIC => "",
-       SKIN => "print.pattern",
-       RECURSIVE => undef,
-       FORMAT => "pdf14",
-       TOCLEVELS => 5,
-       PAGESIZE => "a4",
-       ORIENTATION => "portrait",
-       WIDTH => 860,
-       HEADERSHIFT => 0,
-       KEYWORDS => '%FORMFIELD{"KeyWords"}%',
-       SUBJECT => '%FORMFIELD{"TopicHeadline"}%',
-       TOCHEADER => "...",
-       TOCFOOTER => "..i",
-       HEADFOOTFONT => "",
-       BODYIMAGE => "",
-       LOGOIMAGE => "",
-       NUMBEREDTOC => undef,
-       DUPLEX => undef,
-       PERMISSIONS => undef,
-       MARGINS => undef,
-       BODYCOLOR => undef,
-   };
+  use constant BANNER => "";
+  use constant TITLE => "";
+  use constant SUBTITLE => "";
+  use constant HEADERTOPIC => "";
+  use constant TITLETOPIC => "";
+  use constant SKIN => "print.pattern";
+  use constant RECURSIVE => undef;
+  use constant FORMAT => "pdf14";
+  use constant TOCLEVELS => 5;
+  use constant PAGESIZE => "a4";
+  use constant ORIENTATION => "portrait";
+  use constant WIDTH => 860;
+  use constant HEADERSHIFT => 0;
+  use constant KEYWORDS => '%FORMFIELD{"KeyWords"}%';
+  use constant SUBJECT => '%FORMFIELD{"TopicHeadline"}%';
+  use constant TOCHEADER => "...";
+  use constant TOCFOOTER => "..i";
+  use constant HEADFOOTFONT => "";
+  use constant BODYIMAGE => "";
+  use constant LOGOIMAGE => "";
+  use constant NUMBEREDTOC => undef;
+  use constant DUPLEX => undef;
+  use constant PERMISSIONS => undef;
+  use constant MARGINS => undef;
+  use constant BODYCOLOR => undef;
+
 
    # header/footer topic
    $prefs{'hftopic'} = $query->param('pdfheadertopic') || TWiki::Func::getPreferencesValue("GENPDFADDON_HEADERTOPIC") || HEADERTOPIC;
@@ -632,11 +643,13 @@ sub viewPDF {
       $htmlData =~ s|.*(<!DOCTYPE)|$1|s;
 
       # Save this to a temp file for htmldoc processing
-      my $contentFile = new File::Temp(TEMPLATE => 'GenPDFAddOnXXXXXXXXXX',
-                                       DIR => File::Spec->tmpdir(),
-                                       #UNLINK => 0, # DEBUG
-                                       SUFFIX => '.html');
-      print $contentFile $hfData . $htmlData;
+      my ($cfh, $contentFile) = tempfile('GenPDFAddOnXXXXXXXXXX',
+                                          DIR => File::Spec->tmpdir(),
+                                          #UNLINK => 0, # DEBUG
+                                          SUFFIX => '.html');
+      open $cfh, ">$contentFile";
+      print $cfh $hfData . $htmlData;
+      close $cfh;
       push @contentFiles, $contentFile;
    }
 
@@ -644,10 +657,10 @@ sub viewPDF {
    my $titleFile = _createTitleFile($webName);
 
    # Create a temp file for output
-   my $outputFile = new File::Temp(TEMPLATE => 'GenPDFAddOnXXXXXXXXXX',
-                                   DIR => File::Spec->tmpdir(),
-                                   #UNLINK => 0, # DEBUG
-                                   SUFFIX => '.pdf');
+   my ($ofh, $outputFile) = tempfile('GenPDFAddOnXXXXXXXXXX',
+                                      DIR => File::Spec->tmpdir(),
+                                      #UNLINK => 0, # DEBUG
+	                              SUFFIX => '.pdf');
 
    # Convert contentFile to PDF using HTMLDOC
    my @htmldocArgs;
@@ -686,7 +699,7 @@ sub viewPDF {
 
    push @htmldocArgs, @contentFiles;
 
-   print STDERR "Calling htmldoc with args: @htmldocArgs\n";
+#   print STDERR "Calling htmldoc with args: @htmldocArgs\n";
 
    # Disable CGI feature of newer versions of htmldoc
    # (thanks to Brent Roberts for this fix)
@@ -722,10 +735,15 @@ sub viewPDF {
    } catch Error::Simple with {
    };
 
-   while(<$outputFile>){
-      print;
+   open $ofh, $outputFile;
+   while(<$ofh>){
+	  print;
    }
-   close $outputFile;
+   close $ofh;
+
+   # Cleaning up temporary files
+   unlink $outputFile, $titleFile;
+   unlink @contentFiles; 
 }
 
 1;
