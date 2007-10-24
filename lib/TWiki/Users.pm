@@ -244,7 +244,9 @@ sub initialiseUser {
     $login = $plogin if $plogin;
 
     # if we get here without a login id, we are a guest
-    my $cUID = $this->getCanonicalUserID( $login ) || $this->getCanonicalUserID( $TWiki::cfg{DefaultUserLogin} );
+    my $cUID;
+    $cUID = $this->getCanonicalUserID( $login ) if (defined($login) && ($login ne ''));
+    $cUID = $cUID || $this->getCanonicalUserID( $TWiki::cfg{DefaultUserLogin} );
 	return $cUID;
 }
 
@@ -545,17 +547,26 @@ Get the wikiname to display for a canonical user identifier.
 
 sub getWikiName {
     my ($this, $cUID ) = @_;
-    return 'UnknownUser' unless $cUID;
+    return 'UnknownUser' unless defined($cUID);
 	return $this->{getWikiName}->{$cUID} if (defined($this->{getWikiName}->{$cUID}));
 
 	my $legacycUID = $this->getCanonicalUserID($cUID);
 
-    my $wikiname = $this->_getMapping($legacycUID)->getWikiName($legacycUID) if ($legacycUID && $this->_getMapping($legacycUID));
-	if (defined($TWiki::cfg{RenderLoggedInButUnknownUsers} ) || ($TWiki::cfg{RenderLoggedInButUnknownUsers}) ) {
-		$this->{getWikiName}->{$cUID} = $wikiname || "UnknownUser (<nop>$cUID)";
-	} else {
-		$this->{getWikiName}->{$cUID} = $wikiname || "$cUID";
-	}
+    my $wikiname;
+    $wikiname = $this->_getMapping($legacycUID)->getWikiName($legacycUID) if (defined($legacycUID) && ($legacycUID ne '') && $this->_getMapping($legacycUID));
+    
+	if (!defined($wikiname)) {
+        if (defined($TWiki::cfg{RenderLoggedInButUnknownUsers} ) &&
+            ($TWiki::cfg{RenderLoggedInButUnknownUsers}) ) {
+            $wikiname = "UnknownUser (<nop>$cUID)";
+        } else {
+            $wikiname = "$cUID";
+        }
+    }
+    
+    my ( $web, $topic ) = $this->{session}->normalizeWebTopicName( $TWiki::cfg{UsersWebName}, $wikiname );
+    $this->{getWikiName}->{$cUID} = $topic;
+    
     return $this->{getWikiName}->{$cUID};
 }
 
@@ -807,12 +818,15 @@ sub removeUser {
 
 used for debugging to ensure we are actually passing a canonical_id
 
+These ASSERTS have been disabled, as they have been made dangerous and misleading
+due to the legacy cUID code
+
 =cut
 
 sub ASSERT_IS_CANONICAL_USER_ID {
     my( $this, $user_id ) = @_;
 
-    $this->_getMapping($user_id)->ASSERT_IS_CANONICAL_USER_ID($user_id) if ($this->_getMapping($user_id));
+    #$this->_getMapping($user_id)->ASSERT_IS_CANONICAL_USER_ID($user_id) if ($this->_getMapping($user_id));
 }
 
 =pod
@@ -821,11 +835,14 @@ sub ASSERT_IS_CANONICAL_USER_ID {
 
 used for debugging to ensure we are actually passing a user login
 
+These ASSERTS have been disabled, as they have been made dangerous and misleading
+due to the legacy cUID code
+
 =cut
 
 sub ASSERT_IS_USER_LOGIN_ID {
     my( $this, $user_login ) = @_;
-    $this->_getMapping(undef, $user_login)->ASSERT_IS_USER_LOGIN_ID($user_login) if ($this->_getMapping(undef, $user_login));
+    #$this->_getMapping(undef, $user_login)->ASSERT_IS_USER_LOGIN_ID($user_login) if ($this->_getMapping(undef, $user_login));
 }
 
 
@@ -835,11 +852,14 @@ sub ASSERT_IS_USER_LOGIN_ID {
 
 used for debugging to ensure we are actually passing a user display_name (commonly a WikiWord Name)
 
+These ASSERTS have been disabled, as they have been made dangerous and misleading
+due to the legacy cUID code
+
 =cut
 
 sub ASSERT_IS_USER_DISPLAY_NAME {
     my( $this, $user_display ) = @_;
-    $this->_getMapping(undef, undef, $user_display)->ASSERT_IS_USER_DISPLAY_NAME($user_display) if ($this->_getMapping(undef, undef, $user_display));
+    #$this->_getMapping(undef, undef, $user_display)->ASSERT_IS_USER_DISPLAY_NAME($user_display) if ($this->_getMapping(undef, undef, $user_display));
 }
 
 1;

@@ -81,6 +81,12 @@ sub set_up_for_verify {
     if ($this->{twiki}->inContext('registration_supported') && $this->{twiki}->inContext('registration_enabled'))  {
         try {
             $this->registerUser('usera', 'User', 'A', 'user@example.com');
+            $this->registerUser('usera86', 'User', 'A86', 'user86@example.com');
+            $this->registerUser('user86a', 'User86', 'A', 'user86a@example.com');
+            #this should fail... as its the same as the one above
+            #$this->registerUser('user862a', 'User', '86A', 'user862a@example.com');
+            #this one does fail..
+            #$this->registerUser('86usera', '86User', 'A', 'user86a@example.com');
             $this->registerUser('userb', 'User', 'B', 'user@example.com');
             $this->registerUser('userc', 'User', 'C', 'userc@example.com;userd@example.com');
             $this->{twiki}->{store}->saveTopic(
@@ -158,7 +164,7 @@ sub verify_eachUserAllowLoginName {
     if ($TWiki::cfg{UserMappingManager} eq 'TWiki::Users::BaseUserMapping') {
          @correctList = qw/TWikiContributor TWikiGuest TWikiRegistrationAgent UnknownUser/;
     } else {
-         @correctList = qw/TWikiContributor TWikiGuest TWikiRegistrationAgent UnknownUser ScumBag UserA UserB UserC/;
+         @correctList = qw/TWikiContributor TWikiGuest TWikiRegistrationAgent UnknownUser ScumBag User86A UserA UserA86 UserB UserC/;
     }
     push @correctList, $TWiki::cfg{AdminUserWikiName};
     my $correct = join(',', sort @correctList);
@@ -187,7 +193,7 @@ sub verify_eachUserDontAllowLoginName {
          @correctList = qw/TWikiContributor TWikiGuest TWikiRegistrationAgent UnknownUser/;
     } else {
 #TODO: should reture WikiName's - trouble is that this means wikiname==loginname - and they were registered with them different
-         @correctList = qw/TWikiContributor TWikiGuest TWikiRegistrationAgent UnknownUser scum usera userb userc/;
+         @correctList = qw/TWikiContributor TWikiGuest TWikiRegistrationAgent UnknownUser scum user86a usera usera86 userb userc/;
     }
     push @correctList, $TWiki::cfg{AdminUserWikiName};
     my $correct = join(',', sort @correctList);
@@ -375,11 +381,28 @@ sub verify_getCanonicalUserID_extended {
     $this->assert_str_equals($usera_cUID, TWiki::Func::getCanonicalUserID('UserA'));
     $this->assert_str_equals($usera_cUID, TWiki::Func::getCanonicalUserID($TWiki::cfg{UsersWebName}.'.'.'UserA'));
 
+
+#            $this->registerUser('usera86', 'User', 'A86', 'user86@example.com');
+    my $usera86_cUID = $this->{twiki}->{users}->getCanonicalUserID('usera86');
+    $this->assert_str_equals($usera86_cUID, TWiki::Func::getCanonicalUserID($usera86_cUID));
+    $this->assert_str_equals($usera86_cUID, TWiki::Func::getCanonicalUserID('usera86'));
+    $this->assert_str_equals($usera86_cUID, TWiki::Func::getCanonicalUserID('UserA86'));
+    $this->assert_str_equals($usera86_cUID, TWiki::Func::getCanonicalUserID($TWiki::cfg{UsersWebName}.'.'.'UserA86'));
+#            $this->registerUser('user86a', 'User86', 'A', 'user86a@example.com');
+    my $user86a_cUID = $this->{twiki}->{users}->getCanonicalUserID('user86a');
+    $this->assert_str_equals($user86a_cUID, TWiki::Func::getCanonicalUserID($user86a_cUID));
+    $this->assert_str_equals($user86a_cUID, TWiki::Func::getCanonicalUserID('user86a'));
+    $this->assert_str_equals($user86a_cUID, TWiki::Func::getCanonicalUserID('User86A'));
+    $this->assert_str_equals($user86a_cUID, TWiki::Func::getCanonicalUserID($TWiki::cfg{UsersWebName}.'.'.'User86A'));
+#            $this->registerUser('user862a', 'User', '86A', 'user862a@example.com');
+#            $this->registerUser('86usera', '86User', 'A', 'user86a@example.com');
+
     #TODO: consider how to render unkown user's
     $this->assert_null($this->{twiki}->{users}->getCanonicalUserID('nonexistantuser'));
     $this->assert_null(TWiki::Func::getCanonicalUserID('nonexistantuser'));
     $this->assert_null(TWiki::Func::getCanonicalUserID('NonExistantUser'));
     $this->assert_null(TWiki::Func::getCanonicalUserID($TWiki::cfg{UsersWebName}.'.'.'NonExistantUser'));
+    $this->assert_null(TWiki::Func::getCanonicalUserID($TWiki::cfg{UsersWebName}.'.'.'NonExistantUser86'));
 
     #TODO: consider what to return for GROUPs
 #    $this->assert_null($this->{twiki}->{users}->getCanonicalUserID('AandBGroup'));
@@ -415,6 +438,21 @@ sub verify_getWikiName_extended {
     $this->assert_str_equals('UserA', TWiki::Func::getWikiName('usera'));
     $this->assert_str_equals('UserA', TWiki::Func::getWikiName('UserA'));
     $this->assert_str_equals('UserA', TWiki::Func::getWikiName($TWiki::cfg{UsersWebName}.'.'.'UserA'));
+    
+#            $this->registerUser('usera86', 'User', 'A86', 'user86@example.com');
+    my $usera86_cUID = $this->{twiki}->{users}->getCanonicalUserID('usera86');
+    $this->assert_str_equals('UserA86', TWiki::Func::getWikiName($usera86_cUID));
+    $this->assert_str_equals('UserA86', TWiki::Func::getWikiName('usera86'));
+    $this->assert_str_equals('UserA86', TWiki::Func::getWikiName('UserA86'));
+    $this->assert_str_equals('UserA86', TWiki::Func::getWikiName($TWiki::cfg{UsersWebName}.'.'.'UserA86'));
+#            $this->registerUser('user86a', 'User86', 'A', 'user86a@example.com');
+    my $user86a_cUID = $this->{twiki}->{users}->getCanonicalUserID('user86a');
+    $this->assert_str_equals('User86A', TWiki::Func::getWikiName($user86a_cUID));
+    $this->assert_str_equals('User86A', TWiki::Func::getWikiName('user86a'));
+    $this->assert_str_equals('User86A', TWiki::Func::getWikiName('User86A'));
+    $this->assert_str_equals('User86A', TWiki::Func::getWikiName($TWiki::cfg{UsersWebName}.'.'.'User86A'));
+#            $this->registerUser('user862a', 'User', '86A', 'user862a@example.com');
+#            $this->registerUser('86usera', '86User', 'A', 'user86a@example.com');
 
     #TODO: consider how to render unkown user's
     #$TWiki::cfg{RenderLoggedInButUnknownUsers} is false, or undefined
@@ -424,7 +462,8 @@ sub verify_getWikiName_extended {
     $this->assert_str_equals($TWiki::cfg{DefaultUserWikiName}, TWiki::Func::getWikiName($nonexistantuser_cUID));
     $this->assert_str_equals('nonexistantuser', TWiki::Func::getWikiName('nonexistantuser'));
     $this->assert_str_equals('NonExistantUser', TWiki::Func::getWikiName('NonExistantUser'));
-    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.NonExistantUser', TWiki::Func::getWikiName($TWiki::cfg{UsersWebName}.'.'.'NonExistantUser'));
+    $this->assert_str_equals('NonExistantUser', TWiki::Func::getWikiName($TWiki::cfg{UsersWebName}.'.'.'NonExistantUser'));
+    $this->assert_str_equals('NonExistantUser86', TWiki::Func::getWikiName($TWiki::cfg{UsersWebName}.'.'.'NonExistantUser86'));
 
     #TODO: consider how to render unkown user's
     #my $AandBGroup_cUID = $this->{twiki}->{users}->getCanonicalUserID('AandBGroup');
@@ -458,14 +497,32 @@ sub verify_getWikiUserName_extended {
     $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'UserA', TWiki::Func::getWikiUserName('UserA'));
     $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'UserA', TWiki::Func::getWikiUserName($TWiki::cfg{UsersWebName}.'.'.'UserA'));
 
+#            $this->registerUser('usera86', 'User', 'A86', 'user86@example.com');
+    my $usera86_cUID = $this->{twiki}->{users}->getCanonicalUserID('usera86');
+    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'UserA86', TWiki::Func::getWikiUserName($usera86_cUID));
+    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'UserA86', TWiki::Func::getWikiUserName('usera86'));
+    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'UserA86', TWiki::Func::getWikiUserName('UserA86'));
+    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'UserA86', TWiki::Func::getWikiUserName($TWiki::cfg{UsersWebName}.'.'.'UserA86'));
+#            $this->registerUser('user86a', 'User86', 'A', 'user86a@example.com');
+    my $user86a_cUID = $this->{twiki}->{users}->getCanonicalUserID('user86a');
+    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'User86A', TWiki::Func::getWikiUserName($user86a_cUID));
+    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'User86A', TWiki::Func::getWikiUserName('user86a'));
+    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'User86A', TWiki::Func::getWikiUserName('User86A'));
+    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'User86A', TWiki::Func::getWikiUserName($TWiki::cfg{UsersWebName}.'.'.'User86A'));
+#            $this->registerUser('user862a', 'User', '86A', 'user862a@example.com');
+#            $this->registerUser('86usera', '86User', 'A', 'user86a@example.com');
+
+
     #TODO: consider how to render unkown user's
-    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'TWikiUserMapping_NonExistantUser', TWiki::Func::getWikiUserName('TWikiUserMapping_NonExistantUser'));
-    my $nonexistantuser_cUID = $this->{twiki}->{users}->getCanonicalUserID('nonexistantuser');
+    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'NonExistantUserAsdf', TWiki::Func::getWikiUserName('NonExistantUserAsdf'));
+    my $nonexistantuser_cUID = $this->{twiki}->{users}->getCanonicalUserID('nonexistantuserasdf');
     $this->annotate($nonexistantuser_cUID);			#returns guest
     $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{DefaultUserWikiName}, TWiki::Func::getWikiUserName($nonexistantuser_cUID));
-    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'nonexistantuser', TWiki::Func::getWikiUserName('nonexistantuser'));
-    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'NonExistantUser', TWiki::Func::getWikiUserName('NonExistantUser'));
-    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{UsersWebName}.'.'.'NonExistantUser', TWiki::Func::getWikiUserName($TWiki::cfg{UsersWebName}.'.'.'NonExistantUser'));
+    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'nonexistantuserasdf', TWiki::Func::getWikiUserName('nonexistantuserasdf'));
+    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'nonexistantuserasdfqwer', TWiki::Func::getWikiUserName('nonexistantuserasdfqwer'));
+    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'NonExistantUserAsdf', TWiki::Func::getWikiUserName('NonExistantUserAsdf'));
+    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'NonExistantUserAsdf', TWiki::Func::getWikiUserName($TWiki::cfg{UsersWebName}.'.'.'NonExistantUserAsdf'));
+    $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'NonExistantUserAsdf86', TWiki::Func::getWikiUserName($TWiki::cfg{UsersWebName}.'.'.'NonExistantUserAsdf86'));
 
     #TODO: consider how to render unkown user's
     #my $AandBGroup_cUID = $this->{twiki}->{users}->getCanonicalUserID('AandBGroup');
@@ -498,11 +555,27 @@ sub verify_wikiToUserName_extended {
     $this->assert_str_equals('usera', TWiki::Func::wikiToUserName('UserA'));
     $this->assert_str_equals('usera', TWiki::Func::wikiToUserName($TWiki::cfg{UsersWebName}.'.'.'UserA'));
 
+#            $this->registerUser('usera86', 'User', 'A86', 'user86@example.com');
+    my $usera86_cUID = $this->{twiki}->{users}->getCanonicalUserID('usera86');
+    $this->assert_str_equals('usera86', TWiki::Func::wikiToUserName($usera86_cUID));
+    $this->assert_str_equals('usera86', TWiki::Func::wikiToUserName('usera86'));
+    $this->assert_str_equals('usera86', TWiki::Func::wikiToUserName('UserA86'));
+    $this->assert_str_equals('usera86', TWiki::Func::wikiToUserName($TWiki::cfg{UsersWebName}.'.'.'UserA86'));
+#            $this->registerUser('user86a', 'User86', 'A', 'user86a@example.com');
+    my $user86a_cUID = $this->{twiki}->{users}->getCanonicalUserID('user86a');
+    $this->assert_str_equals('user86a', TWiki::Func::wikiToUserName($user86a_cUID));
+    $this->assert_str_equals('user86a', TWiki::Func::wikiToUserName('user86a'));
+    $this->assert_str_equals('user86a', TWiki::Func::wikiToUserName('User86A'));
+    $this->assert_str_equals('user86a', TWiki::Func::wikiToUserName($TWiki::cfg{UsersWebName}.'.'.'User86A'));
+#            $this->registerUser('user862a', 'User', '86A', 'user862a@example.com');
+#            $this->registerUser('86usera', '86User', 'A', 'user86a@example.com');
+
     #TODO: consider how to render unkown user's
     $this->assert_null(TWiki::Func::wikiToUserName('TWikiUserMapping_NonExistantUser'));
     $this->assert_null(TWiki::Func::wikiToUserName('nonexistantuser'));
     $this->assert_null(TWiki::Func::wikiToUserName('NonExistantUser'));
     $this->assert_null(TWiki::Func::wikiToUserName($TWiki::cfg{UsersWebName}.'.'.'NonExistantUser'));
+    $this->assert_null(TWiki::Func::wikiToUserName($TWiki::cfg{UsersWebName}.'.'.'NonExistantUser86'));
 
     #TODO: consider how to render unkown user's
     #my $AandBGroup_cUID = $this->{twiki}->{users}->getCanonicalUserID('AandBGroup');
