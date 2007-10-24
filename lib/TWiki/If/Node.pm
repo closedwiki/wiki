@@ -23,10 +23,24 @@ sub newLeaf {
     }
 }
 
+# Used wherever a plain string is expected, this method suppresses automatic
+# lookup of names in meta-data
+sub _evaluate {
+    my $this = shift;
+    my $result;
+
+    if (!ref( $this->{op})) {
+        return $this->{params}[0];
+    } else {
+        return $this->evaluate(@_);
+    }
+}
+
 sub OP_context {
-    my( $this, %domain ) = @_;
+    my $this = shift;
     my $a = $this->{params}->[0];
-    my $text = $a->evaluate() || '';
+    my $text = $a->_evaluate(@_) || '';
+    my %domain = @_;
     my $session = $domain{tom}->session;
     throw Error::Simple('No context in which to evaluate "'.
                           $a->stringify().'"') unless $session;
@@ -34,14 +48,15 @@ sub OP_context {
 }
 
 sub OP_allows {
-    my( $this, %domain ) = @_;
+    my $this = shift;
     my $a = $this->{params}->[0]; # topic name (string)
     my $b = $this->{params}->[1]; # access mode (string)
-    my $mode = $b->evaluate() || 'view';
+    my $mode = $b->_evaluate(@_) || 'view';
+    my %domain = @_;
     my $session = $domain{tom}->session;
     throw Error::Simple('No context in which to evaluate "'.
                           $a->stringify().'"') unless $session;
-    my $str = $a->evaluate();
+    my $str = $a->evaluate(@_);
     return 0 unless $str;
     my ($web, $topic) = $session->normalizeWebTopicName(
         $session->{webName}, $str);
@@ -59,33 +74,36 @@ sub OP_allows {
 }
 
 sub OP_istopic {
-    my( $this, %domain ) = @_;
+    my $this = shift;
     my $a = $this->{params}->[0];
-    my $session = $domain{tom}->{_session};
+    my %domain = @_;
+    my $session = $domain{tom}->session;
     throw Error::Simple('No context in which to evaluate "'.
                           $a->stringify().'"') unless $session;
     my ($web, $topic) = $session->normalizeWebTopicName(
-        $session->{webName}, $a->evaluate() || '');
+        $session->{webName}, $a->_evaluate(@_) || '');
     return $session->{store}->topicExists($web, $topic) ? 1 : 0;
 }
 
 sub OP_isweb {
-    my( $this, %domain ) = @_;
+    my $this = shift;
     my $a = $this->{params}->[0];
-    my $session = $domain{tom}->{_session};
+    my %domain = @_;
+    my $session = $domain{tom}->session;
     throw Error::Simple('No context in which to evaluate "'.
                           $a->stringify().'"') unless $session;
-    my $web = $a->evaluate() || '';
+    my $web = $a->_evaluate(@_) || '';
     return $session->{store}->webExists($web) ? 1 : 0;
 }
 
 sub OP_dollar {
-    my( $this, %domain ) = @_;
+    my $this = shift;
     my $a = $this->{params}->[0];
+    my %domain = @_;
     my $session = $domain{tom}->session;
     throw Error::Simple('No context in which to evaluate "'.
                           $a->stringify().'"') unless $session;
-    my $text = $a->evaluate() || '';
+    my $text = $a->_evaluate(@_) || '';
     if( $text && defined( $session->{cgiQuery}->param( $text ))) {
         return $session->{cgiQuery}->param( $text );
     }
@@ -97,12 +115,13 @@ sub OP_dollar {
 }
 
 sub OP_defined {
-    my( $this, %domain ) = @_;
+    my $this = shift;
     my $a = $this->{params}->[0];
-    my $session = $domain{tom}->{_session};
+    my %domain = @_;
+    my $session = $domain{tom}->session;
     throw Error::Simple('No context in which to evaluate "'.
                           $a->stringify().'"') unless $session;
-    my $eval =  $a->evaluate();
+    my $eval =  $a->_evaluate(@_);
     return 0 unless $eval;
     return 1 if( defined( $session->{cgiQuery}->param( $eval )));
     return 1 if( defined(
@@ -112,15 +131,16 @@ sub OP_defined {
 }
 
 sub OP_ingroup {
-    my( $this, %domain ) = @_;
+    my $this = shift;
     my $a = $this->{params}->[0]; # user cUID/ loginname / WikiName / WebDotWikiName :( (string)
     my $b = $this->{params}->[1]; # group name (string
-    my $session = $domain{tom}->{_session};
+    my %domain = @_;
+    my $session = $domain{tom}->session;
     throw Error::Simple('No context in which to evaluate "'.
                           $a->stringify().'"') unless $session;
-    my $user =  $session->{users}->getCanonicalUserID($a->evaluate());
+    my $user =  $session->{users}->getCanonicalUserID($a->evaluate(@_));
     return 0 unless $user;
-    my $group =  $b->evaluate();
+    my $group =  $b->_evaluate(@_);
     return 0 unless $group;
     return 1 if( $session->{users}->isInGroup($user, $group) );
     return 0;

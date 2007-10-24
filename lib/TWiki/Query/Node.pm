@@ -56,6 +56,10 @@ use vars qw ( %aliases %isArrayType );
 %isArrayType =
   map { $_ => 1 } qw( FILEATTACHMENT FIELD PREFERENCE );
 
+sub lookupNames {
+    return 1;
+}
+
 # $data is the indexed object
 # $field is the scalar being used to index the object
 sub _getField {
@@ -183,7 +187,7 @@ sub evaluate {
     if (!ref( $this->{op})) {
         my %domain = @_;
         if ($this->{op} == $TWiki::Infix::Node::NAME &&
-              defined $domain{data}) {
+            defined $domain{data}) {
             # a name; look it up in clientData
             $result = $this->_getField( $domain{data}, $this->{params}[0]);
         } else {
