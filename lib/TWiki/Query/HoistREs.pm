@@ -29,7 +29,7 @@ use TWiki::Query::Node;
 # second level LHS is a field access
 # second level RHS is a static string or number
 
-sub MONITOR_HOIST { 0 }
+sub MONITOR_HOIST { 1 }
 
 =pod
 
@@ -179,7 +179,13 @@ sub _hoistDOT {
 
         }
     } elsif (!ref($node->{op}) && $node->{op} eq $TWiki::Infix::Node::NAME) {
-        if ($node->{params}[0] eq 'text') {
+        if ($node->{params}[0] eq 'name') {
+            # Special case for the topic name
+	    return undef;
+        } elsif ($node->{params}[0] eq 'web') {
+            # Special case for the web name
+	    return undef;
+        } elsif ($node->{params}[0] eq 'text') {
             # Special case for the text body
             return "\000RHS\001";
         } else {
