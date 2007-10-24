@@ -93,6 +93,7 @@ EOF
                                      $systemWeb,
                                      $TWiki::cfg{SystemWebName});
         $TWiki::cfg{SystemWebName} = $systemWeb;
+        $TWiki::cfg{EnableEmail} = 1;
 
     } catch TWiki::AccessControlException with {
         $this->assert(0,shift->stringify());

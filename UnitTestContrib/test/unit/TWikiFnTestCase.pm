@@ -44,6 +44,7 @@ sub set_up {
     $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
     $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';
     $TWiki::cfg{Register}{EnableNewUserRegistration} = 1;
+    $TWiki::cfg{RenderLoggedInButUnknownUsers} = 0;
 
     $TWiki::cfg{Register}{NeedVerification} = 0;
     $TWiki::cfg{MinPasswordLength} = 0;

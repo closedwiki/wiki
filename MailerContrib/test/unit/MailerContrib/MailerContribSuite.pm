@@ -67,6 +67,7 @@ sub set_up {
         "TestGroup", "   * Set GROUP = TestUser3\n");
 
     # Must create a new twiki to force re-registration of users
+    $TWiki::cfg{EnableEmail} = 1;
     $this->{twiki} = new TWiki();
     $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
     @TWikiFnTestCase::mails = ();
