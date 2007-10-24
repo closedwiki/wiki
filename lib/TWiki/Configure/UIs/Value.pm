@@ -49,7 +49,7 @@ sub open_html {
             $info .= $check;
             $isBroken = 1;
         }
-        if ($check eq 'NOT USED IN THIS CONFIGURATION') {
+        if ($check && $check eq 'NOT USED IN THIS CONFIGURATION') {
             $isUnused = 1;
         }
     }

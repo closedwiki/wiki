@@ -215,12 +215,14 @@ HERE
         return 0;
     }
 
-    if (crypt($pass, $TWiki::cfg{Password}) ne $TWiki::cfg{Password}) {
+    # If a password has been defined, check that it has been used
+    if ($TWiki::cfg{Password} &&
+        crypt($pass, $TWiki::cfg{Password}) ne $TWiki::cfg{Password}) {
         print CGI::div({class=>'error'}, "Password incorrect");
         return 0;
     }
 
-    # Password is correct
+    # Password is correct, or no password defined
     # Change the password if so requested
     my $newPass = $TWiki::query->param('newCfgP');
 
