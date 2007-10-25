@@ -127,6 +127,7 @@ sub OP_defined {
     return 1 if( defined(
         $session->{prefs}->getPreferencesValue( $eval )));
     return 1 if( defined( $session->{SESSION_TAGS}{$eval} ));
+    return 1 if( defined( $TWiki::functionTags{$eval} ));
     return 0;
 }
 

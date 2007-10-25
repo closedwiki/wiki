@@ -519,6 +519,27 @@ sub test_94 {
     $this->simpleTest(test => "isweb \$ 'SYSTEMWEB'", then=>1, else=>0);
 }
 
+sub test_95 {
+    my $this = shift;
+    $this->simpleTest(test => 'defined \'SYSTEMWEB\'', then=>1, else=>0);
+}
+
+sub test_96 {
+    my $this = shift;
+    $this->simpleTest(test => 'defined SYSTEMWEB', then=>1, else=>0);
+}
+
+sub test_97 {
+    my $this = shift;
+    $this->simpleTest(test => 'defined \'IF\'', then=>1, else=>0);
+}
+
+sub test_98 {
+    my $this = shift;
+    $this->simpleTest(test => 'defined IF', then=>1, else=>0);
+}
+
+
 sub set_up {
     my $this = shift;
     $this->SUPER::set_up(@_);
