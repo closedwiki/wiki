@@ -99,7 +99,7 @@ data/TWiki/DeveloperDocumentationCategory.txt 0644
 data/TWiki/DontNotify.txt 0644
 data/TWiki/EditDoesNotIncreaseTheRevision.txt 0644
 data/TWiki/ExampleTopicTemplate.txt 0644
-data/TWiki/FormatTokens.txt
+data/TWiki/FormatTokens.txt 0644
 data/TWiki/FileAttachment.txt 0644
 data/TWiki/FileAttribute.txt 0644
 data/TWiki/ForceNewRevision.txt 0644
@@ -764,6 +764,7 @@ pub/TWiki/TWikiDocGraphics/locktopic.gif 0644
 pub/TWiki/TWikiDocGraphics/locktopicgray.gif 0644
 pub/TWiki/TWikiDocGraphics/logout.gif 0644
 pub/TWiki/TWikiDocGraphics/mail.gif 0644
+pub/TWiki/TWikiDocGraphics/map.gif 0644
 pub/TWiki/TWikiDocGraphics/mdb.gif 0644
 pub/TWiki/TWikiDocGraphics/minus.gif 0644
 pub/TWiki/TWikiDocGraphics/mobile.gif 0644
@@ -779,6 +780,7 @@ pub/TWiki/TWikiDocGraphics/note.gif 0644
 pub/TWiki/TWikiDocGraphics/notify.gif 0644
 pub/TWiki/TWikiDocGraphics/package.gif 0644
 pub/TWiki/TWikiDocGraphics/parked.gif 0644
+pub/TWiki/TWikiDocGraphics/parts.gif 0644
 pub/TWiki/TWikiDocGraphics/pdf.gif 0644
 pub/TWiki/TWikiDocGraphics/pencil.gif 0644
 pub/TWiki/TWikiDocGraphics/person.gif 0644
@@ -812,6 +814,8 @@ pub/TWiki/TWikiDocGraphics/searchpackage.gif 0644
 pub/TWiki/TWikiDocGraphics/searchtag.gif 0644
 pub/TWiki/TWikiDocGraphics/searchtopic.gif 0644
 pub/TWiki/TWikiDocGraphics/sh.gif 0644
+pub/TWiki/TWikiDocGraphics/sitemap.gif 0644
+pub/TWiki/TWikiDocGraphics/sitetree.gif 0644
 pub/TWiki/TWikiDocGraphics/skin.gif 0644
 pub/TWiki/TWikiDocGraphics/skype.gif 0644
 pub/TWiki/TWikiDocGraphics/sniff.gif 0644
@@ -1046,5 +1050,4 @@ lib/CPAN/lib/CGI/Session/Serialize/storable.pm 0444
 lib/CPAN/lib/CGI/Session/Serialize/yaml.pm 0444
 lib/CPAN/lib/CGI/Session/Test/Default.pm 0444
 lib/CPAN/lib/CGI/Session/Tutorial.pm 0444
-lib/CPAN/lib/CGI/Session.pm
-
+lib/CPAN/lib/CGI/Session.pm 0444
