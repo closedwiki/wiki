@@ -139,7 +139,7 @@ _this does not _
 </tr>
 <tr valign="top">
 <td>
- *Verbatim (Literal) Text:* %BR%
+ *Verbatim Text:* %BR%
  Surround code excerpts and other formatted text with =&lt;verbatim&gt;= and =&lt;/verbatim&gt;= tags.%BR%
 %T% =verbatim= tags disable HTML code. Use =&lt;pre&gt;= and =&lt;/pre&gt;= tags instead if you want the HTML code within the tags to be interpreted.%BR%
 __%X% NOTE:__ Preferences variables (* Set NAME = value) are set within verbatim tags.
@@ -452,6 +452,53 @@ a@b.com
 [Mail]]
 
 [[mailto:?subject=Hi][Hi]]
+</td>
+</tr>
+<tr>
+<td>
+ *Literal content:* %BR%
+ TWiki generates HTML code from TWiki shorthand.
+ *Experts* surround anything that must be output literally in the HTML code, without the application of
+ TWiki shorthand rules, with =&lt;literal&gt;..&lt;/literal&gt;= tags. %X% any HTML
+ within literal tags *must* be well formed i.e. all tags must be properly closed before
+ the end of the literal block. %I% TWiki Variables are expanded within literal blocks.
+</td><td>
+<pre>
+&lt;literal&gt;
+| Not | A | Table |
+&lt;literal&gt;
+</pre>
+</td>
+<td>
+<literal>
+| Not | A | Table |
+</literal>
+</td>
+</tr>
+<tr>
+<td>
+ *Protected content:* %BR%
+ *Experts* protect text from mangling by WYSIWYG editors using
+ =&lt;sticky&gt;..&lt;/sticky&gt;= tags. Sticky tags don't have any effect on normal
+ topic display; they are only relevant when content has to be
+ protected from a WYSIWYG editor (usually because it isn't well-formed HTML, or because it
+ is HTML that WYSIWYG would normally filter out or modify). Protected
+ content appears as plain text in the WYSIWYG editor.
+</td><td>
+=&lt;sticky&gt;=
+<verbatim>
+<div>
+This div is required
+</div>
+</verbatim>
+=&lt;sticky&gt;=
+</td>
+<td>
+<sticky>
+<div>
+This div is required
+</div>
+</sticky>
 </td>
 </tr>
 </table>

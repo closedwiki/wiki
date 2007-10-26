@@ -15,10 +15,6 @@ Working in TWiki is as easy as typing in text. You don't need to know HTML, thou
 
 %INCLUDE{"UsingHTML"}%
 
----+++ Script tags
-
-You can use HTML =&lt;script>= tags for your TWiki applications. However note that your TWiki administrator can disable =&lt;script>= in topics, and may have chosen to do so for security considerations. TWiki markup and TWikiVariables are *not* expanded inside script tags.
-
 ---++ Hyperlinks
 
 Being able to create links without any special formatting is a core TWiki feature, made possible with WikiWords and inline URLs.

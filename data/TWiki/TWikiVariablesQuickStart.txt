@@ -3,24 +3,17 @@
 
 %STARTINCLUDE%
 
-TWiki Variables are names that are enclosed in percent signs =%= that are expanded on the fly. Some variables take arguments, such as =%<nop>INCLUDE%=. For those variables, the arguments are included in curly braces ({ and }).
+TWiki Variables are names enclosed in percent signs that are that are expanded to some other text when the topic
+is displayed. For example, =%<nop>TOPIC%= is expanded to %TOPIC%.
+Some variables can take arguments in curly braces - for example, =%<nop>INCLUDE{"OtherTopic" ARG="arg"}%=.
 
-| *Variable* | *In brief* | *Full documentation* |
-| =%<nop>TOC%= | Automatically generates a table of contents based on headings in a topic - see the top of this page for an example. |VarTOC |
-| =%<nop>WEB%= | The current web, is <b><nop>%WEB%</b>. | VarWEB |
-| =%<nop>TOPIC%= | The current topic name, is <b>%BASETOPIC%</b>. <!-- using BASETOPIC instead of TOPIC for the example because this document is normally included in TextFormattingRules --> | VarTOPIC |
-| =%<nop>ATTACHURL%= | The attachment URL of the current topic. Example usage: If you attach a file to a topic you can refer to it as =<b>%<nop>ATTACHURL%/image.gif</b>= to show the URL of the file or the image in your text. | VarATTACHURL |
-| =%<nop>INCLUDE{"SomeTopic"}%= | Server side include, includes another topic. The current web is the default web. Example: =<b>%<nop>INCLUDE{"%SYSTEMWEB%.SiteMap"}%</b>= | VarINCLUDE |
-| =%<nop>SEARCH{"sushi"}%= | Inline search showing the search result embedded in a topic. FormattedSearch gives you control over formatting, useful for creating web-based applications. | VarSEARCH |
+Many TWiki variables are built-in, and others are predefined for your convenience. You can also define your own
+TWiki Variables at the entire site, individual web, or individual topic level. For more information,
+go to *[[TWikiVariables]]*
 
-TWikiPreferences defines some site-wide variables. Among them are:
-   * *Line break:* Write =%<nop>BR%= to start a new line.
-   * *Colored text:* Write: =%<nop>RED% Red %<nop>ENDCOLOR% and %<nop>BLUE% blue %<nop>ENDCOLOR% colors= to get: %RED% Red %ENDCOLOR% and %BLUE% blue %ENDCOLOR% colors.
-
-There are many more variables. To see them all, go to *[[TWikiVariables]]*.
+TWiki Variables are fully expanded _before_ any of the TWiki text formatting rules are applied.
 
 *Documentation Graphics:* There are many graphics available to use in your topics. Use =%<nop>ICON{"help"}%=, =%<nop>ICON{"tip"}%=, and =%<nop>ICON{"warning"}%= to get: %H%, %T%, and %X%, respectively. TWikiDocGraphics lists them all.
-
 
 %ICON{"tip"}% To "escape" a variable, prefix it with an exclamation mark. Write: =!%<nop>SOMEVARIABLE%= to get: !%SOMEVARIABLE%.
 %STOPINCLUDE%
