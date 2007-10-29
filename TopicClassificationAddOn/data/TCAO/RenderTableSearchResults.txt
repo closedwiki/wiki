@@ -32,7 +32,7 @@
 ~~~    INITLIMIT="%IFDEFINED{"%INITLIMIT%" 
 ~~~          then="$percntINITLIMIT$percnt" else="all" glue="off"}%" 
 ~~~   }%
-%TABLE{tablewidth="100%" columnwidths=",,,50px"}%
+%TABLE{tablewidth="100%" }%
 %~~   DBQUERY{
 *~~       
 %~~       INCLUDE{"%TCAOWEB%.RenderSearchString"  

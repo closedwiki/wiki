@@ -40,6 +40,9 @@ data/TCAO/Installs/SubjectAreaTemplate.txt 0644
 data/TCAO/Installs/Summary.txt 0644
 data/TCAO/Installs/SundryTangents.txt 0644
 data/TCAO/Installs/TWikiDevelopment.txt 0644
+data/TCAO/Installs/Task.txt 0644
+data/TCAO/Installs/TaskForm.txt 0644
+data/TCAO/Installs/TaskTemplate.txt 0644
 data/TCAO/Installs/TopicClassForm.txt 0644
 data/TCAO/Installs/TopicClassification.txt 0644
 data/TCAO/Installs/TopicForm.txt 0644
@@ -74,9 +77,9 @@ data/TCAO/RenderAddClassification.txt 0644
 data/TCAO/RenderAddComment.txt 0644
 data/TCAO/RenderAlphabeticalSearch.txt 0644
 data/TCAO/RenderBarFilterWithSort.txt 0644
+data/TCAO/RenderBlogList.txt 0644
 data/TCAO/RenderBlogListItem.txt 0644
 data/TCAO/RenderClassificationTopic.txt 0644
-data/TCAO/RenderClassificationTopicMessageLayout.txt 0644
 data/TCAO/RenderCommentCountBar.txt 0644
 data/TCAO/RenderCreateNewTopic.txt 0644
 data/TCAO/RenderCreateNewTopicDropDown.txt 0644
@@ -93,6 +96,8 @@ data/TCAO/RenderTopicCreator.txt 0644
 data/TCAO/RenderTopicSummaryWithCommentsList.txt 0644
 data/TCAO/SubjectArea.txt 0644
 data/TCAO/TCAO.txt 0644
+data/TCAO/TCAOCommentsTemplate.txt 0644
+data/TCAO/TaskTopicMaster.txt 0644
 data/TCAO/TcaoAdmin.txt 0644
 data/TCAO/TcaoUse.txt 0644
 data/TCAO/TopicClassForm.txt 0644

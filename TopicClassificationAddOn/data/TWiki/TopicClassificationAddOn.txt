@@ -52,6 +52,10 @@ Once %TOPIC% is enabled within a web, you're ready to start defining *TopicTypes
 |  Copyright: | &copy; |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 | Change&nbsp;History: | |
+|  15158 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1715'>Item1715</a>  Updated Weblog and added new Task Topic Type |
+|  15121 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1715'>Item1715</a>  Correcting some script names. |
+|  14840 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item4497'>Item4497</a>  finishing modernise references to SYSTEMWEB and USERSWEB for remaining plugins |
+|  13643 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item4025'>Item4025</a>  some scripts don't have their executable bit set |
 |  13160 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1715'>Item1715</a>  Fixing change in name of removeSpacesAndPunctuation function, and changing form for creation new classes to table. |
 |  13112 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1715'>Item1715</a>  Add new format for display of search results in table |
 |  13111 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1715'>Item1715</a>  Further improvements to TopicTypes and navigation |

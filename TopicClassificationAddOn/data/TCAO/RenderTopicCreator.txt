@@ -86,7 +86,7 @@ function assignParent( form, parent ) {
 ~~~     as="choice"
 ~~~     glue="on"
 ~~~  }%%ELSEDEFINED%
-<input type="hidden" name="topicparent" value='%PARENT%' />
+<input type="hidden" name="topicparent" value='%IFDEFINED{"%PARENT%"}%' />
 %FIDEFINED%
 <div class="tcaoCreateNewTopic">
 %TABLE{ tablewidth="90%"  columnwidths="20%, 80%" dataalign="right, left"}%
