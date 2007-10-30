@@ -63,7 +63,7 @@ Construct a user mapping object, using the given mapping id.
 sub new {
     my ($class, $session, $mid) = @_;
     my $this = bless( {
-        mapping_id => $mid,
+        mapping_id => $mid || '',
         session => $session,
     }, $class );
     return $this;
@@ -126,16 +126,19 @@ sub handlesUser {
     return 0;
 }
 
-=pod
+=begin twiki
 
----++ ObjectMethod getCanonicalUserID ($login) -> cUID
+---++ ObjectMethod getCanonicalUserID ($login, $dontcheck) -> cUID
 
 Convert a login name to the corresponding canonical user name. The
 canonical name can be any string of 7-bit alphanumeric and underscore
 characters, and must correspond 1:1 to the login name.
 (undef on failure)
 
+(if dontcheck is true, return a cUID for a nonexistant user too - used for registration)
+
 Subclasses *must* implement this method.
+
 
 =cut
 

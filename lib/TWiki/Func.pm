@@ -1937,7 +1937,7 @@ to the current query on to the target URL, as long as it is another URL on the
 same TWiki installation. If =$passthru= is set to a true value, then TWiki
 will save the current URL parameters, and then try to restore them on the
 other side of the redirect. Parameters are stored on the server in a cache
-file (see ={PassthroughDir} in =configure=).
+file.
 
 Note that if =$passthru= is set, then any parameters in =$url= will be lost
 when the old parameters are restored. if you want to change any parameter

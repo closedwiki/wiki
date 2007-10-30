@@ -208,9 +208,10 @@ sub _getMapping {
       if ($this->{basemapping}->handlesUser($cUID, $login, $wikiname));
 	return $this->{mapping}
       if ($this->{mapping}->handlesUser($cUID, $login, $wikiname));
-    # TODO: I think it should fall back to basemapping, but to do that
-    # I need to get even more clever :/
-	return $this->{mapping} unless ($noFallBack);
+	#THIS MUS BE basemapping, otherwise the mapper implementations need to
+	#implement fallback / defaults for users they don't know about (which is
+	#BaseMappings job)
+	return $this->{basemapping} unless ($noFallBack);
 	return undef;
 }
 
@@ -367,7 +368,7 @@ sub getCanonicalUserID {
 		unless ($cUID) {	#must be a wikiname
 			my( $web, $topic ) = $this->{session}->normalizeWebTopicName( '', $login );
 		    my $found = $this->findUserByWikiName($topic);
-    		$cUID = $found->[0] if scalar(@$found);
+    		$cUID = $found->[0] if ($found && scalar(@$found));
 #			print STDERR "\nfindUserByWikiName";	
 		}
     }
@@ -433,6 +434,8 @@ sub getEmails {
     my( $this, $cUID ) = @_;
 	$cUID = $this->getCanonicalUserID($cUID);
 	#$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
+	
+	return () unless ($cUID);
 
     return $this->_getMapping($cUID)->getEmails( $cUID );
 }
@@ -728,7 +731,7 @@ sub eachMembership {
     my $otherMapping = ($mapping eq $this->{basemapping}) ? $this->{mapping} : $this->{basemapping};
     my $wikiname = $this->_getMapping($cUID)->getWikiName($cUID);
     my $cUIDList = $otherMapping->findUserByWikiName($wikiname);
-    my $othercUID = $cUIDList->[0]  if scalar(@$cUIDList);
+    my $othercUID = $cUIDList->[0]  if ($cUIDList && scalar(@$cUIDList));
 #print STDERR "---------------------------$cUID == $wikiname == $othercUID\n";
 
     if (($mapping eq $otherMapping) ||
