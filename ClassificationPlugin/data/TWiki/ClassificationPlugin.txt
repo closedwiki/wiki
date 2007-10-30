@@ -12,10 +12,18 @@
 
 
 %TOC%
+<table style="float:right">
+<tr>
+  <td><img src="%ATTACHURLPATH%/wikiringlogo40x40.png"></td>
+  <td><a href="http://wikiring.de" title="Make your Wiki ring!" style="text-decoration:none">
+      Powered by <br /> <nop>WikiRing Consultants </a>
+  </td>
+</tr>
+</table>
 
 ---++ Description
-The ClassificationPlugin is a building block for TWikiApplications in need of
-tagging and hierarchies. The contained ClassificationApp is a basic
+The ClassificationPlugin is a building block for <nop>TWikiApplications in need of
+tagging and hierarchies. The contained <nop>ClassificationApp is a basic
 categorization and tagging solution for TWiki based on TWikiForms.
 
 
@@ -29,6 +37,25 @@ Format strings may contain the following:
    * =$n= expands to a linefeed
    * =$t= expands to a tab space
    * =$nop= expands to the empty string
+
+---++ ISA
+Predicate that checks if a topic is filed in a specific category or one of its subcategories
+
+---++ SUBSUMES
+Predicate that checks if a category is a parent category of another
+
+---++ COMPATIBLE
+Predicate that checks if a category is subsuming another category or vice versa
+
+---++ SUBSUMTION
+Renders a large table that shows the subsumtion relation between all categories
+
+---++ COMPATIBILITY
+Renders a large table that shows the compatibility relation between all categories
+
+---++ TAGRELATEDTOPICS
+Renders a list of topics that are tag-related to the current one. Two topics are 
+tag- related if they have at least two tags in common.
 
 ---++ Examples
 
@@ -53,7 +80,7 @@ Format strings may contain the following:
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | v0.10 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  27 Jul 2007: | ... |
+|  30 Oct 2007: | first checkin to twiki svn |
 |  30 Oct 2006: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: |  |
@@ -63,3 +90,5 @@ Format strings may contain the following:
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
+
+-- TWiki:Main.MichaelDaum - 30 Oct 2007
