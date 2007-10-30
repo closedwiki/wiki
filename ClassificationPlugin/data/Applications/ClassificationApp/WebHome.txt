@@ -1,0 +1,57 @@
+%META:TOPICINFO{author="TWikiContributor" date="1184006605" format="1.1" version="$Rev$"}%
+---+!! Welcome to the %WEB% web
+
+The ClassificationApp offers two things: traditional content categorization as well as folksomony using
+tags.
+
+
+<noautolink>
+%~~ DBQUERY{"TopicType=~'\bAuthorTool\b'"
+~~~   hidenull="on"
+~~~   header="---++ Author Tools$n"
+~~~   format="   * [[$web.$topic][$topic]]: $formfield(Summary)"
+~~~ }%
+
+%~~ DBQUERY{"TopicType=~'\bDevelopmentTool\b'"
+~~~   hidenull="on"
+~~~   header="---++ Development Tools$n"
+~~~   format="   * [[$web.$topic][$topic]]: $formfield(Summary)"
+~~~ }%
+
+%~~ DBQUERY{"TopicType=~'\bAdminTool\b'"
+~~~   hidenull="on"
+~~~   header="---++ Admin Tools$n"
+~~~   format="   * [[$web.$topic][$topic]]: $formfield(Summary)"
+~~~ }%
+</noautolink>
+
+<!--
+%!TOC%
+%!DBCALL{"Applications.RenderTopicTypeCloud" TYPE="TWikiApplication"}%
+%!DBCALL{"Applications.RenderTopicTypeCloud" TYPE="TopicType"}%
+%!DBCALL{"Applications.RenderTopicTypeCloud" TYPE="TWikiForm"}%
+%!DBCALL{"Applications.RenderTopicTypeCloud" 
+  TYPE="TopicFunction" 
+  FILTER="\bRender"
+  FORMAT="[[%BASEWEB%.Render$term][Render$term]]"
+}%
+%!DBCALL{"Applications.RenderTopicTypeCloud" TYPE="TopicView"}%
+%!DBCALL{"Applications.RenderTopicTypeCloud" TYPE="TopicTemplate"}%
+-->
+
+<style type="text/css">
+.twbGroup {
+  font-size:1.1em;
+  font-weight:bold;
+}
+</style>
+
+<!--
+   * Set VIEW_TEMPLATE = Applications.HiddenFormView
+-->
+
+
+%META:FORM{name="Applications.ApplicationTopic"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="FrontPage"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="%25SITEMAPWHAT%25"}%
+%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TWikiWorkbench"}%

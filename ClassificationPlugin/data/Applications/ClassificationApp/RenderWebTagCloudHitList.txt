@@ -1,0 +1,86 @@
+%META:TOPICINFO{author="TWikiContributor" date="1188123236" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+!! Function: %TOPIC%
+%FORMFIELD{"Summary"}%
+
+%TOC{depth="2"}%
+
+---++ Documentation
+%STARTSECTION{name="documentation" type="section"}%
+%RED%TODO%ENDCOLOR%
+
+---+++++ Parameters
+   * QUERY
+   * SKIP
+   * LIMIT
+   * PARAMS
+   * HILITE
+
+---+++++ Css
+   * 
+%ENDSECTION{name="documentation" type="section"}%
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%
+*~~
+%~~ DBQUERY{"TopicType=~'\b(Tagged|Classified)Topic\b' %QUERY%"
+~~~    web="%BASEWEB%"
+~~~    sort="modified" 
+~~~    limit="%IFDEFINED{"%LIMIT%" then="%LIMIT%" else="10"}%" 
+~~~    reverse="on" 
+~~~    skip="%IFDEFINED{"%SKIP%" then="%SKIP%" else="0"}%"
+~~~    header="<noautolink>$n
+~~~      | *Nr* | *Topic* | *Summary* | *Changed* | *By* |$n
+~~~      $percntTABLE{tablewidth=\"100%\"}$percnt$n"
+~~~    format="
+~~~      | $index 
+~~~      | <a href=\"%SCRIPTURLPATH{"view"}%/$web/$topic\" 
+~~~         %IFDEFINEDTHEN{"%HILITE%" glue="off"}%
+~~~           title=\"$expand(%HILITE%)\"
+~~~           onmouseover=\"hiliteElements('$expand(%HILITE%)','hilite');\"
+~~~           onmouseout=\"hiliteElements('%URLPARAM{"search"}%','current');\"
+~~~         %FIDEFINED%
+~~~         >$topic</a>
+~~~      | $flatten($expand(Summary or Text or 'no description'))
+~~~      | <span style=\"white-space:nowrap\">$formatTime(info.date)</span>
+~~~      | [[%MAINWEB%.$expand(info.author)][$expand(info.author)]]  
+~~~      |"
+~~~    footer="$n
+~~~      $percntDBCALL{\"Applications.RenderPageNavigation\" 
+~~~        SKIP=\"%IFDEFINED{"%SKIP%" then="%SKIP%" else=" 0"}%\" 
+~~~        MAX=\"$count\"
+~~~        LIMIT=\"%IFDEFINED{"%LIMIT%" then="%LIMIT%" else="10"}%\"
+~~~        PARAMS=\"%PARAMS%\"
+~~~      }$percnt
+~~~      </noautolink>"
+~~~ }%
+~~~
+%STOPINCLUDE%
+</verbatim>
+
+<!-- interrupt glue -->
+
+---++ Test
+<div class="alt">
+%DBCALL{"%TOPIC%" QUERY="%URLPARAM{"search"}%" LIMIT="%URLPARAM{"limit" default="2"}%" SKIP="%URLPARAM{"skip"}%"}%
+</div>
+
+%DBCALL{"Applications.RenderFunctionCallers"}%
+
+---++ Copyright
+<div style="text-align:justify;margin:1em;">
+&copy; 2007 Michael Daum http://wikiring.de
+
+%DBCALL{"Applications.GnuGeneralPublicLicense" section="notice"}%
+</div>
+<!--
+   * Set DEPENDENCIES = TopicFunction
+-->
+
+
+
+%META:FORM{name="Applications.ApplicationTopic"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="DocuTopic, TopicFunction"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="Renders the hit list in a WebTagCloud selection"}%
+%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="ClassificationApp"}%

@@ -1,0 +1,23 @@
+%META:TOPICINFO{author="TWikiContributor" date="1188123204" format="1.1" reprev="1.10" version="$Rev$"}%
+%META:TOPICPARENT{name="ApplicationTopic"}%
+---+!! WebTagCloud Factory
+
+See also: RenderWebTagCloud
+
+---++ Installation
+%DBCALL{"Applications.RenderTopicInstaller"}%
+
+---++ Implementation
+%STARTINCLUDE%<!-- -->
+%~~ DBCALL{"Applications.ClassificationApp.RenderWebTagCloud" 
+~~~   QUERY="%URLPARAM{"search"}%" 
+~~~   LIMIT="%URLPARAM{"limit" default="10"}%" 
+~~~   SKIP="%URLPARAM{"skip"}%" 
+~~~ }%
+<!-- -->%STOPINCLUDE%
+
+
+%META:FORM{name="Applications.ApplicationTopic"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="ApplicationFactory, ApplicationTopic, AuthorTool"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="Access topics based on their tags"}%
+%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="ClassificationApp"}%

@@ -1,0 +1,24 @@
+%META:TOPICINFO{author="TWikiContributor" date="1182248062" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TestCategory7"}%
+---+ %TOPIC%
+%FORMFIELD{"Summary"}%
+
+%DBCALL{"Applications.ClassificationApp.RenderCategory"}%
+<!--
+   * Set VIEW_TEMPLATE = Applications.HiddenFormView
+-->
+
+
+
+
+
+
+
+
+
+
+%META:FORM{name="Applications.ClassificationApp.Category"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="CategorizedTopic, Category"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value=""}%
+%META:FIELD{name="Category" attributes="" title="Category" value="TestCategory5, TestCategory7"}%
+%META:FIELD{name="Usage" attributes="" title="Usage" value="ALL"}%

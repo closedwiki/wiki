@@ -1,0 +1,65 @@
+%META:TOPICINFO{author="TWikiContributor" date="1182192609" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+!! Function: %TOPIC%
+%FORMFIELD{"Summary"}%
+
+%TOC{depth="2"}%
+
+---++ Documentation
+%STARTSECTION{name="documentation" type="section"}%
+This is used to create a checkbox dialog in the edit screen for CategorizedTopics.
+It will reduce the set of possible categories to those that are used for the current
+type. The TopicType under consideration is fetched from the BASETOPIC and not
+passed in explicitly as we use this function in TWikiForm definitions most of the time.
+Note that the BASETOPIC may have multiple types. Therefore we fetch all categories
+that are applicable to every atomic type.
+
+---+++++ Parameters
+NONE
+
+%ENDSECTION{name="documentation" type="section"}%
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%
+~~~ TOP,
+~~~ 
+%~~ DBQUERY{"TopicType=~'\bCategory\b'
+~~~
+%~~    FORMATLIST{"%FORMFIELD{"TopicType" topic="%BASETOPIC%"}%"
+~~~      header="AND Usage='(ALL|"
+~~~      format="$1"
+~~~      separator="|"
+~~~      footer=")'"
+~~~    }%"
+~~~   header="<noautolink>"
+~~~   format="$topic" separator=", "
+~~~   footer="</noautolink>"
+~~~   web="%BASEWEB%"
+~~~   hidenull="on"
+~~~ }%
+~~~
+%STOPINCLUDE%
+</verbatim>
+
+<!-- interrupt glue -->
+
+---++ Test
+<div class="alt">
+%DBCALL{"%TOPIC%"}%
+</div>
+
+%DBCALL{"Applications.RenderFunctionCallers"}%
+
+---++ Copyright
+<div style="text-align:justify;margin:1em;">
+&copy; 2006-2007 Michael Daum http://wikiring.de
+
+%DBCALL{"Applications.GnuGeneralPublicLicense" section="notice"}%
+</div>
+
+
+%META:FORM{name="Applications.ApplicationTopic"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="DocuTopic, TopicFunction"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="Returns a list of categories used for a given topic type"}%
+%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="ClassificationApp"}%

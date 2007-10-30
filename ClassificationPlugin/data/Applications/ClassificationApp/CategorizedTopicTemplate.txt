@@ -1,0 +1,29 @@
+%META:TOPICINFO{author="TWikiContributor" date="1181297001" format="1.1" reprev="1.5" version="$Rev$"}%
+%META:TOPICPARENT{name="TopicTemplate"}%
+
+
+
+
+
+
+
+
+
+
+
+
+
+%STARTSECTION{type="templateonly"}%
+%RED%Note, this is only a template.%ENDCOLOR%
+
+See also: TopicTemplate, CategorizedTopicViewTemplate
+<!--
+   * Local VIEW_TEMPLATE =
+-->
+%ENDSECTION{type="templateonly"}%
+
+%META:FORM{name="Applications.ApplicationTopic"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicTemplate"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="Template for categorized topics"}%
+%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="ClassificationApp"}%
+%META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" type="Set" value="Applications.ClassificationApp.CategorizedTopicView"}%

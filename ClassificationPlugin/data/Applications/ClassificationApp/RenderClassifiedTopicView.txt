@@ -1,0 +1,81 @@
+%META:TOPICINFO{author="TWikiContributor" date="1186509262" format="1.1" reprev="1.7" version="$Rev$"}%
+%META:TOPICPARENT{}%
+---+!! Function: %TOPIC%
+%FORMFIELD{"Summary"}%
+
+%TOC{depth="2"}%
+
+---++ Documentation
+%STARTSECTION{name="documentation" type="section"}%
+
+---+++++ Parameters
+none
+
+---+++++ Css
+   * 
+%ENDSECTION{name="documentation" type="section"}%
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%<!-- -->
+<div class="clsTopicInfo">
+%~~ DBQUERY{topic="%BASEWEB%.%BASETOPIC%"
+~~~   format="
+~~~     <h1 class=\"clsTopicSummary\">[[$web.$topic][$expand(Summary or topic)]]</h1>
+~~~     $percntIFDEFINEDTHEN{\"$formfield(Category)\" glue=\"off\"}$percnt
+~~~       Filed in
+~~~       $percntFORMATLIST{\"
+~~~       $percntFORMATLIST{\"$formfield(Category)\"
+~~~        format=\"
+*~~          $dollarpercntDBQUERY{
+~~~            hidenull=\\"on\\"
+~~~            topic=\\"$web.$1\\" 
+~~~            format=\\"$dollarexpand(Title or topic)\\"
+~~~            header=\\"[[$web.$1][\\"
+~~~            footer=\\"]]\\"
+~~~          }$dollarpercnt\"
+~~~       }$percnt\"}$percnt
+*~~       $percntIFDEFINEDTHEN{\"$formfield(Tag)\" glue=\"off\"}$percnt
+*~~         , tagged 
+~~~         $percntFORMATLIST{\"$formfield(Tag)\"
+~~~           format=\"<a href=\\"%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebTagCloud?search=$1\\">$1</a>\"
+~~~         }$percnt
+~~~       $percntFIDEFINED$percnt
+~~~     $percntELSEDEFINED$percnt
+~~~       $percntIFDEFINEDTHEN{\"$formfield(Tag)\" glue=\"off\"}$percnt
+*~~         Tagged 
+~~~         $percntFORMATLIST{\"$formfield(Tag)\"
+~~~           format=\"<a href=\\"%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebTagCloud?search=$1\\">$1</a>\"
+~~~         }$percnt
+~~~       $percntFIDEFINED$percnt
+~~~     $percntFIDEFINED$percnt"
+~~~ }%
+</div>
+%STOPINCLUDE%
+</verbatim>
+
+<!-- interrupt glue -->
+
+---++ Test
+<div class="alt">
+%DBCALL{"%TOPIC%"}%
+</div>
+
+%DBCALL{"Applications.RenderFunctionCallers"}%
+
+---++ Copyright
+<div style="text-align:justify;margin:1em;">
+&copy; 2007 Michael Daum http://wikiring.de
+
+%DBCALL{"Applications.GnuGeneralPublicLicense" section="notice"}%
+</div>
+<!--
+   * Set DEPENDENCIES = TopicFunction
+-->
+
+
+
+%META:FORM{name="Applications.ApplicationTopic"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="Category, DocuTopic, TopicFunction"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="Renders the TopicView of a ClassifiedTopic"}%
+%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="none"}%

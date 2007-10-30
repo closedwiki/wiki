@@ -1,0 +1,21 @@
+%META:TOPICINFO{author="TWikiContributor" date="1188123236" format="1.1" reprev="1.159" version="$Rev$"}%
+%META:TOPICPARENT{name="WebHome"}%
+---++ Statistics for <nop>%BASEWEB% Web
+
+| *Month:* | *Topic <br /> views:* | *Topic <br /> saves:* | *File <br /> uploads:* | *Most popular <br /> topic views:* | *Top contributors for <br /> topic save and uploads:* |
+| <!--statDate--> | <!--statViews--> | <!--statSaves--> | <!--statUploads--> | <!--statTopViews--> | <!--statTopContributors--> |
+| Jul 2007 |  35 |  1 |  0 | &nbsp;&nbsp;7 [[WebHome]]<br />&nbsp;&nbsp;6 [[ClassifiedTopic]]<br />&nbsp;&nbsp;5 [[CategorizedTopic]]<br />&nbsp;&nbsp;4 [[CategoryBrowser]]<br />&nbsp;&nbsp;4 [[Category]]<br />&nbsp;&nbsp;2 [[RenderCategory]]<br />&nbsp;&nbsp;2 [[TaggedTopic]]<br />&nbsp;&nbsp;2 [[TopicType]]<br />&nbsp;&nbsp;2 [[WebArchive]]<br />&nbsp;&nbsp;1 [[RenderClassifiedTopicView]] | &nbsp;&nbsp;1 Main.MichaelDaum |
+| Jun 2007 |  1281 |  0 |  0 | 252 [[RenderWebTagCloudHitList]]<br />&nbsp;42 [[WebHome]]<br />&nbsp;25 [[WebChanges]]<br />&nbsp;25 [[TopicStub]]<br />&nbsp;23 [[CategorizedTopic]]<br />&nbsp;23 [[TopicType]]<br />&nbsp;22 [[ApplicationFactory]]<br />&nbsp;22 [[TopicFunction]]<br />&nbsp;22 [[RenderTaggedTopicView]]<br />&nbsp;22 [[Category]]<br />&nbsp;22 [[RenderEditTagCloud]] |  |
+| May 2007 |  202 |  0 |  0 | &nbsp;&nbsp;7 [[WebTopicList]]<br />&nbsp;&nbsp;7 [[TopicFunction]]<br />&nbsp;&nbsp;6 [[TaggedTopicViewTemplate]]<br />&nbsp;&nbsp;5 [[WebHome]]<br />&nbsp;&nbsp;5 [[ApplicationFactory]]<br />&nbsp;&nbsp;5 [[TaggedTopicTemplate]]<br />&nbsp;&nbsp;5 [[RenderEditTagCloud]]<br />&nbsp;&nbsp;5 [[DevelopmentTool]]<br />&nbsp;&nbsp;5 [[WebChanges]]<br />&nbsp;&nbsp;5 [[TopicStub]]<br />&nbsp;&nbsp;5 [[TestCategory4]] |  |
+| Apr 2007 |  200 |  0 |  0 | &nbsp;&nbsp;9 [[WebHome]]<br />&nbsp;&nbsp;8 [[ApplicationFactory]]<br />&nbsp;&nbsp;8 [[RenderWebTagCloudHitList]]<br />&nbsp;&nbsp;7 [[TopicView]]<br />&nbsp;&nbsp;5 [[CategorizedTopic]]<br />&nbsp;&nbsp;5 [[TopicTemplate]]<br />&nbsp;&nbsp;5 [[TopicType]]<br />&nbsp;&nbsp;5 [[TaggedTopic]]<br />&nbsp;&nbsp;5 [[WebStatistics]]<br />&nbsp;&nbsp;5 [[ClassifiedTopic]]<br />&nbsp;&nbsp;4 [[WebTopicList]] |  |
+| Mar 2007 |  158 |  0 |  0 | &nbsp;53 [[RenderWebTagCloudHitList]]<br />&nbsp;&nbsp;5 [[WebChanges]]<br />&nbsp;&nbsp;4 [[NatSkinCategorizedTopicViewTemplate]]<br />&nbsp;&nbsp;4 [[TaggedTopicViewTemplate]]<br />&nbsp;&nbsp;4 [[ClassificationAppCss]]<br />&nbsp;&nbsp;3 [[WebHome]]<br />&nbsp;&nbsp;3 [[TaggedTopicTemplate]]<br />&nbsp;&nbsp;3 [[WebNotify]]<br />&nbsp;&nbsp;3 [[ClassifiedTopicViewTemplate]]<br />&nbsp;&nbsp;3 [[NatSkinClassifiedTopicViewTemplate]]<br />&nbsp;&nbsp;3 [[RenderWebTagCloud]] |  |
+
+__Notes:__
+	* Do not edit this topic, it is updated automatically. (You can also <a href="%SCRIPTURLPATH{"statistics"}%/%BASEWEB%">force</a> an update)
+	* %TWIKIWEB%.TWikiDocumentation tells you how to enable the automatic updates of the statistics.
+	* Suggestion: You could archive this topic once a year and delete the previous year's statistics from the table.
+
+%META:FORM{name="Applications.ApplicationTopic"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="Statistics"}%
+%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TWikiWorkbench"}%

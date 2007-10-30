@@ -1,0 +1,118 @@
+%META:TOPICINFO{author="TWikiContributor" date="1193763628" format="1.1" reprev="1.32" version="$Rev$"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+!! Function: %TOPIC%
+%FORMFIELD{"Summary"}%
+
+%TOC{depth="2"}%
+
+---++ Documentation
+%STARTSECTION{name="documentation" type="section"}%
+This function is called in Category topics.
+
+See the CategoryTemplate.
+---+++++ Parameters
+NONE
+
+%ENDSECTION{name="documentation" type="section"}%
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%
+---++ Categories
+<div class="clsButtonBox">
+<a href="javascript:void(0);" onclick="pressButton(this)" class="aquaPill" id="clsNewCategoryButton"><span>New Category</span></a>
+<a href="javascript:void(0);" onclick="pressButton(this)" class="aquaPill" id="clsNewTopicButton"><span>New Topic</span></a>
+<a href="javascript:void(0);" onclick="pressButton(this)" class="aquaPill" id="clsBrowseButton"><span>Browse</span></a>
+</div>
+<div id="clsNewCategory" style="display:none">
+~~~
+%~~ DBCALL{"Applications.ClassificationApp.Category" section="factory" 
+~~~   USAGE="%FORMFIELD{"Usage" topic="%BASEWEB%.%BASETOPIC%"}%"
+~~~ }%
+</div>
+<div id="clsNewTopic" style="display:none">
+~~~
+%~~ DBCALL{"Applications.ClassificationApp.ClassifiedTopic" section="factory" 
+~~~   CAT="%BASETOPIC%"
+~~~ }%
+</div>
+<div id="clsBrowser" style="display:none">
+%DBCALL{"Applications.ClassificationApp.RenderCategoryBrowser"}%
+</div>
+%~~ DBCALL{"Applications.ClassificationApp.RenderCategory"
+~~~   section="doit"
+~~~   FILTER="
+~~~
+%~~     CATFIELD{
+~~~       web="%URLPARAM{"web" default="%BASEWEB%"}%"
+~~~       header="!(TopicType=~'\bCategory\b') AND ("
+~~~       format="$cat=~'\b%BASETOPIC%\b'"
+~~~       separator=" OR "
+~~~       footer=")"
+~~~     }%"
+~~~ }%
+%STOPINCLUDE%
+</verbatim>
+
+<verbatim>
+%STARTSECTION{"doit"}%
+~~~
+%~~ DBQUERY{"%FILTER%"
+~~~   remote="force"
+~~~   hidenull="on"
+~~~   web="%URLPARAM{"web" default="%BASEWEB%"}%"
+~~~   header="<h2>Topics filed in <nop>%BASETOPIC%</h2>$n
+~~~           $percntTABLE{tablewidth=\"100%\"}$percnt$n
+*~~           | *Nr*
+~~~           | *Name*
+~~~           | *Category*
+~~~           | *Last modified*
+~~~           | *By*
+~~~           |$n"
+~~~   format="| $index
+~~~           | [[$web.$topic][$topic]]
+~~~           | $percntFORMATLIST{\"
+~~~             $percntFORMATLIST{\"
+~~~               $percntFORMATLIST{\"$percntCATFIELD{\"$web.$topic\"}$percnt\"
+~~~                 separator=\" \"
+~~~                 format=\"$dollarpercntDBQUERY{topic=\\"$web.$topic\\"
+~~~                   format=\\"$dollarformfield($1)\\"
+~~~                 }$dollarpercnt\"
+~~~               }$percnt\"
+~~~               format=\"
+*~~                   $dollarpercntDBQUERY{topic=\\"$web.$1\\" 
+~~~                     hidenull=\\"on\\"
+~~~                     header=\\"[[$web.$1][\\"
+~~~                     format=\\"$dollarexpand(Title or topic)\\"
+*~~                     footer=\\"]]\\"
+~~~                   }$dollarpercnt\"
+~~~               sort=\"on\"
+~~~               separator=\", \"
+~~~             }$percnt\" split=\",\"}$percnt
+~~~           | <nobr>$formatTime(info.date)</nobr>
+~~~           | %MAINWEB%.$expand(info.author)
+~~~           |"
+~~~ }%
+%ENDSECTION{"doit"}%
+</verbatim>
+
+<!-- interrupt glue -->
+---++ Test
+<div class="alt">
+%DBCALL{"%TOPIC%"}%
+</div>
+
+%DBCALL{"Applications.RenderFunctionCallers"}%
+
+---++ Copyright
+<div style="text-align:justify;margin:1em;">
+&copy; 2006-2007 Michael Daum http://wikiring.de
+
+%DBCALL{"Applications.GnuGeneralPublicLicense" section="notice"}%
+</div>
+
+
+%META:FORM{name="Applications.ApplicationTopic"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="DocuTopic, TopicFunction"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="Render tools to handle categories"}%
+%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="ClassificationApp"}%
