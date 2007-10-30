@@ -1,0 +1,38 @@
+%META:TOPICINFO{author="TWikiContributor" date="1183552346" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TopicType"}%
+---+ %TOPIC%
+%FORMFIELD{"Summary"}%
+
+---++ Installation
+%DBCALL{"RenderTopicInstaller" TEXT="Install '%TOPIC%' TopicType in" TYPE="TopicType" PARENT="TopicType"}%
+
+---++ Factory
+%STARTINCLUDE%
+%DBCALL{"RenderSimpleTopicCreator" 
+  TEXT="%TOPIC%" 
+  VALUE="..."
+  TYPE="%TOPIC%"
+  TEMPLATE="Applications.%TOPIC%Template"
+  FORM="Applications.ApplicationTopic"
+}%
+
+%DBCALL{"Applications.RenderTopicsOfType" THEWEB="%URLPARAM{"web"}%"}%
+%STOPINCLUDE%
+s
+---++ Documentation
+%STARTSECTION{"documentation"}%
+%RED%todo%ENDCOLOR%
+
+See also: %TOPIC%Template
+%ENDSECTION{"documentation"}%
+
+<!--
+   * Set DEPENDENCIES = TopicType
+-->
+
+
+%META:FORM{name="Applications.TopicType"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="DevelopmentTool, DocuTopic, TopicType"}%
+%META:FIELD{name="Inheritance" attributes="" title="Inheritance" value="ApplicationTopic"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="TopicType for an attribute description of a TWikiForm"}%
+%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TWikiWorkbench"}%

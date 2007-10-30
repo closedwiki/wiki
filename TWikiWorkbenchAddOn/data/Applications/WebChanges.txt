@@ -1,0 +1,16 @@
+%META:TOPICINFO{author="TWikiContributor" date="1159799005" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{}%
+%DBCALL{"Applications.RenderWebChanges" 
+  SKIP="%URLPARAM{"skip" default=" 0"}%"
+  LIMIT="%URLPARAM{"limit" default="10"}%"
+}%
+
+<!--
+   * Set VIEW_TEMPLATE = Applications.HiddenFormView
+-->
+
+
+%META:FORM{name="Applications.ApplicationTopic"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="Display the most recent changes in this web"}%
+%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TWikiWorkbench"}%

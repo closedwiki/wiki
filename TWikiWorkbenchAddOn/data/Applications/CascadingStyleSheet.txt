@@ -1,0 +1,37 @@
+%META:TOPICINFO{author="TWikiContributor" date="1184013508" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TopicType"}%
+---+!! %TOPIC%
+%FORMFIELD{"Summary"}%
+
+---++ Documentation
+%STARTSECTION{name="documentation" type="section"}%
+%RED%TODO%ENDCOLOR%
+
+See also: %TOPIC%Template
+%ENDSECTION{name="documentation" type="section"}%
+
+---++ Installation
+%DBCALL{"RenderTopicInstaller" TEXT="Install '%TOPIC%' TopicType in" TYPE="TopicType" PARENT="TopicType"}%
+
+---++ Factory
+%STARTINCLUDE%
+%DBCALL{"RenderSimpleTopicCreator" 
+  TEXT="Css" 
+  VALUE="...Css"
+  TYPE="%TOPIC%"
+  TEMPLATE="Applications.%TOPIC%Template"  
+}%
+
+%DBCALL{"Applications.RenderTopicsOfType" THEWEB="%URLPARAM{"web"}%"}%
+%STOPINCLUDE%
+
+<!--
+   * Set DEPENDENCIES = TopicType
+-->
+
+
+%META:FORM{name="Applications.TopicType"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="DevelopmentTool, TopicType"}%
+%META:FIELD{name="Inheritance" attributes="" title="Inheritance" value="ApplicationTopic"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="TopicType of a bunch of CSS definitions used in a TWikiApplication"}%
+%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TWikiWorkbench"}%

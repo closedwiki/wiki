@@ -1,0 +1,27 @@
+%META:TOPICINFO{author="TWikiContributor" date="1171920502" format="1.1" reprev="1.2" version="$Rev$"}%
+%META:TOPICPARENT{name="TopicTemplate"}%
+---+!! %TOPIC%
+%FORMFIELD{"Summary"}%
+
+All classes use the prefix =TODO=.
+
+<verbatim>
+%STARTINCLUDE%
+.TODO {
+}
+%STOPINCLUDE%
+</verbatim>
+<!--
+   * Set DEPENDENCIES = CascadingStyleSheet
+-->
+
+%STARTSECTION{type="templateonly"}%
+%RED%Note, this is only a template.%ENDCOLOR%
+
+See also: CascadingStyleSheet
+%ENDSECTION{type="templateonly"}%
+
+%META:FORM{name="Applications.ApplicationTopic"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicTemplate"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="Template for CascadingStyleSheets"}%
+%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TWikiWorkbench"}%

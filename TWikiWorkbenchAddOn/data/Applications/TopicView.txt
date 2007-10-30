@@ -1,0 +1,29 @@
+%META:TOPICINFO{author="TWikiContributor" date="1171920365" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TopicType"}%
+---+ %TOPIC%
+%FORMFIELD{"Summary"}%
+
+%DBCALL{"RenderSimpleTopicCreator" 
+  TEXT="%TOPIC%" 
+  VALUE="...ViewTemplate"
+  TYPE="%TOPIC%"
+  TEMPLATE="Applications.%TOPIC%Template"
+  FORM="Applications.ApplicationTopic"
+}%
+
+%DBCALL{"Applications.RenderTopicsOfType" THEWEB="%URLPARAM{"web"}%"}%
+%STOPINCLUDE%
+<!--
+   * Set DEPENDENCIES = TopicType
+-->
+
+---++ Documentation
+%STARTSECTION{"documentation"}%
+See also: %TOPIC%Template
+%ENDSECTION{"documentation"}%
+
+%META:FORM{name="Applications.TopicType"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="DevelopmentTool, DocuTopic, TopicType"}%
+%META:FIELD{name="Inheritance" attributes="" title="Inheritance" value="ApplicationTopic"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="TopicType of topics that implement a TMPL template to view topics"}%
+%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TWikiWorkbench"}%
