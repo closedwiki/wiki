@@ -67,7 +67,7 @@ $RELEASE = 'Dakar';
 
 $| = 1; # Autoflush buffers
 
-our $query = new CGI;
+our $query;
 our %tree;
 our %prefs;
 
@@ -518,6 +518,11 @@ This is the core method to convert the current page into PDF format.
 =cut
 
 sub viewPDF {
+
+   # initialize module wide variables
+   $query = new CGI;
+   %tree = ();
+   %prefs = ();
 
    # Initialize TWiki
    my $thePathInfo = $query->path_info(); 
