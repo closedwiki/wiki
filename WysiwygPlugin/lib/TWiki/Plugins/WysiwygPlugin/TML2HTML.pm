@@ -46,9 +46,11 @@ my $TT2 = chr(2);
 
 # HTML elements that are palatable to editors. Other HTML tags will be
 # rendered in 'protected' regions to prevent the WYSIWYG editor mussing
-# them up.
+# them up. Note that A is specifically excluded from this list because it
+# is common for href attributes to contain TWiki variables. Users should
+# be encouraged to use square bracket formulations for links instead.
 my @PALATABLE_TAGS = qw(
-A ABBR ACRONYM ADDRESS B BDO BIG BLOCKQUOTE BR CAPTION CENTER CITE CODE COL
+ABBR ACRONYM ADDRESS B BDO BIG BLOCKQUOTE BR CAPTION CENTER CITE CODE COL
 COLGROUP DD DEL DFN DIR DIV DL DT EM FONT H1 H2 H3 H4 H5 H6 HR HTML I IMG INS
 ISINDEX KBD LABEL LEGEND LI OL P PRE Q S SAMP SMALL SPAN STRONG SUB SUP TABLE
 TBODY TD TFOOT TH THEAD TITLE TR TT U UL STICKY

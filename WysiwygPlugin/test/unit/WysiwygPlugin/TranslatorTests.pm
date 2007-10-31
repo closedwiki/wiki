@@ -1472,6 +1472,23 @@ HERE
 <span class="WYSIWYG_PROTECTED"><br />%SEARCH{"legacy" nonoise="on" format="| [[\$topic]] | [[\$wikiname]] |"}%</span>
 THERE
       },
+      {
+          name => 'Item4871',
+          exec => $TML2HTML,
+          tml => <<'BLAH',
+Blah
+<a href="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?t=%GM%NOP%TIME{"$epoch"}%">edit</a>
+Blah
+BLAH
+          html => <<'BLAH',
+<p>
+Blah
+<span class="WYSIWYG_PROTECTED">&#60;a&nbsp;href=&#34;%SCRIPTURLPATH{&#34;edit&#34;}%/%WEB%/%TOPIC%?t=%GM%NOP%TIME{&#34;$epoch&#34;}%&#34;&#62;</span>edit<span
+class="WYSIWYG_PROTECTED">&#60;/a&#62;</span>
+Blah
+</p>
+BLAH
+      },
      ];
 
 sub gen_compare_tests {
@@ -1665,7 +1682,7 @@ sub convertImage {
     }
 }
 
-gen_compare_tests('Item4855');
+gen_compare_tests();
 #gen_file_tests();
 
 1;
