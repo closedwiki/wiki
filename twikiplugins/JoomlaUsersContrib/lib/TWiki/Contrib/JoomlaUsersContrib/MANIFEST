@@ -5,3 +5,6 @@ lib/TWiki/Users/JoomlaUserMapping.pm get User and Group information from Joomla 
 lib/TWiki/Contrib/JoomlaUsersContrib/Config.spec
 pub/TWiki/JoomlaUsersContrib/Joomla.png
 pub/TWiki/JoomlaUsersContrib/wikiring.png
+pub/TWiki/JoomlaUsersContrib/JoomlaIcon.png
+templates/login.joomla.tmpl
+

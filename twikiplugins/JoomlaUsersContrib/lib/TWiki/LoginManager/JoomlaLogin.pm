@@ -34,13 +34,13 @@ use strict;
 use Assert;
 use TWiki::LoginManager::TemplateLogin;
 
-@TWiki::LoginManager::JoomlaLogin::ISA = ( 'TWiki::LoginManager::TemplateLogin' );
+@TWiki::LoginManager::JoomlaLogin::ISA = ('TWiki::LoginManager::TemplateLogin');
 
 sub new {
-    my( $class, $session ) = @_;
+    my ( $class, $session ) = @_;
 
     my $this = bless( $class->SUPER::new($session), $class );
-    $session->enterContext( 'can_login' );
+    $session->enterContext('can_login');
     return $this;
 }
 
@@ -53,34 +53,39 @@ add Joomla cookie to the session management
 =cut
 
 sub loadSession {
-    my $this = shift;
+    my $this  = shift;
     my $twiki = $this->{twiki};
     my $query = $twiki->{cgiQuery};
 
-    ASSERT($this->isa( 'TWiki::LoginManager::JoomlaLogin')) if DEBUG;
-    
+    ASSERT( $this->isa('TWiki::LoginManager::JoomlaLogin') ) if DEBUG;
+
     my $authUser = '';
-    
+
     # see if there is a joomla username and password cookie
     #TODO: think i should check the password is right too.. otherwise ignore it
     my %cookies = fetch CGI::Cookie;
-    if (defined($cookies{'usercookie[username]'})) {
-	    my $id = $cookies{'usercookie[username]'}->value;
-	    my $password = $cookies{'usercookie[password]'}->value;
-	    my $user = $twiki->{users}->findUser($id, undef, 1);  
-	      
+    if ( defined( $cookies{'usercookie[username]'} ) ) {
+        my $id       = $cookies{'usercookie[username]'}->value;
+        my $password = $cookies{'usercookie[password]'}->value;
+        my $user     = $twiki->{users}->findUser( $id, undef, 1 );
+
         my $passwordHandler = $twiki->{users}->{passwords};
-        #return $passwordHandler->checkPassword($this->{login}, $password);	      
-	      
-	    if (defined($user) && 
-	       $passwordHandler->checkPassword($user->login(), $password, 1)) {
-            	$authUser = $id;
-        } else {
-            #mmm, if they have a cookie, but are not in the dba, either the db connection is busted, or we're in trouble
+
+        #return $passwordHandler->checkPassword($this->{login}, $password);
+
+        if ( defined($user)
+            && $twiki->{users}->checkPassword( $user->login(), $password, 1 ) )
+        {
+            $authUser = $id;
+        }
+        else {
+
+#mmm, if they have a cookie, but are not in the dba, either the db connection is busted, or we're in trouble
         }
 
-        $this->userLoggedIn( $authUser );
-    } else {
+        $this->userLoggedIn($authUser);
+    }
+    else {
         $authUser = $this->SUPER::loadSession();
     }
     return $authUser;
