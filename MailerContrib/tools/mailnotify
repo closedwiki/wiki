@@ -45,6 +45,7 @@ foreach my $arg ( @ARGV ) {
 }
 
 use TWiki::Contrib::MailerContrib;
+use CGI;
 
 my $report = TWiki::Contrib::MailerContrib::mailNotify(
     \@webs, undef, $verbose, \@exwebs );

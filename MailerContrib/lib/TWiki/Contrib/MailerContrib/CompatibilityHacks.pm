@@ -1,8 +1,6 @@
 # Hack for older TWiki versions
 package CompatibilityHacks;
 
-print STDERR "Included compatibility hacks\n";
-
 package IteratorHack;
 
 sub new {

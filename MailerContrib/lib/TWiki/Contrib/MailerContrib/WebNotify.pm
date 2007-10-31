@@ -286,7 +286,7 @@ sub _load {
     $this->{meta} = $meta;
     # join \ terminated lines
     $text =~ s/\\\r?\n//gs;
-    my $webRE = qr/$TWiki::cfg{UsersWebName}\.|%USERSWEB%\./o;
+    my $webRE = qr/$TWiki::cfg{UsersWebName}\.|%(?:USERS|MAIN)WEB%\./o;
     foreach my $line ( split ( /\r?\n/, $text )) {
         if ( $line =~ /^\s+\*\s$webRE?($TWiki::regex{wikiWordRegex})\s+\-\s+($TWiki::cfg{MailerContrib}{EmailFilterIn})/ ) {
             # * Main.WikiName - email@domain
