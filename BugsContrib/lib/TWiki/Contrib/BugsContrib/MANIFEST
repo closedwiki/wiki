@@ -21,7 +21,7 @@ data/Bugs/WebAtom.txt 0770
 data/Bugs/WebPreferences.txt 0770
 data/Bugs/AppliesTo.txt 0770
 data/Bugs/WebNotify.txt 0770
-data/Bugs/Item1.txt 0770
+#data/Bugs/Item1.txt 0770
 data/Bugs/WebTopicEditTemplate.txt 0770
 data/Bugs/UserCommentsTemplate.txt 0770
 data/Bugs/ItemViewTemplate.txt 0770
