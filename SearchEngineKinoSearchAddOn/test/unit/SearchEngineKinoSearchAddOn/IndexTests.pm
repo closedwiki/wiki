@@ -43,6 +43,13 @@ sub test_newCreateIndex {
     $this->assert(defined($ind), "Index exemplar not created.")
 }
 
+sub test_newUpdateIndex {
+    my $this = shift;
+    my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newUpdateIndex();
+
+    $this->assert(defined($ind), "Index exemplar not created.")
+}
+
 sub test_createIndex {
     my $this = shift;
     my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
@@ -54,26 +61,21 @@ sub test_updateIndex {
     my $this = shift;
     my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newUpdateIndex();
 
-    $ind->updateIndex();
-}
-
-sub test_updateMarkerFile {
-    my $this = shift;
-    my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
-
-    my $file = $ind->updateMarkerFile('Main');
-    my $expected_file = $TWiki::cfg{DataDir}."/Main/.kinoupdate";
-    $this->assert_str_equals($expected_file, $file, "File not O.K.")
-}
-
-sub test_saveUpdateMarker{
-    my $this = shift;
-    my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
     my $start_time = time();
-    $ind->saveUpdateMarker('Main', $start_time);
 
-    my $red_time = $ind->readUpdateMarker('Main');
-    $this->assert_str_equals($start_time, $red_time, "Red time does not fit saved time.");
+    my @webs = $ind->websToIndex();
+
+    foreach my $web (@webs) {
+	$ind->saveUpdateMarker($web, $start_time);
+    }
+    
+    # Now I do a change
+    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "NewOrChangedTopic", <<'HERE');
+Just an example topic
+Keyword: startpoint
+HERE
+
+    $ind->updateIndex();
 }
 
 sub test_indexer {
@@ -100,9 +102,90 @@ sub test_attachmentsOfTopic {
     $this->assert_str_equals($atts[0]->{'name'}, "Simple_example.doc", "Attachment name not O.K.");
 }
 
+sub test_changedTopics {
+    my $this = shift;
+    my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
+
+    my $start_time = time();
+    $ind->saveUpdateMarker($this->{users_web}, $start_time);
+
+    my @changes;
+    my $change;
+
+    # No there should not be any changed topics after the mark I just set.
+    @changes = $ind->changedTopics($this->{users_web});
+    $this->assert(!@changes, "Changes found even if there are non.");
+    
+    # Now I do a change
+    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "NewOrChangedTopic", <<'HERE');
+Just an example topic
+Keyword: startpoint
+HERE
+
+    @changes = $ind->changedTopics($this->{users_web});
+
+    $this->assert(@changes, "Changed topics not returned.");
+
+    # The first change should be the one I just did. 
+    foreach $change (reverse @changes ){
+	$this->assert_str_equals($change, "NewOrChangedTopic", "Last change not detected.");
+	last;
+    }
+}
+
+sub test_removeTopics {
+    my $this = shift;
+    my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
+
+    # Fiest I create the index
+    $ind->createIndex();
+
+    # Now I remove some of the topics
+}
+
+sub test_updateMarkerFile {
+    my $this = shift;
+    my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
+
+    my $file = $ind->updateMarkerFile('Main');
+    my $expected_file = $TWiki::cfg{DataDir}."/Main/.kinoupdate";
+    $this->assert_str_equals($expected_file, $file, "File not O.K.")
+}
+
+sub test_saveUpdateMarker{
+    my $this = shift;
+    my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
+    my $start_time = time();
+    $ind->saveUpdateMarker($this->{users_web}, $start_time);
+
+    my $red_time = $ind->readUpdateMarker($this->{users_web});
+    $this->assert_str_equals($start_time, $red_time, "Red time does not fit saved time.");
+}
+
 sub test_readChanges {
     my $this = shift;
     my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
+
+    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "NewOrChangedTopic", <<'HERE');
+Just an example topic
+Keyword: startpoint
+HERE
+    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "NewOrChangedTopic", <<'HERE');
+Just an example topic: Updated
+Keyword: startpoint
+HERE
+
+    my @changes = $ind->readChanges($this->{users_web});
+    my $change;
+
+    $this->assert(@changes, "Changes not returned.");
+
+    # The first change should be the one I just did. 
+    foreach $change (reverse @changes ){
+	my ($topicName, $userName, $changeTime, $revision) = split( /\t/, $change);
+	$this->assert_str_equals($topicName, "NewOrChangedTopic", "Last change not detected.");
+	last;
+    }
 }
 
 1;

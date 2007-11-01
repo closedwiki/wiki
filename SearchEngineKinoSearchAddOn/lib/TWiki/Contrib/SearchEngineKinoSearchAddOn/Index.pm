@@ -34,6 +34,7 @@ sub newCreateIndex {
 }
 
 # New instance to update the index
+# QS
 sub newUpdateIndex {
     my $self = shift;
     return $self->new("update")
@@ -77,7 +78,8 @@ sub createIndex {
     $invindexer->finish;
 }
 
-#Do the update.
+# Do the update.
+# QS
 sub updateIndex {
     my ($self, $debug) = (@_);
 
@@ -171,7 +173,7 @@ sub indexer {
 }
 
 # Returns the list of attachments for the given topic.
-# OK
+# QS
 sub attachmentsOfTopic {
     my ($self, $web, $topic) = @_;
 
@@ -187,13 +189,13 @@ sub attachmentsOfTopic {
 
 
 # Yields a list of topics in the given web that were changed since the last update. 
+# QS
 sub changedTopics {
     my ($self, $web) = (@_);
 
     # NOTE violates store encapsulation, possible compatibility issue with future releases
-    #my $changes= $TWiki::Plugins::SESSION->{store}->readMetaData( $web, 'changes' );
-    #my $prevLastmodify = $TWiki::Plugins::SESSION->{store}->readMetaData($web,'kinoupdate') || "0";
-    my $changes = $self->readChanges( $web );
+    my @changes = $self->readChanges( $web );
+    my $change;
     my $prevLastmodify = $self->readUpdateMarker($web) || "0";
     my $currLastmodify = "";
     my @topicsToUpdate;
@@ -202,17 +204,22 @@ sub changedTopics {
     my %exclude;
 
     # process the web changes
-    foreach( reverse split( /\n/, $changes ) ) {
+    foreach $change (reverse @changes ) {
 	# Parse lines from .changes:
 	# <topic>	<user>		<change time>	<revision>
-	my ($topicName, $userName, $changeTime, $revision) = split( /\t/);
+	my ($topicName, $userName, $changeTime, $revision) = split( /\t/, $change);
 
 	if( ( ! %exclude ) || ( ! $exclude{ $topicName } ) ) {
+
+	    if (!defined($topicName)) {
+		next;
+	    }
 
 	    if( $prevLastmodify >= $changeTime ) {
 		# found item of last update
 		last;
 	    }
+
 	    $exclude{ $topicName } = "1";
 	    push( @topicsToUpdate, $topicName);
 	}
@@ -631,7 +638,7 @@ sub readUpdateMarker {
     return '';
 }
 
-
+# QS
 sub readChanges {
     my ($self, $web) = @_;
 
@@ -639,9 +646,9 @@ sub readChanges {
 
     if ( -e $changes_file) {
 	open( FILE, "<$changes_file" );
-	my $data = <FILE>;
+	my @data = <FILE>;
 	close( FILE );
-	return $data;
+	return @data;
     }
     return '';
 }
