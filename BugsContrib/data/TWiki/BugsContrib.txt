@@ -40,7 +40,7 @@ See the Bugs.WebHome topic in the new web for help in configuring the applicatio
 |  Version: | %$VERSION% |
 |  License: | GPL |
 |  Change History: | |
-|  | 1 Nov 2007 - TWiki:Main.SvenDowideit - updated to fix bugs reported in the Dev topic (4.2 query release to come later) |
+|  15447  | 1 Nov 2007 - TWiki:Main.SvenDowideit - updated to fix bugs reported in the Dev topic (4.2 query release to come later) |
 |  12856 | 13 Feb 2007 - TWiki:Main.SvenDowideit - update with lessons learned from longer term use |
 |  9804 | TWiki:Main.CrawfordCurrie - packaged for Release |
 |  Home: | TWiki:Plugins/%TOPIC% |
