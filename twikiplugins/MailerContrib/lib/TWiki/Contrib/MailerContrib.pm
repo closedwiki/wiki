@@ -115,7 +115,7 @@ sub _processWeb {
     my( $twiki, $web) = @_;
 
     if( ! TWiki::Func::webExists( $web ) ) {
-        print STDERR "**** ERROR mailnotifier cannot find web $web\n";
+#        print STDERR "**** ERROR mailnotifier cannot find web $web\n";
         return '';
     }
 
