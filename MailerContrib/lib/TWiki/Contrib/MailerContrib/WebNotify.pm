@@ -38,7 +38,7 @@ package TWiki::Contrib::MailerContrib::WebNotify;
 
 =pod
 
----++ new($session, $web, $topic, %options)
+---++ new($session, $web, $topic)
    * =$session= - TWiki object
    * =$web= - web name
    * =$topic= - topic name
