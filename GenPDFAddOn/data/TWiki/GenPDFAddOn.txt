@@ -156,7 +156,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Add-on Author: | TWiki:Main/BrianSpinar, TWiki:Main/WadeTurland |
 |  Add-on Version: | 2 Nov 2007 |
 |  Change History: | |
-|  2 Nov 2007 | Added new header and footer control (Bugs:Item4916) and fixed generation of wrong TWiki page (Bug:Item4915) |
+|  2 Nov 2007 | Added new header and footer control (Bugs:Item4916) and fixed generation of wrong TWiki page (Bugs:Item4915) |
 |  23 Oct 2007 | Fixed Bugs:Item4452 & Bugs:Item4885, compatibility with Perl 5.6 and  missing images with SSL certificates |
 |  31 Aug 2007 | Fixed Bugs:Item4530, improper rendering of lists | 
 |  13196 | Removed =nop= tags before sending to htmldoc, fixed Bugs:Item3549 |
