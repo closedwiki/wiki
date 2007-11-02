@@ -38,7 +38,7 @@ package TWiki::Contrib::MailerContrib::WebNotify;
 
 =pod
 
----++ new($session, $web, $topic)
+---++ new($session, $web, $topic, %options)
    * =$session= - TWiki object
    * =$web= - web name
    * =$topic= - topic name
@@ -127,7 +127,7 @@ sub getSubscribers {
    * =$topics= - wildcard expression giving topics to subscribe to
    * =$depth= - Child depth to scan (default 0)
    * =$mode= - ! if this is a non-changes subscription and the topics should
-   be mailed evebn if there are no changes. ? to mail the full topic only
+   be mailed even if there are no changes. ? to mail the full topic only
    if there are changes. undef to mail changes only.
 Add a subscription, adding the subscriber if necessary.
 
@@ -227,7 +227,7 @@ sub processChange {
                     }
                 }
             } else {
-		$this->_emailWarn($subscriber,$name,$web);
+                $this->_emailWarn($subscriber,$name,$web);
             }
         }
     }
@@ -286,47 +286,33 @@ sub _load {
     $this->{meta} = $meta;
     # join \ terminated lines
     $text =~ s/\\\r?\n//gs;
-    my $webRE = qr/$TWiki::cfg{UsersWebName}\.|%(?:USERS|MAIN)WEB%\./o;
-    foreach my $line ( split ( /\r?\n/, $text )) {
-        if ( $line =~ /^\s+\*\s$webRE?($TWiki::regex{wikiWordRegex})\s+\-\s+($TWiki::cfg{MailerContrib}{EmailFilterIn})/ ) {
-            # * Main.WikiName - email@domain
-            # * %USERSWEB%.WikiName - email@domain
-            if ( $1 ne $TWiki::cfg{DefaultUserWikiName} ) {
-                # Add email address to list if non-guest and non-duplicate
-                $this->subscribe( $2, '*', 0 );
-            }
+    my $webRE = qr/(?:$TWiki::cfg{UsersWebName}\.)?/o;
+    foreach my $baseline ( split ( /\r?\n/, $text )) {
+        my $line = TWiki::Func::expandCommonVariables(
+            $baseline, $this->{topic}, $this->{web}, $meta);
+        if( $line =~ /^\s+\*\s$webRE($TWiki::regex{wikiWordRegex})\s+\-\s+($TWiki::cfg{MailerContrib}{EmailFilterIn})/o
+              && $1 ne $TWiki::cfg{DefaultUserWikiName}) {
+            # Main.WikiName - email@domain (legacy format)
+            $this->subscribe( $2, '*', 0 );
             $in_pre = 0;
         }
-        elsif ( $line =~ /^\s+\*\s$webRE?($TWiki::regex{wikiWordRegex})\s*$/o ) {
-            # * Main.WikiName
-            # %USERSWEB%.WikiName
-            # WikiName
-            $this->subscribe($1, '*', 0 );
-            $in_pre = 0;
-        }
-        elsif ( $line =~ /^\s+\*\s($TWiki::cfg{MailerContrib}{EmailFilterIn})\s*$/ ) {
-            # * email@domain
-            $this->subscribe($1, '*', 0 );
-            $in_pre = 0;
-        }
-        elsif ( $line =~ /^\s+\*\s($TWiki::cfg{MailerContrib}{EmailFilterIn})\s*:(.*)$/ ) {
-            # * email@domain: topics
-            $this->_parsePages( $1, $2 );
-            $in_pre = 0;
-        }
-        elsif ( $line =~ /^\s+\*\s$webRE?([$TWiki::regex{mixedAlphaNum}]+)\s*:(.*)$/o ) {
-            # * Main.WikiName: topics
-            # * %USERSWEB%.WikiName: topics
-            if ( $2 ne $TWiki::cfg{DefaultUserWikiName} ) {
-                $this->_parsePages( $1, $2 );
+        elsif ( $line =~ /^\s+\*\s$webRE($TWiki::regex{wikiWordRegex}|'.*?'|".*?"|$TWiki::cfg{MailerContrib}{EmailFilterIn})\s*(:(.*))?$/o
+               && $1 ne $TWiki::cfg{DefaultUserWikiName}) {
+            my $subscriber = $1;
+            my $topics = $3;
+            $subscriber =~ s/^(['"])(.*)\1$/$2/;
+            if (defined($topics) && $topics) {
+                $this->_parsePages( $subscriber, $topics );
+            } else {
+                $this->subscribe($subscriber, '*', 0 );
             }
             $in_pre = 0;
         }
         else {
             if( $in_pre ) {
-                $this->{pretext} .= "$line\n";
+                $this->{pretext} .= "$baseline\n";
             } else {
-                $this->{posttext} .=  "$line\n";
+                $this->{posttext} .=  "$baseline\n";
             }
         }
     }
@@ -351,16 +337,18 @@ sub _parsePages {
     }
 }
 
-# PRIVATE emailWarn to warn when an email address cannot be found for a subscriber.
+# PRIVATE emailWarn to warn when an email address cannot be found
+# for a subscriber.
 sub _emailWarn {
-  my ($this, $subscriber, $name, $web) = @_;
+    my ($this, $subscriber, $name, $web) = @_;
 
-  # Make sure we only warn once.  Don't want to see this for every Topic we are notifying on.
-  unless(defined $this->{'nomail'}{$name}) {
-    $this->{'nomail'}{$name} = 1;
-    print STDERR "WARNING: Failed to find email for ".
-      $subscriber->stringify()." monitoring $web\n";
-  }
+    # Make sure we only warn once. Don't want to see this for every
+    # Topic we are notifying on.
+    unless (defined $this->{nomail}{$name}) {
+        $this->{nomail}{$name} = 1;
+        print STDERR "WARNING: Failed to find permitted email for '".
+          $subscriber->stringify()."' when processing web '$web'\n";
+    }
 }
 
 1;

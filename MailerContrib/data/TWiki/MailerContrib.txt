@@ -33,15 +33,17 @@ The script collates the changes emails so that each subscriber only receives one
 Each web can optionally contain a topic called <nop>%NOTIFYTOPIC%.
 <!-- Included by %SYSTEMWEB%.WebChangesAlert -->
 %STARTINCLUDE%
-Users subscribe to email notifications using their %SYSTEMWEB%.WikiName or an alternative email address, and can specify the webs/topics they wish to track using one of these bullet list formats:
+Users subscribe to email notifications using their %SYSTEMWEB%.WikiName or an alternative email address, and can specify the webs/topics they wish to track, WWhole groups of users can also be subscribed for notification.
 
-_three spaces_ * [ _webname_ . ] _wikiName_ - _SMTP mail address_ <br />
-_three spaces_ * [ _webName_ . ] _wikiName_ <br />
-_three spaces_ * _SMTP mail address_ <br />
-_three spaces_ * _SMTP mail address_ : _topics_ <br />
-_three spaces_ * [ _webname_ . ] _wikiName_ : _topics_
+The general format of a subscription is:
 
-In the above, _topics_ is a space-separated list of topics:
+_three spaces_ =*= _subscriber_ [ =:= _topics_ ]
+
+Where _subscriber_ can be a %SYSTEMWEB%.WikiName, an E-mail address, or a
+group name. If _subscriber_ contains any characters that are not legal in
+an email address, then it must be enclosed in 'single' or "double" quotes.
+
+_topics_ is an optional space-separated list of topics:
    * ... *without* a _Web._ prefix
    * ...that exist in this web.
 Users may further customize the specific content they will receive using the following controls:
@@ -57,7 +59,7 @@ Subscribe Daisy to all changes to topics in this web.
 </verbatim>
 Subscribe Daisy to all changes to topics that start with =Web=.
 <verbatim>
-   * daisy.cutter@flowers.com: Web*
+   * daisy.cutter@flowers.com : Web*
 </verbatim>
 Subscribe Daisy to changes to topics starting with =Petal=, and their immediate children, !WeedKillers and children to a depth of 3, and all topics that match start with =Pretty= and end with =Flowers= e.g. =PrettyPinkFlowers=
 <verbatim>
@@ -80,9 +82,14 @@ Subscribe !GardenGroup (which includes Petunia) to all changed topics under !All
    * GardenGroup: AllNewsLetters? (3)
    * petunia@flowers.com: - ManureNewsLetter
 </verbatim>
+Subscribe =IT:admins= (a non-TWiki group defined by an alternate user mapping) to all changes to Web* topics.
+<verbatim>
+   * 'IT:admins' : Web*
+</verbatim>
+
 A user may be listed many times in the <nop>%NOTIFYTOPIC% topic. Where a user has several lines in <nop>%NOTIFYTOPIC% that all match the same topic, they will only be notified about _changes_ that topic _once_ (though they will still receive individual mails for news topics).
 
-If a _TWiki group_ is listed for notification, the group will be recursively expanded to the e-mail addresses of all members.
+If a _group_ is listed for notification, the group will be recursively expanded to the e-mail addresses of all members.
 
 __%X% Warning: Because an email address is not linked to a user name, there is no way for TWiki to check access controls for email addresses. A user identified by an email address will only be sent change notifications if the topic they are asubscribed to is readable by guest users. You can limit what email addresses can be used in <nop>%NOTIFYTOPIC%, or even block use of emails altogther, using the ={MailerContrib}{EmailFilterIn} setting in =configure=.
 
@@ -157,6 +164,7 @@ Many thanks to the following sponsors for supporting this work:
 |  License: | GPL |
 |  Version: | %$VERSION% |
 |  Change History: | |
+|  2 Nov 2007 | Bugs:Item4818: added quotes to support non-alphabetic and other wierd group names Bugs:Item4887: corrected minor rendering error Bugs:Item4917: removed dependence on symbolic web names |
 |  9 Sep 2007 | Bugs:Item4326 workaround for possible error in !WebNotify API in old releases, Should not affect most users. |
 |  6 Sep 2007 | Bugs:Item4488 doc tweaks |
 |  14550 | Bugs:Item4461 - 'Changed' link now points to most recent changes, not the entire history |

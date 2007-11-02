@@ -237,7 +237,11 @@ sub stringify {
                        @{$this->{unsubscriptions}} );
     $unsubs = " - $unsubs" if $unsubs;
 
-    return "   * " . $this->{name} . ": " .
+    my $name = $this->{name};
+    if ($name !~ /^($TWiki::regex{wikiWordRegex}|$TWiki::cfg{MailerContrib}{EmailFilterIn})$/) {
+        $name = $name =~ /'/ ? '"'.$name.'"' : "'$name'";
+    }
+    return "   * " . $name . ": " .
       $subs . $unsubs;
 }
 

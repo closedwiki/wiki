@@ -22,9 +22,9 @@
 --------------------------------
 %TMPL:DEF{HTML:middle}%<tr>
   <td width="50%">
-    <a href="%SCRIPTURL{"view"}%/%WEB%/%TOPICNAME%"><b>%TOPICNAME%</b></a>
+    <a href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%"><b>%TOPIC%</b></a>
   </td><td width="30%">
-    <a href="%SCRIPTURL{"rdiff"}%/%WEB%/%TOPICNAME%?rev1=%BASE_REV%&rev2=%CUR_REV%" rel='nofollow'>%TIME%</a> - %REVISION%
+    <a href="%SCRIPTURL{"rdiff"}%/%WEB%/%TOPIC%?rev1=%BASE_REV%&rev2=%CUR_REV%" rel='nofollow'>%TIME%</a> - %REVISION%
   </td><td width="20%">
     %AUTHOR%
   </td>
@@ -50,8 +50,8 @@
 --------------------------------
 %TMPL:DEF{PLAIN:before}%%TMPL:END%
 --------------------------------
-%TMPL:DEF{PLAIN:middle}%- %TOPICNAME% (%AUTHOR%, %TIME%) %REVISION%
-%URL%
+%TMPL:DEF{PLAIN:middle}%- %TOPIC% (%AUTHOR%, %TIME%) %REVISION%
+%SCRIPTURL{"view"}%/%ENCODE{%WEB%}%/%ENCODE{%TOPIC%}%
 
 %TMPL:END%
 --------------------------------

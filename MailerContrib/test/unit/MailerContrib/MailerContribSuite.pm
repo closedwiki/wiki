@@ -112,7 +112,7 @@ sub set_up {
              },
           # single topic with one level of children
           {
-              entry => "email1\@example.com: TestTopic1 (1)",
+              entry => "'email1\@example.com': TestTopic1 (1)",
               email => "email1\@example.com",
               topicsout => "TestTopic1 TestTopic11 TestTopic12",
           },
@@ -150,8 +150,14 @@ sub set_up {
           {
               email => "email7\@example.com",
               entry => "email7\@example.com: TestTopic*1 - \\\n   TestTopic2*",
-              topicsout => "TestTopic1 TestTopic11 TestTopic121"
-             },
+              topicsout => "TestTopic1 TestTopic11 TestTopic121",
+          },
+          # Strange group name; just checking parser, here
+          {
+              email => "email8\@example.com",
+              entry => "'IT:admins': TestTopic1",
+              topicsout => "",
+          },
          );
 
     my $s = "";

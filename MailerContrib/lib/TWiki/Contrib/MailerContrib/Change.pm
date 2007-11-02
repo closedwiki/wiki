@@ -169,18 +169,13 @@ sub expandPlain {
         $this->{TEXT_SUMMARY} = $s;
     }
 
-    # URL-encode topic names for use of I18N topic names in plain text
-    my $scriptUrl =
-      $this->{SESSION}->getScriptUrl(
-          1, 'view',
-          URI::Escape::uri_escape( $this->{WEB} ),
-          URI::Escape::uri_escape( $this->{TOPIC}));
     my $tim =  TWiki::Time::formatTime( $this->{TIME} );
-    $template =~ s/%TOPICNAME%/$this->{TOPIC}/g;
     $template =~ s/%AUTHOR%/$this->{AUTHOR}/g;
     $template =~ s/%TIME%/$tim/g;
     $template =~ s/%CUR_REV%/$this->{CURR_REV}/g;
     $template =~ s/%BASE_REV%/$this->{BASE_REV}/g;
+    $template =~ s/%TOPICNAME%/$this->{TOPIC}/g; # deprecated DO NOT USE!
+    $template =~ s/%TOPIC%/$this->{TOPIC}/g;
     my $frev = '';
     if( $this->{CURR_REV} ) {
         if( $this->{CURR_REV} > 1 ) {
@@ -192,7 +187,11 @@ sub expandPlain {
         }
     }
     $template =~ s/%REVISION%/$frev/g;
-    $template =~ s/%URL%/$scriptUrl/g;
+
+    # URL-encode topic names for use of I18N topic names in plain text
+    # DEPRECATED! DO NOT USE!
+    $template =~ s#%URL%#%SCRIPTURL{view}%/%ENCODE{%WEB%}%/%ENCODE{%TOPIC%}%#g;
+
     $template =~ s/%TEXTHEAD%/$this->{TEXT_SUMMARY}/g;
     return $template;
 }
