@@ -51,7 +51,7 @@ The following table shows the various configuration variables and their meaning.
 | =pdfheadertopic= | GENPDFADDON_HEADERTOPIC | | !GenPDFHeaderFooterTopic | The name of a topic that defines headers and footers using &lt;-- HEADER LEFT "foobar" --> syntax |
 | =pdftitletopic= | GENPDFADDON_TITLETOPIC | | !GenPDFTitleTopic | The name of a topic that defines the layout of the title page |
 | =skin= | GENPDFADDON_SKIN | =print.pattern= | =print.nat= | Default skin to use for PDF generation |
-| =pdfrecursive= | GENPDFADDON_RECURSIVE | undef | =on= | Include children of the base topic in the PDF |
+| =pdfrecursive= | GENPDFADDON_RECURSIVE | =undef= | =on= | Include children of the base topic in the PDF |
 | =pdfformat= | GENPDFADDON_FORMAT | =pdf14= | =pdf12= | HTMLDOC output format |
 | =pdftoclevels= |GENPDFADDON_TOCLEVELS | =5= | =3= | Number of levels to include in the PDF table of contents (use 0 to disable the generation of a table of contents). Note that HTMLDOC generates a table of contents based on HTML headers in the page. |
 | =pdfpagesize= | GENPDFADDON_PAGESIZE | =a4= | =letter= | The page size for PDF output |
@@ -62,7 +62,10 @@ The following table shows the various configuration variables and their meaning.
 | =pdfsubject= | GENPDFADDON_SUBJECT | =%<nop>FORMFIELD{"TopicHeadline"}%= | 'Foobar document creation' | Used for PDF Subject META info to help search engines |
 | =pdftocheader= | GENPDFADDON_TOCHEADER | =...= | =l..= | See http://www.htmldoc.org/ |
 | =pdftocfooter= | GENPDFADDON_TOCFOOTER | =..i= | =.i.= | See http://www.htmldoc.org/ |
+| =pdfheader= | GENPDFADDON_HEADER | | .1. | Specify content of header, see http://www.htmldoc.org |
+| =pdffooter= | GENPDFADDON_FOOTER | | .1. | Specify content of footer, see http://www.htmldoc.org |
 | =pdfheadfootfont= | GENPDFADDON_HEADFOOTFONT | | Helvetica-Bold | Font specification for headers and footers. |
+| =pdfheadfootsize= | GENPDFADDON_HEADFOOTSIZE | | 12 | Sets the size of the header and footer text in points (1 point = 1/72nd inch) | 
 | =pdfbodyimage= | GENPDFADDON_BODYIMAGE | | http:<nop>//my.server.com/path/to/background.jpeg | The image that will appear tiled in the background of every page |
 | =pdflogoimage= | GENPDFADDON_LOGOIMAGE | | http:<nop>//my.server.com/path/to/logo.jpeg | The logo that will appear in a header or footer if you specify 'l' in the string (see http://www.htmldoc.org) |
 | =pdfnumberedtoc= | GENPDFADDON_NUMBEREDTOC | =undef= | True | Option flag for getting numbered headings and Table of Contents. Set it to anything for true. |
@@ -151,8 +154,9 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 ---++ Add-On Info
 
 |  Add-on Author: | TWiki:Main/BrianSpinar, TWiki:Main/WadeTurland |
-|  Add-on Version: | 23 Oct 2007 |
+|  Add-on Version: | 2 Nov 2007 |
 |  Change History: | |
+|  2 Nov 2007 | Added new header and footer control (Bugs:Item4916) and fixed generation of wrong TWiki page (Bug:Item4915) |
 |  23 Oct 2007 | Fixed Bugs:Item4452 & Bugs:Item4885, compatibility with Perl 5.6 and  missing images with SSL certificates |
 |  31 Aug 2007 | Fixed Bugs:Item4530, improper rendering of lists | 
 |  13196 | Removed =nop= tags before sending to htmldoc, fixed Bugs:Item3549 |
