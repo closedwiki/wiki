@@ -95,7 +95,7 @@ sub convert {
     $content =~ s/\\\n/ /g;
     $content =~ s/\t/   /g;
 
-    $content =~ s/[$TT0$TT1$TT2]/!/go;	
+    $content =~ s/[$TT0$TT1$TT2]/?/go;	
 
     # Render TML constructs to tagged HTML
     $content = $this->_getRenderedVersion( $content );
@@ -237,15 +237,6 @@ sub _getRenderedVersion {
 
     # Remove PRE to prevent TML interpretation of text inside it
     $text = $this->_takeOutBlocks( $text, 'pre' );
-
-    # change '!%XXX' to '%<nop>XXX' (but not if preceded by !)
-    $text =~ s/(?<!\+!)!%(?=[A-Z][A-Z0-9_]*[{%])/%<nop>/g;
-
-    # Change ' !AnyWord' to ' <nop>AnyWord',
-    $text =~ s/(^|(?<=[ \t\n\(]))!(?=[$TWiki::regex{mixedAlphaNum}\*\=])/<nop>/gm;
-
-    # Change ' ![[...' to ' [<nop>[...'
-    $text =~ s/(^|\s)!\[\[/$1\[<nop>\[/gm;
 
     # Protect comments
     $text =~ s/(<!--.*?-->)/$this->_liftOut($1, 'PROTECTED')/ges;

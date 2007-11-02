@@ -69,10 +69,10 @@ my $data =
           name => 'Pling',
           tml => 'Move !ItTest/site/ToWeb5 leaving web5 as !MySQL host',
           html => <<HERE,
-Move ${nop}ItTest/site/ToWeb5 leaving web5 as ${nop}MySQL host
+Move !<span class="WYSIWYG_LINK">ItTest</span>/site/ToWeb5 leaving web5 as !<span class="WYSIWYG_LINK">MySQL</span> host
 HERE
           finaltml => <<'HERE',
-Move <nop>ItTest/site/ToWeb5 leaving web5 as <nop>MySQL host
+Move !ItTest/site/ToWeb5 leaving web5 as !MySQL host
 HERE
       },
       {
@@ -392,9 +392,9 @@ HERE
       {
           exec => $TML2HTML | $ROUNDTRIP,
           name => 'noppedWikiword',
-          html => "<p>${nop}SunOS</p>",
+          html => '<p>!<span class="WYSIWYG_LINK">SunOS</span></p>',
           tml => '!SunOS',
-          finaltml => '<nop>SunOS',
+          finaltml => '!SunOS',
       },
       {
           exec => $HTML2TML,
@@ -480,7 +480,7 @@ escaped:
 ![[wiki syntax]]
 THERE
           finaltml => <<'EVERYWHERE',
-[[wiki syntax]][[%USERSWEB%.TWiki users]] escaped: [<nop>[wiki syntax]]
+[[wiki syntax]][[%USERSWEB%.TWiki users]] escaped: ![[wiki syntax]]
 EVERYWHERE
       },
       {
@@ -500,16 +500,16 @@ EVERYWHERE
       {
           exec => $ROUNDTRIP,
           name => 'plingedVarOne',
-          html => '%<nop>USERSWEB%nowt',
+          html => '!<span class="WYSIWYG_PROTECTED">%USERSWEB%</span>nowt',
           tml => '!%USERSWEB%nowt',
-          finaltml => '%<nop>USERSWEB%nowt',
+          finaltml => '!%USERSWEB%nowt',
       },
       {
           exec => $ROUNDTRIP,
           name => 'plingedVarTwo',
-          html => "nowt%${nop}USERSWEB%",
+          html => 'nowt!<span class="WYSIWYG_PROTECTED">%USERSWEB%</span>',
           tml => 'nowt!%USERSWEB%',
-          finaltml => 'nowt%<nop>USERSWEB%',
+          finaltml => 'nowt!%USERSWEB%',
       },
       {
           exec => $ROUNDTRIP,
@@ -1486,6 +1486,20 @@ Blah
 <span class="WYSIWYG_PROTECTED">&#60;a&nbsp;href=&#34;%SCRIPTURLPATH{&#34;edit&#34;}%/%WEB%/%TOPIC%?t=%GM%NOP%TIME{&#34;$epoch&#34;}%&#34;&#62;</span>edit<span
 class="WYSIWYG_PROTECTED">&#60;/a&#62;</span>
 Blah
+</p>
+BLAH
+      },
+      {
+          name => 'Item4903',
+          exec => $TML2HTML | $ROUNDTRIP,
+          tml => <<'BLAH',
+%IF{"X!=Y" then="z"}%
+BLAH
+          html => <<'BLAH',
+<p>
+<span class="WYSIWYG_PROTECTED">
+%IF{&#34;X!=Y&#34;&nbsp;then=&#34;z&#34;}%
+</span>
 </p>
 BLAH
       },
