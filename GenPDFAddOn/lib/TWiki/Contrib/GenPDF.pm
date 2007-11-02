@@ -420,7 +420,10 @@ sub _getPrefs {
   use constant SUBJECT => '%FORMFIELD{"TopicHeadline"}%';
   use constant TOCHEADER => "...";
   use constant TOCFOOTER => "..i";
+  use constant HEADER => undef;
+  use constant FOOTER => undef;
   use constant HEADFOOTFONT => "";
+  use constant HEADFOOTSIZE => undef;
   use constant BODYIMAGE => "";
   use constant LOGOIMAGE => "";
   use constant NUMBEREDTOC => undef;
@@ -469,6 +472,15 @@ sub _getPrefs {
 
    $prefs{'orientation'} = $query->param('pdforientation') || TWiki::Func::getPreferencesValue("GENPDFADDON_ORIENTATION") || '';
    $prefs{'orientation'} = ORIENTATION unless ($prefs{'orientation'} =~ /^(landscape|portrait)$/);
+
+   $prefs{'headfootsize'} = $query->param('pdfheadfootsize') || TWiki::Func::getPreferencesValue("GENPDFADDON_HEADFOOTSIZE") || '';
+   $prefs{'headfootsize'} = HEADFOOTSIZE unless ($prefs{'headfootsize'} =~ /^\d+$/);
+
+   $prefs{'header'} = $query->param('pdfheader') || TWiki::Func::getPreferencesValue("GENPDFADDON_HEADER") || '';
+   $prefs{'header'} = HEADER unless ($prefs{'header'} =~ /^[\.\/:1aAcCdDhiIltT]{3}$/);
+
+   $prefs{'footer'} = $query->param('pdffooter') || TWiki::Func::getPreferencesValue("GENPDFADDON_FOOTER") || '';
+   $prefs{'footer'} = FOOTER unless ($prefs{'footer'} =~ /^[\.\/:1aAcCdDhiIltT]{3}$/);
 
    $prefs{'headfootfont'} = $query->param('pdfheadfootfont') || TWiki::Func::getPreferencesValue("GENPDFADDON_HEADFOOTFONT") || '';
    $prefs{'headfootfont'} = HEADFOOTFONT unless ($prefs{'headfootfont'} =~
@@ -695,6 +707,9 @@ sub viewPDF {
    push @htmldocArgs, "--bodyimage", "$prefs{'bodyimage'}" if $prefs{'bodyimage'};
    push @htmldocArgs, "--logoimage", "$prefs{'logoimage'}" if $prefs{'logoimage'};
    push @htmldocArgs, "--headfootfont", "$prefs{'headfootfont'}" if $prefs{'headfootfont'};
+   push @htmldocArgs, "--headfootsize", "$prefs{'headfootsize'}" if $prefs{'headfootsize'};
+   push @htmldocArgs, "--header", "$prefs{'header'}" if $prefs{'header'};
+   push @htmldocArgs, "--footer", "$prefs{'footer'}" if $prefs{'footer'};
    push @htmldocArgs, "--permissions", "$prefs{'permissions'}" if $prefs{'permissions'};
    push @htmldocArgs, "--bodycolor", "$prefs{'bodycolor'}" if $prefs{'bodycolor'};
    push @htmldocArgs, "--top", "$prefs{'top'}" if $prefs{'top'};
