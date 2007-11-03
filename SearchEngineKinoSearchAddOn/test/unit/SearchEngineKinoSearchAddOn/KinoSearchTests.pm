@@ -130,6 +130,18 @@ sub test_analyserLanguage {
     $this->assert_str_equals('de', $lang, "Configured language not O.K.");
 }
 
+sub test_summaryLength {
+    my $this = shift;
+    my $ks = new TWiki::Contrib::SearchEngineKinoSearchAddOn::KinoSearch("index");
+
+    my $lenth = $ks->summaryLength();
+    $this->assert(300 == $lenth, "Default length not O.K.");
+
+    TWiki::Func::setPreferencesValue( "KINOSEARCHSUMMARYLENGTH", 299);
+    $lenth = $ks->summaryLength();
+    $this->assert(299 == $lenth, "Configured length not O.K.");
+}
+
 sub test_debugPref {
     my $this = shift;
     my $ks = new TWiki::Contrib::SearchEngineKinoSearchAddOn::KinoSearch("index");

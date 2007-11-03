@@ -160,6 +160,10 @@ sub analyserLanguage {
     return TWiki::Func::getPreferencesValue( "KINOSEARCHANALYSERLANGUAGE") || 'en';
 }
 
+sub summaryLength {
+    return TWiki::Func::getPreferencesValue( "KINOSEARCHSUMMARYLENGTH") || 300;
+}
+
 # Returns, if debug statements etc shall be shown
 # QS
 sub debugPref {

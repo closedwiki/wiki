@@ -23,6 +23,7 @@ use KinoSearch::Analysis::PolyAnalyzer;
 use KinoSearch::QueryParser::QueryParser;
 
 # New instance to search the index
+# QS
 sub newSearch {
     my $self = shift;
     return $self->new("search")
@@ -44,8 +45,8 @@ sub search {
     my $query = new CGI;
 
     # getting the web, the topic and the user from the SESSION object
-    my $webName = $TWiki::Plugins::SESSION->{webName};
-    my $topicName = $TWiki::Plugins::SESSION->{topicName};
+    my $webName    = $TWiki::Plugins::SESSION->{webName};
+    my $topicName  = $TWiki::Plugins::SESSION->{topicName};
     my $remoteUser = $TWiki::Plugins::SESSION->{user}->{login}||"TWikiGuest";
 
     my $websStr = $self->websStr($query);
@@ -140,52 +141,13 @@ sub search {
        print $beforeText;
      }
 
-    # Kino code 
-    my $analyser   = $self->analyser( $self->analyserLanguage() );
-
-    my $parser = KinoSearch::QueryParser::QueryParser->new(
-		  analyzer => $analyser,
-		  fields   => [ 'topic', 'bodytext', 'author' ],
-		  default_boolop => 'AND'					   
-    );
-
-    if (! $search ) {
-       $search="\"Something very unlikely to happen. Nothing to search for!\"";
-    }
-    my $kinoquery = $parser->parse($search); 
-
-    my $searcher = KinoSearch::Searcher->new(
-                                invindex => $self->indexPath(),
-				analyzer => $analyser
-                   );
-
-    my $docs = $searcher->search(query => $kinoquery);
+    my $docs = $self->docsForQuery($search);
 
     my $ntopics = 0;
-    my $head = "";
-    my $revUser = "";
-    my $revDate = "";
-    my $revNum = "";
-    my $locked = "";
-    my $lockinguser = "";
-    my $name = "";
-    my $icon = "";
-    my $comment = "";
-
-    my $highlighter = KinoSearch::Highlight::Highlighter->new( 
-        excerpt_field  => 'bodytext',
-	# FIXME: This could be an option!?
-	excerpt_length => 300,
-	);
-    
-    $docs->create_excerpts( highlighter => $highlighter );
-
-    # $hits->seek( $offset, $hits_per_page );
-    $docs->seek( 0, $docs->total_hits );
 
     # output the list of hits
     while ( my $hit = $docs->fetch_hit_hashref ) {
-	my $resweb = $hit->{web};
+	my $resweb   = $hit->{web};
 	my $restopic = $hit->{topic};
 
 	# For partial name search of topics, just hold the first part of the string
@@ -193,116 +155,21 @@ sub search {
 	
 	# topics moved away maybe are still indexed on old web
 	next unless &TWiki::Func::topicExists( $resweb, $restopic );
-	
-	# is the hit an attachment ?
-	my $fieldattachment = $hit->{attachment};
-	if ( $fieldattachment ) {
-	    $name = $hit->{name};
-	    $comment = $hit->{comment} || ""; 
-	    if ($comment) {
-		$comment = " - $comment";
-		$comment =~ s/([\x{80}-\x{FFFF}])/'.'/gse; # FIXME bt now just get rid of UTF8
-	    }
-	} else {
-	    $name = "";
-	}
-	
+
 	# read topic
-	my( $meta, $text ) = TWiki::Func::readTopic( $resweb, $restopic );
-	$text =~ s/%WEB%/$resweb/gos;
-	$text =~ s/%TOPIC%/$restopic/gos;
-	
-	# recover data from the hit so it can be displayed
-	if ( $hit->{author} ) {
-	    $revUser = $hit->{author};
-	    $revUser = TWiki::Func::userToWikiName($revUser);
-	    if ($revUser !~ "$mainWebname.") { $revUser = "$mainWebname.$revUser"; }
-	    $revNum = $hit->{version};
-	    $revDate = $hit->{date};
-	}
+	#my( $meta, $text ) = TWiki::Func::readTopic( $resweb, $restopic );
+	# Why these changes to the text?
+	#$text =~ s/%WEB%/$resweb/gos;
+	#$text =~ s/%TOPIC%/$restopic/gos;
+	my $text;
 	
 	# Check thath the topic can be viewed.
 	if (! $self->topicAllowed($restopic, $resweb,  $text, $remoteUser)) {
 	    next;
 	}
-#	# security check - default mapping for user guest is TWikiGuest, so if web/topic
-#	# does not allow this user to view the hit, it will be discarded
-#	my $allowView = TWiki::Func::checkAccessPermission( "view", TWiki::Func::userToWikiName($remoteUser) , $text, $restopic, $resweb );
-#	if( ! $allowView ) {
-#	    next;
-#	}
-#	# another security check - is the web of the current result hidden ?
-#	$allowView = TWiki::Func::getPreferencesValue( "NOSEARCHALL", $resweb ) || "";
-#	if( $allowView eq "on" ) {
-#	    next;
-#	}
-	
-	# the hit is viewable for the user, so start replacement of labels
-	$tempVal = $repeatText;
-	$tempVal =~ s/%WEB%/$resweb/go;
-	
-	# score should be displayed in some manner (stars, %, ...) ...
-	# however, the KinoSearch documentation does not says nothing about its possible values
-	# if you want to display it, just uncomment the following line
-	###       $tempVal =~ s/%SCORE%/$score/go;
-	$tempVal =~ s/%SCORE%//go;
-	
-	# field $name only is present if the hit is an attachment
-	if ($name) {
-	    # icon for attachment based on filename
-	    $icon = $TWiki::Plugins::SESSION->mapToIconFileName($name);
-	    $icon = "%ICON{\"$icon\"}%";
-	    # URL for the file
-	    $tempVal =~ s/%MATCH%/<a href="%PUBURLPATH%\/$resweb\/$restopic\/$name">$name<\/a>/go;
-	    # no locking information for attachments
-	    $locked = ""; $lockinguser = "";
-	} else {
-	    # no icon for topics
-	    $icon = "";
-	    # URL for the topic
-	    $tempVal =~ s/%MATCH%/\[\[$resweb\.$restopic\]\]/go;
-	    # if locks are to be displayed, then find it out for each hit
-	    if ($showlock) {
-		($url, $lockinguser, $locked) = TWiki::Func::checkTopicEditLock($resweb, $restopic);
-		if ($lockinguser) { $lockinguser = TWiki::Func::userToWikiName( $lockinguser, "0" ); }
-	    }
-	}
-	# NEW icon for new topics and revision number for old ones
-	if (($revNum eq "")||($revNum == 1)) {
-	    $revNum = "%N%";
-	} else {
-	    $revNum = "r$revNum";
-	}
-	
-	# now, just replace the template elements with values and render
-	$tempVal =~ s/%ICON%/$icon/go;
-	if ($locked) {
-	    $tempVal =~ s/%LOCKED%/$lockinguser ($locked)/o;
-	}
-	$tempVal =~ s/%LOCKED%/ /o;
-	$tempVal =~ s/%TIME%/$revDate/o;
-	$tempVal =~ s/%TOPICNAME%/$restopic/o;
-	$tempVal =~ s/%REVISION%/$revNum/o;
-	$tempVal =~ s/%AUTHOR%/$revUser/o;
-	$tempVal = TWiki::Func::expandCommonVariables( $tempVal, $restopic, $resweb );
-	$tempVal = TWiki::Func::renderText( $tempVal, $resweb );
-	
-	if( $nosummary ) {
-	    # no summaries
-	    $tempVal =~ s/%TEXTHEAD%//go;
-	    $tempVal =~ s/&nbsp;//go;
-	} else {
-	    if ($name) {
-		# summaries for attachments
-		$tempVal =~ s/%TEXTHEAD%/\[\[$resweb\.$restopic\]\]$comment \[$hit->{excerpt}\]/go;
-	    } else {
-		# summaries for topics
-		$tempVal =~ s/%TEXTHEAD%/$hit->{excerpt}/go;
-	    }
-	}
-	$tempVal = TWiki::Func::renderText( $tempVal, $resweb );
-	$tempVal =~ s|</*nop/*>||goi;   # remove <nop> tag
-	print $tempVal;
+
+	my $htmlString = $self->renderHtmlStringFor($hit, $repeatText, $nosummary);
+	print $htmlString;
 	
 	# one more in the bag
 	$ntopics += 1;
@@ -318,18 +185,17 @@ sub search {
 
     # print "Number of topics:" part
     if( ! $nototal ) {
-      my $thisNumber = $tmplNumber;
-      $thisNumber =~ s/%NTOPICS%/$ntopics/go;
-      $thisNumber = TWiki::Func::renderText( $thisNumber, $webName );
-      $thisNumber =~ s|</*nop/*>||goi;   # remove <nop> tag
-      print $thisNumber;
+	my $thisNumber = $tmplNumber;
+	$thisNumber =~ s/%NTOPICS%/$ntopics/go;
+	$thisNumber = TWiki::Func::renderText( $thisNumber, $webName );
+	$thisNumber =~ s|</*nop/*>||goi;   # remove <nop> tag
+	print $thisNumber;
     }
 
     # print last part of the HTML page
     $tmplTail = TWiki::Func::renderText( $tmplTail );
     $tmplTail =~ s|</*nop/*>||goi;   # remove <nop> tag
     print $tmplTail;
-
 
     return;
 }
@@ -384,6 +250,157 @@ sub searchStringForWebs {
 	 $search = "$search AND web:$searchStr";
     }
     return $search;
+}
+
+# I retrieve all docs for a given query string
+# QS
+sub docsForQuery {
+    my ($self, $search) = (@_);
+
+    my $analyser = $self->analyser( $self->analyserLanguage() );
+
+    my $parser = KinoSearch::QueryParser::QueryParser->new(
+		  analyzer => $analyser,
+		  fields   => [ 'topic', 'bodytext', 'author' ],
+		  default_boolop => 'AND'					   
+    );
+
+    if (! $search ) {
+       $search="\"Something very unlikely to happen. Nothing to search for!\"";
+    }
+
+    my $kinoquery = $parser->parse($search); 
+
+    my $searcher = KinoSearch::Searcher->new(
+                                invindex => $self->indexPath(),
+				analyzer => $analyser
+					     );
+
+    my $docs = $searcher->search(query => $kinoquery);
+
+    my $highlighter = KinoSearch::Highlight::Highlighter->new( 
+        excerpt_field  => 'bodytext',
+	# FIXME: This could be an option!?
+	excerpt_length => $self->summaryLength(),
+	);
+
+    $docs->create_excerpts( highlighter => $highlighter );
+
+    # $hits->seek( $offset, $hits_per_page );
+    $docs->seek( 0, $docs->total_hits );
+
+    return $docs;
+}
+
+# I return the HTML string to render te given hit.
+sub renderHtmlStringFor {
+    my ($self, $hit, $repeatText, $nosummary) = (@_);
+
+    my $mainWebname = TWiki::Func::getMainWebname();
+
+    my $tempVal = $repeatText;
+    my $resweb = $hit->{web};
+    my $restopic = $hit->{topic};
+    # For partial name search of topics, just hold the first part of the string
+    if($restopic =~ m/(\w+)/) { $restopic =~ s/ .*//; }
+
+    my $revUser = "";
+    my $revDate = "";
+    my $revNum = "";
+    my $locked = "";
+    my $lockinguser = "";
+    my $name = "";
+    my $icon = "";
+    my $comment = "";
+
+    # is the hit an attachment ?
+    my $fieldattachment = $hit->{attachment};
+    if ( $fieldattachment ) {
+	$name = $hit->{name};
+	$comment = $hit->{comment} || ""; 
+	if ($comment) {
+	    $comment = " - $comment";
+	    $comment =~ s/([\x{80}-\x{FFFF}])/'.'/gse; # FIXME bt now just get rid of UTF8
+	}
+    } else {
+	$name = "";
+    }
+
+    # read topic
+    #my( $meta, $text ) = TWiki::Func::readTopic( $resweb, $restopic );
+    #$text =~ s/%WEB%/$resweb/gos;
+    #$text =~ s/%TOPIC%/$restopic/gos;
+
+    # recover data from the hit so it can be displayed
+    if ( $hit->{author} ) {
+	$revUser = $hit->{author};
+	$revUser = TWiki::Func::userToWikiName($revUser);
+
+	if ($revUser !~ "$mainWebname.") { $revUser = "$mainWebname.$revUser"; }
+	$revNum = $hit->{version};
+	$revDate = $hit->{date};
+    }
+
+    $tempVal =~ s/%WEB%/$resweb/go;
+    $tempVal =~ s/%SCORE%//go;
+    
+    # field $name only is present if the hit is an attachment
+    if ($name) {
+	# icon for attachment based on filename
+	$icon = $TWiki::Plugins::SESSION->mapToIconFileName($name);
+	$icon = "%ICON{\"$icon\"}%";
+	# URL for the file
+	$tempVal =~ s/%MATCH%/<a href="%PUBURLPATH%\/$resweb\/$restopic\/$name">$name<\/a>/go;
+	# no locking information for attachments
+	$locked = ""; $lockinguser = "";
+    } else {
+	# no icon for topics
+	$icon = "";
+	# URL for the topic
+	$tempVal =~ s/%MATCH%/\[\[$resweb\.$restopic\]\]/go;
+	# if locks are to be displayed, then find it out for each hit
+	if ($showlock) {
+	    ($url, $lockinguser, $locked) = TWiki::Func::checkTopicEditLock($resweb, $restopic);
+	    if ($lockinguser) { $lockinguser = TWiki::Func::userToWikiName( $lockinguser, "0" ); }
+	}
+    }
+    # NEW icon for new topics and revision number for old ones
+    if (($revNum eq "")||($revNum == 1)) {
+	$revNum = "%N%";
+    } else {
+	$revNum = "r$revNum";
+    }
+
+    # now, just replace the template elements with values and render
+    $tempVal =~ s/%ICON%/$icon/go;
+    if ($locked) {
+	$tempVal =~ s/%LOCKED%/$lockinguser ($locked)/o;
+    }
+    $tempVal =~ s/%LOCKED%/ /o;
+    $tempVal =~ s/%TIME%/$revDate/o;
+    $tempVal =~ s/%TOPICNAME%/$restopic/o;
+    $tempVal =~ s/%REVISION%/$revNum/o;
+    $tempVal =~ s/%AUTHOR%/$revUser/o;
+    $tempVal = TWiki::Func::expandCommonVariables( $tempVal, $restopic, $resweb );
+    $tempVal = TWiki::Func::renderText( $tempVal, $resweb );
+    
+    if( $nosummary ) {
+	# no summaries
+	$tempVal =~ s/%TEXTHEAD%//go;
+	$tempVal =~ s/&nbsp;//go;
+    } else {
+	if ($name) {
+	    # summaries for attachments
+	    $tempVal =~ s/%TEXTHEAD%/\[\[$resweb\.$restopic\]\]$comment \[$hit->{excerpt}\]/go;
+	} else {
+	    # summaries for topics
+	    $tempVal =~ s/%TEXTHEAD%/$hit->{excerpt}/go;
+	}
+    }
+    $tempVal = TWiki::Func::renderText( $tempVal, $resweb );
+    $tempVal =~ s|</*nop/*>||goi;   # remove <nop> tag
+    
+    return $tempVal;
 }
 
 # print "Search:" part

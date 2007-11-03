@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiAdmin" date="1191783839" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICINFO{author="BaseUserMapping_333" date="1194117186" format="1.1" reprev="1.2" version="1.2"}%
 <!--
 This topic is part of the documentation for SearchEngineKinoSearchAddOn and is
 automatically generated from Subversion. Do not edit it! Your edits
@@ -12,7 +12,9 @@ http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/SearchEngineKinoSearchAddOn
 %TOC%
 
 [[http://www.rectangular.com/kinosearch/][KinoSearch]] is a Perl implementation of Lucene search engine (implemented
-in Java). This is the base of this indexed search engine for TWiki.
+in Java). This is the base of this indexed search engine for TWiki. With <nop>KinoSearch you create an index over all webs including attachments like Word, Excel and PDF. Based on that you get a really fast search over all topics and the attachments. You need this add-on
+   * if your TWiki has grown so big, that normal search is too slow or
+   * if you want to do search not only on the topics but also the attchments.
 
 There is already an indexed search based on [[http://www.kasei.com/archives/001039.html][Plucene]]: TWiki:Plugins/SearchEnginePluceneAddOn. But Plucene is relatively slow and is not developed further. <nop>KinoSearch is the successor of Plucene and much faster and more scalable. Thus I created this search engine add-on based on the sources of !SearchEnginePluceneAddOn. 
 
@@ -20,19 +22,15 @@ There is already an indexed search based on [[http://www.kasei.com/archives/0010
 
 ---+++ Indexing with kinoindex
 
-The ==kinoindex== script indexes all the public webs, and it uses some TWiki::Func code to retrieve the list of available webs and to retrieve their topic list. For each topic the text body, the title, the form fields and attached documents are indexed.
+With the script ==kinoindex== you index all the public webs. For each topic the text body, the title, the form fields and attached documents are indexed.
 
-By now, you should run this script manually after installation to create the index files used by ==kinosearch==. If you want, you can also schedule a weekly or monthly crontab job to create the index files again, or maybe execute it manually when you take down your server for maintenance tasks. To prevent browser access, it has been placed out of the public bin folder.
-
-Please, to suggest indexing improvements read/post to TWiki:Plugins/SearchEngineKinoSearchAddOnDev
+By now, you should run this script manually after installation to create the index files used by <nop>KinoSearch. If you want, you can also schedule a weekly or monthly crontab job to create the index files again, or maybe execute it manually when you take down your server for maintenance tasks. To prevent browser access, it has been placed out of the public bin folder.
 
 ---+++ Updating with kinoupdate
 
 The ==kinoupdate== script uses the web's ==.changes== files to know about topic modifications. Also, a ==.kinoupdate== file is used on each web directory storing the last timestamp the script was run on it. So when this script is executed, it first checks if there are any topic updates since last execution. The most recent topic updates are removed from the index and then reindexed again.
 
 This script should be executed by an hourly crontab. As before, this script has been placed out of the public bin folder.
-
-Please, to suggest indexing improvements read/post to TWiki:Plugins/SearchEngineKinoSearchAddOnDev
 
 ---+++ Attachment file types to be indexed
 
@@ -55,7 +53,7 @@ All form fields are indexed. For this, the form templates are checked and the in
 
 The ==kinosearch== script uses a template ==kinosearch.pattern.tmpl== (if you use the pattern skin). There is also a *KinoSearch* topic with a form ready to use with the *kinosearch* script.
 
-The query syntax has been improved
+The query syntax is as follows:
    * you can use ==+== for ==and== and ==-== for ==and not==
    * you can limit to the topic body or attachment body, using the prefix ==text:== or just type the search string
    * if you want to search using some meta data, you should use the prefix ==field:== where *field* is the meta data name (like ==author==)
@@ -67,7 +65,6 @@ Query examples (just type it in your ==KinoSearch== site topic)
    * author:MarkusHesse _searches for topics authored by this author_
    * kino form_name:issueForm _searches for the word kino ind all topics that contain the form issueForm_
 
-Please, to suggest searching improvements read/post to TWiki:Plugins/SearchEngineKinoSearchAddOnDev
 
 ---++ Search form
 The following form submits text to the ==kinosearch== script. The installation instructions are detailed below.
@@ -122,7 +119,6 @@ Like many other TWiki extensions, this module is shipped with a automatic instal
       1. Manually copy the contents across to the relevant places in your TWiki installation.
       1. Check in any installed files that have existing ,v files in your existing install (take care not to lock the files when you check in)
       1. Manually edit LocalSite.cfg to set any configuration variables.
-      1. Run configure and enable the module, if it is a plugin.
       1. Repeat from step 1 for any missing dependencies. 
 
 If you don't use the installer script, you need to install some CPAN modules:
@@ -164,7 +160,7 @@ If you don't use the installer script, you need to install the add-on by hand:
      | ==kinosearch/index/== | directory for index files to be stored |
      | ==kinosearch/logs/== | the index and update logs will be written here - admin should monitor this folder |
 
-   * %RED% ATTENTION! %ENDCOLOR% This add-on now uses several preferences which should be set at [[%MAINWEB%.TWikiPreferences]]. All these preferences are optional. If you are fine with the default values given below, you need not change anything.
+   * This add-on uses several preferences which should be set at [[%MAINWEB%.TWikiPreferences]]. All these preferences are optional. If you are fine with the default values given below, you need not change anything.
 <verbatim>
    *  KinoSearch settings
       * Set KINOSEARCHINDEXEXTENSIONS = .pdf, .doc, .xml, .html, .txt, .xls
@@ -173,6 +169,7 @@ If you don't use the installer script, you need to install the add-on by hand:
       * Set KINOSEARCHINDEXSKIPWEBS = Trash, Sandbox,TWiki
       * Set KINOSEARCHINDEXSKIPATTACHMENTS = Web.SomeTopic.AnAttachment.txt, Web.OtherTopic.OtherAttachment.pdf
       * Set KINOSEARCHANALYSERLANGUAGE = en
+      * Set KINOSEARCHSUMMARYLENGTH = 300
       * Set KINOSEARCHDEBUG = 0
 </verbatim>
    * You can optionally insert the following lines in your ==lib/LocalSite.cfg==. Thus you can determine where the index is created and where the log files are created. *Note*: The directories must exist. 
@@ -195,15 +192,16 @@ $TWiki::cfg{KinoSearchIndexDir} = '/home/httpd/twiki/kinosearch/index';
    * Set SHORTDESCRIPTION = Fast indexed search with indexing of attachments like Word, Excel and PDF
 
 |  Add-on Author: | TWiki:Main/MarkusHesse |
-|  Add-on Version: | v1.07, 7 Oct 2007 |
+|  Add-on Version: | v1.08, 3 Nov 2007 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  7 Oct 2007:   | v 1.07, Sone bugfixing |
+|  3 Nov 2007:  | v 1.08, Some bugfixing |
+|  7 Oct 2007:   | v 1.07, Some bugfixing |
 |  6 Oct 2007:   | v 1.06, Upgrade for 4.1, Release with <nop>BuildContrib|
 |  29 Sep 2007: | v 1.05, Indexing of form fields |
 |  16 Sep 2007: | v 1.04, Stringifier plugins for doc, xls and html |
 |  13 Sep 2007: | v 1.03, Indexing of PDF and TXT attachments |
 |  08 Sep 2007: | v 1.02, Index and update script enhanced |
-|  24 Aug 2007: | v1.01, Update script included, Result uses highlighter |
+|  24 Aug 2007: | v 1.01, Update script included, Result uses highlighter |
 |  14 Aug 2007: | Initial version (v1.000) |
 |  CPAN Dependencies: | CPAN:KinoSearch |
 |                                | CPAN:File::MMagic |
