@@ -41,6 +41,7 @@ sub newUpdateIndex {
 }
 
 # Do the indexing.
+# QS
 sub createIndex {
     my ($self, $debug) = (@_);
 
@@ -69,11 +70,8 @@ sub createIndex {
 	    $self->indexTopic($invindexer, $web, $topic, %fldNames);
 	}
 
-	# NOTE violates store encapsulation, possible compatibility issue with future releases
-	#$TWiki::Plugins::SESSION->{store}->saveMetaData( $web, 'kinoupdate', $start_time );
 	$self->saveUpdateMarker($web, $start_time );
 	$self->log("$web .kinoupdate saved");
-	
     }
     $invindexer->finish;
 }
@@ -228,6 +226,7 @@ sub changedTopics {
 }
 
 # I remove all topic given in @topicsList from the index.
+# QS
 sub removeTopics
 {
     my( $self, $web, @topicsList ) = @_;
@@ -282,8 +281,8 @@ sub removeTopics
 }
 
 # Add the topic in @topicsList to the index.
-sub addTopics()
-{
+# QS
+sub addTopics {
     my( $self, $web, @topicsList ) = @_;
 
     my $idxpath = $self->indexPath();
@@ -316,26 +315,6 @@ sub addTopics()
     $invindexer->finish;
     undef $invindexer;
     
-#    # now, process the attachments
-#    
-#    $self->log("Reindexing attachments ...");
-#
-#    $analyzer = $self->analyser( $self->analyserLanguage() );
-#    my $att_indexer = $self->indexer($analyzer, 0, $self->readFieldNames());
-#
-#    foreach my $attachDefP (@attachmentList) {
-#	my @attachDef = @$attachDefP;
-#	my ( $web, $topic, $name, $author, $comment, $rev, $date ) = @attachDef;
-#
-#	print "Indexing Attachment $web.$topic.$name\n";
-#	$self->indexAttachment($att_indexer, 
-#			       $web, $topic, $name, 
-#			       $author, $comment, $rev, $date )
-#    }
-#
-#    $att_indexer->finish;
-#    undef $att_indexer;
-
     $self->log("New/changed topics indexed succesfully");
 
     return 1;
@@ -343,6 +322,7 @@ sub addTopics()
 
 
 # Yields the list of webs to be indexed
+# QS
 sub websToIndex {
     my $self = shift;
 
@@ -362,6 +342,7 @@ sub websToIndex {
 
 # Yields a hash table keyed on the names of all existing field 
 # names with the value 1.
+# QS
 sub formsFieldNames {
     my $self = shift;
     my %fieldNames;
@@ -387,14 +368,14 @@ sub formsFieldNames {
 }
 
 # The file, where I want to store the names of fields.
+# QS
 sub fieldNamesFileName {
     my $self = shift;
-    my $fname = $self->indexPath();
-    $fname .= "/.formFieldNames";
-    return $fname;
+    return $self->indexPath()."/.formFieldNames";
 }
 
 # I write the list of form fields in a file
+# QS
 sub writeFieldNames {
     my ($self, %fieldNames) = (@_);
     my $fName = $self->fieldNamesFileName();
@@ -410,6 +391,7 @@ sub writeFieldNames {
 # names with the value 1.
 # This is the same as formsFieldNames but here I don't read the 
 # the forms but read the file that was written with writeFieldNames.
+# QS
 sub readFieldNames {
     my $self = shift;
     my $fName = $self->fieldNamesFileName();
@@ -428,13 +410,13 @@ sub readFieldNames {
 }
 
 # I add the given topic to the index
+# QS
 sub indexTopic {
     my ($self, $invindexer, $web, $topic, %fldNames) = @_;
 	
     my ($meta, $text) = TWiki::Func::readTopic($web, $topic, undef);
 
-    # Eliomintate TWiki MAkup Language elements and newlines.
-    #$text=$TWiki::Plugins::SESSION->{renderer}->TML2PlainText($text, $web, $topic, "");
+    # Eliminate TWiki Makup Language elements and newlines.
     $text=$TWiki::Plugins::SESSION->renderer->TML2PlainText($text, $web, $topic, "");
     $text=~ s/\n/ /g;
 
@@ -485,8 +467,6 @@ sub indexTopic {
     $invindexer->add_doc($doc);
 
     # Now I pic up the attachments and store them in @attachmentList
-    # This doesnt work: Perhaps I need the TWiki session here, but I don't know how????
-
     my @attachments = $self->attachmentsOfTopic($web, $topic);
 
     my %indexextensions = $self->indexExtensions();
@@ -503,11 +483,8 @@ sub indexTopic {
 	    # also, is the attachment is the skip list?
 	    if (($indexextensions{".$extension"})&&(!$skipattachments{"$web.$topic.$name"})) {
 		print "Indexing attachment $web.$topic.$name\n";
-		my $author = $attachment->{'user'};
-		my $rev = $attachment->{'version'};
-		my $date = TWiki::Func::formatTime( $attachment->{'date'} );
-		my $comment = $attachment->{'comment'};
-		$self->indexAttachment($invindexer, $web, $topic, $name, $author, $comment, $rev, $date)
+
+		$self->indexAttachment($invindexer, $web, $topic, $attachment)
 	    } else {
 		$self->log("Skipping attachment | $web.$topic | $name");
 	    }
@@ -516,9 +493,16 @@ sub indexTopic {
 }
 
 # I add the given attachment to the index.
+# QS
 sub indexAttachment {
-    my ($self, $invindexer, $web, $topic, $name, $author, $comment, $rev, $date) = @_;
-    
+    my ($self, $invindexer, $web, $topic, $attachment) = @_;
+
+    my $name    = $attachment->{'name'};
+    my $author  = $attachment->{'user'};
+    my $rev     = $attachment->{'version'};
+    my $date    = TWiki::Func::formatTime( $attachment->{'date'} );
+    my $comment = $attachment->{'comment'};
+
     my $pubpath  = $self -> pubPath();
     my $filename = "$pubpath/$web/$topic/$name";
     my $attText  = TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier->stringFor($filename);

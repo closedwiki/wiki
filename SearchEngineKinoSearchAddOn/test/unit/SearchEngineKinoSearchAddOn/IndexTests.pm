@@ -5,6 +5,7 @@ use base qw( TWikiFnTestCase );
 use strict;
 
 use TWiki::Contrib::SearchEngineKinoSearchAddOn::Index;
+use TWiki::Contrib::SearchEngineKinoSearchAddOn::Search;
 
 sub new {
     my $self = shift()->SUPER::new('Index', @_);
@@ -24,7 +25,7 @@ Just an example topic
 Keyword: startpoint
 HERE
     $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "TopicWithWordAttachment", <<'HERE');
-Just an example topic wird MS Word
+Just an example topic with MS Word
 Keyword: redmond
 HERE
     $this->{twiki}->{store}->saveAttachment($this->{users_web}, "TopicWithWordAttachment", "Simple_example.doc",
@@ -55,27 +56,55 @@ sub test_createIndex {
     my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
 
     $ind->createIndex();
+
+    # I check the succuessful created index by doing some searches.
+    my $search = TWiki::Contrib::SearchEngineKinoSearchAddOn::Search->newSearch();
+
+    # Now I search for something.
+    my $docs = $search->docsForQuery( "startpoint");
+    my $hit  = $docs->fetch_hit_hashref;
+    $this->assert(defined($hit), "Hit for startpoint not found.");
+    my $topic = $hit->{topic};
+    $topic =~ s/ .*//;
+    $this->assert_str_equals($topic, "TopicWithoutAttachment", "Wrong topic for startpoint.");
+
+    # Lets seach for the MS Word attachment
+    $docs = $search->docsForQuery( "dummy");
+    $hit  = $docs->fetch_hit_hashref;
+    $this->assert(defined($hit), "Hit for MS Word not found.");
+    $topic = $hit->{topic};
+    $topic =~ s/ .*//;
+    $this->assert_str_equals($topic, "TopicWithWordAttachment", "Wrong topic for MS word.");
 }
 
 sub test_updateIndex {
     my $this = shift;
     my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newUpdateIndex();
 
-    my $start_time = time();
+    # First I create the index of the current state
+    $ind->createIndex();
 
-    my @webs = $ind->websToIndex();
+    my $search = TWiki::Contrib::SearchEngineKinoSearchAddOn::Search->newSearch();
+    my $docs = $search->docsForQuery( "updatedpoint");
+    my $hit  = $docs->fetch_hit_hashref;
+    $this->assert(!defined($hit), "Hit for updatepoint found. Should be undefined!");
 
-    foreach my $web (@webs) {
-	$ind->saveUpdateMarker($web, $start_time);
-    }
-    
     # Now I do a change
-    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "NewOrChangedTopic", <<'HERE');
+    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "NewOrChangedTopicUpdate", <<'HERE');
 Just an example topic
-Keyword: startpoint
+Keyword: updatedpoint
 HERE
 
+    # Now I update the index. 
     $ind->updateIndex();
+
+    # The new topic should be found now.
+    $docs = $search->docsForQuery( "updatedpoint");
+    $hit  = $docs->fetch_hit_hashref;
+    $this->assert(defined($hit), "Hit for updatedpoint not found.");
+    my $topic = $hit->{topic};
+    $topic =~ s/ .*//;
+    $this->assert_str_equals($topic, "NewOrChangedTopicUpdate", "Wrong topic for update topic.");
 }
 
 sub test_indexer {
@@ -137,10 +166,202 @@ sub test_removeTopics {
     my $this = shift;
     my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
 
-    # Fiest I create the index
+    # First I create the index
     $ind->createIndex();
 
+    # Let's check, that a certain topic exists.
+    my $search = TWiki::Contrib::SearchEngineKinoSearchAddOn::Search->newSearch();
+    my $docs = $search->docsForQuery( "startpoint");
+    my $hit  = $docs->fetch_hit_hashref;
+    $this->assert(defined($hit), "Hit for startpoint not found.");
+
     # Now I remove some of the topics
+    my @topicsList = ( "TopicWithoutAttachment" );
+
+    $ind->removeTopics($this->{users_web}, @topicsList);
+    
+    # Now the topic should not be found any more.
+    $docs = $search->docsForQuery( "startpoint");
+    $hit  = $docs->fetch_hit_hashref;
+    $this->assert(!defined($hit), "Hit for startpoint found. Should be removed");
+    
+}
+
+sub test_addTopics {
+    my $this = shift;
+    my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
+
+    # First I create the index
+    $ind->createIndex();
+
+    my $search = TWiki::Contrib::SearchEngineKinoSearchAddOn::Search->newSearch();
+    my $docs = $search->docsForQuery( "creatededpoint");
+    my $hit  = $docs->fetch_hit_hashref;
+    $this->assert(!defined($hit), "Hit for updatepoint found. Should be undefined!");
+
+    # Now I create the topic
+    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "NewTopic", <<'HERE');
+Just an example topic
+Keyword: creatededpoint
+HERE
+
+    # Now I add the topic to the index. 
+    my @topicsList = ( "NewTopic" );
+    $ind->addTopics($this->{users_web}, @topicsList);
+    
+    # Let's check
+    $docs = $search->docsForQuery( "creatededpoint");
+    $hit  = $docs->fetch_hit_hashref;
+    $this->assert(defined($hit), "Hit for creatededpoint not found.");
+    my $topic = $hit->{topic};
+    $topic =~ s/ .*//;
+    $this->assert_str_equals($topic, "NewTopic", "Wrong topic for update topic.");
+}
+
+sub test_websToIndex {
+    my $this = shift;
+    my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
+
+    my @webs = $ind->websToIndex();
+    $this->assert(@webs, "No webs given.");
+    $this->assert(grep(/$this->{users_web}/,@webs), "User web not included.");
+}
+
+sub test_formsFieldNames {
+    my $this = shift;
+    my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
+
+    my %fieldNames = $ind->formsFieldNames();
+    $this->assert(%fieldNames, "No field names given.");
+}
+
+sub test_fieldNamesFileName {
+    my $this = shift;
+    my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
+
+    my $fileName = $ind->fieldNamesFileName();
+    
+    $this->assert_str_equals($ind->indexPath()."/.formFieldNames", $fileName, "Bad file name");
+}
+
+sub test_writeFieldNames {
+    my $this = shift;
+    my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
+
+    $ind->writeFieldNames();
+}
+
+sub test_readFieldNames {
+    my $this = shift;
+    my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
+
+    # I fist write a file, to ensure that it exists
+    $ind->writeFieldNames();
+
+    my %fieldNames = $ind->readFieldNames();
+    $this->assert(%fieldNames, "No field names returned.");
+}
+
+sub test_indexTopic {
+    my $this = shift;
+    my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
+
+    # I check the succuessful created index by doing some searches.
+    my $search = TWiki::Contrib::SearchEngineKinoSearchAddOn::Search->newSearch();
+
+    # First I create the index of the current situation.
+    $ind->createIndex();
+
+    # Now I create a topic with all elements.
+    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "TopicWithExcelAttachment", <<'HERE');
+Just an example topic with MS Excel
+Keyword: spreadsheet
+HERE
+    $this->{twiki}->{store}->saveAttachment($this->{users_web}, "TopicWithExcelAttachment", "Simple_example.xls",
+                                            $this->{twiki}->{user}, {file => "attachement_examples/Simple_example.xls"});
+    # FIXME: How can I add a Form?
+
+    # Let's index the topic
+    # Preparations
+    my %fldNames = $ind->formsFieldNames();
+    my $analyzer = $ind->analyser( $ind->analyserLanguage() );
+    my $indexer  = $ind->indexer($analyzer, 1, %fldNames);
+    # Indexing
+    $ind->indexTopic($indexer, $this->{users_web}, "TopicWithExcelAttachment", %fldNames);
+    # And finish
+    $indexer->finish;
+
+    # Seach for the topic title.
+    my $docs = $search->docsForQuery( "Excel");
+    my $hit  = $docs->fetch_hit_hashref;
+    $this->assert(defined($hit), "No hit found for Excel.");
+    my $topic = $hit->{topic};
+    $topic =~ s/ .*//;
+    $this->assert_str_equals($topic, "TopicWithExcelAttachment", "Wrong topic for tile.");
+
+    # Seach for the topic body
+    $docs = $search->docsForQuery( "spreadsheet");
+    $hit  = $docs->fetch_hit_hashref;
+    $this->assert(defined($hit), "No hit found for spreadsheet.");
+    $topic = $hit->{topic};
+    $topic =~ s/ .*//;
+    $this->assert_str_equals($topic, "TopicWithExcelAttachment", "Wrong topic for body.");
+
+    # Search for string in Excel: "calculator"
+    $docs = $search->docsForQuery( "calculator");
+    $hit  = $docs->fetch_hit_hashref;
+    $this->assert(defined($hit), "No hit found for calculator.");
+    $topic = $hit->{topic};
+    $topic =~ s/ .*//;
+    $this->assert_str_equals($topic, "TopicWithExcelAttachment", "Wrong topic for attachment.");
+
+    # FIXME: How about form name and form fields?
+}
+
+sub test_indexAttachment {
+    my $this = shift;
+    my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
+
+    # I check the succuessful created index by doing some searches.
+    my $search = TWiki::Contrib::SearchEngineKinoSearchAddOn::Search->newSearch();
+
+    # First I create the index of the current situation.
+    $ind->createIndex();
+
+    # Now I create a topic with an attachment.
+    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "TopicWithPdfAttachment", <<'HERE');
+Just an example topic with PDF
+Keyword: spreadsheet
+HERE
+    $this->{twiki}->{store}->saveAttachment($this->{users_web}, "TopicWithPdfAttachment", "Simple_example.pdf",
+                                            $this->{twiki}->{user}, {file => "attachement_examples/Simple_example.pdf"});
+
+    # Let's index the atachment
+    # Preparations
+    my %fldNames = $ind->formsFieldNames();
+    my $analyzer = $ind->analyser( $ind->analyserLanguage() );
+    my $indexer  = $ind->indexer($analyzer, 1, %fldNames);
+    # Indexing
+    my @allAttachments = $ind->attachmentsOfTopic($this->{users_web}, "TopicWithPdfAttachment");
+    my $attachment = @allAttachments[0];
+    $ind->indexAttachment($indexer, $this->{users_web}, "TopicWithPdfAttachment", $attachment);
+    # And finish
+    $indexer->finish;
+
+    # Let's search for that attachment and check all values.
+    my $docs = $search->docsForQuery( "Adobe");
+    my $hit  = $docs->fetch_hit_hashref;
+    $this->assert(defined($hit), "No hit found for Adobe.");
+    my $topic = $hit->{topic};
+    $topic =~ s/ .*//;
+    $this->assert_str_equals($topic, "TopicWithPdfAttachment", "Wrong topic for tile.");
+    $this->assert_str_equals($this->{users_web}."TopicWithPdfAttachment".$attachment->{'name'}, 
+			     $hit->{'id_topic'}, "ID topic not O.K.");
+    $this->assert_str_equals($hit->{'name'}, $attachment->{'name'}, "Name not O.K.");
+    $this->assert_str_equals($hit->{'author'}, $attachment->{'user'}, "User not O.K.");
+    $this->assert_str_equals($hit->{'version'}, $attachment->{'version'}, "Version not O.K.");
+    $this->assert_str_equals($hit->{'attachment'}, "yes", "Attachment not set to yes.");
+    
 }
 
 sub test_updateMarkerFile {
