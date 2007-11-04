@@ -5,31 +5,56 @@ use File::Path;
 use File::Copy;
 use File::Spec;
 use Cwd;
+use Config;
 
-my $install;
-my $basedir;
+use vars qw($install $basedir @twikiplugins_path $CAN_LINK $force);
 
 BEGIN {
     $basedir = Cwd::getcwd();
+    my $path = $ENV{TWIKI_EXTENSIONS} || '';
+    $path .= $Config::Config{path_sep}."$basedir/twikiplugins";
+    @twikiplugins_path =
+      grep(-d $_, split(/$Config::Config{path_sep}/, $path));
+
+    my $n = 0;
+    $n++ while (-e "testtgt$n" || -e "testlink$n");
+    open(F, ">testtgt$n") || die "$basedir is not writeable: $!";
+    print F "";
+    close(F);
+    eval {
+        symlink("testtgt$n", "testlink$n");
+        $CAN_LINK = 1;
+    };
+    unlink("testtgt$n", "testlink$n");
 }
 
 sub usage {
+    my $def = '(default behaviour on this platform)';
+    my $linkByDefault = $CAN_LINK ? $def : "";
+    my $copyByDefault = $CAN_LINK ? "" : $def;
     print <<EOM;
  Must be run from the root of a SVN checkout tree
 
- pseudo-install optional modules in a SVN checkout tree
- This is done by a link or copy of the files listed in the MANIFEST
- for each module. The installer script is not called.
- It should be almost equivalent to a tar zx of the packaged module
- over the dev tree.
+ pseudo-install extensions in a SVN checkout tree
 
- Usage: pseudo-install.pl [-link] [-copy] [all|default] <module>...
-    -link - create links (default behaviour)
-    -copy - copy instead of linking
+ This is done by a link or copy of the files listed in the MANIFEST
+ for the extension. The installer script is *not* called.
+ It should be almost equivalent to a tar zx of the packaged extension
+ over the dev tree, except that the use of links enable a much
+ more useable development environment.
+
+ It picks up the extensions to be installed from a path defined in the
+ environment variable TWIKI_EXTENSIONS, or if it is not defined,
+ from the twikiplugins directory in the current checkout.
+
+ Usage: pseudo-install.pl [-force] [-link|-copy] [all|default] <module>...
+    -force - force an action to complete even if there are warnings
+    -link - create links $linkByDefault
+    -copy - copy instead of linking $copyByDefault
     -uninstall - self explanatory (doesn't remove dirs)
-    all - install all modules found in twikiplugins
-    default - install modules listed in lib/MANIFEST
-    <module>... one or more modules to install e.g. FirstPlugin SomeContrib ...
+    all - install all extensions
+    default - install extensions listed in lib/MANIFEST
+    <module>... one or more extensions to install e.g. FirstPlugin SomeContrib ...
 EOM
 
 }
@@ -37,7 +62,7 @@ EOM
 sub findRelativeTo {
     my( $startdir, $name ) = @_;
 
-    my @path = split( /\/+/, $startdir );
+    my @path = split( /[\\\/]+/, $startdir );
 
     while (scalar(@path) > 0) {
         my $found = join( '/', @path).'/'.$name;
@@ -53,14 +78,22 @@ sub installModule {
     my $subdir = 'Plugins';
     $subdir = 'Contrib' if $module =~ /(Contrib|Skin|AddOn)$/;
     $subdir = 'Tags' if $module =~ /Tag$/;
-    my $moduleDir = "twikiplugins/$module/";
+    my $moduleDir = "$basedir/twikiplugins/$module";
+
+    foreach my $dir (@twikiplugins_path) {
+        if (-d "$dir/$module/") {
+            $moduleDir = "$dir/$module";
+            last;
+        }
+    }
+    $moduleDir =~ s#/+$##;
 
     unless (-d $moduleDir) {
-        print STDERR "---> No such $moduleDir\n";
+        print STDERR "--> Could not find $module\n";
         return;
     }
 
-    my $manifest = findRelativeTo($moduleDir."lib/TWiki/$subdir/$module/",'MANIFEST');
+    my $manifest = findRelativeTo("$moduleDir/lib/TWiki/$subdir/$module/",'MANIFEST');
 
     if( -e "$manifest" ) {
         open( F, "<$manifest" ) || die $!;
@@ -95,28 +128,39 @@ sub copy_in {
     print "Copied $file\n";
 }
 
-sub _checkLink {
-    my( $moduleDir,$path,$c) = @_;
+sub _cleanPath {
+    my ($path, $base) = @_;
 
-    my $base = "$basedir/$moduleDir";
-    my $dest = readlink "$path$c";
-    $dest =~ s#/([^/]*)$##;
+    # Convert relative paths to absolute
+    if ($path !~ /^\//) {
+        $path = "$base/$path" if $base;
+        $path = File::Spec->rel2abs($path, $basedir);
+    }
+    $path = File::Spec->canonpath($path);
+    while ( $path =~ s#/[^/]+/\.\.## ) {}
+    return $path;
+}
+
+# Check that $path$c links to $moduleDir/$path$c
+sub _checkLink {
+    my( $moduleDir, $path, $c) = @_;
+
+    my $dest = _cleanPath(readlink($path.$c), $path);
+    $dest =~ m#/([^/]*)$#;
     unless( $1 eq $c ) {
         print STDERR <<HERE;
 WARNING Confused by
-     $path -> '$dest$1' doesn't point to the expected place
-     (should be $base$path$c)
+     $path -> '$dest' doesn't point to the expected place
+     (should be $moduleDir$path$c)
 HERE
     }
 
-    $dest = "$basedir/$path$dest";
-    while ( $dest =~ s#/[^/]+/\.\.## ) {
-    }
-    if( "$dest/$c" ne "$base$path$c" ) {
+    my $expected = _cleanPath("$moduleDir/$path$c");
+    if( $dest ne $expected ) {
         print STDERR <<HERE;
 WARNING Confused by
-     $path$c -> '$dest/$c' doesn't point to the expected place
-     (should be $base$path$c)
+     $path$c -> '$dest' doesn't point to the expected place
+     (should be $expected)
 HERE
         return 0;
     }
@@ -127,28 +171,25 @@ HERE
 sub just_link {
     my( $moduleDir, $dir, $file ) = @_;
 
-    my $base = "$basedir/$moduleDir";
-    my $relp = '';
+    my $base = "$moduleDir/";
     my @components = split(/\/+/, $file);
     my $path = '';
     foreach my $c ( @components ) {
-        if( -l "$path$c" ) {
-            _checkLink($moduleDir,$path,$c);
+        if( -l $path.$c ) {
+            _checkLink($moduleDir, $path, $c);
             #print STDERR "$path$c already linked\n";
             last;
         } elsif( -d "$path$c" ) {
             $path .= "$c/";
-            $relp .= '../';
         } elsif( -e "$path$c" ) {
             print STDERR "ERROR $path$c is in the way\n";
             last;
         } else {
-            my $tgt = "$relp$moduleDir$path$c";
-            #print "Link $tgt $path$c\n";
-            #print `cd $path && ls -l $tgt`;
-            my $argh = `ln -s $tgt $path$c 2>&1`;
-            die "$argh $@" if ( $argh || $@ );
-            print "Linked $base$path$c\n";
+            my $tgt = _cleanPath("$base$path$c");
+            die "No $tgt" unless -e $tgt;
+            die "Failed to link $path$c to $tgt: $!"
+              unless symlink($tgt, _cleanPath($path.$c));
+            print "Linked $path$c\n";
             last;
         }
     }
@@ -159,18 +200,16 @@ sub uninstall {
     # link handling that detects valid linking path components higher in the
     # tree so it unlinks the directories, and not the leaf files.
     my @components = split(/\/+/, $file);
-    my $base = "$basedir/$moduleDir";
-    my $relp = '';
+    my $base = $moduleDir;
     my $path = '';
     foreach my $c ( @components ) {
         if( -l "$path$c" ) {
-            return unless _checkLink($moduleDir,$path,$c);
+            return unless _checkLink($moduleDir, $path, $c) || $force;
             unlink "$path$c";
             print "Unlinked $path$c\n";
             return;
         } else {
             $path .= "$c/";
-            $relp .= '../';
         }
     }
     if( -e $file ) {
@@ -179,29 +218,64 @@ sub uninstall {
     }
 }
 
-unless (@ARGV) {
-    usage();
-    exit 1;
+sub enablePlugin {
+    my ($module, $enable) = @_;
+    my $cfg = '';
+    if (open(F, "<lib/LocalSite.cfg")) {
+        local $/;
+        $cfg = <F>;
+        $cfg =~ s/\r//g;
+    }
+    if ($cfg =~ s/\$TWiki::cfg{Plugins}{$module}{Enabled}\s*=\s*(\d+)[\s;]+//s) {
+        # Already enabled/disabled
+        return if ($enable); # installing, keep the old setting
+        # otherwise uninstalling, remove the old value
+    } elsif (!$enable) {
+        # Not there and we don't want to enable it
+        return;
+    }
+    if ($enable) {
+        $cfg = "\$TWiki::cfg{Plugins}{$module}{Enabled} = 1;\n".$cfg;
+    }
+    if (open(F, ">lib/LocalSite.cfg")) {
+        print F $cfg;
+        close(F);
+        print(($enable ? 'En' : 'Dis'),"abled $module in LocalSite.cfg\n");
+    } else {
+        print STDERR "WARNING: failed to write lib/LocalSite.cfg\n";
+    }
 }
 
-$install = \&just_link;
-if ($ARGV[0] eq '-link') {
-    shift(@ARGV);
-    $install = \&just_link;
-} elsif ($ARGV[0] eq '-copy') {
-    shift(@ARGV);
-    $install = \&copy_in;
-} elsif ($ARGV[0] eq '-uninstall') {
-    shift(@ARGV);
-    $install = \&uninstall;
+my $enable = 1;
+$install = $CAN_LINK ? \&just_link : \&copy_in;
+
+while (scalar(@ARGV) && $ARGV[0] =~ /^-/) {
+    my $arg = shift(@ARGV);
+    if ($arg eq '-force') {
+        $force = 1;
+    } elsif ($arg eq '-link') {
+        $install = \&just_link;
+    } elsif ($arg eq '-copy') {
+        $install = \&copy_in;
+    } elsif ($arg eq '-uninstall') {
+        $install = \&uninstall;
+        $enable = 0;
+    }
+}
+
+unless (scalar(@ARGV)) {
+    usage();
+    exit 1;
 }
 
 my @modules;
 
 if ($ARGV[0] eq "all") {
-  opendir(D, "twikiplugins") || die "Must be run from root of installation";
-  @modules = ( grep { /(Tag|Plugin|Contrib|Skin|AddOn)$/ } readdir( D ));
-  closedir( D );
+    foreach my $dir (@twikiplugins_path) {
+        opendir(D, $dir) || next;
+        push(@modules, grep(/(Tag|Plugin|Contrib|Skin|AddOn)$/, readdir(D)));
+        closedir( D );
+    }
 } elsif ($ARGV[0] eq "default") {
     open(F, "<", "lib/MANIFEST") || die "Could not open MANIFEST: $!";
     local $/ = "\n";
@@ -213,9 +287,14 @@ if ($ARGV[0] eq "all") {
     @modules = @ARGV;
 }
 
-print "Installing modules: ".join(",", @modules).":\n";
+print(($enable ? 'I' : 'Uni'), "nstalling extensions: ",
+      join(",", @modules), "\n");
 
 foreach my $module (@modules) {
     installModule($module);
+    if ($module =~ /Plugin$/) {
+        enablePlugin($module, $enable);
+    }
 }
-print "Don't forget to enable/disable plugins using configure\n";
+
+print join(",", @modules), ' ', ($enable ? 'i' : 'uni'), "nstalled\n";
