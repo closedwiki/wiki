@@ -186,9 +186,12 @@ sub just_link {
             last;
         } else {
             my $tgt = _cleanPath("$base$path$c");
-            die "No $tgt" unless -e $tgt;
-            die "Failed to link $path$c to $tgt: $!"
-              unless symlink($tgt, _cleanPath($path.$c));
+            if (-e $tgt) {
+                die "Failed to link $path$c to $tgt: $!"
+                  unless symlink($tgt, _cleanPath($path.$c));
+            } else {
+                print STDERR "WARNING: no such file $tgt\n";
+            }
             print "Linked $path$c\n";
             last;
         }
