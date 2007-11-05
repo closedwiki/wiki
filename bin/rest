@@ -66,7 +66,10 @@ my $pass = $query->param('password');
 my $topic = $query->param('topic');
 if ($topic) {
     unless ($topic =~ /((?:.*[\.\/])+)(.*)/) {
-        die "Invalid topic - no web specified";
+        print $query->header(-type=>'text/html',
+                             -status=>'402');
+        print STDERR "ERROR: (402) Invalid REST invocation - Invalid topic - no web specified\n";
+        exit;
     }
 } else {
     # Point it somewhere innocent
@@ -81,7 +84,12 @@ local $SIG{__DIE__} = \&Carp::confess;
 if ($login) {
     my $validation = $twiki->{users}->checkPassword($login, $pass);
     unless ($validation) {
-        die "Can't login as $login";
+        print $query->header(-type=>'text/html',
+                             -status=>'401');
+        print "ERROR: (401) Can't login as $login\n";
+        print STDERR "ERROR: (401) Can't login as $login\n";
+        $twiki->finish();
+        exit;
     }
 
     my $cUID = $twiki->{users}->getCanonicalUserID($login);
@@ -95,19 +103,47 @@ try {
     $twiki->{users}->{loginManager}->checkAccess();
 } catch Error with {
     my $e = shift;
-    die $e;
+    print $query->header(-type=>'text/html',
+                         -status=>'401');
+    print "ERROR: (401) $e\n";
+    print STDERR "ERROR: (401) $e\n";
+    $twiki->finish();
+    exit;
 };
 
 my $pathInfo = $query->path_info();
 my $cgiScriptName = $ENV{'SCRIPT_NAME'} || '';
 $pathInfo =~ s!$cgiScriptName/!/!i;
 
-die "Invalid REST invocation" unless ($pathInfo =~ /\/(.*?)[\.\/](.*?)([\.\/].*?)*$/);
+unless ($pathInfo =~ /\/(.*?)[\.\/](.*?)([\.\/].*?)*$/) {
+    print $query->header(-type=>'text/html',
+                         -status=>'402');
+    print "ERROR: (402) Invalid REST invocation\n";
+    print STDERR "ERROR: (402) Invalid REST invocation\n";
+    $twiki->finish();
+    exit;
+}
 my ($subject, $verb) = ($1, $2);
 
-die 'Invalid Command '.$subject unless TWiki::isValidWikiWord($subject);
+
+unless (TWiki::isValidWikiWord($subject)) {
+    print $query->header(-type=>'text/html',
+                         -status=>'402');
+    print "ERROR: (402) Invalid REST invocation ($subject)\n";
+    print STDERR "ERROR: (402) Invalid REST invocation ($subject)\n";
+    $twiki->finish();
+    exit;
+}
+
 my $function = TWiki::restDispatch($subject,$verb);
-die 'Unknown Action '.$subject.' on '.$verb unless ($function);
+unless ($function) {
+    print $query->header(-type=>'text/html',
+                         -status=>'402');
+    print "ERROR: (402) Invalid REST invocation ($subject on $verb)\n";
+    print STDERR "ERROR: (402) Invalid REST invocation ($subject on $verb)\n";
+    $twiki->finish();
+    exit;
+}
 no strict 'refs';
 my $result = &$function($twiki, $subject, $verb);
 use strict 'refs';
