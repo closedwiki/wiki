@@ -35,6 +35,7 @@ In edit mode, the edit button is replaced by Save and Cancel buttons, with their
 |  Plugin Author: | TWiki:Main.ThomasWeigert |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  05 Nov 2007: | Kenneth Lavrsen fixed problem when settings are hidden in html comments. These settings are now ignored. |
 |  23 Jun 2007: | Crawford Currie added testcases, recoded to work without a form definition, fixed for TWiki 4.2 |
 |  08 Feb 2007: | Arthur Clemens added access keys for Save and Cancel, bold style for editable preference names, and a descriptive Save button label. |
 |  15 Apr 2006: | Adding css classes to buttons. Removed debug print statement causing 500s on !SunOne. Prevent extra space in settings on saves. Switched to earlier handler. Converted all SCRIPTURL to SCRIPTURLPATH, and added support. The only SCRIPTURLs should be the one in the BASE tag and those in mail notification templates. Because the forms package was throwing an exception when it failed to create a form, the edit preferences plugin was aborting the whole of the session whenever the form specified in EDITPREFERENCES didn't exist. Changed it so that the Form constructor does not throw, but returns undef on a non-existant form, and changed preferences plugin to be tolerant of missing forms (ie defaults all fields to text if the form is missing, of is a Set exists which is not in the form). | 
