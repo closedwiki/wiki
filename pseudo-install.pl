@@ -47,14 +47,19 @@ sub usage {
  environment variable TWIKI_EXTENSIONS, or if it is not defined,
  from the twikiplugins directory in the current checkout.
 
- Usage: pseudo-install.pl [-force] [-link|-copy] [all|default] <module>...
-    -force - force an action to complete even if there are warnings
-    -link - create links $linkByDefault
-    -copy - copy instead of linking $copyByDefault
-    -uninstall - self explanatory (doesn't remove dirs)
+ Usage: pseudo-install.pl -felc [all|default|<module>...]
+    -f[orce] - force an action to complete even if there are warnings
+    -e[nable] - automatically enable installed plugins in LocalSite.cfg
+              (only if there is no existing configuration setting)
+    -l[ink] - create links $linkByDefault
+    -c[opy] - copy instead of linking $copyByDefault
+    -u[ninstall] - self explanatory (doesn't remove dirs)
     all - install all extensions
     default - install extensions listed in lib/MANIFEST
-    <module>... one or more extensions to install e.g. FirstPlugin SomeContrib ...
+    <module>... one or more extensions to install
+
+ Example:
+    perl pseudo-install.pl -force -enable -link FirstPlugin SomeContrib
 EOM
 
 }
@@ -222,7 +227,7 @@ sub uninstall {
 }
 
 sub enablePlugin {
-    my ($module, $enable) = @_;
+    my ($module, $installing) = @_;
     my $cfg = '';
     if (open(F, "<lib/LocalSite.cfg")) {
         local $/;
@@ -231,38 +236,41 @@ sub enablePlugin {
     }
     if ($cfg =~ s/\$TWiki::cfg{Plugins}{$module}{Enabled}\s*=\s*(\d+)[\s;]+//s) {
         # Already enabled/disabled
-        return if ($enable); # installing, keep the old setting
+        return if ($installing); # installing, keep the old setting
         # otherwise uninstalling, remove the old value
-    } elsif (!$enable) {
+    } elsif (!$installing) {
         # Not there and we don't want to enable it
         return;
     }
-    if ($enable) {
+    if ($installing) {
         $cfg = "\$TWiki::cfg{Plugins}{$module}{Enabled} = 1;\n".$cfg;
     }
     if (open(F, ">lib/LocalSite.cfg")) {
         print F $cfg;
         close(F);
-        print(($enable ? 'En' : 'Dis'),"abled $module in LocalSite.cfg\n");
+        print(($installing ? 'En' : 'Dis'),"abled $module in LocalSite.cfg\n");
     } else {
         print STDERR "WARNING: failed to write lib/LocalSite.cfg\n";
     }
 }
 
-my $enable = 1;
+my $autoenable = 0;
+my $installing = 1;
 $install = $CAN_LINK ? \&just_link : \&copy_in;
 
 while (scalar(@ARGV) && $ARGV[0] =~ /^-/) {
     my $arg = shift(@ARGV);
     if ($arg eq '-force') {
         $force = 1;
-    } elsif ($arg eq '-link') {
+    } elsif ($arg =~ /^-l/) {
         $install = \&just_link;
-    } elsif ($arg eq '-copy') {
+    } elsif ($arg =~ /^-c/) {
         $install = \&copy_in;
-    } elsif ($arg eq '-uninstall') {
+    } elsif ($arg =~ /^-u/) {
         $install = \&uninstall;
-        $enable = 0;
+        $installing = 0;
+    } elsif ($arg =~ /^-e/) {
+        $autoenable = 1;
     }
 }
 
@@ -290,14 +298,14 @@ if ($ARGV[0] eq "all") {
     @modules = @ARGV;
 }
 
-print(($enable ? 'I' : 'Uni'), "nstalling extensions: ",
-      join(",", @modules), "\n");
+print(($installing ? 'I' : 'Uni'), "nstalling extensions: ",
+      join(", ", @modules), "\n");
 
 foreach my $module (@modules) {
     installModule($module);
-    if ($module =~ /Plugin$/) {
-        enablePlugin($module, $enable);
+    if ((!$installing || $autoenable) && $module =~ /Plugin$/) {
+        enablePlugin($module, $installing);
     }
 }
 
-print join(",", @modules), ' ', ($enable ? 'i' : 'uni'), "nstalled\n";
+print join(", ", @modules), ' ', ($installing ? 'i' : 'uni'), "nstalled\n";
