@@ -18,7 +18,6 @@ use Carp;
 use File::MMagic;
 use File::Spec::Functions qw(rel2abs);
 use File::Basename;
-#use Time::Piece;
 use File::stat;
 my $magic = File::MMagic->new();
 

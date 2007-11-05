@@ -343,7 +343,7 @@ HERE
     my $indexer  = $ind->indexer($analyzer, 1, %fldNames);
     # Indexing
     my @allAttachments = $ind->attachmentsOfTopic($this->{users_web}, "TopicWithPdfAttachment");
-    my $attachment = @allAttachments[0];
+    my $attachment = $allAttachments[0];
     $ind->indexAttachment($indexer, $this->{users_web}, "TopicWithPdfAttachment", $attachment);
     # And finish
     $indexer->finish;

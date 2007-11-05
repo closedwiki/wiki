@@ -13,7 +13,7 @@
 package TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::DOC;
 use base 'TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyBase';
 # Only if antiword exists, I register myself.
-if (!(system("antiword")==-1)) {
+if (!(system("antiword -s")==-1)) {
     __PACKAGE__->register_handler("application/word", ".doc");}
 use File::Temp qw/tmpnam/;
 

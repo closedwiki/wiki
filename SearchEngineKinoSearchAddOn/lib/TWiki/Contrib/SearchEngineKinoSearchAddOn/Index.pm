@@ -57,7 +57,6 @@ sub createIndex {
     my $analyzer   = $self->analyser( $self->analyserLanguage() );
     my $invindexer = $self->indexer($analyzer, 1, %fldNames);
     
-    #my @attachmentList;
     my @webs = $self->websToIndex();
 
     foreach my $web (@webs) {
@@ -74,6 +73,7 @@ sub createIndex {
 	$self->log("$web .kinoupdate saved");
     }
     $invindexer->finish;
+    $self->log("Indexing finished", 1);
 }
 
 # Do the update.
@@ -436,6 +436,7 @@ sub indexTopic {
     
     # processing the topic meta info
     my ( $date, $author, $rev ) = TWiki::Func::getRevisionInfo( $web, $topic );
+
     $date = TWiki::Func::formatTime( $date );
     # the author can be used as a search criteria
     $doc->set_value( author => $author);
@@ -482,7 +483,7 @@ sub indexTopic {
 	    my $extension = lc $bits[$#bits];
 	    # also, is the attachment is the skip list?
 	    if (($indexextensions{".$extension"})&&(!$skipattachments{"$web.$topic.$name"})) {
-		print "Indexing attachment $web.$topic.$name\n";
+		#print "Indexing attachment $web.$topic.$name\n";
 
 		$self->indexAttachment($invindexer, $web, $topic, $attachment)
 	    } else {
@@ -500,7 +501,10 @@ sub indexAttachment {
     my $name    = $attachment->{'name'};
     my $author  = $attachment->{'user'};
     my $rev     = $attachment->{'version'};
-    my $date    = TWiki::Func::formatTime( $attachment->{'date'} );
+    
+    #my $date = $attachment->{'date'};
+    #print "#2######## $date ###########\n";
+    #my $date    = TWiki::Func::formatTime( $attachment->{'date'} );
     my $comment = $attachment->{'comment'};
 
     my $pubpath  = $self -> pubPath();
@@ -525,8 +529,8 @@ sub indexAttachment {
     # version and date are stored as meta data in the doc
     # just for showing them when displaying the hits collection
     $doc->set_value( version => $rev);
-    if (defined($$date)) {
-	$doc->set_value( date => $date);}
+    #if (defined($date)) {
+    #	$doc->set_value( date => $date);}
     
     # This makes the document as an attachment.
     $doc->set_value( attachment => "yes");
