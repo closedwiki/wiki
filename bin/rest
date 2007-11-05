@@ -102,12 +102,12 @@ my $pathInfo = $query->path_info();
 my $cgiScriptName = $ENV{'SCRIPT_NAME'} || '';
 $pathInfo =~ s!$cgiScriptName/!/!i;
 
-die "Invalid REST invocation" unless ($pathInfo =~ /\/(.*)[\.\/](.*?)$/);
+die "Invalid REST invocation" unless ($pathInfo =~ /\/(.*?)[\.\/](.*?)([\.\/].*?)*$/);
 my ($subject, $verb) = ($1, $2);
 
 die 'Invalid Command '.$subject unless TWiki::isValidWikiWord($subject);
 my $function = TWiki::restDispatch($subject,$verb);
-die 'Unknown Action '.$subject.'/'.$verb unless ($function);
+die 'Unknown Action '.$subject.' on '.$verb unless ($function);
 no strict 'refs';
 my $result = &$function($twiki, $subject, $verb);
 use strict 'refs';
