@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2005-2006  TWiki Contributors.
+# Copyright (C) 2005-2007  TWiki Contributors.
 # All Rights Reserved. TWiki Contributors are listed in the
 # AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -85,9 +85,23 @@ sub beforeCommonTagsHandler {
 
     if ( $action eq 'edit' ) {
         TWiki::Func::setTopicEditLock( $web, $topic, 1 );
-
-        $_[0] =~ s(^((?:\t|   )+\*\sSet\s)(\w+)\s\=(.*$(\n[ \t]+[^\s*].*$)*))
-          ($1._generateEditField($web, $topic, $2, $3, $formDef))gem;
+        
+        # Replace setting values by form fields but not inside comments Item4816
+        my $outtext = '';
+        my $insidecomment = 0;
+        foreach my $token ( split/(<!--|-->)/, $_[0] ) {
+            if ( $token =~ /<!--/ ) {
+                $insidecomment++;
+            } elsif ( $token =~ /-->/ ) {
+                $insidecomment-- if ( $insidecomment > 0 );
+            } elsif ( !$insidecomment ) {
+                $token =~ s(^((?:\t|   )+\*\sSet\s*)(\w+)\s*\=(.*$(\n[ \t]+[^\s*].*$)*))
+                           ($1._generateEditField($web, $topic, $2, $3, $formDef))gem;
+            }
+            $outtext .= $token;
+        }
+        $_[0] = $outtext;
+          
         $_[0] =~ s/%EDITPREFERENCES({.*?})?%/
           _generateControlButtons($web, $topic)/ge;
         my $viewUrl = TWiki::Func::getScriptUrl(
@@ -159,14 +173,16 @@ sub _generateEditField {
             # TWiki < 4.2
             $fieldDef = _getField( $formDef, $name );
         }
-        if( defined(&TWiki::Form::renderFieldForEdit)) {
-            # TWiki < 4.2 SMELL: use of unpublished core function
-            ( $extras, $html ) =
-              $formDef->renderFieldForEdit( $fieldDef, $web, $topic, $value);
-        } else {
-            # TWiki 4.2 and later SMELL: use of unpublished core function
-            ( $extras, $html ) =
-              $fieldDef->renderForEdit( $web, $topic, $value );
+        if ( $fieldDef ) {
+            if( defined(&TWiki::Form::renderFieldForEdit)) {
+                # TWiki < 4.2 SMELL: use of unpublished core function
+                ( $extras, $html ) =
+                  $formDef->renderFieldForEdit( $fieldDef, $web, $topic, $value);
+            } else {
+                # TWiki 4.2 and later SMELL: use of unpublished core function
+                ( $extras, $html ) =
+                  $fieldDef->renderForEdit( $web, $topic, $value );
+            }
         }
     }
     unless( $html ) {
