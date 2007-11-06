@@ -1,6 +1,6 @@
-if(!dojo._hasResource["dojo.dnd.avatar"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojo.dnd.avatar"] = true;
-dojo.provide("dojo.dnd.avatar");
+if(!dojo._hasResource["dojo.dnd.Avatar"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojo.dnd.Avatar"] = true;
+dojo.provide("dojo.dnd.Avatar");
 
 dojo.require("dojo.dnd.common");
 

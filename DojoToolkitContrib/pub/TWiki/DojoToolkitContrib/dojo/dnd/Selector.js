@@ -1,9 +1,9 @@
-if(!dojo._hasResource["dojo.dnd.selector"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojo.dnd.selector"] = true;
-dojo.provide("dojo.dnd.selector");
+if(!dojo._hasResource["dojo.dnd.Selector"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojo.dnd.Selector"] = true;
+dojo.provide("dojo.dnd.Selector");
 
 dojo.require("dojo.dnd.common");
-dojo.require("dojo.dnd.container");
+dojo.require("dojo.dnd.Container");
 
 /*
 	Container item states:
@@ -21,7 +21,8 @@ dojo.declare("dojo.dnd.Selector", dojo.dnd.Container, {
 		// params: Object: a dict of parameters, recognized parameters are:
 		//	singular: Boolean: allows selection of only one element, if true
 		//	the rest of parameters are passed to the container
-		this.singular = params && params.singular;
+		if(!params){ params = {}; }
+		this.singular = params.singular;
 		// class-specific variables
 		this.selection = {};
 		this.anchor = null;

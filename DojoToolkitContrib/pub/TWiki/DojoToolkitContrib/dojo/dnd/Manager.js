@@ -1,10 +1,10 @@
-if(!dojo._hasResource["dojo.dnd.manager"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojo.dnd.manager"] = true;
-dojo.provide("dojo.dnd.manager");
+if(!dojo._hasResource["dojo.dnd.Manager"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojo.dnd.Manager"] = true;
+dojo.provide("dojo.dnd.Manager");
 
 dojo.require("dojo.dnd.common");
 dojo.require("dojo.dnd.autoscroll");
-dojo.require("dojo.dnd.avatar");
+dojo.require("dojo.dnd.Avatar");
 
 dojo.dnd.Manager = function(){
 	// summary: the manager of DnD operations (usually a singleton)
@@ -110,7 +110,7 @@ dojo.extend(dojo.dnd.Manager, {
 	onMouseUp: function(e){
 		// summary: event processor for onmouseup
 		// e: Event: mouse event
-		if(this.avatar){
+		if(this.avatar && this.source.mouseButton == e.button){
 			if(this.target && this.canDropFlag){
 				dojo.publish("/dnd/drop", [this.source, this.nodes, Boolean(this.source.copyState(dojo.dnd.getCopyKeyState(e)))]);
 			}else{

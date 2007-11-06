@@ -403,6 +403,30 @@ doh.register("tests.data.ItemFileWriteStore",
 			store.fetchItemByIdentity({identity:"eg", onItem:onItem, onError:onError});
 			return deferred; //Object
 		},
+		function testWriteAPI_saveVerifyState(){
+			//	summary: 
+			//		Simple test of the save API
+			//	description:
+			//		Simple test of the save API
+			var store = new dojo.data.ItemFileWriteStore(tests.data.readOnlyItemFileTestTemplates.getTestData("countries"));
+
+			var deferred = new doh.Deferred();
+			function onError(error){
+				deferred.errback(error);
+			}
+			function onItem(item){
+				store.setValue(item, "capital", "New Cairo");
+				function onComplete() {
+					//Check internal state.  Note:  Users should NOT do this, this is a UT verification
+					//of internals in this case.  Ref tracker: #4394
+					doh.assertTrue(!store._saveInProgress);
+					deferred.callback(true);
+				}
+				store.save({onComplete:onComplete, onError:onError});
+			}
+			store.fetchItemByIdentity({identity:"eg", onItem:onItem, onError:onError});
+			return deferred; //Object
+		},
 		function testWriteAPI_saveEverything(){
 			//	summary: 
 			//		Simple test of the save API
@@ -741,7 +765,6 @@ doh.register("tests.data.ItemFileWriteStore",
 			//		Test for bug #3873. Given a datafile that does not specify an
 			//		identifier, make sure ItemFileWriteStore auto-creates identities 
 			//		that are unique even after calls to deleteItem() and newItem()
-
 			var args = {data: {
 				label:"name",
 				items:[
@@ -757,10 +780,10 @@ doh.register("tests.data.ItemFileWriteStore",
 			var store = new dojo.data.ItemFileWriteStore(args);
 			var deferred = new doh.Deferred();
 			
-			function onError(error, request){
+			var onError = function(error, request){
 				deferred.errback(error);
 			}
-			function onComplete(items, request){
+			var onComplete = function(items, request){
 				doh.assertEqual(7, items.length);
 				
 				var lastItem = items[(items.length - 1)];
@@ -768,7 +791,7 @@ doh.register("tests.data.ItemFileWriteStore",
 				store.deleteItem(lastItem);
 				store.newItem({name:'Canada', capital:'Ottawa'});
 				
-				function onCompleteAgain(itemsAgain, requestAgain){
+				var onCompleteAgain = function(itemsAgain, requestAgain){
 					doh.assertEqual(7, itemsAgain.length);
 					var identitiesInUse = {};
 					for(var i = 0; i < itemsAgain.length; ++i){
@@ -787,6 +810,66 @@ doh.register("tests.data.ItemFileWriteStore",
 				store.fetch({onComplete:onCompleteAgain, onError:onError});
 			}
 			
+			store.fetch({onComplete:onComplete, onError:onError});
+			return deferred;
+		},
+		function testIdentityAPI_noIdentifierSpecified_revert(){
+			//	summary: 
+			//		Test for bug #4691  Given a datafile that does not specify an
+			//		identifier, make sure ItemFileWriteStore auto-creates identities 
+			//		that are unique even after calls to deleteItem() and newItem()
+			var args = {data: {
+				label:"name",
+				items:[
+					{name:'Ecuador', capital:'Quito'},
+					{name:'Egypt', capital:'Cairo'},
+					{name:'El Salvador', capital:'San Salvador'},
+					{name:'Equatorial Guinea', capital:'Malabo'},
+					{name:'Eritrea', capital:'Asmara'},
+					{name:'Estonia', capital:'Tallinn'},
+					{name:'Ethiopia', capital:'Addis Ababa'}
+				]
+			} }; 
+			var store = new dojo.data.ItemFileWriteStore(args);
+			var deferred = new doh.Deferred();
+			
+			var onError = function(error, request){
+				deferred.errback(error);
+			}
+			var onComplete = function(items, request){
+				doh.assertEqual(7, items.length);
+				
+				var lastItem = items[(items.length - 1)];
+				var idOfLastItem = store.getIdentity(lastItem);
+				store.deleteItem(lastItem);
+				store.newItem({name:'Canada', capital:'Ottawa'});
+				
+				var onCompleteAgain = function(itemsAgain, requestAgain){
+					doh.assertEqual(7, itemsAgain.length);
+					var identitiesInUse = {};
+					for(var i = 0; i < itemsAgain.length; ++i){
+						var item = itemsAgain[i];
+						var id = store.getIdentity(item);
+						if(identitiesInUse.hasOwnProperty(id)){
+							// there should not already be an entry for this id
+							doh.assertTrue(false);
+						}else{
+							// we want to add the entry now
+							identitiesInUse[id] = item;
+						}
+					}
+					//Last test, revert everything and check item sizes.
+					store.revert();
+
+					//Now call fetch again and verify store state.
+					var revertComplete = function(itemsReverted, request){
+						doh.assertEqual(7, itemsReverted.length);
+						deferred.callback(true);
+					}
+					store.fetch({onComplete:revertComplete, onError:onError});
+				}
+				store.fetch({onComplete:onCompleteAgain, onError:onError});
+			}
 			store.fetch({onComplete:onComplete, onError:onError});
 			return deferred;
 		}

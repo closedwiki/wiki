@@ -1,6 +1,6 @@
-if(!dojo._hasResource["dojo.dnd.container"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojo.dnd.container"] = true;
-dojo.provide("dojo.dnd.container");
+if(!dojo._hasResource["dojo.dnd.Container"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojo.dnd.Container"] = true;
+dojo.provide("dojo.dnd.Container");
 
 dojo.require("dojo.dnd.common");
 dojo.require("dojo.parser");
@@ -18,16 +18,22 @@ dojo.declare("dojo.dnd.Container", null, {
 	// summary: a Container object, which knows when mouse hovers over it, 
 	//	and know over which element it hovers
 	
+	// object attributes (for markup)
+	skipForm: false,
+	
 	constructor: function(node, params){
 		// summary: a constructor of the Container
 		// node: Node: node or node's id to build the container on
 		// params: Object: a dict of parameters, recognized parameters are:
 		//	creator: Function: a creator function, which takes a data item, and returns an object like that:
 		//		{node: newNode, data: usedData, type: arrayOfStrings}
+		//	skipForm: Boolean: don't start the drag operation, if clicked on form elements
 		//	_skipStartup: Boolean: skip startup(), which collects children, for deferred initialization
 		//		(this is used in the markup mode)
 		this.node = dojo.byId(node);
-		this.creator = params && params.creator || null;
+		if(!params){ params = {}; }
+		this.creator = params.creator || null;
+		this.skipForm = params.skipForm;
 		this.defaultCreator = dojo.dnd._defaultCreator(this.node);
 
 		// class-specific variables
@@ -48,8 +54,8 @@ dojo.declare("dojo.dnd.Container", null, {
 			dojo.connect(this.node, "onmouseover", this, "onMouseOver"),
 			dojo.connect(this.node, "onmouseout",  this, "onMouseOut"),
 			// cancel text selection and text dragging
-			dojo.connect(this.node, "ondragstart",   dojo, "stopEvent"),
-			dojo.connect(this.node, "onselectstart", dojo, "stopEvent")
+			dojo.connect(this.node, "ondragstart",   this, "onSelectStart"),
+			dojo.connect(this.node, "onselectstart", this, "onSelectStart")
 		];
 	},
 	
@@ -194,6 +200,13 @@ dojo.declare("dojo.dnd.Container", null, {
 		}
 		this._changeState("Container", "");
 		this.onOutEvent();
+	},
+	onSelectStart: function(e){
+		// summary: event processor for onselectevent and ondragevent
+		// e: Event: mouse event
+		if(!this.skipForm || !dojo.dnd.isFormElement(e)){
+			dojo.stopEvent(e);
+		}
 	},
 	
 	// utilities

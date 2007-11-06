@@ -1,9 +1,9 @@
-if(!dojo._hasResource["dojo.dnd.source"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojo.dnd.source"] = true;
-dojo.provide("dojo.dnd.source");
+if(!dojo._hasResource["dojo.dnd.Source"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
+dojo._hasResource["dojo.dnd.Source"] = true;
+dojo.provide("dojo.dnd.Source");
 
-dojo.require("dojo.dnd.selector");
-dojo.require("dojo.dnd.manager");
+dojo.require("dojo.dnd.Selector");
+dojo.require("dojo.dnd.Manager");
 
 /*
 	Container property:
@@ -29,6 +29,7 @@ dojo.declare("dojo.dnd.Source", dojo.dnd.Selector, {
 	horizontal: false,
 	copyOnly: false,
 	skipForm: false,
+	withHandles: false,
 	accept: ["text"],
 	
 	constructor: function(node, params){
@@ -39,7 +40,7 @@ dojo.declare("dojo.dnd.Source", dojo.dnd.Selector, {
 		//	accept: Array: list of accepted types (text strings) for a target; assumed to be ["text"] if omitted
 		//	horizontal: Boolean: a horizontal container, if true, vertical otherwise or when omitted
 		//	copyOnly: Boolean: always copy items, if true, use a state of Ctrl key otherwise
-		//	skipForm: Boolean: don't start the drag operation, if clicked on form elements
+		//	withHandles: Boolean: allows dragging only by handles
 		//	the rest of parameters are passed to the selector
 		if(!params){ params = {}; }
 		this.isSource = typeof params.isSource == "undefined" ? true : params.isSource;
@@ -53,7 +54,7 @@ dojo.declare("dojo.dnd.Source", dojo.dnd.Selector, {
 		}
 		this.horizontal = params.horizontal;
 		this.copyOnly = params.copyOnly;
-		this.skipForm = params.skipForm;
+		this.withHandles = params.withHandles;
 		// class-specific variables
 		this.isDragging = false;
 		this.mouseDown = false;
@@ -162,8 +163,9 @@ dojo.declare("dojo.dnd.Source", dojo.dnd.Selector, {
 	onMouseDown: function(e){
 		// summary: event processor for onmousedown
 		// e: Event: mouse event
-		if(!this.skipForm || !dojo.dnd.isFormElement(e)){
+		if(this._legalMouseDown(e) && (!this.skipForm || !dojo.dnd.isFormElement(e))){
 			this.mouseDown = true;
+			this.mouseButton = e.button;
 			dojo.dnd.Source.superclass.onMouseDown.call(this, e);
 		}
 	},
@@ -251,6 +253,7 @@ dojo.declare("dojo.dnd.Source", dojo.dnd.Selector, {
 						};
 					}else{
 						// move nodes
+						if(!this.current){ break; }
 						this._normalizedCreator = function(node, hint){
 							var t = source.getItem(node.id);
 							return {node: node, data: t.data, type: t.type};
@@ -268,6 +271,7 @@ dojo.declare("dojo.dnd.Source", dojo.dnd.Selector, {
 						};
 					}else{
 						// move nodes
+						if(!this.current){ break; }
 						this._normalizedCreator = function(node, hint){
 							var t = source.getItem(node.id);
 							return {node: node, data: t.data, type: t.type};
@@ -339,6 +343,15 @@ dojo.declare("dojo.dnd.Source", dojo.dnd.Selector, {
 	_markDndStatus: function(copy){
 		// summary: changes source's state based on "copy" status
 		this._changeState("Source", copy ? "Copied" : "Moved");
+	},
+	_legalMouseDown: function(e){
+		// summary: checks if user clicked on "approved" items
+		// e: Event: mouse event
+		if(!this.withHandles){ return true; }
+		for(var node = e.target; node && !dojo.hasClass(node, "dojoDndItem"); node = node.parentNode){
+			if(dojo.hasClass(node, "dojoDndHandle")){ return true; }
+		}
+		return false;	// Boolean
 	}
 });
 
