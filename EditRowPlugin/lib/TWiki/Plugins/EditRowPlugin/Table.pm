@@ -55,9 +55,10 @@ sub parseTables {
 
         # Process an EDITTABLE. The tag will be associated with the
         # next table encountered in the topic.
-        if (!$disable && $line =~ s/(%EDITTABLE{(.*?)}%)// ) {
+        if (!$disable && $line =~ s/(%EDITTABLE{(.*)}%)// ) {
             my $spec = $1;
-            my $attrs = new TWiki::Attrs($2);
+            my $attrs = new TWiki::Attrs(
+                TWiki::Func::expandCommonVariables($2, $web, $topic));
             push(@tables, $line) if $line =~ /\S/;
             # Editable table
             $nTables++;
