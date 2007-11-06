@@ -206,7 +206,7 @@ dojox.regexp.emailAddress = function(/*Object?*/flags){
 	flags.allowPort = false; // invalid in email addresses
 
 	// user name RE - apostrophes are valid if there's not 2 in a row
-	var usernameRE = "([\\da-z]+[-._+&'])*[\\da-z]+";
+	var usernameRE = "([\\da-zA-Z]+[-._+&'])*[\\da-zA-Z]+";
 
 	// build emailAddress RE
 	var emailAddressRE = usernameRE + "@" + dojox.regexp.host(flags);
@@ -311,7 +311,7 @@ dojox.regexp.numberFormat = function(/*Object?*/flags){
 	// Converts a number format to RE.
 	var digitRE = function(format){
 		// escape all special characters, except '?'
-		format = dojo.string.escapeRegExp(format, "?");
+		format = dojo.regexp.escapeString(format, "?");
 
 		// Now replace '?' with Regular Expression
 		format = format.replace(/\?/g, "\\d?");

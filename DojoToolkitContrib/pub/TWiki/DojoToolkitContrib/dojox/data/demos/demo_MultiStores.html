@@ -38,7 +38,7 @@
 	<blockquote>
 
 	<!--
-		The store instancew used by this demo.
+		The store instances used by this demo.
 	-->
 	<div dojoType="dojo.data.ItemFileReadStore" url="geography.json"              jsId="ifrGeoStore"></div>
 	<div dojoType="dojox.data.OpmlStore"        url="geography.xml"  label="text" jsId="opmlGeoStore"></div>
@@ -48,12 +48,12 @@
 	</h3>
 	<blockquote>
 	<b>ComboBox:</b><br>
-	<input dojoType="dijit.form.ComboBox" id="combo1" name="combo1" class="medium" store="opmlGeoStore" searchAttr="text" query="{}"></div>
+	<input dojoType="dijit.form.ComboBox" id="combo1" name="combo1" class="medium" store="opmlGeoStore" searchAttr="text" query="{}"></input>
 	<br>
 	<br>
 
 	<b>Tree:</b><br>
-	<div dojoType="dijit.Tree" id="tree1" store="opmlGeoStore"></div>
+	<div dojoType="dijit.Tree" id="tree1" label="Continents" store="opmlGeoStore"></div>
 	</blockquote>
 
 	<h3>
@@ -61,12 +61,12 @@
 	</h3>
 	<blockquote>
 	<b>ComboBox:</b><br>
-	<input dojoType="dijit.form.ComboBox" id="combo2" name="combo2" class="medium" store="ifrGeoStore" searchAttr="name" query="{}"></div>
+	<input dojoType="dijit.form.ComboBox" id="combo2" name="combo2" class="medium" store="ifrGeoStore" searchAttr="name" query="{}"></input>
 	<br>
 	<br>
 
 	<b>Tree:</b><br>
-   	<div dojoType="dijit.Tree" id="tree2" store="ifrGeoStore"></div>
+   	<div dojoType="dijit.Tree" id="tree2" label="Continents" store="ifrGeoStore"></div>
 	</blockquote>
 </body>
 </html>

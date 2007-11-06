@@ -26,7 +26,7 @@
 <body class="tundra">
 	<span dojoType="dojo.data.ItemFileReadStore" 
 		jsId="continentStore"
-		url="../../../dijit/tests/countries.json"></span>
+		url="../../../dijit/tests/_data/countries.json"></span>
 	<span dojoType="dojox.data.FlickrStore" jsId="flickrStore"></span>
 
 
@@ -57,9 +57,8 @@
 				this.row.appendChild(document.createElement("td"));
 				this.row.lastChild.className = icn;
 			}, this);
-			this.body.removeChild(this.row);
+			this.runQuery();
 		</script>
-		<script type="dojo/method" event="postCreate">this.runQuery();</script>
 		<script type="dojo/method" event="onSort" args="index">
 			var ca = this.columns[index].attribute;
 			var qs = this.query.sort;

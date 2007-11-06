@@ -3,13 +3,12 @@ dojo._hasResource["dojox.widget.ColorPicker"] = true;
 dojo.provide("dojox.widget.ColorPicker");
 dojo.experimental("dojox.widget.ColorPicker"); // level: prototype
 
-dojo.require("dijit._Widget");
-dojo.require("dijit._Templated");
+dojo.require("dijit.form._FormWidget");
 dojo.require("dojo.dnd.move"); 
 dojo.require("dojo.fx"); 
 
 dojo.declare("dojox.widget.ColorPicker",
-	[dijit._Widget, dijit._Templated],
+	dijit.form._FormWidget,
 	{
 	// summary: a HSV color picker - like PhotoShop
 	//
@@ -59,13 +58,13 @@ dojo.declare("dojox.widget.ColorPicker",
 	slideDuration: 250, 
 
 	_underlay: dojo.moduleUrl("dojox.widget","ColorPicker/images/underlay.png"),
-	templateString:"<div class=\"dojoxColorPicker\">\n\t<div class=\"dojoxColorPickerBox\">\n\t\t<div dojoAttachPoint=\"cursorNode\" class=\"dojoxColorPickerPoint\"></div>\n\t\t<img dojoAttachPoint=\"colorUnderlay\" dojoAttachEvent=\"onclick: _setPoint\" class=\"dojoxColorPickerUnderlay\" src=\"${_underlay}\">\n\t</div>\n\t<div class=\"dojoxHuePicker\">\n\t\t<div dojoAttachPoint=\"hueCursorNode\" class=\"dojoxHuePickerPoint\"></div>\n\t\t<div dojoAttachPoint=\"hueNode\" class=\"dojoxHuePickerUnderlay\" dojoAttachEvent=\"onclick: _setHuePoint\"></div>\n\t</div>\n\t<div dojoAttachPoint=\"previewNode\" class=\"dojoxColorPickerPreview\"></div>\n\t<div dojoAttachPoint=\"safePreviewNode\" class=\"dojoxColorPickerWebSafePreview\"></div>\n\t<div class=\"dojoxColorPickerOptional\">\n\t\t<div class=\"dijitInline dojoxColorPickerRgb\" dojoAttachPoint=\"rgbNode\">\n\t\t\t<table>\n\t\t\t<tr><td>r</td><td><input dojoAttachPoint=\"Rval\" size=\"1\"></td></tr>\n\t\t\t<tr><td>g</td><td><input dojoAttachPoint=\"Gval\" size=\"1\"></td></tr>\n\t\t\t<tr><td>b</td><td><input dojoAttachPoint=\"Bval\" size=\"1\"></td></tr>\n\t\t\t</table>\n\t\t</div>\n\t\t<div class=\"dijitInline dojoxColorPickerHsv\" dojoAttachPoint=\"hsvNode\">\n\t\t\t<table>\n\t\t\t<tr><td>h</td><td><input dojoAttachPoint=\"Hval\"size=\"1\"> &deg;</td></tr>\n\t\t\t<tr><td>s</td><td><input dojoAttachPoint=\"Sval\" size=\"1\"> %</td></tr>\n\t\t\t<tr><td>v</td><td><input dojoAttachPoint=\"Vval\" size=\"1\"> %</td></tr>\n\t\t\t</table>\n\t\t</div>\n\t\t<div class=\"dojoxColorPickerHex\" dojoAttachPoint=\"hexNode\">\t\n\t\t\thex: <input dojoAttachPoint=\"hexCode\" size=\"6\" class=\"dojoxColorPickerHexCode\">\n\t\t</div>\n\t</div>\n</div>\n",
+	templateString:"<div class=\"dojoxColorPicker\">\n\t<div class=\"dojoxColorPickerBox\">\n\t\t<div dojoAttachPoint=\"cursorNode\" class=\"dojoxColorPickerPoint\"></div>\n\t\t<img dojoAttachPoint=\"colorUnderlay\" dojoAttachEvent=\"onclick: _setPoint\" class=\"dojoxColorPickerUnderlay\" src=\"${_underlay}\">\n\t</div>\n\t<div class=\"dojoxHuePicker\">\n\t\t<div dojoAttachPoint=\"hueCursorNode\" class=\"dojoxHuePickerPoint\"></div>\n\t\t<div dojoAttachPoint=\"hueNode\" class=\"dojoxHuePickerUnderlay\" dojoAttachEvent=\"onclick: _setHuePoint\"></div>\n\t</div>\n\t<div dojoAttachPoint=\"previewNode\" class=\"dojoxColorPickerPreview\"></div>\n\t<div dojoAttachPoint=\"safePreviewNode\" class=\"dojoxColorPickerWebSafePreview\"></div>\n\t<div class=\"dojoxColorPickerOptional\">\n\t\t<div class=\"dijitInline dojoxColorPickerRgb\" dojoAttachPoint=\"rgbNode\">\n\t\t\t<table>\n\t\t\t<tr><td>r</td><td><input dojoAttachPoint=\"Rval\" size=\"1\"></td></tr>\n\t\t\t<tr><td>g</td><td><input dojoAttachPoint=\"Gval\" size=\"1\"></td></tr>\n\t\t\t<tr><td>b</td><td><input dojoAttachPoint=\"Bval\" size=\"1\"></td></tr>\n\t\t\t</table>\n\t\t</div>\n\t\t<div class=\"dijitInline dojoxColorPickerHsv\" dojoAttachPoint=\"hsvNode\">\n\t\t\t<table>\n\t\t\t<tr><td>h</td><td><input dojoAttachPoint=\"Hval\"size=\"1\"> &deg;</td></tr>\n\t\t\t<tr><td>s</td><td><input dojoAttachPoint=\"Sval\" size=\"1\"> %</td></tr>\n\t\t\t<tr><td>v</td><td><input dojoAttachPoint=\"Vval\" size=\"1\"> %</td></tr>\n\t\t\t</table>\n\t\t</div>\n\t\t<div class=\"dojoxColorPickerHex\" dojoAttachPoint=\"hexNode\">\t\n\t\t\thex: <input dojoAttachPoint=\"hexCode, focusNode\" size=\"6\" class=\"dojoxColorPickerHexCode\">\n\t\t</div>\n\t</div>\n</div>\n",
 
 	postCreate: function(){
 		// summary: As quickly as we can, set up ie6 alpha-filter support for our
 		// 	underlay.  we don't do image handles (done in css), just the 'core' 
 		//	of this widget: the underlay. 
-		if(dojo.isIE){ 
+		if(dojo.isIE && dojo.isIE<7){ 
 			this.colorUnderlay.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+this._underlay+"', sizingMethod='scale')";
 			this.colorUnderlay.src = dojo.moduleUrl("dojox.widget","FisheyeList/blank.gif").toString();
 		}
@@ -103,11 +102,12 @@ dojo.declare("dojox.widget.ColorPicker",
 		
 	},
 
-	_setTimer: function(/* DomNode */node){
+	_setTimer: function(/* dojo.dnd.Mover */mover){
 		this._timer = setInterval(dojo.hitch(this,"_updateColor"),45);	
 	},
-	_clearTimer: function(/* DomNode */node){
+	_clearTimer: function(/* dojo.dnd.Mover */mover){
 		clearInterval(this._timer);
+		this.onChange(this.value);
 	},
 
 	_setHue: function(/* Decimal */h){
@@ -127,7 +127,7 @@ dojo.declare("dojox.widget.ColorPicker",
 		var v = Math.round(100-(dojo.style(this.cursorNode,"top")*this._sc)*100);
 
 		// limit hue calculations to only when it changes
-		if (h != this._hue){ this._setHue(h); }
+		if(h != this._hue){ this._setHue(h); }
 
 		var rgb = this._hsv2rgb(h,s/100,v/100,{ inputRange: 1 }); 
 		var hex = (dojo.colorFromArray(rgb).toHex());
@@ -145,11 +145,18 @@ dojo.declare("dojox.widget.ColorPicker",
 			this.Sval.value = s;
 			this.Vval.value = v;
 		}
+		this.value=hex;
+
+		// anytime we muck with the color, fire onChange?
+		if (!this._timer && !(arguments[1])){
+			this.setValue(this.value);	
+			this.onChange(this.value);
+		}
 	},
 
 	_setHuePoint: function(/* Event */evt){ 
 		// summary: set the hue picker handle on relative y coordinates
-		if (this.animatePoint){
+		if(this.animatePoint){
 			dojo.fx.slideTo({ 
 				node: this.hueCursorNode, 
 				duration:this.slideDuration,
@@ -159,13 +166,13 @@ dojo.declare("dojox.widget.ColorPicker",
 			}).play();
 		}else{
 			dojo.style(this.hueCursorNode,"top",(evt.layerY)+"px");
-			this._updateColor(); 
+			this._updateColor(false); 
 		}
 	},
 
 	_setPoint: function(/* Event */evt){
 		// summary: set our picker point based on relative x/y coordinates
-		if (this.animatePoint){
+		if(this.animatePoint){
 			dojo.fx.slideTo({ 
 				node: this.cursorNode, 
 				duration:this.slideDuration,
@@ -176,11 +183,12 @@ dojo.declare("dojox.widget.ColorPicker",
 		}else{
 			dojo.style(this.cursorNode,"left",(evt.layerX-this._offset)+"px");
 			dojo.style(this.cursorNode,"top",(evt.layerY-this._offset)+"px");
-			this._updateColor(); 
+			this._updateColor(false); 
 		}
 	},
 
 	// this ported directly from 0.4 dojo.gfx.colors.hsv, with bugs :)
+	// FIXME: use ttrenka's HSB ?
 	_hsv2rgb: function(/* int || Array */h, /* int */s, /* int */v, /* Object? */options){
 		//	summary
 		//	converts an HSV value set to RGB, ranges depending on optional options object.

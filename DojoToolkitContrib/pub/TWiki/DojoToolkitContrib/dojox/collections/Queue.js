@@ -1,7 +1,7 @@
 if(!dojo._hasResource["dojox.collections.Queue"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
 dojo._hasResource["dojox.collections.Queue"] = true;
 dojo.provide("dojox.collections.Queue");
-dojo.require("dojox.collections");
+dojo.require("dojox.collections._base");
 
 dojox.collections.Queue=function(/* array? */arr){
 	//	summary
@@ -52,14 +52,7 @@ dojox.collections.Queue=function(/* array? */arr){
 	this.forEach=function(/* function */ fn, /* object? */ scope){
 		//	summary
 		//	functional iterator, following the mozilla spec.
-		var s=scope||dj_global;
-		if(Array.forEach){
-			Array.forEach(q, fn, s);
-		}else{
-			for(var i=0; i<q.length; i++){
-				fn.call(s, q[i], i, q);
-			}
-		}
+		dojo.forEach(q, fn, scope);
 	};
 	this.getIterator=function(){
 		//	summary

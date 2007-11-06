@@ -3,7 +3,7 @@ dojo._hasResource["dojox.gfx._base"] = true;
 dojo.provide("dojox.gfx._base");
 
 // candidates for dojox.style (work on VML and SVG nodes)
-dojox.gfx._hasClass = function(/*HTMLElement*/node, /*String*/classStr){
+dojox.gfx._hasClass = function(/*DomNode*/node, /*String*/classStr){
 	//	summary:
 	//		Returns whether or not the specified classes are a portion of the
 	//		class list currently applied to the node. 
@@ -11,7 +11,7 @@ dojox.gfx._hasClass = function(/*HTMLElement*/node, /*String*/classStr){
 	return ((" "+node.getAttribute("className")+" ").indexOf(" "+classStr+" ") >= 0);  // Boolean
 }
 
-dojox.gfx._addClass = function(/*HTMLElement*/node, /*String*/classStr){
+dojox.gfx._addClass = function(/*DomNode*/node, /*String*/classStr){
 	//	summary:
 	//		Adds the specified classes to the end of the class list on the
 	//		passed node.
@@ -21,7 +21,7 @@ dojox.gfx._addClass = function(/*HTMLElement*/node, /*String*/classStr){
 	}
 }
 
-dojox.gfx._removeClass = function(/*HTMLElement*/node, /*String*/classStr){
+dojox.gfx._removeClass = function(/*DomNode*/node, /*String*/classStr){
 	//	summary: Removes classes from node.
 	node.setAttribute("className", node.getAttribute("className").replace(new RegExp('(^|\\s+)'+classStr+'(\\s+|$)'), "$1$2"));
 }
@@ -239,7 +239,12 @@ dojo.mixin(dojox.gfx, {
 	
 	// a constant used to split a SVG/VML path into primitive components
 	pathVmlRegExp: /([A-Za-z]+)|(\d+(\.\d+)?)|(\.\d+)|(-\d+(\.\d+)?)|(-\.\d+)/g,
-	pathSvgRegExp: /([A-Za-z])|(\d+(\.\d+)?)|(\.\d+)|(-\d+(\.\d+)?)|(-\.\d+)/g
+	pathSvgRegExp: /([A-Za-z])|(\d+(\.\d+)?)|(\.\d+)|(-\d+(\.\d+)?)|(-\.\d+)/g,
+	
+	equalSources: function(a, b){
+		// summary: compares event sources, returns true if they are equal
+		return a && b && a == b;
+	}
 });
 
 dojox.gfx._createShape = function(shape){
@@ -259,43 +264,5 @@ dojox.gfx._createShape = function(shape){
 	}
 	return null;
 };
-
-dojox.gfx._eventsProcessing = {
-	connect: function(name, object, method){
-		return arguments.length > 2 ? 
-			dojo.connect(this.getEventSource(), name, object, method) :
-			dojo.connect(this.getEventSource(), name, object);
-	},
-	disconnect: function(token){
-		dojo.disconnect(token);
-	}
-};
-
-dojo.declare("dojox.gfx.Surface", null, {
-	// summary: a surface object to be used for drawings
-
-	constructor: function(){
-		// underlying node
-		this.rawNode = null;
-	},
-	getEventSource: function(){
-		// summary: returns a node, which can be used to attach event listeners
-		
-		return this.rawNode; // Node
-	}
-});
-dojo.extend(dojox.gfx.Surface, dojox.gfx._eventsProcessing);
-
-dojo.declare("dojox.gfx.Point", null, {
-	// summary: a hypothetical 2D point to be used for drawings - {x, y}
-	// description: This object is defined for documentation purposes.
-	//	You should use the naked object instead: {x: 1, y: 2}.
-});
-
-dojo.declare("dojox.gfx.Rectangle", null, {
-	// summary: a hypothetical rectangle - {x, y, width, height}
-	// description: This object is defined for documentation purposes.
-	//	You should use the naked object instead: {x: 1, y: 2, width: 100, height: 200}.
-});
 
 }

@@ -40,7 +40,7 @@ dojo.extend(dojox.encoding.bits.OutputStream, {
 dojox.encoding.bits.InputStream = function(buffer, width){
 	this.buffer = buffer;
 	this.width = width;
-	this.byte = this.bit = 0;
+	this.bbyte = this.bit = 0;
 };
 
 dojo.extend(dojox.encoding.bits.InputStream, {
@@ -48,12 +48,12 @@ dojo.extend(dojox.encoding.bits.InputStream, {
 		var r = 0;
 		while(width){
 			var w = Math.min(width, 8 - this.bit);
-			var v = this.buffer[this.byte] >>> (8 - this.bit - w);
+			var v = this.buffer[this.bbyte] >>> (8 - this.bit - w);
 			r <<= w;
 			r |= v & ~(~0 << w);
 			this.bit += w;
 			if(this.bit == 8){
-				++this.byte;
+				++this.bbyte;
 				this.bit = 0;
 			}
 			width -= w;
@@ -61,7 +61,7 @@ dojo.extend(dojox.encoding.bits.InputStream, {
 		return r;
 	},
 	getWidth: function(){
-		return this.width - this.byte * 8 - this.bit;
+		return this.width - this.bbyte * 8 - this.bit;
 	}
 });
 

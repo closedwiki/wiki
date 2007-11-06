@@ -6,7 +6,10 @@
 	@import "../../../dojo/resources/dojo.css";
 	@import "../../../dijit/tests/css/dijitTests.css";
 </style>
+<!--
+The next line should include Microsoft's Silverligth.js, if you plan to use the silverlight backend
 <script type="text/javascript" src="Silverlight.js"></script>
+-->
 <script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true"></script>
 <!--<script type="text/javascript" src="../_base.js"></script>-->
 <!--<script type="text/javascript" src="../shape.js"></script>-->
@@ -31,22 +34,22 @@ makeShapes = function(){
     var re1 = g1.createPath()
 		.moveTo(startPoint)
 		.arcTo(rx, ry, xRotg, true, false, endPoint)
-		.setStroke({color: "red"})
+		.setStroke({color: "red", width: 3})
 		;
     var ge1 = g1.createPath()
 		.moveTo(re1.getLastPosition())
 		.arcTo(rx, ry, xRotg, false, false, startPoint)
-		.setStroke({color: "blue"})
+		.setStroke({color: "black"})
 		;
     var re2 = g2.createPath()
 		.moveTo(startPoint)
 		.arcTo(rx, ry, xRotg, false, true, endPoint)
-		.setStroke({color: "red"})
+		.setStroke({color: "green", width: 3})
 		;
     var ge2 = g2.createPath()
 		.moveTo(re2.getLastPosition())
 		.arcTo(rx, ry, xRotg, true, true, startPoint)
-		.setStroke({color: "blue"})
+		.setStroke({color: "black"})
 		;
 		
 	g1.setTransform({dx: 200, dy: 200});

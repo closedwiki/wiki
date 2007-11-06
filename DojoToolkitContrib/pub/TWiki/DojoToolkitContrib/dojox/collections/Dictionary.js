@@ -1,7 +1,7 @@
 if(!dojo._hasResource["dojox.collections.Dictionary"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
 dojo._hasResource["dojox.collections.Dictionary"] = true;
 dojo.provide("dojox.collections.Dictionary");
-dojo.require("dojox.collections");
+dojo.require("dojox.collections._base");
 
 dojox.collections.Dictionary=function(/* dojox.collections.Dictionary? */dictionary){
 	//	summary
@@ -65,14 +65,7 @@ dojox.collections.Dictionary=function(/* dojox.collections.Dictionary? */diction
 				a.push(items[p]);	//	fill it up
 			}
 		}
-		var s=scope||dj_global;
-		if(Array.forEach){
-			Array.forEach(a, fn, s);
-		}else{
-			for(var i=0; i<a.length; i++){
-				fn.call(s, a[i], i, a);
-			}
-		}
+		dojo.forEach(a, fn, scope);
 	};
 	this.getKeyList=function(){
 		//	summary

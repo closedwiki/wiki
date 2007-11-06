@@ -37,9 +37,15 @@ dojo.declare("dojox.data.CsvStore", null, {
  		this._dataArray = [];			// e.g. [[<Item0>],[<Item1>],[<Item2>]]
  		this._arrayOfAllItems = [];		// e.g. [{_csvId:0,_csvStore:store},...]
 		this._loadFinished = false;
-		this._csvFileUrl = keywordParameters.url;
+		if(keywordParameters.url){
+			this.url = keywordParameters.url;
+		}
 		this._csvData = keywordParameters.data;
-		this._labelAttr = keywordParameters.label;
+		if(keywordParameters.label){
+			this.label = keywordParameters.label;
+		}else if(this.label === ""){
+			this.label = undefined;
+		}
 		this._storeProp = "_csvStore";	// Property name for the store reference on every item.
 		this._idProp = "_csvId"; 		// Property name for the Item Id on every item.
 		this._features = {	
@@ -49,6 +55,10 @@ dojo.declare("dojox.data.CsvStore", null, {
 		this._loadInProgress = false;	//Got to track the initial load to prevent duelling loads of the dataset.
 		this._queuedFetches = [];
 	},
+
+	url: "", //Declarative hook for setting Csv source url.
+
+	label: "", //Declarative hook for setting the label attribute. 
 	
 	_assertIsItem: function(/* item */ item){
 		//	summary:
@@ -215,8 +225,8 @@ dojo.declare("dojox.data.CsvStore", null, {
 	getLabel: function(/* item */ item){
 		//	summary: 
 		//		See dojo.data.api.Read.getLabel()
-		if(this._labelAttr && this.isItem(item)){
-			return this.getValue(item,this._labelAttr); //String
+		if(this.label && this.isItem(item)){
+			return this.getValue(item,this.label); //String
 		}
 		return undefined; //undefined
 	},
@@ -224,8 +234,8 @@ dojo.declare("dojox.data.CsvStore", null, {
 	getLabelAttributes: function(/* item */ item){
 		//	summary: 
 		//		See dojo.data.api.Read.getLabelAttributes()
-		if(this._labelAttr){
-			return [this._labelAttr]; //array
+		if(this.label){
+			return [this.label]; //array
 		}
 		return null; //null
 	},
@@ -284,7 +294,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 		if(this._loadFinished){
 			filter(keywordArgs, this._arrayOfAllItems);
 		}else{
-			if(this._csvFileUrl){
+			if(this.url !== ""){
 				//If fetches come in before the loading has finished, but while
 				//a load is in progress, we have to defer the fetching to be 
 				//invoked in the callback.
@@ -293,7 +303,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 				}else{
 					this._loadInProgress = true;
 					var getArgs = {
-							url: self._csvFileUrl, 
+							url: self.url, 
 							handleAs: "text"
 						};
 					var getHandler = dojo.xhrGet(getArgs);
@@ -370,7 +380,9 @@ dojo.declare("dojox.data.CsvStore", null, {
 						var lastChar = field.charAt(field.length - 1);
 						var secondToLastChar = field.charAt(field.length - 2);
 						var thirdToLastChar = field.charAt(field.length - 3);
-						if((firstChar == '"') && 
+						if(field.length === 2 && field == "\"\""){
+							listOfFields[j] = "";  //Special case empty string field.
+						}else if((firstChar == '"') && 
 								((lastChar != '"') || 
 								 ((lastChar == '"') && (secondToLastChar == '"') && (thirdToLastChar != '"')))){
 							if(j+1 === listOfFields.length){
@@ -442,7 +454,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 
 		if(!this._loadFinished){
 			var self = this;
-			if(this._csvFileUrl){
+			if(this.url !== ""){
 				//If fetches come in before the loading has finished, but while
 				//a load is in progress, we have to defer the fetching to be 
 				//invoked in the callback.
@@ -451,7 +463,7 @@ dojo.declare("dojox.data.CsvStore", null, {
 				}else{
 					this._loadInProgress = true;
 					var getArgs = {
-							url: self._csvFileUrl, 
+							url: self.url, 
 							handleAs: "text"
 						};
 					var getHandler = dojo.xhrGet(getArgs);
