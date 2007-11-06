@@ -531,7 +531,8 @@ sub _isProtectedByAttrs {
 
     require TWiki::Plugins::WysiwygPlugin;
     foreach my $attr (keys %{$this->{attrs}}) {
-        return 1 if TWiki::Plugins::WysiwygPlugin::protectedByAttr(
+        next unless length($this->{attrs}->{$attr}); # ignore nulls
+        return $attr if TWiki::Plugins::WysiwygPlugin::protectedByAttr(
             $this->{tag}, $attr);
     }
     return 0;
