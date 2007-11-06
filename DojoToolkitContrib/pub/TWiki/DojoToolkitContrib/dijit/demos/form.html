@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-        "http://www.w3.org/TR/html4/strict.dtd">
+		"http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
 		<title>Dojo Form Widgets Test</title>
@@ -51,13 +51,13 @@
 					font-family:Verdana, Arial, sans-serif;
 					margin-bottom:0.75em;
 			}
-			.small {
+			.small INPUT {
 				width: 2.5em;
 			}
-			.medium {
+			.medium INPUT {
 				width: 10em;
 			}
-			.long {
+			.long INPUT {
 				width: 20em;
 			}
 			.firstLabel {
@@ -86,7 +86,7 @@
 	</head>
 	<body class="tundra">
 		<div dojoType="dojo.data.ItemFileReadStore" jsId="stateStore"
-			url="../tests/form/comboBoxData.json"></div>
+			url="../tests/_data/states.json"></div>
 
 		<h2 class="pageSubContentTitle">Job Application Form</h2>
 		<p>This is just a little demo of dijit's form widgets</p>
@@ -153,14 +153,14 @@
 			</div>
 			<div class="formAnswer">
 				<label class="firstLabel" for="position">Position</label>
-				<fieldset id="position" class="dijitInlineBox">
+				<fieldset id="position" class="dijitInline">
 					<input type="checkBox" name="position" id="it" value="it" dojoType="dijit.form.CheckBox" /> <label for="it">IT</label>
 					<input type="checkBox" name="position" id="marketing" value="marketing" dojoType="dijit.form.CheckBox" /> <label for="marketing">Marketing</label>
 					<input type="checkBox" name="position" id="business" value="business" dojoType="dijit.form.CheckBox" /> <label for="business" style="margin-right: 7em;">Business</label>
 				</fieldset>
 
 				<label class="secondLabel" for="hours">Hours</label>
-				<fieldset id="hours" class="dijitInlineBox">
+				<fieldset id="hours" class="dijitInline">
 					<input type="radio" name="hours" id="full" value="full" dojoType="dijit.form.RadioButton" /> <label for="full">Full time</label>
 					<input type="radio" name="hours" id="part" value="part" dojoType="dijit.form.RadioButton" /> <label for="part">Part time</label>
 				</fieldset>
