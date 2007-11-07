@@ -482,8 +482,11 @@ sub getComponent {
     my $f;
 
     # Look for the archive.
-    foreach my $dir ($installationRoot, $installationRoot.'/twikiplugins/'.$module,
-                     split(':', $ENV{TWIKI_PACKAGES}||'')) {
+    require Config;
+    foreach my $dir ($installationRoot,
+                     $installationRoot.'/twikiplugins/'.$module,
+                     split($Config::Config{path_sep},
+                           $ENV{TWIKI_PACKAGES} || '')) {
         foreach my $type ( @$types ) { # .tgz preferred
             $f = $dir.'/'.$module.$type;
             if( -e $f ) {
