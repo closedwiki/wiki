@@ -1,23 +1,23 @@
-%META:TOPICINFO{author="TWikiContributor" date="1144954837" format="1.1" version="1.2"}%
----+ This is the new title
+%META:TOPICINFO{author="ArthurClemens" date="1194448001" format="1.1" version="1.2"}%
+---+ This is the title
 
-Here is a changed paragraph. Lorem Ipsum dolor sit amet, conecteur adipiscing elit.
+Here is a changed paragraph. Lorem Ipsum dolor sit amet, conecteur adipiscing felix elit.
 
 ---
 
    * First item
    * Second item
-   * Thrid item
+   * Third item
 
 ---
 
-| *A* | *X* | *C* |
+| *A* | *B* | *C* |
 | aa | ab | ac |
-| ba | bb | bc |
+| zz | yy | zz |
 | za | zb | zc |
 
 ---
 
-Here is a new paragraph. Pellentesque velit. Aliquam era volutpat. Duis sagittis nibh sed justo.
+Here is a paragraph. Pellentesque velit. Aliquam era volutpat. Duis sagittis nibh sed justo.
 
--- Main.TWikiContributor - 13 Apr 2006
+-- Main.TWikiContributor

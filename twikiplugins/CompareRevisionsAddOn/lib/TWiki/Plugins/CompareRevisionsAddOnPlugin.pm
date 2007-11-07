@@ -20,14 +20,14 @@
 
 =pod
 
----+ package CompareRevisionsAddonPlugin
+---+ package CompareRevisionsAddOnPlugin
 
 This is a helper plugin for the CompareRevisionsAddon package.
 
 =cut
 
 # change the package name and $pluginName!!!
-package TWiki::Plugins::CompareRevisionsAddonPlugin;
+package TWiki::Plugins::CompareRevisionsAddOnPlugin;
 
 # Always use strict to enforce variable scoping
 use strict;
@@ -49,7 +49,7 @@ $VERSION = '$Rev: 8713$';
 $RELEASE = 'Dakar';
 
 # Name of this Plugin, only used in this module
-$pluginName = 'CompareRevisionsAddonPlugin';
+$pluginName = 'CompareRevisionsAddOnPlugin';
 
 
 sub initPlugin {
