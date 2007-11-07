@@ -38,7 +38,6 @@ var TWikiButtonsPlugin = {
                 tinyMCE.triggerNodeChange();
                 tinyMCE.execCommand('mceEndUndoLevel');
             } else {
-                alert(elm);if(elm)alert(elm.nodeName);
                 var s = inst.selection.getSelectedHTML();
                 if (s.length > 0) {
                     tinyMCE.execCommand('mceBeginUndoLevel');
