@@ -738,12 +738,12 @@ h4.patternSearchResultsHeader {
 .patternDiff {
    border-color:%TABLE_HEADER_BACKGROUND%;
 }
-.patternDiff h4.patternSearchResultsHeader {
+#patternMainContents .patternDiff h4.patternSearchResultsHeader {
    background-color:%TABLE_HEADER_BACKGROUND%;
    color:%LIGHT_ON_DARK_TEXT_COLOR%;
 }
-.patternDiff h4.patternSearchResultsHeader a:link,
-.patternDiff h4.patternSearchResultsHeader a:visited {
+#patternMainContents .patternDiff h4.patternSearchResultsHeader a:link,
+#patternMainContents .patternDiff h4.patternSearchResultsHeader a:visited {
    color:%LIGHT_ON_DARK_TEXT_COLOR%;
 }
 tr.twikiDiffDebug td {
