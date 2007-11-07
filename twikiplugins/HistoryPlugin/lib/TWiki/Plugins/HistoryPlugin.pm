@@ -70,7 +70,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '1.1';
 
 $pluginName = 'HistoryPlugin';  # Name of this Plugin
 
@@ -223,7 +223,7 @@ sub handleHeadFoot {
             my $newtext = $params{text} ||
                           $params{_DEFAULT} || '';
             my $url = $params{url} || '';
-            my $replace = $url ? "[[$url][$newtext]]" : $newtext;
+            my $replace = $url ? "<a href='$url' class='twikiButton'>$newtext</a>" : $newtext;
             $text =~ s/\$next({.*?})/$replace/;
         }
     }
@@ -247,7 +247,7 @@ sub handleHeadFoot {
             my $newtext = $params{text} ||
                           $params{_DEFAULT} || '';
             my $url = $params{url} || '';
-            my $replace = $url ? "[[$url][$newtext]]" : $newtext;
+            my $replace = $url ? "<a href='$url' class='twikiButton'>$newtext</a>" : $newtext;
             $text =~ s/\$previous({.*?})/$replace/;
         }
     }

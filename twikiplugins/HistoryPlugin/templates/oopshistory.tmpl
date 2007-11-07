@@ -1,33 +1,73 @@
-%TMPL:INCLUDE{"twiki"}%
-%TMPL:DEF{"titleaction"}%(history) %TMPL:END%
-%TMPL:DEF{"webaction"}% *Topic actions* %TMPL:END%
-%TMPL:DEF{"heading"}%History of [[%TOPIC%]]%TMPL:END%
-%TMPL:DEF{"message"}%
-*(1.%HISTORY_REV1% - 1.%HISTORY_REV2% from %HISTORY_MAXREV% revisions)*
+%TMPL:INCLUDE{"oops"}%
 
-<form name="main" action="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
-<input type="hidden" name="render" value="sidebyside">
-<input type="hidden" name="type" value="diff">
-<table border="0" cellspacing="0" cellpadding="5" style="border-width:0px!important">
-<tr><th>Rev</th><th>Date</th><th>User</th></tr>
-%HISTORY{"<tr><td align=\"right\" style=\"border-width:0px;\"><a href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=1.$rev\">1.$rev</a>&nbsp;<input type=\"radio\" name=\"rev1\" value=\"$rev\">&nbsp;<input type=\"radio\" name=\"rev2\" value=\"$rev\"></td><td style=\"border-width:0px;\">$date</td><td style=\"border-width:0px;\">[[$wikiusername][$wikiname]]</td></tr>" rev1="%URLPARAM{"rev1"}%" rev2="%URLPARAM{"rev2"}%" nrev="%URLPARAM{"nrev"}%" header="<tr><td colspan=\"3\" align=\"left\" style=\"border-width:0px;\">$next{'later' url='%SCRIPTURL%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopshistory&rev1=$rev1&nrev=$nrev'} $next{'last' url='%SCRIPTURL%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopshistory&nrev=$nrev'}</td></tr>" footer="<tr><td colspan=\"3\" align=\"left\" style=\"border-width:0px;\">$previous{'earlier' url='%SCRIPTURL%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopshistory&rev1=$rev1&nrev=$nrev'} $previous{'first' url='%SCRIPTURL%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopshistory&rev1=1&nrev=$nrev'}</td></tr>"}%
+
+%TMPL:DEF{"titleaction"}%(history)%TMPL:END%
+
+
+%TMPL:DEF{"pagetitle"}%%MAKETEXT{"Revision history of [_1]" args="%TOPIC%"}%%TMPL:END%
+
+
+%TMPL:DEF{"script:skintemplate"}%<style type="text/css" media="all">
+.historySelectTable {
+    border:none;
+    margin:0 0 .5em 0;
+}
+.historySelectTable th {
+	text-align:left;
+}
+.historySelectTable th,
+.historySelectTable td {
+	border-style:none none solid none;
+    border-width:1px;
+    border-color:#ddd;
+    padding-left:.7em;
+    padding-right:.7em;
+}
+.historySelectLeft {
+	background-color:#fffaf2;
+}
+.historySelectRight {
+	background-color:#f2f7fc;
+}
+td.historySelectLeft,
+td.historySelectRight {
+	text-align:center;
+}
+.historySelectMoreOptions {
+	margin:2em 0 3em 0;
+}
+</style>%TMPL:END%
+
+
+%TMPL:DEF{"message"}%
+---++ %MAKETEXT{"Select a left and right revision to compare"}%
+---++++ %MAKETEXT{"Revisions [_1] - [_2] (out of [_3])" args="%HISTORY_REV1%,%HISTORY_REV2%,%HISTORY_MAXREV%"}%
+<form name="main" action="%SCRIPTURL{"rdiff"}%/%WEB%/%TOPIC%">
+<input type="hidden" name="render" value="sidebyside" />
+<input type="hidden" name="type" value="diff" />
+<table class="historySelectTable" border="0" cellspacing="0" cellpadding="5">
+<tr>
+<th colspan="2"></th>
+<th>%MAKETEXT{"Revision"}%</th>
+<th>%MAKETEXT{"Changed on"}%</th>
+<th>%MAKETEXT{"By"}%</th>
+</tr>
+%HISTORY{"<tr class="historySelectRow"><td class="historySelectLeft"><input type=\"radio\" class=\"twikiRadioButton\" name=\"rev1\" value=\"$rev\" /></td><td class="historySelectRight"><input type=\"radio\" class=\"twikiRadioButton\" name=\"rev2\" value=\"$rev\" /></td><td align="right"><a href=\"%SCRIPTURL{view}%/%WEB%/%TOPIC%?rev=$rev\">$rev</a></td><td>$date</td><td>[[$wikiusername][$wikiname]]</td></tr>" rev1="%URLPARAM{"rev1"}%" rev2="%URLPARAM{"rev2"}%" nrev="%URLPARAM{"nrev"}%" header="" footer="<tr><td colspan=\"2\"></td><td colspan=\"3\">%MAKETEXT{"This listing:"}% $next{'%MAKETEXT{"last"}%' url='%SCRIPTURL{oops}%/%WEB%/%TOPIC%?template=oopshistory&nrev=$nrev'} $next{'%MAKETEXT{"later"}%' url='%SCRIPTURL{oops}%/%WEB%/%TOPIC%?template=oopshistory&rev1=$rev1&nrev=$nrev'} $previous{'%MAKETEXT{"earlier"}%' url='%SCRIPTURL{oops}%/%WEB%/%TOPIC%?template=oopshistory&rev1=$rev1&nrev=$nrev'} $previous{'%MAKETEXT{"first"}%' url='%SCRIPTURL{oops}%/%WEB%/%TOPIC%?template=oopshistory&rev1=1&nrev=$nrev'}</td></tr>"}%
 </table>
-<input type="submit" value="Compare selected revisions">
+<input type="submit" class="twikiSubmit" value="%MAKETEXT{"Compare"}%" />
 </form>
-<p>
-<form action="%SCRIPTURL%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
-<input type="hidden" name="template" value="oopshistory">
-<input type="submit" value="Show">
-<select type="select" name="nrev" size="1">
-<option selected>%HISTORY_NREV%</option>
+<div class="historySelectMoreOptions">
+<form action="%SCRIPTURL{oops}%/%WEB%/%TOPIC%">
+*%MAKETEXT{"More view options:"}%* %MAKETEXT{"Show"}% <select class="twikiSelect" name="nrev" size="1">
+<option selected="selected">%HISTORY_NREV%</option>
 <option>5</option>
 <option>10</option>
 <option>20</option>
 <option>50</option>
-</select>
-revisions up to 1.
-<input type="text" name="rev2" value="%HISTORY_REV2%" size="2">
+</select> %MAKETEXT{"revisions up to"}% <input type="text" class="twikiInputField" name="rev2" value="%HISTORY_REV2%" size="2" />&nbsp;<input type="submit" class="twikiButton" value="%MAKETEXT{"Refresh"}%" />
+<input type="hidden" name="template" value="oopshistory" />
 </form>
-%TMPL:END%
-%TMPL:DEF{"topicaction"}% [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
-%TMPL:P{"oops"}%
+</div>%TMPL:END%
+
+
+%TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"canceltopicaction"}%%TMPL:END%
