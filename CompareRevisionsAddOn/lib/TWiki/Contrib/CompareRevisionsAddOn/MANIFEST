@@ -1,14 +1,13 @@
-bin/compare 0550
-data/Sandbox/CompareRevisionsAddOnDemoTopic.txt 0660
-data/TWiki/CompareRevisionsAddOn.txt 0660
-data/TWiki/CompareRevisionsAddonPlugin.txt 0660
-lib/TWiki/Plugins/CompareRevisionsAddonPlugin.pm 0440
-lib/TWiki/UI/Compare.pm 0440
-pub/TWiki/CompareRevisionsAddOn/interweave.png 0660
-pub/TWiki/CompareRevisionsAddOn/sidebyside.png 0660
-templates/compare.pattern.tmpl 0440
-templates/compare.tmpl 0440
-templates/interweave.pattern.tmpl 0440
-templates/interweave.tmpl 0440
-templates/view_cra.tmpl 0440
-templates/viewtopicactionbuttons_cra.pattern.tmpl 0440
+bin/compare 0555
+data/Sandbox/CompareRevisionsAddOnDemoTopic.txt 0644
+data/Sandbox/CompareRevisionsAddOnDemoTopic.txt,v 0644 
+data/TWiki/CompareRevisionsAddOn.txt 0644
+data/TWiki/CompareRevisionsAddonPlugin.txt 0644
+lib/TWiki/Plugins/CompareRevisionsAddOnPlugin.pm 0444
+lib/TWiki/Contrib/CompareRevisionsAddOn/Compare.pm 0444
+pub/TWiki/CompareRevisionsAddOn/interweave.png 0644
+pub/TWiki/CompareRevisionsAddOn/sidebyside.png 0644
+templates/compare.tmpl 0444
+templates/compareinterweave.tmpl 0444
+templates/comparesidebyside.tmpl 0444
+

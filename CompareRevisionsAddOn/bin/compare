@@ -27,5 +27,5 @@ BEGIN {
     require 'setlib.cfg';
 }
 
-use TWiki::UI::Compare;
-TWiki::UI::run( \&TWiki::UI::Compare::compare );
+use TWiki::Contrib::CompareRevisionsAddOn::Compare;
+TWiki::UI::run( \&TWiki::Contrib::CompareRevisionsAddOn::Compare::compare );

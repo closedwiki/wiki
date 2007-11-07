@@ -7,32 +7,22 @@ This add-on compares the renderd HTML output of two revisions and shows the diff
 
 ---++ Description
 
-The CompareRevisionsAddOn compares two revisions of a document, like _rdiff_ does.
-But in contrast to normal _rdiff_, the comparison is done with the rendered HTML output of the revisions 
-instead of the TWiki source text files. (This feature was proposed by many of our users, who found
-the normal _rdiff_ output too technical - even with the _sidebyside_ option - and wanted to see
+The !CompareRevisionsAddOn compares two revisions of a document, like _rdiff_ does. But in contrast to normal _rdiff_, the comparison is done with the rendered HTML output of the revisions instead of the TWiki source text files. (This feature was proposed by many of our users, who found the normal _rdiff_ output too technical - even with the _sidebyside_ option - and wanted to see
 differences in the content of the page).
 
-Furthermore, the differences between the revisions are shown as close as possible. If necessary, this means
-that different words are marked instead of whole lines or even paragraphs.
+Furthermore, the differences between the revisions are shown as close as possible. If necessary, this means that different words are marked instead of whole lines or even paragraphs.
 
-The differences may be shown in two formats, either side-by-side or as an interwoven output of the old and
-new revision (like it is done in  Word or !StarOffice/!OpenOffice):
-
----
+The differences may be shown in two formats, either side-by-side or as an interwoven output of the old and new revision (like it is done in  Word or !StarOffice/!OpenOffice):
 
    * Screenshot of interwoven output: <br />
-     <img src="%ATTACHURLPATH%/interweave.png" alt="interweave.png" width='565' height='537' />
-
----
+     <div class="twikiImage"><img src="%ATTACHURLPATH%/interweave.png" alt="interweave.png" width='714' height='366' /></div>
 
    * Screenshot of side-by-side output: <br />
-     <img src="%ATTACHURLPATH%/sidebyside.png" alt="sidebyside.png" width='546' height='637' />
+     <div class="twikiImage"><img src="%ATTACHURLPATH%/sidebyside.png" alt="sidebyside.png" width='714' height='584' /></div>
 
----
+These screenshots have been taken from Sandbox.CompareRevisionsAddOnDemoTopic.
 
-The appearance can be affected by templates and skins. Default templates for the classic and pattern skins are 
-included in the distribution.
+The appearance can be affected by templates and skins.
 
 ---++ Usage
 
@@ -170,13 +160,14 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 ---++ Add-On Info
 
 |  Add-on Author: | TWiki:Main/JChristophFuchs |
-|  Add-on Version: | 03 Mar 2005 (Twiki Sep 2004 release) / 26 Feb 2006 (Twiki 4.0.x release) |
+|  Add-on Version: | 07 Nov 2007 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  9 Apr 2006: | Updated for new <nop>PatternSkin in [[http://TWiki.org/cgi-bin/view/Codev/TWikiRelease04x00x02][TWikiRelease04x00x02]] |
-|  26 Feb 2006: | Updated for Dakar |
-|  02 Mar 2005: | Corrected bug concerning uninitialized elements |
-|  03 Feb 2005: | Removed blank paragraphs before comparing |
-|  20 Jan 2005: | Initial version |
+|  07 Nov 2007 | Arthur Clemens: Updated for TWiki 4.2  |
+|  09 Apr 2006 | Updated for new <nop>PatternSkin in [[http://TWiki.org/cgi-bin/view/Codev/TWikiRelease04x00x02][TWikiRelease04x00x02]] |
+|  26 Feb 2006 | Updated for TWiki 4 |
+|  02 Mar 2005 | Corrected bug concerning uninitialized elements |
+|  03 Feb 2005 | Removed blank paragraphs before comparing |
+|  20 Jan 2005 | Initial version |
 |  CPAN Dependencies: | [[http://cpan.uwinnipeg.ca/module/HTML::Parser][HTML::Parser]], [[http://cpan.uwinnipeg.ca/module/HTML::Tagset][HTML::Tagset]], [[http://cpan.uwinnipeg.ca/module/HTML::Tree][HTML::Tree]] |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
@@ -186,6 +177,4 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topic:__ %SYSTEMWEB%.TWikiAddOns
-
--- TWiki:Main/JChristophFuchs - 20 Jan 2005
 

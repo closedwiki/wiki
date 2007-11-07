@@ -1,98 +1,73 @@
 %TMPL:INCLUDE{"twiki"}%
+%TMPL:INCLUDE{"viewtopicactionbuttons"}%
 
-%TMPL:DEF{"titleaction"}% (%REVTITLE2% vs. %REVTITLE1%) %TMPL:END%
-%TMPL:DEF{"webaction"}% %WEBTOPICLIST% %TMPL:END%
-%TMPL:DEF{"form"}%
-%META{"form"}%%TMPL:END%
 
-%TMPL:DEF{"attachments"}%
-%META{"attachments"}%%TMPL:END%
+%TMPL:DEF{"titleaction"}%%MAKETEXT{"(compare)"}%%TMPL:END%
+
+%TMPL:DEF{"pagetitle"}% %MAKETEXT{"Difference:"}% %TOPIC% (%REVTITLE2% vs. %REVTITLE1%) %TMPL:END%
+
 
 %TMPL:DEF{"footernote"}%
     Revision %REVTITLE2% - %REVINFO2%<br />
     Revision %REVTITLE1% - %REVINFO1%
 %TMPL:END%
 
+
 %TMPL:DEF{"script:skintemplate"}%<style type="text/css" media="all">
-.twikiCompareAdd {
-    background-color:#ccffcc;
+.craCompareAdd {
+    background-color:#cfc;
 }
-.twikiCompareChange2 {
-    background-color:#ccffcc;
+.craCompareChange2 {
+    background-color:#cfc;
 }
-.twikiCompareDelete {
-    background-color:#ffcccc;
+.craCompareDelete {
+    background-color:#fcc;
     text-decoration:line-through;
 }
-.twikiCompareChange1 {
-    background-color:#ffcccc;
+.craCompareChange1 {
+    background-color:#fcc;
     text-decoration:line-through;
+}
+table.craSideBySide {
+	border:none;
+	border-collapse:collapse;
+}
+table.craSideBySide .craCell {
+	vertical-align:top;
+	width:50%;
+	padding:6px;
+}
+.craTableCellSeparator {
+	width:1px;
+	background-color:#666;
+}
+div.craInterweave {
+	padding-left:13px;
+}
+div.craInterweaveDiff {
+	position:relative;
+	left:-13px;
+	border-left:#ccc solid 6px;
+	padding-left:10px;
 }
 </style>%TMPL:END%
 
-%TMPL:DEF{"inactive_edit"}%<strike>Edit</strike>%TMPL:END%
-%TMPL:DEF{"create_topic"}%Cr<span class="twikiAccessKey">e</span>ate%TMPL:END%
-%TMPL:DEF{"edit_topic"}%<span class="twikiAccessKey">E</span>dit%TMPL:END%
 
-%TMPL:DEF{"active_edit"}%<a href='%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%' rel='nofollow' title='Edit this topic text' accesskey='e'><b>%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</b></a> %TMPL:END%
-
-%TMPL:DEF{"inactive_attach"}%<strike>Attach</strike>%TMPL:END%
-%TMPL:DEF{"active_attach"}%<a href="%SCRIPTURLPATH{"attach"}%/%WEB%/%TOPIC%" title="Attach an image or document to this topic" rel='nofollow'>Attach</a>%TMPL:END%
-
-%TMPL:DEF{"inactive_more"}%<strike>More topic actions...</strike>%TMPL:END%
-%TMPL:DEF{"active_more"}%<a href="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=oopsmore&amp;param1=%MAXREV%&amp;param2=%CURRREV%" rel='nofollow'>More</a>%TMPL:END%
-
-
-%TMPL:DEF{"content"}%
-<table cellspacing="0" cellpadding="1">
-<tr><td></td><td colspan="5" height="2" bgcolor="#000000"></td></tr>
-<tr><th></th>
-    <th width="1" bgcolor="#000000"></th>
-    <th width="50%">%REVTITLE2% - %REVINFO2%</th>
-    <th width="1" bgcolor="#000000"></th>
-    <th width="50%">%REVTITLE1% - %REVINFO1%</th>
-    <th width="1" bgcolor="#000000"></th>
-</tr>
-<tr><td></td><td colspan="5" height="2" bgcolor="#000000"></td></tr>
-%REPEAT%
-<tr><td></td><td colspan="5" height="1" bgcolor="#000000"></td></tr>
-%REPEAT%
-<tr><td></td>
-    <td width="1" bgcolor="#000000"></td>
-    <td valign="top" width="50%">%TEXT2%</td>
-    <td width="1" bgcolor="#000000"></td>
-    <td valign="top" width="50%">%TEXT1%</td>
-    <td width="1" bgcolor="#000000"></td>
-</tr>
-%REPEAT%
-<tr><td bgcolor="#cccccc">&nbsp;&nbsp;</td>
-    <td width="1" bgcolor="#000000"></td>
-    <td valign="top" width="50%">%TEXT2%</td>
-    <td width="1" bgcolor="#000000"></td>
-    <td valign="top" width="50%">%TEXT1%</td>
-    <td width="1" bgcolor="#000000"></td>
-</tr>
-%REPEAT%
-%REPEAT%
-%REPEAT%
-<tr><td></td><td colspan="5" height="2" bgcolor="#000000"></td></tr>
-<tr><th></th>
-    <th width="1" bgcolor="#000000"></th>
-    <th width="50%">%REVTITLE2% - %REVINFO2%</th>
-    <th width="1" bgcolor="#000000"></th>
-    <th width="50%">%REVTITLE1% - %REVINFO1%</th>
-    <th width="1" bgcolor="#000000"></th>
-</tr>
-<tr><td></td><td colspan="5" height="2" bgcolor="#000000"></td></tr>
-</table>
-#TopicEnd
-%TMPL:P{"form"}%%TMPL:P{"attachments"}%
+%TMPL:DEF{"content"}%%TMPL:P{"rendercontent"}%
+<p />
 %TMPL:P{"topicinfo"}%%TMPL:END%
 
-%TMPL:DEF{"history_rdiff"}%<span class="patternRevision"><a href="%SCRIPTURLPATH{"rdiff"}%/%WEB%/%TOPIC%?type=history" title="%MAKETEXT{"View total topic history"}%" accesskey="H" rel="nofollow">%MAKETEXT{"&History"}%</a></span>%TMPL:END%
 
-%TMPL:DEF{"history_history"}%<span class="patternRevision"><a href="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=oopshistory" title="%MAKETEXT{"View total topic history"}%" accesskey="H" rel="nofollow">%MAKETEXT{"&History"}%</a></span>%TMPL:END%
+%TMPL:DEF{"rendercontent"}%%TMPL:END%
 
-%TMPL:DEF{"topicaction"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">View</a>
- %TMPL:P{"sep"}% %TMPL:P{context="HistoryPluginEnabled" then="history_history" else="history_rdiff"}% %REVISIONS%
- %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&amp;param1=%MAXREV%&amp;param2=%CURRREV%">More</a> %TMPL:END%
+
+%TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"view_topic_link"}%%TMPL:P{"sep"}%%TMPL:P{"interweave_or_sidebyside_link"}%%TMPL:P{"sep"}%%TMPL:P{"action_revisions"}%%TMPL:P{"activatable_more"}%%TMPL:END%
+
+
+%TMPL:DEF{"interweave_or_sidebyside_link"}%%MAKETEXT{"View difference"}% %IF{"$ render='sidebyside'" then="%TMPL:P{"interweave_link"}%" else="%TMPL:P{"sidebyside_link"}%"}%%TMPL:END%
+
+
+%TMPL:DEF{"sidebyside_link"}%<span><a href='%SCRIPTURLPATH%/compare%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=%URLPARAM{"rev1"}%&rev2=%URLPARAM{"rev2"}%&render=sidebyside&context=%URLPARAM{"context"}%&skin=%URLPARAM{"skin"}%' rel='nofollow' %MAKETEXT{"title='Side by side' accesskey='s'>&side by side"}%</a></span>%TMPL:END%
+
+
+%TMPL:DEF{"interweave_link"}%<span><a href='%SCRIPTURLPATH%/compare%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=%URLPARAM{"rev1"}%&rev2=%URLPARAM{"rev2"}%&render=interweave&context=%URLPARAM{"context"}%&skin=%URLPARAM{"skin"}%' rel='nofollow' %MAKETEXT{"title='Interwoven' accesskey='i'>&interwoven"}%</a></span>%TMPL:END%
