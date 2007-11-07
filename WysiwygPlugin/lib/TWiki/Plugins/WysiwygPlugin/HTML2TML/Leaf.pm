@@ -28,7 +28,7 @@ See also TWiki::Plugins::WysiwygPlugin::TML2HTML::Node
 =cut
 
 package TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf;
-use base 'TWiki::Plugins::WysiwygPlugin::HTML2TML::WC';
+use base 'TWiki::Plugins::WysiwygPlugin::HTML2TML::Base';
 
 use strict;
 

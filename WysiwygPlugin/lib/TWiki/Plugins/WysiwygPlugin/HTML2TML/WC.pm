@@ -19,128 +19,10 @@
 
 ---+ package WC
 
-Constants, and base class of Node and Leaf
-
-_generate
-_cleanAttrs
-addChild
-stringify
+Constants
 
 =cut
 
-package TWiki::Plugins::WysiwygPlugin::HTML2TML::WC;
-
-# pure virtual
-sub generate {
-    die "coding error";
-}
-
-# pure virtual
-sub addChild {
-    die "coding error";
-}
-
-sub cleanNode {
-}
-
-sub hasClass {
-    return 0;
-}
-
-sub cleanParseTree {
-    my( $this, $opts ) = @_;
-
-    my @jobs = ( $this );
-
-    while (scalar(@jobs)) {
-        my $node = shift(@jobs);
-        $node->cleanNode($opts);
-
-        my $prev;
-        my $kid = $node->{head};
-        while ($kid) {
-            push(@jobs, $kid);
-            $kid = $kid->{next};
-        }
-    }
-    return ($this->{head}, $this->{head});
-}
-
-sub stringify {
-    return '';
-}
-
-sub _remove {
-    my ($this) = @_;
-    if ($this->{prev}) {
-        $this->{prev}->{next} = $this->{next};
-    } else {
-        $this->{parent}->{head} = $this->{next};
-    }
-    if ($this->{next}) {
-        $this->{next}->{prev} = $this->{prev};
-    } else {
-        $this->{parent}->{tail} = $this->{prev};
-    }
-    $this->{parent} = $this->{prev} = $this->{next} = undef;
-}
-
-# Determine if the node - and all it's child nodes - satisfy the criteria
-# for an HTML inline element.
-sub isInline {
-    # This impl is actually for Nodes; Leaf overrides it
-    my $this = shift;
-    return 0 if $TWiki::Plugins::WysiwygPlugin::Constants::ALWAYS_BLOCK{uc($this->{tag})};
-    my $kid = $this->{head};
-    while ($kid) {
-        return 0 unless $kid->isInline();
-        $kid = $kid->{next};
-    }
-    return 1;
-}
-
-sub isLeftInline {
-    # This impl is actually for Nodes; Leaf overrides it
-    my $this = shift;
-    return 0 if $TWiki::Plugins::WysiwygPlugin::Constants::ALWAYS_BLOCK{uc($this->{tag})};
-    return 1 unless ($this->{head});
-    return 0 unless $this->{head}->isInline();
-    return 1;
-}
-
-sub isRightInline {
-    my $this = shift;
-    return 0 if $TWiki::Plugins::WysiwygPlugin::Constants::ALWAYS_BLOCK{uc($this->{tag})};
-    return 1 unless $this->{tail};
-    return 0 unless $this->{tail}->isInline();
-    return 1;
-}
-
-# Determine if the previous node qualifies as an inline node
-sub prevIsInline {
-    my $this = shift;
-    if ($this->{prev}) {
-        return $this->{prev}->isRightInline();
-    } elsif ($this->{parent}) {
-        return $this->{parent}->prevIsInline();
-    }
-    return 0;
-}
-
-# Determine if the next node qualifies as an inline node
-sub nextIsInline {
-    my $this = shift;
-    if ($this->{next}) {
-        return $this->{next}->isLeftInline();
-    } elsif ($this->{parent}) {
-        return $this->{parent}->nextIsInline();
-    }
-    return 0;
-}
-
-############################################################################
-# Constants, defined in a simpler-named package for the sake of
-# readability
 package WC;
 
 =pod
@@ -160,6 +42,7 @@ package WC;
 
 our ($NO_TML, $NO_HTML, $NO_BLOCK_TML, $NOP_ALL, $BLOCK_TML, $BR2NL);
 our ($CHECKn, $CHECKw, $CHECKs, $NBSP, $NBBR, $TAB, $PON, $POFF, $WS);
+our ($VERY_CLEAN, $PROTECTED, $KEEP_ENTITIES, $KEEP_WS);
 
 $NO_HTML       = 1 << 0;
 $NO_TML        = 1 << 1;

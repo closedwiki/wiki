@@ -33,7 +33,7 @@ See also TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf
 =cut
 
 package TWiki::Plugins::WysiwygPlugin::HTML2TML::Node;
-use base 'TWiki::Plugins::WysiwygPlugin::HTML2TML::WC';
+use base 'TWiki::Plugins::WysiwygPlugin::HTML2TML::Base';
 
 use strict;
 
@@ -43,6 +43,7 @@ use Assert;
 use vars qw( $reww );
 
 require TWiki::Plugins::WysiwygPlugin::Constants;
+require TWiki::Plugins::WysiwygPlugin::HTML2TML::WC;
 
 =pod
 
@@ -826,7 +827,7 @@ sub _emphasis {
           $ch eq '*' && $contents =~ s/^=(?!=)(.*)(?<!=)=$/$1/) {
         $ch = '==';
     } elsif ($contents =~ /^([*_=]).*\1$/) {
-        return (0, '');
+        return (0, undef);
     }
 
     return ( $flags, $pre.$WC::CHECKw.$ch.$contents.$ch.$WC::CHECK2.$post );
@@ -873,6 +874,16 @@ sub _LIST {
     return ( $WC::BLOCK_TML, $this->_convertList( $WC::TAB ));
 }
 
+# Map that specifies tags to be renamed to a canonical name
+my %emphTag = (
+    b => 'strong',
+    i => 'em',
+    tt => 'code',
+    strong => 'strong',
+    em => 'em',
+    code => 'code',
+);
+
 # Performs initial cleanup of the parse tree before generation. Walks the
 # tree, making parent links and removing attributes that don't add value.
 # This simplifies determining whether a node is to be kept, or flattened
@@ -894,6 +905,22 @@ sub cleanNode {
               $this->{attrs}->{$a} !~ /\S/ ) {
             delete $this->{attrs}->{$a};
         }
+    }
+
+    # If this is an emphasis (b, i, code, tt, strong) then
+    # flatten out any child nodes that express the same emphasis.
+    # This has to be done because TWiki emphases are single level.
+    if ($emphTag{$this->{tag}}) {
+        my $kid = $this->{head};
+        while ($kid) {
+            if ($emphTag{$kid->{tag}} &&
+                  $emphTag{$kid->{tag}} eq $emphTag{$this->{tag}}) {
+                $kid = $kid->_inline();
+            } else {
+                $kid = $kid->{next};
+            }
+        }
+        $this->_combineLeaves();
     }
 }
 
