@@ -549,12 +549,12 @@ h4.patternSearchResultsHeader {
 .patternDiff {
    border-color:#6b7f93;
 }
-.patternDiff h4.patternSearchResultsHeader {
+#patternMainContents .patternDiff h4.patternSearchResultsHeader {
    background-color:#6b7f93;
    color:#fff;
 }
-.patternDiff h4.patternSearchResultsHeader a:link,
-.patternDiff h4.patternSearchResultsHeader a:visited {
+#patternMainContents .patternDiff h4.patternSearchResultsHeader a:link,
+#patternMainContents .patternDiff h4.patternSearchResultsHeader a:visited {
    color:#fff;
 }
 tr.twikiDiffDebug td {
