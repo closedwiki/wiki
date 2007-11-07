@@ -24,4 +24,4 @@
 %ICON{arrowbright}% [[%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebSearch?scope=topic;web=all;search=%BASETOPIC%][%MAKETEXT{"Search similar topics in all public webs"}%]]
 
 ---+++ %MAKETEXT{"Do you wish to create the topic [_1]?" args="'%BASETOPIC%'"}%
-%ICON{arrowbright}% [[%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?create=on&newtopic=%BASETOPIC%&template=WebCreateNewTopic][%MAKETEXT{"Create '[_1]'" args="<nop>%BASETOPIC%"}%]]
+%ICON{arrowbright}% [[%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?create=on&newtopic=%BASETOPIC%&template=WebCreateNewTopic&topicparent=%URLPARAM{"topicparent"}%][%MAKETEXT{"Create '[_1]'" args="<nop>%BASETOPIC%"}%]]
