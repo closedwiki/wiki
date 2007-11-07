@@ -1503,6 +1503,12 @@ BLAH
 </p>
 BLAH
       },
+      {
+          name => "Confused",
+          exec => $HTML2TML,
+          html => 'the <tt><tt>co</tt>mple<code>te</code></tt> table',
+          tml => 'the =complete= table',
+      },
      ];
 
 sub gen_compare_tests {

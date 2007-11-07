@@ -94,7 +94,7 @@ The flow of control is as follows:
 
 ---+++ Other techniques
 ---++++ Asynchronous saves
-Editors can use =XmlHttpRequest= to perform saves, by POSTing to the TWiki =save= script with the =wysiwyg_edit= parameter set to =1=. This parameter tells the =beforeSaveHandler= in the !WysiwygPlugin to convert the content back to TML. See %SYSTEMWEB%.TWikiScripts for details of the other parameters to the =save= script.
+Editors can use =XmlHttpRequest= to perform saves, by POSTing to the TWiki =save= script with the =wysiwyg_edit= parameter set to =1=. This parameter tells the =beforeSaveHandler= in the !WysiwygPlugin to convert the content back to TML. See %TWIKIWEB%.TWikiScripts for details of the other parameters to the =save= script.
 
 Once the save script has completed it responds with a redirect, either to an Oops page if the save failed, or to the appropriate post-save URL (usually a =view=). The editor must be ready to handle this redirect.
 
@@ -125,7 +125,7 @@ Converts the TML text to HTML. =topic= *must* be specified. The response is a =t
 ---++ Plugin Configuration Settings
 
 ---+++ Translator control
-%INCLUDE{"%SYSTEMWEB%.WysiwygPluginSettings"}%
+%INCLUDE{"%TWIKIWEB%.WysiwygPluginSettings"}%
 
 *Implementors note* if you are using your own before/after edit handlers, you can call =TWiki::Plugins::WysiwygPlugin::isWysiwygEditable()= to check these controls.
 
@@ -165,7 +165,7 @@ Many thanks to the following sponsors for supporting this work:
 |  License | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
-|  6 Nov 2007 | Bugs:Item4923: fixed blocking of table conversion due to empty attributes |
+|  6 Nov 2007 | Bugs:Item4923: fixed blocking of table conversion due to empty attributes Bugs:Item4936: An em embedded in an em was getting eaten |
 |  2 Nov 2007 | Bugs:Item4903: corrected over-enthusiastive interpretation of ! as an escape |
 |  21 Oct 2007 | Bugs:Item4788: fixed unbalanced protect, which could cause loss of protected status Bugs:Item4811: noautolink *looks* like an HTML construct but in fact is not; the tag is infact an "on-off" switch and does not imply any HTML structure, so cannot be converted to a DIV or a span, so has to be removed. Bugs:Item4747: added &lt;sticky&gt; to try to overcome limitations in translation Bugs:Item4831: added increased flexibility in deciding what HTML get converted to TML, and what does not. Analysed all the HTML4 tags to establish initial settings. Bugs:Item4847: don't call non-existent function with older HTML::Parser releases Bugs:Item4844: Saving a table from IE didn't convert it back to TML Bugs:Item4855: table rows generated from TWiki variables were being eaten |
 |  6 Oct 2007 | Bugs:Item4700: fixed colspans Bugs:Item4701: removed extra line between %TABLE and the table Bugs:Item4705: fixed spacing around literal and verbatim blocks Bugs:Item4706: merge adjacent verbatim blocks separated only by whitespace Bugs:Item4712: fixed eating of noautolink and literal Bugs:Item4763: list items spanning multiple lines fixed Bugs:Item4867: released tml2html |
@@ -260,7 +260,7 @@ Many thanks to the following sponsors for supporting this work:
 |  7452 | Bugs:Item876:  Item945: Item876: spacing around table cells, correct handling of variables. Had to compromise on handling [[]] but I think it's for the best. |
 |  7430 | Bugs:Item871:  made sure that brackets are generated for non-wikiwords |
 |  7425 | Bugs:Item928:  removed special interpretation of mailto links |
-|  7424 | Bugs:Item866:  extended URL parsing to handle USERSWEB and SYSTEMWEB twiki variables, in the same hacky way as the core. |
+|  7424 | Bugs:Item866:  extended URL parsing to handle MAINWEB and TWIKIWEB twiki variables, in the same hacky way as the core. |
 |  7416 | Bugs:Item870:  a couple of corner-cases for correct handling of twiki variables |
 |  7401 | Bugs:Item899:  changed list generation to use spaces instead of tabs |
 |  7265 | Bugs:Item180:  removed pointless, outdated dependency check from DateFieldPlugin |
@@ -305,7 +305,7 @@ Many thanks to the following sponsors for supporting this work:
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
 
