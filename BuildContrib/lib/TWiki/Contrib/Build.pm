@@ -258,38 +258,9 @@ sub new {
 
     $this->{MODULE} = $this->{project};
 
-    $this->{INSTALL_INSTRUCTIONS} = <<HERE;
-You do not need to install anything in the browser to use this extension. The following instructions are for the administrator who installs the extension on the server where TWiki is running.
+    local $/;
+    $this->{INSTALL_INSTRUCTIONS} = <DATA>;
 
-Like many other TWiki extensions, this module is shipped with a fully automatic installer script written using the Build<nop>Contrib.
-   * If you have TWiki 4.1 or later, you can install from the =configure= interface (Go to Plugins->Find More Extensions)
-      * The webserver user has to have permission to write to all areas of your installation for this to work.
-   * If you have a permanent connection to the internet, you are recommended to use the automatic installer script
-      * Just download the =$this->{MODULE}_installer= perl script and run it.
-   * *Notes:*
-      * The installer script will:
-         * Automatically resolve dependencies,
-         * Copy files into the right places in your local install (even if you have renamed data directories),
-         * check in new versions of any installed files that have existing RCS histories files in your existing install (such as topics).
-         * If the \$TWIKI_PACKAGES environment variable is set to point to a directory, the installer will try to get archives from there. Otherwise it will try to download from twiki.org or cpan.org, as appropriate.
-         * (Developers only: the script will look for twikiplugins/$this->{MODULE}/$this->{MODULE}.tgz before downloading from TWiki.org)
-      * If you don't have a permanent connection, you can still use the automatic installer, by downloading all required TWiki archives to a local directory.
-         * Point the environment variable =\$TWIKI_PACKAGES= to this directory, and the installer script will look there first for required TWiki packages.
-            * =\$TWIKI_PACKAGES= is actually a path; you can list several directories separated by :
-         * If you are behind a firewall that blocks access to CPAN, you can pre-install the required !CPAN libraries, as described at http://twiki.org/cgi-bin/view/TWiki/HowToInstallCpanModules
-   * If you don't want to use the installer script, or have problems on your platform (e.g. you don't have Perl 5.8), then you can still install manually:
-      1 Download and unpack one of the =.zip= or =.tgz= archives to a temporary directory.
-      1 Manually copy the contents across to the relevant places in your TWiki installation.
-      1 Check in any installed files that have existing =,v= files in your existing install (take care *not* to lock the files when you check in)
-      1 Manually edit !LocalSite.cfg to set any configuration variables.
-      1 Run =configure= and enable the module, if it is a plugin.
-      1 Repeat from step 1 for any missing dependencies.
-
-__Note__ if you are installing this extension in TWiki version < 4.2, please add these definitions to your Main<nop>.WebPreferences, if they are not already there:
-   * <nop>Set SYSTEMWEB = %<nop>TWIKIWEB%
-   * <nop>Set USERSWEB = %<nop>MAINWEB%
-
-HERE
     my $config = $this->_loadConfig();
     my $rep = $config->{repositories}->{$this->{project}};
     if ($rep) {
@@ -1853,3 +1824,22 @@ sub _addDep {
 }
 
 1;
+__DATA__
+You do not need to install anything in the browser to use this extension. The following instructions are for the administrator who installs the extension on the server where TWiki is running.
+
+Like many other TWiki extensions, this module is shipped with a fully
+automatic installer script written using the Build<nop>Contrib.
+   * If you have TWiki 4.2 or later, you can install from the =configure= interface (Go to Plugins->Find More Extensions)
+      * See the [[http://twiki.org/cgi-bin/view/Plugins/BuildContribInstallationSupplement][installation supplement]] on TWiki.org for more information.
+   * If you have any problems, then you can still install manually from the command-line:
+      1 Download one of the =.zip= or =.tgz= archives
+      1 Unpack the archive in the root directory of your TWiki installation.
+      1 Run the installer script ( =perl &lt;module&gt;_installer= )
+      1 Run =configure= and enable the module, if it is a plugin.
+      1 Repeat for any missing dependencies.
+   * If you are *still* having problems, then instead of running the installer script:
+      1 Make sure that the file permissions allow the webserver user to access all files.
+      1 Check in any installed files that have existing =,v= files in your existing install (take care *not* to lock the files when you check in)
+      1 Manually edit !LocalSite.cfg to set any configuration variables.
+
+%IF{"defined 'SYSTEMWEB'" else="<div class='twikiAlert'>%X% WARNING: SYSTEMWEB is not defined in this TWiki. Please add these definitions to your %MAINWEB%.TWikiPreferences, if they are not already there:<br><pre>   * <nop>Set SYSTEMWEB = %<nop>TWIKIWEB%<br>   * <nop>Set USERSWEB = %<nop>MAINWEB%</pre></div>"}%
