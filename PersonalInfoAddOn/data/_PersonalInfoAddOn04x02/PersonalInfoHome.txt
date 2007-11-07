@@ -45,7 +45,7 @@ This block is included on every user page when PersonalInfoUserViewTemplate is s
 </verbatim>
 
 *To customize which fields are displayed, follow these steps:*
-   1 Add the custom fields and field formats to the table in [[%USERSWEB%.UserForm]].%BR%
+   1 Add the custom fields and field formats to the table in [[%SYSTEMWEB%.UserForm]].%BR%
    Below is an example, so change the fields as you like, but keep the fields =Picture= and =WorkStatus= (including the value 'Current') (both fields are not displayed to the user in topic view). In the current setup the value for =WorkStatus= can be set when editing the topic. %BR%
    <verbatim>
 | Picture | label | 1 |  |  | H |
@@ -55,7 +55,7 @@ This block is included on every user page when PersonalInfoUserViewTemplate is s
 | <nop>WorkPhoneMobile | text | 40 |  |  | H |
 | <nop>WorkLocation | text | 40 |  |  | H |
 </verbatim>
-   1 Edit PersonalInfo and write the fields and field labels by editing the =INCLUDE= variables. The variable =fieldName= corresponds to the field names in %USERSWEB%.UserForm. The variable =label= can be any text you wish.
+   1 Edit PersonalInfo and write the fields and field labels by editing the =INCLUDE= variables. The variable =fieldName= corresponds to the field names in %SYSTEMWEB%.UserForm. The variable =label= can be any text you wish.
    1 If you want to change the layout:
       * The base style sheets are included from PersonalInfoLayoutModules - install TWiki:Plugins/LayoutModulesAddOn if you haven't already, and modify the styles in that topic.
       * The styles for =personalInfo= are included from PersonalInfo.
