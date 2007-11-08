@@ -329,6 +329,8 @@ sub rootGenerate {
 
 # Collapse adjacent VERBATIM nodes together
 # Collapse a <p> than contains only a protected span into a protected P
+# Collapse em in em
+# Collapse adjacent text nodes
 sub _collapse {
     my $this = shift;
 
@@ -358,7 +360,7 @@ sub _collapse {
                 }
             }
         }
-        if ($node->{tag} eq 'P' && $node->{head} == $node->{tail}) {
+        if ($node->{tag} eq 'p' && $node->{head} == $node->{tail}) {
             my $kid = $node->{head};
             if ($kid->{tag} eq 'SPAN' &&
                   $kid->hasClass('WYSIWYG_PROTECTED')) {
@@ -367,6 +369,24 @@ sub _collapse {
                 $node->_addClass('WYSIWYG_PROTECTED');
             }
         }
+
+        # If this is an emphasis (b, i, code, tt, strong) then
+        # flatten out any child nodes that express the same emphasis.
+        # This has to be done because TWiki emphases are single level.
+        if ($WC::EMPHTAG{$node->{tag}}) {
+            my $kid = $node->{head};
+            while ($kid) {
+                if ($WC::EMPHTAG{$kid->{tag}} &&
+                      $WC::EMPHTAG{$kid->{tag}} eq
+                        $WC::EMPHTAG{$node->{tag}}) {
+                    $kid = $kid->_inline();
+                } else {
+                    $kid = $kid->{next};
+                }
+            }
+        }
+        $node->_combineLeaves();
+
         my $kid = $node->{head};
         while ($kid) {
             push(@jobs, $kid);
@@ -517,7 +537,7 @@ sub _defaultTag {
     my $tag = $this->{tag};
     my $p = _htmlParams( $this->{attrs}, $options );
 
-    if( $text =~ /^\s*$/ && $WC::selfClosing{$tag}) {
+    if( $text =~ /^\s*$/ && $WC::SELFCLOSING{$tag}) {
         return ( $flags, '<'.$tag.$p.' />' );
     } else {
         return ( $flags, '<'.$tag.$p.'>'.$text.'</'.$tag.'>' );
@@ -874,16 +894,6 @@ sub _LIST {
     return ( $WC::BLOCK_TML, $this->_convertList( $WC::TAB ));
 }
 
-# Map that specifies tags to be renamed to a canonical name
-my %emphTag = (
-    b => 'strong',
-    i => 'em',
-    tt => 'code',
-    strong => 'strong',
-    em => 'em',
-    code => 'code',
-);
-
 # Performs initial cleanup of the parse tree before generation. Walks the
 # tree, making parent links and removing attributes that don't add value.
 # This simplifies determining whether a node is to be kept, or flattened
@@ -905,22 +915,6 @@ sub cleanNode {
               $this->{attrs}->{$a} !~ /\S/ ) {
             delete $this->{attrs}->{$a};
         }
-    }
-
-    # If this is an emphasis (b, i, code, tt, strong) then
-    # flatten out any child nodes that express the same emphasis.
-    # This has to be done because TWiki emphases are single level.
-    if ($emphTag{$this->{tag}}) {
-        my $kid = $this->{head};
-        while ($kid) {
-            if ($emphTag{$kid->{tag}} &&
-                  $emphTag{$kid->{tag}} eq $emphTag{$this->{tag}}) {
-                $kid = $kid->_inline();
-            } else {
-                $kid = $kid->{next};
-            }
-        }
-        $this->_combineLeaves();
     }
 }
 
@@ -1051,14 +1045,43 @@ sub _handleDT { return _flatten( @_ ); };
 sub _handleEM { return _emphasis( @_, '_' ); }
 
 sub _handleFIELDSET { return _flatten( @_ ); };
+
 sub _handleFONT {
     my( $this, $options ) = @_;
-    # Ignore font tags
-    if( $options & $WC::VERY_CLEAN ) {
-        return $this->_flatten( $options );
+
+    my %atts = %{$this->{attrs}};
+    # Try to convert font tags into %COLOUR%..%ENDCOLOR%
+    # First extract the colour
+    my $colour;
+    if ($atts{style}) {
+        my $style = $atts{style};
+        if ($style =~ s/(^|\s|;)color\s*:\s*([^\s;]+);?//i) {
+            $colour = $2;
+            delete $atts{style} if $style =~ /^[\s;]*$/;
+        }
     }
-    return ( 0, undef );
+    if ($atts{color}) {
+        $colour = $atts{color};
+        delete $atts{color};
+    }
+    # The presence of the class forces it to be converted to a
+    # TWiki variable
+    if (!_removeClass(\%atts, 'WYSIWYG_COLOUR')) {
+        delete $atts{class};
+        if (scalar(keys %atts) > 0 || !$colour || $colour !~ /^([a-z]+|#[0-9A-Fa-f]{6})$/i) {
+            return ( 0, undef );
+        }
+    }
+    # OK, just the colour
+    $colour = $WC::KNOWN_COLOUR{uc($colour)};
+    if (!$colour) {
+        # Not a recognised colour
+        return ( 0, undef );
+    }
+    my( $f, $kids ) = $this->_flatten( $options );
+    return ($f, '%'.uc($colour).'%'.$kids.'%ENDCOLOR%');
 };
+
 # FORM
 sub _handleFRAME    { return _flatten( @_ ); };
 sub _handleFRAMESET { return _flatten( @_ ); };

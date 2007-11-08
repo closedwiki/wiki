@@ -285,6 +285,10 @@ pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikibuttons/editor_pl
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikibuttons/editor_plugin_src.js 0644
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikibuttons/images/tt.gif 0644
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikibuttons/langs/en.js 0644
+pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikibuttons/jscripts/colour.js 0644
+pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikibuttons/images/colour.gif 0644
+pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikibuttons/css/popup.css 0644
+pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikibuttons/colours.htm 0644
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikiimage/css/advimage.css 0644
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikiimage/editor_plugin.js 0644
 pub/TWiki/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikiimage/editor_plugin_src.js 0644

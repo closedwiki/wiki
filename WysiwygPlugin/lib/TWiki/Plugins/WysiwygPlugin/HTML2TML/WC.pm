@@ -132,8 +132,19 @@ sub debugEncode {
     return $string;
 }
 
-our (%selfClosing);
+# Maps of tag types
+our (%SELFCLOSING, $EMPHTAG);
 
-%selfClosing = (img => 1);
+%SELFCLOSING = (img => 1);
+
+# Map that specifies tags to be renamed to a canonical name
+%EMPHTAG = (
+    b => 'strong',
+    i => 'em',
+    tt => 'code',
+    strong => 'strong',
+    em => 'em',
+    code => 'code',
+);
 
 1;

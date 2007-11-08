@@ -1509,6 +1509,20 @@ BLAH
           html => 'the <tt><tt>co</tt>mple<code>te</code></tt> table',
           tml => 'the =complete= table',
       },
+      {
+          name => 'fontconv',
+          exec => $HTML2TML,
+          html => <<HERE,
+<font color="red" class="WYSIWYG_COLOUR">red</font>
+<font style="color:green">green</font>
+<font style="border:1;color:blue">blue</font>
+<font class="WYSIWYG_COLOUR" style="border:1;color:yellow">yellow</font>
+<font color="brown">brown</font>
+HERE
+          tml => <<HERE,
+%RED%red%ENDCOLOR% %GREEN%green%ENDCOLOR% <font style="border:1;color:blue">blue</font> %YELLOW%yellow%ENDCOLOR% %BROWN%brown%ENDCOLOR%
+HERE
+      },
      ];
 
 sub gen_compare_tests {
@@ -1702,7 +1716,7 @@ sub convertImage {
     }
 }
 
-gen_compare_tests();
+gen_compare_tests('fontconv');
 #gen_file_tests();
 
 1;

@@ -37,7 +37,7 @@ The default setting for this variable is:
     DIR=compact;
     DIV=align;
     DL=compact;
-    FONT=color,size,face;
+    FONT=size,face;
     H\d=align;
     HR=align,noshade,size,width;
     LEGEND=accesskey,align;
