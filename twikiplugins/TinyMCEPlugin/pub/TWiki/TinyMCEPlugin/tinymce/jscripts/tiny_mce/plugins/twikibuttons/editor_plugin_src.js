@@ -11,10 +11,16 @@ var TWikiButtonsPlugin = {
 		};
 	},
 
+	initInstance : function(inst) {
+		//tinyMCE.importCSS(inst.getDoc(), tinyMCE.baseURL + "/plugins/twikibuttons/css/twikibuttons.css");
+	},
+
 	getControlHTML : function(cn) {
 		switch (cn) {
 			case "tt":
             return tinyMCE.getButtonHTML(cn, 'lang_twikibuttons_tt_desc', '{$pluginurl}/images/tt.gif', 'twikiTT', true);
+            case "colour":
+            return tinyMCE.getButtonHTML(cn, 'lang_twikibuttons_colour_desc', '{$pluginurl}/images/colour.gif', 'twikiCOLOUR', true);
 		}
 
 		return "";
@@ -25,13 +31,29 @@ var TWikiButtonsPlugin = {
 		var template, inst, elm;
 
 		switch (command) {
+        case "twikiCOLOUR":
+            var inst = tinyMCE.getInstanceById(editor_id);
+            var t = inst.selection.getSelectedText();
+            if (!(t && t.length > 0 || pe))
+                return true;
+
+            template = new Array();
+            template['file'] = '../../plugins/twikibuttons/colours.htm';
+            template['width'] = 240;
+            template['height'] = 240;
+            tinyMCE.openWindow(template, {editor_id : editor_id});
+            return true;
+
         case "twikiTT":
-            if (!this._anySel(editor_id))
+            var inst = tinyMCE.getInstanceById(editor_id);
+            var elm = inst.getFocusElement();
+            var t = inst.selection.getSelectedText();
+            var pe = tinyMCE.getParentElement(elm, 'TT');
+
+            if (!(t && t.length > 0 || pe))
                 return true;
 
             // if we are in a TT region, then removeformat
-            var inst = tinyMCE.getInstanceById(editor_id);
-            var elm = inst.getFocusElement();
             if (elm && elm.nodeName == 'TT'){
                 tinyMCE.execCommand('mceBeginUndoLevel');
                 tinyMCE.execCommand('removeformat', false, elm);
@@ -65,9 +87,11 @@ var TWikiButtonsPlugin = {
 		if (!any_selection) {
 			// Disable the buttons
 			tinyMCE.switchClass(editor_id + '_tt', 'mceButtonDisabled');
+			tinyMCE.switchClass(editor_id + '_colour', 'mceButtonDisabled');
 		} else {
 			// A selection means the buttons should be active.
 			tinyMCE.switchClass(editor_id + '_tt', 'mceButtonNormal');
+			tinyMCE.switchClass(editor_id + '_colour', 'mceButtonNormal');
 		}
 
 		switch (node.nodeName) {
@@ -77,17 +101,6 @@ var TWikiButtonsPlugin = {
 		}
 
 		return true;
-	},
-
-	_anySel : function(editor_id) {
-		var inst = tinyMCE.getInstanceById(editor_id);
-        var t = inst.selection.getSelectedText();
-
-		if (t && t.length > 0)
-            return true;
-
-		var pe = tinyMCE.getParentElement(inst.getFocusElement(), 'TT');
-        return pe;
 	}
 };
 
