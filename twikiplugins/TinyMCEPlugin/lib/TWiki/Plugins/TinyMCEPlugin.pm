@@ -55,17 +55,19 @@ sub initPlugin {
 }
 
 sub _notAvailable {
-    return "Disabled" if TWiki::Func::getPreferencesValue('TINYMCEPLUGIN_DISABLE');
+    return "Disabled" if
+      TWiki::Func::getPreferencesValue('TINYMCEPLUGIN_DISABLE');
 
     # Disable TinyMCE if we are on a specialised edit skin
-    my $skin = TWiki::Func::getPreferencesValue( 'WYSIWYGPLUGIN_WYSIWYGSKIN' );
+    my $skin = TWiki::Func::getPreferencesValue('WYSIWYGPLUGIN_WYSIWYGSKIN');
     return "$skin is active"
       if( $skin && TWiki::Func::getSkin() =~ /\b$skin\b/o );
 
     return "No browser" unless $query;
 
-    # Check the client browser to see if it is supported
     return "Disabled" if $query->param('nowysiwyg');
+
+    # Check the client browser to see if it is blacklisted
     my $ua = TWiki::Func::getPreferencesValue('TINYMCEPLUGIN_BAD_BROWSERS') ||
       '(?i-xsm:Konqueror)';
     return 'Unsupported browser: '.$query->user_agent()
@@ -79,7 +81,7 @@ sub beforeEditHandler {
 
     my $mess = _notAvailable();
     if ($mess) {
-        if (defined &TWiki::Func::setPreferencesValue) {
+        if ($mess ne 'Disabled' && defined &TWiki::Func::setPreferencesValue) {
             TWiki::Func::setPreferencesValue(
                 'EDITOR_MESSAGE',
                 'WYSIWYG could not be started: '.$mess);
