@@ -180,11 +180,12 @@ sub init_edit {
     my $template = $query->param( 'template' ) ||
 	$session->{prefs}->getPreferencesValue('EDIT_TEMPLATE') ||
         $templateName;
+
     $tmpl =
       $session->templates->readTemplate( $template.$editaction, $skin );
 
-    if( !$tmpl && $template ne $templateName ) {
-        $tmpl = $session->templates->readTemplate( $templateName, $skin );
+    if( !$tmpl ) {
+        $tmpl = $session->templates->readTemplate( $template, $skin );
     }
 
     if( !$tmpl ) {
