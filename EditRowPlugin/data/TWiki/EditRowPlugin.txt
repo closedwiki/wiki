@@ -222,6 +222,7 @@ Another great TWiki extension from the <a style="text-decoration:none" href="htt
 |  Copyright: | &copy; 2007 Wind<nop>River Inc. |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  9 Nov 2007 | Bugs:Item4947: added missing _src.js versions to MANIFEST |
 |  6 Nov 2007 | Bugs:Item4935: fixed problem with embedded TWiki variables |
 |  20 Oct 2007 | Bugs:Item4853: support %EDITCELL Bugs:Item4861: rework the rules for associating tag with adjacent table Bugs:Item4862: avoid expanding TWiki variables on edit |
 |  18 Oct 2007 | Bugs:Item4834: added automatic save on row add Bugs:Item4853: added %EDITCELL support Bugs:Item4651: fixed validation of date change |
