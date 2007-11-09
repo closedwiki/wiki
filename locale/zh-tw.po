@@ -520,7 +520,7 @@ msgstr "更多擴展變更列表位於菜單的 [[%1][最新修改]] 中"
 
 #: templates/messages.tmpl:447
 msgid ""
-"A new *system-generated* password for your login name %1 (<nop>WikiName %2) "
+"A new *system-generated* password for your login name %1 (WikiName %2) "
 "has been sent to your registered e-mail address. If your e-mail address is "
 "no longer valid, please contact %3"
 msgstr ""

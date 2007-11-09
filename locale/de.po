@@ -550,12 +550,12 @@ msgstr ""
 
 #: templates/messages.tmpl:447
 msgid ""
-"A new *system-generated* password for your login name %1 (<nop>WikiName %2) "
+"A new *system-generated* password for your login name %1 (WikiName %2) "
 "has been sent to your registered e-mail address. If your e-mail address is "
 "no longer valid, please contact %3"
 msgstr ""
 "Ein neues vom System erzeugtes Passwort für den Login Namen %1 "
-"(<nop>Wikiname %2) wurde an ihre registrierte E-Mail gesendet. Falls ihre E-"
+"(Wikiname %2) wurde an ihre registrierte E-Mail gesendet. Falls ihre E-"
 "Mail Adresse nicht länger gültig ist, setzen Sie sich bitte mit %3 in Kontakt"
 
 #: data/TWiki/WebTemplateTopics.txt:4

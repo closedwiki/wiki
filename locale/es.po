@@ -554,12 +554,12 @@ msgstr ""
 
 #: templates/messages.tmpl:447
 msgid ""
-"A new *system-generated* password for your login name %1 (<nop>WikiName %2) "
+"A new *system-generated* password for your login name %1 (WikiName %2) "
 "has been sent to your registered e-mail address. If your e-mail address is "
 "no longer valid, please contact %3"
 msgstr ""
 "Un nuevo password *generado por el sistema* para su nombre de usuario %1"
-"(<nop>WikiName %2) ha sido enviado a su correo electronico registrado. Si "
+"(WikiName %2) ha sido enviado a su correo electronico registrado. Si "
 "sudirección de correo electronico no es valida actualmente, por favor, "
 "contacte%3"
 

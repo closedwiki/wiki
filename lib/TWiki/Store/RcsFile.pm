@@ -1094,12 +1094,13 @@ Generate string representation for debugging
 
 sub stringify {
     my $this = shift;
-
-    return $this->{web}.'.'.
-      ($this->{topic} || '{no topic}').
-        ($this->{attachment} ? ':'.$this->{attachment} : '').
-          $this->{file}.(-e $this->{file} ? '(e)' : '').
-            '/'.$this->{rcsFile}.(-e $this->{rcsFile} ? '(e)' : '');
+    my @reply;
+    foreach my $key qw(web topic attachment file rcsFile) {
+        if (defined $this->{$key}) {
+            push(@reply, "$key=$this->{$key}");
+        }
+    }
+    return join(',', @reply);
 }
 
 # Chop out recognisable path components to prevent hacking based on error
