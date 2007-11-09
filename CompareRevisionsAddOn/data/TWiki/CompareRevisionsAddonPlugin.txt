@@ -27,7 +27,7 @@ Test: <nop>CompareRevisionsAddOnPlugin is %IF{"context CompareRevisionsAddOnPlug
 |  Plugin Author: | TWiki:Main.JChristophFuchs |
 |  Plugin Version: | 07 Nov 2006 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  07 Nov 2007 | Renamed from !CompareRevisionsAddonPlugin to !CompareRevisionsAddOnPlugin |
+|  07 Nov 2007 | Updated for TWiki 4.2.0. |
 |  26 Feb 2006 | Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
