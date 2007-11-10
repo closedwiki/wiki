@@ -360,7 +360,8 @@ sub _collapse {
                 }
             }
         }
-        if ($node->{tag} eq 'p' && $node->{head} == $node->{tail}) {
+        if ($node->{tag} eq 'p' &&
+              $node->{head} && $node->{head} == $node->{tail}) {
             my $kid = $node->{head};
             if ($kid->{tag} eq 'SPAN' &&
                   $kid->hasClass('WYSIWYG_PROTECTED')) {
