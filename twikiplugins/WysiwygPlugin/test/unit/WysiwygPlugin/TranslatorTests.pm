@@ -1716,7 +1716,7 @@ sub convertImage {
     }
 }
 
-gen_compare_tests('fontconv');
+gen_compare_tests();
 #gen_file_tests();
 
 1;

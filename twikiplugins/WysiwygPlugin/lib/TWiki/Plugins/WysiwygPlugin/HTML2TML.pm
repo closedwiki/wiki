@@ -115,17 +115,20 @@ sub convert {
     return $this->{stackTop}->rootGenerate( $opts );
 }
 
-# Support autoclose of the tags that are most typically incorrectly
+# Autoclose tags without waiting for a /tag
+my %autoClose = map { $_ => 1 } qw( area base basefont col embed frame input link meta param );
+
+# Support auto-close of the tags that are most typically incorrectly
 # nested. Autoclose triggers when a second tag of the same type is
 # seen without the first tag being closed.
-my %autoclose = ( 'li' => 1, 'td' => 1, 'th' => 1, 'tr' => 1 );
+my %closeOnRepeat = map { $_ => 1 } qw( li td th tr );
 
 sub _openTag {
     my( $this, $tag, $attrs ) = @_;
 
     $tag = lc($tag);
 
-    if ($autoclose{$tag} &&
+    if ($closeOnRepeat{$tag} &&
           $this->{stackTop} &&
             $this->{stackTop}->{tag} eq $tag) {
         $this->_apply($tag);
@@ -134,12 +137,18 @@ sub _openTag {
     push( @{$this->{stack}}, $this->{stackTop} ) if $this->{stackTop};
     $this->{stackTop} =
       new TWiki::Plugins::WysiwygPlugin::HTML2TML::Node( $this->{opts}, $tag, $attrs );
+
+    if ($autoClose{$tag}) {
+        $this->_apply($tag);
+    }
 }
 
 sub _closeTag {
     my( $this, $tag ) = @_;
-
-    $this->_apply(lc($tag));
+    if ($this->{stackTop} &&
+          $this->{stackTop}->{tag} eq $tag) {
+        $this->_apply(lc($tag));
+    }
 }
 
 sub _text {
