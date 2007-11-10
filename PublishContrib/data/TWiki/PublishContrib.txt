@@ -10,7 +10,6 @@
 
    Instead, you could check your fix in, raise a bug in the Bugs web, or mail thge author.
 
-   * Set STUB = %$STUB%
    * Set SHORTDESCRIPTION = Generate static output (HTML, PDF) for a TWiki Web and optionally upload (FTP) the output to a publishing site.
 -->
 
@@ -40,7 +39,7 @@ When TWiki generates a view, it does so dynamically i.e. there's a CGI script th
 	* Output in HTML or PDF. HTML can be compressed in different archive formats.
 	* Full support for hierarchical webs
 	* Multiple instances (e.g. dev, test, prod) can be specified
-	* Templates (such as viewprint) can also be generated, and the links are fixed up appropritately
+	* Special output format specific templates (such as viewpdf) can be used
 	* Able to publish HTML and referenced files directly to a remote server via ftp
     * Complete history of what was published, and when!
 
@@ -48,7 +47,9 @@ When TWiki generates a view, it does so dynamically i.e. there's a CGI script th
 ---+++ Publish Form
 The easiest way to publish a web is from this topic, by filling in the following form.
 
-The output is generated in a directory designated during installation. The progress messages printed during documentation generation tell you exactly where the output is. Publishing is a controlled process; before you can publish, you have to have VIEW access to the topics you want to publish, and CHANGE access to the publishing history topic.
+The output is generated in a directory designated during installation. The progress messages printed during documentation generation tell you exactly where the output is, and you can use the [[%SCRIPTURLPATH{"publish"}%?control=1;skin=basic_publish][publishers control interface]] to manage your published output.
+
+Publishing is a controlled process; before you can publish, you have to have VIEW access to the topics you want to publish, and CHANGE access to the publishing history topic.
 
 You can also create a [[#PublishTopic][permanent topic in a web]] to help with the publishing process.
 
@@ -65,7 +66,7 @@ padding:.5em;
 <form method="POST" name="publish" action="%SCRIPTURL{publish}%/%URLPARAM{"web" default=""}%">
 <table class="twikiTable" cellpadding="0" cellspacing="0">
 <tr>
-  <th>Description</th><th>Value</th><th>Parameter&nbsp;Name</th>
+  <th colspan="3" style="background-color:gold">Choose what to publish</th>
 </tr>
 <tr>
   <td> Web to publish </td>
@@ -79,10 +80,10 @@ padding:.5em;
 <tr>
   <td> 
     Comma-separated list of [[#WildcardPattern][wildcard patterns]] that match
-    the names of topics to *include* 
+    the names of topics to *include*.
   </td>
   <td> 
-    <input type="text" name="inclusions" class="twikiInputField" value="%URLPARAM{"inclusions" default="*"}%" size="50"/>
+    <input type="text" name="inclusions" class="twikiInputField" value="%URLPARAM{"inclusions" default="*"}%" size="50"/><br />Use * for all topics.
   </td>
   <td>
    =inclusions=
@@ -91,10 +92,10 @@ padding:.5em;
 <tr>
   <td> 
     Comma-separated list of [[#WildcardPattern][wildcard patterns]] that match
-    the names of topics to *exclude* 
+    the names of topics to *exclude*.
   </td>
   <td> 
-    <input type="text" name="exclusions" class="twikiInputField" value="%URLPARAM{"exclusions" default=""}%" size="50"/>
+    <input type="text" name="exclusions" class="twikiInputField" value="%URLPARAM{"exclusions" default=""}%" size="50"/><br />Leave blank to include all topics.
   </td>
   <td>
    =exclusions=
@@ -103,36 +104,40 @@ padding:.5em;
 <tr>
   <td> 
     A [[#RegularExpression][regular expression]] that will cause a topic to be
-    *excluded* if the RE matches the topic content 
+    *excluded* if the RE matches the topic content.
   </td>
   <td> 
-    <input type="text" name="filter" class="twikiInputField" value="%URLPARAM{"filter" default=""}%" size="50" />
+    <input type="text" name="filter" class="twikiInputField" value="%URLPARAM{"filter" default=""}%" size="50" /><br />Leave blank to include all topics.
   </td>
   <td>
    =filter=
   </td>
 </tr>
 <tr>
-  <td>Select skin for published HTML</td>
-  <td>
-    <input type="text" name="skin" class="twikiInputField" size="20" value="text" /><br />
-    You are recommended to pick =text=, or =plain=, or a =print= skin.
-    Your installation may also offer a special =export= or =publish= skin.
-  </td>
-  <td>
-   =skin=
-  </td>
-</tr>
-<tr>
   <td> 
-    Comma-separated list of Plugins to enable during publish
+    Comma-separated list of Plugins to enable during publish.
   </td>
   <td> 
-    <input type="text" name="enableplugins" class="twikiInputField" value="%URLPARAM{"enableplugins" default=""}%" size="50"/><br />
-    select from %ACTIVATEDPLUGINS%
+    <input type="text" name="enableplugins" class="twikiInputField" value="%URLPARAM{"enableplugins" default=""}%" size="50"/><br /> Leave blank to enable all plugins. You are recommended to disable any plugins that generate buttons in the output.<br />
+    The currently enabled plugins are: %ACTIVATEDPLUGINS%
   </td>
   <td>
    =enableplugins=
+  </td>
+</tr>
+<tr>
+  <th colspan="3" style="background-color:gold">Output options</th>
+</tr>
+<tr>
+  <td>Select skin for published HTML</td>
+  <td>
+    <input type="text" name="skin" class="twikiInputField" size="20" value="basic_publish" /><br />
+    The skin provides the template for how topics are published. See %TWIKIWEB%.TWikiSkins for more informations on skins.<br />
+    You are recommended to pick =basic_publish=, or =plain=, or a =print= skin.
+    Your installation may also offer a special =export= or =publish= skin.<br />%I% The =view= template is used to generate published pages, so =view.%URLPARAM{"skin" default="basic_publish"}%.tmpl= is the template that will be used to generate the output. You can preview any topic in this skin simply by appending =?skin=%URLPARAM{"skin" default="basic_publish"}%= to the end of the URL.
+  </td>
+  <td>
+   =skin=
   </td>
 </tr>
 <tr>
@@ -145,7 +150,11 @@ padding:.5em;
     <option value="pdf">pdf</option>
     <option value="ftp">ftp</option>
    </select><br />
-    *WARNING* The rendered data can get pretty big, and the process itself puts
+    The output will be generated on the server, in the directory pointed to
+    by the ={PublishContrib}{Dir}= configuration setting. You can manage the
+    contents of this directory from the browser using the [[%SCRIPTURLPATH{"publish"}%?control=1;skin=basic_publish][publishers control interface]]
+    to the =publish= CGI script.<br />
+    *X* The rendered data can get pretty big, and the process itself puts
    a heavy load on the server, especially when using compression on large webs.
   </td>
   <td>
@@ -163,12 +172,15 @@ padding:.5em;
   </td>
 </tr>
 <tr>
- <td>FTP options (only relevant if Output format is =ftp=)
+  <th colspan="3" style="background-color:gold">FTP options</th>
+</tr>
+<tr>
+ <td> FTP options are only relevant if Output format is =ftp=
 
 The FTP output format generates a sitemap.xml, and can also generate
 default.htm, index.html and google site verification files.
 
-The format generator was written by TWiki:Main.SvenDowideit.
+The FTP output generator was written by TWiki:Main.SvenDowideit.
 </td>
  <td colspan=2>
   <table class="twikiTable">
@@ -249,7 +261,7 @@ The format generator was written by TWiki:Main.SvenDowideit.
     </td>
     <td>
      <input type="text" size="40" name="relativeurl" value="/" /><br />
-     the base URL that your published TWiki topics will reside at (if you're publishing to the root of your site =/= is correct)
+     the base URL that your published TWiki topics will reside at (if you are publishing to the root of your site, =/= is correct)
      see <a href="http://www.google.com/webmasters/sitemaps/">Google webmaster tools</a> 
     </td>
     <td>
@@ -269,9 +281,11 @@ The format generator was written by TWiki:Main.SvenDowideit.
  </td>
 </tr>
 <tr>
-  <td>Other extra options</td>
+  <th colspan="3" style="background-color:gold">Other output generator options</th>
+</tr>
+<tr>
+  <td>Some output generators support extra options (e.g. for =pdf=, you can add =htmldoc= command-line parameters here, such as =--linkstyle underline=)</td>
   <td>
-   Some output generators support extra options (e.g. PDF; you can add =htmldoc= command-line parameters here e.g =--linkstyle underline=)<br />
    <textarea rows="5" cols="80"  class="twikiInputField">%URLPARAM{"genopt" default=""}%</textarea>
   </td>
   <td>
@@ -307,10 +321,10 @@ Alternatively you can just take a copy of the form in this topic, paste it into 
 
 ---+++ Publishing from the command line
 TWiki-4 allows you to call any TWiki script from the command line, and the =publish= script is no exception. Just =cd= to the =bin= directory, and
-=perl publish=. Parameters are passed as name=value pairs, for example:
+=perl -T publish=. Parameters are passed as name=value pairs, for example:
 <verbatim>
-perl publish web=Book exclusions='Web*' format=file
-perl publish web=Book inclusions=WebBook format=pdf genopt='--book --duplex --toclevels=5'
+perl -T publish web=Book exclusions='Web*' format=file
+perl -T publish web=Book inclusions=WebBook format=pdf genopt='--book --duplex --toclevels=5'
 </verbatim>
 The available parameter names are shown in the example above, in the 'Name' column.
 
@@ -321,7 +335,7 @@ You can control what gets published from a topic using =%<nop>STARTPUBLISH%= and
    * =%<nop>STARTPUBLISH%= and =%<nop>STOPPUBLISH%= will be visible in the viewed topic, so you can easily see what will be published from the topic.
 Note: the old &lt;nopublish> tag is deprecated and should be replaced in topics
 
-Another good trick is to set up a special "publishing" web. Create topics in the web that %INCLUDE the topics from *other* webs that you want to publish. You can use [[VarSTARTSECTION][STARTSECTION]] and [[VarENDSECTION][ENDSECTION]] to highlight what you want published. This way the "publishing" web gives you a view of exactly what will be in the published output, without the need for special publishing tags.
+Another good trick is to set up a special "publishing" web. Create topics in the web that %INCLUDE the topics from *other* webs that you want to publish. You can use [[%TWIKIWEB%.VarSTARTSECTION][STARTSECTION]] and [[%TWIKIWEB%.VarENDSECTION][ENDSECTION]] to highlight what you want published. This way the "publishing" web gives you a view of exactly what will be in the published output, without the need for special publishing tags.
 
 ---++ Publishing History
 Every time a web is published, then the results of that publishing step are stored in a topic in the web. By default this topic is called =PublishContribHistory=, but you can choose another name (see the form, above). In order to publish a web, you have to be able to write to this topic. If you need to add access controls to the topic, then make sure you do that right at the beginning of the topic, or in the hidden preferences.
@@ -331,17 +345,19 @@ The history topics contains a list of all the parameters used, and the versions 
 ---++ Installation Instructions
 ---+++ Dependencies
 
-Note: If you want to generate PDF files, you will need an installation of =htmldoc=. =htmldoc= is available from http://www.easysw.com/htmldoc/ for free, but you are *strongly* recommended to buy the commercial version. Your support for OSS projects helps make OSS possible.
+Note: If you want to generate PDF files, you will need an installation of =htmldoc=. This program is available from http://www.easysw.com/htmldoc/ for free, but you are *strongly* recommended to buy the commercial version. Your support for open-source projects helps make open-source software possible.
 
 %$INSTALL_INSTRUCTIONS%
 
----+++ Additional install steps
-Run =configure= and complete the installation in the *PublishContrib* section.
+Run =configure= and complete the installation in the *PublishContrib* section. If you can't do this for some reason, these are the settings required in !LocalSite.cfg:
+| =$TWiki::cfg{PublishContrib}{Dir}= | File path to the directory where published files will be generated. you will normally want this to be visible via a URL, so the TWiki pub directory is a good choice. |
+| =$TWiki::cfg{PublishContrib}{URL}= | URL path of the directory you defined above. |
+| =$TWiki::cfg{PublishContrib}{PDFCmd}= | Template command-line for the PDF generator program - for example, =htmldoc --webpage --links --linkstyle plain --outfile %FILE|F% %EXTRAS|U% %FILES|F%'= |
 
 ---++++ =PDF= output
    1 install htmldoc from http://www.easysw.com/htmldoc/
 
-Note that =htmldoc= can also be used to generate !PostScript by using the =-t= option in the =Other extra options= field above. See the =htmldoc= man pages for details.
+Note that =htmldoc= can also be used to generate !PostScript by using the =-t= option in the =Other output generator options= above. See the =htmldoc= man pages for details.
 
 ---++++ =.tgz= (tar) output
    1 Install Archive::Tar and everything it depends on
@@ -356,6 +372,7 @@ This add-on started as the TWiki:Plugins/GenHTMLAddon, written by TWiki:Main/Cra
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 |  Change History: | |
+|  10 Nov 2007 | Tested on 4.2.0. Bugs:Item4624:, Bugs:Item4625: Bugs:Item4830: fixed. Bugs:Item4825: added a basic skin to avoid the confusion caused by =text= skin. Bugs:Item4951: added interface to allow management of output files |
 |  13222 | fixed ftp publish, added doco, and added enabled plugin selection funcitonality |
 |  13064 | Bugs:Item3722 worked around core attaching URL params to internal URLs |
 |  12961 | Bugs:Item3671 cannot publish without write access to history topic, so \
@@ -417,3 +434,4 @@ GNU General Public License for more details, published at
 http://www.gnu.org/copyleft/gpl.html
 
 %META:FILEATTACHMENT{name="publish.gif" attr="h" comment="Logo"}%
+%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="" version="1"}%

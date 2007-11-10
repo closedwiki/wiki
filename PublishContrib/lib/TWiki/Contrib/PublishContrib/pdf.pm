@@ -47,10 +47,16 @@ sub close {
 
     $ENV{HTMLDOC_DEBUG} = 1; # see man htmldoc - goes to apache err log
     $ENV{HTMLDOC_NOCGI} = 1; # see man htmldoc
-	$TWiki::Plugins::SESSION->{sandbox}->{TRACE} = 1;
-
+    my $sb;
+    if (defined $TWiki::sandbox) {
+        $sb = $TWiki::sandbox
+    } else {
+        $sb = $TWiki::Plugins::SESSION->{sandbox};
+    }
+    die "Could not find sandbox" unless $sb;
+	$sb->{TRACE} = 1;
     my( $data, $exit ) =
-      $TWiki::Plugins::SESSION->{sandbox}->sysCommand(
+      $sb->sysCommand(
           $cmd,
           FILE => "$this->{path}$landed",
           FILES => \@files,

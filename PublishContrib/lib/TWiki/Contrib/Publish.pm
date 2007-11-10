@@ -51,12 +51,15 @@ sub publish {
     $TWiki::Plugins::SESSION = $session;
 
     my $query = TWiki::Func::getCgiQuery();
-    my $web = $query->param( 'web' ) || $session->{webName};
-    $query->delete('web');
-    $web =~ /(\w*)/;
+    if (defined $query->param('control')) {
+        $publisher->control();
+    } else {
+        my $web = $query->param( 'web' ) || $session->{webName};
+        $query->delete('web');
+        $web =~ m#([\w/.]*)#; # clean up and untaint
 
-    $publisher->publishWeb($1);
-
+        $publisher->publishWeb($1);
+    }
     $publisher->finish();
 }
 
@@ -104,6 +107,62 @@ sub finish {
     $this->{session} = undef;
 }
 
+# Allow manipulation of $TWiki::cfg{PublishContrib}{Dir}
+sub control {
+    my $this = shift;
+
+    my ($header, $footer) = $this->_getPageTemplate();
+    print $header;
+    print CGI::p(<<HERE);
+<h1>Publishers Control Interface</h1>
+This interface lets you perform basic management operations
+on published output files and directories. Click on the name of the
+output file to visit it.
+HERE
+    my $query = TWiki::Func::getCgiQuery();
+    my $action = $query->param('action') || '';
+    $query->delete('action'); # delete so we can redefine them
+    my $file = $query->param('file');
+    $query->delete('file');
+
+    if ($action eq 'delete') {
+        $file =~ m#([\w./\\]+)#; # untaint
+        File::Path::rmtree("$TWiki::cfg{PublishContrib}{Dir}/$1");
+        print $query->p("$1 deleted");
+    }
+    if (opendir(D, $TWiki::cfg{PublishContrib}{Dir})) {
+        my @files = grep(!/^\./, readdir(D));
+        if (scalar(@files)) {
+            print $query->start_table();
+            foreach my $file (@files) {
+                my $link = "$TWiki::cfg{PublishContrib}{URL}/$file";
+                $link = $query->a({href => $link}, $file);
+                my @cols = ( $query->th($link) );
+                my $delcol = $query->start_form({ action => '',
+                                               method=>'GET',
+                                               name => $file });
+                $delcol .= $query->submit(
+                    { type  => 'button',
+                      name  => 'Delete'});
+                $delcol .= $query->hidden('file', $file);
+                $delcol .= $query->hidden('action', 'delete');
+                $delcol .= $query->hidden('control', '1');
+                $delcol .= $query->hidden('skin');
+                $delcol .= $query->end_form();
+                push(@cols, $delcol);
+                print $query->Tr({valign=>"baseline"},
+                              join('', map {$query->td($_)} @cols));
+            }
+            print $query->end_table();
+        } else {
+            print "The output directory is currently empty";
+        }
+    } else {
+        print "Failed to open '$TWiki::cfg{PublishContrib}{Dir}': $!";
+    }
+    print $footer;
+}
+
 sub publishWeb {
     my ($this, $web) = @_;
 
@@ -112,7 +171,11 @@ sub publishWeb {
 
     #don't add extra markup for topics we're not linking too
     # NEWTOPICLINKSYMBOL LINKTOOLTIPINFO
-    $TWiki::Plugins::SESSION->{renderer}->{NEWLINKSYMBOL} = '';
+    if (defined $TWiki::Plugins::SESSION->{renderer}) {
+        $TWiki::Plugins::SESSION->{renderer}->{NEWLINKSYMBOL} = '';
+    } else {
+        $TWiki::Plugins::SESSION->renderer()->{NEWLINKSYMBOL} = '';
+    }
 
     my $skin = '';
     my $format = 'file';
@@ -133,11 +196,12 @@ sub publishWeb {
         }
         $cfgt =~ s/\r//g;
 
-        while ( $cfgt =~ s/^\s+\*\s+Set\s+([A-Z]+)\s*=\s*(.*?)\s*$//m ) {
+        foreach my $line (split(/\r?\n/, $cfgt)) {
+            next unless $line =~ /^\s+\*\s+Set\s+([A-Z]+)\s*=\s*(.*?)\s*$/;
             my $k = $1;
             my $v = $2;
 
-            if ( $k eq 'HISTORY' ) {
+            if ( $k eq 'HISTORY' && $v ) {
                 $this->{historyTopic} = $v;
             } elsif ( $k eq 'INCLUSIONS' ) {
                 $v =~ s/([*?])/.$1/g;
@@ -201,7 +265,7 @@ sub publishWeb {
                 $format = $1;
             }
         } elsif (defined $query->param( 'format' )) {
-            my $v = $query->param( 'format' );
+            my $v = $query->param( 'format' ) || '';
             if ($v =~ /(\w+)/) {
                 $format = $1;
             }
@@ -213,7 +277,7 @@ sub publishWeb {
     }
 
     $this->{skin} = $skin ||
-      TWiki::Func::getPreferencesValue('PUBLISHSKIN') || '';
+      TWiki::Func::getPreferencesValue('PUBLISHSKIN') || 'basic_publish';
 
     unless (TWiki::Func::checkAccessPermission(
         'CHANGE', TWiki::Func::getWikiName(),
@@ -225,36 +289,19 @@ This topic must be editable by the user doing the publishing.
 TEXT
     }
 
-    my $topic = $query->param('publishtopic') || $this->{session}->{topicName};
+    # Generate the progress information screen (based on the view template)
     my($header, $footer) = '';
     unless( TWiki::Func::getContext()->{command_line} ) {
-        my $tmpl = TWiki::Func::readTemplate('view');
-
-        $tmpl =~ s/%META{.*?}%//g;
-        for my $tag qw( REVTITLE REVARG REVISIONS MAXREV CURRREV ) {
-            $tmpl =~ s/%$tag%//g;
-        }
-        ($header, $footer) = split(/%TEXT%/, $tmpl);
-        $header = TWiki::Func::expandCommonVariables( $header, $topic, $this->{web} );
-        $header = TWiki::Func::renderText( $header, $this->{web} );
-        $header =~ s/<nop>//go;
-        TWiki::Func::writeHeader($query);
-        print $header;
-
-        $footer = TWiki::Func::expandCommonVariables( $footer, $topic,
-                                                      $this->{web} );
-        $footer = TWiki::Func::renderText( $footer, $this->{web} );
-
-        #my $url = $query->url().$query->path_info().'?'.
-        #$query->query_string();
-        #$this->logInfo("URL", $url);
+        ($header, $footer) = $this->_getPageTemplate();
     }
-    
-    
-    #disable unwanted plugins
+
+    # Disable unwanted plugins
     my $enabledPlugins = '';
     my $disabledPlugins = '';
-    my @pluginsToEnable = split(/[, ]+/, $query->param('enableplugins'));
+    my @pluginsToEnable;
+    if (defined $query->param('enableplugins')) {
+        @pluginsToEnable = split(/[, ]+/, $query->param('enableplugins'));
+    }
     foreach my $plugin (keys(%{$TWiki::cfg{Plugins}})) {
         my $enable = $TWiki::cfg{Plugins}{$plugin}{Enabled};
         if (scalar(@pluginsToEnable) > 0) {
@@ -264,8 +311,9 @@ TEXT
         $enabledPlugins .= ', '.$plugin if ($enable);
         $disabledPlugins .= ', '.$plugin unless ($enable);
     }
-    
-    $TWiki::cfg{PublishContrib}{URL} .= '/' unless ( $TWiki::cfg{PublishContrib}{URL} =~ /\/^/);
+
+    $TWiki::cfg{PublishContrib}{URL} .= '/'
+      unless $TWiki::cfg{PublishContrib}{URL} =~ m#/$#;
 
     $this->logInfo("Publisher", $this->{publisher});
     $this->logInfo("Date", TWiki::Func::formatTime(time()));
@@ -281,8 +329,6 @@ TEXT
     $this->logInfo("Generator Options", $genopt);
     $this->logInfo("Enabled Plugins", $enabledPlugins);
     $this->logInfo("Disabled Plugins", $disabledPlugins);
-
-
 
     my @templatesWanted = split(/,/, $this->{templatesWanted});
 
@@ -305,7 +351,7 @@ TEXT
             return;
 
         }
-        $this->publishTemplate($template);
+        $this->publishUsingTemplate($template);
     }
 
     # check the templates referenced, and that everything referenced
@@ -341,6 +387,32 @@ LINK
     $this->logInfo("History saved in", "<a href='$url'>$url</a>");
 
     print $footer;
+}
+
+# get a template for presenting output / interacting
+sub _getPageTemplate {
+    my ($this) = @_;
+
+    my $query = TWiki::Func::getCgiQuery();
+    my $topic = $query->param('publishtopic') || $this->{session}->{topicName};
+    my $tmpl = TWiki::Func::readTemplate('view');
+
+    $tmpl =~ s/%META{.*?}%//g;
+    for my $tag qw( REVTITLE REVARG REVISIONS MAXREV CURRREV ) {
+        $tmpl =~ s/%$tag%//g;
+    }
+    my ($header, $footer) = split(/%TEXT%/, $tmpl);
+    $header = TWiki::Func::expandCommonVariables(
+        $header, $topic, $this->{web} );
+    $header = TWiki::Func::renderText( $header, $this->{web} );
+    $header =~ s/<nop>//go;
+    TWiki::Func::writeHeader($query);
+    print $header;
+
+    $footer = TWiki::Func::expandCommonVariables( $footer, $topic,
+                                                  $this->{web} );
+    $footer = TWiki::Func::renderText( $footer, $this->{web} );
+    return ($header, $footer);
 }
 
 # from http://perl.active-venture.com/pod/perlfaq4-dataarrays.html
@@ -379,9 +451,8 @@ sub logError {
     $this->{history} .= "%RED% *ERROR* $message %ENDCOLOR%%BR%\n";
 }
 
-#  Publish the contents of one web.
-
-sub publishTemplate {
+#  Publish the contents of one web using the given tempate (e.g. view)
+sub publishUsingTemplate {
     my ($this, $template) = @_;
 
     # Get list of topics from this web.
@@ -395,16 +466,16 @@ sub publishTemplate {
     # Attempt to render each included page.
     my %copied;
     foreach my $topic (@topics) {
-        next if $topic eq $this->{historyTopic};
+        next if $topic eq $this->{historyTopic}; # never publish this
         try {
             my $dispo = '';
-            if( $topic !~ /^($this->{inclusions})$/ ) {
+            if( $this->{inclusions} && $topic !~ /^($this->{inclusions})$/ ) {
                 $dispo = 'not included';
-            } elsif( $this->{exclusions} && $topic =~ /^($this->{exclusions})$/ ) {
+            } elsif( $this->{exclusions} &&
+                       $topic =~ /^($this->{exclusions})$/ ) {
                 $dispo = 'excluded';
             } else {
-                $this->publishTopic($topic, $filetype, $tmpl,
-                             \%copied);
+                $this->publishTopic($topic, $filetype, $tmpl, \%copied);
                 my ( $date, $user, $rev, $comment ) =
                   TWiki::Func::getRevisionInfo($this->{web}, $topic);
                 $dispo = "Rev $rev published";
@@ -455,22 +526,28 @@ sub publishTopic {
 
     my ($revdate, $revuser, $maxrev);
     ($revdate, $revuser, $maxrev) = $meta->getRevisionInfo();
-    $revuser = $revuser->wikiName();
+    if (ref($revuser)) {
+        $revuser = $revuser->wikiName();
+    }
 
-    # Handle standard formatting.
-    $text = TWiki::Func::expandCommonVariables($text, $topic, $this->{web});
-    $text = TWiki::Func::renderText($text);
+    # Expand and render the topic text
+    $text = TWiki::Func::expandCommonVariables(
+        $text, $topic, $this->{web}, $meta);
+    $text = TWiki::Func::renderText($text, $this->{web});
 
-    $tmpl = TWiki::Func::expandCommonVariables($tmpl, $topic, $this->{web});
-    $tmpl = TWiki::Func::renderText($tmpl, "", $meta);
+    # Expand and render the template
+    $tmpl = TWiki::Func::expandCommonVariables(
+        $tmpl, $topic, $this->{web}, $meta);
+    $tmpl = TWiki::Func::renderText($tmpl, $this->{web});
 
+    # Inject the text into the template
     $tmpl =~ s/%TEXT%/$text/g;
 
     # REFACTOR OPPORTUNITY: stop factor me into getTWikiRendering()
 
     # legacy
     $tmpl =~ s/<nopublish>.*?<\/nopublish>//gs;
-    # New tags
+
     my $newTmpl = '';
     my $tagSeen = 0;
     my $publish = 1;
@@ -494,22 +571,25 @@ sub publishTopic {
     $tmpl =~ s|( ?) *</*nop/*>\n?|$1|gois;
 
     # Remove <base.../> tag
-    $tmpl =~ s/<base[^>]+\/>//;
+    $tmpl =~ s/<base[^>]+\/>//i;
     # Remove <base...>...</base> tag
-    $tmpl =~ s/<base[^>]+>.*?<\/base>//;
+    $tmpl =~ s/<base[^>]+>.*?<\/base>//i;
 
     # Clean up unsatisfied WikiWords.
-    $tmpl =~ s/<span class="twikiNewLink">(.*?)<\/span>/$this->_handleNewLink($1)/ge;
+    $tmpl =~ s/<span class="twikiNewLink">(.*?)<\/span>/
+      $this->_handleNewLink($1)/ge;
 
     # Copy files from pub dir to rsrc dir in static dir.
     my $hs = $ENV{HTTP_HOST} || "localhost";
 
+    # Find and copy resources attached to the topic
     my $pub = TWiki::Func::getPubUrlPath();
-    $tmpl =~ s!(['"])($TWiki::cfg{DefaultUrlHost}|https?://$hs)?$pub/(.*?)\1!$1.$this->_copyResource($3, $copied).$1!ge;
+    $tmpl =~ s!(['"])($TWiki::cfg{DefaultUrlHost}|https?://$hs)?$pub/(.*?)\1!
+      $1.$this->_copyResource($3, $copied).$1!ge;
 
     my $ilt;
 
-    # Modify topic links relative to server base
+    # Modify local links relative to server base
     $ilt = $TWiki::Plugins::SESSION->getScriptUrl(0, 'view', 'NOISE', 'NOISE');
     $ilt =~ s!/NOISE/NOISE.*$!!;
     $tmpl =~ s!href=(["'])$ilt/(.*?)\1!"href=$1".$this->_topicURL($2).$1!ge;
@@ -523,12 +603,14 @@ sub publishTopic {
     $tmpl =~ s!href=(["'])\?.*?(\1|#)!href=$1$2!g;
 
     # replace any external template references
-    $tmpl =~ s!href=["'](.*?)\?template=(\w*)(.*?)["']!$this->_rewriteTemplateReferences($tmpl, $1, $2, $3)!e;
+    $tmpl =~ s!href=["'](.*?)\?template=(\w*)(.*?)["']!
+      $this->_rewriteTemplateReferences($tmpl, $1, $2, $3)!e;
 
     my $extras = 0;
 
     # Handle image tags using absolute URLs not otherwise satisfied
-    $tmpl =~ s!(<img\s+.*?\bsrc=)(["'])(.*?)\2(.*?>)!$1.$2.$this->_handleURL($3,\$extras).$2.$4!ge;
+    $tmpl =~ s!(<img\s+.*?\bsrc=)(["'])(.*?)\2(.*?>)!
+      $1.$2.$this->_handleURL($3,\$extras).$2.$4!ge;
 
     $tmpl =~ s/<nop>//g;
 

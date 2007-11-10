@@ -9,3 +9,6 @@ lib/TWiki/Contrib/PublishContrib/pdf.pm 0444
 lib/TWiki/Contrib/PublishContrib/ftp.pm 0444
 lib/TWiki/Contrib/PublishContrib/Config.spec 0444
 bin/publish 0555
+pub/TWiki/PublishContrib/wikiringlogo20x20.png 0444
+templates/view.basic_publish.tmpl 0444
+templates/viewpdf.basic_publish.tmpl 0444
