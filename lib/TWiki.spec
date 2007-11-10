@@ -86,6 +86,17 @@ my $OS = $TWiki::cfg{OS} || '';
 #  This is the root of all TWiki URLs e.g. http://myhost.com:123.
 # $TWiki::cfg{DefaultUrlHost} = 'http://your.domain.com';
 
+# **STRING**
+# If your host has aliases (such as both www.twiki.org and twiki.org, and some IP addresses)
+# you need to list them to tell TWiki that redirecting to them is OK. TWiki uses redirection
+# as part of its normal mode of operation when it changes between editing and viewing.
+# The security setting {AllowRedirectUrl} is per default disabled making redirecting to other
+# domains restricted to prevent TWiki from being used in phishing attacks to protect it from
+# middleman exploits. You can add additional URLs to this setting to enable redirects to
+# additional trusted sites. Enter as comma separated list of URLs or hostnames. The URL must 
+# be in the format http://your.domain.com.
+$TWiki::cfg{PermittedRedirectHostUrls} = '';
+
 # **PATH M**
 # This is the 'cgi-bin' part of URLs used to access the TWiki bin
 # directory e.g. <code>/twiki/bin</code><br />
@@ -529,15 +540,10 @@ $TWiki::cfg{RemovePortNumber}  = $FALSE;
 # public sites should <b>not</b> enable it. Note: It is possible to 
 # redirect to a topic regardless of this setting, such as 
 # <tt>topic=OtherTopic</tt> or <tt>redirectto=Web.OtherTopic</tt>.
+# To enable redirection to a just list of trusted URLs keep this setting
+# disabled and add a list of trusted URL to the {PermittedRedirectHostUrls}
+# setting in the General path settings section.
 $TWiki::cfg{AllowRedirectUrl}  = $FALSE;
-
-
-# **STRING  EXPERT**
-#  If your host has aliases (such as both www.twiki.org and twiki.org, and some IP addresses)
-# you can tell TWiki that redirecting to them is OK.
-# Redirects have been restricted to prevent TWiki from being used in phishing attacks
-# and to protect it from middleman exploits. Enter as comma separated list of URLs or hostnames.
-$TWiki::cfg{PermittedRedirectHostUrls} = '';
 
 # **REGEX EXPERT**
 # Defines the filter-in regexp that must match the names of environment
@@ -924,16 +930,17 @@ $TWiki::cfg{RCS}{delRevCmd} =
     "/usr/bin/rcs $TWiki::cfg{RCS}{ExtOption} -o%REVISION|N% %FILENAME|F%";
 
 # **SELECTCLASS TWiki::Store::SearchAlgorithms::* EXPERT**
-# TWiki RCS has three built-in search algorithms
+# TWiki RCS has two built-in search algorithms
 # <ol><li> The default 'Forking' algorithm, which forks a subprocess that
 # runs a 'grep' command,
-# <li>the 'Native' implementation, which uses a search implemented in a
-# special library (see http://twiki.org/cgi-bin/view/Codev/NativeSearch), </li>
 # </li><li> the 'PurePerl' implementation, which is written in Perl and
 # usually only used as a last resort.</li></ol>
 # Normally you will be just fine with the 'Forking' implementation. However
 # if you find searches run very slowly, you may want to try a different
 # algorithm, which may work better on your configuration.
+# Note that there is an alternative algorithm available from
+# http://twiki.org/cgi-bin/view/Plugins/NativeSearchContrib, that often
+# gives better performance with mod_perl and Speedy CGI.
 $TWiki::cfg{RCS}{SearchAlgorithm} = 'TWiki::Store::SearchAlgorithms::Forking';
 
 # **SELECTCLASS TWiki::Store::QueryAlgorithms::* EXPERT**
