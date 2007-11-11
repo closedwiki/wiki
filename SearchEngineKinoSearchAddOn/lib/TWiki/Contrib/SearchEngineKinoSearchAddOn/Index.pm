@@ -112,12 +112,11 @@ sub updateIndex {
 	    $self->log("No index update necessary");
 	}
 
-	#$TWiki::Plugins::SESSION->{store}->saveMetaData( $web, 'kinoupdate', $start_time );
 	$self->saveUpdateMarker($web, $start_time );
 	$self->log("$web .kinoupdate saved");
     }
 
-    $self->log("Updating index finished"); 
+    $self->log("Updating index finished", 1); 
 }
 
 
@@ -191,7 +190,6 @@ sub attachmentsOfTopic {
 sub changedTopics {
     my ($self, $web) = (@_);
 
-    # NOTE violates store encapsulation, possible compatibility issue with future releases
     my @changes = $self->readChanges( $web );
     my $change;
     my $prevLastmodify = $self->readUpdateMarker($web) || "0";
@@ -213,7 +211,7 @@ sub changedTopics {
 		next;
 	    }
 
-	    if( $prevLastmodify >= $changeTime ) {
+	    if( $prevLastmodify > $changeTime ) {
 		# found item of last update
 		last;
 	    }
@@ -245,8 +243,7 @@ sub removeTopics
     my %indexextensions = $self->indexExtensions;    
 
     foreach my $topic (@topicsList) {
-	#my @topicsDef = @$topicsDefP;
-	#my ($web,$topic) = @topicsDef;
+	print "Remove Topic $topic\n";
 	
 	my $term = KinoSearch::Index::Term->new( 'id_topic', $web.$topic );
 	$invindexer->delete_docs_by_term($term);
@@ -417,7 +414,11 @@ sub indexTopic {
     my ($meta, $text) = TWiki::Func::readTopic($web, $topic, undef);
 
     # Eliminate TWiki Makup Language elements and newlines.
-    $text=$TWiki::Plugins::SESSION->renderer->TML2PlainText($text, $web, $topic, "");
+    my $renderer;
+    if (!defined($renderer = $TWiki::Plugins::SESSION->{renderer})) {
+	$renderer = $TWiki::Plugins::SESSION->renderer;
+    }
+    $text= $renderer->TML2PlainText($text, $web, $topic, "");
     $text=~ s/\n/ /g;
 
     # "TheTopic--NNNName" will return the "The Topic Name" string

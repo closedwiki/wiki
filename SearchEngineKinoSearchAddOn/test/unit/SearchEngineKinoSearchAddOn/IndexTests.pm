@@ -89,22 +89,47 @@ sub test_updateIndex {
     my $hit  = $docs->fetch_hit_hashref;
     $this->assert(!defined($hit), "Hit for updatepoint found. Should be undefined!");
 
-    # Now I do a change
+    # Now I do some changes
     $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "NewOrChangedTopicUpdate", <<'HERE');
 Just an example topic
 Keyword: updatedpoint
 HERE
+    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "NewOrChangedTopicUpdate2", <<'HERE');
+Just an example topic
+Keyword: secondupdatedpoint
+HERE
 
-    # Now I update the index. 
+    # Now I update the index.
     $ind->updateIndex();
 
-    # The new topic should be found now.
+    # The new topics should be found now.
     $docs = $search->docsForQuery( "updatedpoint");
     $hit  = $docs->fetch_hit_hashref;
     $this->assert(defined($hit), "Hit for updatedpoint not found.");
     my $topic = $hit->{topic};
     $topic =~ s/ .*//;
     $this->assert_str_equals($topic, "NewOrChangedTopicUpdate", "Wrong topic for update topic.");
+
+    
+    $docs = $search->docsForQuery( "secondupdatedpoint");
+    $hit  = $docs->fetch_hit_hashref;
+    $this->assert(defined($hit), "Hit for secondupdatedpoint not found.");
+    $topic = $hit->{topic};
+    $topic =~ s/ .*//;
+    $this->assert_str_equals($topic, "NewOrChangedTopicUpdate2", "Wrong topic for update2 topic.");
+
+    # Lets delete a topic
+    $this->{twiki}->{store}->moveTopic($this->{users_web}, "NewOrChangedTopicUpdate",
+				       "Trash", "NewOrChangedTopicUpdate",
+				       $this->{twiki}->{user});
+
+    # Now I update the index. 
+    $ind->updateIndex();
+
+# FIXME: This does not work. Why?
+    $docs = $search->docsForQuery( "updatedpoint");
+    $hit  = $docs->fetch_hit_hashref;
+    $this->assert(!defined($hit), "Hit for deleted topic found. Should be undefined!");
 }
 
 sub test_indexer {
@@ -135,7 +160,9 @@ sub test_changedTopics {
     my $this = shift;
     my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
 
-    my $start_time = time();
+    # The "+1" is a littel trick: The Topics created in set_up may have the same 
+    # timestamp as time(). Wiht time()+1 I ensure, that the timestamp is bigger.
+    my $start_time = time()+1;
     $ind->saveUpdateMarker($this->{users_web}, $start_time);
 
     my @changes;
@@ -156,8 +183,26 @@ HERE
     $this->assert(@changes, "Changed topics not returned.");
 
     # The first change should be the one I just did. 
-    foreach $change (reverse @changes ){
+    foreach $change (@changes ){
 	$this->assert_str_equals($change, "NewOrChangedTopic", "Last change not detected.");
+	last;
+    }
+
+    $start_time = time();
+    $ind->saveUpdateMarker($this->{users_web}, $start_time);
+
+    # Lets delete a topic
+    $this->{twiki}->{store}->moveTopic($this->{users_web}, "TopicWithoutAttachment",
+				       "Trash", "NewOrChangedTopic",
+				       $this->{twiki}->{user});
+
+    @changes = $ind->changedTopics($this->{users_web});
+
+    $this->assert(@changes, "Changed topics not returned.");
+
+    # The first change should be the one I just did. 
+    foreach $change (@changes ){
+	$this->assert_str_equals($change, "TopicWithoutAttachment", "Last change not detected.");
 	last;
     }
 }

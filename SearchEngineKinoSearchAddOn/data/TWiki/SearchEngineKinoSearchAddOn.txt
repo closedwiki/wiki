@@ -192,8 +192,9 @@ $TWiki::cfg{KinoSearchIndexDir} = '/home/httpd/twiki/kinosearch/index';
    * Set SHORTDESCRIPTION = Fast indexed search with indexing of attachments like Word, Excel and PDF
 
 |  Add-on Author: | TWiki:Main/MarkusHesse |
-|  Add-on Version: | v1.08, 3 Nov 2007 |
+|  Add-on Version: | v1.09, 11 Nov 2007 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+| 11 Nov 2007:  | v 1.09, Some bugfixing |
 |  3 Nov 2007:  | v 1.08, Some bugfixing |
 |  7 Oct 2007:   | v 1.07, Some bugfixing |
 |  6 Oct 2007:   | v 1.06, Upgrade for 4.1, Release with <nop>BuildContrib|
