@@ -63,7 +63,7 @@ sub renderForEdit {
         if( defined $optionValue && defined $value ) {
             my $selected;
             if( $this->isMultiValued() ) {
-                $selected = ( $value =~ /^(^|,)?\s*$optionValue\s*(,|$)?$/ );
+                $selected = ( $value =~ /(^|,)?\s*$optionValue\s*(,|$)/ );
             } else {
                 $selected = ( $optionValue eq $value );
             }
