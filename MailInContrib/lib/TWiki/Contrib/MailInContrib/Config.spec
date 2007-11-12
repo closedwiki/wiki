@@ -1,5 +1,4 @@
-# ---+ Extensions
-# ---++ MailInContrib
+# ---+ MailInContrib
 # **PERL**
 # The configuration is in the form of an (perl) array of mailbox
 # specifications. Each specification defines a number of fields:

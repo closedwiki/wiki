@@ -1,6 +1,6 @@
-use strict;
-
 package Email::Delete::POP3;
+
+use strict;
 
 use vars qw[$VERSION];
 $VERSION = sprintf "%d.%02d", split m/\./, (qw$Revision: 1.1$)[1];

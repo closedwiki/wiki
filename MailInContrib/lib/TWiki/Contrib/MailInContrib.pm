@@ -17,10 +17,9 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
 # As per the GPL, removal of this notice is prohibited.
-use strict;
-
 package TWiki::Contrib::MailInContrib;
 
+use strict;
 use TWiki;
 
 use Email::Folder;
