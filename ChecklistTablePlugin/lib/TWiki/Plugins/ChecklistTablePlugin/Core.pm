@@ -71,7 +71,7 @@ sub _render {
 			$foundTable = 1;
 			$row = -1;
 			$tablenum++;
-			$options{'_EDITTABLE_'} = ($cgi->param('ettablenr') == $tablenum+1)
+			$options{'_EDITTABLE_'} = (defined $cgi->param('ettablenr')) && ($cgi->param('ettablenr') == $tablenum+1)
 						 && (grep(/^et(save|qsave|addrow|delrow|edit)$/,$cgi->param()));
 		} elsif ($foundTable) {
 			if ($line =~ /^\s*\|[^\|]*\|/) {
@@ -281,6 +281,7 @@ sub _renderForm {
 		} elsif ($type eq 'date') {
 			my($initval,$dateformat);
 			($initval,$dateformat) = split(/,/,$default,2) if defined $default;
+			$initval=&TWiki::Func::expandCommonVariables( $initval, $options{'theTopic'},$options{'theWeb'}) if defined $initval && $initval!~/^\s*$/;
 			$initval="" unless defined $initval;
 			$dateformat=TWiki::Func::getPreferencesValue('JSCALENDARDATEFORMAT') if (!defined $dateformat || $dateformat eq "");
 			$dateformat=~s/'/\\'/g if defined $dateformat;
@@ -791,6 +792,8 @@ sub _initDefaults {
 		'buttonpos'=>'right',
 		'buttonorderright'=>'EIMD', # Edit, Insert, Move (up/down), Delete
 		'buttonorderleft' =>'DMIE', 
+		'initsort'=>undef,
+		'initdirection'=>undef,
 	);
 	@flagOptions = ('allowmove', 'quietsave', 'headerislabel', 'sort','quickadd','quickinsert');
 	$cgi = TWiki::Func::getCgiQuery();
@@ -906,14 +909,26 @@ sub handlePost {
 # =========================
 sub _sortTable {
 	my ($tablenum, $tabledataRef) = @_;
-	
-	return $tabledataRef if !$options{'sort'};
+
+	return $tabledataRef if !$options{'sort'} && !defined $options{'initsort'};
 	my @newtabledata = @{$tabledataRef};
 
 	my ($column, $dir) = (undef, undef);
 	foreach my $param (grep /^cltp_\Q$tablenum\E_sort$/, $cgi->param()) {
 		($column,$dir)=split(/\_/,$cgi->param($param));
 	}
+
+	if ((defined $options{'initsort'})&&(!defined $column)&&(!defined $dir)) {
+		$dir='asc';
+		$dir='desc' if defined $options{'initdirection'} && $options{'initdirection'}=~/^(down|desc)$/i;
+		$column=$options{'initsort'};
+		($column,$dir) = split(/\_/,$options{'initsort'}) if ($options{'initsort'}=~/^\d+_(asc|desc)/);
+		$column=1 if $column !~ /^\d+$/;
+		$column--; ## start with 1 but here we need 0
+		$cgi->param('sort',1);
+		$cgi->param("cltp_${tablenum}_sort","${column}_${dir}");
+	}
+
 	if (defined $column && defined $dir && $dir ne "default") {
 
 		sub _mysort {

@@ -61,6 +61,8 @@ You can use the =%<nop>CHECKLIST%= tag to customize the checklist states, icons 
 | format | table format (see Table Format section) | =format="&#124;item&#124;text,30&#124;textarea,3x30&#124;"= |
 | header | table header: a TWiki table like header or 'off' to disable header | =header="&#124;*State*&#124;*Item*&#124;*Comment*&#124;"= |
 | headerislabel | table headers are read-only (labels) if set to 'on' | =headerislabel="on"= |
+| initdirection | initial sorting direction for initsort, set to "up" or "down" | =initdirection="up"= |
+| initsort | column to sort initially ("1" to number of columns) | =initsort="1"= |
 | name | name of the checklist | =name="_default"= |
 | sort | switch table sort feature 'on' or 'off' | =sort="on"= |
 | template | use template configuration; see =template= attribute of ChecklistPlugin topic | =template="patchday"= |
@@ -154,8 +156,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2007, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | V1.003 (22 Oct 2007) |
+|  Plugin Version: | V1.004 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  V1.004 (BETA) | TWiki:Main:DanielRohde:  added initsort and initdirection feature; fixed numeric eq error; fixed missing default value rendering of 'date' format type; |
 |  V1.003 (22 Oct 2007) | TWiki:Main.DanielRohde: added quick insert feature; added new attributes (quickadd, quickinsert, buttonpos); fixed typos; fixed whitespaces in format bug; fixed (forced) link in text(area) bug; |
 |  V1.002 (30 Aug 2007): | TWiki:Main.DanielRohde: fixed major pre/verbatim bug; fixed and added documentation; added sort feature; added changerows attribute; added EDITCELL feature; fixed Opera bug; fixed topic lock bug |
 |  V1.001 (28 Aug 2007): | TWiki:Main.DanielRohde Initial version |
