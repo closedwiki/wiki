@@ -6,11 +6,11 @@ This topic will show you how to get the users skills displayed on their home pag
 
 <a href="%PUBURLPATH%/%WEB%/SkillsPlugin/skills_screenshot_full.png"><img src="%PUBURLPATH%/%WEB%/SkillsPlugin//skills_screenshot_thumb.png" alt="skills_screenshot_thumb.png" /></a>
 
-The topic you need to edit is [[%USERSWEB%.PatternSkinUserViewTemplate]].
+The topic you need to edit is [[%MAINWEB%.PatternSkinUserViewTemplate]].
 
 ---+++ Step 1.
 
-Firstly, add the following line to %USERSWEB%.PatternSkinUserViewTemplate. This needs to be anywhere between =%TMPL:INCLUDE{"view"}%= and =%TMPL:DEF{"formattop"}%=:
+Firstly, add the following line to %MAINWEB%.PatternSkinUserViewTemplate. This needs to be anywhere between =%TMPL:INCLUDE{"view"}%= and =%TMPL:DEF{"formattop"}%=:
 
 <verbatim>%TMPL:DEF{"skills"}%<div class="skills_UserHomePage">%SKILLS{action="userskills" user="%TOPIC%"}%</div>%TMPL:END%</verbatim>
 

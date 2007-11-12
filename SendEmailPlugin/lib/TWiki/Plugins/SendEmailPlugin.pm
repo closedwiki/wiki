@@ -49,7 +49,7 @@ my %ERROR_STATUS                 = (
     'noerror' => 1,
     'error'   => 2,
 );
-my $ERROR_TITLE            = ' <nop>%SYSTEMWEB%.SendEmailPlugin send error ';
+my $ERROR_TITLE            = ' <nop>%TWIKIWEB%.SendEmailPlugin send error ';
 my $ERROR_BUTTON_LABEL     = 'Show error message';
 my $ERROR_CONCAT           = ': ';
 my $ERROR_NOT_VALID_EMAIL  = '\'$EMAIL\' is not an e-mail address';
@@ -256,7 +256,7 @@ sub _addHeader {
 
     my $header = <<'EOF';
 <style type="text/css" media="all">
-@import url("%PUBURL%/%SYSTEMWEB%/SendEmailPlugin/sendemailplugin.css");
+@import url("%PUBURL%/%TWIKIWEB%/SendEmailPlugin/sendemailplugin.css");
 </style>
 EOF
     TWiki::Func::addToHEAD( 'SENDEMAILPLUGIN', $header );

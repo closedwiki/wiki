@@ -93,18 +93,18 @@ sub _userSkills {
     }
     # if no skills are found, $row will still be empty
     unless ($rows){
-        $rows = "<tr><td colspan='5' bgcolor='yellow'><font color='red'><strong>$user has not added any skills.</strong></font> ([[%SYSTEMWEB%.SkillsPlugin]])</td></tr>";
+        $rows = "<tr><td colspan='5' bgcolor='yellow'><font color='red'><strong>$user has not added any skills.</strong></font> ([[%TWIKIWEB%.SkillsPlugin]])</td></tr>";
     }
 
-    my $footer = "[[%SYSTEMWEB%.SkillsBrowseAll][Browse Skills]]"
-               . " | [[%SYSTEMWEB%.SkillsEditMySkills][Edit Your Skills]]</a>"
-               . " | [[%SYSTEMWEB%.SkillsSearch][SearchSkills]]";
+    my $footer = "[[%TWIKIWEB%.SkillsBrowseAll][Browse Skills]]"
+               . " | [[%TWIKIWEB%.SkillsEditMySkills][Edit Your Skills]]</a>"
+               . " | [[%TWIKIWEB%.SkillsSearch][SearchSkills]]";
 
     my $table = <<"EOT";
 <!-- SKILLSPLUGIN - USER SKILLS TABLE -->
 <table id='skillsTable' class='skillsTable' cellpadding="2px" syle="margin:7px 0;">
 <tr>
-<th class='skillsHeading' colspan='6'><a href='%SCRIPTURL{view}%/%USERSWEB%/$user'>$user\'s Skills</a></th>
+<th class='skillsHeading' colspan='6'><a href='%SCRIPTURL{view}%/%MAINWEB%/$user'>$user\'s Skills</a></th>
 </tr><tr>
 <td style="padding-left:120px;"></td><td class='skillsRatingHeader'>Ancient<br />Knowledge</td><td class='skillsRatingHeader'>Working<br />Knowledge</td><td class='skillsRatingHeader'>Expert</td><td class='skillsRatingHeader'>Guru</td><td>&nbsp;</td>
 </tr>
@@ -183,7 +183,7 @@ sub _browseSkills {
             my $id = 0; # unique id for each row used in twisty (due to problems with nested <tbody>)
             foreach my $user (sort keys %$userSkills){
                 if($userSkills->{$user}->{$skill}){
-                    $rows .= "<tr id='$cat|$skill\_$id'><td class='userRow'>$lg_ur [[%USERSWEB%.$user][$user]]</td>"; # user
+                    $rows .= "<tr id='$cat|$skill\_$id'><td class='userRow'>$lg_ur [[%MAINWEB%.$user][$user]]</td>"; # user
                     # rating
                     my $i = 1;
                     while ($i < $userSkills->{$user}->{$skill}->{rating}){
@@ -221,7 +221,7 @@ sub _browseSkills {
     # $rows will still be empty if no skills have been set up
     unless ($rows){
         $rows = "<tr><td colspan='5' bgcolor='yellow'><font color='red'><strong>"
-              . "No skills have been set up. Go to [[%SYSTEMWEB%.SkillsPlugin]] for more information."
+              . "No skills have been set up. Go to [[%TWIKIWEB%.SkillsPlugin]] for more information."
               . "</strong></font></td></tr>";
     }
         
@@ -230,7 +230,7 @@ sub _browseSkills {
 <!-- SKILLSPLUGIN - LIST SKILLS -->
 <table class='skillsTable'>
 <tr>
-<th class='skillsHeading' colspan='6'><a href='%SCRIPTURL{view}%/%SYSTEMWEB%/SkillsPlugin'>List All Skills</a></th>
+<th class='skillsHeading' colspan='6'><a href='%SCRIPTURL{view}%/%TWIKIWEB%/SkillsPlugin'>List All Skills</a></th>
 </tr><tr>
 <td style="padding-left:200px;"></td><td class='skillsRatingHeader'>Ancient<br />Knowledge</td><td class='skillsRatingHeader'>Working<br />Knowledge</td><td class='skillsRatingHeader'>Expert</td><td class='skillsRatingHeader'>Guru</td>
 </tr>
@@ -297,7 +297,7 @@ sub _editSkills {
 <!-- SKILLSPLUGIN - EDIT SKILLS -->
 <form name="skillsForm" method="post" action="%TOPIC%">
 <table class="skillsForm">
-<tr><th colspan="6"><a href="%SCRIPTURL{view}%/%SYSTEMWEB%/SkillsPlugin">Edit Your Skills (!$user)</a></th></tr>
+<tr><th colspan="6"><a href="%SCRIPTURL{view}%/%TWIKIWEB%/SkillsPlugin">Edit Your Skills (!$user)</a></th></tr>
 <tr><td><strong>Category</strong></td>
 <td colspan="5"><select name="category" onchange='setSkills(this.form.category);'>
 <option selected="selected" value="0">Select a category...</option>
@@ -343,7 +343,7 @@ sub _searchForm {
 <!-- SKILLSPLUGIN - SEARCH SKILLS -->
 <form name="searchskills" method="post" action="%TOPIC%">
 <table class="skillsForm">
-<tr><th colspan="4"><a href="%SCRIPTURL{view}%/%SYSTEMWEB%/SkillsPlugin">Search Skills</a></th></tr>
+<tr><th colspan="4"><a href="%SCRIPTURL{view}%/%TWIKIWEB%/SkillsPlugin">Search Skills</a></th></tr>
 <!-- Category -->
 <tr><td><strong>Category</strong></td>
 <td><select name="category" onchange='setSkills(this.form.category);'>

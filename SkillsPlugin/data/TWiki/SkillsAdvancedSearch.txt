@@ -61,7 +61,7 @@ You can also create a drop down menu in place of the topic search text box. This
 
 <verbatim>
 <select name="topicsearch">
-%SEARCH{".*Office$" type="regex" scope="topic" nonoise="on" web="%USERSWEB%" format="<option value=\"$topic\">$topic</option>"}%
+%SEARCH{".*Office$" type="regex" scope="topic" nonoise="on" web="%MAINWEB%" format="<option value=\"$topic\">$topic</option>"}%
 </select>
 </verbatim>
 

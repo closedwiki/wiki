@@ -6,7 +6,7 @@
 -->
 %SHORTDESCRIPTION%
 
-Example (only works if plugin is installed, and you are logged in (not %USERSWEB%.TWikiGuest)): %SUBSCRIBE%
+Example (only works if plugin is installed, and you are logged in (not %MAINWEB%.TWikiGuest)): %SUBSCRIBE%
 
 ---++ Usage
 %INCLUDE{"VarSUBSCRIBE" section="subscribe_attributes"}%
@@ -45,7 +45,7 @@ Another great TWiki extension from the <a style="text-decoration:none" href="htt
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
 %META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="" version="1"}%
 %META:FILEATTACHMENT{name="logo.gif" attr="h" comment="" version="1"}%

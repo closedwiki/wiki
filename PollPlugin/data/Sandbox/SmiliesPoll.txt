@@ -52,7 +52,7 @@ Are you happy?
 
 ----
 
-	* Set DENYTOPICVOTE = %USERSWEB%.TWikiGuest
+	* Set DENYTOPICVOTE = %MAINWEB%.TWikiGuest
 
 <!--TWikiPoll-->
 | <pollId/> | <pollDate/> | <pollUserId/> | <pollFeeling/> | <pollHappy/> |

@@ -17,5 +17,5 @@ Manager for the PingBackPlugin
 
 
 <!--
-   * Set ALLOWTOPICVIEW = %USERSWEB%.TWikiAdminGroup
+   * Set ALLOWTOPICVIEW = %MAINWEB%.TWikiAdminGroup
 -->

@@ -12,7 +12,7 @@ Search tools to find users:
    * Quick find phone list
    * Quick find face book 
 
-When installed, see [[%USERSWEB%.PersonalInfoHome]] for additional details.
+When installed, see [[%MAINWEB%.PersonalInfoHome]] for additional details.
 
 %TOC{title="On this page:"}%
 
@@ -61,7 +61,7 @@ If you are upgrading from a previous version of this add-on, please note that an
    * Select the data files for your version of TWiki (you are currently running on *%WIKIVERSION%*)
       * TWiki 4.1.x: use =/data/_PersonalInfoAddOn04x01=
       * TWiki 4.2.x: use =/data/_PersonalInfoAddOn04x02=
-   * Copy the data files to your %USERSWEB% web.
+   * Copy the data files to your %MAINWEB% web.
    * Optional plugins:
       * TWiki:Plugins/AttachContentPlugin for a faster quick search module 
       * TWiki:Plugins/ImagePlugin for server-side image rendering (strongly recommended)
@@ -70,7 +70,7 @@ If you are upgrading from a previous version of this add-on, please note that an
       %$DEPENDENCIES%
       
 ---+++ Updating from TWiki 4.1 to 4.2
-If you are using !PersonalInfoAddon for TWiki 4.1, and need to update to the version for TWiki 4.2, copy these files from =/data/_PersonalInfoAddOn04x02= to your %USERSWEB% web:
+If you are using !PersonalInfoAddon for TWiki 4.1, and need to update to the version for TWiki 4.2, copy these files from =/data/_PersonalInfoAddOn04x02= to your %MAINWEB% web:
    * !PersonalInfoLayoutModules
    * !PersonalInfoModules
    * !PersonalInfoPictureDeleteViewTemplate

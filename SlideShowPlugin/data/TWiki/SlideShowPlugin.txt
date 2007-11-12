@@ -84,7 +84,7 @@ This text is not part of the slideshow
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>SLIDESHOWPLUGIN_SHORTDESCRIPTION%==
 
-   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = Create web based presentations based on topics with headings.
 
    * Debug plugin: (See output in =data/debug.txt=)
@@ -152,7 +152,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 29 Sep 2007 (15091) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  29 Sep 2007: | Added %SYSTEMWEB%.VarSLIDESHOWSTART and %SYSTEMWEB%.VarSLIDESHOWEND to have them listed in %SYSTEMWEB%.TWikiVariables |
+|  29 Sep 2007: | Added %TWIKIWEB%.VarSLIDESHOWSTART and %TWIKIWEB%.VarSLIDESHOWEND to have them listed in %TWIKIWEB%.TWikiVariables |
 |  12 Feb 2007: | fixed construction of view urls (TWiki:Main/MichaelDaum) |
 |  19 Nov 2006: | 12011: Preserve URL parameters in slideshow (suggested by TWiki:Main/ThomasWeigert); changed logo in default template to T-logo; fixed warning errors introduced by 1.005 |
 |  16 Mar 2005: | 1.005 Crawford Currie prepped for Dakar, and fixed multiple evaluation bug |
@@ -165,12 +165,12 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle 98%, %SYSTEMWEB%.FormattedSearch 99%, SlideShowPlugin 99% |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 98%, %TWIKIWEB%.FormattedSearch 99%, SlideShowPlugin 99% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 %META:FILEATTACHMENT{name="next.gif" attr="h" comment="Next button" date="1037510613" path="C:\Data\next.gif" size="993" user="TWikiContributor" version="1.2"}%
 %META:FILEATTACHMENT{name="prev.gif" attr="h" comment="Prev button" date="1037510599" path="C:\Data\prev.gif" size="993" user="TWikiContributor" version="1.2"}%

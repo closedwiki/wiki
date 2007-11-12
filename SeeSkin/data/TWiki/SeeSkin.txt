@@ -73,4 +73,4 @@ For inspiration and a solid demonstration of how dramatically you can change a s
 
 As always, feedback is welcome and contributions cheered.
 
--- %USERSWEB%.MattWilkie xx Jul 2003
+-- %MAINWEB%.MattWilkie xx Jul 2003

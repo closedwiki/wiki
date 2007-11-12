@@ -52,7 +52,7 @@ See <a href="http://swish-e.org/docs/swish-search.html" target="_new">Swish Sear
 This uses the configuration scripts (in the ZIP file), along with these steps:
 
    1. Create a new user specifically for use by the spidering program. I used =SpideringEngine=
-   1. Edit the %<nop>USERSWEB%/SpideringEngine page to specify =plain= as the default skin for this user
+   1. Edit the %<nop>MAINWEB%/SpideringEngine page to specify =plain= as the default skin for this user
       %BR% =* Set default skin to remove 'print' button etc=
       %BR% =&nbsp;&nbsp;&nbsp;* Set SKIN = plain=
    1. Edit the =twiki-spider-config.pl= file
@@ -141,7 +141,7 @@ Testing the =catdoc= and =pdf= tools separately is recommended.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topic:__ %SYSTEMWEB%.TWikiAddOns
+__Related Topic:__ %TWIKIWEB%.TWikiAddOns
 
 -- TWiki:Main.StanleyKnutson - 16 Aug 2005
 

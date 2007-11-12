@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1173206530" format="1.1" reprev="1.1" version="1.1"}%
 ---+!! Personal Info !AddOn Application Sections
 
-*Admin topic for %SYSTEMWEB%.PersonalInfoAddOn.* %BR%
+*Admin topic for %TWIKIWEB%.PersonalInfoAddOn.* %BR%
 This topic holds a number of modules (INCLUDE sections) to display and search user information. See also PersonalInfoHome for documentation and usage examples.
 
 *Leave this file intact - always make custom changes to PersonalInfo.*
@@ -84,7 +84,7 @@ color:#ccc;
 ---++ phoneList
 
 <verbatim>
-%STARTSECTION{"phoneList"}%%SEARCH{ "[W]orkPhone;[W]orkStatus.*value=.*(Current)" web="%USERSWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation" format="   * [[$web.$topic][$topic]] $formfield(WorkPhone)"}%%ENDSECTION{"phoneList"}%
+%STARTSECTION{"phoneList"}%%SEARCH{ "[W]orkPhone;[W]orkStatus.*value=.*(Current)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation" format="   * [[$web.$topic][$topic]] $formfield(WorkPhone)"}%%ENDSECTION{"phoneList"}%
 </verbatim>
 
 
@@ -93,7 +93,7 @@ color:#ccc;
 <verbatim>
 %STARTSECTION{"phoneListXML"}%<?xml version="1.0" encoding="ISO-8859-1"?>
 <users>
-%SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%USERSWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="<user><firstname><![CDATA[$formfield(FirstName)]]></firstname><lastname><![CDATA[$formfield(LastName)]]></lastname><phone><![CDATA[$formfield(WorkPhone)]]></phone><url><![CDATA[%SCRIPTURL{view}%/%WEB%/$topic]]></url><imgname><![CDATA[$formfield(Picture)]]></imgname><imgurl><![CDATA[%PUBURL%/Main/$topic/]]></imgurl></user>" "}%
+%SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="<user><firstname><![CDATA[$formfield(FirstName)]]></firstname><lastname><![CDATA[$formfield(LastName)]]></lastname><phone><![CDATA[$formfield(WorkPhone)]]></phone><url><![CDATA[%SCRIPTURL{view}%/%WEB%/$topic]]></url><imgname><![CDATA[$formfield(Picture)]]></imgname><imgurl><![CDATA[%PUBURL%/Main/$topic/]]></imgurl></user>" "}%
 </users>
 %ENDSECTION{"phoneListXML"}%
 </verbatim>
@@ -103,7 +103,7 @@ color:#ccc;
 ---++ personalSearch
 
 <verbatim>
-%STARTSECTION{"personalSearch"}%%SEARCH{ "[F]irstName.*value=.*(%URLPARAM{"q"}%)|[L]astName.*value=.*(%URLPARAM{"q"}%)" web="%USERSWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="   * [[$web.$topic][$topic]] $formfield(WorkPhone)"}%%ENDSECTION{"personalSearch"}%
+%STARTSECTION{"personalSearch"}%%SEARCH{ "[F]irstName.*value=.*(%URLPARAM{"q"}%)|[L]astName.*value=.*(%URLPARAM{"q"}%)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="   * [[$web.$topic][$topic]] $formfield(WorkPhone)"}%%ENDSECTION{"personalSearch"}%
 </verbatim>
 
 
@@ -111,7 +111,7 @@ color:#ccc;
 ---++ vCard
 
 <verbatim>
-%STARTSECTION{"vCard"}%%SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%USERSWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="begin:vcard
+%STARTSECTION{"vCard"}%%SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="begin:vcard
 fn:$formfield(FirstName) $formfield(LastName)
 n:$formfield(LastName);$formfield(FirstName)
 tel;type=work:$formfield(WorkPhone)
@@ -128,8 +128,8 @@ end:vcard"}%%ENDSECTION{"vCard"}%
 <input type="text" class="twikiInputField" size="%IF{"defined inputfieldsize" then="%inputfieldsize%" else="12"}%" id="personalInfoSearchBox" name="personalInfoSearchBox" />
 <div id="personalInfoSearchResults"><!-- search results will be displayed here --></div>
 <!-- Compatibility for TWiki 4.1 that does not have twikiEvent.js -->
-<script language="javascript" type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikilib.js"></script>
-<script language="javascript" type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/PersonalInfoAddOn/twikiEvent.js"></script>
+<script language="javascript" type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikilib.js"></script>
+<script language="javascript" type="text/javascript" src="%PUBURL%/%TWIKIWEB%/PersonalInfoAddOn/twikiEvent.js"></script>
 <!-- END compatibility  -->
 %IF{"context AttachContentPluginEnabled" then='%INCLUDE{"PersonalInfo" section="directSearchScriptFile"}%' else='%INCLUDE{"PersonalInfo" section="directSearchScript" raw="on" literal="on"}%'}%
 %INCLUDE{"PersonalInfoModules" section="initSearchBox" raw="on" literal="on"}%
@@ -144,8 +144,8 @@ end:vcard"}%%ENDSECTION{"vCard"}%
 
 <verbatim>
 %STARTSECTION{"initSearchBox"}%<!-- Compatibility for TWiki 4.1 that does not have twikiEvent.js -->
-<script language="javascript" type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikilib.js"></script>
-<script language="javascript" type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/PersonalInfoAddOn/twikiEvent.js"></script>
+<script language="javascript" type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikilib.js"></script>
+<script language="javascript" type="text/javascript" src="%PUBURL%/%TWIKIWEB%/PersonalInfoAddOn/twikiEvent.js"></script>
 <!-- END compatibility  -->
 <script language="javascript" type="text/javascript">
 // <![CDATA[
@@ -243,7 +243,7 @@ pISearch.showResults = function(inValue) {
 
 ---+++ directSearchData
 <verbatim>
-%STARTSECTION{"directSearchData"}%%SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%USERSWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="{name:\"$formfield(FirstName) $formfield(LastName)\",phone:\"$formfield(WorkPhone)\",topic:\"$web/$topic\",pictureName:\"$formfield(Picture)\"}" separator=", "}%%ENDSECTION{"directSearchData"}%
+%STARTSECTION{"directSearchData"}%%SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="{name:\"$formfield(FirstName) $formfield(LastName)\",phone:\"$formfield(WorkPhone)\",topic:\"$web/$topic\",pictureName:\"$formfield(Picture)\"}" separator=", "}%%ENDSECTION{"directSearchData"}%
 </verbatim>
 
 
@@ -270,7 +270,7 @@ color:#fff;
 </style>
 <div id="compact">
 | *Personal page* | *Phone* | *E-mail* | *Location* |
-%SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%USERSWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="|[[%SCRIPTURL{view}%/$web/$topic][$formfield(FirstName) $formfield(LastName)]] |$formfield(WorkPhone) |$formfield(WorkEmail) |$formfield(WorkLocation) |" "}%
+%SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="|[[%SCRIPTURL{view}%/$web/$topic][$formfield(FirstName) $formfield(LastName)]] |$formfield(WorkPhone) |$formfield(WorkEmail) |$formfield(WorkLocation) |" "}%
 </div>%ENDSECTION{"tableOfAllUsers"}%
 </verbatim>
 
@@ -319,7 +319,7 @@ height:2.25em; /* allow 2 lines */
 overflow:hidden;
 }
 </style>
-<div id="pISearchResultsGrid">%SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%USERSWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,PersonalInfoFaceBook,TWikiContributor,TWikiGuest,UnknownUser%IF{'defined exclude' then=',%exclude%'}%" order="topic" format="<a href='%SCRIPTURL{view}%/$web/$topic' class='pISearchResultsGridItem' id='pISearch$topic' title='$formfield(FirstName) $formfield(LastName)'><span class='pIimage'>$percntINCLUDE{$quotPersonalInfoLayoutModules$quot section=$quotimage$quot imgType=$quotnolink$quot imgWeb=$quot$web$quot imgTopic=$quot$topic$quot imgHeight=$quot%imgHeight%$quot imgTitle=$quot$formfield(FirstName) $formfield(LastName)$quot imgName=$quot$percntFORMFIELD{$quotPicture$quot topic=$quot$web.$topic$quot format=$quot$value$quot default=$quot$quot alttext=$quot$quot}$percnt$quot}$percnt</span><p class='pISearchResultsGridInfo'>$formfield(FirstName) $formfield(LastName)</p></a>" "}%<br class="twikiClear" /></div>%ENDSECTION{"pictures"}%
+<div id="pISearchResultsGrid">%SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,PersonalInfoFaceBook,TWikiContributor,TWikiGuest,UnknownUser%IF{'defined exclude' then=',%exclude%'}%" order="topic" format="<a href='%SCRIPTURL{view}%/$web/$topic' class='pISearchResultsGridItem' id='pISearch$topic' title='$formfield(FirstName) $formfield(LastName)'><span class='pIimage'>$percntINCLUDE{$quotPersonalInfoLayoutModules$quot section=$quotimage$quot imgType=$quotnolink$quot imgWeb=$quot$web$quot imgTopic=$quot$topic$quot imgHeight=$quot%imgHeight%$quot imgTitle=$quot$formfield(FirstName) $formfield(LastName)$quot imgName=$quot$percntFORMFIELD{$quotPicture$quot topic=$quot$web.$topic$quot format=$quot$value$quot default=$quot$quot alttext=$quot$quot}$percnt$quot}$percnt</span><p class='pISearchResultsGridInfo'>$formfield(FirstName) $formfield(LastName)</p></a>" "}%<br class="twikiClear" /></div>%ENDSECTION{"pictures"}%
 
 
 
@@ -327,8 +327,8 @@ overflow:hidden;
 
 <verbatim>
 %STARTSECTION{"pictureFilterSearch"}%%IF{"context AttachContentPluginEnabled" then='%INCLUDE{"PersonalInfo" section="directSearchScriptFile"}%' else='%INCLUDE{"PersonalInfo" section="directSearchScript" raw="on" literal="on"}%'}%<!-- Compatibility for TWiki 4.1 that does not have twikiEvent.js -->
-<script language="javascript" type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikilib.js"></script>
-<script language="javascript" type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/PersonalInfoAddOn/twikiEvent.js"></script>
+<script language="javascript" type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikilib.js"></script>
+<script language="javascript" type="text/javascript" src="%PUBURL%/%TWIKIWEB%/PersonalInfoAddOn/twikiEvent.js"></script>
 <!-- END compatibility  -->
 <script language="javascript" type="text/javascript">
 // <![CDATA[
