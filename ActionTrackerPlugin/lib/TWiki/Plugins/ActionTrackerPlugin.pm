@@ -68,7 +68,7 @@ sub commonTagsHandler {
 <link rel="stylesheet" href="$options->{CSS}" type="text/css" media="all" />
 HERE
     TWiki::Func::addToHEAD('ACTIONTRACKERPLUGIN_JS', <<'HERE');
-<script type='text/javascript' src='%PUBURLPATH%/%SYSTEMWEB%/ActionTrackerPlugin/atp.js'></script>
+<script type='text/javascript' src='%PUBURLPATH%/%TWIKIWEB%/ActionTrackerPlugin/atp.js'></script>
 HERE
 
     # Format actions in the topic.

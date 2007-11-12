@@ -40,6 +40,6 @@ By default existing values for VIEW_TEMPLATE have priority. You can override thi
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPlugins
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins
 
--- %SYSTEMWEB%.TWikiContributor - 04 Jun 2007
+-- %TWIKIWEB%.TWikiContributor - 04 Jun 2007

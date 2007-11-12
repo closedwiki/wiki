@@ -157,7 +157,7 @@ Valid _units_ are =minutes=, =hours=, =days=, =weeks=, =years=.
 #PeopleAnchor
 ---+++ People
 
-People are identified to the action tracker using a wikiname (e.g. =%USERSWEB%.William<nop>Wallace= or simply =William<nop>Wallace=) or an e-mail address (e.g. =a_einstein@<nop>pto.co.ch=). The e-mail address is useful if you want to notify people who aren't registered in the wiki, but bear in mind that if they are outside your firewall, they'll get action notifications but the chances are they won't be able to edit pages and close actions. _Very_ annoying!
+People are identified to the action tracker using a wikiname (e.g. =%MAINWEB%.William<nop>Wallace= or simply =William<nop>Wallace=) or an e-mail address (e.g. =a_einstein@<nop>pto.co.ch=). The e-mail address is useful if you want to notify people who aren't registered in the wiki, but bear in mind that if they are outside your firewall, they'll get action notifications but the chances are they won't be able to edit pages and close actions. _Very_ annoying!
 
 E-mail addresses of people are found by the process [[#TranslatingNamesToEmailAddresses][described below]].
 
@@ -165,7 +165,7 @@ You can also use the shorthand =me= for the currently logged-in user (this is =T
 
 ---++++ Groups
 
-You can assign an action to a group defined using a TWiki group topic (see %SYSTEMWEB%.TWikiDocumentation). Alternatively you can give a list of people as the value of the attribute. For example,
+You can assign an action to a group defined using a TWiki group topic (see %TWIKIWEB%.TWikiDocumentation). Alternatively you can give a list of people as the value of the attribute. For example,
 <pre>
 %ACTION<nop>{who=TWikiAdminGroup ...}%
 %ACTION<nop>{who="KnutHaraldsen,MagnusMagnusson" ...}%
@@ -260,7 +260,7 @@ __Notes:__
 
 ---++ Formatting search tables
 
-The =header=, =footer, =format=, =separator= and =orient= parameters of =%<nop>ACTIONSEARCH{}%= support formatting of the action table using a similar syntax to that described in %SYSTEMWEB%.FormattedSearch. For example:
+The =header=, =footer, =format=, =separator= and =orient= parameters of =%<nop>ACTIONSEARCH{}%= support formatting of the action table using a similar syntax to that described in %TWIKIWEB%.FormattedSearch. For example:
 <pre>
 %<nop>ACTIONSEARCH{ web="Directors" state="open" format="|$who|$text|$edit|" header="|*Director*|*Films*||" footer="|*Director*|*Films*|" separator="$n" orient="rows" }%
 </pre>
@@ -339,7 +339,7 @@ will match both of the following actions:
 <!--
 	* Set SHORTDESCRIPTION = Adds support for action tags in topics, and automatic notification of action statuses
 -->
-You can override the defaults for these values in %USERSWEB%.<nop>TWikiPreferences, the Web<nop>Preferences topic of the current web, or in individual topics. Use the standard TWiki 'Set' syntax e.g:
+You can override the defaults for these values in %MAINWEB%.<nop>TWikiPreferences, the Web<nop>Preferences topic of the current web, or in individual topics. Use the standard TWiki 'Set' syntax e.g:
 <pre>
    *<nop> Set ACTIONTRACKERPLUGIN_EDITORIENT = rows
 </pre>
@@ -441,7 +441,7 @@ Thanks are due to the following sponsors, who have helped make this plugin possi
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/ActionTrackerPlugin |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/ActionTrackerPluginDev |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 ---++ Further development
 

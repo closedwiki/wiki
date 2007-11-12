@@ -108,7 +108,7 @@ macro or listed in the following way:
      | *File:* | *Description:* |
 %$MANIFEST%
    * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-   * Edit your %USERSWEB%.TWikiPreferences and prepend to your SKIN variable the =alias= identifier,
+   * Edit your %MAINWEB%.TWikiPreferences and prepend to your SKIN variable the =alias= identifier,
      for example to
      <verbatim>   * Set SKIN = alias,pattern</verbatim>
      This surrounds the textarea with the STARTALIASAREA, STOPALIASAREA tags to mark the area where

@@ -1,1 +1,1 @@
-%INCLUDE{%SYSTEMWEB%.WebTopicCreator}%
+%INCLUDE{%TWIKIWEB%.WebTopicCreator}%
