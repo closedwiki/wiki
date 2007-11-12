@@ -195,7 +195,7 @@ sub handleCurrentVisitors {
 
 ###############################################################################
 # render list of 10 most recently registered users.
-# this information is extracted from %USERSWEB%.TWikiUsers
+# this information is extracted from %MAINWEB%.TWikiUsers
 sub handleNewUsers {
   my ($this, $attributes) = @_;
 

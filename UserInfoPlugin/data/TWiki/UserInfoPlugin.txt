@@ -51,7 +51,7 @@ The format parameter might containt the following variables:
 	* add a list of host addresses to ignore users comming from them
 		* Set IGNORE_HOSTS = 
 	* add a list of users to ignore
-		* Set IGNORE_USERS = %USERSWEB%.TestUser
+		* Set IGNORE_USERS = %MAINWEB%.TestUser
 
 ---++ Plugin Installation Instructions
 

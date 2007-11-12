@@ -82,7 +82,7 @@ sub test_denytopic {
 If DENYTOPIC is set to a list of wikinames
     * people in the list will be DENIED.
 \t* Set DENYTOPICVIEW = MrGreen
-   * Set DENYTOPICVIEW = MrYellow,$this->{users_web}.MrOrange,%USERSWEB%.ReservoirDogsGroup
+   * Set DENYTOPICVIEW = MrYellow,$this->{users_web}.MrOrange,%MAINWEB%.ReservoirDogsGroup
 THIS
                                 , undef);
     $this->{twiki}->finish();
@@ -121,7 +121,7 @@ sub test_allowtopic {
 If ALLOWTOPIC is set
    1. people in the list are PERMITTED
    2. everyone else is DENIED
-\t* Set ALLOWTOPICVIEW = %USERSWEB%.MrOrange
+\t* Set ALLOWTOPICVIEW = %MAINWEB%.MrOrange
 THIS
                                 , undef);
     $this->{twiki}->finish();
@@ -140,7 +140,7 @@ sub test_allowtopic_a {
 If ALLOWTOPIC is set
    1. people in the list are PERMITTED
    2. everyone else is DENIED
-\t* Set ALLOWTOPICVIEW = %USERSWEB%.MrOrange
+\t* Set ALLOWTOPICVIEW = %MAINWEB%.MrOrange
 THIS
                                 , undef);
     my $topicquery = new CGI( "" );
@@ -170,7 +170,7 @@ sub test_allowtopic_b {
 If ALLOWTOPIC is set
    1. people in the list are PERMITTED
    2. everyone else is DENIED
-\t* Set ALLOWTOPICVIEW = %USERSWEB%.MrOrange
+\t* Set ALLOWTOPICVIEW = %MAINWEB%.MrOrange
 THIS
                                 , undef);
     # renew TWiki, so WebPreferences gets re-read
@@ -198,7 +198,7 @@ sub test_allowtopic_c {
 If ALLOWTOPIC is set
    1. people in the list are PERMITTED
    2. everyone else is DENIED
-%META:PREFERENCE{name="ALLOWTOPICVIEW" title="ALLOWTOPICVIEW" type="Set" value="%25USERSWEB%25.MrOrange MrYellow"}%
+%META:PREFERENCE{name="ALLOWTOPICVIEW" title="ALLOWTOPICVIEW" type="Set" value="%25MAINWEB%25.MrOrange MrYellow"}%
 THIS
                                 , undef);
     # renew TWiki, so WebPreferences gets re-read
@@ -225,7 +225,7 @@ sub test_denyweb {
                                 <<THIS
 If DENYWEB is set to a list of wikiname
     * people in the list are DENIED access
-\t* Set DENYWEBVIEW = $this->{users_web}.MrOrange %USERSWEB%.MrBlue
+\t* Set DENYWEBVIEW = $this->{users_web}.MrOrange %MAINWEB%.MrBlue
 THIS
                                 , undef);
     # renew TWiki, so WebPreferences gets re-read
@@ -296,7 +296,7 @@ sub test_SetInText {
     $this->{twiki} = new TWiki();
 
     my $text = <<THIS;
-\t* Set ALLOWTOPICVIEW = %USERSWEB%.MrGreen
+\t* Set ALLOWTOPICVIEW = %MAINWEB%.MrGreen
 THIS
     $this->checkText($text, undef);
 }
@@ -312,7 +312,7 @@ sub test_setInMETA {
       {
           name =>  'ALLOWTOPICVIEW',
           title => 'ALLOWTOPICVIEW',
-          value => "%USERSWEB%.MrGreen",
+          value => "%MAINWEB%.MrGreen",
           type =>  "Set"
          };
     $meta->putKeyed('PREFERENCE', $args);
@@ -330,12 +330,12 @@ sub test_setInSetAndMETA {
       {
           name =>  'ALLOWTOPICVIEW',
           title => 'ALLOWTOPICVIEW',
-          value => "%USERSWEB%.MrGreen",
+          value => "%MAINWEB%.MrGreen",
           type =>  "Set"
          };
     $meta->putKeyed('PREFERENCE', $args);
     my $text = <<THIS;
-\t* Set ALLOWTOPICVIEW = %USERSWEB%.MrOrange
+\t* Set ALLOWTOPICVIEW = %MAINWEB%.MrOrange
 THIS
     $this->checkText($text, $meta);
 }
@@ -347,7 +347,7 @@ sub test_setInEmbedAndNoMETA {
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki();
     my $text = <<THIS;
-%META:PREFERENCE{name="ALLOWTOPICVIEW" title="ALLOWTOPICVIEW" type="Set" value="%25USERSWEB%25.MrGreen"}%
+%META:PREFERENCE{name="ALLOWTOPICVIEW" title="ALLOWTOPICVIEW" type="Set" value="%25MAINWEB%25.MrGreen"}%
 THIS
     $this->checkText($text, undef);
 }
@@ -363,12 +363,12 @@ sub test_setInEmbedAndMETA {
       {
           name =>  'ALLOWTOPICVIEW',
           title => 'ALLOWTOPICVIEW',
-          value => "%USERSWEB%.MrGreen",
+          value => "%MAINWEB%.MrGreen",
           type =>  "Set"
          };
     $meta->putKeyed('PREFERENCE', $args);
     my $text = <<THIS;
-%META:PREFERENCE{name="ALLOWTOPICVIEW" title="ALLOWTOPICVIEW" type="Set" value="%25USERSWEB%25.MrOrange"}%
+%META:PREFERENCE{name="ALLOWTOPICVIEW" title="ALLOWTOPICVIEW" type="Set" value="%25MAINWEB%25.MrOrange"}%
 THIS
     $this->checkText($text, $meta);
 }
