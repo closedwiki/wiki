@@ -600,8 +600,9 @@ sub test_badIF {
         my $text = '%IF{"'.$test->{test}.'" then="1" else="0"}%';
         my $result = $this->{twiki}->handleCommonTags(
             $text, $this->{test_web}, $this->{test_topic});
+        $result =~ s/^.*twikiAlert'>\s*//s;
+        $result =~ s/\s*<\/span>\s*//s;
         $this->assert($result =~ s/^.*}:\s*//s);
-        $this->assert($result =~ s/<br.*$//s);
         $this->assert_str_equals($test->{expect}, $result);
     }
 }
