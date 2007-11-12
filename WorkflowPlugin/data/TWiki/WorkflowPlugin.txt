@@ -80,7 +80,7 @@ will define =WORKFLOWNOTICE= in any topic that uses the workflow.
 
 As described above the topic needs to contain a definition for the variable =WORKFLOW= for it to be controlled under the approval workflow. This is best set as a document-specific preference setting in the =More topic actions= screen.
 
-The plugin defines a number of %SYSTEMWEB%.TWikiVariables that can be used in the topic under flow control:
+The plugin defines a number of %TWIKIWEB%.TWikiVariables that can be used in the topic under flow control:
 | *Variable* | *Description* |
 | =%<nop>WORKFLOWTRANSITION%= | Expands to either (a) a pull-down menu if the user can perform more than one transition, (b) a button if the current user can only perform one transition, or (c) empty space if the current user is not allowed to perform any action. |
 | =%<nop>WORKFLOWSTATEMESSAGE%= | Expands to the corresponding message in the state table. |
@@ -89,9 +89,9 @@ The plugin defines a number of %SYSTEMWEB%.TWikiVariables that can be used in th
 | =%<nop>WORKFLOWHISTORY%= | Expands to the history of state transitions the topic has undergone. The format of the history is dictated by the =WORKFLOWHISTORYFORMAT= (described below). |
 | =%<nop>WORKFLOWSTATE%= | Expands to the current state of the document. It can also be given a =topic= parameter (default), in which case the state of that topic is returned. |
 
-Furthermore, the plugin replaces any variable starting with =WORKFLOW= that is defined in the workflow description file. If the topic is *not* controlled, then any references to =WORKFLOW= variables are simply removed (you can use this behaviour to place these tags in the header or footer in your %SYSTEMWEB%.TWikiTemplates. They appear only if the currently displayed document is controlled. Otherwise, they are just removed and do not disturb the layout)
+Furthermore, the plugin replaces any variable starting with =WORKFLOW= that is defined in the workflow description file. If the topic is *not* controlled, then any references to =WORKFLOW= variables are simply removed (you can use this behaviour to place these tags in the header or footer in your %TWIKIWEB%.TWikiTemplates. They appear only if the currently displayed document is controlled. Otherwise, they are just removed and do not disturb the layout)
 
-If you replace =%<nop>EDITTOPIC%= with =%<nop>WORKFLOWEDITTOPIC%= in your %SYSTEMWEB%.TWikiTemplates, then the _Edit_ link is crossed out when the user is not allowed to edit the page in a state.  
+If you replace =%<nop>EDITTOPIC%= with =%<nop>WORKFLOWEDITTOPIC%= in your %TWIKIWEB%.TWikiTemplates, then the _Edit_ link is crossed out when the user is not allowed to edit the page in a state.  
 
 ---++ Bugs
 
@@ -141,12 +141,12 @@ __Note:__ For strict access control, the plugin should know who is looking at th
 |  05 Feb 2004: | Initial version of !WorkFlowAddOn |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  Dependencies: | None |
-|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 -- TWiki:Main/ThomasWeigert - 25 Sep 2006
 
