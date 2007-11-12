@@ -45,7 +45,7 @@ sub handleNotify {
         return;
     }
     &$debug("- Jabber: Logged in OK, sending messages...");
-    my $mainWeb = TWiki::Func::getPreferencesValue("USERSWEB") || "Main";
+    my $mainWeb = TWiki::Func::getPreferencesValue("MAINWEB") || "Main";
     my $toolName = TWiki::Func::getPreferencesValue("WIKITOOLNAME") || "TWiki";
     foreach my $user (keys %$users) {
         # get jabber userid

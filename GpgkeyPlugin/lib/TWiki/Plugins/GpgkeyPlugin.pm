@@ -87,7 +87,7 @@ sub handleGpgKeyView {
 	
 	my $keylistTopic = TWiki::Func::readTopicText($web, 
 			"$attrTopic");
-	my $mainWeb = TWiki::Func::getPreferencesValue("USERSWEB") || "Main";
+	my $mainWeb = TWiki::Func::getPreferencesValue("MAINWEB") || "Main";
 
 	while ($keylistTopic =~ /\t+\* $mainWeb\.([^\r\n]+)/go) {
 		push @names, $1 if $1;

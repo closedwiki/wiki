@@ -34,11 +34,11 @@ From there you can use that file in the =Text= =DBType=, use =dbmmanage= to impo
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  July 2007 | version 1 - initial release |
 |  Dependencies: | %$DEPENDENCIES% |
-|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, HTTPDUserAdminContrib nn% |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, HTTPDUserAdminContrib nn% |
 |  Contrib Home: | http://twiki.org/cgi-bin/view/Plugins/HTTPDUserAdminContrib |
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/HTTPDUserAdminContribDev |
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/HTTPDUserAdminContribAppraisal |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiContribs, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
+__Related Topics:__ %TWIKIWEB%.TWikiContribs, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the feedback topic on twiki.org instead. -->

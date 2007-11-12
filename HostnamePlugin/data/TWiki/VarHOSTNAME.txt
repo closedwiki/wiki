@@ -2,5 +2,5 @@
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarHOSTNAME
 ---+++ HOSTNAME -- the name of the host
-%INCLUDE{"%SYSTEMWEB%.HostnamePlugin" section="usage"}%
+%INCLUDE{"%TWIKIWEB%.HostnamePlugin" section="usage"}%
    * See HostnamePlugin for more information

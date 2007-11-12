@@ -76,7 +76,7 @@ The following table shows the various configuration variables and their meaning.
 
 If using TWiki preference variables, copy them to the appropriate web preferences page.
 
-%SEARCH{"GENPDFADDON_" topic="%TOPIC%" type="literal" casesensitive="on" limit="21" nosearch="on" nosummary="on" header="	* Settings for the %SYSTEMWEB%.%TOPIC% Plugin" nototal="on" multiple="on" format="		* #Set $pattern(.*(G.*?N_.*? ).*) = "}%
+%SEARCH{"GENPDFADDON_" topic="%TOPIC%" type="literal" casesensitive="on" limit="21" nosearch="on" nosummary="on" header="	* Settings for the %TWIKIWEB%.%TOPIC% Plugin" nototal="on" multiple="on" format="		* #Set $pattern(.*(G.*?N_.*? ).*) = "}%
 
 ---+++ Limiting the PDF Generation Region
 
@@ -119,7 +119,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 	* *Adjust the perl path in the genpdf script to match your perl installation location.*
 	* %X% *BEFORE TWiki-4* Add the variable =$htmldocCmd = "/path/to/htmldoc";= to your =lib/TWiki.cfg= file so TWiki can find the location of the htmldoc executable. Look for $fgrepCmd.
 	* %X% *TWiki-4 and later* Add the setting =$TWiki::cfg{Extensions}{GenPDFAddOn}{htmldocCmd} = "/path/to/htmldoc";= to your =LocalSite.cfg= file.
-	* %T% Copy the preferences from above and paste them into %USERSWEB%.TWikiPreferences, or the !WebPreferences topic for a single web.
+	* %T% Copy the preferences from above and paste them into %MAINWEB%.TWikiPreferences, or the !WebPreferences topic for a single web.
 	* Test if the installation was successful:
 		* Try loading [[%SCRIPTURL%/genpdf/%WEB%/%TOPIC%][this page]]
 		* If it doesn't work, check your webserver logs for any problems. The most common issue is probably an htmldoc installation problem.
@@ -178,7 +178,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 
-__Related Topic:__ %SYSTEMWEB%.TWikiAddOns
+__Related Topic:__ %TWIKIWEB%.TWikiAddOns
 <!-- PDFSTOP -->
 
 -- TWiki:Main/WadeTurland - 28 Jun 2005%BR%
