@@ -139,8 +139,8 @@ sub processTopic
     open TOPIC, "$dataDir/$web/$topic.txt" or die "$web/$topic: $!";
     while (<TOPIC>)
     {
-	s/%SYSTEMWEB%/TWiki/go;
-	s/%USERSWEB%/Main/go;
+	s/%TWIKIWEB%/TWiki/go;
+	s/%MAINWEB%/Main/go;
 	# meta stuff
 	if (/^%META:TOPICPARENT.name="(.*)"/o) {
 	    				xrf $topic, $1; $hasparent = 1; next; }

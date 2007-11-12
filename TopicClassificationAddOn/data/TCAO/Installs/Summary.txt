@@ -2,10 +2,10 @@
 %INCLUDE{%TCAOWEB%.%TOPIC%}%
 
 <!-- Topic Permissions
-   * Set ALLOWTOPICCHANGE = %USERSWEB%.TWikiAdminGroup
-   * Set ALLOWTOPICRENAME = %USERSWEB%.TWikiAdminGroup
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+   * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
 -->
 
 %META:TOPICMOVED{by="LynnwoodBrown" date="1160083618" from="TCAO2/Installs.TopicHeadline" to="TCAO2/Installs.Summary"}%
-%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%2525USERSWEB%2525.TWikiAdminGroup"}%
-%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%2525USERSWEB%2525.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%2525MAINWEB%2525.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%2525MAINWEB%2525.TWikiAdminGroup"}%

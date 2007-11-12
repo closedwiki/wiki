@@ -31,8 +31,8 @@ After installing this add-on, there are a few additional steps needed before it 
       * Set TCAOWEB = TCAO
       * Set HELP_BACKGROUND_COLOR = #E0B9A6
 </verbatim>
-   * Go to %USERSWEB%.TWikiGroups and create a new group called ==ModeratorGroup==. This group can add new classifications within webs where TCAO is enabled. 
-   * Add the following %SYSTEMWEB%.CommentPlugin templates definitions to %SYSTEMWEB%.UserCommentsTemplate (create this topic if you have not already).
+   * Go to %MAINWEB%.TWikiGroups and create a new group called ==ModeratorGroup==. This group can add new classifications within webs where TCAO is enabled. 
+   * Add the following %TWIKIWEB%.CommentPlugin templates definitions to %TWIKIWEB%.UserCommentsTemplate (create this topic if you have not already).
 <verbatim>
 %TMPL:INCLUDE{"TCAO.TCAOComments"}%
 </verbatim>
@@ -43,7 +43,7 @@ After installing this add-on, there are a few additional steps needed before it 
 %INCLUDE{"%TCAOWEB%.RenderInstallTopicClassification" warm="Only displays if prior installation steps have been completed."}%
 
 ---+++ Setting up Topic Classification within a web
-Once %TOPIC% is enabled within a web, you're ready to start defining *TopicTypes* and *SubjectAreas* to be used in that web. To do this, go to those respective topics (e.g. go to !TopicType to add new !TopicTypes) and use form at bottom that is only visible to members of !ModeratorGroup (or %USERSWEB%.TWikiAdminGroup, of course).
+Once %TOPIC% is enabled within a web, you're ready to start defining *TopicTypes* and *SubjectAreas* to be used in that web. To do this, go to those respective topics (e.g. go to !TopicType to add new !TopicTypes) and use form at bottom that is only visible to members of !ModeratorGroup (or %MAINWEB%.TWikiAdminGroup, of course).
 
 ---++ Add-On Info
 

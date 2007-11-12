@@ -20,8 +20,8 @@ You can modify the options for creating new topics of this type by changing the 
 %ENDSECTION{"new" type="section"}%
 </div>
 <!-- Topic Permissions
-	* Set ALLOWTOPICCHANGE = %USERSWEB%.ModeratorGroup
-	* Set ALLOWTOPICRENAME = %USERSWEB%.ModeratorGroup
+	* Set ALLOWTOPICCHANGE = %MAINWEB%.ModeratorGroup
+	* Set ALLOWTOPICRENAME = %MAINWEB%.ModeratorGroup
 -->
 
 

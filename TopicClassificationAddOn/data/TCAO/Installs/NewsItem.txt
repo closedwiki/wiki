@@ -8,7 +8,7 @@ To enable any of these settings, replace the explanation with the value you want
    * #Set CLASS_DESCRIPTION = Provide a description of how this !TopicType will be used in this web.
    * Set CLASS_DESCRIPTION = <b><i>%FORMFIELD{"Summary" topic="%BASEWEB%.%BASETOPIC%"}%</b></i>
    * Set ADD_FILTER = %TCAOWEB%.RenderStandardFilter
-   * Set SEARCH_FORMAT = $t* [[$web.$topic][<noautolink>$formfield(Summary)</noautolink>]] - _Modified by $percntUSERSWEB$percnt.$expand(info.author) on $formatTime(info.date, $http)_
+   * Set SEARCH_FORMAT = $t* [[$web.$topic][<noautolink>$formfield(Summary)</noautolink>]] - _Modified by $percntMAINWEB$percnt.$expand(info.author) on $formatTime(info.date, $http)_
    * #Set HEADER_FORMAT = Optional custom format for search results header. Defaults to empty header.
    * #Set FOOTER_FORMAT = Optional custom format for search results footer. Defaults to "Number of topics found = $count".
    * #Set SEARCH_ORDER = Option for changing the default order for the search. Defaults to "name."
@@ -28,8 +28,8 @@ You can modify the options for creating new topics of this type by changing the 
 
 
 <!-- Topic Permissions
-	* Set ALLOWTOPICCHANGE = %USERSWEB%.ModeratorGroup
-	* Set ALLOWTOPICRENAME = %USERSWEB%.ModeratorGroup
+	* Set ALLOWTOPICCHANGE = %MAINWEB%.ModeratorGroup
+	* Set ALLOWTOPICRENAME = %MAINWEB%.ModeratorGroup
 -->
 
 %META:FORM{name="TopicClassForm"}%

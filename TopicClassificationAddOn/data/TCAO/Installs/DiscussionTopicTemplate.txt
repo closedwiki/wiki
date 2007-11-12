@@ -9,7 +9,7 @@
 
 %STARTSECTION{type="templateonly"}% 
 <!-- Topic Permissions
-	* Set ALLOWTOPICCHANGE = %USERSWEB%.ModeratorGroup
-	* Set ALLOWTOPICRENAME = %USERSWEB%.ModeratorGroup
+	* Set ALLOWTOPICCHANGE = %MAINWEB%.ModeratorGroup
+	* Set ALLOWTOPICRENAME = %MAINWEB%.ModeratorGroup
 -->
 %ENDSECTION{type="templateonly"}%

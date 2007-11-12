@@ -6,7 +6,7 @@
 At some point, I anticipate adding the search results within this TopicFunction, but for now, it just provides the links.
 
 ---++ Changelog
-   * %USERSWEB%.LynnwoodBrown - 17 Jun 2006: initial version
+   * %MAINWEB%.LynnwoodBrown - 17 Jun 2006: initial version
 
 ---++ Parameters
    * No parameters

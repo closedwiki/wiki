@@ -2,6 +2,6 @@
 %META:TOPICPARENT{name="NewsItem"}%
 %INCLUDE{%TCAOWEB%.%TOPIC%}%
 <!-- Topic Permissions
-   * Set ALLOWTOPICCHANGE= %USERSWEB%.ModeratorGroup
+   * Set ALLOWTOPICCHANGE= %MAINWEB%.ModeratorGroup
 -->
 %META:REVCOMMENT{ncomments="0"}%

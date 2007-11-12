@@ -15,8 +15,8 @@ To enable any of these settings, replace the explanation with the value you want
 %DBCALL{"%TCAOWEB%.RenderAddClassification" TYPE="SubjectArea" ALLEXTRA="selectClassParent" warn="off"}%
 
 <!-- Topic Permissions
-	* Set ALLOWTOPICCHANGE = %USERSWEB%.ModeratorGroup
-	* Set ALLOWTOPICRENAME = %USERSWEB%.ModeratorGroup
+	* Set ALLOWTOPICCHANGE = %MAINWEB%.ModeratorGroup
+	* Set ALLOWTOPICRENAME = %MAINWEB%.ModeratorGroup
 -->
 
 %META:FORM{name="TopicClassForm"}%

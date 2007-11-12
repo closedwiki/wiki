@@ -84,7 +84,7 @@ For instance if you know that every topic in your tree has a common prefix you c
    * Set SHORTDESCRIPTION = Dynamic generation of TWiki topic trees 
 -->
 
-Specify plug-in settings on %USERSWEB%.TWikiPreferences using:
+Specify plug-in settings on %MAINWEB%.TWikiPreferences using:
    * Set #TREEPLUGIN_DEBUG_FAKE = 0
 
 ---++ Installation Instructions
@@ -121,7 +121,7 @@ Specify plug-in settings on %USERSWEB%.TWikiPreferences using:
 | Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 | Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 %META:FILEATTACHMENT{name="oT.gif" attr="h" autoattached="1" comment="" date="1158432770" path="oT.gif" size="879" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="I.gif" attr="h" autoattached="1" comment="" date="1158432770" path="I.gif" size="869" user="UnknownUser" version=""}%

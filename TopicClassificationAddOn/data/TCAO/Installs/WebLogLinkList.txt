@@ -3,6 +3,6 @@
 %INCLUDE{%TCAOWEB%.%TOPIC%}%
 
 <!-- Topic permissions
-   * Set ALLOWTOPICCHANGE = %USERSWEB%.ModeratorGroup
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.ModeratorGroup
 -->
 
