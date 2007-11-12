@@ -24,7 +24,7 @@
 User mapping is the process by which TWiki maps from a username (a login name)
 to a wikiname and back. It is also where groups are maintained.
 
-By default TWiki maintains user topics and group topics in the %USERSWEB% that
+By default TWiki maintains user topics and group topics in the %MAINWEB% that
 define users and group. These topics are
    * !TWikiUsers - stores a mapping from usernames to TWiki names
    * !WikiName - for each user, stores info about the user
@@ -1021,7 +1021,7 @@ sub _expandUserList {
 
     $names ||= '';
     # comma delimited list of users or groups
-    # i.e.: "%USERSWEB%.UserA, UserB, Main.UserC  # something else"
+    # i.e.: "%MAINWEB%.UserA, UserB, Main.UserC  # something else"
     $names =~ s/(<[^>]*>)//go;     # Remove HTML tags
 
     my @l;
