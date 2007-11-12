@@ -44,7 +44,7 @@ the "Refresh Cache" button below. Read the documentation of the =MaxCacheAge= va
 </center>
 
 Tip: You can add this button on any page by adding
-=%<nop>INCLUDE{"%SYSTEMWEB%.LdapContrib"}%= to it.
+=%<nop>INCLUDE{"%TWIKIWEB%.LdapContrib"}%= to it.
 
 ---++ LDAP questionary
 Before you can further configure TWiki's LDAP connection you will have to answer
@@ -151,7 +151,7 @@ $TWiki::cfg{Ldap}{WikiNameAttribute} = 'givenName,sn';
 $TWiki::cfg{Ldap}{NormalizeWikiName} = 1;
 </verbatim>
 The =givenName= and =sn= (surname) LDAP attributes will be fetched and concatenated
-to form a <nop>WikiName, so that "givenName=Hans-Peter,sn=Leuthäuser-Schnarrenberg" will
+to form a <nop>WikiName, so that "givenName=Hans-Peter,sn=Leuthï¿½user-Schnarrenberg" will
 result in the <nop>WikiName "<nop>HansPeterLeuthaeuserSchnarrenberg".
 If one of the <nop>WikiNameAttributes is 'mail' the =@mydomain.com= part will be removed
 all together.
@@ -285,7 +285,7 @@ Enable/disable normalization of <nop>WikiUserNames as they come from LDAP:
 Enable/disable normalization of login names as they come from LDAP:
 <verbatim>$TWiki::cfg{Ldap}{NormalizeLoginName} = 1; </verbatim>
 
-Allow/disallow changing the LDAP password using TWiki's %SYSTEMWEB%.ChangePassword feature
+Allow/disallow changing the LDAP password using TWiki's %TWIKIWEB%.ChangePassword feature
 <verbatim>$TWiki::cfg{Ldap}{AllowChangePassword} = 0; </verbatim>
 
 Define a secondary password manager used to authenticate users that are 

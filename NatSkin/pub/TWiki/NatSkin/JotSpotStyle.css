@@ -44,7 +44,7 @@ a:hover {
 
 /* DISABLE the following to enable the normal webtitle+logo feature;
  * if you still want to have the notspot logo then use this:
- *   * Set NATWEBLOGONAME = <img src="%PUBURLPATH%/%SYSTEMWEB%/NatSkin/notspot.gif" alt="NotSpot Wiki" onMouseOver="this.src='%PUBURLPATH%/%SYSTEMWEB%/NatSkin/notspot_back.gif'" onMouseOut="this.src='%PUBURLPATH%/%SYSTEMWEB%/NatSkin/notspot.gif'" />
+ *   * Set NATWEBLOGONAME = <img src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/notspot.gif" alt="NotSpot Wiki" onMouseOver="this.src='%PUBURLPATH%/%TWIKIWEB%/NatSkin/notspot_back.gif'" onMouseOut="this.src='%PUBURLPATH%/%TWIKIWEB%/NatSkin/notspot.gif'" />
  */
 .natWebTitle {
 }

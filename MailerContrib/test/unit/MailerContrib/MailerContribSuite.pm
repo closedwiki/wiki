@@ -100,7 +100,7 @@ sub set_up {
              },
           # wikiname subscription
           {
-              entry => "%USERSWEB%.TestUser2",
+              entry => "%MAINWEB%.TestUser2",
               email => "test2\@example.com",
               topicsout => "*"
              },

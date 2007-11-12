@@ -2,7 +2,7 @@
 %STARTINCLUDE% <noautolink> 
 <ul>
 %~~ FLEXWEBLIST{
-~~~   webs="%USERSWEB%,User,publiccurrent,%SYSTEMWEB%"
+~~~   webs="%MAINWEB%,User,publiccurrent,%TWIKIWEB%"
 ~~~   include="\w+|%BASEWEB%"
 ~~~   exclude="TestCases|Trash|Attic"
 ~~~   adminwebs="Applications"

@@ -52,9 +52,9 @@ which defaults to
 </verbatim>
 
 This value determines the subdirectory under 
-=%PUBURLPATH%/%SYSTEMWEB%/NatEditContrib= which contains a =styles.css= file and a bunch
+=%PUBURLPATH%/%TWIKIWEB%/NatEditContrib= which contains a =styles.css= file and a bunch
 of button images. You can create a new theme "foo" by creating a CSS file 
-=%PUBURLPATH%/%SYSTEMWEB%/NatEditContrib/foo/styles.css= and setting 
+=%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/foo/styles.css= and setting 
 <pre>
    * <!-- -->Set NATEDIT_THEME = foo
 </pre>
@@ -124,7 +124,7 @@ If you want to customize the help text in the bottom part of the editor then
 set the variable =NATEDIT_HELPTEXT= to the name of a topic that contains
 the help text. The default is
 <verbatim>
-* Set NATEDIT_HELPTEXT = %SYSTEMWEB%.NatEditHelpText
+* Set NATEDIT_HELPTEXT = %TWIKIWEB%.NatEditHelpText
 </verbatim>
 
 
@@ -137,7 +137,7 @@ the help text. The default is
 %$INSTALL_INSTRUCTIONS%
 
 ---++ JSUnitContrib based Unit tests
-There is a small set of browser based unit tests defined in NatEditContribJSUnitTests that can be run as a problem diagnosing tool. These require the installation of TWiki:Plugins.JSUnitContrib, and then can be run from *[[%PUBURL%/%SYSTEMWEB%/JSUnitContrib/testRunner.html?testpage=%SCRIPTURL{"view"}%/%WEB%/NatEditContribJSUnitTests][Run all tests]]*
+There is a small set of browser based unit tests defined in NatEditContribJSUnitTests that can be run as a problem diagnosing tool. These require the installation of TWiki:Plugins.JSUnitContrib, and then can be run from *[[%PUBURL%/%TWIKIWEB%/JSUnitContrib/testRunner.html?testpage=%SCRIPTURL{"view"}%/%WEB%/NatEditContribJSUnitTests][Run all tests]]*
 
 Testing has been carried out using Safari, Firefox, Opera and Internet Explorer.
 

@@ -243,7 +243,7 @@ sub lookup_mailaddr
 	# Extract the email address.
 	$email =~ s/^[^<]*<([^>]+)>.*/$1/s;
 
-	# Fetch the %USERSWEB%.TWikiUser topic
+	# Fetch the %MAINWEB%.TWikiUser topic
 	my $mainweb = TWiki::Func::getMainWebname();
 	my $topic1 = TWiki::Func::readTopicText($mainweb, 'TWikiUsers');
 

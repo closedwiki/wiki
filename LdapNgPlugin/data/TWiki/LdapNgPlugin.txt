@@ -12,7 +12,7 @@
 %TOC%
 <table style="float:right">
 <tr>
-  <td><img src="%PUBURLPATH%/%SYSTEMWEB%/LdapContrib/wikiringlogo40x40.png"></td>
+  <td><img src="%PUBURLPATH%/%TWIKIWEB%/LdapContrib/wikiringlogo40x40.png"></td>
   <td><a href="http://wikiring.de" title="Make your Wiki ring!" style="text-decoration:none">
       Powered by <br /> <nop>WikiRing Consultants </a>
   </td>

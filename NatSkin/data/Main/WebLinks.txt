@@ -2,14 +2,14 @@
 %META:TOPICPARENT{name="TWikiPreferences"}%
 ---+ %TOPIC%
 
-Sidebar navigation in the %WEB% web. See also the %SYSTEMWEB%.TWikiWebLinks
+Sidebar navigation in the %WEB% web. See also the %TWIKIWEB%.TWikiWebLinks
 
 %STARTINCLUDE%<!-- main.weblinks -->
-   * [[%SYSTEMWEB%.WelcomeGuest][%MAKETEXT{"Welcome"}%]]
-   * [[%TWIKIREGISTRATION%][%MAKETEXT{"Registration"}%]] %IFDEFINEDTHEN{"%IFEXISTS{"%USERSWEB%.%WIKIUSERSTOPIC%"}%" glue="off"}%
-   * [[%USERSWEB%.%WIKIUSERSTOPIC%][%MAKETEXT{"Users"}%]] %FIDEFINED%
-   * [[%USERSWEB%.TWikiGroups][%MAKETEXT{"Groups"}%]]
-   * [[%SYSTEMWEB%.ChangePassword][%MAKETEXT{"Password"}%]]%WEBCOMPONENT{"TWikiWebLinks"}% %IFDEFINEDTHEN{"%IFACCESS{"%LOCALSITEPREFS%" type="change"}%" as="1"}%
+   * [[%TWIKIWEB%.WelcomeGuest][%MAKETEXT{"Welcome"}%]]
+   * [[%TWIKIREGISTRATION%][%MAKETEXT{"Registration"}%]] %IFDEFINEDTHEN{"%IFEXISTS{"%MAINWEB%.%WIKIUSERSTOPIC%"}%" glue="off"}%
+   * [[%MAINWEB%.%WIKIUSERSTOPIC%][%MAKETEXT{"Users"}%]] %FIDEFINED%
+   * [[%MAINWEB%.TWikiGroups][%MAKETEXT{"Groups"}%]]
+   * [[%TWIKIWEB%.ChangePassword][%MAKETEXT{"Password"}%]]%WEBCOMPONENT{"TWikiWebLinks"}% %IFDEFINEDTHEN{"%IFACCESS{"%LOCALSITEPREFS%" type="change"}%" as="1"}%
    * [[%LOCALSITEPREFS%][%MAKETEXT{"SitePreferences"}%]] %FIDEFINED%
 <!-- //main.weblinks -->%STOPINCLUDE%
 

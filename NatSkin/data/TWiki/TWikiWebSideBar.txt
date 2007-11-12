@@ -21,10 +21,10 @@
 </div>
 %FISKINSTATE%
 <div class="natSideBarSection natSideBarWebs">
-%INCLUDE{"%SYSTEMWEB%.FlexWebListNavi" warn="off"}%
+%INCLUDE{"%TWIKIWEB%.FlexWebListNavi" warn="off"}%
 </div>
 <div class="natSideBarSection natSideBarPersonal"> 
-%IFDEFINEDTHEN{"$percntINCLUDE{\"%USERSWEB%.%WIKINAME%SideBar\" warn=\"off\"}$percnt"}%
+%IFDEFINEDTHEN{"$percntINCLUDE{\"%MAINWEB%.%WIKINAME%SideBar\" warn=\"off\"}$percnt"}%
 $test
 %ELSEDEFINED%
 %$nopWEBCOMPONENT{"MySideBar"}%

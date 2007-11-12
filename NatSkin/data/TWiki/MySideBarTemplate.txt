@@ -31,15 +31,15 @@
     hideimg="%ICONURLPATH{"toggleopen-mini"}%"
     mode="div"}%
     <ul>
-      <li> [[%SYSTEMWEB%.WelcomeGuest][%MAKETEXT{"Welcome Guest"}%]] </li>
-      <li> [[%SYSTEMWEB%.TWikiUsersGuide][%MAKETEXT{"User's Guide"}%]] </li>
-      <li> [[%SYSTEMWEB%.TWikiReferenceManual][%MAKETEXT{"Reference Manual"}%]] </li>
-      <li> [[%SYSTEMWEB%.GoodStyle][%MAKETEXT{"Good Style"}%]] </li>
-      <li> [[%SYSTEMWEB%.TWikiFAQ][%MAKETEXT{"FAQs"}%]] </li>
-      <li> [[%SYSTEMWEB%.TWikiVariables][%MAKETEXT{"TWiki Variables"}%]] </li>
-      <li> [[%SYSTEMWEB%.TWikiForms][%MAKETEXT{"TWiki Forms"}%]] </li>
-      <li> [[%SYSTEMWEB%.FormattedSearch][%MAKETEXT{"Formatted Search"}%]] </li>
-      <li> [[%SYSTEMWEB%.FileAttachment][%MAKETEXT{"File Attachment"}%]] </li>
+      <li> [[%TWIKIWEB%.WelcomeGuest][%MAKETEXT{"Welcome Guest"}%]] </li>
+      <li> [[%TWIKIWEB%.TWikiUsersGuide][%MAKETEXT{"User's Guide"}%]] </li>
+      <li> [[%TWIKIWEB%.TWikiReferenceManual][%MAKETEXT{"Reference Manual"}%]] </li>
+      <li> [[%TWIKIWEB%.GoodStyle][%MAKETEXT{"Good Style"}%]] </li>
+      <li> [[%TWIKIWEB%.TWikiFAQ][%MAKETEXT{"FAQs"}%]] </li>
+      <li> [[%TWIKIWEB%.TWikiVariables][%MAKETEXT{"TWiki Variables"}%]] </li>
+      <li> [[%TWIKIWEB%.TWikiForms][%MAKETEXT{"TWiki Forms"}%]] </li>
+      <li> [[%TWIKIWEB%.FormattedSearch][%MAKETEXT{"Formatted Search"}%]] </li>
+      <li> [[%TWIKIWEB%.FileAttachment][%MAKETEXT{"File Attachment"}%]] </li>
     </ul> %ENDTWISTY% 
   </li>
   <li> %TWISTY{
@@ -52,7 +52,7 @@
       %FORMATLIST{"%ACTIVATEDPLUGINS%" separator="$n" format="<li> $1 </li>" sort="on"}%
     </ul> %ENDTWISTY% 
   </li>
-  <li> [[%SYSTEMWEB%.NatSkinStyleBrowser][Style Browser]] </li>
+  <li> [[%TWIKIWEB%.NatSkinStyleBrowser][Style Browser]] </li>
 </ul>
 %ENDTWISTY%
 <!-- //mysidebar -->%STOPINCLUDE%

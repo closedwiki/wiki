@@ -3,15 +3,15 @@
 Create your own TWiki <nop>MoveableType design by attaching your Moveable Type css and images (and a copy of base-weblog.css) to your copy of the MoveableTypeSampleDesign topic. Then configure the settings on the topic to match, so that you can Proof your design. 
 
 ---++ Enable this design
-Copy and paste the following section to your %USERSWEB%.TWikiPreferences topic (or !WebPreferences, or your personal topic)
+Copy and paste the following section to your %MAINWEB%.TWikiPreferences topic (or !WebPreferences, or your personal topic)
 <textarea rows="12" cols="80">
 Select the moveabletype skin:
    * Set SKIN = moveabletype
 Get the common text section definitions from this topic (see the "customisation" section in %WEB%.%TOPIC% for more information on what this means):
    * Set MOVEABLETYPESKIN_DESIGNTOPIC = %TOPIC%
-Get the CSS and images from this topic (must be in the %SYSTEMWEB%):
-   * Set MOVEABLETYPESKIN_TWIKICSSFILE = %PUBURL%/%SYSTEMWEB%/%MOVEABLETYPESKIN_DESIGNTOPIC%/TWiki.css
-   * Set MOVEABLETYPESKIN_CSSFILE = %PUBURL%/%SYSTEMWEB%/%MOVEABLETYPESKIN_DESIGNTOPIC%/theme.css
+Get the CSS and images from this topic (must be in the %TWIKIWEB%):
+   * Set MOVEABLETYPESKIN_TWIKICSSFILE = %PUBURL%/%TWIKIWEB%/%MOVEABLETYPESKIN_DESIGNTOPIC%/TWiki.css
+   * Set MOVEABLETYPESKIN_CSSFILE = %PUBURL%/%TWIKIWEB%/%MOVEABLETYPESKIN_DESIGNTOPIC%/theme.css
 Set the column preference:
 </textarea>
 
@@ -131,18 +131,18 @@ Set the column preference:
 ---+++ module-powered-left
 %STARTSECTION{"module-powered-left-three-column"}%%STARTSECTION{"module-powered-left-two-column-left"}%%STARTSECTION{"module-powered-left"}%<div class="module-powered module">
    <div class="module-content">
-      Powered by<br /><a href="http://twiki.org"><img src="%PUBURLPATH%/%SYSTEMWEB%/TWikiLogos/T-logo-34x26.png" />TWiki</a>
+      Powered by<br /><a href="http://twiki.org"><img src="%PUBURLPATH%/%TWIKIWEB%/TWikiLogos/T-logo-34x26.png" />TWiki</a>
 %BR% skin by <a href="http://DistributedINFORMATION.com">Distributed INFORMATION.com</a>
-%BR% [[http://WikiRing.com][a <img src="%PUBURLPATH%/%SYSTEMWEB%/MoveableTypeSkin/wikiringlogo20x20.png" alt="@" width='20' height='20' border='0'  /> WikiRing.com partner]]
+%BR% [[http://WikiRing.com][a <img src="%PUBURLPATH%/%TWIKIWEB%/MoveableTypeSkin/wikiringlogo20x20.png" alt="@" width='20' height='20' border='0'  /> WikiRing.com partner]]
    </div>
 </div> %ENDSECTION{"module-powered-left"}%%ENDSECTION{"module-powered-left-two-column-left"}%%ENDSECTION{"module-powered-left-three-column"}%
 
 ---+++ module-powered-right
 %STARTSECTION{"module-powered-right-three-column"}%%STARTSECTION{"module-powered-right-two-column-right"}%%STARTSECTION{"module-powered-right"}%<div class="module-powered module">
    <div class="module-content">
-      Powered by<br /><a href="http://twiki.org"><img src="%PUBURLPATH%/%SYSTEMWEB%/TWikiLogos/T-logo-34x26.png" />TWiki</a>
+      Powered by<br /><a href="http://twiki.org"><img src="%PUBURLPATH%/%TWIKIWEB%/TWikiLogos/T-logo-34x26.png" />TWiki</a>
 %BR% skin by <a href="http://DistributedINFORMATION.com">Distributed INFORMATION.com</a>
-%BR% [[http://WikiRing.com][a <img src="%PUBURLPATH%/%SYSTEMWEB%/MoveableTypeSkin/wikiringlogo20x20.png" alt="@" width='20' height='20' border='0'  /> WikiRing.com partner]]
+%BR% [[http://WikiRing.com][a <img src="%PUBURLPATH%/%TWIKIWEB%/MoveableTypeSkin/wikiringlogo20x20.png" alt="@" width='20' height='20' border='0'  /> WikiRing.com partner]]
    </div>
 </div> %ENDSECTION{"module-powered-right"}%%ENDSECTION{"module-powered-right-two-column-right"}%%ENDSECTION{"module-powered-right-three-column"}%
 

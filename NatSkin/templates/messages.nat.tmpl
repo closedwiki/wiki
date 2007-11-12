@@ -4,7 +4,7 @@
 ---+++ %MAKETEXT{"User Account [_1] Deleted" args="<nop>%PARAM1%"}%
 %MAKETEXT{"Your user name has been removed from the Authentication System."}%
 
-%MAKETEXT{"Your [[[_1]][homepage]] has _not_ been removed yet." args="%USERSWEB%.%PARAM1%"}%
+%MAKETEXT{"Your [[[_1]][homepage]] has _not_ been removed yet." args="%MAINWEB%.%PARAM1%"}%
 
 %MAKETEXT{"Please email [_1] to request this."
  args="<a href=\"mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Delete&#32;User&amp;body=%PARAM1%\">%WIKIWEBMASTER%</a>"}%
@@ -21,10 +21,10 @@
 %TMPL:DEF{"notwikiuser"}%<!-- fixes duplicate definition of notwikiuser in messages.tmpl -->
 ---+++ %MAKETEXT{"Can't find user \"[_1]\"." args="<nop>%PARAM1%"}%
 %MAKETEXT{"Please make sure you spelled the [_1] correctly and try again. If you get stuck, please mail [_2]."
- args="%SYSTEMWEB%.LoginName,%WIKIWEBMASTER%"}%
+ args="%TWIKIWEB%.LoginName,%WIKIWEBMASTER%"}%
 
 %MAKETEXT{"See [_1] for a list of existing users or register as new user in [_2]."
-args="%USERSWEB%.TWikiUsers,%TWIKIREGISTRATION%"}%
+args="%MAINWEB%.TWikiUsers,%TWIKIREGISTRATION%"}%
 %TMPL:END%
 %TMPL:DEF{"topic_exists"}%<!-- uses goback def -->
 ---+++ %MAKETEXT{"The [_1] topic already exists" args="\"%TOPIC%\""}%
@@ -45,8 +45,8 @@ args="%USERSWEB%.TWikiUsers,%TWIKIREGISTRATION%"}%
 %TMPL:P{"goback"}%
 %TMPL:END%
 %TMPL:DEF{"rename_not_wikiword"}%<!-- uses goback def -->
----+++ %MAKETEXT{"New topic name [_1] is not a [_2]" args="<nop>\"%PARAM1%\",%SYSTEMWEB%.WikiWord"}%
-%MAKETEXT{"Chose a topic name that is a [_1] or check the allow non-Wiki Word box." args="%SYSTEMWEB%.WikiWord"}%
+---+++ %MAKETEXT{"New topic name [_1] is not a [_2]" args="<nop>\"%PARAM1%\",%TWIKIWEB%.WikiWord"}%
+%MAKETEXT{"Chose a topic name that is a [_1] or check the allow non-Wiki Word box." args="%TWIKIWEB%.WikiWord"}%
 
 %TMPL:P{"goback"}%
 %TMPL:END%
@@ -97,7 +97,7 @@ alphanumeric characters."}%
 %MAKETEXT{"A color starts with a # sign, followed by 6 hexadecimal
 numbers, e.g. =#FFFF00=."}%
 
-%MAKETEXT{"Pick one of the [_1]." args="%SYSTEMWEB%.StandardColors"}%
+%MAKETEXT{"Pick one of the [_1]." args="%TWIKIWEB%.StandardColors"}%
 
 %MAKETEXT{"You can also use the names of the standard HTML colors"}% (black, silver, gray,
 white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, blue, teal, or aqua)
@@ -107,7 +107,7 @@ white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, blue, tea
 %TMPL:DEF{"password_changed"}%<!-- huh -->
 ---+++ %MAKETEXT{"Password changed successfully!"}%
 
-<form action="%SCRIPTURLPATH{"view"}%/%USERSWEB%/%WIKINAME%">
+<form action="%SCRIPTURLPATH{"view"}%/%MAINWEB%/%WIKINAME%">
 <input type="submit" class="natOkButton" value='%MAKETEXT{"OK"}%' />
 </form>
 %TMPL:END%
@@ -172,11 +172,11 @@ link in your email or enter the code in the box below to activate your membershi
 %MAKETEXT{"Alternatively go <a href=\"javascript:history.back()\">back</a> in your browser and choose a different username."}%
 %TMPL:END%
 %TMPL:DEF{"bad_wikiname"}%<!-- uses goback def -->
----+++ %MAKETEXT{"Incorrect [_1]" args="%SYSTEMWEB%.WikiName"}%
+---+++ %MAKETEXT{"Incorrect [_1]" args="%TWIKIWEB%.WikiName"}%
 %MAKETEXT{"The [_1] field must be your first and lastname in [_2], e.g. your capitalized first and lastname with spaces removed."
- args="%SYSTEMWEB%.WikiName,%SYSTEMWEB%.WikiNotation"}%
+ args="%TWIKIWEB%.WikiName,%TWIKIWEB%.WikiNotation"}%
 
-| *%MAKETEXT{"Good examples:"}%* | *%MAKETEXT{"Incorrect [_1]" args="%SYSTEMWEB%.WikiNames"}%:* |
+| *%MAKETEXT{"Good examples:"}%* | *%MAKETEXT{"Incorrect [_1]" args="%TWIKIWEB%.WikiNames"}%:* |
 | =JohnSmith= | =John M. Smith= |
 | =RjMiller= | =RJ Miller= |
 | =RickO= | =Rick O= (%MAKETEXT{"single character last name"}%) |
@@ -303,7 +303,7 @@ template that doesn't exist." args="%PARAM2%"}%
 
 %TMPL:P{"logon"}%
 
-%MAKETEXT{"See also:"}% %USERSWEB%.TWikiGroups, %SYSTEMWEB%.TWikiAccessControl,
+%MAKETEXT{"See also:"}% %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl,
 %TWIKIREGISTRATION%
 %TMPL:END%
 %TMPL:DEF{"only_group"}% <!-- -->
@@ -311,7 +311,7 @@ template that doesn't exist." args="%PARAM2%"}%
 
 %TMPL:P{"logon"}%
 
-%MAKETEXT{"See also:"}% %USERSWEB%.TWikiGroups, %SYSTEMWEB%.TWikiAccessControl,
+%MAKETEXT{"See also:"}% %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl,
 %TWIKIREGISTRATION%
 %TMPL:END%
 %TMPL:DEF{"no_such_web"}% <!-- -->
