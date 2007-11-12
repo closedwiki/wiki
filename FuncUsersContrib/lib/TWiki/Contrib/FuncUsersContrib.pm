@@ -115,13 +115,13 @@ sub getListOfGroups {
 ---++ lookupUser( %spec ) -> \$user
 Find the TWiki::User object for a named user.
    * =%spec= - the identifying marks of the user. The following options are supported:
-      * =wikiname= - the wikiname of the user (web name optional, also supports %USERSWEB%)
+      * =wikiname= - the wikiname of the user (web name optional, also supports %MAINWEB%)
       * =login= - login name of the user
       * =email= - email address of the user **returns an array of users**
 For example,
 <verbatim>
 my @pa = TWiki::Func::lookupUser( email => "pa@addams.org" );
-my $ma = TWiki::Func::lookupUser( wikiname => "%USERSWEB%.MorticiaAddams" );
+my $ma = TWiki::Func::lookupUser( wikiname => "%MAINWEB%.MorticiaAddams" );
 </verbatim>
 
 

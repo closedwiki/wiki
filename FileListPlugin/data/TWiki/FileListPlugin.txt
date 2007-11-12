@@ -24,7 +24,7 @@ View permissions are honored: if the user is not allowed to view the referring t
 
 | *Format parameter* | *Comment* |
 | =$fileName=  | Name of the file |
-| =$fileIcon= | Icon image representing this file type (see %SYSTEMWEB%.TWikiDocGraphics) |
+| =$fileIcon= | Icon image representing this file type (see %TWIKIWEB%.TWikiDocGraphics) |
 | =$fileSize= | File size |
 | =$fileComment= | Attachment comment |
 | =$fileUser= | Who submitted |
@@ -39,12 +39,12 @@ View permissions are honored: if the user is not allowed to view the referring t
 ---++ Test
 
 <verbatim>
-%FILELIST{format="| $fileIcon | [[$fileUrl][$fileName]] ($fileSize) | Submitted by $fileUser on $fileDate | $fileComment |<span class='twikiGrayText'>[[$fileActionUrl][manage]]</span> |" web="%SYSTEMWEB%" topic="FileAttachment"}%
+%FILELIST{format="| $fileIcon | [[$fileUrl][$fileName]] ($fileSize) | Submitted by $fileUser on $fileDate | $fileComment |<span class='twikiGrayText'>[[$fileActionUrl][manage]]</span> |" web="%TWIKIWEB%" topic="FileAttachment"}%
 </verbatim>
 
 Output (if installed):
 
-%FILELIST{format="| $fileIcon | [[$fileUrl][$fileName]] ($fileSize) | Submitted by $fileUser on $fileDate | $fileComment |<span class='twikiGrayText'>[[$fileActionUrl][manage]]</span> |" web="%SYSTEMWEB%" topic="FileAttachment"}%
+%FILELIST{format="| $fileIcon | [[$fileUrl][$fileName]] ($fileSize) | Submitted by $fileUser on $fileDate | $fileComment |<span class='twikiGrayText'>[[$fileActionUrl][manage]]</span> |" web="%TWIKIWEB%" topic="FileAttachment"}%
 
 
 ---++ Plugin Settings

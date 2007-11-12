@@ -561,7 +561,7 @@ sub handleTableEnd {
                 $text .= $helpText;
             }
         }
-        my $assetUrl = '%PUBURL%/%SYSTEMWEB%/EditTablePlugin';
+        my $assetUrl = '%PUBURL%/%TWIKIWEB%/EditTablePlugin';
 
         # table specific script
         my $tableNr = $query->param('ettablenr');
@@ -622,8 +622,8 @@ sub viewEditCell {
         $img = '';
         if ( $value =~ s/(.+),\s*(.+)/$1/o ) {
             $img = $2;
-            $img =~ s|%ATTACHURL%|%PUBURL%/%SYSTEMWEB%/EditTablePlugin|o;
-            $img =~ s|%WEB%|%SYSTEMWEB%|o;
+            $img =~ s|%ATTACHURL%|%PUBURL%/%TWIKIWEB%/EditTablePlugin|o;
+            $img =~ s|%WEB%|%TWIKIWEB%|o;
         }
     }
     if ($img) {

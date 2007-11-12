@@ -7,13 +7,13 @@
 This is useful - for example - for a TWiki site that wants to implement a glossary/dictionary web where common terms are defined and stored.  Without this plugin:
 	* Each web would need to create their own topic for a common term 
 	* Link to or INCLUDE the topic from where it is defined
-	* Authors need to remember to put the Web name in front of the topic name, such as [[%SYSTEMWEB%.WikiWord]]
+	* Authors need to remember to put the Web name in front of the topic name, such as [[%TWIKIWEB%.WikiWord]]
 
 Without this kind of plugin, it's likely that common terms used within an organization will be defined in multiple webs or the common terms will be unlinked wiki words (as if they didn't exist).
 
 ---+++ Syntax Rules
 
-No new syntax is introduced.  However, new automatic %SYSTEMWEB%.WikiWord linking will occur.  
+No new syntax is introduced.  However, new automatic %TWIKIWEB%.WikiWord linking will occur.  
 
 If a topic is not found in the current web, this plugin will look through the webs listed in the LOOKELSEWHEREWEBS variable.  If the topic is found (as it looks through the webs in their listed order), it will create one or more links, depending on the number of topics found.
 
@@ -22,13 +22,13 @@ If a topic is not found in the current web, this plugin will look through the we
 __Single hits__
 
 | *Test case*         | *Input*             | *Output<br/>(if installed)* | *Expected*       |
-| Found here          | =<nop>WebHome=        | WebHome        | %SYSTEMWEB%.WebHome     |
-| Found singular here | =<nop>WebHomes=       | WebHomes       | [[%SYSTEMWEB%.WebHome][WebHomes]] |
-| Found elsewhere     | =<nop>WebSearch= | WebSearch | [[%USERSWEB%.WebSearch][WebSearch]] |
+| Found here          | =<nop>WebHome=        | WebHome        | %TWIKIWEB%.WebHome     |
+| Found singular here | =<nop>WebHomes=       | WebHomes       | [[%TWIKIWEB%.WebHome][WebHomes]] |
+| Found elsewhere     | =<nop>WebSearch= | WebSearch | [[%MAINWEB%.WebSearch][WebSearch]] |
 | Found elsewhere     | =<nop>TWiki.TWikiUsers= | TWiki.TWikiUsers | [[Main.TWikiUsers][TWikiUsers]] |
 | Found elsewhere     | =[<nop>[TWiki.TWikiUsers][twiki users]]= | [[TWiki.TWikiUsers][twiki users]] | [[Main.TWikiUsers][TWikiUsers]] |
-| Found singular  elsewhere     | =<nop>WebSearches= | WebSearches | [[%USERSWEB%.WebSearch][WebSearches]] | 
-| Found elsewhere, spaced wiki word | =[<nop/>[Web search]]= | [[Web search]] | [[%USERSWEB%.WebSearch][Web search]] |
+| Found singular  elsewhere     | =<nop>WebSearches= | WebSearches | [[%MAINWEB%.WebSearch][WebSearches]] | 
+| Found elsewhere, spaced wiki word | =[<nop/>[Web search]]= | [[Web search]] | [[%MAINWEB%.WebSearch][Web search]] |
 | Found elsewhere, abbrev | =<nop/>ACRONYM= | ACRONYM | (If <nop/>ACRONYM is a topic defined in one of the LOOKELSEWHERE webs, a link to it should show up) |
 | Escaped with &lt;noautolink> | =&lt;noautolink> <nop>WebSearch &lt;/noautolink>= | <noautolink> WebSearch </noautolink> | <nop>WebSearch  |
 
@@ -39,14 +39,14 @@ __Multiple hits__
 If a word is found in two or more LOOKELSEWHERE webs, a special syntax is used:
 
 	* Standard <nop/>WikiWord: <nop/>TWikiPreferences<sup>([[TWiki.TWikiPreferences][TWiki]],[[Main.TWikiPreferences][Main]])</sup> 
-	* [<nop/>[Spaced wiki word]]: <em>TWiki preferences</em><sup>([[%SYSTEMWEB%.TWikiPreferences][%SYSTEMWEB%]],[[%USERSWEB%.TWikiPreferences][%USERSWEB%]])</sup> 
+	* [<nop/>[Spaced wiki word]]: <em>TWiki preferences</em><sup>([[%TWIKIWEB%.TWikiPreferences][%TWIKIWEB%]],[[%MAINWEB%.TWikiPreferences][%MAINWEB%]])</sup> 
 
 Create this table in [[Sandbox.FindElsewherePluginTest]] to try it out:
 
 <verbatim>
 | *Test case* | *Input* | *Output<br/>(if installed)* | *Expected* |
-| Found elsewhere | <nop>TWikiPreferences | TWikiPreferences | <nop/>TWikiPreferences<sup>([[%SYSTEMWEB%.TWikiPreferences][%SYSTEMWEB%]],[[%USERSWEB%.TWikiPreferences][%USERSWEB%]])</sup> |
-| Found elsewhere, spaced wiki word | [<nop/>[TWiki preferences]] | [[TWiki preferences]] | <em>TWiki preferences</em><sup>([[%SYSTEMWEB%.TWikiPreferences][%SYSTEMWEB%]],[[%USERSWEB%.TWikiPreferences][%USERSWEB%]])</sup> |
+| Found elsewhere | <nop>TWikiPreferences | TWikiPreferences | <nop/>TWikiPreferences<sup>([[%TWIKIWEB%.TWikiPreferences][%TWIKIWEB%]],[[%MAINWEB%.TWikiPreferences][%MAINWEB%]])</sup> |
+| Found elsewhere, spaced wiki word | [<nop/>[TWiki preferences]] | [[TWiki preferences]] | <em>TWiki preferences</em><sup>([[%TWIKIWEB%.TWikiPreferences][%TWIKIWEB%]],[[%MAINWEB%.TWikiPreferences][%MAINWEB%]])</sup> |
 </verbatim>
 
 __Internationalization__
@@ -55,14 +55,14 @@ __Internationalization__
 
 | *Input*								 | *Output*				  |
 | <nop>%TOPIC%#TopicAnchor		  | %TOPIC%#NewFunctionalityTest  |
-| <nop>%SYSTEMWEB%.WebHome			| %SYSTEMWEB%.WebHome	 |
+| <nop>%TWIKIWEB%.WebHome			| %TWIKIWEB%.WebHome	 |
 | <nop>WebHome						  | WebHome					|
-| [<nop>[%SYSTEMWEB%.WebHome]]	  | [[%SYSTEMWEB%.WebHome]]	  |
-| [<nop>[%SYSTEMWEB%.WikiWord]]	 | [[%SYSTEMWEB%.WikiWord]]	 |
-| [<nop>[%SYSTEMWEB%.WikiWords]]	| [[%SYSTEMWEB%.WikiWords]]	|
-| <nop>%SYSTEMWEB%.WikiWord		  | %SYSTEMWEB%.WikiWord	|
-| <nop>%SYSTEMWEB%.WikiWords		 | %SYSTEMWEB%.WikiWords  |
-| [<nop/>[%USERSWEB%.WebSearch][This is a link to <nop/>WebSearch in <nop/>%USERSWEB%]] | [[%USERSWEB%.WebSearch][This is a link to WebSearch in %USERSWEB%]] |
+| [<nop>[%TWIKIWEB%.WebHome]]	  | [[%TWIKIWEB%.WebHome]]	  |
+| [<nop>[%TWIKIWEB%.WikiWord]]	 | [[%TWIKIWEB%.WikiWord]]	 |
+| [<nop>[%TWIKIWEB%.WikiWords]]	| [[%TWIKIWEB%.WikiWords]]	|
+| <nop>%TWIKIWEB%.WikiWord		  | %TWIKIWEB%.WikiWord	|
+| <nop>%TWIKIWEB%.WikiWords		 | %TWIKIWEB%.WikiWords  |
+| [<nop/>[%MAINWEB%.WebSearch][This is a link to <nop/>WebSearch in <nop/>%MAINWEB%]] | [[%MAINWEB%.WebSearch][This is a link to WebSearch in %MAINWEB%]] |
 
 ---+++ <nop>%TOPIC% Hints
 
@@ -71,7 +71,7 @@ __Internationalization__
 	* "Groups of webs" can use each other as lookup webs, by setting the LOOKELSEWHEREWEBS variable accordingly in their !WebPreferences.
 
 ---+++ <nop>%TOPIC% Settings
-You can disable look elsewhere - sitewide (in %USERSWEB%.TWikiPreferences), per web (in <nop/>WebPreferences) or pr. topic by defining DISABLELOOKELSEWHERE = 1. You are encouraged to disable the plugin wherever it is explicitly used!
+You can disable look elsewhere - sitewide (in %MAINWEB%.TWikiPreferences), per web (in <nop/>WebPreferences) or pr. topic by defining DISABLELOOKELSEWHERE = 1. You are encouraged to disable the plugin wherever it is explicitly used!
 
 You can list other webs in which to look for topics that don't exist in the current web by defining LOOKELSEWHEREWEBS to be a comma-separated list of webs - for example, =TWiki,Main=
 

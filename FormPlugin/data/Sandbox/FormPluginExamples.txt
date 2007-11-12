@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="ArthurClemens" date="1193067440" format="1.1" reprev="1.2" version="1.2"}%
 
 ---+!! Form Plugin Examples
-See [[%SYSTEMWEB%.FormPlugin]]
+See [[%TWIKIWEB%.FormPlugin]]
 
 Please view the raw text of this topic to learn how these forms are created.
 
@@ -601,7 +601,7 @@ buttonlabel="Show me photos!"
 
 ---++ Working together with <nop>CommentPlugin
 
-This form uses [[%SYSTEMWEB%.CommentPlugin]] to write submitted values to a table. A user-friendly display of table data is not included in the example.
+This form uses [[%TWIKIWEB%.CommentPlugin]] to write submitted values to a table. A user-friendly display of table data is not included in the example.
 
 #NewArticles
 %STARTFORM{

@@ -290,7 +290,7 @@ digraph G {
 
 ---++ <nop>%TOPIC% Global Settings
 
-	* One line description, shown in the %SYSTEMWEB%.TextFormattingRules topic:
+	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
 		* Set SHORTDESCRIPTION = Embed directed graphs in TWiki topics (using the Graphviz package)
 
 	* Layout engine to use per default. Can be one of =dot=, =neato=, =twopi=, =circo=, =fdp=
@@ -362,12 +362,12 @@ To install the web fonts, download this [[http://biostat.mc.vanderbilt.edu/twiki
 |  CPAN Dependencies: | CPAN:Digest::MD5 |
 |  Other Dependencies: | Graphviz (from http://www.graphviz.org/) and <nop>ImageMagick (from http://www.imagemagick.org/). <nop>ImageMagick is optional and needed only for creating antialiased graphs. |
 |  Perl Version: | 5.005 |
-|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle 100%, %SYSTEMWEB%.FormattedSearch 100%, %TOPIC% 100% |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 100%, %TWIKIWEB%.FormattedSearch 100%, %TOPIC% 100% |
 |  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/DirectedGraphPlugin |
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/DirectedGraphPluginDev |
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/DirectedGraphPluginAppraisal |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 -- TWiki:Main.ColeBeck - 01 Jul 2004
 

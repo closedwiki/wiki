@@ -1,7 +1,7 @@
 ---+!! <nop>DateTimePlugin
 <table cellpadding="5" cellspacing="5"><tr bgcolor="#F0F0F0">
 <th width="50%">English</th><th width="50%">Portug�s</th></tr><tr><td>
-This plugin is an extension of the [[%SYSTEMWEB%.TWikiVariables][TWiki variable]] =%<nop>GMTIME{"format"}%= that allows to show dates and hours with free formatting (with extra options), Internationalization and with a displacement of relative time.
+This plugin is an extension of the [[%TWIKIWEB%.TWikiVariables][TWiki variable]] =%<nop>GMTIME{"format"}%= that allows to show dates and hours with free formatting (with extra options), Internationalization and with a displacement of relative time.
 
 With DateTimePlugin you can write: %BR%
 In five days will be: ==%<nop>DATETIME{incdays="5"}%==. %BR%
@@ -9,7 +9,7 @@ and will have a always coherent phrase.
 
 This plugin was born by the necessity of making searches with dates in the relative past, but I believe that other people will be able use it for several other cases.
 </td><td>
-Esse plugin � uma extens�o da [[%SYSTEMWEB%.TWikiVariables][vari�vel TWiki]] =%<nop>GMTIME{"format"}%= que permite apresentar datas e horas com formata��o livre (com op��es extras), Internacionaliza��o e com um deslocamento de tempo relativo.
+Esse plugin � uma extens�o da [[%TWIKIWEB%.TWikiVariables][vari�vel TWiki]] =%<nop>GMTIME{"format"}%= que permite apresentar datas e horas com formata��o livre (com op��es extras), Internacionaliza��o e com um deslocamento de tempo relativo.
 
 Com DateTimePlugin voc� pode escrever: %BR%
 ==Daqui a 5 dias ser�: %<nop>DATETIME{incdays="5"}%.== %BR%
@@ -319,7 +319,7 @@ Para a internacionaliza��o, insira os nomes dos meses e dias da semana separ
 	* Localize my clock:
 		* Set myGreenwich = -3
 
-	* One line description, shown in the %SYSTEMWEB%.TextFormattingRules topic:
+	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = Supports date display with free formatting, extra options and internationalization.
 
 	* Set DEBUG to 1 to get debug messages in =data/debug.txt=. Default: =0=

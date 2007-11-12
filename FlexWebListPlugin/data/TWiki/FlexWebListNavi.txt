@@ -5,7 +5,7 @@ The fragment below can be used in a sidebar navigation to establish a "twisted" 
 Use it by adding =%<nop>INCLUDE{"%WEB%.%TOPIC%"}%= to your WebLeftBar or TWikiWebSideBar.
 
 If you want to hide the web navigation from <nop>TWikiGuests then uncomment the following:
-   * #Set DENYTOPICVIEW = %USERSWEB%.TWikiGuest
+   * #Set DENYTOPICVIEW = %MAINWEB%.TWikiGuest
 
 <verbatim>
 %STARTINCLUDE%%TWISTY{
@@ -20,7 +20,7 @@ If you want to hide the web navigation from <nop>TWikiGuests then uncomment the 
   hideimg="%ICONURLPATH{"toggleopen-mini"}%"
 }%
 %~~ FLEXWEBLIST{
-~~~   webs="%USERSWEB%,User,People,public,%SYSTEMWEB%" 
+~~~   webs="%MAINWEB%,User,People,public,%TWIKIWEB%" 
 ~~~   exclude="(TestCases|Trash).*" 
 ~~~   adminwebs="Applications.*"
 ~~~   header="<ul>"
