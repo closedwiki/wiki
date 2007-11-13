@@ -3,6 +3,7 @@ use base qw(Unit::TestCase);
 
 use TWiki::Contrib::DBCacheContrib::Map;
 use TWiki::Contrib::DBCacheContrib::Search;
+use TWiki::Time;
 
 sub new {
     my $self = shift()->SUPER::new(@_);

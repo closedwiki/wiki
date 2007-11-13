@@ -39,7 +39,7 @@ sub set_up {
 
     $twiki->{store}->createWeb($twiki->{user}, $testweb);
 
-    my $dbt = _readFile("./testDB.dat");
+    my $dbt = _readFile("DBCacheContrib/testDB.dat");
     $root = TWiki::Func::getDataDir() . "/$testweb";
     $files = new TWiki::Contrib::DBCacheContrib::Array();
     foreach my $t ( split(/\<TOPIC\>/,$dbt)) {

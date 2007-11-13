@@ -60,31 +60,38 @@ contract with the rest of the world.
 package TWiki::Contrib::DBCacheContrib::Search;
 
 # Operator precedences
-my %prec =
+my %operators =
   (
-      'lc'           => 5,
-      'uc'           => 5,
-      '='            => 4,
-      '=~'           => 4,
-      '!='           => 4,
-      '>='           => 4,
-      '<='           => 4,
-      '<'            => 4,
-      '>'            => 4,
-      'EARLIER_THAN' => 4,
-      'LATER_THAN'   => 4,
-      'WITHIN_DAYS'  => 4,
-      'IS_DATE'      => 4,
-      '!'            => 3,
-      'AND'          => 2,
-      'OR'           => 1
-     );
+    'lc' => { exec => \&OP_lc, prec => 5},
+    'uc' => { exec => \&OP_uc, prec => 5},
+    '=' => { exec => \&OP_equal, prec => 4},
+    '=~' => { exec => \&OP_match, prec => 4},
+    '!=' => { exec => \&OP_not_equal, prec => 4},
+    '>=' => { exec => \&OP_gtequal, prec => 4},
+    '<=' => { exec => \&OP_smequal, prec => 4},
+    '>' => { exec => \&OP_greater, prec => 4},
+    '<' => { exec => \&OP_smaller, prec => 4},
+    'EARLIER_THAN' => { exec => \&OP_earlier_than, prec => 4},
+    'LATER_THAN' => { exec => \&OP_later_than, prec => 4},
+    'IS_DATE' => { exec => \&OP_is_date, prec => 4},
+    '!' => { exec => \&OP_not, prec => 3},
+    'AND' => { exec => \&OP_and, prec=> 2},
+    'OR' => { exec => \&OP_or, prec => 1},
+    'FALSE' => { exec => \&OP_false, prec=> 0},
+    'NODE' => { exec => \&OP_node, prec => 0},
+    'NUMBER' => { exec => \&OP_string, prec => 0},
+    'REF' => { exec => \&OP_ref, prec => 0},
+    'STRING' => { exec => \&OP_string, prec => 0},
+    'TRUE' => { exec => \&OP_true, prec => 0},
+    'i2d' => { exec => \&OP_i2d, prec => 0},
+  );
 
 my $bopRE =
   "AND\\b|OR\\b|!=|=~?|<=?|>=?|LATER_THAN\\b|EARLIER_THAN\\b|WITHIN_DAYS\\b|IS_DATE\\b";
 my $uopRE = "!|[lu]c\\b";
 
 my $now = time();
+
 
 # PUBLIC STATIC used for testing only; force 'now' to be a particular
 # time.
@@ -143,6 +150,7 @@ sub _apply {
 # PRIVATE STATIC simple stack parser for grabbing boolean expressions
 sub _parse {
     my $string = shift;
+
     $string .= " ";
     my @opands;
     my @opers;
@@ -150,7 +158,7 @@ sub _parse {
         if ( $string =~ s/^\s*($bopRE)//o ) {
             # Binary comparison op
             my $op = $1;
-            while ( scalar( @opers ) > 0 && $prec{$op} < $prec{$opers[$#opers]} ) {
+            while ( scalar( @opers ) > 0 && $operators{$op}->{prec} < $operators{$opers[$#opers]}->{prec} ) {
                 _apply( \@opers, \@opands );
             }
             push( @opers, $op );
@@ -186,140 +194,247 @@ sub _parse {
     return ( pop( @opands ), $string );
 }
 
-=begin text
-
----+++ =matches($object)= -> boolean
-   * =$object= - object to test; must implement =get=
-See if object matches the search. =$object= can actually be any object that provides
-the method "get" that returns a value given a string key.
-
-=cut
-
 sub matches {
-    my ( $this, $map ) = @_;
+  my ($this, $map) = @_;
 
-    my $op = $this->{op};
-    my $r = $this->{right};
-    my $l = $this->{left};
+  my $handler = $operators{$this->{op}};
+  return 0 unless $handler;
+  return 0 unless defined $this->{right};
 
-    return 1 if ( $op eq "TRUE" );
-
-    return 0 unless defined $r;
-
-    if ($op eq "NODE") {
-        return 0 unless ($map && defined $r);
-        # Only reference the hash if the contained form does not
-        # define the field
-        my $form = $map->get("form");
-        my $val = $map->get($form)->get( $r );
-        unless ($val) {
-            $val = $map->get( $r );
-        }
-        return $val;
-    }
-
-    if ($op eq "REF") {
-        return 0 unless ($map && defined $r);
-        my %seen;
-
-        # get web db
-        my $web = $map->fastget('_web');
-
-        # parse reference chain
-        while ($r =~ /^\@(\w+)\.(.*)$/) {
-            my $ref = $1;
-            $r = $2;
-
-            # protect against infinite loops
-            return 0 if $seen{$ref}; # outch
-            $seen{$ref} = 1;
-
-            # get form
-            my $form = $map->fastget('form');
-            return 0 unless $form; # no form
-
-            # get refered topic
-            $form = $map->fastget($form);
-            $ref = $form->fastget($ref);
-            return 0 unless $ref; # unknown field
-
-            # get topic object
-            $map = $web->fastget($ref);
-            return 0 unless $map; # unknown ref
-        }
-
-        # the tail is a property of the referenced topic
-        my $val = $map->get($map->get("form"))->get( $r );
-        unless ($val) {
-            $val = $map->get( $r );
-        }
-        return $val;
-    }
-
-    if ($op eq "STRING" || $op eq "NUMBER") {
-        return $r;
-    }
-
-    if ($op eq "!") {
-        return !( $r->matches( $map ))
-    };
-    if ($op eq "lc") {
-        return lc( $r->matches( $map ));
-    };
-    if ($op eq "uc") {
-        return uc( $r->matches( $map ));
-    };
-    if ($op eq "i2d") {
-        return 0 unless $r;
-        return TWiki::Time::formatTime( $r->matches( $map ),
-                                        '$email', 'gmtime' );
-    };
-
-    return 0 unless (defined $l);
-
-    if ($op eq "OR" ) {
-        return ( $l->matches( $map ) || $r->matches( $map ));
-    }
-    if ($op eq "AND" ) {
-        return ( $l->matches( $map ) && $r->matches( $map ))
-    }
-
-    my $lval = $l->matches( $map );
-    my $rval = $r->matches( $map );
-    return 0 unless ( defined $lval  && defined $rval);
-
-    if ( $op eq "=" )  { return ( $lval =~ m/^$rval$/ ) };
-    if ( $op eq "!=" ) { return ( $lval !~ m/^$rval$/ ) };
-    if ( $op eq "=~" ) { return ( $lval =~ m/$rval/ ) };
-    if ( $op eq ">" )  { return ( $lval > $rval ) };
-    if ( $op eq "<" )  { return ( $lval < $rval ) };
-    if ( $op eq ">=" ) { return ( $lval >= $rval ) };
-    if ( $op eq "<=" ) { return ( $lval <= $rval ) };
-
-    if ($lval !~ /^-?\d+$/) {
-        require Time::ParseDate;
-
-        $lval = Time::ParseDate::parsedate( $lval );
-    }
-    return 0 unless( defined( $lval ));
-
-    if ( $op eq "WITHIN_DAYS" ) {
-        return ( $lval >= $now && workingDays( $now, $lval ) <= $rval );
-    }
-    if ($rval !~ /^-?\d+$/) {
-        require Time::ParseDate;
-
-        $rval = Time::ParseDate::parsedate( $rval );
-    }
-
-    return 0 unless ( defined( $rval ));
-
-    if ( $op eq "LATER_THAN" )   { return ( $lval > $rval ) };
-    if ( $op eq "EARLIER_THAN" ) { return ( $lval < $rval ) };
-    if ( $op eq "IS_DATE")       { return ( $lval == $rval ) };
-
-    return 0;
+  return $handler->{exec}($this->{right}, $this->{left}, $map);
 }
+
+sub OP_true { return 1; }
+
+sub OP_false { return 0; }
+
+sub OP_string { return $_[0]; }
+
+sub OP_number { return $_[0]; }
+
+sub OP_or {
+  my ($r, $l, $map) = @_;
+  return 0 unless $l;
+  return ($l->matches( $map ) || $r->matches( $map ));
+}
+
+sub OP_and {
+  my ($r, $l, $map) = @_;
+  return 0 unless $l;
+  return ( $l->matches( $map ) && $r->matches( $map ))
+}
+
+sub OP_not {
+  my ($r, $l, $map) = @_;
+  return !($r->matches($map))
+}
+
+sub OP_lc {
+  my ($r, $l, $map) = @_;
+  return lc($r->matches($map));
+}
+
+sub OP_uc {
+  my ($r, $l, $map) = @_;
+  return uc($r->matches($map));
+}
+
+sub OP_i2d {
+  my ($r, $l, $map) = @_;
+  return 0 unless $r;
+  return TWiki::Time::formatTime( $r->matches( $map ), '$email', 'gmtime' );
+}
+
+sub OP_node {
+  my ($r, $l, $map) = @_;
+
+  return 0 unless ($map && defined $r);
+  # Only reference the hash if the contained form does not
+  # define the field
+  my $form = $map->get("form");
+  my $val = $map->get($form)->get( $r );
+  unless ($val) {
+      $val = $map->get( $r );
+  }
+  return $val;
+}
+
+sub OP_ref {
+  my ($r, $l, $map) = @_;
+  return 0 unless ($map && defined $r);
+
+  # get web db
+  my $web = $map->fastget('_web');
+
+  # parse reference chain
+  my %seen;
+  while ($r =~ /^\@(\w+)\.(.*)$/) {
+      my $ref = $1;
+      $r = $2;
+
+      # protect against infinite loops
+      return 0 if $seen{$ref}; # outch
+      $seen{$ref} = 1;
+
+      # get form
+      my $form = $map->fastget('form');
+      return 0 unless $form; # no form
+
+      # get refered topic
+      $form = $map->fastget($form);
+      $ref = $form->fastget($ref);
+      return 0 unless $ref; # unknown field
+
+      # get topic object
+      $map = $web->fastget($ref);
+      return 0 unless $map; # unknown ref
+  }
+
+  # the tail is a property of the referenced topic
+  my $val = $map->get($map->get("form"))->get( $r );
+  unless ($val) {
+      $val = $map->get( $r );
+  }
+  return $val;
+}
+
+sub OP_equal {
+  my ($r, $l, $map) = @_;
+
+  my $lval = $l->matches( $map );
+  my $rval = $r->matches( $map );
+  return 0 unless ( defined $lval  && defined $rval);
+
+  return ( $lval =~ m/^$rval$/ );
+}
+sub OP_not_equal {
+  my ($r, $l, $map) = @_;
+
+  my $lval = $l->matches( $map );
+  my $rval = $r->matches( $map );
+  return 0 unless ( defined $lval  && defined $rval);
+
+  return ( $lval !~ m/^$rval$/ );
+}
+sub OP_match {
+  my ($r, $l, $map) = @_;
+
+  my $lval = $l->matches( $map );
+  my $rval = $r->matches( $map );
+  return 0 unless ( defined $lval  && defined $rval);
+
+  return ( $lval =~ m/$rval/ );
+}
+sub OP_greater {
+  my ($r, $l, $map) = @_;
+
+  my $lval = $l->matches( $map );
+  my $rval = $r->matches( $map );
+  return 0 unless ( defined $lval  && defined $rval);
+
+  return ( $lval > $rval );
+}
+
+sub OP_smaller {
+  my ($r, $l, $map) = @_;
+
+  my $lval = $l->matches( $map );
+  my $rval = $r->matches( $map );
+  return 0 unless ( defined $lval  && defined $rval);
+
+  return ( $lval < $rval );
+}
+
+sub OP_gtequal {
+  my ($r, $l, $map) = @_;
+
+  my $lval = $l->matches( $map );
+  my $rval = $r->matches( $map );
+  return 0 unless ( defined $lval  && defined $rval);
+
+  return ( $lval >= $rval );
+}
+
+sub OP_smequal {
+  my ($r, $l, $map) = @_;
+
+  my $lval = $l->matches( $map );
+  my $rval = $r->matches( $map );
+  return 0 unless ( defined $lval  && defined $rval);
+
+  return ( $lval <= $rval );
+}
+
+sub OP_within_days {
+  my ($r, $l, $map) = @_;
+
+  my $lval = $l->matches( $map );
+  if ($lval !~ /^-?\d+$/) {
+    require Time::ParseDate;
+    $lval = Time::ParseDate::parsedate( $lval );
+  }
+  return 0 unless( defined( $lval ));
+  my $rval = $r->matches( $map );
+  return ( $lval >= $now && workingDays( $now, $lval ) <= $rval );
+}
+
+sub OP_later_than {
+  my ($r, $l, $map) = @_;
+
+  my $lval = $l->matches( $map );
+  if ($lval !~ /^-?\d+$/) {
+    require Time::ParseDate;
+    $lval = Time::ParseDate::parsedate( $lval );
+  }
+  return 0 unless( defined( $lval ));
+  
+  my $rval = $r->matches( $map );
+  if ($rval !~ /^-?\d+$/) {
+    require Time::ParseDate;
+    $rval = Time::ParseDate::parsedate( $rval );
+  }
+  return 0 unless( defined( $lval ));
+  return ( $lval > $rval );
+}
+
+sub OP_earlier_than {
+  my ($r, $l, $map) = @_;
+
+  my $lval = $l->matches( $map );
+  if ($lval !~ /^-?\d+$/) {
+    require Time::ParseDate;
+    $lval = Time::ParseDate::parsedate( $lval );
+  }
+  return 0 unless( defined( $lval ));
+  
+  my $rval = $r->matches( $map );
+  if ($rval !~ /^-?\d+$/) {
+    require Time::ParseDate;
+    $rval = Time::ParseDate::parsedate( $rval );
+  }
+  return 0 unless( defined( $lval ));
+  return ( $lval > $rval );
+}
+
+sub OP_is_date {
+  my ($r, $l, $map) = @_;
+
+  my $lval = $l->matches( $map );
+  if ($lval !~ /^-?\d+$/) {
+    require Time::ParseDate;
+    $lval = Time::ParseDate::parsedate( $lval );
+  }
+  return 0 unless( defined( $lval ));
+  
+  my $rval = $r->matches( $map );
+  if ($rval !~ /^-?\d+$/) {
+    require Time::ParseDate;
+    $rval = Time::ParseDate::parsedate( $rval );
+  }
+  return 0 unless( defined( $lval ));
+  return ( $lval == $rval );
+}
+
 
 # PUBLIC STATIC calculate working days between two times
 # Published because it's useful elsewhere
@@ -371,6 +486,22 @@ sub toString {
         $text .= "(" . $this->{right}->toString() . ")";
     }
     return $text;
+}
+
+=begin text
+
+--+++ =addOperator($op, $prec, $handler )
+Add an operator to the parser
+
+=cut
+
+sub addOperator {
+  my ($op, $prec, $impl) = @_;
+  $operators{$op} = {
+    prec=> $prec,
+    exec=> $impl,
+  };
+  $bopRE .= "|$op\\b";
 }
 
 1;
