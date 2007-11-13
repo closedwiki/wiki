@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1184880054" format="1.1" reprev="1.13" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1194440164" format="1.1" reprev="1.14" version="$Rev$"}%
 ---+!! Welcome to the %WEB% web
 
 This web contains a set of TWikiApplications that can be used in
@@ -9,9 +9,7 @@ new applications.
 ---++ Installed TWikiApplications
 %~~ FORMATLIST{"%FLEXWEBLIST{subwebs="Applications" format="$web;$name" separator=", "}%" 
 ~~~   pattern="(.*);(.*)"
-~~~   format="   1 $percntDBQUERY{topic=\"$1.$2\"
-~~~                  format=\"[[$1.$2][$2]]: $dollarformfield(Summary)\"
-~~~                }$percnt"
+~~~   format="   1 [[$1.WebHome][$2]]: $percntVAR{\"SITEMAPWHAT\" web=\"$1\"}$percnt"
 ~~~   separator="$n"
 ~~~ }%
 

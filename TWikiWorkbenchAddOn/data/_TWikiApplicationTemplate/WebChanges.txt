@@ -1,5 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1159799235" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1194435352" format="1.1" reprev="1.2" version="$Rev$"}%
 %META:TOPICPARENT{}%
+---+!! %TOPIC%
+%FORMFIELD{"Summary"}%
 %DBCALL{"Applications.RenderWebChanges" 
   SKIP="%URLPARAM{"skip" default=" 0"}%"
   LIMIT="%URLPARAM{"limit" default="10"}%"
@@ -11,6 +13,6 @@
 
 
 %META:FORM{name="Applications.ApplicationTopic"}%
-%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool"}%
-%META:FIELD{name="Summary" attributes="" title="Summary" value="Display the most recent changes in this web"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="AdminTool"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="Most recent changes in this web"}%
 %META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TWikiWorkbench"}%

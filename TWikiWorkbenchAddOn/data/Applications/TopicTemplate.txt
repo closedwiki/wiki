@@ -1,7 +1,16 @@
-%META:TOPICINFO{author="TWikiContributor" date="1171920362" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1194436484" format="1.1" reprev="1.6" version="$Rev$"}%
 %META:TOPICPARENT{name="TopicType"}%
 ---+ %TOPIC%
 %FORMFIELD{"Summary"}%
+
+---++ Documentation
+%STARTSECTION{"documentation"}%
+A TopicTemplate is used to create new topics and serves as a kind of blueprint of its content.
+For example, the [[RenderSimpleTopicCreator][simple topic creator]] takes a TopicTempalte and
+a TWikiForm definition to initialize the new topic with the given properties by using the <nop>TopicTemplate
+for the content, and attaching the given <nop>TWikiForm.
+
+%ENDSECTION{"documentation"}%
 
 %DBCALL{"RenderSimpleTopicCreator" 
   TEXT="%TOPIC%" 
@@ -17,13 +26,9 @@
    * Set DEPENDENCIES = TopicType
 -->
 
----++ Documentation
-%STARTSECTION{"documentation"}%
-See also: %TOPIC%Template
-%ENDSECTION{"documentation"}%
 
 %META:FORM{name="Applications.TopicType"}%
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="DevelopmentTool, DocuTopic, TopicType"}%
 %META:FIELD{name="Inheritance" attributes="" title="Inheritance" value="ApplicationTopic"}%
-%META:FIELD{name="Summary" attributes="" title="Summary" value="TopicType used to create topics of the associated type"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="Blueprints of TWiki content"}%
 %META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TWikiWorkbench"}%

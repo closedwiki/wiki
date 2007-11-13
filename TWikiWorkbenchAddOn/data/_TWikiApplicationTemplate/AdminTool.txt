@@ -1,5 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1161330403" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1194434861" format="1.1" reprev="1.4" version="$Rev$"}%
 %META:TOPICPARENT{name="TopicType"}%
+---+!! %TOPIC%
+%FORMFIELD{"Summary"}%
 %DBCALL{"%FORMFIELD{"Target"}%" remote="on"}%
 <!--
    * Set EDIT_TEMPLATE = Applications.FormEdit
@@ -7,7 +9,6 @@
    * Set VIEW_TEMPLATE = Applications.HiddenFormView
 -->
 See also: [[%FORMFIELD{"Target"}%]]
-
 
 %META:FORM{name="Applications.TopicStub"}%
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicStub, TopicType"}%

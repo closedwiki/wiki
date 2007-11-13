@@ -1,7 +1,31 @@
-%META:TOPICINFO{author="TWikiContributor" date="1171920365" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1194437115" format="1.1" reprev="1.6" version="$Rev$"}%
 %META:TOPICPARENT{name="TopicType"}%
 ---+ %TOPIC%
 %FORMFIELD{"Summary"}%
+
+---++ Documentation
+%STARTSECTION{"documentation"}%
+A TopicView defines a view for a topic. By default TWikiTopics are displayed using the installed
+skin and the templates (don't confuse with TopicTemplate being a content blueprint for newly created topics).
+The view (compare with the 'view' term from the Model-View-Control school) computes the appearance
+of a TWikiTopic and its form data. A new view is assigned to a topic by setting the VIEW_TEMPLATE variable.
+
+For example the following will set th view to use the HiddenFormViewTemplate to hide the form table that 
+is normally displayed below the wiki content.
+<pre>
+   * Set <span></span>VIEW_TEMPLATE = HiddenFormView
+</pre>
+Note, that the =...Template= string is appended automatically by the TWiki engine.
+
+Note also, that we use the <nop>TopicView type to mark even those views that are used during _editting_ a
+twiki topic and is assigned using something like
+<pre>
+   * Set <span></span>EDIT_TEMPLATE = FormEdit
+</pre>
+As such the FormEditTemplate is not used during TWiki's view operation but during edit. The template
+is then used to render the _view on the editor_ to be used. Edit templates either augment the normal
+TWiki editor, or even implement a full substitute for its form data.
+%ENDSECTION{"documentation"}%
 
 %DBCALL{"RenderSimpleTopicCreator" 
   TEXT="%TOPIC%" 
@@ -17,10 +41,6 @@
    * Set DEPENDENCIES = TopicType
 -->
 
----++ Documentation
-%STARTSECTION{"documentation"}%
-See also: %TOPIC%Template
-%ENDSECTION{"documentation"}%
 
 %META:FORM{name="Applications.TopicType"}%
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="DevelopmentTool, DocuTopic, TopicType"}%

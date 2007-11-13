@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1185087007" format="1.1" reprev="1.4" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1194470032" format="1.1" reprev="1.5" version="$Rev$"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -23,13 +23,17 @@
 ~~~
 <!--
 <noautolink>
-%CALC{"$SET(theNextSkip,$EVAL(%SKIP%+%LIMIT%))$SET(thePrevSkip,$EVAL(%SKIP%-%LIMIT%))$IF($GET(thePrevSkip)<0,$SET(thePrevSkip,0))"}%
+%IFDEFINEDTHEN{"%SKIP%%LIMIT%"}%
+%CALC$nop{"$SET(theNextSkip,$EVAL(%SKIP%+%LIMIT%))$SET(thePrevSkip,$EVAL(%SKIP%-%LIMIT%))$IF($GET(thePrevSkip)<0,$SET(thePrevSkip,0))"}%
+%ELSEDEFINED%
+%CALC$nop{"$SET(thePrevSkip,0)$SET(theNextSkip,0)"}%
+%FIDEFINED%
 </noautolink>
 -->
 <div class="twbPageNavigation">
 <table border="0" cellpadding="0" cellspacing="0" width="100%"><tr>
 <td class="twbPrevPage" width="50%">
-~~~ <a style="%CALC{"$IF(%SKIP%==0,display:none)"}%" 
+~~~ <a style="%IFDEFINED{"%SKIP%" as="0|(%[S]KIP%)|" then="display:none"}%" 
 ~~~    href="?skip=%CALC{"$GET(thePrevSkip)"}%;limit=%LIMIT%
 *~~    %IFDEFINED{"%PARAMS%" then=";%PARAMS%"}%">
 *~~    &#171;&nbsp;previous
@@ -50,7 +54,7 @@
 
 ---++ Test
 <div class="alt">
-%DBCALL{"%TOPIC%" SKIP="%URLPARAM{"skip" default=" 0"}%" LIMIT="10" MAX="200"}%
+%DBCALL{"%TOPIC%" SKIP="%URLPARAM{"skip" default="0"}%" LIMIT="10" MAX="200"}%
 </div>
 
 %DBCALL{"Applications.RenderFunctionCallers"}%
