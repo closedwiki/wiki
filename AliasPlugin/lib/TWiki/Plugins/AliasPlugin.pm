@@ -23,15 +23,18 @@ use vars qw(
 	$debug $aliasWikiWordsOnly
 	%seenAliasWebTopics $wordRegex $wikiWordRegex $topicRegex $webRegex
 	$defaultWebNameRegex
-	$defaultAliasTopic $foundError $isInitialized $insideAliasArea
+	$foundError $isInitialized $insideAliasArea
 	$TranslationToken $foundAliases
 	%TWikiCompatibility $START $STOP
+        $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
     );
 
 use TWiki::Attrs;
 
 $VERSION = '$Rev$';
-$RELEASE = '2.10';
+$RELEASE = '2.20';
+$SHORTDESCRIPTION = 'Define aliases which will be replaced with arbitrary strings automatically';
+$NO_PREFS_IN_TOPIC = 1;
 
 $START = '(?:^|(?<=[\w\b\s\,\.\;\:\!\?\)\(]))';
 $STOP = '(?:$|(?=[\w\b\s\,\.\;\:\!\?\)\(]))';
@@ -69,11 +72,7 @@ sub doInit {
 
   # get plugin flags
   $aliasWikiWordsOnly = 
-    TWiki::Func::getPreferencesFlag("ALIASPLUGIN_ALIAS_WIKIWORDS_ONLY");
-  $defaultAliasTopic = 
-    TWiki::Func::getPreferencesValue("ALIASPLUGIN_DEFAULT_ALIASES") || 'WebAliases';
-  #$defaultAliasTopic =~ s/^(\s*)(.*?)(\s*)$/$1/g;
-  #writeDebug("defaultAliasTopic=$defaultAliasTopic");
+    TWiki::Func::getPreferencesFlag("ALIASPLUGIN_ALIAS_WIKIWORDS_ONLY") || 0;
   
   # decide on how to match alias words
   $wikiWordRegex = &TWiki::Func::getRegularExpression('wikiWordRegex');
@@ -94,16 +93,16 @@ sub doInit {
 
   # look for aliases in Main or TWiki web
   my $web = TWiki::Func::getMainWebname();
-  my $topic = $defaultAliasTopic;
+  my $topic = 'WebAliases';
   unless (getAliases($web, $topic)) {
     $web = TWiki::Func::getTwikiWebname();
-    $topic = $defaultAliasTopic;
+    $topic = 'WebAliases';
     getAliases($web, $topic);
   }
 
   # look for aliases in current web
   $web = $currentWeb;
-  $topic = $defaultAliasTopic;
+  $topic = 'WebAliases';
   getAliases($web, $topic);
 }
 
@@ -267,7 +266,7 @@ sub addAliasPattern {
 sub getAliases {
   my ($web, $topic) = @_;
 
-  $topic ||= $defaultAliasTopic;
+  $topic ||= 'WebAliases';
   $web ||= $currentWeb;
   ($web, $topic) = TWiki::Func::normalizeWebTopicName($web, $topic);
 

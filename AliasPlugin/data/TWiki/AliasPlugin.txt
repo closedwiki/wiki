@@ -14,7 +14,7 @@
 <table style="float:right">
 <tr>
   <td><img src="%ATTACHURLPATH%/wikiringlogo40x40.png"></td>
-  <td><a href="http://wikiring.de" title="Let your Wiki Ring" style="text-decoration:none">
+  <td><a href="http://wikiring.de" title="Make your Wiki ring!" style="text-decoration:none">
       Powered by <br /> <nop>WikiRing Consultants </a>
   </td>
 </tr>
@@ -31,15 +31,17 @@ prefixing it with =&lt;nop&gt;=.
 
 ---++ Configuration
 Configuration of this plugin is done by writing 
-your aliases into a specific topic which defaults to the topic defined
-by the =DEFAULT_ALIASES= variable (see below). This topic is looked up
-in the current web. If it does not exist in the current web, the plugin will fallback to
-the =DEFAULT_ALIASES= in the %TWIKIWEB%. 
-Aliases defined in =DEFAULT_ALIASES= will be
-used within the current web.
-Aliases can be defined temporarily also, that is
-they will only be taking effect within the current topic. Similarly, aliases can be
-disabled. See the Syntax section for more details.
+your aliases into a specific topic, the <nop>WebAliases. This topic is looked up
+in three places: 
+   1 the current web
+   1 the %MAINWEB% web
+   1 if there's no <nop>WebAliases topic in the %MAINWEB% it will be looked up in the %TWIKIWEB% 
+The aliases defined in (1) are merged with those in (2) or (3). Thereby you can define
+site-wide aliases in <nop>%MAINWEB%.WebAliases and  web specific aliases in the current's web <nop>WebAliases
+topic.
+Aliases can also be defined within the current topic, that is they will only be taking
+effect on the current topic. Similarly, aliases can be disabled. See the
+Syntax section for more details.
 
 ---++ Syntax
 This is the list of TWiki tags defined by this plugin.
@@ -76,7 +78,7 @@ non-alphabetic characters. Textile example:
 </pre>
 
 
-The aliases in the topic =DEFAULT_ALIASES= can be either defined using the %<nop>ALIAS{}%
+The aliases in the topic <nop>WebAliases topic can be either defined using the %<nop>ALIAS{}%
 macro or listed in the following way:
 <verbatim>
    * <name1>: <value1>
@@ -84,16 +86,6 @@ macro or listed in the following way:
    * <name3>: <value3>
    ...
 </verbatim>
-
----++ Plugin Settings
-
-   * Set SHORTDESCRIPTION = Define aliases which will be replaced with arbitrary strings automatically
-
-   * restrict aliases to TWiki.WikiWords
-      * Set ALIAS_WIKI_WORDS_ONLY = 0
-
-   * Set the topic holding some default aliases
-      * Set DEFAULT_ALIASES = WebAliases
 
 ---++ Defined Aliases
 %ALIAS{name="TESTLINK" value="%TWIKIWEB%.WebHome"}%
@@ -141,12 +133,16 @@ macro or listed in the following way:
 %STOPALIASAREA%
 
 ---++ Plugin Info
-
+<!--
+   * Set SHORTDESCRIPTION = Define aliases which will be replaced with arbitrary strings automatically
+-->
 |  Plugin Author: | TWiki:Main/OthelloMaurer, TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003, Othello Maurer; 2003-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v2.10 |
+|  Version: | v2.20 |
 |  Change History: | &nbsp; |
+|  13 Nov 2007: | Item4959: disabled settings in plugin topic, \
+                  removed DEFAULT_ALIASES |
 |  14 Sep 2007: | added view.alias.tmpl |
 |  13 Sep 2007: | rewrite for modern TWiki engines |
 |  10 Feb 2006: | fixed use of uninitialized value (outch) |
@@ -179,6 +175,6 @@ macro or listed in the following way:
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
 -- TWiki:Main/OthelloMaurer - 09 Oct 2003 %BR%
--- TWiki:Main/MichaelDaum - 14 Sep 2007
+-- TWiki:Main/MichaelDaum - 13 Nov 2007
 
 %META:FILEATTACHMENT{name="wikiringlogo40x40.png" attachment="wikiringlogo40x40.png" attr="h" comment="" date="1189787359" path="wikiringlogo40x40.png" size="2571" stream="wikiringlogo40x40.png" tmpFilename="" user="TWikiContributor" version="1"}%
