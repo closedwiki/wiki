@@ -21,7 +21,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.02';
+$RELEASE = 'v1.00';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Format tables the <nop>MediaWiki way';
 

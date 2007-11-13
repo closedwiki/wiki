@@ -15,13 +15,13 @@
 package TWiki::Plugins::MediaWikiTablePlugin::Core;
 
 use strict;
-use vars qw($debug);
-$debug = 0; # toggle me
+
+sub DEBUG {0;} # toggle me
 
 ###############################################################################
 sub writeDebug {
-  #&TWiki::Func::writeDebug('- MediaWikiTablePlugin::Core - '.$_[0]) if $debug;
-  print STDERR '- MediaWikiTablePlugin::Core - '.$_[0]."\n" if $debug;
+  #&TWiki::Func::writeDebug('- MediaWikiTablePlugin::Core - '.$_[0]) if DEBUG;
+  print STDERR '- MediaWikiTablePlugin::Core - '.$_[0]."\n" if DEBUG;
 }
 
 ###############################################################################
