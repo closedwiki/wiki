@@ -21,10 +21,13 @@ use strict;
 # =========================
 use vars qw(
         $VERSION $RELEASE $isInitialized $igpId $doneHeader
+        $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '3.6';
+$RELEASE = '3.61';
+$NO_PREFS_IN_TOPIC = 1;
+$SHORTDESCRIPTION = 'Displays image gallery with auto-generated thumbnails from attachments';
 
 # =========================
 sub initPlugin {

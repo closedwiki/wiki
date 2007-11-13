@@ -9,8 +9,15 @@
    Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
 -->
 ---+!! <nop>ImageGalleryPlugin
-%TOC%
-
+<table style="float:right">
+<tr>
+  <td><img src="%ATTACHURLPATH%/wikiringlogo40x40.png"></td>
+  <td><a href="http://wikiring.de" title="Make your Wiki ring!" style="text-decoration:none">
+      Powered by <br /> <nop>WikiRing Consultants </a>
+  </td>
+</tr>
+</table>
+%TOC{title="On this page"}%
 ---++ Description
 This plugin helps you in viewing pictures that are attached to a topic in a nice thumbnail 
 gallery. Clicking on a thumbnail zooms the image. You might navigate within your images using
@@ -150,36 +157,26 @@ a picture will be put at position =&lt;nr&gt;= if its attachment comment has the
 Note, that the $comment variable will only display =&lt;comment&gt;= , that is with 
 =&lt;nr&gt;&lt;space&gt;-&lt;space&gt;= stripped off.
  
----++ Plugin Settings
-
-   * Names and sizes for thumbnails (feel free to add additional entries or to modify these defaults)
-      * Set TINY = 25x25
-      * Set SMALL = 50x50
-      * Set MEDIUM = 95x95
-      * Set LARGE = 150x150
-      * Set HUGE = 250x250
-   
-   * One line description:
-      * Set SHORTDESCRIPTION = Displays image gallery with auto-generated thumbnails from attachments.
-
 ---++ Plugin Installation Instructions
 
-   * [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] the ZIP file
+   * Download the ZIP file
    * Unzip it in your twiki installation directory. Content: 
-     | *File:* | *Description:* |
-     | ==data/TWiki/%TOPIC%.txt== | plugin topic |
-     | ==pub/TWiki/%TOPIC%/style.css== | cascading style sheets |
-     | ==lib/TWiki/Plugins/%TOPIC%.pm== | plugin interface |
-     | ==lib/TWiki/Plugins/%TOPIC%/Core.pm== | core implementation |
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   | *File:* | *Description:* |
+%$MANIFEST%
+   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 ---++ Plugin Info
+<!--
+   * Set SHORTDESCRIPTION = Displays image gallery with auto-generated thumbnails from attachments.
+-->
+
 
 |  Plugin Author: | TWiki:Main/MichaelDaum, TWiki:Main/WillNorris |
 |  Copyright &copy;: | 2002-2003, Will Norris; 2005-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v3.6 |
+|  Plugin Version: | v3.61 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  13 Nov 2007 | replaced plugin topic settings with =configure= settings |
 |  19 Sep 2007 | store auto-computed images in an images subdir of its own |
 |  19 Feb 2007 | make proper use TWiki-4 API; \
                  don't use inline css, put them into the html header instead |
@@ -211,4 +208,6 @@ Note, that the $comment variable will only display =&lt;comment&gt;= , that is w
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 19 Sep 2007
+-- TWiki:Main.MichaelDaum - 13 Nov 2007
+
+%META:FILEATTACHMENT{name="wikiringlogo40x40.png" attachment="wikiringlogo40x40.png" attr="h" comment="" date="1189787359" path="wikiringlogo40x40.png" size="2571" stream="wikiringlogo40x40.png" tmpFilename="" user="TWikiContributor" version="1"}%

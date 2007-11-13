@@ -20,9 +20,7 @@ package TWiki::Plugins::ImageGalleryPlugin::Core;
 
 use strict;
 
-use vars qw($debug);
-
-$debug = 0; # toggle me
+sub DEBUG { 0; } # toggle me
 
 # =========================
 # constructor
@@ -48,6 +46,17 @@ sub new {
   $this->{imagesDir} = $this->{pubDir}.'/images';
   $this->{pubUrlPath} = &TWiki::Func::getPubUrlPath();
   $this->{twikiWebName} = &TWiki::Func::getTwikiWebname();
+
+  my $defaultThumbSizes = $TWiki::cfg{Plugins}{ImageGalleryPlugin}{ThumbSizes} || [];
+  # get predefined thumbnail sizes
+  %{$this->{thumbSizes}} = (
+    thin => '25x25',
+    small => '50x50',
+    medium => '95x95',
+    large => '150x150',
+    huge => '250x250',
+    @$defaultThumbSizes,
+  );
   
   # get style url
   my $hostUrl = ($this->{isDakar})? $TWiki::cfg{DefaultUrlHost}:$TWiki::defaultUrlHost;
@@ -108,8 +117,7 @@ sub init {
 
   # read attributes
   $this->{size} = $params->{size} || 'medium';
-  my $thumbsize = TWiki::Func::getPreferencesValue(uc "IMAGEGALLERYPLUGIN_$this->{size}") 
-    || $this->{size};
+  my $thumbsize = $this->{thumbSizes}{$this->{size}} || $this->{size};
   my $thumbwidth = 95;
   my $thumbheight = 95;
   if ($thumbsize =~ /^(.*)x(.*)$/) {
@@ -256,7 +264,7 @@ sub render {
   $result .= "</div>\n";
 
   $this->writeInfo();
-  return $result;
+  return '<noautolink>'.$result.'</noautolink>';
 }
 
 # =========================
@@ -920,9 +928,8 @@ sub writeInfo {
 # =========================
 # static
 sub writeDebug {
-  return unless $debug;
   #&TWiki::Func::writeDebug("ImageGalleryPlugin - $_[0]");
-  print STDERR "ImageGalleryPlugin - $_[0]\n";
+  print STDERR "ImageGalleryPlugin - $_[0]\n" if DEBUG;
 }
 
 
