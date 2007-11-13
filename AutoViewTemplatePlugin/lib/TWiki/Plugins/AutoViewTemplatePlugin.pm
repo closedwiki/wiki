@@ -12,11 +12,13 @@
 package TWiki::Plugins::AutoViewTemplatePlugin;
 
 use strict;
-use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $mode $override $pluginName $NO_PREFS_IN_TOPIC );
+use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION 
+  $debug $mode $override $isEditAction
+  $pluginName $NO_PREFS_IN_TOPIC );
 
 $VERSION = '$Rev$';
 $RELEASE = 'ipo';
-$SHORTDESCRIPTION = 'Sets VIEW_TEMPLATE according to the topic type';
+$SHORTDESCRIPTION = 'Automatically sets VIEW_TEMPLATE and EDIT_TEMPLATE';
 $NO_PREFS_IN_TOPIC = 1;
 
 $pluginName = 'AutoViewTemplatePlugin';
@@ -24,7 +26,6 @@ $pluginName = 'AutoViewTemplatePlugin';
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
-    my $viewTemplate = "";
 
     # check for Plugins.pm versions
     if( $TWiki::Plugins::VERSION < 1.026 ) {
@@ -33,68 +34,84 @@ sub initPlugin {
     }
 
     # get configuration
-    $debug    = $TWiki::cfg{Plugins}{AutoViewTemplatePlugin}{Debug}    || 0;
-    $mode     = $TWiki::cfg{Plugins}{AutoViewTemplatePlugin}{Mode}     || "exist";
+    $debug = $TWiki::cfg{Plugins}{AutoViewTemplatePlugin}{Debug}    || 0;
+    $mode = $TWiki::cfg{Plugins}{AutoViewTemplatePlugin}{Mode}     || "exist";
     $override = $TWiki::cfg{Plugins}{AutoViewTemplatePlugin}{Override} || 0;    
+
+    # is this an edit action?
+    $isEditAction = TWiki::Func::getContext()->{edit};
+    my $templateVar = $isEditAction?'EDIT_TEMPLATE':'VIEW_TEMPLATE';
+
+    # back off if there is a view template already and we are not in override mode
+    my $currentTemplate = TWiki::Func::getPreferencesValue($templateVar);
+    return 1 if $currentTemplate && !$override;
 	
     # get form-name
     my ( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
     my $form = $meta->get("FORM");
-    my $formname = $$form{"name"};
+    my $formName = $form->{"name"} if $form;
     
-    if ( $formname ne "" ) {
-      TWiki::Func::writeDebug("- ${pluginName}: formfields detected ($formname)") if $debug;
+    # is it a structured topic?
+    return 1 unless $formName;
+    TWiki::Func::writeDebug("- ${pluginName}: formfields detected ($formName)") if $debug;
 
-      MODE: {
-      	if ( $mode eq "section" ) {
-          $viewTemplate = _getTemplateFromSectionInclude( $formname, $topic, $web );		
-      	  last MODE;	
-      	}
-      	if ( $mode eq "exist" ) {
-      	  $viewTemplate = _getTemplateFromTemplateExistence( $formname, $topic, $web );
-      	  last MODE;	
-      	}
+    # get it
+    my $templateName = "";
+    MODE: {
+      if ( $mode eq "section" ) {
+        $templateName = _getTemplateFromSectionInclude( $formName, $topic, $web );		
+        last MODE;	
       }
-      
-      # only set the view_template if there is anything to set
-      if ( $viewTemplate ) {
-        my $currentTemplate = TWiki::Func::getPreferencesValue("VIEW_TEMPLATE");
-      
-        if ( !$currentTemplate ) {
-          TWiki::Func::writeDebug("- ${pluginName}: VIEW_TEMPLATE set to: $viewTemplate") if $debug;
-          $TWiki::Plugins::SESSION->{prefs}->pushPreferenceValues( 'SESSION', { VIEW_TEMPLATE => $viewTemplate } );      	
+      if ( $mode eq "exist" ) {
+        $templateName = _getTemplateFromTemplateExistence( $formName, $topic, $web );
+        last MODE;	
+      }
+    }
+    
+    # only set the view template if there is anything to set
+    return 1 unless $templateName;
+
+    # in edit mode, try to read the template to check if it exists
+    if ($isEditAction && !TWiki::Func::readTemplate($templateName)) {
+      TWiki::Func::writeDebug("- ${pluginName}: edit tempalte not found") if $debug;
+      return 1;
+    }
+    
+    # do it
+    if ($debug) {
+      if ( $currentTemplate ) {
+        if ( $override ) {
+          TWiki::Func::writeDebug("- ${pluginName}: $templateVar already set, overriding with: $templateName");
         } else {
-      	  if ( $override ) {
-      	    TWiki::Func::writeDebug("- ${pluginName}: VIEW_TEMPLATE already set, overriding with: $viewTemplate") if $debug;
-      	    $TWiki::Plugins::SESSION->{prefs}->pushPreferenceValues( 'SESSION', { VIEW_TEMPLATE => $viewTemplate } );
-          } else {
-      	    TWiki::Func::writeDebug("- ${pluginName}: VIEW_TEMPLATE not changed/set.") if $debug;
-          }
-        }      	
-      }
-    } 
+          TWiki::Func::writeDebug("- ${pluginName}: $templateVar not changed/set.");
+        }
+      } else {
+        TWiki::Func::writeDebug("- ${pluginName}: $templateVar set to: $templateName");
+      }      	
+    }
+    $TWiki::Plugins::SESSION->{prefs}->pushPreferenceValues( 'SESSION', { $templateVar => $templateName } );
 
     # Plugin correctly initialized
     return 1;
 }
 
 sub _getTemplateFromSectionInclude {
-	my $formname = $_[0];
+	my $formName = $_[0];
 	my $topic    = $_[1];
 	my $web      = $_[2];
+
+    TWiki::Func::writeDebug("- ${pluginName}: called _getTemplateFromSectionInclude($formName, $topic, $web)") if $debug;
 	
-    # add current webname, if formname is not fully qualified
-    if ( $formname !~ m/\./ ) { $formname = $web . "." . $formname; };
+    my ($formweb, $formtopic) = TWiki::Func::normalizeWebTopicName($web, $formName);
 
-    my ($formweb, $formtopic) = TWiki::Func::normalizeWebTopicName("", $formname);
-
-    # SMELL: This can be done must faster, if the formdefinition topic is read directly
-    my $viewTemplate = "%INCLUDE{ \"$formweb.$formtopic\" section=\"viewtemplate\"}%";
-    $viewTemplate = TWiki::Func::expandCommonVariables( $viewTemplate, $topic, $web );
+    # SMELL: This can be done much faster, if the formdefinition topic is read directly
+    my $sectionName = $isEditAction?'edittemplate':'viewtemplate';
+    my $templateName = "%INCLUDE{ \"$formweb.$formtopic\" section=\"$sectionName\"}%";
+    $templateName = TWiki::Func::expandCommonVariables( $templateName, $topic, $web );
       
     # TODO: sanatize value
       
-    return $viewTemplate;
+    return $templateName;
 }
 
 
@@ -104,16 +121,14 @@ sub _getTemplateFromTemplateExistence {
 	my $topic    = $_[1];
 	my $web      = $_[2];
 	
-    # add current webname, if formname is not fully qualified
-    if ( $formName !~ m/\./ ) { $formName = $web . "." . $formName; };
-    my ($templateWeb, $templateTopic) = TWiki::Func::normalizeWebTopicName("", $formName);
+    TWiki::Func::writeDebug("- ${pluginName}: called _getTemplateFromTemplateExistence($formName, $topic, $web)") if $debug;
+    my ($templateWeb, $templateTopic) = TWiki::Func::normalizeWebTopicName($web, $formName);
     
     my $templateName = $formName;
-    $templateName =~ s/Form$/ViewTemplate/;
-    
-    my $viewTemplate = TWiki::Func::topicExists( $templateWeb, $templateTopic ) ? $templateName : "";
-    
-    return $viewTemplate;
+    $templateName =~ s/Form$//;
+    $templateName .= $isEditAction?'Edit':'View';
+
+    return $templateName;
 }
 
 1;
