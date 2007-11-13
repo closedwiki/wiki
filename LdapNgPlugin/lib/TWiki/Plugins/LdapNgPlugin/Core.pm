@@ -16,17 +16,16 @@
 package TWiki::Plugins::LdapNgPlugin::Core;
 
 use strict;
-use vars qw($debug);
 use Unicode::MapUTF8 qw(from_utf8);
 use TWiki::Contrib::LdapContrib;
 
-$debug = 0; # toggle me
+sub DEBUG { 0; } # toggle me
 
 ###############################################################################
 sub writeDebug {
   # comment me in/out
-  #&TWiki::Func::writeDebug('- LdapNgPlugin - '.$_[0]) if $debug;
-  print STDERR 'LdapNgPlugin - '.$_[0]."\n" if $debug;
+  #&TWiki::Func::writeDebug('- LdapNgPlugin - '.$_[0]) if DEBUG;
+  print STDERR 'LdapNgPlugin - '.$_[0]."\n" if DEBUG;
 }
 
 ###############################################################################
@@ -221,7 +220,7 @@ sub expandVars {
 
   $format =~ s/\n/<br \/>/go; # multi-line values, e.g. for postalAddress
 
-  $format =~ s/\$nop/\n/go;
+  $format =~ s/\$nop//go;
   $format =~ s/\$n/\n/go;
   $format =~ s/\$quot/\"/go;
   $format =~ s/\$percnt/\%/go;

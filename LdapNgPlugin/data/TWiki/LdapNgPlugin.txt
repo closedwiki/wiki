@@ -141,8 +141,9 @@ This work was partly funded by Spanlink Communications.
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006-2007 Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v2.00 |
+|  Plugin Version: | v2.01 |
 |  Change History: | &nbsp; |
+|  13 Nov 2007: | fixed $nop  |
 |  01 Oct 2007: | added LDAPUSERS, lined up to changes in <nop>LdapContrib-2.0 |
 |  04 June 2007: | don't convert from/to utf8 if the site charset is already utf8 |
 |  18 Dec 2006: | added support for addresses as specified in RFC4517 |
@@ -156,4 +157,4 @@ This work was partly funded by Spanlink Communications.
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
--- TWiki:Main/MichaelDaum - 01 Oct 2007
+-- TWiki:Main/MichaelDaum - 13 Nov 2007
