@@ -8,9 +8,7 @@
 
    Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
 -->
----+!! %TOPIC%
-
-
+---+!! ClassificationPlugin
 %TOC%
 <table style="float:right">
 <tr>
@@ -40,15 +38,19 @@ Format strings may contain the following:
 
 ---++ ISA
 Predicate that checks if a topic is filed in a specific category or one of its subcategories
+Also available in <nop>DBCacheContrib search expressions.
 
 ---++ SUBSUMES
-Predicate that checks if a category is a parent category of another
+Predicate that checks if a category is a parent category of another. 
+Also available in <nop>DBCacheContrib search expressions.
 
 ---++ COMPATIBLE
 Predicate that checks if a category is subsuming another category or vice versa
+Also available in <nop>DBCacheContrib search expressions.
 
 ---++ SUBSUMTION
 Renders a large table that shows the subsumtion relation between all categories
+Also available in <nop>DBCacheContrib search expressions.
 
 ---++ COMPATIBILITY
 Renders a large table that shows the compatibility relation between all categories
@@ -57,17 +59,12 @@ Renders a large table that shows the compatibility relation between all categori
 Renders a list of topics that are tag-related to the current one. Two topics are 
 tag- related if they have at least two tags in common.
 
----++ Examples
-
 
 ---++ Plugin Installation Instructions
-
-   * [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] the ZIP file
+   * Download the ZIP file
    * Unzip it in your twiki installation directory. Content: 
-     | *File:* | *Description:* |
-     | ==data/TWiki/%TOPIC%.txt== | plugin topic |
-     | ==lib/TWiki/Plugins/%TOPIC%.pm== | plugin perl module |
-     | ==lib/TWiki/Plugins/%TOPIC%/Core.pm== | plugin core |
+   | *File:* | *Description:* |
+%$MANIFEST%
    * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 ---++ Plugin Info
@@ -78,8 +75,15 @@ tag- related if they have at least two tags in common.
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.10 |
+|  Plugin Version: | v0.40 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  13 Nov 2007: | added semantic predicates ISA, SUBSUMES, COMPATIBLE to DBQUERY, \
+                  fixed exclude parameter to cat formfield, \
+                  fixed registering topics to TOP category, \
+                  rewrite of detecting which categories a <nop>TopicType has, \
+                  normalized topic documentation according to <nop>TWikiWorkbench standards, \
+                  removed pagination in tag cloud selections, \
+                  added support for displaying "recent" tags |
 |  30 Oct 2007: | first checkin to twiki svn |
 |  30 Oct 2006: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
@@ -91,4 +95,6 @@ tag- related if they have at least two tags in common.
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 30 Oct 2007
+-- TWiki:Main.MichaelDaum - 13 Nov 2007
+
+%META:FILEATTACHMENT{name="wikiringlogo40x40.png" attachment="wikiringlogo40x40.png" attr="h" comment="" date="1189787359" path="wikiringlogo40x40.png" size="2571" stream="wikiringlogo40x40.png" tmpFilename="" user="TWikiContributor" version="1"}%

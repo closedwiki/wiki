@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1188123204" format="1.1" reprev="1.10" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1194448253" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="ApplicationTopic"}%
 ---+!! WebTagCloud Factory
 
@@ -11,8 +11,7 @@ See also: RenderWebTagCloud
 %STARTINCLUDE%<!-- -->
 %~~ DBCALL{"Applications.ClassificationApp.RenderWebTagCloud" 
 ~~~   QUERY="%URLPARAM{"search"}%" 
-~~~   LIMIT="%URLPARAM{"limit" default="10"}%" 
-~~~   SKIP="%URLPARAM{"skip"}%" 
+~~~   MIN="%MIN%"
 ~~~ }%
 <!-- -->%STOPINCLUDE%
 

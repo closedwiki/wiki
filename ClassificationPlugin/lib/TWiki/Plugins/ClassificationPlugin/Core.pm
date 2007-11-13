@@ -15,21 +15,98 @@
 package TWiki::Plugins::ClassificationPlugin::Core;
 
 use strict;
-use vars qw($debug %hierarchies);
 use TWiki::Plugins::DBCachePlugin::Core;
+use TWiki::Contrib::DBCacheContrib::Search;
 use TWiki::Plugins::ClassificationPlugin::Hierarchy;
 
-$debug = 0; # toggle me
+use vars qw(%hierarchies);
+
+sub DEBUG { 0; }
+
 
 ###############################################################################
 sub writeDebug {
-  #&TWiki::Func::writeDebug('- ClassificationPlugin - '.$_[0]) if $debug;
-  print STDERR '- ClassificationPlugin::Core - '.$_[0]."\n" if $debug;
+  #&TWiki::Func::writeDebug('- ClassificationPlugin - '.$_[0]) if DEBUG;
+  print STDERR '- ClassificationPlugin::Core - '.$_[0]."\n" if DEBUG;
+}
+
+###############################################################################
+sub init {
+  TWiki::Contrib::DBCacheContrib::Search::addOperator('SUBSUMES', 4, \&OP_subsumes);
+  TWiki::Contrib::DBCacheContrib::Search::addOperator('COMPATIBLE', 4, \&OP_compatble);
+  TWiki::Contrib::DBCacheContrib::Search::addOperator('ISA', 4, \&OP_isa);
+}
+
+###############################################################################
+sub OP_subsumes {
+  my ($r, $l, $map) = @_;
+  my $lval = $l->matches( $map );
+  my $rval = $r->matches( $map );
+  return 0 unless ( defined $lval  && defined $rval);
+
+  my $hierarchy = getHierarchy($TWiki::Plugins::ClassificationPlugin::currentWeb);
+  my $cat1 = $hierarchy->getCategory($lval);
+  return 0 unless $cat1;
+
+  my $cat2 = $hierarchy->getCategory($rval);
+  return 0 unless $cat2;
+
+  if ($cat1->subsumes($cat2)) {
+    #writeDebug("OP_subsumes($lval, $rval)");
+    return 1;
+  }
+  return 0;
+}
+
+###############################################################################
+sub OP_compatible {
+  my ($r, $l, $map) = @_;
+  my $lval = $l->matches( $map );
+  my $rval = $r->matches( $map );
+  return 0 unless ( defined $lval  && defined $rval);
+  #writeDebug("OP_compatible($lval, $rval)");
+
+  my $hierarchy = getHierarchy($TWiki::Plugins::ClassificationPlugin::currentWeb);
+  my $cat1 = $hierarchy->getCategory($lval);
+  return 0 unless $cat1;
+
+  my $cat2 = $hierarchy->getCategory($rval);
+  return 0 unless $cat2;
+
+  if ($cat1->compatible($cat2)) {
+    #writeDebug("OP_subsumes($lval, $rval)");
+    return 1;
+  }
+  return 0;
+}
+
+###############################################################################
+sub OP_isa {
+  my ($r, $l, $map) = @_;
+  my $lval = $l->matches( $map );
+  my $rval = $r->matches( $map );
+
+  return 0 unless ( defined $lval  && defined $rval);
+
+  #writeDebug("OP_isa($lval, $rval)");
+
+  my $hierarchy = getHierarchy($TWiki::Plugins::ClassificationPlugin::currentWeb);
+  my $cat = $hierarchy->getCategory($rval);
+  return 0 unless $cat;
+
+  if ($cat->contains($lval)) {
+    #writeDebug("... yes");
+    return 1;
+  }
+  #writeDebug("... no");
+  return 0;
 }
 
 ###############################################################################
 sub handleTagRelatedTopics {
   my ($session, $params, $thisTopic, $thisWeb) = @_;
+
+  #writeDebug("called handleTagRelatedTopics(".$params->stringify().")");
 
   my $theTopic = $params->{_DEFAULT} || $params->{topic} || $thisTopic;
   my $theWeb = $params->{web} || $thisWeb;
@@ -51,28 +128,28 @@ sub handleTagRelatedTopics {
   my @tags = split(/,\s*/,$tags);
   my $len = scalar(@tags);
 
-  my %foundTopics;
-  my $found = 0;
+  # build query string
+  my @query = ();
   for (my $i = 0; $i < $len; $i++) {
     my $tag1 = $tags[$i];
     next unless $tag1;
     for (my $j = $i+1; $j < $len; $j++) {
       my $tag2 = $tags[$j];
-      my ($topics, undef, undef) = 
-        $db->dbQuery('Tag=~\'\b'.$tag1.'\b\' AND Tag=~\'\b'.$tag2.'\b\'', 
-          undef, undef, undef, undef, '\b'.$theTopic.'\b');
-      next unless $topics;
-      foreach my $foundTopic (@$topics) {
-        $foundTopics{$foundTopic} = 1;
-        $found = 1;
-      }
+      push @query, 'Tag=~\'\b'.$tag1.'\b\' AND Tag=~\'\b'.$tag2.'\b\''
     }
   }
-  return '' unless $found;
+  my $query = '('.join(') OR (', @query).')';
+  #writeDebug("query=$query");
 
+  # doit
+  my ($topics) = $db->dbQuery($query);
+  return '' unless $topics;
+
+  # format result
   my @lines;
   my $count = 0;
-  foreach my $topic (sort keys %foundTopics) {
+  foreach my $topic (sort @$topics) {
+    next if $topic eq $theTopic;
     $count++;
     push @lines, expandVariables($theFormat,
       'topic'=>$topic,
@@ -80,6 +157,7 @@ sub handleTagRelatedTopics {
       'index'=>$count,
     );
   }
+  return '' unless @lines;
 
   my $result = $theHeader.join($theSep, @lines).$theFooter;
   return expandVariables($result, 'count'=>$count);
@@ -89,7 +167,7 @@ sub handleTagRelatedTopics {
 sub handleBrowseCat {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
-  writeDebug("called handleBrowseCat(".$params->stringify().")");
+  #writeDebug("called handleBrowseCat(".$params->stringify().")");
 
   my $thisWeb = $params->{_DEFAULT} || $params->{web} || $theWeb;
   $thisWeb =~ s/\./\//go;
@@ -102,7 +180,7 @@ sub handleBrowseCat {
 sub handleIsA {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
-  writeDebug("called handleIsa()");
+  #writeDebug("called handleIsa()");
   my $thisWeb = $params->{web} || $theWeb;
   my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $theTopic;
   my $theCategory = $params->{cat} || '';
@@ -159,7 +237,7 @@ sub handleSubsumes {
 sub handleCompatible {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
-  writeDebug("called handleCompatible()");
+  #writeDebug("called handleCompatible()");
 
   my $thisWeb = $params->{web} || $theWeb;
   my $theCat1 = $params->{_DEFAULT} || $theTopic;
@@ -187,7 +265,7 @@ sub handleCompatible {
 sub handleSubsumtion {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
-  writeDebug("called handleSubsumtion()");
+  #writeDebug("called handleSubsumtion()");
   my $thisWeb = $params->{web} || $theWeb;
 
   my $hierarchy = getHierarchy($thisWeb);
@@ -225,7 +303,7 @@ sub handleSubsumtion {
 sub handleCompatibility {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
-  writeDebug("called handleCompatibility()");
+  #writeDebug("called handleCompatibility()");
   my $thisWeb = $params->{web} || $theWeb;
 
   my $hierarchy = getHierarchy($thisWeb);
@@ -263,15 +341,15 @@ sub handleCompatibility {
 sub handleCatField {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
-  writeDebug("called handleCatField(".$params->stringify().")");
+  #writeDebug("called handleCatField(".$params->stringify().")");
 
   my $theFormat = $params->{format} || '$cat';
   my $theSep = $params->{separator} || ' ';
   my $theHeader = $params->{header} || '';
   my $theFooter = $params->{footer} || '';
-  my $theTypes = $params->{type} || $params->{types} || '';
+  my $theTypes = $params->{_DEFAULT} || $params->{type} || $params->{types} || '';
 
-  my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $theTopic;
+  my $thisTopic = $params->{topic} || $theTopic;
   my $thisWeb = $params->{web} || $theWeb;
 
   ($thisWeb, $thisTopic) = 
@@ -407,7 +485,7 @@ sub renderFormFieldForEditHandler {
 
     $widget =~ s/\$web/$web/g;
     $widget =~ s/\$top/$top/g;
-    $widget =~ s/\$exclude/EXCLUDE="$exclude"/g;
+    $widget =~ s/\$exclude/$exclude/g;
   } 
   
   # tagging widget

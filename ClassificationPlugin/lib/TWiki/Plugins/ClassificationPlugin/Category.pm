@@ -15,15 +15,15 @@
 package TWiki::Plugins::ClassificationPlugin::Category;
 
 use strict;
-use vars qw($debug $idCounter);
+use vars qw($idCounter);
 
-$debug = 0; # toggle me
+sub DEBUG { 0; }
 
 ###############################################################################
 # static
 sub writeDebug {
-  #&TWiki::Func::writeDebug('- ClassificationPlugin - '.$_[0]) if $debug;
-  print STDERR '- ClassificationPlugin::Category - '.$_[0]."\n" if $debug;
+  #&TWiki::Func::writeDebug('- ClassificationPlugin - '.$_[0]) if DEBUG;
+  print STDERR '- ClassificationPlugin::Category - '.$_[0]."\n" if DEBUG;
 }
 
 ################################################################################
@@ -146,6 +146,8 @@ sub compatible {
 sub contains {
   my ($this, $topic, $seen) = @_;
 
+  writeDebug("called contains($this->{name}, $topic)");
+
   my $result = $this->{_contains}{$topic};
   return $result if defined $result;
 
@@ -167,6 +169,7 @@ sub contains {
 
   # cache
   $this->{_contains}{$topic} = $result;
+  writeDebug("... $result");
   return $result;
 }
 
@@ -174,7 +177,7 @@ sub contains {
 sub setParents {
   my $this = shift;
 
-  #writeDebug("called $this->{name}->setParents(@_)");
+  writeDebug("called $this->{name}->setParents(@_)");
   foreach my $name (@_) {
     my $parent = $this->{hierarchy}->getCategory($name) || 1;
     $this->{parents}{$name} = $parent;
@@ -325,7 +328,7 @@ sub toHTML {
   my $header = $params->{header} || '';
   my $footer = $params->{footer} || '';
 
-  #writeDebug("toHTML() nrCalls=$$nrCalls, name=$this->{name}");
+  writeDebug("toHTML() nrCalls=$$nrCalls, name=$this->{name}");
 
   # format sub-categories
   my @children = sort {$a->{name} cmp $b->{name}} $this->getChildren();

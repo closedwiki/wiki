@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1188126521" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1194286475" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopicType"}%
 ---+!! %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -22,7 +22,7 @@ See also: See CategorizedTopic, ClassifiedTopic, TaggedTopic, CategoryTemplate
 %ENDSECTION{name="documentation" type="section"}%
 
 ---++ Installation
-%DBCALL{"Applications.RenderTopicInstaller" TEXT="Install '%TOPIC%' TopicType in" TYPE="TopicType, AdminTool"}%
+%DBCALL{"Applications.RenderTopicInstaller" TEXT="Install '%TOPIC%' TopicType in" TYPE="TopicStub, TopicType, AdminTool"}%
 
 %STARTINCLUDE%
 ---++ Create a new category

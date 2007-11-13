@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1188123236" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1194470007" format="1.1" reprev="1.6" version="$Rev$"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+!! Function: %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -27,10 +27,10 @@
 %~~ DBQUERY{"TopicType=~'\b(Tagged|Classified)Topic\b' %QUERY%"
 ~~~    web="%BASEWEB%"
 ~~~    sort="modified" 
-~~~    limit="%IFDEFINED{"%LIMIT%" then="%LIMIT%" else="10"}%" 
+~~~    limit="%IFDEFINED{"%LIMIT%" then="$test"}%" 
 ~~~    reverse="on" 
-~~~    skip="%IFDEFINED{"%SKIP%" then="%SKIP%" else="0"}%"
-~~~    header="<noautolink>$n
+~~~    skip="%IFDEFINED{"%SKIP%" then="$test"}%"
+~~~    header="<noautolink><div class=\"clsHitList\"> $n
 ~~~      | *Nr* | *Topic* | *Summary* | *Changed* | *By* |$n
 ~~~      $percntTABLE{tablewidth=\"100%\"}$percnt$n"
 ~~~    format="
@@ -47,13 +47,15 @@
 ~~~      | [[%MAINWEB%.$expand(info.author)][$expand(info.author)]]  
 ~~~      |"
 ~~~    footer="$n
-~~~      $percntDBCALL{\"Applications.RenderPageNavigation\" 
-~~~        SKIP=\"%IFDEFINED{"%SKIP%" then="%SKIP%" else=" 0"}%\" 
-~~~        MAX=\"$count\"
-~~~        LIMIT=\"%IFDEFINED{"%LIMIT%" then="%LIMIT%" else="10"}%\"
-~~~        PARAMS=\"%PARAMS%\"
-~~~      }$percnt
-~~~      </noautolink>"
+~~~      $percntIFDEFINEDTHEN{\"%LIMIT%\" glue=\"off\"}$percnt
+~~~        $percntDBCALL$nop{\"Applications.RenderPageNavigation\" 
+~~~          SKIP=\"%IFDEFINED{"%SKIP%" then="$test"}%\" 
+~~~          MAX=\"$count\"
+~~~          LIMIT=\"%IFDEFINED{"%LIMIT%" then="$test"}%\"
+~~~          PARAMS=\"%PARAMS%\"
+~~~        }$percnt
+~~~      $percntFIDEFINED$percnt
+~~~      </div></noautolink>"
 ~~~ }%
 ~~~
 %STOPINCLUDE%

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1183541170" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1194439855" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WEB% Web Preferences
 
 %TOC%
@@ -7,8 +7,8 @@
 ---+++ Naming
 Text to be displayed on the sitemap and in the headerbar describing this web
 using a kind of tagline:
-   * Set SITEMAPWHAT = 
-   * Set SITEMAPUSETO = 
+   * Set SITEMAPWHAT = Categorization and folksomony application
+   * Set SITEMAPUSETO = Categorization and folksomony application
 
 Name of this blog displayed in the header if you are using the <nop>NatSkin:
    * Set WEBTOOLNAME =

@@ -19,16 +19,17 @@ use TWiki::Plugins::ClassificationPlugin::Core;
 
 use vars qw( 
   $VERSION $RELEASE $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
-  $doneHeader
+  $doneHeader $currentTopic $currentWeb
 );
 
 $VERSION = '$Rev$';
-$RELEASE = '0.20';
+$RELEASE = '0.40';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'A topic classification plugin and application';
 
 ###############################################################################
 sub initPlugin {
+  ($currentTopic, $currentWeb) = @_;
 
   TWiki::Func::registerTagHandler('BROWSECAT', 
     \&TWiki::Plugins::ClassificationPlugin::Core::handleBrowseCat);
@@ -47,6 +48,7 @@ sub initPlugin {
   TWiki::Func::registerTagHandler('TAGRELATEDTOPICS', 
     \&TWiki::Plugins::ClassificationPlugin::Core::handleTagRelatedTopics);
 
+  TWiki::Plugins::ClassificationPlugin::Core::init();
   $doneHeader = 0;
   return 1;
 }
