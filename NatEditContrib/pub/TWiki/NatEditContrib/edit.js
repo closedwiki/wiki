@@ -3,6 +3,7 @@
 // IE range selection adapted from http://twiki.org/cgi-bin/view/Plugins/SmartEditAddOn
 
 var txtarea;
+var txtareaOffset = -1;
 
 var isOpera=window.opera?1:0;
 
@@ -191,13 +192,28 @@ function getWindowWidth () {
   return 0; // outch
 }
 
+function getOffset(elem) {
+  //alert("elem="+elem);
+  if (elem) {
+    var parentElem = elem.offsetParent;
+    var parentOffset = 0;
+    if (parentElem) {
+      parentOffset = getOffset(parentElem);
+    }
+    return elem.offsetTop + parentOffset;
+  } else {
+    return 0;
+  }
+}
+
 function fixHeightOfTheText() {
   window.onresize = null; /* disable onresize handler */
   var height = getWindowHeight();
-  var offset;
   if (height) {
-    offset = txtarea.offsetTop;
-    height = height-offset-80;
+    if (txtareaOffset < 0) {
+      txtareaOffset = getOffset(txtarea);
+    }
+    height = height-txtareaOffset-80;
     txtarea.style.height = height + "px";
   }
   setTimeout("establishOnResize()", 100); /* add a slight timeout not to DoS IE */
@@ -222,73 +238,90 @@ function natEditInit() {
       txtarea = areas[0];
     }
   }
+
+  // establish tooltips
+  $(".natEditToolBar a, .natEditToolBar input").Tooltip({
+    delay:200,
+    track:true,
+    showURL:false,
+    extraClass:'twiki',
+    showBody:": "
+  });//.css('background','pink');
+
+  // tinymce toggle
+  if (typeof(tinyMCE) != 'undefined') {
+    var elems = document.getElementsByName('hide_in_wysiwyg');
+    for (var i = 0; i < elems.length; i++) {
+      elems[i].style['display'] = 'none';
+    }
+  }
+  var elem = document.getElementById('natEditToolBar');
+  if (elem) {
+    elem.style['visibility'] = 'visible';
+  }
+
+  // establish textarea resizer
   fixHeightOfTheText();
   establishOnResize();
 
-  if (twiki.JQueryPluginEnabled) {
+  // establish the table dialog
+  var natEditTableDialog = $('#natEditTableDialog')[0]; 
 
-    // establish the table dialog
-    $(function() { 
-      // cache the question element 
-      var natEditTableDialog = $('#natEditTableDialog')[0]; 
- 
-      // table button 
-      $('#natEditTableButtonLink').href='';
-      $('#natEditTableButtonLink').click(function() { 
+  // table button 
+  $('#natEditTableButtonLink').href='';
+  $('#natEditTableButtonLink').click(function() { 
 
-       if (document.selection && !isOpera) {
-          var cursorPos = getCursorPosition();
-          $.startPos = cursorPos.startPos;
-          $.endPos = cursorPos.endPos;
+   if (document.selection && !isOpera) {
+      var cursorPos = getCursorPosition();
+      $.startPos = cursorPos.startPos;
+      $.endPos = cursorPos.endPos;
 
-        } // end IE
+    } // end IE
 
-        $.blockUI(natEditTableDialog, { width: '275px' }); 
-        return false; 
-      }); 
- 
-      // dialog buttons
-      $('#yes').click(function() { 
-        // read the rows&col's and create table to that spec
-        var rows = $('#rows').val()
-        var cols = $('#columns').val();
-        $.unblockUI(); 
-            
-        var newTable = '\n';
-        for (var i = 0; i < rows; i++) {
-          newTable += '|';
-          for (var j = 0; j < cols; j++) {
-            if (i == 0) {
-              newTable += ' ** ';
-            } else {
-              newTable += '   ';
-            }
-            newTable += ' |';
-          }
-          newTable += '\n';
+    $.blockUI(natEditTableDialog, { width: '275px' }); 
+    return false; 
+  }); 
+
+  // dialog buttons
+  $('#yes').click(function() { 
+    // read the rows&col's and create table to that spec
+    var rows = $('#rows').val()
+    var cols = $('#columns').val();
+    $.unblockUI(); 
+        
+    var newTable = '\n';
+    for (var i = 0; i < rows; i++) {
+      newTable += '|';
+      for (var j = 0; j < cols; j++) {
+        if (i == 0) {
+          newTable += ' ** ';
+        } else {
+          newTable += '   ';
         }
-        txtarea.focus();
-        //TODO: where in the table shall we place the cursor?
-        // help IE out by re-selecting what was selected before :(
-        if (document.selection && !isOpera) {          //IE
-            ieSelect($.startPos, $.endPos);
-         }
-        natInsertTags('','',newTable);
+        newTable += ' |';
+      }
+      newTable += '\n';
+    }
+    txtarea.focus();
+    //TODO: where in the table shall we place the cursor?
+    // help IE out by re-selecting what was selected before :(
+    if (document.selection && !isOpera) {          //IE
+        ieSelect($.startPos, $.endPos);
+     }
+    natInsertTags('','',newTable);
 
-        return false; 
-      }); 
- 
-      $('#cancel').click(function() {
-        $.unblockUI();
-                
-        txtarea.focus();
-        // help IE out by re-selecting what was selected before :(
-        if (document.selection && !isOpera) {          //IE
-            ieSelect($.startPos, $.endPos);
-         }
-      }); 
-    }); 
-  }
+    return false; 
+  }); 
+
+  $('#cancel').click(function() {
+    $.unblockUI();
+            
+    txtarea.focus();
+    // help IE out by re-selecting what was selected before :(
+    if (document.selection && !isOpera) {          //IE
+        ieSelect($.startPos, $.endPos);
+     }
+  }); 
   
   return true;
 }
@@ -361,4 +394,5 @@ function ieSelect(startPos, endPos) {
     range.select();
 }
 
-addLoadEvent(natEditInit);
+// init on document ready
+$(natEditInit);

@@ -1,7 +1,11 @@
 /* default theme */
 .natEditToolBar { height:26px; margin:0px;}
 .natEditToolBar a:hover,
-.natEditToolBar a {width:24px; height:24px; background-image:url(buttons_sprite.png);}
+.natEditToolBar a {
+  width:25px; 
+  height:25px; 
+  background-image:url(buttons_sprite.png);
+}
 .natEditH1Button a { background-position:0px 0px; }
 .natEditH1Button a:hover { background-position:0px -25px; }
 .natEditH2Button a { background-position:-25px 0px; }

@@ -17,7 +17,7 @@ ul.natEditHelpTools {
 ul.natEditHelpTools {
   float:right;
 }
-.natEditToolBar {
+.natEditHiddenToolBar {
   visibility:hidden; /* becomes visible during load event */
 }
 
@@ -30,18 +30,13 @@ ul.natEditHelpTools {
   display:none;
 }
 
+.natEditToolBar a:hover,
 .natEditToolBar a {
   text-decoration:none;
+  background-color:transparent;
   background-position:top left;
   background-repeat:no-repeat;
   float:left;
-  display:block;
-}
-.natEditToolBar a:hover {
-  text-decoration:none;
-  background-color:transparent;
-  _background-color:white;
-  border:0px;
 }
 
 .natEditOptionTools {

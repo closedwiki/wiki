@@ -12,8 +12,6 @@
    mail the author.
 -->
 %TOC%
-
----++ Description
 <table style="float:right">
 <tr>
   <td><img src="%ATTACHURLPATH%/wikiringlogo40x40.png"></td>
@@ -22,6 +20,8 @@
   </td>
 </tr>
 </table>
+
+---++ Description
 The <nop>NatEdit is an wiki editor that helps in learning the <nop>TWikiMarkup Language
 by providing a GUI. By design, this is not a wysiwyg editor that tries to generate the
 correct TML in the background. Instead, the user is still in charge of writing correct
@@ -87,38 +87,44 @@ When the respective button is pressed, =<open-tag><sample-text><close-tag>=
 will be inserted. If there's a current selection, then it will be used instead of the
 =<sample-text>=.
 
+<div class="natEditToolBar" style="height:auto">
 | *Name* | *Icon* | *Description* | *Default* |
-| NATEDIT_BOLD | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_bold.png" alt="bold" /> | bold text | '*', 'Bold text', '*' |
-| NATEDIT_ITALIC | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_italic.png" alt="italic" /> | italic text | '_', 'Italic text', '_' |
-| NATEDIT_MONO | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_mono.png" alt="monospace" /> | monospace text | '=', 'Monospace text', '=' |
-| NATEDIT_UNDERLINE | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_underlined.png" alt="underlined" /> | underlined text | '<<nop>u>', 'Underlined text', '</u>' | 
-| NATEDIT_STRIKE | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_strike.png" alt="strike" /> | striked text | '<<nop>strike>', 'Strike through text', '<<nop>/strike>' |
-| NATEDIT_SUB | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_sub.png" alt="sub" /> | subscribed text | '<<nop>sub>', 'Subscript text', '<<nop>/sub>' |
-| NATEDIT_SUP | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_super.png" alt="super" /> | superscribed text | '<<nop>sup>', 'Superscript text', '<<nop>/sup>' |
-| NATEDIT_LEFT | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_left.png" alt="left" /> | left adjusted section | '<<nop>div style=\"text-align:left\">\n','Align left','\n<<nop>\/div>\n' |
-| NATEDIT_RIGHT | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_right.png" alt="right" /> | right adjusted section | '<<nop>div style=\"text-align:right\">\n','Align right','\n<<nop>\/div>\n' |
-| NATEDIT_CENTER | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_center.png" alt="center" /> | centered section | '<<nop>div style=\"text-align:center\">\n','Center text','\n<<nop>\/div>\n' |
-| NATEDIT_JUSTIFY | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_justify.png" alt="justify" /> | justify section | '<<nop>div style=\"text-align:justify\">\n','Justify text','\n<<nop>\/div>\n' |
-| NATEDIT_H1 | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_h1.png" alt="h1" /> | headline level 1 | '\n---+ ','Headline text','\n' | 
-| NATEDIT_H2 | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_h2.png" alt="h2" /> | headline level 2 | '\n---++ ','Headline text','\n' | 
-| NATEDIT_H3 | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_h3.png" alt="h3" /> | headline level 3 | '\n---+++ ','Headline text','\n' | 
-| NATEDIT_H4 | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_h4.png" alt="h4" /> | headline level 4 | '\n---++++ ','Headline text','\n' | 
-| NATEDIT_IMAGE | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_image.png" alt="image" /> | image button |\
+| NATEDIT_BOLD | <span class="natEditBoldButton"><a></a></span> | bold text | '*', 'Bold text', '*' |
+| NATEDIT_ITALIC | <span class="natEditItalicButton"><a></a></span> | italic text | '_', 'Italic text', '_' |
+| NATEDIT_MONO | <span class="natEditMonoButton"><a></a></span> | monospace text | '=', 'Monospace text', '=' |
+| NATEDIT_UNDERLINE | <span class="natEditUnderlineButton"><a></a></span> | underlined text | '<<nop>u>', 'Underlined text', '</u>' | 
+| NATEDIT_STRIKE | <span class="natEditStrikeButton"><a></a></span> | striked text | '<<nop>strike>', 'Strike through text', '<<nop>/strike>' |
+| NATEDIT_LEFT | <span class="natEditLeftButton"><a></a></span> | left adjusted section | '<<nop>div style=\"text-align:left\">\n','Align left','\n<<nop>\/div>\n' |
+| NATEDIT_RIGHT | <span class="natEditRightButton"><a></a></span> | right adjusted section | '<<nop>div style=\"text-align:right\">\n','Align right','\n<<nop>\/div>\n' |
+| NATEDIT_CENTER | <span class="natEditCenterButton"><a></a></span> | centered section | '<<nop>div style=\"text-align:center\">\n','Center text','\n<<nop>\/div>\n' |
+| NATEDIT_JUSTIFY | <span class="natEditJustifyButton"><a></a></span> | justify section | '<<nop>div style=\"text-align:justify\">\n','Justify text','\n<<nop>\/div>\n' |
+| NATEDIT_H1 | <span class="natEditH1Button"><a></a></span> | headline level 1 | '\n---+ ','Headline text','\n' | 
+| NATEDIT_H2 | <span class="natEditH2Button"><a></a></span> | headline level 2 | '\n---++ ','Headline text','\n' | 
+| NATEDIT_H3 | <span class="natEditH3Button"><a></a></span> | headline level 3 | '\n---+++ ','Headline text','\n' | 
+| NATEDIT_H4 | <span class="natEditH4Button"><a></a></span> | headline level 4 | '\n---++++ ','Headline text','\n' | 
+| NATEDIT_IMAGE | <span class="natEditImageButton"><a></a></span> | image button |\
  <<nop>img src=\"%<nop>ATTACHURLPATH%/','Example.jpg','\" title=\"Example\" /> \
  <br /> or \
  %<nop>IMAGE{\"','Example.jpg','&#124;400px&#124;Caption text&#124;frame&#124;center\"}<nop>% \
  when the <nop>ImagePlugin is installed |
-| NATEDIT_EXTLINK | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_ext.png" alt="ext link" /> | external link | '[<nop>[http://...][','link text',']]' |
-| NATEDIT_INTLINK | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_int.png" alt="int link" /> | internal link | '[<nop>[','web.topic][link text',']]' | 
-| NATEDIT_MATH | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_formula.png" alt="math" /> | only visible if the <nop>MathModePlugin is installed | '<<nop>latex title=\"Example\">\n','\\sum_{x=1}^{n}\\frac{1}{x}','\n<<nop>/latex>' |
-| NATEDIT_SIGNATURE | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_signature.png" alt="signature" /> | signature button | '-- ','%<nop>WIKIUSERNAME%',' - %<nop>DATE%' |
-| NATEDIT_VERBATIM | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_verbatim.png" alt="verbatim" /> | section ignoring contained wiki markup | '<<nop>verbatim>\n','Insert non-formatted text here','\n<\/verbatim>\n' |
-| NATEDIT_TABLE | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_table.png" alt="table" /> | add table | creates new table |
-| NATEDIT_NUMBERED | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_numbered.png" alt="numbered list" /> | make into numbered point | 3 spaces 1 space |
-| NATEDIT_BULLET | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_bullet.png" alt="bullet point" /> | make into bullet point | 3 spaces * space |
-| NATEDIT_INDENT | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_indent.png" alt="indent" /> | indent | adds 3 spaces  |
-| NATEDIT_UNDENT | <img src="%ATTACHURLPATH%/%NATEDIT_THEME%/button_undent.png" alt="undent" /> | un-indent | removes 3 spaces, or 3 spaces * space or 3 spaces 1 space |
+| NATEDIT_EXTLINK | <span class="natEditExtButton"><a></a></span> | external link | '[<nop>[http://...][','link text',']]' |
+| NATEDIT_INTLINK | <span class="natEditIntButton"><a></a></span> | internal link | '[<nop>[','web.topic][link text',']]' | 
+| NATEDIT_MATH | <span class="natEditMathButton"><a></a></span> | only visible if the <nop>MathModePlugin is installed | '<<nop>latex title=\"Example\">\n','\\sum_{x=1}^{n}\\frac{1}{x}','\n<<nop>/latex>' |
+| NATEDIT_SIGNATURE | <span class="natEditSignatureButton"><a></a></span> | signature button | '-- ','%<nop>WIKIUSERNAME%',' - %<nop>DATE%' |
+| NATEDIT_VERBATIM | <span class="natEditVerbatimButton"><a></a></span> | section ignoring contained wiki markup | '<<nop>verbatim>\n','Insert non-formatted text here','\n<\/verbatim>\n' |
+| NATEDIT_SUB |  | subscribed text | '<<nop>sub>', 'Subscript text' , '<<nop>/sub>' |
+| NATEDIT_SUP |  | superscribed text | '<<nop>sup>', 'Superscript text', '<<nop>/sup>' |
+| NATEDIT_TABLE |  | add table | creates new table |
+| NATEDIT_NUMBERED |  | make into numbered point | 3 spaces 1 space |
+| NATEDIT_BULLET |  | make into bullet point | 3 spaces * space |
+| NATEDIT_INDENT |  | indent | adds 3 spaces  |
+| NATEDIT_UNDENT |  | un-indent | removes 3 spaces, or 3 spaces * space or 3 spaces 1 space |
+</div>
 
+<style type="text/css">
+@import url("%ATTACHURLPATH%/styles.css");
+@import url("%ATTACHURLPATH%/default/styles.css");
+</style>
 
 If you want to customize the help text in the bottom part of the editor then
 set the variable =NATEDIT_HELPTEXT= to the name of a topic that contains
@@ -147,8 +153,11 @@ Sponsored by [[http://www.trivadis.com][Trivadis AG]] & [[http://twiki.net][TWIK
 |  Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2007 Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v1.53 |
+|  Version: | v1.54 |
 |  Change History: | |
+|  13 Nov 2007 | fixed calculation of textarea offset while autoresizing it to window height, \
+                 fixed initialization not to use Behaviour anymore, \
+                 fixed autohide/showing of word toolbar together with tinymce |
 |  08 Oct 2007 | fixed word toolbar together with <nop>TinyMCEPlugin; \
                  fixed launching a popup by not relying on twiki's javascript; \
                  using css sprites instead of individual buttons |
@@ -181,6 +190,7 @@ Sponsored by [[http://www.trivadis.com][Trivadis AG]] & [[http://twiki.net][TWIK
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 08 Oct 2007
+-- TWiki:Main.MichaelDaum - 13 Nov 2007
 
 %META:FILEATTACHMENT{name="screenshot1.png" attachment="screenshot1.png" attr="" comment="" date="1175688869" path="screenshot1.png" size="61040" stream="screenshot1.png" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="wikiringlogo40x40.png" attachment="wikiringlogo40x40.png" attr="h" comment="" date="1189787359" path="wikiringlogo40x40.png" size="2571" stream="wikiringlogo40x40.png" tmpFilename="" user="TWikiContributor" version="1"}%

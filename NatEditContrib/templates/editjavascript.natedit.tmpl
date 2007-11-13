@@ -105,16 +105,5 @@ function openWindow(web, topic) {
   win.focus();
 }
 
-addLoadEvent(function() {
-  if (typeof(tinyMCE) != 'undefined') {
-    var elems = document.getElementsByName('hide_in_wysiwyg');
-    for (var i = 0; i < elems.length; i++) {
-      elems[i].style['display'] = 'none';
-    }
-  }
-  var elem = document.getElementById('natEditToolBar');
-  if (elem)
-    elem.style['visibility'] = 'visible';
-});
 </script>
 <!-- //templatejavascript -->%TMPL:END%
