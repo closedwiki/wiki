@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1154718489" format="1.1" reprev="1.2" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1154718489" format="1.1" reprev="1.2" version="$Rev$"}%
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -12,6 +12,14 @@
 -->
 ---+!! %TOPIC%
 %TOC%
+<table style="float:right">
+<tr>
+  <td><img src="%ATTACHURLPATH%/wikiringlogo40x40.png"></td>
+  <td><a href="http://wikiring.de" title="Make your Wiki ring!" style="text-decoration:none">
+      Powered by <br /> <nop>WikiRing Consultants </a>
+  </td>
+</tr>
+</table>
 ---++ Description
 This plugin allows you to include mathematics in a TWiki page, with a format
 very similar to <nop>LaTeX.  The external program =latex2html= is used to
@@ -132,7 +140,7 @@ This is <latex color="red" size="large">\cal A</latex> new inline test.
    * Make sure they are installed and check the paths to the programs =latex=, =dvipng= and
      =convert= in the latex2img shiped with this plugin 
    * Edit the file =&lt;path-to-twiki>/pub/%TWIKIWEB%/%TOPIC%/latex2img= accordingly
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 ---++ Configuration
 There are a set of configuration variables that an be set in different places.
@@ -173,10 +181,11 @@ overridden by defining the respective prefrence variable.
    * Set SHORTDESCRIPTION = Include <nop>LaTeX formatted math in your TWiki pages
 -->
 |  Plugin Author: | TWiki:Main.GraemeLufkin, TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2002 Graeme Lufkin, gwl@u.washington.edu, 2006, MichaelDaum@WikiRing.com |
+|  Copyright &copy;: | 2002 Graeme Lufkin, gwl@u.washington.edu, 2006-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2.94 |
+|  Plugin Version: | 2.95 |
 |  Change History: | &nbsp; |
+|  13 Nov 2007: | fixed plugin on 4.2 |
 |  18 Dec 2006: | only use one bgcolor |
 |  02 Oct 2006: | don't fail on hierarchical webs; backwards compatible tempfile cleanup |
 |  31 Aug 2006: | added NO_PREFS_IN_TOPIC; \
@@ -210,4 +219,6 @@ overridden by defining the respective prefrence variable.
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 -- TWiki:Main.GraemeLufkin - 05 Jun 2002 %BR%
--- TWiki:Main.MichaelDaum - 18 Dec 2006
+-- TWiki:Main.MichaelDaum - 13 Nov 2007
+
+%META:FILEATTACHMENT{name="wikiringlogo40x40.png" attachment="wikiringlogo40x40.png" attr="h" comment="" date="1189787359" path="wikiringlogo40x40.png" size="2571" stream="wikiringlogo40x40.png" tmpFilename="" user="TWikiContributor" version="1"}%

@@ -24,18 +24,17 @@
 package TWiki::Plugins::MathModePlugin::Core;
 
 use strict;
-use vars qw($debug);
 use Digest::MD5 qw( md5_hex );
 use File::Copy qw( move );
 use File::Temp;
 
-$debug = 0; # toggle me
+sub DEBUG { 0; } # toggle me
 
 ###############################################################################
 # static
 sub writeDebug {
-  #&TWiki::Func::writeDebug('- MathModePlugin - '.$_[0]) if $debug;
-  print STDERR '- MathModePlugin - '.$_[0]."\n" if $debug;
+  #&TWiki::Func::writeDebug('- MathModePlugin - '.$_[0]) if DEBUG;
+  print STDERR '- MathModePlugin - '.$_[0]."\n" if DEBUG;
 }
 
 ###############################################################################
@@ -126,7 +125,7 @@ sub init {
   $this->{latexFontSize} = $value if $value;
 
   # get the current cgi
-  my $pathInfo = $ENV{'PATH_INFO'};
+  my $pathInfo = $ENV{'PATH_INFO'} || '';
   my $script = $ENV{'REQUEST_URI'} || '';
   if ($script =~ /^.*?\/([^\/]+)$pathInfo.*$/) {
     $script = $1;
@@ -149,7 +148,9 @@ sub init {
     eval "use TWiki::Contrib::DakarContrib;";
     $this->{sandbox} = new TWiki::Sandbox();
   } else {
-    $this->{sandbox} = $TWiki::sharedSandbox;
+    $this->{sandbox} = 
+      $TWiki::sharedSandbox ||
+      $TWiki::sandbox; # TWiki-4.2
   }
 
   # create the topic pubdir if it does not exist already
