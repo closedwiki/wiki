@@ -29,7 +29,7 @@
   <td><table style="width:auto" border="0">
     <tr>
       %IFDEFINEDTHEN{"%URLPARAM{"newweb"}%" as="Trash"}%%ELSEDEFINED%
-      <td align="right"><input type="checkbox" class="twikiCheckbox" name="totrash" id="totrash" onclick="var elem = document.forms['rename'].newweb; elem.value = (elem.value=='Trash')?'%WEB%':'Trash';"></td>
+      <td align="right"><input type="checkbox" class="twikiCheckbox" name="totrash" id="totrash" onclick="var elem = document.rename.newweb; elem.value = (elem.value=='Trash')?'%WEB%':'Trash';"></td>
       <td><label for="totrash">%MAKETEXT{"Move to Trash"}%</label></td>
       %FIDEFINED%
     </tr>

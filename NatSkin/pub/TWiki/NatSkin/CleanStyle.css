@@ -18,7 +18,6 @@ hr {
 
 /* twiki styles */
 .twikiTable {
-  margin:0px;
   border:1px #bbb solid;
   line-height:140%;
   border-spacing:0px;
@@ -509,7 +508,6 @@ h2.natSideBarTitle {
   padding-bottom:2px;
   display:block;
   font-weight:normal;
-  text-align:center;
   border-bottom:1px #ccc solid;
 }
 .twikiToc ul {

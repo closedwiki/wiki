@@ -34,14 +34,24 @@
 </tr>
 <tr>
   <th>%MAKETEXT{"To"}%:</th>
-  <td><select name="newweb" onchange="if (document.rename.newweb.value == 'Trash') { document.rename.newtopic.value = 'TrashAttachment'; }"> %WEBLIST{"<option $marker value='$name'>$name</option>" webs="Trash,%NEW_WEB%,public" selection="%NEW_WEB%" separator=" "}% </select>&nbsp;<input type="text" name="newtopic" value="%TOPIC%" size="40"/></td>
+  <td><select name="newweb" onchange="
+~~~ if (document.rename.newweb.value == 'Trash') { 
+~~~   document.rename.newtopic.value = 'TrashAttachment'; 
+~~~   document.rename.totrash.checked = true;
+~~~ } else {
+~~~   document.rename.totrash.checked = false;
+~~~ }
+~~~ "> 
+    %WEBLIST{"<option $marker value='$name'>$name</option>" webs="Trash,%NEW_WEB%,public" selection="%NEW_WEB%" separator=" "}% 
+    </select>&nbsp;<input type="text" name="newtopic" value="%TOPIC%" size="40"/>
+  </td>
 </tr>
 <tr>
   <th>&nbsp;</th>
   <td><table style="width:auto" border="0">
     <tr>
-      <td align="right">%ICON{"trash"}%</td>
-      <td><a href="javascript:document.forms['rename'].newweb.value='Trash'; document.forms['rename'].newtopic.value='TrashAttachment';">To Trash</a></td>
+      <td align="right"><input type="checkbox" class="twikiCheckbox" name="totrash" id="totrash" onclick="var elem = document.rename.newweb; elem.value = (elem.value=='Trash')?'%WEB%':'Trash';"></td>
+      <td><label for="totrash">%MAKETEXT{"Move to Trash"}%</label></td>
     </tr>
     </table>
   </td>

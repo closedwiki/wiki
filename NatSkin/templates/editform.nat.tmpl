@@ -2,5 +2,5 @@
 %TMPL:INCLUDE{"editformtoolbar"}%
 <!-- template: editform.nat.tmpl -->
 %TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"edit form"}%)%TMPL:END%
-%TMPL:DEF{"textarea"}%<textarea name="text" rows="10" cols="80" style="display:none">%TEXT%</textarea>%TMPL:END%
+%TMPL:DEF{"textarea"}%<div style="display:none"><textarea name="text" rows="10" cols="80">%TEXT%</textarea></div>%TMPL:END%
 %TMPL:DEF{"formend"}% <input type="hidden" name="editaction" value="form" /> %TMPL:END%

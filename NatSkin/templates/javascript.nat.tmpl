@@ -5,7 +5,9 @@
 <script type="text/javascript">
 $(function() {
   %TMPL:P{"onloadscript"}%
-  $(".natMainContents .twikiTable").wrap("<div class='overflow'></div>");
+  $(".natMainContents .twikiTable, .natMainContents .mwTable")
+    .not($(".twikiTable .twikiTable, .mwTable .mwTable", this))
+    .wrap("<div class='overflow'></div>");
 });
 </script>
 %TMPL:END%

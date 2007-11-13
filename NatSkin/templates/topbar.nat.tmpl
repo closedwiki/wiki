@@ -5,10 +5,10 @@
 	  <div class="natTopLeftContents">
 	    <div class="natWebTitle"><!--
       	      --><a href="%IFDEFINED{"%WEBLOGOURL%" then="%WEBLOGOURL%" else="%WIKILOGOURL%"}%" title="%WEBLOGOALT%" accesskey="h"><!--
-	      -->%NATWEBLOGO%<!--
+	      --><span>%NATWEBLOGO%</span><!--
 	      --></a><!--
 	    --></div>
-	    <div class="natWebSlogan">%SITEMAPUSETO%</div>
+	    <div class="natWebSlogan">%SITEMAPWHAT%</div>
 	  </div>
 	</div>
       </td>
@@ -29,7 +29,7 @@
     </tr>
 %IFSKINSTATETHEN{buttons="on"}%
     <tr>
-      <td class="natWebButtons" style="%IFSKINSTATE{action="login|logon" then="display:none"}%" colspan="2" align="%IFSKINSTATE{sidebar="left" then="right" else="left"}%">
+      <td class="natWebButtons" id="natWebButtons" style="%IFSKINSTATE{action="login|logon" then="display:none"}%" colspan="2">
 	<div class="natWebButtonsContents"> %$nopWEBCOMPONENT{"WebButtons"}% </div>
       </td>
     </tr>

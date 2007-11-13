@@ -1,38 +1,17 @@
 <!-- template: sidebar.nat.tmpl -->
-%TMPL:DEF{"defaultsidebar"}% 
-%IFSKINSTATETHEN{style="Pattern"}%
+%TMPL:DEF{"searchbox_pos1"}%<div class="natSearchBox natSearchBoxPos1">%TMPL:P{"searchbox"}%</div>%TMPL:END%
+%TMPL:DEF{"searchbox_pos2"}%<div class="natSearchBox natSearchBoxPos2">%TMPL:P{"searchbox"}%</div>%TMPL:END%
+%TMPL:DEF{"searchbox_pos3"}%<div class="natSearchBox natSearchBoxPos3">%TMPL:P{"searchbox"}%</div>%TMPL:END%
+%TMPL:DEF{"webleftbar"}%%WEBCOMPONENT{"WebLeftBar"}%%TMPL:END%
+%TMPL:DEF{"webrightbar"}%%WEBCOMPONENT{"WebRightBar"}%%TMPL:END%
+%TMPL:DEF{"websidebar"}%%WEBCOMPONENT{"WebSideBar"}%%TMPL:END%
+%TMPL:DEF{"pattern_sidebar"}%<!-- pattern_sidebar -->
 <h2 class="natSideBarTitle" style="background:%WEBBGCOLOR%">%BASEWEB%</h2>
-%$nopIFSKINSTATETHEN{searchbox="pos1"}%
-<div class="natSearchBox natSearchBoxPos1">
-%$nopTMPL:P{"searchbox"}%
-</div>
-%$nopFISKINSTATE% <!-- -->
-%$nopWEBCOMPONENT{"WebLeftBar"}%
-%ELSESKINSTATE%
-%$nopIFSKINSTATETHEN{searchbox="pos1"}%
-<div class="natSearchBox natSearchBoxPos1">
-%$nopTMPL:P{"searchbox"}%
-</div>
-%$nopFISKINSTATE% <!-- -->
-%$nopWEBCOMPONENT{"WebSideBar"}% 
-%FISKINSTATE%
+%TMPL:P{context="natskin_searchbox_pos1" then="searchbox_pos1"}%%TMPL:P{"webleftbar"}%
 %TMPL:END%
-%TMPL:DEF{"sidebar"}%%TMPL:P{"defaultsidebar"}% 
-%IFSKINSTATETHEN{searchbox="pos3"}%
-<div class="natSearchBox natSearchBoxPos3">
-%$nopTMPL:P{"searchbox"}%
-</div>
-%FISKINSTATE%
+%TMPL:DEF{"nat_sidebar"}%<!-- nat_sidebar -->
+%TMPL:P{context="natskin_searchbox_pos1" then="searchbox_pos1"}%%TMPL:P{"websidebar"}%
 %TMPL:END%
-%TMPL:DEF{"leftsidebar"}% 
-%IFSKINSTATETHEN{sidebar="left|both"}%
-%$nopTMPL:P{"sidebar"}% 
-%FISKINSTATE%
-%TMPL:END%
-%TMPL:DEF{"rightsidebar"}%  
-%IFSKINSTATETHEN{sidebar="both"}%
-%$nopWEBCOMPONENT{"WebRightBar"}%
-%ELSIFSKINSTATE{sidebar="right"}%
-%$nopTMPL:P{"sidebar"}%
-%FISKINSTATE%
-%TMPL:END%
+%TMPL:DEF{"defaultsidebar"}%%TMPL:P{context="natskin_style_pattern" then="pattern_sidebar" else="nat_sidebar"}%%TMPL:P{context="natskin_searchbox_pos3" then="searchbox_pos3"}%%TMPL:END%
+%TMPL:DEF{"sidebar"}%%TMPL:P{"defaultsidebar"}%%TMPL:END%
+%TMPL:DEF{"rightsidebar"}%%TMPL:P{context="natskin_sidebar_both" then="webrightbar" else="sidebar"}%%TMPL:END%

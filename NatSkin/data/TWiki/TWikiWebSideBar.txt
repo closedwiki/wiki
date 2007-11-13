@@ -15,19 +15,11 @@
 %WEBCOMPONENT{"WebLinks"}%
 %ENDTWISTY%
 </div>
-%IFSKINSTATETHEN{searchbox="pos2"}%
-<div class="natSearchBox natSearchBoxPos2">
-%TMPL:P{"searchbox"}%
-</div>
-%FISKINSTATE%
+%TMPL:P{context="natskin_sidebar_pos2" then="searchbox_pos2"}%<!-- -->
 <div class="natSideBarSection natSideBarWebs">
 %INCLUDE{"%TWIKIWEB%.FlexWebListNavi" warn="off"}%
 </div>
 <div class="natSideBarSection natSideBarPersonal"> 
-%IFDEFINEDTHEN{"$percntINCLUDE{\"%MAINWEB%.%WIKINAME%SideBar\" warn=\"off\"}$percnt"}%
-$test
-%ELSEDEFINED%
-%$nopWEBCOMPONENT{"MySideBar"}%
-%FIDEFINED%
+%IFEXISTS{"%MAINWEB%.%WIKINAME%SideBar" then="$percntINCLUDE{\"%MAINWEB%.%WIKINAME%SideBar\"}$percnt" else="$percntWEBCOMPONENT{\"MySideBar\"}$percnt"}%
 </div>
 <!-- //twiki.twikiwebsidebar -->%STOPINCLUDE%

@@ -1,4 +1,97 @@
 <!-- template: body.nat.tmpl -->
+%TMPL:DEF{"contentheader_container"}%<div class="natMainHeaderContents">%TMPL:P{"contentheader"}%</div>%TMPL:P{"broadcast"}%%TMPL:END%
+%TMPL:DEF{"content_container"}%<div class="natMainContents" id="natMainContents">%STARTALIASAREA%%TMPL:P{"content"}%%STOPALIASAREA%</div>%TMPL:END%
+%TMPL:DEF{"contetfooter_container"}%<div class="natMainFooterContents">%TMPL:P{"contentfooter"}%</div>%TMPL:END%
+%TMPL:DEF{"layout_sidebar_left"}%<!-- sidebar left -->
+      <table class="natLayoutTable natHeaderArt" id="natHeaderArt" cellpadding="0" cellspacing="0" border="0" width="100%">
+%TMPL:P{"topbar"}% <!-- -->
+      </table>
+      <table class="natLayoutTable" cellpadding="0" cellspacing="0" border="0" width="100%">
+	<tr>
+	  <td class="natMiddle natMiddleLeft natSideBar natSideBarLeft" rowspan="2" valign="top">
+	    <div class="natSideBarContents">
+%TMPL:P{"sidebar"}% <!-- -->
+	    </div>
+	  </td>
+	  <td class="natMain natMiddle natMiddleRight natMainRight" valign="top">
+%TMPL:P{"contentheader_container"}% <!-- -->
+%TMPL:P{"content_container"}% <!-- -->
+	  </td> 
+	</tr>
+	<tr>
+	  <td class="natMainFooter natMiddle natMiddleRight natMainFooterRight" valign="bottom">
+%TMPL:P{"contetfooter_container"}% <!-- -->
+	  </td>
+	</tr>
+      </table> 
+%TMPL:END%
+%TMPL:DEF{"layout_sidebar_right"}%<!-- sidebar right -->
+      <table class="natLayoutTable natHeaderArt" id="natHeaderArt" cellpadding="0" cellspacing="0" border="0" width="100%">
+%TMPL:P{"topbar"}% <!-- -->
+	<tr>
+	  <td class="natMain natMiddle natMiddleLeft natMainLeft" valign="top">
+%TMPL:P{"contentheader_container"}% <!-- -->
+%TMPL:P{"content_container"}% <!-- -->
+	  </td> 
+	  <td class="natMiddle natMiddleRight natSideBar natSideBarRight"  rowspan="2" valign="top">
+	    <div class="natSideBarContents">
+%TMPL:P{"rightsidebar"}% <!-- -->
+	    </div>
+	  </td> 
+	</tr>
+	<tr>
+	  <td class="natMainFooter natMiddle natMiddleLeft natMainFooterLeft" valign="bottom">
+%TMPL:P{"contetfooter_container"}% <!-- -->
+	  </td>
+	</tr>
+      </table> 
+%TMPL:END%
+%TMPL:DEF{"layout_sidebar_both"}%<!-- sidebar both -->
+      <table class="natLayoutTable natHeaderArt" id="natHeaderArt" cellpadding="0" cellspacing="0" border="0" width="100%">
+%TMPL:P{"topbar"}% <!-- -->
+      </table>
+      <table class="natLayoutTable" cellpadding="0" cellspacing="0" border="0" width="100%">
+	<tr>
+	  <td class="natMiddle natMiddleLeft natSideBar natSideBarLeft" rowspan="2" valign="top">
+	    <div class="natSideBarContents">
+%TMPL:P{"sidebar"}% <!-- -->
+	    </div>
+	  </td>
+	  <td class="natMain natMiddle" valign="top">
+%TMPL:P{"contentheader_container"}% <!-- -->
+%TMPL:P{"content_container"}% <!-- -->
+	  </td> 
+	  <td class="natMiddle natMiddleRight natSideBar natSideBarRight"  rowspan="2" valign="top">
+	    <div class="natSideBarContents">
+%TMPL:P{"rightsidebar"}% <!-- -->
+	    </div>
+	  </td> 
+	</tr>
+	<tr>
+	  <td class="natMainFooter natMiddle" valign="bottom">
+%TMPL:P{"contetfooter_container"}% <!-- -->
+	  </td>
+	</tr>
+      </table> 
+%TMPL:END%
+%TMPL:DEF{"layout_sidebar_off"}%<!-- sidebar off -->
+      <table class="natLayoutTable natHeaderArt" id="natHeaderArt" cellpadding="0" cellspacing="0" border="0" width="100%">
+%TMPL:P{"topbar"}% <!-- -->
+      </table>
+      <table class="natLayoutTable" cellpadding="0" cellspacing="0" border="0" width="100%">
+	<tr>
+	  <td class="natMain natMiddle natMiddleLeft natMainLeft natMiddleRight natMainRight natMiddleBoth natMainBoth" valign="top">
+%TMPL:P{"contentheader_container"}% <!-- -->
+%TMPL:P{"content_container"}% <!-- -->
+	  </td> 
+	</tr>
+	<tr>
+	  <td class="natMainFooter natMiddle natMiddleLeft natMainFooterLeft natMiddleRight natMainFooterRight natMiddleBoth natMainFooterBoth" valign="bottom">
+%TMPL:P{"contetfooter_container"}% <!-- -->
+	  </td>
+	</tr>
+      </table> 
+%TMPL:END%
 %TMPL:DEF{"defaultbody"}% 
 <a name="PageTop"></a>
 <table class="natPageBox" cellpadding="0" cellspacing="0" border="0" width="100%">
@@ -6,47 +99,13 @@
 <tr>
   <td class="natBoxBorderLeft">
     <div class="natBodyContents">
-      <table class="natLayoutTable natHeaderArt" id="natHeaderArt" cellpadding="0" cellspacing="0" border="0" width="100%">
-%TMPL:P{"topbar"}% <!-- -->
-      %IFSKINSTATETHEN{sidebar="left|both|off"}%
-      </table>
-      <table class="natLayoutTable" cellpadding="0" cellspacing="0" border="0" width="100%">
-      %FISKINSTATE%
-	<tr>
-	  %IFSKINSTATETHEN{sidebar="left|both"}%
-	  <td class="natMiddle natMiddleLeft natSideBar natSideBarLeft" rowspan="2" valign="top">
-	    <div class="natSideBarContents">
-%TMPL:P{"leftsidebar"}% <!-- -->
-	    </div>
-	  </td>
-	  %FISKINSTATE%
-	  <td class="natMain natMiddle %IFSKINSTATE{sidebar="right|off" then="natMiddleLeft natMainLeft"}% %IFSKINSTATE{sidebar="left|off" then="natMiddleRight natMainRight"}% %IFSKINSTATE{sidebar="off" then="natMiddleBoth natMainBoth"}%" valign="top">
-	    <div class="natMainHeaderContents">
-%TMPL:P{"contentheader"}% <!-- -->
-	    </div>
-%TMPL:P{"broadcast"}% <!-- -->
-	    <div class="natMainContents" id="natMainContents">%STARTALIASAREA%%TMPL:P{"content"}%%STOPALIASAREA%</div>
-	  </td> 
-	  %IFSKINSTATETHEN{sidebar="right|both"}%
-	  <td class="natMiddle natMiddleRight natSideBar natSideBarRight"  rowspan="2" valign="top">
-	    <div class="natSideBarContents">
-%TMPL:P{"rightsidebar"}% <!-- -->
-	    </div>
-	  </td> 
-	  %FISKINSTATE%
-	</tr>
-	<tr>
-	  <td class="natMainFooter natMiddle %IFSKINSTATE{sidebar="right|off" then="natMiddleLeft natMainFooterLeft"}% %IFSKINSTATE{sidebar="left|off" then="natMiddleRight natMainFooterRight"}%  %IFSKINSTATE{sidebar="off" then="natMiddleBoth natMainFooterBoth"}%" valign="bottom">
-	    <div class="natMainFooterContents">%TMPL:P{"contentfooter"}%</div>
-	  </td>
-	</tr>
-      </table> 
+%TMPL:P{context="natskin_sidebar_left" then="layout_sidebar_left"}%%TMPL:P{context="natskin_sidebar_right" then="layout_sidebar_right"}%%TMPL:P{context="natskin_sidebar_both" then="layout_sidebar_both"}%%TMPL:P{context="natskin_sidebar_off" then="layout_sidebar_off"}%<!-- -->
       <div class="natBottomBar %IFSKINSTATE{sidebar="right|off" then="natBottomBarLeft"}% %IFSKINSTATE{sidebar="left|off" then="natBottomBarRight"}% %IFSKINSTATE{sidebar="off" then="natBottomBarBoth"}%">
 	<div class="natBottomBarContents">
 	  <div class="natCopyRight">%WEBCOPYRIGHT%</div>
 	  <div class="natSyndicate">
-	    %IFDEFINEDTHEN{"%WEBSYNDICATION%"}%
-	      %WEBSYNDICATION%
+	    %IFDEFINEDTHEN{"$percntWEBSYNDICATION$percnt"}%
+	      %$nopWEBSYNDICATION%
 	    %ELSEDEFINED%
 	      %MAKETEXT{"Syndicate this site"}% 
 	      <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebRss">RSS</a><a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebAtom">ATOM</a>

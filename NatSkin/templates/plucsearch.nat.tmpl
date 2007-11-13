@@ -2,9 +2,9 @@
 <!-- template: plucsearch.nat.tmpl -->
 %TMPL:DEF{"topicactions"}%%TMPL:END%
 %TMPL:DEF{"searchbox"}%%TMPL:END%
-%TMPL:DEF{"content"}%%SPLIT%%TMPL:P{"searchform"}%%SPLIT% 
+%TMPL:DEF{"content"}%%SPLIT%%TMPL:P{"searchform"}%%SPLIT%<div class="natSearchTotal" style="margin:5px 0px">%MAKETEXT{"Found <span>[_1]</span> topics." args="%NTOPICS%"}%</div>%SPLIT%
 %CALC{"$SET(incr, 0)"}% <!-- CALC incr = 0 -->
-<table class="natSearchTable" width="100%">
+<table class="natSearchTable" width="100%" style="margin-top:0px">
 <tr class="natSearchTableTitle">
   <th width="16px">&nbsp;</th>
   <th width="40%" class="natSearchTarget">%MAKETEXT{"Document"}%</th>
@@ -27,7 +27,7 @@
     <td>&nbsp;</td>
     <td colspan="4">%TEXTHEAD%<!-- guard--></td>
   </tr> 
-</table>%REPEAT% %SPLIT%<div class="natSearchTotal">%MAKETEXT{"Found <span>[_1]</span> topics." args="%NTOPICS%"}%</div>%SPLIT%
+</table>%REPEAT% %SPLIT%
 %TMPL:END%
 %TMPL:DEF{"searchform"}%<!-- searchform -->
 <form name="searchform" action="%SCRIPTURLPATH{"plucsearch"}%/%BASEWEB%/%BASETOPIC%" method="post">

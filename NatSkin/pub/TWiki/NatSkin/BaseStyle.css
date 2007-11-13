@@ -118,6 +118,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 */
 
+.natIcon {
+  border:0;
+  vertical-align:baseline;
+}
+
 /* layout */
 .natBody {
   text-align:center;
@@ -833,7 +838,6 @@ td.twikiDiffChangedText {
 .overflow {
   overflow:auto;
   padding:1px;
-  margin:-1px;
 }
 
 .block {
