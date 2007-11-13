@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1144943989" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1144943989" format="1.1" version="$Rev$"}%
 ---+ History Plugin
 
 This plugin shows a complete or partial history of a document. The output can arbitrarily be formatted. An example for a Wikipedia-like history is included.
@@ -43,43 +43,32 @@ For a more complex example see the attached =oopshistory.tmpl= which also allows
 Example screenshot from oopshistory.tmpl: <br />
      <div class="twikiImage"><img src="%ATTACHURLPATH%/screenshot.png" alt="screenshot.png" width='509' height='392' /></div>
 
----++ Plugin Settings
-
-Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
-
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Shows a complete history of a document
-
-   * Debug plugin: (See output in =data/debug.txt=)
-      * Set DEBUG = 0
-
-   * Default number of printed revisions:
-      * Set NREV = 10
-
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
    * Download the ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-     | *File:* | *Description:* |
-     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-     | ==templates/oopshistory.tmpl== | Template for history page |
-     | ==pub/TWiki/HistoryPlugin/screenshot.png== | Example screen shot |
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   | *File:* | *Description:* |
+%$MANIFEST%
+   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
    * Test if the installation was successful:
       * Here should appear the history of this document inline: 
         %HISTORY{"      r1.$rev - $date - $wikiusername%BR%"}%
       * Show the history of Main.TWikiUsers :%BR%
-        %SCRIPTURL%/oops%SCRIPTSUFFIX%/Main/TWikiUsers?template=oopshistory
+        %SCRIPTURL{oops}%/Main/TWikiUsers?template=oopshistory
 
 ---++ Plugin Info
-
+<!--
+      * Set SHORTDESCRIPTION = Shows a complete history of a document
+-->
 |  Plugin Author: | TWiki:Main/JChristophFuchs |
-|  Plugin Version: | 07 Nov 2007: (V1.1) |
+|  Plugin Version: | 07 Nov 2007: (V1.2) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  13 Nov 2007: | 1.2 Michael Daum: removed cruft from plugin, \
+                  updates to use modern TWiki APIs, \
+                  added some more flexibility to create a diff interface, \
+                  removed plugin topic options |
 |  07 Nov 2007: | 1.1 Arthur Clemens: updated to TWiki 4.2; improved user interface.  |
 |  19 Jan 2007: | 1.002 Corrected coding error that causes the plugin to fail with HISTORY tag in topic |
 |  9 Apr 2006: | 1.001 Updated for new <nop>PatternSkin in [[http://TWiki.org/cgi-bin/view/Codev/TWikiRelease04x00x02][TWikiRelease04x00x02]] |

@@ -14,129 +14,43 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 #
-# =========================
-#
-# This is an empty TWiki plugin. Use it as a template
-# for your own plugins; see TWiki.TWikiPlugins for details.
-#
-# Each plugin is a package that may contain these functions:        VERSION:
-#
-#   earlyInitPlugin         ( )                                     1.020
-#   initPlugin              ( $topic, $web, $user, $installWeb )    1.000
-#   initializeUserHandler   ( $loginName, $url, $pathInfo )         1.010
-#   registrationHandler     ( $web, $wikiName, $loginName )         1.010
-#   beforeCommonTagsHandler ( $text, $topic, $web )                 1.024
-#   commonTagsHandler       ( $text, $topic, $web )                 1.000
-#   afterCommonTagsHandler  ( $text, $topic, $web )                 1.024
-#   startRenderingHandler   ( $text, $web )                         1.000
-#   outsidePREHandler       ( $text )                               1.000
-#   insidePREHandler        ( $text )                               1.000
-#   endRenderingHandler     ( $text )                               1.000
-#   beforeEditHandler       ( $text, $topic, $web )                 1.010
-#   afterEditHandler        ( $text, $topic, $web )                 1.010
-#   beforeSaveHandler       ( $text, $topic, $web )                 1.010
-#   afterSaveHandler        ( $text, $topic, $web, $errors )        1.020
-#   writeHeaderHandler      ( $query )                              1.010  Use only in one Plugin
-#   redirectCgiQueryHandler ( $query, $url )                        1.010  Use only in one Plugin
-#   getSessionValueHandler  ( $key )                                1.010  Use only in one Plugin
-#   setSessionValueHandler  ( $key, $value )                        1.010  Use only in one Plugin
-#
-# initPlugin is required, all other are optional. 
-# For increased performance, all handlers except initPlugin are
-# disabled. To enable a handler remove the leading DISABLE_ from
-# the function name. Remove disabled handlers you do not need.
-#
-# NOTE: To interact with TWiki use the official TWiki functions 
-# in the TWiki::Func module. Do not reference any functions or
-# variables elsewhere in TWiki!!
-
-
-# =========================
-package TWiki::Plugins::HistoryPlugin;    # change the package name and $pluginName!!!
+package TWiki::Plugins::HistoryPlugin;
 
 use TWiki::Func;
 
 # =========================
-use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $pluginName
-        $debug $exampleCfgVar
-    );
+use vars qw( $VERSION $RELEASE $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION);
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.1';
-
-$pluginName = 'HistoryPlugin';  # Name of this Plugin
-
-my ($rev1, $rev2, $nrev, $maxrev);
+$RELEASE = '1.2';
+$NO_PREFS_IN_TOPIC = 1;
+$SHORTDESCRIPTION = 'Shows a complete history of a document';
 
 # =========================
 sub initPlugin
 {
-    ( $topic, $web, $user, $installWeb ) = @_;
-
     # check for Plugins.pm versions
     if( $TWiki::Plugins::VERSION < 1.021 ) {
-        TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
+        TWiki::Func::writeWarning( "Version mismatch between HistoryPlugin and Plugins.pm" );
         return 0;
     }
 
-    # Get plugin debug flag
-    $debug = TWiki::Func::getPluginPreferencesFlag( "DEBUG" );
+    TWiki::Func::registerTagHandler('HISTORY', \&handleHistory);
 
-    # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    # $exampleCfgVar = TWiki::Func::getPluginPreferencesValue( "EXAMPLE" ) || "default";
-
-    # Plugin correctly initialized
-    TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
     return 1;
 }
 
-sub commonTagsHandler
-{
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
-
-    # This is the place to define customized tags and variables
-    # Called by TWiki::handleCommonTags, after %INCLUDE:"..."%
-
-    $rev1 = $rev2 = $nrev = $maxrev = undef;
-
-    # do custom extension rule, like for example:
-    $_[0] =~ s/%HISTORY%/&handleHistory()/ge;
-    $_[0] =~ s/%HISTORY{(.*?)}%/&handleHistory($1)/ge;
-
-    $_[0] =~ s/%HISTORY_REV1%/$rev1/g if defined($rev1);
-    $_[0] =~ s/%HISTORY_REV2%/$rev2/g if defined($rev2);
-    $_[0] =~ s/%HISTORY_NREV%/$nrev/g if defined($nrev);
-    $_[0] =~ s/%HISTORY_MAXREV%/$maxrev/g if defined($maxrev);
-
-#    TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] ) returns:\n$_[0]" ) if $debug;
-
-
-}
-
 sub handleHistory {
+    my ($session, $params, $theTopic, $theWeb) = @_;
 
-    TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::handleHistory: Args=>$_[0]<\n") if $debug;
-
-    my %params = TWiki::Func::extractParameters($_[0]);
-
-    my $web = $params{web} || $web;
-    my $topic = $params{topic} || $topic;
-    my $format = $params{format} ||
-                 $params{_DEFAULT} || 
+    my $web = $params->{web} || $theWeb;
+    my $topic = $params->{topic} || $theTopic;
+    my $format = $params->{format} ||
+                 $params->{_DEFAULT} || 
                  'r1.$rev - $date - $wikiusername%BR%';
-    my $header = $params{header} ;
+    my $header = $params->{header} ;
     $header = "\$next{'...'}%BR%" unless defined($header);
-    my $footer = $params{footer} ;
+    my $footer = $params->{footer} ;
     $footer = "\$previous{'...'}" unless defined($footer);
 
     unless ( TWiki::Func::topicExists( $web, $topic) ) {
@@ -145,14 +59,12 @@ sub handleHistory {
 
     # Get revisions
 
-    $maxrev = (TWiki::Func::getRevisionInfo($web, $topic) )[2];
-    $rev1 = $params{rev1};
+    my $maxrev = (TWiki::Func::getRevisionInfo($web, $topic) )[2];
+    my $rev1 = $params->{rev1};
     $rev1 =~ s/1\.// if $rev1;
-    $rev2 = $params{rev2};
+    my $rev2 = $params->{rev2};
     $rev2 =~ s/1\.// if $rev2;
-    $nrev = $params{nrev} ||
-            TWiki::Func::getPluginPreferencesValue( "NREV" ) ||
-            10;
+    my $nrev = $params->{nrev} || 10;
 
     $rev2 ||= $rev1 ? $rev1 + $nrev - 1 : $maxrev;
     $rev1 ||= $rev2 - $nrev + 1;
@@ -163,6 +75,13 @@ sub handleHistory {
     $rev2 = $maxrev if $rev2 > $maxrev;
     $rev2 = 1 if $rev2 < 1;
 
+    $TWiki::Plugins::SESSION->{prefs}->pushPreferenceValues( 'SESSION', { 
+      HISTORY_MAXREV => $maxrev,
+      HISTORY_REV1 => $rev1,
+      HISTORY_REV2 => $rev2,
+      HISTORY_NREV => $nrev,
+    });      	
+
     # Start the output
     my $out = handleHeadFoot($header, $rev1, $rev2, $nrev, $maxrev);
 
@@ -170,23 +89,36 @@ sub handleHistory {
 
     my @revs = ($rev1..$rev2);
 
-    my $reverse = $params{reverse} || 1;
+    my $reverse = $params->{reverse} || 1;
     $reverse = 0 if $reverse =~ /off|no/i;
     @revs = reverse(@revs) if $reverse;
+    my $mixedAlphaNum = TWiki::Func::getRegularExpression('mixedAlphaNum');
+    my $checkFlag = 0;
 
     foreach my $rev (@revs) {
 
         my ($date, $user, $revout, $comment) = 
             TWiki::Func::getRevisionInfo($web, $topic, $rev);
 
+
+        my $wikiName = TWiki::Func::userToWikiName($user, 1);
+        my $wikiUserName = TWiki::Func::userToWikiName($user, 0);
+
         my $revinfo = $format;
+        my $checked1 = '';
+        my $checked2 = '';
+        $checked1 = 'checked' if $checkFlag == 0;
+        $checked2 = 'checked' if $checkFlag == 1;
+        $checkFlag++;
         $revinfo =~ s/\$web/$web/g;
         $revinfo =~ s/\$topic/$topic/g;
         $revinfo =~ s/\$rev/$revout/g;
         $revinfo =~ s/\$date/TWiki::Func::formatTime($date)/ge;
         $revinfo =~ s/\$username/$user/g;
-        $revinfo =~ s/\$wikiname/TWiki::Func::userToWikiName($user,1)/ge;
-        $revinfo =~ s/\$wikiusername/TWiki::Func::userToWikiName($user,0)/ge;
+        $revinfo =~ s/\$wikiname/$wikiName/g;
+        $revinfo =~ s/\$wikiusername/$wikiUserName/g;
+        $revinfo =~ s/\$checked1/$checked1/g;
+        $revinfo =~ s/\$checked2/$checked2/g;
 
         # This space to tabs conversion must be for Cairo compatibility
         $revinfo =~ s|^((   )+)|"\t" x (length($1)/3)|e;
@@ -196,6 +128,10 @@ sub handleHistory {
         $rev--;
     }
     $out .= handleHeadFoot($footer, $rev1, $rev2, $nrev, $maxrev);
+    $out =~ s/\$percnt/\%/go;
+    $out =~ s/\$dollar/\$/go;
+    $out =~ s/\$nop//go;
+    $out =~ s/\$n([^$mixedAlphaNum]|$)/\n$1/go;
 
     return $out;
 }
@@ -220,8 +156,7 @@ sub handleHeadFoot {
             $args =~ s/\$nrev/$nrev/g;
 
             my %params = TWiki::Func::extractParameters($args);
-            my $newtext = $params{text} ||
-                          $params{_DEFAULT} || '';
+            my $newtext = $params{text} || $params{_DEFAULT} || '';
             my $url = $params{url} || '';
             my $replace = $url ? "<a href='$url' class='twikiButton'>$newtext</a>" : $newtext;
             $text =~ s/\$next({.*?})/$replace/;
@@ -244,8 +179,7 @@ sub handleHeadFoot {
             $args =~ s/\$nrev/$nrev/g;
 
             my %params = TWiki::Func::extractParameters($args);
-            my $newtext = $params{text} ||
-                          $params{_DEFAULT} || '';
+            my $newtext = $params{text} || $params{_DEFAULT} || '';
             my $url = $params{url} || '';
             my $replace = $url ? "<a href='$url' class='twikiButton'>$newtext</a>" : $newtext;
             $text =~ s/\$previous({.*?})/$replace/;
