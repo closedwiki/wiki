@@ -127,6 +127,20 @@ returns a list of all known skin styles.
 
 returns a list of all known styles variations.
 
+---+++ NATFORMLIST
+*Syntax*: =%<nop>NATFORMLIST{...}%=
+
+returns a formatted list of forms that can be attached to a topic. typically used
+in the =changeform= skin template.
+paramters:
+   * =header=
+   * =format=
+   * =footer=
+   * =separator=
+   * =selected=
+   * =web=
+   * =topic=
+
 ---+++ NATLOGINURL
 *Syntax*: =%<nop>NATLOGINURL%
 
@@ -322,8 +336,12 @@ returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin 
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v3.00-pre16 |
+|  Plugin Version: | v3.00-pre17 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  13 Nov 2007: | propagating skin state to context to speed up template resolution, \
+                  prepending style identifier to SKIN variable to be able to switch \
+                  the markup together with the css, \
+                  added NATFORMLIST, a more flexible variantion of the standard FORMLIST |
 |  02 Oct 2007: | added support for <nop>HistoryPlugin, <nop>TinyMCEPlugin |
 |  21 Sep 2007: | made external link detection optional, \
                   fixed mod_perl/speedy issue detecting new themes on the stylepath, \
@@ -462,4 +480,4 @@ returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin 
 |  Feedback: | TWiki:Plugins/NatSkinPluginDev  |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main/MichaelDaum - 02 Oct 2007 
+-- TWiki:Main/MichaelDaum - 13 Nov 2007 

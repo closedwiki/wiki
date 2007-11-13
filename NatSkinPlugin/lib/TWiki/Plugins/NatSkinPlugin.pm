@@ -23,7 +23,7 @@ use TWiki::Func;
 ###############################################################################
 use vars qw(
         $baseWeb $baseTopic $currentWeb $currentTopic 
-	$currentUser $VERSION $RELEASE $debug $homeTopic
+	$currentUser $VERSION $RELEASE $homeTopic
         $defaultWikiUserName $isEnabled
 	$useEmailObfuscator $detectExternalLinks
 	$query %seenWebComponent
@@ -44,7 +44,6 @@ use vars qw(
 	$NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
     );
 
-$debug = 0; # toggle me
 
 # from Render.pm
 $STARTWW = qr/^|(?<=[\s\(])/m;
@@ -65,9 +64,11 @@ $defaultVariation = 'off';
 $defaultStyleSearchBox = 'top';
 
 ###############################################################################
+sub DEBUG {  0; } # toggle me
+
+###############################################################################
 sub writeDebug {
-  #&TWiki::Func::writeDebug("- NatSkinPlugin - " . $_[0]) if $debug;
-  print STDERR "DEBUG: NatSkinPlugin - " . $_[0] . "\n" if $debug;
+  print STDERR "DEBUG: NatSkinPlugin - " . $_[0] . "\n" if DEBUG;
 }
 
 
@@ -81,6 +82,7 @@ sub initPlugin {
   TWiki::Func::registerTagHandler('GETSKINSTYLE', \&renderGetSkinStyle);
   TWiki::Func::registerTagHandler('NATLOGINURL', \&renderLoginUrl);
   TWiki::Func::registerTagHandler('NATLOGOUTURL', \&renderLogoutUrl);
+  TWiki::Func::registerTagHandler('NATDIFFURL', \&renderDiffUrl);
   TWiki::Func::registerTagHandler('WEBLINK', \&renderWebLink);
   TWiki::Func::registerTagHandler('USERACTIONS', \&renderUserActions);
   TWiki::Func::registerTagHandler('FORMBUTTON', \&renderFormButton);
@@ -91,9 +93,12 @@ sub initPlugin {
   TWiki::Func::registerTagHandler('IFSKINSTATE', \&renderIfSkinState);
   TWiki::Func::registerTagHandler('TWIKIREGISTRATION', \&renderTWikiRegistration);
 
+  # a more flexible variant
+  TWiki::Func::registerTagHandler('NATFORMLIST', \&renderFormList);
+
   # REVISIONS, MAXREV, CURREV only worked properly for the PatternSkin :/
   TWiki::Func::registerTagHandler('NATREVISIONS', \&renderRevisions);
-  TWiki::Func::registerTagHandler('PREVREV', \&getPrevRevision);
+  TWiki::Func::registerTagHandler('PREVREV', \&renderPrevRevision);
   TWiki::Func::registerTagHandler('CURREV', \&renderCurRevision);
   TWiki::Func::registerTagHandler('NATMAXREV', \&renderMaxRevision);
 
@@ -112,7 +117,7 @@ sub initPlugin {
   %seenWebComponent = (); # used to prevent deep recursion
 
   #writeDebug("done initPlugin at $baseWeb.$baseTopic for $currentUser");
-  return 1;
+  return doInit();
 }
 
 ###############################################################################
@@ -124,8 +129,6 @@ sub commonTagsHandler {
   return unless $isEnabled;
   $currentTopic = $_[1];
   $currentWeb = $_[2];
-
-  return unless &doInit(); # delayed init not _possible_ during initPlugin
 
   # conditional content
   while ($_[0] =~ s/(\s*)%IFSKINSTATETHEN{(?!.*%IFSKINSTATETHEN)(.*?)}%\s*(.*?)\s*%FISKINSTATE%(\s*)/&renderIfSkinStateThen($2, $3, $1, $4)/geos) {
@@ -243,7 +246,7 @@ sub initKnownStyles {
   my $twikiWeb = &TWiki::Func::getTwikiWebname();
   my $stylePath = &TWiki::Func::getPreferencesValue('STYLEPATH') 
     || "$twikiWeb.NatSkin";
-  
+
   $lastStylePath ||= '';
 
   # return cached known styles if we have the same stylePath
@@ -606,6 +609,26 @@ sub initSkinState {
 
   $skinState{'sidebar'} = $theToggleSideBar 
     if $theToggleSideBar && $theToggleSideBar ne '';
+
+
+  # set context
+  my $context = TWiki::Func::getContext();
+  foreach my $key (keys %skinState) {
+    my $val = $skinState{$key};
+    next unless defined($val);
+    my $var = lc('natskin_'.$key.'_'.$val);
+    writeDebug("setting context $var");
+    $context->{$var} = 1;
+  }
+
+
+  # prepend style to template search path
+  my $skin = TWiki::Func::getSkin();
+  my $prefix = lc($skinState{style});
+  $skin = "$prefix.nat,$skin";
+  writeDebug("setting skin to $skin");
+  $TWiki::Plugins::SESSION->{prefs}->pushPreferenceValues('SESSION', { SKIN => $skin } );      	
+  
 }
 
 ###############################################################################
@@ -616,7 +639,7 @@ sub renderIfSkinStateThen {
   $before ||= '';
   $after ||= '';
 
-  writeDebug("called renderIfSkinStateThen($args)");
+  #writeDebug("called renderIfSkinStateThen($args)");
 
 
   my $theThen = $text; 
@@ -733,13 +756,11 @@ sub renderIfSkinState {
 
 ###############################################################################
 sub renderKnownStyles {
-  doInit();
   return join(', ', sort {$a cmp $b} keys %knownStyles);
 }
 
 ###############################################################################
 sub renderKnownVariations {
-  doInit();
   return join(', ', sort {$a cmp $b} keys %knownVariations);
 }
 
@@ -747,8 +768,6 @@ sub renderKnownVariations {
 # TODO: prevent illegal skin states
 sub renderSetSkinState {
   my ($session, $params) = @_;
-
-  &doInit(); 
 
   $skinState{'buttons'} = $params->{buttons} if $params->{buttons};
   $skinState{'sidebar'} = $params->{sidebar} if $params->{sidebar};
@@ -763,8 +782,6 @@ sub renderSetSkinState {
 ###############################################################################
 sub renderGetSkinState {
   my ($session, $params) = @_;
-
-  &doInit(); 
 
   my $theFormat = $params->{_DEFAULT} || 
     '$style, $variation, $sidebar, $border, $buttons, $searchbox';
@@ -784,8 +801,6 @@ sub renderGetSkinState {
 
 ###############################################################################
 sub renderGetSkinStyle {
-
-  doInit();
 
   my $theStyle;
   my $theVariation;
@@ -830,8 +845,6 @@ sub renderGetSkinStyle {
 # display advanced topic actions for non-guests
 sub renderUserActions {
   my ($session, $params) = @_;
-
-  &doInit(); 
 
   my $text = '';
   my $sepString = $params->{sep} || $params->{separator} || '<span class="natSep"> | </span>';
@@ -906,12 +919,11 @@ sub renderUserActions {
   }
   
   # get strings for diff, print, more, login, register
-  my $diffTemplate = $session->inContext("HistoryPluginEnabled")?'oopshistory':'oopsrev';
+  my $diffUrl = renderDiffUrl($session);
   $diffString =
       '<a class="natDiffTopicAction" rel="nofollow" href="' . 
-      &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "oops") . 
-      '?template='.$diffTemplate.
-      '&param1=%PREVREV%&param2=%CURREV%&param3=%NATMAXREV%" accesskey="d" title="'.
+      $diffUrl.
+      '" accesskey="d" title="'.
       '%TMPL:P{"DIFF_HELP"}%"><span>%TMPL:P{"DIFF"}%</span></a>';
 
   $moreString =
@@ -940,7 +952,7 @@ sub renderUserActions {
     $logoutString =
       '<a class="natLogoutTopicAction" rel="nofollow" href="'.
       $logoutUrl.
-      '" accesskey="l" title="%MAKETEXT{"Logout of [_1]" args="<nop>%WIKITOOLNAME%"}%"><span>%TMPL:P{"LOG_OUT"}%</span></a>';
+      '" accesskey="l" title="%MAKETEXT{"Logout [_1]" args="<nop>%WIKINAME%"}%"><span>%TMPL:P{"LOG_OUT"}%</span></a>';
   } else {
     $logoutString = '';
   }
@@ -985,7 +997,6 @@ sub renderUserActions {
 sub renderWebComponent {
   my ($session, $params) = @_;
 
-  doInit();
   my $theComponent = $params->{_DEFAULT};
   my $theLinePrefix = $params->{lineprefix};
   my $theWeb = $params->{web};
@@ -1165,6 +1176,20 @@ sub renderLogoutUrl {
 }
 
 ###############################################################################
+# display url to enter topic diff/history
+sub renderDiffUrl {
+  my $session = shift;
+
+  my $diffTemplate = $session->inContext("HistoryPluginEnabled")?'oopshistory':'oopsrev';
+  my $prevRev = getPrevRevision($baseWeb, $baseTopic);
+  my $curRev = getCurRevision($baseWeb, $baseTopic);
+  my $maxRev = getMaxRevision($baseWeb, $baseTopic);
+  return TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "oops") . 
+      '?template='.$diffTemplate.
+      "&param1=$prevRev&param2=$curRev&param3=$maxRev";
+}
+
+###############################################################################
 # render a button to add/change the form while editing
 # returns 
 #    * the empty string if there's no WEBFORM
@@ -1176,8 +1201,6 @@ sub renderLogoutUrl {
 # we need an empty addform.nat.tmp to switch off this feature of FORMFIELDS
 sub renderFormButton {
   my ($session, $params) = @_;
-
-  doInit();
 
   my $saveCmd = '';
   $saveCmd = $query->param('cmd') || '' if $query;
@@ -1206,7 +1229,7 @@ sub renderFormButton {
     return '';
   }
   
-  my $theFormat = $params->{_DEFAULT} || $params->{formant};
+  my $theFormat = $params->{_DEFAULT} || $params->{format};
   $theFormat =~ s/\$1/<a href=\"javascript:submitEditForm('save', '$action');\" accesskey=\"f\" title=\"$actionTitle\">$actionText<\/a>/g;
   $theFormat =~ s/\$url/javascript:submitEditForm('save', '$action');/g;
   $theFormat =~ s/\$action/$actionText/g;
@@ -1299,8 +1322,6 @@ sub renderNatWebLogo {
 sub renderRevisions {
 
   #writeDebug("called renderRevisions");
-  doInit();
-
   my $rev1;
   my $rev2;
   $rev1 = $query->param("rev1") if $query;
@@ -1384,14 +1405,17 @@ sub renderExternalLink {
 }
 
 ###############################################################################
+sub renderPrevRevision {
+  return getPrevRevision($baseWeb, $baseTopic);
+}
+
+###############################################################################
 sub renderCurRevision {
-  doInit();
   return getCurRevision($baseWeb, $baseTopic, '');
 }
 
 ###############################################################################
 sub renderMaxRevision {
-  doInit();
   return getMaxRevision($baseWeb, $baseTopic);
 }
 
@@ -1416,14 +1440,13 @@ sub getCurRevision {
 
 ###############################################################################
 sub getPrevRevision {
-  doInit();
-
+  my ($thisWeb, $thisTopic) = @_;
   my $rev;
   $rev = $query->param("rev") if $query;
 
   my $numberOfRevisions = $TWiki::cfg{NumberOfRevisions};
 
-  $rev = &getMaxRevision() unless $rev;
+  $rev = &getMaxRevision($thisWeb, $thisTopic) unless $rev;
   $rev =~ s/r?1\.//go; # cut major
   if ($rev > $numberOfRevisions) {
     $rev -= $numberOfRevisions;
@@ -1479,7 +1502,6 @@ sub getCgiAction {
   return $theAction;
 }
 
-
 ###############################################################################
 sub escapeParameter {
   return '' unless $_[0];
@@ -1490,6 +1512,62 @@ sub escapeParameter {
   $_[0] =~ s/\\%/%/g;
   $_[0] =~ s/\$percnt/%/g;
   $_[0] =~ s/\$dollar/\$/g;
+}
+
+###############################################################################
+# taken from TWiki::UI::ChangeForm and leveraged to normal formatting standards
+sub renderFormList {
+  my ($session, $params) = @_;
+
+  my $theFormat = $params->{_DEFAULT} || $params->{format} 
+    || '<label><input type="radio" name="formtemplate" id="formtemplateelem$index" $checked value="$name">'.
+       '&nbsp;$formTopic</input></label>';
+
+  my $theWeb = $params->{web} || $baseWeb;
+  my $theTopic = $params->{topic} || $baseTopic;
+  my $theSeparator = $params->{sep} || $params->{separator} || '<br />';
+  my $theHeader = $params->{header} || '';
+  my $theFooter = $params->{footer} || '';
+  my $theSelected = $params->{selected} || $query->param('formtemplate');
+
+  unless ($theSelected) {
+    my ($meta) = TWiki::Func::readTopic($baseWeb, $baseTopic);
+    my $form = $meta->get( 'FORM' );
+    $theSelected = $form->{name} if $form;
+  }
+  $theSelected = 'none' unless $theSelected;
+
+  my $legalForms = TWiki::Func::getPreferencesValue('WEBFORMS', $theWeb);
+  $legalForms =~ s/^\s*//;
+  $legalForms =~ s/\s*$//;
+  my %forms = map {$_ => 1} split( /[,\s]+/, $legalForms );
+  my @forms = sort keys %forms;
+  push @forms, 'none';
+
+  my @formList = '';
+  my $index = 0;
+  foreach my $form (@forms) {
+      $index++;
+      my $text = $theFormat;
+      my $checked = '';
+      $checked = 'checked' if $form eq $theSelected;
+      my ($formWeb, $formTopic) = $session->normalizeWebTopicName($theWeb, $form);
+
+      $text =~ s/\$index/$index/g;
+      $text =~ s/\$checked/$checked/g;
+      $text =~ s/\$name/$form/g;
+      $text =~ s/\$formWeb/$formWeb/g;
+      $text =~ s/\$formTopic/$formTopic/g;
+      
+      push @formList, $text;
+  }
+  my $result = $theHeader.join($theSeparator, @formList).$theFooter;
+  $result =~ s/\$count/$index/g;
+  $result =~ s/\$web/$theWeb/g;
+  $result =~ s/\$topic/$theTopic/g;
+  escapeParameter($result);
+
+  return $result;
 }
 
 1;
