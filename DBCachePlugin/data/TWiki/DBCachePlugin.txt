@@ -411,8 +411,9 @@ You can also call the update from the command line - from the twiki/bin dir -
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2005-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.62 |
+|  Plugin Version: | v1.63 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  14 Nov 2007  | protect against data store pollution, at least don't die |
 |  12 Sep 2007  | made significant speedups to DBQuery \
                   fixed sorting to be O(N log(N)) \
 		  removed topic access check unless absolutly necessary \
@@ -477,4 +478,4 @@ You can also call the update from the command line - from the twiki/bin dir -
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 24 Sep 2007
+-- TWiki:Main.MichaelDaum - 14 Nov 2007

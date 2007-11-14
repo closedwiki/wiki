@@ -102,6 +102,14 @@ sub onReload {
   foreach my $topicName (@$topics) {
     my $topic = $this->fastget($topicName);
 
+    # anything we get to see here should be in the dbcache already.
+    # however we still check for odd topics that did not make it into the cache
+    # for some odd reason
+    unless ($topic) {
+      print STDERR "ERROR: trying to load topic '$topicName' in web '$this->{web}' but it wasn't found in the cache\n";
+      next;
+    }
+
     # save web
     $topic->set('web', $this->{web});
 
@@ -157,10 +165,7 @@ sub getFormField {
 
 ###############################################################################
 sub dbQuery {
-  my (
-    $this,       $theSearch,  $theTopics, $theSort,
-    $theReverse, $theInclude, $theExclude
- ) = @_;
+  my ($this, $theSearch,  $theTopics, $theSort, $theReverse, $theInclude, $theExclude) = @_;
 
   # TODO return empty result on an emtpy topics list
 
