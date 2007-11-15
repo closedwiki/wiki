@@ -314,7 +314,9 @@ sub addUser {
                        $TWiki::cfg{UsersTopicName},
                        $result, $meta );
 
-    $this->setEmails( $user, $emails );
+    #can't call setEmails here - user may be in the process of being registered
+    #TODO; when registration is moved into the mapping, setEmails will happend after the createUserTOpic
+    #$this->setEmails( $user, $emails );
 
     return $user;
 }
@@ -741,11 +743,11 @@ Only used if =passwordManager->isManagingEmails= = =false=.
 
 sub mapper_setEmails {
     my $session = shift;
-    my $user = shift;
+    my $cUID = shift;
 
     my $mails = join( ';', @_ );
 
-    $user = $session->{users}->getWikiName( $user );
+    my $user = $session->{users}->getWikiName( $cUID );
 
     my ($meta, $text) =
       $session->{store}->readTopic(
@@ -767,7 +769,7 @@ sub mapper_setEmails {
     }
 
     $session->{store}->saveTopic(
-        $user, $TWiki::cfg{UsersWebName}, $user, $text, $meta );
+        $cUID, $TWiki::cfg{UsersWebName}, $user, $text, $meta );
 }
 
 
