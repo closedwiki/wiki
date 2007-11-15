@@ -1249,7 +1249,9 @@ sub _getDataFromQuery {
             push( @{$data->{form}}, $form )
               unless ($name eq 'WikiName' || $name eq 'Confirm');
 
-            $data->{$name} = $value;
+            #TODO: need to change this to be untainting the data correctly
+            #      for eg, for {Emails} only accept real email addresses.
+            $data->{$name} = TWiki::Sandbox::untaintUnchecked($value);
         }
     }
     $data->{WikiName} = TWiki::Sandbox::untaintUnchecked($data->{WikiName});
