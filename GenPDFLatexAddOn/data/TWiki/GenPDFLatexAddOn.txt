@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="guest" date="1131676496" format="1.1" version="1.6"}%
+
 ---+ Generate PDF-Latex Add On
 
 This add-on generates a latex file for a specified topic, and/or the PDF output of =pdflatex= processing this latex file.  The goal is to provide PDF versions of TWiki topics with nicely rendered mathematics, using a latex document preparation environment installed on the TWiki server.
@@ -128,9 +128,9 @@ The TWiki:Plugins.BibtexPlugin can be used for bibliography support.
 
 %STARTINCLUDE%
 |  Add-on Author: | TWiki:Main/ScottHoge |
-|  Add-on Version: | 09 Feb 2007 (v2.1) |
+|  Add-on Version: | 15 Nov 2007 (v2.1, SVN:%$VERSION%) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  09 Feb 2007 (v2.1): | improved reporting of errors, now includes bibtex support |
+|  15 Nov 2007 (v2.1): | improved reporting of errors, now includes bibtex support |
 |  30 Sep 2006 (v2.01): | minor change, for compatibility with TWiki:Plugins.LatexModePlugin v3.0 |
 |  1 Feb 2006 (v1.4): | fixed bug in stripping of &lt;p&gt; tags within latex environments |
 |  6 Dec 2005 (v1.3): | modified for Dakar compatibility |

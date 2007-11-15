@@ -490,7 +490,7 @@ sub _genlatex {
     
     $text =~ s/%META:\w+{.*?}%//gs; # clean out the meta-data
 
-    my $preamble = TWiki::Func::getContext->{'LMPcontext'}->{'preamble'};
+    my $preamble = TWiki::Func::getContext->{'LMPcontext'}->{'preamble'} || "";
     print STDERR $preamble."\n" if ($debug);
 
     # remove the twiki-special <nop> tag (It gets ignored in the HTML
@@ -577,10 +577,12 @@ sub _genlatex {
     # open(F,">/tmp/LMP.html"); print F $text; close(F);
     my $tex = $parser->parse_string($text."<p>",1);
 
-    $tex =~ s/(\\begin\{document\})/\n$preamble\n$1/;
+    $tex =~ s/(\\begin\{document\})/\n$preamble\n$1/ if ($preamble ne "");
 
     # some packages, e.g. endfloat, need environments to end on their own line
     $tex =~ s/([^\n])\\end\{/$1\n\\end\{/g; 
+    # \par commands, too!
+    $tex =~ s/\\par\b/\n\\par/g;
 
     # if color happens to appear outside of a latex environment,
     # ensure that the color package is included.
@@ -597,7 +599,7 @@ sub _genlatex {
 
 __DATA__
 <html><body>
-    <form action="$scriptUrlPath/genpdflatex/$web/$topic">
+    <form action="$scriptUrlPath/genpdflatex/$web/$topic" method="POST">
     <table border=1>
     <tr>
     <td> Web Name: 

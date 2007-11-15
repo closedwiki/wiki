@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="guest" date="1131075316" format="1.0" version="1.4"}%
+
 Use the following form to set options for the <nop>LaTeX or <nop>PDFLaTeX file generator.
 
 <form action="%SCRIPTURLPATH%/genpdflatex%SCRIPTSUFFIX%/$web/$topic">
@@ -52,4 +52,5 @@ Use the following form to set options for the <nop>LaTeX or <nop>PDFLaTeX file g
 <input type="submit" value="Produce PDF/Latex" />
 </table>
 </form>
+
 
