@@ -111,6 +111,7 @@ sub convert {
     $this->_resetStack();
     $this->parse( $text );
     $this->eof();
+    #print STDERR "Finished\n";
     $this->_apply( undef );
     return $this->{stackTop}->rootGenerate( $opts );
 }
@@ -148,15 +149,19 @@ sub _openTag {
 
 sub _closeTag {
     my( $this, $tag ) = @_;
+
+    $tag = lc($tag);
+
     while ($this->{stackTop} &&
              $this->{stackTop}->{tag} ne $tag &&
                $autoClose{$this->{stackTop}->{tag}}) {
+        #print STDERR "Close mismatched $this->{stackTop}->{tag}\n";
         $this->_apply($this->{stackTop}->{tag});
     }
     if ($this->{stackTop} &&
           $this->{stackTop}->{tag} eq $tag) {
         #print STDERR "Closing $tag\n";
-        $this->_apply(lc($tag));
+        $this->_apply($tag);
     }
 }
 
