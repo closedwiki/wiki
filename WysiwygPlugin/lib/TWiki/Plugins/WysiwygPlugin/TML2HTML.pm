@@ -247,7 +247,7 @@ sub _getRenderedVersion {
 
     # Handle colour tags specially (hack, hack, hackity-HACK!)
     my $colourMatch = join('|',grep(/^[A-Z]/, keys %WC::KNOWN_COLOUR));
-    $text =~ s#%($colourMatch)%(.*?)%ENDCOLOR%#<font color="\L$1\E">$2</font>#og;
+    while ($text =~ s#%($colourMatch)%(.*?)%ENDCOLOR%#<font color="\L$1\E">$2</font>#og) {};
 
     # Convert TWiki tags to spans outside protected text
     $text = $this->_processTags( $text );

@@ -1305,11 +1305,11 @@ XWYZ
           name => 'Item4622',
           tml => <<'XYZ',
 <verbatim>
-<img width="392" alt="ï¿½ï¿½ï¿½.png" src="ï¿½&#65533;bleGrï¿½\u017ed/PÃ¥nKake/ï¿½\u0160ï¿½\u017eÃ¥.png" height="129" />
+<img width="392" alt="æøå.png" src="Ã&#65533;bleGrÃ\u017ed/PÃ¥nKake/Ã\u0160Ã\u017eÃ¥.png" height="129" />
 </verbatim>
 XYZ
           html => <<'XWYZ',
-<pre class="TMLverbatim"><br />&lt;img&nbsp;width="392"&nbsp;alt="ï¿½ï¿½ï¿½.png"&nbsp;src="ï¿½&amp;#65533;bleGrï¿½\u017ed/PÃ¥nKake/ï¿½\u0160ï¿½\u017eÃ¥.png"&nbsp;height="129"&nbsp;/&gt;<br /></pre>
+<pre class="TMLverbatim"><br />&lt;img&nbsp;width="392"&nbsp;alt="æøå.png"&nbsp;src="Ã&amp;#65533;bleGrÃ\u017ed/PÃ¥nKake/Ã\u0160Ã\u017eÃ¥.png"&nbsp;height="129"&nbsp;/&gt;<br /></pre>
 XWYZ
       },
       {
@@ -1521,6 +1521,17 @@ BLAH
 HERE
           tml => <<HERE,
 %RED%red%ENDCOLOR% %GREEN%green%ENDCOLOR% <font style="border:1;color:blue">blue</font> %YELLOW%yellow%ENDCOLOR% %BROWN%brown%ENDCOLOR%
+HERE
+      },
+      {
+          name => 'Item4974',
+          exec => $HTML2TML,
+          html => '<pre class="TMLverbatim">U<br></pre><p>L</p>',
+          tml => <<HERE,
+<verbatim>U
+</verbatim>
+
+L
 HERE
       },
      ];
