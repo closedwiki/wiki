@@ -1,4 +1,6 @@
-var WYSIWYG_secret_id='<!-- WYSIWYG content - do not remove this comment, and never use this identical text in your topics -->';var tinymce_plugin_setUpContent=function(editor_id,body,doc){var request=new Object();request.editor_id=editor_id;request.doc=doc;request.body=body;var url=location.pathname;var match=/^(.*)\/edit(\.[^\/]*)?\/([^?]*).*$/.exec(url);var suffix=match[2];if(suffix==null)suffix='';url=match[1]+"/rest"+suffix+"/WysiwygPlugin/tml2html";var path=match[3];path=path.replace(/\/+/g,'.');if(tinyMCE.isIE){request.req=new ActiveXObject("Microsoft.XMLHTTP");}else{request.req=new XMLHttpRequest();}
+var WYSIWYG_secret_id='<!-- WYSIWYG content - do not remove this comment, and never use this identical text in your topics -->';var TWiki_Vars;function getTWikiVar(name){if(TWiki_Vars==null){var sets=tinyMCE.getParam("twiki_vars","");TWiki_Vars=eval(sets);}
+return TWiki_Vars[name];}
+var tinymce_plugin_setUpContent=function(editor_id,body,doc){var request=new Object();request.editor_id=editor_id;request.doc=doc;request.body=body;var url=getTWikiVar("SCRIPTURL");var suffix=getTWikiVar("SCRIPTSUFFIX");if(suffix==null)suffix='';url+="/rest"+suffix+"/WysiwygPlugin/tml2html";var path=getTWikiVar("WEB")+'.'+getTWikiVar("TOPIC");if(tinyMCE.isIE){request.req=new ActiveXObject("Microsoft.XMLHTTP");}else{request.req=new XMLHttpRequest();}
 request.req.open("POST",url,true);request.req.setRequestHeader("Content-type","application/x-www-form-urlencoded");var editor=tinyMCE.getInstanceById(editor_id);var text=editor.oldTargetElement.value;var params="nocache="+encodeURIComponent((new Date()).getTime())
 +"&topic="+encodeURIComponent(path)
 +"&text="+encodeURIComponent(escape(text));request.req.setRequestHeader("Content-length",params.length);request.req.setRequestHeader("Connection","close");request.req.onreadystatechange=function(){contentReadCallback(request);};body.innerHTML="<span class='twikiAlert'>Please wait... retrieving page from server</span>";request.req.send(params);}
@@ -8,13 +10,13 @@ function contentReadCallback(request){if(request.req.readyState==4){if(request.r
 var twikiSaveCallback=function(element_id,html,body){var secret_id=tinyMCE.getParam('twiki_secret_id');if(secret_id!=null&&html.indexOf('<!--'+secret_id+'-->')==-1){html='<!--'+secret_id+'-->'+html;}
 return html;}
 function twikiConvertLink(url,node,onSave){if(onSave==null)
-onSave=false;var orig=url;var vars=tinyMCE.getParam("twiki_vars","");if(vars!=null){var sets=vars.split(',');var vbls=new Object;for(var i=0;i<sets.length;i++){var v=sets[i].split('=');vbls[v[0]]=v[1];url=url.replace('%'+v[0]+'%',v[1],'g');}
-if(onSave){if(url.indexOf(vbls['VIEWSCRIPTURL']+'/')==0){url=url.substr(vbls['VIEWSCRIPTURL'].length+1);url=url.replace(/\/+/g,'.');if(url.indexOf(vbls['WEB']+'.')==0){url=url.substr(vbls['WEB'].length+1);}}}else{if(url.indexOf('/')==-1){var match=/^((?:\w+\.)*)(\w+)$/.exec(url);if(match!=null){var web=match[1];var topic=match[2];if(web==null||web.length==0){web=vbls['WEB'];}
-web=web.replace(/\.+/g,'/');web=web.replace(/\/+$/,'');url=vbls['VIEWSCRIPTURL']+'/'+web+'/'+topic;}}}}
+onSave=false;var orig=url;var vsu=tinyMCE.getTWikiVar("VIEWSCRIPTURL");for(var i in TWiki_Vars){url=url.replace('%'+i+'%',TWiki_Vars[i],'g');}
+if(onSave){if(url.indexOf(vsu+'/')==0){url=url.substr(vsu.length+1);url=url.replace(/\/+/g,'.');if(url.indexOf(vbls['WEB']+'.')==0){url=url.substr(vbls['WEB'].length+1);}}}else{if(url.indexOf('/')==-1){var match=/^((?:\w+\.)*)(\w+)$/.exec(url);if(match!=null){var web=match[1];var topic=match[2];if(web==null||web.length==0){web=vbls['WEB'];}
+web=web.replace(/\.+/g,'/');web=web.replace(/\/+$/,'');url=vsu+'/'+web+'/'+topic;}}}
 return url;}
-function twikiConvertPubURL(url){var orig=url;var vars=tinyMCE.getParam("twiki_vars","");if(vars!=null){var sets=vars.split(',');var vbls=new Object;for(var i=0;i<sets.length;i++){var v=sets[i].split('=');vbls[v[0]]=v[1];url=url.replace('%'+v[0]+'%',v[1],'g');}
-if(url.indexOf('/')==-1){url=vbls['PUBURL']+'/'+vbls['WEB']+'/'+
-vbls['TOPIC']+'/'+url;}}
+function twikiConvertPubURL(url){var orig=url;var base=getTWikiVar("PUBURL")+'/'+getTWikiVar("WEB")+'/'+
+getTWikiVar("TOPIC")+'/';for(var i in TWiki_Vars){url=url.replace('%'+i+'%',TWiki_Vars[i],'g');}
+if(url.indexOf('/')==-1){url=base+url;}
 return url;}
 var IFRAME_ID='mce_editor_0';function changeEditBox(inDirection){return false;}
 function setEditBoxHeight(inRowCount){}

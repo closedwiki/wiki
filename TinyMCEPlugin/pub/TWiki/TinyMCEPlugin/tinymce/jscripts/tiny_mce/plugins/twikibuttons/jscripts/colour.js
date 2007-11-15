@@ -1,3 +1,8 @@
+// invoked on load from the body of the dialog
+function init() {
+	tinyMCEPopup.resizeToInnerSize();
+}
+
 // Functions specific to the actions of the colour-setting dialog
 function setColour(colour) {
 	var inst = tinyMCE.getInstanceById(tinyMCE.getWindowArg('editor_id'));

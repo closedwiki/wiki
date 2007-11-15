@@ -18,6 +18,17 @@
 // This *must* be consistent with WysiwygPlugin.pm
 var WYSIWYG_secret_id = '<!-- WYSIWYG content - do not remove this comment, and never use this identical text in your topics -->';
 
+var TWiki_Vars;
+
+// Get a TWiki variable from the set passed
+function getTWikiVar(name) {
+    if (TWiki_Vars == null) {
+        var sets = tinyMCE.getParam("twiki_vars", "");
+        TWiki_Vars = eval(sets);
+    }
+    return TWiki_Vars[name];
+}
+
 // Asynchronous fetch of the topic content using the Wysiwyg REST handler.
 var tinymce_plugin_setUpContent = function(editor_id, body, doc) {
     var request = new Object();
@@ -25,12 +36,11 @@ var tinymce_plugin_setUpContent = function(editor_id, body, doc) {
     request.doc = doc;
     request.body = body;
     // Work out the rest URL from the location
-    var url = location.pathname;
-    var match = /^(.*)\/edit(\.[^\/]*)?\/([^?]*).*$/.exec(url);
-    var suffix = match[2]; if (suffix == null) suffix = '';
-    url = match[1] + "/rest" + suffix + "/WysiwygPlugin/tml2html";
-    var path = match[3];
-    path = path.replace(/\/+/g, '.');
+    var url = getTWikiVar("SCRIPTURL");
+    var suffix = getTWikiVar("SCRIPTSUFFIX");
+    if (suffix == null) suffix = '';
+    url += "/rest" + suffix + "/WysiwygPlugin/tml2html";
+    var path = getTWikiVar("WEB") + '.' + getTWikiVar("TOPIC");
     if (tinyMCE.isIE) {
         // branch for IE/Windows ActiveX version
         request.req = new ActiveXObject("Microsoft.XMLHTTP");
@@ -95,37 +105,31 @@ function twikiConvertLink(url,node,onSave){
     if(onSave == null)
         onSave = false;
     var orig = url;
-    var vars = tinyMCE.getParam("twiki_vars", "");
-    if (vars != null) {
-        var sets = vars.split(',');
-        var vbls = new Object;
-        for (var i = 0; i < sets.length; i++) {
-            var v = sets[i].split('=');
-            vbls[v[0]] = v[1];
-            url = url.replace('%' + v[0] + '%', v[1], 'g');
-        }
-        if (onSave) {
-            if (url.indexOf(vbls['VIEWSCRIPTURL'] + '/') == 0) {
-                url = url.substr(vbls['VIEWSCRIPTURL'].length + 1);
-                url = url.replace(/\/+/g, '.');
-                if (url.indexOf(vbls['WEB'] + '.') == 0) {
-                    url = url.substr(vbls['WEB'].length + 1);
-                }
+    var vsu = tinyMCE.getTWikiVar("VIEWSCRIPTURL");
+    for (var i in TWiki_Vars) {
+        url = url.replace('%' + i + '%', TWiki_Vars[i], 'g');
+    }
+    if (onSave) {
+        if (url.indexOf(vsu + '/') == 0) {
+            url = url.substr(vsu.length + 1);
+            url = url.replace(/\/+/g, '.');
+            if (url.indexOf(vbls['WEB'] + '.') == 0) {
+                url = url.substr(vbls['WEB'].length + 1);
             }
-        } else {
-            if (url.indexOf('/') == -1) {
-                // if it's a wikiword, make a suitable link
-                var match = /^((?:\w+\.)*)(\w+)$/.exec(url);
-                if (match != null) {
-                    var web = match[1];
-                    var topic = match[2];
-                    if (web == null || web.length == 0) {
-                        web = vbls['WEB'];
-                    }
-                    web = web.replace(/\.+/g, '/');
-                    web = web.replace(/\/+$/, '');
-                    url = vbls['VIEWSCRIPTURL'] + '/' + web + '/' + topic;
+        }
+    } else {
+        if (url.indexOf('/') == -1) {
+            // if it's a wikiword, make a suitable link
+            var match = /^((?:\w+\.)*)(\w+)$/.exec(url);
+            if (match != null) {
+                var web = match[1];
+                var topic = match[2];
+                if (web == null || web.length == 0) {
+                    web = vbls['WEB'];
                 }
+                web = web.replace(/\.+/g, '/');
+                web = web.replace(/\/+$/, '');
+                url = vsu + '/' + web + '/' + topic;
             }
         }
     }
@@ -137,19 +141,13 @@ function twikiConvertLink(url,node,onSave){
 // on the current topic.
 function twikiConvertPubURL(url){
     var orig = url;
-    var vars = tinyMCE.getParam("twiki_vars", "");
-    if (vars != null) {
-        var sets = vars.split(',');
-        var vbls = new Object;
-        for (var i = 0; i < sets.length; i++) {
-            var v = sets[i].split('=');
-            vbls[v[0]] = v[1];
-            url = url.replace('%' + v[0] + '%', v[1], 'g');
-        }
-        if (url.indexOf('/') == -1) {
-            url = vbls['PUBURL'] + '/' + vbls['WEB'] + '/'+
-                vbls['TOPIC'] + '/' + url;
-        }
+    var base = getTWikiVar("PUBURL") + '/' + getTWikiVar("WEB") + '/'+
+        getTWikiVar("TOPIC") + '/';
+    for (var i in TWiki_Vars) {
+        url = url.replace('%' + i + '%', TWiki_Vars[i], 'g');
+    }
+    if (url.indexOf('/') == -1) {
+        url = base + url;
     }
     return url;
 }
