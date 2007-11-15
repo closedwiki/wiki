@@ -28,10 +28,10 @@ doesn't happen because the earliest possible handler is called on the topic
 content and not the template. The template is effectively ignored and a blank
 document is sent to the editor.
 
-Attachment uploads can be handled by URL requests from the editor to the TWiki
-upload script. If these uploads are done in an IFRAME, then the redirect at
-the end of the upload is done in the IFRAME and the user doesn't see the
-upload screens. This avoids the need to add any scripts to the bin dir.
+Attachment uploads can be handled by URL requests from the editor to the rest
+handler in this plugin. This avoids the need to add any scripts to the bin dir.
+You will have to use a form, though, as XmlHttpRequest does not support file
+uploads.
 
 =cut
 
@@ -71,6 +71,9 @@ sub initPlugin {
 
     TWiki::Func::registerRESTHandler('tml2html', \&_restTML2HTML);
     TWiki::Func::registerRESTHandler('html2tml', \&_restHTML2TML);
+    TWiki::Func::registerRESTHandler('upload', \&_restUpload);
+    TWiki::Func::registerRESTHandler('attachments', \&_restAttachments);
+
 
     # Plugin correctly initialized
     return 1;
@@ -528,6 +531,61 @@ sub TranslateTML2HTML {
        );
 }
 
+# PACKAGE PRIVATE
+# Determine if sticky attributes prevent a tag being converted to
+# TML when this attribute is present.
+my @protectedByAttr;
+sub protectedByAttr {
+    my ($tag, $attr) = @_;
+
+    unless (scalar(@protectedByAttr)) {
+        # See the WysiwygPluginSettings for information on stickybits
+        my $protection =
+          TWiki::Func::getPreferencesValue('WYSIWYGPLUGIN_STICKYBITS') ||
+              <<'DEFAULT';
+.*=id,lang,title,dir,on.*;
+a=accesskey,coords,shape,target;
+bdo=dir;
+br=clear;
+col=char,charoff,span,valign,width;
+colgroup=align,char,charoff,span,valign,width;
+dir=compact;
+div=align;
+dl=compact;
+font=size,face;
+h\d=align;
+hr=align,noshade,size,width;
+legend=accesskey,align;
+li=value;
+ol=compact,start,type;
+p=align;
+param=name,type,value,valuetype;
+pre=width;
+q=cite;
+table=align,bgcolor,frame,rules,summary,width;
+tbody=align,char,charoff,valign;
+td=abbr,align,axis,bgcolor,char,charoff,headers,height,nowrap,rowspan,scope,valign,width;
+tfoot=align,char,charoff,valign;
+th=abbr,align,axis,bgcolor,char,charoff,height,nowrap,rowspan,scope,valign,width,headers;
+thead=align,char,charoff,valign;
+tr=bgcolor,char,charoff,valign;
+ul=compact,type;
+DEFAULT
+        foreach my $def (split(/;\s*/s, $protection)) {
+            my ($re, $ats) = split(/\s*=\s*/s, $def, 2);
+            push(@protectedByAttr,
+                 { tag => qr/$re/i,
+                   attrs => join('|', split(/\s*,\s*/, $ats)) });
+        }
+    }
+    foreach my $row (@protectedByAttr) {
+        if ($tag =~ /^$row->{tag}$/i) {
+            return 1 if ($attr =~ /^($row->{attrs})$/i);
+        }
+    }
+    return 0;
+}
+
 # Rest handler for use from Javascript. The 'text' parameter is used to
 # pass the text for conversion. The text must be URI-encoded (this is
 # to support use of this handler from XMLHttpRequest, which gets it
@@ -591,60 +649,134 @@ sub _restHTML2TML {
     return $tml;
 }
 
-# PACKAGE PRIVATE
-# Determine if sticky attributes prevent a tag being converted to
-# TML when this attribute is present.
-my @protectedByAttr;
-sub protectedByAttr {
-    my ($tag, $attr) = @_;
+sub _restUpload {
+    my ($session) = @_;
+    my $query = TWiki::Func::getCgiQuery();
+    my $topic = $query->param('topic');
+    $topic =~ /^(.*)\.([^.]*)$/;
+    my $web = $1;
+    $topic = $2;
 
-    unless (scalar(@protectedByAttr)) {
-        # See the WysiwygPluginSettings for information on stickybits
-        my $protection =
-          TWiki::Func::getPreferencesValue('WYSIWYGPLUGIN_STICKYBITS') ||
-              <<'DEFAULT';
-.*=id,lang,title,dir,on.*;
-a=accesskey,coords,shape,target;
-bdo=dir;
-br=clear;
-col=char,charoff,span,valign,width;
-colgroup=align,char,charoff,span,valign,width;
-dir=compact;
-div=align;
-dl=compact;
-font=size,face;
-h\d=align;
-hr=align,noshade,size,width;
-legend=accesskey,align;
-li=value;
-ol=compact,start,type;
-p=align;
-param=name,type,value,valuetype;
-pre=width;
-q=cite;
-table=align,bgcolor,frame,rules,summary,width;
-tbody=align,char,charoff,valign;
-td=abbr,align,axis,bgcolor,char,charoff,headers,height,nowrap,rowspan,scope,valign,width;
-tfoot=align,char,charoff,valign;
-th=abbr,align,axis,bgcolor,char,charoff,height,nowrap,rowspan,scope,valign,width,headers;
-thead=align,char,charoff,valign;
-tr=bgcolor,char,charoff,valign;
-ul=compact,type;
-DEFAULT
-        foreach my $def (split(/;\s*/s, $protection)) {
-            my ($re, $ats) = split(/\s*=\s*/s, $def, 2);
-            push(@protectedByAttr,
-                 { tag => qr/$re/i,
-                   attrs => join('|', split(/\s*,\s*/, $ats)) });
+    my $hideFile = $query->param('hidefile') || '';
+    my $fileComment = $query->param('filecomment') || '';
+    my $createLink = $query->param('createlink') || '';
+    my $doPropsOnly = $query->param('changeproperties');
+    my $filePath = $query->param('filepath') || '';
+    my $fileName = $query->param('filename') || '';
+    if ($filePath && ! $fileName) {
+        $filePath =~ m|([^/\\]*$)|;
+        $fileName = $1;
+    }
+
+    $fileComment =~ s/\s+/ /go;
+    $fileComment =~ s/^\s*//o;
+    $fileComment =~ s/\s*$//o;
+    $fileName =~ s/\s*$//o;
+    $filePath =~ s/\s*$//o;
+
+    unless (TWiki::Func::checkAccessPermission(
+        'CHANGE', TWiki::Func::getWikiName(), undef, $topic, $web)) {
+        my $error = "Access denied";
+        print CGI::header(-status => 401);
+        print $error;
+        print STDERR $error;
+        return;
+    }
+
+    my ($fileSize, $fileDate, $tmpFileName);
+
+    my $stream = $query->upload('filepath') unless $doPropsOnly;
+    my $origName = $fileName;
+
+    unless($doPropsOnly) {
+        # SMELL: call to unpublished function
+        ($fileName, $origName) =
+          TWiki::Sandbox::sanitizeAttachmentName($fileName);
+
+        # check if upload has non zero size
+        if($stream) {
+            my @stats = stat $stream;
+            $fileSize = $stats[7];
+            $fileDate = $stats[9];
+        }
+
+        unless($fileSize && $fileName) {
+            my $error = "Zero-sized file upload";
+            print CGI::header(-status => 500);
+            print $error;
+            print STDERR $error;
+            return undef;
+        }
+
+        my $maxSize = TWiki::Func::getPreferencesValue(
+            'ATTACHFILESIZELIMIT');
+        $maxSize = 0 unless ($maxSize =~ /([0-9]+)/o);
+
+        if ($maxSize && $fileSize > $maxSize * 1024) {
+            my $error = "OVERSIZED UPLOAD";
+            print CGI::header(-status => 500);
+            print $error;
+            print STDERR $error;
+            return undef;
         }
     }
-    foreach my $row (@protectedByAttr) {
-        if ($tag =~ /^$row->{tag}$/i) {
-            return 1 if ($attr =~ /^($row->{attrs})$/i);
-        }
+
+    # SMELL: use of undocumented CGI::tmpFileName
+    my $tfp = $query->tmpFileName($query->param('filepath'));
+    my $error = TWiki::Func::saveAttachment(
+        $web, $topic, $fileName,
+        {
+            dontlog => !$TWiki::cfg{Log}{upload},
+            comment => $fileComment,
+            hide => $hideFile,
+            createlink => $createLink,
+            stream => $stream,
+            filepath => $filePath,
+            filesize => $fileSize,
+            filedate => $fileDate,
+            tmpFilename => $tfp,
+        });
+
+    close($stream) if $stream;
+
+    if ($error) {
+        print CGI::header(-status => 500);
+        print $error;
+        print STDERR $error;
+        return undef;
     }
-    return 0;
+
+    # Otherwise allow the rest dispatcher to write a 200
+    return "$origName attached to $web.$topic" . ($origName ne $fileName ?
+      " as $fileName" : '');
+}
+
+# Get, and return, a list of attachments using JSON
+sub _restAttachments {
+    my ($session) = @_;
+    my ($web, $topic) = TWiki::Func::normalizeWebTopicName(
+        undef, TWiki::Func::getCgiQuery()->param('topic'));
+    my ($meta, $text) = TWiki::Func::readTopic($web, $topic);
+    unless (TWiki::Func::checkAccessPermission(
+        'VIEW', TWiki::Func::getWikiName(),
+        $text, $topic, $web, $meta)) {
+        my $error = "Access denied";
+        print CGI::header(-status => 401);
+        print $error;
+        print STDERR $error;
+        return;
+    }
+    # Create a JSON list of attachment data, sorted by name
+    my @atts;
+    foreach my $att ( sort { $a->{name} cmp $b->{name} }
+                               $meta->find('FILEATTACHMENT')) {
+        push(@atts, '{'.join(',',
+                         map {
+                             "\"$_\":\"$att->{$_}\""
+                         } keys %$att).'}');
+
+    }
+    return '['.join(',',@atts).']';
 }
 
 1;
-

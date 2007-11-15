@@ -116,7 +116,7 @@ sub convert {
 }
 
 # Autoclose tags without waiting for a /tag
-my %autoClose = map { $_ => 1 } qw( area base basefont col embed frame input link meta param );
+my %autoClose = map { $_ => 1 } qw( area base basefont br col embed frame input link meta param );
 
 # Support auto-close of the tags that are most typically incorrectly
 # nested. Autoclose triggers when a second tag of the same type is
@@ -131,22 +131,31 @@ sub _openTag {
     if ($closeOnRepeat{$tag} &&
           $this->{stackTop} &&
             $this->{stackTop}->{tag} eq $tag) {
+        #print STDERR "Close on repeat $tag\n";
         $this->_apply($tag);
     }
 
     push( @{$this->{stack}}, $this->{stackTop} ) if $this->{stackTop};
     $this->{stackTop} =
-      new TWiki::Plugins::WysiwygPlugin::HTML2TML::Node( $this->{opts}, $tag, $attrs );
+      new TWiki::Plugins::WysiwygPlugin::HTML2TML::Node(
+          $this->{opts}, $tag, $attrs );
 
     if ($autoClose{$tag}) {
+        #print STDERR "Autoclose $tag\n";
         $this->_apply($tag);
     }
 }
 
 sub _closeTag {
     my( $this, $tag ) = @_;
+    while ($this->{stackTop} &&
+             $this->{stackTop}->{tag} ne $tag &&
+               $autoClose{$this->{stackTop}->{tag}}) {
+        $this->_apply($this->{stackTop}->{tag});
+    }
     if ($this->{stackTop} &&
           $this->{stackTop}->{tag} eq $tag) {
+        #print STDERR "Closing $tag\n";
         $this->_apply(lc($tag));
     }
 }
@@ -171,6 +180,7 @@ sub _apply {
 
     while( $this->{stack} && scalar( @{$this->{stack}} )) {
         my $top = $this->{stackTop};
+        #print STDERR "Pop $top->{tag}\n";
         $this->{stackTop} = pop( @{$this->{stack}} );
         die unless $this->{stackTop};
         $this->{stackTop}->addChild( $top );

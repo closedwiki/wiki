@@ -1523,6 +1523,17 @@ HERE
 %RED%red%ENDCOLOR% %GREEN%green%ENDCOLOR% <font style="border:1;color:blue">blue</font> %YELLOW%yellow%ENDCOLOR% %BROWN%brown%ENDCOLOR%
 HERE
       },
+      {
+          name => 'Item4974',
+          exec => $HTML2TML,
+          html => '<pre class="TMLverbatim">U<br></pre><p>L</p>',
+          tml => <<HERE,
+<verbatim>U
+</verbatim>
+
+L
+HERE
+      },
      ];
 
 sub gen_compare_tests {

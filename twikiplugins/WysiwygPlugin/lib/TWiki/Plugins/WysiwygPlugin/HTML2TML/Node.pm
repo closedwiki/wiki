@@ -227,7 +227,7 @@ sub rootGenerate {
     # Debug support
     #print STDERR "Converted ",WC::debugEncode($text),"\n";
 
-    $text =~ s/&nbsp;/$WC::NBSP/go;
+    $text =~ s/&nbsp;/$WC::NBSP/g;
 
     # Move leading \n out of protected region. Delicate hack fix required to
     # maintain TWiki variables at the start of lines.
@@ -246,6 +246,10 @@ sub rootGenerate {
     $text =~ s/([ $WC::NBSP$WC::TAB])$WC::CHECKs/$1/go;
     $text =~ s/$WC::CHECKs( |$WC::NBSP)/$1/go;
     $text =~ s/($WC::CHECKs)+/$WC::NBSP/go;
+
+    $text =~ s/<br( \/)?>$WC::NBBR/$WC::NBBR/g; # Remove BR before P
+
+    #die "Converted ",WC::debugEncode($text),"\n";
 
     my @regions = split(/([$WC::PON$WC::POFF])/o, $text);
     my $protect = 0;
