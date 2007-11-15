@@ -5,15 +5,15 @@
 ---+++ lower case
 
 | *Symbol*            | *Latex Command* | |   *Symbol*       | *Latex Command* | |   *Symbol*       | *Latex Command* |
-|   %$\alpha$%        | \alpha        |   |   %$$\iota$%     | \iota     |     |   %$\varrho$%     | \varrho     |
-|   %$\beta$%         | \beta         |   |   %$$\kappa$%    | \kappa    |     |   %$\sigma$%      | \sigma      | 
-|   %$\gamma$%        | \gamma        |   |   %$$\lambda$%   | \lambda   |     |   %$\varsigma$%   | \varsigma   | 
-|   %$\delta$%        | \delta        |   |   %$$\mu$%       | \mu       |     |   %$\tau$%        | \tau        | 
-|   %$\epsilon$%      | \epsilon      |   |   %$$\nu$%       | \nu       |     |   %$\upsilon$%    | \upsilon    | 
-|   %$\varepsilon$%   | \varepsilon   |   |   %$$\xi$%       | \xi       |     |   %$\phi$%        | \phi        | 
-|   %$\zeta$%         | \zeta         |   |   %$$\pi$%       | \pi       |     |   %$\varphi$%     | \varphi     | 
-|   %$\eta$%          | \eta          |   |   %$$\varpi$%    | \varpi    |     |   %$\chi$%        | \chi        | 
-|   %$\theta$%        | \theta        |   |   %$$\rho$%      | \rho      |     |   %$\psi$%        | \psi        | 
+|   %$\alpha$%        | \alpha        |   |   %$\iota$%     | \iota     |     |   %$\varrho$%     | \varrho     |
+|   %$\beta$%         | \beta         |   |   %$\kappa$%    | \kappa    |     |   %$\sigma$%      | \sigma      | 
+|   %$\gamma$%        | \gamma        |   |   %$\lambda$%   | \lambda   |     |   %$\varsigma$%   | \varsigma   | 
+|   %$\delta$%        | \delta        |   |   %$\mu$%       | \mu       |     |   %$\tau$%        | \tau        | 
+|   %$\epsilon$%      | \epsilon      |   |   %$\nu$%       | \nu       |     |   %$\upsilon$%    | \upsilon    | 
+|   %$\varepsilon$%   | \varepsilon   |   |   %$\xi$%       | \xi       |     |   %$\phi$%        | \phi        | 
+|   %$\zeta$%         | \zeta         |   |   %$\pi$%       | \pi       |     |   %$\varphi$%     | \varphi     | 
+|   %$\eta$%          | \eta          |   |   %$\varpi$%    | \varpi    |     |   %$\chi$%        | \chi        | 
+|   %$\theta$%        | \theta        |   |   %$\rho$%      | \rho      |     |   %$\psi$%        | \psi        | 
 |   %$\vartheta$%     | \vartheta     |   |                  |           |     |   %$\omega$%      | \omega      | 
 
 

@@ -24,7 +24,7 @@ package TWiki::Plugins::LatexModePlugin::Init;
 
 use strict;
 
-my $debug = TWiki::Plugins::LatexModePlugin::debug;
+my $debug = $TWiki::Plugins::LatexModePlugin::debug;
 
 sub doInit{
 

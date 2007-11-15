@@ -1,4 +1,3 @@
-%META:TOPICINFO{author="ScottHoge" date="1140536586" format="1.0" version="1.0"}%
 
 %BEGINLATEXPREAMBLE%
  \usepackage{amsfonts}
