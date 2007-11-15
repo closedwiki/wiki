@@ -34,7 +34,7 @@ sub check {
     unless (-d "$TWiki::cfg{WorkingDir}/tmp") {
         if (-e "$TWiki::cfg{WorkingDir}/tmp") {
             $mess .= $this->ERROR("$TWiki::cfg{WorkingDir}/tmp already exists, but is not a directory");
-        } elsif (!mkdir("$TWiki::cfg{WorkingDir}/tmp")) {
+        } elsif (!mkdir("$TWiki::cfg{WorkingDir}/tmp", '1777')) {
             $mess .= $this->ERROR("Could not create $TWiki::cfg{WorkingDir}/tmp");
         } else {
             $mess .= $this->NOTE("Created $TWiki::cfg{WorkingDir}/tmp");
