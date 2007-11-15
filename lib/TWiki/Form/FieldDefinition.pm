@@ -317,6 +317,12 @@ sub renderForDisplay {
 
     $format =~ s/\$title/$this->{title}/g;
     $format =~ s/\$value/$value/g;
+    $format =~ s/\$name/$this->{name}/g;
+    $format =~ s/\$attributes/$this->{attributed}/g;
+    $format =~ s/\$type/$this->{type}/g;
+    $format =~ s/\$size/$this->{size}/g;
+    my $definingTopic = $this->{definingTopic}|'FIELD';
+    $format =~ s/\$definingTopic/$definingTopic/g;
 
     return $format;
 }
