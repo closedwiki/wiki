@@ -37,7 +37,7 @@ $.fn.extend({
     settings = $.extend({
       whitespace:false,
       trunc:'tail'
-    }, settings);
+    }, settings || {});
 
     return this.each(function() {
       var text = $(this).text();

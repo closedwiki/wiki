@@ -51,7 +51,7 @@ twiki.JQueryPlugin.toggle = function(target, effect) {
 $.fn.extend({
   roundedCorners: function() {
 
-    return this.each(function() {
+    this.each(function() {
       var cls = $(this).attr('class');
 
       var h2args = '';
@@ -167,6 +167,8 @@ $.fn.extend({
       }
       $(this).nifty(divargs);
     });
+
+    return this;
   }
 });
 
@@ -176,11 +178,13 @@ $(function(){
   /********************************************************
    * treeview stuff
    */
+  var $jqTreeviews;
   if (true) {
-    $(".jqTreeview > ul").each(function(){
+    $jqTreeviews = $(".jqTreeview");
+    $jqTreeviews.children("> ul").each(function(){
       $("a,span,input", this).Tooltip({
         delay:250,
-        track:true,
+        track:false,
         showURL:false,
         extraClass:'twiki',
         showBody:": "
@@ -230,7 +234,7 @@ $(function(){
       function(event) {
         $("a,span,input").Tooltip({
           delay:250,
-          track:true,
+          track:false,
           showURL:false,
           extraClass:'twiki',
           showBody:": "
@@ -269,5 +273,9 @@ $(function(){
         }
       });
   }
-  $(".jqTreeview").css('display', 'block');
+
+  /* finally show treeviews */
+  if ($jqTreeviews) {
+    $jqTreeviews.css('display', 'block');
+  }
 });
