@@ -75,7 +75,7 @@ use vars qw( %TWikiCompatibility );
 
 # number the release version of this plugin
 $VERSION = '$Rev$';
-$RELEASE = '3.7';
+$RELEASE = '3.71';
 
 # =========================
 sub initPlugin
@@ -100,7 +100,8 @@ sub initPlugin
 
     if( $TWiki::Plugins::VERSION >= 1.1 ) {
         # Dakar provides a sandbox
-        $sandbox = $TWiki::sharedSandbox;
+        $sandbox = $TWiki::sharedSandbox || 
+            $TWiki::sandbox;    # for TWiki 4.2
     } else {
         # in Cairo, must use the contrib package
         eval("use TWiki::Contrib::DakarContrib;");

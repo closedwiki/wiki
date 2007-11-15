@@ -416,9 +416,9 @@ This plugin is an enhanced version of the TWiki:Plugins.MathModePlugin maintaine
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ScottHoge |
-|  Plugin Version: | 12 Mar 2007 (v 3.7, SVN:%$VERSION%)  |
+|  Plugin Version: | 15 Nov 2007 (v 3.71, SVN:%$VERSION%)  |
 |  Change History: | %ICON{warning}% v3.0 and above requires TWiki 4.x.x and above %ICON{warning}% <!-- versions below in reverse order --> |
-|  15 Nov 2007 (v 3.7)  | minor bug fixes: DEFAULTENGINE, doc changes, improved the 'stale time' in delete-image-check |
+|   15 Nov 2007 (v 3.71) | minor bug fixes: DEFAULTENGINE, doc changes, improved the 'stale time' in delete-image-check |
 |  -- Apr 2007 (v 3.62) | added =-halt-on-error= for better error handling. Fixed =debug= variable in Init.pm |
 |  12 Mar 2007 (v 3.6) | New option, imagetype, to set png or gif rendering from !LocalSite.cfg |
 |   2 Feb 2007 (unreleased) | Modified the section labeling to be more compatible with =genpdflatex=, minor cleanup of html markup, new inline processing available (set =tweakinline= equal to '2' to enable) |
