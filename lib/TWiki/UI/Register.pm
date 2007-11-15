@@ -271,6 +271,7 @@ sub _registerSingleBulkUser {
 	          !$session->{store}->topicExists( $row->{webName},
 	                                           $row->{WikiName} ) ) {
 	        $log .= _createUserTopic($session, $row);
+            $users->setEmails($cUID, $row->{Email});
 	    } else {
 	        $log .= "$b1 Not writing user topic $row->{WikiName}\n";
 	    }
@@ -1042,14 +1043,48 @@ sub _validateRegistration {
     }
 
     # Check if the login name is already registered
+    # luckily, we're only considering TWikiUserMapping cfg's
+    # there are several possible interpretations of 'already registered'
+    # --- For setups with a PasswordManager...
+    # on twiki.org, (allowloginname=off) means that if the user has an
+    #      entry in the htpasswd file, they are already registered.
+    # onmost systems using (allowloginname=off) already registered could mean
+    #      user topic exists, or, Main.UserList mapping exists
+    # on any system using (allowloginname=on) already registered could mean
+    #      user topic exists, or, Main.UserList mapping exists
+    #NOTE: it is important that _any_ user can register any random third party
+    #      this is not only how TWikiGuest registers as someone else, but often
+    #      how users pre-register others.
     my $users = $session->{users};
     my $user = $users->getCanonicalUserID( $data->{LoginName} );
-    if( $user && $users->userExists( $user )) {
+    my $wikiname = $users->getWikiName( $user);
+
+    my $store = $session->{store};
+    if( $user &&
+       #in the pwd system
+       # OR already logged in (shortcircuit to reduce perf impact)
+       # returns undef if passwordmgr=none
+       (
+        ($users->userExists( $user ))) &&
+       #user has an entry in the mapping system (if AllowLoginName == off, then entry is automatic)
+       (
+            (! $TWiki::cfg{Register}{AllowLoginName}) ||
+            $store->topicExists($TWiki::cfg{UsersWebName} , $wikiname)   #mapping from new login exists
+            )      
+       ) {
         throw TWiki::OopsException( 'attention',
                                     web => $data->{webName},
                                     topic => $session->{topicName},
                                     def => 'already_exists',
                                     params => [ $data->{LoginName} ] );
+    }
+    #new user's topic already exists
+    if ($store->topicExists($TWiki::cfg{UsersWebName} , $data->{WikiName})) {
+        throw TWiki::OopsException( 'attention',
+                                    web => $data->{webName},
+                                    topic => $session->{topicName},
+                                    def => 'already_exists',
+                                    params => [ $data->{WikiName} ] );
     }
 
     # Check if WikiName is a WikiName

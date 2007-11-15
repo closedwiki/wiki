@@ -189,6 +189,14 @@ sub NoLoginManager {
     $TWiki::cfg{LoginManager} = 'TWiki::LoginManager';
 }
 
+sub HtPasswdManager {
+    $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
+}
+sub NonePasswdManager {
+    $TWiki::cfg{PasswordManager} = 'none';
+}
+
+
 sub BaseUserMapping {
     my $this = shift;
     $TWiki::cfg{UserMappingManager} = 'TWiki::Users::BaseUserMapping';
@@ -206,6 +214,8 @@ sub fixture_groups {
     return (
         [ 'TemplateLoginManager', 'ApacheLoginManager', 'NoLoginManager' ],
         [ 'AllowLoginName', 'DontAllowLoginName'],
+#        [ 'HtPasswdManager', 'NonePasswdManager'],
+        [ 'HtPasswdManager' ],
 #        [ 'TWikiUserMapping', 'BaseUserMapping' ] );
         [ 'TWikiUserMapping' ] );
 }
@@ -224,6 +234,9 @@ sub set_up_for_verify {
 ###################################
 sub verify_userTopicWithPMWithoutForm {
     my $this = shift;
+    $this->assert(!$this->{twiki}->{store}->topicExists($TWiki::cfg{UsersWebName},
+                                    $this->{new_user_wikiname}),
+                                    "cannot re-register user who's topic exists");
     $this->registerAccount();
     my( $meta, $text ) = $this->{twiki}->{store}->readTopic(
         undef, $TWiki::cfg{UsersWebName}, $this->{new_user_wikiname});
@@ -243,6 +256,9 @@ sub verify_userTopicWithoutPMWithoutForm {
     # Switch off the password manager to force email to be written to user
     # topic
     $TWiki::cfg{PasswordManager} = 'none';
+    $this->assert(!$this->{twiki}->{store}->topicExists($TWiki::cfg{UsersWebName},
+                                    $this->{new_user_wikiname}),
+                                    "cannot re-register user who's topic exists");
     $this->registerAccount();
     my( $meta, $text ) = $this->{twiki}->{store}->readTopic(
         undef, $TWiki::cfg{UsersWebName}, $this->{new_user_wikiname});
