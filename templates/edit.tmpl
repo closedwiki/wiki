@@ -9,10 +9,10 @@
 
 %TMPL:DEF{"pagetitle"}%<nop>%TOPIC% %MAKETEXT{"(edit)"}%%TMPL:END%
 
+%{ If an editor plugin sets EDITOR_HELP, then use it for help info }%
+%TMPL:DEF{"help"}%%INCLUDE{"%SYSTEMWEB%.%IF{"defined 'EDITOR_HELP'" then="%EDITOR_HELP%" else="WikiSyntaxSummary"}%"}%%TMPL:END%
 
-%TMPL:DEF{"help"}%%INCLUDE{"%SYSTEMWEB%.%IF{"context TinyMCEPluginEnabled and $'URLPARAM{nowysiwyg}'!=1" then="TinyMCEQuickHelp" else="WikiSyntaxSummary"}%"}%%TMPL:END%
-
-
+%{ if an editor plugin sets EDITOR_MESSAGE, then use it }%
 %TMPL:DEF{"textarea"}%%IF{"defined 'EDITOR_MESSAGE'" then="<div class='twikiAlert'>%EDITOR_MESSAGE%</div>"}%<div class="twikiEditTextarea"><textarea class="twikiTextarea twikiEditboxStyleProportional" id="topic" name="text" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style='%EDITBOXSTYLE%' onkeydown='handleKeyDown(event)'>%TEXT%</textarea></div><!--/twikiEditTextarea-->%TMPL:END%
 
 

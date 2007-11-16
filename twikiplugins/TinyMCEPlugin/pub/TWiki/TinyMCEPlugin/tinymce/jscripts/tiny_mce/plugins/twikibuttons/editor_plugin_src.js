@@ -12,15 +12,24 @@ var TWikiButtonsPlugin = {
 	},
 
 	initInstance : function(inst) {
-		//tinyMCE.importCSS(inst.getDoc(), tinyMCE.baseURL + "/plugins/twikibuttons/css/twikibuttons.css");
+		//tinyMCE.importCSS(inst.getDoc(),
+        //tinyMCE.baseURL + "/plugins/twikibuttons/css/twikibuttons.css");
 	},
 
 	getControlHTML : function(cn) {
 		switch (cn) {
 			case "tt":
-            return tinyMCE.getButtonHTML(cn, 'lang_twikibuttons_tt_desc', '{$pluginurl}/images/tt.gif', 'twikiTT', true);
+            return tinyMCE.getButtonHTML(cn, 'lang_twikibuttons_tt_desc',
+                                         '{$pluginurl}/images/tt.gif',
+                                         'twikiTT', true);
             case "colour":
-            return tinyMCE.getButtonHTML(cn, 'lang_twikibuttons_colour_desc', '{$pluginurl}/images/colour.gif', 'twikiCOLOUR', true);
+            return tinyMCE.getButtonHTML(cn, 'lang_twikibuttons_colour_desc',
+                                         '{$pluginurl}/images/colour.gif',
+                                         'twikiCOLOUR', true);
+            case "attach":
+            return tinyMCE.getButtonHTML(cn, 'lang_twikibuttons_attach_desc',
+                                         '{$pluginurl}/images/attach.gif',
+                                         'twikiATTACH', true);
 		}
 
 		return "";
@@ -31,6 +40,7 @@ var TWikiButtonsPlugin = {
 		var template, inst, elm;
 
 		switch (command) {
+
         case "twikiCOLOUR":
             var inst = tinyMCE.getInstanceById(editor_id);
             var t = inst.selection.getSelectedText();
@@ -40,7 +50,7 @@ var TWikiButtonsPlugin = {
             template = new Array();
             template['file'] = '../../plugins/twikibuttons/colours.htm';
             template['width'] = 240;
-            template['height'] = 240;
+            template['height'] = 140;
             tinyMCE.openWindow(template, {editor_id : editor_id});
             return true;
 
@@ -73,7 +83,16 @@ var TWikiButtonsPlugin = {
             }
 
             return true;
+
+        case "twikiATTACH":
+            template = new Array();
+            template['file'] = '../../plugins/twikibuttons/attach.htm';
+            template['width'] = 350;
+            template['height'] = 250;
+            tinyMCE.openWindow(template, {editor_id : editor_id});
+            return true;
 		}
+
 		return false;
 	},
 
