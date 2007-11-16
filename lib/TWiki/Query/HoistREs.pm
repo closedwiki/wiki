@@ -29,7 +29,7 @@ use TWiki::Query::Node;
 # second level LHS is a field access
 # second level RHS is a static string or number
 
-sub MONITOR_HOIST { 1 }
+sub MONITOR_HOIST { 0 }
 
 =pod
 
