@@ -91,6 +91,7 @@ sub beforeEditHandler {
         }
         return;
     }
+    TWiki::Func::setPreferencesValue('EDITOR_HELP', 'TinyMCEQuickHelp');
 
     my $init = TWiki::Func::getPreferencesValue('TINYMCEPLUGIN_INIT')
       || <<'HERE';
@@ -157,6 +158,7 @@ HERE
     TWiki::Func::addToHEAD('tinyMCE', <<SCRIPT);
 <meta name="TINYMCEPLUGIN_INIT" content="$metainit" />
 <script language="javascript" type="text/javascript" src="$tmceURL/tiny_mce$USE_SRC.js"></script>
+<script language="javascript" type="text/javascript" src="$pluginURL/twiki_tiny$USE_SRC.js"></script>
 <script language="javascript" type="text/javascript" src="$pluginURL/twiki$USE_SRC.js"></script>
 SCRIPT
 

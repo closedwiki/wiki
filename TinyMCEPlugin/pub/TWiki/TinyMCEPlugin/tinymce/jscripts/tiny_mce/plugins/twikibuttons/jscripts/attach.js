@@ -1,14 +1,19 @@
-var TWiki_Vars;
+/*
+  Copyright (C) 2007 Crawford Currie http://wikiring.com and Arthur Clemens
+  All Rights Reserved.
 
-// Get a TWiki variable from the set passed
-function getTWikiVar(name) {
-    if (TWiki_Vars == null) {
-        var sets = tinyMCE.getParam("twiki_vars", "");
-        TWiki_Vars = eval(sets);
-    }
-    return TWiki_Vars[name];
-}
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version. For
+  more details read LICENSE in the root of the TWiki distribution.
 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+  As per the GPL, removal of this notice is prohibited.
+*/
 function initAttachDialog() {
 	tinyMCEPopup.resizeToInnerSize();
 }
@@ -17,8 +22,8 @@ function initAttachDialog() {
 // wrong place in Safari otherwise
 function getAttachInfo() {
     // Work out the rest URL from the location
-    var scripturl = getTWikiVar("SCRIPTURL");
-    var suffix = getTWikiVar("SCRIPTSUFFIX");
+    var scripturl = TWikiTiny.getTWikiVar("SCRIPTURL");
+    var suffix = TWikiTiny.getTWikiVar("SCRIPTSUFFIX");
     if (suffix == null) suffix = '';
     var url = scripturl + "/rest" + suffix + "/WysiwygPlugin/attachments";
 
@@ -29,7 +34,8 @@ function getAttachInfo() {
     request.setRequestHeader(
         "Content-type", "application/x-www-form-urlencoded");
 
-    var path = getTWikiVar("WEB") + '.' + getTWikiVar("TOPIC");
+    var path = TWikiTiny.getTWikiVar("WEB") + '.' 
+        + TWikiTiny.getTWikiVar("TOPIC");
     var params = "nocache=" + encodeURIComponent((new Date()).getTime())
         + "&topic=" + encodeURIComponent(path);
     
@@ -72,7 +78,7 @@ function insertLink() {
 	var inst = tinyMCE.getInstanceById(tinyMCE.getWindowArg('editor_id'));
     var select = document.getElementById("attachments_select");
     var filename = select.value;
-    var url = getTWikiVar("ATTACHURL") + "/" + filename;
+    var url = TWikiTiny.getTWikiVar("ATTACHURL") + '/' + filename;
     var tmp = filename.lastIndexOf(".");
     if (tmp >= 0)
         tmp = filename.substring(tmp + 1, filename.length);
