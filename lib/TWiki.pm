@@ -881,7 +881,7 @@ sub cacheQuery {
 
     use Fcntl;
     #passthrough file is only written to once, so if it already exists, suspect a security hack (O_EXCL)
-    open(F, ">$passthruFilename", O_RDWR|O_EXCL|O_CREAT, 0600) ||
+    sysopen(F, "$passthruFilename", O_RDWR|O_EXCL|O_CREAT, 0600) ||
       die "Unable to open $TWiki::cfg{WorkingDir}/tmp for write; check the setting of {WorkingDir} in configure, and check file permissions: $!";
     $query->save(\*F);
     close(F);
