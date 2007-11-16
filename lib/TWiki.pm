@@ -3784,7 +3784,7 @@ sub META {
 
     return '' unless $meta;
 
-    my $option = $params->{_DEFAULT};
+    my $option = $params->{_DEFAULT} || '';
 
     if( $option eq 'form' ) {
         # META:FORM and META:FIELD

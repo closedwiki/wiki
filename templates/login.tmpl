@@ -56,7 +56,7 @@
 
 %TMPL:DEF{"submit"}%<p><input tabindex='4' type='submit' class='twikiSubmit' value='%MAKETEXT{"Logon"}%' /></p>%TMPL:END%
 
-%TMPL:DEF{"loginasadministratorlink"}%<span class="twikiUnvisited">%MAKETEXT{"or [[[_1]][log in as administrator]]" args="%SCRIPTURL{login}%?sudo=sudo;origurl=%ORIGURL%"}%</span>%TMPL:END%
+%TMPL:DEF{"loginasadministratorlink"}%%MAKETEXT{"or [_1]" args=" "}%<input type="submit" name="sudo" value="log in as administrator"}%" />%TMPL:END%
 
 %TMPL:DEF{"seealsonote"}%%MAKETEXT{"If you have any questions, please contact [_1]" args="%WIKIWEBMASTER%"}%%TMPL:END%
 

@@ -49,7 +49,7 @@ invoked via the =UI::run= method.
 sub manage {
     my $session = shift;
 
-    my $action = $session->{cgiQuery}->param( 'action' );
+    my $action = $session->{cgiQuery}->param( 'action' ) || '';
 
     if( $action eq 'createweb' ) {
         _createWeb( $session );
