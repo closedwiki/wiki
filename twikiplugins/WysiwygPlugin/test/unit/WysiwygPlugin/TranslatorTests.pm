@@ -1534,6 +1534,18 @@ HERE
 L
 HERE
       },
+      {
+          name => 'Item4974_2',
+          exec => $HTML2TML,
+          html => <<HERE,
+<table cellspacing="1" cellpadding="0" border="1">
+<tr><td>table element with a <hr /> horizontal rule</td></tr>
+</table>
+Mad Fish
+HERE
+          tml => '| table element with a <hr /> horizontal rule |
+Mad Fish',
+      },
      ];
 
 sub gen_compare_tests {

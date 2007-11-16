@@ -117,7 +117,7 @@ sub convert {
 }
 
 # Autoclose tags without waiting for a /tag
-my %autoClose = map { $_ => 1 } qw( area base basefont br col embed frame input link meta param );
+my %autoClose = map { $_ => 1 } qw( area base basefont br col embed frame hr input link meta param );
 
 # Support auto-close of the tags that are most typically incorrectly
 # nested. Autoclose triggers when a second tag of the same type is
