@@ -91,10 +91,11 @@ NOTE: If you just extend the list without having a special stringifier in place,
 
 __Note:__ You do not need to install anything on the browser to use this add-on. The following instructions are for the administrator who installs the add-on on the server where TWiki is running. 
 
-Install antiword and xpdf, if you want to index attached Word and PDF files:
-   * For Debian you can use =aptitude install antiword= and =aptitude install xpdf-utils=
+Install antiword, xpdf and ppthtml, if you want to index attached Word and PDF files:
+   * For Debian you can use =aptitude install antiword=, =aptitude install xpdf-utils= and =aptitude install ppthtml=
    * If you do not install =antiword=, you should remove =.doc= from the =KINOSEARCHINDEXEXTENSIONS= variable.
    * If you do not install =xpdf=, you should remove =.pdf= from the =KINOSEARCHINDEXEXTENSIONS= variable.
+   * If you do not install =ppthtml=, you should remove =.ppt= from the =KINOSEARCHINDEXEXTENSIONS= variable.
 
 Like many other TWiki extensions, this module is shipped with a automatic installer script written using the BuildContrib.
 
@@ -117,8 +118,6 @@ Like many other TWiki extensions, this module is shipped with a automatic instal
    * If you don't want to use the installer script, or have problems on your platform (e.g. you don't have Perl 5.8), then you can still install manually:
       1. Download and unpack one of the .zip or .tgz archives to a temporary directory.
       1. Manually copy the contents across to the relevant places in your TWiki installation.
-      1. Check in any installed files that have existing ,v files in your existing install (take care not to lock the files when you check in)
-      1. Manually edit LocalSite.cfg to set any configuration variables.
       1. Repeat from step 1 for any missing dependencies. 
 
 If you don't use the installer script, you need to install some CPAN modules:
@@ -157,13 +156,14 @@ If you don't use the installer script, you need to install the add-on by hand:
      | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/PDF.pm== | Stringifier for pdf files |
      | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/Text.pm== | Stringifier for ASCII files |
      | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/XLS.pm== | Stringifier for MS Excel files |
+     | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/PPT.pm== | Stringifier for MS Powerpoint files |     
      | ==kinosearch/index/== | directory for index files to be stored |
      | ==kinosearch/logs/== | the index and update logs will be written here - admin should monitor this folder |
 
    * This add-on uses several preferences which should be set at [[%MAINWEB%.TWikiPreferences]]. All these preferences are optional. If you are fine with the default values given below, you need not change anything.
 <verbatim>
    *  KinoSearch settings
-      * Set KINOSEARCHINDEXEXTENSIONS = .pdf, .doc, .xml, .html, .txt, .xls
+      * Set KINOSEARCHINDEXEXTENSIONS = .pdf, .doc, .xml, .html, .txt, .xls, .ppt
       * Set KINOSEARCHSEARCHATTACHMENTSONLY = 1
       * Set KINOSEARCHSEARCHATTACHMENTSONLYLABEL = Display only attachments
       * Set KINOSEARCHINDEXSKIPWEBS = Trash, Sandbox,TWiki
@@ -181,6 +181,7 @@ $TWiki::cfg{KinoSearchIndexDir} = '/home/httpd/twiki/kinosearch/index';
    * Test if the installation was successful:
       * Check that =antiword= is in place: Type =antiword= on the prompt and check that the command exists.
       * Check that =pdftotext= is in place: Type =pdftotext= on the prompt and check that the command exists.
+      * Check that =ppthtml= is in place: Type =ppthtml= on the prompt and check that the command exists.
       * Change the working directory to the ==kinosearch/bin== twiki installation directory.
       * Run =./kinoindex=
       * Once finished, open a browser window and point it to the ==TWiki/KinoSearch== topic.
@@ -192,12 +193,13 @@ $TWiki::cfg{KinoSearchIndexDir} = '/home/httpd/twiki/kinosearch/index';
    * Set SHORTDESCRIPTION = Fast indexed search with indexing of attachments like Word, Excel and PDF
 
 |  Add-on Author: | TWiki:Main/MarkusHesse |
-|  Add-on Version: | v1.09, 11 Nov 2007 |
+|  Add-on Version: | v1.10, 17 Nov 2007 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+| 17 Nov 2007:  | v 1.10, PPT stringifier added |
 | 11 Nov 2007:  | v 1.09, Some bugfixing |
 |  3 Nov 2007:  | v 1.08, Some bugfixing |
-|  7 Oct 2007:   | v 1.07, Some bugfixing |
-|  6 Oct 2007:   | v 1.06, Upgrade for 4.1, Release with <nop>BuildContrib|
+|  7 Oct 2007:  | v 1.07, Some bugfixing |
+|  6 Oct 2007:  | v 1.06, Upgrade for 4.1, Release with <nop>BuildContrib|
 |  29 Sep 2007: | v 1.05, Indexing of form fields |
 |  16 Sep 2007: | v 1.04, Stringifier plugins for doc, xls and html |
 |  13 Sep 2007: | v 1.03, Indexing of PDF and TXT attachments |

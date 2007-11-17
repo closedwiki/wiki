@@ -139,7 +139,7 @@ sub skipAttachments {
 # List of file extensions to be indexed
 # QS
 sub indexExtensions {
-    my $extensions = TWiki::Func::getPreferencesValue( "KINOSEARCHINDEXEXTENSIONS" ) || ".pdf, .doc, .xml, .html, .txt, .xls";
+    my $extensions = TWiki::Func::getPreferencesValue( "KINOSEARCHINDEXEXTENSIONS" ) || ".pdf, .doc, .xml, .html, .txt, .xls, .ppt";
     my %indexextensions;
 
     foreach my $tmpextension ( split( /\,\s+/, $extensions ) ) {

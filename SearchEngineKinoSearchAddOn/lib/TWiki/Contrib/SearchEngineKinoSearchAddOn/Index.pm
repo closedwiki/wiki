@@ -414,6 +414,11 @@ sub indexTopic {
     my ($meta, $text) = TWiki::Func::readTopic($web, $topic, undef);
 
     # Eliminate TWiki Makup Language elements and newlines.
+    # This is a trick to geht the renderer in 4.0/4.1 as well as in 4.2:
+    #  In 4.0/4.1 I can use TWiki->{renderer}. In 4.2 this can give undef. 
+    #  Thus I have to use TWiki->renderer.
+    #  NOTE: In 4.0/4.1 the method TWiki->renderer does not exist, but I 
+    # should never come there.
     my $renderer;
     if (!defined($renderer = $TWiki::Plugins::SESSION->{renderer})) {
 	$renderer = $TWiki::Plugins::SESSION->renderer;
