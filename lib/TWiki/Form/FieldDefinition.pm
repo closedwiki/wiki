@@ -201,7 +201,7 @@ sub renderHidden {
 
 =pod
 
----++ populateMetaDataFromQuery( $query, $meta, $old ) -> $boolean
+---++ populateMetaDataFromQuery( $query, $meta, $old ) -> ($bValid, $bPresent)
 
 Given a CGI =$query=, a =$meta= object, and an array of =$old= field entries,
 then populate the $meta with a row for this field definition, taking the
@@ -209,18 +209,21 @@ content from the query if it's there, otherwise from $old or failing that,
 from the default defined for the type. Refuses to update mandatory fields
 that have an empty value.
 
-Return true if the value in $meta was updated.
+Return $bValid true if the value in $meta was updated (either from the
+query or from a default in the form.
+Return $bPresent true if a value was present in the query (even it was undef)
 
 =cut
 
 sub populateMetaFromQueryData {
     my( $this, $query, $meta, $old ) = @_;
     my $value;
+    my $bPresent = 0;
 
     return unless $this->{name};
 
     if( defined( $query->param( $this->{name} ))) {
-
+        $bPresent = 1;
         if( $this->isMultiValued() ) {
             my @values = $query->param( $this->{name} );
 
@@ -247,12 +250,10 @@ sub populateMetaFromQueryData {
             }
         } else {
             $value = $query->param( $this->{name} );
-
             if( defined( $value ) && $this->{session}->inContext('edit')) {
                 $value = TWiki::expandStandardEscapes( $value );
             }
         }
-
     }
 
     # Find the old value of this field
@@ -268,7 +269,7 @@ sub populateMetaFromQueryData {
     if( defined( $value ) ) {
         # mandatory fields must have length > 0
         if( $this->isMandatory() && length( $value ) == 0) {
-            return 0;
+            return (0, $bPresent);
         }
         # NOTE: title and name are stored in the topic so that it can be
         # viewed without reading in the form definition
@@ -286,12 +287,12 @@ sub populateMetaFromQueryData {
     } elsif( $preDef ) {
         $def = $preDef;
     } else {
-        return 0;
+        return (0, $bPresent);
     }
 
     $meta->putKeyed( 'FIELD', $def ) if $def;
 
-    return 1;
+    return (1, $bPresent);
 }
 
 =pod

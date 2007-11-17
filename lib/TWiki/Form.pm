@@ -438,9 +438,12 @@ sub getFieldValuesFromQuery {
     my @old = $meta->find( 'FIELD' );
     $meta->remove('FIELD');
     foreach my $fieldDef ( @{$this->{fields}} ) {
-        if( $fieldDef->populateMetaFromQueryData( $query, $meta, \@old )) {
+        my( $set, $present ) =
+          $fieldDef->populateMetaFromQueryData( $query, $meta, \@old );
+        if( $present ) {
             $seen++;
-        } elsif( $fieldDef->isMandatory() ) {
+        }
+        if( !$set && $fieldDef->isMandatory() ) {
             # Remember missing mandatory fields
             push( @missing, $fieldDef->{title} || "unnamed field" );
         }

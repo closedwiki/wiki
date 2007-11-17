@@ -127,7 +127,8 @@ sub buildNewTopic {
                              $templatetopic, $revision );
         $templateText = '' if $query->param( 'newtopic' ); # created by edit
         $templateText =
-          $session->expandVariablesOnTopicCreation( $templateText, $user, $webName, $topic );
+          $session->expandVariablesOnTopicCreation(
+              $templateText, $user, $webName, $topic );
         foreach my $k ( keys %$templateMeta ) {
             unless( $k =~ /^_/ || $k eq 'FORM' || $k eq 'TOPICPARENT' ||
                       $k eq 'FIELD' || $k eq 'TOPICMOVED' ) {
