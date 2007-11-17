@@ -30,6 +30,10 @@ var TWikiButtonsPlugin = {
             return tinyMCE.getButtonHTML(cn, 'lang_twikibuttons_attach_desc',
                                          '{$pluginurl}/images/attach.gif',
                                          'twikiATTACH', true);
+            case "hide":
+            return tinyMCE.getButtonHTML(cn, 'lang_twikibuttons_hide_desc',
+                                         '{$pluginurl}/images/hide.gif',
+                                         'twikiHIDE', true);
 		}
 
 		return "";
@@ -82,6 +86,10 @@ var TWikiButtonsPlugin = {
                 }
             }
 
+            return true;
+
+        case "twikiHIDE":
+            tinyMCE.execCommand("mceToggleEditor", user_interface, editor_id);
             return true;
 
         case "twikiATTACH":

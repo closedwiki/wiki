@@ -18,25 +18,26 @@
 // The TWikiTiny class object
 var TWikiTiny = {
 
-    TWiki_Vars : null,
+    twikiVars : null,
+    request : new Object(), // HTTP request object
+    metaTags : null,
+    rawContent : '',
 
     // Get a TWiki variable from the set passed
     getTWikiVar : function (name) {
-        if (TWikiTiny.TWiki_Vars == null) {
+        if (TWikiTiny.twikiVars == null) {
             var sets = tinyMCE.getParam("twiki_vars", "");
-            TWikiTiny.TWiki_Vars = eval(sets);
+            TWikiTiny.twikiVars = eval(sets);
         }
-        return TWikiTiny.TWiki_Vars[name];
+        return TWikiTiny.twikiVars[name];
     },
 
     expandVariables : function(url) {
-        for (var i in TWikiTiny.TWiki_Vars) {
-            url = url.replace('%' + i + '%', TWikiTiny.TWiki_Vars[i], 'g');
+        for (var i in TWikiTiny.twikiVars) {
+            url = url.replace('%' + i + '%', TWikiTiny.twikiVars[i], 'g');
         }
         return url;
     },
-
-    request : new Object(), // HTTP request object
 
     // Asynchronous fetch of the topic content using the Wysiwyg REST handler.
     setUpContent : function(editor_id, body, doc) {
@@ -93,6 +94,9 @@ var TWikiTiny = {
                 }
             }
         };
+        // Cache the content
+        if (!TWikiTiny.rawContent)
+            TWikiTiny.rawContent = body.innerHTML;
         body.innerHTML = "<span class='twikiAlert'>Please wait... retrieving page from server</span>";
         TWikiTiny.request.req.send(params);
     },
@@ -160,7 +164,10 @@ var TWikiTiny = {
         return url;
     },
 
-    metaTags : null,
+    switchToRaw : function (inst) {
+        var te = inst.oldTargetElement;
+        te.value = TWikiTiny.rawContent;
+    },
 
     getMetaTag : function(inKey) {
         if (TWikiTiny.metaTags == null || TWikiTiny.metaTags.length == 0) {
