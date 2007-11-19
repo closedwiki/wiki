@@ -2,10 +2,10 @@
 ---+!! !TwistyPlugin Bundle for TWiki 4.1.x
 
 This is a convenience package for installing !TwistyPlugin on TWiki 4.1 and TWiki 4.1.2.
-Installed components are:
-   * !BehaviourContrib
-   * !TwistyContrib
-   * !TwistyPlugin
+Installed extensions are:
+   * http://TWiki.org/cgi-bin/view/Plugins/BehaviourContrib
+   * http://TWiki.org/cgi-bin/view/Plugins/TwistyContrib
+   * http://TWiki.org/cgi-bin/view/Plugins/TwistyPlugin
 
 Other Twisty bundles:
    *  http://TWiki.org/cgi-bin/view/Plugins/TwistyBundleTWiki04x02 for TWiki 4.2
@@ -23,9 +23,9 @@ Other Twisty bundles:
 |  License: | See individual extension topics |
 |  Version: | %$VERSION% |
 |  Dependencies: | %$DEPENDENCIES% |
-|  Contrib&nbsp;Version: | 1.0 |
+|  Contrib&nbsp;Version: | 1.0 (19 Nov 2007) |
 |  Change&nbsp;History: | <!-- specify latest version first -->&nbsp; |
-|  19 Nov 2007 | 1.0 First Version. |
+|  19 Nov 2007 | 1.0 First version (!TwistyPlugin 1.4.6). |
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |

@@ -431,8 +431,9 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 | Copyright &copy;: | 2005 Rafael Alvarez; 2006, 2007 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
-| Plugin&nbsp;Version: | 07 Oct 2007 (version 1.4.5)  |
+| Plugin&nbsp;Version: | 19 Nov 2007 (version 1.4.6)  |
 | Change&nbsp;History: | <!-- versions below in reverse order -->&nbsp; |
+| 19 Nov 2007 | 1.4.6 Arthur Clemens - Make sure behaviour javascript is included first in head. |
 | 07 Oct 2007 | 1.4.5 Arthur Clemens - Fix html tag with show/hide controls. |
 | 25 Sep 2007 | 1.4.4 Arthur Clemens - Fix rendering of headers when =prefix= is used. |
 | 11 Jul 2007 | 1.4.3 Arthur Clemens - Fix invalid html when =prefix= and =suffix= is used. |
