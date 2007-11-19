@@ -170,6 +170,11 @@ sub expandPlain {
     }
 
     my $tim =  TWiki::Time::formatTime( $this->{TIME} );
+
+    # URL-encode topic names for use of I18N topic names in plain text
+    # DEPRECATED! DO NOT USE!
+    $template =~ s#%URL%#%SCRIPTURL{view}%/%ENCODE{%WEB%}%/%ENCODE{%TOPIC%}%#g;
+
     $template =~ s/%AUTHOR%/$this->{AUTHOR}/g;
     $template =~ s/%TIME%/$tim/g;
     $template =~ s/%CUR_REV%/$this->{CURR_REV}/g;
@@ -187,10 +192,6 @@ sub expandPlain {
         }
     }
     $template =~ s/%REVISION%/$frev/g;
-
-    # URL-encode topic names for use of I18N topic names in plain text
-    # DEPRECATED! DO NOT USE!
-    $template =~ s#%URL%#%SCRIPTURL{view}%/%ENCODE{%WEB%}%/%ENCODE{%TOPIC%}%#g;
 
     $template =~ s/%TEXTHEAD%/$this->{TEXT_SUMMARY}/g;
     return $template;
