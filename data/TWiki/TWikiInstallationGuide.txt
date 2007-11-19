@@ -94,7 +94,7 @@ Administrators have read and write access to any topic in TWiki, independent of 
 
    * Navigate to the =Main.TWikiAdminGroup= topic
    * Follow carefully the steps =Main.TWikiAdminGroup= of how to 
-   * Note that you have to be registered and logged in already before you use the _internal admin login_
+   * Note that if you use ApacheLogin you have to be registered and logged in before you use the _internal admin login_
 
 #SetPreferences
 ---++ Set TWiki Preferences
