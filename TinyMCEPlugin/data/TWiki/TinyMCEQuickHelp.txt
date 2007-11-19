@@ -60,7 +60,8 @@
   </td>
  </tr>
  <tr>
-</table>
+<tr>
+ <td colspan="2" width="50%">
 <h3> Setting a TWiki variable </h3>
 <ol>
  <li> Create a list item using the toolbar button</li>
@@ -68,11 +69,13 @@
  <li> Select the value, and assign the ==Protect on save== style to it (only required if the value contains any TWiki Markup Language or if you style it e.g. to add bold, or if it's sensitive to the number of spaces)
  </li>
 </ol>
-
+</td><td colspan=2>
 <h3> Using a TWiki Variable </h3><ul>
 <li> Just type it in. When the topic is saved, what you type will be saved just as you wrote it.  </li>
 <li> If any part of your variable parameters is sensitive to spacing, then select the entire TWiki variable and assign the ==PROTECTED== style to it before you save. </li></ul>
-
+</td>
+</tr>
+</table>
 <h3> Editing the raw text instead of Wysiwyg </h3><ul>
 <li> Select    <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikibuttons/images/hide.gif" alt="the pickaxe" style="background-color:#f9f9f9"/>
 , or use the _Raw Edit_ link in the bottom action bar. </li></ul>

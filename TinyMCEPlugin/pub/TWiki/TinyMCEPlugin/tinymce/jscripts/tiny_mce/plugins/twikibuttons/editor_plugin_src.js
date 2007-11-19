@@ -38,10 +38,10 @@ var TWikiButtonsPlugin = {
         case "twikiformat":
             html = '<select id="{$editor_id}_formatSelect" name="{$editor_id}_formatSelect" onfocus="tinyMCE.addSelectAccessibility(event, this, window);" onchange="tinyMCE.execInstanceCommand(\'{$editor_id}\',\'twikiFORMAT\',false,this.options[this.selectedIndex].value);" class="mceSelectList">';
             formats = tinyMCE.getParam("twikibuttons_formats");
-            html += '<option value="">None</option>';
             // Build format select
             for (var i = 0; i < formats.length; i++) {
-                html += '<option>' + formats[i].name + '</option>';
+                html += '<option value="'+ formats[i].name + '">'
+                    + formats[i].name + '</option>';
             }
             html += '</select>';
             
@@ -53,11 +53,11 @@ var TWikiButtonsPlugin = {
 
 	execCommand : function(editor_id, element, command,
                            user_interface, value) {
-		var inst, elm;
+		var em;
+        var inst = tinyMCE.getInstanceById(editor_id);
 
 		switch (command) {
         case "twikiCOLOUR":
-            inst = tinyMCE.getInstanceById(editor_id);
             var t = inst.selection.getSelectedText();
             if (!(t && t.length > 0 || pe))
                 return true;
@@ -81,7 +81,7 @@ var TWikiButtonsPlugin = {
             // if we are in a TT region, then removeformat
             if (elm && elm.nodeName == 'TT'){
                 tinyMCE.execCommand('mceBeginUndoLevel');
-                tinyMCE.execCommand('removeformat', false, elm);
+                tinyMCE.execCommand('removeformat', user_interface, elm);
                 tinyMCE.triggerNodeChange();
                 tinyMCE.execCommand('mceEndUndoLevel');
             } else {
@@ -89,7 +89,7 @@ var TWikiButtonsPlugin = {
                 if (s.length > 0) {
                     tinyMCE.execCommand('mceBeginUndoLevel');
                     s = '<tt>' + s + '</tt>';
-                    tinyMCE.execCommand('mceInsertContent', false, s);
+                    tinyMCE.execCommand('mceInsertContent', user_interface, s);
                     tinyMCE.triggerNodeChange();
                     tinyMCE.execCommand('mceEndUndoLevel');
                     // How do I restore the selection? Doesn't seem to be
@@ -119,24 +119,32 @@ var TWikiButtonsPlugin = {
                     format = formats[i];
                 }
             }
+
             if (format != null) {
                 // if None, then remove all the styles that are in the
                 // formats
                 tinyMCE.execCommand('mceBeginUndoLevel');
                 if (format.el != null) {
+                    var fmt = format.el;
+                    if (fmt.length)
+                        fmt = '<' + fmt + '>';
                     tinyMCE.execInstanceCommand(
-                        editor_id, 'FormatBlock', false, format.el);
+                        editor_id, 'FormatBlock', user_interface, fmt);
                     if (format.el == '') {
                         elm = inst.getFocusElement();
-                        tinyMCE.execCommand('removeformat', false, elm);
+                        tinyMCE.execCommand(
+                            'removeformat', user_interface, elm);
                     }
                 }
                 if (format.style != null) {
                     tinyMCE.execInstanceCommand(
-                        editor_id, 'mceSetCSSClass', false, format.style);
+                        editor_id, 'mceSetCSSClass', user_interface,
+                        format.style);
                 }
+                tinyMCE.triggerNodeChange();
             }
-            return true;
+            tinyMCE.execCommand('mceEndUndoLevel');
+           return true;
 		}
 
 		return false;
