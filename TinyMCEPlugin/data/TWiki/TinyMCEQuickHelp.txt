@@ -3,7 +3,7 @@
 <table>
  <tr>
   <td width="100px" style="vertical-align:top;background-color:#f9f9f9" rowspan="3">
-   <p><select><option>None</option>
+   <p><select><option>Normal</option>
 <option>Heading 1</option>
 <option>Heading 2</option>
 <option>Heading 3</option>
@@ -18,7 +18,7 @@
   </td>
   <td style="vertical-align:top;" rowspan=3>
    <ul>
-    <li> ==None== - Normal text style </li>
+    <li> ==Normal== - Normal text style </li>
     <li> ==Heading 1-6== - Headings. 1 is largest </li>
     <li> ==VERBATIM== - Text is shown in monospace with line breaks.%BR% _Wraps &lt;verbatim&gt; tags around the selected text. No TWiki Variables are interpreted inside verbatim tags_ </li>
     <li> ==LITERAL== - Styled content is saved exactly as it appears in the editor.%BR% _Saves the selected content as raw HTML and wraps it in &lt;literal> tags_ </li>
