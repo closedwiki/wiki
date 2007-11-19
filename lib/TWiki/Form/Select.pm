@@ -23,6 +23,34 @@ sub new {
     return $this;
 }
 
+sub getOptions {
+  my $this = shift;
+
+  return $this->{_options} if $this->{_options};
+ 
+  my $vals = $this->SUPER::getOptions(@_);
+  if ($this->{type} =~ /\+values/) {
+    # create a values map
+    
+    $this->{valueMap} = ();
+    $this->{_options} = ();
+    my $str;
+    foreach my $val (@$vals) {
+      if ($val =~ /^(.*?[^\\])=(.*)$/) {
+        $str = $1;
+        $val = $2;
+        $str =~ s/\\=/=/g;
+      } else {
+        $str = $val;
+      }
+      $this->{valueMap}{$val} = TWiki::urlDecode($str);
+      push @{$this->{_options}}, $val;
+    }
+  }
+
+  return $vals;
+}
+
 =begin twiki
 
 ---++ ObjectMethod finish()
@@ -38,6 +66,7 @@ sub finish {
     $this->SUPER::finish();
     undef $this->{minSize};
     undef $this->{maxSize};
+    undef $this->{valueMap}
 }
 
 sub isMultiValued { return shift->{type} =~ /\+multi/; }
@@ -46,28 +75,16 @@ sub renderForEdit {
     my( $this, $web, $topic, $value ) = @_;
 
     my $choices = '';
+
+    my %isSelected = map { $_ => 1 } split(/\s*,\s*/, $value);
     foreach my $option ( @{$this->getOptions()} ) {
-        $option = TWiki::urlDecode($option);
         my %params = (
-            class => 'twikiEditFormOption'
+            class => 'twikiEditFormOption',
            );
-        my $optionValue = $option;
-        if( $this->{type} =~ /\+values/ ) {
-            if( $option =~ /^(.*?[^\\])=(.*)$/ ) {
-                $option = $1;
-                $optionValue = $2;
-                $params{value} = $optionValue;
-            }
-            $option =~ s/\\=/=/g;
-        }
-        if( defined $optionValue && defined $value ) {
-            my $selected;
-            if( $this->isMultiValued() ) {
-                $selected = ( $value =~ /(^|,)?\s*$optionValue\s*(,|$)/ );
-            } else {
-                $selected = ( $optionValue eq $value );
-            }
-            $params{selected} = 'selected' if $selected;
+        $params{selected} = 'selected' if $isSelected{$option};
+        if (defined($this->{valueMap}{$option})) {
+          $params{value} = $option;
+          $option = $this->{valueMap}{$option};
         }
         $option =~ s/<nop/&lt\;nop/go;
         $choices .= CGI::option( \%params, $option );
