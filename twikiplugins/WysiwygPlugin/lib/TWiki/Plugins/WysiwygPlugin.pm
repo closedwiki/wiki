@@ -623,6 +623,7 @@ sub _restTML2HTML {
     # Add the secret id to trigger reconversion. Doesn't work if the
     # editor eats HTML comments, so the editor may need to put it back
     # in during final cleanup.
+
     return '<!--'.$SECRET_ID.'-->'.$html;
 }
 
@@ -634,7 +635,8 @@ sub _restHTML2TML {
 
         $html2tml = new TWiki::Plugins::WysiwygPlugin::HTML2TML();
     }
-    my $html = TWiki::Func::getCgiQuery()->param('text');
+    my $html = TWiki::Func::getCgiQuery()->param('text') || '';
+    $html = TWiki::urlDecode($html);
     $html =~ s/<!--$SECRET_ID-->//go;
 
     my $tml = $html2tml->convert(

@@ -18,38 +18,35 @@
 // The TWikiTiny class object
 var TWikiTiny = {
 
-    TWiki_Vars : null,
+    twikiVars : null,
+    request : null, // Container for HTTP request object
+    metaTags : null,
 
     // Get a TWiki variable from the set passed
     getTWikiVar : function (name) {
-        if (TWikiTiny.TWiki_Vars == null) {
+        if (TWikiTiny.twikiVars == null) {
             var sets = tinyMCE.getParam("twiki_vars", "");
-            TWikiTiny.TWiki_Vars = eval(sets);
+            TWikiTiny.twikiVars = eval(sets);
         }
-        return TWikiTiny.TWiki_Vars[name];
+        return TWikiTiny.twikiVars[name];
     },
 
     expandVariables : function(url) {
-        for (var i in TWikiTiny.TWiki_Vars) {
-            url = url.replace('%' + i + '%', TWikiTiny.TWiki_Vars[i], 'g');
+        for (var i in TWikiTiny.twikiVars) {
+            url = url.replace('%' + i + '%', TWikiTiny.twikiVars[i], 'g');
         }
         return url;
     },
 
-    request : new Object(), // HTTP request object
-
-    // Asynchronous fetch of the topic content using the Wysiwyg REST handler.
-    setUpContent : function(editor_id, body, doc) {
-        TWikiTiny.request.editor_id = editor_id;
-        TWikiTiny.request.doc = doc;
-        TWikiTiny.request.body = body;
+    transform : function(editor, handler, text, onReadyToSend, onReply) {
         // Work out the rest URL from the location
         var url = TWikiTiny.getTWikiVar("SCRIPTURL");
         var suffix = TWikiTiny.getTWikiVar("SCRIPTSUFFIX");
         if (suffix == null) suffix = '';
-        url += "/rest" + suffix + "/WysiwygPlugin/tml2html";
+        url += "/rest" + suffix + "/WysiwygPlugin/" + handler;
         var path = TWikiTiny.getTWikiVar("WEB") + '.'
         + TWikiTiny.getTWikiVar("TOPIC");
+        TWikiTiny.request = new Object();
         if (tinyMCE.isIE) {
             // branch for IE/Windows ActiveX version
             TWikiTiny.request.req = new ActiveXObject("Microsoft.XMLHTTP");
@@ -57,13 +54,11 @@ var TWikiTiny = {
             // branch for native XMLHttpRequest object
             TWikiTiny.request.req = new XMLHttpRequest();
         }
+        TWikiTiny.request.editor = editor;
         TWikiTiny.request.req.open("POST", url, true);
         TWikiTiny.request.req.setRequestHeader(
             "Content-type", "application/x-www-form-urlencoded");
         // get the content of the associated textarea
-        var editor = tinyMCE.getInstanceById(editor_id);
-        var text = editor.oldTargetElement.value;
-        
         var params = "nocache=" + encodeURIComponent((new Date()).getTime())
         + "&topic=" + encodeURIComponent(path)
         // The double-encoding is to overcome flaws in XMLHttpRequest. It makes
@@ -80,23 +75,106 @@ var TWikiTiny = {
             if (TWikiTiny.request.req.readyState == 4) {
                 // only if "OK"
                 if (TWikiTiny.request.req.status == 200) {
-                    TWikiTiny.request.body.innerHTML =
-                    TWikiTiny.request.req.responseText;
-                    var editor = tinyMCE.getInstanceById(
-                        TWikiTiny.request.editor_id);
-                    editor.isNotDirty = true;
+                    onReply();
                 } else {
-                    TWikiTiny.request.body.innerHTML =
-                    "<div class='twikiAlert'>"
-                    + "There was a problem retrieving the page: "
-                    + TWikiTiny.request.req.statusText + "</div>";
+                    onFail();
                 }
             }
         };
-        body.innerHTML = "<span class='twikiAlert'>Please wait... retrieving page from server</span>";
+        onReadyToSend();
         TWikiTiny.request.req.send(params);
     },
 
+    // Set up content for the initial edit
+    setUpContent : function(editor_id, body, doc) {
+        var editor = tinyMCE.getInstanceById(editor_id);
+        TWikiTiny.switchToWYSIWYG(editor);
+    },
+
+    // Convert HTML content to textarea. Called from the WYSIWYG->raw switch
+    switchToRaw : function (inst) {
+        TWikiTiny.transform(
+            inst, "html2tml", inst.getBody().innerHTML,
+            function () {
+                var te = TWikiTiny.request.editor.oldTargetElement;
+                te.value = "Please wait... retrieving page from server";
+            },
+            function () {
+                var te = TWikiTiny.request.editor.oldTargetElement;
+                te.value = TWikiTiny.request.req.responseText;
+            },
+            function () {
+                var te = TWikiTiny.request.editor.oldTargetElement;
+                te.value = "There was a problem retrieving the page: "
+                    + TWikiTiny.request.req.statusText;
+            });
+        // Add the button for the switch back to WYSIWYG mode
+        var eid = inst.editorId;
+        var id = eid + "_2WYSIWYG";
+        var el = document.getElementById(id);
+        if (el) {
+            // exists, unhide it
+            el.style.display = "block";
+        } else {
+            // does not exist, create it
+            el = document.createElement('INPUT');
+            el.id = id;
+            el.type = "button";
+            el.value = "WYSIWYG";
+            el.onclick = function () {
+                tinyMCE.execCommand("mceToggleEditor", null, inst.editorId);
+                return false;
+            }
+            // Need to insert after to avoid knackering 'back'
+            var pel = inst.oldTargetElement.parentNode;
+            pel.insertBefore(el, inst.oldTargetElement);
+        }
+        // SMELL: what if there is already an onchange handler?
+        inst.oldTargetElement.onchange = function() {
+            var inst = tinyMCE.getInstanceById(eid);
+            inst.isNotDirty = false;
+            return true;
+        }
+    },
+
+    // Convert textarea content to HTML. This is invoked from the content
+    // setup handler, and also from the raw->WYSIWYG switch
+    switchToWYSIWYG : function (editor) {
+        // Kill the change handler to avoid excess fires
+        editor.oldTargetElement.onchange = null;
+        // Need to tinyMCE.execCommand("mceToggleEditor", null, editor_id);
+        TWikiTiny.transform(
+            editor, "tml2html", editor.oldTargetElement.value,
+            function () {
+                // Before send
+                var editor = TWikiTiny.request.editor;
+                tinyMCE.setInnerHTML(
+                    TWikiTiny.request.editor.getBody(),
+                    "<span class='twikiAlert'>Please wait... retrieving page from server</span>");
+            },
+            function () {
+                // Handle the reply
+                tinyMCE.setInnerHTML(
+                    TWikiTiny.request.editor.getBody(),
+                    TWikiTiny.request.req.responseText);
+                TWikiTiny.request.editor.isNotDirty = true;
+            },
+            function () {
+                // Handle a failure
+                tinyMCE.setInnerHTML(
+                    TWikiTiny.request.editor.getBody(),
+                    "<div class='twikiAlert'>"
+                    + "There was a problem retrieving the page: "
+                    + TWikiTiny.request.req.statusText + "</div>");
+            });
+        // Hide the conversion button, if it exists
+        var id = editor.editorId + "_2WYSIWYG";
+        var el = document.getElementById(id);
+        if (el) {
+            // exists, hide it
+            el.style.display = "none";
+        }
+    },
 
     // Callback on save. Make sure the WYSIWYG flag ID is there.
     saveCallback : function(element_id, html, body) {
@@ -159,8 +237,6 @@ var TWikiTiny = {
         }
         return url;
     },
-
-    metaTags : null,
 
     getMetaTag : function(inKey) {
         if (TWikiTiny.metaTags == null || TWikiTiny.metaTags.length == 0) {

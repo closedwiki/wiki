@@ -39,8 +39,7 @@ This setting contains all the options passed to the TinyMCE editor on startup.
 For a full explanation of the available options, and guidance on reconfiguring TinyMCE, see the [[http://wiki.moxiecode.com/index.php/TinyMCE:Configuration][Moxicode TinyMCE Wiki]]. Note the inclusion of the Pattern Skin standard CSS files in the =content_css= setting.
    * Set INIT = mode : "exact",
    save_on_tinymce_forms: true,
-   elements : "topic",
-   debug : true,
+   elements : "text",
    cleanup : false,
    theme : "advanced",
    convert_urls : true,
@@ -48,13 +47,28 @@ For a full explanation of the available options, and guidance on reconfiguring T
    remove_script_host : false,
    setupcontent_callback : TWikiTiny.setUpContent,
    urlconverter_callback : "TWikiTiny.convertLink",
+   hide_instance_callback : TWikiTiny.switchToRaw,
+   show_instance_callback : TWikiTiny.switchToWYSIWYG,
    twikipuburl_callback : "TWikiTiny.convertPubURL",
    save_callback : "TWikiTiny.saveCallback",
+   %IF{"$TINYMCEPLUGIN_DEBUG" then="debug:true,"}%
    plugins : "table,searchreplace,autosave,paste,twikibuttons,twikiimage%IF{"$TINYMCEPLUGIN_DEBUG" then=",devkit"}%",
    twiki_secret_id : "%WYSIWYG_SECRET_ID%",
    twiki_vars : { PUBURLPATH : "%PUBURLPATH%", PUBURL : "%PUBURL%", WEB : "%WEB%", TOPIC : "%TOPIC%", ATTACHURL : "%ATTACHURL%", ATTACHURLPATH : "%ATTACHURLPATH%", VIEWSCRIPTURL : "%SCRIPTURL{view}%", SCRIPTSUFFIX: "%SCRIPTSUFFIX%", SCRIPTURL : "%SCRIPTURL%" },
    theme_advanced_toolbar_align : "left",
-   theme_advanced_blockformats : "p,h1,h2,h3,h4,h5,h6",
+   twikibuttons_formats : [
+   { name: "None", el: "", style: null },
+   { name: "Heading 1", el: "h1", style: false },
+   { name: "Heading 2", el: "h2", style: false },
+   { name: "Heading 3", el: "h3", style: false },
+   { name: "Heading 4", el: "h4", style: false },
+   { name: "Heading 5", el: "h5", style: false },
+   { name: "Heading 6", el: "h6", style: false },
+   { name: "VERBATIM", el: "pre", style: "TMLverbatim" },
+   { name: "LITERAL", el: "span", style: "WYSIWYG_LITERAL" },
+   { name: "Protect on save", el: null, style: "WYSIWYG_PROTECTED" },
+   { name: "Protect forever", el: null, style: "WYSIWYG_STICKY" }
+   ],
    paste_create_paragraphs : true,
    paste_create_linebreaks : false,
    paste_convert_middot_lists : true,
@@ -62,8 +76,8 @@ For a full explanation of the available options, and guidance on reconfiguring T
    paste_remove_spans: true,
    paste_remove_styles: true,
    paste_strip_class_attributes: "all",
-   theme_advanced_buttons1 : "formatselect,styleselect,separator,bold,italic,tt,colour,removeformat,separator,link,unlink,attach,separator,bullist,numlist,separator,outdent,indent,separator,image,charmap,hr,anchor,separator,undo,redo,separator,search,replace,separator,code",
-   theme_advanced_buttons2: "tablecontrols",
+   theme_advanced_buttons1 : "twikiformat,separator,bold,italic,tt,colour,removeformat,separator,link,unlink,attach,separator,bullist,numlist,separator,outdent,indent,separator,image,charmap,hr,anchor,separator,undo,redo,separator,search,replace",
+   theme_advanced_buttons2: "tablecontrols,separator,code,hide",
    theme_advanced_buttons3: "",
    theme_advanced_toolbar_location: "top",
    theme_advanced_resize_horizontal : false,
@@ -71,7 +85,7 @@ For a full explanation of the available options, and guidance on reconfiguring T
    theme_advanced_path: false,
    theme_advanced_statusbar_location : "bottom",
    theme_advanced_styles : "VERBATIM=TMLverbatim;LITERAL=WYSIWYG_LITERAL;Protect on save=WYSIWYG_PROTECTED;Protect forever=WYSIWYG_STICKY",
-   content_css : "%PUBURLPATH%/%SYSTEMWEB%/TinyMCEPlugin/wysiwyg.css,%PUBURLPATH%/%SYSTEMWEB%/TWikiTemplates/base.css,%TWIKISTYLEURL%,%TWIKICOLORSURL%"
+   content_css : "%PUBURLPATH%/%TWIKIWEB%/TinyMCEPlugin/wysiwyg.css,%PUBURLPATH%/%TWIKIWEB%/TWikiTemplates/base.css,%TWIKISTYLEURL%,%TWIKICOLORSURL%"
    * Additional settings for specific browsers.
       * Warning: if you enable =paste_auto_cleanup_on_paste then it automatically implies =past_use_dialog= on all non-MSIE browsers.
       * Set INIT_MSIE = paste_auto_cleanup_on_paste : true
@@ -85,7 +99,7 @@ You can override these settings in the same way as any other TWiki variable, by 
    * Some browsers don't support !TinyMCE. You can prevent the editor from
      being invoked on these browsers by setting =TINYMCEPLUGIN_BAD_BROWSERS= to a regular expression that matches the user-agent string for any broken browsers. The default is =(?i-xsm:Konqueror|Opera)=.   
 
-%INCLUDE{"%SYSTEMWEB%.WysiwygPluginSettings"}%
+%INCLUDE{"%TWIKIWEB%.WysiwygPluginSettings"}%
 
 ---++ Plugin Info
 
@@ -97,7 +111,7 @@ Another great TWiki extension from the <a style="text-decoration:none" href="htt
 |             | This package also includes the complete sources for version 2.1.1.1 of the !TinyMCE editor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  8 Nov 2007 | Bugs:Item4742: auto-disable if Wysiwyg is not enabled Bugs:Item4820: validate mandatory fields on save Bugs:Item4747: add &lt;sticky&gt; Bugs:Item4811: noautolink *looks* like an HTML construct but in fact is not; the tag is infact an "on-off" switch and does not imply any HTML structure, so cannot be converted to a DIV or a span, so has to be removed. Bugs:Item4817: added typewriter text button Bugs:Item4850: added font colour controls Bugs:Item4645: added attachment management features |
+|  19 Nov 2007 | Bugs:Item4742: auto-disable if Wysiwyg is not enabled Bugs:Item4820: validate mandatory fields on save Bugs:Item4747: add &lt;sticky&gt; Bugs:Item4811: noautolink *looks* like an HTML construct but in fact is not; the tag is infact an "on-off" switch and does not imply any HTML structure, so cannot be converted to a DIV or a span, so has to be removed. Bugs:Item4817: added typewriter text button Bugs:Item4850: added font colour controls Bugs:Item4645: added attachment management features Bugs:Item4945: added switch to raw and back |
 |  16 Sep 2007 | Bugs:Item4630: polished up the way the secret string is done, to ensure synch between perl and JS. Bugs:Item4622: added UTF-8 handling steps that fixup malformed UTF8 strings before presenting them to the editor (saves Moz) and stops the editor passing them back to TWiki (saves IE). Bugs:Item4603: added the draft help, so we can at least build the beta without the nasty warning |
 |  13 Sep 2007 | Bugs:Item4613 fixed navigate-away prompt when unchanged Bugs:Item4583 Bugs:Item4604 Bugs:Item4614 Bugs:Item4616 A clutch of issues caused by use of the wrong encoding function when passing UTF8 parameters to REST using XMLHttpRequest. |
 |  12 Sep 2007 | Bugs:Item4604 Converted to REST call for content conversion, to provide safe callback if JS is disabled in the browser Bugs:Item4583 relaxed regex to try and make it work for UTF-8 topic names |
