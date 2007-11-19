@@ -2,58 +2,43 @@
 %STARTINCLUDE%
 <table>
  <tr>
-  <td colspan="2">
-   <h3> Format </h3>
+  <td width="100px" style="vertical-align:top;background-color:#f9f9f9" rowspan="3">
+   <p><select><option>None</option>
+<option>Heading 1</option>
+<option>Heading 2</option>
+<option>Heading 3</option>
+<option>Heading 4</option>
+<option>Heading 5</option>
+<option>Heading 6</option>
+<option>VERBATIM</option>
+<option>LITERAL</option>
+<option>Protect on save</option>
+<option>Protect forever</option></select>
+</p>
   </td>
-  <td colspan="2">
-   <h3> Styles </h3>
-  </td>
- </tr>
- <tr>
-  <td width="100px" style="vertical-align:top;">
-   <img src="%ATTACHURLPATH%/Format_Drop_Down.png" alt="Format_Drop_Down.png" width='92' height='151' />
-  </td>
-  <td style="vertical-align:top;">
+  <td style="vertical-align:top;" rowspan=3>
    <ul>
-    <li> ==Paragraph== - Normal text style </li>
+    <li> ==None== - Normal text style </li>
     <li> ==Heading 1-6== - Headings. 1 is largest </li>
+    <li> ==VERBATIM== - Text is shown in monospace with line breaks.%BR% _Wraps &lt;verbatim&gt; tags around the selected text. No TWiki Variables are interpreted inside verbatim tags_ </li>
+    <li> ==LITERAL== - Styled content is saved exactly as it appears in the editor.%BR% _Saves the selected content as raw HTML and wraps it in &lt;literal> tags_ </li>
+    <li> ==Protect on save== - Prevent any change to the selected text when the edit is saved.%BR% _Use this to save advanced TWiki Variables where you do not want the Wysiwyg editor to modify the text during save_ </li>
+    <li> ==Protect forever== - Content is saved exactly as it is typed, and the protection is still there in future edit sessions.%BR% _Content is wrapped in &lt;sticky&gt; tags_ </li>
    </ul>
   </td>
-  <td width="100px" style="vertical-align:top;">
-   <img src="%ATTACHURLPATH%/Styles_Drop_Down.png" alt="Styles_Drop_Down.png" />
-  </td>
-  <td>
-   <ul>
-   <li> ==--Styles--== Use this to remove a style in the selected text </li>
-   <li> ==VERBATIM== - Wraps &lt;verbatim&gt; tags around the selected text. Verbatim text is shown in monospace with line breaks. No TWiki Variables are interpreted inside verbatim tags </li>
-   <li> ==LITERAL== - Styled content is saved exactly as it appears in the editor. Wraps the content in &lt;literal> tags </li>
-   <li> ==Protect on save== - Text is saved exactly as it is typed. Use this to save advanced TWiki Variables where you do not want the Wysiwyg editor to interpret or modify the text during save </li></ul>
-  </td>
-   <li> ==Protect forever== - Text is saved exactly as it is typed, but unlike Protect on save this protection is still there in future edit sessions. Use this to save blocks of advanced TWiki Variables or TML where you do not want the Wysiwyg editor to interpret or modify the text </li></ul>
-  </td>
- </tr>
- <tr>
-  <td colspan="2">
-   <h3> Indent </h3>
-  </td>
-  <td>
-   <h3 colspan="2"> Links </h3>
-  </td>
- </tr>
- <tr>
-  <td style="vertical-align:top; ">
+  <td style="vertical-align:top; background-color:#f9f9f9">
    <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/indent.gif" alt="indent" />
    <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/outdent.gif" alt="outdent" />
   </td>
-  <td>
+  <td style="vertical-align:top; ">
    <ul>
-    <li> Change the indent of list items. </li>
-    <li> You cannot indent normal text the same way as you do in a word processor.  </li>
-    <li> The indent icon puts the selected text inside &lt;BLOCKQUOTE&gt; tags.  </li>
-    <li> The default TWiki skin shows the text indented with a blue background. Unindenting turns the text into normal text. </li>
+    <li> If the cursor is in a list item, change the indent </li>
+    <li> Otherwise mark text with &lt;BLOCKQUOTE&gt; tags (the default TWiki skin shows blockquotes indented with a blue background)</li>
    </ul>
   </td>
-  <td style="vertical-align:top; ">
+ </tr>
+ <tr>
+  <td style="vertical-align:top; background-color:#f9f9f9">
    <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/link.gif" alt="link" />
    <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/unlink.gif" alt="unlink" />
   </td>
@@ -65,23 +50,7 @@
   </td>
  </tr>
  <tr>
-  <td colspan="2">
-   <h3> Images </h3>
-  </td>
-  <td colspan="2">
-   <h3> Anchors </h3>
-  </td>
- </tr>
- <tr>
-  <td style="vertical-align:top; ">
-   <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/image.gif" alt="image" />
-  </td>
-  <td>
-   <ul>
-    <li> Type the name of an image file that you have attached to the current topic. You can also put a real URL as an image link. </li>
-   </ul>
-  </td>
-  <td style="vertical-align:top; ">
+  <td style="vertical-align:top; background-color:#f9f9f9">
    <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/anchor.gif" alt="anchor" />
   </td>
   <td style="vertical-align:top; ">
@@ -90,6 +59,7 @@
    </ul>
   </td>
  </tr>
+ <tr>
 </table>
 <h3> Setting a TWiki variable </h3>
 <ol>
@@ -104,7 +74,8 @@
 <li> If any part of your variable parameters is sensitive to spacing, then select the entire TWiki variable and assign the ==PROTECTED== style to it before you save. </li></ul>
 
 <h3> Editing the raw text instead of Wysiwyg </h3><ul>
-<li> Use the _Raw Edit_ link at the bottom action bar. </li></ul>
+<li> Select    <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikibuttons/images/hide.gif" alt="the pickaxe" style="background-color:#f9f9f9"/>
+, or use the _Raw Edit_ link in the bottom action bar. </li></ul>
 %STOPINCLUDE%
 
 %META:FILEATTACHMENT{name="Format_Drop_Down.png" attr="" comment="" version="1"}%

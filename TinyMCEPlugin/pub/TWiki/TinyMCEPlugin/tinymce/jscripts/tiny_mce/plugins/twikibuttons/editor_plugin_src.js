@@ -17,23 +17,35 @@ var TWikiButtonsPlugin = {
 	},
 
 	getControlHTML : function(cn) {
+        var html, formats;
 		switch (cn) {
-			case "tt":
+        case "tt":
             return tinyMCE.getButtonHTML(cn, 'lang_twikibuttons_tt_desc',
                                          '{$pluginurl}/images/tt.gif',
                                          'twikiTT', true);
-            case "colour":
+        case "colour":
             return tinyMCE.getButtonHTML(cn, 'lang_twikibuttons_colour_desc',
                                          '{$pluginurl}/images/colour.gif',
                                          'twikiCOLOUR', true);
-            case "attach":
+        case "attach":
             return tinyMCE.getButtonHTML(cn, 'lang_twikibuttons_attach_desc',
                                          '{$pluginurl}/images/attach.gif',
                                          'twikiATTACH', true);
-            case "hide":
+        case "hide":
             return tinyMCE.getButtonHTML(cn, 'lang_twikibuttons_hide_desc',
                                          '{$pluginurl}/images/hide.gif',
                                          'twikiHIDE', true);
+        case "twikiformat":
+            html = '<select id="{$editor_id}_formatSelect" name="{$editor_id}_formatSelect" onfocus="tinyMCE.addSelectAccessibility(event, this, window);" onchange="tinyMCE.execInstanceCommand(\'{$editor_id}\',\'twikiFORMAT\',false,this.options[this.selectedIndex].value);" class="mceSelectList">';
+            formats = tinyMCE.getParam("twikibuttons_formats");
+            html += '<option value="">None</option>';
+            // Build format select
+            for (var i = 0; i < formats.length; i++) {
+                html += '<option>' + formats[i].name + '</option>';
+            }
+            html += '</select>';
+            
+            return html;
 		}
 
 		return "";
@@ -41,12 +53,11 @@ var TWikiButtonsPlugin = {
 
 	execCommand : function(editor_id, element, command,
                            user_interface, value) {
-		var template, inst, elm;
+		var inst, elm;
 
 		switch (command) {
-
         case "twikiCOLOUR":
-            var inst = tinyMCE.getInstanceById(editor_id);
+            inst = tinyMCE.getInstanceById(editor_id);
             var t = inst.selection.getSelectedText();
             if (!(t && t.length > 0 || pe))
                 return true;
@@ -59,8 +70,8 @@ var TWikiButtonsPlugin = {
             return true;
 
         case "twikiTT":
-            var inst = tinyMCE.getInstanceById(editor_id);
-            var elm = inst.getFocusElement();
+            inst = tinyMCE.getInstanceById(editor_id);
+            elm = inst.getFocusElement();
             var t = inst.selection.getSelectedText();
             var pe = tinyMCE.getParentElement(elm, 'TT');
 
@@ -98,6 +109,33 @@ var TWikiButtonsPlugin = {
             template['width'] = 350;
             template['height'] = 250;
             tinyMCE.openWindow(template, {editor_id : editor_id});
+            return true;
+
+        case "twikiFORMAT":
+            var formats = tinyMCE.getParam("twikibuttons_formats");
+            var format = null;
+            for (var i = 0; i < formats.length; i++) {
+                if (formats[i].name == value) {
+                    format = formats[i];
+                }
+            }
+            if (format != null) {
+                // if None, then remove all the styles that are in the
+                // formats
+                tinyMCE.execCommand('mceBeginUndoLevel');
+                if (format.el != null) {
+                    tinyMCE.execInstanceCommand(
+                        editor_id, 'FormatBlock', false, format.el);
+                    if (format.el == '') {
+                        elm = inst.getFocusElement();
+                        tinyMCE.execCommand('removeformat', false, elm);
+                    }
+                }
+                if (format.style != null) {
+                    tinyMCE.execInstanceCommand(
+                        editor_id, 'mceSetCSSClass', false, format.style);
+                }
+            }
             return true;
 		}
 
