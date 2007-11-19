@@ -124,6 +124,18 @@ HEAD
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikilib.js"></script>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiPref.js"></script>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiCSS.js"></script>
+EOF
+
+    if (!$@ && defined(&TWiki::Contrib::BehaviourContrib::addHEAD)) {
+        TWiki::Contrib::BehaviourContrib::addHEAD();
+    } else {
+        $header .= <<'EOF';
+<script type='text/javascript' src='%PUBURL%/%TWIKIWEB%/BehaviourContrib/behaviour.compressed.js'></script>
+HEAD
+EOF
+	}
+
+    $header .= <<'EOF';
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.compressed.js"></script>
 <script type="text/javascript">
 // <![CDATA[
