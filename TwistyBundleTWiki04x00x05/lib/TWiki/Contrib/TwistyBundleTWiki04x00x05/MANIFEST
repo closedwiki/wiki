@@ -19,6 +19,7 @@ pub/TWiki/BehaviourContrib/cssQuery/src/cssQuery-standard.js 0755
 pub/TWiki/BehaviourContrib/cssQuery/src/cssQuery.js 0755
 pub/TWiki/BehaviourContrib/cssQuery/src/test.html 0755
 pub/TWiki/BehaviourContrib/cssQuery/test.html 0755
+pub/TWiki/PatternSkin/style.css 0755
 pub/TWiki/TWikiJavascripts/twikilib.js 0755
 pub/TWiki/TWikiJavascripts/twikiCSS.js 0755
 pub/TWiki/TWikiJavascripts/twikiPref.js 0755
@@ -27,4 +28,5 @@ pub/TWiki/TwistyContrib/twist.compressed_src.js 0644
 pub/TWiki/TwistyContrib/twist.css 0644
 pub/TWiki/TwistyContrib/twist.js 0644
 pub/TWiki/TwistyContrib/twist_src.js 0644
+templates/attachtables.pattern.tmpl 0644
 templates/javascript.pattern.tmpl 0644
