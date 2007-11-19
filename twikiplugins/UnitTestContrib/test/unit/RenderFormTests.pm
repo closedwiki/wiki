@@ -61,23 +61,23 @@ HERE
     $meta->putKeyed(
         'FIELD',
         { name=>"Issue1",
-          attributes=>"", title=>"Issue 1", value=>"*Defect*"});
+          attributes=>"", title=>"Issue 1:", value=>"*Defect*"});
     $meta->putKeyed(
         'FIELD',
         { name=>"Issue2",
-          attributes=>"", title=>"Issue 2", value=>"Enhancement"});
+          attributes=>"", title=>"Issue 2:", value=>"Enhancement"});
     $meta->putKeyed(
         'FIELD',
         { name=>"Issue3",
-          attributes=>"", title=>"Issue 3", value=>"Defect, None"});
+          attributes=>"", title=>"Issue 3:", value=>"Defect, None"});
     $meta->putKeyed(
         'FIELD',
         { name=>"Issue4",
-          attributes=>"", title=>"Issue 4", value=>"Defect"});
+          attributes=>"", title=>"Issue 4:", value=>"Defect"});
     $meta->putKeyed(
         'FIELD',
         { name=>"Issue5",
-          attributes=>"", title=>"Issue 5", value=>"Foo, Baz"});
+          attributes=>"", title=>"Issue 5:", value=>"Foo, Baz"});
     $meta->putKeyed(
         'FIELD',
         { name=>"State",
@@ -237,7 +237,7 @@ sub test_render_for_edit {
 my $expected = <<HERE;
 <div class="twikiForm twikiEditForm"><table class="twikiFormTable">
 <tr>
-<th class="twikiFormTableHRow" colspan="2"><a rel="nofollow" target="InitializationForm" href="/twiki/bin/view/TemporaryRenderFormTestsTestWebRenderFormTests/InitializationForm" title="Details in separate window" onclick="return launchWindow(&quot;TemporaryRenderFormTestsTestWebRenderFormTests&quot;,&quot;InitializationForm&quot;)">TemporaryRenderFormTestsTestWebRenderFormTests.InitializationForm</a> <input type="submit" name="action_replaceform" value='Replace form...' class="twikiChangeFormButton twikiButton" /></th>
+<th class="twikiFormTableHRow" colspan="2"><a rel="nofollow" target="InitializationForm" href="%VIEWURL%/TemporaryRenderFormTestsTestWebRenderFormTests/InitializationForm" title="Details in separate window" onclick="return launchWindow(&quot;TemporaryRenderFormTestsTestWebRenderFormTests&quot;,&quot;InitializationForm&quot;)">TemporaryRenderFormTestsTestWebRenderFormTests.InitializationForm</a> <input type="submit" name="action_replaceform" value='Replace form...' class="twikiChangeFormButton twikiButton" /></th>
 </tr> 
 <tr><th align="right">Issue Name</th><td align="left"><input type="text" name="IssueName" value="_An issue_" size="40" class="twikiInputField twikiEditFormTextField" /></td></tr>
 <tr><th align="right">State</th><td align="left"><table><tr><td><label><input type="radio" name="State" value="none"  label="none" class="twikiRadioButton twikiEditFormRadioField"/>none</label></td></tr></table></td></tr>
@@ -255,7 +255,7 @@ my $oldstuff=<<HERE;
 <table class="twikiFormTable">
  <tr>
   <th class="twikiFormTableHRow" colspan="2">
-   <a rel="nofollow" target="InitializationForm" href="%SCRIPTURLPATH%/view/TemporaryRenderFormTestsTestWebRenderFormTests/InitializationForm" title="Click to see details in separate window" onclick="return launchWindow(&quot;TemporaryRenderFormTestsTestWebRenderFormTests&quot;,&quot;InitializationForm&quot;)">TemporaryRenderFormTestsTestWebRenderFormTests.InitializationForm</a>
+   <a rel="nofollow" target="InitializationForm" href="%VIEWURL%/TemporaryRenderFormTestsTestWebRenderFormTests/InitializationForm" title="Click to see details in separate window" onclick="return launchWindow(&quot;TemporaryRenderFormTestsTestWebRenderFormTests&quot;,&quot;InitializationForm&quot;)">TemporaryRenderFormTestsTestWebRenderFormTests.InitializationForm</a>
    <input type="submit" name="action_replaceform" value='Replace form...' class="twikiChangeFormButton twikiButton" />
   </th>
  </tr>
@@ -334,8 +334,8 @@ Defect
 </div>
 HERE
 
-    my $cgiBinUrl = $TWiki::cfg{ScriptUrlPath};
-    $expected =~ s/%SCRIPTURLPATH%/$cgiBinUrl/e;
+    my $viewUrl = $this->{twiki}->getScriptUrl(0, 'view');
+    $expected =~ s/%VIEWURL%/$viewUrl/g;
 
     $this->assert_html_equals($expected, $res);
 }
