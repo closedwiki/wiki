@@ -65,11 +65,13 @@ my $nop = "$protecton<nop>$protectoff";
 my $data =
   [
       {
-          exec => $ROUNDTRIP,
+          exec => $TML2HTML | $HTML2TML,
           name => 'Pling',
           tml => 'Move !ItTest/site/ToWeb5 leaving web5 as !MySQL host',
           html => <<HERE,
+<p>
 Move !<span class="WYSIWYG_LINK">ItTest</span>/site/ToWeb5 leaving web5 as !<span class="WYSIWYG_LINK">MySQL</span> host
+</p>
 HERE
           finaltml => <<'HERE',
 Move !ItTest/site/ToWeb5 leaving web5 as !MySQL host
@@ -1535,7 +1537,7 @@ L
 HERE
       },
       {
-          name => 'Item4974_2',
+          name => 'Item4969',
           exec => $HTML2TML,
           html => <<HERE,
 <table cellspacing="1" cellpadding="0" border="1">

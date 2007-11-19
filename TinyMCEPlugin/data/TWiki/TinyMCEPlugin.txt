@@ -48,6 +48,7 @@ For a full explanation of the available options, and guidance on reconfiguring T
    setupcontent_callback : TWikiTiny.setUpContent,
    urlconverter_callback : "TWikiTiny.convertLink",
    hide_instance_callback : TWikiTiny.switchToRaw,
+   show_instance_callback : TWikiTiny.switchToWYSIWYG,
    twikipuburl_callback : "TWikiTiny.convertPubURL",
    save_callback : "TWikiTiny.saveCallback",
    %IF{"$TINYMCEPLUGIN_DEBUG" then="debug:true,"}%
@@ -98,7 +99,7 @@ Another great TWiki extension from the <a style="text-decoration:none" href="htt
 |             | This package also includes the complete sources for version 2.1.1.1 of the !TinyMCE editor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  8 Nov 2007 | Bugs:Item4742: auto-disable if Wysiwyg is not enabled Bugs:Item4820: validate mandatory fields on save Bugs:Item4747: add &lt;sticky&gt; Bugs:Item4811: noautolink *looks* like an HTML construct but in fact is not; the tag is infact an "on-off" switch and does not imply any HTML structure, so cannot be converted to a DIV or a span, so has to be removed. Bugs:Item4817: added typewriter text button Bugs:Item4850: added font colour controls Bugs:Item4645: added attachment management features |
+|  19 Nov 2007 | Bugs:Item4742: auto-disable if Wysiwyg is not enabled Bugs:Item4820: validate mandatory fields on save Bugs:Item4747: add &lt;sticky&gt; Bugs:Item4811: noautolink *looks* like an HTML construct but in fact is not; the tag is infact an "on-off" switch and does not imply any HTML structure, so cannot be converted to a DIV or a span, so has to be removed. Bugs:Item4817: added typewriter text button Bugs:Item4850: added font colour controls Bugs:Item4645: added attachment management features Bugs:Item4945: added switch to raw and back |
 |  16 Sep 2007 | Bugs:Item4630: polished up the way the secret string is done, to ensure synch between perl and JS. Bugs:Item4622: added UTF-8 handling steps that fixup malformed UTF8 strings before presenting them to the editor (saves Moz) and stops the editor passing them back to TWiki (saves IE). Bugs:Item4603: added the draft help, so we can at least build the beta without the nasty warning |
 |  13 Sep 2007 | Bugs:Item4613 fixed navigate-away prompt when unchanged Bugs:Item4583 Bugs:Item4604 Bugs:Item4614 Bugs:Item4616 A clutch of issues caused by use of the wrong encoding function when passing UTF8 parameters to REST using XMLHttpRequest. |
 |  12 Sep 2007 | Bugs:Item4604 Converted to REST call for content conversion, to provide safe callback if JS is disabled in the browser Bugs:Item4583 relaxed regex to try and make it work for UTF-8 topic names |

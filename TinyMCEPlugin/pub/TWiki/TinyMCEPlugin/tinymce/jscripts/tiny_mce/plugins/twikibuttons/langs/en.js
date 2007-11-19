@@ -17,5 +17,5 @@ tinyMCE.addToLang("twikibuttons", {
     upload : "Upload",
     existing_attachments : "Existing Attachments",
     attach_help : "If recently uploaded files are not in the list, then close and re-open this dialog",
-    hide_desc : "Edit TWiki markup (changes will be lost)"
+    hide_desc : "Edit TWiki markup"
 });
