@@ -8,6 +8,7 @@ Installed extensions are:
    * http://TWiki.org/cgi-bin/view/Plugins/TwistyPlugin
 
 Other Twisty bundles:
+   *  http://TWiki.org/cgi-bin/view/Plugins/TwistyBundleTWiki04x00x05 for TWiki 4.0.5
    *  http://TWiki.org/cgi-bin/view/Plugins/TwistyBundleTWiki04x02 for TWiki 4.2
    
 ---++ Installation Instructions
