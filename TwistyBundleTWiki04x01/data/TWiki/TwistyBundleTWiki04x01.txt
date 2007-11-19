@@ -1,26 +1,21 @@
 %META:TOPICINFO{author="TWikiContributor" date="1183913691" format="1.1" reprev="1." version="1.1"}%
----+!! !TwistyPlugin Bundle for TWiki 4.2
+---+!! !TwistyPlugin Bundle for TWiki 4.1.x
 
-This is a convenience package for installing !TwistyPlugin on TWiki 4.2. Installed components are:
+This is a convenience package for installing !TwistyPlugin on TWiki 4.1 and TWiki 4.1.2.
+Installed components are:
    * !BehaviourContrib
    * !TwistyContrib
    * !TwistyPlugin
-   
+
 Other Twisty bundles:
-   *  http://TWiki.org/cgi-bin/view/Plugins/TwistyBundleTWiki04x00x05 for TWiki 4.0.5
-   *  http://TWiki.org/cgi-bin/view/Plugins/TwistyBundleTWiki04x01 for TWiki 4.1
+   *  http://TWiki.org/cgi-bin/view/Plugins/TwistyBundleTWiki04x02 for TWiki 4.2
    
 ---++ Installation Instructions
    1 Run the installer to install all files
    1 Go to =configure= to enable !TwistyPlugin
 
-Installed components are:
-   * !BehaviourContrib
-   * !TwistyContrib
-   * !TwistyPlugin
-   
 ---++ Contrib Settings
-   * Set SHORTDESCRIPTION = Contains all necessary files to use !TwistyPlugin on TWiki 4.2
+   * Set SHORTDESCRIPTION = Contains all necessary files to use !TwistyPlugin on TWiki 4.1 and 4.1.2
 
 ---++ Contrib Info
 |  Author: | TWiki:Main.ArthurClemens |
