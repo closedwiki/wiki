@@ -36,10 +36,10 @@ use vars
   $prefMode $prefShowLink $prefHideLink $prefRemember
   $defaultMode $defaultShowLink $defaultHideLink $defaultRemember );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
+# This should always be $Rev: 15653 (19 Nov 2007) $ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
-$VERSION = '$Rev$';
+$VERSION = '$Rev: 15653 (19 Nov 2007) $';
 
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
@@ -113,18 +113,30 @@ sub _addHeader {
         TWiki::Contrib::BehaviourContrib::addHEAD();
     } else {
         TWiki::Func::addToHEAD('BEHAVIOURCONTRIB', <<HEAD);
-<script type='text/javascript' src='%PUBURL%/%SYSTEMWEB%/BehaviourContrib/behaviour.compressed.js'></script>
+<script type='text/javascript' src='%PUBURL%/%TWIKIWEB%/BehaviourContrib/behaviour.compressed.js'></script>
 HEAD
     }
 
     my $header = <<'EOF';
 <style type="text/css" media="all">
-@import url("%PUBURL%/%SYSTEMWEB%/TwistyContrib/twist.css");
+@import url("%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.css");
 </style>
-<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikilib.js"></script>
-<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikiPref.js"></script>
-<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TWikiJavascripts/twikiCSS.js"></script>
-<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/TwistyContrib/twist.compressed.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikilib.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiPref.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiCSS.js"></script>
+EOF
+
+    if (!$@ && defined(&TWiki::Contrib::BehaviourContrib::addHEAD)) {
+        TWiki::Contrib::BehaviourContrib::addHEAD();
+    } else {
+        $header .= <<'EOF';
+<script type='text/javascript' src='%PUBURL%/%TWIKIWEB%/BehaviourContrib/behaviour.compressed.js'></script>
+HEAD
+EOF
+	}
+
+    $header .= <<'EOF';
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.compressed.js"></script>
 <script type="text/javascript">
 // <![CDATA[
 var styleText = '<style type="text/css" media="all">.twikiMakeVisible{display:inline;}.twikiMakeVisibleInline{display:inline;}.twikiMakeVisibleBlock{display:block;}.twikiMakeHidden{display:none;}</style>';
