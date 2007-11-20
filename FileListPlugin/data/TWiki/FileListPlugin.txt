@@ -15,12 +15,15 @@ View permissions are honored: if the user is not allowed to view the referring t
 | *Parameter* | *Comment* | *Example* |
 | =topic=     | Topic name to show attachments of | =<nop>%TOPIC%= |
 | =web=       | Web name of =topic= | =<nop>%WEB%= |
-| =filter=    | Comma separated list of file extensions to be listed |=gif,jpg= |
 | =format=    | Format string. Use the format in the table below | |
+| =separator=    | String to separate listed entries | |
 | =header=    | If there are hits this header is prepended | |
 | =footer=    | If there are hits this footer is appended | |
 | =alt=       | Alternate text if nothing is found | |
 | =hide=      | Wether !FileListPlugin should hide the attachments marked as hidden. Disabled by default, set to "yes", "on" or "1" to enable | |
+| =filter= (deprecated)   | Use =showextensions= |
+| =showextensions=  | Comma separated list of file extensions to be listed |=gif,jpg= |
+| =hidefiles= | Comma separated list of filenames to hide | |
 
 | *Format parameter* | *Comment* |
 | =$fileName=  | Name of the file |
@@ -70,10 +73,11 @@ Output (if installed):
 
 ---++ Plugin Info
 
-| Authors: | TWiki:Main.VinodKulkarni, TWiki:Main.SopanShewale (2006), TWiki:Main.ArthurClemens (2006) |
-| Copyright &copy;: | TWiki:Main.VinodKulkarni, TWiki:Main.SopanShewale (2006), TWiki:Main.ArthurClemens (2006) |
+| Authors: | TWiki:Main.VinodKulkarni, TWiki:Main.SopanShewale (2006), TWiki:Main.ArthurClemens (2006, 2007) |
+| Copyright &copy;: | TWiki:Main.VinodKulkarni, TWiki:Main.SopanShewale (2006), TWiki:Main.ArthurClemens (2006, 2007) |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
+| 20 Nov 2007 - v.0.9.1 | Arthur Clemens: deprecated =filter= in favor of =showextensions=; added =hidefiles=; added =separator= |
 | 18 Jun 2007 | TWiki:Main/AntonioTerceiro: added support for handling hidden attchments. |
 | 08 Apr 2007 - v.0.9 | TWiki:Main.OliverKrueger: added header, footer and alt params. |
 | 17 Dec 2006 - v.0.8 | TWiki:Main.ArthurClemens: reworked for TWiki 4.1 and optimized; activated =filter= parameter, added topic view permission check. |
