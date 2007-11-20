@@ -14,6 +14,7 @@
 package TWiki::Plugins::FileListPlugin;
 
 use strict;
+use TWiki::Plugins::FileListPlugin::FileData;
 
 use vars qw($VERSION $RELEASE $web $topic $user $installWeb $pluginName
   $debug $renderingWeb $defaultFormat
@@ -27,7 +28,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '0.9.1';
+$RELEASE = '0.9.2';
 
 $pluginName = 'FileListPlugin';    # Name of this Plugin
 
@@ -41,13 +42,15 @@ sub initPlugin {
         return 0;
     }
 
-    my $notSpecifiedFormat = '   * [[$fileUrl][$fileName]] $fileComment';
+    $defaultFormat = '   * [[$fileUrl][$fileName]] $fileComment';
 
     # Get plugin preferences
     $defaultFormat = TWiki::Func::getPreferencesValue('FORMAT')
       || TWiki::Func::getPluginPreferencesValue('FORMAT')
-      || $notSpecifiedFormat;
+      || $defaultFormat;
 
+    $defaultFormat =~ s/^[\\n]+//;    # Strip off leading \n
+    
     # Get plugin debug flag
     $debug = TWiki::Func::getPluginPreferencesFlag("DEBUG");
 
@@ -62,31 +65,40 @@ sub _handleFileList {
     my ( $args, $theWeb, $theTopic ) = @_;
     my %params = TWiki::Func::extractParameters($args);
 
-    my $thisWeb   = $params{'web'}   || $theWeb   || '';
-    my $thisTopic = $params{'topic'} || $theTopic || '';
+    my $web   = $params{'web'}   || $theWeb   || '';
+    my $topic = $params{'topic'} || $theTopic || '';
 
     # check if the user has permissions to view the topic
     my $user = TWiki::Func::getWikiName();
     my $wikiUserName = TWiki::Func::userToWikiName( $user, 1 );
     if (
         !TWiki::Func::checkAccessPermission(
-            'VIEW', $wikiUserName, undef, $thisTopic, $thisWeb
+            'VIEW', $wikiUserName, undef, $topic, $web
         )
       )
     {
         return '';
     }
 
+    my $outtext = "";
+
     my $format    = $params{'format'}    || $defaultFormat;
     my $header    = $params{'header'}    || '';
     my $footer    = $params{'footer'}    || '';
     my $alttext   = $params{'alt'}       || '';
-    my $hidefiles = $params{'hidefiles'} || '';
+    my $fileCount = $params{'fileCount'} || '';
     my $separator = $params{'separator'} || '';
 
-    my $showExtensions = $params{"showextensions"}
+    # filters
+    my $excludeTopics          = $params{'excludetopic'}     || '';
+    my $excludeWebs          = $params{'excludeweb'}     || '';
+    my $excludeFiles           = $params{'excludefile'}      || '';
+    my $excludeExtensionsParam = $params{'excludeextension'} || '';
+    my $extensionsParam        = $params{"extension"}
       || $params{"filter"};    # "abc, def" syntax. Substring match will be used
                                # param filter is deprecated
+    my %extensions        = makeHashFromString($extensionsParam);
+    my %excludeExtensions = makeHashFromString($excludeExtensionsParam);
 
     my $hideHidden = '';
     if ( defined $params{"hide"} ) {
@@ -96,30 +108,34 @@ sub _handleFileList {
           : 0;                 # don't hide by default
     }
 
-    my %hiddenFiles = createHash($hidefiles);
+    my %hiddenFiles = makeHashFromString($excludeFiles);
 
-    my ( $meta, $text ) = TWiki::Func::readTopic( $thisWeb, $thisTopic );
-    my $outtext = "";
+    my @files = createAttachmentList( $topic, $web, $excludeTopics, $excludeWebs );
 
-    # Make sure filter string is valid.
-    if ($showExtensions) {
-
-        # Convert it into regexp to search files against.
-        # "abc, bcd" => (abc)|(bcd)
-        $showExtensions =~ s/\s*([\w\._\-\+\s]*)\s*,/($1)|/g;
-        $showExtensions =~ s/\s*([\w\._\-\+\s]*)\s*$/($1)/;
-    }
-
-    # store once for reuse in loop
+    # store once for re-use in loop
     my $pubUrl = TWiki::Func::getUrlHost() . TWiki::Func::getPubUrlPath();
 
-    my @attachments = $meta->find("FILEATTACHMENT");
+    my $count = 0;
+    foreach my $fileData (@files) {
 
-    foreach my $attachment (@attachments) {
-        my $file = $attachment->{name};
+        my $attachmentTopic    = $fileData->{'topic'};
+        my $attachmentTopicWeb = $fileData->{'web'};
+        my $attachment         = $fileData->{'attachment'};
 
-        next if ( $showExtensions && !( $file =~ m/$showExtensions/ ) );
-        next if ( $hiddenFiles{$file} );
+        # do not show file if user has no permission to view this topic
+		next if (!TWiki::Func::checkAccessPermission(
+				'VIEW', $wikiUserName, undef, $attachmentTopic, $attachmentTopicWeb));
+		
+        my $filename = $attachment->{name};
+
+        my $fileExtension = getFileExtension($filename);
+
+        if (   ( keys %extensions && !$extensions{$fileExtension} )
+            || ( $excludeExtensions{$fileExtension} ) )
+        {
+            next;
+        }
+        next if ( $hiddenFiles{$filename} );
 
         my $attrSize    = $attachment->{size};
         my $attrUser    = $attachment->{user};
@@ -142,11 +158,11 @@ sub _handleFileList {
           if ( $attrSize >= 100 );
         $attrComment = $attrComment || "";
         my $s = "$format";
-        $s =~ s/\$fileName/$file/g;
+        $s =~ s/\$fileName/$filename/g;
 
         if ( $s =~ /fileIcon/ ) {
             ## To find the File Extention..
-            my @bits     = ( split( /\./, $file ) );
+            my @bits     = ( split( /\./, $filename ) );
             my $ext      = lc $bits[$#bits];
             my $fileIcon = '%ICON{"' . $ext . '"}%';
             $s =~ s/\$fileIcon/$fileIcon/g;
@@ -165,16 +181,18 @@ sub _handleFileList {
 
         if ( $s =~ /fileActionUrl/ ) {
             my $fileActionUrl =
-              TWiki::Func::getScriptUrl( $thisWeb, $thisTopic, "attach" )
-              . "?filename=$file&revInfo=1";
+              TWiki::Func::getScriptUrl( $attachmentTopicWeb, $attachmentTopic,
+                "attach" )
+              . "?filename=$filename&revInfo=1";
             $s =~ s/\$fileActionUrl/$fileActionUrl/;
         }
 
         if ( $s =~ /viewfileUrl/ ) {
             my $attrVersion = $attachment->{Version};
             my $viewfileUrl =
-              TWiki::Func::getScriptUrl( $thisWeb, $thisTopic, "viewfile" )
-              . "?rev=$attrVersion&filename=$file";
+              TWiki::Func::getScriptUrl( $attachmentTopicWeb, $attachmentTopic,
+                "viewfile" )
+              . "?rev=$attrVersion&filename=$filename";
             $s =~ s/\$viewfileUrl/$viewfileUrl/;
         }
 
@@ -183,11 +201,15 @@ sub _handleFileList {
             $s =~ s/\$hidden/$hidden/g;
         }
 
-        my $fileUrl = $pubUrl . "/$thisWeb/$thisTopic/$file";
+        my $fileUrl =
+          $pubUrl . "/$attachmentTopicWeb/$attachmentTopic/$filename";
+
         $s =~ s/\$fileUrl/$fileUrl/;
 
         my $sep = $separator || "\n";
         $outtext .= $s . $sep;
+
+        $count++;
     }
 
     # remove last separator
@@ -197,20 +219,84 @@ sub _handleFileList {
         $outtext = $alttext;
     }
     else {
+        $footer =~ s/\$fileCount/$count/go;
         $outtext = $header . "\n" . $outtext . $footer;
     }
 
     return $outtext;
 }
 
-sub createHash {
+sub getFileExtension {
+    my ($filename) = @_;
+
+    my $extension = $filename;
+    $extension =~ s/^.*?\.(.*?)$/$1/go;
+    return $extension;
+}
+
+=pod
+
+Goes through the topics in $topicString, f.e. '%TOPIC%, WebHome'
+or all topics in case of a wildcard '*'.
+
+Returns a list of FileData objects.
+
+=cut
+
+sub createAttachmentList {
+    my ( $topicString, $webString, $excludeTopicsString, $excludeWebssString ) = @_;
+
+    my @files = ();
+    my %excludeTopics = makeHashFromString($excludeTopicsString);
+    my %excludeWebs = makeHashFromString($excludeWebssString);
+
+    my @webs = ();
+	my @topics = ();
+	if ( $webString eq '*' ) {
+		@webs = TWiki::Func::getListOfWebs();
+	}
+	else {
+		@webs = split( /[\s,]+/, $webString );
+	}
+	foreach my $web (@webs) {
+		next if ( $excludeWebs{$web} );
+		my @topics = ();
+		if ( $topicString eq '*' ) {
+			@topics = TWiki::Func::getTopicList($web);
+		}
+		else {
+			@topics = split( /[\s,]+/, $topicString );
+		}
+		
+		foreach my $attachmentTopic (@topics) {
+			next if ( $excludeTopics{$attachmentTopic} );
+			my @topicFiles = createAttachmentListForTopic( $attachmentTopic, $web );
+			foreach my $attachment (@topicFiles) {
+				my $fd =
+				  TWiki::Plugins::FileListPlugin::FileData->new( $attachmentTopic,
+					$web, $attachment );
+				push @files, $fd;
+			}
+		}
+	}
+    return @files;
+}
+
+sub createAttachmentListForTopic {
+    my ( $topic, $web ) = @_;
+
+    my ( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
+    return $meta->find("FILEATTACHMENT");
+}
+
+sub makeHashFromString {
     my ($text) = @_;
-    
-    my %hash  = ();
+
+    my %hash = ();
 
     return %hash if !defined $text || !$text;
 
-    my $re    = '\b[\w\._\-\+\s]*\b';
+    my $re = '\b[\w\._\-\+\s]*\b';
     my @elems = split( /\s*($re)\s*/, $text );
     foreach (@elems) {
         $hash{$_} = 1;

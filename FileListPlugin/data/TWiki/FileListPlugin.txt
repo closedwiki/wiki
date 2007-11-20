@@ -13,17 +13,26 @@ View permissions are honored: if the user is not allowed to view the referring t
    * =%<nop>FILELIST{format="..." web="webname" topic="topicname"}%= - with specified format/web/topic
 
 | *Parameter* | *Comment* | *Example* |
-| =topic=     | Topic name to show attachments of | =<nop>%TOPIC%= |
-| =web=       | Web name of =topic= | =<nop>%WEB%= |
-| =format=    | Format string. Use the format in the table below | |
-| =separator=    | String to separate listed entries | |
-| =header=    | If there are hits this header is prepended | |
-| =footer=    | If there are hits this footer is appended | |
-| =alt=       | Alternate text if nothing is found | |
-| =hide=      | Wether !FileListPlugin should hide the attachments marked as hidden. Disabled by default, set to "yes", "on" or "1" to enable | |
-| =filter= (deprecated)   | Use =showextensions= |
-| =showextensions=  | Comma separated list of file extensions to be listed |=gif,jpg= |
-| =hidefiles= | Comma separated list of filenames to hide | |
+| =topic=     | Topic name to show attachments of. Possible values: \
+%BB% one topic \
+%BB% a comma-separated list of topic names \
+%BB% a wildcard * to search in all topics in the web; exclude topics using =excludetopics= | =topic="<nop>%TOPIC%"=, =topic="<nop>%TOPIC%, <nop>WebHome"=, =topic="*"= |
+| =excludetopic= | Comma-separated list of topic names to not show the attachments of | =excludetopic="<nop>WebPreferences, <nop>WebHome"= |
+| =web=       | Web name to show attachments of. Possible values: \
+%BB% one web \
+%BB% a comma-separated list of web names \
+%BB% a wildcard * to search in all webs; exclude topics using =excludeweb= | =web="<nop>%WEB%"=, =web="<nop>%WEB%, <nop>Main"=, =web="*"= |
+| =excludeweb= | Comma-separated list of web names to not show the attachments of | =web="*" excludeweb="TWiki"= |
+| =format=    | Format string; use the format in the table below | =format="[<nop>[$fileUrl][$fileName]]"= |
+| =separator=    | String to separate listed entries | =separator=","= |
+| =header=    | If there are hits this header is prepended | =header="All files:"= |
+| =footer=    | If there are hits this footer is appended |=footer="Number of files: $fileCount"= |
+| =alt=       | Alternate text if nothing is found |=alt="No files found"= |
+| =hide=      | Set to "on" to show only non-hidden attachments; by default the hidden property is ignored | =hide="on"= |
+| =filter= (deprecated)   | Use =extension= |
+| =extension=  | Comma-separated list of file extensions to be listed |=extension="gif, jpg"= |
+| =excludeextension=  | Comma-separated list of file extensions to not show | =excludeextension="htm"= |
+| =excludefile= | Comma-separated list of filenames to not show, possibly generated from a search | =excludefile="ReadMe.txt"= |
 
 | *Format parameter* | *Comment* |
 | =$fileName=  | Name of the file |
@@ -35,6 +44,7 @@ View permissions are honored: if the user is not allowed to view the referring t
 | =$fileUrl=  | URL of the file, assumes =ATTACHURL= path |
 | =$viewfileUrl= | Full path with =viewfile= as script name |
 | =$fileActionUrl= | Full path of management URL for this file (for changing properties etcetera) |
+| =$fileCount= | Number of listed files  |
 | =$hidden= | 'hidden' if the attachment is hidden, nothing otherwise |
 | =$n= | newline character |
 | =$br= | =&lt;br /&gt;= tag |
@@ -54,7 +64,7 @@ Output (if installed):
 
 	* Default format of rendering the attachments:
 <verbatim>
-		* Set FORMAT = $n   * [[$fileUrl][$fileName]] $fileComment
+		* Set FORMAT = \n   * [[$fileUrl][$fileName]] $fileComment
 </verbatim>
    * Set SHORTDESCRIPTION = Displays a formattable list of topic attachments, anywhere in a topic.
    * Set DEBUG = 0
@@ -77,7 +87,7 @@ Output (if installed):
 | Copyright &copy;: | TWiki:Main.VinodKulkarni, TWiki:Main.SopanShewale (2006), TWiki:Main.ArthurClemens (2006, 2007) |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
-| 20 Nov 2007 - v.0.9.1 | Arthur Clemens: deprecated =filter= in favor of =showextensions=; added =hidefiles=; added =separator= |
+| 20 Nov 2007 - v.0.9.2 | Arthur Clemens: deprecated =filter= in favor of =extensions=; added more options. |
 | 18 Jun 2007 | TWiki:Main/AntonioTerceiro: added support for handling hidden attchments. |
 | 08 Apr 2007 - v.0.9 | TWiki:Main.OliverKrueger: added header, footer and alt params. |
 | 17 Dec 2006 - v.0.8 | TWiki:Main.ArthurClemens: reworked for TWiki 4.1 and optimized; activated =filter= parameter, added topic view permission check. |
