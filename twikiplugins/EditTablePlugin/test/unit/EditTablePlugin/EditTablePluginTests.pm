@@ -510,7 +510,7 @@ INPUT
 <nop>
 <table cellspacing="0" id="default" cellpadding="0" class="twikiTable" rules="rows" border="1">
 	<tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
-		<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <img src="%PUBURLPATH%/%SYSTEMWEB%/TWikiDocGraphics/choice-yes.gif" alt="DONE" title="DONE" width="16" height="16" border="0" /> </td>
+		<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <img src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/choice-yes.gif" alt="DONE" title="DONE" width="16" height="16" border="0" /> </td>
 		<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLast"> <a href="$viewUrl" class="twikiCurrentTopicLink twikiLink">$topicName</a> </td>
 		<td bgcolor="#ffffff" valign="top" class="twikiTableCol2 twikiLastCol twikiLast"> <a href="$viewUrl" class="twikiCurrentTopicLink twikiLink">$topicName</a> </td>
 	</tr></table>
@@ -520,7 +520,7 @@ INPUT
 END
 
     $expected =~ s/%PUBURLPATH%/$TWiki::cfg{PubUrlPath}/e;
-    $expected =~ s/%SYSTEMWEB%/TWiki/g;
+    $expected =~ s/%TWIKIWEB%/TWiki/g;
 
     $this->do_testHtmlOutput( $expected, $result, 1 );
 }

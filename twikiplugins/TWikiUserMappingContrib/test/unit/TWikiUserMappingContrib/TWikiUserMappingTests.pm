@@ -221,7 +221,7 @@ sub groupFix {
     $twiki->{users}->{mapping}->addUser( "zuser","ZebediahUser", $me);
     $twiki->{store}->saveTopic(
         $twiki->{user}, $testUsersWeb, 'AmishGroup',
-        "   * Set GROUP = AaronUser,%USERSWEB%.GeorgeUser\n");
+        "   * Set GROUP = AaronUser,%MAINWEB%.GeorgeUser\n");
     $twiki->{store}->saveTopic(
         $twiki->{user}, $testUsersWeb, 'BaptistGroup',
         "   * Set GROUP = GeorgeUser,$testUsersWeb.ZebediahUser\n");

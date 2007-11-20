@@ -15,15 +15,15 @@ If you haven't previously set up an administrator, follow these steps:
    1 Insert the wikinames of admin users in the TWiki Administrator Group by listing them in the GROUP setting %BR% (example =* Set GROUP = <nop>JohnSmith, <nop>JamesBond=)
    1 Save this topic
    1 [[%LOGOUTURL%][Logout]] from the Internal TWikiAdminUser
-   1 Verify that new members show up properly in the group listing at %USERSWEB%.TWikiGroups
+   1 Verify that new members show up properly in the group listing at %MAINWEB%.TWikiGroups
    1 Make sure always to keep this topic write protected by keeping the already defined ALLOWTOPICCHANGE setting
-   1 The ALLOWTOPICHANGE and ALLOWTOPICRENAME settings in [[%SYSTEMWEB%.TWikiPreferences]] and [[%USERSWEB%.TWikiPreferences]] have already been set to this group (<nop>TWikiAdminGroup), restricting edit of site-wide preferences to the TWiki Administrator Group
+   1 The ALLOWTOPICHANGE and ALLOWTOPICRENAME settings in [[%TWIKIWEB%.TWikiPreferences]] and [[%MAINWEB%.TWikiPreferences]] have already been set to this group (<nop>TWikiAdminGroup), restricting edit of site-wide preferences to the TWiki Administrator Group
 <sticky></div></sticky>
 
-__Related topics:__ %WIKIUSERSTOPIC%, TWikiAdminUser, TWikiGroups, %SYSTEMWEB%.TWikiAccessControl
+__Related topics:__ %WIKIUSERSTOPIC%, TWikiAdminUser, TWikiGroups, %TWIKIWEB%.TWikiAccessControl
 ---
 __%X% NOTE:__ You can login as the built-in TWikiAdminUser using the password set in configure.
-%INCLUDE{"%USERSWEB%.TWikiAdminUser" section="sudo_login"}%
+%INCLUDE{"%MAINWEB%.TWikiAdminUser" section="sudo_login"}%
 ---
 __%X% NOTE:__ If you lock yourself out of <nop>TWikiAdminGroup during setup activities, or have forgotten the configure password, you can edit this group topic at file system level using any text file editor (as a last resort.)
 ---
