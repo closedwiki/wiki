@@ -37,7 +37,6 @@ document.write(styleText);
 
 %TMPL:P{"usernamefield"}% %TMPL:P{"usernamefieldhelp"}%
 
-<p>%TMPL:P{"loginasadministratorlink"}%</p>
 </div><!-- /twikiFormStep-->%TMPL:END%
 
 %TMPL:DEF{"usernamefieldhelp"}%%TWISTY{mode="span" showlink="%MAKETEXT{"Help"}%" hidelink="%MAKETEXT{"Hide help"}%" remember="on"}% <div class="twikiHelp">%TMPL:P{"usernamenote"}%</div> %ENDTWISTY%%TMPL:END%
@@ -54,7 +53,8 @@ document.write(styleText);
 %TMPL:DEF{"form"}%<div id="twikiLogin">
 %TMPL:P{"formstart"}%
 <div class="twikiFormSteps">%TMPL:P{"titlestep"}%
-%TMPL:P{"usernamestep"}%%TMPL:P{"passwordstep"}%%TMPL:P{"submitstep"}%</div><!-- /twikiFormSteps-->
+%TMPL:P{"usernamestep"}%%TMPL:P{"passwordstep"}%%TMPL:P{"submitstep"}%<p>%TMPL:P{"loginasadministratorlink"}%</p>
+</div><!-- /twikiFormSteps-->
 %TMPL:P{"formend"}%
 
 <span class="twikiGrayText">%TMPL:P{"seealsonote"}%</span>

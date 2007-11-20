@@ -33,7 +33,6 @@
 %TMPL:DEF{"usernamestep"}%<p> *%MAKETEXT{"Username"}%* %BR%
 %TMPL:P{"usernamefield"}% %BR%
 %TMPL:P{"usernamenote"}% %BR%
-%TMPL:P{"loginasadministratorlink"}%</p>
 %TMPL:END%
 
 %TMPL:DEF{"usernamenote"}%%TMPL:P{"authrealm"}%%TMPL:END%
@@ -56,7 +55,7 @@
 
 %TMPL:DEF{"submit"}%<p><input tabindex='4' type='submit' class='twikiSubmit' value='%MAKETEXT{"Logon"}%' /></p>%TMPL:END%
 
-%TMPL:DEF{"loginasadministratorlink"}%%MAKETEXT{"or [_1]" args=" "}%<input type="submit" name="sudo" value="log in as administrator"}%" />%TMPL:END%
+%TMPL:DEF{"loginasadministratorlink"}%<input type="submit" name="sudo" value="%MAKETEXT{"administrator login"}%" class="twikiEmulatedLink" style="margin:0px;padding:0px;border:none;background-color:transparent;vertical-align:middle;float:right"}%" />%TMPL:END%
 
 %TMPL:DEF{"seealsonote"}%%MAKETEXT{"If you have any questions, please contact [_1]" args="%WIKIWEBMASTER%"}%%TMPL:END%
 
@@ -66,6 +65,7 @@
 %TMPL:P{"notestep"}%%TMPL:P{"errorstep"}%
 %TMPL:P{"usernamestep"}%%TMPL:P{"passwordstep"}%%TMPL:P{"submitstep"}%
 </fieldset>
+%TMPL:P{"loginasadministratorlink"}%
 %TMPL:P{"formend"}%
 %TMPL:END%
 
