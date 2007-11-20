@@ -230,7 +230,7 @@ Describe the file so other people know what it is.
 ---++ Help text
 
 <div class="twikiHelp"><ul>
-<li> <strong>Help:</strong> Please see <a target='TWikiVariables' onclick="return launchWindow('TWiki','FileAttachment')" href='' rel='nofollow'>FileAttachment</a> for more information about attaching files.
+<li> <strong>Help:</strong> Please see <a class="twikiPopUp" target='FileAttachment' href="%SCRIPTURL{view}%/%SYSTEMWEB%/FileAttachment" rel='nofollow'>FileAttachment</a> for more information about attaching files.
 </li> <li> <strong>Bug:</strong> Internet Explorer 4.0 or earlier: If you get an "Internal Server Error" message when you upload a file, you need to try again. It should work the second time.
 </li></ul> 
 </div>
