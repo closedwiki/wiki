@@ -131,6 +131,52 @@ twiki.Form = {
 		return str;
 	},
 	
+	/**
+	Makes form field values safe to insert in a TWiki table. Any table-breaking characters are replaced.
+	@param inForm: (String) the form to make safe
+	*/
+	makeSafeForTableEntry:function(inForm) {
+		if (!inForm) return null;
+		var formElem;
+		
+		for (i = 0; i < inForm.elements.length; i++) {
+			formElem = inForm.elements[i];
+			switch (formElem.type) {
+				// Text fields, hidden form elements
+				case 'text':
+				case 'password':
+				case 'textarea':
+					formElem.value = twiki.Form._makeTextSafeForTableEntry(formElem.value);
+					break;
+			}
+		}
+	},
+	
+	/**
+	Makes a text safe to insert in a TWiki table. Any table-breaking characters are replaced.
+	@param inText: (String) the text to make safe
+	@return table-safe text.
+	*/
+	_makeTextSafeForTableEntry:function(inText) {
+		if (inText.length == 0) return "";
+		var safeString = inText;
+		var re;
+		// replace \n by \r
+		re = new RegExp(/\r/g);
+		safeString = safeString.replace(re, "\n");	
+		// replace pipes by forward slashes
+		re = new RegExp(/\|/g);
+		safeString = safeString.replace(re, "/");
+		// replace double newlines
+		re = new RegExp(/\n\s*\n/g);
+		safeString = safeString.replace(re, "%<nop>BR%%<nop>BR%");
+		// replace single newlines
+		re = new RegExp(/\n/g);
+		safeString = safeString.replace(re, "%<nop>BR%");
+		// make left-aligned by appending a space
+		safeString += " ";
+		return safeString;
+	},
 	
 	/**
 	Finds the form element.

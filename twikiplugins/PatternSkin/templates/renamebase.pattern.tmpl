@@ -1,6 +1,10 @@
 %TMPL:INCLUDE{"renamebase"}%
 
 
+%TMPL:DEF{"script:skintemplate"}%<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiJavascripts/twiki_renamebase.js"></script>
+</script>%TMPL:END%
+
+
 %TMPL:DEF{"bodyclassname"}%patternNoViewPage patternRenamePage%TMPL:END%
 
 
@@ -24,6 +28,10 @@ hideimgleft="%ICONURLPATH{toggleclose}%"}%</div><!--//patternTop-->%TMPL:END%
 <div class="twikiFormStep">%TMPL:P{"toweb"}%</div><!-- /twikiFormStep-->
 <div class="twikiFormStep twikiLast">%TMPL:P{"totopic"}%</div><!-- /twikiFormStep-->
 %TMPL:P{"searchresultsstep"}%</div><!-- /twikiFormSteps-->%TMPL:END%
+
+
+%TMPL:DEF{"checkuncheck"}%<div class="twikiMakeVisibleBlock"><hr />
+<p><input type="button" class="twikiButton" value='%MAKETEXT{"Select all"}%' onclick="checkAll(document.rename,true);" />&nbsp;<input type="button" class="twikiButton" value='%MAKETEXT{"Clear all"}%' onclick="checkAll(document.rename,false);" /> %MAKETEXT{"checkboxes of referenced topics"}%</p></div>%TMPL:END%
 
 
 %TMPL:DEF{"content"}%%TMPL:P{"toolbar"}%

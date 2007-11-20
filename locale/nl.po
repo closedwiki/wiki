@@ -877,7 +877,7 @@ msgstr "Wijzig van:"
 #: data/TWiki/LanguageSelector.txt:16 templates/oopschangelanguage.tmpl:20
 #: templates/oopschangelanguage.tmpl:4 templates/oopslanguagechanged.tmpl:5
 msgid "Change language"
-msgstr "Taal gewijzigd"
+msgstr "Wijzig taal"
 
 #: templates/renamewebbase.tmpl:43
 msgid "Change links in topics that refer to !%1 in any Web:"

@@ -119,7 +119,7 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
 <form id="testForm" name="testForm">
 
 <!-- text input -->
-<input type="text" name="testInput" value="TESTTEXT" size="40" disabled=true />
+<input type="text" name="testInput" id="testInput" value="TESTTEXT" size="40" disabled=true />
 
 <!-- text input -->
 <input type="password" name="testPwd" value="secret" size="40" disabled=true />
@@ -202,6 +202,32 @@ These tests require TWiki:Plugins.JSUnitContrib to run.
 
 /*]]>*/
 </script>
+
+
+---+++ twiki.Form.makeSafeForTableEntry
+
+<script language="javascript">
+/*<![CDATA[*/
+
+    function testMakeSafeForTableEntry() {
+    	{
+    		var form = document.getElementById('testForm');
+    		var formElem = document.getElementById('testInput');
+    		var testValue = "1111|2222";
+    		formElem.value = testValue;
+    		assertEquals("Before make safe", formElem.value, testValue);
+			var EXPECTED = "1111/2222 ";
+			
+			twiki.Form.makeSafeForTableEntry( form );
+			assertEquals("Before make safe", formElem.value, EXPECTED);
+
+		}
+    }
+
+/*]]>*/
+</script>
+
+
 
 ---++ twiki.HTML
 

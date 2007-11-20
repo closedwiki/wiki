@@ -20,8 +20,8 @@
 %TMPL:DEF{"formtop"}%%TMPL:END%
 %TMPL:DEF{"formbottom"}%%TMPL:P{"form"}%%TMPL:END%
 
-%TMPL:DEF{"formstart"}%<div class="twikiFormHolder twistyMakeHidden" id="formHolder">
-<form name="main" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%" method="post" onsubmit="return validateTWikiMandatoryFields(event)">%TMPL:END%
+%TMPL:DEF{"formstart"}%<div class="twikiFormHolder" id="formHolder">
+<form name="main" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%" method="post">%TMPL:END%
 
 %TMPL:DEF{"formend"}%%TMPL:P{"formparameters"}%
 </form></div><!-- /twikiFormHolder-->%TMPL:END%
@@ -50,13 +50,8 @@
 %TMPL:DEF{"footernote"}%%TMPL:P{"help"}%%TMPL:END%
 
 
-%TMPL:DEF{"topicactionbuttons"}%<input type="submit" class="twikiSubmit" name="action_cancel" value="Cancel" id="cancel" onclick="suppressTWikiSaveValidation()" />%TMPL:P{"sep"}%<input type="submit" class="twikiSubmit" name="action_save" value="Save" id="save" />%TMPL:P{"sep"}%<input type="submit" class="twikiSubmit" name="action_preview" value="Preview" id="preview" onclick="enableTWikiMandatoryChecks()" />%TMPL:END%
+%TMPL:DEF{"topicactionbuttons"}%<input type="submit" class="twikiSubmit" name="action_cancel" value="Cancel" id="cancel" />%TMPL:P{"sep"}%<input type="submit" class="twikiSubmit" name="action_save" value="Save" id="save" />%TMPL:P{"sep"}%<input type="submit" class="twikiSubmit" name="action_preview" value="Preview" id="preview" />%TMPL:END%
 
-%TMPL:DEF{"script:skintemplate"}%%TMPL:P{"script:skintemplate:edit"}%%TMPL:END%
-%TMPL:DEF{"script:skintemplate:edit"}%<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiJavascripts/twikiPref.js"></script>
-<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiJavascripts/twikiCSS.js"></script>
-<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiJavascripts/twikiEvent.js"></script>
-<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiJavascripts/twiki_edit.js"></script>%TMPL:END%
 
 %TMPL:DEF{"content"}%%TMPL:P{"formstart"}%%TMPL:P{"formtop"}%
 %TMPL:P{"textarea"}%

@@ -243,6 +243,11 @@ a.twikiSubmit:visited:active {
 	border:0px;
 }
 
+/* RevCommentPlugin */
+.patternEditPage .revComment {
+	padding:1em 0 2em 0;
+}
+
 /* EditTablePlugin */
 .editTable .twikiTable {
 	margin:0 0 2px 0;

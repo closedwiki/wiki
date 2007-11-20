@@ -6,7 +6,7 @@
 
 %TMPL:DEF{"nonwikiwordwarning"}%<p><input type="checkbox" id="nonwikiword" name="nonwikiword" %NONWIKIWORDFLAG% /><label for="nonwikiword">%MAKETEXT{"Allow non <nop>WikiWord for the new topic name"}%</label><br />%TMPL:P{"nonwikiwordhelp"}%</p>%TMPL:END%
 
-%TMPL:DEF{"nonwikiwordhelp"}% %MAKETEXT{"It's usually best to choose a <a target='WikiWord' onclick=\"launchWindow('[_1]','WikiWord'); return false;\" href='[_2]' rel='nofollow'>WikiWord</a> for the new topic name, otherwise automatic linking may not work. Characters not allowed in topic names, such as spaces will automatically be removed." args="%SYSTEMWEB%,%SCRIPTURLPATH{"view"}%/%SYSTEMWEB%/WikiWord"}%%TMPL:END%
+%TMPL:DEF{"nonwikiwordhelp"}% %MAKETEXT{"It's usually best to choose a <a target='WikiWord' class='twikiPopUp' href='[_1]' rel='nofollow'>WikiWord</a> for the new topic name, otherwise automatic linking may not work. Characters not allowed in topic names, such as spaces will automatically be removed." args="%SCRIPTURLPATH{"view"}%/%SYSTEMWEB%/WikiWord"}%%TMPL:END%
 
 %TMPL:DEF{"nonwikiwordallowed"}%<input type="hidden" name="nonwikiword" value="on" />%TMPL:END%
 
@@ -17,8 +17,7 @@
 
 %TMPL:DEF{"script"}%%TMPL:P{"script:skinbase"}%%TMPL:P{"script:skintemplate"}%%TMPL:P{"script:topictemplate"}%%TMPL:END%
 
-%TMPL:DEF{"script:skinbase"}%<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiJavascripts/twikilib.js"></script>
-<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiJavascripts/twikiWindow.js"></script>%TMPL:END%
+%TMPL:DEF{"script:skinbase"}%%TMPL:END%
 
 %TMPL:DEF{"script:skintemplate"}%%TMPL:END%
 %TMPL:DEF{"script:topictemplate"}%%TMPL:END%
@@ -32,7 +31,7 @@
     <meta name="scriptsuffix" content="%SCRIPTSUFFIX%" />
 	<link rel="icon" href="%FAVICON%" type="image/x-icon" /> <link rel="shortcut icon" href="%FAVICON%" type="image/x-icon" />
 	<meta name="description" content="%TOPIC%" />
-        <base href="%SCRIPTURL{%SCRIPTNAME%}%/%WEB%/%TOPIC%"></base>
+    <base href="%SCRIPTURL{%SCRIPTNAME%}%/%WEB%/%TOPIC%"></base>
 	%TMPL:P{"script"}%
 	%TMPL:P{"defaultstyle"}%
 </head>%TMPL:END%
@@ -67,6 +66,7 @@
 %TMPL:DEF{"copyright"}%<div class="twikiCopyright">%WEBCOPYRIGHT%</div>%TMPL:END%
 
 %TMPL:DEF{"footernote"}%%TMPL:END%
+%TMPL:DEF{"content"}%%TMPL:END%
 
 %TMPL:DEF{"standardfooter"}%#PageBottom
 %TMPL:P{"footernote"}%%TMPL:P{"copyright"}%%TMPL:END%

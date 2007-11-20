@@ -121,6 +121,7 @@ A wide range of standard styles are used in the TWiki core code and topics, and 
 |.twikiMakeVisibleBlock  |For =div= elements that should only be visible with javascript on: default set to hidden, is made visible by javascript. |
 |.twikiMakeHidden  |For elements that should be *hidden* with javascript on: no default style, is made hidden by javascript. |
 |.twikiFooterNote  | |
+|.twikiPopUp | Behaviour marker so a popup-window can be invoked |
 
 ---+++ TWiki Styles used in =configure=
 |#twikiLogin  |CSS.pm  |

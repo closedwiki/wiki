@@ -93,6 +93,7 @@ templates/preview.pattern.tmpl 0444
 templates/rdiff.pattern.tmpl 0444
 templates/renameattachmentdelete.pattern.tmpl 0444
 templates/renamebase.pattern.tmpl 0444
+templates/renamedelete.pattern.tmpl 0444
 templates/renamewebbase.pattern.tmpl 0444
 templates/search.pattern.tmpl 0444
 templates/searchbase.pattern.tmpl 0444

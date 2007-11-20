@@ -1,9 +1,6 @@
 %{ This is a default template }%%TMPL:INCLUDE{"twiki"}%
 
 
-%TMPL:DEF{"script:skintemplate"}%<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiJavascripts/twiki_renamebase.js"></script>%TMPL:END%
-
-
 %TMPL:DEF{"formstart"}%<form method="post" name="rename" action="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%">%TMPL:END%
 
 %TMPL:DEF{"formend"}%</form>%TMPL:END%
@@ -39,8 +36,7 @@
 %TMPL:DEF{"renameformsteps"}%%TMPL:P{"changefrom"}%%TMPL:P{"toweb"}%%TMPL:P{"totopic"}%%TMPL:P{"searchresultsstep"}%%TMPL:END%
 
 
-%TMPL:DEF{"checkuncheck"}%<hr />
-<p><input type="button" class="twikiButton" value='%MAKETEXT{"Select all"}%' onclick="checkAll(document.rename,true);" />&nbsp;<input type="button" class="twikiButton" value='%MAKETEXT{"Clear all"}%' onclick="checkAll(document.rename,false);" /> %MAKETEXT{"checkboxes of referenced topics"}%</p>%TMPL:END%
+%TMPL:DEF{"checkuncheck"}%%TMPL:END%
 
 
 %TMPL:DEF{"updatenote"}%%MAKETEXT{"Checked topics will be updated to point to the new topic location."}%%TMPL:END%
@@ -67,7 +63,7 @@
 
 
 %TMPL:DEF{"notegethelp"}%
-   * %MAKETEXT{"Get help on <a target='ManagingTopics' onclick=\"return launchWindow('[_1]','ManagingTopics')\" href=\"[_2]\" rel='nofollow'>Renaming and moving topics</a>." args="%SYSTEMWEB%,%SCRIPTURLPATH{"view"}%/%SYSTEMWEB%/ManagingTopics"}%
+   * %MAKETEXT{"Get help on <a target='ManagingTopics' class='twikiPopUp' href='[_1]' rel='nofollow'>Renaming and moving topics</a>." args="%SCRIPTURLPATH{"view"}%/%SYSTEMWEB%/ManagingTopics"}%
 %TMPL:P{"notecheckmarkedtopics"}%
 %TMPL:END%
 
