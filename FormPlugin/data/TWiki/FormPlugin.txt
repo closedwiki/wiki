@@ -306,7 +306,7 @@ See =FORMELEMENT:validate= for usage instructions. %BR%
 Use =%<nop>FORMSTATUS{}%= to retrieve the status of the form; see [[#FormStatus][FORMSTATUS]].
 
 ---++ Examples
-See [[FormPluginExamples]]
+See [[Sandbox.FormPluginExamples]]
 
 
 ---+++ Upload form
@@ -358,7 +358,7 @@ options="on=Create a link to the attached file"
 }%
 </verbatim>
 
-See the working example in [[FormPluginExamples#Upload][FormPluginExamples:Upload]]
+See the working example in [[Sandbox.FormPluginExamples#Upload][FormPluginExamples:Upload]]
 
 
 
@@ -411,7 +411,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
      | ==data/TWiki/FormPlugin.txt== | Plugin topic |
-     | ==data/TWiki/FormPluginExamples.txt== | Working examples |
+     | ==data/Sandbox/FormPluginExamples.txt== | Working examples |
      | ==lib/TWiki/Plugins/FormPlugin.pm== | Plugin Perl module |
      | ==lib/TWiki/Plugins/FormPlugin/Validate.pm== | Plugin Perl module for form validation |
      | ==pub/TWiki/FormPlugin/formplugin.css== | Style Sheet  |
@@ -423,7 +423,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 |  Plugin Author: | TWiki:Main.ArthurClemens |
 |  Other authors: | =Validate.pm=, originally =CGI::Validate= by Zenin <zenin@archive.rhps.org> aka Byron Brummer <byron@omix.com>. Copyright (c) 1997,1998 OMIX, Inc. All rights reserved. Use is granted under the same terms of Perl. |
-|  Plugin Version: | 19 Oct 2007 (V1.1)  |
+|  Plugin Version: | 20 Nov 2007 (V1.1.1)  |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  19 Oct 2007 | 1.1 Added =date= type. |
 |  09 Jun 2007 | 1.0.5 Added upload parameter; option to turn off form validation; custom javascript has been replaced by code in =pub/TWiki/TWikiJavascripts/twikiForm.js=; added Flickr example. |
