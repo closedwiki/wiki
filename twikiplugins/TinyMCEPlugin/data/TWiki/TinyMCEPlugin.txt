@@ -57,7 +57,7 @@ For a full explanation of the available options, and guidance on reconfiguring T
    twiki_vars : { PUBURLPATH : "%PUBURLPATH%", PUBURL : "%PUBURL%", WEB : "%WEB%", TOPIC : "%TOPIC%", ATTACHURL : "%ATTACHURL%", ATTACHURLPATH : "%ATTACHURLPATH%", VIEWSCRIPTURL : "%SCRIPTURL{view}%", SCRIPTSUFFIX: "%SCRIPTSUFFIX%", SCRIPTURL : "%SCRIPTURL%" },
    theme_advanced_toolbar_align : "left",
    twikibuttons_formats : [
-   { name: "None", el: "", style: null },
+   { name: "Normal", el: "", style: null },
    { name: "Heading 1", el: "h1", style: false },
    { name: "Heading 2", el: "h2", style: false },
    { name: "Heading 3", el: "h3", style: false },
