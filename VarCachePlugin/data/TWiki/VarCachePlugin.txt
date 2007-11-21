@@ -73,7 +73,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Copyright: | &copy; 2004-2006, [[http://www.structuredwikis.com/][Peter Thoeny]] |
+|  Copyright: | &copy; 2004-2007, [[http://www.twiki.net/][TWIKI.NET]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 06 Jan 2006 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
