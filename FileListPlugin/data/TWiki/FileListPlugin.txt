@@ -23,7 +23,9 @@ View permissions are honored: if the user is not allowed to view the referring t
 %BB% a comma-separated list of web names \
 %BB% a wildcard * to search in all webs; exclude topics using =excludeweb= | =web="<nop>%WEB%"=, =web="<nop>%WEB%, <nop>Main"=, =web="*"= |
 | =excludeweb= | Comma-separated list of web names to not show the attachments of | =web="*" excludeweb="TWiki"= |
-| =format=    | Format string; use the format in the table below | =format="[<nop>[$fileUrl][$fileName]]"= |
+| =limit=     | The maximum number of files to display. This setting has no cosequences for rendering time. | =limit="10"= |
+| =format=    | Format string; use the format in the table below. To render images, use format parameter =$imgTag= (see also plugin setting =IMAGE_FORMAT=). | =format="   * [<nop>[$fileUrl][$fileName]]"= %BR% \
+To create a list of images, use: =extension="jpg,jpeg,gif" format="   * &lt;a href='$fileUrl'&gt;$imgTag&lt;/a&gt;"= |
 | =separator=    | String to separate listed entries | =separator=","= |
 | =header=    | If there are hits this header is prepended | =header="All files:"= |
 | =footer=    | If there are hits this footer is appended |=footer="Number of files: $fileCount"= |
@@ -33,6 +35,9 @@ View permissions are honored: if the user is not allowed to view the referring t
 | =extension=  | Comma-separated list of file extensions to be listed |=extension="gif, jpg"= |
 | =excludeextension=  | Comma-separated list of file extensions to not show | =excludeextension="htm"= |
 | =excludefile= | Comma-separated list of filenames to not show, possibly generated from a search | =excludefile="ReadMe.txt"= |
+
+---+++ Formatting parameters
+These parameters can be used in the =format= tag:
 
 | *Format parameter* | *Comment* |
 | =$fileName=  | Name of the file |
@@ -44,27 +49,81 @@ View permissions are honored: if the user is not allowed to view the referring t
 | =$fileUrl=  | URL of the file, assumes =ATTACHURL= path |
 | =$viewfileUrl= | Full path with =viewfile= as script name |
 | =$fileActionUrl= | Full path of management URL for this file (for changing properties etcetera) |
-| =$fileCount= | Number of listed files  |
+| =$imgTag= | Render an image tag using =IMAGE_FORMAT=; see =format= parameter above |
+| =$imgHeight= | Height of image in pixels |
+| =$imgWidth= | Width of image in pixels |
 | =$hidden= | 'hidden' if the attachment is hidden, nothing otherwise |
+
+These parameters can be used in the =format=, =header= and =footer= tags:
+
+| *Format parameter* | *Comment* |
 | =$n= | newline character |
 | =$br= | =&lt;br /&gt;= tag |
+
+These parameters can be used in the =header= and =footer= tags:
+
+| *Format parameter* | *Comment* |
+| =$fileCount= | Number of listed files  |
+| =$fileExtensions= | Comma-separated list of extensions of listed files  |
+
 
 ---++ Test
 
 <verbatim>
-%FILELIST{format="| $fileIcon | [[$fileUrl][$fileName]] ($fileSize) | Submitted by $fileUser on $fileDate | $fileComment |<span class='twikiGrayText'>[[$fileActionUrl][manage]]</span> |" web="%TWIKIWEB%" topic="FileAttachment"}%
+%FILELIST{
+web="%TWIKIWEB%"
+topic="FileAttachment"
+format="| $fileIcon | [[$fileUrl][$fileName]] ($fileSize) | Submitted by $fileUser on $fileDate | $fileComment |<span class='twikiGrayText'>[[$fileActionUrl][manage]]</span> |"
+}%
 </verbatim>
 
 Output (if installed):
 
-%FILELIST{format="| $fileIcon | [[$fileUrl][$fileName]] ($fileSize) | Submitted by $fileUser on $fileDate | $fileComment |<span class='twikiGrayText'>[[$fileActionUrl][manage]]</span> |" web="%TWIKIWEB%" topic="FileAttachment"}%
+%FILELIST{
+web="%TWIKIWEB%"
+topic="FileAttachment"
+format="| $fileIcon | [[$fileUrl][$fileName]] ($fileSize) | Submitted by $fileUser on $fileDate | $fileComment |<span class='twikiGrayText'>[[$fileActionUrl][manage]]</span> |"
+}%
 
+---+++ Image output
+
+<verbatim>
+%FILELIST{
+topic="WabiSabi"
+web="%TWIKIWEB%"
+extension="jpg,jpeg,gif,png"
+header="Images:"
+format="<div class='twikiImage'><a href='$fileUrl'>$imgTag</a></div>"
+separator="<hr />"
+footer="Number of images: $fileCount"
+}%
+</verbatim>
+
+Output (if installed):
+
+%FILELIST{
+topic="WabiSabi"
+web="%TWIKIWEB%"
+extension="jpg,jpeg,gif,png"
+header="Images:"
+format="<div class='twikiImage'><a href='$fileUrl'>$imgTag</a></div>"
+separator="<hr />"
+footer="Number of images: $fileCount"
+}%
 
 ---++ Plugin Settings
 
 	* Default format of rendering the attachments:
 <verbatim>
 		* Set FORMAT = \n   * [[$fileUrl][$fileName]] $fileComment
+</verbatim>
+	* Default format of rendering *image* attachments:
+<verbatim>
+		* Set IMAGE_FORMAT = <img src='$fileUrl' alt='$fileComment' title='$fileComment' />
+</verbatim>
+	* Specify image height and width parameters (switched off for performance; enable by removing the # sign):
+<verbatim>
+		* #Set IMAGE_FORMAT = <img src='$fileUrl' height='$imgHeight' width='$imgWidth' alt='$fileComment' title='$fileComment'  />
 </verbatim>
    * Set SHORTDESCRIPTION = Displays a formattable list of topic attachments, anywhere in a topic.
    * Set DEBUG = 0
@@ -87,6 +146,7 @@ Output (if installed):
 | Copyright &copy;: | TWiki:Main.VinodKulkarni, TWiki:Main.SopanShewale (2006), TWiki:Main.ArthurClemens (2006, 2007) |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
+| 21 Nov 2007 - v.0.9.3 | Arthur Clemens: added rendering of images; added =$fileExtensions= and =limit=. |
 | 20 Nov 2007 - v.0.9.2 | Arthur Clemens: deprecated =filter= in favor of =extensions=; added more options. |
 | 18 Jun 2007 | TWiki:Main/AntonioTerceiro: added support for handling hidden attchments. |
 | 08 Apr 2007 - v.0.9 | TWiki:Main.OliverKrueger: added header, footer and alt params. |
