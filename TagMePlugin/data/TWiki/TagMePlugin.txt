@@ -346,8 +346,8 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.TWikiContributor ([[http://www.structuredwikis.com/peter.html][blog]]) |
-|  Copyright: | &copy; 2006, 2007, Peter@Thoeny.org, [[http://www.structuredwikis.com/][StructuredWikis LLC]] |
+|  Plugin Author: | TWiki:Main/PeterThoeny, TWiki:Main/ArthurClemens |
+|  Copyright: | &copy; 2006-2007, Peter Thoeny, [[http://www.twiki.net/][TWIKI.NET]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 16 Oct 2007 (V1.046) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
@@ -392,7 +392,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TagMeViewAllTags, %TWIKIWEB%.TagMeViewMyTags, %TWIKIWEB%.TagMeSearch, %TWIKIWEB%.TagMeDebugViewTags, %TWIKIWEB%.TagMeDebugSearch, %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
--- TWiki:Main.PeterThoeny - 14 Nov 2006
+-- TWiki:Main.PeterThoeny - 16 Oct 2007
 
 %META:FILEATTACHMENT{name="tag_add.gif" attr="h" comment="Button: add tag" date="1141691885" path="tag_add.gif" size="857" user="TWikiContributor" version="1.1"}%
 %META:FILEATTACHMENT{name="tag_remove.gif" attr="h" comment="Button: remove tag" date="1141697484" path="tag_remove.gif" size="862" user="TWikiContributor" version="1.1"}%

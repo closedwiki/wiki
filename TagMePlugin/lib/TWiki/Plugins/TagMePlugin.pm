@@ -480,7 +480,8 @@ sub _showAllTags {
               . "vote on an existing tag.";
         }
 
-        my @ordered = sort { $tagCount{$a} <=> $tagCount{$b} } @tags;
+#        my @ordered = sort { $tagCount{$a} <=> $tagCount{$b} } @tags;
+        my @ordered = sort { $tagCount{$a} <=> $tagCount{$b} } keys(%tagCount);
         my %order = map { ( $_, $tagCount{$_} ) }
           @ordered;
         my $smallestItem = $ordered[0];
