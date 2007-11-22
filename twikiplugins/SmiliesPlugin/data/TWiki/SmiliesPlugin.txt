@@ -1,5 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
 ---+ The Smilies Plugin <nop>:-)
 
 Smilies are common in e-mail messages and bulletin board posts. They are used to convey an emotion, such as a smile :<nop>-) or a frown :<nop>-( . This plugin automatically converts certain smilies to a nice small icon.
@@ -33,19 +32,19 @@ Here is the list of smilies supported by this plugin. To add others, attach new 
 | <nop>:ok:         | %ATTACHURL%/thumbs.gif      | "thumbs up" |
 | <nop>:yes:      | %ATTACHURL%/yes.gif         | "yes" |
 | <nop>:no:         | %ATTACHURL%/no.gif          | "no" |
-| <nop>:love:       | %ATTACHURL%/love.gif        | "in love" |
-| <nop>:skull:      | %ATTACHURL%/skull.gif       | "skull" |
+| <nop>:love:       | %ATTACHURL%/love.gif        | "I love it!" |
+| <nop>:skull:      | %ATTACHURL%/skull.gif       | "dead!" |
 
 ---++ <nop>%TOPIC% Global Settings
 
 Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
-	* One line description, shown in the %SYSTEMWEB%.TextFormattingRules topic:
+	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
 	* Set SHORTDESCRIPTION = Render smilies as icons, like :-) for =&nbsp;:-)= or :eek: for =&nbsp;:eek:=
 
 	* The name of the topic containig your Smilies. Default: ==%WEB%.SmiliesPlugin==
-	* #Set TOPIC = %SYSTEMWEB%.SmiliesPlugin
+	* #Set TOPIC = %TWIKIWEB%.SmiliesPlugin
 
 	* The way the _emoticon_ is displayed. You can use ==$emoticon== (e.g. =:<nop>D=), ==$url== (e.g. =%<nop>ATTACHURL%/biggrin.gif=) and ==$tooltip== (e.g. ="big grin"=). Default: ==&lt;img src="$url" alt="$tooltip" title="$tooltip" border="0" /&gt;==
 <verbatim>
@@ -69,8 +68,10 @@ This plugin is installed by default with a TWiki release. You should not need to
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.AndreaSterbini, TWiki:Main.PeterThoeny |
-|  Plugin Version: | 1.004 |
+|  Copyright: | &copy; 2001-2007, Andrea Sterbini, Peter Thoeny, TWiki Contributors |
+|  Plugin Version: | 21 Nov 2007 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  21 Nov 2007: | Doc improvements |
 |  16 Mar 2005: | Fixed typo "scull" |
 |  5 Mar 2005   | 1.004 Crawford Currie prepared for Dakar |
 |  21 Nov 2004: | Added benchmarks (no code changes) |
@@ -85,15 +86,12 @@ This plugin is installed by default with a TWiki release. You should not need to
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.0 |
-|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle 96%, %SYSTEMWEB%.FormattedSearch 98%, SmiliesPlugin 96% |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 96%, %TWIKIWEB%.FormattedSearch 98%, SmiliesPlugin 96% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
-
-
-
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 %META:FILEATTACHMENT{name="biggrin.gif" attr="h" comment="" date="1071216488" path="C:\Data\MyTWiki\Plugins\SmiliesPlugin\pub\TWiki\SmiliesPlugin\biggrin.gif" size="152" user="TWikiContributor" version="1.1"}%
 %META:FILEATTACHMENT{name="confused.gif" attr="h" comment="" date="1071216502" path="C:\Data\MyTWiki\Plugins\SmiliesPlugin\pub\TWiki\SmiliesPlugin\confused.gif" size="110" user="TWikiContributor" version="1.1"}%
