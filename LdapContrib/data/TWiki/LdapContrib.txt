@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1191603656" format="1.1" reprev="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1195737941" format="1.1" reprev="1.1" version="$Rev$"}%
 ---+!! %TOPIC%
 <!--
 
@@ -39,6 +39,7 @@ the "Refresh Cache" button below. Read the documentation of the =MaxCacheAge= va
 
 <center>%STARTINCLUDE%<form action="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%">
 <input type="hidden" name="refreshldap" value="on" />
+<input type="hidden" name="refresh" value="on" />
 <input type="submit" value="Refresh Cache" style="color:red" />
 </form>%STOPINCLUDE%
 </center>
@@ -364,8 +365,9 @@ Prevent certain names from being looked up in LDAP:
    This work was partly funded by [[http://www.spanlink.com][Spanlink Communications]] and \
    [[http://www.trivadis.com][Trivadis]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v2.0.2 |
+|  Version: | v2.0.3 |
 |  Change History: | |
+|  22 Nov 2007: | fixed recognition of <nop>TWikiGroups in a mixed setting |
 |  05 Oct 2007: | enabled native user registration using the secondary password manager;\
                   added support to change a user's LDAP password from within TWiki; \
                   added patch for =TWiki.pm= that backports some of the fixes from TWiki-4.2 \
@@ -416,7 +418,7 @@ Prevent certain names from being looked up in LDAP:
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 
--- TWiki:Main/MichaelDaum - 05 Oct 2007
+-- TWiki:Main/MichaelDaum - 22 Nov 2007
 
-%META:FILEATTACHMENT{name="wikiringlogo40x40.png" attachment="wikiringlogo40x40.png" attr="h" comment="" date="1189787359" path="wikiringlogo40x40.png" size="2571" stream="wikiringlogo40x40.png" tmpFilename="" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="TWikiDotPm-4.1.2.patch" attachment="TWikiDotPm-4.1.2.patch" attr="" comment="" date="1191603620" path="TWikiDotPm-4.1.2.patch" size="1538" stream="TWikiDotPm-4.1.2.patch" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="TWikiDotPm-4.1.2.patch" attr="" autoattached="0" comment="" date="1191603621" path="TWikiDotPm-4.1.2.patch" size="1538" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="wikiringlogo40x40.png" attr="h" autoattached="0" comment="" date="1190996093" path="wikiringlogo40x40.png" size="2571" user="TWikiContributor" version="1"}%

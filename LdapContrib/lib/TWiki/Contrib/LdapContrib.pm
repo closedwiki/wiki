@@ -28,7 +28,7 @@ use Net::LDAP::Control::Paged;
 use vars qw($VERSION $RELEASE %sharedLdapContrib);
 
 $VERSION = '$Rev$';
-$RELEASE = 'v2.0.2';
+$RELEASE = 'v2.0.3';
 
 =begin text
 
@@ -914,7 +914,8 @@ sub isGroup {
 
   #$this->writeDebug("called isGroup($wikiName)");
   return undef if $this->{excludeMap}{$wikiName};
-  return defined($this->{data}{"GROUPS::$wikiName"})?1:0;
+  return 1 if defined($this->{data}{"GROUPS::$wikiName"});
+  return undef;
 }
 
 =begin text
