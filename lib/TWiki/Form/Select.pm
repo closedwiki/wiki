@@ -23,32 +23,46 @@ sub new {
     return $this;
 }
 
+
+=pod
+
+---++ getDefaultValue() -> $value
+The default for a select is always the empty string, as there is no way in
+TWiki form definitions to indicate selected values. This defers the decision
+on a value to the browser.
+
+=cut
+
+sub getDefaultValue {
+    return '';
+}
+
 sub getOptions {
-  my $this = shift;
+    my $this = shift;
 
-  return $this->{_options} if $this->{_options};
- 
-  my $vals = $this->SUPER::getOptions(@_);
-  if ($this->{type} =~ /\+values/) {
-    # create a values map
-    
-    $this->{valueMap} = ();
-    $this->{_options} = ();
-    my $str;
-    foreach my $val (@$vals) {
-      if ($val =~ /^(.*?[^\\])=(.*)$/) {
-        $str = $1;
-        $val = $2;
-        $str =~ s/\\=/=/g;
-      } else {
-        $str = $val;
-      }
-      $this->{valueMap}{$val} = TWiki::urlDecode($str);
-      push @{$this->{_options}}, $val;
+    return $this->{_options} if $this->{_options};
+
+    my $vals = $this->SUPER::getOptions(@_);
+    if ($this->{type} =~ /\+values/) {
+        # create a values map
+
+        $this->{valueMap} = ();
+        $this->{_options} = ();
+        my $str;
+        foreach my $val (@$vals) {
+            if ($val =~ /^(.*?[^\\])=(.*)$/) {
+                $str = $1;
+                $val = $2;
+                $str =~ s/\\=/=/g;
+            } else {
+                $str = $val;
+            }
+            $this->{valueMap}{$val} = TWiki::urlDecode($str);
+            push @{$this->{_options}}, $val;
+        }
     }
-  }
 
-  return $vals;
+    return $vals;
 }
 
 =begin twiki
@@ -83,8 +97,8 @@ sub renderForEdit {
            );
         $params{selected} = 'selected' if $isSelected{$option};
         if (defined($this->{valueMap}{$option})) {
-          $params{value} = $option;
-          $option = $this->{valueMap}{$option};
+            $params{value} = $option;
+            $option = $this->{valueMap}{$option};
         }
         $option =~ s/<nop/&lt\;nop/go;
         $choices .= CGI::option( \%params, $option );
