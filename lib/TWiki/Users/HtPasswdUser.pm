@@ -81,6 +81,25 @@ sub finish {
     undef $this->{passworddata};
 }
 
+=pod
+
+---++ ObjectMethod readOnly(  ) -> boolean
+
+returns true if the password file is not currently modifyable
+
+=cut
+
+sub readOnly {
+    my $this = shift;
+    my $path = $TWiki::cfg{Htpasswd}{FileName};
+    #TODO: what if the data dir is also read only?
+    if ((!-e $path) || ( -e $path && -r $path && !-d $path && -w $path)) {
+        $this->{session}->enterContext('passwords_modifyable');
+        return 0;
+    }
+    return 1;
+}
+
 sub fetchUsers {
     my $this = shift;
     my $db = _readPasswd($this);

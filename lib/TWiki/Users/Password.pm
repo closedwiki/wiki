@@ -69,6 +69,21 @@ sub finish {
 
 =pod
 
+---++ ObjectMethod readOnly(  ) -> boolean
+
+returns true if the password database is not currently modifyable
+also needs to call
+$this->{session}->enter_context('passwords_modifyable');
+if you want to be able to use the existing TWikiUserMappingContrib ChangePassword topics
+
+=cut
+
+sub readOnly {
+    return 1;   #there _is_ no password file.
+}
+
+=pod
+
 ---++ ObjectMethod fetchPass( $login ) -> $passwordE
 
 Implements TWiki::Password

@@ -142,8 +142,10 @@ sub new {
 	    }
     }
     #the UI for rego supported/not is different from rego temporarily turned off
-    $session->enterContext('registration_supported') if $this->supportsRegistration();
-    $session->enterContext('registration_enabled') if $TWiki::cfg{Register}{EnableNewUserRegistration};
+    if ($this->supportsRegistration()) {
+        $session->enterContext('registration_supported');
+        $session->enterContext('registration_enabled') if $TWiki::cfg{Register}{EnableNewUserRegistration};
+    }
     $implUserMappingManager =~ /^TWiki::Users::(.*)$/;
 
 	#caches

@@ -15,7 +15,14 @@
 <form name="manage" action="%SCRIPTURLPATH{"manage"}%/%WEB%/%TOPIC%" method="post">
 <div class="twikiFormSteps">
 <div class="twikiFormStep">
-*%MAKETEXT{"After submitting this form your e-mail will be changed, and you will be returned to this form."}%*
+%IF{
+  "context passwords_modifyable"
+  then="*%MAKETEXT{"After submitting this form your e-mail will be changed, and you will be returned to this form."}%*"
+  else="<strong>%MAKETEXT{"Sorry, the password system is currently read only, please contact [_1]" args="%WIKIWEBMASTER%"}%</strong>"
+}%
+<!--
+      * Set NOTMODIFYABLE = %IF{"context passwords_modifyable" then="" else="DISABLED"}%
+-->
 </div>
 <div class="twikiFormStep">
 Registered e-mail addresses for currently logged in user (=%USERINFO{format="$wikiname"}%=): %USERINFO{format="$emails"}% 
@@ -23,14 +30,14 @@ Registered e-mail addresses for currently logged in user (=%USERINFO{format="$wi
 <div class="twikiFormStep">
 %TABLE{databg="transparent" tableborder="0" tablerules="none"}%
 | | %MAKETEXT{"Fields marked [_1] are required" args="=<font color='red'>**</font>="}% |
-|  %MAKETEXT{"Your [_1].LoginName" args="%TWIKIWEB%"}%: | <input type="text" name="username" value="%URLPARAM{"username" default="%USERNAME%"}%" size="40" class="twikiInputField" /> =<font color="red">**</font>= |
-|  %MAKETEXT{"Password"}%: | <input type="password" name="oldpassword" value="%URLPARAM{oldpassword}%" size="40" class="twikiInputField" /> =<font color="red">**</font>= |
-|  %MAKETEXT{"New e-mails (space-separated list)"}%: | <input type="text" name="email" size="40" class="twikiInputField" /> =<font color="red">**</font>= |
+|  %MAKETEXT{"Your [_1].LoginName" args="%TWIKIWEB%"}%: | <input %NOTMODIFYABLE% type="text" name="username" value="%URLPARAM{"username" default="%USERNAME%"}%" size="40" class="twikiInputField" /> =<font color="red">**</font>= |
+|  %MAKETEXT{"Password"}%: | <input %NOTMODIFYABLE% type="password" name="oldpassword" value="%URLPARAM{oldpassword}%" size="40" class="twikiInputField" /> =<font color="red">**</font>= |
+|  %MAKETEXT{"New e-mails (space-separated list)"}%: | <input %NOTMODIFYABLE% type="text" name="email" size="40" class="twikiInputField" /> =<font color="red">**</font>= |
 </div>
 <div class="twikiFormStep twikiLast">
 <input type="hidden" name="TopicName" value="%TOPIC%" />
 <input type="hidden" name="action" value="changePassword" />
-<input type="submit" class="twikiSubmit" value="Change e-mail address" />
+<input %NOTMODIFYABLE% type="submit" class="twikiSubmit" value="Change e-mail address" />
 </div><!-- /twikiFormStep-->
 </div><!-- /twikiFormSteps-->
 </form>

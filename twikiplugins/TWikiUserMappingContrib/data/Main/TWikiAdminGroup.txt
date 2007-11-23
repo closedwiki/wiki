@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="BaseUserMapping_333" date="1195624532" format="1.1" version="1.3"}%
 ---+ TWiki Administrator Group
 
 
    * Member list (comma-separated list):
-      * Set GROUP = 
+      * Set GROUP = SvenDowideit
    * Persons/group who can change the list:
       * Set ALLOWTOPICCHANGE = TWikiAdminGroup
 
