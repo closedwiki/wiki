@@ -98,14 +98,6 @@ Editors can use =XmlHttpRequest= to perform saves, by POSTing to the TWiki =save
 
 Once the save script has completed it responds with a redirect, either to an Oops page if the save failed, or to the appropriate post-save URL (usually a =view=). The editor must be ready to handle this redirect.
 
----++++ Handling Attachments
-Attachment uploads can be handled by URL requests from the editor template to the TWiki
-=upload= script. The =upload= script normally redirects to the containing topic; a behaviour that you usually don't want in an editor! There are two ways to handle this:
-   * If the uploads are done in an =IFRAME= or via =XmlHttpRequest=, then the
-     302 redirect at the end of the upload can simply be ignored.
-   * You can pass =noredirect= to the =upload= script to suppress the redirect. In this case
-     you will get a =text/plain= response of =OK= followed by a message if everything went well, or an error message if it did not.
-
 ---++++ REST handlers
 If you are confident in Javascript you can use REST handlers with =XmlHttpRequest= to convert content from TML to HTML and back again.
 
@@ -118,6 +110,14 @@ Converts the HTML text to TML. =topic= *must* be specified.
 =.../rest/WysiwygPlugin/tml2html?topic=Web.Topic;text=tmltexttotranslate=
 
 Converts the TML text to HTML. =topic= *must* be specified. The response is a =text/plain= page of converted content.
+
+=.../rest/WysiwygPlugin/upload?topic=Web.Topic;...=
+
+Uploads a file. Uses the same parameters as the =upload= script (see TWikiScripts) but behaves properly in a REST context.
+
+=.../rest/WysiwygPlugin/attachments?topic=Web.Topic=
+
+Gets a list of attachments on the topic, and returns them as a JSON string. The JSON structure contains the same information as is available from the corresponding =TWiki::Meta= object for the topic.
 
 ---++ Plugin Installation Instructions
 %$INSTALL_INSTRUCTIONS%
