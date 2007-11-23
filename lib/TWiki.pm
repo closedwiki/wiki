@@ -1258,11 +1258,14 @@ sub new {
     $TWiki::cfg{TempfileDir} = "$TWiki::cfg{WorkingDir}/tmp"
       unless defined($TWiki::cfg{TempfileDir});
 
+    # Set command_line context if there is no query
+    $initialContext ||= defined( $query ) ? {} : { command_line => 1 };
+
     $query ||= new CGI( {} );
     my $this = bless( {}, $class );
 
     $this->{_HTMLHEADERS} = {};
-    $this->{context} = $initialContext || {};
+    $this->{context} = $initialContext;
 
     # create the various sub-objects
     unless ($sandbox) {
