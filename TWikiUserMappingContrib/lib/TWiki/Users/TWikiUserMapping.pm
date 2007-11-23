@@ -123,8 +123,11 @@ sub handlesUser {
 	my ($this, $cUID, $login, $wikiname) = @_;
 	
     if (defined $cUID && !length($this->{mapping_id})) {
-        # Normal behaviour; if there is no user mapping specified, it's ours
-        return 1 if $cUID !~ /^[A-Za-z]+_/;
+        # TWikiUserMapping is special - for backwards compatibility, it assumes
+        # responsibility for _all_ non BaseMapping users
+        # if you're needing to mix the TWikiuserMapping with others, 
+        # define $this->{mapping_id} = 'TWikiUserMapping_';
+        return 1;
     } else {
         # Used when (if) TWikiUserMapping is subclassed
         return 1 if ( defined $cUID && $cUID =~ /^($this->{mapping_id})/ );
