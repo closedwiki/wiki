@@ -85,7 +85,7 @@ sub getListOfGroups {
     }
   }
 
-  $this->{ldap}->writeDebug("got " . (scalar keys %groups) . " overall groups=".join(',',keys %groups));
+  #$this->{ldap}->writeDebug("got " . (scalar keys %groups) . " overall groups=".join(',',keys %groups));
 
   return values %groups;
 }
@@ -106,12 +106,15 @@ sub groupMembers {
     unless $this->{ldap}{mapGroups};
   return $group->{members} if defined($group->{members});
 
-  #$this->{ldap}->writeDebug("called groupMembers");
-
   my $groupName = $group->wikiName;
-  my $ldapMembers = $this->{ldap}->getGroupMembers($groupName);
 
-  if (defined($ldapMembers)) {
+  #$this->{ldap}->writeDebug("called groupMembers for $groupName");
+
+  my $ldapMembers;
+  $ldapMembers = $this->{ldap}->getGroupMembers($groupName)
+    unless $this->{ldap}{excludeMap}{$groupName};
+
+  if (defined($ldapMembers) && @$ldapMembers) {
     my %memberUsers;
     $group->{members} = [];
 
@@ -137,6 +140,7 @@ sub groupMembers {
   } else {
     # fallback to twiki groups,
     # try also to find the SuperAdminGroup
+    #$this->{ldap}->writeDebug("fallback to twiki groups");
     if ($this->{ldap}{twikiGroupsBackoff} 
       || $groupName eq $TWiki::cfg{SuperAdminGroup}) {
       return $this->SUPER::groupMembers($group) || [];
