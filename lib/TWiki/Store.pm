@@ -146,7 +146,20 @@ sub readTopic {
 
       my @knownAttachments = $meta->find('FILEATTACHMENT');
       my @attachmentsFoundInPub = _findAttachments($this, $web, $topic, \@knownAttachments);
-      $meta->putAll('FILEATTACHMENT', @attachmentsFoundInPub) if @attachmentsFoundInPub;
+      my @validAttachmentsFound;
+      foreach my $foundAttachment (@attachmentsFoundInPub) {
+            my ( $fileName, $origName ) =
+                TWiki::Sandbox::sanitizeAttachmentName( $foundAttachment->{name} );
+            #test if the attachment filenam would need sanitizing, if so, ignore it.
+            if ($fileName ne $origName) {
+                $this->{session}->writeWarning
+                    ("AutoAttachPubFiles ignoring $origName, in $web.$topic - not a valid TWiki Attachment filename");
+            } else {
+                push @validAttachmentsFound, $foundAttachment;
+            }
+      }
+
+      $meta->putAll('FILEATTACHMENT', @validAttachmentsFound) if @validAttachmentsFound;
     }
 
     return( $meta, $meta->text() );
