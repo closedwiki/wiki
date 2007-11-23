@@ -421,11 +421,13 @@ $TWiki::cfg{Register}{NeedVerification} = $FALSE;
 # You can provide your own alternative by implementing a new subclass of
 # TWiki::Users::Password, and pointing {PasswordManager} at it in
 # lib/LocalSite.cfg.<p />
-# If 'none' is selected, users will not be able to change passwords, and
-# will always be authenticated by the TemplateLogin manager, regardless of
+# If 'none' is selected, users will not be able to change passwords
+# and TemplateLogin manager then will always succeed, regardless of
 # what username or password they enter. This may be useful when you want to
 # enable logins so TWiki can identify contributors, but you don't care about
-# passwords.
+# passwords. Using ApacheLogin and PassordManager set to 'none' (and
+# AllowLoginName = true) is a common  Enterprise SSO configuration, in which
+# any logged in user can then register to create  their TWiki Based identity.
 $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
 
 # **NUMBER**
