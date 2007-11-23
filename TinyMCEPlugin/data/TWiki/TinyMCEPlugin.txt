@@ -17,11 +17,14 @@ Unlike the other editor integrations in TWiki, which install "Word in a Browser"
 The editor automatically "switches itself off" (i.e. reverts to the old text-only window) when editing topics that contain TWiki content it can't handle, such as complex TWiki variables.
 
 ---++ Editor Notes
-The editor functions on normal topic text exactly like any other HTML editor. It uses a translator module to convert from TWiki markup language (TML) to HTML and back. The translator converts special TWiki tags - such as %<nopVARIABLES% - to plain text, and encloses it withn HTML span using a special style called =WYSIWYG_PROTECTED=. In this way the client editor can detect text that is not meant to be HTML formatted. This style is _also_ used to protect special text you enter into the editor from being interpreted when the topic is translated back into TML. If you want to add any special TWiki features that are sensitive to formatting, such as =Set= statements, then you have to paint the =PROTECTED= style (from the styles menu) over those regions.
+The editor uses a translator module to convert from TWiki markup language (TML) to HTML and back. The translator converts special TWiki tags - such as %<nop>VARIABLES% - to plain text, and encloses them within HTML spans using a special style called =WYSIWYG_PROTECTED=. In this way the editor can detect text that is not meant to be HTML formatted. This style is _also_ used to protect special text you enter into the editor from being interpreted when the topic is translated back into TML. If you want to add any special TWiki features that are sensitive to formatting, such as =Set= statements, then you have to format those regions using 'Protect on save' or 'Protect forever'.
 
 ---++ Installation Instructions
 
-__NOTE:__ this plugin requires the very latest revision of WysiwygPlugin. It will *not* work with the version shipped with TWiki 4.1.2.
+__NOTES:__
+   * This plugin comes pre-installed on TWiki 4.2.0. You should only need to re-install if there is an upgrade to the plugin.
+   * It requires the very latest revision of WysiwygPlugin. It will *not* work with the version shipped with TWiki 4.1.2.
+   * When installed, it *replaces* the old "textarea" editor. If you want to maintain access to the old editor from the standard screens, follow the instructions under [[#InstallingOnOldTWikis][Configuring the buttons on TWiki < 4.2.0]].
 
 First follow the installation instructions to install the Plugin:
 
@@ -84,8 +87,7 @@ For a full explanation of the available options, and guidance on reconfiguring T
    theme_advanced_resizing : true,
    theme_advanced_path: false,
    theme_advanced_statusbar_location : "bottom",
-   theme_advanced_styles : "VERBATIM=TMLverbatim;LITERAL=WYSIWYG_LITERAL;Protect on save=WYSIWYG_PROTECTED;Protect forever=WYSIWYG_STICKY",
-   content_css : "%PUBURLPATH%/%TWIKIWEB%/TinyMCEPlugin/wysiwyg.css,%PUBURLPATH%/%TWIKIWEB%/TWikiTemplates/base.css,%TWIKISTYLEURL%,%TWIKICOLORSURL%"
+   content_css : "%PUBURLPATH%/%TWIKIWEB%/TinyMCEPlugin/wysiwyg.css,%PUBURLPATH%/%TWIKIWEB%/TWikiTemplates/base.css,%TWIKISTYLEURL%,%TWIKICOLORSURL%,%PUBURLPATH%/%TWIKIWEB%/ActionTrackerPlugin/styles.css"
    * Additional settings for specific browsers.
       * Warning: if you enable =paste_auto_cleanup_on_paste then it automatically implies =past_use_dialog= on all non-MSIE browsers.
       * Set INIT_MSIE = paste_auto_cleanup_on_paste : true
@@ -100,6 +102,10 @@ You can override these settings in the same way as any other TWiki variable, by 
      being invoked on these browsers by setting =TINYMCEPLUGIN_BAD_BROWSERS= to a regular expression that matches the user-agent string for any broken browsers. The default is =(?i-xsm:Konqueror|Opera)=.   
 
 %INCLUDE{"%TWIKIWEB%.WysiwygPluginSettings"}%
+
+#InstallingOnOldTWikis
+---++ Configuring the buttons on TWiki < 4.2.0
+When installed on TWiki versions before 4.2.0, this plugin *replaces* the old textarea editor with the !TinyMCE editor. The shock of this change can be too much for some older contributors, so we have written instructions for reconfiguring your templates in TWiki:Plugins.TinyMCEFrequentlyAskedQuestions.
 
 ---++ Plugin Info
 
