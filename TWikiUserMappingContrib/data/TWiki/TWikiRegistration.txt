@@ -2,12 +2,12 @@
 ---+ %MAKETEXT{"Registration"}%
 
 %IF{"context registration_supported" 
-then="*%MAKETEXT{"To edit pages on this TWikiSite, you must have a registered user name and password."}%* %IF{"{Register}{EnableNewUserRegistration}" then="" else="%BR%%BR% __%MAKETEXT{"Sorry, Registration has been temporarily disabled"}%__ "}%" 
+then="*%MAKETEXT{"To edit pages on this TWikiSite, you must have a registered user name and password."}%* %IF{"context registration_enabled" then="" else="%BR%%BR% __%MAKETEXT{"Sorry, Registration has been temporarily disabled"}%__ "}%" 
 else="*%MAKETEXT{"This TWiki does _not_ support new User Registration"}%*"
 }%
 
 <!--
-      * Set NOREGISTRATION = %IF{"context registration_supported" then="%IF{"{Register}{EnableNewUserRegistration}" then="" else="DISABLED"}%" else="DISABLED"}%
+      * Set NOREGISTRATION = %IF{"context registration_supported" then="%IF{"context registration_enabled" then="" else="DISABLED"}%" else="DISABLED"}%
 -->
 
 %H% *%MAKETEXT{"Note:"}%* %MAKETEXT{"Registered users can [[[_1]][change]] and [[[_2]][reset]] their passwords." args="%TWIKIWEB%.ChangePassword,%TWIKIWEB%.ResetPassword"}%

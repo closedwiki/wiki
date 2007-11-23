@@ -69,6 +69,15 @@ sub new {
     eval "require $implPasswordManager";
     die $@ if $@;
     $this->{passwords} = $implPasswordManager->new( $session );
+    
+    #if password manager says sorry, we're read only today
+    #'none' is a special case, as it means we're not actually using the password manager for
+    # registration.
+    if ($this->{passwords}->readOnly() && ($TWiki::cfg{PasswordManager} ne 'none')) {
+        $session->writeWarning( 'TWikiUserMapping has TURNED OFF EnableNewUserRegistration, because the password file is read only.' );
+        $TWiki::cfg{Register}{EnableNewUserRegistration} = 0;
+    }
+
 
     #$this->{U2L} = {};
     $this->{L2U} = {};
