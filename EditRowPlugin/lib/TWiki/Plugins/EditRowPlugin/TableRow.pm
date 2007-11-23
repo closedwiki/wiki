@@ -74,7 +74,8 @@ sub set {
     foreach my $val (@$cols) {
         if ($n < scalar(@{$this->{cols}})) {
             my $old = $this->{cols}->[$n]->{text};
-            if ($this->{cols}->[$n]->{text} =~ /(%EDITCELL{.*?}%)\s*/) {
+            if ($val !~ /%EDITCELL{.*?}%/
+                  && $this->{cols}->[$n]->{text} =~ /(%EDITCELL{.*?}%)\s*/) {
                 $val .= $1;
             }
             $this->{cols}->[$n]->{text} = $val;
