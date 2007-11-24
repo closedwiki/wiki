@@ -605,6 +605,8 @@ sub writeCompletePage {
         # my $len = do { use bytes; length( $text ); };
         my $len = length($text);
         $hdr =~ s/\n$/Content-Length: $len\n\n/s if $len;
+    } else {
+        $hdr = '';
     }
 
     print $hdr.$text;
