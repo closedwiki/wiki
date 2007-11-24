@@ -1296,9 +1296,9 @@ sub checkTopicEditLock {
     if( $lease ) {
         my $remain = $lease->{expires} - time();
         my $session = $TWiki::Plugins::SESSION;
-        my $who = $lease->{user};
 
-        if ( ( $remain > 0 ) && ($session->{user} ne $who) ) {
+        if( $remain > 0 ) {
+            my $who = $lease->{user};
             require TWiki::Time;
             my $past = TWiki::Time::formatDelta(
                 time()-$lease->{taken},
