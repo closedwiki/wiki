@@ -153,7 +153,7 @@ sub _TWISTYSHOW {
     my $mode = $params->{'mode'} || $prefMode;
     
     my $btn = _twistyBtn( 'show', @_ );
-    return _wrapInButtonHtml( $btn, $mode );
+    return _expandFormatVariables(_wrapInButtonHtml( $btn, $mode ));
 }
 
 sub _TWISTYHIDE {
@@ -161,7 +161,7 @@ sub _TWISTYHIDE {
     my $mode = $params->{'mode'} || $prefMode;
     
     my $btn = _twistyBtn( 'hide', @_ );
-    return _wrapInButtonHtml( $btn, $mode );
+    return _expandFormatVariables(_wrapInButtonHtml( $btn, $mode ));
 }
 
 sub _TWISTYBUTTON {
@@ -173,7 +173,7 @@ sub _TWISTYBUTTON {
     my $prefix = $params->{'prefix'} || '';
     my $suffix = $params->{'suffix'} || '';
     my $btn = $prefix . ' ' . $btnShow . $btnHide . ' ' . $suffix;
-    return _wrapInButtonHtml( $btn, $mode );
+    return _expandFormatVariables(_wrapInButtonHtml( $btn, $mode ));
 }
 
 sub _TWISTY {
@@ -205,7 +205,7 @@ sub _TWISTYTOGGLE {
         $cookieState );
     my $props = @propList ? " " . join( " ", @propList ) : '';
     my $modeTag = '<' . $mode . $props . '>';
-    return _wrapInContentHtmlOpen() . $modeTag;
+    return _expandFormatVariables(_wrapInContentHtmlOpen() . $modeTag);
 }
 
 sub _ENDTWISTYTOGGLE {
@@ -443,5 +443,18 @@ sub _wrapInContainerDivIfNoJavascripClose {
     my ($mode) = @_;
     return '</' . $mode . '><!--/twistyPlugin twikiMakeVisibleInline-->';
 }
+
+sub _expandFormatVariables {
+    my ($text) = @_;
+
+	$text =~ s/\$quot/"/gos;      # expand double quote
+    $text =~ s/\$percnt/%/gos;    # expand percent
+    $text =~ s/\$dollar/\$/gos;    # expand dollar
+    $text =~ s/\$n/\n/gos;    # expand newline
+    $text =~ s/\$nop/<nop>/gos;    # expand nop    
+    
+    return $text;
+}
+
 
 1;
