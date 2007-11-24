@@ -73,9 +73,10 @@ sub set {
     my $n = 0;
     foreach my $val (@$cols) {
         if ($n < scalar(@{$this->{cols}})) {
+            # Restore the EDITCELL from the old value, if present
             my $old = $this->{cols}->[$n]->{text};
             if ($val !~ /%EDITCELL{.*?}%/
-                  && $this->{cols}->[$n]->{text} =~ /(%EDITCELL{.*?}%)\s*/) {
+                  && $this->{cols}->[$n]->{text} =~ /(%EDITCELL{.*?}%)/) {
                 $val .= $1;
             }
             $this->{cols}->[$n]->{text} = $val;

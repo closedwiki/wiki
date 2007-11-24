@@ -493,19 +493,25 @@ sub _getCols {
     for (my $i = 0; $i < $count; $i++) {
         my $colDef = $this->{colTypes}->[$i];
         my $cellName = 'erp_cell_'.$this->{number}.'_'.$row.'_'.($i + 1);
+        my $cell = $this->{rows}->[$row - 1]->{cols}->[$i];
+        # Check current value for format-overriding EDITCELL
+        if ($cell->{text} =~/%EDITCELL{(.*?)}%/) {
+            my $cd = $this->parseFormat($1);
+            $colDef = $cd->[0];
+        }
         if ($colDef->{type} eq 'row') {
             # Force numbering if this is an auto-numbered column
             $urps->{$cellName} = $row - $headRows + $colDef->{size};
         } elsif ($colDef->{type} eq 'label') {
             # Label cells are uneditable, so we have to keep any existing
             # value for them.
-            my $cell = $this->{rows}->[$row - 1]->{cols}->[$i];
             $urps->{$cellName} = $cell->{text};
         }
         # CGI returns multi-values separated by \0. Replace with
         # the TWiki convention, comma
+        $urps->{$cellName} ||= '';
         $urps->{$cellName} =~ s/\0/, /g;
-        push(@cols, $urps->{$cellName} || '');
+        push(@cols, $urps->{$cellName});
     }
     return \@cols;
 }
