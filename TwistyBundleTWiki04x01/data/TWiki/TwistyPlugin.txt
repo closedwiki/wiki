@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130850299" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="BaseUserMapping_333" date="1195487956" format="1.1" version="1.2"}%
 ---+!! <nop>%TOPIC%
 
 *A "twisty" is an interface toggle control to show and hide content.*
@@ -268,6 +268,41 @@ When you want to use links, write:
 <a href="#TOGGLE" class="twistyCollapseAll">Collapse all</a>
 
 
+---++ Special syntax: formatting tokens
+If you use TWiki variables inside TWISTY parameters chances are it will mess up the variable, or the rendered html. Use formatting tokens to 'delay' rendering of these variables until the Twisty parameters are parsed.
+
+The formatting tokens are the same as with %TWIKIWEB%.FormattedSearch:
+
+| *Token*    | *Expands to*  |
+| =$percnt=  | =%=           |
+| =$quot=    | ="=           |
+| =$dollar=  | =$=           |
+| =$n=       | =\n=          | 
+| =$nop=     | =&lt;nop&gt;= |
+
+For example, to show an icon inside the link, do not write:
+<verbatim>
+link="%Y%"
+</verbatim>
+
+but use formatting tokens:
+
+<verbatim>
+link="$percntY$percnt"
+</verbatim>
+
+Or a more complex example using %TWIKIWEB%.SpreadsheetPlugin; do not write:
+
+<verbatim>
+link="Count: (%CALC{"$GET(infoCount)"}%)"
+</verbatim>
+
+but use formatting tokens:
+
+<verbatim>
+link="Count: ($percntCALC{$quot$dollarGET(infoCount)$quot}$percnt)"
+</verbatim>
+
 
 ---++ Syntax
 
@@ -418,10 +453,36 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
    * Download the ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your root ($TWIKI_ROOT) directory. Content:
    | *File:* | *Description:* |
-%$MANIFEST%
+   | ==TwistyBundleTWiki04x02_installer== |  |
+   | ==TwistyBundleTWiki04x02_installer.pl== |  |
+   | ==data/TWiki/TwistyBundleTWiki04x02.txt== |  |
+   | ==data/TWiki/BehaviourContrib.txt== |  |
+   | ==data/TWiki/TwistyContrib.txt== |  |
+   | ==data/TWiki/TwistyPlugin.txt== |  |
+   | ==lib/TWiki/Contrib/BehaviourContrib.pm== |  |
+   | ==lib/TWiki/Contrib/TwistyBundleTWiki04x02.pm== |  |
+   | ==lib/TWiki/Contrib/TwistyContrib.pm== |  |
+   | ==lib/TWiki/Plugins/TwistyPlugin.pm== |  |
+   | ==pub/TWiki/BehaviourContrib/behaviour.compressed.js== |  |
+   | ==pub/TWiki/BehaviourContrib/behaviour.compressed_src.js== |  |
+   | ==pub/TWiki/BehaviourContrib/behaviour.js== |  |
+   | ==pub/TWiki/BehaviourContrib/behaviour_src.js== |  |
+   | ==pub/TWiki/BehaviourContrib/cssQuery/cssQuery-p.js== |  |
+   | ==pub/TWiki/BehaviourContrib/cssQuery/src/cssQuery-level2.js== |  |
+   | ==pub/TWiki/BehaviourContrib/cssQuery/src/cssQuery-level3.js== |  |
+   | ==pub/TWiki/BehaviourContrib/cssQuery/src/cssQuery-standard.js== |  |
+   | ==pub/TWiki/BehaviourContrib/cssQuery/src/cssQuery.js== |  |
+   | ==pub/TWiki/BehaviourContrib/cssQuery/src/test.html== |  |
+   | ==pub/TWiki/BehaviourContrib/cssQuery/test.html== |  |
+   | ==pub/TWiki/TwistyContrib/twist.compressed.js== |  |
+   | ==pub/TWiki/TwistyContrib/twist.compressed_src.js== |  |
+   | ==pub/TWiki/TwistyContrib/twist.css== |  |
+   | ==pub/TWiki/TwistyContrib/twist.js== |  |
+   | ==pub/TWiki/TwistyContrib/twist_src.js== |  |
+
    * Optionally, if it exists, run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.
    * Alternatively, manually make sure the dependencies listed in the table below are resolved.
-   %$DEPENDENCIES%
+   None
    * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 
@@ -430,10 +491,10 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 | Authors: | TWiki:Main.RafaelAlvarez, TWiki:Main.ArthurClemens |
 | Copyright &copy;: | 2005 Rafael Alvarez; 2006, 2007 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
-| Dependencies: | %$DEPENDENCIES% |
-| Plugin&nbsp;Version: | 19 Nov 2007 (version 1.4.6)  |
+| Dependencies: | None |
+| Plugin&nbsp;Version: | 24 Nov 2007 (version 1.4.6)  |
 | Change&nbsp;History: | <!-- versions below in reverse order -->&nbsp; |
-| 19 Nov 2007 | 1.4.6 Arthur Clemens - Make sure behaviour javascript is included first in head. |
+| 24 Nov 2007 | 1.4.6 Arthur Clemens - Added formatting tokens. |
 | 07 Oct 2007 | 1.4.5 Arthur Clemens - Fix html tag with show/hide controls. |
 | 25 Sep 2007 | 1.4.4 Arthur Clemens - Fix rendering of headers when =prefix= is used. |
 | 11 Jul 2007 | 1.4.3 Arthur Clemens - Fix invalid html when =prefix= and =suffix= is used. |
