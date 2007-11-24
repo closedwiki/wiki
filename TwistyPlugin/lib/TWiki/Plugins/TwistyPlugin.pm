@@ -95,10 +95,10 @@ sub initPlugin {
 }
 
 sub _setDefaults {
-    $defaultMode        = 'span';
-    $defaultShowLink    = '';
-    $defaultHideLink    = '';
-    $defaultRemember    =
+    $defaultMode     = 'span';
+    $defaultShowLink = '';
+    $defaultHideLink = '';
+    $defaultRemember =
       '';    # do not default to 'off' or all cookies will be cleared!
 }
 
@@ -106,13 +106,12 @@ sub _addHeader {
     return if $doneHeader;
     $doneHeader = 1;
 
-    eval {
-        require TWiki::Contrib::BehaviourContrib;
-    };
-    if (!$@ && defined(&TWiki::Contrib::BehaviourContrib::addHEAD)) {
+    eval { require TWiki::Contrib::BehaviourContrib; };
+    if ( !$@ && defined(&TWiki::Contrib::BehaviourContrib::addHEAD) ) {
         TWiki::Contrib::BehaviourContrib::addHEAD();
-    } else {
-        TWiki::Func::addToHEAD('BEHAVIOURCONTRIB', <<HEAD);
+    }
+    else {
+        TWiki::Func::addToHEAD( 'BEHAVIOURCONTRIB', <<HEAD);
 <script type='text/javascript' src='%PUBURL%/%TWIKIWEB%/BehaviourContrib/behaviour.compressed.js'></script>
 HEAD
     }
@@ -126,14 +125,15 @@ HEAD
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiCSS.js"></script>
 EOF
 
-    if (!$@ && defined(&TWiki::Contrib::BehaviourContrib::addHEAD)) {
+    if ( !$@ && defined(&TWiki::Contrib::BehaviourContrib::addHEAD) ) {
         TWiki::Contrib::BehaviourContrib::addHEAD();
-    } else {
+    }
+    else {
         $header .= <<'EOF';
 <script type='text/javascript' src='%PUBURL%/%TWIKIWEB%/BehaviourContrib/behaviour.compressed.js'></script>
 HEAD
 EOF
-	}
+    }
 
     $header .= <<'EOF';
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.compressed.js"></script>
@@ -151,17 +151,17 @@ EOF
 sub _TWISTYSHOW {
     my ( $session, $params, $theTopic, $theWeb ) = @_;
     my $mode = $params->{'mode'} || $prefMode;
-    
+
     my $btn = _twistyBtn( 'show', @_ );
-    return _expandFormatVariables(_wrapInButtonHtml( $btn, $mode ));
+    return _expandFormatVariables( _wrapInButtonHtml( $btn, $mode ) );
 }
 
 sub _TWISTYHIDE {
     my ( $session, $params, $theTopic, $theWeb ) = @_;
     my $mode = $params->{'mode'} || $prefMode;
-    
+
     my $btn = _twistyBtn( 'hide', @_ );
-    return _expandFormatVariables(_wrapInButtonHtml( $btn, $mode ));
+    return _expandFormatVariables( _wrapInButtonHtml( $btn, $mode ) );
 }
 
 sub _TWISTYBUTTON {
@@ -173,12 +173,12 @@ sub _TWISTYBUTTON {
     my $prefix = $params->{'prefix'} || '';
     my $suffix = $params->{'suffix'} || '';
     my $btn = $prefix . ' ' . $btnShow . $btnHide . ' ' . $suffix;
-    return _expandFormatVariables(_wrapInButtonHtml( $btn, $mode ));
+    return _expandFormatVariables( _wrapInButtonHtml( $btn, $mode ) );
 }
 
 sub _TWISTY {
     my ( $session, $params, $theTopic, $theWeb ) = @_;
-    
+
     _addHeader();
     $twistyCount++;
     my $id = $params->{'id'};
@@ -195,7 +195,7 @@ sub _TWISTYTOGGLE {
         return '';
     }
     my $idTag = $id . 'toggle';
-    my $mode = 'div'; #$params->{'mode'} || $prefMode;
+    my $mode  = 'div';            #$params->{'mode'} || $prefMode;
     unshift @modes, $mode;
 
     my $isTrigger = 0;
@@ -205,7 +205,7 @@ sub _TWISTYTOGGLE {
         $cookieState );
     my $props = @propList ? " " . join( " ", @propList ) : '';
     my $modeTag = '<' . $mode . $props . '>';
-    return _expandFormatVariables(_wrapInContentHtmlOpen() . $modeTag);
+    return _expandFormatVariables( _wrapInContentHtmlOpen() . $modeTag );
 }
 
 sub _ENDTWISTYTOGGLE {
@@ -274,8 +274,7 @@ sub _twistyBtn {
       . $link
       . '</span>'
       . $imgTag
-      . $imgRightTag . '</a>'
-      . ' ';
+      . $imgRightTag . '</a>' . ' ';
 
     my $isTrigger = 1;
     my $props     = '';
@@ -294,7 +293,7 @@ sub _twistyBtn {
 sub _createHtmlProperties {
     my ( $twistyControlState, $idTag, $mode, $params, $isTrigger, $cookie ) =
       @_;
-    my $class = $params->{'class'} || '';
+    my $class      = $params->{'class'}      || '';
     my $firststart = $params->{'firststart'} || '';
     my $firstStartHidden;
     $firstStartHidden = 1 if ( $firststart eq 'hide' );
@@ -327,10 +326,12 @@ sub _createHtmlProperties {
     # Mimic the rules in twist.js, function _update()
     my $state = '';
     $state = $TWISTYPLUGIN_CONTENT_HIDDEN if $firstStartHidden;
-    $state = $TWISTYPLUGIN_CONTENT_SHOWN if $firstStartShown;
+    $state = $TWISTYPLUGIN_CONTENT_SHOWN  if $firstStartShown;
+
     # cookie setting may override  firstStartHidden and firstStartShown
     $state = $TWISTYPLUGIN_CONTENT_HIDDEN if $cookieHide;
     $state = $TWISTYPLUGIN_CONTENT_SHOWN  if $cookieShow;
+
     # startHidden and startShown may override cookie
     $state = $TWISTYPLUGIN_CONTENT_HIDDEN if $startHidden;
     $state = $TWISTYPLUGIN_CONTENT_SHOWN  if $startShown;
@@ -403,7 +404,7 @@ sub _readCookie {
     return '' if !$idTag;
 
     # which state do we use?
-    my $cgi = new CGI;
+    my $cgi    = new CGI;
     my $cookie = $cgi->cookie('TWIKIPREF');
     my $tag    = $idTag;
     $tag =~ s/^(.*)(hide|show|toggle)$/$1/go;
@@ -412,16 +413,16 @@ sub _readCookie {
     return unless ( defined($key) && defined($cookie) );
 
     my $value = '';
-	if ($cookie =~ m/\b$key\=(.+?)\b/gi) {
-		$value = $1;
-	}
-    
+    if ( $cookie =~ m/\b$key\=(.+?)\b/gi ) {
+        $value = $1;
+    }
+
     return if $value eq '';
-    return ($value eq '1') ? 1 : 0;
+    return ( $value eq '1' ) ? 1 : 0;
 }
 
 sub _wrapInButtonHtml {
-    my ($text, $mode) = @_;
+    my ( $text, $mode ) = @_;
     return _wrapInContainerHideIfNoJavascripOpen($mode) . "\n" . $text
       . _wrapInContainerDivIfNoJavascripClose($mode);
 }
@@ -443,27 +444,27 @@ sub _wrapInContainerDivIfNoJavascripClose {
     my ($mode) = @_;
     return '</' . $mode . '><!--/twistyPlugin twikiMakeVisibleInline-->';
 }
-        
+
 sub _expandFormatVariables {
     my ($text) = @_;
-    
-	return defined(&TWiki::Func::decodeFormatTokens)
-        ? TWiki::Func::decodeFormatTokens($text)
-        : _expandFormatVariables($text);
+
+    return
+      defined(&TWiki::Func::decodeFormatTokens)
+      ? TWiki::Func::decodeFormatTokens($text)
+      : _expandFormatVariables($text);
 }
 
 sub _compatibilityExpandFormatVariables {
 
     my ($text) = @_;
 
-	$text =~ s/\$quot/"/gos;      # expand double quote
-	$text =~ s/\$percnt/%/gos;    # expand percent
-	$text =~ s/\$n/\n/gos;    # expand newline
-	$text =~ s/\$nop/<nop>/gos;    # expand nop    
-	$text =~ s/\$dollar/\$/gos;    # expand dollar
-    
+    $text =~ s/\$quot/"/gos;       # expand double quote
+    $text =~ s/\$percnt/%/gos;     # expand percent
+    $text =~ s/\$n/\n/gos;         # expand newline
+    $text =~ s/\$nop//gos;         # remove nop
+    $text =~ s/\$dollar/\$/gos;    # expand dollar
+
     return $text;
 }
-
 
 1;
