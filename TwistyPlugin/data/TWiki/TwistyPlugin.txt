@@ -54,33 +54,49 @@ You may have noticed that no parameters are passed to =%<nop>TWISTY{}%= but the 
 We will use =mode="div"= to put the collapsing content below the button (the default mode is ="span"=).
 
 <verbatim>
-%TWISTY{mode="div" showlink="Show..." hidelink="Hide"
-showimgleft="%ICONURLPATH{toggleopen-small}%" 
-hideimgleft="%ICONURLPATH{toggleclose-small}%"}%
+%TWISTY{
+mode="div"
+showlink="Show..."
+hidelink="Hide"
+showimgleft="%ICONURLPATH{toggleopen-small}%"
+hideimgleft="%ICONURLPATH{toggleclose-small}%"
+}%
 my twisty content
 %ENDTWISTY%
 </verbatim>
 
 It will look like this:
 
-%TWISTY{mode="div" showlink="Show..." hidelink="Hide"
-showimgleft="%ICONURLPATH{toggleopen-small}%" 
-hideimgleft="%ICONURLPATH{toggleclose-small}%"}%
+%TWISTY{
+mode="div"
+showlink="Show..."
+hidelink="Hide"
+showimgleft="%ICONURLPATH{toggleopen-small}%"
+hideimgleft="%ICONURLPATH{toggleclose-small}%"
+}%
 %GREEN% my twisty content %ENDCOLOR%
 %ENDTWISTY%
 
 To put icons at the right side, write
 <verbatim>
-%TWISTY{mode="div" showlink="Show&nbsp;" hidelink="Hide&nbsp;"
-showimgright="%ICONURLPATH{toggleopen-small}%" 
-hideimgright="%ICONURLPATH{toggleclose-small}%"}%
+%TWISTY{
+mode="div"
+showlink="Show&nbsp;"
+hidelink="Hide&nbsp;"
+showimgright="%ICONURLPATH{toggleopen-small}%"
+hideimgright="%ICONURLPATH{toggleclose-small}%"
+}%
 my twisty content
 %ENDTWISTY%
 </verbatim>
 
-%TWISTY{mode="div" showlink="Show&nbsp;" hidelink="Hide&nbsp;"
-showimgright="%ICONURLPATH{toggleopen-small}%" 
-hideimgright="%ICONURLPATH{toggleclose-small}%"}%
+%TWISTY{
+mode="div"
+showlink="Show&nbsp;"
+hidelink="Hide&nbsp;"
+showimgright="%ICONURLPATH{toggleopen-small}%"
+hideimgright="%ICONURLPATH{toggleclose-small}%"
+}%
 %GREEN% my twisty content %ENDCOLOR%
 %ENDTWISTY%
 
@@ -91,31 +107,52 @@ To store the last state in a TWIKIPREF cookie, add the parameter =remember="on"=
 To test this, reload the page after toggling.
 
 <verbatim>
-%TWISTY{showlink="Show..." hidelink="Hide" remember="on"}%
+%TWISTY{
+showlink="Show..."
+hidelink="Hide"
+remember="on"
+}%
 my twisty content
 %ENDTWISTY%
 </verbatim>
 
-%TWISTY{showlink="Show..." hidelink="Hide" remember="on"}%
+%TWISTY{
+showlink="Show..."
+hidelink="Hide"
+remember="on"
+}%
 %GREEN% my twisty content %ENDCOLOR%
 %ENDTWISTY%
 
 If a Twisty state has been stored in a TWIKIPREF cookie before, it can be cleared by using =remember="off"=:
 
 <verbatim>
-%TWISTY{showlink="Show..." hidelink="Hide" remember="off"}%
+%TWISTY{
+showlink="Show..."
+hidelink="Hide"
+remember="off"
+}%
 my twisty content
 %ENDTWISTY%
 </verbatim>
 
-%TWISTY{showlink="Show..." hidelink="Hide" remember="off"}%
+%TWISTY{
+showlink="Show..."
+hidelink="Hide"
+remember="off"
+}%
 %GREEN% my twisty content %ENDCOLOR%
 %ENDTWISTY%
 
 *NOTE:* Twisty ids are generated automatically. If you need control over exactly _which_ Twisty should be remembered, add the parameter =id=:
 
 <verbatim>
-%TWISTY{id="currentCustomerList" showlink="Show..." hidelink="Hide" remember="on"}%
+%TWISTY{
+id="currentCustomerList"
+showlink="Show..."
+hidelink="Hide"
+remember="on"
+}%
 my customer list
 %ENDTWISTY%
 </verbatim>
@@ -131,24 +168,40 @@ id="%WEB%_%TOPIC%_currentCustomerList"
 To let the Twisty start with its content folded open, add parameter =start="show"=. 
 
 <verbatim>
-%TWISTY{showlink="Show..." hidelink="Hide" start="show"}%
+%TWISTY{
+showlink="Show..."
+hidelink="Hide"
+start="show"
+}%
 my twisty content
 %ENDTWISTY%
 </verbatim>
 
-%TWISTY{showlink="Show..." hidelink="Hide" start="show"}%
+%TWISTY{
+showlink="Show..."
+hidelink="Hide"
+start="show"
+}%
 %GREEN% my twisty content %ENDCOLOR%
 %ENDTWISTY%
 
 Likewise use =start="hide"= to start with hidden content.
 
 <verbatim>
-%TWISTY{showlink="Show..." hidelink="Hide" start="hide"}%
+%TWISTY{
+showlink="Show..."
+hidelink="Hide
+start="hide"
+}%
 my twisty content
 %ENDTWISTY%
 </verbatim>
 
-%TWISTY{showlink="Show..." hidelink="Hide" start="hide"}%
+%TWISTY{
+showlink="Show..."
+hidelink="Hide
+start="hide"
+}%
 %GREEN% my twisty content %ENDCOLOR%
 %ENDTWISTY%
 
@@ -159,12 +212,20 @@ To let the Twisty start with its content folded open the first time the visitor 
 If =remember="on"= is used, subsequential visits to the page will display the Twisty according the cookie setting.
 
 <verbatim>
-%TWISTY{showlink="Show..." hidelink="Hide" firststart="show"}%
+%TWISTY{
+showlink="Show..."
+hidelink="Hide"
+firststart="show"
+}%
 my twisty content
 %ENDTWISTY%
 </verbatim>
 
-%TWISTY{showlink="Show..." hidelink="Hide" firststart="show"}%
+%TWISTY{
+showlink="Show..."
+hidelink="Hide"
+firststart="show"
+}%
 %GREEN% my twisty content %ENDCOLOR%
 %ENDTWISTY%
 
@@ -176,12 +237,20 @@ You can use Twisty to show interface elements that should only be visible with !
 Put the "JavaScript content" in an almost bare bones Twisty. Write =showlink="" hidelink=""= to not display any default link texts.
 
 <verbatim>
-%TWISTY{link="" noscript="hide" start="show"}%
+%TWISTY{
+link=""
+noscript="hide"
+start="show"
+}%
 <input type="submit" class="twikiButton" value="You surely have !JavaScript" />
 %ENDTWISTY%
 </verbatim>
 
-%TWISTY{link="" noscript="hide" start="show"}%
+%TWISTY{
+link=""
+noscript="hide"
+start="show"
+}%
 <input type="submit" class="twikiButton" value="You surely have !JavaScript" />
 %ENDTWISTY%
 
@@ -192,12 +261,18 @@ When !JavaScript is off, the button should be invisible.
 This code will show the button when !JavaScript is off:
 
 <verbatim>
-%TWISTY{link="" start="show"}%
+%TWISTY{
+link=""
+start="show"
+}%
 <input type="submit" class="twikiButton" value="You might have !JavaScript" />
 %ENDTWISTY%
 </verbatim>
 
-%TWISTY{link="" start="show"}%
+%TWISTY{
+link=""
+start="show"
+}%
 <input type="submit" class="twikiButton" value="You might have !JavaScript" />
 %ENDTWISTY%
 
@@ -207,13 +282,23 @@ This code will show the button when !JavaScript is off:
 Use parameter =class= to style the content div or class:
 
 <verbatim>
-%TWISTY{mode="div" showlink="Show..." hidelink="Hide" class="twikiHelp"}%
+%TWISTY{
+mode="div"
+showlink="Show..."
+hidelink="Hide"
+class="twikiHelp"
+}%
 my twisty content
 %ENDTWISTY%
 </verbatim>
 
 Generates: %BR%
-%TWISTY{mode="div" showlink="Show..." hidelink="Hide" class="twikiHelp"}%
+%TWISTY{
+mode="div"
+showlink="Show..."
+hidelink="Hide"
+class="twikiHelp"
+}%
 %GREEN% my twisty content %ENDCOLOR%
 %ENDTWISTY%
 
@@ -222,9 +307,14 @@ Generates: %BR%
 To be able to use header tags like =&lt;h2>=, use the properties =prefix= and =suffix=. Because we have identical show and hide links we can use the shorthand property =link=.
 
 <verbatim>
-%TWISTY{prefix="<h4>!!" mode="div" link="Header"
+%TWISTY{
+prefix="<h4>!!"
+mode="div"
+link="Header"
 showimgleft="%ICONURLPATH{toggleopen}%"
-hideimgleft="%ICONURLPATH{toggleclose}%" suffix="</h4>"}%
+hideimgleft="%ICONURLPATH{toggleclose}%"
+suffix="</h4>"
+}%
 my twisty content
 %ENDTWISTY%
 </verbatim>
@@ -233,9 +323,13 @@ Add the =!!= to prevent the twisty header appear in the table of contents when y
 
 Will create:
 
-%TWISTY{prefix="<h4>!!" link="Header"
+%TWISTY{
+prefix="<h4>!!"
+link="Header"
 showimgleft="%ICONURLPATH{toggleopen}%"
-hideimgleft="%ICONURLPATH{toggleclose}%" suffix="</h4>"}%
+hideimgleft="%ICONURLPATH{toggleclose}%"
+suffix="</h4>"
+}%
 %GREEN% my twisty content %ENDCOLOR%
 %ENDTWISTY%
 
@@ -290,6 +384,17 @@ but use formatting tokens:
 <verbatim>
 link="$percntY$percnt"
 </verbatim>
+
+... to get:
+
+%TWISTY{
+mode="div"
+link="$percntY$percnt"
+showimgleft="%ICONURLPATH{toggleopen-small}%"
+hideimgleft="%ICONURLPATH{toggleclose-small}%"
+}%
+my twisty content
+%ENDTWISTY%
 
 Or a more complex example using %TWIKIWEB%.SpreadsheetPlugin; do not write:
 
@@ -492,9 +597,9 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 | Copyright &copy;: | 2005 Rafael Alvarez; 2006, 2007 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | None |
-| Plugin&nbsp;Version: | 24 Nov 2007 (version 1.4.6)  |
+| Plugin&nbsp;Version: | 25 Nov 2007 (version 1.4.7)  |
 | Change&nbsp;History: | <!-- versions below in reverse order -->&nbsp; |
-| 24 Nov 2007 | 1.4.6 Arthur Clemens - Added formatting tokens. |
+| 24 Nov 2007 | 1.4.6, 1.4.7 Arthur Clemens - Added formatting tokens. |
 | 07 Oct 2007 | 1.4.5 Arthur Clemens - Fix html tag with show/hide controls. |
 | 25 Sep 2007 | 1.4.4 Arthur Clemens - Fix rendering of headers when =prefix= is used. |
 | 11 Jul 2007 | 1.4.3 Arthur Clemens - Fix invalid html when =prefix= and =suffix= is used. |
