@@ -37,7 +37,7 @@ $VERSION = '$Rev: 11069$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.0.5';
+$RELEASE = '1.0.6';
 
 # Name of this Plugin, only used in this module
 $pluginName = 'RenderTableDataPlugin';
@@ -310,11 +310,8 @@ s/\$C$cellNum(\(([0-9]*),*(.*?)\))*/_getCellContents($cell,$2,$3)/ges;
                 $result .= $rowResult;
             }
             $result .= $afterText;
-            $result =~ s/\$nop//go;
-            $result =~ s/\$n/\n/go;
-            $result =~ s/\$percnt/%/go;
-            $result =~ s/\$dollar/\$/go;
-            $result =~ s/\$quot/\"/go;
+            
+            $result = _decodeFormatTokens($result);
 
             # feedback variables
             $showSetStart = '' if !defined $showSetStart;
@@ -454,6 +451,32 @@ sub _stripHtml {
     $text =~ s/<[^>]+>//go;               # strip HTML
     $text =~ s/^ *//go;                   # strip leading space space
     $text = lc($text);                    # convert to lower case
+    return $text;
+}
+
+sub _decodeFormatTokens {
+    my $text = shift;
+    return
+      defined(&TWiki::Func::decodeFormatTokens)
+      ? TWiki::Func::decodeFormatTokens($text)
+      : _expandStandardEscapes($text);
+}
+
+=pod
+
+For TWiki versions that do not implement TWiki::Func::decodeFormatTokens.
+
+=cut
+
+sub _expandStandardEscapes {
+    my $text = shift;
+    $text =~ s/\$n\(\)/\n/gos;    # expand '$n()' to new line
+    my $alpha = TWiki::Func::getRegularExpression('mixedAlpha');
+    $text =~ s/\$n([^$alpha]|$)/\n$1/gos;    # expand '$n' to new line
+    $text =~ s/\$nop(\(\))?//gos;      # remove filler, useful for nested search
+    $text =~ s/\$quot(\(\))?/\"/gos;   # expand double quote
+    $text =~ s/\$percnt(\(\))?/\%/gos; # expand percent
+    $text =~ s/\$dollar(\(\))?/\$/gos; # expand dollar
     return $text;
 }
 
