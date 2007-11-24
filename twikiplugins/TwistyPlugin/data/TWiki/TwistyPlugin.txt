@@ -374,6 +374,7 @@ The format tokens are the same as with %TWIKIWEB%.FormattedSearch:
 | =$percnt= | Percent sign (=%=) |
 | =$dollar= | Dollar sign (=$=) |
 
+
 For example, to show an icon inside the link, do not write:
 <verbatim>
 link="%Y%"
