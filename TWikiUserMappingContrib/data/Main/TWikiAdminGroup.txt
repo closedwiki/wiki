@@ -7,10 +7,14 @@
    * Persons/group who can change the list:
       * Set ALLOWTOPICCHANGE = TWikiAdminGroup
 
+---
+%INCLUDE{"%MAINWEB%.TWikiAdminUser" section="sudo_login"}%
+
 <sticky><div style="background-color:yellow"></sticky>
 __How to add the first administrator__ %BR%
 If you haven't previously set up an administrator, follow these steps:
-   1 Authenticate as the internal TWiki administrator using the [[%SCRIPTURL{login}%/%WEB%/%TOPIC%?sudo=sudo;origurl=%SCRIPTURL{"view"}%/%BASEWEB%/%BASETOPIC%][internal admin login]] (use the username suggested, and the password you set in =configure=).
+   1 Authenticate as the internal TWiki administrator:
+      * %ADMINLOGIN%
    1 Edit this topic
    1 Insert the wikinames of admin users in the TWiki Administrator Group by listing them in the GROUP setting %BR% (example =* Set GROUP = <nop>JohnSmith, <nop>JamesBond=)
    1 Save this topic
@@ -21,9 +25,5 @@ If you haven't previously set up an administrator, follow these steps:
 <sticky></div></sticky>
 
 __Related topics:__ %WIKIUSERSTOPIC%, TWikiAdminUser, TWikiGroups, %TWIKIWEB%.TWikiAccessControl
----
-__%X% NOTE:__ You can login as the built-in TWikiAdminUser using the password set in configure.
-%INCLUDE{"%MAINWEB%.TWikiAdminUser" section="sudo_login"}%
----
-__%X% NOTE:__ If you lock yourself out of <nop>TWikiAdminGroup during setup activities, or have forgotten the configure password, you can edit this group topic at file system level using any text file editor (as a last resort.)
----
+
+
