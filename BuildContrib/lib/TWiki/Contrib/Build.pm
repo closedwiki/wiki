@@ -1718,7 +1718,7 @@ sub target_history {
             next if $mess =~ /^Item0+:/;
             $mess =~ s/</&lt;/g;
             $mess =~ s/\|/!/g;
-            $mess =~ s#^Item(\d+):#<a rel='nofollow' href='$this->{BUGSURL}/Item$1'>Item$1</a> #gm;
+            $mess =~ s#(?<!Bugs:)\bItem(\d+):#Bugs:Item$1:#gm;
             $mess =~ s/\r?\n/ /g;
             $new{$rev} = [ $rev, $mess ];
         }
