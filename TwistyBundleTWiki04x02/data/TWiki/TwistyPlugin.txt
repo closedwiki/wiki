@@ -367,12 +367,13 @@ If you use TWiki variables inside TWISTY parameters chances are it will mess up 
 
 The format tokens are the same as with %TWIKIWEB%.FormattedSearch:
 
-| *Token*    | *Expands to*  |
-| =$percnt=  | =%=           |
-| =$quot=    | ="=           |
-| =$dollar=  | =$=           |
-| =$n=       | =\n=          | 
-| =$nop=     | =&lt;nop&gt;= |
+| *Escape:* | *Expands To:* |
+| =$n= or =$n()= | New line. Use =$n()= if followed by alphanumeric character, e.g. write =Foo$n()Bar= instead of =Foo$nBar= |
+| =$nop= or =$nop()= | Is a "no operation". |
+| =$quot= | Double quote (="=) |
+| =$percnt= | Percent sign (=%=) |
+| =$dollar= | Dollar sign (=$=) |
+
 
 For example, to show an icon inside the link, do not write:
 <verbatim>
