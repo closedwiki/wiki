@@ -1254,6 +1254,7 @@ sub TML2PlainText {
     $text =~ s/[\+\-]+/ /g;             # remove special chars
     $text =~ s/^\s+//;                  # remove leading whitespace
     $text =~ s/\s+$//;                  # remove trailing whitespace
+    $text =~ s/!(\w*)/$1/s;             # remove nop exclamation marks
     $text =~ s/[\r\n]+/\n/s;
     $text =~ s/[ \t]+/ /s;
 
