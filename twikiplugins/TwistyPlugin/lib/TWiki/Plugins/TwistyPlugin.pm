@@ -36,15 +36,15 @@ use vars
   $prefMode $prefShowLink $prefHideLink $prefRemember
   $defaultMode $defaultShowLink $defaultHideLink $defaultRemember );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
+# This should always be $Rev: 15653 (19 Nov 2007) $ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
-$VERSION = '$Rev$';
+$VERSION = '$Rev: 15653 (19 Nov 2007) $';
 
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.4.6';
+$RELEASE = '1.4.7';
 
 $pluginName = 'TwistyPlugin';
 
@@ -443,15 +443,24 @@ sub _wrapInContainerDivIfNoJavascripClose {
     my ($mode) = @_;
     return '</' . $mode . '><!--/twistyPlugin twikiMakeVisibleInline-->';
 }
-
+        
 sub _expandFormatVariables {
+    my ($text) = @_;
+    
+	return defined(&TWiki::Func::decodeFormatTokens)
+        ? TWiki::Func::decodeFormatTokens($text)
+        : _expandFormatVariables($text);
+}
+
+sub _compatibilityExpandFormatVariables {
+
     my ($text) = @_;
 
 	$text =~ s/\$quot/"/gos;      # expand double quote
-    $text =~ s/\$percnt/%/gos;    # expand percent
-    $text =~ s/\$dollar/\$/gos;    # expand dollar
-    $text =~ s/\$n/\n/gos;    # expand newline
-    $text =~ s/\$nop/<nop>/gos;    # expand nop    
+	$text =~ s/\$percnt/%/gos;    # expand percent
+	$text =~ s/\$n/\n/gos;    # expand newline
+	$text =~ s/\$nop/<nop>/gos;    # expand nop    
+	$text =~ s/\$dollar/\$/gos;    # expand dollar
     
     return $text;
 }
