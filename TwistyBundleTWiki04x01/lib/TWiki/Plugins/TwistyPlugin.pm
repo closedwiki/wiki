@@ -44,7 +44,7 @@ $VERSION = '$Rev: 15653 (19 Nov 2007) $';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.4.7';
+$RELEASE = '1.4.8';
 
 $pluginName = 'TwistyPlugin';
 
@@ -153,7 +153,7 @@ sub _TWISTYSHOW {
     my $mode = $params->{'mode'} || $prefMode;
 
     my $btn = _twistyBtn( 'show', @_ );
-    return _expandFormatVariables( _wrapInButtonHtml( $btn, $mode ) );
+    return _decodeFormatTokens( _wrapInButtonHtml( $btn, $mode ) );
 }
 
 sub _TWISTYHIDE {
@@ -161,7 +161,7 @@ sub _TWISTYHIDE {
     my $mode = $params->{'mode'} || $prefMode;
 
     my $btn = _twistyBtn( 'hide', @_ );
-    return _expandFormatVariables( _wrapInButtonHtml( $btn, $mode ) );
+    return _decodeFormatTokens( _wrapInButtonHtml( $btn, $mode ) );
 }
 
 sub _TWISTYBUTTON {
@@ -173,7 +173,7 @@ sub _TWISTYBUTTON {
     my $prefix = $params->{'prefix'} || '';
     my $suffix = $params->{'suffix'} || '';
     my $btn = $prefix . ' ' . $btnShow . $btnHide . ' ' . $suffix;
-    return _expandFormatVariables( _wrapInButtonHtml( $btn, $mode ) );
+    return _decodeFormatTokens( _wrapInButtonHtml( $btn, $mode ) );
 }
 
 sub _TWISTY {
@@ -205,7 +205,7 @@ sub _TWISTYTOGGLE {
         $cookieState );
     my $props = @propList ? " " . join( " ", @propList ) : '';
     my $modeTag = '<' . $mode . $props . '>';
-    return _expandFormatVariables( _wrapInContentHtmlOpen() . $modeTag );
+    return _decodeFormatTokens( _wrapInContentHtmlOpen() . $modeTag );
 }
 
 sub _ENDTWISTYTOGGLE {
@@ -436,34 +436,38 @@ sub _wrapInContentHtmlClose {
 }
 
 sub _wrapInContainerHideIfNoJavascripOpen {
-    my ($mode) = @_;
+    my ($mode) = shift;
     return '<' . $mode . ' class="twistyPlugin twikiMakeVisibleInline">';
 }
 
 sub _wrapInContainerDivIfNoJavascripClose {
-    my ($mode) = @_;
+    my ($mode) = shift;
     return '</' . $mode . '><!--/twistyPlugin twikiMakeVisibleInline-->';
 }
 
-sub _expandFormatVariables {
-    my ($text) = @_;
-
+sub _decodeFormatTokens {
+    my $text = shift;
     return
       defined(&TWiki::Func::decodeFormatTokens)
       ? TWiki::Func::decodeFormatTokens($text)
-      : _expandFormatVariables($text);
+      : _expandStandardEscapes($text);
 }
 
-sub _compatibilityExpandFormatVariables {
+=pod
 
-    my ($text) = @_;
+For TWiki versions that do not implement TWiki::Func::decodeFormatTokens.
 
-    $text =~ s/\$quot/"/gos;       # expand double quote
-    $text =~ s/\$percnt/%/gos;     # expand percent
-    $text =~ s/\$n/\n/gos;         # expand newline
-    $text =~ s/\$nop//gos;         # remove nop
-    $text =~ s/\$dollar/\$/gos;    # expand dollar
+=cut
 
+sub _expandStandardEscapes {
+    my $text = shift;
+    $text =~ s/\$n\(\)/\n/gos;    # expand '$n()' to new line
+    my $alpha = TWiki::Func::getRegularExpression('mixedAlpha');
+    $text =~ s/\$n([^$alpha]|$)/\n$1/gos;    # expand '$n' to new line
+    $text =~ s/\$nop(\(\))?//gos;      # remove filler, useful for nested search
+    $text =~ s/\$quot(\(\))?/\"/gos;   # expand double quote
+    $text =~ s/\$percnt(\(\))?/\%/gos; # expand percent
+    $text =~ s/\$dollar(\(\))?/\$/gos; # expand dollar
     return $text;
 }
 
