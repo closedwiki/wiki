@@ -165,7 +165,10 @@
 %TMPL:DEF{"password_changed"}%
 ---+++ %MAKETEXT{"Password changed successfully!"}%
 
-%MAKETEXT{"You may need to close your browser to make this change take effect."}%
+%IF{
+  "{LoginManager} = 'TWiki::LoginManager::ApacheLogin'"
+  then="%MAKETEXT{"You may need to close your browser to make this change take effect."}%"
+}%
 
 *[[%USERSWEB%.%HOMETOPIC%][%MAKETEXT{"OK"}%]]*
 %TMPL:END%
