@@ -145,14 +145,14 @@ handler.
 	   added "web" property to topic hashes; \
            caching META:PREFERENCES now |
 |  11537 | Added lc and uc operators for case-insensitive searches |
-|  9303 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1844>'>Item1844</a> don't die on broken symlinks |
-|  8682 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1580'>Item1580</a>  one-char fix that makes the difference |
-|  8110 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item663'>Item663</a>  formatting and text fixes |
-|  7552 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item997'>Item997</a>  test update |
-|  7274 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item719'>Item719</a>  onReload() is not a static method. |
-|  7262 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item719'>Item719</a>  MichaelDaum's patch (almost) to correct parameters to onReload |
-|  7260 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item727'>Item727</a>  made it clean the form name using normaliseWebTopicName |
-|  6353 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item380'>Item380</a>  do as the man says; make all $/ local |
+|  9303 | TWikibug:Item1844 - don't die on broken symlinks |
+|  8682 | TWikibug:Item1580 - one-char fix that makes the difference |
+|  8110 | TWikibug:Item663 - formatting and text fixes |
+|  7552 | TWikibug:Item997 - test update |
+|  7274 | TWikibug:Item719 - onReload() is not a static method. |
+|  7262 | TWikibug:Item719 - MichaelDaum's patch (almost) to correct parameters to onReload |
+|  7260 | TWikibug:Item727 - made it clean the form name using normaliseWebTopicName |
+|  6353 | TWikibug:Item380 - do as the man says; make all $/ local |
 |  5720 | Updated tests |
 |  5719 | Fix for correct handling of parent relations |
 |  5229 | Small improvement to the way it handles errors from Storable and Archive |
