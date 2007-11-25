@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="PeterThoeny" date="1186881349" format="1.1" version="$Rev$"}%
 ---+!! Interwiki Plugin
 
-The <nop>%TOPIC% links ==ExternalSite:Page== text to external sites based on aliases defined in the %SYSTEMWEB%.InterWikis topic. This plugin is inspired by <nop>UseMod Wiki's inter-wiki links, http://www.usemod.com/cgi-bin/wiki.pl?InterWiki.
+The <nop>%TOPIC% links ==ExternalSite:Page== text to external sites based on aliases defined in the %TWIKIWEB%.InterWikis topic. This plugin is inspired by <nop>UseMod Wiki's inter-wiki links, http://www.usemod.com/cgi-bin/wiki.pl?InterWiki.
 
 %TOC%
 
@@ -9,8 +9,8 @@ The <nop>%TOPIC% links ==ExternalSite:Page== text to external sites based on ali
 
    * Enter ==ExternalSite:Page== to create a link that points to the ==Page== on the ==ExternalSite== server.
    * Enter ==[<nop>[ExternalSite:Page][any label]]== to specify a custom label.
-   * All ==ExternalSite== aliases are defined in the %SYSTEMWEB%.InterWikis topic.
-   * Add and edit aliases in %SYSTEMWEB%.InterWikis.
+   * All ==ExternalSite== aliases are defined in the %TWIKIWEB%.InterWikis topic.
+   * Add and edit aliases in %TWIKIWEB%.InterWikis.
    * Each entry must be of format: <br /> ==| External site alias | URL | Tooltip help text |==.
    * Site aliases must start with an upper case letter and may contain alphanumeric letters.
    * The URL and Tooltip Text may contain optional ==$page== variables; the variable gets expanded to the page name.
@@ -22,10 +22,10 @@ The <nop>%TOPIC% links ==ExternalSite:Page== text to external sites based on ali
 Plugin settings are stored as Preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
-   * One-line description, shown in the %SYSTEMWEB%.TextFormattingRules topic:
+   * One-line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = Link ==ExternalSite:Page== text to external sites based on aliases defined in a rules topic
 
-   * Link rules topic name: (default is %SYSTEMWEB%.InterWikis)
+   * Link rules topic name: (default is %TWIKIWEB%.InterWikis)
       * Set RULESTOPIC = 
 
    * Inter-link format, with variables:
@@ -51,11 +51,12 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.AndreaSterbini, TWiki:Main.PeterThoeny |
-|  Copyright: | &copy; 2001-2007, TWiki:Main.AndreaSterbini, [[http://www.twiki.net/][Peter Thoeny]]|
+|  Copyright: | &copy; 2001-2007, Andrea Sterbini, Peter Thoeny ([[http://www.twiki.net/][TWIKI.NET]]), %TWIKIWEB%.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  13 Aug 2007: | 14545 - Bugs:Item4451 - Added Bugs: rule (TWiki:Main.CrawfordCurrie) |
+|  25 Nov 2007: | 15752 - TWikibug:Item5006 - Renamed Bugs rule to TWikibug rule (PTh) |
+|  13 Aug 2007: | 14545 - TWikibug:Item4451 - Added Bugs: rule (TWiki:Main.CrawfordCurrie) |
 |  11 Aug 2007: | 14538 - Fixed broken ISBN link (TWiki:Main.PeterThoeny) |
 |  08 Nov 2006: | 11935 - Added css =class="interwikiLink"= (TWiki:Main.PeterThoeny) |
 |  07 Nov 2006: | 11924 - Added INTERLINKFORMAT; removed redundant SUPPRESSTOOLTIP; allow @ signs in page part of interwiki link; support single digit page part (TWiki:Main.PeterThoeny) |
@@ -75,11 +76,11 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.0 |
-|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %SYSTEMWEB%.GoodStyle 100%, %SYSTEMWEB%.FormattedSearch 98%, %TOPIC% 98% |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle 100%, %TWIKIWEB%.FormattedSearch 98%, %TOPIC% 98% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.InterWikis
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.InterWikis
 
--- TWiki:Main.PeterThoeny - 11 Aug 2007
+-- TWiki:Main.PeterThoeny - 25 Nov 2007
