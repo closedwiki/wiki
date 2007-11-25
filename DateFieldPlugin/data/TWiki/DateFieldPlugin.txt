@@ -56,10 +56,10 @@ See JSCalendarContrib for additional settings.
 | Change History: | |
 |  11860 | Added DATEFIELDPLUGIN_DEFAULTTOTODAY to allow turning on the default to today's date |
 |  11702 | Use default date format from JSCalendarContrib |
-|  11335 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2804'>Item2804</a> default date to todays date, support DATEFORMAT as standard preference |
-|  7265 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item180'>Item180</a>  removed pointless, outdated dependency check from DateFieldPlugin |
-|  6653 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item196'>Item196</a>  removed spurious documentation. JSCalendarContrib is now used, and there is no longer any plugin-specific setup for the calendar |
-|  5958 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item180'>Item180</a>  modernised DateFieldPlugin, and made mklinks.sh link in contribs. Also added a copy option, for people like Anton who want to make local dists for upload to remote servers |
+|  11335 | TWikibug:Item2804 - default date to todays date, support DATEFORMAT as standard preference |
+|  7265 | TWikibug:Item180 - removed pointless, outdated dependency check from DateFieldPlugin |
+|  6653 | TWikibug:Item196 - removed spurious documentation. JSCalendarContrib is now used, and there is no longer any plugin-specific setup for the calendar |
+|  5958 | TWikibug:Item180 - modernised DateFieldPlugin, and made mklinks.sh link in contribs. Also added a copy option, for people like Anton who want to make local dists for upload to remote servers |
 |  5451 | Initial revision |
 |  03 Jan 2005 | 1.001 make outputformat configurable; changed standard format to sortable dates |
 |  9 Dec 2004 | 1.000 initial version |
