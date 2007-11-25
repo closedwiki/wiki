@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1175216131" format="1.0" version="1.19"}%
+%META:TOPICINFO{author="PeterThoeny" date="1195983822" format="1.0" version="1.20"}%
 ---+!! Black List Plugin
 
 %TOC%
@@ -138,7 +138,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Known Issues and Limitations
 
 	* Wiki-spam filtering for HTML attachments works in TWiki 01-Sep-2004 and later.
-	* With TWiki 4.0.2 on some platforms, notably Solaris, attached files are uploaded with a zero file size. This is because there is a bug in how TWiki 4.0.2 handles the beforeAttachmentSaveHandler. If affected, upgrade TWiki or apply bug fix [[http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2390][Item2390]]
+	* With TWiki 4.0.2 on some platforms, notably Solaris, attached files are uploaded with a zero file size. This is because there is a bug in how TWiki 4.0.2 handles the beforeAttachmentSaveHandler. If affected, upgrade TWiki or apply bug fix [[TWikibug:Item2390][Item2390]]
 	* Scan for script eval() and escape() is currently hardcoded
 
 ---++ Plugin Info
