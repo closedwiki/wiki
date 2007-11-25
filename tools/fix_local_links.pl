@@ -1,4 +1,19 @@
 #! /usr/bin/perl -w
+
+# This script is used by the build script when building a TWiki release.
+# It is used to create the documents in the TWiki root.
+# It creates complete stand-alone HMTL versions of TWiki topics which 
+# requires no external resources. This is because especiall the INSTALL.html
+# is expected to be read by a browser as a file without having a working TWiki
+# installation.
+# It expects the topic viewed as HTML in the plain skin in STDIN and returns the 
+# filtered topic in STDOUT
+# The script does the following processing
+# - Reduce the header section to a bare minimum so no CSS or scripts are loaded
+# - Removes all images
+# - Changes all links from pointing to the server that was used for the build to
+#   twiki.org
+
 use strict;
 
 BEGIN {
@@ -8,43 +23,32 @@ BEGIN {
     unshift @INC, '../lib/CPAN/lib/';
     unshift @INC, '../lib/';
 
-    # designed to be run from within an SVN checkout area
-    my @path = split( /\/+/, File::Spec->rel2abs($0) );
-    pop(@path); # the script name
 }
 use TWiki;
 
-my $BASE = {url=>'',};
+{
+    # Read entire file from STDIN
+    local $/;
+    my $topichtml = <>;
 
-#print 'url: ', $TWiki::cfg{DefaultUrlHost}, "\n";
-#print 'pub: ', $TWiki::cfg{PubUrlPath}, "\n";
-#print 'script: ', $TWiki::cfg{ScriptUrlPath}, "\n";
+    $topichtml =~ s|(?<=[?;&])TWIKISESSID=\w*[;&]?||g;
+    
+    # Replace the header with a minimal header to avoid all references to other files
+    $topichtml =~ s|<head>.*?<title>\s*(\S*).*?</title>.*?</head>|<head><title>$1</title></head>|gs;
 
-while ( <> ) {
-    # <base href=".../view/TWiki/TWikiDocumentation" />
-#    my ( @a ) = m|<base href="([^"]*)/view[^/]*/([A-Za-z]+)/([A-Za-z]+)"|i;
-#    my %base;
-#    @base{ 'url', 'web', 'topic' } = @a;
+    # Remove image tags so we avoid dependance of other files or internet connection
+    $topichtml =~ s|<img.*?>||g;
+    
+    # Changes all links to attachments to twiki.org
+    $topichtml =~ s|$TWiki::cfg{DefaultUrlHost}$TWiki::cfg{PubUrlPath}/*|http://twiki.org/p/pub/|g;
 
-#    if ( $base{url} ) {
-#        $BASE = \%base;
-#        next;
-#    }
-
-    s|(?<=[?;&])TWIKISESSID=\w*[;&]?||g;
-
-    s|$TWiki::cfg{DefaultUrlHost}$TWiki::cfg{PubUrlPath}/*|http://twiki.org/p/pub/|g;
-
-    s|($TWiki::cfg{DefaultUrlHost}$TWiki::cfg{ScriptUrlPath})/*|http://twiki.org/cgi-bin/|g;
+    # Changes all links to topics to twiki.org
+    $topichtml =~ s|($TWiki::cfg{DefaultUrlHost}$TWiki::cfg{ScriptUrlPath})/*|http://twiki.org/cgi-bin/|g;
     
     #This URL param is not wanted when we link to twiki.org 
-    s/href="\?skin=plain#/href="#/g;
+    $topichtml =~ s/href="\?skin=plain#/href="#/g;
     
-    #Base URL just destroys the TOC. We do not really need this.
-    s|<base href="http://twiki.org/cgi-bin/TWiki/.*?"></base>||g;
-
-    # SMELL: do we really need this?
-    s|(src=".*?/TWikiDocGraphics)Pattern(/)|$1$2|g;
-
-    print;
+    # Send the modified file to STDOUT
+    print $topichtml;
+    
 }
