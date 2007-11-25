@@ -30,16 +30,15 @@ Another great TWiki extension from the <a style="text-decoration:none" href="htt
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Dependencies: | %$DEPENDENCIES% |
-| Change&nbsp;History: | |
+|  Change&nbsp;History: | <!-- versions below in reverse order -->&nbsp; |
 |  9 Sep 2007 | Bugs:Item4175 added MAKETEXT in case the string is available |
 |  13966 | Bugs:Item4155 Fixed for 4.0.x and 4.1.x |
-|  13787 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item4010'>Item4010</a>fix web subscription, and =format= parameters. - TWiki:Main.SvenDowideit |
-|  13525 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item3731'>Item3731</a> Update documentation topic. |
-|  13512 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item3731'>Item3731</a>  final pre-release tweaks, result of testing on 4.1.2 |
-|  13510 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item3731'>Item3731</a>  completed the plugin now that the Mailer updates are done |
-|  13506 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item3731'>Item3731</a>  Update dependency to latest version of MailerContrib |
-|  13081 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item3731'>Item3731</a>  Added SubscribePlugin, and cleaned up and updated APIs in MailerContrib |
-|  ?1'<!-- versions below in reverse order -->&nbsp;' | <!-- versions below in reverse order -->&nbsp; |
+|  13787 | TWikibug:Item4010 - fix web subscription, and =format= parameters. - TWiki:Main.SvenDowideit |
+|  13525 | TWikibug:Item3731 - Update documentation topic. |
+|  13512 | TWikibug:Item3731 - final pre-release tweaks, result of testing on 4.1.2 |
+|  13510 | TWikibug:Item3731 - completed the plugin now that the Mailer updates are done |
+|  13506 | TWikibug:Item3731 - Update dependency to latest version of MailerContrib |
+|  13081 | TWikibug:Item3731 - Added SubscribePlugin, and cleaned up and updated APIs in MailerContrib |
 |  24 Apr 2007 | First version |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
