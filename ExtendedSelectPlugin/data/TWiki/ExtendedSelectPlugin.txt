@@ -64,7 +64,7 @@ Content:
 |  Plugin Version: | 05 Dec 2005 (V1.10) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  29 Dec 2005: | updated topic formatting (TWiki:Main.WillNorris) |
-|  05 Dec 2005: | added value decoding. See Bugs:Item1045. (TWiki:Main.MichaelDaum) |
+|  05 Dec 2005: | added value decoding. See TWikibug:Item1045. (TWiki:Main.MichaelDaum) |
 |  11 Oct 2005: | V1.001, fixed editing multiple selects | 
 |  11 Oct 2005: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 and Dakar Beta 3 or later|
