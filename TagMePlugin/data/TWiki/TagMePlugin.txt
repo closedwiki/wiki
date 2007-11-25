@@ -352,7 +352,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Version: | 16 Oct 2007 (V1.046) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  16 Oct 2007: | Arthur Clemens: added backward compatible example template. |
-|  26 Sep 2007: | TWiki:Main.CrawfordCurrie Bugs:Item4728 fixed incorrect cloud font sizes to reflect relative importance of tags actually being displayed |
+|  26 Sep 2007: | TWiki:Main.CrawfordCurrie TWikibug:Item4728 fixed incorrect cloud font sizes to reflect relative importance of tags actually being displayed |
 |  11 Sep 2007: | Arthur Clemens: updated example template to TWiki template convention. |
 |  11 Jun 2007: | Arthur Clemens: fixed sizing of tags with the same tag count; fixed CSS class for select box; updated documentation with "How to put tags on every page". |
 |  07 Jun 2007: | Arthur Clemens: removed dependency on (unreleased) TWiki 4.2. |
@@ -368,14 +368,14 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  14 Nov 2006: | Fix IE browser crash issue on print (forms can't be named "tags"; debug by TWiki:Main.KevinKalmbach) |
 |  14 Oct 2006: | Fix show default problem introduced by version 07 Oct 2006 (contributed by TWiki:Main.ChristianSuenkel) |
 |  07 Oct 2006: | nostatus="on" parameter for add/remove tag (contributed by TWiki:Main.FredMorris) |
-|  05 Oct 2006: | Fix issue of missing topics in tag search if topic name contains plus or minus sign (workaround for TWiki core Bugs:Item2625 and Bugs:Item2967) |
+|  05 Oct 2006: | Fix issue of missing topics in tag search if topic name contains plus or minus sign (workaround for TWiki core TWikibug:Item2625 and TWikibug:Item2967) |
 |  04 Oct 2006: | Fix issue of statistics moving !WebHome tags to !WebStatistics |
 |  02 Oct 2006: | Support for topic rename (tags are no longer lost) |
 |  14 Sep 2006: | MAKETEXT support (TWiki:Main.KoenMartens); fixed nested webs issue; fix in generated XHTML (TWiki:Main.ArthurClemens) |
 |  20 May 2006: | Support international characters (contributed by TWiki:Main.AntonioTerceiro) |
 |  09 May 2006: | Support for sub-webs; enclose tag list on topic in =span class="tagMePlugin"=; tag selector not shown if empty; limit max size of new tags to 30 characters |
 |  21 Mar 2006: | !TagMeSearch with =minsize= and =maxsize= parameters; !TagMeSearch format with =$votecount=, =$size=; fixed !JavaScript compatibility issue on TWiki 4.0 |
-|  11 Mar 2006: | !TagMeSearch with =sort=, =norelated=, =nototal=, =format= and =separator= paramters; linked tags in create new tag section; renamed !TagMeViewSpecificTag to a shorter !TagMeSearch; workaround for Dakar Bugs:Item1838 to fix broken links in top bar |
+|  11 Mar 2006: | !TagMeSearch with =sort=, =norelated=, =nototal=, =format= and =separator= paramters; linked tags in create new tag section; renamed !TagMeViewSpecificTag to a shorter !TagMeSearch; workaround for Dakar TWikibug:Item1838 to fix broken links in top bar |
 |  06 Mar 2006: | Remove my tag vote; added exclude="", minsize="" and maxsize="" parameters; more intuitive icons; in default view, sort tags alphabetically instead of sort by tag vote |
 |  03 Mar 2006: | Allow underscore in tags (and convert space and dash to underscore); added web="" and topic="" parameters; fixed font size issue in tag cloud with disproportional counts |
 |  28 Feb 2006: | Use tabs in all/my/specific tags view; show related tags in specific tags view; check if topic exists when adding tags; |
