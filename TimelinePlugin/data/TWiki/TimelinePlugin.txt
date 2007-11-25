@@ -82,7 +82,7 @@ format="<event start='$date' title='$topic' link='%SCRIPTURL{"view"}%/$web/$topi
 ---++ Plugin Installation Instructions
 
    * unzip the zip file into the twiki directory
-   * if you are running TWiki release 4.0.4 or before, you need to apply patch to TWiki add the tmpl file mentioned in http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2617
+   * if you are running TWiki release 4.0.4 or before, you need to apply patch to TWiki add the tmpl file mentioned in TWikibug:Item2617
    * enable the plugin using configure
 
 ---++ Plugin Info
