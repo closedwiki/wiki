@@ -109,12 +109,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 |  Plugin Author: | TWiki:Main.StanleyKnutson, TWiki:Main.PeterThoeny, TWiki:Main.PaulineCheung |
 |  Plugin Version: | 21 Nov 2005 (V1.01) |
-| Change&nbsp;History: | |
-|  11686 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2956'>Item2956</a>  Freeze TWikiRelease04x00 and copy it to new branch MAIN |
-|  10613 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2473'>Item2473</a>  files in pub and data directories shouldn't be marked executable in svn (Ordnung muss sein) |
-|  7960 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1238'>Item1238</a>  plugins cleanup: added BuildContrib support/infrastructure |
-|  7585 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1016'>Item1016</a>  initial import of TopicCreatePlugin (thanks TWiki:Main.StanleyKnutson and others) |
-|  ?1'<!-- versions below in reverse order -->&nbsp;' | <!-- versions below in reverse order -->&nbsp; |
+|  Change&nbsp;History: | <!-- versions below in reverse order -->&nbsp; |
+|  11686 | TWikibug:Item2956 - Freeze TWikiRelease04x00 and copy it to new branch MAIN |
+|  10613 | TWikibug:Item2473 - files in pub and data directories shouldn't be marked executable in svn (Ordnung muss sein) |
+|  7960 | TWikibug:Item1238 - plugins cleanup: added BuildContrib support/infrastructure |
+|  7585 | TWikibug:Item1016 - initial import of TopicCreatePlugin (thanks TWiki:Main.StanleyKnutson and others) |
 |  21 Nov 2005: | Initial TOPICCATTACH |
 |  30 Apr 2005: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
@@ -130,5 +129,3 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 -- TWiki:Main.StanleyKnutson - 21 Nov 2005
-<br>-- TWiki:Main.PeterThoeny - 30 Apr 2005
-
