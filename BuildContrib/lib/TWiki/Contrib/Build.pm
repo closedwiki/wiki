@@ -54,7 +54,7 @@ my $NL = "\n";
 my $TWIKIORGPUB = 'http://twiki.org/p/pub';
 my $TWIKIORGSCRIPT = 'http://twiki.org/cgi-bin';
 my $TWIKIORGSUFFIX = '';
-my $TWIKIORGBUGS = 'http://develop.twiki.org/~develop/cgi-bin/view/Bugs';
+my $TWIKIORGBUGS = 'http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs';
 my $TWIKIORGEXTENSIONSWEB = "Plugins";
 
 my $GLACIERMELT = 10; # number of seconds to sleep between uploads,
