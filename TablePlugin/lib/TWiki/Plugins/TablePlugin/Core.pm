@@ -753,13 +753,50 @@ sub _guessColumnType {
 # Remove HTML from text so it can be sorted
 sub _stripHtml {
     my ($text) = @_;
-    $text ||= '';
+
     $text =~ s/\&nbsp;/ /go;    # convert space
     $text =~
       s/\[\[[^\]]+\]\[([^\]]+)\]\]/$1/go; # extract label from [[...][...]] link
-    $text =~ s/<[^>]+>//go;               # strip HTML
+
+    my $orgtext =
+      $text;    # in case we will remove all contents with stripping html
+    $text =~ s/<[^>]+>//go;    # strip HTML
+    $text = _getImageTextForSorting($orgtext) if ( $text eq '' );
+    $text =~ s/[\[\]\*\|=_\&\<\>]/ /g;    # remove Wiki formatting chars
     $text =~ s/^ *//go;                   # strip leading space space
     $text = lc($text);                    # convert to lower case
+    return $text;
+}
+
+=pod
+
+Retrieve text data from an image html tag to be used for sorting.
+First try the alt tag string. If not available, return the url string.
+If not available, return the original string.
+
+=cut
+
+sub _getImageTextForSorting {
+    my ($text) = @_;
+
+    # try to see _if_ there is any img data for sorting
+    my $hasImageTag = ( $text =~ m/\<\s*img([^>]+)>/ );
+    return $text if ( !$hasImageTag );
+
+    # first try to get the alt text
+    my $key = 'alt';
+    $text =~ m/$key=\s*[\"\']([^\"\']*)/;
+    return $1 if ( $1 ne '' );
+
+    # else
+
+    # no alt text; use the url
+    $key = 'url';
+    $text =~ m/$key=\s*[\"\']([^\"\']*)/;
+    return $1 if ( $1 ne '' );
+
+    # else
+
     return $text;
 }
 
@@ -1029,7 +1066,8 @@ sub _addStylesToHead {
         push( @styles, "$selector th a:visited font {$attr}" );
         my $hoverLinkColor = $cssAttrs{headerBg} || '#fff';
         my $hoverBackgroundColor = $cssAttrs{headerColor};
-        $attr = 'color:'
+        $attr =
+            'color:'
           . $hoverLinkColor
           . ';background-color:'
           . $hoverBackgroundColor . ';';
@@ -1465,7 +1503,8 @@ sub emitTable {
                           . $tableAnchor;
                     }
                     else {
-                        $cell = $debugText
+                        $cell =
+                            $debugText
                           . CGI::a( $linkAttributes, $cell )
                           . $tableAnchor;
                     }
@@ -1479,8 +1518,8 @@ sub emitTable {
                     my $bgcolor;
                     if ( $isSorted && @dataBgSorted ) {
                         $bgcolor =
-                          $dataBgSorted[ $dataColorCount %
-                          ( $#dataBgSorted + 1 ) ];
+                          $dataBgSorted[ $dataColorCount % (
+                              $#dataBgSorted + 1 ) ];
                     }
                     else {
                         $bgcolor =
