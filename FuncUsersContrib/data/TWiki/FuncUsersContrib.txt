@@ -34,10 +34,10 @@ The API is packaged this way so it can be used with TWiki-4.0
 |  10558 | Now supports ACL stored in META:PREFERENCE |
 |  9060 | Removed NOSEARCHALL handling from setACLs |
 |  9046 | Was not deleting the old setting out of the file, just writing the new setting at the end. Not a killer, just untidy. |
-|  8877 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1701'>Item1701</a>  getting install right |
-|  8856 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1682'>Item1682</a>  Further improvements to the user access, include access to ACL lists (read and write) |
-|  8847 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1670'>Item1670</a>  didn't realise getAllGroups wasn't in TWiki4 |
-|  8837 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1670'>Item1670</a>  proof-of-concept demonstrator for functions for user data access from plugins, long overdue. |
+|  8877 | TWikibug:Item1701 - getting install right |
+|  8856 | TWikibug:Item1682 - Further improvements to the user access, include access to ACL lists (read and write) |
+|  8847 | TWikibug:Item1670 - didn't realise getAllGroups wasn't in TWiki4 |
+|  8837 | TWikibug:Item1670 - proof-of-concept demonstrator for functions for user data access from plugins, long overdue. |
 |  Copyright &copy;: | Crawford Currie http://c-dot.co.uk 2006 |
 |  License: | GNU LGPL |
 |  Dependencies: | %$DEPENDENCIES% |
