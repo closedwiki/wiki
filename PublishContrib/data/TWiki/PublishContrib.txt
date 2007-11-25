@@ -400,7 +400,7 @@ This add-on started as the TWiki:Plugins/GenHTMLAddon, written by TWiki:Main/Cra
       fixed several html errors in the !PublishContrib and !PublishWeb topics;\
       removed hardcoded reference to print.pattern |
 |  8959 | TWiki-4 version. Also supports publishing to a file area, making TWiki easier to use as a CMS (see also TWiki:Plugins/PublishWebPlugin, which does almost the same thing :-( ) |
-|  6276 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item196'>Item196</a>  bugfix for HTTP_HOST, as described in the Dev topic for the contrib |
+|  6276 | TWikibug:Item196 - bugfix for HTTP_HOST, as described in the Dev topic for the contrib |
 |  5566 | Changed interface to support wildcards, and lightened the plugin by replacing a lot of files with simpler ways of doing things. |
 |  5499 | Added Compress::Zlib dependency, as requested by Brad Taylor |
 |  27 Apr 2005 | 1.301 Crawford Currie - fixed minor issues highlighted by Bruce Dillahunty and Scott Claridge |
