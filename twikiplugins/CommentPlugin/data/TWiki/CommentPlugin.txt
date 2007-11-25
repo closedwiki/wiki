@@ -248,20 +248,20 @@ Another great TWiki extension from the <a style="text-decoration:none" href="htt
 |  Plugin Author: | TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk inspired by the work of TWiki:Main.DavidWeller and TWiki:Main.PeterMasiar |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
-|  5 Sep 2007 | Bugs:Item3689 corrected =location= handling Bugs:Item4181 added VarCOMMENT Bugs:Item4402 corrected access check |
+|  5 Sep 2007 | TWikibug:Item3689 corrected =location= handling TWikibug:Item4181 added VarCOMMENT TWikibug:Item4402 corrected access check |
 |  22 Jun 2007 | Removed the long-deprecated =%TIME= (use %GMTIME instead). Minor doc changes |
-|  14021 | Bugs:Item3755 Fixed incorrect handling of line terminators when targeting an anchor |
+|  14021 | TWikibug:Item3755 Fixed incorrect handling of line terminators when targeting an anchor |
 |  13311 | Added option to define a comment template in any topic. Pass the topic location with =templatetopic= (either =topic= or =web.topic=). See an example in [[CommentPluginExamples#TemplateTopic][CommentPluginExamples:templatetopic]]. |
-|  12822 | Bugs:Item3598 minor doc fixes |
-|  12750 | Bugs:Item3510 added a note about the changed template spec in TWiki 4.1.0. Code remains unchanged |
-|  11358 | Bugs:Item2802 moved SHORTDESCRIPTION to .pm. Coded up TWiki:main.PankajPant's suggestions as =nopost= and =remove=. Added default text for the %COMMENT as requested by TWiki:Main.AndyGlew |
-|  11118 | Bugs:Item2322 removed span tag around oneliner bullet output |
-|  8788 | Bugs:Item1465  Item1577: reverted 8433 to fix inclusion of correct user templates |
-|  8787 | Bugs:Item1573  renamed standard templates topic to avoid naming clash on Windows, where filenames are case-insensitive |
-|  8433 | Bugs:Item1465  Fix 'TWiki.' to '%TWIKIWEB%.'; also fixed include 'UserComments' to 'UserCommentsTemplate' (at least that is what the doc suggests) |
-|  7427 | Bugs:Item845  removed duplicate date in default comments; stick with server time |
-|  7251 | Bugs:Item810  fix for user template inclusion; reorganised templates to make customisation easier |
-|  5906 | Bugs:Item143  apache warning from comment plugin when !CommentsTmpl.txt not found |
+|  12822 | TWikibug:Item3598 minor doc fixes |
+|  12750 | TWikibug:Item3510 added a note about the changed template spec in TWiki 4.1.0. Code remains unchanged |
+|  11358 | TWikibug:Item2802 moved SHORTDESCRIPTION to .pm. Coded up TWiki:main.PankajPant's suggestions as =nopost= and =remove=. Added default text for the %COMMENT as requested by TWiki:Main.AndyGlew |
+|  11118 | TWikibug:Item2322 removed span tag around oneliner bullet output |
+|  8788 | TWikibug:Item1465  Item1577: reverted 8433 to fix inclusion of correct user templates |
+|  8787 | TWikibug:Item1573  renamed standard templates topic to avoid naming clash on Windows, where filenames are case-insensitive |
+|  8433 | TWikibug:Item1465  Fix 'TWiki.' to '%TWIKIWEB%.'; also fixed include 'UserComments' to 'UserCommentsTemplate' (at least that is what the doc suggests) |
+|  7427 | TWikibug:Item845  removed duplicate date in default comments; stick with server time |
+|  7251 | TWikibug:Item810  fix for user template inclusion; reorganised templates to make customisation easier |
+|  5906 | TWikibug:Item143  apache warning from comment plugin when !CommentsTmpl.txt not found |
 |  5519 | !CommentPluginOnAnchorsBroken: incorporated !JacobEisinger's fix |
 |  5518 | !CommentPluginOnAnchorsBroken: incorporated !OlivierBerger's fix |
 |  5455 | On Niels Kodslo's prompting, removed the global recursion prevention that I believe is no longer needed. |
