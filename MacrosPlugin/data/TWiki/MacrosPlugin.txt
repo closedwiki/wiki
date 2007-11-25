@@ -73,7 +73,7 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 |  Plugin Author: | TWiki:Main/CrawfordCurrie |
 |  Plugin Version: | %$VERSION% |
 | Change History: | |
-| 6173 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item196'>Item196</a>  updates for MacrosPlugin |
+| 6173 | TWikibug:Item196 - updates for MacrosPlugin |
 | 5223 | Documentation fixes, adding gifs. |
 | 5048 | Cairo readiness |
 | 5002 | Initial version |
