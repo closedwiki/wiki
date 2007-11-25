@@ -165,11 +165,11 @@ Many thanks to the following sponsors for supporting this work:
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
-| 8 Sep 2007 | Updated for TWiki-4.2.0 |
-| July 2006 | add Topic ACLs user interface via More topic actions - SvenDowideit@WikiRing.com |
-|  10216 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1766'>Item2291</a> Added repeatheads and webs parameters |
-|  9048 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1766'>Item1766</a> corrected problems with passing incorrect parameters to setACLs and not interpreting values from the form correctly. |
-|  8877 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1701'>Item1701</a>  first release |
+|  8 Sep 2007 | Updated for TWiki-4.2.0 |
+|  July 2006 | add Topic ACLs user interface via More topic actions - SvenDowideit@WikiRing.com |
+|  10216 | TWikibug:Item2291 - Added repeatheads and webs parameters |
+|  9048 | TWikibug:Item1766 - corrected problems with passing incorrect parameters to setACLs and not interpreting values from the form correctly. |
+|  8877 | TWikibug:Item1701 - first release |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Demo Url: | http://demo.wikiring.com/twiki/bin/view/Demo/TopicPermissionsDemo |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
