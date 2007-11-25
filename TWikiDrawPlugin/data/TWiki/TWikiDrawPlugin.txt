@@ -95,12 +95,12 @@ If you add a map to a drawing by setting a URL on any of the figures a map file 
 |  Plugin Author: | TWiki:Main/CrawfordCurrie http://www.c-dot.co.uk |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
-|  8570 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1528'>Item1528</a>  Minor pattern skin template update for TWikiDrawPlugin |
-|  8569 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1528'>Item1528</a>  Adding pattern skin template to TWikiDrawPlugin |
-|  7926 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1206'>Item1206</a>  minor formatting fix |
-|  7907 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1206'>Item1206</a>  merged minor documentation fixes that were causing confusion about latest version of the plugin. |
-|  7761 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1124'>Item1124</a>  checked in jar file, even though it is built, because most people don't have ANT and it's a source of error for people using SVN checkouts. |
-|  6340 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item196'>Item196</a>  added screenshot to TWikiDrawPlugin |
+|  8570 | TWikibug:Item1528 - Minor pattern skin template update for TWikiDrawPlugin |
+|  8569 | TWikibug:Item1528 - Adding pattern skin template to TWikiDrawPlugin |
+|  7926 | TWikibug:Item1206 - minor formatting fix |
+|  7907 | TWikibug:Item1206 - merged minor documentation fixes that were causing confusion about latest version of the plugin. |
+|  7761 | TWikibug:Item1124 - checked in jar file, even though it is built, because most people don't have ANT and it's a source of error for people using SVN checkouts. |
+|  6340 | TWikibug:Item196 - added screenshot to TWikiDrawPlugin |
 |  5245 | Added anchor support to wikilinks |
 |  5243 | Added support for web.topic wiki links, and remove url encoding, which was breaking |
 |  5223 | Documentation fixes, adding gifs. |
