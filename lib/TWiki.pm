@@ -2072,7 +2072,7 @@ sub inlineAlert {
     } else {
         $text = CGI::h1('TWiki Installation Error')
           . 'Template "'.$template.'" not found.'.CGI::p()
-            . 'Check the configuration setting for {TemplateDir}';
+            . 'Check your configuration settings for {TemplateDir} and {TemplatePath}';
     }
 
     return $text;
