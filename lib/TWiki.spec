@@ -1001,6 +1001,7 @@ $TWiki::cfg{EnableEmail} = $TRUE;
 # **STRING 30**
 # TWiki administrator's e-mail address e.g. <code>webmaster@example.com</code>
 # (used in <code>%WIKIWEBMASTER%</code>)
+# NOTE: must be a single valid email address
 $TWiki::cfg{WebMasterEmail} = '';
 
 # **STRING 30**
