@@ -29,6 +29,7 @@ sub set_up {
     $this->{twiki}->{store}->saveTopic(
         $this->{twiki}->{user}, $this->{test_web},
         'Ok+Topic', "BLEEGLE dont.matchmeblah");
+   	
 }
 
 sub fixture_groups {
@@ -522,6 +523,47 @@ sub verify_search_numpty_word {
         '%SEARCH{"something.Very/unLikelyTo+search-for;-)" type="word" scope="text" nonoise="on" format="$topic"}%',
         $this->{test_web}, $this->{test_topic});
     $this->assert_str_equals("", $result);
+}
+
+sub set_up_for_formatted_search {
+    my $this = shift;
+
+	my $text = <<'HERE';
+%META:TOPICINFO{author="TWikiContributor" date="1169714817" format="1.1" version="1.2"}%
+%META:TOPICPARENT{name="TestCaseAutoFormattedSearch"}%
+!MichaelAnchor and !AnnaAnchor lived in Skagen in !DenmarkEurope!. There is a very nice museum you can visit!
+
+This text is fill in text which is there to ensure that the unique word below does not show up in a summary.
+
+%META:FORM{name="FormattedSearchForm"}%
+%META:FIELD{name="Name" attributes="" title="Name" value="!AnnaAnchor"}%
+HERE
+	
+	$this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $this->{test_web},
+        'FormattedSearchTopic1', $text);
+}
+
+sub verify_formatted_search_summary_with_exclamation_marks {
+    my $this = shift;
+    my $session = $this->{twiki};
+    
+    $this->set_up_for_formatted_search();
+    my $actual, my $expected;
+    $actual = $session->handleCommonTags(
+        '%SEARCH{"Anna" topic="FormattedSearchTopic1" type="regex" multiple="on" casesensitive="on" nosearch="on" noheader="on" nototal="on" format="$summary"}%',
+        $this->{test_web}, $this->{test_topic});
+    $actual = $session->renderer->getRenderedVersion( $actual, $this->{test_web}, $this->{test_topic} );
+    $expected = '<nop>MichaelAnchor and <nop>AnnaAnchor lived in Skagen in <nop>DenmarkEurope!. There is a very nice museum you can visit!';
+    $this->assert_str_equals($expected, $actual);
+    
+    
+    $actual = $session->handleCommonTags(
+        '%SEARCH{"Anna" topic="FormattedSearchTopic1" type="regex" multiple="on" casesensitive="on" nosearch="on" noheader="on" nototal="on" format="$formfield(Name)"}%',
+        $this->{test_web}, $this->{test_topic});
+    $actual = $session->renderer->getRenderedVersion( $actual, $this->{test_web}, $this->{test_topic} );
+    $expected = '<nop>AnnaAnchor';
+    $this->assert_str_equals($expected, $actual);
 }
 
 sub set_up_for_queries {
