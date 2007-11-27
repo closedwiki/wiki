@@ -157,6 +157,20 @@ Found 4
 %SEARCH{"option1" topic="FormattedSearch1" type="regex" multiple="on" casesensitive="on" nosummary="on" nosearch="on" noheader="on" nototal="on" format="$text$n"}%
 <!-- /actual -->
 
+---+ Formatted search with $summary
+
+---++ Expected
+
+<!-- expected with summary --><noautolink>
+MichaelAnchor and AnnaAnchor lived in Skagen in DenmarkEurope!. There is a very nice museum you can visit!
+</noautolink><!-- /expected -->
+
+---++ Actual
+
+<!-- actual -->
+%SEARCH{"Anna" topic="FormattedSearch3" type="regex" multiple="on" casesensitive="on" nosearch="on" noheader="on" nototal="on" format="$summary"}%
+<!-- /actual -->
+
 ---+ Formatted singled level search - Table and $summary
 
 ---++ Expected
