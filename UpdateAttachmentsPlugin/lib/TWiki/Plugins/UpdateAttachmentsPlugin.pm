@@ -218,9 +218,9 @@ sub restUpdate {
             } else {
                 #if its @knownAttachments, update _if_ attr's have changed
                 if (
-                    ($foundAttachment->{date} ne $existingFile->{date}) ||
-                    ($foundAttachment->{attr} ne $existingFile->{attr}) ||
-                    ($foundAttachment->{size} != $existingFile->{size})
+                    (!defined($existingFile->{date})) || ($foundAttachment->{date} ne $existingFile->{date}) ||
+                    (!defined($existingFile->{attr})) || ($foundAttachment->{attr} ne $existingFile->{attr}) ||
+                    (!defined($existingFile->{size})) || ($foundAttachment->{size} != $existingFile->{size})
                    ){
                     $foundAttachment->{comment} = $existingFile->{comment};
                     $foundAttachment->{attr} = $existingFile->{attr};

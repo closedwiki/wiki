@@ -1,3 +1,6 @@
+%META:TOPICINFO{author="BaseUserMapping_333" date="1196135362" format="1.1" version="1.2"}%
+
+<img src="%PUBURL%/%WEB%/%TOPIC%/wikiring-attach.png" style="float:right;padding:26px" />
 ---+!! !UpdateAttachmentsPlugin
 <!--
 One line description, required for extensions repository catalog.
@@ -45,8 +48,9 @@ This plugin _may_ not function correctly if =$TWiki::cfg{AutoAttachPubFiles}= is
 
 ---++ Plugin Info
 
-|  Plugin Author(s): | TWiki:Main.SvenDowideit - SvenDowideit@distributedINFORMATION.com a [[http://WikiRing.com][WikiRing]] founding partner  |
+|  Plugin Author(s): | TWiki:Main.SvenDowideit - http://distributedINFORMATION.com a %PUBURL%/%WEB%/%TOPIC%/wikiring.png [[http://WikiRing.com][WikiRing]] founding partner  |
 |  Copyright: | &copy; SvenDowideit@distributedINFORMATION.com |
+|  Attachment Icon | based on eXperience Crystal, by David Christian Berg |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
@@ -59,3 +63,6 @@ This plugin _may_ not function correctly if =$TWiki::cfg{AutoAttachPubFiles}= is
 __Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the feedback topic on twiki.org instead. -->
+
+%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" autoattached="1" comment="" date="1196132654" path="wikiringlogo20x20.png" size="1343" version=""}%
+%META:FILEATTACHMENT{name="wikiring-attach.png" attr="h" autoattached="1" comment="" date="1196134816" path="wikiring-attach.png" size="34351" version=""}%
