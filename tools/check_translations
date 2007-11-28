@@ -123,6 +123,7 @@ EOF
 ;
 
   my $ua = LWP::UserAgent->new;
+  $ua->agent("TWiki check_translations Script");
   my $req = POST 'http://twiki.org/cgi-bin/save/Codev/TWikiTranslationStatus', [ text => $text ];
   $req->authorization_basic($wikiname, $password);
   my $resp = $ua->request($req);
@@ -130,6 +131,7 @@ EOF
     print "I: Translation status successfully uploaded to twiki.org!\n";
   } else {
     print "E: Translation status not uploaded to twiki.org. Did you type your correct WikiName and password?\n";
+    print $resp->content;
   }
 } else {
   print $text;
