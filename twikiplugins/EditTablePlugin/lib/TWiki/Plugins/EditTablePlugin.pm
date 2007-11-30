@@ -19,9 +19,11 @@
 
 package TWiki::Plugins::EditTablePlugin;
 
+use strict;
+
 use vars qw(
   $web $topic $user $VERSION $RELEASE $debug
-  $query $renderingWeb $usesJavascriptInterface $viewModeHeaderDone $editModeHeaderDone
+  $query $renderingWeb $usesJavascriptInterface $viewModeHeaderDone $editModeHeaderDone $encodeStart $encodeEnd $prefsInitialized $table
 );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -32,7 +34,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '4.2';
+$RELEASE = '4.3';
 
 $encodeStart = '--EditTableEncodeStart--';
 $encodeEnd   = '--EditTableEncodeEnd--';
@@ -73,15 +75,42 @@ sub initPlugin {
     return 1;
 }
 
+=pod
+
+Parse text before variables are expanded. This way TWiki variables can be used
+inside table cells.
+
+=cut
+
+sub beforeCommonTagsHandler {
+    _process(@_);
+
+}
+
+=pod
+
+The handler has to be run from both beforeCommonTagsHandler and
+commonTagsHandler, because beforeCommonTagsHandler allows us to
+process tables before TWiki variables in their data are expanded,
+while the second call allos us to handle tables that have been
+included from other topics. Both handlers only fire when the topic
+text contains %EDITTABLE, thus constraining the problem.
+
+=cut
+
 sub commonTagsHandler {
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+    _process(@_);
+}
+
+sub _process {
+    my ( $theText, $theTopic, $theWeb ) = @_;
 
     return unless $_[0] =~ /%EDIT(TABLE|CELL){(.*)}%/os;
-
     addViewModeHeadersToHead();
-    require TWiki::Plugins::EditTablePlugin::Core;
 
-    TWiki::Plugins::EditTablePlugin::Core::process(@_);
+    require TWiki::Plugins::EditTablePlugin::Core;
+    TWiki::Plugins::EditTablePlugin::Core::process( $_[0], $theTopic, $theWeb,
+        $topic, $web );
 }
 
 sub postRenderingHandler {
@@ -94,11 +123,12 @@ sub encodeValue {
     my ($theText) = @_;
 
     # FIXME: *very* crude encoding to escape Wiki rendering inside form fields
+    # also prevents urls to get expanded to links
     $theText =~ s/\./%dot%/gos;
     $theText =~ s/(.)/\.$1/gos;
 
     # convert <br /> markup to unicode linebreak character for text areas
-    $theText =~ s/.<.b.r. .\/.>\.*\s*/&#10;/gos;
+    $theText =~ s/.<.b.r. .\/.>/&#10;/gos;
     return $encodeStart . $theText . $encodeEnd;
 }
 
@@ -115,6 +145,12 @@ sub decodeValue {
     return $theText;
 }
 
+=pod
+
+Style sheet for table in view mode
+
+=cut
+
 sub addViewModeHeadersToHead {
     return if $viewModeHeaderDone;
 
@@ -128,11 +164,20 @@ EOF
     TWiki::Func::addToHEAD( 'EDITTABLEPLUGIN', $header );
 }
 
+=pod
+
+Style sheet and javascript for table in edit mode
+
+=cut
+
 sub addEditModeHeadersToHead {
     my ( $tableNr, $assetUrl ) = @_;
 
     return if $editModeHeaderDone;
     return if !$usesJavascriptInterface;
+
+    require TWiki::Contrib::BehaviourContrib;
+    TWiki::Contrib::BehaviourContrib::addHEAD();
 
     $editModeHeaderDone = 1;
 
@@ -154,3 +199,4 @@ EOF
 }
 
 1;
+

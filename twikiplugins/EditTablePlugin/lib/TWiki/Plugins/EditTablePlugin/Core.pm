@@ -29,15 +29,34 @@ use vars qw(
   $nrCols $encodeStart $encodeEnd $table $query %regex
 );
 
-$preSp = '';
-
-$regex{edit_table_plugin} = '%EDITTABLE{(.*)}%';
-$regex{table_plugin}      = '%TABLE(?:{(.*?)})?%';
-$regex{table_row_full}    = '^(\s*)\|.*\|\s*$';
-$regex{table_row}         = '^(\s*)\|(.*)';
-
 my $RENDER_HACK        = "\n<nop>\n";
 my $DEFAULT_FIELD_SIZE = 16;
+
+BEGIN {
+    $preSp                      = '';
+    %params                     = ();
+    @format                     = ();
+    @formatExpanded             = ();
+    $prefsInitialized           = undef;
+    $prefCHANGEROWS             = undef;
+    $prefEDIT_BUTTON            = undef;
+    $prefSAVE_BUTTON            = undef;
+    $prefQUIET_SAVE_BUTTON      = undef;
+    $prefADD_ROW_BUTTON         = undef;
+    $prefDELETE_LAST_ROW_BUTTON = undef;
+    $prefDELETE_LAST_ROW_BUTTON = undef;
+    $prefQUIETSAVE              = undef;
+    $nrCols                     = undef;
+    $encodeStart                = undef;
+    $encodeEnd                  = undef;
+    $table                      = undef;
+    $query                      = undef;
+    %regex                      = ();
+    $regex{edit_table_plugin}   = '%EDITTABLE{(.*)}%';
+    $regex{table_plugin}        = '%TABLE(?:{(.*?)})?%';
+    $regex{table_row_full}      = '^(\s*)\|.*\|\s*$';
+    $regex{table_row}           = '^(\s*)\|(.*)';
+}
 
 =pod
 
@@ -108,15 +127,11 @@ sub processText {
         $prefsInitialized = 1;
     }
 
-    my $theWeb   = $_[2];
-    my $theTopic = $_[1];
-    my $theText;
-    if ($doSave) {
-        $theText = TWiki::Func::readTopicText( $theWeb, $theTopic );
-    }
-    else {
-        $theText = $_[0];
-    }
+    my $theTopic = $query->param('ettabletopic') || $_[1];
+    my $theWeb   = $query->param('ettableweb')   || $_[2];
+    my $invokedFromTopic = $_[3];    # not used yet
+    my $invokedFromWeb   = $_[4];    # not used yet
+
     my $result = '';
 
     my $insidePRE   = 0;
@@ -125,9 +140,26 @@ sub processText {
     my $enableForm  = 0;
     my $insideTable = 0;
     my $doEdit      = $doSave;
-    my $etrows      = -1;
     my $hasTableRow = 0;       # the current line has a row with '| some text |'
     my $createdNewTable = 0;
+    my @rows            = ();
+
+    my $etrows = -1
+      ; # the number of content rows as passed as form parameter: only available on edit or save; -1 if not rendered
+    my $etrowsParam;
+    my $addedRowCount      = 0;
+    my $addedRowCountParam = 0;
+    my $headerRowCount     = 0;    #$query->param('etheaderrows') || 0;
+    my $footerRowCount     = 0;    #$query->param('etfooterrows') || 0;
+    my $endOfTable         = 0;
+
+    my $theText;
+    if ($doSave) {
+        $theText = TWiki::Func::readTopicText( $theWeb, $theTopic );
+    }
+    else {
+        $theText = $_[0];
+    }
 
     $theText =~
       s/\r//go;    # strip out all \r chars (may be pasted into a table cell)
@@ -137,7 +169,7 @@ sub processText {
 
     my @lines = split( /\n/, $theText );
     for (@lines) {
-
+TWiki::Func::writeDebug("line=$_");
         # Check if we are inside <pre> or <verbatim> tags
         # if so, do not process
         m|<pre>|i       && ( $insidePRE = 1 );
@@ -151,8 +183,6 @@ sub processText {
             $result .= "$_\n";
             next;
         }
-
-        $hasTableRow = 0;
 
         my $isLineWithEditTableTag = m/(\s*)$regex{edit_table_plugin}/go;
         if ($isLineWithEditTableTag) {
@@ -175,13 +205,19 @@ s/(.*?)$regex{edit_table_plugin}/&handleEditTableTag( $theWeb, $theTopic, $1, $2
             }
             $tableNr++;
 
-            next if ( $doSave && $tableNr != $saveTableNr );
-
+            next if ( $doSave && ( $tableNr != $saveTableNr ) );
             $enableForm = 1;
 
-            my $cgiTableNr = $query->param('ettablenr') || 0;
+            my $cgiTableNr = $query->param('ettablenr')
+              || 0;    # only on save and edit
+            $etrowsParam = $query->param('etrows');
+            $etrows =
+              ( defined $etrowsParam )
+              ? $etrowsParam
+              : -1;
+            $addedRowCountParam = $query->param('etaddedrows') || 0;
+            $addedRowCount = $addedRowCountParam;
 
-            $etrows = $query->param('etrows') || -1;
             if (
                 ( $cgiTableNr == $tableNr )
                 && (  $theWeb . '.'
@@ -200,7 +236,6 @@ s/(.*?)$regex{edit_table_plugin}/&handleEditTableTag( $theWeb, $theTopic, $1, $2
 
                     # [Quiet save] button pressed
                     return processText( 1, $tableNr, 1, @_ );
-
                 }
                 elsif ( $query->param('etcancel') ) {
 
@@ -208,23 +243,24 @@ s/(.*?)$regex{edit_table_plugin}/&handleEditTableTag( $theWeb, $theTopic, $1, $2
                     doCancelEdit( $theWeb, $theTopic );
                     ASSERT(0) if DEBUG;
                     return;    # in case browser does not redirect
-
                 }
                 elsif ( $query->param('etaddrow') ) {
 
                     # [Add row] button pressed
-                    $etrows++ if ( $etrows >= 0 );
+                    $etrows = ( $etrows == -1 ) ? 1 : $etrows + 1;
+                    $addedRowCount++;
                     $doEdit = doEnableEdit( $theWeb, $theTopic, 0 );
                     return unless ($doEdit);
-
                 }
                 elsif ( $query->param('etdelrow') ) {
 
                     # [Delete row] button pressed
-                    $etrows--;
+                    if ( $etrows > 0 ) {
+                        $etrows--;
+                    }
+                    $addedRowCount--;
                     $doEdit = doEnableEdit( $theWeb, $theTopic, 0 );
                     return unless ($doEdit);
-
                 }
                 elsif ( $query->param('etedit') ) {
 
@@ -233,92 +269,209 @@ s/(.*?)$regex{edit_table_plugin}/&handleEditTableTag( $theWeb, $theTopic, $1, $2
 
                     # never return if locked or no permission
                     return unless ($doEdit);
-                    $etrows = -1;   # make sure to get the actual number of rows
                 }
             }
-        }    # /if ($isLineWithEditTableTag)
+        }    # if $isLineWithEditTableTag
 
         if (/$regex{table_plugin}/) {
 
             # match with a TablePlugin line
-            # no need to process, just copy the line
+            # works when TABLE tag is just above OR just below the EDITTABLE tag
+            my %tablePluginParams = TWiki::Func::extractParameters($1);
+            $headerRowCount = $tablePluginParams{'headerrows'};
+            $footerRowCount = $tablePluginParams{'footerrows'};
+
+            # no need to process any further, just copy the line
             $result .= "$_\n";
             next;
         }
+
+        $hasTableRow = 0;    # assume no row
         if (m/$regex{table_row_full}/) {
             $hasTableRow = 1;
         }
 
         if ($enableForm) {
+            if ( !$doEdit && !$doSave ) {
 
-            if ( !$hasTableRow && !$insideTable && !$createdNewTable ) {
+                if ( !$hasTableRow && !$insideTable ) {
 
-                # start new table
-                $createdNewTable = 1;
-                $result .=
-                  handleTableStart( $theWeb, $theTopic, $tableNr, $doEdit )
-                  if !$doSave;
-                $insideTable = 1;
-                $hasTableRow = 1;
-                next;
-            }
-            if ($hasTableRow) {
-                $insideTable = 1;
-                $rowNr++;
+                    my $tableStart =
+                      handleTableStart( $theWeb, $theTopic, $tableNr, $doEdit );
+                    $result .= $tableStart;
+                    $insideTable = 1;
+                    $hasTableRow = 1;
+                    next;
+                }
+                if ($hasTableRow) {
+                    $insideTable = 1;
+                    $rowNr++;
+                    my $isNewRow = 0;
+s/^(\s*)\|(.*)/handleTableRow( $1, $2, $tableNr, $isNewRow, $rowNr, $doEdit, $doSave, $theWeb, $theTopic )/eo;
+                }
+                elsif ($insideTable) {
 
-                if ( $doSave || $doEdit ) {
-                    if ( ( $etrows >= 0 ) && ( $rowNr > $etrows ) ) {
+                    # end of table
+                    $endOfTable = 1;
+                    my $rowCount = $rowNr - $headerRowCount - $footerRowCount;
+                    my $tableEnd = handleTableEnd( $theWeb, $rowCount, $doEdit,
+                        $headerRowCount, $footerRowCount );
+                    $result .= $tableEnd;
+                }
+            }    # if !$doEdit && !$doSave
 
-                        # deleted row
-                        $rowNr--;
-                        next;
+            if ( $doEdit || $doSave ) {
+                if ( !$hasTableRow && !$insideTable && !$createdNewTable ) {
+
+                    # start new table
+                    $createdNewTable = 1;
+                    if ( !$doSave ) {
+                        my $tableStart =
+                          handleTableStart( $theWeb, $theTopic, $tableNr,
+                            $doEdit );
+                        $result .= $tableStart;
                     }
+                    $insideTable = 1;
+                    $hasTableRow = 1;
+                    next;
                 }
-                my $isNewRow = ( $rowNr > $rowNr ) ? 1 : 0;
-s/$regex{table_row}/handleTableRow( $1, $2, $tableNr, $isNewRow, $rowNr, $doEdit, $doSave, $theWeb, $theTopic )/eo;
-            }
-            elsif ($insideTable) {
+                if ($hasTableRow) {
+                    $insideTable = 1;
+                    $rowNr++;
 
-                # end of table
-
-                # if we are starting with an empty table, we force
-                # create a row, with an optional header row
-                if (   !$doSave
-                    && $doEdit
-                    && $etrows == -1
-                    && $rowNr == 0
-                    && !$query->param('etdelrow') )
-                {
-                    $etrows = 1;
-                    $etrows++ if $params{'header'};
-                }
-
-                if ( $doEdit && $etrows >= 0 ) {
-                    while ( $rowNr < $etrows ) {
-                        $rowNr++;
-                        my $isNewRow = ( $rowNr > $etrows ) ? 1 : 0;
-
-                        $result .= handleTableRow(
-                            '',     '',      $tableNr, $isNewRow,
-                            $rowNr, $doEdit, $doSave,  $theWeb,
-                            $theTopic
-                        ) . "\n";
+# when adding new rows, previously entered values will be mapped onto the new table rows
+# when the last row is not the newly added, as may happen with footer rows, we need to adjust the mapping
+# we introduce a 'rowNr shift' for values
+# we assume that new rows are added just before the footer
+                    my $shift = 0;
+                    if ( $footerRowCount > 0 ) {
+                        my $bodyRowNr = $rowNr - $headerRowCount;
+                        if ( $bodyRowNr > ( $etrows - $addedRowCount ) ) {
+                            $shift = $addedRowCountParam;
+                        }
                     }
+                    my $theRowNr = $rowNr + $shift;
+                    my $isNewRow = 0;
+s/$regex{table_row}/handleTableRow( $1, $2, $tableNr, $isNewRow, $theRowNr, $doEdit, $doSave, $theWeb, $theTopic )/eo;
+
+                    push @rows, $_;
+                    next;
                 }
-                $result .= handleTableEnd( $theWeb, $rowNr, $doEdit )
-                  if !$doSave;
-                $insideTable     = 0;
-                $enableForm      = 0;
-                $doEdit          = 0;
-                $rowNr           = 0;
-                $createdNewTable = 0;
-            }
-        }    #/ if $enableForm
+                elsif ($insideTable) {
+
+                    # end of table
+                    $endOfTable = 1;
+                    my @headerRows = ();
+                    my @footerRows = ();
+                    my @bodyRows   = @rows;    #clone
+
+                    if ( $headerRowCount > 0 ) {
+                        @headerRows = @rows;    # clone
+                        splice @headerRows, $headerRowCount;
+
+                        # remove the header rows from the body rows
+                        splice @bodyRows, 0, $headerRowCount;
+                    }
+                    if ( $footerRowCount > 0 ) {
+                        @footerRows = @rows;    # clone
+                        splice @footerRows, 0,
+                          ( scalar @footerRows - $footerRowCount );
+
+                        # remove the footer rows from the body rows
+                        splice @bodyRows,
+                          ( scalar @bodyRows - $footerRowCount ),
+                          $footerRowCount;
+                    }
+
+                    # delete rows?
+                    if ( $doEdit || $doSave ) {
+                        if ( scalar @bodyRows > $etrows && $etrows != -1 ) {
+                            splice( @bodyRows, $etrows );
+                        }
+                    }
+
+                    # no table at all?
+                    if ( $doEdit && !$doSave ) {
+
+                        # if we are starting with an empty table, we force
+                        # create a row, with an optional header row
+                        my $addHeader =
+                          ( $params{'header'} && $headerRowCount == 0 )
+                          ? 1
+                          : 0;
+                        my $firstRowsCount = 1 + $addHeader;
+
+                        if ( scalar @bodyRows < $firstRowsCount
+                            && !$query->param('etdelrow') )
+                        {
+                            if ( $etrows < $firstRowsCount ) {
+                                $etrows = $firstRowsCount;
+                            }
+                        }
+                    }
+
+                    # add rows?
+                    if ( $doEdit || $doSave ) {
+                        while ( scalar @bodyRows < $etrows ) {
+                            $rowNr++;
+                            my $newBodyRowNr = scalar @bodyRows + 1;
+                            my $theRowNr     = $newBodyRowNr + $headerRowCount;
+
+                            my $isNewRow = ( defined $etrowsParam
+                                  && $newBodyRowNr > $etrowsParam ) ? 1 : 0;
+                            my $newRow = handleTableRow(
+                                '',        '',      $tableNr, $isNewRow,
+                                $theRowNr, $doEdit, $doSave,  $theWeb,
+                                $theTopic
+                            );
+                            push @bodyRows, $newRow;
+                        }
+                    }
+
+                    my @combinedRows = ( @headerRows, @bodyRows, @footerRows );
+
+                    # after re-ordering, renumber the cells
+                    my $rowCounter = 0;
+                    for my $cellRow (@combinedRows) {
+                        $rowCounter++;
+                        $cellRow =~
+                          s/(etcell)([0-9]+)(x)([0-9]+)/$1$rowCounter$3$4/go;
+                    }
+                    $result .= join( "\n", @combinedRows ) . "\n";
+
+                    if ( !$doSave ) {
+                        my $rowCount = scalar @bodyRows;
+                        my $tableEnd =
+                          handleTableEnd( $theWeb, $rowCount, $doEdit,
+                            $headerRowCount, $footerRowCount, $addedRowCount );
+                        $result .= $tableEnd;
+                    }
+
+                }    # $hasTableRow
+            }    #/ if $doEdit
+        }    # if $enableForm
+
+        if ($endOfTable) {
+            $endOfTable = 0;
+
+            # re-init values
+            $insideTable     = 0;
+            $enableForm      = 0;
+            $doEdit          = 0;
+            $rowNr           = 0;
+            $createdNewTable = 0;
+            $headerRowCount  = 0;
+            $footerRowCount  = 0;
+            $etrows          = -1;
+            @rows            = ();
+        }
+
         $result .= "$_\n";
     }
 
     # clean up hack that handles EDITTABLE correctly if at end
     $result =~ s/($RENDER_HACK)+$//go;
+
     if ($doSave) {
         my $error = TWiki::Func::saveTopicText( $theWeb, $theTopic, $result, '',
             $doSaveQuiet );
@@ -394,29 +547,28 @@ sub parseFormat {
     return @aFormat;
 }
 
-=pod
-
-=cut
-
-sub unProtectVariablePlaceholders {
+sub decodeFormatTokens {
     return if ( !$_[0] );
-    $_[0] =~ s/\$nop//go;
-    $_[0] =~ s/\$n/\n/go;
-    $_[0] =~ s/\$dollarpercnt/%/go;
-    $_[0] =~ s/\$dollar/\$/go;
-    $_[0] =~ s/\$percnt/%/go;
-    $_[0] =~ s/\$quot/\"/go;
+    defined(&TWiki::Func::decodeFormatTokens)
+      ? TWiki::Func::decodeFormatTokens( $_[0] )
+      : _expandStandardEscapes( $_[0] );
 }
 
 =pod
 
+For TWiki versions that do not implement TWiki::Func::decodeFormatTokens.
+
 =cut
 
-sub protectVariablePlaceholders {
+sub _expandStandardEscapes {
     return if ( !$_[0] );
-    $_[0] =~ s/%/\$percnt/go;
-    $_[0] =~ s/\$/\$dollar/go;
-    $_[0] =~ s/\"/\$quot/go;
+    $_[0] =~ s/\$n\(\)/\n/gos;    # expand '$n()' to new line
+    my $alpha = TWiki::Func::getRegularExpression('mixedAlpha');
+    $_[0] =~ s/\$n([^$alpha]|$)/\n$1/gos;    # expand '$n' to new line
+    $_[0] =~ s/\$nop(\(\))?//gos;      # remove filler, useful for nested search
+    $_[0] =~ s/\$quot(\(\))?/\"/gos;   # expand double quote
+    $_[0] =~ s/\$percnt(\(\))?/\%/gos; # expand percent
+    $_[0] =~ s/\$dollar(\(\))?/\$/gos; # expand dollar
 }
 
 =pod
@@ -465,6 +617,7 @@ sub handleEditTableTag {
 
     extractParams( $theArgs, \%params );
 
+    # FIXME: should use TWiki::Func::extractParameters
     $params{'header'} = '' if ( $params{header} =~ /^(off|no)$/oi );
     $params{'header'} =~ s/^\s*\|//o;
     $params{'header'} =~ s/\|\s*$//o;
@@ -479,8 +632,6 @@ sub handleEditTableTag {
     @format         = parseFormat( $params{format}, $theTopic, $theWeb, 0 );
     @formatExpanded = parseFormat( $params{format}, $theTopic, $theWeb, 1 );
     $nrCols         = @format;
-
-    # FIXME: No handling yet of footer
 
     return "$preSp";
 }
@@ -506,14 +657,21 @@ sub handleTableStart {
     if ($doEdit) {
         $cssClass .= ' editTableEdit';
     }
-    $text .= "<div class=\"" . $cssClass . "\">";
+    $text .= "<div class=\"" . $cssClass . "\">\n";
     $text .=
 "$preSp<form name=\"edittable$theTableNr\" action=\"$viewUrl\" method=\"post\">\n";
-    $text .=
-"$preSp<input class=\"twikiInputField\" type=\"hidden\" name=\"ettablenr\" value=\"$theTableNr\" />\n";
-    $text .= "$preSp<input type=\"hidden\" name=\"etedit\" value=\"on\" />\n"
+    $text .= hiddenField( $preSp, 'ettablenr', $theTableNr, "\n" );
+    $text .= hiddenField( $preSp, 'etedit', 'on', "\n" )
       unless $doEdit;
     return $text;
+}
+
+sub hiddenField {
+    my ( $prefix, $name, $value, $suffix ) = @_;
+    $prefix = defined $prefix ? $prefix : '';
+    $suffix = defined $suffix ? $suffix : '';
+    return
+      "$prefix<input type=\"hidden\" name=\"$name\" value=\"$value\" />$suffix";
 }
 
 =pod
@@ -521,9 +679,18 @@ sub handleTableStart {
 =cut
 
 sub handleTableEnd {
-    my ( $theWeb, $theRowNr, $doEdit ) = @_;
-    my $text =
-      "$preSp<input type=\"hidden\" name=\"etrows\" value=\"$theRowNr\" />\n";
+    my ( $theWeb, $rowCount, $doEdit, $headerRowCount, $footerRowCount,
+        $addedRowCount )
+      = @_;
+    my $text = '';
+    $text .= hiddenField( $preSp, 'etrows',       $rowCount,       "\n" );
+    $text .= hiddenField( $preSp, 'etheaderrows', $headerRowCount, "\n" )
+      if $headerRowCount;
+    $text .= hiddenField( $preSp, 'etfooterrows', $footerRowCount, "\n" )
+      if $footerRowCount;
+    $text .= hiddenField( $preSp, 'etaddedrows', $addedRowCount, "\n" )
+      if $addedRowCount;
+
     if ($doEdit) {
 
         # Edit mode
@@ -644,7 +811,7 @@ sub saveEditCellFormat {
     my ( $theFormat, $theName ) = @_;
     return '' unless ($theFormat);
     $theName =~ s/cell/format/;
-    return "<input type=\"hidden\" name=\"$theName\" value=\"$theFormat\" />";
+    return hiddenField( '', $theName, $theFormat, '' );
 }
 
 =pod
@@ -798,16 +965,16 @@ sub inputElement {
             $i++;
         }
         $text .= "</td></tr></table>" if ( $lines > 1 );
-        $text .= "<input type=\"hidden\" name=\"$theName\" value=\"$names\" />";
-        $text .= saveEditCellFormat( $cellFormat, $theName );
+        $text .= hiddenField( $preSp, $theName, $names );
+        $text .= saveEditCellFormat( $cellFormat, $theName, "\n" );
 
     }
     elsif ( $type eq 'row' ) {
         $size = $size + $theRowNr;
         $text =
-            "<div class=\"et_rowlabel\">"
-          . "$size<input type=\"hidden\" name=\"$theName\" value=\"$size\" />"
-          . "</div>";
+            "<span class=\"et_rowlabel\">"
+          . hiddenField( $size, $theName, $size )
+          . "</span>";
         $text .= saveEditCellFormat( $cellFormat, $theName );
 
     }
@@ -842,8 +1009,7 @@ sub inputElement {
         $theValue = TWiki::Plugins::EditTablePlugin::encodeValue($theValue)
           unless ( $theValue eq '' );
         $theValue = "\*$theValue\*" if ( $isHeader and $digestedCellValue );
-        $text .=
-          "<input type=\"hidden\" name=\"$theName\" value=\"$theValue\" />";
+        $text .= hiddenField( $preSp, $theName, $theValue );
         $text = "\*$text\*" if ($isHeader);
 
     }
@@ -1040,8 +1206,7 @@ sub handleTableRow {
     }
 
     # render final value in view mode (not edit or save)
-    unProtectVariablePlaceholders($text) if ( !$doSave && !$doEdit );
-
+    decodeFormatTokens($text) if ( !$doSave && !$doEdit );
     return $text;
 }
 
@@ -1214,8 +1379,8 @@ Trim any leading and trailing white space and/or '*'.
 sub _trim {
     my ($totrim) = @_;
     for my $element (@$totrim) {
-        $element =~ s/^[\s\*]+//;    # Strip of leading white/*
-        $element =~ s/[\s\*]+$//;    # Strip of trailing white/*
+        $element =~ s/^[\s\*]+//;    # Strip off leading white
+        $element =~ s/[\s\*]+$//;    # Strip off trailing white
     }
 }
 
