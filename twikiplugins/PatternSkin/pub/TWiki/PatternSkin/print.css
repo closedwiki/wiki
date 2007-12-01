@@ -169,6 +169,9 @@
 	.twistyTrigger {
 		display:none;
 	}
+	.editTableEditImageButton {
+		display:none;
+	}
 	
 	/* define custom print styles here */
 

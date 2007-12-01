@@ -277,6 +277,10 @@ a.twikiSubmit:visited:active {
 	border-right-style:solid;
 	padding:4px 6px;
 }
+.twikiTable .tableSortIcon {
+	margin:0 0 0 5px;
+}
+
 /*
 .twikiTable th.twikiFirstCol {
 	border-left-style:none;
