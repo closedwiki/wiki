@@ -433,6 +433,8 @@ WARN
           if $query->param('skin');
         $redirecturl .= '&cover='.$query->param('cover')
           if $query->param('cover');
+        $redirecturl .= '&nowysiwyg='.$query->param('nowysiwyg')
+          if $query->param('nowysiwyg');
         $redirecturl .= $editparams
           if $editparams;  # May contain anchor
         my $lease = $store->getLease( $web, $topic );
