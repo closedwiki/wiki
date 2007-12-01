@@ -1085,7 +1085,7 @@ msgstr "Haben Sie %1 richtig geschrieben?"
 
 #: data/TWiki/VarMAKETEXT.txt:19
 msgid "Did you want to [[%1][reset %2's password]]?"
-msgstr "Wollen Sie [[_1][%2's Passwort zurücksetzen]]?"
+msgstr "Wollen Sie [[%1][%2's Passwort zurücksetzen]]?"
 
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:14
 msgid "Difference:"
