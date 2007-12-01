@@ -22,6 +22,9 @@ var TWikiTiny = {
     request : null, // Container for HTTP request object
     metaTags : null,
 
+    tml2html : new Array(), // callbacks, attached in plugins
+    html2tml : new Array(), // callbacks, attached in plugins
+
     // Get a TWiki variable from the set passed
     getTWikiVar : function (name) {
         if (TWikiTiny.twikiVars == null) {
@@ -93,15 +96,22 @@ var TWikiTiny = {
 
     // Convert HTML content to textarea. Called from the WYSIWYG->raw switch
     switchToRaw : function (inst) {
+        var text = inst.getBody().innerHTML;
+        // Evaluate post-processors
+        for (var i = 0; i < TWikiTiny.html2tml.length; i++) {
+            var cb = TWikiTiny.html2tml[i];
+            text = cb.apply(inst, [ inst, text ]);
+        }
         TWikiTiny.transform(
-            inst, "html2tml", inst.getBody().innerHTML,
+            inst, "html2tml", text,
             function () {
                 var te = TWikiTiny.request.editor.oldTargetElement;
                 te.value = "Please wait... retrieving page from server";
             },
             function () {
                 var te = TWikiTiny.request.editor.oldTargetElement;
-                te.value = TWikiTiny.request.req.responseText;
+                var text = TWikiTiny.request.req.responseText;
+                te.value = text;
             },
             function () {
                 var te = TWikiTiny.request.editor.oldTargetElement;
@@ -121,6 +131,7 @@ var TWikiTiny = {
             el.id = id;
             el.type = "button";
             el.value = "WYSIWYG";
+            el.className = "twikiButton";
             el.onclick = function () {
                 tinyMCE.execCommand("mceToggleEditor", null, inst.editorId);
                 return false;
@@ -154,9 +165,13 @@ var TWikiTiny = {
             },
             function () {
                 // Handle the reply
-                tinyMCE.setInnerHTML(
-                    TWikiTiny.request.editor.getBody(),
-                    TWikiTiny.request.req.responseText);
+                var text = TWikiTiny.request.req.responseText;
+                // Evaluate any registered pre-processors
+                for (var i = 0; i < TWikiTiny.tml2html.length; i++) {
+                    var cb = TWikiTiny.tml2html[i];
+                    text = cb.apply(editor, [ editor, text ]);
+                }
+                tinyMCE.setInnerHTML(TWikiTiny.request.editor.getBody(), text);
                 TWikiTiny.request.editor.isNotDirty = true;
             },
             function () {
@@ -167,6 +182,7 @@ var TWikiTiny = {
                     + "There was a problem retrieving the page: "
                     + TWikiTiny.request.req.statusText + "</div>");
             });
+
         // Hide the conversion button, if it exists
         var id = editor.editorId + "_2WYSIWYG";
         var el = document.getElementById(id);
@@ -177,7 +193,13 @@ var TWikiTiny = {
     },
 
     // Callback on save. Make sure the WYSIWYG flag ID is there.
-    saveCallback : function(element_id, html, body) {
+    saveCallback : function(editor_id, html, body) {
+        // Evaluate any registered post-processors
+        var editor = tinyMCE.getInstanceById(editor_id);
+        for (var i = 0; i < TWikiTiny.html2tml.length; i++) {
+            var cb = TWikiTiny.html2tml[i];
+            html = cb.apply(editor, [ editor, html ]);
+        }
         var secret_id = tinyMCE.getParam('twiki_secret_id');
         if (secret_id != null && html.indexOf(
                 '<!--' + secret_id + '-->') == -1) {
