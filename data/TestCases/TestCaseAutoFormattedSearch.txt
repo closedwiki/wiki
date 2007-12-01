@@ -98,7 +98,7 @@ Revision 4 has parent <nop>TestCaseAutoFormattedSearch and it contains the form 
 ---++ Expected
 
 <!-- expected with separator -->
-<nop>FormattedSearch1, <nop>FormattedSearch2
+<nop>FormattedSearch1, <nop>FormattedSearch2, <nop>FormattedSearch3
 <!-- /expected -->
 
 ---++ Actual
@@ -161,50 +161,14 @@ Found 4
 
 ---++ Expected
 
-<!-- expected with summary --><noautolink>
-MichaelAnchor and AnnaAnchor lived in Skagen in DenmarkEurope!. There is a very nice museum you can visit!
-</noautolink><!-- /expected -->
-
----++ Actual
-
-<!-- actual -->
-%SEARCH{"Anna" topic="FormattedSearch3" type="regex" multiple="on" casesensitive="on" nosearch="on" noheader="on" nototal="on" format="$summary"}%
-<!-- /actual -->
-
----+ Formatted singled level search - Table and $summary
-
----++ Expected
-
-<!-- expected expand Table and $summary -->
-<table cellspacing="0" cellpadding="0" class="twikiTable" border="1">
-<thead>
-<tr>
-<th><strong> Topic </strong></th>
-<th><strong> Summary </strong></th>
-<th><strong> Name </strong></th>
-<th><strong> Role </strong></th>
-<th><strong> Testsample </strong></th>
-</tr></thead><tbody>
-<tr><td>  <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/FormattedSearch1" class="twikiLink">FormattedSearch1</a>  </td>
-<td>  Michael Anchor is a famous Danish painter. He never painted $web, $n, $nop, $quot, $percnt or $dollar. He was married to Anna Anchor who was also a great painter. ...  </td>
-<td>  Michael Anchor  </td>
-<td>  <a href="%SCRIPTURLPATH%/view/TestCases/FormattedSearch2" class="twikiLink">FormattedSearch2</a>  </td>
-<td>  $nop, $quot, $percnt, $dollar in $formfield()  </td>
-
-</tr>
-<tr><td>  <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/FormattedSearch2" class="twikiLink">FormattedSearch2</a>  </td>
-<td>  Michael Anchor and Anna Anchor lived in Skagen in Denmark. There is a very nice museum you can visit This text is fill in text which is there to ensure that the unique ...  </td>
-<td>  Anna Anchor  </td>
-<td>  Painter  </td>
-<td>  $summary  </td>
-
-</tr></tbody></table>
+<!-- expected with summary -->
+<nop>MichaelAnchor and <nop>AnnaAnchor lived in Skagen in <nop>DenmarkEurope!. There is a very nice museum you can visit!
 <!-- /expected -->
 
 ---++ Actual
 
 <!-- actual -->
-%SEARCH{"^FormattedSearch.$" type="regex" scope="topic" nototal="on" nosummary="on" nosearch="on" header="|*Topic*|*Summary*|*Name*|*Role*|*Testsample*|" format="| [[$topic]] | $summary | $formfield(Name) | $formfield(Role) | $formfield(Testsample) |" }%
+%SEARCH{"Anna" topic="FormattedSearch3" type="regex" multiple="on" casesensitive="on" nosearch="on" noheader="on" nototal="on" format="$summary"}%
 <!-- /actual -->
 
 ---+ Formatted singled level search - header
@@ -217,6 +181,8 @@ The header contains <nop>TestCases "Hey" <nop>TestCases $summary
 Formatted search result <nop>FormattedSearch1
 <p />
 Formatted search result <nop>FormattedSearch2
+<p />
+Formatted search result <nop>FormattedSearch3
 <p />
 <!-- /expected -->
 
