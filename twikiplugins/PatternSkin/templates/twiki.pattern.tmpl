@@ -74,3 +74,8 @@
 </div><!-- /patternScreen-->%TMPL:END%
 
 %TMPL:DEF{"bodyend"}%</body></html>%TMPL:END%
+
+%TMPL:DEF{"sig"}%%TMPL:END%
+%TMPL:DEF{"sig_textareabuttons"}%<div class="patternSigLine">%TMPL:P{"sig"}%%TMPL:P{context="TinyMCEPluginEnabled" else="textareabuttons"}%<br class="twikiClear" /></div><!-- /patternSigLine-->%TMPL:END%
+
+%TMPL:DEF{"textareabuttons"}%<span class="twikiRight twikiMakeVisible" style="text-align:left;"><span class="twikiLeft patternTextareaButton patternButtonFontSelector" title="%MAKETEXT{"Switch to monotype or propotional font"}%">&nbsp;</span><span class="twikiLeft patternTextareaButton patternButtonEnlarge" title="%MAKETEXT{"Enlarge edit box"}%">&nbsp;</span><span class="twikiLeft patternTextareaButton patternButtonShrink" title="%MAKETEXT{"Shrink edit box"}%">&nbsp;</span></span>%TMPL:END%

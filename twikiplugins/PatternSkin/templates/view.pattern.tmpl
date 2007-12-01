@@ -4,7 +4,13 @@
 %TMPL:INCLUDE{"viewleftbar"}%
 %TMPL:DEF{"logo"}%%TMPL:END%%{ no logo because we have a top bar }%
 
-%TMPL:DEF{"bodyclassname"}%patternViewPage%TMPL:END%
+%TMPL:DEF{"bodyclassname"}%patternViewPage%IF{"defined raw" then=" patternRawViewPage"}%%TMPL:END%
+
+%TMPL:DEF{"script:skintemplate"}%%IF{"defined raw" then='%TMPL:P{"script:skintemplate:viewraw"}%'}%%TMPL:END%
+
+%TMPL:DEF{"script:skintemplate:viewraw"}%<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiJavascripts/twikiPref.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiJavascripts/twiki_edit.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/PatternSkin/pattern_edit.js"></script>%TMPL:END%
 
 %{ DEPRECATED: formattop, formatbottom, attachmentsattop and attachmentsatbottom }%
 %{ compatibility transition older than 4.2: }%
@@ -28,7 +34,7 @@
 
 %TMPL:DEF{"breadcrumb:title"}%<span class="patternHomePathTitle">%MAKETEXT{"You are here:"}% </span> %TMPL:END%
 
-%TMPL:DEF{"breadcrumb:wikitoolname"}%[[%USERSWEB%.%HOMETOPIC%][%WIKITOOLNAME%]]%TMPL:P{"breadcrumb:separator"}%%TMPL:END%
+%TMPL:DEF{"breadcrumb:wikitoolname"}%[[%MAINWEB%.%HOMETOPIC%][%WIKITOOLNAME%]]%TMPL:P{"breadcrumb:separator"}%%TMPL:END%
 
 %TMPL:DEF{"breadcrumb:currentweb"}%<img src="%ICONURLPATH{web-bg-small}%" border="0" alt="" width="13" height="13" style="background-color:%WEBBGCOLOR%" />&nbsp;<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%HOMETOPIC%">%MAKETEXT{"[_1] Web" args="<nop>%WEB%"}%</a>%TMPL:END%
 
@@ -54,7 +60,7 @@
 %TMPL:DEF{"flashnote"}%%IF{"defined FLASHNOTE and $FLASHNOTE != ''" then="$percntTMPL:P{$quotflashnote:contents$quot}$percnt"}%%TMPL:END%
 %TMPL:DEF{"flashnote:contents"}%<div class="twikiNotification"> %FLASHNOTE% </div>%TMPL:END%
 
-%TMPL:DEF{"content"}%%TMPL:P{"simpleheader"}% %TEXT% %TMPL:END%
+%TMPL:DEF{"content"}%%TMPL:P{"simpleheader"}% %TEXT% %IF{"defined raw" then='%TMPL:P{"sig_textareabuttons"}%'}%%TMPL:END%
 
 %TMPL:DEF{"printaction"}%%TMPL:P{"activatable_printable"}%%TMPL:END%
 

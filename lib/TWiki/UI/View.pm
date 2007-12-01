@@ -368,6 +368,7 @@ sub view {
                       -cols => $p->getPreferencesValue('EDITBOXWIDTH'),
                       -style => $p->getPreferencesValue('EDITBOXSTYLE'),
                       -class => 'twikiTextarea twikiTextareaRawView',
+                      -id => 'topic',
                       -default => $text
                      );
             }

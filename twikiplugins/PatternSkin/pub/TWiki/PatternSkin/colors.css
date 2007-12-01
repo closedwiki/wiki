@@ -179,7 +179,7 @@ select {
 }
 
 .twikiTextareaRawView {
-   color:#777;
+   color:#000;
 }
 .twikiInputFieldDisabled {
    color:#aaa;
@@ -451,7 +451,10 @@ a:hover .twikiAccessKey {
 }
 .patternSigLine {
    color:#777;
+   background-color:#f6f7f8;
+   border-color:#e1e5e9;
 }
+
 .patternToolBar a:link .twikiAccessKey,
 .patternToolBar a:visited .twikiAccessKey {
    color:inherit;
@@ -531,11 +534,6 @@ h4.patternSearchResultsHeader {
 }
 
 /* edit.pattern.tmpl */
-
-.patternEditPage .patternSigLine {
-   background-color:#f6f7f8;
-   border-color:#e1e5e9;
-}
 
 /* preview.pattern.tmpl */
 
