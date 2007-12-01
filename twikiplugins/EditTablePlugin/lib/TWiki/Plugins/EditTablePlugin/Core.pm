@@ -169,7 +169,7 @@ sub processText {
 
     my @lines = split( /\n/, $theText );
     for (@lines) {
-TWiki::Func::writeDebug("line=$_");
+
         # Check if we are inside <pre> or <verbatim> tags
         # if so, do not process
         m|<pre>|i       && ( $insidePRE = 1 );
@@ -1087,8 +1087,8 @@ sub handleTableRow {
     $thePre |= '';
     my $text = "$thePre\|";
     if ($doEdit) {
-        $theRow =~ s/\|\s*$//o;
 
+        $theRow =~ s/\|\s*$//o;
         my $rowID = $query->param("etrow_id$theRowNr");
         if ( !defined $rowID ) { $rowID = $theRowNr; }
         my @cells = split( /\|/, $theRow );
