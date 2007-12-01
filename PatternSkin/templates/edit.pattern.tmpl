@@ -3,13 +3,11 @@
 
 
 
-%TMPL:DEF{"script:skintemplate"}%%TMPL:P{"script:skintemplate:edit"}%%TMPL:END%
+%TMPL:DEF{"script:skintemplate"}%%TMPL:P{context="TinyMCEPluginEnabled" else="script:skintemplate:edit"}%%TMPL:END%
+
 %TMPL:DEF{"script:skintemplate:edit"}%<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiJavascripts/twikiPref.js"></script>
-<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiJavascripts/twikiCSS.js"></script>
-<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiJavascripts/twikiEvent.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiJavascripts/twiki_edit.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/PatternSkin/pattern_edit.js"></script>%TMPL:END%
-
 
 
 %TMPL:DEF{"toolbar"}%<div class="patternTop">%TWISTYBUTTON{id="edithelp" firststart="show" mode="div" remember="on" link="%MAKETEXT{"Edit help"}%" showimgleft="%ICONURLPATH{toggleopen}%"
@@ -64,13 +62,8 @@ hideimgleft="%ICONURLPATH{toggleclose}%"}%</div><!--//patternTop-->%TMPL:END%
 %TMPL:P{"sig_textareabuttons"}%%TMPL:END%
 
 
-%TMPL:DEF{"sig_textareabuttons"}%<div class="patternSigLine">%TMPL:P{"sig"}%%TMPL:P{"textareabuttons"}%<br class="twikiClear" /></div><!-- /patternSigLine-->%TMPL:END%
-
 
 %TMPL:DEF{"sig"}%<span class="patternSig twikiLeft"><label for="sig" class="twikiGrayText">%MAKETEXT{"Your signature to copy/paste:"}%&nbsp;&nbsp;</label><input class="twikiInputFieldReadOnly" size="41" name="sig" type="text" readonly="readonly" title='%MAKETEXT{"Select, copy and paste your signature text to the bottom of your entry"}%' id="sig" value="-- <nop>%WIKIUSERNAME% - %DATE%" /></span><!--/patternSig-->%TMPL:END%
-
-
-%TMPL:DEF{"textareabuttons"}%<span class="twikiRight twikiMakeVisible" style="text-align:left;"><span class="twikiLeft patternTextareaButton patternButtonFontSelector" title="%MAKETEXT{"Switch to monotype or propotional font"}%">&nbsp;</span><span class="twikiLeft patternTextareaButton patternButtonEnlarge" title="%MAKETEXT{"Enlarge edit box"}%">&nbsp;</span><span class="twikiLeft patternTextareaButton patternButtonShrink" title="%MAKETEXT{"Shrink edit box"}%">&nbsp;</span></span>%TMPL:END%
 
 
 %TMPL:DEF{"pagehelp_nojavascript"}%<br />%TWISTYTOGGLE{id="pagehelp_nojavascript" mode="div" start="hide"}%<div class="twikiHelp">%TMPL:P{"help"}%</div>%ENDTWISTYTOGGLE%%TMPL:END%
