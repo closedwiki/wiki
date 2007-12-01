@@ -131,6 +131,7 @@ var TWikiTiny = {
             el.id = id;
             el.type = "button";
             el.value = "WYSIWYG";
+            el.className = "twikiButton";
             el.onclick = function () {
                 tinyMCE.execCommand("mceToggleEditor", null, inst.editorId);
                 return false;
