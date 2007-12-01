@@ -33,6 +33,14 @@ my $RENDER_HACK        = "\n<nop>\n";
 my $DEFAULT_FIELD_SIZE = 16;
 
 BEGIN {
+    %regex                      = ();
+    $regex{edit_table_plugin}   = '%EDITTABLE{(.*)}%';
+    $regex{table_plugin}        = '%TABLE(?:{(.*?)})?%';
+    $regex{table_row_full}      = '^(\s*)\|.*\|\s*$';
+    $regex{table_row}           = '^(\s*)\|(.*)';
+}
+
+sub init {
     $preSp                      = '';
     %params                     = ();
     @format                     = ();
@@ -51,11 +59,6 @@ BEGIN {
     $encodeEnd                  = undef;
     $table                      = undef;
     $query                      = undef;
-    %regex                      = ();
-    $regex{edit_table_plugin}   = '%EDITTABLE{(.*)}%';
-    $regex{table_plugin}        = '%TABLE(?:{(.*?)})?%';
-    $regex{table_row_full}      = '^(\s*)\|.*\|\s*$';
-    $regex{table_row}           = '^(\s*)\|(.*)';
 }
 
 =pod
@@ -67,6 +70,7 @@ Called from commonTagsHandler. Pass over to processText in 'no Save' mode.
 =cut
 
 sub process {
+	init();
     processText( 0, 0, 0, @_ );
 }
 
