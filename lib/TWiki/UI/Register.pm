@@ -529,7 +529,7 @@ sub _resetUsersPassword {
     unless( $user && $users->userExists( $user )) {
         # Not an error.
         $$pMess .= $session->inlineAlert(
-            'alertsnohtml', 'missing_user', $user);
+            'alertsnohtml', 'missing_user', $login);
         return 0;
     }
 
