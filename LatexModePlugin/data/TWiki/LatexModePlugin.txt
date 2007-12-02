@@ -360,8 +360,8 @@ Finally, customize the installation specific variables.
       *  $TWiki::cfg{Plugins}{LatexModePlugin}{donotrenderlist} %BR% declare a comma-separated list of <nop>LaTeX commands that _will not be rendered_.  %BR% Default = ='input,include,catcode'=.
       *  $TWiki::cfg{Plugins}{LatexModePlugin}{tweakinline} %BR% Turned off by default, if this variable is set to =1= the plugin will attempt to align the baseline of the rendered in-line math with the baseline of the HTML text.
       *  $TWiki::cfg{Plugins}{LatexModePlugin}{bypassattach} %BR% Turned off by default, setting this boolean variable to =1= will force file creation to use direct file stores and bypass the saveAttach mechanism in TWiki4.  Saves a bit of processing overhead.
-      *  $TWiki::cfg{Plugins}{LatexModePlugins}{engine} %BR% This sets the default rendering engine %BR% Default: 'dvipng'
-      *  $TWiki::cfg{Plugins}{LatexModePlugins}{imagetype} %BR% This sets the image format for the generated files.  Valid types are png and gif.  %BR% Default:  'png'
+      *  $TWiki::cfg{Plugins}{LatexModePlugin}{engine} %BR% This sets the default rendering engine %BR% Default: 'dvipng'
+      *  $TWiki::cfg{Plugins}{LatexModePlugin}{imagetype} %BR% This sets the image format for the generated files.  Valid types are png and gif.  %BR% Default:  'png'
 
 
 ---+++ Security

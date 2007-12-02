@@ -105,7 +105,8 @@ my $convertargs = " -density %DENSITY|N%".
 ## # to be used during rendering (e.g. in-line vs. own-line equations)
 my %markup_opts = ();
 
-my $sandbox = $TWiki::Plugins::LatexModePlugin::sandbox;
+my $sandbox =  $TWiki::sharedSandbox || $TWiki::sandbox;
+# $TWiki::Plugins::LatexModePlugin::sandbox;
 
 # sub _writeOpts {
 # ## 
@@ -176,7 +177,7 @@ sub handleLatex
 
         $opts{$a} = $b;
 
-        $LMPc{'use_color'} = 1 if ($a eq 'color');
+        $LMPc{'use_color'} = 1 if ( ($a eq 'color') || ($a eq 'bgcolor'));
     }
     if ( ($LMPc{'use_color'} == 1) and !( $LMPc{'preamble'} =~ m/ackage\{color/) ) {
         $LMPc{'preamble'} = "\\RequirePackage{color}\n".$LMPc{'preamble'};
@@ -565,6 +566,23 @@ sub renderEquations {
     #check if there was any math in this document
     return unless defined( $LMPc{'hashed_math_strings'} );
     # return unless scalar( keys( %hashed_math_strings ) );
+
+    ## 'halt-on-error' is not supported in older versions of tetex, so check to see if it exists:
+    ## 
+    my ($resp,$exit);
+    if (-x $PATHTOLATEX) {
+        ($resp,$exit) = $sandbox->sysCommand("$PATHTOLATEX ".' --help');
+    } elsif (-x $PATHTOPDFLATEX) {
+        ($resp,$exit) = $sandbox->sysCommand("$PATHTOPDFLATEX ".' --help');
+    }
+    if ($resp =~ m/halt\-on\-error/) {
+        $LMPc{'haltonerror'} = ' -halt-on-error ';
+    } else {
+        $LMPc{'haltonerror'} = ' ';
+    }
+    # print STDERR $LMPc{'haltonerror'}."\n";
+
+
     my %hashed_math_strings = %{ $LMPc{'hashed_math_strings'} };
 
     # &TWiki::Func::writeDebug( join(" ", keys(%hashed_math_strings) ) ) if ($debug);
@@ -728,7 +746,9 @@ sub renderEquations {
     # system("$PATHTOLATEX -interaction=nonstopmode -halt-on-error $LATEXFILENAME >> $LATEXLOG 2>&1");
     if ( scalar(%pdf_hash_code_mapping) ) {
         $sandbox->sysCommand("$PATHTOPDFLATEX ".
-                             ' -interaction=nonstopmode -halt-on-error %FILE|F% ',
+                             ' -interaction=nonstopmode '.
+                             $LMPc{'haltonerror'}.
+                             ' %FILE|F% ',
                              FILE => 'pdf_'.$LATEXFILENAME
                              );
         (my $log = 'pdf_'.$LATEXFILENAME) =~ s/\.tex$/\.log/;
@@ -744,7 +764,9 @@ sub renderEquations {
     }
     if ( scalar(%dvi_hash_code_mapping) ) {
         $sandbox->sysCommand("$PATHTOLATEX ".
-                             ' -interaction=nonstopmode -halt-on-error %FILE|F% ',
+                             ' -interaction=nonstopmode '.
+                             $LMPc{'haltonerror'}.
+                             ' %FILE|F% ',
                              FILE => $LATEXFILENAME
                              );
 
@@ -879,6 +901,8 @@ sub makePNGs {
             # system($cmd);
             my $args = $dvipngargs;
             $args .= ' -bg transparent '; # unless ($tweakinline ne 0);
+            # dvipng 1.7 uses 'transparent'
+            # dvipng 1.5 uses 'Transparent'
 
             $sandbox->sysCommand( "$PATHTODVIPNG $args",
                                   DENSITY => $opts{'density'},
@@ -1026,7 +1050,7 @@ sub trimInlineImage_v2 {
     my ($in,$sandbox,$bgcolor,$LATEXWDIR,$ptsz) = @_;
 
     (my $out = $in ) =~ s/\.(png|gif)/.xpm/;
-    $sandbox->sysCommand("$PATHTOCONVERT %IN|F% -trim %OUT|F%",
+    $sandbox->sysCommand("$PATHTOCONVERT %IN|F%  %OUT|F%",
                          IN => $in,
                          OUT => $out );
 
@@ -1034,7 +1058,7 @@ sub trimInlineImage_v2 {
     my ($canvaschar,$cpp) = (' ',1);
     my ($col, $flag, $cnt) = (0,0,0);
     my ($midu, $midl, $sum)  = (0,0,'');
-    
+
     open(F,"<$out") || print STDERR $!;
 
     ## run through the XPM image line-by-line
@@ -1077,12 +1101,13 @@ sub trimInlineImage_v2 {
             $pre .= $_;
             if ($_ =~ m/\"(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\"/) {
                 $cpp = $4;
-                # print "\t cpp: $cpp\n";
+                &TWiki::Func::writeDebug( "cpp:'".$cpp."'" ) if ($debug);
             }
-            if ($_ =~ m/None/) {
+            if ($_ =~ m/None|gray100/) {
                 $canvaschar = substr($_,1,$cpp);
-                # $canvaschar =~ s/([\*\,])/\\$1/g;
             }
+            # &TWiki::Func::writeDebug( "canvaschar:'".$canvaschar."'" ) if ($debug);
+
         }
         $flag = 1 if m!/\*\spixels\s\*/!; # switch between 'pre' and the image
     }
@@ -1147,7 +1172,6 @@ sub trimInlineImage_v2 {
 
     unlink("mod_$out") unless ($debug);
     unlink("$out") unless ($debug);
-    
 }
 
 # =========================

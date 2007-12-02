@@ -127,9 +127,9 @@ sub commonTagsHandler
              ($_[0] =~ m/%(\$.*?\$)%/) ||
              ($_[0] =~ m/%(\\\[.*?\\\])%/) 
              ) 
-        {   eval(" use TWiki::Plugins::LatexModePlugin::Init;");
-            eval(" use TWiki::Plugins::LatexModePlugin::Render;");
-            eval(" use TWiki::Plugins::LatexModePlugin::CrossRef;");
+        {   use TWiki::Plugins::LatexModePlugin::Init;
+            use TWiki::Plugins::LatexModePlugin::Render;
+            use TWiki::Plugins::LatexModePlugin::CrossRef;
             eval(" use TWiki::Plugins::LatexModePlugin::Parse;");
             $initialized = &TWiki::Plugins::LatexModePlugin::Init::doInit(); 
         }
