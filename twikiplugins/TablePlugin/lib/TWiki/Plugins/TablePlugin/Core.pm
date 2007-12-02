@@ -122,13 +122,10 @@ sub _parseParameters {
 
     $tmp = $params{id};
     if ( defined $tmp && $tmp ne '' && $tmp ne $tableId ) {
-        $tableId = 'table' . $tmp;
-    }
-    elsif ( !$writeDefaults ) {
-        $tableId = 'table' . ( $tableCount + 1 );
+        $tableId = $tmp;
     }
     else {
-        $tableId = 'default';
+        $tableId = 'table' . ( $tableCount + 1 );
     }
     $cssAttrs{tableId} = $tableId;
 
