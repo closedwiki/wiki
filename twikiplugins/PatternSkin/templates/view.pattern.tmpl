@@ -60,9 +60,11 @@
 %TMPL:DEF{"flashnote"}%%IF{"defined FLASHNOTE and $FLASHNOTE != ''" then="$percntTMPL:P{$quotflashnote:contents$quot}$percnt"}%%TMPL:END%
 %TMPL:DEF{"flashnote:contents"}%<div class="twikiNotification"> %FLASHNOTE% </div>%TMPL:END%
 
-%TMPL:DEF{"content"}%%TMPL:P{"simpleheader"}% %TEXT% %IF{"defined raw" then='%TMPL:P{"sig_textareabuttons"}%'}%%TMPL:END%
+%TMPL:DEF{"content"}%%TMPL:P{"simpleheader"}% %TEXT% %IF{"$raw='on'" then='%TMPL:P{"sig_textareabuttons"}%'}%%TMPL:END%
 
 %TMPL:DEF{"printaction"}%%TMPL:P{"activatable_printable"}%%TMPL:END%
 
 %TMPL:DEF{"footernote"}%%TMPL:P{"topicinfo"}%%TMPL:END%
 %TMPL:DEF{"topicinfo"}%<div class="patternInfo twikiGrayText"><div class="patternRevInfo">%MAKETEXT{"Topic revision:"}% %REVINFO%</div><!-- /patternRevInfo--><div class="patternMoved">%META{"moved"}%</div><!-- /patternMoved--></div><!-- /patternInfo-->%TMPL:END%
+
+%TMPL:DEF{"sig_textareabuttons"}%<div class="patternSigLine">%TMPL:P{"textareabuttons"}%<br class="twikiClear" /></div><!-- /patternSigLine-->%TMPL:END%
