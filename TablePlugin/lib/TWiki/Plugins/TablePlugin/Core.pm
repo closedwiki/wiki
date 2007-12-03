@@ -1345,6 +1345,15 @@ sub emitTable {
     my $numberOfRows   = scalar(@curTable);
     my $dataColorCount = 0;
 
+    my @headerRows = ();
+    my @bodyRows   = ();
+    my @footerRows = ();
+
+    my $isPastHeaderRows = 0;
+    my $singleIndent     = "\n\t";
+    my $doubleIndent     = "\n\t\t";
+    my $tripleIndent     = "\n\t\t\t";
+
     foreach my $row (@curTable) {
         my $rowtext  = '';
         my $colCount = 0;
@@ -1567,7 +1576,7 @@ sub emitTable {
             next if ( $type eq 'Y' );
             my $fn = 'CGI::' . $type;
             no strict 'refs';
-            $rowtext .= "\n\t\t" . &$fn( $attr, " $cell " );
+            $rowtext .= "$tripleIndent" . &$fn( $attr, " $cell " );
             use strict 'refs';
         }    # foreach my $fcell ( @$row )
 
@@ -1597,36 +1606,50 @@ sub emitTable {
             $trClassName =
               _appendRowNumberCssClass( $trClassName, 'dataColor', $modRowNum );
         }
-        $rowtext .= "\n\t";
-        my $rowHTML = "\n\t" . CGI::Tr( { class => $trClassName }, $rowtext );
+        $rowtext .= $doubleIndent;
+        my $rowHTML =
+          $doubleIndent . CGI::Tr( { class => $trClassName }, $rowtext );
 
         $isHeaderRow = ( $headerCellCount == $colCount );
         my $isFooterRow = ( ( $numberOfRows - $rowCount ) <= $footerRows );
 
         if ($isFooterRow) {
-
-           # this makes one tfoot element per header row due to the line by line
-           # nature of this parser - which might be a good thing..
-            $rowHTML = "\n\t" . CGI::tfoot( $rowHTML . "\n\t" );
+            push @footerRows, $rowHTML;
         }
         elsif ($isHeaderRow) {
-
-           # this makes one thead element per header row due to the line by line
-           # nature of this parser - which might be a good thing..
-            $rowHTML = "\n\t" . CGI::thead( $rowHTML . "\n\t" );
+            push( @headerRows, $rowHTML ) if !$isPastHeaderRows;
 
             # reset data color count to start with first color after
             # each table heading
             $dataColorCount = 0;
         }
         else {
+            $isPastHeaderRows = 1;
+            push @bodyRows, $rowHTML;
             $dataColorCount++;
         }
-        $text .= $currTablePre . $rowHTML;
+
+        #$text .= $currTablePre . $rowHTML;
         $rowCount++;
     }    # foreach my $row ( @curTable )
 
-    $text .= $currTablePre . CGI::end_table() . "\n";
+    my $thead =
+        "$singleIndent<thead>"
+      . join( "", @headerRows )
+      . "$singleIndent</thead>";
+    $text .= $currTablePre . $thead if scalar @headerRows;
+
+    my $tfoot =
+        "$singleIndent<tfoot>"
+      . join( "", @footerRows )
+      . "$singleIndent</tfoot>";
+    $text .= $currTablePre . $tfoot if scalar @footerRows;
+
+    my $tbody =
+      "$singleIndent<tbody>" . join( "", @bodyRows ) . "$singleIndent</tbody>";
+    $text .= $currTablePre . $tbody if scalar @bodyRows;
+
+    $text .= $currTablePre . "\n" . CGI::end_table() . "\n";
     _setDefaults();
     return $text;
 }
