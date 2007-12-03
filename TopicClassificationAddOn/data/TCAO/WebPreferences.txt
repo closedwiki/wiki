@@ -8,11 +8,8 @@ The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%
 __Preferences:__
 
 ---+++ Application Pointer
-Application web; note, that there are hard-coded references to Applications.
-   * Set APPLIB = TCAO
-<nop>DBCachePlugin settings registering the WebDB
-implementation for this web (don't change):
-   * Set #WEBDB = TWiki::Plugins::DBCachePlugin::WebDB
+   * Application web; note, that there are hard-coded references to Applications.
+      * Set APPLIB = TCAO
 
 	* List of topics of the <nop>%WEB% web:
 		* Set WEBTOPICLIST = [[WebChanges][Changes]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" />

@@ -3,7 +3,7 @@
 
 | *Name:*| *Type:* | *Size:* | *Values:* | *Tooltip message:* |
 | TopicType | label | 1 | Task  | Classify the topic by function. |
-| SubjectArea  | select | 1 | %DBQUERY{"Classification = 'SubjectArea'" format="$topic" separator=", "}%  | Focus of task.  |
+| SubjectArea  | checkbox | 3 | %DBQUERY{"Classification = 'SubjectArea'" format="$topic" separator=", "}%  | Focus of task.  |
 | Lead | text | 30 |  | Person responsible for completion. |
 | Due | date | 10 |   | Due date for completion. |
 | Status | select | 1 | Pending, 0%, 10%, 20%, 30%, 40%, 50%, 60%, 70%, 80%, 90%, Completed, On Hold  |   |

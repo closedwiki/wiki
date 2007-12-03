@@ -82,11 +82,11 @@ function assignParent( form, parent ) {
 <input type="hidden" name="templatetopic" value="%IFDEFINED{"%TEMPLATE%" then="%ENCODE{%TEMPLATE%}%" else=""}%" />
 <input type="hidden" name="formtemplate" value="%IFDEFINED{"%FORM%" then="%FORM%" else="TopicForm"}%" />
 <input type="hidden" name="%IFDEFINED{"%CLASS_NAME%" then="$test" else="TopicType" glue="off"}%" value="%IFDEFINED{"%TYPE%"}%" />
-%~~  IFDEFINEDTHEN{"%PARENT%"
-~~~     as="choice"
-~~~     glue="on"
-~~~  }%%ELSEDEFINED%
-<input type="hidden" name="topicparent" value='%IFDEFINED{"%PARENT%"}%' />
+%IFDEFINEDTHEN{"%PARENT%" as="choice" glue="on"}%
+%ELSEIFDEFINED{"%PARENT%" glue="off"}%
+<input type="hidden" name="topicparent" value='%PARENT%' />
+%ELSEDEFINED%
+<input type="hidden" name="topicparent" value='%URLPARAM{parent}%' />
 %FIDEFINED%
 <div class="tcaoCreateNewTopic">
 %TABLE{ tablewidth="90%"  columnwidths="20%, 80%" dataalign="right, left"}%

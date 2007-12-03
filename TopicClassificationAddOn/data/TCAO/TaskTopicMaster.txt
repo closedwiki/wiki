@@ -5,11 +5,16 @@ _This MasterTopic provide defines some sections of Task topics to minimize the a
 ---++ Task summary section
 This section defineds the top part of Task topics.
 %STARTSECTION{name="taskSummary" }%
----++!! %FORMFIELD{"Summary" topic="%BASEWEB%.%BASETOPIC%"}%
-<blockquote style="background-color:#f8fbfc;width:400px;border-style:solid;border-width:0 0 0 3px;padding:.5em .5em;border-color:#D5E6F3;">
-*Lead:* %FORMFIELD{"Lead" topic="%BASEWEB%.%BASETOPIC%"}%%BR%
-*Status:* %FORMFIELD{"Status" topic="%BASEWEB%.%BASETOPIC%"}%%BR%
-*Due Date:* %FORMFIELD{"Due" topic="%BASEWEB%.%BASETOPIC%"}%%BR%
+---++!! %SPACEOUT{%BASETOPIC%}%
+<blockquote style="background-color:#f8fbfc;width:500px;border-style:solid;border-width:0 0 0 3px;padding:.5em .5em;border-color:#D5E6F3;">
+%~~  DBQUERY{topic="%BASETOPIC%"
+~~~      format="<span style='font-size:1.2em;'><b>Summary: $formfield(Summary)</b></span> %BR%
+~~~          *Lead:* <nop>$formfield(Lead) %BR%
+~~~          *SubjectArea:* %BASEWEB%.$formfield(SubjectArea) %BR%
+~~~          *Priority:* $formfield(Priority) %BR%
+~~~          *Status:* $formfield(Status) %BR%
+~~~          *Due Date:* $formfield(Due) %BR%"
+~~~  }%
 </blockquote>
 %TWISTYSHOW{id="toc" link="Show Table of Contents" imgleft="%ICONURLPATH{toggleopen}%" }% %TWISTYHIDE{id="toc" link="Hide Table of Contents" imgleft="%ICONURLPATH{'toggleclose'}%"}% 
 %TWISTYTOGGLE{id="toc" mode="div" remember="on"}% 

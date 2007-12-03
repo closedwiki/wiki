@@ -63,9 +63,9 @@ The following parameters allow customization of how specific Classification topi
 ~~~    }%
 
 %IFDEFINEDTHEN{"%LISTFORMAT%" glue="off" }%
-%INCLUDE{"%LISTFORMAT%" %IFDEFINED{"%FACET%" then="FACETS=\"$test\"" glue="off"}% }%
+%DBCALL{"%LISTFORMAT%" %IFDEFINED{"%FACET%" then="FACETS=\"$test\"" glue="off"}% remote="on"}%
 %ELSEDEFINED%
-%~~  INCLUDE{"%TCAOWEB%.RenderTableSearchResults" 
+%~~  DBCALL{"%TCAOWEB%.RenderTableSearchResults" 
 ~~~       remote="on"
 ~~~       FACETS="%FORMFIELD{"Facets" topic="%BASEWEB%.%BASETOPIC%"}%" 
 ~~~       BASESEARCH="%FORMFIELD{"Classification" topic="%BASEWEB%.%BASETOPIC%"}% =~ '%BASETOPIC%'" }%
