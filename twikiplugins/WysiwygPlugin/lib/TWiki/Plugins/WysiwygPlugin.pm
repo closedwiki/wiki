@@ -753,6 +753,17 @@ sub _restUpload {
       " as $fileName" : '');
 }
 
+sub _unquote {
+    my $text = shift;
+    $text =~ s/\\/\\\\/g;
+    $text =~ s/\n/\\n/g;
+    $text =~ s/\r/\\r/g;
+    $text =~ s/\t/\\t/g;
+    $text =~ s/"/\\"/g;
+    $text =~ s/'/\\'/g;
+    return $text;
+}
+
 # Get, and return, a list of attachments using JSON
 sub _restAttachments {
     my ($session) = @_;
@@ -774,7 +785,7 @@ sub _restAttachments {
                                $meta->find('FILEATTACHMENT')) {
         push(@atts, '{'.join(',',
                          map {
-                             "\"$_\":\"$att->{$_}\""
+                             '"'._unquote($_).'":"'._unquote($att->{$_}).'"'
                          } keys %$att).'}');
 
     }
