@@ -48,7 +48,7 @@
 
 %TMPL:DEF{"edit_or_create"}%%TMPL:P{context="new_topic" then="create_topic_link" else="edit_topic_link"}%%TMPL:END%
 
-%TMPL:DEF{"raw_edit"}%%TMPL:P{context="new_topic" then="" else="raw_edit_link"}%%TMPL:END%
+%TMPL:DEF{"raw_edit"}%%TMPL:P{context="new_topic" then="" else="raw_edit_link"}%%TMPL:P{context="new_topic" then="" else="sep"}%%TMPL:END%
 
 %TMPL:DEF{"action_activatable_edit_or_create"}%%TMPL:P{"activatable_edit_or_create"}%%TMPL:P{"sep"}%%TMPL:END%
 
@@ -56,7 +56,9 @@
 
 %TMPL:DEF{"action_activatable_raw_edit"}%%TMPL:P{context="TinyMCEPluginEnabled" then="activatable_raw_edit"}%%TMPL:END%
 
-%TMPL:DEF{"activatable_raw_edit"}%%TMPL:P{context="inactive" then="inactive_raw_edit" else="raw_edit"}%%TMPL:P{"sep"}%%TMPL:END%
+%TMPL:DEF{"activatable_raw_edit"}%%TMPL:P{context="inactive" then="inactive_raw_edit" else="raw_edit"}%%TMPL:END%
+
+%TMPL:DEF{"inactive_raw_edit"}%<span><strike>%MAKETEXT{"Raw edit"}%</strike></span>%TMPL:P{"sep"}%%TMPL:END%
 
 
 %TMPL:DEF{"active_attach"}%%TMPL:P{"attach_link"}%%TMPL:END%
