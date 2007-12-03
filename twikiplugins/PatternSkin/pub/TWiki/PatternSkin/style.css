@@ -757,7 +757,7 @@ html>body #patternLeftBarContents li { /* Mozilla */
 	border-width:1px;
 	border-style:solid;
 	padding:.1em .35em;
-	margin:-.2em 0 .2em .25em;
+	margin:0 0 .2em .25em;
 	font-weight:bold;
 }
 .patternToolBar span a:link,
