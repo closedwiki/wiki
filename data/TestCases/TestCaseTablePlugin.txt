@@ -47,10 +47,40 @@
 | ^ | Two Two | Two Three |
 | Three One | ^ | Three Three |
 
+---+++ More cellspan examples
+| *vertical span* | *table 1* | *normal* |
+|^ | <- pipe-caret-pipe ||
+| cell | cell | cell |
+| *vertical span* | *table 1* | *normal* |
+|^ | <- pipe-caret-pipe ||
+| cell | cell | cell |
+| vertical span | cell | cell |
+|^ | <- pipe-caret-pipe ||
+| cell | cell | cell |
+
+| *vertical span* | *table 2* | *normal* |
+| ^ | <- pipe-space-caret-space-pipe ||
+| cell | cell | cell |
+| vertical span | cell | cell |
+| ^ | <- pipe-space-caret-space-pipe ||
+| cell | cell | cell |
+
+| vertical span | table 3 | normal |
+| ^ | <- pipe-space-caret-space-pipe ||
+| cell | cell | cell |
+| vertical span | cell | cell |
+| ^ | <- pipe-space-caret-space-pipe ||
+| cell | cell | cell |
+
 ---+++ Complex table with headers
 | *One One* | *One Two* | *One Three* |
 | ^ | Two Two | Two Three |
 | Three One | ^ | Three Three |
+
+---+++ Vertical cellspan in headers
+| *Web* | *Sitemap* | *VIEW* || *CHANGE* || *RENAME* ||
+| ^ | *Listed* | *DENY* | *ALLOW* | *DENY* | *ALLOW* | *DENY* | *ALLOW* |
+
 
 ---++ Sorting
 
