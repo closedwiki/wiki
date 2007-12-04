@@ -109,12 +109,12 @@ The plugin tries very hard to keep the permissions specification you started wit
 The web permissions matrix can be viewed (and edited) by entering =%<nop>WEBPERMISSIONS%= anywhere in a topic. You have to have admin rights to view/edit the matrix.
 
 The =WEBPERMISSIONS= TWiki variable accepts the following parameters:
+   * =repeatheads= - if set to a number, headings will be repeated every this number of rows. This is very useful when you have a lot of users and groups.
    * =webs= - a comma-separated list of webs to show. Default is to show all webs.
    * =users= - a comma-separated list of users (and groups) to show. Default is to show all users and groups.
 Both =webs= and =users= lists can use _wildcards_. A star (*) in a name will match any number of characters - so =Brian*= will match all users and groups whose names start with =Brian=. =*Group= will match all users or groups whose name ends in =Group=. If you put a minus sign (-) before a name in either list, then the next expression will be treated as a _filter_ e.g. =-Secret= will _exclude_ the name =Secret= from the list, and =*Group= will exclude all names ending in =Group= from the list.
-   * =repeatheads= - if set to a number, headings will be repeated every this number of rows. This is very useful when you have a lot of users and groups.
 
-If you have a lot of webs, use the following form to select the subset of webs you want to display. If you have admin rights, and the plugin is installed, you will see the matrix below the form:
+Use the following form to select the subset of webs and users you want to display. If you have admin rights, and the plugin is installed, you will see the matrix below the form:
 
 <!-- Copy from HERE -->
 #PermissionsMatrix
@@ -122,10 +122,10 @@ If you have a lot of webs, use the following form to select the subset of webs y
 Select the webs, users and groups you want to change permissions for from the list below. Ctrl+click and Shift+click work as normal.<br />
 <form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%#PermissionsMatrix" method="POST">
 <select size="7" name="webs" multiple="multiple">
-%WEBLIST{format="<option $marker>$wikiname</option>" selection="%URLPARAM{"webs" multiple="on" separator=", "}%"}%
+%WEBLIST{format="<option $marker>$name</option>" selection="%URLPARAM{"webs" multiple="on" separator=", "}%"}%
 </select>
 <select size="7" name="users" multiple="multiple">
-%USERSLIST{format="<option $marker>$name</option>" selection="%URLPARAM{"users" multiple="on" separator=", "}%"}%
+%USERSLIST{format="<option $marker>$wikiname</option>" selection="%URLPARAM{"users" multiple="on" separator=", "}%"}%
 </select> <br />
 <input type="submit" value="Select"/>
 </form>
