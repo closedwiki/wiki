@@ -308,7 +308,7 @@ sub _filterList {
 
 sub USERSLIST {
     my( $this, $params ) = @_;
-    my $format = $params->{_DEFAULT} || $params->{'format'} || '$user';
+    my $format = $params->{_DEFAULT} || $params->{'format'} || '$wikiname';
     my $separator = $params->{separator} || "\n";
     $separator =~ s/\$n/\n/;
     my $selection = $params->{selection} || '';

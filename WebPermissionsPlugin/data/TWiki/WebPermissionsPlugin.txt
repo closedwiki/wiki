@@ -164,7 +164,7 @@ Many thanks to the following sponsors for supporting this work:
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
-| 4 Dec 2007 | TWikibug:Item4901 fixed templates TWikibug:Item5072 added users parameter to select a subset of users/groups in the web permissions interface |
+|  4 Dec 2007 | TWikibug:Item4901 fixed templates TWikibug:Item5072 added users parameter to select a subset of users/groups in the web permissions interface |
 |  8 Sep 2007 | Updated for TWiki-4.2.0 |
 |  July 2006 | add Topic ACLs user interface via More topic actions - SvenDowideit@WikiRing.com |
 |  10216 | TWikibug:Item2291 - Added repeatheads and webs parameters |
