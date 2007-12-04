@@ -213,7 +213,8 @@ sub restUpdate {
             if ((defined($TWiki::cfg{Plugins}{UpdateAttachmentsPlugin}{AttachAsUser})) &&
                 ($TWiki::cfg{Plugins}{UpdateAttachmentsPlugin}{AttachAsUser} ne '')) {
                 $foundAttachment->{user} = $TWiki::cfg{Plugins}{UpdateAttachmentsPlugin}{AttachAsUser};
-                #TODO: for 4.2, need to get the user's cUID
+                #4.2.0 falls back and works if WikiName there.
+                #TODO: needs testing for the generalised usermapping case - shoudl store cUID
             }
 
             my $existingFile = $meta->get( 'FILEATTACHMENT', $foundAttachment->{name} );
