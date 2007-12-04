@@ -81,7 +81,7 @@ msgstr "%1 Последни промени в раздел %2"
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:2
 #: twikiplugins/PatternSkin/data/Trash/WebLeftBar.txt:3
 #: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:3
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:33
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:39
 msgid "%1 Web"
 msgstr "Раздел %1"
 
@@ -285,6 +285,11 @@ msgstr "(име, видимо в сайта) WikiName :"
 msgid "(login)"
 msgstr "(вход)"
 
+#: templates/oopsmore.tmpl:3
+#, fuzzy
+msgid "(more)"
+msgstr "(нищо)"
+
 #: templates/moveattachment.tmpl:4
 msgid "(move attachment)"
 msgstr "(преместване на прикаченеия файл)"
@@ -315,7 +320,7 @@ msgstr "(незадължително)"
 msgid "(otherwise search %1 Web only)"
 msgstr "(в противен случай, търсете само в раздел %1)"
 
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:35
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:41
 msgid "(raw view)"
 msgstr "(суров изглед)"
 
@@ -330,7 +335,7 @@ msgstr "(препоръчително)"
 msgid "(rename)"
 msgstr "(преименуване)"
 
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:35
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:41
 msgid "(revision %1)"
 msgstr "(версия %1)"
 
@@ -568,7 +573,7 @@ msgstr "Достъпът отказан"
 msgid "Access check on %1 failed"
 msgstr "Достъпът до %1 бе отказан"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:52
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:50
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:14
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:19
 msgid "Access keys"
@@ -588,7 +593,7 @@ msgstr "Действие %1 : %2."
 msgid "Add form"
 msgstr "Добавяне на форма"
 
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:122
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:161
 #, fuzzy
 msgid "Add row"
 msgstr "Добавяне на форма"
@@ -688,7 +693,7 @@ msgstr ""
 "Всички промени, направени от вас по страницата преди да дойдете на тази "
 "страница , са запазени."
 
-#: templates/viewtopicactionbuttons.tmpl:64
+#: templates/viewtopicactionbuttons.tmpl:66
 msgid "Attach"
 msgstr "Прикрепи"
 
@@ -782,7 +787,7 @@ msgstr "Налични шаблони в Раздел %1 :"
 msgid "Back to topic"
 msgstr "Обратно в страницата"
 
-#: templates/oopsmore.tmpl:37 templates/viewtopicactionbuttons.tmpl:87
+#: templates/oopsmore.tmpl:37 templates/viewtopicactionbuttons.tmpl:89
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:17
 msgid "Backlinks"
 msgstr "Обратни връзки"
@@ -835,11 +840,11 @@ msgstr "Няма e-mail-адрес за %1 (задължителен за нул
 
 #: templates/twiki.tmpl:74
 #: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:64
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:124
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:163
 msgid "Cancel"
 msgstr "Отказ"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:46
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:44
 msgid "Cancel editing and discard changes"
 msgstr "Откажи редакцията и отмени промените"
 
@@ -1162,7 +1167,7 @@ msgstr "Изтриване"
 msgid "Delete attachment"
 msgstr "Изтриване на притурка"
 
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:123
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:162
 #, fuzzy
 msgid "Delete last row"
 msgstr "Изтриване на страница"
@@ -1284,7 +1289,7 @@ msgstr "Редактиране"
 msgid "Edit Anyway"
 msgstr "Редактиране все пак!"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:15
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:13
 msgid "Edit help"
 msgstr "Помощ при редактиране"
 
@@ -1292,7 +1297,7 @@ msgstr "Помощ при редактиране"
 msgid "Edit personal data"
 msgstr "Редактиране на лични данни"
 
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:118
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:157
 #, fuzzy
 msgid "Edit table"
 msgstr "Редактиране на текст"
@@ -1301,7 +1306,7 @@ msgstr "Редактиране на текст"
 msgid "Edit text"
 msgstr "Редактиране на текст"
 
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:119
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:158
 #, fuzzy
 msgid "Edit this table"
 msgstr "Редактиране на текста в тази страница"
@@ -1335,7 +1340,7 @@ msgstr ""
 msgid "Email has been disabled for this TWiki installation"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:73
+#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:78
 msgid "Enlarge edit box"
 msgstr "Уголеми кутията за редактиране"
 
@@ -1428,7 +1433,7 @@ msgstr ""
 msgid "First Name:"
 msgstr "Име:"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:29
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:27
 msgid "Force new revision"
 msgstr "Нова версия сега!"
 
@@ -1828,11 +1833,15 @@ msgstr ""
 msgid "Modify search"
 msgstr "Промяна на търсенето"
 
+#: templates/oopsmore.tmpl:7
+msgid "More Actions on Topic %1"
+msgstr ""
+
 #: data/TWiki/WikiSyntaxSummary.txt:17
 msgid "More formatting help"
 msgstr "Още помощ при форматиране"
 
-#: templates/viewtopicactionbuttons.tmpl:74
+#: templates/viewtopicactionbuttons.tmpl:76
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:29
 msgid "More topic actions..."
 msgstr "Още действия..."
@@ -2157,7 +2166,7 @@ msgid ""
 "preferences)"
 msgstr ""
 
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:121
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:160
 msgid "Quiet save"
 msgstr ""
 
@@ -2175,7 +2184,7 @@ msgid ""
 "more, study the TWikiTutorial, which is accessible from the same link."
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:29
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:27
 msgid "Read new revision help text in new window"
 msgstr ""
 
@@ -2365,13 +2374,13 @@ msgstr "S = Запис, C = Отказ"
 msgid "S = Save, Q = Quiet save, K = Save and Continue, D = Discard"
 msgstr "S = Запис, Q = Quiet save, K = Прилагане, D = Отмяна"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:52
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:50
 #, fuzzy
 msgid ""
 "S = Save, Q = Quiet save, K = Save and Continue, P = Preview, C = Cancel"
 msgstr "S = Запис, Q = Тих запис, K = Прилагане, P = Преглед, C = Отказ"
 
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:120
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:159
 #, fuzzy
 msgid "Save table"
 msgstr "Записано в:"
@@ -2457,7 +2466,7 @@ msgstr "Вижте също подробния %1."
 msgid "See also:"
 msgstr "Вижте също"
 
-#: templates/edit.tmpl:58
+#: templates/edit.tmpl:59
 msgid "See below for help in editing this page."
 msgstr "Вижте по-долу за помощ при редактирането на тази страница."
 
@@ -2477,8 +2486,8 @@ msgstr "Избор на всичко"
 msgid "Select topic parent:"
 msgstr "Избери родителска страница:"
 
-#: templates/edit.tmpl:47
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:70
+#: templates/edit.tmpl:48
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:68
 msgid "Select, copy and paste your signature text to the bottom of your entry"
 msgstr ""
 "Изберете копирайте и вмъкнете подписа си в дъното на въведеното от вас."
@@ -2512,7 +2521,7 @@ msgstr "Покажи помощ"
 msgid "Show tool-tip topic info on mouse-over of %1 links, on or off:"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:73
+#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:78
 msgid "Shrink edit box"
 msgstr "Смали кутийката за редакция"
 
@@ -2612,7 +2621,7 @@ msgstr ""
 msgid "Summaries"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:73
+#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:78
 msgid "Switch to monotype or propotional font"
 msgstr ""
 
@@ -2952,8 +2961,8 @@ msgstr ""
 #: templates/viewprint.tmpl:14
 #: twikiplugins/ClassicSkin/templates/viewprint.classic.tmpl:12
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:19
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:37
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:62
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:43
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:68
 msgid "Topic revision:"
 msgstr "Версия на страницата"
 
@@ -3217,7 +3226,7 @@ msgid ""
 "with %1 first."
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:29
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:35
 msgid "You are here:"
 msgstr "Вие сте тук:"
 
@@ -3356,8 +3365,8 @@ msgstr ""
 msgid "Your registered e-mail address(es) are updated to: %1."
 msgstr ""
 
-#: templates/edit.tmpl:47
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:70
+#: templates/edit.tmpl:48
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:68
 msgid "Your signature to copy/paste:"
 msgstr "Вашият подпис за copy/paste:"
 
@@ -3453,8 +3462,8 @@ msgstr "полета са задължителни."
 msgid "has more information about attaching files."
 msgstr "Прегледайте %1 за информация относно Дефиниране на Форми."
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:26
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:29
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:24
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:27
 msgid "help"
 msgstr "помощ"
 
@@ -3504,7 +3513,7 @@ msgstr "сега %1"
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:29
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:33
 #: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:7
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:35
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:33
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:10
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:25
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:16
@@ -3601,7 +3610,7 @@ msgstr "title='Цялата история на страницата' accesskey=
 msgid "user list truncated"
 msgstr "списъкът с потребителите е повреден"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:46
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:44
 msgid "value='Cancel' accesskey='c'"
 msgstr "value='Отказ' accesskey='c'"
 
@@ -3609,20 +3618,20 @@ msgstr "value='Отказ' accesskey='c'"
 msgid "value='Discard' accesskey='d'"
 msgstr "value='Отмяна' accesskey='d'"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:44
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
 msgid "value='Preview' accesskey='p'"
 msgstr "value='Преглед' accesskey='p'"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:40
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:38
 msgid "value='Quiet save' accesskey='q'"
 msgstr "value='Тих запис' accesskey='q'"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:40
 #, fuzzy
 msgid "value='Save and Continue' accesskey='k'"
 msgstr "value='Запис' accesskey='s'"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:38
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:36
 msgid "value='Save' accesskey='s'"
 msgstr "value='Запис' accesskey='s'"
 

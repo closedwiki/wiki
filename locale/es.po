@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2006-03-23 17:42-0800\n"
+"PO-Revision-Date: 2007-12-04 12:22-0300\n"
 "Last-Translator: Will Norris\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -81,7 +81,7 @@ msgstr "Revisar cambios recientes en:"
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:2
 #: twikiplugins/PatternSkin/data/Trash/WebLeftBar.txt:3
 #: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:3
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:33
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:39
 msgid "%1 Web"
 msgstr "Web %1"
 
@@ -290,6 +290,11 @@ msgstr "(Te identifica ante los otros) WikiName:"
 msgid "(login)"
 msgstr "Sesión Iniciada"
 
+#: templates/oopsmore.tmpl:3
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:12
+msgid "(more)"
+msgstr "(más)"
+
 #: templates/moveattachment.tmpl:4
 msgid "(move attachment)"
 msgstr "(mover archivo adjunto)"
@@ -320,7 +325,7 @@ msgstr "(opcional)"
 msgid "(otherwise search %1 Web only)"
 msgstr "(si no, buscar la página %1 solamente)"
 
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:35
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:41
 #, fuzzy
 msgid "(raw view)"
 msgstr "Vista previa"
@@ -336,7 +341,7 @@ msgstr "(recomendado)"
 msgid "(rename)"
 msgstr "(renombrar)"
 
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:35
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:41
 #, fuzzy
 msgid "(revision %1)"
 msgstr "Revisión"
@@ -576,7 +581,7 @@ msgstr "Acceso Denegado"
 msgid "Access check on %1 failed"
 msgstr "La revisión de acceso a %1 ha fallado"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:52
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:50
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:14
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:19
 msgid "Access keys"
@@ -596,7 +601,7 @@ msgstr "Acción %1: %2."
 msgid "Add form"
 msgstr "Añadir formulario"
 
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:122
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:161
 #, fuzzy
 msgid "Add row"
 msgstr "Añadir formulario"
@@ -696,7 +701,7 @@ msgstr ""
 "Cualquier cambio que usted haga a la página antes de venir a estapagina "
 "fueron preservados."
 
-#: templates/viewtopicactionbuttons.tmpl:64
+#: templates/viewtopicactionbuttons.tmpl:66
 msgid "Attach"
 msgstr "Adjuntar"
 
@@ -795,7 +800,7 @@ msgstr "Plantillas para formas posibles"
 msgid "Back to topic"
 msgstr "Volver a la página"
 
-#: templates/oopsmore.tmpl:37 templates/viewtopicactionbuttons.tmpl:87
+#: templates/oopsmore.tmpl:37 templates/viewtopicactionbuttons.tmpl:89
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:17
 msgid "Backlinks"
 msgstr "Retroceso"
@@ -849,12 +854,12 @@ msgstr ""
 
 #: templates/twiki.tmpl:74
 #: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:64
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:124
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:163
 #, fuzzy
 msgid "Cancel"
 msgstr "&Cancelar"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:46
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:44
 msgid "Cancel editing and discard changes"
 msgstr "Cancelar la edición y descartar los cambios"
 
@@ -1183,7 +1188,7 @@ msgstr "Borrar"
 msgid "Delete attachment"
 msgstr "Borrar fichero adjunto"
 
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:123
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:162
 #, fuzzy
 msgid "Delete last row"
 msgstr "Borrar página"
@@ -1308,7 +1313,7 @@ msgstr "Editar"
 msgid "Edit Anyway"
 msgstr "Editar de todas formas"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:15
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:13
 #, fuzzy
 msgid "Edit help"
 msgstr "Editar texto"
@@ -1317,7 +1322,7 @@ msgstr "Editar texto"
 msgid "Edit personal data"
 msgstr "Editar datos personales"
 
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:118
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:157
 #, fuzzy
 msgid "Edit table"
 msgstr "Editar texto"
@@ -1326,7 +1331,7 @@ msgstr "Editar texto"
 msgid "Edit text"
 msgstr "Editar texto"
 
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:119
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:158
 #, fuzzy
 msgid "Edit this table"
 msgstr "Editar el texto de la página"
@@ -1358,7 +1363,7 @@ msgstr ""
 msgid "Email has been disabled for this TWiki installation"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:73
+#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:78
 msgid "Enlarge edit box"
 msgstr "Agrandar caja de edición"
 
@@ -1448,7 +1453,7 @@ msgstr ""
 msgid "First Name:"
 msgstr "Nombre:"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:29
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:27
 msgid "Force new revision"
 msgstr "Forzar nueva revisión"
 
@@ -1881,11 +1886,16 @@ msgstr "Comando de acción no encontrado"
 msgid "Modify search"
 msgstr "Modificar búsqueda"
 
+#: templates/oopsmore.tmpl:7
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:18
+msgid "More Actions on Topic %1"
+msgstr "Más acciones en página %1"
+
 #: data/TWiki/WikiSyntaxSummary.txt:17
 msgid "More formatting help"
 msgstr "Más ayuda de formato"
 
-#: templates/viewtopicactionbuttons.tmpl:74
+#: templates/viewtopicactionbuttons.tmpl:76
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:29
 msgid "More topic actions..."
 msgstr "Mas acciones de página..."
@@ -2228,7 +2238,7 @@ msgid ""
 "preferences)"
 msgstr ""
 
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:121
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:160
 msgid "Quiet save"
 msgstr ""
 
@@ -2249,7 +2259,7 @@ msgstr ""
 "aprender mas estudie el TWikiTutorial, el cual esta accesible en el "
 "mismoenlace."
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:29
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:27
 msgid "Read new revision help text in new window"
 msgstr "Leer el nuevo texto de ayuda de revision en una nueva ventana"
 
@@ -2444,7 +2454,7 @@ msgstr ""
 msgid "S = Save, Q = Quiet save, K = Save and Continue, D = Discard"
 msgstr "S = salvar, Q = Salvar discreto, K = Punto de partida, D = Descartar"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:52
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:50
 #, fuzzy
 msgid ""
 "S = Save, Q = Quiet save, K = Save and Continue, P = Preview, C = Cancel"
@@ -2452,7 +2462,7 @@ msgstr ""
 "S = Salvar, Q = Salvar discreto, K = Punto de partida, P = Vista previa,C = "
 "Cancelar"
 
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:120
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:159
 #, fuzzy
 msgid "Save table"
 msgstr "Salvado en:"
@@ -2541,7 +2551,7 @@ msgstr "Vea también el %1 con más información."
 msgid "See also:"
 msgstr "Ver también:"
 
-#: templates/edit.tmpl:58
+#: templates/edit.tmpl:59
 msgid "See below for help in editing this page."
 msgstr ""
 
@@ -2562,8 +2572,8 @@ msgstr "Seleccionar todo"
 msgid "Select topic parent:"
 msgstr "Paso 1: Seleccionar página pariente:"
 
-#: templates/edit.tmpl:47
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:70
+#: templates/edit.tmpl:48
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:68
 msgid "Select, copy and paste your signature text to the bottom of your entry"
 msgstr "Seleccione, copie y pegue su texto firma al fondo de su entrada"
 
@@ -2599,7 +2609,7 @@ msgstr ""
 "Mostrar información sobre sugerencias de herramientas cuando el ratón "
 "estésobre los enlaces, activado o desactivado:"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:73
+#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:78
 msgid "Shrink edit box"
 msgstr "Empequeñecer caja de edición"
 
@@ -2701,7 +2711,7 @@ msgstr "Subscribir/Cancelar subscripción en:"
 msgid "Summaries"
 msgstr "Sumarios"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:73
+#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:78
 msgid "Switch to monotype or propotional font"
 msgstr ""
 
@@ -3098,8 +3108,8 @@ msgstr "Pariente de la página"
 #: templates/viewprint.tmpl:14
 #: twikiplugins/ClassicSkin/templates/viewprint.classic.tmpl:12
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:19
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:37
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:62
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:43
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:68
 #, fuzzy
 msgid "Topic revision:"
 msgstr "Pariente de la página"
@@ -3388,7 +3398,7 @@ msgstr ""
 "de formularios no sefusiona tan facilment, asi que en este caso se "
 "recomienda que cheque con %1 primero"
 
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:29
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:35
 msgid "You are here:"
 msgstr "Usted está aquí"
 
@@ -3563,8 +3573,8 @@ msgstr ""
 msgid "Your registered e-mail address(es) are updated to: %1."
 msgstr "Su(s) dirección(es) de correo electronico han sido actualizadas a: %1"
 
-#: templates/edit.tmpl:47
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:70
+#: templates/edit.tmpl:48
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:68
 msgid "Your signature to copy/paste:"
 msgstr "Tu firma para copiar/pegar:"
 
@@ -3668,8 +3678,8 @@ msgstr "Campos requeridos."
 msgid "has more information about attaching files."
 msgstr "Vea %1 por información acerca de definiciones de formularios."
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:26
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:29
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:24
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:27
 msgid "help"
 msgstr "ayuda"
 
@@ -3719,7 +3729,7 @@ msgstr "ahora %1"
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:29
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:33
 #: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:7
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:35
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:33
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:10
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:25
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:16
@@ -3821,7 +3831,7 @@ msgstr "Ver el historial total de la página"
 msgid "user list truncated"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:46
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:44
 msgid "value='Cancel' accesskey='c'"
 msgstr "value='Cancelar' accesskey='c'"
 
@@ -3829,20 +3839,20 @@ msgstr "value='Cancelar' accesskey='c'"
 msgid "value='Discard' accesskey='d'"
 msgstr "valor=Descartar' accesskey='d'"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:44
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
 msgid "value='Preview' accesskey='p'"
 msgstr "value='Previsualizar' accesskey='p'"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:40
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:38
 msgid "value='Quiet save' accesskey='q'"
 msgstr "value='Salvar sin notificación' accesskey='q'"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:40
 #, fuzzy
 msgid "value='Save and Continue' accesskey='k'"
 msgstr "value='Salvar' accesskey='s'"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:38
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:36
 msgid "value='Save' accesskey='s'"
 msgstr "value='Salvar' accesskey='s'"
 
@@ -3943,9 +3953,6 @@ msgstr ""
 #~ "soportecambiar contraseñas. De otra manera remplace esta página con una "
 #~ "nota describiendocómo cambiar la contraseña en su organización."
 
-#~ msgid "(more)"
-#~ msgstr "(más)"
-
 #~ msgid ""
 #~ "*Bug:* Internet Explorer 4.0 or earlier: If you get an \"Internal Server "
 #~ "Error\" message when you upload a file, you need to try again. It should "
@@ -3983,9 +3990,6 @@ msgstr ""
 
 #~ msgid "Language Changed"
 #~ msgstr "Lenguaje Cambiado"
-
-#~ msgid "More Actions on Topic %1"
-#~ msgstr "Más acciones en página %1"
 
 #~ msgid "Not recommended when deleting a web."
 #~ msgstr "No recomendado cuando se borra una web."
@@ -4890,10 +4894,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "debug"
 #~ msgstr "Depurar"
-
-#, fuzzy
-#~ msgid "edit"
-#~ msgstr "(editar)"
 
 #, fuzzy
 #~ msgid "edit form"

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: sv\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2007-09-07 13:30+0200\n"
+"PO-Revision-Date: 2007-12-04 12:23-0300\n"
 "Last-Translator: Erik Åman <N/A>\n"
 "Language-Team: Swedish <N/A>\n"
 "MIME-Version: 1.0\n"
@@ -77,7 +77,7 @@ msgstr "%1 senaste ändringar på avdelning %2"
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:2
 #: twikiplugins/PatternSkin/data/Trash/WebLeftBar.txt:3
 #: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:3
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:33
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:39
 msgid "%1 Web"
 msgstr "Avdelning %1"
 
@@ -284,6 +284,11 @@ msgstr "(det namn som syns för andra) WikiName:"
 msgid "(login)"
 msgstr "(logga in)"
 
+#: templates/oopsmore.tmpl:3
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:12
+msgid "(more)"
+msgstr "(mer)"
+
 #: templates/moveattachment.tmpl:4
 msgid "(move attachment)"
 msgstr "(flytta bifogad fil)"
@@ -314,7 +319,7 @@ msgstr "(frivilligt)"
 msgid "(otherwise search %1 Web only)"
 msgstr "(annars begränsas sökningen till avdelning %1)"
 
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:35
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:41
 msgid "(raw view)"
 msgstr "(källtext)"
 
@@ -329,7 +334,7 @@ msgstr "(rekommenderas)"
 msgid "(rename)"
 msgstr "(döp om)"
 
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:35
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:41
 msgid "(revision %1)"
 msgstr "(version %1)"
 
@@ -560,7 +565,7 @@ msgstr "Åtkomst nekad"
 msgid "Access check on %1 failed"
 msgstr "Åtkomstkontroll till %1 misslyckades"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:52
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:50
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:14
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:19
 msgid "Access keys"
@@ -580,7 +585,7 @@ msgstr "Åtgärd %1: %2."
 msgid "Add form"
 msgstr "Lägg till formulär"
 
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:122
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:161
 #, fuzzy
 msgid "Add row"
 msgstr "Lägg till formulär"
@@ -679,7 +684,7 @@ msgid ""
 "Any changes you made to the topic before coming to this page are preserved."
 msgstr "Alla ändringar du gjort innan du kom till denna sida bevaras."
 
-#: templates/viewtopicactionbuttons.tmpl:64
+#: templates/viewtopicactionbuttons.tmpl:66
 msgid "Attach"
 msgstr "Bifoga fil"
 
@@ -773,7 +778,7 @@ msgstr "Tillgängliga mallar i avdelning %1:"
 msgid "Back to topic"
 msgstr "Tillbaka till sidan"
 
-#: templates/oopsmore.tmpl:37 templates/viewtopicactionbuttons.tmpl:87
+#: templates/oopsmore.tmpl:37 templates/viewtopicactionbuttons.tmpl:89
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:17
 msgid "Backlinks"
 msgstr "Referenser hit"
@@ -827,11 +832,11 @@ msgstr ""
 
 #: templates/twiki.tmpl:74
 #: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:64
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:124
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:163
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:46
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:44
 msgid "Cancel editing and discard changes"
 msgstr "Avbryt redigering utan att spara ändringar"
 
@@ -1150,7 +1155,7 @@ msgstr "Radera"
 msgid "Delete attachment"
 msgstr "Radera bifogad fil"
 
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:123
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:162
 #, fuzzy
 msgid "Delete last row"
 msgstr "Radera sida"
@@ -1272,7 +1277,7 @@ msgstr "Redigera"
 msgid "Edit Anyway"
 msgstr "Redigera ändå"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:15
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:13
 msgid "Edit help"
 msgstr "Redigeringshjälp"
 
@@ -1280,7 +1285,7 @@ msgstr "Redigeringshjälp"
 msgid "Edit personal data"
 msgstr "Uppdatera användarinformation"
 
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:118
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:157
 #, fuzzy
 msgid "Edit table"
 msgstr "Redigera text"
@@ -1289,7 +1294,7 @@ msgstr "Redigera text"
 msgid "Edit text"
 msgstr "Redigera text"
 
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:119
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:158
 #, fuzzy
 msgid "Edit this table"
 msgstr "Redigera denna sida"
@@ -1323,7 +1328,7 @@ msgstr ""
 msgid "Email has been disabled for this TWiki installation"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:73
+#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:78
 msgid "Enlarge edit box"
 msgstr "Förstora redigeringsruta"
 
@@ -1415,7 +1420,7 @@ msgstr ""
 msgid "First Name:"
 msgstr "Förnamn:"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:29
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:27
 msgid "Force new revision"
 msgstr "Tvinga fram ny version"
 
@@ -1834,11 +1839,16 @@ msgstr "Tangentbordskommandon som saknas"
 msgid "Modify search"
 msgstr "Anpassa sökning"
 
+#: templates/oopsmore.tmpl:7
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:18
+msgid "More Actions on Topic %1"
+msgstr "Fler möjligheter för sidan %1"
+
 #: data/TWiki/WikiSyntaxSummary.txt:17
 msgid "More formatting help"
 msgstr "Mer formateringshjälp"
 
-#: templates/viewtopicactionbuttons.tmpl:74
+#: templates/viewtopicactionbuttons.tmpl:76
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:29
 msgid "More topic actions..."
 msgstr "Fler möjligheter med denna sida..."
@@ -2172,7 +2182,7 @@ msgstr ""
 "Snabbredigering av befintliga inställningar (redigera sidans text för att "
 "göra nya inställningar)"
 
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:121
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:160
 msgid "Quiet save"
 msgstr ""
 
@@ -2192,7 +2202,7 @@ msgstr ""
 "Läs %1 för en överblick om sammarbetsplattformen. För djupare insikt kan du "
 "läsa TWikiTutorial som kan nås från samma länk."
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:29
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:27
 msgid "Read new revision help text in new window"
 msgstr "Läs hjälpen om ny version i nytt fönster"
 
@@ -2383,7 +2393,7 @@ msgstr ""
 "S = Spara, Q = Spara i tysthet, K = Spara och fortsätt redigera, D = Ångra "
 "ändringar"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:52
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:50
 #, fuzzy
 msgid ""
 "S = Save, Q = Quiet save, K = Save and Continue, P = Preview, C = Cancel"
@@ -2391,7 +2401,7 @@ msgstr ""
 "S = Spara, Q = Spara i tysthet, K = Spara och fortsätt redigera, P = "
 "Förhandsgranska, C = Avbryt"
 
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:120
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:159
 #, fuzzy
 msgid "Save table"
 msgstr "Sparat i:"
@@ -2477,7 +2487,7 @@ msgstr "Se också den utförligare %1."
 msgid "See also:"
 msgstr "Se också:"
 
-#: templates/edit.tmpl:58
+#: templates/edit.tmpl:59
 msgid "See below for help in editing this page."
 msgstr "Se nedan för hjälp om att redigera denna sida."
 
@@ -2497,8 +2507,8 @@ msgstr "Välj alla"
 msgid "Select topic parent:"
 msgstr "Välj sidans förälder:"
 
-#: templates/edit.tmpl:47
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:70
+#: templates/edit.tmpl:48
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:68
 msgid "Select, copy and paste your signature text to the bottom of your entry"
 msgstr ""
 "Välj texten i fältet och kopiera din signatur till botten av ditt inlägg"
@@ -2532,7 +2542,7 @@ msgstr "Visa hjälp"
 msgid "Show tool-tip topic info on mouse-over of %1 links, on or off:"
 msgstr "Visa hjälpinformation när du för musen över %1-länkar, på eller av.)"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:73
+#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:78
 msgid "Shrink edit box"
 msgstr "Minska redigeringsrutan"
 
@@ -2642,7 +2652,7 @@ msgstr "Prenumerera / avprenumerera i:"
 msgid "Summaries"
 msgstr "Sammanställningar"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:73
+#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:78
 msgid "Switch to monotype or propotional font"
 msgstr "Ändra till typsnitt med fast eller proportionell bredd"
 
@@ -3023,8 +3033,8 @@ msgstr "Sidans förälder:"
 #: templates/viewprint.tmpl:14
 #: twikiplugins/ClassicSkin/templates/viewprint.classic.tmpl:12
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:19
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:37
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:62
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:43
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:68
 msgid "Topic revision:"
 msgstr "Version av sidan:"
 
@@ -3302,7 +3312,7 @@ msgstr ""
 "slås samman på enkelt sätt så i detta fall rekommenderas du att kolla med %1 "
 "först."
 
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:29
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:35
 msgid "You are here:"
 msgstr "Du är här:"
 
@@ -3469,8 +3479,8 @@ msgstr "Din personliga TWiki-sida %1 har skapats"
 msgid "Your registered e-mail address(es) are updated to: %1."
 msgstr "Din(a) registrerede e-postadress(er) ändrades till: %1"
 
-#: templates/edit.tmpl:47
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:70
+#: templates/edit.tmpl:48
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:68
 msgid "Your signature to copy/paste:"
 msgstr "Din signatur (att kopiera och klistra in)"
 
@@ -3573,8 +3583,8 @@ msgstr "fälten är obligatoriska"
 msgid "has more information about attaching files."
 msgstr "Se %1 för information om formulärdefinitioner."
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:26
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:29
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:24
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:27
 msgid "help"
 msgstr "hjälp"
 
@@ -3624,7 +3634,7 @@ msgstr "nu %1"
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:29
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:33
 #: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:7
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:35
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:33
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:10
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:25
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:16
@@ -3724,7 +3734,7 @@ msgstr "title='Visa komplett historik för sidan' accesskey='h'>&Historik"
 msgid "user list truncated"
 msgstr "användarlistan avkortad"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:46
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:44
 msgid "value='Cancel' accesskey='c'"
 msgstr "value='Avbryt' accesskey='c'"
 
@@ -3732,20 +3742,20 @@ msgstr "value='Avbryt' accesskey='c'"
 msgid "value='Discard' accesskey='d'"
 msgstr "value='Ångra ändringar' accesskey='d'"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:44
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
 msgid "value='Preview' accesskey='p'"
 msgstr "value='Förhandsgranska' accesskey='p'"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:40
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:38
 msgid "value='Quiet save' accesskey='q'"
 msgstr "value='Spara i tysthet' accesskey='q'"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:40
 #, fuzzy
 msgid "value='Save and Continue' accesskey='k'"
 msgstr "value='Spara' accesskey='s'"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:38
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:36
 msgid "value='Save' accesskey='s'"
 msgstr "value='Spara' accesskey='s'"
 
@@ -3851,9 +3861,6 @@ msgstr ""
 #~ "stöder att byta lösenord. Om detta inte är fallet så ersätt detta ämne "
 #~ "med ett meddelande om hur man byter lösenord i din organisation."
 
-#~ msgid "(more)"
-#~ msgstr "(mer)"
-
 #~ msgid ""
 #~ "*Bug:* Internet Explorer 4.0 or earlier: If you get an \"Internal Server "
 #~ "Error\" message when you upload a file, you need to try again. It should "
@@ -3896,9 +3903,6 @@ msgstr ""
 
 #~ msgid "Language Changed"
 #~ msgstr "Språk ändrat"
-
-#~ msgid "More Actions on Topic %1"
-#~ msgstr "Fler möjligheter för sidan %1"
 
 #~ msgid "Not recommended when deleting a web."
 #~ msgstr "Rekommenderas inte när man raderar en avdelning."
@@ -5018,9 +5022,6 @@ msgstr ""
 
 #~ msgid "debug"
 #~ msgstr "felsök"
-
-#~ msgid "edit"
-#~ msgstr "redigera"
 
 #~ msgid "edit form"
 #~ msgstr "redigera formulär"
