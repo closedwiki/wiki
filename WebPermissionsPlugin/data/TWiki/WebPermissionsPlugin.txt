@@ -15,6 +15,7 @@ Web permissions are presented as a matrix that has columns of webs and rows of u
 To interactivly edit topic permissions, it adds an "Edit topic ACLs" option to the "More Actions" page.
 
 ---++++ Web Permissions
+This interface allows you to control 
 <table class="twikiTable">
 <tr><th width="50%"> Viewing </th><th width="50%"> Editing </th></tr>
 <tr><td>
@@ -105,27 +106,35 @@ The plugin tries very hard to keep the permissions specification you started wit
 
 ---++ Syntax Rules
 
-The permissions matrix can be viewed (and edited) by entering =%<nop>WEBPERMISSIONS%= anywhere in a topic. You have to have admin rights (be a member of !TWikiAdminGroup) to view/edit the matrix.
+The web permissions matrix can be viewed (and edited) by entering =%<nop>WEBPERMISSIONS%= anywhere in a topic. You have to have admin rights to view/edit the matrix.
 
 The =WEBPERMISSIONS= TWiki variable accepts the following parameters:
    * =webs= - a comma-separated list of webs to show. Default is to show all webs.
+   * =users= - a comma-separated list of users (and groups) to show. Default is to show all users and groups.
+Both =webs= and =users= lists can use _wildcards_. A star (*) in a name will match any number of characters - so =Brian*= will match all users and groups whose names start with =Brian=. =*Group= will match all users or groups whose name ends in =Group=. If you put a minus sign (-) before a name in either list, then the next expression will be treated as a _filter_ e.g. =-Secret= will _exclude_ the name =Secret= from the list, and =*Group= will exclude all names ending in =Group= from the list.
    * =repeatheads= - if set to a number, headings will be repeated every this number of rows. This is very useful when you have a lot of users and groups.
 
 If you have a lot of webs, use the following form to select the subset of webs you want to display. If you have admin rights, and the plugin is installed, you will see the matrix below the form:
 
 <!-- Copy from HERE -->
+#PermissionsMatrix
 <div style="background-color: #ffffdf; padding: 10px">
-Select the webs you want to change permissions for from the list below. Ctrl+click and Shift+click work as normal.<br />
-<form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">
-<select size="7" name="webs" multiple="multiple" method="POST">
-%WEBLIST{format="<option $marker>$name</option>" selection="%URLPARAM{"webs" multiple="on" separator=", "}%"}%
+Select the webs, users and groups you want to change permissions for from the list below. Ctrl+click and Shift+click work as normal.<br />
+<form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%#PermissionsMatrix" method="POST">
+<select size="7" name="webs" multiple="multiple">
+%WEBLIST{format="<option $marker>$wikiname</option>" selection="%URLPARAM{"webs" multiple="on" separator=", "}%"}%
+</select>
+<select size="7" name="users" multiple="multiple">
+%USERSLIST{format="<option $marker>$name</option>" selection="%URLPARAM{"users" multiple="on" separator=", "}%"}%
 </select> <br />
-<input type="submit" value="Select webs"/>
+<input type="submit" value="Select"/>
 </form>
 
-%WEBPERMISSIONS{webs="%URLPARAM{"webs" multiple="on" separator="," default="%TWIKIWEB%"}%" repeatheads="10"}%
+%WEBPERMISSIONS{webs="%URLPARAM{"webs" multiple="on" separator="," default="%TWIKIWEB%,%MAINWEB%,%WEB%"}%" users="%URLPARAM{"users" multiple="on" separator="," default="%USERNAME%"}%" repeatheads="10"}%
 </div>
 <!-- TO HERE -->
+
+Similarly the topic permissions tool can be viewed (and edited) by entering =%<nop>TOPICPERMISSIONS%= anywhere in a topic. You can also add an "Edit ACLS" option to the "More topic actions" screen by adding =webpermissions= to the front of the SKIN setting (e.g. =Set SKIN=webpermissions,pattern=)
 
 ---++ Plugin Settings
 <!--
@@ -140,17 +149,7 @@ See %TWIKIWEB%.TWikiAccessControls for more information on what access modes can
 
 ---++ Plugin Installation Instructions
 
-__Note:__ These instructions are for the TWiki maintainer. No changes to your browser are required. *This plugin makes extensive use of new features added to TWiki in the Feb 2006 release*. Earlier versions lack all the features described here. Make sure you install using the zip appropriate to your TWiki installation. For best overall performance, please upgrade your TWiki to the latest released version.
-
-	* Download the archive (zip or tgz) from the Plugin web (see below). Contents:
-	| *File:* | *Description:* |
-%$MANIFEST%
-	* Unpack the archive in your twiki installation directory.
-	* =perl= ==%TOPIC%_installer.pl== to automatically check and install other TWiki modules that this module depends on. This script also includes an _uninstaller_ should you ever wish to remove the plugin from your installation.
-	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
-%$DEPENDENCIES%
-	* Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-	* to enable the TOPIC ACLs user interface, add webpermissions to the front of the SKIN setting (eg Set SKIN=webpermissions,pattern)
+%$INSTALL_INSTRUCTIONS%
 
 ---++ Plugin Info
 
@@ -165,6 +164,7 @@ Many thanks to the following sponsors for supporting this work:
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
+| 4 Dec 2007 | TWikibug:Item4901 fixed templates TWikibug:Item5072 added users parameter to select a subset of users/groups in the web permissions interface |
 |  8 Sep 2007 | Updated for TWiki-4.2.0 |
 |  July 2006 | add Topic ACLs user interface via More topic actions - SvenDowideit@WikiRing.com |
 |  10216 | TWikibug:Item2291 - Added repeatheads and webs parameters |

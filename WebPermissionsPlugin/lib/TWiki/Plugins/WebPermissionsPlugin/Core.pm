@@ -47,14 +47,14 @@ sub WEBPERMISSIONS {
                       $TWiki::cfg{Plugins}{WebPermissionsPlugin}{modes} ||
                         'VIEW,CHANGE' );
 
-    my @webs;
+    my @webs = TWiki::Func::getListOfWebs( 'user' );
     my $chosenWebs = $params->{webs} || $query->param('webs');
     if( $chosenWebs ) {
-        @webs = split(/[,\s]+/, $chosenWebs);
-    } else {
-        @webs = TWiki::Func::getListOfWebs( 'user' );
+        @webs = _filterList($chosenWebs, @webs);
     }
+
     my @knownusers;
+    my $chosenUsers = $params->{users} || $query->param('users');
 
     my %table;
     foreach $web ( @webs ) {
@@ -64,7 +64,13 @@ sub WEBPERMISSIONS {
 
         my $acls = _getACLs( \@modes, $web );
 
-        @knownusers = keys %$acls unless scalar( @knownusers );
+        unless( scalar( @knownusers )) {
+            @knownusers = keys %$acls;
+            if ($chosenUsers) {
+                @knownusers = _filterList($chosenUsers, @knownusers);
+            }
+        }
+
         if( $saving ) {
             my $changes = 0;
             foreach my $user ( @knownusers ) {
@@ -105,6 +111,7 @@ sub WEBPERMISSIONS {
     my $repeat_heads = $params->{repeatheads} || 0;
     my $repeater = 0;
     my $row;
+
     foreach my $user ( sort @knownusers ) {
         unless( $repeater ) {
             $row = CGI::th( '' );
@@ -115,7 +122,7 @@ sub WEBPERMISSIONS {
             $repeater = $repeat_heads;
         }
         $repeater--;
-        $row = CGI::th( ' '.$user.' ' );
+        $row = CGI::th( "$user " );
         foreach $web ( sort @webs ) {
             my $cell;
             foreach my $op ( @modes ) {
@@ -141,10 +148,14 @@ sub WEBPERMISSIONS {
     }
     my $page = CGI::start_form(
         -method => 'POST',
-        -action => TWiki::Func::getScriptUrl( $web, $topic, 'view') );
-
+        -action => TWiki::Func::getScriptUrl( $web, $topic, 'view').
+          '#webpermissions_matrix' );
+    $page .= CGI::a({ name => 'webpermissions_matrix'});
     if( defined $chosenWebs ) {
       $page .= CGI::hidden( -name => 'webs', -value => $chosenWebs );
+    }
+    if( defined $chosenUsers ) {
+      $page .= CGI::hidden( -name => 'users', -value => $chosenUsers );
     }
 
     $page .= $tab . CGI::end_form();
@@ -272,6 +283,60 @@ sub beforeSaveHandler {
    }
 }
 
+# Filter a list of strings based on the filter expression passed in
+sub _filterList {
+    my $filter = shift;
+    my %included;
+
+    foreach my $expr (split(/,/, $filter)) {
+        my $exclude = ($expr =~ s/^-//) ? 1 : 0;
+        $expr =~ s/\*/.*/g;
+        $expr =~ s/\?/./g;
+        foreach my $item (@_) {
+            # The \s's are needed to retain compatibility
+            if ($item =~ /^\s*$expr\s*$/) {
+                if ($exclude) {
+                    delete $included{$item};
+                } else {
+                    $included{$item} = 1;
+                }
+            }
+        }
+    }
+    return keys %included;
+}
+
+sub USERSLIST {
+    my( $this, $params ) = @_;
+    my $format = $params->{_DEFAULT} || $params->{'format'} || '$user';
+    my $separator = $params->{separator} || "\n";
+    $separator =~ s/\$n/\n/;
+    my $selection = $params->{selection} || '';
+    $selection =~ s/\,/ /g;
+    $selection = " $selection ";
+    my $marker = $params->{marker} || 'selected="selected"';
+
+    my @items;
+    foreach my $item ( _getListOfUsers() ) {
+        my $line = $format;
+        $line =~ s/\$wikiname\b/$item/ge;
+        my $mark = ( $selection =~ / \Q$item\E / ) ? $marker : '';
+        $line =~ s/\$marker/$mark/g;
+        if (defined(&TWiki::Func::decodeFormatTokens)) {
+            $line = TWiki::Func::decodeFormatTokens( $line );
+        } else {
+            $line =~ s/\$n\(\)/\n/gs;
+            $line =~ s/\$n([^$TWiki::regex{mixedAlpha}]|$)/\n$1/gs;
+            $line =~ s/\$nop(\(\))?//gs;
+            $line =~ s/\$quot(\(\))?/\"/gs;
+            $line =~ s/\$percnt(\(\))?/\%/gs;
+            $line =~ s/\$dollar(\(\))?/\$/gs;
+        }
+        push( @items, $line );
+    }
+    return join( $separator, @items);
+}
+
 # Get a list of all registered users
 sub _getListOfUsers {
     my @list;
@@ -282,16 +347,25 @@ sub _getListOfUsers {
             push(@list, $user);
         }
     } else {
-        require TWiki::Contrib::FuncUsersContrib;
-        if (defined(&TWiki::Contrib::FuncUsersContrib::getListOfUsers)) {
-            # Compatibility; pre 4.2
-            @list =
-              map($_->wikiName(),
-                  grep(!$_->isGroup(),
-                       @{TWiki::Contrib::FuncUsersContrib::getListOfUsers()}));
+        # Compatibility; pre 4.2
+        my $session = $TWiki::Plugins::SESSION;
+        my $users = $session->{users};
+
+        #if we have the UserMapping changes (post 4.0.2)
+        if (defined (&TWiki::Users::getAllUsers)) {
+            @list = @{$users->getAllUsers()};
         } else {
-            throw Error::Simple("FuncUsersContrib seems to be missing");
+            $users->lookupLoginName('guest'); # load the cache
+
+            @list =
+              map {
+                  my( $w, $t ) = TWiki::Func::normalizeWebTopicName(
+                      $TWiki::cfg{UsersWebName}, $_);
+                  $users->findUser( $t, "$w.$t");
+              } values %{$users->{U2W}};
         }
+        @list = map($_->wikiName(), grep(!$_->isGroup(), grep($_, @list)));
+
     }
     return @list;
 }
@@ -306,13 +380,39 @@ sub _getListOfGroups {
             push(@list, $user);
         }
     } else {
-        require TWiki::Contrib::FuncUsersContrib;
-        if (defined(&TWiki::Contrib::FuncUsersContrib::getListOfGroups)) {
-            # Compatibility; pre 4.2
-            @list = map { $_->wikiName() } grep { $_->isGroup() }
-              @{TWiki::Contrib::FuncUsersContrib::getListOfGroups()};
+        # Compatibility; pre 4.2
+        my $session = $TWiki::Plugins::SESSION;
+        my $users = $session->{users};
+
+        # if we have the UserMapping changes (post 4.0.2)
+        if (defined (&TWiki::Users::getAllGroups)) {
+            @list = map { $_->wikiName() }
+              @{$session->{users}->getAllGroups()};
         } else {
-            throw Error::Simple("FuncUsersContrib seems to be missing");
+            # This code assumes we are using TWiki topic based Group mapping
+            $session->{search}->searchWeb(
+                _callback     => sub {
+                    my $ref = shift;
+                    my $group = shift;
+                    return unless $group;
+                    my $groupObject = $ref->{users}->findUser( $group );
+                    push (@{$ref->{list}}, $groupObject->wikiName())
+                      if $groupObject;
+                },
+                _cbdata       =>  { list => \@list, users => $users },
+                inline        => 1,
+                search        => "Set GROUP =",
+                web           => 'all',
+                topic         => "*Group",
+                type          => 'regex',
+                nosummary     => 'on',
+                nosearch      => 'on',
+                noheader      => 'on',
+                nototal       => 'on',
+                noempty       => 'on',
+                format	     => "\$web.\$topic",
+                separator     => '',
+               );
         }
     }
     return @list;
@@ -362,6 +462,7 @@ sub _getACLs {
             $acls{$user}->{$mode} = 1;
         }
     }
+
     #print STDERR "Got users ",join(',',keys %acls),"\n";
     foreach my $mode ( @$modes ) {
         foreach my $perm ( 'ALLOW', 'DENY' ) {
@@ -404,12 +505,13 @@ sub _getACLs {
                             push( @lusers, $it->next() );
                         }
                     } else {
+                        # Compatibility - pre 4.2
                         my $session = $TWiki::Plugins::SESSION;
                         my $users = $session->{users};
                         my $uo = $users->findUser($user);
                         # expand groups and add individual users
                         my $group = $uo->groupMembers();
-                        push( @lusers, @$group ) if $group;
+                        push( @lusers, map { $_->wikiName() } @$group ) if $group;
                     }
                 }
                 push( @users, $user );

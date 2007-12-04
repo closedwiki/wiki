@@ -52,7 +52,9 @@ sub initPlugin {
 
     TWiki::Func::registerTagHandler( 'WEBPERMISSIONS', \&_WEBPERMISSIONS );
     TWiki::Func::registerTagHandler( 'TOPICPERMISSIONS', \&_TOPICPERMISSIONS );
-
+    # SMELL: need to disable this if the USERSLIST code is ever moved into the
+    # core.
+    TWiki::Func::registerTagHandler( 'USERSLIST', \&_USERSLIST );
     $antiBeforeSaveRecursion = 0;
 
     return 1;
@@ -71,13 +73,18 @@ sub _WEBPERMISSIONS {
 #TODO: add param topic= and show= specify to list only groups / only users / both
 sub _TOPICPERMISSIONS {
     require TWiki::Plugins::WebPermissionsPlugin::Core;
-    TWiki::Plugins::WebPermissionsPlugin::Core::TOPICPERMISSIONS(@_);
+    return TWiki::Plugins::WebPermissionsPlugin::Core::TOPICPERMISSIONS(@_);
+}
+
+sub _USERSLIST {
+    require TWiki::Plugins::WebPermissionsPlugin::Core;
+    return TWiki::Plugins::WebPermissionsPlugin::Core::USERSLIST(@_);
 }
 
 #TODO: rejig this so it works for the WEBPERMS too
 sub beforeSaveHandler {
     require TWiki::Plugins::WebPermissionsPlugin::Core;
-    TWiki::Plugins::WebPermissionsPlugin::Core::beforeSaveHandler(@_);
+    return TWiki::Plugins::WebPermissionsPlugin::Core::beforeSaveHandler(@_);
 }
 
 1;
