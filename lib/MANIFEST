@@ -637,7 +637,6 @@ pub/TWiki/TWikiDocGraphics/TWikiDocGraphics_Text_done.psd 0644
 pub/TWiki/TWikiDocGraphics/TWikiDocGraphics_Text_new.psd 0644
 pub/TWiki/TWikiDocGraphics/TWikiDocGraphics_Text_todo.psd 0644
 pub/TWiki/TWikiDocGraphics/TWikiDocGraphics_Text_updated.psd 0644
-pub/TWiki/TWikiDocGraphics/map.gif 0644
 pub/TWiki/TWikiDocGraphics/_filetypes.txt 0644
 pub/TWiki/TWikiDocGraphics/addon.gif 0644
 pub/TWiki/TWikiDocGraphics/application.gif 0644
@@ -766,6 +765,7 @@ pub/TWiki/TWikiDocGraphics/logout.gif 0644
 pub/TWiki/TWikiDocGraphics/mail.gif 0644
 pub/TWiki/TWikiDocGraphics/map.gif 0644
 pub/TWiki/TWikiDocGraphics/mdb.gif 0644
+pub/TWiki/TWikiDocGraphics/megaphone.gif 0644
 pub/TWiki/TWikiDocGraphics/minus.gif 0644
 pub/TWiki/TWikiDocGraphics/mobile.gif 0644
 pub/TWiki/TWikiDocGraphics/monospace.gif 0644
@@ -793,6 +793,7 @@ pub/TWiki/TWikiDocGraphics/plus.gif 0644
 pub/TWiki/TWikiDocGraphics/png.gif 0644
 pub/TWiki/TWikiDocGraphics/ppt.gif 0644
 pub/TWiki/TWikiDocGraphics/printtopic.gif 0644
+pub/TWiki/TWikiDocGraphics/presentation.gif 0644
 pub/TWiki/TWikiDocGraphics/proportional.gif 0644
 pub/TWiki/TWikiDocGraphics/ps.gif 0644
 pub/TWiki/TWikiDocGraphics/psd.gif 0644

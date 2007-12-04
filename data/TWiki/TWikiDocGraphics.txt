@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1193349525" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1196729838" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and Filetype icons
 
 This is the TWiki icon library. The graphics can be used in topics and by web applications. 
@@ -37,6 +37,7 @@ Other usage: [[%TOPIC%#Usage_extended][see below]].
 | <img src="%ATTACHURLPATH%/help.gif" alt="Help" title="Help" />  | =help.gif= | Help | =%<nop>H%=, =%<nop>ICON{help}%= |
 | <img src="%ATTACHURLPATH%/info.gif" alt="Information" title="Information" />  | =info.gif= | Info | =%<nop>ICON{info}%= |
 | <img src="%ATTACHURLPATH%/hourglass.gif" alt="Hour glass (clock)" title="Hour glass (clock)" />  | =hourglass.gif= | Hour glass (clock) | =%<nop>ICON{hourglass}%= |
+| <img src="%ATTACHURLPATH%/megaphone.gif" alt="Megaphone" title="Megaphone" />  | =megaphone.gif= | Megaphone | =%<nop>ICON{megaphone}%= |
 | <img src="%ATTACHURLPATH%/mobile.gif" alt="Mobile" title="Mobile" />  | =mobile.gif= | Mobile | =%<nop>ICON{mobile}%= |
 | <img src="%ATTACHURLPATH%/more.gif" alt="Read more" title="Read more" />  | =more.gif= | Read more | =%<nop>ICON{more}%= |
 | <img src="%ATTACHURLPATH%/more-small.gif" alt="Read more" title="Read more" />  | =more-small.gif= | Read more, 13x13 | =&lt;img src="%<nop>ICONURL{more-small}%" width="13" height="13" alt="Read more" border="0" /&gt;= |
@@ -47,6 +48,7 @@ Other usage: [[%TOPIC%#Usage_extended][see below]].
 | <img src="%ATTACHURLPATH%/pencil.gif" alt="Pencil / Refactor / Edit" title="Pencil / Refactor / Edit" />  | =pencil.gif= | Pencil / Refactor / Edit | =%<nop>P%=, =%<nop>ICON{pencil}%= |
 | <img src="%ATTACHURLPATH%/phone.gif" alt="Phone" title="Phone" />  | =phone.gif= | Phone | =%<nop>ICON{phone}%= |
 | <img src="%ATTACHURLPATH%/photo.gif" alt="Photo" title="Photo" />  | =photo.gif= | Photo, 13x10 | =&lt;img src="%<nop>ICONURL{photo}%" width="13" height="10" alt="Photo" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/presentation.gif" alt="Presentation" title="Presentation" />  | =presentation.gif= | Presentation | =%<nop>ICON{presentation}%= |
 | <img src="%ATTACHURLPATH%/puzzle.gif" alt="Puzzle" title="Puzzle" />  | =puzzle.gif= | Puzzle | =%<nop>ICON{puzzle}%= |
 | <img src="%ATTACHURLPATH%/question.gif" alt="Question" title="Question" />  | =question.gif= | Question | =%<nop>ICON{question}%= |
 | <img src="%ATTACHURLPATH%/quiet.gif" alt="Quiet" title="Quiet" />  | =quiet.gif= | Quiet | =%<nop>ICON{quiet}%= |
@@ -490,6 +492,7 @@ __Contributors:__ Most icons on this page were originally designed by TWiki:Main
 %META:FILEATTACHMENT{name="mail.gif" attr="" comment="" date="1169565034" path="mail.gif" size="224" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="map.gif" attr="" comment="" date="1181928995" path="map.gif" size="932" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="mdb.gif" attr="" comment="" date="1169565034" path="mdb.gif" size="385" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="megaphone.gif" attr="" comment="" date="1196729838" path="megaphone.gif" size="995" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="minus.gif" attr="" comment="" date="1169565034" path="minus.gif" size="83" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="mobile.gif" attr="" comment="" date="1193349525" path="mobile.gif" size="333" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="monospace.gif" attr="" comment="" date="1169565034" path="monospace.gif" size="145" user="TWikiContributor" version=""}%
@@ -516,6 +519,7 @@ __Contributors:__ Most icons on this page were originally designed by TWiki:Main
 %META:FILEATTACHMENT{name="plus.gif" attr="" comment="" date="1169565034" path="plus.gif" size="90" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="png.gif" attr="" comment="" date="1169565034" path="png.gif" size="378" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="ppt.gif" attr="" comment="" date="1169565034" path="ppt.gif" size="373" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="presentation.gif" attr="" comment="" date="1196729838" path="presentation.gif" size="892" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="printtopic.gif" attr="" comment="" date="1169565034" path="printtopic.gif" size="221" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="proportional.gif" attr="" comment="" date="1169565034" path="proportional.gif" size="137" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="ps.gif" attr="" comment="" date="1169565034" path="ps.gif" size="362" user="TWikiContributor" version=""}%
