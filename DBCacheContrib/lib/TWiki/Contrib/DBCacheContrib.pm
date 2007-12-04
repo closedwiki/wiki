@@ -103,7 +103,7 @@ sub _loadTopic {
     #print STDERR "DBCacheContrib::_loadTopic($filename)\n";
 
     unless (open( $fh, "<$filename" )) {
-        print STDERR "WARNING: Failed to open $dataDir/$topic.txt\n";
+        print STDERR "WARNING: Failed to open $filename\n";
         return 0;
     }
 

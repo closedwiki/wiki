@@ -73,6 +73,7 @@ my %operators =
     '<' => { exec => \&OP_smaller, prec => 4},
     'EARLIER_THAN' => { exec => \&OP_earlier_than, prec => 4},
     'LATER_THAN' => { exec => \&OP_later_than, prec => 4},
+    'WITHIN_DAYS' => { exec => \&OP_within_days, prec => 4},
     'IS_DATE' => { exec => \&OP_is_date, prec => 4},
     '!' => { exec => \&OP_not, prec => 3},
     'AND' => { exec => \&OP_and, prec=> 2},
@@ -199,7 +200,6 @@ sub matches {
 
   my $handler = $operators{$this->{op}};
   return 0 unless $handler;
-  return 0 unless defined $this->{right};
 
   return $handler->{exec}($this->{right}, $this->{left}, $map);
 }
@@ -221,12 +221,12 @@ sub OP_or {
 sub OP_and {
   my ($r, $l, $map) = @_;
   return 0 unless $l;
-  return ( $l->matches( $map ) && $r->matches( $map ))
+  return ( $l->matches( $map ) && $r->matches( $map ))?1:0;
 }
 
 sub OP_not {
   my ($r, $l, $map) = @_;
-  return !($r->matches($map))
+  return ($r->matches($map))?0:1;
 }
 
 sub OP_lc {
@@ -305,7 +305,7 @@ sub OP_equal {
   my $rval = $r->matches( $map );
   return 0 unless ( defined $lval  && defined $rval);
 
-  return ( $lval =~ m/^$rval$/ );
+  return ( $lval =~ m/^$rval$/ )?1:0;
 }
 sub OP_not_equal {
   my ($r, $l, $map) = @_;
@@ -314,7 +314,7 @@ sub OP_not_equal {
   my $rval = $r->matches( $map );
   return 0 unless ( defined $lval  && defined $rval);
 
-  return ( $lval !~ m/^$rval$/ );
+  return ( $lval =~ m/^$rval$/ )?0:1;
 }
 sub OP_match {
   my ($r, $l, $map) = @_;
@@ -323,7 +323,7 @@ sub OP_match {
   my $rval = $r->matches( $map );
   return 0 unless ( defined $lval  && defined $rval);
 
-  return ( $lval =~ m/$rval/ );
+  return ( $lval =~ m/$rval/ )?1:0;
 }
 sub OP_greater {
   my ($r, $l, $map) = @_;
@@ -332,7 +332,7 @@ sub OP_greater {
   my $rval = $r->matches( $map );
   return 0 unless ( defined $lval  && defined $rval);
 
-  return ( $lval > $rval );
+  return ( $lval > $rval )?1:0;
 }
 
 sub OP_smaller {
@@ -342,7 +342,7 @@ sub OP_smaller {
   my $rval = $r->matches( $map );
   return 0 unless ( defined $lval  && defined $rval);
 
-  return ( $lval < $rval );
+  return ( $lval < $rval )?1:0;
 }
 
 sub OP_gtequal {
@@ -352,7 +352,7 @@ sub OP_gtequal {
   my $rval = $r->matches( $map );
   return 0 unless ( defined $lval  && defined $rval);
 
-  return ( $lval >= $rval );
+  return ( $lval >= $rval )?1:0;
 }
 
 sub OP_smequal {
@@ -362,7 +362,7 @@ sub OP_smequal {
   my $rval = $r->matches( $map );
   return 0 unless ( defined $lval  && defined $rval);
 
-  return ( $lval <= $rval );
+  return ( $lval <= $rval )?1:0;
 }
 
 sub OP_within_days {
@@ -375,7 +375,7 @@ sub OP_within_days {
   }
   return 0 unless( defined( $lval ));
   my $rval = $r->matches( $map );
-  return ( $lval >= $now && workingDays( $now, $lval ) <= $rval );
+  return ( $lval >= $now && workingDays( $now, $lval ) <= $rval )?1:0;
 }
 
 sub OP_later_than {
@@ -394,7 +394,7 @@ sub OP_later_than {
     $rval = Time::ParseDate::parsedate( $rval );
   }
   return 0 unless( defined( $lval ));
-  return ( $lval > $rval );
+  return ( $lval > $rval )?1:0;
 }
 
 sub OP_earlier_than {
@@ -413,7 +413,7 @@ sub OP_earlier_than {
     $rval = Time::ParseDate::parsedate( $rval );
   }
   return 0 unless( defined( $lval ));
-  return ( $lval > $rval );
+  return ( $lval < $rval )?1:0;
 }
 
 sub OP_is_date {
@@ -432,7 +432,7 @@ sub OP_is_date {
     $rval = Time::ParseDate::parsedate( $rval );
   }
   return 0 unless( defined( $lval ));
-  return ( $lval == $rval );
+  return ( $lval == $rval )?1:0;
 }
 
 
@@ -490,18 +490,34 @@ sub toString {
 
 =begin text
 
---+++ =addOperator($op, $prec, $handler )
+--+++ =addOperator(%oper)
 Add an operator to the parser
+
+=%oper= is a hash, containing the following fields:
+   * =name= - operator string
+   * =prec= - operator precedence, positive non-zero integer.
+     Larger number => higher precedence.
+   * =arity= - set to 1 if this operator is unary, 2 for binary. Arity 0
+     is legal, should you ever need it.
+   * =exec= - the handler to implement the new operator
 
 =cut
 
 sub addOperator {
-  my ($op, $prec, $impl) = @_;
-  $operators{$op} = {
-    prec=> $prec,
-    exec=> $impl,
-  };
-  $bopRE .= "|$op\\b";
+  my %oper = @_;
+
+  my $name = $oper{name};
+  die "illegal operator definition" unless $name;
+
+  $operators{$name} = \%oper;
+
+  if ($oper{arity} == 2) {
+    $bopRE .= "|\\b$name\\b";
+  } elsif ($oper{arity} == 1) {
+    $uopRE .= "|\\b$name\\b";
+  } else {
+    die "illegal operator definition"; 
+  }
 }
 
 1;

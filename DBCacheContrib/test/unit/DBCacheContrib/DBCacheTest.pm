@@ -106,7 +106,9 @@ sub tear_down {
 # Create a set of test functions for each different store impl
 sub list_tests {
     my $this = shift;
-    my @set = $this->SUPER::list_tests();
+    my @set;
+                
+    my %seen = ();
 
     my $clz = new Devel::Symdump(qw(DBCacheTest));
     for my $i ($clz->functions()) {
@@ -120,6 +122,8 @@ sub list_tests {
                     my $fn = $i;
                     $fn =~ s/\W/_/g;
                     my $sfn = 'DBCacheTest::test_'.$fn.$a;
+                    next if $seen{$sfn}; # bad INC path
+                    $seen{$sfn} = 1;
                     no strict 'refs';
                     *$sfn = sub {
                         my $this = shift;

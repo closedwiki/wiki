@@ -134,7 +134,8 @@ handler.
 |  License: | As required for the publication of all extensions to TWiki, this software is published under the terms of the GNU General Public License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details, published at http://www.gnu.org/copyleft/gpl.html |
 |  Version: | %$VERSION% |
 |  Change History: | |
-|  15561 | made query parser pluggable so that other plugins can implement their own predicates. TWiki:Main.MichaelDaum |
+|  15868 | fixed WITHIN_DAYS and EARLIER_THAN. TWiki:Main.MichaelDaum |
+|  15583 | made query parser pluggable so that other plugins can implement their own predicates. TWiki:Main.MichaelDaum |
 |  15019 | added {DBCache}{AlwaysUpdateCache} to remove the updateCache from every operation. TWiki:Main.SvenDowideit |
 |  13562 | Bugs:Item3985 - fixed failures with hierarchical webs |
 |  13527 | Moved the cache into the extensions work areas, instead of the web directory |
