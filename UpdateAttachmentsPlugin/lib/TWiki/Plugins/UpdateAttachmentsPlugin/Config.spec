@@ -1,4 +1,8 @@
 #---+ Update Attachments Plugin
+# **STRING**
+# To attribute attachments to a known user, set this to their WikiName. This user must exist,
+# and be mappable to a login. (in 4.2 and above)
+$TWiki::cfg{Plugins}{UpdateAttachmentsPlugin}{AttachAsUser} = '';
 # **BOOLEAN**
 # remove references to attachments that no longer exist in pub
 $TWiki::cfg{Plugins}{UpdateAttachmentsPlugin}{RemoveMissing} = $FALSE;

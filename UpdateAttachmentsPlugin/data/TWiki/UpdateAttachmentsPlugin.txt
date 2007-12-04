@@ -36,6 +36,7 @@ Or using a cronjob - make sure the cronjob is running as the same user as TWiki'
 
 ---++ Settings
 These settings are in the configure web interface in the <nop>Update Attachments Plugin section of [[%SCRIPTURL{configure}%][configure]].
+   * =$TWiki::cfg{Plugins}{UpdateAttachmentsPlugin}{AttachAsUser}= - defaults to the unknown user. To reset the attributed user for attachments that already exist, =touch= the files in the attachment directory.
    * =$TWiki::cfg{Plugins}{UpdateAttachmentsPlugin}{RemoveMissing}= - will remove attachment references in a topic that no longer exist
    * =$TWiki::cfg{Plugins}{UpdateAttachmentsPlugin}{UseDangerousNoHandlersSave}= - use with extreme caution, _if_ you understand what the results of a no_handler save are, and _if_ you are able to recover your TWiki if it fails.
    * =$TWiki::cfg{Plugins}{UpdateAttachmentsPlugin}{Debug}= - to see what topics are updated (edit LocalSite.cfg by hand to add this setting).

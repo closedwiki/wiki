@@ -209,7 +209,13 @@ sub restUpdate {
                 next;
             }
 
-            #update username
+            #default attachment owner to {AttachAsUser}
+            if ((defined($TWiki::cfg{Plugins}{UpdateAttachmentsPlugin}{AttachAsUser})) &&
+                ($TWiki::cfg{Plugins}{UpdateAttachmentsPlugin}{AttachAsUser} ne '')) {
+                $foundAttachment->{user} = $TWiki::cfg{Plugins}{UpdateAttachmentsPlugin}{AttachAsUser};
+                #TODO: for 4.2, need to get the user's cUID
+            }
+
             my $existingFile = $meta->get( 'FILEATTACHMENT', $foundAttachment->{name} );
             if ( !$existingFile ) {
                 #if its not in @knownAttachments, add it
@@ -218,12 +224,20 @@ sub restUpdate {
             } else {
                 #if its @knownAttachments, update _if_ attr's have changed
                 if (
+                    (!defined($existingFile->{user})) || ($foundAttachment->{user} ne $existingFile->{user}) ||
                     (!defined($existingFile->{date})) || ($foundAttachment->{date} ne $existingFile->{date}) ||
                     (!defined($existingFile->{attr})) || ($foundAttachment->{attr} ne $existingFile->{attr}) ||
                     (!defined($existingFile->{size})) || ($foundAttachment->{size} != $existingFile->{size})
                    ){
                     $foundAttachment->{comment} = $existingFile->{comment};
                     $foundAttachment->{attr} = $existingFile->{attr};
+                    #if attached by a real user, keep them.
+                    if ((defined($existingFile->{user})) && (      # the default from 4.2.0 onwards
+                        ($existingFile->{user} ne '') &&            
+                        ($existingFile->{user} ne 'UnknownUser')    # the 4.1.2 autoattach default
+                        )) {
+                        $foundAttachment->{user} = $existingFile->{user};
+                    }
 
                     $meta->putKeyed('FILEATTACHMENT', $foundAttachment );
                     $changed = 1;
