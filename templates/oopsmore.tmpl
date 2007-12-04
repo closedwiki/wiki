@@ -1,10 +1,10 @@
 %{ This is a default template }%%TMPL:INCLUDE{"oops"}%
 
-%TMPL:DEF{"titleaction"}%(more) %TMPL:END%
+%TMPL:DEF{"titleaction"}%%MAKETEXT{"(more)"}% %TMPL:END%
 
 %TMPL:DEF{"webaction"}%%TMPL:END%
 
-%TMPL:DEF{"heading"}%More Actions on Topic [[%TOPIC%]]%TMPL:END%
+%TMPL:DEF{"heading"}%%MAKETEXT{"More Actions on Topic [_1]" args="[[%TOPIC%]]"}%%TMPL:END%
 
 %TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"canceltopicaction"}%%TMPL:END%
 
