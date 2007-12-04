@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1187864474" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1196806546" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Templates
 
@@ -159,7 +159,7 @@ When the following variables are used in a template topic, they automatically ge
 <pre>
 %<nop>STARTSECTION{type="templateonly"}%
 This template can only be changed by:
-   * Set <nop>ALLOWTOPICCHANGE = TWikiAdminGroup
+   * Set <nop>ALLOWTOPICCHANGE = <nop>%USERSWEB%.TWikiAdminGroup
 %<nop>ENDSECTION{type="templateonly"}%
 </pre>
 This will restrict who can edit the template topic, but will get removed when a new topic based on that template topic is created.
