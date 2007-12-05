@@ -40,7 +40,107 @@ This TopicFunction is for creating new topics. It is mostly called indirectly fr
 %INCLUDE{"%TWIKIWEB%.WebTopicCreator" section="javascriptfunctions" }%
 <script type="text/javascript">
 //<![CDATA[
+
 /**
+This section contains js code borrowed from 4.1.2 version of WebTopicCreator
+
+Checks if the entered topic name is a valid WikiWord.
+If so, enables the submit button, if not: enables the submit button if the user allows non-WikiWords as topic name; otherwise disables the submit button and returns 'false'.
+Automatically removes spaces from entered name.
+Automatically strips illegal characters.
+If non-WikiWords are not allowed, capitalizes words (separated by space).
+If non-WikiWords _are_ allowed, capitalizes sentence.
+The generated topic name is written to a 'feedback' field.
+@param inForm : pointer to the form
+@param inShouldConvertInput : true: a new name is created from the entered name
+@return True: submit is enabled and topic creation is allowed; false: submit is disabled and topic creation should be inhibited.
+*/
+function canSubmit(inForm, inShouldConvertInput) {
+	
+	var inputForTopicName = inForm.topic.value;
+	if (!inputForTopicName) return;
+
+	/* Topic names of zero length are not allowed */
+	if (inputForTopicName.length == 0) {
+		disableSubmit(inForm.submit);
+		/* Update feedback field */
+		insertHtml("", "webTopicCreatorFeedback");
+		return false;
+	}
+	
+	var hasNonWikiWordCheck = (inForm.nonwikiword != undefined);
+	var userAllowsNonWikiWord = true;
+	if (hasNonWikiWordCheck) {
+		userAllowsNonWikiWord = inForm.nonwikiword.checked;
+	}
+	
+	/* check if current input is a valid WikiWord */
+	var noSpaceName = removeSpacesAndPunctuation(inputForTopicName);
+
+	/*
+	if necessary, create a WikiWord from the input name
+	(when a non-WikiWord is not allowed)
+	*/
+	var wikiWordName = noSpaceName;
+	if (!userAllowsNonWikiWord) {
+		wikiWordName = removeSpacesAndPunctuation(capitalize(inputForTopicName));
+	}
+	if (userAllowsNonWikiWord) {
+		wikiWordName = removeSpacesAndPunctuation(capitalizeSentence(inputForTopicName));
+	}
+	
+	if (inShouldConvertInput) {
+		if (hasNonWikiWordCheck && userAllowsNonWikiWord) {
+			inForm.topic.value = noSpaceName;
+		} else {
+			inForm.topic.value = wikiWordName;
+		}
+	}
+
+	/* Update feedback field */
+	feedbackHeader = "<strong>%MAKETEXT{"Topic will be named: "}%</strong>";
+	feedbackText = feedbackHeader + wikiWordName;
+	insertHtml(feedbackText, "webTopicCreatorFeedback");
+
+	/*
+	Update hidden field value
+	Use the negative value of the checkbox. This is the ugly way but must be used until edit script parameter =allowsnonwikiword= is implemented.
+	*/
+	if (hasNonWikiWordCheck && userAllowsNonWikiWord) {
+		inForm.onlywikiname.value = userAllowsNonWikiWord ? "off" : "on";
+	}
+	if (isWikiWord(wikiWordName) || userAllowsNonWikiWord) {
+		enableSubmit(inForm.submit);
+		return true;
+	} else {
+		disableSubmit(inForm.submit);
+		return false;
+	}
+}
+function capitalizeSentence (inText) {
+	return inText.substr(0,1).toUpperCase() + inText.substr(1);
+}
+/**
+@param inState: true or false
+*/
+function setCheckBoxState (inCheckBox, inState) {
+if (! inCheckBox) return;
+	inCheckBox.checked = inState;
+}
+function enableSubmit(inButton) {
+if (!inButton) return;
+	removeClass(inButton, "twikiSubmitDisabled");
+	inButton.disabled = false;
+}
+function disableSubmit(inButton) {
+if (!inButton) return;
+	addClass(inButton, "twikiSubmitDisabled");
+	inButton.disabled = true;
+}
+
+
+
+/*
 This section contains js code added for TCAO
 */
 %IFDEFINEDTHEN{"%SAVE%" glue="off"}%
@@ -83,7 +183,7 @@ function assignParent( form, parent ) {
 <input type="hidden" name="formtemplate" value="%IFDEFINED{"%FORM%" then="%FORM%" else="TopicForm"}%" />
 <input type="hidden" name="%IFDEFINED{"%CLASS_NAME%" then="$test" else="TopicType" glue="off"}%" value="%IFDEFINED{"%TYPE%"}%" />
 %IFDEFINEDTHEN{"%PARENT%" as="choice" glue="on"}%
-%ELSEIFDEFINED{"%PARENT%" glue="off"}%
+%ELSIFDEFINED{"%PARENT%" glue="off"}%
 <input type="hidden" name="topicparent" value='%PARENT%' />
 %ELSEDEFINED%
 <input type="hidden" name="topicparent" value='%URLPARAM{parent}%' />
@@ -185,7 +285,6 @@ document.forms.newtopic.topic.focus();
 
 %DBCALL{"GnuGeneralPublicLicense" section="notice"}%
 </div>
-
 
 %META:FORM{name="TopicForm"}%
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicFunction"}%
