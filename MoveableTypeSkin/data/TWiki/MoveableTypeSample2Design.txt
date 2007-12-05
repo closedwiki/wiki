@@ -18,96 +18,40 @@ This theme has been created by copying the MoveableTypeSampleDesign topic and pu
 
 ----
 ---++ Moveable Type Common Text sections
----+++ module-search-left
-%STARTSECTION{"module-search-left-three-column"}%%STARTSECTION{"module-search-left-two-column-left"}%%STARTSECTION{"module-search-left"}%<div class="module-search module">
-   <h2 class="module-header">Search</h2>
-   <div class="module-content">
-<form name="quickSearchForm" action="%SCRIPTURLPATH{view}%/%INCLUDINGWEB%/WebSearch">%IF{" '%URLPARAM{"search" encode="entity" scope="topic"}%' = '' " then="<input type=\"text\" class=\"twikiInputField patternFormFieldDefaultColor\" name=\"search\" value=\"%MAKETEXT{"Search"}%\" size=\"14\" onfocus=\"clearDefaultandCSS(this);\" onblur=\"setDefaultText(this);\" />" else="<input type=\"text\" class=\"twikiInputField\" name=\"search\" value=\"%URLPARAM{ "search" encode="entity" scope="topic" }%\" size=\"14\" />"}%</form>
-   </div>
-</div>%ENDSECTION{"module-search-left"}%%ENDSECTION{"module-search-left-two-column-left"}%%ENDSECTION{"module-search-left-three-column"}%
 
+---+++ module-search-left
 ---+++ module-search-right
-%STARTSECTION{"module-search-right-three-column"}%%STARTSECTION{"module-search-right-two-column-right"}%%STARTSECTION{"module-search-right"}%<div class="module-search module">
+%STARTSECTION{"module-search-left-three-column"}%%STARTSECTION{"module-search-left-two-column-left"}%%STARTSECTION{"module-search-left"}%%STARTSECTION{"module-search-right-three-column"}%%STARTSECTION{"module-search-right-two-column-right"}%%STARTSECTION{"module-search-right"}%<div class="module-search module">
    <h2 class="module-header">Search</h2>
    <div class="module-content">
-<form name="quickSearchForm" action="%SCRIPTURLPATH{view}%/%INCLUDINGWEB%/WebSearch">%IF{" '%URLPARAM{"search" encode="entity" scope="topic"}%' = '' " then="<input type=\"text\" class=\"twikiInputField patternFormFieldDefaultColor\" name=\"search\" value=\"%MAKETEXT{"Search"}%\" size=\"14\" onfocus=\"clearDefaultandCSS(this);\" onblur=\"setDefaultText(this);\" />" else="<input type=\"text\" class=\"twikiInputField\" name=\"search\" value=\"%URLPARAM{ "search" encode="entity" scope="topic" }%\" size=\"14\" />"}%</form>
+<form name="quickSearchForm" action="%SCRIPTURLPATH{view}%/%INCLUDINGWEB%/WebSearch">%IF{" '%URLPARAM{"search" encode="entity" scope="topic"}%' = '' " then="<input type=\"text\" class=\"twikiInputField\" name=\"search\" value=\"%MAKETEXT{"Search"}%\" size=\"14\" onfocus=\"clearDefaultandCSS(this);\" onblur=\"setDefaultText(this);\" />" else="<input type=\"text\" class=\"twikiInputField\" name=\"search\" value=\"%URLPARAM{ "search" encode="entity" scope="topic" }%\" size=\"14\" />"}%</form>
    </div>
-</div>%ENDSECTION{"module-search-right"}%%ENDSECTION{"module-search-right-two-column-right"}%%ENDSECTION{"module-search-right-three-column"}%
----
+</div>%ENDSECTION{"module-search-right"}%%ENDSECTION{"module-search-right-two-column-right"}%%ENDSECTION{"module-search-right-three-column"}%%ENDSECTION{"module-search-left"}%%ENDSECTION{"module-search-left-two-column-left"}%%ENDSECTION{"module-search-left-three-column"}%
+
 ---+++ module-categories-left
-%STARTSECTION{"module-categories-left-three-column"}%%STARTSECTION{"module-categories-left-two-column-left"}%%STARTSECTION{"module-categories-left"}%
-%ENDSECTION{"module-categories-left"}%%ENDSECTION{"module-categories-left-two-column-left"}%%ENDSECTION{"module-categories-left-three-column"}%
-<div class="module-categories module">
-   <h2 class="module-header">Categories</h2>
-   <div class="module-content">
-      <ul class="module-list">
-            <li class="module-list-item"><a href="http://www.thestylecontest.com/browser/category_1/" title="">Category 1</a>
-            <ul class="module-list">
-            <li class="module-list-item"><a href="http://www.thestylecontest.com/browser/category_1/sub_category_a/" title="">Sub Category a</a></li>
-            <li class="module-list-item"><a href="http://www.thestylecontest.com/browser/category_1/sub_category_b/" title="">Sub Category b</a></li>
-   </ul>
-      </li>
-            <li class="module-list-item"><a href="http://www.thestylecontest.com/browser/category_2/" title="">Category 2</a>
-      </li>
-   </ul>
-   </div>
-</div>
 ---+++ module-categories-right
+%STARTSECTION{"module-categories-left-three-column"}%%STARTSECTION{"module-categories-left-two-column-left"}%%STARTSECTION{"module-categories-left"}%
 %STARTSECTION{"module-categories-right-three-column"}%%STARTSECTION{"module-categories-right-two-column-right"}%%STARTSECTION{"module-categories-right"}%
 %ENDSECTION{"module-categories-right"}%%ENDSECTION{"module-categories-right-two-column-right"}%%ENDSECTION{"module-categories-right-three-column"}%
-<div class="module-categories module">
-   <h2 class="module-header">Categories</h2>
-   <div class="module-content">
-      <ul class="module-list">
-            <li class="module-list-item"><a href="http://www.thestylecontest.com/browser/category_1/" title="">Category 1</a>
-            <ul class="module-list">
-            <li class="module-list-item"><a href="http://www.thestylecontest.com/browser/category_1/sub_category_a/" title="">Sub Category a</a></li>
-            <li class="module-list-item"><a href="http://www.thestylecontest.com/browser/category_1/sub_category_b/" title="">Sub Category b</a></li>
-   </ul>
-      </li>
-            <li class="module-list-item"><a href="http://www.thestylecontest.com/browser/category_2/" title="">Category 2</a>
-      </li>
-   </ul>
-   </div>
-</div>
+%ENDSECTION{"module-categories-left"}%%ENDSECTION{"module-categories-left-two-column-left"}%%ENDSECTION{"module-categories-left-three-column"}%
 
 ---
----+++ module-categories-left
-%STARTSECTION{"module-archives-left-three-column"}%%STARTSECTION{"module-archives-left-two-column-left"}%%STARTSECTION{"module-archives-left"}%<div class="module-archives module">
-   <h2 class="module-header">TWiki Webs</h2>
+---+++ module-archives-left
+---+++ module-archives-right
+%STARTSECTION{"module-archives-left-three-column"}%%STARTSECTION{"module-archives-left-two-column-left"}%%STARTSECTION{"module-archives-left"}%%STARTSECTION{"module-archives-right-three-column"}%%STARTSECTION{"module-archives-right-two-column-right"}%%STARTSECTION{"module-archives-right"}%<div class="module-archives module">
+   <h2 class="module-header">Login</h2>
+    <div class="module-content">
+     %TMPL:P{"login"}%
+    </div>
+   <h2 class="module-header">Webs</h2>
    <div class="module-content">
-         <ul class="module-list">
-            <li class="module-list-item">%TMPL:P{"login"}%</li>
+    <ul class="module-list">
 %WEBLIST{"<li class="module-list-item">[[$name.WebHome][$name]]</li>"}%
-      </ul>
+    </ul>
    </div>
 </div>
-<div class="module-archives module">
-   <h2 class="module-header">Links</h2>
-   <div class="module-content">
-%INCLUDE{"%BASEWEB%.WebLeftBar"}%      
-   </div>
-</div>%ENDSECTION{"module-archives-left"}%%ENDSECTION{"module-archives-left-two-column-left"}%%ENDSECTION{"module-archives-left-three-column"}%
+%ENDSECTION{"module-archives-right"}%%ENDSECTION{"module-archives-right-two-column-right"}%%ENDSECTION{"module-archives-right-three-column"}%%ENDSECTION{"module-archives-left"}%%ENDSECTION{"module-archives-left-two-column-left"}%%ENDSECTION{"module-archives-left-three-column"}%
 
----+++ module-categories-right
-%STARTSECTION{"module-archives-right-three-column"}%%STARTSECTION{"module-archives-right-two-column-right"}%%STARTSECTION{"module-archives-right"}%<div class="module-archives module">
-   <h2 class="module-header">TWiki Webs</h2>
-   <div class="module-content">
-         <ul class="module-list">
-            <li class="module-list-item">%TMPL:P{"login"}%</li>
-%WEBLIST{"<li class="module-list-item">[[$name.WebHome][$name]]</li>"}%
-      </ul>
-   </div>
-</div>
-<div class="module-archives module">
-   <h2 class="module-header">Links</h2>
-   <div class="module-content">
-%INCLUDE{"%BASEWEB%.WebLeftBar"}%      
-   </div>
-</div>%ENDSECTION{"module-archives-right"}%%ENDSECTION{"module-archives-right-two-column-right"}%%ENDSECTION{"module-archives-right-three-column"}%
-
-
----
 ---+++ module-syndicate-left
 %STARTSECTION{"module-syndicate-left-three-column"}%%STARTSECTION{"module-syndicate-left-two-column-left"}%%STARTSECTION{"module-syndicate-left"}%
 %ENDSECTION{"module-syndicate-left"}%%ENDSECTION{"module-syndicate-left-two-column-left"}%%ENDSECTION{"module-syndicate-left-three-column"}%
