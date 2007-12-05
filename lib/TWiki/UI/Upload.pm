@@ -43,12 +43,11 @@ require TWiki::OopsException;
 
 ---++ StaticMethod attach( $session )
 
-=upload= command handler.
+=attach= command handler.
 This method is designed to be
 invoked via the =UI::run= method.
 
-Adds the meta-data for an attachment to a toic. Does *not* upload
-the attachment itself, just modifies the meta-data.
+Generates a prompt page for adding an attachment.
 
 =cut
 
@@ -144,9 +143,9 @@ CGI parameters, passed in $query:
 | =changeproperties= | |
 | =redirectto= | URL to redirect to after upload. ={AllowRedirectUrl}= must be enabled in =configure=. The parameter value can be a =TopicName=, a =Web.TopicName=, or a URL. Redirect to a URL only works if it is enabled in =configure=. |
 
-Does the work of uploading a file to a topic. Designed to be useable as
-a REST method (it will redirect to the 'view' script unless the 'noredirect'
-parameter is specified, in which case it will print a message to
+Does the work of uploading a file to a topic. Designed to be useable for
+a crude RPC (it will redirect to the 'view' script unless the
+'noredirect' parameter is specified, in which case it will print a message to
 STDOUT, starting with 'OK' on success and 'ERROR' on failure.
 
 =cut
@@ -182,14 +181,18 @@ sub upload {
     TWiki::UI::checkAccess( $session, $webName, $topic,
                             'CHANGE', $user );
 
-    my ( $fileSize, $fileDate, $tmpFileName );
-
-    my $stream;
-    # SMELL: Does $stream get closed in all throws?
-    $stream = $query->upload( 'filepath' ) unless ( $doPropsOnly );
     my $origName = $fileName;
+    my $stream;
+    my ( $fileSize, $fileDate, $tmpFilePath ) = '';
 
     unless( $doPropsOnly ) {
+        my $fh = $query->param( 'filepath' );
+        # $fh is both a file name *and* a file handle (see the CGI doc)
+
+        # SMELL: use of undocumented CGI::tmpFileName
+        $tmpFilePath = $query->tmpFileName( $fh );
+
+        $stream = $query->upload( 'filepath' );
         ( $fileName, $origName ) =
           TWiki::Sandbox::sanitizeAttachmentName( $fileName );
 
@@ -199,7 +202,6 @@ sub upload {
             $fileSize = $stats[7];
             $fileDate = $stats[9];
         }
-
         unless( $fileSize && $fileName ) {
             throw TWiki::OopsException(
                 'attention',
@@ -223,8 +225,6 @@ sub upload {
         }
     }
     try {
-        # SMELL: use of undocumented CGI::tmpFileName
-        my $tfp = $query->tmpFileName( $query->param( 'filepath' ));
         $session->{store}->saveAttachment(
             $webName, $topic, $fileName, $user,
             {
@@ -236,7 +236,7 @@ sub upload {
                 filepath => $filePath,
                 filesize => $fileSize,
                 filedate => $fileDate,
-                tmpFilename => $tfp,
+                tmpFilename => $tmpFilePath,
             } );
     } catch Error::Simple with {
         throw TWiki::OopsException( 'attention',
@@ -245,7 +245,6 @@ sub upload {
                                     topic => $topic,
                                     params => [ shift->{-text} ] );
     };
-
     close( $stream ) if $stream;
 
     if( $fileName eq $origName ) {
