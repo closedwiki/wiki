@@ -1649,7 +1649,7 @@ sub emitTable {
       "$singleIndent<tbody>" . join( "", @bodyRows ) . "$singleIndent</tbody>";
     $text .= $currTablePre . $tbody if scalar @bodyRows;
 
-    $text .= $currTablePre . "\n" . CGI::end_table() . "\n";
+    $text .= $currTablePre . CGI::end_table();
     _setDefaults();
     return $text;
 }
