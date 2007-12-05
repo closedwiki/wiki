@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1196806546" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1196874068" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Templates
 
@@ -58,7 +58,7 @@ See IfStatements for details of supported context identifiers.
 
 The master templates shipped with a twiki release are stored in the twiki/templates directory. As an example, ==twiki/templates/view.tmpl== is the default template file for the ==twiki/bin/view== script. 
 
-You can save templates in other directories as long as they are listed in the ={TemplatePath}= configuration setting. The ={TemplatePath}= is defined in the Miscellaneous section of the [[%SCRIPTURL{configure}%][configure]] page.
+You can save templates in other directories as long as they are listed in the ={TemplatePath}= configuration setting. The ={TemplatePath}= is defined in the Miscellaneous section of the [[%SCRIPTURLPATH{configure}%][configure]] page.
 
 You can also save templates in user topics. The ={TemplatePath}= configuration setting defines which topics will be accepted as templates.
 
