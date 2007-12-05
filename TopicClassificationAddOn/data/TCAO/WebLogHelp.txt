@@ -8,7 +8,7 @@ This topic provides help regarding the !WebLog TopicType included with %TWIKIWEB
 The following instructions are displayed when the !WebLog !TopicType is first installed within a web via RenderNewClassHelp.
 
 %STARTINCLUDE%
-   1 Add %BASEWEB%.WebLogForm to the list of !WebForms in %BASEWEB%.WebPreferences.
+   1 Add ==Web<nop>LogForm== to the list of !WebForms in %BASEWEB%.WebPreferences.
    1 Confirm that %BASEWEB%.WebLogForm is consistent with the %BASEWEB%.TopicClassification scheme in use in the %BASEWEB% web. For example, you might be using "Categories" rather that "SubjectArea."
    
 %ICON{tip}% For "quick-blog" feature in [[http://www.mozilla.com/firefox/][Firefox]] browser, see %TCAOWEB%.JustBlogItInstallation.

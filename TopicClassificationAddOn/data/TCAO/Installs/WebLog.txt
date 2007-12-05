@@ -9,16 +9,14 @@
 To enable any of these settings, replace the explanation with the value you want and remove the "#" before "Set". 
    * Set CLASS_DESCRIPTION = <b><i>Web log entries for the %BASEWEB% web.  </b></i>
    * Set LISTFORMAT = %TCAOWEB%.RenderBlogList
-   * #Set HEADER_FORMAT = Optional custom format for search results header. Defaults to empty header.
-   * #Set FOOTER_FORMAT = Optional custom format for search results footer. Defaults to "Number of topics found = $count".
-   * Set SEARCH_ORDER = createdate
-   * Set SEARCH_REVERSE = on
+   * Set INITSORT = createdate
+   * Set INITLIMIT = 10
    * Set TOPICTYPE = WebLog
    * Set FACETS = %FORMFIELD{"Facets" topic="%BASEWEB%.%BASETOPIC%"}%
    * Set HELPTOPIC = %TCAOWEB%.WebLogHelp
 -->
 
-%INCLUDE{"%TCAOWEB%.RenderClassificationTopic" remote="on" LISTFORMAT="%TCAOWEB%.RenderStandardFilter" }%
+%INCLUDE{"%TCAOWEB%.RenderClassificationTopic" remote="on" }%
 
 <div class="twikiHidden">
 You can modify the options for creating new topics of this type by changing the parameters to RenderTopicCreator. See that topic for more info.
