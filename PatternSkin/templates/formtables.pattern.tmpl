@@ -16,9 +16,7 @@
 
 %{ Each row }%
 %TMPL:DEF{FORM:display:row}%<tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> %A_TITLE% </td><td>
-    <span id="/%BASEWEB%/%BASETOPIC%/$definingTopic/$name" style="font-size:larger;" dojoType="dijit.form.InlineEditBox" onChange="myHandler(this.id,arguments[0])">
-        <input dojoType="dijit.form.TextBox" value="$value">
-    </span>
+%A_VALUE%
 </td></tr>%TMPL:END%
 
 
