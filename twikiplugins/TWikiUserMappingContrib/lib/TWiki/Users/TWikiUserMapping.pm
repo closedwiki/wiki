@@ -375,7 +375,14 @@ sub getWikiName {
     } else {
         # If the mapping isn't enabled there's no point in loading it
     }
-	$wikiname = $wikiname || getLoginName( $this, $cUID );
+    
+    unless ($wikiname) {
+        #sanitise the generated WikiName - fisex up email addresses and stuff
+        $wikiname = getLoginName( $this, $cUID );
+        $wikiname =~ s/$TWiki::cfg{NameFilter}//go;
+        $wikiname =~ s/\.//go;
+    }
+
 #print STDERR "--------------------------------------cUID : $cUID => $wikiname\n";	
     return $wikiname;
  

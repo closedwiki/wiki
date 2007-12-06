@@ -175,6 +175,8 @@ sub finish {
     undef $this->{mapping};
     undef $this->{session};
 	undef $this->{getWikiName};
+    undef $this->{getLoginName};
+
 }
 
 =pod
@@ -406,6 +408,7 @@ sub getCanonicalUserID {
 #	print STDERR "\nTWiki::Users::getCanonicalUserID($login) => ".($cUID || '(NO cUID)');	
 
     $this->{getCanonicalUserID}->{$login} = forceCUID($cUID) if ($cUID);
+
     return $this->{getCanonicalUserID}->{$login};
 }
 
@@ -577,6 +580,8 @@ sub getLoginName {
 	
 	my $login = $this->_getMapping($cUID)-> getLoginName($cUID) if ($cUID && $this->_getMapping($cUID));
     $this->{getLoginName}->{$cUID} = $login || 'unknown';
+    $this->{getCanonicalUserID}->{$this->{getLoginName}->{$cUID}} = $cUID;
+
     
     return $this->{getLoginName}->{$cUID};
 }
@@ -612,6 +617,7 @@ sub getWikiName {
     
     my ( $web, $topic ) = $this->{session}->normalizeWebTopicName( $TWiki::cfg{UsersWebName}, $wikiname );
     $this->{getWikiName}->{$cUID} = $topic;
+    $this->{getCanonicalUserID}->{$topic} = $cUID;
     
     return $this->{getWikiName}->{$cUID};
 }
