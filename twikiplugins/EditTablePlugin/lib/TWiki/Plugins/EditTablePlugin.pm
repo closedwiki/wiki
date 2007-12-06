@@ -34,7 +34,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '4.3';
+$RELEASE = '4.4';
 
 $encodeStart = '--EditTableEncodeStart--';
 $encodeEnd   = '--EditTableEncodeEnd--';
@@ -158,7 +158,7 @@ sub addViewModeHeadersToHead {
 
     my $header = <<'EOF';
 <style type="text/css" media="all">
-@import url("%PUBURL%/%TWIKIWEB%/EditTablePlugin/edittable.css");
+@import url("%PUBURL%/%SYSTEMWEB%/EditTablePlugin/edittable.css");
 </style>
 EOF
     TWiki::Func::addToHEAD( 'EDITTABLEPLUGIN', $header );
@@ -190,9 +190,9 @@ sub addEditModeHeadersToHead {
       . $assetUrl . '" />';
     $header .= <<'EOF';
 <style type="text/css" media="all">
-@import url("%PUBURL%/%TWIKIWEB%/EditTablePlugin/edittable.css");
+@import url("%PUBURL%/%SYSTEMWEB%/EditTablePlugin/edittable.css");
 </style>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/EditTablePlugin/edittable.js"></script>
+<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/EditTablePlugin/edittable.js"></script>
 EOF
 
     TWiki::Func::addToHEAD( 'EDITTABLEPLUGIN', $header );
