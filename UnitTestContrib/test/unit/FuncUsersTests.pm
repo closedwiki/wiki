@@ -102,7 +102,7 @@ sub set_up_for_verify {
             $this->{twiki}->{store}->saveTopic(
                 $this->{twiki}->{user},
                 $this->{users_web}, 'AandBGroup',
-                "   * Set GROUP = UserA, UserB");
+                "   * Set GROUP = UserA, UserB, $TWiki::cfg{AdminUserWikiName}");
             $this->{twiki}->{store}->saveTopic(
                 $this->{twiki}->{user},
                 $this->{users_web}, 'AandCGroup',
@@ -115,6 +115,10 @@ sub set_up_for_verify {
                 $this->{twiki}->{user},
                 $this->{users_web}, 'ScumGroup',
                 "   * Set GROUP = UserA, $TWiki::cfg{DefaultUserWikiName}");
+            $this->{twiki}->{store}->saveTopic(
+                $this->{twiki}->{user},
+                $this->{users_web}, $TWiki::cfg{SuperAdminGroup},
+                "   * Set GROUP = UserA, $TWiki::cfg{AdminUserWikiName}");
         } catch TWiki::AccessControlException with {
             my $e = shift;
             $this->assert(0,$e->stringify());
@@ -232,7 +236,7 @@ sub verify_eachGroupTraditional {
     if ($TWiki::cfg{UserMappingManager} eq 'TWiki::Users::BaseUserMapping') {
          @correctList = qw/TWikiAdminGroup TWikiBaseGroup/;
     } else {
-         @correctList = qw/ AandBGroup AandCGroup BandCGroup ScumGroup TWikiAdminGroup TWikiBaseGroup/;
+         @correctList = qw/AdminGroup AandBGroup AandCGroup BandCGroup ScumGroup TWikiAdminGroup TWikiBaseGroup/;
     }
     my $correct = join(',', sort @correctList);
     $this->assert_str_equals($correct, $ulist);
@@ -259,7 +263,7 @@ sub verify_eachGroupCustomAdmin {
     if ($TWiki::cfg{UserMappingManager} eq 'TWiki::Users::BaseUserMapping') {
          @correctList = qw/TWikiBaseGroup/;
     } else {
-         @correctList = qw/ AandBGroup AandCGroup BandCGroup ScumGroup TWikiBaseGroup/; 
+         @correctList = qw/AdminGroup AandBGroup AandCGroup BandCGroup ScumGroup TWikiBaseGroup/; 
     }
     push @correctList, $TWiki::cfg{SuperAdminGroup};
     my $correct = join(',', sort @correctList);
@@ -275,7 +279,8 @@ sub verify_isAnAdmin {
         my $u = $iterator->next();
         $u =~ /.*\.(.*)/;
         $TWiki::Plugins::SESSION->{user} = $u;
-        if ($u eq $TWiki::cfg{AdminUserWikiName}) {
+        if (($u eq $TWiki::cfg{AdminUserWikiName}) ||
+           ($u eq 'UserA')) {
 	        $this->assert(TWiki::Func::isAnAdmin($u), $u);
         } else {
 	        $this->assert(!TWiki::Func::isAnAdmin($u), $u);
@@ -304,7 +309,7 @@ sub verify_eachMembership {
         my $g = $it->next();
         push(@list, $g);
     }
-    $this->assert_str_equals('AandBGroup,AandCGroup,ScumGroup', join(',', sort @list));
+    $this->assert_str_equals('AandBGroup,AandCGroup,AdminGroup,ScumGroup', join(',', sort @list));
     $it = TWiki::Func::eachMembership('UserB');
     @list = ();
     while ($it->hasNext()) {
@@ -350,7 +355,7 @@ sub verify_eachGroupMember {
         my $g = $it->next();
         push(@list, $g);
     }
-    $this->assert_str_equals('UserA,UserB', sort join(',', @list));
+    $this->assert_str_equals("UserA,UserB,$TWiki::cfg{AdminUserWikiName}", sort join(',', @list));
     
     $it = TWiki::Func::eachGroupMember('ScumGroup');
     @list = ();
@@ -613,10 +618,17 @@ sub verify_isAnAdmin_extended {
     $this->assert(TWiki::Func::isAnAdmin($TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{AdminUserWikiName}));
 
     my $usera_cUID = $this->{twiki}->{users}->getCanonicalUserID('usera');
-    $this->assert(!TWiki::Func::isAnAdmin($usera_cUID));
-    $this->assert(!TWiki::Func::isAnAdmin('usera'));
-    $this->assert(!TWiki::Func::isAnAdmin('UserA'));
-    $this->assert(!TWiki::Func::isAnAdmin($TWiki::cfg{UsersWebName}.'.'.'UserA'));
+    $this->assert(TWiki::Func::isAnAdmin($usera_cUID));
+    $this->assert(TWiki::Func::isAnAdmin('usera'));
+    $this->assert(TWiki::Func::isAnAdmin('UserA'));
+    $this->assert(TWiki::Func::isAnAdmin($TWiki::cfg{UsersWebName}.'.'.'UserA'));
+
+    $this->assert(!TWiki::Func::isAnAdmin($TWiki::cfg{UsersWebName}.'.'.'UserB'));
+    my $userb_cUID = $this->{twiki}->{users}->getCanonicalUserID('userb');
+    $this->assert(!TWiki::Func::isAnAdmin($userb_cUID));
+    $this->assert(!TWiki::Func::isAnAdmin('userb'));
+    $this->assert(!TWiki::Func::isAnAdmin('UserB'));
+
 
     #TODO: consider how to render unkown user's
     $this->assert(!TWiki::Func::isAnAdmin('TWikiUserMapping_NonExistantUser'));
@@ -648,10 +660,16 @@ sub verify_isGroupMember_extended {
     $this->assert(!TWiki::Func::isGroupMember('AandBGroup', $TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{DefaultUserWikiName}));
 	
     my $admin_cUID = $this->{twiki}->{users}->getCanonicalUserID($TWiki::cfg{AdminUserLogin});
-    $this->assert(!TWiki::Func::isGroupMember('AandBGroup', $admin_cUID));
-    $this->assert(!TWiki::Func::isGroupMember('AandBGroup', $TWiki::cfg{AdminUserLogin}));
-    $this->assert(!TWiki::Func::isGroupMember('AandBGroup', $TWiki::cfg{AdminUserWikiName}));
-    $this->assert(!TWiki::Func::isGroupMember('AandBGroup', $TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{AdminUserWikiName}));
+    $this->assert(TWiki::Func::isGroupMember('AandBGroup', $admin_cUID));
+    $this->assert(TWiki::Func::isGroupMember('AandBGroup', $TWiki::cfg{AdminUserLogin}));
+    $this->assert(TWiki::Func::isGroupMember('AandBGroup', $TWiki::cfg{AdminUserWikiName}));
+    $this->assert(TWiki::Func::isGroupMember('AandBGroup', $TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{AdminUserWikiName}));
+
+    $this->assert(!TWiki::Func::isGroupMember('AandCGroup', $admin_cUID));
+    $this->assert(!TWiki::Func::isGroupMember('AandCGroup', $TWiki::cfg{AdminUserLogin}));
+    $this->assert(!TWiki::Func::isGroupMember('AandCGroup', $TWiki::cfg{AdminUserWikiName}));
+    $this->assert(!TWiki::Func::isGroupMember('AandCGroup', $TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{AdminUserWikiName}));
+
 
     my $usera_cUID = $this->{twiki}->{users}->getCanonicalUserID('usera');
     $this->assert(TWiki::Func::isGroupMember('AandBGroup', $usera_cUID));
@@ -686,10 +704,17 @@ sub verify_isGroupMember_extended {
     $this->assert(TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, $TWiki::cfg{AdminUserWikiName}));
     $this->assert(TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, $TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{AdminUserWikiName}));
 
-    $this->assert(!TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, $usera_cUID));
-    $this->assert(!TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, 'usera'));
-    $this->assert(!TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, 'UserA'));
-    $this->assert(!TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, $TWiki::cfg{UsersWebName}.'.'.'UserA'));
+    $this->assert(TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, $usera_cUID));
+    $this->assert(TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, 'usera'));
+    $this->assert(TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, 'UserA'));
+    $this->assert(TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, $TWiki::cfg{UsersWebName}.'.'.'UserA'));
+
+    $this->assert(!TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, 'userb'));
+    my $userb_cUID = $this->{twiki}->{users}->getCanonicalUserID('userb');
+    $this->assert(!TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, $userb_cUID));
+    $this->assert(!TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, 'UserB'));
+    $this->assert(!TWiki::Func::isGroupMember($TWiki::cfg{SuperAdminGroup}, $TWiki::cfg{UsersWebName}.'.'.'UserB'));
+
 }
 
 1;
