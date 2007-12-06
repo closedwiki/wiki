@@ -486,8 +486,8 @@ sub test_getExternalResource {
     my $response = TWiki::Func::getExternalResource('http://develop.twiki.org');
     $this->assert_equals(200, $response->code());
     $this->assert_str_equals('OK', $response->message());
-    $this->assert_str_equals('text/html; charset=UTF-8',
-                             $response->header('content-type'));
+    $this->assert_matches(qr/text\/html; charset=utf-8/s, 
+                             lc($response->header('content-type')));
     $this->assert_matches(qr/Welcome to DevelopBranch TWiki/s, $response->content());
     $this->assert(!$response->is_error());
     $this->assert(!$response->is_redirect());
