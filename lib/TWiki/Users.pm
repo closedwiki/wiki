@@ -1,7 +1,6 @@
-# Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
-#
-# Copyright (C) 1999-2007 Peter Thoeny, peter@thoeny.org
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
+# Users Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
+# Copyright (C) 1999-2007 TWiki Contributors.
+# All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
 #
@@ -20,7 +19,6 @@
 =pod
 
 ---+ package TWiki::Users
-
 This package provides services for the lookup and manipulation of login and
 wiki names of users, and their authentication.
 
@@ -91,8 +89,8 @@ BEGIN {
 =pod
 
 ---++ ClassMethod new ($session)
-
-Construct the user management object
+Construct the user management object that is the facade to the BaseUserMapping
+and the user mapping chosen in the configuration.
 
 =cut
 
@@ -260,6 +258,9 @@ sub initialiseUser {
             #needs to be WikiName safe
             $this->{getWikiName}->{$cUID} =~ s/$TWiki::cfg{NameFilter}//go;
             $this->{getWikiName}->{$cUID} =~ s/\.//go;
+            #I wonder what the risk is..
+            $this->{getCanonicalUserID}->{$login} = $cUID;
+            $this->{getCanonicalUserID}->{$this->{getWikiName}->{$cUID}} = $cUID;
         }
     }
 
@@ -319,9 +320,13 @@ sub addUser {
         $login, $wikiname, $password, $emails);
 	$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
     
-    #update the 2 cached values
+    #update the cached values
+    #see BugsItem4771 - it seems that authenticated, but unmapped users have rights too
     $this->{getLoginName}->{$cUID} = $login;
     $this->{getWikiName}->{$cUID} = $wikiname;
+    #I wonder what the risk is..
+    $this->{getCanonicalUserID}->{$login} = $cUID;
+    $this->{getCanonicalUserID}->{$wikiname} = $cUID;
 
     return $cUID;
 
@@ -367,6 +372,8 @@ returns undef if the user does not exist.
 sub getCanonicalUserID {
     my( $this, $login ) = @_;
 	$this->ASSERT_IS_USER_LOGIN_ID($login) if DEBUG;
+    
+   	return $this->{getCanonicalUserID}->{$login} if (defined($this->{getCanonicalUserID}->{$login}));
 	
     # if its one of the known cUID's, then just return itself
     # SMELL: CC added $login as the second param, because otherwise the
@@ -379,25 +386,27 @@ sub getCanonicalUserID {
     my $testMapping = $this->_getMapping($login, $login, undef, 1);
 #print STDERR "Users::getCanonicalUserID($login) $testMapping=>".$testMapping->getLoginName($login)."\n";
 
-    # passed a valid cUID?
-    return forceCUID($login) if ($testMapping && $testMapping->getLoginName($login));
-
     my $cUID;
-    my $mapping = $this->_getMapping(undef, $login, $login);
-    if ($mapping) {
-		$cUID = $mapping->getCanonicalUserID( $login );
-		
-		unless ($cUID) {	#must be a wikiname
-			my( $web, $topic ) = $this->{session}->normalizeWebTopicName( '', $login );
-		    my $found = $this->findUserByWikiName($topic);
-    		$cUID = $found->[0] if ($found && scalar(@$found));
-#			print STDERR "\nfindUserByWikiName";	
-		}
+    # passed a valid cUID?
+    if ($testMapping && $testMapping->getLoginName($login)){
+        $cUID = $login;
+    } else {
+        my $mapping = $this->_getMapping(undef, $login, $login);
+        if ($mapping) {
+            $cUID = $mapping->getCanonicalUserID( $login );
+            
+            unless ($cUID) {	#must be a wikiname
+                my( $web, $topic ) = $this->{session}->normalizeWebTopicName( '', $login );
+                my $found = $this->findUserByWikiName($topic);
+                $cUID = $found->[0] if ($found && scalar(@$found));
+    #			print STDERR "\nfindUserByWikiName";	
+            }
+        }
     }
-
 #	print STDERR "\nTWiki::Users::getCanonicalUserID($login) => ".($cUID || '(NO cUID)');	
 
-    return forceCUID($cUID);
+    $this->{getCanonicalUserID}->{$login} = forceCUID($cUID) if ($cUID);
+    return $this->{getCanonicalUserID}->{$login};
 }
 
 =pod
@@ -575,8 +584,10 @@ sub getLoginName {
 =pod
 
 ---++ ObjectMethod getWikiName($cUID) -> $wikiName
-
 Get the wikiname to display for a canonical user identifier.
+
+can return undef if the user is not in the mapping system
+(or the special case from initialiseUser)
 
 =cut
 
