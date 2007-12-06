@@ -271,7 +271,6 @@ sub _registerSingleBulkUser {
 	          !$session->{store}->topicExists( $row->{webName},
 	                                           $row->{WikiName} ) ) {
 	        $log .= _createUserTopic($session, $row);
-            $users->setEmails($cUID, $row->{Email});
 	    } else {
 	        $log .= "$b1 Not writing user topic $row->{WikiName}\n";
 	    }

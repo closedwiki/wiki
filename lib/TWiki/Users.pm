@@ -284,7 +284,7 @@ sub randomPassword {
 
 =pod
 
----++ ObjectMethod addUser($login, $wikiname, $password, $emails) -> $user
+---++ ObjectMethod addUser($login, $wikiname, $password, $emails) -> $cUID
 
    * =$login= - user login name. If =undef=, =$wikiname= will be used as the login name.
    * =$wikiname= - user wikiname. If =undef=, the user mapper will be asked
@@ -315,11 +315,15 @@ sub addUser {
 
     # create a new user and get the canonical user ID from the user mapping
     # manager.
-    my $user = $this->{mapping}->addUser(
+    my $cUID = $this->{mapping}->addUser(
         $login, $wikiname, $password, $emails);
-	$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
+	$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
+    
+    #update the 2 cached values
+    $this->{getLoginName}->{$cUID} = $login;
+    $this->{getWikiName}->{$cUID} = $wikiname;
 
-    return $user;
+    return $cUID;
 
 }
 

@@ -213,7 +213,6 @@ sub getLoginName {
 
 ---++ ObjectMethod addUser ($login, $wikiname, $password, $emails) -> cUID
 
-no registration, this is a read only user mapping
 throws an Error::Simple 
 
 Add a user to the persistant mapping that maps from usernames to wikinames
