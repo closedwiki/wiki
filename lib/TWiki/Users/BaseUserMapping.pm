@@ -262,13 +262,15 @@ sub eachUser {
 Called from TWiki::Users. See the documentation of the corresponding
 method in that module for details.
 
+The basemapper implementation assumes that there are no nested groups in the
+basemapper.
+
 =cut
 
 sub eachGroupMember {
     my $this = shift;
     my $group = shift;
 
-#TODO: implemend expanding of nested groups
     my $members = $this->{GROUPS}{$group};
 #print STDERR "eachGroupMember($group): ".join(',', @{$members});
 

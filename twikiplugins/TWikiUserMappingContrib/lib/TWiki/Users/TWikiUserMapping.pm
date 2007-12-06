@@ -1053,7 +1053,13 @@ sub _expandUserList {
                 push( @l, $it->next() );
             }
         } else {
-            push( @l, @{$this->findUserByWikiName( $ident, 1 )} );
+            my @list = @{$this->findUserByWikiName( $ident, 1 )};
+            if (scalar(@list) < 1) {
+                #The user might be defined in the basemapping.
+                @list = @{$this->{session}->{users}->findUserByWikiName( $ident, 1 )};
+            }
+
+            push( @l, @list );
         }
     }
     return \@l;

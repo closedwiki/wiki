@@ -128,18 +128,19 @@ sub new {
     	$this->{mapping} = $implUserMappingManager->new( $session );
 	
     	#add all the basemapper users to the impl mapping to allow us Group mixing between mappers
+        #specifically, this is needed to add BaseMapping users to Groups defined in the impl mapping (such as adding the TWikiAdminUser to the QaGroup)
     	#yes, this is a dirty looking hack, but it does suggest that putting the 'caches' of both usermapping in one place might work.
-    	foreach my $cUID (keys %{$this->{basemapping}->{U2L}}) {
-    		my $wikiname = $this->{basemapping}->getWikiName($cUID);
-    		my $login = $this->{basemapping}->getLoginName($cUID);
-    		#$cUID =~ s/^$this->{basemapping}->{mapping_id}/$this->{mapping}->{mapping_id}/;
-    		#print STDERR "\npreload from basemapping $cUID, $wikiname, $login";
-	    	$this->{mapping}->{U2W}->{$cUID} = $wikiname;
-            # If the mapping doesn't allow login names, then $login will be
-            # the same as $wikiname
-            $this->{mapping}->{L2U}->{$login} = $cUID;
-	    	$this->{mapping}->{W2U}->{$wikiname} = $cUID;
-	    }
+#    	foreach my $cUID (keys %{$this->{basemapping}->{U2L}}) {
+#    		my $wikiname = $this->{basemapping}->getWikiName($cUID);
+#    		my $login = $this->{basemapping}->getLoginName($cUID);
+#    		#$cUID =~ s/^$this->{basemapping}->{mapping_id}/$this->{mapping}->{mapping_id}/;
+#    		#print STDERR "\npreload from basemapping $cUID, $wikiname, $login";
+#	    	$this->{mapping}->{U2W}->{$cUID} = $wikiname;
+#            # If the mapping doesn't allow login names, then $login will be
+#            # the same as $wikiname
+#            $this->{mapping}->{L2U}->{$login} = $cUID;
+#	    	$this->{mapping}->{W2U}->{$wikiname} = $cUID;
+#	    }
     }
     #the UI for rego supported/not is different from rego temporarily turned off
     if ($this->supportsRegistration()) {
@@ -148,8 +149,9 @@ sub new {
     }
     $implUserMappingManager =~ /^TWiki::Users::(.*)$/;
 
-	#caches
+	#caches - not only used for speedup, but also for authenticated but unregistered users
 	$this->{getWikiName} = {};
+    $this->{getLoginName} = {};
 	
     return $this;
 }
@@ -246,9 +248,22 @@ sub initialiseUser {
     my $plogin = $this->{session}->{plugins}->load( $TWiki::cfg{DisableAllPlugins} );
     $login = $plogin if $plogin;
 
-    # if we get here without a login id, we are a guest
     my $cUID;
-    $cUID = $this->getCanonicalUserID( $login ) if (defined($login) && ($login ne ''));
+    if (defined($login) && ($login ne '')) {
+        $cUID = $this->getCanonicalUserID( $login );
+        
+        #see BugsItem4771 - it seems that authenticated, but unmapped users have rights too
+        if (!defined($cUID)) {
+            $cUID = forceCUID($login);
+            $this->{getLoginName}->{$cUID} = $login;
+            $this->{getWikiName}->{$cUID} = $login;
+            #needs to be WikiName safe
+            $this->{getWikiName}->{$cUID} =~ s/$TWiki::cfg{NameFilter}//go;
+            $this->{getWikiName}->{$cUID} =~ s/\.//go;
+        }
+    }
+
+    # if we get here without a login id, we are a guest
     $cUID = $cUID || $this->getCanonicalUserID( $TWiki::cfg{DefaultUserLogin} );
 	return $cUID;
 }
@@ -541,10 +556,16 @@ Get the login name of a user.
 sub getLoginName {
     my( $this, $cUID) = @_;
 #	$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
+	return $this->{getLoginName}->{$cUID} if (defined($this->{getLoginName}->{$cUID}));
+
+
 	$cUID = $this->getCanonicalUserID($cUID);
+    return 'unknown' unless (defined($cUID));
 	
 	my $login = $this->_getMapping($cUID)-> getLoginName($cUID) if ($cUID && $this->_getMapping($cUID));
-    return $login || 'unknown';
+    $this->{getLoginName}->{$cUID} = $login || 'unknown';
+    
+    return $this->{getLoginName}->{$cUID};
 }
 
 =pod
@@ -706,16 +727,19 @@ sub isInGroup {
     
     my $mapping = $this->_getMapping($cUID);
     my $otherMapping = ($mapping eq $this->{basemapping}) ? $this->{mapping} : $this->{basemapping};
+    if ($mapping eq $otherMapping){
+        return $mapping->isInGroup( $cUID, $group );
+    }
+    
     my $wikiname = $this->_getMapping($cUID)->getWikiName($cUID);
     my $cUIDList = $otherMapping->findUserByWikiName($wikiname);
     my $othercUID = $cUIDList->[0]  if scalar(@$cUIDList);
 #print STDERR "---------------------------$cUID == $wikiname == $othercUID\n";
 
-    if (($mapping eq $otherMapping) ||
-        (!defined($othercUID))) {
-        return $mapping->isInGroup( $cUID, $group );
+    if (!defined($othercUID)) {
+        $othercUID = $cUID;
     }
-	
+		
     return ($mapping->isInGroup( $cUID, $group ) || $otherMapping->isInGroup( $othercUID, $group ));
 
 	
@@ -737,6 +761,12 @@ sub eachMembership {
     my $mapping = $this->_getMapping($cUID);
     my $otherMapping = ($mapping eq $this->{basemapping}) ? $this->{mapping} : $this->{basemapping};
     my $wikiname = $this->_getMapping($cUID)->getWikiName($cUID);
+    #stop if the user has no wikiname (generally means BugsItem4771)
+    unless(defined($wikiname)) {
+        require TWiki::ListIterator;
+        return new TWiki::ListIterator(\()) ;
+    }
+    
     my $cUIDList = $otherMapping->findUserByWikiName($wikiname);
     my $othercUID = $cUIDList->[0]  if ($cUIDList && scalar(@$cUIDList));
 #print STDERR "---------------------------$cUID == $wikiname == $othercUID\n";

@@ -88,7 +88,8 @@ sub readOnly {
 
 Implements TWiki::Password
 
-Returns encrypted password if succeeds.  Returns 0 if login is invalid.
+Returns encrypted password if succeeds.
+Returns 0 if login is invalid.
 Returns undef otherwise.
 
 =cut
