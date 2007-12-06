@@ -164,6 +164,8 @@ sub getCanonicalUserID {
     my( $this, $login, $dontcheck ) = @_;
     #print STDERR "\nTWikiUserMapping::getCanonicalUserID($login)";
 
+    _loadMapping($this);
+
 	return unless (($dontcheck) ||
                      defined($this->{L2U}->{$login}) ||
                        (defined($this->{passwords}->fetchPass( $login ))) );
@@ -199,6 +201,8 @@ sub getLoginName {
     # use bytes to ignore character encoding
     $user =~ s/_(\d\d)/chr($1)/ge;
     no bytes;
+
+    _loadMapping($this);
     
 	return unless (($dontcheck) || defined($this->{L2U}->{$user}) || (defined($this->{passwords}->fetchPass( $user ))) );    
     
@@ -991,9 +995,12 @@ sub _loadMapping {
     return if $this->{CACHED};
     $this->{CACHED} = 1;
 
-    #mapping from login to WikiName is done in the TWikiUserTopic
-    #TODO: should only really do this mapping IF the use is in the password file.
-    if ($TWiki::cfg{Register}{AllowLoginName}) {
+    #TODO: should only really do this mapping IF the user is in the password file.
+    #       except if {PasswordManager} eq 'none' - in which case the only time we
+    #       know a login is real, is when they are logged in :(
+    if (($TWiki::cfg{Register}{AllowLoginName}) ||
+        ($TWiki::cfg{PasswordManager} eq 'none')
+        ) {
         my $store = $this->{session}->{store};
         if( $store->topicExists($TWiki::cfg{UsersWebName},
                                 $TWiki::cfg{UsersTopicName} )) {

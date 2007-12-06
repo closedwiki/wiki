@@ -358,6 +358,7 @@ sub getCanonicalUserID {
     # it impossible to retain 100% compatibility (guest user edits will get
     # saved as edits by BaseMapping_666).
     my $testMapping = $this->_getMapping($login, $login, undef, 1);
+#print STDERR "Users::getCanonicalUserID($login) $testMapping=>".$testMapping->getLoginName($login)."\n";
 
     # passed a valid cUID?
     return forceCUID($login) if ($testMapping && $testMapping->getLoginName($login));
@@ -375,7 +376,7 @@ sub getCanonicalUserID {
 		}
     }
 
-	#print STDERR "\nTWiki::Users::getCanonicalUserID($login) => ".($cUID || '(NO cUID)');	
+#	print STDERR "\nTWiki::Users::getCanonicalUserID($login) => ".($cUID || '(NO cUID)');	
 
     return forceCUID($cUID);
 }
@@ -404,18 +405,18 @@ sub findUserByWikiName {
 ---++ ObjectMethod findUserByEmail( $email ) -> \@users
    * =$email= - email address to look up
 Return a list of canonical user names for the users that have this email
-registered with the password manager or the user mapping manager.
-
-The password manager is asked first for whether it maps emails.
-If it doesn't, then the user mapping manager is asked instead.
+registered with the user mapping managers.
 
 =cut
 
 sub findUserByEmail {
     my( $this, $email ) = @_;
     ASSERT($email) if DEBUG;
+    
+    my $users = $this->{mapping}->findUserByEmail( $email );
+    push @{$users}, @{$this->{basemapping}->findUserByEmail( $email )};
 
-    return $this->_getMapping(undef, undef, undef)->findUserByEmail( $email );
+    return $users;
 }
 
 =pod
@@ -433,13 +434,17 @@ Duplicates are removed from the list.
 =cut
 
 sub getEmails {
-    my( $this, $cUID ) = @_;
-	$cUID = $this->getCanonicalUserID($cUID);
-	#$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
+    my( $this, $user ) = @_;
+	$user = $this->getCanonicalUserID($user);
+	#$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
 	
-	return () unless ($cUID);
-
-    return $this->_getMapping($cUID)->getEmails( $cUID );
+	return () unless ($user);
+    
+    if ($this->{mapping}->isGroup($user)) {
+        return $this->{mapping}->getEmails($user);
+    }
+    #will fall back to basemapper if its a basemapper group
+    return $this->_getMapping($user)->getEmails( $user );
 }
 
 =pod

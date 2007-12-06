@@ -94,7 +94,7 @@ Returns undef otherwise.
 =cut
 
 sub fetchPass {
-    return 0;
+    return undef;
 }
 
 =pod

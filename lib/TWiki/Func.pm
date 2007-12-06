@@ -728,9 +728,30 @@ sub wikiToUserName {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return '' unless $wiki;
     my $users = $TWiki::Plugins::SESSION->{users};
-    
+
+#This should work, as getCanonicaluserID has been written to test for cUID, login and wikiname
     my $cUID = $users->getCanonicalUserID($wiki);
     return $users->getLoginName($cUID) if ($cUID);
+    return undef;
+
+    
+    #is it a wikiname?
+#    my $usernames = $users->findUserByWikiName($wiki);
+#    if ($usernames && scalar(@$usernames)) {
+#        my $cUID = $usernames->[0];
+#        return $users->getLoginName($cUID) if ($cUID);
+#    }
+    
+    #is it a login name
+#    my $cUID = $users->getCanonicalUserID($wiki);
+#    return $users->getLoginName($cUID) if ($cUID);
+
+    #is is a cUID
+#    my $login = $users->getLoginName($wiki);
+#    return $login if ($login &&
+#            #the base mapping's unknown user
+#            ($login ne $users->getLoginName('BaseUserMapping_999')));
+
     return undef;
 }
 
