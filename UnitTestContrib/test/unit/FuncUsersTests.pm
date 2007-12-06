@@ -51,13 +51,23 @@ sub TWikiUserMapping {
     $this->set_up_for_verify();
 }
 
+sub NonePasswordManager {
+    $TWiki::cfg{PasswordManager} = 'none';
+}
+
+sub HtPasswordPasswordManager {
+    $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
+}
+
+
 # See the pod doc in Unit::TestCase for details of how to use this
 sub fixture_groups {
 
     return (
-        [ 'NoLoginManager' ],
-        [ 'AllowLoginName'],
-        [ 'TWikiUserMapping' ] );
+        [ 'NoLoginManager', 'ApacheLoginManager', 'TemplateLoginManager' ],
+        [ 'AllowLoginName', 'DontAllowLoginName'],
+        [ 'TWikiUserMapping' ],
+        [ 'NonePasswordManager', 'HtPasswordPasswordManager' ]);
 
 =pod
 
