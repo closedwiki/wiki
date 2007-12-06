@@ -282,8 +282,8 @@ s/(.*?)$regex{edit_table_plugin}/&handleEditTableTag( $theWeb, $theTopic, $1, $2
             # match with a TablePlugin line
             # works when TABLE tag is just above OR just below the EDITTABLE tag
             my %tablePluginParams = TWiki::Func::extractParameters($1);
-            $headerRowCount = $tablePluginParams{'headerrows'};
-            $footerRowCount = $tablePluginParams{'footerrows'};
+            $headerRowCount = $tablePluginParams{'headerrows'} || 0;
+            $footerRowCount = $tablePluginParams{'footerrows'} || 0;
 
             # no need to process any further, just copy the line
             $result .= "$_\n";
