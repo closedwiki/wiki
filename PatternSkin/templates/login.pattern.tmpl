@@ -45,7 +45,8 @@ document.write(styleText);
 
 %TMPL:DEF{"submitstep"}%<div class="twikiFormStep">%TMPL:P{"submit"}%</div><!-- /twikiFormStep-->%TMPL:END%
 
-%TMPL:DEF{"seealsostep"}%<div class="twikiFormStep twikiGrayText twikiLast">%TMPL:P{"seealsonote"}%</div><!-- /twikiFormStep-->%TMPL:END%
+%{ please keep the spaces between the div and the TMPL seealsonote, it allows TWiki to process the emailaddress }%
+%TMPL:DEF{"seealsostep"}%<div class="twikiFormStep twikiGrayText twikiLast"> %TMPL:P{"seealsonote"}% </div><!-- /twikiFormStep-->%TMPL:END%
 
 %TMPL:DEF{"loginasadministratorstep"}%<div style="text-align:right">%TMPL:P{"loginasadministratorform"}%</div>%TMPL:END%
 
