@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1139587822" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1197051219" format="1.1" reprev="1.2" version="$Rev$"}%
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -316,6 +316,12 @@ Note, that the above pattern will crop away the day. Groups can be nested counti
 them from left to right, outside to inside:  the first group matches the
 compete pattern, the second the month the third the year.
 
+---+++ PAGETITLE
+derive the title of a topic from a couple of properties:
+   * from a PAGETITLE preference variable, or
+   * from a "Title" formfield attribute, or
+   * defaults to the topic name
+
 ---++ Perl API
 
 The <nop>DBCachePlugin supports overloading the contained default database cache by inheriting
@@ -396,25 +402,23 @@ You can also call the update from the command line - from the twiki/bin dir -
 
 ---++ Plugin Installation Instructions
 
-   * [[%ATTACHURL%/%TOPIC%.zip][Download]] the ZIP file
+   * Download the ZIP file
    * Download and install all additionally required plugins listed in the
      [[#Plugin_Info][dependencies information]] below
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-     | *File:* | *Description:* |
-     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-     | ==lib/TWiki/Plugins/%TOPIC%/Core.pm== | Plugin Perl module |
-     | ==lib/TWiki/Plugins/%TOPIC%/WebDB.pm== | Plugin Perl module |
+   | *File:* | *Description:* |
+%$MANIFEST%
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2005-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.63 |
+|  Plugin Version: | v1.70 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  14 Nov 2007  | protect against data store pollution, at least don't die |
-|  12 Sep 2007  | made significant speedups to DBQuery \
+|  07 Dec 2007: | added PAGETITLE, defaulting to BASEWEB instead of INCLUDINGWEB in all of the tags |
+|  14 Nov 2007: | protect against data store pollution, at least don't die |
+|  12 Sep 2007: | made significant speedups to DBQuery \
                   fixed sorting to be O(N log(N)) \
 		  removed topic access check unless absolutly necessary \
                   - SvenDowideit@home.org.au |
@@ -478,4 +482,4 @@ You can also call the update from the command line - from the twiki/bin dir -
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 14 Nov 2007
+-- TWiki:Main.MichaelDaum - 07 Dec 2007

@@ -248,6 +248,10 @@ sub dbQuery {
             $this->expandPath($hits{$topicName}, 'info.date');
         }
         else {
+          $theSort =~ s/\$percnt/\%/go;
+          $theSort =~ s/\$nop//go;
+          $theSort =~ s/\$n/\n/go;
+          $theSort =~ s/\$dollar/\$/go;
           $hits{$topicName}->{sort} =
             $this->expandPath($hits{$topicName}, $theSort);
           if (($doNumericalSort == 1) &&
@@ -354,8 +358,6 @@ sub expandPath {
   }
 
   if ($thePath =~ /^%/) {
-
-    # SMELL: is topic='' ok?
     $thePath =
       &TWiki::Func::expandCommonVariables($thePath, '', $this->{web});
     return $this->expandPath($theRoot, $thePath);

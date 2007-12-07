@@ -22,19 +22,19 @@ package TWiki::Plugins::DBCachePlugin;
 use strict;
 use vars qw( 
   $VERSION $RELEASE $SHORTDESCRIPTION $NO_PREFS_IN_TOPIC
-  $currentWeb $currentTopic $currentUser $isInitialized
+  $baseWeb $baseTopic $isInitialized
   $addDependency
 );
 
 $VERSION = '$Rev$';
-$RELEASE = '1.63';
+$RELEASE = '1.70';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Lightweighted frontend to the DBCacheContrib';
 
 ###############################################################################
 # plugin initializer
 sub initPlugin {
-  ($currentTopic, $currentWeb, $currentUser) = @_;
+  ($baseTopic, $baseWeb) = @_;
 
   # check for Plugins.pm versions
   if ($TWiki::Plugins::VERSION < 1.1) {
@@ -47,6 +47,8 @@ sub initPlugin {
   TWiki::Func::registerTagHandler('DBDUMP', \&_DBDUMP); # for debugging
   TWiki::Func::registerTagHandler('DBRECURSE', \&_DBRECURSE);
   TWiki::Func::registerTagHandler('ATTACHMENTS', \&_ATTACHMENTS);
+  TWiki::Func::registerTagHandler('PAGETITLE', \&_PAGETITLE);
+
   TWiki::Func::registerRESTHandler('UpdateCache', \&updateCache );
 
   # SMELL: remove this when TWiki::Cache got into the core
@@ -69,22 +71,7 @@ sub initCore {
   eval 'use TWiki::Plugins::DBCachePlugin::Core;';
   die $@ if $@;
 
-  # We don't initialize the webDB hash on every request, see getDB()!
-  if (0) { # set this to 1 if you like
-    #&TWiki::Plugins::DBCachePlugin::Core::DESTROY_ALL();
-  } else {
-    # at least check for a changed _DB file on every turn
-    %TWiki::Plugins::DBCachePlugin::Core::webDBIsModified = ();
-  }
-
-  $TWiki::Plugins::DBCachePlugin::Core::wikiWordRegex = 
-    TWiki::Func::getRegularExpression('wikiWordRegex');
-  $TWiki::Plugins::DBCachePlugin::Core::webNameRegex = 
-    TWiki::Func::getRegularExpression('webNameRegex');
-  $TWiki::Plugins::DBCachePlugin::Core::defaultWebNameRegex = 
-    TWiki::Func::getRegularExpression('defaultWebNameRegex');
-  $TWiki::Plugins::DBCachePlugin::Core::linkProtocolPattern = 
-    TWiki::Func::getRegularExpression('linkProtocolPattern');
+  TWiki::Plugins::DBCachePlugin::Core::init($baseWeb, $baseTopic);
 }
 
 ###############################################################################
@@ -93,7 +80,6 @@ sub updateCache {
   my $session = shift;
   my $web = $session->{webName};
 
-  #print STDERR "force cache update of $web\n";
   my $db = getDB($web);
   $db->load(1) if $db;
 }
@@ -130,6 +116,10 @@ sub _ATTACHMENTS {
 sub _DBRECURSE {
   initCore();
   return TWiki::Plugins::DBCachePlugin::Core::handleDBRECURSE(@_);
+}
+sub _PAGETITLE {
+  initCore();
+  return TWiki::Plugins::DBCachePlugin::Core::handlePAGETITLE(@_);
 }
 
 ###############################################################################

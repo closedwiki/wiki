@@ -16,8 +16,9 @@ package TWiki::Plugins::DBCachePlugin::Core;
 
 use strict;
 use vars qw( 
-  $TranslationToken $debug %webDB %webDBIsModified $wikiWordRegex $webNameRegex
+  $TranslationToken %webDB %webDBIsModified $wikiWordRegex $webNameRegex
   $defaultWebNameRegex $linkProtocolPattern
+  $baseWeb $baseTopic
 );
 
 use TWiki::Contrib::DBCacheContrib;
@@ -25,12 +26,29 @@ use TWiki::Contrib::DBCacheContrib::Search;
 use TWiki::Plugins::DBCachePlugin::WebDB;
 
 $TranslationToken = "\0"; # from TWiki.pm
-$debug = 0; # toggle me
+
+sub DEBUG { 0; } # toggle me
 
 ###############################################################################
 sub writeDebug {
-  #&TWiki::Func::writeDebug('- DBCachePlugin - '.$_[0]) if $debug;
-  print STDERR "- DBCachePlugin - $_[0]\n" if $debug;
+  #&TWiki::Func::writeDebug('- DBCachePlugin - '.$_[0]) if DEBUG;
+  print STDERR "- DBCachePlugin - $_[0]\n" if DEBUG;
+}
+
+###############################################################################
+sub init {
+  ($baseWeb, $baseTopic) = @_;
+
+  %webDBIsModified = ();
+
+  $wikiWordRegex = 
+    TWiki::Func::getRegularExpression('wikiWordRegex');
+  $webNameRegex = 
+    TWiki::Func::getRegularExpression('webNameRegex');
+  $defaultWebNameRegex = 
+    TWiki::Func::getRegularExpression('defaultWebNameRegex');
+  $linkProtocolPattern = 
+    TWiki::Func::getRegularExpression('linkProtocolPattern');
 }
 
 ###############################################################################
@@ -38,14 +56,39 @@ sub afterSaveHandler {
   #TODO: re-do this so it only reparses the topic that was saved
 
   # force reload
-  my $theDB = getDB($TWiki::Plugins::DBCachePlugin::currentWeb);
-  #writeDebug("touching webdb for $TWiki::Plugins::DBCachePlugin::currentWeb");
-  $theDB->touch();
-  if ($TWiki::Plugins::DBCachePlugin::currentWeb ne $_[2]) {
-    $theDB = getDB($_[2]); 
+  my $db = getDB($baseWeb);
+  #writeDebug("touching webdb for $baseWeb");
+  $db->touch();
+  if ($baseWeb ne $_[2]) {
+    $db = getDB($_[2]); 
     #writeDebug("touching webdb for $_[2]");
-    $theDB->touch();
+    $db->touch();
   }
+}
+
+###############################################################################
+sub handlePAGETITLE {
+  my ($session, $params, $theTopic, $theWeb) = @_;
+
+  my $pageTitle = TWiki::Func::getPreferencesValue("PAGETITLE");
+  return $pageTitle if $pageTitle;
+
+  my $db = getDB($baseWeb);
+  return $baseTopic unless $db;
+
+  my $topicObj = $db->fastget($baseTopic);
+  return $baseTopic unless $topicObj;
+
+  my $form = $topicObj->fastget('form');
+  return $baseTopic unless $form;
+
+  my $formObj = $topicObj->fastget($form);
+  return $baseTopic unless $formObj;
+
+  my $title = $formObj->fastget('Title');
+  return $baseTopic unless $title;
+
+  return $title;
 }
 
 ###############################################################################
@@ -57,15 +100,16 @@ sub handleDBQUERY {
   # params
   my $theSearch = $params->{_DEFAULT} || $params->{search};
   my $thisTopic = $params->{topic} || '';
+  my $thisWeb = $params->{web} || $baseWeb;
   my $theTopics = $params->{topics} || '';
-  my $theFormat = $params->{format} || '$topic';
+  my $theFormat = $params->{format};
   my $theHeader = $params->{header} || '';
   my $theFooter = $params->{footer} || '';
   my $theInclude = $params->{include};
   my $theExclude = $params->{exclude};
   my $theSort = $params->{sort} || $params->{order} || 'name';
   my $theReverse = $params->{reverse} || 'off';
-  my $theSep = $params->{separator} || $params->{sep} || '$n';
+  my $theSep = $params->{separator} || $params->{sep};
   my $theLimit = $params->{limit} || '';
   my $theSkip = $params->{skip} || 0;
   my $theHideNull = $params->{hidenull} || 'off';
@@ -73,13 +117,16 @@ sub handleDBQUERY {
   $theRemote = ($theRemote =~ /^(on|force|1|yes)$/)?1:0;
   $theRemote = ($theRemote eq 'on')?1:0;
 
+  $theFormat = '$topic' unless defined $theFormat;
+  $theSep = '$n' unless defined $theSep;
+
   # get web and topic(s)
   my @topicNames = ();
-  my $thisWeb = $params->{web} || $theWeb;
   if ($thisTopic) {
     ($thisWeb, $thisTopic) = TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
     push @topicNames, $thisTopic;
   } else {
+    $thisTopic = $baseTopic;
     if ($theTopics) {
       @topicNames = split(/[,\s+]/, $theTopics);
     }
@@ -144,13 +191,9 @@ sub handleDBQUERY {
     }
   }
 
-  $theHeader = _expandVariables($theHeader, $theWeb, $theTopic, count=>$count, web=>$thisWeb) if $theHeader;
-  $theFooter = _expandVariables($theFooter, $theWeb, $theTopic, count=>$count, web=>$thisWeb) if $theFooter;
+  $theHeader = _expandVariables($theHeader, $thisWeb, $thisTopic, count=>$count, web=>$thisWeb) if defined $theHeader;
+  $theFooter = _expandVariables($theFooter, $thisWeb, $thisTopic, count=>$count, web=>$thisWeb) if defined $theFooter;
 
-## DISABLED
-#  $text = &TWiki::Func::expandCommonVariables("$theHeader$text$theFooter", 
-#    $theTopic, $theWeb);
-##
   $text = $theHeader.$text.$theFooter;
 
   _fixInclude($session, $thisWeb, $text) if $theRemote;
@@ -165,7 +208,7 @@ sub handleDBCALL {
   my $thisTopic = $params->remove('_DEFAULT');
   return '' unless $thisTopic;
   my $thisWeb;
-  ($thisWeb, $thisTopic) = &TWiki::Func::normalizeWebTopicName($theWeb, $thisTopic);
+  ($thisWeb, $thisTopic) = &TWiki::Func::normalizeWebTopicName($baseWeb, $thisTopic);
 
   $TWiki::Plugins::DBCachePlugin::addDependency->($thisWeb, $thisTopic);
 
@@ -180,7 +223,7 @@ sub handleDBCALL {
   my $remote = $params->remove('remote') || 'off';
   $remote = ($remote =~ /^(on|force|1|yes)$/)?1:0;
 
-  #writeDebug("thisWeb=$thisWeb thisTopic=$thisTopic theWeb=$theWeb theTopic=$theTopic");
+  #writeDebug("thisWeb=$thisWeb thisTopic=$thisTopic baseWeb=$baseWeb baseTopic=$baseTopic");
 
   # get web and topic
   my $thisDB = getDB($thisWeb);
@@ -201,7 +244,6 @@ sub handleDBCALL {
     } 
     return '';
   }
-
 
   # get section
   my $sectionText = $topicObj->fastget("_section$section") if $topicObj;
@@ -253,7 +295,8 @@ sub handleDBSTATS {
 
   # get args
   my $theSearch = $params->{_DEFAULT} || $params->{search} || '';
-  my $thisWeb = $params->{web} || $theWeb;
+  my $thisWeb = $params->{web} || $baseWeb;
+  my $thisTopic = $params->{topic} || $baseTopic;
   my $thePattern = $params->{pattern} || '(\w+)';
   my $theHeader = $params->{header} || '';
   my $theFormat = $params->{format} || '   * $key: $count';
@@ -292,20 +335,20 @@ sub handleDBSTATS {
     next unless TWiki::Func::checkAccessPermission('VIEW', 
       $wikiUserName, undef, $topicName, $thisWeb);
 
-    #writeDebug("found topic $topicName");
+    writeDebug("found topic $topicName");
     my $createdate = $topicObj->fastget('createdate');
-    foreach my $field (split(/,\s/, $theFields)) { # loop over all fields
+    foreach my $field (split(/\s*,\s*/, $theFields)) { # loop over all fields
       my $fieldValue = $topicObj->fastget($field);
-      unless ($fieldValue) {
+      if (!$fieldValue || ref($fieldValue)) {
 	my $topicForm = $topicObj->fastget('form');
-	#writeDebug("found form $topicForm");
+	writeDebug("found form $topicForm");
 	if ($topicForm) {
 	  $topicForm = $topicObj->fastget($topicForm);
 	  $fieldValue = $topicForm->fastget($field);
 	}
       }
       next unless $fieldValue; # unless present
-      #writeDebug("reading field $field");
+      writeDebug("reading field $field found $fieldValue");
 
       while ($fieldValue =~ /$thePattern/g) { # loop over all occurrences of the pattern
 	my $key1 = $1;
@@ -373,7 +416,7 @@ sub handleDBSTATS {
     $text .= $theFormat;
     $result .= &_expandVariables($text, 
       $thisWeb,
-      $theTopic,
+      $thisTopic,
       'web'=>$thisWeb,
       'topics'=>join(', ', @{$record->{topics}}),
       'key'=>$key,
@@ -393,9 +436,9 @@ sub handleDBSTATS {
 
     last if $theLimit && $index == $theLimit;
   }
-  $theHeader = &_expandVariables($theHeader, $thisWeb, $theTopic);
-  $theFooter = &_expandVariables($theFooter, $thisWeb, $theTopic);
-  $result = &TWiki::Func::expandCommonVariables($theHeader.$result.$theFooter, $theTopic, $thisWeb);
+  $theHeader = &_expandVariables($theHeader, $thisWeb, $thisTopic);
+  $theFooter = &_expandVariables($theFooter, $thisWeb, $thisTopic);
+  $result = &TWiki::Func::expandCommonVariables($theHeader.$result.$theFooter, $thisTopic, $thisWeb);
 
   return $result;
 }
@@ -406,8 +449,8 @@ sub handleDBDUMP {
 
   #writeDebug("called handleDBDUMP");
 
-  my $thisTopic = $params->{_DEFAULT} || $theTopic;
-  my $thisWeb = $params->{web} || $theWeb;
+  my $thisTopic = $params->{_DEFAULT} || $baseTopic;
+  my $thisWeb = $params->{web} || $baseWeb;
   ($thisWeb, $thisTopic) = TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
 
   $TWiki::Plugins::DBCachePlugin::addDependency->($thisWeb, $thisTopic);
@@ -435,7 +478,7 @@ sub handleDBDUMP {
   $result .= "<table class=\"twikiTable\">\n";
   foreach my $key (sort $topicInfo->getKeys()) {
     my $value = $topicInfo->fastget($key);
-    $result .= "<tr><th>$key</th><td>$value</td></tr>\n" if $value;
+    $result .= "<tr><th>$key</th><td>$value</td></tr>\n" if defined $value;
   }
   $result .= "</table>\n";
 
@@ -447,7 +490,7 @@ sub handleDBDUMP {
     $topicForm = $topicObj->fastget($topicForm);
     foreach my $key (sort $topicForm->getKeys()) {
       my $value = $topicForm->fastget($key);
-      $result .= "<tr><th>$key</th><td>$value</td>\n" if $value;
+      $result .= "<tr><th>$key</th><td>$value</td>\n" if defined $value;
     }
     $result .= "</table>\n";
   }
@@ -463,7 +506,7 @@ sub handleDBDUMP {
       foreach my $key (sort $attachment->getKeys()) {
         next if $key eq 'name';
         my $value = $attachment->fastget($key);
-        $result .= "<tr><th>$key</th><td>$value</td></tr>\n" if $value;
+        $result .= "<tr><th>$key</th><td>$value</td></tr>\n" if defined $value;
       }
       $result .= '</table></td></tr>';
     }
@@ -496,8 +539,8 @@ sub handleATTACHMENTS {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
   # get parameters
-  my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $theTopic;
-  my $thisWeb = $params->{web} || $theWeb;
+  my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $baseTopic;
+  my $thisWeb = $params->{web} || $baseWeb;
   ($thisWeb, $thisTopic) = TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
   $TWiki::Plugins::DBCachePlugin::addDependency->($thisWeb, $thisTopic);
 
@@ -679,9 +722,11 @@ sub handleDBRECURSE {
 
   #writeDebug("called handleDBRECURSE(" . $params->stringify() . ")");
 
-  $theTopic = $params->{_DEFAULT} || $params->{topic} || $theTopic;
-  $theWeb = $params->{web} || $theWeb;
-  ($theWeb, $theTopic) = &TWiki::Func::normalizeWebTopicName($theWeb, $theTopic);
+  my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $baseTopic;
+  my $thisWeb = $params->{web} || $baseWeb;
+
+  ($thisWeb, $thisTopic) = 
+    &TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
 
   $params->{format} ||= '   $indent* [[$web.$topic][$topic]]';
   $params->{single} ||= $params->{format};
@@ -711,9 +756,9 @@ sub handleDBRECURSE {
   $params->{separator} = '' if $params->{separator} eq 'none';
 
   # query topics
-  my $theDB = getDB($theWeb);
+  my $theDB = getDB($thisWeb);
   $params->{_count} = 0;
-  my $result = _formatRecursive($theDB, $theWeb, $theTopic, $params);
+  my $result = _formatRecursive($theDB, $thisWeb, $thisTopic, $params);
   return '' unless $result;
 
   # render result
@@ -722,12 +767,12 @@ sub handleDBRECURSE {
   return 
     _expandVariables(
       ($params->{_count} == 1)?$params->{singleheader}:$params->{header}, 
-      $theWeb, $theTopic, 
+      $thisWeb, $thisTopic, 
       count=>$params->{_count}).
     join($params->{separator},@$result).
     _expandVariables(
       ($params->{_count} == 1)?$params->{singlefooter}:$params->{footer}, 
-      $theWeb, $theTopic, 
+      $thisWeb, $thisTopic, 
       count=>$params->{_count});
 }
 
@@ -848,7 +893,7 @@ sub getDB {
     unless (defined $webDBIsModified{$theWeb}) {
       # never checked
       $webDBIsModified{$theWeb} = $webDB{$theWeb}->isModified();
-      if ($debug) {
+      if (DEBUG) {
         if ($webDBIsModified{$theWeb}) {
           writeDebug("reloading modified $theWeb");
         } else {
