@@ -11,7 +11,7 @@ dvipng=/usr/bin/dvipng
 convert=/usr/bin/convert
 grep=/bin/grep
 origpwd=`pwd`
-stderr=`tempfile`
+stderr=`mktemp`
 
 convertargs="-trim -transparent $bgcolor"
 latexargs="-interaction=nonstopmode"

@@ -1,6 +1,6 @@
 # MathModePlugin.pm
 #
-# Copyright (C) 2006 MichaelDaum@WikiRing.com
+# Copyright (C) 2006-2007 Michael Daum http://wikiring.de
 # Copyright (C) 2002 Graeme Lufkin, gwl@u.washington.edu
 #
 # TWiki WikiClone ($wikiversion has version info)
@@ -29,7 +29,7 @@ use vars qw(
   $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
 );
 $VERSION = '$Rev$';
-$RELEASE = '2.95';
+$RELEASE = '2.96';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Include <nop>LaTeX formatted math in your TWiki pages';
 $TWikiCompatibility{endRenderingHandler} = 1.1;

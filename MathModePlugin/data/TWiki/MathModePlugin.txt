@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1154718489" format="1.1" reprev="1.2" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1197052703" format="1.1" version="$Rev$"}%
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -183,8 +183,9 @@ overridden by defining the respective prefrence variable.
 |  Plugin Author: | TWiki:Main.GraemeLufkin, TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2002 Graeme Lufkin, gwl@u.washington.edu, 2006-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2.95 |
+|  Plugin Version: | 2.96 |
 |  Change History: | &nbsp; |
+|  07 Dec 2007: | replaced =templfile= with =mktemp= in the latex2img helper script |
 |  13 Nov 2007: | fixed plugin on 4.2 |
 |  18 Dec 2006: | only use one bgcolor |
 |  02 Oct 2006: | don't fail on hierarchical webs; backwards compatible tempfile cleanup |
@@ -219,6 +220,7 @@ overridden by defining the respective prefrence variable.
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 -- TWiki:Main.GraemeLufkin - 05 Jun 2002 %BR%
--- TWiki:Main.MichaelDaum - 13 Nov 2007
+-- TWiki:Main.MichaelDaum - 07 Dec 2007
 
-%META:FILEATTACHMENT{name="wikiringlogo40x40.png" attachment="wikiringlogo40x40.png" attr="h" comment="" date="1189787359" path="wikiringlogo40x40.png" size="2571" stream="wikiringlogo40x40.png" tmpFilename="" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="wikiringlogo40x40.png" attr="h" autoattached="1" comment="" date="1194980363" path="wikiringlogo40x40.png" size="2571" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="latex2img" attr="" autoattached="1" comment="" date="1197052551" path="latex2img" size="1178" version=""}%
