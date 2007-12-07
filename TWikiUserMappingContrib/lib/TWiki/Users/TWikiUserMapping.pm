@@ -1,6 +1,6 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2007 Sven Dowideit, SvenDowideit@home.org.au
+# Copyright (C) 2007 Sven Dowideit, SvenDowideit@distributedINFMRATION.com
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -21,8 +21,8 @@
 
 ---+ package TWiki::Users::TWikiUserMapping
 
-User mapping is the process by which TWiki maps from a username (a login name)
-to a wikiname and back. It is also where groups are maintained.
+The User mapping is the process by which TWiki maps from a username (a login name)
+to a wikiname and back. It is also where groups are defined.
 
 By default TWiki maintains user topics and group topics in the %MAINWEB% that
 define users and group. These topics are
@@ -36,9 +36,7 @@ This class implements the basic TWiki behaviour using topics to store users,
 but is also designed to be subclassed so that other services can be used.
 
 Subclasses should be named 'XxxxUserMapping' so that configure can find them.
-
-*All* methods in this class should be implemented by subclasses.
-
+ 
 =cut
 
 package TWiki::Users::TWikiUserMapping;
@@ -358,7 +356,9 @@ sub removeUser {
 
 ---++ ObjectMethod getWikiName ($cUID) -> wikiname
 
-# Map a canonical user name to a wikiname
+Map a canonical user name to a wikiname. If it fails to find a WikiName, it will
+attempt to find a matching loginname, and use an escaped version of that.
+If there is no matching WikiName or LoginName, it returns undef.
 
 =cut
 
@@ -377,10 +377,12 @@ sub getWikiName {
     }
     
     unless ($wikiname) {
-        #sanitise the generated WikiName - fisex up email addresses and stuff
+        #sanitise the generated WikiName - fix up email addresses and stuff
         $wikiname = getLoginName( $this, $cUID );
-        $wikiname =~ s/$TWiki::cfg{NameFilter}//go;
-        $wikiname =~ s/\.//go;
+        if ($wikiname) {
+            $wikiname =~ s/$TWiki::cfg{NameFilter}//go;
+            $wikiname =~ s/\.//go;
+        }
     }
 
 #print STDERR "--------------------------------------cUID : $cUID => $wikiname\n";	
@@ -405,6 +407,7 @@ sub userExists {
     return 1 if $cUID eq $this->{session}->{user};
 
     my $loginName = $this->getLoginName( $cUID );
+    return 0 unless (defined($loginName) && ($loginName ne ''));
 
     if( $loginName eq $TWiki::cfg{DefaultUserLogin} ) {
         return $loginName;
@@ -1046,7 +1049,7 @@ sub _expandUserList {
 
     $names ||= '';
     # comma delimited list of users or groups
-    # i.e.: "%MAINWEB%.UserA, UserB, Main.UserC  # something else"
+    # i.e.: "%MAINWEB%.UserA, UserB, Main.UserC # something else"
     $names =~ s/(<[^>]*>)//go;     # Remove HTML tags
 
     my @l;
