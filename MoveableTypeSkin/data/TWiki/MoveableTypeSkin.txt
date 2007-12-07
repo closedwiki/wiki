@@ -5,6 +5,11 @@
     width:expression(document.body.clientWidth > (200)?"200px":"95%" );
     algin: center;
 }
+ContribInfoTable {
+    width: 95%;
+    max-width: 480px;
+    width:expression(document.body.clientWidth > (200)?"200px":"95%" );
+}
 </style>
 
 ---+!! MoveableTypeSkin Contrib Package
@@ -50,7 +55,7 @@ Choose CSSFILE:
 
 Choose COLUMNS:
 <nobr> &nbsp;&nbsp;&nbsp; [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=moveabletype;%DESIGNPARAM%;%CSSPARAM%;moveabletypecolumns=%COLS%PREVIOUSCOLS%%;colsidx=%PREVIOUSCOLS%][%ICON{"go_back"}%]] 
-%COLS%CURRENTCOLS%%
+%COLS%CURRENTCOLS%% (%CALC{"$EVAL( %CURRENTCOLS% - %FIRSTCOLS% +1 ) of $EVAL( %LASTCOLS% - %FIRSTCOLS% +1 )"}%)
 [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=moveabletype;%DESIGNPARAM%;%CSSPARAM%;moveabletypecolumns=%COLS%NEXTCOLS%%;colsidx=%NEXTCOLS%][%ICON{"go_forward"}%]] </nobr>
 ---
 Or type the *full URL path* to a CSS you have downloaded from the style browser here:
@@ -104,21 +109,9 @@ The skin uses two CSS files; the reusable CSS that defines the Moveable Type
 classes, and a mapping CSS that adds additional classes that TWiki requires,
 but aren't defined by the Moveable Type standard.
 
-<noautolink>
-<!--
-   * Set SKIN = moveabletype
-   * Set SHORTDESCRIPTION = a TWiki skin based on the HTML used by [[http://www.thestylecontest.com][The Style Archive]] and [[http://www.sixapart.com/movabletype/styles/library][The Six Apart style library]]
-   * Set MOVEABLETYPESKIN_DESIGNTOPIC = %URLPARAM{"moveabletypetopic" default="%DESIGN%FIRSTDESIGN%%"}%
-   * Set MOVEABLETYPESKIN_CSSFILE = %URLPARAM{"cssfile" default="%CSS%FIRSTCSS%%"}%
-   * Set MOVEABLETYPESKIN_TWIKICSSFILE = %URLPARAM{"twikicssfile" default="%PUBURLPATH%/%TWIKIWEB%/%MOVEABLETYPESKIN_DESIGNTOPIC%/TWiki.css"}%
-Set the column preference:
-   * Set MOVEABLETYPESKIN_COLUMNS = %URLPARAM{"moveabletypecolumns" default="two-column-left"}%
--->
-</noautolink>
-
 Once you have chosen your CSS and layout, you must tell TWiki to use those
 options. If you have used the Theme Browser to select your preferred setup,
-you can simply copy and paste the following section to your
+you can copy and paste the following section to your
 %MAINWEB%.TWikiPreferences topic (or !WebPreferences, or your personal topic)
 
 <noautolink>
@@ -153,13 +146,13 @@ There is documentation for the required set of CSS classes and tags found at [[h
 
 Once you have a CSS that you want to use, simply upload it to a TWiki topic and point the MOVEABLETYPESKIN_CSSFILE setting at it.
 
-For more radical customisations you will want to create your own _design topic_. To create a design topic:
-   1 Copy the text from [[%SCRIPTURL{view}%/%WEB%/MoveableTypeSampleDesign?raw=on][MoveableTypeSampleDesign]] topic and paste it to =YourMoveableTypeDesign= (or another name of your choosing).
+For more radical customisations (or to distribute your theme as a Contrib) you will want to create your own _design topic_. To create a design topic:
+   1 Copy the text from the [[%SCRIPTURL{view}%/%WEB%/MoveableTypeSampleDesign?raw=on][MoveableTypeSampleDesign]] topic and paste it to =YourMoveableTypeDesign= (or another name of your choosing).
    1 Copy the MoveableTypeSampleDesign attachments =TWiki.css= and =base-weblog.css= to your new topic (save the files locally, and then upload them again to your new topic)
    1 Attach your custom TWiki CSS and imagefiles to your new topic.
-   1 Edit your new topic and modify the MOVEABLETYPESKIN_CSSFILE setting to reflect the name of your CSS file. You should now be able to proof your design from that topic.
+   1 Edit your new topic and modify the MOVEABLETYPESKIN_CSSFILE setting to reflect the name of your CSS file. You should now be able to proof your design by viewing that topic.
 
-Optionally you can also customise the TWiki.css attached to your design topic. This file contains most TWiki specific styles, such as tables, forms and diffs.
+You can also optionally customise the TWiki.css attached to your design topic. This file contains most TWiki specific styles, such as tables, forms and diffs.
 
 Finally you can also customise the common text sections in your design by editing the _Moveable Type Common Text sections_. 
 There are two sample design topics, MoveableTypeSampleDesign and  MoveableTypeSample2Design.
@@ -182,12 +175,12 @@ Once you are done, you will be able to follow the instructions under 'Enable thi
 
 ---++ Contrib Info
 
-This skin is an example of how to make a TWikiSkin _without_ duplicating the work of the TWiki Core release. It reuses the default skin, and only adds a =twiki.moveabletype.tmpl= 
+This skin is an example of how to make a [[TWikiSkins][TWikiSkin]] _without_ duplicating the work of the TWiki Core release. It reuses the default skin, and only adds a =twiki.moveabletype.tmpl= 
 (and a viewprint that I hope to remove later), and only defines the bare essentials to create HTML that is similar to an existing system.
 
 You can use this technique to create a TWikiSkin that matches closely the HTML of your existing web site, and thus re-use the existing site's css styling, thus creating a comon look & feel.
 
-%TABLE{ id="ContribInfo"}%
+%TABLE{ id="ContribInfoTable"}%
 |  Contrib Author: | TWiki:Main.SvenDowideit - SvenDowideit@DistributedINFORMATION.com [[http://DistributedINFORMATION.com][DistributedINFORMATION]] - a <img src="%ATTACHURLPATH%/wikiringlogo20x20.png" /> [[http://www.wikiring.com][WikiRing.com]] partner |
 |  Copyright &copy;: | !SixApart and designs by various, and twiki adaption by TWiki:Main.SvenDowideit - SvenDowideit@DistributedINFORMATION.com |
 |  License: | Various Open Source |
@@ -201,7 +194,7 @@ You can use this technique to create a TWikiSkin that matches closely the HTML o
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  7 Dec 2007:  | stop the demo images from overflowing the design, other UI cleanups |
+|  7 Dec 2007:  | stop the demo images from overflowing the design, other Skin fixes |
 |  15 Oct 2007: | Doc rewrite - TWiki:Main.CrawfordCurrie |
 |  30 Mar 2007: | initial release of Skin | 
 |  Home: | [[http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%][%TOPIC%]] |
@@ -212,6 +205,17 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences
 
 -- TWiki:Main/SvenDowideit - %DATE%
 
+<noautolink>
+<!--
+   * Set SKIN = moveabletype
+   * Set SHORTDESCRIPTION = a TWiki skin based on the HTML used by [[http://www.thestylecontest.com][The Style Archive]] and [[http://www.sixapart.com/movabletype/styles/library][The Six Apart style library]]
+   * Set MOVEABLETYPESKIN_DESIGNTOPIC = %URLPARAM{"moveabletypetopic" default="%DESIGN%FIRSTDESIGN%%"}%
+   * Set MOVEABLETYPESKIN_CSSFILE = %URLPARAM{"cssfile" default="%CSS%FIRSTCSS%%"}%
+   * Set MOVEABLETYPESKIN_TWIKICSSFILE = %URLPARAM{"twikicssfile" default="%PUBURLPATH%/%TWIKIWEB%/%MOVEABLETYPESKIN_DESIGNTOPIC%/TWiki.css"}%
+Set the column preference:
+   * Set MOVEABLETYPESKIN_COLUMNS = %URLPARAM{"moveabletypecolumns" default="two-column-left"}%
+-->
+</noautolink>
 <!--
 BROWSER SETTINGS
 Designs
@@ -229,78 +233,78 @@ Column layouts
    * Set LASTCOLS = 4
 
 CSSes
-   * Set FIRSTCSS = 148
-   * Set CSS148 = %PUBURL%/%TWIKIWEB%/MoveableTypeSample2Design/theme.css
-   * Set NAME148 = Sample2Theme
-   * Set CSS149 = %PUBURL%/%TWIKIWEB%/MoveableTypeSampleDesign/theme.css
-   * Set NAME149 = SampleTheme
-   * Set CSS150 = http://www.sixapart.com/movabletype/styles/vicksburg_variations/theme-vicksburg_desert/theme-vicksburg_desert.css
-   * Set NAME150 = vicksburg_desert
-   * Set CSS151 = http://www.sixapart.com/movabletype/styles/vicksburg_variations/theme-vicksburg_khaki/theme-vicksburg_khaki.css
-   * Set NAME151 = vicksburg_khaki
-   * Set CSS152 = http://www.sixapart.com/movabletype/styles/vicksburg_variations/theme-vicksburg_violet/theme-vicksburg_violet.css
-   * Set NAME152 = vicksburg_violet
-   * Set CSS153 = http://www.sixapart.com/movabletype/styles/pale_palettes/theme-subtle/theme-subtle.css
-   * Set NAME153 = subtle
-   * Set CSS154 = http://www.sixapart.com/movabletype/styles/bold_palettes/theme-forest_green/theme-forest_green.css
-   * Set NAME154 = forest_green
-   * Set CSS155 = http://www.sixapart.com/movabletype/styles/bold_palettes/theme-sunburned/theme-sunburned.css
-   * Set NAME155 = sunburned
-   * Set CSS156 = http://www.sixapart.com/movabletype/styles/pale_palettes/theme-city_blend/theme-city_blend.css
-   * Set NAME156 = city_blend
-   * Set CSS157 = http://www.sixapart.com/movabletype/styles/vicksburg_variations/theme-vicksburg_red/theme-vicksburg_red.css
-   * Set NAME157 = vicksburg_red
-   * Set CSS158 = http://www.sixapart.com/movabletype/styles/cool_colors/theme-powell_street/theme-powell_street.css
-   * Set NAME158 = powell_street
-   * Set CSS159 = http://www.sixapart.com/movabletype/styles/special_interest/theme-baby/theme-baby.css
-   * Set NAME159 = baby
-   * Set CSS160 = http://www.sixapart.com/movabletype/styles/pale_palettes/theme-tickle/theme-tickle.css
-   * Set NAME160 = tickle
-   * Set CSS161 = http://www.sixapart.com/movabletype/styles/classic/theme-april_showers/theme-april_showers.css
-   * Set NAME161 = april_showers
-   * Set CSS162 = http://www.sixapart.com/movabletype/styles/bold_palettes/theme-purple_crush/theme-purple_crush.css
-   * Set NAME162 = purple_crush
-   * Set CSS163 = http://www.sixapart.com/movabletype/styles/cool_colors/theme-porpoise/theme-porpoise.css
-   * Set NAME163 = porpoise
-   * Set CSS164 = http://www.sixapart.com/movabletype/styles/special_interest/theme-knitting/theme-knitting.css
-   * Set NAME164 = knitting
-   * Set CSS165 = http://www.sixapart.com/movabletype/styles/special_interest/theme-travel/theme-travel.css
-   * Set NAME165 = travel
-   * Set CSS166 = http://www.sixapart.com/movabletype/styles/special_interest/theme-wedding/theme-wedding.css
-   * Set NAME166 = wedding
-   * Set CSS167 = http://www.sixapart.com/movabletype/styles/cool_colors/theme-bryant/theme-bryant.css
-   * Set NAME167 = bryant
-   * Set CSS168 = http://www.sixapart.com/movabletype/styles/vicksburg_variations/theme-vicksburg_rose/theme-vicksburg_rose.css
-   * Set NAME168 = vicksburg_rose
-   * Set CSS169 = http://www.sixapart.com/movabletype/styles/vicksburg_variations/theme-vicksburg_olive/theme-vicksburg_olive.css
-   * Set NAME169 = vicksburg_olive
-   * Set CSS170 = http://www.sixapart.com/movabletype/styles/vicksburg_variations/theme-vicksburg_teal/theme-vicksburg_teal.css
-   * Set NAME170 = vicksburg_teal
-   * Set CSS171 = http://www.sixapart.com/movabletype/styles/bold_palettes/theme-beckett/theme-beckett.css
-   * Set NAME171 = beckett
-   * Set CSS172 = http://www.sixapart.com/movabletype/styles/classic/theme-earth/theme-earth.css
-   * Set NAME172 = earth
-   * Set CSS173 = http://www.sixapart.com/movabletype/styles/classic/theme-green_grass/theme-green_grass.css
-   * Set NAME173 = green_grass
-   * Set CSS174 = http://www.sixapart.com/movabletype/styles/special_interest/theme-stitch/theme-stitch.css
-   * Set NAME174 = stitch
-   * Set CSS175 = http://www.sixapart.com/movabletype/styles/classic/theme-minimalist/theme-minimalist.css
-   * Set NAME175 = minimalist
-   * Set CSS176 = http://www.sixapart.com/movabletype/styles/bold_palettes/theme-masala/theme-masala.css
-   * Set NAME176 = masala
-   * Set CSS177 = http://www.sixapart.com/movabletype/styles/classic/theme-classy/theme-classy.css
-   * Set NAME177 = classy
-   * Set CSS178 = http://www.sixapart.com/movabletype/styles/cool_colors/theme-blue_crush/theme-blue_crush.css
-   * Set NAME178 = blue_crush
-   * Set CSS179 = http://www.sixapart.com/movabletype/styles/vicksburg_variations/theme-vicksburg/theme-vicksburg.css
-   * Set NAME179 = vicksburg
-   * Set CSS180 = http://www.sixapart.com/movabletype/styles/cool_colors/theme-stevenson/theme-stevenson.css
-   * Set NAME180 = stevenson
-   * Set CSS181 = http://www.sixapart.com/movabletype/styles/bold_palettes/theme-folio/theme-folio.css
-   * Set NAME181 = folio
-   * Set CSS182 = http://www.sixapart.com/movabletype/styles/classic/theme-bonjour_chatette/theme-bonjour_chatette.css
-   * Set NAME182 = bonjour_chatette
-   * Set LASTCSS = 182
+   * Set FIRSTCSS = 48
+   * Set CSS48 = %PUBURL%/%TWIKIWEB%/MoveableTypeSample2Design/theme.css
+   * Set NAME48 = Sample2Theme
+   * Set CSS49 = %PUBURL%/%TWIKIWEB%/MoveableTypeSampleDesign/theme.css
+   * Set NAME49 = SampleTheme
+   * Set CSS50 = http://www.sixapart.com/movabletype/styles/vicksburg_variations/theme-vicksburg_desert/theme-vicksburg_desert.css
+   * Set NAME50 = vicksburg_desert
+   * Set CSS51 = http://www.sixapart.com/movabletype/styles/vicksburg_variations/theme-vicksburg_khaki/theme-vicksburg_khaki.css
+   * Set NAME51 = vicksburg_khaki
+   * Set CSS52 = http://www.sixapart.com/movabletype/styles/vicksburg_variations/theme-vicksburg_violet/theme-vicksburg_violet.css
+   * Set NAME52 = vicksburg_violet
+   * Set CSS53 = http://www.sixapart.com/movabletype/styles/pale_palettes/theme-subtle/theme-subtle.css
+   * Set NAME53 = subtle
+   * Set CSS54 = http://www.sixapart.com/movabletype/styles/bold_palettes/theme-forest_green/theme-forest_green.css
+   * Set NAME54 = forest_green
+   * Set CSS55 = http://www.sixapart.com/movabletype/styles/bold_palettes/theme-sunburned/theme-sunburned.css
+   * Set NAME55 = sunburned
+   * Set CSS56 = http://www.sixapart.com/movabletype/styles/pale_palettes/theme-city_blend/theme-city_blend.css
+   * Set NAME56 = city_blend
+   * Set CSS57 = http://www.sixapart.com/movabletype/styles/vicksburg_variations/theme-vicksburg_red/theme-vicksburg_red.css
+   * Set NAME57 = vicksburg_red
+   * Set CSS58 = http://www.sixapart.com/movabletype/styles/cool_colors/theme-powell_street/theme-powell_street.css
+   * Set NAME58 = powell_street
+   * Set CSS59 = http://www.sixapart.com/movabletype/styles/special_interest/theme-baby/theme-baby.css
+   * Set NAME59 = baby
+   * Set CSS60 = http://www.sixapart.com/movabletype/styles/pale_palettes/theme-tickle/theme-tickle.css
+   * Set NAME60 = tickle
+   * Set CSS61 = http://www.sixapart.com/movabletype/styles/classic/theme-april_showers/theme-april_showers.css
+   * Set NAME61 = april_showers
+   * Set CSS62 = http://www.sixapart.com/movabletype/styles/bold_palettes/theme-purple_crush/theme-purple_crush.css
+   * Set NAME62 = purple_crush
+   * Set CSS63 = http://www.sixapart.com/movabletype/styles/cool_colors/theme-porpoise/theme-porpoise.css
+   * Set NAME63 = porpoise
+   * Set CSS64 = http://www.sixapart.com/movabletype/styles/special_interest/theme-knitting/theme-knitting.css
+   * Set NAME64 = knitting
+   * Set CSS65 = http://www.sixapart.com/movabletype/styles/special_interest/theme-travel/theme-travel.css
+   * Set NAME65 = travel
+   * Set CSS66 = http://www.sixapart.com/movabletype/styles/special_interest/theme-wedding/theme-wedding.css
+   * Set NAME66 = wedding
+   * Set CSS67 = http://www.sixapart.com/movabletype/styles/cool_colors/theme-bryant/theme-bryant.css
+   * Set NAME67 = bryant
+   * Set CSS68 = http://www.sixapart.com/movabletype/styles/vicksburg_variations/theme-vicksburg_rose/theme-vicksburg_rose.css
+   * Set NAME68 = vicksburg_rose
+   * Set CSS69 = http://www.sixapart.com/movabletype/styles/vicksburg_variations/theme-vicksburg_olive/theme-vicksburg_olive.css
+   * Set NAME69 = vicksburg_olive
+   * Set CSS70 = http://www.sixapart.com/movabletype/styles/vicksburg_variations/theme-vicksburg_teal/theme-vicksburg_teal.css
+   * Set NAME70 = vicksburg_teal
+   * Set CSS71 = http://www.sixapart.com/movabletype/styles/bold_palettes/theme-beckett/theme-beckett.css
+   * Set NAME71 = beckett
+   * Set CSS72 = http://www.sixapart.com/movabletype/styles/classic/theme-earth/theme-earth.css
+   * Set NAME72 = earth
+   * Set CSS73 = http://www.sixapart.com/movabletype/styles/classic/theme-green_grass/theme-green_grass.css
+   * Set NAME73 = green_grass
+   * Set CSS74 = http://www.sixapart.com/movabletype/styles/special_interest/theme-stitch/theme-stitch.css
+   * Set NAME74 = stitch
+   * Set CSS75 = http://www.sixapart.com/movabletype/styles/classic/theme-minimalist/theme-minimalist.css
+   * Set NAME75 = minimalist
+   * Set CSS76 = http://www.sixapart.com/movabletype/styles/bold_palettes/theme-masala/theme-masala.css
+   * Set NAME76 = masala
+   * Set CSS77 = http://www.sixapart.com/movabletype/styles/classic/theme-classy/theme-classy.css
+   * Set NAME77 = classy
+   * Set CSS78 = http://www.sixapart.com/movabletype/styles/cool_colors/theme-blue_crush/theme-blue_crush.css
+   * Set NAME78 = blue_crush
+   * Set CSS79 = http://www.sixapart.com/movabletype/styles/vicksburg_variations/theme-vicksburg/theme-vicksburg.css
+   * Set NAME79 = vicksburg
+   * Set CSS80 = http://www.sixapart.com/movabletype/styles/cool_colors/theme-stevenson/theme-stevenson.css
+   * Set NAME80 = stevenson
+   * Set CSS81 = http://www.sixapart.com/movabletype/styles/bold_palettes/theme-folio/theme-folio.css
+   * Set NAME81 = folio
+   * Set CSS82 = http://www.sixapart.com/movabletype/styles/classic/theme-bonjour_chatette/theme-bonjour_chatette.css
+   * Set NAME82 = bonjour_chatette
+   * Set LASTCSS = 82
 
 
 -->

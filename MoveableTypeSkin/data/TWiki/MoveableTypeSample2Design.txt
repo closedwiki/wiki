@@ -1,11 +1,14 @@
 %META:TOPICINFO{author="NoneSvenDowideit" date="1174054820" format="1.1" reprev="1.1" version="1.1"}%
 %META:TOPICPARENT{name="MoveableTypeSkin"}%
 ---+ <nop>%TOPIC%
-This theme has been created by copying the MoveableTypeSampleDesign topic and pub/TWiki directory, and then replacing the content of theme.css withcss generated using the [[http://styles.movalog.com/generator/][Moveable Type Style Generator]]. Thats _is all_.
+This theme has been created by copying and simplifying the MoveableTypeSampleDesign topic and pub/TWiki directory, 
+and then replacing the content of theme.css with css generated using the [[http://styles.movalog.com/generator/][Moveable Type Style Generator]]. 
+
 
 
 ---++ Enable this design
-<code>
+Copy and paste the following section to your %MAINWEB%.TWikiPreferences topic (or !WebPreferences, or your personal topic)
+<textarea readonly rows="13" style="width:85%;margin:10px;">
    * Set TWiki to use this MoveableType design, set the following on %MAINWEB%.TWikiPreferences (don't copy the raw text)
       * Set SKIN=moveabletype
    * set the moveabletype skin to use this topic to get the _Moveable Type Common Text sections_ from this topic
@@ -14,7 +17,7 @@ This theme has been created by copying the MoveableTypeSampleDesign topic and pu
       * Set MOVEABLETYPESKIN_CSSFILE = %PUBURL%/%TWIKIWEB%/%MOVEABLETYPESKIN_DESIGNTOPIC%/theme.css
    * is the css one-column, two-column-left, two-column-right, three-column
       * Set MOVEABLETYPESKIN_COLUMNS = two-column-left
-</code>
+</textarea>
 
 ----
 ---++ Moveable Type Common Text sections
@@ -73,23 +76,16 @@ This theme has been created by copying the MoveableTypeSampleDesign topic and pu
 </div>
 
 ---
----+++ module-powered-left
-%STARTSECTION{"module-powered-left-three-column"}%%STARTSECTION{"module-powered-left-two-column-left"}%%STARTSECTION{"module-powered-left"}%<div class="module-powered module">
-   <div class="module-content">
-      Powered by<br /><a href="http://twiki.org"><img src="%PUBURLPATH%/%TWIKIWEB%/TWikiLogos/T-logo-34x26.png" />TWiki</a>
-%BR% skin by <a href="http://DistributedINFORMATION.com">Distributed INFORMATION.com</a>
-%BR% [[http://WikiRing.com][a <img src="%PUBURLPATH%/%TWIKIWEB%/MoveableTypeSkin/wikiringlogo20x20.png" alt="@" width='20' height='20' border='0'  /> WikiRing.com partner]]
-   </div>
-</div> %ENDSECTION{"module-powered-left"}%%ENDSECTION{"module-powered-left-two-column-left"}%%ENDSECTION{"module-powered-left-three-column"}%
-
 ---+++ module-powered-right
-%STARTSECTION{"module-powered-right-three-column"}%%STARTSECTION{"module-powered-right-two-column-right"}%%STARTSECTION{"module-powered-right"}%<div class="module-powered module">
+---+++ module-powered-left
+%STARTSECTION{"module-powered-right-three-column"}%%STARTSECTION{"module-powered-right-two-column-right"}%%STARTSECTION{"module-powered-right"}%<div class="module-powered module">%STARTSECTION{"module-powered-left-three-column"}%%STARTSECTION{"module-powered-left-two-column-left"}%%STARTSECTION{"module-powered-left"}%<div class="module-powered module">
    <div class="module-content">
       Powered by<br /><a href="http://twiki.org"><img src="%PUBURLPATH%/%TWIKIWEB%/TWikiLogos/T-logo-34x26.png" />TWiki</a>
 %BR% skin by <a href="http://DistributedINFORMATION.com">Distributed INFORMATION.com</a>
 %BR% [[http://WikiRing.com][a <img src="%PUBURLPATH%/%TWIKIWEB%/MoveableTypeSkin/wikiringlogo20x20.png" alt="@" width='20' height='20' border='0'  /> WikiRing.com partner]]
    </div>
-</div> %ENDSECTION{"module-powered-right"}%%ENDSECTION{"module-powered-right-two-column-right"}%%ENDSECTION{"module-powered-right-three-column"}%
+</div> %ENDSECTION{"module-powered-left"}%%ENDSECTION{"module-powered-left-two-column-left"}%%ENDSECTION{"module-powered-left-three-column"}%%ENDSECTION{"module-powered-right"}%%ENDSECTION{"module-powered-right-two-column-right"}%%ENDSECTION{"module-powered-right-three-column"}%
+
 
 ---
               

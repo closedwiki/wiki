@@ -4,15 +4,15 @@ Create your own TWiki <nop>MoveableType design by attaching your Moveable Type c
 
 ---++ Enable this design
 Copy and paste the following section to your %MAINWEB%.TWikiPreferences topic (or !WebPreferences, or your personal topic)
-<textarea rows="12" cols="80">
-Select the moveabletype skin:
-   * Set SKIN = moveabletype
-Get the common text section definitions from this topic (see the "customisation" section in %WEB%.%TOPIC% for more information on what this means):
-   * Set MOVEABLETYPESKIN_DESIGNTOPIC = %TOPIC%
-Get the CSS and images from this topic (must be in the %TWIKIWEB%):
-   * Set MOVEABLETYPESKIN_TWIKICSSFILE = %PUBURL%/%TWIKIWEB%/%MOVEABLETYPESKIN_DESIGNTOPIC%/TWiki.css
-   * Set MOVEABLETYPESKIN_CSSFILE = %PUBURL%/%TWIKIWEB%/%MOVEABLETYPESKIN_DESIGNTOPIC%/theme.css
-Set the column preference:
+<textarea readonly rows="13" style="width:85%;margin:10px;">
+   * Set TWiki to use this MoveableType design, set the following on %MAINWEB%.TWikiPreferences (don't copy the raw text)
+      * Set SKIN=moveabletype
+   * set the moveabletype skin to use this topic to get the _Moveable Type Common Text sections_ from this topic
+      * Set MOVEABLETYPESKIN_DESIGNTOPIC = %TOPIC%
+   * set the moveabletype skin to use to get the css and images from here
+      * Set MOVEABLETYPESKIN_CSSFILE = %PUBURL%/%TWIKIWEB%/%MOVEABLETYPESKIN_DESIGNTOPIC%/theme.css
+   * is the css one-column, two-column-left, two-column-right, three-column
+      * Set MOVEABLETYPESKIN_COLUMNS = two-column-left
 </textarea>
 
 ----
@@ -131,7 +131,7 @@ Set the column preference:
 ---+++ module-powered-left
 %STARTSECTION{"module-powered-left-three-column"}%%STARTSECTION{"module-powered-left-two-column-left"}%%STARTSECTION{"module-powered-left"}%<div class="module-powered module">
    <div class="module-content">
-      Powered by<br /><a href="http://twiki.org"><img src="%PUBURLPATH%/%TWIKIWEB%/TWikiLogos/T-logo-34x26.png" />TWiki</a>
+      <a href="http://twiki.org"><img src="%PUBURLPATH%/%TWIKIWEB%/TWikiLogos/T-logo-34x26.png" />TWiki powered</a>
 %BR% skin by <a href="http://DistributedINFORMATION.com">Distributed INFORMATION.com</a>
 %BR% [[http://WikiRing.com][a <img src="%PUBURLPATH%/%TWIKIWEB%/MoveableTypeSkin/wikiringlogo20x20.png" alt="@" width='20' height='20' border='0'  /> WikiRing.com partner]]
    </div>
@@ -140,9 +140,9 @@ Set the column preference:
 ---+++ module-powered-right
 %STARTSECTION{"module-powered-right-three-column"}%%STARTSECTION{"module-powered-right-two-column-right"}%%STARTSECTION{"module-powered-right"}%<div class="module-powered module">
    <div class="module-content">
-      Powered by<br /><a href="http://twiki.org"><img src="%PUBURLPATH%/%TWIKIWEB%/TWikiLogos/T-logo-34x26.png" />TWiki</a>
-%BR% skin by <a href="http://DistributedINFORMATION.com">Distributed INFORMATION.com</a>
-%BR% [[http://WikiRing.com][a <img src="%PUBURLPATH%/%TWIKIWEB%/MoveableTypeSkin/wikiringlogo20x20.png" alt="@" width='20' height='20' border='0'  /> WikiRing.com partner]]
+      <a href="http://twiki.org"><img src="%PUBURLPATH%/%TWIKIWEB%/TWikiLogos/T-logo-34x26.png" />TWiki powered</a>
+ skin by <a href="http://DistributedINFORMATION.com">Distributed INFORMATION.com</a>
+ [[http://WikiRing.com][a <img src="%PUBURLPATH%/%TWIKIWEB%/MoveableTypeSkin/wikiringlogo20x20.png" alt="@" width='20' height='20' border='0'  /> WikiRing.com partner]]
    </div>
 </div> %ENDSECTION{"module-powered-right"}%%ENDSECTION{"module-powered-right-two-column-right"}%%ENDSECTION{"module-powered-right-three-column"}%
 
