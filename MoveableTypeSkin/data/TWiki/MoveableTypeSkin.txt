@@ -2,6 +2,7 @@
 .demoImage {
     width: 95%;
     max-width: 480px;
+    width:expression(document.body.clientWidth > (200)?"200px":"95%" );
     algin: center;
 }
 </style>
@@ -186,7 +187,7 @@ This skin is an example of how to make a TWikiSkin _without_ duplicating the wor
 
 You can use this technique to create a TWikiSkin that matches closely the HTML of your existing web site, and thus re-use the existing site's css styling, thus creating a comon look & feel.
 
-%TABLE{tablewidth="95%" id="ContribInfo"}%
+%TABLE{ id="ContribInfo"}%
 |  Contrib Author: | TWiki:Main.SvenDowideit - SvenDowideit@DistributedINFORMATION.com [[http://DistributedINFORMATION.com][DistributedINFORMATION]] - a <img src="%ATTACHURLPATH%/wikiringlogo20x20.png" /> [[http://www.wikiring.com][WikiRing.com]] partner |
 |  Copyright &copy;: | !SixApart and designs by various, and twiki adaption by TWiki:Main.SvenDowideit - SvenDowideit@DistributedINFORMATION.com |
 |  License: | Various Open Source |
