@@ -47,7 +47,7 @@ pre, code, tt {
    color:#7A4707;
 }
 blockquote {
-   background-color:#f0f7fc;
+   background-color:#fbfbfb;
    border-color:#ddd;
 }
 blockquote h2 {
@@ -157,7 +157,7 @@ select {
 .twikiSubmitDisabled:active {
    border-color:#fff #ccc #ccc #fff;
    color:#aaa;
-   background-color:#f0f7fc;
+   background-color:#fbfbfb;
 }
 .twikiTextarea,
 .twikiInputField,
@@ -229,7 +229,7 @@ a:hover.twistyTrigger {
 
 /* TipsContrib */
 .tipsOfTheDay {
-   background-color:#fff0c4;
+   background-color:#ffe67b;
 }
 
 /* RevCommentPlugin */
@@ -294,7 +294,7 @@ table.twikiFormTable th.twikiFormTableHRow font {
 }
 
 .twikiFormSteps {
-   background-color:#f0f7fc;
+   background-color:#fbfbfb;
    border-color:#e1e5e9;
 }
 .twikiFormStep {
@@ -315,18 +315,17 @@ table.twikiFormTable th.twikiFormTableHRow font {
    color:#777;
 }
 .twikiBroadcastMessage {
-   background-color:#fff0c4;
-   border-color:#ffdf4c;
+   background-color:#ffe67b;
 }
 .twikiNotification {
-   background-color:#fff0c4;
+   background-color:#ffe67b;
 }
 #twikiLogin .patternLoginNotification {
    background-color:#fff;
    border-color:#f00;
 }
 .twikiHelp {
-   background-color:#fff0c4;
+   background-color:#ffe67b;
 }
 .twikiHelp {
    background-color:#f6f7f8;
@@ -795,6 +794,11 @@ a.twikiButton:active {
    background-image:url(border_sidebar_personal.gif);
    background-repeat:repeat-x;
    background-position:bottom left;
+}
+.twikiBroadcastMessage,
+.twikiNotification {
+   background-image:url(background_alert.gif);
+   background-repeat:repeat-x;
 }
 
 /* common settings */

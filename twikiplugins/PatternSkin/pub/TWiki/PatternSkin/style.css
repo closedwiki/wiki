@@ -533,8 +533,6 @@ table.twikiFormTable th.twikiFormTableHRow a:visited {
 }
 .twikiBroadcastMessage {
 	margin:0 0 1.25em 0;
-	border-width:1px;
-	border-style:solid none;
 }
 .twikiHelp {
 	height:1%; /* for IE */
