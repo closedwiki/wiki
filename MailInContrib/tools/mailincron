@@ -50,6 +50,7 @@ if( eval 'defined($TWiki::wikiversion)' ) {
     eval "use LocalSite.cfg";
 } else {
     $twiki = new TWiki();
+    $TWiki::Plugins::SESSION = $twiki;
 }
 $folders = $TWiki::cfg{MailInContrib};
 my $processor = new TWiki::Contrib::MailInContrib($twiki, $debug);
