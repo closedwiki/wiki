@@ -118,7 +118,7 @@ Save the topic. This will generate an [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/them
 ---++++ DIFF_HEADER_BACKGROUND Diff header (dark gray)
    * Set DIFF_HEADER_BACKGROUND = #ccc
 ---++++ NOTIFICATION_BACKGROUND Info, broadcast message and notifications
-   * Set NOTIFICATION_BACKGROUND = #fff0c4
+   * Set NOTIFICATION_BACKGROUND = #ffe67b
 ---++++ INFO_BACKGROUND
    * Set INFO_BACKGROUND = %NOTIFICATION_BACKGROUND%
 
@@ -176,7 +176,7 @@ Save the topic. This will generate an [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/them
 ---++++ FORM_BORDER Form (same as twikiTable border)
    * Set FORM_BORDER = #cfcfcf
 ---++++ ACTIVE_FORM_BACKGROUND Edit form, form steps
-   * Set ACTIVE_FORM_BACKGROUND = #f0f7fc
+   * Set ACTIVE_FORM_BACKGROUND = #fbfbfb
 ---++++ FORMFIELD_ACTIVE Active form field
    * Set FORMFIELD_ACTIVE = #ffffe0
 ---++++ FORM_HEADER_TEXT Header text on form background
@@ -505,7 +505,6 @@ table.twikiFormTable th.twikiFormTableHRow font {
 }
 .twikiBroadcastMessage {
    background-color:%NOTIFICATION_BACKGROUND%;
-   border-color:%NOTIFICATION_BORDER%;
 }
 .twikiNotification {
    background-color:%NOTIFICATION_BACKGROUND%;
@@ -983,6 +982,11 @@ a.twikiButton:active {
    background-image:url(border_sidebar_personal.gif);
    background-repeat:repeat-x;
    background-position:bottom left;
+}
+.twikiBroadcastMessage,
+.twikiNotification {
+   background-image:url(background_alert.gif);
+   background-repeat:repeat-x;
 }
 
 /* common settings */
