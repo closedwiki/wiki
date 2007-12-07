@@ -46,7 +46,7 @@ implementation for this web (don't change):
 TopicFunctions to generate html page header information:
 <verbatim>
    * Set HTTP_EQUIV_ON_VIEW = %DBCALL{"Applications.RenderHttpEquivs"}%
-   * Set PAGETITLE = $percntDBCALL{\"Applications.RenderHtmlTitle\"}$percnt
+   * Set HTMLTITLE = $percntDBCALL{\"Applications.RenderHtmlTitle\"}$percnt
    * Set DEFAULT_METAKEYWORDS = TWikiWorkbench
    * Set METAKEYWORDS = %DEFAULT_METAKEYWORDS%
    * #Set METAAUTHOR =

@@ -44,6 +44,7 @@ The TopicType topic is the factory to create new <nop>TopicTypes as well.
 ---++ Topics of type 'TopicType'
 <noautolink>
 %~~ DBQUERY{"TopicType=~'\bTopicType\b'"
+~~~   web="%BASEWEB%"
 ~~~   header="$percntTABLE{tablewidth=\"100%\"}$percnt$n
 ~~~           | *Nr*
 ~~~           | *Name*

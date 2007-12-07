@@ -64,6 +64,7 @@ See also: WebTopicEditTemplate
 ---++ TWikiTopic form
 | *Name:*| *Type:* | *Size:* | *Values:* | *Tooltip message:* | *Attributes:* |
 | TopicType | checkbox | 3 |%DBCALL{"Applications.GetTopicTypes" remote="off"}%| Document type  | |
+| Title | text | 75 | | title | |
 | Summary | text | 75 | | short description of the role of this topic |  |
 
 

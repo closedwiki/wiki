@@ -4,7 +4,7 @@
 %TMPL:DEF{"content"}%
 %TEXT% 
 %TMPL:END%
-%TMPL:DEF{"contentfooter"}%%TMPL:END%
+%TMPL:DEF{"contentfooter"}%<div class="natRevision"> %REVINFO% </div>%TMPL:END%
 
 %META:FORM{name="Applications.ApplicationTopic"}%
 %META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicView"}%
