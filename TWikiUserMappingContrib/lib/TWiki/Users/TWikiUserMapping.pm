@@ -1,6 +1,6 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2007 Sven Dowideit, SvenDowideit@distributedINFMRATION.com
+# Copyright (C) 2007 Sven Dowideit, SvenDowideit@distributedINFORMATION.com
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -407,7 +407,7 @@ sub userExists {
     return 1 if $cUID eq $this->{session}->{user};
 
     my $loginName = $this->getLoginName( $cUID );
-    return 0 unless (defined($loginName) && ($loginName ne ''));
+    return unless (defined($loginName) && ($loginName ne ''));
 
     if( $loginName eq $TWiki::cfg{DefaultUserLogin} ) {
         return $loginName;
