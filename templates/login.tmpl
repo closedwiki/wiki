@@ -28,7 +28,7 @@
 %QUERYPARAMS{encoding="entity" format="<input type='hidden' name='$name' value='$value' />"}%
 </literal><input type="hidden" name="origurl" value="%ORIGURL%" /></form>%TMPL:END%
 
-%TMPL:DEF{"usernamefield"}%<input tabindex='1' type='text' class='twikiInputField' size='40' name='username' value='%URLPARAM{"usernamestep"}%' />%TMPL:END%
+%TMPL:DEF{"usernamefield"}%<input tabindex='1' type='text' class='twikiInputField twikiFocus' size='40' name='username' value='%URLPARAM{"usernamestep"}%' />%TMPL:END%
 
 %TMPL:DEF{"usernamestep"}%<p> *%MAKETEXT{"Username"}%*
 %BR%%TMPL:P{"usernamefield"}%

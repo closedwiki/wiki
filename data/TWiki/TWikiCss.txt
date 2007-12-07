@@ -101,6 +101,7 @@ A wide range of standard styles are used in the TWiki core code and topics, and 
 |.twikiTextarea | |
 |.twikiTextareaRawView | |
 |.twikiButton  | |
+|.twikiFocus  |Behaviour marker so a field can be given input focus |
 |.twikiLeft  | |
 |.twikiRight  | |
 |.twikiClear  | |
