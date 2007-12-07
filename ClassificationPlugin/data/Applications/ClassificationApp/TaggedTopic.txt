@@ -16,13 +16,6 @@ See also: ClassifiedTopic, CategorizedTopic, TaggedTopicTemplate, TaggedTopicVie
 ---++ Installation
 %DBCALL{"Applications.RenderTopicInstaller" TEXT="Install '%TOPIC%' TopicType in" TYPE="TopicType" PARENT="TopicType"}%
 
----++ %TOPIC% form
-| *Name:*| *Type:* | *Size:* | *Values:* | *Tooltip message:* | *Attributes:* |
-| TopicType | label | 1 | TaggedTopic | Document type  | |
-| Summary | text | 75 | | Short description of the role of this topic | |
-| Tag | tag | 1 | | tag and keywords | |
-
-
 %STARTINCLUDE%
 ---+++ Create a new topic 
 %STARTSECTION{"factory"}%
@@ -68,6 +61,14 @@ See also: ClassifiedTopic, CategorizedTopic, TaggedTopicTemplate, TaggedTopicVie
 ~~~           |"
 ~~~ }%
 %STOPINCLUDE%
+
+---++ %TOPIC% form
+| *Name:*| *Type:* | *Size:* | *Values:* | *Tooltip message:* | *Attributes:* |
+| TopicType | label | 1 | TaggedTopic | Document type  | |
+| Title | text | 75 | | Title of this topic | |
+| Summary | text | 75 | | Short description of the role of this topic | |
+| Tag | tag | 1 | | tag and keywords | |
+
 
 
 %META:FORM{name="Applications.TopicType"}%

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1186509262" format="1.1" reprev="1.7" version="$Rev$"}%
+%META:TOPICINFO{author="micha" date="1196956465" format="1.1" reprev="1.8" version="1.8"}%
 %META:TOPICPARENT{}%
 ---+!! Function: %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -17,40 +17,15 @@ none
 
 ---++ Implementation
 <verbatim>
-%STARTINCLUDE%<!-- -->
-<div class="clsTopicInfo">
-%~~ DBQUERY{topic="%BASEWEB%.%BASETOPIC%"
-~~~   format="
-~~~     <h1 class=\"clsTopicSummary\">[[$web.$topic][$expand(Summary or topic)]]</h1>
-~~~     $percntIFDEFINEDTHEN{\"$formfield(Category)\" glue=\"off\"}$percnt
-~~~       Filed in
-~~~       $percntFORMATLIST{\"
-~~~       $percntFORMATLIST{\"$formfield(Category)\"
-~~~        format=\"
-*~~          $dollarpercntDBQUERY{
-~~~            hidenull=\\"on\\"
-~~~            topic=\\"$web.$1\\" 
-~~~            format=\\"$dollarexpand(Title or topic)\\"
-~~~            header=\\"[[$web.$1][\\"
-~~~            footer=\\"]]\\"
-~~~          }$dollarpercnt\"
-~~~       }$percnt\"}$percnt
-*~~       $percntIFDEFINEDTHEN{\"$formfield(Tag)\" glue=\"off\"}$percnt
-*~~         , tagged 
-~~~         $percntFORMATLIST{\"$formfield(Tag)\"
-~~~           format=\"<a href=\\"%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebTagCloud?search=$1\\">$1</a>\"
-~~~         }$percnt
-~~~       $percntFIDEFINED$percnt
-~~~     $percntELSEDEFINED$percnt
-~~~       $percntIFDEFINEDTHEN{\"$formfield(Tag)\" glue=\"off\"}$percnt
-*~~         Tagged 
-~~~         $percntFORMATLIST{\"$formfield(Tag)\"
-~~~           format=\"<a href=\\"%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebTagCloud?search=$1\\">$1</a>\"
-~~~         }$percnt
-~~~       $percntFIDEFINED$percnt
-~~~     $percntFIDEFINED$percnt"
+%STARTINCLUDE%
+~~~ <div class="clsTopicInfo">
+~~~ <h1>[[%BASEWEB%.%BASETOPIC%][%PAGETITLE%]]</h1>
+%~~ IFDEFINED{
+~~~   "$percntCATINFO{header=\"Filed in \" separator=\", \"}$percnt" 
+~~~   then="$test$percntTAGINFO{header=\", tagged \" separator=\", \"}$percnt"
+~~~   else="$percntTAGINFO{header=\"Tagged \"}$percnt"
 ~~~ }%
-</div>
+~~~ </div>
 %STOPINCLUDE%
 </verbatim>
 
@@ -76,6 +51,7 @@ none
 
 
 %META:FORM{name="Applications.ApplicationTopic"}%
-%META:FIELD{name="TopicType" attributes="" title="TopicType" value="Category, DocuTopic, TopicFunction"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="DocuTopic, TopicFunction"}%
+%META:FIELD{name="Title" attributes="" title="Title" value=""}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="Renders the TopicView of a ClassifiedTopic"}%
-%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="none"}%
+%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="ClassificationApp"}%

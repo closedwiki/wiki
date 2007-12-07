@@ -54,6 +54,7 @@ See also: CategorizedTopicTemplate, ClassifiedTopic, TaggedTopic
 ---++ %TOPIC% form
 | *Name:*| *Type:* | *Size:* | *Values:* | *Tooltip message:* | *Attributes:* |
 | TopicType | label | 1 | CategorizedTopic | Document type  | |
+| Title | text | 75 | | Title of this topic | |
 | Summary | text | 75 | | Short description of the role of this topic | |
 | Category | cat | 1 | | categories |  |
 

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1193763628" format="1.1" reprev="1.32" version="$Rev$"}%
+%META:TOPICINFO{author="micha" date="1195766087" format="1.1" reprev="1.34" version="1.34"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+!! Function: %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -18,83 +18,64 @@ NONE
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
----++ Categories
-<div class="clsButtonBox">
-<a href="javascript:void(0);" onclick="pressButton(this)" class="aquaPill" id="clsNewCategoryButton"><span>New Category</span></a>
-<a href="javascript:void(0);" onclick="pressButton(this)" class="aquaPill" id="clsNewTopicButton"><span>New Topic</span></a>
-<a href="javascript:void(0);" onclick="pressButton(this)" class="aquaPill" id="clsBrowseButton"><span>Browse</span></a>
-</div>
-<div id="clsNewCategory" style="display:none">
-~~~
-%~~ DBCALL{"Applications.ClassificationApp.Category" section="factory" 
-~~~   USAGE="%FORMFIELD{"Usage" topic="%BASEWEB%.%BASETOPIC%"}%"
+<noautolink>
+%~~ MAKEINDEX{"
+*~~
+%~~     BROWSECAT{
+~~~       web="%BASEWEB%"
+~~~       top="%BASETOPIC%"
+~~~       exclude="%BASETOPIC%"
+~~~       depth="2"
+~~~       format="$name;$web;$title;$summary;$leafs#"
+~~~     }%
+*~~   "
+~~~   cols="3"
+~~~   header="<h2>Sub categories</h2>
+~~~     There 
+~~~     $percntIFDEFINED{\"$count\" as=\"1\" 
+~~~       then=\" is one subcategory \"
+~~~       else=\" are $count subcategories \"
+~~~     }$percnt in this category."
+~~~   split="#"
+~~~   pattern="(.*);(.*);(.*);(.*);(.*)"
+~~~   format="[[$2.$1][$3]]
+~~~     $percntIFDEFINED{\"$5\" then=\"&nbsp;($5)\"}$percnt
+~~~     $percntREDDOT{$2.$1}$percnt
+~~~     <div class='clsTopicInfo'>$4</div>
+~~~  "
 ~~~ }%
-</div>
-<div id="clsNewTopic" style="display:none">
-~~~
-%~~ DBCALL{"Applications.ClassificationApp.ClassifiedTopic" section="factory" 
-~~~   CAT="%BASETOPIC%"
+
+%~~ MAKEINDEX{"
+*~~
+%~~    DBQUERY{
+~~~      "!(TopicType=~'\bCategory\b') AND ('%BASETOPIC%' DISTANCE topic) = 0"
+~~~      web="%BASEWEB%"
+~~~      hidenull="on"
+~~~      format="$topic;$web;$expand(Summary and ',<br />');$expand(info.author);$formatTime(info.date);$expand(Title or topic)"
+~~~      separator="#"
+~~~    }%
+*~~   "
+~~~   cols="3"
+~~~   header="<h2>Topics in $percntPAGETITLE$percnt</h2>
+~~~     There
+~~~     $percntIFDEFINED{\"$count\" as=\"1\" 
+~~~       then=\" is one topic \"
+~~~       else=\" are $count topics \"
+~~~     }$percnt in this category."
+~~~   split="#"
+~~~   pattern="(.*);(.*);(.*);(.*);(.*);(.*)"
+~~~   format="[[$2.$1][$6]]
+~~~     $percntREDDOT{$2.$1}$percnt
+~~~     <div class='clsTopicInfo'>$3 last modified $5 by $percntSPACEOUT{$4}$percnt</div>
+~~~   "
 ~~~ }%
-</div>
-<div id="clsBrowser" style="display:none">
-%DBCALL{"Applications.ClassificationApp.RenderCategoryBrowser"}%
-</div>
-%~~ DBCALL{"Applications.ClassificationApp.RenderCategory"
-~~~   section="doit"
-~~~   FILTER="
-~~~
-%~~     CATFIELD{
-~~~       web="%URLPARAM{"web" default="%BASEWEB%"}%"
-~~~       header="!(TopicType=~'\bCategory\b') AND ("
-~~~       format="$cat=~'\b%BASETOPIC%\b'"
-~~~       separator=" OR "
-~~~       footer=")"
-~~~     }%"
-~~~ }%
+
+---
+see also: [[CategoryBrowser]], [[Category]]
+</noautolink>
 %STOPINCLUDE%
 </verbatim>
 
-<verbatim>
-%STARTSECTION{"doit"}%
-~~~
-%~~ DBQUERY{"%FILTER%"
-~~~   remote="force"
-~~~   hidenull="on"
-~~~   web="%URLPARAM{"web" default="%BASEWEB%"}%"
-~~~   header="<h2>Topics filed in <nop>%BASETOPIC%</h2>$n
-~~~           $percntTABLE{tablewidth=\"100%\"}$percnt$n
-*~~           | *Nr*
-~~~           | *Name*
-~~~           | *Category*
-~~~           | *Last modified*
-~~~           | *By*
-~~~           |$n"
-~~~   format="| $index
-~~~           | [[$web.$topic][$topic]]
-~~~           | $percntFORMATLIST{\"
-~~~             $percntFORMATLIST{\"
-~~~               $percntFORMATLIST{\"$percntCATFIELD{\"$web.$topic\"}$percnt\"
-~~~                 separator=\" \"
-~~~                 format=\"$dollarpercntDBQUERY{topic=\\"$web.$topic\\"
-~~~                   format=\\"$dollarformfield($1)\\"
-~~~                 }$dollarpercnt\"
-~~~               }$percnt\"
-~~~               format=\"
-*~~                   $dollarpercntDBQUERY{topic=\\"$web.$1\\" 
-~~~                     hidenull=\\"on\\"
-~~~                     header=\\"[[$web.$1][\\"
-~~~                     format=\\"$dollarexpand(Title or topic)\\"
-*~~                     footer=\\"]]\\"
-~~~                   }$dollarpercnt\"
-~~~               sort=\"on\"
-~~~               separator=\", \"
-~~~             }$percnt\" split=\",\"}$percnt
-~~~           | <nobr>$formatTime(info.date)</nobr>
-~~~           | %MAINWEB%.$expand(info.author)
-~~~           |"
-~~~ }%
-%ENDSECTION{"doit"}%
-</verbatim>
 
 <!-- interrupt glue -->
 ---++ Test

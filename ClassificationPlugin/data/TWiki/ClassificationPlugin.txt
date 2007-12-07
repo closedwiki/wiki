@@ -44,17 +44,6 @@ Also available in <nop>DBCacheContrib search expressions.
 Predicate that checks if a category is a parent category of another. 
 Also available in <nop>DBCacheContrib search expressions.
 
----++ COMPATIBLE
-Predicate that checks if a category is subsuming another category or vice versa
-Also available in <nop>DBCacheContrib search expressions.
-
----++ SUBSUMTION
-Renders a large table that shows the subsumtion relation between all categories
-Also available in <nop>DBCacheContrib search expressions.
-
----++ COMPATIBILITY
-Renders a large table that shows the compatibility relation between all categories
-
 ---++ TAGRELATEDTOPICS
 Renders a list of topics that are tag-related to the current one. Two topics are 
 tag- related if they have at least two tags in common.

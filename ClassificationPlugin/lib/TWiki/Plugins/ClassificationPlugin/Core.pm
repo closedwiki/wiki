@@ -19,23 +19,47 @@ use TWiki::Plugins::DBCachePlugin::Core;
 use TWiki::Contrib::DBCacheContrib::Search;
 use TWiki::Plugins::ClassificationPlugin::Hierarchy;
 
-use vars qw(%hierarchies);
+use vars qw(%hierarchies $baseWeb $baseTopic);
 
-sub DEBUG { 0; }
-
+sub DEBUG { 1; }
 
 ###############################################################################
 sub writeDebug {
-  #&TWiki::Func::writeDebug('- ClassificationPlugin - '.$_[0]) if DEBUG;
-  print STDERR '- ClassificationPlugin::Core - '.$_[0]."\n" if DEBUG;
+  print STDERR 'ClassificationPlugin::Core - '.$_[0]."\n" if DEBUG;
 }
 
 ###############################################################################
 sub init {
-  TWiki::Contrib::DBCacheContrib::Search::addOperator('SUBSUMES', 4, \&OP_subsumes);
-  TWiki::Contrib::DBCacheContrib::Search::addOperator('COMPATIBLE', 4, \&OP_compatble);
-  TWiki::Contrib::DBCacheContrib::Search::addOperator('ISA', 4, \&OP_isa);
+  ($baseWeb, $baseTopic) = @_;
+
+  TWiki::Contrib::DBCacheContrib::Search::addOperator(
+    name=>'SUBSUMES', 
+    prec=>4,
+    arity=>2,
+    exec=>\&OP_subsumes,
+  );
+  TWiki::Contrib::DBCacheContrib::Search::addOperator(
+    name=>'ISA', 
+    prec=>4,
+    arity=>2,
+    exec=>\&OP_isa,
+  );
+  TWiki::Contrib::DBCacheContrib::Search::addOperator(
+    name=>'DISTANCE', 
+    prec=>5,
+    arity=>2,
+    exec=>\&OP_distance,
+  );
 }
+
+###############################################################################
+sub finish {
+
+  foreach my $hierarchy (values %hierarchies) {
+    $hierarchy->finish() if defined $hierarchy;
+  }
+}
+
 
 ###############################################################################
 sub OP_subsumes {
@@ -44,40 +68,8 @@ sub OP_subsumes {
   my $rval = $r->matches( $map );
   return 0 unless ( defined $lval  && defined $rval);
 
-  my $hierarchy = getHierarchy($TWiki::Plugins::ClassificationPlugin::currentWeb);
-  my $cat1 = $hierarchy->getCategory($lval);
-  return 0 unless $cat1;
-
-  my $cat2 = $hierarchy->getCategory($rval);
-  return 0 unless $cat2;
-
-  if ($cat1->subsumes($cat2)) {
-    #writeDebug("OP_subsumes($lval, $rval)");
-    return 1;
-  }
-  return 0;
-}
-
-###############################################################################
-sub OP_compatible {
-  my ($r, $l, $map) = @_;
-  my $lval = $l->matches( $map );
-  my $rval = $r->matches( $map );
-  return 0 unless ( defined $lval  && defined $rval);
-  #writeDebug("OP_compatible($lval, $rval)");
-
-  my $hierarchy = getHierarchy($TWiki::Plugins::ClassificationPlugin::currentWeb);
-  my $cat1 = $hierarchy->getCategory($lval);
-  return 0 unless $cat1;
-
-  my $cat2 = $hierarchy->getCategory($rval);
-  return 0 unless $cat2;
-
-  if ($cat1->compatible($cat2)) {
-    #writeDebug("OP_subsumes($lval, $rval)");
-    return 1;
-  }
-  return 0;
+  my $hierarchy = getHierarchy($baseWeb);
+  return $hierarchy->subsumes($lval, $rval);
 }
 
 ###############################################################################
@@ -85,47 +77,56 @@ sub OP_isa {
   my ($r, $l, $map) = @_;
   my $lval = $l->matches( $map );
   my $rval = $r->matches( $map );
-
   return 0 unless ( defined $lval  && defined $rval);
 
-  #writeDebug("OP_isa($lval, $rval)");
-
-  my $hierarchy = getHierarchy($TWiki::Plugins::ClassificationPlugin::currentWeb);
+  my $hierarchy = getHierarchy($baseWeb);
   my $cat = $hierarchy->getCategory($rval);
   return 0 unless $cat;
 
-  if ($cat->contains($lval)) {
-    #writeDebug("... yes");
-    return 1;
-  }
-  #writeDebug("... no");
-  return 0;
+  return ($cat->contains($lval))?1:0;
+}
+
+###############################################################################
+sub OP_distance {
+  my ($r, $l, $map) = @_;
+  my $lval = $l->matches( $map );
+  my $rval = $r->matches( $map );
+
+  return 0 unless ( defined $lval  && defined $rval);
+
+  my $hierarchy = getHierarchy($baseWeb);
+  my $distance = $hierarchy->distance($lval, $rval);
+  return '' unless $distance;
+  my ($min, undef) = @$distance;
+
+  return $min;
 }
 
 ###############################################################################
 sub handleTagRelatedTopics {
-  my ($session, $params, $thisTopic, $thisWeb) = @_;
+  my ($session, $params, $theTopic, $theWeb) = @_;
 
   #writeDebug("called handleTagRelatedTopics(".$params->stringify().")");
 
-  my $theTopic = $params->{_DEFAULT} || $params->{topic} || $thisTopic;
-  my $theWeb = $params->{web} || $thisWeb;
+  my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $baseTopic;
+  my $thisWeb = $params->{web} || $baseWeb;
   my $theFormat = $params->{format} || '$topic';
   my $theHeader = $params->{header} || '';
   my $theFooter = $params->{footer} || '';
   my $theSep = $params->{separator} || ', ';
 
-  ($theTopic, $theWeb) = TWiki::Func::normalizeWebTopicName($theTopic, $theWeb);
+  ($thisTopic, $thisWeb) = 
+    TWiki::Func::normalizeWebTopicName($thisTopic, $thisWeb);
 
-  my $db = TWiki::Plugins::DBCachePlugin::Core::getDB($theWeb);
-  my $topicObj = $db->fastget($theTopic);
+  my $db = TWiki::Plugins::DBCachePlugin::Core::getDB($thisWeb);
+  my $topicObj = $db->fastget($thisTopic);
   return '' unless $topicObj;
   my $form = $topicObj->fastget("form");
   return '' unless $form;
   $form = $topicObj->fastget($form);
   my $tags = $form->fastget('Tag');
   return '' unless $tags;
-  my @tags = split(/,\s*/,$tags);
+  my @tags = split(/\s*,\s*/,$tags);
   my $len = scalar(@tags);
 
   # build query string
@@ -149,11 +150,11 @@ sub handleTagRelatedTopics {
   my @lines;
   my $count = 0;
   foreach my $topic (sort @$topics) {
-    next if $topic eq $theTopic;
+    next if $topic eq $thisTopic;
     $count++;
     push @lines, expandVariables($theFormat,
       'topic'=>$topic,
-      'web'=>$theWeb,
+      'web'=>$thisWeb,
       'index'=>$count,
     );
   }
@@ -169,7 +170,7 @@ sub handleBrowseCat {
 
   #writeDebug("called handleBrowseCat(".$params->stringify().")");
 
-  my $thisWeb = $params->{_DEFAULT} || $params->{web} || $theWeb;
+  my $thisWeb = $params->{_DEFAULT} || $params->{web} || $baseWeb;
   $thisWeb =~ s/\./\//go;
 
   my $hierarchy = getHierarchy($thisWeb);
@@ -181,24 +182,22 @@ sub handleIsA {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
   #writeDebug("called handleIsa()");
-  my $thisWeb = $params->{web} || $theWeb;
-  my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $theTopic;
+  my $thisWeb = $params->{web} || $baseWeb;
+  my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $baseTopic;
   my $theCategory = $params->{cat} || '';
-  my $theUsage = $params->{usage};
 
   return 0 unless $theCategory;
 
   ($thisWeb, $thisTopic) =
     TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
 
+  my %lookingForCategory = map {$_=>1} split(/\s*,\s*/,$theCategory);
   my $hierarchy = getHierarchy($thisWeb);
 
-  foreach my $catName (split(/,/,$theCategory)) {
-    $catName =~ s/^\s+//g;
-    $catName =~ s/\s+$//g;
-    next unless $catName;
-    my $category = $hierarchy->getCategory($catName);
-    return 1 if $category && $category->contains($thisTopic);
+  foreach my $catName (keys %lookingForCategory) {
+    my $cat = $hierarchy->getCategory($catName);
+    next unless $cat;
+    return 1 if $cat->contains($thisTopic);
   }
 
   return 0;
@@ -208,8 +207,8 @@ sub handleIsA {
 sub handleSubsumes {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
-  my $thisWeb = $params->{web} || $theWeb;
-  my $theCat1 = $params->{_DEFAULT} || $theTopic;
+  my $thisWeb = $params->{web} || $baseWeb;
+  my $theCat1 = $params->{_DEFAULT} || $baseTopic;
   my $theCat2 = $params->{cat} || '';
 
   #writeDebug("called handleSubsumes($theCat1, $theCat2)");
@@ -220,7 +219,7 @@ sub handleSubsumes {
   my $cat1 = $hierarchy->getCategory($theCat1);
   return 0 unless $cat1;
 
-  foreach my $catName (split(/,/,$theCat2)) {
+  foreach my $catName (split(/\s*,\s*/,$theCat2)) {
     $catName =~ s/^\s+//g;
     $catName =~ s/\s+$//g;
     next unless $catName;
@@ -234,105 +233,33 @@ sub handleSubsumes {
 }
 
 ###############################################################################
-sub handleCompatible {
+sub handleDistance {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
-  #writeDebug("called handleCompatible()");
+  my $thisWeb = $params->{web} || $baseWeb;
+  my $theFrom = $params->{_DEFAULT} || $params->{from} || $baseTopic;
+  my $theTo = $params->{to} || 'TOP';
+  my $theFormat = $params->{format} || '$min';
+  my $theAbs = $params->{abs} || 'on';
 
-  my $thisWeb = $params->{web} || $theWeb;
-  my $theCat1 = $params->{_DEFAULT} || $theTopic;
-  my $theCat2 = $params->{cat};
-
-  return 0 unless $theCat2;
-
-  my $hierarchy = getHierarchy($thisWeb);
-  my $cat1 = $hierarchy->getCategory($theCat1);
-  return 0 unless $cat1;
-
-  foreach my $catName (split(/,/,$theCat2)) {
-    $catName =~ s/^\s+//g;
-    $catName =~ s/\s+$//g;
-    next unless $catName;
-    my $cat2 = $hierarchy->getCategory($theCat2);
-    next unless $cat2;
-    return 1 if $cat1->compatible($cat2);
-  }
-
-  return 0;
-}
-
-###############################################################################
-sub handleSubsumtion {
-  my ($session, $params, $theTopic, $theWeb) = @_;
-
-  #writeDebug("called handleSubsumtion()");
-  my $thisWeb = $params->{web} || $theWeb;
+  #writeDebug("called handleDistance($theFrom, $theTo)");
 
   my $hierarchy = getHierarchy($thisWeb);
-  my @allCats = sort {$a->{name} cmp $b->{name}} $hierarchy->getCategories();
 
-  my $result = '<div style="overflow:auto">';
-  $result .= '<table class="twikiTable">';
-  $result .= '<tr><th>Subsumtion</th>';
-  foreach my $cat (@allCats) {
-    if ($cat->{name} =~ /^(TOP|BOTTOM)$/) {
-      $result .= "<th>$cat->{name}</th>";
-    } else {
-      $result .= "<th>[[$thisWeb.$cat->{name}][$cat->{name}]]</th>";
-    }
+  my $distance = $hierarchy->distance($theFrom, $theTo);
+  return '' unless defined $distance;
+  my ($min, $max) = @$distance;
+
+  if ($theAbs eq 'on') {
+    $min = abs($min);
+    $max = abs($max);
   }
-  $result .= '</tr>';
-  foreach my $cat1 (@allCats) {
-    if ($cat1->{name} =~ /^(TOP|BOTTOM)$/) {
-      $result .= "<tr><th>$cat1->{name}</th>";
-    } else {
-      $result .= "<tr><th>[[$thisWeb.$cat1->{name}][$cat1->{name}]]</th>";
-    }
-    foreach my $cat2 (@allCats) {
-      my $subsumtion = $cat1->subsumes($cat2);
-      $result .= '<td'.($subsumtion?' style="background:#d0d0d0"':'').">$subsumtion</td>";
-    }
-    $result .= '</tr>';
-  }
-  $result .= '</table></div>';
 
-  return $result;
-}
+  #writeDebug("distance=@$distance");
 
-###############################################################################
-sub handleCompatibility {
-  my ($session, $params, $theTopic, $theWeb) = @_;
-
-  #writeDebug("called handleCompatibility()");
-  my $thisWeb = $params->{web} || $theWeb;
-
-  my $hierarchy = getHierarchy($thisWeb);
-  my @allCats = sort {$a->{name} cmp $b->{name}} $hierarchy->getCategories();
-
-  my $result = '<div style="overflow:auto">';
-  $result .= '<table class="twikiTable">';
-  $result .= '<tr><th>Compatibility</th>';
-  foreach my $cat (@allCats) {
-    if ($cat->{name} =~ /^(TOP|BOTTOM)$/) {
-      $result .= "<th>$cat->{name}</th>";
-    } else {
-      $result .= "<th>[[$thisWeb.$cat->{name}][$cat->{name}]]</th>";
-    }
-  }
-  $result .= '</tr>';
-  foreach my $cat1 (@allCats) {
-    if ($cat1->{name} =~ /^(TOP|BOTTOM)$/) {
-      $result .= "<tr><th>$cat1->{name}</th>";
-    } else {
-      $result .= "<tr><th>[[$thisWeb.$cat1->{name}][$cat1->{name}]]</th>";
-    }
-    foreach my $cat2 (@allCats) {
-      my $compatibility = $cat1->compatible($cat2);
-      $result .= '<td'.($compatibility?' style="background:#d0d0d0"':'').">$compatibility</td>";
-    }
-    $result .= '</tr>';
-  }
-  $result .= '</table></div>';
+  my $result = $theFormat;
+  $result =~ s/\$min/$min/g;
+  $result =~ s/\$max/$max/g;
 
   return $result;
 }
@@ -347,25 +274,33 @@ sub handleCatField {
   my $theSep = $params->{separator} || ' ';
   my $theHeader = $params->{header} || '';
   my $theFooter = $params->{footer} || '';
-  my $theTypes = $params->{_DEFAULT} || $params->{type} || $params->{types} || '';
-
-  my $thisTopic = $params->{topic} || $theTopic;
-  my $thisWeb = $params->{web} || $theWeb;
+  my $theTypes = $params->{type} || $params->{types} || '';
+  my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $baseTopic;
+  my $thisWeb = $params->{web} || $baseWeb;
 
   ($thisWeb, $thisTopic) = 
     TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
 
-  #writeDebug("thisWeb=$thisWeb, thisTopic=$thisTopic");
-
-  my $hierarchy = getHierarchy($thisWeb);
   my @topicTypes;
   if ($theTypes) {
-    @topicTypes = split(/,/,$theTypes);
+    #writeDebug("type mode");
+    @topicTypes = split(/\s*,\s*/,$theTypes);
   } else {
-    @topicTypes = $hierarchy->getTopicTypes();
+    #writeDebug("topic mode");
+    my $db = TWiki::Plugins::DBCachePlugin::Core::getDB($thisWeb);
+    my $topicObj = $db->fastget($thisTopic);
+    my $form = $topicObj->fastget("form");
+    if ($form) {
+      $form = $topicObj->fastget($form);
+      my $topicTypes = $form->fastget('TopicType');
+      if ($topicTypes) {
+        @topicTypes = split(/\s*,\s*/, $topicTypes);
+      }
+    }
   }
   return '' unless @topicTypes;
 
+  my $hierarchy = getHierarchy($thisWeb);
   my $catFields = $hierarchy->getCatFields(@topicTypes);
   #writeDebug("found catFields=".join(',',@$catFields));
   my @result;
@@ -383,6 +318,180 @@ sub handleCatField {
   $result = expandVariables($result, 'count'=>$count);
 
   #writeDebug("result=$result");
+  return $result;
+}
+
+###############################################################################
+sub handleTagField {
+  my ($session, $params, $theTopic, $theWeb) = @_;
+
+  #writeDebug("called handleTagField(".$params->stringify().")");
+
+  my $theFormat = $params->{format} || '$tag';
+  my $theSep = $params->{separator} || ' ';
+  my $theHeader = $params->{header} || '';
+  my $theFooter = $params->{footer} || '';
+  my $theTypes = $params->{_DEFAULT} || $params->{type} || $params->{types} || '';
+
+  my $thisTopic = $params->{topic} || $baseTopic;
+  my $thisWeb = $params->{web} || $baseWeb;
+
+  ($thisWeb, $thisTopic) = 
+    TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
+
+  #writeDebug("thisWeb=$thisWeb, thisTopic=$thisTopic");
+
+  my @topicTypes;
+  if ($theTypes) {
+    @topicTypes = split(/\s*,\s*/,$theTypes);
+  } else {
+    my $db = TWiki::Plugins::DBCachePlugin::Core::getDB($thisWeb);
+    my $topicObj = $db->fastget($thisTopic);
+    my $form = $topicObj->fastget("form");
+    if ($form) {
+      $form = $topicObj->fastget($form);
+      my $topicTypes = $form->fastget('TopicType');
+      if ($topicTypes) {
+        @topicTypes = split(/\s*,\s*/, $topicTypes);
+      }
+    }
+  }
+  return '' unless @topicTypes;
+
+  my $hierarchy = getHierarchy($thisWeb);
+
+  my $tagFields = $hierarchy->getTagFields(@topicTypes);
+  #writeDebug("found tagFields=".join(',',@$tagFields));
+  my @result;
+  my $count = @$tagFields;
+  my $index = 1;
+  foreach my $tagField (@$tagFields) {
+    my $line = $theFormat;
+    $line =~ s/\$tag\b/$tagField/g;
+    $line =~ s/\$index\b/$index/g;
+    $index++;
+    push @result, $line;
+  }
+
+  my $result = $theHeader.join($theSep, @result).$theFooter;
+  $result = expandVariables($result, 'count'=>$count);
+
+  #writeDebug("result=$result");
+  return $result;
+}
+
+###############################################################################
+sub handleCatInfo {
+  my ($session, $params, $theTopic, $theWeb) = @_;
+
+  #writeDebug("called handleTagField(".$params->stringify().")");
+  my $theCat = $params->{cat};
+  my $theFormat = $params->{format} || '$link';
+  my $theSep = $params->{separator} || ' ';
+  my $theHeader = $params->{header} || '';
+  my $theFooter = $params->{footer} || '';
+  my $thisWeb = $params->{web} || $baseWeb;
+  my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $baseTopic;
+
+  ($thisWeb, $thisTopic) = 
+    TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
+
+  my $hierarchy = getHierarchy($thisWeb);
+  return '' unless $hierarchy;
+
+  my $categories;
+  $categories = $hierarchy->getCategoriesOfTopic($thisTopic)
+    unless defined $theCat;
+  $categories->{$theCat} = 1 if defined $theCat;
+
+  my @categories = grep (!/^(TOP|BOTTOM)$/, keys %$categories);
+  return '' unless @categories;
+  
+  my @result;
+  foreach my $catName (sort @categories) {
+    my $category = $hierarchy->getCategory($catName);
+    my $line = $theFormat;
+    my $parents = '';
+    if ($line =~ /\$parents/) {
+      my @links = ();
+      foreach my $parent ($category->getParents()) {
+        push @links, "[[$thisWeb.$parent->{name}][$parent->{title}]]";
+      }
+      $parents = join(', ', @links);
+    }
+    my $isCyclic = 0;
+    $isCyclic = $category->isCyclic() if $theFormat =~ /\$cyclic/;
+    my $title = $category->{title} || $catName;
+    my $link = ($catName =~ /^(TOP|BOTTOM)$/)?
+      "<b>$title</b>":
+      "[[$thisWeb.$catName][$title]]";
+    my $url = ($catName =~ /^(TOP|BOTTOM)$/)?
+      "":
+      '%SCRIPTURL{"view"}%/'."$thisWeb/$catName";
+    my $summary = $category->{summary} || $title;
+    $line =~ s/\$link/$link/g;
+    $line =~ s/\$url/$url/g;
+    $line =~ s/\$web/$thisWeb/g;
+    $line =~ s/\$name/$catName/g;
+    $line =~ s/\$title/$title/g;
+    $line =~ s/\$summary/$summary/g;
+    $line =~ s/\$parents/$parents/g;
+    $line =~ s/\$cyclic/$isCyclic/g;
+    push @result, $line;
+  }
+  my $result = $theHeader.join($theSep, @result).$theFooter;
+  $result = expandVariables($result, 'count'=>scalar(@categories));
+
+  #writeDebug("result=$result");
+  return $result;
+}
+
+###############################################################################
+sub handleTagInfo {
+  my ($session, $params, $theTopic, $theWeb) = @_;
+
+  #writeDebug("called handleTagField(".$params->stringify().")");
+  my $theCat = $params->{cat};
+  my $theFormat = $params->{format} || '$link';
+  my $theSep = $params->{separator} || ' ';
+  my $theHeader = $params->{header} || '';
+  my $theFooter = $params->{footer} || '';
+  my $thisWeb = $params->{web} || $baseWeb;
+  my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $baseTopic;
+
+  ($thisWeb, $thisTopic) = 
+    TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
+
+  # get tags
+  my $db = TWiki::Plugins::DBCachePlugin::Core::getDB($thisWeb);
+  return '' unless $db;
+  my $topicObj = $db->fastget($thisTopic);
+  return '' unless $topicObj;
+  my $form = $topicObj->fastget('form');
+  return '' unless $form;
+  my $formObj = $topicObj->fastget($form);
+  return '' unless $formObj;
+  my $tags = $formObj->fastget('Tag');
+  return '' unless $tags;
+  my @tags = split(/\s*,\s*/, $tags);
+
+  my @result;
+  foreach my $tag (sort @tags) {
+    $tag =~ s/^\s+//go;
+    $tag =~ s/\s+$//go;
+    my $line = $theFormat;
+    my $url = TWiki::Func::getScriptUrl($thisWeb, "WebTagCloud", "view", search=>$tag);
+    my $link = "<a href='$url'>$tag</a>";
+    $line =~ s/\$url/$url/g;
+    $line =~ s/\$link/$link/g;
+    $line =~ s/\$web/$thisWeb/g;
+    $line =~ s/\$name/$tag/g;
+    push @result, $line;
+  }
+  my $result = $theHeader.join($theSep, @result).$theFooter;
+  $result = expandVariables($result, 'count'=>scalar(@tags));
+
+  #writeDebug("result='$result'");
   return $result;
 }
 
@@ -409,14 +518,14 @@ sub beforeSaveHandler {
   return unless $topicType =~ /ClassifiedTopic|CategorizedTopic|Category/;
 
   my $hierarchy = getHierarchy($web);
-  my $catFields = $hierarchy->getCatFields(split(/,/,$topicType));
+  my $catFields = $hierarchy->getCatFields(split(/\s*,\s*/,$topicType));
   my @allCats;
   foreach my $field (@$catFields) {
     my $cats = $meta->get('FIELD',$field);
     next unless $cats;
     $cats = $cats->{value};
     next unless $cats;
-    foreach my $cat (split(/,/,$cats)) {
+    foreach my $cat (split(/\s*,\s*/,$cats)) {
       $cat =~ s/^\s+//go;
       $cat =~ s/\s+$//go;
       push @allCats, $cat;
@@ -455,13 +564,13 @@ sub beforeSaveHandler {
 ###############################################################################
 sub afterSaveHandler {
   # my ( $text, $topic, $web, $error, $meta ) = @_;
+  my $web = $_[2];
 
   # reset cache
-  foreach my $hierarchy (values %hierarchies) {
-    $hierarchy->DESTROY();
-  }
-  %hierarchies = ();
-
+  my $hierarchy = getHierarchy($web);
+  $hierarchy->invalidate();
+  $hierarchy->DESTROY();
+  $hierarchies{$web} = undef;
 }
 
 ###############################################################################

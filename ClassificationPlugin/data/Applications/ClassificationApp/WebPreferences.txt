@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1194439855" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="micha" date="1195762468" format="1.1" version="1.6"}%
 ---+!! <nop>%WEB% Web Preferences
 
 %TOC%
@@ -30,15 +30,12 @@ Flag to enable/disable listing this web on the sitemap:
 <nop>DBCachePlugin settings registering the WebDB
 implementation for this web (don't change):
    * Set WEBDB = TWiki::Plugins::DBCachePlugin::WebDB
-
-   * Set CLASSIFICATIONPLUGIN_CATEGORY_ClassifiedTopic = Category
-   * Set CLASSIFICATIONPLUGIN_CATEGORY_CategorizedTopic = Category
-   * Set CLASSIFICATIONPLUGIN_CATEGORY_Category = Category
+   * Set CLASSIFICATIONPLUGIN_AUTOREPARENT  = 1
 
 TopicFunctions to generate html page header information:
 <verbatim>
    * Set HTTP_EQUIV_ON_VIEW = %DBCALL{"Applications.RenderHttpEquivs"}%
-   * Set PAGETITLE = $percntDBCALL{\"Applications.RenderHtmlTitle\"}$percnt
+   * Set HTMLTITLE = $percntDBCALL{\"Applications.RenderHtmlTitle\"}$percnt
    * Set DEFAULT_METAKEYWORDS = TWikiWorkbench
    * Set METAKEYWORDS = %DEFAULT_METAKEYWORDS%
    * #Set METAAUTHOR =
@@ -48,7 +45,6 @@ TopicFunctions to generate html page header information:
 ---+++ Misc
 Definition of TWikiForms:
    * Set WEBFORMS = Applications.TWikiTopic, Applications.TopicStub
-
    * Set FINALPREFERENCES = ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, WEBDB
 
 __Related Topics__:

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1185292428" format="1.1" reprev="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="micha" date="1196956623" format="1.1" version="1.11"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+!! Function: %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -38,7 +38,8 @@
 ~~~       then=\"open\"
 ~~~       else=\"closed\"
 ~~~     }$percnt\">
-*~~     <a href=\"javascript:toggleValue('%NAME%','$name', 'clsCatSelector_%NAME%');\" 
+*~~     <a href=\"javascript:void(0)\"
+~~~        onclick=\"this.blur(); toggleValue('%NAME%','$name', 'clsCatSelector_%NAME%');\" 
 ~~~        id=\"$name\"
 ~~~        $percntIFDEFINED{\"%VALUE%\" as=\".*\b$name\b.*\" glue=\"off\"
 ~~~          then=\"class=\\"current\\"\"
@@ -66,7 +67,7 @@
 ---++ Test
 <div class="alt">
 *Categories A*:
-%DBCALL{"%TOPIC%" NAME="CategoryA" VALUE="TestCategory2"}%
+%DBCALL{"%TOPIC%" NAME="CategoryA" THEWEB="Demo"}%
 </div>
 <div class="alt">
 *Categories B*:
@@ -87,5 +88,6 @@
 
 %META:FORM{name="Applications.ApplicationTopic"}%
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="DocuTopic, TopicFunction"}%
+%META:FIELD{name="Title" attributes="" title="Title" value=""}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="Renders a hierarchical browser for categories during edit"}%
 %META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="ClassificationApp"}%

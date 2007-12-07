@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1185614582" format="1.1" reprev="1.9" version="$Rev$"}%
-%META:TOPICPARENT{name="Category"}%
+%META:TOPICINFO{author="micha" date="1196691683" format="1.1" version="1.10"}%
+%META:TOPICPARENT{}%
 ---+ %IFDEFINED{"%FORMFIELD{"Title"}%" then="$test" else="%TOPIC%" glue="off"}%
 %FORMFIELD{"Summary"}%
 
@@ -12,7 +12,6 @@
 
 %META:FORM{name="Applications.ClassificationApp.Category"}%
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="CategorizedTopic, Category"}%
-%META:FIELD{name="Title" attributes="" title="Title" value="<nop>FooBar"}%
-%META:FIELD{name="Summary" attributes="" title="Summary" value="Test Category"}%
+%META:FIELD{name="Title" attributes="" title="Title" value=""}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value=""}%
 %META:FIELD{name="Category" attributes="" title="Category" value="TOP"}%
-%META:FIELD{name="Usage" attributes="" title="Usage" value="ALL"}%

@@ -15,9 +15,7 @@
 package TWiki::Plugins::ClassificationPlugin::Category;
 
 use strict;
-use vars qw($idCounter);
-
-sub DEBUG { 0; }
+sub DEBUG { 1; }
 
 ###############################################################################
 # static
@@ -35,14 +33,16 @@ sub new {
 
   my $this = {
     name=>$name,
-    id=>$idCounter++,
+    id=>$hierarchy->{idCounter}++,
     hierarchy=>$hierarchy,
     summary=>'',
     title=>$name,
     @_
   };
+  $this->{gotUpdate} = 1;
 
   $this = bless($this, $class);
+
 
   # register to hierarchy
   $hierarchy->setCategory($name, $this);
@@ -58,10 +58,15 @@ sub DESTROY {
   #writeDebug("called DESTROY for category $this->{name}");
 
   # breaking cyclic references
-  $this->{parents} = ();
-  $this->{children} = ();
-  $this->{topics} = ();
-  $this->{hierarchy} = undef;
+  undef $this->{parents};
+  undef $this->{children};
+  undef $this->{topics};
+  undef $this->{hierarchy};
+  undef $this->{_subsumes};
+  undef $this->{_contains};
+  undef $this->{_nrLeafs};
+  undef $this->{_isCyclic};
+  undef $this->{_perms};
 }
 
 ###############################################################################
@@ -84,61 +89,59 @@ sub init {
     # establish child relation
     $parent->addChild($this) if $parent;
   }
+
+  $this->{gotUpdate} = 1;
 }
 
 ###############################################################################
 sub countLeafs {
   my $this = shift;
 	
-  return $this->{_nrLeafs} if defined $this->{nrLeafs};
+  my $nrLeafs = $this->{_nrLeafs};
 
-  $this->{_nrLeafs} = scalar($this->getTopics());
+  unless (defined $nrLeafs) {
+    #writeDebug("counting leafs of $this->{name}");
+    $nrLeafs = scalar($this->getLeafs());
+    $this->{_nrLeafs} = $nrLeafs;
+    $this->{gotUpdate} = 1;
+  }
+
+  return $nrLeafs;
+}
+
+###############################################################################
+sub getLeafs {
+  my ($this, $result, $seen) = @_;
+
+  $seen ||= {};
+  $result ||= {};
+
+  return keys %$result if $seen->{$this};
+  $seen->{$this} = 1;
+
+  foreach my $topic ($this->getTopics()) {
+    $result->{$topic} = 1;
+  }
+
   foreach my $child ($this->getChildren()) {
-    $this->{_nrLeafs} += $child->countLeafs();
+    $child->getLeafs($result, $seen);
   }
 
-  return $this->{_nrLeafs};
+  return keys %$result;
 }
 
 ###############################################################################
-# returns 1 if this category subsumes another
-sub subsumes {
-  my ($this, $that, $seen) = @_;
-
-  my $result = $this->{_subsumes}{$that->{name}};
-  return $result if defined $result;
-
-  #writeDebug("subsumes($this->{name}, $that->{name})");
-  $result = 0;
-  if ($this->{name} eq 'TOP' || 
-      $that->{name} eq 'BOTTOM' || 
-      $this eq $that) {
-    $result = 1;
-  } elsif ($that->{name} eq 'TOP') {
-    $result = 0;
-  } else {
-    $seen ||= {};
-    unless ($seen->{$this}) {
-      $seen->{$this} = 1;
-      foreach my $child ($this->getChildren()) {
-        #writeDebug("checking child $child->{name}");
-        $result = $child->subsumes($that, $seen);
-        last if $result;
-      }
-    }
-  }
-  #writeDebug("...$result");
-
-  # cache
-  $this->{_subsumes}{$that->{name}} = $result;
-  return $result;
-}
-
-###############################################################################
-# return 1 if this category subsumes that or the other way around
-sub compatible {
+sub distance {
   my ($this, $that) = @_;
-  return $this->subsumes($that) || $that->subsumes($this);
+
+  return $this->{hierarchy}->catDistance($this, $that);
+}
+
+###############################################################################
+sub subsumes {
+  my ($this, $that) = @_;
+
+  return $this->{hierarchy}->subsumes($this, $that);
 }
 
 ###############################################################################
@@ -146,30 +149,22 @@ sub compatible {
 sub contains {
   my ($this, $topic, $seen) = @_;
 
-  writeDebug("called contains($this->{name}, $topic)");
-
   my $result = $this->{_contains}{$topic};
   return $result if defined $result;
 
-  if ($this->{topics}{$topic} || $this->{name} eq $topic) {
-    $result = 1;
-  } else {
-    $seen ||= {};
-    $result = 0;
-    unless ($seen->{$this}) {
-      $seen->{$this} = 1;
-      foreach my $child ($this->getChildren()) {
-        if ($child->contains($topic, $seen)) {
-          $result = 1;
-          last;
-        }
-      }
-    }
+  $result = 0;
+  my $hierarchy = $this->{hierarchy};
+  my $cats = $hierarchy->getCategoriesOfTopic($topic);
+  foreach my $cat (keys %$cats) {
+    #writeDebug("checking $cat");
+    $result = $hierarchy->subsumes($this, $cat);
+    last if $result;
   }
-
+  #writeDebug("called contains($this->{name}, $topic) = $result");
+  
   # cache
   $this->{_contains}{$topic} = $result;
-  writeDebug("... $result");
+  $this->{gotUpdate} = 1;
   return $result;
 }
 
@@ -177,11 +172,12 @@ sub contains {
 sub setParents {
   my $this = shift;
 
-  writeDebug("called $this->{name}->setParents(@_)");
+  #writeDebug("called $this->{name}->setParents(@_)");
   foreach my $name (@_) {
     my $parent = $this->{hierarchy}->getCategory($name) || 1;
     $this->{parents}{$name} = $parent;
   }
+  $this->{gotUpdate} = 1;
 }
 
 ###############################################################################
@@ -191,6 +187,7 @@ sub getParents {
 }
 
 ###############################################################################
+# register a topic in that category
 sub addTopic {
   my ($this, $topic) = @_;
 
@@ -206,11 +203,13 @@ sub getTopics {
 }
 
 ###############################################################################
+# register a subcategory
 sub addChild {
   my ($this, $category) = @_;
 
   #writeDebug("called $this->{name}->addChild($category->{name})");
   $this->{children}{$category->{name}} = $category;
+  $this->{gotUpdate} = 1;
 }
 
 ###############################################################################
@@ -220,20 +219,11 @@ sub getChildren {
 }
 
 ###############################################################################
-sub setUsage { 
-  my ($this, $usage) = @_;
-
-  $usage ||= '';
-  foreach my $item (split(/,\s/, $usage)) {
-    $this->{usage}{$item} = 1;
-  }
-}
-
-###############################################################################
 sub setSummary {
   my ($this, $summary) = @_;
   $summary = TWiki::urlDecode($summary);
   $this->{summary} = $summary;
+  $this->{gotUpdate} = 1;
   return $summary;
 }
 
@@ -242,15 +232,8 @@ sub setTitle {
   my ($this, $title) = @_;
   $title = TWiki::urlDecode($title);
   $this->{title} = $title;
+  $this->{gotUpdate} = 1;
   return $title;
-}
-
-
-###############################################################################
-sub isUsedFor {
-  my ($this, $usage) = @_;
-
-  return defined($this->{usage}{$usage});
 }
 
 ###############################################################################
@@ -268,6 +251,7 @@ sub isCyclic {
   
   # cache
   $this->{_isCyclic} = $result;
+  $this->{gotUpdate} = 1;
   return $result;
 }
 
@@ -315,27 +299,34 @@ return 1;
 
 ###############################################################################
 sub toHTML {
-  my ($this, $params, $nrCalls, $index, $nrSiblings, $seen) = @_;
+  my ($this, $params, $nrCalls, $index, $nrSiblings, $seen, $depth) = @_;
 
-  return '' unless $this->checkAccessPermission();
+  $depth ||= 0;
+
+  my $maxDepth = $params->{depth};
+  return '' if $maxDepth && $depth >= $maxDepth;
 
   $index ||= 1;
   $nrSiblings ||= 0;
   $seen ||= {};
   return '' if $seen->{$this};
   $seen->{$this} = 1;
+
+  return '' unless $this->checkAccessPermission();
+
   my $subResult = '';
   my $header = $params->{header} || '';
   my $footer = $params->{footer} || '';
+  my $format = $params->{format} || '<ul><li>$link ($count) $children</li></ul>';
 
-  writeDebug("toHTML() nrCalls=$$nrCalls, name=$this->{name}");
+  #writeDebug("toHTML() nrCalls=$$nrCalls, name=$this->{name}");
 
   # format sub-categories
   my @children = sort {$a->{name} cmp $b->{name}} $this->getChildren();
   my $nrChildren = @children;
   my $childIndex = 1;
   foreach my $child (@children) {
-    $subResult .= $child->toHTML($params, $nrCalls, $childIndex, $nrChildren, $seen);
+    $subResult .= $child->toHTML($params, $nrCalls, $childIndex, $nrChildren, $seen, $depth+1);
     $childIndex++;
   }
   $seen->{$this} = 0;
@@ -356,15 +347,14 @@ sub toHTML {
   my $nrTopics = scalar(keys %{$this->{topics}});
   my $nrSubcats = scalar(keys %{$this->{children}});
   my $isCyclic = 0;
-  my $format = $params->{format} || '<ul><li>$link ($count) $children</li></ul>';
   $isCyclic = $this->isCyclic() if $format =~ /\$cyclic/;
 
   $subResult = $header.$subResult.$footer if $subResult;
 
   return TWiki::Plugins::ClassificationPlugin::Core::expandVariables($format, 
     'link'=>($this->{name} =~ /^(TOP|BOTTOM)$/)?
-      "<b>$this->{name}</b>":
-      "[[$this->{hierarchy}->{web}.$this->{name}][$this->{name}]]",
+      "<b>$this->{title}</b>":
+      "[[$this->{hierarchy}->{web}.$this->{name}][$this->{title}]]",
     'url'=>($this->{name} =~ /^(TOP|BOTTOM)$/)?"":
       '%SCRIPTURL{"view"}%/'."$this->{hierarchy}->{web}/$this->{name}",
     'web'=>$this->{hierarchy}->{web}, 

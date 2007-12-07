@@ -11,7 +11,10 @@ function toggleValue(fieldName, theValue, selector) {
     if (value == theValue) {
       found = true;
     } else {
-      newValues.push(value);
+      var re = new RegExp("^"+value+".*");
+      if (!re.test(theValue)) {
+        newValues.push(value);
+      }
     }
   }
 
@@ -32,14 +35,12 @@ function clsSetSelection(fieldName, selector, selection) {
 }
 function clsClearSelection(fieldName, selector) {
   $("#"+selector+" input#"+fieldName).val("");
-  $("#"+selector+" a").removeClass('current');
-  $("#"+selector+" a").removeClass('typed');
+  $("#"+selector+" a").removeClass('current typed');
 }
 
 function handleTaggingKey(fieldName, selector) {
   var selector = $("#"+selector);
-  $("a", selector).removeClass("typed");
-  $("a", selector).removeClass("current");
+  $("a", selector).removeClass('typed current');
   var selection = $("input", selector).val();
   var values = selection.split(/[, ]+/);
   for (var i = 0; i < values.length; i++) {
@@ -50,7 +51,7 @@ function handleTaggingKey(fieldName, selector) {
     return;
   }
   var re = new RegExp("^"+last+".*");
-  $("a",selector).each(function(i) {
+  $("a",selector).each(function() {
     var id = $(this).attr("id");
     if(re.test(id)) {
       $(this).addClass("typed");

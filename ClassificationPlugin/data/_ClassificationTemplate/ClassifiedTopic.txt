@@ -5,7 +5,6 @@
 %DBCALL{"%FORMFIELD{"Target"}%" remote="on" section="%FORMFIELD{"Section"}%"}%
 <!--
    * Set EDIT_TEMPLATE = Applications.FormEdit
-   * Set PAGETITLE = %TOPIC% - %FORMFIELD{"Summary"}% - %WEB%
    * Set VIEW_TEMPLATE = Applications.HiddenFormView
 -->
 See also: [[%FORMFIELD{"Target"}%]]

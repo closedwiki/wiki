@@ -19,7 +19,7 @@ use TWiki::Plugins::ClassificationPlugin::Core;
 
 use vars qw( 
   $VERSION $RELEASE $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
-  $doneHeader $currentTopic $currentWeb
+  $doneHeader
 );
 
 $VERSION = '$Rev$';
@@ -29,7 +29,7 @@ $SHORTDESCRIPTION = 'A topic classification plugin and application';
 
 ###############################################################################
 sub initPlugin {
-  ($currentTopic, $currentWeb) = @_;
+  my ($baseTopic, $baseWeb) = @_;
 
   TWiki::Func::registerTagHandler('BROWSECAT', 
     \&TWiki::Plugins::ClassificationPlugin::Core::handleBrowseCat);
@@ -37,18 +37,20 @@ sub initPlugin {
     \&TWiki::Plugins::ClassificationPlugin::Core::handleIsA);
   TWiki::Func::registerTagHandler('SUBSUMES', 
     \&TWiki::Plugins::ClassificationPlugin::Core::handleSubsumes);
-  TWiki::Func::registerTagHandler('COMPATIBLE', 
-    \&TWiki::Plugins::ClassificationPlugin::Core::handleCompatible);
-  TWiki::Func::registerTagHandler('SUBSUMTION', 
-    \&TWiki::Plugins::ClassificationPlugin::Core::handleSubsumtion);
-  TWiki::Func::registerTagHandler('COMPATIBILITY', 
-    \&TWiki::Plugins::ClassificationPlugin::Core::handleCompatibility);
   TWiki::Func::registerTagHandler('CATFIELD', 
     \&TWiki::Plugins::ClassificationPlugin::Core::handleCatField);
+  TWiki::Func::registerTagHandler('TAGFIELD', 
+    \&TWiki::Plugins::ClassificationPlugin::Core::handleTagField);
   TWiki::Func::registerTagHandler('TAGRELATEDTOPICS', 
     \&TWiki::Plugins::ClassificationPlugin::Core::handleTagRelatedTopics);
+  TWiki::Func::registerTagHandler('CATINFO', 
+    \&TWiki::Plugins::ClassificationPlugin::Core::handleCatInfo);
+  TWiki::Func::registerTagHandler('TAGINFO', 
+    \&TWiki::Plugins::ClassificationPlugin::Core::handleTagInfo);
+  TWiki::Func::registerTagHandler('DISTANCE', 
+    \&TWiki::Plugins::ClassificationPlugin::Core::handleDistance);
 
-  TWiki::Plugins::ClassificationPlugin::Core::init();
+  TWiki::Plugins::ClassificationPlugin::Core::init($baseWeb, $baseTopic);
   $doneHeader = 0;
   return 1;
 }
@@ -82,8 +84,20 @@ sub afterSaveHandler {
 }
 
 ###############################################################################
+# SMELL: I'd prefer a proper finishHandler, alas it does not exist
+sub modifyHeaderHandler {
+  TWiki::Plugins::ClassificationPlugin::Core::finish(@_);
+}
+
+###############################################################################
 sub renderFormFieldForEditHandler {
   return TWiki::Plugins::ClassificationPlugin::Core::renderFormFieldForEditHandler(@_);
+}
+
+###############################################################################
+# perl api
+sub getHierarchy {
+  return TWiki::Plugins::ClassificationPlugin::Core::getHierarchy(@_);
 }
 
 1;

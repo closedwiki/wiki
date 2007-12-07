@@ -1,17 +1,13 @@
-%META:TOPICINFO{author="TWikiContributor" date="1182192450" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="micha" date="1196879877" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicView"}%
 %TMPL:INCLUDE{"view"}%
 %TMPL:DEF{"textcontent"}%<div class="patternTopic">
-%DBCALL{"Applications.ClassificationApp.RenderClassifiedTopicView"}%
-%TEXT%
-</div>%TMPL:END% %{
-%RED%Note, this is only a view template.%ENDCOLOR%
-
-See also: TopicView
-}%
+%TEXT% 
+</div>%TMPL:END%
 %TMPL:DEF{"form"}%%TMPL:END%
+%TMPL:DEF{"attachments"}%%TMPL:END%
 
 %META:FORM{name="Applications.ApplicationTopic"}%
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicView"}%
-%META:FIELD{name="Summary" attributes="" title="Summary" value="Display a categorized topic"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="View for Categories"}%
 %META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="ClassificationApp"}%

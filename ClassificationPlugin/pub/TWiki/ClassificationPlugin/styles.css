@@ -1,7 +1,8 @@
+.clsTopicInfo h1 {
+  margin-bottom:0.5em !important;
+}
 .clsTopicInfo {
   margin-bottom:1em;
-}
-.clsTopicSummary {
 }
 .clsBrowser a {
   text-decoration:none;
@@ -97,4 +98,32 @@
 }
 .clsCategoryFactory .twikiFirstCol {
   width:100px;
+}
+
+/* indexes */
+.fltMakeIndexWrapper {
+  margin:1em 0px;
+}
+.fltMakeIndexWrapper h3 {
+  margin:0px !important;
+}
+.fltMakeIndexWrapper ul {
+  margin:0px;
+  padding-top:0px;
+  padding-bottom:0px;
+}
+.fltMakeIndexWrapper li {
+  padding:7px 0px 0px 0px;
+  margin:0px 0px 3px 0px;
+  border-bottom:1px solid #eeeeee;
+}
+.fltMakeIndexWrapper .clsTopicInfo {
+  color:gray;
+  margin:0px;
+}
+.fltMakeIndexWrapper .redDot a {
+  display:inline !important;
+}
+.fltMakeIndexWrapper table td {
+  width:40em;
 }

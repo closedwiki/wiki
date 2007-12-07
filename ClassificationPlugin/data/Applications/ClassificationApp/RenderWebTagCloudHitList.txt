@@ -41,7 +41,7 @@
 ~~~           onmouseover=\"hiliteElements('$expand(%HILITE%)','hilite');\"
 ~~~           onmouseout=\"hiliteElements('%URLPARAM{"search"}%','current');\"
 ~~~         %FIDEFINED%
-~~~         >$topic</a>
+~~~         >$expand(Title or topic)</a>
 ~~~      | $flatten($expand(Summary or Text or 'no description'))
 ~~~      | <span style=\"white-space:nowrap\">$formatTime(info.date)</span>
 ~~~      | [[%MAINWEB%.$expand(info.author)][$expand(info.author)]]  

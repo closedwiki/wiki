@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1194286475" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="micha" date="1195766506" format="1.1" reprev="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicType"}%
 ---+!! %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -14,9 +14,6 @@ So while tags are a kind of "keywords" that connect content in a per-to-per fash
 categories are a predefined hierarchy where content is situated in separate compartments.
 
 Categories themselves are CategorizedTopics thus implementing a hierarchy.
-
-Categories can be restricted in their usage by listing the TopicTypes they should be appliable
-in the Usage formfield. For example you can define a category to be used for discussions but not for products.
 
 See also: See CategorizedTopic, ClassifiedTopic, TaggedTopic, CategoryTemplate
 %ENDSECTION{name="documentation" type="section"}%
@@ -38,15 +35,6 @@ See also: See CategorizedTopic, ClassifiedTopic, TaggedTopic, CategoryTemplate
 <input type="hidden" name="topicparent" value="%BASEWEB%.%BASETOPIC%" />
 <table>
 <tr>
-  <th class="twikiFirstCol" valign="top">Parent:</th>
-  <td>
-%~~ DBCALL{"Applications.ClassificationApp.RenderEditCategoryBrowser" 
-~~~   NAME="Category" 
-~~~   VALUE="%IFDEFINED{"%BASETOPIC%" as="Category" then="TOP" else="$test"}%"
-~~~   BUTTONS="off"
-~~~ }%
-  </td>
-</tr>
   <th class="twikiFirstCol">Title:</th>
   <td><input type="text" id="title" name="Title" size="60" onblur="wikify('title','topic', 'Category')" onkeyup="wikify('title','topic', 'Category')" /></td>
 </tr>
@@ -59,24 +47,13 @@ See also: See CategorizedTopic, ClassifiedTopic, TaggedTopic, CategoryTemplate
   <td><input type="text" name="Summary" size="60" /></td>
 </tr>
 <tr>
-  <th class="twikiFirstCol">Usage:</th>
-  <td><select name="Usage">
-~~~ <option 
-~~~   %IFDEFINED{"%USAGE%" as="ALL" 
-~~~     then=" selected='selected'"
-~~~   }%>ALL
-*~~ </option>
-%~~ DBQUERY{"TopicType=~'\bTopicType\b'"
-~~~   web="%URLPARAM{"web" default="%BASEWEB%"}%"
-~~~   format="
-*~~     <option 
-~~~       $percntIFDEFINED{\"%USAGE%\"
-~~~         as=\"$topic\" 
-~~~         then=\" selected='selected'\"
-~~~       }$percnt>$topic
-*~~     </option>"
+  <th class="twikiFirstCol" valign="top">Parent:</th>
+  <td>
+%~~ DBCALL{"Applications.ClassificationApp.RenderEditCategoryBrowser" 
+~~~   NAME="Category" 
+~~~   VALUE="%IFDEFINED{"%BASETOPIC%" as="Category" then="TOP" else="$test"}%"
+~~~   BUTTONS="off"
 ~~~ }%
-  </select>
   </td>
 </tr>
 <tr style="padding-top:1em">
@@ -92,42 +69,34 @@ See also: See CategorizedTopic, ClassifiedTopic, TaggedTopic, CategoryTemplate
 <script type="text/javascript" src="%PUBURLPATH%/Applications/twb.js"></script>
 </noautolink>%ENDSECTION{"factory"}%
 
-
-%~~ DBQUERY{"TopicType=~'\bCategory\b' 
-~~~     AND Category='(TOP)?'
-~~~     %IFDEFINED{"%URLPARAM{"usage"}%" glue="off" then="AND Usage=~'\b($test)\b'"}%
-~~~   "
+<noautolink>
+%~~ DBQUERY{"TopicType=~'\bCategory\b' AND Category='(TOP)?'"
 ~~~   remote="on"
-~~~   web="%URLPARAM{"web" defeault="%BASEWEB%"}%"
+~~~   web="%URLPARAM{"web" default="%BASEWEB%"}%"
 ~~~   header="<h2>Top categories</h2>$n
 ~~~           $percntTABLE{tablewidth=\"100%\"}$percnt$n
 ~~~           | *Nr*
 ~~~           | *Name*
 ~~~           | *Summary*
 ~~~           | *Parent*
-~~~           | *Usage*
 ~~~           |$n"
 ~~~   hidenull="on"
 ~~~   format="| $index
 ~~~           | [[$web.$topic][$expand(Title or topic)]]
 ~~~           | $formfield(Summary)
 ~~~           |<b>TOP</b>
-~~~           | $formfield(Usage)
 ~~~           |"
 ~~~ }%
 
-%~~ DBQUERY{"TopicType=~'\bCategory\b' AND Category!='(TOP)'
-~~~     %IFDEFINED{"%URLPARAM{"usage"}%" glue="off" then="AND Usage=~'\b($test)\b'"}%
-~~~   "
+%~~ DBQUERY{"TopicType=~'\bCategory\b' AND Category!='(TOP)'"
 ~~~   remote="on"
-~~~   web="%URLPARAM{"web" defeault="%BASEWEB%"}%"
+~~~   web="%URLPARAM{"web" default="%BASEWEB%"}%"
 ~~~   header="<h2>List of all categories</h2>$n
-~~~           $percntTABLE{tablewidth=\"100%\"}$percnt$n
+~~~           $percntTABLE{tablewidth=\"100%\" columnwidths=\"1em,5em,5em,5em\"}$percnt$n
 ~~~           | *Nr*
 ~~~           | *Name*
 ~~~           | *Summary*
 ~~~           | *Parent*
-~~~           | *Usage*
 ~~~           |$n"
 ~~~   hidenull="on"
 ~~~   format="| $index
@@ -146,14 +115,10 @@ See also: See CategorizedTopic, ClassifiedTopic, TaggedTopic, CategoryTemplate
 *~~                 $dollarpercntFIDEFINED$dollarpercnt
 ~~~                \"
 ~~~             }$percnt
-~~~           | $formfield(Usage)
 ~~~           |"
 ~~~ }%
+</noautolink>
 %STOPINCLUDE%
-
-<!-- -->
----++ Subsumtion
-%SUBSUMTION{web="%URLPARAM{"web" default="%BASEWEB%"}%"}%
 
 ---++ %TOPIC% form
 | *Name:*| *Type:* | *Size:* | *Values:* | *Tooltip message:* | *Attributes:* |
@@ -161,7 +126,6 @@ See also: See CategorizedTopic, ClassifiedTopic, TaggedTopic, CategoryTemplate
 | Title | text | 75 | | title | |
 | Summary | text | 75 | | short description of | |
 | Category | cat | 1 | | parent category |  |
-| Usage | checkbox | 3 | ALL, %DBCALL{"Applications.GetTopicTypes" remote="off"}%| <nop>TopicTypes that may use this category  | |
 
 
 %DBCALL{"Applications.RenderTWikiFormList" THEWEB="%URLPARAM{"web" default="%BASEWEB%"}%"}%

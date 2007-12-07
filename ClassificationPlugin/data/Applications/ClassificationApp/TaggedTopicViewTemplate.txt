@@ -2,7 +2,7 @@
 %META:TOPICPARENT{name="TopicView"}%
 %TMPL:INCLUDE{"view"}%
 %TMPL:DEF{"simpleheader"}%
-%DBCALL{"Applications.ClassificationApp.RenderTaggedTopicView"}%
+%DBCALL{"Applications.ClassificationApp.RenderClassifiedTopicView"}%
 %TMPL:END% 
 %TMPL:DEF{"form"}%%TMPL:END%
 

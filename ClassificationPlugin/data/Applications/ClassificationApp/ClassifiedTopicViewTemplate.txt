@@ -4,7 +4,11 @@
 %TMPL:DEF{"textcontent"}%<div class="patternTopic">
 %DBCALL{"Applications.ClassificationApp.RenderClassifiedTopicView"}%
 %TEXT%
-</div>%TMPL:END%
+</div>%TMPL:END% %{
+%RED%Note, this is only a view template.%ENDCOLOR%
+
+See also: TopicView
+}%
 %TMPL:DEF{"form"}%%TMPL:END%
 
 %META:FORM{name="Applications.ApplicationTopic"}%
