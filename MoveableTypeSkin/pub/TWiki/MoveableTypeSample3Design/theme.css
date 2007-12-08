@@ -31,9 +31,8 @@ body
 	margin: 0;
 	color: #000000;
 	background: darkslategrey;
-	background-image: url(wiki.gif);
+	background-image: url(background.png);
 	font-family: Arial, sans-serif;
-	NOfont-weight: normal;
 	font-size: 10pt;
 	line-height: 140%;
 }
@@ -41,14 +40,11 @@ body
 #container { 
     position: static; 
     padding: 50px;
-    NOpadding-left: 25px;
 }
 
 #container-inner
 {
 	position: static;
-	NOborder: 1px solid #CCCCCC;
-	NObackground: #FFFFFF;
 }
 
 #banner
@@ -61,7 +57,6 @@ body
 	color: darkslategrey;
 	background: steelblue url(wikiring-mosaic.png) no-repeat scroll right;
 	text-align: left;
-	font-family: Arial, sans-serif;
 	font-size: large;
 }
 
@@ -73,7 +68,7 @@ body
 
 #banner-header
 {
-    padding: 75px 150px 0px; 
+    padding: 75px 175px 0px; 
 	margin: 0.25em 0;
 	font-size: 2em;
 	font-weight: bold;
@@ -83,7 +78,7 @@ body
 
 #banner-description
 {
-    padding: 10px 150px; 
+    padding: 10px 200px; 
 	margin: 0.25em 0;
 	font-size: 1em;
 }
@@ -134,7 +129,6 @@ body
 .layout-calendar #beta-inner,
 .layout-timeline #beta-inner
 {
-	NOborder: 1px solid #CCCCCC;
 	padding: 14px 14px 14px 14px;
 	background: #FFFFFF;
 }
@@ -209,7 +203,6 @@ body
 	margin: 0 0 10px 0;
 	border-top: 1px solid #CCCCCC;
 	padding: 3px;
-	NOcolor: #666666;
 	font-family: Verdana, Arial, sans-serif;
 	font-size: x-small;
 	line-height: normal;
@@ -250,8 +243,6 @@ img.image-full
 	margin: 5px 0;
 	border-bottom: 1px dotted #CCCCCC;
   	padding: 3px;
-	NOcolor: #666666;
-	NOfont-family: Georgia, 'Times New Roman', serif;
 	font-size: small;
 	line-height: normal;
 	font-weight: bold;
@@ -264,8 +255,6 @@ img.image-full
 .module-content
 {
 	margin: 5px 0 20px 0;
-	NOcolor: #333333;
-	NOfont-family: 'Trebuchet MS', Verdana, sans-serif;
 	font-size: x-small;
 	line-height: 150%;
 	font-weight: bold;
@@ -293,8 +282,6 @@ img.image-full
 
 .module-calendar .module-header
 {
-	NOcolor: #666666;
-	NOfont-family: Georgia, 'Times New Roman', serif;
 	font-size: x-small;
 	border-bottom: 1px dotted #CCCCCC;
 	text-align: left;
