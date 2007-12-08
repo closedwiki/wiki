@@ -592,6 +592,29 @@ sub DISABLE_afterAttachmentSaveHandler {
     TWiki::Func::writeDebug( "- ${pluginName}::afterAttachmentSaveHandler( $_[2].$_[1] )" ) if $debug;
 }
 
+=begin twiki
+
+---++ beforeMergeHandler( $text, $currRev, $currText, $origRev, $origText, $web, $topic )
+   * =$text= - the new text of the topic
+   * =$currRev= - the number of the most recent rev of the topic in the store
+   * =$currText= - the text of that rev
+   * =$origRev= - the number of the rev that the edit started on (or undef
+     if that revision was overwritten by a replace-revision save)
+   * =$origText= - the text of that revision (or undef)
+   * =$web= - the name of the web for the topic being saved
+   * =$topic= - the name of the topic
+This handler is called immediately before a merge of a topic that was edited
+simultaneously by two users. It is called once on the topic text from
+the =save= script. See =mergeHandler= for handling individual changes in the
+topic text (and in forms).
+
+=cut
+
+sub DISABLE_beforeMergeHandler {
+    # do not uncomment, use $_[0], $_[1]... instead
+    #my( $text, $currRev, $currText, $origRev, $origText, $web, $topic ) = @_;
+}
+
 =pod
 
 ---++ mergeHandler( $diff, $old, $new, \%info ) -> $text
