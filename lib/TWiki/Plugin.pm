@@ -40,6 +40,7 @@ use vars qw( @registrableHandlers %deprecated );
    'beforeAttachmentSaveHandler',  # 1.022
    'beforeCommonTagsHandler',      # 1.024
    'beforeEditHandler',            # 1.010
+   'beforeMergeHandler',           # 1.200
    'beforeSaveHandler',            # 1.010
    'commonTagsHandler',            # 1.000
    'completePageHandler',          # 1.100
