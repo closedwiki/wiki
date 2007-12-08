@@ -222,7 +222,8 @@ Designs
    * Set FIRSTDESIGN = 1
    * Set DESIGN1 = MoveableTypeSampleDesign
    * Set DESIGN2 = MoveableTypeSample2Design
-   * Set LASTDESIGN = 2
+   * Set DESIGN2 = MoveableTypeSample3Design
+   * Set LASTDESIGN = 3
 
 Column layouts
    * Set FIRSTCOLS = 1
@@ -233,7 +234,9 @@ Column layouts
    * Set LASTCOLS = 4
 
 CSSes
-   * Set FIRSTCSS = 48
+   * Set FIRSTCSS = 47
+   * Set CSS47 = %PUBURL%/%TWIKIWEB%/MoveableTypeSample3Design/theme.css
+   * Set NAME47 = Sample3Theme
    * Set CSS48 = %PUBURL%/%TWIKIWEB%/MoveableTypeSample2Design/theme.css
    * Set NAME48 = Sample2Theme
    * Set CSS49 = %PUBURL%/%TWIKIWEB%/MoveableTypeSampleDesign/theme.css
