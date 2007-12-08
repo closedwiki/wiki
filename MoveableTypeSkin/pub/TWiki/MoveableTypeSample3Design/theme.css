@@ -9,7 +9,8 @@ developer_url: http://distributedINFORMATION.com
 h1, h2, h3, h4, h5, h6
 {
 	margin-top: 25px;
-	margin-bottom: 15px;
+	margin-bottom: 25px;
+	line-height: 1.2em;
 }
 
 a
@@ -30,7 +31,7 @@ body
 {
 	margin: 0;
 	color: #000000;
-	background: lightslategrey;
+	background: #000044;
 	background-image: url(no);
 	font-family: Arial, sans-serif;
 	font-size: 10pt;
@@ -52,10 +53,12 @@ body
 }
 
 #banner-inner { 
-	border: 0;
-	height: 200px;
+	border:4px solid white;
+	height: 192px;
+	right: -120px;
 	color: darkslategrey;
-	background: steelblue url(wikiring-mosaic.png) no-repeat scroll right;
+	NObackground: steelblue url(fireworks.png) no-repeat scroll right top;
+	background: steelblue;
 	text-align: left;
 	font-size: large;
 }
@@ -68,7 +71,7 @@ body
 
 #banner-header
 {
-    padding: 75px 175px 0px; 
+    padding: 65px 175px 0px; 
 	margin: 0.25em 0;
 	font-size: 2em;
 	font-weight: bold;
@@ -83,6 +86,14 @@ body
 	font-size: 1em;
 }
 
+#banner #banner-extra {
+    float: right;
+    top: -3px;
+	background: #000044 url(fireworks.png) no-repeat scroll right top;
+	height: 234px;
+	width: 231px;
+	z-index: 9999;
+}
 
 
 
@@ -539,7 +550,7 @@ img.image-full
 		position: absolute;
 		float: none;
 		left: 0px;
-		top: 25px;
+		top: 60px;
 	    bottom: 0px;
 	}
 	
@@ -554,7 +565,7 @@ img.image-full
 	.layout-two-column-left #beta
 	{
 		display: block;
-		float: none;
+		NOfloat: none;
 		width: auto;
 		margin-left: 225px;
 		top: 25px;
@@ -619,12 +630,12 @@ img.image-full
 	
 	.layout-two-column-right #beta
 	{
-		width: 200px;
+		width: 197px;
 					display: block;
 			position: absolute;
 			float: none;
 			right: 0;
-			top: 25px;
+			top: 30px;
 	    bottom: 0px;
 	}
 	
@@ -633,7 +644,7 @@ img.image-full
 		padding: 14px 14px 14px 14px;
         background: steelblue;
         color: ivory;
-	}
+	    border:3px solid white;	}
 
 
 /* three-column tweaks */
@@ -667,9 +678,9 @@ img.image-full
 		display: block;
 		float: none;
 		width: auto;
-		margin-left: 150px;
-		margin-right: 225px;
-		top: 25px;
+		margin-left: 160px;
+		margin-right: 235px;
+		top: 35px;
 	    bottom: 0px;
 	}
 	
@@ -694,17 +705,18 @@ img.image-full
 	
 	.layout-three-column #gamma
 	{
-		width: 200px;
+		width: 197px;
 		display: block;
 		position: absolute;
 		float: none;
 		right: 0;
-		top: 25px;
+		top: 30px;
 	    bottom: 0px;
 	}
 	
 	.layout-three-column #gamma-inner
 	{
+	    border:3px solid white;
 		padding: 14px 14px 14px 14px;
         background: steelblue;
         color: ivory;

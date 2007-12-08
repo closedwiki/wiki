@@ -71,18 +71,16 @@ mainclass = %TMPL:P{"mainclass"}%
    <div id="container">
       <div id="container-inner" class="pkg">%TMPL:END%
 %{ ******************************************* }%
-%TMPL:DEF{"standardheader"}%         <div id="banner">
-%INCLUDE{"%TWIKIWEB%.%TMPL:P{moveabletypetext}%" section="startsectionwrapper-banner"}%
+%TMPL:DEF{"standardheader"}%         <div id="banner">%INCLUDE{"%TWIKIWEB%.%TMPL:P{moveabletypetext}%" section="startsectionwrapper-banner"}%
+               <span id="banner-extra"></span>
             <div id="banner-inner" class="pkg">
                <h1 id="banner-header">%TMPL:P{"titleaction"}%%IF{"defined PAGETITLE" then="%PAGETITLE%" else="<nop>%TOPIC% "}%</h1>
                <h2 id="banner-description"> [[%WEB%.WebHome][%WEB%]] </h2>
             </div>
-%INCLUDE{"%TWIKIWEB%.%TMPL:P{moveabletypetext}%" section="endsectionwrapper-banner"}%
-         </div>
+%INCLUDE{"%TWIKIWEB%.%TMPL:P{moveabletypetext}%" section="endsectionwrapper-banner"}%         </div>
          <div id="pagebody">
             <div id="pagebody-inner" class="pkg">%TMPL:P{two-column-left}%               <div id="%TMPL:P{"mainclass"}%">
-%INCLUDE{"%TWIKIWEB%.%TMPL:P{moveabletypetext}%" section="startsectionwrapper-main"}%
-  <div id="%TMPL:P{"mainclass"}%-inner" class="pkg">
+%INCLUDE{"%TWIKIWEB%.%TMPL:P{moveabletypetext}%" section="startsectionwrapper-main"}%  <div id="%TMPL:P{"mainclass"}%-inner" class="pkg">
 	<span id="twiki_text">%TMPL:END%
 	
 	
@@ -91,8 +89,7 @@ mainclass = %TMPL:P{"mainclass"}%
 %{ ******************************************* }%
 %TMPL:DEF{"standardfooter"}%
 	</span><!-- twiki_text -->
-  </div>
-%INCLUDE{"%TWIKIWEB%.%TMPL:P{moveabletypetext}%" section="endsectionwrapper-main"}%
+  </div>%INCLUDE{"%TWIKIWEB%.%TMPL:P{moveabletypetext}%" section="endsectionwrapper-main"}%
                </div>%TMPL:P{two-column-right}%            </div>
          </div>
 %TMPL:END%

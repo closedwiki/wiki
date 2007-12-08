@@ -10,7 +10,7 @@ Then configure the settings on the topic to match, so that you can Proof your de
 <!--
 <noautolink>
 Iterators for Design, CSS file, and column layout
-   * Set CURRENTCOLS = 3
+   * Set CURRENTCOLS = %URLPARAM{"colsidx" default="3"}%
    * Set NEXTCOLS = %CALC{"$IF( $EVAL( %CURRENTCOLS% + 1 ) > %LASTCOLS%, %FIRSTCOLS%, $EVAL( %CURRENTCOLS% + 1 ))"}%
    * Set PREVIOUSCOLS = %CALC{"$IF( $EVAL( %CURRENTCOLS% - 1 ) < %FIRSTCOLS%, %LASTCOLS%, $EVAL( %CURRENTCOLS% - 1 ))"}%
    * Set COLSPARAM = moveabletypecolumns=%URLPARAM{"moveabletypecolumns" default="%COLS%CURRENTCOLS%%"}%;colsidx=%CURRENTCOLS%
