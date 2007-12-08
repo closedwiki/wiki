@@ -8,14 +8,15 @@ Then configure the settings on the topic to match, so that you can Proof your de
 
 %STARTSECTION{"css-browser"}%
 <!--
+<noautolink>
 Iterators for Design, CSS file, and column layout
-   * Set CURRENTCOLS = %URLPARAM{"colsidx" default="%FIRSTCOLS%"}%
+   * Set CURRENTCOLS = 3
    * Set NEXTCOLS = %CALC{"$IF( $EVAL( %CURRENTCOLS% + 1 ) > %LASTCOLS%, %FIRSTCOLS%, $EVAL( %CURRENTCOLS% + 1 ))"}%
    * Set PREVIOUSCOLS = %CALC{"$IF( $EVAL( %CURRENTCOLS% - 1 ) < %FIRSTCOLS%, %LASTCOLS%, $EVAL( %CURRENTCOLS% - 1 ))"}%
    * Set COLSPARAM = moveabletypecolumns=%URLPARAM{"moveabletypecolumns" default="%COLS%CURRENTCOLS%%"}%;colsidx=%CURRENTCOLS%
    
-   * Set DESIGNPARAM=
-   * Set CSSPARAM=
+   * Set DESIGNPARAM=moveabletypetopic=%MOVEABLETYPESKIN_DESIGNTOPIC%
+   * Set CSSPARAM=cssfile=%MOVEABLETYPESKIN_CSSFILE%
    
 Column layouts
    * Set FIRSTCOLS = 1
@@ -24,6 +25,7 @@ Column layouts
    * Set COLS3 = three-column
    * Set COLS4 = one-column
    * Set LASTCOLS = 4
+</noautolink>
 -->
 <div align="center" style="margin:6px;">
 <div align="left" style="color:black;align:NOcenter;width:80%;background-color:#F3FEF6;border:1px solid;margin:6px;padding:6px;">
@@ -37,6 +39,7 @@ Choose COLUMNS:
 ---++ Enable this design
 Copy and paste the following section to your %MAINWEB%.TWikiPreferences topic (or !WebPreferences, or your personal topic)
 
+<noautolink>
 <textarea readonly rows="13" style="width:85%;margin:10px;">
    * Set TWiki to use this MoveableType design, set the following on %MAINWEB%.TWikiPreferences (don't copy the raw text)
       * Set SKIN=moveabletype
@@ -45,8 +48,9 @@ Copy and paste the following section to your %MAINWEB%.TWikiPreferences topic (o
    * set the moveabletype skin to use to get the css and images from here
       * Set MOVEABLETYPESKIN_CSSFILE = %PUBURL%/%TWIKIWEB%/%MOVEABLETYPESKIN_DESIGNTOPIC%/theme.css
    * is the css one-column, two-column-left, two-column-right, three-column
-      * Set MOVEABLETYPESKIN_COLUMNS = three-column
+      * Set MOVEABLETYPESKIN_COLUMNS = %URLPARAM{"moveabletypecolumns" default="%COLS%CURRENTCOLS%%"}%
 </textarea>
+</noautolink>
 
 ----
 ---++ Moveable Type Common Text sections

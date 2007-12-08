@@ -30,8 +30,8 @@ body
 {
 	margin: 0;
 	color: #000000;
-	background: darkslategrey;
-	background-image: url(background.png);
+	background: lightslategrey;
+	background-image: url(no);
 	font-family: Arial, sans-serif;
 	font-size: 10pt;
 	line-height: 140%;

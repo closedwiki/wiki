@@ -28,7 +28,7 @@ Use the navigation buttons to select between options. Click on the theme name to
 Iterators for Design, CSS file, and column layout
    * Set CURRENTDESIGN = %URLPARAM{"designidx" default="%FIRSTDESIGN%"}%
    * Set NEXTDESIGN = %CALC{"$IF( $EVAL( %CURRENTDESIGN% + 1 ) > %LASTDESIGN%, %FIRSTDESIGN%, $EVAL( %CURRENTDESIGN% + 1 ))"}%
-   * Set NEXTDESIGN = %CALC{"$IF( $EVAL( %CURRENTDESIGN% + 1 ) > %LASTDESIGN%, %FIRSTDESIGN%, $EVAL( %CURRENTDESIGN% + 1 ))"}%
+   * Set PREVOUSDESIGN = %CALC{"$IF( $EVAL( %CURRENTDESIGN% - 1 ) < %FIRSTDESIGN%, %LASTDESIGN%, $EVAL( %CURRENTDESIGN% - 1 ))"}%
    * Set DESIGNPARAM = moveabletypetopic=%URLPARAM{"moveabletypetopic" default="%MOVEABLETYPESKIN_DESIGNTOPIC%"}%;designidx=%CURRENTDESIGN%
 
    * Set CURRENTCSS = %URLPARAM{"cssidx" default="%FIRSTCSS%"}%
