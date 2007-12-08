@@ -222,7 +222,7 @@ Designs
    * Set FIRSTDESIGN = 1
    * Set DESIGN1 = MoveableTypeSampleDesign
    * Set DESIGN2 = MoveableTypeSample2Design
-   * Set DESIGN2 = MoveableTypeSample3Design
+   * Set DESIGN3 = MoveableTypeSample3Design
    * Set LASTDESIGN = 3
 
 Column layouts

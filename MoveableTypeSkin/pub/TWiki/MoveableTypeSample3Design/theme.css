@@ -53,6 +53,9 @@ body
 
 #banner
 {
+}
+
+#banner-inner { 
 	border: 0;
 	height: 200px;
 	color: darkslategrey;
@@ -60,10 +63,6 @@ body
 	text-align: left;
 	font-family: Arial, sans-serif;
 	font-size: large;
-}
-
-#banner-inner { 
-    padding: 75px 150px; 
 }
 
 #banner a
@@ -74,6 +73,7 @@ body
 
 #banner-header
 {
+    padding: 75px 150px 0px; 
 	margin: 0.25em 0;
 	font-size: 2em;
 	font-weight: bold;
@@ -83,6 +83,7 @@ body
 
 #banner-description
 {
+    padding: 10px 150px; 
 	margin: 0.25em 0;
 	font-size: 1em;
 }
@@ -530,6 +531,7 @@ img.image-full
 .layout-one-column #alpha-inner h2 
 { 
   	background: url(wikiringlogo20x20.png) no-repeat ;
+  	height: 25px;
 	padding-left: 25px;
 	padding-top : 2px;
 	padding-bottom : 2px;
@@ -584,6 +586,7 @@ img.image-full
 .layout-two-column-left #beta-inner h2 
 { 
   	background: url(wikiringlogo20x20.png) no-repeat ;
+  	height: 25px;
 	padding-left: 25px;
 	padding-top : 2px;
 	padding-bottom : 2px;
@@ -620,6 +623,7 @@ img.image-full
 .layout-two-column-right #alpha-inner h2 
 { 
   	background: url(wikiringlogo20x20.png) no-repeat ;
+  	height: 25px;
 	padding-left: 25px;
 	padding-top : 2px;
 	padding-bottom : 2px;
@@ -695,6 +699,7 @@ img.image-full
 .layout-three-column #beta-inner h2 
 { 
   	background: url(wikiringlogo20x20.png) no-repeat ;
+  	height: 25px;
 	padding-left: 25px;
 	padding-top : 2px;
 	padding-bottom : 2px;
@@ -723,3 +728,49 @@ img.image-full
     list-style-position:outside;
     list-style-type:none;
 }
+
+/* default to ivory - the main textsection */
+.xsnazzy qh1, #xsnazzy qh2, #xsnazzy p {margin:0 10px; letter-spacing:1px;}
+.snazzy qh1 {font-size:2.5em; color:#fff;}
+.xsnazzy qh2 {font-size:2em;color:#06a; border:0;}
+.xsnazzy p {padding-bottom:0.5em;}
+.xsnazzy qh2 {padding-top:0.5em;}
+.xsnazzy {background: transparent; nomargin:1em;}
+.xtop, .xbottom {display:block; background:transparent; font-size:1px;}
+.xb1, .xb2, .xb3, .xb4 {display:block; overflow:hidden;}
+.xb1, .xb2, .xb3 {height:1px;}
+.xb2, .xb3, .xb4 {background:ivory; border-left:1px solid #929234; border-right:1px solid #929234;}
+.xb1 {margin:0 5px; background:#929234;}
+.xb2 {margin:0 3px; border-width:0 2px;}
+.xb3 {margin:0 2px;}
+.xb4 {height:2px; margin:0 1px;}
+.xboxcontent {display:block; background:ivory; border:0 solid #929234; border-width:0 1px;padding-left:8px;padding-right:8px;}
+
+
+/* in case I can round the banner */
+#banner .xb2, 
+#banner .xb3, 
+#banner .xb4,
+#banner .xboxcontent {
+    background: steelblue;
+}
+
+/* in case I can round the sidebars */
+.layout-two-column-left #alpha .xb2,
+.layout-two-column-left #alpha .xb2,
+.layout-two-column-left #alpha .xb4,
+.layout-two-column-left #alpha .xboxcontent,
+.layout-two-column-right #beta .xb2,
+.layout-two-column-right #beta .xb2,
+.layout-two-column-right #beta .xb4,
+.layout-two-column-right #beta .xboxcontent,
+.layout-three-column #gamma .xb2, 
+.layout-three-column #gamma .xb3, 
+.layout-three-column #gamma .xb4,
+.layout-three-column #gamma .xboxcontent 
+{
+    background: steelblue;
+}
+
+
+

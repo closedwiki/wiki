@@ -134,7 +134,30 @@ Copy and paste the following section to your %MAINWEB%.TWikiPreferences topic (o
 </div> %ENDSECTION{"module-powered-right"}%%ENDSECTION{"module-powered-left-two-column-left"}%%ENDSECTION{"module-powered-right-two-column-right"}%%ENDSECTION{"module-powered-right-three-column"}%
 
 ---
-              
+---+++ extra html around each section
+In this case, using TWiki:Plugins.SnazzyRoundedCornersContrib code
+---++++ startsectionwrapper
+%STARTSECTION{"startsectionwrapper-nobanner"}%%STARTSECTION{"startsectionwrapper-main"}% <div>
+<div class="xsnazzy">
+<b class="xtop">
+<b class="xb1">
+</b><b class="xb2">
+</b><b class="xb3">
+</b><b class="xb4"></b></b>
+<div class="xboxcontent" >
+<div>%ENDSECTION{"startsectionwrapper-nobanner"}%%ENDSECTION{"startsectionwrapper-main"}%
+---++++ endsectionwrapper
+%STARTSECTION{"endsectionwrapper-nobanner"}%%STARTSECTION{"endsectionwrapper-main"}% </div>
+</div>
+<b class="xbottom">
+<b class="xb4">
+</b><b class="xb3">
+</b><b class="xb2">
+</b><b class="xb1"></b></b>
+</div>
+</div>%ENDSECTION{"endsectionwrapper-nobanner"}%%ENDSECTION{"endsectionwrapper-main"}%
+
+
 
 
 %META:FILEATTACHMENT{name="base-weblog.css" attachment="base-weblog.css" attr="" comment="" date="1174054380" path="base-weblog.css" size=""  user="SvenDowideit" version="1"}%
