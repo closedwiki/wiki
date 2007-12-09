@@ -1,7 +1,7 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2001-2007 Peter Thoeny, peter@thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -70,7 +70,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.1';
+$RELEASE = '1.2';
 
 $pluginName = 'HistoryPlugin';  # Name of this Plugin
 
@@ -133,7 +133,7 @@ sub handleHistory {
     my $topic = $params{topic} || $topic;
     my $format = $params{format} ||
                  $params{_DEFAULT} || 
-                 'r1.$rev - $date - $wikiusername%BR%';
+                 'r$rev - $date - $wikiusername%BR%';
     my $header = $params{header} ;
     $header = "\$next{'...'}%BR%" unless defined($header);
     my $footer = $params{footer} ;

@@ -3,6 +3,16 @@
 
 This plugin shows a complete or partial history of a document. The output can arbitrarily be formatted. An example for a Wikipedia-like history is included.
 
+Since TWiki 4.0.3 - when using PatternSkin enabling the !HistoryPlugin changes the "History" link in the bottom action bar so it opens a page with a nice user interface where you can select the versions to compare. 
+
+With older versions of TWiki you will need to tweak the templates.
+
+If [[TWiki:Plugins.CompareRevisionsAddOn][CompareRevisionsAddOn]] is installed and activated the "History" user interface will allow you to choose how the changes are rendered (interweaved vs side-by-side, and context).
+
+If [[TWiki:Plugins.RevCommentPlugin][RevCommentPlugin]] is installed and activated the "History" page will show the comments entered for each revision.
+
+This plugins is designed to work together with !CompareRevisionsAddOn and !RevCommentPlugin but works well on its own or with just one of the two other plugins.
+
 ---++ Syntax Rules
 
    * %<nop>HISTORY%
@@ -33,15 +43,15 @@ one %<nop>HISTORY% is used on the same page, the values from the last one  will 
 
 The call %<nop>HISTORY% shows a simple list of available revisions like%BR%
 <pre>
-r1.3 - 17 Feb 2005 - 09:56 - AnUser
-r1.2 - 31 Dec 2004 - 10:22 - AnotherUser
-r1.1 - 15 Nov 2003 - 01:23 - YetAnotherUser
+r3 - 17 Feb 2005 - 09:56 - AnUser
+r2 - 31 Dec 2004 - 10:22 - AnotherUser
+r1 - 15 Nov 2003 - 01:23 - YetAnotherUser
 </pre>
 
 For a more complex example see the attached =oopshistory.tmpl= which also allows the comparison of two selected revisions. 
 
-Example screenshot from oopshistory.tmpl: <br />
-     <div class="twikiImage"><img src="%ATTACHURLPATH%/screenshot.png" alt="screenshot.png" width='509' height='392' /></div>
+Example screenshot of the topic history with !HistoryPlugin enabled and working with !CompareRevisionsAddOn and !RevCommentPlugin <br />
+     <div class="twikiImage"><img src="%ATTACHURLPATH%/screenshot.png" alt="screenshot.png" width='573' height='538' /></div>
 
 ---++ Plugin Settings
 
@@ -68,18 +78,20 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
      | ==templates/oopshistory.tmpl== | Template for history page |
      | ==pub/TWiki/HistoryPlugin/screenshot.png== | Example screen shot |
+
    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
    * Test if the installation was successful:
       * Here should appear the history of this document inline: 
-        %HISTORY{"      r1.$rev - $date - $wikiusername%BR%"}%
+        %HISTORY{"      r$rev - $date - $wikiusername%BR%"}%
       * Show the history of Main.TWikiUsers :%BR%
         %SCRIPTURL%/oops%SCRIPTSUFFIX%/Main/TWikiUsers?template=oopshistory
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/JChristophFuchs |
-|  Plugin Version: | 07 Nov 2007: (V1.1) |
+|  Plugin Version: | 09 Dec 2007: (V1.2) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  09 Dec 2007: | 1.2 Kenneth Lavrsen: Restored the features that were lost in revision 1.1 including: Showing comments made by !RevCommentPlugin, selection of render styles "interweave" and "side by side" provided by !CompareRevisionsAddOn, and link to rdiff history. Restored compatibility with TWiki-4.1 which means removing the dependency of 4.2 only CSS feature. Updated the default rev format to 4.X format. |
 |  07 Nov 2007: | 1.1 Arthur Clemens: updated to TWiki 4.2; improved user interface.  |
 |  19 Jan 2007: | 1.002 Corrected coding error that causes the plugin to fail with HISTORY tag in topic |
 |  9 Apr 2006: | 1.001 Updated for new <nop>PatternSkin in [[http://TWiki.org/cgi-bin/view/Codev/TWikiRelease04x00x02][TWikiRelease04x00x02]] |
