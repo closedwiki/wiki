@@ -85,8 +85,8 @@ sub test_simpleTheadTableUsingTablePlugin {
 <table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="rows" border="1">
 	<thead>
 		<tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
-			<th bgcolor="#6b7f93" valign="top" class="twikiTableCol0 twikiFirstCol"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=0;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">a</font></a> </th>
-			<th bgcolor="#6b7f93" valign="top" class="twikiTableCol1 twikiLastCol"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=1;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">b</font></a> </th>
+			<th bgcolor="#687684" valign="top" class="twikiTableCol0 twikiFirstCol"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=0;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">a</font></a> </th>
+			<th bgcolor="#687684" valign="top" class="twikiTableCol1 twikiLastCol"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=1;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">b</font></a> </th>
 		</tr>
 	</thead>
 	<tbody>
@@ -119,8 +119,8 @@ sub test_simpleTfootTableusingTablePlugin {
 <table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="rows" border="1">
 	<tfoot>
 		<tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
-			<th bgcolor="#6b7f93" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <font color="#ffffff">ok</font> </th>
-			<th bgcolor="#6b7f93" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> <font color="#ffffff">bad</font> </th>
+			<th bgcolor="#687684" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <font color="#ffffff">ok</font> </th>
+			<th bgcolor="#687684" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> <font color="#ffffff">bad</font> </th>
 		</tr>
 	</tfoot>
 	<tbody>
@@ -159,12 +159,12 @@ sub test_doubleTheadTableUsingTablePlugin {
 <table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="rows" border="1">
 	<thead>
 		<tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
-			<th bgcolor="#6b7f93" valign="top" class="twikiTableCol0 twikiFirstCol"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=0;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">a</font></a> </th>
-			<th bgcolor="#6b7f93" valign="top" class="twikiTableCol1 twikiLastCol"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=1;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">b</font></a> </th>
+			<th bgcolor="#687684" valign="top" class="twikiTableCol0 twikiFirstCol"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=0;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">a</font></a> </th>
+			<th bgcolor="#687684" valign="top" class="twikiTableCol1 twikiLastCol"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=1;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">b</font></a> </th>
 		</tr>
 		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
-			<th bgcolor="#6b7f93" valign="top" class="twikiTableCol0 twikiFirstCol"> <font color="#ffffff">c</font> </th>
-			<th bgcolor="#6b7f93" valign="top" class="twikiTableCol1 twikiLastCol"> <font color="#ffffff">c</font> </th>
+			<th bgcolor="#687684" valign="top" class="twikiTableCol0 twikiFirstCol"> <font color="#ffffff">c</font> </th>
+			<th bgcolor="#687684" valign="top" class="twikiTableCol1 twikiLastCol"> <font color="#ffffff">c</font> </th>
 		</tr>
 	</thead>
 	<tbody>
@@ -204,18 +204,18 @@ sub test_doubleTheadandTfootTableusingTablePlugin {
 <table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="rows" border="1">
 	<thead>
 		<tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
-				<th bgcolor="#6b7f93" valign="top" class="twikiTableCol0 twikiFirstCol"> <font color="#ffffff">a</font> </th>
-				<th bgcolor="#6b7f93" valign="top" class="twikiTableCol1 twikiLastCol"> <font color="#ffffff">b</font> </th>
+				<th bgcolor="#687684" valign="top" class="twikiTableCol0 twikiFirstCol"> <font color="#ffffff">a</font> </th>
+				<th bgcolor="#687684" valign="top" class="twikiTableCol1 twikiLastCol"> <font color="#ffffff">b</font> </th>
 		</tr>
 		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
-				<th bgcolor="#6b7f93" valign="top" class="twikiTableCol0 twikiFirstCol"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=0;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">c</font></a> </th>
-				<th bgcolor="#6b7f93" valign="top" class="twikiTableCol1 twikiLastCol"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=1;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">c</font></a> </th>
+				<th bgcolor="#687684" valign="top" class="twikiTableCol0 twikiFirstCol"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=0;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">c</font></a> </th>
+				<th bgcolor="#687684" valign="top" class="twikiTableCol1 twikiLastCol"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=1;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">c</font></a> </th>
 		</tr>
 	</thead>
 	<tfoot>
 		<tr class="twikiTableOdd twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
-				<th bgcolor="#6b7f93" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <font color="#ffffff">ok</font> </th>
-				<th bgcolor="#6b7f93" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> <font color="#ffffff">bad</font> </th>
+				<th bgcolor="#687684" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <font color="#ffffff">ok</font> </th>
+				<th bgcolor="#687684" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> <font color="#ffffff">bad</font> </th>
 		</tr>
 	</tfoot>
 	<tbody>
