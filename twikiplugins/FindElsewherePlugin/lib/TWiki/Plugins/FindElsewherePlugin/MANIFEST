@@ -1,2 +1,3 @@
-data/TWiki/FindElsewherePlugin.txt NEW
-lib/TWiki/Plugins/FindElsewherePlugin.pm NEW
+data/TWiki/FindElsewherePlugin.txt 0440
+lib/TWiki/Plugins/FindElsewherePlugin.pm 0440
+lib/TWiki/Plugins/FindElsewherePlugin/Core.pm 0440
