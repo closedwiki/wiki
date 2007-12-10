@@ -19,7 +19,7 @@ This plugins is designed to work together with !CompareRevisionsAddOn and !RevCo
    * %<nop>HISTORY{parameters}%BR%
      Supported parameters: %BR%
      |*Parameter* | *Description* | *Default* |
-     |"format" _or_ format="format" |Format of one line, may include any variable which is supported by %<nop>REVINFO% |"r1.$rev - $date - $wikiusername" |
+     |"format" _or_ format="format" |Format of one line, may include any variable which is supported by %<nop>REVINFO% |"r$rev - $date - $wikiusername" |
      |topic="topic" |Topic name |Current topic |
      |web="web" |Web name |Current web |
      |nrev="nrev" |Number of revisions to show. Ignored, if both rev1 and rev2 are specified | Plugin preference variable NREV |
