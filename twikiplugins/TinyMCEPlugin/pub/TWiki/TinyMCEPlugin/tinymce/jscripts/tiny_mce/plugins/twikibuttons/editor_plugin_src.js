@@ -36,7 +36,7 @@ var TWikiButtonsPlugin = {
                                          '{$pluginurl}/images/hide.gif',
                                          'twikiHIDE', true);
         case "twikiformat":
-            html = '<select id="{$editor_id}_formatSelect" name="{$editor_id}_formatSelect" onfocus="tinyMCE.addSelectAccessibility(event, this, window);" onchange="tinyMCE.execInstanceCommand(\'{$editor_id}\',\'twikiFORMAT\',false,this.options[this.selectedIndex].value);" class="mceSelectList">';
+            html = '<select id="{$editor_id}_twikiFormatSelect" name="{$editor_id}_twikiFormatSelect" onfocus="tinyMCE.addSelectAccessibility(event, this, window);" onchange="tinyMCE.execInstanceCommand(\'{$editor_id}\',\'twikiFORMAT\',false,this.options[this.selectedIndex].value);" class="mceSelectList">';
             formats = tinyMCE.getParam("twikibuttons_formats");
             // Build format select
             for (var i = 0; i < formats.length; i++) {
@@ -117,6 +117,7 @@ var TWikiButtonsPlugin = {
             for (var i = 0; i < formats.length; i++) {
                 if (formats[i].name == value) {
                     format = formats[i];
+                    break;
                 }
             }
 
@@ -137,6 +138,7 @@ var TWikiButtonsPlugin = {
                     }
                 }
                 if (format.style != null) {
+                    // element is additionally styled
                     tinyMCE.execInstanceCommand(
                         editor_id, 'mceSetCSSClass', user_interface,
                         format.style);
@@ -173,6 +175,32 @@ var TWikiButtonsPlugin = {
             return true;
 		}
 
+		var selectElm = document.getElementById(
+            editor_id + "_twikiFormatSelect");
+        if (selectElm) {
+            var formats = tinyMCE.getParam("twikibuttons_formats");
+            var puck = -1;
+            do {
+                for (var i = 0; i < formats.length; i++) {
+                    if (!formats[i].el ||
+                        formats[i].el == node.nodeName.toLowerCase()) {
+                        if (!formats[i].style ||
+                            RegExp('\\b' + formats[i].style + '\\b').test(
+                                tinyMCE.getAttrib(node, "class"))) {
+                            // Matched el+style or just el
+                            puck = i;
+                            // Only break if the format is not Normal (which
+                            // always matches, and is at pos 0)
+                            if (puck > 0)
+                                break;
+                        }
+                    }
+                }
+            } while (puck < 0 && (node = node.parentNode) != null);
+            if (puck >= 0) {
+                selectElm.selectedIndex = puck;
+            }
+        }
 		return true;
 	}
 };
