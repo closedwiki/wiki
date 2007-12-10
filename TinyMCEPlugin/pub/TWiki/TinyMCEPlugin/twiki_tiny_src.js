@@ -41,6 +41,16 @@ var TWikiTiny = {
         return url;
     },
 
+    enableSave: function(enabled) {
+        var status = enabled ? null : "disabled";
+        var elm = document.getElementById("save");
+        if (elm)
+            elm.disabled = status;
+        elm = document.getElementById("preview");
+        if (elm)
+            elm.disabled = status;
+    },
+
     transform : function(editor, handler, text, onReadyToSend, onReply) {
         // Work out the rest URL from the location
         var url = TWikiTiny.getTWikiVar("SCRIPTURL");
@@ -88,10 +98,17 @@ var TWikiTiny = {
         TWikiTiny.request.req.send(params);
     },
 
+    initialisedFromServer : false,
+
     // Set up content for the initial edit
     setUpContent : function(editor_id, body, doc) {
+        // If we haven't done it before, then transform from TML
+        // to HTML. We need this test so that pressing the 'back'
+        // button from a failed save doesn't banjax the old content.
+        if (TWikiTiny.initialisedFromServer) return;
         var editor = tinyMCE.getInstanceById(editor_id);
         TWikiTiny.switchToWYSIWYG(editor);
+        TWikiTiny.initialisedFromServer = true;
     },
 
     // Convert HTML content to textarea. Called from the WYSIWYG->raw switch
@@ -105,6 +122,7 @@ var TWikiTiny = {
         TWikiTiny.transform(
             inst, "html2tml", text,
             function () {
+                TWikiTiny.enableSave(false);
                 var te = TWikiTiny.request.editor.oldTargetElement;
                 te.value = "Please wait... retrieving page from server";
             },
@@ -112,11 +130,13 @@ var TWikiTiny = {
                 var te = TWikiTiny.request.editor.oldTargetElement;
                 var text = TWikiTiny.request.req.responseText;
                 te.value = text;
+                TWikiTiny.enableSave(true);
             },
             function () {
                 var te = TWikiTiny.request.editor.oldTargetElement;
                 te.value = "There was a problem retrieving the page: "
                     + TWikiTiny.request.req.statusText;
+                //TWikiTiny.enableSave(true); leave it disabled
             });
         // Add the button for the switch back to WYSIWYG mode
         var eid = inst.editorId;
@@ -158,10 +178,11 @@ var TWikiTiny = {
             editor, "tml2html", editor.oldTargetElement.value,
             function () {
                 // Before send
+                TWikiTiny.enableSave(false);
                 var editor = TWikiTiny.request.editor;
                 tinyMCE.setInnerHTML(
                     TWikiTiny.request.editor.getBody(),
-                    "<span class='twikiAlert'>Please wait... retrieving page from server</span>");
+                    "<span class='twikiAlert'>Please wait... retrieving page from server.</span>");
             },
             function () {
                 // Handle the reply
@@ -173,6 +194,7 @@ var TWikiTiny = {
                 }
                 tinyMCE.setInnerHTML(TWikiTiny.request.editor.getBody(), text);
                 TWikiTiny.request.editor.isNotDirty = true;
+                TWikiTiny.enableSave(true);
             },
             function () {
                 // Handle a failure
@@ -181,6 +203,7 @@ var TWikiTiny = {
                     "<div class='twikiAlert'>"
                     + "There was a problem retrieving the page: "
                     + TWikiTiny.request.req.statusText + "</div>");
+                //TWikiTiny.enableSave(true); leave save disabled
             });
 
         // Hide the conversion button, if it exists
