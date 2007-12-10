@@ -23,12 +23,12 @@ This topic function renders a right-hand sidebar.
 %STARTINCLUDE%
 <div style="position:relative;float:right;width:30%;background-color:white;border:2px dotted %WEBBGCOLOR%;padding:1em;margin:0.5em;display:inline;">
 %IFDEFINEDTHEN{"%CONTENT%" glue="off"}%
-%FORMATLIST{"%CONTENT%t" separator="$dollarn" format="$percntINCLUDE{\"$1\" }$percnt" }%
+%FORMATLIST{"%CONTENT%" separator="$dollarn" format="$percntINCLUDE{\"$1\" }$percnt" }%
 %FIDEFINED%
 %IFDEFINEDTHEN{"%RECENT%" glue="off"}%
 ---+++++!! <font  FACE="arial,helvetica"> $test most recently changed topics: </font>
-<font size="-1">%SEARCH{".*" web="%BASEWEB%" format="&bull; $web.$topic - $date " separator="%BR%" regex="on" nonoise="on" order="modified" limit="%RECENT%" }%
-%BR% _See also: [[%BASEWEB%t.WebChanges][Recent changes]]._ </font>
+<font size="-1">%SEARCH{".*" web="%BASEWEB%" format="&bull; $web.$topic - $date " separator="%BR%" regex="on" nonoise="on" order="modified" reverse="on" limit="%RECENT%" }%
+%BR% _See also: [[%BASEWEB%.WebChanges][Recent changes]]._ </font>
 %FIDEFINED%
 %IFDEFINEDTHEN{"%CREATENEW%" as="yes" glue="off" }%
 ---+++++!! <font  FACE="arial,helvetica"> Create a new topic:</font>
