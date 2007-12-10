@@ -29,14 +29,14 @@ Use the following form to install the core %TWIKIWEB%.TopicClassificationAddOn c
 <div class="twikiFormSteps">
 <div class="twikiFormStep">
 <script type="text/javascript">
-function setAction(theWeb) {
-   document.installTCAO.action = "%SCRIPTURL{save}%/" + theWeb + "/";
+function setWeb(theWeb) {
+   document.installTCAO.topic.value = theWeb + ".TopicClassification";
 }
 </script>
-<form name="installTCAO" action="" >
+<form name="installTCAO" action="%SCRIPTURL{save}%/" >
 <input type="hidden" name="templatetopic" value="%TCAOWEB%/Installs.TopicClassification" />
 <input type="hidden" name="topic" value="TopicClassification" />
-*Select web to install !TopicClassification framework:* <select name="selectWeb" onchange="setAction(this.value);" ><option> Select web... </option>%WEBLIST{"<option>$name</option>" separator=" " }% </select> %BR% 
+*Select web to install !TopicClassification framework:* <select name="selectWeb" onchange="setWeb(this.value);" ><option> Select web... </option>%WEBLIST{"<option>$name</option>" separator=" " }% </select> %BR% 
 <input type="submit" value=" Install !TopicClassificationAddOn " /> <br /> _You will be sent immediately to the !TopicClassification topic in the choosen web and presented further instructions for setting up TCAO within the web._ 
 </form>
 </div><!--/twikiFormStep-->
