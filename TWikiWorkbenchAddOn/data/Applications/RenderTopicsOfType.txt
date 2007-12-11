@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1185727651" format="1.1" reprev="1.10" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1197297605" format="1.1" reprev="1.11" version="$Rev$"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+!! %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -41,7 +41,7 @@
 ~~~       %FORMAT%
 ~~~     $percntELSEDEFINED$percnt
 ~~~           | $index 
-~~~           | [[$web.$topic][$topic]]
+~~~           | [[$web.$topic][$expand(TopicTitle or topic)]]
 ~~~           | $formfield(Summary)
 ~~~           | $percntIFDEFINED{\"$formfield(TWikiApplication)\" 
 ~~~               as=\"(none)?\"
@@ -82,5 +82,6 @@
 
 %META:FORM{name="Applications.ApplicationTopic"}%
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="DocuTopic, TopicFunction"}%
+%META:FIELD{name="TopicTitle" attributes="" title="<nop>TopicTitle" value=""}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="Display a table of topcis of a given type"}%
 %META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TWikiWorkbench"}%

@@ -4,7 +4,7 @@
 %FORMFIELD{"Summary"}%
 
 %STARTINCLUDE%
-%DBCALL{"RenderSimpleTopicCreator" 
+%DBCALL{"Applications.RenderSimpleTopicCreator" 
   TEXT="%TOPIC%" 
   VALUE="Render..."
   TYPE="%TOPIC%, DocuTopic"

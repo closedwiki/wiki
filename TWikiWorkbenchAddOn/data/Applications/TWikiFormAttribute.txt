@@ -16,7 +16,7 @@ See also: %TOPIC%Template
 
 ---++ Factory
 %STARTINCLUDE%
-%DBCALL{"RenderSimpleTopicCreator" 
+%DBCALL{"Applications.RenderSimpleTopicCreator" 
   TEXT="%TOPIC%" 
   VALUE="..."
   TYPE="%TOPIC%"

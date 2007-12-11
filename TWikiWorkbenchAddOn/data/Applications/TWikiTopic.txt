@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1194542432" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1197297635" format="1.1" reprev="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopicType"}%
 ---+ %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -30,7 +30,7 @@ See also: WebTopicEditTemplate
 
 ---++ Factory
 %STARTINCLUDE%
-%DBCALL{"RenderSimpleTopicCreator" 
+%DBCALL{"Applications.RenderSimpleTopicCreator" 
   TEXT="TWikiTopic" 
   VALUE="..."
   TYPE="TWikiTopic"
@@ -53,7 +53,7 @@ See also: WebTopicEditTemplate
 *~~   %IFDEFINED{"%FORMAT%"
 ~~~     then="$test"
 ~~~     else="| $index 
-~~~           | [[$web.$topic][<nop>$topic]]
+~~~           | [[$web.$topic][$expand(TopicTitle or topic)]]
 ~~~           | $formfield(Summary)
 ~~~           |"
 ~~~   }%"
@@ -64,7 +64,7 @@ See also: WebTopicEditTemplate
 ---++ TWikiTopic form
 | *Name:*| *Type:* | *Size:* | *Values:* | *Tooltip message:* | *Attributes:* |
 | TopicType | checkbox | 3 |%DBCALL{"Applications.GetTopicTypes" remote="off"}%| Document type  | |
-| Title | text | 75 | | title | |
+| <nop>TopicTitle | text | 75 | | title | |
 | Summary | text | 75 | | short description of the role of this topic |  |
 
 
@@ -75,6 +75,7 @@ See also: WebTopicEditTemplate
 
 %META:FORM{name="Applications.TopicType"}%
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="DocuTopic, TopicType, TWikiForm"}%
+%META:FIELD{name="TopicTitle" attributes="" title="<nop>TopicTitle" value=""}%
 %META:FIELD{name="Inheritance" attributes="" title="Inheritance" value="none"}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="A normal TWiki topic"}%
 %META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TWikiWorkbench"}%

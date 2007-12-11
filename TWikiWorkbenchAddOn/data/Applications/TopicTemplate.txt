@@ -12,7 +12,7 @@ for the content, and attaching the given <nop>TWikiForm.
 
 %ENDSECTION{"documentation"}%
 
-%DBCALL{"RenderSimpleTopicCreator" 
+%DBCALL{"Applications.RenderSimpleTopicCreator" 
   TEXT="%TOPIC%" 
   VALUE="..."
   TYPE="%TOPIC%"

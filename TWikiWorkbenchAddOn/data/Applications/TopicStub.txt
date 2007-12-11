@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="micha" date="1195764080" format="1.1" reprev="1.18" version="1.18"}%
+%META:TOPICINFO{author="TWikiContributor" date="1197290965" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopicType"}%
 ---+ %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -23,7 +23,7 @@ See also: %TOPIC%Template
 
 ---++ Factory
 %STARTINCLUDE%
-%DBCALL{"RenderSimpleTopicCreator" 
+%DBCALL{"Applications.RenderSimpleTopicCreator" 
   TEXT="%TOPIC%" 
   VALUE="..."
   TYPE="%TOPIC%"
@@ -38,7 +38,7 @@ See also: %TOPIC%Template
 ---++ TopicStub form
 | *Name:*| *Type:* | *Size:* | *Values:* | *Tooltip message:* | *Attributes:* |
 | TopicType | checkbox | 3 |%DBCALL{"Applications.GetTopicTypes" remote="off"}%| Document type  | |
-| Title | text | 75 | | Title of this topic | |
+| <nop>TopicTitle | text | 75 | | title of this topic | |
 | Summary | text | 75 | | Short description of the role of this topic | |
 | TWikiApplication| select | 1 |%FLEXWEBLIST{subwebs="Applications" header="none, " footer="TWikiWorkbench" format="$name, "}%| Application this topic belongs to | |
 | Target | text | 75 | | Target web-topic | |

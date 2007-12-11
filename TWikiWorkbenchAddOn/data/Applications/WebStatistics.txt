@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="BaseUserMapping_333" date="1196978464" format="1.1" reprev="1.184" version="1.184"}%
+%META:TOPICINFO{author="TWikiContributor" date="1196978464" format="1.1" reprev="1.184" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---++ Statistics for <nop>%BASEWEB% Web
 

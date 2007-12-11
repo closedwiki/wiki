@@ -23,7 +23,7 @@ There are two types of creators for ApplicationFactories:
 
 ---++ Factory
 %STARTINCLUDE%
-%DBCALL{"RenderSimpleTopicCreator" 
+%DBCALL{"Applications.RenderSimpleTopicCreator" 
   TEXT="WebFactory" 
   VALUE="...Factory"
   TYPE="%TOPIC%"
@@ -31,7 +31,7 @@ There are two types of creators for ApplicationFactories:
   FORM="Applications.ApplicationTopic"
 }%
 
-%DBCALL{"RenderSimpleTopicCreator" 
+%DBCALL{"Applications.RenderSimpleTopicCreator" 
   TEXT="TopicFactory" 
   VALUE="...Factory"
   TYPE="%TOPIC%"

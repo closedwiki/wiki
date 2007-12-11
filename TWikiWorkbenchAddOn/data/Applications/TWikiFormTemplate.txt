@@ -5,6 +5,7 @@
 
 | *Name:*| *Type:* | *Size:* | *Values:* | *Tooltip message:* | *Attributes:* |
 | TopicType | checkbox | 3 |%DBCALL{"Applications.GetTopicTypes" remote="off"}%| Document type  | |
+| <nop>TopicTitle | text | 75 | | title | |
 | Summary | text | 75 | | Short description of the role of this topic | |
 
 <!--

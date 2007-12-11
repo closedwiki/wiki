@@ -36,6 +36,7 @@ See also: %TOPIC%Template
 ---++ %TOPIC% form
 | *Name:*| *Type:* | *Size:* | *Values:* | *Tooltip message:* | *Attributes:* |
 | TopicType | checkbox | 3 |%DBCALL{"Applications.GetTopicTypes" remote="off"}%| Document type  | |
+| <nop>TopicTitle | text | 75 | | title of this topic | |
 | Summary | text | 75 | | Short description of the role of this topic | |
 
 

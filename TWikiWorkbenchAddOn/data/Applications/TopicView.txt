@@ -27,7 +27,7 @@ is then used to render the _view on the editor_ to be used. Edit templates eithe
 TWiki editor, or even implement a full substitute for its form data.
 %ENDSECTION{"documentation"}%
 
-%DBCALL{"RenderSimpleTopicCreator" 
+%DBCALL{"Applications.RenderSimpleTopicCreator" 
   TEXT="%TOPIC%" 
   VALUE="...ViewTemplate"
   TYPE="%TOPIC%"

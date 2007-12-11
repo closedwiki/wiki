@@ -33,7 +33,7 @@ The TopicType topic is the factory to create new <nop>TopicTypes as well.
 
 ---++ Factory
 %STARTINCLUDE%
-%DBCALL{"RenderSimpleTopicCreator" 
+%DBCALL{"Applications.RenderSimpleTopicCreator" 
   TEXT="TopicType" 
   VALUE="..."
   TYPE="TopicType, TWikiForm, DocuTopic, ApplicationTopic"
@@ -76,6 +76,7 @@ The TopicType topic is the factory to create new <nop>TopicTypes as well.
 ---++ TopicType form
 | *Name:*| *Type:* | *Size:* | *Values:* | *Tooltip message:* | *Attributes:* |
 | TopicType | checkbox | 3 |%DBCALL{"Applications.GetTopicTypes" remote="off"}%| Document type  | |
+| <nop>TopicTitle | text | 75 | | title | |
 | Inheritance | checkbox | 3 |%DBCALL{"Applications.GetTopicTypes" remote="off"}%| TopicType whose properties are implemented here too (see java's interfaces)  | |
 | Summary | text | 75 | | Short description of the role of this topic | |
 | TWikiApplication| select | 1 |%FLEXWEBLIST{subwebs="Applications" header="none, " footer="TWikiWorkbench" format="$name, "}%| Application this topic belongs to | |

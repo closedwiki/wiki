@@ -13,7 +13,7 @@ is to ease the access to any furthe content. By definition all WebHome topics ar
 
 ---++ Factory
 %STARTINCLUDE%
-%DBCALL{"RenderSimpleTopicCreator" 
+%DBCALL{"Applications.RenderSimpleTopicCreator" 
   TEXT="FrontPage" 
   VALUE="..."
   TYPE="FrontPage"
