@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1177803014" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1197351701" format="1.1" version="$Rev$"}%
 ---++ Text Formatting FAQ
 
 The most frequently asked questions about text formatting are answered. Also, TextFormattingRules contains the complete TWiki shorthand system on one quick reference page.
@@ -70,7 +70,9 @@ This text will keep its format as it is:
 
 The =pre= tag is standard HTML; =verbatim= is a special TWiki tag that forces text to fixed font mode, and also prevents other tags and TWiki shortcuts from being expanded.
 
-*NOTE:* VARIABLES are still Set within verbatim tags (this is a historical peculiarity)
+__NOTE:__ VARIABLES are still Set within verbatim tags (this is a historical peculiarity)
+
+__NOTE:__ The =verbatim= opening and closing tags are converted into =pre= tags; any HTML attributes (e.g., =class=, =id=) in the opening =verbatim= tag are included in the corresponding =pre= tag.
 
 ---
 ---+++ How do I create tables?
@@ -146,7 +148,7 @@ You can upload images directly to your server with FTP access. You can also [[Fi
 
 *2. Using &lt;img&gt; tag*
 
-This is a manual process where you have more control over the rendering of the image. Use the &lt;img&gt; tag of HTML to include GIF, JPG and PNG files. *Note:* The rendering of the topic is faster if you include the =width= and =height= parameters that have the actual image size. http://www.htmlhelp.com/reference/wilbur/special/img.html has more on inline images.
+This is a manual process where you have more control over the rendering of the image. Use the &lt;img&gt; tag of HTML to include GIF, JPG and PNG files. __Note:__ The rendering of the topic is faster if you include the =width= and =height= parameters that have the actual image size. http://www.htmlhelp.com/reference/wilbur/special/img.html has more on inline images.
 
    * __You enter:__ <code> &lt;img src="%<nop>PUBURLPATH%/%SYSTEMWEB%/TWikiLogos/T-logo-80x15.gif" width="80" height="15" border="0" alt="logo" /&gt; logo.</code><br />
     __Result:__ <br /> <img src="%PUBURLPATH%/%SYSTEMWEB%/TWikiLogos/T-logo-80x15.gif" width="80" height="15" border="0" alt="logo" /> logo.
