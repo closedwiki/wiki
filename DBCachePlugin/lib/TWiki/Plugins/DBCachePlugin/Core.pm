@@ -67,26 +67,31 @@ sub afterSaveHandler {
 }
 
 ###############################################################################
-sub handlePAGETITLE {
+sub handleTOPICTITLE {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
-  my $pageTitle = TWiki::Func::getPreferencesValue("PAGETITLE");
+  my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $baseTopic;
+  my $thisWeb = $params->{web} || $baseWeb;
+
+  ($thisWeb, $thisTopic) = TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
+
+  my $pageTitle = TWiki::Func::getPreferencesValue("TOPICTITLE");
   return $pageTitle if $pageTitle;
 
-  my $db = getDB($baseWeb);
-  return $baseTopic unless $db;
+  my $db = getDB($thisWeb);
+  return $thisTopic unless $db;
 
-  my $topicObj = $db->fastget($baseTopic);
-  return $baseTopic unless $topicObj;
+  my $topicObj = $db->fastget($thisTopic);
+  return $thisTopic unless $topicObj;
 
   my $form = $topicObj->fastget('form');
-  return $baseTopic unless $form;
+  return $thisTopic unless $form;
 
   my $formObj = $topicObj->fastget($form);
-  return $baseTopic unless $formObj;
+  return $thisTopic unless $formObj;
 
-  my $title = $formObj->fastget('Title');
-  return $baseTopic unless $title;
+  my $title = $formObj->fastget('TopicTitle');
+  return $thisTopic unless $title;
 
   return $title;
 }

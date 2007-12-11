@@ -27,7 +27,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = '1.70';
+$RELEASE = '1.71';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Lightweighted frontend to the DBCacheContrib';
 
@@ -47,7 +47,7 @@ sub initPlugin {
   TWiki::Func::registerTagHandler('DBDUMP', \&_DBDUMP); # for debugging
   TWiki::Func::registerTagHandler('DBRECURSE', \&_DBRECURSE);
   TWiki::Func::registerTagHandler('ATTACHMENTS', \&_ATTACHMENTS);
-  TWiki::Func::registerTagHandler('PAGETITLE', \&_PAGETITLE);
+  TWiki::Func::registerTagHandler('TOPICTITLE', \&_TOPICTITLE);
 
   TWiki::Func::registerRESTHandler('UpdateCache', \&updateCache );
 
@@ -117,9 +117,9 @@ sub _DBRECURSE {
   initCore();
   return TWiki::Plugins::DBCachePlugin::Core::handleDBRECURSE(@_);
 }
-sub _PAGETITLE {
+sub _TOPICTITLE {
   initCore();
-  return TWiki::Plugins::DBCachePlugin::Core::handlePAGETITLE(@_);
+  return TWiki::Plugins::DBCachePlugin::Core::handleTOPICTITLE(@_);
 }
 
 ###############################################################################
