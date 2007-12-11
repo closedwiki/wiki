@@ -15,7 +15,7 @@
 package TWiki::Plugins::ClassificationPlugin::Category;
 
 use strict;
-sub DEBUG { 1; }
+sub DEBUG { 0; }
 
 ###############################################################################
 # static

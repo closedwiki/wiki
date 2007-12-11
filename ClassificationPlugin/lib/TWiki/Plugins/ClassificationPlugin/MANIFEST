@@ -9,6 +9,7 @@ data/Applications/ClassificationApp/CategorizedTopicViewTemplate.txt 0644
 data/Applications/ClassificationApp/CategorizedTopic.txt 0644
 data/Applications/ClassificationApp/CategoryBrowser.txt 0644
 data/Applications/ClassificationApp/CategoryTemplate.txt 0644
+data/Applications/ClassificationApp/CategoryViewTemplate.txt 0644
 data/Applications/ClassificationApp/Category.txt 0644
 data/Applications/ClassificationApp/ClassificationApp.txt 0644
 data/Applications/ClassificationApp/ClassifiedTopicTemplate.txt 0644
@@ -17,8 +18,8 @@ data/Applications/ClassificationApp/ClassifiedTopic.txt 0644
 data/Applications/ClassificationApp/DevelopmentTool.txt 0644
 data/Applications/ClassificationApp/DocuTopic.txt 0644
 data/Applications/ClassificationApp/FrontPage.txt 0644
-data/Applications/ClassificationApp/GetCategories.txt 0644
 data/Applications/ClassificationApp/NatSkinCategorizedTopicViewTemplate.txt 0644
+data/Applications/ClassificationApp/NatSkinCategoryViewTemplate.txt 0644
 data/Applications/ClassificationApp/NatSkinClassifiedTopicViewTemplate.txt 0644
 data/Applications/ClassificationApp/NatSkinTaggedTopicViewTemplate.txt 0644
 data/Applications/ClassificationApp/RenderCategoryBrowser.txt 0644
@@ -99,8 +100,10 @@ data/_ClassificationTemplate/WebSearch.txt 0644
 data/_ClassificationTemplate/WebStatistics.txt 0644
 data/_ClassificationTemplate/WebTagCloud.txt 0644
 data/_ClassificationTemplate/WebTopicCreator.txt 0644
+data/_ClassificationTemplate/WebTopicEditTemplate.txt 0644
 data/_ClassificationTemplate/WebTopicList.txt 0644
 data/TWiki/ClassificationPlugin.txt 0644
+lib/TWiki/Form/Cat.pm 0644
 lib/TWiki/Plugins/ClassificationPlugin/Category.pm 0644
 lib/TWiki/Plugins/ClassificationPlugin/Core.pm 0644
 lib/TWiki/Plugins/ClassificationPlugin/Hierarchy.pm 0644

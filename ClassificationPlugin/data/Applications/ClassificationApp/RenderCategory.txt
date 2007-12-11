@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="micha" date="1195766087" format="1.1" reprev="1.34" version="1.34"}%
+%META:TOPICINFO{author="TWikiContributor" date="1195766087" format="1.1" reprev="1.34" version="$Rev$"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+!! Function: %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -40,7 +40,7 @@ NONE
 ~~~   pattern="(.*);(.*);(.*);(.*);(.*)"
 ~~~   format="[[$2.$1][$3]]
 ~~~     $percntIFDEFINED{\"$5\" then=\"&nbsp;($5)\"}$percnt
-~~~     $percntREDDOT{$2.$1}$percnt
+*~~     &nbsp;$percntREDDOT{$2.$1}$percnt
 ~~~     <div class='clsTopicInfo'>$4</div>
 ~~~  "
 ~~~ }%
@@ -51,12 +51,12 @@ NONE
 ~~~      "!(TopicType=~'\bCategory\b') AND ('%BASETOPIC%' DISTANCE topic) = 0"
 ~~~      web="%BASEWEB%"
 ~~~      hidenull="on"
-~~~      format="$topic;$web;$expand(Summary and ',<br />');$expand(info.author);$formatTime(info.date);$expand(Title or topic)"
+~~~      format="$topic;$web;$expand(Summary and ',<br />');$expand(info.author);$formatTime(info.date);$expand(TopicTitle or topic)"
 ~~~      separator="#"
 ~~~    }%
 *~~   "
 ~~~   cols="3"
-~~~   header="<h2>Topics in $percntPAGETITLE$percnt</h2>
+~~~   header="<h2>Topics in $percntTOPICTITLE$percnt</h2>
 ~~~     There
 ~~~     $percntIFDEFINED{\"$count\" as=\"1\" 
 ~~~       then=\" is one topic \"
@@ -65,7 +65,7 @@ NONE
 ~~~   split="#"
 ~~~   pattern="(.*);(.*);(.*);(.*);(.*);(.*)"
 ~~~   format="[[$2.$1][$6]]
-~~~     $percntREDDOT{$2.$1}$percnt
+*~~     &nbsp;$percntREDDOT{$2.$1}$percnt
 ~~~     <div class='clsTopicInfo'>$3 last modified $5 by $percntSPACEOUT{$4}$percnt</div>
 ~~~   "
 ~~~ }%

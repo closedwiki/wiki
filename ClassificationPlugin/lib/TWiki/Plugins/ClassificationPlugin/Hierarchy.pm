@@ -19,9 +19,8 @@ use TWiki::Plugins::DBCachePlugin::Core;
 use TWiki::Plugins::ClassificationPlugin::Category;
 use Storable;
 
-use constant OBJECTVERSION => 0.1;
-
-sub DEBUG { 1; }
+use constant OBJECTVERSION => 0.2;
+sub DEBUG { 0; }
 
 ###############################################################################
 # static
@@ -54,7 +53,7 @@ sub new {
   };
 
   if ($this && $this->{_version} == OBJECTVERSION) {
-    #writeDebug("restored hierarchy object (v$this->{_version}) from $cacheFile");
+    writeDebug("restored hierarchy object (v$this->{_version}) from $cacheFile");
     return $this;
   } else {
     writeDebug("creating new object");
@@ -120,6 +119,7 @@ sub DESTROY {
   undef $this->{_catFields};
   undef $this->{_tagFields};
   undef $this->{_distance};
+  undef $this->{_tagIntersection};
 }
 
 ################################################################################
@@ -157,7 +157,7 @@ sub init {
       }
 
       my $summary = $form->fastget("Summary") || '';
-      my $title = $form->fastget("Title") || $topicName;
+      my $title = $form->fastget("TopicTitle") || $topicName;
       $cat->setSummary($summary);
       $cat->setTitle($title);
 
@@ -243,7 +243,6 @@ sub computeDistance {
       next if $catIId == $catJId; # skip current row
 
       my $distIJ = $distance[$catIId][$catJId];
-      next if $distIJ && $$distIJ[0] < 2 && $$distIJ[1] < 2; # already optimal
 
       foreach my $catKId (0..$maxId) {
         next if $catKId == $catIId; # skip current row
@@ -298,7 +297,7 @@ sub computeDistance {
 sub distance {
   my ($this, $topic1, $topic2) = @_;
 
-  #writeDebug("called distance($topic1, $topic2)");
+  writeDebug("called distance($topic1, $topic2)");
 
   my %catSet1 = ();
   my %catSet2 = ();
@@ -307,7 +306,7 @@ sub distance {
   # to be taken under consideration
 
   # check topic1
-  #writeDebug("checking topic1");
+  writeDebug("checking topic1");
   if ($topic1 eq 'TOP') {
     $catSet1{$topic1} = 0;
   } elsif ($topic1 eq 'BOTTOM') {
@@ -327,7 +326,7 @@ sub distance {
   }
 
   # check topic2
-  #writeDebug("checking topic2");
+  writeDebug("checking topic2");
   if ($topic2 eq 'TOP') {
     $catSet2{$topic2} = 0;
   } elsif ($topic2 eq 'BOTTOM') {
@@ -346,7 +345,7 @@ sub distance {
     }
   }
 
-  if (0) {
+  if (DEBUG) {
     writeDebug("catSet1 = ".join(',', sort keys %catSet1));
     writeDebug("catSet2 = ".join(',', sort keys %catSet2));
   }
@@ -357,8 +356,8 @@ sub distance {
     foreach my $id2 (values %catSet2) {
       my $dist = $this->{_distance}[$id1][$id2];
       next unless $dist;
-      $min = $dist->[0] if !defined($min) || $min > $dist->[0];
-      $max = $dist->[1] if !defined($max) || $max < $dist->[1];
+      $min = abs($dist->[0]) if !defined($min) || abs($min) > abs($dist->[0]);
+      $max = abs($dist->[1]) if !defined($max) || abs($max) < abs($dist->[1]);
     }
   }
 
@@ -369,7 +368,7 @@ sub distance {
   # both sets aren't connected
   return undef unless defined($min);
 
-  #writeDebug("min=$min, max=$max");
+  writeDebug("min=$min, max=$max");
 
   return [$min, $max];
 }
@@ -401,6 +400,81 @@ sub catDistance {
   return $this->{_distance}[$id1][$id2];
 }
 
+################################################################################
+sub getTagIntersection {
+  my ($this, $thisTopic) = @_;
+
+  # lookup cache
+  my $tagIntersection = $this->{_tagIntersection}{$thisTopic};
+  return $tagIntersection if defined $tagIntersection;
+
+  $tagIntersection ||= {};
+
+  # get current tags
+  my $db = TWiki::Plugins::DBCachePlugin::Core::getDB($this->{web});
+  my $thisTopicObj = $db->fastget($thisTopic);
+  return undef unless $thisTopicObj;
+
+  my $thisForm = $thisTopicObj->fastget("form");
+  return undef unless $thisForm;
+
+  $thisForm = $thisTopicObj->fastget($thisForm);
+  my $tags = $thisForm->fastget('Tag');
+  return undef unless $tags;
+
+  # create initial tag hash
+  my %thisTagHash = ();
+  foreach my $tag (split(/\s*,\s*/,$tags)) {
+    $tag =~ s/^\s+//go;
+    $tag =~ s/\s+$//go;
+    $thisTagHash{$tag} = 1;
+  }
+
+  # loop over all topics and collect all intersecting topics
+  foreach my $topic ($db->getKeys()) {
+    next if $topic eq $thisTopic;
+
+    my $topicObj = $db->fastget($topic);
+    my $form = $topicObj->fastget("form");
+    next unless $form;
+
+    $form = $topicObj->fastget($form);
+    next unless $form;
+
+    my $tags = $form->fastget("Tag");
+    next unless $tags;
+    
+    # count number of intersecting tags
+    my %intersection = %thisTagHash;
+    foreach my $tag (split(/\s*,\s*/, $tags)) {
+      $tag =~ s/^\s+//go;
+      $tag =~ s/\s+$//go;
+      $intersection{$tag}++;
+    }
+
+    # filter out non-intersecting tags
+    foreach my $tag (keys %intersection) {
+      my $count = $intersection{$tag};
+      delete $intersection{$tag} 
+        if $count < 2;
+    }
+
+    my @tags = keys %intersection;
+    my $size = scalar(@tags);
+
+    $tagIntersection->{$topic} = {
+      tags => \@tags,
+      size => $size
+    };
+    #writeDebug("$thisTopic and $topic share $size tags");
+  }
+
+  # cache
+  $this->{_tagIntersection}{$thisTopic} = $tagIntersection;
+  $this->{gotUpdate} = 1;
+
+  return $tagIntersection;
+}
 
 
 ################################################################################

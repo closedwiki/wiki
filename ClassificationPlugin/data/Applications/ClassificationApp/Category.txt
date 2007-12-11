@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="micha" date="1195766506" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1195766506" format="1.1" reprev="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopicType"}%
 ---+!! %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -36,7 +36,7 @@ See also: See CategorizedTopic, ClassifiedTopic, TaggedTopic, CategoryTemplate
 <table>
 <tr>
   <th class="twikiFirstCol">Title:</th>
-  <td><input type="text" id="title" name="Title" size="60" onblur="wikify('title','topic', 'Category')" onkeyup="wikify('title','topic', 'Category')" /></td>
+  <td><input type="text" id="title" name="TopicTitle" size="60" onblur="wikify('title','topic', 'Category')" onkeyup="wikify('title','topic', 'Category')" /></td>
 </tr>
 <tr>
   <th class="twikiFirstCol">Topic:</th>
@@ -82,7 +82,7 @@ See also: See CategorizedTopic, ClassifiedTopic, TaggedTopic, CategoryTemplate
 ~~~           |$n"
 ~~~   hidenull="on"
 ~~~   format="| $index
-~~~           | [[$web.$topic][$expand(Title or topic)]]
+~~~           | [[$web.$topic][$expand(TopicTitle or topic)]]
 ~~~           | $formfield(Summary)
 ~~~           |<b>TOP</b>
 ~~~           |"
@@ -100,7 +100,7 @@ See also: See CategorizedTopic, ClassifiedTopic, TaggedTopic, CategoryTemplate
 ~~~           |$n"
 ~~~   hidenull="on"
 ~~~   format="| $index
-~~~           | [[$web.$topic][$expand(Title or topic)]]
+~~~           | [[$web.$topic][$expand(TopicTitle or topic)]]
 ~~~           | $formfield(Summary)
 ~~~           |$percntFORMATLIST{\"$formfield(Category)\"
 ~~~               separator=\", \"
@@ -109,7 +109,7 @@ See also: See CategorizedTopic, ClassifiedTopic, TaggedTopic, CategoryTemplate
 *~~                 $dollarpercntELSEDEFINED$dollarpercnt
 ~~~                   [[$web.$1][
 *~~                     $dollarpercntDBQUERY{topic=\\"$web.$1\\"
-~~~                       format=\\"$dollarexpand(Title or topic)\\"
+~~~                       format=\\"$dollarexpand(TopicTitle or topic)\\"
 ~~~                     }$dollarpercnt
 *~~                   ]]
 *~~                 $dollarpercntFIDEFINED$dollarpercnt
@@ -123,7 +123,7 @@ See also: See CategorizedTopic, ClassifiedTopic, TaggedTopic, CategoryTemplate
 ---++ %TOPIC% form
 | *Name:*| *Type:* | *Size:* | *Values:* | *Tooltip message:* | *Attributes:* |
 | TopicType | label | 3 |Category,CategorizedTopic| Document type  | |
-| Title | text | 75 | | title | |
+| <nop>TopicTitle | text | 75 | | title | |
 | Summary | text | 75 | | short description of | |
 | Category | cat | 1 | | parent category |  |
 

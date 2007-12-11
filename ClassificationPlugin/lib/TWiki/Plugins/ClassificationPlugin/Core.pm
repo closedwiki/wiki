@@ -21,7 +21,7 @@ use TWiki::Plugins::ClassificationPlugin::Hierarchy;
 
 use vars qw(%hierarchies $baseWeb $baseTopic);
 
-sub DEBUG { 1; }
+sub DEBUG { 0; }
 
 ###############################################################################
 sub writeDebug {
@@ -106,58 +106,52 @@ sub OP_distance {
 sub handleTagRelatedTopics {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
-  #writeDebug("called handleTagRelatedTopics(".$params->stringify().")");
+  #writeDebug("called handleTagRelatedTopics()");
 
   my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $baseTopic;
   my $thisWeb = $params->{web} || $baseWeb;
   my $theFormat = $params->{format} || '$topic';
   my $theHeader = $params->{header} || '';
   my $theFooter = $params->{footer} || '';
-  my $theSep = $params->{separator} || ', ';
+  my $theSep = $params->{separator};
+  my $theIntersect = $params->{intersect} || 2;
+  my $theMax = $params->{max} || 0;
 
+  # sanitice parameters
+  $theIntersect =~ s/[^\d]//g;
+  $theIntersect = 2 if $theIntersect eq '';
+  $theMax =~ s/[^\d]//g;
+  $theMax = 0 if $theMax eq '';
+  $theSep = ', ' unless defined $theSep;
   ($thisTopic, $thisWeb) = 
     TWiki::Func::normalizeWebTopicName($thisTopic, $thisWeb);
 
-  my $db = TWiki::Plugins::DBCachePlugin::Core::getDB($thisWeb);
-  my $topicObj = $db->fastget($thisTopic);
-  return '' unless $topicObj;
-  my $form = $topicObj->fastget("form");
-  return '' unless $form;
-  $form = $topicObj->fastget($form);
-  my $tags = $form->fastget('Tag');
-  return '' unless $tags;
-  my @tags = split(/\s*,\s*/,$tags);
-  my $len = scalar(@tags);
+  my $hierarchy = getHierarchy($thisWeb);
+  my $tagIntersection = $hierarchy->getTagIntersection($thisTopic);
 
-  # build query string
-  my @query = ();
-  for (my $i = 0; $i < $len; $i++) {
-    my $tag1 = $tags[$i];
-    next unless $tag1;
-    for (my $j = $i+1; $j < $len; $j++) {
-      my $tag2 = $tags[$j];
-      push @query, 'Tag=~\'\b'.$tag1.'\b\' AND Tag=~\'\b'.$tag2.'\b\''
-    }
-  }
-  my $query = '('.join(') OR (', @query).')';
-  #writeDebug("query=$query");
-
-  # doit
-  my ($topics) = $db->dbQuery($query);
-  return '' unless $topics;
+  # sort most intersecting first
+  my @foundTopics = 
+    sort {$$tagIntersection{$b}{size} <=> $$tagIntersection{$a}{size}} 
+      grep {$$tagIntersection{$_}{size} >= $theIntersect}
+        keys %$tagIntersection;
 
   # format result
   my @lines;
   my $count = 0;
-  foreach my $topic (sort @$topics) {
-    next if $topic eq $thisTopic;
+  foreach my $topic (@foundTopics) {
     $count++;
+    last if $theMax && $count > $theMax;
     push @lines, expandVariables($theFormat,
       'topic'=>$topic,
       'web'=>$thisWeb,
       'index'=>$count,
+      'size'=>$$tagIntersection{$topic}{size},
+      'tags'=>join(', ', sort @{$$tagIntersection{$topic}{tags}}),
     );
   }
+
+  #writeDebug("done handleTagRelatedTopics()");
+
   return '' unless @lines;
 
   my $result = $theHeader.join($theSep, @lines).$theFooter;
@@ -240,7 +234,7 @@ sub handleDistance {
   my $theFrom = $params->{_DEFAULT} || $params->{from} || $baseTopic;
   my $theTo = $params->{to} || 'TOP';
   my $theFormat = $params->{format} || '$min';
-  my $theAbs = $params->{abs} || 'on';
+  my $theAbs = $params->{abs} || 'off';
 
   #writeDebug("called handleDistance($theFrom, $theTo)");
 
@@ -268,25 +262,27 @@ sub handleDistance {
 sub handleCatField {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
-  #writeDebug("called handleCatField(".$params->stringify().")");
+  writeDebug("called handleCatField(".$params->stringify().")");
 
   my $theFormat = $params->{format} || '$cat';
-  my $theSep = $params->{separator} || ' ';
+  my $theSep = $params->{separator};
   my $theHeader = $params->{header} || '';
   my $theFooter = $params->{footer} || '';
   my $theTypes = $params->{type} || $params->{types} || '';
   my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $baseTopic;
   my $thisWeb = $params->{web} || $baseWeb;
 
+  $theSep = ', ' unless defined $theSep;
+
   ($thisWeb, $thisTopic) = 
     TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
 
   my @topicTypes;
   if ($theTypes) {
-    #writeDebug("type mode");
+    writeDebug("type mode");
     @topicTypes = split(/\s*,\s*/,$theTypes);
   } else {
-    #writeDebug("topic mode");
+    writeDebug("topic mode");
     my $db = TWiki::Plugins::DBCachePlugin::Core::getDB($thisWeb);
     my $topicObj = $db->fastget($thisTopic);
     my $form = $topicObj->fastget("form");
@@ -302,7 +298,7 @@ sub handleCatField {
 
   my $hierarchy = getHierarchy($thisWeb);
   my $catFields = $hierarchy->getCatFields(@topicTypes);
-  #writeDebug("found catFields=".join(',',@$catFields));
+  writeDebug("found catFields=".join(',',@$catFields));
   my @result;
   my $count = @$catFields;
   my $index = 1;
@@ -317,7 +313,7 @@ sub handleCatField {
   my $result = $theHeader.join($theSep, @result).$theFooter;
   $result = expandVariables($result, 'count'=>$count);
 
-  #writeDebug("result=$result");
+  writeDebug("result=$result");
   return $result;
 }
 
@@ -328,10 +324,12 @@ sub handleTagField {
   #writeDebug("called handleTagField(".$params->stringify().")");
 
   my $theFormat = $params->{format} || '$tag';
-  my $theSep = $params->{separator} || ' ';
+  my $theSep = $params->{separator};
   my $theHeader = $params->{header} || '';
   my $theFooter = $params->{footer} || '';
   my $theTypes = $params->{_DEFAULT} || $params->{type} || $params->{types} || '';
+
+  $theSep = ', ' unless defined $theSep;
 
   my $thisTopic = $params->{topic} || $baseTopic;
   my $thisWeb = $params->{web} || $baseWeb;
@@ -387,11 +385,13 @@ sub handleCatInfo {
   #writeDebug("called handleTagField(".$params->stringify().")");
   my $theCat = $params->{cat};
   my $theFormat = $params->{format} || '$link';
-  my $theSep = $params->{separator} || ' ';
+  my $theSep = $params->{separator};
   my $theHeader = $params->{header} || '';
   my $theFooter = $params->{footer} || '';
   my $thisWeb = $params->{web} || $baseWeb;
   my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $baseTopic;
+
+  $theSep = ', ' unless defined $theSep;
 
   ($thisWeb, $thisTopic) = 
     TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
@@ -453,11 +453,13 @@ sub handleTagInfo {
   #writeDebug("called handleTagField(".$params->stringify().")");
   my $theCat = $params->{cat};
   my $theFormat = $params->{format} || '$link';
-  my $theSep = $params->{separator} || ' ';
+  my $theSep = $params->{separator};
   my $theHeader = $params->{header} || '';
   my $theFooter = $params->{footer} || '';
   my $thisWeb = $params->{web} || $baseWeb;
   my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $baseTopic;
+
+  $theSep = ', ' unless defined $theSep;
 
   ($thisWeb, $thisTopic) = 
     TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
