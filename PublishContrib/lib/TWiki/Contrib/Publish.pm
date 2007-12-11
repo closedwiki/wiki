@@ -290,7 +290,7 @@ TEXT
     }
 
     # Generate the progress information screen (based on the view template)
-    my($header, $footer) = '';
+    my($header, $footer) = ('', '');
     unless( TWiki::Func::getContext()->{command_line} ) {
         ($header, $footer) = $this->_getPageTemplate();
     }
@@ -533,12 +533,27 @@ sub publishTopic {
     # Expand and render the topic text
     $text = TWiki::Func::expandCommonVariables(
         $text, $topic, $this->{web}, $meta);
-    $text = TWiki::Func::renderText($text, $this->{web});
+
+    my $newText = '';
+    my $tagSeen = 0;
+    my $publish = 1;
+    foreach my $s ( split( /(%STARTPUBLISH%|%STOPPUBLISH%)/, $text )) {
+        if( $s eq '%STARTPUBLISH%' ) {
+            $publish = 1;
+            $newText = '' unless( $tagSeen );
+            $tagSeen = 1;
+        } elsif( $s eq '%STOPPUBLISH%' ) {
+            $publish = 0;
+            $tagSeen = 1;
+        } elsif( $publish ) {
+            $newText .= $s;
+        }
+    }
+    $text = $newText;
 
     # Expand and render the template
     $tmpl = TWiki::Func::expandCommonVariables(
         $tmpl, $topic, $this->{web}, $meta);
-    $tmpl = TWiki::Func::renderText($tmpl, $this->{web});
 
     # Inject the text into the template
     $tmpl =~ s/%TEXT%/$text/g;
@@ -548,26 +563,13 @@ sub publishTopic {
     # legacy
     $tmpl =~ s/<nopublish>.*?<\/nopublish>//gs;
 
-    my $newTmpl = '';
-    my $tagSeen = 0;
-    my $publish = 1;
-    foreach my $s ( split( /(%STARTPUBLISH%|%STOPPUBLISH%)/, $tmpl )) {
-        if( $s eq '%STARTPUBLISH%' ) {
-            $publish = 1;
-            $newTmpl = '' unless( $tagSeen );
-            $tagSeen = 1;
-        } elsif( $s eq '%STOPPUBLISH%' ) {
-            $publish = 0;
-            $tagSeen = 1;
-        } elsif( $publish ) {
-            $newTmpl .= $s;
-        }
-    }
-    $tmpl = $newTmpl;
     $tmpl =~ s/.*?<\/nopublish>//gs;
     $tmpl =~ s/%MAXREV%/$maxrev/g;
     $tmpl =~ s/%CURRREV%/$maxrev/g;
     $tmpl =~ s/%REVTITLE%//g;
+
+    $tmpl = TWiki::Func::renderText($tmpl, $this->{web});
+
     $tmpl =~ s|( ?) *</*nop/*>\n?|$1|gois;
 
     # Remove <base.../> tag
