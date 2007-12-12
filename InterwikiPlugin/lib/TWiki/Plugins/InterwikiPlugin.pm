@@ -119,10 +119,14 @@ sub _map {
 }
 
 sub preRenderingHandler {
+    my $session = $TWiki::Plugins::SESSION;
+    my $removed = {};
+    $_[0] = $session->{renderer}->takeOutBlocks($_[0], 'noautolink', $removed);  
     # ref in [[ref]] or [[ref][
     $_[0] =~ s/(\[\[)$sitePattern:$pagePattern(\]\]|\]\[[^\]]+\]\])/_link($1,$2,$3,$4)/geo;
     # ref in text
     $_[0] =~ s/(^|[\s\-\*\(])$sitePattern:$pagePattern(?=[\s\.\,\;\:\!\?\)\|]*(\s|$))/_link($1,$2,$3)/geo;
+    $session->{renderer}->putBackBlocks( \$_[0], $removed, 'noautolink');
 }
 
 sub _link {
