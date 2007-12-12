@@ -198,7 +198,7 @@ __Note:__ The Plugin uses base settings like date format, language and style fro
 |  Plugin Author: | TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2002-2007, TWiki:Main.PeterThoeny ([[http://www.twiki.net/][TWIKI.NET]]) and TWiki Contributors |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 01 Dec 2007 (4.3) |
+|  Plugin Version: | 12 Dec 2007 (4.5) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
 |  01 Dec 2007: | 4.3:  Arthur Clemens: added support for TablePlugin =headerrows= and =footerrows=; updated edit button |
 |  16 Oct 2007: | 4.2:  Arthur Clemens: refactoring, bug fixes. |
