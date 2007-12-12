@@ -33,11 +33,11 @@ my $RENDER_HACK        = "\n<nop>\n";
 my $DEFAULT_FIELD_SIZE = 16;
 
 BEGIN {
-    %regex                      = ();
-    $regex{edit_table_plugin}   = '%EDITTABLE{(.*)}%';
-    $regex{table_plugin}        = '%TABLE(?:{(.*?)})?%';
-    $regex{table_row_full}      = '^(\s*)\|.*\|\s*$';
-    $regex{table_row}           = '^(\s*)\|(.*)';
+    %regex                    = ();
+    $regex{edit_table_plugin} = '%EDITTABLE{(.*)}%';
+    $regex{table_plugin}      = '%TABLE(?:{(.*?)})?%';
+    $regex{table_row_full}    = '^(\s*)\|.*\|\s*$';
+    $regex{table_row}         = '^(\s*)\|(.*)';
 }
 
 sub init {
@@ -70,7 +70,7 @@ Called from commonTagsHandler. Pass over to processText in 'no Save' mode.
 =cut
 
 sub process {
-	init();
+    init();
     processText( 0, 0, 0, @_ );
 }
 
@@ -1267,6 +1267,17 @@ sub doEnableEdit {
         if ($oopsUrl) {
             my $loginUser = TWiki::Func::wikiToUserName($wikiUserName);
             if ( $lockUser ne $loginUser ) {
+
+                # change the default oopsleaseconflict url
+                # use viewauth instead of view
+                $oopsUrl =~ s/param4=view/param4=viewauth/;
+
+                # add info of the edited table
+                my $params = '';
+                $query = TWiki::Func::getCgiQuery();
+                $params .= ';ettablenr=' . $query->param('ettablenr');
+                $params .= ';etedit=on';
+                $oopsUrl =~ s/($|#\w*)/$params/;
 
                 # warn user that other person is editing this topic
                 TWiki::Func::redirectCgiQuery( $query, $oopsUrl );
