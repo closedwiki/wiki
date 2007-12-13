@@ -328,6 +328,9 @@ sub rootGenerate {
     $text =~ s/^\n*//s;
     $text =~ s/\s*$/\n/s;
 
+    # Item5127: Remove BR just before EOLs
+    $text =~ s/<br( \/)?>\n/\n/g;
+
     return $text;
 }
 

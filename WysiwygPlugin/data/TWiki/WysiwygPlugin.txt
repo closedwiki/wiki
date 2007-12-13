@@ -165,130 +165,130 @@ Many thanks to the following sponsors for supporting this work:
 |  License | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
-| | Bugs:Item4836: make the parser tolerant of META, so pasting OO docs works Bugs:Item4969: autoclose BR and HR tags |
-|  8 Nov 2007 | Bugs:Item4923: fixed blocking of table conversion due to empty attributes Bugs:Item4936: An em embedded in an em was getting eaten Bugs:Item4817: added typewriter text button Bugs:Item4850: added font colour controls Bugs:Item4645: added REST handlers for upload and fetching lists of attachments |
-|  2 Nov 2007 | Bugs:Item4903: corrected over-enthusiastive interpretation of ! as an escape |
-|  21 Oct 2007 | Bugs:Item4788: fixed unbalanced protect, which could cause loss of protected status Bugs:Item4811: noautolink *looks* like an HTML construct but in fact is not; the tag is infact an "on-off" switch and does not imply any HTML structure, so cannot be converted to a DIV or a span, so has to be removed. Bugs:Item4747: added &lt;sticky&gt; to try to overcome limitations in translation Bugs:Item4831: added increased flexibility in deciding what HTML get converted to TML, and what does not. Analysed all the HTML4 tags to establish initial settings. Bugs:Item4847: don't call non-existent function with older HTML::Parser releases Bugs:Item4844: Saving a table from IE didn't convert it back to TML Bugs:Item4855: table rows generated from TWiki variables were being eaten |
-|  6 Oct 2007 | Bugs:Item4700: fixed colspans Bugs:Item4701: removed extra line between %TABLE and the table Bugs:Item4705: fixed spacing around literal and verbatim blocks Bugs:Item4706: merge adjacent verbatim blocks separated only by whitespace Bugs:Item4712: fixed eating of noautolink and literal Bugs:Item4763: list items spanning multiple lines fixed Bugs:Item4867: released tml2html |
-|  17 Sep 2007 | Bugs:Item4647: Bugs:Item4652: problems related to DIV fixed. Bugs:Item4653: fixed multi-line twiki variables |
-|  16 Sep 2007 | Bugs:Item4630: polished up the way the secret string is done, to ensure synch between perl and JS. Item4622: added UTF-8 handling steps that fixup malformed UTF8 strings before presenting them to the editor (saves Moz) and stops the editor passing them back to TWiki (saves IE). Removed extra entity decoding steps that were causing problems. Bugs:Item4629: fixed issues with verbatim, highlighted by previous mangling of this topic |
-|  13 Sep 2007 | Bugs:Item4613 cleaned up spurious message when navigating away Bugs:Item4615 fixed incorrect rendering of emphasis next to br |
-|  12 Sep 2007 | Bugs:Item4604 Fixes to REST handler, and add ability to trigger HTML2TML conversion from a content comment alone (required for some editors) Bugs:Item4588 fixes to conversion of double-character emphases |
-|  7 Sep 2007 | Bugs:Item4503 excess empty lines Bugs:Item4486 no toc headers with unofficial syntax Bugs:Item4560: empty lines lost Bugs:Item4566: corrupted table on save Bugs:Item4550 section tags being eaten |
-|  4 Sep 2007 | Bugs:Item4534 Bugs:Item4535 fixed |
-|  14679 | Bugs:Item4481 Bugs:Item4524 fixed |
+| | TWikibug:Item4836: make the parser tolerant of META, so pasting OO docs works TWikibug:Item4969: autoclose BR and HR tags TWikibug: |
+|  8 Nov 2007 | TWikibug:Item4923: fixed blocking of table conversion due to empty attributes TWikibug:Item4936: An em embedded in an em was getting eaten TWikibug:Item4817: added typewriter text button TWikibug:Item4850: added font colour controls TWikibug:Item4645: added REST handlers for upload and fetching lists of attachments |
+|  2 Nov 2007 | TWikibug:Item4903: corrected over-enthusiastive interpretation of ! as an escape |
+|  21 Oct 2007 | TWikibug:Item4788: fixed unbalanced protect, which could cause loss of protected status TWikibug:Item4811: noautolink *looks* like an HTML construct but in fact is not; the tag is infact an "on-off" switch and does not imply any HTML structure, so cannot be converted to a DIV or a span, so has to be removed. TWikibug:Item4747: added &lt;sticky&gt; to try to overcome limitations in translation TWikibug:Item4831: added increased flexibility in deciding what HTML get converted to TML, and what does not. Analysed all the HTML4 tags to establish initial settings. TWikibug:Item4847: don't call non-existent function with older HTML::Parser releases TWikibug:Item4844: Saving a table from IE didn't convert it back to TML TWikibug:Item4855: table rows generated from TWiki variables were being eaten |
+|  6 Oct 2007 | TWikibug:Item4700: fixed colspans TWikibug:Item4701: removed extra line between %TABLE and the table TWikibug:Item4705: fixed spacing around literal and verbatim blocks TWikibug:Item4706: merge adjacent verbatim blocks separated only by whitespace TWikibug:Item4712: fixed eating of noautolink and literal TWikibug:Item4763: list items spanning multiple lines fixed TWikibug:Item4867: released tml2html |
+|  17 Sep 2007 | TWikibug:Item4647: TWikibug:Item4652: problems related to DIV fixed. TWikibug:Item4653: fixed multi-line twiki variables |
+|  16 Sep 2007 | TWikibug:Item4630: polished up the way the secret string is done, to ensure synch between perl and JS. Item4622: added UTF-8 handling steps that fixup malformed UTF8 strings before presenting them to the editor (saves Moz) and stops the editor passing them back to TWiki (saves IE). Removed extra entity decoding steps that were causing problems. TWikibug:Item4629: fixed issues with verbatim, highlighted by previous mangling of this topic |
+|  13 Sep 2007 | TWikibug:Item4613 cleaned up spurious message when navigating away TWikibug:Item4615 fixed incorrect rendering of emphasis next to br |
+|  12 Sep 2007 | TWikibug:Item4604 Fixes to REST handler, and add ability to trigger HTML2TML conversion from a content comment alone (required for some editors) TWikibug:Item4588 fixes to conversion of double-character emphases |
+|  7 Sep 2007 | TWikibug:Item4503 excess empty lines TWikibug:Item4486 no toc headers with unofficial syntax TWikibug:Item4560: empty lines lost TWikibug:Item4566: corrupted table on save TWikibug:Item4550 section tags being eaten |
+|  4 Sep 2007 | TWikibug:Item4534 TWikibug:Item4535 fixed |
+|  14679 | TWikibug:Item4481 TWikibug:Item4524 fixed |
 |  14668 | Bugfixes and refinements done as part of 4.2 release |
-|  14585 | Bugs:Item4435 - further fixes to newlines; this time to remove excess BRs |
-|  14548 | Bugs:Item4453 - noautolink was breaking lists |
+|  14585 | TWikibug:Item4435 - further fixes to newlines; this time to remove excess BRs |
+|  14548 | TWikibug:Item4453 - noautolink was breaking lists |
 |  14541 | Support for entry of TML constructs such as Set |
 |  14538 | Extensive rewrite to remove a lot of the "clever bits" that try to be too smart with TML and HTML embedded in the topic. By simply passing that through as editable text, we defer to the client side the choice of doing something clever with it, which makes the whole editing experience an awful lot better. |
-|  13701 | Made use of HTML::Entities optional; fixed encoding problem with nbsp on IE; Bugs:Item1742 support for simultaneous edits (post edit merge) |
+|  13701 | Made use of HTML::Entities optional; fixed encoding problem with nbsp on IE; TWikibug:Item1742 support for simultaneous edits (post edit merge) |
 |  12422 | Added JAVASCRIPT_TEXT to support editors that require topic text in a JS var |
 |  12161 | Added support for embedded editable HTML in the edit template |
 |  12119 | Split into WysiwygPlugin and KupuContrib |
 |  11538 | Minor doc updates, minor fixes to spacing in lists, integrated Koen Marten's template topic patch |
-|  9671 | Bugs:Item2025:  corrected handling of SPAN and FONT tags used for colour changes |
-|  9566 | Bugs:Item1890:  doc update |
-|  9565 | Bugs:Item1890: Bugs:Item1041: Bugs:Item944: Much more aggressive cleanup of HTML pasted in from external sources. Excessively verbose HTML (e.g. from Outlook) was causing apparent infinite looing behaviour. |
-|  8867 | Bugs:Item1176:  commented out Cairo version of header handler |
-|  8780 | Bugs:Item1625:  disable expansion of twiki variables in urls where there are other twiki variables that can't be expanded |
-|  8779 | Bugs:Item1530:  support for templatetopic when editing new topics |
-|  8592 | Bugs:Item1532:  WysiwygPlugin: Added two more do-not-edit-if-topic-contains parameters, pre+comments |
-|  8590 | Bugs:Item1532:  WysiwygPlugin: Kenneths suggestion on proper handling of HTML comments (incl. change to kupu) |
-|  8572 | Bugs:Item1529:  evil, evil. The XMLSerializer in IE isn't happy serializing the DOM. I have no idea why. Kupu manages to get away with this because it passes the DOM through the XML validator, which I had to disable because it strips comments. So, for now, the IE implementation will strip comments - but at least you can save again |
-|  8538 | Bugs:Item1501:  table handling was a bit spazzy. Several problems fixed. |
-|  8535 | Bugs:Item1518:  moved icon and string lists into topics, updated screenshot |
-|  8531 | Bugs:Item1392:  reversed the sense of the navigate-away condition, again |
-|  8466 | Bugs:Item1486:  added WYSIWYG_EXCLUDE to allow exclusion of 'uneditable' content |
-|  8463 | Bugs:Item1486:  was stripping comments, wrongly. Had to disable the kupu filters completely, they just do too much damage. |
-|  8401 | Bugs:Item1457:  corrected problem with bullet list at top of topic |
-|  8388 | Bugs:Item1445:  fix for a javascript error, introduced by previous fix |
-|  8387 | Bugs:Item1445:  small usability improvements |
-|  8334 | Bugs:Item663:  TWiki.org doc merge: Fix incorrect link to kupu website |
-|  8327 | Bugs:Item1411:  handle case of the result of a TWiki variable being nopped |
-|  8312 | Bugs:Item1317:  wrong result returned from generation function when expanding HTML embedded in verbatim block |
-|  8301 | Bugs:Item1397:  removed excess space after sqaub links |
-|  8300 | Bugs:Item1231:  added %SPAN% to indicate a spanned-over cell in the editor. Improved handling of HTML in verbatim tags by inserting line breaks is the tag type calls for it, before removing the HTML. |
-|  8276 | Bugs:Item1215:  added WYSIWYG_ICONS and WYSIWYG_TAGS to support user customisation of icon images and twiki variables that can be inserted |
-|  8274 | Bugs:Item1314:  debugging in case the hang happens again; and made sure to default the editor just in case |
-|  8273 | Bugs:Item1315:  short forms must be terminated by one of the same characters that terminate wikiwords |
-|  8272 | Bugs:Item1391:  added special interpretation of IMG tags to expand selected TWiki variables within SRC attributes |
-|  8271 | Bugs:Item1340:  refined handling of NOP to cover abbrevs |
-|  8270 | Bugs:Item1311:  removed excess space inserted in headings |
-|  8269 | Bugs:Item1339:  changed from using arbitrary attribute for notoc to a new CSS class. Arbitrary attributes are stripped by Kupu before save. |
-|  8268 | Bugs:Item1344:  strip ^Ms inserted by Sarissa during serialisation on IE |
-|  8267 | Bugs:Item1394:  still can't get text styles to work properly in IE; but I am now firmly of the opinion that the fault lies with the browser, and not with Kupu. |
-|  8232 | Bugs:Item1341:  added appropriate CSS class |
-|  8152 | Bugs:Item1313:  added caveat about editing complex HTML and mixed HTML-TML |
-|  8151 | Bugs:Item1334:  headers not handled properly in Cairo version |
-|  8108 | Bugs:Item1318:  corrected table/list parser for tables embedded in bulleted lists |
-|  8106 | Bugs:Item1310:  support for &lt;nop/> |
-|  8105 | Bugs:Item1317:  support for limited case of nopped variable |
-|  8104 | Bugs:Item1320:  corrected interpretation of relative URL path in [[]] |
-|  8091 | Bugs:Item1259:  changed comment handling; rather than trying to create HTML, which gets munged, create an HTML comment. This will only be editable by switching to source view, but hey, it's supposed to be WYSIWYG. Note that this also means that comments in pasted HTML should be retained now |
-|  8063 | Bugs:Item1042:  spec of SCRIPTURL changed |
-|  7904 | Bugs:Item1189:  reverting accidental checkin of experimental code |
-|  7903 | Bugs:Item1189:  filter whitelist is not good enough; need to generate B and I nodes. templates/ pub/TWiki/WysiwygPlugin |
-|  7902 | Bugs:Item1189:  it took bloody ages to track down, but finally discovered that bold and italic were being filtered out of spans by Kupu 1.3.2.... too smart for it's own good. So added them to the filter whitelist, and it works again. |
-|  7873 | Bugs:Item1189:  added pre save filter to try and find where the attributes are disappearing to in FF |
-|  7872 | Bugs:Item1187:  for lack of an s on an RE, the nation was lost (well, the multi-line comment actually). Thanks Kenneth! |
-|  7871 | Bugs:Item859:  solved issue with non-display of inserted images. Was due to the use of an onSubmit handler to close the dialog, rather than an onLoad handler triggered when the IFRAME that contains the result is loaded. |
-|  7869 | Bugs:Item1172:  had to rewrite big chunk of the table popup to get it working with 1.3.2 |
-|  7858 | Bugs:Item1151:  rewrote link handlings stuff to leverage browser better |
-|  7854 | Bugs:Item1175:  escape wikiwords within squabs |
-|  7815 | Bugs:Item1158:  works for Cairo now as well |
-|  7814 | Bugs:Item1158:  first implementation of AJAX interface to allow selectoin of topics from other webs |
-|  7812 | Bugs:Item1154:  removed non-existent scull.gif |
-|  7811 | Bugs:Item1155:  added extra recursion block, as Item1155 suggests it is needed |
-|  7801 | Bugs:Item1042:  All sorts of clever tricks to handle expansion/compression of a subset of TWiki variables when they are used in URLs. Not a complete solution, but better than it was. |
-|  7799 | Bugs:Item1024:  caught out by recursive call to beforeCommonTagsHandler in Cairo (nasty) |
-|  7798 | Bugs:Item1042:  whoops, broke \t conversion in Cairo |
-|  7789 | Bugs:Item1140:  testcase for 1140 |
-|  7788 | Bugs:Item1140:  fix rewriting of img src urls (and updated MANIFEST for Kupu1.3.2) |
-|  7786 | Bugs:Item1042:  extensive improvements to variable and URL recognition and conversion |
-|  7766 | Bugs:Item856:  added doc on EDIT_SKIN to the plugin |
-|  7712 | Bugs:Item1074:  upgrade to Kupu 1.3.2 complete (at last) |
-|  7710 | Bugs:Item1074:  Fixed source edit mode |
-|  7709 | Bugs:Item1074:  tidied up broken toolbar. There are still known issues |
-|  7700 | Bugs:Item1074:  first pass at moving to Kupu 1.3.2. |
-|  7673 | Bugs:Item1037:  insert wikiword only if selection is zero length |
-|  7672 | Bugs:Item977:  changed to remove dangerous Cairo-based assumption, and use context ids instead |
-|  7630 | Bugs:Item1025:  added 'escape clause' for old handlers implemented to support old TWiki releases without warnings |
-|  7506 | Bugs:Item941:  Eliminated the last of the dynamic globals to try and solve saving problem. Can;t test with mod_perl, but is fine with speedycgi AFAICT |
-|  7456 | Bugs:Item873:  minor issue; replace br with \n in pre |
-|  7455 | Bugs:Item873:  obvious problem parsing closing pre tag on same line as open tag |
-|  7453 | Bugs:Item710:  Handling HTML comments |
-|  7452 | Bugs:Item876:  Item945: Item876: spacing around table cells, correct handling of variables. Had to compromise on handling [[]] but I think it's for the best. |
-|  7430 | Bugs:Item871:  made sure that brackets are generated for non-wikiwords |
-|  7425 | Bugs:Item928:  removed special interpretation of mailto links |
-|  7424 | Bugs:Item866:  extended URL parsing to handle MAINWEB and TWIKIWEB twiki variables, in the same hacky way as the core. |
-|  7416 | Bugs:Item870:  a couple of corner-cases for correct handling of twiki variables |
-|  7401 | Bugs:Item899:  changed list generation to use spaces instead of tabs |
-|  7265 | Bugs:Item180:  removed pointless, outdated dependency check from DateFieldPlugin |
-|  6935 | Bugs:Item622:  reverted 3 specs to tabs in Set lines in plugins topics for kompatterbility with Kigh-roe |
-|  6905 | Bugs:Item622:  tabs -> 3 spacesto avoid confusing the users |
-|  6850 | Bugs:Item638:  added instruction to run configure to all install docs (I hope) |
-|  6827 | Bugs:Item569:  added default RELEASE to everything that had a version, and removed a load of dead code that was getting in the way |
-|  6758 | Bugs:Item569:  computed version numbers for plugins from the repository rev they were built from. |
-|  6504 | Bugs:Item436:  incremented vernos of all changed plugins |
-|  6485 | Bugs:Item429:  trying to make access controls clearer |
-|  6401 | Bugs:Item340:  re-initialisation bug found by ColasNahaboo when using mod_perl; fixed by correctly re-initialising the parse stack for each run of the convertor |
-|  6284 | Bugs:Item340:  Release 0.16 of WysiwygPlugin |
-|  6279 | Bugs:Item340:  bugfixes for release 0.16 of WysiwygPlugin |
-|  6261 | Bugs:Item335:  Switched PNGs to indexed mode, as transparency doesn't work on IE for RGB images |
-|  6238 | Bugs:Item332:  Added context identifier to WysiwygPlugin, and a button to the pattern view template. If WysiwygPlugin is enabled, then the button will appear. Neat, huh? |
-|  6195 | Bugs:Item196:  getting plugin test suites to pass. Doesn't mean the plugins actually work, just that the test suites run (which is a good indicator) |
-|  6174 | Bugs:Item168:  checkpoint checking for 0.16 |
-|  6151 | Bugs:Item186:  more minor updates |
-|  6150 | Bugs:Item168:  new icons, and a couple of bugfixes, to WysiwygPlugin |
-|  6092 | Bugs:Item196:  more plugin and contrib fixes for develop; mainly just moving tests around and making sure they all pass. |
-|  6067 | Bugs:Item138:  had to change to using beforeCommonTagsHandler and also escape % signs to prevent TWiki from rendering internal tags (as reported by Colas) |
-|  5979 | Bugs:Item168:  corrected stupid error on IE; added screenshot |
-|  5977 | Bugs:Item168:  release 0.13 |
-|  5948 | Bugs:Item168:  nearly ready for 0.13 |
-|  5937 | Bugs:Item168:  corrected images, twikified all images |
-|  5936 | Bugs:Item168:  the import from cvs has screwed images |
-|  5934 | Bugs:Item168:  twikified icon images, and renamed some images to be more intention-revealing |
+|  9671 | TWikibug:Item2025:  corrected handling of SPAN and FONT tags used for colour changes |
+|  9566 | TWikibug:Item1890:  doc update |
+|  9565 | TWikibug:Item1890: TWikibug:Item1041: TWikibug:Item944: Much more aggressive cleanup of HTML pasted in from external sources. Excessively verbose HTML (e.g. from Outlook) was causing apparent infinite looing behaviour. |
+|  8867 | TWikibug:Item1176:  commented out Cairo version of header handler |
+|  8780 | TWikibug:Item1625:  disable expansion of twiki variables in urls where there are other twiki variables that can't be expanded |
+|  8779 | TWikibug:Item1530:  support for templatetopic when editing new topics |
+|  8592 | TWikibug:Item1532:  WysiwygPlugin: Added two more do-not-edit-if-topic-contains parameters, pre+comments |
+|  8590 | TWikibug:Item1532:  WysiwygPlugin: Kenneths suggestion on proper handling of HTML comments (incl. change to kupu) |
+|  8572 | TWikibug:Item1529:  evil, evil. The XMLSerializer in IE isn't happy serializing the DOM. I have no idea why. Kupu manages to get away with this because it passes the DOM through the XML validator, which I had to disable because it strips comments. So, for now, the IE implementation will strip comments - but at least you can save again |
+|  8538 | TWikibug:Item1501:  table handling was a bit spazzy. Several problems fixed. |
+|  8535 | TWikibug:Item1518:  moved icon and string lists into topics, updated screenshot |
+|  8531 | TWikibug:Item1392:  reversed the sense of the navigate-away condition, again |
+|  8466 | TWikibug:Item1486:  added WYSIWYG_EXCLUDE to allow exclusion of 'uneditable' content |
+|  8463 | TWikibug:Item1486:  was stripping comments, wrongly. Had to disable the kupu filters completely, they just do too much damage. |
+|  8401 | TWikibug:Item1457:  corrected problem with bullet list at top of topic |
+|  8388 | TWikibug:Item1445:  fix for a javascript error, introduced by previous fix |
+|  8387 | TWikibug:Item1445:  small usability improvements |
+|  8334 | TWikibug:Item663:  TWiki.org doc merge: Fix incorrect link to kupu website |
+|  8327 | TWikibug:Item1411:  handle case of the result of a TWiki variable being nopped |
+|  8312 | TWikibug:Item1317:  wrong result returned from generation function when expanding HTML embedded in verbatim block |
+|  8301 | TWikibug:Item1397:  removed excess space after sqaub links |
+|  8300 | TWikibug:Item1231:  added %SPAN% to indicate a spanned-over cell in the editor. Improved handling of HTML in verbatim tags by inserting line breaks is the tag type calls for it, before removing the HTML. |
+|  8276 | TWikibug:Item1215:  added WYSIWYG_ICONS and WYSIWYG_TAGS to support user customisation of icon images and twiki variables that can be inserted |
+|  8274 | TWikibug:Item1314:  debugging in case the hang happens again; and made sure to default the editor just in case |
+|  8273 | TWikibug:Item1315:  short forms must be terminated by one of the same characters that terminate wikiwords |
+|  8272 | TWikibug:Item1391:  added special interpretation of IMG tags to expand selected TWiki variables within SRC attributes |
+|  8271 | TWikibug:Item1340:  refined handling of NOP to cover abbrevs |
+|  8270 | TWikibug:Item1311:  removed excess space inserted in headings |
+|  8269 | TWikibug:Item1339:  changed from using arbitrary attribute for notoc to a new CSS class. Arbitrary attributes are stripped by Kupu before save. |
+|  8268 | TWikibug:Item1344:  strip ^Ms inserted by Sarissa during serialisation on IE |
+|  8267 | TWikibug:Item1394:  still can't get text styles to work properly in IE; but I am now firmly of the opinion that the fault lies with the browser, and not with Kupu. |
+|  8232 | TWikibug:Item1341:  added appropriate CSS class |
+|  8152 | TWikibug:Item1313:  added caveat about editing complex HTML and mixed HTML-TML |
+|  8151 | TWikibug:Item1334:  headers not handled properly in Cairo version |
+|  8108 | TWikibug:Item1318:  corrected table/list parser for tables embedded in bulleted lists |
+|  8106 | TWikibug:Item1310:  support for &lt;nop/> |
+|  8105 | TWikibug:Item1317:  support for limited case of nopped variable |
+|  8104 | TWikibug:Item1320:  corrected interpretation of relative URL path in [[]] |
+|  8091 | TWikibug:Item1259:  changed comment handling; rather than trying to create HTML, which gets munged, create an HTML comment. This will only be editable by switching to source view, but hey, it's supposed to be WYSIWYG. Note that this also means that comments in pasted HTML should be retained now |
+|  8063 | TWikibug:Item1042:  spec of SCRIPTURL changed |
+|  7904 | TWikibug:Item1189:  reverting accidental checkin of experimental code |
+|  7903 | TWikibug:Item1189:  filter whitelist is not good enough; need to generate B and I nodes. templates/ pub/TWiki/WysiwygPlugin |
+|  7902 | TWikibug:Item1189:  it took bloody ages to track down, but finally discovered that bold and italic were being filtered out of spans by Kupu 1.3.2.... too smart for it's own good. So added them to the filter whitelist, and it works again. |
+|  7873 | TWikibug:Item1189:  added pre save filter to try and find where the attributes are disappearing to in FF |
+|  7872 | TWikibug:Item1187:  for lack of an s on an RE, the nation was lost (well, the multi-line comment actually). Thanks Kenneth! |
+|  7871 | TWikibug:Item859:  solved issue with non-display of inserted images. Was due to the use of an onSubmit handler to close the dialog, rather than an onLoad handler triggered when the IFRAME that contains the result is loaded. |
+|  7869 | TWikibug:Item1172:  had to rewrite big chunk of the table popup to get it working with 1.3.2 |
+|  7858 | TWikibug:Item1151:  rewrote link handlings stuff to leverage browser better |
+|  7854 | TWikibug:Item1175:  escape wikiwords within squabs |
+|  7815 | TWikibug:Item1158:  works for Cairo now as well |
+|  7814 | TWikibug:Item1158:  first implementation of AJAX interface to allow selectoin of topics from other webs |
+|  7812 | TWikibug:Item1154:  removed non-existent scull.gif |
+|  7811 | TWikibug:Item1155:  added extra recursion block, as Item1155 suggests it is needed |
+|  7801 | TWikibug:Item1042:  All sorts of clever tricks to handle expansion/compression of a subset of TWiki variables when they are used in URLs. Not a complete solution, but better than it was. |
+|  7799 | TWikibug:Item1024:  caught out by recursive call to beforeCommonTagsHandler in Cairo (nasty) |
+|  7798 | TWikibug:Item1042:  whoops, broke \t conversion in Cairo |
+|  7789 | TWikibug:Item1140:  testcase for 1140 |
+|  7788 | TWikibug:Item1140:  fix rewriting of img src urls (and updated MANIFEST for Kupu1.3.2) |
+|  7786 | TWikibug:Item1042:  extensive improvements to variable and URL recognition and conversion |
+|  7766 | TWikibug:Item856:  added doc on EDIT_SKIN to the plugin |
+|  7712 | TWikibug:Item1074:  upgrade to Kupu 1.3.2 complete (at last) |
+|  7710 | TWikibug:Item1074:  Fixed source edit mode |
+|  7709 | TWikibug:Item1074:  tidied up broken toolbar. There are still known issues |
+|  7700 | TWikibug:Item1074:  first pass at moving to Kupu 1.3.2. |
+|  7673 | TWikibug:Item1037:  insert wikiword only if selection is zero length |
+|  7672 | TWikibug:Item977:  changed to remove dangerous Cairo-based assumption, and use context ids instead |
+|  7630 | TWikibug:Item1025:  added 'escape clause' for old handlers implemented to support old TWiki releases without warnings |
+|  7506 | TWikibug:Item941:  Eliminated the last of the dynamic globals to try and solve saving problem. Can;t test with mod_perl, but is fine with speedycgi AFAICT |
+|  7456 | TWikibug:Item873:  minor issue; replace br with \n in pre |
+|  7455 | TWikibug:Item873:  obvious problem parsing closing pre tag on same line as open tag |
+|  7453 | TWikibug:Item710:  Handling HTML comments |
+|  7452 | TWikibug:Item876:  Item945: Item876: spacing around table cells, correct handling of variables. Had to compromise on handling [[]] but I think it's for the best. |
+|  7430 | TWikibug:Item871:  made sure that brackets are generated for non-wikiwords |
+|  7425 | TWikibug:Item928:  removed special interpretation of mailto links |
+|  7424 | TWikibug:Item866:  extended URL parsing to handle MAINWEB and TWIKIWEB twiki variables, in the same hacky way as the core. |
+|  7416 | TWikibug:Item870:  a couple of corner-cases for correct handling of twiki variables |
+|  7401 | TWikibug:Item899:  changed list generation to use spaces instead of tabs |
+|  7265 | TWikibug:Item180:  removed pointless, outdated dependency check from DateFieldPlugin |
+|  6935 | TWikibug:Item622:  reverted 3 specs to tabs in Set lines in plugins topics for kompatterbility with Kigh-roe |
+|  6905 | TWikibug:Item622:  tabs -> 3 spacesto avoid confusing the users |
+|  6850 | TWikibug:Item638:  added instruction to run configure to all install docs (I hope) |
+|  6827 | TWikibug:Item569:  added default RELEASE to everything that had a version, and removed a load of dead code that was getting in the way |
+|  6758 | TWikibug:Item569:  computed version numbers for plugins from the repository rev they were built from. |
+|  6504 | TWikibug:Item436:  incremented vernos of all changed plugins |
+|  6485 | TWikibug:Item429:  trying to make access controls clearer |
+|  6401 | TWikibug:Item340:  re-initialisation bug found by ColasNahaboo when using mod_perl; fixed by correctly re-initialising the parse stack for each run of the convertor |
+|  6284 | TWikibug:Item340:  Release 0.16 of WysiwygPlugin |
+|  6279 | TWikibug:Item340:  bugfixes for release 0.16 of WysiwygPlugin |
+|  6261 | TWikibug:Item335:  Switched PNGs to indexed mode, as transparency doesn't work on IE for RGB images |
+|  6238 | TWikibug:Item332:  Added context identifier to WysiwygPlugin, and a button to the pattern view template. If WysiwygPlugin is enabled, then the button will appear. Neat, huh? |
+|  6195 | TWikibug:Item196:  getting plugin test suites to pass. Doesn't mean the plugins actually work, just that the test suites run (which is a good indicator) |
+|  6174 | TWikibug:Item168:  checkpoint checking for 0.16 |
+|  6151 | TWikibug:Item186:  more minor updates |
+|  6150 | TWikibug:Item168:  new icons, and a couple of bugfixes, to WysiwygPlugin |
+|  6092 | TWikibug:Item196:  more plugin and contrib fixes for develop; mainly just moving tests around and making sure they all pass. |
+|  6067 | TWikibug:Item138:  had to change to using beforeCommonTagsHandler and also escape % signs to prevent TWiki from rendering internal tags (as reported by Colas) |
+|  5979 | TWikibug:Item168:  corrected stupid error on IE; added screenshot |
+|  5977 | TWikibug:Item168:  release 0.13 |
+|  5948 | TWikibug:Item168:  nearly ready for 0.13 |
+|  5937 | TWikibug:Item168:  corrected images, twikified all images |
+|  5936 | TWikibug:Item168:  the import from cvs has screwed images |
+|  5934 | TWikibug:Item168:  twikified icon images, and renamed some images to be more intention-revealing |
 |  5739 | 0.12 beta release |
 |  5730 | V0.11 |
 |  5714 | Tidied up installer, documentation. Release 0.10 |

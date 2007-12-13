@@ -162,7 +162,14 @@ sub beforeSaveHandler {
     $_[0] = TranslateHTML2TML( @_ );
 }
 
-# This handler is invoked *before* a merge, and only from the edit
+# This handler is invoked before a merge. Merges are done before the
+# afterEditHandler is called, so we need to translate here.
+sub beforeMergeHandler {
+    #my( $text, $currRev, $currText, $origRev, $origText, $web, $topic ) = @_;
+    afterEditHandler($_[0], $_[6], $_[5]);
+}
+
+# This handler is invoked *after* a merge, and only from the edit
 # script (so it's useless for a REST save)
 sub afterEditHandler {
     #my( $text, $topic, $web ) = @_;
@@ -623,7 +630,7 @@ sub _restTML2HTML {
     # Add the secret id to trigger reconversion. Doesn't work if the
     # editor eats HTML comments, so the editor may need to put it back
     # in during final cleanup.
-
+sleep(5);
     return '<!--'.$SECRET_ID.'-->'.$html;
 }
 
