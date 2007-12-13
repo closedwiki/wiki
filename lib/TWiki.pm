@@ -471,7 +471,7 @@ BEGIN {
 
 =pod
 
----++ ObjectMethod UTF82SiteCharSet( $utf8 ) -> $ascii
+---++ StaticMethod UTF82SiteCharSet( $utf8 ) -> $ascii
 
 Auto-detect UTF-8 vs. site charset in string, and convert UTF-8 into site
 charset.
@@ -479,7 +479,7 @@ charset.
 =cut
 
 sub UTF82SiteCharSet {
-    my( $this, $text ) = @_;
+    my $text = shift;
 
     return $text unless( defined $TWiki::cfg{Site}{CharSet} );
 
@@ -493,13 +493,13 @@ sub UTF82SiteCharSet {
     if ( $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i ) {
         # warn if using Perl older than 5.8
         if( $] <  5.008 ) {
-            $this->writeWarning( 'UTF-8 not remotely supported on Perl '.$].
-                                 ' - use Perl 5.8 or higher..' );
+            print STDERR 'UTF-8 not remotely supported on Perl ', $],
+              ' - use Perl 5.8 or higher..' ;
         }
 
         # We still don't have Codev.UnicodeSupport
-        $this->writeWarning( 'UTF-8 not yet supported as site charset -'.
-                             'TWiki is likely to have problems' );
+        print STDERR 'UTF-8 not yet supported as site charset -',
+          'TWiki is likely to have problems';
         return $text;
     }
 
@@ -520,10 +520,10 @@ sub UTF82SiteCharSet {
             my $charEncoding =
               Encode::resolve_alias( $TWiki::cfg{Site}{CharSet} );
             if( not $charEncoding ) {
-                $this->writeWarning
-                  ( 'Conversion to "'.$TWiki::cfg{Site}{CharSet}.
-                    '" not supported, or name not recognised - check '.
-                    '"perldoc Encode::Supported"' );
+                print STDERR
+                  'Conversion to "',$TWiki::cfg{Site}{CharSet},
+                    '" not supported, or name not recognised - check ',
+                      '"perldoc Encode::Supported"';
             } else {
                 # Convert text using Encode:
                 # - first, convert from UTF8 bytes into internal
@@ -539,10 +539,9 @@ sub UTF82SiteCharSet {
             require Unicode::MapUTF8;    # Pre-5.8 Perl versions
             my $charEncoding = $TWiki::cfg{Site}{CharSet};
             if( not Unicode::MapUTF8::utf8_supported_charset($charEncoding) ) {
-                $this->writeWarning
-                  ( 'Conversion to "'.$TWiki::cfg{Site}{CharSet}.
-                    '" not supported, or name not recognised - check '.
-                    '"perldoc Unicode::MapUTF8"' );
+                print STDERR 'Conversion to "',$TWiki::cfg{Site}{CharSet},
+                  '" not supported, or name not recognised - check ',
+                    '"perldoc Unicode::MapUTF8"';
             } else {
                 # Convert text
                 $text =
@@ -1363,12 +1362,12 @@ sub new {
     # Convert UTF-8 web and topic name from URL into site charset if necessary 
     # SMELL: merge these two cases, browsers just don't mix two encodings in one URL
     # - can also simplify into 2 lines by making function return unprocessed text if no conversion
-    my $webNameTemp = $this->UTF82SiteCharSet( $this->{webName} );
+    my $webNameTemp = UTF82SiteCharSet( $this->{webName} );
     if ( $webNameTemp ) {
         $this->{webName} = $webNameTemp;
     }
 
-    my $topicNameTemp = $this->UTF82SiteCharSet( $this->{topicName} );
+    my $topicNameTemp = UTF82SiteCharSet( $this->{topicName} );
     if ( $topicNameTemp ) {
         $this->{topicName} = $topicNameTemp;
     }
@@ -2407,6 +2406,14 @@ sub urlDecode {
     my $text = shift;
 
     $text =~ s/%([\da-f]{2})/chr(hex($1))/gei;
+
+    # Item4946: support chars in %u format
+    $text =~ s/%u([\da-f]{4})/chr(hex($1))/gei;
+    # chr($unicode_codepoint) works w/o a pragma in Perl 5.8 and 5.6
+    unless( $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i ) {
+       my $t = UTF82SiteCharSet( $text );
+       $text = $t if ( $t );
+    }
 
     return $text;
 }
