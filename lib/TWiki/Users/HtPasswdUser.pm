@@ -100,6 +100,9 @@ sub readOnly {
     return 1;
 }
 
+sub canFetchUsers {
+    return 1;
+}
 sub fetchUsers {
     my $this = shift;
     my $db = _readPasswd($this);

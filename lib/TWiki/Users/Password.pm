@@ -249,4 +249,35 @@ sub findUserByEmail {
     ASSERT(0, "should never be called") if DEBUG;
 }
 
+=pod 
+
+---++ ObjectMethod canFetchUsers() -> boolean
+
+returns true if the fetchUsers method is implemented and can return an iterator of users.
+returns undef / nothing in this case, as we are unable to generate a list of users
+
+=cut
+
+=pod 
+
+sub canFetchUsers {
+    return;
+}
+
+=pod 
+
+---++ ObjectMethod fetchUsers() -> new TWiki::ListIterator(\@users)
+
+returns a TWikiIterator of loginnames from the password source. If AllowLoginNames is false
+this is used to remove the need for a TWikiUsers topic.
+
+=cut
+
+sub fetchUsers {
+
+    die "not Implemented in Base class";
+    #return new TWiki::ListIterator(\@users);
+}
+
+
 1;
