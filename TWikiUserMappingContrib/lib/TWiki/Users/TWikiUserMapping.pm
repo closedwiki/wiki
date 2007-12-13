@@ -1005,10 +1005,11 @@ sub _loadMapping {
     $this->{CACHED} = 1;
 
     #TODO: should only really do this mapping IF the user is in the password file.
-    #       except if {PasswordManager} eq 'none' - in which case the only time we
+    #       except if we can't 'fetchUsers' like in the Passord='none' case - 
+    #       in which case the only time we
     #       know a login is real, is when they are logged in :(
     if (($TWiki::cfg{Register}{AllowLoginName}) ||
-        ($TWiki::cfg{PasswordManager} eq 'none')
+        (!$this->{passwords}->canFetchUsers())
         ) {
         my $store = $this->{session}->{store};
         if( $store->topicExists($TWiki::cfg{UsersWebName},
@@ -1026,7 +1027,6 @@ sub _loadMapping {
     } else {
         #loginnames _are_ WikiNames so ask the Password handler for list of users
         my $iter = $this->{passwords}->fetchUsers();
-#        $it->{process} = sub { return $_[0] + 1 };
         while ($iter->hasNext()) {
             my $login = $iter->next();
             _cacheUser($this, $login, $login);
