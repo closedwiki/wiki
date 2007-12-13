@@ -2,7 +2,7 @@
 # This file is distributed under the same license as TWiki itself
 # Copyright (C) 2005 Peter Thoeny, peter@thoeny.com and TWiki Contributors.
 # Translators:
-#   TWiki:Main/ArthurClemens, 2006
+#   TWiki:Main/ArthurClemens, 2006, 2007
 msgid ""
 msgstr ""
 "Project-Id-Version: TWiki $Id\n"
@@ -38,7 +38,7 @@ msgstr "%*(%1,seconden)"
 #: templates/oopsgeneric.tmpl:12 templates/oopsgeneric.tmpl:14
 #: templates/oopsgeneric.tmpl:16 templates/oopsgeneric.tmpl:7
 msgid "%1"
-msgstr ""
+msgstr "%1"
 
 #: templates/registernotify.tmpl:3 templates/registernotifyadmin.tmpl:3
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:3
@@ -192,13 +192,12 @@ msgid "'%1' is not a valid %2 "
 msgstr "'%1' is geen geldige %2 "
 
 #: data/TWiki/WebTopicCreator.txt:2
-#, fuzzy
 msgid "'Create New Topic' page has moved"
-msgstr "Maak nieuwe pagina aan in %1 Web"
+msgstr "De pagina 'Nieuwe pagina aanmaken' is verplaatst"
 
 #: templates/login.tmpl:10
 msgid "(%1 login)"
-msgstr ""
+msgstr "(inloggen op %1)"
 
 #: templates/rdiff.tmpl:4
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:6
@@ -220,7 +219,7 @@ msgstr "(__Suggestie:__ Wat dacht je van een foto op je persoonlijke pagina?)"
 #: templates/oopsaccessdenied.tmpl:4
 #, fuzzy
 msgid "(access denied)"
-msgstr "Toegang niet toegestaan"
+msgstr "(toegang geweigerd)"
 
 #: templates/attachnew.tmpl:2
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:8
@@ -237,7 +236,7 @@ msgstr "(teruglinks in alle Webs)"
 
 #: templates/searchbookview.tmpl:3
 msgid "(book view)"
-msgstr ""
+msgstr "('book view')"
 
 #: templates/changeform.tmpl:4
 msgid "(change form)"
@@ -281,9 +280,8 @@ msgid "(identifies you to others) WikiName:"
 msgstr "(zo zien anderen jou) WikiName"
 
 #: templates/login.tmpl:4
-#, fuzzy
 msgid "(login)"
-msgstr "Log in"
+msgstr "(inloggen)"
 
 #: templates/oopsmore.tmpl:3
 #: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:12
@@ -322,7 +320,7 @@ msgstr "(of zoek alleen in %1 web)"
 
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:41
 msgid "(raw view)"
-msgstr ""
+msgstr "(brontekst)"
 
 #: templates/oopsmore.tmpl:21 templates/oopsmore.tmpl:30
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:13
@@ -338,12 +336,12 @@ msgstr "(hernoem)"
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:41
 #, fuzzy
 msgid "(revision %1)"
-msgstr "Revisie"
+msgstr "(revisie %1)"
 
 #: templates/oopssaveerr.tmpl:8
 #, fuzzy
 msgid "(save error)"
-msgstr "Pagina bewaarfout"
+msgstr "(fout bij opslaan)"
 
 #: templates/searchformat.tmpl:3
 #, fuzzy
@@ -364,7 +362,7 @@ msgstr "(puntkomma =;= voor en)"
 #: templates/settings.tmpl:4
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:4
 msgid "(set preferences)"
-msgstr "(voorkeuren instellen)"
+msgstr "(instellingen aanpassen)"
 
 #: templates/messages.tmpl:275
 msgid "(single character first name)"
@@ -453,8 +451,8 @@ msgid ""
 "*external links* =http://yahoo.com= or =[<nop>[http://yahoo.com/][link to "
 "Yahoo]]="
 msgstr ""
-"*links* gebruik paginanaam of URL: =%1=, =http://yahoo.com=, of =[<nop>"
-"[http://yahoo.com/][link naar Yahoo]]="
+"*externe links* =http://yahoo.com= of =[<nop>[http://yahoo.com/][link naar "
+"Yahoo]]="
 
 #: data/TWiki/WikiSyntaxSummary.txt:11
 msgid "*headings* 3 dashes, 1 to 6 pluses, 1 space: =---++&&nbsp;Your Heading="
@@ -477,7 +475,7 @@ msgstr "*paragrafen* scheiden met een lege regel"
 
 #: data/TWiki/WikiSyntaxSummary.txt:13
 msgid "*site links* use topic name: =%1= or =[<nop>[%1][Our homepage]]="
-msgstr ""
+msgstr "*site links* gebruik de paginanaam: =%1= of =[<nop>[%1][Onze " "homepage]]="
 
 #: lib/TWiki/I18N/Extract.pm:104
 msgid "..."
@@ -514,8 +512,8 @@ msgid ""
 "A %1 is divided into webs; each one represents one subject, one area of "
 "collaboration. You are trying to %2 in a web that does not exist."
 msgstr ""
-"Een %1 is opgedeel in webs; elk web staat voor een onderwerp of terrein "
-"waarop wordt samengewerkt. Je probeert %2 in een web dat niet bestaat."
+"Een %1 is opgedeeld in webs; elk web staat voor een onderwerp of terrein "
+"van samenwerking. Je probeert %2 in een web dat niet bestaat."
 
 #: templates/messages.tmpl:354
 msgid "A =.txt= extension is appended to some filenames for security reasons"
@@ -528,7 +526,7 @@ msgid ""
 "A color starts with a # sign, followed by 6 hexadecimal numbers, e.g. "
 "=#FFFF00=."
 msgstr ""
-"Een kleur begint met een # teken, gevolgd door 6 hexadecimale nummber, "
+"Een kleur begint met een # teken, gevolgd door 6 hexadecimale nummers, "
 "bijvoorbeeld =#FFFF00=."
 
 #. ($data->{Email})
@@ -563,7 +561,7 @@ msgstr ""
 
 #: data/TWiki/WebTemplateTopics.txt:4
 msgid "A topic template defines the initial content of a newly created topic."
-msgstr ""
+msgstr "Een paginatemplate definieert de initiële inhoud van een nieuw " "aangemaakte pagina."
 
 #: templates/oopsaccessdenied.tmpl:6
 #: twikiplugins/ClassicSkin/templates/oopsaccessdenied.classic.tmpl:5
@@ -613,7 +611,7 @@ msgstr "Admin onderhoud"
 
 #: templates/login.sudo.tmpl:3
 msgid "Admin TWiki User Authentication"
-msgstr ""
+msgstr "Admin TWiki Geberuikersauthenticatie"
 
 #: templates/login.tmpl:56
 #, fuzzy
@@ -781,12 +779,12 @@ msgstr "Beschikbare informatie"
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:13
 #, fuzzy
 msgid "Available form templates"
-msgstr "Mogelijke formuliertemplates"
+msgstr "Beschikbare formuliertemplates"
 
 #: data/TWiki/WebTemplateTopics.txt:6
 #, fuzzy
 msgid "Available templates in %1 Web:"
-msgstr "Mogelijke formuliertemplates"
+msgstr "Beschikbare templates in %1 Web:"
 
 #: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:11
 msgid "Back to topic"
@@ -822,6 +820,8 @@ msgid ""
 "But existing form data will be lost (you can always retrieve this data "
 "through the topic history)"
 msgstr ""
+"Maar bestaande formuliergegevens worden gewist (je kan deze gegevens altijd "
+"terugvinden in de paginageschiedenis)"
 
 #: data/Trash/WebHome.txt:7
 msgid ""
@@ -912,7 +912,7 @@ msgstr "Wijzig wachtwoord"
 #: templates/attachagain.tmpl:21
 #, fuzzy
 msgid "Change properties only"
-msgstr "Eigenschappen wijzigen"
+msgstr "Alleen eigenschappen wijzigen"
 
 #: templates/edit.tmpl:7
 msgid "Change topic"
@@ -1022,6 +1022,8 @@ msgid ""
 "Confirm your changes using TWiki's [[%1][topic history comparison tool "
 "(diff)]]."
 msgstr ""
+"Bevestig je wijzigingen met TWiki's [[%1][paginageschiedenisvergelijker "
+"(diff)]]."
 
 #: templates/oopsleaseconflict.tmpl:6
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:5
@@ -1061,7 +1063,7 @@ msgstr "Kon template niet vinden"
 
 #: templates/messages.tmpl:455
 msgid "Could not perform search. Error was: %1"
-msgstr ""
+msgstr "Kon geen zoekactie uitvoeren. Foutmelding was: %1"
 
 #: templates/messages.tmpl:312
 msgid "Could not save %1."
@@ -1083,12 +1085,12 @@ msgstr "<nop>Testpagina### aanmaken"
 #: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:5
 #: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:4
 msgid "Create New Topic"
-msgstr "Nieuwe pagina"
+msgstr "Nieuwe pagina aanmaken"
 
 #: data/TWiki/WebCreateNewTopicTemplate.txt:6
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebCreateNewTopicTemplate.txt:40
 msgid "Create New Topic in %1 Web"
-msgstr "Maak nieuwe pagina aan in %1 Web"
+msgstr "Nieuwe pagina aanmaken in %1 Web"
 
 #: templates/attach.tmpl:39
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:56
@@ -1115,7 +1117,7 @@ msgstr "Persoonlijk menu aanmaken"
 #: templates/messages.tmpl:493
 #, fuzzy
 msgid "Create the topic"
-msgstr "Maak deze pagina aan"
+msgstr "Pagina aanmaken"
 
 #: data/TWiki/TWikiPreferences.txt:314 data/TWiki/TWikiPreferences.txt:316
 #: data/TWiki/WebCreateNewTopicTemplate.txt:60 lib/TWiki/Render.pm:89
@@ -1177,7 +1179,7 @@ msgstr "Bijlage verwijderen"
 #: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:162
 #, fuzzy
 msgid "Delete last row"
-msgstr "Pagina verwijderen"
+msgstr "Verwijder laatste rij"
 
 #: templates/oopsmore.tmpl:19
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:5
@@ -1201,7 +1203,7 @@ msgstr "Klik om details te bekijken in een ander venster"
 
 #: data/TWiki/WebTopicViewTemplate.txt:11
 msgid "Did you spell the %1 correctly?"
-msgstr "Heb je %1 goed gespeld?"
+msgstr "Heb je %1 juist gespeld?"
 
 #: data/TWiki/VarMAKETEXT.txt:19
 msgid "Did you want to [[%1][reset %2's password]]?"
@@ -1347,7 +1349,7 @@ msgstr ""
 
 #: lib/TWiki/UI/Register.pm:418 lib/TWiki/UI/Register.pm:455
 msgid "Email has been disabled for this TWiki installation"
-msgstr ""
+msgstr "E-mail is gedeactiveerd voor deze TWiki"
 
 #: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:78
 msgid "Enlarge edit box"
@@ -1488,7 +1490,7 @@ msgid ""
 "rel='nofollow'>Setting topic preferences</a>."
 msgstr ""
 "Meer info over <a target='TWikiVariables' onclick=\"return launchWindow('%"
-"1','TWikiVariables')\" href='%2' rel='nofollow'>pagina-voorkeuren</a>."
+"1','TWikiVariables')\" href='%2' rel='nofollow'>pagina-instellingen</a>."
 
 #: data/TWiki/WebSearch.txt:5 data/TWiki/WebSearchAdvanced.txt:5
 msgid "Get notified on changes on this search"
@@ -1535,9 +1537,8 @@ msgid "Help"
 msgstr "Help"
 
 #: templates/attach.tmpl:45
-#, fuzzy
 msgid "Hide file"
-msgstr "Verberg bestand:"
+msgstr "Verberg bestand"
 
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:38
 msgid "Hide help"
@@ -1545,7 +1546,7 @@ msgstr "Verberg help"
 
 #: templates/messages.tmpl:109
 msgid "Hierarchical Webs is currently disabled, you cannot create Nested webs."
-msgstr ""
+msgstr "Hiërarchische Webs zijn niet geactiveerd; je kan geen genest web " "aanmaken."
 
 #: templates/registernotify.tmpl:16
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:16
@@ -1617,7 +1618,7 @@ msgid ""
 msgstr ""
 "Als je deze e-mail per ongeluk hebt gekregen: Iemand (%1) heeft zich "
 "geregistreerd op de %2 site met gebruik van uw e-mailadres %3. Neem contact "
-"op met %4 als dit niet goed is."
+"op met %4 als dit niet juist is."
 
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:301
 msgid "If you have any questions about registration, send an e-mail to %1."
@@ -1947,11 +1948,11 @@ msgstr "Naam van het nieuwe web ontbreekt"
 
 #: templates/messages.tmpl:145
 msgid "New User Registration disabled"
-msgstr ""
+msgstr "Registratie van nieuwe gebruikers is gedeactiveerd"
 
 #: templates/messages.tmpl:136
 msgid "New User Registration not supported"
-msgstr ""
+msgstr "Aanmelden van nieuwe gebruikers wordt niet ondersteund"
 
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:35
 msgid "New e-mails (space-separated list)"
@@ -2067,7 +2068,7 @@ msgstr ""
 
 #: templates/login.tmpl:8
 msgid "Oops: we could not recognize you. Try again or %1."
-msgstr ""
+msgstr "Ahem: we konden je niet herkennen. Probeer het opnieuw of %1."
 
 #: twikiplugins/ClassicSkin/templates/preview.classic.tmpl:10
 msgid "Opens page in new window"
@@ -2129,12 +2130,12 @@ msgstr "Wachtwoorden komen niet overeen"
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:60
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:74
 msgid "Personal Preferences"
-msgstr "Persoonlijke voorkeuren"
+msgstr "Persoonlijke instellingen"
 
 #: data/TWiki/WebCreateNewTopicTemplate.txt:56 templates/oopsmore.tmpl:55
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:30
 msgid "Pick from a list"
-msgstr ""
+msgstr "Kies uit de lijst"
 
 #: templates/messages.tmpl:125
 msgid "Pick one of the %1."
@@ -2196,7 +2197,7 @@ msgid ""
 "Please make sure you spelled the %1 correctly and try again. If you get "
 "stuck, please mail %2."
 msgstr ""
-"Let dat je %1 goed hebt gespeld en probeer opnieuw. Als je niet verder kan, "
+"Let dat je %1 juist hebt gespeld en probeer opnieuw. Als je niet verder kan, "
 "mail %2."
 
 #: templates/mailresetpassword.tmpl:12
@@ -2211,12 +2212,12 @@ msgstr ""
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:13
 #: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:11
 msgid "Preferences"
-msgstr "Voorkeuren"
+msgstr "Instellingen"
 
 #: templates/settings.tmpl:7
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:7
 msgid "Preferences for"
-msgstr "Voorkeuren voor"
+msgstr "Instellingen voor"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:54
 msgid "Properties"
@@ -2227,17 +2228,19 @@ msgid ""
 "Quick edit of existing preferences (edit the topic text to set new "
 "preferences)"
 msgstr ""
+"Snel aanpassen van bestaande instellingen (om nieuwe instellingen aan te "
+"maken: bewerk de paginatekst)"
 
 #: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:160
 msgid "Quiet save"
-msgstr ""
+msgstr "Stil bewaren"
 
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:10
 #: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:10
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:11
 #: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:9
 msgid "RSS Feed"
-msgstr ""
+msgstr "RSS Feed"
 
 #: templates/registernotify.tmpl:10
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:10
@@ -2306,11 +2309,11 @@ msgstr "Gerelateerde pagina's:"
 
 #: twikiplugins/ClassicSkin/templates/login.classic.tmpl:10
 msgid "Remember me"
-msgstr ""
+msgstr "Onthou mij op deze computer"
 
 #: templates/login.tmpl:50
 msgid "Remember me on this computer"
-msgstr ""
+msgstr "Onthou mij op deze computer"
 
 #: templates/messages.tmpl:185
 msgid ""
@@ -2438,7 +2441,7 @@ msgstr "Revisie"
 
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:19
 msgid "S = Save, C = Cancel"
-msgstr ""
+msgstr "B = Bewaren, A = Afbreken"
 
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:14
 #, fuzzy
@@ -2544,7 +2547,7 @@ msgstr "Zie ook:"
 
 #: templates/edit.tmpl:59
 msgid "See below for help in editing this page."
-msgstr ""
+msgstr "Zie onder voor hulp bij het bewerken van deze pagina."
 
 #: templates/changeform.tmpl:13
 msgid "Select"
@@ -2622,6 +2625,9 @@ msgid ""
 "clobbering yours. It's easier to keep a handle on if you only copy over the "
 "settings you actually change."
 msgstr ""
+"Site-brede instellingen bevinden zich in %1, maar deze %2 instellingen pagina " "heeft prioriteit en wordt gebruikt voor lokale aanpassingen. Dit maakt het "
+"opwaarderen gemakkelijker omdat je je dan geen zorgen hoeft te maken over " "meegeleverde instellingen die de jouwe dan overschrijven. Kopieer van %1 "
+"alleen de instellingen die je nodig hebt."
 
 #: templates/attachtables.tmpl:4
 msgid "Size"
@@ -2657,7 +2663,7 @@ msgstr ""
 
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:5
 msgid "Sorry, Registration has been temporarily disabled"
-msgstr ""
+msgstr "Sorry, registratie is tijdelijk gedeactiveerd"
 
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/BulkRegistration.txt:60
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/BulkResetPassword.txt:17
@@ -2665,7 +2671,8 @@ msgstr ""
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:13
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:16
 msgid "Sorry, the password system is currently read only, please contact %1"
-msgstr ""
+msgstr "Sorry, het wachtwoordsysteem blijkt alleen te kunnen lezen, niet "
+"wegschrijven. Neem contact op met %1"
 
 #: data/TWiki/WebSearchAdvanced.txt:47
 msgid "Sort results by:"
@@ -2705,7 +2712,7 @@ msgstr "Samenvattingen"
 
 #: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:78
 msgid "Switch to monotype or propotional font"
-msgstr ""
+msgstr "Wissel tussen vaste or proportionele tekenbreedte"
 
 #: data/TWiki/WebSearch.txt:25 data/TWiki/WebSearchAdvanced.txt:33
 msgid ""
@@ -2717,7 +2724,7 @@ msgstr ""
 
 #: templates/login.tmpl:3
 msgid "TWiki User Authentication"
-msgstr ""
+msgstr "TWiki gebruikersauthenticatie"
 
 #: templates/mailresetpassword.tmpl:3
 #: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:3
@@ -2768,7 +2775,7 @@ msgstr ""
 
 #: templates/messages.tmpl:504
 msgid "That user has already been activated "
-msgstr ""
+msgstr "Die gebruiker is al geactiveerd "
 
 #: templates/messages.tmpl:269
 msgid ""
@@ -2816,7 +2823,7 @@ msgstr ""
 
 #: templates/messages.tmpl:147
 msgid "The Administrator has disabled new user registration."
-msgstr ""
+msgstr "De beheerder heeft registratie van nieuwe gebruikers gedeactiveerd."
 
 #: templates/messages.tmpl:295
 msgid "The activation code %1 is invalid."
@@ -2904,7 +2911,7 @@ msgstr "Het vereiste veld %1 is niet ingevuld."
 
 #: templates/messages.tmpl:138
 msgid "The selected User System does not support new user registration."
-msgstr ""
+msgstr "Het gekozen gebruikerssysteem ondersteunt geen nieuwe registraties."
 
 #: data/TWiki/WebTopicViewTemplate.txt:4
 msgid "The topic %1 you are trying to access does not exist, yet."
@@ -2920,7 +2927,7 @@ msgstr "De twee wachtwoorden die je hebt ingevoerd komen niet overeen."
 
 #: templates/messages.tmpl:506
 msgid "The user %1 has already been activated, and should be able to log in."
-msgstr ""
+msgstr "Gebruiker %1 is al geactiveerd, en zou moeten kunnen inloggen."
 
 #: templates/messages.tmpl:380
 msgid "There are problems with renaming this web:"
@@ -2938,7 +2945,7 @@ msgstr "Er zou een regel moeten zijn die %1 bevat; kijk uit naar %2 (of %3)"
 
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:6
 msgid "This TWiki does _not_ support new User Registration"
-msgstr ""
+msgstr "Deze TWiki ondersteunt _geen_ registratie van nieuwe gebruikers"
 
 #: templates/messages.tmpl:339
 msgid "This can be automatically upgraded by:"
@@ -3324,7 +3331,7 @@ msgstr "Waarschuwing: kon geen bevestigingse-mail versturen"
 #: lib/TWiki/UI/Register.pm:833
 #, fuzzy
 msgid "Warning: Could not send confirmation email, email has been disabled"
-msgstr "Waarschuwing: kon geen bevestigingse-mail versturen"
+msgstr "Waarschuwing: kon geen bevestigings e-email versturen; e-mail is " "gedeactiveerd"
 
 #: templates/messages.tmpl:454
 msgid "Warning: This site does not allow %<nop>INCLUDE% of URLs"
@@ -3476,6 +3483,8 @@ msgid ""
 "You may have clicked a registration verification link that you had already "
 "visited."
 msgstr ""
+"Misschien heb je een verificatielink geklikt terwijl je die pagina al had "
+"bezocht."
 
 #: templates/messages.tmpl:170
 msgid "You may need to close your browser to make this change take effect."
@@ -3504,7 +3513,7 @@ msgstr ""
 #: templates/oopsmore.tmpl:106
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:53
 msgid "You will be able to review the topic before saving it to a new revision"
-msgstr ""
+msgstr "Je kan de pagina bekijken voordat je deze opslaat in een nieuwe revisie"
 
 #: templates/messages.tmpl:344
 msgid "You will probably have to ask your administrator, %1, to do this."
@@ -3554,7 +3563,7 @@ msgstr ""
 
 #: templates/messages.tmpl:155
 msgid "Your personal TWiki topic %1 has been created"
-msgstr ""
+msgstr "Je persoonlijke TWiki pagina %1 is aangemaakt"
 
 #: templates/messages.tmpl:187
 msgid "Your registered e-mail address(es) are updated to: %1."
@@ -3812,7 +3821,7 @@ msgstr "title='Bekijk paginageschiedenis' accesskey='g'>&Geschiedenis"
 
 #: lib/TWiki.pm:3942
 msgid "user list truncated"
-msgstr ""
+msgstr "gebruikerslijst afgebroken"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:44
 msgid "value='Cancel' accesskey='c'"
@@ -3854,1340 +3863,3 @@ msgstr ""
 "wachtwoord opnieuw te kunnen instellen. Als geen van je geregistreerde e-"
 "mailadressen geldig zijn, en je je wachtwoord bent vergeten, neem dan "
 "contact op met %1."
-
-#, fuzzy
-#~ msgid ""
-#~ "It's usually best to choose a <a target='WikiWord' onclick=\"launchWindow"
-#~ "('%1','WikiWord'); return false;\" href='%2' rel='nofollow'>WikiWord</a> "
-#~ "for the new topic name, otherwise automatic linking may not work. "
-#~ "Characters not allowed in topic names, such as spaces will automatically "
-#~ "be removed."
-#~ msgstr ""
-#~ "Het is over het algemeen beter om een <a target='WikiWord' onclick="
-#~ "\"return launchWindow('%1','WikiWord')\" href='%1' "
-#~ "rel='nofollow'>WikiWord</a> voor de nieuwe paginanaam te gebruiken, "
-#~ "anders werkt automatisch linken niet. Niet toegestane karakters voor "
-#~ "paginanamen, zoals spaties, zullen automatisch worden verwijderd."
-
-#~ msgid "You can see the differences [[%1][here]]."
-#~ msgstr "Je kunt de verschillen [[%1][hier]] bekijken."
-
-#, fuzzy
-#~ msgid "or [[%1][log in as administrator]]"
-#~ msgstr "Bericht aan de beheerder"
-
-#, fuzzy
-#~ msgid "or %1"
-#~ msgstr "nu %1"
-
-#~ msgid "&WYSIWYG"
-#~ msgstr "&WYSIWYG"
-
-#, fuzzy
-#~ msgid ""
-#~ "Please see <a target='TWikiVariables' onclick=\"return launchWindow('%"
-#~ "1','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a> for more "
-#~ "information about attaching files."
-#~ msgstr ""
-#~ "*Help:* Zie <a target='TWikiVariables' onclick=\"return launchWindow('%"
-#~ "1','FileAttachment')\" href='' rel='nofollow'>Bijlagen</a> voor meer "
-#~ "informatie."
-
-#~ msgid "WYSIWYG"
-#~ msgstr "WYSIWYG"
-
-#~ msgid "title='Create this topic' accesskey='w'>Create (&WYSIWYG)"
-#~ msgstr "title='Creer nieuwe pagina' accesskey='c'>&Creer (WYSIWYG)"
-
-#~ msgid "title='Edit this topic text' accesskey='w'>&WYSIWYG"
-#~ msgstr ""
-#~ "title='Bewerk deze paginatekst WYSIWYG' accesskey='b'>&Bewerken (WYSIWYG)"
-
-#~ msgid "value='Checkpoint' accesskey='k'"
-#~ msgstr "value='Bewaren en verder bewerken' accesskey='d'"
-
-#~ msgid "%1 has a list of other TWiki users."
-#~ msgstr "%1 heeft een lijst van andere TWikigebruikers."
-
-#~ msgid "Click here"
-#~ msgstr "Klik hier"
-
-#~ msgid ""
-#~ "During save of file %1 an error was found by the version control system. "
-#~ "Please notify your %2 administrator."
-#~ msgstr ""
-#~ "Tijdens het bewaren van bijlage %1 is een fout opgetreden in het "
-#~ "versiebeheersysteem. Stel je %2 beheerder op de hoogte."
-
-#, fuzzy
-#~ msgid "Hello %1!</strong>"
-#~ msgstr "Hallo %1"
-
-#~ msgid ""
-#~ "Once you have created the topic, consider adding links in related topics "
-#~ "to the new topic so that there are more ways people can discover it."
-#~ msgstr ""
-#~ "Wanneer je de pagina hebt aangemaakt zou je links naar gerelateerde "
-#~ "pagina's kunnen toevoegen. Dan zijn er meer manieren om deze pagina te "
-#~ "ontdekken."
-
-#~ msgid "See %1 for more information."
-#~ msgstr "Zie %1 voor meer informatie."
-
-#~ msgid ""
-#~ "This form applies only if TWiki uses a {PasswordManager} that supports "
-#~ "changing passwords. Otherwise replace this topic with a note describing "
-#~ "how to change the password in your organization."
-#~ msgstr ""
-#~ "Dit formulier is alleen van toepassing als TWiki een {PasswordManager} "
-#~ "gebruikt dat het veranderen van wachtwoorden ondersteunt. Vervang anders "
-#~ "deze pagina met een notitie waarin wordt beschreven hoe in je organisatie "
-#~ "een wachtwoord kan worden gewijzigd."
-
-#~ msgid ""
-#~ "*Bug:* Internet Explorer 4.0 or earlier: If you get an \"Internal Server "
-#~ "Error\" message when you upload a file, you need to try again. It should "
-#~ "work the second time."
-#~ msgstr ""
-#~ "*Internet Explorer* 4.0 of eerder: als je een \"Internal Server Error\" "
-#~ "bericht krijgt wanneer je een bijlage upload, probeer het dan opnieuw. De "
-#~ "tweede keer zou het moeten werken."
-
-#~ msgid ""
-#~ "<a target='ManagingWebs' onclick=\"return launchWindow('%"
-#~ "1','ManagingWebs')\" href='%2' rel='nofollow'>Get help on managing webs</"
-#~ "a>"
-#~ msgstr ""
-#~ "<a target='ManagingWebs' onclick=\"return launchWindow('%"
-#~ "1','ManagingWebs')\" href='%2' rel='nofollow'>Meer info over het beheren "
-#~ "van webs</a>"
-
-#~ msgid ""
-#~ "<span class='twikiAlert'><b>Do not forget</b></span> to save your changes."
-#~ msgstr ""
-#~ "<span class='twikiAlert'><b>Vergeet niet</b></span> je wijzigingen op te "
-#~ "slaan."
-
-#~ msgid "Added"
-#~ msgstr "Toegevoegd"
-
-#~ msgid "Deleted"
-#~ msgstr "Verwijderd"
-
-#~ msgid "Existing form data will be lost! (still available in old version)"
-#~ msgstr ""
-#~ "De bestaande gegevens in het formulier worden verwijderd (maar wel nog "
-#~ "beschikbaar in een oudere paginaversie)"
-
-#~ msgid "Hide attachments"
-#~ msgstr "Verberg bijlagen"
-
-#~ msgid "History:"
-#~ msgstr "Geschiedenis:"
-
-#~ msgid "Language Changed"
-#~ msgstr "Taal gewijzigd"
-
-#~ msgid "Not recommended when deleting a web."
-#~ msgstr "Niet aangeraden bij het verwijderen van een web."
-
-#~ msgid "Notices:"
-#~ msgstr "Kennisgevingen:"
-
-#~ msgid "Preview"
-#~ msgstr "Voorvertoning"
-
-#~ msgid "Revision:"
-#~ msgstr "Revisie:"
-
-#~ msgid "Save"
-#~ msgstr "Bewaren"
-
-#~ msgid "Show attachments"
-#~ msgstr "Toon bijlagen"
-
-#~ msgid ""
-#~ "Step 2: Continue to <input type='submit' class='twikiButton' "
-#~ "value='Edit' /> and save %1 to activate the new parent"
-#~ msgstr ""
-#~ "Stap 2: Ga door en <input type='submit' class='twikiButton' "
-#~ "value='Bewerk' /> en bewaar %1 om de nieuwe bovenliggende pagina te "
-#~ "activeren"
-
-#~ msgid "Subwebs must be enabled."
-#~ msgstr "Subwebs moeten geaktiveerd zijn."
-
-#~ msgid "The checkmarked topics will be updated."
-#~ msgstr "De aangevinkte pagina's zullen worden vernieuwd."
-
-#~ msgid "There is no size limit for uploaded files."
-#~ msgstr "Er is geen upload limiet."
-
-#~ msgid "To *cancel* and discard any changes: Press the [Discard] button."
-#~ msgstr ""
-#~ "Om alle veranderingen *ongedaan te maken*: Druk op de [Weggooien] knop."
-
-#~ msgid "To *save* changes: Press the [Save Changes] button."
-#~ msgstr "Om wijzigingen te *bewaren*: Druk op de [Bewaren] knop."
-
-#~ msgid ""
-#~ "To delete this web: move this web to the Trash web by renaming it to %1."
-#~ msgstr ""
-#~ "Om dit web te verwijderen: verplaats dit web naar het Prullenmand web "
-#~ "door het te hernoemen naar %1."
-
-#~ msgid "To edit the topic anyway, hit 'Edit Anyway'."
-#~ msgstr "Om de pagina hoe dan ook te bewerken, klik 'Hoe dan ook bewerken'."
-
-#~ msgid "To make *more changes*: Go back in your browser."
-#~ msgstr "Om *meer wijzigingen* te maken: Ga terug in je browser."
-
-#~ msgid "To see if %1 has finished editing yet, click 'Try Again'."
-#~ msgstr "Om te zien of %1 klaar is met bewerken, klik 'Probeer opnieuw'."
-
-#~ msgid "Unchanged"
-#~ msgstr "Onveranderd"
-
-#~ msgid "Unrecognized user and/or password"
-#~ msgstr "Gebruiker of wachtwoord niet bekend"
-
-#~ msgid "Use monospace font"
-#~ msgstr "Gebruik monospace lettertype"
-
-#~ msgid "Use proportional spaced font"
-#~ msgstr "Gebruik proportioneel lettertype"
-
-#~ msgid "You can move the topic to a different web."
-#~ msgstr "Je kunt de pagina verplaatsen naar een ander web."
-
-#~ msgid "You can review your changes in your personal TWiki topic %1"
-#~ msgstr "Je kunt je wijzigingen in je persoonlijke TWikipagina %1 bekijken"
-
-#~ msgid "none (remove topic parent)"
-#~ msgstr "geen (verwijder bovenliggende pagina)"
-
-#~ msgid "to edit the topic anyway."
-#~ msgstr "om de pagina toch te bewerken."
-
-#~ msgid "to see if %1 has finished editing yet."
-#~ msgstr "om te zien of %1 klaar is met bewerken."
-
-#, fuzzy
-#~ msgid "New Group"
-#~ msgstr "Groepen"
-
-#~ msgid "\"%1\" is an invalid name for a new web."
-#~ msgstr "%1 is geen geldige naam voor een nieuw web."
-
-#~ msgid "\"%1\" topic does not exist"
-#~ msgstr "pagina %1 bestaat niet"
-
-#~ msgid "%1 - Automated notification of topic changes"
-#~ msgstr "%1 - Automatische kennisgeving van paginawijzigingen"
-
-#~ msgid "%1 has no permission to %2 *%3*."
-#~ msgstr "%1 heeft geen permissie om %2 *%3*."
-
-#~ msgid "%1 has no permission to change topic [[%2]]."
-#~ msgstr "%1 heeft geen permissie om pagina [[%2]] te wijzigen."
-
-#~ msgid "%1 has no permission to create a new <nop><b>%2 Web</b>."
-#~ msgstr ""
-#~ "%1 heeft geen permissie om een nieuw <nop><b>%2 Web</b> aan te maken."
-
-#~ msgid "%1 has no permission to rename topic [[%2]]."
-#~ msgstr "%1 heeft geen permissie om pagina [[%2]] te hernoemen."
-
-#~ msgid "%1 has no permission to view topic [[%2]]."
-#~ msgstr "%1 heeft geen permissie om pagina [[%2]] te bekijken."
-
-#~ msgid "%1 has no permission to vote on topic [[%2]]."
-#~ msgstr "%1 heeft geen rechten om te stemmen op pagina [[%2]]."
-
-#~ msgid "%1 web:"
-#~ msgstr "%1 Web:"
-
-#~ msgid "%1's sidebar"
-#~ msgstr "de zijbalk van %1"
-
-#~ msgid "(don't forget to check your Topic Settings)"
-#~ msgstr "(vergeet niet om de pagina-instellingen na te kijken)"
-
-#~ msgid ""
-#~ "*Move attachment*: An attachment can be deleted by moving it to the Trash."
-#~ "TrashAttachment."
-#~ msgstr ""
-#~ "*Verplaats bijlage*: Een bijlage kan worden verwijderd door het te "
-#~ "verplaatsen naar Trash.TrashAttachment."
-
-#~ msgid ""
-#~ "*Properties*: Click on _manage_ of an existing attachment to change its "
-#~ "properties."
-#~ msgstr ""
-#~ "*Eigenschappen*: Klik on _beheren_ van een bijlage om de eigenschappen "
-#~ "ervan te bewerken."
-
-#~ msgid "*Tip:* More options in WebSearch"
-#~ msgstr "*Tip:* Meer opties in [[WebSearch][Zoeken]]"
-
-#~ msgid "... don't know, it just happended."
-#~ msgstr "... geen idee, het gebeurde zomaar."
-
-#~ msgid "... for user %1."
-#~ msgstr "... voor gebruiker %1."
-
-#~ msgid "1. Form definition missing"
-#~ msgstr "1. Formulierdefinitie ontbreekt"
-
-#~ msgid "2. Topic can not be upgraded from old style category table"
-#~ msgstr ""
-#~ "2. De pagina kan niet worden opgewaardeerd van een vroegere versie "
-#~ "categorie-tabel"
-
-#~ msgid "<a href='%1' title='%2'>Create</a> your personalized sidebar."
-#~ msgstr "<a href='%1' title='%2'>Creër</a> je gepersonaliseerde zijbalk."
-
-#~ msgid ""
-#~ "A color starts with the number sign, followed by 6 hexadecimal numbers, e."
-#~ "g. yellow is =#FFFF00=."
-#~ msgstr ""
-#~ "Een kleur begint met een # teken, gevolgd door 6 hexadecimale nummers, "
-#~ "bijvoorbeeld geel is =#FFFF00=."
-
-#~ msgid "Abandon your changes and exit"
-#~ msgstr "Wijzigingen niet bewaren en afbreken"
-
-#~ msgid "Abandon your changes but continue editing"
-#~ msgstr "Wijzigingen niet bewaren, maar doorgaan met bewerken"
-
-#~ msgid "About Topics"
-#~ msgstr "Over Pagina's"
-
-#~ msgid "Add a new form to <nop>%1"
-#~ msgstr "Voeg een nieuw formulier toe aan <nop>%1"
-
-#~ msgid "Adding a =WEBFORMS= variable in WebPreferences"
-#~ msgstr "Een =WEBFORMS= variabele toegoegen aan WebPreferences"
-
-#~ msgid "Align left"
-#~ msgstr "Links uitlijnen"
-
-#~ msgid "Align right"
-#~ msgstr "Rechts uitlijnen"
-
-#~ msgid "Allow non <nop>WikiWord for the new topic name."
-#~ msgstr "Een niet-<nop>WikiWord mag worden gebruikt als paginanaam."
-
-#~ msgid ""
-#~ "Alternatively go <a href=\"javascript:history.back()\">back</a> in your "
-#~ "browser and choose a different username."
-#~ msgstr ""
-#~ "Of ga <a href=\"javascript:history.back()\">terug</a> en kies een andere "
-#~ "gebruikersnaam."
-
-#~ msgid "An e-mail could not be delivered."
-#~ msgstr "Een e-mail kon niet worden verstuurd."
-
-#~ msgid "An email address is required before a password can be reset."
-#~ msgstr "Een e-mail adres is nodig om een wachtwoord te kunnen instellen."
-
-#~ msgid "Attach image or document to this topic"
-#~ msgstr "Voeg een afbeelding of document toe aan deze pagina"
-
-#~ msgid "Attachment move error"
-#~ msgstr "Verplaatsen van bijlage is niet gelukt"
-
-#~ msgid "Base web:"
-#~ msgstr "Basisweb:"
-
-#~ msgid "Bold text"
-#~ msgstr "Vetgedrukte tekst"
-
-#~ msgid "Border Off"
-#~ msgstr "Borders uit"
-
-#~ msgid "Border On"
-#~ msgstr "Borders aan"
-
-#~ msgid "Both sidebars"
-#~ msgstr "Beide zijbalken"
-
-#~ msgid "Can not rename to %1 as this already exists!"
-#~ msgstr "Kan %1 niet hernoemen naar %2 omdat deze al bestaat!"
-
-#~ msgid "Can't find the username <b>%1</b>"
-#~ msgstr "Kan gebruiker <b>%1</b> niet vinden"
-
-#~ msgid "Can't find user \"%1\"."
-#~ msgstr "Kan gebruiker \"%1\" niet vinden."
-
-#~ msgid "Can't get an email address for %1"
-#~ msgstr "Kan geen e-mailadres vinden voor %1"
-
-#~ msgid "Cancel and abandon changes"
-#~ msgstr "Bewerken afbreken en wijzigingen niet bewaren"
-
-#~ msgid "Center align"
-#~ msgstr "Centreren"
-
-#~ msgid "Center text"
-#~ msgstr "Tekst centreren"
-
-#~ msgid "Change Access Denied"
-#~ msgstr "Wijzigen niet toegestaan"
-
-#~ msgid "Change form"
-#~ msgstr "Formulier wijzigen"
-
-#~ msgid "Change links in topics that refer to %1 in the %1 Web:"
-#~ msgstr "Wijzig links in pagina's die verwijzen naar %1 in %2 Web:"
-
-#~ msgid "Change links in topics that refer to %1.%2 in any Web:"
-#~ msgstr "Wijzig links in pagina's die verwijzen naar %1.%2 in alle Webs:"
-
-#~ msgid "Change references"
-#~ msgstr "Verwijzigen wijzigen"
-
-#~ msgid "Change the current form of <nop>%1"
-#~ msgstr "Wijzig het formulier van <nop>%1"
-
-#~ msgid ""
-#~ "Characters not allowed in topic names, such as spaces will automatically "
-#~ "be removed."
-#~ msgstr ""
-#~ "Tekens die niet zijn toegestaan in paginanamen - zoals spaties - worden "
-#~ "automatisch verwijderd."
-
-#~ msgid ""
-#~ "Chose a topic name that is a %1 or check the allow non-Wiki Word box."
-#~ msgstr ""
-#~ "Kies een paginanaam dat een %1 is of vink de checkbox 'niet-<nop>WikiWord "
-#~ "mag gebruikt worden' aan."
-
-#~ msgid "Clear"
-#~ msgstr "Wissen"
-
-#~ msgid "Comment:"
-#~ msgstr "Toelichting:"
-
-#~ msgid "Compare Revisions of %1"
-#~ msgstr "Vergelijk revisies van %1"
-
-#~ msgid "Continue editing"
-#~ msgstr "Ga door met bewerken"
-
-#~ msgid "Could not find template =%1="
-#~ msgstr "Kon template =%1= niet vinden"
-
-#~ msgid "Create New Web"
-#~ msgstr "Nieuw Web aanmaken"
-
-#~ msgid "Create Web Access Denied"
-#~ msgstr "Niet toegestaan om een nieuw Web aan te maken"
-
-#~ msgid "Create a link to the attached file at the end of the topic."
-#~ msgstr "Maak een link naar de bijlage onderaan de pagina."
-
-#~ msgid "Creates a new topic revision when saving"
-#~ msgstr "Creert een nieuwe paginarevisie bij het bewaren"
-
-#~ msgid "Currently being edited:"
-#~ msgstr "Op dit moment wordt bewerkt:"
-
-#~ msgid "Deleting Attachments"
-#~ msgstr "Verwijderen van bijlagen"
-
-#~ msgid "Deleting Topics"
-#~ msgstr "Pagina's verwijderen"
-
-#~ msgid ""
-#~ "Did you type in your login name and password correctly? Remember, both "
-#~ "are case sensitive."
-#~ msgstr ""
-#~ "Heb je je login naam en wachtwoord goed ingevuld? Let op, beide zijn "
-#~ "hoofdlettergevoelig."
-
-#~ msgid "Diffs"
-#~ msgstr "Verschillen"
-
-#~ msgid "Documentation"
-#~ msgstr "Documentatie"
-
-#~ msgid "Done"
-#~ msgstr "Klaar"
-
-#~ msgid "During deletion of attachment =%1= an error was found."
-#~ msgstr "Tijdens het verwijderen van bijlage =%1= is een fout opgetreden."
-
-#~ msgid "During rename of topic %1 to %2 an error (%3) was found."
-#~ msgstr ""
-#~ "Tijdens het hernoemen van pagina %1 naar %2 is een fout (%3) opgetreden."
-
-#~ msgid "During rename of topic %1 to %2 an error was found."
-#~ msgstr "Tijdens het hernoemen van pagina %1 naar %2 is een fout opgetreden."
-
-#~ msgid "During rename of web %1 to %2 an error (%3) was found."
-#~ msgstr ""
-#~ "Tijdens het hernoemen van pagina %1 naar %2 is een fout (%3) opgetreden."
-
-#~ msgid "During save of %1 an error was found by the version control system."
-#~ msgstr ""
-#~ "Tijdens het bewaren van %1 is een fout opgetreden in het "
-#~ "versiebeheersysteem."
-
-#~ msgid ""
-#~ "During save of file %1 an error was found by the version control system."
-#~ msgstr ""
-#~ "Tijdens het bewaren van bijlage %1 is een fout opgetreden in het "
-#~ "versiebeheersysteem."
-
-#~ msgid "Edit preference settings for %1"
-#~ msgstr "Bewerk paginavoorkeur-instellingen voor %1"
-
-#~ msgid "Either you need to register or the authentication failed"
-#~ msgstr "Je moet je registreren, of de authenticatie is niet goed gegaan"
-
-#~ msgid "Embed image"
-#~ msgstr "Afbeelding toevoegen"
-
-#~ msgid "Error message"
-#~ msgstr "Foutmelding"
-
-#~ msgid "Error: %1 <span class=\"twikiAlert\">%2</span>"
-#~ msgstr "Foutmelding: %1 <span class=\"twikiAlert\">%2</span>"
-
-#~ msgid "Error: Cannot create this web because it already exists"
-#~ msgstr "Foutmelding: Kan dit web niet aanmaken omdat deze al bestaat"
-
-#~ msgid "Error: Could not copy topics to the new web"
-#~ msgstr "Foutmelding: Kon geen pagina's kopiren naar het nieuwe web"
-
-#~ msgid "Error: Could not create the new web"
-#~ msgstr "Foutmelding: Kon het nieuwe web niet aanmaken"
-
-#~ msgid "Error: Could not update the <nop>WebPreferences"
-#~ msgstr "Foutmelding: Kon <nop>WebPreferences niet vernieuwen"
-
-#~ msgid "Error: Invalid name of new web"
-#~ msgstr "Foutmelding: geen geldige naam voor een nieuw web"
-
-#~ msgid "Error: Name of base web is missing or does not exist"
-#~ msgstr "Foutmelding: Naam van basisweb ontbreekt of bestaat niet"
-
-#~ msgid "Error: Name of new web is missing"
-#~ msgstr "Foutmelding: Naam van het nieuwe web ontbreekt"
-
-#~ msgid "Error: Web color is missing or has an invalid format"
-#~ msgstr "Foutmelding: Webkleur ontbreekt of heeft een ongeldig formaat"
-
-#~ msgid "Existing Web:"
-#~ msgstr "Bestaand Web:"
-
-#~ msgid "Existing attachments for <nop>%1"
-#~ msgstr "Verberg bijlagen vor <nop>%1"
-
-#~ msgid "Explanation"
-#~ msgstr "Uitleg"
-
-#~ msgid "External"
-#~ msgstr "Extern"
-
-#~ msgid "External link"
-#~ msgstr "Externe link"
-
-#~ msgid "FAQs"
-#~ msgstr "FAQ"
-
-#~ msgid ""
-#~ "Fields with a =<span class=\"twikiAlert\">**</span>= mark are required."
-#~ msgstr ""
-#~ "Velden met een =<span class=\"twikiAlert\">**</span>= teken zijn "
-#~ "verplicht."
-
-#~ msgid "File Attachment"
-#~ msgstr "Bijlage"
-
-#~ msgid "File Attachments"
-#~ msgstr "Bijlagen"
-
-#~ msgid "Find"
-#~ msgstr "Zoek"
-
-#~ msgid "Form based input"
-#~ msgstr "Invullen met formulier"
-
-#~ msgid "Formatted Search"
-#~ msgstr "Geformatteerd Zoeken"
-
-#~ msgid "Found <span>%1</span> topics."
-#~ msgstr "<span>%1</span> pagina's gevonden."
-
-#~ msgid "From"
-#~ msgstr "Van"
-
-#~ msgid "From:"
-#~ msgstr "Naar:"
-
-#~ msgid "Get a fresh page of the topic %1"
-#~ msgstr "Pagina %1 opnieuw laden"
-
-#~ msgid ""
-#~ "Get help on <a href=\"%1\" target=\"_blank\">Renaming and moving topics</"
-#~ "a>."
-#~ msgstr ""
-#~ "Meer info over <a href=\"%1\" target=\"_blank\">hernoemen en verplaatsen "
-#~ "van pagina's</a>."
-
-#~ msgid ""
-#~ "Go <a href=\"javascript:history.back()\">back</a> in your browser and "
-#~ "save your changes locally."
-#~ msgstr ""
-#~ "Ga <a href=\"javascript:history.back()\">terug</a> en bewaar je "
-#~ "wijzigingen lokaal."
-
-#~ msgid "Good Style"
-#~ msgstr "Goede Stijl"
-
-#~ msgid "GoodStyle"
-#~ msgstr "Goede Stijl"
-
-#~ msgid "Hide attachment in normal topic view."
-#~ msgstr "Verberg bijlage op de pagina."
-
-#~ msgid "Hiding Attachments"
-#~ msgstr "Bijlagen verbergen"
-
-#~ msgid "Horizontal size of text edit box:"
-#~ msgstr "Breedte van tekstvak (bij bewerken):"
-
-#~ msgid "If unsure, click 'Cancel'."
-#~ msgstr "Als je niet zeker bent, klik op 'Afbreken'."
-
-#~ msgid "If you expected to be logged in at this point:"
-#~ msgstr "Als je verwachtte ingelogd te zijn:"
-
-#~ msgid "If you intend to do a full text search:"
-#~ msgstr "Als je een zoekactie wilt beginnen:"
-
-#~ msgid "If you want to create the topic then [[%1][click here]]."
-#~ msgstr "Als je deze pagina wilt aanmaken [[%1][klik hier]]."
-
-#~ msgid "Ignore wiki formatting"
-#~ msgstr "Negeer wiki formattering"
-
-#~ msgid "Improper use of the \"<code>save</code>\" script"
-#~ msgstr "Verkeerde aanroep van \"<code>save</code>\" script"
-
-#~ msgid "Including"
-#~ msgstr "Pagina's opnemen"
-
-#~ msgid "Incorrect <nop>WikiName"
-#~ msgstr "Onjuiste <nop>WikiNaam"
-
-#~ msgid "Incorrect format of submitted data: <b>%1</b>"
-#~ msgstr "Onjuist format van verstuurde gegevens: <b>%1</b>"
-
-#~ msgid "Internal link"
-#~ msgstr "Interne link"
-
-#~ msgid "Italic text"
-#~ msgstr "Schuingedrukte tekst"
-
-#~ msgid "Justify text"
-#~ msgstr "Text aan beide zijden uitlijnen"
-
-#~ msgid "Level 1 headline"
-#~ msgstr "Niveau 1 kop"
-
-#~ msgid "Level 2 headline"
-#~ msgstr "Niveau 2 kop"
-
-#~ msgid "Level 3 headline"
-#~ msgstr "Niveau 3 kop"
-
-#~ msgid "Level 4 headline"
-#~ msgstr "Niveau 4 kop"
-
-#~ msgid "Linking to Attachments"
-#~ msgstr "Linken naar bijlagen"
-
-#~ msgid "Links"
-#~ msgstr "Links"
-
-#~ msgid "Local file:"
-#~ msgstr "Lokaal bestand:"
-
-#~ msgid "Locked Topics"
-#~ msgstr "Vergrendelde pagina's"
-
-#~ msgid "Login to %1"
-#~ msgstr "Inloggen tot %1"
-
-#~ msgid "Logout"
-#~ msgstr "Log uit"
-
-#~ msgid "Logout of %1"
-#~ msgstr "Log uit van %1"
-
-#~ msgid "Mail Error"
-#~ msgstr "E-mailfout"
-
-#~ msgid "Managing Topics"
-#~ msgstr "Pagina's beheren"
-
-#~ msgid "Managing Webs"
-#~ msgstr "Webs beheren"
-
-#~ msgid "Mathematical formula (<nop>LaTeX)"
-#~ msgstr "Wiskundige formules (<nop>LaTeX)"
-
-#~ msgid "Minor changes"
-#~ msgstr "Kleine wijzigingen"
-
-#~ msgid "Missing Fields =<span class=\"twikiAlert\">**</span>="
-#~ msgstr "Ontbrekende velden =<span class=\"twikiAlert\">**</span>="
-
-#~ msgid "More"
-#~ msgstr "Meer"
-
-#~ msgid "More topic actions"
-#~ msgstr "Meer pagina-acties"
-
-#~ msgid "Move or Delete File \"%1\""
-#~ msgstr "Verplaats of verwijder bestand \"%1\""
-
-#~ msgid "Move or rename this topic"
-#~ msgstr "Verplaats of hernoem deze pagina"
-
-#~ msgid "Move topic error"
-#~ msgstr "Fout bij het verplaatsen van de pagina"
-
-#~ msgid "Moving Attachments"
-#~ msgstr "Bijlage verplaatsen"
-
-#~ msgid "MySideBar"
-#~ msgstr "MijnZijBalk"
-
-#~ msgid "MySidebar"
-#~ msgstr "MijZijbalk"
-
-#~ msgid "Navigation"
-#~ msgstr "Navigatie"
-
-#~ msgid "New"
-#~ msgstr "Nieuw"
-
-#~ msgid "New or changed topics in the %1 web, since %2 GMT:"
-#~ msgstr "Nieuwe of gewijzigde pagina's in %1 web, sinds %2 GMT:"
-
-#~ msgid "New topic name is not a <nop>WikiWord"
-#~ msgstr "Nieuwe paginanaam is geen <nop>WikiWoord"
-
-#~ msgid "Newer revision"
-#~ msgstr "Nieuwere revisie"
-
-#~ msgid "No permission:"
-#~ msgstr "Geen permissie:"
-
-#~ msgid "Note, that this will _break_ the lock"
-#~ msgstr "Let op, dit breekt de vergrendeling"
-
-#~ msgid ""
-#~ "Note: The new web has been created successfully and populated with topics "
-#~ "from the base web"
-#~ msgstr ""
-#~ "Let op: Het nieuwe web is succesvol aangemaakt en gevuld met pagina's van "
-#~ "het basisweb"
-
-#~ msgid "Notes"
-#~ msgstr "Opmerkingen"
-
-#~ msgid "Nothing found. Try again!"
-#~ msgstr "Niets gevonden. Probeer het opnieuw!"
-
-#~ msgid "Number of topics: <span>%1</span>"
-#~ msgstr "Aantal pagina's: <span>%1</span>"
-
-#~ msgid "Older revision"
-#~ msgstr "Oudere revisie"
-
-#~ msgid "Parent"
-#~ msgstr "Bovenliggende pagina"
-
-#~ msgid "Parrent web"
-#~ msgstr "Bovenliggend web"
-
-#~ msgid "Password Format Error"
-#~ msgstr "Wachtwoord-format fout"
-
-#~ msgid "Please ask your %1 administrator %2, to do this."
-#~ msgstr "Vraag je %1 beheerder, %2, om dit te doen."
-
-#~ msgid "Please check out the WebPreferences or try again."
-#~ msgstr "Kijk de [[WebPreferences][Webvoorkeuren]] na of probeer opnieuw."
-
-#~ msgid ""
-#~ "Please chose a topic name that is a %1 or check the _Allow non-Wiki Word_ "
-#~ "&nbsp;box."
-#~ msgstr ""
-#~ "Kies een paginanaam dat een %1 is of vink de checkbox 'niet-"
-#~ "<nop>WikiWoord mag gebruikt worden' aan."
-
-#~ msgid "Please copy this information into a friendly e-mail to %1"
-#~ msgstr "Kopieer deze informatie naar een vriendelijke e-mail aan %1"
-
-#~ msgid "Please email %1 to request this."
-#~ msgstr "E-mail %1 om dit aan te vragen."
-
-#~ msgid ""
-#~ "Please go <a href=\"javascript:history.back()\">back</a> in your browser "
-#~ "and try again."
-#~ msgstr ""
-#~ "Ga <a href=\"javascript:history.back()\">terug</a> en probeer opnieuw."
-
-#~ msgid "Please notify your %1"
-#~ msgstr "Stel je %1 op de hoogte"
-
-#~ msgid "Please notify your %1 administrator %2"
-#~ msgstr "Stel je %1 beheerder, %2, op de hoogte"
-
-#~ msgid "Please notify your %1 administrator %2."
-#~ msgstr "Stel je %1 beheerder, %2, op de hoogte."
-
-#~ msgid "Please notify your %1 administrator and explain how to reproduce it:"
-#~ msgstr ""
-#~ "Stel je %1 beheerder op de hoogte en vertel op welke manier deze situatie "
-#~ "is ontstaan:"
-
-#~ msgid "Please notify your %1 webmaster %2."
-#~ msgstr "Stel je %1 webmaster %2 op de hoogte."
-
-#~ msgid "Please try again."
-#~ msgstr "Probeer het opnieuw."
-
-#~ msgid "Plugins"
-#~ msgstr "Plugins"
-
-#~ msgid "Possibly caused by improper use of the =manage= script."
-#~ msgstr ""
-#~ "Mogelijk veroorzaakt door een onjuist gebruik van het =manage= script."
-
-#~ msgid "Preference Settings for %1:"
-#~ msgstr "Voorkeurinstellingen voor %1:"
-
-#~ msgid "Preview your changes"
-#~ msgstr "Voorvertoning van je wijzigingen"
-
-#~ msgid "Print"
-#~ msgstr "Printen"
-
-#~ msgid "Print this page"
-#~ msgstr "Print deze pagina"
-
-#~ msgid "Problems could arise for two reasons:"
-#~ msgstr "Problemen kunnen twee oorzaken hebben:"
-
-#~ msgid "Raw"
-#~ msgstr "Brontekst"
-
-#~ msgid "Reference Manual"
-#~ msgstr "Gebruikershandleiding"
-
-#~ msgid "Referring topics currently being edited:"
-#~ msgstr "Verwijzende pagina's die op dit moment bewerkt worden:"
-
-#~ msgid "Register on %1"
-#~ msgstr "Meld je aan op %1"
-
-#~ msgid "Rename Access Denied"
-#~ msgstr "Hernoemen niet toegestaan"
-
-#~ msgid "Rename Web"
-#~ msgstr "Web hernoemen"
-
-#~ msgid "Rename anyway"
-#~ msgstr "Toch hernoemen"
-
-#~ msgid "Request to reset your TWiki password"
-#~ msgstr "Verzoek om je TWiki wachtwoord te vernieuwen."
-
-#~ msgid "Reset"
-#~ msgstr "Herstel"
-
-#~ msgid "Reset to defaults"
-#~ msgstr "Terugzetten naar standaardwaarden"
-
-#~ msgid "Save and continue editing"
-#~ msgstr "Bewaar en ga door met bewerken"
-
-#~ msgid "Save and exit"
-#~ msgstr "Bewaren en stoppen"
-
-#~ msgid "Searchbox in pos. 1"
-#~ msgstr "Zoekveld in positie 1"
-
-#~ msgid "Searchbox in pos. 2"
-#~ msgstr "Zoekveld in positie 2"
-
-#~ msgid "Searchbox in pos. 3"
-#~ msgstr "Zoekveld in positie 3"
-
-#~ msgid "Searchbox in topbar"
-#~ msgstr "Zoekveld in bovenbalk"
-
-#~ msgid "Searchbox off"
-#~ msgstr "Geen zoekveld"
-
-#~ msgid "Select the [[Trash.WebHome][Trash]] web to delete the topic."
-#~ msgstr ""
-#~ "Selecteer [[Trash.WebHome][Trash]] web om deze pagina te verwijderen."
-
-#~ msgid "Select..."
-#~ msgstr "Selecteer..."
-
-#~ msgid "Send Mail Error"
-#~ msgstr "Fout bij het versturen van e-mail"
-
-#~ msgid "Sidebar Left"
-#~ msgstr "Zijbalk links"
-
-#~ msgid "Sidebar Off"
-#~ msgstr "Geen zijbalk"
-
-#~ msgid "Sidebar Right"
-#~ msgstr "Zijbalk rechts"
-
-#~ msgid ""
-#~ "Simply fill out the *[[%1][TWikiRegistration]]* form. It only takes a "
-#~ "minute."
-#~ msgstr ""
-#~ "Vul het *[[%1][TWikiRegistration]]* formulier in. Het kost maar een "
-#~ "minuut."
-
-#~ msgid "SitePreferences"
-#~ msgstr "Sitevoorkeuren"
-
-#~ msgid "Skin Styles"
-#~ msgstr "Skinstijlen"
-
-#~ msgid "Software Error"
-#~ msgstr "Softwarefout"
-
-#~ msgid "Strike through text"
-#~ msgstr "Doorgehaalde tekst"
-
-#~ msgid ""
-#~ "Style of text edit box. =width: 99%= for full window width (default), "
-#~ "=width: auto= to disable."
-#~ msgstr ""
-#~ "Stijl van het tekstvak. =breedte: 99%= voor een venstervullende "
-#~ "vakbreedte (standaard), =width: auto= om dit te deactiveren."
-
-#~ msgid "Style:"
-#~ msgstr "Stijl:"
-
-#~ msgid "Submit changes"
-#~ msgstr "Wijzigingen bewaren"
-
-#~ msgid "Subscript text"
-#~ msgstr "Subscript tekst"
-
-#~ msgid "Superscript text"
-#~ msgstr "Superscript tekst"
-
-#~ msgid "Switch to next style"
-#~ msgstr "Naar de volgende stijl"
-
-#~ msgid "Switch to previous style"
-#~ msgstr "Naar de vorige stijl"
-
-#~ msgid "Switch to previous variation"
-#~ msgstr "Naar de vorige variatie"
-
-#~ msgid "Switches:"
-#~ msgstr "Mogelijkheden:"
-
-#~ msgid "Syndicate this site"
-#~ msgstr "Abonneer je op wijzigingen"
-
-#~ msgid "TWiki Forms"
-#~ msgstr "TWikiformulieren"
-
-#~ msgid "TWiki Variables"
-#~ msgstr "TWikivariabelen"
-
-#~ msgid "Take a look at the [[%1][TWikiWeb]] to get help on the %2."
-#~ msgstr "Ga naar [[%1][TWikiWeb]] voor info over de %2."
-
-#~ msgid "TextFormatting"
-#~ msgstr "Tekstopmaak"
-
-#~ msgid ""
-#~ "The %1 field must be your first and lastname in %2, e.g. your capitalized "
-#~ "first and lastname with spaces removed."
-#~ msgstr ""
-#~ "Het %1 veld moet je voornaam en achternaam in %2 zijn, d.w.z. je voornaam "
-#~ "en achternaam beide met een hoofdletter en zonder spaties."
-
-#~ msgid ""
-#~ "The correct format is =WikiName:&lt;encryptedpassword&gt;= (13 chars)."
-#~ msgstr ""
-#~ "Het juiste formaat is =WikiName:&lt;encryptedpassword&gt;= (13 tekens)."
-
-#~ msgid "The e-mail could not be delivered."
-#~ msgstr "De e-mail kon niet worden verstuurd."
-
-#~ msgid "The email address entered is not valid."
-#~ msgstr "Het e-mailadres voor deze account is ongeldig."
-
-#~ msgid "The following is your encrypted password entry:"
-#~ msgstr "Dit is je versleutelde wachtwoord:"
-
-#~ msgid ""
-#~ "The new web has been created, however not all topics could be copied from "
-#~ "the base web."
-#~ msgstr ""
-#~ "Het nieuwe web is aangemaakt, maar niet alle pagina's konden worden "
-#~ "gekopieerd van het basisweb."
-
-#~ msgid ""
-#~ "The other possibility is that someone sent you the preview URL of [[%1]] "
-#~ "instead of the view URL."
-#~ msgstr ""
-#~ "De andere mogelijkheid is dat iemand je de url van de voorvertoning van "
-#~ "[[%1]] heeft gestuurd in plaats van de normale url."
-
-#~ msgid ""
-#~ "The password you entered in the *password* field is incorrect. Please try "
-#~ "again."
-#~ msgstr ""
-#~ "Het wachtwoord dat je hebt ingevoerd in het *wachtwoord*-veld is onjuist. "
-#~ "Probeer het opnieuw."
-
-#~ msgid ""
-#~ "The required field =<span class=\"twikiAlert\">**</span>= *%1* was not "
-#~ "filled in."
-#~ msgstr ""
-#~ "Het verplichte veld =<span class=\"twikiAlert\">**</span>= *%1* is niet "
-#~ "ingevuld."
-
-#~ msgid ""
-#~ "There should be a line that includes =META:FORM=, look for name=\"&lt;"
-#~ "formName&gt;\""
-#~ msgstr ""
-#~ "Er zou een regel moeten zijn met =META:FORM=, kijk naar name=\"&lt;"
-#~ "formName&gt;\""
-
-#~ msgid "There should be a topic &lt;formName&gt;"
-#~ msgstr "Er zou een pagina &lt;formName&gt; moeten zijn"
-
-#~ msgid "Thin Layout"
-#~ msgstr "Smalle layout"
-
-#~ msgid "This is an automated email from %1."
-#~ msgstr "Dit is een geautomatiseerde e-mail van %1."
-
-#~ msgid ""
-#~ "This requires the form definition to be present. This can be "
-#~ "automatically upgraded by:"
-#~ msgstr ""
-#~ "Dit vereist dat de formulierdefinitie bestaat. Dit kan automatisch worden "
-#~ "vernieuwd door:"
-
-#~ msgid "To"
-#~ msgstr "Naar"
-
-#~ msgid ""
-#~ "To cancel go <a href=\"javscript:history.back()\">back</a> in your "
-#~ "browser."
-#~ msgstr "Om af te breken ga <a href=\"javscript:history.back()\">terug</a>."
-
-#~ msgid ""
-#~ "To cancel simply go <a href=\"javascript:history.back()\">back</a> in "
-#~ "your browser."
-#~ msgstr "Om af te breken ga <a href=\"javscript:history.back()\">terug</a>."
-
-#~ msgid "To edit anyway click on the <a href=\"%1\">Edit anyway</a>."
-#~ msgstr "<a href=\"%1\">Hoe dan ook bewerken</a>"
-
-#~ msgid "To edit the topic anyway, hit 'Edit&nbsp;Anyway'."
-#~ msgstr "Om de pagina hoe dan ook te bewerken, klik 'Hoe dan ook bewerken'."
-
-#~ msgid ""
-#~ "To edit topics on this %1 collaborative web, you must be registered as a "
-#~ "user."
-#~ msgstr ""
-#~ "Om pagina's te bewerken op deze %1 moet je geregistreerde gebruiker zijn."
-
-#~ msgid ""
-#~ "To look at the text without editing the topic click on the [[%1][View raw "
-#~ "text]]."
-#~ msgstr "[[%1][Bekijk brontekst]] om te tekst zonder opmaak te bekijken."
-
-#~ msgid "To register as a new user:"
-#~ msgstr "Om te registreren als nieuwe gebruiker:"
-
-#~ msgid "To rename anyway click on [[%1][Rename anyway]]"
-#~ msgstr "[[%1][Hoe dan ook hernoemen]]"
-
-#~ msgid "To see if they have finished their edit yet, click 'Try&nbsp;Again'"
-#~ msgstr ""
-#~ "Om te zien of %1 klaar is met bewerken, klik 'Probeer&nbsp;opnieuw'."
-
-#~ msgid "To:"
-#~ msgstr "Naar:"
-
-#~ msgid "Topic"
-#~ msgstr "Pagina"
-
-#~ msgid "Topic Caching"
-#~ msgstr "Pagina cachen"
-
-#~ msgid "Topic Meta data"
-#~ msgstr "Pagina metadata"
-
-#~ msgid "Topic does not exist"
-#~ msgstr "Pagina bestaat niet"
-
-#~ msgid "Topic is locked by another user"
-#~ msgstr "Pagina is vergrendeld door een andere gebruiker"
-
-#~ msgid "Topic is not saved yet"
-#~ msgstr "Pagina is nog niet bewaard"
-
-#~ msgid "Topic must not be empty"
-#~ msgstr "Pagina mag niet leeg zijn"
-
-#~ msgid "Topic preferences"
-#~ msgstr "Voorkeuren"
-
-#~ msgid "Underlined text"
-#~ msgstr "Onderlijnde tekst"
-
-#~ msgid "Undo"
-#~ msgstr "Herstel"
-
-#~ msgid "Unrecognized action command:"
-#~ msgstr "Onbekende actieopdracht:"
-
-#~ msgid "Update attachment"
-#~ msgstr "Vernieuw bijlage"
-
-#~ msgid "Uploaded file \"%1\" does not exist or is empty"
-#~ msgstr "Geupload bestand \"%1\" bestaat niet of is leeg"
-
-#~ msgid "Uploaded file \"<nop>%1\" does not exist or is empty."
-#~ msgstr "Geupload bestand \"<nop>%1\" bestaat niet of is leeg."
-
-#~ msgid "User's Guide"
-#~ msgstr "Gebruikershandleiding"
-
-#~ msgid "Variables"
-#~ msgstr "Variabelen"
-
-#~ msgid "Variation:"
-#~ msgstr "Variatie:"
-
-#~ msgid "Vertical size of text edit box:"
-#~ msgstr "Hoogte van het tekstkader:"
-
-#~ msgid "View Access Denied"
-#~ msgstr "Toegang niet toegestaan"
-
-#~ msgid "View Previous Topic Revision"
-#~ msgstr "Bekijk vorige paginarevisie"
-
-#~ msgid "View all diffs"
-#~ msgstr "Bekijk alle verschillen"
-
-#~ msgid "View formatted topic"
-#~ msgstr "Bekijk pagina met opmaak"
-
-#~ msgid "View raw"
-#~ msgstr "Bekijk brontekst"
-
-#~ msgid "View raw topic"
-#~ msgstr "Bekijk brontekst"
-
-#~ msgid "View raw topic text"
-#~ msgstr "Bekijk brontekst"
-
-#~ msgid "View topic history"
-#~ msgstr "Bekijk paginageschiedenis"
-
-#~ msgid "Vote Access Denied"
-#~ msgstr "Stemmen niet toegestaan"
-
-#~ msgid "Web Buttons Off"
-#~ msgstr "Web knoppen uit"
-
-#~ msgid "Web Buttons On"
-#~ msgstr "Web knoppen aan"
-
-#~ msgid "Web:"
-#~ msgstr "Web:"
-
-#~ msgid "Welcome"
-#~ msgstr "Welkom"
-
-#~ msgid "Welcome %1, take a [[%2][first tour]] on the %3."
-#~ msgstr "Welkom %1, neem een [[%2][eerste tour]] op de %3."
-
-#~ msgid "Welcome Guest"
-#~ msgstr "Welkom"
-
-#~ msgid "Welcome to the %1"
-#~ msgstr "Welkom in het %1 web"
-
-#~ msgid "WikiWord"
-#~ msgstr "WikiWoord"
-
-#~ msgid "Write protect your home page: (set it to your %1)"
-#~ msgstr ""
-#~ "Bescherm je persoonlijke pagina tegen overschrijven (zet het als je %1)"
-
-#~ msgid "You are not registered"
-#~ msgstr "Je bent niet geregistreerd"
-
-#~ msgid "You are trying to '%1' a topic in a web that does not exist."
-#~ msgstr "Je probeert om te '%1' bij een pagina die niet bestaat."
-
-#~ msgid ""
-#~ "You can [[%1][create a new web]] if you have the permission. Contact %2 "
-#~ "if you have any questions."
-#~ msgstr ""
-#~ "Je kan een [[%1][nieuw web aanmaken]] als je permissies hebt. Neem "
-#~ "contact op met %2 als je vragen hebt."
-
-#~ msgid "You can also use the names of the standard HTML colors"
-#~ msgstr "Je kan ook de namen van de standaard HTML kleuren gebruiken"
-
-#~ msgid "You cannot call this script directly, %1 uses it internally."
-#~ msgstr ""
-#~ "Je kunt dit script niet rechtstreeks aanroepen, %1 gebruikt het intern."
-
-#~ msgid ""
-#~ "You might go <a href=\"javascript:history.back()\">back</a> in your "
-#~ "browser and save your changes locally."
-#~ msgstr ""
-#~ "Ga <a href=\"javascript:history.back()\">terug</a> en bewaar je "
-#~ "veranderingen lokaal."
-
-#~ msgid "Your [[%1][homepage]] has _not_ been removed yet."
-#~ msgstr "Je [[%1][homepage]] is nog _niet_ verwijderd."
-
-#~ msgid ""
-#~ "Your language will be reset to the global default from the next screen "
-#~ "on. You will be redirected to there right now. If you aren't, [[%1][click "
-#~ "here]] to proceed."
-#~ msgstr ""
-#~ "Vanaf het volgende scherm wordt je taalinstelling gewijzigd. Je wordt nu "
-#~ "daarheen geleid - zo niet [[%1][ga verder]]."
-
-#~ msgid ""
-#~ "Your login name is usually the %1, like *<nop>TomSawyer* and _not_ Tom "
-#~ "Sawyer or tom or sawyer."
-#~ msgstr ""
-#~ "Je login naar is gebruikelijk de %1, zoals *<nop>AntonWachter* en _niet_ "
-#~ "Anton Wachter of anton of wachter."
-
-#~ msgid "Your signature with timestamp"
-#~ msgstr "Je signatuur met tijdstempel"
-
-#~ msgid ""
-#~ "__Note:__ Go back and click on Cancel if you would like to cancel the "
-#~ "changes you did."
-#~ msgstr ""
-#~ "__Let op:__ Ga terug en klik op Annuleren als je je veranderingen "
-#~ "ongedaan wilt maken."
-
-#~ msgid ""
-#~ "__Note:__ Locking gets reset after <b> %1 </b> minutes of inactivity, the "
-#~ "earliest in <b>%2</b> minutes."
-#~ msgstr ""
-#~ "__Let op:__ Vergrendeling wordt ongedaan gemaakt na <b> %1 </b> minuten "
-#~ "van inactiviteit, op z'n vroegst in <b>%2</b> minuten."
-
-#~ msgid "changes"
-#~ msgstr "wijzigingen"
-
-#~ msgid "debug"
-#~ msgstr "Debuggen"
-
-#~ msgid "edit form"
-#~ msgstr "wijzig formulier"
-
-#~ msgid "go back to <nop>%1"
-#~ msgstr "gaterug naar <nop>%1"
-
-#~ msgid "in <input type=\"checkbox\" name=\"raw\"> raw text format."
-#~ msgstr "in <input type=\"checkbox\" name=\"raw\"> brontekstformaat."
-
-#~ msgid "manage properties of %1"
-#~ msgstr "beheer eigenschappen van %1"
-
-#~ msgid "more"
-#~ msgstr "meer"
-
-#~ msgid "move"
-#~ msgstr "verplaats"
-
-#~ msgid "move or delete %1"
-#~ msgstr "verplaats of verwijder %1"
-
-#~ msgid "next"
-#~ msgstr "volgende"
-
-#~ msgid "note"
-#~ msgstr "opmerking"
-
-#~ msgid "oops"
-#~ msgstr "melding"
-
-#~ msgid "prefs"
-#~ msgstr "voorkeuren"
-
-#~ msgid "prev"
-#~ msgstr "vorige"
-
-#~ msgid "printable"
-#~ msgstr "printbaar"
-
-#~ msgid "props"
-#~ msgstr "eigenschappen"
-
-#~ msgid "rename"
-#~ msgstr "hernoemen"
-
-#~ msgid "rename web"
-#~ msgstr "web hernoemen"
-
-#~ msgid "search"
-#~ msgstr "zoeken"
-
-#~ msgid "sequential"
-#~ msgstr "sequentieel"
-
-#~ msgid "side by side"
-#~ msgstr "naast elkaar"
-
-#~ msgid "single character first name"
-#~ msgstr "enkel teken voornaam"
-
-#~ msgid "single character last name"
-#~ msgstr "enkel teken achternaam"
-
-#~ msgid "the %1 home?"
-#~ msgstr "%1 home?"
-
-#~ msgid "the %1 to customize the web specific preferences or"
-#~ msgstr "%1 om webinstellingen aan te passen of"
-
-#~ msgid "the %1 to start working on the new web,"
-#~ msgstr "%1 om te beginnen in het nieuwe web,"
-
-#, fuzzy
-#~ msgid "Registered users can [%1[change]] and [%2[reset]] their passwords."
-#~ msgstr ""
-#~ "Geregistreerde gebruikers kunnen hun wachtwoorden [[%1][veranderen]] and "
-#~ "[[%2][opnieuw instellen]]."
