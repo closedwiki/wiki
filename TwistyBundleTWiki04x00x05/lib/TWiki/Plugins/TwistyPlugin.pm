@@ -44,7 +44,7 @@ $VERSION = '$Rev: 15653 (19 Nov 2007) $';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.4.8';
+$RELEASE = '1.4.9';
 
 $pluginName = 'TwistyPlugin';
 
@@ -106,36 +106,14 @@ sub _addHeader {
     return if $doneHeader;
     $doneHeader = 1;
 
-    eval { require TWiki::Contrib::BehaviourContrib; };
-    if ( !$@ && defined(&TWiki::Contrib::BehaviourContrib::addHEAD) ) {
-        TWiki::Contrib::BehaviourContrib::addHEAD();
-    }
-    else {
-        TWiki::Func::addToHEAD( 'BEHAVIOURCONTRIB', <<HEAD);
-<script type='text/javascript' src='%PUBURL%/%TWIKIWEB%/BehaviourContrib/behaviour.compressed.js'></script>
-HEAD
-    }
-
-    my $header = <<'EOF';
+    my $header .= <<'EOF';
 <style type="text/css" media="all">
 @import url("%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.css");
 </style>
+<script type='text/javascript' src='%PUBURL%/%TWIKIWEB%/BehaviourContrib/behaviour.compressed.js'></script>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikilib.js"></script>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiPref.js"></script>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiCSS.js"></script>
-EOF
-
-    if ( !$@ && defined(&TWiki::Contrib::BehaviourContrib::addHEAD) ) {
-        TWiki::Contrib::BehaviourContrib::addHEAD();
-    }
-    else {
-        $header .= <<'EOF';
-<script type='text/javascript' src='%PUBURL%/%TWIKIWEB%/BehaviourContrib/behaviour.compressed.js'></script>
-HEAD
-EOF
-    }
-
-    $header .= <<'EOF';
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.compressed.js"></script>
 <script type="text/javascript">
 // <![CDATA[
