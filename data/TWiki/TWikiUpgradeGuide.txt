@@ -2,7 +2,7 @@
 %STARTINCLUDE%
 ---+ TWiki Upgrade Guide
 
-_This guide covers upgrading from a previous version of TWiki (such as Cairo or TWiki4.0) to TWiki 4.2__
+_This guide covers upgrading from a previous version of TWiki (such as Cairo or TWiki4.0) to TWiki 4.2_
 
 %TOC%
 
