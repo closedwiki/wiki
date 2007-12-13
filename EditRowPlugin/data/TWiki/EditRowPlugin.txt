@@ -222,26 +222,27 @@ Another great TWiki extension from the <a style="text-decoration:none" href="htt
 |  Copyright: | &copy; 2007 Wind<nop>River Inc. |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  23 Nov 2007 | Bugs:Item4853: remove duplicated %EDITCELL |
-|  9 Nov 2007 | Bugs:Item4947: added missing _src.js versions to MANIFEST |
-|  6 Nov 2007 | Bugs:Item4935: fixed problem with embedded TWiki variables |
-|  20 Oct 2007 | Bugs:Item4853: support %EDITCELL Bugs:Item4861: rework the rules for associating tag with adjacent table Bugs:Item4862: avoid expanding TWiki variables on edit |
-|  18 Oct 2007 | Bugs:Item4834: added automatic save on row add Bugs:Item4853: added %EDITCELL support Bugs:Item4651: fixed validation of date change |
-|  26 Sep 2007 | Bugs:Item4696 Keep table in full-table edit mode after a row is added Bugs:Item4651 add JS to handle navigating away with pending changes (requires BehaviourContrib) |
-|  10 Sep 2007 | Bugs:Item4552 Can use row buttons to delete the header, even though headderrows is set Bugs:Item4565 "row" parameter not supported Bugs:Item4567 header parameter not correctly handled Bugs:Item4602 Header row gets eaten |
-|  13685 | Bugs:Item4040 Support for =helptopic= and =disable=, which allows more flexible configuration of the UI, especially when vertical editing |
-|  13641 | Bugs:Item4020 Improved the table anchors for a better editing experience. Fixed calendar formats. Fixed table footer sorting. Disabled label edits. Fixed multi-malued checkboxes. |
-|  13615 | Bugs:Item3882 added initial values support Bugs:Item4009 fixed included tables. Also fixed a bug with variable expansion reported in the dev topic. |
-|  13609 | Bugs:Item4003: fixed colspan. Also added support for headerrows and footerrows parameters from %TABLE |
-|  13560 | Bugs:Item4002 Problems with blank lines, multi-value edits, and line continuations resolved |
-|  13596 | Bugs:Item4000 Added =orientrowedit=, global control options, fixed issue with wikiwords in edited data, added column sorting |
-|  13487 | Bugs:Item3925 - fixed infinite loop when included format doesn't exist |
-|  13359 | Bugs:Item3875 - can now edit top row of tables. Also now writes row numbers back to the topic, which was needed to support some compatible apps. |
+|  13 Dec 2007 | TWikibug:Item4970: removed beforeCommonTagsHandler, which was causing problems when interacting with other plugins that use unregistered tag handlers. |
+|  23 Nov 2007 | TWikibug:Item4853: remove duplicated %EDITCELL |
+|  9 Nov 2007 | TWikibug:Item4947: added missing _src.js versions to MANIFEST |
+|  6 Nov 2007 | TWikibug:Item4935: fixed problem with embedded TWiki variables |
+|  20 Oct 2007 | TWikibug:Item4853: support %EDITCELL TWikibug:Item4861: rework the rules for associating tag with adjacent table TWikibug:Item4862: avoid expanding TWiki variables on edit |
+|  18 Oct 2007 | TWikibug:Item4834: added automatic save on row add TWikibug:Item4853: added %EDITCELL support TWikibug:Item4651: fixed validation of date change |
+|  26 Sep 2007 | TWikibug:Item4696 Keep table in full-table edit mode after a row is added TWikibug:Item4651 add JS to handle navigating away with pending changes (requires BehaviourContrib) |
+|  10 Sep 2007 | TWikibug:Item4552 Can use row buttons to delete the header, even though headderrows is set TWikibug:Item4565 "row" parameter not supported TWikibug:Item4567 header parameter not correctly handled TWikibug:Item4602 Header row gets eaten |
+|  13685 | TWikibug:Item4040 Support for =helptopic= and =disable=, which allows more flexible configuration of the UI, especially when vertical editing |
+|  13641 | TWikibug:Item4020 Improved the table anchors for a better editing experience. Fixed calendar formats. Fixed table footer sorting. Disabled label edits. Fixed multi-malued checkboxes. |
+|  13615 | TWikibug:Item3882 added initial values support TWikibug:Item4009 fixed included tables. Also fixed a bug with variable expansion reported in the dev topic. |
+|  13609 | TWikibug:Item4003: fixed colspan. Also added support for headerrows and footerrows parameters from %TABLE |
+|  13560 | TWikibug:Item4002 Problems with blank lines, multi-value edits, and line continuations resolved |
+|  13596 | TWikibug:Item4000 Added =orientrowedit=, global control options, fixed issue with wikiwords in edited data, added column sorting |
+|  13487 | TWikibug:Item3925 - fixed infinite loop when included format doesn't exist |
+|  13359 | TWikibug:Item3875 - can now edit top row of tables. Also now writes row numbers back to the topic, which was needed to support some compatible apps. |
 |  13335 | Fixed broken date prompt, and problem with radio buttons, improved and documented REST interface for Javascript authors |
 |  13291 | Added full table editing, including moving rows within the table |
 |  13161 | Bulletproofed against issues with rows that are shorter or longer than the format. |
 |  13159 | Fixed issue with short rows, and added perms check. Thanks also to TWiki:Main.MichaelDaum for more fixes and testing. Now works on IE. |
-|  13148 | Bugs:Item3770: Bugfixes |
+|  13148 | TWikibug:Item3770: Bugfixes |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/EditRowPlugin |
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/EditRowPluginDev |

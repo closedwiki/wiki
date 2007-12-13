@@ -36,23 +36,26 @@ sub initPlugin {
     return 1;
 }
 
-sub beforeCommonTagsHandler {
-    my ($text, $topic, $web, $meta) = @_;
-
-    if (_process($text, $web, $topic, $meta)) {
-        $_[0] = $text;
-    }
-}
-
+# Formerly this said:
 # The handler has to be run from both beforeCommonTagsHandler and
 # commonTagsHandler, because beforeCommonTagsHandler allows us to
 # process tables before TWiki variables in their data are expanded,
-# while the second call allos us to handle tables that have been
+# while the second call allows us to handle tables that have been
 # included from other topics. Both handlers only fire when the topic
 # text contains %EDITTABLE, thus constraining the problem.
+# But since Item4970: disabled the beforeCommonTagsHandler because
+# it pre-empts SpreadSheetPlugin, which uses a commonTagsHandler. This
+# is consistent with EditTablePlugin, so fingers crossed.
+#sub beforeCommonTagsHandler {
+#   my ($text, $topic, $web, $meta) = @_;
+#die $text if $text =~ /%EDITTABLE/;
+#   if (_process($text, $web, $topic, $meta)) {
+#       $_[0] = $text;
+#   }
+#}
+
 sub commonTagsHandler {
     my ($text, $topic, $web, $included, $meta) = @_;
-
     if (_process($text, $web, $topic, $meta)) {
         $_[0] = $text;
     }
