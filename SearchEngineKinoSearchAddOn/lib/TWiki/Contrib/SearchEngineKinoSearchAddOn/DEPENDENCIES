@@ -8,3 +8,4 @@ File::MMagic,>0,cpan,Required
 Module::Pluggable,>0,cpan,Required
 HTML::TreeBuilder,>0,cpan,Required
 Spreadsheet::ParseExcel,>0,cpan,Required
+Text::Iconv,>0,cpan,Required

@@ -1,5 +1,5 @@
-# Test for DOC.pm
-package DocTests;
+# Test for DOC_antiword.pm
+package Doc_antiwordTests;
 use base qw( TWikiFnTestCase );
 
 use strict;
@@ -31,16 +31,30 @@ sub tear_down {
 
 sub test_stringForFile {
     my $this = shift;
-    my $stringifier = TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::DOC->new();
+    my $stringifier = TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::DOC_antiword->new();
 
     my $text  = $stringifier->stringForFile('attachement_examples/Simple_example.doc');
     my $text2 = TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier->stringFor('attachement_examples/Simple_example.doc');
 
+    #print "Test : $text\n";
+    #print "Test2: $text2\n";
+
     $this->assert(defined($text), "No text returned.");
-    $this->assert_str_equals($text, $text2, "DOC stringifier not well registered.");
+    $this->assert_str_equals($text, $text2, "DOC_antiword stringifier not well registered.");
 
     my $ok = $text =~ /dummy/;
     $this->assert($ok, "Text dummy not included")
+}
+
+sub test_SpecialCharacters {
+    # I check, that speciual characters are not destroied by the stringifier.
+    
+    my $this = shift;
+    my $stringifier = TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::DOC_antiword->new();
+
+    my $text  = $stringifier->stringForFile('attachement_examples/Simple_example.doc');
+
+    $this->assert(($text =~ m\Größer\)==1, "Text Größer not found.");
 }
 
 1;

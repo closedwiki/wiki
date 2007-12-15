@@ -12,8 +12,9 @@
 
 package TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::PDF;
 use base 'TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyBase';
+
 # Only if pdftotext exists, I register myself.
-if (!(system("pdftotext -v")==-1)) {
+if (!(system("pdftotext -v >/dev/null 2>&1")==-1)) {
     __PACKAGE__->register_handler("application/pdf", ".pdf");}
 use File::Temp qw/tmpnam/;
 
@@ -27,6 +28,9 @@ sub stringForFile {
 
     open $in, $tmp_file;
     $text = join(" ", <$in>);
+
+    close($in);
+    unlink($tmp_file);
 
     return $text;
 }

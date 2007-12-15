@@ -75,6 +75,14 @@ sub test_createIndex {
     $topic = $hit->{topic};
     $topic =~ s/ .*//;
     $this->assert_str_equals($topic, "TopicWithWordAttachment", "Wrong topic for MS word.");
+
+    # Now search for an Umlaut
+    $docs = $search->docsForQuery( "Größer");
+    $hit  = $docs->fetch_hit_hashref;
+    $this->assert(defined($hit), "Hit for MS Word with Größer not found.");
+    $topic = $hit->{topic};
+    $topic =~ s/ .*//;
+    $this->assert_str_equals($topic, "TopicWithWordAttachment", "Wrong topic for MS word.");
 }
 
 sub test_updateIndex {
@@ -356,6 +364,14 @@ HERE
     $docs = $search->docsForQuery( "calculator");
     $hit  = $docs->fetch_hit_hashref;
     $this->assert(defined($hit), "No hit found for calculator.");
+    $topic = $hit->{topic};
+    $topic =~ s/ .*//;
+    $this->assert_str_equals($topic, "TopicWithExcelAttachment", "Wrong topic for attachment.");
+
+    # Search for an Umlaut in Excel
+    $docs = $search->docsForQuery( "Größer");
+    $hit  = $docs->fetch_hit_hashref;
+    $this->assert(defined($hit), "No hit found for Größer in XLS.");
     $topic = $hit->{topic};
     $topic =~ s/ .*//;
     $this->assert_str_equals($topic, "TopicWithExcelAttachment", "Wrong topic for attachment.");

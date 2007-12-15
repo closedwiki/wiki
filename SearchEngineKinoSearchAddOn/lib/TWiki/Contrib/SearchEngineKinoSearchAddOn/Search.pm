@@ -357,6 +357,7 @@ sub renderHtmlStringFor {
 	# no icon for topics
 	$icon = "";
 	# URL for the topic
+
 	$tempVal =~ s/%MATCH%/\[\[$resweb\.$restopic\]\]/go;
 	# if locks are to be displayed, then find it out for each hit
 	if ($showlock) {

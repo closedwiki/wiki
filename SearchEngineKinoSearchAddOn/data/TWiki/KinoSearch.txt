@@ -31,26 +31,37 @@
 </form>
 </verbatim>
 
+---+++ Search in <nop>WebTopBar
+Add the following lines to <nop>TWiki.WebTopBar. Then you have an
+additional search field in the upper right corner behaving and looking
+exactly the same as the normal search field there. If you want, you
+can also replace the existing search field with this one.
+<verbatim>
+   * <form name="kinosearch" form action="%SCRIPTURLPATH%/kinosearch%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%"}%/">
+  %IF{" '%URLPARAM{"search" encode="entity" scope="topic"}%' = '' " then="<input type=\"text\" class=\"twikiInputField patternFormFieldDefaultColor\" name=\"search\" value=\"%MAKETEXT{"Search Index"}%\" size=\"14\" onfocus=\"clearDefaultandCSS(this);\" onblur=\"setDefaultText(this);\" />" else="<input type=\"text\" class=\"twikiInputField\" name=\"search\" value=\"%URLPARAM{ "search" encode="entity" scope="topic" }%\" size=\"14\" />"}%</form>
+</verbatim>
+
 ---++ Query syntax
-   * you can use ==+== and ==-==, as Google query syntax, just for ==AND== and ==AND NOT== operators respectively
-   * for a text search, just put the word or add the prefix ==text:== before it
-   * for a sentence search, just put double quotes
-   * if you want to search using some meta data, you should use the prefix ==field:== where _field_ is the meta data name (i.e. author).
 
+   * To search for a word, just put that word into the Search box. (Alternatively, add the prefix ==text:== before the word.)
+   * To search for a phrase, put the phrase in "double quotes".
+   * Use the ==+== and ==-== operators, just as in Google query syntax, to indicate _required_ and _forbidden_ terms, respectively.
+   * To search on metadata, prefix the search term with ==field:== where _&lt;field&gt;_ is the field name in the metadata (for instance, _author_).
 
----+++ Query examples (just type it in your ==KinoSearch== site topic)
+---+++ Query examples
+
    * ==text:kino== or just ==kino==
    * ==text:"search engine"== or just =="search engine"==
-   * ==author:MarkusHesse== note that you should use the login name
-   * ==form:WebFormName== to get all topics with that form
+   * ==author:MarkusHesse== &mdash; note that to search for a TWiki author, use their login name
+   * ==form:WebFormName== to get all topics with that form attached.
    * ==CONTACTINFO:MarkusHesse== if you have declared ==CONTACTINFO== as a variable to be indexed
    * ==type:doc== to get all attachments of given type
-   * ==web:Sandbox== to get all the topics of a given web
+   * ==web:Sandbox== to get all the topics in a given web
    * ==topic:WebHome== to get all the topics of a given name
-   * ==+web:Sandbox +topic:Test== to get all the topics with word Test in name and belonging to Sandbox
+   * ==+web:Sandbox +topic:Test== to get all the topics containing "Test" in their titles and belonging to the Sandbox web.
 
-__Notes:__ current version of <nop>KinoSearch does not support wildcards.
+_Note:_ the current version of !KinoSearch does not support wildcards.
 
 __See also:__ TWiki.SearchEngineKinoSeachAddOn
 
--- TWiki:Main/MarkusHesse - 03 Aug 2007
+-- TWiki:Main/MarkusHesse - 12 Dec 2007

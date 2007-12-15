@@ -14,12 +14,16 @@
 package TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::HTML;
 use base 'TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyBase';
 use HTML::TreeBuilder;
+use Encode;
 __PACKAGE__->register_handler("text/html", ".html");
 
 sub stringForFile {
     my ($self, $filename) = @_;
     my $tree = HTML::TreeBuilder->new;
-    $tree->parse_file($filename);
+    open(my $fh, "<:utf8", $filename) || die;
+    $tree->parse_file($fh);
+    close($fh);
+
     my $text;
     for($tree->look_down(_tag => "meta")) {
         next if $_->attr("http-equiv");
@@ -35,6 +39,8 @@ sub stringForFile {
     }
 
     $text .= $tree->as_trimmed_text;
+
+    $text = encode("iso-8859-15", $text);
 
     return $text;
 }

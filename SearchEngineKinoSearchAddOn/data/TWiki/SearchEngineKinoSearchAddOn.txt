@@ -53,17 +53,26 @@ All form fields are indexed. For this, the form templates are checked and the in
 
 The ==kinosearch== script uses a template ==kinosearch.pattern.tmpl== (if you use the pattern skin). There is also a *KinoSearch* topic with a form ready to use with the *kinosearch* script.
 
-The query syntax is as follows:
-   * you can use ==+== for ==and== and ==-== for ==and not==
-   * you can limit to the topic body or attachment body, using the prefix ==text:== or just type the search string
-   * if you want to search using some meta data, you should use the prefix ==field:== where *field* is the meta data name (like ==author==)
-   * if you want to search only for topics with specific forms, you can user =form_name:name= where *name* is the name of the form. 
+---++++ Query syntax
 
-Query examples (just type it in your ==KinoSearch== site topic)
-   * text:kino _searches for kino in topic text_
-   * kino _as above_
-   * author:MarkusHesse _searches for topics authored by this author_
-   * kino form_name:issueForm _searches for the word kino ind all topics that contain the form issueForm_
+   * To search for a word, just put that word into the Search box. (Alternatively, add the prefix ==text:== before the word.)
+   * To search for a phrase, put the phrase in "double quotes".
+   * Use the ==+== and ==-== operators, just as in Google query syntax, to indicate _required_ and _forbidden_ terms, respectively.
+   * To search on metadata, prefix the search term with ==field:== where _&lt;field&gt;_ is the field name in the metadata (for instance, _author_).
+
+---++++ Query examples
+
+   * ==text:kino== or just ==kino==
+   * ==text:"search engine"== or just =="search engine"==
+   * ==author:MarkusHesse== &mdash; note that to search for a TWiki author, use their login name
+   * ==form:WebFormName== to get all topics with that form attached.
+   * ==CONTACTINFO:MarkusHesse== if you have declared ==CONTACTINFO== as a variable to be indexed
+   * ==type:doc== to get all attachments of given type
+   * ==web:Sandbox== to get all the topics in a given web
+   * ==topic:WebHome== to get all the topics of a given name
+   * ==+web:Sandbox +topic:Test== to get all the topics containing "Test" in their titles and belonging to the Sandbox web.
+
+_Note:_ the current version of !KinoSearch does not support wildcards.
 
 
 ---++ Search form
@@ -129,6 +138,7 @@ If you don't use the installer script, you need to install some CPAN modules:
       * perl -MCPAN -e "install Module::Pluggable"
       * perl -MCPAN -e "install HTML::TreeBuilder"
       * perl -MCPAN -e "install Spreadsheet::ParseExcel"
+      * perl -MCPAN -e "install Text::Iconv"
 
    * _Note for Windows_: For Windows, make sure, you have a C-compiler in place. This is normally part of Visual Studio etc. 
 
@@ -164,7 +174,7 @@ If you don't use the installer script, you need to install the add-on by hand:
 <verbatim>
    *  KinoSearch settings
       * Set KINOSEARCHINDEXEXTENSIONS = .pdf, .doc, .xml, .html, .txt, .xls, .ppt
-      * Set KINOSEARCHSEARCHATTACHMENTSONLY = 1
+      * Set KINOSEARCHSEARCHATTACHMENTSONLY = 0
       * Set KINOSEARCHSEARCHATTACHMENTSONLYLABEL = Display only attachments
       * Set KINOSEARCHINDEXSKIPWEBS = Trash, Sandbox,TWiki
       * Set KINOSEARCHINDEXSKIPATTACHMENTS = Web.SomeTopic.AnAttachment.txt, Web.OtherTopic.OtherAttachment.pdf
@@ -213,6 +223,7 @@ $TWiki::cfg{KinoSearchIndexDir} = '/home/httpd/twiki/kinosearch/index';
 |                                | CPAN:Spreadsheet::ParseExcel |
 |  Other Dependencies: | pdftotext (part of xpdf-utils) |
 |                                 | antiword |
+|                                 | ppthtml  |
 |  Perl Version: | Tested with 5.8.0 |
 |  License: | GPL |
 |  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |

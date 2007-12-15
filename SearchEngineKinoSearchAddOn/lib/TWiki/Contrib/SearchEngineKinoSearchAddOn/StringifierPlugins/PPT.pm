@@ -14,10 +14,10 @@
 package TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::PPT;
 use base 'TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyBase';
 use TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier;
-#use TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::HTML;
+
 use File::Temp qw/tmpnam/;
 
-if (!(system("ppthtml")==-1)) {
+if (!(system("ppthtml >/dev/null 2>&1")==-1)) {
     __PACKAGE__->register_handler("text/ppt", ".ppt");}
 
 sub stringForFile {
@@ -28,8 +28,10 @@ sub stringForFile {
     my $cmd = "ppthtml $filename > $tmp_file";
     system($cmd);
 
-    # The I use the HTML stringifier to convert HTML to TXT
+    # Then I use the HTML stringifier to convert HTML to TXT
     my $text = TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier->stringFor($tmp_file);
+
+    unlink($tmp_file);
 
     return $text;
 }

@@ -43,4 +43,43 @@ sub test_stringForFile {
     $this->assert($ok, "Text dummy not included")
 }
 
+sub test_SpecialCharacters {
+    # I check, that speciual characzers are not destroied by the stringifier.
+
+    my $this = shift;
+    my $stringifier = TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::XLS->new();
+
+    my $text  = $stringifier->stringForFile('attachement_examples/Simple_example.xls');
+
+    $this->assert(($text =~ m\Größer\)==1, "Text Größer not found.");
+}
+
+sub test_Numbers {
+    # I check, that numbers are found
+
+    my $this = shift;
+    my $stringifier = TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::XLS->new();
+
+    my $text  = $stringifier->stringForFile('attachement_examples/Simple_example.xls');
+
+    #print "Test = $text\n";
+
+    $this->assert(($text =~ m\200\)==1,  "Number 200 not found.");
+    $this->assert(($text =~ m\0.23\)==1, "Number 0,23 not found.");
+    $this->assert(($text =~ m\4,711\)==1, "Number 4711 not found.");
+    $this->assert(($text =~ m\312\)==1, "Number 312 Euro not found.");
+}
+
+sub test_calculatedNumbers {
+    # I check, that calculated numbers are found
+
+    my $this = shift;
+    my $stringifier = TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::XLS->new();
+
+    my $text  = $stringifier->stringForFile('attachement_examples/Simple_example.xls');
+
+    $this->assert(($text =~ m\217\)==1,  "Number 200 + 17 not found.");
+    $this->assert(($text =~ m\5\)==1, "Number 5 not found.");
+}
+
 1;

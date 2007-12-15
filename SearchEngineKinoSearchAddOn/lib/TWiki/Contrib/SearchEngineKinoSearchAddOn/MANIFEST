@@ -8,7 +8,9 @@ lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/KinoSearch.pm
 lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/Search.pm
 lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/Stringifier.pm
 lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifyBase.pm
-lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/DOC.pm
+lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/DOC_antiword.pm
+lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/DOC_abiword.pm
+lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/DOC_vw.pm
 lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/HTML.pm
 lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/PDF.pm
 lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/Text.pm

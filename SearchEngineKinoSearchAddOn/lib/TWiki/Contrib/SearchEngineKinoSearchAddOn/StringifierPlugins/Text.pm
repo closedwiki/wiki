@@ -12,17 +12,32 @@
 
 package TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::Text;
 use base 'TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyBase';
+use Text::Iconv;
 
 # Note: I need not do any register, because I am the default handler for stringification!
 
 sub stringForFile {
     my ($self, $file) = @_;
     my $in;
-    my $text = '';
 
     open $in, $file or die $!;
 
-    $text = join(" ", <$in>);
+    my $text = "";
+    my $converter = Text::Iconv->new("", "iso-8859-15");
+
+    while (<$in>) {
+        chomp;
+
+        # Tries to convert a text line to iso-8859-15. If something goes wrong ($line is undef), uses the original string
+        my $line = $converter->convert($_);
+        if (defined($line)) {
+            $text .= " " . $line;
+        } else {
+            $text .= " " . $_;
+        }
+    }
+
+    close($in);
 
     return $text;
 }
