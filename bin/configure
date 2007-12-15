@@ -414,7 +414,7 @@ if ($sanityUI->insane() || $query->param('abort')) {
 
     if ($reroute) {
         print '<div>';
-        print CGI::a( { href=>$TWiki::query->url().'?t='.time(),
+        print CGI::a( { href=>$scriptName.'?t='.time(),
                         rel => 'nofollow' },
                       'Return to configuration');
         print CGI::br();
