@@ -258,8 +258,6 @@ returns undef / nothing in this case, as we are unable to generate a list of use
 
 =cut
 
-=pod 
-
 sub canFetchUsers {
     return;
 }
