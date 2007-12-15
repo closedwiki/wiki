@@ -14,7 +14,9 @@ package TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::PDF;
 use base 'TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyBase';
 
 # Only if pdftotext exists, I register myself.
-if (!(system("pdftotext -v >/dev/null 2>&1")==-1)) {
+# NOTE (system("pdftotext -v >/dev/null 2>&1") does not return zero even when pdftotext is installed. ???
+#if ((system("pdftotext -v >/dev/null 2>&1")==0)) {
+if (!(system("pdftotext")==-1)) {
     __PACKAGE__->register_handler("application/pdf", ".pdf");}
 use File::Temp qw/tmpnam/;
 

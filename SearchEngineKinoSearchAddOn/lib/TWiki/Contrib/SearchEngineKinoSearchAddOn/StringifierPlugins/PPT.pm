@@ -17,7 +17,7 @@ use TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier;
 
 use File::Temp qw/tmpnam/;
 
-if (!(system("ppthtml >/dev/null 2>&1")==-1)) {
+if ((system("ppthtml >/dev/null 2>&1")==0)) {
     __PACKAGE__->register_handler("text/ppt", ".ppt");}
 
 sub stringForFile {

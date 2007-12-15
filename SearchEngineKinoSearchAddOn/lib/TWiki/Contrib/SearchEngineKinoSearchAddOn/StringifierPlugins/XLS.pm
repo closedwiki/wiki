@@ -35,8 +35,8 @@ sub stringForFile {
 		    my $raw_value = $cell->{Val};
 		    my $formatted_value = $cell->Value;
 
-		    $raw_value       = $converter->convert($raw_value);
-		    $formatted_value = $converter->convert($formatted_value);
+		    $raw_value       = $converter->convert($raw_value)||'';
+		    $formatted_value = $converter->convert($formatted_value)||'';
 
                     $text .= $formatted_value;
 
