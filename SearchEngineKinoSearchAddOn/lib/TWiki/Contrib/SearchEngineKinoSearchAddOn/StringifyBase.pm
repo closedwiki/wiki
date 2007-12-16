@@ -39,6 +39,15 @@ use constant DEFAULT_HANDLER => "TWiki::Contrib::SearchEngineKinoSearchAddOn::St
         }
         return DEFAULT_HANDLER;
     }
+
+    # Returns 1, if the program can be called.
+    # This is as service method that a sub calss can use to decise, 
+    # if it wants to register or not.
+    sub _programExists {
+	my ($self, $program) = @_;
+
+	return defined(`$program 2>&1`);
+    }
 }
 
 sub new { 

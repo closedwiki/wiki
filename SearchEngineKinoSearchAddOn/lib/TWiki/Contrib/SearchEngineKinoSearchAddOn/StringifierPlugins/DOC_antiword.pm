@@ -15,9 +15,8 @@ use base 'TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyBase';
 use File::Temp qw/tmpnam/;
 
 # Only if antiword exists, I register myself.
-if ((system("antiword >/dev/null 2>&1")==0)) {
+if (__PACKAGE__->_programExists("antiword")){
     __PACKAGE__->register_handler("application/word", ".doc");}
-
 
 sub stringForFile {
     my ($self, $file) = @_;
@@ -32,12 +31,12 @@ sub stringForFile {
     ###########
     # Note: This way, the encoding of the text is reworked in the text stringifier.
     # Note2: May be this is not necessary: My UnitTest says NO...
-    $text = TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier->stringFor($tmp_file);
+    #$text = TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier->stringFor($tmp_file);
 
-    #open $in, $tmp_file;
-    #$text = join(" ", <$in>);    
+    open $in, $tmp_file;
+    $text = join(" ", <$in>); 
+    close($in);
     ###############
-    #print "Doc: $text\n";
 
     unlink($tmp_file);
     return $text;

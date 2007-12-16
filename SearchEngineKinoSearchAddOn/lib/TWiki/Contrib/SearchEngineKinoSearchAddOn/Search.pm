@@ -280,7 +280,6 @@ sub docsForQuery {
 
     my $highlighter = KinoSearch::Highlight::Highlighter->new( 
         excerpt_field  => 'bodytext',
-	# FIXME: This could be an option!?
 	excerpt_length => $self->summaryLength(),
 	);
 

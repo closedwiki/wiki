@@ -243,7 +243,7 @@ sub removeTopics
     my %indexextensions = $self->indexExtensions;    
 
     foreach my $topic (@topicsList) {
-	print "Remove Topic $topic\n";
+	$self->log("Remove Topic $topic");
 	
 	my $term = KinoSearch::Index::Term->new( 'id_topic', $web.$topic );
 	$invindexer->delete_docs_by_term($term);

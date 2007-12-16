@@ -40,7 +40,10 @@ sub test_stringForFile {
     $this->assert_str_equals($text, $text2, "HTML stringifier not well registered.");
 
     my $ok = $text =~ /Cern/;
-    $this->assert($ok, "Text Cern not included")
+    $this->assert($ok, "Text Cern not included");
+
+    $ok = $text =~ /geöffnet/;
+    $this->assert($ok, "Text geöffnet not included");
 }
 
 1;

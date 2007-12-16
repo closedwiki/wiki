@@ -15,7 +15,7 @@ use base 'TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyBase';
 use File::Temp qw/tmpnam/;
 
 # Only if vw exists, I register myself.
-if ((system("wvHtml >/dev/null 2>&1")==0)) {
+if (__PACKAGE__->_programExists("wvHtml")){
     __PACKAGE__->register_handler("application/word", ".doc");}
 
 sub stringForFile {

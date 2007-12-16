@@ -100,8 +100,23 @@ NOTE: If you just extend the list without having a special stringifier in place,
 
 __Note:__ You do not need to install anything on the browser to use this add-on. The following instructions are for the administrator who installs the add-on on the server where TWiki is running. 
 
-Install antiword, xpdf and ppthtml, if you want to index attached Word and PDF files:
-   * For Debian you can use =aptitude install antiword=, =aptitude install xpdf-utils= and =aptitude install ppthtml=
+Install a backend to stringify Word documents if you want to index
+Word documents. For this either install antiword, abiword of !vwWare.
+
+__Note:__ This add-on comes with stringifiers for all three of
+them. Depending on what is installed, the right stringifiers is used. 
+
+__Note2:__ If you install more than one of the three backends, it is not
+preditable, which of them is used. If you want to be sure, delete the
+not used stringifiers from the directory
+=lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins=
+(either =DOC_antiword.pm=, =DOC_abiword.pm= or =DOC_vw.pm=).
+
+To install antiword for Denin you can do:
+   * =aptitude install antiword=
+
+Install xpdf and ppthtml, if you want to index attached Word and PDF files:
+   * For Debian you can use =aptitude install xpdf-utils= and =aptitude install ppthtml=
    * If you do not install =antiword=, you should remove =.doc= from the =KINOSEARCHINDEXEXTENSIONS= variable.
    * If you do not install =xpdf=, you should remove =.pdf= from the =KINOSEARCHINDEXEXTENSIONS= variable.
    * If you do not install =ppthtml=, you should remove =.ppt= from the =KINOSEARCHINDEXEXTENSIONS= variable.
@@ -110,13 +125,12 @@ Like many other TWiki extensions, this module is shipped with a automatic instal
 
    * If you have TWiki 4.1 or later, you can install from the configure interface (Go to Plugins->Find More Extensions)
       * The webserver user has to have permission to write to all areas of your installation for this to work.
-      * Take care to install  =antiword= and =xpdf= before.
    * If you have a permanent connection to the internet, you are recommended to use the automatic installer script
       * Just download the BuildContrib_installer perl script and run it. 
    * Notes:
-      * The installer script will:
-         * Automatically resolve dependencies,
-         * Copy files into the right places in your local install (even if you have renamed data directories),
+      * The installer script will
+         * automatically resolve dependencies,
+         * copy files into the right places in your local install (even if you have renamed data directories),
          * check in new versions of any installed files that have existing RCS histories files in your existing install (such as topics).
          * If the $TWIKI_PACKAGES environment variable is set to point to a directory, the installer will try to get archives from there. Otherwise it will try to download from twiki.org or cpan.org, as appropriate.
          * (Developers only: the script will look for twikiplugins/BuildContrib/BuildContrib.tgz before downloading from TWiki.org) 
@@ -161,7 +175,9 @@ If you don't use the installer script, you need to install the add-on by hand:
      | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/Stringifier.pm== | Class to stringify attached files |
      | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifyBase.pm== | Base class for stringifier plugins |
      | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins== | Directory with stringifier plugins |
-     | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/DOC.pm== | Stringifier for MS Word documents |
+     | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/DOC_antiword.pm== | Stringifier for MS Word documents using antiword|
+     | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/DOC_abiword.pm== | Stringifier for MS Word documents using abiword |
+     | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/DOC_vw.pm== | Stringifier for MS Word documents using vw |
      | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/HTML.pm== | Stringifier for html files |
      | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/PDF.pm== | Stringifier for pdf files |
      | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/Text.pm== | Stringifier for ASCII files |
@@ -189,7 +205,7 @@ $TWiki::cfg{KinoSearchIndexDir} = '/home/httpd/twiki/kinosearch/index';
 </verbatim>
    * Remember to edit the file ==kinosearch/bin/LocalLib.cfg== and modify ==twikiLibPath== accordingly to your configuration
    * Test if the installation was successful:
-      * Check that =antiword= is in place: Type =antiword= on the prompt and check that the command exists.
+      * Check that =antiword=, =abiword= or =wvHtml= is in place: Type =antiword=,  =abiword= or =wvHtml= on the prompt and check that the command exists.
       * Check that =pdftotext= is in place: Type =pdftotext= on the prompt and check that the command exists.
       * Check that =ppthtml= is in place: Type =ppthtml= on the prompt and check that the command exists.
       * Change the working directory to the ==kinosearch/bin== twiki installation directory.
@@ -200,11 +216,12 @@ $TWiki::cfg{KinoSearchIndexDir} = '/home/httpd/twiki/kinosearch/index';
 
 ---++ Add-On Info
 
-   * Set SHORTDESCRIPTION = Fast indexed search with indexing of attachments like Word, Excel and PDF
+   * Set SHORTDESCRIPTION = Fast indexed search with indexing of attachments like Word, Excel, PDF and PPT
 
 |  Add-on Author: | TWiki:Main/MarkusHesse |
 |  Add-on Version: | v1.10, 17 Nov 2007 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+| ??  | v 1.11, Additions on stringifiers, modification of output format |
 | 17 Nov 2007:  | v 1.10, PPT stringifier added |
 | 11 Nov 2007:  | v 1.09, Some bugfixing |
 |  3 Nov 2007:  | v 1.08, Some bugfixing |
@@ -221,8 +238,9 @@ $TWiki::cfg{KinoSearchIndexDir} = '/home/httpd/twiki/kinosearch/index';
 |                                | CPAN:Module::Pluggable |
 |                                | CPAN:HTML::TreeBuilder |
 |                                | CPAN:Spreadsheet::ParseExcel |
+|                                | CPAN:Text::Iconv |
 |  Other Dependencies: | pdftotext (part of xpdf-utils) |
-|                                 | antiword |
+|                                 | antiword, abiword or !vwWare |
 |                                 | ppthtml  |
 |  Perl Version: | Tested with 5.8.0 |
 |  License: | GPL |

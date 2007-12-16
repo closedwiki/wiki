@@ -75,14 +75,6 @@ sub test_createIndex {
     $topic = $hit->{topic};
     $topic =~ s/ .*//;
     $this->assert_str_equals($topic, "TopicWithWordAttachment", "Wrong topic for MS word.");
-
-    # Now search for an Umlaut
-    $docs = $search->docsForQuery( "Größer");
-    $hit  = $docs->fetch_hit_hashref;
-    $this->assert(defined($hit), "Hit for MS Word with Größer not found.");
-    $topic = $hit->{topic};
-    $topic =~ s/ .*//;
-    $this->assert_str_equals($topic, "TopicWithWordAttachment", "Wrong topic for MS word.");
 }
 
 sub test_updateIndex {
@@ -367,15 +359,6 @@ HERE
     $topic = $hit->{topic};
     $topic =~ s/ .*//;
     $this->assert_str_equals($topic, "TopicWithExcelAttachment", "Wrong topic for attachment.");
-
-    # Search for an Umlaut in Excel
-    $docs = $search->docsForQuery( "Größer");
-    $hit  = $docs->fetch_hit_hashref;
-    $this->assert(defined($hit), "No hit found for Größer in XLS.");
-    $topic = $hit->{topic};
-    $topic =~ s/ .*//;
-    $this->assert_str_equals($topic, "TopicWithExcelAttachment", "Wrong topic for attachment.");
-
     # FIXME: How about form name and form fields?
 }
 
@@ -469,5 +452,73 @@ HERE
 	last;
     }
 }
+
+###############################################################################
+# 
+# Test for Umlaute
+# 
+
+sub test_UmlauteInDoc {
+    my $this = shift;
+
+    $this->_testForWordInAttachment("Simple_example.doc", "Größer");
+}
+
+sub test_UmlauteInXLS {
+    my $this = shift;
+
+    $this->_testForWordInAttachment("Simple_example.xls", "Größer");
+}
+
+sub test_UmlauteInHTML {
+    my $this = shift;
+
+    $this->_testForWordInAttachment("Simple_example.html", "geöffnet");
+}
+
+sub test_UmlauteInTXT {
+    my $this = shift;
+
+    $this->_testForWordInAttachment("Simple_example.txt", "Änderung");
+}
+
+sub test_UmlauteInPPT {
+    my $this = shift;
+
+    $this->_testForWordInAttachment("Simple_example.ppt", "Übergang");
+}
+
+sub test_UmlauteInPDF {
+    my $this = shift;
+
+    $this->_testForWordInAttachment("Simple_example.pdf", "Überflieger");
+    $this->_testForWordInAttachment("Simple_example.pdf", "Äußerung");
+}
+
+sub _testForWordInAttachment {
+    my ($this, $file, $word) = (@_);
+    
+    my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
+
+    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "TopicWithSpecialFile", <<'HERE');
+Just an example topic.
+Keyword: Superspecific
+HERE
+    $this->{twiki}->{store}->saveAttachment($this->{users_web}, "TopicWithSpecialFile", $file,
+                                            $this->{twiki}->{user}, {file => "attachement_examples/$file"});
+
+    $ind->createIndex();
+
+    my $search = TWiki::Contrib::SearchEngineKinoSearchAddOn::Search->newSearch();
+
+    # Now search for the word
+    my $docs = $search->docsForQuery( $word );
+    my $hit  = $docs->fetch_hit_hashref;
+    $this->assert(defined($hit), "Hit for $word in file $file not found.");
+    my $topic = $hit->{topic};
+    $topic =~ s/ .*//;
+    $this->assert_str_equals($topic, "TopicWithSpecialFile", "Wrong topic for $word");
+}
+
 
 1;

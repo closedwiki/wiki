@@ -15,14 +15,16 @@ package TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::HTML;
 use base 'TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyBase';
 use HTML::TreeBuilder;
 use Encode;
+
 __PACKAGE__->register_handler("text/html", ".html");
 
 sub stringForFile {
     my ($self, $filename) = @_;
     my $tree = HTML::TreeBuilder->new;
-    open(my $fh, "<:utf8", $filename) || die;
-    $tree->parse_file($fh);
-    close($fh);
+    #open(my $fh, "<:utf8", $filename) || die;
+    #$tree->parse_file($fh);
+    #close($fh);
+    $tree->parse_file($filename);
 
     my $text;
     for($tree->look_down(_tag => "meta")) {

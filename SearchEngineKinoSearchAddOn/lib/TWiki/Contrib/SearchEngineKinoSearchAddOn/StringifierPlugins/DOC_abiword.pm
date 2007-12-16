@@ -12,11 +12,14 @@
 
 package TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::DOC_abiword;
 use base 'TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyBase';
-# Only if abiword exists, I register myself.
-if ((system("abiword  >/dev/null 2>&1")==0)) {
-    __PACKAGE__->register_handler("application/word", ".doc");}
 use File::Temp qw/tmpnam/;
 use Encode;
+
+# Only if abiword exists, I register myself.
+if (__PACKAGE__->_programExists("abiword")){
+    __PACKAGE__->register_handler("application/word", ".doc");}
+
+
 
 sub stringForFile {
     my ($self, $file) = @_;

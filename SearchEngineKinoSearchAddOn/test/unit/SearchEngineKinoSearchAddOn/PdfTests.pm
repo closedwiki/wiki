@@ -40,7 +40,10 @@ sub test_stringForFile {
     $this->assert_str_equals($text, $text2, "PDF stringifier not well registered.");
 
     my $ok = $text =~ /Adobe/;
-    $this->assert($ok, "Text Adobe not included")
+    $this->assert($ok, "Text Adobe not included");
+
+    $ok = $text =~ /Äußerung/;
+    $this->assert($ok, "Text Äußerung not included");
 }
 
 1;
