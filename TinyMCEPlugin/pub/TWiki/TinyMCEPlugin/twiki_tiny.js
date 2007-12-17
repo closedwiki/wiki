@@ -2,7 +2,7 @@ var TWikiTiny={twikiVars:null,request:null,metaTags:null,tml2html:new Array(),ht
 return TWikiTiny.twikiVars[name];},expandVariables:function(url){for(var i in TWikiTiny.twikiVars){url=url.replace('%'+i+'%',TWikiTiny.twikiVars[i],'g');}
 return url;},enableSave:function(enabled){var status=enabled?null:"disabled";var elm=document.getElementById("save");if(elm)
 elm.disabled=status;elm=document.getElementById("preview");if(elm)
-elm.disabled=status;},transform:function(editor,handler,text,onReadyToSend,onReply){var url=TWikiTiny.getTWikiVar("SCRIPTURL");var suffix=TWikiTiny.getTWikiVar("SCRIPTSUFFIX");if(suffix==null)suffix='';url+="/rest"+suffix+"/WysiwygPlugin/"+handler;var path=TWikiTiny.getTWikiVar("WEB")+'.'
+elm.disabled=status;},transform:function(editor,handler,text,onReadyToSend,onReply,onFail){var url=TWikiTiny.getTWikiVar("SCRIPTURL");var suffix=TWikiTiny.getTWikiVar("SCRIPTSUFFIX");if(suffix==null)suffix='';url+="/rest"+suffix+"/WysiwygPlugin/"+handler;var path=TWikiTiny.getTWikiVar("WEB")+'.'
 +TWikiTiny.getTWikiVar("TOPIC");TWikiTiny.request=new Object();if(tinyMCE.isIE){TWikiTiny.request.req=new ActiveXObject("Microsoft.XMLHTTP");}else{TWikiTiny.request.req=new XMLHttpRequest();}
 TWikiTiny.request.editor=editor;TWikiTiny.request.req.open("POST",url,true);TWikiTiny.request.req.setRequestHeader("Content-type","application/x-www-form-urlencoded");var params="nocache="+encodeURIComponent((new Date()).getTime())
 +"&topic="+encodeURIComponent(path)
