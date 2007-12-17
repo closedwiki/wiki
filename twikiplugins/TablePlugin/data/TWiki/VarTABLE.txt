@@ -7,9 +7,10 @@
 %STARTSECTION{"table_attributes"}%
    * Supported attributes:
      | *Argument*       | *Comment*  | *Default&nbsp;value*  | *Example*  |
-     | =sort=           | Set table sorting ="on"= or ="off"=. | <span class="twikiGrayText">unspecified</span> | =sort="on"= |
+     | =sort=           | Set table sorting by clicking headers ="on"= or ="off"=. | <span class="twikiGrayText">unspecified</span> | =sort="on"= |
      | =initsort=       | Column to sort initially (="1"= to number of columns). | <span class="twikiGrayText">unspecified</span> | =initsort="2"= |
      | =initdirection=  | Initial sorting direction for =initsort=, set to  ="up"= (descending) or ="down"= (ascending). | <span class="twikiGrayText">unspecified</span> | =initdirection="up"= |
+     | =disableallsort= | Disable all sorting, both initsort and header sort. This is mainly used by plugins such as the EditTablePlugin to disable sorting in a table while editing the table. | <span class="twikiGrayText">unspecified</span> | =disableallsort="on"= |
      | =headerbg=       | Header cell background colour. | ="#6b7f93"= | =headerbg="#999999"= |
      | =headerbgsorted= | Header cell background colour of a sorted column. | the value of =headerbg= | =headerbgsorted="#32596c"= |
      | =headercolor=    | Header cell text colour. | ="#ffffff"= | =headercolor="#0000cc"= |

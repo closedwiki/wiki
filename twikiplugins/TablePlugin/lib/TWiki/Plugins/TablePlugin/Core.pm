@@ -144,6 +144,23 @@ sub _parseParameters {
     $tmp           = $params{sort};
     $tmp           = '0' if ( defined $tmp && $tmp =~ /^off$/oi );
     $sortAllTables = $tmp if ( defined $tmp && $tmp ne '' );
+    
+    # If EditTablePlugin is installed and we are editing a table, the CGI
+    # parameter 'sort' is defined as "off" to disable all header sorting ((Item5135)
+    my $cgi = TWiki::Func::getCgiQuery();
+    $tmp = $cgi->param('sort');
+    if ( defined $tmp && $tmp =~ /^off$/oi ) {
+        undef $sortAllTables;
+    }
+
+    # If EditTablePlugin is installed and we are editing a table, the 
+    # 'disableallsort' TABLE parameter is added to disable initsort and header
+    # sorting in the table that is being edited. (Item5135)
+    $tmp = $params{disableallsort};
+    if ( defined $tmp && $tmp =~ /^on$/oi ) {
+        undef $sortAllTables;
+        undef $initSort;        
+    }
 
     $tmp = $params{tableborder};
     if ( defined $tmp && $tmp ne '' ) {

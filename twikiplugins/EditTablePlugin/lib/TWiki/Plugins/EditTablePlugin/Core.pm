@@ -285,6 +285,10 @@ s/(.*?)$regex{edit_table_plugin}/&handleEditTableTag( $theWeb, $theTopic, $1, $2
             $headerRowCount = $tablePluginParams{'headerrows'} || 0;
             $footerRowCount = $tablePluginParams{'footerrows'} || 0;
 
+            # When editing we append a disableallsort="on" to the TABLE tag
+            # to prevent TablePlugin from sorting the table. (Item5135)            
+            $_ =~ s/(}%)/ disableallsort="on"$1/ if ( $doEdit && !$doSave );
+
             # no need to process any further, just copy the line
             $result .= "$_\n";
             next;
@@ -694,6 +698,8 @@ sub handleTableEnd {
       if $footerRowCount;
     $text .= hiddenField( $preSp, 'etaddedrows', $addedRowCount, "\n" )
       if $addedRowCount;
+
+    $text .= hiddenField( $preSp, 'sort', 'off', "\n" );
 
     if ($doEdit) {
 
