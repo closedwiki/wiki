@@ -760,7 +760,8 @@ sub userToWikiName {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     my $users = $TWiki::Plugins::SESSION->{users};
     my $user = $users->getCanonicalUserID( $login );
-    return $login unless $users->userExists( $user );
+    return  ( $dontAddWeb ? $login : ( $TWiki::cfg{UsersWebName} . '.' . $login ) )
+        unless $users->userExists( $user );
     return $users->getWikiName( $user ) if $dontAddWeb;
     return $users->webDotWikiName($user);
 }
