@@ -198,8 +198,9 @@ __Note:__ The Plugin uses base settings like date format, language and style fro
 |  Plugin Author: | TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2002-2007, TWiki:Main.PeterThoeny ([[http://www.twiki.net/][TWIKI.NET]]) and TWiki Contributors |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 12 Dec 2007 (4.5) |
+|  Plugin Version: | 4.6 (16 Dec 2007) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  16 Dec 2007: | 4.6:  Kenneth Lavrsen: The plugin prevents TablePlugin from initsorting the table being edited. This is done by temporarily appending the attribute disableallsort="on" to the TABLE tag of a table being edited. Additionally all header sorting is disabled while editing a table by setting a hidden formfield =sort= to "off". Disabling sorting while editing is needed now that the EditTablePlugin supports moving rows up and down. |
 |  01 Dec 2007: | 4.3:  Arthur Clemens: added support for TablePlugin =headerrows= and =footerrows=; updated edit button |
 |  16 Oct 2007: | 4.2:  Arthur Clemens: refactoring, bug fixes. |
 |  07 Oct 2007: | 15182: PTh: Added %SYSTEMWEB%.VarEDITTABLE to have it listed in %SYSTEMWEB%.TWikiVariables |
