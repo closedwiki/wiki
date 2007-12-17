@@ -51,7 +51,7 @@ var TWikiTiny = {
             elm.disabled = status;
     },
 
-    transform : function(editor, handler, text, onReadyToSend, onReply) {
+    transform : function(editor, handler, text, onReadyToSend, onReply, onFail) {
         // Work out the rest URL from the location
         var url = TWikiTiny.getTWikiVar("SCRIPTURL");
         var suffix = TWikiTiny.getTWikiVar("SCRIPTSUFFIX");
