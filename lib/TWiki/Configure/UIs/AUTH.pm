@@ -32,7 +32,11 @@ sub ui {
     my ($this, $canChangePW, $actionMess) = @_;
     my $output = '';
 
-    $output .= CGI::start_form({ action=>$ENV{SCRIPT_NAME}, method=>'post' });
+    my @script = File::Spec->splitdir($ENV{SCRIPT_NAME});
+    my $scriptName = pop(@script);
+    $scriptName =~ s/.*[\/\\]//;  # Fix for Item3511, on Win XP
+
+    $output .= CGI::start_form({ action=>$scriptName, method=>'post' });
 
     # Pass URL params through, except those below
     foreach my $param ( $TWiki::query->param ) {
@@ -70,7 +74,7 @@ HERE
         $output .= "<div id='twikiPasswordChange'><div class='twikiFormSteps'>\n";
         $output .= '<div class="explanation">';
         $output .= CGI::img({width=>'16', height=>'16',
-                             src=>$ENV{SCRIPT_NAME}.'?action=image;image=warning.gif;type=image/gif', alt=>''});
+                             src=>$scriptName.'?action=image;image=warning.gif;type=image/gif', alt=>''});
         $output .= '&nbsp;'.CGI::span(
             { class=>'twikiAlert' }, CGI::strong('Notes on Security'));
         $output .= <<HERE;

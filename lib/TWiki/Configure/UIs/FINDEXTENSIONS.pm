@@ -40,7 +40,10 @@ HERE
     if (!$bad) {
         # Can't use a submit here, because if we do, it is invoked when
         # the user presses Enter in a text field.
-        my $scriptName = $ENV{SCRIPT_NAME} || 'THISSCRIPT';
+        my @script = File::Spec->splitdir($ENV{SCRIPT_NAME} || 'THISSCRIPT');
+        my $scriptName = pop(@script);
+        $scriptName =~ s/.*[\/\\]//;  # Fix for Item3511, on Win XP
+
         $actor = CGI::a({ href => $scriptName.'?action=FindMoreExtensions',
                           class=>'twikiSubmit',
                           accesskey => 'P' },

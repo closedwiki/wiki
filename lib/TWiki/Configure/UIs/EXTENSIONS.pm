@@ -96,7 +96,11 @@ sub ui {
         foreach my $f (@tableHeads) {
             my $text;
             if ($f eq 'install') {
-                my $link = $TWiki::query->url().
+                my @script = File::Spec->splitdir($ENV{SCRIPT_NAME});
+                my $scriptName = pop(@script);
+                $scriptName =~ s/.*[\/\\]//;  # Fix for Item3511, on Win XP
+
+                my $link = $scriptName.
                   '?action=InstallExtension'.
                     ';repository='.$ext->{repository}.
                     ';extension='.$ext->{topic};
