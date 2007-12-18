@@ -48,13 +48,12 @@ use vars qw(
             $sitePattern
             $pagePattern
             %interSiteTable
-            $noAutolink
     );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
+# This should always be $Rev: 14913 (17 Sep 2007) $ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
-$VERSION = '$Rev$';
+$VERSION = '$Rev: 14913 (17 Sep 2007) $';
 
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
@@ -92,8 +91,6 @@ sub initPlugin {
       TWiki::Func::getPreferencesValue( 'INTERWIKIPLUGIN_INTERLINKFORMAT' ) ||
       '<a href="$url" title="$tooltip"><noautolink>$label</noautolink></a>';
 
-    $noAutolink = TWiki::Func::getPreferencesFlag('NOAUTOLINK');
-    
     my $interTopic =
       TWiki::Func::getPreferencesValue( 'INTERWIKIPLUGIN_RULESTOPIC' )
           || 'InterWikis';
@@ -122,15 +119,10 @@ sub _map {
 }
 
 sub preRenderingHandler {
-    return if $noAutolink;
-    my $session = $TWiki::Plugins::SESSION;
-    my $removed = {};
-    $_[0] = $session->{renderer}->takeOutBlocks($_[0], 'noautolink', $removed);  
     # ref in [[ref]] or [[ref][
     $_[0] =~ s/(\[\[)$sitePattern:$pagePattern(\]\]|\]\[[^\]]+\]\])/_link($1,$2,$3,$4)/geo;
     # ref in text
     $_[0] =~ s/(^|[\s\-\*\(])$sitePattern:$pagePattern(?=[\s\.\,\;\:\!\?\)\|]*(\s|$))/_link($1,$2,$3)/geo;
-    $session->{renderer}->putBackBlocks( \$_[0], $removed, 'noautolink');
 }
 
 sub _link {
