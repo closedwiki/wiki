@@ -55,7 +55,6 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  12 Dec 2007: | 15977 - TWikibug:Item4748 - Respect &lt;noautolink&gt; tags (TWiki:Main.SteffenPoulsen) |
 |  25 Nov 2007: | 15752 - TWikibug:Item5006 - Renamed Bugs rule to TWikibug rule (PTh) |
 |  13 Aug 2007: | 14545 - TWikibug:Item4451 - Added Bugs: rule (TWiki:Main.CrawfordCurrie) |
 |  11 Aug 2007: | 14538 - Fixed broken ISBN link (TWiki:Main.PeterThoeny) |
