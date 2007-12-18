@@ -48,6 +48,7 @@ use vars qw(
             $sitePattern
             $pagePattern
             %interSiteTable
+            $noAutolink
     );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -91,6 +92,8 @@ sub initPlugin {
       TWiki::Func::getPreferencesValue( 'INTERWIKIPLUGIN_INTERLINKFORMAT' ) ||
       '<a href="$url" title="$tooltip"><noautolink>$label</noautolink></a>';
 
+    $noAutolink = TWiki::Func::getPreferencesFlag('NOAUTOLINK');
+    
     my $interTopic =
       TWiki::Func::getPreferencesValue( 'INTERWIKIPLUGIN_RULESTOPIC' )
           || 'InterWikis';
@@ -119,6 +122,7 @@ sub _map {
 }
 
 sub preRenderingHandler {
+    return if $noAutolink;
     my $session = $TWiki::Plugins::SESSION;
     my $removed = {};
     $_[0] = $session->{renderer}->takeOutBlocks($_[0], 'noautolink', $removed);  
