@@ -153,6 +153,8 @@ If you don't use the installer script, you need to install some CPAN modules:
       * perl -MCPAN -e "install HTML::TreeBuilder"
       * perl -MCPAN -e "install Spreadsheet::ParseExcel"
       * perl -MCPAN -e "install Text::Iconv"
+      * perl -MCPAN -e "install !CharsetDetector"
+
 
    * _Note for Windows_: For Windows, make sure, you have a C-compiler in place. This is normally part of Visual Studio etc. 
 
@@ -239,6 +241,7 @@ $TWiki::cfg{KinoSearchIndexDir} = '/home/httpd/twiki/kinosearch/index';
 |                                | CPAN:HTML::TreeBuilder |
 |                                | CPAN:Spreadsheet::ParseExcel |
 |                                | CPAN:Text::Iconv |
+|                                | CPAN:CharsetDetector |
 |  Other Dependencies: | pdftotext (part of xpdf-utils) |
 |                                 | antiword, abiword or !vwWare |
 |                                 | ppthtml  |

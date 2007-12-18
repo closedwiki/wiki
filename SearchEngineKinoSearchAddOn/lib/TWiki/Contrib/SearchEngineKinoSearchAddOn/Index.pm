@@ -548,8 +548,10 @@ sub indexAttachment {
 }
 
 # Removing the first repeated character. e.g. TTTTheTopic input will return TheTopic
+# QS
 sub tripFirstchar {
   my $string = shift;
+  return "" unless $string;
   my @fields = split //, $string;
   my $firstchar = shift @fields;
   $string =~ s/^$firstchar+/$firstchar/;
@@ -557,37 +559,60 @@ sub tripFirstchar {
 }
 
 # Spliting the topic Names e.g. "TheTopic" will return "The Topic"
+# QS
 sub splitTopicName {
   my $string = shift;
-  my @topicfields = split//, $string;
-  my $flag = 1; my $seccap = 0;
-  my $str = "";
-  foreach (@topicfields) {
-    if (/[A-Z]/){ $flag=1; } else {$flag =0;}
-    if($flag == 1) { if (/[A-Z]/) { $flag=0;  if ($seccap==1){$str = $str." ";}  $str = $str . $_; $seccap=0;} }
-    else {$str = $str . $_; $seccap = 1; }
-  }
-  my $topicname = $str;
-  return $topicname;
+  
+  # I replace each capital letter with a space and the letter itself as long as it follows a lower letter.
+  # FIXME: I also want to work with all special characters but this looks quite agly. Is there a better solution?
+  $string =~ s/(ä|ö|ü|ß|á|à|â|ç|é|è|ê|ó|ò|ô|ú|ù|û|[a-z]|[1-9])(Ä|Ö|Ü|Á|À|Â|Ç|É|È|Ê|Ó|Ò|Ô|Ú|Ù|Û|[A-Z])/$1 $2/g;
+
+  return $string;
+
+#  my @topicfields = split//, $string;
+#  my $flag = 1; my $seccap = 0;
+#  my $str = "";
+#  foreach (@topicfields) {
+#    if (/[A-Z]/){ $flag=1; } else { $flag =0; }
+#    if($flag == 1) { 
+#	if (/[A-Z]/) { 
+#	    $flag=0;  
+#	    if ($seccap==1){$str = $str." ";}  
+#	    $str = $str . $_; 
+#	    $seccap=0;
+#	} 
+#    }
+#    else {$str = $str . $_; $seccap = 1; }
+#  }
+#  my $topicname = $str;
+#  return $topicname;
 }
 
-# Spliting the topic Name e.g. "TheTopic--NNNName" will return the "The Topic Name" string
+# Spliting the topic Name e.g. "TheTopic--NNNName" will return the "The Topic Name " string
+# QS
 sub splitTheTopicName {
   my $string = shift;
   my @fields = split //, $string;
   my $newstr = "";
+  # Fist I strip ut things like "_", ".", ...
+  # FIXME: I want to keep special chars but this looks quite agly. Is there a better solution?
   foreach (@fields) {
-    if (/[A-Z]|[a-z]|[0-9]/) {$newstr = $newstr . $_;}
+    if (/Ä|Ö|Ü|ä|ö|ü|ß|á|Á|à|À|â|Â|ç|Ç|é|É|è|È|ê|Ê|ó|Ó|ò|Ò|ô|Ô|ú|Ú|ù|Ù|û|Û|[A-Z]|[a-z]|[0-9]/) {$newstr = $newstr . $_;}
     else { $newstr = $newstr . " ";}
   }
-  ## Now trim the more than one spaces in the string.
+
+  # I remove all double spaces
   $newstr =~ s/\s+/ /g;
+
+  # Now I split the topic name on each capital letter
   my @newfields = split / /, $newstr;
   my $finalstr ="";
   foreach (@newfields) {
     my $str = splitTopicName($_);
     $finalstr = $finalstr. $str." ";
   }
+
+  # Now I remove double characters at the beginning of a word. 
   @newfields = split / /, $finalstr;
   $finalstr = "";
   foreach (@newfields) {

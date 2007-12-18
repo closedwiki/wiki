@@ -15,33 +15,47 @@ package TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::HTML;
 use base 'TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyBase';
 use HTML::TreeBuilder;
 use Encode;
+use CharsetDetector;
 
 __PACKAGE__->register_handler("text/html", ".html");
 
 sub stringForFile {
     my ($self, $filename) = @_;
     my $tree = HTML::TreeBuilder->new;
-    #open(my $fh, "<:utf8", $filename) || die;
-    #$tree->parse_file($fh);
-    #close($fh);
-    $tree->parse_file($filename);
+    open(my $fh, "<", $filename) || return "";
 
-    my $text;
+    my $text = "";
+    while (<$fh>) {
+        my $aux_text = "";
+        my $charset = CharsetDetector::detect1($_);
+        if ($charset =~ "utf") {
+            $aux_text = encode("iso-8859-15", decode("utf-8", $_));
+            $aux_text = $_ unless (defined($aux_text));
+        } else {
+            $aux_text = $_;
+        }
+
+        $text .= $aux_text;
+    }
+    close($fh);
+
+    $tree->parse($text);
+
+    $text = "";
     for($tree->look_down(_tag => "meta")) {
         next if $_->attr("http-equiv");
         next unless $_->attr("value");
 
         $text .=  $_->attr("value");
-	$text .=  " ";
+        $text .=  " ";
     }
     for (@{$tree->extract_links("a")}) {
 
         $text .=  $_->[0];
-	$text .=  " ";
+        $text .=  " ";
     }
 
     $text .= $tree->as_trimmed_text;
-
     $text = encode("iso-8859-15", $text);
 
     return $text;

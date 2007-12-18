@@ -291,7 +291,7 @@ sub docsForQuery {
     return $docs;
 }
 
-# I return the HTML string to render te given hit.
+# I return the HTML string to render the given hit.
 sub renderHtmlStringFor {
     my ($self, $hit, $repeatText, $nosummary) = (@_);
 
@@ -319,7 +319,10 @@ sub renderHtmlStringFor {
 	$comment = $hit->{comment} || ""; 
 	if ($comment) {
 	    $comment = " - $comment";
-	    $comment =~ s/([\x{80}-\x{FFFF}])/'.'/gse; # FIXME bt now just get rid of UTF8
+	    
+	    # Don't know, why this was in. 
+	    # If I do this, I remove also special characters like "Ä", "É" etc.
+	    #$comment =~ s/([\x{80}-\x{FFFF}])/'.'/gse; # FIXME bt now just get rid of UTF8
 	}
     } else {
 	$name = "";
@@ -356,7 +359,6 @@ sub renderHtmlStringFor {
 	# no icon for topics
 	$icon = "";
 	# URL for the topic
-
 	$tempVal =~ s/%MATCH%/\[\[$resweb\.$restopic\]\]/go;
 	# if locks are to be displayed, then find it out for each hit
 	if ($showlock) {

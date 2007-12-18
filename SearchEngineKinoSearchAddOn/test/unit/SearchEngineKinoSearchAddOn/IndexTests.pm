@@ -453,6 +453,39 @@ HERE
     }
 }
 
+sub test_tripFirstchar {
+    my $this = shift;
+
+    my $result = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index::tripFirstchar("TTTTheTopic");
+    $this->assert_str_equals($result, "TheTopic");
+
+    $result = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index::tripFirstchar("‹berschrift");
+    $this->assert_str_equals($result, "‹berschrift");
+
+    $result = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index::tripFirstchar("»cole");
+    $this->assert_str_equals($result, "»cole");
+}
+
+sub test_splitTheTopicName {
+    my $this = shift;
+
+    my $result = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index::splitTheTopicName("TheTopic--NNNName");
+    $this->assert_str_equals("The Topic Name ", $result);
+
+    $result = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index::splitTheTopicName("»cole_‹TheTopic--NNNName");
+    $this->assert_str_equals("»cole ‹The Topic Name ", $result);
+}
+
+sub test_splitTopicName {
+    my $this = shift;
+
+    my $result = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index::splitTopicName("TheTopicName   IsKnown");
+    $this->assert_str_equals("The Topic Name   Is Known", $result);
+
+    $result = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index::splitTopicName("Groﬂeƒnderungs‹berg‰nge");
+    $this->assert_str_equals("Groﬂe ƒnderungs ‹berg‰nge", $result);
+}
+
 ###############################################################################
 # 
 # Test for Umlaute
@@ -467,7 +500,7 @@ sub test_UmlauteInDoc {
 sub test_UmlauteInXLS {
     my $this = shift;
 
-    $this->_testForWordInAttachment("Simple_example.xls", "Grˆﬂer");
+    $this->_testForWordInAttachment("Simple_example.xls", "‹bergroﬂ");
 }
 
 sub test_UmlauteInHTML {

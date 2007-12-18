@@ -19,16 +19,30 @@ if (__PACKAGE__->_programExists("wvHtml")){
     __PACKAGE__->register_handler("application/word", ".doc");}
 
 sub stringForFile {
-    my ($self, $file) = @_;
-    my $tmp_file = tmpnam();
+        my ($self, $file) = @_;
+    my ($tmp_file, $tmp_dir);
+
+    # Creates a temp file name and checks if it exists
+    do {
+        $tmp_file = tmpnam();
+        $tmp_dir = $tmp_file;
+        $tmp_dir =~ s/^(.*)\/.*$/$1/;
+        $tmp_file =~ s/.*\///;
+    } while (-f "$tmp_dir/$tmp_file");
+
     my $in;
     my $text = '';
 
-    my $cmd = "wvHtml $file $tmp_file >/dev/null 2>&1";
-    system($cmd);
+    my $cmd = "wvHtml --targetdir=$tmp_dir $file $tmp_file >/dev/null 2>&1";
+    $tmp_file = "$tmp_dir/$tmp_file";
+    return "" if (((system($cmd)) != 0) || (!(-f $tmp_file)) || (-z $tmp_file));
 
     $text = TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier->stringFor($tmp_file);
-    unlink($tmp_file);
+
+    # Deletes temp files (main html and images)
+    # FIXME: This not run on Windows systems
+    $cmd = "rm -f " . $tmp_file . "*";
+    `$cmd`;
 
     return $text;
 }

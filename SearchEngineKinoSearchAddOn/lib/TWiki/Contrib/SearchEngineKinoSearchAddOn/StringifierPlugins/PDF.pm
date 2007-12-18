@@ -12,7 +12,6 @@
 
 package TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::PDF;
 use base 'TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyBase';
-#use Encode;
 
 # Only if pdftotext exists, I register myself.
 if (__PACKAGE__->_programExists("pdftotext")){
@@ -23,26 +22,23 @@ sub stringForFile {
     my ($self, $filename) = @_;
     my $tmp_file = tmpnam();
     my $in;
-    my $text = '';
+    my $text;
 
-    #my $cmd = "pdftotext -enc iso-8859-15 $filename $tmp_file";
-    #system($cmd);
-
-    system("pdftotext", $filename, $tmp_file);
+    unless ((system("pdftotext", $filename, $tmp_file, "-q") == 0) && (-f $tmp_file)) {
+        return "";
+    }
     
-
     ###########
     # Note: This way, the encoding of the text is reworked in the text stringifier.
     # Note2: May be this is not necessary: My UnitTest says NO...
-    #$text = TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier->stringFor($tmp_file);
-    open $in, $tmp_file;
-    $text = join(" ", <$in>);
-    close($in);
+    $text = TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier->stringFor($tmp_file);
+    
+    #open $in, $tmp_file;
+    #$text = join(" ", <$in>);
+    #close($in);
     ###############
 
     unlink($tmp_file);
-
-    #$text = encode("iso-8859-15", $text);
 
     return $text;
 }
