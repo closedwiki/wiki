@@ -982,8 +982,9 @@ sub getRenderedVersion {
     $text =~ s/^<(\?\w.*?\?)>/{$TWiki::TranslationToken$1}$TWiki::TranslationToken/g;
 
     # entitify lone < and >, praying that we haven't screwed up :-(
-    $text =~ s/</&lt\;/g;
-    $text =~ s/>/&gt\;/g;
+    # Item1985: CDATA sections are not lone < and >
+    $text =~ s/<(?!\!\[CDATA\[)/&lt\;/g;
+    $text =~ s/(?<!\]\])>/&gt\;/g;
     $text =~ s/{$TWiki::TranslationToken/</go;
     $text =~ s/}$TWiki::TranslationToken/>/go;
 
