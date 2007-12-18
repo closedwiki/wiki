@@ -27,7 +27,7 @@ use TWiki::Func;
 
 use vars qw( $VERSION $RELEASE
             %smiliesUrls %smiliesEmotions
-            $smiliesPubUrl $allPattern $smiliesFormat );
+            $smiliesPubUrl $allPattern $smiliesFormat $noAutolink );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -44,7 +44,7 @@ sub initPlugin {
 
     # check for Plugins.pm versions
     if( $TWiki::Plugins::VERSION < 1.026 ) {
-        TWiki::Func::writeWarning( "Version mismatch between InterwikiPlugin and Plugins.pm" );
+        TWiki::Func::writeWarning( "Version mismatch between SmiliesPlugin and Plugins.pm" );
         return 0;
     }
 
@@ -56,6 +56,8 @@ sub initPlugin {
     $topic =
       TWiki::Func::getPreferencesValue( 'SMILIESPLUGIN_TOPIC' ) 
           || "$installWeb.SmiliesPlugin";
+
+    $noAutolink = TWiki::Func::getPreferencesFlag('NOAUTOLINK');
 
     $web = $installWeb;
     if( $topic =~ /(.+)\.(.+)/ ) {
@@ -89,8 +91,15 @@ sub commonTagsHandler {
 
 sub preRenderingHandler {
 #    my ( $text, \%removed ) = @_;
+    return if $noAutolink;
+
+    my $session = $TWiki::Plugins::SESSION;
+    my $removed = {};
+    $_[0] = $session->{renderer}->takeOutBlocks($_[0], 'noautolink', $removed);  
 
     $_[0] =~ s/(\s|^)$allPattern(?=\s|$)/_renderSmily($1,$2)/geo;
+
+    $session->{renderer}->putBackBlocks( \$_[0], $removed, 'noautolink');
 }
 
 sub _renderSmily {
