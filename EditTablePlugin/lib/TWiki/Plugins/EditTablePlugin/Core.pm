@@ -839,6 +839,12 @@ sub inputElement {
     my $text     = '';
     my $i        = @format - 1;
     $i = $theCol if ( $theCol < $i );
+    
+    # expand variables in format
+    # we need to do this because this handler is called in
+    # sub beforeCommonTagsHandler, so variables are not expanded at this time
+    $format[$i] = TWiki::Func::expandCommonVariables( $format[$i], $theTopic, $theWeb );
+   
     my @bits         = split( /,\s*/, $format[$i] );
     my @bitsExpanded = split( /,\s*/, $formatExpanded[$i] );
 
@@ -879,6 +885,7 @@ sub inputElement {
             $expandedValue =~ s/\s+$//;
             $valExpanded   =~ s/^\s+//;
             $valExpanded   =~ s/\s+$//;
+
             if ( $valExpanded eq $expandedValue ) {
                 $text .= " <option selected=\"selected\">$val</option>";
             }
