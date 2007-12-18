@@ -1338,6 +1338,9 @@ sub makeTopicSummary {
     # Especially new lines (Item2496)
     # To not waste performance we simply replace $ by $<nop>
     $htext =~ s/\$/\$<nop>/g;
+    # Escape Interwiki links and other side effects introduced by
+    # plugins later in the rendering pipeline (Item4748)
+    $htext =~ s/\:/<nop>\:/g;
     $htext =~ s/\s+/ /g;
 
     return $this->protectPlainText( $htext );
