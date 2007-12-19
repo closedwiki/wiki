@@ -32,7 +32,7 @@ BEGIN {
 use vars qw(
             $disabledFlag $disablePluralToSingular
             $webNameRegex $wikiWordRegex $abbrevRegex $singleMixedAlphaNumRegex
-            $noAutolink $redirectable $initialised @webList
+            $noAutolink $redirectable $initialised @webList %linkedWords
            );
 
 $initialised = 0;
@@ -115,7 +115,7 @@ sub handle {
     # 2) WikiWordAsWebName.WikiWord,
     # 3) WikiWords, and 
     # 4) WIK IWO RDS
-
+    %linkedWords = ();
     $text =~ s/(\[\[.*?\]\]|(?:^|(?<=[\s\(,]))(?:$webNameRegex\.)?(?:$wikiWordRegex|$abbrevRegex))/findTopicElsewhere($_[1],$1)/geo;
 
     putBackBlocks( \$text, $removed, 'noautolink' );
@@ -134,7 +134,7 @@ sub findTopicElsewhere {
     my $original = $theTopic;
     my $linkText = $theTopic;
 
-    if ($theTopic =~ /\[\[($webNameRegex)\.($wikiWordRegex)\](?:\[(.*)\])?\]/o) {
+    if ($theTopic =~ /^\[\[($webNameRegex)\.($wikiWordRegex)\](?:\[(.*)\])?\]$/o) {
         if ($redirectable && $1 eq $theWeb) {
             # The topic is *supposed* to be in this web, but the web is
             # redirectable so we can ignore the web specifier
@@ -145,6 +145,14 @@ sub findTopicElsewhere {
             # The topic is an explicit link to another web
             return $theTopic;
         }
+    } elsif ($theTopic =~ /^\[\[($wikiWordRegex)\](?:\[(.*)\])?\]$/o) {
+            # No web specifier, look elsewhere
+            $theTopic = $1;
+            $linkText = $2 || $theTopic;
+    } elsif ($theTopic =~ /^\[\[($abbrevRegex)\](?:\[(.*)\])?\]$/o) {
+            # No web specifier, look elsewhere
+            $theTopic = $1;
+            $linkText = $2 || $theTopic;
     } elsif ($theTopic =~ /^($webNameRegex)\.($wikiWordRegex)$/o) {
         if ($redirectable && $1 eq $theWeb) {
             $linkText = $theTopic = $2;
@@ -177,6 +185,11 @@ sub findTopicElsewhere {
 
     # Look in the other webs, return when found
     my @topicLinks;
+    
+    # To-be-spec'ed: If topic/acronym has already been linked once, remove forced linking and return
+    #$linkText =~ s/\[\[(.*)\]\]/$1/o if $linkedWords{$theTopic};
+    #return "<nop>$linkText" if $linkedWords{$theTopic};
+
     foreach ( @webList ) {
         my $otherWeb = $_;
 
@@ -184,6 +197,7 @@ sub findTopicElsewhere {
         # If the $theTopic is a reference to a the name of 
         # otherWeb, point at otherWeb.WebHome - MRJC
         if ($otherWeb eq $theTopic) {
+            $linkedWords{$theTopic} = $linkText;
             _debug("$theTopic is the name of another web $otherWeb.");
             return "[[$otherWeb.WebHome][$otherWeb]]";
         }
@@ -194,12 +208,14 @@ sub findTopicElsewhere {
                 my $theTopicSingular = makeSingular( $theTopic );
                 if( TWiki::Func::topicExists( $otherWeb, $theTopicSingular ) ) {
                     _debug("$theTopicSingular was found in $otherWeb");
+                    $linkedWords{$theTopic} = $linkText;
                     push(@topicLinks, makeTopicLink($otherWeb, $theTopic));
                 }
             }
         }
         else  {
             _debug("$theTopic was found in $otherWeb");
+            $linkedWords{$theTopic} = $linkText;
             push(@topicLinks, makeTopicLink($otherWeb,$theTopic));
         }
     }
