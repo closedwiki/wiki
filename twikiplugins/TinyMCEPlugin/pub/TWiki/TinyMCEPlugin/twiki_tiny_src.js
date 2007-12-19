@@ -44,11 +44,13 @@ var TWikiTiny = {
     enableSave: function(enabled) {
         var status = enabled ? null : "disabled";
         var elm = document.getElementById("save");
-        if (elm)
+        if (elm) {
             elm.disabled = status;
+        }
         elm = document.getElementById("preview");
-        if (elm)
+        if (elm) {
             elm.disabled = status;
+        }
     },
 
     transform : function(editor, handler, text, onReadyToSend, onReply, onFail) {
@@ -71,7 +73,6 @@ var TWikiTiny = {
         TWikiTiny.request.req.open("POST", url, true);
         TWikiTiny.request.req.setRequestHeader(
             "Content-type", "application/x-www-form-urlencoded");
-        // get the content of the associated textarea
         var params = "nocache=" + encodeURIComponent((new Date()).getTime())
         + "&topic=" + encodeURIComponent(path)
         // The double-encoding is to overcome flaws in XMLHttpRequest. It makes
@@ -113,7 +114,13 @@ var TWikiTiny = {
 
     // Convert HTML content to textarea. Called from the WYSIWYG->raw switch
     switchToRaw : function (inst) {
-        var text = inst.getBody().innerHTML;
+        // As shown by OliverKrueger in Item5138, trivial text may include
+        // UTF-8 chars. These need to be encoded to entities before we can
+        // pass the string back to the server. This is done in triggerSave,
+        // but note that it requires cleanup:true to work.
+        inst.triggerSave(false, true);
+        var text = inst.oldTargetElement.value;
+
         // Evaluate post-processors
         for (var i = 0; i < TWikiTiny.html2tml.length; i++) {
             var cb = TWikiTiny.html2tml[i];
