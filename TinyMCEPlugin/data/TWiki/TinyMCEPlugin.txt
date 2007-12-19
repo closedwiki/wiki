@@ -44,7 +44,7 @@ For a full explanation of the available options, and guidance on reconfiguring T
    * Set INIT = mode : "exact",
    save_on_tinymce_forms: true,
    elements : "text",
-   cleanup : false,
+   cleanup : true,
    theme : "advanced",
    convert_urls : true,
    relative_urls : false,
