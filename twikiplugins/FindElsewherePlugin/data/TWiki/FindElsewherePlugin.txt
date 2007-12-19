@@ -16,7 +16,7 @@ Without this kind of plugin, it's likely that common terms or acronyms (abbrevia
 
 No new syntax is introduced.  However, new automatic %TWIKIWEB%.WikiWord linking will occur.  
 
-If a topic is not found in the current web, this plugin will look through the webs listed in the LOOKELSEWHEREWEBS variable.  If the topic is found (as it looks through the webs in their listed order), it will create one or more links, depending on the number of topics found.
+If a topic or abbreviation is not found in the current web, this plugin will look through the webs listed in the LOOKELSEWHEREWEBS variable.  If the topic is found (as it looks through the webs in their listed order), it will create one or more links, depending on the number of topics found.
 
 #NewFunctionalityTest
 
@@ -57,6 +57,8 @@ __Internationalization__
 
 <nop/>FindElsewherePlugin handles international characters (I18N) in links, topics and webs.
 
+__Compatibility__
+
 | *Input*								 | *Output*				  |
 | <nop>%TOPIC%#TopicAnchor		  | %TOPIC%#NewFunctionalityTest  |
 | <nop>%TWIKIWEB%.WebHome			| %TWIKIWEB%.WebHome	 |
@@ -76,11 +78,25 @@ __Internationalization__
 
 ---+++ <nop>%TOPIC% Settings
 
-You can disable look elsewhere - sitewide (in %MAINWEB%.TWikiPreferences), per web (in <nop/>WebPreferences) or pr. topic by defining DISABLELOOKELSEWHERE = 1.
+---++++ Enabling and disabling the plugin globally
+
+You can enable or disable the <nop>%TOPIC% plugin sitewide (in %MAINWEB%.TWikiPreferences), per web (in <nop/>WebPreferences) or pr. topic by defining DISABLELOOKELSEWHERE = 1.
+
+---++++ Scope of the plugin - webs to find topics in
 
 You can list other webs in which to look for topics that don't exist in the current web by defining LOOKELSEWHEREWEBS to be a comma-separated list of webs - for example, =TWiki,Main=
 
-If the TWiki.WikiWord is plural but doesn't exist, %TOPIC% also looks for the singular word in other webs. You can disable this behaviour by setting DISABLEPLURALTOSINGULAR = 1. (Note this setting is for looking in *other* webs only (plural to singular is still automatically done in the current web).
+---++++ Singular and plural topics
+
+If the TWiki.WikiWord is plural but doesn't exist, %TOPIC% also looks for the singular word in other webs. You can disable this behaviour by setting DISABLEPLURALTOSINGULAR = 1. (Note this setting is for looking in *other* webs only (plural to singular is still automatically done in the current web, dependent on the setting in =configure=).
+
+---++++ <nop>ACRONYM link settings
+
+A setting called "LOOKELSEWHEREFORACRONYMS" can be set to a value of =none=, =first= or =all= (=all= is default). 
+
+=none= means that non-forced acronyms in topics are never found elsewhere, =first= that they are linked only at the first occurence and =all= that every occurence is linked. Especially topics with many occurences of the same acronym will experience improved readability by use of the =first= setting.
+
+---++++ Overriding forced local links
 
 Even if a link refers explicitly to the current web and a topic name (for
 example, [<nop>[Thatweb.ThatTopic]], you can still trigger
@@ -101,6 +117,7 @@ Enabled for demo and testing - try it on and off
 |  Plugin Author: | TWiki:Main.MikeBarton |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  19 Dec 2007: | TWiki:Main.SteffenPoulsen - Link none, first or all standalone abbreviations (LOOKELSEWHEREFORACRONYMS option added) |
 |  18 Dec 2007: | TWiki:Main.SteffenPoulsen - Abbrev with alternative linktext found elsewhere again |
 |  25 Sep 2007: | TWiki:Main.CrawfordCurrie - Added redirect support, removed illegal calls, and made more efficient |
 |  20-Apr-2006: | (v1.9) - Now repects &lt;noautolink&gt; ... &lt;/noautolink&gt; blocks (Dakar only) and a new NOAUTOLINK preference flag - TWiki:Main.MichaelDaum |
