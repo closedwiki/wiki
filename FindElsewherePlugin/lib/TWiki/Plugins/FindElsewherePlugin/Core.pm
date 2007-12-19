@@ -32,7 +32,7 @@ BEGIN {
 use vars qw(
             $disabledFlag $disablePluralToSingular
             $webNameRegex $wikiWordRegex $abbrevRegex $singleMixedAlphaNumRegex
-            $noAutolink $redirectable $initialised @webList %linkedWords
+            $noAutolink $redirectable $initialised @webList %linkedWords $findAcronyms
            );
 
 $initialised = 0;
@@ -58,6 +58,8 @@ sub _lazyInit {
         # plugin is disabled.
         $otherWebs = "TWiki,Main";
     }
+
+    $findAcronyms = TWiki::Func::getPreferencesValue( "LOOKELSEWHEREFORACRONYMS" ) || "all";
 
     $disablePluralToSingular =
       TWiki::Func::getPreferencesFlag( "DISABLEPLURALTOSINGULAR" );
@@ -133,6 +135,7 @@ sub findTopicElsewhere {
     my( $theWeb, $theTopic ) = @_;
     my $original = $theTopic;
     my $linkText = $theTopic;
+    my $nonForcedAcronym = 0;
 
     if ($theTopic =~ /^\[\[($webNameRegex)\.($wikiWordRegex)\](?:\[(.*)\])?\]$/o) {
         if ($redirectable && $1 eq $theWeb) {
@@ -153,12 +156,20 @@ sub findTopicElsewhere {
             # No web specifier, look elsewhere
             $theTopic = $1;
             $linkText = $2 || $theTopic;
+    } elsif ($theTopic =~ /^$abbrevRegex$/o) {
+            $nonForcedAcronym = 1;
     } elsif ($theTopic =~ /^($webNameRegex)\.($wikiWordRegex)$/o) {
         if ($redirectable && $1 eq $theWeb) {
             $linkText = $theTopic = $2;
         } else {
             return $theTopic;
         }
+    }
+
+    if ( $nonForcedAcronym ) {
+      return $theTopic if $findAcronyms eq "none";
+      return $linkedWords{$theTopic} if ( $findAcronyms eq "all" && $linkedWords{$theTopic} );
+      return $theTopic if ( $findAcronyms eq "first" && $linkedWords{$theTopic} );
     }
 
     # Turn spaced-out names into WikiWords - upper case first letter of
@@ -186,10 +197,6 @@ sub findTopicElsewhere {
     # Look in the other webs, return when found
     my @topicLinks;
     
-    # To-be-spec'ed: If topic/acronym has already been linked once, remove forced linking and return
-    #$linkText =~ s/\[\[(.*)\]\]/$1/o if $linkedWords{$theTopic};
-    #return "<nop>$linkText" if $linkedWords{$theTopic};
-
     foreach ( @webList ) {
         my $otherWeb = $_;
 
@@ -197,7 +204,6 @@ sub findTopicElsewhere {
         # If the $theTopic is a reference to a the name of 
         # otherWeb, point at otherWeb.WebHome - MRJC
         if ($otherWeb eq $theTopic) {
-            $linkedWords{$theTopic} = $linkText;
             _debug("$theTopic is the name of another web $otherWeb.");
             return "[[$otherWeb.WebHome][$otherWeb]]";
         }
@@ -208,14 +214,12 @@ sub findTopicElsewhere {
                 my $theTopicSingular = makeSingular( $theTopic );
                 if( TWiki::Func::topicExists( $otherWeb, $theTopicSingular ) ) {
                     _debug("$theTopicSingular was found in $otherWeb");
-                    $linkedWords{$theTopic} = $linkText;
                     push(@topicLinks, makeTopicLink($otherWeb, $theTopic));
                 }
             }
         }
         else  {
             _debug("$theTopic was found in $otherWeb");
-            $linkedWords{$theTopic} = $linkText;
             push(@topicLinks, makeTopicLink($otherWeb,$theTopic));
         }
     }
@@ -228,7 +232,8 @@ sub findTopicElsewhere {
 
             # Link to topic
             $topicLinks[0] =~ s/(\[\[.*?\]\[)(.*?)(\]\])/$1$linkText$3/o;
-            return $topicLinks[0] ;
+            $linkedWords{$theTopic} = $topicLinks[0];
+            return $topicLinks[0];
         } else {
             # topic found in several places
             # If link text [[was in this form]] <em> it
@@ -237,7 +242,9 @@ sub findTopicElsewhere {
             # If $linkText is a WikiWord, prepend with <nop>
             # (prevent double links)
             $linkText =~ s/($wikiWordRegex)/<nop\/>$1/go;
-            return "$linkText<sup>(".join(",", @topicLinks ).")</sup>" ;
+            my $renderedLink = "$linkText<sup>(".join(",", @topicLinks ).")</sup>";
+            $linkedWords{$theTopic} = $renderedLink;
+            return $renderedLink;
         }
     }
     return $linkText;
