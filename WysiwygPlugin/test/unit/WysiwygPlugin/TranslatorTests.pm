@@ -1556,7 +1556,7 @@ Mad Fish',
 HERE
           tml => '<table border="0"><tbody><tr><td>
 ---++ Argh
-   * Ergh
+   * Ergh 
 </td><td> </td></tr><tr><td> </td><td> </td></tr></tbody></table>',
       },
       {

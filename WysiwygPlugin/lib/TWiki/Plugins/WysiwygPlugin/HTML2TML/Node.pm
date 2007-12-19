@@ -15,11 +15,11 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
-# The generator works by expanding to "decorated" text, where the decorators
-# are non-printable characters. These characters act express format
-# requirements - for example, the need to have a newline before some text,
-# or the need for a space. Whitespace is collapsed down to the minimum that
-# satisfies the format requirements.
+# The generator works by expanding and HTML parse tree to "decorated"
+# text, where the decorators are non-printable characters. These characters
+# act to express format requirements - for example, the need to have a
+# newline before some text, or the need for a space. Whitespace is then
+# collapsed down to the minimum that satisfies the format requirements.
 
 =pod
 
@@ -128,8 +128,10 @@ sub addChild {
 sub _trim {
     my $s = shift;
 
-    $s =~ s/^[ \t\n$WC::CHECKn$WC::CHECKw$WC::CHECKs]+/$WC::CHECKw/o;
-    $s =~ s/[ \t\n$WC::CHECKn$WC::CHECKw]+$/$WC::CHECKw/o;
+    # Item5076: removed CHECKn from the following exprs, because loss of it
+    # breaks line-sensitive TML content inside flattened content.
+    $s =~ s/^[ \t\n$WC::CHECKw$WC::CHECKs]+/$WC::CHECKw/o;
+    $s =~ s/[ \t\n$WC::CHECKw]+$/$WC::CHECKw/o;
     return $s;
 }
 
