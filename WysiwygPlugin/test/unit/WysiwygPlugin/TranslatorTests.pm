@@ -1548,6 +1548,29 @@ HERE
           tml => '| table element with a <hr /> horizontal rule |
 Mad Fish',
       },
+      {
+          name => 'Item5076',
+          exec => $HTML2TML,
+          html => <<HERE,
+<table border="0"><tbody><tr><td><h2>Argh</h2><ul><li>Ergh&nbsp;</li></ul></td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table>
+HERE
+          tml => '<table border="0"><tbody><tr><td>
+---++ Argh
+   * Ergh
+</td><td> </td></tr><tr><td> </td><td> </td></tr></tbody></table>',
+      },
+      {
+          name => 'Item5132',
+          exec => $TML2HTML,
+          html => <<HERE,
+<h1 class="TML">  Title<img src="art1.jpg"> </img> </h1>
+Peace in earth, and goodwill to all worms
+HERE
+            tml => <<HERE,
+---+ Title<img src="art1.jpg"></img>
+Peace in earth, and goodwill to all worms
+HERE
+      },
      ];
 
 sub gen_compare_tests {

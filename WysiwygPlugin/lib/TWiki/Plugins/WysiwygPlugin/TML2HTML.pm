@@ -484,6 +484,7 @@ sub _takeOutIMGTag {
     $text =~ s/(<img [^>]*\bsrc=)(["'])(.*?)\2/$1.$2.$this->_expandURL($3).$2/gie;
     # Take out mce_src - it just causes problems.
     $text =~ s/(<img [^>]*)\bmce_src=(["'])(.*?)\2/$1/gie;
+    $text =~ s:([^/])>$:$1 />:; # close the tag XHTML style
 
     return $this->_liftOut($text, '', 'NONE');
 }

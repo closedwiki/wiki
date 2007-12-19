@@ -630,7 +630,6 @@ sub _restTML2HTML {
     # Add the secret id to trigger reconversion. Doesn't work if the
     # editor eats HTML comments, so the editor may need to put it back
     # in during final cleanup.
-sleep(5);
     return '<!--'.$SECRET_ID.'-->'.$html;
 }
 
