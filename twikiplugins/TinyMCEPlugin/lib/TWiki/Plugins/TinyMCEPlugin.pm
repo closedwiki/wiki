@@ -91,7 +91,9 @@ sub beforeEditHandler {
         }
         return;
     }
-    TWiki::Func::setPreferencesValue('EDITOR_HELP', 'TinyMCEQuickHelp');
+    if (defined &TWiki::Func::setPreferencesValue) {
+        TWiki::Func::setPreferencesValue('EDITOR_HELP', 'TinyMCEQuickHelp');
+    }
 
     my $init = TWiki::Func::getPreferencesValue('TINYMCEPLUGIN_INIT')
       || <<'HERE';
