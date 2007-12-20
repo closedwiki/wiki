@@ -1220,6 +1220,10 @@ sub _handleSPAN {
         $options |= $WC::NO_BLOCK_TML;
     }
 
+    if( _removeClass(\%atts, 'WYSIWYG_TT')) {
+        return _emphasis( @_, '=' );
+    }
+
     # Remove all other classes
     delete $atts{class};
 

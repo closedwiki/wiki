@@ -77,24 +77,13 @@ var TWikiButtonsPlugin = {
 
             if (!(t && t.length > 0 || pe))
                 return true;
-
-            // if we are in a TT region, then removeformat
-            if (elm && elm.nodeName == 'TT'){
+            var s = inst.selection.getSelectedHTML();
+            if (s.length > 0) {
                 tinyMCE.execCommand('mceBeginUndoLevel');
-                tinyMCE.execCommand('removeformat', user_interface, elm);
-                tinyMCE.triggerNodeChange();
+                tinyMCE.execInstanceCommand(
+                    editor_id, 'mceSetCSSClass', user_interface,
+                    "WYSIWYG_TT");
                 tinyMCE.execCommand('mceEndUndoLevel');
-            } else {
-                var s = inst.selection.getSelectedHTML();
-                if (s.length > 0) {
-                    tinyMCE.execCommand('mceBeginUndoLevel');
-                    s = '<tt>' + s + '</tt>';
-                    tinyMCE.execCommand('mceInsertContent', user_interface, s);
-                    tinyMCE.triggerNodeChange();
-                    tinyMCE.execCommand('mceEndUndoLevel');
-                    // How do I restore the selection? Doesn't seem to be
-                    // a way :-(
-                }
             }
 
             return true;
