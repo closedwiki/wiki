@@ -403,7 +403,7 @@ sub _getRenderedVersion {
     $text =~ s#(<p>\s*</p>\s*)+$##s;
 
     $text =~ s(${WC::STARTWW}==([^\s]+?|[^\s].*?[^\s])==$WC::ENDWW)
-      (CGI::b(CGI::code($1)))gem;
+      (CGI::b(CGI::span({class => 'WYSIWYG_TT'}, $1)))gem;
     $text =~ s(${WC::STARTWW}__([^\s]+?|[^\s].*?[^\s])__$WC::ENDWW)
       (CGI::b(CGI::i($1)))gem;
     $text =~ s(${WC::STARTWW}\*([^\s]+?|[^\s].*?[^\s])\*$WC::ENDWW)
@@ -412,7 +412,7 @@ sub _getRenderedVersion {
     $text =~ s(${WC::STARTWW}\_([^\s]+?|[^\s].*?[^\s])\_$WC::ENDWW)
       (CGI::i($1))gem;
     $text =~ s(${WC::STARTWW}\=([^\s]+?|[^\s].*?[^\s])\=$WC::ENDWW)
-      (CGI::code($1))gem;
+      (CGI::span({class => 'WYSIWYG_TT'}, $1))gem;
 
     # Handle [[][] and [[]] links
 
