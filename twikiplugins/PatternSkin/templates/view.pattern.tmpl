@@ -6,7 +6,7 @@
 
 %TMPL:DEF{"bodyclassname"}%patternViewPage%IF{"defined raw" then=" patternRawViewPage"}%%TMPL:END%
 
-%TMPL:DEF{"script:skintemplate"}%%IF{"defined raw" then='%TMPL:P{"script:skintemplate:viewraw"}%'}%%TMPL:END%
+%TMPL:DEF{"script:skintemplate"}%%IF{"defined raw" then='$percntTMPL:P{\"script:skintemplate:viewraw\"}$percnt'}%%TMPL:END%
 
 %TMPL:DEF{"script:skintemplate:viewraw"}%<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiJavascripts/twikiPref.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiJavascripts/twiki_edit.js"></script>
