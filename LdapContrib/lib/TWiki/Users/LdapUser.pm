@@ -163,7 +163,7 @@ sub getEmails {
 
 =pod 
 
----++++ ObjectMethod finish()
+---++++ finish()
 
 Complete processing after the client's HTTP request has been responded.
 i.e. destroy the ldap object.
@@ -181,7 +181,7 @@ sub finish {
 
 =pod
 
----++++ ObjectMethod deleteUser( $user ) -> $boolean
+---++++ deleteUser( $user ) -> $boolean
 
 LDAP users can't be deleted by TWiki.
 So this will call the deleteUser interface of the secondary
@@ -203,7 +203,7 @@ sub deleteUser {
 
 =pod
 
----++++ ObjectMethod passwd( $user, $newPassword, $newPassword ) -> $boolean
+---++++ passwd( $user, $newPassword, $newPassword ) -> $boolean
 
 This method can only change the LDAP password. It can not
 add the user to the LDAP directory. To change the password the
@@ -259,7 +259,7 @@ sub encrypt {
 
 =pod
 
----++++ ObjectMethod setEmails($user, @emails)
+---++++ setEmails($user, @emails)
 
 Set the email address(es) for the given username.
 TWiki can't set the email stored in LDAP. But may be the secondary
@@ -279,7 +279,7 @@ sub setEmails {
 
 =pod
 
----++ ObjectMethod findUserByEmail( $email ) -> \@users
+---++++ findUserByEmail( $email ) -> \@users
    * =$email= - email address to look up
 Return a list of user objects for the users that have this email registered
 with the password manager. This will concatenate the result list of the
