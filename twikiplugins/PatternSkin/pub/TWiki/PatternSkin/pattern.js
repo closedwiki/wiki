@@ -83,12 +83,6 @@ var patternRules = {
 	'body.patternEditPage' : function(el) {
 		twiki.Event.addLoadEvent(initForm, false); // call after Behaviour
 	},
-	'body.patternLoginPage' : function(el) {
-		var initForm = function() {
-			document.loginform.username.focus();
-		}
-		twiki.Event.addLoadEvent(initForm, true);
-	},
 	'.twikiSearchResultCount' : function(el) {
 		Pattern.addSearchResultsCounter(el);
 	},
@@ -103,6 +97,9 @@ var patternRules = {
 			twiki.Window.openPopup(el.href, {template:"viewplain"});
 			return false;
 		}
+	},
+	'.twikiFocus':function(el) {
+		el.focus();
 	}
 };
 Behaviour.register(patternRules);
