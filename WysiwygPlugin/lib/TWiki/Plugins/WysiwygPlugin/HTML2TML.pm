@@ -49,8 +49,7 @@ require HTML::Parser;
 # Entities that are safe to convert back to 8-bit characters without
 # tripping over Perl's crappy UTF-8 support.
 my %safe_entities = (
-    quot => 34,    amp => 38,     lt => 60,      gt => 62,
-    nbsp => 160,   iexcl => 161,  cent => 162,   pound => 163,
+    iexcl => 161,  cent => 162,   pound => 163,
     curren => 164, yen => 165,    brvbar => 166, sect => 167,
     uml => 168,    copy => 169,   ordf => 170,   laquo => 171,
     not => 172,    shy => 173,    reg => 174,    macr => 175,
@@ -138,8 +137,8 @@ sub convert {
 
     # Item5138: Convert 8-bit entities back into characters
     $text =~ s/&($safe_entities_re);/chr($safe_entities{$1})/ego;
-    $text =~ s/(&#(\d+);)/$2 <= 255 ? chr($2) : $1/eg;
-    $text =~ s/(&#x([\dA-Fa-f]+);)/hex($2) <= 255 ? chr(hex($2)) : $1/eg;
+    $text =~ s/(&#(\d+);)/$2 > 127 && $2 <= 255 ? chr($2) : $1/eg;
+    $text =~ s/(&#x([\dA-Fa-f]+);)/(hex($2) > 127 && hex($2)) <= 255 ? chr(hex($2)) : $1/eg;
 
     # get rid of nasties
     $text =~ s/\r//g;
