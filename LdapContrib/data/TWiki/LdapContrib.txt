@@ -34,8 +34,8 @@ This package downloads all relevant records from your LDAP server into a local c
 time you use it. This can take a noticeable period of time depending on the size of your LDAP database.
 This cache will be refreshed on a configurable interval (defaults to once a day).
 You can also disable automatic refreshing and refresh the <nop>LdapContrib's cache manually using
-the "Refresh Cache" button below. Read the documentation of the =MaxCacheAge= variable in the
-[[#Advanced_Settings][Advanced Settings]] section below on how to configure the refesh intervals.
+the "Refresh Cache" button below. Read the documentation of the =MaxCacheAge= variable in the section
+"[[#Performance_settings][Performance Settings]]" below on how to configure the refesh intervals.
 
 <center>%STARTINCLUDE%<form action="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%">
 <input type="hidden" name="refreshldap" value="on" />
@@ -45,7 +45,10 @@ the "Refresh Cache" button below. Read the documentation of the =MaxCacheAge= va
 </center>
 
 Tip: You can add this button on any page by adding
-=%<nop>INCLUDE{"%TWIKIWEB%.LdapContrib"}%= to it.
+<verbatim>
+%INCLUDE{"%TWIKIWEB%.LdapContrib"}%
+</verbatim>
+to it.
 
 ---++ LDAP questionary
 Before you can further configure TWiki's LDAP connection you will have to answer
@@ -163,6 +166,40 @@ setting. However the normalized result will not be forced to be a cammel case <n
 
 Similar to the <nop>WikiName of a user, group names can be normalized using
 <verbatim>$TWiki::cfg{Ldap}{NormalizeGroupName} = 1;</verbatim>
+
+---++ SSO and <nop>LdapContrib
+First of all, <nop>LdapContrib does not provide any SSO solution. Nor does LDAP
+per se. However, LDAP directories might come with SSO facilities that they
+provide via kerberos or similar. Unfortunately, nowaday browsers themselves are
+not kerberized.  They depend on talking to the webserver using HTTP means,
+which then decides which tickets are valid for the remote user by talking to
+the acutal authority.  That is, authentication is implemented using an
+approriate apache module.
+
+<nop>LdapContrib can then be used to complete an LDAP integration of TWiki by
+providing the mapping to <nop>WikiNames as well as email information and group
+definitions drawn from the LDAP directory directly.
+
+The remaining problem is that, when a new user has been added to your LDAP
+directory recently, and he/she then dashes off to sign on to TWiki right away,
+<nop>LdapContrib's cache most probably is outdated. This situation is different
+from one where users were authenticated by TWiki's own <nop>TemplateLogin
+mechanism. The user would then not be able to login until the cache has been
+refreshed manually or automatically.
+
+So when the new user is authenticated using SSO and then hits TWiki, it might
+fail to compute the proper <nop>WikiName. The solution to this problem is to
+use the <nop>LdapApacheLogin login manager as a drop in replacement to the
+standard <nop>ApacheLogin that would have been used in this situation. The
+<nop>LdapApacheLogin will then take care that the remote user is known to the
+cache and add this single record if it is missing.
+
+Bottomline: whenever you are using apache to authenticate to TWiki, do use the
+<nop>LdapApacheLogin manager. Or in other words, whenever you configured TWiki
+to use the standard <nop>ApacheLogin manager, and you now install
+<nop>LdapContrib, change it to <nop>LdapApacheLogin to assure
+<nop>LdapContrib's cache is up to date.
+
 
 ---++ Simple Example 
 For the sake of this documentation we assume that users accounts in your
@@ -365,8 +402,10 @@ Prevent certain names from being looked up in LDAP:
    This work was partly funded by [[http://www.spanlink.com][Spanlink Communications]] and \
    [[http://www.trivadis.com][Trivadis]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v2.0.3 |
+|  Version: | v2.1.0 |
 |  Change History: | |
+|  21 Dec 2007: | added <nop>LdapApacheLogin, \
+                  made updating the cache quasi atomic |
 |  22 Nov 2007: | fixed recognition of <nop>TWikiGroups in a mixed setting |
 |  05 Oct 2007: | enabled native user registration using the secondary password manager;\
                   added support to change a user's LDAP password from within TWiki; \
@@ -418,7 +457,7 @@ Prevent certain names from being looked up in LDAP:
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 
--- TWiki:Main/MichaelDaum - 22 Nov 2007
+-- TWiki:Main/MichaelDaum - 21 Dec 2007
 
 %META:FILEATTACHMENT{name="TWikiDotPm-4.1.2.patch" attr="" autoattached="0" comment="" date="1191603621" path="TWikiDotPm-4.1.2.patch" size="1538" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="wikiringlogo40x40.png" attr="h" autoattached="0" comment="" date="1190996093" path="wikiringlogo40x40.png" size="2571" user="TWikiContributor" version="1"}%
