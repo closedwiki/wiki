@@ -2,6 +2,7 @@ lib/TWiki/Contrib/MailerContrib/Config.spec 0444 Spec file for =configure=
 lib/TWiki/Contrib/MailerContrib/WebNotify.pm 0444
 lib/TWiki/Contrib/MailerContrib/Subscriber.pm 0444
 lib/TWiki/Contrib/MailerContrib/Subscription.pm 0444
+lib/TWiki/Contrib/MailerContrib/TopicContext.pm 0444
 lib/TWiki/Contrib/MailerContrib/Change.pm 0444
 lib/TWiki/Contrib/MailerContrib/UpData.pm 0444
 lib/TWiki/Contrib/MailerContrib/CompatibilityHacks.pm 0444
