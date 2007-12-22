@@ -768,7 +768,6 @@ sub _guessColumnType {
 sub _stripHtml {
     my ($text) = @_;
 
-    $text =~ s/\&nbsp;/ /go;    # convert space
     $text =~
       s/\[\[[^\]]+\]\[([^\]]+)\]\]/$1/go; # extract label from [[...][...]] link
 
