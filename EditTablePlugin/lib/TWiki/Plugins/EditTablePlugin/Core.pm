@@ -71,7 +71,10 @@ Called from commonTagsHandler. Pass over to processText in 'no Save' mode.
 
 sub process {
     init();
-    processText( 0, 0, 0, @_ );
+    my $saveMode      = $TWiki::Plugins::EditTablePlugin::saveMode{'NONE'};
+    my $saveTableNr   = 0;
+    my $saveQuietMode = $TWiki::Plugins::EditTablePlugin::saveMode{'SAVEQUIET'};
+    processText( $saveMode, $saveTableNr, $saveQuietMode, @_ );
 }
 
 =pod
@@ -88,9 +91,11 @@ When a EditTablePlugin table is encountered, its contents is rendered according 
 
 sub processText {
 
-    my $doSave      = shift;
+    my $doSave = ( shift == $TWiki::Plugins::EditTablePlugin::saveMode{'SAVE'} )
+      || 0;
     my $saveTableNr = shift;
-    my $doSaveQuiet = shift;
+    my $doSaveQuiet =
+      ( shift == $TWiki::Plugins::EditTablePlugin::saveMode{'SAVEQUIET'} ) || 0;
 
     $query = TWiki::Func::getCgiQuery();
 
@@ -138,17 +143,18 @@ sub processText {
 
     my $result = '';
 
-    my $insidePRE   = 0;
-    my $tableNr     = 0;       # current EditTable table
-    my $rowNr       = 0;       # current row number; starting at 1
-    my $enableForm  = 0;
-    my $insideTable = 0;
-    my $doEdit      = $doSave;
-    my $hasTableRow = 0;       # the current line has a row with '| some text |'
+    my $insidePRE    = 0;
+    my $cgiTableNr   = 0;
+    my $tableNr      = 0;      # current EditTable table
+    my $isAtTheTable = 0;
+    my $rowNr        = 0;      # current row number; starting at 1
+    my $enableForm   = 0;
+    my $insideTable  = 0;
+    my $doEdit       = $doSave;
+    my $hasTableRow  = 0;      # the current line has a row with '| some text |'
     my $createdNewTable = 0;
     my @rows            = ();
-
-    my $etrows = -1
+    my $etrows          = -1
       ; # the number of content rows as passed as form parameter: only available on edit or save; -1 if not rendered
     my $etrowsParam;
     my $addedRowCount      = 0;
@@ -198,8 +204,10 @@ sub processText {
                 $result .= "$_\n";
             }
             else {
+                my $line = $_;
 
                 # process the tag contents
+                $line =~
 s/(.*?)$regex{edit_table_plugin}/&handleEditTableTag( $theWeb, $theTopic, $1, $2 )/geo;
 
                 # TODO: something strange has happened to the prefix
@@ -212,7 +220,7 @@ s/(.*?)$regex{edit_table_plugin}/&handleEditTableTag( $theWeb, $theTopic, $1, $2
             next if ( $doSave && ( $tableNr != $saveTableNr ) );
             $enableForm = 1;
 
-            my $cgiTableNr = $query->param('ettablenr')
+            $cgiTableNr = $query->param('ettablenr')
               || 0;    # only on save and edit
             $etrowsParam = $query->param('etrows');
             $etrows =
@@ -222,6 +230,7 @@ s/(.*?)$regex{edit_table_plugin}/&handleEditTableTag( $theWeb, $theTopic, $1, $2
             $addedRowCountParam = $query->param('etaddedrows') || 0;
             $addedRowCount = $addedRowCountParam;
 
+            $isAtTheTable = 0;
             if (
                 ( $cgiTableNr == $tableNr )
                 && (  $theWeb . '.'
@@ -230,16 +239,27 @@ s/(.*?)$regex{edit_table_plugin}/&handleEditTableTag( $theWeb, $theTopic, $1, $2
                 )
               )
             {
-
+                $isAtTheTable = 1;
                 if ( !$doSave && $query->param('etsave') ) {
 
                     # [Save table] button pressed
-                    return processText( 1, $tableNr, 0, @_ );
+                    my $theSaveMode =
+                      $TWiki::Plugins::EditTablePlugin::saveMode{'SAVE'};
+                    my $theSaveQuietMode =
+                      $TWiki::Plugins::EditTablePlugin::saveMode{'NONE'};
+
+                    return processText( $theSaveMode, $tableNr,
+                        $theSaveQuietMode, @_ );
                 }
                 elsif ( !$doSave && $query->param('etqsave') ) {
 
                     # [Quiet save] button pressed
-                    return processText( 1, $tableNr, 1, @_ );
+                    my $theSaveMode =
+                      $TWiki::Plugins::EditTablePlugin::saveMode{'SAVE'};
+                    my $theSaveQuietMode =
+                      $TWiki::Plugins::EditTablePlugin::saveMode{'SAVEQUIET'};
+                    return processText( $theSaveMode, $tableNr,
+                        $theSaveQuietMode, @_ );
                 }
                 elsif ( $query->param('etcancel') ) {
 
@@ -286,7 +306,7 @@ s/(.*?)$regex{edit_table_plugin}/&handleEditTableTag( $theWeb, $theTopic, $1, $2
             $footerRowCount = $tablePluginParams{'footerrows'} || 0;
 
             # When editing we append a disableallsort="on" to the TABLE tag
-            # to prevent TablePlugin from sorting the table. (Item5135)            
+            # to prevent TablePlugin from sorting the table. (Item5135)
             $_ =~ s/(}%)/ disableallsort="on"$1/ if ( $doEdit && !$doSave );
 
             # no need to process any further, just copy the line
@@ -300,6 +320,7 @@ s/(.*?)$regex{edit_table_plugin}/&handleEditTableTag( $theWeb, $theTopic, $1, $2
         }
 
         if ($enableForm) {
+
             if ( !$doEdit && !$doSave ) {
 
                 if ( !$hasTableRow && !$insideTable ) {
@@ -329,6 +350,7 @@ s/^(\s*)\|(.*)/handleTableRow( $1, $2, $tableNr, $isNewRow, $rowNr, $doEdit, $do
             }    # if !$doEdit && !$doSave
 
             if ( $doEdit || $doSave ) {
+
                 if ( !$hasTableRow && !$insideTable && !$createdNewTable ) {
 
                     # start new table
@@ -472,6 +494,8 @@ s/$regex{table_row}/handleTableRow( $1, $2, $tableNr, $isNewRow, $theRowNr, $doE
             $footerRowCount  = 0;
             $etrows          = -1;
             @rows            = ();
+            $isAtTheTable    = 0;
+            $cgiTableNr      = 0;
         }
 
         $result .= "$_\n";
@@ -542,6 +566,7 @@ sub parseFormat {
     #$theFormat =~ s/\$quot(\(\))?/\"/gos;      # expand double quote
     #$theFormat =~ s/\$percnt(\(\))?/\%/gos;    # expand percent
     #$theFormat =~ s/\$dollar(\(\))?/\$/gos;    # expand dollar
+
     if ($doExpand) {
 
         # expanded form to be able to use %-vars in format
@@ -553,30 +578,6 @@ sub parseFormat {
     $aFormat[0] = "text,$DEFAULT_FIELD_SIZE" unless @aFormat;
 
     return @aFormat;
-}
-
-sub decodeFormatTokens {
-    return if ( !$_[0] );
-    defined(&TWiki::Func::decodeFormatTokens)
-      ? TWiki::Func::decodeFormatTokens( $_[0] )
-      : _expandStandardEscapes( $_[0] );
-}
-
-=pod
-
-For TWiki versions that do not implement TWiki::Func::decodeFormatTokens.
-
-=cut
-
-sub _expandStandardEscapes {
-    return if ( !$_[0] );
-    $_[0] =~ s/\$n\(\)/\n/gos;    # expand '$n()' to new line
-    my $alpha = TWiki::Func::getRegularExpression('mixedAlpha');
-    $_[0] =~ s/\$n([^$alpha]|$)/\n$1/gos;    # expand '$n' to new line
-    $_[0] =~ s/\$nop(\(\))?//gos;      # remove filler, useful for nested search
-    $_[0] =~ s/\$quot(\(\))?/\"/gos;   # expand double quote
-    $_[0] =~ s/\$percnt(\(\))?/\%/gos; # expand percent
-    $_[0] =~ s/\$dollar(\(\))?/\$/gos; # expand dollar
 }
 
 =pod
@@ -839,12 +840,7 @@ sub inputElement {
     my $text     = '';
     my $i        = @format - 1;
     $i = $theCol if ( $theCol < $i );
-    
-    # expand variables in format
-    # we need to do this because this handler is called in
-    # sub beforeCommonTagsHandler, so variables are not expanded at this time
-    $format[$i] = TWiki::Func::expandCommonVariables( $format[$i], $theTopic, $theWeb );
-   
+
     my @bits         = split( /,\s*/, $format[$i] );
     my @bitsExpanded = split( /,\s*/, $formatExpanded[$i] );
 
@@ -1104,10 +1100,9 @@ sub handleTableRow {
     $thePre |= '';
     my $text = "$thePre\|";
     if ($doEdit) {
-
         $theRow =~ s/\|\s*$//o;
         my $rowID = $query->param("etrow_id$theRowNr");
-        if ( !defined $rowID ) { $rowID = $theRowNr; }
+        $rowID = $theRowNr if !defined $rowID;
         my @cells = split( /\|/, $theRow );
         my $tmp = @cells;
         $nrCols = $tmp if ( $tmp > $nrCols );    # expand number of cols
@@ -1117,6 +1112,7 @@ sub handleTableRow {
         my $digested    = 0;
         my $cellDefined = 0;
         my $col         = 0;
+
         while ( $col < $nrCols ) {
             $col += 1;
             $cellDefined = 0;
@@ -1183,12 +1179,12 @@ sub handleTableRow {
                         $cell = "*text*" unless $cell;
                     }
                 }
+                $cell = " $cell " if $cell ne '';
                 $text .= "$cell\|";
-
             }
             elsif ($doSave) {
-                $text .= " $cell \|";
-
+                $cell = " $cell " if $cell ne '';
+                $text .= "$cell\|";
             }
             else {
                 if (
@@ -1209,11 +1205,13 @@ sub handleTableRow {
                     $cell =~ s/\,.*$//o
                       if ( $val eq 'select' || $val eq 'date' );
                 }
-                $text .=
+                my $element = '';
+                $element =
                   inputElement( $theTableNr, $theRowNr, $col - 1,
                     "etcell${theRowNr}x$col", $cell, $digested, $theWeb,
-                    $theTopic )
-                  . " \|";
+                    $theTopic );
+                $element = " $element \|";
+                $text .= $element;
             }
         }
     }
@@ -1223,7 +1221,8 @@ sub handleTableRow {
     }
 
     # render final value in view mode (not edit or save)
-    decodeFormatTokens($text) if ( !$doSave && !$doEdit );
+    TWiki::Plugins::EditTablePlugin::decodeFormatTokens($text)
+      if ( !$doSave && !$doEdit );
     return $text;
 }
 
