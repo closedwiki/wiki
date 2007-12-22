@@ -40,8 +40,9 @@ sub set_up {
         return bless( {}, shift );
     }
 
-    sub mergeHandler {
-        my($this, $c, $a, $b, $i) = @_;
+    sub dispatch {
+        my($this, $handler, $c, $a, $b, $i) = @_;
+        die "OUCH $handler" unless $handler eq 'mergeHandler';
         $a = 'undef' unless defined $a;
         $b = 'undef' unless defined $b;
         die "$i.$MergeTests::info" unless $i eq $MergeTests::info;
