@@ -1361,9 +1361,9 @@ sub emitTable {
     my $numberOfRows   = scalar(@curTable);
     my $dataColorCount = 0;
 
-    my @headerRows = ();
-    my @bodyRows   = ();
-    my @footerRows = ();
+    my @headerRowList = ();
+    my @bodyRowList   = ();
+    my @footerRowList = ();
 
     my $isPastHeaderRows = 0;
     my $singleIndent     = "\n\t";
@@ -1377,7 +1377,6 @@ sub emitTable {
         # keep track of header cells: if all cells are header cells, do not
         # update the data color count
         my $headerCellCount = 0;
-        my $isHeaderRow     = 0;
         my $numberOfCols    = scalar(@$row);
 
         foreach my $fcell (@$row) {
@@ -1603,7 +1602,7 @@ sub emitTable {
         # just 2 css names is too limited, but we will keep it for compatibility
         # with existing style sheets
         my $rowTypeName =
-          ( $rowCount % 2 ) ? 'twikiTableOdd' : 'twikiTableEven';
+          ( $rowCount % 2 ) ? 'twikiTableEven' : 'twikiTableOdd';
         $trClassName = _appendToClassList( $trClassName, $rowTypeName );
 
         if ( scalar @dataBgSorted ) {
@@ -1626,44 +1625,50 @@ sub emitTable {
         my $rowHTML =
           $doubleIndent . CGI::Tr( { class => $trClassName }, $rowtext );
 
-        $isHeaderRow = ( $headerCellCount == $colCount );
+        my $isHeaderRow = ( $headerCellCount == $colCount );
         my $isFooterRow = ( ( $numberOfRows - $rowCount ) <= $footerRows );
 
+		if (!$isHeaderRow && !$isFooterRow) {
+			# don't include non-adjacent header rows to the top block of header rows
+			$isPastHeaderRows = 1;
+		}
+		
+		
         if ($isFooterRow) {
-            push @footerRows, $rowHTML;
+            push @footerRowList, $rowHTML;
         }
-        elsif ($isHeaderRow) {
-            push( @headerRows, $rowHTML ) if !$isPastHeaderRows;
-
-            # reset data color count to start with first color after
-            # each table heading
-            $dataColorCount = 0;
+        elsif ($isHeaderRow && !$isPastHeaderRows) {
+            push( @headerRowList, $rowHTML );
         }
         else {
-            $isPastHeaderRows = 1;
-            push @bodyRows, $rowHTML;
+            push @bodyRowList, $rowHTML;
             $dataColorCount++;
         }
-
-        #$text .= $currTablePre . $rowHTML;
+        
+		if ($isHeaderRow) {
+			# reset data color count to start with first color after
+            # each table heading
+            $dataColorCount = 0;
+		}
+		
         $rowCount++;
     }    # foreach my $row ( @curTable )
 
     my $thead =
         "$singleIndent<thead>"
-      . join( "", @headerRows )
+      . join( "", @headerRowList )
       . "$singleIndent</thead>";
-    $text .= $currTablePre . $thead if scalar @headerRows;
+    $text .= $currTablePre . $thead if scalar @headerRowList;
 
     my $tfoot =
         "$singleIndent<tfoot>"
-      . join( "", @footerRows )
+      . join( "", @footerRowList )
       . "$singleIndent</tfoot>";
-    $text .= $currTablePre . $tfoot if scalar @footerRows;
+    $text .= $currTablePre . $tfoot if scalar @footerRowList;
 
     my $tbody =
-      "$singleIndent<tbody>" . join( "", @bodyRows ) . "$singleIndent</tbody>";
-    $text .= $currTablePre . $tbody if scalar @bodyRows;
+      "$singleIndent<tbody>" . join( "", @bodyRowList ) . "$singleIndent</tbody>";
+    $text .= $currTablePre . $tbody if scalar @bodyRowList;
 
     $text .= $currTablePre . CGI::end_table() . "\n";
     _setDefaults();
