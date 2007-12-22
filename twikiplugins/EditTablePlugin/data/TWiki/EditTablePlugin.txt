@@ -16,9 +16,29 @@ Multiple tables per topic are editable, but only one at a time can be edited.
 Add a =%<nop>EDITTABLE{...}%= variable just before an existing table to make it editable, or add the variable anywhere in a topic to start a new table.
 %INCLUDE{"%SYSTEMWEB%.VarEDITTABLE" section="edittable_attributes"}%
 
----+++ Initial Values
+---+++ Using TWiki Variables in the Format Parameter
 
-TWiki variables like =%<nop>Y%= in =&lt;initial value&gt;= (of text input field) and =&lt;label text&gt;= (of fixed label) will *not* get expanded when a new row is added.
+TWiki variables like =%<nop>Y%= in =&lt;initial value&gt;= (of text input field) and =&lt;label text&gt;= (of fixed label) will get expanded when a new row is added.
+
+This is useful to write variables like dates into the table.
+<blockquote>
+For example:
+<verbatim>
+%EDITTABLE{ format="| label, 0, %SERVERTIME{"$day $mon $year $hour:$min"}% |" }%
+</verbatim>
+... will get expanded to =%SERVERTIME{"$day $mon $year $hour:$min"}%= when the new row is created.
+</blockquote>
+
+To prevent variable expansion: escape the format variable with [[%TWIKIWEB%.FormatTokens][formatting tokens]] (particularly =$percnt=).
+<blockquote>
+For example:
+<verbatim>
+%EDITTABLE{ format="| text, 20, $percntY$percnt |" }%
+</verbatim>
+... will create a new row with =$percntY$percnt=. In view mode this is temporarily translated to =%<nop>Y%= and subsequent rendered as %Y%.
+</blockquote>
+
+
 
 #DateField
 ---+++ Date Field Type
@@ -54,8 +74,8 @@ __Note:__ The =%<nop>EDITCELL{ }%=variable cannot be used by itself; place an =%
 
 ---++ Examples
 
-Line before table: =%<nop>EDITTABLE{ format="| row, -1 | text, 20, init | select, 1, one, two, three, four | radio, 3,:-),:-I,:-( | label, 0, %<nop>SERVERTIME{\"$day $mon $year $hour:$min"}% |\" changerows="on" }%=
-%EDITTABLE{ format="| row, -1 | text, 20, init | select, 1, one, two, three, four | radio, 3,:-),:-I,:-( | label, 0, %SERVERTIME{\"$day $mon $year $hour:$min"}% |\" changerows="on" }%
+Line before table: =%<nop>EDITTABLE{ format="| row, -1 | text, 20, init | select, 1, one, two, three, four | radio, 3,:-),:-I,:-( | label, 0, %<nop>SERVERTIME{"$day $mon $year $hour:$min"}% |" changerows="on" }%=
+%EDITTABLE{ format="| row, -1 | text, 20, init | select, 1, one, two, three, four | radio, 3,:-),:-I,:-( | label, 0, %SERVERTIME{"$day $mon $year $hour:$min"}% |" changerows="on" }%
 |*Nr*|*Text field*|*Drop down*|*Mood*|*Timestamp*|
 | 1 | hello table | one | :-) | 26 Jun 2002 12:30 |
 | 2 |  | two | :-( | 27 Jun 2002 12:40 |
@@ -198,8 +218,9 @@ __Note:__ The Plugin uses base settings like date format, language and style fro
 |  Plugin Author: | TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2002-2007, TWiki:Main.PeterThoeny ([[http://www.twiki.net/][TWIKI.NET]]) and TWiki Contributors |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 4.6 (16 Dec 2007) |
+|  Plugin Version: | 4.7 (22 Dec 2007) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  22 Dec 2007: | 4.7: Arthur Clemens: Changed handling of escaped variables. To escape TWiki variable, use formatting tokens such as =$percnt=. ||
 |  16 Dec 2007: | 4.6:  Kenneth Lavrsen: The plugin prevents TablePlugin from initsorting the table being edited. This is done by temporarily appending the attribute disableallsort="on" to the TABLE tag of a table being edited. Additionally all header sorting is disabled while editing a table by setting a hidden formfield =sort= to "off". Disabling sorting while editing is needed now that the EditTablePlugin supports moving rows up and down. |
 |  01 Dec 2007: | 4.3:  Arthur Clemens: added support for TablePlugin =headerrows= and =footerrows=; updated edit button |
 |  16 Oct 2007: | 4.2:  Arthur Clemens: refactoring, bug fixes. |

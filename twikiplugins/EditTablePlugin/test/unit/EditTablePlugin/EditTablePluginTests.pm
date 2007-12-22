@@ -303,20 +303,20 @@ EXPECTED
 <nop>
 <table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="rows" border="1">
 	<tbody>
-		<tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
 			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <span class="et_rowlabel">0<input type="hidden" name="etcell1x1" value="0" /></span> </td>
 			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> <input class="twikiInputField editTableInput" type="text" name="etcell1x2" size="10" value="test1" /> </td>
 		</tr>
-		<tr class="twikiTableOdd twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
 			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <span class="et_rowlabel">1<input type="hidden" name="etcell2x1" value="1" /></span> </td>
 			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> <input class="twikiInputField editTableInput" type="text" name="etcell2x2" size="10" value="test2" /> </td>
 		</tr>
-		<tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
 			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <span class="et_rowlabel">2<input type="hidden" name="etcell3x1" value="2" /></span> </td>
 	
 			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> <input class="twikiInputField editTableInput" type="text" name="etcell3x2" size="10" value="test3" /> </td>
 		</tr>
-		<tr class="twikiTableOdd twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
 			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <span class="et_rowlabel">3<input type="hidden" name="etcell4x1" value="3" /></span> </td>
 			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> <input class="twikiInputField editTableInput" type="text" name="etcell4x2" size="10" value="init" /> </td>
 		</tr>
@@ -366,8 +366,8 @@ EXPECTED
     $expected = <<NEWEXPECTED;
 %EDITTABLE{format="| row, -1 | text, 10, init|"}%
 | 0 | test1 |
-|  | test2 |
-|  | test3 |
+|| test2 |
+|| test3 |
 NEWEXPECTED
     $this->assert_str_equals( $expected, $newtext, 0 );
 
@@ -417,7 +417,7 @@ INPUT
 <nop>
 <table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="rows" border="1">
 	<tbody>
-		<tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
 			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <select class="twikiSelect" name="etcell1x1" size="1"> <option>a</option> <option>b</option> <option selected="selected">c</option> <option>d</option></select> </td>
 			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLast"> <select class="twikiSelect" name="etcell1x2" size="1"> <option>a</option> <option>b</option> <option selected="selected">c</option> <option>d</option></select> </td>
 			<td bgcolor="#ffffff" valign="top" class="twikiTableCol2 twikiLast"> <select class="twikiSelect" name="etcell1x3" size="1 "> <option>a </option> <option>b</option> <option selected="selected">c</option> <option>d</option></select> </td>
@@ -483,7 +483,7 @@ INPUT
 <nop>
 <table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="rows" border="1">
 	<tbody>
-		<tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
 			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <table class="editTableInnerTable"><tr><td valign="top"> <input type="radio" name="etcell1x1" value=":skull:" /> <img src="$pubUrlTWikiWeb/SmiliesPlugin/skull.gif" alt="dead!" title="dead!" border="0" /> <br /> <input type="radio" name="etcell1x1" value=":cool:" /> <img src="$pubUrlTWikiWeb/SmiliesPlugin/cool.gif" alt="cool!" title="cool!" border="0" /> </td></tr></table> </td>
 			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> <table class="editTableInnerTable"><tr><td valign="top"> <input type="checkbox" name="etcell1x2x2" value=":skull:" checked="checked" /> <img src="$pubUrlTWikiWeb/SmiliesPlugin/skull.gif" alt="dead!" title="dead!" border="0" /> <br /> <input type="checkbox" name="etcell1x2x3" value=":cool:" checked="checked" /> <img src="$pubUrlTWikiWeb/SmiliesPlugin/cool.gif" alt="cool!" title="cool!" border="0" /> </td></tr></table><input type="hidden" name="etcell1x2" value="Chkbx: etcell1x2x2 etcell1x2x3" /> </td>
 		</tr>
@@ -540,7 +540,7 @@ INPUT
 <nop>
 <table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="rows" border="1">
 	<tbody>
-		<tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
 			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <img src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/choice-yes.gif" alt="DONE" title="DONE" width="16" height="16" border="0" /> </td>
 			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> <a href="$viewUrl" class="twikiCurrentTopicLink twikiLink">$topicName</a> </td>
 		</tr>
@@ -570,7 +570,7 @@ sub test_VariablePlaceholdersEdit {
     my $userName = $this->{users_web} . '.' . 'TWikiGuest';
 
     my $text = <<INPUT;
-%EDITTABLE{format="| text, 30, %Y% | text, 30, %TOPIC% |"}%
+%EDITTABLE{format="| text, 30, \$percntY\$percnt | text, 30, \$percntTOPIC\$percnt |"}%
 INPUT
 
     my $query = new CGI(
@@ -595,9 +595,9 @@ INPUT
 <nop>
 <table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="rows" border="1">
 	<tbody>
-		<tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
-			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <input class="twikiInputField editTableInput" type="text" name="etcell1x1" size="30" value="%Y%" /> </td>
-			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> <input class="twikiInputField editTableInput" type="text" name="etcell1x2" size="30" value="%TOPIC%" /> </td>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <input class="twikiInputField editTableInput" type="text" name="etcell1x1" size="30" value="\$percntY\$percnt" /> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> <input class="twikiInputField editTableInput" type="text" name="etcell1x2" size="30" value="\$percntTOPIC\$percnt" /> </td>
 		</tr>
 	</tbody>	
 </table>
@@ -692,11 +692,11 @@ sub test_saveWithHeaderAndFooter {
 %TABLE{columnwidths="80,80,50,110,150,50,50,50,50,50,70,70,50" dataalign="left,left,center,left,left,center,center,center,center,center,center,right,right,center" headeralign="center" headerrows="1" footerrows="1" headerislabel="on"}%
 %EDITTABLE{format="|text,10|text,10|text,3|text,15|text,15|text,3|text,3|text,3|text,3|text,3|text,3|text,10|label,0|text,5|" }%
 | *Project* | *Customer* | *Pass* | *Type* | *Purpose* | *Qty* | *Radios* | *Controllers* | *Hubs* | *Tuners* | *Hybrid* | *Unit Cost (USD)* | *Total Cost (USD)* | *When (Q)* |
-| Project A | Engineering | A | PK2 | Eng Test | 2 | 4 |  | 2 | 2 |  | 6214 | %CALC{"\$EVAL(\$T(R\$ROW():C6) * \$T(R\$ROW():C\$COLUMN(-1)))"}% | Q1 |
-| Project B | Factory | A | PC2 | Fact Test | 1 | 4 |  | 2 | 2 |  | 6214 | %CALC{"\$EVAL(\$T(R\$ROW():C6) * \$T(R\$ROW():C\$COLUMN(-1)))"}% | Q2 |
-| Project C | Eng | P1 | CT5 | Eng Test | 1 | 2 | 1 |  |  | 1 | 3502 | %CALC{"\$EVAL(\$T(R\$ROW():C6) * \$T(R\$ROW():C\$COLUMN(-1)))"}% | Q3 |
-| Project D | SW | P1 | CT5 | SW Dev | 2 | 4 | 2 |  | 2 |  | 6345 | %CALC{"\$EVAL(\$T(R\$ROW():C6) * \$T(R\$ROW():C\$COLUMN(-1)))"}% | Q4 |
-| Total |  |  |  |  | *%CALC{"\$SUM(\$ABOVE())"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* |  | *%CALC{"\$SUM(\$ABOVE())"}%* |  |
+| Project A | Engineering | A | PK2 | Eng Test | 2 | 4 || 2 | 2 || 6214 | %CALC{"\$EVAL(\$T(R\$ROW():C6) * \$T(R\$ROW():C\$COLUMN(-1)))"}% | Q1 |
+| Project B | Factory | A | PC2 | Fact Test | 1 | 4 || 2 | 2 || 6214 | %CALC{"\$EVAL(\$T(R\$ROW():C6) * \$T(R\$ROW():C\$COLUMN(-1)))"}% | Q2 |
+| Project C | Eng | P1 | CT5 | Eng Test | 1 | 2 | 1 ||| 1 | 3502 | %CALC{"\$EVAL(\$T(R\$ROW():C6) * \$T(R\$ROW():C\$COLUMN(-1)))"}% | Q3 |
+| Project D | SW | P1 | CT5 | SW Dev | 2 | 4 | 2 || 2 || 6345 | %CALC{"\$EVAL(\$T(R\$ROW():C6) * \$T(R\$ROW():C\$COLUMN(-1)))"}% | Q4 |
+| Total ||||| *%CALC{"\$SUM(\$ABOVE())"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* || *%CALC{"\$SUM(\$ABOVE())"}%* ||
 INPUT
     my $query = new CGI(
         {
@@ -739,12 +739,12 @@ INPUT
 %TABLE{columnwidths="80,80,50,110,150,50,50,50,50,50,70,70,50" dataalign="left,left,center,left,left,center,center,center,center,center,center,right,right,center" headeralign="center" headerrows="1" footerrows="1" headerislabel="on"}%
 %EDITTABLE{format="|text,10|text,10|text,3|text,15|text,15|text,3|text,3|text,3|text,3|text,3|text,3|text,10|label,0|text,5|" }%
 | *Project* | *Customer* | *Pass* | *Type* | *Purpose* | *Qty* | *Radios* | *Controllers* | *Hubs* | *Tuners* | *Hybrid* | *Unit Cost (USD)* | *Total Cost (USD)* | *When (Q)* |
-| Project A | Engineering | A | PK2 | Eng Test | 2 | 4 |  | 2 | 2 |  | 6214 | %CALC{"\$EVAL(\$T(R\$ROW():C6) * \$T(R\$ROW():C\$COLUMN(-1)))"}% | Q1 |
-| Project B | Factory | A | PC2 | Fact Test | 1 | 4 |  | 2 | 2 |  | 6214 | %CALC{"\$EVAL(\$T(R\$ROW():C6) * \$T(R\$ROW():C\$COLUMN(-1)))"}% | Q2 |
-| Project C | Eng | P1 | CT5 | Eng Test | 1 | 2 | 1 |  |  | 1 | 3502 | %CALC{"\$EVAL(\$T(R\$ROW():C6) * \$T(R\$ROW():C\$COLUMN(-1)))"}% | Q3 |
-| Project D | SW | P1 | CT5 | SW Dev | 2 | 4 | 2 |  | 2 |  | 6345 | %CALC{"\$EVAL(\$T(R\$ROW():C6) * \$T(R\$ROW():C\$COLUMN(-1)))"}% | Q4 |
-|  |  |  |  |  |  |  |  |  |  |  |  |  |  |
-| Total |  |  |  |  | *%CALC{"\$SUM(\$ABOVE())"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* |  | *%CALC{"\$SUM(\$ABOVE())"}%* |  |
+| Project A | Engineering | A | PK2 | Eng Test | 2 | 4 || 2 | 2 || 6214 | %CALC{"\$EVAL(\$T(R\$ROW():C6) * \$T(R\$ROW():C\$COLUMN(-1)))"}% | Q1 |
+| Project B | Factory | A | PC2 | Fact Test | 1 | 4 || 2 | 2 || 6214 | %CALC{"\$EVAL(\$T(R\$ROW():C6) * \$T(R\$ROW():C\$COLUMN(-1)))"}% | Q2 |
+| Project C | Eng | P1 | CT5 | Eng Test | 1 | 2 | 1 ||| 1 | 3502 | %CALC{"\$EVAL(\$T(R\$ROW():C6) * \$T(R\$ROW():C\$COLUMN(-1)))"}% | Q3 |
+| Project D | SW | P1 | CT5 | SW Dev | 2 | 4 | 2 || 2 || 6345 | %CALC{"\$EVAL(\$T(R\$ROW():C6) * \$T(R\$ROW():C\$COLUMN(-1)))"}% | Q4 |
+|||||||||||||||
+| Total ||||| *%CALC{"\$SUM(\$ABOVE())"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* || *%CALC{"\$SUM(\$ABOVE())"}%* ||
 NEWEXPECTED
     $this->assert_str_equals( $expected, $newtext, 0 );
 

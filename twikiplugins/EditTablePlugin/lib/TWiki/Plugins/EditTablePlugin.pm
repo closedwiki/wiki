@@ -24,6 +24,7 @@ use strict;
 use vars qw(
   $web $topic $user $VERSION $RELEASE $debug
   $query $renderingWeb $usesJavascriptInterface $viewModeHeaderDone $editModeHeaderDone $encodeStart $encodeEnd $prefsInitialized $table
+  %editMode %saveMode
 );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -34,10 +35,12 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '4.6.1';
+$RELEASE = '4.7';
 
 $encodeStart = '--EditTableEncodeStart--';
 $encodeEnd   = '--EditTableEncodeEnd--';
+%editMode    = ( 'NONE', 0, 'EDIT', 1 );
+%saveMode    = ( 'NONE', 0, 'SAVE', 1, 'SAVEQUIET', 2 );
 
 sub initPlugin {
     ( $topic, $web, $user ) = @_;
@@ -73,17 +76,6 @@ sub initPlugin {
     undef $table;
 
     return 1;
-}
-
-=pod
-
-Parse text before variables are expanded. This way TWiki variables can be used
-inside table cells.
-
-=cut
-
-sub beforeCommonTagsHandler {
-    _process(@_);
 }
 
 =pod
@@ -140,8 +132,18 @@ sub decodeValue {
     $theText =~ s/</\&lt;/go;                # change < to entity
     $theText =~ s/>/\&gt;/go;                # change > to entity
     $theText =~ s/\"/\&quot;/go;             # change " to entity
-
     return $theText;
+}
+
+sub decodeFormatTokens {
+    return if ( !$_[0] );
+    $_[0] =~ s/\$n\(\)/\n/gos;               # expand '$n()' to new line
+    my $alpha = TWiki::Func::getRegularExpression('mixedAlpha');
+    $_[0] =~ s/\$n([^$alpha]|$)/\n$1/gos;    # expand '$n' to new line
+    $_[0] =~ s/\$nop(\(\))?//gos;      # remove filler, useful for nested search
+    $_[0] =~ s/\$quot(\(\))?/\"/gos;   # expand double quote
+    $_[0] =~ s/\$percnt(\(\))?/\%/gos; # expand percent
+    $_[0] =~ s/\$dollar(\(\))?/\$/gos; # expand dollar
 }
 
 =pod
