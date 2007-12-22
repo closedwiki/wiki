@@ -47,15 +47,15 @@ sub test_simpleTableusing {
 <nop>
 <table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="rows" border="1">
 	<tbody>
-		<tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
 			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> a </td>
 			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> b </td>
 		</tr>
-		<tr class="twikiTableOdd twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
 			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> 2 </td>
 			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> 3 </td>
 		</tr>
-		<tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
 			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> ok </td>
 			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> bad </td>
 		</tr>
@@ -84,17 +84,17 @@ sub test_simpleTheadTableUsingTablePlugin {
 <nop>
 <table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="rows" border="1">
 	<thead>
-		<tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
 			<th bgcolor="#687684" valign="top" class="twikiTableCol0 twikiFirstCol"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=0;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">a</font></a> </th>
 			<th bgcolor="#687684" valign="top" class="twikiTableCol1 twikiLastCol"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=1;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">b</font></a> </th>
 		</tr>
 	</thead>
 	<tbody>
-		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+		<tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
 			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> 2 </td>
 			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> 3 </td>
 		</tr>
-		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
 			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> ok </td>
 			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> bad </td>
 		</tr>
@@ -118,17 +118,17 @@ sub test_simpleTfootTableusingTablePlugin {
 <nop>
 <table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="rows" border="1">
 	<tfoot>
-		<tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
 			<th bgcolor="#687684" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <font color="#ffffff">ok</font> </th>
 			<th bgcolor="#687684" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> <font color="#ffffff">bad</font> </th>
 		</tr>
 	</tfoot>
 	<tbody>
-		<tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
 			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> a </td>
 			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> b </td>
 		</tr>
-		<tr class="twikiTableOdd twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
 			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> 2 </td>
 			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> 3 </td>
 		</tr>
@@ -158,21 +158,21 @@ sub test_doubleTheadTableUsingTablePlugin {
 <nop>
 <table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="rows" border="1">
 	<thead>
-		<tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
 			<th bgcolor="#687684" valign="top" class="twikiTableCol0 twikiFirstCol"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=0;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">a</font></a> </th>
 			<th bgcolor="#687684" valign="top" class="twikiTableCol1 twikiLastCol"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=1;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">b</font></a> </th>
 		</tr>
-		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+		<tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
 			<th bgcolor="#687684" valign="top" class="twikiTableCol0 twikiFirstCol"> <font color="#ffffff">c</font> </th>
 			<th bgcolor="#687684" valign="top" class="twikiTableCol1 twikiLastCol"> <font color="#ffffff">c</font> </th>
 		</tr>
 	</thead>
 	<tbody>
-		<tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
 			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> 2 </td>
 			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> 3 </td>
 		</tr>
-		<tr class="twikiTableOdd twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
 			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> ok </td>
 			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> bad </td>
 		</tr>
@@ -203,23 +203,23 @@ sub test_doubleTheadandTfootTableusingTablePlugin {
 <nop>
 <table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="rows" border="1">
 	<thead>
-		<tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
 				<th bgcolor="#687684" valign="top" class="twikiTableCol0 twikiFirstCol"> <font color="#ffffff">a</font> </th>
 				<th bgcolor="#687684" valign="top" class="twikiTableCol1 twikiLastCol"> <font color="#ffffff">b</font> </th>
 		</tr>
-		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+		<tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
 				<th bgcolor="#687684" valign="top" class="twikiTableCol0 twikiFirstCol"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=0;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">c</font></a> </th>
 				<th bgcolor="#687684" valign="top" class="twikiTableCol1 twikiLastCol"> <a rel="nofollow" href="http://localhost/TemporaryTableFormattingTestWebTableFormatting/TestTopicTableFormatting?sortcol=1;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">c</font></a> </th>
 		</tr>
 	</thead>
 	<tfoot>
-		<tr class="twikiTableOdd twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
 				<th bgcolor="#687684" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <font color="#ffffff">ok</font> </th>
 				<th bgcolor="#687684" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> <font color="#ffffff">bad</font> </th>
 		</tr>
 	</tfoot>
 	<tbody>
-		<tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
 				<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> 2 </td>
 				<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> 3 </td>
 		</tr>
