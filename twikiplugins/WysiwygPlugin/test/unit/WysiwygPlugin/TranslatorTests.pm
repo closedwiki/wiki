@@ -225,6 +225,14 @@ Oh....
 HERE
       },
       {
+          exec => $HTML2TML,
+          name => 'Item5165',
+          html => '<pre class="TMLverbatim"><br />Before&nbsp;&amp;nbsp;&nbsp;After<br /></pre>',
+          tml => '<verbatim>
+Before &nbsp; After
+</verbatim>',
+      },
+      {
           exec => $ROUNDTRIP,
           name => 'simpleHR',
           html => '<hr class="TMLhr"/><hr class="TMLhr"/>--',

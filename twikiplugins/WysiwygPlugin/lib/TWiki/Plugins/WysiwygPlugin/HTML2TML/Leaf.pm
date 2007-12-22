@@ -56,6 +56,9 @@ sub generate {
         $t =~ s/$WC::STARTWW($TWiki::regex{abbrevRegex})/<nop>$1/go;
         $t =~ s/\[/<nop>[/g;
     }
+    unless ($options & $WC::KEEP_ENTITIES) {
+        $t =~ s/&nbsp;/$WC::NBSP/g;
+    }
     return (0, $t);
 }
 
