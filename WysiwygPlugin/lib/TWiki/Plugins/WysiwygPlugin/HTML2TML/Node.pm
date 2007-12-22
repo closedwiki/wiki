@@ -229,8 +229,6 @@ sub rootGenerate {
     # Debug support
     #print STDERR "Converted ",WC::debugEncode($text),"\n";
 
-    $text =~ s/&nbsp;/$WC::NBSP/g;
-
     # Move leading \n out of protected region. Delicate hack fix required to
     # maintain TWiki variables at the start of lines.
     $text =~ s/$WC::PON$WC::NBBR/$WC::CHECKn$WC::PON/g;
