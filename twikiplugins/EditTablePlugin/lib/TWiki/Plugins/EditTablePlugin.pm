@@ -35,7 +35,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '4.7';
+$RELEASE = '4.7.1';
 
 $encodeStart = '--EditTableEncodeStart--';
 $encodeEnd   = '--EditTableEncodeEnd--';
@@ -78,17 +78,6 @@ sub initPlugin {
     return 1;
 }
 
-=pod
-
-The handler has to be run from both beforeCommonTagsHandler and
-commonTagsHandler, because beforeCommonTagsHandler allows us to
-process tables before TWiki variables in their data are expanded,
-while the second call allos us to handle tables that have been
-included from other topics. Both handlers only fire when the topic
-text contains %EDITTABLE, thus constraining the problem.
-
-=cut
-
 sub commonTagsHandler {
     _process(@_);
 }
@@ -106,7 +95,6 @@ sub _process {
 
 sub postRenderingHandler {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-
     $_[0] =~ s/$encodeStart(.*?)$encodeEnd/decodeValue($1)/geos;
 }
 
@@ -200,4 +188,3 @@ EOF
 }
 
 1;
-

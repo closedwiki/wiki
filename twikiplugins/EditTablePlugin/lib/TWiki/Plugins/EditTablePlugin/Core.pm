@@ -24,9 +24,10 @@ use Assert;
 
 use vars qw(
   $preSp %params @format @formatExpanded
-  $prefsInitialized $prefCHANGEROWS $prefEDIT_BUTTON $prefSAVE_BUTTON $prefQUIET_SAVE_BUTTON $prefADD_ROW_BUTTON $prefDELETE_LAST_ROW_BUTTON $prefCANCEL_BUTTON
+  $prefsInitialized $prefCHANGEROWS $prefEDIT_BUTTON $prefSAVE_BUTTON $prefQUIET_SAVE_BUTTON $prefADD_ROW_BUTTON $prefDELETE_LAST_ROW_BUTTON $prefCANCEL_BUTTON $prefMESSAGE_INCLUDED_TOPIC_DOES_NOT_EXIST
   $prefQUIETSAVE
   $nrCols $encodeStart $encodeEnd $table $query %regex
+  $warningMessage
 );
 
 my $RENDER_HACK        = "\n<nop>\n";
@@ -59,6 +60,7 @@ sub init {
     $encodeEnd                  = undef;
     $table                      = undef;
     $query                      = undef;
+    $warningMessage             = '';
 }
 
 =pod
@@ -132,6 +134,11 @@ sub processText {
         $prefCANCEL_BUTTON = TWiki::Func::getPreferencesValue('CANCEL_BUTTON')
           || TWiki::Func::getPreferencesValue('EDITTABLEPLUGIN_CANCEL_BUTTON')
           || 'Cancel';
+        $prefMESSAGE_INCLUDED_TOPIC_DOES_NOT_EXIST =
+          TWiki::Func::getPreferencesValue('INCLUDED_TOPIC_DOES_NOT_EXIST')
+          || TWiki::Func::getPreferencesValue(
+            'EDITTABLEPLUGIN_INCLUDED_TOPIC_DOES_NOT_EXIST')
+          || 'Warning: \'include\' topic does not exist!';
 
         $prefsInitialized = 1;
     }
@@ -599,28 +606,39 @@ sub handleEditTableTag {
         'helptopic'     => '',
         'editbutton'    => '',
     );
+    $warningMessage = '';
 
+    # include topic to read definitions
     my $iTopic = TWiki::Func::extractNameValuePair( $theArgs, 'include' );
+    my $iTopicExists = 0;
     if ($iTopic) {
-
-        # include topic to read definitions
         if ( $iTopic =~ /^([^\.]+)\.(.*)$/o ) {
             $theWeb = $1;
             $iTopic = $2;
         }
-        my $text = TWiki::Func::readTopicText( $theWeb, $iTopic );
-        $text =~ /$regex{edit_table_plugin}/os;
-        if ($1) {
-            my $args = $1;
-            if (   $theWeb ne $TWiki::Plugins::EditTablePlugin::web
-                || $iTopic ne $TWiki::Plugins::EditTablePlugin::topic )
-            {
 
-                # expand common vars, unless oneself to prevent recursion
-                $args =
-                  TWiki::Func::expandCommonVariables( $1, $iTopic, $theWeb );
+        $iTopicExists = TWiki::Func::topicExists( $theWeb, $iTopic )
+          if $iTopic ne '';
+        TWiki::Func::writeDebug("iTopic=$iTopic; iTopicExists=$iTopicExists");
+        if ( $iTopic && !$iTopicExists ) {
+            $warningMessage = $prefMESSAGE_INCLUDED_TOPIC_DOES_NOT_EXIST;
+        }
+        if ($iTopicExists) {
+
+            my $text = TWiki::Func::readTopicText( $theWeb, $iTopic );
+            $text =~ /$regex{edit_table_plugin}/os;
+            if ($1) {
+                my $args = $1;
+                if (   $theWeb ne $TWiki::Plugins::EditTablePlugin::web
+                    || $iTopic ne $TWiki::Plugins::EditTablePlugin::topic )
+                {
+
+                    # expand common vars, unless oneself to prevent recursion
+                    $args = TWiki::Func::expandCommonVariables( $1, $iTopic,
+                        $theWeb );
+                }
+                extractParams( $args, \%params );
             }
-            extractParams( $args, \%params );
         }
     }
 
@@ -806,11 +824,11 @@ sub viewEditCell {
     }
     if ($img) {
         return
-"<input class=\"editTableEditImageButton\" type=\"image\" src=\"$img\" alt=\"$value\" />";
+"<input class=\"editTableEditImageButton\" type=\"image\" src=\"$img\" alt=\"$value\" /> $warningMessage";
     }
     else {
         return
-"<input class=\"twikiButton editTableEditButton\" type=\"submit\" value=\"$value\" />";
+"<input class=\"twikiButton editTableEditButton\" type=\"submit\" value=\"$value\" /> $warningMessage";
     }
 }
 
