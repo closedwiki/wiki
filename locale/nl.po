@@ -777,15 +777,15 @@ msgstr "Terug naar pagina"
 #: templates/oopsmore.tmpl:37 templates/viewtopicactionbuttons.tmpl:89
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:17
 msgid "Backlinks"
-msgstr "Teruglinks"
+msgstr "Verwijzingen"
 
 #: templates/backlinksweb.tmpl:7
 msgid "Backlinks to %1 in %2 Web"
-msgstr "Teruglinks naar %1 in %2 Web"
+msgstr "Verwijzingen naar %1 in %2 Web"
 
 #: templates/backlinksallwebs.tmpl:7
 msgid "Backlinks to %1 in all Webs"
-msgstr "Teruglinks naar %1 in alle Webs"
+msgstr "Verwijzingen naar %1 in alle Webs"
 
 #: templates/messages.tmpl:280
 msgid "Bad password"
@@ -1173,7 +1173,7 @@ msgstr "Verwijder pagina..."
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:48
 msgid "Describe the file so other people know what it is."
-msgstr "Beschrijf het bestand zodat anderen weten wat het is."
+msgstr "Beschrijf de bijlage zodat anderen weten wat het is."
 
 #: lib/TWiki/Form.pm:261
 msgid "Details in separate window"
@@ -1304,7 +1304,7 @@ msgstr "Bewerk de paginatekst"
 #: templates/oopsmore.tmpl:13
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:60
 msgid "Edit topic preference settings"
-msgstr "Bewerk paginavoorkeur-instellingen"
+msgstr "Paginavoorkeuren"
 
 #: templates/messages.tmpl:297
 msgid ""
@@ -1319,7 +1319,7 @@ msgid ""
 "%1 has no content. You may not upload an empty file."
 msgstr ""
 "Je hebt geen bestand geselecteerd, of het bestand dat je wil uploaden is "
-"leeg (0 bytes). Je kan geen leeg bestand uploaden."
+"leeg (0 bytes). Je kunt geen leeg bestand uploaden."
 
 #: lib/TWiki/UI/Register.pm:418 lib/TWiki/UI/Register.pm:455
 msgid "Email has been disabled for this TWiki installation"
@@ -1404,7 +1404,7 @@ msgstr "Het bestand is geupload met een andere naam"
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:18
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:20
 msgid "Find topics that link to %1 ..."
-msgstr "Zoek pagina's die linken naar %1 ..."
+msgstr "Pagina's die verwijzen naar %1 ..."
 
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:281
 msgid ""
@@ -1511,7 +1511,7 @@ msgstr "Verberg help"
 
 #: templates/messages.tmpl:109
 msgid "Hierarchical Webs is currently disabled, you cannot create Nested webs."
-msgstr "Hiërarchische Webs zijn niet geactiveerd; je kan geen genest web " "aanmaken."
+msgstr "Hiërarchische Webs zijn niet geactiveerd; je kunt geen genest web " "aanmaken."
 
 #: templates/registernotify.tmpl:16
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:16
@@ -2125,7 +2125,7 @@ msgstr "Ga _terug_ met je browser en probeer een andere naam."
 
 #: templates/messages.tmpl:363
 msgid "Please go back in your browser and check again."
-msgstr "Ga terug met je browser en probeer opnieuw."
+msgstr "Ga terug met je browser en probeer het opnieuw."
 
 #: templates/messages.tmpl:88
 msgid ""
@@ -2144,7 +2144,7 @@ msgstr ""
 #: templates/messages.tmpl:37 templates/messages.tmpl:41
 #: templates/messages.tmpl:59
 msgid "Please go back in your browser and try again."
-msgstr "Ga terug met je browser en probeer opnieuw."
+msgstr "Ga terug met je browser en probeer het opnieuw."
 
 #: templates/messages.tmpl:45
 msgid ""
@@ -3151,7 +3151,7 @@ msgstr "Bestand uploaden"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:39
 msgid "Upload up to %1 KB."
-msgstr "Upload mogelijk tot %1 KB."
+msgstr "Uploaden is mogelijk tot %1 KB."
 
 #: templates/messages.tmpl:367
 msgid "Uploaded file %1 exceeds limit of %2 KB"
@@ -3720,13 +3720,13 @@ msgid ""
 "title='Search the %1 Web for topics that link to here' "
 "accesskey='b'>&Backlinks"
 msgstr ""
-"title='Zoek in %1 Web naar pagina's die hierheen linken' accesskey='w'>&Web"
+"title='Zoek in %1 Web naar pagina's die hierheen linken' accesskey='w'>Verwijzingen in &Web"
 
 #: templates/viewtopicactionbuttons.tmpl:26
 msgid ""
 "title='Search the %1 Web for topics that link to here' accesskey='b'>We&b"
 msgstr ""
-"title='Zoek in %1 Web naar pagina's die hierheen linken' accesskey='w'>&Web"
+"title='Zoek in %1 Web naar pagina's die hierheen linken' accesskey='w'>Verwijzingen in &Web"
 
 #: templates/viewtopicactionbuttons.tmpl:38
 msgid "title='View raw text without formatting' accesskey='r'>&Raw View"
