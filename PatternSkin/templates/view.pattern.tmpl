@@ -6,7 +6,7 @@
 
 %TMPL:DEF{"bodyclassname"}%patternViewPage%IF{"defined raw" then=" patternRawViewPage"}%%TMPL:END%
 
-%TMPL:DEF{"script:skintemplate"}%%IF{"defined raw" then='$percntTMPL:P{\"script:skintemplate:viewraw\"}$percnt'}%%TMPL:END%
+%TMPL:DEF{"script:skintemplate"}%%IF{"defined raw" then='%TMPL:P{"script:skintemplate:viewraw"}%'}%%TMPL:END%
 
 %TMPL:DEF{"script:skintemplate:viewraw"}%<script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiJavascripts/twikiPref.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%SYSTEMWEB%/TWikiJavascripts/twiki_edit.js"></script>
@@ -40,7 +40,7 @@
 
 %TMPL:DEF{"breadcrumb:annotation"}%%IF{"defined rev" then=" %MAKETEXT{"(revision [_1])" args="%URLPARAM{"rev"}%"}%" else=" <span class='patternRevInfo'>(%REVINFO{format="$date, $wikiusername"}%)</span>"}%%IF{"defined raw" then=" %MAKETEXT{"(raw view)"}%"}%%TMPL:END%
 
-%TMPL:DEF{"breadcrumb:currenttopic"}%%TMPL:P{"breadcrumb:separator"}%<a href="%TOPIC%" title='%MAKETEXT{"Topic revision:"}% %REVINFO{format="$rev ($date - $time)"}%'><nop>%TOPIC%</a>%TMPL:P{"breadcrumb:annotation"}%%TMPL:END%
+%TMPL:DEF{"breadcrumb:currenttopic"}%%TMPL:P{"breadcrumb:separator"}%<a href="%SCRIPTURL{view}%/%WEB%/%TOPIC%" title='%MAKETEXT{"Topic revision:"}% %REVINFO{format="$rev ($date - $time)"}%'><nop>%TOPIC%</a>%TMPL:P{"breadcrumb:annotation"}%%TMPL:END%
 
 %{ DEPRECATED: beforetext and aftertext }%
 %{ compatibility transition older than 4.2: }%
