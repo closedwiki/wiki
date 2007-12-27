@@ -418,7 +418,6 @@ a:hover.twistyTrigger {
 
 /* TipsContrib */
 .tipsOfTheDay {
-   background-color:%NOTIFICATION_BACKGROUND%;
 }
 
 /* RevCommentPlugin */

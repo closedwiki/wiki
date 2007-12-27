@@ -689,6 +689,11 @@ a.twikiLinkInHeaderRight {
 	margin:0;
 	list-style:none;
 }
+#patternLeftBarContents,
+#patternLeftBarContents ul,
+#patternLeftBarContents li {
+	line-height:1.35em;
+}
 #patternLeftBarContents h2 {
 	border:none;
 	background-color:transparent;
