@@ -5,20 +5,20 @@
 /* LAYOUT ELEMENTS */
 
 #patternTopBar {
-   border-color:#e1e5e9;
+   border-color:#e2e2e2;
    background-color:#fefcf7;
 }
 #patternMain { /* don't set a background here; use patternOuter */ }
 #patternOuter {
    background-color:#fff; /* Sets background of center col */
-   border-color:#cfcfcf;
+   border-color:#dadada;
 }
 #patternLeftBar,
 #patternWrapper {
-   background-color:#f6f7f8;
+   background-color:#f6f6f6;
 }
 #patternBottomBar {
-   border-color:#e1e5e9;
+   border-color:#e2e2e2;
 }
 #patternBottomBarContents,
 #patternBottomBarContents a:link,
@@ -40,8 +40,8 @@ body, p, li, ul, ol, dl, dt, dd, acronym, h1, h2, h3, h4, h5, h6 {
    background-color:transparent;
 }
 hr {
-   color:#e1e5e9;
-   background-color:#e1e5e9;
+   color:#e2e2e2;
+   background-color:#e2e2e2;
 }
 pre, code, tt {
    color:#7A4707;
@@ -54,14 +54,14 @@ blockquote h2 {
    background:none;
 }
 h1, h2, h3, h4, h5, h6 {
-   color:#800;
+   color:#630000;
 }
 h2 {
-   background-color:#f6f7f8;
-   border-color:#e1e5e9;
+   background-color:#f6f6f6;
+   border-color:#e2e2e2;
 }
 h3, h4, h5, h6 {
-   border-color:#e1e5e9;
+   border-color:#e2e2e2;
 }
 /* to override old Render.pm coded font color style */
 .twikiNewLink font {
@@ -73,9 +73,9 @@ h3, h4, h5, h6 {
    border-color:#ddd;
 }
 .twikiNewLink a:hover sup {
-   background-color:#d6000f;
+   background-color:#ce000f;
    color:#fff;
-   border-color:#d6000f;
+   border-color:#ce000f;
 }
 .twikiNewLink {
    border-color:#ddd;
@@ -92,7 +92,7 @@ h3, h4, h5, h6 {
 :link:hover,
 :visited:hover {
    color:#fff;
-   background-color:#d6000f;
+   background-color:#ce000f;
    background-image:none;
 }
 :link:hover img,
@@ -111,7 +111,7 @@ h3, h4, h5, h6 {
 #patternMainContents h4 a:link, #patternMainContents h4 a:visited,
 #patternMainContents h5 a:link, #patternMainContents h5 a:visited,
 #patternMainContents h6 a:link, #patternMainContents h6 a:visited {
-   color:#800;
+   color:#630000;
 }
 #patternMainContents h1 a:hover,
 #patternMainContents h2 a:hover,
@@ -211,7 +211,7 @@ select {
 .twikiTable,
 .twikiTable td,
 .twikiTable th {
-   border-color:#e1e5e9;
+   border-color:#e2e2e2;
 }
 .twikiTable th a:link,
 .twikiTable th a:visited,
@@ -233,7 +233,7 @@ a:hover.twistyTrigger {
 
 /* RevCommentPlugin */
 .revComment .patternTopicAction {
-   background-color:#f6f7f8;
+   background-color:#f6f6f6;
 }
 
 /*   -----------------------------------------------------------
@@ -261,7 +261,7 @@ table.twikiFormTable td.twikiFormTableRow {
 .twikiEditForm .twikiFormTable,
 .twikiEditForm .twikiFormTable th,
 .twikiEditForm .twikiFormTable td {
-   border-color:#e1e5e9;
+   border-color:#e2e2e2;
 }
 /* use a different table background color mix: no odd/even rows, no white background */
 .twikiEditForm .twikiFormTable td  {
@@ -272,12 +272,12 @@ table.twikiFormTable td.twikiFormTableRow {
 }
 .patternContent .twikiAttachments,
 .patternContent .twikiForm {
-   background-color:#f6f7f8;
-   border-color:#e1e5e9;
+   background-color:#f6f6f6;
+   border-color:#e2e2e2;
 }
 .twikiAttachments table,
 table.twikiFormTable {
-   border-color:#e1e5e9;
+   border-color:#e2e2e2;
    background-color:#fff;
 }
 .twikiAttachments table {
@@ -285,7 +285,7 @@ table.twikiFormTable {
 }
 .twikiAttachments td, 
 .twikiAttachments th {
-   border-color:#e1e5e9;
+   border-color:#e2e2e2;
 }
 .twikiAttachments .twikiTable th font,
 table.twikiFormTable th.twikiFormTableHRow font {
@@ -294,10 +294,10 @@ table.twikiFormTable th.twikiFormTableHRow font {
 
 .twikiFormSteps {
    background-color:#fbfbfb;
-   border-color:#e1e5e9;
+   border-color:#e2e2e2;
 }
 .twikiFormStep {
-   border-color:#e1e5e9;
+   border-color:#e2e2e2;
 }
 .twikiFormStep h3,
 .twikiFormStep h4 {
@@ -327,8 +327,8 @@ table.twikiFormTable th.twikiFormTableHRow font {
    background-color:#ffe67b;
 }
 .twikiHelp {
-   background-color:#f6f7f8;
-   border-color:#e1e5e9;
+   background-color:#f6f6f6;
+   border-color:#e2e2e2;
 }
 .twikiBroadcastMessage b,
 .twikiBroadcastMessage strong {
@@ -342,13 +342,13 @@ table.twikiFormTable th.twikiFormTableHRow font {
    color:#4571d0;
 }
 .twikiPageForm table {
-   border-color:#e1e5e9;
+   border-color:#e2e2e2;
    background:#fff;
 }
 .twikiPageForm hr {
-   border-color:#cfcfcf;
-   background-color:#cfcfcf;
-   color:#cfcfcf;
+   border-color:#dadada;
+   background-color:#dadada;
+   color:#dadada;
 }
 .twikiAccessKey {
    color:inherit;
@@ -369,7 +369,7 @@ a:hover .twikiAccessKey {
    background-color:transparent;
 }
 .twikiImage a:hover img {
-   border-color:#d6000f;
+   border-color:#ce000f;
 }
 
 /*   -----------------------------------------------------------
@@ -401,31 +401,39 @@ a:hover .twikiAccessKey {
    color:#000;
 }
 #patternLeftBarContents hr {
-   color:#e1e5e9;
-   background-color:#e1e5e9;
+   color:#e2e2e2;
+   background-color:#e2e2e2;
 }
 #patternLeftBarContents a:link,
 #patternLeftBarContents a:visited {
-   color:#555;
+   color:#444;
 }
 #patternLeftBarContents a:hover {
    color:#fff;
 }
+#patternLeftBarContents .patternLeftBarPersonal,
+#patternLeftBarContents .patternWebIndicator {
+	border-color:#dadada;
+}
+#patternLeftBarContents b,
+#patternLeftBarContents strong {
+	color:#630000;
+}
 
 .patternTopicActions {
-   border-color:#e1e5e9;
-   background-color:#f6f7f8;
+   border-color:#e2e2e2;
+   background-color:#f6f6f6;
    color:#777;
 }
 .patternTopicAction {
-   border-color:#e1e5e9;
+   border-color:#e2e2e2;
 }
 .patternTopicAction s,
 .patternTopicAction strike {
    color:#aaa;
 }
 .patternTopicAction .twikiSeparator {
-   color:#e1e5e9;
+   color:#e2e2e2;
 }
 .patternActionButtons a:link,
 .patternActionButtons a:visited {
@@ -449,8 +457,8 @@ a:hover .twikiAccessKey {
 }
 .patternSigLine {
    color:#777;
-   background-color:#f6f7f8;
-   border-color:#e1e5e9;
+   background-color:#f6f6f6;
+   border-color:#e2e2e2;
 }
 
 .patternToolBar a:link .twikiAccessKey,
@@ -469,16 +477,16 @@ a:hover .twikiAccessKey {
 
 /* WebSearch, WebSearchAdvanced */
 table#twikiSearchTable {
-   border-color:#e1e5e9;
+   border-color:#e2e2e2;
 }
 table#twikiSearchTable th,
 table#twikiSearchTable td {
    background-color:#fff;
-   border-color:#e1e5e9;
+   border-color:#e2e2e2;
 }
 table#twikiSearchTable hr {
-   border-color:#e1e5e9;
-   background-color:#e1e5e9;
+   border-color:#e2e2e2;
+   background-color:#e2e2e2;
 }
 table#twikiSearchTable th {
    color:#000;
@@ -491,17 +499,17 @@ table#twikiSearchTable th {
 
 h3.patternSearchResultsHeader,
 h4.patternSearchResultsHeader {
-   background-color:#f6f7f8;
-   border-color:#e1e5e9;
+   background-color:#f6f6f6;
+   border-color:#e2e2e2;
 }
 h4.patternSearchResultsHeader {
    color:#000;
 }
 .patternNoViewPage h4.patternSearchResultsHeader {
-   color:#800;
+   color:#630000;
 }
 .patternSearchResult .twikiBottomRow {
-   border-color:#e1e5e9;
+   border-color:#e2e2e2;
 }
 .patternSearchResult .twikiAlert {
    color:#f00;
@@ -515,7 +523,7 @@ h4.patternSearchResultsHeader {
    color:#049804;
 }
 .patternViewPage .patternSearchResultsBegin {
-   border-color:#e1e5e9;
+   border-color:#e2e2e2;
 }
 
 /* Search results in book view format */
@@ -525,7 +533,7 @@ h4.patternSearchResultsHeader {
    color:#777;
 }
 .patternBookView .twikiBottomRow {
-   border-color:#e1e5e9;
+   border-color:#e2e2e2;
 }
 .patternBookView .patternSearchResultCount {
    color:#777;
@@ -554,7 +562,7 @@ h4.patternSearchResultsHeader {
    color:#fff;
 }
 tr.twikiDiffDebug td {
-   border-color:#e1e5e9;
+   border-color:#e2e2e2;
 }
 .patternDiffPage .twikiDiffTable th {
    background-color:#ccc;
@@ -787,12 +795,6 @@ a.twikiButton:active {
 }
 .patternButtonShrink:active {
    background-position:16px -84px;
-}
-#patternLeftBarContents .patternLeftBarPersonal,
-#patternLeftBarContents .patternWebIndicator {
-   background-image:url(border_sidebar_personal.gif);
-   background-repeat:repeat-x;
-   background-position:bottom left;
 }
 .twikiBroadcastMessage,
 .twikiNotification {
