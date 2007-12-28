@@ -36,7 +36,7 @@ Save the topic. This will generate an [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/them
 ---++++ GENERAL_TEXT General text (if not set in MAIN_BACKGROUND_COLOR) (black)
    * Set GENERAL_TEXT = #000
 ---++++ HEADER_TEXT Header text
-   * Set HEADER_TEXT = #800
+   * Set HEADER_TEXT = #630000
 ---++++ CODE_TEXT Code text, left bar text and links
    * Set CODE_TEXT = #7A4707
 ---++++ MUTED_TEXT Muted text (dark gray)
@@ -56,9 +56,9 @@ Save the topic. This will generate an [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/them
 ---++++ LINK_TEXT_HOVER Link hover text
    * Set LINK_TEXT_HOVER = #fff
 ---++++ LINK_BACKGROUND_HOVER Link background hover
-   * Set LINK_BACKGROUND_HOVER = #d6000f
+   * Set LINK_BACKGROUND_HOVER = #ce000f
 ---++++ SIDE_BAR_LINK_TEXT Side bar link text
-   * Set SIDE_BAR_LINK_TEXT = #555
+   * Set SIDE_BAR_LINK_TEXT = #444
 
 ---+++ Disabled
 ---++++ DISABLED_BORDER Disabled border
@@ -104,13 +104,13 @@ Save the topic. This will generate an [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/them
 ---++++ GENERAL_BACKGROUND General background color (if not set in MAIN_BACKGROUND_COLOR) (white)
    * Set GENERAL_BACKGROUND = #fff
 ---++++ SIDE_BAR_BACKGROUND Side bar background
-   * Set SIDE_BAR_BACKGROUND = #f6f7f8
+   * Set SIDE_BAR_BACKGROUND = #f6f6f6
 ---++++ NEUTRAL_BACKGROUND
    * Set NEUTRAL_BACKGROUND = #fdfaf1
 ---++++ TOP_BAR_BACKGROUND Top bar background
    * Set TOP_BAR_BACKGROUND = #fefcf7
 ---++++ ATTACHMENT_AND_FORM_BACKGROUND Attachment, form
-   * Set ATTACHMENT_AND_FORM_BACKGROUND = #f6f7f8
+   * Set ATTACHMENT_AND_FORM_BACKGROUND = #f6f6f6
 ---++++ TOPIC_ACTION_BACKGROUND Topic action row
    * Set TOPIC_ACTION_BACKGROUND = %ATTACHMENT_AND_FORM_BACKGROUND%
 ---++++ HEADER_BACKGROUND h2, h3
@@ -126,11 +126,11 @@ Save the topic. This will generate an [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/them
 ---++++ NEUTRAL_BORDER Info (light gray)
    * Set NEUTRAL_BORDER = #ddd
 ---++++ SEPARATOR_BORDER
-   * Set SEPARATOR_BORDER = #e1e5e9
+   * Set SEPARATOR_BORDER = #e2e2e2
 ---++++ MINOR_SEPARATOR_BORDER Header H3..H6 bottom
    * Set MINOR_SEPARATOR_BORDER = %SEPARATOR_BORDER%
 ---++++ LAYOUT_ELEMENT_BORDER Main layout elements (neutral tone)
-   * Set LAYOUT_ELEMENT_BORDER = #cfcfcf
+   * Set LAYOUT_ELEMENT_BORDER = #dadada
 ---++++ IMAGE_BORDER Image border
    * Set IMAGE_BORDER = #eee
 ---++++ FORM_STEP_BORDER Form step border
@@ -156,7 +156,7 @@ Save the topic. This will generate an [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/them
 ---+++++ TABLE_DATA_MIX_BACKGROUND Table data background (mix between even and odd)
    * Set TABLE_DATA_MIX_BACKGROUND = #f7fafc
 ---++++ TABLE_BORDER Table border, sup (light neutral tone)
-   * Set TABLE_BORDER = #e1e5e9
+   * Set TABLE_BORDER = #e2e2e2
 ---++++ LINK_TEXT_NORMAL_TABLE_HEADER Table header link text
    * Set LINK_TEXT_NORMAL_TABLE_HEADER = #fff
 ---++++ LINK_TEXT_NORMAL_BORDER_TABLE_HEADER Table header link border
@@ -600,6 +600,14 @@ a:hover .twikiAccessKey {
 #patternLeftBarContents a:hover {
    color:%LINK_TEXT_HOVER%;
 }
+#patternLeftBarContents .patternLeftBarPersonal,
+#patternLeftBarContents .patternWebIndicator {
+	border-color:#dadada;
+}
+#patternLeftBarContents b,
+#patternLeftBarContents strong {
+	color:%HEADER_TEXT%;
+}
 
 .patternTopicActions {
    border-color:%TABLE_BORDER%;
@@ -975,12 +983,6 @@ a.twikiButton:active {
 }
 .patternButtonShrink:active {
    background-position:16px -84px;
-}
-#patternLeftBarContents .patternLeftBarPersonal,
-#patternLeftBarContents .patternWebIndicator {
-   background-image:url(border_sidebar_personal.gif);
-   background-repeat:repeat-x;
-   background-position:bottom left;
 }
 .twikiBroadcastMessage,
 .twikiNotification {

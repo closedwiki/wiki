@@ -702,6 +702,8 @@ a.twikiLinkInHeaderRight {
 #patternLeftBarContents .patternWebIndicator {
 	padding:0 1em .75em 1em;
 	margin:0 -1em .75em -1em; /*S6*/
+	border-style:none none solid none;
+	border-width:1px;
 }
 .patternWebIndicator a {
 	font-size:1.1em;
