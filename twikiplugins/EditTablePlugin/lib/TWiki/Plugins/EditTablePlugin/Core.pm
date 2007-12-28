@@ -315,10 +315,6 @@ s/(.*?)$regex{edit_table_plugin}/&handleEditTableTag( $theWeb, $theTopic, $1, $2
             # When editing we append a disableallsort="on" to the TABLE tag
             # to prevent TablePlugin from sorting the table. (Item5135)
             $_ =~ s/(}%)/ disableallsort="on"$1/ if ( $doEdit && !$doSave );
-
-            # no need to process any further, just copy the line
-            $result .= "$_\n";
-            next;
         }
 
         $hasTableRow = 0;    # assume no row
