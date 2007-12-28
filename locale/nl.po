@@ -557,7 +557,7 @@ msgstr "Een paginatemplate definieert de initiële inhoud van een nieuw " "aange
 #: templates/oopsaccessdenied.tmpl:6
 #: twikiplugins/ClassicSkin/templates/oopsaccessdenied.classic.tmpl:5
 msgid "Access Denied"
-msgstr "Toegang niet toegestaan"
+msgstr "Geen toegang"
 
 #: templates/messages.tmpl:460
 msgid "Access check on %1 failed"
@@ -1728,7 +1728,11 @@ msgid ""
 "linking may not work. Characters not allowed in topic names, such as spaces "
 "will automatically be removed."
 msgstr ""
-"Het is over het algemeen beter om een <a target='WikiWord' class='twikiPopUp' " "href='%1' rel='nofollow'>WikiWord</a> voor de nieuwe paginanaam te gebruiken, " "anders werkt automatisch linken niet. Niet toegestane karakters in " "paginanamen, spaties bijvoorbeeld, worden automatisch verwijderd."
+"Het is over het algemeen beter om een "
+"<a target='WikiWord' class='twikiPopUp' href='%1' rel='nofollow'>WikiWord</a> "
+"voor de nieuwe paginanaam te gebruiken, anders werkt automatisch linken niet. "
+"Niet toegestane karakters in paginanamen, spaties bijvoorbeeld, worden "
+"automatisch verwijderd."
 
 #: templates/renameweb.tmpl:17
 msgid ""
