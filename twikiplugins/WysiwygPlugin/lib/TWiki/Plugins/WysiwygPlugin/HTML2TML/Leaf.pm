@@ -42,9 +42,16 @@ sub new {
     return bless( $this, $class );
 }
 
+# Entities that we want to decoded in plain text
+my %text_entities = (
+    quot => 34, amp => 38, lt => 60, gt => 62
+   );
+my $text_entities_re = join('|', keys %text_entities);
+
 sub generate {
     my( $this, $options ) = @_;
     my $t = $this->{text};
+
     if (!($options & $WC::KEEP_WS)) {
         $t =~ s/\t/   /g;
         $t =~ s/\n/$WC::CHECKw/g;
@@ -57,6 +64,7 @@ sub generate {
         $t =~ s/\[/<nop>[/g;
     }
     unless ($options & $WC::KEEP_ENTITIES) {
+        $t =~ s/&($text_entities_re);/chr($text_entities{$1})/ego;
         $t =~ s/&nbsp;/$WC::NBSP/g;
     }
     return (0, $t);

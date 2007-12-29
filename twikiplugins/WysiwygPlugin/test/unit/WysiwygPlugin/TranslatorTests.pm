@@ -421,7 +421,7 @@ HERE
           tml => '%<nop>MAINWEB%'
          },
       {
-          exec => $TML2HTML|$HTML2TML|$ROUNDTRIP,
+          exec => $HTML2TML,#|$TML2HTML|$ROUNDTRIP,
           name => 'noAutoLunk',
           html => <<'HERE',
 <p>
@@ -1577,6 +1577,15 @@ HERE
             tml => <<HERE,
 ---+ Title<img src="art1.jpg"></img>
 Peace in earth, and goodwill to all worms
+HERE
+      },
+      {
+          name => 'Item5179',
+          exec => $ROUNDTRIP,
+          tml => <<HERE,
+<fleegle src="ball&co<ck>s"> <verbatim>
+<img src="ball&co<ck>s">&amp;&gt;&lt;&quot;
+</verbatim>
 HERE
       },
      ];
