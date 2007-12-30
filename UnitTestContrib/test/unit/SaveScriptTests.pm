@@ -816,4 +816,23 @@ sub test_1897 {
     $this->assert_str_equals("<del>Sweaty\n</del><ins>Smelly\n</ins><del>cat\n</del><ins>rat\n</ins>", $text);
 }
 
+sub test_missingTemplateTopic {
+    my $this = shift;
+    $this->{twiki}->finish();
+    my $query = new CGI({
+        templatetopic => [ 'NonExistantTemplateTopic' ],
+        action => [ 'save' ],
+        topic => [ $this->{test_web}.'.FlibbleDeDib' ]
+       });
+    $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
+    try {
+        $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
+    } catch TWiki::OopsException with {
+        my $e = shift;
+        $this->assert_str_equals('no_such_topic', $e->{def});
+    } otherwise {
+        $this->assert(0, shift);
+    };
+}
+
 1;
