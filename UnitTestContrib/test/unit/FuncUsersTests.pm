@@ -20,11 +20,11 @@ sub new {
 
 sub AllowLoginName {
     my $this = shift;
-    $TWiki::cfg{AllowLoginName} = 1;
+    $TWiki::cfg{Register}{AllowLoginName} = 1;
 }
 sub DontAllowLoginName {
     my $this = shift;
-    $TWiki::cfg{AllowLoginName} = 0;
+    $TWiki::cfg{Register}{AllowLoginName} = 0;
 }
 
 sub TemplateLoginManager {
