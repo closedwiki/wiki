@@ -35,7 +35,7 @@ my $DEFAULT_FIELD_SIZE = 16;
 
 BEGIN {
     %regex                    = ();
-    $regex{edit_table_plugin} = '%EDITTABLE{(.*)}%';
+    $regex{edit_table_plugin} = '%EDITTABLE{(.*?)}%';
     $regex{table_plugin}      = '%TABLE(?:{(.*?)})?%';
     $regex{table_row_full}    = '^(\s*)\|.*\|\s*$';
     $regex{table_row}         = '^(\s*)\|(.*)';
@@ -215,13 +215,17 @@ sub processText {
                 my $line = $_;
 
                 # process the tag contents
+                my $restRegex = '([^$]*)';
+                my $editTablePluginRE =
+                  "(.*?)$regex{edit_table_plugin}$restRegex";
                 $line =~
-s/(.*?)$regex{edit_table_plugin}/&handleEditTableTag( $theWeb, $theTopic, $1, $2 )/geo;
+s/$editTablePluginRE/&handleEditTableTag( $theWeb, $theTopic, $1, $2 )/geo;
 
                 # TODO: something strange has happened to the prefix
                 # it is no longer used by handleEditTableTag
                 # we add it here:
                 $result .= $1 if $1;
+                $result .= $3 if $3;
             }
             $tableNr++;
 
@@ -508,7 +512,7 @@ s/$regex{table_row}/handleTableRow( $1, $2, $tableNr, $isNewRow, $theRowNr, $doE
 
     # clean up hack that handles EDITTABLE correctly if at end
     $result =~ s/($RENDER_HACK)+$//go;
-
+    TWiki::Func::writeDebug("result=$result");
     if ($doSave) {
         my $error = TWiki::Func::saveTopicText( $theWeb, $theTopic, $result, '',
             $doSaveQuiet );
@@ -1324,7 +1328,7 @@ package TWiki::Plugins::Table;
 use vars qw(
   %regex
 );
-$regex{edit_table_plugin} = '%EDITTABLE{(.*)}%';
+$regex{edit_table_plugin} = '%EDITTABLE{(.*?)}%';
 
 =pod
 
