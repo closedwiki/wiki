@@ -159,6 +159,7 @@ sub processText {
     my $insideTable  = 0;
     my $doEdit       = $doSave;
     my $hasTableRow  = 0;      # the current line has a row with '| some text |'
+    my $hasTableTag  = 0;      # the current line has a %TABLE{}% variable tag
     my $createdNewTable = 0;
     my @rows            = ();
     my $etrows          = -1
@@ -304,6 +305,7 @@ s/(.*?)$regex{edit_table_plugin}/&handleEditTableTag( $theWeb, $theTopic, $1, $2
             }
         }    # if $isLineWithEditTableTag
 
+        $hasTableTag = 0;
         if (/$regex{table_plugin}/) {
 
             # match with a TablePlugin line
@@ -315,6 +317,8 @@ s/(.*?)$regex{edit_table_plugin}/&handleEditTableTag( $theWeb, $theTopic, $1, $2
             # When editing we append a disableallsort="on" to the TABLE tag
             # to prevent TablePlugin from sorting the table. (Item5135)
             $_ =~ s/(}%)/ disableallsort="on"$1/ if ( $doEdit && !$doSave );
+
+            $hasTableTag = 1;
         }
 
         $hasTableRow = 0;    # assume no row
@@ -327,7 +331,6 @@ s/(.*?)$regex{edit_table_plugin}/&handleEditTableTag( $theWeb, $theTopic, $1, $2
             if ( !$doEdit && !$doSave ) {
 
                 if ( !$hasTableRow && !$insideTable ) {
-
                     my $tableStart =
                       handleTableStart( $theWeb, $theTopic, $tableNr, $doEdit );
                     $result .= $tableStart;
@@ -341,7 +344,7 @@ s/(.*?)$regex{edit_table_plugin}/&handleEditTableTag( $theWeb, $theTopic, $1, $2
                     my $isNewRow = 0;
 s/^(\s*)\|(.*)/handleTableRow( $1, $2, $tableNr, $isNewRow, $rowNr, $doEdit, $doSave, $theWeb, $theTopic )/eo;
                 }
-                elsif ($insideTable) {
+                elsif ( $insideTable && !$hasTableTag ) {
 
                     # end of table
                     $endOfTable = 1;
@@ -353,7 +356,6 @@ s/^(\s*)\|(.*)/handleTableRow( $1, $2, $tableNr, $isNewRow, $rowNr, $doEdit, $do
             }    # if !$doEdit && !$doSave
 
             if ( $doEdit || $doSave ) {
-
                 if ( !$hasTableRow && !$insideTable && !$createdNewTable ) {
 
                     # start new table
@@ -390,7 +392,7 @@ s/$regex{table_row}/handleTableRow( $1, $2, $tableNr, $isNewRow, $theRowNr, $doE
                     push @rows, $_;
                     next;
                 }
-                elsif ($insideTable) {
+                elsif ( $insideTable && !$hasTableTag ) {
 
                     # end of table
                     $endOfTable = 1;
@@ -615,7 +617,6 @@ sub handleEditTableTag {
 
         $iTopicExists = TWiki::Func::topicExists( $theWeb, $iTopic )
           if $iTopic ne '';
-        TWiki::Func::writeDebug("iTopic=$iTopic; iTopicExists=$iTopicExists");
         if ( $iTopic && !$iTopicExists ) {
             $warningMessage = $prefMESSAGE_INCLUDED_TOPIC_DOES_NOT_EXIST;
         }
