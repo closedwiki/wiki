@@ -1,3 +1,4 @@
+<!-- template:editjavascript.natedit.tmpl -->
 %TMPL:DEF{"templatescript"}%%TMPL:P{"templatejavascript"}%%TMPL:END%
 %TMPL:DEF{"script:skintemplate:edit"}%%TMPL:P{"templatejavascript"}%%TMPL:END%
 %TMPL:DEF{"templatejavascript"}%<!-- templatejavascript -->
@@ -11,9 +12,7 @@
 // button functions
 function natEditTableButtonAction() {
   // this function gets replaced if JQueryPlugin is installed
-  if (!twiki.JQueryPluginEnabled) {
-    natInsertTags(%IF{"defined NATEDIT_TABLE" then="%NATEDIT_TABLE%" else="'\n| ** | ** | ** |\n|    |    |    |\n|    |    |    |\n', '', ''"}%);
-  }
+  natInsertTags(%IF{"defined NATEDIT_TABLE" then="%NATEDIT_TABLE%" else="'\n| ** | ** | ** |\n|    |    |    |\n|    |    |    |\n', '', ''"}%);
 }
 function natEditNumberedButtonAction() {
   natInsertListTag(%IF{"defined NATEDIT_NUMBERED" then="%NATEDIT_NUMBERED%" else="'   1 ','enumerated item',''"}%);

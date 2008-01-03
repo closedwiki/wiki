@@ -1,30 +1,31 @@
 %TMPL:DEF{"edittoolbar"}%<div class="natEditToolBar natEditHiddenToolBar" id="natEditToolBar">
-%TMPL:P{"helptools"}%
-%TMPL:P{"headlinetools"}% 
-%TMPL:P{"texttools"}%
-%TMPL:P{"paragraphtools"}% 
-%TMPL:P{"objecttools"}% 
-%TMPL:P{"edittools"}%
-%TMPL:P{"exittools"}%
-%TMPL:P{"forcenewrevision"}%
+%TMPL:P{"helptools"}%<!-- -->
+%TMPL:P{"headlinetools"}%<!-- -->
+%TMPL:P{"texttools"}%<!-- -->
+%TMPL:P{"paragraphtools"}% <!-- -->
+%TMPL:P{"objecttools"}% <!-- -->
+%TMPL:P{"edittools"}%<!-- -->
+%TMPL:P{"exittools"}%<!-- -->
+%TMPL:P{"forcenewrevision"}%<!-- -->
 </div>%TMPL:END%
 
 %TMPL:DEF{"natedittoolbar"}%
-%TMPL:P{"helptools"}%
-%TMPL:P{"headlinetools"}% 
-%TMPL:P{"texttools"}%
-%TMPL:P{"paragraphtools"}% 
-%TMPL:P{"objecttools"}% 
-%TMPL:P{"edittools"}%
-%TMPL:P{"exittools"}%
-%TMPL:P{"forcenewrevision"}%%TMPL:END%
+%TMPL:P{"helptools"}%<!-- -->
+%TMPL:P{"headlinetools"}%<!-- --> 
+%TMPL:P{"texttools"}%<!-- -->
+%TMPL:P{"paragraphtools"}%<!-- -->
+%TMPL:P{"objecttools"}%<!-- -->
+%TMPL:P{"edittools"}%<!-- -->
+%TMPL:P{"exittools"}%<!-- -->
+%TMPL:P{"forcenewrevision"}%<!-- -->
+%TMPL:END%
 
 %TMPL:DEF{"texttools"}%<ul class="natEditTextTools" name="hide_in_wysiwyg">
-%TMPL:P{"boldbutton"}%
-%TMPL:P{"italicbutton"}%
-%TMPL:P{"monobutton"}%
-%TMPL:P{"underlinebutton"}%
-%TMPL:P{"strikebutton"}%
+%TMPL:P{"boldbutton"}%<!-- -->
+%TMPL:P{"italicbutton"}%<!-- -->
+%TMPL:P{"monobutton"}%<!-- -->
+%TMPL:P{"underlinebutton"}%<!-- -->
+%TMPL:P{"strikebutton"}%<!-- -->
 </ul>%TMPL:END%
 
 %TMPL:DEF{"boldbutton"}%<li class="natEditBoldButton"><a accesskey="b" href="javascript:natEditBoldButtonAction()" title="%MAKETEXT{"Bold"}%"><span>%MAKETEXT{"Bold"}%</span></a></li>%TMPL:END%
@@ -36,10 +37,10 @@
 %TMPL:DEF{"superbutton"}%<li class="natEditSupButton"><a accesskey="^" href="javascript:natEditSupButtonAction()" title="%MAKETEXT{"Superscript"}%"><span>%MAKETEXT{"Superscript"}%</span></a></li>%TMPL:END%
 
 %TMPL:DEF{"headlinetools"}%<ul class="natEditHeadlineTools" name="hide_in_wysiwyg">
-%TMPL:P{"h1button"}%
-%TMPL:P{"h2button"}%
-%TMPL:P{"h3button"}%
-%TMPL:P{"h4button"}%
+%TMPL:P{"h1button"}%<!-- -->
+%TMPL:P{"h2button"}%<!-- -->
+%TMPL:P{"h3button"}%<!-- -->
+%TMPL:P{"h4button"}%<!-- -->
 </ul>%TMPL:END%
 
 %TMPL:DEF{"h1button"}%<li class="natEditH1Button"><a accesskey="1" href="javascript:natEditHeadlineButtonAction(1)" title="%MAKETEXT{"Level 1 headline"}%"><span>%MAKETEXT{"H1"}%</span></a></li>%TMPL:END%
@@ -48,10 +49,10 @@
 %TMPL:DEF{"h4button"}%<li class="natEditH4Button"><a accesskey="4" href="javascript:natEditHeadlineButtonAction(4)" title="%MAKETEXT{"Level 4 headline"}%"><span>%MAKETEXT{"H4"}%</span></a></li>%TMPL:END%
 
 %TMPL:DEF{"paragraphtools"}%<ul class="natEditParagraphTools" name="hide_in_wysiwyg">
-%TMPL:P{"leftbutton"}%
-%TMPL:P{"centerbutton"}%
-%TMPL:P{"rightbutton"}%
-%TMPL:P{"justifybutton"}%
+%TMPL:P{"leftbutton"}%<!-- -->
+%TMPL:P{"centerbutton"}%<!-- -->
+%TMPL:P{"rightbutton"}%<!-- -->
+%TMPL:P{"justifybutton"}%<!-- -->
 </ul>%TMPL:END%
 
 %TMPL:DEF{"leftbutton"}%<li class="natEditLeftButton"><a accesskey="&lt;" href="javascript:natEditLeftButtonAction()" title="%MAKETEXT{"Align left"}%"><span>%MAKETEXT{"Left"}%</span></a></li>%TMPL:END%
@@ -60,11 +61,12 @@
 %TMPL:DEF{"justifybutton"}%<li class="natEditJustifyButton"><a accesskey="j" href="javascript:natEditJustifyButtonAction()" title="%MAKETEXT{"Justify text"}%"><span>%MAKETEXT{"Justify"}%</span></a></li>%TMPL:END%
 
 %TMPL:DEF{"objecttools"}%<ul class="natEditObjectTools" name="hide_in_wysiwyg">
-%TMPL:P{"extbutton"}%
-%TMPL:P{"intbutton"}%
-%TMPL:P{"imagebutton"}%%TMPL:P{context="MathModePluginEnabled" then="mathbutton"}%
-%TMPL:P{"verbatimbutton"}%
-%TMPL:P{"signaturebutton"}%
+%TMPL:P{"extbutton"}%<!-- -->
+%TMPL:P{"intbutton"}%<!-- -->
+%TMPL:P{"imagebutton"}%<!-- -->
+%TMPL:P{context="MathModePluginEnabled" then="mathbutton"}%<!-- -->
+%TMPL:P{"verbatimbutton"}%<!-- -->
+%TMPL:P{"signaturebutton"}%<!-- -->
 </ul>%TMPL:END%
 
 %TMPL:DEF{"extbutton"}%<li class="natEditExtButton"><a accesskey="/" href="javascript:natEditExtButtonAction()" title='%MAKETEXT{"External link"}%'/><span>%MAKETEXT{"Ext.link"}%</span></a></li>%TMPL:END%
@@ -75,18 +77,16 @@
 %TMPL:DEF{"signaturebutton"}%<li class="natEditSignatureButton"><a accesskey="z" href="javascript:natEditSignatureButtonAction()" title='%MAKETEXT{"Your signature with timestamp"}%'/><span>%MAKETEXT{"Sign"}%</span></a></li>%TMPL:END%
 
 %TMPL:DEF{"edittools"}%<ul class="natEditEditTools">
-%TMPL:P{"previewbutton"}%
-%TMPL:P{"undobutton"}%
-%TMPL:P{"checkpointbutton"}%
+%TMPL:P{"previewbutton"}%<!-- -->
+%TMPL:P{"checkpointbutton"}%<!-- -->
 </ul>%TMPL:END%
 
 %TMPL:DEF{"previewbutton"}%<li class="natEditPreviewButton"><a accesskey="p" href="javascript:submitEditForm('preview', 'preview')" title='%MAKETEXT{"Preview your changes"}%'/><span>%MAKETEXT{"Preview"}%</span></a></li>%TMPL:END%
-%TMPL:DEF{"undobutton"}%<li class="natEditUndoButton"><a accesskey="u" href="javascript:self.location.reload()" title='%MAKETEXT{"Abandon your changes but continue editing"}%'/><span>%MAKETEXT{"Undo"}%</span></a></li>%TMPL:END%
 %TMPL:DEF{"checkpointbutton"}%<li class="natEditCheckpointButton"><a accesskey="w" href="javascript:submitEditForm('save', 'checkpoint')" title='%MAKETEXT{"Save and continue editing"}%'/><span>%MAKETEXT{"Save and Continue"}%</span></a></li>%TMPL:END%
 
 %TMPL:DEF{"exittools"}%<ul class="natEditExitTools">
-%TMPL:P{"savebutton"}%
-%TMPL:P{"cancelbutton"}%
+%TMPL:P{"savebutton"}%<!-- -->
+%TMPL:P{"cancelbutton"}%<!-- -->
 </ul>%TMPL:END%
 
 %TMPL:DEF{"savebutton"}%<li class="natEditSaveButton"><a accesskey="s" href="javascript:submitEditForm('save', 'save')" title='%MAKETEXT{"Save and exit"}%'/><span>%MAKETEXT{"Save"}%</span></a></li>%TMPL:END%
@@ -95,7 +95,7 @@
 %TMPL:DEF{"forcenewrevision"}%<ul class="natEditOptionTools"><li class="natEditForceNewRevision"><label for="forcenewrevision"><input type="checkbox" title="Creates a new topic revision when saving" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% />%MAKETEXT{"New revision"}%</label></li></ul>%TMPL:END%
 
 %TMPL:DEF{"helptools"}%<ul class="natEditHelpTools" name="hide_in_wysiwyg">
-%TMPL:P{"helpbutton"}%
+%TMPL:P{"helpbutton"}%<!-- -->
 </ul>%TMPL:END%
 
 %TMPL:DEF{"helpbutton"}%<li class="natEditHelpButton"><a accesskey="?" href="javascript:openWindow('%TWIKIWEB%', 'TextFormattingRules')" title='%MAKETEXT{"Help"}%'/><span>%MAKETEXT{"Help"}%</span></a></li>%TMPL:END%

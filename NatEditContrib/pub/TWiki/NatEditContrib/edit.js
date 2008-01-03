@@ -156,6 +156,9 @@ function natInsertListTag(tagOpen, sampleText, tagClose) {
 
 
 function submitEditForm(script, action) {
+  if (typeof(beforeSubmitHandler) != 'undefined') {
+    beforeSubmitHandler(script, action);
+  }
   document.main.elements['action_preview'].value = '';
   document.main.elements['action_save'].value = '';
   document.main.elements['action_checkpoint'].value = '';
@@ -225,24 +228,28 @@ function establishOnResize() {
 
 
 function natEditInit() {
+  //alert("called natEditInit");
   if (txtarea) {
     //alert("txtarea is already "+txtarea);
   } else {
-    if (document.main) { // patternskin
-      txtarea = document.main.text;
-    } else if (document.EditForm) { // natskin
-      txtarea = document.EditForm.text;
-    } else {
-      // some alternate form? take the first one we can find
-      var areas = document.getElementsByTagName('textarea');
-      txtarea = areas[0];
+    txtarea = document.getElementById('topic'); // twiki default
+    if (!txtarea) {
+      if (document.main) { // old patternskin
+        txtarea = document.main.text;
+      } else if (document.EditForm) { // old natskin
+        txtarea = document.EditForm.text;
+      } else {
+        // some alternate form? take the first one we can find
+        var areas = document.getElementsByTagName('textarea');
+        txtarea = areas[0];
+      }
     }
   }
 
   // establish tooltips
   $(".natEditToolBar a, .natEditToolBar input").Tooltip({
     delay:200,
-    track:true,
+    track:false,
     showURL:false,
     extraClass:'twiki',
     showBody:": "
@@ -322,6 +329,8 @@ function natEditInit() {
         ieSelect($.startPos, $.endPos);
      }
   }); 
+
+  txtarea.focus();
   
   return true;
 }

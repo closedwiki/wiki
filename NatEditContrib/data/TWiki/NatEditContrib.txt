@@ -68,7 +68,7 @@ This is acheived through the use of the TWiki Template path - over-riding the or
 
 Create new table can either be a static 3x3 table, or, If you install and enable JQueryPlugin, will use a popup dialog that lets the user choose the number of rows and columns.
 <pre>
-   * <!-- -->Set SKIN = jquery,word.natedit,natedit,pattern
+   * <!-- -->Set SKIN = word.natedit,natedit,pattern
    * <!-- -->Set NATEDIT_THEME = word
    * <!-- -->Set NATEDIT_HELPTEXT = TWiki.NatEditWordHelpText
 </pre>
@@ -151,10 +151,11 @@ Testing has been carried out using Safari, Firefox, Opera and Internet Explorer.
 Sponsored by [[http://www.trivadis.com][Trivadis AG]] & [[http://twiki.net][TWIKI.NET]]
 
 |  Author: | TWiki:Main/MichaelDaum |
-|  Copyright &copy;: | 2007 Michael Daum http://wikiring.de |
+|  Copyright &copy;: | 2007-2008 Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v1.54 |
+|  Version: | v1.60 |
 |  Change History: | |
+|  03 Jan 2008 | added =beforeSubmitHandler= to give TWiki:Plugins/EditChapterPlugin a chance to hook in |
 |  13 Nov 2007 | fixed calculation of textarea offset while autoresizing it to window height, \
                  fixed initialization not to use Behaviour anymore, \
                  fixed autohide/showing of word toolbar together with tinymce |
@@ -190,7 +191,7 @@ Sponsored by [[http://www.trivadis.com][Trivadis AG]] & [[http://twiki.net][TWIK
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 13 Nov 2007
+-- TWiki:Main.MichaelDaum - 03 Jan 2008
 
 %META:FILEATTACHMENT{name="screenshot1.png" attachment="screenshot1.png" attr="" comment="" date="1175688869" path="screenshot1.png" size="61040" stream="screenshot1.png" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="wikiringlogo40x40.png" attachment="wikiringlogo40x40.png" attr="h" comment="" date="1189787359" path="wikiringlogo40x40.png" size="2571" stream="wikiringlogo40x40.png" tmpFilename="" user="TWikiContributor" version="1"}%
