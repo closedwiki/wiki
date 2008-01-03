@@ -17,15 +17,15 @@
 package TWiki::Plugins::TagCloudPlugin::Core;
 
 use strict;
-use vars qw($debug $englishStopWords);
+use vars qw($englishStopWords);
 
-$debug = 0; # toggle me
+use constant DEBUG => 0; # toggle me
+
 $englishStopWords = qr(a|about|above|across|after|afterwards|again|against|all|almost|alone|along|already|also|although|always|am|among|amongst|amoungst|amount|an|and|another|any|anyhow|anyone|anything|anyway|anywhere|are|around|as|at|back|be|became|because|become|becomes|becoming|been|before|beforehand|behind|being|below|beside|besides|between|beyond|bill|both|bottom|but|by|call|can|cannot|cant|co|computer|con|could|couldnt|cry|de|describe|detail|do|done|down|dont|doesnt|didnt|due|during|each|eg|eight|either|eleven|else|elsewhere|empty|enough|etc|evenever|every|everyone|everything|everywhere|except|for|does|few|fifteen|fify|fill|find|fire|first|fivefor|former|formerly|forty|found|four|from|front|full|further|get|give|go|got|had|has|hasnt|have|he|hence|her|here|hereafter|hereby|hereinhereupon|hers|herself|him|himself|his|how|however|hundred|i|ie|if|in|inc|indeed|interest|into|is|it|its|itself|keep|lastlatter|latterly|least|less|ltd|made|many|may|me|meanwhile|might|mill|mine|more|moreover|most|mostly|move|much|must|my|myself|name|namely|neither|never|nevertheless|next|nine|no|nobody|none|noone|nor|not|nothing|now|nowhere|of|off|often|on|once|one|only|onto|or|other|others|otherwise|our|ours|ourselves|out|over|own|part|per|perhaps|please|put|rather|re|same|see|seem|seemed|seeming|seems|serious|several|she|should|show|side|since|sincere|six|sixty|so|some|somehow|someone|something|sometime|sometimes|somewhere|still|such|system|take|ten|than|that|the|their|them|themselves|then|thence|there|thereafter|thereby|therefore|therein|thereupon|these|they|thick|thin|third|this|those|though|three|through|throughout|thru|thus|to|together|too|top|toward|towards|twelve|twenty|two|un|under|until|up|upon|us|very|via|was|we|well|were|what|whatever|when|whence|whenever|where|whereafter|whereas|whereby|wherein|whereupon|wherever|whether|which|while|whither|who|whoever|whole|whom|whose|why|will|with|within|without|would|yet|you|your|yours|yourself|yourselves);
 
 ###############################################################################
 sub writeDebug {
-  #&TWiki::Func::writeDebug('- TagCloudPlugin - '.$_[0]) if $debug;
-  print STDERR '- TagCloudPlugin - '.$_[0] if $debug;
+  print STDERR '- TagCloudPlugin - '.$_[0] if DEBUG;
 }
 
 ###############################################################################
@@ -34,8 +34,8 @@ sub handleTagCloud {
 
   # get params
   my $theTerms = $params->{_DEFAULT} || $params->{terms} || '';
-  my $theHeader = $params->{header} || '';
-  my $theFooter = $params->{footer} || '';
+  my $theHeader = $params->{header};
+  my $theFooter = $params->{footer};
   my $theSep = $params->{separator} || $params->{sep} || '$n';
   my $theFormat = $params->{format} || 
     '<span style="font-size:$weightpx">$term</span>';
@@ -54,13 +54,21 @@ sub handleTagCloud {
   my $theWarn = $params->{warn} || 'on';
   my $theGroup = $params->{group} || '';
   my $theFilter = $params->{filter} || 'off';
+  my $theLimit = $params->{limit};
+
+  unless (defined($theHeader) || defined($theFooter)) {
+    $theHeader = '<div class="tagCloud">';
+    $theFooter = '</div>';
+  }
+  $theHeader ||= '';
+  $theFooter ||= '';
 
   # fix params
   $theBuckets =~ s/[^\d]//go;
   $theMin =~ s/[^\d]//go;
   $theOffset =~ s/[^\d]//go;
   $theBuckets = 10 if $theBuckets < 2;
-  $theSort = 'alpha' unless $theSort =~ /^(alpha|weight)$/;
+  $theSort = 'alpha' unless $theSort =~ /^(alpha|weight|count)$/;
   $theReverse = 'off' unless $theReverse =~ /^(on|off)$/;
   $theLowerCase = 'off' unless $theLowerCase =~ /^(on|off)$/;
   $theStopWords = 'off' unless $theStopWords =~ /^(on|off)$/;
@@ -105,12 +113,12 @@ sub handleTagCloud {
   }
   writeDebug("after theTerms=$theTerms\n");
   foreach my $term (split(/$theSplit/, $theTerms)) {
+    $term =~ s/^\s*(.*?)\s*$/$1/o;
     my $weight = 1;
     if ($term =~ /^(.*):(\d+)$/) {
       $term = $1;
       $weight = $2;
     }
-    $term =~ s/^\s*(.*?)\s*$/$1/o;
     next if $term =~ /^.?$/;
 
     # filter
@@ -133,16 +141,12 @@ sub handleTagCloud {
 
     $termCount{$term}+=$weight;
   }
-  unless (scalar(keys %termCount)) {
-    return '<span class="twikiAlert">nothing found</span>' if $theWarn eq 'on';
-    return '';
-  }
   
   # filter low frequencies, compute floor, ceiling
   my $floor = -1;
   my $ceiling = 0;
   foreach my $term (keys %termCount) {
-    if ($termCount{$term} < $theMin) {
+    if ($termCount{$term} <= $theMin) {
       delete $termCount{$term};
       next;
     }
@@ -150,6 +154,10 @@ sub handleTagCloud {
       if $termCount{$term} > $ceiling;
     $floor = $termCount{$term}
       if $termCount{$term} < $floor || $floor < 0;
+  }
+  unless (scalar(keys %termCount)) {
+    return '<span class="twikiAlert">nothing found</span>' if $theWarn eq 'on';
+    return '';
   }
 
   # compute the weights
@@ -170,7 +178,11 @@ sub handleTagCloud {
   if ($theSort eq 'alpha') {
     @sortedTerms = sort keys %termCount;
   } else {
-    @sortedTerms = sort {($termWeight{$b} <=> $termWeight{$a}) || ($a cmp $b)} keys %termCount;
+    if ($theSort eq 'count') {
+      @sortedTerms = sort {($termCount{$b} <=> $termCount{$a}) || ($a cmp $b)} keys %termCount;
+    } else {
+      @sortedTerms = sort {($termWeight{$b} <=> $termWeight{$a}) || ($a cmp $b)} keys %termCount;
+    }
   }
   @sortedTerms = reverse @sortedTerms if $theReverse eq 'on';
 
@@ -181,6 +193,7 @@ sub handleTagCloud {
   my $lastGroup = '';
   foreach my $term (@sortedTerms) {
     $index++;
+    last if $theLimit && $index > $theLimit;
     my $text;
     my $weight = $termWeight{$term}+$theOffset;
     $text = $theSep if $result;

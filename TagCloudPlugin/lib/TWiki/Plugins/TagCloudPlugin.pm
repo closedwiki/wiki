@@ -20,7 +20,7 @@ package TWiki::Plugins::TagCloudPlugin;
 use strict;
 use vars qw(
   $VERSION $RELEASE $SHORTDESCRIPTION $NO_PREFS_IN_TOPIC 
-  $debug $isInitialized
+  $isInitialized
 );
 
 $VERSION = '$Rev$';
