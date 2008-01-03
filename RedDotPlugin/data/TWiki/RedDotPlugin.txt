@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1139390200" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1139390200" format="1.1" version="$Rev$"}%
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -66,10 +66,11 @@ Note, however, that this feature only works on a TWiki/Dakar engine.
 
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2005-2006, Michael Daum |
+|  Copyright &copy;: | 2005-2008, Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.37 |
+|  Plugin Version: | v1.40 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  03 Jan 2008: | using TWiki-4 APIs to register tags; fixed default values for reddots |
 |  18 Sep 2006: | don't use private apis; removed endRenderingHandler: this plugin does not \
                   work on older twiki releases!; create cgi urls properly |
 |  31 Aug 2006: | added NO_PREFS_IN_TOPIC |
@@ -97,8 +98,5 @@ Note, however, that this feature only works on a TWiki/Dakar engine.
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 18 Sep 2006
+-- TWiki:Main.MichaelDaum - 03 Jan 2008
 
-
-
-%META:FILEATTACHMENT{name="style.css" attr="" comment="" date="1124736061" path="style.css" size="157" user="TWikiContributor" version="1.1"}%
