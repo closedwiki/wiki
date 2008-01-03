@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2006 MichaelDaum@WikiRing.com
+# Copyright (C) 2006-2008 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -15,15 +15,13 @@
 package TWiki::Plugins::FlexWebListPlugin::Core;
 
 use strict;
-use vars qw($debug);
 
-$debug = 0; # toggle me
+use constant DEBUG => 0; # toggle me
 
 ###############################################################################
 # static
 sub writeDebug {
-  #&TWiki::Func::writeDebug('- FlexWebListPlugin - '.$_[0]) if $debug;
-  print STDERR '- FlexWebListPlugin - '.$_[0]."\n" if $debug;
+  print STDERR '- FlexWebListPlugin - '.$_[0]."\n" if DEBUG;
 }
 
 ###############################################################################
@@ -118,6 +116,20 @@ sub handler {
   }
   #writeDebug("list=".join(',', @list));
 
+  # filter webs by setting the 'enabled' flag
+  foreach my $aweb (@list) {
+    my $web = $allWebs->{$aweb};
+    next unless $web;
+    unless ($this->{isExplicit}{$web->{key}}) {
+      next if $web->{isSubWeb} && $this->{subWebs} eq 'none';
+      next if $this->{exclude} ne '' && $web->{key} =~ /^($this->{exclude})$/;
+      next if $this->{include} ne '' && $web->{key} !~ /^($this->{include})$/;
+      next if $this->{adminwebs} ne '' && !$this->{isAdmin} &&
+        $web->{key} =~ /^($this->{adminwebs})$/;
+    }
+    $web->{enabled} = 1;
+  }
+
   # format result
   my @result;
   foreach my $aweb (@list) {
@@ -155,18 +167,9 @@ sub formatWeb {
   my ($this, $web, $format) = @_;
 
   # check conditions to format this web
-  return '' if $web->{done};
-
-  # filter webs
-  unless ($this->{isExplicit}{$web->{key}}) {
-    return '' if $web->{isSubWeb} && $this->{subWebs} eq 'none';
-    return '' if $this->{exclude} ne '' && $web->{key} =~ /^($this->{exclude})$/;
-    return '' if $this->{include} ne '' && $web->{key} !~ /^($this->{include})$/;
-    return '' if $this->{adminwebs} ne '' && !$this->{isAdmin} &&
-      $web->{key} =~ /^($this->{adminwebs})$/;
-  }
-
+  return '' if $web->{done} || !$web->{enabled};
   $web->{done} = 1;
+
   #writeDebug("formatWeb($web->{key})");
 
   # format all subwebs recursively

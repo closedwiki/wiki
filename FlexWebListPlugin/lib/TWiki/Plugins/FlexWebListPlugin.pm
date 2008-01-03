@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2006 MichaelDaum@WikiRing.com
+# Copyright (C) 2006-2008 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@ use strict;
 use vars qw( $VERSION $RELEASE $core $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION);
 
 $VERSION = '$Rev$';
-$RELEASE = 'v1.20';
+$RELEASE = 'v1.21';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Flexible way to display hierarchical weblists';
 

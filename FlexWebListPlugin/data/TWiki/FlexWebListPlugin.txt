@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1023947640" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1198821769" format="1.1" version="$Rev$"}%
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -138,22 +138,23 @@ See the FlexWebListExamples.
 ---++ Plugin Installation Instructions
 
 
-	* [[%ATTACHURL%/%TOPIC%.zip][Download]] the ZIP file
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	| *File:* | *Description:* |
+   * [[%ATTACHURL%/%TOPIC%.zip][Download]] the ZIP file
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+   | *File:* | *Description:* |
 %$MANIFEST%
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 ---++ Plugin Info
 <!-- provided for compatibility only
-	* Set SHORTDESCRIPTION = Flexible way to display hierarchical weblists
+   * Set SHORTDESCRIPTION = Flexible way to display hierarchical weblists
 -->
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2006-2007, MichaelDaum http://wikiring.de |
+|  Copyright &copy;: | 2006-2008, Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.20 |
+|  Plugin Version: | v1.21 |
 |  Change History: | &nbsp; |
+|  03 Jan 2008: | fixed hiding of subwebs |
 |  13 Sep 2007: | added adminwebs feature |
 |  21 May 2007: | added <nop>FlexWebListNavi |
 |  08 May 2007: | docu fixes, respect HOMETOPIC in the examples |
@@ -165,7 +166,7 @@ See the FlexWebListExamples.
 |  &nbsp;       | start counting =$indent= at zero, not one; fixed the examples accordingly |
 |  02 Aug 2006: | added =publiccurrent= pseudo-web which is the sorted list of all public webs \
                   including the current one; fixed =$indent= not to assume multiples of 3 items \
-		  to indent |
+                  to indent |
 |  31 Jul 2006: | don't filter webs that have been added explicitly added to =webs= |
 |  &nbsp;       | more fixes related to web filtering; fixed some testcases |
 |  28 Jul 2006: | preserve order in webs parameter |
@@ -179,4 +180,4 @@ See the FlexWebListExamples.
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main/MichaelDaum - 13 Sep 2007
+-- TWiki:Main/MichaelDaum - 03 Jan 2008

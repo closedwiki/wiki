@@ -9,7 +9,7 @@ If you want to hide the web navigation from <nop>TWikiGuests then uncomment the 
 
 <verbatim>
 %STARTINCLUDE%%TWISTY{
-  prefix="<h2>"
+  prefix="<h2 >"
   suffix="</h2>"
   remember="on" 
   firststart="show"
