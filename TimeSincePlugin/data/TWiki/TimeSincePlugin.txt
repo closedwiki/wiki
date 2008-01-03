@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1139390249" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1139390249" format="1.1" version="$Rev$"}%
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -89,10 +89,11 @@ Format strings may contain the following:
 -->
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2005-2006, Michael Daum http://wikiring.com |
+|  Copyright &copy;: | 2005-2008, Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.02 |
+|  Plugin Version: | v1.10 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  03 Jan 2008: | improved parsing time formats |
 |  13 Oct 2006: | added =negformat= parameter |
 |  31 Aug 2006: | added NO_PREFS_IN_TOPIC |
 |  27 Apr 2006: | added lazy compilation |
@@ -106,4 +107,4 @@ Format strings may contain the following:
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 13 Oct 2006
+-- TWiki:Main.MichaelDaum - 03 Jan 2008

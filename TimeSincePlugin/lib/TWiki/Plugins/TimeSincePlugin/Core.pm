@@ -23,9 +23,9 @@ package TWiki::Plugins::TimeSincePlugin::Core;
 
 use Time::Local;
 use strict;
-use vars qw( $debug @SECONDS %MON2NUM );
+use vars qw( @SECONDS %MON2NUM );
 
-$debug = 0; # toggle me
+use constant DEBUG => 0; # toggle me
 
 %MON2NUM = (
   Jan => 0,
@@ -56,7 +56,7 @@ $debug = 0; # toggle me
 
 ###############################################################################
 sub writeDebug {
-  &TWiki::Func::writeDebug('- TimeSincePlugin - ' . $_[0]) if $debug;
+  print STDERR "TimeSincePlugin - $_[0]\n" if DEBUG
 }
 
 
@@ -128,6 +128,8 @@ sub handleTimeSince {
   if ($theAbs eq 'on') {
     $since = abs($since);
   }
+
+  #writeDebug("from=$theFrom to=$theTo, since=$since, abs=$theAbs");
    
   # calculate time string
   my $unit;
@@ -143,7 +145,7 @@ sub handleTimeSince {
     $seconds = $SECONDS[$i][1];
     $count = int(($since + 0.0) / $seconds);
 
-    #writeDebug("unit=$unit, seconds=$seconds, count=$count, since=$since");
+    #writeDebug("$i: unit=$unit, seconds=$seconds, count=$count, since=$since");
 
     # finding next unit
     if ($count) {
@@ -168,20 +170,23 @@ sub handleTimeSince {
 
 ###############################################################################
 sub parseTime {
-    my( $date ) = @_;
+    my $date = shift;
+
+    #writeDebug("parseTime($date)");
 
     my $isGmt = ($date =~ /GMT$/i)?1:0;
 
     # NOTE: This routine *will break* if input is not one of below formats!
     
     # FIXME - why aren't ifs around pattern match rather than $5 etc
-    # try "31 Dec 2001 - 23:59"  (TWiki date)
-    if ($date =~ /([0-9]+)\s+([A-Za-z]+)\s+([0-9]+)[\s\-]+([0-9]+)\:([0-9]+)/) {
+    # try "31 Dec 2001 - 23:59:11"  (TWiki date)
+    if ($date =~ /([0-9]+)\s+([A-Za-z]+)\s+([0-9]+)[\s\-]+([0-9]+)\:([0-9]+)(?:\:([0-9]+))?/) {
         my $year = $3;
+        my $seconds = $6 || 0;
         #$year -= 1900 if( $year > 1900 );
         # The ($2) will look up the constant so named
-        return timegm( 0, $5, $4, $1, $MON2NUM{$2}, $year ) if $isGmt;
-        return timelocal( 0, $5, $4, $1, $MON2NUM{$2}, $year );
+        return timegm( $seconds, $5, $4, $1, $MON2NUM{$2}, $year ) if $isGmt;
+        return timelocal( $seconds, $5, $4, $1, $MON2NUM{$2}, $year );
     }
 
     # try "31 Dec 2001"
@@ -201,20 +206,20 @@ sub parseTime {
         return timelocal( $6, $5, $4, $3, $2-1, $year );
     }
 
-    # try "2001/12/31"
-    if ($date =~ /([0-9]+)[\.\/\-]([0-9]+)[\.\/\-]([0-9]+)/) {
-        my $year = $1;
-        #$year -= 1900 if( $year > 1900 );
-        return timegm( 0, 0, 0, $3, $2-1, $year ) if $isGmt;
-        return timelocal( 0, 0, 0, $3, $2-1, $year );
-    }
-
     # try "2001/12/31 23:59" or "2001.12.31.23.59" (RCS short date)
     if ($date =~ /([0-9]+)[\.\/\-]([0-9]+)[\.\/\-]([0-9]+)[\.\s\-]+([0-9]+)[\.\:]([0-9]+)/) {
         my $year = $1;
         #$year -= 1900 if( $year > 1900 );
         return timegm( 0, $5, $4, $3, $2-1, $year ) if $isGmt;
         return timelocal( 0, $5, $4, $3, $2-1, $year );
+    }
+
+    # try "2001/12/31"
+    if ($date =~ /([0-9]+)[\.\/\-]([0-9]+)[\.\/\-]([0-9]+)/) {
+        my $year = $1;
+        #$year -= 1900 if( $year > 1900 );
+        return timegm( 0, 0, 0, $3, $2-1, $year ) if $isGmt;
+        return timelocal( 0, 0, 0, $3, $2-1, $year );
     }
 
     # try "2001-12-31T23:59:59Z" or "2001-12-31T23:59:59+01:00" (ISO date)
@@ -254,10 +259,10 @@ sub expandVariables {
     $theFormat =~ s/\$$key/$params{$key}/g;
   }
   $theFormat =~ s/\$percnt/\%/go;
-  $theFormat =~ s/\$dollar/\$/go;
-  $theFormat =~ s/\$n/\n/go;
   $theFormat =~ s/\$t\b/\t/go;
   $theFormat =~ s/\$nop//g;
+  $theFormat =~ s/\$n/\n/go;
+  $theFormat =~ s/\$dollar/\$/go;
 
   return $theFormat;
 }
