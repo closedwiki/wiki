@@ -552,7 +552,8 @@ msgstr ""
 
 #: data/TWiki/WebTemplateTopics.txt:4
 msgid "A topic template defines the initial content of a newly created topic."
-msgstr "Een paginatemplate definieert de initiële inhoud van een nieuw " "aangemaakte pagina."
+msgstr ""
+"Een paginatemplate definieert de initiële inhoud van een nieuw aangemaakte pagina."
 
 #: templates/oopsaccessdenied.tmpl:6
 #: twikiplugins/ClassicSkin/templates/oopsaccessdenied.classic.tmpl:5
@@ -804,8 +805,8 @@ msgid ""
 "But existing form data will be lost (you can always retrieve this data "
 "through the topic history)"
 msgstr ""
-"Maar bestaande formuliergegevens worden gewist (je kan deze gegevens altijd "
-"terugvinden in de paginageschiedenis)"
+"Maar bestaande formuliergegevens worden gewist. Je kunt deze gegevens altijd "
+"terugvinden in de paginageschiedenis."
 
 #: data/Trash/WebHome.txt:7
 msgid ""
@@ -1097,7 +1098,7 @@ msgstr "Persoonlijk menu aanmaken"
 
 #: templates/messages.tmpl:493
 msgid "Create the topic"
-msgstr "Pagina aanmaken"
+msgstr "Maak deze pagina aan"
 
 #: data/TWiki/TWikiPreferences.txt:314 data/TWiki/TWikiPreferences.txt:316
 #: data/TWiki/WebCreateNewTopicTemplate.txt:60 lib/TWiki/Render.pm:89
@@ -1749,7 +1750,7 @@ msgstr ""
 #: twikiplugins/PatternSkin/data/TWiki/WebTopBar.txt:7
 #: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:36
 msgid "Jump"
-msgstr "Spring naar"
+msgstr "Direct naar pagina"
 
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:97
 msgid "Last Name:"
@@ -2410,7 +2411,7 @@ msgstr ""
 
 #: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:159
 msgid "Save table"
-msgstr "Bewaar tabel"
+msgstr "Bewaren"
 
 #: templates/registernotifyadmin.tmpl:16
 #: twikiplugins/ClassicSkin/templates/registernotifyadmin.classic.tmpl:16
