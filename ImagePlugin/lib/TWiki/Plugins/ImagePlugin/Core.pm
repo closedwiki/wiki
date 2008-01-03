@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2006 Craig Meyer, meyercr@gmail.com
-# Copyright (C) 2006 MichaelDaum@WikiRing.com
+# Copyright (C) 2006-2008 Michael Daum http://michaeldaumconsulting.com
 #
 # Based on ImgPlugin
 # Copyright (C) 2006 Meredith Lesly, msnomer@spamcop.net
@@ -39,12 +39,12 @@ BEGIN {
 };
 
 use vars qw(
-  $debug $frameFormat $linkFormat $simpleFormat 
+  $frameFormat $linkFormat $simpleFormat 
   $magnifyFormat $captionFormat $floatFormat
   $clearFormat
 );
 
-$debug = 0; # toggle me
+use constant DEBUG => 0; # toggle me
 
 # SMELL: become plugin preference values
 $linkFormat = 
@@ -88,8 +88,7 @@ $magnifyFormat =
 ###############################################################################
 # static
 sub writeDebug {
-  #&TWiki::Func::writeDebug("ImagePlugin - $_[0]") if $debug;
-  print STDERR "ImagePlugin - $_[0]\n" if $debug;
+  print STDERR "ImagePlugin - $_[0]\n" if DEBUG;
 }
 
 ###############################################################################
@@ -118,7 +117,7 @@ sub new {
 sub handleIMAGE {
   my ($this, $session, $params, $theTopic, $theWeb) = @_;
 
-  #writeDebug("called handleIMAGE(params, $theTopic, $theWeb)");
+  writeDebug("called handleIMAGE(params, $theTopic, $theWeb)");
 
   if($params->{_DEFAULT} =~ m/clr|clear/i ){ # SMELL: non-documented feature
     return $clearFormat;
@@ -155,11 +154,36 @@ sub handleIMAGE {
   my $imgTopic;
   my $imgPath;
   my $pubDir = TWiki::Func::getPubDir();
-  my $pubUrlPath = TWiki::Func::getPubUrlPath();
+  my $pubUrl= TWiki::Func::getUrlHost().TWiki::Func::getPubUrlPath();
   my $albumTopic;
 
   # search image
-  if ($origFile =~ /^(.*)\/(.*?)$/) {
+  if ($origFile =~ /^http:\/\/.*/) {
+    require LWP::Simple;
+    require Digest::MD5;
+    my $url = $origFile;
+    my $ext = '';
+    if ($url =~ /(\.[a-zA-Z]+)$/) {
+      $ext = $1;
+    }
+    $origFile = '_img'.Digest::MD5::md5_hex($url).$ext;
+    $imgTopic = $params->{topic} || $theTopic;
+    ($imgWeb, $imgTopic) = 
+      TWiki::Func::normalizeWebTopicName($imgWeb, $imgTopic);
+    $imgPath = $pubDir.'/'.$imgWeb;
+    mkdir($imgPath) unless -d $imgPath;
+    $imgPath .= '/'.$imgTopic;
+    mkdir($imgPath) unless -d $imgPath;
+    $imgPath .= '/'.$origFile;
+    unless (-e $imgPath) {
+      writeDebug("fetching $url into $imgPath");
+      my $responseCode = LWP::Simple::getstore($url, $imgPath);
+      if (LWP::Simple::is_error($responseCode)) {
+        $this->{errorMsg} = "($responseCode) can't fetch image from <nop>'$url'";
+        return $this->inlineError($params);
+      }
+    }
+  } elsif ($origFile =~ /^(.*)\/(.*?)$/) {
     # part of the filename
     $origFile = $2;
     ($imgWeb, $imgTopic) = TWiki::Func::normalizeWebTopicName($imgWeb, $1);
@@ -227,7 +251,7 @@ sub handleIMAGE {
 
   writeDebug("origFile=$origFile, imgWeb=$imgWeb, imgTopic=$imgTopic");
 
-  my $origFileUrl = $pubUrlPath.'/'.$imgWeb.'/'.$imgTopic.'/'.$origFile;
+  my $origFileUrl = $pubUrl.'/'.$imgWeb.'/'.$imgTopic.'/'.$origFile;
   $params->{alt} ||= $origFile;
   $params->{title} ||= $params->{caption} || $origFile;
   $params->{desc} ||= $params->{title};
@@ -247,7 +271,7 @@ sub handleIMAGE {
   }
 
   # For compatibility with i18n-characters in file names, encode urls (as TWiki.pm/viewfile does for attachment names in general)
-  my $thumbFileUrl = $pubUrlPath.'/'.$imgWeb.'/'.$imgTopic.'/'.$imgInfo->{file};
+  my $thumbFileUrl = $pubUrl.'/'.$imgWeb.'/'.$imgTopic.'/'.$imgInfo->{file};
   $thumbFileUrl = TWiki::urlEncode($thumbFileUrl);
   my $encHref   = $params->{href};
   $encHref      = TWiki::urlEncode($encHref);
@@ -401,6 +425,8 @@ sub getImageInfo {
 # sets type (link,frame,thumb), file, width, height, size, caption
 sub parseWikipediaParams {
   my ($this, $params, $argStr) = @_;
+
+  return unless $argStr =~ /\|/g;
 
   my ($file, @args) = split(/\|/, $argStr);
   $params->{type} = 'link' if $file =~ s/^://o;

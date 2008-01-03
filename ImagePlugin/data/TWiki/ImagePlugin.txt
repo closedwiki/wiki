@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1147158959" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1185796960" format="1.1" reprev="1.3" version="$Rev$"}%
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -20,7 +20,7 @@ of pre-defined layout formats for images as well as a free layout configurabilit
 Short example: %BR%
 *You type:* %BR%
 <verbatim>
-%IMAGE{"Westminstpalace.jpg"
+%IMAGE{"WestminstpalaceSample.png"
   type="frame" 
   align="none" 
   caption="caption text"
@@ -33,8 +33,13 @@ Short example: %BR%
 
 Images to be displayed can be located
    * at the =topic= as specified,
-   * at the location specified in the IMAGEALBUM preference variable or
-   * at the current topic as a last resort.
+   * at the location specified in the IMAGEALBUM preference variable,
+   * at the current topic or
+   * at a remote URL.
+
+If you specify a remote url using =http://...= the image is downloaded (using CPAN:LWP::Simple)
+into a local cache and then processed as usual. WARNING: please be aware of any copyrights of
+the images you mirror this way.
 
 The =topic= and IMAGEALBUM parameters can be of the for =[&lt;web>.]&lt;topic>= .
 For example putting
@@ -78,6 +83,7 @@ The image name is mandatory.  Further arguments are optional.
 | =type=  |  simple&#124;link&#124;thumb[nail]&#124;frame&#124;float"  | empty  |
 | =web= | valid TWiki web name | web part of IMGALBUM value or current topic |
 | =width= | integer value | image width |
+| =warn= | on/off, surpress error warnings | on |
 
 ---+++ Image geometry
 The image geometry in the =size= parameter can be specified in a format 
@@ -131,17 +137,6 @@ order is left-to-right-inside-out.
    * =%<nop>IMAGE{"foo.gif" type="thumb" align="center"}%=  (Resize to %<nop>IMGPLUGIN_THUMBNAIL% size, and center image)
    
 
----++ Plugin Settings
-
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Control the display and alignment of images using an easy syntax
-
-   * Default Thumbnail size (defaults to 180)
-      * Set THUMBNAIL_SIZE = 180
-      
-   * Location of picture used as enlarge icon for thumbnails
-      * Set IMAGEPLUGIN_MAGNIFY_ICON = %PUBURLPATH%/TWiki/ImagePlugin/magnify-clip.png
-
 ---++ Plugin Installation Instructions
 
    * [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] the ZIP file
@@ -160,12 +155,16 @@ order is left-to-right-inside-out.
       * For complete example see Sandbox.ImagePluginTest
 
 ---++ Plugin Info
+<!--
+   * Set SHORTDESCRIPTION = Control the display and alignment of images using an easy syntax
+-->
 
 |  Plugin Author: | TWiki:Main.CraigMeyer |
-|  Copyright: | &copy; 2006, TWiki:Main.CraigMeyer, MichaelDaum@WikiRing.com |
+|  Copyright: | &copy; 2006, TWiki:Main.CraigMeyer, %copy; 2006-2008 MichaelDaum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 0.4 |
+|  Plugin Version: | 1.0 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  03 Jan 2008: | added processing of remote images |
 |  18 Dec 2006: | fixed image lookup order; fixed html formats; added I18N workaround |
 |  18 Aug 2006: | fixed html errors; \
                   removed references to <nop>ImgPlugin thus not showing the magnify-clip; \
@@ -174,7 +173,7 @@ order is left-to-right-inside-out.
 |  16 June 2006: | released into the public |
 |  10 May 2006: | Initial version by forking <nop>ImgPlugin |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
-|  CPAN Dependencies: | CPAN:Image::Magick |
+|  CPAN Dependencies: | CPAN:Image::Magick; CPAN:LWP::Simple; CPAN::Digest::MD5 |
 |  Other Dependencies: |  |
 |  Perl Version: | 5.8 |
 |  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
@@ -184,4 +183,8 @@ order is left-to-right-inside-out.
 
 
 -- TWiki:Main.CraigMeyer %BR%
--- TWiki:Main.MichaelDaum - 18 Dec 2006
+-- TWiki:Main.MichaelDaum - 03 Jan 2008
+
+%META:FILEATTACHMENT{name="style.css" attr="" autoattached="1" comment="" date="1168442621" path="style.css" size="1423" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="magnify-clip.png" attr="" autoattached="1" comment="" date="1160383253" path="magnify-clip.png" size="267" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="WestminstpalaceSample.png" attr="" autoattached="1" comment="" date="1185796830" path="WestminstpalaceSample.png" size="107728" user="TWikiContributor" version="1"}%

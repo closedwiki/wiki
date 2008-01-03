@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2006 Craig Meyer, meyercr@gmail.com
-# Copyright (C) 2006 MichaelDaum@WikiRing.com
+# Copyright (C) 2006-2008 Michael Daum http://michaeldaumconsulting.com
 #
 # Based on ImgPlugin
 # Copyright (C) 2006 Meredith Lesly, msnomer@spamcop.net
@@ -28,7 +28,7 @@ use strict;
 use vars qw( $VERSION $RELEASE $imageCore $doneHeader $imgStyle $baseWeb $baseTopic);
 
 $VERSION = '$Rev$';
-$RELEASE = '0.4'; # please increase on every upload to twiki.org
+$RELEASE = '1.0'; # please increase on every upload to twiki.org
 
 ###############################################################################
 sub initPlugin {
