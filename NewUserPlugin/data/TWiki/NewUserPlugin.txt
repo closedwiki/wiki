@@ -38,10 +38,11 @@ TWiki:Plugins/LdapNgPlugin and the TWiki:Plugins/GluePlugin to make use of it.
 This work is partly funded by [[http://www.hennerich.de][T+T Hennerich <nop>GmbH]].
 
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Copyright &copy;: | 2006-2007, Michael Daum http://wikiring.de |
+|  Copyright &copy;: | 2006-2008, Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.01 |
+|  Plugin Version: | v1.02 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  03 Jan 2008 | fixed default values for NEWUSERTEMPLATE, clearing unset LDAP attributes |
 |  23 Oct 2007 | work around infinite loop in combination with <nop>ActionTrackerPlugin |
 |  17 Sep 2007 | replace usernames in formtemplates as well as in the topic text |
 |  18 Dec 2006 | initial release |

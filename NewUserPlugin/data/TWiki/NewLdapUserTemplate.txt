@@ -4,10 +4,5 @@
 %$nopINCLUDE{"%TWIKIWEB%.RenderLdapUser" KEY="%USERNAME%"}%
 
 <!--
-   * Set EDITBOXWIDTH = 80
-   * Set EDITBOXHEIGHT = 22
-   * Set EDITBOXSTYLE = width: 99%
-   * Set LINKTOOLTIPINFO = off
-
    * Set ALLOWTOPICCHANGE = %WIKIUSERNAME%
 -->

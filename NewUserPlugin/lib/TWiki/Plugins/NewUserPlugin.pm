@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2006-2007 Michael Daum http://wikiring.de
+# Copyright (C) 2006-2008 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,20 +18,21 @@
 package TWiki::Plugins::NewUserPlugin;
 
 use strict;
-use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $NO_PREFS_IN_TOPIC $done);
+use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $NO_PREFS_IN_TOPIC $done);
+
+use constsant DEBUG => 0; # toggle me
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
 $VERSION = '$Rev$';
-$RELEASE = 'v1.01';
+$RELEASE = 'v1.02';
 $SHORTDESCRIPTION = 'Create a user topic if it does not exist yet';
 $NO_PREFS_IN_TOPIC = 1;
-$debug = 0; # toggle me
 
 ###############################################################################
 sub writeDebug {
-  print STDERR 'NewUserPlugin - '.$_[0]."\n" if $debug;
+  print STDERR 'NewUserPlugin - '.$_[0]."\n" if DEBUG;
 }
 
 ###############################################################################
@@ -76,7 +77,7 @@ sub createUserTopic {
   my $twikiWeb = TWiki::Func::getTwikiWebname();
   my $mainWeb = TWiki::Func::getMainWebname();
   my $newUserTemplate = 
-    TWiki::Func::getPreferencesValue('NEWUSERTEMPLATE') || 'NewUserTemplate';
+    TWiki::Func::getPreferencesValue('NEWUSERTEMPLATE') || 'NewLdapUserTemplate';
   my $tmplTopic;
   my $tmplWeb;
 
