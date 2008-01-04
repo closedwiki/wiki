@@ -28,7 +28,7 @@ $VERSION = '$Rev: 14207 $';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.0.1';
+$RELEASE = '1.1';
 
 $pluginName = 'AttachmentListPlugin';    # Name of this Plugin
 
@@ -116,6 +116,10 @@ sub handleFileList {
                                # param filter is deprecated
     my %extensions        = makeHashFromString( lc $extensionsParam );
     my %excludeExtensions = makeHashFromString( lc $excludeExtensionsParam );
+    my $usersParam        = $params->{"user"};
+    my %users             = makeHashFromString($usersParam);
+    my $excludeUsersParam = $params->{"excludeuser"};
+    my %excludeUsers      = makeHashFromString($excludeUsersParam);
 
     # sort options
     my $sort      = $params->{'sort'}      || '';
@@ -131,7 +135,7 @@ sub handleFileList {
           : 0;    # don't hide by default
     }
 
-    my %hiddenFiles = makeHashFromString($excludeFiles);
+    my %excludedFiles = makeHashFromString($excludeFiles);
 
     # store once for re-use in loop
     my $pubUrl = TWiki::Func::getUrlHost() . TWiki::Func::getPubUrlPath();
@@ -174,6 +178,7 @@ sub handleFileList {
 
         my $filename = $attachment->{name};
 
+        # filter on extension
         my $fileExtension = getFileExtension($filename);
 
         if (   ( keys %extensions && !$extensions{$fileExtension} )
@@ -181,15 +186,30 @@ sub handleFileList {
         {
             next;
         }
-        next if ( $hiddenFiles{$filename} );
+
+        # filter excluded files
+        next if ( $excludedFiles{$filename} );
 
         my $attrSize    = $attachment->{size};
         my $attrUser    = $attachment->{user};
         my $attrComment = $attachment->{comment};
         my $attrAttr    = $attachment->{attr};
 
-        # skip if the attachment is hidden
-        next if ( $attrAttr =~ /h/i && $hideHidden );
+        # filter on hidden attachments
+        next if ( $hideHidden && $attrAttr =~ /h/i );
+
+        # filter on user
+        if ( $usersParam || $excludeUsersParam ) {
+            my $userName = "none";
+            $userName = TWiki::Func::getWikiUserName($attrUser)
+              if ( $attrUser ne '' );
+            $userName =~ s/^(.*?\.)*(.*?)$/$2/;    # remove Main. from username
+            if (   ( keys %users && !$users{$userName} )
+                || ( $excludeUsers{$userName} ) )
+            {
+                next;
+            }
+        }
 
         # ------- END OF FILTERS -------
 
@@ -281,6 +301,8 @@ sub handleFileList {
           $pubUrl . "/$attachmentTopicWeb/$attachmentTopic/$filename";
 
         $s =~ s/\$fileUrl/$fileUrl/g;
+        $s =~ s/\$fileTopic/$attachmentTopic/g;
+        $s =~ s/\$fileWeb/$attachmentTopicWeb/g;
 
         my $sep = $separator || "\n";
         $outtext .= $s . $sep;
