@@ -158,7 +158,7 @@ footer="Number of images: $fileCount"
 | Copyright &copy;: | TWiki:Main.VinodKulkarni, TWiki:Main.SopanShewale (2006), TWiki:Main.ArthurClemens (2006, 2007, 2008) |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
-|  Plugin Version: | 04 Jan 2008 (V1.1)  |
+|  Plugin Version: | 05 Jan 2008 (V1.1.1)  |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 | 04 Jan 2008 - v.1.1   | Arthur Clemens: Added filter parameters =user= and =excludeuser=; added format parameters =$fileTopic= and =$fileWeb=. |
 | 06 Dec 2007 - v.1.0   | Arthur Clemens: integrated sort options by TWiki:Main.RohanMoitra. Renamed !FileListPlugin to !AttachmentListPlugin; changed =FILELIST= (now deprecated) to =ATTACHMENTLIST=. |
