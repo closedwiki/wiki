@@ -28,7 +28,7 @@ $VERSION = '$Rev: 14207 $';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.1.2';
+$RELEASE = '1.1.3';
 
 $pluginName = 'AttachmentListPlugin';    # Name of this Plugin
 
@@ -229,9 +229,9 @@ sub handleFileList {
         # TODO: more flexible size formatting
         # also take MB into account
         my $attrSizeStr;
-        $attrSizeStr = $attrSize . 'b' if ( $attrSize < 100 );
+        $attrSizeStr = $attrSize . 'b' if ( $attrSize && $attrSize < 100 );
         $attrSizeStr = sprintf( "%1.1fK", $attrSize / 1024 )
-          if ( $attrSize >= 100 );
+          if ( $attrSize && $attrSize >= 100 );
         $attrComment = $attrComment || "";
         my $s = "$format";
 
