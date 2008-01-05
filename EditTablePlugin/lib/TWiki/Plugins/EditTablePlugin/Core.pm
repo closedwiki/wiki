@@ -512,7 +512,7 @@ s/$regex{table_row}/handleTableRow( $1, $2, $tableNr, $isNewRow, $theRowNr, $doE
 
     # clean up hack that handles EDITTABLE correctly if at end
     $result =~ s/($RENDER_HACK)+$//go;
-    TWiki::Func::writeDebug("result=$result");
+
     if ($doSave) {
         my $error = TWiki::Func::saveTopicText( $theWeb, $theTopic, $result, '',
             $doSaveQuiet );
@@ -1050,7 +1050,8 @@ sub inputElement {
 
         $rows |= 3  if !defined $rows;
         $cols |= 30 if !defined $cols;
-
+        $theValue =~ s/\s*<br \/>/ <br \/>/go
+          ;    # put one space before linebreak and not more
         $theValue = TWiki::Plugins::EditTablePlugin::encodeValue($theValue)
           unless ( $theValue eq '' );
         $text .=
@@ -1181,6 +1182,7 @@ sub handleTableRow {
             else {
                 $cell = '';
             }
+
             if ( ( $theRowNr <= 1 ) && ( $params{'header'} ) ) {
                 unless ($cell) {
                     if ( $params{'header'} =~ /^on$/i ) {
@@ -1198,11 +1200,13 @@ sub handleTableRow {
                         $cell = "*text*" unless $cell;
                     }
                 }
-                $cell = " $cell " if $cell ne '';
+                $cell = " $cell "
+                  if $cell ne '';    # add space to expand variables
                 $text .= "$cell\|";
             }
             elsif ($doSave) {
-                $cell = " $cell " if $cell ne '';
+                $cell = " $cell "
+                  if $cell ne '';    # add space to expand variables
                 $text .= "$cell\|";
             }
             else {
