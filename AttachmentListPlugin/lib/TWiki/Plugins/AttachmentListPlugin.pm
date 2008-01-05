@@ -28,7 +28,7 @@ $VERSION = '$Rev: 14207 $';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.1.1';
+$RELEASE = '1.1.2';
 
 $pluginName = 'AttachmentListPlugin';    # Name of this Plugin
 
@@ -191,7 +191,7 @@ sub handleFileList {
         next if ( $excludedFiles{$filename} );
 
         my $attrSize    = $attachment->{size};
-        my $attrUser    = $attachment->{user};
+        my $attrUser    = $attachment->{user} || 'UnknownUser';
         my $attrComment = $attachment->{comment};
         my $attrAttr    = $attachment->{attr};
 
@@ -200,9 +200,16 @@ sub handleFileList {
 
         # filter on user
         if ( $usersParam || $excludeUsersParam ) {
-            my $userName = "none";
-            $userName = TWiki::Func::getWikiName($attrUser)
-              if ( $attrUser ne '' ); # else getWikiName defaults to the current logged in user
+            my $userName = 'none';
+            if ( $TWiki::Plugins::VERSION < 1.2 ) {
+                $userName = $attrUser;
+                $userName =~ s/^(.*?\.)*(.*?)$/$2/; # remove Main. from username
+            }
+            else {
+                $userName = TWiki::Func::getWikiName($attrUser)
+                  if ( $attrUser ne '' )
+                  ;    # else getWikiName defaults to the current logged in user
+            }
             if (   ( keys %users && !$users{$userName} )
                 || ( $excludeUsers{$userName} ) )
             {
