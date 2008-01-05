@@ -930,12 +930,10 @@ sub inputElement {
             $expandedValue =~ s/\s+$//;
             $valExpanded   =~ s/^\s+//;
             $valExpanded   =~ s/\s+$//;
-            $text .= " <input type=\"radio\" name=\"$theName\" value=\"$val\"";
+            $text .= "<input type=\"radio\" name=\"$theName\" value=\"$val\"";
 
             # make space to expand variables
-            $val = " $val ";
-            $val =~ s/^\s+/ /;    # remove extra spaces
-            $val =~ s/\s+$/ /;
+            $val = addSpaceToBothSides($val);
             $text .= " checked=\"checked\""
               if ( $valExpanded eq $expandedValue );
             $text .= " />$val";
@@ -977,10 +975,7 @@ sub inputElement {
             $text .=
               " <input type=\"checkbox\" name=\"${theName}x$i\" value=\"$val\"";
 
-            # make space to expand variables
-            $val = " $val ";
-            $val =~ s/^\s+/ /;    # remove extra spaces
-            $val =~ s/\s+$/ /;
+            $val = addSpaceToBothSides($val);
 
             $text .= " checked=\"checked\""
               if ( $expandedValue =~ /(^|\s*,\s*)\Q$valExpanded\E(\s*,\s*|$)/ );
@@ -1149,9 +1144,7 @@ sub handleTableRow {
                     if ( defined $val ) {
 
                         # make space to expand variables
-                        $val = " $val ";
-                        $val =~ s/^\s+/ /;    # remove extra spaces
-                        $val =~ s/\s+$/ /;
+                        $val = addSpaceToBothSides($val);
                         $chkBoxVals .= $val . ',';
                     }
                 }
@@ -1200,13 +1193,11 @@ sub handleTableRow {
                         $cell = "*text*" unless $cell;
                     }
                 }
-                $cell = " $cell "
-                  if $cell ne '';    # add space to expand variables
+                $cell = addSpaceToBothSides($cell);
                 $text .= "$cell\|";
             }
             elsif ($doSave) {
-                $cell = " $cell "
-                  if $cell ne '';    # add space to expand variables
+                $cell = addSpaceToBothSides($cell);
                 $text .= "$cell\|";
             }
             else {
@@ -1246,6 +1237,23 @@ sub handleTableRow {
     # render final value in view mode (not edit or save)
     TWiki::Plugins::EditTablePlugin::decodeFormatTokens($text)
       if ( !$doSave && !$doEdit );
+    return $text;
+}
+
+=pod
+
+Add one space to both sides of the text to allow TML expansion.
+Convert multiple (existing) spaces to one space.
+
+=cut
+
+sub addSpaceToBothSides {
+    my ($text) = @_;
+    return $text if $text eq '';
+
+    $text = " $text ";
+    $text =~ s/^\s+/ /;    # remove extra spaces
+    $text =~ s/\s+$/ /;
     return $text;
 }
 
