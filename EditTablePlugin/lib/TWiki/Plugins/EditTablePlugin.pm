@@ -35,7 +35,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '4.7.5';
+$RELEASE = '4.7.6';
 
 $encodeStart = '--EditTableEncodeStart--';
 $encodeEnd   = '--EditTableEncodeEnd--';
@@ -96,6 +96,8 @@ sub _process {
 sub postRenderingHandler {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
     $_[0] =~ s/$encodeStart(.*?)$encodeEnd/decodeValue($1)/geos;
+    TWiki::Func::writeDebug("postRenderingHandler:$_[0]");
+
 }
 
 sub encodeValue {
@@ -120,12 +122,14 @@ sub decodeValue {
     $theText =~ s/</\&lt;/go;                # change < to entity
     $theText =~ s/>/\&gt;/go;                # change > to entity
     $theText =~ s/\"/\&quot;/go;             # change " to entity
+    $theText =~
+      s/&#10;/<br \/>/go;    # change unicode linebreak character to <br />
     return $theText;
 }
 
 sub decodeFormatTokens {
     return if ( !$_[0] );
-    $_[0] =~ s/\$n\(\)/\n/gos;               # expand '$n()' to new line
+    $_[0] =~ s/\$n\(\)/\n/gos;    # expand '$n()' to new line
     my $alpha = TWiki::Func::getRegularExpression('mixedAlpha');
     $_[0] =~ s/\$n([^$alpha]|$)/\n$1/gos;    # expand '$n' to new line
     $_[0] =~ s/\$nop(\(\))?//gos;      # remove filler, useful for nested search

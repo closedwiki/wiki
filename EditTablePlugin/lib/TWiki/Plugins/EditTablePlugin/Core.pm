@@ -1094,13 +1094,16 @@ sub inputElement {
     }
     else {    #  if( $type eq 'text')
         $size = $DEFAULT_FIELD_SIZE if $size < 1;
+
         $theValue = TWiki::Plugins::EditTablePlugin::encodeValue($theValue)
           unless ( $theValue eq '' );
+
         $text =
 "<input class=\"twikiInputField editTableInput\" type=\"text\" name=\"$theName\" size=\"$size\" value=\"$theValue\" />";
         $text .= saveEditCellFormat( $cellFormat, $theName );
     }
     return $text;
+ 
 }
 
 =pod
