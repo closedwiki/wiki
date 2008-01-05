@@ -221,7 +221,7 @@ __Note:__ The Plugin uses base settings like date format, language and style fro
 |  Plugin Author: | TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2002-2007, TWiki:Main.PeterThoeny ([[http://www.twiki.net/][TWIKI.NET]]) and TWiki Contributors |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 4.7.4 (05 Jan 2008) |
+|  Plugin Version: | 4.7.5 (05 Jan 2008) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
 |  25 Dec 2007: | 4.7.1: Arthur Clemens: Added warning if =include= parameter topic does not exist. |
 |  22 Dec 2007: | 4.7: Arthur Clemens: Changed handling of escaped variables. To escape TWiki variable, use formatting tokens such as =$percnt=. |
