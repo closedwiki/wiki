@@ -1102,8 +1102,13 @@ sub inputElement {
 "<input class=\"twikiInputField editTableInput\" type=\"text\" name=\"$theName\" size=\"$size\" value=\"$theValue\" />";
         $text .= saveEditCellFormat( $cellFormat, $theName );
     }
+
+    if ( $type ne 'textarea' ) {
+        $text =~
+          s/&#10;/<br \/>/go;    # change unicode linebreak character to <br />
+    }
     return $text;
- 
+
 }
 
 =pod
