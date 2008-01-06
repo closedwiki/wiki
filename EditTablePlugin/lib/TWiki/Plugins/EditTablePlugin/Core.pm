@@ -1045,8 +1045,6 @@ sub inputElement {
 
         $rows |= 3  if !defined $rows;
         $cols |= 30 if !defined $cols;
-        $theValue =~ s/\s*<br \/>/ <br \/>/go
-          ;    # put one space before linebreak and not more
         $theValue = TWiki::Plugins::EditTablePlugin::encodeValue($theValue)
           unless ( $theValue eq '' );
         $text .=
@@ -1245,6 +1243,11 @@ sub handleTableRow {
     # render final value in view mode (not edit or save)
     TWiki::Plugins::EditTablePlugin::decodeFormatTokens($text)
       if ( !$doSave && !$doEdit );
+
+    # put one space before linebreak (but not more than one)
+    # so TML can get expanded
+    $text =~ s/\s*<br \/>/ <br \/>/go;
+    
     return $text;
 }
 
