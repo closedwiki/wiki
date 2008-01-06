@@ -96,8 +96,6 @@ sub _process {
 sub postRenderingHandler {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
     $_[0] =~ s/$encodeStart(.*?)$encodeEnd/decodeValue($1)/geos;
-    TWiki::Func::writeDebug("postRenderingHandler:$_[0]");
-
 }
 
 sub encodeValue {
