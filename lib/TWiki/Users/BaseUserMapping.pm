@@ -324,6 +324,7 @@ method in that module for details.
 
 sub eachMembership {
     my ($this, $cUID) = @_;
+    ASSERT($cUID) if DEBUG;
 
     my $it = $this->eachGroup();
     $it->{filter} = sub {
