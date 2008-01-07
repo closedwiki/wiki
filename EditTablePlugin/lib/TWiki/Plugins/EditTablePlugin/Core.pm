@@ -392,7 +392,6 @@ s/^(\s*)\|(.*)/handleTableRow( $1, $2, $tableNr, $isNewRow, $rowNr, $doEdit, $do
                     my $theRowNr = $rowNr + $shift;
                     my $isNewRow = 0;
 s/$regex{table_row}/handleTableRow( $1, $2, $tableNr, $isNewRow, $theRowNr, $doEdit, $doSave, $theWeb, $theTopic )/eo;
-
                     push @rows, $_;
                     next;
                 }
@@ -866,7 +865,8 @@ sub inputElement {
     my $cellFormat = '';
     $theValue =~
       s/\s*%EDITCELL{(.*?)}%/&parseEditCellFormat( $1, $cellFormat )/eo;
-    $theValue = '' if ( $theValue eq ' ' );
+
+    #$theValue = '' if ( $theValue eq ' ' );
     if ($cellFormat) {
         my @aFormat = parseFormat( $cellFormat, $theTopic, $theWeb, 0 );
         @bits = split( /,\s*/, $aFormat[0] );
@@ -1086,16 +1086,12 @@ sub inputElement {
             );
             $text .= '</span>';
         }
-
         $query->{'jscalendar'} = 1;
-
     }
     else {    #  if( $type eq 'text')
         $size = $DEFAULT_FIELD_SIZE if $size < 1;
-
         $theValue = TWiki::Plugins::EditTablePlugin::encodeValue($theValue)
           unless ( $theValue eq '' );
-
         $text =
 "<input class=\"twikiInputField editTableInput\" type=\"text\" name=\"$theName\" size=\"$size\" value=\"$theValue\" />";
         $text .= saveEditCellFormat( $cellFormat, $theName );
@@ -1106,7 +1102,6 @@ sub inputElement {
           s/&#10;/<br \/>/go;    # change unicode linebreak character to <br />
     }
     return $text;
-
 }
 
 =pod
@@ -1175,8 +1170,8 @@ sub handleTableRow {
                 $cell = $cells[ $col - 1 ];
                 $digested = 1;    # Flag that we are using non-raw cell text.
                 $cellDefined = 1 if ( length($cell) > 0 );
-                $cell =~ s/^\s//o;
-                $cell =~ s/\s$//o;
+                $cell =~ s/^\s*(.+?)\s*$/$1/o
+                  ; # remove spaces around content, but do not void a cell with just spaces
             }
             else {
                 $cell = '';
@@ -1247,7 +1242,6 @@ sub handleTableRow {
     # put one space before linebreak (but not more than one)
     # so TML can get expanded
     $text =~ s/\s*<br \/>/ <br \/>/go;
-    
     return $text;
 }
 

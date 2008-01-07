@@ -749,4 +749,321 @@ NEWEXPECTED
     $twiki->finish();
 }
 
+=pod
+
+Test if cells with a space do not voided (and rendered with a colspan): text fields
+
+=cut
+
+sub test_keepSpacesInEmptyCellsWithTexts {
+    my $this = shift;
+    my $topicName = $this->{test_topic};
+    my $webName   = $this->{test_web};
+    my $viewUrlAuth =
+      TWiki::Func::getScriptUrl( $webName, $topicName, 'viewauth' );
+    my $pubUrlTWikiWeb =
+      TWiki::Func::getUrlHost() . TWiki::Func::getPubUrlPath() . '/TWiki';
+    my $input = <<INPUT;
+%EDITTABLE{format="|text,40|text,10|"}% 
+| *Milestone* | *Plan* |
+| ABC | X |
+| DEF | |
+INPUT
+    my $query = new CGI(
+        {
+            etedit    => ['on'],
+            ettablenr => ['1'],
+        }
+    );
+    $query->path_info("/$webName/$topicName");
+    my $twiki = new TWiki( undef, $query );
+    $TWiki::Plugins::SESSION = $twiki;
+    $query = new CGI(
+        {
+            etsave    => ['on'],
+            ettablenr => ['1'],
+        }
+    );
+    $query->path_info("/$webName/$topicName");
+    TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
+        $input );
+    $twiki = new TWiki( undef, $query );
+    $TWiki::Plugins::SESSION = $twiki;
+    my ( $saveResult, $ecode ) = $this->capture(
+        sub {
+            print TWiki::Func::expandCommonVariables( $input,
+                $this->{test_topic}, $this->{test_web}, undef );
+        }
+    );
+    my ( $meta, $newtext ) = TWiki::Func::readTopic( $webName, $topicName );
+    my $expected = <<NEWEXPECTED;
+%EDITTABLE{format="|text,40|text,10|"}% 
+| *Milestone* | *Plan* |
+| ABC | X |
+| DEF | |
+NEWEXPECTED
+    $this->assert_str_equals( $expected, $newtext, 0 );
+    $twiki->finish();
+}
+
+=pod
+
+Test if cells with a space do not voided (and rendered with a colspan): date fields
+
+=cut
+
+sub test_keepSpacesInEmptyCellsWithDates {
+    my $this = shift;
+    my $topicName = $this->{test_topic};
+    my $webName   = $this->{test_web};
+    my $viewUrlAuth =
+      TWiki::Func::getScriptUrl( $webName, $topicName, 'viewauth' );
+    my $pubUrlTWikiWeb =
+      TWiki::Func::getUrlHost() . TWiki::Func::getPubUrlPath() . '/TWiki';
+    my $input = <<INPUT;
+%EDITTABLE{format="|text,40|date,10,,%d %b %Y|date,10,,%d %b %Y|date,10,,%d %b %Y|"}% 
+%TABLE{columnwidths="300,130,130,130" dataalign="left,center,center,center" tablerules="all"}%
+| *Milestone* | *Plan* | *Forecast* | *Actual* |
+| Blabla 1 | 07 Sep 2007 | | 07 Sep 2007 |
+| Blabla 5 | 16 Nov 2007 | 21 Nov 2007 | |
+INPUT
+    my $query = new CGI(
+        {
+            etedit    => ['on'],
+            ettablenr => ['1'],
+        }
+    );
+    $query->path_info("/$webName/$topicName");
+    my $twiki = new TWiki( undef, $query );
+    $TWiki::Plugins::SESSION = $twiki;
+    $query = new CGI(
+        {
+            etsave    => ['on'],
+            ettablenr => ['1'],
+        }
+    );
+    $query->path_info("/$webName/$topicName");
+    TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
+        $input );
+    $twiki = new TWiki( undef, $query );
+    $TWiki::Plugins::SESSION = $twiki;
+    my ( $saveResult, $ecode ) = $this->capture(
+        sub {
+            print TWiki::Func::expandCommonVariables( $input,
+                $this->{test_topic}, $this->{test_web}, undef );
+        }
+    );
+    my ( $meta, $newtext ) = TWiki::Func::readTopic( $webName, $topicName );
+    my $expected = <<NEWEXPECTED;
+%EDITTABLE{format="|text,40|date,10,,%d %b %Y|date,10,,%d %b %Y|date,10,,%d %b %Y|"}% 
+%TABLE{columnwidths="300,130,130,130" dataalign="left,center,center,center" tablerules="all"}%
+| *Milestone* | *Plan* | *Forecast* | *Actual* |
+| Blabla 1 | 07 Sep 2007 | | 07 Sep 2007 |
+| Blabla 5 | 16 Nov 2007 | 21 Nov 2007 | |
+NEWEXPECTED
+    $this->assert_str_equals( $expected, $newtext, 0 );
+    $twiki->finish();
+}
+
+=pod
+
+Test if colspan cells do not get saved with a space
+
+=cut
+
+sub test_keepColspans {
+    my $this = shift;
+    my $topicName = $this->{test_topic};
+    my $webName   = $this->{test_web};
+    my $viewUrlAuth =
+      TWiki::Func::getScriptUrl( $webName, $topicName, 'viewauth' );
+    my $pubUrlTWikiWeb =
+      TWiki::Func::getUrlHost() . TWiki::Func::getPubUrlPath() . '/TWiki';
+    my $input = <<INPUT;
+%EDITTABLE{format="|text,40|text,10|"}% 
+|| X |
+| DEF ||
+INPUT
+    my $query = new CGI(
+        {
+            etedit    => ['on'],
+            ettablenr => ['1'],
+        }
+    );
+    $query->path_info("/$webName/$topicName");
+    my $twiki = new TWiki( undef, $query );
+    $TWiki::Plugins::SESSION = $twiki;
+    $query = new CGI(
+        {
+            etsave    => ['on'],
+            ettablenr => ['1'],
+        }
+    );
+    $query->path_info("/$webName/$topicName");
+    TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
+        $input );
+    $twiki = new TWiki( undef, $query );
+    $TWiki::Plugins::SESSION = $twiki;
+    my ( $saveResult, $ecode ) = $this->capture(
+        sub {
+            print TWiki::Func::expandCommonVariables( $input,
+                $this->{test_topic}, $this->{test_web}, undef );
+        }
+    );
+    my ( $meta, $newtext ) = TWiki::Func::readTopic( $webName, $topicName );
+    my $expected = <<NEWEXPECTED;
+%EDITTABLE{format="|text,40|text,10|"}% 
+|| X |
+| DEF ||
+NEWEXPECTED
+    $this->assert_str_equals( $expected, $newtext, 0 );
+    $twiki->finish();
+}
+
+=pod
+
+Test if TML formatting is rendered.
+=cut
+
+sub test_TMLFormattingInsideCell {
+    my $this = shift;
+
+    my $topicName = $this->{test_topic};
+    my $webName   = $this->{test_web};
+    my $viewUrlAuth =
+      TWiki::Func::getScriptUrl( $webName, $topicName, 'viewauth' );
+    my $pubUrlTWikiWeb =
+      TWiki::Func::getUrlHost() . TWiki::Func::getPubUrlPath() . '/TWiki';
+
+    my $input = <<INPUT;
+%EDITTABLE{}%
+| blablabla%BR%there's still a bug%BR%lurking around%BR%_italic_%BR%*bold* %EDITCELL{textarea,6x40,}% |
+INPUT
+
+    my $result =
+      TWiki::Func::expandCommonVariables( $input, $topicName,
+        $webName, undef );
+        
+    my $expected = <<NEWEXPECTED;
+<a name="edittable1"></a>
+<div class="editTable">
+<form name="edittable1" action="$viewUrlAuth#edittable1" method="post">
+<input type="hidden" name="ettablenr" value="1" />
+<input type="hidden" name="etedit" value="on" />
+<nop>
+<table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="rows" border="1">
+	<tbody>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol twikiLastCol twikiLast"> blablabla <br /> there's still a bug <br /> lurking around <br /> <em>italic</em> <br /> <strong>bold</strong> </td>
+		</tr>
+	</tbody></table>
+<input type="hidden" name="etrows" value="1" />
+<input type="hidden" name="sort" value="off" />
+<input class="editTableEditImageButton" type="image" src="$pubUrlTWikiWeb/EditTablePlugin/edittable.gif" alt="Edit this table" /> </form>
+</div><!-- /editTable -->
+NEWEXPECTED
+
+    $this->do_testHtmlOutput( $expected, $result, 1 );
+}
+
+sub test_keepStars {
+    my $this = shift;
+    my $topicName = $this->{test_topic};
+    my $webName   = $this->{test_web};
+    my $viewUrlAuth =
+      TWiki::Func::getScriptUrl( $webName, $topicName, 'viewauth' );
+    my $pubUrlTWikiWeb =
+      TWiki::Func::getUrlHost() . TWiki::Func::getPubUrlPath() . '/TWiki';
+    my $input = <<INPUT;
+%EDITTABLE{}%
+| * <small>Name of the client (prefilled)</small> |
+INPUT
+    my $query = new CGI(
+        {
+            etedit    => ['on'],
+            ettablenr => ['1'],
+        }
+    );
+    $query->path_info("/$webName/$topicName");
+    my $twiki = new TWiki( undef, $query );
+    $TWiki::Plugins::SESSION = $twiki;
+    $query = new CGI(
+        {
+            etsave    => ['on'],
+            ettablenr => ['1'],
+        }
+    );
+    $query->path_info("/$webName/$topicName");
+    TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
+        $input );
+    $twiki = new TWiki( undef, $query );
+    $TWiki::Plugins::SESSION = $twiki;
+    my ( $saveResult, $ecode ) = $this->capture(
+        sub {
+            print TWiki::Func::expandCommonVariables( $input,
+                $this->{test_topic}, $this->{test_web}, undef );
+        }
+    );
+    my ( $meta, $newtext ) = TWiki::Func::readTopic( $webName, $topicName );
+    my $expected = <<NEWEXPECTED;
+%EDITTABLE{}%
+| * <small>Name of the client (prefilled)</small> |
+NEWEXPECTED
+    $this->assert_str_equals( $expected, $newtext, 0 );
+    $twiki->finish();
+}
+
+=pod
+
+Test if linebreaks inside input fields are kept.
+
+=cut
+
+sub test_lineBreaksInsideInputField {
+    my $this = shift;
+    my $topicName = $this->{test_topic};
+    my $webName   = $this->{test_web};
+    my $viewUrlAuth =
+      TWiki::Func::getScriptUrl( $webName, $topicName, 'viewauth' );
+    my $pubUrlTWikiWeb =
+      TWiki::Func::getUrlHost() . TWiki::Func::getPubUrlPath() . '/TWiki';
+    my $input = <<INPUT;
+%EDITTABLE{ changerows="off" quietsave="off"  }%
+| <small><table><tr><td>TD...Technical Documentation <br />TM...Translation Management <br />PC...Product Catalogs </td><td>PS...Processes and Systems <br />FM...Feedback Management <br />KL...Knowledge Logistics</td></tr></table></small> |
+INPUT
+    my $query = new CGI(
+        {
+            etedit    => ['on'],
+            ettablenr => ['1'],
+        }
+    );
+    $query->path_info("/$webName/$topicName");
+    my $twiki = new TWiki( undef, $query );
+    $TWiki::Plugins::SESSION = $twiki;
+    $query = new CGI(
+        {
+            etsave    => ['on'],
+            ettablenr => ['1'],
+        }
+    );
+    $query->path_info("/$webName/$topicName");
+    TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
+        $input );
+    $twiki = new TWiki( undef, $query );
+    $TWiki::Plugins::SESSION = $twiki;
+    my ( $saveResult, $ecode ) = $this->capture(
+        sub {
+            print TWiki::Func::expandCommonVariables( $input,
+                $this->{test_topic}, $this->{test_web}, undef );
+        }
+    );
+    my ( $meta, $newtext ) = TWiki::Func::readTopic( $webName, $topicName );
+    my $expected = <<NEWEXPECTED;
+%EDITTABLE{ changerows="off" quietsave="off"  }%
+| <small><table><tr><td>TD...Technical Documentation <br />TM...Translation Management <br />PC...Product Catalogs </td><td>PS...Processes and Systems <br />FM...Feedback Management <br />KL...Knowledge Logistics</td></tr></table></small> |
+NEWEXPECTED
+    $this->assert_str_equals( $expected, $newtext, 0 );
+    $twiki->finish();
+}
+
 1;
