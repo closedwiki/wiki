@@ -124,21 +124,6 @@ sub new {
     	eval "require $implUserMappingManager";
         die $@ if $@;
     	$this->{mapping} = $implUserMappingManager->new( $session );
-	
-    	#add all the basemapper users to the impl mapping to allow us Group mixing between mappers
-        #specifically, this is needed to add BaseMapping users to Groups defined in the impl mapping (such as adding the TWikiAdminUser to the QaGroup)
-    	#yes, this is a dirty looking hack, but it does suggest that putting the 'caches' of both usermapping in one place might work.
-#    	foreach my $cUID (keys %{$this->{basemapping}->{U2L}}) {
-#    		my $wikiname = $this->{basemapping}->getWikiName($cUID);
-#    		my $login = $this->{basemapping}->getLoginName($cUID);
-#    		#$cUID =~ s/^$this->{basemapping}->{mapping_id}/$this->{mapping}->{mapping_id}/;
-#    		#print STDERR "\npreload from basemapping $cUID, $wikiname, $login";
-#	    	$this->{mapping}->{U2W}->{$cUID} = $wikiname;
-#            # If the mapping doesn't allow login names, then $login will be
-#            # the same as $wikiname
-#            $this->{mapping}->{L2U}->{$login} = $cUID;
-#	    	$this->{mapping}->{W2U}->{$wikiname} = $cUID;
-#	    }
     }
     #the UI for rego supported/not is different from rego temporarily turned off
     if ($this->supportsRegistration()) {
@@ -514,16 +499,12 @@ sub isAdmin {
 
     my $mapping = $this->_getMapping($cUID);
     my $otherMapping = ($mapping eq $this->{basemapping}) ? $this->{mapping} : $this->{basemapping};
-    my $wikiname = $this->_getMapping($cUID)->getWikiName($cUID);
-    my $cUIDList = $otherMapping->findUserByWikiName($wikiname) if ($wikiname);
-    my $othercUID = $cUIDList->[0]  if (($cUIDList) && scalar(@$cUIDList));
 
-    if (($mapping eq $otherMapping) ||
-        (!defined($othercUID))) {
+    if ($mapping eq $otherMapping) {
         return $mapping->isAdmin( $cUID );
     }
 	
-    return ($mapping->isAdmin( $cUID ) || $otherMapping->isAdmin( $othercUID ));
+    return ($mapping->isAdmin( $cUID ) || $otherMapping->isAdmin( $cUID ));
 }
 
 =pod
@@ -751,17 +732,8 @@ sub isInGroup {
     if ($mapping eq $otherMapping){
         return $mapping->isInGroup( $cUID, $group );
     }
-    
-    my $wikiname = $this->_getMapping($cUID)->getWikiName($cUID);
-    my $cUIDList = $otherMapping->findUserByWikiName($wikiname);
-    my $othercUID = $cUIDList->[0]  if scalar(@$cUIDList);
-#print STDERR "---------------------------$cUID == $wikiname == $othercUID\n";
-
-    if (!defined($othercUID)) {
-        $othercUID = $cUID;
-    }
 		
-    return ($mapping->isInGroup( $cUID, $group ) || $otherMapping->isInGroup( $othercUID, $group ));
+    return ($mapping->isInGroup( $cUID, $group ) || $otherMapping->isInGroup( $cUID, $group ));
 
 	
 #	return $this->_getMapping($cUID)->isInGroup( $cUID, $group );
@@ -769,9 +741,9 @@ sub isInGroup {
 
 =pod
 
----++ ObjectMethod eachMembership($user) -> $iterator
+---++ ObjectMethod eachMembership($cUID) -> $iterator
 
-Return an iterator over the groups that $user (an object)
+Return an iterator over the groups that $cUID
 is a member of.
 
 =cut
@@ -780,24 +752,20 @@ sub eachMembership {
 	my ($this, $cUID) = @_;
 
     my $mapping = $this->_getMapping($cUID);
-    my $otherMapping = ($mapping eq $this->{basemapping}) ? $this->{mapping} : $this->{basemapping};
-    my $wikiname = $this->_getMapping($cUID)->getWikiName($cUID);
+    my $wikiname = $mapping->getWikiName($cUID);
     #stop if the user has no wikiname (generally means BugsItem4771)
     unless(defined($wikiname)) {
         require TWiki::ListIterator;
         return new TWiki::ListIterator(\()) ;
     }
     
-    my $cUIDList = $otherMapping->findUserByWikiName($wikiname);
-    my $othercUID = $cUIDList->[0]  if ($cUIDList && scalar(@$cUIDList));
-#print STDERR "---------------------------$cUID == $wikiname == $othercUID\n";
-
-    if (($mapping eq $otherMapping) ||
-        (!defined($othercUID))) {
+    my $otherMapping = ($mapping eq $this->{basemapping}) ? $this->{mapping} : $this->{basemapping};
+    if ($mapping eq $otherMapping) {
+        # only using BaseMapping.
         return $mapping->eachMembership( $cUID );
     }
-	
-	my @list = ($mapping->eachMembership( $cUID ), $otherMapping->eachMembership( $othercUID ));
+
+	my @list = ($mapping->eachMembership( $cUID ), $otherMapping->eachMembership( $cUID ));
     return new TWiki::AggregateIterator(\@list, 1);
 }
 
