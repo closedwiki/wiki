@@ -28,7 +28,7 @@ use Net::LDAP::Control::Paged;
 use vars qw($VERSION $RELEASE %sharedLdapContrib);
 
 $VERSION = '$Rev: 15691 (17 Dec 2007) $';
-$RELEASE = 'v2.1.0';
+$RELEASE = 'v2.1.1';
 
 =begin text
 
@@ -199,10 +199,7 @@ sub new {
   my %excludeMap = map {$_ => 1} split(/,\s/, $this->{exclude});
   $this->{excludeMap} = \%excludeMap;
 
-  #$this->writeDebug("constructed a new LdapContrib object");
-
-  # init the ldap cache
-  $this->initCache();
+  $this->writeDebug("constructed a new LdapContrib object");
 
   return $this;
 }
@@ -219,10 +216,12 @@ configuration.
 sub getLdapContrib {
   my $session = shift;
 
-  $sharedLdapContrib{$session} = new TWiki::Contrib::LdapContrib($session)
-    unless $sharedLdapContrib{$session};
+  my $obj = $sharedLdapContrib{$session};
+  $obj = new TWiki::Contrib::LdapContrib($session) unless $obj;
+  $obj->initCache();
+  $sharedLdapContrib{$session} = $obj;
 
-  return $sharedLdapContrib{$session};
+  return $obj;
 }
 
 =begin text
@@ -324,7 +323,10 @@ finalize this ldap object.
 sub finish {
   my $this = shift;
 
-  #$this->writeDebug("finishing");
+  return if $this->{isFinished};
+  $this->{isFinished} = 1;
+
+  $this->writeDebug("finishing");
   delete $sharedLdapContrib{$this->{session}};
   undef $this->{cacheDB};
   untie %{$this->{data}};
@@ -387,7 +389,7 @@ sub getAccount {
   my ($this, $login) = @_;
 
   $login = lc($login);
-  #$this->writeDebug("called getAccount($login)");
+  $this->writeDebug("called getAccount($login)");
   return undef if $this->{excludeMap}{$login};
 
   my $filter = '(&('.$this->{loginFilter}.')('.$this->{loginAttribute}.'='.$login.'))';
@@ -552,6 +554,12 @@ sub initCache {
   my $lastUpdate = $this->{data}{lastUpdate} || 0;
   $cacheAge = $now - $lastUpdate if $lastUpdate;
 
+  # don't refresh within 60 seconds
+  if ($cacheAge < 60) {
+    $refresh = 0;
+    $this->writeDebug("suppressing cache refresh within 60 seconds");
+  }
+
   #$this->writeDebug("cacheAge=$cacheAge, lastUpdate=$lastUpdate");
 
   # clear to reload it
@@ -559,12 +567,7 @@ sub initCache {
       ($this->{maxCacheAge} > 0 && $cacheAge > $this->{maxCacheAge}) || 
       $refresh) {
     $this->writeDebug("updating cache");
-    if($this->refreshCache()) {
-      # reconnect hash
-      $this->{cacheDB} = 
-        tie %{$this->{data}}, 'DB_File', $this->{cacheFile}, O_CREAT|O_RDWR, 0664, $DB_HASH
-        or die "Cannot open file $this->{cacheFile}: $!";
-    }
+    $this->refreshCache();
   }
 }
 
@@ -591,7 +594,7 @@ sub refreshCache {
 
   my $result = $this->refreshUsersCache(\%tempData);
   if (defined($result) && $this->{mapGroups}) {
-    $result ||= $this->refreshGroupsCache(\%tempData);
+    $result = $this->refreshGroupsCache(\%tempData);
   }
 
   unless ($result) {
@@ -608,10 +611,16 @@ sub refreshCache {
   untie %tempData;
 
   # try to be transactional
-  $this->finish();
+  undef $this->{cacheDB};
+  untie %{$this->{data}};
 
   $this->writeDebug("replacing working copy");
   rename $tempCacheFile,$this->{cacheFile};
+
+  # reconnect hash
+  $this->{cacheDB} = 
+    tie %{$this->{data}}, 'DB_File', $this->{cacheFile}, O_CREAT|O_RDWR, 0664, $DB_HASH
+    or die "Cannot open file $this->{cacheFile}: $!";
 
   return 1;
 }
@@ -740,7 +749,7 @@ sub refreshGroupsCache {
 
     # process each entry on a page
     while (my $entry = $mesg->pop_entry()) {
-      $this->cacheGroupFromEntry($entry, \%groupNames) && $nrRecords++;
+      $this->cacheGroupFromEntry($entry, $data, \%groupNames) && $nrRecords++;
     }
     # get cookie from paged control to remember the offset
     my ($resp) = $mesg->control(LDAP_CONTROL_PAGED) or last;
@@ -832,7 +841,7 @@ sub cacheUserFromEntry {
   @{$emails} = $entry->get_value($this->{mailAttribute});
 
   # store it
-  #$this->writeDebug("adding wikiName='$wikiName', loginName='$loginName', dn=$dn");
+  $this->writeDebug("adding wikiName='$wikiName', loginName='$loginName', dn=$dn");
   $data->{"U2W::$loginName"} = $wikiName;
   $data->{"W2U::$wikiName"} = $loginName;
   $data->{"DN2U::$dn"} = $loginName;
@@ -885,15 +894,16 @@ sub cacheGroupFromEntry {
     # groups may store DNs to members instead of a memberUid, in this case we
     # have to lookup the corresponding loginAttribute
     if ($this->{memberIndirection}) {
-      my $found = 0;
       #$this->writeDebug("following indirection for $member");
-      $member = $data->{"DN2U::$member"};
-      unless ($member) {
-        $this->writeDebug("oops, member not found ... inconsistent ldap data");
-        next;
-      }
+      my $userName = $data->{"DN2U::$member"};
+      if ($userName) {
+	$members{$userName} = 1;
+      } else {
+        $this->writeDebug("oops, $member not found, but member of $groupName");
+      } 
+    } else {
+      $members{$member} = 1;
     }
-    $members{$member} = 1;
   }
 
   # store it
