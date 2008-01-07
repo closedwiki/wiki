@@ -164,12 +164,14 @@ sub getCanonicalUserID {
 
     _loadMapping($this);
 
-	return unless (($dontcheck) ||
-                     defined($this->{L2U}->{$login}) ||
-                       (defined($this->{passwords}->fetchPass( $login ))) );
+    unless ($dontcheck) {
+        return unless (defined($this->{L2U}->{$login}));
+        my $pass = $this->{passwords}->fetchPass( $login );
+        return unless (defined($pass));
+        return if ("$pass" eq "0"); #login invalid... (TODO: what does that really mean)
+    }
 
     $login = TWiki::Users::forceCUID($login);
-
     $login = $this->{mapping_id}.$login;
 #print STDERR " OK ($login)";
     return $login;
@@ -1062,12 +1064,7 @@ sub _expandUserList {
                 push( @l, $it->next() );
             }
         } else {
-            my @list = @{$this->findUserByWikiName( $ident, 1 )};
-            if (scalar(@list) < 1) {
-                #The user might be defined in the basemapping.
-                @list = @{$this->{session}->{users}->findUserByWikiName( $ident, 1 )};
-            }
-
+	        my @list = @{$this->{session}->{users}->findUserByWikiName( $ident, 1 )};
             push( @l, @list );
         }
     }
