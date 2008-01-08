@@ -366,8 +366,8 @@ EXPECTED
     $expected = <<NEWEXPECTED;
 %EDITTABLE{format="| row, -1 | text, 10, init|"}%
 | 0 | test1 |
-|| test2 |
-|| test3 |
+| | test2 |
+| | test3 |
 NEWEXPECTED
     $this->assert_str_equals( $expected, $newtext, 0 );
 
@@ -737,12 +737,12 @@ INPUT
     my $expected = <<NEWEXPECTED;
 %TABLE{columnwidths="80,80,50,110,150,50,50,50,50,50,70,70,50" dataalign="left,left,center,left,left,center,center,center,center,center,center,right,right,center" headeralign="center" headerrows="1" footerrows="1" headerislabel="on"}%%EDITTABLE{format="|text,10|text,10|text,3|text,15|text,15|text,3|text,3|text,3|text,3|text,3|text,3|text,10|label,0|text,5|" }%
 | *Project* | *Customer* | *Pass* | *Type* | *Purpose* | *Qty* | *Radios* | *Controllers* | *Hubs* | *Tuners* | *Hybrid* | *Unit Cost (USD)* | *Total Cost (USD)* | *When (Q)* |
-| Project A | Engineering | A | PK2 | Eng Test | 2 | 4 || 2 | 2 || 6214 | %CALC{"\$EVAL(\$T(R\$ROW():C6) * \$T(R\$ROW():C\$COLUMN(-1)))"}% | Q1 |
-| Project B | Factory | A | PC2 | Fact Test | 1 | 4 || 2 | 2 || 6214 | %CALC{"\$EVAL(\$T(R\$ROW():C6) * \$T(R\$ROW():C\$COLUMN(-1)))"}% | Q2 |
-| Project C | Eng | P1 | CT5 | Eng Test | 1 | 2 | 1 ||| 1 | 3502 | %CALC{"\$EVAL(\$T(R\$ROW():C6) * \$T(R\$ROW():C\$COLUMN(-1)))"}% | Q3 |
-| Project D | SW | P1 | CT5 | SW Dev | 2 | 4 | 2 || 2 || 6345 | %CALC{"\$EVAL(\$T(R\$ROW():C6) * \$T(R\$ROW():C\$COLUMN(-1)))"}% | Q4 |
-|||||||||||||||
-| Total ||||| *%CALC{"\$SUM(\$ABOVE())"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* || *%CALC{"\$SUM(\$ABOVE())"}%* ||
+| Project A | Engineering | A | PK2 | Eng Test | 2 | 4 | | 2 | 2 | | 6214 | %CALC{"\$EVAL(\$T(R\$ROW():C6) * \$T(R\$ROW():C\$COLUMN(-1)))"}% | Q1 |
+| Project B | Factory | A | PC2 | Fact Test | 1 | 4 | | 2 | 2 | | 6214 | %CALC{"\$EVAL(\$T(R\$ROW():C6) * \$T(R\$ROW():C\$COLUMN(-1)))"}% | Q2 |
+| Project C | Eng | P1 | CT5 | Eng Test | 1 | 2 | 1 | | | 1 | 3502 | %CALC{"\$EVAL(\$T(R\$ROW():C6) * \$T(R\$ROW():C\$COLUMN(-1)))"}% | Q3 |
+| Project D | SW | P1 | CT5 | SW Dev | 2 | 4 | 2 | | 2 | | 6345 | %CALC{"\$EVAL(\$T(R\$ROW():C6) * \$T(R\$ROW():C\$COLUMN(-1)))"}% | Q4 |
+| | | | | | | | | | | | | | |
+| Total | | | | | *%CALC{"\$SUM(\$ABOVE())"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | | *%CALC{"\$SUM(\$ABOVE())"}%* | |
 NEWEXPECTED
     $this->assert_str_equals( $expected, $newtext, 0 );
 
@@ -867,11 +867,14 @@ NEWEXPECTED
 
 =pod
 
-Test if colspan cells do not get saved with a space
+Test if colspan cells do get split to avoid that users get unwanted cell merges
+when they delete the content of a cell.
+Note that EditTablePlugin does not support merged cells using the ||| syntax.
+If a merge feature is added please pay attention to Item5217
 
 =cut
 
-sub test_keepColspans {
+sub test_addSpacesToEmptyCells {
     my $this = shift;
     my $topicName = $this->{test_topic};
     my $webName   = $this->{test_web};
@@ -913,8 +916,8 @@ INPUT
     my ( $meta, $newtext ) = TWiki::Func::readTopic( $webName, $topicName );
     my $expected = <<NEWEXPECTED;
 %EDITTABLE{format="|text,40|text,10|"}% 
-|| X |
-| DEF ||
+| | X |
+| DEF | |
 NEWEXPECTED
     $this->assert_str_equals( $expected, $newtext, 0 );
     $twiki->finish();

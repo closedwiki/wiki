@@ -1254,7 +1254,7 @@ Convert multiple (existing) spaces to one space.
 
 sub addSpaceToBothSides {
     my ($text) = @_;
-    return $text if $text eq '';
+    return ' ' if $text eq ''; #Item5217
 
     $text = " $text ";
     $text =~ s/^\s+/ /;    # remove extra spaces
