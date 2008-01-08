@@ -574,7 +574,7 @@ sub _processTableRow {
 
     $theRow =~ s/\t/   /go;    # change tabs to space
     $theRow =~ s/\s*$//o;      # remove trailing spaces
-    $theRow =~ s/(\|\|+)/$translationToken.length($1)."\|"/geo;   # calc COLSPAN
+    $theRow =~ s/(\|\|+)/'colspan'.$translationToken.length($1)."\|"/geo;   # calc COLSPAN
     my $colCount = 0;
     my @row      = ();
     $span = 0;
@@ -585,7 +585,7 @@ sub _processTableRow {
         $span = 1;
 
         #AS 25-5-01 Fix to avoid matching also single columns
-        if (s/$translationToken([0-9]+)//) {
+        if (s/colspan$translationToken([0-9]+)//) {
             $span = $1;
             $attr->{colspan} = $span;
         }

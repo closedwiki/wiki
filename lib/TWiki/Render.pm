@@ -302,7 +302,7 @@ sub _emitTR {
 
     $theRow =~ s/\t/   /g;  # change tabs to space
     $theRow =~ s/\s*$//;    # remove trailing spaces
-    $theRow =~ s/(\|\|+)/$TWiki::TranslationToken.length($1).'|'/ge;  # calc COLSPAN
+    $theRow =~ s/(\|\|+)/'colspan'.$TWiki::TranslationToken.length($1).'|'/ge;  # calc COLSPAN
     my $cells = '';
     my $containsTableHeader;
     my $isAllTH = 1;
@@ -310,7 +310,7 @@ sub _emitTR {
         my @attr;
 
         # Avoid matching single columns
-        if ( s/$TWiki::TranslationToken([0-9]+)//o ) {
+        if ( s/colspan$TWiki::TranslationToken([0-9]+)//o ) {
             push( @attr, colspan => $1 );
         }
         s/^\s+$/ &nbsp; /;
