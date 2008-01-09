@@ -866,7 +866,10 @@ sub inputElement {
     $theValue =~
       s/\s*%EDITCELL{(.*?)}%/&parseEditCellFormat( $1, $cellFormat )/eo;
 
-    #$theValue = '' if ( $theValue eq ' ' );
+    # If cell is empty we remove the space to not annoy the user when
+    # he needs to add text to empty cell.
+    $theValue = '' if ( $theValue eq ' ' );
+    
     if ($cellFormat) {
         my @aFormat = parseFormat( $cellFormat, $theTopic, $theWeb, 0 );
         @bits = split( /,\s*/, $aFormat[0] );
@@ -1199,6 +1202,10 @@ sub handleTableRow {
             }
             elsif ($doSave) {
                 $cell = addSpaceToBothSides($cell);
+                
+                # Item5217 Avoid that deleting content of cell creates unwanted span
+                $cell = ' ' if $cell eq '';
+                
                 $text .= "$cell\|";
             }
             else {
