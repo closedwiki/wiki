@@ -231,6 +231,7 @@ sub _userReallyExists {
         return 1;
      } else {
         #passwd==none case generally assumes any login given exists... (not positive if that makes sense for rego..)
+        return 1;
      }
 
     return 0;
@@ -449,8 +450,19 @@ sub userExists {
     }
 
     # Look them up in the password manager (can be slow).
-    if( $this->{passwords}->fetchPass( $loginName )) {
+    if( $this->{passwords}->canFetchUsers() &&
+       $this->{passwords}->fetchPass( $loginName )) {
         return $loginName;
+    }
+    
+    unless ( $TWiki::cfg{Register}{AllowLoginName} ||
+            $this->{passwords}->canFetchUsers() ) {
+        #if there is no pwd file, then its external auth
+        #and if AllowLoginName is also off, then the only way to know if
+        #the user has registered is to test for user topic?
+        if (TWiki::Func::topicExists($TWiki::cfg{UsersWebName}, $loginName)) {
+            return $loginName
+        }
     }
 
     return undef;
