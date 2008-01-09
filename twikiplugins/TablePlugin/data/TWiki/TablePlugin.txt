@@ -63,7 +63,7 @@ Attributes are defined as a =TABLEATTRIBUTES= Plugin setting in this topic, a =T
 
 The =%<nop>TABLE{...}%= settings override =TABLEATTRIBUTES= preferences settings, which override the =TABLEATTRIBUTES= Plugin settings. 
 
-The setting =disableallsort= is normally used as a TABLE or TABLEATTRIBUTES setting. Plugins such as EditTablePlugin dynamically sets =disableallsort= to disable sorting while editing a table. For this to work it is important that EditTablePlugin runs before TablePlugin, which is the default. The setting =sort= can be overwritten by a URL parameter or hidden formfield of the same name. Plugins such as EditTablePlugin can use this to disable table header sorting while in edit mode.
+The setting =disableallsort= is normally not used as a TABLE or TABLEATTRIBUTES setting. Plugins such as EditTablePlugin dynamically sets =disableallsort= to disable sorting while editing a table. For this to work it is important that EditTablePlugin runs before TablePlugin, which is the default. The setting =sort= can be overwritten by a URL parameter or hidden formfield of the same name. Plugins such as EditTablePlugin can use this to disable table header sorting while in edit mode.
 
 ---++ Examples
 
