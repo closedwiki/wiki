@@ -46,6 +46,9 @@ use strict;
 use Assert;
 use Error qw( :try );
 
+#use Monitor;
+#Monitor::MonitorMethod('TWiki::Users::TWikiUserMapping');
+
 =begin twiki
 
 ---++ ClassMethod new ($session, $impl)
@@ -160,15 +163,10 @@ characters, and must correspond 1:1 to the login name.
 
 sub getCanonicalUserID {
     my( $this, $login, $dontcheck ) = @_;
-    #print STDERR "\nTWikiUserMapping::getCanonicalUserID($login)";
-
-    _loadMapping($this);
+#    print STDERR "\nTWikiUserMapping::getCanonicalUserID($login, ".($dontcheck||'undef').")";
 
     unless ($dontcheck) {
-        return unless (defined($this->{L2U}->{$login}));
-        my $pass = $this->{passwords}->fetchPass( $login );
-        return unless (defined($pass));
-        return if ("$pass" eq "0"); #login invalid... (TODO: what does that really mean)
+        return unless (_userReallyExists($this, $login));
     }
 
     $login = TWiki::Users::forceCUID($login);
@@ -188,7 +186,6 @@ converts an internal cUID to that user's login
 
 sub getLoginName {
     my( $this, $user ) = @_;
-    my $dontcheck;
     ASSERT($user) if DEBUG;
 	
 	#can't call userExists - its recursive
@@ -202,11 +199,41 @@ sub getLoginName {
     $user =~ s/_(\d\d)/chr($1)/ge;
     no bytes;
 
-    _loadMapping($this);
-    
-	return unless (($dontcheck) || defined($this->{L2U}->{$user}) || (defined($this->{passwords}->fetchPass( $user ))) );    
+    return unless (_userReallyExists($this, $user));
     
     return $user;
+}
+
+=begin twiki
+
+---++ ObjectMethod _userReallyExists ($login) -> boolean
+
+test if the login is in the TWikiUsers topic, or in the password file
+depending on the AllowLoginNames setting
+
+=cut
+
+sub _userReallyExists {
+    my( $this, $login ) = @_;
+    
+    if ($TWiki::cfg{Register}{AllowLoginName}) {
+        #need to use the TWikiUsers file
+        _loadMapping($this);
+        return 1 if (defined($this->{L2U}->{$login}));
+    }
+    
+    if ($this->{passwords}->canFetchUsers()) {
+        #AllowLoginName mapping failed, maybe the user is however present in the TWiki managed pwd file
+        #can use the password file if available 
+        my $pass = $this->{passwords}->fetchPass( $login );
+        return unless (defined($pass));
+        return if ("$pass" eq "0"); #login invalid... (TODO: what does that really mean)
+        return 1;
+     } else {
+        #passwd==none case generally assumes any login given exists... (not positive if that makes sense for rego..)
+     }
+
+    return 0;
 }
 
 =begin twiki
@@ -403,6 +430,7 @@ or not is determined by the password manager.
 
 sub userExists {
     my( $this, $cUID ) = @_;
+    ASSERT($cUID) if DEBUG;
 	$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
 
     # Do this to avoid a password manager lookup
