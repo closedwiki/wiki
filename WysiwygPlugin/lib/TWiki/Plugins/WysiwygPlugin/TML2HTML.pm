@@ -684,7 +684,9 @@ sub _emitTR {
             $cell = $2;
         }
 
-        if( $left > $right ) {
+        if ($left == 1 && $right < 2 ) {
+            # Treat left=1 and right=0 like 1 and 1 - Item5220
+        } elsif( $left > $right ) {
             $attr->{class} = 'align-right';
             $attr->{style} = 'text-align: right';
         } elsif( $left < $right ) {
