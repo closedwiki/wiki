@@ -106,8 +106,14 @@ The plugin tries very hard to keep the permissions specification you started wit
 
 ---++ Syntax Rules
 
-The web permissions matrix can be viewed (and edited) by entering =%<nop>WEBPERMISSIONS%= anywhere in a topic. You have to have admin rights to view/edit the matrix.
+The web permissions matrix can be viewed (and edited) by entering =%<nop>WEBPERMISSIONS%= anywhere in a topic. 
+You have to have admin rights to view/edit the matrix.
 
+The topic permissions UI can be viewed (and edited) by entering =%<nop>TOPICPERMISSIONS%= anywhere in a topic (or accesing it via the 'More topic actions' page). 
+You have to have write permissions to that topic to view/edit the UI.
+
+
+---+++ =WEBPERMISSIONS=
 The =WEBPERMISSIONS= TWiki variable accepts the following parameters:
    * =repeatheads= - if set to a number, headings will be repeated every this number of rows. This is very useful when you have a lot of users and groups.
    * =webs= - a comma-separated list of webs to show. Default is to show all webs.
@@ -134,7 +140,10 @@ Select the webs, users and groups you want to change permissions for from the li
 </div>
 <!-- TO HERE -->
 
-Similarly the topic permissions tool can be viewed (and edited) by entering =%<nop>TOPICPERMISSIONS%= anywhere in a topic. You can also add an "Edit ACLS" option to the "More topic actions" screen by adding =webpermissions= to the front of the SKIN setting (e.g. =Set SKIN=webpermissions,pattern=)
+---+++ =TOPICPERMISSIONS=
+The topic permissions tool can be viewed (and edited) by entering =%<nop>TOPICPERMISSIONS%= anywhere in a topic. 
+
+To add  an "Edit ACLS" option to the "More topic actions" screen  add =webpermissions= to the front of the SKIN setting (e.g. =Set SKIN=webpermissions,pattern=)
 
 ---++ Plugin Settings
 <!--
@@ -150,6 +159,10 @@ See %TWIKIWEB%.TWikiAccessControls for more information on what access modes can
 ---++ Plugin Installation Instructions
 
 %$INSTALL_INSTRUCTIONS%
+
+To access the Topic Permission editor, add =webpermissions= to the SKIN setting in %MAINWEB%.TWikiPreferences .
+e.g. =Set SKIN=webpermissions,pattern=)
+
 
 ---++ Plugin Info
 
