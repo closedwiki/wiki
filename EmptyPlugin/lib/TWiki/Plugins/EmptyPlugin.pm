@@ -279,7 +279,13 @@ handler. Use the =$meta= object.
 
 sub DISABLE_commonTagsHandler {
     # do not uncomment, use $_[0], $_[1]... instead
-    ### my ( $text, $topic, $web, $meta ) = @_;
+    ### my ( $text, $topic, $web, $included, $meta ) = @_;
+    
+    # If you don't want to be called from nested includes...
+    #   if( $_[3] ) {
+    #   # bail out, handler called from an %INCLUDE{}%
+    #         return;
+    #   }
 
     TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
 
