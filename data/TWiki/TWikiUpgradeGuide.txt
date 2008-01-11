@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1197351701" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1200013119" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Upgrade Guide
 
@@ -198,11 +198,56 @@ The directory for passthrough files and session files have been replaced by a co
 
 It is highly recommended no longer to use the tmp directory common to other web applications and the new default will work fine for most. You may want to delete all the old session files in /tmp after the upgrade to 4.1.1. They all start with cgisess_. It is additionally highly recommended to limit write access to the ={TempfileDir}= for security reasons if you have non-admin users with login access to the webserver just like you would do with the other webserver directories.
 
-*An upgrader to 4.2.0 should note the following important change*
+---++ Important Changes since 4.1.2
 
-The directory for work files has been moved under TWiki's installation path.  The configuration setting ={WorkingDir}= defines the container directory for temporary files, extensions' work areas, and intermediate registration data.  The default is =working= under your installation root.
+---+++ New WYSIWYG Editor
+
+TWiki now ships with a new WYSIWYG editor based on !TinyMCE replaces the Kupu based editor.%BR% !TinyMCE is not a perfect Wysiwyg editor but it is magnitudes better than the Kupu editor
+
+The !WysiwygPlugin that drives the engine behind both !TinyMCE has additionally been heavily improved so that less TWiki Applications are negatively affected by editing WYSIWYG
+
+When !TinyMCEPlugin is enabled the Edit button per default becomes WYSIWYG editing mode. A new Raw Edit link has been added to enable application developers to edit the good old way
+
+The WYSIWYG button has been removed.
+
+---+++ NEWTOPICLINKSYMBOL removed
+
+The NEWTOPICLINKSYMBOL preference which was deprecated in 4.1 has now been removed from the code. If you want to control the appearance of new links, you can use NEWLINKFORMAT.
+
+---+++ !UserForm and !NewUserTemplate Customization
+
+When a new user registers on TWiki his user topic is created based on the =NewUserTemplate= and =UserForm=.
+
+The =NewUserTemplate= was located in the TWiki web and the =UserForm= in the Main web. When upgrading TWiki these were some of the topics you had to take care not to overwrite.
+
+From 4.2.0 the =UserForm= and =NewUserTemplate= are distributed in the TWiki web. If you create the two in the Main web the Main web version will be used instead. So if you tailor the user topic format or the form then you should always copy the two files to the Main web and modify the ones in the Main web. When you later upgrade TWiki your tailored template and form will not be overwritten.
+
+---+++ !TWikiUsers no longer distributed
+
+The =Main.TWikiUsers= topic contains all the registered users. It is a topic you do not want to overwrite when you upgrade TWiki.
+
+From 4.2.0 this file is no longer included in the TWiki distribution. When you register the first time TWiki creates the =Main.TWikiUsers= topic in the Main web if it does not exist already. This means that you can now upgrade TWiki without risk of overwriting the important =TWikiUsers= topic.
+
+   * For new installers this makes no difference at all
+   * For upgraders this is one less problem to worry about as your important !Main.TWikiUsers topic now no longer gets overwritten when upgrading.
+   
+---+++ New =working= directory
+
+A new directory =working= which per default is located in the twiki root, has been introduced which contains:
+
+   * registration_approvals - with 4.2.0 it is moved to here from the data directory)
+   * tmp - so we now avoid having to fight with special access rights and /tmp directory that gets cleaned out when booting.
+   * work_areas - with 4.2.0 it is moved to here from the pub directory. Configure automatically moved the directory when you upgrade.
+
+Note: Remember to restrict access to this new directory when you upgrade.
+
+The configuration setting ={WorkingDir}= defines the container directory for temporary files, extensions' work areas, and intermediate registration data.  The default is =working= under your installation root.
 
 Take care for that change if you run your own routine to delete obsolete session files, which will now be found under =working/tmp/cgisess*=.
+   
+---+++ New Internal Admin Login
+
+TWiki 4.2 introduces a new _Internal Admin Login_ feature which uses "admin" (configurable) as username and the password used for configure to become temporary administrator. When you do a new installation you need to use this feature as !Main.TWikiAdminGroup is now access restricted by default to avoid security attacks during the hours an installation may take. From configure there is a link to the !TWikiAdminGroup topic and on !TWikiAdminGroup the step by step instructions are written in a yellow box. Our advice is not to remove this help text in case you need it later.
 
 %STOPINCLUDE%
 
