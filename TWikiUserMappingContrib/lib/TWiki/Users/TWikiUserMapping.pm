@@ -514,7 +514,8 @@ sub eachGroupMember {
     my $this = shift;
     my $group = shift;
     
-    return $this->{eachGroupMember}->{$group} if (defined($this->{eachGroupMember}->{$group}));
+    return new TWiki::ListIterator( $this->{eachGroupMember}->{$group} )
+        if (defined($this->{eachGroupMember}->{$group}));
     
     my $store = $this->{session}->{store};
     my $users = $this->{session}->{users};
@@ -543,8 +544,8 @@ sub eachGroupMember {
     }
 
     require TWiki::ListIterator;
-    $this->{eachGroupMember}->{$group} = new TWiki::ListIterator( $members );
-    return $this->{eachGroupMember}->{$group};
+    $this->{eachGroupMember}->{$group} = $members;
+    return new TWiki::ListIterator( $this->{eachGroupMember}->{$group} );
 }
 
 
