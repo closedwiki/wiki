@@ -118,7 +118,7 @@ sub END {
 			$methods{$call->{method}}{total} = $diff;
 		}
 	}
-	print STDERR "\n| count | min | max | total | method |";
+	print STDERR "\n| Count  |  Min   |  Max   | Total      | Method |";
 	foreach my $method (sort keys %methods) {
 		print STDERR "\n| "
 			.sprintf('%6u', $methods{$method}{count}).' | '

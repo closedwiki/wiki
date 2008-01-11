@@ -99,7 +99,7 @@ sub checkAccessPermission {
 
     undef $this->{failure};
 
-    print STDERR "Check $mode access $user to ", ($web||'undef'), '.', ($topic||'undef'),"\n" if MONITOR;
+    print STDERR "Check $mode access $user to ". ($web||'undef'). '.'. ($topic||'undef')."\n" if MONITOR;
 
     # super admin is always allowed
     if( $this->{session}->{users}->isAdmin( $user ) ) {
@@ -133,7 +133,7 @@ sub checkAccessPermission {
         if( $denyText =~ /\S$/ ) {
             if( $this->{session}->{users}->isInList( $user, $denyText )) {
                 $this->{failure} = $this->{session}->i18n->maketext('access denied on topic');
-                print STDERR $this->{failure},"\n" if MONITOR;
+                print STDERR $this->{failure}." ($denyText)\n" if MONITOR;
                 return 0;
             }
         } else {
@@ -150,7 +150,7 @@ sub checkAccessPermission {
             return 1;
         }
         $this->{failure} = $this->{session}->i18n->maketext('access not allowed on topic');
-        print STDERR $this->{failure},"\n" if MONITOR;
+        print STDERR $this->{failure}." ($allowText)\n" if MONITOR;
         return 0;
     }
 
@@ -162,7 +162,7 @@ sub checkAccessPermission {
         if( defined( $denyText ) &&
               $this->{session}->{users}->isInList( $user, $denyText )) {
             $this->{failure} = $this->{session}->i18n->maketext('access denied on web');
-            print STDERR $this->{failure},"\n" if MONITOR;
+            print STDERR $this->{failure}."\n" if MONITOR;
             return 0;
         }
     }
@@ -174,7 +174,7 @@ sub checkAccessPermission {
     if( defined( $allowText ) && $allowText =~ /\S/ ) {
         unless( $this->{session}->{users}->isInList( $user, $allowText )) {
             $this->{failure} = $this->{session}->i18n->maketext('access not allowed on web');
-            print STDERR $this->{failure},"\n" if MONITOR;
+            print STDERR $this->{failure}."\n" if MONITOR;
             return 0;
         }
     }
@@ -186,7 +186,7 @@ sub checkAccessPermission {
         if( defined( $denyText ) &&
               $this->{session}->{users}->isInList( $user, $denyText )) {
             $this->{failure} = $this->{session}->i18n->maketext('access denied on root');
-            print STDERR $this->{failure},"\n" if MONITOR;
+            print STDERR $this->{failure}."\n" if MONITOR;
             return 0;
         }
 
@@ -195,7 +195,7 @@ sub checkAccessPermission {
         if( defined( $allowText ) && $allowText =~ /\S/ ) {
             unless( $this->{session}->{users}->isInList( $user, $allowText )) {
                 $this->{failure} = $this->{session}->i18n->maketext('access not allowed on root');
-                print STDERR $this->{failure},"\n" if MONITOR;
+                print STDERR $this->{failure}."\n" if MONITOR;
                 return 0;
             }
         }

@@ -240,6 +240,8 @@ sub stage_gendocs {
     $this->cp( "$this->{tmpDir}/AUTHORS",
                "$this->{tmpDir}/pub/TWiki/TWikiContributor/AUTHORS" );
 
+
+#TODO: SMELL: um, what is this doing here? 
     for my $script qw( view rdiff ) {
         $this->cp( "$this->{tmpDir}/bin/$script",
                    "$this->{tmpDir}/bin/${script}auth" );

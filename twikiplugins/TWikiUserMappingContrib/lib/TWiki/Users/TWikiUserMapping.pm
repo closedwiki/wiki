@@ -79,11 +79,13 @@ sub new {
         $TWiki::cfg{Register}{EnableNewUserRegistration} = 0;
     }
 
-
+	#SMELL: and this is a second user object
+	#TODO: combine with the one in TWiki::Users
     #$this->{U2L} = {};
     $this->{L2U} = {};
     $this->{U2W} = {};
     $this->{W2U} = {};
+    $this->{eachGroupMember} = {};
 
     return $this;
 }
@@ -106,6 +108,7 @@ sub finish {
     undef $this->{U2W};
     undef $this->{W2U};
     undef $this->{passwords};
+    undef $this->{eachGroupMember};
     $this->SUPER::finish();
 }
 
@@ -510,6 +513,10 @@ method in that module for details.
 sub eachGroupMember {
     my $this = shift;
     my $group = shift;
+    
+    return new TWiki::ListIterator( $this->{eachGroupMember}->{$group} )
+            if (defined($this->{eachGroupMember}->{$group}));
+    
     my $store = $this->{session}->{store};
     my $users = $this->{session}->{users};
 
@@ -537,7 +544,8 @@ sub eachGroupMember {
     }
 
     require TWiki::ListIterator;
-    return new TWiki::ListIterator( $members );
+    $this->{eachGroupMember}->{$group} = $members;
+    return new TWiki::ListIterator( $this->{eachGroupMember}->{$group} );
 }
 
 

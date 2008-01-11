@@ -75,8 +75,8 @@ use strict;
 use Assert;
 
 require TWiki::AggregateIterator;
-use Monitor;
-Monitor::MonitorMethod('TWiki::Users');
+#use Monitor;
+#Monitor::MonitorMethod('TWiki::Users');
 
 BEGIN {
     # Do a dynamic 'use locale' for this module
@@ -133,8 +133,10 @@ sub new {
     $implUserMappingManager =~ /^TWiki::Users::(.*)$/;
 
 	#caches - not only used for speedup, but also for authenticated but unregistered users
+    #SMELL: this is basically the user object reborn
 	$this->{getWikiName} = {};
     $this->{getLoginName} = {};
+    $this->{isAdmin} = {};
 	
     return $this;
 }
@@ -161,6 +163,7 @@ sub finish {
     undef $this->{session};
 	undef $this->{getWikiName};
     undef $this->{getLoginName};
+    undef $this->{isAdmin};
 
 }
 
@@ -455,7 +458,6 @@ sub getEmails {
 	#$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
 	
 	return () unless ($user);
-    
     if ($this->{mapping}->isGroup($user)) {
         return $this->{mapping}->getEmails($user);
     }
@@ -493,7 +495,8 @@ True if the user is an admin
 
 sub isAdmin {
     my( $this, $cUID ) = @_;
-	
+    return $this->{isAdmin}->{$cUID} if (defined($this->{isAdmin}->{$cUID}));
+    
 	$cUID = $this->getCanonicalUserID($cUID);
     return unless (defined($cUID));
 
@@ -504,7 +507,8 @@ sub isAdmin {
         return $mapping->isAdmin( $cUID );
     }
 	
-    return ($mapping->isAdmin( $cUID ) || $otherMapping->isAdmin( $cUID ));
+    $this->{isAdmin}->{$cUID} = ($mapping->isAdmin( $cUID ) || $otherMapping->isAdmin( $cUID ));
+    return $this->{isAdmin}->{$cUID};
 }
 
 =pod
@@ -535,8 +539,8 @@ sub isInList {
         $ident =~ s/^.*\.//;       # Dump the web specifier
         next unless $ident;
         return 1 if( $ident eq $wn );
-        if( $umm->isGroup( $ident )) {
-            return 1 if( $umm->isInGroup( $user, $ident ));
+        if( $this->isGroup( $ident )) {
+            return 1 if( $this->isInGroup( $user, $ident ));
         }
     }
     return 0;
