@@ -1,8 +1,86 @@
-%META:TOPICINFO{author="TWikiContributor" date="1169338988" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1200210697" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ Appendix A: TWiki Development Timeline
 
 %TOC%
+
+
+#FreetownRelease
+---++ TWiki Release 4.2 (Freetown), 15 Jan 2008
+
+__New Features and Enhancements of TWiki Release 4.2__
+
+   * *Easier Installation and Upgrade*
+      * New Internal Admin Login feature
+      * The !Main.TWikiUsers topic is no longer distributed as a default topic in Main web
+      * A new directory =working= which per default is located in the twiki root which contains registration_approvals, tmp, and work_areas
+      * Configure can now authenticate when connecting to local plugins repository.
+
+   * *Usability Enhancements*
+      * New WYSIWYG editor based on !TinyMCE replaces the Kupu based editor
+      * New "Restore topic" feature has been added to the _More Topic Actions_ menu to easily restore an older version of a topic
+
+   * *Application Platform Enhancements*
+      * Enhancements to IF: allows, istopic, and isweb
+
+   * *Search Enhancements*
+      * New =query= search mode supports SQL-style queries over form fields and other meta-data
+
+   * *Skins and Templates Enhancements*
+      * The !PatternSkin which is the default skin for TWiki has got a face lift
+      * The template have been heavily refactored to make it easier to create skins
+
+   * *Miscellaneous Feature Enhancements*
+      * Many new functions in the API for plugin developers
+      * Table of Content (TOC) feature enhanced
+      * Pluggable user mapping (between login name and !WikiName) to integrate with alternative authentication schemes
+
+   * *Enhancements of Pre-installed Plugins*
+      * CommentPlugin: ...
+      * SpreadSheetPlugin: ...
+      * TablePlugin: ...
+
+   * *Bugfixes*
+      * More than 200 bugs fixes since 4.1.2
+
+#FreetownHallOfFame
+__Hall of Fame of TWiki Release 4.2__
+
+Many people have been involved in creating TWiki-4.2, special thanks go to the most active contributors in the following areas:
+
+   * *Sponsor and facilitator:* TWiki:Main.PeterThoeny
+   * *Process refinements:* TWiki:Main.KennethLavrsen
+   * *Release management:* TWiki:Main.KennethLavrsen
+   * *Usability:* TWiki:Main.CarloSchulz, TWiki:Main.ArthurClemens
+   * *Spec, code, testing:* TWiki:Main.CrawfordCurrie, TWiki:Main...
+   * *Templates and skins:* TWiki:Main.ArthurClemens, TWiki:Main...
+   * *Documentation:* TWiki:Main.PeterThoeny, TWiki:Main...
+   * *Translations:* Coordinated by TWiki:Main.AntonioTerceiro
+      * Chinese: TWiki:Main.CheDong
+      * Czech: TWiki:Main.IvanKuncl
+      * Danish: TWiki:Main.SteffenPoulsen
+      * Dutch: TWiki:Main.ArthurClemens
+      * French: TWiki:Main.BenVoui
+      * German: TWiki:Main.AndreUlrich
+      * Italian: TWiki:Main.MassimoMancini
+      * Japanese: TWiki:Main.KenYuminaga
+      * Polish: TWiki:Main.ZbigniewKulesza
+      * Portuguese: TWiki:Main.AntonioTerceiro, TWiki:Main.CarlinhosCecconi
+      * Russian: TWiki:Main.AndreyTkachenko, TWiki:Main.SergejZnamenskij, TWiki:Main.SergeyJSinx, TWiki:Main.AlexTananaev
+      * Spanish: TWiki:Main.WillNorris, TWiki:Main.MiguelABayona
+      * Swedish: TWiki:Main.ErikAman
+   * *Marketing:* TWiki:Main.RodBeckstrom, TWiki:Main.PeterThoeny, TWiki:Main.MichaelCorbett, TWiki:Main.KoenMartens
+   * *Public relations:* TWiki:Main.PeterThoeny, TWiki:Main.MichaelCorbett
+   * *Meetups:* TWiki:Main.AmirShobeiri
+   * *TWiki.org wiki champions:* TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens, TWiki:Main.CrawfordCurrie, TWiki:Main.KennethLavrsen, TWiki:Main.SvenDowideit, TWiki:Main.MichaelDaum, TWiki:Main.CarloSchulz, TWiki:Main.StephaneLenclud, TWiki:Main.RichardDonkin, TWiki:Main.KoenMartens <!-- Blog, Codev, Main, Plugins, TWiki webs -->
+   * *Customer support:* TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens, TWiki:Main.CrawfordCurrie, SvenDowideit, TWiki:Main.HaraldJoerg <!-- Support web -->
+   * *System administration:* TWiki:Main.SvenDowideit, TWiki:Main.PeterThoeny, TWiki:Main.CrawfordCurrie
+
+If you find an omission please fix it at TWiki:TWiki.TWikiHistory. For the full list of contributors see TWikiContributor. 
+
+__Note:__ Sequence of contributors under "Spec, code, testing", "Templates and skins" and "Documentation" is based on number of SVN check-ins for core and default extensions from 2007-02 to 2007-12. Sequence of contributors under "TWiki.org wiki champions" and "Customer support" is based on TWiki.org web statistics from 2007-02 to 2007-12.
+
+See more details on the TWiki 4.2 release at TWikiReleaseNotes04x02.
 
 #EdinburghRelease
 ---++ TWiki Release 4.1 (Edinburgh), 16 Jan 2007
