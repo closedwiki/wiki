@@ -52,6 +52,11 @@ sub set_up {
     } catch Error::Simple with {
         $this->assert(0,shift->stringify()||'');
     };
+    #GROUPs are cached, so we need to go again
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki(undef, $topicquery);
+    $twiki = $this->{twiki};
+    $TWiki::Plugins::SESSION = $this->{twiki};
 }
 
 sub tear_down {
@@ -69,6 +74,7 @@ sub _set {
     $type ||= 'Set';
 
     my $user = $twiki->{user};
+    $this->assert_not_null($user);
     my( $meta, $text) = $twiki->{store}->readTopic($user, $web, $topic);
     $text =~ s/^\s*\* $type $pref =.*$//gm;
     $text .= "\n\t* $type $pref = $val\n";
