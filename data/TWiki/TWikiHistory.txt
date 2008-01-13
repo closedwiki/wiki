@@ -21,7 +21,7 @@ __New Features and Enhancements of TWiki Release 4.2__
       * New "Restore topic" feature has been added to the _More Topic Actions_ menu to easily restore an older version of a topic
 
    * *Application Platform Enhancements*
-      * Enhancements to IF: allows, istopic, and isweb
+      * Enhancements to IF: allows, ingroup, istopic, and isweb
 
    * *Search Enhancements*
       * New =query= search mode supports SQL-style queries over form fields and other meta-data
@@ -29,6 +29,9 @@ __New Features and Enhancements of TWiki Release 4.2__
    * *Skins and Templates Enhancements*
       * The !PatternSkin which is the default skin for TWiki has got a face lift
       * The template have been heavily refactored to make it easier to create skins
+
+   * *User Management API*
+      * The UserMapping component has been re-written to make it simpler to interface to external User Authentication and Management system.
 
    * *Miscellaneous Feature Enhancements*
       * Many new functions in the API for plugin developers
@@ -49,12 +52,12 @@ __Hall of Fame of TWiki Release 4.2__
 Many people have been involved in creating TWiki-4.2, special thanks go to the most active contributors in the following areas:
 
    * *Sponsor and facilitator:* TWiki:Main.PeterThoeny
-   * *Process refinements:* TWiki:Main.KennethLavrsen
-   * *Release management:* TWiki:Main.KennethLavrsen
+   * *Process refinements:* TWiki:Main.KennethLavrsen, TWiki:Main.CrawfordCurrie,TWiki:Main.SvenDowideit
+   * *Release management:* TWiki:Main.KennethLavrsen, TWiki:Main.SvenDowideit
    * *Usability:* TWiki:Main.CarloSchulz, TWiki:Main.ArthurClemens
-   * *Spec, code, testing:* TWiki:Main.CrawfordCurrie, TWiki:Main...
-   * *Templates and skins:* TWiki:Main.ArthurClemens, TWiki:Main...
-   * *Documentation:* TWiki:Main.PeterThoeny, TWiki:Main...
+   * *Spec, code, testing:* TWiki:Main.CrawfordCurrie,TWiki:Main.SvenDowideit, TWiki:Main...
+   * *Templates and skins:* TWiki:Main.ArthurClemens, TWiki:Main.SvenDowideit, TWiki:Main...
+   * *Documentation:* TWiki:Main.PeterThoeny, TWiki:Main.TWiki:Main.CrawfordCurrie, TWiki:Main.SvenDowideit, TWiki:Main...
    * *Translations:* Coordinated by TWiki:Main.AntonioTerceiro
       * Chinese: TWiki:Main.CheDong
       * Czech: TWiki:Main.IvanKuncl
@@ -73,7 +76,7 @@ Many people have been involved in creating TWiki-4.2, special thanks go to the m
    * *Public relations:* TWiki:Main.PeterThoeny, TWiki:Main.MichaelCorbett
    * *Meetups:* TWiki:Main.AmirShobeiri
    * *TWiki.org wiki champions:* TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens, TWiki:Main.CrawfordCurrie, TWiki:Main.KennethLavrsen, TWiki:Main.SvenDowideit, TWiki:Main.MichaelDaum, TWiki:Main.CarloSchulz, TWiki:Main.StephaneLenclud, TWiki:Main.RichardDonkin, TWiki:Main.KoenMartens <!-- Blog, Codev, Main, Plugins, TWiki webs -->
-   * *Customer support:* TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens, TWiki:Main.CrawfordCurrie, SvenDowideit, TWiki:Main.HaraldJoerg <!-- Support web -->
+   * *Customer support:* TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens, TWiki:Main.CrawfordCurrie, TWiki:Main.SvenDowideit, TWiki:Main.HaraldJoerg <!-- Support web -->
    * *System administration:* TWiki:Main.SvenDowideit, TWiki:Main.PeterThoeny, TWiki:Main.CrawfordCurrie
 
 If you find an omission please fix it at TWiki:TWiki.TWikiHistory. For the full list of contributors see TWikiContributor. 
