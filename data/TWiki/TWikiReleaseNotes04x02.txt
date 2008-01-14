@@ -143,7 +143,1560 @@ The 4.2.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 ---+++ TWiki 4.2.0 Fixes
 <noautolink>
 
-FIXME using http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/ReleaseNotesTml?type=n%2Fa%7Cpatch%7Cminor
+<!-- using http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/ReleaseNotesTml?type=n%2Fa%7Cpatch%7Cminor -->
+<table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="rows" border="1">
+	<tbody>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item5242" target="_top">Item5242</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> PrefsTests failing - now that groups are cached, we need to force a reload </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item5238" target="_top">Item5238</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> eachGroupMember seems to be re-processing the same groups multiple times. </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item5226" target="_top">Item5226</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> TWikiUserMapping speed re-enhancements </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item5219" target="_top">Item5219</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> unqualified use of $TWiki::TranslationToken can lead to unexpected results </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item5210" target="_top">Item5210</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> EDITTABLE with a simple text input in which the user has put %BR% gets trunkated at the first BR </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item5194" target="_top">Item5194</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Highly suspect code in Users.pm </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item5185" target="_top">Item5185</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> User mapping testcase is giving a false positive </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item5182" target="_top">Item5182</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> "save" does not treat bad templatetopic as an error </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item5123" target="_top">Item5123</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> missing fetchUsers method in Password.pm </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item5121" target="_top">Item5121</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Performance: Copy hash </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item5107" target="_top">Item5107</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> 4.2.0 rc2 release </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item5085" target="_top">Item5085</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> un-necessary strictness in content type unit test </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item5050" target="_top">Item5050</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> TablePlugin: Do not add a thead for each header row </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item5046" target="_top">Item5046</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> error link mailto </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item5040" target="_top">Item5040</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Auto attach has hardcoded the string 'UnknownUser' for the attachment meta user attr </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item5038" target="_top">Item5038</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> TablePlugin prepends 'table' to id parameter </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item5031" target="_top">Item5031</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> "Here" link in merge_notice in templates/messages.tmpl </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item5029" target="_top">Item5029</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Template.pm prints incomplete and confusing error message </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item5019" target="_top">Item5019</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> if you get a lease conflict when using EditTablePlugin, the oops conflict output link is unusable </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item5018" target="_top">Item5018</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> make the "How to add the first administrator" yellow box display only if relevant. </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item5016" target="_top">Item5016</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> TWikiAdminGroup help text does not work for ApacheLogin </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item5014" target="_top">Item5014</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> EditTablePlugin complains about editing conflict when adding row </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item5009" target="_top">Item5009</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> TWISTY <code>link</code> parameter doesn't support (local) variables (set in topic and used with %) properly </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item5008" target="_top">Item5008</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> If you register someone you are magically logged in as them </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item5004" target="_top">Item5004</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> AutoAttach created META that will break topic rendering </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4991" target="_top">Item4991</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> TwistyPlugin: add behaviour earlier to head than twisty js </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4989" target="_top">Item4989</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> wrong expansion of deprecated URL tag </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4986" target="_top">Item4986</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> select+multi+values broken in various respects </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4984" target="_top">Item4984</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> tiny docco tweak after a conversation with a user </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4973" target="_top">Item4973</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> default skin appears to have javascript in it </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4972" target="_top">Item4972</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> session files should only be created for web based sessions. </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4971" target="_top">Item4971</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> taint error when registering and verify is off </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4944" target="_top">Item4944</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> EditTablePlugin data corruption under mod_perl </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4941" target="_top">Item4941</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> ChangePassword form does not detect failure when .htpasswd is read-only </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4939" target="_top">Item4939</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Pass topicparent when creating a new topic </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4928" target="_top">Item4928</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> lets use HTTP error codes in rest cgi, rather than rather less useful die's </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4921" target="_top">Item4921</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> rest cgi is not testing the URL correctly </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4918" target="_top">Item4918</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> checkpoint-save ignores EDIT_TEMPATE </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4908" target="_top">Item4908</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> don't call the main usermapper if its already returned false to handlesUser </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4900" target="_top">Item4900</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> 0 is not recognized as valid input in a mandatory form field </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4898" target="_top">Item4898</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> tmp and working dir security needs work (docco and code </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4879" target="_top">Item4879</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> configure not honoring $TWiki::cfg{ScriptUrlPath} </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4870" target="_top">Item4870</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> More topic actions / restore should spawn raw edit as default editor </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4858" target="_top">Item4858</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> EditTablePlugin: do not show a move button with only 1 row </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4856" target="_top">Item4856</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> EditTablePlugin: make buttons customizable and translatable </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4854" target="_top">Item4854</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> EditTablePlugin: undefined textarea size gives error in log </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4848" target="_top">Item4848</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> <a href="http://twiki.org/cgi-bin/view/Plugins.EditTablePlugin" title="'Plugins.EditTablePlugin' on TWiki.org" class="interwikiLink">TWiki:Plugins.EditTablePlugin</a> textarea bug! </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4846" target="_top">Item4846</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Installation process SNAFU if you don't set a configure PW </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4833" target="_top">Item4833</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> TagMePlugin example template does not work on TWiki 4.1 </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4819" target="_top">Item4819</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> viewauth redirect loops to death when Main and TWiki webs both are view denied for TWikiGuest </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4816" target="_top">Item4816</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> EditPreferences of Main.TWikiPreferences broken </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4815" target="_top">Item4815</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Wrong link to username of attachments from 4.1 topics </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4809" target="_top">Item4809</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> ConditionalBasedOnGroupMembership </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4807" target="_top">Item4807</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> swap twikistyle and defaultstyle definitions </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4806" target="_top">Item4806</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> EditTablePlugin does not add rows </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4797" target="_top">Item4797</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Online installer not resolving dependencies </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4794" target="_top">Item4794</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Wrong link to FileAttachment </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4793" target="_top">Item4793</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Login screen has error messages the wrong order </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4774" target="_top">Item4774</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> When using a field type select+multi in a form used in a template topic, the field doesn't remember the selection </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4771" target="_top">Item4771</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> TWikiUserMapping fails with Corporate SSO </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4765" target="_top">Item4765</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Reading static HTML's for upgrade/install is difficult without internet connection/behind firewall </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4761" target="_top">Item4761</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Remove inline scripts from pattern skin </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4756" target="_top">Item4756</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> raw=all does not show all meta when VIEW_TEMPLATE is defined. </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4755" target="_top">Item4755</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Create new topic link from old webs no longer works </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4753" target="_top">Item4753</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> /bin/twiki is experimental stuff that should not be in distribution </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4752" target="_top">Item4752</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Terrifying text appears below plugins list during new extensions install via configure </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4736" target="_top">Item4736</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> add expires header for css js etc </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4727" target="_top">Item4727</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> nested web creation is broken (it should prevent the user from creating them if its disabled...) </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4724" target="_top">Item4724</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> <code>afterEditHandler</code> is never called on "Quiet Save" </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4722" target="_top">Item4722</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Unused EXPERT options are always shown </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4718" target="_top">Item4718</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Improve the installation doc for how to setup apache config for configure </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4713" target="_top">Item4713</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Repackage native search as a conrib, remove from 4.2 </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4708" target="_top">Item4708</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Sudo login has wrong tab index </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4702" target="_top">Item4702</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Lighter top bar background image </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4694" target="_top">Item4694</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Standard user topics of TWikiUserMapping are referenced, but not defined </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4692" target="_top">Item4692</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Forking search algorithm throws error if topic is nonexistent </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4680" target="_top">Item4680</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Print view seems weird in both pattern skin and default skin </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4677" target="_top">Item4677</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Search results now have empty line (= html P) between search header and results list </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4676" target="_top">Item4676</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Update color scheme to match new neutral table borders </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4675" target="_top">Item4675</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Add completePageHandler for plugins </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4671" target="_top">Item4671</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> default skin is a bit broken </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4670" target="_top">Item4670</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> close browser advice non-sensical when not using apache login </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4669" target="_top">Item4669</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> I thought we were shipping TinyMCE as on by default - the svn repository has it off </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4667" target="_top">Item4667</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Adding CGI::Session with distribution and enable Template login by default. </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4664" target="_top">Item4664</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Web rename renames content as well </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4661" target="_top">Item4661</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> renaming a topic destroys full qualified topic names </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4659" target="_top">Item4659</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Change the strategy of protecting again html attach spam to not harm Wysiwyg editor </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4658" target="_top">Item4658</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> remove use of undefined variable un utf8 code </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4657" target="_top">Item4657</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Branching and building 4.2.0 beta </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4641" target="_top">Item4641</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> css for hr element of a partially styled twikiTable has a broken left border </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4605" target="_top">Item4605</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> User shown as Unknown User (Login ID) when author is not in TWikiUsers. Bad feature </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4603" target="_top">Item4603</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Add TinyMCE quick help to edit template </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4590" target="_top">Item4590</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Rename "Checkpoint" to "Save and Continue" </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4585" target="_top">Item4585</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> configure generates apache errors </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4576" target="_top">Item4576</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Too many mail dependencies </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4569" target="_top">Item4569</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> WebSearchAdvanced does not show selected state for default radion button "both" </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4539" target="_top">Item4539</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Rename css class TWikiFooterNote to twikiFooterNote </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4510" target="_top">Item4510</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Remove inline scripts </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4509" target="_top">Item4509</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Prevent [ and ] in topic names when renaming topics </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4508" target="_top">Item4508</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> ResetPassword, ChangePassword, ChangeEmailAddress, TWikiRegistration needs to be hacked after each upgrade </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4505" target="_top">Item4505</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> User registration states incorrect user name </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4493" target="_top">Item4493</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Inline rdiff between rev 0 and rev 1 is empty </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4487" target="_top">Item4487</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> As described in TWiki.TWikiScripts auth protect rest </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4476" target="_top">Item4476</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Missing error message when registration mail fails to be sent </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4459" target="_top">Item4459</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> TemplateLogin messages not translated </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4458" target="_top">Item4458</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Topic newsletter notifications in MailerContrib fail </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4456" target="_top">Item4456</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> TWikiUserMappingContrib.txt is more or less an empty topic. Some lines of description needed </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4453" target="_top">Item4453</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> A Set embedded in a list has problems </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4449" target="_top">Item4449</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> No (simple) way to create a Set </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4448" target="_top">Item4448</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> InterwikiPlugin: Change ISBN rule </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4440" target="_top">Item4440</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> reading the FORMFIELDs of another topic imposes its access rights </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4439" target="_top">Item4439</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> %INCLUDE breaks enumeration/tables when included topic has file attachments </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4435" target="_top">Item4435</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Paragraphs not correctly handled </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4434" target="_top">Item4434</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Patch for improper replacing of "0" with "" (empty string) in URLPARAM default value </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4432" target="_top">Item4432</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> %VAR% causes an internal server error </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4426" target="_top">Item4426</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> HTMl embedded in lists breaks the translator </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4425" target="_top">Item4425</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Empty bullets get a <code>&lt;br /&gt;</code> tag. </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4424" target="_top">Item4424</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Extra space after headings (one is added each time you save.) </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4410" target="_top">Item4410</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Having major problems with tables </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4403" target="_top">Item4403</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Error saving topic message not shown as code because of trailing space </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4402" target="_top">Item4402</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Access check based on getWikiUserName (fails) vs. getWikiName (succeeds) </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4399" target="_top">Item4399</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Add a note about adding a doc license to footer when installing TWiki </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4397" target="_top">Item4397</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Authenticating through REST does not work in MAIN </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4383" target="_top">Item4383</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> {Register}{NeedVerification} shoud not be an expert setting and disabled by default </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4380" target="_top">Item4380</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> <code>mailnotify</code> fails due to TWIki::Merge failing </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4378" target="_top">Item4378</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> default skin, and thus the classic skin, contains javascript </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4372" target="_top">Item4372</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Custom META fields that don't have the <em>name</em> key are ignored by TWiki::Store </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4357" target="_top">Item4357</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> PatternSkin release, v3.0 </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4355" target="_top">Item4355</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> bulkregistration is unforgiving on TWikiTable format </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4349" target="_top">Item4349</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> TablePlugin generates invalid html attribute <code>maxcols</code> </td>
+		</tr>
+
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4347" target="_top">Item4347</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Empty field values in searches are returned as strings containing "$value" </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4335" target="_top">Item4335</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> TablePlugin: TWikiTables in TWikiLists generate invalid html </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4333" target="_top">Item4333</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> OopsException allows anything from a URL to pass through to the generated HTML incl scripts </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4332" target="_top">Item4332</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> No error message for duplicate_activation </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4319" target="_top">Item4319</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> {SafeEnvPath} screws up windows </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4308" target="_top">Item4308</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> getListOfWebs() and webExists() disagree </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4300" target="_top">Item4300</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> TablePlugin overrides skin css AGAIN </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4284" target="_top">Item4284</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Support topic permissions checking </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4281" target="_top">Item4281</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Native search falls over on d.t.o </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4280" target="_top">Item4280</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Move hide-if-no-javascript functionality from TwistyPlugin to default templates </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4271" target="_top">Item4271</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Update TwistyPlugin with TWiki 4 javascript files </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4269" target="_top">Item4269</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Update TwistyContrib with TWiki 4 javascript files </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4260" target="_top">Item4260</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Add MAKETEXT to all default templates </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4258" target="_top">Item4258</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Get rid of default TH background color </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4257" target="_top">Item4257</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Default templates and documentation topics assume pattern CSS classes </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4250" target="_top">Item4250</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Pipe symbol (i.e. in SEARCH) breaks Form Definition Table </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4249" target="_top">Item4249</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> RegistrationApprovals is not a web </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4244" target="_top">Item4244</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> EditTablePlugin: Very easy to accidently delete row. </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4243" target="_top">Item4243</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Malformed META embedded in text can crash TWiki </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4239" target="_top">Item4239</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> syntax error at /usr/lib/cgi-bin/TEST/lib/TWiki/ Users/ApacheHtpasswdUser.pm line 67, near "}" </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4236" target="_top">Item4236</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Configure harmless errors confuse people when they have other unrelated errors. </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4229" target="_top">Item4229</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Remove deprecated filename attribute from attach template </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4219" target="_top">Item4219</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Add correct CSS class to select box </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4207" target="_top">Item4207</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Usability: Warn if more than one {WebMasterEmail} e-mail address </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4204" target="_top">Item4204</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Document how you become an admin user with new temporary admin login (sudo) </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4193" target="_top">Item4193</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Show and hide WYSIWYG buttons based on COMPOSER setting </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4173" target="_top">Item4173</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> GROUPS variable kills server if there is a large group </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4166" target="_top">Item4166</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> TwistyPlugin: wrong use of plugin handlers </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4158" target="_top">Item4158</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> TWikiRegistration does not pass on multiple checkbox element values to UserForm. </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4157" target="_top">Item4157</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> tick_twiki.pl broken </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4156" target="_top">Item4156</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Fixing twiki cgi for logging in </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4151" target="_top">Item4151</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Javascript: twiki object overwritten </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4150" target="_top">Item4150</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Add global setting to allow non-WikiWords </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4146" target="_top">Item4146</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Documentation VarENCODE param typo </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4143" target="_top">Item4143</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Remove max length on attachment comment </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4141" target="_top">Item4141</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Topic templates are not documented </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4138" target="_top">Item4138</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Doc bug in TWikiUpgradeGuide.html </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4128" target="_top">Item4128</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Create default directive for non-view pages </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4126" target="_top">Item4126</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> WebSearch: Fix checkbox state based on url param web=all </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4088" target="_top">Item4088</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Add css style to raw textarea </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4081" target="_top">Item4081</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Broken Links to Topics and Subwebs </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4080" target="_top">Item4080</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Downloading extension via configure sometimes end up in an "Invalid header block" message </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4071" target="_top">Item4071</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Add dmg to mime.types </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4067" target="_top">Item4067</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Hexadecimal character references do not work </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4063" target="_top">Item4063</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Document how to reset a password with ApacheLogin </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4062" target="_top">Item4062</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Reset password message doesn't make sense any more </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4060" target="_top">Item4060</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> template login Error message activated when there was no error </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4048" target="_top">Item4048</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> EditTablePlugin: Password shown in URL params after template login on direct sort urls (authenticated setups) </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4045" target="_top">Item4045</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> PatternSkin: More space in topic name fields and file field </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4043" target="_top">Item4043</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> attachments have bad user name display issues </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4042" target="_top">Item4042</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Broken formfield "name" and "title" attributes </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4035" target="_top">Item4035</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> METASEARCH doc not complete. format option and probably more are missing in the doc </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4034" target="_top">Item4034</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Topic rename: error in javascript so select all does not work </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4028" target="_top">Item4028</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Authenticated twice; garbled CommentPlugin text </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4023" target="_top">Item4023</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> configure link for 'Expert mode' missing t= parameter to prevent caching </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4019" target="_top">Item4019</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Remove preferences edit button from TWiki.TWikiPreferences </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4006" target="_top">Item4006</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> More options: do not show "View previous topic revision" when there is no previous version </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3991" target="_top">Item3991</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Add <code>spaceOutWikiWord</code> to Func </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3989" target="_top">Item3989</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Problematic Values for FINALPREFERENCES in Distribution </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3971" target="_top">Item3971</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> viewauth Redirect May Add Superfluous Slash </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3969" target="_top">Item3969</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Emails may be 8bit, not 7bit </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3968" target="_top">Item3968</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Base HREF is wrong when scripturls are changed </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3957" target="_top">Item3957</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Mandatory fields will not accept 0 </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3955" target="_top">Item3955</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> RCS command-line settings should be EXPERT </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3949" target="_top">Item3949</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Search 'Number of topics' does not show on first search on advanced regex searches </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3947" target="_top">Item3947</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Better documentation on how to install CPAN libs (including a reference in the install doc) </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3940" target="_top">Item3940</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> PREFERENCE values not carried over to preview and then save </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3929" target="_top">Item3929</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Make TOPICLIST topic parameter equivalent to other vars </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3921" target="_top">Item3921</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> <code>renderWikiWordHandler</code> called at wrong place in Render.pm; change to support bracket notation </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3917" target="_top">Item3917</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Add .changes API to Func </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3914" target="_top">Item3914</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Some plugins cannot be downloaded using <code>configure</code> </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3911" target="_top">Item3911</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> default preview tmpl has major bug in release value="%REDIRECTTO" </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3909" target="_top">Item3909</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Pattern skin template documentation update </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3902" target="_top">Item3902</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Reset Password is broken in MAIN branch </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3900" target="_top">Item3900</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> New CARET preferences variable </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3897" target="_top">Item3897</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Fix sanitizeAttachmentName </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3895" target="_top">Item3895</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Structure the TWiki version number to make accessible from plugins (code included) </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3892" target="_top">Item3892</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Do not automatically lock user homepages when this is not set in NewUserTemplate </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3890" target="_top">Item3890</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> EDITTABLE expands variables in table cells </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3889" target="_top">Item3889</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> $EXISTS() should default to topic in current web </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3885" target="_top">Item3885</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Plugin installation doesn't work through some proxies </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3883" target="_top">Item3883</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> No rendering of TML after %BR% used in table cells and multiline bullets </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3879" target="_top">Item3879</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Topic rename does not find URL references from topics in different web </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3876" target="_top">Item3876</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Better documentation of <code>$FORMAT(PERCENT, ...)</code> </td>
+		</tr>
+
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3864" target="_top">Item3864</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> <code>renderWikiWordHandler</code> is not documented </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3862" target="_top">Item3862</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Parameter passed to preRenderingHandler incorrect </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3853" target="_top">Item3853</a> </td>
+
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> WEBLIST docco spelling error (selection=) </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3835" target="_top">Item3835</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> TWiki.TWikiSiteTools mentions geturl.pl, but does not point out the authentication problems with it </td>
+
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3834" target="_top">Item3834</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> USERINFO{format="$groups"} always returns webDotWikiName identifiers </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3833" target="_top">Item3833</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Cannot move attachment to topic with non-wikiword name </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3832" target="_top">Item3832</a> </td>
+
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> [[bracket links]] are not updated during page renames </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3829" target="_top">Item3829</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> NativeSearch: give gentle warning when no parameters are passed to test.pl </td>
+
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3822" target="_top">Item3822</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Table rules for columns are invisible in Internet explorer </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3821" target="_top">Item3821</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Document INCLUDE behaviour in TWikiAccessControl </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3813" target="_top">Item3813</a> </td>
+
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Web reference gets inappropriately inserted into bracketed links inside verbatim tags. </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3812" target="_top">Item3812</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Space in username not rejected when resetting password </td>
+
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3806" target="_top">Item3806</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> add <code>true</code> and <code>false</code> to TWiki::isTrue </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3805" target="_top">Item3805</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> footerrows setting is ignored when adding rows </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3804" target="_top">Item3804</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> TemplateLogin.pm doesn't return the error from the underlying PasswordManager </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3803" target="_top">Item3803</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> %!USERINFO{format="$groups"}% crashes </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3796" target="_top">Item3796</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Javascript: ensuring variables are local </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3790" target="_top">Item3790</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Web statistic severely broken </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3787" target="_top">Item3787</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> TWiki.TWikiDocumentation jumps to top at double click </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3784" target="_top">Item3784</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Rename across webs bugs </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3783" target="_top">Item3783</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Pattern skin small template refactoring </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3780" target="_top">Item3780</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Add Sanitize Attachment Name to TWiki::Func </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3779" target="_top">Item3779</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Table with backslash breaks EditTablePlugin </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3778" target="_top">Item3778</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Lock WebPreferences to person creating web </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3775" target="_top">Item3775</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Commentplugin makes inappropriate line ending handling when targeting an anchor </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3772" target="_top">Item3772</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> TWiki::Func::getOopsUrl() doesn't support <code>def</code> parameter </td>
+		</tr>
+
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3771" target="_top">Item3771</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Dutch translation files some special chars mangled </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3769" target="_top">Item3769</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Can't create configuration subsection for plugins and contribs </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3765" target="_top">Item3765</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> configure docco for mail handler should say howto force twiki to use sendmail </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3760" target="_top">Item3760</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> With rename topic, topic texts are changed as well </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3759" target="_top">Item3759</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> MailerContrib not mailing groups </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3758" target="_top">Item3758</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Remark "There is no size limit for uploaded files." is not relevant to users </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3756" target="_top">Item3756</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> TWikiRegistrationAgent produces wrongly formated entries </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3755" target="_top">Item3755</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Need to document parameterized include </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3752" target="_top">Item3752</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Doc fix to AdminSkillsAssumptions </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3748" target="_top">Item3748</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> EXTEND.pm fails to move directories across filesystems </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3743" target="_top">Item3743</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Input bugs in SpreadSheetPlugin::Calc </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3742" target="_top">Item3742</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Short description containing TML does not get rendered properly in PLUGINDESCRIPTIONS </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3738" target="_top">Item3738</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Avoid "detailed instructions are beyond the scope of this document" </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3735" target="_top">Item3735</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> WYSIWYG broken for bolded WikiWords </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3727" target="_top">Item3727</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Can't login; e-mail wiped out in .htpasswd entry </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3725" target="_top">Item3725</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> BulkRegister not functioning properly if password Manger is set to NONE </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3704" target="_top">Item3704</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Incorrect number of topics indicated with multiple SEARCHes </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3703" target="_top">Item3703</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> &amp;nbsp; in the size field of a form will crash the forms code </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3690" target="_top">Item3690</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> exec return an exit code of 1 for a perfectly valid grep </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3689" target="_top">Item3689</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> CommentPlugin location only works if it is above the %COMMENT... tag </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3688" target="_top">Item3688</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Page loads unreasonable slow under IE with Twisty enabled (clone of 3582) </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3686" target="_top">Item3686</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Make redirectto parameter work for rename </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3684" target="_top">Item3684</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Over-complex CPAN installation instructions </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3673" target="_top">Item3673</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Bad expression error in 'more' screen if parent is missing </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3668" target="_top">Item3668</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Broken links in topic A if includes topic B in which InterWiki links are defined </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3653" target="_top">Item3653</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Document standard extensions in release notes </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3652" target="_top">Item3652</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> I18N: Urls to file attachments that has umlauts only works in some browsers </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3646" target="_top">Item3646</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Make edit form somewhat less spacious </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3641" target="_top">Item3641</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Access key char invisible on hover </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3639" target="_top">Item3639</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Extension installer in configure floods error_log when checking for installed plugins. </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3630" target="_top">Item3630</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Topic URL parameter overwrites revision to which REVINFO variable refers </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3623" target="_top">Item3623</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Can't delete attachment with pluses in file name </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3621" target="_top">Item3621</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Improve visibility of attachment twisty </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3604" target="_top">Item3604</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> URL rendering cuts off first part of URL </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3594" target="_top">Item3594</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Can't save template topic with mandatory form fields </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3592" target="_top">Item3592</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Cleaning up Main.TWikiPreferences </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3583" target="_top">Item3583</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> 'configure' password gets saved as 'smtp' password (in plain text!) </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3581" target="_top">Item3581</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Unwanted question mark link in bracket link text </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3580" target="_top">Item3580</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> redirectto implemented redundantly in several places </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3579" target="_top">Item3579</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Usability: [Save] of preferences screen should support access key </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3578" target="_top">Item3578</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Deprecate <code>permissionsSet</code> from Func </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3575" target="_top">Item3575</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Usability: Use pub url instead of viewfile url in attachment table </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3570" target="_top">Item3570</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Usability: Time consuming to create new topic </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3567" target="_top">Item3567</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> TablePlugin: css attributes priority of site/web preferences too agressive </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3486" target="_top">Item3486</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Possible to create topics with unsupported characters </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3463" target="_top">Item3463</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Document how to use .spec files for plugin setting in TWiki.TWikiPlugins </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3456" target="_top">Item3456</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Doc is unclear that Space In Path Causes Error </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3438" target="_top">Item3438</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> UnprocessedBulkRegistrationLog is improperly formatted </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3375" target="_top">Item3375</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Refactor object names for clarity </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3368" target="_top">Item3368</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> No existance check for topic used in <code>include</code> </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3367" target="_top">Item3367</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> EditTablePlugin ignores valid table syntax </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3362" target="_top">Item3362</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Update doc topics that have forms </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3341" target="_top">Item3341</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> invalid Date: header in mailnotify </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3289" target="_top">Item3289</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> attach a filename with paraens and wikiwords </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3246" target="_top">Item3246</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Fix save_error template </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3229" target="_top">Item3229</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> WysiwygPlugin alters things inside complex twiki vars so they break </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3158" target="_top">Item3158</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Don't include anything when trying to include a non existing section </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3105" target="_top">Item3105</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Usability: Misleading  "Invalid Activation Code" error message </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3051" target="_top">Item3051</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Wasted vertical space below edit box </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3038" target="_top">Item3038</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> NEWTOPICFGCOLOR and NEWTOPICBGCOLOR never used </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3009" target="_top">Item3009</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Need clear definition of the impact of spaces on EditTable definition </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item2975" target="_top">Item2975</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> EditTablePlugin format fails for last item </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item2960" target="_top">Item2960</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> I18N: Using UTF8 in headers breaks header anchors </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item2915" target="_top">Item2915</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Allow date format in form fields </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item2892" target="_top">Item2892</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> TWiki dies with SEARCH on topic that has form field named <code>*Foobar*</code> </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item2772" target="_top">Item2772</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Mailto link should use %20 instead of &amp;#32; for spaces </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item2690" target="_top">Item2690</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> EditTablePlugin: remove sort links from headers when editing the table </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item2632" target="_top">Item2632</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Username vs WikiName is confusing in Configure </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item2615" target="_top">Item2615</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Fully document exposed APIs </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item2520" target="_top">Item2520</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> WebExist uses WebPreferences as opposed to WebHome to determine the validity of a web </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item2354" target="_top">Item2354</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> FuncUsersContrib and MoreFuncContrib and FuncusersContrib should be merged into Func </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item2326" target="_top">Item2326</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Remove the secret NEWTOPICLINKSYMBOL (was missing docs for <code>NEWTOPIC*</code> ) </td>
+		</tr>
+
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item2244" target="_top">Item2244</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Documented METASEARCH parameter defaults are not the actual defaults </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item2221" target="_top">Item2221</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> .changes is hardcoded to 500 entries, affecting WebStatistics and MailerContrib </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item2108" target="_top">Item2108</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Better installation doc for TWikiAdminGroup </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item2032" target="_top">Item2032</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Some UTF8 characters in form values broken (CGI.pm interaction) </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item2005" target="_top">Item2005</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Cannot change configure password without making other changes </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item1993" target="_top">Item1993</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> IE eats newlines </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item1985" target="_top">Item1985</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Not possible to use CDATA in SEARCH output (prev: RSS feeds chokes on HTML entities in SEARCH results) </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item1965" target="_top">Item1965</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> ResetPassword usability </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item1870" target="_top">Item1870</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Improvements to installation docs </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item1860" target="_top">Item1860</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> NewUserTemplate should be in Main </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item1852" target="_top">Item1852</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Lease files are not deleted or renamed when you delete/rename topics with cancelled edit </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item1828" target="_top">Item1828</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Rendering bug of headings when using MBCS as a heading string </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" align="center" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item1562" target="_top">Item1562</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> RcsFile::searchInWebContent doesn't check exit status of the grep command </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" align="center" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item1379" target="_top">Item1379</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> Table sorting confused when using variables. </td>
+		</tr>
+	</tbody></table>
+
 
 </noautolink>
 
@@ -154,7 +1707,311 @@ FIXME using http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/ReleaseNotesTml?t
 
 <noautolink>
 
-FIXME using http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/ReleaseNotesTml?type=n%2Fa%7Cpatch%7Cminor
+<!-- using http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/ReleaseNotesTml?type=n%2Fa%7Cpatch%7Cminor -->
+<table cellspacing="0" id="table2" cellpadding="0" class="twikiTable" rules="rows" border="1">
+	<tbody>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item652" target="_top">Item652</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> <code>configure</code> plugins should be sorted case-insensitively </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4995" target="_top">Item4995</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> EditTablePlugin: Omit Edit button in print view </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4875" target="_top">Item4875</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Add javascript function 'makeSafeForTableEntry' </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4810" target="_top">Item4810</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> SpreadSheetPlugin: New FORMATTIMEDIFF() function </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4709" target="_top">Item4709</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Update small T-logo badge in bottom bar </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4599" target="_top">Item4599</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Add timestamps to history revisions (rdiff) </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4568" target="_top">Item4568</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Offer RSS feed on search results </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4548" target="_top">Item4548</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Improve TOC display in TWiki documentation </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4547" target="_top">Item4547</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Improve TWiki variables documentation </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4504" target="_top">Item4504</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> pop-ups need to pass extra url parameters </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4500" target="_top">Item4500</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> need a way to set preferences from TWiki::Func </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4473" target="_top">Item4473</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> check that we have a testable can_edit state </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4461" target="_top">Item4461</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> 'Changed' link should point to most recent changes, not the entire history </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4451" target="_top">Item4451</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Add Bugs rule </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4351" target="_top">Item4351</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Add a way to pass authentication information to an extra plugins repository </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4294" target="_top">Item4294</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> TablePlugin: put all css styling in head </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4279" target="_top">Item4279</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> TwistyContrib: support TwistyPlugin 1.4 </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4278" target="_top">Item4278</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> TwistyPlugin 1.4: remove ugly javascript init calls </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4275" target="_top">Item4275</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Add Adobe Air to mimetypes </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4259" target="_top">Item4259</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Simplify default templates more, and use CSS </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4241" target="_top">Item4241</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> CSS class <code>twikiUnvisited</code> </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4185" target="_top">Item4185</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> SlideShowPlugin: Add VarSLIDESHOWSTART and VarSLIDESHOWEND variable documentation </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4184" target="_top">Item4184</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> RenderListPlugin: Add VarRENDERLIST variable documentation </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4183" target="_top">Item4183</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> TablePlugin: Add VarTABLE variable documentation </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4182" target="_top">Item4182</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> EditTablePlugin: Add VarEDITTABLE variable documentation </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4181" target="_top">Item4181</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> CommentPlugin: Add VarCOMMENT variable documentation </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4180" target="_top">Item4180</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> SpreadSheetPlugin: Add VarCALC variable documentation </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4174" target="_top">Item4174</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Add templatetopic url parameter to WebTopicCreator </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4153" target="_top">Item4153</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Add control over TOC rendering </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4142" target="_top">Item4142</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Template unification </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4140" target="_top">Item4140</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Support standard escapes in IF statements </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4139" target="_top">Item4139</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Configurable date format to enable 2007-05-25 format. </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4120" target="_top">Item4120</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Main.TWikiUsers no longer in distribution but gets created from template if non existing </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4087" target="_top">Item4087</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> PatternSkin: visual update to form elements </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4075" target="_top">Item4075</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Enhance MailerContrib To Allow Exclusion Of Webs </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4069" target="_top">Item4069</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Normalise <code>viewfile</code> so it is able to use path syntax as well as the ?filename= syntax. </td>
+		</tr>
+
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4046" target="_top">Item4046</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> PatternSkin: Add RSS feed icon to WebLeftBar </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4044" target="_top">Item4044</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Add RSS feed icon to TWikiDocGraphics </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item4041" target="_top">Item4041</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Extend SEARCH to allow SQL-type queries over form fields </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3988" target="_top">Item3988</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Japanese translation </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3854" target="_top">Item3854</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> show subwebs="" in WEBLIST relative to a web </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3841" target="_top">Item3841</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Add expandStandardEscapes to TWiki::Func </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3801" target="_top">Item3801</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Propose adding $admin attribute to USERINFO rather than appending "isAdmin()" to $group output </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3798" target="_top">Item3798</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> twikiNotification: CSS style for notifcations </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3774" target="_top">Item3774</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Add getSessionKeys to Func </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3773" target="_top">Item3773</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Handlers don't have access to the full topic </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3766" target="_top">Item3766</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Enhance EditTablePlugin with DHTML; fix eating of newlines; graceful fallback calendar button; fix css styling </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3757" target="_top">Item3757</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> TWiki inserts html into text areas which have text in them </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3607" target="_top">Item3607</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> SEARCH summary should remove leading exclamation point </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3606" target="_top">Item3606</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> SpreadSheetPlugin doc work for 4.2 </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3552" target="_top">Item3552</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Support interface to getting URLs in Func </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3530" target="_top">Item3530</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Make scope="all" the default search in WebSearch </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3487" target="_top">Item3487</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Need a way to tell if mod_perl is in use </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3321" target="_top">Item3321</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Table column headers always centered </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3313" target="_top">Item3313</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Make redirectto parameter work for upload </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3265" target="_top">Item3265</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Existing attachments: change header from "Other attachments of" to "Attachments of" </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3250" target="_top">Item3250</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Allow infinite expiry of cookies </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item3234" target="_top">Item3234</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> PatternSkin minor CSS changes for 4.2 </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item2123" target="_top">Item2123</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Add new type=word search to search on word boundaries </td>
+
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item1966" target="_top">Item1966</a> </td>
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Poor/nonexistent revert-to-previous-version design </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item1772" target="_top">Item1772</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> Add a <code>?template=viewplain</code> template for plain view </td>
+		</tr>
+		<tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item1748" target="_top">Item1748</a> </td>
+
+			<td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol"> Attach help contains note for Internet Explorer 4 that can be removed now </td>
+		</tr>
+		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <a href="http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item1582" target="_top">Item1582</a> </td>
+			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> configure needs a backlink to the TWiki/WebHome </td>
+
+		</tr>
+	</tbody></table>
+
 
 </noautolink>
 
