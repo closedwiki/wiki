@@ -1,6 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1150149564" format="1.1" reprev="1.3" version="1.3"}%
+%META:TOPICINFO{author="GeorgeClark" date="1200278593" format="1.1" version="1.2"}%
 %META:TOPICPARENT{name="DirectedGraphPlugin"}%
 ---+!! Overview of directed graph editing
+
+<!-- NOTE:  The dot graphs on this page are all configured with file hash disabled.  
+If you want to modify any of them remove the dothash parameter from the dot directive
+-->
 
 %TOC%
 
@@ -14,7 +18,7 @@ Support for creating advanced directed graphs has been installed on this TWiki i
 <tr><td valign="top">
 *The graph:*
 
-<dot>
+<dot file="example1"  dothash="off" >
 digraph G {
   "a" -> "b";
   "a" -> "c";
@@ -46,7 +50,7 @@ Using more advanced syntax very advanced graphs can be created, including subgra
 <tr><td valign="top">
 *The graph:*
 
-<dot>
+<dot file="simple_two_nodes" dothash="off" >
 digraph G {
  a -> b;
 }
@@ -56,7 +60,7 @@ digraph G {
 *The code:*
 
 <verbatim>
-<dot>
+<dot file="simple_two_nodes" dothash="off">
 digraph G {
  a -> b;
 }
@@ -89,7 +93,7 @@ As you can see in this example we actually only define exactly one edge, the lin
 <tr><td valign="top">
 *The graph:*
 
-<dot>
+<dot file="added_attributes" dothash="off">
 digraph G {
  a [style=filled, color=green];
  b [style=filled, color=red];
@@ -102,7 +106,7 @@ digraph G {
 *The code:*
 
 <verbatim>
-<dot>
+<dot file="added_attributes" dothash="off">
 digraph G {
  a [style=filled, color=green];
  b [style=filled, color=red];
@@ -133,7 +137,7 @@ To add attributes to edges (i.e. arrows) just add the attributes to the line of 
 <tr><td valign="top">
 *The graph:*
 
-<dot>
+<dot file="with_labels" dothash="off">
 digraph G {
  a -> b [label="link"];
 }
@@ -143,7 +147,7 @@ digraph G {
 *The code:*
 
 <verbatim>
-<dot>
+<dot file="with_labels" dothash="off">
 digraph G {
  a -> b [label="link"];
 }
@@ -160,10 +164,10 @@ Edges can be labeled by adding the attribute <verbatim>label="text"</verbatim> a
 ---+++ Adding subgraphs
 
 <table>
-<tr><td valign="top">
+<tr><td valign="top" >
 *The graph:*
 
-<dot>
+<dot file="add_subgraphs" dothash="off" >
 digraph G {
   a -> b;
   a -> c;
@@ -187,7 +191,7 @@ digraph G {
 *The code:*
 
 <verbatim>
-<dot>
+<dot file="add_subgraphs" dothash="off" >
 digraph G {
   a -> b;
   a -> c;
@@ -196,7 +200,7 @@ digraph G {
     node [style=filled, color=white];
     style=filled;
     color=lightgrey;
-    rank=same; 
+    rank=same;
     b;
     c;
   }
@@ -228,7 +232,7 @@ All nodes defined in the subgraph have the attributes <verbatim>style=filled, co
 <tr><td valign="top">
 *The graph:*
 
-<dot>
+<dot file="grouping_nodes" dothash="off" >
 digraph G {
   size="2.5,2";
 
@@ -256,7 +260,7 @@ digraph G {
 *The code:*
 
 <verbatim>
-<dot>
+<dot file="grouping_nodes" dothash="off" >
 
 digraph G {
   {
@@ -299,7 +303,7 @@ Choose the shape of a node by adding the attribute =shape= to the node definitio
 
 <table border="1"><tr>
 <td>
-<dot>
+<dot file="shape_box" dothash="off" >
 digraph G {
  " " [shape=box];
 }
@@ -307,7 +311,7 @@ digraph G {
 <center>box</center>
 </td>
 <td>
-<dot>
+<dot file="shape_polygon" dothash="off" >
 digraph G {
  " " [shape=polygon];
 }
@@ -315,7 +319,7 @@ digraph G {
 <center>polygon</center>
 </td>
 <td>
-<dot>
+<dot file="shape_ellipse" dothash="off" >
 digraph G {
  " " [shape=ellipse];
 }
@@ -323,7 +327,7 @@ digraph G {
 <center>ellipse</center>
 </td>
 <td>
-<dot>
+<dot file="shape_circle" dothash="off" >
 digraph G {
  " " [shape=circle];
 }
@@ -332,15 +336,17 @@ digraph G {
 </td>
 </tr><tr>
 <td>
-<dot>
+<center>
+<dot file="shape_point" dothash="off" >
 digraph G {
  " " [shape=point];
 }
 </dot>
+</center>
 <center>point</center>
 </td>
 <td>
-<dot>
+<dot file="shape_egg" dothash="off" >
 digraph G {
  " " [shape=egg];
 }
@@ -348,7 +354,7 @@ digraph G {
 <center>egg</center>
 </td>
 <td>
-<dot>
+<dot file="shape_triangle" dothash="off" >
 digraph G {
  " " [shape=triangle];
 }
@@ -356,7 +362,7 @@ digraph G {
 <center>triangle</center>
 </td>
 <td>
-<dot>
+<dot file="shape_plaintext" dothash="off" >
 digraph G {
  plaintext [shape=plaintext];
 }
@@ -365,7 +371,7 @@ digraph G {
 </td>
 <tr>
 <td>
-<dot>
+<dot file="shape_diamond" dothash="off" >
 digraph G {
  " " [shape=diamond];
 }
@@ -373,7 +379,7 @@ digraph G {
 <center>diamond</center>
 </td>
 <td>
-<dot>
+<dot file="shape_trapezium" dothash="off" >
 digraph G {
  " " [shape=trapezium];
 }
@@ -381,7 +387,7 @@ digraph G {
 <center>trapezium</center>
 </td>
 <td>
-<dot>
+<dot file="shape_parallelogram" dothash="off" >
 digraph G {
  " " [shape=parallelogram];
 }
@@ -389,7 +395,7 @@ digraph G {
 <center>parallelogram</center>
 </td>
 <td>
-<dot>
+<dot file="shape_house" dothash="off" >
 digraph G {
  " " [shape=house];
 }
@@ -398,7 +404,7 @@ digraph G {
 </td>
 </tr><tr>
 <td>
-<dot>
+<dot file="shape_hexagon" dothash="off" >
 digraph G {
  " " [shape=hexagon];
 }
@@ -406,7 +412,7 @@ digraph G {
 <center>hexagon</center>
 </td>
 <td>
-<dot>
+<dot file="shape_octagon" dothash="off" >
 digraph G {
  " " [shape=octagon];
 }
@@ -414,7 +420,7 @@ digraph G {
 <center>octagon</center>
 </td>
 <td>
-<dot>
+<dot file="shape_doublecircle" dothash="off" >
 digraph G {
  " " [shape=doublecircle];
 }
@@ -422,7 +428,7 @@ digraph G {
 <center>doublecircle</center>
 </td>
 <td>
-<dot>
+<dot file="shape_doubleoctagon" dothash="off" >
 digraph G {
  " " [shape=doubleoctagon];
 }
@@ -432,7 +438,7 @@ digraph G {
 </tr>
 <tr>
 <td>
-<dot>
+<dot file="shape_tripleoctagon" dothash="off" >
 digraph G {
  " " [shape=tripleoctagon];
 }
@@ -440,7 +446,7 @@ digraph G {
 <center>tripleoctagon</center>
 </td>
 <td>
-<dot>
+<dot file="shape_invtriangle" dothash="off" >
 digraph G {
  " " [shape=invtriangle];
 }
@@ -448,7 +454,7 @@ digraph G {
 <center>invtriangle</center>
 </td>
 <td>
-<dot>
+<dot file="shape_invtrapezium" dothash="off" >
 digraph G {
  " " [shape=invtrapezium];
 }
@@ -456,7 +462,7 @@ digraph G {
 <center>invtrapezium</center>
 </td>
 <td>
-<dot>
+<dot file="shape_invhouse" dothash="off" >
 digraph G {
  " " [shape=invhouse];
 }
@@ -465,7 +471,7 @@ digraph G {
 </td>
 </tr><tr>
 <td>
-<dot>
+<dot file="shape_Mdiamond" dothash="off" >
 digraph G {
  " " [shape=Mdiamond];
 }
@@ -473,7 +479,7 @@ digraph G {
 <center>Mdiamond</center>
 </td>
 <td>
-<dot>
+<dot file="shape_Msquare" dothash="off" >
 digraph G {
  " " [shape=Msquare];
 }
@@ -481,7 +487,7 @@ digraph G {
 <center>Msquare</center>
 </td>
 <td>
-<dot>
+<dot file="shape_Mcircle" dothash="off" >
 digraph G {
  " " [shape=Mcircle];
 }
@@ -497,7 +503,7 @@ The form of the edge can be set by using the =arrowtail= and =arrowhead= attribu
 <table border="1">
 <tr>
 <td>
-<dot>
+<dot file="arrow_normal" dothash="off" >
 digraph G {
   a [shape=point];
 
@@ -507,7 +513,7 @@ digraph G {
 <center>normal</center>
 </td>
 <td>
-<dot>
+<dot file="arrow_dot" dothash="off" >
 digraph G {
   a [shape=point];
 
@@ -517,7 +523,7 @@ digraph G {
 <center>dot</center>
 </td>
 <td>
-<dot>
+<dot file="arrow_odot" dothash="off" >
 digraph G {
   a [shape=point];
 
@@ -527,7 +533,7 @@ digraph G {
 <center>odot</center>
 </td>
 <td>
-<dot>
+<dot file="arrow_inv" dothash="off" >
 digraph G {
   a [shape=point];
 
@@ -538,7 +544,7 @@ digraph G {
 </td>
 </tr><tr>
 <td>
-<dot>
+<dot file="arrow_invdot" dothash="off" >
 digraph G {
   a [shape=point];
 
@@ -548,7 +554,7 @@ digraph G {
 <center>invdot</center>
 </td>
 <td>
-<dot>
+<dot file="arrow_invodot" dothash="off" >
 digraph G {
   a [shape=point];
 
@@ -558,7 +564,7 @@ digraph G {
 <center>invodot</center>
 </td>
 <td>
-<dot>
+<dot file="arrow_none" dothash="off" >
 digraph G {
   a [shape=point];
 
@@ -571,39 +577,40 @@ digraph G {
 
 -- TWiki:Main.MikaelOlenfalk - 08 Aug 2005
 
-%META:FILEATTACHMENT{name="graphf31818f2ff4290edddbcfa9e66ff24fc.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148698" path="graphf31818f2ff4290edddbcfa9e66ff24fc.png" size="259" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graphb210c0d224eb2ccb7277e9102bff73ee.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148699" path="graphb210c0d224eb2ccb7277e9102bff73ee.png" size="290" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graphdee6af6092106ebf0652194b2ee84145.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148693" path="graphdee6af6092106ebf0652194b2ee84145.png" size="896" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graphbb79f5e45859feaaaf7c52255a6f8329.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148701" path="graphbb79f5e45859feaaaf7c52255a6f8329.png" size="304" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graph6a3d52f05250ce22eda8527fefb6c20a.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148705" path="graph6a3d52f05250ce22eda8527fefb6c20a.png" size="329" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graph2d7f4fa9ad366ecbec30e88c9fa48166.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148694" path="graph2d7f4fa9ad366ecbec30e88c9fa48166.png" size="500" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graph0fbc8637cd6445ac966b9d9ffde33e38.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148698" path="graph0fbc8637cd6445ac966b9d9ffde33e38.png" size="206" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graph2478a2c401c37a4a7c5c55d654d3ea4a.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148695" path="graph2478a2c401c37a4a7c5c55d654d3ea4a.png" size="1296" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="grapha1e508c5cf3f494c4ad920f39a63c9ec.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148695" path="grapha1e508c5cf3f494c4ad920f39a63c9ec.png" size="603" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graph354b8adcba6ff6962137081f39ba37c7.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148705" path="graph354b8adcba6ff6962137081f39ba37c7.png" size="325" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graphda9c40928085c0a3b1f4f516210d68cf.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148696" path="graphda9c40928085c0a3b1f4f516210d68cf.png" size="134" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graphf3e69b387bc65de7e6c23fbd7e18d723.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148696" path="graphf3e69b387bc65de7e6c23fbd7e18d723.png" size="117" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graph1d5791947e3635a47f7c75517a950df6.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148700" path="graph1d5791947e3635a47f7c75517a950df6.png" size="237" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graph17c77ca0f032f1ad17143a2b683f705b.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148705" path="graph17c77ca0f032f1ad17143a2b683f705b.png" size="288" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graph12c538f8b237be5316b919f9214fae67.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148697" path="graph12c538f8b237be5316b919f9214fae67.png" size="288" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graph1980afea0e56672ab4b5ee832fd01a0c.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148699" path="graph1980afea0e56672ab4b5ee832fd01a0c.png" size="322" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graph729ab7e957e3250bb2afc64a13f02c10.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148699" path="graph729ab7e957e3250bb2afc64a13f02c10.png" size="210" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graphfbc47cc6c3bdce37d153ae8284a4bd4b.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148699" path="graphfbc47cc6c3bdce37d153ae8284a4bd4b.png" size="365" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graphcc160c8fbf9da61faf4cb243119ec80c.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148700" path="graphcc160c8fbf9da61faf4cb243119ec80c.png" size="247" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graph1adb9063107771dc191968afda080ce9.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148697" path="graph1adb9063107771dc191968afda080ce9.png" size="388" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graph35cf17852b9dae7ee4673392df55891b.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148695" path="graph35cf17852b9dae7ee4673392df55891b.png" size="1613" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graph2061f318f2dbf249101bc237e6d1ffd5.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148700" path="graph2061f318f2dbf249101bc237e6d1ffd5.png" size="331" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graph11e915c267ab6ebbebfc43e0d1d231e5.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148701" path="graph11e915c267ab6ebbebfc43e0d1d231e5.png" size="311" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graph26e60edc0ea523dd3dadfba1dbb46d12.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148696" path="graph26e60edc0ea523dd3dadfba1dbb46d12.png" size="275" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graph47c90eff8389d9fe4b4e0a321bb75dc8.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148699" path="graph47c90eff8389d9fe4b4e0a321bb75dc8.png" size="352" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graph984f9e8ddc4343ac91e5e0b820953740.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148701" path="graph984f9e8ddc4343ac91e5e0b820953740.png" size="306" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graphb8fba6dbbb30d1959d0049c529570399.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148695" path="graphb8fba6dbbb30d1959d0049c529570399.png" size="612" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="grapha3d1c8f6e58ae481f3258ddcbdcc44e7.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148697" path="grapha3d1c8f6e58ae481f3258ddcbdcc44e7.png" size="216" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graph8c0d2141e1575167fb0662a88f3d5b4e.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148701" path="graph8c0d2141e1575167fb0662a88f3d5b4e.png" size="307" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graphd7c46c986e809542ff00713fcbf99d0f.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148697" path="graphd7c46c986e809542ff00713fcbf99d0f.png" size="296" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graph3755ea6961afdd352062e06965b85baf.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148698" path="graph3755ea6961afdd352062e06965b85baf.png" size="265" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graph693b434009bc60b1527b5ec87fe4897f.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148700" path="graph693b434009bc60b1527b5ec87fe4897f.png" size="224" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graphd80dd3e1a5efcc3488899ad4e2d190f7.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148696" path="graphd80dd3e1a5efcc3488899ad4e2d190f7.png" size="134" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graph279498a873cb76c750e3a9c415e3341a.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148697" path="graph279498a873cb76c750e3a9c415e3341a.png" size="323" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graph0058ce4b5087cba9266ca777c76b1408.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148696" path="graph0058ce4b5087cba9266ca777c76b1408.png" size="242" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="graph2ccf0d9c11c168791cff2f61ecb6dbe1.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1150148698" path="graph2ccf0d9c11c168791cff2f61ecb6dbe1.png" size="221" user="UnknownUser" version=""}%
+
+%META:FILEATTACHMENT{name="shape_diamond.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200240" path="shape_diamond.png" size="1340" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="shape_invtrapezium.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200241" path="shape_invtrapezium.png" size="1468" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="shape_tripleoctagon.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200463" path="shape_tripleoctagon.png" size="1606" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="shape_polygon.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200239" path="shape_polygon.png" size="320" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="shape_circle.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200239" path="shape_circle.png" size="1782" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="shape_invtriangle.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200241" path="shape_invtriangle.png" size="2187" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="shape_octagon.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200240" path="shape_octagon.png" size="691" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="grouping_nodes.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200238" path="grouping_nodes.png" size="10707" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="shape_trapezium.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200240" path="shape_trapezium.png" size="1506" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="added_attributes.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200238" path="added_attributes.png" size="3298" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="arrow_dot.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200463" path="arrow_dot.png" size="2697" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="shape_doublecircle.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200240" path="shape_doublecircle.png" size="3441" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="shape_box.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200238" path="shape_box.png" size="320" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="arrow_none.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200243" path="arrow_none.png" size="2448" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="simple_two_nodes.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200238" path="simple_two_nodes.png" size="3324" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="arrow_inv.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200242" path="arrow_inv.png" size="2711" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="shape_egg.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200239" path="shape_egg.png" size="2223" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="shape_plaintext.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200239" path="shape_plaintext.png" size="1327" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="shape_Mdiamond.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200241" path="shape_Mdiamond.png" size="1828" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="arrow_invdot.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200242" path="arrow_invdot.png" size="2931" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="shape_Mcircle.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200241" path="shape_Mcircle.png" size="1784" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="arrow_invodot.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200242" path="arrow_invodot.png" size="2973" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="shape_house.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200240" path="shape_house.png" size="1239" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="shape_parallelogram.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200240" path="shape_parallelogram.png" size="1442" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="shape_invhouse.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200241" path="shape_invhouse.png" size="1283" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="shape_point.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200239" path="shape_point.png" size="233" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="shape_hexagon.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200240" path="shape_hexagon.png" size="1739" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="shape_doubleoctagon.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200240" path="shape_doubleoctagon.png" size="1183" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="shape_triangle.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200239" path="shape_triangle.png" size="1873" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="arrow_odot.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200242" path="arrow_odot.png" size="2762" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="with_labels.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200238" path="with_labels.png" size="4730" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="shape_ellipse.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200239" path="shape_ellipse.png" size="2114" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="arrow_normal.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200242" path="arrow_normal.png" size="2743" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="add_subgraphs.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200238" path="add_subgraphs.png" size="11651" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="example1.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200238" path="example1.png" size="7080" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="shape_Msquare.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200241" path="shape_Msquare.png" size="644" user="Main.GeorgeClark" version="1"}%
