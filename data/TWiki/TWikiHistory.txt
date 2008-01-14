@@ -58,19 +58,18 @@ Many people have been involved in creating TWiki-4.2, special thanks go to the m
    * *Templates and skins:* TWiki:Main.ArthurClemens (587), TWiki:Main.CrawfordCurrie (130), TWiki:Main.AndreUlrich (73), TWiki:Main.SvenDowideit (44) - ( 869 changes by 12 authors )
    * *Documentation:* TWiki:Main.ArthurClemens (460), TWiki:Main.CrawfordCurrie (377), TWiki:Main.PeterThoeny (233), TWiki:Main.AndreUlrich (157), TWiki:Main.SvenDowideit (118), TWiki:Main.KennethLavrsen (68) - ( 1450 changes by 14 authors )
    * *Translations:* Coordinated by TWiki:Main.AntonioTerceiro
-      * Chinese: TWiki:Main.CheDong
-      * Czech: TWiki:Main.IvanKuncl
+      * Bulgarian: TWiki:Main.KrassimirBerov
       * Danish: TWiki:Main.SteffenPoulsen
-      * Dutch: TWiki:Main.ArthurClemens
+      * Dutch: TWiki.Main.ArthurClemens
+      * Finnish: TWiki.Main.HeikkiToivonen
       * French: TWiki:Main.BenVoui
-      * German: TWiki:Main.AndreUlrich
+      * German: TWiki:Main.OliverKrueger, TWiki:Main.AndreUlrich
       * Italian: TWiki:Main.MassimoMancini
-      * Japanese: TWiki:Main.KenYuminaga
-      * Polish: TWiki:Main.ZbigniewKulesza
-      * Portuguese: TWiki:Main.AntonioTerceiro, TWiki:Main.CarlinhosCecconi
-      * Russian: TWiki:Main.AndreyTkachenko, TWiki:Main.SergejZnamenskij, TWiki:Main.SergeyJSinx, TWiki:Main.AlexTananaev
-      * Spanish: TWiki:Main.WillNorris, TWiki:Main.MiguelABayona
+      * Portuguese: TWiki:Main.CarlinhosCecconi
+      * Simplified Chinese: TWiki:Main.CheDong
       * Swedish: TWiki:Main.ErikAman
+      * Traditional Chinese: TWiki:Main.CheDong
+      * Ukrainian: TWiki:Main.SerhijDubyk
    * *Marketing:* TWiki:Main.RodBeckstrom, TWiki:Main.PeterThoeny, TWiki:Main.MichaelCorbett, TWiki:Main.KoenMartens
    * *Public relations:* TWiki:Main.PeterThoeny, TWiki:Main.MichaelCorbett
    * *Meetups:* TWiki:Main.AmirShobeiri
