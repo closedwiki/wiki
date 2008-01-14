@@ -249,6 +249,8 @@ sub formatTime  {
 
 sub _weekNumber {
     my( $day, $mon, $year, $wday ) = @_;
+    
+    require Time::Local;
 
     # calculate the calendar week (ISO 8601)
     my $nextThursday = Time::Local::timegm(0, 0, 0, $day, $mon, $year) +
