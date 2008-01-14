@@ -138,7 +138,7 @@ In Func getOopsUrl and permissionsSet have been declared deprecated. There is no
 
 ---++  TWiki 4.2.0 Minor Release - Details
 
-The 4.2.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x02 revision FIXME.
+The %$VERSION% release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x02. 
 
 ---+++ TWiki 4.2.0 Fixes
 <noautolink>
