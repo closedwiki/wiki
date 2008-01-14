@@ -1,12 +1,11 @@
-%META:TOPICINFO{author="TWikiContributor" date="1200210697" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1200294847" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ Appendix A: TWiki Development Timeline
 
 %TOC%
 
-
 #FreetownRelease
----++ TWiki Release 4.2 (Freetown), 14 Jan 2008
+---++ TWiki Release 4.2 (Freetown), 16 Jan 2008
 
 __New Features and Enhancements of TWiki Release 4.2__
 
@@ -36,11 +35,12 @@ __New Features and Enhancements of TWiki Release 4.2__
       * Pluggable user mapping (between login name and !WikiName) to integrate with alternative authentication and Management schemes
 
    * *Enhancements of Pre-installed Plugins*
-      * SpreadSheetPlugin: =FORMATTIMEDIFF()=, 
+      * CommentPlugin: New =templatetopic= parameter to point to custom comment template topic
+      * EditTablePlugin: Move and delete rows 
       * MailerContrib: Allow Exclusion Of Webs
-      * EditTablePlugin: fix eating of newlines; graceful fallback calendar button; fix css styling
+      * SpreadSheetPlugin: 6 new math formulas; formula to format time diff
 
-   * *Bugfixes*
+   * *Bug Fixes*
       * More than 300 bugs fixes since 4.1.2
 
 #FreetownHallOfFame
@@ -49,11 +49,11 @@ __Hall of Fame of TWiki Release 4.2__
 Many people have been involved in creating TWiki-4.2, special thanks go to the most active contributors in the following areas:
 
    * *Sponsor and facilitator:* TWiki:Main.PeterThoeny
-   * *Process refinements:* TWiki:Main.KennethLavrsen, TWiki:Main.CrawfordCurrie,TWiki:Main.SvenDowideit
-   * *Release management:* TWiki:Main.KennethLavrsen, TWiki:Main.SvenDowideit
-   * *Beta&Release builds:* TWiki:Main.SvenDowideit
+   * *Process refinements:* TWiki:Main.KennethLavrsen, TWiki:Main.CrawfordCurrie, TWiki:Main.SvenDowideit
+   * *Release management:* TWiki:Main.KennethLavrsen
+   * *Release package builds:* TWiki:Main.SvenDowideit
    * *Usability:* TWiki:Main.CarloSchulz, TWiki:Main.ArthurClemens
-   * *Spec, code, testing:* TWiki:Main.CrawfordCurrie (2323), TWiki:Main.ArthurClemens (566), TWiki:Main.SvenDowideit (507) - ( 3857 changes by 20 authors )
+   * *Spec, code, testing:* TWiki:Main.CrawfordCurrie (2323), TWiki:Main.ArthurClemens (566), TWiki:Main.SvenDowideit (507), TWiki:Main.PeterThoeny (83), TWiki:Main.KennethLavrsen (73), TWiki:Main.SteffenPoulsen (72), TWiki:Main.AntonioTerceiro (63) - ( 3857 changes by 20 authors )
    * *Templates and skins:* TWiki:Main.ArthurClemens (587), TWiki:Main.CrawfordCurrie (130), TWiki:Main.AndreUlrich (73), TWiki:Main.SvenDowideit (44) - ( 869 changes by 12 authors )
    * *Documentation:* TWiki:Main.ArthurClemens (460), TWiki:Main.CrawfordCurrie (377), TWiki:Main.PeterThoeny (233), TWiki:Main.AndreUlrich (157), TWiki:Main.SvenDowideit (118), TWiki:Main.KennethLavrsen (68) - ( 1450 changes by 14 authors )
    * *Translations:* Coordinated by TWiki:Main.AntonioTerceiro
@@ -79,9 +79,7 @@ Many people have been involved in creating TWiki-4.2, special thanks go to the m
 
 If you find an omission please fix it at TWiki:TWiki.TWikiHistory. For the full list of contributors see TWikiContributor. 
 
-__Note:__ Sequence of contributors under "Spec, code, testing", "Templates and skins" and "Documentation" is based on 
-number of SVN file changes for core and default extensions from March 2007 (svn rev:13046) to Jan 2008 (svn rev:16210). (see [[http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/TWiki420SvnLog][Bugs:FullStats]])
-Sequence of contributors under "TWiki.org wiki champions" and "Customer support" is based on TWiki.org web statistics from 2007-02 to 2007-12.
+__Note:__ Sequence of contributors under "Spec, code, testing", "Templates and skins" and "Documentation" is based on number of SVN file changes for core and default extensions from March 2007 (svn rev:13046) to Jan 2008 (svn rev:16210). (Details at TWikibug:TWiki420SvnLog). Sequence of contributors under "TWiki.org wiki champions" and "Customer support" is based on TWiki.org web statistics from 2007-02 to 2007-12.
 
 See more details on the TWiki 4.2 release at TWikiReleaseNotes04x02.
 
