@@ -41,7 +41,7 @@ sub test_urlEncodeDecode {
     $this->assert_equals(chr(0xAC).'TION{}%', $s);
 }
 
-sub test_segfault1 {
+sub DISABLEtest_segfault1 {
     my $this = shift;
     my $s = <<'EOS';
 ---+!! %TOPIC%

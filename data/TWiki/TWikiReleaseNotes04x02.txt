@@ -39,7 +39,7 @@ TWiki 4.2.0 is shipped with
       * The viewfile script now accepts similar simple URL path as used to access a topic. E.g. =http:<nop>//example.com/twiki/bin/viewfile/TWiki/TWikiDocGraphics/addon.gif= means the same as =http<nop>://example.com/twiki/bin/viewfile/TWiki/TWikiDocGraphics?filename=addon.gif=. This make it simpler to use command line tools like =wget= in Linux to download attachments.
 
    * *Application Platform Enhancements*
-      * Enhancements to IF: allows, istopic, and isweb
+      * Enhancements to IF: allows, ingroup, istopic, and isweb
 
    * *Search Enhancements*
       * New =query= search mode supports SQL-style queries over form fields
@@ -52,7 +52,7 @@ TWiki 4.2.0 is shipped with
    * *Miscellaneous Feature Enhancements*
       * Many new functions in the API for plugin developers.
       * Table of Content (TOC) feature enhanced 
-      * User Mapping (mapping between login name and !WikiName) code has been extended to allow pluggable modules to integrate with all sorts of alternative authentication schemes. For normal cases you use the default !TWikiUserMapping which is using the !Main.TWikiUsers topic to map between login and !WikiName. A new !BaseUserMapping is provided for TWikis where you only have guests and an administrator. In this case you use the login and password given in configure to login as an admin.
+      * User Mapping (mapping between login name and !WikiName) code has been extended to allow pluggable modules to integrate with all sorts of alternative authentication and Management schemes. For normal cases you use the default !TWikiUserMapping which is using the !Main.TWikiUsers topic to map between login and !WikiName. A new !BaseUserMapping is provided for TWikis where you only have guests and an administrator. In this case you use the login and password given in configure to login as an admin.
 
 ---++ Important Changes since 4.1.2
 

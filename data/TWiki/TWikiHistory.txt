@@ -30,13 +30,10 @@ __New Features and Enhancements of TWiki Release 4.2__
       * The !PatternSkin which is the default skin for TWiki has got a face lift
       * The template have been heavily refactored to make it easier to create skins
 
-   * *User Management API*
-      * The UserMapping component has been re-written to make it simpler to interface to external User Authentication and Management system.
-
    * *Miscellaneous Feature Enhancements*
       * Many new functions in the API for plugin developers
       * Table of Content (TOC) feature enhanced
-      * Pluggable user mapping (between login name and !WikiName) to integrate with alternative authentication schemes
+      * Pluggable user mapping (between login name and !WikiName) to integrate with alternative authentication and Management schemes
 
    * *Enhancements of Pre-installed Plugins*
       * CommentPlugin: ...
@@ -55,9 +52,9 @@ Many people have been involved in creating TWiki-4.2, special thanks go to the m
    * *Process refinements:* TWiki:Main.KennethLavrsen, TWiki:Main.CrawfordCurrie,TWiki:Main.SvenDowideit
    * *Release management:* TWiki:Main.KennethLavrsen, TWiki:Main.SvenDowideit
    * *Usability:* TWiki:Main.CarloSchulz, TWiki:Main.ArthurClemens
-   * *Spec, code, testing:* TWiki:Main.CrawfordCurrie,TWiki:Main.SvenDowideit, TWiki:Main...
-   * *Templates and skins:* TWiki:Main.ArthurClemens, TWiki:Main.SvenDowideit, TWiki:Main...
-   * *Documentation:* TWiki:Main.PeterThoeny, TWiki:Main.TWiki:Main.CrawfordCurrie, TWiki:Main.SvenDowideit, TWiki:Main...
+   * *Spec, code, testing:* TWiki:Main.AndreUlrich, TWiki:Main.AndrewRJones, TWiki:Main.AntonioTerceiro, TWiki:Main.ArthurClemens, TWiki:Main.ByronDarrah, TWiki:Main.CrawfordCurrie, TWiki:Main.DanielRohde, TWiki:Main.GeorgeClark, TWiki:Main.HaraldJoerg, TWiki:Main.JasonHill, TWiki:Main.KennethLavrsen, TWiki:Main.KoenMartens, TWiki:Main.LynnwoodBrown, TWiki:Main.MarkKeisler, TWiki:Main.MarkusHesse, TWiki:Main.MayerEugen, TWiki:Main.MichaelDaum, TWiki:Main.OliverKrueger, TWiki:Main.PeterThoeny, TWiki:Main.RafaelAlvarez, TWiki:Main.RichardDonkin, TWiki:Main.RickMach, TWiki:Main.ScottHoge, TWiki:Main.SteffenPoulsen, TWiki:Main.StephaneLenclud, TWiki:Main.SvenDowideit, TWiki:Main.ThomasWeigert, TWiki:Main.WernerRandelshofer, TWiki:Main.WillNorris
+   * *Templates and skins:* TWiki:Main.ArthurClemens, TWiki:Main.CrawfordCurrie, TWiki:Main.SvenDowideit
+   * *Documentation:* TWiki:Main.ArthurClemens, TWiki:Main.CrawfordCurrie, TWiki:Main.KennethLavrsen, TWiki:Main.PeterThoeny, TWiki:Main.SvenDowideit
    * *Translations:* Coordinated by TWiki:Main.AntonioTerceiro
       * Chinese: TWiki:Main.CheDong
       * Czech: TWiki:Main.IvanKuncl
