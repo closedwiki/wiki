@@ -1,6 +1,6 @@
 %META:TOPICINFO{author="TWikiContributor" date="1200294847" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
----+ Appendix A: TWiki Development Timeline
+---+ Appendix A: TWiki Development Time-line
 
 %TOC%
 
@@ -12,7 +12,7 @@ __New Features and Enhancements of TWiki Release 4.2__
    * *Easier Installation and Upgrade*
       * New Internal Admin Login feature
       * The !Main.TWikiUsers topic is no longer distributed as a default topic in Main web
-      * A new directory =working= which per default is located in the twiki root which contains registration_approvals, tmp, and work_areas
+      * A new directory =working= which per default is located in the TWiki root which contains registration_approvals, tmp, and work_areas
       * Configure can now authenticate when connecting to local plugins repository.
 
    * *Usability Enhancements*
@@ -27,12 +27,13 @@ __New Features and Enhancements of TWiki Release 4.2__
 
    * *Skins and Templates Enhancements*
       * The !PatternSkin which is the default skin for TWiki has got a face lift
-      * The template have been heavily refactored to make it easier to create skins
+      * The default templates have been heavily refactored to make it easier to create skins reusing the default skin.
 
    * *Miscellaneous Feature Enhancements*
       * Many new functions in the API for plugin developers
       * Table of Content (TOC) feature enhanced
-      * Pluggable user mapping (between login name and !WikiName) to integrate with alternative authentication and Management schemes
+      * re-architected Pluggable user mapping (between login name and !WikiName) to integrate with alternative authentication and Management schemes
+      * Topic based User management has been extracted into a separately update-able package (!TWikiUsersContrib)
 
    * *Enhancements of Pre-installed Plugins*
       * CommentPlugin: New =templatetopic= parameter to point to custom comment template topic

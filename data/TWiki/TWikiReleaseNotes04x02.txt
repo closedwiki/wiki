@@ -17,8 +17,8 @@ The development team has done everything to maintain full compatibility with top
 
 TWiki 4.2.0 is shipped with
 
-   * *Plugins:* !CommentPlugin, !EditTablePlugin, !EmptyPlugin, !InterwikiPlugin, !PreferencesPlugin, !RenderListPlugin, !SlideShowPlugin, !SmiliesPlugin, !SpreadSheetPlugin, !TablePlugin, !TwistyPlugin, !WysiwygPlugin
-   * *Contribs:* !BehaviourContrib !JSCalendarContrib, !TinyMCEContrib, !MailerContrib, !NatEditContrib, !TipsContrib, !TwistyContrib
+   * *Plugins:* !CommentPlugin, !EditTablePlugin, !EmptyPlugin, !InterwikiPlugin, !PreferencesPlugin, !RenderListPlugin, !SlideShowPlugin, !SmiliesPlugin, !SpreadSheetPlugin, !TablePlugin, !TinyMCEPlugin, !TwistyPlugin, !WysiwygPlugin
+   * *Contribs:* !BehaviourContrib, !JSCalendarContrib, !MailerContrib, !TipsContrib, !TWikiUserMappingContrib, !TwistyContrib
    * *Skins:* !ClassicSkin, !PatternSkin
 
 ---++ New Features Highlights
@@ -66,7 +66,7 @@ The WYSIWYG button is removed when using !TinyMCE instead of Kupu.
 
 ---+++ NEWTOPICLINKSYMBOL removed
 
-The NEWTOPICLINKSYMBOL preference which was deprecated in 4.1 has now been removed from the code. If you want to control the appearance of new links, you can use [[%SYSTEMWEB%.VarNEWLINKFORMAT][NEWLINKFORMAT]]
+The NEWTOPICLINKSYMBOL preference which was deprecated in 4.1 has now been removed from the code. If you want to control the appearance of new links, you can use the more flexible NEWLINKFORMAT.
 
 ---+++ !UserForm and !NewUserTemplate Customization
 
@@ -97,7 +97,15 @@ Note: Remember to restrict access to this new directory when you upgrade.
    
 ---+++ New Internal Admin Login
 
-TWiki 4.2 introduces a new _Internal Admin Login_ feature which uses "admin" (configurable) as username and the password used for configure to become temporary administrator. When you do a new installation you need to use this feature as !Main.TWikiAdminGroup is now access restricted by default to avoid security attacks during the hours an installation may take. From configure there is a link to the !TWikiAdminGroup topic and on !TWikiAdminGroup the step by step instructions are written in a yellow box. Our advice is not to remove this help text in case you need it later.
+TWiki 4.2 introduces a new _Internal Admin Login_ feature which uses "admin" (configurable) as username and the password from configure to become temporary administrator. 
+When you do a new installation you need to use this feature as !Main.TWikiAdminGroup is now access restricted by default to avoid security attacks during the hours an installation may take. 
+From configure there is a link to the !TWikiAdminGroup topic and on !TWikiAdminGroup the step by step instructions are written in a yellow box. 
+
+---+++ Rearchitected User Mapping system (a transperant change for end users)
+
+The User Mapping system has been further rearchitected to reduce its dependance on the traditional TWiki User topic based management and mapping implementation. TWiki is now capable of 
+dealing with login names that are not 7bit ascii (by transforming those logins into a 'cUID' that can be used by rcs). TWiki::Users now uses =TWikiIterators= opening the way for much larger
+user sets.
 
 ---++ API Enhancements (Func)
 
@@ -136,7 +144,7 @@ In Func getOopsUrl and permissionsSet have been declared deprecated. There is no
 
 ---++  TWiki 4.2.0 Minor Release - Details
 
-The %$VERSION% release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x02. 
+The 4.2.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x02 revision %$VERSION%. 
 
 ---++ Fixes
 
