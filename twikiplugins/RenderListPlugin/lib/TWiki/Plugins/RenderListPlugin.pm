@@ -178,8 +178,8 @@ sub renderIconList
     $theParams =~ s/%PUBURL%/$pubUrl/go;
     $theParams =~ s/%ATTACHURL%/$attachUrl/go;
     $theParams =~ s/%WEB%/$installWeb/go;
-    $theParams =~ s/%USERSWEB%/TWiki::Func::getMainWebname()/geo;
-    $theParams =~ s/%SYSTEMWEB%/TWiki::Func::getTwikiWebname()/geo;
+    $theParams =~ s/%MAINWEB%/TWiki::Func::getMainWebname()/geo;
+    $theParams =~ s/%TWIKIWEB%/TWiki::Func::getTwikiWebname()/geo;
     my ( $showLead, $width, $height, $iconSp, $iconT, $iconI, $iconL, $iconImg )
        = split( /, */, $theParams );
     $width   = 16 unless( $width );
@@ -220,7 +220,7 @@ sub renderIconList
                    $text .= "<td valign=\"top\">$iconT</td>\n";
                 }
             } else {
-                $text .= "<td valign=\"top\">$listIcon[$l]</td>\n";
+                $text .= "<td valign=\"top\">" . ($listIcon[$l] || '') . "</td>\n";
             }
         }
         if( $theType eq "icon" ) {
