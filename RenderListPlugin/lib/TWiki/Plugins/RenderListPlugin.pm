@@ -220,7 +220,7 @@ sub renderIconList
                    $text .= "<td valign=\"top\">$iconT</td>\n";
                 }
             } else {
-                $text .= "<td valign=\"top\">$listIcon[$l]</td>\n";
+                $text .= "<td valign=\"top\">" . ($listIcon[$l] || '') . "</td>\n";
             }
         }
         if( $theType eq "icon" ) {
