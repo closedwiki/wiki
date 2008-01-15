@@ -65,8 +65,8 @@ Many thanks also to outstanding contributors in the following areas:
    * *Translations:*
       * Bulgarian: TWiki:Main.KrassimirBerov
       * Danish: TWiki:Main.SteffenPoulsen
-      * Dutch: TWiki.Main.ArthurClemens
-      * Finnish: TWiki.Main.HeikkiToivonen
+      * Dutch: TWiki:Main.ArthurClemens
+      * Finnish: TWiki:Main.HeikkiToivonen
       * French: TWiki:Main.BenVoui
       * German: TWiki:Main.OliverKrueger, TWiki:Main.AndreUlrich
       * Italian: TWiki:Main.MassimoMancini
