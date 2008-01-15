@@ -25,8 +25,8 @@ use vars qw(
         $debug $pubUrl $attachUrl
     );
 
-$VERSION = '$Rev$';
-$RELEASE = 'any TWiki';
+$VERSION = '$Rev: 16234 $';
+$RELEASE = '2.0';
 $pluginName = 'RenderListPlugin';  # Name of this Plugin
 
 # =========================
