@@ -47,22 +47,20 @@ __New Features and Enhancements of TWiki Release 4.2__
 #FreetownHallOfFame
 __Hall of Fame of TWiki Release 4.2__
 
-Many people have been involved in creating TWiki-4.2. Special
-thanks go to the leaders in the following areas:
-   * Release Management led by TWiki:Main.KennethLavrsen, ably assisted by TWiki:Main.SvenDowideit
-   * Design and Development driven by TWiki:Main.CrawfordCurrie, TWiki:Main.ArthurClemens, and TWiki:Main.SvenDowideit
+Many people have been involved in creating TWiki 4.2. Special thanks go to the most active contributors in the following areas:
+   * Release management led by TWiki:Main.KennethLavrsen, ably assisted by TWiki:Main.SvenDowideit
+   * Design and development driven by TWiki:Main.CrawfordCurrie, TWiki:Main.ArthurClemens, and TWiki:Main.SvenDowideit
    * Testing driven by TWiki:Main.KennethLavrsen
-   * Infrastructure and meetings sponsored and facilitated by TWiki:Main.PeterThoeny
-   * Translations coordinated by TWiki:Main.AntonioTerceiro
 
-Many thanks also to outstanding contributors in the following areas:
+Many thanks also to the contributors in the following areas:
+   * *Sponsor and facilitator:* TWiki:Main.PeterThoeny
    * *Testing and bug fixing:* TWiki:Main.KennethLavrsen, TWiki:Main.CrawfordCurrie, TWiki:Main.ArthurClemens, TWiki:Main.SvenDowideit, TWiki:Main.SteffenPoulsen, TWiki:Main.MichaelDaum, TWiki:Main.PeterThoeny, TWiki:Main.RichardDonkin
    * *Spec and code:* TWiki:Main.CrawfordCurrie (2323), TWiki:Main.ArthurClemens (566), TWiki:Main.SvenDowideit (507), TWiki:Main.PeterThoeny (83), TWiki:Main.KennethLavrsen (73), TWiki:Main.SteffenPoulsen (72), TWiki:Main.AntonioTerceiro (63) - ( 3857 changes by 20 authors )
    * *Templates and skins:* TWiki:Main.ArthurClemens (587), TWiki:Main.CrawfordCurrie (130), TWiki:Main.AndreUlrich (73), TWiki:Main.SvenDowideit (44) - ( 869 changes by 12 authors )
    * *Documentation:* TWiki:Main.ArthurClemens (460), TWiki:Main.CrawfordCurrie (377), TWiki:Main.PeterThoeny (233), TWiki:Main.AndreUlrich (157), TWiki:Main.SvenDowideit (118), TWiki:Main.KennethLavrsen (68) - ( 1450 changes by 14 authors )
    * *Release package builds:* TWiki:Main.SvenDowideit
    * *Usability:* TWiki:Main.CarloSchulz, TWiki:Main.ArthurClemens
-   * *Translations:*
+   * *Translations:* Coordinated by TWiki:Main.AntonioTerceiro
       * Bulgarian: TWiki:Main.KrassimirBerov
       * Danish: TWiki:Main.SteffenPoulsen
       * Dutch: TWiki:Main.ArthurClemens
