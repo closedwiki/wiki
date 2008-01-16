@@ -2407,14 +2407,6 @@ sub urlDecode {
 
     $text =~ s/%([\da-f]{2})/chr(hex($1))/gei;
 
-    # Item4946: support chars in %u format
-    $text =~ s/%u([\da-f]{4})/chr(hex($1))/gei;
-    # chr($unicode_codepoint) works w/o a pragma in Perl 5.8 and 5.6
-    unless( $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i ) {
-        my $t = UTF82SiteCharSet( $text );
-        $text = $t if ( $t );
-    }
-
     return $text;
 }
 
