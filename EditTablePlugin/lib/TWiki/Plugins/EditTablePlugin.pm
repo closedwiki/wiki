@@ -147,7 +147,7 @@ sub addViewModeHeadersToHead {
 
     my $header = <<'EOF';
 <style type="text/css" media="all">
-@import url("%PUBURL%/%SYSTEMWEB%/EditTablePlugin/edittable.css");
+@import url("%PUBURL%/%TWIKIWEB%/EditTablePlugin/edittable.css");
 </style>
 EOF
     TWiki::Func::addToHEAD( 'EDITTABLEPLUGIN', $header );
@@ -179,9 +179,9 @@ sub addEditModeHeadersToHead {
       . $assetUrl . '" />';
     $header .= <<'EOF';
 <style type="text/css" media="all">
-@import url("%PUBURL%/%SYSTEMWEB%/EditTablePlugin/edittable.css");
+@import url("%PUBURL%/%TWIKIWEB%/EditTablePlugin/edittable.css");
 </style>
-<script type="text/javascript" src="%PUBURL%/%SYSTEMWEB%/EditTablePlugin/edittable.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/EditTablePlugin/edittable.js"></script>
 EOF
 
     TWiki::Func::addToHEAD( 'EDITTABLEPLUGIN', $header );
