@@ -201,6 +201,24 @@ sub handleDot
     my $doMap = $params{map} || "";
     my $dotHash = $params{dothash} || "on";
 
+    # Strip all leading / trailing white space - WYSIWYG seems to pad it.
+    $antialias =~ s/^\s+//;
+    $antialias =~ s/\s+$//;
+    $density =~ s/^\s+//;
+    $density =~ s/\s+$//;
+    $size =~ s/^\s+//;
+    $size =~ s/\s+$//;
+    $vectorFormats =~ s/^\s+//;
+    $vectorFormats =~ s/\s+$//;
+    $engine =~ s/^\s+//;
+    $engine  =~ s/\s+$//;
+    $library =~ s/^\s+//;
+    $library =~ s/\s+$//;
+    $outFilename =~ s/^\s+//;
+    $outFilename =~ s/\s+$//;
+    $dotHash =~ s/^\s+//;
+    $dotHash =~ s/\s+$//;
+
     # Make sure outFilename is clean 
     $outFilename = TWiki::Sandbox::sanitizeAttachmentName($outFilename) if ($outFilename ne "");
 
