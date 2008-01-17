@@ -27,6 +27,7 @@ Note: searches over my paternal family tree (360 persons, 120 unions) are just a
    * %<nop>MANCESTORS("person"}% - generate a representation of the male line leading to the given person
    * %<nop>FANCESTORS{"person"}% -  generate a representation of the female line leading to the given person
    * %<nop>DESCENDANTS{"person"}% - generate a complete family tree rooted at the given person
+   * %<nop>GRDESCENDANTS{"person"}% - generate a complete family tree rooted at the given person using the DirectedGraphPlugin
 
 ---++ Plugin Settings
    * Set SHORTDESCRIPTION = A simple genealogy database

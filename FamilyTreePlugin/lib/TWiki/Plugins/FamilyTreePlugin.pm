@@ -10,7 +10,7 @@ package TWiki::Plugins::FamilyTreePlugin;
 
 use strict;
 
-use vars qw( $VERSION $RELEASE $pluginName $debug $exampleCfgVar );
+use vars qw( $VERSION $RELEASE $pluginName $debug $exampleCfgVar $node );
 
 $VERSION = '$Rev$';
 $RELEASE = 'TWiki-4';
@@ -29,6 +29,7 @@ sub initPlugin {
     TWiki::Func::registerTagHandler( 'MANCESTORS', \&_MANCESTORS );
     TWiki::Func::registerTagHandler( 'FANCESTORS', \&_FANCESTORS );
     TWiki::Func::registerTagHandler( 'DESCENDANTS', \&_DESCENDANTS );
+    TWiki::Func::registerTagHandler( 'GRDESCENDANTS', \&_GRDESCENDANTS );
 
     return 1;
 }
@@ -45,10 +46,10 @@ sub _MANCESTORS {
 
     while( my $parents = _getParents( $to )) {
 
-        my $col = ' <strong> '.$to .' </strong> '.$wife.' <br>';
+        my $col = ' <strong> '.$to .' </strong> '.$wife.' <br /> ';
 
         my $sibs = _getSiblings( $parents, $to );
-        $col .= join(' <br> ', @$sibs);
+        $col .= join(' <br /> ', @$sibs);
 
         $wife = 'm. '. _getFemale( $parents );
         $to = _getMale( $parents );
@@ -75,10 +76,10 @@ sub _FANCESTORS {
 
     while( my $parents = _getParents( $to )) {
 
-        my $col = ' <strong> '.$to .' </strong> '.$husband.' <br>';
+        my $col = ' <strong> '.$to .' </strong> '.$husband.' <br /> ';
 
         my $sibs = _getSiblings( $parents, $to );
-        $col .= join(' <br> ', @$sibs);
+        $col .= join(' <br /> ', @$sibs);
 
         $husband = 'm. '. _getMale( $parents );
         $to = _getFemale( $parents );
@@ -101,6 +102,89 @@ sub _DESCENDANTS {
 
     return _expandDescendants( $to );
 }
+
+# Handle the %GRDESCENDANTS% tag
+#  - Graph the descendants using GraphViz - DirectedGraphPlugin
+# 
+sub _GRDESCENDANTS {
+    my($session, $params, $topic, $web) = @_;
+
+    my $to = $params->{_DEFAULT} || $topic;
+    my $engine = $params->{engine} || "dot";
+    my $raw = $params->{raw} || 0;
+    my $orient = $params->{orientation} ;
+    my $ranksep = $params->{ranksep} || ".25";
+    my $nodesep = $params->{nodesep} || ".25";
+    my $size = $params->{size} ;
+
+    my $lt = "<";
+    if ($raw == 1) {$lt = "&lt;";}
+
+    $node = 0;  # Counter for unnamed nodes (no issue) 
+
+    my $nodeURL = TWiki::Func::getScriptUrl( $web, "X", "view" );
+    chop($nodeURL);
+    
+    my  $gdPrefix .= $lt . "dot map=1 vectorformats=\"ps\" engine=\"$engine\" >\n";
+	$gdPrefix .= "    digraph G { \n";
+	$gdPrefix .= "       orientation=\"$orient\"\n" if $orient;
+	$gdPrefix .= "       size = \"$size\"; \n" if $size;  #Graph size in width,high
+	#$gdPrefix .= "       page = \"8.5,11\"; \n";  # Used to set multi-page PS output - breaks png output
+	$gdPrefix .= "       ranksep=\"$ranksep\"; nodesep=\"$nodesep\";\n";        
+	$gdPrefix .= "       node [URL=\"" . $nodeURL . "\\N\" ];\n";
+
+    my $gdSuffix = "}\n </dot>\n ";
+
+    return $gdPrefix . _graphDescendants( $to ) . $gdSuffix;
+    #return "<verbatim>" . $gdPrefix . _graphDescendants( $to ) . $gdSuffix . "</verbatim>";
+}
+
+
+# Generate a table representing all descendants of $who
+sub _graphDescendants {
+    my $who = shift;
+
+    my $marriages = _getMarriages( $who );
+
+    my $martable = '';
+    foreach my $marriage ( @$marriages ) {
+        $martable .= "$who -> $marriage [arrowhead=\"none\"];\n";
+        my $kids = _getOffspring( $marriage );
+        my $childs = '';
+        my $cs = 1;
+        if(scalar(@$kids)) {
+            foreach my $issue ( @$kids ) {
+	        $martable .= "$marriage -> $issue [arrowhead=\"none\"];\n";
+                $childs .=  _graphDescendants( $issue );
+            }
+            $cs = scalar(@$kids);
+        } else {
+	    $node++;
+            $childs = "$marriage -> n$node [arrowhead=\"none\", style=\"dotted\"]";
+	    $childs .= "n$node [shape=plaintext,label=\"no issue\",fontname=\"Helvetica-Oblique\"];\n"; 
+	    }
+   
+        my $m1 = "%SPACEOUT{" . _getMale( $marriage ) . "}% m. %SPACEOUT{" . _getFemale( $marriage ) . "}%" ;
+
+	my $mdate = TWiki::Func::expandCommonVariables( '%FORMFIELD{"Date" topic="'.$marriage.'"}%');
+	my $m3 = TWiki::Func::expandCommonVariables( '%FORMFIELD{"Disolved" topic="'.$marriage.'"}%');
+	if (length($m3) > 1) {   $mdate .= " - " . $m3 ;}
+	$m3 = TWiki::Func::expandCommonVariables( '%FORMFIELD{"Cause" topic="'.$marriage.'"}%');
+	if (length($m3) > 1) {   $mdate .= " (" . $m3 . ")" ;}
+
+        if (length($mdate) > 1) { $mdate = "\\n " . $mdate; }
+	
+	my $m = " $marriage [shape=plaintext,label=\"$m1$mdate\" ];\n";
+         
+        $martable .=  $m . $childs;
+    }
+    my $w = $who . "[shape=record,label=\"%SPACEOUT{$who}%" ;
+    $w .= "\\l b. %FORMFIELD{\"Born\" topic=\"$who\"}%";
+    $w .= "\\l d. %FORMFIELD{\"Died\" topic=\"$who\"}%\\l\" ];\n";
+    return  $w .
+       $martable ;
+}
+
 
 # Generate a table representing all descendants of $who
 sub _expandDescendants {
