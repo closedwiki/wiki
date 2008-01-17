@@ -26,6 +26,8 @@ require TWiki;
 require TWiki::UI::Save;
 require TWiki::OopsException;
 
+require Assert;
+
 sub preview {
     my $session = shift;
 
@@ -105,6 +107,20 @@ sub preview {
     $tmpl =~ s/%HIDDENTEXT%/$text/go;
 
     $tmpl =~ s/<\/?(nop|noautolink)\/?>//gis;
+    
+    #I don't know _where_ these should be done, so I'll do them as late as possible
+    my $originalrev = $query->param( 'originalrev' ); # rev edit started on
+    #ASSERT($originalrev ne '%ORIGINALREV%') if DEBUG;
+    $tmpl =~ s/%ORIGINALREV%/$originalrev/go;
+    my $templatetopic = $query->param( 'templatetopic');
+    #ASSERT($templatetopic ne '%TEMPLATETOPIC%') if DEBUG;
+    $tmpl =~ s/%TEMPLATETOPIC%/$templatetopic/go;
+    #this one's worrying, its special, and not set much at all
+    #$tmpl =~ s/%SETTINGSTOPIC%/$settingstopic/go;
+    my $newtopic = $query->param( 'newtopic' );
+    #ASSERT($newtopic ne '%NEWTOPIC%') if DEBUG;
+    $tmpl =~ s/%NEWTOPIC%/$newtopic/go;
+
 
     $session->writeCompletePage( $tmpl );
 }
