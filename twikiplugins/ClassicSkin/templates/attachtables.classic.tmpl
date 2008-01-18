@@ -5,8 +5,8 @@
 | *[[%TWIKIWEB%.FileAttachment][Attachment]]* | *Action* | *Size* | *Date* | *Who* | *Comment* |%TMPL:END%
 
 %{ A basic row definition, for attachment table and attach screen }%
-%{ Use %A_URL% instead of %PUBURL%/%WEB%/%TOPIC%/%A_FILE% to get a viewfile link }%
-%TMPL:DEF{ATTACH:files:row(basic)}%| %A_ICON% <a href="%PUBURL%/%WEB%/%TOPIC%/%ENCODE{%A_FILE%}%">%A_FILE%</a> | <a href="%SCRIPTURLPATH{"attach"}%/%WEB%/%TOPIC%?filename=%ENCODE{%A_FILE%}%;revInfo=1" title="change, update, previous revisions, move, delete..." rel='nofollow'>manage</a> |  %A_SIZE% | %A_DATE% | %A_USER% | %A_COMMENT% |%TMPL:END%
+%{ Use %A_URL% instead of %PUBURLPATH%/%WEB%/%TOPIC%/%A_FILE% to get a viewfile link }%
+%TMPL:DEF{ATTACH:files:row(basic)}%| %A_ICON% <a href="%PUBURLPATH%/%WEB%/%TOPIC%/%ENCODE{%A_FILE%}%">%A_FILE%</a> | <a href="%SCRIPTURLPATH{"attach"}%/%WEB%/%TOPIC%?filename=%ENCODE{%A_FILE%}%;revInfo=1" title="change, update, previous revisions, move, delete..." rel='nofollow'>manage</a> |  %A_SIZE% | %A_DATE% | %A_USER% | %A_COMMENT% |%TMPL:END%
 
 %{ Header for topic attachment table }%
 %TMPL:DEF{ATTACH:files:header}%%TMPL:P{ATTACH:files:header(basic)}%
@@ -37,7 +37,7 @@
 |  *Version*  |  *Action*   |  *Date*  |  *Who*  |  *Comment*  |%TMPL:END%
 
 %{ Row for versions table in attach screen }%
-%{ Use %A_URL% instead of %PUBURL%/%WEB%/%TOPIC%/%A_FILE% to get a viewfile link }%
+%{ Use %A_URL% instead of %PUBURLPATH%/%WEB%/%TOPIC%/%A_FILE% to get a viewfile link }%
 %TMPL:DEF{ATTACH:versions:row}%
 | %A_REV%  | <a href="%SCRIPTURL{viewfile}%/%WEB%/%TOPIC%?filename=%ENCODE{%A_FILE%}%;rev=%A_REV%">%MAKETEXT{"view"}%</a>  | <span class="twikiNoBreak">%A_DATE%</span> | %A_USER%  | %A_COMMENT%  |%TMPL:END%
 
