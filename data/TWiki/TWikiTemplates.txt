@@ -228,6 +228,10 @@ See TWikiScripts#edit for details of the parameters that the =edit= script under
 %T% *TIP:* You can use the =%<nop>WIKIUSERNAME%= and =%<nop>DATE%= variables in your topic templates to include the signature of the person creating a new topic. The variables are expanded into fixed text when a new topic is created. The standard signature is: <br />
 ==-- %<nop>WIKIUSERNAME% - %<nop>DATE%==
 
+---+++ Using Absolute vs Relative URLs in Templates
+
+When you use TWikiVariables such as %<nop>PUBURL% and %<nop>PUBURLPATH% in templates you should be aware that using %<nop>PUBURL% instead of %<nop>PUBURLPATH% puts absolute URLs in the produced HTML. This means that when a user saves a TWiki page in HTML and emails the file to someone outside a company firewall, the receiver has a severe problem viewing it. It is therefore recommended always to use the %<nop>PUBURLPATH% to refer to images, CSS, Javascript files etc so links become relative. This way browsers just give up right away and show a usable html file.
+
 __Related Topics:__ TWikiSkins, DeveloperDocumentationCategory, AdminDocumentationCategory
 
 %STOPINCLUDE%
