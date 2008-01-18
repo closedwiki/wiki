@@ -179,6 +179,12 @@ Some pages are meant to be customized after choice of authentication. If you do 
    * =TWiki.ResetPassword=
    * =TWiki.ChangeEmailAddress=
    
+---++ WYSIWYG vs Raw Edit
+
+From TWiki release 4.2.0 the WYSIWYG editor has been replaced by a much better and more powerful editor and it was decided that WYSIWYG would be the default edit mode. An Edit Raw link is available for those that have a need or preference for this mode.
+
+However you may prefer to have the same user interface as in TWiki 4.1 where _Edit_ was the raw text editor and you had a WYSIWYG button. You can modify the templates that define the buttons by following the description on TWiki:Codev.TWikiRawEditDefault04x02.
+   
 ---++ Copyright, License and Classification Statements
 
 In the bottom of each topic you will find a default copyright messages saying "Copyright &&copy; by the contributing authors. All material on this collaboration platform is the property of the contributing authors." It is a setting WEBCOPYRIGHT that defines this. This is often not adequate.
