@@ -15,7 +15,7 @@ use base 'TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyBase';
 __PACKAGE__->register_handler("application/excel", ".xls");
 
 use Spreadsheet::ParseExcel;
-use Text::Iconv;
+use Encode;
 
 sub stringForFile {
     my ($self, $file) = @_;
@@ -24,7 +24,6 @@ sub stringForFile {
     return unless $book;
 
     my $text = '';
-    my $converter = Text::Iconv->new("", "iso-8859-15");
 
     foreach my $sheet (@{$book->{Worksheet}}) {
         last if !defined $sheet->{MaxRow};
@@ -32,16 +31,15 @@ sub stringForFile {
             foreach my $col ($sheet->{MinCol} .. $sheet->{MaxCol}) {
                 my $cell = $sheet->{Cells}[$row][$col];
                 if ($cell) {
-		    my $raw_value = $cell->{Val};
-		    my $formatted_value = $cell->Value;
+                    my $cell_text;
+                    if ($cell->{Type} eq "Numeric") {
+                        $cell_text = $cell->{Val};
+                    } else {
+                        $cell_text = $cell->Value;
+                    }
+                    next if ($cell_text eq "");
 
-		    $raw_value       = $converter->convert($raw_value)||'';
-		    $formatted_value = $converter->convert($formatted_value)||'';
-
-                    $text .= $formatted_value;
-
-		    unless ($raw_value eq $formatted_value) {
-			$text .= " ".$raw_value;}
+                    $text .= $cell_text;
                 }
                 $text .= " ";
             }
@@ -50,6 +48,7 @@ sub stringForFile {
         $text .= "\n\n";
     }
 
+    $text = encode("iso-8859-15", $text);
     return $text;
 }
 

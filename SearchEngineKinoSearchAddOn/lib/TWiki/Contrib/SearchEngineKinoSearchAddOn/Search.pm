@@ -225,11 +225,15 @@ sub limit {
     if ($limit =~ /(^\d+$)/o) { # only digits, all else is the same as
         $limit = $1;            # an empty string.  "+10" won't work.
     } else {
-        $limit = 0;             # change "all" to 0, then to big number
+        $limit = 32000;         # change "all" to very big number
     }
-    if (! $limit ) {            # PTh 03 Nov 2000:
-	$limit = 32000;         # Big number, needed for performance improvements
+
+    # Defines an absolute limit
+    my $maxlimit = TWiki::Func::getPreferencesValue("KINOSEARCHMAXLIMIT") || 2000;
+    if ($maxlimit < $limit) {
+        $limit = $maxlimit;
     }
+
     return $limit;
 }
 

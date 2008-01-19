@@ -16,20 +16,11 @@ sub set_up {
     my $this = shift;
 
     $this->SUPER::set_up();
-    # Use RcsLite so we can manually gen topic revs
-    $TWiki::cfg{StoreImpl} = 'RcsLite';
 
-    $this->registerUser("TestUser", "User", "TestUser", 'testuser@an-address.net');
-    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "TopicWithoutAttachment", <<'HERE');
-Just an example topic
-Keyword: startpoint
-HERE
-    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "TopicWithWordAttachment", <<'HERE');
-Just an example topic with MS Word
-Keyword: redmond
-HERE
-    $this->{twiki}->{store}->saveAttachment($this->{users_web}, "TopicWithWordAttachment", "Simple_example.doc",
-                                            $this->{twiki}->{user}, {file => "attachement_examples/Simple_example.doc"})
+    # Use RcsLite so we can manually gen topic revs
+    #$TWiki::cfg{StoreImpl} = 'RcsLite';
+
+    #$this->registerUser("TestUser", "User", "TestUser", 'testuser@an-address.net');
 }
 
 sub tear_down {
@@ -53,6 +44,9 @@ sub test_newUpdateIndex {
 
 sub test_createIndex {
     my $this = shift;
+    $this->_createTopicWithoutAttachment();
+    $this->_createTopicWithWordAttachment();
+
     my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
 
     $ind->createIndex();
@@ -144,6 +138,7 @@ sub test_indexer {
 
 sub test_attachmentsOfTopic {
     my $this = shift;
+    $this->_createTopicWithWordAttachment();
     my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
 
     my @atts;
@@ -158,6 +153,7 @@ sub test_attachmentsOfTopic {
 
 sub test_changedTopics {
     my $this = shift;
+    $this->_createTopicWithoutAttachment();  
     my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
 
     # The "+1" is a littel trick: The Topics created in set_up may have the same 
@@ -209,6 +205,7 @@ HERE
 
 sub test_removeTopics {
     my $this = shift;
+    $this->_createTopicWithoutAttachment();  
     my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
 
     # First I create the index
@@ -501,6 +498,7 @@ sub test_UmlauteInXLS {
     my $this = shift;
 
     $this->_testForWordInAttachment("Simple_example.xls", "Übergroß");
+    $this->_testForWordInAttachment("Portuguese_example.xls", "Formatação");
 }
 
 sub test_UmlauteInHTML {
@@ -540,6 +538,7 @@ HERE
     $this->{twiki}->{store}->saveAttachment($this->{users_web}, "TopicWithSpecialFile", $file,
                                             $this->{twiki}->{user}, {file => "attachement_examples/$file"});
 
+    TWiki::Func::setPreferencesValue( "KINOSEARCHINDEXSKIPWEBS", "Main, Sandbox, TWiki, TestCases, Trash");
     $ind->createIndex();
 
     my $search = TWiki::Contrib::SearchEngineKinoSearchAddOn::Search->newSearch();
@@ -550,8 +549,28 @@ HERE
     $this->assert(defined($hit), "Hit for $word in file $file not found.");
     my $topic = $hit->{topic};
     $topic =~ s/ .*//;
-    $this->assert_str_equals($topic, "TopicWithSpecialFile", "Wrong topic for $word");
+    $this->assert_str_equals($topic, "TopicWithSpecialFile", "Wrong topic for $word: Is = $topic but should be TopicWithSpecialFile");
 }
 
+sub _createTopicWithoutAttachment {
+    my $this = shift;
+
+    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "TopicWithoutAttachment", <<'HERE');
+Just an example topic
+Keyword: startpoint
+HERE
+}
+
+sub _createTopicWithWordAttachment {
+    my $this = shift;
+
+    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "TopicWithWordAttachment", <<'HERE');
+Just an example topic with MS Word
+Keyword: redmond
+HERE
+
+    $this->{twiki}->{store}->saveAttachment($this->{users_web}, "TopicWithWordAttachment", "Simple_example.doc",
+                                            $this->{twiki}->{user}, {file => "attachement_examples/Simple_example.doc"})
+}
 
 1;

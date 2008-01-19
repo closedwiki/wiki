@@ -24,18 +24,17 @@ sub stringForFile {
     my $in;
     my $text = '';
 
-    my $cmd = "antiword $file > $tmp_file";
-
+    my $cmd = "antiword '$file' > $tmp_file 2>/dev/null";
     system($cmd);
 
     ###########
     # Note: This way, the encoding of the text is reworked in the text stringifier.
     # Note2: May be this is not necessary: My UnitTest says NO...
-    #$text = TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier->stringFor($tmp_file);
+    $text = TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier->stringFor($tmp_file);
 
-    open $in, $tmp_file;
-    $text = join(" ", <$in>); 
-    close($in);
+    #open $in, $tmp_file;
+    #$text = join(" ", <$in>); 
+    #close($in);
     ###############
 
     unlink($tmp_file);

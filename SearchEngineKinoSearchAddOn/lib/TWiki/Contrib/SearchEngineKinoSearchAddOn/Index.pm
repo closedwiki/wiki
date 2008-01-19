@@ -329,8 +329,10 @@ sub websToIndex {
 
     foreach my $web (@userWebList) {
 	if ($skipwebs{$web}) {
+	    #print "Skipping $web topics\n";
 	    $self->log("Skipping $web topics");
 	} else {
+	    #print "Indexing $web topics\n";
 	    push (@webList, $web);
 	}
     }

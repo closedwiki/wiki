@@ -26,7 +26,7 @@ sub stringForFile {
     my $tmp_file = tmpnam() . ".html";
 
     # mensagens de erro do abiword ignoradas
-    my $cmd = "abiword --to=$tmp_file $file 2>/dev/null";
+    my $cmd = "abiword --to=$tmp_file '$file' 2>/dev/null";
     system($cmd);
 
     # The I use the HTML stringifier to convert HTML to TXT

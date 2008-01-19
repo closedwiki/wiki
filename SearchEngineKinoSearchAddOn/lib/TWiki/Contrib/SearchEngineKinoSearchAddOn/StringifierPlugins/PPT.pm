@@ -26,7 +26,7 @@ sub stringForFile {
     my $tmp_file = tmpnam();
     
     # First I convert PPT to HTML
-    my $cmd = "ppthtml $filename > $tmp_file";
+    my $cmd = "ppthtml '$filename' > $tmp_file 2>/dev/null";
     return "" unless ((system($cmd) == 0) && (-f $tmp_file));
 
     # Then I use the HTML stringifier to convert HTML to TXT

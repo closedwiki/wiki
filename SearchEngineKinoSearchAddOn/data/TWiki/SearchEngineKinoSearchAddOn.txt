@@ -101,7 +101,7 @@ NOTE: If you just extend the list without having a special stringifier in place,
 __Note:__ You do not need to install anything on the browser to use this add-on. The following instructions are for the administrator who installs the add-on on the server where TWiki is running. 
 
 Install a backend to stringify Word documents if you want to index
-Word documents. For this either install antiword, abiword of !vwWare.
+Word documents. For this either install antiword, abiword or !wvWare.
 
 __Note:__ This add-on comes with stringifiers for all three of
 them. Depending on what is installed, the right stringifiers is used. 
@@ -110,12 +110,12 @@ __Note2:__ If you install more than one of the three backends, it is not
 preditable, which of them is used. If you want to be sure, delete the
 not used stringifiers from the directory
 =lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins=
-(either =DOC_antiword.pm=, =DOC_abiword.pm= or =DOC_vw.pm=).
+(either =DOC_antiword.pm=, =DOC_abiword.pm= or =DOC_wv.pm=).
 
-To install antiword for Denin you can do:
+To install antiword for Debian you can do:
    * =aptitude install antiword=
 
-Install xpdf and ppthtml, if you want to index attached Word and PDF files:
+Install xpdf and ppthtml, if you want to index attached PDF and PPT files:
    * For Debian you can use =aptitude install xpdf-utils= and =aptitude install ppthtml=
    * If you do not install =antiword=, you should remove =.doc= from the =KINOSEARCHINDEXEXTENSIONS= variable.
    * If you do not install =xpdf=, you should remove =.pdf= from the =KINOSEARCHINDEXEXTENSIONS= variable.
@@ -179,7 +179,7 @@ If you don't use the installer script, you need to install the add-on by hand:
      | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins== | Directory with stringifier plugins |
      | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/DOC_antiword.pm== | Stringifier for MS Word documents using antiword|
      | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/DOC_abiword.pm== | Stringifier for MS Word documents using abiword |
-     | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/DOC_vw.pm== | Stringifier for MS Word documents using vw |
+     | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/DOC_wv.pm== | Stringifier for MS Word documents using wv |
      | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/HTML.pm== | Stringifier for html files |
      | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/PDF.pm== | Stringifier for pdf files |
      | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/Text.pm== | Stringifier for ASCII files |
@@ -221,9 +221,9 @@ $TWiki::cfg{KinoSearchIndexDir} = '/home/httpd/twiki/kinosearch/index';
    * Set SHORTDESCRIPTION = Fast indexed search with indexing of attachments like Word, Excel, PDF and PPT
 
 |  Add-on Author: | TWiki:Main/MarkusHesse |
-|  Add-on Version: | v1.10, 17 Nov 2007 |
+|  Add-on Version: | v1.12, ??????  2008 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-| ??  | v 1.11, Additions on stringifiers, modification of output format |
+| 19 Dec 2007:  | v 1.11, Additions on stringifiers, modification of output format |
 | 17 Nov 2007:  | v 1.10, PPT stringifier added |
 | 11 Nov 2007:  | v 1.09, Some bugfixing |
 |  3 Nov 2007:  | v 1.08, Some bugfixing |
@@ -242,8 +242,9 @@ $TWiki::cfg{KinoSearchIndexDir} = '/home/httpd/twiki/kinosearch/index';
 |                                | CPAN:Spreadsheet::ParseExcel |
 |                                | CPAN:Text::Iconv |
 |                                | CPAN:CharsetDetector |
+                                 | CPAN:Encode |
 |  Other Dependencies: | pdftotext (part of xpdf-utils) |
-|                                 | antiword, abiword or !vwWare |
+|                                 | antiword, abiword or !wvWare |
 |                                 | ppthtml  |
 |  Perl Version: | Tested with 5.8.0 |
 |  License: | GPL |

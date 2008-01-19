@@ -8,20 +8,13 @@ use TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyBase;
 use TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier;
 
 sub set_up {
-        my $this = shift;
+    my $this = shift;
 
     $this->SUPER::set_up();
     # Use RcsLite so we can manually gen topic revs
-    $TWiki::cfg{StoreImpl} = 'RcsLite';
+    #$TWiki::cfg{StoreImpl} = 'RcsLite';
 
-    $this->registerUser("TestUser", "User", "TestUser", 'testuser@an-address.net');
-
-    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "TopicWithXLSAttachment", <<'HERE');
-Just an example topic wird MS Excel
-Keyword: spreadsheet
-HERE
-    $this->{twiki}->{store}->saveAttachment($this->{users_web}, "TopicWithExcelAttachment", "Simple_example.xls",
-                                            $this->{twiki}->{user}, {file => "attachement_examples/Simple_example.xls"})
+    #$this->registerUser("TestUser", "User", "TestUser", 'testuser@an-address.net');
 }
 
 sub tear_down {
@@ -50,8 +43,14 @@ sub test_SpecialCharacters {
     my $stringifier = TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::XLS->new();
 
     my $text  = $stringifier->stringForFile('attachement_examples/Simple_example.xls');
+    
+    $this->assert($text =~ m\Größer\, "Text Größer not found.");
+		  
+    $text  = $stringifier->stringForFile('attachement_examples/Portuguese_example.xls');
 
-    $this->assert(($text =~ m\Größer\)==1, "Text Größer not found.");
+    # print "Text = $text\n";
+    $this->assert($text =~ m\Formatação\, "Text Formatação not found.");		  
+    $this->assert(!($text =~ m\GENERAL\), "Bad string GENERAL appeares.");
 }
 
 sub test_Numbers {
@@ -64,10 +63,10 @@ sub test_Numbers {
 
     #print "Test = $text\n";
 
-    $this->assert(($text =~ m\200\)==1,  "Number 200 not found.");
-    $this->assert(($text =~ m\0.23\)==1, "Number 0,23 not found.");
-    $this->assert(($text =~ m\4,711\)==1, "Number 4711 not found.");
-    $this->assert(($text =~ m\312\)==1, "Number 312 Euro not found.");
+    $this->assert($text =~ m\200\,  "Number 200 not found.");
+    $this->assert($text =~ m\0.23\, "Number 0,23 not found.");
+    $this->assert($text =~ m\4711\, "Number 4711 not found.");
+    $this->assert($text =~ m\312\,  "Number 312 Euro not found.");
 }
 
 sub test_calculatedNumbers {
