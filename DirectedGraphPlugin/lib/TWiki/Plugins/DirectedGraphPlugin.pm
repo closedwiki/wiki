@@ -35,7 +35,7 @@ use vars qw(
   $debug $exampleCfgVar $sandbox $isInitialized $antialiasDefault
   $densityDefault $sizeDefault $vectorFormatsDefault $engineDefault
   $libraryDefault $enginePath $magickPath $workAreaDir $grNum
-  $toolsPath $perlCmd
+  $toolsPath $perlCmd $hideAttachDefault
 );
 
 use vars qw( %TWikiCompatibility );
@@ -126,6 +126,9 @@ sub initPlugin
     # Get plugin library default
     $libraryDefault = TWiki::Func::getPreferencesValue("\U$pluginName\E_LIBRARY");
 
+    # Get plugin hideattachments default
+    $hideAttachDefault = TWiki::Func::getPreferencesValue("\U$pluginName\E_HIDEATTACHMENTS");
+
     # Initialize graph number for auto-generated graphs.
     $grNum = 0;
 
@@ -200,6 +203,7 @@ sub handleDot
     my $outFilename = $params{file} || "";
     my $doMap = $params{map} || "";
     my $dotHash = $params{dothash} || "on";
+    my $hideAttach = $params{hideattachments} || $hideAttachDefault ;
 
     # Strip all leading / trailing white space - WYSIWYG seems to pad it.
     $antialias =~ s/^\s+//;
@@ -218,7 +222,9 @@ sub handleDot
     $outFilename =~ s/\s+$//;
     $dotHash =~ s/^\s+//;
     $dotHash =~ s/\s+$//;
-
+    $hideAttach =~ s/^\s+//;
+    $hideAttach =~ s/\s+$//;
+    
     # Make sure outFilename is clean 
     $outFilename = TWiki::Sandbox::sanitizeAttachmentName($outFilename) if ($outFilename ne "");
 
@@ -244,6 +250,17 @@ sub handleDot
     unless ( $dotHash =~ m/^(on|off)$/o ) {
           return "<font color=\"red\"><nop>DirectedGraph Error: dothash must be either \"off\" or \"on\" (was: $dotHash)</font>";
        }
+
+    unless ( $hideAttach =~ m/^(on|off)$/o ) {
+          return "<font color=\"red\"><nop>DirectedGraph Error: hideattachments  must be either \"off\" or \"on\" (was: $hideAttach)</font>";
+       }
+
+    my $hide = undef;   
+    if ( $hideAttach =~ m/off/o ) {
+        $hide = 0;
+    } else {
+        $hide = 1;
+    }
 
     my $chkHash = undef;   
     if ( $dotHash =~ m/off/o ) {
@@ -289,28 +306,6 @@ sub handleDot
     
     my $oldHashCode = TWiki::Func::readFile( "$workAreaDir/${web}_${topic}_${outFilename}");
 
-    # Make sure vectorFormats includes all required file types
-    # dups okay, will scrub them out below.
-    $vectorFormats .= " png";
-    $vectorFormats .= " ps" if ($antialias);
-    $vectorFormats .= " cmapx" if ($doMap);
-
-    my $outString = "";
-    my %tempFile;
-    my %attachFile;
-    foreach my $key (split(" ",$vectorFormats) ) {
-       if ( $key ne "none" ) {   # skip the bogus default
-          if (!exists ($tempFile{$key})) {
-             $tempFile{$key} = new File::Temp(TEMPLATE => 'DGPXXXXXXXXXX',
-                         DIR => $tempdir,
-	                 #UNLINK => 0, # DEBUG
-                         SUFFIX => ".$key" );
-             # Don't create the GraphViz PNG output if antialias is requested			 
-             $outString .= "-T$key -o$tempFile{$key} " unless ($antialias && $key eq "png");
-             $attachFile{$key} = "$outFilename.$key";
-          }   
-       }
-    }
 
     #  If the hash codes don't match, the graph needs to be recreated
     #  otherwise just use the previous graph already attached.
@@ -319,13 +314,36 @@ sub handleDot
     if ( (($oldHashCode ne $hashCode) && $chkHash ) | 
          not TWiki::Func::attachmentExists( $web, $topic, "$outFilename.png" )) {
 
+        # Make sure vectorFormats includes all required file types
+        # dups okay, will scrub them out below.
+        $vectorFormats .= " png";
+        $vectorFormats .= " ps" if ($antialias);
+        $vectorFormats .= " cmapx" if ($doMap);
+
+        my $outString = "";
+        my %tempFile;
+        my %attachFile;
+        foreach my $key (split(" ",$vectorFormats) ) {
+           if ( $key ne "none" ) {   # skip the bogus default
+              if (!exists ($tempFile{$key})) {
+                 $tempFile{$key} = new File::Temp(TEMPLATE => 'DGPXXXXXXXXXX',
+                         DIR => $tempdir,
+	                 UNLINK => 0, #  Manually unlink later if debug not specified.
+                         SUFFIX => ".$key" );
+                 # Don't create the GraphViz PNG output if antialias is requested			 
+                 $outString .= "-T$key -o$tempFile{$key} " unless ($antialias && $key eq "png");
+                 $attachFile{$key} = "$outFilename.$key";
+              }   
+           }
+        }
+
         # Save the hash for the new graph.
         if ( $chkHash ) { TWiki::Func::saveFile( "$workAreaDir/${web}_${topic}_${outFilename}", $hashCode ); } 
 
         # Create a new temporary file to pass to GraphViz
         my $dotFile = new File::Temp(TEMPLATE => 'DiGraphPluginXXXXXXXXXX',
                          DIR => $tempdir,
-                         #UNLINK => 0, # DEBUG
+                         UNLINK => 0, # Manually unlink later if debug not specified
                          SUFFIX => '.dot');
         TWiki::Func::saveFile( "$dotFile", $desc);
 
@@ -372,7 +390,7 @@ sub handleDot
                 {
 		    file => "$tempFile{$key}",
                     comment => '<nop>DirectedGraphPlugin: DOT graph',
-                    hide    => 1
+                    hide    => $hide
                 }
             );
         unlink $tempFile{$key} unless $debug ;
