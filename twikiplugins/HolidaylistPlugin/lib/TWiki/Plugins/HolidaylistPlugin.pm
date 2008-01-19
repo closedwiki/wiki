@@ -509,7 +509,7 @@ sub fetchHolidaylist {
 	foreach $line (grep(/$bullet_rx/, split(/\r?\n/, $text))) {
 		my ($person, $start, $end, $location, $icon);
 
-        $line =~ s/\s+$//;
+		$line =~ s/\s+$//;
 		$line =~ s/$bullet_rx//g; 
 
 		$descr = $line;
