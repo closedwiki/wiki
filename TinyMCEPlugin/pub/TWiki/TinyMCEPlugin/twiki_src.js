@@ -62,3 +62,16 @@ function initTextAreaStyles() {
         node = node.parentNode;
     }
 }
+
+/**
+Disables the use of ESCAPE in the edit box, because some browsers will interpret this as cancel and will remove all changes.
+Copied from TWiki.TWikiJavascripts/twiki_edit.js because it is used in
+pickaxe mode.
+*/
+function handleKeyDown(e) {
+	if (!e) e = window.event;
+	var code;
+	if (e.keyCode) code = e.keyCode;
+	if (code==27) return false;
+	return true;
+}
