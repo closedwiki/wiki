@@ -49,6 +49,7 @@ var TWikiTiny = {
         }
         elm = document.getElementById("preview");
         if (elm) {
+            elm.style.display = 'none'; // Item5263: broken preview
             elm.disabled = status;
         }
     },
