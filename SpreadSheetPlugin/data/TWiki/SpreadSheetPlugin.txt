@@ -439,8 +439,8 @@ Conventions for Syntax:
 ---+++ PROPER( text ) -- properly capitalize text
 	* Capitalize letters that follow any character other than a letter; convert all other letters to lowercase letters
 	* Syntax: ==$PROPER( text )==
-	* Example: ==%<nop>CALC{"PROPER(a small STEP)"}%== returns ==A Small Step==
-	* Example: ==%<nop>CALC{"PROPER(f1 (formula-1))"}%== returns ==F1 (Formula-1)==
+	* Example: ==%<nop>CALC{"$PROPER(a small STEP)"}%== returns ==A Small Step==
+	* Example: ==%<nop>CALC{"$PROPER(f1 (formula-1))"}%== returns ==F1 (Formula-1)==
 	* Related: =[[#FuncLOWER][$LOWER()]]=, =[[#FuncPROPERSPACE][$PROPERSPACE()]]=, =[[#FuncTRIM][$TRIM()]]=, =[[#FuncUPPER][$UPPER()]]=
 
 #FuncPROPERSPACE
