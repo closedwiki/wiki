@@ -3,8 +3,6 @@
 
 %TOC%
 
----++ TWiki Release 4.2 (Freetown), 16 Jan 2008
-
 ---++ Introduction
 
 TWiki Release 4.2.0 is a minor release. TWiki releases are either major (major new features and changes in architecture), minor (enhancements and bug fixes), or patch releases (bug fixes only) which can be installed as upgrades on production installations.
@@ -149,36 +147,25 @@ The 4.2.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 ---++ Fixes
 
 <noautolink>
-| [[%BUGS%/Item5244][Item5244]] | remove all FIXMEs |
-| [[%BUGS%/Item5242][Item5242]] | PrefsTests failing - now that groups are cached, we need to force a reload |
-| [[%BUGS%/Item5238][Item5238]] | eachGroupMember seems to be re-processing the same groups multiple times. |
+| [[%BUGS%/Item5252][Item5252]] | RenderListPlugin produces warnings with list with no level 1 bullets |
+| [[%BUGS%/Item5246][Item5246]] | When using SERVERTIME with $week in template TWIki fails on missing CPAN lib dependency |
+| [[%BUGS%/Item5245][Item5245]] | adding missing docs for NEWLINKFORMAT - introduced in 2006 |
 | [[%BUGS%/Item5226][Item5226]] | TWikiUserMapping speed re-enhancements |
-| [[%BUGS%/Item5219][Item5219]] | unqualified use of $TWiki::TranslationToken can lead to unexpected results |
 | [[%BUGS%/Item5210][Item5210]] | EDITTABLE with a simple text input in which the user has put %BR% gets trunkated at the first BR |
-| [[%BUGS%/Item5194][Item5194]] | Highly suspect code in Users.pm |
-| [[%BUGS%/Item5185][Item5185]] | User mapping testcase is giving a false positive |
-| [[%BUGS%/Item5182][Item5182]] | "save" does not treat bad templatetopic as an error |
 | [[%BUGS%/Item5123][Item5123]] | missing fetchUsers method in Password.pm |
 | [[%BUGS%/Item5121][Item5121]] | Performance: Copy hash |
-| [[%BUGS%/Item5107][Item5107]] | 4.2.0 rc2 release |
-| [[%BUGS%/Item5085][Item5085]] | un-necessary strictness in content type unit test |
-| [[%BUGS%/Item5050][Item5050]] | TablePlugin: Do not add a thead for each header row |
 | [[%BUGS%/Item5046][Item5046]] | error link mailto |
 | [[%BUGS%/Item5040][Item5040]] | Auto attach has hardcoded the string 'UnknownUser' for the attachment meta user attr |
 | [[%BUGS%/Item5038][Item5038]] | TablePlugin prepends 'table' to id parameter |
 | [[%BUGS%/Item5031][Item5031]] | "Here" link in merge_notice in templates/messages.tmpl |
 | [[%BUGS%/Item5029][Item5029]] | Template.pm prints incomplete and confusing error message |
 | [[%BUGS%/Item5019][Item5019]] | if you get a lease conflict when using EditTablePlugin, the oops conflict output link is unusable |
-| [[%BUGS%/Item5018][Item5018]] | make the "How to add the first administrator" yellow box display only if relevant. |
-| [[%BUGS%/Item5016][Item5016]] | TWikiAdminGroup help text does not work for ApacheLogin |
-| [[%BUGS%/Item5014][Item5014]] | EditTablePlugin complains about editing conflict when adding row |
 | [[%BUGS%/Item5009][Item5009]] | TWISTY =link= parameter doesn't support (local) variables (set in topic and used with %) properly |
 | [[%BUGS%/Item5008][Item5008]] | If you register someone you are magically logged in as them |
 | [[%BUGS%/Item5004][Item5004]] | AutoAttach created META that will break topic rendering |
 | [[%BUGS%/Item4991][Item4991]] | TwistyPlugin: add behaviour earlier to head than twisty js |
 | [[%BUGS%/Item4989][Item4989]] | wrong expansion of deprecated URL tag |
 | [[%BUGS%/Item4986][Item4986]] | select+multi+values broken in various respects |
-| [[%BUGS%/Item4984][Item4984]] | tiny docco tweak after a conversation with a user |
 | [[%BUGS%/Item4973][Item4973]] | default skin appears to have javascript in it |
 | [[%BUGS%/Item4972][Item4972]] | session files should only be created for web based sessions. |
 | [[%BUGS%/Item4971][Item4971]] | taint error when registering and verify is off |
@@ -188,31 +175,23 @@ The 4.2.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 | [[%BUGS%/Item4928][Item4928]] | lets use HTTP error codes in rest cgi, rather than rather less useful die's |
 | [[%BUGS%/Item4921][Item4921]] | rest cgi is not testing the URL correctly |
 | [[%BUGS%/Item4918][Item4918]] | checkpoint-save ignores EDIT_TEMPATE |
-| [[%BUGS%/Item4908][Item4908]] | don't call the main usermapper if its already returned false to handlesUser |
 | [[%BUGS%/Item4900][Item4900]] | 0 is not recognized as valid input in a mandatory form field |
 | [[%BUGS%/Item4898][Item4898]] | tmp and working dir security needs work (docco and code |
 | [[%BUGS%/Item4879][Item4879]] | configure not honoring $TWiki::cfg{ScriptUrlPath} |
-| [[%BUGS%/Item4870][Item4870]] | More topic actions / restore should spawn raw edit as default editor |
-| [[%BUGS%/Item4858][Item4858]] | EditTablePlugin: do not show a move button with only 1 row |
 | [[%BUGS%/Item4856][Item4856]] | EditTablePlugin: make buttons customizable and translatable |
 | [[%BUGS%/Item4854][Item4854]] | EditTablePlugin: undefined textarea size gives error in log |
 | [[%BUGS%/Item4848][Item4848]] | TWiki:Plugins.EditTablePlugin textarea bug! |
 | [[%BUGS%/Item4846][Item4846]] | Installation process SNAFU if you don't set a configure PW |
-| [[%BUGS%/Item4833][Item4833]] | TagMePlugin example template does not work on TWiki 4.1 |
 | [[%BUGS%/Item4819][Item4819]] | viewauth redirect loops to death when Main and TWiki webs both are view denied for !TWikiGuest |
 | [[%BUGS%/Item4816][Item4816]] | !EditPreferences of !Main.TWikiPreferences broken |
-| [[%BUGS%/Item4815][Item4815]] | Wrong link to username of attachments from 4.1 topics |
 | [[%BUGS%/Item4807][Item4807]] | swap twikistyle and defaultstyle definitions |
-| [[%BUGS%/Item4806][Item4806]] | EditTablePlugin does not add rows |
 | [[%BUGS%/Item4797][Item4797]] | Online installer not resolving dependencies |
 | [[%BUGS%/Item4794][Item4794]] | Wrong link to !FileAttachment |
 | [[%BUGS%/Item4793][Item4793]] | Login screen has error messages the wrong order |
 | [[%BUGS%/Item4774][Item4774]] | When using a field type select+multi in a form used in a template topic, the field doesn't remember the selection |
-| [[%BUGS%/Item4771][Item4771]] | !TWikiUserMapping fails with Corporate SSO |
 | [[%BUGS%/Item4765][Item4765]] | Reading static HTML's for upgrade/install is difficult without internet connection/behind firewall |
 | [[%BUGS%/Item4761][Item4761]] | Remove inline scripts from pattern skin |
 | [[%BUGS%/Item4756][Item4756]] | raw=all does not show all meta when VIEW_TEMPLATE is defined. |
-| [[%BUGS%/Item4755][Item4755]] | Create new topic link from old webs no longer works |
 | [[%BUGS%/Item4753][Item4753]] | /bin/twiki is experimental stuff that should not be in distribution |
 | [[%BUGS%/Item4752][Item4752]] | Terrifying text appears below plugins list during new extensions install via configure |
 | [[%BUGS%/Item4736][Item4736]] | add expires header for css js etc |
@@ -221,7 +200,6 @@ The 4.2.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 | [[%BUGS%/Item4722][Item4722]] | Unused EXPERT options are always shown |
 | [[%BUGS%/Item4718][Item4718]] | Improve the installation doc for how to setup apache config for configure |
 | [[%BUGS%/Item4713][Item4713]] | Repackage native search as a conrib, remove from 4.2 |
-| [[%BUGS%/Item4708][Item4708]] | Sudo login has wrong tab index |
 | [[%BUGS%/Item4702][Item4702]] | Lighter top bar background image |
 | [[%BUGS%/Item4694][Item4694]] | Standard user topics of !TWikiUserMapping are referenced, but not defined |
 | [[%BUGS%/Item4692][Item4692]] | Forking search algorithm throws error if topic is nonexistent |
@@ -231,19 +209,15 @@ The 4.2.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 | [[%BUGS%/Item4675][Item4675]] | Add completePageHandler for plugins |
 | [[%BUGS%/Item4671][Item4671]] | default skin is a bit broken |
 | [[%BUGS%/Item4670][Item4670]] | close browser advice non-sensical when not using apache login |
-| [[%BUGS%/Item4669][Item4669]] | I thought we were shipping TinyMCE as on by default - the svn repository has it off |
 | [[%BUGS%/Item4667][Item4667]] | Adding CGI::Session with distribution and enable Template login by default. |
 | [[%BUGS%/Item4664][Item4664]] | Web rename renames content as well |
 | [[%BUGS%/Item4661][Item4661]] | renaming a topic destroys full qualified topic names |
 | [[%BUGS%/Item4659][Item4659]] | Change the strategy of protecting again html attach spam to not harm Wysiwyg editor |
 | [[%BUGS%/Item4658][Item4658]] | remove use of undefined variable un utf8 code |
-| [[%BUGS%/Item4657][Item4657]] | Branching and building 4.2.0 beta |
-| [[%BUGS%/Item4641][Item4641]] | css for hr element of a partially styled twikiTable has a broken left border |
 | [[%BUGS%/Item4605][Item4605]] | User shown as Unknown User (Login ID) when author is not in TWikiUsers. Bad feature |
-| [[%BUGS%/Item4603][Item4603]] | Add !TinyMCE quick help to edit template |
 | [[%BUGS%/Item4590][Item4590]] | Rename "Checkpoint" to "Save and Continue" |
 | [[%BUGS%/Item4585][Item4585]] | configure generates apache errors |
-| [[%BUGS%/Item4576][Item4576]] | Too many mail dependencies |
+| [[%BUGS%/Item4576][Item4576]] | Improve how emailing is enabled and disabled in TWiki especially for registration |
 | [[%BUGS%/Item4569][Item4569]] | !WebSearchAdvanced does not show selected state for default radion button "both"  |
 | [[%BUGS%/Item4539][Item4539]] | Rename css class !TWikiFooterNote to twikiFooterNote |
 | [[%BUGS%/Item4510][Item4510]] | Remove inline scripts |
@@ -255,7 +229,6 @@ The 4.2.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 | [[%BUGS%/Item4476][Item4476]] | Missing error message when registration mail fails to be sent |
 | [[%BUGS%/Item4459][Item4459]] | TemplateLogin messages not translated |
 | [[%BUGS%/Item4458][Item4458]] | Topic newsletter notifications in MailerContrib fail |
-| [[%BUGS%/Item4456][Item4456]] | !TWikiUserMappingContrib.txt is more or less an empty topic. Some lines of description needed |
 | [[%BUGS%/Item4453][Item4453]] | A Set embedded in a list has problems |
 | [[%BUGS%/Item4449][Item4449]] | No (simple) way to create a Set |
 | [[%BUGS%/Item4448][Item4448]] | InterwikiPlugin: Change ISBN rule |
@@ -266,8 +239,6 @@ The 4.2.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 | [[%BUGS%/Item4432][Item4432]] | %VAR% causes an internal server error |
 | [[%BUGS%/Item4426][Item4426]] | HTMl embedded in lists breaks the translator |
 | [[%BUGS%/Item4425][Item4425]] | Empty bullets get a =<br />= tag. |
-| [[%BUGS%/Item4424][Item4424]] | Extra space after headings (one is added each time you save.) |
-| [[%BUGS%/Item4410][Item4410]] | Having major problems with tables |
 | [[%BUGS%/Item4403][Item4403]] | Error saving topic message not shown as code because of trailing space |
 | [[%BUGS%/Item4402][Item4402]] | Access check based on getWikiUserName (fails) vs. getWikiName (succeeds) |
 | [[%BUGS%/Item4399][Item4399]] | Add a note about adding a doc license to footer when installing TWiki |
@@ -276,7 +247,6 @@ The 4.2.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 | [[%BUGS%/Item4380][Item4380]] | =mailnotify= fails due to TWIki::Merge failing |
 | [[%BUGS%/Item4378][Item4378]] | default skin, and thus the classic skin, contains javascript |
 | [[%BUGS%/Item4372][Item4372]] | Custom META fields that don't have the _name_ key are ignored by TWiki::Store |
-| [[%BUGS%/Item4357][Item4357]] | PatternSkin release, v3.0 |
 | [[%BUGS%/Item4355][Item4355]] | bulkregistration is unforgiving on TWikiTable format |
 | [[%BUGS%/Item4349][Item4349]] | TablePlugin generates invalid html attribute =maxcols= |
 | [[%BUGS%/Item4347][Item4347]] | Empty field values in searches are returned as strings containing "$value"  |
@@ -287,7 +257,6 @@ The 4.2.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 | [[%BUGS%/Item4308][Item4308]] | getListOfWebs() and webExists() disagree |
 | [[%BUGS%/Item4300][Item4300]] | TablePlugin overrides skin css AGAIN |
 | [[%BUGS%/Item4284][Item4284]] | Support topic permissions checking |
-| [[%BUGS%/Item4281][Item4281]] | Native search falls over on d.t.o |
 | [[%BUGS%/Item4280][Item4280]] | Move hide-if-no-javascript functionality from TwistyPlugin to default templates |
 | [[%BUGS%/Item4271][Item4271]] | Update TwistyPlugin with TWiki 4 javascript files |
 | [[%BUGS%/Item4269][Item4269]] | Update TwistyContrib with TWiki 4 javascript files |
@@ -296,7 +265,6 @@ The 4.2.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 | [[%BUGS%/Item4257][Item4257]] | Default templates and documentation topics assume pattern CSS classes |
 | [[%BUGS%/Item4250][Item4250]] | Pipe symbol (i.e. in SEARCH) breaks Form Definition Table |
 | [[%BUGS%/Item4249][Item4249]] | RegistrationApprovals is not a web |
-| [[%BUGS%/Item4244][Item4244]] | EditTablePlugin: Very easy to accidently delete row. |
 | [[%BUGS%/Item4243][Item4243]] | Malformed META embedded in text can crash TWiki |
 | [[%BUGS%/Item4239][Item4239]] | syntax error at /usr/lib/cgi-bin/TEST/lib/TWiki/ Users/ApacheHtpasswdUser.pm line 67, near "}" |
 | [[%BUGS%/Item4236][Item4236]] | Configure harmless errors confuse people when they have other unrelated errors. |
@@ -482,7 +450,6 @@ The 4.2.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 <noautolink>
 | [[%BUGS%/Item652][Item652]] | =configure= plugins should be sorted case-insensitively |
 | [[%BUGS%/Item4995][Item4995]] | EditTablePlugin: Omit Edit button in print view |
-| [[%BUGS%/Item4875][Item4875]] | Add javascript function 'makeSafeForTableEntry' |
 | [[%BUGS%/Item4810][Item4810]] | SpreadSheetPlugin: New FORMATTIMEDIFF() function |
 | [[%BUGS%/Item4809][Item4809]] | ConditionalBasedOnGroupMembership |
 | [[%BUGS%/Item4709][Item4709]] | Update small T-logo badge in bottom bar |
@@ -545,8 +512,6 @@ The 4.2.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 | [[%BUGS%/Item1748][Item1748]] | Attach help contains note for Internet Explorer 4 that can be removed now |
 | [[%BUGS%/Item1582][Item1582]] | configure needs a backlink to the TWiki/WebHome |
 </noautolink>
-
-
 
 <!-- Note: Do not use Bugs: interwiki links because interwiki rule might not be defined
    * Set BUGS = http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs
