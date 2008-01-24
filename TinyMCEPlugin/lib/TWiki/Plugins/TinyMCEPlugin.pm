@@ -71,7 +71,7 @@ sub _notAvailable {
 
     # Check the client browser to see if it is blacklisted
     my $ua = TWiki::Func::getPreferencesValue('TINYMCEPLUGIN_BAD_BROWSERS') ||
-      '(?i-xsm:Konqueror)';
+      '(?i-xsm:Konqueror|Opera)';
     return 'Unsupported browser: '.$query->user_agent()
       if $ua && $query->user_agent() && $query->user_agent() =~ /$ua/;
 
