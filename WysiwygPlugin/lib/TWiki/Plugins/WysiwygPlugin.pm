@@ -15,7 +15,7 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
-=pod
+=begin twiki
 
 ---+ package WysiwygPlugin
 
@@ -46,12 +46,12 @@ require TWiki::Plugins; # For the API version
 
 use Assert;
 
-use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $SECRET_ID );
+use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $SECRET_ID $NO_PREFS_IN_TOPIC );
 use vars qw( $html2tml $tml2html $recursionBlock $imgMap );
 use vars qw( %TWikiCompatibility @refs );
 
 $SHORTDESCRIPTION = 'Translator framework for Wysiwyg editors';
-
+$NO_PREFS_IN_TOPIC = 1;
 $VERSION = '$Rev$';
 
 $RELEASE = 'TWiki-4.2';
@@ -80,39 +80,39 @@ sub initPlugin {
 }
 
 sub _OWEBTAG {
-    my($session, $params, $theTopic, $theWeb) = @_;
+    my( $session, $params, $topic, $web ) = @_;
 
     my $query = TWiki::Func::getCgiQuery();
 
-    return "$theWeb" unless $query;
+    return $web unless $query;
 
-    if(defined($query->param('templatetopic'))) {
-        my @split=split(/\./,$query->param('templatetopic'));
+    if( defined( $query->param( 'templatetopic' ))) {
+        my @split = split( /\./, $query->param( 'templatetopic' ));
 
-	if($#split==0) {
-	  return $theWeb;
-	} else {
-	  return $split[0];
-	}
+        if( $#split == 0 ) {
+            return $web;
+        } else {
+            return $split[0];
+        }
     }
 
-    return $theWeb;
+    return $web;
 }
 
 sub _OTOPICTAG {
-    my($session, $params, $theTopic, $theWeb) = @_;
+    my( $session, $params, $topic, $web ) = @_;
 
     my $query = TWiki::Func::getCgiQuery();
 
-    return "$theTopic" unless $query;
+    return $topic unless $query;
 
-    if(defined($query->param('templatetopic'))) {
-        my @split=split(/\./,$query->param('templatetopic'));
+    if( defined( $query->param( 'templatetopic' ))) {
+        my @split = split(/\./, $query->param( 'templatetopic' ));
 
-	return $split[$#split];
+        return $split[$#split];
     }
 
-    return $theTopic;
+    return $topic;
 }
 
 sub startRenderingHandler {
@@ -469,7 +469,7 @@ sub _dropBack {
     return $text;
 }
 
-=pod
+=begin twiki
 
 ---++ StaticMethod notWysiwygEditable($text) -> $boolean
 Determine if the given =$text= is WYSIWYG editable, based on the topic content
