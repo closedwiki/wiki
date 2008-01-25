@@ -253,8 +253,8 @@ var TWikiTiny = {
             if (url.indexOf(vsu + '/') == 0) {
                 url = url.substr(vsu.length + 1);
                 url = url.replace(/\/+/g, '.');
-                if (url.indexOf(vbls['WEB'] + '.') == 0) {
-                    url = url.substr(vbls['WEB'].length + 1);
+                if (url.indexOf(TWikiTiny.getTWikiVar('WEB') + '.') == 0) {
+                    url = url.substr(TWikiTiny.getTWikiVar('WEB').length + 1);
                 }
             }
         } else {
