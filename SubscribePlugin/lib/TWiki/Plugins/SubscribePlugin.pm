@@ -151,8 +151,9 @@ sub _subscribe {
     return _alert("bad topic '$topics'") if
       $checktopic =~ m/$TWiki::cfg{NameFilter}/o;
 
+	## Make sure to not expand groups in $wn
     my $wn = new TWiki::Contrib::MailerContrib::WebNotify(
-        $TWiki::Plugins::SESSION, $web, $TWiki::cfg{NotifyTopicName} );
+        $TWiki::Plugins::SESSION, $web, $TWiki::cfg{NotifyTopicName}, 1 );
 
     my $mess;
     if ($unsubscribe && $unsubscribe =~ /^(on|true|yes)$/i) {
