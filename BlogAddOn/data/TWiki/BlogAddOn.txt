@@ -35,11 +35,12 @@ When installed, see !_BlogAddOn.BlogAddOnHome for additional details.
 ---++ !AddOn Info
 
 | Authors: | TWiki:Main.ArthurClemens |
-| Copyright &copy;: | 2006, 2007 Arthur Clemens |
+| Copyright &copy;: | 2006-2008 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
-| Plugin&nbsp;Version: | 1.0.9 |
+| Plugin&nbsp;Version: | 1.1, 26 Jan 2008 |
 | Change&nbsp;History: | <!-- specify latest version first -->&nbsp; |
+| 26 Jan 2008 | 1.1 Adds the creation date to blog post topic names. Adds an Edit link to the Comments header in a blog post. Increases the height of the comment box. Bug fix: allow topic names with periods. |
 | 26 Jun 2007 | 1.0.9 Fixed html bug in !BlogPost; added comment count to !BlogPost; improved styling of form elements. |
 | 08 Apr 2007 | 1.0.8 Show link to latest comment in !BlogPost listing. Improved readability for comments. This version relies on CommentPlugin svn release number 13313 and PatternSkin svn release number 13320, but !BlogAddOn will now play nicely with other skins as well. | 
 | 06 Feb 2007 | 1.0.7 Added no-javascript fallback to !BlogPost and !BlogPostCreator (so that topic can actually be created without javascript). Fixed a javascript bug that was introduced when a Core function was renamed. |
@@ -50,7 +51,3 @@ When installed, see !_BlogAddOn.BlogAddOnHome for additional details.
 | 15 Dec 2006 | 1.0.2 RSS feed link to category filter, fixes to sorting/filtering.  |
 | 14 Dec 2006 | 1.0.1 Option to set defaults when including !BlogPost.  |
 | 12 Dec 2006 | 1.0 First release.  |
-| Demo url:  | http://twiki4.visiblearea.com/twiki4/MAIN/bin/view/_BlogAddOn/BlogPost  |
-| Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
-| Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
-| Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |

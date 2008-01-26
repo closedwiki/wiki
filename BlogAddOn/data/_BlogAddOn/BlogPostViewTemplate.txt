@@ -18,11 +18,11 @@
 
 %TEXT%
 
----++ %MAKETEXT{"Comments"}%
+---++ %MAKETEXT{"Comments"}% <span style="font-size:60%"><a href="%SCRIPTURL{edit}%/%WEB%/%TOPIC%Comments?topicparent=%TOPIC%;t=%GMTIME{"$epoch"}%" style="text-decoration:none;">%MAKETEXT{"(edit)"}%</a></span>
 #BlogPostComments
 %INCLUDE{"%TOPIC%Comments" warn="off"}%
 
-%COMMENT{noform="on" type="blogpost" templatetopic="BlogPostCommentTemplate" target="%TOPIC%" button="%MAKETEXT{"Add comment"}%" }%
+%COMMENT{rows="10" cols="100" noform="on" type="blogpost" templatetopic="BlogPostCommentTemplate" target="%TOPIC%" button="%MAKETEXT{"Add comment"}%" }%
 </div>
 #BlogPostEnd
 %TMPL:END%

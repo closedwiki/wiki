@@ -2,13 +2,12 @@
 ---+!! !BlogAddOn CSS styles
 
 <verbatim>
-%STARTINCLUDE%
-<style type="text/css" media="all">
+%STARTINCLUDE%<style type="text/css" media="all">
 /* sort and filter options */
 .blogPostAddOnViewOptions {
 	padding:.5em 1em 0 1em;
 	color:#666;
-	background-color:#FCF8EC;
+	background-color:#f6f6f6;
 	font-size:94%;
 	margin:0 0 .5em 0;
 }
@@ -43,14 +42,12 @@ a.blogPostAddOnViewOptionsSubscribeLink:visited {
 }
 .blogPostAddOnLatestCommentCount {}
 /* list of posts */
-.blogPostAddOnOverview {
-	padding:0 1em;
-}
+.blogPostAddOnOverview {}
 .blogPostAddOnOverview .blogPostAddOnHeaderInfo {
 	margin:0;
 }
 .blogPostAddOnItem {
-	padding:1em 0 1.25em 0;
+	padding:1em;
 	border-bottom:1px solid #ddd;
 }
 .blogPostAddOnItem h3 {
@@ -63,7 +60,7 @@ a.blogPostAddOnViewOptionsSubscribeLink:visited {
 	text-decoration:none;
 }
 .blogPostAddOnSummary {
-	margin:.5em 0;
+	margin:.5em 0 0 0;
 }
 /* post */
 h1.blogAddOnTitle {
@@ -72,6 +69,5 @@ h1.blogAddOnTitle {
 .blogPostAddOnHeaderInfo {
 	margin:0 0 1em 0;
 }
-</style>
-%STOPINCLUDE%
+</style>%STOPINCLUDE%
 </verbatim>
