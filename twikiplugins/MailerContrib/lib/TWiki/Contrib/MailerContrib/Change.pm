@@ -118,17 +118,10 @@ sub expandHTML {
     my ( $this, $html ) = @_;
 
     unless( defined $this->{HTML_SUMMARY} ) {
-        if( defined &TWiki::Func::summariseChanges ) {
-            $this->{HTML_SUMMARY} =
-              TWiki::Func::summariseChanges(
-                  $this->{WEB}, $this->{TOPIC}, $this->{BASE_REV},
-                  $this->{CURR_REV}, 1 );
-        } else {
-            $this->{HTML_SUMMARY} =
-              $this->{SESSION}->{renderer}->summariseChanges
-                ( undef, $this->{WEB}, $this->{TOPIC}, $this->{BASE_REV},
-                  $this->{CURR_REV}, 1 );
-        }
+        $this->{HTML_SUMMARY} =
+          $this->{SESSION}->{renderer}->summariseChanges
+            ( undef, $this->{WEB}, $this->{TOPIC}, $this->{BASE_REV},
+              $this->{CURR_REV}, 1 );
     }
 
     $html =~ s/%TOPICNAME%/$this->{TOPIC}/g;
@@ -148,9 +141,9 @@ sub expandHTML {
         }
     }
     $html =~ s/%REVISION%/$frev/g;
-    $html = TWiki::Func::expandCommonVariables(
+    $html = $this->{SESSION}->handleCommonTags(
         $html, $this->{WEB}, $this->{TOPIC} );
-    $html = TWiki::Func::renderText( $html );
+    $html = $this->{SESSION}->{renderer}->getRenderedVersion( $html );
     $html =~ s/%TEXTHEAD%/$this->{HTML_SUMMARY}/g;
 
     return $html;
@@ -167,16 +160,10 @@ sub expandPlain {
     my ( $this, $template ) = @_;
 
     unless( defined $this->{TEXT_SUMMARY} ) {
-        my $s;
-        if( defined &TWiki::Func::summariseChanges ) {
-            $s = TWiki::Func::summariseChanges(
-                $this->{WEB}, $this->{TOPIC}, $this->{BASE_REV},
-                $this->{CURR_REV}, 0 );
-        } else {
-            $s = $this->{SESSION}->{renderer}->summariseChanges(
-                undef, $this->{WEB}, $this->{TOPIC}, $this->{BASE_REV},
-                $this->{CURR_REV}, 0 );
-        }
+        my $s =
+          $this->{SESSION}->{renderer}->summariseChanges
+            ( undef, $this->{WEB}, $this->{TOPIC}, $this->{BASE_REV},
+              $this->{CURR_REV}, 0 );
         $s =~ s/\n/\n   /gs;
         $s = "   $s";
         $this->{TEXT_SUMMARY} = $s;

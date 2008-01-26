@@ -59,7 +59,7 @@ sub getParent {
 
     if ( ! defined( $this->{parent}{$topic} )) {
         my( $meta, $text ) =
-          TWiki::Func::readTopic( $this->{web}, $topic );
+          $this->{session}->{store}->readTopic( undef, $this->{web}, $topic );
         my $parent = $meta->get('TOPICPARENT');
         $this->{parent}{$topic} = $parent->{name} if $parent;
         $this->{parent}{$topic} ||= '';

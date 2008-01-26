@@ -42,9 +42,6 @@ package TWiki::Contrib::MailerContrib::WebNotify;
    * =$session= - TWiki object
    * =$web= - web name
    * =$topic= - topic name
-   * =$noexpandgroups= - True will prevent expansion of  group subscriptions
-          (False is best for checking subscriptions, but True is best for
-	  writing results back to $topic)
 Create a new object by parsing the content of the given topic in the
 given web. This is the normal way to load a %NOTIFYTOPIC% topic. If the
 topic does not exist, it will create an empty object.
@@ -52,7 +49,7 @@ topic does not exist, it will create an empty object.
 =cut
 
 sub new {
-    my ( $class, $session, $web, $topic, $noexpandgroups ) = @_;
+    my ( $class, $session, $web, $topic ) = @_;
 
     my $this = bless( {}, $class );
 
@@ -60,8 +57,6 @@ sub new {
     $this->{topic} = $topic || $TWiki::cfg{NotifyTopicName} || 'WebNotify';
     $this->{pretext} = '';
     $this->{posttext} = '';
-    $this->{session} = $session;
-    $this->{noexpandgroups} = $noexpandgroups;
 
     if( TWiki::Func::topicExists( $web, $topic )) {
         $this->_load();
@@ -141,20 +136,10 @@ Add a subscription, adding the subscriber if necessary.
 sub subscribe {
     my ( $this, $name, $topics, $depth, $mode ) = @_;
 
-    my @names = ($name);
-    unless ($this->{noexpandgroups}) {
-	my $user = TWiki::User->new($this->{session}, '', $name);
-	if ($user->isGroup) {
-	    @names = map {$_->wikiName} @{$user->groupMembers};
-	}
-    }
-
-    foreach my $n (@names) {
-	my $subscriber = $this->getSubscriber( $n );
-	my $sub = new TWiki::Contrib::MailerContrib::Subscription(
-	    $topics, $depth, $mode );
-	$subscriber->subscribe( $sub );
-    }
+    my $subscriber = $this->getSubscriber( $name );
+    my $sub = new TWiki::Contrib::MailerContrib::Subscription(
+        $topics, $depth, $mode );
+    $subscriber->subscribe( $sub );
 }
 
 =pod
@@ -172,20 +157,10 @@ particular subscriber.
 sub unsubscribe {
     my ( $this, $name, $topics, $depth ) = @_;
 
-    my @names = ($name);
-    unless ($this->{noexpandgroups}) {
-	my $user = TWiki::User->new($this->{session}, '', $name);
-	if ($user->isGroup) {
-	    @names = map {$_->wikiName} @{$user->groupMembers};
-	}
-    }
-
-    foreach my $n (@names) {
-	my $subscriber = $this->getSubscriber( $n );
-	my $sub = new TWiki::Contrib::MailerContrib::Subscription(
-	    $topics, $depth );
-	$subscriber->unsubscribe( $sub );
-    }
+    my $subscriber = $this->getSubscriber( $name );
+    my $sub = new TWiki::Contrib::MailerContrib::Subscription(
+        $topics, $depth );
+    $subscriber->unsubscribe( $sub );
 }
 
 =pod

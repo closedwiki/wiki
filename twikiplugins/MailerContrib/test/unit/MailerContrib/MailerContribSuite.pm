@@ -50,20 +50,21 @@ sub set_up {
 
     $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
 
+    my $user = $this->{twiki}->{user};
     my $text;
 
     $testWeb2 = "$this->{test_web}/SubWeb";
     # Will get torn down when the parent web dies
-    TWiki::Func::createWeb($testWeb2);
+    $this->{twiki}->{store}->createWeb($user, $testWeb2);
 
     $this->registerUser("tu1", "Test", "User1", "test1\@example.com");
     $this->registerUser("tu2", "Test", "User2", "test2\@example.com");
     $this->registerUser("tu3", "Test", "User3", "test3\@example.com");
 
     # test group
-    TWiki::Func::saveTopic(
-        $this->{users_web},
-        "TestGroup", undef, "   * Set GROUP = TestUser3\n");
+    $this->{twiki}->{store}->saveTopic(
+        $user, $this->{users_web},
+        "TestGroup", "   * Set GROUP = TestUser3\n");
 
     # Must create a new twiki to force re-registration of users
     $TWiki::cfg{EnableEmail} = 1;
@@ -167,66 +168,69 @@ sub set_up {
     foreach my $web ($this->{test_web}, $testWeb2) {
         my $meta = new TWiki::Meta($this->{twiki},$web,"WebNotify");
         $meta->put( "TOPICPARENT", { name => "$web.WebHome" } );
-        TWiki::Func::saveTopic( $web, "WebNotify", $meta,
-                                    "Before\n${s}After");
+        $this->{twiki}->{store}->saveTopic( $user, $web, "WebNotify",
+                                    "Before\n${s}After",
+                                    $meta);
         $meta = new TWiki::Meta($this->{twiki},$web,"TestTopic1");
         $meta->put( "TOPICPARENT", { name => "WebHome" } );
-        TWiki::Func::saveTopic( $web, "TestTopic1", $meta,
-            "This is TestTopic1 so there");
+        $this->{twiki}->{store}->saveTopic(
+            $user, $web, "TestTopic1",
+            "This is TestTopic1 so there", $meta);
 
         $meta = new TWiki::Meta($this->{twiki},$web,"TestTopic11");
         $meta->put( "TOPICPARENT", { name => "TestTopic1" } );
-        TWiki::Func::saveTopic( $web, "TestTopic11",$meta,
-                                    "This is TestTopic11 so there");
+        $this->{twiki}->{store}->saveTopic( $user, $web, "TestTopic11",
+                                    "This is TestTopic11 so there", $meta);
 
         $meta = new TWiki::Meta($this->{twiki},$web,"TestTopic111");
         $meta->put( "TOPICPARENT", { name => "TestTopic11" } );
-        TWiki::Func::saveTopic( $web, "TestTopic111", $meta,
-                                    "This is TestTopic111 so there");
+        $this->{twiki}->{store}->saveTopic( $user, $web, "TestTopic111",
+                                    "This is TestTopic111 so there", $meta);
 
         $meta = new TWiki::Meta($this->{twiki},$web,"TestTopic112");
         $meta->put( "TOPICPARENT", { name => "TestTopic11" } );
-        TWiki::Func::saveTopic( $web, "TestTopic112", $meta,
-                                    "This is TestTopic112 so there");
+        $this->{twiki}->{store}->saveTopic( $user, $web, "TestTopic112",
+                                    "This is TestTopic112 so there", $meta);
 
         $meta = new TWiki::Meta($this->{twiki},$web,"TestTopic12");
         $meta->put( "TOPICPARENT", { name => "TestTopic1" } );
-        TWiki::Func::saveTopic( $web, "TestTopic12", $meta,
-                                    "This is TestTopic12 so there");
+        $this->{twiki}->{store}->saveTopic( $user, $web, "TestTopic12",
+                                    "This is TestTopic12 so there", $meta);
 
         $meta = new TWiki::Meta($this->{twiki},$web,"TestTopic121");
         $meta->put( "TOPICPARENT", { name => "TestTopic12" } );
-        TWiki::Func::saveTopic( $web, "TestTopic121", $meta,
-                                    "This is TestTopic121 so there");
+        $this->{twiki}->{store}->saveTopic( $user, $web, "TestTopic121",
+                                    "This is TestTopic121 so there", $meta);
 
         $meta = new TWiki::Meta($this->{twiki},$web,"TestTopic122");
         $meta->put( "TOPICPARENT", { name => "TestTopic12" } );
-        TWiki::Func::saveTopic( $web, "TestTopic122", $meta,
-                                    "This is TestTopic122 so there");
+        $this->{twiki}->{store}->saveTopic( $user, $web, "TestTopic122",
+                                    "This is TestTopic122 so there", $meta);
 
         $meta = new TWiki::Meta($this->{twiki},$web,"TestTopic1221");
         $meta->put( "TOPICPARENT", { name => "TestTopic122" } );
-        TWiki::Func::saveTopic( $web, "TestTopic1221", $meta,
-                                    "This is TestTopic1221 so there");
+        $this->{twiki}->{store}->saveTopic( $user, $web, "TestTopic1221",
+                                    "This is TestTopic1221 so there", $meta);
 
         $meta = new TWiki::Meta($this->{twiki},$web,"TestTopic2");
         $meta->put( "TOPICPARENT", { name => "WebHome" } );
-        TWiki::Func::saveTopic( $web, "TestTopic2", $meta,
-                                    "Dylsexia rules");
+        $this->{twiki}->{store}->saveTopic( $user, $web, "TestTopic2",
+                                    "Dylsexia rules", $meta);
 
         $meta = new TWiki::Meta($this->{twiki},$web,"TestTopic21");
         $meta->put( "TOPICPARENT", { name => "$web.TestTopic2" } );
-        TWiki::Func::saveTopic( $web, "TestTopic21", $meta,
-                                    "This is TestTopic21 so there");
+        $this->{twiki}->{store}->saveTopic( $user, $web, "TestTopic21",
+                                    "This is TestTopic21 so there", $meta);
 
         $meta = new TWiki::Meta($this->{twiki},$web,"TestTopicDenied");
-        TWiki::Func::saveTopic( $web, "TestTopicDenied", $meta,
-            "   * Set ALLOWTOPICVIEW = TestUser1");
+        $this->{twiki}->{store}->saveTopic(
+            $user, $web, "TestTopicDenied",
+            "   * Set ALLOWTOPICVIEW = TestUser1", $meta);
 
         # add a second rev to TestTopic2 so the base rev is 2
-        ( $meta, $text ) = TWiki::Func::readTopic($web,"TestTopic2");
-        TWiki::Func::saveTopic( $web, "TestTopic2", $meta,
-                                    "This is TestTopic2 so there",
+        ( $meta, $text ) = $this->{twiki}->{store}->readTopic(undef,$web,"TestTopic2");
+        $this->{twiki}->{store}->saveTopic( $user, $web, "TestTopic2",
+                                    "This is TestTopic2 so there", $meta,
                                     { forcenewrevision=>1 });
 
         # stamp the baseline
@@ -240,54 +244,54 @@ sub set_up {
         # wait a wee bit for the clock to tick over
         sleep(1);
 
-        ( $meta, $text ) = TWiki::Func::readTopic($web,"TestTopic1");
-        TWiki::Func::saveTopic( $web, "TestTopic1", $meta,
-                                    "not the last word",
+        ( $meta, $text ) = $this->{twiki}->{store}->readTopic(undef,$web,"TestTopic1");
+        $this->{twiki}->{store}->saveTopic( $user, $web, "TestTopic1",
+                                    "not the last word", $meta,
                                     { forcenewrevision=>1 });
 
-        ( $meta, $text ) = TWiki::Func::readTopic($web,"TestTopic11");
-        TWiki::Func::saveTopic( $web, "TestTopic11", $meta,
-                                    $finalText{TestTopic11},
+        ( $meta, $text ) = $this->{twiki}->{store}->readTopic(undef,$web,"TestTopic11");
+        $this->{twiki}->{store}->saveTopic( $user, $web, "TestTopic11",
+                                    $finalText{TestTopic11}, $meta,
                                     { forcenewrevision=>1 });
 
-        ( $meta, $text ) = TWiki::Func::readTopic($web,"TestTopic111");
-        TWiki::Func::saveTopic( $web, "TestTopic111", $meta,
-                                    $finalText{TestTopic111},
+        ( $meta, $text ) = $this->{twiki}->{store}->readTopic(undef,$web,"TestTopic111");
+        $this->{twiki}->{store}->saveTopic( $user, $web, "TestTopic111",
+                                    $finalText{TestTopic111}, $meta,
                                     { forcenewrevision=>1 });
 
-        ( $meta, $text ) = TWiki::Func::readTopic($web,"TestTopic112");
-        TWiki::Func::saveTopic( $web, "TestTopic112", $meta,
-                                    $finalText{TestTopic112},
+        ( $meta, $text ) = $this->{twiki}->{store}->readTopic(undef,$web,"TestTopic112");
+        $this->{twiki}->{store}->saveTopic( $user, $web, "TestTopic112",
+                                    $finalText{TestTopic112}, $meta,
                                     { forcenewrevision=>1 });
 
-        ( $meta, $text ) = TWiki::Func::readTopic($web,"TestTopic12");
-        TWiki::Func::saveTopic( $web, "TestTopic12", $meta,
-                                    $finalText{TestTopic12},
+        ( $meta, $text ) = $this->{twiki}->{store}->readTopic(undef,$web,"TestTopic12");
+        $this->{twiki}->{store}->saveTopic( $user, $web, "TestTopic12",
+                                    $finalText{TestTopic12}, $meta,
                                     { forcenewrevision=>1 });
 
-        ( $meta, $text ) = TWiki::Func::readTopic($web,"TestTopic121");
-        TWiki::Func::saveTopic( $web, "TestTopic121", $meta,
-                                    $finalText{TestTopic121},
+        ( $meta, $text ) = $this->{twiki}->{store}->readTopic(undef,$web,"TestTopic121");
+        $this->{twiki}->{store}->saveTopic( $user, $web, "TestTopic121",
+                                    $finalText{TestTopic121}, $meta,
                                     { forcenewrevision=>1 });
 
-        ( $meta, $text ) = TWiki::Func::readTopic($web,"TestTopic122");
-        TWiki::Func::saveTopic( $web, "TestTopic122", $meta,
-                                    $finalText{TestTopic122},
+        ( $meta, $text ) = $this->{twiki}->{store}->readTopic(undef,$web,"TestTopic122");
+        $this->{twiki}->{store}->saveTopic( $user, $web, "TestTopic122",
+                                    $finalText{TestTopic122}, $meta,
                                     { forcenewrevision=>1 });
 
-        ( $meta, $text ) = TWiki::Func::readTopic($web,"TestTopic1221");
-        TWiki::Func::saveTopic( $web, "TestTopic1221", $meta,
-                                    $finalText{TestTopic1221},
+        ( $meta, $text ) = $this->{twiki}->{store}->readTopic(undef,$web,"TestTopic1221");
+        $this->{twiki}->{store}->saveTopic( $user, $web, "TestTopic1221",
+                                    $finalText{TestTopic1221}, $meta,
                                     { forcenewrevision=>1 });
 
-        ( $meta, $text ) = TWiki::Func::readTopic($web,"TestTopic2");
-        TWiki::Func::saveTopic( $web, "TestTopic2", $meta,
-                                    $finalText{TestTopic2},
+        ( $meta, $text ) = $this->{twiki}->{store}->readTopic(undef,$web,"TestTopic2");
+        $this->{twiki}->{store}->saveTopic( $user, $web, "TestTopic2",
+                                    $finalText{TestTopic2}, $meta,
                                     { forcenewrevision=>1 });
 
-        ( $meta, $text ) = TWiki::Func::readTopic($web,"TestTopic21");
-        TWiki::Func::saveTopic( $web, "TestTopic21", $meta,
-                                    $finalText{TestTopic21},
+        ( $meta, $text ) = $this->{twiki}->{store}->readTopic(undef,$web,"TestTopic21");
+        $this->{twiki}->{store}->saveTopic( $user, $web, "TestTopic21",
+                                    $finalText{TestTopic21}, $meta,
                                     { forcenewrevision=>1 });
 
         # wait a wee bit more for the clock to tick over again
@@ -295,9 +299,9 @@ sub set_up {
 
         # TestTopic1 should now have two change records in the period, so
         # should be going from rev 1 to rev 3
-        ( $meta, $text ) = TWiki::Func::readTopic($web,"TestTopic1");
-        TWiki::Func::saveTopic( $web, "TestTopic1", $meta,
-                                    $finalText{TestTopic1},
+        ( $meta, $text ) = $this->{twiki}->{store}->readTopic(undef,$web,"TestTopic1");
+        $this->{twiki}->{store}->saveTopic( $user, $web, "TestTopic1",
+                                    $finalText{TestTopic1}, $meta,
                                     { forcenewrevision=>1 });
     }
     # OK, we should have a bunch of changes
@@ -442,7 +446,8 @@ HERE
 
     my $meta = new TWiki::Meta($this->{twiki},$this->{test_web},"WebNotify");
     $meta->put( "TOPICPARENT", { name => "$this->{test_web}.WebHome" } );
-    TWiki::Func::saveTopic( $this->{test_web}, "WebNotify", $meta,
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $this->{test_web}, "WebNotify",
         "Before\n${s}After",
         $meta);
     TWiki::Contrib::MailerContrib::mailNotify( [ $this->{test_web} ], $this->{twiki}, 0 );
