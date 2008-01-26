@@ -7,7 +7,11 @@
 
 
 %INCLUDE{"%TOPIC%" section="paragraphWithImageLeftStyle"}%
-%TABLEDATA{ rows="2.." sortdirection="descending" sortcolumn="1"  format="$percntINCLUDE{$quot%TOPIC%$quot section=$quotparagraphWithImageLeft$quot imagePath=$quot$percntATTACHURLPATH$percnt/$C2$quot text=$quot$C3$quot}$percnt" }%
+%TABLEDATA{
+rows="2.."
+sortdirection="descending"
+sortcolumn="1"
+format="$percntINCLUDE{$quot%TOPIC%$quot section=$quotparagraphWithImageLeft$quot imagePath=$quot$percntATTACHURLPATH$percnt/$C2$quot text=$quot$C3$quot}$percnt" }%
 
 <!-- HIDE AND DISABLE ON THIS PAGE --><pre style="display:none;">
 

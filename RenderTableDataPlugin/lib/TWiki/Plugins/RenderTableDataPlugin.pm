@@ -27,7 +27,8 @@ use strict;
 # $VERSION is referred to by TWiki, and is the only global variable that
 # *must* exist in this package
 use vars qw( $VERSION $RELEASE $debug $pluginName
-  $format $shouldRenderTableData @isoMonth %mon2num %columnType  );
+  $format $shouldRenderTableData @isoMonth %mon2num %columnType
+  %regex );
 
 # This should always be $Rev: 11069$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -37,7 +38,7 @@ $VERSION = '$Rev: 11069$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.0.6';
+$RELEASE = '1.1';
 
 # Name of this Plugin, only used in this module
 $pluginName = 'RenderTableDataPlugin';
@@ -55,6 +56,8 @@ BEGIN {
         'TEXT',   'text',   'DATE',      'date',
         'NUMBER', 'number', 'UNDEFINED', 'undefined'
     );
+    %regex = ();
+    $regex{table_plugin} = '%TABLE(?:{(.*?)})?%';
 }
 
 sub initPlugin {
@@ -109,11 +112,14 @@ sub _parseTableRows {
     my $format         = $params->{'format'}         || '';
     my $topic          = $params->{'topic'}          || $inTopic;
     my $web            = $params->{'web'}            || $inWeb;
+    my $tableId        = $params->{'id'}             || undef;
     my $preserveSpaces = $params->{'preservespaces'} || 'off';
+    my $escapeQuotes   = $params->{'escapequotes'}   || 'on';
     my $sortCol        = $params->{'sortcolumn'}     || undef;
     my $sortDirection  = $params->{'sortdirection'}  || 'ascending';
     my $beforeText     = $params->{'beforetext'}     || '';
     my $afterText      = $params->{'aftertext'}      || '';
+    my $separator      = $params->{'separator'}      || '';
 
     my $rowStart   = 1;
     my $rowEnd     = undef;
@@ -124,7 +130,8 @@ sub _parseTableRows {
             $rowStart = $1;
         }
         if ($2) {
-            $rowEnd = $3
+            $rowEnd =
+                $3
               ? $3
               : undef;
         }
@@ -141,7 +148,8 @@ sub _parseTableRows {
             $colStart = $1;
         }
         if ($2) {
-            $colEnd = $3
+            $colEnd =
+                $3
               ? $3
               : undef;
         }
@@ -159,7 +167,8 @@ sub _parseTableRows {
             $showSetStart = $1;
         }
         if ($2) {
-            $showSetEnd = $3
+            $showSetEnd =
+                $3
               ? $3
               : undef;
         }
@@ -168,18 +177,24 @@ sub _parseTableRows {
         }
     }
     $showSetStart = $rowStart if !defined $showSetStart;
-    $showSetEnd = $rowEnd if !defined $showSetEnd;
-            
+    $showSetEnd   = $rowEnd   if !defined $showSetEnd;
+
     my $filter = $params->{'filter'} || $params->{'condition'} || '';
 
     my $text = TWiki::Func::readTopicText( $web, $topic );
 
-    my $result      = $beforeText;
+    my $result      = '';
+    my $tableResult = '';
     my $insidePRE   = 0;
     my $insideTABLE = 0;
     my $line        = "";
     my $rPos        = 1;
     my @tableMatrix = ();
+    my $atTableToParse =
+      defined $tableId
+      ? 0
+      : 1
+      ; # assume we will parse the first table unless we are looking for a specific table
 
     $text =~ s/\r//go;
     $text =~ s/\\\n//go;    # Join lines ending in "\"
@@ -195,7 +210,20 @@ sub _parseTableRows {
         m|</verbatim>|i && ( $insidePRE = 0 );
 
         if ( !$insidePRE ) {
-            if (/^\s*\|.*\|\s*$/) {
+
+            if (/$regex{table_plugin}/) {
+
+                # match with a TablePlugin line
+                my %tablePluginParams = TWiki::Func::extractParameters($1);
+                my $currentTableId = $tablePluginParams{'id'} || '';
+
+                if ( defined $tableId ) {
+                    $atTableToParse = 0 if ( $tableId ne $currentTableId );
+                    $atTableToParse = 1 if ( $tableId eq $currentTableId );
+                }
+                next;
+            }
+            if ( /^\s*\|.*\|\s*$/ && $atTableToParse ) {
 
                 # inside | table |
                 if ( !$insideTABLE ) {
@@ -221,15 +249,18 @@ sub _parseTableRows {
                 my @rowValues = split( /\|/o, $line, -1 );
                 for my $value (@rowValues) {
                     if ( $preserveSpaces ne 'on' ) {
-                        $value =~ s/^\s*//;       # trim spaces at start
-                        $value =~ s/\s*$//;       # trim spaces at end
+                        $value =~ s/^\s*//;    # trim spaces at start
+                        $value =~ s/\s*$//;    # trim spaces at end
+                    }
+                    if ( $escapeQuotes ne 'off' ) {
                         $value =~ s/\"/\\"/go;    # escape double quotes
                         $value =~ s/\'/\\'/go;    # escape single quotes
                     }
                     push @row, { text => $value, type => 'text' };
                 }
-                $colEnd = @row if !defined $colEnd; # 1-based indexing
-                push @tableMatrix, [@row];   # we must add the complete row to be able to sort later on
+                $colEnd = @row if !defined $colEnd;    # 1-based indexing
+                push @tableMatrix, [@row]
+                  ;   # we must add the complete row to be able to sort later on
                 $rPos++;
             }
             else {
@@ -238,19 +269,21 @@ sub _parseTableRows {
                 if ($insideTABLE) {
                     $insideTABLE           = 0;
                     $shouldRenderTableData = 1;
+                    $atTableToParse        = 1
+                      ; # assume we will parse next table unless we will find out otherwise
                 }
             }
         }
 
-        if ($shouldRenderTableData && $colEnd) {
+        if ( $shouldRenderTableData && $colEnd ) {
 
             if ( defined $sortCol ) {
                 my $type =
-                  _guessColumnType( $sortCol-1, $rowStart, @tableMatrix );
+                  _guessColumnType( $sortCol - 1, $rowStart, @tableMatrix );
                 if ( $type eq $columnType{'TEXT'} ) {
                     @tableMatrix = map { $_->[0] }
                       sort { $a->[1] cmp $b->[1] }
-                      map { [ $_, _stripHtml( $_->[$sortCol-1]->{text} ) ] }
+                      map { [ $_, _stripHtml( $_->[ $sortCol - 1 ]->{text} ) ] }
                       @tableMatrix;
                 }
                 elsif ( $type eq $columnType{'UNDEFINED'} ) {
@@ -259,29 +292,31 @@ sub _parseTableRows {
                 }
                 else {
                     @tableMatrix = sort {
-                        $a->[$sortCol-1]->{$type} <=> $b->[$sortCol-1]->{$type}
+                        $a->[ $sortCol - 1 ]->{$type} <=> $b->[ $sortCol - 1 ]
+                          ->{$type}
                     } @tableMatrix;
                 }
             }
             if ( $sortDirection eq 'descending' ) {
                 @tableMatrix = reverse @tableMatrix;
             }
-            
+
             my $resultSetStart = ( defined $showSetStart ) ? $showSetStart : 1;
-            my $resultSetEnd   = ( defined $showSetEnd ) ? $showSetEnd : @tableMatrix;
-            
+            my $resultSetEnd =
+              ( defined $showSetEnd ) ? $showSetEnd : @tableMatrix;
+
             if ( $resultSetStart < 0 ) {
-                $resultSetStart += @tableMatrix+1;
+                $resultSetStart += @tableMatrix + 1;
                 $resultSetEnd = @tableMatrix;
             }
             if ( $resultSetEnd < 0 ) {
-                $resultSetEnd += @tableMatrix+1;
+                $resultSetEnd += @tableMatrix + 1;
                 $resultSetStart = 1;
             }
 
             $resultSetStart -= 1;
-            $resultSetEnd -= 1;
-   
+            $resultSetEnd   -= 1;
+
             if ( $filter eq 'random' ) {
 
                 my $resultCount = ( $resultSetEnd - $resultSetStart ) + 1;
@@ -290,12 +325,12 @@ sub _parseTableRows {
                 $resultSetStart += $random;
                 $resultSetEnd = $resultSetStart;
             }
-            
+
             for my $rowPos ( $resultSetStart .. $resultSetEnd ) {
-                my $row       = $tableMatrix[$rowPos];
+                my $row = $tableMatrix[$rowPos];
                 next if !$row;
                 my $rowResult = $format;
-                for my $colPos ( $colStart-1 .. $colEnd-1 ) {
+                for my $colPos ( $colStart - 1 .. $colEnd - 1 ) {
                     my $cell = $row->[$colPos]->{text};
                     if ( $format eq '' ) {
 
@@ -307,31 +342,37 @@ sub _parseTableRows {
                     $rowResult =~
 s/\$C$cellNum(\(([0-9]*),*(.*?)\))*/_getCellContents($cell,$2,$3)/ges;
                 }
-                $result .= $rowResult;
+                $tableResult .= $rowResult . $separator;
             }
-            $result .= $afterText;
-            
-            $result = _decodeFormatTokens($result);
+
+            # remove last separator
+            $tableResult =~ s/$separator$//g;
+
+            $tableResult = $beforeText . $tableResult if $tableResult ne '';
+            $tableResult .= $afterText if $tableResult ne '';
+            $tableResult = _decodeFormatTokens($tableResult);
 
             # feedback variables
             $showSetStart = '' if !defined $showSetStart;
-            $showSetEnd = '' if !defined $showSetEnd;
+            $showSetEnd   = '' if !defined $showSetEnd;
             my $set = "$showSetStart..$showSetEnd";
-            $result =~ s/\$set/$set/go;
-            $result =~ s/\$set/$set/go;
+            $tableResult =~ s/\$set/$set/go;
+            $tableResult =~ s/\$set/$set/go;
 
 #TODO: format, topic, web, preserveSpaces, sortCol+1, sortDirection, beforeText, afterText, rows, cols, show
 
             TWiki::Func::writeDebug(
-                "- RenderTableDataPlugin::_parseTableRows - result A=$result")
-              if $debug;
-            return $result;
+"- RenderTableDataPlugin::_parseTableRows - result A=$tableResult"
+            ) if $debug;
+
+            return $result . $tableResult;
         }
     }
     TWiki::Func::writeDebug(
-        "- RenderTableDataPlugin::_parseTableRows - result B=$result")
+        "- RenderTableDataPlugin::_parseTableRows - result B=$tableResult")
       if $debug;
-    return $result;
+
+    return $result . $tableResult;
 }
 
 =pod
