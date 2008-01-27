@@ -119,11 +119,28 @@ HERE
 
     # Now I update the index. 
     $ind->updateIndex();
-
-# FIXME: This does not work. Why?
     $docs = $search->docsForQuery( "updatedpoint");
     $hit  = $docs->fetch_hit_hashref;
     $this->assert(!defined($hit), "Hit for deleted topic found. Should be undefined!");
+
+    # Now let's add an attachment
+    $this->{twiki}->{store}->saveAttachment($this->{users_web}, "NewOrChangedTopicUpdate2", "Simple_example.doc",
+					    $this->{twiki}->{user}, {file => "attachement_examples/Simple_example.doc"});
+    
+    $ind->updateIndex();
+    $docs = $search->docsForQuery( "dummy");
+    $hit  = $docs->fetch_hit_hashref;
+    $this->assert(defined($hit), "Attached doc not found");
+    $this->assert_str_equals($topic, "NewOrChangedTopicUpdate2", "Wrong topic for attach.");
+
+    # Now let't change the attachment
+    $this->{twiki}->{store}->saveAttachment($this->{users_web}, "NewOrChangedTopicUpdate2", "Simple_example.doc",
+					    $this->{twiki}->{user}, {file => "attachement_examples/Simple_example2.doc"});
+    $ind->updateIndex();
+    $docs = $search->docsForQuery( "additions");
+    $hit  = $docs->fetch_hit_hashref;
+    $this->assert(defined($hit), "Attached changed doc not found");
+    $this->assert_str_equals($topic, "NewOrChangedTopicUpdate2", "Wrong topic for changed attach.");
 }
 
 sub test_indexer {

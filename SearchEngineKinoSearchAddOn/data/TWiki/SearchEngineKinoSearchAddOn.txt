@@ -259,7 +259,7 @@ $TWiki::cfg{KinoSearchIndexDir} = '/home/httpd/twiki/kinosearch/index';
 |                                | CPAN:HTML::TreeBuilder |
 |                                | CPAN:Spreadsheet::ParseExcel |
 |                                | CPAN:CharsetDetector |
-                                 | CPAN:Encode |
+|                                 | CPAN:Encode |
 |  Other Dependencies: | pdftotext (part of xpdf-utils) |
 |                                 | antiword, abiword or !wvWare |
 |                                 | ppthtml  |

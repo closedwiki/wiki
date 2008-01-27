@@ -201,6 +201,7 @@ sub changedTopics {
 
     # process the web changes
     foreach $change (reverse @changes ) {
+
 	# Parse lines from .changes:
 	# <topic>	<user>		<change time>	<revision>
 	my ($topicName, $userName, $changeTime, $revision) = split( /\t/, $change);
