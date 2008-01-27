@@ -22,7 +22,7 @@ In order to print a list of which topics are under document control, have a look
 ---++ Usage
 
 A topic is under document control if the preference variable =WORKFLOW= is set
-in the topic page page. =WORKFLOW= must be set to the TWiki name of a topic that describes your specific workflow (the _workflow description topic_).
+in the topic page. =WORKFLOW= must be set to the TWiki name of a topic that describes your specific workflow (the _workflow description topic_).
 
 Note: you can hide the setting in a normal view using HTML comments, or better, you can put these settings into the local topic settings, accessible from the "more" screen.
 
@@ -70,7 +70,7 @@ If a form name is given in the last column, this form will be attached to the to
    * If no form is given, the existing form (if any) is left in place.
 A typical usage of the form would be to collect additional information as the topic walks through the work flow, or to make information in the form unchangeable (by setting it to a =label= field) once a given state is reached.
 
-An example of a workflow that also controls the form information can be found in WorkflowPluginDemo.ControlledDocument (only available if the plugin is installed).
+An example of a workflow that also controls the form information can be found in Sandbox.ControlledDocument (only available if the plugin is installed).
 
 You can also define other TWiki variables starting with =WORKFLOW= in the workflow description topic. These will be expanded to their defined values in any topic that uses the workflow. For example:
 	* Set WORKFLOWNOTICE = This topic is under document control.
