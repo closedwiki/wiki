@@ -168,7 +168,7 @@ sub search {
 	    next;
 	}
 
-	my $htmlString = $self->renderHtmlStringFor($hit, $repeatText, $nosummary);
+	my $htmlString = $self->renderHtmlStringFor($hit, $repeatText, $nosummary, $showlock);
 	print $htmlString;
 	
 	# one more in the bag
@@ -297,7 +297,7 @@ sub docsForQuery {
 
 # I return the HTML string to render the given hit.
 sub renderHtmlStringFor {
-    my ($self, $hit, $repeatText, $nosummary) = (@_);
+    my ($self, $hit, $repeatText, $nosummary, $showlock) = (@_);
 
     my $mainWebname = TWiki::Func::getMainWebname();
 
