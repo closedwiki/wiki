@@ -443,7 +443,7 @@ sub UserIsAllowed {
 
     # Always allow members of the admin group to edit
     if ( $TWiki::Plugins::VERSION >= 1.2 ) {
-        if ( $TWiki::Plugins::SESSION->{users}->isAdmin( $User ) ) {
+        if ( TWiki::Func::IsAnAdmin( $User ) ) {
             return 1;
         }
     } else {
