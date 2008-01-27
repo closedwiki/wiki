@@ -442,8 +442,14 @@ sub UserIsAllowed {
     my ($User, $allow) = @_;
 
     # Always allow members of the admin group to edit
-    if ( $User->isAdmin() ) {
-      return 1;
+    if ( $TWiki::Plugins::VERSION >= 1.2 ) {
+        if ( $TWiki::Plugins::SESSION->{users}->isAdmin( $User ) ) {
+            return 1;
+        }
+    } else {
+        if ( $User->isAdmin() ) {
+            return 1;
+        }
     }
 
     if ( defined( $allow ) && $allow ) {
