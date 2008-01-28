@@ -49,7 +49,7 @@ $VERSION = '$Rev: 0$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '28 Jan 2008';
 
 $SHORTDESCRIPTION = 'Supports work flows associated with topics';
 
@@ -443,7 +443,7 @@ sub UserIsAllowed {
 
     # Always allow members of the admin group to edit
     if ( $TWiki::Plugins::VERSION >= 1.2 ) {
-        if ( TWiki::Func::IsAnAdmin( $User ) ) {
+        if ( TWiki::Func::isAnAdmin( $User ) ) {
             return 1;
         }
     } else {
