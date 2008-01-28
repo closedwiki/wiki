@@ -2,7 +2,7 @@ data/TWiki/WorkflowPlugin.txt 0640 Plugin doc page
 lib/TWiki/Plugins/WorkflowPlugin.pm 0640 Plugin Perl module
 pub/TWiki/WorkflowPlugin/Flow.gif 0640 Example image
 pub/TWiki/WorkflowPlugin/Flow.draw 0640 Example image
-pub/TWiki/WorkflowPlugin/convert.pl 0640 Conversion script
+pub/TWiki/WorkflowPlugin/convert.pl.txt 0640 Conversion script
 data/Sandbox/DefectWorkflow.txt 0640 Example workflow
 data/Sandbox/DefectOne.txt 0640 Example defect
 data/Sandbox/DefectTwo.txt 0640 Example defect

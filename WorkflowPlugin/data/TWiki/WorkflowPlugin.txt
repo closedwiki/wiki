@@ -118,7 +118,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>W
 
 %$INSTALL_INSTRUCTIONS%
 
-__Note:__ The script =[[%ATTACHURL/convert.pl][convert.pl]]= supplied will convert topics written for the !ApprovalPlugin to the WorkflowPlugin. The script takes a topic at the standard input and outputs the converted topic on standard output.
+__Note:__ The script =[[%ATTACHURL/convert.pl.txt][convert.pl.txt]]= supplied will convert topics written for the !ApprovalPlugin to the WorkflowPlugin. The script takes a topic at the standard input and outputs the converted topic on standard output. Rename the file from =convert.pl.txt= to =convert.pl=.
 
 Look at the examples in the !Sandbox web.
 
@@ -129,7 +129,7 @@ __Note:__ For strict access control, the plugin should know who is looking at th
 |  Plugin Author: | TWiki:Main/ThomasHartkens, Dakar port and changes from 24 Jul 2006 by TWiki:Main/ThomasWeigert |
 |  Plugin Version: | 28 Jan 2008 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  28 Jan 2008: | Kenneth Lavrsen: Fixed his typo in code |
+|  28 Jan 2008: | Kenneth Lavrsen: Fixed his typo in code. Renamed the convert.pl to convert.pl.txt as most TWiki's including twiki.org does not allow .pl as extension and this creates problems when you want to update attachments |
 |  27 Jan 2008: | Markus Ueberall: Fixed for compatibility with TWiki 4.2.0 |
 |  10 Dec 2006: | Add =<nop>%WORKFLOWSTATE%=. |
 |  25 Sep 2006: | Restored ability to put workflow related tags into templates. Support the visual customization of the generated controls. |
@@ -154,6 +154,6 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
 
-%META:FILEATTACHMENT{name="convert.pl" attr="h" autoattached="1" comment="" date="1159057355" path="convert.pl" size="355" user="Main.TWikiGuest" version="1"}%
+%META:FILEATTACHMENT{name="convert.pl.txt" attr="h" autoattached="1" comment="" date="1159057355" path="convert.pl.txt" size="355" user="Main.TWikiGuest" version="1"}%
 %META:FILEATTACHMENT{name="Flow.draw" attr="h" autoattached="1" comment="" date="1159056685" path="Flow.draw" size="5504" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="Flow.gif" attr="h" autoattached="1" comment="" date="1159056685" path="Flow.gif" size="3252" user="UnknownUser" version=""}%
