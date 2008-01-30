@@ -28,7 +28,7 @@ use Net::LDAP::Control::Paged;
 use vars qw($VERSION $RELEASE %sharedLdapContrib);
 
 $VERSION = '$Rev: 15691 (17 Dec 2007) $';
-$RELEASE = 'v2.99.1';
+$RELEASE = 'v2.99.2';
 
 =begin text
 

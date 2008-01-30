@@ -20,7 +20,6 @@ package TWiki::Users::LdapUserMapping;
 use strict;
 use TWiki::Users::TWikiUserMapping;
 use TWiki::Contrib::LdapContrib;
-use TWiki::ListIterator;
 use TWiki::Plugins;
 
 use vars qw($isLoadedMapping);
@@ -244,9 +243,9 @@ sub lookupLoginName {
   # fallback
   #$this->{ldap}->writeDebug("asking SUPER");
   if ($TWiki::Plugins::VERSION < 1.2) {
-    $wikiName =  $this->SUPER::lookupLoginName(@_)
+    $wikiName =  $this->SUPER::lookupLoginName($thisName)
   } else {
-    $wikiName = $this->SUPER::getWikiName(@_);
+    $wikiName = $this->SUPER::getWikiName($thisName);
   }
   
   return undef unless $wikiName;
@@ -273,7 +272,7 @@ sub lookupWikiName {
   # no login names for groups
   return $wikiName if $this->isGroup($wikiName);
 
-  #$this->{ldap}->writeDebug("called lookupWikiName($wikiName)");
+  $this->{ldap}->writeDebug("called lookupWikiName($wikiName)");
 
   my $loginName;
   unless ($this->{ldap}{excludeMap}{$wikiName}) {
@@ -292,9 +291,9 @@ sub lookupWikiName {
   # fallback
   #$this->{ldap}->writeDebug("asking SUPER");
   if ($TWiki::Plugins::VERSION < 1.2) {
-    $loginName = $this->SUPER::lookupWikiName(@_)
+    $loginName = $this->SUPER::lookupWikiName($wikiName)
   } else {
-    $loginName = $this->SUPER::getLoginName(@_);
+    $loginName = $this->SUPER::getLoginName($wikiName);
   }
 
   return undef if $loginName eq '_unknown_';
@@ -435,6 +434,8 @@ returns a list iterator for all known users
 sub eachUser {
   my $this = shift;
 
+  require TWiki::ListIterator;
+
   my @allLoginNames = $this->{ldap}->getAllLoginNames();
   my $ldapIter = new TWiki::ListIterator(@allLoginNames);
 
@@ -456,6 +457,8 @@ returns a list iterator for all known groups
 
 sub eachGroup {
   my ($this) = @_;
+
+  require TWiki::ListIterator;
 
   my @groups = $this->getListOfGroups();
 
@@ -487,6 +490,8 @@ sub eachGroupMember {
     }
   }
 
+  require TWiki::ListIterator;
+
   return new TWiki::ListIterator($members);
 }
 
@@ -502,6 +507,8 @@ sub eachMembership {
   my ($this, $user) = @_;
 
   my @groups = $this->getListOfGroups();
+
+  require TWiki::ListIterator;
 
   my $it = new TWiki::ListIterator( \@groups );
   $it->{filter} = sub {
