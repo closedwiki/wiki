@@ -55,9 +55,13 @@ a.blogPostAddOnViewOptionsSubscribeLink:visited {
 	margin:0 0 .1em 0;
 	border:none;
 }
-.blogPostAddOnItem h3 a:link,
-.blogPostAddOnItem h3 a:visited {
+#patternMainContents .blogPostAddOnItem h3 a:link,
+#patternMainContents .blogPostAddOnItem h3 a:visited {
 	text-decoration:none;
+	color:#06c;
+}
+#patternMainContents .blogPostAddOnItem h3 a:hover {
+	color:#fff;
 }
 .blogPostAddOnSummary {
 	margin:.5em 0 0 0;

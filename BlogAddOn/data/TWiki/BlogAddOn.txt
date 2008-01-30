@@ -38,7 +38,7 @@ When installed, see !_BlogAddOn.BlogAddOnHome for additional details.
 | Copyright &copy;: | 2006-2008 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
-| Plugin&nbsp;Version: | 1.1, 26 Jan 2008 |
+| Plugin&nbsp;Version: | 1.1.1, 30 Jan 2008 |
 | Change&nbsp;History: | <!-- specify latest version first -->&nbsp; |
 | 26 Jan 2008 | 1.1 Adds the creation date to blog post topic names. Adds an Edit link to the Comments header in a blog post. Increases the height of the comment box. Bug fix: allow topic names with periods. |
 | 26 Jun 2007 | 1.0.9 Fixed html bug in !BlogPost; added comment count to !BlogPost; improved styling of form elements. |
