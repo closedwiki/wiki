@@ -38,7 +38,7 @@ This block is included on every user page when PersonalInfoUserViewTemplate is s
    %META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" type="Local" value="PersonalInfoUserView"}%
 </verbatim>
    Make sure the topic ends with a newline.
-      * or by editing topics using a web interface: set the preference =* SET VIEW_TEMPLATE = <nop>PersonalInfoUserView=
+      * or by editing topics using a web interface: set the preference =* Local VIEW_TEMPLATE = <nop>PersonalInfoUserView=
    1 To have this set automatically for new users, change the last line in <nop>%TWIKIWEB%.NewUserTemplate to %BR%
    <verbatim>
    %META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" type="Local" value="PersonalInfoUserView"}%
