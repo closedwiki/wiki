@@ -79,8 +79,8 @@ sub new {
         $TWiki::cfg{Register}{EnableNewUserRegistration} = 0;
     }
 
-	#SMELL: and this is a second user object
-	#TODO: combine with the one in TWiki::Users
+    #SMELL: and this is a second user object
+    #TODO: combine with the one in TWiki::Users
     #$this->{U2L} = {};
     $this->{L2U} = {};
     $this->{U2W} = {};
@@ -133,8 +133,8 @@ to use for a given user (must be fast).
 =cut
 
 sub handlesUser {
-	my ($this, $cUID, $login, $wikiname) = @_;
-	
+    my ($this, $cUID, $login, $wikiname) = @_;
+
     if (defined $cUID && !length($this->{mapping_id})) {
         # TWikiUserMapping is special - for backwards compatibility, it assumes
         # responsibility for _all_ non BaseMapping users
@@ -145,9 +145,9 @@ sub handlesUser {
         # Used when (if) TWikiUserMapping is subclassed
         return 1 if ( defined $cUID && $cUID =~ /^($this->{mapping_id})/ );
     }
-	return 1 if ($login && $this->getLoginName( $login ));
-#	return 1 if ($wikiname && $this->findUserByWikiName( $wikiname ));
-	return 0;
+
+    return 1 if ($login && $this->getLoginName( $login ));
+    return 0;
 }
 
 
@@ -190,10 +190,10 @@ converts an internal cUID to that user's login
 sub getLoginName {
     my( $this, $user ) = @_;
     ASSERT($user) if DEBUG;
-	
-	#can't call userExists - its recursive
-	#return unless (userExists($this, $user));
-	
+
+    #can't call userExists - its recursive
+    #return unless (userExists($this, $user));
+
     # Remove the mapping id in case this is a subclass
     $user =~ s/$this->{mapping_id}// if $this->{mapping_id};
 
@@ -287,7 +287,7 @@ sub addUser {
         }
 
         unless( $this->{passwords}->setPassword( $login, $password )) {
-        	#print STDERR "\n Failed to add user:  ".$this->{passwords}->error();
+            #print STDERR "\n Failed to add user:  ".$this->{passwords}->error();
             throw Error::Simple(
                 'Failed to add user: '.$this->{passwords}->error());
         }
@@ -327,7 +327,7 @@ sub addUser {
                 $name = $2;
                 $odate = $3;
             } elsif ( $line =~ /^\s+\*\s([A-Z]) - / ) {
-                #	* A - <a name="A">- - - -</a>^M
+                #* A - <a name="A">- - - -</a>^M
                 $name = $1;
             }
             if( $name && ( $wikiname le $name ) ) {
@@ -351,12 +351,11 @@ sub addUser {
         # brand new file - add to end
         $result .= "$entry$today\n";
     }
-    $store->saveTopic( 
-    			#TODO: why is this Admin and not the RegoAgent??
-    			$this->{session}->{users}->getCanonicalUserID($TWiki::cfg{AdminUserLogin}),
-                       $TWiki::cfg{UsersWebName},
-                       $TWiki::cfg{UsersTopicName},
-                       $result, $meta );
+    $store->saveTopic( #TODO: why is this Admin and not the RegoAgent??
+        $this->{session}->{users}->getCanonicalUserID($TWiki::cfg{AdminUserLogin}),
+        $TWiki::cfg{UsersWebName},
+        $TWiki::cfg{UsersTopicName},
+        $result, $meta );
 
     #can't call setEmails here - user may be in the process of being registered
     #TODO; when registration is moved into the mapping, setEmails will happend after the createUserTOpic
@@ -378,7 +377,7 @@ topics, which may still be linked.
 
 sub removeUser {
     my( $this, $user ) = @_;
-	$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
+    $this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
     my $ln = $this->getLoginName( $user );
     $this->{passwords}->removeUser($ln);
     # SMELL: currently a nop, needs someone to implement it
@@ -397,14 +396,13 @@ If there is no matching WikiName or LoginName, it returns undef.
 
 sub getWikiName {
     my ($this, $cUID) = @_;
-	ASSERT($cUID) if DEBUG;
-	ASSERT($cUID =~ /^$this->{mapping_id}/) if DEBUG;
-	
-	my $wikiname;
-#    $cUID =~ s/^$this->{mapping_id}//;
+    ASSERT($cUID) if DEBUG;
+    ASSERT($cUID =~ /^$this->{mapping_id}/) if DEBUG;
+
+    my $wikiname;
     if( $TWiki::cfg{Register}{AllowLoginName} ) {
         _loadMapping( $this );
-        $wikiname = $this->{U2W}->{$cUID}
+        $wikiname = $this->{U2W}->{$cUID};
     } else {
         # If the mapping isn't enabled there's no point in loading it
     }
@@ -418,7 +416,7 @@ sub getWikiName {
         }
     }
 
-#print STDERR "--------------------------------------cUID : $cUID => $wikiname\n";	
+    #print STDERR "--------------------------------------cUID : $cUID => $wikiname\n";
     return $wikiname;
  
 }
@@ -435,7 +433,7 @@ or not is determined by the password manager.
 sub userExists {
     my( $this, $cUID ) = @_;
     ASSERT($cUID) if DEBUG;
-	$this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
+    $this->ASSERT_IS_CANONICAL_USER_ID($cUID) if DEBUG;
 
     # Do this to avoid a password manager lookup
     return 1 if $cUID eq $this->{session}->{user};
@@ -619,8 +617,9 @@ True if the user is an admin
 sub isAdmin {
     my( $this, $user ) = @_;
     my $isAdmin = 0;
-	$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
-#TODO: this might not apply now that we have BaseUserMapping - test
+    $this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
+
+    #TODO: this might not apply now that we have BaseUserMapping - test
     if ($user eq $TWiki::cfg{SuperAdminGroup}) {
         $isAdmin = 1;
     } else {
@@ -716,7 +715,7 @@ Duplicates are removed from the list.
 
 sub getEmails {
     my( $this, $user ) = @_;
-	$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
+    $this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
 
     my %emails;
     if ( $this->isGroup($user) ) {
@@ -756,7 +755,7 @@ user mapping manager is tried.
 sub setEmails {
     my $this = shift;
     my $user = shift;
-	$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
+    $this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
 
     if( $this->{passwords}->isManagingEmails()) {
         $this->{passwords}->setEmails( $this->getLoginName( $user ), @_ );
@@ -899,9 +898,8 @@ Returns 1 on success, undef on failure.
 
 sub checkPassword {
     my( $this, $userName, $pw ) = @_;
-	$this->ASSERT_IS_USER_LOGIN_ID($userName) if DEBUG;
-    return $this->{passwords}->checkPassword(
-        $userName, $pw);
+    $this->ASSERT_IS_USER_LOGIN_ID($userName) if DEBUG;
+    return $this->{passwords}->checkPassword( $userName, $pw );
 }
 
 =begin twiki
@@ -922,7 +920,7 @@ Otherwise returns 1 on success, undef on failure.
 
 sub setPassword {
     my( $this, $user, $newPassU, $oldPassU ) = @_;
-	$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
+    $this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
     return $this->{passwords}->setPassword(
         $this->getLoginName( $user ), $newPassU, $oldPassU);
 }
@@ -1032,7 +1030,7 @@ sub _getListOfGroups {
               noheader      => 'on',
               nototal       => 'on',
               noempty       => 'on',
-              format	     => '$topic',
+              format        => '$topic',
               separator     => '',
              );
     }
@@ -1112,7 +1110,7 @@ sub _expandUserList {
                 push( @l, $it->next() );
             }
         } else {
-	        my @list = @{$this->{session}->{users}->findUserByWikiName( $ident, 1 )};
+            my @list = @{$this->{session}->{users}->findUserByWikiName( $ident, 1 )};
             push( @l, @list );
         }
     }
