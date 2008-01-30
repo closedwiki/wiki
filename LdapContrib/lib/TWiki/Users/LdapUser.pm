@@ -76,7 +76,8 @@ return the last error during LDAP operations
 
 sub error {
   my $this = shift;
-  return $this->{ldap}->getError();
+  $this->{error} = $this->{ldap}->getError();
+  return return $this->{error};
 }
 
 =pod 
@@ -133,6 +134,20 @@ sub checkPassword {
 
   return 0;
 }
+
+=pod
+
+---++ isManagingEmails() -> $boolean
+
+we aare managing emails, but don't allow setting emails. alas the
+core does not distinguish this case, e.g. by using readOnly()
+
+=cut
+
+sub isManagingEmails {
+  return 1;
+}
+
 
 =pod 
 
@@ -220,7 +235,7 @@ sub passwd {
   if ($this->{ldap}->{allowChangePassword} && defined($oldPassword) && $oldPassword ne '1') {
     if ($this->{ldap}->getDnOfLogin($user)) {
       return 1 if $this->{ldap}->changePassword($user, $newPassword, $oldPassword);
-      $this->{error} = $this->{ldap}->getError();
+      $this->error();
       return undef;
     }
   }
@@ -259,6 +274,36 @@ sub encrypt {
 
 =pod
 
+---++++ setPassword( $login, $newPassU, $oldPassU ) -> $boolean
+
+If the $oldPassU matches matches the user's password, then it will
+replace it with $newPassU.
+
+If $oldPassU is not correct and not 1, will return 0.
+
+If $oldPassU is 1, will force the change irrespective of
+the existing password, adding the user if necessary.
+
+Otherwise returns 1 on success, undef on failure.
+
+=cut
+
+sub setPassword {
+  my ($this, $login, $newUserPassword, $oldUserPassword) = @_;
+
+  my $isOk = $this->{ldap}->changePassword($login, $newUserPassword, $oldUserPassword);
+
+  if ($isOk) {
+    $this->{error} = undef;
+    return 1;
+  } else {
+    $this->error();
+    return undef;
+  }
+}
+
+=pod
+
 ---++++ setEmails($user, @emails)
 
 Set the email address(es) for the given username.
@@ -290,15 +335,15 @@ LDAP manager with the secondary password manager
 sub findUserByEmail {
   my $this = shift;
 
-  my $users = $this->SUPER::findUserByEmail(@_);
-  return $users unless $this->{secondaryPasswordManager};
+  return undef unless $this->{secondaryPasswordManager};
 
   # add those from the secondary
-  push @$users, $this->{secondaryPasswordManager}->findUserByEmail(@_);
+  my @users;
+  push @users, $this->{secondaryPasswordManager}->findUserByEmail(@_);
 
   # remove duplicates
-  my %users = map {$_ => 1} @$users;
-  my @users = keys %users;
+  my %users = map {$_ => 1} @users;
+  @users = keys %users;
   return \@users;
 }
 

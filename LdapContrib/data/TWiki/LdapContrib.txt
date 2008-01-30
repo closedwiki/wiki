@@ -402,8 +402,9 @@ Prevent certain names from being looked up in LDAP:
    This work was partly funded by [[http://www.spanlink.com][Spanlink Communications]] and \
    [[http://www.trivadis.com][Trivadis]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v2.1.1 |
+|  Version: | v2.99.1 |
 |  Change History: | |
+|  30 Jan 2008: | first beta towards TWiki-4.2 |
 |  07 Jan 2008: | fixed initializing the cache |
 |  21 Dec 2007: | added <nop>LdapApacheLogin, \
                   made updating the cache quasi atomic |
@@ -458,7 +459,7 @@ Prevent certain names from being looked up in LDAP:
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 
--- TWiki:Main/MichaelDaum - 07 Jan 2008
+-- TWiki:Main/MichaelDaum - 30 Jan 2008
 
 %META:FILEATTACHMENT{name="TWikiDotPm-4.1.2.patch" attr="" autoattached="0" comment="" date="1191603621" path="TWikiDotPm-4.1.2.patch" size="1538" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="wikiringlogo40x40.png" attr="h" autoattached="0" comment="" date="1190996093" path="wikiringlogo40x40.png" size="2571" user="TWikiContributor" version="1"}%

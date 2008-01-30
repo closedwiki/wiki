@@ -28,7 +28,7 @@ use Net::LDAP::Control::Paged;
 use vars qw($VERSION $RELEASE %sharedLdapContrib);
 
 $VERSION = '$Rev: 15691 (17 Dec 2007) $';
-$RELEASE = 'v2.1.1';
+$RELEASE = 'v2.99.1';
 
 =begin text
 
@@ -555,9 +555,9 @@ sub initCache {
   $cacheAge = $now - $lastUpdate if $lastUpdate;
 
   # don't refresh within 60 seconds
-  if ($cacheAge < 60) {
+  if ($cacheAge < 10) {
     $refresh = 0;
-    $this->writeDebug("suppressing cache refresh within 60 seconds");
+    $this->writeDebug("suppressing cache refresh within 10 seconds");
   }
 
   #$this->writeDebug("cacheAge=$cacheAge, lastUpdate=$lastUpdate");
@@ -658,6 +658,7 @@ sub refreshUsersCache {
   # read pages
   my $nrRecords = 0;
   my %wikiNames = ();
+  my %loginNames = ();
   my $gotError = 0;
   while (1) {
 
@@ -673,7 +674,7 @@ sub refreshUsersCache {
 
     # process each entry on a page
     while (my $entry = $mesg->pop_entry()) {
-      $this->cacheUserFromEntry($entry, $data, \%wikiNames) && $nrRecords++;
+      $this->cacheUserFromEntry($entry, $data, \%wikiNames, \%loginNames) && $nrRecords++;
     } 
 
     # get cookie from paged control to remember the offset
@@ -700,8 +701,9 @@ sub refreshUsersCache {
   # check for error
   return undef if $gotError;
 
-  # remember list of all groups
-  $data->{USERS} = join(',', keys %wikiNames);
+  # remember list of all user names
+  $data->{WIKINAMES} = join(',', keys %wikiNames);
+  $data->{LOGINNAMES} = join(',', keys %loginNames);
 
   $this->writeDebug("got $nrRecords keys in cache");
 
@@ -781,7 +783,7 @@ sub refreshGroupsCache {
 
 =pod
 
----++++ cacheUserFromEntry($entry, $data, $seen) -> $boolean
+---++++ cacheUserFromEntry($entry, $data, $wikiNames, $loginNames) -> $boolean
 
 store a user LDAP::Entry to our internal cache 
 
@@ -790,12 +792,13 @@ returns true if new records have been created
 =cut
 
 sub cacheUserFromEntry {
-  my ($this, $entry, $data, $seen) = @_;
+  my ($this, $entry, $data, $wikiNames, $loginNames) = @_;
 
   #$this->writeDebug("called cacheUserFromEntry()");
 
   $data ||= $this->{data};
-  $seen ||= {};
+  $wikiNames ||= {};
+  $loginNames ||= {};
 
   my $dn = $entry->dn();
   my $loginName = $entry->get_value($this->{loginAttribute});
@@ -830,11 +833,16 @@ sub cacheUserFromEntry {
     }
   }
   $wikiName ||= $loginName;
-  if (defined($seen->{$wikiName})) {
-    $this->writeDebug("WARNING: $dn clashes with $seen->{$wikiName} on $wikiName");
+  if (defined($wikiNames->{$wikiName})) {
+    $this->writeDebug("WARNING: $dn clashes with wikiName $wikiNames->{$wikiName} on $wikiName");
     return 0;
   }
-  $seen->{$wikiName} = $dn;
+  $wikiNames->{$wikiName} = $dn;
+  if (defined($loginNames->{$loginName})) {
+    $this->writeDebug("WARNING: $dn clashes with loginName $loginName->{$loginName} on $loginName");
+    return 0;
+  }
+  $loginNames->{$loginName} = $dn;
 
   # get email addrs
   my $emails;
@@ -853,7 +861,7 @@ sub cacheUserFromEntry {
 
 =pod
 
----++++ cacheGroupFromEntry($entry, $data, $seen) -> $boolean
+---++++ cacheGroupFromEntry($entry, $data, $groupNames) -> $boolean
 
 store a group LDAP::Entry to our internal cache 
 
@@ -862,10 +870,10 @@ returns true if new records have been created
 =cut
 
 sub cacheGroupFromEntry {
-  my ($this, $entry, $data, $seen) = @_;
+  my ($this, $entry, $data, $groupNames) = @_;
 
   $data ||= $this->{data};
-  $seen ||= {};
+  $groupNames ||= {};
 
   my $dn = $entry->dn();
 
@@ -882,8 +890,8 @@ sub cacheGroupFromEntry {
     $groupName = $this->normalizeWikiName($groupName);
   }
 
-  if (defined($seen->{$groupName})) {
-    $this->writeDebug("WARNING: $dn clashes with $seen->{$groupName} on $groupName");
+  if (defined($groupNames->{$groupName})) {
+    $this->writeDebug("WARNING: $dn clashes with $groupNames->{$groupName} on $groupName");
     return 0;
   }
 
@@ -909,7 +917,7 @@ sub cacheGroupFromEntry {
   # store it
   $this->writeDebug("adding groupName='$groupName', dn=$dn");
   $data->{"GROUPS::$groupName"} = join(',', keys %members);
-  $seen->{$groupName} = 1;
+  $groupNames->{$groupName} = 1;
 
   return 1;
 }
@@ -1085,9 +1093,25 @@ returns a list of all known wikiNames
 sub getAllWikiNames {
   my $this = shift;
 
-  my $wikiNames = TWiki::Sandbox::untaintUnchecked($this->{data}{USERS});
+  my $wikiNames = TWiki::Sandbox::untaintUnchecked($this->{data}{WIKINAMES});
   my @wikiNames = split(/,/,$wikiNames);
   return \@wikiNames;
+}
+
+=pod 
+
+---++++ getAllLoginNames() -> \@array
+
+returns a list of all known loginNames
+
+=cut
+
+sub getAllLoginNames {
+  my $this = shift;
+
+  my $loginNames = TWiki::Sandbox::untaintUnchecked($this->{data}{LOGINNAMES});
+  my @loginNames = split(/,/,$loginNames);
+  return \@loginNames;
 }
 
 =pod 
@@ -1164,7 +1188,14 @@ sub checkCacheForLoginName {
   unless ($entry) {
     $this->writeDebug("oops, no result");
   } else {
-    $this->cacheUserFromEntry($entry);
+    # merge this user record
+
+    my %wikiNames = map {$_ => 1} @{$this->getAllWikiNames()};
+    my %loginNames = map {$_ => 1} @{$this->getAllLoginNames()};
+    $this->cacheUserFromEntry($entry, $this->{data}, \%wikiNames, \%loginNames);
+
+    $this->{data}{WIKINAMES} = join(',', keys %wikiNames);
+    $this->{data}{LOGINNAMES} = join(',', keys %loginNames);
   }
 
   return 0;

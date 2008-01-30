@@ -20,6 +20,8 @@ package TWiki::Users::LdapUserMapping;
 use strict;
 use TWiki::Users::TWikiUserMapping;
 use TWiki::Contrib::LdapContrib;
+use TWiki::ListIterator;
+use TWiki::Plugins;
 
 use vars qw($isLoadedMapping);
 
@@ -54,6 +56,24 @@ sub new {
   return $this;
 }
 
+
+=pod
+
+---++++ finish()
+
+Complete processing after the client's HTTP request has been responded
+to. I.e. it disconnects the LDAP database connection.
+
+=cut
+
+sub finish {
+  my $this = shift;
+    
+  $this->{ldap}->finish() if $this->{ldap};
+  $this->{ldap} = undef;
+  $this->SUPER::finish();
+}
+
 =pod
 
 ---++++ getListOfGroups( ) -> @listOfUserObjects
@@ -67,27 +87,46 @@ merged whereas LDAP groups have precedence in case of a name clash.
 sub getListOfGroups {
   my $this = shift;
 
-  $this->{ldap}->writeDebug("called getListOfGroups()");
-
-  return $this->SUPER::getListOfGroups() 
-    unless $this->{ldap}{mapGroups};
+  #$this->{ldap}->writeDebug("called getListOfGroups()");
 
   my %groups;
-  if ($this->{ldap}{twikiGroupsBackoff}) {
-    %groups = map { $_->wikiName() => $_ } $this->SUPER::getListOfGroups();
-  } else {
-    %groups = ();
-  }
-  my $groupNames = $this->{ldap}->getGroupNames();
-  if ($groupNames) {
-    foreach my $groupName (@$groupNames) {
-      $groups{$groupName} = $this->{session}->{users}->findUser($groupName, $groupName);
+  
+
+  if ($TWiki::Plugins::VERSION < 1.2) {
+    # pre TWiki 4.2
+    return $this->SUPER::getListOfGroups()
+      unless $this->{ldap}{mapGroups};
+
+    if ($this->{ldap}{twikiGroupsBackoff}) {
+      %groups = map { $_->wikiName() => $_ } $this->SUPER::getListOfGroups();
+    } else {
+      %groups = ();
     }
+    my $groupNames = $this->{ldap}->getGroupNames();
+    if ($groupNames) {
+      foreach my $groupName (@$groupNames) {
+        $groups{$groupName} = $this->{session}->{users}->findUser($groupName, $groupName);
+      }
+    }
+    return values %groups;
+
+  } else {
+    # TWiki 4.2
+
+    if ($this->{ldap}{twikiGroupsBackoff}) {
+      %groups = map { $_ => 1 } @{$this->SUPER::_getListOfGroups()};
+    } else {
+      %groups = ();
+    }
+    my $groupNames = $this->{ldap}->getGroupNames();
+    if ($groupNames) {
+      foreach my $groupName (@$groupNames) {
+        $groups{$groupName} = 1;
+      }
+    }
+    #$this->{ldap}->writeDebug("got " . (scalar keys %groups) . " overall groups=".join(',',keys %groups));
+    return keys %groups;
   }
-
-  #$this->{ldap}->writeDebug("got " . (scalar keys %groups) . " overall groups=".join(',',keys %groups));
-
-  return values %groups;
 }
 
 =pod 
@@ -108,7 +147,7 @@ sub groupMembers {
 
   my $groupName = $group->wikiName;
 
-  #$this->{ldap}->writeDebug("called groupMembers for $groupName");
+  $this->{ldap}->writeDebug("called groupMembers for $groupName");
 
   my $ldapMembers;
   $ldapMembers = $this->{ldap}->getGroupMembers($groupName)
@@ -204,7 +243,11 @@ sub lookupLoginName {
 
   # fallback
   #$this->{ldap}->writeDebug("asking SUPER");
-  $wikiName = $this->SUPER::lookupLoginName($thisName);
+  if ($TWiki::Plugins::VERSION < 1.2) {
+    $wikiName =  $this->SUPER::lookupLoginName(@_)
+  } else {
+    $wikiName = $this->SUPER::getWikiName(@_);
+  }
   
   return undef unless $wikiName;
 
@@ -248,7 +291,11 @@ sub lookupWikiName {
 
   # fallback
   #$this->{ldap}->writeDebug("asking SUPER");
-  $loginName = $this->SUPER::lookupWikiName($wikiName) || '_unknown_';
+  if ($TWiki::Plugins::VERSION < 1.2) {
+    $loginName = $this->SUPER::lookupWikiName(@_)
+  } else {
+    $loginName = $this->SUPER::getLoginName(@_);
+  }
 
   return undef if $loginName eq '_unknown_';
   return $loginName;
@@ -311,34 +358,157 @@ sub isGroup {
 
 =pod
 
----++++ getGroupMembers($name) -> \@members
+---++++ getCanonicalUserID ($login) -> cUID
 
-Returns a list of user ids that are in a given group, undef if the group does
-not exist.
+Convert a login name to the corresponding canonical user name.
+
+Caution: we don't distinguish cUIDs and login names.
 
 =cut
 
-sub getGroupMembers {
-  my ($this, $groupName) = @_;
+sub getCanonicalUserID {
+  my ($this, $login) = @_;
 
+  return $login;
 }
-
 
 =pod
 
----++++ finish()
+---++++ getLoginName ($user) -> login
 
-Complete processing after the client's HTTP request has been responded
-to. I.e. it disconnects the LDAP database connection.
+Converts an internal cUID to that user's login.
+
+Caution: we don't distinguish cUIDs and login names.
 
 =cut
 
-sub finish {
-  my $this = shift;
+sub getLoginName {
+  my ($this, $user) = @_;
+
+  return $this->lookupWikiName($user) || $user;
+}
+
+=pod
+
+---++++ getWikiName ($cUID) -> wikiname
+
+Maps a canonical user name to a wikiname
+
+=cut
+
+sub getWikiName {
+  my ($this, $cUID) = @_;
     
-  $this->{ldap}->finish() if $this->{ldap};
-  $this->{ldap} = undef;
-  $this->SUPER::finish();
+  return $this->lookupLoginName($cUID) || $cUID;
+}
+
+=pod
+
+---++++ userExists($cUID) -> $boolean
+
+Determines if the user already exists or not. 
+
+=cut
+
+sub userExists {
+  my ($this, $cUID) = @_;
+
+  my $wikiName = $this->{ldap}->getWikiNameOfLogin($cUID);
+
+  return 1 if $wikiName;
+
+  if ($this->{ldap}{twikiGroupsBackoff}) {
+    return $this->SUPER::userExists($cUID);
+  }
+
+  return 0;
+}
+
+=pod
+
+---++++ eachUser () -> listIterator of cUIDs
+
+returns a list iterator for all known users
+
+=cut
+
+sub eachUser {
+  my $this = shift;
+
+  my @allLoginNames = $this->{ldap}->getAllLoginNames();
+  my $ldapIter = new TWiki::ListIterator(@allLoginNames);
+
+  return $ldapIter unless $this->{ldap}{twikiGroupsBackoff};
+
+  my $backOffIter = $this->SUPER::eachUser(@_);
+  my @list = ($ldapIter, $backOffIter);
+
+  return new TWiki::AggregateIterator(\@list, 1);
+}
+
+=pod
+
+---++++ eachGroup () -> listIterator of groupnames
+
+returns a list iterator for all known groups
+
+=cut
+
+sub eachGroup {
+  my ($this) = @_;
+
+  my @groups = $this->getListOfGroups();
+
+  return new TWiki::ListIterator(\@groups );
+}
+
+=pod
+
+---++++ eachGroupMember ($groupName) ->  listIterator of cUIDs
+
+returns a list iterator for all groups members
+
+=cut
+
+sub eachGroupMember {
+  my ($this, $groupName) = @_;
+
+  return $this->SUPER::eachGroupMember($groupName) 
+    unless $this->{ldap}{mapGroups};
+
+  my $members = $this->{ldap}->getGroupMembers($groupName) || [];
+
+  unless (@$members) {
+    # fallback to twiki groups,
+    # try also to find the SuperAdminGroup
+    if ($this->{ldap}{twikiGroupsBackoff} 
+      || $groupName eq $TWiki::cfg{SuperAdminGroup}) {
+      return $this->SUPER::eachGroupMember($groupName);
+    }
+  }
+
+  return new TWiki::ListIterator($members);
+}
+
+=pod
+
+---++++ eachMembership ($cUID) -> listIterator of groups this user is in
+
+returns a list iterator for all groups a user is in.
+
+=cut
+
+sub eachMembership {
+  my ($this, $user) = @_;
+
+  my @groups = $this->getListOfGroups();
+
+  my $it = new TWiki::ListIterator( \@groups );
+  $it->{filter} = sub {
+    $this->isInGroup($user, $_[0]);
+  };
+
+  return $it;
 }
 
 1;
