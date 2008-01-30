@@ -1,4 +1,4 @@
-,!--
+<!--
    Do not edit this topic - it is generated from a subversion repository,
    and your edits will be lost (unless you check your changes in, of course)
 -->
@@ -30,8 +30,9 @@ controlled range of sites.
 Whenever anything is filtered, a report is written to the TWiki warning
 log.
 
-Note that some extensions depend on Javascript to work, and a number
-have not been coded with due consideration for security. If you find that
+The plugin filters all HTML it thinks is dodgy from the output. There is
+a chance that one or more of the extensions you are using works by embedding
+naughty HTML. If you find that
 !SafeWikiPlugin kills one or more of your other extensions, then you are
 advised to seek fixes from the authors of those extensions.
 
@@ -52,7 +53,7 @@ but =javascript: alert(window.open("http://evilsite.cn"))= is not.
 
 Inline scripts (SCRIPT tags without a =src= parameter) are always
 filtered out (removed). URIs used in certain parameters are compared
-against a list of filter-in regular expressions, one of which must match
+against a whitelist of filter-in regular expressions, one of which must match
 or the URI will be replaced with a disarming string.
 
 By default the following URI parameters are checked against the
@@ -70,6 +71,18 @@ The filter-in regular expressions and the disarming strings are all
 defined using the =configure= interface. See the setup for SafeWikiPlugin
 for more help.
 
+---++ Notes for extensions (Plugins etc) authors
+As mentioned above, there is a risk that use of !SafeWikiPlugin might
+prevent your extension from working. If that is the case, it will usually
+be because you have tried to embed something in the HTML that the
+!SafeWikiPlugin regards as "naughty" - for example, inline script,
+complex expressions in handlers etc.
+
+The way to overcome this is to recode your plugin so that all script tags
+are generated in the HEAD section (using TWiki::Func::addToHEAD). Handlers
+can still be used, but they cannot be any more complex than a simple call
+to a function.
+ 
 ---++ Installation Instructions
 
 %$INSTALL_INSTRUCTIONS%
