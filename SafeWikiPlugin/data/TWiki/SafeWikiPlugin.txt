@@ -1,7 +1,11 @@
+,!--
+   Do not edit this topic - it is generated from a subversion repository,
+   and your edits will be lost (unless you check your changes in, of course)
+-->
 ---+!! !SafeWikiPlugin
 <!--
 One line description, required for extensions repository catalog.
-   * Set SHORTDESCRIPTION = Secure your TWiki so it can't be attacked using cross-scripting
+   * Set SHORTDESCRIPTION = Secure your TWiki so it can't be attacked using cross-scripting (XSS)
 -->
 <img style="float:right" src="%ATTACHURL%/safewiki.png" />
 %SHORTDESCRIPTION%

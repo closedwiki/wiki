@@ -72,7 +72,7 @@ sub dummyFilter {
 
 sub filterURI {
     my $uri = shift;
-    return 0 unless $uri;
+    return '' unless $uri;
     unless (defined($URIFILTER)) {
         # the eval expands $TWiki::cfg vars
         $URIFILTER =
@@ -87,7 +87,7 @@ sub filterURI {
 
 sub filterHandler {
     my $code = shift;
-    return 0 unless $code;
+    return '' unless $code;
     unless (defined($CODEFILTER)) {
         # the eval expands $TWiki::cfg vars
         $CODEFILTER =
