@@ -99,7 +99,6 @@ Possible options are:
    * memberAttribute: the attribute that should be used to collect group members
    * bindDN: the dn to use when binding to the LDAP server
    * bindPassword: the password used when binding to the LDAP server
-   * ssl: negotiate ssl when binding to the server
 
 Options not passed to the constructor are taken from the global settings
 in =lib/LocalSite.cfg=.
@@ -150,7 +149,6 @@ sub new {
     twikiGroupsBackoff=>$TWiki::cfg{Ldap}{TWikiGroupsBackoff} || 0,
     bindDN=>$TWiki::cfg{Ldap}{BindDN} || '',
     bindPassword=>$TWiki::cfg{Ldap}{BindPassword} || '',
-    ssl=>$TWiki::cfg{Ldap}{SSL} || 0,
     mapGroups=>$TWiki::cfg{Ldap}{MapGroups} || 0,
 
     mailAttribute=>$TWiki::cfg{Ldap}{MailAttribute} || 'mail',

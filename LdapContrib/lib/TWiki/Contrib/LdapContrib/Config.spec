@@ -38,10 +38,6 @@ $TWiki::cfg{Ldap}{BindDN} = '';
 $TWiki::cfg{Ldap}{BindPassword} = 'secret';
 
 # **BOOLEAN**
-# Negotiate ssl when binding to the server
-$TWiki::cfg{Ldap}{SSL} = 0;
-
-# **BOOLEAN**
 # Use SASL authentication when binding to the server; Note, when using SASL the 
 # BindDN and BindPassword setting are used to configure the SASL access.
 $TWiki::cfg{Ldap}{UseSASL} = 0;

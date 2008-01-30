@@ -292,9 +292,6 @@ will be used. Example 'cn=proxyuser,dc=my,dc=domain,dc=com'
 The password used when binding to the LDAP server using the <nop>BindDN account:
 <verbatim>$TWiki::cfg{Ldap}{BindPassword} = 'secret'; </verbatim>
 
-Negotiate ssl when binding to the server
-<verbatim>$TWiki::cfg{Ldap}{SSL} = 0; </verbatim>
-
 Use SASL authentication when binding to the server; Note, when using SASL the 
 <nop>BindDN and <nop>BindPassword setting are used to configure the SASL access.
 <verbatim>$TWiki::cfg{Ldap}{UseSASL} = 0; </verbatim>
@@ -402,7 +399,7 @@ Prevent certain names from being looked up in LDAP:
    This work was partly funded by [[http://www.spanlink.com][Spanlink Communications]] and \
    [[http://www.trivadis.com][Trivadis]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v2.99.1 |
+|  Version: | v2.99.2 |
 |  Change History: | |
 |  30 Jan 2008: | first beta towards TWiki-4.2 |
 |  07 Jan 2008: | fixed initializing the cache |
