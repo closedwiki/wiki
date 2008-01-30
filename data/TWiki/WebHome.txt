@@ -3,7 +3,6 @@
 <a href="http://twiki.org"><img src="%PUBURLPATH%/%SYSTEMWEB%/TWikiLogos/T-logo-235x67-t.gif" style="margin:.3em 0;" width="235" height="67" alt="Collaborate with TWiki -- visit TWiki.org" title="Collaborate with TWiki -- visit TWiki.org" border="0" /></a>
 <br />The official TWiki site is <a href="http://twiki.org"><span class="twikiLinkLabel">twiki.org</span></a>
 </div>
-
 ---+!! Welcome to the %WEB% Web
 
 _The place to learn about TWiki features and perform TWiki system maintenance._
