@@ -1,7 +1,7 @@
-#! /usr/bin/perl -w
+#!/usr/bin/perl -w
 # Script for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2006-2007 TWikiContributors. All rights reserved.
+# Copyright (C) 2006-2008 TWikiContributors. All rights reserved.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -11,34 +11,36 @@
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details, published at 
+# GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
 #
 use strict;
 
 sub ask {
-    my ($q, $default) = @_;
+    my ( $q, $default ) = @_;
     my $reply;
     local $/ = "\n";
 
     $q .= '?' unless $q =~ /\?\s*$/;
 
     my $yorn = 'y/n';
-    if (defined $default) {
-        if ($default =~ /y/i) {
+    if ( defined $default ) {
+        if ( $default =~ /y/i ) {
             $default = 'yes';
-            $yorn = 'Y/n';
-        } elsif( $default =~ /n/i) {
+            $yorn    = 'Y/n';
+        }
+        elsif ( $default =~ /n/i ) {
             $default = 'no';
-            $yorn = 'y/N';
-        } else {
+            $yorn    = 'y/N';
+        }
+        else {
             $default = undef;
         }
     }
-    print $q.' ['.$yorn.'] ';
+    print $q. ' [' . $yorn . '] ';
 
     while ( ( $reply = <STDIN> ) !~ /^[yn]/i ) {
-        if ($reply =~ /^\s*$/ && defined($default)) {
+        if ( $reply =~ /^\s*$/ && defined($default) ) {
             $reply = $default;
             last;
         }
@@ -48,10 +50,10 @@ sub ask {
 }
 
 sub prompt {
-    my( $q, $default) = @_;
+    my ( $q, $default ) = @_;
     local $/ = "\n";
     my $reply = '';
-    while( !$reply ) {
+    while ( !$reply ) {
         print $q;
         print " ($default)" if defined $default;
         print ': ';
@@ -72,6 +74,8 @@ You must be cd'ed to the twikiplugins directory, and you must
 pass the name of your extension - which must end in Skin, Plugin,
 Contrib, AddOn or TWikiApp - to the script. The extension directory
 must not already exist.
+
+Usage: $0 <name of new extension>
 HERE
 }
 
@@ -91,32 +95,36 @@ usage(), exit 1 unless $def{TYPE};
 
 $def{STUBS} = $def{TYPE} eq 'Plugin' ? 'Plugins' : 'Contrib';
 
-$def{SHORTDESCRIPTION} = prompt("Enter a one-line description of the extension: ", '');
+$def{SHORTDESCRIPTION} =
+  prompt( "Enter a one-line description of the extension: ", '' );
 $def{SHORTDESCRIPTION} =~ s/'/\\'/g;
 
 # Templates for all required files are in this script, after __DATA__
 $/ = undef;
-my @DATA = split(/<<<< (.*?) >>>>\s*\n/, <DATA>);
+my @DATA = split( /<<<< (.*?) >>>>\s*\n/, <DATA> );
 shift @DATA;
-my %data = @DATA;
+my %data     = @DATA;
 my $stubPath = "$def{MODULE}/lib/TWiki/$def{STUBS}";
-if ($def{TYPE} eq 'Plugin') {
+if ( $def{TYPE} eq 'Plugin' ) {
     my $rewrite = getFile("EmptyPlugin/lib/TWiki/Plugins/EmptyPlugin.pm");
+
     # Tidy up
+    $rewrite =~ s/Copyright .*(# This program)/$1/s;
     $rewrite =~ s/^.*?__NOTE:__ /$data{PLUGIN_HEADER}/s;
     $rewrite =~ s/^# change the package name.*$//m;
     $rewrite =~ s/(SHORTDESCRIPTION = ').*?'/$1%\$SHORTDESCRIPTION%'/;
     $rewrite =~ s/EmptyPlugin/%\$MODULE%/sg;
-    writeFile($stubPath, "$def{MODULE}.pm", $rewrite );
-} else {
-    writeFile($stubPath, "$def{MODULE}.pm",
-              $data{PM}.($data{"PM_$def{TYPE}"} || ''));
+    writeFile( $stubPath, "$def{MODULE}.pm", $rewrite );
+}
+else {
+    writeFile( $stubPath, "$def{MODULE}.pm",
+        $data{PM} . ( $data{"PM_$def{TYPE}"} || '' ) );
 }
 my $modPath = "$stubPath/$def{MODULE}";
-$def{UPLOADTARGETPUB} = 'http://twiki.org/p/pub';
+$def{UPLOADTARGETPUB}    = 'http://twiki.org/p/pub';
 $def{UPLOADTARGETSCRIPT} = 'http://twiki.org/cgi-bin';
 $def{UPLOADTARGETSUFFIX} = '';
-$def{UPLOADTARGETWEB} = "Plugins";
+$def{UPLOADTARGETWEB}    = "Plugins";
 while (1) {
     print <<END;
 The 'upload' target in the generated script will use the following defaults:
@@ -125,25 +133,27 @@ PubDir:  $def{UPLOADTARGETPUB}
 Scripts: $def{UPLOADTARGETSCRIPT}
 Suffix:  $def{UPLOADTARGETSUFFIX}
 END
-    last if ask("Is that correct? Answer 'n' to change", 1);
-    print "Enter the name of the TWiki web that contains the target repository\n";
-    $def{UPLOADTARGETWEB} = prompt("Web", $def{UPLOADTARGETWEB});
+    last if ask( "Is that correct? Answer 'n' to change", 1 );
+    print
+      "Enter the name of the TWiki web that contains the target repository\n";
+    $def{UPLOADTARGETWEB} = prompt( "Web", $def{UPLOADTARGETWEB} );
     print "Enter the full URL path to the TWiki pub directory\n";
-    $def{UPLOADTARGETPUB} = prompt("PubDir", $def{UPLOADTARGETPUB});
+    $def{UPLOADTARGETPUB} = prompt( "PubDir", $def{UPLOADTARGETPUB} );
     print "Enter the full URL path to the TWiki bin directory\n";
-    $def{UPLOADTARGETSCRIPT} = prompt("Scripts", $def{UPLOADTARGETSCRIPT});
-    print "Enter the file suffix used on scripts in the TWiki bin directory (enter 'none' for none)\n";
-    $def{UPLOADTARGETSUFFIX} = prompt("Suffix", $def{UPLOADTARGETSUFFIX});
+    $def{UPLOADTARGETSCRIPT} = prompt( "Scripts", $def{UPLOADTARGETSCRIPT} );
+    print
+"Enter the file suffix used on scripts in the TWiki bin directory (enter 'none' for none)\n";
+    $def{UPLOADTARGETSUFFIX} = prompt( "Suffix", $def{UPLOADTARGETSUFFIX} );
     $def{UPLOADTARGETSUFFIX} = '' if $def{UPLOADTARGETSUFFIX} eq 'none';
 }
 
-writeFile($modPath, "build.pl", $data{"build.pl"});
+writeFile( $modPath, "build.pl", $data{"build.pl"} );
 chmod 0775, "$modPath/build.pl";
-writeFile($modPath, "DEPENDENCIES", $data{DEPENDENCIES});
-writeFile($modPath, "MANIFEST", $data{MANIFEST});
+writeFile( $modPath, "DEPENDENCIES", $data{DEPENDENCIES} );
+writeFile( $modPath, "MANIFEST",     $data{MANIFEST} );
 
-writeFile("$def{MODULE}/data/TWiki", "$def{MODULE}.txt",
-          ($data{"TXT_$def{TYPE}"} || $data{TXT}));
+writeFile( "$def{MODULE}/data/TWiki", "$def{MODULE}.txt",
+    ( $data{"TXT_$def{TYPE}"} || $data{TXT} ) );
 
 sub expandVars {
     my $content = shift;
@@ -153,17 +163,17 @@ sub expandVars {
 
 sub expandVar {
     my $var = shift;
-    return '%$'.$var.'%' unless defined $def{$var};
+    return '%$' . $var . '%' unless defined $def{$var};
     return $def{$var};
 }
 
 sub writeFile {
-    my ($path, $file, $content ) = @_;
+    my ( $path, $file, $content ) = @_;
     print "Writing $path/$file\n";
-    unless (-d $path) {
+    unless ( -d $path ) {
         File::Path::mkpath("./$path") || die "Failed to mkdir $path: $!";
     }
-    open(F, ">$path/$file") || die "Failed to create $path/$file: $!";
+    open( F, ">$path/$file" ) || die "Failed to create $path/$file: $!";
     print F expandVars($content);
     close(F);
 }
@@ -171,7 +181,7 @@ sub writeFile {
 sub getFile {
     my $file = shift;
     local $/ = undef;
-    open(F, "<$file") || die "Failed to open $file: $!";
+    open( F, "<$file" ) || die "Failed to open $file: $!";
     my $content = <F>;
     close(F);
     return $content;

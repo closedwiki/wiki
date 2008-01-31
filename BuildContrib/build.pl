@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-unless (scalar(@ARGV)) {
+unless ( scalar(@ARGV) ) {
     print <<DOC;
 Build an extension
 
@@ -19,12 +19,12 @@ my $extension = shift(@ARGV);
 $extension =~ s./+$..;
 
 my $extdir = "Contrib";
-if ($extension =~ /Plugin$/) {
+if ( $extension =~ /Plugin$/ ) {
     $extdir = "Plugins";
 }
 
 my $scriptDir = "$extension/lib/TWiki/$extdir/$extension";
-unless (-e "$scriptDir/build.pl") {
+unless ( -e "$scriptDir/build.pl" ) {
     die "$scriptDir/build.pl not found";
 }
 

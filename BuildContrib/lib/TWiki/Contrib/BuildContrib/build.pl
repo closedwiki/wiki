@@ -48,5 +48,5 @@ package main;
 $build = new BuildBuild();
 
 # Build the target on the command line, or the default target
-$build->build($build->{target});
+$build->build( $build->{target} );
 

@@ -9,14 +9,14 @@
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details, published at 
+# GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
 #
 package TWiki::Contrib::BuildContrib::BaseBuild;
 
 use strict;
 
-=pod
+=begin twiki
 
 ---++ Package TWiki::Contrib::BuildContrib::BaseBuild
 
@@ -30,7 +30,7 @@ Build implementations.
 
 my $NL = "\n";
 
-=pod
+=begin twiki
 
 ---++++ readManifest($baseDir,$path,$file,$manifest,$noManifestFileHook) => \@files
 
@@ -59,55 +59,68 @@ each file. Each hash has the following information:
 =cut
 
 sub readManifest {
-    # TODO: Support for wildcards?
-    my( $baseDir,$path, $file,$noManifestFileHook) = @_;
-    $file ||= '';
-    $file = $path.$file if $path;
 
-    unless($file && open(PF, '<'.$file)) {
-        print STDERR 'COULD NOT OPEN MANIFEST FILE ',$file,$NL;
-        &$noManifestFileHook() if defined($noManifestFileHook); #CodeSmell - calling package sub not object method
+    # TODO: Support for wildcards?
+    my ( $baseDir, $path, $file, $noManifestFileHook ) = @_;
+    $file ||= '';
+    $file = $path . $file if $path;
+
+    unless ( $file && open( PF, '<' . $file ) ) {
+        print STDERR 'COULD NOT OPEN MANIFEST FILE ', $file, $NL;
+        &$noManifestFileHook()
+          if defined($noManifestFileHook)
+        ;    #CodeSmell - calling package sub not object method
         return undef;
     }
     my @files;
     my @otherModules;
     my $line;
-    while ($line = <PF>) {
+    while ( $line = <PF> ) {
         next if $line =~ /^\s*#/;
         if ( $line =~ /^!include\s+(\S+)\s*$/ ) {
-            push(@otherModules, $1);
-        } elsif ( $line =~ /^(\S+)\s+(0?\d\d\d)?\s*(\S.*)?\s*$/o ) {
+            push( @otherModules, $1 );
+        }
+        elsif ( $line =~ /^(".*"|\S+)\s+(0?\d\d\d)?\s*(\S.*)?\s*$/o ) {
             my $name = $1;
+            $name =~ s/^"(.*)"$/$1/;
             my $permissions = $2;
-            my $desc = $3;
-            unless( $permissions ) {
+            my $desc        = $3;
+            unless ($permissions) {
+
                 # No permissions in MANIFEST, apply defaults
-                if ($name =~ /\.pm$/) {
+                if ( $name =~ /\.pm$/ ) {
                     $permissions = '0444';
-                } elsif ($name =~ /\.pl$/) {
+                }
+                elsif ( $name =~ /\.pl$/ ) {
                     $permissions = '0554';
-                } elsif ($name =~ /^data\/.*\.txt$/ ||
-                           $name =~ /^pub\//) {
+                }
+                elsif ($name =~ /^data\/.*\.txt$/
+                    || $name =~ /^pub\// )
+                {
                     $permissions = '0664';
-                } elsif ($name =~ /^bin\//) {
+                }
+                elsif ( $name =~ /^bin\// ) {
                     $permissions = '0555';
-                } else {
+                }
+                else {
                     $permissions = '0444';
                 }
             }
             $permissions = "0$permissions";
             $permissions =~ s/^0+/0/;
-            my $n = { name => $name, description => ($desc || ''),
-                      permissions => $permissions };
-            push(@files, $n);
+            my $n = {
+                name        => $name,
+                description => ( $desc || '' ),
+                permissions => $permissions
+            };
+            push( @files, $n );
         }
     }
     close(PF);
-    return (\@files,\@otherModules);
+    return ( \@files, \@otherModules );
 }
 
-
-=pod
+=begin twiki
 
 ---++++ findInINC($fileName) => $path
 
@@ -119,14 +132,15 @@ Returns the path to the first instance of the file found in @INC.
 =cut
 
 sub findInINC {
-#TODO: Receive a sub to determine if the file is in the path?
-   my $fileName=shift;
-   foreach my $dir ( @INC ) {
-      if (-f $dir.'/'.$fileName) {
-         return $dir.'/'.$fileName;
-      }
-   }
-   return undef;
+
+    #TODO: Receive a sub to determine if the file is in the path?
+    my $fileName = shift;
+    foreach my $dir (@INC) {
+        if ( -f $dir . '/' . $fileName ) {
+            return $dir . '/' . $fileName;
+        }
+    }
+    return undef;
 }
 
 1;

@@ -59,10 +59,10 @@ my $PACKAGES_URL = '%$UPLOADTARGETPUB%/%$UPLOADTARGETWEB%';
 
 # Extract MANIFEST and DEPENDENCIES from the __DATA__
 undef $/;
-my @DATA = split(/<<<< (.*?) >>>>\s*\n/, <DATA>);
-shift @DATA; # remove empty first element
+my @DATA = split( /<<<< (.*?) >>>>\s*\n/, <DATA> );
+shift @DATA;    # remove empty first element
 
-unless (do 'tools/extender.pl') {
+unless ( do 'tools/extender.pl' ) {
     die <<MESSAGE;
 ************************************************************
 Could not load installer script from tools/extender.pl.
@@ -82,22 +82,26 @@ MESSAGE
 }
 
 sub preuninstall {
-    %$PREUNINSTALL%;
+
+    # %$PREUNINSTALL%;
 }
+
 sub postuninstall {
-    %$POSTUNINSTALL%;
+
+    # %$POSTUNINSTALL%;
 }
 
 sub preinstall {
-    %$PREINSTALL%
+
+    # %$PREINSTALL%;
 }
 
 sub postinstall {
-    %$POSTINSTALL%
+
+    # %$POSTINSTALL%;
 }
 
-TWiki::Extender::install(
-    $PACKAGES_URL, '%$MODULE%', '%$ROOTMODULE%', @DATA);
+TWiki::Extender::install( $PACKAGES_URL, '%$MODULE%', '%$ROOTMODULE%', @DATA );
 
 1;
 
