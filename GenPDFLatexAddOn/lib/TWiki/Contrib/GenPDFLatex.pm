@@ -307,6 +307,7 @@ sub genfile() {
 
         my $optpg = &TWiki::Func::getPreferencesValue( "GENPDFLATEX_OPTIONSPAGE" ) || "";
 
+        $optpg =~ s/\s+$//;  # this should not be needed, but apparently is :(
         my $text = "";
         if ( $optpg ne "" ) {
             # if an options page is defined
@@ -319,10 +320,25 @@ sub genfile() {
             }
             $optWeb = $webName if ($optWeb eq "");
 
-            if (TWiki::UI::webExists( $optWeb, $optTopic ) ) {
+            my $exists;
+            my $session;
+            if( $TWiki::Plugins::VERSION >= 1.1 ) {
+                $session = $TWiki::Plugins::SESSION;
+                $exists = $session->{store}->topicExists( $optWeb, $optTopic );
+            } else {
+                $exists = TWiki::UI::webExists( $optWeb, $optTopic );
+            }
 
+            if ($exists) {
                 my $skin = "plain"; # $query->param( "skin" );
-                my $tmpl = &TWiki::Store::readTemplate( "view", $skin );
+                my $tmpl;
+                if( $TWiki::Plugins::VERSION >= 1.2 ) { 
+                    $tmpl = $session->templates->readTemplate( 'view', $skin );
+                } elsif( $TWiki::Plugins::VERSION >= 1.1 ) {
+                    $tmpl = $session->{templates}->readTemplate( 'view', $skin );
+                } else {
+                    $tmpl = &TWiki::Store::readTemplate( "view", $skin );
+                }
 
                 $text = TWiki::Func::readTopicText($optWeb, $optTopic, undef );
 
@@ -456,13 +472,17 @@ sub _genlatex {
 
     my $tmpl;
     if( $TWiki::Plugins::VERSION >= 1.1 ) { 
-        # Dakar interface
+        # Dakar interface or better
         my $session = $TWiki::Plugins::SESSION;
         my $store = $session->{store};
 
         return unless ( $store->topicExists( $webName, $topic ) );
 
-        my $tmpl = $session->{templates}->readTemplate( 'view', $skin );
+        if( $TWiki::Plugins::VERSION >= 1.2 ) { 
+            $tmpl = $session->templates->readTemplate( 'view', $skin );
+        } else {
+            $tmpl = $session->{templates}->readTemplate( 'view', $skin );
+        }
     } else {
         return unless TWiki::UI::webExists( $webName, $topic );
 
@@ -588,7 +608,8 @@ sub _genlatex {
     # ensure that the color package is included.
     # SMELL: there must be a better way to do this.
     if ( ($tex =~ m/\\textcolor/) and 
-         !($tex =~ m/includepackage\{color\}/) ) {
+         !($tex =~ m/\\usepackage(\[[^\]]*\])?\{x?color\}/) and
+         !($tex =~ m/\\includepackage(\[[^\]]*\])?\{x?color\}/) ) {
         $tex =~ s!(\\begin\{document\})!\\usepackage{color}\n$1!;
     }
 
