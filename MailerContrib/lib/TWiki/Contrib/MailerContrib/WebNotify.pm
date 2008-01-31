@@ -143,17 +143,28 @@ sub subscribe {
 
     my @names = ($name);
     unless ($this->{noexpandgroups}) {
-	my $user = TWiki::User->new($this->{session}, '', $name);
-	if ($user->isGroup) {
-	    @names = map {$_->wikiName} @{$user->groupMembers};
-	}
+        if (defined &TWiki::Func::eachGroupMember) {
+            my $it = TWiki::Func::eachGroupMember( $name );
+            if( $it ) {
+                @names = ();
+                while( $it->hasNext() ) {
+                    my $member = $it->next();
+                    push( @names, $member );
+                }
+            }
+        } else {
+            my $user = TWiki::User->new($this->{session}, '', $name);
+            if ($user->isGroup) {
+                @names = map {$_->wikiName} @{$user->groupMembers};
+            }
+        }
     }
 
     foreach my $n (@names) {
-	my $subscriber = $this->getSubscriber( $n );
-	my $sub = new TWiki::Contrib::MailerContrib::Subscription(
-	    $topics, $depth, $mode );
-	$subscriber->subscribe( $sub );
+        my $subscriber = $this->getSubscriber( $n );
+        my $sub = new TWiki::Contrib::MailerContrib::Subscription(
+            $topics, $depth, $mode );
+        $subscriber->subscribe( $sub );
     }
 }
 
@@ -172,19 +183,30 @@ particular subscriber.
 sub unsubscribe {
     my ( $this, $name, $topics, $depth ) = @_;
 
-    my @names = ($name);
+    my @names = ( $name );
     unless ($this->{noexpandgroups}) {
-	my $user = TWiki::User->new($this->{session}, '', $name);
-	if ($user->isGroup) {
-	    @names = map {$_->wikiName} @{$user->groupMembers};
-	}
+        if (defined &TWiki::Func::eachGroupMember) {
+            my $it = TWiki::Func::eachGroupMember( $name );
+            if( $it ) {
+                @names = ();
+                while( $it->hasNext() ) {
+                    my $member = $it->next();
+                    push( @names, $member );
+                }
+            }
+        } else {
+            my $user = TWiki::User->new($this->{session}, '', $name);
+            if ($user->isGroup) {
+                @names = map {$_->wikiName} @{$user->groupMembers};
+            }
+        }
     }
 
     foreach my $n (@names) {
-	my $subscriber = $this->getSubscriber( $n );
-	my $sub = new TWiki::Contrib::MailerContrib::Subscription(
-	    $topics, $depth );
-	$subscriber->unsubscribe( $sub );
+        my $subscriber = $this->getSubscriber( $n );
+        my $sub = new TWiki::Contrib::MailerContrib::Subscription(
+            $topics, $depth );
+        $subscriber->unsubscribe( $sub );
     }
 }
 
@@ -322,7 +344,7 @@ sub _load {
             $in_pre = 0;
         }
         elsif ( $line =~ /^\s+\*\s$webRE($TWiki::regex{wikiWordRegex}|'.*?'|".*?"|$TWiki::cfg{MailerContrib}{EmailFilterIn})\s*(:(.*))?$/o
-               && $1 ne $TWiki::cfg{DefaultUserWikiName}) {
+                  && $1 ne $TWiki::cfg{DefaultUserWikiName}) {
             my $subscriber = $1;
             my $topics = $3;
             $subscriber =~ s/^(['"])(.*)\1$/$2/;
