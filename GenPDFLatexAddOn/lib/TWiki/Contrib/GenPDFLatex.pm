@@ -48,7 +48,7 @@ use File::Copy;
 
 # number the release version of this addon
 $VERSION = '$Rev$';
-$RELEASE = '2.000';
+$RELEASE = '2.200';
 
 =pod
 

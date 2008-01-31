@@ -39,8 +39,8 @@ use vars qw(
         $debug $pdflatex_ifelse $pdflatex_ifonly $script
     );
 
-$VERSION = '1.300';
-$RELEASE = 'Dakar';
+$VERSION = '$Rev$';
+$RELEASE = '2.200';
 
 $pluginName = 'GenPDFLatexPlugin';  # Name of this Plugin
 
