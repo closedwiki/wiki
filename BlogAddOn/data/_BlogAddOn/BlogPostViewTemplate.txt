@@ -12,8 +12,7 @@
 
 
 %TMPL:DEF{"content"}%%INCLUDE{"BlogAddOnStyles"}%
-<div class="patternTopic">%BROADCASTMESSAGE%
-<h1 class="blogAddOnTitle"> %FORMFIELD{"Title"}% </h1>
+<div class="patternTopic"><h1 class="blogAddOnTitle"> %FORMFIELD{"Title"}% </h1>
 <div class="twikiGrayText twikiSmallish blogPostAddOnHeaderInfo">%TMPL:P{"postinfo"}%</div>
 
 %TEXT%
