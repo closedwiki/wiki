@@ -1131,7 +1131,8 @@ sub trimInlineImage_v2 {
     # print $sum ."\n";
     my ($frnt,$back) = (0,0);
     $frnt = length($1)*$cpp if ($sum =~ m/^(1+0+)/); # from the left 
-    $back = length($1)*$cpp if ($sum =~ m/(0+1+)$/); # and from the right
+    # $back = length($1)*$cpp if ($sum =~ m/(0+1+)$/); # and from the right
+    $back = length($1)*$cpp if ($sum =~ m/(0+1+0{0,2})$/); # and from the right
     # print "frnt: $frnt back: $back\n";
 
     $pre =~ m/\"$col\s+$cnt/;
