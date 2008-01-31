@@ -73,6 +73,26 @@
 	 <td align="right"><b>Phrase:</b></td>
 	 <td><input type="text" name="phrase" size="50" value="" /></td>
   </tr>
+  <tr>
+    <td align="right"><b>Bibliography output style:</b></td>
+<td>
+<select name="bibstyle" width="50">
+<option value="">Any type</option>
+<option value="ieeetr">IEEE Transactions (ieeetr2)</option>
+<option value="siam">SIAM (siam)</option>
+<option value="amsplain">AMS (amsplain)</option>
+<option value="abbrvnat">Natural (abbrvnat)</option>
+<option value="abbrv">Abbreviated (abbrv)</option>
+<option value="plain">Plain (plain)</option>
+</select>
+</td>
+  </tr>
+  <tr>
+
+    <td align="right"><b>Phrase:</b></td>
+    <td><input type="text" name="phrase" size="50" value="" /></td>
+  </tr>
+
 </table>
 </td></tr>
 <tr><td>%BIBTEXRESULT%</td></tr>

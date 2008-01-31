@@ -82,7 +82,7 @@ sub doInit {
     eval "use TWiki::Contrib::DakarContrib;";
     $sandbox = new TWiki::Sandbox();
   } else {
-    $sandbox = $TWiki::sharedSandbox;
+    $sandbox = $TWiki::sharedSandbox || $TWiki::sandbox;
   }
 
   writeDebug("called doInit");
@@ -126,8 +126,8 @@ sub doInit {
     ' %STDERR|F%' .
     ' %BIBFILES|F%';
   
-  $currentBibWeb = "";
-  $currentBibTopic = "";
+  $currentBibWeb = $web; # "";
+  $currentBibTopic = $topic; # "";
 
   &writeDebug( "doInit( ) is OK" );
   $isInitialized = 1;
@@ -186,11 +186,11 @@ sub postRenderingHandler
     # as when a cited bibtex entry is not found or the keys are not numeric.
 
     foreach my $key (keys %bibliography) {
-        if ($_[0] =~ m!<a name=\"$key\">([^\<]*?)</a>!) {
+        if ($_[0] =~ m!<a name=\"$key\">(.*?)</a>!) {
             my $newno = $1;
-            $_[0] =~ s!(<a href=\"\#$key\".*?>)[^\<]*?(</a>)!$1$newno$2!g;
+            $_[0] =~ s!(<a href=\"\#$key\".*?>)[^\<\+]*?(</a>)!$1$newno$2!g;
         } else {
-            $_[0] =~ s!<a href=\"\#$key\".*?>[^\<]*?</a>!?? $key not found ??!g;
+            $_[0] =~ s!<a href=\"\#$key\".*?>[^\<\+]*?</a>!?? $key not found ??!g;
         }
     }
     unlink($citefile) unless ($debug);
@@ -245,11 +245,12 @@ sub handleBibtexBibliography
 
     my %opts = TWiki::Func::extractParameters( $args );
 
-    my $header = "\n\n---+ References";
+    my $header = "\n\n---+ References\n";
 
     my $style = $opts{'bibstyle'} || 'plain';
     my $files = $opts{'file'} || '.*\.bib';
-    my $reqtopic = $opts{'topic'} || $topic;
+    my $web = $opts{'web'} || $currentBibWeb;
+    my $reqtopic = $opts{'topic'} || $currentBibTopic;
 
     my $text = "";
 
@@ -263,8 +264,8 @@ sub handleBibtexBibliography
         my $errMsg = &doInit();
         return $errMsg if $errMsg;
 
-        $currentBibWeb = $web unless ($currentBibWeb);
-        $currentBibTopic = $reqtopic unless ($currentBibTopic);
+        $currentBibWeb = $web;
+        $currentBibTopic = $reqtopic;
 
         my @bibfiles = &getBibfiles($currentBibWeb, $currentBibTopic, $files);
         if (!@bibfiles) {
@@ -353,6 +354,7 @@ sub handleBibtexBibliography
         $text .= '"';
         $text .= " bibstyle=\"$style\"";
         $text .= " file=\"$files\"" if ($files);
+        $text .= " web=\"$web\"" if ($web ne '');
         $text .= " topic=\"$reqtopic\"" if ($reqtopic);
         $text .= " citefile=\"on\"";
         $text .= '}%';
@@ -376,6 +378,8 @@ sub handleBibtex {
   my $theSelect = &TWiki::Func::extractNameValuePair($theAttributes, "select");
   my $theBibfile = &TWiki::Func::extractNameValuePair($theAttributes, "file");
   my $theTopic = &TWiki::Func::extractNameValuePair($theAttributes, "topic");
+  $theTopic = &TWiki::Func::extractNameValuePair($theAttributes, "web").'.'.$theTopic if length(&TWiki::Func::extractNameValuePair($theAttributes, "web"))>0;
+
   my $theStyle = &TWiki::Func::extractNameValuePair($theAttributes, "bibstyle");
   my $theSort = &TWiki::Func::extractNameValuePair($theAttributes, "sort");
   my $theErrors = &TWiki::Func::extractNameValuePair($theAttributes, "errors");
@@ -466,7 +470,10 @@ sub bibSearch {
   &writeDebug("called bibSearch()" );
 
   # fallback to default values
-  $theTopic = $web.'.'.$topic unless $theTopic;
+  do {
+      $theTopic = $topic;
+      # $theTopic = $web.'.'.$theTopic unless ($web == '');
+  } unless $theTopic;
   $theStyle = 'bibtool' unless $theStyle;
   $theSort = 'year' unless $theSort;
   $theReverse = 'on' unless $theReverse;
@@ -515,10 +522,12 @@ sub bibSearch {
   }
 
   my ($formWebName, $formTopicName) = &scanWebTopic($formTemplate) if $formTemplate;
-  my ($webName, $topicName) = &scanWebTopic($theTopic) if $theTopic;
-
   &writeDebug("formWebName=$formWebName") if $formTemplate;
   &writeDebug("formTopicName=$formTopicName") if $formTemplate;
+
+  my ($webName, $topicName) = &scanWebTopic($theTopic) if $theTopic;
+  &writeDebug("webName=$webName") if $theTopic;
+  &writeDebug("topicName=$topicName") if $theTopic;
 
 
   # check for error
@@ -733,7 +742,7 @@ sub renderStderror {
     $errors =~ s/ in \/tmp\/bibfile.*\)/)/go;
     $errors =~ s/$pubDir\/(.*)\/(.*)\/(.*)/$1.$2:$3/g;
     if ($errors) {
-      return "<font color=\"red\"><b>Errors</b>:<br/>\n<pre>\n" . 
+      return "<font color=\"red\"><b>BibtexPlugin Errors:</b><br/>\n<pre>\n" . 
 	$errors .  "\n</pre>\n</font>";
     }
   }

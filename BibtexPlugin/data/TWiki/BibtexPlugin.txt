@@ -132,7 +132,7 @@ you get (simulated) <img src="%ATTACHURL%/bibtex-cite-ex.png" alt="bibtex select
 
 The text within the citation is dictated by the results of the %<nop>BIBTEXREF% declaration in the topic (see below).
 
-_Note: The %<nop>CITE% macro is also defined by the TWiki:Plugins.BibliographyPlugin.  If both plugins are also installed, one must use the alternate declaration, %BIBCITE{...}%, to access the !BibtexPlugin functionality._
+_Note: The %<nop>CITE% macro is also defined by the TWiki:Plugins.BibliographyPlugin.  If both plugins are installed, one must use the alternate declaration, %<nop>BIBCITE{...}%, to access the !BibtexPlugin functionality._
 
 ---++ Syntax
 	* =%<nop>BIBTEX{&lt;attributes&gt;}%= - render a set of bibtex files attached to some topic 
