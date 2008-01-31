@@ -40,7 +40,7 @@ use File::Basename;
 
 use strict;
 $VERSION = '$Rev$';
-$RELEASE = '1.4';
+$RELEASE = '1.5';
 $pluginName = 'BibtexPlugin'; 
 $debug = 0; # toggle me
 
