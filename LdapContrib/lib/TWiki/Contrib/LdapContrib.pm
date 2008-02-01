@@ -28,7 +28,7 @@ use Net::LDAP::Control::Paged;
 use vars qw($VERSION $RELEASE %sharedLdapContrib);
 
 $VERSION = '$Rev: 15691 (17 Dec 2007) $';
-$RELEASE = 'v2.99.2';
+$RELEASE = 'v2.99.3';
 
 =begin text
 
@@ -889,8 +889,19 @@ sub cacheGroupFromEntry {
   }
 
   if (defined($groupNames->{$groupName})) {
-    $this->writeDebug("WARNING: $dn clashes with $groupNames->{$groupName} on $groupName");
+    $this->writeDebug("WARNING: $dn clashes with group $groupNames->{$groupName} on $groupName");
     return 0;
+  }
+
+  if (defined($data->{"U2W::$groupName"}) || defined($data->{"W2U::$groupName"})) {
+    my $groupSuffix = '';
+    if ($this->{normalizeGroupName}) {
+      $groupSuffix = 'Group';
+    } else {
+      $groupSuffix = '_group';
+    }
+    $this->writeDebug("WARNING: group $dn clashes with user $groupName ... appending $groupSuffix");
+    $groupName .= $groupSuffix;
   }
 
   # fetch all members of this group
@@ -1091,7 +1102,7 @@ returns a list of all known wikiNames
 sub getAllWikiNames {
   my $this = shift;
 
-  my $wikiNames = TWiki::Sandbox::untaintUnchecked($this->{data}{WIKINAMES});
+  my $wikiNames = TWiki::Sandbox::untaintUnchecked($this->{data}{WIKINAMES}) || '';
   my @wikiNames = split(/,/,$wikiNames);
   return \@wikiNames;
 }
@@ -1107,7 +1118,7 @@ returns a list of all known loginNames
 sub getAllLoginNames {
   my $this = shift;
 
-  my $loginNames = TWiki::Sandbox::untaintUnchecked($this->{data}{LOGINNAMES});
+  my $loginNames = TWiki::Sandbox::untaintUnchecked($this->{data}{LOGINNAMES}) || '';
   my @loginNames = split(/,/,$loginNames);
   return \@loginNames;
 }
