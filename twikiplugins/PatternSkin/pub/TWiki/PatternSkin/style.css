@@ -700,6 +700,8 @@ a.twikiLinkInHeaderRight {
 }
 #patternLeftBarContents .patternLeftBarPersonal,
 #patternLeftBarContents .patternWebIndicator {
+	height:1%; /* for IE */
+	width:100%; /* for IE */
 	padding:0 1em .75em 1em;
 	margin:0 -1em .75em -1em; /*S6*/
 	border-style:none none solid none;
