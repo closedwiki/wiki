@@ -407,6 +407,7 @@ sub renderForDisplay {
             $this->{colTypes}, $rowControls));
     }
 
+    # Generate the buttons at the bottom of the table
     my $script = 'view';
     if ($showControls && !TWiki::Func::getContext()->{authenticated}) {
         # A  bit of a hack. If the user isn't logged in, then show the
@@ -455,20 +456,24 @@ sub renderForDisplay {
                 -title => $title,
                }, '');
             my $url;
+            # Note: erp_unchanged prevents addRow from trying to
+            # save changes in the table
             if ($TWiki::Plugins::VERSION < 1.11) {
                 $url = TWiki::Func::getScriptUrl(
                     'EditRowPlugin', 'save', 'rest')
                   ."?erp_active_topic=$this->{web}.$this->{topic}"
                     .";erp_active_table=$this->{number}"
                       .";erp_active_row=-1"
-                        .";erp_addRow.x=1"
-                          ."#erp_$this->{number}";
+                        .";erp_unchanged=-1"
+                          .";erp_addRow.x=1"
+                            ."#erp_$this->{number}";
             } else {
                 $url = TWiki::Func::getScriptUrl(
                     'EditRowPlugin', 'save', 'rest',
                     erp_active_topic => "$this->{web}.$this->{topic}",
                     erp_active_table => $this->{number},
                     erp_active_row => -1,
+                    erp_unchanged => 1,
                     'erp_addRow.x' => 1,
                     '#' => "erp_$this->{number}");
             }
@@ -499,10 +504,10 @@ sub _getCols {
             my $cd = $this->parseFormat($1);
             $colDef = $cd->[0];
         }
-        if ($colDef->{type} eq 'row') {
+        if ($colDef->{type} && $colDef->{type} eq 'row') {
             # Force numbering if this is an auto-numbered column
             $urps->{$cellName} = $row - $headRows + $colDef->{size};
-        } elsif ($colDef->{type} eq 'label') {
+        } elsif ($colDef->{type} && $colDef->{type} eq 'label') {
             # Label cells are uneditable, so we have to keep any existing
             # value for them.
             $urps->{$cellName} = $cell->{text};
@@ -563,7 +568,9 @@ sub addRow {
     my @cols;
     my $row = $urps->{erp_active_row};
 
-    $this->change($urps); # in case data has changed
+    unless( $urps->{erp_unchanged} ) {
+        $this->change($urps); # in case data has changed
+    }
 
     if ($row < 0) {
         # Full table edit

@@ -222,6 +222,7 @@ Another great TWiki extension from the <a style="text-decoration:none" href="htt
 |  Copyright: | &copy; 2007 Wind<nop>River Inc. |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  4 Jan 2008 | TWikibug:Item5320: fixed destructive save when add row is pressed outside edit mode |
 |  13 Dec 2007 | TWikibug:Item4970: removed beforeCommonTagsHandler, which was causing problems when interacting with other plugins that use unregistered tag handlers. |
 |  23 Nov 2007 | TWikibug:Item4853: remove duplicated %EDITCELL |
 |  9 Nov 2007 | TWikibug:Item4947: added missing _src.js versions to MANIFEST |
