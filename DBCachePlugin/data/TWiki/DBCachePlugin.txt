@@ -421,6 +421,7 @@ You can also call the update from the command line - from the twiki/bin dir -
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | v1.71 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  4 Jan 2008: | TWikibug:Item5319: fix empty separator |
 |  11 Dec 2007: | renamed PAGETITLE to TOPICTITLE, matching formfield <nop>TopicTitle |
 |  07 Dec 2007: | added PAGETITLE, defaulting to BASEWEB instead of INCLUDINGWEB in all of the tags |
 |  14 Nov 2007: | protect against data store pollution, at least don't die |
