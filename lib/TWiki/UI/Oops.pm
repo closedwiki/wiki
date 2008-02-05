@@ -98,6 +98,9 @@ sub oops {
         }
     }
     $tmplName ||= 'oops';
+    
+    # Item5324: Filter out < and > to block XSS
+    $tmplName =~ tr/<>//d;
 
     # Do not pass on the template parameter otherwise continuation won't work
     $query->delete( 'template' );
