@@ -20,6 +20,7 @@ use vars qw(
   $defaultWebNameRegex $linkProtocolPattern
   $baseWeb $baseTopic
 );
+use constant DEBUG => 0; # toggle me
 
 use TWiki::Contrib::DBCacheContrib;
 use TWiki::Contrib::DBCacheContrib::Search;
@@ -27,7 +28,6 @@ use TWiki::Plugins::DBCachePlugin::WebDB;
 
 $TranslationToken = "\0"; # from TWiki.pm
 
-sub DEBUG { 0; } # toggle me
 
 ###############################################################################
 sub writeDebug {
@@ -114,9 +114,7 @@ sub handleDBQUERY {
   my $theExclude = $params->{exclude};
   my $theSort = $params->{sort} || $params->{order} || 'name';
   my $theReverse = $params->{reverse} || 'off';
-  my $theSep = $params->{separator};
-  $theSep = $params->{sep} unless defined $theSep;
-  $theSep = '$n' unless defined $theSep;
+  my $theSep = $params->{separator} || $params->{sep};
   my $theLimit = $params->{limit} || '';
   my $theSkip = $params->{skip} || 0;
   my $theHideNull = $params->{hidenull} || 'off';
@@ -126,6 +124,7 @@ sub handleDBQUERY {
 
   $theFormat = '$topic' unless defined $theFormat;
   $theSep = '$n' unless defined $theSep;
+  $theSep = '' if $theSep eq 'none';
 
   # get web and topic(s)
   my @topicNames = ();
@@ -145,7 +144,6 @@ sub handleDBQUERY {
   $theSkip = 0 if $theSkip eq '';
   $theSkip = 0 if $theSkip < 0;
   $theFormat = '' if $theFormat eq 'none';
-  $theSep = '' if $theSep eq 'none';
 
   my ($topicNames, $hits, $msg) = $theDB->dbQuery($theSearch, 
     \@topicNames, $theSort, $theReverse, $theInclude, $theExclude);
@@ -185,7 +183,7 @@ sub handleDBQUERY {
         $temp = $theDB->expandPath($topicObj, $temp);
 	$temp =~ s#\)#${TranslationToken}#g;
 	$temp/geo;
-      $format =~ s/\$formatTime\((.*?)(?:,\s*'([^']*?)')?\)/TWiki::Func::formatTime($theDB->expandPath($topicObj, $1), $2)/geo; # single quoted
+      $format =~ s/\$formatTime\((.*?)(?:,\s*'([^']*?)')?\)/_formatTime($theDB->expandPath($topicObj, $1), $2)/geo; # single quoted
       $format = _expandVariables($format, $topicWeb, $topicName,
 	topic=>$topicName, web=>$topicWeb, index=>$index, count=>$count);
       $format =~ s/${TranslationToken}/)/go;
@@ -282,7 +280,10 @@ sub handleDBCALL {
   }
 
   # expand
+  my $context = TWiki::Func::getContext();
+  $context->{insideInclude} = 1;
   $sectionText = TWiki::Func::expandCommonVariables($sectionText, $thisTopic, $thisWeb);
+  delete $context->{insideInclude};
 
   # fix local linx
   _fixInclude($session, $thisWeb, $sectionText) if $remote;
@@ -308,13 +309,15 @@ sub handleDBSTATS {
   my $theHeader = $params->{header} || '';
   my $theFormat = $params->{format} || '   * $key: $count';
   my $theFooter = $params->{footer} || '';
-  my $theSep = $params->{separator} || $params->{sep} || '$n';
+  my $theSep = $params->{separator} || $params->{sep};
   my $theFields = $params->{fields} || $params->{field} || 'text';
   my $theSort = $params->{sort} || $params->{order} || 'alpha';
   my $theReverse = $params->{reverse} || 'off';
   my $theLimit = $params->{limit} || 0;
   my $theHideNull = $params->{hidenull} || 'off';
   $theLimit =~ s/[^\d]//go;
+
+  $theSep = '$n' unless defined $theSep;
 
   #writeDebug("theSearch=$theSearch");
   #writeDebug("thisWeb=$thisWeb");
@@ -567,10 +570,12 @@ sub handleATTACHMENTS {
   my $theHeader = $params->{header} || '';
   my $theFooter = $params->{footer} || '';
   my $theFormat = $params->{format} || '| [[$url][$name]] |  $sizeK | <nobr>$date</nobr> | $wikiuser | $comment |';
-  my $theSeparator = $params->{separator} || $params->{sep} || "\n";
+  my $theSeparator = $params->{separator} || $params->{sep};
   my $theSort = $params->{sort} || $params->{order} || 'name';
   my $theHideNull = $params->{hidenull} || 'off';
   my $theComment = $params->{comment} = '.*';
+
+  $theSeparator = "\n" unless defined $theSeparator;
 
   # get topic
   my $theDB = getDB($thisWeb);
@@ -681,7 +686,7 @@ sub handleATTACHMENTS {
     
     $index++;
     my $text = $theFormat;
-    $text =~ s/\$date\(([^\)]+)\)/TWiki::Func::formatTime($date, $1)/ge;
+    $text =~ s/\$date\(([^\)]+)\)/_formatTile($date, $1)/ge;
     $text = _expandVariables($text, $thisWeb, $thisTopic,
       'webdav'=>$webDavAction,
       'webdavUrl'=>$webDavUrl,
@@ -697,7 +702,7 @@ sub handleATTACHMENTS {
       'attr'=>$attr,
       'autoattached'=>$autoattached,
       'comment'=>$comment,
-      'date'=>TWiki::Func::formatTime($date),
+      'date'=>_formatTime($date),
       'index'=>$index,
       'name'=>$name,
       'path'=>$path,
@@ -846,7 +851,7 @@ sub _formatRecursive {
       my $temp = $theDB->expandPath($topicObj, $1);
       $temp =~ s#\)#${TranslationToken}#g;
       $temp/geo;
-    $text =~ s/\$formatTime\((.*?)(?:,\s*'([^']*?)')?\)/TWiki::Func::formatTime($theDB->expandPath($topicObj, $1), $2)/geo; # single quoted
+    $text =~ s/\$formatTime\((.*?)(?:,\s*'([^']*?)')?\)/_formatTime($theDB->expandPath($topicObj, $1), $2)/geo; # single quoted
 
     push @result, $text;
 
@@ -998,7 +1003,8 @@ sub _expandVariables {
   $theFormat =~ s/\$nop//g;
   $theFormat =~ s/\$n/\n/go;
   $theFormat =~ s/\$flatten\((.*?)\)/&_flatten($1)/ges;
-  $theFormat =~ s/\$encode\((.*?)\)/&_encode($1, $web, $topic)/ges;
+  $theFormat =~ s/\$rss\((.*?)\)/&_rss($1, $web, $topic)/ges;
+  $theFormat =~ s/\$encode\((.*?)\)/&_encode($1)/ges;
   $theFormat =~ s/\$trunc\((.*?),\s*(\d+)\)/substr($1,0,$2)/ges;
   $theFormat =~ s/\$t\b/\t/go;
   $theFormat =~ s/\$dollar/\$/go;
@@ -1007,19 +1013,37 @@ sub _expandVariables {
 }
 
 ###############################################################################
-# for rss
-sub _encode {
+# fault tolerant wrapper
+sub _formatTime {
+  my ($time, $format) = @_;
+
+  $time ||= 0;
+  return TWiki::Func::formatTime($time, $format)
+}
+
+###############################################################################
+# used to encode rss feeds
+sub _rss {
   my ($text, $web, $topic) = @_;
 
   $text = "\n<noautolink>\n$text\n</noautolink>\n";
-  $text = &TWiki::Func::expandCommonVariables($text, $topic, $web);
-  $text = &TWiki::Func::renderText($text);
+  $text = TWiki::Func::expandCommonVariables($text, $topic, $web);
+  $text = TWiki::Func::renderText($text);
   $text =~ s/\b(onmouseover|onmouseout|style)=".*?"//go; # TODO filter out more not validating attributes
   $text =~ s/<nop>//go;
   $text =~ s/[\n\r]+/ /go;
   $text =~ s/\n*<\/?noautolink>\n*//go;
   $text =~ s/([[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|])/'&#'.ord($1).';'/ge;
   $text =~ s/^\s*(.*?)\s*$/$1/gos;
+
+  return $text;
+}
+
+###############################################################################
+sub _encode {
+  my $text = shift;
+
+  $text =~ s/([[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|])/'&#'.ord($1).';'/ge;
 
   return $text;
 }

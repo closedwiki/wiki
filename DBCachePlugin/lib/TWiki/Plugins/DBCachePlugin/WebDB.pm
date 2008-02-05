@@ -293,7 +293,9 @@ sub expandPath {
 
   if ($thePath =~ /^info.author$/) {
     if (defined(&TWiki::Users::getWikiName)) {    # TWiki-4.2 onwards
-      my $author = $theRoot->fastget('info')->fastget('author');
+      my $info = $theRoot->fastget('info');
+      return '' unless $info;
+      my $author = $info->fastget('author');
       my $session = $TWiki::Plugins::SESSION;
       return $session->{users}->getWikiName($author);
     }
@@ -330,6 +332,7 @@ sub expandPath {
     $root = $theRoot->fastget($first) unless $root;
     return $this->expandPath($root, $tail) if ref($root);
     return '' unless $root;
+    return $root if $first eq 'text'; # not url encoded
     my $field = TWiki::urlDecode($root);
 
     #print STDERR "DEBUG: result=$field\n";
