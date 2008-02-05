@@ -143,6 +143,7 @@ sub handleSection {
       to=>$to,
       t=>time(),
       cover=>'chapter',
+      action=>'text',
     );
 
     my $anchor = lc($web.'_'.$topic);

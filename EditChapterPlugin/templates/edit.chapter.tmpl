@@ -16,5 +16,5 @@ $(function() {
 });
 </script>%TMPL:END%
 %TMPL:DEF{"titleaction"}%(section)%TMPL:END%
-%TMPL:DEF{"pagetitle"}%<nop>%TOPIC% (section)%TMPL:END%
+%TMPL:DEF{"pagetitle"}%<h1 class="patternTemplateTitle"><nop>%TOPIC% %MAKETEXT{"(section)"}%</h1>%TMPL:END%
 %TMPL:DEF{"action_buttons"}%%TMPL:P{"button_save"}%&nbsp;%TMPL:P{"button_quietsave"}% %MAKETEXT{"or"}% %TMPL:P{"button_cancel"}%%TMPL:END%
