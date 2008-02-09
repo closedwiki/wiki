@@ -38,20 +38,18 @@ use File::Temp ();
 use POSIX      ();
 use diagnostics;
 use Carp ();
-use vars
-  qw( $VERSION $RELEASE $SHORTDESCRIPTION $basedir $twiki_home $buildpldir $libpath );
+our $basedir;
+our $buildpldir;
+our $libpath;
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
-$VERSION = '$Rev$';
+our $VERSION = '$Rev$';
 
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'TWiki-4';
+our $RELEASE = 'TWiki-4';
 
-$SHORTDESCRIPTION =
+our $SHORTDESCRIPTION =
   'Automate build process for Plugins, Add-ons and Contrib modules';
 
 my $TWIKIORGPUB    = 'http://twiki.org/p/pub';
@@ -104,7 +102,6 @@ BEGIN {
     $basedir = $libpath;
     $basedir =~ s#/[^/]*$##;
 
-    $twiki_home = $ENV{'TWIKI_HOME'};
     if ( $ENV{TWIKI_LIBS} ) {
         my %known;
         map { $known{$_} = 1 } split( /:/, @INC );
@@ -749,15 +746,22 @@ sub target_test {
 
     # find testrunner
     my $testrunner =
+      _findRelativeTo( $this->{basedir}, 'core/test/bin/TestRunner.pl' ) ||
       _findRelativeTo( $this->{basedir}, 'test/bin/TestRunner.pl' );
 
     my $tests =
-      _findRelativeTo( $this->{basedir},
-        'test/unit/' . $this->{project} . '/' . $this->{project} . 'Suite.pm' );
+      _findRelativeTo(
+          $this->{basedir},
+          'test/unit/' . $this->{project} . '/'
+            . $this->{project} . 'Suite.pm' );
     unless ($tests) {
         $tests =
-          _findRelativeTo( $this->{basedir},
-            '/test/unit/' . $this->{project} . 'Suite.pm' );
+          _findRelativeTo(
+              $this->{basedir},
+              '/core/test/unit/' . $this->{project} . 'Suite.pm' ) ||
+              _findRelativeTo(
+                  $this->{basedir},
+                  '/test/unit/' . $this->{project} . 'Suite.pm' );
         unless ($tests) {
             warn 'WARNING: COULD NOT FIND ANY UNIT TESTS FOR '
               . $this->{project};
