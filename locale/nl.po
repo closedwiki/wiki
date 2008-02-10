@@ -2028,8 +2028,9 @@ msgstr ""
 "Alleen leden van de %1 hebben de mogelijkheid deze actie uit te voeren."
 
 #: templates/login.tmpl:8
-msgid "Oops: we could not recognize you. Try again or %1."
-msgstr "Ahem: we konden je niet herkennen. Probeer het opnieuw of %1."
+msgid "Oops: we could not recognize you. Try again or [[%SYSTEMWEB%.ResetPassword][reset your password]]."
+msgstr "Ahem: we konden je niet herkennen. Probeer het opnieuw of "
+"[[%1][stel een nieuw wachtwoord in]]."
 
 #: twikiplugins/ClassicSkin/templates/preview.classic.tmpl:10
 msgid "Opens page in new window"
@@ -2082,7 +2083,7 @@ msgstr "Wachtwoord kon niet worden veranderd"
 
 #: templates/messages.tmpl:204 templates/messages.tmpl:208
 msgid "Password reset failed"
-msgstr "Wachtwoord nieuw instellen niet gelukt"
+msgstr "Wachtwoord opnieuw instellen niet gelukt"
 
 #: templates/messages.tmpl:218
 msgid "Passwords do not match"
