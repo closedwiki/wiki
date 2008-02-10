@@ -52,7 +52,7 @@
 </div>
 <div class="twikiFormStep">
 ---+++!! %MAKETEXT{"Select topic parent:"}%
-<p>%IF{"defined pickparent" then="<select name='topicparent' size='10' class='twikiSelect' tabindex='12'>$percntTOPICLIST{$quot<option $marker value='$name'>$name</option>$quot separator=$quot$quot selection=$quot$percntMETASEARCH{type=$quotparent$quot}$percnt}$percnt<option value=$quot$quot>$percntMAKETEXT{$quot(no parent, orphaned topic)$quot}$percnt</option></select>" else="<input type='text' name='topicparent' size='40' class='twikiInputField' />&nbsp;<a href='$percntSCRIPTURLPATH{oops}$percnt/$percntWEB$percnt/$percntTOPIC$percnt?template=oopsmore;$percntQUERYSTRING$percnt;pickparent=1#SetParent'>%MAKETEXT{"Pick from a list"}%</a>"}%</p>
+<p>%IF{"defined pickparent" then="<select name='topicparent' size='10' class='twikiSelect' tabindex='12'>$percntTOPICLIST{$quot<option $marker value='$name'>$name</option>$quot separator=$quot$quot selection=$quot$percntMETASEARCH{type=$quotparent$quot}$percnt}$percnt<option value=$quotnone$quot>$percntMAKETEXT{$quot(no parent, orphaned topic)$quot}$percnt</option></select>" else="<input type='text' name='topicparent' size='40' class='twikiInputField' />&nbsp;<a href='$percntSCRIPTURLPATH{oops}$percnt/$percntWEB$percnt/$percntTOPIC$percnt?template=oopsmore;$percntQUERYSTRING$percnt;pickparent=1#SetParent'>%MAKETEXT{"Pick from a list"}%</a>"}%</p>
 </div>
 <div class="twikiFormStep twikiLast">
 <input type='submit' class='twikiButton' value='%MAKETEXT{"Set new parent"}%' />
@@ -102,7 +102,6 @@ table.twikiDiffOptions img {
 <form name="main" action="%SCRIPTURLPATH{"manage"}%/%WEB%/%TOPIC%">
 	* %MAKETEXT{"Restore topic to revision:"}% <input class="twikiInputField" type="text" name="rev" size="6" value="%PARAM2%" />
 	<input type="hidden" name="action" value="restoreRevision" />
-	<input type="hidden" name="nowysiwyg" value="1" />
 	<input type="submit" class="twikiButton" title="%MAKETEXT{"Restore topic to this revision"}%" value='%MAKETEXT{"Restore"}%' /> <span class="twikiGrayText">%MAKETEXT{"You will be able to review the topic before saving it to a new revision"}%</span>
 </form>
 %IF{"$ param1='0'" then="-->" }%%IF{"$ param1!='0'" then="<!--" }%
