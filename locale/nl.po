@@ -423,8 +423,7 @@ msgid ""
 "%1."
 msgstr ""
 "*Eigenschappen:* De toelichting en zichtbaarheid (of een bijlage verborgen "
-"is) kun je wijzigen zonder een bestand te uploaden. Klik op "
-"\"Alleen "eigenschappen wijzigen\"; zie %1."
+"is) kun je wijzigen zonder een bestand te uploaden. Klik op \"Alleen "eigenschappen wijzigen\"; zie %1."
 
 #: data/TWiki/WikiSyntaxSummary.txt:9
 msgid "*bold* put word/phrase in asterisks: =<nop>*your phrase*="
@@ -1348,8 +1347,7 @@ msgid ""
 msgstr ""
 "Vul je [[%TWIKIWEB%.LoginName][login naam]] in. (Gebruikelijk Voornaam "
 "Achternaam zonder spatie, zonder punten en met hoofdletters, bijvoorbeeld "
-"!JanDevries, tenzij je bewust anders kiest). Ga naar de "
-"[[%TWIKIWEB%.TWikiRegistration][registratiepagina]] als je geen login hebt."
+"!JanDevries, tenzij je bewust anders kiest). Ga naar de " "[[%TWIKIWEB%.TWikiRegistration][registratiepagina]] als je geen login hebt."
 
 #: templates/messages.tmpl:233
 msgid "Error registering new user"
@@ -1585,7 +1583,7 @@ msgid ""
 "using your mail address %3. Contact %4 if this is in error."
 msgstr ""
 "Als je deze e-mail per ongeluk hebt gekregen: Iemand (%1) heeft zich "
-"geregistreerd op de %2 site met gebruik van uw e-mailadres %3. Neem contact "
+"geregistreerd op de %2 site met gebruik van je e-mailadres %3. Neem contact "
 "op met %4 als dit niet juist is."
 
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:301
@@ -1721,8 +1719,7 @@ msgstr ""
 "Het kan waarschijnlijk geen kwaad om door te gaan om te bewerken - tenzij je "
 "van plan bent om gegevens te veranderen in een formulier op de pagina. Als %1 "
 "de pagina bewaart terwijl jij nog aan het bewerken bent, worden jullie "
-"wijzigingen samengevoegd - niets gaat verloren. Maar formuliergegevens kunnen "
-"niet gemakkelijk worden samengevoegd, dus in dat geval raden we je aan om "
+"wijzigingen samengevoegd - niets gaat verloren. Maar formuliergegevens kunnen " "niet gemakkelijk worden samengevoegd, dus in dat geval raden we je aan om "
 "eerst af te stemmen met %1."
 
 #: templates/twiki.tmpl:9
@@ -2575,10 +2572,8 @@ msgid ""
 "clobbering yours. It's easier to keep a handle on if you only copy over the "
 "settings you actually change."
 msgstr ""
-"Site-brede instellingen bevinden zich in %1, maar deze %2 instellingen pagina "
-"heeft prioriteit en wordt gebruikt voor lokale aanpassingen. Dit maakt het "
-"opwaarderen gemakkelijker omdat je je dan geen zorgen hoeft te maken over "
-"meegeleverde instellingen die de jouwe dan overschrijven. Kopieer van %1 "
+"Site-brede instellingen bevinden zich in %1, maar deze %2 instellingen pagina " "heeft prioriteit en wordt gebruikt voor lokale aanpassingen. Dit maakt het "
+"opwaarderen gemakkelijker omdat je je dan geen zorgen hoeft te maken over " "meegeleverde instellingen die de jouwe dan overschrijven. Kopieer van %1 "
 "alleen de instellingen die je nodig hebt."
 
 #: templates/attachtables.tmpl:4
@@ -2650,7 +2645,7 @@ msgstr "Versturen"
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:18
 #: twikiplugins/ClassicSkin/templates/registernotifyadmin.classic.tmpl:12
 msgid "Submitted content:"
-msgstr "Verstuur inhoud:"
+msgstr "Verstuurde gegevens:"
 
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:47
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:79
@@ -3338,11 +3333,7 @@ msgid ""
 "cannot easily be merged though, so in this case you are recommended to check "
 "with %1 first."
 msgstr ""
-"Ga gewoon door met bewerken - tenzij je van plan bent om gegevens in een "
-"paginaformulier te wijzigen. Als %1 de pagina bewaart terwijl jij nog aan het "
-"bewerken bent, worden jullie wijzigingen samengevoegd - niets gaat verloren. "
-"Maar formuliergegevens kunnen niet gemakkelijk worden samengevoegd, dus in "
-"dat geval raden we je aan om eerst te af te stemmen met %1."
+"Ga gewoon door met bewerken - tenzij je van plan bent om gegevens in een " "paginaformulier te wijzigen. Als %1 de pagina bewaart terwijl jij nog aan het " "bewerken bent, worden jullie wijzigingen samengevoegd - niets gaat verloren. " "Maar formuliergegevens kunnen niet gemakkelijk worden samengevoegd, dus in " "dat geval raden we je aan om eerst te af te stemmen met %1."
 
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:35
 msgid "You are here:"
