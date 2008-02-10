@@ -2,27 +2,23 @@
 %META:TOPICPARENT{name="ManagingUsers"}%
 ---+ Bulk Registration
 
-Administrators can use this topic to register (i.e. create logins and UserTopics) for a group of people quickly. 
-Create a table in the REGISTERTOPIC named below, setting each row to represent each user and each column to correspond to the metadata.
-Then press the button on this page to perform registration for those users. 
-Unlike normal registration the administrator is assumed to have correct e-mail addresses for the users, so no verification is required.
+Administrators can use this topic to register (i.e. create logins and user topics) for a group of people in one batch. 
+
+Unlike normal registration the administrator is assumed to have correct e-mail addresses for the users, so *no verification is required.*
 Note that the new users are not notified that they have an account. This is so you can prepare and verify the accounts before announcing them.
-To announce them use the BulkResetPassword feature: this will assign a new random password and notify users. 
+To announce them use the [[BulkResetPassword]] feature: this will assign a new random password and notify users. 
 
 ---++ Bulk Registration usage
+Note: this is an administrator job - only admistrators can run this.
 
-Any fields you define in this table will end up in the User's topic. If a form (such as %TWIKIWEB%.UserForm) is attached to NewUserTemplate then the data will go in as META:FIELDS, meaning that you can use SEARCH formfield constructs to search. 
+If you are administrator, you will take these actions:
+   1 (First time use) Create new bulk registration topics (see [[#Settings][Settings]] below).
+   1 In the REGISTERTOPIC topic: create a table of new users. An example table is provided below to copy.
+   1 Return to this topic and press the button "Bulk Register" to create the new topics.
+   1 Read %LOGTOPIC% to verify if all has gone well.
+   1 When you are ready, use the [[BulkResetPassword]] page to assign passwords and notify the users of their new accounts.
 
-If you use the %TWIKIWEB%.UserForm then ensure that it contains all the fields you define here. Otherwise they will disappear when the user edits their home topic!
-
----+++ Mandatory fields
-   * !WikiName 
-   * !FirstName
-   * !LastName 
-
----+++ Optional fields
-   * LoginName - if not set will register with WikiName
-
+Below are the details.
 
 ---++ Settings
    * Define where to pick up the table of users to register
@@ -34,26 +30,53 @@ If you use the %TWIKIWEB%.UserForm then ensure that it contains all the fields y
      topics. By default, existing user topics are left alone.
       * Set OVERWRITEHOMETOPICS = 0
 
+---++ The user table
+This table is a template for user data that will be written to the new user topics. If you stick to these basic fields you can just use the first example below. If you want to write more data (like phone number or country) read the section [[#CustomizingUserData][Customizing user data]] as well.
+
 ---+++ Example format
-The following should be inserted into your REGISTERTOPIC as a table.
+The following should be inserted into your %REGISTERTOPIC% as a table. This is the most simple format:
 <verbatim>
-| FirstName | LastName | Email | WikiName | CustomFieldThis | SomeOtherRandomField | WhateverYouLike |
-| Test | User | you@example.com | TestUser | A | B | C |
+<noautolink>
+%EDITTABLE{}%
+| FirstName | LastName | Email | WikiName |
+| Test | User | you@example.com | TestUser |
+</noautolink>
 </verbatim>
 
-To use this:
-   1 Make sure that the Custom fields appear on the %TWIKIWEB%.UserForm
-   2 Copy the above table to your clipboard
-   3 Click through and paste this on %REGISTERTOPIC%, save the topic and return here.
-   4 Click the Bulk register button below
-   5 Read %LOGTOPIC%
-   6 When you are ready, use the BulkResetPassword page to assign passwords and notify the users of their new accounts.
+*Usage:*
+   1 Copy this text to your clipboard
+   1 Click through and paste this on %REGISTERTOPIC%. 
+   1 Add and customize entries, save table. Note that the first row must not contain bolded entries, so don't apply any formatting.
+   1 Return here
 
-Notes:
-   1 The first row of the table dictates the heading format and that the fieldnames must be plain, i.e. *must not contain bolded* entries.
-   2 You are responsible for ensuring that the fieldnames appear in the [[%TWIKIWEB%.UserForm]]
-   3 Only administrators can run this.
+#CustomizingUserData
+---+++ Customizing user data
 
+You can write additional data to the new user topics. Do this by enhancing the user table with additional field names as table headers.
+
+Any fields you define in this table will end up in the User's topic. If a form (such as %TWIKIWEB%.UserForm) is attached to NewUserTemplate then the data will go in as META:FIELDS, meaning that you can use SEARCH formfield constructs to search. 
+
+If you use the %TWIKIWEB%.UserForm then ensure that it contains all the fields you define here. Otherwise they will disappear when the user edits their home topic!
+
+---++++ Mandatory fields
+   * !WikiName 
+   * !FirstName
+   * !LastName 
+
+---++++ Optional fields
+   * LoginName - if not set will register with WikiName
+
+---++++ Customized table example
+Make sure that the extra fields also appear on the %TWIKIWEB%.UserForm.
+<verbatim>
+<noautolink>
+%EDITTABLE{}%
+| FirstName | LastName | Email | WikiName | CustomFieldThis | SomeOtherRandomField | WhateverYouLike |
+| Test | User | you@example.com | TestUser | A | B | C |
+</noautolink>
+</verbatim>
+
+---
 %IF{
   "context passwords_modifyable"
   then=""
@@ -69,14 +92,14 @@ Notes:
 <input type="hidden" name="OverwriteHomeTopics" value="%OVERWRITEHOMETOPICS%" />
 </form>
 
----++ %REGISTERTOPIC%
+---++ <nop>%REGISTERTOPIC%
 
-%INCLUDE{%REGISTERTOPIC%}%
+%INCLUDE{"%REGISTERTOPIC%" warn="off"}%
 
 
----++ %LOGTOPIC%
+---++ <nop>%LOGTOPIC%
 
-%INCLUDE{%LOGTOPIC%}%
+%INCLUDE{"%LOGTOPIC%" warn="off"}%
 
 
 __Related Topics:__ AdminToolsCategory
