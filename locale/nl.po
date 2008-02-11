@@ -119,7 +119,7 @@ msgstr "%1 home"
 
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:86
 msgid "%1 is a list of TWiki user documentation"
-msgstr "%1 is een lijst van pagina's van de TWiki gebruikersdocumentatie"
+msgstr "%1 is een lijst van pagina&#39;s van de TWiki gebruikersdocumentatie"
 
 #: templates/messages.tmpl:106
 msgid "%1 is an invalid name for a new web"
@@ -206,7 +206,7 @@ msgstr "(%1 vs. %2)"
 
 #: data/TWiki/WebSearchAdvanced.txt:76
 msgid "(=all= to show all topics)"
-msgstr "(=all= om alle pagina's te tonen)"
+msgstr "(=all= om alle pagina&#39;s te tonen)"
 
 #: data/Sandbox/WebHome.txt:9
 msgid "(Use a topic name in TWiki.WikiNotation)"
@@ -486,7 +486,7 @@ msgstr ""
 "<a href='%1'>RSS feed</a>, recente wijzigingen met <a href='%2'>50</a>, <a "
 "href='%3' rel='nofollow'>100</a>, <a href='%4' rel='nofollow'>200</a>, <a "
 "href='%5' rel='nofollow'>500</a>, <a href='%6' rel='nofollow'>1000</a> "
-"pagina's, <a href='%7' rel='nofollow'>alle wijzigingen</a>"
+"pagina&#39;s, <a href='%7' rel='nofollow'>alle wijzigingen</a>"
 
 #: templates/oopsmore.tmpl:41
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:21
@@ -643,7 +643,7 @@ msgstr "Alle publieke webs"
 
 #: data/TWiki/WebSearchAdvanced.txt:89
 msgid "All topics in %1"
-msgstr "Alle pagina's in %1"
+msgstr "Alle pagina&#39;s in %1"
 
 #: templates/twiki.tmpl:7
 msgid "Allow non <nop>WikiWord for the new topic name"
@@ -668,12 +668,12 @@ msgid ""
 "An error page will be shown if either of the topics are locked by another "
 "user."
 msgstr ""
-"Een foutmeldingspagina wordt getoond als een van de pagina's is vergrendeld "
+"Een foutmeldingspagina wordt getoond als een van de pagina&#39;s is vergrendeld "
 "door een andere gebruiker."
 
 #: templates/messages.tmpl:17
 msgid "And populated with topics from the base web"
-msgstr "En gevuld met pagina's van het basisweb"
+msgstr "En gevuld met pagina&#39;s van het basisweb"
 
 #: templates/changeform.tmpl:27
 msgid ""
@@ -880,15 +880,15 @@ msgstr "Wijzig links die verwijzen naar !%1 in alle Webs:"
 
 #: templates/renamewebbase.tmpl:40
 msgid "Change links in topics that refer to !%1 in the %2 Web:"
-msgstr "Wijzig links in pagina's die verwijzen naar !%1 in %2 Web:"
+msgstr "Wijzig links in pagina&#39;s die verwijzen naar !%1 in %2 Web:"
 
 #: templates/renamebase.tmpl:56
 msgid "Change links in topics that refer to %1 in any Web:"
-msgstr "Wijzig links in pagina's die verwijzen naar %1 in alle Webs:"
+msgstr "Wijzig links in pagina&#39;s die verwijzen naar %1 in alle Webs:"
 
 #: templates/renamebase.tmpl:53
 msgid "Change links in topics that refer to %1 in the %2 Web:"
-msgstr "Wijzig links in pagina's die verwijzen naar %1 in %2 Web"
+msgstr "Wijzig links in pagina&#39;s die verwijzen naar %1 in %2 Web"
 
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:30
 msgid "Change password"
@@ -942,19 +942,19 @@ msgstr ""
 #: templates/renamebase.tmpl:42 templates/renamedelete.tmpl:31
 msgid "Checked topics will be updated to point to the new topic location."
 msgstr ""
-"Aangevinkte pagina's zullen worden geupdate zodat ze verwijzen naar de "
+"Aangevinkte pagina&#39;s zullen worden geupdate zodat ze verwijzen naar de "
 "nieuwe locatie van de pagina."
 
 #: templates/renameweb.tmpl:29
 msgid "Checked topics will be updated to point to the new web name."
 msgstr ""
-"Aangevinkte pagina's zullen worden geupdate zodat ze verwijzen naar de "
+"Aangevinkte pagina&#39;s zullen worden geupdate zodat ze verwijzen naar de "
 "nieuwe webnaam."
 
 #: templates/oopsmore.tmpl:113
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:23
 msgid "Child topics in %1 web"
-msgstr "Onderliggende pagina's in %1 web"
+msgstr "Onderliggende pagina&#39;s in %1 web"
 
 #: templates/changeform.tmpl:7
 msgid "Choose a new form for %1"
@@ -1413,7 +1413,7 @@ msgid ""
 "using your WikiName."
 msgstr ""
 "De account aanmaken afronden, zodat je kan beginnen met het bewerken van "
-"pagina's met gebruik van je [[WikiName][Wikinaam]]."
+"pagina&#39;s met gebruik van je [[WikiName][Wikinaam]]."
 
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:93
 msgid "First Name:"
@@ -1441,7 +1441,7 @@ msgid ""
 "rel='nofollow'>Renaming and moving topics</a>."
 msgstr ""
 "Meer info over <a target='ManagingTopics' class='twikiPopUp' href='%1' "
-"rel='nofollow'>hernoemen en verplaatsen van pagina's</a>."
+"rel='nofollow'>hernoemen en verplaatsen van pagina&#39;s</a>."
 
 #: templates/renamewebbase.tmpl:50
 msgid ""
@@ -1449,7 +1449,7 @@ msgid ""
 "rel='nofollow'>Renaming and moving webs</a>."
 msgstr ""
 "Meer info over <a target='ManagingWebs' class='twikiPopUp' href='%1' "
-"rel='nofollow'>hernoemen en verplaatsen van pagina's</a>."
+"rel='nofollow'>hernoemen en verplaatsen van pagina&#39;s</a>."
 
 #: templates/settings.tmpl:26
 msgid ""
@@ -1563,7 +1563,7 @@ msgid ""
 "the correct parameters."
 msgstr ""
 "Als je een [[TWikiApplication][TWiki applicatie]] ontwikkelt, zie %1 voor "
-"een beschrijving van de juiste pagina's."
+"een beschrijving van de juiste pagina&#39;s."
 
 #: templates/messages.tmpl:480
 msgid "If you came here by clicking on a question mark link"
@@ -1785,15 +1785,15 @@ msgstr "Link"
 
 #: data/TWiki/WebSearch.txt:44 data/TWiki/WebSearchAdvanced.txt:87
 msgid "List all topics in the %1 web in alphabetical order"
-msgstr "Toon alle pagina's in het %1 web in alfabetische volgorde"
+msgstr "Toon alle pagina&#39;s in het %1 web in alfabetische volgorde"
 
 #: data/TWiki/WebTopicViewTemplate.txt:23
 msgid "List more similar topic in this web"
-msgstr "Toon vergelijkbare pagina's in dit web"
+msgstr "Toon vergelijkbare pagina&#39;s in dit web"
 
 #: data/TWiki/WebSearch.txt:45 data/TWiki/WebSearchAdvanced.txt:88
 msgid "List topics that start with the letter:"
-msgstr "Toon alle pagina's die beginnen met de letter:"
+msgstr "Toon alle pagina&#39;s die beginnen met de letter:"
 
 #: data/Main/TWikiPreferences.txt:2
 msgid "Local customisations of site-wide preferences"
@@ -1923,7 +1923,7 @@ msgstr "Nieuwe e-mails (spatie-gescheiden lijst)"
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:73
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:9
 msgid "New or changed topics in %1, since %2:"
-msgstr "Nieuwe of gewijzigde pagina's in %1, sinds %2:"
+msgstr "Nieuwe of gewijzigde pagina&#39;s in %1, sinds %2:"
 
 #: templates/renamewebbase.tmpl:10
 msgid "New parent web:"
@@ -1948,7 +1948,7 @@ msgstr "Nieuwere revisie:"
 #: templates/oopsmore.tmpl:114
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:24
 msgid "No child topics"
-msgstr "Geen onderliggende pagina's"
+msgstr "Geen onderliggende pagina&#39;s"
 
 #: templates/messages.tmpl:442
 msgid "No permission to view %1"
@@ -2002,7 +2002,7 @@ msgstr "Blijf op de hoogte"
 #: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:5
 #: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:38
 msgid "Number of topics:"
-msgstr "Aantal pagina's:"
+msgstr "Aantal pagina&#39;s:"
 
 #: templates/messages.tmpl:173 templates/messages.tmpl:180
 #: templates/oopsaccessdenied.tmpl:7 templates/oopssaveerr.tmpl:14
@@ -2255,7 +2255,7 @@ msgstr "Regular expression zoeken"
 
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:81
 msgid "Related Topics"
-msgstr "Gerelateerde pagina's"
+msgstr "Gerelateerde pagina&#39;s"
 
 #: data/Sandbox/WebNotify.txt:10 data/Trash/WebNotify.txt:9
 #: data/_default/WebNotify.txt:8 templates/messages.tmpl:467
@@ -2265,7 +2265,7 @@ msgstr "Gerelateerde pagina's"
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:42
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:43
 msgid "Related topics:"
-msgstr "Gerelateerde pagina's:"
+msgstr "Gerelateerde pagina&#39;s:"
 
 #: twikiplugins/ClassicSkin/templates/login.classic.tmpl:10
 msgid "Remember me"
@@ -2445,11 +2445,11 @@ msgstr "Zoek in a&lle webs"
 #: templates/oopsmore.tmpl:38
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:18
 msgid "Search all webs for topics that link to here"
-msgstr "Zoek in alle webs naar pagina's die hierheen linken"
+msgstr "Zoek in alle webs naar pagina&#39;s die hierheen linken"
 
 #: data/TWiki/WebTopicViewTemplate.txt:24
 msgid "Search similar topics in all public webs"
-msgstr "Zoek naar vergelijkbare pagina's in alle publieke webs"
+msgstr "Zoek naar vergelijkbare pagina&#39;s in alle publieke webs"
 
 #: data/TWiki/WebSearchAdvanced.txt:64
 msgid "Search string"
@@ -2458,7 +2458,7 @@ msgstr "Zoektekst"
 #: templates/oopsmore.tmpl:40
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:20
 msgid "Search the %1 Web for topics that link to here"
-msgstr "Zoek in %1 Web naar pagina's die hierheen linken"
+msgstr "Zoek in %1 Web naar pagina&#39;s die hierheen linken"
 
 #: data/TWiki/WebSearch.txt:29 data/TWiki/WebSearchAdvanced.txt:37
 msgid "Search where:"
@@ -2559,7 +2559,7 @@ msgstr "Naast elkaar"
 
 #: data/TWiki/WebTopicViewTemplate.txt:21
 msgid "Similar topics in this web (if any):"
-msgstr "Vergelijkbare pagina's in dit web (eventueel):"
+msgstr "Vergelijkbare pagina&#39;s in dit web (eventueel):"
 
 #: data/TWiki/WebSearchAdvanced.txt:32
 msgid "Simple search"
@@ -2667,7 +2667,7 @@ msgid ""
 "TIP: to search for all topics that contain =\"SOAP\"=, =\"WSDL\"=, a literal "
 "=\"web service\"=, but not =\"shampoo\"=, write:"
 msgstr ""
-"TIP: om te zoeken naar alle pagina's met de woorden =\"SOAP\"=, =\"WSDL\"=, "
+"TIP: om te zoeken naar alle pagina&#39;s met de woorden =\"SOAP\"=, =\"WSDL\"=, "
 "een woordelijk =\"web service\"=, maar niet =\"shampoo\"=, schrijf:"
 
 #: templates/login.tmpl:3
@@ -2796,8 +2796,8 @@ msgid ""
 "The checkmarked topics will be updated (another form will appear which will "
 "_eventually_ allow you to rename any topics that were locked)"
 msgstr ""
-"De aangevinkte pagina's zullen worden vernieuwd (je zal een ander formulier "
-"te zien krijgen waarin je pagina's kunt hernoemen die zijn vergendeld)."
+"De aangevinkte pagina&#39;s zullen worden vernieuwd (je zal een ander formulier "
+"te zien krijgen waarin je pagina&#39;s kunt hernoemen die zijn vergendeld)."
 
 #: templates/messages.tmpl:287
 msgid "The e-mail address for this account is not valid."
@@ -2814,13 +2814,13 @@ msgstr "Het bestand is geupload en succesvol bijgevoegd bij pagina %1."
 #: templates/messages.tmpl:384
 msgid "The following topics are locked for edit, and cannot be moved:"
 msgstr ""
-"De volgende pagina's zijn vergrendeld voor bewerken, en kunnen niet "
+"De volgende pagina&#39;s zijn vergrendeld voor bewerken, en kunnen niet "
 "verplaatst worden:"
 
 #: templates/messages.tmpl:390
 msgid "The following topics refer to topics in this web, but are being edited:"
 msgstr ""
-"De volgende pagina's verwijzen naar pagina's in dit web, maar worden op dit "
+"De volgende pagina&#39;s verwijzen naar pagina&#39;s in dit web, maar worden op dit "
 "moment bewerkt:"
 
 #: templates/messages.tmpl:387
@@ -2828,7 +2828,7 @@ msgid ""
 "The following topics refer to topics in this web, but you are denied access "
 "to them:"
 msgstr ""
-"De volgende pagina's verwijzen naar pagina's in dit web, maar je hebt geen "
+"De volgende pagina&#39;s verwijzen naar pagina&#39;s in dit web, maar je hebt geen "
 "toegang ertoe:"
 
 #: templates/messages.tmpl:326
@@ -2925,7 +2925,7 @@ msgid ""
 "list:"
 msgstr ""
 "Dit is een abonnementsdienst om automatisch per e-mail bericht te krijgen "
-"wanneer pagina's zijn gewijzigd in dit %1 web. Dit is een gemaksdienst, "
+"wanneer pagina&#39;s zijn gewijzigd in dit %1 web. Dit is een gemaksdienst, "
 "zodat je niet steeds terug hoeft te komen om te controleren of iets is "
 "gewijzigd. Om je aan te melden voeg je een _bullet point_ toe met je %2 in "
 "alfabetische volgorde van deze lijst:"
@@ -2947,7 +2947,7 @@ msgid ""
 "This is the Trash. Here you can undelete topics; deleted attachments are in "
 "TrashAttachment."
 msgstr ""
-"Dit is de Prullenmand. Hier kun je verwijderingen van pagina's ongedaan "
+"Dit is de Prullenmand. Hier kun je verwijderingen van pagina&#39;s ongedaan "
 "maken; verwijderde bijlagen staan in TrashAttachment."
 
 #: templates/renamedelete.tmpl:25
@@ -2955,7 +2955,7 @@ msgid ""
 "This name has been chosen so it doesn't conflict with any other topics "
 "already in the %1 web."
 msgstr ""
-"Deze naam is uigekozen zodat deze niet conflicteert met andere pagina's die "
+"Deze naam is uigekozen zodat deze niet conflicteert met andere pagina&#39;s die "
 "al aanwezig zijn in het %1 web."
 
 #: templates/messages.tmpl:337
@@ -3001,7 +3001,7 @@ msgid ""
 "To edit pages on this TWikiSite, you must have a registered user name and "
 "password."
 msgstr ""
-"Om pagina's te bewerken op deze TWikiSite heb je een geregistreerde "
+"Om pagina&#39;s te bewerken op deze TWikiSite heb je een geregistreerde "
 "gebruikersnaam en wachtwoord nodig."
 
 #: templates/oopsleaseconflict.tmpl:20
@@ -3324,7 +3324,7 @@ msgstr "Je staat ook vermeld op pagina %1"
 
 #: templates/messages.tmpl:381
 msgid "You are denied access to the following topics in the web:"
-msgstr "Je hebt geen toegang tot the volgende pagina's in web:"
+msgstr "Je hebt geen toegang tot the volgende pagina&#39;s in web:"
 
 #: templates/messages.tmpl:435
 msgid ""
@@ -3718,7 +3718,7 @@ msgstr "title='Bewerk pagina in brontekst' accesskey='b'>Bewerk &brontekst"
 msgid ""
 "title='Search all webs for topics that link to here' accesskey='l'>A&ll Webs"
 msgstr ""
-"title='Zoek in alle webs naar pagina's die hierheen linken' "
+"title='Zoek in alle webs naar pagina&#39;s die hierheen linken' "
 "accesskey='l'>A&lle Webs"
 
 #: templates/viewtopicactionbuttons.tmpl:30
@@ -3726,13 +3726,13 @@ msgid ""
 "title='Search the %1 Web for topics that link to here' "
 "accesskey='b'>&Backlinks"
 msgstr ""
-"title='Zoek in %1 Web naar pagina's die hierheen linken' accesskey='w'>Verwijzingen in &Web"
+"title='Zoek in %1 Web naar pagina&#39;s die hierheen linken' accesskey='w'>Verwijzingen in &Web"
 
 #: templates/viewtopicactionbuttons.tmpl:26
 msgid ""
 "title='Search the %1 Web for topics that link to here' accesskey='b'>We&b"
 msgstr ""
-"title='Zoek in %1 Web naar pagina's die hierheen linken' accesskey='w'>Verwijzingen in &Web"
+"title='Zoek in %1 Web naar pagina&#39;s die hierheen linken' accesskey='w'>Verwijzingen in &Web"
 
 #: templates/viewtopicactionbuttons.tmpl:38
 msgid "title='View raw text without formatting' accesskey='r'>&Raw View"
