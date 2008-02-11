@@ -1,10 +1,5 @@
 %TMPL:INCLUDE{"attachagain"}%
-
-
-
-%TMPL:DEF{"commonattachtableattributes"}%tablerules="rows" valign="middle" dataalign="center,left,left,right,left,left, left,center" datavalign="top" headercolor="#0066cc" databg="#ffffff" headerbg="#ffffff" headerbgsorted="#eeeeee" databgsorted="#f5f5f5" %TMPL:END%
-
-
+%TMPL:INCLUDE{"attachtables"}%
 
 %TMPL:DEF{"pagetitle"}%%MAKETEXT{"Update attachment [_1] on [_2]" args="[[%ATTACHURLPATH%/%ENCODE{%FILENAME%}%][%FILENAME%]],[[%TOPIC%]]"}%%TMPL:END%
 
