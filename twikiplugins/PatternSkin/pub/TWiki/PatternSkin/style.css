@@ -711,7 +711,9 @@ a.twikiLinkInHeaderRight {
 	font-size:1.1em;
 	font-weight:bold;
 }
-
+.patternLeftBarPersonalContent {
+	margin:1em 0;
+}
 #patternLeftBarContents li {
 	overflow:hidden;
 }
