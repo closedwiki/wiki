@@ -26,13 +26,14 @@ use constant DEBUG => 0; # toggle me
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
 $VERSION = '$Rev$';
-$RELEASE = 'v1.03';
+$RELEASE = 'v1.04';
 $SHORTDESCRIPTION = 'Create a user topic if it does not exist yet';
 $NO_PREFS_IN_TOPIC = 1;
 
 ###############################################################################
 sub writeDebug {
-  print STDERR 'NewUserPlugin - '.$_[0]."\n" if DEBUG;
+  #print STDERR 'NewUserPlugin - '.$_[0]."\n" if DEBUG;
+  TWiki::Func::writeDebug("NewUserPlugin - $_[0]") if DEBUG;
 }
 
 ###############################################################################
@@ -82,10 +83,16 @@ sub createUserTopic {
   my $tmplWeb;
 
   # search the NEWUSERTEMPLATE 
+  $newUserTemplate =~ s/^\s+//go;
+  $newUserTemplate =~ s/\s+$//go;
+  $newUserTemplate =~ s/\%TWIKIWEB\%/$twikiWeb/g;
+  $newUserTemplate =~ s/\%SYSTEMWEB\%/$twikiWeb/g;
+  $newUserTemplate =~ s/\%MAINWEB\%/$mainWeb/g;
 
   # in Main
   ($tmplWeb, $tmplTopic) = 
     TWiki::Func::normalizeWebTopicName($mainWeb, $newUserTemplate);
+
   unless (TWiki::Func::topicExists($tmplWeb, $tmplTopic)) {
 
     # in TWiki
@@ -98,7 +105,7 @@ sub createUserTopic {
     }
   }
 
-  writeDebug("topic $tmplWeb.$tmplTopic exists");
+  writeDebug("newusertemplate = $tmplWeb.$tmplTopic");
 
   # read the template
   my $text = TWiki::Func::readTopicText($tmplWeb, $tmplTopic);
