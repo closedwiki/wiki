@@ -25,6 +25,8 @@ HTML documents, handle events, perform animations, and add Ajax interactions to
 your web pages."
 </blockquote>
 
+See the Sandbox.JQueryPluginExamples page for a demo of a couple of widgets used by TWiki.
+
 ---++ Included libraries
    1 jquery v1.2.3
    1 jquery.bgiframe
@@ -40,146 +42,13 @@ your web pages."
    1 jquery.blockUI
 
 
----++ TWiki wrappers & helpers
-There are helpers to ease creating buttons and a toggle helpers.
-
 ---++ Documentation
-%RED%missing%ENDCOLOR%
-
----++ Documentation
-   * [[http://docs.jquery.com/How_jQuery_Works][Getting the feets wet]]
+   * [[http://docs.jquery.com/How_jQuery_Works][Getting the feet wet]]
    * [[http://docs.jquery.com/Tutorials][Tutorials]]
    * [[http://docs.jquery.com/Main_Page][Reference API]]
    * [[http://docs.jquery.com/Using_jQuery_with_Other_Libraries][Using jQuery with other libraries]]
    * [[http://docs.jquery.com/Plugins][Plugin repository]]
 
-
----++ Examples
----+++ Buttons
-%BUTTON{bg="bluish"}%
-%BUTTON{bg="pinkish"}%
-%BUTTON{bg="greenish"}%
-%BUTTON{style="background-color:orange;color:white;"}%
-%CLEAR%
-
-
----+++ Toggles
-%TOGGLE{target="#lorem_area" text="$percntX$percnt Slide" effect="slide"}%
-
-<input type="button" value="Toggle" onclick="twiki.JQueryPlugin.toggle('#lorem_area', 'toggle')" />
-<input type="button" value="Fade " onclick="twiki.JQueryPlugin.toggle('#lorem_area', 'fade')"/>
-<input type="button" value="Slide" onclick="twiki.JQueryPlugin.toggle('#lorem_area', 'slide')"/>
-<input type="button" value="Bounce" onclick="twiki.JQueryPlugin.toggle('#lorem_area', 'bounce')"/>
-<input type="button" value="Ease" onclick="twiki.JQueryPlugin.toggle('#lorem_area', 'ease')"/>
-
-<div id="lorem_area" style="border:1px solid #ccc;padding:5px;width:250px">
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla dui turpis,
-convallis eget, lacinia id, vulputate ut, ipsum. Donec sed sem. Ut tempus. Nunc
-egestas consectetuer augue. Sed a nibh. Duis rutrum nibh. Sed in orci at arcu
-molestie ultrices. Quisque a lectus. In mollis, nulla id rutrum tincidunt,
-lacus dui vestibulum sapien, vel tincidunt nulla lectus a elit. Nullam laoreet,
-nunc ut varius pulvinar, lacus lectus condimentum orci, nec mattis augue erat
-at mauris. Donec sollicitudin, sapien id lobortis vulputate, tellus sem
-dignissim felis, in laoreet massa purus in mauris. Suspendisse tempus leo quis
-massa. Curabitur tortor eros, dictum sed, tincidunt sit amet, tristique nec,
-nisi. Mauris est urna, fermentum vel, luctus sed, luctus eu, elit. In nulla.
-</div>
-
----+++ Tooltips
-   * <span class="jqToolTip" title="Hello World: This is my first tooltip!!!">Hello world</span>
-
----+++ Rounded corners
-<div style="width:520px;">
-  <div class="jqRounded" style="width:250px;float:left;margin:5px">
-    <h2 style="color:#ffffff;background:#778cca;border:0px">1. Lorem ipsum dolor sit amet</h2>
-    <div style="background:#bfdded;color:black">
-      Consectetuer adipiscing elit. Nulla dui turpis,
-      convallis eget, lacinia id, vulputate ut, ipsum. Donec sed sem. Ut tempus. Nunc
-      egestas consectetuer augue. Sed a nibh. Duis rutrum nibh. Sed in orci at arcu
-      molestie ultrices. Quisque a lectus. In mollis, nulla id rutrum tincidunt,
-    </div>
-  </div>
-  <div class="jqRounded" style="width:250px;float:right;margin:5px">
-    <h2 style="color:#ffffff;background:#9DC35B;border:0px;">2. Lorem ipsum dolor sit amet</h2>
-    <div style="background:#C4E786;color:black">
-      Consectetuer adipiscing elit. Nulla dui turpis,
-      convallis eget, lacinia id, vulputate ut, ipsum. Donec sed sem. Ut tempus. Nunc
-      egestas consectetuer augue. Sed a nibh. Duis rutrum nibh. Sed in orci at arcu
-      molestie ultrices. Quisque a lectus. In mollis, nulla id rutrum tincidunt,
-    </div>
-  </div>
-  <div class="jqRounded" style="width:250px;float:left;margin:5px;">
-    <h2 style="color:#ffffff;background:#DBB13F;border:0px;">3. Lorem ipsum dolor sit amet</h2>
-    <div style="background:#ffd154;color:black">
-      Consectetuer adipiscing elit. Nulla dui turpis,
-      convallis eget, lacinia id, vulputate ut, ipsum. Donec sed sem. Ut tempus. Nunc
-      egestas consectetuer augue. Sed a nibh. Duis rutrum nibh. Sed in orci at arcu
-      molestie ultrices. Quisque a lectus. In mollis, nulla id rutrum tincidunt,
-    </div>
-  </div>
-  <div class="jqRounded" style="width:250px;float:right;margin:5px">
-    <h2 style="color:#ffffff;background:#aa0000;border:0px;">4. Lorem ipsum dolor sit amet</h2>
-    <div style="background:#EDC2C2;color:black">
-      Consectetuer adipiscing elit. Nulla dui turpis,
-      convallis eget, lacinia id, vulputate ut, ipsum. Donec sed sem. Ut tempus. Nunc
-      egestas consectetuer augue. Sed a nibh. Duis rutrum nibh. Sed in orci at arcu
-      molestie ultrices. Quisque a lectus. In mollis, nulla id rutrum tincidunt,
-    </div>
-  </div>
-</div>
-<br clear="all" />
-<div class="jqRounded" style="background:#EDC2C2;color:black;width:250px;margin:5px;">
-  <div>
-  Consectetuer adipiscing elit. Nulla dui turpis,
-  convallis eget, lacinia id, vulputate ut, ipsum. Donec sed sem. Ut tempus. Nunc
-  egestas consectetuer augue. Sed a nibh. Duis rutrum nibh. Sed in orci at arcu
-  molestie ultrices. Quisque a lectus. In mollis, nulla id rutrum tincidunt,
-  </div>
-</div>
-
----+++ Treeview
-<div class="jqTreeview">
-   * list
-      * item
-      * item
-      * item
-   * list
-      * item
-      * item
-      * item
-   * list
-      * item
-      * item
-      * item
-</div>
-<div class="jqTreeview closed red">
-   * list
-      * item
-      * item
-      * item
-   * list
-      * item
-      * item
-      * item
-   * list
-      * item
-      * item
-      * item
-</div>
-<div class="jqTreeview famfamfam">
-   * list
-      * item
-      * item
-      * item
-   * list
-      * item
-      * item
-      * item
-   * list
-      * item
-      * item
-      * item
-</div>
 
 ---++ Installation Instructions
    * Download the ZIP file from the Plugin web (see below)
