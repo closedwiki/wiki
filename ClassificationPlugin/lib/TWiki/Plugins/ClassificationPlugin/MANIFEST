@@ -57,6 +57,9 @@ data/Applications/ClassificationApp/TestCategory8.txt 0644
 data/Applications/ClassificationApp/TestCategory9.txt 0644
 data/Applications/ClassificationApp/TestCategory.txt 0644
 data/Applications/ClassificationApp/TestTagging.txt 0644
+data/Applications/ClassificationApp/TestTopic0.txt 0644
+data/Applications/ClassificationApp/TestTopic1.txt 0644
+data/Applications/ClassificationApp/TestTopic.txt 0644
 data/Applications/ClassificationApp/TopicFunction.txt 0644
 data/Applications/ClassificationApp/TopicStub.txt 0644
 data/Applications/ClassificationApp/TopicTemplate.txt 0644
@@ -84,6 +87,7 @@ data/_ClassificationTemplate/Category.txt 0644
 data/_ClassificationTemplate/ClassifiedTopic.txt 0644
 data/_ClassificationTemplate/TWikiTopic.txt 0644
 data/_ClassificationTemplate/TaggedTopic.txt 0644
+data/_ClassificationTemplate/TopCategory.txt 0644
 data/_ClassificationTemplate/TopicStub.txt 0644
 data/_ClassificationTemplate/TopicType.txt 0644
 data/_ClassificationTemplate/WebAtom.txt 0644
@@ -107,7 +111,10 @@ lib/TWiki/Form/Cat.pm 0644
 lib/TWiki/Plugins/ClassificationPlugin/Access.pm 0644
 lib/TWiki/Plugins/ClassificationPlugin/Category.pm 0644
 lib/TWiki/Plugins/ClassificationPlugin/Core.pm 0644
+lib/TWiki/Plugins/ClassificationPlugin/DEPENDENCIES 0644
 lib/TWiki/Plugins/ClassificationPlugin/Hierarchy.pm 0644
+lib/TWiki/Plugins/ClassificationPlugin/MANIFEST 0644
+lib/TWiki/Plugins/ClassificationPlugin/build.pl 0644
 lib/TWiki/Plugins/ClassificationPlugin.pm 0644
 pub/TWiki/ClassificationPlugin/aqua-pill-18.gif 0644
 pub/TWiki/ClassificationPlugin/classification.js 0644
