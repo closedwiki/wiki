@@ -646,8 +646,6 @@ a:hover .twikiAccessKey {
 }
 .patternSigLine {
    color:%MUTED_TEXT%;
-   background-color:%ATTACHMENT_AND_FORM_BACKGROUND%;
-   border-color:%SEPARATOR_BORDER%;
 }
 .patternToolBar a:link .twikiAccessKey,
 .patternToolBar a:visited .twikiAccessKey {

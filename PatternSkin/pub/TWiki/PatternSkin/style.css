@@ -946,6 +946,7 @@ h4.patternSearchResultsHeader {
 	margin:1em 0 3em 0;
 }
 .patternSearched {
+	display:block;
 }
 .patternSaveHelp {
 	line-height:1.5em;
@@ -1000,9 +1001,8 @@ h4.patternSearchResultsHeader {
 	width:100%;
 }
 .patternSigLine {
-	padding:.25em 20px;
-	border-style:none none solid none;
-	border-width:1px;
+	padding:.25em 0;
+	border-style:none;
 	height:1%; /* for IE */
 }
 .patternOopsPage .patternTopicActions,
