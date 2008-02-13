@@ -73,7 +73,7 @@ require TWiki::Plugins; # For the API version
 
 # $VERSION is referred to by TWiki, and is the only global variable that
 # *must* exist in this package.
-use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC $p4port $p4client $p4user $p4password );
+use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC $p4port $p4client $p4user $p4password);
 
 # This should always be $Rev: 15942 (22 Jan 2008) $ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -104,11 +104,14 @@ $pluginName = 'PerforcePlugin';
 #Settings
 #TODO:  move that into some CFG file. Allow those parameters to be overridden from the TAG?
 
-
 $p4port = "scm-srv:1666";
 $p4client = "sl-pc";
 $p4user = "ccBuild";
 $p4password = "?nt3rn3t";
+
+
+
+
 
 
 =pod
@@ -170,6 +173,7 @@ sub initPlugin {
 
     # Allow a sub to be called from the REST interface 
     # using the provided alias
+    #TODO: use rest interface for ajax support
     #TWiki::Func::registerRESTHandler('example', \&restExample);
 
     # Plugin correctly initialized
@@ -178,6 +182,23 @@ sub initPlugin {
 
 # The function used to handle the %EXAMPLETAG{...}% variable
 # You would have one of these for each variable you want to process.
+
+=pod
+
+
+#Here is Perforce command documentation:
+# http://www.perforce.com/perforce/doc.073/manuals/cmdref/changes.html#1048020
+
+p4 [g-opts] changes [-i -t -l -L -c client -m max -s status -u user] [file[RevRange]...]
+
+TODO: allow setting global options 
+p4user 
+p4port
+p4client
+p4password
+
+=cut
+
 sub _P4CHANGES {
     my($session, $params, $theTopic, $theWeb) = @_;
     # $session  - a reference to the TWiki session object (if you don't know
@@ -194,48 +215,85 @@ sub _P4CHANGES {
     # $params->{_DEFAULT} will be 'hamburger'
     # $params->{sideorder} will be 'onions'
     
+    
+    #my $p4ChangesTemplate='p4 %p4port% %p4client% %p4user% %p4password% %p4cmd% %i% %t% %l% %L% %c% %m% %s% %u% %file%';
+    
+    #my $p4ChangesTemplate='p4 %p4port% %p4client% %p4user% %p4password% %p4cmd% %params% %file%';
+    #my $p4ChangesTemplate='p4 %P4PORT% %P4CLIENT% %P4USER% %P4PASSWORD% %P4CMD% %PARAMS% %FILE%';
+    #my $p4ChangesTemplate='dir %DRIVE%';
+    #my $p4ChangesTemplate='p4 %DRIVE%';
+    
+    #$p4CmdParams{'p4cmd'}=changes
+    
+=pod    
+
+	#Use that with sysCommand if ever you can get it working
+    my %p4ChangesCmdParams=(
+			'P4PORT' => "-p $p4port",
+			'P4CLIENT' => "-c $p4client",
+			'P4USER' => "-u $p4user",
+			'P4PASSWORD' => "-P $p4password",
+			'P4CMD' => 'changes',	
+			'PARAMS' => $params->{params},			
+			'FILE' => $params->{_DEFAULT}
+			);
+
+
+    my %p4ChangesCmdParams=(
+    		'DRIVE' => "changes"
+					);			
+=cut
+					    
+    
     my $changesCmdParams=$params->{_DEFAULT};    
-    my $format = $params->{format};
+    #my $fileSpec = $params->{_DEFAULT};
+    my $format = $params->{format};    
     my $cmd=PerforceBaseCmd($p4port, $p4client, $p4user, $p4password);
+    #$cmd= "$cmd changes $changesCmdParams $fileSpec";
     $cmd= "$cmd changes $changesCmdParams";
     
-    #execute the command
     
+    #Validate our command line
+    if ($cmd =~ /\s+-t\s*/)
+    	{
+		return "%RED%P4CHANGES error: -t option not supported!%ENDCOLOR%";	    	
+    	}
+    elsif ($cmd =~ /\s+-s\s*/)
+    	{
+	    return "%RED%P4CHANGES error: -s option not supported!%ENDCOLOR%";	
+    	}
+    
+    
+        
+    #execute the command    
     #my @changesCmdOutput=TWiki::Sandbox::sysCommand($cmd); #TODO: should be using that API instead of backticks
-    my @changesCmdOutput=`$cmd`; #I know I should not be using backticks ;)
+    my @changesCmdOutput=`$cmd`; #I know I should not be using backticks but I can't get sysCommand to work ;)
+    
+    #my ($changesCmdOutput,$exit)=$session->TWiki::Sandbox::sysCommand('dir %DRIVE%','DRIVE' => "C:");     
+    #my ($changesCmdOutput,$exit)=$session->TWiki::Sandbox::sysCommand($p4ChangesTemplate,%p4ChangesCmdParams); 
+    #return $changesCmdOutput;
+    #return $exit;
+    #my @changesCmdOutput=split $changesCmdOutput;
+    
     my $output="";
     
     if (defined $format)
     	{
-	    #There was a format specified  so let's just parse our results
-    	foreach my $change(@changesCmdOutput)
+	    if ($cmd =~ /\s+-l\s*/)	
+	    	{
+		    #return "Parse full description";		    	  			    	  	
+	    	$output=ParseAndFormatP4ChangesLongDescriptionOutput($format,\@changesCmdOutput);
+    		}
+	    elsif ($cmd =~ /\s+-L\s*/)	
+	    	{
+		    #return "Parse 250 characters description";		    	  	
+	    	$output=ParseAndFormatP4ChangesLongDescriptionOutput($format,\@changesCmdOutput);
+    		}    		
+    	else
     		{
-	    	#Change 69463 on 2008/02/06 by sl@sl-ti 'Some nice comments'
-			
-	    	#Parse one change line	    	
-	    	if ($change =~ /^Change\s+(\d+)\s+on\s+(\d+)\/(\d+)\/(\d+)\s+by\s+([^\s]+)@([^\s]+)\s+'(.+)'$/)
-	    		{
-		    	my $changelist=$1;			
-		    	my $year=$2;
-		    	my $month=$3;
-		    	my $day=$4;
-		    	my $user=$5;
-		    	my $client=$6;
-		    	my $description=$7;
-		    	
-		    	#my $line=$format;
-		    	$output.=P4ChangesVariableSubtitution($format, $changelist, $year, $month, $day, $user, $client, $description);
-		    	
-		    	#Perform var substitutions
-		    	
-		    	
-	    		}
-	    	else
-	    		{
-	    		$output .= "Could not parse: $change";
-		    	$output .= "<br />";		    		
-	    		}	    	     		
-    		}	    	    
+	    	#return "Parse basic";	
+	    	$output=ParseAndFormatP4ChangesBasicOutput($format,\@changesCmdOutput);		    		
+    		}
     	}
     else
     	{
@@ -928,6 +986,119 @@ sub P4ChangesVariableSubtitution
 	#return "$changelist, $year, $month, $day, $user, $client, $description";		
 	}
 
+
+#
+#
+#
 	
+sub ParseAndFormatP4ChangesBasicOutput()
+	{
+	my $format=@_[0];	
+	my $changesCmdOutputRef=@_[1];	
+	my @changesCmdOutput=@$changesCmdOutputRef;	
+		
+	#There was a format specified  so let's just parse our results
+	my $output="";
+    foreach my $change(@changesCmdOutput)
+    	{
+	   	#Change 69463 on 2008/02/06 by sl@sl-ti 'Some nice comments'
+		#Parse one change line	    	
+	    	    	
+	    	
+    	if ($change =~ /^Change\s+(\d+)\s+on\s+(\d+)\/(\d+)\/(\d+)\s+by\s+([^\s]+)@([^\s]+)\s+'(.+)'$/)
+    		{	    		
+	    	my $changelist=$1;			
+	    	my $year=$2;
+	    	my $month=$3;
+	    	my $day=$4;
+	    	my $user=$5;
+	    	my $client=$6;
+	    	my $description=$7;
+	    	#my $status='submitted'; ##TODO
+	    	
+	    	#my $line=$format;
+	    	$output.=P4ChangesVariableSubtitution($format, $changelist, $year, $month, $day, $user, $client, $description);
+	    	
+	    	#Perform var substitutions
+	    		    	
+    		}
+    	else
+    		{
+    		$output .= "Could not parse: $change";
+	    	$output .= "<br />";		    		
+    		}	    	     		
+   		}
+   		
+   	return $output;
+	}	    	    
+	
+#
+#
+#
+
+sub ParseAndFormatP4ChangesLongDescriptionOutput()
+	{
+	my $format=@_[0];	
+	my $changesCmdOutputRef=@_[1];	
+	my @changesCmdOutput=@$changesCmdOutputRef;	
+		
+	#There was a format specified  so let's just parse our results
+	my $output="";
+	
+   	my $changelist;			
+  	my $year;
+   	my $month;
+   	my $day;
+   	my $user;
+   	my $client;
+   	my $description;
+   	
+   	my $description;
+
+	
+    foreach my $change(@changesCmdOutput)
+    	{
+	   	#Change 69463 on 2008/02/06 by sl@sl-ti 'Some nice comments'
+		#Parse one change line	    	
+	    	    	
+	    	
+    	if ($change =~ /^Change\s+(\d+)\s+on\s+(\d+)\/(\d+)\/(\d+)\s+by\s+([^\s]+)@([^\s]+)\s*$/)
+    		{
+	    	if (defined $changelist)	
+	    		{
+		    	$output.=P4ChangesVariableSubtitution($format, $changelist, $year, $month, $day, $user, $client, $description);			
+	    		}
+	    			    		
+	    	$changelist=$1;			
+	    	$year=$2;
+	    	$month=$3;
+	    	$day=$4;
+	    	$user=$5;
+	    	$client=$6;
+	        $description="";
+	        
+	    	#my $status='submitted'; ##TODO	    		    	
+	    	#my $line=$format;	    	    
+	    	#Perform var substitutions
+	    		    	
+    		}
+    	elsif ($change =~ /^\t(.*)/) #empty line is ok
+    		{
+	    	$description.="$1<br />";	
+    		}
+    	elsif ($change =~ /^$/) #drop empty lines
+    		{
+	    	
+    		}    		
+    	else
+    		{
+    		$output .= "Could not parse: $change";
+	    	$output .= "<br />";		    		
+    		}	    	     		
+   		}
+   		
+   	return $output;
+	}	   
+		
 	
 1;
