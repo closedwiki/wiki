@@ -1,64 +1,3 @@
-function toggleValue(fieldName, theValue, selector) {
-
-  var values = $("input#"+fieldName).val() || '';
-  values = values.split(/[, ]+/);
-  var found = false;
-  var newValues = new Array();
-  for (var i = 0; i < values.length; i++)  {
-    var value = values[i];
-    if (!value) 
-      continue;
-    if (value == theValue) {
-      found = true;
-    } else {
-      var re = new RegExp("^"+value+".*");
-      if (!re.test(theValue)) {
-        newValues.push(value);
-      }
-    }
-  }
-
-  if (!found) {
-    newValues.push(theValue)
-  }
-
-  clsSetSelection(fieldName, selector, ""+newValues);
-}
-
-function clsSetSelection(fieldName, selector, selection) {
-  clsClearSelection(fieldName, selector);
-  var values = selection.split(/[, ]+/);
-  for (var i = 0; i < values.length; i++) {
-    $("#"+selector+" a#"+values[i]).addClass("current");
-  }
-  $("input#"+fieldName).val(values.sort().join(", "));
-}
-function clsClearSelection(fieldName, selector) {
-  $("#"+selector+" input#"+fieldName).val("");
-  $("#"+selector+" a").removeClass('current typed');
-}
-
-function handleTaggingKey(fieldName, selector) {
-  var selector = $("#"+selector);
-  $("a", selector).removeClass('typed current');
-  var selection = $("input", selector).val();
-  var values = selection.split(/[, ]+/);
-  for (var i = 0; i < values.length; i++) {
-    $("a#"+values[i],selector).addClass("current");
-  }
-  var last = values[values.length-1];
-  if (last.match(/^ *$/)) {
-    return;
-  }
-  var re = new RegExp("^"+last+".*");
-  $("a",selector).each(function() {
-    var id = $(this).attr("id");
-    if(re.test(id)) {
-      $(this).addClass("typed");
-    }
-  });
-}
-
 var prevHiliteElements = new Array();
 function hiliteElements (elemNames, className) {
   setClassOfNames(prevHiliteElements,'');
@@ -112,5 +51,45 @@ function pressButton(button) {
     $("#clsBrowseButton").toggleClass("aquaPillSelected");
     $("#clsBrowser").slideToggle();
   }
+}
+
+/* TODO: this is only used by the category editor; so make the category editor
+ * a proper jquery plugin like the jquery.tagselector component
+ */
+function toggleValue(fieldName, theValue, selector) {
+
+  var values = $("input#"+fieldName).val() || '';
+  values = values.split(/[, ]+/);
+  var found = false;
+  var newValues = new Array();
+  for (var i = 0; i < values.length; i++)  {
+    var value = values[i];
+    if (!value)
+      continue;
+    if (value == theValue) {
+      found = true;
+    } else {
+      newValues.push(value);
+    }
+  }
+
+  if (!found) {
+    newValues.push(theValue)
+  }
+
+  clsSetSelection(fieldName, selector, ""+newValues);
+}
+function clsSetSelection(fieldName, selector, selection) {
+  clsClearSelection(fieldName, selector);
+  var values = selection.split(/[, ]+/);
+  for (var i = 0; i < values.length; i++) {
+    $("#"+selector+" a#"+values[i]).addClass("current");
+  }
+  $("input#"+fieldName).val(values.sort().join(", "));
+}
+function clsClearSelection(fieldName, selector) {
+  $("#"+selector+" input#"+fieldName).val("");
+  $("#"+selector+" a").removeClass('current');
+  $("#"+selector+" a").removeClass('typed');
 }
 

@@ -6,8 +6,8 @@
    * DISTANCE{to="TestCategory"}: %DISTANCE{to="TestCategory"}%
    * DISTANCE{from="foo" to="TestCategory"}: %DISTANCE{from="foo" to="TestCategory"}%
    * DISTANCE{from="TestCategory5" to="TestCategory15"}: %DISTANCE{from="TestCategory5" to="TestCategory15"}%
-   * DISTANCE{from="TOP" to="BOTTOM" format="min=$min, max=$max"}: %DISTANCE{from="TOP" to="BOTTOM" format="min=$min, max=$max"}%
-   * DISTANCE{from="TOP" to="TestCategory7"}: %DISTANCE{from="TOP" to="TestCategory7"}%
+   * DISTANCE{from="TopCategory" to="BottomCategory" format="min=$min, max=$max"}: %DISTANCE{from="TopCategory" to="BottomCategory" format="min=$min, max=$max"}%
+   * DISTANCE{from="TopCategory" to="TestCategory7"}: %DISTANCE{from="TopCategory" to="TestCategory7"}%
    * DISTANCE{from="TestCategory8" to="TestCategory7"}: %DISTANCE{from="TestCategory8" to="TestCategory7" abs="off"}%
    * DISTANCE{from="TestCategory7" to="TestCategory8"}: %DISTANCE{from="TestCategory7" to="TestCategory8" abs="off"}%
 

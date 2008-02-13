@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2006 Michael Daum http://wikiring.com
+# Copyright (C) 2006-2007 Michael Daum http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@ use TWiki::Plugins::ClassificationPlugin::Hierarchy;
 
 use vars qw(%hierarchies $baseWeb $baseTopic);
 
-sub DEBUG { 0; }
+use constant DEBUG => 0; # toggle me
 
 ###############################################################################
 sub writeDebug {
@@ -31,6 +31,7 @@ sub writeDebug {
 ###############################################################################
 sub init {
   ($baseWeb, $baseTopic) = @_;
+
 
   TWiki::Contrib::DBCacheContrib::Search::addOperator(
     name=>'SUBSUMES', 
@@ -103,10 +104,154 @@ sub OP_distance {
 }
 
 ###############################################################################
-sub handleTagRelatedTopics {
+sub handleTAGCOOCCURRENCE {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
-  #writeDebug("called handleTagRelatedTopics()");
+  my $theTag1 = $params->{tag1};
+  my $theTag2 = $params->{tag2};
+  my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $baseTopic;
+  my $thisWeb = $params->{web} || $baseWeb;
+  my $theFormat = $params->{format} || '   * $tag1, $tag2: $count$n';
+  my $theSep = $params->{separator} || '';
+  my $theHeader = $params->{header} || '';
+  my $theFooter = $params->{footer} || '';
+  my $theArrayFormat = $params->{arrayformat} || '$tag2 ($count)';
+  my $theArraySep = $params->{arrayseparator};
+  my $theAllPairs = $params->{allpairs} || 'on';
+
+  $theAllPairs = ($theAllPairs eq 'on')?1:0;
+
+  $theArraySep = ',' unless defined($theArraySep);
+
+  my $hierarchy = getHierarchy($thisWeb);
+  my $coocc = $hierarchy->getCooccurrence($theTag1, $theTag2);
+
+  my $result = '';
+
+  # format
+  my @result = ();
+  if (defined($theTag1)) {
+    if (defined($theTag2)) {
+      # mode 3: coocurrences of tag1 and tag2
+      my $count = $$coocc{$theTag1}{$theTag2};
+      if (defined($count)) {
+        push @result,  expandVariables($theFormat,
+          tag1=>$theTag1,
+          tag2=>$theTag2,
+          count=>$count,
+        );
+      }
+    } else {
+      # mode 2: all coocurrences of tag1
+      my @coocurringTags = sort keys %{$$coocc{$theTag1}};
+      my $arrayResult = '';
+      if ($theFormat =~ /\$array/) {
+        my @arrayResult = ();
+        foreach my $tag (@coocurringTags) {
+          push @arrayResult, expandVariables($theArrayFormat,
+            tag2=>$tag,
+            count=>$$coocc{$theTag1}{$tag},
+          );
+        }
+        $arrayResult = join($theArraySep, @arrayResult);
+      }
+      foreach my $theTag2 (@coocurringTags) {
+        my $count = $$coocc{$theTag1}{$theTag2};
+        if (defined($count)) {
+          push @result,  expandVariables($theFormat,
+            tag1=>$theTag1,
+            tag2=>$theTag2,
+            count=>$count,
+            array=>$arrayResult,
+          );
+        }
+      }
+    }
+  } else {
+    if (defined($theTag2)) {
+      # mode 2: all coocurrences of tag1
+      my @coocurringTags = sort keys %{$$coocc{$theTag2}};
+      my $arrayResult = '';
+      if ($theFormat =~ /\$array/) {
+        my @arrayResult = ();
+        foreach my $tag (@coocurringTags) {
+          push @arrayResult, expandVariables($theArrayFormat,
+            tag2=>$tag,
+            count=>$$coocc{$theTag1}{$tag},
+          );
+        }
+        $arrayResult = join($theArraySep, @arrayResult);
+      }
+      foreach my $theTag1 (@coocurringTags) {
+        my $count = $$coocc{$theTag1}{$theTag2};
+        if (defined($count)) {
+          push @result,  expandVariables($theFormat,
+            tag1=>$theTag1,
+            tag2=>$theTag2,
+            count=>$count,
+            array=>$arrayResult,
+          );
+        }
+      }
+    } else {
+      # mode 1: full cooccurrence matrix
+      foreach my $theTag1 (sort keys %{$coocc}) {
+        my @coocurringTags = sort keys %{$$coocc{$theTag1}};
+        writeDebug("coocurringTags($theTag1)=@coocurringTags");
+        my $arrayResult = '';
+        if ($theFormat =~ /\$array/) {
+          my @arrayResult = ();
+          my %seen;
+          foreach my $tag (@coocurringTags) {
+            next if $seen{$theTag1}{$tag};
+            next if $seen{$tag}{$theTag1};
+            $seen{$theTag1}{$tag} = 1;
+            push @arrayResult, expandVariables($theArrayFormat,
+              tag2=>$tag,
+              count=>$$coocc{$theTag1}{$tag},
+            );
+          }
+          $arrayResult = join($theArraySep, @arrayResult);
+        }
+
+        if ($theAllPairs) {
+          my %seen;
+          foreach my $theTag2 (@coocurringTags) {
+            next if $seen{$theTag1}{$theTag2};
+            next if $seen{$theTag2}{$theTag1};
+            $seen{$theTag1}{$theTag2} = 1;
+            my $count = $$coocc{$theTag1}{$theTag2};
+            if (defined($count)) {
+              push @result,  expandVariables($theFormat,
+                tag1=>$theTag1,
+                tag2=>$theTag2,
+                count=>$count,
+                array=>$arrayResult,
+              );
+            }
+          }
+        } else {
+          push @result,  expandVariables($theFormat,
+            tag1=>$theTag1,
+            array=>$arrayResult,
+          );
+        }
+      }
+    }
+  }
+  
+  $theHeader = expandVariables($theHeader);
+  $theFooter = expandVariables($theFooter);
+  $theSep = expandVariables($theSep);
+
+  return $theHeader.join($theSep, @result).$theFooter;
+}
+
+###############################################################################
+sub handleTAGRELATEDTOPICS {
+  my ($session, $params, $theTopic, $theWeb) = @_;
+
+  #writeDebug("called handleTAGRELATEDTOPICS()");
 
   my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $baseTopic;
   my $thisWeb = $params->{web} || $baseWeb;
@@ -150,19 +295,21 @@ sub handleTagRelatedTopics {
     );
   }
 
-  #writeDebug("done handleTagRelatedTopics()");
+  #writeDebug("done handleTAGRELATEDTOPICS()");
 
   return '' unless @lines;
+  $theHeader = expandVariables($theHeader, count=>$count);
+  $theFooter = expandVariables($theFooter, count=>$count);
+  $theSep = expandVariables($theSep);
 
-  my $result = $theHeader.join($theSep, @lines).$theFooter;
-  return expandVariables($result, 'count'=>$count);
+  return $theHeader.join($theSep, @lines).$theFooter;
 }
 
 ###############################################################################
-sub handleBrowseCat {
+sub handleHIERARCHY {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
-  #writeDebug("called handleBrowseCat(".$params->stringify().")");
+  #writeDebug("called handleHIERARCHY(".$params->stringify().")");
 
   my $thisWeb = $params->{_DEFAULT} || $params->{web} || $baseWeb;
   $thisWeb =~ s/\./\//go;
@@ -172,10 +319,10 @@ sub handleBrowseCat {
 }
 
 ###############################################################################
-sub handleIsA {
+sub handleISA {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
-  #writeDebug("called handleIsa()");
+  #writeDebug("called handleISA()");
   my $thisWeb = $params->{web} || $baseWeb;
   my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $baseTopic;
   my $theCategory = $params->{cat} || '';
@@ -198,14 +345,14 @@ sub handleIsA {
 }
 
 ###############################################################################
-sub handleSubsumes {
+sub handleSUBSUMES {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
   my $thisWeb = $params->{web} || $baseWeb;
   my $theCat1 = $params->{_DEFAULT} || $baseTopic;
   my $theCat2 = $params->{cat} || '';
 
-  #writeDebug("called handleSubsumes($theCat1, $theCat2)");
+  #writeDebug("called handleSUBSUMES($theCat1, $theCat2)");
 
   return 0 unless $theCat2;
 
@@ -227,16 +374,16 @@ sub handleSubsumes {
 }
 
 ###############################################################################
-sub handleDistance {
+sub handleDISTANCE {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
   my $thisWeb = $params->{web} || $baseWeb;
   my $theFrom = $params->{_DEFAULT} || $params->{from} || $baseTopic;
-  my $theTo = $params->{to} || 'TOP';
+  my $theTo = $params->{to} || 'TopCategory';
   my $theFormat = $params->{format} || '$min';
   my $theAbs = $params->{abs} || 'off';
 
-  #writeDebug("called handleDistance($theFrom, $theTo)");
+  #writeDebug("called handleDISTANCE($theFrom, $theTo)");
 
   my $hierarchy = getHierarchy($thisWeb);
 
@@ -259,10 +406,10 @@ sub handleDistance {
 }
 
 ###############################################################################
-sub handleCatField {
+sub handleCATFIELD {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
-  writeDebug("called handleCatField(".$params->stringify().")");
+  #writeDebug("called handleCATFIELD(".$params->stringify().")");
 
   my $theFormat = $params->{format} || '$cat';
   my $theSep = $params->{separator};
@@ -277,28 +424,19 @@ sub handleCatField {
   ($thisWeb, $thisTopic) = 
     TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
 
-  my @topicTypes;
+  my $topicTypes;
   if ($theTypes) {
-    writeDebug("type mode");
-    @topicTypes = split(/\s*,\s*/,$theTypes);
+    #writeDebug("type mode");
+    @{$topicTypes} = split(/\s*,\s*/,$theTypes);
   } else {
-    writeDebug("topic mode");
-    my $db = TWiki::Plugins::DBCachePlugin::Core::getDB($thisWeb);
-    my $topicObj = $db->fastget($thisTopic);
-    my $form = $topicObj->fastget("form");
-    if ($form) {
-      $form = $topicObj->fastget($form);
-      my $topicTypes = $form->fastget('TopicType');
-      if ($topicTypes) {
-        @topicTypes = split(/\s*,\s*/, $topicTypes);
-      }
-    }
+    #writeDebug("topic mode");
+    $topicTypes = getTopicTypes($thisWeb, $thisTopic);
   }
-  return '' unless @topicTypes;
+  return '' unless $topicTypes && @$topicTypes;
 
   my $hierarchy = getHierarchy($thisWeb);
-  my $catFields = $hierarchy->getCatFields(@topicTypes);
-  writeDebug("found catFields=".join(',',@$catFields));
+  my $catFields = $hierarchy->getCatFields(@$topicTypes);
+  #writeDebug("found catFields=".join(',',@$catFields));
   my @result;
   my $count = @$catFields;
   my $index = 1;
@@ -313,15 +451,15 @@ sub handleCatField {
   my $result = $theHeader.join($theSep, @result).$theFooter;
   $result = expandVariables($result, 'count'=>$count);
 
-  writeDebug("result=$result");
+  #writeDebug("result=$result");
   return $result;
 }
 
 ###############################################################################
-sub handleTagField {
+sub handleTAGFIELD {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
-  #writeDebug("called handleTagField(".$params->stringify().")");
+  #writeDebug("called handleTAGFIELD(".$params->stringify().")");
 
   my $theFormat = $params->{format} || '$tag';
   my $theSep = $params->{separator};
@@ -339,26 +477,17 @@ sub handleTagField {
 
   #writeDebug("thisWeb=$thisWeb, thisTopic=$thisTopic");
 
-  my @topicTypes;
+  my $topicTypes;
   if ($theTypes) {
-    @topicTypes = split(/\s*,\s*/,$theTypes);
+    @{$topicTypes} = split(/\s*,\s*/,$theTypes);
   } else {
-    my $db = TWiki::Plugins::DBCachePlugin::Core::getDB($thisWeb);
-    my $topicObj = $db->fastget($thisTopic);
-    my $form = $topicObj->fastget("form");
-    if ($form) {
-      $form = $topicObj->fastget($form);
-      my $topicTypes = $form->fastget('TopicType');
-      if ($topicTypes) {
-        @topicTypes = split(/\s*,\s*/, $topicTypes);
-      }
-    }
+    $topicTypes = getTopicTypes($thisWeb, $thisTopic);
   }
-  return '' unless @topicTypes;
+  return '' unless $topicTypes && @$topicTypes;
 
   my $hierarchy = getHierarchy($thisWeb);
 
-  my $tagFields = $hierarchy->getTagFields(@topicTypes);
+  my $tagFields = $hierarchy->getTagFields(@$topicTypes);
   #writeDebug("found tagFields=".join(',',@$tagFields));
   my @result;
   my $count = @$tagFields;
@@ -379,10 +508,10 @@ sub handleTagField {
 }
 
 ###############################################################################
-sub handleCatInfo {
+sub handleCATINFO {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
-  #writeDebug("called handleTagField(".$params->stringify().")");
+  #writeDebug("called handleCATINFO(".$params->stringify().")");
   my $theCat = $params->{cat};
   my $theFormat = $params->{format} || '$link';
   my $theSep = $params->{separator};
@@ -404,11 +533,16 @@ sub handleCatInfo {
     unless defined $theCat;
   $categories->{$theCat} = 1 if defined $theCat;
 
-  my @categories = grep (!/^(TOP|BOTTOM)$/, keys %$categories);
+  my @categories = keys %$categories;
+  #@categories = grep (!/^(TopCategory|BottomCategory)$/, @categories);
   return '' unless @categories;
   
   my @result;
   foreach my $catName (sort @categories) {
+    if ($catName =~ /^(TopCategory|BottomCategory)$/ &&
+        !TWiki::Func::topicExists($thisWeb, $catName)) {
+      next;
+    }
     my $category = $hierarchy->getCategory($catName);
     my $line = $theFormat;
     my $parents = '';
@@ -422,12 +556,8 @@ sub handleCatInfo {
     my $isCyclic = 0;
     $isCyclic = $category->isCyclic() if $theFormat =~ /\$cyclic/;
     my $title = $category->{title} || $catName;
-    my $link = ($catName =~ /^(TOP|BOTTOM)$/)?
-      "<b>$title</b>":
-      "[[$thisWeb.$catName][$title]]";
-    my $url = ($catName =~ /^(TOP|BOTTOM)$/)?
-      "":
-      '%SCRIPTURL{"view"}%/'."$thisWeb/$catName";
+    my $link = "[[$thisWeb.$catName][$title]]";
+    my $url = TWiki::Func::getScriptUrl($thisWeb, $catName, 'view');
     my $summary = $category->{summary} || $title;
     $line =~ s/\$link/$link/g;
     $line =~ s/\$url/$url/g;
@@ -439,6 +569,7 @@ sub handleCatInfo {
     $line =~ s/\$cyclic/$isCyclic/g;
     push @result, $line;
   }
+  return '' unless @result;
   my $result = $theHeader.join($theSep, @result).$theFooter;
   $result = expandVariables($result, 'count'=>scalar(@categories));
 
@@ -447,10 +578,10 @@ sub handleCatInfo {
 }
 
 ###############################################################################
-sub handleTagInfo {
+sub handleTAGINFO {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
-  #writeDebug("called handleTagField(".$params->stringify().")");
+  #writeDebug("called handleTAGINFO(".$params->stringify().")");
   my $theCat = $params->{cat};
   my $theFormat = $params->{format} || '$link';
   my $theSep = $params->{separator};
@@ -506,6 +637,8 @@ sub beforeSaveHandler {
   my $doAutoReparent = TWiki::Func::getPreferencesFlag('CLASSIFICATIONPLUGIN_AUTOREPARENT', $web);
   $doAutoReparent = 1 unless defined $doAutoReparent;
 
+  return unless $doAutoReparent;
+
   unless ($meta) {
     my $session = $TWiki::Plugins::SESSION;
     $meta = new TWiki::Meta($session, $web, $topic );
@@ -519,9 +652,11 @@ sub beforeSaveHandler {
   $topicType = $topicType->{value};
   return unless $topicType =~ /ClassifiedTopic|CategorizedTopic|Category/;
 
+  my @allCats;
   my $hierarchy = getHierarchy($web);
   my $catFields = $hierarchy->getCatFields(split(/\s*,\s*/,$topicType));
-  my @allCats;
+
+  # get categories from meta data
   foreach my $field (@$catFields) {
     my $cats = $meta->get('FIELD',$field);
     next unless $cats;
@@ -535,35 +670,22 @@ sub beforeSaveHandler {
   }
 
   # set the new parent topic
-  $meta->remove('TOPICPARENT') if $doAutoReparent;
+  $meta->remove('TOPICPARENT');
   if (@allCats) {
     @allCats = sort @allCats;
     my $firstCat = shift @allCats;
-    $firstCat = $TWiki::cfg{HomeTopic} if $firstCat eq 'TOP';
-    $meta->putKeyed('TOPICPARENT', {name=>$firstCat}) if $doAutoReparent;
+    # TODO: check if the firstCat exists and only then set the parent
+    # don't autoset to HomeTopic if TopCategory
+    $firstCat = $TWiki::cfg{HomeTopic} if $firstCat eq 'TopCategory';
+    $meta->putKeyed('TOPICPARENT', {name=>$firstCat});
 
-    # set access rights
-    my $access = 0;
-    foreach my $catName (@allCats) {
-      my $category = $hierarchy->getCategory($catName);
-      $access = $category->checkAccessPermission($TWiki::cfg{'DefaultUserWikiName'});
-      last if $access;
-    }
-    $meta->remove('PREFERENCE','DENYTOPICVIEW');
-    if ($access) {
-      $meta->putKeyed('PREFERENCE',{
-        'name'=>'DENYTOPICVIEW', 
-        'title'=>'DENYTOPICVIEW', 
-        'type'=>'Set', 
-        'value'=>''
-      });
-    }
   } else {
-    $meta->putKeyed('TOPICPARENT', {name=>''}) if $doAutoReparent;
+    $meta->putKeyed('TOPICPARENT', {name=>''});
   }
 }
 
 ###############################################################################
+# TODO: only invalidate the hierarchy if relevant information has changed
 sub afterSaveHandler {
   # my ( $text, $topic, $web, $error, $meta ) = @_;
   my $web = $_[2];
@@ -588,7 +710,7 @@ sub renderFormFieldForEditHandler {
   if ($type eq 'cat') {
     my %params = TWiki::Func::extractParameters($possibleValues);
     my $web = $params{web} || '';
-    my $top = $params{_DEFAULT} || $params{top} || 'TOP';
+    my $top = $params{_DEFAULT} || $params{top} || 'TopCategory';
     my $exclude = $params{exclude} || '';
 
     $widget = '%DBCALL{"Applications.ClassificationApp.RenderEditCategoryBrowser" '
@@ -633,6 +755,30 @@ sub renderFormFieldForEditHandler {
   return $widget;
 }
 
+###############################################################################
+sub getTopicTypes {
+  my ($web, $topic) = @_;
+
+  my $db = TWiki::Plugins::DBCachePlugin::Core::getDB($web);
+  return undef unless $db;
+
+  my $topicObj = $db->fastget($topic);
+  return undef unless $db;
+
+  my $form = $topicObj->fastget("form");
+  return undef unless $form;
+
+  $form = $topicObj->fastget($form);
+  return undef unless $form;
+
+  my $topicTypes = $form->fastget('TopicType');
+  return undef unless $topicTypes;
+
+  my @topicTypes = split(/\s*,\s*/, $topicTypes);
+
+  return \@topicTypes;
+}
+
 
 ###############################################################################
 # returns the hierarchy object for a given web; construct a new one if
@@ -654,6 +800,7 @@ sub expandVariables {
   #writeDebug("called expandVariables($theFormat)");
 
   foreach my $key (keys %params) {
+    die "params{$key} undefined" unless defined($params{$key});
     $theFormat =~ s/\$$key\b/$params{$key}/g;
   }
   $theFormat =~ s/\$percnt/\%/go;

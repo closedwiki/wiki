@@ -3,6 +3,7 @@
 %TMPL:INCLUDE{"view"}%
 %TMPL:DEF{"textcontent"}%<div class="patternTopic">
 %DBCALL{"Applications.ClassificationApp.RenderClassifiedTopicView"}%
+<hr class="clsTopicInfoSep" />
 %TEXT%
 </div>%TMPL:END% %{
 %RED%Note, this is only a view template.%ENDCOLOR%

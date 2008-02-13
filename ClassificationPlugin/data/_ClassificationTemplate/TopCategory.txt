@@ -1,0 +1,14 @@
+%META:TOPICINFO{author="micha" date="1197994274" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICPARENT{}%
+
+%DBCALL{"Applications.ClassificationApp.RenderCategory"}%
+
+
+
+%META:FORM{name="Applications.ClassificationApp.Category"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="Category, CategorizedTopic"}%
+%META:FIELD{name="TopicTitle" attributes="" title="<nop>TopicTitle" value="TOP"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value=""}%
+%META:FIELD{name="Category" attributes="" title="Category" value=""}%
+%META:TOPICMOVED{by="micha" date="1197994274" from="Demo.TopCategoryOld" to="Demo.TopCategory"}%
+%META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" type="Set" value="Applications.ClassificationApp.CategoryView"}%

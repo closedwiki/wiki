@@ -28,6 +28,7 @@ data/Applications/ClassificationApp/RenderClassifiedTopicView.txt 0644
 data/Applications/ClassificationApp/RenderEditCategoryBrowser.txt 0644
 data/Applications/ClassificationApp/RenderEditTagCloud.txt 0644
 data/Applications/ClassificationApp/RenderTaggedTopicView.txt 0644
+data/Applications/ClassificationApp/RenderWebClassSearch.txt 0644
 data/Applications/ClassificationApp/RenderWebTagCloudHitList.txt 0644
 data/Applications/ClassificationApp/RenderWebTagCloud.txt 0644
 data/Applications/ClassificationApp/TWikiApplication.txt 0644
@@ -56,8 +57,6 @@ data/Applications/ClassificationApp/TestCategory8.txt 0644
 data/Applications/ClassificationApp/TestCategory9.txt 0644
 data/Applications/ClassificationApp/TestCategory.txt 0644
 data/Applications/ClassificationApp/TestTagging.txt 0644
-data/Applications/ClassificationApp/TestTopic0.txt 0644
-data/Applications/ClassificationApp/TestTopic1.txt 0644
 data/Applications/ClassificationApp/TopicFunction.txt 0644
 data/Applications/ClassificationApp/TopicStub.txt 0644
 data/Applications/ClassificationApp/TopicTemplate.txt 0644
@@ -65,6 +64,7 @@ data/Applications/ClassificationApp/TopicType.txt 0644
 data/Applications/ClassificationApp/TopicView.txt 0644
 data/Applications/ClassificationApp/WebAtom.txt 0644
 data/Applications/ClassificationApp/WebChanges.txt 0644
+data/Applications/ClassificationApp/WebClassSearch.txt 0644
 data/Applications/ClassificationApp/WebHome.txt 0644
 data/Applications/ClassificationApp/WebLeftBar.txt 0644
 data/Applications/ClassificationApp/WebLinks.txt 0644
@@ -104,11 +104,13 @@ data/_ClassificationTemplate/WebTopicEditTemplate.txt 0644
 data/_ClassificationTemplate/WebTopicList.txt 0644
 data/TWiki/ClassificationPlugin.txt 0644
 lib/TWiki/Form/Cat.pm 0644
+lib/TWiki/Plugins/ClassificationPlugin/Access.pm 0644
 lib/TWiki/Plugins/ClassificationPlugin/Category.pm 0644
 lib/TWiki/Plugins/ClassificationPlugin/Core.pm 0644
 lib/TWiki/Plugins/ClassificationPlugin/Hierarchy.pm 0644
 lib/TWiki/Plugins/ClassificationPlugin.pm 0644
 pub/TWiki/ClassificationPlugin/aqua-pill-18.gif 0644
 pub/TWiki/ClassificationPlugin/classification.js 0644
+pub/TWiki/ClassificationPlugin/jquery.tagselector.js 0644
 pub/TWiki/ClassificationPlugin/styles.css 0644
 pub/TWiki/ClassificationPlugin/wikiringlogo40x40.png 0644

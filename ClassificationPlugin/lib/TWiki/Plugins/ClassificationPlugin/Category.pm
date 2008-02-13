@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2006 Michael Daum http://wikiring.com
+# Copyright (C) 2006-2007 Michael Daum http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -43,9 +43,10 @@ sub new {
 
   $this = bless($this, $class);
 
-
   # register to hierarchy
   $hierarchy->setCategory($name, $this);
+
+  writeDebug("new category name=$this->{name} title=$this->{title} web=$hierarchy->{web}"); 
 
   return $this;
 }
@@ -259,9 +260,7 @@ sub isCyclic {
 sub checkAccessPermission {
   my ($this, $user, $type, $seen) = @_;
 
-return 1;
-
-  return 1 if $this->{name} =~ /^(TOP|BOTTOM)$/;
+  return 1 if $this->{name} =~ /^(TopCategory|BottomCategory)$/;
 
   $type ||= 'VIEW';
   $seen ||= {};
@@ -270,7 +269,8 @@ return 1;
   return 0 if $seen->{$this};
   $seen->{$this} = 1;
 
-  $user ||= TWiki::Func::getWikiName();
+  # normalize calling parameter not to trash the cache
+  $user = TWiki::Func::getWikiName($user);
 
   # lookup cache
   my $access = $this->{_perms}{$type}{$user};
@@ -278,13 +278,13 @@ return 1;
   unless (defined $access) {
     my $topic = $this->{name};
     my $web = $this->{hierarchy}->{web};
+    #writeDebug("checking $type access to category $web.$topic for $user");
     $access = TWiki::Func::checkAccessPermission($type, $user, undef, $topic, $web);
-    #writeDebug("checkAccessPermission($type,$user,$web.$topic) = $access");
   
     if ($access) {
       # recurse til access granted
       foreach my $parent (values %{$this->{parents}}) {
-        next if $parent->{name} eq 'TOP';
+        next if $parent->{name} eq 'TopCategory';
         $access = $parent->checkAccessPermission($user, $type, $seen);
         last if $access;
       }
@@ -295,6 +295,11 @@ return 1;
   }
 
   return $access;
+}
+
+###############################################################################
+# get all preferences, merged with those from parent categories
+sub getPreferences {
 }
 
 ###############################################################################
@@ -331,6 +336,10 @@ sub toHTML {
   }
   $seen->{$this} = 0;
 
+  my $minDepth = $params->{mindepth};
+  return $subResult 
+    if $minDepth && $depth <= $minDepth;
+
   return $subResult
     if defined $params->{exclude} && $this->{name} =~ /^($params->{exclude})$/;
   return $subResult
@@ -352,10 +361,10 @@ sub toHTML {
   $subResult = $header.$subResult.$footer if $subResult;
 
   return TWiki::Plugins::ClassificationPlugin::Core::expandVariables($format, 
-    'link'=>($this->{name} =~ /^(TOP|BOTTOM)$/)?
+    'link'=>($this->{name} =~ /^(TopCategory|BottomCategory)$/)?
       "<b>$this->{title}</b>":
       "[[$this->{hierarchy}->{web}.$this->{name}][$this->{title}]]",
-    'url'=>($this->{name} =~ /^(TOP|BOTTOM)$/)?"":
+    'url'=>($this->{name} =~ /^(TopCategory|BottomCategory)$/)?"":
       '%SCRIPTURL{"view"}%/'."$this->{hierarchy}->{web}/$this->{name}",
     'web'=>$this->{hierarchy}->{web}, 
     'topic'=>$this->{name},

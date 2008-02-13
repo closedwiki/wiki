@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2006 Michael Daum http://wikiring.com
+# Copyright (C) 2006-2007 Michael Daum http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,8 +19,8 @@ use TWiki::Plugins::DBCachePlugin::Core;
 use TWiki::Plugins::ClassificationPlugin::Category;
 use Storable;
 
-use constant OBJECTVERSION => 0.2;
-sub DEBUG { 0; }
+use constant OBJECTVERSION => 0.42;
+use constant DEBUG => 0; # toggle me
 
 ###############################################################################
 # static
@@ -34,8 +34,11 @@ sub writeDebug {
 sub getCacheFile {
   my $web = shift;
 
+  $web =~ s/^\s+//go;
+  $web =~ s/\s+$//go;
   $web =~ s/[\/\.]/_/go;
-  return TWiki::Func::getWorkArea("ClassificationPlugin")."/$web.hierarchy";
+
+  return TWiki::Func::getWorkArea("ClassificationPlugin").'/'.$web.'.hierarchy';
 }
 
 ################################################################################
@@ -48,9 +51,16 @@ sub new {
   my $this;
   my $cacheFile = getCacheFile($web);
   
-  eval {
-    $this = Storable::lock_retrieve($cacheFile);
-  };
+  my $session = $TWiki::Plugins::SESSION;
+  my $refresh = '';
+  $refresh = $session->{cgiQuery}->param('refresh') || '' if defined $session;
+  $refresh = $refresh eq 'on'?1:0;
+
+  unless ($refresh) {
+    eval {
+      $this = Storable::lock_retrieve($cacheFile);
+    };
+  }
 
   if ($this && $this->{_version} == OBJECTVERSION) {
     writeDebug("restored hierarchy object (v$this->{_version}) from $cacheFile");
@@ -66,8 +76,6 @@ sub new {
   };
 
   $this = bless($this, $class);
-  $this->createCategory('TOP'); # every hierarchy has one top node
-  $this->createCategory('BOTTOM'); # every hierarchy has one BOTTOM node
   $this->init();
 
   $this->{gotUpdate} = 1;
@@ -120,6 +128,7 @@ sub DESTROY {
   undef $this->{_tagFields};
   undef $this->{_distance};
   undef $this->{_tagIntersection};
+  undef $this->{_aclAttribute};
 }
 
 ################################################################################
@@ -153,7 +162,7 @@ sub init {
       if ($cats) {
         $cat->setParents(keys %$cats);
       } else {
-        $cat->setParents('TOP');
+        $cat->setParents('TopCategory');
       }
 
       my $summary = $form->fastget("Summary") || '';
@@ -163,10 +172,10 @@ sub init {
 
     } else {
       # process all categories of this topic and add the topic to the category
-      #writeDebug("found categorized topic $topicName");
+      writeDebug("found categorized topic $topicName");
       if ($cats) {
         foreach my $name (keys %$cats) {
-          #writeDebug("adding it to category $name");
+          writeDebug("adding it to category $name");
           my $cat = $this->getCategory($name);
           $cat = $this->createCategory($name) unless $cat;
           $cat->addTopic($topicName);
@@ -176,6 +185,13 @@ sub init {
       }
     }
   }
+
+  writeDebug("checking for default categories");
+  $this->createCategory('TopCategory', title=>'TOP')
+    unless defined $this->getCategory('TopCategory'); ; # every hierarchy has one top node
+
+  $this->createCategory('BottomCategory', title=>'BOTTOM')
+    unless defined $this->getCategory('BottomCategory');; # every hierarchy has one BOTTOM node
 
   # init nested structures
   foreach my $cat ($this->getCategories()) {
@@ -193,14 +209,28 @@ sub init {
       }
       writeDebug($text);
     }
-    foreach my $cat1 (sort $this->getCategories()) {
-      foreach my $cat2 (sort $this->getCategories()) {
-        my $distance = $this->catDistance($cat1, $cat2);
-        if (defined $distance) {
-          my ($min, $max) = @$distance;
-          writeDebug("distance($cat1->{name}, $cat2->{name}) = $min,$max");
-        }
-      }
+    $this->_printDistanceMatrix();
+  }
+}
+
+################################################################################
+sub _printDistanceMatrix {
+  return unless DEBUG;
+
+  my ($this, $distance) = @_;
+
+  $distance ||= $this->{_distance};
+
+  foreach my $catName1 (sort $this->getCategoryNames()) {
+    my $cat1 = $this->{categories}{$catName1};
+    my $catId1 = $cat1->{id};
+    foreach my $catName2 (sort $this->getCategoryNames()) {
+      my $cat2 = $this->{categories}{$catName2};
+      my $catId2 = $cat2->{id};
+      my $distance =  $$distance[$catId1][$catId2];
+      next unless $distance;
+      my ($min, $max) = @$distance;
+      writeDebug("distance($catName1/$catId1, $catName2/$catId2) = $min,$max");
     }
   }
 }
@@ -215,9 +245,13 @@ sub computeDistance {
 
   # init matrix
   my @distance;
+  my $bottomCategory = $this->getCategory('BottomCategory');
+  my $bottomId = $bottomCategory->{id};
 
+  my %seen = ();
   for my $cat ($this->getCategories()) {
     my $id = $cat->{id};
+    $seen{$id} = $cat->{name};
     @{$distance[$id][$id]} = (0,0); # diagonal
 
     my @children = $cat->getChildren();
@@ -226,8 +260,8 @@ sub computeDistance {
         @{$distance[$id][$child->{id}]} = (1,1); # direct contectedness
       }
     } else {
-      unless ($id == 1) { # bottom
-        @{$distance[$id][1]} = (1, 1); # leave nodes
+      unless ($id == $bottomId) { # bottom
+        @{$distance[$id][$bottomId]} = (1, 1); # leave nodes
       }
     }
   }
@@ -297,7 +331,7 @@ sub computeDistance {
 sub distance {
   my ($this, $topic1, $topic2) = @_;
 
-  writeDebug("called distance($topic1, $topic2)");
+  #writeDebug("called distance($topic1, $topic2)");
 
   my %catSet1 = ();
   my %catSet2 = ();
@@ -306,42 +340,30 @@ sub distance {
   # to be taken under consideration
 
   # check topic1
-  writeDebug("checking topic1");
-  if ($topic1 eq 'TOP') {
-    $catSet1{$topic1} = 0;
-  } elsif ($topic1 eq 'BOTTOM') {
-    $catSet1{$topic1} = 1;
+  #writeDebug("checking topic1");
+  my $catObj = $this->getCategory($topic1);
+  if ($catObj) { # known category
+    $catSet1{$topic1} = $catObj->{id};
   } else {
-    my $catObj = $this->getCategory($topic1);
-    if ($catObj) { # known category
-      $catSet1{$topic1} = $catObj->{id};
-    } else {
-      my $cats = $this->getCategoriesOfTopic($topic1);
-      return undef unless $cats; # no categories, no distance
-      foreach my $name (keys %$cats) {
-        $catObj = $this->getCategory($name);
-        $catSet1{$name} = $catObj->{id} if $catObj;
-      }
+    my $cats = $this->getCategoriesOfTopic($topic1);
+    return undef unless $cats; # no categories, no distance
+    foreach my $name (keys %$cats) {
+      $catObj = $this->getCategory($name);
+      $catSet1{$name} = $catObj->{id} if $catObj;
     }
   }
 
   # check topic2
-  writeDebug("checking topic2");
-  if ($topic2 eq 'TOP') {
-    $catSet2{$topic2} = 0;
-  } elsif ($topic2 eq 'BOTTOM') {
-    $catSet2{$topic2} = 2;
+  #writeDebug("checking topic2");
+  $catObj = $this->getCategory($topic2);
+  if ($catObj) { # known category
+    $catSet2{$topic2} = $catObj->{id};
   } else {
-    my $catObj = $this->getCategory($topic2);
-    if ($catObj) { # known category
-      $catSet2{$topic2} = $catObj->{id};
-    } else {
-      my $cats = $this->getCategoriesOfTopic($topic2);
-      return undef unless $cats; # no categories, no distance
-      foreach my $name (keys %$cats) {
-        $catObj = $this->getCategory($name);
-        $catSet2{$name} = $catObj->{id} if $catObj
-      }
+    my $cats = $this->getCategoriesOfTopic($topic2);
+    return undef unless $cats; # no categories, no distance
+    foreach my $name (keys %$cats) {
+      $catObj = $this->getCategory($name);
+      $catSet2{$name} = $catObj->{id} if $catObj
     }
   }
 
@@ -368,7 +390,7 @@ sub distance {
   # both sets aren't connected
   return undef unless defined($min);
 
-  writeDebug("min=$min, max=$max");
+  #writeDebug("min=$min, max=$max");
 
   return [$min, $max];
 }
@@ -401,6 +423,100 @@ sub catDistance {
 }
 
 ################################################################################
+sub computeCoocurrence {
+  my $this = shift;
+
+  writeDebug("called computeCooccurrence()");
+
+  my $coocc = {};
+  my $db = TWiki::Plugins::DBCachePlugin::Core::getDB($this->{web});
+
+  # loop over all topics and collect all cooccurence information
+  foreach my $topic ($db->getKeys()) {
+    my $topicObj = $db->fastget($topic);
+    my $form = $topicObj->fastget("form");
+    next unless $form;
+
+    $form = $topicObj->fastget($form);
+    next unless $form;
+
+    my $tags = $form->fastget("Tag");
+    next unless $tags;
+
+    my @tags = map {$_ =~ s/^\s+//go; $_ =~ s/\s+$//go; $_} split(/\s*,\s*/, $tags);
+    my $length = scalar(@tags);
+    next unless $length > 0;
+
+    for (my $i = 0; $i < $length; $i++) {
+      my $tagI = $tags[$i];
+      for (my $j = $i+1; $j < $length; $j++) {
+        my $tagJ = $tags[$j];
+        next if $tagI eq $tagJ;
+        $$coocc{$tagI}{$tagJ}++;
+      }
+    }
+  }
+
+  # reflexivity
+  my @tags = keys %{$coocc};
+  my $length = scalar(@tags);
+  for (my $i = 0; $i < $length; $i++) {
+    my $tagI = $tags[$i];
+    for (my $j = 0; $j < $length; $j++) {
+      my $tagJ = $tags[$j];
+      next if $tagI eq $tagJ;
+      my $value = $$coocc{$tagI}{$tagJ} || $$coocc{$tagI}{$tagJ};
+      next unless $value;
+      $$coocc{$tagI}{$tagJ} = $$coocc{$tagJ}{$tagI} = $value;
+    }
+  }
+
+  if (0) {
+    foreach my $tagI (sort keys %{$coocc}) {
+      foreach my $tagJ (sort keys %{$$coocc{$tagI}}) {
+        writeDebug("'$tagI' cooccurs with '$tagJ' $$coocc{$tagI}{$tagJ} times");
+      }
+    }
+  }
+
+  # cache
+  $this->{_coOccurrence} = $coocc;
+  $this->{gotUpdate} = 1;
+
+  writeDebug("done computeCooccurrence()");
+
+  return $coocc;
+}
+
+################################################################################
+# compute the cooccurrence of all tags with each other. this is a 2-dimensional
+# matrix of integers. each cell's integer indicates how often one tag cooccurred
+# with another.
+sub getCooccurrence {
+  my ($this, $tag1, $tag2) = @_;
+
+  my $coocc = $this->{_coOccurrence} || $this->computeCoocurrence();
+
+  # mode 1: return full cooccurrence matrix
+  return $coocc unless defined($tag1);
+
+  # mode 2: return a hash of tags coocurring with tag1
+  return $$coocc{$tag1} unless defined($tag2);
+
+  # mode 3: return coocurrence of tag1 and tag2
+  return $$coocc{$tag1}{$tag2};
+}
+
+################################################################################
+# find all topics that use the same set of tags
+# returns a hash of all topics that use intersecting tags.
+# hash entries are indexed by topic names. each hash entry
+# is of the format
+# {
+#   tags => @tags,
+#   size => scalar(@tags)
+# }
+# the intersection size is cached to ease sorting later on.
 sub getTagIntersection {
   my ($this, $thisTopic) = @_;
 
@@ -572,7 +688,7 @@ sub getCatFields {
     my $form = $formDef->fastget('form');
     next unless $form; # woops got no form
     $form = $formDef->fastget($form);
-    my $type = $form->fastget('TopicType');
+    my $type = $form->fastget('TopicType') || '';
     #writeDebug("type=$type");
 
     if ($type =~ /\bTopicStub\b/) {
@@ -728,20 +844,23 @@ sub getTagFields {
 
 ###############################################################################
 sub getCategories {
-  my $this = shift;
-  return values %{$this->{categories}}
+  return values %{$_[0]->{categories}}
 }
 
 ###############################################################################
+sub getCategoryNames {
+  return keys %{$_[0]->{categories}}
+}
+
+
+###############################################################################
 sub getCategory {
-  my ($this, $name) = @_;
-  return $this->{categories}{$name};
+  return $_[0]->{categories}{$_[1]};
 }
 
 ###############################################################################
 sub setCategory {
-  my ($this, $name, $cat) = @_;
-  $this->{categories}{$name} = $cat
+  $_[0]->{categories}{$_[1]} = $_[2];
 }
 
 ###############################################################################
@@ -759,16 +878,16 @@ sub inlineError {
 sub toHTML {
   my ($this, $params) = @_;
 
-  #writeDebug("called toHTML");
+  #writeDebug("called toHTML for hierarchy in '$this->{web}'");
 
   my $nrCalls = 0;
-  my $top = $params->{top} || 'TOP';
+  my $top = $params->{top} || 'TopCategory';
   my $header = $params->{header} || '';
   my $footer = $params->{footer} || '';
 
   my $result = '';
   foreach my $name (split(/\s*,\s*/,$top)) {
-    #writeDebug("searching for category '$name'");
+    #writeDebug("searching for category $name");
     my $cat = $this->getCategory($name);
     next unless $cat;
     #writeDebug("found category ".$cat->{name});
@@ -781,6 +900,63 @@ sub toHTML {
   return $header.$result.$footer;
 }
 
+###############################################################################
+# get preferences of a set of categories
+sub getPreferences {
+  my ($this, @cats) = @_;
 
+  my $session = $TWiki::Plugins::SESSION;
+
+  require TWiki::Prefs;
+  my $prefs = new TWiki::Prefs($session);
+
+  require TWiki::Prefs::PrefsCache;
+  $prefs = new TWiki::Prefs::PrefsCache($prefs, undef, 'WEB'); 
+    # SMELL what kind of type do we need
+
+  foreach my $cat (@cats) {
+    $cat =~ s/^\s+//go;
+    $cat =~ s/\s+$//go;
+    my $catObj = $this->getCategory($cat);
+    $prefs = $catObj->getPreferences($prefs);
+  }
+
+  return $prefs;
+}
+
+###############################################################################
+sub checkAccessPermission {
+  my ($this, $mode, $user, $topic, $order) = @_;
+
+  # get acl attribute
+  my $aclAttribute = $this->{_aclAttribute};
+
+  unless (defined $aclAttribute) {
+    $aclAttribute = 
+      TWiki::Func::getPreferencesValue('CLASSIFICATIONPLUGIN_ACLATTRIBUTE', $this->{web}) || 
+      'Category';
+    $this->{_aclAttribute} = $aclAttribute;
+  }
+
+  # get categories and gather access control lists
+  my $db = TWiki::Plugins::DBCachePlugin::Core::getDB($this->{web});
+  my $topicObj = $db->fastget($topic);
+  return undef unless $topicObj;
+
+  my $form = $topicObj->fastget('form');
+  return undef unless $form;
+
+  $form = $topicObj->fastget($form);
+  return undef unless $form;
+
+  my $cats = $form->fastget($aclAttribute);
+  return undef unless $cats;
+
+  #my $prefs = $this->getPreferences(split(/\s*,\s*/, $cats));
+
+  my $allowed = 1;
+
+  return $allowed;
+}
 
 1;

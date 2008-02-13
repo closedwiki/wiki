@@ -9,7 +9,7 @@
 %STARTSECTION{name="documentation" type="section"}%
 
 ---+++++ Parameters
-   * TOP: node from where to start the category, defaults to 'TOP'
+   * TOP: node from where to start the category, defaults to 'TopCategory'
    * EXCLUDE: filter to exclude categories
    * THEWEB: where to search for categories, defaults to BASEWEB
    * UNIQUE: "on" or "off"
@@ -22,10 +22,10 @@
 <verbatim>
 %STARTINCLUDE%<div class="clsBrowser jqTreeview %IFDEFINED{"%UNIQUE%" as="off" then=" " else=" unique"}%">
 ~~~ <noautolink>
-%~~ BROWSECAT{
-~~~   "%IFDEFINED{"%THEWEB%" then="$test" else="%BASEWEB%"}%"
-~~~   top="%IFDEFINED{"%TOP%" then="$test" else="TOP"}%"
-~~~   exclude="%IFDEFINED{"%EXCLUDE%" then="$test" else="TOP"}%"
+%~~ HIERARCHY{
+~~~   web="%IFDEFINED{"%THEWEB%" then="$test" else="%BASEWEB%"}%"
+~~~   %IFDEFINED{"%TOP%" then="top=\"$test\"" glue="off"}%
+~~~   exclude="%IFDEFINED{"%EXCLUDE%" then="$test" else="TopCategory"}%"
 ~~~   header="<ul>"
 ~~~   footer="</ul>"
 ~~~   format="<li class=\"

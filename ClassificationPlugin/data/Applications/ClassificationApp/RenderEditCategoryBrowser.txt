@@ -12,7 +12,7 @@
    * THEWEB: the web where to look for classes, defaults to BASEWEB
    * NAME: name of the formfield to render the browser for
    * VALUE: list of pre-selected categories
-   * TOP: node from where to start the category, defaults to 'TOP'
+   * TOP: node from where to start the category, defaults to 'TopCategory'
    * EXCLUDE: filter to exclude categories
    * BUTTONS: on or off, defaults to on
 
@@ -25,9 +25,9 @@
 %STARTINCLUDE%<div id="clsCatSelector_%NAME%"><noautolink>
 ~~~ <input type="hidden" size="75" name="%NAME%" id="%NAME%" value="%IFDEFINED{"%VALUE%"}%" />
 ~~~ <div class="clsBrowser jqTreeview">
-%~~ BROWSECAT{
+%~~ HIERARCHY{
 ~~~   web="%IFDEFINED{"%THEWEB%" then="$test" else="%BASEWEB%"}%"
-~~~   top="%IFDEFINED{"%TOP%" then="$test" else="TOP"}%"
+~~~   top="%IFDEFINED{"%TOP%" then="$test" else="TopCategory"}%"
 ~~~   %IFDEFINED{"%EXCLUDE%" then="exclude=\"$test\"" glue="off"}%
 ~~~   header="<ul>"
 ~~~   footer="</ul>"
@@ -52,7 +52,7 @@
 ~~~ </div>
 ~~~ %IFDEFINEDTHEN{"%BUTTONS%" as="off"}%%ELSEDEFINED%
 ~~~ <div class="clsButtonBox">
-~~~ <input class="twikiButton natAltButton" type="button" value="Clear" 
+~~~ <input class="twikiButton natCancelButton" type="button" value="Clear" 
 ~~~   onclick="clsClearSelection('%NAME%', 'clsCatSelector_%NAME%')" />
 ~~~ <input class="twikiButton natAltButton" type="button" value="Reset"
 ~~~   onclick="clsSetSelection('%NAME%', 'clsCatSelector_%NAME%', '%IFDEFINED{"%VALUE%"}%')" />

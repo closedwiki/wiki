@@ -2,6 +2,8 @@
 %META:TOPICPARENT{name="TopicView"}%
 %TMPL:INCLUDE{"view"}%
 %TMPL:DEF{"textcontent"}%<div class="patternTopic">
+%DBCALL{"Applications.ClassificationApp.RenderClassifiedTopicView"}%
+<hr class="clsTopicInfoSep" />
 %TEXT% 
 </div>%TMPL:END%
 %TMPL:DEF{"form"}%%TMPL:END%

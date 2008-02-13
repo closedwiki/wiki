@@ -26,7 +26,7 @@ categorization and tagging solution for TWiki based on TWikiForms.
 
 
 ---++ Syntax Rules
-=%<nop>BROWSECAT{...}%=
+=%<nop>HIERARCHY{...}%=
 
 Format strings may contain the following:
    * =$time= expands to the calculated time difference
@@ -62,10 +62,18 @@ tag- related if they have at least two tags in common.
 -->
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2006-2007, Michael Daum http://wikiring.de |
+|  Copyright &copy;: | 2006-2008, Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.40 |
+|  Plugin Version: | v0.50 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  17 Jan 2008: | new TAGCOOCURRENCE; \
+                  new HIERARCHY tag; \
+                  TOP category can be mapped onto a real topic now; \
+                  new jquery.tagselector plugin; \
+                  reworked view for topictypes making use of new MAKEINDEX of \
+                  TWiki:Plugins/FilterPlugin; \
+                  added category and tag search; \
+                  speedup for tag clouds |
 |  13 Nov 2007: | added semantic predicates ISA, SUBSUMES, COMPATIBLE to DBQUERY, \
                   fixed exclude parameter to cat formfield, \
                   fixed registering topics to TOP category, \
@@ -84,6 +92,6 @@ tag- related if they have at least two tags in common.
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 13 Nov 2007
+-- TWiki:Main.MichaelDaum - 17 Jan 2008
 
 %META:FILEATTACHMENT{name="wikiringlogo40x40.png" attachment="wikiringlogo40x40.png" attr="h" comment="" date="1189787359" path="wikiringlogo40x40.png" size="2571" stream="wikiringlogo40x40.png" tmpFilename="" user="TWikiContributor" version="1"}%

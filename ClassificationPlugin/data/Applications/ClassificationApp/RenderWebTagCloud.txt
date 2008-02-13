@@ -37,29 +37,30 @@
 ~~~   offset="100"
 ~~~   min="%IFDEFINED{"%MIN%" then="$test" else="0"}%"
 ~~~   split="[,\s]+"
-~~~   header="<div class=\"twikiPageForm clsTagCloud\">"
+~~~   header="<div class=\"clsTagCloud\">"
 ~~~   group="<strong>$group</strong>"
 ~~~   format="<a rel=\"nofollow\" name=\"$term\"
 ~~~        style=\"font-size:$weight%;
 ~~~                color:$fadeRGB(194,199,204,0,102,204);\"
 ~~~        href=\"%SCRIPTURLPATH{"view"}%/%BASEWEB%/
 *~~          %IFDEFINED{"%TAGCLOUDTOPIC%" then="$test" else="%BASETOPIC%"}%
-*~~        $percntIFDEFINEDTHEN{\"%QUERY%\" as=\".*\b$term\b.*\" glue=\"off\"}$percnt
-*~~          $percntFORMATLIST{\"%QUERY%\" 
-~~~            header=\"?search=\" 
-~~~            unique=\"on\" 
-~~~            separator=\",\" 
-~~~            exclude=\"$term\"
-~~~          }$percnt#result\"
-~~~          class=\"current\"
-~~~        $percntELSEDEFINED$percnt
-*~~          $percntFORMATLIST{\"%IFDEFINED{"%QUERY%" then="$test,"}%$term\" 
+~~~          $percntFORMATLIST{
+~~~            $percntIFDEFINED{\"%QUERY%\" 
+~~~                as=\".*\b$term\b.*\" 
+~~~                then=\"\\"$test\\" exclude=\\"$term\\"\" 
+~~~                else=\"\\"$test,$term\\"\"
+~~~                glue=\"off\"
+~~~            }$percnt 
 ~~~            header=\"?search=\" 
 ~~~            unique=\"on\" 
 ~~~            separator=\",\" 
 ~~~          }$percnt#result\"
+~~~          $percntIFDEFINED{\"%QUERY%\"
+~~~            as=\".*\b$term\b.*\"
+~~~            then=\"class=\\"current\\"\"
+~~~            glue=\"off\"
+~~~          }$percnt
 ~~~          title=\"found $count time(s)\"
-~~~        $percntFIDEFINED$percnt
 ~~~     >$term</a>"
 ~~~   footer="</ul></div>"
 ~~~ }%

@@ -22,12 +22,31 @@
 
 ---++ Implementation
 <verbatim>
-%STARTINCLUDE%<div id="clsTagSelector"><noautolink>
-~~~ <input class="clsEditTagCloudInput" type="text" size="75" 
+%STARTINCLUDE%<!-- render edit tag cloud -->
+~~~ <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/ClassificationPlugin/jquery.tagselector.js"></script>
+~~~ <script type="text/javascript">
+~~~ $(function() {
+%~~   TAGCOOCCURRENCE{
+~~~     web="%IFDEFINED{"%THEWEB%" then="$test" else="%BASEWEB%"}%"
+~~~     header="var coocc = {$n"
+~~~     footer="$n};"
+~~~     format=" \"$tag1\" : [ $array ]"
+~~~     separator=",$n"
+~~~     arrayformat="'$tag2'"
+~~~     arrayseparator=","
+~~~     allpairs="off"
+~~~   }%
+~~~  $("#clsTagSelector").tagSelector({"cooccurence": coocc});
+~~~ });
+~~~ </script>
+~~~ <div class="clsTagSelector" id="clsTagSelector"><noautolink>
+~~~ <input class="clsTagCloudInput" type="text" size="75" autocomplete="off"
 ~~~        name="%NAME%" id="%NAME%"
-~~~        onkeyup="handleTaggingKey('%NAME%', 'clsTagSelector')"
 ~~~        value="%IFDEFINED{"%VALUE%"}%" />
-~~~ </noautolink>
+~~~ <div class="clsButtonBox">
+~~~   <input class="twikiButton natCancelButton clsClearButton" type="button" value="Clear" />
+~~~   <input class="twikiButton natAltButton clsResetButton" type="button" value="Reset" />
+~~~ </div>
 ~~~ <div class="clsTagCloud">
 %~~ TAGCLOUD{
 ~~~   "$percntDBQUERY{\"TopicType=~'\b(Tagged|Classified)Topic\b'
@@ -43,23 +62,14 @@
 ~~~    format="<span 
 ~~~      style=\"font-size:$weight%;\">
 *~~      <a id=\"$term\" href=\"javascript:void(0)\"
-~~~          onclick=\"this.blur(); toggleValue('%NAME%','$term', 'clsTagSelector');\"
 ~~~          $percntIFDEFINED{\"%VALUE%\" as=\".*\b$term\b.*\" glue=\"off\"
 ~~~            then=\"class=\\"current\\"\"
 ~~~          }$percnt
 ~~~         title=\"$count\">$term</a></span>"
 ~~~  }%
-*~~
 ~~~ </div>
-~~~ <div class="clsButtonBox">
-~~~ <input class="twikiButton natAltButton" type="button" value="Clear" 
-~~~   onclick="clsClearSelection('%NAME%', 'clsTagSelector')" />
-~~~ <input class="twikiButton natAltButton" type="button" value="Reset"
-~~~   onclick="clsSetSelection('%NAME%', 'clsTagSelector', '%IFDEFINED{"%VALUE%"}%')" />
-~~~ </div>
-~~~ </div>
-~~~
-%STOPINCLUDE%
+~~~ </noautolink>
+~~~ </div>%STOPINCLUDE%
 </verbatim>
 
 <!-- interrupt glue -->

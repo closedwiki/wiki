@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2006 Michael Daum http://wikiring.com
+# Copyright (C) 2006-2008 Michael Daum http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -16,6 +16,7 @@ package TWiki::Plugins::ClassificationPlugin;
 
 use strict;
 use TWiki::Plugins::ClassificationPlugin::Core;
+use TWiki::Plugins::ClassificationPlugin::Access;
 
 use vars qw( 
   $VERSION $RELEASE $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
@@ -23,7 +24,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = '0.40';
+$RELEASE = '0.50';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'A topic classification plugin and application';
 
@@ -31,26 +32,29 @@ $SHORTDESCRIPTION = 'A topic classification plugin and application';
 sub initPlugin {
   my ($baseTopic, $baseWeb) = @_;
 
-  TWiki::Func::registerTagHandler('BROWSECAT', 
-    \&TWiki::Plugins::ClassificationPlugin::Core::handleBrowseCat);
+  TWiki::Func::registerTagHandler('HIERARCHY', 
+    \&TWiki::Plugins::ClassificationPlugin::Core::handleHIERARCHY);
   TWiki::Func::registerTagHandler('ISA', 
-    \&TWiki::Plugins::ClassificationPlugin::Core::handleIsA);
+    \&TWiki::Plugins::ClassificationPlugin::Core::handleISA);
   TWiki::Func::registerTagHandler('SUBSUMES', 
-    \&TWiki::Plugins::ClassificationPlugin::Core::handleSubsumes);
+    \&TWiki::Plugins::ClassificationPlugin::Core::handleSUBSUMES);
   TWiki::Func::registerTagHandler('CATFIELD', 
-    \&TWiki::Plugins::ClassificationPlugin::Core::handleCatField);
+    \&TWiki::Plugins::ClassificationPlugin::Core::handleCATFIELD);
   TWiki::Func::registerTagHandler('TAGFIELD', 
-    \&TWiki::Plugins::ClassificationPlugin::Core::handleTagField);
+    \&TWiki::Plugins::ClassificationPlugin::Core::handleTAGFIELD);
   TWiki::Func::registerTagHandler('TAGRELATEDTOPICS', 
-    \&TWiki::Plugins::ClassificationPlugin::Core::handleTagRelatedTopics);
+    \&TWiki::Plugins::ClassificationPlugin::Core::handleTAGRELATEDTOPICS);
   TWiki::Func::registerTagHandler('CATINFO', 
-    \&TWiki::Plugins::ClassificationPlugin::Core::handleCatInfo);
+    \&TWiki::Plugins::ClassificationPlugin::Core::handleCATINFO);
   TWiki::Func::registerTagHandler('TAGINFO', 
-    \&TWiki::Plugins::ClassificationPlugin::Core::handleTagInfo);
+    \&TWiki::Plugins::ClassificationPlugin::Core::handleTAGINFO);
   TWiki::Func::registerTagHandler('DISTANCE', 
-    \&TWiki::Plugins::ClassificationPlugin::Core::handleDistance);
+    \&TWiki::Plugins::ClassificationPlugin::Core::handleDISTANCE);
+  TWiki::Func::registerTagHandler('TAGCOOCCURRENCE', 
+    \&TWiki::Plugins::ClassificationPlugin::Core::handleTAGCOOCCURRENCE);
 
   TWiki::Plugins::ClassificationPlugin::Core::init($baseWeb, $baseTopic);
+#  TWiki::Plugins::ClassificationPlugin::Access::init($baseWeb, $baseTopic);
   $doneHeader = 0;
   return 1;
 }
