@@ -1,2 +1,1 @@
-TWiki::Plugins::JQueryPlugin,>=0.3,perl,Required.
-
+TWiki::Plugins::JQueryPlugin,>=0.5,perl,Required.

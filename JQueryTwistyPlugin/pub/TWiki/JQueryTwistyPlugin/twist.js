@@ -62,7 +62,7 @@ twiki.JQueryTwistyPlugin = new function () {
 		if (ref.state == twiki.JQueryTwistyPlugin.CONTENT_SHOWN) {
 			// show content
                         if (inMaySave) {
-                          $(contentElem).slideDown({easing:'easeinout', duration:300});
+                          $(contentElem).slideDown({easing:'easeInOutQuad', duration:300});
                         } else {
                           $(contentElem).show();
 
@@ -73,7 +73,7 @@ twiki.JQueryTwistyPlugin = new function () {
 		} else {
 			// hide content
                         if (inMaySave) {
-                          $(contentElem).slideUp({easing:'easeinout', duration:300});
+                          $(contentElem).slideUp({easing:'easeInOutQuad', duration:300});
                         } else {
                           $(contentElem).hide();
                         }
