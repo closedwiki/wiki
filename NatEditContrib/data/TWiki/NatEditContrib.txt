@@ -22,116 +22,42 @@
 </table>
 
 ---++ Description
-The <nop>NatEdit is an wiki editor that helps in learning the <nop>TWikiMarkup Language
-by providing a GUI. By design, this is not a wysiwyg editor that tries to generate the
-correct TML in the background. Instead, the user is still in charge of writing correct
-wiki markup but with a bit more of assistance as a plain browser textarea. Therefor
-this editor helps to lower the learning curve but will not get in your way once
-you are aware of wiki markup. 
+The <nop>NatEdit is an wiki editor that helps in learning the <nop>TWikiMarkup
+Language by providing a GUI. By design, this is not a wysiwyg editor that tries
+to generate the correct TML in the background. Instead, the user is still in
+charge of writing correct wiki markup but with a bit more of assistance as a
+plain browser textarea. Therefor this editor helps to lower the learning curve
+but will not get in your way once you are aware of wiki markup. 
 
-<nop>NatEdit heavily depends on javascript. Hence browsers without
-javascript are not supported.
+<nop>NatEdit is implemented as a jquery plugin, called =jquery.natedit=,
+and thus heavily depends on javascript. Hence browsers without javascript are not supported. 
+You will need to install the TWiki:Plugins/JQueryPlugin to use <nop>NatEdit.
+
+%RED%Caution:%ENDCOLOR% %BR%
+Theming has been disabled in the current version. So you are stuck with one and the
+same button layout for now. Themability is brought back on the final 2.0 release, hopefully.
+
+---++ Documentation
+jquery.natedit docu
 
 ---++ Screenshot
 <img src="%ATTACHURLPATH%/screenshot1.png" alt="screenshot1.png" />
 
 ---++ Configuration
+*PatternSkin:* %BR%
 To enable the <nop>NatEditContrib add the identifier =natedit= to the =SKIN= 
-variable in Main.TWikiPreferences or WebPreferences.  So in case you are using <nop>PatternSkin
-this is
+variable in %MAINWEB%.TWikiPreferences or WebPreferences, e.g.
 <pre>
    * <!-- -->Set SKIN = natedit,pattern
 </pre>
 
----++ Customization
----+++ Theming
-The editor can be themed using CSS. The actual theme is set using the =NATEDIT_THEME= variable
-which defaults to
-<verbatim>
-   * Set NATEDIT_THEME = default
-</verbatim>
-
-This value determines the subdirectory under 
-=%PUBURLPATH%/%TWIKIWEB%/NatEditContrib= which contains a =styles.css= file and a bunch
-of button images. You can create a new theme "foo" by creating a CSS file 
-=%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/foo/styles.css= and setting 
+*NatSkin:* %BR%
+No extra configuration steps are needed in case you are using TWiki:Plugins/NatSkin.
+<nop>NatEditContrib is the default editor for <nop>NatSkin, that is the normal
 <pre>
-   * <!-- -->Set NATEDIT_THEME = foo
+   * <!-- -->Set SKIN = nat
 </pre>
-See the default theme for the CSS classes used for the individual buttons.
-
-<img src="%ATTACHURLPATH%/word-natedit.jpg" alt="word-natedit.jpg" style="float:right;" width="300px"  />
----+++ Word theme
-The Word theme for NatEditContrib uses not only a custom CSS style, but also a customisation of the icon order, and customised Help.
-
-This is acheived through the use of the TWiki Template path - over-riding the original natedit edittoolbar, a natedit theme, and a custom help text topic.
-
-Create new table can either be a static 3x3 table, or, If you install and enable JQueryPlugin, will use a popup dialog that lets the user choose the number of rows and columns.
-<pre>
-   * <!-- -->Set SKIN = word.natedit,natedit,pattern
-   * <!-- -->Set NATEDIT_THEME = word
-   * <!-- -->Set NATEDIT_HELPTEXT = TWiki.NatEditWordHelpText
-</pre>
-
----+++ Markup
-All buttons produce a certain amout of TWiki markup or HTML inserting it at the current
-position in the textarea. This can be configured to your needs using a set of
-preference variables. Please add them to your Main.TWikiPreferences or WebPreferences to
-override the build-in defaults.
-
-The =NATEDIT_...= variables have the format 
-<verbatim>
-'<open-tag>', '<sample-text>', '<close-tag>'
-</verbatim>
-When the respective button is pressed, =<open-tag><sample-text><close-tag>= 
-will be inserted. If there's a current selection, then it will be used instead of the
-=<sample-text>=.
-
-<div class="natEditToolBar" style="height:auto">
-| *Name* | *Icon* | *Description* | *Default* |
-| NATEDIT_BOLD | <span class="natEditBoldButton"><a></a></span> | bold text | '*', 'Bold text', '*' |
-| NATEDIT_ITALIC | <span class="natEditItalicButton"><a></a></span> | italic text | '_', 'Italic text', '_' |
-| NATEDIT_MONO | <span class="natEditMonoButton"><a></a></span> | monospace text | '=', 'Monospace text', '=' |
-| NATEDIT_UNDERLINE | <span class="natEditUnderlineButton"><a></a></span> | underlined text | '<<nop>u>', 'Underlined text', '</u>' | 
-| NATEDIT_STRIKE | <span class="natEditStrikeButton"><a></a></span> | striked text | '<<nop>strike>', 'Strike through text', '<<nop>/strike>' |
-| NATEDIT_LEFT | <span class="natEditLeftButton"><a></a></span> | left adjusted section | '<<nop>div style=\"text-align:left\">\n','Align left','\n<<nop>\/div>\n' |
-| NATEDIT_RIGHT | <span class="natEditRightButton"><a></a></span> | right adjusted section | '<<nop>div style=\"text-align:right\">\n','Align right','\n<<nop>\/div>\n' |
-| NATEDIT_CENTER | <span class="natEditCenterButton"><a></a></span> | centered section | '<<nop>div style=\"text-align:center\">\n','Center text','\n<<nop>\/div>\n' |
-| NATEDIT_JUSTIFY | <span class="natEditJustifyButton"><a></a></span> | justify section | '<<nop>div style=\"text-align:justify\">\n','Justify text','\n<<nop>\/div>\n' |
-| NATEDIT_H1 | <span class="natEditH1Button"><a></a></span> | headline level 1 | '\n---+ ','Headline text','\n' | 
-| NATEDIT_H2 | <span class="natEditH2Button"><a></a></span> | headline level 2 | '\n---++ ','Headline text','\n' | 
-| NATEDIT_H3 | <span class="natEditH3Button"><a></a></span> | headline level 3 | '\n---+++ ','Headline text','\n' | 
-| NATEDIT_H4 | <span class="natEditH4Button"><a></a></span> | headline level 4 | '\n---++++ ','Headline text','\n' | 
-| NATEDIT_IMAGE | <span class="natEditImageButton"><a></a></span> | image button |\
- <<nop>img src=\"%<nop>ATTACHURLPATH%/','Example.jpg','\" title=\"Example\" /> \
- <br /> or \
- %<nop>IMAGE{\"','Example.jpg','&#124;400px&#124;Caption text&#124;frame&#124;center\"}<nop>% \
- when the <nop>ImagePlugin is installed |
-| NATEDIT_EXTLINK | <span class="natEditExtButton"><a></a></span> | external link | '[<nop>[http://...][','link text',']]' |
-| NATEDIT_INTLINK | <span class="natEditIntButton"><a></a></span> | internal link | '[<nop>[','web.topic][link text',']]' | 
-| NATEDIT_MATH | <span class="natEditMathButton"><a></a></span> | only visible if the <nop>MathModePlugin is installed | '<<nop>latex title=\"Example\">\n','\\sum_{x=1}^{n}\\frac{1}{x}','\n<<nop>/latex>' |
-| NATEDIT_SIGNATURE | <span class="natEditSignatureButton"><a></a></span> | signature button | '-- ','%<nop>WIKIUSERNAME%',' - %<nop>DATE%' |
-| NATEDIT_VERBATIM | <span class="natEditVerbatimButton"><a></a></span> | section ignoring contained wiki markup | '<<nop>verbatim>\n','Insert non-formatted text here','\n<\/verbatim>\n' |
-| NATEDIT_SUB |  | subscribed text | '<<nop>sub>', 'Subscript text' , '<<nop>/sub>' |
-| NATEDIT_SUP |  | superscribed text | '<<nop>sup>', 'Superscript text', '<<nop>/sup>' |
-| NATEDIT_TABLE |  | add table | creates new table |
-| NATEDIT_NUMBERED |  | make into numbered point | 3 spaces 1 space |
-| NATEDIT_BULLET |  | make into bullet point | 3 spaces * space |
-| NATEDIT_INDENT |  | indent | adds 3 spaces  |
-| NATEDIT_UNDENT |  | un-indent | removes 3 spaces, or 3 spaces * space or 3 spaces 1 space |
-</div>
-
-<style type="text/css">
-@import url("%ATTACHURLPATH%/styles.css");
-@import url("%ATTACHURLPATH%/default/styles.css");
-</style>
-
-If you want to customize the help text in the bottom part of the editor then
-set the variable =NATEDIT_HELPTEXT= to the name of a topic that contains
-the help text. The default is
-<verbatim>
-* Set NATEDIT_HELPTEXT = %TWIKIWEB%.NatEditHelpText
-</verbatim>
+is sufficient.
 
 
 <!--
@@ -139,11 +65,12 @@ the help text. The default is
    * Set SHORTDESCRIPTION = A Wikiwyg Editor
 -->
 
----++ Installation Instructions
-%$INSTALL_INSTRUCTIONS%
-
----++ JSUnitContrib based Unit tests
-There is a small set of browser based unit tests defined in NatEditContribJSUnitTests that can be run as a problem diagnosing tool. These require the installation of TWiki:Plugins.JSUnitContrib, and then can be run from *[[%PUBURL%/%TWIKIWEB%/JSUnitContrib/testRunner.html?testpage=%SCRIPTURL{"view"}%/%WEB%/NatEditContribJSUnitTests][Run all tests]]*
+---++ <nop>JSUnitContrib based Unit tests
+There is a small set of browser based unit tests defined in
+NatEditContribJSUnitTests that can be run as a problem diagnosing tool. These
+require the installation of TWiki:Plugins.JSUnitContrib, and then can be run
+from
+*[[%PUBURL%/%TWIKIWEB%/JSUnitContrib/testRunner.html?testpage=%SCRIPTURL{"view"}%/%WEB%/NatEditContribJSUnitTests][Run all tests]]*
 
 Testing has been carried out using Safari, Firefox, Opera and Internet Explorer.
 
@@ -153,8 +80,11 @@ Sponsored by [[http://www.trivadis.com][Trivadis AG]] & [[http://twiki.net][TWIK
 |  Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2007-2008 Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v1.60 |
+|  Version: | v2.00-pre1 |
 |  Change History: | |
+|  17 Jan 2008 | reimplemented as jquery.natedit plugin; \
+                 using a tabbed interface now; \
+                 new default button design |
 |  03 Jan 2008 | added =beforeSubmitHandler= to give TWiki:Plugins/EditChapterPlugin a chance to hook in |
 |  13 Nov 2007 | fixed calculation of textarea offset while autoresizing it to window height, \
                  fixed initialization not to use Behaviour anymore, \
@@ -191,7 +121,7 @@ Sponsored by [[http://www.trivadis.com][Trivadis AG]] & [[http://twiki.net][TWIK
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 03 Jan 2008
+-- TWiki:Main.MichaelDaum - 13 Feb 2008
 
 %META:FILEATTACHMENT{name="screenshot1.png" attachment="screenshot1.png" attr="" comment="" date="1175688869" path="screenshot1.png" size="61040" stream="screenshot1.png" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="wikiringlogo40x40.png" attachment="wikiringlogo40x40.png" attr="h" comment="" date="1189787359" path="wikiringlogo40x40.png" size="2571" stream="wikiringlogo40x40.png" tmpFilename="" user="TWikiContributor" version="1"}%

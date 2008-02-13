@@ -1,4 +1,11 @@
 /* natedit base styles */
+.natEdit .jqTabContents {
+  overflow-x:hidden;
+  overflow-y:auto;
+}
+.natEditTextArea {
+  _width:99% !important; /* bloddy IE */
+}
 ul.natEditTextTools,
 ul.natEditHeadlineTools,
 ul.natEditParagraphTools,
@@ -20,10 +27,20 @@ ul.natEditHelpTools {
   visibility:hidden; /* becomes visible during load event */
 }
 
+.natEditBottomBar {
+  margin-top:10px;
+}
+.natEditBottomBar ul {
+  margin:0px;
+  padding:0px;
+}
+.natEditBottomBar ul li,
 .natEditToolBar ul li {
   display:inline;
   padding:0px;
   margin:0px;
+  list-style:none;
+  background:inherit;
 }
 .natEditToolBar ul li a span {
   display:none;
@@ -70,4 +87,20 @@ ul.natEditHelpTools {
 .natEditDoneButton img,
 .natEditCancelButton  img {
   border:0px;
+}
+
+/* pattern skin tweaks */
+.patternPreviewPage .patternTopic,
+.patternEditPage .patternTopic {
+  margin:0px;
+}
+.patternEditPage .twikiForm {
+  margin:0px;
+}
+.jqTabContents h3 {
+  margin-top:0px;
+}
+
+.patternEditPage #patternPage {
+  font-size:100%;
 }

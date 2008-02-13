@@ -1,10 +1,10 @@
 /* default theme */
-.natEditToolBar { height:26px; margin:0px;}
+.natEditToolBar { padding:0px; margin:0px 0px 3px 0px; height:25px}
 .natEditToolBar a:hover,
 .natEditToolBar a {
   width:25px; 
   height:25px; 
-  background-image:url(buttons_sprite.png);
+  background-image:url(buttons_sprite.gif);
 }
 .natEditH1Button a { background-position:0px 0px; }
 .natEditH1Button a:hover { background-position:0px -25px; }
@@ -46,13 +46,53 @@
 .natEditSignatureButton a:hover { background-position:-450px -25px; }
 .natEditFormButton a { background-position:-475px 0px;}
 .natEditFormButton a:hover { background-position:-475px -25px;}
-.natEditPreviewButton a { background-position:-500px 0px; }
-.natEditPreviewButton a:hover { background-position:-500px -25px; }
 .natEditCheckpointButton a { background-position:-525px 0px; }
 .natEditCheckpointButton a:hover { background-position:-525px -25px; }
-.natEditSaveButton a { background-position:-550px 0px; width:46px;}
-.natEditSaveButton a:hover { background-position:-550px -25px;width:46px;}
-.natEditCancelButton a { background-position:-595px 0px; width:56px;}
-.natEditCancelButton a:hover { background-position:-595px -25px; width:56px;}
-.natEditHelpButton a { background-position:-655px 0px;}
-.natEditHelpButton a:hover { background-position:-655px -25px;}
+.natEditHelpButton a { background-position:-555px 0px;}
+.natEditHelpButton a:hover { background-position:-555px -25px;}
+.natEditHelpButton a { background-position:-555px 0px;}
+
+.natEditNumberedButton a:hover { background-position:-575px -25px;}
+.natEditNumberedButton a { background-position:-575px 0px;}
+
+.natEditBulletButton a:hover { background-position:-600px -25px;}
+.natEditBulletButton a { background-position:-600px 0px;}
+.natEditIndentButton a:hover { background-position:-625px -25px;}
+.natEditIndentButton a { background-position:-625px 0px;}
+.natEditOutdentButton a:hover { background-position:-650px -25px;}
+.natEditOutdentButton a { background-position:-650px 0px;}
+
+.natEditBottomBar li {
+  line-height:22px;
+  font-size:12px;
+}
+.natEditBottomBar a:hover,
+.natEditBottomBar a {
+  background-color:inherit;
+  background-image:url(btn_right.gif);
+  background-position:top right;
+  background-repeat:no-repeat;
+  text-decoration:none;
+  cursor:pointer;
+  display:block;
+  float:left;
+  height:23px;
+  padding:0px;
+  margin:0px 8px 0px 0px;
+  color:black;
+}
+.natEditBottomBar a:hover {
+  color:red;
+}
+.natEditBottomBar span {
+  background-image:url(btn_left.gif);
+  background-position:top left;
+  background-repeat:no-repeat;
+  cursor:pointer;
+  display:block;
+  float:left;
+  height:23px;
+  margin:0px 3px 0px 0px;
+  _margin:0px 1px 0px 0px;
+  padding:0px 8px;
+}

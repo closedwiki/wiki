@@ -3,9 +3,20 @@
 // IE range selection adapted from http://twiki.org/cgi-bin/view/Plugins/SmartEditAddOn
 
 var txtarea;
-var txtareaOffset = -1;
 
 var isOpera=window.opera?1:0;
+
+// write to Firebug's console
+function writeDebug(msg) {
+  if (1) { // toggle me
+    if (window.console && window.console.log) {
+      window.console.log("DEBUG: NatEditContrib - "+msg);
+    /*} else {
+      alert(msg);
+    */
+    }
+  }
+};
 
 // apply tagOpen/tagClose to selection in textarea,
 // use sampleText instead of selection if there is none
@@ -167,68 +178,51 @@ function submitEditForm(script, action) {
   document.main.submit();
 }
 
-function getWindowHeight () {
-  if( typeof( window.innerWidth ) == 'number' ) {
-    //Non-IE
-    return window.innerHeight;
-  } else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
-    //IE 6+ in 'standards compliant mode'
-    return document.documentElement.clientHeight;
-  } else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
-    //IE 4 compatible
-    return document.body.clientHeight;
-  }
-  return 0; // outch
-}
 
-function getWindowWidth () {
-  if( typeof( window.innerWidth ) == 'number' ) {
-    //Non-IE
-    return window.innerWidth;
-  } else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
-    //IE 6+ in 'standards compliant mode'
-    return document.documentElement.clientWidth;
-  } else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
-    //IE 4 compatible
-    return document.body.clientWidth;
-  }
-  return 0; // outch
-}
+function fixHeightOfPane() {
 
-function getOffset(elem) {
-  //alert("elem="+elem);
-  if (elem) {
-    var parentElem = elem.offsetParent;
-    var parentOffset = 0;
-    if (parentElem) {
-      parentOffset = getOffset(parentElem);
-    }
-    return elem.offsetTop + parentOffset;
-  } else {
-    return 0;
-  }
-}
+  // disable onresize handler
+  window.onresize = null; 
 
-function fixHeightOfTheText() {
-  window.onresize = null; /* disable onresize handler */
-  var height = getWindowHeight();
-  if (height) {
-    if (txtareaOffset < 0) {
-      txtareaOffset = getOffset(txtarea);
-    }
-    height = height-txtareaOffset-80;
-    txtarea.style.height = height + "px";
+  // get new window height
+  var windowHeight = $(window).height();
+
+  // resize txtarea
+  if (txtarea) {
+    var offset = $(txtarea).offset({scroll:false});
+    $(txtarea).height(windowHeight-offset.top-80);
   }
-  setTimeout("establishOnResize()", 100); /* add a slight timeout not to DoS IE */
+  
+  var paneOffset = $(".jqTabContents:visible").offset({
+      scroll:false, 
+      padding:true,
+      margin:true
+    }).top;
+  writeDebug("paneOffset="+paneOffset);
+
+  // resize tab contents
+  var $bottomBar = $(".natEditBottomBar");
+  var bottomBarOffset = $bottomBar.offset({
+      scroll:false, 
+      padding:true,
+      margin:true
+    }).top-$bottomBar.height();
+
+  writeDebug("bottomBarOffset="+bottomBarOffset);
+
+  $(".natEdit .jqTabContents").height(bottomBarOffset-paneOffset-5);
+
+  // add a slight timeout not to DoS IE 
+  // before enabling handler again
+  setTimeout("establishOnResize()", 100); 
 }
 
 function establishOnResize() {
-  window.onresize = fixHeightOfTheText;
+  window.onresize = fixHeightOfPane;
 }
 
 
 function natEditInit() {
-  //alert("called natEditInit");
   if (txtarea) {
     //alert("txtarea is already "+txtarea);
   } else {
@@ -246,15 +240,6 @@ function natEditInit() {
     }
   }
 
-  // establish tooltips
-  $(".natEditToolBar a, .natEditToolBar input").Tooltip({
-    delay:200,
-    track:false,
-    showURL:false,
-    extraClass:'twiki',
-    showBody:": "
-  });//.css('background','pink');
-
   // tinymce toggle
   if (typeof(tinyMCE) != 'undefined') {
     var elems = document.getElementsByName('hide_in_wysiwyg');
@@ -267,9 +252,11 @@ function natEditInit() {
     elem.style['visibility'] = 'visible';
   }
 
+
   // establish textarea resizer
-  fixHeightOfTheText();
+  fixHeightOfPane();
   establishOnResize();
+
 
   // establish the table dialog
   var natEditTableDialog = $('#natEditTableDialog')[0]; 
@@ -330,8 +317,6 @@ function natEditInit() {
      }
   }); 
 
-  txtarea.focus();
-  
   return true;
 }
 
@@ -404,4 +389,6 @@ function ieSelect(startPos, endPos) {
 }
 
 // init on document ready
-$(natEditInit);
+$(function() {
+  natEditInit();
+});
