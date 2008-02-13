@@ -133,42 +133,22 @@
 .jqTreeview {
   display:none;
 }
-.treeview, 
-.treeview ul { 
-  padding: 0 !important;
-  margin: 0 !important;
-  list-style: none !important;
-}	
+.jqTreeview.red  li { background-image: url(images/treeview-red-line.gif); }
+.jqTreeview.red .hitarea, 
+.jqTreeview.red li.lastCollapsable, 
+.jqTreeview.red li.lastExpandable { background-image: url(images/treeview-red.gif); } 
 
-.treeview li { 
-  margin: 0;
-  padding: 4px 0 3px 20px;
-}
+.jqTreeview.black li { background-image: url(images/treeview-black-line.gif); }
+.jqTreeview.black .hitarea, 
+.jqTreeview.black li.lastCollapsable, 
+.jqTreeview.black li.lastExpandable { background-image: url(images/treeview-black.gif); }  
 
-.treeview li { background: url(images/tv-item.gif) 0 0 no-repeat; }
-.treeview .collapsable { background-image: url(images/tv-collapsable.gif); }
-.treeview .expandable { background-image: url(images/tv-expandable.gif); }
-.treeview .last { background-image: url(images/tv-item-last.gif); }
-.treeview .lastCollapsable { background-image: url(images/tv-collapsable-last.gif); }
-.treeview .lastExpandable { background-image: url(images/tv-expandable-last.gif); }
+.jqTreeview.gray li { background-image: url(images/treeview-gray-line.gif); }
+.jqTreeview.gray .hitarea, 
+.jqTreeview.gray li.lastCollapsable, 
+.jqTreeview.gray li.lastExpandable { background-image: url(images/treeview-gray.gif); } 
 
-.jqTreeview.red .treeview li { background: url(images/red/tv-item.gif) 0 0 no-repeat; }
-.jqTreeview.red .treeview .collapsable { background-image: url(images/red/tv-collapsable.gif); }
-.jqTreeview.red .treeview .expandable { background-image: url(images/red/tv-expandable.gif); }
-.jqTreeview.red .treeview .last { background-image: url(images/red/tv-item-last.gif); }
-.jqTreeview.red .treeview .lastCollapsable { background-image: url(images/red/tv-collapsable-last.gif); }
-.jqTreeview.red .treeview .lastExpandable { background-image: url(images/red/tv-expandable-last.gif); }
-
-.jqTreeview.black .treeview li { background: url(images/black/tv-item.gif) 0 0 no-repeat; }
-.jqTreeview.black .treeview .collapsable { background-image: url(images/black/tv-collapsable.gif); }
-.jqTreeview.black .treeview .expandable { background-image: url(images/black/tv-expandable.gif); }
-.jqTreeview.black .treeview .last { background-image: url(images/black/tv-item-last.gif); }
-.jqTreeview.black .treeview .lastCollapsable { background-image: url(images/black/tv-collapsable-last.gif); }
-.jqTreeview.black .treeview .lastExpandable { background-image: url(images/black/tv-expandable-last.gif); }
-
-.jqTreeview.gray .treeview li { background: url(images/gray/tv-item.gif) 0 0 no-repeat; }
-.jqTreeview.gray .treeview .collapsable { background-image: url(images/gray/tv-collapsable.gif); }
-.jqTreeview.gray .treeview .expandable { background-image: url(images/gray/tv-expandable.gif); }
-.jqTreeview.gray .treeview .last { background-image: url(images/gray/tv-item-last.gif); }
-.jqTreeview.gray .treeview .lastCollapsable { background-image: url(images/gray/tv-collapsable-last.gif); }
-.jqTreeview.gray .treeview .lastExpandable { background-image: url(images/gray/tv-expandable-last.gif); }
+.jqTreeview.famfamfam li { background-image: url(images/treeview-famfamfam-line.gif); }
+.jqTreeview.famfamfam .hitarea, 
+.jqTreeview.famfamfam li.lastCollapsable, 
+.jqTreeview.famfamfam li.lastExpandable { background-image: url(images/treeview-famfamfam.gif); } 

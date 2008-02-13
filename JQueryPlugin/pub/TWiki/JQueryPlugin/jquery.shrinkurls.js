@@ -28,6 +28,7 @@
  *                            // not match to be considered
  *    whitespace:<boolean>,   // true: even shrink if there's whitespace
  *                            // in the link text (default false)
+ *    trunc:<head|middle|tail> // position where to insert the ellipsis
  *  });
  *
  */

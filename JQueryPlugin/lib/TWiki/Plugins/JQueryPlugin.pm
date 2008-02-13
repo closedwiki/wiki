@@ -24,12 +24,19 @@ use vars qw(
   $VERSION $RELEASE $SHORTDESCRIPTION 
   $NO_PREFS_IN_TOPIC
   $doneInit $doneHeader
+  $header
 );
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.4'; 
+$RELEASE = 'v0.50'; 
 $SHORTDESCRIPTION = 'jQuery <nop>JavaScript library for TWiki';
 $NO_PREFS_IN_TOPIC = 1;
+
+$header = <<'HERE';
+<link rel="stylesheet" href="%PUBURLPATH%/%TWIKIWEB%/JQueryPlugin/jquery-all.css" type="text/css" media="all" />
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/JQueryPlugin/jquery-all.js"></script>
+HERE
+
 
 ###############################################################################
 sub initPlugin {
@@ -40,6 +47,10 @@ sub initPlugin {
   TWiki::Func::registerTagHandler('BUTTON', \&handleButton );
   TWiki::Func::registerTagHandler('TOGGLE', \&handleToggle );
   TWiki::Func::registerTagHandler('CLEAR', \&handleClear );
+  TWiki::Func::registerTagHandler('TABPANE', \&handleTabPane );
+  TWiki::Func::registerTagHandler('ENDTABPANE', \&handleEndTabPane );
+  TWiki::Func::registerTagHandler('TAB', \&handleTab );
+  TWiki::Func::registerTagHandler('ENDTAB', \&handleEndTab );
   return 1;
 }
 
@@ -47,29 +58,7 @@ sub initPlugin {
 sub commonTagsHandler {
 
   return if $doneHeader;
-
-  my $header = <<'HERE';
-<link rel="stylesheet" href="%PUBURLPATH%/%TWIKIWEB%/JQueryPlugin/jquery-all.css" type="text/css" media="all" />
-<script type="text/javascript">
-var twiki;
-if (!twiki) { 
-  twiki = {}; 
-}
-twiki.pubUrlPath = '%PUBURLPATH%';
-twiki.viewUrlPath = '%SCRIPTURLPATH{"view"}%';
-twiki.editUrlPath = '%SCRIPTURLPATH{"edit"}%';
-twiki.renameUrlPath = '%SCRIPTURLPATH{"rename"}%';
-twiki.saveUrlPath = '%SCRIPTURLPATH{"save"}%';
-twiki.twikiWeb = '%TWIKIWEB%';
-twiki.mainWeb = '%MAINWEB%';
-twiki.wikiName = '%USERINFO{format="$wikiname"}%';
-twiki.userName = '%USERINFO{format="$username"}%';
-twiki.JQueryPluginEnabled = 1;
-</script>
-<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/JQueryPlugin/jquery-all.js"></script>
-HERE
-
-  $doneHeader = 1 if ($_[0] =~ s/<head>(.*?[\r\n]+)/<head>$1$header\n/o);
+  $doneHeader = 1 if ($_[0] =~ s/<head>(.*?[\r\n]+)/<head>$1$header/o);
 }
 
 ###############################################################################
@@ -90,6 +79,28 @@ sub handleButton {
 sub handleToggle {
   initCore();
   return TWiki::Plugins::JQueryPlugin::Core::handleToggle(@_);
+}
+
+###############################################################################
+sub handleTabPane {
+  initCore();
+  return TWiki::Plugins::JQueryPlugin::Core::handleTabPane(@_);
+}
+
+###############################################################################
+sub handleTab {
+  initCore();
+  return TWiki::Plugins::JQueryPlugin::Core::handleTab(@_);
+}
+
+###############################################################################
+sub handleEndTab {
+  return '</div></div>';
+}
+
+###############################################################################
+sub handleEndTabPane {
+  return '</div>';
 }
 
 ###############################################################################

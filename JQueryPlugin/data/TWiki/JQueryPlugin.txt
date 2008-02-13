@@ -26,9 +26,10 @@ your web pages."
 </blockquote>
 
 ---++ Included libraries
-   1 jquery v1.1.3.1
+   1 jquery v1.2.3
    1 jquery.bgiframe
    1 jquery.dom 
+   1 jquery.metadata 
    1 jquery.easing
    1 jquery.hoverIntent
    1 jquery.innerfade
@@ -165,6 +166,20 @@ nisi. Mauris est urna, fermentum vel, luctus sed, luctus eu, elit. In nulla.
       * item
       * item
 </div>
+<div class="jqTreeview famfamfam">
+   * list
+      * item
+      * item
+      * item
+   * list
+      * item
+      * item
+      * item
+   * list
+      * item
+      * item
+      * item
+</div>
 
 ---++ Installation Instructions
    * Download the ZIP file from the Plugin web (see below)
@@ -173,11 +188,16 @@ nisi. Mauris est urna, fermentum vel, luctus sed, luctus eu, elit. In nulla.
 %$MANIFEST%
 
 ---++ Contrib Info
-|  Contrib Author(s): | TWiki:Main/MichaelDaum - http://wikiring.de |
-|  Copyright: | 2007 Michael Daum http://michaeldaumconsulting.com, 2007 John Resig (jquery.com), and jQuery plugin authors |
+|  Contrib Author(s): | TWiki:Main/MichaelDaum |
+|  Copyright: | 2007-2008 Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL |
-|  Contrib Version: | v0.4 |
+|  Contrib Version: | v0.5 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  13 Feb 2008: | upgrade to jquery-1.2.3, as well as most plugins |
+|  17 Jan 2008: | added jquery.metadata plugin; \
+                  implemented a jquery.tabpane plugin; \
+                  updated jquery.dimensions plugin; \
+                  added jquery.empty plugin to ease development of new plugins |
 |  15 Nov 2007: | use skin independent way to add javascript files to header |
 |  10 Oct 2007: | upgraded to jQuery-1.1.4; compressed js and css |
 |  12 Jul 2007: | initial package containing jQuery-1.1.3.1 |

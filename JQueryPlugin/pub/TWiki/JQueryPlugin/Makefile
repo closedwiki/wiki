@@ -11,6 +11,7 @@ clean:
 
 JS_SOURCES=\
   jquery.js \
+  jquery.metadata.js \
   jquery.easing.js \
   jquery.hoverIntent.js \
   jquery.bgiframe.js \
@@ -21,12 +22,15 @@ JS_SOURCES=\
   jquery.dom.js \
   jquery.nifty.js \
   jquery.tooltip.js \
-  jquery.treeview.js \
-  jquery.twiki.js
+  jquery.treeview.uncompressed.js \
+  jquery.twiki.js \
+  jquery.tabpane.js
 
 CSS_SOURCES=\
   jquery.nifty.css \
-  jquery.twiki.css
+  jquery.twiki.css \
+  jquery.tabpane.css \
+  jquery.treeview.css
 
 jquery-all.js: $(JS_SOURCES) Makefile $(MINIFYJS)
 	@echo creating $@

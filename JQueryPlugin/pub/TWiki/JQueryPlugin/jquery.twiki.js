@@ -3,6 +3,10 @@
  *
  * $Rev$
 */
+var twiki;
+if (!twiki) {
+  twiki = {};
+}
 
 twiki.JQueryPlugin = new function () {
   var self = this;
@@ -27,13 +31,13 @@ twiki.JQueryPlugin.toggle = function(target, effect) {
       $(target).slideToggle("fast");
       break;
     case "ease":
-      $(target).slideToggle({duration:500, easing:'easeinout'});
+      $(target).slideToggle({duration:500, easing:'easeInOutQuad'});
       break;
     case "bounce":
       if ($(target).is(":visible")) {
-        $(target).slideUp({ duration:500, easing:'easeinout'});
+        $(target).slideUp({ duration:500, easing:'easeInOutQuad'});
       } else {
-        $(target).slideDown({ duration:1000, easing:'bounceout'});
+        $(target).slideDown({ duration:1000, easing:'easeOutBounce'});
       }
       break;
     case "toggle":
@@ -191,7 +195,6 @@ $(function(){
       });
       var args = Array();
       var parentClass = $(this).parent().attr('class');
-      args['speed'] = 'fast';
       if (parentClass.match(/\bopen\b/)) {
         args['collapsed'] = false;
       }
@@ -201,15 +204,24 @@ $(function(){
       if (parentClass.match(/\bunique\b/)) {
         args['unique'] = true;
       }
-      $(this).Treeview(args);
+      args['animated'] = 'fast';
+      if (parentClass.match(/\bspeed_(fast|slow|normal|none|[\d\.]+)\b/)) {
+        var speed = RegExp.$1;
+        if (speed == "none") {
+          delete args['animated'];
+        } else {
+          args['animated'] = speed;
+        }
+      }
+      $(this).treeview(args);
     });
   }
 
   /********************************************************
    * shrink urls in TWikiTables lists
    */
-  if (false) {
-    $(".twikiTable a").shrinkUrls({size:25});
+  if (true) {
+    $(".twikiAttachments .twikiTable a").shrinkUrls({size:25, trunc:'middle'});
   }
 
   /********************************************************
@@ -229,24 +241,20 @@ $(function(){
   /********************************************************
    * tooltips 
    */
-  if (false) { /* lazy initialization */
-    $("body").one('mouseover',
-      function(event) {
-        $("a,span,input").Tooltip({
-          delay:250,
-          track:false,
-          showURL:false,
-          extraClass:'twiki',
-          showBody:": "
-        });//.css('background','pink');
-      }
-    );
+  if (false) {
+    $("a,span,input").Tooltip({
+      delay:250,
+      track:false,
+      showURL:false,
+      extraClass:'twiki',
+      showBody:": "
+    });//.css('background','pink');
   }
 
   /********************************************************
    * rounded corners using nifty 
    */
-  if (true) {
+  if (false) {
     $(".jqRounded").roundedCorners();
   }
 
@@ -265,7 +273,7 @@ $(function(){
     $(".twikiTocToggle").
       css("float","right").
       click(function() {
-        $("> ul",$(this).parent()).slideToggle({easing:'easeinout', duration:300});
+        $("> ul",$(this).parent()).slideToggle({easing:'easeInOutQuad', duration:300});
         if($(this).text() == "[hide]") {
           $(this).text("[show]");
         } else {

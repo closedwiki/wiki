@@ -16,15 +16,53 @@
 package TWiki::Plugins::JQueryPlugin::Core;
 
 use strict;
-use vars qw( 
-  $debug 
-);
+use constant DEBUG => 0; # toggle me
 
-$debug = 0; # toggle me
+use vars qw($tabPaneCounter $tabCounter);
+
+###############################################################################
+sub handleTabPane {
+  my ($session, $params, $theTopic, $theWeb) = @_;
+
+  my $tpId = 'jqTabPane'.($tabPaneCounter++);
+
+  TWiki::Func::addToHEAD($tpId, <<"EOS");
+<script type="text/javascript">
+jQuery(function(\$) {
+  \$("#$tpId").tabpane();
+});
+</script>
+EOS
+
+  return "<div class=\"jqTabPane\" id=\"$tpId\">";
+}
+
+###############################################################################
+sub handleTab {
+  my ($session, $params, $theTopic, $theWeb) = @_;
+
+  my $theName = $params->{_DEFAULT} || $params->{name} || 'Tab';
+  my $beforeHandler = $params->{before} || '';
+  my $afterHandler = $params->{after} || '';
+  my $tabId = 'jqTab'.($tabCounter++);
+
+  my @metaData = ();
+  if ($beforeHandler) {
+    $beforeHandler =~ s/'/\\'/go;
+    push @metaData,  "beforeHandler: '$beforeHandler'";
+  }
+  if ($afterHandler) {
+    $afterHandler =~ s/'/\\'/go;
+    push @metaData,  "afterHandler: '$afterHandler'";
+  }
+  my $metaData = scalar(@metaData)?' {'.join(',', @metaData).'}':'';
+
+  return "<div id=\"$tabId\" class=\"jqTab$metaData\">\n<h2 >$theName</h2><div class=\"jqTabContents\">";
+}
 
 ###############################################################################
 sub handleToggle {
-  my($session, $params, $theTopic, $theWeb) = @_;
+  my ($session, $params, $theTopic, $theWeb) = @_;
 
   my $theText = $params->{_DEFAULT} || $params->{text} || 'Button';
   my $theBackground = $params->{bg};
@@ -56,7 +94,7 @@ sub handleToggle {
 
 ###############################################################################
 sub handleButton {
-  my($session, $params, $theTopic, $theWeb) = @_;
+  my ($session, $params, $theTopic, $theWeb) = @_;
 
   my $theText = $params->{_DEFAULT} || $params->{text} || 'Button';
   my $theBackground = $params->{bg} || '';
