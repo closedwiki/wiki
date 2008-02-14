@@ -192,6 +192,57 @@ sub initPlugin {
 
 =pod
 
+TWiki TAG specific functionality.
+
+=cut
+
+sub _P4CHANGES
+	{
+    my($session, $params, $theTopic, $theWeb) = @_;   
+    
+    my $ajax=$params->{ajax};
+    my $label=$params->{label};
+    $label='Fetch perforce changes' unless defined($label);
+    my $format=$params->{format};
+    my $default=$params->{_DEFAULT};
+    my $footer=$params->{footer};
+    my $header=$params->{header};
+        
+    #If asked for ajax services we don't run the actual p4 command now 	    
+    if (defined $ajax)
+    	{
+		#Resolving some substitutions for header and footer here implies it will be done twice since it will be done again in P4Changes sub through the rest interface
+		#However we must resolve things like the $quot to allow HTML and JS in footer for instance
+		#TODO: Can't get the footer and header param to work properly with ajax
+    	#if (defined $header)
+		#	{
+		#	$header=EarlyVariableSubstitution($header);			
+		#	}
+		
+		#	
+		#if (defined $footer)
+			#{
+			#die "FOOTER: $footer";	
+			#$footer=EarlyVariableSubstitution($footer);
+			##$footer=UrlEncode($footer);					
+			#}		    	
+	    
+		#die "FOOTER: $footer";	
+					    	
+	    my $output="<input type=\"button\" value=\"$label\" onclick=\"\$('#$ajax').load('%SCRIPTURLPATH%/rest/PerforcePlugin/p4changes?header=$header&footer=$footer&topic=%WEB%.%TOPIC%&_DEFAULT=$default&format=$format', {}, function(){\$('#$ajax').show('slow');})\"/>\n<div style=\"display: none\" id=\"$ajax\"></div>";
+	   	#die $output;	    		
+	   	return "$output";
+    	}
+    
+    return P4Changes(@_);    
+    }
+
+
+
+
+=pod
+
+Core p4 changes functionality
 
 #Here is Perforce command documentation:
 # http://www.perforce.com/perforce/doc.073/manuals/cmdref/changes.html#1048020
@@ -206,7 +257,8 @@ p4password
 
 =cut
 
-sub _P4CHANGES {
+sub P4Changes 
+	{
     my($session, $params, $theTopic, $theWeb) = @_;
     # $session  - a reference to the TWiki session object (if you don't know
     #             what this is, just ignore it)
@@ -257,6 +309,8 @@ sub _P4CHANGES {
         
     #my $fileSpec = $params->{_DEFAULT};
     my $format = $params->{format};    
+    my $header = $params->{header};
+    my $footer = $params->{footer};
     my $cmd=PerforceBaseCmd($p4port, $p4client, $p4user, $p4password);
     #$cmd= "$cmd changes $changesCmdParams $fileSpec";
     $cmd= "$cmd changes $changesCmdParams";
@@ -291,8 +345,8 @@ sub _P4CHANGES {
     #return $exit;
     #my @changesCmdOutput=split $changesCmdOutput;
     
-    my $output="";
-    
+    #Parse and format the output
+    my $output="";    
     if (defined $format)
     	{
 	    #return "format";	
@@ -324,9 +378,21 @@ sub _P4CHANGES {
     		}
 		}
     
-    return $output;    
-    
-}
+	if (defined $header)
+		{
+		$header=CommonVariableSubstitution($header);	
+		$output = $header.$output;	
+		}
+		
+	if (defined $footer)
+		{
+		$footer=CommonVariableSubstitution($footer);		
+		$output = $output.$footer;	
+		}		
+				
+		
+    return $output;        
+	}
 
 
 
@@ -354,10 +420,13 @@ sub restP4CHANGES
    	
    	$params{'_DEFAULT'}=$query->param('_DEFAULT');
    	$params{'format'}=$query->param('format');   	
+	$params{'footer'}=$query->param('footer');
+   	$params{'header'}=$query->param('header');   	
+
     
    	#return "$params{'_DEFAULT'}\n$params{'format'}\n";
    	
-   	my $output=_P4CHANGES($session,\%params);
+   	my $output=P4Changes($session,\%params);
    	
    	$output=TWiki::Func::expandCommonVariables($output);  
    	$output=TWiki::Func::renderText($output);
@@ -1002,6 +1071,8 @@ sub P4ChangesVariableSubstitution
 	{	
 	my ($format, $changelist, $year, $month, $day, $user, $client, $status, $description) = @_;
 	
+	#TODO: is the nop gonna be working with the n?
+	#We should use CommonVariableSubstitution instead of duplicating hash values
 	my %substitutions=(
 			'changelist' => $changelist,
 			'year' => $year,			
@@ -1010,9 +1081,13 @@ sub P4ChangesVariableSubstitution
 			'user' => $user,			
 			'client' => $client,
 			'description' => $description,
-			'n' => "\n",
 			'date' => "$year/$month/$day",
-			'status' => $status
+			'status' => $status,
+			'nop' => '',
+			'quot' => '"',
+			'percnt' => '%',
+			'dollar' => '$',
+			'n' => "\n"			
 		 	);
 	
 		 	
@@ -1031,6 +1106,89 @@ sub P4ChangesVariableSubstitution
 	}
 
 
+=pod
+
+=cut
+	
+	
+sub CommonVariableSubstitution
+	{	
+	my ($format) = @_;
+	
+	#TODO: is the nop gonna be working with the n?	
+	my %substitutions=(
+			'nop' => '',
+			'quot' => '"',
+			'percnt' => '%',
+			'dollar' => '$',
+			'n' => "\n"
+		 	);
+			 	
+	my $formated = $format;
+  	while ( my ($key, $value) = each(%substitutions) )
+    		{     	
+       		$formated =~ s/\$$key/$value/g;
+       		}	
+	
+    return "$formated";
+	}
+	
+=pod
+
+=cut
+		
+sub EarlyVariableSubstitution
+	{	
+	my ($format) = @_;
+	
+	#TODO: is the nop gonna be working with the n?	
+	my %substitutions=(
+			#'nop' => '',
+			'quot' => '"',
+			#'#' => '%23',
+			#'percnt' => '%',
+			#'dollar' => '$'
+		 	);
+			 	
+	my $formated = $format;
+  	while ( my ($key, $value) = each(%substitutions) )
+    		{     	
+       		$formated =~ s/\$$key/$value/g;
+       		}	
+	
+    return "$formated";
+	}
+
+=pod
+
+=cut
+		
+sub UrlEncode
+	{	
+	my ($format) = @_;
+	
+	#TODO: is the nop gonna be working with the n?	
+	my %substitutions=(
+			#'nop' => '',
+			'"' => '%22',
+			'#' => '%23',
+			#'percnt' => '%',
+			#'dollar' => '$'
+		 	);
+			 	
+	my $formated = $format;
+  	while ( my ($key, $value) = each(%substitutions) )
+    		{     	
+       		$formated =~ s/$key/$value/g;
+       		}	
+	
+    return "$formated";
+	}
+	
+	
+	
+		
+	
 #
 #
 #

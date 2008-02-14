@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="BaseUserMapping_666" date="1202996884" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICINFO{author="BaseUserMapping_666" date="1203033261" format="1.1" reprev="1.4" version="1.4"}%
 ---+!! %TOPIC%
 
 _short description here_
@@ -7,13 +7,27 @@ _short description here_
 
 ---++ Syntax Rules
 
+---+++ TWiki %TAG%
+
 <verbatim>
-%P4CHANGES{"p4changesoptions" format="format"}%
+%P4CHANGES{"p4changesoptions" format="format" header="header" footer="footer" ajax="ajax" label="label"}%
 </verbatim>
 
-| *Parameter* | *description* | *default value* |
-| _p4changesoptions_ | This must be some valid [[http://www.perforce.com/perforce/doc.073/manuals/cmdref/changes.html][p4 changes]] options | none |
-| _format_ | A template string used to format each change record. See below for the supported variables. If none specified the output of the command is returned with HTML br tags append to each line.  | none |
+| *Parameter* | *description* | *example* | *default value* |
+| _p4changesoptions_ | This must be some valid [[http://www.perforce.com/perforce/doc.073/manuals/cmdref/changes.html][p4 changes]] options | =-m 10= | none |
+| _format_ | A template string used to format each change record. See below for the supported variables. If none specified the output of the command is returned with HTML br tags append to each line.  |  <verbatim>| $changelist | $description |</verbatim> | none |
+| _header_ | Specify a header for the formatted output. | <verbatim> | *Parameter* | *description* | *default value* | </verbatim>  | none |
+| _footer_ | Specify a footer for the formatted output. | =nice footer= | none |
+| _ajax_ | Tell the plug-in to delay running of the p4 command. Instead of the command output it displays a button that will allow the user to fetch the information from Perforce on demand. The given value defines the id of the =div= element to be loaded upon ajax request completion. | =ajaxdivid1=  | none |
+| _label_ | Used only in ajax mode. It defines the label of the ajax button. |  =Fetch changes=  | =Fetch Perforce changes= |
+
+---+++ REST interface
+
+<verbatim>
+%SCRIPTURLPATH%/rest/PerforcePlugin/p4changes?topic=%WEB%.%TOPIC%&_DEFAULT=p4changesoptions&format=format&header=header&footer=footer
+</verbatim>
+
+_p4changesoptions_, _format_, _header_ and _footer_ parameters are the same as for the TWiki =%TAG%=. Parameters _ajax_ and _label_ are not supported.
 
 ---+++ Format variable substitution
 
@@ -29,9 +43,19 @@ The following symbols specified in the _format_ parameter are substituted with t
 | =$client= | Perforce client to which the changelist belong to | myperforceclient |
 | =$status= | Changelist status. Can be _submitted_ or _pending_ | pending |
 | =$description= | Perforce change description | I fixed Bug:123 |
+
+---+++ Format, header and footer variable substitution
+
+| *Variable* | *description* | *example* |
+| =$nop= | Replaced with nothing. | |
+| =$quot= | Replaced with a double quote | ="= |
+| =$percnt= | Replaced with a percent | =%= |
+| =$dollar= | Replaced with a dollor | =$= |
 | =$n= | New line character | =\n= |
 
 ---++ Examples
+
+See Sandbox.PluginTestPerforcePlugin.
 
 ---+++ Get the last ten change list
 
@@ -56,7 +80,7 @@ The following symbols specified in the _format_ parameter are substituted with t
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<plugin>_<setting>%==, i.e. ==%NEWPLUGIN_SHORTDESCRIPTION%==
 
    * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic: 
-      * Set SHORTDESCRIPTION = Provide access to informations from a [[http://www.perforce.com][Perforce]] CMS system.      
+      * Set SHORTDESCRIPTION = Provide access to informations from a [[http://www.perforce.com][Perforce]] CMS system.              
 
 ---++ Plugin Installation Instructions
 
@@ -90,8 +114,9 @@ $TWiki::cfg{Plugins}{PerforcePlugin}{p4password} = "mypassword";
 |  Plugin Author: | TWiki:Main.StephaneLenclud |
 |  Copyright: | © 2007, TWiki:Main.StephaneLenclud |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 14 Feb 2008 (V1.000) |
+|  Plugin Version: | 15 Feb 2008 (V0.004) |
 |  Change History: | <!-- versions below in reverse order --> |
+|  15 Feb 2008: | Documentation, more parameters, ajax/jquery support |
 |  14 Feb 2008: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |

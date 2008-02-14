@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="BaseUserMapping_666" date="1203016333" format="1.1" reprev="1.3" version="1.3"}%
+%META:TOPICINFO{author="BaseUserMapping_666" date="1203031692" format="1.1" reprev="1.5" version="1.5"}%
 %META:TOPICPARENT{name="TWiki.EmptyPlugin"}%
 ---+!! TWiki.PerforcePlugin examples
 
@@ -68,10 +68,36 @@
 
 ---++ REST
 
-[[/twiki/bin/rest/PerforcePlugin/p4changes?topic=%WEB%.%TOPIC%&_DEFAULT=-m 10&format=| $changelist | $date | $description | $user | $status | $n"][Get changes through REST]]
+<verbatim>
+%SCRIPTURLPATH%/rest/PerforcePlugin/p4changes?topic=%WEB%.%TOPIC%&_DEFAULT=-m 10&format=| $changelist | $date | $description | $user | $status | $n
+</verbatim>
+
+[[%SCRIPTURLPATH%/rest/PerforcePlugin/p4changes?topic=%WEB%.%TOPIC%&_DEFAULT=-m 10&format=| $changelist | $date | $description | $user | $status | $n][Get changes through REST]]
 
 ---++ REST and TWiki:Plugins.JQueryPlugin
 
-<input type="button" value="Fetch perforce changes" onclick="$('#loaddiv').load('/twiki/bin/rest/PerforcePlugin/p4changes?topic=%WEB%.%TOPIC%&_DEFAULT=-m 10&format=| $changelist | $date | $description | $user | $status | $n', {}, function(){$('#loaddiv').toggle('slow');})"/>
+<verbatim>
+<input type="button" value="Fetch perforce changes" onclick="$('#loaddiv').load('%SCRIPTURLPATH%/rest/PerforcePlugin/p4changes?topic=%WEB%.%TOPIC%&_DEFAULT=-m 10&format=| $changelist | $date | $description | $user | $status | $n', {}, function(){$('#loaddiv').toggle('slow');})"/>
 
 <div style="display: none" id="loaddiv"> empty </div>
+</verbatim>
+
+<input type="button" value="Fetch perforce changes" onclick="$('#loaddiv').load('%SCRIPTURLPATH%/rest/PerforcePlugin/p4changes?topic=%WEB%.%TOPIC%&_DEFAULT=-m 10&format=| $changelist | $date | $description | $user | $status | $n', {}, function(){$('#loaddiv').toggle('slow');})"/>
+
+<div style="display: none" id="loaddiv"> empty </div>
+
+---++ TWiki:Plugins.JQueryPlugin the easy way
+
+<verbatim>
+%P4CHANGES{"-l -m 10" format="| $changelist | $date | $description | $user | $status | $n" ajax="ajaxdivid" label="Show my changes"}%
+</verbatim>
+
+%P4CHANGES{"-l -m 10" format="| $changelist | $date | $description | $user | $status | $n" ajax="ajaxdivid" label="Show my changes"}%
+
+---++ TWiki:Plugins.JQueryPlugin with header
+
+<verbatim>
+%P4CHANGES{"-l -m 10" format="| $changelist | $date | $description | $user | $status | $n" header="| *Changelist* | *Date* | *Description* | *User* | *Status* |$n" ajax="ajaxdivid1" label="Show my changes"}%
+</verbatim>
+
+%P4CHANGES{"-l -m 10" format="| $changelist | $date | $description | $user | $status | $n" header="| *Changelist* | *Date* | *Description* | *User* | *Status* |$n" ajax="ajaxdivid1" label="Show my changes"}%
