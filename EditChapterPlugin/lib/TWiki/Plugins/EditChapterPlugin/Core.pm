@@ -110,7 +110,7 @@ sub commonTagsHandler {
 
   # loop over all lines
   my $chapterNumber = 0;
-  $_[0] =~ s/(^)(---\+{$this->{minDepth},$this->{maxDepth}}(?:!!)?)([^$this->{translationToken}\+!].+?)($)/
+  $_[0] =~ s/(^)(---+[\+#]{$this->{minDepth},$this->{maxDepth}}(?:!!)?)([^$this->{translationToken}\+#!].+?)($)/
     $1.
     $this->handleSection($web, $topic, \$chapterNumber, $3, $2, $4, $enabled)
   /gme;
@@ -243,7 +243,7 @@ sub handleEXTRACTCHAPTER {
     $insidePre-- if $line =~ /<\/(pre|verbatim)>/goi;
     next if $insidePre > 0;
 
-    if ($line =~ /^---\+{$this->{minDepth},$this->{maxDepth}}(?:!!)?\s*(.+?)$/m) {
+    if ($line =~ /^---+[\+#]{$this->{minDepth},$this->{maxDepth}}(?:!!)?\s*(.+?)$/m) {
       $chapterNumber++;
       if ($chapterNumber == $theFrom) {
         $fromPos = pos($text) - length($line);

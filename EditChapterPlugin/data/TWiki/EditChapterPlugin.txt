@@ -137,9 +137,10 @@ Many thanks to the following sponsors for supporting this work:
 |  Plugin Author(s): | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2008, Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.11 |
+|  Plugin Version: | v1.12 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  14 Feb 2008: | have a little space in the default heading format to let <nop>TWikiMarkup do its job |
+|  14 Feb 2008: | have a little space in the default heading format to let <nop>TWikiMarkup do its job; \
+                  added support for legacy heading markup like =--------#####= |
 |  05 Feb 2008: | compatibility with old <nop>PatternSkin versions |
 |  03 Jan 2008: | initial release |
 |  Dependencies: | %$DEPENDENCIES% |
