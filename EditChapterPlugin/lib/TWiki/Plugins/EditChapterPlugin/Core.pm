@@ -39,7 +39,7 @@ sub new {
     '<img src="%PUBURLPATH%/%TWIKIWEB%/EditChapterPlugin/uweb-g.gif" height="16" width="16" border="0" />';
   my $editLabelFormat = 
     TWiki::Func::getPreferencesValue("EDITCHAPTERPLUGIN_EDITLABELFORMAT") || 
-    '<span class="ecpHeading">$anchor</a>$heading<a class="ecpEdit" href="$url" title="Edit this chapter">$img</a></span>';
+    '<span class="ecpHeading">$anchor $heading <a class="ecpEdit" href="$url" title="Edit this chapter">$img</a></span>';
   my $wikiName = TWiki::Func::getWikiName();
 
   my $this = {
@@ -156,7 +156,7 @@ sub handleSection {
 
     my $url = TWiki::Func::getScriptUrl($web, $topic, 'edit', %args);
 
-    $anchor = '<a name="'.$anchor.'">';
+    $anchor = '<a name="'.$anchor.'"></a>';
 
     # format
     $result = $this->{editLabelFormat};
