@@ -1,4 +1,67 @@
-%META:TOPICINFO{author="TWikiContributor" date="1042728360" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="BaseUserMapping_666" date="1202990033" format="1.1" reprev="1.2" version="1.2"}%
 %META:TOPICPARENT{name="TWiki.EmptyPlugin"}%
+---+!! TWiki.PerforcePlugin examples
 
-SOME EXAMPLES OF THE PLUGIN
+%TOC%
+
+---++ No format
+
+<verbatim>
+%P4CHANGES{"-m 10"}%
+</verbatim>
+
+%P4CHANGES{"-m 10"}%
+
+---++ Basic format
+
+<verbatim>
+%P4CHANGES{"-m 10" format="| $changelist | $date | $description | $user | $status | $n"}%
+</verbatim>
+
+| *Changelist* | *Date* | *Description* | *User* | *Status* |
+%P4CHANGES{"-m 10" format="| $changelist | $date | $description | $user | $status | $n"}%
+
+---++ Long description
+
+<verbatim>
+%P4CHANGES{"-L -m 10"  format="| $changelist | $date | $description | $user | $status | $n"}%
+</verbatim>
+
+| *Changelist* | *Date* | *Description* | *User* | *Status* |
+%P4CHANGES{"-L -m 10"  format="| $changelist | $date | $description | $user | $status | $n"}%
+
+---++ All description
+
+<verbatim>
+%P4CHANGES{"-l -m 10" format="| $changelist | $date | $description | $user | $status | $n"}%
+</verbatim>
+
+| *Changelist* | *Date* | *Description* | *User* | *Status* |
+%P4CHANGES{"-l -m 10" format="| $changelist | $date | $description | $user | $status | $n"}%
+
+---++ Time support
+
+<verbatim>
+%P4CHANGES{"-t -m 10" format="| $changelist | $date | $description | $user | $status | $n"}%
+</verbatim>
+
+| *Changelist* | *Date* | *Description* | *User* | *Status* |
+%P4CHANGES{"-t -m 10" format="| $changelist | $date | $description | $user | $status | $n"}%
+
+---++ Status support
+
+<verbatim>
+%P4CHANGES{"-s pending -m 10" format="| $changelist | $date | $description | $user | $status | $n"}%
+</verbatim>
+
+| *Changelist* | *Date* | *Description* | *User* | *Status* |
+%P4CHANGES{"-s pending -m 10" format="| $changelist | $date | $description | $user | $status | $n"}%
+
+---++ Status with full text
+
+<verbatim>
+%P4CHANGES{"-l -s pending -m 10" format="| $changelist | $date | $description | $user | $status | $n"}%
+</verbatim>
+
+| *Changelist* | *Date* | *Description* | *User* | *Status* |
+%P4CHANGES{"-l -s pending -m 10" format="| $changelist | $date | $description | $user | $status | $n"}%

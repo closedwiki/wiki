@@ -101,17 +101,6 @@ $NO_PREFS_IN_TOPIC = 1;
 # Name of this Plugin, only used in this module
 $pluginName = 'PerforcePlugin';
 
-#Settings
-#TODO:  move that into some CFG file. Allow those parameters to be overridden from the TAG?
-
-$p4port = "scm-srv:1666";
-$p4client = "sl-pc";
-$p4user = "ccBuild";
-$p4password = "?nt3rn3t";
-
-
-
-
 
 
 =pod
@@ -165,6 +154,18 @@ sub initPlugin {
     # configuration to the =configure= interface.
     my $setting = $TWiki::cfg{Plugins}{PerforcePlugin}{ExampleSetting} || 0;
     $debug = $TWiki::cfg{Plugins}{PerforcePlugin}{Debug} || 0;
+    
+    $p4port = $TWiki::cfg{Plugins}{PerforcePlugin}{p4port} || undef;
+	$p4client = $TWiki::cfg{Plugins}{PerforcePlugin}{p4client} || undef;
+	$p4user = $TWiki::cfg{Plugins}{PerforcePlugin}{p4user} || undef;
+	$p4password = $TWiki::cfg{Plugins}{PerforcePlugin}{p4password} || undef;
+    
+	unless (defined($p4password) && defined($p4port) && defined($p4client) && defined($p4user) )
+		{
+		TWiki::Func::writeWarning("{Plugins}{PerforcePlugin}{p4port}, {Plugins}{PerforcePlugin}{p4client}, {Plugins}{PerforcePlugin}{p4user} and {Plugins}{PerforcePlugin}{p4password} must be defined in LocalSite.cfg\n");	
+		return 0;
+		}
+	
 
     # register the _EXAMPLETAG function to handle %EXAMPLETAG{...}%
     # This will be called whenever %EXAMPLETAG% or %EXAMPLETAG{...}% is
@@ -258,10 +259,11 @@ sub _P4CHANGES {
     	{
 		return "%RED%P4CHANGES error: -t option not supported!%ENDCOLOR%";	    	
     	}
-    elsif ($cmd =~ /\s+-s\s*/)
-    	{
-	    return "%RED%P4CHANGES error: -s option not supported!%ENDCOLOR%";	
-    	}
+    # -s flag is now supported
+    #elsif ($cmd =~ /\s+-s\s*/)
+    #	{
+	#    return "%RED%P4CHANGES error: -s option not supported!%ENDCOLOR%";	
+    #	}
     
     
         
@@ -955,9 +957,9 @@ sub PerforceBaseCmd
 	return $baseCmd;		
 	}
 
-sub P4ChangesVariableSubtitution
+sub P4ChangesVariableSubstitution
 	{	
-	my ($format, $changelist, $year, $month, $day, $user, $client, $description) = @_;
+	my ($format, $changelist, $year, $month, $day, $user, $client, $status, $description) = @_;
 	
 	my %substitutions=(
 			'changelist' => $changelist,
@@ -968,7 +970,8 @@ sub P4ChangesVariableSubtitution
 			'client' => $client,
 			'description' => $description,
 			'n' => "\n",
-			'date' => "$year/$month/$day"
+			'date' => "$year/$month/$day",
+			'status' => $status
 		 	);
 	
 		 	
@@ -1005,7 +1008,7 @@ sub ParseAndFormatP4ChangesBasicOutput()
 		#Parse one change line	    	
 	    	    	
 	    	
-    	if ($change =~ /^Change\s+(\d+)\s+on\s+(\d+)\/(\d+)\/(\d+)\s+by\s+([^\s]+)@([^\s]+)\s+'(.+)'$/)
+    	if ($change =~ /^Change\s+(\d+)\s+on\s+(\d+)\/(\d+)\/(\d+)\s+by\s+([^\s]+)@([^\s]+)\s+'(.*)'$/)
     		{	    		
 	    	my $changelist=$1;			
 	    	my $year=$2;
@@ -1014,14 +1017,29 @@ sub ParseAndFormatP4ChangesBasicOutput()
 	    	my $user=$5;
 	    	my $client=$6;
 	    	my $description=$7;
-	    	#my $status='submitted'; ##TODO
+	    	my $status='submitted'; 
 	    	
 	    	#my $line=$format;
-	    	$output.=P4ChangesVariableSubtitution($format, $changelist, $year, $month, $day, $user, $client, $description);
+	    	$output.=P4ChangesVariableSubstitution($format, $changelist, $year, $month, $day, $user, $client, $status, $description);
 	    	
-	    	#Perform var substitutions
-	    		    	
+	    	#Perform var substitutions	    		    	
     		}
+		elsif ($change =~ /^Change\s+(\d+)\s+on\s+(\d+)\/(\d+)\/(\d+)\s+by\s+([^\s]+)@([^\s]+)\s+\*pending\*\s+'(.*)'$/)    		
+			{
+	    	my $changelist=$1;			
+	    	my $year=$2;
+	    	my $month=$3;
+	    	my $day=$4;
+	    	my $user=$5;
+	    	my $client=$6;
+	    	my $description=$7;
+	    	my $status='pending'; 
+	    	
+	    	#my $line=$format;
+	    	$output.=P4ChangesVariableSubstitution($format, $changelist, $year, $month, $day, $user, $client, $status, $description);
+				
+				
+			}
     	else
     		{
     		$output .= "Could not parse: $change";
@@ -1051,6 +1069,7 @@ sub ParseAndFormatP4ChangesLongDescriptionOutput()
    	my $day;
    	my $user;
    	my $client;
+   	my $status;
    	my $description;
    	
    	my $description;
@@ -1066,7 +1085,7 @@ sub ParseAndFormatP4ChangesLongDescriptionOutput()
     		{
 	    	if (defined $changelist)	
 	    		{
-		    	$output.=P4ChangesVariableSubtitution($format, $changelist, $year, $month, $day, $user, $client, $description);			
+		    	$output.=P4ChangesVariableSubstitution($format, $changelist, $year, $month, $day, $user, $client, $status, $description);			
 	    		}
 	    			    		
 	    	$changelist=$1;			
@@ -1076,11 +1095,29 @@ sub ParseAndFormatP4ChangesLongDescriptionOutput()
 	    	$user=$5;
 	    	$client=$6;
 	        $description="";
+	        $status="submitted";
 	        
 	    	#my $status='submitted'; ##TODO	    		    	
 	    	#my $line=$format;	    	    
 	    	#Perform var substitutions
 	    		    	
+    		}
+    	elsif ($change =~ /^Change\s+(\d+)\s+on\s+(\d+)\/(\d+)\/(\d+)\s+by\s+([^\s]+)@([^\s]+)\s+\*pending\*\s*$/)
+    		{
+	    	if (defined $changelist)	
+	    		{
+		    	$output.=P4ChangesVariableSubstitution($format, $changelist, $year, $month, $day, $user, $client, $status, $description);			
+	    		}
+	    			    		
+	    	$changelist=$1;			
+	    	$year=$2;
+	    	$month=$3;
+	    	$day=$4;
+	    	$user=$5;
+	    	$client=$6;
+	        $description="";
+	        $status="pending";
+	    		
     		}
     	elsif ($change =~ /^\t(.*)/) #empty line is ok
     		{
