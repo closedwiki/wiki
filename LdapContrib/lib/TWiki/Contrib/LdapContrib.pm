@@ -1,6 +1,6 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2006-2007 Michael Daum http://wikiring.de
+# Copyright (C) 2006-2008 Michael Daum http://michaeldaumconsulting.com
 # Portions Copyright (C) 2006 Spanlink Communications
 #
 # This program is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ use Net::LDAP::Control::Paged;
 use vars qw($VERSION $RELEASE %sharedLdapContrib);
 
 $VERSION = '$Rev: 15691 (17 Dec 2007) $';
-$RELEASE = 'v2.99.3';
+$RELEASE = 'v2.99.4';
 
 =begin text
 
@@ -196,6 +196,9 @@ sub new {
   # create exclude map
   my %excludeMap = map {$_ => 1} split(/,\s/, $this->{exclude});
   $this->{excludeMap} = \%excludeMap;
+
+  # default value for cache expiration is every 24h
+  $this->{maxCacheAge} = 86400 unless defined $this->{maxCacheAge};
 
   $this->writeDebug("constructed a new LdapContrib object");
 
@@ -541,29 +544,32 @@ sub initCache {
     or die "Cannot open file $this->{cacheFile}: $!";
 
   # refresh by user interaction
-  my $refresh='';
+  my $refresh = '';
   my $session = $this->{session}->{cgiQuery};
   $refresh = $session->param('refreshldap') || '' if $session;
   $refresh = $refresh eq 'on'?1:0;
 
-  # compute age
-  my $cacheAge = 9999999999;
-  my $now = time();
-  my $lastUpdate = $this->{data}{lastUpdate} || 0;
-  $cacheAge = $now - $lastUpdate if $lastUpdate;
+  if ($this->{maxCacheAge} > 0) { # is cache expiration enabled
 
-  # don't refresh within 60 seconds
-  if ($cacheAge < 10) {
-    $refresh = 0;
-    $this->writeDebug("suppressing cache refresh within 10 seconds");
+    # compute age of data
+    my $cacheAge = 9999999999;
+    my $now = time();
+    my $lastUpdate = $this->{data}{lastUpdate} || 0;
+    $cacheAge = $now - $lastUpdate if $lastUpdate;
+
+    # don't refresh within 60 seconds
+    if ($cacheAge < 10) {
+      $refresh = 0;
+      $this->writeDebug("suppressing cache refresh within 10 seconds");
+    } else {
+      $refresh = 1 if $cacheAge > $this->{maxCacheAge}
+    }
+
+    $this->writeDebug("cacheAge=$cacheAge, lastUpdate=$lastUpdate, refresh=$refresh");
   }
 
-  #$this->writeDebug("cacheAge=$cacheAge, lastUpdate=$lastUpdate");
-
   # clear to reload it
-  if (!$lastUpdate || 
-      ($this->{maxCacheAge} > 0 && $cacheAge > $this->{maxCacheAge}) || 
-      $refresh) {
+  if ($refresh) {
     $this->writeDebug("updating cache");
     $this->refreshCache();
   }
