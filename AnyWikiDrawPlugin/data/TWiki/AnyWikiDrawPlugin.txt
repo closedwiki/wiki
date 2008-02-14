@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="WernerRandelshofer" date="1181542124" format="1.1" reprev="1.3" version="1.3"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1202953345" format="1.1" reprev="1.2" version="1.2"}%
 ---+!! <nop>%TOPIC%
 
 <nop>AnyWikiDraw</nop> adds support for drawing directly into a Wiki page.
@@ -29,12 +29,12 @@ __Warning:__ This is an experimental plugin. Data loss may occur. Install it onl
 
 ---++ Syntax Rules
 
-   <nop>%</nop>DRAWING{drawing.svg|width|height}<nop>%</nop>
+<verbatim>
+   %ANYWIKIDRAW{ "drawing.svg" width="240" height="320"}%
+   %AWDRAW{ "drawing.svg" width="240" height="320"}%
+</verbatim>
 
-   * The tag needs to be put into percent signs.
-   * The name of the tag is DRAWING
-   * The parameters for the tag need to be put into curly braces.
-   * The parameter drawing.svg specifies the name of the drawing file.
+   * The parameter =drawing.svg= specifies the name of the drawing file.
    * The drawing file can have one of the following extensions .draw, .svg, .svgz, .png, .jpg.
    * If you specify a drawing file that does not yet exist in your Wiki, the drawing is created  the first time you save a drawing.
    * The parameter width specifies the width of the drawing.
@@ -43,16 +43,14 @@ __Warning:__ This is an experimental plugin. Data loss may occur. Install it onl
 
 ---++ Examples
 
-   * 
-   * 
-
 ---++ Plugin Settings
 
-   * 
-   * 
----++ Plugin Installation Instructions
+---++ Installation Instructions
 
-   * Installation instructions are supplied in the !AnyWikiDraw download file.
+   * Download on of the archive and unpack into your TWiki installation directory.
+   * Fix the shebang line and file extension for =/bin/pack200=.
+   * Fix your files access right.
+   * Review your apache configuration keeping in mind the newly added script =/bin/pack200=.
 
 ---++ Plugin Info
 
@@ -61,6 +59,7 @@ __Warning:__ This is an experimental plugin. Data loss may occur. Install it onl
 |  License: | Client-side code: LGPL ([[http://www.gnu.org/licenses/lgpl.html][Lesser GNU General Public License]]) and/or CC-By 3.0 ([[http://creativecommons.org/licenses/by/3.0/][Creative Commons Attribution 3.0]]). Server-side code: GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]).  |
 |  Plugin Version: | 30 Aug 2007 (V1.000) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  14 Feb 2008: | Proper packaging and code cleaning by TWiki:Main.StephaneLenclud |
 |  30 Aug 2007: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
@@ -74,6 +73,7 @@ __Warning:__ This is an experimental plugin. Data loss may occur. Install it onl
 __Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
 -- TWiki:Main.WernerRandelshofer - 30 Aug 2007
+
 
 
 %META:FILEATTACHMENT{name="example.draw" attachment="example.draw" attr="" comment="TWiki Draw draw file" date="1180861883" path="/~werni/twiki/pub/TWiki/AnyWikiDrawPlugin/example.draw" size="28830" stream="/~werni/twiki/pub/TWiki/AnyWikiDrawPlugin/example.draw" user="Main.WernerRandelshofer" version="1"}%
