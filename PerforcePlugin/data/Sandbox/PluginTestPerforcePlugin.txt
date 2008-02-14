@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="BaseUserMapping_666" date="1202990033" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICINFO{author="BaseUserMapping_666" date="1203016333" format="1.1" reprev="1.3" version="1.3"}%
 %META:TOPICPARENT{name="TWiki.EmptyPlugin"}%
 ---+!! TWiki.PerforcePlugin examples
 
@@ -65,3 +65,13 @@
 
 | *Changelist* | *Date* | *Description* | *User* | *Status* |
 %P4CHANGES{"-l -s pending -m 10" format="| $changelist | $date | $description | $user | $status | $n"}%
+
+---++ REST
+
+[[/twiki/bin/rest/PerforcePlugin/p4changes?topic=%WEB%.%TOPIC%&_DEFAULT=-m 10&format=| $changelist | $date | $description | $user | $status | $n"][Get changes through REST]]
+
+---++ REST and TWiki:Plugins.JQueryPlugin
+
+<input type="button" value="Fetch perforce changes" onclick="$('#loaddiv').load('/twiki/bin/rest/PerforcePlugin/p4changes?topic=%WEB%.%TOPIC%&_DEFAULT=-m 10&format=| $changelist | $date | $description | $user | $status | $n', {}, function(){$('#loaddiv').toggle('slow');})"/>
+
+<div style="display: none" id="loaddiv"> empty </div>

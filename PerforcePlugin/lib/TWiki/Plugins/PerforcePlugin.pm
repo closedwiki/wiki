@@ -101,6 +101,12 @@ $NO_PREFS_IN_TOPIC = 1;
 # Name of this Plugin, only used in this module
 $pluginName = 'PerforcePlugin';
 
+#
+#TODO: use that to test if a plugin is installed. Could be useful if we want to make use of JQueryPlugin
+#
+#eval "require TWiki:Plugins:OtherPlugin"; if $@ { print STDERR "Not installed" }
+#if ($TWiki::cfg{Plugins}{OtherPlugin}{Enabled}) { print STDERR "it's enabled" }
+#
 
 
 =pod
@@ -171,11 +177,11 @@ sub initPlugin {
     # This will be called whenever %EXAMPLETAG% or %EXAMPLETAG{...}% is
     # seen in the topic text.
     TWiki::Func::registerTagHandler( 'P4CHANGES', \&_P4CHANGES );
-
+    
     # Allow a sub to be called from the REST interface 
     # using the provided alias
     #TODO: use rest interface for ajax support
-    #TWiki::Func::registerRESTHandler('example', \&restExample);
+    TWiki::Func::registerRESTHandler('p4changes', \&restP4CHANGES);
 
     # Plugin correctly initialized
     return 1;
@@ -246,7 +252,9 @@ sub _P4CHANGES {
 =cut
 					    
     
-    my $changesCmdParams=$params->{_DEFAULT};    
+    my $changesCmdParams=$params->{_DEFAULT};
+    #TODO: $changesCmdParams parse our p4 changes options to make sure nthing malicious is in there 
+        
     #my $fileSpec = $params->{_DEFAULT};
     my $format = $params->{format};    
     my $cmd=PerforceBaseCmd($p4port, $p4client, $p4user, $p4password);
@@ -264,12 +272,18 @@ sub _P4CHANGES {
     #	{
 	#    return "%RED%P4CHANGES error: -s option not supported!%ENDCOLOR%";	
     #	}
-    
-    
         
+    
+    # 
+    #BAD: untaint the cmd. See: http://gunther.web66.com/FAQS/taintmode.html
+    #Basically with perl -T you can't execute a system command but that trick fixes us.
+    $cmd=~/^(.*)$/; $cmd=$1;
+
     #execute the command    
-    #my @changesCmdOutput=TWiki::Sandbox::sysCommand($cmd); #TODO: should be using that API instead of backticks
-    my @changesCmdOutput=`$cmd`; #I know I should not be using backticks but I can't get sysCommand to work ;)
+    #return "$cmd";
+    #my @changesCmdOutput=TWiki::Sandbox::sysCommand($cmd); #TODO: should be using that API instead of backticks    
+    my @changesCmdOutput=`$cmd`; #I know I should not be using backticks but I can't get sysCommand to work ;)    
+    #return "after execute";
     
     #my ($changesCmdOutput,$exit)=$session->TWiki::Sandbox::sysCommand('dir %DRIVE%','DRIVE' => "C:");     
     #my ($changesCmdOutput,$exit)=$session->TWiki::Sandbox::sysCommand($p4ChangesTemplate,%p4ChangesCmdParams); 
@@ -281,6 +295,7 @@ sub _P4CHANGES {
     
     if (defined $format)
     	{
+	    #return "format";	
 	    if ($cmd =~ /\s+-l\s*/)	
 	    	{
 		    #return "Parse full description";		    	  			    	  	
@@ -299,6 +314,7 @@ sub _P4CHANGES {
     	}
     else
     	{
+	    #return "no format";
     	#Change 69463 on 2008/02/06 by sl@sl-ti 'Some nice comments'     	
     	#No format specified, use default format. No need to parse anything
     	foreach my $change(@changesCmdOutput)
@@ -311,6 +327,47 @@ sub _P4CHANGES {
     return $output;    
     
 }
+
+
+
+=pod
+
+---++ restP4CHANGES($session) -> $text
+
+This is an example of a sub to be called by the =rest= script. The parameter is:
+   * =$session= - The TWiki object associated to this session.
+
+Additional parameters can be recovered via de query object in the $session.
+
+For more information, check TWiki:TWiki.TWikiScripts#rest
+
+*Since:* TWiki::Plugins::VERSION 1.1
+
+=cut
+
+sub restP4CHANGES 
+	{
+   	my ($session) = @_;   
+   	my $query = TWiki::Func::getCgiQuery();
+   	
+   	my %params;
+   	
+   	$params{'_DEFAULT'}=$query->param('_DEFAULT');
+   	$params{'format'}=$query->param('format');   	
+    
+   	#return "$params{'_DEFAULT'}\n$params{'format'}\n";
+   	
+   	my $output=_P4CHANGES($session,\%params);
+   	
+   	$output=TWiki::Func::expandCommonVariables($output);  
+   	$output=TWiki::Func::renderText($output);
+   	
+   	return $output;	
+   		
+	#return "This is an example of a REST invocation\n\n";
+	}
+
+
 
 =pod
 
@@ -916,29 +973,13 @@ sub DISABLE_completePageHandler {
     # modify $_[0] or $_[1] if you must change the HTML or headers
 }
 
-=pod
 
----++ restExample($session) -> $text
 
-This is an example of a sub to be called by the =rest= script. The parameter is:
-   * =$session= - The TWiki object associated to this session.
-
-Additional parameters can be recovered via de query object in the $session.
-
-For more information, check TWiki:TWiki.TWikiScripts#rest
-
-*Since:* TWiki::Plugins::VERSION 1.1
-
-=cut
-
-sub restExample {
-   #my ($session) = @_;
-   return "This is an example of a REST invocation\n\n";
-}
 
 
 =pod
 
+Build p4 command global options.
 
 =cut
 
@@ -1070,8 +1111,6 @@ sub ParseAndFormatP4ChangesLongDescriptionOutput()
    	my $user;
    	my $client;
    	my $status;
-   	my $description;
-   	
    	my $description;
 
 	
