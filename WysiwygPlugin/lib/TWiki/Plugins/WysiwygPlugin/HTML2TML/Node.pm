@@ -831,12 +831,16 @@ sub _H {
     my( $flags, $contents ) = $this->_flatten( $options );
     return ( 0, undef ) if( $flags & $WC::BLOCK_TML );
     my $notoc = '';
-    if($this->hasClass('notoc')) {
+    if( $this->hasClass( 'notoc' )) {
         $notoc = '!!';
+    }
+    my $indicator = '+';
+    if( $this->hasClass( 'numbered' )) {
+        $indicator = '#';
     }
     $contents =~ s/^\s+/ /;
     $contents =~ s/\s+$//;
-    my $res = $WC::CHECKn.'---'.('+' x $depth).$notoc.
+    my $res = $WC::CHECKn.'---'.($indicator x $depth).$notoc.
       $WC::CHECKs.$contents.$WC::CHECKn;
     return ( $flags | $WC::BLOCK_TML, $res );
 }
