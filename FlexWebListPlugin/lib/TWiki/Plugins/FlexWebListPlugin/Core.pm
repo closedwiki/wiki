@@ -30,6 +30,8 @@ sub new {
   my $class = shift;
   my $this = bless({}, $class);
 
+  #writeDebug("new FlexWebListPlugin::Core");
+
   $this->{webCache} = ();
 
   return $this;
@@ -39,7 +41,7 @@ sub new {
 sub handler {
   my ($this, $session, $params, $currentTopic, $currentWeb) = @_;
 
-  #writeDebug("*** called hander()");
+  #writeDebug("*** called %FLEXWEBLIST{".$params->stringify."}%");
 
   # extract parameters
   $this->{format} = $params->{_DEFAULT} || $params->{format} || '$web ';
@@ -120,6 +122,7 @@ sub handler {
   foreach my $aweb (@list) {
     my $web = $allWebs->{$aweb};
     next unless $web;
+    $web->{enabled} = 0;
     unless ($this->{isExplicit}{$web->{key}}) {
       next if $web->{isSubWeb} && $this->{subWebs} eq 'none';
       next if $this->{exclude} ne '' && $web->{key} =~ /^($this->{exclude})$/;
@@ -157,7 +160,7 @@ sub handler {
   #writeDebug("result=$result");
   $result = TWiki::Func::expandCommonVariables($result, $currentTopic, $currentWeb);
 
-  #writeDebug("*** hander done");
+  #writeDebug("*** handler done");
 
   return $result;
 }

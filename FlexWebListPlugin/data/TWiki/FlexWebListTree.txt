@@ -12,16 +12,17 @@ If you want to hide the web navigation from <nop>TWikiGuests then uncomment the 
 <verbatim>
 %STARTINCLUDE%<!-- flexweblist tree -->
 %TWISTY{
-  prefix="<h2>"
+  prefix="<h2 >"
   link="Webs "
   suffix="</h2>"
-  showimg="%ICONURLPATH{"toggleclose-mini"}%"
-  hideimg="%ICONURLPATH{"toggleopen-mini"}%"
+  showimg="%ICONURLPATH{"plus"}%"
+  hideimg="%ICONURLPATH{"minus"}%"
+  remember="on"
 }%
 <div class="jqTreeview closed">
 %~~ FLEXWEBLIST{
 ~~~   webs="%MAINWEB%,User,People,public,%TWIKIWEB%" 
-~~~   exclude="(TestCases|Trash).*" 
+~~~   exclude="(TestCases|Trash)" 
 ~~~   adminwebs="Applications.*"
 ~~~   header="<ul>"
 ~~~   format="<li>$percntWEBLINK{\"$web\"}$percnt"
