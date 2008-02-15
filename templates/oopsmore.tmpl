@@ -85,7 +85,7 @@ table.twikiDiffOptions img {
 </style>%TMPL:END%
 
 %TMPL:DEF{"revision"}%---++ %MAKETEXT{"Revisions"}%
-%IF{"$ param1='0'" then="<!--" }%---+++ %MAKETEXT{"View previous topic revision"}% (1 ... %PARAM1%)
+%IF{"$ param1='0'" then="<!--" else="---+++ %MAKETEXT{"View previous topic revision"}% (1 ... %PARAM1%)" }%
 <form name="main" action="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">
    * %MAKETEXT{"View revision:"}% <input class="twikiInputField" type="text" name="rev" size="6" value="%PARAM2%" /> &nbsp;
      <input type="checkbox" class="twikiCheckbox" id="raw" name="raw" /><label for="raw">%MAKETEXT{"in raw text format"}%</label> <input type="submit" class="twikiButton" value='%MAKETEXT{"View"}%' />
