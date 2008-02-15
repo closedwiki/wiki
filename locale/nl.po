@@ -1461,7 +1461,7 @@ msgstr ""
 
 #: data/TWiki/WebSearch.txt:5 data/TWiki/WebSearchAdvanced.txt:5
 msgid "Get notified on changes on this search"
-msgstr ""
+msgstr "Abonneer je op wijzigingen op deze zoekvraag"
 
 #: templates/twiki.tmpl:76
 #: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:66
