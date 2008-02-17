@@ -1,0 +1,33 @@
+TWiki for Debian
+----------------
+
+/usr/share/twiki/twiki-data.tar.gz has the initial data set, if
+you find you want to restore the data in /var/lib/twiki/data/ after
+experimenting.
+/usr/share/twiki/twiki-pub.tar.gz has the initial pub data set.
+It should also be unpacked to /var/www/twiki/pub
+
+To enable the mailnotify, statistics and general cleanup tasks, add 
+the following to the www-data user's crontab (crontab -e -u www-data):
+
+# enable email for WebNotify
+0 6 * * * www-data perl -I /usr/lib/cgi-bin/twiki /var/lib/twiki/tools/mailnotify -q
+# Automatically update WebStatistics
+15 6 * * * www-data cd /usr/lib/cgi-bin/twiki; ./statistics >/dev/null
+# expires sessions and lease files - useful if you disable twiki doing
+this on every topic view
+0 5 * * * www-data perl -I /usr/lib/cgi-bin/twiki /var/lib/twiki/tools/tick_twiki.pl
+
+For multiple TWiki's on the same machine, it is recommended that you
+just have multiple data sets on one TWiki.  If you really need more
+than one, in particular to isolate the data under a different uid,
+there are a bunch of things you need to do; I can make suggestions, or
+if you figure it out let me know and I'll try and integrate such
+enhancements into the package.
+
+To report upstream issues (and feedback) please goto 
+     http://twiki.org/cgi-bin/view/Codev/TWikiOnDebian
+
+ -- Sven Dowideit <SvenDowideit@distributedINFORMATION.com>, November 2007
+
+

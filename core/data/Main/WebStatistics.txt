@@ -1,0 +1,12 @@
+%META:TOPICINFO{author="TWikiContributor" date="1112660125" format="1.0" version="$Rev$"}%
+%META:TOPICPARENT{name="WebHome"}%
+---++ Statistics for <nop>%WEB% Web
+
+| *Month:* | *Topic <br /> views:* | *Topic <br /> saves:* | *File <br /> uploads:* | *Most popular <br /> topic views:* | *Top contributors for <br /> topic save and uploads:* |
+| <!--statDate--> | <!--statViews--> | <!--statSaves--> | <!--statUploads--> | <!--statTopViews--> | <!--statTopContributors--> |
+
+__Notes:__
+   * This topic is updated by the statistics script. (You can also [[%SCRIPTURLPATH{"statistics"}%/%WEB%][force]] an update)
+   * %SYSTEMWEB%.TWikiDocumentation tells you how to enable the automatic updates of the statistics.
+   * Suggestion: You could archive this topic once a year and delete the previous year's statistics from the table.
+
