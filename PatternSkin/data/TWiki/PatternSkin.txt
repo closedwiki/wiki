@@ -1,0 +1,163 @@
+%META:TOPICINFO{author="TWikiContributor" date="1160971176" format="1.1" version="1.1"}%
+%STARTINCLUDE%
+<!--
+   * Set SHORTDESCRIPTION = <nop>PatternSkin provides a CSS based default look and feel for TWiki - flexible and <nop>W3C-compliant. Its layout and color scheme are designed to provide a nice, clean and productive editing environment
+-->
+---+!! Pattern skin
+
+%SHORTDESCRIPTION%. For use in corporate or perhaps in personal websites it should be fairly easy to tune the looks or even create a !PatternSkin-based new skin.
+
+%TOC{title="Page contents"}%
+
+---++ Screenshot
+
+<a href="%ATTACHURL%/patternskin_screenshot_full.png"><img src="%ATTACHURL%/patternskin_screenshot.jpg" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a>
+<!--
+%SEARCH{ "%TOPIC%" scope="topic" nosearch="on" nototal="on" format="$pattern(.*\| *Screenshot\:[^\|]*\|([^\|]*).*)" }%
+<div class="twikiGrayText">Click to view full screenshot</div>-->
+
+---++ Creating your own look
+
+---+++ Template customization
+%TWIKIWEB%.PatternSkinCustomization - how to configure page elements
+%TOC{"%TWIKIWEB%.PatternSkinCustomization"}%
+
+---+++ Style sheet customization
+%TWIKIWEB%.PatternSkinCssCookbook - how to customize the visual style
+%TOC{"%TWIKIWEB%.PatternSkinCssCookbook"}%
+
+---+++ Changing graphics
+The original Photoshop files of the skin graphics (mainly background images) are attached to PatternSkinGraphics.
+
+---++ Supported browsers
+
+!PatternSkin has been tested successfully on the following browsers:
+   * Windows
+      * Internet Explorer 7.0, 6.0, 5.5 (note: Explorer 5.0 is *not* supported: will function but shows visual quirks)
+      * Mozilla/Firefox 2.0, 1.5
+   * Mac OS X
+      * Safari 3.0.2
+      * Mozilla/Firefox 2.0, 1.5 (note: Firefox 1.0 will show visual quirks)
+   * *nix
+      * Mozilla/Firefox 1.5 (note: Firefox 1.0 will show visual quirks)
+
+---++ Installation
+
+*Note:* You do not need to install anything on the browser to use this skin. The following instructions are for the administrator who installs the skin on the server where TWiki is running.
+
+*Note 2:* !PatternSkin is included with TWiki by default. Use the following instructions only if you are upgrading !PatternSkin.
+
+   * Download the ZIP file from the Skin Home page (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory
+   * Test if installed: %SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?skin=pattern
+   * For skin activation see %TWIKIWEB%.TWikiSkins
+
+---+++ Troubleshooting
+
+If you have set the SKIN variable setting to =pattern= and you still don't see the layout as on the <a href="%ATTACHURL%/patternskin_screenshot_full.png">screenshot</a>, a few settings in may have been disabled.
+
+Check these variables here:
+   * TWIKILAYOUTURL = %TWIKILAYOUTURL%
+   * TWIKISTYLEURL = %TWIKISTYLEURL%
+   * TWIKICOLORSURL = %TWIKICOLORSURL%
+   * SKIN = %SKIN%
+
+If TWIKILAYOUTURL or TWIKISTYLEURL don't give a value or point to non-existing files, check in %TWIKIWEB%.TWikiPreferences that the following variables do exist and that they are set to on:
+<pre>
+   * %<nop>TWIKIWEB%.PatternSkin settings:
+      * <nop>Set TWIKILAYOUTURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/PatternSkin/layout.css
+      * <nop>Set TWIKISTYLEURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/PatternSkin/style.css
+      * <nop>Set TWIKICOLORSURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/PatternSkin/colors.css
+</pre>
+
+*NOTE:* customization of these values should be done in [[%MAINWEB%.TWikiPreferences]]
+
+If this still does not work, contact the administrator who installs skins.
+
+For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Report bugs in the [[TWiki:Support/WebHome][Support web]].
+
+---++ Skin Info
+
+|  Description: | TWiki's default skin; CSS based, flexible and <nop>W3C-compliant |
+|  Screenshot: | <a href="%ATTACHURL%/patternskin_screenshot_full.png"><img src="%ATTACHURL%/patternskin_screenshot.jpg" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a> |
+|  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=pattern][Preview with this skin]] |
+|  Base Name: | pattern |
+|  Skin Author: | TWiki:Main/ArthurClemens |
+|  Skin Version: | 13 Jul 2007 (v3.0.0) | 
+|  History: | <!-- specify latest version first -->&nbsp; |
+|  13 Jul 2007: | v.3.0.0 - TWiki 4.2.0 (Edinburgh) RELEASE VERSION |
+|  15 Jan 2006: | v.2.0.6 - TWiki 4.1.0 (Edinburgh) RELEASE VERSION |
+|  26 Sep 2006: | v.2.0.5 - Fixed form background colors |
+|  22 Jul 2006: | v.2.0.4 - Refactored info in colors.css; fixed textarea color |
+|  26 Jun 2006: | v.2.0.3 - TWiki 4.0.3 (Dakar) RELEASE VERSION |
+|  31 Jan 2006: | v.2.0.0 - TWiki 4.0.0 (Dakar) RELEASE VERSION |
+|  28 Aug 2004: | v.1.0.9 - TWiki 3.0 (Cairo) RELEASE VERSION |
+|  08 Aug 2004: | Initial version (v1.0.0) |
+|  Dependencies: | TWiki:Plugins/TwistyContrib (automatically supported by Dakar) |
+|  Skin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev | %STOPINCLUDE%
+|  Download: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+
+---++ Related topics
+
+   * %TWIKIWEB%.TWikiCss
+   * %TWIKIWEB%.PatternSkinCss
+   * %TWIKIWEB%.PatternSkinCssCookbook
+   * %TWIKIWEB%.PatternSkinCssCookbookCenterPage
+   * %TWIKIWEB%.PatternSkinCssCookbookEditTableStyle
+   * %TWIKIWEB%.PatternSkinCssCookbookFonts
+   * %TWIKIWEB%.PatternSkinCssCookbookNoLeftBar
+   * %TWIKIWEB%.PatternSkinCssCookbookNoTopBar
+   * %TWIKIWEB%.PatternSkinCustomization
+   * %TWIKIWEB%.PatternSkinGraphics
+   * %TWIKIWEB%.WebBottomBar
+   * %TWIKIWEB%.WebLeftBar
+   * %TWIKIWEB%.WebLeftBarCookbook
+   * %TWIKIWEB%.WebLeftBarExample
+   * %TWIKIWEB%.WebLeftBarLogin
+   * %TWIKIWEB%.WebLeftBarPersonalTemplate
+   * %TWIKIWEB%.WebLeftBarSearch
+   * %TWIKIWEB%.WebLeftBarWebsList
+   * %TWIKIWEB%.WebTopBar
+   * %TWIKIWEB%.AdminDocumentationCategory
+
+Other skins:
+   * %TWIKIWEB%.TWikiSkins
+   * %TWIKIWEB%.TWikiSkinBrowser
+
+---++ Feedback
+
+Leave remarks, suggestions and other feedback in TWiki:Plugins.PatternSkinDev.
+
+%META:FILEATTACHMENT{name="TWiki_header.gif" attr="" autoattached="1" comment="" date="1182955036" path="TWiki_header.gif" size="18053" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="background_submit.gif" attr="" autoattached="1" comment="" date="1182955036" path="background_submit.gif" size="158" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="border_sidebar_personal.gif" attr="" autoattached="1" comment="" date="1183837372" path="border_sidebar_personal.gif" size="47" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="background_button.gif" attr="" autoattached="1" comment="" date="1182955036" path="background_button.gif" size="104" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="patternskin_screenshot.jpg" attr="" autoattached="1" comment="" date="1184362908" path="patternskin_screenshot.jpg" size="54937" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="bg_button_gradient.gif" attr="" autoattached="1" comment="" date="1183811042" path="bg_button_gradient.gif" size="1473" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="print.css" attr="" autoattached="1" comment="" date="1182955036" path="print.css" size="3033" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="bg_button_small_gradient.gif" attr="" autoattached="1" comment="" date="1183811027" path="bg_button_small_gradient.gif" size="1337" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="bullet-toc.gif" attr="" autoattached="1" comment="" date="1182955036" path="bullet-toc.gif" size="54" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="striped_blue.gif" attr="" autoattached="1" comment="" date="1182955036" path="striped_blue.gif" size="238" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="bg_submit_gradient.gif" attr="" autoattached="1" comment="" date="1183665090" path="bg_submit_gradient.gif" size="1476" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="background_action.gif" attr="" autoattached="1" comment="" date="1182955036" path="background_action.gif" size="229" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="background_form_element.gif" attr="" autoattached="1" comment="" date="1182955036" path="background_form_element.gif" size="70" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="bullet-down.gif" attr="" autoattached="1" comment="" date="1183989197" path="bullet-down.gif" size="59" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="bg_outer_gradient.gif" attr="" autoattached="1" comment="" date="1184332033" path="bg_outer_gradient.gif" size="433" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="striped_white.gif" attr="" autoattached="1" comment="" date="1182955036" path="striped_white.gif" size="234" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="background_input.gif" attr="" autoattached="1" comment="" date="1182955036" path="background_input.gif" size="55" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="button_font_selector.gif" attr="" autoattached="1" comment="" date="1184105853" path="button_font_selector.gif" size="831" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="layout.css" attr="" autoattached="1" comment="" date="1184279679" path="layout.css" size="4322" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="bullet-lock.gif" attr="" autoattached="1" comment="" date="1183989167" path="bullet-lock.gif" size="64" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="form_gradient.gif" attr="" autoattached="1" comment="" date="1182955036" path="form_gradient.gif" size="173" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="bg_action_gradient.gif" attr="" autoattached="1" comment="" date="1184355082" path="bg_action_gradient.gif" size="355" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="patternskin_screenshot_full.png" attr="" autoattached="1" comment="" date="1184362710" path="patternskin_screenshot_full.png" size="131008" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="striped_pageshadow.gif" attr="" autoattached="1" comment="" date="1182955036" path="striped_pageshadow.gif" size="234" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="bg_buttoncancel_gradient.gif" attr="" autoattached="1" comment="" date="1184016448" path="bg_buttoncancel_gradient.gif" size="1544" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="style.css" attr="" autoattached="1" comment="" date="1184361490" path="style.css" size="19292" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="striped_gray.gif" attr="" autoattached="1" comment="" date="1182955036" path="striped_gray.gif" size="238" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="striped_yellow.gif" attr="" autoattached="1" comment="" date="1182955036" path="striped_yellow.gif" size="238" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="pattern.js" attr="" autoattached="1" comment="" date="1184192338" path="pattern.js" size="3526" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="colors.css" attr="" autoattached="1" comment="" date="1184360679" path="colors.css" size="16740" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="button_arrow.gif" attr="" autoattached="1" comment="" date="1184105722" path="button_arrow.gif" size="1297" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="bullet-personal_sidebar.gif" attr="" autoattached="1" comment="" date="1183989183" path="bullet-personal_sidebar.gif" size="60" user="TWikiContributor" version=""}%

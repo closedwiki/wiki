@@ -1,0 +1,106 @@
+/* natedit base styles */
+.natEdit .jqTabContents {
+  overflow-x:hidden;
+  overflow-y:auto;
+}
+.natEditTextArea {
+  _width:99% !important; /* bloddy IE */
+}
+ul.natEditTextTools,
+ul.natEditHeadlineTools,
+ul.natEditParagraphTools,
+ul.natEditListTools,
+ul.natEditObjectTools,
+ul.natEditEditTools,
+ul.natEditExitTools,
+ul.natEditOptionTools,
+ul.natEditPreviewTools,
+ul.natEditHelpTools {
+  margin:0px 10px 0px 0px;
+  padding:0px;
+  float:left;
+}
+ul.natEditHelpTools {
+  float:right;
+}
+.natEditHiddenToolBar {
+  visibility:hidden; /* becomes visible during load event */
+}
+
+.natEditBottomBar {
+  margin-top:10px;
+}
+.natEditBottomBar ul {
+  margin:0px;
+  padding:0px;
+}
+.natEditBottomBar ul li,
+.natEditToolBar ul li {
+  display:inline;
+  padding:0px;
+  margin:0px;
+  list-style:none;
+  background:inherit;
+}
+.natEditToolBar ul li a span {
+  display:none;
+}
+
+.natEditToolBar a:hover,
+.natEditToolBar a {
+  text-decoration:none;
+  background-color:transparent;
+  background-position:top left;
+  background-repeat:no-repeat;
+  float:left;
+}
+
+.natEditOptionTools {
+  font-size:12px;
+}
+.natEditForceNewRevision label,
+.natEditForceNewRevision input {
+  margin:4px;
+  _margin:0px;
+  border:0px;
+  vertical-align:middle;
+}
+.natEditFontButtons {
+  margin:0.5em;
+  float:right;
+}
+
+.twikiForm {
+  clear:both;
+}
+
+/* RevCommentPlugin support */
+.revComment {
+  margin:0.5em 0px;
+}
+.revComment label {
+  font-weight:bold;
+}
+.revComment input {
+  width:80%;
+}
+.natEditDoneButton img,
+.natEditCancelButton  img {
+  border:0px;
+}
+
+/* pattern skin tweaks */
+.patternPreviewPage .patternTopic,
+.patternEditPage .patternTopic {
+  margin:0px;
+}
+.patternEditPage .twikiForm {
+  margin:0px;
+}
+.jqTabContents h3 {
+  margin-top:0px;
+}
+
+.patternEditPage #patternPage {
+  font-size:100%;
+}

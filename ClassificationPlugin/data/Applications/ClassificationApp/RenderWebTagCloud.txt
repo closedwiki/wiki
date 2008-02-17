@@ -1,0 +1,109 @@
+%META:TOPICINFO{author="TWikiContributor" date="1194455876" format="1.1" reprev="1.11" version="$Rev$"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+!! Function: %TOPIC%
+%FORMFIELD{"Summary"}%
+
+%TOC{depth="2"}%
+---++ Documentation
+%STARTSECTION{name="documentation" type="section"}%
+
+---+++++ Parameters
+   * QUERY: comma separated list of tags to be searched for in the archive
+   * MIN: minimum frequency of a tags to be shown
+   * TAGCLOUDTOPIC: topic where to jump to when a tag is clicked, defaults to BASETOPIC
+   * RECENCY: limit search for tags on most recently changed topics
+
+%ENDSECTION{name="documentation" type="section"}%
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%<noautolink>
+%~~ TAGCLOUD{
+~~~   "$percntDBQUERY{
+~~~     \"TopicType=~'\b(Tagged|Classified)Topic\b'
+~~~       $percntFORMATLIST{\"%IFDEFINED{"%QUERY%"}%\" 
+~~~         header=\"AND\" 
+~~~         format=\" Tag=~'\b$1\b' \"
+~~~         separator=\"AND\"
+~~~       }$percnt
+~~~     \"
+~~~     order=\"modified\"
+~~~     reverse=\"on\"
+~~~     limit=\"%IFDEFINED{"%RECENCY%"}%\"
+~~~     web=\"%BASEWEB%\"
+~~~     format=\"$formfield(Tag)\" separator=\", \"
+~~~   }$percnt"
+~~~   buckets="200"
+~~~   offset="100"
+~~~   min="%IFDEFINED{"%MIN%" then="$test" else="0"}%"
+~~~   split="[,\s]+"
+~~~   header="<div class=\"clsTagCloud\">"
+~~~   group="<strong>$group</strong>"
+~~~   format="<a rel=\"nofollow\" name=\"$term\"
+~~~        style=\"font-size:$weight%;
+~~~                color:$fadeRGB(194,199,204,0,102,204);\"
+~~~        href=\"%SCRIPTURLPATH{"view"}%/%BASEWEB%/
+*~~          %IFDEFINED{"%TAGCLOUDTOPIC%" then="$test" else="%BASETOPIC%"}%
+~~~          $percntFORMATLIST{
+~~~            $percntIFDEFINED{\"%QUERY%\" 
+~~~                as=\".*\b$term\b.*\" 
+~~~                then=\"\\"$test\\" exclude=\\"$term\\"\" 
+~~~                else=\"\\"$test,$term\\"\"
+~~~                glue=\"off\"
+~~~            }$percnt 
+~~~            header=\"?search=\" 
+~~~            unique=\"on\" 
+~~~            separator=\",\" 
+~~~          }$percnt#result\"
+~~~          $percntIFDEFINED{\"%QUERY%\"
+~~~            as=\".*\b$term\b.*\"
+~~~            then=\"class=\\"current\\"\"
+~~~            glue=\"off\"
+~~~          }$percnt
+~~~          title=\"found $count time(s)\"
+~~~     >$term</a>"
+~~~   footer="</ul></div>"
+~~~ }%
+%IFDEFINEDTHEN{"%QUERY%" glue="off"}%
+<a name="results"></a>
+%~~   $nopDBCALL{"Applications.ClassificationApp.RenderWebTagCloudHitList"
+~~~     QUERY="
+*~~       %$nopFORMATLIST{"%QUERY%" 
+~~~         header="AND" 
+~~~         format=" Tag=~'\b$1\b' "
+~~~         separator="AND"
+~~~       }%"
+~~~     PARAMS="search=%QUERY%"
+~~~     HILITE="Tag"
+~~~   }%
+%FIDEFINED%
+~~~ </noautolink>
+%STOPINCLUDE%
+</verbatim>
+
+
+<!-- interrupt glue -->
+
+---++ Test
+<div class="alt">
+%DBCALL{"%TOPIC%" QUERY="%URLPARAM{"search"}%"}%
+</div>
+
+%DBCALL{"Applications.RenderFunctionCallers"}%
+
+---++ Copyright
+<div style="text-align:justify;margin:1em;">
+&copy; 2007 Michael Daum http://wikiring.de
+
+%DBCALL{"Applications.GnuGeneralPublicLicense" section="notice"}%
+</div>
+<!--
+   * Set DEPENDENCIES = TopicFunction
+-->
+
+
+
+%META:FORM{name="Applications.ApplicationTopic"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="DocuTopic, TopicFunction"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="Render a tool to list all classified topics in this web"}%
+%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="ClassificationApp"}%

@@ -1,0 +1,16 @@
+%TMPL:INCLUDE{"javascript.jquery"}%<!-- template: javascript.nat.tmpl -->
+%TMPL:DEF{"defaultjavascript"}%
+%TMPL:P{"jqueryjavascript"}%
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki.js"></script>
+<script type="text/javascript">
+$(function() {
+  %TMPL:P{"onloadscript"}%
+  $(".natMainContents .twikiTable, .natMainContents .mwTable")
+    .not($(".twikiTable .twikiTable, .mwTable .mwTable", this))
+    .wrap("<div class='overflow'></div>");
+});
+</script>
+%TMPL:END%
+%TMPL:DEF{"javascript"}%
+%TMPL:P{"defaultjavascript"}%
+%TMPL:END%

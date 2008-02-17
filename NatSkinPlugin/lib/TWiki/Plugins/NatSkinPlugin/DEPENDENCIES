@@ -1,0 +1,6 @@
+TWiki::Plugins::BreadCrumbsPlugin,>=0.01,perl,Required; Download from TWiki:Plugins/BreadCrumbsPlugin 
+TWiki::Plugins::FilterPlugin,>=0.94,perl,Required; Download from TWiki:Plugins/FilterPlugin 
+TWiki::Plugins::FlexWebListPlugin,>=1.10,perl,Required; Download from TWiki:Plugins/FlexWebListPlugin 
+TWiki::Plugins::GluePlugin,>=1.5,perl,Required; Download from TWiki:Plugins/GluePlugin 
+TWiki::Plugins::IfDefinedPlugin,>=0.93,perl,Required; Download from TWiki:Plugins/IfDefinedPlugin 
+TWiki::Plugins::RedDotPlugin,>=1.35,perl,Recommended; Download from TWiki:Plugins/RedDotPlugin 

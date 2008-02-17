@@ -1,0 +1,83 @@
+%META:TOPICINFO{author="TWikiContributor" date="1185729160" format="1.1" reprev="1.10" version="$Rev$"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+!! Function: %TOPIC%
+%FORMFIELD{"Summary"}%
+
+%TOC{depth="2"}%
+
+---++ Documentation
+%STARTSECTION{name="documentation" type="section"}%
+
+---+++++ Parameters
+   * TOP: node from where to start the category, defaults to 'TopCategory'
+   * EXCLUDE: filter to exclude categories
+   * THEWEB: where to search for categories, defaults to BASEWEB
+   * UNIQUE: "on" or "off"
+
+---+++++ Css
+   * 
+%ENDSECTION{name="documentation" type="section"}%
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%<div class="clsBrowser jqTreeview %IFDEFINED{"%UNIQUE%" as="off" then=" " else=" unique"}%">
+~~~ <noautolink>
+%~~ HIERARCHY{
+~~~   web="%IFDEFINED{"%THEWEB%" then="$test" else="%BASEWEB%"}%"
+~~~   %IFDEFINED{"%TOP%" then="top=\"$test\"" glue="off"}%
+~~~   exclude="%IFDEFINED{"%EXCLUDE%" then="$test" else="TopCategory"}%"
+~~~   header="<ul>"
+~~~   footer="</ul>"
+~~~   format="<li class=\"
+~~~     $percntIFDEFINED{
+~~~       \"$percntSUBSUMES{\"$name\" web=\"%BASEWEB%\" cat=\"%BASETOPIC%\" }$percnt\" 
+~~~       as=\"1\" 
+~~~       then=\"open\"
+~~~       else=\"closed\"
+~~~     }$percnt\">
+~~~     <a href=\"$url\" 
+~~~          $percntIFDEFINED{\"%BASETOPIC%\" as=\"$name\" glue=\"off\"
+~~~            then=\"class=\\"twikiCurrentTopicLink\\"\"
+~~~          }$percnt
+~~~          title=\"$summary\">
+*~~         $title</a>
+~~~       $percntIFDEFINED{\"$cyclic\" as=\"1\" 
+~~~         then=\" <span class='twikiAlert'>C</span>\"
+~~~       }$percnt
+~~~       $percntIFDEFINED{\"$count \" as=\"0 \" then=\" \" else=\" ($count)\"}$percnt
+~~~       $children</li>"
+~~~ }%
+~~~ </noautolink>
+~~~ </div>
+~~~ %STOPINCLUDE%
+</verbatim>
+
+<!-- interrupt glue -->
+
+---++ Test
+<div class="alt">
+%DBCALL{"%TOPIC%" UNIQUE="off"}%
+</div>
+
+<div class="alt">
+%DBCALL{"%TOPIC%" UNIQUE="on" TOP="TestCategory"}%
+</div>
+
+%DBCALL{"Applications.RenderFunctionCallers"}%
+
+---++ Copyright
+<div style="text-align:justify;margin:1em;">
+&copy; 2007 Michael Daum http://wikiring.de
+
+%DBCALL{"Applications.GnuGeneralPublicLicense" section="notice"}%
+</div>
+<!--
+   * Set DEPENDENCIES = TopicFunction
+-->
+
+
+
+%META:FORM{name="Applications.ApplicationTopic"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="DocuTopic, TopicFunction"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="Renders a hierarchical browser for categories"}%
+%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="ClassificationApp"}%

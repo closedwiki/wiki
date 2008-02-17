@@ -1,0 +1,85 @@
+---+!! !TinyMCE Editor Help Summary 
+%STARTINCLUDE%
+<table>
+ <tr>
+  <td width="100px" style="vertical-align:top;background-color:#f9f9f9" rowspan="3">
+   <p><select><option>Normal</option>
+<option>Heading 1</option>
+<option>Heading 2</option>
+<option>Heading 3</option>
+<option>Heading 4</option>
+<option>Heading 5</option>
+<option>Heading 6</option>
+<option>VERBATIM</option>
+<option>LITERAL</option>
+<option>Protect on save</option>
+<option>Protect forever</option></select>
+</p>
+  </td>
+  <td style="vertical-align:top;" rowspan=3>
+   <ul>
+    <li> ==Normal== - Normal text style </li>
+    <li> ==Heading 1-6== - Headings. 1 is largest </li>
+    <li> ==VERBATIM== - Text is shown in monospace with line breaks.%BR% _Wraps &lt;verbatim&gt; tags around the selected text. No TWiki Variables are interpreted inside verbatim tags_ </li>
+    <li> ==LITERAL== - Styled content is saved exactly as it appears in the editor.%BR% _Saves the selected content as raw HTML and wraps it in &lt;literal> tags_ </li>
+    <li> ==Protect on save== - Prevent any change to the selected text when the edit is saved.%BR% _Use this to save advanced TWiki Variables where you do not want the Wysiwyg editor to modify the text during save_ </li>
+    <li> ==Protect forever== - Content is saved exactly as it is typed, and the protection is still there in future edit sessions.%BR% _Content is wrapped in &lt;sticky&gt; tags_ </li>
+   </ul>
+  </td>
+  <td style="vertical-align:top; background-color:#f9f9f9">
+   <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/indent.gif" alt="indent" />
+   <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/outdent.gif" alt="outdent" />
+  </td>
+  <td style="vertical-align:top; ">
+   <ul>
+    <li> If the cursor is in a list item, change the indent </li>
+    <li> Otherwise mark text with &lt;BLOCKQUOTE&gt; tags (the default TWiki skin shows blockquotes indented with a blue background)</li>
+   </ul>
+  </td>
+ </tr>
+ <tr>
+  <td style="vertical-align:top; background-color:#f9f9f9">
+   <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/link.gif" alt="link" />
+   <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/unlink.gif" alt="unlink" />
+  </td>
+  <td style="vertical-align:top; ">
+   <ul>
+    <li> Links can either point to a URL or to the name of a TWiki topic. </li>
+    <li> E.g. =http://twiki.org=, =TopicNames=, =Webname.TopicNames=, or =Webname.Subweb.WebName=. </li>
+   </ul>
+  </td>
+ </tr>
+ <tr>
+  <td style="vertical-align:top; background-color:#f9f9f9">
+   <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/themes/advanced/images/anchor.gif" alt="anchor" />
+  </td>
+  <td style="vertical-align:top; ">
+   <ul>
+    <li> An anchor is a hidden mark you can use to link to a certain part of a topic, e.g a heading or a paragraph. An anchor must be a !WikiWord. </li>
+   </ul>
+  </td>
+ </tr>
+ <tr>
+<tr>
+ <td colspan="2" width="50%">
+<h3> Setting a TWiki variable </h3>
+<ol>
+ <li> Create a list item using the toolbar button</li>
+ <li> In the list item, type =Set NAME = value= </li>
+ <li> Select the value, and assign the ==Protect on save== style to it (only required if the value contains any TWiki Markup Language or if you style it e.g. to add bold, or if it's sensitive to the number of spaces)
+ </li>
+</ol>
+</td><td colspan=2>
+<h3> Using a TWiki Variable </h3><ul>
+<li> Just type it in. When the topic is saved, what you type will be saved just as you wrote it.  </li>
+<li> If any part of your variable parameters is sensitive to spacing, then select the entire TWiki variable and assign the ==PROTECTED== style to it before you save. </li></ul>
+</td>
+</tr>
+</table>
+<h3> Editing the raw text instead of Wysiwyg </h3><ul>
+<li> Select    <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikibuttons/images/hide.gif" alt="the pickaxe" style="background-color:#f9f9f9"/>
+, or use the _Raw Edit_ link in the bottom action bar. </li></ul>
+%STOPINCLUDE%
+
+%META:FILEATTACHMENT{name="Format_Drop_Down.png" attr="" comment="" version="1"}%
+%META:FILEATTACHMENT{name="Styles_Drop_Down.png" attr="" comment="" version="1"}%

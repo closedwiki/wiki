@@ -1,0 +1,16 @@
+%META:TOPICINFO{author="TWikiContributor" date="1196775404" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TestCategory13"}%
+<!--
+   * Set VIEW_TEMPLATE = Applications.ClassificationApp.ClassifiedTopicView
+-->
+
+
+   * DISTANCE('TOP','BOTTOM') = %DISTANCE{from="TOP" to="BOTTOM"}%
+   * DISTANCE{from="%TOPIC%" to="TestCategory13"}: %DISTANCE{from="%TOPIC%" to="TestCategory13"}%
+   * DISTANCE{from="%TOPIC%" to="TestCategory3"}: %DISTANCE{from="%TOPIC%" to="TestCategory3"}%
+
+%META:FORM{name="Applications.ClassificationApp.ClassifiedTopic"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="ClassifiedTopic, TaggedTopic, CategorizedTopic"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="foo bar"}%
+%META:FIELD{name="Tag" attributes="" title="Tag" value="client, fat, foo, sql"}%
+%META:FIELD{name="Category" attributes="" title="Category" value="TestCategory13"}%

@@ -1,0 +1,26 @@
+%META:TOPICINFO{author="TWikiContributor" date="1196764170" format="1.1" reprev="1.6" version="$Rev$"}%
+%META:TOPICPARENT{name="TestCategory2"}%
+   * ISA{TestCategory}: %ISA{cat="TestCategory"}%
+   * ISA{TestCategory2}: %ISA{cat="TestCategory2"}%
+   * DISTANCE: %DISTANCE%
+   * DISTANCE{to="TestCategory"}: %DISTANCE{to="TestCategory"}%
+   * DISTANCE{from="foo" to="TestCategory"}: %DISTANCE{from="foo" to="TestCategory"}%
+   * DISTANCE{from="TestCategory5" to="TestCategory15"}: %DISTANCE{from="TestCategory5" to="TestCategory15"}%
+   * DISTANCE{from="TopCategory" to="BottomCategory" format="min=$min, max=$max"}: %DISTANCE{from="TopCategory" to="BottomCategory" format="min=$min, max=$max"}%
+   * DISTANCE{from="TopCategory" to="TestCategory7"}: %DISTANCE{from="TopCategory" to="TestCategory7"}%
+   * DISTANCE{from="TestCategory8" to="TestCategory7"}: %DISTANCE{from="TestCategory8" to="TestCategory7" abs="off"}%
+   * DISTANCE{from="TestCategory7" to="TestCategory8"}: %DISTANCE{from="TestCategory7" to="TestCategory8" abs="off"}%
+
+
+
+<!--
+   * Set VIEW_TEMPLATE = Applications.ClassificationApp.ClassifiedTopicView
+-->
+-- Main.MichaelDaum - 25 Oct 2006
+
+
+%META:FORM{name="Applications.ClassificationApp.ClassifiedTopic"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="ClassifiedTopic, TaggedTopic, CategorizedTopic"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value=""}%
+%META:FIELD{name="Tag" attributes="" title="Tag" value="test, topic"}%
+%META:FIELD{name="Category" attributes="" title="Category" value="TestCategory2"}%

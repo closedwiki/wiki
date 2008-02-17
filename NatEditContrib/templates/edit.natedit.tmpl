@@ -1,0 +1,41 @@
+%TMPL:INCLUDE{"edit"}%
+%TMPL:INCLUDE{"editjavascript"}%
+%TMPL:INCLUDE{"edittoolbar"}%
+%TMPL:INCLUDE{"edithelp"}%
+
+<!-- template: edit.natedit.tmpl -->
+
+%TMPL:DEF{"twikistyle"}%%TMPL:P{"styles"}%%TMPL:END%
+
+%TMPL:DEF{"styles"}%
+%TMPL:P{"stylesscreen"}%
+<style type="text/css" media="all">
+  @import url("%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/styles.css");
+  @import url("%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/%IF{"defined NATEDIT_THEME" then="%NATEDIT_THEME%" else="default"}%/styles.css");
+</style>
+%TMPL:END%
+
+%TMPL:DEF{"content"}% 
+%TMPL:P{"formstart"}%%TMPL:P{"formattop"}%
+<input type="hidden" name="action_addform" value="" />
+<input type="hidden" name="action_replaceform" value="" />
+<input type="hidden" name="action_preview" value="" />
+<input type="hidden" name="action_save" value="" />
+<input type="hidden" name="action_checkpoint" value="" />
+<input type="hidden" name="action_cancel" value="" />
+%TABPANE%
+%TAB{"Text" after="$.natedit.autoMaxExpand('#topic')"}% %TMPL:P{"textarea"}% %ENDTAB%
+%TMPL:P{"form"}%<!-- -->
+%TAB{"Help" after="fixHeightOfPane()"}%%TMPL:P{"pagehelp"}%%ENDTAB%
+%ENDTABPANE%
+%TMPL:P{"formatbottom"}% %TMPL:P{"bottomtopicactions"}% %TMPL:P{"formend"}% %TMPL:END%
+
+%TMPL:DEF{"help"}%%TMPL:P{"edithelp"}%%TMPL:END%
+%TMPL:DEF{"pagehelp"}%<!-- -->
+%TMPL:P{"help"}%
+%TMPL:END%
+
+%TMPL:DEF{"revCommentPluginOptions"}%%IF{ "context RevCommentPluginEnabled" then="<div class='revComment'><label for='comment'>Summary of changes</label> <input class='twikiEditComment twikiInputField' size='50' type='text' name='comment' id='comment' /></div><!--/revComment-->" else=""}%%TMPL:END%
+
+%TMPL:DEF{"sig_textareabuttons"}%%TMPL:END%
+%TMPL:DEF{"bottombar"}%%TMPL:END%

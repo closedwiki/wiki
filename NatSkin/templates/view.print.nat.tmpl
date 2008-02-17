@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="%LANG%" lang="%LANG%">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" />
+<meta http-equiv="Content-Style-Type" content="text/css" /> 
+<meta name="generator" content="TWiki/NatSkin" /> %TMPL:P{"meta"}%
+<title>%TMPL:P{"title"}% - %WIKITOOLNAME% - (%MAKETEXT{"printable"}%)</title>
+<base href="%SCRIPTURL{view}%/%WEB%/%TOPIC%"></base>
+<link rel="icon" href="%FAVICON%" type="image/x-icon" /> 
+<link rel="shortcut icon" href="%FAVICON%" type="image/x-icon" />
+<!-- 
+
+  Disable the conditional around GETSKINSTYLE when firefox has fixed printing of pages
+  that import css. See https://bugzilla.mozilla.org/show_bug.cgi?id=154892 
+-->
+%IFDEFINED{"%URLPARAM{"css"}%" as="off" else="$percntGETSKINSTYLE$percnt"}%
+%TMPL:P{"javascript"}%
+%WEBCOMPONENT{"WebJavaScript"}%
+<style type="text/css">
+.natFeedIcon,
+.blogEntryFeed,
+.blogNavigation,
+.blogAddComment {
+  display:none;
+}
+/*
+.natExternalLink:after {
+  content: " (" attr(href) ") ";
+}
+*/
+</style>
+%TMPL:P{"styles"}%
+%WEBCOMPONENT{"WebCss"}%
+</head>
+<body class="natBody natPrintBody">
+<div class="natBodyContents">
+  <div class="natMiddle natMain">
+    <div class="natMainContents">
+%TMPL:P{"content"}%
+    </div>
+  <div class="natMainFooterContents">
+%IFDEFINED{"$percntMETA{\"attachments\"}$percnt" then="<div class=\"natTopicAttachments\"> $test </div>"}%
+  </div>
+  </div>
+</div>
+</body>
+</html>
+%TMPL:DEF{"content"}%%STARTALIASAREA%%TEXT% 
+%META{"form"}% 
+%STOPALIASAREA% %TMPL:END%
+<!-- template: view.print.nat.tmpl -->
+%TMPL:INCLUDE{"strings"}%
+%TMPL:INCLUDE{"styles"}%
+%TMPL:INCLUDE{"javascript"}%

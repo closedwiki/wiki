@@ -1,0 +1,8 @@
+<!-- template: edittoolbar.nat.tmpl -->
+%TMPL:INCLUDE{"edittoolbar.natedit"}%
+%TMPL:DEF{"formbutton"}%%FORMBUTTON{"<li class=\"natEditFormButton\"><a href=\"$url\" accesskey=\"f\" title=\"$action\"/><span>$action</span></a></li>"}%%TMPL:END%
+%TMPL:DEF{"edittools"}%<ul class="natEditEditTools">
+%TMPL:P{"formbutton"}%<!-- placeholder -->
+%TMPL:P{"previewbutton"}%
+%TMPL:P{"checkpointbutton"}%
+</ul>%TMPL:END%

@@ -1,0 +1,24 @@
+# Release manifest for SearchEngineKinoSearchAddOn
+bin/kinosearch 0544
+data/TWiki/SearchEngineKinoSearchAddOn.txt 0644 Documentation
+data/TWiki/KinoSearch.txt 0644 Examples
+lib/TWiki/Contrib/SearchEngineKinoSearchAddOn.pm 0644 Perl module
+lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/Index.pm
+lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/KinoSearch.pm
+lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/Search.pm
+lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/Stringifier.pm
+lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifyBase.pm
+lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/DOC_antiword.pm
+lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/DOC_abiword.pm
+lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/DOC_wv.pm
+lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/HTML.pm
+lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/PDF.pm
+lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/Text.pm
+lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/XLS.pm
+lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/PPT.pm
+templates/kinosearch.pattern.tmpl
+kinosearch/bin/kinoindex 0544
+kinosearch/bin/kinoupdate 0544
+kinosearch/bin/LocalLib.cfg 0644 
+kinosearch/logs/ 0755
+kinosearch/index/ 0755

@@ -1,0 +1,716 @@
+use strict;
+
+# tests for the correct expansion of IF
+
+package Fn_IF;
+
+use base qw( TWikiFnTestCase );
+
+use TWiki;
+use Error qw( :try );
+
+sub new {
+    my $self = shift()->SUPER::new('IF', @_);
+    return $self;
+}
+
+sub test_1 {
+    my $this = shift;
+    $this->simpleTest(test => "'A'='B'", then=>0, else=>1);
+}
+
+sub test_2 {
+    my $this = shift;
+    $this->simpleTest(test => "'A'!='B'", then=>1, else=>0);
+}
+
+sub test_3 {
+    my $this = shift;
+    $this->simpleTest(test => "'A'='A'", then=>1, else=>0);
+}
+
+sub test_4 {
+    my $this = shift;
+    $this->simpleTest(test => "'A'='B'", then=>0, else=>1);
+}
+
+sub test_5 {
+    my $this = shift;
+    $this->simpleTest(test => 'context test', then=>1, else=>0);
+}
+
+sub test_5a {
+    my $this = shift;
+    $this->simpleTest(test => 'context \'test\'', then=>1, else=>0);
+}
+
+sub test_6 {
+    my $this = shift;
+    $this->simpleTest(test => "{Fnargle}='Fleeble'", then=>1, else=>0);
+}
+
+sub test_7 {
+    my $this = shift;
+    $this->simpleTest(test => "{A}{B}='C'", then=>1, else=>0);
+}
+
+sub test_8 {
+    my $this = shift;
+    my $u = $this->{twiki}->{users};
+    $this->simpleTest(test => '$ WIKINAME = \''.$u->getWikiName($this->{twiki}->{user})."'", then=>1, else=>0);
+}
+
+sub test_8a {
+    my $this = shift;
+    my $u = $this->{twiki}->{users};
+    $this->simpleTest(test => '$ \'WIKINAME\' = \''.$u->getWikiName($this->{twiki}->{user})."'", then=>1, else=>0);
+}
+
+sub test_9 {
+    my $this = shift;
+    $this->simpleTest(test => 'defined EDITBOXHEIGHT', then=>1, else=>0);
+}
+
+sub test_9a {
+    my $this = shift;
+    $this->simpleTest(test => 'defined \'EDITBOXHEIGHT\'', then=>1, else=>0);
+}
+
+sub test_10 {
+    my $this = shift;
+    $this->simpleTest(test => '0>1', then=>0, else=>1);
+}
+
+sub test_11 {
+    my $this = shift;
+    $this->simpleTest(test => '1>0', then=>1, else=>0);
+}
+
+sub test_12 {
+    my $this = shift;
+    $this->simpleTest(test => '1<0', then=>0, else=>1);
+}
+
+sub test_13 {
+    my $this = shift;
+    $this->simpleTest(test => '0<1', then=>1, else=>0);
+}
+
+sub test_14 {
+    my $this = shift;
+    $this->simpleTest(test => "0>=\t1", then=>0, else=>1);
+}
+
+sub test_15 {
+    my $this = shift;
+    $this->simpleTest(test => '1>=0', then=>1, else=>0);
+}
+
+sub test_16 {
+    my $this = shift;
+    $this->simpleTest(test => '1>=1', then=>1, else=>0);
+}
+
+sub test_17 {
+    my $this = shift;
+    $this->simpleTest(test => '1<=0', then=>0, else=>1);
+}
+
+sub test_18 {
+    my $this = shift;
+    $this->simpleTest(test => '0<=1', then=>1, else=>0);
+}
+
+sub test_19 {
+    my $this = shift;
+    $this->simpleTest(test => '1<=1', then=>1, else=>0);
+}
+
+sub test_20 {
+    my $this = shift;
+    $this->simpleTest(test => "not 'A'='B'", then=>1, else=>0);
+}
+
+sub test_21 {
+    my $this = shift;
+    $this->simpleTest(test => "not NOT 'A'='B'", then=>0, else=>1);
+}
+
+sub test_22 {
+    my $this = shift;
+    $this->simpleTest(test => "'A'='A' AND 'B'='B'", then=>1, else=>0);
+}
+
+sub test_23 {
+    my $this = shift;
+    $this->simpleTest(test => "'A'='A' and 'B'='B'", then=>1, else=>0);
+}
+
+sub test_24 {
+    my $this = shift;
+    $this->simpleTest(test => "'A'='A' and 'B'='B'", then=>1, else=>0);
+}
+
+sub test_25 {
+    my $this = shift;
+    $this->simpleTest(test => "('A'='B' or 'A'='A') and ('B'='B')", then=>1, else=>0);
+}
+
+sub test_26 {
+    my $this = shift;
+    $this->simpleTest(test => "'A'='B' or 'B'='B'", then=>1, else=>0);
+}
+
+sub test_27 {
+    my $this = shift;
+    $this->simpleTest(test => "'A'='A' or 'B'='A'", then=>1, else=>0);
+}
+
+sub test_28 {
+    my $this = shift;
+    $this->simpleTest(test => "'A'='B' or 'B'='A'", then=>0, else=>1);
+}
+
+sub test_29 {
+    my $this = shift;
+    $this->simpleTest(test => "\$PUBURLPATH='".$TWiki::cfg{PubUrlPath}."'", then=>1, else =>0);
+}
+
+sub test_29a {
+    my $this = shift;
+    $this->simpleTest(test => "\$'PUBURLPATH'='".$TWiki::cfg{PubUrlPath}."'", then=>1, else =>0);
+}
+
+sub test_30 {
+    my $this = shift;
+    $this->simpleTest(test => "'A'~'B'", then=>0, else=>1);
+}
+
+sub test_31 {
+    my $this = shift;
+    $this->simpleTest(test => "'ABLABA'~'*B?AB*'", then=>1, else=>0);
+}
+
+sub test_32 {
+    my $this = shift;
+    $this->simpleTest(test => '\"BABBA\"~\"*BB?\"', then=>1, else=>0);
+}
+
+sub test_33 {
+    my $this = shift;
+    $this->simpleTest(test => "lc('FRED')='fred'", then=>1, else=>0);
+}
+
+sub test_34 {
+    my $this = shift;
+    $this->simpleTest(test => "('FRED')=uc 'fred'", then=>1, else=>0);
+}
+
+sub test_35 {
+    my $this = shift;
+    $this->simpleTest(test => "d2n('2007-03-26')=".TWiki::Time::parseTime('2007-03-26', 1), then=>1, else=>0);
+}
+
+sub test_36 {
+    my $this = shift;
+    $this->simpleTest(test => "d2n('wibble')=1174863600", then=>0, else=>1);
+}
+
+sub test_37 {
+    my $this = shift;
+    $this->simpleTest(test => "1 = 1 > 0", then=>1, else=>0);
+}
+
+sub test_38 {
+    my $this = shift;
+    $this->simpleTest(test => "1 > 1 = 0", then=>1, else=>0);
+}
+
+sub test_39 {
+    my $this = shift;
+    $this->simpleTest(test => "not 1 = 2", then=>1, else=>0);
+}
+
+sub test_40 {
+    my $this = shift;
+    $this->simpleTest(test => "not not 1 and 1", then=>1, else=>0);
+}
+
+sub test_41 {
+    my $this = shift;
+    $this->simpleTest(test => "0 or not not 1 and 1", then=>1, else=>0);
+}
+
+sub test_42 {
+    my $this = shift;
+    $this->simpleTest(test => "'".$this->{twiki}->{user}."' ingroup 'TWikiGuest'", then=>0, else=>1);
+}
+
+sub test_43 {
+    my $this = shift;
+    $this->simpleTest(test => "'".$this->{twiki}->{user}."' ingroup 'ThereHadBetterBeNoSuchGroup'", then=>0, else=>1);
+}
+
+sub test_44 {
+    my $this = shift;
+    $this->simpleTest(test => "'".$this->{twiki}->{user}."' ingroup '$TWiki::cfg{SuperAdminGroup}'",
+         then=>0, else=>1);
+}
+
+sub test_45 {
+    my $this = shift;
+    $this->simpleTest(test => "'".$this->{twiki}->{user}."' ingroup 'GropeGroup'", then=>1, else=>0);
+}
+
+sub test_46 {
+    my $this = shift;
+    $this->simpleTest(test => "'%USERNAME%' ingroup 'TWikiGuest'", then=>0, else=>1);
+}
+
+sub test_47 {
+    my $this = shift;
+    $this->simpleTest(test => "'%USERNAME%' ingroup 'ThereHadBetterBeNoSuchGroup'", then=>0, else=>1);
+}
+
+sub test_48 {
+    my $this = shift;
+    $this->simpleTest(test => "'%USERNAME%' ingroup '$TWiki::cfg{SuperAdminGroup}'", then=>0, else=>1);
+}
+
+sub test_49 {
+    my $this = shift;
+    $this->simpleTest(test => "'%USERNAME%' ingroup 'GropeGroup'", then=>1, else=>0);
+}
+
+sub test_50 {
+    my $this = shift;
+    $this->simpleTest(test => "'%USERINFO{format=\"\$username\"}%' ingroup 'TWikiGuest'", then=>0, else=>1);
+}
+
+sub test_51 {
+    my $this = shift;
+    $this->simpleTest(test => "'%USERINFO{format=\"\$username\"}%' ingroup 'ThereHadBetterBeNoSuchGroup'", then=>0, else=>1);
+}
+
+sub test52_ {
+    my $this = shift;
+    $this->simpleTest(test => "'%USERINFO{format=\"\$username\"}%' ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>0, else=>1);
+}
+
+sub test_53 {
+    my $this = shift;
+    $this->simpleTest(test => "'%USERINFO{format=\"\$username\"}%' ingroup 'GropeGroup'", then=>1, else=>0);
+}
+
+sub test_54 {
+    my $this = shift;
+    $this->simpleTest(test => "'%USERINFO{format=\"\$wikiname\"}%' ingroup 'TWikiGuest'", then=>0, else=>1);
+}
+
+sub test_55 {
+    my $this = shift;
+    $this->simpleTest(test => "'%USERINFO{format=\"\$wikiname\"}%' ingroup 'ThereHadBetterBeNoSuchGroup'", then=>0, else=>1);
+}
+
+sub test_56 {
+    my $this = shift;
+    $this->simpleTest(test => "'%USERINFO{format=\"\$wikiname\"}%' ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>0, else=>1);
+}
+
+sub test_57 {
+    my $this = shift;
+    $this->simpleTest(test => "'%USERINFO{format=\"\$wikiname\"}%' ingroup 'GropeGroup'", then=>1, else=>0);
+}
+
+sub test_58 {
+    my $this = shift;
+    $this->simpleTest(test => "'%USERINFO{format=\"\$wikiusername\"}%' ingroup 'TWikiGuest'", then=>0, else=>1);
+}
+
+sub test_59 {
+    my $this = shift;
+    $this->simpleTest(test => "'%USERINFO{format=\"\$wikiusername\"}%' ingroup 'ThereHadBetterBeNoSuchGroup'", then=>0, else=>1);
+}
+
+sub test_60 {
+    my $this = shift;
+    $this->simpleTest(test => "'%USERINFO{format=\"\$wikiusername\"}%' ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>0, else=>1);
+}
+
+sub test_61 {
+    my $this = shift;
+    $this->simpleTest(test => "'%USERINFO{format=\"\$wikiusername\"}%' ingroup 'GropeGroup'", then=>1, else=>0);
+}
+
+sub test_62 {
+    my $this = shift;
+    my $u = $this->{twiki}->{users};
+    $this->simpleTest(test => "'".$u->getWikiName($this->{twiki}->{user})."' ingroup 'TWikiGuest'", then=>0, else=>1);
+}
+
+sub test_63 {
+    my $this = shift;
+    my $u = $this->{twiki}->{users};
+    $this->simpleTest(test => "'".$u->getWikiName($this->{twiki}->{user})."' ingroup 'ThereHadBetterBeNoSuchGroup'", then=>0, else=>1);
+}
+
+sub test_64 {
+    my $this = shift;
+    my $u = $this->{twiki}->{users};
+    $this->simpleTest(test => "'".$u->getWikiName($this->{twiki}->{user})."' ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>0, else=>1);
+}
+
+sub test_65 {
+    my $this = shift;
+    my $u = $this->{twiki}->{users};
+    $this->simpleTest(test => "'".$u->getWikiName($this->{twiki}->{user})."' ingroup 'GropeGroup'", then=>1, else=>0);
+}
+
+sub test_66 {
+    my $this = shift;
+    $this->simpleTest(test => "'".$TWiki::cfg{AdminUserWikiName}."' ingroup 'TWikiGuest'", then=>0, else=>1);
+}
+
+sub test_67 {
+    my $this = shift;
+    $this->simpleTest(test => "'".$TWiki::cfg{AdminUserWikiName}."' ingroup 'ThereHadBetterBeNoSuchGroup'", then=>0, else=>1);
+}
+
+sub test_68 {
+    my $this = shift;
+    $this->simpleTest(test => "'".$TWiki::cfg{AdminUserWikiName}."' ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>1, else=>0);
+}
+
+sub test_69 {
+    my $this = shift;
+    $this->simpleTest(test => "'".$TWiki::cfg{AdminUserWikiName}."' ingroup 'GropeGroup'", then=>0, else=>1);
+}
+
+sub test_70 {
+    my $this = shift;
+    $this->simpleTest(test => "'".$TWiki::cfg{DefaultUserWikiName}."' ingroup 'TWikiGuest'", then=>0, else=>1);
+}
+
+sub test_71 {
+    my $this = shift;
+    $this->simpleTest(test => "'".$TWiki::cfg{DefaultUserWikiName}."' ingroup 'ThereHadBetterBeNoSuchGroup'", then=>0, else=>1);
+}
+
+sub test_72 {
+    my $this = shift;
+    $this->simpleTest(test => "'".$TWiki::cfg{DefaultUserWikiName}."' ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>0, else=>1);
+}
+
+sub test_73 {
+    my $this = shift;
+    $this->simpleTest(test => "'$TWiki::cfg{DefaultUserWikiName}' ingroup 'GropeGroup'", then=>1, else=>0);
+}
+
+sub test_74 {
+    my $this = shift;
+    $this->simpleTest(test => "'".$TWiki::cfg{AdminUserLogin}."' ingroup 'TWikiGuest'", then=>0, else=>1);
+}
+
+sub test_75 {
+    my $this = shift;
+    $this->simpleTest(test => "'".$TWiki::cfg{AdminUserLogin}."' ingroup 'ThereHadBetterBeNoSuchGroup'", then=>0, else=>1);
+}
+
+sub test_76 {
+    my $this = shift;
+    $this->simpleTest(test => "'".$TWiki::cfg{AdminUserLogin}."' ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>1, else=>0);
+}
+
+sub test_77 {
+    my $this = shift;
+    $this->simpleTest(test => "'".$TWiki::cfg{AdminUserLogin}."' ingroup 'GropeGroup'", then=>0, else=>1);
+}
+
+sub test_78 {
+    my $this = shift;
+    $this->simpleTest(test => "'".$TWiki::cfg{DefaultUserLogin}."' ingroup 'TWikiGuest'", then=>0, else=>1);
+}
+
+sub test_79 {
+    my $this = shift;
+    $this->simpleTest(test => "'".$TWiki::cfg{DefaultUserLogin}."' ingroup 'ThereHadBetterBeNoSuchGroup'", then=>0, else=>1);
+}
+
+sub test_80 {
+    my $this = shift;
+    $this->simpleTest(test => "'".$TWiki::cfg{DefaultUserLogin}."' ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>0, else=>1);
+}
+
+sub test_81 {
+    my $this = shift;
+    $this->simpleTest(test => "'".$TWiki::cfg{DefaultUserLogin}."' ingroup 'GropeGroup'", then=>1, else=>0);
+}
+
+sub test_82 {
+    my $this = shift;
+    my $u = $this->{twiki}->{users};
+    $this->simpleTest(test => "'".$u->getCanonicalUserID($TWiki::cfg{AdminUserLogin})."' ingroup 'TWikiGuest'", then=>0, else=>1);
+}
+
+sub test_83 {
+    my $this = shift;
+    my $u = $this->{twiki}->{users};
+    $this->simpleTest(test => "'".$u->getCanonicalUserID($TWiki::cfg{AdminUserLogin})."' ingroup 'ThereHadBetterBeNoSuchGroup'", then=>0, else=>1);
+}
+
+sub test_84 {
+    my $this = shift;
+    my $u = $this->{twiki}->{users};
+    $this->simpleTest(test => "'".$u->getCanonicalUserID($TWiki::cfg{AdminUserLogin})."' ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>1, else=>0);
+}
+
+sub test_85 {
+    my $this = shift;
+    my $u = $this->{twiki}->{users};
+    $this->simpleTest(test => "'".$u->getCanonicalUserID($TWiki::cfg{AdminUserLogin})."' ingroup 'GropeGroup'", then=>0, else=>1);
+}
+
+sub test_86 {
+    my $this = shift;
+    my $u = $this->{twiki}->{users};
+    $this->simpleTest(test => "'".$u->getCanonicalUserID($TWiki::cfg{DefaultUserLogin})."' ingroup 'TWikiGuest'", then=>0, else=>1);
+}
+
+sub test_87 {
+    my $this = shift;
+    my $u = $this->{twiki}->{users};
+    $this->simpleTest(test => "'".$u->getCanonicalUserID($TWiki::cfg{DefaultUserLogin})."' ingroup 'ThereHadBetterBeNoSuchGroup'", then=>0, else=>1);
+}
+
+sub test_88 {
+    my $this = shift;
+    my $u = $this->{twiki}->{users};
+    $this->simpleTest(test => "'".$u->getCanonicalUserID($TWiki::cfg{DefaultUserLogin})."' ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>0, else=>1);
+}
+
+sub test_89 {
+    my $this = shift;
+    my $u = $this->{twiki}->{users};
+    $this->simpleTest(test => "'".$u->getCanonicalUserID($TWiki::cfg{DefaultUserLogin})."' ingroup 'GropeGroup'", then=>1, else=>0);
+}
+
+sub test_90 {
+    my $this = shift;
+    $this->simpleTest(test => "isweb 'TWiki'", then=>1, else=>0);
+}
+
+sub test_91 {
+    my $this = shift;
+    $this->simpleTest(test => "isweb 'Not a web'", then=>0, else=>1);
+}
+
+sub test_92 {
+    my $this = shift;
+    $this->simpleTest(test => "istopic \$'TWiki'", then=>0, else=>1);
+}
+
+sub test_93 {
+    my $this = shift;
+    $this->simpleTest(test => "istopic \$'Not a web'", then=>0, else=>1);
+}
+
+sub test_94 {
+    my $this = shift;
+    $this->simpleTest(test => "isweb \$ 'SYSTEMWEB'", then=>1, else=>0);
+}
+
+sub test_95 {
+    my $this = shift;
+    $this->simpleTest(test => 'defined \'SYSTEMWEB\'', then=>1, else=>0);
+}
+
+sub test_96 {
+    my $this = shift;
+    $this->simpleTest(test => 'defined SYSTEMWEB', then=>1, else=>0);
+}
+
+sub test_97 {
+    my $this = shift;
+    $this->simpleTest(test => 'defined \'IF\'', then=>1, else=>0);
+}
+
+sub test_98 {
+    my $this = shift;
+    $this->simpleTest(test => 'defined IF', then=>1, else=>0);
+}
+
+
+sub set_up {
+    my $this = shift;
+    $this->SUPER::set_up(@_);
+    
+    my $u = $this->{twiki}->{users};
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $this->{users_web},
+        "GropeGroup",
+        "   * Set GROUP = ".$u->getWikiName($this->{twiki}->{user})."\n");
+}
+
+sub simpleTest {
+    my ($this, %test) = @_;
+    $this->{twiki}->enterContext('test');
+    $TWiki::cfg{Fnargle} = 'Fleeble';
+    $TWiki::cfg{A}{B} = 'C';
+
+    my $meta = new TWiki::Meta($this->{twiki}, $this->{test_web},
+                               $this->{test_topic});
+    my $text = '%IF{"'.$test{test}.'" then="'.
+      $test{then}.'" else="'.$test{else}.'"}%';
+    my $result = $this->{twiki}->handleCommonTags(
+        $text, $this->{test_web}, $this->{test_topic}, $meta);
+    $this->assert_equals('1', $result, $text." => ".$result);
+}
+
+sub test_INCLUDEparams {
+    my $this = shift;
+
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user},
+        $this->{test_web},
+        "DeadHerring",
+        <<'SMELL');
+one %IF{ "defined NAME" then="1" else="0" }%
+two %IF{ "$ NAME='%NAME%'" then="1" else="0" }%
+three %IF{ "$ NAME=$ 'NAME{}'" then="1" else="0" }%
+SMELL
+    my $text = <<'PONG';
+%INCLUDE{"DeadHerring" NAME="Red" warn="on"}%
+PONG
+    my $result = $this->{twiki}->handleCommonTags(
+        $text, $this->{test_web}, $this->{test_topic});
+    $this->assert_matches(qr/^\s*one 1\s+two 1\s+three 1\s*$/s, $result);
+}
+
+# check parse failures
+sub test_badIF {
+    my $this = shift;
+    my @tests = (
+        { test => "'A'=?", expect => "Syntax error in ''A'=?' at '?'" },
+        { test => "'A'==", expect => "Excess operators (= =) in ''A'=='" },
+        { test => "'A' 'B'", expect => "Missing operator in ''A' 'B''" },
+        { test => ' ', expect => "Empty expression" },
+       );
+
+    foreach my $test (@tests) {
+        my $text = '%IF{"'.$test->{test}.'" then="1" else="0"}%';
+        my $result = $this->{twiki}->handleCommonTags(
+            $text, $this->{test_web}, $this->{test_topic});
+        $result =~ s/^.*twikiAlert'>\s*//s;
+        $result =~ s/\s*<\/span>\s*//s;
+        $this->assert($result =~ s/^.*}:\s*//s);
+        $this->assert_str_equals($test->{expect}, $result);
+    }
+}
+
+sub test_ContentAccessSyntax {
+    my $this = shift;
+
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user},
+        $this->{test_web},
+        "DeadHerring",
+        <<'SMELL');
+one %IF{ "BleaghForm.Wibble='Woo'" then="1" else="0" }%
+%META:FORM{name="BleaghForm"}%
+%META:FIELD{name="Wibble" title="Wobble" value="Woo"}%
+SMELL
+    my $text = <<'PONG';
+%INCLUDE{"DeadHerring" NAME="Red" warn="on"}%
+PONG
+    my $result = $this->{twiki}->handleCommonTags(
+        $text, $this->{test_web}, $this->{test_topic});
+    $this->assert_matches(qr/^\s*one 1\s*$/s, $result);
+}
+
+sub test_ALLOWS_and_EXISTS{
+    my $this = shift;
+    my $wn = $this->{twiki}->{users}->getWikiName($this->{twiki}->{user});
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user},
+        $this->{test_web},
+        "DeadDog",
+        <<PONG);
+   * Set ALLOWTOPICVIEW = WibbleFloon
+   * Set ALLOWTOPICCHANGE = $wn
+PONG
+    my @tests;
+    push(@tests, {
+        test => "'%TOPIC%' allows 'change'",
+        expect => "1"
+       });
+    push(@tests, {
+        test => "istopic '%TOPIC%'",
+        expect => "1"
+       });
+    push(@tests, {
+            test => "'%TOPIC%' allows 'view'",
+            expect => "1",
+        });
+    push(@tests, {
+            test => "'%WEB%.%TOPIC%' ALLOWS 'change'",
+            expect => "1",
+        });
+    push(@tests, {
+            test => "'%WEB%.%TOPIC%' allows 'view'",
+            expect => "1",
+        });
+    push(@tests, {
+            test => "'DeadDog' ALLOWS 'view'",
+            expect => "0",
+        });
+    push(@tests, {
+        test => "'$this->{test_web}' allows 'view'",
+        expect => "1"
+       });
+    push(@tests, {
+            test => '\''.$this->{test_web}.'.DeadDog\' allows \'change\'',
+            expect => "1"
+        });
+    push(@tests, {
+        test => "istopic 'LazyFox'",
+        expect => "0"
+       });
+    push(@tests, {
+        test => "istopic '$this->{test_web}.LazyFox'",
+        expect => "0"
+       });
+    push(@tests, {
+        test => "istopic '$this->{test_web}.DeadDog'",
+        expect => "1"
+       });
+    push(@tests, {
+        test => "isweb '$this->{test_web}'",
+        expect => "1"
+       });
+    push(@tests, {
+        test => "isweb '%WEB%'",
+        expect => "1"
+       });
+    push(@tests, {
+        test => "isweb 'NotAHopeInHellPal'",
+        expect => "0"
+       });
+    push(@tests, {
+        test => "'NotAHopeInHellPal' allows 'view'",
+        expect => "0"
+       });
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki();
+    $this->{twiki}->{webName} = $this->{test_web}; # hack
+
+    foreach my $test (@tests) {
+        my $text = '%IF{"'.$test->{test}.'" then="1" else="0"}%';
+        my $result = $this->{twiki}->handleCommonTags(
+            $text, $this->{test_web}, $this->{test_topic});
+        $this->assert_str_equals($test->{expect}, $result,
+                                 "$text: '$result'");
+    }
+}
+
+
+1;

@@ -1,0 +1,58 @@
+%TMPL:INCLUDE{"login"}%
+
+%TMPL:DEF{"bodyclassname"}%patternNoViewPage patternLoginPage%TMPL:END%
+
+%TMPL:DEF{"pagetitle"}%%TMPL:END%
+
+%TMPL:DEF{"script:skintemplate"}%<style type="text/css" media="all">
+@import url("%PUBURLPATH%/%TWIKIWEB%/TwistyContrib/twist.css");
+</style>
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twikiStyles.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twikiPref.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twikiCSS.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TwistyContrib/twist.compressed.js"></script>%TMPL:END%
+
+%TMPL:DEF{"titlestep"}%<div class="twikiFormStep">
+%TMPL:P{"title"}%
+%TMPL:P{"notestep"}%
+%TMPL:P{"errorstep"}%</div><!-- /twikiFormStep-->%TMPL:END%
+
+%TMPL:DEF{"notestep"}%<div style="display:%IF{'$ERROR or $NOTE or $BANNER' then='block' else='none'}%;">
+%IF{"$NOTE" then='---+++ %NOTE%'}%</div>%TMPL:END%
+
+%TMPL:DEF{"errorstep"}%%IF{"$BANNER" then='<div class="twikiNotification twikiAlert twikiUnvisited patternLoginNotification">%BANNER%%IF{"$ERROR" then='<!--%TMPL:P{"error"}%-->'}%</div>'}%%TMPL:END%
+
+%TMPL:DEF{"usernamestep"}%<div class="twikiFormStep">
+---+++ %MAKETEXT{"Username"}%
+
+%TMPL:P{"usernamefield"}% %TMPL:P{"usernamefieldhelp"}%
+
+</div><!-- /twikiFormStep-->%TMPL:END%
+
+%TMPL:DEF{"usernamefieldhelp"}%%TWISTY{mode="span" showlink="%MAKETEXT{"Help"}%" hidelink="%MAKETEXT{"Hide help"}%" remember="on"}% <div class="twikiHelp">%TMPL:P{"usernamenote"}%</div> %ENDTWISTY%%TMPL:END%
+
+%TMPL:DEF{"passwordstep"}%<div class="twikiFormStep">
+---+++ %MAKETEXT{"Password"}%
+
+%TMPL:P{"passwordfieldnoteremember"}%
+</div><!-- /twikiFormStep-->%TMPL:END%
+
+%TMPL:DEF{"submitstep"}%<div class="twikiFormStep">%TMPL:P{"submit"}%</div><!-- /twikiFormStep-->%TMPL:END%
+
+%{ please keep the spaces between the div and the TMPL seealsonote, it allows TWiki to process the emailaddress }%
+%TMPL:DEF{"seealsostep"}%<div class="twikiFormStep twikiGrayText twikiLast"> %TMPL:P{"seealsonote"}% </div><!-- /twikiFormStep-->%TMPL:END%
+
+%TMPL:DEF{"loginasadministratorstep"}%<div style="text-align:right">%TMPL:P{"loginasadministratorform"}%</div>%TMPL:END%
+
+%TMPL:DEF{"form"}%<div id="twikiLogin">
+<div class="twikiFormSteps">%TMPL:P{"formstart"}%%TMPL:P{"titlestep"}%
+%TMPL:P{"usernamestep"}%%TMPL:P{"passwordstep"}%%TMPL:P{"submitstep"}%
+%TMPL:P{"formend"}%
+%TMPL:P{"seealsostep"}%
+</div><!-- /twikiFormSteps-->
+%TMPL:P{"loginasadministratorstep"}%
+</div><!-- /twikiLogin-->%TMPL:END%
+
+%TMPL:DEF{"content"}%%TMPL:P{"form"}%%TMPL:END%
+
+%TMPL:DEF{"bottombar"}%%TMPL:END%

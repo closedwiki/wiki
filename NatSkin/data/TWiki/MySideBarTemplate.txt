@@ -1,0 +1,62 @@
+%META:TOPICINFO{author="TWikiContributor" date="1133357180" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="MySideBar"}%
+---+ %MAKETEXT{"[_1]'s sidebar" args="%WIKIUSERNAME%"}%
+
+%STARTINCLUDE%<!-- mysidebar -->
+%TWISTY{
+  prefix="<h2>"
+  suffix="</h2>"
+  link="%MAKETEXT{"MySideBar"}% " 
+  showimg="%ICONURLPATH{"toggleclose-mini"}%"
+  hideimg="%ICONURLPATH{"toggleopen-mini"}%"
+  remember="on" 
+  firststart="show"}%
+<ul>
+  <li> %TWISTY{
+    link="%MAKETEXT{"Links"}% " 
+    remember="on" 
+    showimg="%ICONURLPATH{"toggleclose-mini"}%"
+    hideimg="%ICONURLPATH{"toggleopen-mini"}%"
+    mode="div"}%
+    <ul>
+      <li> ... </li>
+      <li> ... </li>
+      <li> ... </li>
+    </ul> %ENDTWISTY% 
+  </li>
+  <li> %TWISTY{
+    link="%MAKETEXT{"Documentation"}% " 
+    remember="on" 
+    showimg="%ICONURLPATH{"toggleclose-mini"}%"
+    hideimg="%ICONURLPATH{"toggleopen-mini"}%"
+    mode="div"}%
+    <ul>
+      <li> [[%TWIKIWEB%.WelcomeGuest][%MAKETEXT{"Welcome Guest"}%]] </li>
+      <li> [[%TWIKIWEB%.TWikiUsersGuide][%MAKETEXT{"User's Guide"}%]] </li>
+      <li> [[%TWIKIWEB%.TWikiReferenceManual][%MAKETEXT{"Reference Manual"}%]] </li>
+      <li> [[%TWIKIWEB%.GoodStyle][%MAKETEXT{"Good Style"}%]] </li>
+      <li> [[%TWIKIWEB%.TWikiFAQ][%MAKETEXT{"FAQs"}%]] </li>
+      <li> [[%TWIKIWEB%.TWikiVariables][%MAKETEXT{"TWiki Variables"}%]] </li>
+      <li> [[%TWIKIWEB%.TWikiForms][%MAKETEXT{"TWiki Forms"}%]] </li>
+      <li> [[%TWIKIWEB%.FormattedSearch][%MAKETEXT{"Formatted Search"}%]] </li>
+      <li> [[%TWIKIWEB%.FileAttachment][%MAKETEXT{"File Attachment"}%]] </li>
+    </ul> %ENDTWISTY% 
+  </li>
+  <li> %TWISTY{
+    link="%MAKETEXT{"Plugins"}% " 
+    remember="on" 
+    showimg="%ICONURLPATH{"toggleclose-mini"}%"
+    hideimg="%ICONURLPATH{"toggleopen-mini"}%"
+    mode="div"}%
+    <ul>
+      %FORMATLIST{"%ACTIVATEDPLUGINS%" separator="$n" format="<li> $1 </li>" sort="on"}%
+    </ul> %ENDTWISTY% 
+  </li>
+  <li> [[%TWIKIWEB%.NatSkinStyleBrowser][Style Browser]] </li>
+</ul>
+%ENDTWISTY%
+<!-- //mysidebar -->%STOPINCLUDE%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %WIKIUSERNAME%
+-->

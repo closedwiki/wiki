@@ -1,0 +1,39 @@
+%META:TOPICINFO{author="TWikiContributor" date="1185727719" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TopicType"}%
+---+ %TOPIC%
+%FORMFIELD{"Summary"}%
+
+---++ Documentation
+%STARTSECTION{name="documentation" type="section"}%
+This TopicType is used to construct JavaScript topics that are used in the applications.
+If you are using <nop>NatSkin, then incorporate these topics to the %MAINWEB%.TWikiWebJavaScript
+web component.
+
+See also: %TOPIC%Template
+%ENDSECTION{name="documentation" type="section"}%
+
+---++ Installation
+%DBCALL{"Applications.RenderTopicInstaller" TEXT="Install '%TOPIC%' TopicType in"}%
+
+---++ Factory
+%STARTINCLUDE%
+%DBCALL{"Applications.RenderSimpleTopicCreator" 
+  TEXT="%TOPIC%" 
+  VALUE="..."
+  TYPE="%TOPIC%"
+  FORM="Applications.ApplicationTopic"
+  TEMPLATE="%WEB%.%TOPIC%Template"  
+}%
+
+%DBCALL{"Applications.RenderTopicsOfType" THEWEB="%URLPARAM{"web"}%"}%
+<!--
+   * Set DEPENDENCIES = TopicType
+-->
+%STOPINCLUDE%
+
+
+%META:FORM{name="Applications.TopicType"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="ApplicationTopic, DocuTopic, TopicType"}%
+%META:FIELD{name="Inheritance" attributes="" title="Inheritance" value="ApplicationTopic"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="TopicType of <nop>JavaScript fragments"}%
+%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TWikiWorkbench"}%

@@ -1,0 +1,9 @@
+%META:TOPICINFO{author="TWikiContributor" date="1182157189" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="CategorizedTopic"}%
+-- Main.MichaelDaum - 27 Oct 2006
+
+%META:FORM{name="Applications.ClassificationApp.CategorizedTopic"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="CategorizedTopic"}%
+%META:FIELD{name="Summary" attributes="" title="Summary" value="This is a test topic with a <nop> in it"}%
+%META:FIELD{name="Category" attributes="" title="Category" value="TestCategory3, TestCategory4, TestCategory8"}%
+%META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" type="Set" value="Applications.ClassificationApp.CategorizedTopicView"}%

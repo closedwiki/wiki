@@ -1,0 +1,71 @@
+%TMPL:INCLUDE{"searchbase"}%<!-- template: search.nat.tmpl -->
+%TMPL:DEF{"searchbox"}%%TMPL:END%
+%TMPL:DEF{"content"}% %SPLIT%%TMPL:P{"searchform"}%%SPLIT% 
+%CALC{"$SET(incr, 0)"}% <!-- CALC incr = 0 -->
+<table class="natSearchTable" cellpadding="0" cellspacing="0">
+<tr class="natSearchTableTitle">
+  <th width="50%" class="natSearchTarget">%MAKETEXT{"[_1] Web" args="%WEB%"}%</th>
+  <th width="30%" class="natSearchRevision">%MAKETEXT{"Changed"}%</th>
+  <th width="20%" class="natSearchAuthor">%MAKETEXT{"By"}%</th>
+</tr>
+</table> %REPEAT% %CALC{"$SETM(incr, +1)"}% <!-- CALC incr++ -->
+<table class="natSearchHit %CALC{"$IF($ODD($GET(incr)),natSearchHitOdd,natSearchHitEven)"}%" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th width="50%" class="natSearchTarget">
+      <a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPICNAME%">%TOPICNAME%</a>
+    </th>
+    <th width="30%" class="natSearchRevision">
+      <a style="white-space:pre" href="%SCRIPTURLPATH{"rdiff"}%/%WEB%/%TOPICNAME%">%TIME%</a>
+    </th><th width="20%" class="natSearchAuthor">
+      %AUTHOR%
+    </th>
+  </tr>
+  <tr>
+    <td colspan="3">%TEXTHEAD%<!-- guard--></td>
+  </tr> 
+</table>%REPEAT% %SPLIT%<div class="natSearchTotal">
+  %MAKETEXT{"Found <span>[_1]</span> topics" args="%NTOPICS%"}% 
+</div>%SPLIT%
+%TMPL:END%
+%TMPL:DEF{"searchform"}%
+%IFSKINSTATETHEN{action="natsearch"}%
+<form name="searchform" action="%SCRIPTURLPATH{"natsearch"}%/%BASEWEB%/%BASETOPIC%" method="post">
+<table>
+  <tr>
+    <th class="natSearch">%MAKETEXT{"Search"}%:</th>
+    <td>
+      <input type="text" name="search" size="50" value="%URLPARAM{"search"}%" accesskey="f" /> 
+      <input type="submit" value="%MAKETEXT{"Submit"}%" class="natOkButton" title="submit the query" />
+      <input type="button" value="%MAKETEXT{"Cancel"}%" class="natCancelButton" onclick="window.location.href='%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%';" accesskey="c" title='%MAKETEXT{"go back to <nop>[_1]" args="%WEB%.%TOPIC%"}%'>
+    </td>
+  </tr>
+  <tr>
+    <th>&nbsp;</th>
+    <td>
+      <label>
+        <input type="checkbox" class="twikiCheckbox" name="web" value="all" %IFDEFINED{"%URLPARAM{web}%" as="all" then=" checked"}%/>search in all webs
+      </label>
+      <label>
+        <select name="limit">
+          <option %IFDEFINED{"%URLPARAM{"limit"}%" as="5" then=" selected"}%>5</option>
+          <option %IFDEFINED{"%URLPARAM{"limit"}%" as="10" then=" selected"}%>10</option>
+          <option %IFDEFINED{"%URLPARAM{"limit"}%" as="20" then=" selected"}%>20</option>
+          <option %IFDEFINED{"%URLPARAM{"limit"}%" as="30" then=" selected"}%>30</option>
+          <option %IFDEFINED{"%URLPARAM{"limit"}%" as="40" then=" selected"}%>40</option>
+          <option %IFDEFINED{"%URLPARAM{"limit"}%" as="50" then=" selected"}%>50</option>
+          <option %IFDEFINED{"%URLPARAM{"limit"}%" as="100" then=" selected"}%>100</option>
+          <option %IFDEFINED{"%URLPARAM{"limit" default="all"}%" as="all" then=" selected"}%>all</option>
+        </select>
+        %MAKETEXT{"limit maximum number of hits"}%
+      </label>
+    </td>
+  </tr>
+</table>
+</form>
+<div class="natSeeAlso">
+See also: [[WebSearchAdvanced][%MAKETEXT{"Advanced Search"}%]],
+[[WebTopicList][%MAKETEXT{"List of all topics"}%]],
+[[WebChanges][%MAKETEXT{"Recently changed topics"}%]]
+</div>
+%FISKINSTATE%
+%TMPL:END%
