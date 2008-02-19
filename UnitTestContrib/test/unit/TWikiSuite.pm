@@ -8,6 +8,10 @@ use strict;
 
 # Assumes we are run from the "test/unit" directory
 
+sub list_tests {
+    return ();
+}
+
 sub include_tests {
     my $this = shift;
     push(@INC, '.');
@@ -23,23 +27,26 @@ sub include_tests {
 
     # Add standard extensions tests
     my $read_manifest = 0;
-    my $home = $ENV{TWIKI_HOME};
-    unless ($home) {
-        require Cwd;
-        $home = Cwd::abs_path('../..');
+    my $home = "../..";
+    unless (-e "$home/lib/MANIFEST") {
+        $home = $ENV{TWIKI_HOME};
     }
+    require Cwd;
+    $home = Cwd::abs_path($home);
 
+    @list = ();
+    print STDERR "Getting extensions from $home/lib/MANIFEST\n";
     if (open(F, "$home/lib/MANIFEST")) {
         $read_manifest = 1;
     } else {
-        # dunno which plugins we require
+        # dunno which extensions we require
         $read_manifest = 0;
     }
     if ($read_manifest) {
         local $/ = "\n";
         while (<F>) {
-            if (m#^!include (twikiplugins/\w+)/.*?/(\w+)$#) {
-                my $d = "$home/$1/test/unit/$2";
+            if (m#^!include (\w+)/.*?/(\w+)$#) {
+                my $d = "$home/../$1/test/unit/$2";
                 next unless (-e "$d/${2}Suite.pm");
                 push(@INC, $d);
                 push(@list, "${2}Suite.pm");
