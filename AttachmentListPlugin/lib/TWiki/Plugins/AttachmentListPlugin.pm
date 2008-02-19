@@ -28,7 +28,7 @@ $VERSION = '$Rev: 14207 $';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.1.4';
+$RELEASE = '1.1.5';
 
 $pluginName = 'AttachmentListPlugin';    # Name of this Plugin
 
@@ -323,7 +323,7 @@ sub handleFileList {
         $outtext = $alttext;
     }
     else {
-        my $header .= "\n" if ( $header ne '' );
+        $header .= "\n" if ( $header ne '' );
         $outtext = $header . $outtext . $footer;
     }
 

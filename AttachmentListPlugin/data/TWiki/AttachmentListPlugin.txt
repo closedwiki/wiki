@@ -154,12 +154,13 @@ footer="Number of images: $fileCount"
 
 ---++ Plugin Info
 
-| Authors: | TWiki:Main.VinodKulkarni, TWiki:Main.SopanShewale (2006), TWiki:Main.ArthurClemens (2006, 2007) |
+| Authors: | TWiki:Main.VinodKulkarni, TWiki:Main.SopanShewale (2006), TWiki:Main.ArthurClemens (2006, 2007, 2008) |
 | Copyright &copy;: | TWiki:Main.VinodKulkarni, TWiki:Main.SopanShewale (2006), TWiki:Main.ArthurClemens (2006, 2007, 2008) |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
-|  Plugin Version: | 25 Jan 2008 (V1.1.4)  |
+|  Plugin Version: | 19 Feb 2008 (V1.1.5)  |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+| 19 Feb 2008 - v.1.1.5   | Arthur Clemens: Fix display of header. |
 | 25 Jan 2008 - v.1.1.4   | Arthur Clemens: Removed redundant spacing when no header is defined. |
 | 04 Jan 2008 - v.1.1   | Arthur Clemens: Added filter parameters =user= and =excludeuser=; added format parameters =$fileTopic= and =$fileWeb=. |
 | 06 Dec 2007 - v.1.0   | Arthur Clemens: integrated sort options by TWiki:Main.RohanMoitra. Renamed !FileListPlugin to !AttachmentListPlugin; changed =FILELIST= (now deprecated) to =ATTACHMENTLIST=. |
