@@ -1206,7 +1206,7 @@ sub ParseAndFormatP4ChangesBasicOutput()
 	   	#Change 69463 on 2008/02/06 by sl@sl-ti 'Some nice comments'
 		#Parse one change line	    	
 	    	    	
-	    	
+	    #Without pending status 	
     	if ($change =~ /^Change\s+(\d+)\s+on\s+(\d+)\/(\d+)\/(\d+)\s+by\s+([^\s]+)@([^\s]+)\s+'(.*)'$/)
     		{	    		
 	    	my $changelist=$1;			
@@ -1223,6 +1223,7 @@ sub ParseAndFormatP4ChangesBasicOutput()
 	    	
 	    	#Perform var substitutions	    		    	
     		}
+    	#With pending status 	
 		elsif ($change =~ /^Change\s+(\d+)\s+on\s+(\d+)\/(\d+)\/(\d+)\s+by\s+([^\s]+)@([^\s]+)\s+\*pending\*\s+'(.*)'$/)    		
 			{
 	    	my $changelist=$1;			
@@ -1277,7 +1278,7 @@ sub ParseAndFormatP4ChangesLongDescriptionOutput()
 	   	#Change 69463 on 2008/02/06 by sl@sl-ti 'Some nice comments'
 		#Parse one change line	    	
 	    	    	
-	    	
+	    #Without pending status
     	if ($change =~ /^Change\s+(\d+)\s+on\s+(\d+)\/(\d+)\/(\d+)\s+by\s+([^\s]+)@([^\s]+)\s*$/)
     		{
 	    	if (defined $changelist)	
@@ -1299,6 +1300,7 @@ sub ParseAndFormatP4ChangesLongDescriptionOutput()
 	    	#Perform var substitutions
 	    		    	
     		}
+		#With pending status    		
     	elsif ($change =~ /^Change\s+(\d+)\s+on\s+(\d+)\/(\d+)\/(\d+)\s+by\s+([^\s]+)@([^\s]+)\s+\*pending\*\s*$/)
     		{
 	    	if (defined $changelist)	
@@ -1316,9 +1318,9 @@ sub ParseAndFormatP4ChangesLongDescriptionOutput()
 	        $status="pending";
 	    		
     		}
-    	elsif ($change =~ /^\t(.*)/) #empty line is ok
+    	elsif ($change =~ /^\t(.*)/) #must be description line
     		{
-	    	$description.="$1<br />";	
+	    	$description.="$1 <br />";	
     		}
     	elsif ($change =~ /^$/) #drop empty lines
     		{
@@ -1330,7 +1332,13 @@ sub ParseAndFormatP4ChangesLongDescriptionOutput()
 	    	$output .= "<br />";		    		
     		}	    	     		
    		}
-   		
+   	
+   	#Do not forget to add the last change entry if any
+   	if (defined $changelist)	
+		{
+		$output.=P4ChangesVariableSubstitution($format, $changelist, $year, $month, $day, $user, $client, $status, $description);			
+    	}	
+   			
    	return $output;
 	}	   
 		
