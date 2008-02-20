@@ -28,7 +28,7 @@ $VERSION = '$Rev: 14207 $';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.1.5';
+$RELEASE = '1.2';
 
 $pluginName = 'AttachmentListPlugin';    # Name of this Plugin
 
@@ -110,6 +110,7 @@ sub handleFileList {
     my $excludeTopics          = $params->{'excludetopic'} || '';
     my $excludeWebs            = $params->{'excludeweb'} || '';
     my $excludeFiles           = $params->{'excludefile'} || '';
+    my $includeFilePattern     = $params->{'includefilepattern'} || undef;
     my $excludeExtensionsParam = $params->{'excludeextension'} || '';
     my $extensionsParam        = $params->{"extension"}
       || $params->{"filter"};  # "abc, def" syntax. Substring match will be used
@@ -147,7 +148,8 @@ sub handleFileList {
     if (   ( $sort eq '$fileName' )
         || ( $sort eq '$fileSize' )
         || ( $sort eq '$fileUser' )
-        || ( $sort eq '$fileDate' ) )
+        || ( $sort eq '$fileDate' )
+        || ( $sort eq '$fileExtension' ) )
     {
         my $sortedFiles =
           sortFileData( \@files, $sort, $sortOrder, $fromDate, $toDate );
@@ -179,7 +181,7 @@ sub handleFileList {
         my $filename = $attachment->{name};
 
         # filter on extension
-        my $fileExtension = getFileExtension($filename);
+        my $fileExtension = $attachment->{_AttachmentListPlugin_extension};
 
         if (   ( keys %extensions && !$extensions{$fileExtension} )
             || ( $excludeExtensions{$fileExtension} ) )
@@ -189,6 +191,11 @@ sub handleFileList {
 
         # filter excluded files
         next if ( $excludedFiles{$filename} );
+
+        # filter excluded files by regex pattern
+        if ( defined $includeFilePattern ) {
+            next unless ( $filename =~ /$includeFilePattern/ );
+        }
 
         my $attrSize    = $attachment->{size};
         my $attrUser    = $attachment->{user} || 'UnknownUser';
@@ -263,14 +270,13 @@ sub handleFileList {
         $s =~ s/\$fileName/$filename/g;
 
         if ( $s =~ /fileIcon/ ) {
-            ## To find the File Extention..
-            my @bits     = ( split( /\./, $filename ) );
-            my $ext      = lc $bits[$#bits];
-            my $fileIcon = '%ICON{"' . $ext . '"}%';
+            my $fileIcon = '%ICON{"' . $fileExtension . '"}%';
             $s =~ s/\$fileIcon/$fileIcon/g;
         }
         $s =~ s/\$fileSize/$attrSizeStr/g;
         $s =~ s/\$fileComment/$attrComment/g;
+        $s =~ s/\$fileExtension/$fileExtension/g;
+
         if ( $s =~ /fileDate/ ) {
             my $attrDate = TWiki::Time::formatTime( $attachment->{"date"} );
             $s =~ s/\$fileDate/$attrDate/g;
@@ -337,15 +343,9 @@ sub handleFileList {
     my $listedExtensions = join( ',', @extensionsList );
     $outtext =~ s/\$fileExtensions/$listedExtensions/g;
 
+    $outtext = _decodeFormatTokens($outtext);
+
     return $outtext;
-}
-
-sub getFileExtension {
-    my ($filename) = @_;
-
-    my $extension = $filename;
-    $extension =~ s/^.*?\.(.*?)$/$1/g;
-    return lc $extension;
 }
 
 =pod
@@ -496,48 +496,48 @@ sub sortFileData {
         my $sortedFiles = sortFilesByType( \@fileData, $sortOrder, 'user' );
         @sortedFiles = @$sortedFiles;
     }
+    if ( $inSort eq '$fileExtension' ) {
+
+        my $sortedFiles = sortFilesByType( \@fileData, $sortOrder,
+            '_AttachmentListPlugin_extension' );
+        @sortedFiles = @$sortedFiles;
+    }
 
     return \@sortedFiles;
 }
+
+=pod
+
+Sort files by type (primary key) and by name (secondary key).
+
+=cut
 
 sub sortFilesByType {
 
     my ( $fileData, $inSortOrder, $inType ) = @_;
     my @fileData = @$fileData;
     my @sortedFiles;
+    my $order = $inSortOrder;
 
-    if ($inSortOrder) {
-        if ( $inSortOrder eq 'ascending' ) {
-            @sortedFiles =
-              sort {
-                lc( $a->{'attachment'}->{$inType} ) cmp
-                  lc( $b->{'attachment'}->{$inType} )
-              } @fileData;
-        }
-        if ( $inSortOrder eq 'descending' ) {
-            @sortedFiles =
-              sort {
-                lc( $b->{'attachment'}->{$inType} ) cmp
-                  lc( $a->{'attachment'}->{$inType} )
-              } @fileData;
-        }
-        if (   ( $inSortOrder ne 'ascending' )
-            && ( $inSortOrder ne 'descending' ) )
-        {
-            @sortedFiles =
-              sort {
-                lc( $a->{'attachment'}->{$inType} ) cmp
-                  lc( $b->{'attachment'}->{$inType} )
-              } @fileData;
-        }
-    }
-    else {
+    if ( $order eq 'descending' ) {
         @sortedFiles =
           sort {
-            lc( $a->{'attachment'}->{$inType} ) cmp
-              lc( $b->{'attachment'}->{$inType} )
+            lc( $b->{'attachment'}->{$inType} ) cmp
+              lc( $a->{'attachment'}->{$inType} )
+              or lc( $b->{'attachment'}->{'name'} ) cmp
+              lc( $a->{'attachment'}->{'name'} )
           } @fileData;
+        return \@sortedFiles;
     }
+
+    # else: all other orders default to ascending
+    @sortedFiles =
+      sort {
+        lc( $a->{'attachment'}->{$inType} ) cmp
+          lc( $b->{'attachment'}->{$inType} )
+          or lc( $a->{'attachment'}->{'name'} ) cmp
+          lc( $b->{'attachment'}->{'name'} )
+      } @fileData;
     return \@sortedFiles;
 }
 
@@ -834,6 +834,14 @@ sub _pngsize {
         );
     }
     return ( 0, 0 );
+}
+
+sub _decodeFormatTokens {
+    my $text = shift;
+    return
+      defined(&TWiki::Func::decodeFormatTokens)
+      ? TWiki::Func::decodeFormatTokens($text)
+      : _expandStandardEscapes($text);
 }
 
 1;

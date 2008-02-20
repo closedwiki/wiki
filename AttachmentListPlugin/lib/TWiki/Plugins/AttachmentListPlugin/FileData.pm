@@ -29,7 +29,18 @@ sub new {
     $this->{'topic'}      = $topic;
     $this->{'web'}        = $web;
     $this->{'attachment'} = $attachment;
+    $this->{'attachment'}->{'_AttachmentListPlugin_extension'} =
+      _getExtension( $this->{'attachment'}->{name} );
     bless $this, $class;
+}
+
+sub _getExtension {
+    my ($fileName) = @_;
+
+    my @bits = ( split( /\./, $fileName ) );
+    my $extension = '';
+    $extension = lc $bits[$#bits] if ( scalar @bits > 1 );
+    return lc $extension;
 }
 
 sub toString {

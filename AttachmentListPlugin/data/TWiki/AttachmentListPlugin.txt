@@ -32,13 +32,14 @@ To create a list of images, use: =extension="jpg,jpeg,gif" format="   * &lt;a hr
 | =footer=    | A footer text in case of hits | no footer | =footer="Number of files: $fileCount"= |
 | =alt=       | Alternative text if nothing is found | none | =alt="No files found"= |
 | =hide=      | Set to "on" to show only non-hidden attachments | by default the 'hidden' property is ignored | =hide="on"= |
-| =filter= (deprecated)   | Use =extension= | | | 
+| =filter= (deprecated)   | Use =extension= or =includefilepattern= | | | 
 | =extension=  | Comma-separated list of file extensions to be listed | none | =extension="gif, jpg"= |
 | =excludeextension=  | Comma-separated list of file extensions to not show | none | =excludeextension="htm"= |
 | =user=  | Comma-separated list of user names (that have attached an attachment) to be listed | none | =user="TWikiContributor"= |
 | =excludeuser=  | Comma-separated list of user names (that have attached an attachment) to not show | none | =excludeuser="TWikiContributor,TWikiAdminUser,TWikiGuest,UnknownUser"= |
 | =excludefile= | Comma-separated list of filenames to not show, possibly generated from a search | none | =excludefile="ReadMe.txt"= |
-| =sort=      | Sorts the retrieved attachments on either name, date or user. The sort order can be specified with parameter =sortorder=. | no sort | =sort="$fileName"= |
+| =includefilepattern= | Regular expression pattern to match filenames to show. For example: the pattern =^[A-Z]= will match files which filenames start with an uppercase letter; pattern =[0-9]= will find files that have a number in the filename. | none | =includefilepattern="^[A-Z]"= |
+| =sort=      | Sorts the retrieved attachments on either name (=$fileName=), size (=$fileSize=), user (=$fileUser=), date (=$fileDate=) or extension (=$fileExtension=). The sort order can be specified with parameter =sortorder=. | no sort | =sort="$fileName"= |
 | =sortorder= | Lists sorted attachments: ascending or descending | The default sort order depends on the =sort= type: \
 %BB% sort on =$fileDate=: =descending= (latest file first) \
 %BB% sort on =$fileName= or =$fileUser=: =ascending= (alphabetically) | =sortorder="ascending"= |
@@ -51,8 +52,9 @@ These parameters can be used in the =format= tag:
 
 | *Format parameter* | *Comment* |
 | =$fileName=  | Name of the attachment |
-| =$fileIcon= | Icon image representing this attachment type (see %TWIKIWEB%.TWikiDocGraphics) |
 | =$fileSize= | Attachment size in bytes |
+| =$fileExtension= | Attachment extension |
+| =$fileIcon= | Icon image representing this attachment type (see %TWIKIWEB%.TWikiDocGraphics) (wraps %TWIKIWEB%.VarICON around =$fileExtension=) |
 | =$fileComment= | Attachment comment |
 | =$fileUser= | Who has attached |
 | =$fileDate= | When was attachment attached |
@@ -69,7 +71,11 @@ These parameters can be used in the =format= tag:
 These parameters can be used in the =format=, =header= and =footer= tags:
 
 | *Format parameter* | *Comment* |
-| =$n= | newline character |
+| =$n= or =$n()= | New line. Use =$n()= if followed by alphanumeric character, e.g. write =Foo$n()Bar= instead of =Foo$nBar= |
+| =$nop= or =$nop()= | Is a "no operation". |
+| =$quot= | Double quote (="=) |
+| =$percnt= | Percent sign (=%=) |
+| =$dollar= | Dollar sign (=$=) |
 | =$br= | =&lt;br /&gt;= tag |
 
 These parameters can be used in the =header= and =footer= tags:
@@ -158,8 +164,9 @@ footer="Number of images: $fileCount"
 | Copyright &copy;: | TWiki:Main.VinodKulkarni, TWiki:Main.SopanShewale (2006), TWiki:Main.ArthurClemens (2006, 2007, 2008) |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
-|  Plugin Version: | 19 Feb 2008 (V1.1.5)  |
+|  Plugin Version: | 20 Feb 2008 (V1.2)  |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+| 20 Feb 2008 - v.1.2   | Arthur Clemens: Added parameter =includefilepattern= and formatting parameter =$fileExtension=. When using parameter =sort= the files are now secondary sorted on filename. Added decoding of format tokens. |
 | 19 Feb 2008 - v.1.1.5   | Arthur Clemens: Fix display of header. |
 | 25 Jan 2008 - v.1.1.4   | Arthur Clemens: Removed redundant spacing when no header is defined. |
 | 04 Jan 2008 - v.1.1   | Arthur Clemens: Added filter parameters =user= and =excludeuser=; added format parameters =$fileTopic= and =$fileWeb=. |
