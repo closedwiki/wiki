@@ -1,9 +1,21 @@
-%META:TOPICINFO{author="BaseUserMapping_666" date="1203033261" format="1.1" reprev="1.4" version="1.4"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1203544202" format="1.1" reprev="1.2" version="1.2"}%
 ---+!! %TOPIC%
 
-_short description here_
+<div style="background-color: #CCFF66; padding: 5px">
+*%X% NOTE:* This plug-in has a server side dependency on the Perforce command line =p4.exe=
+</div>
 
 %TOC%
+
+---++ Description
+
+<!--
+SHORTDESCRIPTION is used in various places such as the InstalledPlugins page or the extension downloader in configure.
+
+   * Set SHORTDESCRIPTION = Provide access to informations from a Perforce SCM server.              
+-->
+
+Provide access to information from a Perforce server. [[http://www.perforce.com][Perforce]] is a well known software configuration management system.
 
 ---++ Syntax Rules
 
@@ -18,8 +30,8 @@ _short description here_
 | _format_ | A template string used to format each change record. See below for the supported variables. If none specified the output of the command is returned with HTML br tags append to each line.  |  <verbatim>| $changelist | $description |</verbatim> | none |
 | _header_ | Specify a header for the formatted output. | <verbatim> | *Parameter* | *description* | *default value* | </verbatim>  | none |
 | _footer_ | Specify a footer for the formatted output. | =nice footer= | none |
-| _ajax_ | Tell the plug-in to delay running of the p4 command. Instead of the command output it displays a button that will allow the user to fetch the information from Perforce on demand. The given value defines the id of the =div= element to be loaded upon ajax request completion. | =ajaxdivid1=  | none |
-| _label_ | Used only in ajax mode. It defines the label of the ajax button. |  =Fetch changes=  | =Fetch Perforce changes= |
+| _ajax_ | Tell the plug-in to delay running of the p4 command. Instead of the command output it displays a button that will allow the user to fetch the information from Perforce on demand. The given value defines the id of the =div= element to be loaded upon ajax request completion. | =ajaxdivid1= | none |
+| _label_ | Used only in ajax mode. It defines the label of the ajax button. | =Fetch changes= | =Fetch Perforce changes= |
 
 ---+++ REST interface
 
@@ -75,12 +87,12 @@ See Sandbox.PluginTestPerforcePlugin.
 %P4CHANGES{" //depot/branches/rel_1_0_1/...@100,200" format="| $changelist | $date | $description | $user | $status | $n"}%
 </verbatim>
 
+
+
 ---++ Plugin Settings
 
-Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<plugin>_<setting>%==, i.e. ==%NEWPLUGIN_SHORTDESCRIPTION%==
-
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic: 
-      * Set SHORTDESCRIPTION = Provide access to informations from a [[http://www.perforce.com][Perforce]] CMS system.              
+As per the new plug-in development guidelines this plug-in do not make use of preferences variables for settings and configuration.
+Instead settings are stored in =/lib/LocalSite.cfg=. See the installations instructions below.
 
 ---++ Plugin Installation Instructions
 
@@ -104,6 +116,8 @@ $TWiki::cfg{Plugins}{PerforcePlugin}{p4user} = "mylogin";
 $TWiki::cfg{Plugins}{PerforcePlugin}{p4password} = "mypassword";
 </verbatim>
 
+NOTE: It turns out that you don't even need to specify an existing =p4client= to run =p4 changes= commands.   
+
    * If the installation was successful you should get valid information in the table below: 
 
 | *Changelist* | *Date* | *Description* | *User* | *Status* |
@@ -114,13 +128,14 @@ $TWiki::cfg{Plugins}{PerforcePlugin}{p4password} = "mypassword";
 |  Plugin Author: | TWiki:Main.StephaneLenclud |
 |  Copyright: | © 2007, TWiki:Main.StephaneLenclud |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 15 Feb 2008 (V0.004) |
+|  Plugin Version: | 15 Feb 2008 (V0.1) |
 |  Change History: | <!-- versions below in reverse order --> |
+|  20 Feb 2008: | Fixing bug preventing TWiki:InterWikiPlugin to auto link at beginning and at the end of changes description lines <br /> Fixing missing last changes entry in long description mode ( =-l= and =-L= options ) |
 |  15 Feb 2008: | Documentation, more parameters, ajax/jquery support |
 |  14 Feb 2008: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
-|  Other Dependencies: | none |
+|  Other Dependencies: | [[http://www.perforce.com][Perforce]] command line =p4.exe= <br /> TWiki:Plugins.JQueryPlugin optional. Only for AJAX functionality |
 |  Perl Version: | 5.005 |
 |  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
@@ -129,4 +144,4 @@ $TWiki::cfg{Plugins}{PerforcePlugin}{p4password} = "mypassword";
 
 __Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
-%TOPICCREATE{ template="Plugins.PluginDevTemplate" topic="PerforcePluginDev" disable="NewPluginTemplate" parameters="pluginName=PerforcePlugin&RelatedTopics=PerforcePlugin, PerforcePluginAppraisal" }% %TOPICCREATE{ template="Plugins.PluginAppraisalTemplate" topic="PerforcePluginAppraisal" disable="NewPluginTemplate" parameters="RelatedTopics=PerforcePlugin, PerforcePluginDev" }% -- TWiki:Main.StephaneLenclud - 14 Feb 2008
+ -- TWiki:Main.StephaneLenclud - 14 Feb 2008
