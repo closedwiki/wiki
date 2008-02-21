@@ -28,7 +28,7 @@ $VERSION = '$Rev: 14207 $';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.2.1';
+$RELEASE = '1.2.2';
 
 $pluginName = 'AttachmentListPlugin';    # Name of this Plugin
 
@@ -144,8 +144,9 @@ sub handleFileList {
     my @files =
       createAttachmentList( $topic, $web, $excludeTopics, $excludeWebs );
 
-    my @sortedFiles = sortFileData( \@files, $sort, $sortOrder, $fromDate, $toDate );
-
+    my $sortedFiles = sortFileData( \@files, $sort, $sortOrder, $fromDate, $toDate );
+    @sortedFiles = @$sortedFiles;
+    
     my $count = 0;
     foreach my $fileData (@sortedFiles) {
 
