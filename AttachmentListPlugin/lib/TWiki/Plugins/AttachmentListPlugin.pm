@@ -28,7 +28,7 @@ $VERSION = '$Rev: 14207 $';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.2';
+$RELEASE = '1.2.1';
 
 $pluginName = 'AttachmentListPlugin';    # Name of this Plugin
 
@@ -123,7 +123,7 @@ sub handleFileList {
     my %excludeUsers      = makeHashFromString($excludeUsersParam);
 
     # sort options
-    my $sort      = $params->{'sort'}      || '';
+    my $sort      = $params->{'sort'}      || '$fileName';
     my $sortOrder = $params->{'sortorder'} || '';
     my $fromDate  = $params->{'fromdate'};
     my $toDate    = $params->{'todate'};
@@ -144,20 +144,7 @@ sub handleFileList {
     my @files =
       createAttachmentList( $topic, $web, $excludeTopics, $excludeWebs );
 
-    my @sortedFiles;
-    if (   ( $sort eq '$fileName' )
-        || ( $sort eq '$fileSize' )
-        || ( $sort eq '$fileUser' )
-        || ( $sort eq '$fileDate' )
-        || ( $sort eq '$fileExtension' ) )
-    {
-        my $sortedFiles =
-          sortFileData( \@files, $sort, $sortOrder, $fromDate, $toDate );
-        @sortedFiles = @$sortedFiles;
-    }
-    else {
-        @sortedFiles = @files;
-    }
+    my @sortedFiles = sortFileData( \@files, $sort, $sortOrder, $fromDate, $toDate );
 
     my $count = 0;
     foreach my $fileData (@sortedFiles) {
@@ -842,6 +829,24 @@ sub _decodeFormatTokens {
       defined(&TWiki::Func::decodeFormatTokens)
       ? TWiki::Func::decodeFormatTokens($text)
       : _expandStandardEscapes($text);
+}
+
+=pod
+
+For TWiki versions that do not implement TWiki::Func::decodeFormatTokens.
+
+=cut
+
+sub _expandStandardEscapes {
+    my $text = shift;
+    $text =~ s/\$n\(\)/\n/gos;    # expand '$n()' to new line
+    my $alpha = TWiki::Func::getRegularExpression('mixedAlpha');
+    $text =~ s/\$n([^$alpha]|$)/\n$1/gos;    # expand '$n' to new line
+    $text =~ s/\$nop(\(\))?//gos;      # remove filler, useful for nested search
+    $text =~ s/\$quot(\(\))?/\"/gos;   # expand double quote
+    $text =~ s/\$percnt(\(\))?/\%/gos; # expand percent
+    $text =~ s/\$dollar(\(\))?/\$/gos; # expand dollar
+    return $text;
 }
 
 1;

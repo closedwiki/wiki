@@ -38,8 +38,8 @@ To create a list of images, use: =extension="jpg,jpeg,gif" format="   * &lt;a hr
 | =user=  | Comma-separated list of user names (that have attached an attachment) to be listed | none | =user="TWikiContributor"= |
 | =excludeuser=  | Comma-separated list of user names (that have attached an attachment) to not show | none | =excludeuser="TWikiContributor,TWikiAdminUser,TWikiGuest,UnknownUser"= |
 | =excludefile= | Comma-separated list of filenames to not show, possibly generated from a search | none | =excludefile="ReadMe.txt"= |
-| =includefilepattern= | Regular expression pattern to match filenames to show. For example: the pattern =^[A-Z]= will match files which filenames start with an uppercase letter; pattern =[0-9]= will find files that have a number in the filename. | none | =includefilepattern="^[A-Z]"= |
-| =sort=      | Sorts the retrieved attachments on either name (=$fileName=), size (=$fileSize=), user (=$fileUser=), date (=$fileDate=) or extension (=$fileExtension=). The sort order can be specified with parameter =sortorder=. | no sort | =sort="$fileName"= |
+| =includefilepattern= | Regular expression pattern to match filenames to show. For example: the pattern =^[A-Z]= will match files which filenames start with an uppercase letter; pattern =[0-9]= will find files that have a number in the filename. Use prefix =(?i)= for case insensitivity. | none | =includefilepattern="^(?i)[A]"= |
+| =sort=      | Sorts the retrieved attachments on either name (=$fileName=), size (=$fileSize=), user (=$fileUser=), date (=$fileDate=) or extension (=$fileExtension=). The sort order can be specified with parameter =sortorder=. | =$fileName= | =sort="$fileDate"= |
 | =sortorder= | Lists sorted attachments: ascending or descending | The default sort order depends on the =sort= type: \
 %BB% sort on =$fileDate=: =descending= (latest file first) \
 %BB% sort on =$fileName= or =$fileUser=: =ascending= (alphabetically) | =sortorder="ascending"= |
@@ -129,6 +129,33 @@ separator="<hr />"
 footer="Number of images: $fileCount"
 }%
 
+---+++ Regular expression filter
+
+List all files starting with an 'a' or 'A'. Note this uses prefix =(?i)= for case insensitivity.
+
+<verbatim>
+%ATTACHMENTLIST{
+web="%TWIKIWEB%"
+topic="*"
+header="Files starting with A:"
+footer="Number of files: $fileCount"
+format="   * $percntICON{$fileExtension}$percnt [[$fileUrl][$fileName]] $fileComment"
+includefilepattern="(?i)^[A]"
+}%
+</verbatim>
+
+Output (if installed):
+
+%ATTACHMENTLIST{
+web="%TWIKIWEB%"
+topic="*"
+header="Files starting with A:"
+footer="Number of files: $fileCount"
+format="   * $percntICON{$fileExtension}$percnt [[$fileUrl][$fileName]] $fileComment"
+includefilepattern="(?i)^[A]"
+sort="$fileName"
+}%
+
 ---++ Plugin Settings
 
 	* Default format of rendering the attachments:
@@ -164,8 +191,9 @@ footer="Number of images: $fileCount"
 | Copyright &copy;: | TWiki:Main.VinodKulkarni, TWiki:Main.SopanShewale (2006), TWiki:Main.ArthurClemens (2006, 2007, 2008) |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
-|  Plugin Version: | 20 Feb 2008 (V1.2)  |
+|  Plugin Version: | 21 Feb 2008 (V1.2.1)  |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+| 20 Feb 2008 - v.1.2.1   | Arthur Clemens: Fixed error with format tokens on TWiki older than 4.2; by default sort files by name. |
 | 20 Feb 2008 - v.1.2   | Arthur Clemens: Added parameter =includefilepattern= and formatting parameter =$fileExtension=. When using parameter =sort= the files are now secondary sorted on filename. Added decoding of format tokens. |
 | 19 Feb 2008 - v.1.1.5   | Arthur Clemens: Fix display of header. |
 | 25 Jan 2008 - v.1.1.4   | Arthur Clemens: Removed redundant spacing when no header is defined. |
