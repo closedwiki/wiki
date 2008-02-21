@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="BaseUserMapping_666" date="1203031692" format="1.1" reprev="1.5" version="1.5"}%
+%META:TOPICINFO{author="BaseUserMapping_666" date="1203611356" format="1.1" version="1.6"}%
 %META:TOPICPARENT{name="TWiki.EmptyPlugin"}%
 ---+!! TWiki.PerforcePlugin examples
 
@@ -77,12 +77,12 @@
 ---++ REST and TWiki:Plugins.JQueryPlugin
 
 <verbatim>
-<input type="button" value="Fetch perforce changes" onclick="$('#loaddiv').load('%SCRIPTURLPATH%/rest/PerforcePlugin/p4changes?topic=%WEB%.%TOPIC%&_DEFAULT=-m 10&format=| $changelist | $date | $description | $user | $status | $n', {}, function(){$('#loaddiv').toggle('slow');})"/>
+<input type="button" value="Fetch perforce changes" onclick="$('#loaddiv').load('%SCRIPTURLPATH%/rest/PerforcePlugin/p4changes',  {_DEFAULT: '-m 10', format: '| $changelist | $date | $description | $user | $status | $n' }, function(){$('#loaddiv').toggle('slow');})"/>
 
 <div style="display: none" id="loaddiv"> empty </div>
 </verbatim>
 
-<input type="button" value="Fetch perforce changes" onclick="$('#loaddiv').load('%SCRIPTURLPATH%/rest/PerforcePlugin/p4changes?topic=%WEB%.%TOPIC%&_DEFAULT=-m 10&format=| $changelist | $date | $description | $user | $status | $n', {}, function(){$('#loaddiv').toggle('slow');})"/>
+<input type="button" value="Fetch perforce changes" onclick="$('#loaddiv').load('%SCRIPTURLPATH%/rest/PerforcePlugin/p4changes',  {_DEFAULT: '-m 10', format: '| $changelist | $date | $description | $user | $status | $n' }, function(){$('#loaddiv').toggle('slow');})"/>
 
 <div style="display: none" id="loaddiv"> empty </div>
 

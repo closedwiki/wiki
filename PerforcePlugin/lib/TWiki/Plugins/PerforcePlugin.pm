@@ -83,7 +83,7 @@ $VERSION = '$Rev: 15942 (22 Jan 2008) $';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '0.1';
+$RELEASE = '0.2';
 
 # Short description of this plugin
 # One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
@@ -207,6 +207,7 @@ sub _P4CHANGES
     my $default=$params->{_DEFAULT};
     my $footer=$params->{footer};
     my $header=$params->{header};
+    my $method=$params->{method} || 'POST';    
         
     #If asked for ajax services we don't run the actual p4 command now 	    
     if (defined $ajax)
@@ -228,8 +229,28 @@ sub _P4CHANGES
 			#}		    	
 	    
 		#die "FOOTER: $footer";	
-					    	
-	    my $output="<input type=\"button\" value=\"$label\" onclick=\"\$('#$ajax').load('%SCRIPTURLPATH%/rest/PerforcePlugin/p4changes?header=$header&footer=$footer&topic=%WEB%.%TOPIC%&_DEFAULT=$default&format=$format', {}, function(){\$('#$ajax').show('slow');})\"/>\n<div style=\"display: none\" id=\"$ajax\"></div>";
+
+		my $output="";
+				
+		if ($method eq 'GET')
+			{
+		
+			#URL encode the URL parameters
+			$default=TWiki::urlEncode($default);
+			$format=TWiki::urlEncode($format);
+			$footer=TWiki::urlEncode($footer);
+			$header=TWiki::urlEncode($header);
+			
+			$output="<input type=\"button\" value=\"$label\" onclick=\"\$('#$ajax').load('%SCRIPTURLPATH%/rest/PerforcePlugin/p4changes?header=$header&footer=$footer&topic=%WEB%.%TOPIC%&_DEFAULT=$default&format=$format', {}, function(){\$('#$ajax').show('slow');})\"/>\n<div style=\"display: none\" id=\"$ajax\"></div>";			
+			}
+		else
+			{							    	
+	    	#By default use POST
+	    	my $jsHash="{ topic:'%WEB%.%TOPIC%' , _DEFAULT: '$default' , format: '$format', header: '$header' , footer: '$footer' }";
+						
+			$output="<input type=\"button\" value=\"$label\" onclick=\"\$('#$ajax').load('%SCRIPTURLPATH%/rest/PerforcePlugin/p4changes', $jsHash, function(){\$('#$ajax').show('slow');})\"/>\n<div style=\"display: none\" id=\"$ajax\"></div>";				
+    		}
+    		
 	   	#die $output;	    		
 	   	return "$output";
     	}
@@ -237,7 +258,44 @@ sub _P4CHANGES
     return P4Changes(@_);    
     }
 
+=pod
 
+---++ restP4CHANGES($session) -> $text
+
+This is an example of a sub to be called by the =rest= script. The parameter is:
+   * =$session= - The TWiki object associated to this session.
+
+Additional parameters can be recovered via de query object in the $session.
+
+For more information, check TWiki:TWiki.TWikiScripts#rest
+
+*Since:* TWiki::Plugins::VERSION 1.1
+
+=cut
+
+sub restP4CHANGES 
+	{
+   	my ($session) = @_;   
+   	my $query = TWiki::Func::getCgiQuery();
+   	
+   	my %params;
+   	
+   	$params{'_DEFAULT'}=$query->param('_DEFAULT');
+   	$params{'format'}=$query->param('format');   	
+	$params{'footer'}=$query->param('footer');
+   	$params{'header'}=$query->param('header');   	
+    
+   	#return "This is an example of a REST invocation\n\n";   	
+   	#return "$params{'_DEFAULT'}\n$params{'format'}\n\n";
+   	
+   	my $output=P4Changes($session,\%params);
+   	
+   	$output=TWiki::Func::expandCommonVariables($output);  
+   	$output=TWiki::Func::renderText($output);
+   	
+   	return "$output\n\n";	   		
+	#return "This is an example of a REST invocation\n\n";
+	}
 
 
 =pod
@@ -310,7 +368,10 @@ sub P4Changes
     #my $fileSpec = $params->{_DEFAULT};
     my $format = $params->{format};    
     my $header = $params->{header};
-    my $footer = $params->{footer};
+    my $footer = $params->{footer};    
+        
+    #return "$header\n$format\n$footer";
+    
     my $cmd=PerforceBaseCmd($p4port, $p4client, $p4user, $p4password);
     #$cmd= "$cmd changes $changesCmdParams $fileSpec";
     $cmd= "$cmd changes $changesCmdParams";
@@ -373,8 +434,8 @@ sub P4Changes
     	#No format specified, use default format. No need to parse anything
     	foreach my $change(@changesCmdOutput)
     		{
-	    	$output .= "$change";
-		    $output .= "<br />";
+	    	$output .= TWiki::entityEncode($change);
+		    $output .= " <br /> "; #NOTE: we have a space after and before the br element. This helps InterWiki plugin to do its job
     		}
 		}
     
@@ -392,48 +453,6 @@ sub P4Changes
 				
 		
     return $output;        
-	}
-
-
-
-=pod
-
----++ restP4CHANGES($session) -> $text
-
-This is an example of a sub to be called by the =rest= script. The parameter is:
-   * =$session= - The TWiki object associated to this session.
-
-Additional parameters can be recovered via de query object in the $session.
-
-For more information, check TWiki:TWiki.TWikiScripts#rest
-
-*Since:* TWiki::Plugins::VERSION 1.1
-
-=cut
-
-sub restP4CHANGES 
-	{
-   	my ($session) = @_;   
-   	my $query = TWiki::Func::getCgiQuery();
-   	
-   	my %params;
-   	
-   	$params{'_DEFAULT'}=$query->param('_DEFAULT');
-   	$params{'format'}=$query->param('format');   	
-	$params{'footer'}=$query->param('footer');
-   	$params{'header'}=$query->param('header');   	
-
-    
-   	#return "$params{'_DEFAULT'}\n$params{'format'}\n";
-   	
-   	my $output=P4Changes($session,\%params);
-   	
-   	$output=TWiki::Func::expandCommonVariables($output);  
-   	$output=TWiki::Func::renderText($output);
-   	
-   	return $output;	
-   		
-	#return "This is an example of a REST invocation\n\n";
 	}
 
 
@@ -1215,7 +1234,7 @@ sub ParseAndFormatP4ChangesBasicOutput()
 	    	my $day=$4;
 	    	my $user=$5;
 	    	my $client=$6;
-	    	my $description=$7;
+	    	my $description=TWiki::entityEncode($7);
 	    	my $status='submitted'; 
 	    	
 	    	#my $line=$format;
@@ -1232,7 +1251,7 @@ sub ParseAndFormatP4ChangesBasicOutput()
 	    	my $day=$4;
 	    	my $user=$5;
 	    	my $client=$6;
-	    	my $description=$7;
+	    	my $description=TWiki::entityEncode($7);
 	    	my $status='pending'; 
 	    	
 	    	#my $line=$format;
@@ -1291,7 +1310,7 @@ sub ParseAndFormatP4ChangesLongDescriptionOutput()
 	    	$month=$3;
 	    	$day=$4;
 	    	$user=$5;
-	    	$client=$6;
+	    	$client=$6;	    	
 	        $description="";
 	        $status="submitted";
 	        
@@ -1320,7 +1339,8 @@ sub ParseAndFormatP4ChangesLongDescriptionOutput()
     		}
     	elsif ($change =~ /^\t(.*)/) #must be description line
     		{
-	    	$description.="$1 <br />";	
+	    	my $htmlDes=TWiki::entityEncode($1);	
+	    	$description.="$htmlDes <br /> ";	#NOTE: we have a space after and before the br element. This helps InterWiki plugin to do its job
     		}
     	elsif ($change =~ /^$/) #drop empty lines
     		{
