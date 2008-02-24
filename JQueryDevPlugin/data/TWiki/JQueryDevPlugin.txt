@@ -1,0 +1,57 @@
+%META:TOPICINFO{author="BaseUserMapping_666" date="1203809569" format="1.1" reprev="1.3" version="1.3"}%
+---+!! jQuery developer plug-in
+
+ <!--
+   * Set SHORTDESCRIPTION = Enable jQuery for TWiki
+--> 
+%SHORTDESCRIPTION%
+
+%TOC%
+
+---++ Description
+
+Provides jQuery and jQuery UI.
+
+<blockquote> "jQuery is a fast, concise, JavaScript Library that simplifies how you traverse HTML documents, handle events, perform animations, and add Ajax interactions to your web pages." </blockquote>
+
+---++ Acknowledgement 
+
+This plug-in was derived from the excellent TWiki:Plugins.JQueryPlugin from TWiki:Main.MichaelDaum.
+
+---++ JQuery documentation
+
+   * [[http://docs.jquery.com/How_jQuery_Works][Getting the feets wet]] 
+   * [[http://docs.jquery.com/Tutorials][Tutorials]] 
+   * [[http://docs.jquery.com/Main_Page][Reference API]] 
+   * [[http://docs.jquery.com/Using_jQuery_with_Other_Libraries][Using jQuery with other libraries]] 
+   * [[http://docs.jquery.com/Plugins][Plugin repository]] 
+
+---++ Syntax Rules
+
+
+---++ Plugin Settings
+
+
+---++ Plugin Installation Instructions
+
+
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.StephaneLenclud |
+|  Copyright: | © 2008, Stéphane Lenclud |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 15942 (22 Jan 2008) |
+|  Change History: | <!-- versions below in reverse order --> |
+|  24 Feb 2008 | First draft.<br /> Contains jquery 1.2.3, jquery.ui-1.5b and the _flora_ theme  |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  Dependencies: | %$DEPENDENCIES |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 99%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC% 99% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+
+
+%META:FILEATTACHMENT{name="wikiringlogo40x40.png" attachment="wikiringlogo40x40.png" attr="h" comment="" date="1189787359" path="wikiringlogo40x40.png" size="2571" stream="wikiringlogo40x40.png" tmpFilename="" user="TWikiContributor" version="1"}%
