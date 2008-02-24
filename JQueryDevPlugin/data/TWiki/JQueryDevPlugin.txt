@@ -1,8 +1,8 @@
-%META:TOPICINFO{author="BaseUserMapping_666" date="1203809569" format="1.1" reprev="1.3" version="1.3"}%
+%META:TOPICINFO{author="BaseUserMapping_666" date="1203816611" format="1.1" reprev="1.4" version="1.4"}%
 ---+!! jQuery developer plug-in
 
- <!--
-   * Set SHORTDESCRIPTION = Enable jQuery for TWiki
+<!--
+   * Set SHORTDESCRIPTION = Enable jquery 1.2.3 and jquery.ui-1.5b for TWiki 
 --> 
 %SHORTDESCRIPTION%
 
@@ -14,32 +14,33 @@ Provides jQuery and jQuery UI.
 
 <blockquote> "jQuery is a fast, concise, JavaScript Library that simplifies how you traverse HTML documents, handle events, perform animations, and add Ajax interactions to your web pages." </blockquote>
 
----++ Acknowledgement 
+---++ Acknowledgement
 
 This plug-in was derived from the excellent TWiki:Plugins.JQueryPlugin from TWiki:Main.MichaelDaum.
 
----++ JQuery documentation
+---++ jQuery documentation
 
    * [[http://docs.jquery.com/How_jQuery_Works][Getting the feets wet]] 
    * [[http://docs.jquery.com/Tutorials][Tutorials]] 
    * [[http://docs.jquery.com/Main_Page][Reference API]] 
    * [[http://docs.jquery.com/Using_jQuery_with_Other_Libraries][Using jQuery with other libraries]] 
-   * [[http://docs.jquery.com/Plugins][Plugin repository]] 
+   * [[http://docs.jquery.com/Plugins][Plugin repository]]
+   * [[http://ui.jquery.com][jQuery UI]]
+
+---++ Examples
+
+See Sandbox.PluginTestJQueryDevPlugin.
 
 ---++ Syntax Rules
 
-
 ---++ Plugin Settings
 
-
 ---++ Plugin Installation Instructions
-
-
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.StephaneLenclud |
-|  Copyright: | © 2008, Stéphane Lenclud |
+|  Copyright: | © 2008, Stéphane Lenclud, 2007 Michael Daum http://michaeldaumconsulting.com, 2007 John Resig (jquery.com), and jQuery plugin authors |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 15942 (22 Jan 2008) |
 |  Change History: | <!-- versions below in reverse order --> |
@@ -52,6 +53,5 @@ This plug-in was derived from the excellent TWiki:Plugins.JQueryPlugin from TWik
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
-
 
 %META:FILEATTACHMENT{name="wikiringlogo40x40.png" attachment="wikiringlogo40x40.png" attr="h" comment="" date="1189787359" path="wikiringlogo40x40.png" size="2571" stream="wikiringlogo40x40.png" tmpFilename="" user="TWikiContributor" version="1"}%
