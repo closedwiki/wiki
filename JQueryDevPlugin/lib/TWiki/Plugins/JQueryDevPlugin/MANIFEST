@@ -3,7 +3,6 @@ lib/TWiki/Plugins/JQueryDevPlugin.pm 0444 plugin perl module
 data/Sandbox/PluginTestJQueryDevPlugin.txt 0644 plugin examples 
 pub/TWiki/JQueryDevPlugin/jquery.dimensions.js 0644
 pub/TWiki/JQueryDevPlugin/jquery.js 0644
-pub/TWiki/JQueryDevPlugin/man.txt 0644
 pub/TWiki/JQueryDevPlugin/themes 0644
 pub/TWiki/JQueryDevPlugin/ui.accordion.js 0644
 pub/TWiki/JQueryDevPlugin/ui.dialog.js 0644
@@ -80,5 +79,70 @@ pub/TWiki/JQueryDevPlugin/themes/flora/i/toaster-se.gif 0644
 pub/TWiki/JQueryDevPlugin/themes/flora/i/toaster-sw.gif 0644
 pub/TWiki/JQueryDevPlugin/themes/flora/i/toaster-w.gif 0644
 pub/TWiki/JQueryDevPlugin/themes/flora/i/toolbars-bot-bg.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/ogray.accordion.css 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/ogray.all.css 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/ogray.calendar.css 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/ogray.css 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/ogray.datepicker.css 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/ogray.dialog.css 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/ogray.menu.css 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/ogray.resizable.css 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/ogray.slider.css 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/ogray.tablesorter.css 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/ogray.tabs.css 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/ogray.toasterLite.css 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/ogray.toolbar.css 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/accordion-left-act.png 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/accordion-left-over.png 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/accordion-left.png 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/accordion-middle-act.png 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/accordion-middle-over.png 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/accordion-middle.png 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/accordion-right-act.png 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/accordion-right-over.png 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/accordion-right.png 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/asc.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/bg.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/desc.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/dialog-e.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/dialog-n.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/dialog-ne.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/dialog-nw.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/dialog-s.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/dialog-se.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/dialog-sw.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/dialog-title.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/dialog-titlebar-close-hover.png 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/dialog-titlebar-close.png 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/dialog-w.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/menu-submenu.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/resizable-e.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/resizable-n.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/resizable-ne.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/resizable-nw.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/resizable-s.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/resizable-se.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/resizable-sw.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/resizable-w.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/shadow.png 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/slider-bg-1.png 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/slider-bg-2.png 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/slider-handle.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/tabs.png 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/toaster-e.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/toaster-n.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/toaster-ne.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/toaster-nw.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/toaster-s.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/toaster-se.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/toaster-sw.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/toaster-w.gif 0644
+pub/TWiki/JQueryDevPlugin/themes/ogray/i/toolbars-bot-bg.gif 0644
+
+
+
+
 
 
