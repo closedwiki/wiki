@@ -28,7 +28,7 @@ $VERSION = '$Rev: 14207 $';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.2.3';
+$RELEASE = '1.2.4';
 
 $pluginName = 'AttachmentListPlugin';    # Name of this Plugin
 
@@ -103,7 +103,7 @@ sub handleFileList {
     my $footer    = $params->{'footer'}    || '';
     my $alttext   = $params->{'alt'}       || '';
     my $fileCount = $params->{'fileCount'} || '';
-    my $separator = $params->{'separator'} || '';
+    my $separator = $params->{'separator'} || "\n";
 
     # filters
     my $limit                  = $params->{'limit'};
@@ -304,8 +304,7 @@ sub handleFileList {
         $s =~ s/\$fileTopic/$attachmentTopic/g;
         $s =~ s/\$fileWeb/$attachmentTopicWeb/g;
 
-        my $sep = $separator || "\n";
-        $outtext .= $s . $sep;
+        $outtext .= $s . $separator;
 
         $count++;
     }

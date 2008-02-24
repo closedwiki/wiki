@@ -191,7 +191,7 @@ sort="$fileName"
 | Copyright &copy;: | TWiki:Main.VinodKulkarni, TWiki:Main.SopanShewale (2006), TWiki:Main.ArthurClemens (2006, 2007, 2008) |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
-|  Plugin Version: | 21 Feb 2008 (V1.2.3)  |
+|  Plugin Version: | 24 Feb 2008 (V1.2.4)  |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 | 20 Feb 2008 - v.1.2.1 - 1.2.3   | Arthur Clemens: Fixed error with format tokens on TWiki older than 4.2; by default sort files by name. |
 | 20 Feb 2008 - v.1.2   | Arthur Clemens: Added parameter =includefilepattern= and formatting parameter =$fileExtension=. When using parameter =sort= the files are now secondary sorted on filename. Added decoding of format tokens. |
