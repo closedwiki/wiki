@@ -27,7 +27,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev: 15942 (22 Jan 2008) $';
-$RELEASE = 'v0.2'; 
+$RELEASE = 'v0.3'; 
 $SHORTDESCRIPTION = 'Enable jquery 1.2.3 and jquery.ui-1.5b for TWiki';
 $NO_PREFS_IN_TOPIC = 1;
 
@@ -114,6 +114,7 @@ sub commonTagsHandler
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/JQueryDevPlugin/ui.sortable.ext.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/JQueryDevPlugin/ui.tabs.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/JQueryDevPlugin/ui.tabs.ext.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/JQueryDevPlugin/jquery.spinner.js"></script>
 HERE
 
   	$doneHeader = 1 if ($_[0] =~ s/<head>(.*?[\r\n]+)/<head>$1$header\n/o);

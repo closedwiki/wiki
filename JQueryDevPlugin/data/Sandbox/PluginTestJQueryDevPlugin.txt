@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="BaseUserMapping_666" date="1203826187" format="1.1" version="1.5"}%
+%META:TOPICINFO{author="BaseUserMapping_666" date="1203860896" format="1.1" reprev="1.6" version="1.6"}%
 ---+!! Examples for TWiki.JQueryDevPlugin
 
 %TOC%
@@ -15,3 +15,40 @@
 ---+++ Title, Width & Height
 
 <div class="ogray" id="example2" title="Nice title">I have a title and I'm big</div> <br /> <button onclick="$('#example2').dialog({width: 600, height: 300});$(this).hide().next().show();">Create Dialog</button> <button onclick="$('#example2').dialog('open')" style="display:none;">Open</button> <button onclick="$('#example2').dialog('close')">Close</button>
+
+
+---++ Spinner
+
+We currently support only one spinner per page. Don't forget to stop the spinner before starting another one. This should be fixed in the JS code at some point.
+
+<button onclick="$('#spinner').spinner({height: 32,width: 32,speed: 50,	image: '%PUBURLPATH%/TWiki/JQueryDevPlugin/i/linux_spinner.png'});$('#spinner').show();">Star spinner</button>
+<button onclick="$('#spinner').spinner({height: 48,width: 48,speed: 50,	image: '%PUBURLPATH%/TWiki/JQueryDevPlugin/i/spotlight_spinner_big.png'});$('#spinner').show();">Star big spinner</button>
+<button onclick="$.spinnerStop();$('#spinner').hide();">Stop spinning</button> 
+
+<div id="spinner"></div>
+		
+<div id="spinmefast"></div>
+		
+
+
+<!--				
+				/*
+				$("#spinmelinux").spinner({
+					height: 48,
+					width: 48,
+					speed: 50,
+					image: 'spotlight_spinner_big.png'
+				});
+				*/
+
+				$("#spinmefast").spinner({
+					height: 32,
+					width: 32,
+					speed: 25,
+					image: 'linux_spinner.png'
+				});
+			
+-->
+
+		
+

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="BaseUserMapping_666" date="1203826816" format="1.1" version="1.5"}%
+%META:TOPICINFO{author="BaseUserMapping_666" date="1203861184" format="1.1" version="1.6"}%
 ---+!! jQuery developer plug-in
 
 <!--
@@ -42,8 +42,9 @@ See Sandbox.PluginTestJQueryDevPlugin.
 |  Plugin Author: | TWiki:Main.StephaneLenclud |
 |  Copyright: | © 2008, Stéphane Lenclud <br /> 2007 Michael Daum http://michaeldaumconsulting.com <br /> 2007 John Resig (jquery.com) and jQuery plugin authors |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 24 Feb 2008 (V0.2) |
+|  Plugin Version: | 25 Feb 2008 (V0.3) |
 |  Change History: | <!-- versions below in reverse order --> |
+|  25 Feb 2008 | Adding adding spinner prototype from [[http://www.command-tab.com/2007/05/07/jquery-spinner-plugin/][command-tab.com]] |
 |  24 Feb 2008 | Adding the _ogray_ theme and making it the default one |
 |  24 Feb 2008 | First draft.<br /> Contains jquery 1.2.3, jquery.ui-1.5b and the _flora_ theme  |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
