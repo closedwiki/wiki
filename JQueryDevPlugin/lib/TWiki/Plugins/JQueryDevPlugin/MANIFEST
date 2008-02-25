@@ -19,6 +19,7 @@ pub/TWiki/JQueryDevPlugin/ui.sortable.js 0644
 pub/TWiki/JQueryDevPlugin/ui.tabs.ext.js 0644
 pub/TWiki/JQueryDevPlugin/ui.tabs.js 0644
 pub/TWiki/JQueryDevPlugin/jquery.spinner.js 0644
+pub/TWiki/JQueryDevPlugin/jquery.debug.js 0644
 pub/TWiki/JQueryDevPlugin/i/linux_spinner.png 0644
 pub/TWiki/JQueryDevPlugin/i/spotlight_spinner_big.png 0644
 pub/TWiki/JQueryDevPlugin/themes/flora 0644

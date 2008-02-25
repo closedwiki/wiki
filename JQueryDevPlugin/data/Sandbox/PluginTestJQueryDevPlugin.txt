@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="BaseUserMapping_666" date="1203860896" format="1.1" reprev="1.6" version="1.6"}%
+%META:TOPICINFO{author="BaseUserMapping_666" date="1203898747" format="1.1" reprev="1.8" version="1.8"}%
 ---+!! Examples for TWiki.JQueryDevPlugin
 
 %TOC%
@@ -19,15 +19,21 @@
 
 ---++ Spinner
 
-We currently support only one spinner per page. Don't forget to stop the spinner before starting another one. This should be fixed in the JS code at some point.
+We fully support multiple spinner per page. One minor bug though: we can't change the spinner image once it's been loaded once. Tested on Firefox, IE7 and Opera. We had to specify the number of frames for Opera as it could not work it out like the others.
 
-<button onclick="$('#spinner').spinner({height: 32,width: 32,speed: 50,	image: '%PUBURLPATH%/TWiki/JQueryDevPlugin/i/linux_spinner.png'});$('#spinner').show();">Star spinner</button>
-<button onclick="$('#spinner').spinner({height: 48,width: 48,speed: 50,	image: '%PUBURLPATH%/TWiki/JQueryDevPlugin/i/spotlight_spinner_big.png'});$('#spinner').show();">Star big spinner</button>
-<button onclick="$.spinnerStop();$('#spinner').hide();">Stop spinning</button> 
+<button onclick="$('#spinner').spinner({image: '%PUBURLPATH%/TWiki/JQueryDevPlugin/i/linux_spinner.png'});$('#spinner').show();">Start spinner</button>
+<button onclick="$('#spinner').spinner({height: 48,width: 48,speed: 50, frames:12, image: '%PUBURLPATH%/TWiki/JQueryDevPlugin/i/spotlight_spinner_big.png'});$('#spinner').show();">Start big spinner</button>
+<button onclick="$('#spinner').spinner('stop');//$('#spinner').hide();">Stop spinning</button> 
+
+<button onclick="$('#spinnerfast').spinner({height: 32,width: 32,speed: 25, image: '%PUBURLPATH%/TWiki/JQueryDevPlugin/i/linux_spinner.png'});$('#spinnerfast').show();">Start fast spinner</button>
+<button onclick="$('#spinnerfast').spinner({height: 48,width: 48,speed: 25, frames:12, image: '%PUBURLPATH%/TWiki/JQueryDevPlugin/i/spotlight_spinner_big.png'});$('#spinnerfast').show();">Start big fast spinner</button>
+<button onclick="$('#spinnerfast').spinner('stop');//$('#spinnerfast').hide();">Stop fast spinning</button> 
+
 
 <div id="spinner"></div>
+
 		
-<div id="spinmefast"></div>
+<div id="spinnerfast"></div>
 		
 
 

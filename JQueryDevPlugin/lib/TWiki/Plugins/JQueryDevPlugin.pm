@@ -1,6 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (c) 2007 Michael Daum, daum@wikiring.de
+# Copyright (c) 2008 StéphaneLenclud, twiki@lenclud.com
 # 
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
@@ -27,7 +28,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev: 15942 (22 Jan 2008) $';
-$RELEASE = 'v0.3'; 
+$RELEASE = 'v0.4'; 
 $SHORTDESCRIPTION = 'Enable jquery 1.2.3 and jquery.ui-1.5b for TWiki';
 $NO_PREFS_IN_TOPIC = 1;
 
@@ -95,6 +96,8 @@ sub commonTagsHandler
   
 	#including several themes on one page seems to break the dialogues
 	#<link rel="stylesheet" href="%PUBURLPATH%/%TWIKIWEB%/JQueryDevPlugin/themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)" />  	
+	
+	#<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/JQueryDevPlugin/jquery.debug.js"></script>
 	
   	my $header = <<'HERE';
 <link rel="stylesheet" href="%PUBURLPATH%/%TWIKIWEB%/JQueryDevPlugin/themes/ogray/ogray.all.css" type="text/css" media="screen" title="Ogray" />  	

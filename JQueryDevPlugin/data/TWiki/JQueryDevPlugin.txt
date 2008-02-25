@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="BaseUserMapping_666" date="1203861184" format="1.1" version="1.6"}%
+%META:TOPICINFO{author="BaseUserMapping_666" date="1203900841" format="1.1" reprev="1.7" version="1.7"}%
 ---+!! jQuery developer plug-in
 
 <!--
@@ -24,8 +24,8 @@ This plug-in was derived from the excellent TWiki:Plugins.JQueryPlugin from TWik
    * [[http://docs.jquery.com/Tutorials][Tutorials]] 
    * [[http://docs.jquery.com/Main_Page][Reference API]] 
    * [[http://docs.jquery.com/Using_jQuery_with_Other_Libraries][Using jQuery with other libraries]] 
-   * [[http://docs.jquery.com/Plugins][Plugin repository]]
-   * [[http://ui.jquery.com][jQuery UI]]
+   * [[http://docs.jquery.com/Plugins][Plugin repository]] 
+   * [[http://ui.jquery.com][jQuery UI]] 
 
 ---++ Examples
 
@@ -37,14 +37,30 @@ See Sandbox.PluginTestJQueryDevPlugin.
 
 ---++ Plugin Installation Instructions
 
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
+
+   * Download the ZIP file from the Plugin Home (see below) 
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. 
+   * Configure the Plugin: 
+      * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin 
+      * Change the Plugin settings as needed 
+      * Edit =/lib/TWiki/Plugin/%TOPIC%.pm= and adjust the =js= and =css= files inclusions has needed.
+
+
+   * If the installation was successful you should be able the create a dialog by clicking the button below: 
+<div class="ogray" id="example2" title="Congratulation!" style="display: none">You successfully installed that plug-in.</div> <br /> <button onclick="$('#example2').dialog({width: 600, height: 300}).show('slow');$(this).hide().next().show();">Create Dialog</button> <button onclick="$('#example2').dialog('open').hide().show('slow');" style="display:none;">Open</button> <button onclick="$('#example2').dialog('close')">Close</button>
+
+
+
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.StephaneLenclud |
 |  Copyright: | © 2008, Stéphane Lenclud <br /> 2007 Michael Daum http://michaeldaumconsulting.com <br /> 2007 John Resig (jquery.com) and jQuery plugin authors |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 25 Feb 2008 (V0.3) |
+|  Plugin Version: | 25 Feb 2008 (V0.4) |
 |  Change History: | <!-- versions below in reverse order --> |
-|  25 Feb 2008 | Adding adding spinner prototype from [[http://www.command-tab.com/2007/05/07/jquery-spinner-plugin/][command-tab.com]] |
+|  25 Feb 2008 | Support multiple spinner per page. New spinner API. <br /> Adding =jquery.debug.js= from [[http://jquery.glyphix.com/][Glyphix]] |
+|  25 Feb 2008 | Adding spinner prototype from [[http://www.command-tab.com/2007/05/07/jquery-spinner-plugin/][command-tab.com]] |
 |  24 Feb 2008 | Adding the _ogray_ theme and making it the default one |
 |  24 Feb 2008 | First draft.<br /> Contains jquery 1.2.3, jquery.ui-1.5b and the _flora_ theme  |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
@@ -55,7 +71,6 @@ See Sandbox.PluginTestJQueryDevPlugin.
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
-
 
 __Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
