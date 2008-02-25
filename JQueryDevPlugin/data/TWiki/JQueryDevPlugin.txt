@@ -47,7 +47,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
       * Edit =/lib/TWiki/Plugin/%TOPIC%.pm= and adjust the =js= and =css= files inclusions has needed.
 
 
-   * If the installation was successful you should be able the create a dialog by clicking the button below: 
+   * If the installation was successful you should be able to create a dialog by clicking the button below: 
 <div class="ogray" id="example2" title="Congratulation!" style="display: none">You successfully installed that plug-in.</div> <br /> <button onclick="$('#example2').dialog({width: 600, height: 300}).show('slow');$(this).hide().next().show();">Create Dialog</button> <button onclick="$('#example2').dialog('open').hide().show('slow');" style="display:none;">Open</button> <button onclick="$('#example2').dialog('close')">Close</button>
 
 
