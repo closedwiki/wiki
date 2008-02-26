@@ -172,7 +172,6 @@ sub initPlugin {
 		return 0;
 		}
 	
-
     # register the _EXAMPLETAG function to handle %EXAMPLETAG{...}%
     # This will be called whenever %EXAMPLETAG% or %EXAMPLETAG{...}% is
     # seen in the topic text.
@@ -206,7 +205,7 @@ sub _P4CHANGES
     my $format=$params->{format};
     my $default=$params->{_DEFAULT};
     my $footer=$params->{footer};
-    my $header=$params->{header};
+    my $header=$params->{header};    
     my $method=$params->{method} || 'POST';    
         
     #If asked for ajax services we don't run the actual p4 command now 	    
@@ -241,14 +240,14 @@ sub _P4CHANGES
 			$footer=TWiki::urlEncode($footer);
 			$header=TWiki::urlEncode($header);
 			
-			$output="<input type=\"button\" value=\"$label\" onclick=\"\$('#$ajax').load('%SCRIPTURLPATH%/rest/PerforcePlugin/p4changes?header=$header&footer=$footer&topic=%WEB%.%TOPIC%&_DEFAULT=$default&format=$format', {}, function(){\$('#$ajax').show('slow');})\"/>\n<div style=\"display: none\" id=\"$ajax\"></div>";			
+			$output="<input type=\"button\" value=\"$label\" onclick=\"\$('#$ajax').load('%SCRIPTURLPATH%/rest/PerforcePlugin/p4changes?header=$header&footer=$footer&topic=%WEB%.%TOPIC%&_DEFAULT=$default&format=$format', {}, function(){\$('#$ajax').show('slow');})\"/><div style=\"display: none\" id=\"$ajax\"></div>";			
 			}
 		else
 			{							    	
 	    	#By default use POST
 	    	my $jsHash="{ topic:'%WEB%.%TOPIC%' , _DEFAULT: '$default' , format: '$format', header: '$header' , footer: '$footer' }";
 						
-			$output="<input type=\"button\" value=\"$label\" onclick=\"\$('#$ajax').load('%SCRIPTURLPATH%/rest/PerforcePlugin/p4changes', $jsHash, function(){\$('#$ajax').show('slow');})\"/>\n<div style=\"display: none\" id=\"$ajax\"></div>";				
+			$output="<input type=\"button\" value=\"$label\" onclick=\"\$('#$ajax').load('%SCRIPTURLPATH%/rest/PerforcePlugin/p4changes', $jsHash, function(){\$('#$ajax').show('slow');})\"/><div style=\"display: none\" id=\"$ajax\"></div>";				
     		}
     		
 	   	#die $output;	    		
@@ -272,6 +271,7 @@ For more information, check TWiki:TWiki.TWikiScripts#rest
 *Since:* TWiki::Plugins::VERSION 1.1
 
 =cut
+
 
 sub restP4CHANGES 
 	{
@@ -1214,8 +1214,8 @@ sub UrlEncode
 	
 sub ParseAndFormatP4ChangesBasicOutput()
 	{
-	my $format=@_[0];	
-	my $changesCmdOutputRef=@_[1];	
+	my $format=$_[0];	
+	my $changesCmdOutputRef=$_[1];	
 	my @changesCmdOutput=@$changesCmdOutputRef;	
 		
 	#There was a format specified  so let's just parse our results
@@ -1275,8 +1275,8 @@ sub ParseAndFormatP4ChangesBasicOutput()
 
 sub ParseAndFormatP4ChangesLongDescriptionOutput()
 	{
-	my $format=@_[0];	
-	my $changesCmdOutputRef=@_[1];	
+	my $format=$_[0];	
+	my $changesCmdOutputRef=$_[1];	
 	my @changesCmdOutput=@$changesCmdOutputRef;	
 		
 	#There was a format specified  so let's just parse our results
