@@ -28,7 +28,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev: 15942 (22 Jan 2008) $';
-$RELEASE = 'v0.4'; 
+$RELEASE = 'v0.5'; 
 $SHORTDESCRIPTION = 'Enable jquery 1.2.3 and jquery.ui-1.5b for TWiki';
 $NO_PREFS_IN_TOPIC = 1;
 
@@ -46,8 +46,8 @@ sub initPlugin
   	$doneInit = 0;
   	$doneHeader = 0;
   	
-  	#TWiki::Func::registerTagHandler('JQDINC', \&includeJQueryJS );
-  	#TWiki::Func::registerTagHandler('TOGGLE', \&handleToggle );
+  	TWiki::Func::registerTagHandler('JQSCRIPT', \&includeJQueryScript );
+  	TWiki::Func::registerTagHandler('JQTHEME', \&includeJQueryTheme );
   	#TWiki::Func::registerTagHandler('CLEAR', \&handleClear );
   	
   	return 1;
@@ -88,7 +88,7 @@ handler. Use the =$meta= object.
 =cut
 
 
-sub commonTagsHandler
+sub DISABLED_commonTagsHandler
 	{
   	return if $doneHeader;
 
@@ -100,6 +100,13 @@ sub commonTagsHandler
 	#<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/JQueryDevPlugin/jquery.debug.js"></script>
 	
   	my $header = <<'HERE';
+HERE
+
+  	$doneHeader = 1 if ($_[0] =~ s/<head>(.*?[\r\n]+)/<head>$1$header\n/o);
+	}
+	
+
+=pod
 <link rel="stylesheet" href="%PUBURLPATH%/%TWIKIWEB%/JQueryDevPlugin/themes/ogray/ogray.all.css" type="text/css" media="screen" title="Ogray" />  	
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/JQueryDevPlugin/jquery.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/JQueryDevPlugin/jquery.dimensions.js"></script>
@@ -118,19 +125,29 @@ sub commonTagsHandler
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/JQueryDevPlugin/ui.tabs.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/JQueryDevPlugin/ui.tabs.ext.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/JQueryDevPlugin/jquery.spinner.js"></script>
-HERE
+=cut
 
-  	$doneHeader = 1 if ($_[0] =~ s/<head>(.*?[\r\n]+)/<head>$1$header\n/o);
-	}
-	
 	
 #######################################
 
-sub includeJQueryJS
+sub includeJQueryScript
 	{
-	return "";
+    my($session, $params, $theTopic, $theWeb) = @_;   
+    my $scriptFileName=$params->{_DEFAULT};
+
+    return "<script type=\"text/javascript\" src=\"%PUBURLPATH%/%TWIKIWEB%/$pluginName/$scriptFileName\"></script>";
 	}
 
+#######################################
+
+sub includeJQueryTheme
+    {
+    my($session, $params, $theTopic, $theWeb) = @_;   
+    my $themeName=$params->{_DEFAULT};
+
+    return "<link rel=\"stylesheet\" href=\"%PUBURLPATH%/%TWIKIWEB%/$pluginName/themes/$themeName/$themeName.all.css\" type=\"text/css\" media=\"screen\" title=\"$themeName\" />";
+
+    }
 
 
 	

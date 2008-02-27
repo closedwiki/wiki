@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="BaseUserMapping_666" date="1203900841" format="1.1" reprev="1.7" version="1.7"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1204154323" format="1.1" reprev="1.3" version="1.3"}%
 ---+!! jQuery developer plug-in
 
 <!--
@@ -10,7 +10,7 @@
 
 ---++ Description
 
-Provides jQuery and jQuery UI.
+Provides jQuery and jQuery UI. Designed for jQuery developer targeting the TWiki platform.
 
 <blockquote> "jQuery is a fast, concise, JavaScript Library that simplifies how you traverse HTML documents, handle events, perform animations, and add Ajax interactions to your web pages." </blockquote>
 
@@ -27,13 +27,24 @@ This plug-in was derived from the excellent TWiki:Plugins.JQueryPlugin from TWik
    * [[http://docs.jquery.com/Plugins][Plugin repository]] 
    * [[http://ui.jquery.com][jQuery UI]] 
 
+---++ Syntax Rules
+
+=%<nop>JQSCRIPT{"jquery.js"}%= : include the specified script. Keep in mind that the =jquery.js= script must be loaded before plug-ins scripts.<br />
+=%<nop>JQTHEME{"mythemename"}%= : include the specified theme. Better load the desired theme before any script.
+
+---++ Themes
+
+The following themes are provided:
+   * =flora= theme
+   * =ogray= theme
+
 ---++ Examples
 
 See Sandbox.PluginTestJQueryDevPlugin.
 
----++ Syntax Rules
-
 ---++ Plugin Settings
+
+none.
 
 ---++ Plugin Installation Instructions
 
@@ -45,9 +56,19 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
       * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin 
       * Change the Plugin settings as needed 
       * Edit =/lib/TWiki/Plugin/%TOPIC%.pm= and adjust the =js= and =css= files inclusions has needed.
-
-
    * If the installation was successful you should be able to create a dialog by clicking the button below: 
+
+<!--
+Include the jQuery javascript we need
+-->
+%JQTHEME{"ogray"}%
+%JQSCRIPT{"jquery.js"}%
+%JQSCRIPT{"jquery.dimensions.js"}%
+%JQSCRIPT{"ui.mouse.js"}%
+%JQSCRIPT{"ui.draggable.js"}%
+%JQSCRIPT{"ui.resizable.js "}%
+%JQSCRIPT{"ui.dialog.js "}%  
+
 <div class="ogray" id="example2" title="Congratulation!" style="display: none">You successfully installed that plug-in.</div> <br /> <button onclick="$('#example2').dialog({width: 600, height: 300}).show('slow');$(this).hide().next().show();">Create Dialog</button> <button onclick="$('#example2').dialog('open').hide().show('slow');" style="display:none;">Open</button> <button onclick="$('#example2').dialog('close')">Close</button>
 
 
@@ -57,8 +78,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.StephaneLenclud |
 |  Copyright: | © 2008, Stéphane Lenclud <br /> 2007 Michael Daum http://michaeldaumconsulting.com <br /> 2007 John Resig (jquery.com) and jQuery plugin authors |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 25 Feb 2008 (V0.4) |
+|  Plugin Version: | 28 Feb 2008 (V0.5) |
 |  Change History: | <!-- versions below in reverse order --> |
+|  28 Feb 2008 | Adding =JQSCRIPT= and =JQTHEME= tags. |
 |  25 Feb 2008 | Support multiple spinner per page. New spinner API. <br /> Adding =jquery.debug.js= from [[http://jquery.glyphix.com/][Glyphix]] |
 |  25 Feb 2008 | Adding spinner prototype from [[http://www.command-tab.com/2007/05/07/jquery-spinner-plugin/][command-tab.com]] |
 |  24 Feb 2008 | Adding the _ogray_ theme and making it the default one |
