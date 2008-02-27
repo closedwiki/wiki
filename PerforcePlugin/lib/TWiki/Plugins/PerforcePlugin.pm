@@ -83,7 +83,7 @@ $VERSION = '$Rev: 15942 (22 Jan 2008) $';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '0.3';
+$RELEASE = '0.5';
 
 # Short description of this plugin
 # One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
@@ -1105,6 +1105,7 @@ sub P4ChangesVariableSubstitution
 			'nop' => '',
 			'quot' => '"',
 			'percnt' => '%',
+			'pipe' => '|',
 			'dollar' => '$',
 			'n' => "\n"			
 		 	);
@@ -1139,6 +1140,7 @@ sub CommonVariableSubstitution
 			'nop' => '',
 			'quot' => '"',
 			'percnt' => '%',
+			'pipe' => '|',			
 			'dollar' => '$',
 			'n' => "\n"
 		 	);
@@ -1204,10 +1206,7 @@ sub UrlEncode
     return "$formated";
 	}
 	
-	
-	
 		
-	
 #
 #
 #

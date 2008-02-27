@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="BaseUserMapping_666" date="1204043343" format="1.1" reprev="1.6" version="1.6"}%
+%META:TOPICINFO{author="BaseUserMapping_666" date="1204131575" format="1.1" reprev="1.7" version="1.7"}%
 ---+!! %TOPIC%
 
 <div style="background-color: #CCFF66; padding: 5px">
@@ -64,7 +64,8 @@ The following symbols specified in the _format_ parameter are substituted with t
 | =$nop= | Replaced with nothing. | |
 | =$quot= | Replaced with a double quote | ="= |
 | =$percnt= | Replaced with a percent | =%= |
-| =$dollar= | Replaced with a dollor | =$= |
+| =$pipe= | Replaced with a pipe. <br /> Useful when embedded in TWiki table | <verbatim>|</verbatim> |
+| =$dollar= | Replaced with a dollar | =$= |
 | =$n= | New line character | =\n= |
 
 ---++ Examples
@@ -101,7 +102,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content: 
 | *File:* | *Description:* |
 | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-| ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+| ==data/Sandbox/PluginTest%TOPIC%.txt== | Plugin examples |
 | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
    * Configure the Plugin: 
       * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin 
@@ -127,8 +128,9 @@ NOTE: It turns out that you don't even need to specify an existing =p4client= to
 |  Plugin Author: | TWiki:Main.StephaneLenclud |
 |  Copyright: | © 2007, TWiki:Main.StephaneLenclud |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 21 Feb 2008 (V0.3) |
+|  Plugin Version: | 27 Feb 2008 (V0.5) |
 |  Change History: | <!-- versions below in reverse order --> |
+|  27 Feb 2008: | Adding =$pipe= variable. |
 |  26 Feb 2008: | Removing some =\n= from =ajax= mode output. Other minor fix. |
 |  21 Feb 2008: | Support _method_ parameter in AJAX mode. Default AJAX method is now =POST=. URL encoding parameters value in =GET= mode. Now encoding HTML entities in description field. |
 |  20 Feb 2008: | Fixing bug preventing TWiki:InterWikiPlugin to auto link at beginning and at the end of changes description lines <br /> Fixing missing last changes entry in long description mode ( =-l= and =-L= options ) |
