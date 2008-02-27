@@ -269,7 +269,7 @@ sub _parseTableRows {
                 if ($insideTABLE) {
                     $insideTABLE           = 0;
                     $shouldRenderTableData = 1;
-                    $atTableToParse        = 1
+                    $atTableToParse        = 0
                       ; # assume we will parse next table unless we will find out otherwise
                 }
             }
@@ -339,6 +339,10 @@ sub _parseTableRows {
                         next;
                     }
                     my $cellNum = $colPos + 1;
+                    
+                    # if statement
+                    $rowResult =~ s/\$C$cellNum(\(\"([^\"]*)\"(\s*then\=\"([^\"]*)\")*(\s*else\=\"([^\"]*)\")*\))/_handleIfStatement($cell,$2,$4,$6)/ges;
+                    
                     $rowResult =~
 s/\$C$cellNum(\(([0-9]*),*(.*?)\))*/_getCellContents($cell,$2,$3)/ges;
                 }
@@ -359,8 +363,6 @@ s/\$C$cellNum(\(([0-9]*),*(.*?)\))*/_getCellContents($cell,$2,$3)/ges;
             $tableResult =~ s/\$set/$set/go;
             $tableResult =~ s/\$set/$set/go;
 
-#TODO: format, topic, web, preserveSpaces, sortCol+1, sortDirection, beforeText, afterText, rows, cols, show
-
             TWiki::Func::writeDebug(
 "- RenderTableDataPlugin::_parseTableRows - result A=$tableResult"
             ) if $debug;
@@ -376,6 +378,28 @@ s/\$C$cellNum(\(([0-9]*),*(.*?)\))*/_getCellContents($cell,$2,$3)/ges;
 }
 
 =pod
+
+Evaluate an 'if' statement. Currently supported:
+cell("isempty" then="true" else="false")
+cell("='value'" then="true" else="false")
+
+=cut
+
+sub _handleIfStatement {
+    my ($cell, $ifStatement, $then, $else) = @_;
+
+	if ($ifStatement =~ m/\s*isempty\s*/) {
+	    return ($cell eq '') ? $then : $else;
+	}
+	if ($ifStatement =~ m/\s*\=\s*\'(.*?)\'\s*/) {
+	    return ($cell eq $1) ? $then : $else;
+	}
+    return $cell;
+}
+
+=pod
+
+If a limit is passed, return a number characters of a cell.
 
 =cut
 
