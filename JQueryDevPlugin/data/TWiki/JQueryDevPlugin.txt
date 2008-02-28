@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1204154323" format="1.1" reprev="1.3" version="1.3"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1204157195" format="1.1" reprev="1.3" version="1.3"}%
 ---+!! jQuery developer plug-in
 
 <!--
@@ -29,8 +29,10 @@ This plug-in was derived from the excellent TWiki:Plugins.JQueryPlugin from TWik
 
 ---++ Syntax Rules
 
-=%<nop>JQSCRIPT{"jquery.js"}%= : include the specified script. Keep in mind that the =jquery.js= script must be loaded before plug-ins scripts.<br />
-=%<nop>JQTHEME{"mythemename"}%= : include the specified theme. Better load the desired theme before any script.
+=%<nop>JQSCRIPT{"jquery.js"}%= : Include the specified script. Keep in mind that the =jquery.js= script must be loaded before plug-ins scripts.<br />
+=%<nop>JQTHEME{"mythemename"}%= : Include the specified theme. Better load the desired theme before any script.<br />
+=%<nop>JQIMAGESURLPATH{"myimage.png"}%= : Expand to the specified image path.<br />
+=%<nop>JQIMAGESURLPATH%/myimage.png= : Same result as the above.<br />
 
 ---++ Themes
 
@@ -80,7 +82,7 @@ Include the jQuery javascript we need
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 28 Feb 2008 (V0.5) |
 |  Change History: | <!-- versions below in reverse order --> |
-|  28 Feb 2008 | Adding =JQSCRIPT= and =JQTHEME= tags. |
+|  28 Feb 2008 | Adding =JQSCRIPT=, =JQTHEME= and =JQIMAGESURLPATH= tags. |
 |  25 Feb 2008 | Support multiple spinner per page. New spinner API. <br /> Adding =jquery.debug.js= from [[http://jquery.glyphix.com/][Glyphix]] |
 |  25 Feb 2008 | Adding spinner prototype from [[http://www.command-tab.com/2007/05/07/jquery-spinner-plugin/][command-tab.com]] |
 |  24 Feb 2008 | Adding the _ogray_ theme and making it the default one |

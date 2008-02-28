@@ -48,6 +48,7 @@ sub initPlugin
   	
   	TWiki::Func::registerTagHandler('JQSCRIPT', \&includeJQueryScript );
   	TWiki::Func::registerTagHandler('JQTHEME', \&includeJQueryTheme );
+    TWiki::Func::registerTagHandler('JQIMAGESURLPATH', \&handleJQueryImagesUrlPath );
   	#TWiki::Func::registerTagHandler('CLEAR', \&handleClear );
   	
   	return 1;
@@ -148,6 +149,23 @@ sub includeJQueryTheme
     return "<link rel=\"stylesheet\" href=\"%PUBURLPATH%/%TWIKIWEB%/$pluginName/themes/$themeName/$themeName.all.css\" type=\"text/css\" media=\"screen\" title=\"$themeName\" />";
 
     }
+
+#######################################
+
+sub handleJQueryImagesUrlPath
+    {
+    my($session, $params, $theTopic, $theWeb) = @_;   
+    my $image=$params->{_DEFAULT};
+    if (defined $image)
+        {
+        return "%PUBURLPATH%/%TWIKIWEB%/$pluginName/i/$image";
+        }
+    else
+        {
+        return "%PUBURLPATH%/%TWIKIWEB%/$pluginName/i";
+        }
+    }
+
 
 
 	
