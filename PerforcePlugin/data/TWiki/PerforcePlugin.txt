@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="BaseUserMapping_666" date="1204131575" format="1.1" reprev="1.7" version="1.7"}%
+%META:TOPICINFO{author="BaseUserMapping_666" date="1204214100" format="1.1" version="1.9"}%
 ---+!! %TOPIC%
 
 <div style="background-color: #CCFF66; padding: 5px">
@@ -22,6 +22,10 @@ Provide access to information from a Perforce server. [[http://www.perforce.com]
 
 ---+++ TWiki %TAG%
 
+---++++ =P4CHANGES=
+
+Simply gives you the output of the [[http://www.perforce.com/perforce/doc.073/manuals/cmdref/changes.html][p4 changes]] command. 
+
 <verbatim>
 %P4CHANGES{"p4changesoptions" format="format" header="header" footer="footer" ajax="ajax" label="label"}%
 </verbatim>
@@ -35,13 +39,43 @@ Provide access to information from a Perforce server. [[http://www.perforce.com]
 | _label_ | Used only in ajax mode. It defines the label of the ajax button. | =Fetch changes= | =Fetch Perforce changes= |
 | _method_ | Used only in ajax mode. Do not use that parameter unless you know what you are doing. Although both modes work fine on TWiki 4.2 we could not get =GET= to function on 4.1.2. Can be =POST= or =GET=.  | =GET= | =POST= |
 
+---++++ =P4CHANGESPI=
+
+Gives you the changes pending for integration for a specified branch specification. It is achieved by parsing the output of a single [[http://www.perforce.com/perforce/doc.073/manuals/cmdref/integrate.html][p4 integrate -n]] command and gathering the corresponding changes by running n times the relevant =p4 changes= commands.
+
+<verbatim>
+%P4CHANGES{"branch" format="format" header="header" footer="footer" description="description" reverse="reverse" ajax="ajax" label="label" }%
+</verbatim>
+
+| *Parameter* | *description* | *example* | *default value* |
+| _branch_ | The name of the branch used for integration | =mybranchname= | none |
+| _format_ | A template string used to format each change record. See below for the supported variables. If none specified the output of the command is returned with HTML br tags append to each line.  |  <verbatim>| $changelist | $description |</verbatim> | none |
+| _header_ | Specify a header for the formatted output. | <verbatim> | *Parameter* | *description* | *default value* | </verbatim>  | none |
+| _footer_ | Specify a footer for the formatted output. | =nice footer= | none |
+| _description_ | Can be =long= ( use =p4 changes -L= flag ) or =full= ( use =p4 changes -l= flag ).  | =full= | none |
+| _reverse_ | Set to =on= to perform a reverse integration. ( use =p4 integrate= =-r= flag ) | =on= | none |
+| _ajax_ | Tell the plug-in to delay running of the p4 command. Instead of the command output it displays a button that will allow the user to fetch the information from Perforce on demand. The given value defines the id of the =div= element to be loaded upon ajax request completion. | =ajaxdivid1= | none |
+| _label_ | Used only in ajax mode. It defines the label of the ajax button. | =Fetch changes= | =Fetch Perforce changes= |
+| _method_ | Used only in ajax mode. Do not use that parameter unless you know what you are doing. Although both modes work fine on TWiki 4.2 we could not get =GET= to function on 4.1.2. Can be =POST= or =GET=.  | =GET= | =POST= |
+
 ---+++ REST interface
+
+---++++ =p4changes=
 
 <verbatim>
 %SCRIPTURLPATH%/rest/PerforcePlugin/p4changes?topic=%WEB%.%TOPIC%&_DEFAULT=p4changesoptions&format=format&header=header&footer=footer
 </verbatim>
 
 _p4changesoptions_, _format_, _header_ and _footer_ parameters are the same as for the TWiki =%TAG%=. Parameters _ajax_ and _label_ are not supported.
+
+---++++ =p4changespi=
+
+<verbatim>
+%SCRIPTURLPATH%/rest/PerforcePlugin/p4changespi?topic=%WEB%.%TOPIC%&_DEFAULT=branch&format=format&header=header&footer=footer&description=description&reverse=reverse
+</verbatim>
+
+_branch_, _format_, _header_, _footer_, _description_ and _reverse_ parameters are the same as for the TWiki =%TAG%=. Parameters _ajax_ and _label_ are not supported.
+
 
 ---+++ Format variable substitution
 
@@ -128,8 +162,9 @@ NOTE: It turns out that you don't even need to specify an existing =p4client= to
 |  Plugin Author: | TWiki:Main.StephaneLenclud |
 |  Copyright: | © 2007, TWiki:Main.StephaneLenclud |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 27 Feb 2008 (V0.5) |
+|  Plugin Version: | 28 Feb 2008 (V0.6) |
 |  Change History: | <!-- versions below in reverse order --> |
+|  28 Feb 2008: | Adding =P4CHANGESPI= and its REST interface. |
 |  27 Feb 2008: | Adding =$pipe= variable. |
 |  26 Feb 2008: | Removing some =\n= from =ajax= mode output. Other minor fix. |
 |  21 Feb 2008: | Support _method_ parameter in AJAX mode. Default AJAX method is now =POST=. URL encoding parameters value in =GET= mode. Now encoding HTML entities in description field. |

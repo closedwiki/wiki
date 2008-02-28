@@ -83,7 +83,7 @@ $VERSION = '$Rev: 15942 (22 Jan 2008) $';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '0.5';
+$RELEASE = '0.6';
 
 # Short description of this plugin
 # One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
@@ -176,11 +176,13 @@ sub initPlugin {
     # This will be called whenever %EXAMPLETAG% or %EXAMPLETAG{...}% is
     # seen in the topic text.
     TWiki::Func::registerTagHandler( 'P4CHANGES', \&_P4CHANGES );
+    TWiki::Func::registerTagHandler( 'P4CHANGESPI', \&_P4CHANGESPI );
     
     # Allow a sub to be called from the REST interface 
     # using the provided alias
     #TODO: use rest interface for ajax support
     TWiki::Func::registerRESTHandler('p4changes', \&restP4CHANGES);
+    TWiki::Func::registerRESTHandler('p4changespi', \&restP4CHANGESPI);
 
     # Plugin correctly initialized
     return 1;
@@ -254,9 +256,10 @@ sub _P4CHANGES
 	   	return "$output";
     	}
     
-    return P4Changes(@_);    
+    return handleP4Changes(@_);    
     }
-
+    
+    
 =pod
 
 ---++ restP4CHANGES($session) -> $text
@@ -288,16 +291,246 @@ sub restP4CHANGES
    	#return "This is an example of a REST invocation\n\n";   	
    	#return "$params{'_DEFAULT'}\n$params{'format'}\n\n";
    	
-   	my $output=P4Changes($session,\%params);
+   	my $output=handleP4Changes($session,\%params);
    	
    	$output=TWiki::Func::expandCommonVariables($output);  
    	$output=TWiki::Func::renderText($output);
    	
    	return "$output\n\n";	   		
 	#return "This is an example of a REST invocation\n\n";
+	}	
+
+
+=pod
+
+Gather changes pending for integration from the given branch specification
+
+=cut
+
+sub _P4CHANGESPI
+	{
+    my($session, $params, $theTopic, $theWeb) = @_;   
+    
+    my $ajax=$params->{ajax};
+    my $label=$params->{label};
+    $label='Fetch perforce changes' unless defined($label);
+    my $format=$params->{format};
+    my $default=$params->{_DEFAULT};
+    my $footer=$params->{footer};
+    my $header=$params->{header};    
+    my $reverse=$params->{reverse};
+    my $description=$params->{description};
+    my $method=$params->{method} || 'POST';    
+        
+    #If asked for ajax services we don't run the actual p4 command now 	    
+    if (defined $ajax)
+    	{
+		my $output="";
+				
+		if ($method eq 'GET')
+			{
+		
+			#URL encode the URL parameters
+			$default=TWiki::urlEncode($default);
+			$format=TWiki::urlEncode($format);
+			$footer=TWiki::urlEncode($footer);
+			$header=TWiki::urlEncode($header);
+			
+			$output="<input type=\"button\" value=\"$label\" onclick=\"\$('#$ajax').load('%SCRIPTURLPATH%/rest/PerforcePlugin/p4changespi?reverse=$reverse&description=$description&header=$header&footer=$footer&topic=%WEB%.%TOPIC%&_DEFAULT=$default&format=$format', {}, function(){\$('#$ajax').show('slow');})\"/><div style=\"display: none\" id=\"$ajax\"></div>";			
+			}
+		else
+			{							    	
+	    	#By default use POST
+	    	my $jsHash="{ topic:'%WEB%.%TOPIC%' , _DEFAULT: '$default' , format: '$format', header: '$header' , footer: '$footer', description: '$description', reverse: '$reverse' }";
+						
+			$output="<input type=\"button\" value=\"$label\" onclick=\"\$('#$ajax').load('%SCRIPTURLPATH%/rest/PerforcePlugin/p4changespi', $jsHash, function(){\$('#$ajax').show('slow');})\"/><div style=\"display: none\" id=\"$ajax\"></div>";				
+    		}
+    		
+	   	#die $output;	    		
+	   	return "$output";
+    	}
+    
+    return handleP4ChangesPendingIntegration(@_);    		
 	}
 
+	
+##############################################
+	
+=pod
 
+---++ restP4CHANGESPI($session) -> $text
+
+=cut
+
+
+sub restP4CHANGESPI 
+	{
+   	my ($session) = @_;   
+   	my $query = TWiki::Func::getCgiQuery();
+   	
+   	my %params;
+   	
+   	#Just pass on the following parameter
+   	$params{'_DEFAULT'}=$query->param('_DEFAULT');
+   	$params{'format'}=$query->param('format');   	
+	$params{'footer'}=$query->param('footer');
+   	$params{'header'}=$query->param('header');   	
+	$params{'description'}=$query->param('description');
+   	$params{'reverse'}=$query->param('reverse');   	
+   	
+    
+   	
+   	my $output=handleP4ChangesPendingIntegration($session,\%params);
+   	
+   	$output=TWiki::Func::expandCommonVariables($output);  
+   	$output=TWiki::Func::renderText($output);
+   	
+   	return "$output\n\n";	   		
+	#return "This is an example of a REST invocation\n\n";
+	}	
+	
+	
+#########################################################
+=pod	
+	
+=cut
+
+sub handleP4ChangesPendingIntegration
+	{
+	my($session, $params, $theTopic, $theWeb) = @_;   	
+		
+	my $branchName=$params->{_DEFAULT};
+	my $reverse=(defined $params->{reverse} && $params->{reverse} eq 'on' ? '-r' : '');	
+	my $format=$params->{format};
+    my $header = $params->{header};
+    my $footer = $params->{footer};    
+
+	
+	#Interpret description parameter
+	my $description=$params->{description};
+	if (defined $description)
+		{
+		if ($description eq 'long')
+			{
+			$description='-L';	
+			}
+		elsif ($description eq 'full')
+			{
+			$description='-l';		
+			}
+		else
+			{
+			$description = '';		
+			}
+		}
+	
+	my $cmd=PerforceBaseCmd($p4port, $p4client, $p4user, $p4password);
+	my $integrateCmd="$cmd integrate $reverse -n -b $branchName 2>&1"; #redirect error output
+	
+    #BAD: untaint the cmd. See: http://gunther.web66.com/FAQS/taintmode.html
+    #Basically with perl -T you can't execute a system command but that trick fixes us.
+    $integrateCmd=~/^(.*)$/; $integrateCmd=$1;
+    #return $integrateCmd; #debug
+    
+	#Run the integrate command
+	my @integrateOutput=`$integrateCmd`;
+	#return "$integrateCmd";	
+	my @changesOutput;
+	
+	#Parse the integrate lines...
+	#and run changes command for each of them...
+	#thus collecting the changes corresponding to each integration	
+	foreach my $line(@integrateOutput)
+		{
+		my $toFile;	
+		my $fromFile;	
+		my $fromVersion1; 
+		my $fromVersion2; 
+	
+		if ($line=~/^(.+?) - .*integrate from (.+?)#(\d+),#(\d+)$/)
+			{
+			$toFile=$1;	
+			$fromFile=$2;	
+			$fromVersion1=$3; 
+			$fromVersion2=$4; 			
+			}
+		elsif ($line=~/^(.+?) - .*integrate from\s+(.+?)#(\d+)$/)
+			{
+			$toFile=$1;	
+			$fromFile=$2;	
+			$fromVersion1=$3; 
+			$fromVersion2=$fromVersion1; 						
+			#print "NICE!\n";
+			}
+		else
+			{
+			return "ERROR: $line";
+			next;
+			}
+		
+		#print "p4 changes $fromFile#$fromVersion1,#$fromVersion2\n";			
+		
+		my $changesCmd="$cmd changes $description $fromFile#$fromVersion1,#$fromVersion2";				
+		#BAD: untaint the cmd. See: http://gunther.web66.com/FAQS/taintmode.html
+    	#Basically with perl -T you can't execute a system command but that trick fixes us.
+    	$changesCmd=~/^(.*)$/; $changesCmd=$1;    	
+    	
+		my @newChangesOutput=`$changesCmd`;		
+		push(@changesOutput,@newChangesOutput);					
+		}
+	
+	#Parse all changes to get ride of duplicates
+	if ($description eq '')	
+		{
+		@changesOutput=ExcludeDuplicateChangesBasicOutput(\@changesOutput);		
+		}
+	else
+		{
+		@changesOutput=ExcludeDuplicateChangesLongDescriptionOutput(\@changesOutput);	
+		}
+	
+	my $output="";		
+	
+	#Format the filtered results	
+	if (defined $format)
+		{
+		if ($description eq '')	
+			{
+			$output=ParseAndFormatP4ChangesBasicOutput($format,\@changesOutput);			
+			}
+		else
+			{
+			$output=ParseAndFormatP4ChangesLongDescriptionOutput($format,\@changesOutput);
+			}
+		}
+	else
+		{
+		foreach my $change(@changesOutput)
+			{
+    		$output .= TWiki::entityEncode($change);
+	    	$output .= " <br /> "; #NOTE: we have a space after and before the br element. This helps InterWiki plugin to do its job
+			}			
+		}
+	
+	#Deal with header and format		
+	if (defined $header)
+		{
+		$header=CommonVariableSubstitution($header);	
+		$output = $header.$output;	
+		}
+		
+	if (defined $footer)
+		{
+		$footer=CommonVariableSubstitution($footer);		
+		$output = $output.$footer;	
+		}			
+		
+	return $output;											
+	}
+	
+	
+		
+	
 =pod
 
 Core p4 changes functionality
@@ -315,7 +548,7 @@ p4password
 
 =cut
 
-sub P4Changes 
+sub handleP4Changes 
 	{
     my($session, $params, $theTopic, $theWeb) = @_;
     # $session  - a reference to the TWiki session object (if you don't know
@@ -1360,6 +1593,101 @@ sub ParseAndFormatP4ChangesLongDescriptionOutput()
    			
    	return $output;
 	}	   
+
+###################################################	
+	
+sub ExcludeDuplicateChangesBasicOutput
+	{
+	my $changesCmdOutputRef=$_[0];	
+	my @changesCmdOutput=@$changesCmdOutputRef;	
+	
+	my %changesHash=();
+	my @results;
 		
+	#There was a format specified  so let's just parse our results
+	my $output="";
+    foreach my $change(@changesCmdOutput)
+    	{
+	   	#Change 69463 on 2008/02/06 by sl@sl-ti 'Some nice comments'
+		#Parse one change line	    	
+	    	    	
+	    #Without pending status 	
+    	if ($change =~ /^Change\s+(\d+)\s+on\s+(\d+)\/(\d+)\/(\d+)\s+by\s+([^\s]+)@([^\s]+)\s+'(.*)'$/)
+    		{	    		
+	    	my $changelist=$1;			
+	    	
+	   		unless (defined ($changesHash{$changelist}))
+	   			{
+		   		$changesHash{$changelist}=1;
+		   		push (@results,$change); #Keep that change
+	   			}
+    		}
+    	else
+    		{
+	    	die "CAN'T PARSE: $change";
+    		}	    	     		
+   		}
+   		
+   	return @results;
+	}	    	    
+
+###################################################	
+	
+sub ExcludeDuplicateChangesLongDescriptionOutput
+	{
+	my $changesCmdOutputRef=$_[0];	
+	my @changesCmdOutput=@$changesCmdOutputRef;	
+
+	my %changesHash=();
+	my @results;
+	
+   	my $changelist;			
+   	my $isDuplicate;
+	
+    foreach my $change(@changesCmdOutput)
+    	{
+	   	#Change 69463 on 2008/02/06 by sl@sl-ti 'Some nice comments'
+		#Parse one change line	    	
+	    	    	
+	    #Without pending status
+    	if ($change =~ /^Change\s+(\d+)\s+on\s+(\d+)\/(\d+)\/(\d+)\s+by\s+([^\s]+)@([^\s]+)\s*$/)
+    		{    			    		
+	    	$changelist=$1;			
+	    	
+		  	if (defined ($changesHash{$changelist}))
+	   			{
+		   		$isDuplicate=1;	
+	   			}
+	   		else
+	   			{
+		   		$isDuplicate=0;		
+		   		$changesHash{$changelist}=1;
+		   		push (@results,$change); #Keep that change		   			
+	   			}	    		        	    		    	
+    		}
+    	elsif ($change =~ /^\t(.*)/) #must be description line
+    		{
+	    	unless ($isDuplicate)
+	    		{
+		    	push (@results,$change); #Keep that change
+	    		}
+    		}
+    	elsif ($change =~ /^$/) #drop empty lines
+    		{
+	    	unless ($isDuplicate)
+	    		{
+				push (@results,$change); #Keep that change			    		
+	    		}	    	
+    		}    		
+    	else
+    		{
+    		die "Could not parse: $change";	    	
+    		}	    	     		
+   		}   	
+   			
+   	return @results;
+	}	   
+	
+			
 	
 1;
