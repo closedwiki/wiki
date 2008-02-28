@@ -49,6 +49,24 @@ See the Sandbox.JQueryPluginExamples page for a demo of a couple of widgets used
    * [[http://docs.jquery.com/Using_jQuery_with_Other_Libraries][Using jQuery with other libraries]]
    * [[http://docs.jquery.com/Plugins][Plugin repository]]
 
+---++ Syntax Rules
+
+=%<nop>JQSCRIPT{"jquery.js"}%= : include the specified script. Keep in mind that the =jquery.js= script must be loaded before plug-ins scripts.<br />
+=%<nop>JQTHEME{"mythemename"}%= : include the specified theme. Better load the desired theme before any script.<br />
+=%<nop>JQIMAGESURLPATH{"myimage.png"}%= : Expand to the specified image path.<br />
+=%<nop>JQIMAGESURLPATH%/myimage.png= : Same result as the above.<br />
+
+
+---++ Themes
+
+The following themes are provided:
+   * =flora= theme
+   * =ogray= theme
+
+---++ Examples
+
+   * Sandbox.PluginTestJQueryPlugin.txt 	 	
+   * Sandbox.JQueryPluginExamples.txt
 
 ---++ Installation Instructions
    * Download the ZIP file from the Plugin web (see below)

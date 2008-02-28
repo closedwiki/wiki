@@ -195,8 +195,9 @@ pub/TWiki/JQueryPlugin/themes/ogray/ogray.slider.css 0644
 pub/TWiki/JQueryPlugin/themes/ogray/ogray.tablesorter.css 0644	 	
 pub/TWiki/JQueryPlugin/themes/ogray/ogray.tabs.css 0644	 	
 pub/TWiki/JQueryPlugin/themes/ogray/ogray.toasterLite.css 0644	 	
-pub/TWiki/JQueryPlugin/themes/ogray/ogray.toolbar.css 0644	 	
- 
+pub/TWiki/JQueryPlugin/themes/ogray/ogray.toolbar.css 0644
+data/Sandbox/PluginTestJQueryPlugin.txt 0644	 	
+data/Sandbox/JQueryPluginExamples.txt 0644
  
  
 

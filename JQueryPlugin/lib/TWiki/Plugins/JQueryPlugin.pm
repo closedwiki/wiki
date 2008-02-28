@@ -25,12 +25,14 @@ use vars qw(
   $NO_PREFS_IN_TOPIC
   $doneInit $doneHeader
   $header
+  $pluginName
 );
 
 $VERSION = '$Rev$';
 $RELEASE = 'v0.50'; 
 $SHORTDESCRIPTION = 'jQuery <nop>JavaScript library for TWiki';
 $NO_PREFS_IN_TOPIC = 1;
+$pluginName = 'JQueryPlugin';
 
 $header = <<'HERE';
 <link rel="stylesheet" href="%PUBURLPATH%/%TWIKIWEB%/JQueryPlugin/jquery-all.css" type="text/css" media="all" />
@@ -51,6 +53,10 @@ sub initPlugin {
   TWiki::Func::registerTagHandler('ENDTABPANE', \&handleEndTabPane );
   TWiki::Func::registerTagHandler('TAB', \&handleTab );
   TWiki::Func::registerTagHandler('ENDTAB', \&handleEndTab );
+  TWiki::Func::registerTagHandler('JQSCRIPT', \&handleJQueryScript );
+  TWiki::Func::registerTagHandler('JQTHEME', \&handleJQueryTheme );
+  TWiki::Func::registerTagHandler('JQIMAGESURLPATH', \&handleJQueryImagesUrlPath );
+
   return 1;
 }
 
@@ -107,5 +113,35 @@ sub handleEndTabPane {
 sub handleClear {
   return '<br clear="all" />';
 }
+
+#######################################
+
+sub handleJQueryScript	{
+  my($session, $params, $theTopic, $theWeb) = @_;   
+  my $scriptFileName=$params->{_DEFAULT};
+  return "<script type=\"text/javascript\" src=\"%PUBURLPATH%/%TWIKIWEB%/$pluginName/$scriptFileName\"></script>";
+}
+
+#######################################
+
+sub handleJQueryTheme {
+  my($session, $params, $theTopic, $theWeb) = @_;   
+  my $themeName=$params->{_DEFAULT};
+  return "<link rel=\"stylesheet\" href=\"%PUBURLPATH%/%TWIKIWEB%/$pluginName/themes/$themeName/$themeName.all.css\" type=\"text/css\" media=\"screen\" title=\"$themeName\" />";
+}
+
+#######################################
+
+sub handleJQueryImagesUrlPath {
+  my($session, $params, $theTopic, $theWeb) = @_;   
+  my $image=$params->{_DEFAULT};
+  if (defined $image) {
+    return "%PUBURLPATH%/%TWIKIWEB%/$pluginName/images/$image";
+  }
+  else {
+    return "%PUBURLPATH%/%TWIKIWEB%/$pluginName/images";
+  }
+}
+
 
 1;
