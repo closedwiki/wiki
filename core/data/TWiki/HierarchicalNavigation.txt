@@ -43,21 +43,36 @@ generates:
 *Child topics:*
 %INCLUDE{"%SYSTEMWEB%.HierarchicalNavigation" section="children"}%
 
+When included in WebLeftBar (using default Pattern skin) this is styled to:
 
-<div style="display:none;">
-%STARTSECTION{name="all"}%<div class="twikiHierarchicalNavigation"><div class="twikiParentTopic">
-%SEARCH{ "^%BASETOPIC%$" web="%BASEWEB%" scope="topic" type="regex" nonoise="on" format="$percntIF{$quot$parent$quot then=$quot   * [[$web.$parent][$parent]]$quot else=$quot<nop>$quot}$percnt" }%<nop>
+<div id="patternLeftBarContents">
+%INCLUDE{"%SYSTEMWEB%.HierarchicalNavigation" section="children"}%
 </div>
-<div class="twikiCurrentTopic">
-   * <nop>%BASETOPIC%
-</div>
-<div class="twikiChildTopics">
-%METASEARCH{type="parent" topic="%BASETOPIC%" format="   * [[$web.$topic][$topic]]"}%<nop>
-</div><!--twikiChildTopics--></div><!--/twikiHierarchicalNavigation-->%ENDSECTION{name="all"}%
+
+<verbatim style="display:none;">
+%STARTSECTION{name="all"}%<div class="twikiHierarchicalNavigation">
+<ul>
+%SEARCH{
+"parent"
+type="query"
+topic="%BASETOPIC%"
+web="%BASEWEB%"
+nonoise="on"
+format="<li class='twikiParentTopic'><img src='%ICONURL{parent_gray}%' width='16' height='16' alt='' border='0' /> [[$web.$parent][$parent]]</li>"
+}%
+<li class='twikiCurrentTopic' style='font-weight:bold;'><nop>%BASETOPIC%</li>%INCLUDE{"%TOPIC%" section="childlist"}%
+</ul>
+</div><!--/twikiHierarchicalNavigation-->%ENDSECTION{name="all"}%
 
 %STARTSECTION{name="children"}%<div class="twikiHierarchicalNavigation">
-<div class="twikiChildTopics">
-%METASEARCH{type="parent" topic="%BASETOPIC%" format="   * [[$web.$topic][$topic]]"}%<nop>
-</div><!--twikiChildTopics--></div><!--/twikiHierarchicalNavigation-->%ENDSECTION{name="children"}%
+<ul>%INCLUDE{"%TOPIC%" section="childlist"}%</ul>
+</div><!--/twikiHierarchicalNavigation-->%ENDSECTION{name="children"}%</div>%ENDSECTION{name="children"}%
 
-</div>
+%STARTSECTION{name="childlist"}%%SEARCH{
+"parent.name='%BASETOPIC%'"
+web="%BASEWEB%"
+type="query"
+nonoise="on"
+format="<li class='childTopic'><img src='%ICONURL{line_ur_gray}%' width='16' height='16' alt='' border='0' /> [[$web.$topic][$topic]]</li>"
+}%%ENDSECTION{name="childlist"}%
+</verbatim>
