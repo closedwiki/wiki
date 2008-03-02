@@ -757,6 +757,7 @@ pub/TWiki/TWikiDocGraphics/line_udr.gif 0644
 pub/TWiki/TWikiDocGraphics/line_ul.gif 0644
 pub/TWiki/TWikiDocGraphics/line_ulr.gif 0644
 pub/TWiki/TWikiDocGraphics/line_ur.gif 0644
+pub/TWiki/TWikiDocGraphics/line_ur_gray.gif 0644
 pub/TWiki/TWikiDocGraphics/lock.gif 0644
 pub/TWiki/TWikiDocGraphics/lockfolder.gif 0644
 pub/TWiki/TWikiDocGraphics/lockfoldergray.gif 0644
@@ -780,6 +781,7 @@ pub/TWiki/TWikiDocGraphics/newtopic.gif 0644
 pub/TWiki/TWikiDocGraphics/note.gif 0644
 pub/TWiki/TWikiDocGraphics/notify.gif 0644
 pub/TWiki/TWikiDocGraphics/package.gif 0644
+pub/TWiki/TWikiDocGraphics/parent_gray.gif 0644
 pub/TWiki/TWikiDocGraphics/parked.gif 0644
 pub/TWiki/TWikiDocGraphics/parts.gif 0644
 pub/TWiki/TWikiDocGraphics/pdf.gif 0644
