@@ -954,26 +954,38 @@ sub saveAttachment {
                 stream => $opts->{stream},
                 tmpFilename => $opts->{tmpFilename},
                 user => $user,
-#                user => $users->webDotWikiName($user),
                };
             $attrs->{comment} = $opts->{comment}
               if (defined($opts->{comment}));
 
             my $handler = _getHandler( $this, $web, $topic, $attachment );
 
+            my $tmpFile;
+
             if( $plugins->haveHandlerFor( 'beforeAttachmentSaveHandler' )) {
-                # Because of the way CGI works, the stream is actually attached
-                # to a file that is already on disc. So all we need to do
-                # is determine that filename, close the stream, process the
-                # upload and then reopen the stream on the resultant file.
-                close( $opts->{stream} );
-                if (!defined($attrs->{tmpFilename})) {
-                    throw Error::Simple(
-                        "Cannot call beforeAttachmentSaveHandler; CGI did not provide a temporary file name");
+                # We create an extra temporary copy of the uploaded file
+                # It appears that under some circumstances the CGI deletes
+                # the uploaded file when you close it even though the doco
+                # says it is deleted when it goes out of scope.
+                # The code below has proven to work for all. See Item5307
+                
+                use File::Temp;
+                my $fh;
+                
+                ( $fh, $tmpFile ) = File::Temp::tempfile();
+                binmode( $fh );
+                # transfer 512KB blocks
+                my $transfer;
+                my $r;
+                while( $r = sysread( $opts->{stream}, $transfer, 0x80000 )) {
+                    syswrite( $fh, $transfer, $r );
                 }
+                close( $fh );
+                $attrs->{tmpFilename} = $tmpFile;
                 $plugins->beforeAttachmentSaveHandler( $attrs, $topic, $web );
-                open( $opts->{stream}, "<$attrs->{tmpFilename}" );
+                open( $opts->{stream}, "<$tmpFile" );
                 binmode( $opts->{stream} );
+                
             }
             my $error;
             try {
@@ -983,6 +995,8 @@ sub saveAttachment {
             } catch Error::Simple with {
                 $error = shift;
             };
+            
+            unlink( $tmpFile ) if( $tmpFile && -e $tmpFile );
 
             if( $plugins->haveHandlerFor( 'afterAttachmentSaveHandler' )) {
                 $plugins->afterAttachmentSaveHandler( $attrs, $topic, $web,
