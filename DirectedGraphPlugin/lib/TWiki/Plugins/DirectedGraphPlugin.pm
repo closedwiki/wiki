@@ -35,7 +35,7 @@ use vars qw(
   $debug $exampleCfgVar $sandbox $isInitialized $antialiasDefault
   $densityDefault $sizeDefault $vectorFormatsDefault $engineDefault
   $libraryDefault $enginePath $magickPath $workAreaDir $grNum
-  $toolsPath $perlCmd $hideAttachDefault
+  $toolsPath $perlCmd $hideAttachDefault $usWeb
 );
 
 use vars qw( %TWikiCompatibility );
@@ -72,6 +72,9 @@ my $tempdir = "";
 sub initPlugin
 {
     ( $topic, $web, $user, $installWeb ) = @_;
+
+    $usWeb = $web;
+    $usWeb =~ s/\//_/g;
 
     # check for Plugins.pm versions
     if ( $TWiki::Plugins::VERSION < 1 ) {
@@ -176,6 +179,10 @@ sub commonTagsHandler
 
     # This is the place to define customized tags and variables
     # Called by sub handleCommonTags, after %INCLUDE:"..."%
+    
+    $web = $_[2];
+    $usWeb = $web;
+    $usWeb =~ s/\//_/g;  #Change slash to underscore to handle subwebs in the workarea
 
     #pass everything within <dot> tags to handleDot function
     $_[0] =~ s/<DOT(.*?)>(.*?)<\/DOT>/&handleDot($2,$1)/giseo;
@@ -304,7 +311,7 @@ sub handleDot
     # If a filename is not provided, set it to a name, with incrementing number.
     if ($outFilename eq "") {$outFilename = "DirectedGraphPlugin_"."$grNum";} 
     
-    my $oldHashCode = TWiki::Func::readFile( "$workAreaDir/${web}_${topic}_${outFilename}");
+    my $oldHashCode = TWiki::Func::readFile( "$workAreaDir/${usWeb}_${topic}_${outFilename}");
 
 
     #  If the hash codes don't match, the graph needs to be recreated
@@ -338,7 +345,7 @@ sub handleDot
         }
 
         # Save the hash for the new graph.
-        if ( $chkHash ) { TWiki::Func::saveFile( "$workAreaDir/${web}_${topic}_${outFilename}", $hashCode ); } 
+        if ( $chkHash ) { TWiki::Func::saveFile( "$workAreaDir/${usWeb}_${topic}_${outFilename}", $hashCode ); } 
 
         # Create a new temporary file to pass to GraphViz
         my $dotFile = new File::Temp(TEMPLATE => 'DiGraphPluginXXXXXXXXXX',
@@ -446,8 +453,12 @@ sub afterRenameHandler {
     ### my ( $oldWeb, $oldTopic, $oldAttachment, $newWeb, $newTopic, $newAttachment ) = @_;
 
     my $oldweb = $_[0];
+    my $oldUsWeb = $oldweb;
+    $oldUsWeb =~ s/\//_/g; #Change slash to underscore to handle subwebs in the workarea
     my $oldtopic = $_[1];
     my $newweb = $_[3];
+    my $newUsWeb = $newweb;
+    $newUsWeb =~ s/\//_/g; #Change slash to underscore to handle subwebs in the workarea
     my $newtopic = $_[4];
     my $workAreaDir = TWiki::Func::getWorkArea('DirectedGraphPlugin');
     
@@ -463,15 +474,15 @@ sub afterRenameHandler {
 
    opendir(DIR, $workAreaDir) || die "<ERR> Can't find directory --> $workAreaDir !";
    
-   my @wfiles  = grep { /^${oldweb}_${oldtopic}_/ } readdir(DIR);
+   my @wfiles  = grep { /^${oldUsWeb}_${oldtopic}_/ } readdir(DIR);
    foreach my $f (@wfiles) {
-      my $prefix = "${oldweb}_${oldtopic}_";
+      my $prefix = "${oldUsWeb}_${oldtopic}_";
       my ($suffix) = ($f =~  "^$prefix(.*)" );
       $f = TWiki::Sandbox::untaintUnchecked($f);
       if ($newweb eq "Trash") {
          unlink "$workAreaDir/$f";
       } else {
-         my $newname = "${newweb}_${newtopic}_${suffix}";
+         my $newname = "${newUsWeb}_${newtopic}_${suffix}";
 	 $newname = TWiki::Sandbox::untaintUnchecked($newname);
          rename ("$workAreaDir/$f", "$workAreaDir/$newname");
       }
