@@ -145,7 +145,40 @@ sub commonTagsHandler {
   ....
 }
 </verbatim>
-The first parameter to =showCalendar= is the id of the textfield, and the second parameter is the . See the Mishoo documentation for details of the '$e %B %Y' parameter.
+The first parameter to =showCalendar= is the id of the textfield, and the second parameter is the date format. Default format is '%e %B %Y'.
+
+All available date specifiers:
+<verbatim>
+%a - abbreviated weekday name 
+%A - full weekday name 
+%b - abbreviated month name 
+%B - full month name 
+%C - century number 
+%d - the day of the month ( 00 .. 31 ) 
+%e - the day of the month ( 0 .. 31 ) 
+%H - hour ( 00 .. 23 ) 
+%I - hour ( 01 .. 12 ) 
+%j - day of the year ( 000 .. 366 ) 
+%k - hour ( 0 .. 23 ) 
+%l - hour ( 1 .. 12 ) 
+%m - month ( 01 .. 12 ) 
+%M - minute ( 00 .. 59 ) 
+%n - a newline character 
+%p - "PM" or "AM"
+%P - "pm" or "am"
+%S - second ( 00 .. 59 ) 
+%s - number of seconds since Epoch (since Jan 01 1970 00:00:00 UTC) 
+%t - a tab character 
+%U, %W, %V - the week number
+   The week 01 is the week that has the Thursday in the current year,
+   which is equivalent to the week that contains the fourth day of January. 
+   Weeks start on Monday.
+%u - the day of the week ( 1 .. 7, 1 = MON ) 
+%w - the day of the week ( 0 .. 6, 0 = SUN ) 
+%y - year without the century ( 00 .. 99 ) 
+%Y - year including the century ( ex. 1979 ) 
+%% - a literal % character 
+</verbatim>
 
 =addHEAD= can be called from =commonTagsHandler= for adding the header to all pages, or from =beforeEditHandler= just for edit pages etc.
 
