@@ -24,7 +24,7 @@ pages, revision control of pages and attachments, and
 more. The server-side TWiki Plugins API provides developers 
 with a simple way to build new groupware applications. 
 
-The GPLed TWiki software and over 100 Plugins can be 
+The GPLed TWiki software and over hundreds of Plugins can be 
 downloaded from the TWiki.org web site, http://TWiki.org/.
 
 
@@ -48,19 +48,19 @@ TWiki Installation, Support
 ---------------------------
 
 It is important to follow the installation instructions in
-TWikiDocumentation.html located in the distribution, also at
-http://TWiki.org/cgi-bin/view/TWiki/TWikiDocumentation
+INSTALL.html located in the distribution, also at
+http://twiki.org/cgi-bin/view/TWiki/TWikiInstallationGuide
 
 Important note: Once you installed TWiki on your own system, 
 make sure to add yourself to the list of TWikiInstallations 
-at http://TWiki.org/cgi-bin/view/Main/TWikiInstallations . 
+at http://twiki.org/cgi-bin/view/Main/TWikiInstallation . 
 This helps in getting more exposure --> attracts more 
 developers --> results in a better product.
 
 TWiki is free software and does not include any support. There
 is a TWiki web for support questions, run by TWiki users for
-TWiki users. Visit http://TWiki.org/cgi-bin/view/Support/ if
-you have any installation questions or questions about TWiki
+TWiki users. Visit http://twiki.org/cgi-bin/view/Support/WebHome
+if you have any installation questions or questions about TWiki
 deployment; please do not contact the developers directly.
 
 
@@ -68,11 +68,11 @@ TWiki News, Development and Deployment
 --------------------------------------
 
 You can always find out the latest news at the TWiki home 
-page at http://TWiki.org/ .
+page at http://twiki.org/ .
 
 The place to collaborate on further TWiki development is at
-http://TWiki.org/cgi-bin/view/Codev/ . ReadmeFirst tells you 
-how to collaborate. Subscribe in WebNotify to stay up to 
+http://twiki.org/cgi-bin/view/Codev/WebHome . ReadmeFirst tells
+you how to collaborate. Subscribe in WebNotify to stay up to 
 date on latest development issues.
 
 Good luck with your collaboration effort and with TWiki.
