@@ -10,7 +10,6 @@ use strict;
 
 my $REPOS = $ARGV[0];
 my $TXN = $ARGV[1];
-my $BRANCH = $ARGV[2];
 
 my $logmsg = `/usr/bin/svnlook log -t $TXN $REPOS`;
 
@@ -30,15 +29,8 @@ EOF
     exit 1;
 }
 
-fail("$BRANCH is disabled for checkins") if $BRANCH =~ /^(TWikiRelease04x0[01]|DEVELOP)$/;
-
-# See if this checkin is changing our branch
-my $paths = `/usr/bin/svnlook changed -t $TXN $REPOS`;
-exit 0 unless( $paths =~ m#\stwiki/branches/$BRANCH/#s );
-
-local $/ = undef;
-fail("No Bug item in log message")
-  unless( $logmsg =~ /\bItem\d+:/ );
+fail("No Bug item in log message") unless( $logmsg =~ /\bItem\d+:/ );
+local $/;
 
 my @items;
 $logmsg =~ s/\b(Item\d+):/push(@items, $1); '';/gem;

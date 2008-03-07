@@ -13,18 +13,19 @@ my $first = `cat ../lastupdate`;
 chomp($first);
 my $last = $ARGV[1] || `/usr/bin/svnlook youngest $REPOS`;
 chomp($last);
-my $BRANCH = $ARGV[2];
+#my $BRANCH = $ARGV[2]; # Not used
 
 die unless $last;
-die unless $BRANCH;
+#die unless $BRANCH; ] Not used
 
 $first ||= ($last-1);
 
 my @changes;
 for (my $i = $first + 1; $i <= $last; $i++) {
     push( @changes,
-          map { s/^.*?$BRANCH\///; $_ }
-           grep { /twiki\/branches\/$BRANCH/ }
+# No filter since change to /trunk/
+#          map { s/^.*?$BRANCH\///; $_ }
+#           grep { /twiki\/branches\/$BRANCH/ }
             split(/\n/, `/usr/bin/svnlook changed -r $i $REPOS` ));
 }
 exit 0 unless scalar( @changes );

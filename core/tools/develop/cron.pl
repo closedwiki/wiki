@@ -2,11 +2,10 @@
 # Cron script that refreshes the develop installs
 use strict;
 
-my $BRANCH = $ARGV[0];
 my $ROOT = $ENV{HOME};
 my $COMMIT_FLAG = "$ROOT/svncommit";
 my $UPDATE_FLAG = "$ROOT/update_in_progress";
-my $LATEST = "$ROOT/twikisvn/pub/Bugs/latest_$BRANCH/rev.txt";
+my $LATEST = "$ROOT/twikisvn/pub/Bugs/latest/rev.txt";
 
 chdir("$ROOT/twikisvn") || die $!;
 
@@ -38,10 +37,10 @@ eval {
     print `perl pseudo-install.pl -link default`;
 
     # Whack any precompiled templates
-    print `rm $ROOT/public_html/working/tmp/*.tmpl_cache`;
+    print `rm -f $ROOT/public_html/working/tmp/*.tmpl_cache`;
 
-    # Copy the bin scripts over to cgi-bin
-    print `cp $ROOT/twikisvn/bin/* $ROOT/public_html/cgi-bin/`;
+    # Copy the bin scripts (and logos) over to cgi-bin
+    print `cp -r $ROOT/twikisvn/bin/* $ROOT/public_html/cgi-bin/`;
     print `cp $ROOT/public_html/cgi-bin/view $ROOT/public_html/cgi-bin/viewauth`;
     print `cp $ROOT/public_html/cgi-bin/rdiff $ROOT/public_html/cgi-bin/rdiffauth`;
 
