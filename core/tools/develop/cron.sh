@@ -1,7 +1,7 @@
 #!/bin/sh
 # Regular cleanup of shipped webs.
 
-cd $HOME/twikisvn
+cd $HOME/twikisvn/core
 
 WEBS="Main TWiki Sandbox _default Trash TestCases";
 

@@ -3,8 +3,8 @@ use strict;
 use Data::Dumper;
 
 my $REPOS = '/home/svn/repos';
-my $BUGS = '/home/twiki4/twikisvn/data/Bugs';
-my $MANIFEST = '/home/twiki4/twikisvn/lib/MANIFEST';
+my $BUGS = '/home/twiki4/twikisvn/core/data/Bugs';
+my $MANIFEST = '/home/twiki4/twikisvn/core/lib/MANIFEST';
 my $verbose = 0;
 my $releases;
 foreach my $release (

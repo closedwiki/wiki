@@ -7,9 +7,9 @@ REPOS="$1"
 REV="$2"
 
 # These are done in a cron job to avoid problems with file ownerships
-#cd /home/develop/twikisvn
+#cd /home/develop/twikisvn/core
 #[ -f tools/develop/post-commit.pl ] && perl tools/develop/post-commit.pl "$REPOS" "$REV" DEVELOP
-#cd /home/twiki4/twikisvn
+#cd /home/twiki4/twikisvn/core
 #[ -f tools/develop/post-commit.pl ] && perl tools/develop/post-commit.pl "$REPOS" "$REV" TWikiRelease04x00
 
 cd $REPOS/hooks

@@ -9,7 +9,7 @@
 use strict;
 
 my $REPOS = $ARGV[0];
-my $first = `cat ../lastupdate`;
+my $first = `cat $ENV{HOME}/lastupdate`;
 chomp($first);
 my $last = $ARGV[1] || `/usr/bin/svnlook youngest $REPOS`;
 chomp($last);
@@ -42,7 +42,7 @@ sub _add {
 }
 
 # Don't know where STDERR goes, so send it somewhere we can read it
-open(STDERR, ">>../logs/post-commit.log") || die $!;
+open(STDERR, ">>$ENV{HOME}/logs/post-commit.log") || die $!;
 print STDERR "Post-Commit $first..$last in $REPOS\n";
 $/ = undef;
 
@@ -87,12 +87,12 @@ for my $rev ($first..$last) {
 }
 
 # Create the flag that tells the cron job to update from the repository
-open(F, ">>../svncommit") || die "Failed to write ../svncommit: $!";
+open(F, ">>$ENV{HOME}/svncommit") || die "Failed to write $ENV{HOME}/svncommit: $!";
 print F join(" ", @changes);
 close(F);
 
 # Create the flag for this script
-open(F, ">../lastupdate") || die $!;
+open(F, ">$ENV{HOME}/lastupdate") || die $!;
 print F "$last\n";
 close(F);
 
