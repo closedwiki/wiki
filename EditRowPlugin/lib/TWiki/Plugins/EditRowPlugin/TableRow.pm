@@ -175,6 +175,9 @@ sub renderForDisplay {
     }
 
     if ($withControls) {
+        my $active_topic = $this->{table}->getWeb().'.'
+          .$this->{table}->getTopic();
+
         if ($this->{isHeader} || $this->{isFooter}) {
             # The ** fools TablePlugin into thinking this is a header.
             # Otherwise it disables sorting :-(
@@ -193,14 +196,18 @@ sub renderForDisplay {
             if ($TWiki::Plugins::VERSION < 1.11) {
                 $url = TWiki::Func::getScriptUrl(
                     $this->{table}->getWeb(),
-                    $this->{table}->getTopic(), $script).
-                      "?erp_active_table=".$this->{table}->getNumber().
-                        ";erp_active_row=$this->{number}#".
-                          $this->getRowAnchor();
+                    $this->{table}->getTopic(),
+                    $script)
+                  .'?erp_active_topic='.$active_topic
+                    .';erp_active_table='.$this->{table}->getNumber()
+                      .';erp_active_row='.$this->{number}.'#'
+                        .$this->getRowAnchor();
             } else {
                 $url = TWiki::Func::getScriptUrl(
                     $this->{table}->getWeb(),
-                    $this->{table}->getTopic(), $script,
+                    $this->{table}->getTopic(),
+                    $script,
+                    erp_active_topic => $active_topic,
                     erp_active_table => $this->{table}->getNumber(),
                     erp_active_row => $this->{number},
                     '#' => $this->getRowAnchor());

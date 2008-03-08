@@ -104,12 +104,15 @@ STYLE
     my $content = TWiki::Plugins::EditRowPlugin::Table::parseTables(
         $text, $web, $topic, $meta, $urps);
 
-    $urps->{erp_active_table} ||= 0;
+    my $active_table = 0;
+    my $active_topic = "$web.$topic";
+
+    $urps->{erp_active_topic} ||= $active_topic;
+    $urps->{erp_active_table} ||= $active_table;
     $urps->{erp_active_row} ||= 0;
 
     my $nlines = '';
     my $table = undef;
-    my $active_table = 0;
 
     my $displayOnly = 0;
 
@@ -127,7 +130,9 @@ STYLE
             my $line = '';
             $table = $_;
             $active_table++;
-            if (!$displayOnly && $active_table == $urps->{erp_active_table}) {
+            if (!$displayOnly
+                  && $active_topic eq $urps->{erp_active_topic}
+                    && $active_table == $urps->{erp_active_table}) {
                 my $active_row = $urps->{erp_active_row};
                 my $saveUrl =
                   TWiki::Func::getScriptUrl($pluginName, 'save', 'rest');
@@ -135,7 +140,7 @@ STYLE
                     -method=>'POST',
                     -name => 'erp_form_'.$active_table,
                     -action => $saveUrl);
-                $line .= CGI::hidden('erp_active_topic', "$web.$topic");
+                $line .= CGI::hidden('erp_active_topic', $active_topic);
                 $line .= CGI::hidden('erp_active_table', $active_table);
                 $line .= CGI::hidden('erp_active_row', $active_row);
                 $line .= "\n".$table->renderForEdit($active_row)."\n";
@@ -217,8 +222,8 @@ sub save {
     eval "use CGI::Carp qw(fatalsToBrowser)" if DEBUG;
 
     my $saveType = $query->param('editrowplugin_save') || '';
-    my $atopic = $query->param('erp_active_topic');
-    $atopic =~ /(.*)/;
+    my $active_topic = $query->param('erp_active_topic');
+    $active_topic =~ /(.*)/;
     my ($web, $topic) = TWiki::Func::normalizeWebTopicName(undef, $1);
 
     my ($meta, $text) = TWiki::Func::readTopic($web, $topic);
@@ -276,7 +281,8 @@ sub save {
             if (ref($line) eq 'TWiki::Plugins::EditRowPlugin::Table') {
                 $table = $line;
                 $active_table++;
-                if ($active_table == $urps->{erp_active_table}) {
+                if ($active_topic eq $urps->{erp_active_topic}
+                      && $active_table == $urps->{erp_active_table}) {
                     $table->$action($urps);
                 }
                 $line = $table->stringify();
@@ -303,7 +309,8 @@ sub save {
         if ($TWiki::Plugins::VERSION < 1.11) {
             my $p = '';
             unless ($no_return) {
-                $p = "?erp_active_table=$urps->{erp_active_table}";
+                $p = "?erp_active_topic=$urps->{erp_active_topic}";
+                $p = ";erp_active_table=$urps->{erp_active_table}";
                 $p .= ";erp_active_row=$urps->{erp_active_row}";
             }
             $url = TWiki::Func::getScriptUrl($web, $topic, 'view').
@@ -311,6 +318,7 @@ sub save {
         } else {
             my @p = ('#' => $anchor);
             unless ($no_return) {
+                push(@p, erp_active_table => $urps->{erp_active_topic});
                 push(@p, erp_active_table => $urps->{erp_active_table});
                 push(@p, erp_active_row => $urps->{erp_active_row});
             }

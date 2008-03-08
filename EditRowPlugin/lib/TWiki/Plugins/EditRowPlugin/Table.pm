@@ -417,6 +417,8 @@ sub renderForDisplay {
         $showControls = $this->{editable};
     }
 
+    my $active_topic = "$this->{web}.$this->{topic}";
+
     if ($showControls) {
         if ($this->{attrs}->{disable} !~ /full/) {
             # Full table editing is not disabled
@@ -432,15 +434,17 @@ sub renderForDisplay {
             if ($TWiki::Plugins::VERSION < 1.11) {
                 $url = TWiki::Func::getScriptUrl(
                     $this->{web}, $this->{topic}, $script)
-                  ."?erp_active_table=$this->{number}"
-                    .";erp_active_row=-1"
-                      ."#erp_$this->{number}";
+                  .'?erp_active_topic='.$active_topic
+                    .';erp_active_table='.$this->{number}
+                      .';erp_active_row=-1'
+                        .'#erp_'.$this->{number};
             } else {
                 $url = TWiki::Func::getScriptUrl(
                     $this->{web}, $this->{topic}, $script,
+                    erp_active_topic => $active_topic,
                     erp_active_table => $this->{number},
                     erp_active_row => -1,
-                    '#' => "erp_$this->{number}");
+                    '#' => 'erp_'.$this->{number});
             }
 
             push(@out,
@@ -461,21 +465,21 @@ sub renderForDisplay {
             if ($TWiki::Plugins::VERSION < 1.11) {
                 $url = TWiki::Func::getScriptUrl(
                     'EditRowPlugin', 'save', 'rest')
-                  ."?erp_active_topic=$this->{web}.$this->{topic}"
-                    .";erp_active_table=$this->{number}"
-                      .";erp_active_row=-1"
-                        .";erp_unchanged=-1"
-                          .";erp_addRow.x=1"
-                            ."#erp_$this->{number}";
+                  .'?erp_active_topic='.$active_topic
+                    .';erp_active_table='.$this->{number}
+                      .';erp_active_row=-1'
+                        .';erp_unchanged=-1'
+                          .';erp_addRow.x=1'
+                            .'#erp_'.$this->{number};
             } else {
                 $url = TWiki::Func::getScriptUrl(
                     'EditRowPlugin', 'save', 'rest',
-                    erp_active_topic => "$this->{web}.$this->{topic}",
+                    erp_active_topic => $active_topic,
                     erp_active_table => $this->{number},
                     erp_active_row => -1,
                     erp_unchanged => 1,
                     'erp_addRow.x' => 1,
-                    '#' => "erp_$this->{number}");
+                    '#' => 'erp_'.$this->{number});
             }
             # Full table disabled, but not row
             push(@out, "<a href='$url' title='$title'>$button</a><br />");

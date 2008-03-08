@@ -35,7 +35,12 @@ sub finish {
 sub stringify {
     my $this = shift;
 
-    return $this->{precruft}.$this->{text}.$this->{postcruft};
+    # Jeff Crawford, Item5043:
+    # replace linefeeds with breaks to support multiline textareas
+    my $text = $this->{text};
+    $text =~ s#[\r\n]+#<br \/>#g;
+
+    return $this->{precruft}.$text.$this->{postcruft};
 }
 
 # Row index offset by size in the columnn definition
@@ -170,12 +175,18 @@ sub renderForEdit {
         $rows = 3 if $rows < 1;
         $cols = 30 if $cols < 1;
 
+        # Jeff Crawford, Item5043:
+        # replace BRs to display multiple lines nicely
+        my $tmptext = $unexpandedValue;
+        $tmptext =~ s#<br( /)?>#\r\n#gi;
+        $tmptext =~ s/%BR%/\r\n/gi;
+
         $text = CGI::textarea({
             class => 'EditRowPluginInput',
             rows => $rows,
             columns => $cols,
             name => $cellName,
-            value => $unexpandedValue});
+            value => $tmptext});
 
     } elsif( $colDef->{type} eq 'date' ) {
 
