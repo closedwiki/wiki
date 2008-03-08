@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ArthurClemens" date="1193067440" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICINFO{author="BaseUserMapping_333" date="1204935200" format="1.1" reprev="1.5" version="1.5"}%
 
 ---+!! Form Plugin Examples
 See [[%TWIKIWEB%.FormPlugin]]
@@ -41,11 +41,14 @@ Mouse over the field...
 
 <script type="text/javascript">
 //<![CDATA[
+var bgImg = el.style.backgroundImage;
 function makeYellow(el) {
 	el.style.backgroundColor = '#ffc';
+	el.style.backgroundImage = 'none';
 }
 function makeWhite(el) {
 	el.style.backgroundColor = '#fff';
+	el.style.backgroundImage = bgImg;
 }
 //]]>
 </script>
@@ -514,6 +517,7 @@ buttonlabel="Upload file"
 %ENDFORM%
 
 
+
 ---++ Date
 
 %STARTFORM{{}%
@@ -527,79 +531,80 @@ title="Publishing date"
 
 
 
----++ !SendEmailPlugin form
+---++ Working together with <nop>CommentPlugin to create <nop>HolidaylistPlugin entries
 
-E-mail form for !SendEmailPlugin - form works if the plugin is installed and enabled.
+We want to create a form to enter holiday data: a 'from' date and a 'until' date. The default date format from <nop>HolidaylistPlugin is:
+<verbatim>
+   * from_date - until_date - wikiusername
+</verbatim>
 
-%SENDEMAIL%
-
+We want an easy entry form, but the data must not get corrupted. So:
+   * The 'From' field must be filled in
+   * The 'Until' field will not be displayed if not filled in, so no dash will be displayed
+   * Entering data is only possible if logged in, otherwise we would get <nop>TWikiGuest entries
+   
+<verbatim style="display:none;">
+%TMPL:DEF{PROMPT:holiday_data}%
+<div class="twikiFormSteps">
+<div class="twikiFormStep">
 %STARTFORM{
-name="mailForm"
-action="%SCRIPTURL{sendemail}%/%WEB%/%TOPIC%"
-method="POST"
+name="holiday_data"
+action="save"
+topic="%WEB%.%TOPIC%"
+anchor="NewData"
+}%
+<input type="hidden" name="comment_action" value="save" />
+<input type="hidden" name="comment_type" value="holiday_data" />
+<input type="hidden" name="comment_templatetopic" value="%WEB%.%TOPIC%"  />
+%FORMELEMENT{
+name="From"
+type="date"
+dateformat="%Y/%m/%d"
+size="9"
+title="I am on holidays from:"
+disabled="%IF{"$WIKINAME='TWikiGuest'" then="on"}%"
+validate="nonempty"
 }%
 %FORMELEMENT{
-name="To"
-type="text"
-title="To:"
-validate="email"
-mandatory="on"
-default="arthur@visiblearea.com"
-hint="Enter an e-mail address"
+name="Until"
+type="date"
+dateformat="%Y/%m/%d"
+size="9"
+title="Until:"
+disabled="%IF{"$WIKINAME='TWikiGuest'" then="on"}%"
 }%
 %FORMELEMENT{
-name="Subject"
-type="text"
-title="Subject:"
-hint="(optional)"
+name="comment_from_date"
+type="hidden"
+default="$From"
+condition="$From=nonempty"
 }%
 %FORMELEMENT{
-name="body"
-type="textarea"
-title="Message:"
-rows="5"
-cols="80"
-hint="(optional)"
+name="comment_to_date"
+type="hidden"
+default=" - $Until"
+condition="$Until=nonempty"
 }%
 %FORMELEMENT{
 type="submit"
-default="Send"
-}%
+buttonlabel="Add my dates"
+disabled="%IF{"$WIKINAME='TWikiGuest'" then="on"}%"
+}% %IF{"$WIKINAME='TWikiGuest'" then="<em>Log in to add your dates</em>"}%
 %ENDFORM%
+</div>
+</div>
+%TMPL:END%
+%TMPL:DEF{OUTPUT:holiday_data}%   * %URLPARAM{"comment_from_date"}%%URLPARAM{"comment_to_date"}% - %WIKIUSERNAME%
+%POS:AFTER%%TMPL:END%
+</verbatim>
+
+Try it out:
+#NewData
+%COMMENT{type="holiday_data" noform="on" templatetopic="%WEB%.%TOPIC%"}%
 
 
 
----++ Accessing other sites: Flickr
-This form lets you search for Flickr photos that have been tagged with a name.
-
-%STARTFORM{
-name="flickr"
-action="http://www.flickr.com/photos/tags/$Name/$Netherlands"
-method="POST"
-}%
-%FORMELEMENT{
-name="Name"
-title="Search name on Flickr:"
-type="text"
-default="Sander"
-hint="Enter a first name, such as Sander, Johan or Annemieke"
-}% %FORMELEMENT{
-name="Netherlands"
-type="checkbox"
-options="clusters/netherlands-amsterdam-geotagged/"
-labels="In the Netherlands"
-default="clusters/netherlands-amsterdam-geotagged/"
-hint="Shows pictures from the Netherlands only if these are geo-tagged"
-}%
-%FORMELEMENT{
-type="submit"
-buttonlabel="Show me photos!"
-}%
-%ENDFORM%
-
-
-
----++ Working together with <nop>CommentPlugin
+---++ Working together with <nop>CommentPlugin: filling a table
 
 This form uses [[%TWIKIWEB%.CommentPlugin]] to write submitted values to a table. A user-friendly display of table data is not included in the example.
 
@@ -674,3 +679,76 @@ buttonlabel="Save"
 %TMPL:DEF{OUTPUT:new_article_prependtotable}%%POS:BEFORE%| %URLPARAM{"title"}% | %URLPARAM{"source"}% | %URLPARAM{"source_url"}% | %URLPARAM{"date"}% | %URLPARAM{"entry_date"}% |
 %TMPL:END%
 </verbatim>
+
+
+---++ !SendEmailPlugin form
+
+E-mail form for !SendEmailPlugin - form works if the plugin is installed and enabled.
+
+%SENDEMAIL%
+
+%STARTFORM{
+name="mailForm"
+action="%SCRIPTURL{sendemail}%/%WEB%/%TOPIC%"
+method="POST"
+}%
+%FORMELEMENT{
+name="To"
+type="text"
+title="To:"
+validate="email"
+mandatory="on"
+default="arthur@visiblearea.com"
+hint="Enter an e-mail address"
+}%
+%FORMELEMENT{
+name="Subject"
+type="text"
+title="Subject:"
+hint="(optional)"
+}%
+%FORMELEMENT{
+name="body"
+type="textarea"
+title="Message:"
+rows="5"
+cols="80"
+hint="(optional)"
+}%
+%FORMELEMENT{
+type="submit"
+default="Send"
+}%
+%ENDFORM%
+
+
+
+---++ Accessing other sites: Flickr
+This form lets you search for Flickr photos that have been tagged with a name.
+
+Note: for this example to work, add =http://www.flickr.com/= to ={PermittedRedirectHostUrls}= in [[%SCRIPTURL{"configure"}%][configure]].
+
+%STARTFORM{
+name="flickr"
+action="http://www.flickr.com/photos/tags/$Name/$Netherlands"
+method="POST"
+}%
+%FORMELEMENT{
+name="Name"
+title="Search name on Flickr:"
+type="text"
+default="Sander"
+hint="Enter a first name, such as Sander, Johan or Annemieke"
+}% %FORMELEMENT{
+name="Netherlands"
+type="checkbox"
+options="clusters/netherlands-amsterdam-geotagged/"
+labels="In the Netherlands"
+default="clusters/netherlands-amsterdam-geotagged/"
+hint="Shows pictures from the Netherlands only if these are geo-tagged"
+}%
+%FORMELEMENT{
+type="submit"
+buttonlabel="Show me photos!"
+}%
+%ENDFORM%

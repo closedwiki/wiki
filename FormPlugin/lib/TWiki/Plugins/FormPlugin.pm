@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (c) 2007 by Arthur Clemens
+# Copyright (c) 2007, 2008 by Arthur Clemens
 # All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -32,34 +32,30 @@ use CGI qw( :all );
 # *must* exist in this package
 use vars qw( $VERSION $RELEASE $debug $pluginName $installWeb);
 use vars
-  qw( $currentTopic $currentWeb $defaultFormat $defaultTitleFormat $elementcssclass %expandedForms %substitutedForms %uncheckedForms %validatedForms %errorForms %noErrorForms %errorFields $headerDone %currentForm );
+  qw( $currentTopic $currentWeb $defaultFormat $defaultHiddenFieldFormat $defaultTitleFormat %expandedForms %substitutedForms %uncheckedForms %validatedForms %errorForms %noErrorForms %errorFields $headerDone
+  %currentForm $elementcssclass);
 
 # This should always be $Rev: 11069$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
 $VERSION = '$Rev: 11069$';
-$RELEASE = '1.1.1';
+$RELEASE = '1.2';
 
 # Name of this Plugin, only used in this module
 $pluginName = 'FormPlugin';
 
-$headerDone         = 0;
-$defaultTitleFormat = ' $t <br />';
-$defaultFormat      = '<p>$titleformat $e $m $h </p>';
-%expandedForms      = ();
-%validatedForms     = ();
-%errorForms         = ();
-%noErrorForms       = ();
-%uncheckedForms     = ();
-%substitutedForms   = ()
+$headerDone               = 0;
+$defaultTitleFormat       = ' $t <br />';
+$defaultFormat            = '<p>$titleformat $e $m $h </p>';
+$defaultHiddenFieldFormat = '$e';
+%expandedForms            = ();
+%validatedForms           = ();
+%errorForms               = ();
+%noErrorForms             = ();
+%uncheckedForms           = ();
+%substitutedForms         = ()
   ; # hash of forms names that have their field tokens substituted by the corresponding field values
 %errorFields = ();    # for each field entry: ...
-
-# form attributes we want to retrieve while parsing FORMELEMENT tags:
-%currentForm = (
-    'name'          => '',
-    'elementformat' => '',
-);
 
 # constants
 my $STATUS_NO_ERROR  = 'noerror';
@@ -69,6 +65,8 @@ my $DEFAULT_METHOD   = 'GET';
 my $FORM_SUBMIT_TAG  = 'FP_submit';
 my $ACTION_URL_TAG   = 'FP_actionurl';
 my $VALIDATE_TAG     = 'FP_validate';
+my $CONDITION_TAG    = 'FP_condition';
+my $FIELDTITLE_TAG   = 'FP_title';
 my $MULTIPLE_TAG_ID  = '=m';
 my %MULTIPLE_TYPES   = (
     'radio'    => 1,
@@ -89,6 +87,13 @@ my %ERROR_TYPE_HINTS = (
 
 # translate from user-friendly names to Validate.pm input
 my %REQUIRED_TYPE_TABLE = (
+    'int'      => 'i',
+    'float'    => 'f',
+    'email'    => 'e',
+    'nonempty' => 's',
+    'string'   => 's',
+);
+my %CONDITION_TYPE_TABLE = (
     'int'      => 'i',
     'float'    => 'f',
     'email'    => 'e',
@@ -183,6 +188,18 @@ sub beforeCommonTagsHandler {
 
 }
 
+sub _initValues {
+    $elementcssclass = '';
+
+    # form attributes we want to retrieve while parsing FORMELEMENT tags:
+    undef %currentForm;
+    %currentForm = (
+        'name'          => 'untitled',
+        'elementformat' => $defaultFormat,
+        'noFormHtml'    => '',
+    );
+}
+
 =pod
 
 Read form field tokens and replace them by the field values.
@@ -198,17 +215,65 @@ sub _substituteFieldTokens {
     # create quick lookup hash
     my @names = $query->param;
     my %keyValues;
+    my %conditionFields = ();
     foreach (@names) {
         my $name = $_;
         next if !$name;
         $keyValues{$name} = $query->param($name);
     }
-
     foreach ( keys %keyValues ) {
+        my $name = $_;
+        next if $conditionFields{$name};    # value already set with a condition
         my $value = $keyValues{$_};
-        $value =~ s/(\$(\w+))/$keyValues{$2}/go;
-        $query->param( -name => $_, -value => $value );
+        my ( $referencedField, $meetsCondition ) =
+          _meetsCondition( $name, $value );
+        if ($meetsCondition) {
+            $value =~ s/(\$(\w+))/$keyValues{$2}/go;
+            $query->param( -name => $_, -value => $value );
+        }
+        else {
+            $value = '';
+            $query->param( -name => $referencedField, -value => $value );
+            $conditionFields{$referencedField} = 1;
+        }
     }
+}
+
+=pod
+
+Checks if a field value meets the condition of a referenced field.
+For instance:
+
+User input is:
+%FORMELEMENT{
+name="comment_from_date"
+condition="$comment_from_date_input=nonempty"
+}%
+
+This has been parsed to:
+(hidden) field name: FP_condition_comment_from_date
+(hidden) field value: =comment_from_date=s
+
+=cut
+
+sub _meetsCondition {
+    my ( $fieldName, $nameAndValidationType ) = @_;
+
+    if ( !( $fieldName =~ m/^$CONDITION_TAG\_(.+?)$/go ) ) {
+        return ( $fieldName, 1 );    # no condition, so pass
+    }
+
+    my $referencedField = $1;
+
+    my %validateFields = ();
+    _createValidationFieldEntry( $referencedField, $nameAndValidationType, 0,
+        \%validateFields );
+
+    _validateFormFields(%validateFields);
+    if (@TWiki::Plugins::FormPlugin::Validate::ErrorFields) {
+        return ( $referencedField, 0 );
+    }
+    return ( $referencedField, 1 );
 }
 
 =pod
@@ -290,10 +355,11 @@ Order of actions:
 sub _startForm {
     my ( $session, $params, $topic, $web ) = @_;
 
+    _initValues();
     _addHeader();
 
     my $name = $params->{'name'} || '';
-    return if $expandedForms{$name};
+    return '' if $expandedForms{$name};
 
     # else
     $expandedForms{$name} = 1;
@@ -310,8 +376,8 @@ sub _startForm {
         }
 
         # redirectto if an action url has been passed in the form
-        my $actionurl = $query->param($ACTION_URL_TAG);
-        if ($actionurl) {
+        my $actionUrl = $query->param($ACTION_URL_TAG);
+        if ($actionUrl) {
 
             # delete temporary parameters
             $query->delete($ACTION_URL_TAG);
@@ -324,27 +390,59 @@ sub _startForm {
                 # because the request is changed to a GET
                 # to not loose the parameters we will convert all key-values
                 # to a parameter string
-                $actionurl .= '?' . _postDataToUrlParamString();
+                $actionUrl .= '?' . _postDataToUrlParamString();
 
                 # we now have a url param
                 # delete original POST data
                 $query->delete_all();
                 TWiki::Func::writeDebug(
-"FormPlugin - POST and Plugins::VERSION < 1.2 -- converting all key-values to a parameter string: actionurl="
-                      . $actionurl )
+"FormPlugin - POST and Plugins::VERSION < 1.2 -- converting all key-values to a parameter string: actionUrl="
+                      . $actionUrl )
                   if $debug;
-                TWiki::Func::redirectCgiQuery( undef, $actionurl );
+                TWiki::Func::redirectCgiQuery( undef, $actionUrl );
                 return;
             }
 
             # else
-            TWiki::Func::redirectCgiQuery( undef, $actionurl, 1 );
+            TWiki::Func::redirectCgiQuery( undef, $actionUrl, 1 );
             return '';
         }
     }
 
     # else
     return _displayForm(@_);
+}
+
+=pod
+
+Code taken from TWiki.pm
+
+=cut
+
+sub _isRedirectSafe {
+    my $redirect = shift;
+
+    #TODO: this should really use URI
+    if (   ( !$TWiki::cfg{AllowRedirectUrl} )
+        && ( $redirect =~ m!^([^:]*://[^/]*)/*(.*)?$! ) )
+    {
+        my $host = $1;
+
+        #remove trailing /'s to match
+        $TWiki::cfg{DefaultUrlHost} =~ m!^([^:]*://[^/]*)/*(.*)?$!;
+        my $expected = $1;
+
+        if ( defined( $TWiki::cfg{PermittedRedirectHostUrls} )
+            && $TWiki::cfg{PermittedRedirectHostUrls} ne '' )
+        {
+            my @permitted =
+              map { s!^([^:]*://[^/]*)/*(.*)?$!$1!; $1 }
+              split( /,\s*/, $TWiki::cfg{PermittedRedirectHostUrls} );
+            return 1 if ( grep ( { uc($host) eq uc($_) } @permitted ) );
+        }
+        return ( uc($host) eq uc($expected) );
+    }
+    return 1;
 }
 
 =pod
@@ -361,11 +459,11 @@ sub _validateForm {
     # this is set with parameter =validate="s"= in %FORMELEMENT%
     # during parsing of %FORMELEMENT% this has been converted to
     # a new hidden field $VALIDATE_TAG_fieldname
-
     my $query = TWiki::Func::getCgiQuery();
-    my @names = $query->param;
-    my %validateFields;
-    my $order = 0;
+
+    my @names          = $query->param;
+    my %validateFields = ();
+    my $order          = 0;
     foreach (@names) {
         my $name = $_;
         next if !$name;
@@ -374,31 +472,64 @@ sub _validateForm {
         # can be recognized by $VALIDATE_TAG_fieldname
         my $isSettingField = $name =~ m/^$VALIDATE_TAG\_(.+?)$/go;
         if ($isSettingField) {
-
-            # create hash entry:
-            # string_fieldname+validation_type => reference_field
-            my $fieldName             = $1;
-            my $nameAndvalidationType = $query->param($name);
-            $nameAndvalidationType =~ s/^(.*?)(\=m)*$/$1/go;
-            my $isMultiple = $2 if $2;
-
-            # append order argument
-            $nameAndvalidationType .= '=' . $order++;
-            if ($isMultiple) {
-                my @fieldNameRef;
-                $validateFields{$nameAndvalidationType} = \@fieldNameRef
-                  if $nameAndvalidationType;
-            }
-            else {
-                my $fieldNameRef;
-                $validateFields{$nameAndvalidationType} = \$fieldNameRef
-                  if $nameAndvalidationType;
-            }
+            my $referencedField       = $1;
+            my $nameAndValidationType = $query->param($name);
+            _createValidationFieldEntry( $referencedField,
+                $nameAndValidationType, $order++, \%validateFields );
         }
     }
 
     # return all fine if nothing to be done
     return 1 if !keys %validateFields;
+
+    _validateFormFields(%validateFields);
+    if (@TWiki::Plugins::FormPlugin::Validate::ErrorFields) {
+
+        # store field name refs
+        for my $href (@TWiki::Plugins::FormPlugin::Validate::ErrorFields) {
+            my $fieldNameForRef = $href->{'field'};
+            $errorFields{$fieldNameForRef} = 1;
+        }
+        return 0;
+    }
+    return 1;
+}
+
+sub _createValidationFieldEntry {
+    my ( $fieldName, $nameAndValidationType, $order, $validateFields ) = @_;
+
+    # create hash entry:
+    # string_fieldname+validation_type => reference_field
+    $nameAndValidationType =~ s/^(.*?)(\=m)*$/$1/go;
+
+    # append order argument
+    $nameAndValidationType .= '=' . $order;
+
+    my $isMultiple = $2 if $2;
+    if ($isMultiple) {
+        my @fieldNameRef;
+        $validateFields->{$nameAndValidationType} = \@fieldNameRef
+          if $nameAndValidationType;
+    }
+    else {
+        my $fieldNameRef;
+        $validateFields->{$nameAndValidationType} = \$fieldNameRef
+          if $nameAndValidationType;
+    }
+}
+
+=pod
+
+Use Validator to check fields.
+
+Returns 1 when validation is ok; 0 if an error has been found.
+
+=cut
+
+sub _validateFormFields {
+    my (%fields) = @_;
+
+    eval 'use TWiki::Plugins::FormPlugin::Validate';
 
     # allow some fields not to be validated
     # otherwise we get errors on hidden fields we have inserted ourselves
@@ -408,15 +539,9 @@ sub _validateForm {
     $TWiki::Plugins::FormPlugin::Validate::Complete = 1;
 
     # test fields
-    TWiki::Plugins::FormPlugin::Validate::GetFormData(%validateFields);
+    TWiki::Plugins::FormPlugin::Validate::GetFormData(%fields);
 
     if ($TWiki::Plugins::FormPlugin::Validate::Error) {
-
-        # store field name refs
-        for my $href (@TWiki::Plugins::FormPlugin::Validate::ErrorFields) {
-            my $fieldNameForRef = $href->{'field'};
-            $errorFields{$fieldNameForRef} = 1;
-        }
         return 0;
     }
 
@@ -488,20 +613,26 @@ sub _method {
 
 sub _displayForm {
     my ( $session, $params, $topic, $web ) = @_;
-    
+
     my $name = $params->{'name'} || '';
 
     my $actionParam = $params->{'action'} || '';
-    my $method      = _method( $params->{'method'} || '');
-    my $redirectto  = $params->{'redirectto'} || '';
+    my $method = _method( $params->{'method'} || '' );
+    my $redirectto = $params->{'redirectto'} || '';
     $elementcssclass = $params->{'elementcssclass'} || '';
     my $formcssclass = $params->{'formcssclass'} || '';
-    my $webParam     = $params->{'web'} || '';
-    my $topicParam   = $params->{'topic'} || '';
+    my $webParam     = $params->{'web'}          || '';
+    my $topicParam   = $params->{'topic'}        || '';
 
     # store for element rendering
     $currentForm{'name'} = $name;
     $currentForm{'elementformat'} = $params->{'elementformat'} || '';
+
+    my $noFormHtml = TWiki::Func::isTrue( $params->{'noformhtml'} || '' );
+    if ($noFormHtml) {
+        $currentForm{'noFormHtml'} = 1;
+        return '';
+    }
 
     if ($topicParam) {
         ( $web, $topic ) =
@@ -513,7 +644,6 @@ sub _displayForm {
     }
 
     my $anchor = $params->{'anchor'} || $NOTIFICATION_ANCHOR_NAME;
-    $anchor = undef if !$topicParam;
 
     my $actionUrl = '';
     if ( $actionParam eq 'save' ) {
@@ -548,7 +678,6 @@ sub _displayForm {
     my $disableValidation = $params->{'validate'} eq 'off'
       if ( defined $params->{'validate'} );
 
-# with validation (default on), first post to current topic and retrieve dynamic values
     $startFormParameters{'-action'} =
       $disableValidation ? $actionUrl : $currentUrl;
 
@@ -587,7 +716,10 @@ sub _displayForm {
 sub _endForm {
     my ( $session, $params, $topic, $web ) = @_;
 
-    return '</div><!--/FormPlugin form end-->' . CGI::end_form();
+    my $endForm = '</div><!--/FormPlugin form end-->' . CGI::end_form();
+    $endForm = '' if ( $currentForm{'noFormHtml'} );
+    _initValues();
+    return $endForm;
 }
 
 =pod
@@ -624,16 +756,11 @@ sub _formElement {
     my $type = $params->{'type'};
     my $name = $params->{'name'};
 
-    my $format = $params->{'format'}
+    my $format =
+         $params->{'format'}
       || $currentForm{'elementformat'}
       || $defaultFormat;
-
-    if ( $type eq 'hidden' ) {
-        $format = '$e';
-        $format =~ s/\$e\b/$element/go;
-        $format = _renderFormattingTokens($format);
-        return $format;
-    }
+    $format = $defaultHiddenFieldFormat if ( $type eq 'hidden' );
 
     my $javascriptCalls = '';
     my $focus           = $params->{'focus'};
@@ -647,49 +774,33 @@ sub _formElement {
     }
     my $beforeclick = $params->{'beforeclick'};
     if ($beforeclick) {
-        my $beforeclickCall =
-            '<script type="text/javascript">var el=twiki.Form.getFormElement("'
-          . $currentForm{'name'} . '", "'
+        my $formName        = $currentForm{'name'};
+        my $beforeclickCall = '';
+        $beforeclickCall .= '<script type="text/javascript">';
+        if ( $formName eq '' ) {
+            $beforeclickCall .=
+                'var field=document.getElementsByName("' 
+              . $name
+              . '")[0]; var formName=field.form.name;';
+        }
+        else {
+            $beforeclickCall .= 'var formName="' . $formName . '";';
+        }
+        $beforeclickCall .=
+            'var el=twiki.Form.getFormElement(formName, "' 
           . $name
           . '"); twiki.Form.initBeforeFocusText(el,"'
-          . $beforeclick
-          . '");</script>';
+          . $beforeclick . '");';
+        $beforeclickCall .= '</script>';
         $javascriptCalls .= $beforeclickCall;
     }
 
     $format =~ s/(\$e\b)/$1$javascriptCalls/go;
 
-    my $title = $params->{'title'} || '';
-    my $hint  = $params->{'hint'}  || '';
-
-    $title = _wrapHtmlTitleContainer($title) if $title;
-
     my $mandatoryParam = $params->{'mandatory'};
     my $isMandatory = isTrue( $mandatoryParam, 0 );
     my $mandatory =
       $isMandatory ? _wrapHtmlMandatoryContainer($MANDATORY_STRING) : '';
-
-    my $titleformat = $params->{'titleformat'} || $defaultTitleFormat;
-    $format =~ s/\$titleformat/$titleformat/go if $title;
-    $format =~ s/\$e\b/$element/go;
-    $format =~ s/\$t\b/$title/go;
-    $format =~ s/\$m\b/$mandatory/go;
-
-    $hint = _wrapHtmlHintContainer($hint) if $hint;
-    $format =~ s/\$h\b/$hint/go;
-    my $hintCssClass = $hint ? ' ' . $ELEMENT_GROUP_HINT_CSS_CLASS : '';
-    $format =~ s/\$_h/$hintCssClass/go;
-
-    # clean up tokens if no title
-    $format =~ s/\$titleformat//go;
-    $format = _renderFormattingTokens($format);
-
-    if ($elementcssclass) {
-
-        # not for hidden classes, but these are returned earlier in sub
-        my $classAttr = ' class="' . $elementcssclass . '"';
-        $format = '<div class="' . $elementcssclass . '">' . $format . '</div>';
-    }
 
     my $validationTypeParam = $params->{'validate'};
     my $validationType =
@@ -705,6 +816,52 @@ sub _formElement {
             -name    => $VALIDATE_TAG . '_' . $name,
             -default => "$name$validate$multiple"
           );
+    }
+
+    my $conditionParam = $params->{'condition'};
+    if ($conditionParam) {
+        $conditionParam =~ m/^\$(.*)?\=(.*)$/go;
+        my $conditionReferencedField = $1;
+        my $conditionValue           = $2;
+        my $conditionType =
+          $conditionValue ? $CONDITION_TYPE_TABLE{$conditionValue} : '';
+        if ($conditionType) {
+            my $condition = '=' . $conditionType;
+            $format .= "\n"
+              . CGI::hidden(
+                -name    => $CONDITION_TAG . '_' . $name,
+                -default => "$conditionReferencedField$condition"
+              );
+        }
+    }
+
+    my $title = $params->{'title'} || '';
+    my $hint  = $params->{'hint'}  || '';
+
+    $title = _wrapHtmlTitleContainer($title) if $title;
+
+    my $titleformat = $params->{'titleformat'} || $defaultTitleFormat;
+    $format =~ s/\$titleformat/$titleformat/go if $title;
+    $format =~ s/\$e\b/$element/go;
+    $format =~ s/\$t\b/$title/go;
+    $format =~ s/\$m\b/$mandatory/go;
+
+    return $format if ( $type eq 'hidden' );    # do not draw any more html
+
+    $hint = _wrapHtmlHintContainer($hint) if $hint;
+    $format =~ s/\$h\b/$hint/go;
+    my $hintCssClass = $hint ? ' ' . $ELEMENT_GROUP_HINT_CSS_CLASS : '';
+    $format =~ s/\$_h/$hintCssClass/go;
+
+    # clean up tokens if no title
+    $format =~ s/\$titleformat//go;
+    $format = _renderFormattingTokens($format);
+
+    if ($elementcssclass) {
+
+        # not for hidden classes, but these are returned earlier in sub
+        my $classAttr = ' class="' . $elementcssclass . '"';
+        $format = '<div class="' . $elementcssclass . '">' . $format . '</div>';
     }
 
     # error?
@@ -731,7 +888,10 @@ sub _getFormElementHtml {
     my $type           = $params->{'type'};
     my $hasMultiSelect = $type =~ m/^(.*?)multi$/;
     $type =~ s/^(.*?)multi$/$1/;
-    my $value = $params->{'default'} || $params->{'buttonlabel'};
+    my $value =
+         $params->{'default'}
+      || $params->{'value'}
+      || $params->{'buttonlabel'};
 
     my $size = $params->{'size'} || ( $type eq 'date' ? '15' : '40' );
     my $maxlength = $params->{'maxlength'};
@@ -741,7 +901,7 @@ sub _getFormElementHtml {
       _parseOptions( $params->{'options'}, $params->{'labels'} );
 
     my $itemformat = $params->{'fieldformat'};
-    my $cssClass   = $params->{'cssclass'} || '';
+    my $cssClass = $params->{'cssclass'} || '';
     $cssClass = _normalizeCssClassName($cssClass);
 
     my $selectedoptions = $params->{'default'} || undef;
@@ -842,9 +1002,10 @@ sub _getFormElementHtml {
         $element = _getHiddenHtml( $session, $name, $value );
     }
     elsif ( $type eq 'date' ) {
+        my $dateFormat = $params->{'dateformat'};
         $element =
           _getDateFieldHtml( $session, $name, $value, $size, $maxlength,
-            %extraAttributes );
+            $dateFormat, %extraAttributes );
     }
     return $element;
 }
@@ -1195,9 +1356,13 @@ sub _getSelectHtml {
 =cut
 
 sub _getDateFieldHtml {
-    my ( $session, $name, $value, $size, $maxlength, %extraAttributes ) = @_;
+    my ( $session, $name, $value, $size, $maxlength, $dateFormat,
+        %extraAttributes )
+      = @_;
 
-    my %attributes = _textfieldAttributes(@_);
+    my %attributes =
+      _textfieldAttributes( $session, $name, $value, $size, $maxlength,
+        %extraAttributes );
     my $id = $attributes{'id'} || 'cal' . $currentForm{'name'} . $name;
     $attributes{'id'} |= $id;
 
@@ -1213,7 +1378,11 @@ sub _getDateFieldHtml {
         else {
             TWiki::Contrib::JSCalendarContrib::addHEAD('twiki');
 
-            my $format = $TWiki::cfg{JSCalendarContrib}{format} || '%e %B %Y';
+            my $format =
+                 $dateFormat
+              || $TWiki::cfg{JSCalendarContrib}{format}
+              || "%e %B %Y";
+
             $text .= ' <span class="twikiMakeVisible">';
             my $control = CGI::image_button(
                 -class   => 'editTableCalendarButton',
@@ -1225,6 +1394,7 @@ sub _getDateFieldHtml {
                 -alt   => 'Calendar',
                 -align => 'middle'
             );
+
             #fix generated html
             $control =~ s/MIDDLE/middle/go;
             $text .= $control;
@@ -1244,7 +1414,7 @@ sub _group {
     my $type       = $options{-type};
     my $name       = $options{-name};
     my $size       = $options{-size};
-    my $values     = $options{ -values };
+    my $values     = $options{-values};
     my $default    = $options{-default};
     my %defaultSet = map { $_ => 1 } @$default;
 
@@ -1355,7 +1525,8 @@ sub _wrapHtmlError {
     my $errorIconUrl = "%PUBURL%/%TWIKIWEB%/FormPlugin/error.gif";
     my $errorIconImgTag =
       '<img src="' . $errorIconUrl . '" alt="" width="16" height="16" />';
-    return "#$NOTIFICATION_ANCHOR_NAME\n"
+    return
+        "#$NOTIFICATION_ANCHOR_NAME\n"
       . '<div id="'
       . $ERROR_CSS_CLASS
       . '" class="'
@@ -1372,7 +1543,8 @@ sub _wrapHtmlError {
 sub _wrapHtmlGroupContainer {
     my ($text) = @_;
 
-    return '<fieldset class="'
+    return
+        '<fieldset class="'
       . $ELEMENT_GROUP_CSS_CLASS . '$_h">'
       . $text
       . '</fieldset>';
