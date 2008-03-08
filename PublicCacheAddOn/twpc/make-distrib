@@ -1,0 +1,26 @@
+#!/bin/bash
+# make distrib from these files as ..
+# include in them the mercurial ID of the revision in file HG_REVISION
+
+page_author=`curl -s http://twiki.org/cgi-bin/view/Plugins/PublicCacheAddOn|grep '<span class="patternRevInfo">.*class="twikiLink">ColasNahaboo</a>'`
+
+if test -z "$page_author"; then
+  echo "*** ERROR!"
+  echo "http://twiki.org/cgi-bin/view/Plugins/PublicCacheAddOn page has been edited!"
+  echo "by $page_author"
+  echo "Please report changes in PublicCacheAddOn.txt here, and edit/save on twiki"
+fi
+
+oldpwd="$PWD"
+dirname=${PWD##*/}
+./make-hg-revision >HG_REVISION 2>/dev/null
+
+cd ..
+tar cf - $dirname/* | gzip -9 >/tmp/PublicCacheAddOn.tgz
+cd /tmp
+rm -f PublicCacheAddOn.zip; zip -9 -q PublicCacheAddOn.zip PublicCacheAddOn.tgz
+cd "$oldpwd"
+
+ls -l /tmp/PublicCacheAddOn.tgz /tmp/PublicCacheAddOn.zip
+echo "Mercurial changeset: `cat HG_REVISION`"
+rm -f HG_REVISION

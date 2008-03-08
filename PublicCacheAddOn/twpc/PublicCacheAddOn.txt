@@ -1,0 +1,314 @@
+---+ Public Cache Add-On
+Makes TWiki surviving being  
+[[http://en.wikipedia.org/wiki/Slashdot_effect][Slashdotted]]
+- serves pages 100 times faster.
+---++ Goals
+I made this addon for people (like me) wanting to have their personal (or
+small group) public web site on a TWiki. The problems I want to address are
+thus the ones important for this scenario:
+   * many more reads and readers than edits and authors
+   * huge spikes of visitors, being able to survive a slashdot effect. It 
+     should handle 10000 simultaneous requests on a TWiki topic on a 1Ghz 
+     machine. It does this by locking to ensure only one process tries to 
+     build a page at a time
+   * no, or few read-protected pages:
+      * everybody sees the same thing at the same URL (no more "Hello
+        !ColasNahaboo" in the left bar, indication if you are logged or not. 
+        or personalized left bar)
+      * read-protected pages will work, but as slow as before
+      * pages with parameters will not be cached
+   * do not break the read/edit/save/read cycle: you must not have to have to
+     refresh manually a page to see the edits you just did to it. Other pages 
+     than the one you edit should also be freshened correctly, but this is 
+     less important.
+   * should work with all plugins (or most of them: not the ones showing 
+     different things to different people)
+   * serve the pages  in pre-compressed (gzip) form to save bandwidth and CPU
+   * help resist prefetching clients, such as the Fasterfox Firefox extension
+   * work with hierarchical webs
+   * work with short URLs (without the /bin/view), and even with one "root"
+     web, not appearing in the url (and maybe not showing !WebHome ?) Works 
+     with TWiki:Codev/CreateHomeWebVariable
+   * do not break twiki, or plugins.  Be careful of race conditions when
+     deluged with hundreds of simultaneous requests
+   * slowing down somewhat the other operations than view is acceptable
+   * can be used on hosted sites, but with at least a shell access.
+   * linux server
+   * aims at performance, correctness, automated use but not optimality (we 
+   may re-build the same page unecessarily)
+
+This caching system has thus different goals than TWiki:Codev/TWikiCache that
+will accelerate even page builds, in an exact and optimal way, but will be
+less slashdot-resistant, and the mod_perl, speedycgi, persistent perl perl
+precompilers that will accelerate all operations. It could be used on top of
+them however. It is not adapted by default to working groups, unless you use
+it in Synchronous mode (-t0), as changing a page invalidates eventually the
+whole cache, and you will have to wait before seeing your co-workers
+modifications (or edit a page to become a "changer").  It is closer in
+philosophy and design to Plugins.CacheAddOn.
+
+---++ Usage
+
+   * Just install it, it will work immediately
+   * There is a web admin panel for some administrative tasks, at
+     %SCRIPTURL%/pcad
+   * To disable it, just uninstall it. The config file is kept for easier
+     re-installation with =install -u=, 
+     unless you give the =-p= option for "purging" all the files.
+
+The pcad script can be used interactively or via command-line
+   * %SCRIPTURL%/pcad?clear clears cache
+   * %SCRIPTURL%/pcad?cleartopics=on&topiclist=Web1.Topic1,Web2.Topic2,...
+     clears the cache of specific topics. Can be used in crontabs for pages
+     %INCLUDEing external urls, thus providing a caching wrapper for these
+     urls
+   * %SCRIPTURL%/pcad?build build caches for all yet-uncached pages. It runs 
+     the =pcge= script that you can use also from the command line, or in
+     a crontab job
+   * %SCRIPTURL%/pcad?reset clear twpc-warnings.txt and twpc-debug.txt logs
+
+---++ Syntax
+   * =%<nop>PCACHEEXPTIME{seconds}%= make the page cache expire after
+     =seconds=. (without argument, defaults to 3600, one hour, as for  =%<nop>PCACHEEXPTIME%= ).
+     The cache removal of the topics
+     will be performed by a crontab-scheduled run of =pccl=, so its
+     granularity depends on it (default: 3mn).
+     <br /> The amount of the default value can be set via -the =-t= install  
+     option.
+     <br /> =%<nop>INCLUDE{url}%= automatically performs a =%<nop>PCACHEEXPTIME%=
+     <br />Note that caches will never expire if no page is edited if 
+     =%<nop>PCACHEEXPTIME%= is not used.
+
+---++ Add-On Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this add-on. The following instructions are for the administrator who installs the add-on on the server where TWiki is running. 
+
+   * Download the TGZ file from the Add-on Home (see below)
+   * untar ==%TOPIC%.tgz== where you want, not necessarily in your twiki
+     installation directory
+   * =cd twpc=
+   * type either:
+      * =./install -q -O YOUR_TWIKI_DIR/bin= _C front end: faster, no view logss, but need a C compiler_ __recommended__
+      * =./install YOUR_TWIKI_DIR/bin= _shell front end: slower, but works everyewhere_
+   * the install script will check for the CPAN modules =LWP::Simple=, 
+     =File::Path= and prompt you to install them if not
+     present. On debian/ubuntu, you may want to install the packages
+     =libwww-perl perl-modules libfile-touch-perl=
+
+To update, or change options, just redo install. This will clear the cache. type =./install -h= to see options, i.e:
+   * =-u=    update: reuse the same options as last install (options are stored in =bin/pc-options=)
+   * =-O=    optimize: use C-compiled cache reader. faster.
+   * =-q=    quiet: do not log views on cache hits in normal twiki logs. faster. 
+   * =-tseconds= time (default -1000s, 17mn) after last edit to clear cache
+     =-t0= means the cache is globally cleared on each save
+   * =-Tseconds= but if others are editing, wait for all to have stopped for
+      at least this time to clear (default 150s)
+   * =-eseconds= default value for %<nop>PCACHEEXPTIME% (defaults to 3600)
+   * -wWebList=  make pcad build menu and pcge default mode not rebuild 
+     these webs. List is comma-separated. (defaults to -wMain,TWiki,Sandbox)
+   * =-v=    verbose: logs a lot of things in data/twpc-debug.txt
+   * =-g=    generate distrib
+
+To uninstall:
+   * =./uninstall YOUR_TWIKI_DIR/bin=
+
+---+++ Synchronous mode
+When used for teamwork sites, you may want to be sure that all people see the
+most fresh version of a topic at all times. For this just give the =-t0=
+option at install, it means that the cache will be invalidated on each
+save. This is not bad as it sounds, as some speed gains are still made by the
+compression of  the page, and the pages will still be cached most of the time
+for readers.
+
+---+++ Use with perl accelerators
+*WARNING* if you use *mod_perl* or *speedy_cgi* or *persistent_perl*, you
+*must* disable these accelerators for the =view= script (which is not perl
+anymore, but bash or compiled C), and enable it for =vief=. Otherwise you will
+get an "Error 500" and a trace in your web server logs similar to:
+
+=Bad file descriptor: couldn't spawn child process: view=
+
+Example for SpeedyCgi under apache:
+<verbatim>
+  # default is to use speedycgi for all files in dir
+  SetHandler speedycgi-script 
+  # except for the 4 twpc files, that will use normal cgi
+  <FilesMatch "(view|pcbd|pccl|pcad)">
+    SetHandler cgi-script
+  </FilesMatch>
+</verbatim>
+
+---+++ Tips
+   * Use robots.txt on your site to prevent browsing the TWiki web. e.g,
+     <br> =Disallow: /bin/view/TWiki=
+     <br> You may want to also disallow access to Main, Sandbox, and Trash.
+     Why? The TWiki web represent often an important (more than 500 pages)
+     part of a TWiki web site. This has the drawback of
+      * Making search engines produce less relevant results for your site
+        (your personal contents will be diluted into the TWiki docs)
+      * Google has a time limit for browsing a site. He may thus only crawl
+        part of your TWiki site on first run and not index your actual content
+      * As the cache will be totally cleared on edits, it means that the TWiki
+        cache will be re-computed over and over on crawling by search
+        engines, consuming needless CPU and bandwidth
+   * Use a perl accelerator: TWiki:Codev/ModPerl, TWiki:Codev/SpeedyCGI or 
+     TWiki:Codev/PersistentPerl
+
+---++ Implementation
+I have been toying with this idea for a very long time. At last I sat down
+trying to really implement it, this is how:
+   * a module, *pccr* "cache reader" replaces the view script. if a cached page
+     exists, it just serves it. if not, or if the page is not cacheable (query
+     string in url or a previous attempt to read it anonymously failed), just
+     calls the "cache builder" pcbd module. This pccr (shell) module is the 
+     frontend, so I also provide a *C version* for low starting latency, 
+     thus speed.
+     If you are listed as a  "changer" (you have been editing some page 
+     recently) , it just build the page normally via vief and serves it 
+     without caching it.
+   * the "cache builder", *pcbd* (shell) calls the copy of the original 
+     TWiki view script (named *vief*) to make it build the page, and save 
+     it in normal and gzipped versions. If it cannot get it (read-protected 
+     page) it saves a marker to remember not trying to build it and 
+     directly delegate to vief.
+   * an automatically installed TWiki plugin *PublicCachePlugin* (perl) 
+     installs just an afterSaveHandler hook to track the changes in topics, 
+     and save the IP Adress of the client browser that edited the page as a 
+     "changer". It also interprets the %<nop>PCACHEEXPTIME% vars.
+   * the "cache cleaner" *pccl* (shell) is run every 5 minutes from *
+     crontab*, and when it sees that a changer has not 
+     edited anything anymore since =-t= seconds (default 1000s), it clears 
+     the cache. (if there are other changers it allows them some delay too, 
+     but less - default 150s -, in order to be actually able to clear the 
+     cache eventually). It also look for caches declared as expired via the 
+     =%<nop>PCACHEEXPTIME%= and removes them.
+
+Files:
+   * executables are installed in the =bin/= directory. =pccr= (shell) or 
+   =pccr.bin= (C) replace the =view= script, which is renamed as =vief=, 
+   with a backup copy named =pc-view-backup= to be safe, and the config 
+   files =pc-options= (twpc config) =pc-config= (variables read from your 
+   =lib/LocalSite.cfg=). All filenames start with "pc"
+   * the cache is maintained inside a =working/public_cache/= dir, as:
+      * =cache/=, the current cache. In it the cache for topic T of web W are the files W/T.gz (cached, gzipped). W/T.tx (cached, uncompressed), or W/T.nc if the topic has been determined to be non-cacheable (protected page)
+      * =cache/_changers/= is the list (one file with the name of the client IP) of last editors, who the cache will let through
+      * =cache.N/= is a cache being removed (with a grace delay to avoid race conditions and errors)
+      * =cache/_expire/= lists the topics that are set to expire
+
+Notes
+   * We modify the saved cached pages to be sure they use links to =view= and not =vief=.
+   * An admin module *bin/pcad* provides a web interface (as bin/pcad) for some stats and admin
+     functions such as clearing the whole cache, some topics caches, and logs. It can be called by wget for a automation.
+   * you should always use the =install= script to install it, as it modifies the files on install to set variables to to your actual config.
+   * While you edit a page, other people will see the old cached version of the page. This provides a very useful simple "publication workflow" to let you work on a page, not showing draft copies, and auto-showing it after 1000 seconds of inactivity. Also it tries to keep things consistent: either you see everything in the old cached version, or everything fresh. We thus avoid the complexities of solving dependencies between pages.
+   * TWiki code is slightly patched (3 lines in TWiki.pm, to call
+   =%<nop>PCACHEEXPTIME%= on inclusion of external urls). After a TWiki update, 
+   just reinstall this addon. This patch work with 3.0 to 4.2 versions, and
+   probably newer ones. But it is just for convenience to avoid putting 
+   =%<nop>PCACHEEXPTIME%= by hand on all topics using 
+   =%<nop>INCLUDE{external-url}%
+   The system could be adapted to work with any web app. 
+   * If you use TWiki:Codev/ModPerl, TWiki:Codev/SpeedyCGI or TWiki:Codev/PersistentPerl, check that you enable
+     it also for =bin/vief= for better performance, and *disable it for view*, as it
+     no more a perl file and will crash your server
+   * Although you can log in, the fact that you are logged in will not be shown on cached pages, as they would have been built in non-logged "guest" mode
+   * Serving not-yet-cached pages is approximately 5% slower than without the cache
+   * The cache will occupy roughly 150% of the space occupied by your data dir (less if you have pages with a lot of history).
+   * It would be a good idea to run a cache generation at a time where normally authors do not work anymore, to prepare the cached pages for
+     crawling by search engines, by doing a wget of %SCRIPTURL%/pcad?build
+   * more implementation details can be found in the [[http://hg.colas.nahaboo.net/twiki-colas/twpc/raw-file/tip/README_TWPC.txt][README_TWPC.txt]] file in the distrib. My bleeding edge version is available on my [[http://www.selenic.com/mercurial/][mercurial]] repository for [[http://hg.colas.nahaboo.net/twiki-colas/twpc][twpc]]
+
+---++ Status, known bugs
+Work and tested on
+   * linux (or any unix with GNU utilities, but untested)
+   * TWiki Cairo, Dakar, Edinburgh, Freetown, ... (3.0 -> 4.2). Should work on
+     any version at it is very disconnected from TWiki perl code. Warning:
+     Cairo(3.0) is only supported in the version 3.1 of this plugin
+   * All pages are emitted with =content-type: text/html= This does not seem a problem for RSS feeds, as the readers
+     do not seem to be bothered by this. It could be a problem however if some pages were set up to use other types, such as text/plain?
+   * Changes to pages not resulting from an edit will not be shown (e.g. %INCLUDE of external urls). Anyways, this is discouraged for server scalability, better use javascript to make the browser work to include external URLs to save your server CPU. This can be solved by clearing the cache of these pages in a crontab job every N minutes by 
+   <br> =wget %<nop>SCRIPTURL%/pcad?action=topics&topiclist=Web1.Topic1,Web2.Topic2=
+   <br>Note that the special case of externally-%INCLUDEd urls are handled
+   automatically. If you have special topics needing refresh (because they use
+   special plugins of rely on the current time for instance), please put in
+   the topic a =%<nop>PCACHEEXPTIME% variable or use a crontab job like
+   described above
+   * Another kind of changes not done by normal editing is installing or
+   changing templates, skins or plugins. Thus we recommend disabling the
+   cache during skins development for instance. 
+
+Current performance: (celeron 1Ghz, 512M RAM, Apache 1.3, 150 max processes)
+for 20 simultaneous requests for the same TWiki page:
+|*Configuration*|*First run, empty cache*|*2nd run, cache built*|
+| Normal 4.2  | 143s load 20 | 143s load 20 |
+| TWiki:Codev/TWikiCache  | 66s load 12 | 65s load 11 |
+| Cairo+mod_perl+koalaskin  | 28s load 8 | 18s load 9 |
+| Cairo+speedy+koalaskin | 20s load 6 | 17s load 8 |
+| publiccache -v | 9s load 4 | 0.20s load 0 |
+| publiccache -q -O | 8s load 1 | 0.17s load 0 |
+| publiccache -q -O + speedy | 8s load 0.6 | 0.13s load 0 |
+
+Note that you can push really hard, and send 1000, or even 10,000 simultaneous
+requests, the server will now hold without a sweat, you can even still edit
+pages while deluging it with requests from another machine. example:
+   * 1000 concurrent hits, shell frontend:
+     completed in 2s with server load reaching 23
+   * 1000 concurrent hits, C frontend: 
+     completed in 1s with server load reaching 11
+
+Note that these tests were made with an empty cache to factor in the cost of
+generating the page. With the page cache already built, even the shell
+frontend can serve the 1000 pages in one second with a load peak of 2.5. And
+with the C frontend, you are able to browse the site with page loads under 10
+seconds even if you launch a flood of 10,000 requests at the same time, as the
+server load stays around 1.2.
+
+I ran the simple tests on another server on the LAN the command:
+<br> =i=1000;while let 'i-->0';do curl -s --compressed <nop>http://mytwiki/bin/view/TWiki/TWikiVariables >/dev/null& done; time wait=
+
+Note that it does *not* mean this cache is better that  TWiki:Codev/TWikiCache
+for all uses. If you just look at the time to load a single page:
+|*Configuration*|*1rst time*|*2nd time*|
+| Normal  | 6s | 6s |
+| Normal+speedy  | 6s | 5.5s |
+| publiccache  | 6s | 0.06s |
+| TWiki:Codev/TWikiCache  | 4.3s | 3.3s |
+| TWiki:Codev/TWikiCache + speedy  | 4.5s | 3s |
+You can see that !TWikiCache will be better suited for intranet sites, and the
+only option if you use access control or have personalized views anyways. And
+my "benchmark" is really braindead and do not model typical use. And it only
+measures the time to send the page. In real life, you will have to wait for
+your browser to get the css, javascript, and image files, and render the page.
+
+---++ Add-On Info
+
+   * Set SHORTDESCRIPTION = Fast cache geared for public site usage
+
+|  Add-on Author: | TWiki:Main.ColasNahaboo |
+|  Copyright: | &copy; 2008, TWiki:Main.ColasNahaboo |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Add-on Version: | 08 Mar 2008 (V3.500) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  08 Mar 2008: | v3.5 -w option to rebuild only some webs |
+|  04 Mar 2008: | v3.4 synchronous mode was disabling cache |
+|  28 Feb 2008: | v3.3 lazy autoload of CPAN modules for less overhead |
+|  24 Feb 2008: | v3.2 %<nop>PCACHEEXPTIME{...}% variable, automatic for external url include, but do *not work on Cairo* (v3.0) anymore from now on |
+|  05 Feb 2008: | v3.1 -t0 option runs in synchronous mode |
+|  03 Feb 2008: | v3.0 works now also with all versions: Cairo, Dakar, Edinburgh, ... |
+|  02 Feb 2008: | v2.4 typo in pccl, fixed |
+|  02 Feb 2008: | v2.3 -T option, can clear cache of individual topics |
+|  01 Feb 2008: | v2.2 bugfix: created caches on non-existing topics, fixes calls to Web alone without trailing / |
+|  30 Jan 2008: | v2.1 generate standard twiki logs by default |
+|  29 Jan 2008: | algorithm v2, beta, autoconfig |
+|  13 Jan 2008: | Initial version, v1, alpha |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.020 (TWiki 3.0) |
+|  CPAN Dependencies: | LWP::Simple File::Path |
+|  Other Dependencies: | bash, sed, wget, grep, crontab, cc (optional), ... |
+|  Perl Version: | 5.005 |
+|  Add-on Home: | TWiki:Plugins/%TOPIC% |
+|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
+|  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
+
+__Related Topic:__ %TWIKIWEB%.TWikiAddOns
+
+-- TWiki:Main/ColasNahaboo - 08 Mar 2008
