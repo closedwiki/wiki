@@ -1064,7 +1064,10 @@ sub getScriptUrl {
         if( $script ) {
             $url .= '/' unless $url =~ /\/$/;
             $url .= $script;
-            $url .= $TWiki::cfg{ScriptSuffix} if $script;
+	    if (rindex($url, $TWiki::cfg{ScriptSuffix}) !=
+	        ( length($url) - length($TWiki::cfg{ScriptSuffix}))) {
+                $url .= $TWiki::cfg{ScriptSuffix} if $script;
+	    }
         }
     }
 
