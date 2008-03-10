@@ -453,7 +453,7 @@ sub resetPassword {
         my $err=$session->i18n->maketext(
                   'Email has been disabled for this TWiki installation');
         throw TWiki::OopsException( 'attention',
-                                    topic => $TWiki::cfg{UsersTopicName},
+                                    topic => $TWiki::cfg{HomeTopicName},
                                     def => 'reset_bad',
                                     params => [ $err ] );
     }
@@ -501,12 +501,12 @@ sub resetPassword {
         }
 
         throw TWiki::OopsException( 'attention',
-                                    topic => $TWiki::cfg{UsersTopicName},
+                                    topic => $TWiki::cfg{HomeTopicName},
                                     def => 'reset_ok',
                                     params => [ $message ] );
     } else {
         throw TWiki::OopsException( 'attention',
-                                    topic => $TWiki::cfg{UsersTopicName},
+                                    topic => $TWiki::cfg{HomeTopicName},
                                     def => 'reset_bad',
                                     params => [ $message ] );
     }
@@ -899,7 +899,7 @@ sub _writeRegistrationDetailsToTopic {
     my $user = $data->{WikiName};
     $text = $session->expandVariablesOnTopicCreation( $text, $user, $TWiki::cfg{UsersWebName}, $user );
 
-    $meta->put( 'TOPICPARENT', { 'name' => $TWiki::cfg{UsersTopicName}} );
+    $meta->put( 'TOPICPARENT', { 'name' => $TWiki::cfg{HomeTopicName}} );
 
     $session->{store}->saveTopic($session->{users}->getCanonicalUserID($agent), $TWiki::cfg{UsersWebName},
                                  $user, $text, $meta );
