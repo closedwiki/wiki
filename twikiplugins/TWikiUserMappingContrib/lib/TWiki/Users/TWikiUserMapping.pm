@@ -595,7 +595,6 @@ method in that module for details.
 
 sub eachMembership {
     my ($this, $user) = @_;
-    my @groups = ();
 
     _getListOfGroups( $this );
     require TWiki::ListIterator;
@@ -715,29 +714,38 @@ Duplicates are removed from the list.
 =cut
 
 sub getEmails {
-    my( $this, $user ) = @_;
-	$this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
+    my( $this, $user, $seen ) = @_;
+    $this->ASSERT_IS_CANONICAL_USER_ID($user) if DEBUG;
 
-    my %emails;
-    if ( $this->isGroup($user) ) {
-        my $it = $this->eachGroupMember( $user );
-        while( $it->hasNext() ) {
-            foreach ($this->getEmails( $it->next())) {
-                $emails{$_} = 1;
-            }
-        }
+    $seen ||= {};
+
+    my %emails = ();
+
+    if ($seen->{$user}) {
+      #print STDERR "preventing infinit recursion in getEmails($user)\n";
     } else {
-        if ($this->{passwords}->isManagingEmails()) {
-            # get emails from the password manager
-            foreach ($this->{passwords}->getEmails( $this->getLoginName( $user ))) {
-                $emails{$_} = 1;
-            }
-        } else {
-            # And any on offer from the user mapping manager
-            foreach (mapper_getEmails( $this->{session}, $user )) {
-                $emails{$_} = 1;
-            }
-        }
+      $seen->{$user} = 1;
+
+      if ( $this->isGroup($user) ) {
+          my $it = $this->eachGroupMember( $user );
+          while( $it->hasNext() ) {
+              foreach ($this->getEmails( $it->next(), $seen )) {
+                  $emails{$_} = 1;
+              }
+          }
+      } else {
+          if ($this->{passwords}->isManagingEmails()) {
+              # get emails from the password manager
+              foreach ($this->{passwords}->getEmails( $this->getLoginName( $user ), $seen )) {
+                  $emails{$_} = 1;
+              }
+          } else {
+              # And any on offer from the user mapping manager
+              foreach (mapper_getEmails( $this->{session}, $user )) {
+                  $emails{$_} = 1;
+              }
+          }
+      }
     }
 
     return keys %emails;
