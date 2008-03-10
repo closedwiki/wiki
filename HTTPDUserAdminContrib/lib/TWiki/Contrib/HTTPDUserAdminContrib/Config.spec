@@ -67,6 +67,19 @@ $TWiki::cfg{HTTPDUserAdminContrib}{UserTable} = "";
 #NameField - Field for the name (Default is 'user')
 $TWiki::cfg{HTTPDUserAdminContrib}{NameField} = "user";
 # **STRING 30**
+#NameField - Field for the wikiname (only used if {Register}{AllowLoginName} is on) (Default is 'wikiname')
+$TWiki::cfg{HTTPDUserAdminContrib}{WikiNameField} = "wikiname";
+# **STRING 30**
 #PasswordField - Field for the password (Default is 'password')
 $TWiki::cfg{HTTPDUserAdminContrib}{PasswordField} = "password";
+# **STRING 30**
+#GroupTable - Table with field names below (set ={HTTPDUserAdminContrib}{DB}= for the Database Schema name)
+# only applicable if UserMapping is set to TWiki::Users::HTTPDUserAdminUserMapping
+$TWiki::cfg{HTTPDUserAdminContrib}{GroupTable} = "";
+# **STRING 30**
+#GroupNameField - Field for the group (Default is 'group')
+$TWiki::cfg{HTTPDUserAdminContrib}{GroupNameField} = "group";
+# **STRING 30**
+#userNameField - Field for the name (Default is 'user') (must match the User table's NameField in value)
+$TWiki::cfg{HTTPDUserAdminContrib}{UserNameField} = "user";
 

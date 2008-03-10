@@ -48,8 +48,7 @@ sub new {
     my( $class, $session ) = @_;
 
     my $this = $class->SUPER::new( $session );
-    #$this->{apache} = new Apache::Htpasswd
-    #  ( { passwdFile => $TWiki::cfg{Htpasswd}{FileName} } );
+
 	my %configuration =  (
 			DBType =>					$TWiki::cfg{HTTPDUserAdminContrib}{DBType} || 'Text',
 			Host =>						$TWiki::cfg{HTTPDUserAdminContrib}{Host} || '',
@@ -72,11 +71,33 @@ sub new {
              );
 
 	$this->{configuration} = \%configuration;
+
     $this->{userDatabase} = new HTTPD::UserAdmin(%configuration);
-	
-	print STDERR "new HTTPDAuth".join(', ', $this->{userDatabase}->list())."\n" if ($TWiki::cfg{HTTPDUserAdminContrib}{Debug});
+
+#	print STDERR "new HTTPDAuth".join(', ', $this->{userDatabase}->list())."\n" if ($TWiki::cfg{HTTPDUserAdminContrib}{Debug});
 
     return $this;
+}
+
+#add func to HTTPD::UserAdmin::SQL so i can ask for a list of users by fields..
+sub listMatchingUsers
+{
+        my($this, $field, $value) = @_;
+        my $self = $this->{userDatabase};
+        my $statement = 
+	    sprintf("SELECT %s from %s WHERE %s = '%s'\n",
+		    @{$self}{qw(NAMEFIELD USERTABLE)}, $field, $value);
+        print STDERR $statement if $self->debug;
+        my $sth = $self->{'_DBH'}->prepare($statement);
+        Carp::carp("Cannot prepare sth ($DBI::err): $DBI::errstr")
+	    unless $sth;
+        $sth->execute || Carp::croak($DBI::errstr);
+        my($user,@list);
+        while($user = $sth->fetchrow) {
+    	    push(@list, $user);
+        }
+        $sth->finish;
+        return @list;
 }
 
 =begin twiki
@@ -92,6 +113,7 @@ Break circular references.
 sub finish {
     my $this = shift;
     $this->SUPER::finish();
+    $this->{userDatabase}->commit();
     undef $this->{userDatabase};
 }
 
@@ -120,10 +142,14 @@ sub readOnly {
     return 0;
 }
 
+sub canFetchUsers {
+    return 1;
+}
 sub fetchUsers {
     my $this = shift;
     my @users = $this->{userDatabase}->list();
-    return new ListIterator(\@users);
+    require TWiki::ListIterator;
+    return new TWiki::ListIterator(\@users);
 }
 
 sub fetchPass {
@@ -193,27 +219,46 @@ sub isManagingEmails {
     return 1;
 }
 
+#special accessors for HTTPDUserAdminUserMapping
+sub fetchField {
+    my( $this, $login, $fieldname) = @_;
+	return unless ($this->{userDatabase}->exists($login));
+	my $settings = $this->{userDatabase}->fetch($login, ($fieldname));
+	
+	#use Data::Dumper;
+	#print STDERR "\nsettings . ".$settings." ..".Dumper($settings, keys(%{$settings}));
+	
+	return $settings->{$fieldname};
+}
+sub setField {
+    my( $this, $login, $fieldname, $value) = @_;
+	return unless ($this->{userDatabase}->exists($login));
+    my $r = $this->{userDatabase}->update($login, undef,  {$fieldname=>$value} );
+	return $r;
+}
+
 # emails are stored in extra info field as a ; separated list
 sub getEmails {
     my( $this, $login) = @_;
 	return unless ($this->{userDatabase}->exists($login));
-	my $settings = $this->{userDatabase}->fetch($login, ('emails'));
+	my $setting = fetchField($this, $login, 'emails');
 	
-	
-	#use Data::Dumper;
-	#print STDERR "\nsettings . ".$settings." ..".Dumper($settings, keys(%{$settings}));
-
-    my @r = split(/;/, $$settings{emails});
+    my @r = split(/;/, $setting);
     $this->{error} = undef;
     return @r;
 }
-
 sub setEmails {
     my $this = shift;
     my $login = shift;
-    my $r = $this->{userDatabase}->update($login, undef,  {emails=>join(';', @_)} );
+    my $r = setField($this, $login, 'emails', join(';', @_) );
     $this->{error} =  undef;
     return $r;
+}
+sub findUserByEmail {
+    my( $this, $email ) = @_;
+    ASSERT($email) if DEBUG;
+    
+    return $this->listMatchingUsers('emails', $email);
 }
 
 1;
