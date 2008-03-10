@@ -548,9 +548,10 @@ sub addUser {
                 'Failed to add user: '.$this->{passwords}->error());
         }
         
-        if( $TWiki::cfg{Register}{AllowLoginName} ) {
-	        $wikiname = $this->{passwords}->setField($login, $TWiki::cfg{HTTPDUserAdminContrib}{WikiNameField}, $wikiname);
+        if( !$TWiki::cfg{Register}{AllowLoginName} ) {
+            $wikiname = $login;
         }
+        $this->{passwords}->setField($login, $TWiki::cfg{HTTPDUserAdminContrib}{WikiNameField}, $wikiname);
     }
 
     my $user = getCanonicalUserID( $this, $login, 1 );

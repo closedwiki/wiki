@@ -183,25 +183,47 @@ sub removeUser {
     return $r;
 }
 
+=pod
+
+---++ ObjectMethod setPassword( $user, $newPassU, $oldPassU ) -> $boolean
+
+If the $oldPassU matches matches the user's password, then it will
+replace it with $newPassU.
+
+If $oldPassU is not correct and not 1, will return 0.
+
+If $oldPassU is 1, will force the change irrespective of
+the existing password, adding the user if necessary.
+
+Otherwise returns 1 on success, undef on failure.
+
+=cut
+
 sub setPassword {
     my( $this, $login, $newPassU, $oldPassU ) = @_;
     ASSERT( $login ) if DEBUG;
 
     if( defined($oldPassU)) {
-        my $ok = 0;
-        try {
-            $ok = $this->checkPassword( $login, $oldPassU );
-        } catch Error::Simple with {
-        };
-        unless( $ok ) {
-            $this->{error} = "Wrong password";
-            return 0;
+        if ($oldPassU != 1) {
+            my $ok = 0;
+            try {
+                $ok = $this->checkPassword( $login, $oldPassU );
+            } catch Error::Simple with {
+            };
+            unless( $ok ) {
+                $this->{error} = "Wrong password";
+                return 0;
+            }
         }
     }
 
     my $added = 0;
     try {
-        $added = $this->{userDatabase}->add( $login, $newPassU );
+        if ($this->{userDatabase}->exists( $login) ) {
+            $added = $this->{userDatabase}->update( $login, $newPassU );
+        } else {
+            $added = $this->{userDatabase}->add( $login, $newPassU );
+        }
         $this->{error} = undef;
     } catch Error::Simple with {
         $this->{error} = 'problem changing password';
