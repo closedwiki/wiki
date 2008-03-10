@@ -453,7 +453,7 @@ sub resetPassword {
         my $err=$session->i18n->maketext(
                   'Email has been disabled for this TWiki installation');
         throw TWiki::OopsException( 'attention',
-                                    topic => $TWiki::cfg{UsersTopicName},
+                                    topic => $TWiki::cfg{HomeTopicName},
                                     def => 'reset_bad',
                                     params => [ $err ] );
     }
@@ -501,12 +501,12 @@ sub resetPassword {
         }
 
         throw TWiki::OopsException( 'attention',
-                                    topic => $TWiki::cfg{UsersTopicName},
+                                    topic => $TWiki::cfg{HomeTopicName},
                                     def => 'reset_ok',
                                     params => [ $message ] );
     } else {
         throw TWiki::OopsException( 'attention',
-                                    topic => $TWiki::cfg{UsersTopicName},
+                                    topic => $TWiki::cfg{HomeTopicName},
                                     def => 'reset_bad',
                                     params => [ $message ] );
     }
