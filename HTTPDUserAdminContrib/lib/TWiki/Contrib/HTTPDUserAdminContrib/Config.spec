@@ -61,7 +61,7 @@ $TWiki::cfg{HTTPDUserAdminContrib}{Auth} = "";
 #Driver - Driver for DBI (Default is 'mSQL')
 $TWiki::cfg{HTTPDUserAdminContrib}{Driver} = "mSQL";
 # **STRING 30**
-#UserTable - Table with field names below
+#UserTable - Table with field names below (set ={HTTPDUserAdminContrib}{DB}= for the Database Schema name)
 $TWiki::cfg{HTTPDUserAdminContrib}{UserTable} = "";
 # **STRING 30**
 #NameField - Field for the name (Default is 'user')

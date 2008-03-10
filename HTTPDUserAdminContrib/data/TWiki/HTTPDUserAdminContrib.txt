@@ -12,11 +12,20 @@ though the [[http://search.cpan.org/~lds/HTTPD-User-Manage-1.66/lib/HTTPD/UserAd
 
 It has been developed and tested for the TWiki-4.2, though _may_ be useable for previous releases.
 
-A once off converstion from an existing TWiki htpasswd file must be done, due to differences in the way that email addresses are stored.
+See the Extensions | HTTPDUserAdminContrib section of =configure= to set up the specific options.
+
+---+++ Text file user store (.htpassword)
+If you are using the Text mode a once off converstion from an existing TWiki htpasswd file must be done, due to differences in the way that email addresses are stored.
 
 run =perl -pi~ -e "s/$([^:]*):([^:]*):(.*)^/$1:$2:emails=$3/g" twiki/data/.htpasswd= to convert from TWiki's native htpassword format.
 
 From there you can use that file in the =Text= =DBType=, use =dbmmanage= to import it to a DBM file, or run a similar tool to import it into your database.
+---+++ DBM mode
+
+---+++ SQL mode (DBI)
+This Contrib will not create the database setup for you, you will need to have an existing database, with appropriate database connection permissions, and a database table for with the required fields that is accessible by this user.
+
+Note that the DB Schema name is set in the top section of the settings (defaults to the .htpasswd filename).
 
 ---++ Installation Instructions
    1 Install %TOPIC%

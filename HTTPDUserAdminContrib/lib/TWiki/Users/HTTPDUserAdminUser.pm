@@ -50,7 +50,7 @@ sub new {
     my $this = $class->SUPER::new( $session );
     #$this->{apache} = new Apache::Htpasswd
     #  ( { passwdFile => $TWiki::cfg{Htpasswd}{FileName} } );
-	my @configuration =  (
+	my %configuration =  (
 			DBType =>					$TWiki::cfg{HTTPDUserAdminContrib}{DBType} || 'Text',
 			Host =>						$TWiki::cfg{HTTPDUserAdminContrib}{Host} || '',
 			Port =>						$TWiki::cfg{HTTPDUserAdminContrib}{Port} || '',
@@ -71,7 +71,8 @@ sub new {
 			#Debug =>				1
              );
 
-    $this->{userDatabase} = new HTTPD::UserAdmin(@configuration);
+	$this->{configuration} = \%configuration;
+    $this->{userDatabase} = new HTTPD::UserAdmin(%configuration);
 	
 	print STDERR "new HTTPDAuth".join(', ', $this->{userDatabase}->list())."\n" if ($TWiki::cfg{HTTPDUserAdminContrib}{Debug});
 
@@ -94,6 +95,31 @@ sub finish {
     undef $this->{userDatabase};
 }
 
+=pod
+
+---++ ObjectMethod readOnly(  ) -> boolean
+
+returns true if the password file is not currently modifyable
+
+=cut
+
+sub readOnly {
+    my $this = shift;
+
+    if ($this->{configuration}->{DBType} eq 'SQL') {
+    } else {
+        #file based
+        my $path = $this->{configuration}->{DB};
+        if (-e $path && -d $path && !-w $path) {
+            #if the file has been set to non-writable
+            return 1;
+        }      
+    }
+
+    $this->{session}->enterContext('passwords_modifyable');
+    return 0;
+}
+
 sub fetchUsers {
     my $this = shift;
     my @users = $this->{userDatabase}->list();
@@ -112,7 +138,7 @@ sub checkPassword {
     my ( $this, $login, $password ) = @_;
 	
 	#TODO: this should be extracted to a new LoginManager i think
-	my $authen = new HTTPD::Authen ($this->{userDatabase});
+	my $authen = new HTTPD::Authen($this->{configuration});
 	return $authen->check($login, $password);
 }
 
