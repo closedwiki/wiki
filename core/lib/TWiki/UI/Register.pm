@@ -899,7 +899,7 @@ sub _writeRegistrationDetailsToTopic {
     my $user = $data->{WikiName};
     $text = $session->expandVariablesOnTopicCreation( $text, $user, $TWiki::cfg{UsersWebName}, $user );
 
-    $meta->put( 'TOPICPARENT', { 'name' => $TWiki::cfg{HomeTopicName}} );
+    $meta->put( 'TOPICPARENT', { 'name' => $TWiki::cfg{UsersTopicName}} );
 
     $session->{store}->saveTopic($session->{users}->getCanonicalUserID($agent), $TWiki::cfg{UsersWebName},
                                  $user, $text, $meta );
