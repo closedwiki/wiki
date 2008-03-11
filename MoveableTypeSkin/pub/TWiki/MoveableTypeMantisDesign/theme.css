@@ -51,7 +51,7 @@ body
 }
 
 #banner-inner { 
-background:transparent url(http://localhost/twiki/pub/TWiki/MoveableTypeMantisDesign/top-mantis-logo.png) no-repeat scroll 0%;
+background:transparent url(top-mantis-logo.png) no-repeat scroll 0%;
 height:240px;
 padding:0pt;
 }
@@ -78,7 +78,7 @@ padding:0pt;
 
 #pagebody-inner
 {
-    background: #5687BC url(http://localhost/twiki/pub/TWiki/MoveableTypeMantisDesign/left-mantis-logo.png) no-repeat scroll 0% 0%;
+    background: #5687BC url(left-mantis-logo.png) no-repeat scroll 0% 0%;
 }
 
 
@@ -484,7 +484,7 @@ img.image-full
 	.layout-one-column #alpha-inner
 	{
 		padding: 30px 44px;
-		background: white url(http://localhost/twiki/pub/TWiki/MoveableTypeMantisDesign/inner-mantis-logo.png) no-repeat scroll 0% 0%;
+		background: white url(inner-mantis-logo.png) no-repeat scroll 0% 0%;
 
 	}
 
@@ -510,7 +510,7 @@ img.image-full
 	.layout-two-column-left #alpha-inner
 	{
 		padding: 56px 14px;
-		background: white url(http://localhost/twiki/pub/TWiki/MoveableTypeMantisDesign/inner-mantis-logo.png) no-repeat scroll 0% 0%;
+		background: white url(inner-mantis-logo.png) no-repeat scroll 0% 0%;
 		height: 100%;
 	}
 	
@@ -552,7 +552,7 @@ img.image-full
 	.layout-two-column-right #alpha-inner
 	{
 		padding: 46px 30px;
-		background: white url(http://localhost/twiki/pub/TWiki/MoveableTypeMantisDesign/inner-mantis-logo.png) no-repeat scroll 0% 0%;
+		background: white url(inner-mantis-logo.png) no-repeat scroll 0% 0%;
 		height: 100%;
 	}
 	
@@ -596,7 +596,7 @@ img.image-full
 	.layout-three-column #alpha-inner
 	{
 		padding: 56px 14px;
-		background: white url(http://localhost/twiki/pub/TWiki/MoveableTypeMantisDesign/inner-mantis-logo.png) no-repeat scroll 0% 0%;
+		background: white url(inner-mantis-logo.png) no-repeat scroll 0% 0%;
 		height: 100%;
 
 	}
