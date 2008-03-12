@@ -89,9 +89,7 @@ function checkName() {
 
 ---+++ Add New <nop>%TYPE% to the <nop>%BASEWEB% Web
 
-<div class="twikiFormSteps">
-<div class="twikiFormStep">
-<p><form name="addType" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%BASEWEB%/" onsubmit="return checkName()" >
+<form name="addType" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%BASEWEB%/" onsubmit="return checkName()" >
 Add <select name="selectClass"  size="1"  
 ~~~          onchange="selectNewOrPre(this.value);" > 
 ~~~      <option value="new"> New <nop>%TYPE% </option>
@@ -115,8 +113,8 @@ Add <select name="selectClass"  size="1"
 ~~~        }% 
 ~~~   </select>
 </p>
-</div><!--/twikiFormStep--><div class="twikiFormStep">
-<div id="addNew" style="display:inline;"  >%TABLE{tablewidth="100%" columnwidths="14%,86%" }%
+<div id="addNew" style="display:inline;"  >
+%TABLE{tablewidth="100%" columnwidths="14%,86%" }%
 |  *Name:* | <input type="text" name="new_type"  size="25" onblur="nameNew();" > 
 ~~~     %IFDEFINEDTHEN{"%NEWEXTRA%" glue="off"}%
 ~~~     %INCLUDE{"%TOPIC%" section="%NEWEXTRA%" TYPE="%TYPE%"}% 
@@ -136,9 +134,6 @@ Add <select name="selectClass"  size="1"
 <input type="hidden" name="Classification" value="%TYPE%" />
 <p /><input type="submit" id="submit" value=" Create New <nop>%TYPE%  " />
 </form>
-
-</div><!--/twikiFormStep-->
-</div><!--/twikiFormSteps-->
 %STOPINCLUDE%
 </verbatim>
 
