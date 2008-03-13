@@ -285,9 +285,11 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 %TABLE{headeralign="left" databg="#ffffff,#ffffff" databgsorted="#f5f5f5"}%
 | *&nbsp;* | *File Name* | *Name* | *Write...* |
 | <img src="%ATTACHURLPATH%/as.gif" alt="as" title="as" />  | =as.gif= | !ActionScript | =%<nop>ICON{as}%= |
+| <img src="%ATTACHURLPATH%/air.gif" alt="air" title="air" />  | =air.gif= | Adobe Air | =%<nop>ICON{air}%= |
 | <img src="%ATTACHURLPATH%/bat.gif" alt="bat" title="bat" />  | =bat.gif= | MS-DOS batch file | =%<nop>ICON{bat}%= |
 | <img src="%ATTACHURLPATH%/bmp.gif" alt="bmp" title="bmp" />  | =bmp.gif= | Bitmap | =%<nop>ICON{bmp}%= |
 | <img src="%ATTACHURLPATH%/c.gif" alt="c" title="c" />  | =c.gif= | C source code file  | =%<nop>ICON{c}%= |
+| <img src="%ATTACHURLPATH%/css.gif" alt="css" title="css" />  | =css.gif= | Cascading Style Sheet file  | =%<nop>ICON{css}%= |
 | <img src="%ATTACHURLPATH%/dll.gif" alt="dll" title="dll" />  | =dll.gif= | Dynamic Linked Library; Microsoft application file | =%<nop>ICON{dll}%= |
 | <img src="%ATTACHURLPATH%/doc.gif" alt="doc" title="doc" />  | =doc.gif= | Microsoft Word file | =%<nop>ICON{doc}%= |
 | <img src="%ATTACHURLPATH%/else.gif" alt="else" title="else" />  | =else.gif= | Unknown file format | =%<nop>ICON{else}%= |
@@ -368,6 +370,7 @@ __Related Topics:__ TWikiSkins, DeveloperDocumentationCategory, AdminDocumentati
 __Contributors:__ Most icons on this page were originally designed by TWiki:Main.PeterThoeny. Many icons were recreated by TWiki:Main.ArthurClemens.
 
 %META:FILEATTACHMENT{name="addon.gif" attr="" comment="" date="1169565034" path="addon.gif" size="370" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="air.gif" attr="" comment="" date="1169565034" path="air.gif" size="356" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="application.gif" attr="" comment="" date="1169565034" path="application.gif" size="356" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="arrowbdown.gif" attr="" comment="" date="1169565034" path="arrowbdown.gif" size="101" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="arrowbleft.gif" attr="" comment="" date="1169565034" path="arrowbleft.gif" size="98" user="TWikiContributor" version=""}%
@@ -399,6 +402,7 @@ __Contributors:__ Most icons on this page were originally designed by TWiki:Main
 %META:FILEATTACHMENT{name="choice-yes.gif" attr="" comment="" date="1169565034" path="choice-yes.gif" size="159" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="closed.gif" attr="" comment="" date="1169565034" path="closed.gif" size="379" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="code.gif" attr="" comment="" date="1169565035" path="code.gif" size="374" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="css.gif" attr="" comment="" date="1169565035" path="css.gif" size="374" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="days.gif" attr="" comment="" date="1169565034" path="days.gif" size="161" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="detail.gif" attr="" comment="" date="1169565034" path="detail.gif" size="118" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="dll.gif" attr="" comment="" date="1169565034" path="dll.gif" size="376" user="TWikiContributor" version=""}%

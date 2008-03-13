@@ -640,6 +640,7 @@ pub/TWiki/TWikiDocGraphics/TWikiDocGraphics_Text_todo.psd 0644
 pub/TWiki/TWikiDocGraphics/TWikiDocGraphics_Text_updated.psd 0644
 pub/TWiki/TWikiDocGraphics/_filetypes.txt 0644
 pub/TWiki/TWikiDocGraphics/addon.gif 0644
+pub/TWiki/TWikiDocGraphics/air.gif 0644
 pub/TWiki/TWikiDocGraphics/application.gif 0644
 pub/TWiki/TWikiDocGraphics/arrowbdown.gif 0644
 pub/TWiki/TWikiDocGraphics/arrowbleft.gif 0644
@@ -671,6 +672,7 @@ pub/TWiki/TWikiDocGraphics/choice-no.gif 0644
 pub/TWiki/TWikiDocGraphics/choice-yes.gif 0644
 pub/TWiki/TWikiDocGraphics/closed.gif 0644
 pub/TWiki/TWikiDocGraphics/code.gif 0644
+pub/TWiki/TWikiDocGraphics/css.gif 0644
 pub/TWiki/TWikiDocGraphics/days.gif 0644
 pub/TWiki/TWikiDocGraphics/detail.gif 0644
 pub/TWiki/TWikiDocGraphics/dll.gif 0644
