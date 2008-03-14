@@ -46,13 +46,13 @@ body
     color:navajoWhite;
 	background: #5687BC;
 	text-align: left;
-    height:240px;
+    height:236px;
 	
 }
 
 #banner-inner { 
-background:transparent url(top-mantis-logo.png) no-repeat scroll 0%;
-height:240px;
+background:transparent url(top-mantis-logo.jpg) no-repeat scroll 0%;
+height:236px;
 padding:0pt;
 }
 
@@ -78,7 +78,7 @@ padding:0pt;
 
 #pagebody-inner
 {
-    background: #5687BC url(left-mantis-logo.png) no-repeat scroll 0% 0%;
+    background: #5687BC url(left-mantis-logo.jpg) no-repeat scroll 0% 0%;
 }
 
 
@@ -478,13 +478,13 @@ img.image-full
 		display: block;
 		float: none;
 		width: auto;
-		left: 82px;
+		left: 79px;
 	}
 
 	.layout-one-column #alpha-inner
 	{
 		padding: 30px 44px;
-		background: white url(inner-mantis-logo.png) no-repeat scroll 0% 0%;
+		background: white url(inner-mantis-logo.jpg) no-repeat scroll 0% 0%;
 
 	}
 
@@ -502,7 +502,7 @@ img.image-full
 		display: block;
 		position: absolute;
 		float: none;
-		left: 82px;
+		left: 79px;
 		top: 0;
 		height: 100%;		
 	}
@@ -510,7 +510,7 @@ img.image-full
 	.layout-two-column-left #alpha-inner
 	{
 		padding: 56px 14px;
-		background: white url(inner-mantis-logo.png) no-repeat scroll 0% 0%;
+		background: white url(inner-mantis-logo.jpg) no-repeat scroll 0% 0%;
 		height: 100%;
 	}
 	
@@ -520,7 +520,7 @@ img.image-full
 					display: block;
 			float: none;
 			width: auto;
-			margin-left: 282px;
+			margin-left: 279px;
 		
 	}
 	
@@ -545,14 +545,14 @@ img.image-full
 			float: none;
 			width: auto;
 			margin-right: 200px;
-		left: 82px;
+		left: 79px;
 		height: 100%;		
 	}
 	
 	.layout-two-column-right #alpha-inner
 	{
 		padding: 46px 30px;
-		background: white url(inner-mantis-logo.png) no-repeat scroll 0% 0%;
+		background: white url(inner-mantis-logo.jpg) no-repeat scroll 0% 0%;
 		height: 100%;
 	}
 	
@@ -588,7 +588,7 @@ img.image-full
 		display: block;
 			position: absolute;
 			float: none;
-			left: 82px;
+			left: 79px;
 			top: 0;
 		height: 100%;		
 	}
@@ -596,7 +596,7 @@ img.image-full
 	.layout-three-column #alpha-inner
 	{
 		padding: 56px 14px;
-		background: white url(inner-mantis-logo.png) no-repeat scroll 0% 0%;
+		background: white url(inner-mantis-logo.jpg) no-repeat scroll 0% 0%;
 		height: 100%;
 
 	}
@@ -607,7 +607,7 @@ img.image-full
 					display: block;
 			float: none;
 			width: auto;
-			margin-left: 282px;
+			margin-left: 279px;
 			margin-right: 200px;
 		
 	}
