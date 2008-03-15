@@ -106,16 +106,20 @@ sub processText {
       if $TWiki::Plugins::EditTablePlugin::debug;
 
     unless ($prefsInitialized) {
-        $prefCHANGEROWS = TWiki::Func::getPreferencesValue('CHANGEROWS')
+        $prefCHANGEROWS =
+             TWiki::Func::getPreferencesValue('CHANGEROWS')
           || TWiki::Func::getPreferencesValue('EDITTABLEPLUGIN_CHANGEROWS')
           || 'on';
-        $prefQUIETSAVE = TWiki::Func::getPreferencesValue('QUIETSAVE')
+        $prefQUIETSAVE =
+             TWiki::Func::getPreferencesValue('QUIETSAVE')
           || TWiki::Func::getPreferencesValue('EDITTABLEPLUGIN_QUIETSAVE')
           || 'on';
-        $prefEDIT_BUTTON = TWiki::Func::getPreferencesValue('EDIT_BUTTON')
+        $prefEDIT_BUTTON =
+             TWiki::Func::getPreferencesValue('EDIT_BUTTON')
           || TWiki::Func::getPreferencesValue('EDITTABLEPLUGIN_EDIT_BUTTON')
           || 'Edit table';
-        $prefSAVE_BUTTON = TWiki::Func::getPreferencesValue('SAVE_BUTTON')
+        $prefSAVE_BUTTON =
+             TWiki::Func::getPreferencesValue('SAVE_BUTTON')
           || TWiki::Func::getPreferencesValue('EDITTABLEPLUGIN_SAVE_BUTTON')
           || 'Save table';
         $prefQUIET_SAVE_BUTTON =
@@ -123,7 +127,8 @@ sub processText {
           || TWiki::Func::getPreferencesValue(
             'EDITTABLEPLUGIN_QUIET_SAVE_BUTTON')
           || 'Quiet save';
-        $prefADD_ROW_BUTTON = TWiki::Func::getPreferencesValue('ADD_ROW_BUTTON')
+        $prefADD_ROW_BUTTON =
+             TWiki::Func::getPreferencesValue('ADD_ROW_BUTTON')
           || TWiki::Func::getPreferencesValue('EDITTABLEPLUGIN_ADD_ROW_BUTTON')
           || 'Add row';
         $prefDELETE_LAST_ROW_BUTTON =
@@ -131,7 +136,8 @@ sub processText {
           || TWiki::Func::getPreferencesValue(
             'EDITTABLEPLUGIN_DELETE_LAST_ROW_BUTTON')
           || 'Delete last row';
-        $prefCANCEL_BUTTON = TWiki::Func::getPreferencesValue('CANCEL_BUTTON')
+        $prefCANCEL_BUTTON =
+             TWiki::Func::getPreferencesValue('CANCEL_BUTTON')
           || TWiki::Func::getPreferencesValue('EDITTABLEPLUGIN_CANCEL_BUTTON')
           || 'Cancel';
         $prefMESSAGE_INCLUDED_TOPIC_DOES_NOT_EXIST =
@@ -148,7 +154,7 @@ sub processText {
     my $invokedFromTopic = $_[3];    # not used yet
     my $invokedFromWeb   = $_[4];    # not used yet
 
-    my $result = '';
+    my @result;
 
     my $insidePRE    = 0;
     my $cgiTableNr   = 0;
@@ -198,7 +204,7 @@ sub processText {
         if ($insidePRE) {
 
             # no need to process, just copy the line
-            $result .= "$_\n";
+            push( @result, "$_\n" );
             next;
         }
 
@@ -209,7 +215,7 @@ sub processText {
             if ($doSave) {
 
                 # no need to process, just copy the line
-                $result .= "$_\n";
+                push( @result, "$_\n" );
             }
             else {
                 my $line = $_;
@@ -224,8 +230,8 @@ s/$editTablePluginRE/&handleEditTableTag( $theWeb, $theTopic, $1, $2 )/geo;
                 # TODO: something strange has happened to the prefix
                 # it is no longer used by handleEditTableTag
                 # we add it here:
-                $result .= $1 if $1;
-                $result .= $3 if $3;
+                push( @result, $1 ) if $1;
+                push( @result, $3 ) if $3;
             }
             $tableNr++;
 
@@ -309,6 +315,14 @@ s/$editTablePluginRE/&handleEditTableTag( $theWeb, $theTopic, $1, $2 )/geo;
             }
         }    # if $isLineWithEditTableTag
 
+        # check if the previous line had a TABLE tag
+        my $ref_to_results = \@result;
+        my $previousLine   = $ref_to_results->[ scalar @result - 1 ];
+        if ( $previousLine =~ m/$regex{table_plugin}/go ) {
+            putDisableSortInTableTagLine($previousLine)
+              if ( $doEdit && !$doSave );
+            $ref_to_results->[ scalar @result - 1 ] = $previousLine;
+        }
         $hasTableTag = 0;
         if (/$regex{table_plugin}/) {
 
@@ -320,8 +334,8 @@ s/$editTablePluginRE/&handleEditTableTag( $theWeb, $theTopic, $1, $2 )/geo;
 
             # When editing we append a disableallsort="on" to the TABLE tag
             # to prevent TablePlugin from sorting the table. (Item5135)
-            $_ =~ s/(}%)/ disableallsort="on"$1/ if ( $doEdit && !$doSave );
-
+            #$_ =~ s/(}%)/ disableallsort="on"$1/ if ( $doEdit && !$doSave );
+            putDisableSortInTableTagLine($_) if ( $doEdit && !$doSave );
             $hasTableTag = 1;
         }
 
@@ -337,7 +351,7 @@ s/$editTablePluginRE/&handleEditTableTag( $theWeb, $theTopic, $1, $2 )/geo;
                 if ( !$hasTableRow && !$insideTable ) {
                     my $tableStart =
                       handleTableStart( $theWeb, $theTopic, $tableNr, $doEdit );
-                    $result .= $tableStart;
+                    push( @result, $tableStart );
                     $insideTable = 1;
                     $hasTableRow = 1;
                     next;
@@ -355,7 +369,7 @@ s/^(\s*)\|(.*)/handleTableRow( $1, $2, $tableNr, $isNewRow, $rowNr, $doEdit, $do
                     my $rowCount = $rowNr - $headerRowCount - $footerRowCount;
                     my $tableEnd = handleTableEnd( $theWeb, $rowCount, $doEdit,
                         $headerRowCount, $footerRowCount );
-                    $result .= $tableEnd;
+                    push( @result, $tableEnd );
                 }
             }    # if !$doEdit && !$doSave
 
@@ -368,7 +382,7 @@ s/^(\s*)\|(.*)/handleTableRow( $1, $2, $tableNr, $isNewRow, $rowNr, $doEdit, $do
                         my $tableStart =
                           handleTableStart( $theWeb, $theTopic, $tableNr,
                             $doEdit );
-                        $result .= $tableStart;
+                        push( @result, $tableStart );
                     }
                     $insideTable = 1;
                     $hasTableRow = 1;
@@ -475,14 +489,14 @@ s/$regex{table_row}/handleTableRow( $1, $2, $tableNr, $isNewRow, $theRowNr, $doE
                         $cellRow =~
                           s/(etcell)([0-9]+)(x)([0-9]+)/$1$rowCounter$3$4/go;
                     }
-                    $result .= join( "\n", @combinedRows ) . "\n";
+                    push( @result, join( "\n", @combinedRows ) . "\n" );
 
                     if ( !$doSave ) {
                         my $rowCount = scalar @bodyRows;
                         my $tableEnd =
                           handleTableEnd( $theWeb, $rowCount, $doEdit,
                             $headerRowCount, $footerRowCount, $addedRowCount );
-                        $result .= $tableEnd;
+                        push( @result, $tableEnd );
                     }
 
                 }    # $hasTableRow
@@ -506,14 +520,17 @@ s/$regex{table_row}/handleTableRow( $1, $2, $tableNr, $isNewRow, $theRowNr, $doE
             $cgiTableNr      = 0;
         }
 
-        $result .= "$_\n";
+        push( @result, "$_\n" );
     }
 
+    my $resultText = join( "", @result );
+
     # clean up hack that handles EDITTABLE correctly if at end
-    $result =~ s/($RENDER_HACK)+$//go;
+    $resultText =~ s/($RENDER_HACK)+$//go;
 
     if ($doSave) {
-        my $error = TWiki::Func::saveTopicText( $theWeb, $theTopic, $result, '',
+        my $error =
+          TWiki::Func::saveTopicText( $theWeb, $theTopic, $resultText, '',
             $doSaveQuiet );
         TWiki::Func::setTopicEditLock( $theWeb, $theTopic, 0 );   # unlock Topic
         my $url = TWiki::Func::getViewUrl( $theWeb, $theTopic );
@@ -524,7 +541,7 @@ s/$regex{table_row}/handleTableRow( $1, $2, $tableNr, $isNewRow, $theRowNr, $doE
         TWiki::Func::redirectCgiQuery( $query, $url );
         return;
     }
-    $_[0] = $result;
+    $_[0] = $resultText;
 }
 
 =pod
@@ -559,6 +576,9 @@ sub extractParams {
 
     $tmp = TWiki::Func::extractNameValuePair( $theArgs, 'editbutton' );
     $$theHashRef{'editbutton'} = $tmp if ($tmp);
+
+    $tmp = TWiki::Func::extractNameValuePair( $theArgs, 'javascriptinterface' );
+    $$theHashRef{'javascriptinterface'} = $tmp if ($tmp);
 
     return;
 }
@@ -598,14 +618,15 @@ sub handleEditTableTag {
     #$preSp = $thePreSpace || '';
 
     %params = (
-        'header'        => '',
-        'footer'        => '',
-        'headerislabel' => "1",
-        'format'        => '',
-        'changerows'    => $prefCHANGEROWS,
-        'quietsave'     => $prefQUIETSAVE,
-        'helptopic'     => '',
-        'editbutton'    => '',
+        'header'              => '',
+        'footer'              => '',
+        'headerislabel'       => "1",
+        'format'              => '',
+        'changerows'          => $prefCHANGEROWS,
+        'quietsave'           => $prefQUIETSAVE,
+        'helptopic'           => '',
+        'editbutton'          => '',
+        'javascriptinterface' => '',
     );
     $warningMessage = '';
 
@@ -655,6 +676,8 @@ sub handleEditTableTag {
     $params{'footer'} =~ s/\|\s*$//o;
     $params{'changerows'} = '' if ( $params{changerows} =~ /^(off|no)$/oi );
     $params{'quietsave'}  = '' if ( $params{quietsave}  =~ /^(off|no)$/oi );
+    $params{'javascriptinterface'} = 'off'
+      if ( $params{javascriptinterface} =~ /^(off|no)$/oi );
 
     @format         = parseFormat( $params{format}, $theTopic, $theWeb, 0 );
     @formatExpanded = parseFormat( $params{format}, $theTopic, $theWeb, 1 );
@@ -688,7 +711,7 @@ sub handleTableStart {
     $text .=
 "$preSp<form name=\"edittable$theTableNr\" action=\"$viewUrl\" method=\"post\">\n";
     $text .= hiddenField( $preSp, 'ettablenr', $theTableNr, "\n" );
-    $text .= hiddenField( $preSp, 'etedit', 'on', "\n" )
+    $text .= hiddenField( $preSp, 'etedit',    'on',        "\n" )
       unless $doEdit;
     return $text;
 }
@@ -762,7 +785,10 @@ sub handleTableEnd {
         # table specific script
         my $tableNr = $query->param('ettablenr');
         &TWiki::Plugins::EditTablePlugin::addEditModeHeadersToHead( $tableNr,
-            $assetUrl );
+            $assetUrl, $params{'javascriptinterface'} );
+        &TWiki::Plugins::EditTablePlugin::addJavaScriptInterfaceDisabledToHead(
+            $tableNr)
+          if ( $params{'javascriptinterface'} eq 'off' );
     }
     else {
         $params{editbutton} |= '';
@@ -869,7 +895,7 @@ sub inputElement {
     # If cell is empty we remove the space to not annoy the user when
     # he needs to add text to empty cell.
     $theValue = '' if ( $theValue eq ' ' );
-    
+
     if ($cellFormat) {
         my @aFormat = parseFormat( $cellFormat, $theTopic, $theWeb, 0 );
         @bits = split( /,\s*/, $aFormat[0] );
@@ -1202,10 +1228,10 @@ sub handleTableRow {
             }
             elsif ($doSave) {
                 $cell = addSpaceToBothSides($cell);
-                
-                # Item5217 Avoid that deleting content of cell creates unwanted span
+
+            # Item5217 Avoid that deleting content of cell creates unwanted span
                 $cell = ' ' if $cell eq '';
-                
+
                 $text .= "$cell\|";
             }
             else {
@@ -1345,6 +1371,16 @@ sub doEnableEdit {
     TWiki::Func::setTopicEditLock( $theWeb, $theTopic, 1 );
 
     return 1;
+}
+
+=pod
+
+Adds parameter disableallsort="on" to a TABLE tag
+
+=cut
+
+sub putDisableSortInTableTagLine {
+    $_[0] =~ s/(}%)/ disableallsort="on"$1/;
 }
 
 package TWiki::Plugins::Table;

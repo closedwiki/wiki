@@ -35,7 +35,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '4.7.10';
+$RELEASE = '4.7.11';
 
 $encodeStart = '--EditTableEncodeStart--';
 $encodeEnd   = '--EditTableEncodeEnd--';
@@ -125,7 +125,7 @@ sub decodeValue {
 
 sub decodeFormatTokens {
     return if ( !$_[0] );
-    $_[0] =~ s/\$n\(\)/\n/gos;    # expand '$n()' to new line
+    $_[0] =~ s/\$n\(\)/\n/gos;               # expand '$n()' to new line
     my $alpha = TWiki::Func::getRegularExpression('mixedAlpha');
     $_[0] =~ s/\$n([^$alpha]|$)/\n$1/gos;    # expand '$n' to new line
     $_[0] =~ s/\$nop(\(\))?//gos;      # remove filler, useful for nested search
@@ -160,10 +160,11 @@ Style sheet and javascript for table in edit mode
 =cut
 
 sub addEditModeHeadersToHead {
-    my ( $tableNr, $assetUrl ) = @_;
+    my ( $tableNr, $assetUrl, $paramJavascriptInterface ) = @_;
 
     return if $editModeHeaderDone;
-    return if !$usesJavascriptInterface;
+    return
+      if !$usesJavascriptInterface && ( $paramJavascriptInterface ne 'on' );
 
     require TWiki::Contrib::BehaviourContrib;
     TWiki::Contrib::BehaviourContrib::addHEAD();
@@ -185,6 +186,18 @@ sub addEditModeHeadersToHead {
 EOF
 
     TWiki::Func::addToHEAD( 'EDITTABLEPLUGIN', $header );
+}
+
+sub addJavaScriptInterfaceDisabledToHead {
+    my ($tableNr) = @_;
+
+    my $tableId = "edittable$tableNr";
+    my $header  = "";
+    $header .=
+'<meta name="EDITTABLEPLUGIN_NO_JAVASCRIPTINTERFACE_EditTableId" content="'
+      . $tableId . '" />';
+
+    TWiki::Func::addToHEAD( 'EDITTABLEPLUGIN_NO_JAVASCRIPTINTERFACE', $header );
 }
 
 1;
