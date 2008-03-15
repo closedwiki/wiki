@@ -318,7 +318,7 @@ s/$editTablePluginRE/&handleEditTableTag( $theWeb, $theTopic, $1, $2 )/geo;
         # check if the previous line had a TABLE tag
         my $ref_to_results = \@result;
         my $previousLine   = $ref_to_results->[ scalar @result - 1 ];
-        if ( $previousLine =~ m/$regex{table_plugin}/go ) {
+        if ( $previousLine && $previousLine =~ m/$regex{table_plugin}/go ) {
             putDisableSortInTableTagLine($previousLine)
               if ( $doEdit && !$doSave );
             $ref_to_results->[ scalar @result - 1 ] = $previousLine;
