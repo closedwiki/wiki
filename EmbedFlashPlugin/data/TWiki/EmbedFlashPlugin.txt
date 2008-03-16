@@ -139,7 +139,7 @@ height="400px"
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ArthurClemens |
-|  Plugin Version: | 25 Feb 2008 (v1.1) |
+|  Plugin Version: | 16 Mar 2008 (v1.1.1) |
 |  Change History: | &nbsp; |
 |  25 Feb 2008: | Version 1.1 - Added attributes. Write HTML embed/object tags with Javascript to prevent popup windows. If no javascript is available the =noscript= tag is used. |
 |  02 Nov 2006: | Version 1.01 - Updated Flash sample, small changes to documentation. |

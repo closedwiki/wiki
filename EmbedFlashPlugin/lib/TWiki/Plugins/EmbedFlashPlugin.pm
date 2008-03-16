@@ -10,7 +10,7 @@ use vars qw(
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
 $VERSION = '$Rev$';
-$RELEASE = '1.1';
+$RELEASE = '1.1.1';
 
 $pluginName = 'EmbedFlashPlugin';
 
