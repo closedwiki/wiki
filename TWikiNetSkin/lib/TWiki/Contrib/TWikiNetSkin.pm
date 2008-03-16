@@ -1,4 +1,4 @@
 package TWiki::Contrib::TWikiNetSkin;
 use vars qw( $VERSION );
-$VERSION = '$Rev$';
+$VERSION = '1.0.1';
 1;

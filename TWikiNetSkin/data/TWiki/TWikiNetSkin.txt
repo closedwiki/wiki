@@ -58,7 +58,7 @@ This skin is based on TWiki:Plugins/PatternSkin, and the same rules for customiz
 |  Screenshot: | <a href="%ATTACHURL%/fullscreen.png"><img src="%ATTACHURL%/screenshot.png" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=twikinet,pattern][Preview with this topic]] |
 |  Base Name: | twikinet,pattern |
-|  Skin Version: | 16 Mar 2008 (v1.000) |
+|  Skin Version: | 16 Mar 2008 (v1.0.1) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
 |  16 Mar 2008: | Public release (v1.000) |
 |  Dependencies: | TWiki 4.2; TWiki:Plugins/PatternSkin (automatically provided by TWiki); TWiki:Plugins/TWikiNetSkinPlugin |

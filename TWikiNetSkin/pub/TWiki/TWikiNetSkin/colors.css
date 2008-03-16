@@ -1030,6 +1030,10 @@ li.patternLogIn {
 	background-image:url(bg_bottom_gradient.gif);
 	background-repeat:repeat-x;
 }
+#patternBottomBarContents #twikinetBadge {
+	float:right;
+	margin-left:10px;
+}
 
 #attachhelpshow img,
 #attachhelphide img,
