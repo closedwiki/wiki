@@ -8,10 +8,10 @@ BEGIN {
   }
 }
 
-use TWiki::Plugins::Build;
+use TWiki::Contrib::Build;
 
 # Create the build object
-$build = new TWiki::Plugins::Build( 'EmbedFlashPlugin' );
+$build = new TWiki::Contrib::Build( 'EmbedFlashPlugin' );
 
 # Build the target on the command line, or the default target
 $build->build($build->{target});
