@@ -1,0 +1,38 @@
+---+!! !FamFamFamContrib
+<!--
+One line description, required for extensions repository catalog.
+   * Set SHORTDESCRIPTION = 4 great free icon sets, by Mark James http://www.famfamfam.com
+-->
+%SHORTDESCRIPTION%
+
+%TOC%
+
+---++ Usage
+
+The icons are attached to the FamFamFamFlagIcons  FamFamFamMiniIcons  FamFamFamMintIcons  FamFamFamSilkIcons topics - be *CAREFUL* those topics can cause your browser to run very slowly for a bit.
+
+
+---++ Examples
+
+   * <img src="%PUBURLPATH%/TWiki/FamFamFamFlagIcons/au.png" /> (=&lt;img src="%PUBURLPATH%/TWiki/FamFamFamFlagIcons/au.png" /&gt;=)
+
+---++ Installation Instructions
+
+%$INSTALL_INSTRUCTIONS%
+
+---++ Contrib Info
+
+
+|  Contrib Author(s): | Icons by Mark James http://www.famfamfam.com, TWiki packaging by TWiki:Main.SvenDowideit |
+|  Copyright: | &copy; Mark James |
+|  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
+|  Contrib Version: | %$VERSION% |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  Dependencies: | %$DEPENDENCIES% |
+|  Contrib Home: | http://twiki.org/cgi-bin/view/Plugins/FamFamFamContrib |
+|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/FamFamFamContribDev |
+|  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/FamFamFamContribAppraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiContribs, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the feedback topic on twiki.org instead. -->
