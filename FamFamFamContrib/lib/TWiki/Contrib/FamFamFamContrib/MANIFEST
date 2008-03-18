@@ -8,6 +8,12 @@ data/TWiki/FamFamFamMintIcons.txt
 data/TWiki/FamFamFamMiniIcons.txt
 
 
+pub/TWiki/FamFamFamContrib/silk-preview.jpg
+pub/TWiki/FamFamFamContrib/mint-preview.jpg
+pub/TWiki/FamFamFamContrib/flags-preview.jpg
+pub/TWiki/FamFamFamContrib/mini-preview.jpg
+
+
 pub
 pub/TWiki
 pub/TWiki/FamFamFamFlagIcons
