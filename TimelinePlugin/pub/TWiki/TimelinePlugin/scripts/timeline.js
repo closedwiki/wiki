@@ -2,6 +2,13 @@
  *  Timeline
  *==================================================
  */
+
+Timeline.strings = {}; // localization string tables
+
+Timeline.getDefaultLocale = function() {
+    return Timeline.clientLocale;
+};
+
 Timeline.create = function(elmt, bandInfos, orientation, unit) {
     return new Timeline._Impl(elmt, bandInfos, orientation, unit);
 };
@@ -18,25 +25,19 @@ Timeline.createBandInfo = function(params) {
     
     var ether = new Timeline.LinearEther({ 
         centersOn:          ("date" in params) ? params.date : new Date(),
-        interval:           Timeline.DateTime.gregorianUnitLengths[params.intervalUnit],
+        interval:           SimileAjax.DateTime.gregorianUnitLengths[params.intervalUnit],
         pixelsPerInterval:  params.intervalPixels
     });
     
     var etherPainter = new Timeline.GregorianEtherPainter({
         unit:       params.intervalUnit, 
-        theme:      theme 
-    });
-    
-    var layout = new Timeline.StaticTrackBasedLayout({
-        eventSource:    eventSource,
-        ether:          ether,
-        showText:       ("showEventText" in params) ? params.showEventText : true,
-        theme:          theme
+        multiple:   ("multiple" in params) ? params.multiple : 1,
+        theme:      theme,
+        align:      ("align" in params) ? params.align : undefined
     });
     
     var eventPainterParams = {
         showText:   ("showEventText" in params) ? params.showEventText : true,
-        layout:     layout,
         theme:      theme
     };
     if ("trackHeight" in params) {
@@ -45,7 +46,19 @@ Timeline.createBandInfo = function(params) {
     if ("trackGap" in params) {
         eventPainterParams.trackGap = params.trackGap;
     }
-    var eventPainter = new Timeline.DurationEventPainter(eventPainterParams);
+    
+    var layout = ("overview" in params && params.overview) ? "overview" : ("layout" in params ? params.layout : "original");
+    var eventPainter;
+    switch (layout) {
+        case "overview" :
+            eventPainter = new Timeline.OverviewEventPainter(eventPainterParams);
+            break;
+        case "detailed" :
+            eventPainter = new Timeline.DetailedEventPainter(eventPainterParams);
+            break;
+        default:
+            eventPainter = new Timeline.OriginalEventPainter(eventPainterParams);
+    }
     
     return {   
         width:          params.width,
@@ -64,7 +77,7 @@ Timeline.createHotZoneBandInfo = function(params) {
     
     var ether = new Timeline.HotZoneEther({ 
         centersOn:          ("date" in params) ? params.date : new Date(),
-        interval:           Timeline.DateTime.gregorianUnitLengths[params.intervalUnit],
+        interval:           SimileAjax.DateTime.gregorianUnitLengths[params.intervalUnit],
         pixelsPerInterval:  params.intervalPixels,
         zones:              params.zones
     });
@@ -72,18 +85,12 @@ Timeline.createHotZoneBandInfo = function(params) {
     var etherPainter = new Timeline.HotZoneGregorianEtherPainter({
         unit:       params.intervalUnit, 
         zones:      params.zones,
-        theme:      theme 
-    });
-    
-    var layout = new Timeline.StaticTrackBasedLayout({
-        eventSource:    eventSource,
-        ether:          ether,
-        theme:          theme
+        theme:      theme,
+        align:      ("align" in params) ? params.align : undefined
     });
     
     var eventPainterParams = {
         showText:   ("showEventText" in params) ? params.showEventText : true,
-        layout:     layout,
         theme:      theme
     };
     if ("trackHeight" in params) {
@@ -92,8 +99,20 @@ Timeline.createHotZoneBandInfo = function(params) {
     if ("trackGap" in params) {
         eventPainterParams.trackGap = params.trackGap;
     }
-    var eventPainter = new Timeline.DurationEventPainter(eventPainterParams);
     
+    var layout = ("overview" in params && params.overview) ? "overview" : ("layout" in params ? params.layout : "original");
+    var eventPainter;
+    switch (layout) {
+        case "overview" :
+            eventPainter = new Timeline.OverviewEventPainter(eventPainterParams);
+            break;
+        case "detailed" :
+            eventPainter = new Timeline.DetailedEventPainter(eventPainterParams);
+            break;
+        default:
+            eventPainter = new Timeline.OriginalEventPainter(eventPainterParams);
+    }
+   
     return {   
         width:          params.width,
         eventSource:    eventSource,
@@ -106,7 +125,7 @@ Timeline.createHotZoneBandInfo = function(params) {
 
 Timeline.getDefaultTheme = function() {
     if (Timeline._defaultTheme == null) {
-        Timeline._defaultTheme = Timeline.ClassicTheme.create(Timeline.Platform.getDefaultLocale());
+        Timeline._defaultTheme = Timeline.ClassicTheme.create(Timeline.getDefaultLocale());
     }
     return Timeline._defaultTheme;
 };
@@ -120,9 +139,13 @@ Timeline.loadXML = function(url, f) {
         alert("Failed to load data xml from " + url + "\n" + statusText);
     };
     var fDone = function(xmlhttp) {
-        f(xmlhttp.responseXML, url);
+        var xml = xmlhttp.responseXML;
+        if (!xml.documentElement && xmlhttp.responseStream) {
+            xml.load(xmlhttp.responseStream);
+        } 
+        f(xml, url);
     };
-    Timeline.XmlHttp.get(url, fError, fDone);
+    SimileAjax.XmlHttp.get(url, fError, fDone);
 };
 
 
@@ -133,18 +156,29 @@ Timeline.loadJSON = function(url, f) {
     var fDone = function(xmlhttp) {
         f(eval('(' + xmlhttp.responseText + ')'), url);
     };
-    Timeline.XmlHttp.get(url, fError, fDone);
+    SimileAjax.XmlHttp.get(url, fError, fDone);
 };
 
 
 Timeline._Impl = function(elmt, bandInfos, orientation, unit) {
+    SimileAjax.WindowManager.initialize();
+    
     this._containerDiv = elmt;
     
     this._bandInfos = bandInfos;
     this._orientation = orientation == null ? Timeline.HORIZONTAL : orientation;
-    this._unit = (unit != null) ? unit : Timeline.NativeDateUnit;
+    this._unit = (unit != null) ? unit : SimileAjax.NativeDateUnit;
     
     this._initialize();
+};
+
+Timeline._Impl.prototype.dispose = function() {
+    for (var i = 0; i < this._bands.length; i++) {
+        this._bands[i].dispose();
+    }
+    this._bands = null;
+    this._bandInfos = null;
+    this._containerDiv.innerHTML = "";
 };
 
 Timeline._Impl.prototype.getBandCount = function() {
@@ -209,14 +243,18 @@ Timeline._Impl.prototype.loadXML = function(url, f) {
     };
     var fDone = function(xmlhttp) {
         try {
-            f(xmlhttp.responseXML, url);
+            var xml = xmlhttp.responseXML;
+            if (!xml.documentElement && xmlhttp.responseStream) {
+                xml.load(xmlhttp.responseStream);
+            } 
+            f(xml, url);
         } finally {
             tl.hideLoadingMessage();
         }
     };
     
     this.showLoadingMessage();
-    window.setTimeout(function() { Timeline.XmlHttp.get(url, fError, fDone); }, 0);
+    window.setTimeout(function() { SimileAjax.XmlHttp.get(url, fError, fDone); }, 0);
 };
 
 Timeline._Impl.prototype.loadJSON = function(url, f) {
@@ -236,7 +274,7 @@ Timeline._Impl.prototype.loadJSON = function(url, f) {
     };
     
     this.showLoadingMessage();
-    window.setTimeout(function() { Timeline.XmlHttp.get(url, fError, fDone); }, 0);
+    window.setTimeout(function() { SimileAjax.XmlHttp.get(url, fError, fDone); }, 0);
 };
 
 Timeline._Impl.prototype._initialize = function() {
@@ -253,10 +291,10 @@ Timeline._Impl.prototype._initialize = function() {
     /*
      *  inserting copyright and link to simile
      */
-    var elmtCopyright = Timeline.Graphics.createTranslucentImage(doc, Timeline.urlPrefix + (this.isHorizontal() ? "images/copyright-vertical.png" : "images/copyright.png"));
+    var elmtCopyright = SimileAjax.Graphics.createTranslucentImage(Timeline.urlPrefix + (this.isHorizontal() ? "images/copyright-vertical.png" : "images/copyright.png"));
     elmtCopyright.className = "timeline-copyright";
     elmtCopyright.title = "Timeline (c) SIMILE - http://simile.mit.edu/timeline/";
-    Timeline.DOM.registerEvent(elmtCopyright, "click", function() { window.location = "http://simile.mit.edu/timeline/"; });
+    SimileAjax.DOM.registerEvent(elmtCopyright, "click", function() { window.location = "http://simile.mit.edu/timeline/"; });
     containerDiv.appendChild(elmtCopyright);
     
     /*
@@ -285,7 +323,7 @@ Timeline._Impl.prototype._initialize = function() {
     /*
      *  creating loading UI
      */
-    var message = Timeline.Graphics.createMessageBubble(doc);
+    var message = SimileAjax.Graphics.createMessageBubble(doc);
     message.containerDiv.className = "timeline-message-container";
     containerDiv.appendChild(message.containerDiv);
     
@@ -330,11 +368,13 @@ Timeline._Band = function(timeline, bandInfo, index) {
     this._bandInfo = bandInfo;
     this._index = index;
     
-    this._locale = ("locale" in bandInfo) ? bandInfo.locale : Timeline.Platform.getDefaultLocale();
+    this._locale = ("locale" in bandInfo) ? bandInfo.locale : Timeline.getDefaultLocale();
     this._timeZone = ("timeZone" in bandInfo) ? bandInfo.timeZone : 0;
     this._labeller = ("labeller" in bandInfo) ? bandInfo.labeller : 
-        timeline.getUnit().createLabeller(this._locale, this._timeZone);
-    
+        (("createLabeller" in timeline.getUnit()) ?
+            timeline.getUnit().createLabeller(this._locale, this._timeZone) :
+            new Timeline.GregorianDateLabeller(this._locale, this._timeZone));
+
     this._dragging = false;
     this._changing = false;
     this._originalScrollSpeed = 5; // pixels
@@ -360,21 +400,21 @@ Timeline._Band = function(timeline, bandInfo, index) {
     this._keyboardInput = document.createElement("input");
     this._keyboardInput.type = "text";
     inputDiv.appendChild(this._keyboardInput);
-    Timeline.DOM.registerEventWithObject(this._keyboardInput, "keydown", this, this._onKeyDown);
-    Timeline.DOM.registerEventWithObject(this._keyboardInput, "keyup", this, this._onKeyUp);
+    SimileAjax.DOM.registerEventWithObject(this._keyboardInput, "keydown", this, "_onKeyDown");
+    SimileAjax.DOM.registerEventWithObject(this._keyboardInput, "keyup", this, "_onKeyUp");
     
     /*
      *  The band's outer most div that slides with respect to the timeline's div
      */
     this._div = this._timeline.getDocument().createElement("div");
-    this._div.className = "timeline-band";
+    this._div.className = "timeline-band timeline-band-" + index;
     this._timeline.addDiv(this._div);
     
-    Timeline.DOM.registerEventWithObject(this._div, "mousedown", this, this._onMouseDown);
-    Timeline.DOM.registerEventWithObject(this._div, "mousemove", this, this._onMouseMove);
-    Timeline.DOM.registerEventWithObject(this._div, "mouseup", this, this._onMouseUp);
-    Timeline.DOM.registerEventWithObject(this._div, "mouseout", this, this._onMouseOut);
-    Timeline.DOM.registerEventWithObject(this._div, "dblclick", this, this._onDblClick);
+    SimileAjax.DOM.registerEventWithObject(this._div, "mousedown", this, "_onMouseDown");
+    SimileAjax.DOM.registerEventWithObject(this._div, "mousemove", this, "_onMouseMove");
+    SimileAjax.DOM.registerEventWithObject(this._div, "mouseup", this, "_onMouseUp");
+    SimileAjax.DOM.registerEventWithObject(this._div, "mouseout", this, "_onMouseOut");
+    SimileAjax.DOM.registerEventWithObject(this._div, "dblclick", this, "_onDblClick");
     
     /*
      *  The inner div that contains layers
@@ -394,10 +434,11 @@ Timeline._Band = function(timeline, bandInfo, index) {
     
     this._eventSource = bandInfo.eventSource;
     if (this._eventSource) {
-        this._eventSource.addListener({
+        this._eventListener = {
             onAddMany: function() { b._onAddMany(); },
             onClear:   function() { b._onClear(); }
-        });
+        }
+        this._eventSource.addListener(this._eventListener);
     }
         
     this._eventPainter = bandInfo.eventPainter;
@@ -407,11 +448,36 @@ Timeline._Band = function(timeline, bandInfo, index) {
     for (var i = 0; i < this._decorators.length; i++) {
         this._decorators[i].initialize(this, timeline);
     }
-        
-    this._bubble = null;
 };
 
 Timeline._Band.SCROLL_MULTIPLES = 5;
+
+Timeline._Band.prototype.dispose = function() {
+    this.closeBubble();
+    
+    if (this._eventSource) {
+        this._eventSource.removeListener(this._eventListener);
+        this._eventListener = null;
+        this._eventSource = null;
+    }
+    
+    this._timeline = null;
+    this._bandInfo = null;
+    
+    this._labeller = null;
+    this._ether = null;
+    this._etherPainter = null;
+    this._eventPainter = null;
+    this._decorators = null;
+    
+    this._onScrollListeners = null;
+    this._syncWithBandHandler = null;
+    this._selectorListener = null;
+    
+    this._div = null;
+    this._innerDiv = null;
+    this._keyboardInput = null;
+};
 
 Timeline._Band.prototype.addOnScrollListener = function(listener) {
     this._onScrollListeners.push(listener);
@@ -490,12 +556,20 @@ Timeline._Band.prototype.softPaint = function() {
 };
 
 Timeline._Band.prototype.setBandShiftAndWidth = function(shift, width) {
+    var inputDiv = this._keyboardInput.parentNode;
+    var middle = shift + Math.floor(width / 2);
     if (this._timeline.isHorizontal()) {
         this._div.style.top = shift + "px";
         this._div.style.height = width + "px";
+        
+        inputDiv.style.top = middle + "px";
+        inputDiv.style.left = "-1em";
     } else {
         this._div.style.left = shift + "px";
         this._div.style.width = width + "px";
+        
+        inputDiv.style.left = middle + "px";
+        inputDiv.style.top = "-1em";
     }
 };
 
@@ -571,15 +645,15 @@ Timeline._Band.prototype.pixelOffsetToDate = function(pixels) {
     return this._ether.pixelOffsetToDate(pixels + this._viewOffset);
 };
 
-Timeline._Band.prototype.createLayerDiv = function(zIndex) {
+Timeline._Band.prototype.createLayerDiv = function(zIndex, className) {
     var div = this._timeline.getDocument().createElement("div");
-    div.className = "timeline-band-layer";
+    div.className = "timeline-band-layer" + (typeof className == "string" ? (" " + className) : "");
     div.style.zIndex = zIndex;
     this._innerDiv.appendChild(div);
     
     var innerDiv = this._timeline.getDocument().createElement("div");
     innerDiv.className = "timeline-band-layer-inner";
-    if (Timeline.Platform.browser.isIE) {
+    if (SimileAjax.Platform.browser.isIE) {
         innerDiv.style.cursor = "move";
     } else {
         innerDiv.style.cursor = "-moz-grab";
@@ -593,20 +667,24 @@ Timeline._Band.prototype.removeLayerDiv = function(div) {
     this._innerDiv.removeChild(div.parentNode);
 };
 
-Timeline._Band.prototype.closeBubble = function() {
-    if (this._bubble != null) {
-        this._bubble.close();
-        this._bubble = null;
+Timeline._Band.prototype.scrollToCenter = function(date, f) {
+    var pixelOffset = this._ether.dateToPixelOffset(date);
+    if (pixelOffset < -this._viewLength / 2) {
+        this.setCenterVisibleDate(this.pixelOffsetToDate(pixelOffset + this._viewLength));
+    } else if (pixelOffset > 3 * this._viewLength / 2) {
+        this.setCenterVisibleDate(this.pixelOffsetToDate(pixelOffset - this._viewLength));
     }
+    this._autoScroll(Math.round(this._viewLength / 2 - this._ether.dateToPixelOffset(date)), f);
 };
 
-Timeline._Band.prototype.openBubbleForPoint = function(pageX, pageY, width, height) {
-    this.closeBubble();
-    
-    this._bubble = Timeline.Graphics.createBubbleForPoint(
-        this._timeline.getDocument(), pageX, pageY, width, height);
-        
-    return this._bubble.content;
+Timeline._Band.prototype.showBubbleForEvent = function(eventID) {
+    var evt = this.getEventSource().getEvent(eventID);
+    if (evt) {
+        var self = this;
+        this.scrollToCenter(evt.getStart(), function() {
+            self._eventPainter.showBubble(evt);
+        });
+    }
 };
 
 Timeline._Band.prototype._onMouseDown = function(innerFrame, evt, target) {
@@ -636,7 +714,7 @@ Timeline._Band.prototype._onMouseUp = function(innerFrame, evt, target) {
 };
 
 Timeline._Band.prototype._onMouseOut = function(innerFrame, evt, target) {
-    var coords = Timeline.DOM.getEventRelativeCoordinates(evt, innerFrame);
+    var coords = SimileAjax.DOM.getEventRelativeCoordinates(evt, innerFrame);
     coords.x += this._viewOffset;
     if (coords.x < 0 || coords.x > innerFrame.offsetWidth ||
         coords.y < 0 || coords.y > innerFrame.offsetHeight) {
@@ -645,7 +723,7 @@ Timeline._Band.prototype._onMouseOut = function(innerFrame, evt, target) {
 };
 
 Timeline._Band.prototype._onDblClick = function(innerFrame, evt, target) {
-    var coords = Timeline.DOM.getEventRelativeCoordinates(evt, innerFrame);
+    var coords = SimileAjax.DOM.getEventRelativeCoordinates(evt, innerFrame);
     var distance = coords.x - (this._viewLength / 2 - this._viewOffset);
     
     this._autoScroll(-distance);
@@ -667,13 +745,14 @@ Timeline._Band.prototype._onKeyDown = function(keyboardInput, evt, target) {
             this._moveEther(this._scrollSpeed);
             break;
         default:
-            return;
+            return true;
         }
         this.closeBubble();
         
-        Timeline.DOM.cancelEvent(evt);
+        SimileAjax.DOM.cancelEvent(evt);
         return false;
     }
+    return true;
 };
 
 Timeline._Band.prototype._onKeyUp = function(keyboardInput, evt, target) {
@@ -694,21 +773,28 @@ Timeline._Band.prototype._onKeyUp = function(keyboardInput, evt, target) {
             this._autoScroll(-this._timeline.getPixelLength());
             break;
         default:
-            return;
+            return true;
         }
         
         this.closeBubble();
         
-        Timeline.DOM.cancelEvent(evt);
+        SimileAjax.DOM.cancelEvent(evt);
         return false;
     }
+    return true;
 };
 
-Timeline._Band.prototype._autoScroll = function(distance) {
+Timeline._Band.prototype._autoScroll = function(distance, f) {
     var b = this;
-    var a = Timeline.Graphics.createAnimation(function(abs, diff) {
-        b._moveEther(diff);
-    }, 0, distance, 3000);
+    var a = SimileAjax.Graphics.createAnimation(
+        function(abs, diff) {
+            b._moveEther(diff);
+        }, 
+        0, 
+        distance, 
+        1000, 
+        f
+    );
     a.run();
 };
 
@@ -820,4 +906,8 @@ Timeline._Band.prototype._softPaintDecorators = function() {
     for (var i = 0; i < this._decorators.length; i++) {
         this._decorators[i].softPaint();
     }
+};
+
+Timeline._Band.prototype.closeBubble = function() {
+    SimileAjax.WindowManager.cancelPopups();
 };

@@ -7,6 +7,7 @@ Timeline.GregorianEtherPainter = function(params) {
     this._params = params;
     this._theme = params.theme;
     this._unit = params.unit;
+    this._multiple = ("multiple" in params) ? params.multiple : 1;
 };
 
 Timeline.GregorianEtherPainter.prototype.initialize = function(band, timeline) {
@@ -20,7 +21,7 @@ Timeline.GregorianEtherPainter.prototype.initialize = function(band, timeline) {
     this._markerLayer = null;
     this._lineLayer = null;
     
-    var align = ("align" in this._params) ? this._params.align : 
+    var align = ("align" in this._params && this._params.align != undefined) ? this._params.align : 
         this._theme.ether.interval.marker[timeline.isHorizontal() ? "hAlign" : "vAlign"];
     var showLine = ("showLine" in this._params) ? this._params.showLine : 
         this._theme.ether.interval.line.show;
@@ -57,11 +58,13 @@ Timeline.GregorianEtherPainter.prototype.paint = function() {
     var timeZone = this._band.getTimeZone();
     var labeller = this._band.getLabeller();
     
-    Timeline.DateTime.roundDownToInterval(minDate, this._unit, timeZone, 1, this._theme.firstDayOfWeek);
+    SimileAjax.DateTime.roundDownToInterval(minDate, this._unit, timeZone, this._multiple, this._theme.firstDayOfWeek);
     
     var p = this;
     var incrementDate = function(date) {
-        Timeline.DateTime.incrementByInterval(date, p._unit);
+        for (var i = 0; i < p._multiple; i++) {
+            SimileAjax.DateTime.incrementByInterval(date, p._unit);
+        }
     };
     
     while (minDate.getTime() < maxDate.getTime()) {
@@ -94,8 +97,8 @@ Timeline.HotZoneGregorianEtherPainter = function(params) {
     }];
     for (var i = 0; i < params.zones.length; i++) {
         var zone = params.zones[i];
-        var zoneStart = Timeline.DateTime.parseGregorianDateTime(zone.start).getTime();
-        var zoneEnd = Timeline.DateTime.parseGregorianDateTime(zone.end).getTime();
+        var zoneStart = SimileAjax.DateTime.parseGregorianDateTime(zone.start).getTime();
+        var zoneEnd = SimileAjax.DateTime.parseGregorianDateTime(zone.end).getTime();
         
         for (var j = 0; j < this._zones.length && zoneEnd > zoneStart; j++) {
             var zone2 = this._zones[j];
@@ -145,7 +148,7 @@ Timeline.HotZoneGregorianEtherPainter.prototype.initialize = function(band, time
     this._markerLayer = null;
     this._lineLayer = null;
     
-    var align = ("align" in this._params) ? this._params.align : 
+    var align = ("align" in this._params && this._params.align != undefined) ? this._params.align : 
         this._theme.ether.interval.marker[timeline.isHorizontal() ? "hAlign" : "vAlign"];
     var showLine = ("showLine" in this._params) ? this._params.showLine : 
         this._theme.ether.interval.line.show;
@@ -185,7 +188,7 @@ Timeline.HotZoneGregorianEtherPainter.prototype.paint = function() {
     var p = this;
     var incrementDate = function(date, zone) {
         for (var i = 0; i < zone.multiple; i++) {
-            Timeline.DateTime.incrementByInterval(date, zone.unit);
+            SimileAjax.DateTime.incrementByInterval(date, zone.unit);
         }
     };
     
@@ -210,8 +213,8 @@ Timeline.HotZoneGregorianEtherPainter.prototype.paint = function() {
         var minDate2 = new Date(Math.max(minDate.getTime(), zone.startTime));
         var maxDate2 = new Date(Math.min(maxDate.getTime(), zone.endTime));
         
-        Timeline.DateTime.roundDownToInterval(minDate2, zone.unit, timeZone, zone.multiple, this._theme.firstDayOfWeek);
-        Timeline.DateTime.roundUpToInterval(maxDate2, zone.unit, timeZone, zone.multiple, this._theme.firstDayOfWeek);
+        SimileAjax.DateTime.roundDownToInterval(minDate2, zone.unit, timeZone, zone.multiple, this._theme.firstDayOfWeek);
+        SimileAjax.DateTime.roundUpToInterval(maxDate2, zone.unit, timeZone, zone.multiple, this._theme.firstDayOfWeek);
         
         while (minDate2.getTime() < maxDate2.getTime()) {
             this._intervalMarkerLayout.createIntervalMarker(
@@ -235,7 +238,7 @@ Timeline.HotZoneGregorianEtherPainter.prototype.softPaint = function() {
 Timeline.YearCountEtherPainter = function(params) {
     this._params = params;
     this._theme = params.theme;
-    this._startDate = Timeline.DateTime.parseGregorianDateTime(params.startDate);
+    this._startDate = SimileAjax.DateTime.parseGregorianDateTime(params.startDate);
     this._multiple = ("multiple" in params) ? params.multiple : 1;
 };
 
@@ -289,7 +292,7 @@ Timeline.YearCountEtherPainter.prototype.paint = function() {
     var p = this;
     var incrementDate = function(date) {
         for (var i = 0; i < p._multiple; i++) {
-            Timeline.DateTime.incrementByInterval(date, Timeline.DateTime.YEAR);
+            SimileAjax.DateTime.incrementByInterval(date, SimileAjax.DateTime.YEAR);
         }
     };
     var labeller = {
@@ -304,7 +307,7 @@ Timeline.YearCountEtherPainter.prototype.paint = function() {
     
     while (minDate.getTime() < maxDate.getTime()) {
         this._intervalMarkerLayout.createIntervalMarker(
-            minDate, labeller, Timeline.DateTime.YEAR, this._markerLayer, this._lineLayer);
+            minDate, labeller, SimileAjax.DateTime.YEAR, this._markerLayer, this._lineLayer);
             
         incrementDate(minDate);
     }
@@ -323,7 +326,7 @@ Timeline.YearCountEtherPainter.prototype.softPaint = function() {
 Timeline.QuarterlyEtherPainter = function(params) {
     this._params = params;
     this._theme = params.theme;
-    this._startDate = Timeline.DateTime.parseGregorianDateTime(params.startDate);
+    this._startDate = SimileAjax.DateTime.parseGregorianDateTime(params.startDate);
 };
 
 Timeline.QuarterlyEtherPainter.prototype.initialize = function(band, timeline) {
@@ -391,7 +394,7 @@ Timeline.QuarterlyEtherPainter.prototype.paint = function() {
     
     while (minDate.getTime() < maxDate.getTime()) {
         this._intervalMarkerLayout.createIntervalMarker(
-            minDate, labeller, Timeline.DateTime.YEAR, this._markerLayer, this._lineLayer);
+            minDate, labeller, SimileAjax.DateTime.YEAR, this._markerLayer, this._lineLayer);
             
         incrementDate(minDate);
     }
@@ -442,17 +445,17 @@ Timeline.EtherIntervalMarkerLayout = function(timeline, band, theme, align, show
     var stylePrefix = (horizontal ? "h" : "v") + align;
     var labelStyler = markerTheme[stylePrefix + "Styler"];
     var emphasizedLabelStyler = markerTheme[stylePrefix + "EmphasizedStyler"];
-    var day = Timeline.DateTime.gregorianUnitLengths[Timeline.DateTime.DAY];
+    var day = SimileAjax.DateTime.gregorianUnitLengths[SimileAjax.DateTime.DAY];
     
     this.createIntervalMarker = function(date, labeller, unit, markerDiv, lineDiv) {
         var offset = Math.round(band.dateToPixelOffset(date));
 
-        if (showLine && unit != Timeline.DateTime.WEEK) {
+        if (showLine && unit != SimileAjax.DateTime.WEEK) {
             var divLine = timeline.getDocument().createElement("div");
             divLine.style.position = "absolute";
             
             if (lineTheme.opacity < 100) {
-                Timeline.Graphics.setOpacity(divLine, lineTheme.opacity);
+                SimileAjax.Graphics.setOpacity(divLine, lineTheme.opacity);
             }
             
             if (horizontal) {
@@ -470,7 +473,7 @@ Timeline.EtherIntervalMarkerLayout = function(timeline, band, theme, align, show
             }
             lineDiv.appendChild(divLine);
         }
-        if (unit == Timeline.DateTime.WEEK) {
+        if (unit == SimileAjax.DateTime.WEEK) {
             var firstDayOfWeek = theme.firstDayOfWeek;
             
             var saturday = new Date(date.getTime() + (6 - firstDayOfWeek - 7) * day);
@@ -485,7 +488,7 @@ Timeline.EtherIntervalMarkerLayout = function(timeline, band, theme, align, show
             
             divWeekend.style.background = weekendTheme.color;
             if (weekendTheme.opacity < 100) {
-                Timeline.Graphics.setOpacity(divWeekend, weekendTheme.opacity);
+                SimileAjax.Graphics.setOpacity(divWeekend, weekendTheme.opacity);
             }
             
             if (horizontal) {
@@ -534,7 +537,7 @@ Timeline.EtherHighlight = function(timeline, band, theme, backgroundLayer) {
             
             var opacity = theme.ether.highlightOpacity;
             if (opacity < 100) {
-                Timeline.Graphics.setOpacity(this._highlightDiv, opacity);
+                SimileAjax.Graphics.setOpacity(this._highlightDiv, opacity);
             }
             
             backgroundLayer.appendChild(this._highlightDiv);

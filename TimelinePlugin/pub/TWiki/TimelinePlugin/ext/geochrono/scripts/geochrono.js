@@ -2,9 +2,7 @@
  *  Geochrono
  *==================================================
  */
-
 Timeline.Geochrono = new Object();
-
 Timeline.Geochrono.eons = [
     {   name: "Proterozoic",
         start: 2500.000
@@ -13,7 +11,6 @@ Timeline.Geochrono.eons = [
         start: 542.000
     }
 ];
-
 Timeline.Geochrono.eras = [
     {   name: "Paleoarchean",
         start: 3600.000
@@ -43,7 +40,6 @@ Timeline.Geochrono.eras = [
         start: 65.500
     }
 ];
-
 Timeline.Geochrono.periods = [
     {   name: "Siderian",
         start: 2500.000
@@ -109,7 +105,6 @@ Timeline.Geochrono.periods = [
         start: 23.030
     }
 ];
-
 Timeline.Geochrono.epoches = [
     {   name: "Lower Cambrian",
         start: 542.000
@@ -211,7 +206,6 @@ Timeline.Geochrono.epoches = [
         start: 0.012
     }
 ];
-
 Timeline.Geochrono.ages = [
     {   name: "-",
         start: 542.000
@@ -482,7 +476,6 @@ Timeline.Geochrono.ages = [
     }
 ];
 
-
 Timeline.Geochrono.createBandInfo = function(params) {
     var theme = ("theme" in params) ? params.theme : Timeline.getDefaultTheme();
     
@@ -501,16 +494,7 @@ Timeline.Geochrono.createBandInfo = function(params) {
         theme:              theme 
     });
     
-    var layout = new Timeline.StaticTrackBasedLayout({
-        eventSource:    eventSource,
-        ether:          ether,
-        showText:       ("showEventText" in params) ? params.showEventText : true,
-        theme:          theme
-    });
-    
     var eventPainterParams = {
-        showText:   ("showEventText" in params) ? params.showEventText : true,
-        layout:     layout,
         theme:      theme
     };
     if ("trackHeight" in params) {
@@ -519,7 +503,9 @@ Timeline.Geochrono.createBandInfo = function(params) {
     if ("trackGap" in params) {
         eventPainterParams.trackGap = params.trackGap;
     }
-    var eventPainter = new Timeline.DurationEventPainter(eventPainterParams);
+    var eventPainter = ("overview" in params && params.overview) ?
+        new Timeline.OverviewEventPainter(eventPainterParams) :
+        new Timeline.DetailedEventPainter(eventPainterParams);
     
     return {   
         width:          params.width,

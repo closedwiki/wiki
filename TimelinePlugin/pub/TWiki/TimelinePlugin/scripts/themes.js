@@ -10,7 +10,7 @@ Timeline.ClassicTheme.implementations = [];
 
 Timeline.ClassicTheme.create = function(locale) {
     if (locale == null) {
-        locale = Timeline.Platform.getDefaultLocale();
+        locale = Timeline.getDefaultLocale();
     }
     
     var f = Timeline.ClassicTheme.implementations[locale];
@@ -76,27 +76,36 @@ Timeline.ClassicTheme._Impl = function() {
     
     this.event = {
         track: {
-            offset:         0.5, // em
-            height:         1.5, // em
-            gap:            0.5  // em
+            height:         10, // px
+            gap:            2   // px
+        },
+        overviewTrack: {
+            offset:     20,     // px
+            tickHeight: 6,      // px
+            height:     2,      // px
+            gap:        1       // px
+        },
+        tape: {
+            height:         4 // px
         },
         instant: {
-            icon:           Timeline.urlPrefix + "images/dull-blue-circle.png",
-            lineColor:      "#58A0DC",
-            impreciseColor: "#58A0DC",
-            impreciseOpacity: 20,
-            showLineForNoText: true
+            icon:              Timeline.urlPrefix + "images/dull-blue-circle.png",
+            iconWidth:         10,
+            iconHeight:        10,
+            color:             "#58A0DC",
+            impreciseColor:    "#58A0DC",
+            impreciseOpacity:  20
         },
         duration: {
-            color:          "#58A0DC",
-            opacity:        100,
-            impreciseColor: "#58A0DC",
+            color:            "#58A0DC",
+            impreciseColor:   "#58A0DC",
             impreciseOpacity: 20
         },
         label: {
-            insideColor:    "white",
-            outsideColor:   "black",
-            width:          200 // px
+            backgroundColor:   "white",
+            backgroundOpacity: 50,
+            lineColor:         "#58A0DC",
+            offsetFromLine:    3 // px
         },
         highlightColors: [
             "#FFFF00",
@@ -115,6 +124,9 @@ Timeline.ClassicTheme._Impl = function() {
             },
             imageStyler: function(elmt) {
                 elmt.className = "timeline-event-bubble-image";
+            },
+            wikiStyler: function(elmt) {
+                elmt.className = "timeline-event-bubble-wiki";
             },
             timeStyler: function(elmt) {
                 elmt.className = "timeline-event-bubble-time";

@@ -1,5 +1,5 @@
 /*==================================================
- *  Geochrono Extension
+ *  Planning Extension
  *
  *  This file will load all the Javascript files
  *  necessary to make the extension work.
@@ -9,7 +9,7 @@
  
 (function() {
     var javascriptFiles = [
-        "geochrono.js",
+        "planning.js",
         "units.js",
         "ether-painters.js",
         "labellers.js"
@@ -30,10 +30,10 @@
     
     try {
         var includeJavascriptFile = function(filename) {
-            document.write("<script src='" + Timeline.urlPrefix + "ext/geochrono/scripts/" + filename + "' type='text/javascript'></script>");
+            document.write("<script src='" + Timeline.urlPrefix + "ext/planning/scripts/" + filename + "' type='text/javascript'></script>");
         };
         var includeCssFile = function(filename) {
-            document.write("<link rel='stylesheet' href='" + Timeline.urlPrefix + "ext/geochrono/styles/" + filename + "' type='text/css'/>");
+            document.write("<link rel='stylesheet' href='" + Timeline.urlPrefix + "ext/planning/styles/" + filename + "' type='text/css'/>");
         }
         
         /*

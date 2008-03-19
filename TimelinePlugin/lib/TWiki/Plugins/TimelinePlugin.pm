@@ -31,7 +31,7 @@ use strict;
 
 # $VERSION is referred to by TWiki, and is the only global variable that
 # *must* exist in this package
-use vars qw( $VERSION $RELEASE $debug $pluginName );
+use vars qw( $VERSION $RELEASE $debug $pluginName $timelineId );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -100,6 +100,7 @@ sub initPlugin {
     $exampleCfgVar ||= 'default'; # make sure it has a value
 
     # register the _EXAMPLETAG function to handle %EXAMPLETAG{...}%
+    $timelineId = 1;
     TWiki::Func::registerTagHandler( 'TIMELINE', \&_TIMELINE );
 
     # get debug flag
@@ -136,9 +137,26 @@ sub _TIMELINE {
     my $jscript = TWiki::Func::readTemplate ( 'timelineplugin' );
     $jscript =~ s/%PLUGINPUBURL%/$pluginPubUrl/g;
     TWiki::Func::addToHEAD($pluginName, $jscript);
+    
+    my $orientation = 'Timeline.HORIZONTAL';
+    #orientation="vertical"
+    if ($params->{orientation} eq 'vertical') {
+        $orientation = 'Timeline.VERTICAL';
+    }
+    my $urltype = 'XML';
+    #urltype="JSON"
+    if ($params->{urltype} eq 'JSON') {
+        $urltype = 'JSON';
+    }
 
-    my $timeline = '<div id="my-timeline" class="TimelineDiv" style="height: '.$params->{height}
-        .'; width: '.$params->{width}.'; border: 1px solid #aaa" url="'.$params->{_DEFAULT}.'" interval="'.$params->{interval}.'" date="'.$params->{date}.'"></div>';
+    my $timeline = '<div id="my-timeline'.$timelineId.'" class="TimelineDiv" style="height: '.$params->{height}
+        .'; width: '.$params->{width}.'; border: 1px solid #aaa" '
+        .'url="'.$params->{_DEFAULT}.'" '
+        .'interval="'.$params->{interval}.'" '
+        .'orientation="'.$orientation.'" '
+        .'urltype="'.$urltype.'" '
+        .'date="'.$params->{date}.'"></div>';
+    $timelineId++;
     return $timeline;
 }
 

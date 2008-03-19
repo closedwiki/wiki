@@ -7,10 +7,13 @@ Uses the dead sexy Timeline view from http://simile.mit.edu/timeline/ to show da
 
 ---++ Syntax Rules
 the %<nop>TIMELINE% variable has the following parmeters:
+   * DEFAULT - the url of the datasource
+   * urltype - XML or JSON (defaults to XML)
    * interval - (DAY, MONTH, YEAR, DECADE)
    * date - the initial date that the timeline will be centered on
    * height - height in pixels that the timeline area will use
    * width - width in pixels that the timeline area will use
+   * orientation - horizontal or vertical (horizontal by default)
 
 ---++ Plugin Settings
 
@@ -24,27 +27,29 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
       * Set DEBUG = 0
       
 ---++ Example (shows when Plugin is installed and running successfully)
-The first example shows a timeline based on a pre-esisting xml file (%PUBURL%/%SYSTEMWEB%/TimelinePlugin/monet.xml)
+---+++ static xml file
+The first example shows a timeline based on a pre-existing xml file (%PUBURL%/%SYSTEMWEB%/TimelinePlugin/monet.xml)
 
 %TIMELINE{
 "%PUBURL%/%SYSTEMWEB%/TimelinePlugin/monet.xml"
 interval="DECADE"
-height="450px"
+height="200px"
 width="700px"
 date="1870"
 }%
 
-
+---+++ TWiki =SEARCH= based timeline
 This example uses the %SYSTEMWEB%.TimeLineSearch topic to show the last 50 modified topics in all webs.
-*(DISABLED - currently can only show one timeline per page)*
 
-*WARNING: at the moment IE will only work with xml file, not from generated xml as below*
+*WARNING: at the moment IE (and Safari) will only work with xml file, not from generated xml as below*
 
-%<nop>TIMELINE{
-"%SCRIPTURL{view}%/%SYSTEMWEB%/TimeLineSearch"
+%!TIMELINE{
+no="%PUBURL%/%SYSTEMWEB%/TimelinePlugin/cubism.js"
+"%SCRIPTURL{view}%/%SYSTEMWEB%/TimeLineSearch?contenttype=text/xml, application/xml"
+nourltype="JSON"
 interval="YEAR"
 height="450px"
-width="700px"
+width="450px"
 date="%DISPLAYTIME{"$day $month $year"}%"
 }%
  The example is made up of the the %<nop>TIMELINE% variable that is converted into the client side javascript, and a TWiki %<nop>SEARCH% statement that formats the results into the XML data format that the javascript requires.
@@ -55,6 +60,7 @@ date="%DISPLAYTIME{"$day $month $year"}%"
 interval="DAY"
 height="450px"
 width="450px"
+orientation="vertical"
 date="%DISPLAYTIME{"$day $month $year"}%"
 }%
 </verbatim>
@@ -94,6 +100,7 @@ format="<event start='$date' title='$topic' link='%SCRIPTURL{"view"}%/$web/$topi
 |  SIMILE Timeline  License: | [[http://simile.mit.edu/license.html][BSD license]] |
 |  Plugin Version: | 22 Feb 2006 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  19 March 2008   | updated to Revision 9234: /timeline/trunk/src/webapp/api , updated Plugin to add features.|
 |  22 July 2006: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |

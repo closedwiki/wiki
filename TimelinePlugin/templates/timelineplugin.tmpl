@@ -1,5 +1,9 @@
 
 <script src="%PLUGINPUBURL%/timeline-api.js" type="text/javascript"></script>
+
+
+<nonscript src="%PLUGINPUBURL%/timeline-bundle.js" type="text/javascript"></nonscript>
+<nonstyle src="%PLUGINPUBURL%/timeline-bundle.js" media="all" />
 <script type="text/javascript">
 
 function addResizeEvent(func, prepend) {
@@ -37,7 +41,7 @@ function addLoadEvent(func, prepend) {
 }
 
 //<body onload="onLoad();" onresize="onResize();">
-//<div id="my-timeline" class="TimelineDiv" style="height: 150px; border: 1px solid #aaa"></div>
+//<div id="my-timeline1" class="TimelineDiv" style="height: 150px; border: 1px solid #aaa"></div>
 
 //create the TWiki namespace if needed
 if ( typeof( TWiki ) == "undefined" ) {
@@ -93,9 +97,14 @@ TWiki.TimelinePlugin.timelineOnLoad = function() {
 
 TWiki.TimelinePlugin.createNewTimeline = function(thisDiv) {
     var url = thisDiv.getAttribute('url');
+    var urltype = thisDiv.getAttribute('urltype');
     var interval = thisDiv.getAttribute('interval');
     var TimelineInterval = TWiki.TimelinePlugin.getDateTimeConstantByName(interval);
     var date = thisDiv.getAttribute('date');
+    var orientation = Timeline.HORIZONTAL; 
+    if (thisDiv.getAttribute('orientation') == 'Timeline.VERTICAL') {
+        orientation = Timeline.VERTICAL; 
+    }
     
     var eventSource = new Timeline.DefaultEventSource(0);
             
@@ -120,8 +129,8 @@ TWiki.TimelinePlugin.createNewTimeline = function(thisDiv) {
             eventSource:    eventSource,
             date:           d,
             showEventText:  false,
-//        trackHeight:    0.5,
-//        trackGap:       0.5,
+            trackHeight:    0.5,
+            trackGap:       0.2,
             showEventText:  false,
             theme:          theme
         })
@@ -129,11 +138,18 @@ TWiki.TimelinePlugin.createNewTimeline = function(thisDiv) {
     bandInfos[1].syncWith = 0;
     bandInfos[1].highlight = true;
             
-    TWiki.TimelinePlugin.timelines = Timeline.create(document.getElementById(thisDiv.id), bandInfos, Timeline.HORIZONTAL);
+    TWiki.TimelinePlugin.timelines = Timeline.create(document.getElementById(thisDiv.id), bandInfos, orientation);
 //    push(TimelinePlugin.timelines, TWiki.TimelinePlugin.timelines);
-    Timeline.loadXML(url, function(xml, url) { 
-         eventSource.loadXML(xml, url);
-    });
+    if (urltype == 'XML') {
+        Timeline.loadXML(url, function(data, url) { 
+             eventSource.loadXML(data, url);
+        });
+    }
+    if (urltype == 'JSON') {
+        Timeline.loadJSON(url, function(data, url) { 
+             eventSource.loadJSON(data, url);
+        });
+    }
 }
         
         

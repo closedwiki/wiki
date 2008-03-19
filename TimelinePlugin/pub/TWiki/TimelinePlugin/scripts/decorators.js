@@ -4,8 +4,11 @@
  */
 
 Timeline.SpanHighlightDecorator = function(params) {
-    this._startDate = Timeline.DateTime.parseGregorianDateTime(params.startDate);
-    this._endDate = Timeline.DateTime.parseGregorianDateTime(params.endDate);
+    this._unit = ("unit" in params) ? params.unit : SimileAjax.NativeDateUnit;
+    this._startDate = (typeof params.startDate == "string") ? 
+        this._unit.parseFromObject(params.startDate) : params.startDate;
+    this._endDate = (typeof params.endDate == "string") ?
+        this._unit.parseFromObject(params.endDate) : params.endDate;
     this._startLabel = params.startLabel;
     this._endLabel = params.endLabel;
     this._color = params.color;
@@ -30,11 +33,11 @@ Timeline.SpanHighlightDecorator.prototype.paint = function() {
     var minDate = this._band.getMinDate();
     var maxDate = this._band.getMaxDate();
     
-    if (this._startDate.getTime() < maxDate.getTime() && 
-        this._endDate.getTime() > minDate.getTime()) {
+    if (this._unit.compare(this._startDate, maxDate) < 0 &&
+        this._unit.compare(this._endDate, minDate) > 0) {
         
-        minDate = new Date(Math.max(minDate.getTime(), this._startDate.getTime()));
-        maxDate = new Date(Math.min(maxDate.getTime(), this._endDate.getTime()));
+        minDate = this._unit.later(minDate, this._startDate);
+        maxDate = this._unit.earlier(maxDate, this._endDate);
         
         var minPixel = this._band.dateToPixelOffset(minDate);
         var maxPixel = this._band.dateToPixelOffset(maxDate);
@@ -52,14 +55,14 @@ Timeline.SpanHighlightDecorator.prototype.paint = function() {
         div.style.overflow = "hidden";
         div.style.background = this._color;
         if (this._opacity < 100) {
-            Timeline.Graphics.setOpacity(div, this._opacity);
+            SimileAjax.Graphics.setOpacity(div, this._opacity);
         }
         this._layerDiv.appendChild(div);
             
         var tableStartLabel = createTable();
         tableStartLabel.style.position = "absolute";
         tableStartLabel.style.overflow = "hidden";
-        tableStartLabel.style.fontSize = "300%";
+        tableStartLabel.style.fontSize = "200%";
         tableStartLabel.style.fontWeight = "bold";
         tableStartLabel.style.color = this._color;
         tableStartLabel.rows[0].cells[0].innerHTML = this._startLabel;
@@ -68,7 +71,7 @@ Timeline.SpanHighlightDecorator.prototype.paint = function() {
         var tableEndLabel = createTable();
         tableEndLabel.style.position = "absolute";
         tableEndLabel.style.overflow = "hidden";
-        tableEndLabel.style.fontSize = "300%";
+        tableEndLabel.style.fontSize = "200%";
         tableEndLabel.style.fontWeight = "bold";
         tableEndLabel.style.color = this._color;
         tableEndLabel.rows[0].cells[0].innerHTML = this._endLabel;
@@ -85,11 +88,13 @@ Timeline.SpanHighlightDecorator.prototype.paint = function() {
             tableStartLabel.style.top = "0px";
             tableStartLabel.style.height = "100%";
             tableStartLabel.style.textAlign = "right";
+            tableStartLabel.rows[0].style.verticalAlign = "top";
             
             tableEndLabel.style.left = maxPixel + "px";
             tableEndLabel.style.width = (this._endLabel.length) + "em";
             tableEndLabel.style.top = "0px";
             tableEndLabel.style.height = "100%";
+            tableEndLabel.rows[0].style.verticalAlign = "top";
         } else {
             div.style.top = minPixel + "px";
             div.style.height = (maxPixel - minPixel) + "px";
@@ -119,7 +124,9 @@ Timeline.SpanHighlightDecorator.prototype.softPaint = function() {
  */
 
 Timeline.PointHighlightDecorator = function(params) {
-    this._date = Timeline.DateTime.parseGregorianDateTime(params.date);
+    this._unit = ("unit" in params) ? params.unit : SimileAjax.NativeDateUnit;
+    this._date = (typeof params.date == "string") ? 
+        this._unit.parseFromObject(params.date) : params.date;
     this._width = ("width" in params) ? params.width : 10;
     this._color = params.color;
     this._opacity = ("opacity" in params) ? params.opacity : 100;
@@ -143,8 +150,8 @@ Timeline.PointHighlightDecorator.prototype.paint = function() {
     var minDate = this._band.getMinDate();
     var maxDate = this._band.getMaxDate();
     
-    if (this._date.getTime() < maxDate.getTime() && 
-        this._date.getTime() > minDate.getTime()) {
+    if (this._unit.compare(this._date, maxDate) < 0 &&
+        this._unit.compare(this._date, minDate) > 0) {
         
         var pixel = this._band.dateToPixelOffset(this._date);
         var minPixel = pixel - Math.round(this._width / 2);
@@ -156,7 +163,7 @@ Timeline.PointHighlightDecorator.prototype.paint = function() {
         div.style.overflow = "hidden";
         div.style.background = this._color;
         if (this._opacity < 100) {
-            Timeline.Graphics.setOpacity(div, this._opacity);
+            SimileAjax.Graphics.setOpacity(div, this._opacity);
         }
         this._layerDiv.appendChild(div);
             
