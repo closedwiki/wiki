@@ -6,8 +6,8 @@
 'events' : [
 %SEARCH{
 ".*" web="all" regex="on" nototal="on" noheader="on" nosearch="on" 
-order="modified" limit="5" reverse="on"
-format="{ 'start':'$isodate', 'title':'$topic', 'link':'%SCRIPTURL{view}%/$web/$topic', 'description':'summary(noheader)' }, "}%
+order="modified" limit="10" reverse="on"
+format="{ 'start':'$isodate', 'title':'$web.$topic', 'link':'%SCRIPTURL{view}%/$web/$topic', 'description':'$web.$topic r$rev edited by $wikiusername see  [[%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/$web/$topic#_foo=$rev][diff]] ', 'icon': '%FAVICON%' }, "}%
         {'start': '1900',
         'title': 'Fake',
         'description': 'Fake to stop Safari complaining about extra ,',

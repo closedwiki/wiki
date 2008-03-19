@@ -45,12 +45,12 @@ date="1890"
 To use data from a twiki topic, you need to set the SKIN=text and add =?contenttype=text/xml= (to trick IE's XHTTPRequest into working) to the url
 
 <verbatim>
-"http://10.10.10.20/trunk/bin/view/TWiki/TimeLineJSON?contenttype=text/xml"
+"http://10.10.10.20/trunk/bin/view/TWiki/TimeLineSearchJSON?contenttype=text/xml"
 urltype="JSON"
 </verbatim>
 
 ---+++ TWiki =SEARCH= based timeline
-This example uses the %SYSTEMWEB%.TimeLineSearch topic to show the last 50 modified topics in all webs.
+This example uses the %SYSTEMWEB%.TimeLineSearchJSON topic to show the last 10 modified topics in all webs.
 
 
 %TIMELINE{
@@ -58,7 +58,7 @@ urltype="JSON"
 "%SCRIPTURL{view}%/%SYSTEMWEB%/TimeLineSearchJSON?contenttype=text/xml"
 interval="YEAR"
 height="450px"
-width="450px"
+width="700px"
 date="%DISPLAYTIME{"$day $month $year"}%"
 }%
  The example is made up of the the %<nop>TIMELINE% variable that is converted into the client side javascript, and a TWiki %<nop>SEARCH% statement that formats the results into the XML data format that the javascript requires.
@@ -69,7 +69,7 @@ urltype="JSON"
 "%SCRIPTURL{view}%/%SYSTEMWEB%/TimeLineSearchJSON?contenttype=text/xml"
 interval="YEAR"
 height="450px"
-width="450px"
+width="700px"
 date="%DISPLAYTIME{"$day $month $year"}%"
 }%
 </verbatim>
