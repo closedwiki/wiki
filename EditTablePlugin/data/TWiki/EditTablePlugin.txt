@@ -18,26 +18,16 @@ Add a =%<nop>EDITTABLE{...}%= variable just before an existing table to make it 
 
 ---+++ Using TWiki Variables in the Format Parameter
 
-TWiki variables like =%<nop>Y%= in =&lt;initial value&gt;= (of text input field) and =&lt;label text&gt;= (of fixed label) will get expanded when a new row is added.
+By default, variables in =&lt;initial value&gt;= (of text input field) and =&lt;label text&gt;= (of fixed label) get expanded when a new row is added. This can be used for example to add a timestamp to a label. You can escape characters with format tokens if you do not want that.
 
-This is useful to write variables like dates into the table.
-<blockquote>
-For example:
-<verbatim>
-%EDITTABLE{ format="| label, 0, %SERVERTIME{"$day $mon $year $hour:$min"}% |" }%
-</verbatim>
-... will get expanded to =%SERVERTIME{"$day $mon $year $hour:$min"}%= when the new row is created.
-</blockquote>
+The format tokens are the same as with %TWIKIWEB%.FormattedSearch:
 
-To prevent variable expansion: escape the format variable with [[%TWIKIWEB%.FormatTokens][formatting tokens]] (particularly =$percnt=).
-<blockquote>
-For example:
-<verbatim>
-%EDITTABLE{ format="| text, 20, $percntY$percnt |" }%
-</verbatim>
-... will create a new row with =$percntY$percnt=. In view mode this is temporarily translated to =%<nop>Y%= and subsequent rendered as %Y%.
-</blockquote>
-
+| *Escape:* | *Expands To:* |
+| =$n= or =$n()= | New line. Use =$n()= if followed by alphanumeric character, e.g. write =Foo$n()Bar= instead of =Foo$nBar= |
+| =$nop= or =$nop()= | Is a "no operation". |
+| =$quot= | Double quote (="=) |
+| =$percnt= | Percent sign (=%=) |
+| =$dollar= | Dollar sign (=$=) |
 
 
 #DateField
@@ -137,6 +127,7 @@ Table in edit mode:
 <tr>
 <td valign="top">
 <verbatim>
+%TABLE{"headerrows="1"}%
 %EDITTABLE{ format="| label | text, 40 |" changerows="off" }%
 |*Key*|*Value*|
 | Name: | John Smith |
@@ -164,7 +155,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
    * Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
       * Set DEBUG = 0
 
-   * Set JAVASCRIPTINTERFACE to 1 to be able to directly move and delete row without page refresh.
+   * Set JAVASCRIPTINTERFACE to 1 to be able to directly move and delete row without page refresh. Can be overridden with parameter =javascriptinterface=.
       * Set JAVASCRIPTINTERFACE = 1
    
    * Default for change rows flag: =on=, =off=, =add=
@@ -181,7 +172,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
       * Set ADD_ROW_BUTTON = %MAKETEXT{"Add row"}%
       * Set DELETE_LAST_ROW_BUTTON = %MAKETEXT{"Delete last row"}%
       * Set CANCEL_BUTTON = %MAKETEXT{"Cancel"}%
-
+   
    * Default help texts
       * Set INCLUDED_TOPIC_DOES_NOT_EXIST = <span class="twikiAlert">%MAKETEXT{"Warning: 'include' topic does not exist!"}%</span>
    
@@ -191,7 +182,6 @@ __Note:__ The Plugin uses base settings like date format, language and style fro
 
    * This Plugin does not support TWiki table formatting like Multi-span cells (e.g. =| ... ||=) and cell justification (e.g. =|  centered  |   right |=)
    * There is a performance issue when editing a large table, say, with more then 50 rows
-   * Variables like =%<nop>ATTACHURL%= get expanded unless they are in a label
    * You cannot put two =%<nop>EDITTABLE{}%= statements on the same line in the source
    * You can include %-vars now in select values, by quoting them with &lt;nop&gt;, as in %&lt;nop&gt;X% for %<nop>X%, say for instance:
      <br /> =select,1,%&lt;nop&gt;X%,%&lt;nop&gt;Y%=
@@ -221,8 +211,9 @@ __Note:__ The Plugin uses base settings like date format, language and style fro
 |  Plugin Author: | TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2002-2007, TWiki:Main.PeterThoeny ([[http://www.twiki.net/][TWIKI.NET]]) and TWiki Contributors |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 4.7.10 (08 Jan 2008) |
+|  Plugin Version: | 4.8 (20 Mar 2008) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  20 Mar 2008: | 4.8: Arthur Clemens: Code refactoring; disabled table sort when editing; removed usage of =$percnt= to prevent variable expansion (is now done automatically); made Javascript interface aware of headers and footers, and of =changerows="off"=; improved feedback on row move. |
 |  25 Dec 2007: | 4.7.1: Arthur Clemens: Added warning if =include= parameter topic does not exist. |
 |  22 Dec 2007: | 4.7: Arthur Clemens: Changed handling of escaped variables. To escape TWiki variable, use formatting tokens such as =$percnt=. |
 |  16 Dec 2007: | 4.6:  Kenneth Lavrsen: The plugin prevents TablePlugin from initsorting the table being edited. This is done by temporarily appending the attribute disableallsort="on" to the TABLE tag of a table being edited. Additionally all header sorting is disabled while editing a table by setting a hidden formfield =sort= to "off". Disabling sorting while editing is needed now that the EditTablePlugin supports moving rows up and down. |
@@ -266,8 +257,6 @@ __Note:__ The Plugin uses base settings like date format, language and style fro
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__  %TWIKIWEB%.VarEDITTABLE, %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- TWiki:Main/PeterThoeny - 07 Oct 2007
 
 %META:FILEATTACHMENT{name="EditTablePluginCalendarExample.gif" attr="h" comment="" date="1071283396" path="EditTablePluginCalendarExample.gif" size="7823" user="TWikiContributor" version="1.1"}%
 %META:FILEATTACHMENT{name="ScreenshotEditCell1.gif" attr="h" comment="Screenshot" date="1077050633" path="ScreenshotEditCell1.gif" size="2017" user="TWikiContributor" version="1.1"}%

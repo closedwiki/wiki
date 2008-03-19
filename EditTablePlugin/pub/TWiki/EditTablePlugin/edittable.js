@@ -9,6 +9,26 @@
 // TODO: all functions should be moved from global space to a twiki.EditTable object
 
 /**
+Code from TWiki 4.2 to make this plugin compatible with earlier versions.
+*/
+var twiki;
+if (!twiki) twiki = {};
+twiki.getMetaTag = function(inKey) {
+    if (twiki.metaTags == null || twiki.metaTags.length == 0) {
+        var head = document.getElementsByTagName("META");
+        head = head[0].parentNode.childNodes;
+        twiki.metaTags = new Array();
+        for (var i = 0; i < head.length; i++) {
+            if (head[i].tagName != null &&
+                head[i].tagName.toUpperCase() == 'META') {
+                twiki.metaTags[head[i].name] = head[i].content;
+            }
+        }
+    }
+    return twiki.metaTags[inKey];
+};
+
+/**
 
 */
 // Global variables
@@ -70,29 +90,29 @@ Create user control elements and initialize table manipulation objects.
 */
 
 // Build the list of edittables.
-function edittableInit(form_name, asset_url) {
-    
+function edittableInit(form_name, asset_url, headerRows, footerRows) {
     
     // The form we want is actually the second thing in the
     // document that has the form_name.
-    
-    var tableform = document.getElementsByName(form_name)[1];
-    
+    var forms = document.getElementsByName(form_name);
+    var tableform = forms[1];
     
     if (tableform == null) {
-        alert("Error: EditTable features cannot be enabled.\n");
+        alert("Something went wrong: EditTable javascript features cannot be enabled.\n");
         return;
     }
     attachEvent(tableform, 'submit', submitHandler);
     
-    
     var somerow = searchNodeTreeForTagName(tableform, "TR");
-    
     
     if (somerow != null) {
         var row_container = somerow.parentNode;
         sEditTable = new EditTableObject(tableform, row_container);
-        insertActionButtons(asset_url);
+    }
+	sEditTable.headerRows = headerRows;
+	sEditTable.footerRows = footerRows;
+	 if (somerow != null) {
+		insertActionButtons(asset_url);
         insertRowSeparators();
     }
     sRowSelection = new RowSelectionObject(asset_url);
@@ -105,16 +125,23 @@ function edittableInit(form_name, asset_url) {
 */
 // Create the etrow_id# inputs to tell the server about row changes we made.
 function submitHandler(evt) {
-    var inp;
-    for (var pos = 0; pos < sEditTable.numrows; pos++) {
-        var inpname = 'etrow_id' + (pos + 1);
-        var row_id = sEditTable.revidx[pos] + 1;
-        inp = document.createElement('INPUT');
+	if (!evt) var evt = window.event;
+
+	var ilen = sEditTable.numrows;
+
+    for (var rowpos = 0; rowpos < ilen; rowpos++) {
+    	if (rowpos+1 == sEditTable.headerRows) {
+			//continue;
+		}
+        var inpname = 'etrow_id' + (rowpos + 1);
+        var row_id = sEditTable.revidx[rowpos] + 1;
+        var inp = document.createElement('INPUT');
         inp.setAttribute('type', 'hidden');
         inp.setAttribute('name', inpname);
         inp.setAttribute('value', '' + row_id);
         sEditTable.tableform.appendChild(inp);
     }
+	
     return true;
 }
 
@@ -122,7 +149,8 @@ function submitHandler(evt) {
 
 */
 function attachEvent(obj, evtype, handler) {
-    if (window.addEventListener) {
+	if (!handler) return;
+	if (window.addEventListener) {
         // Mozilla, Netscape, Firefox
         obj.addEventListener(evtype, handler, false);
     } else {
@@ -172,42 +200,51 @@ function insertActionButtonsMove(asset_url) {
     // do not show a move button for just one row
     if (sEditTable.numrows <= 1 ) return;
     
-    var action_cell,
-    action_butt;
-    
+    var action_cell, action_butt;
     
     for (var rowpos = 0; rowpos < sEditTable.numrows; rowpos++) {
         var rownr = sEditTable.revidx[rowpos];
         var child = sEditTable.rows[rownr];
         if (child.tagName == 'TR') {
-            action_cell = document.createElement('TD');
-            addClass(action_cell, 'editTableActionCell');
-            action_cell.id = 'et_actioncell' + rownr; {
-                action_butt = document.createElement('IMG');
-                action_butt.setAttribute('title', 'Move row');
-                action_butt.enableButtonSrc = asset_url + '/btn_move.gif';
-                action_butt.disableButtonSrc = asset_url + '/btn_move_disabled.gif';
-                action_butt.hoverButtonSrc = asset_url + '/btn_move_over.gif';
-                action_butt.moveButtonSrc = asset_url + '/btn_move.gif';
-                action_butt.setAttribute('src', action_butt.enableButtonSrc);
-                
-                action_butt.mohandler = mouseOverButtonHandler;
-                attachEvent(action_butt, 'mouseover', action_butt.mohandler);
-                action_butt.mouthandler = mouseOutButtonHandler;
-                attachEvent(action_butt, 'mouseout', action_butt.mouthandler);
-                
-                action_butt.handler = moveHandler;
-                attachEvent(action_butt, 'click', action_butt.handler);
-                addClass(action_butt, 'editTableActionButton');
-                action_butt.rownr = rownr;
-                action_cell.moveButton = action_butt;
-                action_cell.appendChild(action_butt);
-            }
+        	var isHeaderRow = (rowpos < sEditTable.headerRows);
+        	var isFooterRow = (rowpos < sEditTable.headerRows + sEditTable.footerRows); // footer rows are written just below the header, and before the body
+        	if (isHeaderRow || isFooterRow) {
+        	    action_cell = document.createElement('TH');
+        	    action_butt = document.createElement('SPAN');
+        	} else {
+	            action_cell = document.createElement('TD');
+	            action_butt = createActionButtonMove(asset_url, rownr);
+				action_cell.moveButton = action_butt;
+				addClass(action_cell, 'editTableActionCell');
+	        }
+			action_cell.id = 'et_actioncell' + rownr;
+			action_cell.appendChild(action_butt);
             child.insertBefore(action_cell, child.firstChild);
         }
     }
     // set styling for the last action_cell to remove the bottom border
-    addClass(action_cell, 'twikiLast');
+    //addClass(action_cell, 'twikiLast');
+}
+
+function createActionButtonMove (asset_url, rownr) {
+	var action_butt = document.createElement('IMG');
+	action_butt.setAttribute('title', 'Move row');
+	action_butt.enableButtonSrc = asset_url + '/btn_move.gif';
+	action_butt.disableButtonSrc = asset_url + '/btn_move_disabled.gif';
+	action_butt.hoverButtonSrc = asset_url + '/btn_move_over.gif';
+	action_butt.moveButtonSrc = asset_url + '/btn_move.gif';
+	action_butt.setAttribute('src', action_butt.enableButtonSrc);
+	
+	action_butt.mohandler = mouseOverButtonHandler;
+	attachEvent(action_butt, 'mouseover', action_butt.mohandler);
+	action_butt.mouthandler = mouseOutButtonHandler;
+	attachEvent(action_butt, 'mouseout', action_butt.mouthandler);
+	
+	action_butt.handler = moveHandler;
+	attachEvent(action_butt, 'click', action_butt.handler);
+	addClass(action_butt, 'editTableActionButton');
+	action_butt.rownr = rownr;
+	return action_butt;
 }
 
 /**
@@ -215,42 +252,55 @@ function insertActionButtonsMove(asset_url) {
 */
 function insertActionButtonsDelete(asset_url) {
     
-    var action_cell,
-    action_butt;
+    var action_cell, action_butt;
     
     for (var rowpos = 0; rowpos < sEditTable.numrows; rowpos++) {
         var rownr = sEditTable.revidx[rowpos];
         var child = sEditTable.rows[rownr];
         if (child.tagName == 'TR') {
-            action_cell = document.createElement('TD');
-            addClass(action_cell, 'editTableActionCell');
-            action_cell.id = 'et_actioncell' + rownr; {
-                action_butt = document.createElement('IMG');
-                action_butt.setAttribute('title', 'Delete row');
-                action_butt.enableButtonSrc = asset_url + '/btn_delete.gif';
-                action_butt.disableButtonSrc = asset_url + '/btn_delete_disabled.gif';
-                action_butt.hoverButtonSrc = asset_url + '/btn_delete_over.gif';
-                action_butt.setAttribute('src', action_butt.enableButtonSrc);
-                
-                action_butt.mohandler = mouseOverButtonHandler;
-                attachEvent(action_butt, 'mouseover', action_butt.mohandler);
-                action_butt.mouthandler = mouseOutButtonHandler;
-                attachEvent(action_butt, 'mouseout', action_butt.mouthandler);
-                
-                action_butt.handler = deleteHandler;
-                attachEvent(action_butt, 'click', action_butt.handler);
-                
-                addClass(action_butt, 'editTableActionButton');
-                action_butt.rownr = rownr;
-                action_cell.deleteButton = action_butt;
-                action_cell.appendChild(action_butt);
-            }
+        	var isHeaderRow = (rowpos < sEditTable.headerRows);
+        	var isFooterRow = (rowpos < sEditTable.headerRows + sEditTable.footerRows); // footer rows are written just below the header, and before the body
+        	if (isHeaderRow || isFooterRow) {
+        	    action_cell = document.createElement('TH');
+        	    action_butt = document.createElement('SPAN');
+        	} else {
+	            action_cell = document.createElement('TD');
+	            action_butt = createActionButtonDelete(asset_url, rownr);
+				action_cell.moveButton = action_butt;
+				addClass(action_cell, 'editTableActionCell');
+	        }
+			action_cell.id = 'et_actioncell' + rownr;			
+			action_cell.deleteButton = action_butt;
+			action_cell.appendChild(action_butt);
             insertAfter(action_cell, child.lastChild);
         }
     }
     // set styling for the last action_cell to remove the bottom border
     addClass(action_cell, 'twikiLast');
 }
+
+function createActionButtonDelete (asset_url, rownr) {
+	
+	var action_butt = document.createElement('IMG');
+	action_butt.setAttribute('title', 'Delete row');
+	action_butt.enableButtonSrc = asset_url + '/btn_delete.gif';
+	action_butt.disableButtonSrc = asset_url + '/btn_delete_disabled.gif';
+	action_butt.hoverButtonSrc = asset_url + '/btn_delete_over.gif';
+	action_butt.setAttribute('src', action_butt.enableButtonSrc);
+	
+	action_butt.mohandler = mouseOverButtonHandler;
+	attachEvent(action_butt, 'mouseover', action_butt.mohandler);
+	action_butt.mouthandler = mouseOutButtonHandler;
+	attachEvent(action_butt, 'mouseout', action_butt.mouthandler);
+	
+	action_butt.handler = deleteHandler;
+	attachEvent(action_butt, 'click', action_butt.handler);
+	
+	addClass(action_butt, 'editTableActionButton');
+	action_butt.rownr = rownr;
+	return action_butt;
+}
+
 
 /**
 
@@ -261,13 +311,18 @@ function insertRowSeparators() {
     var sep_row,
     columns;
     
-    
     for (var rowpos = 0; rowpos < sEditTable.numrows; rowpos++) {
         var rownr = sEditTable.revidx[rowpos];
-        child = sEditTable.rows[rownr];
-        columns = countRowColumns(child);
-        sep_row = makeSeparatorRow(rownr, columns);
-        child.parentNode.insertBefore(sep_row, child);
+        var isHeaderRow = (rowpos < sEditTable.headerRows);
+		var isFooterRow = (rowpos < sEditTable.headerRows + sEditTable.footerRows); // footer rows are written just below the header, and before the body
+		if (isHeaderRow || isFooterRow) {
+			//
+		} else {
+			child = sEditTable.rows[rownr];
+			columns = countRowColumns(child);
+			sep_row = makeSeparatorRow(rownr, columns);
+			child.parentNode.insertBefore(sep_row, child);
+		}
     }
     sep_row = makeSeparatorRow(null, columns);
     child.parentNode.appendChild(sep_row);
@@ -335,7 +390,6 @@ function selectRow(rownr) {
         var sep_row = sRowSelection.row.previousSibling;
         sRowSelection.topSep = sep_row;
         
-        
         var next_rowpos = sEditTable.positions[rownr] + 1;
         if (next_rowpos < sEditTable.numrows) {
             var next_rownr = sEditTable.revidx[next_rowpos];
@@ -345,7 +399,6 @@ function selectRow(rownr) {
         }
         sRowSelection.bottomSep = sep_row;
     }
-    
     
     /* Set the style class of data cell elements in the selected row */
     
@@ -400,18 +453,28 @@ function moveHandler(evt) {
         selectRow(null);
         switchDeleteButtons(evt);
         switchMoveButtons(evt);
+        removeSeparatorAnimation();
         return;
     }
     var rownr = getEventAttr(evt, 'rownr');
     selectRow(rownr);
     switchDeleteButtons(evt);
     switchMoveButtons(evt);
+    addSeparatorAnimation();
+}
+
+function addSeparatorAnimation() {
+	addClass(sEditTable.rows[0].parentNode.parentNode, 'editTableMoveMode');
+}
+
+function removeSeparatorAnimation() {
+	removeClass(sEditTable.rows[0].parentNode.parentNode, 'editTableMoveMode');
 }
 
 /**
 
 */
-function sepClickHandler(evt) {
+function sepClickHandler(evt) {	
     var rownr = getEventAttr(evt, 'rownr');
     if (sRowSelection.rownum == null) {
         return;
@@ -420,6 +483,7 @@ function sepClickHandler(evt) {
     selectRow(null);
     switchDeleteButtons(evt);
     switchMoveButtons(evt);
+    removeSeparatorAnimation();
 }
 
 /**
@@ -450,6 +514,7 @@ function switchDeleteButtons(evt) {
         var row_elem = sEditTable.rows[i];
         var action_cell = row_elem.lastChild;
         var deleteButton = action_cell.deleteButton;
+        if (!deleteButton) continue;
         if (mode == 'to_enable') {
             deleteButton.src = deleteButton['enableButtonSrc'];
             attachEvent(deleteButton, 'click', deleteButton.handler);
@@ -476,6 +541,7 @@ function switchMoveButtons(evt) {
         var row_elem = sEditTable.rows[i];
         var action_cell = row_elem.firstChild;
         var moveButton = action_cell.moveButton;
+        if (!moveButton) continue;
         if (buttonMode == 'to_enable') {
             moveButton.src = moveButton['enableButtonSrc'];
             attachEvent(moveButton, 'click', moveButton.handler);
@@ -491,10 +557,7 @@ function switchMoveButtons(evt) {
 */
 function deleteHandler(evt) {
     var rownr = getEventAttr(evt, 'rownr');
-    
-    
     var from_row_pos = sEditTable.positions[rownr];
-    
     
     // Remove the from_row from the table.
     
@@ -502,26 +565,22 @@ function deleteHandler(evt) {
     from_row_elem.parentNode.removeChild(from_row_elem.previousSibling);
     from_row_elem.parentNode.removeChild(from_row_elem);
     
-    
     // Update all rows after from_row.
     
-    for (var pos = from_row_pos + 1; pos < sEditTable.numrows; pos++) {
-        var rownum = sEditTable.revidx[pos];
-        var newpos = pos - 1;
+    for (var rowpos = from_row_pos + 1; rowpos < sEditTable.numrows; rowpos++) {
+        var rownum = sEditTable.revidx[rowpos];
+        var newpos = rowpos - 1;
         sEditTable.positions[rownum] = newpos;
         sEditTable.revidx[newpos] = rownum;
         updateRowlabels(rownum, -1);
     }
     
-    
     if (sRowSelection.rownum == rownr) {
         selectRow(null);
     }
-    
-    
+
     sEditTable.numrows--;
-    sEditTable.tableform.etrows.value = sEditTable.numrows;
-    
+    sEditTable.tableform.etrows.value = sEditTable.numrows - (sEditTable.headerRows + sEditTable.footerRows);
     
     fixStyling();
 }
@@ -538,6 +597,7 @@ function addHandler() {
 
 */
 function retrieveAlternatingRowColors() {
+	if (!sEditTable) return;
     var ilen = sEditTable.numrows;
     for (var i = 0; i < ilen;++i) {
         var tr = sEditTable.rows[i];
@@ -560,10 +620,8 @@ function retrieveAlternatingRowColors() {
 Style the last row.
 */
 function fixStyling() {
-    
-    
+	if (!sEditTable) return;
     // style even/uneven rows
-    
     var ilen = sEditTable.numrows;
     for (var i = 0; i < ilen; i++) {
         var num = sEditTable.revidx[i];
@@ -590,7 +648,6 @@ function fixStyling() {
         }
     }
     
-    
     // style last row
     
     var lastRowNum = sEditTable.revidx[sEditTable.numrows - 1];
@@ -607,11 +664,10 @@ function fixStyling() {
 
 */
 function moveRow(from_row, to_row) {
+	if (!sEditTable) return;
     var from_row_pos = sEditTable.positions[from_row];
     var to_row_pos;
-    
-    
-    
+
     // If the end separator row was selected, use the last row.
     
     if (to_row == null) {
@@ -646,9 +702,9 @@ function moveRow(from_row, to_row) {
     
     // Update all rows after from_row up to to_row.
     
-    for (var pos = from_row_pos + inc; pos != to_row_pos + inc; pos += inc) {
-        var rownum = sEditTable.revidx[pos];
-        var newpos = pos - inc;
+    for (var rowpos = from_row_pos + inc; rowpos != to_row_pos + inc; rowpos += inc) {
+        var rownum = sEditTable.revidx[rowpos];
+        var newpos = rowpos - inc;
         sEditTable.positions[rownum] = newpos;
         sEditTable.revidx[newpos] = rownum;
         updateRowlabels(rownum, -inc);
@@ -711,8 +767,6 @@ function workaroundIECheckboxBug(container) {
 */
 
 function RowSelectionObject(asset_url) {
-    //  this.topImage    = asset_url + '/dash_right.gif';
-    //  this.bottomImage = asset_url + '/dash_left.gif';
     this.row = null;
     this.rownum = null;
     this.topSep = null;
@@ -732,6 +786,8 @@ function EditTableObject(tableform, row_container) {
     this.positions = new Array();
     this.revidx = new Array();
     this.numrows = 0;
+    this.headerRows = 0;
+    this.footerRows = 0;
     this.last_separator = null;
     var got_thead = 0;
     var first_head = 0;
@@ -741,8 +797,7 @@ function EditTableObject(tableform, row_container) {
     // sure to iterate over all of them.
     
     while (row_container != null) {
-        
-        
+      
         // If there were any rows before the first thead, we'll have to correct
         // our notion of the row positions, because browsers display the header
         // above the body instead of in the order they appear in the DOM.
@@ -751,8 +806,7 @@ function EditTableObject(tableform, row_container) {
             first_head = this.numrows;
             got_thead = 1;
         }
-        
-        
+
         var row_elem = row_container.firstChild;
         while (row_elem != null) {
             if (row_elem.tagName == "TR") {
@@ -764,10 +818,9 @@ function EditTableObject(tableform, row_container) {
             row_elem = row_elem.nextSibling;
         }
         
-        
         // Now make any necessary position adjustments to account for an
         // out-of-order THEAD.
-        
+      
         if (first_head > 0) {
             var num_headrows = this.numrows - first_head;
             for (var body_rownum = 0; body_rownum < first_head; body_rownum++) {
@@ -775,8 +828,7 @@ function EditTableObject(tableform, row_container) {
                 this.revidx[body_rownum + num_headrows] = body_rownum;
             }
             first_head = 0;
-        }
-        
+        }     
         
         row_container = row_container.nextSibling;
     }
@@ -786,32 +838,13 @@ function EditTableObject(tableform, row_container) {
 /**
 
 */
-
-function etsubmit(formid) {
-    var form = document.getElementById(formid);
-    var table_num = parseInt(form.tablenum.value);
-    var table_obj = edittables[table_num];
-    if (table_obj.positions.length < 1) {
-        return true;
-    }
-    
-    
-    var pos_str = table_obj.positions[0] + '';
-    for (var i = 1; i < table_obj.numrows; i++) {
-        pos_str = pos_str + ',' + table_obj.positions[i];
-    }
-    form.etrowpos.value = pos_str;
-    return true;
-}
-
-/**
-
-*/
 // Update all row labels in a row by adding a delta amount to each one.
 
 function updateRowlabels(rownum, delta) {
+	if (!sEditTable) return;
     var row = sEditTable.rows[rownum];
     var label_nodes = row.getElementsByTagName('DIV');
+
     for (var i = 0; label_nodes[i] != null; i++) {
         var lnode = label_nodes[i];
         if (lnode.className == 'et_rowlabel') {
@@ -841,9 +874,13 @@ function updateRowlabels(rownum, delta) {
 Grabs the values from <meta> tags and inits the table with the table id and topic url.
 */
 function init() {
-    var currentTableId = twiki.getMetaTag('EDITTABLEPLUGIN_EditTableId');
+    var noJavascript = twiki.getMetaTag('EDITTABLEPLUGIN_NO_JAVASCRIPTINTERFACE_EditTableId');
+	if (noJavascript) return;
+    var currentFormName = twiki.getMetaTag('EDITTABLEPLUGIN_FormName');
     var url = twiki.getMetaTag('EDITTABLEPLUGIN_EditTableUrl');
-    edittableInit(currentTableId, url);
+    var headerRows = parseInt(twiki.getMetaTag('EDITTABLEPLUGIN_headerRows'));
+    var footerRows = parseInt(twiki.getMetaTag('EDITTABLEPLUGIN_footerRows'));
+    edittableInit(currentFormName, url, headerRows, footerRows);
 }
 
 /**

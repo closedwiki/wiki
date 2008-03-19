@@ -19,7 +19,7 @@
 	margin:0 2px 2px 0;
 	cursor:pointer;
 }
-td.editTableActionCell {
+.editTableActionCell {
 	vertical-align:middle;
 }
 .editTableActionCell a:hover {
@@ -53,4 +53,16 @@ td.editTableActionCell {
 .editTableRowSeparatorHover {
 	background-color:#069;
 	cursor:move;
+}
+.editTableMoveMode .editTableActionCell img {
+	visibility:hidden;
+}
+.editTableMoveMode .editTableActionSelectedCell img {
+	visibility:visible;
+}
+.editTableMoveMode .editTableRowSeparator {
+	/**/
+}
+.editTableMoveMode .editTableRowSeparator {
+	background-image:url(separator_bg_anim.gif);
 }
