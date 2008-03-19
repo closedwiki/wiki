@@ -2,9 +2,9 @@
 ---+ Timeline TWiki Plugin
 <img src="%ATTACHURLPATH%/timeline.jpg" alt="timeline.jpg" style="float:right;" />
 
-Uses the dead sexy Timeline view from http://simile.mit.edu/timeline/ to show date based information. 
+[[http://simile.mit.edu/timeline/][Timeline]] is a DHTML-based AJAXy widget for visualizing time-based events.
 
-I use it to show <nop>WebChanges with the query below, and will update with a task / calendar query soon.
+I use it to show a <nop>WebChanges tineline  with the query below.
 
 
 ---++ Syntax Rules
@@ -96,18 +96,16 @@ format="<event start='$date' title='$topic' link='%SCRIPTURL{"view"}%/$web/$topi
 
 ---++ Plugin Installation Instructions
 
-   * unzip the zip file into the twiki directory
-   * if you are running TWiki release 4.0.4 or before, you need to apply patch to TWiki add the tmpl file mentioned in TWikibug:Item2617
-   * enable the plugin using configure
+%$INSTALL_INSTRUCTIONS%
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.SvenDowideit - <img src="%ATTACHURLPATH%/wikiringlogo20x20.png" /> http://WikiRing.com |
-|  Copyright: | &copy; 2006, TWiki:Main.SvenDowideit |
-|             | &copy; |
+|  Copyright: | TWiki Plugin &copy; 2006-2008, TWiki:Main.SvenDowideit |
+|             | The SIMILE Timeline software is sponsored by The Andrew W. Mellon Foundation  and is maintained by the SIMILE project, in particular: David François Huynh, dfhuynh at csail.mit.edu |
 |  Plugin License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  SIMILE Timeline  License: | [[http://simile.mit.edu/license.html][BSD license]] |
-|  Plugin Version: | 22 Feb 2006 |
+|  Plugin Version: | %$VERSION% - %$DATE% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  19 March 2008   | updated to Revision 9234: http://simile.mit.edu/repository/timeline/trunk/src/webapp/api and http://simile.mit.edu/repository/ajax/trunk/src/webapp/api/ , updated Plugin to add features.|
 |  22 July 2006: | Initial version |
@@ -115,7 +113,7 @@ format="<event start='$date' title='$topic' link='%SCRIPTURL{"view"}%/$web/$topi
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle 99%, %SYSTEMWEB%.FormattedSearch 99%, %TOPIC% 99% |
+|  Bug reports: | %$BUGSURL% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
