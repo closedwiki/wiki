@@ -120,12 +120,5 @@ format="<event start='$date' title='$topic' link='%SCRIPTURL{"view"}%/$web/$topi
 
 __Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
 
-%META:FILEATTACHMENT{name="ttt" attr="" autoattached="1" comment="" date="1157250308" path="ttt" size="4096" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="" autoattached="1" comment="" date="1153741461" path="wikiringlogo20x20.png" size="1343" user="Main.TWikiGuest" version="1"}%
-%META:FILEATTACHMENT{name="scripts" attr="" autoattached="1" comment="" date="1153721646" path="scripts" size="4096" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="ext" attr="" autoattached="1" comment="" date="1157250517" path="ext" size="4096" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="monet.xml" attr="" autoattached="1" comment="" date="1153721646" path="monet.xml" size="10596" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="images" attr="" autoattached="1" comment="" date="1157250491" path="images" size="4096" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="styles" attr="" autoattached="1" comment="" date="1153721645" path="styles" size="4096" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="timeline-api.js" attr="" autoattached="1" comment="" date="1157250491" path="timeline-api.js" size="6486" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="timeline.jpg" attr="" autoattached="1" comment="" date="1153721646" path="timeline.jpg" size="11824" user="UnknownUser" version=""}%
