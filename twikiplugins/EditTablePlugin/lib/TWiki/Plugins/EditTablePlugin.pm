@@ -23,8 +23,8 @@ use strict;
 
 use vars qw(
   $web $topic $user $VERSION $RELEASE $debug
-  $query $renderingWeb $usesJavascriptInterface $viewModeHeaderDone $editModeHeaderDone $encodeStart $encodeEnd $prefsInitialized $table
-  %editMode %saveMode
+  $query $renderingWeb $usesJavascriptInterface $viewModeHeaderDone $editModeHeaderDone $encodeStart $encodeEnd $prefsInitialized
+  %editMode %saveMode $ASSET_URL
 );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -35,12 +35,13 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '4.7.11';
+$RELEASE = '4.8';
 
 $encodeStart = '--EditTableEncodeStart--';
 $encodeEnd   = '--EditTableEncodeEnd--';
 %editMode    = ( 'NONE', 0, 'EDIT', 1 );
 %saveMode    = ( 'NONE', 0, 'SAVE', 1, 'SAVEQUIET', 2 );
+$ASSET_URL   = '%PUBURL%/%TWIKIWEB%/EditTablePlugin';
 
 sub initPlugin {
     ( $topic, $web, $user ) = @_;
@@ -71,44 +72,39 @@ sub initPlugin {
         "- TWiki::Plugins::EditTablePlugin::initPlugin( $web.$topic ) is OK")
       if $debug;
 
-    # Initialize $table such that the code will correctly detect when to
-    # read in a topic.
-    undef $table;
-
     return 1;
 }
 
-sub commonTagsHandler {
-    _process(@_);
+sub beforeCommonTagsHandler {
+    return unless $_[0] =~ /%EDIT(TABLE|CELL){(.*)}%/os;
+    require TWiki::Plugins::EditTablePlugin::Core;
+    TWiki::Plugins::EditTablePlugin::Core::preProcessSpreadsheetPluginTags(
+        $_[0] );
 }
 
-sub _process {
-    my ( $theText, $theTopic, $theWeb ) = @_;
-
+sub commonTagsHandler {
     return unless $_[0] =~ /%EDIT(TABLE|CELL){(.*)}%/os;
-    addViewModeHeadersToHead();
 
+    addViewModeHeadersToHead();
     require TWiki::Plugins::EditTablePlugin::Core;
-    TWiki::Plugins::EditTablePlugin::Core::process( $_[0], $theTopic, $theWeb,
-        $topic, $web );
+    TWiki::Plugins::EditTablePlugin::Core::process( $_[0], $_[1], $_[2], $topic,
+        $web );
 }
 
 sub postRenderingHandler {
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
     $_[0] =~ s/$encodeStart(.*?)$encodeEnd/decodeValue($1)/geos;
 }
 
 sub encodeValue {
-    my ($theText) = @_;
 
     # FIXME: *very* crude encoding to escape Wiki rendering inside form fields
     # also prevents urls to get expanded to links
-    $theText =~ s/\./%dot%/gos;
-    $theText =~ s/(.)/\.$1/gos;
+    $_[0] =~ s/\./%dot%/gos;
+    $_[0] =~ s/(.)/\.$1/gos;
 
     # convert <br /> markup to unicode linebreak character for text areas
-    $theText =~ s/.<.b.r. .\/.>. /&#10;/gos;
-    return $encodeStart . $theText . $encodeEnd;
+    $_[0] =~ s/.<.b.r. .\/.>. /&#10;/gos;
+    $_[0] = $encodeStart . $_[0] . $encodeEnd;
 }
 
 sub decodeValue {
@@ -160,8 +156,7 @@ Style sheet and javascript for table in edit mode
 =cut
 
 sub addEditModeHeadersToHead {
-    my ( $tableNr, $assetUrl, $paramJavascriptInterface ) = @_;
-
+    my ( $tableNr, $paramJavascriptInterface ) = @_;
     return if $editModeHeaderDone;
     return
       if !$usesJavascriptInterface && ( $paramJavascriptInterface ne 'on' );
@@ -171,13 +166,13 @@ sub addEditModeHeadersToHead {
 
     $editModeHeaderDone = 1;
 
-    my $tableId = "edittable$tableNr";
-    my $header  = "";
+    my $formName = "edittable$tableNr";
+    my $header   = "";
     $header .=
-      '<meta name="EDITTABLEPLUGIN_EditTableId" content="' . $tableId . '" />';
+      '<meta name="EDITTABLEPLUGIN_FormName" content="' . $formName . '" />';
     $header .= "\n"
       . '<meta name="EDITTABLEPLUGIN_EditTableUrl" content="'
-      . $assetUrl . '" />';
+      . $ASSET_URL . '" />';
     $header .= <<'EOF';
 <style type="text/css" media="all">
 @import url("%PUBURL%/%TWIKIWEB%/EditTablePlugin/edittable.css");
@@ -196,8 +191,20 @@ sub addJavaScriptInterfaceDisabledToHead {
     $header .=
 '<meta name="EDITTABLEPLUGIN_NO_JAVASCRIPTINTERFACE_EditTableId" content="'
       . $tableId . '" />';
-
+    $header .= "\n";
     TWiki::Func::addToHEAD( 'EDITTABLEPLUGIN_NO_JAVASCRIPTINTERFACE', $header );
+}
+
+sub addHeaderAndFooterCountToHead {
+    my ( $headerCount, $footerCount ) = @_;
+    my $header = "";
+    $header .= '<meta name="EDITTABLEPLUGIN_headerRows" content="'
+      . $headerCount . '" />';
+    $header .= "\n";
+    $header .= '<meta name="EDITTABLEPLUGIN_footerRows" content="'
+      . $footerCount . '" />';
+    $header .= "\n";
+    TWiki::Func::addToHEAD( 'EDITTABLEPLUGIN_HEADERFOOTERCOUNT', $header );
 }
 
 1;
