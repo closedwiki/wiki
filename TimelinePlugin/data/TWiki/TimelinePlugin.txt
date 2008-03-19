@@ -4,7 +4,7 @@
 
 [[http://simile.mit.edu/timeline/][Timeline]] is a DHTML-based AJAXy widget for visualizing time-based events.
 
-I use it to show a <nop>WebChanges tineline  with the query below.
+I use it to show a <nop>WebChanges timeline  with the query below.
 
 
 ---++ Syntax Rules
@@ -31,7 +31,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 ---++ Example (shows when Plugin is installed and running successfully)
 Note that the JSON based output is much more reliable cross browsers, so only use xml is you really need to.
 ---+++ static file
-The first example shows a timeline based on a pre-existing xml file (%PUBURL%/%SYSTEMWEB%/TimelinePlugin/monet.xml)
+The first example shows a timeline based on a pre-existing JSON file (%PUBURL%/%SYSTEMWEB%/TimelinePlugin/cubism.js)
 
 %TIMELINE{
 urltype="JSON"
