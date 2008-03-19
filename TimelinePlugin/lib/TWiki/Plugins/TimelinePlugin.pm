@@ -143,10 +143,10 @@ sub _TIMELINE {
     if ($params->{orientation} eq 'vertical') {
         $orientation = 'Timeline.VERTICAL';
     }
-    my $urltype = 'XML';
+    my $urltype = 'JSON';
     #urltype="JSON"
-    if ($params->{urltype} eq 'JSON') {
-        $urltype = 'JSON';
+    if ($params->{urltype} eq 'XML') {
+        $urltype = 'XML';
     }
 
     my $timeline = '<div id="my-timeline'.$timelineId.'" class="TimelineDiv" style="height: '.$params->{height}

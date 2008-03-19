@@ -1,6 +1,7 @@
 data/TWiki/TimelinePlugin.txt  Plugin doc page
 data/TWiki/TimeLineSearch.txt  Plugin doc page
 data/TWiki/TimeLineSearchJSON.txt
+data/TWiki/TimeLineJSON.txt
 lib/TWiki/Plugins/TimelinePlugin.pm  Plugin Perl module 
 templates/timelineplugin.tmpl
 

@@ -1,14 +1,16 @@
 %META:TOPICINFO{author="SvenDowideit" date="1157251037" format="1.1" version="1.3"}%
 ---+ Timeline TWiki Plugin
 
-Uses the dead sexy Timeline view from http://simile.mit.edu/timeline/ to show date based information. I use it to show webChanges with the query below, and will update with a task / calendar query soon.
+Uses the dead sexy Timeline view from http://simile.mit.edu/timeline/ to show date based information. 
+
+I use it to show <nop>WebChanges with the query below, and will update with a task / calendar query soon.
 
 <img src="%ATTACHURLPATH%/timeline.jpg" alt="timeline.jpg" width='300' height='328' />
 
 ---++ Syntax Rules
 the %<nop>TIMELINE% variable has the following parmeters:
    * DEFAULT - the url of the datasource
-   * urltype - XML or JSON (defaults to XML)
+   * urltype - XML or JSON (defaults to JSON)
    * interval - (DAY, MONTH, YEAR, DECADE)
    * date - the initial date that the timeline will be centered on
    * height - height in pixels that the timeline area will use
@@ -27,26 +29,33 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
       * Set DEBUG = 0
       
 ---++ Example (shows when Plugin is installed and running successfully)
----+++ static xml file
+Note that the JSON based output is much more reliable cross browsers, so only use xml is you really need to.
+---+++ static file
 The first example shows a timeline based on a pre-existing xml file (%PUBURL%/%SYSTEMWEB%/TimelinePlugin/monet.xml)
 
 %TIMELINE{
-"%PUBURL%/%SYSTEMWEB%/TimelinePlugin/monet.xml"
+urltype="JSON"
+"%PUBURL%/%SYSTEMWEB%/TimelinePlugin/cubism.js"
 interval="DECADE"
 height="200px"
 width="700px"
-date="1870"
+date="1890"
 }%
+
+To use data from a twiki topic, you need to set the SKIN=text and add =?contenttype=text/xml= (to trick IE's XHTTPRequest into working) to the url
+
+<verbatim>
+"http://10.10.10.20/trunk/bin/view/TWiki/TimeLineJSON?contenttype=text/xml"
+urltype="JSON"
+</verbatim>
 
 ---+++ TWiki =SEARCH= based timeline
 This example uses the %SYSTEMWEB%.TimeLineSearch topic to show the last 50 modified topics in all webs.
 
-*WARNING: at the moment IE (and Safari) will only work with xml file, not from generated xml as below*
 
-%!TIMELINE{
-no="%PUBURL%/%SYSTEMWEB%/TimelinePlugin/cubism.js"
-"%SCRIPTURL{view}%/%SYSTEMWEB%/TimeLineSearch?contenttype=text/xml, application/xml"
-nourltype="JSON"
+%TIMELINE{
+urltype="JSON"
+"%SCRIPTURL{view}%/%SYSTEMWEB%/TimeLineSearchJSON?contenttype=text/xml"
 interval="YEAR"
 height="450px"
 width="450px"
@@ -56,11 +65,11 @@ date="%DISPLAYTIME{"$day $month $year"}%"
  
 <verbatim>
 %TIMELINE{
-"%SCRIPTURL{view}%/%SYSTEMWEB%/TimeLineSearch"
-interval="DAY"
+urltype="JSON"
+"%SCRIPTURL{view}%/%SYSTEMWEB%/TimeLineSearchJSON?contenttype=text/xml"
+interval="YEAR"
 height="450px"
 width="450px"
-orientation="vertical"
 date="%DISPLAYTIME{"$day $month $year"}%"
 }%
 </verbatim>
@@ -95,7 +104,7 @@ format="<event start='$date' title='$topic' link='%SCRIPTURL{"view"}%/$web/$topi
 
 |  Plugin Author: | TWiki:Main.SvenDowideit - <img src="%ATTACHURLPATH%/wikiringlogo20x20.png" /> http://WikiRing.com |
 |  Copyright: | &copy; 2006, TWiki:Main.SvenDowideit |
-|             | &copy;
+|             | &copy; |
 |  Plugin License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  SIMILE Timeline  License: | [[http://simile.mit.edu/license.html][BSD license]] |
 |  Plugin Version: | 22 Feb 2006 |
