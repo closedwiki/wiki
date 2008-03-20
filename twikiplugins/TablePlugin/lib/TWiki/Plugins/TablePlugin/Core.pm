@@ -616,7 +616,7 @@ sub _processTableRow {
             $attr->{width} = $columnWidths[$colCount];
         }
 
-        if (/^\s*\^\s*$/) {    # row span above
+        if (/^(\s|<[^>]*>)*\^(\s|<[^>]*>)*$/) {    # row span above
             $rowspan[$colCount]++;
             push @row, { text => $value, type => 'Y' };
         }
