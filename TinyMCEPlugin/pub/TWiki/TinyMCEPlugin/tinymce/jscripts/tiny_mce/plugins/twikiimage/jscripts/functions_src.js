@@ -14,12 +14,15 @@ function preinit() {
 		if (url.charAt(0) != '/' && url.indexOf('://') == -1)
 			url = tinyMCE.documentBasePath + "/" + url;
 
-		document.write('<sc'+'ript language="javascript" type="text/javascript" src="' + url + '"></sc'+'ript>');
+		document.write('<sc'+'ript language="javascript" type="text/javascript" src="'
+                       + url + '"></sc'+'ript>');
 	}
 }
 
 function pubURL(url, node, on_save) {
-	return eval("tinyMCEPopup.windowOpener." + tinyMCE.settings['twikipuburl_callback'] + "(url, node, on_save);");
+	return eval("tinyMCEPopup.windowOpener."
+                + tinyMCE.settings['twikipuburl_callback']
+                + "(url, node, on_save);");
 }
 
 function getImageSrc(str) {
@@ -77,11 +80,13 @@ function init() {
 	document.getElementById("srcbrowsercontainer").innerHTML = html;
 
 	// Over browser
-	html = getBrowserHTML('oversrcbrowser','onmouseoversrc','image','twikiimage');
+	html = getBrowserHTML('oversrcbrowser', 'onmouseoversrc', 'image',
+                          'twikiimage');
 	document.getElementById("onmouseoversrccontainer").innerHTML = html;
 
 	// Out browser
-	html = getBrowserHTML('outsrcbrowser','onmouseoutsrc','image','twikiimage');
+	html = getBrowserHTML('outsrcbrowser', 'onmouseoutsrc',
+                          'image', 'twikiimage');
 	document.getElementById("onmouseoutsrccontainer").innerHTML = html;
 
 	// Longdesc browser
@@ -109,8 +114,12 @@ function init() {
 
 	if (action == "update") {
 		var src = tinyMCE.getAttrib(elm, 'src');
-		var onmouseoversrc = getImageSrc(tinyMCE.cleanupEventStr(tinyMCE.getAttrib(elm, 'onmouseover')));
-		var onmouseoutsrc = getImageSrc(tinyMCE.cleanupEventStr(tinyMCE.getAttrib(elm, 'onmouseout')));
+		var onmouseoversrc =
+            getImageSrc(tinyMCE.cleanupEventStr(
+                            tinyMCE.getAttrib(elm, 'onmouseover')));
+		var onmouseoutsrc =
+            getImageSrc(tinyMCE.cleanupEventStr(
+                            tinyMCE.getAttrib(elm, 'onmouseout')));
 
 		src = pubURL(src, elm, true);
 
@@ -139,7 +148,8 @@ function init() {
 		formObj.src.value    = src;
 		formObj.alt.value    = tinyMCE.getAttrib(elm, 'alt');
 		formObj.title.value  = tinyMCE.getAttrib(elm, 'title');
-		formObj.border.value = trimSize(getStyle(elm, 'border', 'borderWidth'));
+		formObj.border.value =
+            trimSize(getStyle(elm, 'border', 'borderWidth'));
 		formObj.vspace.value = tinyMCE.getAttrib(elm, 'vspace');
 		formObj.hspace.value = tinyMCE.getAttrib(elm, 'hspace');
 		formObj.width.value  = orgImageWidth;
@@ -155,9 +165,11 @@ function init() {
 
 		// Select by the values
 		if (tinyMCE.isMSIE)
-			selectByValue(formObj, 'align', getStyle(elm, 'align', 'styleFloat'));
+			selectByValue(formObj, 'align', getStyle(
+                              elm, 'align', 'styleFloat'));
 		else
-			selectByValue(formObj, 'align', getStyle(elm, 'align', 'cssFloat'));
+			selectByValue(formObj, 'align', getStyle(
+                              elm, 'align', 'cssFloat'));
 
 		addClassesToList('classlist', 'twikiimage_styles');
 
@@ -179,7 +191,8 @@ function init() {
 		formObj.constrain.checked = true;
 
 	// Check swap image if valid data
-	if (formObj.onmouseoversrc.value != "" || formObj.onmouseoutsrc.value != "")
+	if (formObj.onmouseoversrc.value != ""
+        || formObj.onmouseoutsrc.value != "")
 		setSwapImageDisabled(false);
 	else
 		setSwapImageDisabled(true);
@@ -274,7 +287,8 @@ function insertAction() {
 	var inst = tinyMCE.getInstanceById(tinyMCE.getWindowArg('editor_id'));
 	var elm = inst.getFocusElement();
 	var formObj = document.forms[0];
-	var src = formObj.src.value;
+    // Always expand the URL, and keep it expanded
+	var src = pubURL(formObj.src.value, tinyMCE.imgElement);
 	var onmouseoversrc = formObj.onmouseoversrc.value;
 	var onmouseoutsrc = formObj.onmouseoutsrc.value;
 
@@ -284,18 +298,21 @@ function insertAction() {
 	}
 
 	if (tinyMCE.getParam("accessibility_warnings")) {
-		if (formObj.alt.value == "" && !confirm(tinyMCE.getLang('lang_twikiimage_missing_alt', '', true)))
+		if (formObj.alt.value == "" &&
+            !confirm(tinyMCE.getLang('lang_twikiimage_missing_alt', '', true)))
 			return;
 	}
 
 	if (onmouseoversrc && onmouseoversrc != "")
-		onmouseoversrc = "this.src='" + pubURL(onmouseoversrc, tinyMCE.imgElement) + "';";
+		onmouseoversrc = "this.src='" +
+            pubURL(onmouseoversrc, tinyMCE.imgElement) + "';";
 
 	if (onmouseoutsrc && onmouseoutsrc != "")
-		onmouseoutsrc = "this.src='" + pubURL(onmouseoutsrc, tinyMCE.imgElement) + "';";
+		onmouseoutsrc = "this.src='" +
+            pubURL(onmouseoutsrc, tinyMCE.imgElement) + "';";
 
 	if (elm != null && elm.nodeName == "IMG") {
-		setAttrib(elm, 'src', pubURL(src, tinyMCE.imgElement));
+		setAttrib(elm, 'src', src);
 		setAttrib(elm, 'mce_src', src);
 		setAttrib(elm, 'alt');
 		setAttrib(elm, 'title');
@@ -318,7 +335,8 @@ function insertAction() {
 		//tinyMCEPopup.execCommand("mceRepaint");
 
 		// Repaint if dimensions changed
-		if (formObj.width.value != orgImageWidth || formObj.height.value != orgImageHeight)
+		if (formObj.width.value != orgImageWidth
+            || formObj.height.value != orgImageHeight)
 			inst.repaint();
 
 		// Refresh in old MSIE
@@ -327,7 +345,7 @@ function insertAction() {
 	} else {
 		var html = "<img";
 
-		html += makeAttrib('src', pubURL(src, tinyMCE.imgElement));
+		html += makeAttrib('src', src);
 		html += makeAttrib('mce_src', src);
 		html += makeAttrib('alt');
 		html += makeAttrib('title');
@@ -382,13 +400,20 @@ function updateStyle() {
 	var st = tinyMCE.parseStyle(formObj.style.value);
 
 	if (tinyMCE.getParam('inline_styles', false)) {
-		st['width'] = formObj.width.value == '' ? '' : formObj.width.value + "px";
-		st['height'] = formObj.height.value == '' ? '' : formObj.height.value + "px";
-		st['border-width'] = formObj.border.value == '' ? '' : formObj.border.value + "px";
-		st['margin-top'] = formObj.vspace.value == '' ? '' : formObj.vspace.value + "px";
-		st['margin-bottom'] = formObj.vspace.value == '' ? '' : formObj.vspace.value + "px";
-		st['margin-left'] = formObj.hspace.value == '' ? '' : formObj.hspace.value + "px";
-		st['margin-right'] = formObj.hspace.value == '' ? '' : formObj.hspace.value + "px";
+		st['width'] = formObj.width.value == '' ? ''
+            : formObj.width.value + "px";
+		st['height'] = formObj.height.value == '' ? ''
+            : formObj.height.value + "px";
+		st['border-width'] = formObj.border.value == '' ? ''
+            : formObj.border.value + "px";
+		st['margin-top'] = formObj.vspace.value == '' ? ''
+            : formObj.vspace.value + "px";
+		st['margin-bottom'] = formObj.vspace.value == '' ? ''
+            : formObj.vspace.value + "px";
+		st['margin-left'] = formObj.hspace.value == '' ? ''
+            : formObj.hspace.value + "px";
+		st['margin-right'] = formObj.hspace.value == '' ? ''
+            : formObj.hspace.value + "px";
 	} else {
 		st['width'] = st['height'] = st['border-width'] = null;
 
@@ -433,7 +458,8 @@ function changeHeight() {
 	if (formObj.width.value == "" || formObj.height.value == "")
 		return;
 
-	var temp = (parseInt(formObj.width.value) / parseInt(preloadImg.width)) * preloadImg.height;
+	var temp = (parseInt(formObj.width.value) / parseInt(preloadImg.width))
+        * preloadImg.height;
 	formObj.height.value = temp.toFixed(0);
 	updateStyle();
 }
@@ -449,7 +475,8 @@ function changeWidth() {
 	if (formObj.width.value == "" || formObj.height.value == "")
 		return;
 
-	var temp = (parseInt(formObj.height.value) / parseInt(preloadImg.height)) * preloadImg.width;
+	var temp = (parseInt(formObj.height.value) / parseInt(preloadImg.height))
+        * preloadImg.width;
 	formObj.width.value = temp.toFixed(0);
 	updateStyle();
 }
@@ -472,13 +499,17 @@ function showPreviewImage(src, start) {
 	var elm = document.getElementById('prev');
 	var src = pubURL(src, null, false);
 
-	if (!start && tinyMCE.getParam("twikiimage_update_dimensions_onchange", true))
+	if (!start && tinyMCE.getParam("twikiimage_update_dimensions_onchange",
+                                   true))
 		resetImageData();
 
 	if (src == "")
 		elm.innerHTML = "";
 	else
-		elm.innerHTML = '<img id="previewImg" src="' + src + '" border="0" onload="updateImageData(' + start + ');" onerror="resetImageData();" />'
+		elm.innerHTML =
+            '<img id="previewImg" src="' + src
+            + '" border="0" onload="updateImageData('
+            + start + ');" onerror="resetImageData();" />'
 }
 
 function updateImageData(start) {
@@ -510,22 +541,26 @@ function getSelectValue(form_obj, field_name) {
 }
 
 function getImageListHTML(elm_id, target_form_element, onchange_func) {
-	if (typeof(tinyMCEImageList) == "undefined" || tinyMCEImageList.length == 0)
+	if (typeof(tinyMCEImageList) == "undefined"
+        || tinyMCEImageList.length == 0)
 		return "";
 
 	var html = "";
 
 	html += '<select id="' + elm_id + '" name="' + elm_id + '"';
-	html += ' class="mceImageList" onfocus="tinyMCE.addSelectAccessibility(event, this, window);" onchange="this.form.' + target_form_element + '.value=';
+	html += ' class="mceImageList" onfocus="tinyMCE.addSelectAccessibility(event, this, window);" onchange="this.form.'
+        + target_form_element + '.value=';
 	html += 'this.options[this.selectedIndex].value;';
 
 	if (typeof(onchange_func) != "undefined")
-		html += onchange_func + '(\'' + target_form_element + '\',this.options[this.selectedIndex].text,this.options[this.selectedIndex].value);';
+		html += onchange_func + '(\'' + target_form_element
+            + '\',this.options[this.selectedIndex].text,this.options[this.selectedIndex].value);';
 
 	html += '"><option value="">---</option>';
 
 	for (var i=0; i<tinyMCEImageList.length; i++)
-		html += '<option value="' + tinyMCEImageList[i][1] + '">' + tinyMCEImageList[i][0] + '</option>';
+		html += '<option value="' + tinyMCEImageList[i][1] + '">'
+            + tinyMCEImageList[i][0] + '</option>';
 
 	html += '</select>';
 

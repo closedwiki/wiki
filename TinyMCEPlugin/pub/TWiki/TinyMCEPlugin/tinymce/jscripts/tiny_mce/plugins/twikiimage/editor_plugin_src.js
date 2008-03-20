@@ -16,7 +16,7 @@ var TinyMCE_TWikiImagePlugin = {
 			longname : 'TWiki image',
 			author : 'WikiRing, from Moxiecode Systems AB original',
 			authorurl : 'http://wikiring.com',
-			infourl : 'http://wiki.moxiecode.com/index.php/TinyMCE:Plugins/twikiimage',
+			infourl : 'http://twiki.org/cgi-bin/view/Plugins/TinyMCEPlugin',
 			version : tinyMCE.majorVersion + "." + tinyMCE.minorVersion
 		};
 	},
@@ -24,13 +24,16 @@ var TinyMCE_TWikiImagePlugin = {
 	getControlHTML : function(cn) {
 		switch (cn) {
 			case "image":
-				return tinyMCE.getButtonHTML(cn, 'lang_image_desc', '{$themeurl}/images/image.gif', 'mceAdvImage');
+				return tinyMCE.getButtonHTML(
+                    cn, 'lang_image_desc',
+                    '{$themeurl}/images/image.gif', 'mceAdvImage');
 		}
 
 		return "";
 	},
 
-	execCommand : function(editor_id, element, command, user_interface, value) {
+	execCommand : function(
+        editor_id, element, command, user_interface, value) {
 		switch (command) {
 			case "mceAdvImage":
 				var template = new Array();
@@ -40,16 +43,20 @@ var TinyMCE_TWikiImagePlugin = {
 				template['height'] = 380;
 
 				// Language specific width and height addons
-				template['width']  += tinyMCE.getLang('lang_twikiimage_delta_width', 0);
-				template['height'] += tinyMCE.getLang('lang_twikiimage_delta_height', 0);
+				template['width']  += tinyMCE.getLang(
+                    'lang_twikiimage_delta_width', 0);
+				template['height'] += tinyMCE.getLang(
+                    'lang_twikiimage_delta_height', 0);
 
 				var inst = tinyMCE.getInstanceById(editor_id);
 				var elm = inst.getFocusElement();
 
-				if (elm != null && tinyMCE.getAttrib(elm, 'class').indexOf('mceItem') != -1)
+				if (elm != null &&
+                    tinyMCE.getAttrib(elm, 'class').indexOf('mceItem') != -1)
 					return true;
 
-				tinyMCE.openWindow(template, {editor_id : editor_id, inline : "yes"});
+				tinyMCE.openWindow(template, {editor_id : editor_id,
+                                           inline : "yes"});
 
 				return true;
 		}
@@ -62,19 +69,25 @@ var TinyMCE_TWikiImagePlugin = {
 			case "insert_to_editor_dom":
 				var imgs = content.getElementsByTagName("img"), src, i;
 				for (i=0; i<imgs.length; i++) {
-					var onmouseover = tinyMCE.cleanupEventStr(tinyMCE.getAttrib(imgs[i], 'onmouseover'));
-					var onmouseout = tinyMCE.cleanupEventStr(tinyMCE.getAttrib(imgs[i], 'onmouseout'));
+					var onmouseover = tinyMCE.cleanupEventStr(
+                        tinyMCE.getAttrib(imgs[i], 'onmouseover'));
+					var onmouseout = tinyMCE.cleanupEventStr(
+                        tinyMCE.getAttrib(imgs[i], 'onmouseout'));
 
 					if ((src = this._getImageSrc(onmouseover)) != "") {
-                        src = eval(tinyMCE.settings['twikipuburl_callback'] + "(src);");
+                        src = eval(tinyMCE.settings['twikipuburl_callback']
+                                   + "(src);");
 
-						imgs[i].setAttribute('onmouseover', "this.src='" + src + "';");
+						imgs[i].setAttribute('onmouseover', "this.src='"
+                                             + src + "';");
 					}
 
 					if ((src = this._getImageSrc(onmouseout)) != "") {
-                        src = eval(tinyMCE.settings['twikipuburl_callback'] + "(src);");
+                        src = eval(tinyMCE.settings['twikipuburl_callback']
+                                   + "(src);");
 
-						imgs[i].setAttribute('onmouseout', "this.src='" + src + "';");
+						imgs[i].setAttribute('onmouseout', "this.src='"
+                                             + src + "';");
 					}
 				}
 				break;
@@ -82,19 +95,25 @@ var TinyMCE_TWikiImagePlugin = {
 			case "get_from_editor_dom":
 				var imgs = content.getElementsByTagName("img");
 				for (var i=0; i<imgs.length; i++) {
-					var onmouseover = tinyMCE.cleanupEventStr(tinyMCE.getAttrib(imgs[i], 'onmouseover'));
-					var onmouseout = tinyMCE.cleanupEventStr(tinyMCE.getAttrib(imgs[i], 'onmouseout'));
+					var onmouseover = tinyMCE.cleanupEventStr(
+                        tinyMCE.getAttrib(imgs[i], 'onmouseover'));
+					var onmouseout = tinyMCE.cleanupEventStr(
+                        tinyMCE.getAttrib(imgs[i], 'onmouseout'));
 
 					if ((src = this._getImageSrc(onmouseover)) != "") {
-                        src = eval(tinyMCE.settings['twikipuburl_callback'] + "(src);");
+                        src = eval(tinyMCE.settings['twikipuburl_callback']
+                                   + "(src);");
 
-						imgs[i].setAttribute('onmouseover', "this.src='" + src + "';");
+						imgs[i].setAttribute('onmouseover', "this.src='"
+                                             + src + "';");
 					}
 
 					if ((src = this._getImageSrc(onmouseout)) != "") {
-                        src = eval(tinyMCE.settings['twikipuburl_callback'] + "(src, null, true);");
+                        src = eval(tinyMCE.settings['twikipuburl_callback']
+                                   + "(src, null, true);");
 
-						imgs[i].setAttribute('onmouseout', "this.src='" + src + "';");
+						imgs[i].setAttribute('onmouseout', "this.src='"
+                                             + src + "';");
 					}
 				}
 				break;
@@ -103,13 +122,16 @@ var TinyMCE_TWikiImagePlugin = {
 		return content;
 	},
 
-	handleNodeChange : function(editor_id, node, undo_index, undo_levels, visual_aid, any_selection) {
+	handleNodeChange : function(
+        editor_id, node, undo_index, undo_levels, visual_aid, any_selection) {
 		if (node == null)
 			return;
 
 		do {
-			if (node.nodeName == "IMG" && tinyMCE.getAttrib(node, 'class').indexOf('mceItem') == -1) {
-				tinyMCE.switchClass(editor_id + '_twikiimage', 'mceButtonSelected');
+			if (node.nodeName == "IMG" &&
+                tinyMCE.getAttrib(node, 'class').indexOf('mceItem') == -1) {
+				tinyMCE.switchClass(editor_id + '_twikiimage',
+                                    'mceButtonSelected');
 				return true;
 			}
 		} while ((node = node.parentNode));

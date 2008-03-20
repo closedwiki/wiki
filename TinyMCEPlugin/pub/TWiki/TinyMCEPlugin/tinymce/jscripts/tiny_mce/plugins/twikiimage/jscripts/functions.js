@@ -1,6 +1,9 @@
 var preloadImg=null;var orgImageWidth,orgImageHeight;function preinit(){tinyMCE.setWindowArg('mce_windowresize',false);var url=tinyMCE.getParam("external_image_list_url");if(url!=null){if(url.charAt(0)!='/'&&url.indexOf('://')==-1)
-url=tinyMCE.documentBasePath+"/"+url;document.write('<sc'+'ript language="javascript" type="text/javascript" src="'+url+'"></sc'+'ript>');}}
-function pubURL(url,node,on_save){return eval("tinyMCEPopup.windowOpener."+tinyMCE.settings['twikipuburl_callback']+"(url, node, on_save);");}
+url=tinyMCE.documentBasePath+"/"+url;document.write('<sc'+'ript language="javascript" type="text/javascript" src="'
++url+'"></sc'+'ript>');}}
+function pubURL(url,node,on_save){return eval("tinyMCEPopup.windowOpener."
++tinyMCE.settings['twikipuburl_callback']
++"(url, node, on_save);");}
 function getImageSrc(str){var pos=-1;if(!str)
 return"";if((pos=str.indexOf('this.src='))!=-1){var src=str.substring(pos+10);src=src.substring(0,src.indexOf('\''));if(tinyMCE.getParam('convert_urls'))
 src=pubURL(src,null,true);return src;}
@@ -44,14 +47,16 @@ function makeAttrib(attrib,value){var formObj=document.forms[0];var valueElm=for
 value=valueElm.value;}
 if(value=="")
 return"";value=value.replace(/&/g,'&amp;');value=value.replace(/\"/g,'&quot;');value=value.replace(/</g,'&lt;');value=value.replace(/>/g,'&gt;');return' '+attrib+'="'+value+'"';}
-function insertAction(){var inst=tinyMCE.getInstanceById(tinyMCE.getWindowArg('editor_id'));var elm=inst.getFocusElement();var formObj=document.forms[0];var src=formObj.src.value;var onmouseoversrc=formObj.onmouseoversrc.value;var onmouseoutsrc=formObj.onmouseoutsrc.value;if(!AutoValidator.validate(formObj)){alert(tinyMCE.getLang('lang_invalid_data'));return false;}
+function insertAction(){var inst=tinyMCE.getInstanceById(tinyMCE.getWindowArg('editor_id'));var elm=inst.getFocusElement();var formObj=document.forms[0];var src=pubURL(formObj.src.value,tinyMCE.imgElement);var onmouseoversrc=formObj.onmouseoversrc.value;var onmouseoutsrc=formObj.onmouseoutsrc.value;if(!AutoValidator.validate(formObj)){alert(tinyMCE.getLang('lang_invalid_data'));return false;}
 if(tinyMCE.getParam("accessibility_warnings")){if(formObj.alt.value==""&&!confirm(tinyMCE.getLang('lang_twikiimage_missing_alt','',true)))
 return;}
 if(onmouseoversrc&&onmouseoversrc!="")
-onmouseoversrc="this.src='"+pubURL(onmouseoversrc,tinyMCE.imgElement)+"';";if(onmouseoutsrc&&onmouseoutsrc!="")
-onmouseoutsrc="this.src='"+pubURL(onmouseoutsrc,tinyMCE.imgElement)+"';";if(elm!=null&&elm.nodeName=="IMG"){setAttrib(elm,'src',pubURL(src,tinyMCE.imgElement));setAttrib(elm,'mce_src',src);setAttrib(elm,'alt');setAttrib(elm,'title');setAttrib(elm,'border');setAttrib(elm,'vspace');setAttrib(elm,'hspace');setAttrib(elm,'width');setAttrib(elm,'height');setAttrib(elm,'onmouseover',onmouseoversrc);setAttrib(elm,'onmouseout',onmouseoutsrc);setAttrib(elm,'id');setAttrib(elm,'dir');setAttrib(elm,'lang');setAttrib(elm,'longdesc');setAttrib(elm,'usemap');setAttrib(elm,'style');setAttrib(elm,'class',getSelectValue(formObj,'classlist'));setAttrib(elm,'align',getSelectValue(formObj,'align'));if(formObj.width.value!=orgImageWidth||formObj.height.value!=orgImageHeight)
+onmouseoversrc="this.src='"+
+pubURL(onmouseoversrc,tinyMCE.imgElement)+"';";if(onmouseoutsrc&&onmouseoutsrc!="")
+onmouseoutsrc="this.src='"+
+pubURL(onmouseoutsrc,tinyMCE.imgElement)+"';";if(elm!=null&&elm.nodeName=="IMG"){setAttrib(elm,'src',src);setAttrib(elm,'mce_src',src);setAttrib(elm,'alt');setAttrib(elm,'title');setAttrib(elm,'border');setAttrib(elm,'vspace');setAttrib(elm,'hspace');setAttrib(elm,'width');setAttrib(elm,'height');setAttrib(elm,'onmouseover',onmouseoversrc);setAttrib(elm,'onmouseout',onmouseoutsrc);setAttrib(elm,'id');setAttrib(elm,'dir');setAttrib(elm,'lang');setAttrib(elm,'longdesc');setAttrib(elm,'usemap');setAttrib(elm,'style');setAttrib(elm,'class',getSelectValue(formObj,'classlist'));setAttrib(elm,'align',getSelectValue(formObj,'align'));if(formObj.width.value!=orgImageWidth||formObj.height.value!=orgImageHeight)
 inst.repaint();if(tinyMCE.isMSIE5)
-elm.outerHTML=elm.outerHTML;}else{var html="<img";html+=makeAttrib('src',pubURL(src,tinyMCE.imgElement));html+=makeAttrib('mce_src',src);html+=makeAttrib('alt');html+=makeAttrib('title');html+=makeAttrib('border');html+=makeAttrib('vspace');html+=makeAttrib('hspace');html+=makeAttrib('width');html+=makeAttrib('height');html+=makeAttrib('onmouseover',onmouseoversrc);html+=makeAttrib('onmouseout',onmouseoutsrc);html+=makeAttrib('id');html+=makeAttrib('dir');html+=makeAttrib('lang');html+=makeAttrib('longdesc');html+=makeAttrib('usemap');html+=makeAttrib('style');html+=makeAttrib('class',getSelectValue(formObj,'classlist'));html+=makeAttrib('align',getSelectValue(formObj,'align'));html+=" />";tinyMCEPopup.execCommand("mceInsertContent",false,html);}
+elm.outerHTML=elm.outerHTML;}else{var html="<img";html+=makeAttrib('src',src);html+=makeAttrib('mce_src',src);html+=makeAttrib('alt');html+=makeAttrib('title');html+=makeAttrib('border');html+=makeAttrib('vspace');html+=makeAttrib('hspace');html+=makeAttrib('width');html+=makeAttrib('height');html+=makeAttrib('onmouseover',onmouseoversrc);html+=makeAttrib('onmouseout',onmouseoutsrc);html+=makeAttrib('id');html+=makeAttrib('dir');html+=makeAttrib('lang');html+=makeAttrib('longdesc');html+=makeAttrib('usemap');html+=makeAttrib('style');html+=makeAttrib('class',getSelectValue(formObj,'classlist'));html+=makeAttrib('align',getSelectValue(formObj,'align'));html+=" />";tinyMCEPopup.execCommand("mceInsertContent",false,html);}
 tinyMCE._setEventsEnabled(inst.getBody(),false);tinyMCEPopup.close();}
 function cancelAction(){tinyMCEPopup.close();}
 function changeAppearance(){var formObj=document.forms[0];var img=document.getElementById('alignSampleImg');if(img){img.align=formObj.align.value;img.border=formObj.border.value;img.hspace=formObj.hspace.value;img.vspace=formObj.vspace.value;}}
@@ -76,7 +81,9 @@ function onSelectMainImage(target_form_element,name,value){var formObj=document.
 function showPreviewImage(src,start){var formObj=document.forms[0];selectByValue(document.forms[0],'imagelistsrc',src);var elm=document.getElementById('prev');var src=pubURL(src,null,false);if(!start&&tinyMCE.getParam("twikiimage_update_dimensions_onchange",true))
 resetImageData();if(src=="")
 elm.innerHTML="";else
-elm.innerHTML='<img id="previewImg" src="'+src+'" border="0" onload="updateImageData('+start+');" onerror="resetImageData();" />'}
+elm.innerHTML='<img id="previewImg" src="'+src
++'" border="0" onload="updateImageData('
++start+');" onerror="resetImageData();" />'}
 function updateImageData(start){var formObj=document.forms[0];preloadImg=document.getElementById('previewImg');if(!start&&formObj.width.value=="")
 formObj.width.value=preloadImg.width;if(!start&&formObj.height.value=="")
 formObj.height.value=preloadImg.height;updateStyle();}
@@ -84,7 +91,10 @@ function resetImageData(){var formObj=document.forms[0];formObj.width.value=form
 function getSelectValue(form_obj,field_name){var elm=form_obj.elements[field_name];if(elm==null||elm.options==null)
 return"";return elm.options[elm.selectedIndex].value;}
 function getImageListHTML(elm_id,target_form_element,onchange_func){if(typeof(tinyMCEImageList)=="undefined"||tinyMCEImageList.length==0)
-return"";var html="";html+='<select id="'+elm_id+'" name="'+elm_id+'"';html+=' class="mceImageList" onfocus="tinyMCE.addSelectAccessibility(event, this, window);" onchange="this.form.'+target_form_element+'.value=';html+='this.options[this.selectedIndex].value;';if(typeof(onchange_func)!="undefined")
-html+=onchange_func+'(\''+target_form_element+'\',this.options[this.selectedIndex].text,this.options[this.selectedIndex].value);';html+='"><option value="">---</option>';for(var i=0;i<tinyMCEImageList.length;i++)
-html+='<option value="'+tinyMCEImageList[i][1]+'">'+tinyMCEImageList[i][0]+'</option>';html+='</select>';return html;}
+return"";var html="";html+='<select id="'+elm_id+'" name="'+elm_id+'"';html+=' class="mceImageList" onfocus="tinyMCE.addSelectAccessibility(event, this, window);" onchange="this.form.'
++target_form_element+'.value=';html+='this.options[this.selectedIndex].value;';if(typeof(onchange_func)!="undefined")
+html+=onchange_func+'(\''+target_form_element
++'\',this.options[this.selectedIndex].text,this.options[this.selectedIndex].value);';html+='"><option value="">---</option>';for(var i=0;i<tinyMCEImageList.length;i++)
+html+='<option value="'+tinyMCEImageList[i][1]+'">'
++tinyMCEImageList[i][0]+'</option>';html+='</select>';return html;}
 preinit();
