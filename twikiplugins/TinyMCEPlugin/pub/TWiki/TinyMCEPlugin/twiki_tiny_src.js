@@ -240,9 +240,9 @@ var TWikiTiny = {
         return html;
     },
 
+    // Called 
     // Called on URL insertion, but not on image sources. Expand TWiki
-    // variables in the url. If the URL is a simple filename, then assume
-    // it's an attachment on the current topic.
+    // variables in the url.
     convertLink : function(url, node, onSave){
         if(onSave == null)
             onSave = false;
@@ -276,9 +276,10 @@ var TWikiTiny = {
         return url;
     },
 
-    // Called on URL insertion, but not on image sources. Expand TWiki
-    // variables in the url. If the URL is a simple filename, then assume
-    // it's an attachment on the current topic.
+    // Called from Insert Image, when the image is inserted. The resultant
+    // URL is only used when displaying the image in the picture dialog. It
+    // is thrown away (reverts to the typed address) when the image is
+    // actually inserted, at which time convertLink is called.
     convertPubURL : function(url){
         var orig = url;
         var base = TWikiTiny.getTWikiVar("PUBURL") + '/'
