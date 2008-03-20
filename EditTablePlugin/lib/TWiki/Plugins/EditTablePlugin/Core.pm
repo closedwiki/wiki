@@ -80,6 +80,7 @@ sub preProcessSpreadsheetPluginTags {
 
                 # escape variables
                 $tableText =~ s/%(.*?\{*.*?\}*)%/%E_T_P_NOP$1%/go;
+                $tableText =~ s/%E_T_P_NOPBR%/&#10;/go;
                 $tableDone = 1;
             }
             $tableText = $editTableTag . "\n" . $tableText;
@@ -1220,7 +1221,7 @@ sub handleTableRow {
             if ( defined $val ) {
 
                 # change any new line character sequences to <br />
-                $val =~ s/[\n\r]{2,}?/%BR%/gos;
+                $val =~ s/[\n\r]{2,}?/<br \/>/gos;
 
                 # escape "|" to HTML entity
                 $val =~ s/\|/\&\#124;/gos;

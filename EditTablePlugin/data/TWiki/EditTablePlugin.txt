@@ -20,6 +20,8 @@ Add a =%<nop>EDITTABLE{...}%= variable just before an existing table to make it 
 
 By default, variables in =&lt;initial value&gt;= (of text input field) and =&lt;label text&gt;= (of fixed label) get expanded when a new row is added. This can be used for example to add a timestamp to a label. You can escape characters with format tokens if you do not want that.
 
+Any TWiki variable inside a table cell will be preserved. For instance, =%<nop>TOPIC%= will not get expanded to the current topic name.
+
 The format tokens are the same as with %TWIKIWEB%.FormattedSearch:
 
 | *Escape:* | *Expands To:* |
@@ -211,7 +213,7 @@ __Note:__ The Plugin uses base settings like date format, language and style fro
 |  Plugin Author: | TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2002-2007, TWiki:Main.PeterThoeny ([[http://www.twiki.net/][TWIKI.NET]]) and TWiki Contributors |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 4.8 (20 Mar 2008) |
+|  Plugin Version: | 4.8.1 (20 Mar 2008) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
 |  20 Mar 2008: | 4.8: Arthur Clemens: Code refactoring; disabled table sort when editing; removed usage of =$percnt= to prevent variable expansion (is now done automatically); made Javascript interface aware of headers and footers, and of =changerows="off"=; improved feedback on row move. |
 |  25 Dec 2007: | 4.7.1: Arthur Clemens: Added warning if =include= parameter topic does not exist. |

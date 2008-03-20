@@ -35,7 +35,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '4.8';
+$RELEASE = '4.8.1';
 
 $encodeStart = '--EditTableEncodeStart--';
 $encodeEnd   = '--EditTableEncodeEnd--';
@@ -103,7 +103,7 @@ sub encodeValue {
     $_[0] =~ s/(.)/\.$1/gos;
 
     # convert <br /> markup to unicode linebreak character for text areas
-    $_[0] =~ s/.<.b.r. .\/.>. /&#10;/gos;
+    $_[0] =~ s/.<.b.r. .\/.>/&#10;/gos;
     $_[0] = $encodeStart . $_[0] . $encodeEnd;
 }
 
