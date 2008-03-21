@@ -15,6 +15,7 @@ The following parameters allow customization of how specific Classification topi
 
 
    * CLASS_DESCRIPTION - Optional introductory information about the particular category.
+   * CLASS_NAME - Optional designation of alternative reference for the Classification the current topic falls under. This provides for nested classifications.
    * LISTFORMAT - Optional designation of topic that defines how the list of topics are displayed. Defaults to RenderTableSearchResults. RenderBlogList is an example of alternative format.
    * INITSORT - Optionally set initial sort. Defaults to "modified".
    * INITLIMIT - Optionally set initial limit to # of results. Defaults to "all".
@@ -68,7 +69,10 @@ The following parameters allow customization of how specific Classification topi
 %~~  DBCALL{"%TCAOWEB%.RenderTableSearchResults" 
 ~~~       remote="on"
 ~~~       FACETS="%FORMFIELD{"Facets" topic="%BASEWEB%.%BASETOPIC%"}%" 
-~~~       BASESEARCH="%FORMFIELD{"Classification" topic="%BASEWEB%.%BASETOPIC%"}% =~ '%BASETOPIC%'" }%
+~~~       BASESEARCH="%IFDEFINED{"%CLASS_NAME%" 
+~~~               then="$test"
+~~~               else="%FORMFIELD{"Classification" topic="%BASEWEB%.%BASETOPIC%"}%"}%
+~~~             =~ '%BASETOPIC%'" 
 ~~~  %FIDEFINED%
 _For more information on content organization within the *%BASEWEB%* web, see %BASEWEB%.TopicClassification._
 
