@@ -56,6 +56,7 @@ If allowScriptAccess is =sameDomain= (it is supported in SWFs from Flash Player 
 | =fullscreen= | Enabled scriptable fullscreen mode. An overlay dialog box will appear when the movie enters full-screen mode, instructing the user how to exit and return to normal mode. The dialog box appears for a few seconds and then fades out. | ="true"= or ="false"= | ="false"= | 
 | =base= | Specifies the base directory or URL used to resolve all relative path statements in the Flash Player movie. This attribute is helpful when your Flash Player movies are kept in a different directory from your other files. | any directory URL, or empty string =""= | ="%<nop>ATTACHURL%/"= |
 | =swliveconnect= | Specifies whether the browser should start Java when loading the Flash Player for the first time. | ="true"= or ="false"= | =""= |
+| =flashvars= | Variables to be passed to the Flash movie. Multiple variables are separated by =&amp;=. | =flashvars="x=50&y=100&url=%<nop>ATTACHURL%/picture.jpg"= | =""= |
 
 
 Note that this plugin writes =object= and =embed= tags using Javascript to prevent annoying popup windows. %BR%
@@ -139,8 +140,9 @@ height="400px"
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ArthurClemens |
-|  Plugin Version: | 25 Feb 2008 (v1.1) |
+|  Plugin Version: | 24 Mar 2008 (v1.2) |
 |  Change History: | &nbsp; |
+|  24 Mar 2008: | Version 1.2 - Added =flashvar= attributes. |
 |  25 Feb 2008: | Version 1.1 - Added attributes. Write HTML embed/object tags with Javascript to prevent popup windows. If no javascript is available the =noscript= tag is used. |
 |  02 Nov 2006: | Version 1.01 - Updated Flash sample, small changes to documentation. |
 |  28 Dec 2003: | Version 1.0 |

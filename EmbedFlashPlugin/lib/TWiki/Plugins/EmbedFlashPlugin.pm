@@ -10,7 +10,7 @@ use vars qw(
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
 $VERSION = '$Rev$';
-$RELEASE = '1.1';
+$RELEASE = '1.2';
 
 $pluginName = 'EmbedFlashPlugin';
 
@@ -34,7 +34,7 @@ sub initPlugin {
 sub _handleEmbedFlash {
     my ( $session, $params, $theTopic, $theWeb ) = @_;
 
-    my $flashFileName = $params->{"filename"} || $params->{_DEFAULT};
+    my $flashFileName = $params->{"filepath"} || $params->{_DEFAULT};
     my $movieId = $params->{"id"};
     my $flashId;
     if ( !$movieId ) {
@@ -61,6 +61,7 @@ sub _handleEmbedFlash {
     my $flashAllowScriptAccess = $params->{"allowscriptaccess"} || "sameDomain";
     my $flashBase          = $params->{"base"}          || "%ATTACHURL%/";
     my $flashSwliveconnect = $params->{"swliveconnect"} || "";
+    my $flashVars          = $params->{"flashvars"}     || undef;
 
     $objectEmbed = "";
     my $itemSeparator = " ";
@@ -88,6 +89,9 @@ sub _handleEmbedFlash {
     $objectEmbed .=
       $itemSeparator . '<param name="movie" value="' . $flashId . '" />';
     $objectEmbed .=
+      $itemSeparator . '<param name="FlashVars" value="' . $flashVars . '" />'
+      if defined $flashVars;
+    $objectEmbed .=
       $itemSeparator . '<param name="quality" value="' . $flashQuality . '" />';
     $objectEmbed .=
         $itemSeparator
@@ -101,6 +105,8 @@ sub _handleEmbedFlash {
       . $flashSwliveconnect . '" />';
     $objectEmbed .= $itemSeparator . '<embed';
     $objectEmbed .= $itemSeparator . 'src="' . $flashFileName . '"';
+    $objectEmbed .= $itemSeparator . 'FlashVars="' . $flashVars . '"'
+      if defined $flashVars;
     $objectEmbed .= $itemSeparator . 'quality="' . $flashQuality . '"';
     $objectEmbed .= $itemSeparator . 'bgcolor="' . $flashBackground . '"';
     $objectEmbed .= $itemSeparator . 'width="' . $flashWidth . '"';
