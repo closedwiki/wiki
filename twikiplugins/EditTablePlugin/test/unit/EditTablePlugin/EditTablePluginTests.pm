@@ -45,6 +45,16 @@ sub do_testHtmlOutput {
           $session->renderer->getRenderedVersion( $actual, $webName,
             $topicName );
     }
+
+
+    # remove ever changing bgcolors from table cells
+    # as well as the rules property
+    # these are not important for these tests now
+    $expected =~ s/bgcolor\=\"*\#[a-z0-9]{6}\"*//go;
+    $actual =~ s/bgcolor\=\"*\#[a-z0-9]{6}\"*//go;
+    $expected =~ s/rules\=\"*(cols|rows|all)\"*//go;
+    $actual =~ s/rules\=\"*(cols|rows|all)\"*//go;
+
     $this->assert_html_equals( $expected, $actual );
 }
 
@@ -260,6 +270,7 @@ INPUT
 </form>
 </div><!-- /editTable --></noautolink>
 EXPECTED
+    
     $this->do_testHtmlOutput( $expected, $result, 0 );
 
     # Add 2 rows
@@ -323,6 +334,7 @@ EXPECTED
 </form>
 </div><!-- /editTable --></noautolink>
 EXPECTED
+
     $this->do_testHtmlOutput( $expected, $result, 1 );
 
     $query = new CGI(
@@ -359,6 +371,7 @@ EXPECTED
 | | test2 |
 | | test3 |
 NEWEXPECTED
+
     $this->assert_str_equals( $expected, $newtext, 0 );
 
     $twiki->finish();
