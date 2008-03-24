@@ -27,6 +27,7 @@ use strict;
 # $VERSION is referred to by TWiki, and is the only global variable that
 # *must* exist in this package
 use vars qw( $VERSION $RELEASE $debug $pluginName
+  $VARIABLES_TO_REMOVE
   $format $shouldRenderTableData @isoMonth %mon2num %columnType
   %regex );
 
@@ -38,10 +39,12 @@ $VERSION = '$Rev: 11069$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.1';
+$RELEASE = '1.2.1';
 
 # Name of this Plugin, only used in this module
 $pluginName = 'RenderTableDataPlugin';
+
+$VARIABLES_TO_REMOVE = '(EDITCELL|CALC)';
 
 BEGIN {
     @isoMonth = (
@@ -109,17 +112,18 @@ sub _parseTableRows {
 
     $shouldRenderTableData = 0;
 
-    my $format         = $params->{'format'}         || '';
-    my $topic          = $params->{'topic'}          || $inTopic;
-    my $web            = $params->{'web'}            || $inWeb;
-    my $tableId        = $params->{'id'}             || undef;
-    my $preserveSpaces = $params->{'preservespaces'} || 'off';
-    my $escapeQuotes   = $params->{'escapequotes'}   || 'on';
-    my $sortCol        = $params->{'sortcolumn'}     || undef;
-    my $sortDirection  = $params->{'sortdirection'}  || 'ascending';
-    my $beforeText     = $params->{'beforetext'}     || '';
-    my $afterText      = $params->{'aftertext'}      || '';
-    my $separator      = $params->{'separator'}      || '';
+    my $format            = $params->{'format'}            || '';
+    my $topic             = $params->{'topic'}             || $inTopic;
+    my $web               = $params->{'web'}               || $inWeb;
+    my $tableId           = $params->{'id'}                || undef;
+    my $preserveSpaces    = $params->{'preservespaces'}    || 'off';
+    my $escapeQuotes      = $params->{'escapequotes'}      || 'on';
+    my $sortCol           = $params->{'sortcolumn'}        || undef;
+    my $sortDirection     = $params->{'sortdirection'}     || 'ascending';
+    my $beforeText        = $params->{'beforetext'}        || '';
+    my $afterText         = $params->{'aftertext'}         || '';
+    my $separator         = $params->{'separator'}         || '';
+    my $preserveVariables = $params->{'preservevariables'} || 'off';
 
     my $rowStart   = 1;
     my $rowEnd     = undef;
@@ -197,7 +201,9 @@ sub _parseTableRows {
       ; # assume we will parse the first table unless we are looking for a specific table
 
     $text =~ s/\r//go;
-    $text =~ s/\\\n//go;    # Join lines ending in "\"
+    $text =~ s/\\\n//go;                            # Join lines ending in "\"
+    $text =~ s/%$VARIABLES_TO_REMOVE({.*?})*%//go
+      unless TWiki::Func::isTrue($preserveVariables);   # Remove TWiki variables
     $text .= '\n'
       ; # Help to find the end of the table if the table is the last item in the topic
 
@@ -216,7 +222,6 @@ sub _parseTableRows {
                 # match with a TablePlugin line
                 my %tablePluginParams = TWiki::Func::extractParameters($1);
                 my $currentTableId = $tablePluginParams{'id'} || '';
-
                 if ( defined $tableId ) {
                     $atTableToParse = 0 if ( $tableId ne $currentTableId );
                     $atTableToParse = 1 if ( $tableId eq $currentTableId );
@@ -339,10 +344,11 @@ sub _parseTableRows {
                         next;
                     }
                     my $cellNum = $colPos + 1;
-                    
+
                     # if statement
-                    $rowResult =~ s/\$C$cellNum(\(\"([^\"]*)\"(\s*then\=\"([^\"]*)\")*(\s*else\=\"([^\"]*)\")*\))/_handleIfStatement($cell,$2,$4,$6)/ges;
-                    
+                    $rowResult =~
+s/\$C$cellNum(\(\"([^\"]*)\"(\s*then\=\"([^\"]*)\")*(\s*else\=\"([^\"]*)\")*\))/_handleIfStatement($cell,$2,$4,$6)/ges;
+
                     $rowResult =~
 s/\$C$cellNum(\(([0-9]*),*(.*?)\))*/_getCellContents($cell,$2,$3)/ges;
                 }
@@ -386,14 +392,14 @@ cell("='value'" then="true" else="false")
 =cut
 
 sub _handleIfStatement {
-    my ($cell, $ifStatement, $then, $else) = @_;
+    my ( $cell, $ifStatement, $then, $else ) = @_;
 
-	if ($ifStatement =~ m/\s*isempty\s*/) {
-	    return ($cell eq '') ? $then : $else;
-	}
-	if ($ifStatement =~ m/\s*\=\s*\'(.*?)\'\s*/) {
-	    return ($cell eq $1) ? $then : $else;
-	}
+    if ( $ifStatement =~ m/\s*isempty\s*/ ) {
+        return ( $cell eq '' ) ? $then : $else;
+    }
+    if ( $ifStatement =~ m/\s*\=\s*\'(.*?)\'\s*/ ) {
+        return ( $cell eq $1 ) ? $then : $else;
+    }
     return $cell;
 }
 

@@ -76,6 +76,7 @@ Any one of the parameters is optional.
 Start counting from the end by using a negative number: =show="-5.."= will start 5 positions from the end counting up to the end. %BR% \
 Likewise use =show="..-5"= to show results up to the fifth item from the end. | =none= (show all results) | =show="2"=, =show="2..6"=, =show="2.."=, =show="-5.."=, =show="..-5"= |
 | =preservespaces= | By default leading and trailing spaces of table cells are trimmed. Use =on= to preserve spaces. | =none= (spaces are trimmed) | =preservespaces="on"= |
+| =preservevariables= | By default TWiki variables =EDITCELL= and =CALC= are removed. Use =preservevariables="on"= to keep these variables in the rendered text. | =none= (variables are removed) | =preservevariables="on"= |
 | =escapequotes=   | Will not escape double quotes and single quotes if set to =off=. By default quotes are escaped. If you are using the output text in html it is adviced to have quotes escaped. If you render out to xml set the parameter to =off=. | =on= | =escapequotes="off"= |
 | =sortdirection= | The sort direction of the parsed data corresponding to the original table data. %BR% If no =sortcolumn= is passed and the direction is ="descending"=, the results are simply reversed. | =none= (no sorting) | =sortdirection="ascending"= (default direction), =sortdirection="descending"= |
 | =sortcolumn= | The table column data to sort upon. You may use a column with dates or sequential numbers to sort the results without showing that order data in the results. %BR% The first column is numbered 1. The column number always refers to the original table, even if cells are omitted with parameter =rows= or =cols=. | =none= (no sorting) | =sortcolumn="1"= |
@@ -209,7 +210,8 @@ format="   * $C1$C3(\"isempty\" then=\" $C4\" else=\" [[$C3][$C4]]\") %BR%   $C2
 | Copyright &copy;: | 2007-2008 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
-| Plugin&nbsp;Version: | 27 Feb 2008 (version 1.2)  |
+| Plugin&nbsp;Version: | 24 Mar 2008 (version 1.2.1)  |
+| 24 Mar 2008 | Arthur Clemens: 1.2.1 Added parameter =preservevariables= |
 | 27 Feb 2008 | Arthur Clemens: 1.2 Added cell value evaluation. Added unit tests. |
 | 25 Jan 2008 | Arthur Clemens: 1.1 Adds parameters =id=, =separator= and =escapequotes=. |
 | 24 Nov 2007 | Arthur Clemens: 1.0.6 Use standard TWiki function for format tokens. Change: instead of =$n= use =$n()=. |
