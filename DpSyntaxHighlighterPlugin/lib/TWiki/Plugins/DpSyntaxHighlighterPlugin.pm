@@ -20,7 +20,7 @@ use strict;
 use vars qw( $VERSION $RELEASE $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION $pluginName $rootDir $doneHead );
 
 $VERSION = '$Rev: 9813$';
-$RELEASE = 'Dakar';
+$RELEASE = '1.5.2';
 $pluginName = 'DpSyntaxHighlighterPlugin';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Client side syntax highlighting using the [[http://code.google.com/p/syntaxhighlighter/][dp.SyntaxHighlighter]]';
@@ -46,7 +46,7 @@ sub initPlugin {
 
 sub commonTagsHandler {
 
-    $_[0] =~ s/%CODE{(.*?)}%\n(.*?)%ENDCODE%/&_handleTag/egs;
+    $_[0] =~ s/%CODE{(.*?)}%\s*(.*?)%ENDCODE%/&_handleTag/egs;
 
 }
 
@@ -86,6 +86,7 @@ sub _handleTag {
     # brush
     my $brush = '';
     for ($lang){
+	/as3|actionscript3/ and $brush = "AS3", last;
 	/css/ and $brush = "Css", last;
 	/c#|c-sharp|csharp/ and $brush = "CSharp", last;
 	/^c$|cpp|c\+\+/ and $brush = "Cpp", last;
