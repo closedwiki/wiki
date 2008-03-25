@@ -545,11 +545,11 @@ msgstr ""
 
 #: templates/messages.tmpl:452
 msgid ""
-"A new *system-generated* password for your login name %1 (WikiName %2) has "
+"A new system-generated password for your login name %1 (!WikiName %2) has "
 "been sent to your registered e-mail address. If your e-mail address is no "
 "longer valid, please contact %3"
 msgstr ""
-"Nové *systémem vygenerované* heslo pro Váš účet %1 (WikiName %2) byl odeslán "
+"Nové systémem vygenerované heslo pro Váš účet %1 (!WikiName %2) byl odeslán "
 "na Vaši registrovanou e-mailovou adresu. Pokud Vaše adresa není dále platná, "
 "kontaktujte prosím %3"
 

@@ -484,8 +484,8 @@ msgid "A more extensive changes list is available via [[%1][Recent Changes]]."
 msgstr "更多擴展變更列表位於菜單的 [[%1][最新修改]] 中"
 
 #: templates/messages.tmpl:452
-msgid "A new *system-generated* password for your login name %1 (WikiName %2) has been sent to your registered e-mail address. If your e-mail address is no longer valid, please contact %3"
-msgstr "系統為 %1 (Wikiname %2 )*自動*生成的新密碼已經被發送到你註冊的電子郵件位址，如果你的註冊電子郵件不生效，請聯繫 %3 "
+msgid "A new system-generated password for your login name %1 (!WikiName %2) has been sent to your registered e-mail address. If your e-mail address is no longer valid, please contact %3"
+msgstr "系統為 %1 (!WikiName %2 )*自動*生成的新密碼已經被發送到你註冊的電子郵件位址，如果你的註冊電子郵件不生效，請聯繫 %3 "
 
 #: data/TWiki/WebTemplateTopics.txt:4
 msgid "A topic template defines the initial content of a newly created topic."

@@ -483,8 +483,8 @@ msgid "A more extensive changes list is available via [[%1][Recent Changes]]."
 msgstr "Більш розширений список змін доступний за посиланням [[%1][Недавні зміни]] "
 
 #: templates/messages.tmpl:447
-msgid "A new *system-generated* password for your login name %1 (<nop>WikiName %2) has been sent to your registered e-mail address. If your e-mail address is no longer valid, please contact %3"
-msgstr "Новий пароль *автоматично* згенерований для Вашого ІменіКористувача %1 (<nop>ВікіІм'я %2) висланий на введений Вами при реєстрації адреса електронної пошти. Якщо ця адреса більше не дійсна, то зверніться, будь ласка, до %3"
+msgid "A new system-generated password for your login name %1 (!WikiName %2) has been sent to your registered e-mail address. If your e-mail address is no longer valid, please contact %3"
+msgstr "Новий пароль автоматично згенерований для Вашого ІменіКористувача %1 (!ВікіІм'я %2) висланий на введений Вами при реєстрації адреса електронної пошти. Якщо ця адреса більше не дійсна, то зверніться, будь ласка, до %3"
 
 #: data/TWiki/WebTemplateTopics.txt:4
 msgid "A topic template defines the initial content of a newly created topic."
