@@ -538,11 +538,11 @@ msgstr "En mer utförlig lista på ändringar finns på [[%1][Senaste ändringar
 
 #: templates/messages.tmpl:445
 msgid ""
-"A new *system-generated* password for your login name %1 (!WikiName %2) "
+"A new system-generated password for your login name %1 (!WikiName %2) "
 "has been sent to your registered e-mail address. If your e-mail address is "
 "no longer valid, please contact %3"
 msgstr ""
-"Ett nytt *systemgenererat* lösenord till dit användarnamn %1 (!WikiName %"
+"Ett nytt systemgenererat lösenord till dit användarnamn %1 (!WikiName %"
 "2) har skickats till den registrerade e-postadressen. Om den inte längre är "
 "giltig så  kontakta %3"
 

@@ -546,7 +546,7 @@ msgstr "Szczegółowa lista zmian jest dostępna na stronie [[%1][Zmiany]]."
 
 #: templates/messages.tmpl:445
 msgid ""
-"A new *system-generated* password for your login name %1 (!WikiName %2) "
+"A new system-generated password for your login name %1 (!WikiName %2) "
 "has been sent to your registered e-mail address. If your e-mail address is "
 "no longer valid, please contact %3"
 msgstr ""

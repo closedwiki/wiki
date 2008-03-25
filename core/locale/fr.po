@@ -544,11 +544,11 @@ msgstr ""
 
 #: templates/messages.tmpl:445
 msgid ""
-"A new *system-generated* password for your login name %1 (!WikiName %2) "
+"A new system-generated password for your login name %1 (!WikiName %2) "
 "has been sent to your registered e-mail address. If your e-mail address is "
 "no longer valid, please contact %3"
 msgstr ""
-"Un nouveau mot de passe a été *généré par TWiki*, pour l'utilisateur ou "
+"Un nouveau mot de passe a été généré par TWiki, pour l'utilisateur ou "
 "l'utilisatrice %1 (nom wiki : %2), et a été envoyé à %3"
 
 #: data/TWiki/WebTemplateTopics.txt:4

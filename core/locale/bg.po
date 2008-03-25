@@ -524,11 +524,11 @@ msgstr "По-подробен списък с промените ще намер
 
 #: templates/messages.tmpl:445
 msgid ""
-"A new *system-generated* password for your login name %1 (!WikiName %2) "
+"A new system-generated password for your login name %1 (!WikiName %2) "
 "has been sent to your registered e-mail address. If your e-mail address is "
 "no longer valid, please contact %3"
 msgstr ""
-"Нова *генерирана от системата* парола за вход %1 (!WikiName %2) "
+"Нова генерирана от системата парола за вход %1 (!WikiName %2) "
 "бе изпратена на вашия регистриран e-mail-адрес. Ако вашият e-mail-адрес вече е невалиден,моля свържете се с %3"
 
 #: data/TWiki/WebTemplateTopics.txt:4
