@@ -1830,10 +1830,13 @@ sub getReferenceRE {
             # Searching for a web
             if( $options{interweb} ) {
                 # web name used to refer to a topic
-                $re = $bow.'\.'.$matchWeb.'\.[A-Za-z0-9]+'.$eow;
+                $re = $bow . '\.' . $matchWeb . '(\.[$TWiki::regex{mixedAlphaNum}]+)' . $eow;
             } else {
                 # most general search for a reference to a topic or subweb
-                $re = $bow.$matchWeb.'\.[A-Za-z0-9]+'.$eow;
+                # note that replaceWebReferences() uses $1 from this regex
+                $re = $bow . $matchWeb . 
+                      "(([\/\.][$TWiki::regex{upperAlpha}][$TWiki::regex{mixedAlphaNum}_]*)*" .
+                      "\.[$TWiki::regex{mixedAlphaNum}]+)" . $eow;
             }
         }
     }
@@ -1930,7 +1933,7 @@ sub replaceWebReferences {
 
     my $re = getReferenceRE( $oldWeb, undef);
 
-    $text =~ s/$re/$newWeb/g;
+    $text =~ s/$re/$newWeb$1/g;
 
     $re = getReferenceRE( $oldWeb, undef, url => 1);
 
