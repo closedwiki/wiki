@@ -1,7 +1,6 @@
 lib/TWiki/Contrib/PatternSkin.pm 0444
 data/_default/WebLeftBar.txt 0644
 data/Main/PatternSkinUserViewTemplate.txt 0644
-data/Main/TWikiGuestLeftBar.txt 0644
 data/Main/WebLeftBar.txt 0644
 data/Sandbox/WebLeftBar.txt 0644
 data/Trash/WebLeftBar.txt 0644
