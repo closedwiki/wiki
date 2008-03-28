@@ -43,8 +43,10 @@ sub new {
 }
 
 # Entities that we want to decoded in plain text
+# Do *not* add lt or gt, as you will turn > and < in plain text into HTML
+# tags!
 my %text_entities = (
-    quot => 34, amp => 38, lt => 60, gt => 62
+    quot => 34, amp => 38,
    );
 my $text_entities_re = join('|', keys %text_entities);
 

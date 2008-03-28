@@ -1130,7 +1130,6 @@ sub _handleIMG {
     # Hack out mce_src, which is TinyMCE-specific and causes indigestion
     # when the topic is reloaded
     delete $this->{attrs}->{mce_src} if defined $this->{attrs}->{mce_src};
-
     if( $this->{context} && $this->{context}->{rewriteURL} ) {
         my $href = $this->{attrs}->{src};
         # decode URL params in the href
