@@ -143,6 +143,7 @@ sub convert {
     # get rid of nasties
     $text =~ s/\r//g;
     $this->_resetStack();
+
     $this->parse( $text );
     $this->eof();
     #print STDERR "Finished\n";

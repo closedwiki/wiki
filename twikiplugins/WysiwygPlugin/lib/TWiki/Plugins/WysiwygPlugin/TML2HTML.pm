@@ -227,11 +227,12 @@ sub _getRenderedVersion {
 
     $this->{removed} = {}; # Map of placeholders to tag parameters and text
 
+    # Do sticky first; it can't be ignored
+    $text = $this->_takeOutBlocks( $text, 'sticky' );
+
     $text = $this->_takeOutBlocks( $text, 'verbatim' );
 
     $text = $this->_takeOutBlocks( $text, 'literal' );
-
-    $text = $this->_takeOutBlocks( $text, 'sticky' );
 
     $text = $this->_takeOutSets( $text );
 
@@ -329,7 +330,19 @@ sub _getRenderedVersion {
             $inList = 0;
             push(@result, '</p>') if $inParagraph;
             $inParagraph = 0;
-            $line = _makeHeading($2, length($1));
+            my( $indicator, $heading ) = ( $1, $2 );
+            my $class = 'TML';
+            if( $heading =~ s/$TWiki::regex{headerPatternNoTOC}//o ) {
+                $class .= ' notoc';
+            }
+            if( $indicator =~ /#/ ) {
+                $class .= ' numbered';
+            }
+            my $attrs = { class => $class };
+            my $fn = 'CGI::h'.length( $indicator );
+            no strict 'refs';
+            $line = &$fn($attrs, " $heading ");
+            use strict 'refs';
 
         } elsif ($line =~ /^\s*$/) {
             # Blank line
@@ -437,10 +450,10 @@ sub _getRenderedVersion {
 
     $this->_putBackBlocks( $text, 'literal', 'div' );
 
-    $this->_putBackBlocks( $text, 'sticky', 'div', \&_encodeEntities );
-
     # replace verbatim with pre in the final output, with encoded entities
     $this->_putBackBlocks( $text, 'verbatim', 'pre', \&_encodeEntities );
+
+    $this->_putBackBlocks( $text, 'sticky', 'div', \&_encodeEntities );
 
     $text =~ s/(<nop>)/$this->_liftOut($1, 'PROTECTED')/ge;
 
@@ -461,20 +474,6 @@ sub _encodeEntities {
     $text =~ s/ /&nbsp;/g;
     $text =~ s/\n/<br \/>/gs;
     return $text;
-}
-
-# Make the html for a heading
-sub _makeHeading {
-    my( $theHeading, $theLevel ) = @_;
-    my $class = 'TML';
-    if( $theHeading =~ s/$TWiki::regex{headerPatternNoTOC}//o ) {
-        $class .= ' notoc';
-    }
-    my $attrs = { class => $class };
-    my $fn = 'CGI::h'.$theLevel;
-    no strict 'refs';
-    return &$fn($attrs, " $theHeading ");
-    use strict 'refs';
 }
 
 sub _takeOutIMGTag {

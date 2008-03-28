@@ -1581,11 +1581,49 @@ HERE
       },
       {
           name => 'Item5179',
-          exec => $ROUNDTRIP,
+          exec => $TML2HTML | $HTML2TML,
           tml => <<HERE,
-<fleegle src="ball&co<ck>s"> <verbatim>
-<img src="ball&co<ck>s">&amp;&gt;&lt;&quot;
+<smeg>
+<verbatim>
+<img src="ball&co<ck>s">&><"
 </verbatim>
+&&gt;&lt;"
+HERE
+          html => <<HERE,
+<p>
+<span class="WYSIWYG_PROTECTED">&#60;smeg&#62;</span>
+<pre class="TMLverbatim"><br />&#60;img&nbsp;src=&#34;ball&#38;co&#60;ck&#62;s&#34;&#62;&#38;&#62;&#60;&#34;<br /></pre>
+&&gt;&lt;"
+</p>
+HERE
+          finaltml => <<HERE,
+<smeg> <verbatim>
+<img src="ball&co<ck>s">&><"
+</verbatim> &&gt;&lt;"
+HERE
+      },
+      {
+          name => "Item5337",
+          exec => $TML2HTML | $ROUNDTRIP,
+          tml => <<HERE,
+<pre>
+hello
+there
+</pre>
+HERE
+          finaltml => <<HERE,
+<pre>
+hello
+there
+</pre>
+HERE
+          html => <<HERE,
+<p>
+<pre>
+hello
+there
+</pre>
+</p>
 HERE
       },
      ];
