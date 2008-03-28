@@ -106,8 +106,21 @@ shift @DATA;
 my %data     = @DATA;
 my $stubPath = "$def{MODULE}/lib/TWiki/$def{STUBS}";
 if ( $def{TYPE} eq 'Plugin' ) {
-    my $rewrite = getFile("EmptyPlugin/lib/TWiki/Plugins/EmptyPlugin.pm");
-
+    my $rewrite;
+    # Look in all the possible places for EmptyPlugin
+    if (-e "EmptyPlugin/lib/TWiki/Plugins/EmptyPlugin.pm") {
+        # probably running in a checkout
+        $rewrite = getFile("EmptyPlugin/lib/TWiki/Plugins/EmptyPlugin.pm");
+    } elsif (-e "twikiplugins/EmptyPlugin/lib/TWiki/Plugins/EmptyPlugin.pm") {
+        # Old-style checkout
+        $rewrite = getFile("twikiplugins/EmptyPlugin/lib/TWiki/Plugins/EmptyPlugin.pm");
+    } elsif (-e "../EmptyPlugin/lib/TWiki/Plugins/EmptyPlugin.pm") {
+        # core subdir in a new-style checkout
+        $rewrite = getFile("../EmptyPlugin/lib/TWiki/Plugins/EmptyPlugin.pm");
+    } elsif (-e "lib/TWiki/Plugins/EmptyPlugin.pm") {
+        # last ditch, get it from the install
+        $rewrite = getFile("lib/TWiki/Plugins/EmptyPlugin.pm");
+    }
     # Tidy up
     $rewrite =~ s/Copyright .*(# This program)/$1/s;
     $rewrite =~ s/^.*?__NOTE:__ /$data{PLUGIN_HEADER}/s;

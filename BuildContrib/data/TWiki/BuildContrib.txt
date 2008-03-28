@@ -45,12 +45,11 @@ __Notes__
 ---++ Fast Start
 If you don't like reading documentation, and just want a fast route to creating a new TWiki extension, then:
    1 Install the contrib using the instructions below
-   1 =cd= to the =twikiplugins= directory under the root of your twiki installation
+   1 =cd= to the root of your twiki installation
    1 =perl create_new_extension.pl= <i>extension_name</i>
-then modify the extension files as required (including MANIFEST). Then when you are ready to create archives,
-   1 =cd twikiplugins=
+then modify the extension files as required (including MANIFEST). Then when you are ready to create archives:
    1 =perl build.pl <i>extension_name</i> release=
-      * Archives (.zip, .tgz) will be created in =twikiplugins/<i>extension_name</i>=
+      * Archives (.zip, .tgz) will be created in =<i>extension_name</i>=
 
 #DevelopmentModel
 ---++ Development Model

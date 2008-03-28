@@ -20,6 +20,7 @@ BEGIN {
     $parentdir = "$basedir/..";
     my $path = $ENV{TWIKI_EXTENSIONS} || '';
     $path .= $Config::Config{path_sep}."$basedir/twikiplugins"
+      .$Config::Config{path_sep}.'.'
       .$Config::Config{path_sep}.$parentdir;
     @twikiplugins_path =
       grep(-d $_, split(/$Config::Config{path_sep}/, $path));
