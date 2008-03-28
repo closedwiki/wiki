@@ -1,16 +1,36 @@
-if(!dojo._hasResource["dojox.lang.tests.fold"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.lang.tests.fold"] = true;
-dojo.provide("dojox.lang.tests.fold");
-dojo.require("dojox.lang.functional");
+﻿dojo.provide("dojox.lang.tests.fold");
+
+dojo.require("dojox.lang.functional.fold");
+dojo.require("dojox.lang.functional.scan");
+dojo.require("dojox.lang.functional.curry");
 
 (function(){
 	var df = dojox.lang.functional, a = df.arg;
+
+	var revArrayIter = function(array){
+		this.array    = array;
+		this.position = array.length - 1;
+	};
+	dojo.extend(revArrayIter, {
+		hasNext:	df.lambda("this.position >= 0"),
+		next:		df.lambda("this.array[this.position--]")
+	});
+
 	tests.register("dojox.lang.tests.fold", [
 		function testFoldl1(t){ t.assertEqual(df.foldl([1, 2, 3], "+", 0), 6); },
 		function testFoldl2(t){ t.assertEqual(df.foldl1([1, 2, 3], "*"), 6); },
 		function testFoldl3(t){ t.assertEqual(df.foldl1([1, 2, 3], "/"), 1/6); },
 		function testFoldl4(t){ t.assertEqual(df.foldl1([1, 2, 3], df.partial(Math.max, a, a)), 3); },
 		function testFoldl5(t){ t.assertEqual(df.foldl1([1, 2, 3], df.partial(Math.min, a, a)), 1); },
+		
+		function testFoldlIter(t){
+			var iter = new revArrayIter([1, 2, 3]);
+			t.assertEqual(df.foldl(iter, "+", 0), 6);
+		},
+		function testFoldl1Iter(t){
+			var iter = new revArrayIter([1, 2, 3]);
+			t.assertEqual(df.foldl1(iter, "/"), 3/2);
+		},
 		
 		function testFoldr1(t){ t.assertEqual(df.foldr([1, 2, 3], "+", 0), 6); },
 		function testFoldr2(t){ t.assertEqual(df.foldr1([1, 2, 3], "*"), 6); },
@@ -22,6 +42,15 @@ dojo.require("dojox.lang.functional");
 		function testScanl2(t){ t.assertEqual(df.scanl1([1, 2, 3], "*"), [1, 2, 6]); },
 		function testScanl3(t){ t.assertEqual(df.scanl1([1, 2, 3], df.partial(Math.max, a, a)), [1, 2, 3]); },
 		function testScanl4(t){ t.assertEqual(df.scanl1([1, 2, 3], df.partial(Math.min, a, a)), [1, 1, 1]); },
+
+		function testScanlIter(t){
+			var iter = new revArrayIter([1, 2, 3]);
+			t.assertEqual(df.scanl(iter, "+", 0), [0, 3, 5, 6]);
+		},
+		function testScanl1Iter(t){
+			var iter = new revArrayIter([1, 2, 3]);
+			t.assertEqual(df.scanl1(iter, "*"), [3, 6, 6]);
+		},
 		
 		function testScanr1(t){ t.assertEqual(df.scanr([1, 2, 3], "+", 0), [6, 5, 3, 0]); },
 		function testScanr2(t){ t.assertEqual(df.scanr1([1, 2, 3], "*"), [6, 6, 3]); },
@@ -29,5 +58,3 @@ dojo.require("dojox.lang.functional");
 		function testScanr4(t){ t.assertEqual(df.scanr1([1, 2, 3], df.partial(Math.min, a, a)), [1, 2, 3]); }
 	]);
 })();
-
-}

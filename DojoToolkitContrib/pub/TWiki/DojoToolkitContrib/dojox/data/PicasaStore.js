@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.data.PicasaStore"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.data.PicasaStore"] = true;
 dojo.provide("dojox.data.PicasaStore");
 
 dojo.require("dojo.data.util.simpleFetch");
@@ -250,5 +248,3 @@ dojo.declare("dojox.data.PicasaStore", null, {
 	}
 });
 dojo.extend(dojox.data.PicasaStore,dojo.data.util.simpleFetch);										  
-
-}

@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.grid._grid.drag"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.grid._grid.drag"] = true;
 dojo.provide("dojox.grid._grid.drag");
 
 // summary:
@@ -109,5 +107,3 @@ dgdrag.click = function(inEvent){
 
 })();
 // end closure
-
-}

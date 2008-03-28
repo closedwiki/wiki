@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.collections.tests._base"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.collections.tests._base"] = true;
 dojo.provide("dojox.collections.tests._base");
 dojo.require("dojox.collections");
 
@@ -80,5 +78,3 @@ tests.register("dojox.collections.tests._base", [
 		t.assertEqual(null, itr.get());
 	}
 ]);
-
-}

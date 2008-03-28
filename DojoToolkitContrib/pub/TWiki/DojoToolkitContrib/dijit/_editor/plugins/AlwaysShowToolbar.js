@@ -1,26 +1,24 @@
-if(!dojo._hasResource["dijit._editor.plugins.AlwaysShowToolbar"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dijit._editor.plugins.AlwaysShowToolbar"] = true;
 dojo.provide("dijit._editor.plugins.AlwaysShowToolbar");
 
-dojo.declare("dijit._editor.plugins.AlwaysShowToolbar", null,
+dojo.declare("dijit._editor.plugins.AlwaysShowToolbar", dijit._editor._Plugin,
 	{
 	_handleScroll: true,
 	setEditor: function(e){
-		this.editor=e;
-//		setTimeout(dojo.hitch(this,this.enable),10000);
-		e.onLoadDeferred.addCallback(dojo.hitch(this,this.enable));
+		this.editor = e;
+//		setTimeout(dojo.hitch(this,this.enable), 10000);
+		e.onLoadDeferred.addCallback(dojo.hitch(this, this.enable));
 //		this.scrollInterval = setInterval(dojo.hitch(this, "globalOnScrollHandler"), 100);
 	},
 	enable: function(d){
 		this._updateHeight();
-		this._connects=[dojo.connect(window,'onscroll',this,"globalOnScrollHandler"),
-		dojo.connect(this.editor,'onNormalizedDisplayChanged',this,"_updateHeight")];
+		this.connect(window, 'onscroll', "globalOnScrollHandler");
+		this.connect(this.editor, 'onNormalizedDisplayChanged', "_updateHeight");
 		return d;
 	},
 	_updateHeight: function(){
 		// summary:
 		//		Updates the height of the editor area to fit the contents.
-		var e=this.editor;
+		var e = this.editor;
 		if(!e.isLoaded){ return; }
 		if(e.height){ return; }
 
@@ -68,6 +66,7 @@ dojo.declare("dijit._editor.plugins.AlwaysShowToolbar", null,
 		}
 
 		var scrollPos = dojo._docScroll().y;
+		var s = tdn.style;
 
 		if(scrollPos > this._scrollThreshold && scrollPos < this._scrollThreshold+this._lastHeight){
 			// dojo.debug(scrollPos);
@@ -76,7 +75,7 @@ dojo.declare("dijit._editor.plugins.AlwaysShowToolbar", null,
 				this.editor.iframe.style.marginTop = tdnbox.h+"px";
 
 				if(isIE){
-					tdn.style.left = dojo._abs(tdn).x;
+					s.left = dojo._abs(tdn).x;
 					if(tdn.previousSibling){
 						this._IEOriginalPos = ['after',tdn.previousSibling];
 					}else if(tdn.nextSibling){
@@ -85,16 +84,14 @@ dojo.declare("dijit._editor.plugins.AlwaysShowToolbar", null,
 						this._IEOriginalPos = ['last',tdn.parentNode];
 					}
 					dojo.body().appendChild(tdn);
-					dojo.addClass(tdn,'IEFixedToolbar');
+					dojo.addClass(tdn,'dijitIEFixedToolbar');
 				}else{
-					with(tdn.style){
-						position = "fixed";
-						top = "0px";
-					}
+					s.position = "fixed";
+					s.top = "0px";
 				}
 
 				dojo.marginBox(tdn, { w: tdnbox.w });
-				tdn.style.zIndex = 2000;
+				s.zIndex = 2000;
 				this._fixEnabled = true;
 			}
 			// if we're showing the floating toolbar, make sure that if
@@ -105,43 +102,35 @@ dojo.declare("dijit._editor.plugins.AlwaysShowToolbar", null,
 			// correctly, ensure that we check this against the scroll
 			// position of the bottom-most editor instance.
 			var eHeight = (this.height) ? parseInt(this.editor.height) : this.editor._lastHeight;
-			if(scrollPos > (this._scrollThreshold+eHeight)){
-				tdn.style.display = "none";
-			}else{
-				tdn.style.display = "";
-			}
+			s.display = (scrollPos > this._scrollThreshold+eHeight) ? "none" : "";
 		}else if(this._fixEnabled){
 			this.editor.iframe.style.marginTop = '';
-			with(tdn.style){
-				position = "";
-				top = "";
-				zIndex = "";
-				display = "";
-			}
+			s.position = "";
+			s.top = "";
+			s.zIndex = "";
+			s.display = "";
 			if(isIE){
-				tdn.style.left = "";
-				dojo.removeClass(tdn,'IEFixedToolbar');
+				s.left = "";
+				dojo.removeClass(tdn,'dijitIEFixedToolbar');
 				if(this._IEOriginalPos){
 					dojo.place(tdn, this._IEOriginalPos[1], this._IEOriginalPos[0]);
 					this._IEOriginalPos = null;
 				}else{
-					dojo.place(tdn, this.editor.iframe,'before');
+					dojo.place(tdn, this.editor.iframe, 'before');
 				}
 			}
-			tdn.style.width = "";
+			s.width = "";
 			this._fixEnabled = false;
 		}
 	},
 	destroy: function(){
 		this._IEOriginalPos = null;
 		this._handleScroll = false;
-		dojo.forEach(this._connects,dojo.disconnect);
+		dojo.forEach(this._connects, dojo.disconnect);
 //		clearInterval(this.scrollInterval);
 
 		if(dojo.isIE && dojo.isIE<7){
-			dojo.removeClass(this.editor.toolbar.domNode,'IEFixedToolbar');
+			dojo.removeClass(this.editor.toolbar.domNode, 'dijitIEFixedToolbar');
 		}
 	}
 });
-
-}

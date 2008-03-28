@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dijit._tree.dndContainer"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dijit._tree.dndContainer"] = true;
 dojo.provide("dijit._tree.dndContainer");
 dojo.require("dojo.dnd.common");
 dojo.require("dojo.dnd.Container");
@@ -12,15 +10,15 @@ dojo.declare("dijit._tree.dndContainer",
 			// tree: Node: node or node's id to build the container on
 			// params: Object: a dict of parameters, which gets mixed into the object
 			this.tree = tree;
-			this.node = tree.domNode;
+			this.node = tree.domNode;	// TODO: rename; it's not a TreeNode but the whole Tree
 			dojo.mixin(this, params);
 	
 			// class-specific variables
 			this.map = {};
-			this.current = null;
+			this.current = null;	// current TreeNode
 	
 			// states
-			this.ContainerState = "";
+			this.containerState = "";
 			dojo.addClass(this.node, "dojoDndContainer");
 			
 			// mark up children
@@ -52,20 +50,24 @@ dojo.declare("dijit._tree.dndContainer",
 		onMouseOver: function(e){
 			// summary: event processor for onmouseover
 			// e: Event: mouse event
-			var n = e.relatedTarget;
-			while(n){
-				if(n == this.node){ break; }
+
+			// handle when mouse has just moved over the Tree itself (not a TreeNode, but the Tree)
+			var rt = e.relatedTarget;	// the previous location
+			while(rt){
+				if(rt == this.node){ break; }
 				try{
-					n = n.parentNode;
+					rt = rt.parentNode;
 				}catch(x){
-					n = null;
+					rt = null;
 				}
 			}
-			if(!n){
+			if(!rt){
 				this._changeState("Container", "Over");
 				this.onOverEvent();
 			}
-			n = this._getChildByEvent(e);
+
+			// code below is for handling depending on which TreeNode we are over
+			var n = this._getChildByEvent(e);	// the TreeNode
 			if(this.current == n){ return; }
 			if(this.current){ this._removeItemClass(this.current, "Over"); }
 			if(n){ this._addItemClass(n, "Over"); }
@@ -103,16 +105,17 @@ dojo.declare("dijit._tree.dndContainer",
 			this[state] = newState;
 		},
 
-                _getChildByEvent: function(e){
-                        // summary: gets a child, which is under the mouse at the moment, or null
-                        // e: Event: a mouse event
-                        var node = e.target;
-
-                        if (node && dojo.hasClass(node,"dijitTreeLabel")){
-                                return node;
-                        }
-                        return null;
-                },
+		_getChildByEvent: function(e){
+			// summary: gets a child, which is under the mouse at the moment, or null
+			// e: Event: a mouse event
+			var node = e.target;
+			if(node){
+				for(var parent = node.parentNode; parent; node = parent, parent = node.parentNode){
+					if(dojo.hasClass(node, "dijitTreeContent")){ return node; }
+				}
+			}
+			return null;
+		},
 
 		markupFactory: function(tree, params){
 			params._skipStartup = true;
@@ -135,12 +138,9 @@ dojo.declare("dijit._tree.dndContainer",
 
 		onOverEvent: function(){
 			// summary: this function is called once, when mouse is over our container
-			console.log("onOverEvent parent");
 		},
 
 		onOutEvent: function(){
 			// summary: this function is called once, when mouse is out of our container
 		}
 });
-
-}

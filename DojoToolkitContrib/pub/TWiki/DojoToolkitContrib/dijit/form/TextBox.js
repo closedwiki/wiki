@@ -1,17 +1,14 @@
-if(!dojo._hasResource["dijit.form.TextBox"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dijit.form.TextBox"] = true;
 dojo.provide("dijit.form.TextBox");
 
 dojo.require("dijit.form._FormWidget");
 
 dojo.declare(
 	"dijit.form.TextBox",
-	dijit.form._FormWidget,
+	dijit.form._FormValueWidget,
 	{
-		// summary:
-		//		A generic textbox field.
-		//		Serves as a base class to derive more specialized functionality in subclasses.
-
+		//	summary:
+		//		A base class for textbox form inputs
+		//
 		//	trim: Boolean
 		//		Removes leading and trailing whitespace if true.  Default is false.
 		trim: false,
@@ -28,17 +25,20 @@ dojo.declare(
 		//		Converts the first character of each word to uppercase if true.
 		propercase: false,
 
-		// maxLength: String
+		//	maxLength: String
 		//		HTML INPUT tag maxLength declaration.
 		maxLength: "",
 
-		templateString:"<input class=\"dojoTextBox\" dojoAttachPoint='textbox,focusNode' name=\"${name}\"\n\tdojoAttachEvent='onmouseenter:_onMouse,onmouseleave:_onMouse,onfocus:_onMouse,onblur:_onMouse,onkeyup,onkeypress:_onKeyPress'\n\tautocomplete=\"off\" type=\"${type}\"\n\t/>\n",
+		templatePath: dojo.moduleUrl("dijit.form", "templates/TextBox.html"),
 		baseClass: "dijitTextBox",
 
-		attributeMap: dojo.mixin(dojo.clone(dijit.form._FormWidget.prototype.attributeMap),
+		attributeMap: dojo.mixin(dojo.clone(dijit.form._FormValueWidget.prototype.attributeMap),
 			{maxLength:"focusNode"}),
 
 		getDisplayedValue: function(){
+			//	summary:
+			//		Returns the formatted value that the user sees in the textbox, which may be different
+			//		from the serialized value that's actually sent to the server (see dijit.form.ValidationTextBox.serialize)
 			return this.filter(this.textbox.value);
 		},
 
@@ -46,9 +46,25 @@ dojo.declare(
 			return this.parse(this.getDisplayedValue(), this.constraints);
 		},
 
-		setValue: function(value, /*Boolean, optional*/ priorityChange, /*String, optional*/ formattedValue){
+		setValue: function(value, /*Boolean?*/ priorityChange, /*String?*/ formattedValue){
+			//	summary: 
+			//		Sets the value of the widget to "value" which can be of
+			//		any type as determined by the widget.
+			//
+			//	value:
+			//		The visual element value is also set to a corresponding,
+			//		but not necessarily the same, value.
+			//
+			//	formattedValue:
+			//		If specified, used to set the visual element value,
+			//		otherwise a computed visual value is used.
+			//
+			//	priorityChange:
+			//		If true, an onChange event is fired immediately instead of 
+			//		waiting for the next blur event.
+
 			var filteredValue = this.filter(value);
-			if((typeof filteredValue == typeof value) && (formattedValue == null || formattedValue == undefined)){
+			if((((typeof filteredValue == typeof value) && (value !== undefined/*#5317*/)) || (value === null/*#5329*/)) && (formattedValue == null || formattedValue == undefined)){
 				formattedValue = this.format(filteredValue, this.constraints);
 			}
 			if(formattedValue != null && formattedValue != undefined){
@@ -57,22 +73,29 @@ dojo.declare(
 			dijit.form.TextBox.superclass.setValue.call(this, filteredValue, priorityChange);
 		},
 
-		setDisplayedValue: function(/*String*/value){
-			this.textbox.value = value;
-			this.setValue(this.getValue(), true);
-		},
+		setDisplayedValue: function(/*String*/value, /*Boolean?*/ priorityChange){
+			//	summary: 
+			//		Sets the value of the visual element to the string "value".
+			//		The widget value is also set to a corresponding,
+			//		but not necessarily the same, value.
+			//
+			//	priorityChange:
+			//		If true, an onChange event is fired immediately instead of 
+			//		waiting for the next blur event.
 
-		forWaiValuenow: function(){
-			return this.getDisplayedValue();
+			this.textbox.value = value;
+			this.setValue(this.getValue(), priorityChange);
 		},
 
 		format: function(/* String */ value, /* Object */ constraints){
-			// summary: Replacable function to convert a value to a properly formatted string
+			//	summary:
+			//		Replacable function to convert a value to a properly formatted string
 			return ((value == null || value == undefined) ? "" : (value.toString ? value.toString() : value));
 		},
 
 		parse: function(/* String */ value, /* Object */ constraints){
-			// summary: Replacable function to convert a formatted string to a value
+			//	summary:
+			//		Replacable function to convert a formatted string to a value
 			return value;
 		},
 
@@ -80,32 +103,19 @@ dojo.declare(
 			// setting the value here is needed since value="" in the template causes "undefined"
 			// and setting in the DOM (instead of the JS object) helps with form reset actions
 			this.textbox.setAttribute("value", this.getDisplayedValue());
-			this.inherited('postCreate', arguments);
+			this.inherited(arguments);
 
-			if(this.srcNodeRef){
+			/*#5297:if(this.srcNodeRef){
 				dojo.style(this.textbox, "cssText", this.style);
 				this.textbox.className += " " + this["class"];
-			}
+			}*/
 			this._layoutHack();
 		},
 
-		_layoutHack: function(){
-			// summary: work around table sizing bugs on FF2 by forcing redraw
-			if(dojo.isFF == 2 && this.domNode.tagName=="TABLE"){
-				var node=this.domNode, _this = this;
-				setTimeout(function(){
-					var oldWidth = node.style.width;
-					node.style.width = "0";
-					setTimeout(function(){
-						node.style.width = oldWidth;
-					}, 0);
-				 }, 0);
-			}			
-		},
-
 		filter: function(val){
-			// summary: Apply various filters to textbox value
-			if(val == undefined || val == null){ return ""; }
+			//	summary:
+			//		Apply specified filters to textbox value
+			if(val === null || val === undefined){ return ""; }
 			else if(typeof val != "string"){ return val; }
 			if(this.trim){
 				val = dojo.trim(val);
@@ -124,18 +134,44 @@ dojo.declare(
 			return val;
 		},
 
-		// event handlers, you can over-ride these in your own subclasses
-		_onBlur: function(){
+		_setBlurValue: function(){
 			this.setValue(this.getValue(), (this.isValid ? this.isValid() : true));
 		},
 
-		onkeyup: function(){
-			// TODO: it would be nice to massage the value (ie: automatic uppercase, etc) as the user types
-			// but this messes up the cursor position if you are typing into the middle of a word, and
-			// also trimming doesn't work correctly (it prevents spaces between words too!)
-			// this.setValue(this.getValue());
+		_onBlur: function(){
+			this._setBlurValue();
+			this.inherited(arguments);
 		}
+
 	}
 );
 
+dijit.selectInputText = function(/*DomNode*/element, /*Number?*/ start, /*Number?*/ stop){
+	//	summary:
+	//		Select text in the input element argument, from start (default 0), to stop (default end).
+
+	// TODO: use functions in _editor/selection.js?
+	var _window = dojo.global;
+	var _document = dojo.doc;
+	element = dojo.byId(element);
+	if(isNaN(start)){ start = 0; }
+	if(isNaN(stop)){ stop = element.value ? element.value.length : 0; }
+	element.focus();
+	if(_document["selection"] && dojo.body()["createTextRange"]){ // IE
+		if(element.createTextRange){
+			var range = element.createTextRange();
+			with(range){
+				collapse(true);
+				moveStart("character", start);
+				moveEnd("character", stop);
+				select();
+			}
+		}
+	}else if(_window["getSelection"]){
+		var selection = _window.getSelection();
+		// FIXME: does this work on Safari?
+		if(element.setSelectionRange){
+			element.setSelectionRange(start, stop);
+		}
+	}
 }

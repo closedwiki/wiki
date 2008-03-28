@@ -1,19 +1,10 @@
-if(!dojo._hasResource["dojox.crypto._base"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.crypto._base"] = true;
 dojo.provide("dojox.crypto._base");
 
-(function(){
-	var dxc=dojox.crypto;
-	dxc.cipherModes={ 
-		//	summary
-		//	Enumeration for various cipher modes.
-		ECB:0, CBC:1, PCBC:2, CFB:3, OFB:4, CTR:5 
-	};
-	dxc.outputTypes={ 
-		//	summary
-		//	Enumeration for input and output encodings.
-		Base64:0, Hex:1, String:2, Raw:3 
-	};
-})();
+dojo.require("dojox.encoding.crypto._base");
+dojo.require("dojox.encoding.digests._base");
 
-}
+dojo.deprecated("dojox.crypto._base", "DojoX cryptography has been merged into DojoX Encoding. To use, include dojox.encoding.digests and/or dojox.encoding.crypto.", "1.2");
+
+//	unfortunately there's no way of pointing at two files with an alias, particularly 
+//	when both have similarly named things; but we'll try anyways.
+dojox.crypto._base=dojo.mixin(dojox.encoding.crypto._base, dojox.encoding.digests._base);

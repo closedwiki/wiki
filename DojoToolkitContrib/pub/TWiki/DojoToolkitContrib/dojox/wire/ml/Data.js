@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.wire.ml.Data"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.wire.ml.Data"] = true;
 dojo.provide("dojox.wire.ml.Data");
 dojo.provide("dojox.wire.ml.DataProperty");
 
@@ -139,5 +137,3 @@ dojo.declare("dojox.wire.ml.DataProperty", [dijit._Widget, dijit._Container], {
 		return value; //anything
 	}
 });
-
-}

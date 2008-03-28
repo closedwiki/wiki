@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.storage.Provider"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.storage.Provider"] = true;
 dojo.provide("dojox.storage.Provider");
 
 dojo.declare("dojox.storage.Provider", null, {
@@ -137,9 +135,9 @@ dojo.declare("dojox.storage.Provider", null, {
 		console.warn("dojox.storage.get not implemented");
 	},
 
-	hasKey: function(/*string*/ key, /*string?*/ namespace){ /*Boolean*/
+	hasKey: function(/*string*/ key, /*string?*/ namespace){
 		// summary: Determines whether the storage has the given key. 
-		return (this.get(key) != null);
+		return !!this.get(key, namespace); // Boolean
 	},
 
 	getKeys: function(/*string?*/ namespace){ /*Array*/
@@ -239,7 +237,8 @@ dojo.declare("dojox.storage.Provider", null, {
 		//		if left off, the value will be placed into dojox.storage.DEFAULT_NAMESPACE
 		
 		console.warn("dojox.storage.putMultiple not implemented");
-		//	JAC: We could implement a 'default' puMultiple here by just doing each put individually
+		//	JAC: We could implement a 'default' puMultiple here by just doing 
+		//  each put individually
 	},
 
 	getMultiple: function(/*array*/ keys, /*string?*/ namespace){ /*Object*/
@@ -255,28 +254,28 @@ dojo.declare("dojox.storage.Provider", null, {
 		// return: Returns any JavaScript object type; null if the key is not present
 
 		console.warn("dojox.storage.getMultiple not implemented");
-		//	JAC: We could implement a 'default' getMultiple here by just doing each get individually
+		//	JAC: We could implement a 'default' getMultiple here by just 
+		//  doing each get individually
 	},
 
 	removeMultiple: function(/*array*/ keys, /*string?*/ namespace) {
 		// summary: Removes the given keys from this storage system.
 
-		//	JAC: We could implement a 'default' removeMultiple here by just doing each remove individually
+		//	JAC: We could implement a 'default' removeMultiple here by just 
+		//  doing each remove individually
 		console.warn("dojox.storage.remove not implemented");
 	},
 	
 	isValidKeyArray: function( keys) {
-		if(keys === null || typeof keys === "undefined" || ! keys instanceof Array){
+		if(keys === null || keys === undefined || !dojo.isArray(keys)){
 			return false;
 		}
-		
-		//	JAC: This could be optimized by running the key validity test directly over a joined string
-		for(var k=0;k<keys.length;k++){
-			if(!this.isValidKey(keys[k])){
-				return false;
-			}
-		}
-		return true;
+
+		//	JAC: This could be optimized by running the key validity test 
+		//  directly over a joined string
+		return !dojo.some(keys, function(key){
+			return !this.isValidKey(key);
+		}); // Boolean
 	},
 
 	hasSettingsUI: function(){ /*Boolean*/
@@ -301,7 +300,7 @@ dojo.declare("dojox.storage.Provider", null, {
 		//		in a consistent way across different storage providers. We use
 		//		the lowest common denominator for key values allowed: only
 		//		letters, numbers, and underscores are allowed. No spaces. 
-		if((keyName == null)||(typeof keyName == "undefined")){
+		if(keyName === null || keyName === undefined){
 			return false;
 		}
 			
@@ -319,9 +318,10 @@ dojo.declare("dojox.storage.Provider", null, {
 		//	to cache these resources to ensure the machinery
 		//	used by this storage provider is available offline.
 		//	What is returned is an array of URLs.
+		//  Note that Dojo Offline uses Gears as its native 
+		//  storage provider, and does not support using other
+		//  kinds of storage providers while offline anymore.
 		
 		return [];
 	}
 });
-
-}

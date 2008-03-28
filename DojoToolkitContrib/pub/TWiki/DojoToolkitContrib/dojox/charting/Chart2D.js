@@ -1,9 +1,9 @@
-if(!dojo._hasResource["dojox.charting.Chart2D"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.charting.Chart2D"] = true;
 dojo.provide("dojox.charting.Chart2D");
 
 dojo.require("dojox.gfx");
 dojo.require("dojox.lang.functional");
+dojo.require("dojox.lang.functional.fold");
+dojo.require("dojox.lang.functional.reversed");
 
 dojo.require("dojox.charting.Theme");
 dojo.require("dojox.charting.Series");
@@ -15,6 +15,7 @@ dojo.require("dojox.charting.plot2d.Lines");
 dojo.require("dojox.charting.plot2d.Areas");
 dojo.require("dojox.charting.plot2d.Markers");
 dojo.require("dojox.charting.plot2d.MarkersOnly");
+dojo.require("dojox.charting.plot2d.Scatter");
 dojo.require("dojox.charting.plot2d.Stacked");
 dojo.require("dojox.charting.plot2d.StackedLines");
 dojo.require("dojox.charting.plot2d.StackedAreas");
@@ -31,6 +32,7 @@ dojo.require("dojox.charting.plot2d.Pie");
 	var df = dojox.lang.functional, dc = dojox.charting, 
 		clear = df.lambda("item.clear()"), 
 		purge = df.lambda("item.purgeGroup()"),
+		destroy = df.lambda("item.destroy()"),
 		makeClean = df.lambda("item.dirty = false"),
 		makeDirty = df.lambda("item.dirty = true");
 		
@@ -57,6 +59,11 @@ dojo.require("dojox.charting.plot2d.Pie");
 			var box = dojo.marginBox(node);
 			this.surface = dojox.gfx.createSurface(this.node, box.w, box.h);
 		},
+		destroy: function(){
+			dojo.forEach(this.series, destroy);
+			dojo.forEach(this.stack,  destroy);
+			df.forIn(this.axes, destroy);
+		},
 		getCoords: function(){
 			if(!this.coords){
 				this.coords = dojo.coords(this.node, true);
@@ -69,14 +76,20 @@ dojo.require("dojox.charting.plot2d.Pie");
 			return this;
 		},
 		addAxis: function(name, kwArgs){
+			var axis;
 			if(!kwArgs || !("type" in kwArgs)){
-				this.axes[name] = new dc.axis2d.Default(this, kwArgs);
+				axis = new dc.axis2d.Default(this, kwArgs);
 			}else{
-				this.axes[name] = typeof kwArgs.type == "string" ?
+				axis = typeof kwArgs.type == "string" ?
 					new dc.axis2d[kwArgs.type](this, kwArgs) :
 					new kwArgs.type(this, kwArgs);
 			}
-			this.axes[name].dirty = true;
+			axis.name = name;
+			axis.dirty = true;
+			if(name in this.axes){
+				this.axes[name].destroy();
+			}
+			this.axes[name] = axis;
 			this.dirty = true;
 			return this;
 		},
@@ -92,6 +105,7 @@ dojo.require("dojox.charting.plot2d.Pie");
 			plot.name = name;
 			plot.dirty = true;
 			if(name in this.plots){
+				this.stack[this.plots[name]].destroy();
 				this.stack[this.plots[name]] = plot;
 			}else{
 				this.plots[name] = this.stack.length;
@@ -103,12 +117,16 @@ dojo.require("dojox.charting.plot2d.Pie");
 		addSeries: function(name, data, kwArgs){
 			var run = new dc.Series(this, data, kwArgs);
 			if(name in this.runs){
+				this.series[this.runs[name]].destroy();
 				this.series[this.runs[name]] = run;
 			}else{
 				this.runs[name] = this.series.length;
 				this.series.push(run);
 			}
 			this.dirty = true;
+			// fix min/max
+			if(!("ymin" in run) && "min" in run){ run.ymin = run.min; }
+			if(!("ymax" in run) && "max" in run){ run.ymax = run.max; }
 			return this;
 		},
 		updateSeries: function(name, data){
@@ -182,7 +200,7 @@ dojo.require("dojox.charting.plot2d.Pie");
 			}, this);
 
 			// go over the stack backwards
-			df.forEachReversed(this.stack, function(plot){ plot.render(this.dim, this.offsets); }, this);
+			df.forEachRev(this.stack, function(plot){ plot.render(this.dim, this.offsets); }, this);
 			
 			// go over axes
 			df.forIn(this.axes, function(axis){ axis.render(this.dim, this.offsets); }, this);
@@ -200,8 +218,8 @@ dojo.require("dojox.charting.plot2d.Pie");
 			
 			// clear old values
 			dojo.forEach(this.stack,  clear);
-			dojo.forEach(this.axes,   purge);
 			dojo.forEach(this.series, purge);
+			df.forIn(this.axes, purge);
 			dojo.forEach(this.stack,  purge);
 			this.surface.clear();
 			
@@ -299,10 +317,6 @@ dojo.require("dojox.charting.plot2d.Pie");
 			
 			this._makeClean();
 			
-			// BEGIN FOR HTML CANVAS 
-			if(this.surface.render){ this.surface.render(); };	
-			// END FOR HTML CANVAS
-			
 			return this;
 		},
 		_makeClean: function(){
@@ -321,5 +335,3 @@ dojo.require("dojox.charting.plot2d.Pie");
 		}
 	});
 })();
-
-}

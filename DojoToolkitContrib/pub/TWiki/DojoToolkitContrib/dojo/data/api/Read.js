@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojo.data.api.Read"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojo.data.api.Read"] = true;
 dojo.provide("dojo.data.api.Read");
 dojo.require("dojo.data.api.Request");
 
@@ -17,8 +15,8 @@ dojo.declare("dojo.data.api.Read", null, {
 		//		Returns a single attribute value.
 		//		Returns defaultValue if and only if *item* does not have a value for *attribute*.
 		//		Returns null if and only if null was explicitly set as the attribute value.
-		//		Returns undefined if and only if the item does not have a value for the given 
-		//		attribute (which is the same as saying the item does not have the attribute). 
+		//		Returns undefined if and only if the item does not have a value for the
+		//		given attribute (which is the same as saying the item does not have the attribute). 
 		// description:
 		//		Saying that an "item x does not have a value for an attribute y"
 		//		is identical to saying that an "item x does not have attribute y". 
@@ -48,11 +46,11 @@ dojo.declare("dojo.data.api.Read", null, {
 		//	summary:
 		// 		This getValues() method works just like the getValue() method, but getValues()
 		//		always returns an array rather than a single attribute value.  The array
-		//		may be empty, may contain a single attribute value, or may contain many
-		//		attribute values.
+		//		may be empty, may contain a single attribute value, or may contain
+		//		many attribute values.
 		//		If the item does not have a value for the given attribute, then getValues()
 		//		will return an empty array: [].  (So, if store.hasAttribute(item, attribute)
-		//		returns false, then store.getValues(item, attribute) will return [].)
+		//		has a return of false, then store.getValues(item, attribute) will return [].)
 		//
 		//	item:
 		//		The item to access values on.
@@ -495,5 +493,3 @@ dojo.declare("dojo.data.api.Read", null, {
 		return null;
 	}
 });
-
-}

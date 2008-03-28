@@ -1,1 +1,4 @@
-({"loadingState": "Trwa ładowanie...", "errorState": "Niestety, wystąpił błąd"})
+({
+	loadingState: "Trwa ładowanie...",
+	errorState: "Niestety, wystąpił błąd"
+})

@@ -3,19 +3,7 @@
 <html>
 	<head>
 		<title>Dojo Slider Widget Demo</title>
-		<script type="text/javascript" src="../../../dojo/dojo.js"
-			djConfig="isDebug: true, parseOnLoad: true, extraLocale: ['de-de', 'en-us']"></script>
-		<script type="text/javascript" src="../_testCommon.js"></script>
 
-		<script type="text/javascript">
-				dojo.require("dijit.form.Slider");
-				dojo.require("dijit.form.Button");
-				dojo.require("dojo.parser"); // scan page for widgets
-	
-				dojo.addOnLoad(function(){
-					dijit.byId("sliderH2").setDisabled(true);
-				});
-		</script>
 		<style type="text/css">
 			@import "../../../dojo/resources/dojo.css";
 			@import "../css/dijitTests.css";
@@ -27,12 +15,69 @@
 				padding:0px;
 			}
 		</style>
+		
+		<script type="text/javascript" src="../../../dojo/dojo.js"
+			djConfig="isDebug: true, parseOnLoad: true, extraLocale: ['de-de', 'en-us']"></script>
+		<script type="text/javascript" src="../_testCommon.js"></script>
+
+		<script type="text/javascript">
+				dojo.require("dijit.form.Slider");
+				dojo.require("dijit.form.Button");
+				dojo.require("dojo.parser"); // scan page for widgets
+
+				// programatic vertical slider and labels
+				var programaticExample = function(){
+					
+					var node = dojo.byId("programaticSlider");
+					// or var node = dojo.body().appendChild(document.createElement('div'));
+
+					// our rules are to be children of the slider
+					var rulesNode = document.createElement('div');
+					node.appendChild(rulesNode);
+
+					// setup the rules
+					var sliderRules = new dijit.form.VerticalRule({
+						count:11,
+						style:"width:5px" 
+					},rulesNode);
+
+					// and setup the slider
+					var theSlider = new dijit.form.VerticalSlider({ 
+						value:1400,
+						onChange: function(){
+                                                    console.log(arguments);
+						},
+						name:"programaticSlider",
+						slideDuration:0,
+						onChange:function(val){ dojo.byId('sliderProgInput').value=val; },
+						style:"height:165px",
+						minimum:1000,
+						maximum:3000,
+						discreteValues:11,
+						intermediateChanges:"true",
+						showButtons:"true"
+					},node);
+
+					// and start them both
+					theSlider.startup();
+        				sliderRules.startup();
+
+				};
+				dojo.addOnLoad(programaticExample);
+	
+				dojo.addOnLoad(function(){
+					dijit.byId("sliderH2").setAttribute('disabled',true);
+				});
+		</script>
 	</head>
 
 	<body>
 		<h1 class="testTitle">Slider</h1>
 		Also try using the arrow keys, buttons, or clicking on the progress bar to move the slider.
 		<br>
+		<!--    to test form submission, you'll need to create an action handler similar to
+			http://www.utexas.edu/teamweb/cgi-bin/generic.cgi -->
+		<form id="form1" action="" name="example" method="post">
 		<br>initial value=10, min=0, max=100, pageIncrement=100, onChange event triggers input box value change immediately<br>
 
 		<div dojoType="dijit.form.HorizontalSlider" name="horizontal1"
@@ -57,8 +102,8 @@
 
 		Slider1 Value:<input readonly id="slider1input" size="4" value="10.0%">
 		<br>
-		<button id="disableButton" dojoType="dijit.form.Button" onClick="dijit.byId('slider1').setDisabled( true);dijit.byId('disableButton').setDisabled(true);dijit.byId('enableButton').setDisabled(false);">Disable previous slider</button>
-		<button id="enableButton"  dojoType="dijit.form.Button" onClick="dijit.byId('slider1').setDisabled(false);dijit.byId('disableButton').setDisabled(false);dijit.byId('enableButton').setDisabled( true);" disabled>Enable previous slider</button>
+		<button id="disableButton" dojoType="dijit.form.Button" onClick="dijit.byId('slider1').setAttribute('disabled', true);dijit.byId('disableButton').setAttribute('disabled',true);dijit.byId('enableButton').setAttribute('disabled',false);">Disable previous slider</button>
+		<button id="enableButton"  dojoType="dijit.form.Button" onClick="dijit.byId('slider1').setAttribute('disabled',false);dijit.byId('disableButton').setAttribute('disabled',false);dijit.byId('enableButton').setAttribute('disabled', true);" disabled>Enable previous slider</button>
 		<br>
 		<br>initial value=10, min=0, max=100, onChange event triggers input box value change when you mouse up or tab away<br>
 		<div dojoType="dijit.form.VerticalSlider" name="vertical1"
@@ -78,7 +123,7 @@
 				<ol dojoType="dijit.form.VerticalRuleLabels" container="rightDecoration" style="width:2em;color:gray;" count="6" numericMargin="1" maximum="100" constraints={pattern:'#'}></ol>
 		</div>
 		Slider2 Value:<input readonly id="slider2input" size="3" value="10">
-		<h1>Fancy HTML labels:</h1>
+		<h1>Fancy HTML labels (no slide animation):</h1>
 		<div dojoType="dijit.form.HorizontalSlider" name="horizontal2"
 			minimum="1"
 			value="2"
@@ -86,6 +131,7 @@
 			discreteValues="3"
 			showButtons="false"
 			intermediateChanges="true"
+			slideDuration="0"
 			style="width:300px; height: 40px;"
 			id="slider3">
 				<div dojoType="dijit.form.HorizontalRule" container="bottomDecoration" count=3 style="height:5px;"></div>
@@ -132,5 +178,31 @@
 				</ol>
 		</div>
 
+
+		<h2>Completely Programatic VerticalSlider and VerticalRule</h2>
+		<h3>min:1000, max:3000, 11 discrete values, no animation</h3>
+
+		<div id="programaticSlider"></div>
+		Programmatic Value:<input readonly id="sliderProgInput" size="5" value="1400">
+
+		        <script>
+                		function displayData() {
+        		                var f = document.getElementById("form1");
+		                        var s = "";
+                        		for (var i = 0; i < f.elements.length; i++) {
+                		                var elem = f.elements[i];
+        		                        if (elem.name == "button")  { continue; }
+		                                s += elem.name + ": " + elem.value + "\n";
+                        		}
+                		        alert(s);
+        		        }
+		        </script>
+
+		        <div>
+                		<button name="button" onclick="displayData(); return false;">view data</button>
+        		        <input type="submit" name="submit" />
+		        </div>
+
+		</form>
 	</body>
 </html>

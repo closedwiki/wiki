@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojo._base.Color"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojo._base.Color"] = true;
 dojo.provide("dojo._base.Color");
 dojo.require("dojo._base.array");
 dojo.require("dojo._base.lang");
@@ -152,5 +150,3 @@ dojo.colorFromString = function(/*String*/ str, /*dojo.Color?*/ obj){
 	var a = dojo.Color.named[str];
 	return a && dojo.colorFromArray(a, obj) || dojo.colorFromRgb(str, obj) || dojo.colorFromHex(str, obj);
 };
-
-}

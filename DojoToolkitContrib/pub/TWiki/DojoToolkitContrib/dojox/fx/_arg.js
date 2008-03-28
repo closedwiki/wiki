@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.fx._arg"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.fx._arg"] = true;
 dojo.provide("dojox.fx._arg");
 
 dojox.fx._arg.StyleArgs = function(/*Object*/ args){
@@ -22,6 +20,4 @@ dojox.fx._arg.ShadowResizeArgs = function(/*Object*/ args){
 	//	the height to set	
 	this.x = args.x;
 	this.y = args.y;
-}
-
 }

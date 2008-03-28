@@ -1,1 +1,8 @@
-({"ar": "العربية", "hello": "ﺎﺑﺣﺮﻣ", "yi": "Yiddish", "en-us-texas": "English (Texas)", "es": "Spanish", "de": "German", "pl": "Polish", "hello_dojo": "${hello}, ${dojo}!", "fa": "Farsi", "pt": "Portugese", "zh-tw": "Chinese (Traditional)", "sw": "Kiswahili", "en-us-new_york-brooklyn": "English (Brooklynese)", "ru": "Russian", "fr": "French", "th": "Thai", "it": "Italian", "he": "Hebrew", "cs": "Czech", "hi": "Hindi", "en-us-hawaii": "English (US-Hawaii)", "file_not_found": "The file you requested, ${0}, is not found.", "en-au": "English (Australia)", "el": "Greek", "ko": "Korean", "tr": "Turkish", "en": "English", "ja": "Japanese", "zh-cn": "Chinese (Simplified)", "dojo": "Dojo"})
+/*<?xml version="1.0" encoding="UTF-8" ?>*/
+// The above is a workaround for Konqueror and Safari (see bug #1010)
+// The parentheses are optional, but make this file a valid JS expression for
+// tools to inspect
+({
+ ar: "العربية",
+ hello: "ﺎﺑﺣﺮﻣ"
+})

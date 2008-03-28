@@ -1,26 +1,25 @@
-if(!dojo._hasResource["dojo.dnd.Manager"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojo.dnd.Manager"] = true;
 dojo.provide("dojo.dnd.Manager");
 
 dojo.require("dojo.dnd.common");
 dojo.require("dojo.dnd.autoscroll");
 dojo.require("dojo.dnd.Avatar");
 
-dojo.dnd.Manager = function(){
+dojo.declare("dojo.dnd.Manager", null, {
 	// summary: the manager of DnD operations (usually a singleton)
-	this.avatar  = null;
-	this.source = null;
-	this.nodes = [];
-	this.copy  = true;
-	this.target = null;
-	this.canDropFlag = false;
-	this.events = [];
-};
+	constructor: function(){
+		this.avatar  = null;
+		this.source = null;
+		this.nodes = [];
+		this.copy  = true;
+		this.target = null;
+		this.canDropFlag = false;
+		this.events = [];
+	},
 
-dojo.extend(dojo.dnd.Manager, {
 	// avatar's offset from the mouse
 	OFFSET_X: 16,
 	OFFSET_Y: 16,
+	
 	// methods
 	overSource: function(source){
 		// summary: called when a source detected a mouse-over conditiion
@@ -67,7 +66,7 @@ dojo.extend(dojo.dnd.Manager, {
 	},
 	canDrop: function(flag){
 		// summary: called to notify if the current target can accept items
-		var canDropFlag = this.target && flag;
+		var canDropFlag = Boolean(this.target && flag);
 		if(this.canDropFlag != canDropFlag){
 			this.canDropFlag = canDropFlag;
 			this.avatar.update();
@@ -100,7 +99,9 @@ dojo.extend(dojo.dnd.Manager, {
 		if(a){
 			//dojo.dnd.autoScrollNodes(e);
 			dojo.dnd.autoScroll(e);
-			dojo.marginBox(a.node, {l: e.pageX + this.OFFSET_X, t: e.pageY + this.OFFSET_Y});
+			var s = a.node.style;
+			s.left = (e.pageX + this.OFFSET_X) + "px";
+			s.top  = (e.pageY + this.OFFSET_Y) + "px";
 			var copy = Boolean(this.source.copyState(dojo.dnd.getCopyKeyState(e)));
 			if(this.copy != copy){ 
 				this._setCopyStatus(copy);
@@ -110,9 +111,11 @@ dojo.extend(dojo.dnd.Manager, {
 	onMouseUp: function(e){
 		// summary: event processor for onmouseup
 		// e: Event: mouse event
-		if(this.avatar && this.source.mouseButton == e.button){
+		if(this.avatar && (!("mouseButton" in this.source) || this.source.mouseButton == e.button)){
 			if(this.target && this.canDropFlag){
-				dojo.publish("/dnd/drop", [this.source, this.nodes, Boolean(this.source.copyState(dojo.dnd.getCopyKeyState(e)))]);
+				var params = [this.source, this.nodes, Boolean(this.source.copyState(dojo.dnd.getCopyKeyState(e))), this.target];
+				dojo.publish("/dnd/drop/before", params);
+				dojo.publish("/dnd/drop", params);
 			}else{
 				dojo.publish("/dnd/cancel");
 			}
@@ -171,5 +174,3 @@ dojo.dnd.manager = function(){
 	}
 	return dojo.dnd._manager;	// Object
 };
-
-}

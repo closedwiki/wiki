@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.string.tokenize"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.string.tokenize"] = true;
 dojo.provide("dojox.string.tokenize");
 
 dojox.string.tokenize = function(/*String*/ str, /*RegExp*/ re, /*Function?*/ parseDelim, /*Object?*/ instance){
@@ -13,23 +11,28 @@ dojox.string.tokenize = function(/*String*/ str, /*RegExp*/ re, /*Function?*/ pa
 	var tokens = [];
 	var match, content, lastIndex = 0;
 	while(match = re.exec(str)){
-		content = str.substring(lastIndex, re.lastIndex - match[0].length);
+		content = str.slice(lastIndex, re.lastIndex - match[0].length);
 		if(content.length){
 			tokens.push(content);
 		}
 		if(parseDelim){
-			var parsed = parseDelim.apply(instance, match.slice(1));
+			if(dojo.isOpera){
+				var copy = match.slice(0);
+				while(copy.length < match.length){
+					copy.push(null);
+				}
+				match = copy;
+			}
+			var parsed = parseDelim.apply(instance, match.slice(1).concat(tokens.length));
 			if(typeof parsed != "undefined"){
 				tokens.push(parsed);
 			}
 		}
 		lastIndex = re.lastIndex;
 	}
-	content = str.substr(lastIndex);
+	content = str.slice(lastIndex);
 	if(content.length){
 		tokens.push(content);
 	}
 	return tokens;
-}
-
 }

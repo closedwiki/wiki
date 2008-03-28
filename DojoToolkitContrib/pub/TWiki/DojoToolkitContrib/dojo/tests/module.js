@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojo.tests.module"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojo.tests.module"] = true;
 dojo.provide("dojo.tests.module");
 
 try{
@@ -19,9 +17,9 @@ try{
 	dojo.require("tests.behavior");
 	dojo.require("tests.parser");
 	dojo.require("tests.colors");
+	dojo.requireIf(dojo.isBrowser,"tests.cookie");
 	dojo.require("tests.fx");
+	dojo.require("tests.DeferredList");
 }catch(e){
 	doh.debug(e);
-}
-
 }

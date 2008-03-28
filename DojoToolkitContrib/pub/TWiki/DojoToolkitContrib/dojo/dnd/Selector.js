@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojo.dnd.Selector"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojo.dnd.Selector"] = true;
 dojo.provide("dojo.dnd.Selector");
 
 dojo.require("dojo.dnd.common");
@@ -127,7 +125,7 @@ dojo.declare("dojo.dnd.Selector", dojo.dnd.Container, {
 			if(!dojo.dnd.getCopyKeyState(e)){
 				this._removeSelection();
 			}
-			var c = dojo.query("> .dojoDndItem", this.parent);
+			var c = this.getAllNodes();
 			if(c.length){
 				if(!this.anchor){
 					this.anchor = c[0];
@@ -240,5 +238,3 @@ dojo.declare("dojo.dnd.Selector", dojo.dnd.Container, {
 		return this;	// self
 	}
 });
-
-}

@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.widget.FileInputAuto"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.widget.FileInputAuto"] = true;
 dojo.provide("dojox.widget.FileInputAuto");
 
 dojo.require("dojox.widget.FileInput");
@@ -43,7 +41,7 @@ dojo.declare("dojox.widget.FileInputAuto",
 	_sent: false,
 
 	// small template changes, new attachpoint: overlay
-	templateString:"<div class=\"dijitFileInput\">\n\t<input class=\"dijitFileInputReal\" type=\"file\" dojoAttachPoint=\"fileInput\" />\n\t<div class=\"dijitFakeInput\" dojoAttachPoint=\"fakeNodeHolder\">\n\t\t<input class=\"dijitFileInputVisible\" type=\"text\" dojoAttachPoint=\"focusNode, inputNode\" />\n\t\t<span class=\"dijitInline dijitFileInputText\" dojoAttachPoint=\"titleNode\">${label}</span>\n\t\t<span class=\"dijitInline dijitFileInputButton\" dojoAttachPoint=\"cancelNode\" dojoAttachEvent=\"onclick:_onClick\">${cancelText}</span>\n\t</div>\n\t<div class=\"dijitProgressOverlay\" dojoAttachPoint=\"overlay\">&nbsp;</div>\n</div>\n",
+	templatePath: dojo.moduleUrl("dojox.widget","FileInput/FileInputAuto.html"),
 
 	startup: function(){
 		// summary: add our extra blur listeners
@@ -85,23 +83,30 @@ dojo.declare("dojox.widget.FileInputAuto",
 
 		dojo.fadeIn({ node: this.overlay, duration:this.duration }).play();
 
-		var _newForm = document.createElement('form');
-		_newForm.setAttribute("enctype","multipart/form-data");
-		var node = dojo.clone(this.fileInput);
+		var _newForm; 
+		if(dojo.isIE){
+			// just to reiterate, IE is a steaming pile of code. 
+			_newForm = document.createElement('<form enctype="multipart/form-data" method="post">');
+			_newForm.encoding = "multipart/form-data";
+			
+		}else{
+			// this is how all other sane browsers do it
+			_newForm = document.createElement('form');
+			_newForm.setAttribute("enctype","multipart/form-data");
+		}
 		_newForm.appendChild(this.fileInput);
 		dojo.body().appendChild(_newForm);
-
+	
 		dojo.io.iframe.send({
 			url: this.url+"?name="+this.name,
 			form: _newForm,
-			handleAs: "text",
+			handleAs: "json",
 			handle: dojo.hitch(this,"_handleSend")
 		});
 	},
 
 	_handleSend: function(data,ioArgs){
 		// summary: The callback to toggle the progressbar, and fire the user-defined callback
-		
 		if(!dojo.isIE){
 			// otherwise, this throws errors in ie? FIXME:
 			this.overlay.innerHTML = "";
@@ -116,10 +121,10 @@ dojo.declare("dojox.widget.FileInputAuto",
 		this.fileInput.style.display = "none";
 		this.fakeNodeHolder.style.display = "none";
 		dojo.fadeIn({ node:this.overlay, duration:this.duration }).play(250);
-		
+
 		dojo.disconnect(this._blurListener);
 		dojo.disconnect(this._focusListener);
-		
+
 		this.onComplete(data,ioArgs,this);
 	},
 
@@ -136,10 +141,11 @@ dojo.declare("dojox.widget.FileInputAuto",
 		this._focusListener = dojo.connect(this.fileInput,"onfocus",this,"_onFocus"); 
 	},
 
-	onComplete: function(/* Object */data, /* dojo.Deferred._ioArgs */ioArgs, /* this */widgetRef){
+	onComplete: function(data,ioArgs,widgetRef){
 		// summary: stub function fired when an upload has finished. 
 		// data: the raw data found in the first [TEXTAREA] tag of the post url
 		// ioArgs: the dojo.Deferred data being passed from the handle: callback
+		// widgetRef: this widget pointer, so you can set this.overlay to a completed/error message easily
 	}
 });
 
@@ -162,7 +168,6 @@ dojo.declare("dojox.widget.FileInputBlind",
 		// summary: in this case, set the button under where the visible button is 
 		if(dojo.isIE){
 			dojo.style(this.fileInput,"width","1px");
-			//dojo.style(this.fileInput,"height",this.overlay.scrollHeight+"px")
 		}else{
 			dojo.style(this.fileInput,"left","-"+(this._off)+"px");
 		}
@@ -174,5 +179,3 @@ dojo.declare("dojox.widget.FileInputBlind",
 		this._fixPosition(); 
 	}
 });
-
-}

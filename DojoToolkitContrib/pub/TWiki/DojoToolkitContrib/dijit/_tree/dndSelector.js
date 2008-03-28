@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dijit._tree.dndSelector"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dijit._tree.dndSelector"] = true;
 dojo.provide("dijit._tree.dndSelector");
 dojo.require("dojo.dnd.common");
 dojo.require("dijit._tree.dndContainer");
@@ -58,7 +56,7 @@ dojo.declare("dijit._tree.dndSelector",
 			if(!this.current){ return; }
 
 			var item = dijit.getEnclosingWidget(this.current).item
-			var id = this.tree.store.getIdentity(item);
+			var id = this.tree.model.getIdentity(item);
 
 			if (!this.current.id) {
 				this.current.id=id;
@@ -114,7 +112,7 @@ dojo.declare("dijit._tree.dndSelector",
 						}
 					}else{
 						var item = dijit.getEnclosingWidget(this.current).item
-						var id = this.tree.store.getIdentity(item);
+						var id = this.tree.model.getIdentity(item);
 						if(!(id in this.selection)){
 							this.selectNone();
 							this.anchor = this.current;
@@ -167,5 +165,3 @@ dojo.declare("dijit._tree.dndSelector",
 			return this;	// self
 		}
 });
-
-}

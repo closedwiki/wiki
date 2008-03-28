@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.dtl.filter.integers"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.dtl.filter.integers"] = true;
 dojo.provide("dojox.dtl.filter.integers");
 
 dojo.mixin(dojox.dtl.filter.integers, {
@@ -28,5 +26,3 @@ dojo.mixin(dojox.dtl.filter.integers, {
 		return (isNaN(value) ? 0 : value);
 	}
 });
-
-}

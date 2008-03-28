@@ -1,16 +1,16 @@
-if(!dojo._hasResource["dijit.Menu"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dijit.Menu"] = true;
 dojo.provide("dijit.Menu");
 
 dojo.require("dijit._Widget");
 dojo.require("dijit._Container");
 dojo.require("dijit._Templated");
 
-dojo.declare(
-	"dijit.Menu",
+dojo.declare("dijit.Menu",
 	[dijit._Widget, dijit._Templated, dijit._KeyNavContainer],
-{
-	constructor: function() {
+	{
+	// summary
+	//	A context menu you can assign to multiple elements
+
+	constructor: function(){
 		this._bindings = [];
 	},
 
@@ -29,6 +29,10 @@ dojo.declare(
 	//	if false, must specify targetNodeIds
 	contextMenuForWindow: false,
 
+	// leftClickToOpen: Boolean
+	//	If true, menu will open on left click instead of right click, similiar to a file menu.
+	leftClickToOpen: false,
+	
 	// parentMenu: Widget
 	// pointer to menu that displayed me
 	parentMenu: null,
@@ -52,8 +56,12 @@ dojo.declare(
 	},
 
 	startup: function(){
+		if(this._started){ return; }
+
 		dojo.forEach(this.getChildren(), function(child){ child.startup(); });
 		this.startupKeyNavChildren();
+
+		this.inherited(arguments);
 	},
 
 	onExecute: function(){
@@ -71,8 +79,7 @@ dojo.declare(
 	},
 
 	_onKeyPress: function(/*Event*/ evt){
-		// summary
-		//	Handle keyboard based menu navigation.
+		// summary: Handle keyboard based menu navigation.
 		if(evt.ctrlKey || evt.altKey){ return; }
 
 		switch(evt.keyCode){
@@ -91,6 +98,7 @@ dojo.declare(
 	},
 
 	onItemHover: function(/*MenuItem*/ item){
+		// summary: Called when cursor is over a MenuItem
 		this.focusChild(item);
 
 		if(this.focusedChild.popup && !this.focusedChild.disabled && !this.hover_timer){
@@ -99,13 +107,14 @@ dojo.declare(
 	},
 
 	_onChildBlur: function(item){
-		// Close all popups that are open and descendants of this menu
+		// summary: Close all popups that are open and descendants of this menu
 		dijit.popup.close(item.popup);
 		item._blur();
 		this._stopPopupTimer();
 	},
 
 	onItemUnhover: function(/*MenuItem*/ item){
+		// summary: Callback fires when mouse exits a MenuItem
 	},
 
 	_stopPopupTimer: function(){
@@ -120,9 +129,8 @@ dojo.declare(
 		return top;
 	},
 
-	onItemClick: function(/*Widget*/ item){
+	onItemClick: function(/*Widget*/ item, /*Event*/ evt){
 		// summary: user defined function to handle clicks on an item
-		// summary: internal function for clicks
 		if(item.disabled){ return false; }
 
 		if(item.popup){
@@ -135,27 +143,27 @@ dojo.declare(
 			this.onExecute();
 
 			// user defined handler for click
-			item.onClick();
+			item.onClick(evt);
 		}
 	},
 
 	// thanks burstlib!
-	_iframeContentWindow: function(/* HTMLIFrameElement */iframe_el) {
-		//	summary
-		//	returns the window reference of the passed iframe
+	_iframeContentWindow: function(/* HTMLIFrameElement */iframe_el){
+		// summary:
+		//	Returns the window reference of the passed iframe
 		var win = dijit.getDocumentWindow(dijit.Menu._iframeContentDocument(iframe_el)) ||
 			// Moz. TODO: is this available when defaultView isn't?
 			dijit.Menu._iframeContentDocument(iframe_el)['__parent__'] ||
-			(iframe_el.name && document.frames[iframe_el.name]) || null;
+			(iframe_el.name && dojo.doc.frames[iframe_el.name]) || null;
 		return win;	//	Window
 	},
 
 	_iframeContentDocument: function(/* HTMLIFrameElement */iframe_el){
-		//	summary
-		//	returns a reference to the document object inside iframe_el
+		// summary:
+		//	Returns a reference to the document object inside iframe_el
 		var doc = iframe_el.contentDocument // W3
 			|| (iframe_el.contentWindow && iframe_el.contentWindow.document) // IE
-			|| (iframe_el.name && document.frames[iframe_el.name] && document.frames[iframe_el.name].document)
+			|| (iframe_el.name && dojo.doc.frames[iframe_el.name] && dojo.doc.frames[iframe_el.name].document)
 			|| null;
 		return doc;	//	HTMLDocument
 	},
@@ -176,7 +184,7 @@ dojo.declare(
 		var cn = (node == dojo.body() ? dojo.doc : node);
 
 		node[this.id] = this._bindings.push([
-			dojo.connect(cn, "oncontextmenu", this, "_openMyself"),
+			dojo.connect(cn, (this.leftClickToOpen)?"onclick":"oncontextmenu", this, "_openMyself"),
 			dojo.connect(cn, "onkeydown", this, "_contextKey"),
 			dojo.connect(cn, "onmousedown", this, "_contextMouse")
 		]);
@@ -185,16 +193,18 @@ dojo.declare(
 	unBindDomNode: function(/*String|DomNode*/ nodeName){
 		// summary: detach menu from given node
 		var node = dojo.byId(nodeName);
-		var bid = node[this.id]-1, b = this._bindings[bid];
-		dojo.forEach(b, dojo.disconnect);
-		delete this._bindings[bid];
+		if(node){
+			var bid = node[this.id]-1, b = this._bindings[bid];
+			dojo.forEach(b, dojo.disconnect);
+			delete this._bindings[bid];
+		}
 	},
 
 	_contextKey: function(e){
 		this._contextMenuWithMouse = false;
-		if (e.keyCode == dojo.keys.F10) {
+		if(e.keyCode == dojo.keys.F10){
 			dojo.stopEvent(e);
-			if (e.shiftKey && e.type=="keydown") {
+			if(e.shiftKey && e.type=="keydown"){
 				// FF: copying the wrong property from e will cause the system
 				// context menu to appear in spite of stopEvent. Don't know
 				// exactly which properties cause this effect.
@@ -216,6 +226,9 @@ dojo.declare(
 		//		Internal function for opening myself when the user
 		//		does a right-click or something similar
 
+		if(this.leftClickToOpen&&e.button>0){
+			return;
+		}
 		dojo.stopEvent(e);
 
 		// Get coordinates.
@@ -253,6 +266,7 @@ dojo.declare(
 		this.focus();
 
 		this._onBlur = function(){
+			this.inherited('_onBlur', arguments);
 			// Usually the parent closes the child widget but if this is a context
 			// menu then there is no parent
 			dijit.popup.close(this);
@@ -262,8 +276,7 @@ dojo.declare(
 	},
 
 	onOpen: function(/*Event*/ e){
-		// summary
-		//		Open menu relative to the mouse
+		// summary: Open menu relative to the mouse
 		this.isShowingNow = true;
 	},
 
@@ -306,24 +319,27 @@ dojo.declare(
 		if(popup.focus){
 			popup.focus();
 		}
+	},
+	
+	uninitialize: function(){
+ 		dojo.forEach(this.targetNodeIds, this.unBindDomNode, this);
+ 		this.inherited(arguments);
 	}
 }
 );
 
-dojo.declare(
-	"dijit.MenuItem",
+dojo.declare("dijit.MenuItem",
 	[dijit._Widget, dijit._Templated, dijit._Contained],
-{
-	// summary
-	//	A line item in a Menu2
+	{
+	// summary: A line item in a Menu Widget
 
 	// Make 3 columns
 	//   icon, label, and expand arrow (BiDi-dependent) indicating sub-menu
 	templateString:
-		 '<tr class="dijitReset dijitMenuItem"'
+		 '<tr class="dijitReset dijitMenuItem" '
 		+'dojoAttachEvent="onmouseenter:_onHover,onmouseleave:_onUnhover,ondijitclick:_onClick">'
-		+'<td class="dijitReset"><div class="dijitMenuItemIcon ${iconClass}" dojoAttachPoint="iconNode" ></div></td>'
-		+'<td tabIndex="-1" class="dijitReset dijitMenuItemLabel" dojoAttachPoint="containerNode" waiRole="menuitem"></td>'
+		+'<td class="dijitReset"><div class="dijitMenuItemIcon ${iconClass}" dojoAttachPoint="iconNode"></div></td>'
+		+'<td tabIndex="-1" class="dijitReset dijitMenuItemLabel" dojoAttachPoint="containerNode,focusNode" waiRole="menuitem"></td>'
 		+'<td class="dijitReset" dojoAttachPoint="arrowCell">'
 			+'<div class="dijitMenuExpand" dojoAttachPoint="expand" style="display:none">'
 			+'<span class="dijitInline dijitArrowNode dijitMenuExpandInner">+</span>'
@@ -348,7 +364,7 @@ dojo.declare(
 		dojo.setSelectable(this.domNode, false);
 		this.setDisabled(this.disabled);
 		if(this.label){
-			this.containerNode.innerHTML=this.label;
+			this.setLabel(this.label);
 		}
 	},
 
@@ -359,19 +375,19 @@ dojo.declare(
 
 	_onUnhover: function(){
 		// summary: callback when mouse is moved off of menu item
+
 		// if we are unhovering the currently selected item
 		// then unselect it
 		this.getParent().onItemUnhover(this);
 	},
 
 	_onClick: function(evt){
-		this.getParent().onItemClick(this);
+		this.getParent().onItemClick(this, evt);
 		dojo.stopEvent(evt);
 	},
 
-	onClick: function() {
-		// summary
-		//	User defined function to handle clicks
+	onClick: function(/*Event*/ evt){
+		// summary: User defined function to handle clicks
 	},
 
 	focus: function(){
@@ -386,6 +402,10 @@ dojo.declare(
 	_blur: function(){
 		dojo.removeClass(this.domNode, 'dijitMenuItemHover');
 	},
+	
+	setLabel: function(/*String*/ value){
+		this.containerNode.innerHTML=this.label=value;
+	},
 
 	setDisabled: function(/*Boolean*/ value){
 		// summary: enable or disable this menu item
@@ -395,17 +415,17 @@ dojo.declare(
 	}
 });
 
-dojo.declare(
-	"dijit.PopupMenuItem",
+dojo.declare("dijit.PopupMenuItem",
 	dijit.MenuItem,
-{
+	{
 	_fillContent: function(){
-		// my inner HTML contains both the menu item text and a popup widget, like
-		// <div dojoType="dijit.PopupMenuItem">
-		//		<span>pick me</span>
-		//		<popup> ... </popup>
-		// </div>
-		// the first part holds the menu item text and the second part is the popup
+		// summary: The innerHTML contains both the menu item text and a popup widget
+		// description: the first part holds the menu item text and the second part is the popup
+		// example: 
+		// |	<div dojoType="dijit.PopupMenuItem">
+		// |		<span>pick me</span>
+		// |		<popup> ... </popup>
+		// |	</div>
 		if(this.srcNodeRef){
 			var nodes = dojo.query("*", this.srcNodeRef);
 			dijit.PopupMenuItem.superclass._fillContent.call(this, nodes[0]);
@@ -416,8 +436,11 @@ dojo.declare(
 	},
 
 	startup: function(){
+		if(this._started){ return; }
+		this.inherited(arguments);
+
 		// we didn't copy the dropdown widget from the this.srcNodeRef, so it's in no-man's
-		// land now.  move it to document.body.
+		// land now.  move it to dojo.doc.body.
 		if(!this.popup){
 			var node = dojo.query("[widgetId]", this.dropDownContainer)[0];
 			this.popup = dijit.byNode(node);
@@ -428,15 +451,21 @@ dojo.declare(
 		dojo.addClass(this.expand, "dijitMenuExpandEnabled");
 		dojo.style(this.expand, "display", "");
 		dijit.setWaiState(this.containerNode, "haspopup", "true");
+	},
+	
+	destroyDescendants: function(){
+		if(this.popup){
+			this.popup.destroyRecursive();
+			delete this.popup;
+		}
+		this.inherited(arguments);
 	}
 });
 
-dojo.declare(
-	"dijit.MenuSeparator",
+dojo.declare("dijit.MenuSeparator",
 	[dijit._Widget, dijit._Templated, dijit._Contained],
-{
-	// summary
-	//	A line between two menu items
+	{
+	// summary: A line between two menu items
 
 	templateString: '<tr class="dijitMenuSeparator"><td colspan=3>'
 			+'<div class="dijitMenuSeparatorTop"></div>'
@@ -448,10 +477,7 @@ dojo.declare(
 	},
 	
 	isFocusable: function(){
-		// summary:
-		//		over ride to always return false
-		return false;
+		// summary: over ride to always return false
+		return false; // Boolean
 	}
 });
-
-}

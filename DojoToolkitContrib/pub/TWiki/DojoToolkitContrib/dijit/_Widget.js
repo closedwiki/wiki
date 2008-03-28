@@ -1,39 +1,44 @@
-if(!dojo._hasResource["dijit._Widget"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dijit._Widget"] = true;
 dojo.provide("dijit._Widget");
 
-dojo.require("dijit._base");
+//>>excludeStart("dijitBaseExclude", kwArgs.customDijitBase == "true");
+dojo.require( "dijit._base" );
+//>>excludeEnd("dijitBaseExclude");
 
 dojo.declare("dijit._Widget", null, {
-	// summary:
+	//	summary:
 	//		The foundation of dijit widgets. 	
 	//
-	// id: String
+	//	id: String
 	//		a unique, opaque ID string that can be assigned by users or by the
 	//		system. If the developer passes an ID which is known not to be
 	//		unique, the specified ID is ignored and the system-generated ID is
 	//		used instead.
 	id: "",
 
-	// lang: String
-	//	Language to display this widget in (like en-us).
-	//	Defaults to brower's specified preferred language (typically the language of the OS)
+	//	lang: String
+	//		Rarely used.  Overrides the default Dojo locale used to render this widget,
+	//		as defined by the [HTML LANG](http://www.w3.org/TR/html401/struct/dirlang.html#adef-lang) attribute.
+	//		Value must be among the list of locales specified during by the Dojo bootstrap,
+	//		formatted according to [RFC 3066](http://www.ietf.org/rfc/rfc3066.txt) (like en-us).
 	lang: "",
 
-	// dir: String
-	//  Bi-directional support, as defined by the HTML DIR attribute. Either left-to-right "ltr" or right-to-left "rtl".
+	//	dir: String
+	//		Unsupported by Dijit, but here for completeness.  Dijit only supports setting text direction on the
+	//		entire document.
+	//		Bi-directional support, as defined by the [HTML DIR](http://www.w3.org/TR/html401/struct/dirlang.html#adef-dir)
+	//		attribute. Either left-to-right "ltr" or right-to-left "rtl".
 	dir: "",
 
 	// class: String
-	// HTML class attribute
+	//		HTML class attribute
 	"class": "",
 
 	// style: String
-	// HTML style attribute
+	//		HTML style attribute
 	style: "",
 
 	// title: String
-	// HTML title attribute
+	//		HTML title attribute
 	title: "",
 
 	// srcNodeRef: DomNode
@@ -54,13 +59,16 @@ dojo.declare("dijit._Widget", null, {
 	attributeMap: {id:"", dir:"", lang:"", "class":"", style:"", title:""},  // TODO: add on* handlers?
 
 	//////////// INITIALIZATION METHODS ///////////////////////////////////////
-
-	postscript: function(params, srcNodeRef){
+//TODOC: params and srcNodeRef need docs.  Is srcNodeRef optional?
+//TODOC: summary needed for postscript
+	postscript: function(/*Object?*/params, /*DomNode|String*/srcNodeRef){
 		this.create(params, srcNodeRef);
 	},
 
-	create: function(params, srcNodeRef){
-		// summary:
+	create: function(/*Object?*/params, /*DomNode|String*/srcNodeRef){
+		//	summary:
+		//		Kick off the life-cycle of a widget
+		//	description:
 		//		To understand the process by which widgets are instantiated, it
 		//		is critical to understand what other methods create calls and
 		//		which of them you'll want to override. Of course, adventurous
@@ -70,19 +78,19 @@ dojo.declare("dijit._Widget", null, {
 		//		Below is a list of the methods that are called, in the order
 		//		they are fired, along with notes about what they do and if/when
 		//		you should over-ride them in your widget:
-		//			
-		//			postMixInProperties:
-		//				a stub function that you can over-ride to modify
-		//				variables that may have been naively assigned by
-		//				mixInProperties
-		//			# widget is added to manager object here
-		//			buildRendering
-		//				Subclasses use this method to handle all UI initialization
-		//				Sets this.domNode.  Templated widgets do this automatically
-		//				and otherwise it just uses the source dom node.
-		//			postCreate
-		//				a stub function that you can over-ride to modify take
-		//				actions once the widget has been placed in the UI
+		//
+		// * postMixInProperties:
+		//	|	* a stub function that you can over-ride to modify
+		//		variables that may have been naively assigned by
+		//		mixInProperties
+		// * widget is added to manager object here
+		// * buildRendering:
+		//	|	* Subclasses use this method to handle all UI initialization
+		//		Sets this.domNode.  Templated widgets do this automatically
+		//		and otherwise it just uses the source dom node.
+		// * postCreate:
+		//	|	* a stub function that you can over-ride to modify take
+		//		actions once the widget has been placed in the UI
 
 		// store pointer to original dom tree
 		this.srcNodeRef = dojo.byId(srcNodeRef);
@@ -98,6 +106,7 @@ dojo.declare("dijit._Widget", null, {
 		//mixin our passed parameters
 		if(this.srcNodeRef && (typeof this.srcNodeRef.id == "string")){ this.id = this.srcNodeRef.id; }
 		if(params){
+			this.params = params;
 			dojo.mixin(this,params);
 		}
 		this.postMixInProperties();
@@ -119,23 +128,9 @@ dojo.declare("dijit._Widget", null, {
 		// cannot be processed this way as they are not mutable.
 		if(this.domNode){
 			for(var attr in this.attributeMap){
-				var mapNode = this[this.attributeMap[attr] || "domNode"];
 				var value = this[attr];
-				if(typeof value != "object" && (value !== "" || (params && params[attr]))){
-					switch(attr){
-					case "class":
-						dojo.addClass(mapNode, value);
-						break;
-					case "style":
-						if(mapNode.style.cssText){
-							mapNode.style.cssText += "; " + value;// FIXME: Opera
-						}else{
-							mapNode.style.cssText = value;
-						}
-						break;
-					default:
-						mapNode.setAttribute(attr, value);
-					}
+				if(typeof value != "object" && ((value !== "" && value !== false) || (params && params[attr]))){
+					this.setAttribute(attr, value);
 				}
 			}
 		}
@@ -173,9 +168,10 @@ dojo.declare("dijit._Widget", null, {
 	startup: function(){
 		// summary:
 		//		Called after a widget's children, and other widgets on the page, have been created.
-		//		Provides an opportunity to manipulate any children before they are displayed
-		//		This is useful for composite widgets that need to control or layout sub-widgets
-		//		Many layout widgets can use this as a wiring phase
+		//		Provides an opportunity to manipulate any children before they are displayed.
+		//		This is useful for composite widgets that need to control or layout sub-widgets.
+		//		Many layout widgets can use this as a wiring phase.
+		this._started = true;
 	},
 
 	//////////// DESTROY FUNCTIONS ////////////////////////////////
@@ -200,10 +196,15 @@ dojo.declare("dijit._Widget", null, {
 		// finalize: Boolean
 		//		is this function being called part of global environment
 		//		tear-down?
+
 		this.uninitialize();
 		dojo.forEach(this._connects, function(array){
 			dojo.forEach(array, dojo.disconnect);
 		});
+
+		// destroy widgets created as part of template, etc.
+		dojo.forEach(this._supportingWidgets || [], function(w){ w.destroy(); });
+		
 		this.destroyRendering(finalize);
 		dijit.registry.remove(this.id);
 	},
@@ -242,12 +243,66 @@ dojo.declare("dijit._Widget", null, {
 
 	uninitialize: function(){
 		// summary:
-		//		stub function. Over-ride to implement custom widget tear-down
+		//		stub function. Override to implement custom widget tear-down
 		//		behavior.
 		return false;
 	},
 
 	////////////////// MISCELLANEOUS METHODS ///////////////////
+
+	onFocus: function(){
+		// summary:
+		//		stub function. Override or connect to this method to receive
+		//		notifications for when the widget moves into focus.
+	},
+
+	onBlur: function(){
+		// summary:
+		//		stub function. Override or connect to this method to receive
+		//		notifications for when the widget moves out of focus.
+	},
+
+	_onFocus: function(e){
+		this.onFocus();
+	},
+
+	_onBlur: function(){
+		this.onBlur();
+	},
+
+	setAttribute: function(/*String*/ attr, /*anything*/ value){
+		// summary
+		//		Set native HTML attributes reflected in the widget,
+		//		such as readOnly, disabled, and maxLength in TextBox widgets.
+		// description
+		//		In general, a widget's "value" is controlled via setValue()/getValue(), 
+		//		rather than this method.  The exception is for widgets where the
+		//		end user can't adjust the value, such as Button and CheckBox;
+		//		in the unusual case that you want to change the value attribute of
+		//		those widgets, use setAttribute().
+		var mapNode = this[this.attributeMap[attr]||'domNode'];
+		this[attr] = value;
+		switch(attr){
+			case "class":
+				dojo.addClass(mapNode, value);
+				break;
+			case "style":
+				if(mapNode.style.cssText){
+					mapNode.style.cssText += "; " + value;// FIXME: Opera
+				}else{
+					mapNode.style.cssText = value;
+				}
+				break;
+			default:
+				if(/^on[A-Z]/.test(attr)){ // eg. onSubmit needs to be onsubmit
+					attr = attr.toLowerCase();
+				}
+				if(typeof value == "function"){ // functions execute in the context of the widget
+					value = dojo.hitch(this, value);
+				}
+				dojo.attr(mapNode, attr, value);
+		}
+	},
 
 	toString: function(){
 		// summary:
@@ -260,33 +315,36 @@ dojo.declare("dijit._Widget", null, {
 
 	getDescendants: function(){
 		// summary:
-		//	return all the descendant widgets
-		var list = dojo.query('[widgetId]', this.domNode);
-		return list.map(dijit.byNode);		// Array
+		//	Returns all the widgets that contained by this, i.e., all widgets underneath this.containerNode.
+		if(this.containerNode){
+			var list= dojo.query('[widgetId]', this.containerNode);
+			return list.map(dijit.byNode);		// Array
+		}else{
+			return [];
+		}
 	},
 
-	nodesWithKeyClick : ["input", "button"],
+//TODOC
+	nodesWithKeyClick: ["input", "button"],
 
 	connect: function(
 			/*Object|null*/ obj,
 			/*String*/ event,
 			/*String|Function*/ method){
-
-		// summary:
+		//	summary:
 		//		Connects specified obj/event to specified method of this object
 		//		and registers for disconnect() on widget destroy.
 		//		Special event: "ondijitclick" triggers on a click or enter-down or space-up
 		//		Similar to dojo.connect() but takes three arguments rather than four.
 		var handles =[];
 		if(event == "ondijitclick"){
-			var w = this;
 			// add key based click activation for unsupported nodes.
 			if(!this.nodesWithKeyClick[obj.nodeName]){
 				handles.push(dojo.connect(obj, "onkeydown", this,
 					function(e){
 						if(e.keyCode == dojo.keys.ENTER){
 							return (dojo.isString(method))?
-								w[method](e) : method.call(w, e);
+								this[method](e) : method.call(this, e);
 						}else if(e.keyCode == dojo.keys.SPACE){
 							// stop space down as it causes IE to scroll
 							// the browser window
@@ -297,7 +355,7 @@ dojo.declare("dijit._Widget", null, {
 					function(e){
 						if(e.keyCode == dojo.keys.SPACE){
 							return dojo.isString(method) ?
-								w[method](e) : method.call(w, e);
+								this[method](e) : method.call(this, e);
 						}
 			 		}));
 			}
@@ -332,7 +390,7 @@ dojo.declare("dijit._Widget", null, {
 		//		'dir' attribute until one is found, otherwise left to right mode is assumed.
 		//		See HTML spec, DIR attribute for more information.
 
-		if(typeof this._ltr == "undefined"){
+		if(!("_ltr" in this)){
 			this._ltr = dojo.getComputedStyle(this.domNode).direction != "rtl";
 		}
 		return this._ltr; //Boolean
@@ -345,5 +403,3 @@ dojo.declare("dijit._Widget", null, {
 		return this.focus && (dojo.style(this.domNode, "display") != "none");
 	}
 });
-
-}

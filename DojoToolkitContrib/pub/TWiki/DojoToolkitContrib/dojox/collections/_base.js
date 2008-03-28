@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.collections._base"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.collections._base"] = true;
 dojo.provide("dojox.collections._base");
 
 dojox.collections.DictionaryEntry=function(/* string */k, /* object */v){
@@ -96,5 +94,3 @@ dojox.collections.DictionaryIterator=function(/* object */obj){
 		this.element=a[position];
 	};
 };
-
-}

@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojo.io.iframe"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojo.io.iframe"] = true;
 dojo.provide("dojo.io.iframe");
 
 dojo.io.iframe = {
@@ -23,12 +21,12 @@ dojo.io.iframe = {
 		var cframe = null;
 		var turi = uri;
 		if(!turi){
-			if(djConfig["useXDomain"] && !djConfig["dojoBlankHtmlUrl"]){
+			if(dojo.config["useXDomain"] && !dojo.config["dojoBlankHtmlUrl"]){
 				console.debug("dojo.io.iframe.create: When using cross-domain Dojo builds,"
 					+ " please save dojo/resources/blank.html to your domain and set djConfig.dojoBlankHtmlUrl"
 					+ " to the path on your domain to blank.html");
 			}
-			turi = (djConfig["dojoBlankHtmlUrl"]||dojo.moduleUrl("dojo", "resources/blank.html"));
+			turi = (dojo.config["dojoBlankHtmlUrl"]||dojo.moduleUrl("dojo", "resources/blank.html"));
 		}
 		var ifrstr = dojo.isIE ? '<iframe name="'+fname+'" src="'+turi+'" onload="'+onloadstr+'">' : 'iframe';
 		cframe = dojo.doc.createElement(ifrstr);
@@ -41,13 +39,13 @@ dojo.io.iframe = {
 		window[fname] = cframe;
 	
 		with(cframe.style){
-			// if(!dojo.isSafari){
+			if(dojo.isSafari < 3){
 				//We can't change the src in Safari 2.0.3 if absolute position. Bizarro.
 				position = "absolute";
-			// }
-			left = top = "300px";
-			height = width = "300px";
-			// visibility = "hidden";
+			}
+			left = top = "1px";
+			height = width = "1px";
+			visibility = "hidden";
 		}
 
 		if(!dojo.isIE){
@@ -101,7 +99,11 @@ dojo.io.iframe = {
 		//summary: Returns the document object associated with the iframe DOM Node argument.
 		var doc = iframeNode.contentDocument || // W3
 			(
-				(iframeNode.contentWindow)&&(iframeNode.contentWindow.document)
+				(
+					(iframeNode.name) && (iframeNode.document) && 
+					(document.getElementsByTagName("iframe")[iframeNode.name].contentWindow) &&
+					(document.getElementsByTagName("iframe")[iframeNode.name].contentWindow.document)
+				)
 			) ||  // IE
 			(
 				(iframeNode.name)&&(document.frames[iframeNode.name])&&
@@ -147,7 +149,7 @@ dojo.io.iframe = {
 		//This transport can only process one send() request at a time, so if send() is called
 		//multiple times, it will queue up the calls and only process one at a time.
 		if(!this["_frame"]){
-			this._frame = this.create(this._iframeName, "dojo.io.iframe._iframeOnload();");
+			this._frame = this.create(this._iframeName, dojo._scopeName + ".io.iframe._iframeOnload();");
 		}
 
 		//Set up the deferred.
@@ -231,7 +233,7 @@ dojo.io.iframe = {
 
 	_currentDfd: null,
 	_dfdQueue: [],
-	_iframeName: "dojoIoIframe",
+	_iframeName: dojo._scopeName + "IoIframe",
 
 	_fireNextRequest: function(){
 		//summary: Internal method used to fire the next request in the bind queue.
@@ -242,7 +244,7 @@ dojo.io.iframe = {
 			var args = ioArgs.args;
 
 			ioArgs._contentToClean = [];
-			var fn = args["form"];
+			var fn = dojo.byId(args["form"]);
 			var content = args["content"] || {};
 			if(fn){
 				if(content){
@@ -314,7 +316,7 @@ dojo.io.iframe = {
 
 		var ioArgs = dfd.ioArgs;
 		var args = ioArgs.args;
-		var fNode = args.form;
+		var fNode = dojo.byId(args.form);
 	
 		if(fNode){
 			// remove all the hidden content inputs
@@ -349,6 +351,4 @@ dojo.io.iframe = {
 
 		ioArgs._finished = true;
 	}
-}
-
 }

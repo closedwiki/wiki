@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.wire.ml.Invocation"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.wire.ml.Invocation"] = true;
 dojo.provide("dojox.wire.ml.Invocation");
 
 dojo.require("dojox.wire.ml.Action");
@@ -153,7 +151,7 @@ dojo.declare("dojox.wire.ml.Invocation", dojox.wire.ml.Action, {
 		var parameters = [];
 		var list = this.parameters.split(",");
 		if(list.length == 1){
-			var parameter = dojox.wire.ml._getValue(list[0], args);
+			var parameter = dojox.wire.ml._getValue(dojo.trim(list[0]), args);
 			if(dojo.isArray(parameter)){
 				parameters = parameter;
 			}else{
@@ -161,11 +159,9 @@ dojo.declare("dojox.wire.ml.Invocation", dojox.wire.ml.Action, {
 			}
 		}else{
 			for(var i in list){
-				parameters.push(dojox.wire.ml._getValue(list[i], args));
+				parameters.push(dojox.wire.ml._getValue(dojo.trim(list[i]), args));
 			}
 		}
 		return parameters; //Array
 	}
 });
-
-}

@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.gfx3d.lighting"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.gfx3d.lighting"] = true;
 dojo.provide("dojox.gfx3d.lighting");
 dojo.require("dojox.gfx._base");
 
@@ -237,5 +235,3 @@ dojox.gfx3d.lighting.finish = {
 	// very highly polished and reflective
 	metalE: {Ka: 0.10, Kd: 0.7, Ks: 0.8, roughness: 1/120}
 };
-
-}

@@ -1,1 +1,7 @@
-({"set": "设定", "text": "文本：", "title": "链接 URL", "url": "URL：", "urlInvalidMessage": "URL 无效。请输入完整的 URL，如“http://www.dojotoolkit.org”"})
+({
+	title: "链接 URL",
+	url: "URL：",
+	text: "文本：",
+	set: "设定",
+	urlInvalidMessage: "URL 无效。请输入完整的 URL，如“http://www.dojotoolkit.org”"	
+})

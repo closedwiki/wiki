@@ -1,1 +1,34 @@
-({"eraAbbr": ["公元前", "公元"], "am": "上午", "months-format-abbr": ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"], "days-format-abbr": ["周日", "周一", "周二", "周三", "周四", "周五", "周六"], "pm": "下午", "months-format-wide": ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"], "months-standAlone-narrow": ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"], "days-standAlone-narrow": ["日", "一", "二", "三", "四", "五", "六"], "days-format-wide": ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"], "dateTimeFormats-appendItem-Second": "{0} ({2}: {1})", "field-dayperiod": "Dayperiod", "field-minute": "Minute", "eraNames": ["BCE", "CE"], "field-weekday": "Day of the Week", "dateTimeFormats-appendItem-Year": "{0} {1}", "field-era": "Era", "field-hour": "Hour", "timeFormat-full": "HH:mm:ss z", "dateTimeFormats-appendItem-Week": "{0} ({2}: {1})", "dateTimeFormats-appendItem-Timezone": "{0} {1}", "dateTimeFormats-appendItem-Month": "{0} ({2}: {1})", "dateFormat-long": "yyyy MMMM d", "timeFormat-medium": "HH:mm:ss", "field-zone": "Zone", "dateTimeFormats-appendItem-Minute": "{0} ({2}: {1})", "dateFormat-medium": "yyyy MMM d", "quarters-format-abbreviated": ["Q1", "Q2", "Q3", "Q4"], "dateTimeFormat": "{1} {0}", "field-year": "Year", "dateTimeFormats-appendItem-Day": "{0} ({2}: {1})", "field-week": "Week", "timeFormat-long": "HH:mm:ss z", "timeFormat-short": "HH:mm", "field-month": "Month", "dateTimeFormats-appendItem-Quarter": "{0} ({2}: {1})", "field-second": "Second", "field-day": "Day", "dateTimeFormats-appendItem-Day-Of-Week": "{0} {1}", "dateTimeFormats-appendItem-Hour": "{0} ({2}: {1})", "dateFormat-short": "yy/MM/dd", "dateFormat-full": "EEEE, yyyy MMMM dd", "dateTimeFormats-appendItem-Era": "{0} {1}", "quarters-format-wide": ["Q1", "Q2", "Q3", "Q4"]})
+// generated from ldml/main/*.xml, xpath: ldml/calendars/calendar-gregorian
+({
+        'months-format-wide':["1","2","3","4","5","6","7","8","9","10","11","12"],
+        'months-standAlone-abbr':["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],
+        'months-standAlone-narrow':["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],
+        'months-standAlone-wide':["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],
+        'days-format-abbr':["周日","周一","周二","周三","周四","周五","周六"],
+        'days-format-wide':["星期日","星期一","星期二","星期三","星期四","星期五","星期六"],
+        'days-standAlone-narrow':["日","一","二","三","四","五","六"],
+        'am':"上午",
+        'pm':"下午",
+        'eraAbbr':["公元前","公元"],
+        'dateFormat-full': "yyyy年M月d日EEEE",
+        'dateFormat-long': "yyyy年M月d日",
+        'dateFormat-medium': "yyyy-M-d",
+        'dateFormat-short': "yy-M-d",
+        'timeFormat-full': "ahh时mm分ss秒 v",
+        'timeFormat-long': "ahh时mm分ss秒 z",
+        'timeFormat-medium': "ahh:mm:ss",
+        'timeFormat-short': "ah:mm",
+        'dateTimeAvailableFormats':"M-d",
+        'field-era':"时期",
+        'field-year':"年",
+        'field-month':"月",
+        'field-week':"周",
+        'field-day':"日",
+        'field-weekday':"周天",
+        'field-dayperiod':"上午/下午",
+        'field-hour':"小时",
+        'field-minute':"分钟",
+        'field-second':"秒钟",
+        'field-zone':"区域"
+})
+                        

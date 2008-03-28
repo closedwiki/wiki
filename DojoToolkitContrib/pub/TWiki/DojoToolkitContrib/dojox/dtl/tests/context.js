@@ -1,8 +1,7 @@
-if(!dojo._hasResource["dojox.dtl.tests.context"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.dtl.tests.context"] = true;
 dojo.provide("dojox.dtl.tests.context");
 
 dojo.require("dojox.dtl");
+dojo.require("dojox.dtl.Context");
 
 doh.register("dojox.dtl.context", 
 	[
@@ -33,7 +32,7 @@ doh.register("dojox.dtl.context",
 				context.pop();
 				t.t(false);
 			}catch(e){
-				t.is("pop() has been called more times than push() on the Context", e.message);
+				t.is("pop() called on empty Context", e.message);
 			}
 		},
 		function test_context_filter(t){
@@ -74,5 +73,3 @@ doh.register("dojox.dtl.context",
 		}
 	]
 );
-
-}

@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.encoding.ascii85"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.encoding.ascii85"] = true;
 dojo.provide("dojox.encoding.ascii85");
 
 (function(){
@@ -59,5 +57,3 @@ dojo.provide("dojox.encoding.ascii85");
 		return r;
 	};
 })();
-
-}

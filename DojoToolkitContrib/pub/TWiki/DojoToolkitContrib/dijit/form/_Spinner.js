@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dijit.form._Spinner"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dijit.form._Spinner"] = true;
 dojo.provide("dijit.form._Spinner");
 
 dojo.require("dijit.form.ValidationTextBox");
@@ -30,7 +28,7 @@ dojo.declare(
 		//	  adjust the value by this much when spinning using the PgUp/Dn keys
 		largeDelta: 10,
 
-		templateString:"<table style=\"-moz-inline-stack;\" class=\"dijit dijitReset dijitInlineTable dijitLeft\" cellspacing=\"0\"  cellpadding=\"0\"\n\tid=\"widget_${id}\" name=\"${name}\"\n\tdojoAttachEvent=\"onmouseenter:_onMouse,onmouseleave:_onMouse,onkeypress:_onKeyPress\"\n\twaiRole=\"presentation\"\n\t><tr class=\"dijitReset\"\n\t\t><td rowspan=\"2\" class=\"dijitReset dijitStretch dijitInputField\" width=\"100%\"\n\t\t\t><input dojoAttachPoint=\"textbox,focusNode\" type=\"${type}\" dojoAttachEvent=\"onfocus,onkeyup\"\n\t\t\t\twaiRole=\"spinbutton\" autocomplete=\"off\" name=\"${name}\"\n\t\t></td\n\t\t><td rowspan=\"2\" class=\"dijitReset dijitValidationIconField\" width=\"0%\" \n\t\t\t><div dojoAttachPoint='iconNode' class='dijitInline dijitValidationIcon'></div\n\t\t></td\n\t\t><td class=\"dijitReset dijitRight dijitButtonNode dijitUpArrowButton\" width=\"0%\"\n\t\t\t\tdojoAttachPoint=\"upArrowNode\"\n\t\t\t\tdojoAttachEvent=\"onmousedown:_handleUpArrowEvent,onmouseup:_handleUpArrowEvent,onmouseover:_handleUpArrowEvent,onmouseout:_handleUpArrowEvent\"\n\t\t\t\tstateModifier=\"UpArrow\"\n\t\t\t><div class=\"dijitA11yUpArrow\">&#9650;</div\n\t\t></td\n\t></tr\n\t><tr class=\"dijitReset\"\n\t\t><td class=\"dijitReset dijitRight dijitButtonNode dijitDownArrowButton\" width=\"0%\"\n\t\t\t\tdojoAttachPoint=\"downArrowNode\"\n\t\t\t\tdojoAttachEvent=\"onmousedown:_handleDownArrowEvent,onmouseup:_handleDownArrowEvent,onmouseover:_handleDownArrowEvent,onmouseout:_handleDownArrowEvent\"\n\t\t\t\tstateModifier=\"DownArrow\"\n\t\t\t><div class=\"dijitA11yDownArrow\">&#9660;</div\n\t\t></td\n\t></tr\n></table>\n\n",
+		templatePath: dojo.moduleUrl("dijit.form", "templates/Spinner.html"),
 		baseClass: "dijitSpinner",
 
 		adjust: function(/* Object */ val, /*Number*/ delta){
@@ -39,26 +37,23 @@ dojo.declare(
 			return val;
 		},
 
-		_handleUpArrowEvent : function(/*Event*/ e){
-			this._onMouse(e, this.upArrowNode);
+		_arrowState: function(/*Node*/ node, /*Boolean*/ pressed){
+			this._active = pressed;
+			this.stateModifier = node.getAttribute("stateModifier") || "";
+			this._setStateClass();
 		},
-
-		_handleDownArrowEvent : function(/*Event*/ e){
-			this._onMouse(e, this.downArrowNode);
-		},
-
 
 		_arrowPressed: function(/*Node*/ nodePressed, /*Number*/ direction){
-			if(this.disabled){ return; }
-			dojo.addClass(nodePressed, "dijitSpinnerButtonActive");
-			this.setValue(this.adjust(this.getValue(), direction*this.smallDelta));
+			if(this.disabled || this.readOnly){ return; }
+			this._arrowState(nodePressed, true);
+			this.setValue(this.adjust(this.getValue(), direction*this.smallDelta), false);
+			dijit.selectInputText(this.textbox, this.textbox.value.length);
 		},
 
 		_arrowReleased: function(/*Node*/ node){
-			if(this.disabled){ return; }
 			this._wheelTimer = null;
-			dijit.focus(this.textbox);
-			dojo.removeClass(node, "dijitSpinnerButtonActive");
+			if(this.disabled || this.readOnly){ return; }
+			this._arrowState(node, false);
 		},
 
 		_typematicCallback: function(/*Number*/ count, /*DOMNode*/ node, /*Event*/ evt){
@@ -76,12 +71,13 @@ dojo.declare(
 			}else if(typeof evt.detail == 'number'){ // Mozilla+Firefox
 				scrollAmount = -evt.detail;
 			}
+			var node, dir;
 			if(scrollAmount > 0){
-				var node = this.upArrowNode;
-				var dir = +1;
+				node = this.upArrowNode;
+				dir = +1;
 			}else if(scrollAmount < 0){
-				var node = this.downArrowNode;
-				var dir = -1;
+				node = this.downArrowNode;
+				dir = -1;
 			}else{ return; }
 			this._arrowPressed(node, dir);
 			if(this._wheelTimer != null){
@@ -96,9 +92,22 @@ dojo.declare(
 
 			// extra listeners
 			this.connect(this.textbox, dojo.isIE ? "onmousewheel" : 'DOMMouseScroll', "_mouseWheeled");
-			dijit.typematic.addListener(this.upArrowNode, this.textbox, {keyCode:dojo.keys.UP_ARROW,ctrlKey:false,altKey:false,shiftKey:false}, this, "_typematicCallback", this.timeoutChangeRate, this.defaultTimeout);
-			dijit.typematic.addListener(this.downArrowNode, this.textbox, {keyCode:dojo.keys.DOWN_ARROW,ctrlKey:false,altKey:false,shiftKey:false}, this, "_typematicCallback", this.timeoutChangeRate, this.defaultTimeout);
+			this._connects.push(dijit.typematic.addListener(this.upArrowNode, this.textbox, {keyCode:dojo.keys.UP_ARROW,ctrlKey:false,altKey:false,shiftKey:false}, this, "_typematicCallback", this.timeoutChangeRate, this.defaultTimeout));
+			this._connects.push(dijit.typematic.addListener(this.downArrowNode, this.textbox, {keyCode:dojo.keys.DOWN_ARROW,ctrlKey:false,altKey:false,shiftKey:false}, this, "_typematicCallback", this.timeoutChangeRate, this.defaultTimeout));
+			if(dojo.isIE){
+				// When spinner is moved from hidden to visible, call _setStateClass to remind IE to render it. (#6123)
+				var _this = this;
+				this.connect(this.domNode, "onresize", 
+					function(){ setTimeout(dojo.hitch(_this,
+						function(){
+							// cause the IE expressions to rerun
+							this.upArrowNode.style.behavior = '';
+							this.downArrowNode.style.behavior = '';
+							// cause IE to rerender
+							this._setStateClass();
+						}), 0);
+					}
+				);
+			}
 		}
 });
-
-}

@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.grid._grid.layout"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.grid._grid.layout"] = true;
 dojo.provide("dojox.grid._grid.layout");
 dojo.require("dojox.grid._grid.cell");
 
@@ -10,7 +8,7 @@ dojo.declare("dojox.grid.layout", null, {
 		this.grid = inGrid;
 	},
 	// flat array of grid cells
-	cells: null,
+	cells: [],
 	// structured array of grid cells
 	structure: null,
 	// default cell width
@@ -71,5 +69,3 @@ dojo.declare("dojox.grid.layout", null, {
 			}));
 	}
 });
-
-}

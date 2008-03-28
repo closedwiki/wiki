@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.grid._grid.rows"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.grid._grid.rows"] = true;
 dojo.provide("dojox.grid._grid.rows");
 
 dojo.declare("dojox.grid.rows", null, {
@@ -62,5 +60,3 @@ dojo.declare("dojox.grid.rows", null, {
 		return (this.overRow == inRowIndex);
 	}
 });
-
-}

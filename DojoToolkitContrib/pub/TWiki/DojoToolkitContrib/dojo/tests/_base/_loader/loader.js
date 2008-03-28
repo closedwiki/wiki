@@ -1,11 +1,9 @@
-if(!dojo._hasResource["tests._base._loader.loader"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["tests._base._loader.loader"] = true;
 dojo.provide("tests._base._loader.loader");
 
 tests.register("tests._base._loader.loader", 
 	[
 		function baseUrl(t){
-			var originalBaseUrl = djConfig["baseUrl"] || "./";
+			var originalBaseUrl = dojo.config["baseUrl"] || "./";
 
 			t.assertEqual(originalBaseUrl, dojo.baseUrl);
 		},
@@ -48,5 +46,3 @@ tests.register("tests._base._loader.loader",
 		}
 	]
 );
-
-}

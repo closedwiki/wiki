@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.wire.TableAdapter"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.wire.TableAdapter"] = true;
 dojo.provide("dojox.wire.TableAdapter");
 
 dojo.require("dojox.wire.CompositeWire");
@@ -84,5 +82,3 @@ dojo.declare("dojox.wire.TableAdapter", dojox.wire.CompositeWire, {
 		return row; //Array||Object
 	}
 });
-
-}

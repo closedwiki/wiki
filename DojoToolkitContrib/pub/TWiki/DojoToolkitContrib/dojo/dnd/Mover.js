@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojo.dnd.Mover"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojo.dnd.Mover"] = true;
 dojo.provide("dojo.dnd.Mover");
 
 dojo.require("dojo.dnd.common");
@@ -48,11 +46,23 @@ dojo.declare("dojo.dnd.Mover", null, {
 	// utilities
 	onFirstMove: function(){
 		// summary: makes the node absolute; it is meant to be called only once
-		this.node.style.position = "absolute";	// enforcing the absolute mode
-		var m = dojo.marginBox(this.node);
-		m.l -= this.marginBox.l;
-		m.t -= this.marginBox.t;
-		this.marginBox = m;
+		var s = this.node.style, l, t;
+		switch(s.position){
+			case "relative":
+			case "absolute":
+				// assume that left and top values are in pixels already
+				l = Math.round(parseFloat(s.left));
+				t = Math.round(parseFloat(s.top));
+				break;
+			default:
+				s.position = "absolute";	// enforcing the absolute mode
+				var m = dojo.marginBox(this.node);
+				l = m.l;
+				t = m.t;
+				break;
+		}
+		this.marginBox.l = l - this.marginBox.l;
+		this.marginBox.t = t - this.marginBox.t;
 		this.host.onFirstMove(this);
 		dojo.disconnect(this.events.pop());
 	},
@@ -68,5 +78,3 @@ dojo.declare("dojo.dnd.Mover", null, {
 		this.events = this.node = null;
 	}
 });
-
-}

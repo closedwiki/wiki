@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dijit.demos.chat.room"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dijit.demos.chat.room"] = true;
 dojo.provide("dijit.demos.chat.room"); 
 
 dojo.require("dojox.cometd");
@@ -123,5 +121,3 @@ dojo.declare("dijit.demos.chat.Room",
 		}
 	}
 });
-
-}

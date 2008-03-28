@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.off._common"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.off._common"] = true;
 dojo.provide("dojox.off._common");
 
 dojo.require("dojox.storage");
@@ -283,7 +281,7 @@ dojo.mixin(dojox.off, {
 		// FIXME: need to pull in the firebug lite files here!
 		// workaround or else we will get an error on page load
 		// from Dojo that it can't find 'console.debug' for optimized builds
-		// dojox.off.files.cache(djConfig.baseRelativePath + "src/debug.js");
+		// dojox.off.files.cache(dojo.config.baseRelativePath + "src/debug.js");
 		
 		// make sure that resources needed by all of our underlying
 		// Dojo Storage storage providers will be available
@@ -555,5 +553,3 @@ dojox.storage.manager.addOnLoad(dojo.hitch(dojox.off, "_onStorageLoad"));
 
 // wait until the page is finished loading
 dojo.addOnLoad(dojox.off, "_onPageLoad");
-
-}

@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojo.io.script"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojo.io.script"] = true;
 dojo.provide("dojo.io.script");
 
 /*=====
@@ -22,6 +20,10 @@ dojo.io.script.__ioArgs = function(kwArgs){
 	//		"typeof(" + checkString + ") != 'undefined'"
 	//		being true means that the script fetched has been loaded. 
 	//		Do not use this if doing a JSONP type of call (use callbackParamName instead).
+	//	frameDoc: Document.
+	//		The Document object for a child iframe. If this is passed in, the script
+	//		will be attached to that document. This can be helpful in some comet long-polling
+	//		scenarios with Firefox and Opera.
 }
 =====*/
 
@@ -33,12 +35,12 @@ dojo.io.script = {
 		var ioArgs = dfd.ioArgs;
 		dojo._ioAddQueryToUrl(ioArgs);
 
-		this.attach(ioArgs.id, ioArgs.url);
+		this.attach(ioArgs.id, ioArgs.url, args.frameDoc);
 		dojo._ioWatch(dfd, this._validCheck, this._ioCheck, this._resHandle);
 		return dfd;
 	},
 
-	attach: function(/*String*/id, /*String*/url){
+	attach: function(/*String*/id, /*String*/url, /*Document?*/frameDocument){
 		//	summary:
 		//		creates a new <script> tag pointing to the specified URL and
 		//		adds it to the document.
@@ -46,11 +48,12 @@ dojo.io.script = {
 		//		Attaches the script element to the DOM.  Use this method if you
 		//		just want to attach a script to the DOM and do not care when or
 		//		if it loads.
-		var element = dojo.doc.createElement("script");
+		var doc = (frameDocument || dojo.doc);
+		var element = doc.createElement("script");
 		element.type = "text/javascript";
 		element.src = url;
 		element.id = id;
-		dojo.doc.getElementsByTagName("head")[0].appendChild(element);
+		doc.getElementsByTagName("head")[0].appendChild(element);
 	},
 
 	remove: function(/*String*/id){
@@ -69,7 +72,7 @@ dojo.io.script = {
 		var dfd = dojo._ioSetArgs(args, this._deferredCancel, this._deferredOk, this._deferredError);
 
 		var ioArgs = dfd.ioArgs;
-		ioArgs.id = "dojoIoScript" + (this._counter++);
+		ioArgs.id = dojo._scopeName + "IoScript" + (this._counter++);
 		ioArgs.canDelete = false;
 
 		//Special setup for jsonp case
@@ -79,7 +82,10 @@ dojo.io.script = {
 			if(ioArgs.query.length > 0){
 				ioArgs.query += "&";
 			}
-			ioArgs.query += args.callbackParamName + "=dojo.io.script.jsonp_" + ioArgs.id + "._jsonpCallback";
+			ioArgs.query += args.callbackParamName
+				+ "="
+				+ (args.frameDoc ? "parent." : "")
+				+ "dojo.io.script.jsonp_" + ioArgs.id + "._jsonpCallback";
 
 			//Setup the Deferred to have the jsonp callback.
 			ioArgs.canDelete = true;
@@ -198,6 +204,4 @@ dojo.io.script = {
 		//		request.
 		this.ioArgs.json = json;
 	}
-}
-
 }

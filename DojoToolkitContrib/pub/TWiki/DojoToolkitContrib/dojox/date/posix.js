@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.date.posix"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.date.posix"] = true;
 dojo.provide("dojox.date.posix");
 
 dojo.require("dojo.date");
@@ -12,7 +10,7 @@ dojox.date.posix.strftime = function(/*Date*/dateObject, /*String*/format, /*Str
 //		Formats the date object using the specifications of the POSIX strftime function
 //
 // description:
-//		see <http://www.opengroup.org/onlinepubs/007908799/xsh/strftime.html>
+//		see http://www.opengroup.org/onlinepubs/007908799/xsh/strftime.html
 
 	// zero pad
 	var padChar = null;
@@ -288,6 +286,4 @@ dojox.date.posix.getIsoWeeksInYear = function(/*Date*/dateObject) {
 	}
 	var y = dateObject.getFullYear();
 	return ( p(y) % 7 == 4 || p(y-1) % 7 == 3 ) ? 53 : 52;	//	Integer
-}
-
 }

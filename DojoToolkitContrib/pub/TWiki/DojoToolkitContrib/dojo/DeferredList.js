@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojo.DeferredList"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojo.DeferredList"] = true;
 dojo.provide("dojo.DeferredList");
 dojo.declare("dojo.DeferredList", dojo.Deferred, {
 	constructor: function(/*Array*/ list, /*Boolean?*/ fireOnOneCallback, /*Boolean?*/ fireOnOneErrback, /*Boolean?*/ consumeErrors, /*Function?*/ canceller){
@@ -33,7 +31,7 @@ dojo.declare("dojo.DeferredList", dojo.Deferred, {
 		this.canceller = canceller;
 		this.silentlyCancelled = false;
 
-		if (this.list.length === 0 && !fireOnOneCallback) {
+		if(this.list.length === 0 && !fireOnOneCallback){
 			this.callback(this.resultList);
 		}
 
@@ -42,50 +40,45 @@ dojo.declare("dojo.DeferredList", dojo.Deferred, {
 		this.fireOnOneErrback = fireOnOneErrback;
 		this.consumeErrors = consumeErrors;
 
-		var index = 0;
-
-		dojo.forEach(this.list, function(d, index) {
-			d.addCallback(this, function(r) { this._cbDeferred(index, true, r); return r; });
-			d.addErrback(this, function(r) { this._cbDeferred(index, false, r); return r; });
-			index++;
-		},this);
+		dojo.forEach(this.list, function(d, index){
+			d.addCallback(this, function(r){ this._cbDeferred(index, true, r); return r; });
+			d.addErrback(this, function(r){ this._cbDeferred(index, false, r); return r; });
+		}, this);
 	},
 
-	_cbDeferred: function (index, succeeded, result) {
+	_cbDeferred: function(index, succeeded, result){
 		// summary:
 		//	The DeferredLists' callback handler
 
 		this.resultList[index] = [succeeded, result]; this.finishedCount += 1;
-		if (this.fired !== 0) {
-			if (succeeded && this.fireOnOneCallback) {
+		if(this.fired !== 0){
+			if(succeeded && this.fireOnOneCallback){
 				this.callback([index, result]);
-			} else if (!succeeded && this.fireOnOneErrback) {
-			this.errback(result);
-			} else if (this.finishedCount == this.list.length) {
+			}else if(!succeeded && this.fireOnOneErrback){
+				this.errback(result);
+			}else if(this.finishedCount == this.list.length){
 				this.callback(this.resultList);
 			}
 		}
-		if (!succeeded && this.consumeErrors) {
+		if(!succeeded && this.consumeErrors){
 			result = null;
 		}
 		return result;
 	},
 
-	gatherResults: function (deferredList) {
+	gatherResults: function(deferredList){
 		// summary:	
 		//	Gathers the results of the deferreds for packaging
 		//	as the parameters to the Deferred Lists' callback
 
-		var d = new dojo.DeferedList(deferredList, false, true, false);
-		d.addCallback(function (results) {
+		var d = new dojo.DeferredList(deferredList, false, true, false);
+		d.addCallback(function(results){
 			var ret = [];
-			for (var i = 0; i < results.length; i++) {
-				ret.push(results[i][1]);
-			}
+			dojo.forEach(results, function(result){
+				ret.push(result[1]);
+			});
 			return ret;
 		});
 		return d;
 	}
 });
-
-}

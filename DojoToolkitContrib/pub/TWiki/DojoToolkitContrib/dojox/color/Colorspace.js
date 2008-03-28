@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.color.Colorspace"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.color.Colorspace"] = true;
 dojo.provide("dojox.color.Colorspace");
 dojo.require("dojox.math.matrix");
 
@@ -552,5 +550,3 @@ dojo.extend(dojox.color.Color, {
 		return { X: xyz[0][0], Y: xyz[0][1], Z: xyz[0][2] };	//	Object
 	}
 });
-
-}

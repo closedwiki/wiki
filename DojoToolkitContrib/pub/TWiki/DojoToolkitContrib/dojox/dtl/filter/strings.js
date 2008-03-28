@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.dtl.filter.strings"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.dtl.filter.strings"] = true;
 dojo.provide("dojox.dtl.filter.strings");
 
 dojo.require("dojox.dtl.filter.htmlstrings");
@@ -7,6 +5,21 @@ dojo.require("dojox.string.sprintf");
 dojo.require("dojox.string.tokenize");
 
 dojo.mixin(dojox.dtl.filter.strings, {
+	_urlquote: function(/*String*/ url, /*String?*/ safe){
+		if(!safe){
+			safe = "/";
+		}
+		return dojox.string.tokenize(url, /([^\w-_.])/g, function(token){
+			if(safe.indexOf(token) == -1){
+				if(token == " "){
+					return "+";
+				}else{
+					return "%" + token.charCodeAt(0).toString(16).toUpperCase();
+				}
+			}
+			return token;
+		}).join("");
+	},
 	addslashes: function(value){
 		// summary: Adds slashes - useful for passing strings to JavaScript, for example.
 		return value.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/'/g, "\\'");
@@ -60,7 +73,7 @@ dojo.mixin(dojox.dtl.filter.strings, {
 		return (arg < 0) ? parseFloat(value) + "" : value;
 	},
 	iriencode: function(value){
-		return dojox.dtl.text.urlquote(value, "/#%[]=:;$&()+,!");
+		return dojox.dtl.filter.strings._urlquote(value, "/#%[]=:;$&()+,!");
 	},
 	linenumbers: function(value){
 		// summary: Displays text with line numbers
@@ -175,7 +188,7 @@ dojo.mixin(dojox.dtl.filter.strings, {
 		}
 		return value;
 	},
-	_truncate_words: /(&.*?;|<.*?>|(\w[\w-]*))/g,
+	_truncate_words: /(&.*?;|<.*?>|(\w[\w\-]*))/g,
 	_truncate_tag: /<(\/)?([^ ]+?)(?: (\/)| .*?)?>/,
 	_truncate_singlets: { br: true, col: true, link: true, base: true, img: true, param: true, area: true, hr: true, input: true },
 	truncatewords_html: function(value, arg){
@@ -232,7 +245,7 @@ dojo.mixin(dojox.dtl.filter.strings, {
 		return value.toUpperCase();
 	},
 	urlencode: function(value){
-		return dojox.dtl.text.urlquote(value);
+		return dojox.dtl.filter.strings._urlquote(value);
 	},
 	_urlize: /^((?:[(>]|&lt;)*)(.*?)((?:[.,)>\n]|&gt;)*)$/,
 	_urlize2: /^\S+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+$/,
@@ -308,5 +321,3 @@ dojo.mixin(dojox.dtl.filter.strings, {
 		return output.join("");
 	}
 });
-
-}

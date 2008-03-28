@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojo._base.connect"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojo._base.connect"] = true;
 dojo.provide("dojo._base.connect");
 dojo.require("dojo._base.lang");
 
@@ -281,5 +279,3 @@ dojo.connectPublisher = function(	/*String*/ topic,
 	var pf = function(){ dojo.publish(topic, arguments); }
 	return (event) ? dojo.connect(obj, event, pf) : dojo.connect(obj, pf); //Handle
 };
-
-}

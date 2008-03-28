@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.collections.tests.SortedList"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.collections.tests.SortedList"] = true;
 dojo.provide("dojox.collections.tests.SortedList");
 dojo.require("dojox.collections.SortedList");
 
@@ -164,5 +162,3 @@ tests.register("dojox.collections.tests.SortedList", [
 		t.assertEqual("orange,fab,shot,bar", a.join());
 	}
 ]);
-
-}

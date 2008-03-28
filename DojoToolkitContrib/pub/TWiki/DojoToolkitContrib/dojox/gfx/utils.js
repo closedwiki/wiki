@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.gfx.utils"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.gfx.utils"] = true;
 dojo.provide("dojox.gfx.utils");
 
 dojo.require("dojox.gfx");
@@ -83,5 +81,3 @@ dojox.gfx.utils.fromJson = function(
 ){
 	return dojox.gfx.utils.deserialize(parent, dojo.fromJson(json));	// Array || dojox.gfx.Shape
 };
-
-}

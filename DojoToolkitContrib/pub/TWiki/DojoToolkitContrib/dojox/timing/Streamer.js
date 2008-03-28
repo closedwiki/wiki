@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.timing.Streamer"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.timing.Streamer"] = true;
 dojo.provide("dojox.timing.Streamer");
 
 dojo.require("dojox.timing._base");
@@ -90,5 +88,3 @@ dojox.timing.Streamer = function(
 		queue.concat(initialData);
 	}
 };
-
-}

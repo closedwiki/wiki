@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojo._base.event"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojo._base.event"] = true;
 dojo.provide("dojo._base.event");
 dojo.require("dojo._base.connect");
 
@@ -7,28 +5,24 @@ dojo.require("dojo._base.connect");
 
 (function(){
 	// DOM event listener machinery
-	var del = dojo._event_listener = {
+	var del = (dojo._event_listener = {
 		add: function(/*DOMNode*/node, /*String*/name, /*Function*/fp){
 			if(!node){return;} 
 			name = del._normalizeEventName(name);
-
 			fp = del._fixCallback(name, fp);
-
 			var oname = name;
-			if((!dojo.isIE)&&((name == "mouseenter")||(name == "mouseleave"))){
-				var oname = name;
+			if(!dojo.isIE && (name == "mouseenter" || name == "mouseleave")){
 				var ofp = fp;
+				//oname = name;
 				name = (name == "mouseenter") ? "mouseover" : "mouseout";
 				fp = function(e){
 					// thanks ben!
-					var id = dojo.isDescendant(e.relatedTarget, node);
-					if(id == false){
-						// e.type = oname; // FIXME: doesn't take?
-						return ofp.call(this, e);
+					if(!dojo.isDescendant(e.relatedTarget, node)){
+						// e.type = oname; // FIXME: doesn't take? SJM: event.type is generally immutable.
+						return ofp.call(this, e); 
 					}
 				}
 			}
-
 			node.addEventListener(name, fp, false);
 			return fp; /*Handle*/
 		},
@@ -41,13 +35,15 @@ dojo.require("dojo._base.connect");
 			//		the name of the handler to remove the function from
 			// handle:
 			//		the handle returned from add
-			(node)&&(node.removeEventListener(del._normalizeEventName(event), handle, false));
+			if (node){
+				node.removeEventListener(del._normalizeEventName(event), handle, false);
+			}
 		},
 		_normalizeEventName: function(/*String*/name){
 			// Generally, name should be lower case, unless it is special
 			// somehow (e.g. a Mozilla DOM event).
 			// Remove 'on'.
-			return (name.slice(0,2)=="on" ? name.slice(2) : name);
+			return name.slice(0,2) =="on" ? name.slice(2) : name;
 		},
 		_fixCallback: function(/*String*/name, fp){
 			// By default, we only invoke _fixEvent for 'keypress'
@@ -55,7 +51,7 @@ dojo.require("dojo._base.connect");
 			// to revisit this optimization.
 			// This also applies to _fixEvent overrides for Safari and Opera
 			// below.
-			return (name!="keypress" ? fp : function(e){ return fp.call(this, del._fixEvent(e, this)); });	
+			return name != "keypress" ? fp : function(e){ return fp.call(this, del._fixEvent(e, this)); };
 		},
 		_fixEvent: function(evt, sender){
 			// _fixCallback only attaches us to keypress.
@@ -69,9 +65,9 @@ dojo.require("dojo._base.connect");
 			return evt;
 		},
 		_setKeyChar: function(evt){
-			evt.keyChar = (evt.charCode ? String.fromCharCode(evt.charCode) : '');
+			evt.keyChar = evt.charCode ? String.fromCharCode(evt.charCode) : '';
 		}
-	};
+	});
 
 	// DOM events
 	
@@ -127,6 +123,7 @@ dojo.require("dojo._base.connect");
 	// keyCode against these named constants, as the
 	// actual codes can vary by browser.
 	dojo.keys = {
+		// summary: definitions for common key values
 		BACKSPACE: 8,
 		TAB: 9,
 		CLEAR: 12,
@@ -202,7 +199,7 @@ dojo.require("dojo._base.connect");
 		// by default, use the standard listener
 		var iel = dojo._listener;
 		// dispatcher tracking property
-		if(!djConfig._allow_leaks){
+		if(!dojo.config._allow_leaks){
 			// custom listener that handles leak protection for DOM events
 			node_listener = iel = dojo._ie_listener = {
 				// support handler indirection: event handler functions are 
@@ -225,10 +222,10 @@ dojo.require("dojo._base.connect");
 				},
 				// remove a listener from an object
 				remove: function(/*Object*/ source, /*String*/ method, /*Handle*/ handle){
-					var f = (source||dojo.global)[method], l = f&&f._listeners;
+					var f = (source||dojo.global)[method], l = f && f._listeners;
 					if(f && l && handle--){
 						delete ieh[l[handle]];
-						delete l[handle]; 
+						delete l[handle];
 					}
 				}
 			};
@@ -241,28 +238,37 @@ dojo.require("dojo._base.connect");
 				if(!node){return;} // undefined
 				event = del._normalizeEventName(event);
 				if(event=="onkeypress"){
-					// we need to listen to onkeydown to synthesize 
+					// we need to listen to onkeydown to synthesize
 					// keypress events that otherwise won't fire
 					// on IE
 					var kd = node.onkeydown;
-					if(!kd||!kd._listeners||!kd._stealthKeydown){
-						// we simply ignore this connection when disconnecting
-						// because it's side-effects are harmless 
-						del.add(node, "onkeydown", del._stealthKeyDown);
-						// we only want one stealth listener per node
-						node.onkeydown._stealthKeydown = true;
-					} 
+					if(!kd || !kd._listeners || !kd._stealthKeydownHandle){
+						var h = del.add(node, "onkeydown", del._stealthKeyDown);
+						kd = node.onkeydown;
+						kd._stealthKeydownHandle = h;
+						kd._stealthKeydownRefs = 1;
+					}else{
+						kd._stealthKeydownRefs++;
+					}
 				}
 				return iel.add(node, event, del._fixCallback(fp));
 			},
 			remove: function(/*DOMNode*/node, /*String*/event, /*Handle*/handle){
-				iel.remove(node, del._normalizeEventName(event), handle); 
+				event = del._normalizeEventName(event);
+				iel.remove(node, event, handle); 
+				if(event=="onkeypress"){
+					var kd = node.onkeydown;
+					if(--kd._stealthKeydownRefs <= 0){
+						iel.remove(node, "onkeydown", kd._stealthKeydownHandle);
+						delete kd._stealthKeydownHandle;
+					}
+				}
 			},
 			_normalizeEventName: function(/*String*/eventName){
 				// Generally, eventName should be lower case, unless it is
 				// special somehow (e.g. a Mozilla event)
 				// ensure 'on'
-				return (eventName.slice(0,2)!="on" ? "on"+eventName : eventName);
+				return eventName.slice(0,2) != "on" ? "on" + eventName : eventName;
 			},
 			_nop: function(){},
 			_fixEvent: function(/*Event*/evt, /*DOMNode*/sender){
@@ -272,7 +278,7 @@ dojo.require("dojo._base.connect");
 				// evt: native event object
 				// sender: node to treat as "currentTarget"
 				if(!evt){
-					var w = (sender)&&((sender.ownerDocument || sender.document || sender).parentWindow)||window;
+					var w = sender && (sender.ownerDocument || sender.document || sender).parentWindow || window;
 					evt = w.event; 
 				}
 				if(!evt){return(evt);}
@@ -286,7 +292,7 @@ dojo.require("dojo._base.connect");
 				var se = evt.srcElement, doc = (se && se.ownerDocument) || document;
 				// DO NOT replace the following to use dojo.body(), in IE, document.documentElement should be used
 				// here rather than document.body
-				var docBody = ((dojo.isIE<6)||(doc["compatMode"]=="BackCompat")) ? doc.body : doc.documentElement;
+				var docBody = ((dojo.isIE < 6) || (doc["compatMode"] == "BackCompat")) ? doc.body : doc.documentElement;
 				var offset = dojo._getIeDocumentElementOffset();
 				evt.pageX = evt.clientX + dojo._fixIeBiDiScrollLeft(docBody.scrollLeft || 0) - offset.x;
 				evt.pageY = evt.clientY + (docBody.scrollTop || 0) - offset.y;
@@ -342,9 +348,9 @@ dojo.require("dojo._base.connect");
 			_stealthKeyDown: function(evt){
 				// IE doesn't fire keypress for most non-printable characters.
 				// other browsers do, we simulate it here.
-				var kp=evt.currentTarget.onkeypress;
+				var kp = evt.currentTarget.onkeypress;
 				// only works if kp exists and is a dispatcher
-				if(!kp||!kp._listeners)return;
+				if(!kp || !kp._listeners){ return; }
 				// munge key/charCode
 				var k=evt.keyCode;
 				// These are Windows Virtual Key Codes
@@ -352,7 +358,7 @@ dojo.require("dojo._base.connect");
 				var unprintable = (k!=13)&&(k!=32)&&(k!=27)&&(k<48||k>90)&&(k<96||k>111)&&(k<186||k>192)&&(k<219||k>222);
 				// synthesize keypress for most unprintables and CTRL-keys
 				if(unprintable||evt.ctrlKey){
-					var c = (unprintable ? 0 : k);
+					var c = unprintable ? 0 : k;
 					if(evt.ctrlKey){
 						if(k==3 || k==13){
 							return; // IE will post CTRL-BREAK, CTRL-ENTER as keypress natively 
@@ -495,25 +501,25 @@ if(dojo.isIE){
 	// keep this out of the closure
 	// closing over 'iel' or 'ieh' b0rks leak prevention
 	// ls[i] is an index into the master handler array
-	dojo._getIeDispatcher = function(){
-		return function(){
-			var ap=Array.prototype, h=dojo._ie_listener.handlers, c=arguments.callee, ls=c._listeners, t=h[c.target];
-			// return value comes from original target function
-			var r = t && t.apply(this, arguments);
-			// invoke listeners after target function
-			for(var i in ls){
-				if(!(i in ap)){
-					h[ls[i]].apply(this, arguments);
-				}
+	dojo._ieDispatcher = function(args, sender){
+		var ap=Array.prototype, h=dojo._ie_listener.handlers, c=args.callee, ls=c._listeners, t=h[c.target];
+		// return value comes from original target function
+		var r = t && t.apply(sender, args);
+		// invoke listeners after target function
+		for(var i in ls){
+			if(!(i in ap)){
+				h[ls[i]].apply(sender, args);
 			}
-			return r;
 		}
+		return r;
+	}
+	dojo._getIeDispatcher = function(){
+		// ensure the returned function closes over nothing
+		return new Function(dojo._scopeName + "._ieDispatcher(arguments, this)"); // function
 	}
 	// keep this out of the closure to reduce RAM allocation
 	dojo._event_listener._fixCallback = function(fp){
 		var f = dojo._event_listener._fixEvent;
 		return function(e){ return fp.call(this, f(e, this)); };
 	}
-}
-
 }

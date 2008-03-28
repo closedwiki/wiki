@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.collections.tests.Dictionary"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.collections.tests.Dictionary"] = true;
 dojo.provide("dojox.collections.tests.Dictionary");
 dojo.require("dojox.collections.Dictionary");
 
@@ -78,5 +76,3 @@ tests.register("dojox.collections.tests.Dictionary", [
 		t.assertEqual(undefined, d.item("baz"));
 	}
 ]);
-
-}

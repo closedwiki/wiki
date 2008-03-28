@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.validate.tests.creditcard"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.validate.tests.creditcard"] = true;
 dojo.provide("dojox.validate.tests.creditcard");
 dojo.require("dojox.validate.creditCard");
 
@@ -115,5 +113,3 @@ tests.register("dojox.validate.tests.creditcard",
 		}
 	}
 ]);
-
-}

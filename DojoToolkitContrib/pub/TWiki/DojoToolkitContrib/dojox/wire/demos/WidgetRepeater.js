@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.wire.demos.WidgetRepeater"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.wire.demos.WidgetRepeater"] = true;
 dojo.provide("dojox.wire.demos.WidgetRepeater")
 		
 dojo.require("dojo.parser");
@@ -29,5 +27,3 @@ dojo.declare("dojox.wire.demos.WidgetRepeater", [ dijit._Widget, dijit._Template
 		}catch(e){ console.debug(e); }
 	}
 });
-
-}

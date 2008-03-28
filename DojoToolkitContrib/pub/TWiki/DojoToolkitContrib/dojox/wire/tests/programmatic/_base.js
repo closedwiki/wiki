@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.wire.tests.programmatic._base"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.wire.tests.programmatic._base"] = true;
 dojo.provide("dojox.wire.tests.programmatic._base");
 
 dojo.require("dojox.wire._base");
@@ -107,5 +105,3 @@ tests.register("dojox.wire.tests.programmatic._base", [
 	}
 
 ]);
-
-}

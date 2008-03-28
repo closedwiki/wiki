@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.wire._base"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.wire._base"] = true;
 dojo.provide("dojox.wire._base");
 
 dojox.wire._defaultWireClass = "dojox.wire.Wire";
@@ -191,5 +189,3 @@ dojox.wire.disconnect = function(/*Object*/connection){
 		dojo.disconnect(connection.handle);
 	}
 };
-
-}

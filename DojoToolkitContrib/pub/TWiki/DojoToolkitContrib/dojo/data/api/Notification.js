@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojo.data.api.Notification"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojo.data.api.Notification"] = true;
 dojo.provide("dojo.data.api.Notification");
 dojo.require("dojo.data.api.Read");
 
@@ -115,5 +113,3 @@ dojo.declare("dojo.data.api.Notification", dojo.data.api.Read, {
 		throw new Error('Unimplemented API: dojo.data.api.Notification.onDelete');
 	}
 });
-
-}

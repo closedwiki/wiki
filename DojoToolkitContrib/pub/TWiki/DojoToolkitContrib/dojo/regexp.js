@@ -1,6 +1,10 @@
-if(!dojo._hasResource["dojo.regexp"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojo.regexp"] = true;
 dojo.provide("dojo.regexp");
+
+/*=====
+dojo.regexp = {
+	// summary: Regular expressions and Builder resources
+};
+=====*/
 
 dojo.regexp.escapeString = function(/*String*/str, /*String?*/except){
 	//	summary:
@@ -58,6 +62,4 @@ dojo.regexp.group = function(/*String*/expression, /*Boolean?*/nonCapture){
 	//		If true, uses non-capturing match, otherwise matches are retained
 	//		by regular expression. 
 	return "(" + (nonCapture ? "?:":"") + expression + ")"; // String
-}
-
 }

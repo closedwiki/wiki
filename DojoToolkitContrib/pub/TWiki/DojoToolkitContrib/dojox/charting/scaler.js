@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.charting.scaler"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.charting.scaler"] = true;
 dojo.provide("dojox.charting.scaler");
 
 (function(){
@@ -59,7 +57,7 @@ dojo.provide("dojox.charting.scaler");
 			majorPrecision = majorTick ? Math.floor(Math.log(majorTick) / Math.LN10) : 0,
 			minorPrecision = minorTick ? Math.floor(Math.log(minorTick) / Math.LN10) : 0,
 			scale = span / (upperBound - lowerBound);
-		if(isNaN(scale)){ scale = 1; }
+		if(!isFinite(scale)){ scale = 1; }
 		return {
 			bounds: {
 				lower:	lowerBound,
@@ -157,5 +155,3 @@ dojo.provide("dojox.charting.scaler");
 		return micro ? ticks : calcTicks(min, max, h, major, minor, 0, span);	// Object
 	};
 })();
-
-}

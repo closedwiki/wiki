@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.layout.ContentPane"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.layout.ContentPane"] = true;
 dojo.provide("dojox.layout.ContentPane");
 
 dojo.require("dijit.layout.ContentPane");
@@ -221,11 +219,12 @@ dojo.declare("dojox.layout.ContentPane", dijit.layout.ContentPane, {
 	//	description:
 	//		usefull if you send contentpane a complete page, instead of a html fragment
 	//		scans for 
-	//			style nodes, inserts in Document head
-	//			title Node, remove
-	//			DOCTYPE tag, remove
-	//			<!-- *JS code here* -->
-	//			<![CDATA[ *JS code here* ]]>
+	//
+	//			* style nodes, inserts in Document head
+	//			* title Node, remove
+	//			* DOCTYPE tag, remove
+	//			* `<!-- *JS code here* -->`
+	//			* `<![CDATA[ *JS code here* ]]>`
 	cleanContent: false,
 
 	// renderStyles: Boolean
@@ -392,7 +391,7 @@ dojo.declare("dojox.layout.ContentPane", dijit.layout.ContentPane, {
 			// rationale for this block:
 			// if containerNode/domNode is a table derivate tag, some browsers dont allow innerHTML on those
 			var node = (this.containerNode || this.domNode), pre = post = '', walk = 0;
-			switch(name = node.nodeName.toLowerCase()){
+			switch(node.nodeName.toLowerCase()){
 				case 'tr':
 					pre = '<tr>'; post = '</tr>';
 					walk += 1;//fallthrough
@@ -436,7 +435,7 @@ dojo.declare("dojox.layout.ContentPane", dijit.layout.ContentPane, {
 			}
 			if(this.scriptHasHooks){
 				// replace _container_ with dijit.byId(this.id)
-				code = code.replace(/_container_(?!\s*=[^=])/g, "dijit.byId('"+this.id+"')");
+				code = code.replace(/_container_(?!\s*=[^=])/g, dijit._scopeName + ".byId('"+this.id+"')");
 			}
 			try{
 				evalInGlobal(code, (this.containerNode || this.domNode));
@@ -474,5 +473,3 @@ dojo.declare("dojox.layout.ContentPane", dijit.layout.ContentPane, {
 });
 
 })();
-
-}

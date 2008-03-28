@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.collections.tests.Set"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.collections.tests.Set"] = true;
 dojo.provide("dojox.collections.tests.Set");
 dojo.require("dojox.collections.Set");
 
@@ -31,5 +29,3 @@ dojo.require("dojox.collections.Set");
 		}
 	]);
 })();
-
-}

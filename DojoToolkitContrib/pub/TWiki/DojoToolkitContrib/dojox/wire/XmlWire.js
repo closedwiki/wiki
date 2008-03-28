@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.wire.XmlWire"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.wire.XmlWire"] = true;
 dojo.provide("dojox.wire.XmlWire");
 
 dojo.require("dojox.data.dom");
@@ -240,5 +238,3 @@ dojo.declare("dojox.wire.XmlWire", dojox.wire.Wire, {
 		}
 	}
 });
-
-}

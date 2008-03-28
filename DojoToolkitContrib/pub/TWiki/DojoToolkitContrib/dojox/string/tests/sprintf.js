@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.string.tests.sprintf"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.string.tests.sprintf"] = true;
 dojo.provide("dojox.string.tests.sprintf");
 
 dojo.require("dojox.string.sprintf");
@@ -273,5 +271,3 @@ tests.register("dojox.string.tests.sprintf", [
 		}
 	}
 ]);
-
-}

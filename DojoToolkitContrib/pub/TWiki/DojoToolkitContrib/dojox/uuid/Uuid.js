@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.uuid.Uuid"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.uuid.Uuid"] = true;
 dojo.provide("dojox.uuid.Uuid");
 dojo.require("dojox.uuid");
 
@@ -196,5 +194,3 @@ dojox.uuid.Uuid.prototype.getTimestamp = function(/*String?*/ returnType){
 			break;
 	}
 };
-
-}

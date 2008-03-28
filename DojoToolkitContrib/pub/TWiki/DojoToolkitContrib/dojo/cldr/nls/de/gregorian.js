@@ -1,1 +1,37 @@
-({"eraNames": ["v. Chr.", "n. Chr."], "timeFormat-full": "H:mm' Uhr 'z", "eraAbbr": ["v. Chr.", "n. Chr."], "dateFormat-medium": "dd.MM.yyyy", "am": "vorm.", "months-format-abbr": ["Jan", "Feb", "Mrz", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"], "dateFormat-full": "EEEE, d. MMMM yyyy", "days-format-abbr": ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"], "quarters-format-wide": ["1. Quartal", "2. Quartal", "3. Quartal", "4. Quartal"], "pm": "nachm.", "dateFormat-short": "dd.MM.yy", "months-format-wide": ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"], "months-standAlone-narrow": ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"], "days-standAlone-narrow": ["S", "M", "D", "M", "D", "F", "S"], "dateFormat-long": "d. MMMM yyyy", "days-format-wide": ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"], "dateTimeFormats-appendItem-Second": "{0} ({2}: {1})", "field-dayperiod": "Dayperiod", "field-minute": "Minute", "field-weekday": "Day of the Week", "dateTimeFormats-appendItem-Year": "{0} {1}", "field-era": "Era", "field-hour": "Hour", "dateTimeFormats-appendItem-Week": "{0} ({2}: {1})", "dateTimeFormats-appendItem-Timezone": "{0} {1}", "dateTimeFormats-appendItem-Month": "{0} ({2}: {1})", "timeFormat-medium": "HH:mm:ss", "field-zone": "Zone", "dateTimeFormats-appendItem-Minute": "{0} ({2}: {1})", "quarters-format-abbreviated": ["Q1", "Q2", "Q3", "Q4"], "dateTimeFormat": "{1} {0}", "field-year": "Year", "dateTimeFormats-appendItem-Day": "{0} ({2}: {1})", "field-week": "Week", "timeFormat-long": "HH:mm:ss z", "timeFormat-short": "HH:mm", "field-month": "Month", "dateTimeFormats-appendItem-Quarter": "{0} ({2}: {1})", "field-second": "Second", "field-day": "Day", "dateTimeFormats-appendItem-Day-Of-Week": "{0} {1}", "dateTimeFormats-appendItem-Hour": "{0} ({2}: {1})", "dateTimeFormats-appendItem-Era": "{0} {1}"})
+// generated from ldml/main/*.xml, xpath: ldml/calendars/calendar-gregorian
+({
+        'months-format-abbr':["Jan","Feb","Mrz","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Dez"],
+        'months-format-wide':["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"],
+        'months-standAlone-narrow':["J","F","M","A","M","J","J","A","S","O","N","D"],
+        'days-format-abbr':["So","Mo","Di","Mi","Do","Fr","Sa"],
+        'days-format-wide':["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"],
+        'days-standAlone-narrow':["S","M","D","M","D","F","S"],
+        'quarters-format-abbreviated':["Q1","Q2","Q3","Q4"],
+        'quarters-format-wide':["1. Quartal","2. Quartal","3. Quartal","4. Quartal"],
+        'quarters-stand-alone-narrow':["1","2","3","4"],
+        'am':"vorm.",
+        'pm':"nachm.",
+        'eraNames':["v. Chr.","n. Chr."],
+        'eraAbbr':["v. Chr.","n. Chr."],
+        'dateFormat-full': "EEEE, d. MMMM yyyy",
+        'dateFormat-long': "d. MMMM yyyy",
+        'dateFormat-medium': "dd.MM.yyyy",
+        'dateFormat-short': "dd.MM.yy",
+        'timeFormat-full': "HH:mm:ss v",
+        'timeFormat-long': "HH:mm:ss z",
+        'timeFormat-medium': "HH:mm:ss",
+        'timeFormat-short': "HH:mm",
+        'dateTimeAvailableFormats':["E d","H","HH:mm","HH:mm:ss","E MMM d","d. MMMM","dd.MM.","d.M.","mm:ss","MM.yy","MMM yy","Q yy","yyyy","MMMM yyyy"],
+        'field-era':"Epoche",
+        'field-year':"Jahr",
+        'field-month':"Monat",
+        'field-week':"Woche",
+        'field-day':"Tag",
+        'field-weekday':"Wochentag",
+        'field-dayperiod':"Tageshälfte",
+        'field-hour':"Stunde",
+        'field-minute':"Minute",
+        'field-second':"Sekunde",
+        'field-zone':"Zone"
+})
+                        

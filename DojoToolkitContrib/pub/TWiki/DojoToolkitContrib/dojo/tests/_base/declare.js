@@ -1,5 +1,3 @@
-if(!dojo._hasResource["tests._base.declare"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["tests._base.declare"] = true;
 dojo.provide("tests._base.declare");
 
 tests.register("tests._base.declare",
@@ -193,5 +191,3 @@ tests.register("tests._base.declare",
 		//	- multi-level inheritance + L/R conflict checks
 	]
 );
-
-}

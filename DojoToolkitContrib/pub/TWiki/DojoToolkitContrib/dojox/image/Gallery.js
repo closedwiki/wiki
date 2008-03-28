@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.image.Gallery"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.image.Gallery"] = true;
 dojo.provide("dojox.image.Gallery");
 dojo.experimental("dojox.image.Gallery");
 //
@@ -22,7 +20,7 @@ dojo.declare("dojox.image.Gallery",
 	{
 	// summary:
 	//	Gallery widget that wraps a dojox.image.ThumbnailPicker and dojox.image.SlideShow widget
-	
+	//
 	// imageHeight: Number
 	//	Maximum height of an image in the SlideShow widget
 	imageHeight: 375,
@@ -64,18 +62,19 @@ dojo.declare("dojox.image.Gallery",
 	//	time in seconds, between image changes in the slide show.
 	slideshowInterval: 3,
 	
-	templateString:"<div dojoAttachPoint=\"outerNode\" class=\"imageGalleryWrapper\">\n\t<div dojoAttachPoint=\"thumbPickerNode\"></div>\n\t<div dojoAttachPoint=\"slideShowNode\"></div>\n</div>\n", 
+	templatePath: dojo.moduleUrl("dojox.image", "resources/Gallery.html"), 
 
 	postCreate: function(){
 		// summary: Initializes the widget, creates the ThumbnailPicker and SlideShow widgets
 		this.widgetid = this.id;
-		this.inherited("postCreate",arguments)
+		this.inherited(arguments)
 		
 		this.thumbPicker = new dojox.image.ThumbnailPicker({
 			linkAttr: this.linkAttr,
 			imageLargeAttr: this.imageLargeAttr,
 			titleAttr: this.titleAttr,
-			useLoadNotifier: true
+			useLoadNotifier: true,
+			size: this.imageWidth
 		}, this.thumbPickerNode);
 		
 		
@@ -177,5 +176,3 @@ dojo.declare("dojox.image.Gallery",
 		}
 	}
 });
-
-}

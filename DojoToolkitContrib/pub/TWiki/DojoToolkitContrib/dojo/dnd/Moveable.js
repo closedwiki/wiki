@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojo.dnd.Moveable"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojo.dnd.Moveable"] = true;
 dojo.provide("dojo.dnd.Moveable");
 
 dojo.require("dojo.dnd.Mover");
@@ -30,8 +28,8 @@ dojo.declare("dojo.dnd.Moveable", null, {
 		this.events = [
 			dojo.connect(this.handle, "onmousedown", this, "onMouseDown"),
 			// cancel text selection and text dragging
-			dojo.connect(this.node, "ondragstart",   this, "onSelectStart"),
-			dojo.connect(this.node, "onselectstart", this, "onSelectStart")
+			dojo.connect(this.handle, "ondragstart",   this, "onSelectStart"),
+			dojo.connect(this.handle, "onselectstart", this, "onSelectStart")
 		];
 	},
 
@@ -108,7 +106,9 @@ dojo.declare("dojo.dnd.Moveable", null, {
 		// summary: called during every move notification,
 		//	should actually move the node, can be overwritten.
 		this.onMoving(mover, leftTop);
-		dojo.marginBox(mover.node, leftTop);
+		var s = mover.node.style;
+		s.left = leftTop.l + "px";
+		s.top  = leftTop.t + "px";
 		this.onMoved(mover, leftTop);
 	},
 	onMoving: function(/* dojo.dnd.Mover */ mover, /* Object */ leftTop){
@@ -124,5 +124,3 @@ dojo.declare("dojo.dnd.Moveable", null, {
 		// default implementation does nothing
 	}
 });
-
-}

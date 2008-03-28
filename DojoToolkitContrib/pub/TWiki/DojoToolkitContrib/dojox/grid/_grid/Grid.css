@@ -4,6 +4,8 @@
 	font-family: Geneva, Arial, Helvetica, sans-serif;
 	-moz-outline-style: none;
 	outline: none;
+	overflow: hidden;
+	height: 0;
 }
 
 .dojoxGrid table {
@@ -242,4 +244,15 @@
 	left: -1000px;
 	top: -1000px;
 	height: 0px, width: 0px;
+}
+
+.gridArrowButtonChar {
+	display:none !important;
+}
+.dijit_a11y .gridArrowButtonChar {
+	display:inline !important;
+}
+.dijit_a11y .dojoxGrid-sort-down, .dijit_a11y .dojoxGrid-sort-up {
+	margin-left: 0;
+	padding-left: 0;
 }

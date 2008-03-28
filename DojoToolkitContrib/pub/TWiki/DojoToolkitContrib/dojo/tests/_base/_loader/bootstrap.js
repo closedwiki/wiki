@@ -1,5 +1,3 @@
-if(!dojo._hasResource["tests._base._loader.bootstrap"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["tests._base._loader.bootstrap"] = true;
 dojo.provide("tests._base._loader.bootstrap");
 
 tests.register("tests._base._loader.bootstrap", 
@@ -9,10 +7,6 @@ tests.register("tests._base._loader.bootstrap",
 			t.assertTrue("console" in dojo.global);
 			t.assertTrue("assert" in console);
 			t.assertEqual("function", typeof console.assert);
-		},
-
-		function hasDjConfig(t){
-			t.assertTrue("djConfig" in dojo.global);
 		},
 
 		{
@@ -86,5 +80,3 @@ tests.register("tests._base._loader.bootstrap",
 		}
 	]
 );
-
-}

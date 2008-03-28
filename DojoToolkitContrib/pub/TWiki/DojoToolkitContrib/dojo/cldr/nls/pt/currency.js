@@ -1,1 +1,13 @@
-({"EUR_displayName": "Euro", "CHF_displayName": "Franco suíço", "HKD_displayName": "Dólar de Hong Kong", "CAD_displayName": "Dólar canadense", "GBP_displayName": "Libra esterlina britânica", "JPY_displayName": "Iene japonês", "AUD_displayName": "Dólar australiano", "USD_displayName": "Dólar norte-americano", "USD_symbol": "$", "GBP_symbol": "£", "JPY_symbol": "¥", "EUR_symbol": "€"})
+// generated from ldml/main/*.xml, xpath: ldml/numbers/currencies
+({
+	AUD_displayName:"Dólar australiano",
+	CAD_displayName:"Dólar canadense",
+	CHF_displayName:"Franco suíço",
+	CNY_displayName:"Yuan Renminbi chinês",
+	EUR_displayName:"Euro",
+	GBP_displayName:"Libra esterlina britânica",
+	HKD_displayName:"Dólar de Hong Kong",
+	JPY_displayName:"Iene japonês",
+	USD_displayName:"Dólar norte-americano"
+})
+                 

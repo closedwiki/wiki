@@ -1,11 +1,24 @@
-if(!dojo._hasResource["dojox.charting.axis2d.common"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.charting.axis2d.common"] = true;
 dojo.provide("dojox.charting.axis2d.common");
 
 dojo.require("dojox.gfx");
 
 (function(){
 	var g = dojox.gfx;
+	
+	function clearNode(s){
+		s.marginLeft   = "0px";
+		s.marginTop    = "0px";
+		s.marginRight  = "0px";
+		s.marginBottom = "0px";
+		s.paddingLeft   = "0px";
+		s.paddingTop    = "0px";
+		s.paddingRight  = "0px";
+		s.paddingBottom = "0px";
+		s.borderLeftWidth   = "0px";
+		s.borderTopWidth    = "0px";
+		s.borderRightWidth  = "0px";
+		s.borderBottomWidth = "0px";
+	}
 	
 	dojo.mixin(dojox.charting.axis2d.common, {
 		createText: {
@@ -15,44 +28,44 @@ dojo.require("dojox.gfx");
 				}).setFont(font).setFill(fontColor);
 			},
 			html: function(chart, creator, x, y, align, text, font, fontColor){
+				// setup the text node
 				var p = dojo.doc.createElement("div"), s = p.style;
-				s.marginLeft   = "0px";
-				s.marginTop    = "0px";
-				s.marginRight  = "0px";
-				s.marginBottom = "0px";
-				s.paddingLeft   = "0px";
-				s.paddingTop    = "0px";
-				s.paddingRight  = "0px";
-				s.paddingBottom = "0px";
-				s.borderLeftWidth   = "0px";
-				s.borderTopWidth    = "0px";
-				s.borderRightWidth  = "0px";
-				s.borderBottomWidth = "0px";
-				s.position = "absolute";
+				clearNode(s);
 				s.font = font;
 				p.innerHTML = text;
 				s.color = fontColor;
-				chart.node.appendChild(p);
-				var parent = chart.getCoords(), 
-					box = dojo.marginBox(p),
-					size = g.normalizedLength(g.splitFontString(font).size),
-					top = parent.y + Math.floor(y - size);
+				// measure the size
+				s.position = "absolute";
+				s.left = "-10000px";
+				dojo.body().appendChild(p);
+				var size = g.normalizedLength(g.splitFontString(font).size),
+					box = dojo.marginBox(p);
+				// new settings for the text node
+				dojo.body().removeChild(p);
+				s.position = "relative";
 				switch(align){
 					case "middle":
-						dojo.marginBox(p, {l: parent.x + Math.floor(x - box.w / 2), t: top});
+						s.left = Math.floor(x - box.w / 2) + "px";
 						break;
 					case "end":
-						dojo.marginBox(p, {l: parent.x + Math.floor(x - box.w), t: top});
+						s.left = Math.floor(x - box.w) + "px";
 						break;
 					//case "start":
 					default:
-						dojo.marginBox(p, {l: parent.x + Math.floor(x), t: top});
+						s.left = Math.floor(x) + "px";
 						break;
 				}
+				s.top = Math.floor(y - size) + "px";
+				// setup the wrapper node
+				var wrap = dojo.doc.createElement("div"), w = wrap.style;
+				clearNode(w);
+				w.width = "0px";
+				w.height = "0px";
+				// insert nodes
+				wrap.appendChild(p)
+				chart.node.insertBefore(wrap, chart.node.firstChild);
 				return p;
 			}
 		}
 	});
 })();
-
-}

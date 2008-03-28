@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.validate.web"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.validate.web"] = true;
 dojo.provide("dojox.validate.web");
 dojo.require("dojox.validate._base");
 
@@ -84,6 +82,4 @@ dojox.validate.getEmailAddressList = function(/*String*/value, /*Object?*/flags)
 		return value.split(new RegExp("\\s*[" + flags.listSeparator + "]\\s*")); // Array
 	}
 	return []; // Array
-}
-
 }

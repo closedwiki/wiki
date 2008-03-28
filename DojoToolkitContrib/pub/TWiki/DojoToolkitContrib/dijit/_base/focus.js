@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dijit._base.focus"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dijit._base.focus"] = true;
 dojo.provide("dijit._base.focus");
 
 // summary:
@@ -31,7 +29,7 @@ dojo.mixin(dijit,
 		var _document = dojo.doc;
 		if(_document.selection){ // IE
 			return !_document.selection.createRange().text; // Boolean
-		}else if(_window.getSelection){
+		}else{
 			var selection = _window.getSelection();
 			if(dojo.isString(selection)){ // Safari
 				return !selection; // Boolean
@@ -47,19 +45,27 @@ dojo.mixin(dijit,
 		if(selection){ // IE
 			var range = selection.createRange();
 			if(selection.type.toUpperCase()=='CONTROL'){
-				bookmark = range.length ? dojo._toArray(range) : null;
+				if(range.length){
+					bookmark=[];
+					var i=0,len=range.length;
+					while(i<len){
+						bookmark.push(range.item(i++));
+					}
+				}else{
+					bookmark=null;
+				}
 			}else{
 				bookmark = range.getBookmark();
 			}
 		}else{
-			if(dojo.global.getSelection){
+			if(window.getSelection){
 				selection = dojo.global.getSelection();
 				if(selection){
-					var range = selection.getRangeAt(0);
+					range = selection.getRangeAt(0);
 					bookmark = range.cloneRange();
 				}
 			}else{
-				console.debug("No idea how to store the current selection for this browser!");
+				console.warn("No idea how to store the current selection for this browser!");
 			}
 		}
 		return bookmark; // Array
@@ -67,13 +73,13 @@ dojo.mixin(dijit,
 
 	moveToBookmark: function(/*Object*/bookmark){
 		// summary: Moves current selection to a bookmark
-		// bookmark: this should be a returned object from dojo.html.selection.getBookmark()
+		// bookmark: This should be a returned object from dojo.html.selection.getBookmark()
 		var _document = dojo.doc;
 		if(_document.selection){ // IE
 			var range;
 			if(dojo.isArray(bookmark)){
 				range = _document.body.createControlRange();
-				dojo.forEach(bookmark, range.addElement);
+				dojo.forEach(bookmark, "range.addElement(item)"); //range.addElement does not have call/apply method, so can not call it directly
 			}else{
 				range = _document.selection.createRange();
 				range.moveToBookmark(bookmark);
@@ -85,25 +91,25 @@ dojo.mixin(dijit,
 				selection.removeAllRanges();
 				selection.addRange(bookmark);
 			}else{
-				console.debug("No idea how to restore selection for this browser!");
+				console.warn("No idea how to restore selection for this browser!");
 			}
 		}
 	},
 
-	getFocus: function(/*Widget*/menu, /*Window*/ openedForWindow){
+	getFocus: function(/*Widget?*/menu, /*Window?*/openedForWindow){
 		// summary:
 		//	Returns the current focus and selection.
 		//	Called when a popup appears (either a top level menu or a dialog),
 		//	or when a toolbar/menubar receives focus
 		//
 		// menu:
-		//	the menu that's being opened
+		//	The menu that's being opened
 		//
 		// openedForWindow:
 		//	iframe in which menu was opened
 		//
 		// returns:
-		//	a handle to restore focus/selection
+		//	A handle to restore focus/selection
 
 		return {
 			// Node to return focus to
@@ -155,14 +161,15 @@ dojo.mixin(dijit,
 				openedForWindow.focus();
 			}
 			try{
-				dojo.withGlobal(openedForWindow||dojo.global, moveToBookmark, null, [bookmark]);
+				dojo.withGlobal(openedForWindow||dojo.global, dijit.moveToBookmark, null, [bookmark]);
 			}catch(e){
 				/*squelch IE internal error, see http://trac.dojotoolkit.org/ticket/1984 */
 			}
 		}
 	},
 
-	// List of currently active widgets (focused widget and it's ancestors)
+	// _activeStack: Array
+	//		List of currently active widgets (focused widget and it's ancestors)
 	_activeStack: [],
 
 	registerWin: function(/*Window?*/targetWindow){
@@ -175,7 +182,7 @@ dojo.mixin(dijit,
 			targetWindow = window;
 		}
 
-		dojo.connect(targetWindow.document, "onmousedown", null, function(evt){
+		dojo.connect(targetWindow.document, "onmousedown", function(evt){
 			dijit._justMouseDowned = true;
 			setTimeout(function(){ dijit._justMouseDowned = false; }, 0);
 			dijit._onTouchNode(evt.target||evt.srcElement);
@@ -209,11 +216,6 @@ dojo.mixin(dijit,
 		dijit._prevFocus = dijit._curFocus;
 		dijit._curFocus = null;
 
-		var w = dijit.getEnclosingWidget(node);
-		if (w && w._setStateClass){
-			w._focused = false;
-			w._setStateClass();
-		}
 		if(dijit._justMouseDowned){
 			// the mouse down caused a new widget to be marked as active; this blur event
 			// is coming late, so ignore it.
@@ -225,11 +227,14 @@ dojo.mixin(dijit,
 			clearTimeout(dijit._clearActiveWidgetsTimer);
 		}
 		dijit._clearActiveWidgetsTimer = setTimeout(function(){
-			delete dijit._clearActiveWidgetsTimer; dijit._setStack([]); }, 100);
+			delete dijit._clearActiveWidgetsTimer;
+			dijit._setStack([]);
+			dijit._prevFocus = null;
+		}, 100);
 	},
 
 	_onTouchNode: function(/*DomNode*/ node){
-		// summary
+		// summary:
 		//		Callback when node is focused or mouse-downed
 
 		// ignore the recent blurNode event
@@ -251,8 +256,8 @@ dojo.mixin(dijit,
 						break;
 					}
 					// otherwise, find the iframe this node refers to (can't access it via parentNode,
-					// need to do this trick instead) and continue tracing up the document
-					node=dojo.query("iframe").filter(function(iframe){ return iframe.contentDocument.body===node; })[0];
+					// need to do this trick instead). window.frameElement is supported in IE/FF/Webkit
+					node=dijit.getDocumentWindow(node.ownerDocument).frameElement;
 				}else{
 					var id = node.getAttribute && node.getAttribute("widgetId");
 					if(id){
@@ -273,17 +278,13 @@ dojo.mixin(dijit,
 			return;
 		}
 		dijit._onTouchNode(node);
+
 		if(node==dijit._curFocus){ return; }
-		dijit._prevFocus = dijit._curFocus;
+		if(dijit._curFocus){
+			dijit._prevFocus = dijit._curFocus;
+		}
 		dijit._curFocus = node;
 		dojo.publish("focusNode", [node]);
-
-		// handle focus/blur styling
-		var w = dijit.getEnclosingWidget(node);
-		if (w && w._setStateClass){
-			w._focused = true;
-			w._setStateClass();
-		}
 	},
 
 	_setStack: function(newStack){
@@ -304,21 +305,30 @@ dojo.mixin(dijit,
 		for(var i=oldStack.length-1; i>=nCommon; i--){
 			var widget = dijit.byId(oldStack[i]);
 			if(widget){
-				dojo.publish("widgetBlur", [widget]);
+				widget._focused = false;
+				widget._hasBeenBlurred = true;
 				if(widget._onBlur){
 					widget._onBlur();
 				}
+				if (widget._setStateClass){
+					widget._setStateClass();
+				}
+				dojo.publish("widgetBlur", [widget]);
 			}
 		}
 
 		// for all element that have come into focus, send focus event
-		for(var i=nCommon; i<newStack.length; i++){
-			var widget = dijit.byId(newStack[i]);
+		for(i=nCommon; i<newStack.length; i++){
+			widget = dijit.byId(newStack[i]);
 			if(widget){
-				dojo.publish("widgetFocus", [widget]);
+				widget._focused = true;
 				if(widget._onFocus){
 					widget._onFocus();
 				}
+				if (widget._setStateClass){
+					widget._setStateClass();
+				}
+				dojo.publish("widgetFocus", [widget]);
 			}
 		}
 	}
@@ -326,5 +336,3 @@ dojo.mixin(dijit,
 
 // register top window and all the iframes it contains
 dojo.addOnLoad(dijit.registerWin);
-
-}

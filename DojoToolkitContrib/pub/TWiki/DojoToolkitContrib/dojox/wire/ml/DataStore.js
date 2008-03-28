@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.wire.ml.DataStore"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.wire.ml.DataStore"] = true;
 dojo.provide("dojox.wire.ml.DataStore");
 
 dojo.require("dijit._Widget");
@@ -112,5 +110,3 @@ dojo.declare("dojox.wire.ml.DataStore", dijit._Widget, {
 		return this.store.revert(); //Boolean
 	}
 });
-
-}

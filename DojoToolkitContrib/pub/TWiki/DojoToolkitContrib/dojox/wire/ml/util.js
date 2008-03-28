@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.wire.ml.util"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.wire.ml.util"] = true;
 dojo.provide("dojox.wire.ml.util");
 
 dojo.require("dojox.data.dom");
@@ -291,5 +289,3 @@ dojo.declare("dojox.wire.ml.XmlElement", null, {
 		}
 	}
 });
-
-}

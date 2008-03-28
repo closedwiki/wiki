@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.gfx.path"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.gfx.path"] = true;
 dojo.provide("dojox.gfx.path");
 
 dojo.require("dojox.gfx.shape");
@@ -58,8 +56,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 	_updateWithSegment: function(segment){
 		// summary: updates the bounding box of path with new segment
 		// segment: Object: a segment
-		var n = segment.args;
-		var l = n.length;
+		var n = segment.args, l = n.length;
 		// update internal variables: bbox, absolute, last
 		switch(segment.action){
 			case "M":
@@ -158,8 +155,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 		if(typeof this.shape.path == "string"){
 			this.shape.path += path.join("");
 		}else{
-			var l = path.length;
-			var a = this.shape.path;
+			var l = path.length, a = this.shape.path;
 			for(var i = 0; i < l; ++i){
 				a.push(path[i]);
 			}
@@ -288,12 +284,11 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 		this.last = {};
 		if(!p) return;
 		// create segments
-		var action = "";	// current action
-		var args = [];		// current arguments
-		var l = p.length;
+		var action = "",	// current action
+			args = [],		// current arguments
+			l = p.length;
 		for(var i = 0; i < l; ++i){
-			var t = p[i];
-			var x = parseFloat(t);
+			var t = p[i], x = parseFloat(t);
 			if(isNaN(x)){
 				if(action){
 					this._pushSegment(action, args);
@@ -309,7 +304,7 @@ dojo.declare("dojox.gfx.path.Path", dojox.gfx.Shape, {
 	setShape: function(newShape){
 		// summary: forms a path using a shape
 		// newShape: Object: an SVG path string or a path object (see dojox.gfx.defaultPath)
-		this.shape = dojox.gfx.makeParameters(this.shape, typeof newShape == "string" ? {path: newShape} : newShape);
+		dojox.gfx.Shape.prototype.setShape.call(this, typeof newShape == "string" ? {path: newShape} : newShape);
 		var path = this.shape.path;
 		// switch to non-updating version of path building
 		this.shape.path = [];
@@ -336,12 +331,20 @@ dojo.declare("dojox.gfx.path.TextPath", dojox.gfx.path.Path, {
 			this.fontStyle = dojo.clone(dojox.gfx.defaultFont);
 		}
 	},
+	getText: function(){
+		// summary: returns the current text object or null
+		return this.text;	// Object
+	},
 	setText: function(newText){
 		// summary: sets a text to be drawn along the path
 		this.text = dojox.gfx.makeParameters(this.text, 
 			typeof newText == "string" ? {text: newText} : newText);
 		this._setText();
 		return this;	// self
+	},
+	getFont: function(){
+		// summary: returns the current font object or null
+		return this.fontStyle;	// Object
 	},
 	setFont: function(newFont){
 		// summary: sets a font for text
@@ -352,5 +355,3 @@ dojo.declare("dojox.gfx.path.TextPath", dojox.gfx.path.Path, {
 		return this;	// self
 	}
 });
-
-}

@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.color._base"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.color._base"] = true;
 dojo.provide("dojox.color._base");
 dojo.require("dojo.colors");
 
@@ -193,5 +191,3 @@ dojo.extend(dojox.color.Color, {
 		return { h:h, s:Math.round(s*100), v:Math.round(max*100) };	//	Object
 	}
 });
-
-}

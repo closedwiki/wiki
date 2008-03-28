@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.data.HtmlTableStore"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.data.HtmlTableStore"] = true;
 dojo.provide("dojox.data.HtmlTableStore");
 
 dojo.require("dojox.data.dom");
@@ -8,6 +6,7 @@ dojo.require("dojo.data.util.filter");
 
 dojo.declare("dojox.data.HtmlTableStore", null, {
 	constructor: function(/*Object*/args){
+		dojo.deprecated("dojox.data.HtmlTableStore", "Please use dojox.data.HtmlStore");
 		//	summary:
 		//		Initializer for the HTML table store.  
 		//	description:
@@ -104,7 +103,7 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 		//		Returns the index (column) that the attribute resides in the row.
 		if(typeof attribute !== "string"){ 
 			throw new Error("dojo.data.HtmlTableStore: a function was passed an attribute argument that was not an attribute name string");
-			return;
+			return -1;
 		}
 		return dojo.indexOf(this._headings, attribute); //int
 	},
@@ -302,8 +301,10 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 			//See if there are any string values that can be regexp parsed first to avoid multiple regexp gens on the
 			//same value for each item examined.  Much more efficient.
 			var regexpList = {};
-			for(var key in request.query){
-				var value = request.query[key]+'';
+                        var value;
+                        var key;
+			for(key in request.query){
+				value = request.query[key]+'';
 				if(typeof value === "string"){
 					regexpList[key] = dojo.data.util.filter.patternToRegExp(value, ignoreCase);
 				}
@@ -312,8 +313,8 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 			for(var i = 0; i < arrayOfAllItems.length; ++i){
 				var match = true;
 				var candidateItem = arrayOfAllItems[i];
-				for(var key in request.query){
-					var value = request.query[key]+'';
+				for(key in request.query){
+					value = request.query[key]+'';
 					if (!this._containsValue(candidateItem, key, value, regexpList[key])){
 						match = false;
 					}
@@ -392,7 +393,8 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 		//		See dojo.data.api.Identity.fetchItemByIdentity()
 		var identity = keywordArgs.identity;
 		var self = this;
-		var item = null
+		var item = null;
+                var scope = null;
 
 		if(!this._rootNode){
 			if(!this.url){
@@ -403,7 +405,7 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 				}
 				item = this._rootNode.rows[identity+1];
 				if (keywordArgs.onItem){
-					var scope = keywordArgs.scope?keywordArgs.scope:dojo.global;
+					scope = keywordArgs.scope?keywordArgs.scope:dojo.global;
 					keywordArgs.onItem.call(scope, item);
 				}
 
@@ -412,7 +414,6 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 						url: this.url,
 						handleAs: "text"
 					};
-				var self = this;
 				var getHandler = dojo.xhrGet(getArgs);
 				getHandler.addCallback(function(data){
 					var findNode = function(node, id){
@@ -438,13 +439,13 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 					}
 					item = self._rootNode.rows[identity+1];
 					if (keywordArgs.onItem){
-						var scope = keywordArgs.scope?keywordArgs.scope:dojo.global;
+						scope = keywordArgs.scope?keywordArgs.scope:dojo.global;
 						keywordArgs.onItem.call(scope, item);
 					}
 				});
 				getHandler.addErrback(function(error){
 					if(keywordArgs.onError){
-						var scope = keywordArgs.scope?keywordArgs.scope:dojo.global;
+						scope = keywordArgs.scope?keywordArgs.scope:dojo.global;
 						keywordArgs.onError.call(scope, error);
 
 					}
@@ -454,7 +455,7 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 			if(this._rootNode.rows[identity+1]){
 				item = this._rootNode.rows[identity+1];
 				if (keywordArgs.onItem){
-					var scope = keywordArgs.scope?keywordArgs.scope:dojo.global;
+					scope = keywordArgs.scope?keywordArgs.scope:dojo.global;
 					keywordArgs.onItem.call(scope, item);
 				}
 			}
@@ -462,5 +463,3 @@ dojo.declare("dojox.data.HtmlTableStore", null, {
 	}
 });
 dojo.extend(dojox.data.HtmlTableStore,dojo.data.util.simpleFetch);
-
-}

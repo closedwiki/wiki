@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.data.demos.widgets.PicasaViewList"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.data.demos.widgets.PicasaViewList"] = true;
 dojo.provide("dojox.data.demos.widgets.PicasaViewList");
 dojo.require("dijit._Templated");
 dojo.require("dijit._Widget");
@@ -8,7 +6,7 @@ dojo.require("dojox.data.demos.widgets.PicasaView");
 dojo.declare("dojox.data.demos.widgets.PicasaViewList", [dijit._Widget, dijit._Templated], {
 	//Simple demo widget that is just a list of PicasaView Widgets.
 
-	templateString:"<div dojoAttachPoint=\"list\"></div>\n\n",
+	templatePath: dojo.moduleUrl("dojox", "data/demos/widgets/templates/PicasaViewList.html"),
 
 	//Attach points for reference.
 	listNode: null,
@@ -33,5 +31,3 @@ dojo.declare("dojox.data.demos.widgets.PicasaViewList", [dijit._Widget, dijit._T
 		 this.list.appendChild(newView.domNode);
 	}
 });
-
-}

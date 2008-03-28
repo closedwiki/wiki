@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.charting._color"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.charting._color"] = true;
 dojo.provide("dojox.charting._color");
 
 dojox.charting._color={};
@@ -58,5 +56,3 @@ dojox.charting._color.toHsb=function(/* int|Object|dojo.Color */ red, /* int? */
 		hue:hue, saturation:saturation, brightness:brightness
 	};	//	Object
 };
-
-}

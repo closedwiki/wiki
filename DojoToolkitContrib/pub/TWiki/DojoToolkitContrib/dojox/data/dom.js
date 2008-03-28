@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.data.dom"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.data.dom"] = true;
 dojo.provide("dojox.data.dom");
 
 //DOM type to int value for reference.
@@ -183,5 +181,3 @@ dojox.data.dom.innerXML = function(/*Node*/node){
 	}
 }
 
-
-}

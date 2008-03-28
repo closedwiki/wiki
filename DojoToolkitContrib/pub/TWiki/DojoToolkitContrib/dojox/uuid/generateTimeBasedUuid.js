@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.uuid.generateTimeBasedUuid"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.uuid.generateTimeBasedUuid"] = true;
 dojo.provide("dojox.uuid.generateTimeBasedUuid");
 
 dojox.uuid.generateTimeBasedUuid = function(/*String?*/ node){
@@ -286,5 +284,3 @@ dojox.uuid.generateTimeBasedUuid._generator = new function(){
 	}
 
 }();
-
-}

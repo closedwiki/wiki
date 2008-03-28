@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.widget.ColorPicker"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.widget.ColorPicker"] = true;
 dojo.provide("dojox.widget.ColorPicker");
 dojo.experimental("dojox.widget.ColorPicker"); // level: prototype
 
@@ -58,7 +56,7 @@ dojo.declare("dojox.widget.ColorPicker",
 	slideDuration: 250, 
 
 	_underlay: dojo.moduleUrl("dojox.widget","ColorPicker/images/underlay.png"),
-	templateString:"<div class=\"dojoxColorPicker\">\n\t<div class=\"dojoxColorPickerBox\">\n\t\t<div dojoAttachPoint=\"cursorNode\" class=\"dojoxColorPickerPoint\"></div>\n\t\t<img dojoAttachPoint=\"colorUnderlay\" dojoAttachEvent=\"onclick: _setPoint\" class=\"dojoxColorPickerUnderlay\" src=\"${_underlay}\">\n\t</div>\n\t<div class=\"dojoxHuePicker\">\n\t\t<div dojoAttachPoint=\"hueCursorNode\" class=\"dojoxHuePickerPoint\"></div>\n\t\t<div dojoAttachPoint=\"hueNode\" class=\"dojoxHuePickerUnderlay\" dojoAttachEvent=\"onclick: _setHuePoint\"></div>\n\t</div>\n\t<div dojoAttachPoint=\"previewNode\" class=\"dojoxColorPickerPreview\"></div>\n\t<div dojoAttachPoint=\"safePreviewNode\" class=\"dojoxColorPickerWebSafePreview\"></div>\n\t<div class=\"dojoxColorPickerOptional\">\n\t\t<div class=\"dijitInline dojoxColorPickerRgb\" dojoAttachPoint=\"rgbNode\">\n\t\t\t<table>\n\t\t\t<tr><td>r</td><td><input dojoAttachPoint=\"Rval\" size=\"1\"></td></tr>\n\t\t\t<tr><td>g</td><td><input dojoAttachPoint=\"Gval\" size=\"1\"></td></tr>\n\t\t\t<tr><td>b</td><td><input dojoAttachPoint=\"Bval\" size=\"1\"></td></tr>\n\t\t\t</table>\n\t\t</div>\n\t\t<div class=\"dijitInline dojoxColorPickerHsv\" dojoAttachPoint=\"hsvNode\">\n\t\t\t<table>\n\t\t\t<tr><td>h</td><td><input dojoAttachPoint=\"Hval\"size=\"1\"> &deg;</td></tr>\n\t\t\t<tr><td>s</td><td><input dojoAttachPoint=\"Sval\" size=\"1\"> %</td></tr>\n\t\t\t<tr><td>v</td><td><input dojoAttachPoint=\"Vval\" size=\"1\"> %</td></tr>\n\t\t\t</table>\n\t\t</div>\n\t\t<div class=\"dojoxColorPickerHex\" dojoAttachPoint=\"hexNode\">\t\n\t\t\thex: <input dojoAttachPoint=\"hexCode, focusNode\" size=\"6\" class=\"dojoxColorPickerHexCode\">\n\t\t</div>\n\t</div>\n</div>\n",
+	templatePath: dojo.moduleUrl("dojox.widget","ColorPicker/ColorPicker.html"),
 
 	postCreate: function(){
 		// summary: As quickly as we can, set up ie6 alpha-filter support for our
@@ -66,7 +64,7 @@ dojo.declare("dojox.widget.ColorPicker",
 		//	of this widget: the underlay. 
 		if(dojo.isIE && dojo.isIE<7){ 
 			this.colorUnderlay.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+this._underlay+"', sizingMethod='scale')";
-			this.colorUnderlay.src = dojo.moduleUrl("dojox.widget","FisheyeList/blank.gif").toString();
+			this.colorUnderlay.src = dojo.moduleUrl("dojo","resources/blank.gif").toString();
 		}
 		// hide toggle-able nodes:
 		if (!this.showRgb){ this.rgbNode.style.display = "none"; }
@@ -280,5 +278,3 @@ dojo.declare("dojox.widget.ColorPicker",
 		return [r, g, b];
 	}
 });
-
-}

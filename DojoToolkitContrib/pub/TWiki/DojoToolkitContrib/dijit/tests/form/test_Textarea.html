@@ -3,6 +3,12 @@
 <html>
 	<head>
 		<title>Dojo Textarea Widget Demo</title>
+
+		<style type="text/css">
+			@import "../../../dojo/resources/dojo.css";
+			@import "../css/dijitTests.css";
+		</style>
+
 		<script type="text/javascript" src="../../../dojo/dojo.js"
 			djConfig="isDebug: true, parseOnLoad: true"></script>
 		<script type="text/javascript" src="../_testCommon.js"></script>
@@ -11,21 +17,18 @@
 			dojo.require("dijit.form.Textarea");
 			dojo.require("dojo.parser");
 		</script>
-		<style type="text/css">
-			@import "../../../dojo/resources/dojo.css";
-			@import "../css/dijitTests.css";
-		</style>
-
 	</head>
 	<body>
 		<h2 class="pageSubContentTitle">Test Auto-sizing Textarea Widget</h2>
 
+		<!--    to test form submission, you'll need to create an action handler similar to
+		        http://www.utexas.edu/teamweb/cgi-bin/generic.cgi -->
 		<form id="form1" action="" name="example" method="post">
-		<textarea name="plainTextArea" rows=5>
+		<label for="plain">HTML textarea: </label><textarea name="plainTextArea" id="plain" rows=5>
 			this is a plain text area
 			for comparison
 		</textarea>
-		<br><textarea id="programmatic"></textarea>
+		<br><label for="programmatic">programmatically created:</label> <textarea id="programmatic"></textarea>
 		<script type="text/javascript">
 			// See if we can make a widget in script
 			dojo.addOnLoad(function(){
@@ -37,8 +40,18 @@
 				w.setValue('we will create this one programatically');
 			});
 		</script>
-		<div name="simpleTextArea" dojoType="dijit.form.Textarea" style="width:33%;border:20px solid red;"
+		<br><label for="simple">Inline:</label><div name="simpleTextArea" dojoType="dijit.form.Textarea" id="simple" style="width:33%;border:20px solid red;"
+         		onChange="dojo.byId('ocSimple').value=arguments[0]"
+         		onFocus="console.log('user focus handler')"
+         		onBlur="console.log('user blur handler')"
 			>this is a very simple resizable text area</div>
+		onChange:<textarea id="ocSimple" readOnly>not fired yet!</textarea>
+		<br>
+		<input type="button" onclick="dijit.byId('simple').setAttribute('readOnly',false);" value="Remove readOnly">
+		<input type="button" onclick="dijit.byId('simple').setAttribute('readOnly',true);" value="Set readOnly">
+		<input type="button" onclick="dijit.byId('simple').setAttribute('disabled',true);" value="Disable">
+		<input type="button" onclick="dijit.byId('simple').setAttribute('disabled',false);" value="Enable">
+		<br>
 		<textarea dojoType="dijit.form.Textarea" name="largeTextArea">
 this is a textarea with a LOT of content
 

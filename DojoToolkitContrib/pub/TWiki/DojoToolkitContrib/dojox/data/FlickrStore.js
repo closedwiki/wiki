@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.data.FlickrStore"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.data.FlickrStore"] = true;
 dojo.provide("dojox.data.FlickrStore");
 
 dojo.require("dojo.data.util.simpleFetch");
@@ -253,5 +251,3 @@ if (!jsonFlickrFeed) {
 	var jsonFlickrFeed = function(data){};
 }
 
-
-}

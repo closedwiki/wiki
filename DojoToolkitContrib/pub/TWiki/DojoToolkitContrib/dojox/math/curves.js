@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.math.curves"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.math.curves"] = true;
 dojo.provide("dojox.math.curves");
 
 dojo.mixin(dojox.math.curves, {
@@ -189,5 +187,3 @@ dojo.mixin(dojox.math.curves, {
 		return this;
 	}
 });
-
-}

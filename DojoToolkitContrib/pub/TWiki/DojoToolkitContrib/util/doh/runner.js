@@ -264,7 +264,7 @@ doh.extend(doh.Deferred, {
 		var res = this.results[fired];
 		var self = this;
 		var cb = null;
-		while (chain.length > 0 && this.paused == 0) {
+		while (chain.length > 0 && this.paused == 0){
 			// Array
 			var pair = chain.shift();
 			var f = pair[fired];
@@ -328,7 +328,7 @@ doh.registerTestNs = function(/*String*/ group, /*Object*/ ns){
 	//		fixtures (setUp(), tearDown(), and runTest()), please use
 	//		registerTest() or registerTests().
 	for(var x in ns){
-		if(	(x.charAt(0) == "_") &&
+		if(	(x.charAt(0) != "_") &&
 			(typeof ns[x] == "function") ){
 			this.registerTest(group, ns[x]);
 		}
@@ -537,10 +537,10 @@ doh.e = doh.assertError = function(/*Error object*/expectedError, /*Object*/scop
 		if(e instanceof expectedError){
 			return true;
 		}else{
-			throw new doh._AssertFailure("assertError() failed: expected error |"+expectedError+"| but got |"+e+"|");
+			throw new doh._AssertFailure("assertError() failed:\n\texpected error\n\t\t"+expectedError+"\n\tbut got\n\t\t"+e+"\n\n");
 		}
 	}
-	throw new doh._AssertFailure("assertError() failed: expected error |"+expectedError+"| but no error caught.");
+	throw new doh._AssertFailure("assertError() failed:\n\texpected error\n\t\t"+expectedError+"\n\tbut no error caught\n\n");
 }
 
 
@@ -568,7 +568,7 @@ doh.is = doh.assertEqual = function(/*Object*/ expected, /*Object*/ actual){
 		(this._objPropEq(expected, actual)) ){
 		return true;
 	}
-	throw new doh._AssertFailure("assertEqual() failed: expected |"+expected+"| but got |"+actual+"|");
+	throw new doh._AssertFailure("assertEqual() failed:\n\texpected\n\t\t"+expected+"\n\tbut got\n\t\t"+actual+"\n\n");
 }
 
 doh._arrayEq = function(expected, actual){
@@ -581,6 +581,16 @@ doh._arrayEq = function(expected, actual){
 }
 
 doh._objPropEq = function(expected, actual){
+	if(expected instanceof Date){
+		return actual instanceof Date && expected.getTime()==actual.getTime();
+	}
+	// Make sure ALL THE SAME properties are in both objects!
+	for(var x in actual){ // Lets check "actual" here, expected is checked below.
+		if(expected[x] === undefined){
+			return false;
+		}
+	};
+
 	for(var x in expected){
 		if(!doh.assertEqual(expected[x], actual[x])){
 			return false;
@@ -590,7 +600,7 @@ doh._objPropEq = function(expected, actual){
 }
 
 doh._isArray = function(it){
-	return (it && it instanceof Array || typeof it == "array" || ((typeof dojo["NodeList"] != "undefined") && (it instanceof dojo.NodeList)));
+	return (it && it instanceof Array || typeof it == "array" || (dojo["NodeList"] !== undefined && it instanceof dojo.NodeList));
 }
 
 //
@@ -624,6 +634,12 @@ doh._handleFailure = function(groupName, fixture, e){
 	}else{
 		this.debug("\tERROR IN:\n\t\t", fixture.runTest);
 	}
+
+	if(e.rhinoException){
+		e.rhinoException.printStackTrace();
+	}else if(e.javaException){
+		e.javaException.printStackTrace();
+	} 
 }
 
 try{
@@ -924,8 +940,9 @@ tests = doh;
 				dojo.forEach(testModule.split(","), dojo.require, dojo);
 			}
 		}catch(e){
+			print("An exception occurred: " + e);
 		}
 
 		doh.run();
 	}
-})();
+}).apply(this, typeof arguments != "undefined" ? arguments : [null]);

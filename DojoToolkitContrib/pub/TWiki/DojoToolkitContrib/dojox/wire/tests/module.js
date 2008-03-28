@@ -1,6 +1,4 @@
-if(!dojo._hasResource["dojox.tests.module"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.tests.module"] = true;
-dojo.provide("dojox.tests.module");
+dojo.provide("dojox.wire.tests.module");
 
 try{
 	dojo.require("dojox.wire.tests.wire");
@@ -9,5 +7,3 @@ try{
 	doh.debug(e);
 }
 
-
-}

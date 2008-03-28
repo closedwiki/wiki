@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.encoding.bits"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.encoding.bits"] = true;
 dojo.provide("dojox.encoding.bits");
 
 dojox.encoding.bits.OutputStream = function(){
@@ -64,5 +62,3 @@ dojo.extend(dojox.encoding.bits.InputStream, {
 		return this.width - this.bbyte * 8 - this.bit;
 	}
 });
-
-}

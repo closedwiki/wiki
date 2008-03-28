@@ -1,10 +1,9 @@
-if(!dojo._hasResource["dojox.grid._data.dijitEditors"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.grid._data.dijitEditors"] = true;
 dojo.provide("dojox.grid._data.dijitEditors");
 dojo.require("dojox.grid._data.editors");
 dojo.require("dijit.form.DateTextBox");
 dojo.require("dijit.form.TimeTextBox");
 dojo.require("dijit.form.ComboBox");
+dojo.require("dojo.data.ItemFileReadStore");
 dojo.require("dijit.form.CheckBox");
 dojo.require("dijit.form.TextBox");
 dojo.require("dijit.form.NumberSpinner");
@@ -121,6 +120,16 @@ dojo.declare("dojox.grid.editors.CheckBox", dojox.grid.editors.Dijit, {
 	editorClass: "dijit.form.CheckBox",
 	getValue: function(){
 		return this.editor.checked;
+	},
+	setValue: function(inRowIndex, inValue){
+		if(this.editor&&this.editor.setAttribute){
+			this.editor.setAttribute("checked", inValue);
+		}else{
+			this.inherited(arguments);
+		}
+	},
+	sizeEditor: function(inNode, inDatum, inRowIndex){
+		return;
 	}
 });
 
@@ -148,5 +157,3 @@ dojo.declare("dojox.grid.editors.Editor", dojox.grid.editors.Dijit, {
 		}
 	}
 });
-
-}

@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.gfx3d.vector"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.gfx3d.vector"] = true;
 dojo.provide("dojox.gfx3d.vector");
 
 dojo.mixin(dojox.gfx3d.vector, {
@@ -106,5 +104,3 @@ dojo.mixin(dojox.gfx3d.vector, {
 		return dojox.gfx3d.vector.crossProduct(u, v);
 	}
 });
-
-}

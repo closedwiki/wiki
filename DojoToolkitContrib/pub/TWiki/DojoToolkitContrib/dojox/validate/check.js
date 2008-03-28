@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.validate.check"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.validate.check"] = true;
 dojo.provide("dojox.validate.check");
 
 dojo.require("dojox.validate._base");
@@ -256,6 +254,4 @@ dojox.validate.evaluateConstraint=function(profile, /*Array*/constraint, fieldNa
 		return isValidSomething.apply(null, params);
 	}
 	return false; // Boolean
-}
-
 }

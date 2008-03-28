@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.off.files"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.off.files"] = true;
 dojo.provide("dojox.off.files");
 
 // Author: Brad Neuberg, bkn3@columbia.edu, http://codinginparadise.org
@@ -174,7 +172,7 @@ dojox.off.files = {
 		//	with details on errors encountered. If no error occured then message is
 		//	empty array with length 0.
 		try{
-			if(djConfig.isDebug){
+			if(dojo.config.isDebug){
 				this.printURLs();
 			}
 			
@@ -183,8 +181,8 @@ dojox.off.files = {
 			if(this.versionURL){
 				this._getVersionInfo(function(oldVersion, newVersion, justDebugged){
 					//console.warn("getVersionInfo, oldVersion="+oldVersion+", newVersion="+newVersion
-					//				+ ", justDebugged="+justDebugged+", isDebug="+djConfig.isDebug);
-					if(djConfig.isDebug || !newVersion || justDebugged 
+					//				+ ", justDebugged="+justDebugged+", isDebug="+dojo.config.isDebug);
+					if(dojo.config.isDebug || !newVersion || justDebugged 
 							|| !oldVersion || oldVersion != newVersion){
 						console.warn("Refreshing offline file list");
 						this._doRefresh(callback, newVersion);
@@ -372,6 +370,11 @@ dojox.off.files = {
 		
 		var storeName = "dot_store_" 
 							+ window.location.href.replace(/[^0-9A-Za-z_]/g, "_");
+							
+		// clip at 64 characters, the max length of a resource store name
+		if(storeName.length >= 64){
+		  storeName = storeName.substring(0, 63);
+		}
 			
 		// refresh everything by simply removing
 		// any older stores
@@ -405,7 +408,7 @@ dojox.off.files = {
 					dojox.storage.put("oldVersion", newVersion, null,
 									dojox.off.STORAGE_NAMESPACE);
 				}
-				dojox.storage.put("justDebugged", djConfig.isDebug, null,
+				dojox.storage.put("justDebugged", dojo.config.isDebug, null,
 									dojox.off.STORAGE_NAMESPACE);
 				callback(false, []);
 			}
@@ -444,6 +447,4 @@ dojox.off.files = {
 				}
 		});
 	}
-}
-
 }

@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.wire.TextAdapter"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.wire.TextAdapter"] = true;
 dojo.provide("dojox.wire.TextAdapter");
 
 dojo.require("dojox.wire.CompositeWire");
@@ -84,5 +82,3 @@ dojo.declare("dojox.wire.TextAdapter", dojox.wire.CompositeWire, {
 		}
 	}
 });
-
-}

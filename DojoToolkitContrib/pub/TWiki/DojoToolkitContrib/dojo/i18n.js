@@ -1,6 +1,10 @@
-if(!dojo._hasResource["dojo.i18n"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojo.i18n"] = true;
 dojo.provide("dojo.i18n");
+
+/*=====
+dojo.i18n = {
+	// summary: Utility classes to enable loading of resources for internationalization (i18n)
+};
+=====*/
 
 dojo.i18n.getLocalization = function(/*String*/packageName, /*String*/bundleName, /*String?*/locale){
 	//	summary:
@@ -10,13 +14,13 @@ dojo.i18n.getLocalization = function(/*String*/packageName, /*String*/bundleName
 	//		Returns a hash containing name/value pairs in its prototypesuch
 	//		that values can be easily overridden.  Throws an exception if the
 	//		bundle is not found.  Bundle must have already been loaded by
-	//		dojo.requireLocalization() or by a build optimization step.  NOTE:
+	//		`dojo.requireLocalization()` or by a build optimization step.  NOTE:
 	//		try not to call this method as part of an object property
-	//		definition (var foo = { bar: dojo.i18n.getLocalization() }).  In
+	//		definition (`var foo = { bar: dojo.i18n.getLocalization() }`).  In
 	//		some loading situations, the bundle may not be available in time
 	//		for the object definition.  Instead, call this method inside a
 	//		function that is run after all modules load or the page loads (like
-	//		in dojo.adOnLoad()), or in a widget lifecycle method.
+	//		in `dojo.addOnLoad()`), or in a widget lifecycle method.
 	//	packageName:
 	//		package which is associated with this resource
 	//	bundleName:
@@ -60,7 +64,7 @@ dojo.i18n.normalizeLocale = function(/*String?*/locale){
 	//		Returns canonical form of locale, as used by Dojo.
 	//
 	//  description:
-	//		All variants are case-insensitive and are separated by '-' as specified in RFC 3066.
+	//		All variants are case-insensitive and are separated by '-' as specified in [RFC 3066](http://www.ietf.org/rfc/rfc3066.txt).
 	//		If no locale is specified, the dojo.locale is returned.  dojo.locale is defined by
 	//		the user agent's locale unless overridden by djConfig.
 
@@ -84,8 +88,8 @@ dojo.i18n._requireLocalization = function(/*String*/moduleName, /*String*/bundle
 	//		When loading these resources, the packaging does not match what is
 	//		on disk.  This is an implementation detail, as this is just a
 	//		private data structure to hold the loaded resources.  e.g.
-	//		tests/hello/nls/en-us/salutations.js is loaded as the object
-	//		tests.hello.nls.salutations.en_us={...} The structure on disk is
+	//		`tests/hello/nls/en-us/salutations.js` is loaded as the object
+	//		`tests.hello.nls.salutations.en_us={...}` The structure on disk is
 	//		intended to be most convenient for developers and translators, but
 	//		in memory it is more logical and efficient to store in a different
 	//		order.  Locales cannot use dashes, since the resulting path will
@@ -113,7 +117,7 @@ dojo.i18n._requireLocalization = function(/*String*/moduleName, /*String*/bundle
 	var bundle = dojo._loadedModules[bundlePackage];
 	var localizedBundle = null;
 	if(bundle){
-		if(djConfig.localizationComplete && bundle._built){return;}
+		if(dojo.config.localizationComplete && bundle._built){return;}
 		var jsLoc = tempLocale.replace(/-/g, '_');
 		var translationPackage = bundlePackage+"."+jsLoc;
 		localizedBundle = dojo._loadedModules[translationPackage];
@@ -175,7 +179,7 @@ dojo.i18n._requireLocalization = function(/*String*/moduleName, /*String*/bundle
 	// iterate through the extraLocale list and load those translations as
 	// well, unless a particular locale was requested.
 
-	var extra = djConfig.extraLocale;
+	var extra = dojo.config.extraLocale;
 	if(extra){
 		if(!extra instanceof Array){
 			extra = [extra];
@@ -234,10 +238,8 @@ dojo.i18n._preloadLocalizations = function(/*String*/bundlePrefix, /*Array*/loca
 		});
 	}
 	preload();
-	var extra = djConfig.extraLocale||[];
+	var extra = dojo.config.extraLocale||[];
 	for(var i=0; i<extra.length; i++){
 		preload(extra[i]);
 	}
 };
-
-}

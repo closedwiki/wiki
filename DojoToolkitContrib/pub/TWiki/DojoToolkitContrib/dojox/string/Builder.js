@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.string.Builder"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.string.Builder"] = true;
 dojo.provide("dojox.string.Builder");
 
 (function(){
@@ -97,5 +95,3 @@ dojo.provide("dojox.string.Builder");
 	
 	dojo.extend(dojox.string.Builder, m);
 })();
-
-}

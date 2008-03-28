@@ -1,5 +1,3 @@
-if(!dojo._hasResource["tests._base.json"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["tests._base.json"] = true;
 dojo.provide("tests._base.json");
 
 tests.register("tests._base.json", 
@@ -23,9 +21,13 @@ tests.register("tests._base.json",
 			t.assertEqual(3, mirrorObj.f[2]);
 			t.assertEqual("g", mirrorObj.g);
 			t.assertEqual("h3", mirrorObj.h.h1.h2.h3);
+			var badJson;
+			try{
+				badJson = dojo.fromJson("bad json"); // this should throw an exception, and not set badJson
+			}catch(e){
+			}
+			t.assertEqual(undefined,badJson);
 		}
 	]
 );
 
-
-}

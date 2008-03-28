@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojo.rpc.JsonpService"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojo.rpc.JsonpService"] = true;
 dojo.provide("dojo.rpc.JsonpService");
 dojo.require("dojo.rpc.RpcService");
 dojo.require("dojo.io.script");
@@ -61,5 +59,3 @@ dojo.declare("dojo.rpc.JsonpService", dojo.rpc.RpcService, {
 		return params;
 	}
 });
-
-}

@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dijit._base.sniff"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dijit._base.sniff"] = true;
 dojo.provide("dijit._base.sniff");
 
 // ported from dojo.html.applyBrowserClass (style.js)
@@ -13,6 +11,7 @@ dojo.provide("dijit._base.sniff");
 	var ie = d.isIE;
 	var opera = d.isOpera;
 	var maj = Math.floor;
+	var ff = d.isFF;
 	var classes = {
 		dj_ie: ie,
 //		dj_ie55: ie == 5.5,
@@ -25,7 +24,8 @@ dojo.provide("dijit._base.sniff");
 		dj_opera9: maj(opera) == 9,
 		dj_khtml: d.isKhtml,
 		dj_safari: d.isSafari,
-		dj_gecko: d.isMozilla
+		dj_gecko: d.isMozilla,
+		dj_ff2: maj(ff) == 2
 	}; // no dojo unsupported browsers
 
 	for(var p in classes){
@@ -39,5 +39,3 @@ dojo.provide("dijit._base.sniff");
 		}
 	}
 })();
-
-}

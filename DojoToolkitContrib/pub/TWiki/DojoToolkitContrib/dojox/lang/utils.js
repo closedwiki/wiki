@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.lang.utils"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.lang.utils"] = true;
 dojo.provide("dojox.lang.utils");
 
 (function(){
@@ -50,5 +48,3 @@ dojo.provide("dojox.lang.utils");
 		}
 	});
 })();
-
-}

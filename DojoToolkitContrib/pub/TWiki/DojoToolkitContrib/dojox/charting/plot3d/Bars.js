@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.charting.plot3d.Bars"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.charting.plot3d.Bars"] = true;
 dojo.provide("dojox.charting.plot3d.Bars");
 
 dojo.require("dojox.charting.plot3d.Base");
@@ -62,5 +60,3 @@ dojo.require("dojox.charting.plot3d.Base");
 		}
 	});
 })();
-
-}

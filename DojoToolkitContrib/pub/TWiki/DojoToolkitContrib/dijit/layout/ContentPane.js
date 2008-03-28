@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dijit.layout.ContentPane"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dijit.layout.ContentPane"] = true;
 dojo.provide("dijit.layout.ContentPane");
 
 dojo.require("dijit._Widget");
@@ -7,7 +5,7 @@ dojo.require("dijit.layout._LayoutWidget");
 
 dojo.require("dojo.parser");
 dojo.require("dojo.string");
-dojo.requireLocalization("dijit", "loading", null, "ko,zh,ja,zh-tw,ru,it,ROOT,hu,fr,pt,pl,es,de,cs");
+dojo.requireLocalization("dijit", "loading");
 
 dojo.declare(
 	"dijit.layout.ContentPane",
@@ -73,12 +71,26 @@ dojo.declare(
 
 	// class: String
 	//	Class name to apply to ContentPane dom nodes
+	// TODO: this should be called "baseClass" like in the other widgets
 	"class": "dijitContentPane",
+
+	// doLayout: String/Boolean
+	//	false - don't adjust size of children
+	//	true - looks for the first sizable child widget (ie, having resize() method) and sets it's size to
+	//			however big the ContentPane is (TODO: implement)
+	//	auto - if there is a single sizable child widget (ie, having resize() method), set it's size to
+	//			however big the ContentPane is
+	doLayout: "auto",
 
 	postCreate: function(){
 		// remove the title attribute so it doesn't show up when i hover
 		// over a node
 		this.domNode.title = "";
+
+		if(!this.containerNode){
+			// make getDescendants() work
+			this.containerNode = this.domNode;
+		}
 
 		if(this.preload){
 			this._loadCheck();
@@ -87,6 +99,10 @@ dojo.declare(
 		var messages = dojo.i18n.getLocalization("dijit", "loading", this.lang);
 		this.loadingMessage = dojo.string.substitute(this.loadingMessage, messages);
 		this.errorMessage = dojo.string.substitute(this.errorMessage, messages);
+		var curRole = dijit.getWaiRole(this.domNode);
+		if (!curRole){
+			dijit.setWaiRole(this.domNode, "group");
+		}
 
 		// for programatically created ContentPane (with <span> tag), need to muck w/CSS
 		// or it's as though overflow:visible is set
@@ -95,18 +111,23 @@ dojo.declare(
 
 	startup: function(){
 		if(this._started){ return; }
-		this._checkIfSingleChild();
-		if(this._singleChild){
-			this._singleChild.startup();
+		if(this.doLayout != "false" && this.doLayout !== false){
+			this._checkIfSingleChild();
+			if(this._singleChild){
+				this._singleChild.startup();
+			}
 		}
 		this._loadCheck();
-		this._started = true;
+		this.inherited(arguments);
 	},
 
 	_checkIfSingleChild: function(){
 		// summary:
 		// 	Test if we have exactly one widget as a child, and if so assume that we are a container for that widget,
 		//	and should propogate startup() and resize() calls to it.
+
+		// TODO: if there are two child widgets (a data store and a TabContainer, for example),
+		//	should still find the TabContainer
 		var childNodes = dojo.query(">", this.containerNode || this.domNode),
 			childWidgets = childNodes.filter("[widgetId]");
 
@@ -163,9 +184,12 @@ dojo.declare(
 			this._createSubWidgets();
 		}
 
-		this._checkIfSingleChild();
-		if(this._singleChild && this._singleChild.resize){
-			this._singleChild.resize(this._contentBox);
+		if(this.doLayout != "false" && this.doLayout !== false){
+			this._checkIfSingleChild();
+			if(this._singleChild && this._singleChild.resize){
+				this._singleChild.startup();
+				this._singleChild.resize(this._contentBox || dojo.contentBox(this.containerNode || this.domNode));
+			}
 		}
 
 		this._onLoadHandler();
@@ -217,7 +241,17 @@ dojo.declare(
 		this._loadCheck(forceLoad);
 	},
 
-	_loadCheck: function(forceLoad){
+	_isShown: function(){
+		// summary: returns true if the content is currently shown
+		if("open" in this){
+			return this.open;		// for TitlePane, etc.
+		}else{
+			var node = this.domNode;
+			return (node.style.display != 'none')  && (node.style.visibility != 'hidden');
+		}
+	},
+
+	_loadCheck: function(/*Boolean*/ forceLoad){
 		// call this when you change onShow (onSelected) status when selected in parent container
 		// it's used as a trigger for href download when this.domNode.display != 'none'
 
@@ -230,7 +264,7 @@ dojo.declare(
 		// else -> load when download not in progress, if this.open !== false (undefined is ok) AND
 		//						domNode display != 'none', isLoaded must be false
 
-		var displayState = ((this.open !== false) && (this.domNode.style.display != 'none'));
+		var displayState = this._isShown();
 
 		if(this.href &&	
 			(forceLoad ||
@@ -405,5 +439,3 @@ dojo.declare(
 		//		called when download is finished
 	}
 });
-
-}

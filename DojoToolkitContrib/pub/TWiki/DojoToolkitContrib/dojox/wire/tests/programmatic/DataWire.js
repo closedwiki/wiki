@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.wire.tests.programmatic.DataWire"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.wire.tests.programmatic.DataWire"] = true;
 dojo.provide("dojox.wire.tests.programmatic.DataWire");
 
 dojo.require("dojox.wire.DataWire");
@@ -21,5 +19,3 @@ tests.register("dojox.wire.tests.programmatic.DataWire", [
 	}
 
 ]);
-
-}

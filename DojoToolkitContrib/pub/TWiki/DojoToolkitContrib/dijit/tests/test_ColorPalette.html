@@ -4,20 +4,25 @@
 <head>
 	<title>ColorPalette Test</title>
 
+	<style type="text/css">
+		@import "../../dojo/resources/dojo.css";
+		@import "css/dijitTests.css";
+	</style>
 
 	<script type="text/javascript" src="../../dojo/dojo.js"
-		djConfig="isDebug: true, parseOnLoad: true, debugAtAllCosts: true"></script>
+		djConfig="isDebug: true, parseOnLoad: true"></script>
 	<script type="text/javascript" src="_testCommon.js"></script>
 
 	<script language="JavaScript" type="text/javascript">
 		dojo.require("dijit.ColorPalette");
 		dojo.require("dojo.parser");	// scan page for widgets and instantiate them
-	</script>
-	<script>
+
 		var palette;
 		function init(){
-			palette = new dijit.ColorPalette({palette: "7x10", id: "progPalette"}, dojo.byId("programPalette"));
-		}
+            var date0 = new Date();
+            palette = new dijit.ColorPalette({palette: "7x10", id: "progPalette"}, dojo.byId("programPalette"));
+            console.log("creation time: " + (new Date() - date0) );
+        }
 
 		dojo.addOnLoad(init);
 
@@ -27,10 +32,6 @@
 			theSpan.innerHTML = color;
 		}
 	</script>
-	<style type="text/css">
-		@import "../../dojo/resources/dojo.css";
-		@import "css/dijitTests.css";
-	</style>
 </head>
 
 <body>

@@ -1,13 +1,11 @@
-if(!dojo._hasResource["dojox.gfx"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.gfx"] = true;
 dojo.provide("dojox.gfx");
 
 dojo.require("dojox.gfx.matrix");
 dojo.require("dojox.gfx._base");
 
 (function(){
-	var renderers = (typeof djConfig["gfxRenderer"] == "string" ?
-		djConfig["gfxRenderer"] : "svg,vml,silverlight,canvas").split(",");
+	var renderers = (typeof dojo.config["gfxRenderer"] == "string" ?
+		dojo.config["gfxRenderer"] : "svg,vml,silverlight,canvas").split(",");
 	for(var i = 0; i < renderers.length; ++i){
 		switch(renderers[i]){
 			case "svg":
@@ -28,6 +26,7 @@ dojo.require("dojox.gfx._base");
 		}
 		if(dojox.gfx.renderer){ break; }
 	}
+	console.log("gfx renderer = " + dojox.gfx.renderer);
 })();
 
 // include a renderer conditionally
@@ -35,5 +34,3 @@ dojo.requireIf(dojox.gfx.renderer == "svg", "dojox.gfx.svg");
 dojo.requireIf(dojox.gfx.renderer == "vml", "dojox.gfx.vml");
 dojo.requireIf(dojox.gfx.renderer == "silverlight", "dojox.gfx.silverlight");
 dojo.requireIf(dojox.gfx.renderer == "canvas", "dojox.gfx.canvas");
-
-}

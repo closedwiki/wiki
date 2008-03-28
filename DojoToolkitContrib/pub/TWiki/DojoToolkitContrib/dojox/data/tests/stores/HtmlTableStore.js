@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.data.tests.stores.HtmlTableStore"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.data.tests.stores.HtmlTableStore"] = true;
 dojo.provide("dojox.data.tests.stores.HtmlTableStore");
 dojo.require("dojox.data.HtmlTableStore");
 dojo.require("dojo.data.api.Read");
@@ -698,5 +696,3 @@ doh.register("dojox.data.tests.stores.HtmlTableStore",
 
 //Register the remote tests ... when they work.
 //doh.registerUrl("dojox.data.tests.stores.HtmlTableStore.remote", dojo.moduleUrl("dojox.data.tests", "ml/test_HtmlTableStore_declaratively.html"));
-
-}

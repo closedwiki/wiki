@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojo.dnd.Container"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojo.dnd.Container"] = true;
 dojo.provide("dojo.dnd.Container");
 
 dojo.require("dojo.dnd.common");
@@ -149,7 +147,7 @@ dojo.declare("dojo.dnd.Container", null, {
 		}
 
 		// process specially marked children
-		dojo.query("> .dojoDndItem", this.parent).forEach(function(node){
+		this.getAllNodes().forEach(function(node){
 			if(!node.id){ node.id = dojo.dnd.getUniqueId(); }
 			var type = node.getAttribute("dndType"),
 				data = node.getAttribute("dndData");
@@ -307,5 +305,3 @@ dojo.dnd._defaultCreator = function(node){
 		return {node: n, data: data, type: type};
 	};
 };
-
-}

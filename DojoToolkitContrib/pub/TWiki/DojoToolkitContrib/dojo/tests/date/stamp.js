@@ -1,5 +1,3 @@
-if(!dojo._hasResource["tests.date.stamp"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["tests.date.stamp"] = true;
 dojo.provide("tests.date.stamp");
 
 dojo.require("dojo.date.stamp");
@@ -11,7 +9,7 @@ function test_date_iso(t){
 	var date = dojo.date.stamp.fromISOString(rfc);
 	t.is(2005,date.getFullYear());
 	t.is(5,date.getMonth());
-	t.is(29,date.getDate());
+	t.is(29,date.getUTCDate());
 	t.is(15,date.getUTCHours());
 	t.is(5,date.getMinutes());
 	t.is(0,date.getSeconds());
@@ -21,6 +19,12 @@ function test_date_iso(t){
 	t.is(2004,date.getFullYear());
 	t.is(1,date.getMonth());
 	t.is(29,date.getDate());
+
+	rfc  = "2004-01";
+	date = dojo.date.stamp.fromISOString(rfc);
+	t.is(2004,date.getFullYear());
+	t.is(0,date.getMonth());
+	t.is(1,date.getDate());
 
 	// No TZ info means local time
 	rfc  = "2004-02-29T01:23:45";
@@ -34,6 +38,18 @@ function test_date_iso(t){
 	rfc = dojo.date.stamp.toISOString(date);
 	//truncate for comparison
 	t.is("2005-06",rfc.substring(0,7));
+
+	date = new Date(101,0,2);
+	date.setFullYear(101);
+	rfc = dojo.date.stamp.toISOString(date);
+	//truncate for comparison
+	t.is("0101-01",rfc.substring(0,7));
+
+	rfc  = "0101-01-01";
+	date = dojo.date.stamp.fromISOString(rfc);
+	t.is(101,date.getFullYear());
+	t.is(0,date.getMonth());
+	t.is(1,date.getDate());
 
 	date = dojo.date.stamp.fromISOString("T18:46:39");
 	t.is(18, date.getHours());
@@ -72,5 +88,3 @@ function test_date_iso_tz(t){
 	}
 	]
 );
-
-}

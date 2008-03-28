@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.validate._base"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.validate._base"] = true;
 dojo.provide("dojox.validate._base");
 
 dojo.require("dojo.regexp");		// dojo core expressions
@@ -179,5 +177,3 @@ dojox.validate.isValidLuhn = function(/*String*/value){
 		isInvalid(field):  Returns true if the field has an invalid value.
 
 */
-
-}

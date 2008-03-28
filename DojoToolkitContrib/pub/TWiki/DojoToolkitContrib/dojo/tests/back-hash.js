@@ -1,5 +1,3 @@
-if(!dojo._hasResource["tests.back-hash"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["tests.back-hash"] = true;
 dojo.provide("tests.back-hash");
 
 dojo.require("dojo.back");
@@ -29,5 +27,3 @@ dojo.require("dojo.back");
 		}
 	]);
 })();
-
-}

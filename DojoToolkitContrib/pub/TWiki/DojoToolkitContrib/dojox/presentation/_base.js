@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.presentation._base"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.presentation._base"] = true;
 dojo.provide("dojox.presentation._base");
 dojo.experimental("dojox.presentation"); 
 
@@ -49,7 +47,7 @@ dojo.declare("dojox.presentation.Deck", [ dijit.layout.StackContainer, dijit._Te
 
 	// just to over-ride:
 	templateString: null,
-	templateString:"<div class=\"dojoShow\" dojoAttachPoint=\"showHolder\">\n\t<div class=\"dojoShowNav\" dojoAttachPoint=\"showNav\" dojoAttachEvent=\"onmouseover: _showNav, onmouseout: _hideNav\">\n\t<div class=\"dojoShowNavToggler\" dojoAttachPoint=\"showToggler\">\n\t\t<img dojoAttachPoint=\"prevNode\" src=\"${prevIcon}\" dojoAttachEvent=\"onclick:previousSlide\">\n\t\t<select dojoAttachEvent=\"onchange:_onEvent\" dojoAttachPoint=\"select\">\n\t\t\t<option dojoAttachPoint=\"_option\">Title</option>\n\t\t</select>\n\t\t<img dojoAttachPoint=\"nextNode\" src=\"${nextIcon}\" dojoAttachEvent=\"onclick:nextSlide\">\n\t</div>\n\t</div>\n\t<div dojoAttachPoint=\"containerNode\"></div>\n</div>\n",
+	templatePath: dojo.moduleUrl('dojox.presentation','resources/Show.html'),
 
 	// nextIcon: String
 	//	icon for navigation "next" button
@@ -338,7 +336,7 @@ dojo.declare(
 
 	// templatPath: String
 	//	make a ContentPane templated, and style the 'titleNode'
-	templateString:"<div dojoAttachPoint=\"showSlide\" class=\"dojoShowPrint dojoShowSlide\">\n\t<h1 class=\"showTitle\" dojoAttachPoint=\"slideTitle\"><span class=\"dojoShowSlideTitle\" dojoAttachPoint=\"slideTitleText\">${title}</span></h1>\n\t<div class=\"dojoShowBody\" dojoAttachPoint=\"containerNode\"></div>\n</div>\n",
+	templatePath: dojo.moduleUrl("dojox.presentation","resources/Slide.html"),
 
 	// title: String
 	//	string to insert into titleNode, title of Slide
@@ -552,5 +550,3 @@ dojo.declare("dojox.presentation.Action", [dijit._Widget,dijit._Contained], {
 	}	
 
 });
-
-}

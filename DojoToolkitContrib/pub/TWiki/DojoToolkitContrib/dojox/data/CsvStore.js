@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.data.CsvStore"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.data.CsvStore"] = true;
 dojo.provide("dojox.data.CsvStore");
 
 dojo.require("dojo.data.util.filter");
@@ -314,7 +312,11 @@ dojo.declare("dojox.data.CsvStore", null, {
 					});
 					getHandler.addErrback(function(error){
 						self._loadInProgress = false;
-						throw error;
+						if(errorCallback){
+							errorCallback(error, keywordArgs);
+						}else{
+							throw error;
+						}
 					});
 				}
 			}else if(this._csvData){
@@ -322,7 +324,12 @@ dojo.declare("dojox.data.CsvStore", null, {
 				this._csvData = null;
 				filter(keywordArgs, this._arrayOfAllItems);
 			}else{
-				throw new Error("dojox.data.CsvStore: No CSV source data was provided as either URL or String data input.");
+				var error = new Error("dojox.data.CsvStore: No CSV source data was provided as either URL or String data input.");
+				if(errorCallback){
+					errorCallback(error, keywordArgs);
+				}else{
+					throw error;
+				}
 			}
 		}
 	},
@@ -548,5 +555,3 @@ dojo.declare("dojox.data.CsvStore", null, {
 });
 //Mix in the simple fetch implementation to this class.
 dojo.extend(dojox.data.CsvStore,dojo.data.util.simpleFetch);
-
-}

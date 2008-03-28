@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.layout.RadioGroup"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.layout.RadioGroup"] = true;
 dojo.provide("dojox.layout.RadioGroup");
 dojo.experimental("dojox.layout.RadioGroup");
 //
@@ -229,5 +227,3 @@ dojo.declare("dojox.layout._RadioButton",
 		});
 	}
 });
-
-}

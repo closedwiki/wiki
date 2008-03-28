@@ -1,5 +1,3 @@
-if(!dojo._hasResource["tests.string"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["tests.string"] = true;
 dojo.provide("tests.string");
 
 dojo.require("dojo.string");
@@ -27,5 +25,3 @@ tests.register("tests.string",
 		}
 	]
 );
-
-}

@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.encoding.tests.bits"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.encoding.tests.bits"] = true;
 dojo.provide("dojox.encoding.tests.bits");
 dojo.require("dojox.encoding.bits");
 
@@ -70,5 +68,3 @@ dojo.require("dojox.encoding.bits");
 		function testBits4(t){ t.assertEqual(msg4, test(msg4)); }
 	]);
 })();
-
-}

@@ -1,5 +1,3 @@
-if(!dojo._hasResource["dojox.data.demos.widgets.PicasaView"]){ //_hasResource checks added by build. Do not use _hasResource directly in your code.
-dojo._hasResource["dojox.data.demos.widgets.PicasaView"] = true;
 dojo.provide("dojox.data.demos.widgets.PicasaView");
 dojo.require("dijit._Templated");
 dojo.require("dijit._Widget");
@@ -7,7 +5,7 @@ dojo.require("dijit._Widget");
 dojo.declare("dojox.data.demos.widgets.PicasaView", [dijit._Widget, dijit._Templated], {
 	//Simple demo widget for representing a view of a Picasa Item.
 
-	templateString:"<table class=\"picasaView\">\n\t<tbody>\n\t\t<tr class=\"picasaTitle\">\n\t\t\t<td>\n\t\t\t\t<b>\n\t\t\t\t\tTitle:\n\t\t\t\t</b>\n\t\t\t</td>\n\t\t\t<td dojoAttachPoint=\"titleNode\">\n\t\t\t</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td>\n\t\t\t\t<b>\n\t\t\t\t\tAuthor:\n\t\t\t\t</b>\n\t\t\t</td>\n\t\t\t<td dojoAttachPoint=\"authorNode\">\n\t\t\t</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td colspan=\"2\">\n\t\t\t\t<b>\n\t\t\t\t\tSummary:\n\t\t\t\t</b>\n\t\t\t\t<span class=\"picasaSummary\" dojoAttachPoint=\"descriptionNode\"></span>\n\t\t\t</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td dojoAttachPoint=\"imageNode\" colspan=\"2\">\n\t\t\t</td>\n\t\t</tr>\n\t</tbody>\n</table>\n\n",
+	templatePath: dojo.moduleUrl("dojox", "data/demos/widgets/templates/PicasaView.html"),
 
 	//Attach points for reference.
 	titleNode: null, 
@@ -33,5 +31,3 @@ dojo.declare("dojox.data.demos.widgets.PicasaView", [dijit._Widget, dijit._Templ
 		this.imageNode.appendChild(href);
 	}
 });
-
-}
