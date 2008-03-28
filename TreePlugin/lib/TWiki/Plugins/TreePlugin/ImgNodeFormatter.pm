@@ -245,7 +245,7 @@ sub images {
 sub getLasts {
     my ( $node, $level ) = @_;
     my $lastString = "";
-    $lastString = isNodeLast($node) unless ( $level == 0 );    # don't do root
+    $lastString = isNodeLast($node,$level) unless ( $level == 0 );    # don't do root
     return
       substr( $lastString, -$level )
       ;    # just get the data pertainent to this tree view
@@ -261,7 +261,12 @@ sub getLasts {
 # class method
 
 sub isNodeLast {
-    my ($node) = @_;
+    my ($node,$level) = @_;
+    #SL: make sure we don't recurse on the root level
+    if ($level==0)
+    	{
+	    return 0;	
+    	}
     my $parent = $node->parent;
     return 0 unless ( ref($parent) );
 
@@ -271,7 +276,7 @@ sub isNodeLast {
     return $t
       if ( $parent->name eq " " );    # HACK to stop recursion up the tree!!
                                       # though it should stop anyway
-    return isNodeLast($parent) . $t;  # recurse up the hierarchy tree
+    return isNodeLast($parent,--$level) . $t;  # recurse up the hierarchy tree
 }
 
 1;
