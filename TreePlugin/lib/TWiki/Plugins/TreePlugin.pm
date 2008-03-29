@@ -38,7 +38,7 @@ use vars qw(
 );
 
 $pluginName = 'TreePlugin';
-$VERSION = '1.3';
+$VERSION = '1.4';
 $RootLabel = "_RootLabel_";    # what we use to label the root of a tree if not a topic
 
 # =========================
@@ -77,7 +77,7 @@ sub initPlugin {
 
 =pod
 Tag handler for TREE and TREEVIEW
-=cut 
+=cut
 
 # bugs re recursion:
 #	1) doesn't remember webs so: recursion across webs is problematic
@@ -115,12 +115,12 @@ sub HandleTreeTag
         $attrHeader=""; 
         }
 
-    my $attrFormat = $params->{'format'} || "";
+    my $attrFormat = $params->{'format'} || "";   
+    my $attrFormatBranch = $params->{'formatbranch'} || "";
+    $attrFormatting = $params->{'formatting'} || "";
     
-    my $attrFormatBranch =
-      $params->{'formatbranch'} || "";
-    $attrFormatting =
-      $params->{'formatting'} || "";
+    my $attrSeparator = $params->{'separator'} || "\n";
+
     my $attrStartlevel =
       $params->{'startlevel'} || -1; # -1 means not defined
     #SL: If no =topic= and =startlevel= parameter was given then set =startlevel= to 1
@@ -150,9 +150,9 @@ sub HandleTreeTag
     else {
 
         # else set the format(s), if any
-        $formatter->data( "format", $attrFormat ) if ($attrFormat);
-        $formatter->data( "branchformat", $attrFormatBranch )
-          if ($attrFormatBranch);
+        $formatter->data( 'format', $attrFormat ) if ($attrFormat);
+        $formatter->data( 'branchformat', $attrFormatBranch ) if ($attrFormatBranch);
+        $formatter->data( 'separator', $attrSeparator ) if ($attrSeparator);          
 
     }
     
@@ -185,7 +185,7 @@ sub HandleTreeTag
         my $node = createTWikiNode( $nodeId, \%nodes );        
         $node->data( "web",     $nodeWeb );
         $node->data( "topic",   $nodeTopic );
-        $node->data( "format",  "$nodeFormat\n" ) if defined $nodeFormat; 
+        $node->data( "format",  $nodeFormat ) if defined $nodeFormat; 
     }
     
     &TWiki::Func::writeDebug("Create root") if $debug;    

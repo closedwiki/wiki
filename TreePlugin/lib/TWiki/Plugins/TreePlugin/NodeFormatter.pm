@@ -25,6 +25,8 @@ Superclass for node types. Formatting functions are implemented by subclasses.
 
 sub new { }
 
+sub separator { return ""; } #no separator by default
+
 sub initNode { _unimplemented( "initNode", @_ ); }
 
 sub formatNode { _unimplemented( "formatNode", @_ ); }

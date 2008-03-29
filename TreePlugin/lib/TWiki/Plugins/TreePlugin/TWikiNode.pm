@@ -89,10 +89,13 @@ sub toHTMLFormat {
     if ( scalar( @{ $this->children() } ) ) {
         my $count = 0;
         foreach my $node ( @{ $this->children() } )
-            {    
+            {
+            #SL: Append delimiter
+            #$childrenText .= "," unless ($count==0 && $level==0 && $this->name() eq ' '); #BAD: Test to prevent Web tree to append delimiter before first item    
+            $childrenText .= $formatter->separator();
             # accumulate childrens' format
             $node->data( "count", $count++ );
-            # remember this node's sibling order            
+            # remember this node's sibling order
             $childrenText .= $formatter->formatChild( $node, $count, $level + 1 );
             }
     }

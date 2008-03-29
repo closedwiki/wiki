@@ -96,5 +96,10 @@ sub formatChild {
     return $node->toHTMLFormat( $this, $count, $level );
 }
 
+sub separator { 
+    my ( $this ) = @_;
+    return $this->data('separator');
+} 
+
 1;
 
