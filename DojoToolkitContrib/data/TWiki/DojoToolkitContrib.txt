@@ -3,10 +3,10 @@
 %TOC%
 
 ---++ Summary of Contents
-Contains an un-archived and ready for use copy of dojo toolkit 1.0.0 - see http://dojotoolkit.org/
+Contains an un-archived and ready for use copy of dojo toolkit 1.1.0 - see http://dojotoolkit.org/
 
 ---++ Documentation
-see the [[http://dojotoolkit.org/book/dojo-book-0-9-0][The Dojo Book v1.0.0 / 0.9.0]]
+see the [[http://dojotoolkit.org/book/dojo-book-0-9-0][The Dojo Book]]
 
 ---++ Examples
    * [[%ATTACHURL%/dijit/demos/form.html]]
@@ -52,8 +52,8 @@ If you're going to update the version of Dojo in the contrib, please use the olo
    * =find . \! -regex '.*\.svn.*' -exec rm '{}' \;= (this will remove all the existing files from your checkout)
    * =tar zxvf /Users/sven/Desktop/dojo-release-0.9.0.tar.gz=
    * if the untar created a new directory :( move the contents up on, to overlay the original TWiki files
-   * svn rm the files that are missing (these have been removed from the latest release.
-   * update the MANIFEST
+   * svn rm the files that are missing (these have been removed from the latest release. (=svn stat | sed 's/!/svn rm/' | sh=)
+   * update the MANIFEST (=find pub ! -wholename '*.svn*' >> lib/TWiki/Contrib/DojoToolkitContrib/MANIFEST=)
    * commit the new versions
 
 ---++ Installation Instructions
@@ -71,11 +71,12 @@ If you're going to update the version of Dojo in the contrib, please use the olo
 ---++ Contrib Info
 
 |  Plugin Author: | TWiki:Main.SvenDowideit - SvenDowideit@DistributedINFORMATION.com [[http://DistributedINFORMATION.com][DistributedINFORMATION]] - a <img src="%ATTACHURLPATH%/wikiringlogo20x20.png" /> [[http://www.wikiring.com][WikiRing.com]] partner |
-|  Copyright &copy;: | Copyright (c) 2004-2007, The Dojo Foundation and  |
+|  Copyright &copy;: | Copyright (c) 2004-2008, The Dojo Foundation  |
 |  License: | Dojo is availble under *either* the terms of the modified BSD license *or* the Academic Free License version 2.1. |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  29 Mar 2008: | update to 1.1.0 |
 |  6 Nov 2007: | update to 1.0.0 |
 |  Sept 2007: | update to 0.9 |
 |  Apr 2006: | Initial packaging of dojo 0.2.2 |
