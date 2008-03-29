@@ -1689,8 +1689,8 @@ pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/Sudan
 pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/Sudan/data.json
 pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/Sudan/Khartoum
 pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/Sudan/Khartoum/data.json
-pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/Commonwealth of Australia
-pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/Commonwealth of Australia/data.json
+#pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/Commonwealth of Australia
+#pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/Commonwealth of Australia/data.json
 pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/Germany
 pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/Germany/data.json
 pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/Spain
@@ -1701,13 +1701,13 @@ pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/Argentina
 pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/Argentina/data.json
 pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/Egypt
 pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/Egypt/data.json
-pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/United States of America
-pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/United States of America/data.json
+#pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/United States of America
+#pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/United States of America/data.json
 pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/Mexico
 pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/Mexico/Guadalajara
 pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/Mexico/Guadalajara/data.json
-pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/Mexico/Mexico City
-pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/Mexico/Mexico City/data.json
+#pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/Mexico/Mexico City
+#pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/Mexico/Mexico City/data.json
 pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/Mexico/data.json
 pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/Mongolia
 pub/TWiki/DojoToolkitContrib/dojox/data/demos/geography/Mongolia/data.json
