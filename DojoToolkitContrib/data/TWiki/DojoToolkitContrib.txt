@@ -36,6 +36,11 @@ see the [[http://dojotoolkit.org/book/dojo-book-0-9-0][The Dojo Book]]
    * [[%ATTACHURL%/dojox/wire/demos/markup/demo_ConditionalActions.html]]
    * [[%ATTACHURL%/dojox/wire/demos/markup/demo_FlickrStoreWire.html]]
    * [[%ATTACHURL%/dojox/wire/demos/markup/demo_TopicWiring.html]]
+   
+---++ Usage
+This Contrib is really a developer conveinience package, and should be used in conjunction with another TWiki Extension - such as TWiki:Plugins.RestPlugin.
+
+It contains one function =TWiki::Contrib::DojoToolkitContrib::requireJS(dojoModuleName), that will add the dojo.js script to the HTML header, and add the =dojo.require= calls in order.
 
 ---++ Settings
 
@@ -47,7 +52,7 @@ Settings are stored as preferences variables. To reference a setting write ==%<n
    * Name of the perl package
       * Set STUB = %$STUB%
 
----++ Updateing instructions
+---++ Updating instructions
 If you're going to update the version of Dojo in the contrib, please use the oloowoing command in the %TOPIC%/pub/TWiki/%TOPIC/ directory
    * =find . \! -regex '.*\.svn.*' -exec rm '{}' \;= (this will remove all the existing files from your checkout)
    * =tar zxvf /Users/sven/Desktop/dojo-release-0.9.0.tar.gz=
