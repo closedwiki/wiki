@@ -361,6 +361,13 @@ sub sysCommand {
     my $cmd;
     my $cq = $this->{CMDQUOTE};
 
+    # Item5449: A random key known by both parent and child. 
+    # Used to make it possible that the parent detects when
+    # child execution fails. Child can't throw exceptions
+    # cause they are separated processes, so it's up to
+    # the parent.
+    my $key = int(rand(255)) + 1;
+
     # Build argument list from template
     my @args = _buildCommandLine( $this, $pTmpl, %params );
     if ( $this->{REAL_SAFE_PIPE_OPEN} ) {
@@ -381,11 +388,16 @@ sub sysCommand {
             $data = <$handle>;
             close $handle;
             $exit = ( $? >> 8 );
+            if ( $exit == $key && $data =~ /$key: (.*)/ ) {
+                throw Error::Simple( 'exec failed: '. $1 );
+            }
         } else {
             # Child - run the command
             open (STDERR, '>'.File::Spec->devnull()) || die "Can't kill STDERR: '$!'";
-            exec( $path, @args ) ||
-              throw Error::Simple( 'exec failed: '.$! );
+            unless ( exec( $path, @args ) ) {
+                syswrite(STDOUT, $key . ": $!\n");
+                exit($key);
+            }
             # can never get here
         }
 
@@ -412,6 +424,9 @@ sub sysCommand {
             close( $readHandle );
             $pid = wait; # wait for child process so we can get exit status
             $exit = ( $? >> 8 );
+            if ( $exit == $key && $data =~ /$key: (.*)/ ) {
+                throw Error::Simple( 'exec failed: '. $1 );
+            }
 
         } else {
             # Child - run the command, stdout to pipe
@@ -430,8 +445,10 @@ sub sysCommand {
             open(STDOUT, ">&=".fileno( $writeHandle )) or die;
 
             open (STDERR, '>'.File::Spec->devnull());
-            exec( $path, @args ) ||
-              throw Error::Simple( 'exec failed: '.$! );
+            unless ( exec( $path, @args ) ) {
+                syswrite(STDOUT, $key . ": $!\n");
+                exit($key);
+            }
             # can never get here
         }
 
