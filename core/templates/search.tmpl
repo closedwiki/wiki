@@ -10,27 +10,24 @@
 
 %TMPL:DEF{"searchbody"}%%SPLIT%%TMPL:P{"repeatedsearchblock"}%
 %SPLIT%Number of topics: <b>%NTOPICS%</b>%TMPL:END%
-
+ 
 %TMPL:DEF{"repeatedsearchblock"}%%TABLE%<table width="100%" border="0" cellpadding="0" cellspacing="4">
-	<tr bgcolor="%WEBBGCOLOR%">
-		<td width="50%"><b>%MAKETEXT{"Topics in [_1] web" args="<nop>%WEB%"}%</b></td>
-		<td width="30%"><b>%MAKETEXT{"Changed"}%</b></td>
-		<td width="20%"><b>%MAKETEXT{"Changed by"}%</b></td>
-	</tr>
-</table>%REPEAT%<table width="100%" border="0" cellspacing="0" cellpadding="0">
-	<tr>
-		<td width="50%"><a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPICNAME%"><b>%TOPICNAME%</b></a></td>
-		<td width="30%"><a href="%SCRIPTURLPATH{"rdiff"}%/%WEB%/%TOPICNAME%" rel='nofollow'>%TIME%</a> - %REVISION%</td>
-		<td width="20%"> %AUTHOR%</td>
-	</tr>
-	<tr>
-		<td colspan="2"><font size="-1">%TEXTHEAD%</font></td>
-		<td width="20%">&nbsp;</td>
-	</tr>
-</table>%REPEAT%<br clear="all" />%TMPL:END%
-
-%TMPL:DEF{"content"}%%SPLIT%%MAKETEXT{"Searched:"}% <b> %SEARCHSTRING% </b>
-<p />%TMPL:P{"searchbody"}%<p />%SPLIT%%TMPL:P{"topicinfo"}%%TMPL:END%
+    <tr bgcolor="%WEBBGCOLOR%">
+       <td width="50%"><b>%MAKETEXT{"Topics in [_1] web" args="<nop>%WEB%"}%</b></td>
+       <td width="30%"><b>%MAKETEXT{"Changed"}%</b></td>
+       <td width="20%"><b>%MAKETEXT{"Changed by"}%</b></td>
+    </tr>
+%REPEAT%
+    <tr>
+       <td width="50%"><a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPICNAME%"><b>%TOPICNAME%</b></a></td>
+       <td width="30%"><a href="%SCRIPTURLPATH{"rdiff"}%/%WEB%/%TOPICNAME%" rel='nofollow'>%TIME%</a> - %REVISION%</td>
+       <td colspan="2"><font size="-1">%TEXTHEAD%</font></td>
+       <td width="20%">&nbsp;</td>
+    </tr>
+%REPEAT%</table><br clear="all" />%TMPL:END%
+ 
+ %TMPL:DEF{"content"}%%SPLIT%%MAKETEXT{"Searched:"}% <b> %SEARCHSTRING% </b>
+ <p />%TMPL:P{"searchbody"}%<p />%SPLIT%%TMPL:P{"topicinfo"}%%TMPL:END%
 
 %TMPL:DEF{"topicinfo"}%%TMPL:END%
 %TMPL:DEF{"topicaction"}%%TMPL:END%
