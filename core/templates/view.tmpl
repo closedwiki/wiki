@@ -22,7 +22,10 @@
 
 %TMPL:DEF{"simpleheader"}%%BROADCASTMESSAGE%%TMPL:P{"standardheader"}%%TMPL:END%
 
-%TMPL:DEF{"content"}%%TMPL:P{"contentheaderstylewrapper"}%%TMPL:P{"formtop"}%%TMPL:P{"attachmentstop"}%
+%TMPL:DEF{"content"}%
 %TEXT%
-#TopicEnd
+#TopicEnd%TMPL:END%
+
+%TMPL:DEF{"contentwrapper"}%%TMPL:P{"contentheaderstylewrapper"}%%TMPL:P{"formtop"}%%TMPL:P{"attachmentstop"}%
+%TMPL:P{"content"}%
 %TMPL:P{"contentfooterstylewrapper"}%%TMPL:P{"formbottom"}%%TMPL:P{"attachmentsbottom"}%%TMPL:P{"topicinfo"}%%TMPL:END%

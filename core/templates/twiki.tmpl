@@ -67,6 +67,7 @@
 
 %TMPL:DEF{"footernote"}%%TMPL:END%
 %TMPL:DEF{"content"}%%TMPL:END%
+%TMPL:DEF{"contentwrapper"}%%TMPL:P{"content"}%%TMPL:END%
 
 %TMPL:DEF{"standardfooter"}%#PageBottom
 %TMPL:P{"footernote"}%%TMPL:P{"copyright"}%%TMPL:END%
@@ -82,7 +83,7 @@
 
 %TMPL:DEF{"main"}%<div class="twikiMiddleContainer"><div class="twikiMain">
 %TMPL:P{"simpleheader"}%
-%TMPL:P{"pagetitlestylewrapper"}%%TMPL:P{"content"}%
+%TMPL:P{"pagetitlestylewrapper"}%%TMPL:P{"contentwrapper"}%
 %TMPL:P{"standardfooter"}%</div></div>%TMPL:END%
 
 %{ container displayed just above the topic text: }%
