@@ -41,7 +41,6 @@ templates/renameweb.classic.tmpl  0444
 templates/renamewebbase.classic.tmpl  0444
 templates/renamewebconfirm.classic.tmpl  0444
 templates/renamewebdelete.classic.tmpl  0444
-templates/search.classic.tmpl  0444
 templates/searchbookview.classic.tmpl  0444
 templates/searchformat.classic.tmpl  0444
 templates/searchmeta.classic.tmpl  0444
