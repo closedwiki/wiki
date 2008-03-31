@@ -79,7 +79,7 @@ var TWikiTiny = {
         // The double-encoding is to overcome flaws in XMLHttpRequest. It makes
         // the TWikiTiny.request much larger than it needs to be, but at
         // least it works.
-        + "&text=" + encodeURIComponent(escape(text));
+        + "&text=" + encodeURIComponent(text);
     
         TWikiTiny.request.req.setRequestHeader(
             "Content-length", params.length);

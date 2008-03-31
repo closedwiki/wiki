@@ -615,9 +615,6 @@ sub _restTML2HTML {
     my ($session) = @_;
     my $tml = TWiki::Func::getCgiQuery()->param('text');
 
-    # Text is a assumed to be URL-encoded
-    $tml = TWiki::urlDecode($tml);
-
     # if the secret ID is present, don't convert again. We are probably
     # going 'back' to this page (doesn't work on IE :-( )
     if ($tml =~ /<!--$SECRET_ID-->/) {
@@ -642,9 +639,15 @@ sub _restHTML2TML {
         $html2tml = new TWiki::Plugins::WysiwygPlugin::HTML2TML();
     }
     my $html = TWiki::Func::getCgiQuery()->param('text') || '';
-    $html = TWiki::urlDecode($html);
-    $html =~ s/<!--$SECRET_ID-->//go;
 
+    require Encode;
+
+    # Convert UTF-8 octets to characters to protect the HTML parser. If
+    # We don't do this HTML::Parser fails with "Parsing of undecoded UTF-8
+    # will give garbage when decoding entities"
+    $html = Encode::decode_utf8($html);
+
+    $html =~ s/<!--$SECRET_ID-->//go;
     my $tml = $html2tml->convert(
         $html,
         {
@@ -654,6 +657,12 @@ sub _restHTML2TML {
             expandVarsInURL => \&expandVarsInURL,
             very_clean => 1,
         });
+
+    # Convert wide characters to HTML entities, to keep print happy (it
+    # fails on "Wide characters in print" otherwise, when writing the
+    # page)
+    $tml =~ s/(.)/ord($1) > 255 ? "&#".ord($1).";" : $1/ge;
+
     return $tml;
 }
 
@@ -675,7 +684,6 @@ sub _restUpload {
         $filePath =~ m|([^/\\]*$)|;
         $fileName = $1;
     }
-
     $fileComment =~ s/\s+/ /go;
     $fileComment =~ s/^\s*//o;
     $fileComment =~ s/\s*$//o;
