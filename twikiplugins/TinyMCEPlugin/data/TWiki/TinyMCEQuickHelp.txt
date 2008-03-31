@@ -79,12 +79,6 @@
 <h3> Editing the raw text instead of Wysiwyg </h3><ul>
 <li> Select    <img src="%PUBURL%/%WEB%/TinyMCEPlugin/tinymce/jscripts/tiny_mce/plugins/twikibuttons/images/hide.gif" alt="the pickaxe" style="background-color:#f9f9f9"/>
 , or use the _Raw Edit_ link in the bottom action bar. </li></ul>
-<h3> Copy/Paste in Internet Explorer </h3>
-Note that Internet Explorer has a security setting that may prevent you from pasting content into the Wysiwyg editor. Changing the setting depends on the version of Internet Explorer.
-<ul>
-<li> Internet Explorer 6: Enable Tools->Internet Options->Security->Internet Zone selected->Custom Level->Scripting->Allow paste operations via script </li>
-<li> Internet Explorer 7: Enable Tools->Internet Options->Security->Internet Zone selected->Custom Level->Scripting->Allow programmatic clipboard access </li>
-</ul>
 %STOPINCLUDE%
 
 %META:FILEATTACHMENT{name="Format_Drop_Down.png" attr="" comment="" version="1"}%
