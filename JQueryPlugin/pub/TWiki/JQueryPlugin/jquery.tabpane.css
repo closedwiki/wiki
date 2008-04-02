@@ -21,10 +21,9 @@
   overflow-y:auto;
 }
 ul.jqTabGroup {
-  margin:0px;
-  padding:0px;
+  margin:0px !important;
+  padding:0px !important;
   height:29px;
-  line-height:100%;
   list-style:none;
 }
 ul.jqTabGroup li {
@@ -36,6 +35,7 @@ ul.jqTabGroup li {
   padding:0px 3px 0px 0px !important;
   margin:0px 4px 0px 0px !important;
   height:29px;
+  line-height:100%;
 }
 ul.jqTabGroup a:active,
 ul.jqTabGroup a:hover,

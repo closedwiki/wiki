@@ -1,12 +1,16 @@
 TWIKIROOT=~/twiki/MAIN
-TARGET= jquery-all.js jquery-all.css
+TARGET= \
+  jquery-all.js \
+  jquery-all.css \
+  jquery.superfish.js \
+  jquery.superfish.css
+
 MINIFYJS=$(TWIKIROOT)/tools/minifyjs
 MINIFYCSS=$(TWIKIROOT)/tools/minifycss
 
 
 all: $(TARGET)
 clean: 
-	
 	rm -f $(TARGET)
 
 JS_SOURCES=\
@@ -41,3 +45,10 @@ jquery-all.css: $(CSS_SOURCES) Makefile
 	@echo creating $@
 	@$(MINIFYCSS) $(CSS_SOURCES) > $@
 
+jquery.superfish.js: jquery.superfish.uncompressed.js
+	@echo creating $@
+	@$(MINIFYJS) $< > $@
+
+jquery.superfish.css: jquery.superfish.uncompressed.css
+	@echo creating $@
+	@$(MINIFYCSS) $< > $@

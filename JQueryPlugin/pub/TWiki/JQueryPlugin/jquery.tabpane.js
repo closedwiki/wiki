@@ -32,20 +32,21 @@
       var $tabGroup = $('<ul class="jqTabGroup"></ul>').prependTo($tabContainer);
 
       // get all headings and create tabs
-      var isFirstTab = 1;
+      var index = 1;
       var currentTabId;
       $(this).children(".jqTab").each(function() {
         var title = $('h2', this).eq(0).remove().text();
-        $tabGroup.append('<li'+(isFirstTab?' class="current"':'')+'><a href="javascript:void(0)" data="'+this.id+'">'+title+'</a></li>');
-        if (isFirstTab) {
-          isFirstTab = 0;
+        $tabGroup.append('<li'+(index == opts.select?' class="current"':'')+'><a href="javascript:void(0)" data="'+this.id+'">'+title+'</a></li>');
+        if (index == opts.select) {
           currentTabId = this.id;
           $(this).addClass("current");
         } else {
           writeDebug("hiding "+this.id);
           $(this).removeClass("current");
         }
+        index++;
       });
+      //$tabGroup.append('<br class="twikiClear" />');
       $(".jqTabGroup li > a", this).click(function() {
         $(this).blur();
         var newTabId = $(this).attr('data');
@@ -58,7 +59,7 @@
 
           // before click handler
           if (typeof(data.beforeHandler) != "undefined") {
-            var command = "{ var oldTab = '"+currentTabId+"'; var newTab = '"+newTabId+"'; "+data.beforeHandler+";}";
+            var command = "{ oldTab = '"+currentTabId+"'; newTab = '"+newTabId+"'; "+data.beforeHandler+";}";
             writeDebug("exec "+command);
             //eval(command);
           }
@@ -71,7 +72,7 @@
 
           // after click handler
           if (typeof(data.afterHandler) != "undefined") {
-            var command = "{ var oldTab = '"+currentTabId+"'; var newTab = '"+newTabId+"'; "+data.afterHandler+";}";
+            var command = "{ oldTab = '"+currentTabId+"'; newTab = '"+newTabId+"'; "+data.afterHandler+";}";
             writeDebug("exec "+command);
             eval(command);
           }
@@ -101,6 +102,7 @@
    * plugin defaults
    */
   $.fn.tabpane.defaults = {
-    debug: false
+    debug: false,
+    select: 1
   };
 })(jQuery);
