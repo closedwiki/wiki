@@ -474,6 +474,7 @@ sub diff {
     do {
         my $diff = $difftmpl;
         $diff =~ s/%REVTITLE1%/$r1/go;
+        $diff =~ s/%REVTITLE2%/$r2/go;
 
         my $rInfo = '';
         my $rInfo2 = '';
