@@ -46,6 +46,9 @@
 #PageTop %TMPL:END%
 %TMPL:DEF{"bodyend"}%</div><!--/twikiPage--></body></html>%TMPL:END%
 
+%TMPL:DEF{"broadcastmessage"}%%IF{"defined BROADCASTMESSAGE and $BROADCASTMESSAGE != ''" then="$percntTMPL:P{$quotbroadcastmessage:contents$quot}$percnt"}%%TMPL:END%
+%TMPL:DEF{"broadcastmessage:contents"}%<div class="twikiBroadcastMessage"> %BROADCASTMESSAGE% </div>%TMPL:END%
+
 %TMPL:DEF{"attachments"}%%TMPL:END%
 
 %TMPL:DEF{"standardheader"}%
