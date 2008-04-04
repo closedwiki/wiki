@@ -17,7 +17,7 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
-=begin twiki
+=pod
 
 ---+ package TWiki::Users::BaseUserMapping
 
@@ -48,7 +48,7 @@ use strict;
 use Assert;
 use Error;
 
-=begin twiki
+=pod
 
 ---++ ClassMethod new ($session)
 
@@ -107,7 +107,7 @@ sub new {
     return $this;
 }
 
-=begin twiki
+=pod
 
 ---++ ObjectMethod finish()
 Break circular references.
@@ -129,7 +129,7 @@ sub finish {
     $this->SUPER::finish();
 }
 
-=begin twiki
+=pod
 
 ---++ ObjectMethod loginTemplateName () -> templateFile
 
@@ -143,7 +143,7 @@ sub loginTemplateName {
 
 
 
-=begin twiki
+=pod
 
 ---++ ObjectMethod handlesUser ( $cUID, $login, $wikiname) -> $boolean
 
@@ -164,7 +164,7 @@ sub handlesUser {
 }
 
 
-=begin twiki
+=pod
 
 ---++ ObjectMethod getCanonicalUserID ($login) -> cUID
 
@@ -190,7 +190,7 @@ sub getCanonicalUserID {
 }
 
 
-=begin twiki
+=pod
 
 ---++ ObjectMethod getLoginName ($cUID) -> login
 
@@ -208,7 +208,7 @@ sub getLoginName {
     return $this->{U2L}{$user};
 }
 
-=begin twiki
+=pod
 
 ---++ ObjectMethod getWikiName ($cUID) -> wikiname
 
@@ -222,7 +222,7 @@ sub getWikiName {
     return $this->{U2W}->{$cUID} || getLoginName( $this, $cUID );
 }
 
-=begin twiki
+=pod
 
 ---++ ObjectMethod userExists( $user ) -> $boolean
 
@@ -237,7 +237,7 @@ sub userExists {
     return $this->{U2L}{$cUID};
 }
 
-=begin twiki
+=pod
 
 ---++ ObjectMethod eachUser () -> listIterator of cUIDs
 
@@ -255,7 +255,7 @@ sub eachUser {
 }
 
 
-=begin twiki
+=pod
 
 ---++ ObjectMethod eachGroupMember ($group) ->  listIterator of cUIDs
 
@@ -279,7 +279,7 @@ sub eachGroupMember {
 }
 
 
-=begin twiki
+=pod
 
 ---++ ObjectMethod isGroup ($user) -> boolean
 TODO: what is $user - wikiname, UID ??
@@ -295,7 +295,7 @@ sub isGroup {
 }
 
 
-=begin twiki
+=pod
 
 ---++ ObjectMethod eachGroup () -> ListIterator of groupnames
 
@@ -313,7 +313,7 @@ sub eachGroup {
 }
 
 
-=begin twiki
+=pod
 
 ---++ ObjectMethod eachMembership ($cUID) -> ListIterator of groups this user is in
 
@@ -332,7 +332,7 @@ sub eachMembership {
     return $it;
 }
 
-=begin twiki
+=pod
 
 ---++ ObjectMethod isAdmin( $cUID ) -> $boolean
 
@@ -353,7 +353,7 @@ sub isAdmin {
 }
 
 
-=begin twiki
+=pod
 
 ---++ ObjectMethod isInGroup ($user, $group, $scanning) -> bool
 
@@ -380,7 +380,7 @@ sub isInGroup {
     return 0;
 }
 
-=begin twiki
+=pod
 
 ---++ ObjectMethod getEmails($user) -> @emailAddress
 
@@ -395,7 +395,7 @@ sub getEmails {
     return $this->{U2E}{$user} || ();
 }
 
-=begin twiki
+=pod
 
 ---++ ObjectMethod findUserByWikiName ($wikiname) -> list of cUIDs associated with that wikiname
 
@@ -430,7 +430,7 @@ sub findUserByWikiName {
     return \@users;
 }
 
-=begin twiki
+=pod
 
 ---++ ObjectMethod checkPassword( $userName, $passwordU ) -> $boolean
 
@@ -458,7 +458,7 @@ sub checkPassword {
     return 0;
 }
 
-=begin twiki
+=pod
 
 ---++ ObjectMethod setPassword( $user, $newPassU, $oldPassU ) -> $boolean
 
@@ -481,7 +481,7 @@ sub setPassword {
           'cannot change user passwords using TWiki::BaseUserMapping');
 }
 
-=begin twiki
+=pod
 
 ---++ ObjectMethod passwordError( ) -> $string
 

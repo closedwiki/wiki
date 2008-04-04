@@ -914,6 +914,10 @@ sub checkPassword {
 
 ---++ ObjectMethod setPassword( $user, $newPassU, $oldPassU ) -> $boolean
 
+BEWARE: $user should be a cUID, but is a login when the resetPassword functionality is used.
+The UserMapper needs to convert either one to a valid login for use by the Password manager
+TODO: needs fixing
+
 If the $oldPassU matches matches the user's password, then it will
 replace it with $newPassU.
 
