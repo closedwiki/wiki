@@ -56,19 +56,6 @@ HERE
         $TWiki::cfg{Site}{CharSet} = 'iso-8859-1';
     }
 
-    # Extract the default site language - ignores '@euro' part of
-    # 'fr_BE@euro'-type locales.
-    unless( defined( $TWiki::cfg{Site}{Lang} )) {
-        $TWiki::cfg{Site}{Locale} =~ m/^([a-z]+)_([a-z]+)/i;
-        $TWiki::cfg{Site}{Lang} = (lc $1) if defined $1;
-    }
-
-    unless( defined( $TWiki::cfg{Site}{FullLang} )) {
-        $TWiki::cfg{Site}{Locale} =~ m/^([a-z]+)_([a-z]+)/i;
-        $TWiki::cfg{Site}{FullLang} = (lc "$1-$2" )
-          if defined $1 and defined $2;
-    }
-
     # Check for unusable multi-byte encodings as site character set
     # - anything that enables a single ASCII character such as '[' to be
     # matched within a multi-byte character cannot be used for TWiki.

@@ -48,8 +48,8 @@ if a built-in English-language web (Main, TWiki or Plugins).  Plurals
 apply to names ending in 's', where topic doesn't exist with plural
 name.
 
-SMELL: this is highly langauge specific, and shoud be overridable
-on a per-installation basis.
+Note that this is highly langauge specific, and need to be enabled
+on a per-installation basis with $TWiki::cfg{PluralToSingular}.
 
 =cut
 
@@ -57,14 +57,13 @@ sub singularForm {
     my( $web, $pluralForm ) = @_;
     $web =~ s#\.#/#go;
 
-    # SMELL Plural processing should be set per web
-    # SMELL Lang settings should be set per web
-    return undef unless( $TWiki::cfg{PluralToSingular} );
+    # Plural processing only if enabled in configure or one of the
+    # distributed webs
+    return undef unless( $TWiki::cfg{PluralToSingular} or 
+                         $web eq $TWiki::cfg{UsersWebName} or 
+                          $web eq $TWiki::cfg{SystemWebName} );
     return undef unless( $pluralForm =~ /s$/ );
-    return undef unless( !defined($TWiki::cfg{Site}{Lang}) or
-                           $TWiki::cfg{Site}{Lang} eq 'en'
-                             or $web eq $TWiki::cfg{UsersWebName}
-                               or $web eq $TWiki::cfg{SystemWebName} );
+
     # Topic name is plural in form
     my $singularForm = $pluralForm;
     $singularForm =~ s/ies$/y/;      # plurals like policy / policies
