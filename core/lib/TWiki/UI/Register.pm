@@ -678,8 +678,8 @@ sub changePassword {
                                     def => 'wrong_password');
     }
 
+    my $cUID = $users->getCanonicalUserID($user);
     if( defined $email ) {
-        my $cUID = $users->getCanonicalUserID($user);
         my $return = $users->setEmails($cUID, split(/\s+/, $email) );
     }
 
@@ -694,7 +694,7 @@ sub changePassword {
                 params => [ $TWiki::cfg{MinPasswordLength} ] );
         }
 
-        unless( $users->setPassword( $user, $passwordA, $oldpassword )) {
+        unless( $users->setPassword( $cUID, $passwordA, $oldpassword )) {
             throw TWiki::OopsException( 'attention',
                                         web => $webName,
                                         topic => $topic,
