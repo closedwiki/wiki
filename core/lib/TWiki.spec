@@ -722,18 +722,13 @@ $TWiki::cfg{UseLocale} = $FALSE;
 # specify the character set in which content must be presented for the user's
 # web browser.
 # <br/>
-# The language part also prevents English plural handling for non-English
-# languages. If the language is not English, TWiki won't try to calculate
-# plurals for WikiNames automatically.
-# <br/>
 # Note that {Site}{Locale} is ignored unless {UseLocale} is set.
 # <br />
-# Locale names are not standardised - check 'locale -a' on your
-# system to see what's installed, and check this works using command
-# line tools.  You may also need to check what charsets your browsers
-# accept - the 'preferred MIME names' at
-# http://www.iana.org/assignments/character-sets are a good starting
-# point.
+# Locale names are not standardised. On Unix/Linux check 'locale -a' on
+# your system to see which locales are supported by your system.
+# You may also need to check what charsets your browsers accept - the 
+# 'preferred MIME names' at http://www.iana.org/assignments/character-sets
+# are a good starting point.
 # <br />
 # WARNING: Topics are stored in site character set format, so data
 # conversion of file names and contents will be needed if you change
@@ -741,11 +736,13 @@ $TWiki::cfg{UseLocale} = $FALSE;
 # characters.
 # <br />
 # Examples:<br />
+# <code>en_US.ISO-8859-1</code> - Standard US ISO-8859-1 (default)<br />
 # <code>de_AT.ISO-8859-15</code> - Austria with ISO-8859-15 for Euro<br />
 # <code>ru_RU.KOI8-R</code> - Russia<br />
 # <code>ja_JP.eucjp</code> - Japan <br />
 # <code>C</code> - English only; no I18N features regarding character
-# encodings and external programs.
+# encodings and external programs.<br />
+# UTF-8 locale like en_US.utf8 is still considered experimental
 $TWiki::cfg{Site}{Locale} = 'en_US.ISO-8859-1';
 
 # **BOOLEAN EXPERT**
@@ -774,24 +771,15 @@ $TWiki::cfg{UpperNational} = '';
 # 
 $TWiki::cfg{LowerNational} = '';
 
-# **STRING 50 EXPERT**
-# Change this only if you must match a specific locale (from 'locale -a')
-# whose character set is not supported by your chosen conversion module
+# **STRING 50 **
+# Set this to match your chosen {Site}{Locale} (from 'locale -a')
+# whose character set is not supported by your available perl conversion module
 # (i.e. Encode for Perl 5.8 or higher, or Unicode::MapUTF8 for other Perl
 # versions).  For example, if the locale 'ja_JP.eucjp' exists on your system
 # but only 'euc-jp' is supported by Unicode::MapUTF8, set this to 'euc-jp'.
-# If you don't define it, it will automatically be defaulted.
+# If you don't define it, it will automatically be defaulted to iso-8859-1<br />
+# UTF-8 support is still considered experimental. Use the value 'utf-8' to try it.
 $TWiki::cfg{Site}{CharSet} = undef;
-
-# **STRING 20 EXPERT**
-# Site language - change this from the default if it is incorrect. Only
-# used if {UseLocale} is set.
-$TWiki::cfg{Site}{Lang} = undef;
-
-# **STRING 20 EXPERT**
-# Site language - change this from the default if it is incorrect. Only
-# used if {UseLocale} is set.
-$TWiki::cfg{Site}{FullLang} = undef;
 
 # **BOOLEAN EXPERT**
 # Change non-existant plural topic name to singular,

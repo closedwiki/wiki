@@ -327,8 +327,6 @@ BEGIN {
 
     $functionTags{CHARSET}   = sub { $TWiki::cfg{Site}{CharSet} ||
                                        'iso-8859-1' };
-    $functionTags{SHORTLANG} = sub { $TWiki::cfg{Site}{Lang} || '' };
-    $functionTags{LANG}      = sub { $TWiki::cfg{Site}{FullLang} || '' };
 
     # Tell CGI.pm which charset we are using if not default
     if( defined $TWiki::cfg{Site}{CharSet} &&
@@ -2354,9 +2352,9 @@ sub urlEncodeAttachment {
 
     my $usingEBCDIC = ( 'A' eq chr(193) ); 	# Only true on EBCDIC mainframes
 
-    if( (defined($TWiki::cfg{Site}{CharSet}) and $TWiki::cfg{Site}{CharSet} eq "utf-8") or $usingEBCDIC ) {
-	# Just let browser do UTF-8 URL encoding 
-	return $text;
+    if( (defined($TWiki::cfg{Site}{CharSet}) and $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i ) or $usingEBCDIC ) {
+        # Just let browser do UTF-8 URL encoding
+        return $text;
     }
 
     # Freeze into site charset through URL encoding

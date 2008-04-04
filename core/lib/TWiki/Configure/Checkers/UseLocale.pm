@@ -88,9 +88,9 @@ sub check {
     my $n = $this->checkPerlModules( \@required );
 
     if ($] >= 5.008) {
-        $n .= $this->checkPerlModules( \@perl56 );
-    } else {
         $n .= $this->checkPerlModules( \@perl58 );
+    } else {
+        $n .= $this->checkPerlModules( \@perl56 );
     }
 
     if( $TWiki::cfg{OS} eq 'WINDOWS' ) {
