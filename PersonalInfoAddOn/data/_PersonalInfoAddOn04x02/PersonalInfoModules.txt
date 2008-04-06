@@ -16,7 +16,7 @@ This topic holds a number of modules (INCLUDE sections) to display and search us
 
 <verbatim>
 %STARTSECTION{"personalInfoDataRow" fieldName=%FIELDNAME% label=%LABEL%}%<tr>
-<th> %label% </th><td> %IF{"defined editUserData" then="<input type='text' name='%fieldName%' id='%fieldName%' class='twikiInputField' size='40' value='%FORMFIELD{"%fieldName%" topic="%BASETOPIC%" format="<nop>$value"}%' />" else="%FORMFIELD{"%fieldName%" topic="%BASETOPIC%"}%" }% </td>
+<th> %label% </th><td> %IF{"defined editUserData" then="<input type='text' name='%fieldName%' id='%fieldName%' $percntIF{$quot\'%editable%\'=\'no\'$quot then=$quotdisabled=\'disabled\'$quot}$percnt $percntIF{$quot\'%editable%\'=\'no\'$quot then=$quotclass=\'twikiInputFieldDisabled\'$quot else=$quotclass=\'twikiInputField\'$quot}$percnt size='40' value='%FORMFIELD{"%fieldName%" topic="%BASETOPIC%" format="$value"}%' />" else="%FORMFIELD{"%fieldName%" topic="%BASETOPIC%" format="$percntIF{$quot\'%link%\'=\'yes\'$quot then=$quot[[$value]]$quot else=$quot$value$quot}$percnt"}%" }% </td>
 </tr>%ENDSECTION{"personalInfoDataRow"}%
 </verbatim>
 
@@ -30,6 +30,7 @@ margin:0 0 1em 0;
 }
 .personalInfo .pIparagraphWithImageLeftText table {
 border-width:1px 0 0 0;
+border-collapse:collapse;
 }
 .personalInfo .pIparagraphWithImageLeftText th {
 font-weight:normal;
@@ -40,6 +41,8 @@ white-space:nowrap;
 }
 .personalInfo .pIparagraphWithImageLeftText td {
 width:100%;
+overflow:hidden;
+white-space:nowrap;
 }
 .personalInfo .pIparagraphWithImageLeftText td,
 .personalInfo .pIparagraphWithImageLeftText th {
@@ -55,7 +58,7 @@ border-style:solid;
 border-color:#e5e2db;
 }
 .personalInfoFormDataActions {
-margin:1.5em 0 0 0;
+margin:.5em 0 2em 0;
 padding:0 .8em; /* same as .pIparagraphWithImageLeftText td */
 }
 .personalInfoFormDataActions a {
@@ -68,14 +71,14 @@ color:#ccc;
 </verbatim>
 
 <verbatim>
-%STARTSECTION{"personalInfo"}%<div class="pIparagraphFrame personalInfo">
+%STARTSECTION{"personalInfo"}%<div class="pIparagraphFrame personalInfo%IF{"$'FORMFIELD{WorkStatus}'!='Current'" then=" pIFormer"}%">
 ---+!! <nop>%FORMFIELD{"FirstName" topic="%BASETOPIC%"}% %FORMFIELD{"LastName" topic="%BASETOPIC%"}%
 %INCLUDE{"PersonalInfoLayoutModules" section="paragraphWithImageLeftStyle"}%
 <form name="main" action="%SCRIPTURLPATH{"save"}%/%BASEWEB%/%BASETOPIC%" method="post">
 <input type="hidden" name="editaction" value="form" />
 <!-- if !AllowRedirectUrl is enabled in configure, !PersonalInfo is updated to save the search data as javascript file -->
 %IF{"context AttachContentPluginEnabled" then='<input type="hidden" name="redirectto" value="%SCRIPTURL{save}%/%WEB%/PersonalInfo?redirectto=%BASETOPIC%" />'}%
-%INCLUDE{"PersonalInfoLayoutModules" section="paragraphWithImageLeft" imgName="%FORMFIELD{"Picture" topic="%BASEWEB%.%BASETOPIC%" format="$value" default="" alttext=""}%" imgWeb="%BASEWEB%" imgTopic="%BASETOPIC%" imgWidth="120" imgTitle="%FORMFIELD{FirstName}% %FORMFIELD{LastName}%" text="%INCLUDE{"PersonalInfo" section="personalInfoFields"}%
+%INCLUDE{"PersonalInfoLayoutModules" section="paragraphWithImageLeft" imgName="%FORMFIELD{"Picture" topic="%BASEWEB%.%BASETOPIC%" format="$value" default="" alttext=""}%" imgWeb="%BASEWEB%" imgTopic="%BASETOPIC%" imgWidth="120" imgTitle="" text="%INCLUDE{"PersonalInfo" section="personalInfoFields"}%
 %IF{"not defined editUserData" then="<div class='personalInfoFormDataActions twikiUnvisited'>[[%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?editUserData=on][Edit data]] <span class='twikiSeparator'>|</span> [[%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?template=PersonalInfoPictureView][Change picture]]</div>" }% %IF{"defined editUserData" then="<div class='personalInfoFormDataActions'><input type='submit' class='twikiSubmit' name='action_save' id='save' value='Save' /> <input type='submit' class='twikiButton' name='action_cancel' id='cancel' value='Cancel' /></div>" }%" }% </form></div><!--/pIparagraphFrame-->%ENDSECTION{"personalInfo"}%
 </verbatim>
 
@@ -270,49 +273,52 @@ color:#fff;
 
 <verbatim>
 %STARTSECTION{"pictures"}%<style type="text/css" media="all">
-#pISearchResultsGrid  {
+#pISearchResultsGrid {
 margin:1em 0;
 }
-#pISearchResultsGrid .pIimage {
-text-align:center;
-display:block;
-%IF{"defined imgWidth" then="width:%imgWidth%px;"}%%IF{"defined imgHeight" then="height:%imgHeight%px;"}%
+#pISearchResultsGrid .twikiImage a img {
+border:none;
+margin:0 0 .35em 0;
+padding:0;
 }
-#pISearchResultsGrid .pIimage img {
-text-align:center;
-}
-.pISearchResultsGridItem {
-overflow:hidden;
-}
-a.pISearchResultsGridItem {
+#pISearchResultsGrid a.pISearchResultsGridItem {
 display:block;
 float:left;
+text-align:center;
+border:1px solid #eee;
+text-decoration:none;
 margin:0 .5em 1em 0;
 padding:3px;
-text-decoration:none;
-border-width:1px;
-border-style:solid;
+overflow:hidden;
+width:auto;%IF{"defined gridWidth" then="width:%gridWidth%px;"}%
+height:100%;%IF{"defined gridHeight" then="height:%gridHeight%px;"}%
 }
-.pISearchResultsGridItem:link,
-.pISearchResultsGridItem:visited {
-border-color:#eee;
+#pISearchResultsGrid a.pISearchResultsGridItem img {
+overflow:hidden;
+width:auto;%IF{"defined imgWidth and '%imgWidth%'!=''" then="width:%imgWidth%px;"}%
 }
-.pISearchResultsGridItem:hover {
-border-color:#d6000f;
-background-color:transparent;
-}
-p.pISearchResultsGridInfo {
-text-align:center;
-margin:.5em 0 0 0;
-color:#06c; /* link color */
-%IF{"defined imgWidth" then="width:%imgWidth%px;"}%
+#pISearchResultsGrid .pISearchResultsGridInfo {
+display:block;
+font-size:94%;
 line-height:100%;
-height:2.25em; /* allow 2 lines */
 overflow:hidden;
 }
+#pISearchResultsGrid a:link .pISearchResultsGridInfo,
+#pISearchResultsGrid a:visited .pISearchResultsGridInfo {
+text-decoration:none;
+color:#06c;
+}
+#pISearchResultsGrid .twikiImage a:hover {
+border:1px solid #06c;
+}
+#pISearchResultsGrid a:hover .pISearchResultsGridInfo {
+text-decoration:none;
+color:#06c;
+background:none;
+}
 </style>
-<div id="pISearchResultsGrid">%SEARCH{ "[F]irstName.*value=.*();[W]orkStatus.*value=.*(Current)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,PersonalInfoFaceBook,TWikiContributor,TWikiGuest,UnknownUser%IF{'defined exclude' then=',%exclude%'}%" order="topic" format="<a href='%SCRIPTURL{view}%/$web/$topic' class='pISearchResultsGridItem' id='pISearch$topic' title='$formfield(FirstName) $formfield(LastName)'><span class='pIimage'>$percntINCLUDE{$quotPersonalInfoLayoutModules$quot section=$quotimage$quot imgType=$quotnolink$quot imgWeb=$quot$web$quot imgTopic=$quot$topic$quot imgHeight=$quot%imgHeight%$quot imgTitle=$quot$formfield(FirstName) $formfield(LastName)$quot imgName=$quot$percntFORMFIELD{$quotPicture$quot topic=$quot$web.$topic$quot format=$quot$value$quot default=$quot$quot alttext=$quot$quot}$percnt$quot}$percnt</span><p class='pISearchResultsGridInfo'>$formfield(FirstName) $formfield(LastName)</p></a>" "}%<br class="twikiClear" /></div>%ENDSECTION{"pictures"}%
-
+<div id="pISearchResultsGrid">%SEARCH{ "[W]orkStatus.*value=.*(Current)" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="PresentationForm,UserForm,PersonalInfo,PersonalInfoDocumentation,PersonalInfoFaceBook,TWikiContributor,TWikiGuest,UnknownUser%IF{'defined exclude' then=',%exclude%'}%" order="topic" format="<div class='twikiImage'><a href='%SCRIPTURL{view}%/$web/$topic' class='pISearchResultsGridItem' id='pISearch$topic' title='$formfield(FirstName) $formfield(LastName)'>$percntINCLUDE{$quotPersonalInfoLayoutModules$quot section=$quotimage$quot imgType=$quotnolink$quot imgWeb=$quot$web$quot imgTopic=$quot$topic$quot imgTitle=$quot$formfield(FirstName) $formfield(LastName)$quot imgName=$quot$percntFORMFIELD{$quotPicture$quot topic=$quot$web.$topic$quot format=$quot$value$quot default=$quot$quot alttext=$quot$quot}$percnt$quot}$percnt<span class='pISearchResultsGridInfo'>$formfield(FirstName) $formfield(LastName)</span></a></div>" "}%<br class="twikiClear" /></div>%ENDSECTION{"pictures"}%
+</verbatim>
 
 
 ---+++ pictureFilterSearch

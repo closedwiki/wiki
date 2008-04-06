@@ -60,7 +60,7 @@ If you are upgrading from a previous version of this add-on, please note that an
    * Unzip ==%TOPIC%.zip== in your ($TWIKI_ROOT) directory.
    * Select the data files for your version of TWiki (you are currently running on *%WIKIVERSION%*)
       * TWiki 4.1.x: use =/data/_PersonalInfoAddOn04x01=
-      * TWiki 4.2.x: use =/data/_PersonalInfoAddOn04x02=
+      * TWiki 4.2.x: use =/data/_PersonalInfoAddOn04x02= - this version is being maintained
    * Copy the data files to your %MAINWEB% web.
    * Optional plugins:
       * TWiki:Plugins/AttachContentPlugin for a faster quick search module 
@@ -85,7 +85,8 @@ If you are using !PersonalInfoAddon for TWiki 4.1, and need to update to the ver
 | Copyright &copy;: | 2007, 2008 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
-| Plugin Version: | 1.3.4 (08 Feb 2008)  |
+| Plugin Version: | 1.4 (06 Apr 2008)  |
+| 06 Apr 2008 | 1.4 Various formatting fixes (version TWiki 4.2 only). |
 | 30 Jan 2008 | 1.3.2 Fixes template bug in picture upload screen that caused images to be uploaded as FILENAME. |
 | 23 Aug 2007 | 1.3 Made this add-on work on TWiki 4.1 as well. Added vCard format and improved facebook display.  |
 | 12 Jun 2007 | 1.2 Update for TWiki 4.2 template refactoring (so the add-on will work with default skin as well); images can now be rendered using !ImagePlugin; added "table of all users" and face book. |
