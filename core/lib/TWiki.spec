@@ -849,11 +849,6 @@ $TWiki::cfg{Store}{RememberChangesFor} = 31 * 24 * 60 * 60;
 $TWiki::cfg{RCS}{asciiFileSuffixes} = qr/\.(txt|html|xml|pl)$/;
 
 # **BOOLEAN EXPERT**
-# Set this if you want to use RCS subdirectories instead of storing
-# ,v files alongside the topics. Not recommended.
-$TWiki::cfg{RCS}{useSubDir} = $FALSE;
-
-# **BOOLEAN EXPERT**
 # Set this if your RCS cannot check out using the -p option.
 # May be needed in some windows installations (not required for cygwin)
 $TWiki::cfg{RCS}{coMustCopy} = $FALSE;

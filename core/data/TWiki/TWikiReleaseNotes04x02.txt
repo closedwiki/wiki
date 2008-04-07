@@ -50,6 +50,16 @@ TWiki 4.2.0 is shipped with
       * Table of Content (TOC) feature enhanced 
       * User Mapping (mapping between login name and !WikiName) code has been extended to allow pluggable modules to integrate with all sorts of alternative authentication and Management schemes. For normal cases you use the default !TWikiUserMapping which is using the !Main.TWikiUsers topic to map between login and !WikiName. A new !BaseUserMapping is provided for TWikis where you only have guests and an administrator. In this case you use the login and password given in configure to login as an admin.
 
+---++ Important Changes since 4.2.0
+
+---+++ The RCS files in subdirectories feature removed
+
+The feature related to the config option TWiki::cfg{RCS}{useSubDir} has been removed. It never really worked and there are all sorts of issues related to it with respect to distribution of extensions and packaged applications, and it does not really add any performance advantages. So instead of trying to repair a bad feature that never really worked it was decided to remove it.
+
+The removal was announced in a news letter and in a proposal topic, and discussed at several release meetings, and noone objected against its removal.
+
+If you have run TWiki with this feature (maybe with a self implemented fix of the code) you will need to simply copy all the ,v files in all RCS directories to the directory above (where you find the .txt file or the attached filed) when you upgrade to 4.2.1.
+
 ---++ Important Changes since 4.1.2
 
 ---+++ New WYSIWYG Editor
