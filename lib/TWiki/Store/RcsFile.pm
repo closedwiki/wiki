@@ -63,23 +63,20 @@ sub new {
     $this->{web} = $web;
 
     if( $topic ) {
-        my $rcsSubDir = ( $TWiki::cfg{RCS}{useSubDir} ? '/RCS' : '' );
 
         $this->{topic} = $topic;
 
         if( $attachment ) {
             $this->{attachment} = $attachment;
 
-            $this->{file} = $TWiki::cfg{PubDir}.'/'.$web.'/'.
-              $this->{topic}.'/'.$attachment;
-            $this->{rcsFile} = $TWiki::cfg{PubDir}.'/'.
-              $web.'/'.$topic.$rcsSubDir.'/'.$attachment.',v';
+            $this->{file} = $TWiki::cfg{PubDir} . '/' . $web .
+              '/' . $topic . '/' . $attachment;
+            $this->{rcsFile} = $this->{file} . ',v';
 
         } else {
-            $this->{file} = $TWiki::cfg{DataDir}.'/'.$web.'/'.
-              $topic.'.txt';
-            $this->{rcsFile} = $TWiki::cfg{DataDir}.'/'.
-              $web.$rcsSubDir.'/'.$topic.'.txt,v';
+            $this->{file} = $TWiki::cfg{DataDir} . '/' . $web .
+              '/' . $topic . '.txt';
+            $this->{rcsFile} = $this->{file} . ',v';
         }
     }
 
