@@ -25,7 +25,7 @@ sub handleTabPane {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
   my $tpId = 'jqTabPane'.($tabPaneCounter++);
-  my $select = $params->{select};
+  my $select = $params->{select} || '';
 
   $select =~ s/[^\d]//go;
   $select ||= 1;
