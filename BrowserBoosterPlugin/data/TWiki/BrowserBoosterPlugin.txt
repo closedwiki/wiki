@@ -25,6 +25,8 @@ On a network with a high latency every additional css or js file costs you an ad
 
 ---++ Installation Instructions
 
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
+
    * [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] the ZIP file
    * Unzip it in your twiki installation directory.
    * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
