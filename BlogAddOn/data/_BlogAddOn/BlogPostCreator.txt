@@ -15,7 +15,8 @@ function canSubmit() {
   document.forms.newTopicForm.Title.value = inputTitle;
   
   inputTitle = inputTitle.replace(/^\s+|\s+$/g,""); // trim spaces at ends
-  var topicName = "%GMTIME{"$year-$mo-$day"}%_" + inputTitle;
+  //var topicName = "%GMTIME{"$year-$mo-$day"}%_" + inputTitle;
+  var topicName = inputTitle;
   topicName = topicName.replace(/_/g, "BLOGPOSTADDONUNDERSCORE");
   topicName = topicName.replace(/\./g, "BLOGPOSTADDONUNDERSCORE");
   topicName = topicName.replace(/ /g, "BLOGPOSTADDONUNDERSCORE");
@@ -25,6 +26,9 @@ function canSubmit() {
   topicName = twiki.String.removePunctuation(topicName);
   topicName = topicName.replace(/BLOGPOSTADDONUNDERSCORE/g, "_");
   topicName = topicName.replace(/BLOGPOSTADDONDASH/g, "-");
+  
+  if (!topicName) return false;
+  
   document.forms.newTopicForm.topic.value = topicName;
   
   /* no-js-fallback */
@@ -35,8 +39,7 @@ function canSubmit() {
   document.forms.newTopicForm.jstopic.value = topicName;
   didSwitchToJsField = true;
   
-  if (topicName) return true;
-  return false;
+  return true;
 }
 /* ]]> */
 </script>
