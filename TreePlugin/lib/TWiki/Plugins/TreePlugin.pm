@@ -2,6 +2,7 @@
 # TWiki ($wikiversion has version info)
 #
 # Copyright (C) 2002 Slava Kozlov,
+# Copyright (C) 2006-2008 Stéphane Lenclud,
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -97,8 +98,8 @@ sub HandleTreeTag
     $plist .= "\&" if $plist;
     my $CurrUrl = $cgi->url . $cgi->path_info() . "?" . $plist;
     
-    my $nodiv = $params->{'nodiv'} || "0";
-    my $attrWeb = $params->{'web'} || $aWeb || "";
+    my $nodiv = $params->{'nodiv'} || '0';
+    my $attrWeb = $params->{'web'} || $aWeb || '';
     #Get root topic id in the form =web.topic=
     my $rootTopicId = $params->{'topic'} ? "$attrWeb.".$params->{'topic'} : $RootLabel; 
   
@@ -107,14 +108,44 @@ sub HandleTreeTag
     my $attrHeader='';
     if (defined $params->{'header'})
         {
-        $attrHeader ='<div class="treePluginHeader">'. $params->{'header'}."</div>\n";
-        }
-    else
-        {
-        #Make sure the tree starts on a new line and get formatted correctly
-        $attrHeader=""; 
+	    if ($nodiv>=2)
+	    	{
+		    $attrHeader = $params->{'header'};	
+	    	}
+	    else
+	    	{
+	        $attrHeader ='<div class="treePluginHeader">'. $params->{'header'}."</div>\n";
+        	}
         }
 
+    my $attrFooter='';
+    if (defined $params->{'footer'})
+        {
+   	    if ($nodiv>=2)
+	    	{
+		    $attrFooter = $params->{'footer'};	
+	    	}
+	    else
+	    	{
+        	$attrFooter ='<div class="treePluginFooter">'. $params->{'footer'}."</div>\n";
+    		}
+        }
+        
+    my $attrZero='';
+    if (defined $params->{'zero'})
+        {
+   	    if ($nodiv>=2)
+	    	{
+		    $attrZero = $params->{'zero'};	
+	    	}
+	    else
+	    	{   
+       		$attrZero ='<div class="treePluginZero">'. $params->{'zero'}."</div>\n";
+   			}
+        }
+
+        
+                
     my $attrFormat = $params->{'format'} || "";   
     my $attrFormatBranch = $params->{'formatbranch'} || "";
     $attrFormatting = $params->{'formatting'} || "";
@@ -165,6 +196,7 @@ sub HandleTreeTag
 
     my %nodes = ();
 
+    
     &TWiki::Func::writeDebug("First loop") if $debug;    
     
     #### Parse SEARCH results and build up tree structure    
@@ -174,7 +206,7 @@ sub HandleTreeTag
     #   * Create TWikiNode objects 
     #   * Populate hash of nodes/topics
     foreach ( split /\n/, $search ) {
-        my ( $nodeWeb, $nodeTopic, $nodeFormat ) = split (/\|/,$_,3);    # parse out node data
+        my ( $nodeWeb, $nodeTopic, $nodeParent, $nodeFormat ) = split (/\|/,$_,4);    # parse out node data
         &TWiki::Func::writeDebug("SEARCH LINE: $nodeWeb, $nodeTopic, $nodeFormat") if $debug;  
         my $nodeId = "$nodeWeb.$nodeTopic";
         
@@ -183,18 +215,34 @@ sub HandleTreeTag
        
         # create node object and add it to the hash
         my $node = createTWikiNode( $nodeId, \%nodes );        
-        $node->data( "web",     $nodeWeb );
-        $node->data( "topic",   $nodeTopic );
-        $node->data( "format",  $nodeFormat ) if defined $nodeFormat; 
+        $node->data( 'web',     $nodeWeb );
+        $node->data( 'topic',   $nodeTopic );
+        $node->data( 'format',  $nodeFormat ) if defined $nodeFormat; 
+        
+        #Work out the parentid as web.topic
+        if ($nodeParent eq '$parent')
+        	{
+	        #No parent property for that topic	
+	        $node->data( 'parentid', undef );	
+         	}
+        else
+        	{
+	        #Now deal with the case where we have no web specified in the parent Codev.GetRidOfTheDot	
+        	unless ($nodeParent=~/.+\.+/) #unless web.topic format
+        		{
+        		#Prepend the web 
+        		$nodeParent="$nodeWeb.$nodeParent"; 
+        		}
+        	$node->data( 'parentid', $nodeParent);		
+    		}
     }
-    
-    &TWiki::Func::writeDebug("Create root") if $debug;    
-    
+
+    &TWiki::Func::writeDebug("Create root") if $debug;      
     #SL: to simplify we could even systematically create the web root, that would do no arm would save a few test... why not
     #If no root topic specified it means we are rendering web tree therefore create a fake web root object 
-    my $webRoot = $rootTopicId eq $RootLabel ? createTWikiNode( $RootLabel, \%nodes ) : undef;  
+    my $webRoot = $rootTopicId eq $RootLabel ? createTWikiNode( $RootLabel, \%nodes ) : undef;      
     #At this stage the root must be in the hash, if not just quite (fake web root or actual topic root) 
-    return "<!-- No Topic -->" unless $nodes{$rootTopicId};  # nope, the wanted node ain't here
+    return '' unless $nodes{$rootTopicId};  # nope, the wanted node ain't here "<!-- No Topic -->"
 
     &TWiki::Func::writeDebug("Second loop") if $debug;    
 
@@ -204,14 +252,11 @@ sub HandleTreeTag
         my $node=$nodes{$nodeId};
         #Make sure we don't set a parent to the web root otherwise we just go in an infinite loop while rendering
         next if (defined $webRoot && $node == $webRoot);
-        #Get parent
-        #SL: We could get the parent from the SEARCH
-        #I wonder if that would give us any performance gain
-        #...since we would need to make the scope="text" 
-        my $parentId = getParentId($node->data('web'),$node->data('topic'));
+        #Get parent node from parent id
+        my $parentId = $node->data('parentid');
         my $parent = defined $parentId && defined $nodes{$parentId} ? $nodes{$parentId} : $webRoot; # otherwise root's my parent
         next unless (defined $parent);
-        $node->data( "parent", $parent );
+        $node->data( 'parent', $parent );
         $parent->add_child($node); # hook me up
     }
     
@@ -223,15 +268,26 @@ sub HandleTreeTag
     my $root= defined $webRoot ? $webRoot : $nodes{$rootTopicId}; #Get the root object fake web root or actual topic root 
 
     # format the tree & parse TWiki tags and rendering
-    my $renderedTree = $attrHeader . $root->toHTMLFormat($formatter);
+    my $renderedTree = $root->toHTMLFormat($formatter);
 
     &TWiki::Func::writeDebug("Rendering done!") if $debug;    
     
     #Workaround for our issues of trailing new lines
     $renderedTree=~s/\s*$//so;
+    
+    if ($renderedTree eq '')
+    	{
+	    $renderedTree=$attrZero;
+    	}
+    else
+    	{
+	    #Add footer and header	    	
+    	$renderedTree = $attrHeader . $renderedTree . $attrFooter 
+    	}
 
-    #Encapsulate in a div.
-    $renderedTree ="<div class=\"treePlugin\">\n".$renderedTree."</div><!--//treePlugin-->" unless ($nodiv);
+	#Encapsulate in a div.
+    $renderedTree ="<div class=\"treePlugin\">\n".$renderedTree."</div><!--//treePlugin-->" unless ($nodiv);    	
+    	
 
     #SL: Substitute $index in the rendered tree, $index is most useful to implement menus in combination with TreeBrowserPlugin
     #SL Later: well actually TreeBrowserPlugin now supports =autotoggle= so TreeBrowserPlugin can get away without using that $index in most cases.
@@ -257,31 +313,6 @@ sub createTWikiNode {
     my $node = TWiki::Plugins::TreePlugin::TWikiNode->new($id);
     $hash->{$id} = $node;
     return $node;
-}
-
-
-=pod
-Return web.topic of the parent topic for the specified topic or undef if no parent
-@param [in] web 
-@param [in] topic
-@return web.topic for the parent or undef 
-=cut
-
-sub getParentId {
-    my ($aWeb, $aTopic) = @_;
-    my ( $meta, $text ) = &TWiki::Func::readTopic( $aWeb, $aTopic );
-    my $ref = $meta->get("TOPICPARENT");
-    return undef unless (defined $ref); 
-    #my %par = (defined $ref ? %$ref : ()); #cast
-    my $parent = $ref->{'name'};
-    return undef unless (defined $parent); #Handle the case where META:TOPICPARENT does not specify a name !?!
-    #Now deal with the case where we have no web specified in the parent Codev.GetRidOfTheDot
-    unless ($parent=~/.+\.+/) #unless web.topic format
-        {
-        #Prepend the web 
-        $parent="$aWeb.$parent"; 
-        }
-    return $parent;
 }
 
 
@@ -313,7 +344,7 @@ sub doSEARCH {
     #We build up our SEARCH format parameter
     #   * First comes our topic identifier 
     #   * Next comes our topic format
-    my $searchTmpl = "\$web|\$topic";
+    my $searchTmpl = "\$web|\$topic|\$parent";
     $searchTmpl .= "|" . $params->{'format'} if defined $params->{'format'}; 
     
     #	ok. make the topic list and return it  (use this routine for now)
