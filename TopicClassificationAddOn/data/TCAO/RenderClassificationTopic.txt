@@ -29,7 +29,16 @@ The following parameters allow customization of how specific Classification topi
 <verbatim>
 %STARTINCLUDE%
 <span class="twikiRight" style="margin:.25em 0 0 0;" /><form name="browseSubjects" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/" >
-<select name="subject" size="1" onchange="document.location=this.value;"> <option>Jump to different <nop>%FORMFIELD{"Classification" topic="%BASEWEB%.%BASETOPIC%"}%...</option>%DBQUERY{ "Classification='%FORMFIELD{"Classification" topic="%BASEWEB%.%BASETOPIC%"}%'" web="%BASEWEB%"  exclude="%BASETOPIC%" regex= "on" noheader="on" nosearch="on" nosummary="on" nototal="on" order="topic" format= "<option>$topic</option>" }% </select></form> </span>
+<select name="subject" size="1" onchange="document.location=this.value;"> 
+<option>Jump to different <nop>%FORMFIELD{"%IFDEFINED{"%CLASS_NAME%" then="$test" else="Classification" glue="off"}%" topic="%BASEWEB%.%BASETOPIC%"}%...</option>
+~~~  
+%~~  DBQUERY{ "%IFDEFINED{"%CLASS_NAME%" then="$test" else="Classification" glue="off"}% 
+~~~           ='%FORMFIELD{"%IFDEFINED{"%CLASS_NAME%" then="$test" else="Classification" glue="off"}%" topic="%BASEWEB%.%BASETOPIC%"}%'" 
+~~~    web="%BASEWEB%"  
+~~~    exclude="%BASETOPIC%" 
+~~~    order="topic" 
+~~~    format= "<option>$topic</option>" 
+~~~  }% </select></form> </span>
 ---++!! %SPACEOUT{%BASETOPIC%}%
 %IF{"defined CLASS_DESCRIPTION" then="%CLASS_DESCRIPTION%"}%
 %~~   IFDEFINED{"%FORMFIELD{"Classification" topic="%BASEWEB%.%BASETOPIC%"}%" 
@@ -42,25 +51,6 @@ The following parameters allow customization of how specific Classification topi
 ~~~            <input type=\"submit\" class=\"twikiButton\" value=\"Create new <nop>$percntBASETOPIC$percnt \" />
 ~~~            </form>" 
 ~~~        glue="off"
-~~~    }%
-
-%~~   IFDEFINED{"
-*~~
-%~~      DBQUERY{"parent = '%BASETOPIC%' 
-~~~            AND Classification = '%FORMFIELD{"Classification" topic="%BASEWEB%.%BASETOPIC%"}%'"
-~~~         web="%BASEWEB%"
-~~~         format="none"
-~~~         header="$count"
-~~~         hidenull="on"
-~~~       }%"
-~~~      then="<em>See also sub-%FORMFIELD{"Classification" topic="%BASEWEB%.%BASETOPIC%"}%s: 
-~~~         $percntDBQUERY{\"parent = '%BASETOPIC%'
-~~~            AND Classification = '%FORMFIELD{"Classification" topic="%BASEWEB%.%BASETOPIC%"}%'\"
-~~~            web=\"%BASEWEB%\"
-~~~            format=\"$web.$topic\"
-~~~            separator=\", \" 
-~~~         }$percnt</em>"
-~~~      glue="off"
 ~~~    }%
 
 %IFDEFINEDTHEN{"%LISTFORMAT%" glue="off" }%

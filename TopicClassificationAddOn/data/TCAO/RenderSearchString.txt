@@ -23,7 +23,7 @@
 %ENDSECTION{name="documentation" type="section"}%
 
 ---++ Implementation
-<verbatim><noautolink>
+<verbatim>
 %STARTINCLUDE%%IFDEFINEDTHEN{"%FORSEARCH%" glue="off"}%
 ~~~  search="
 *~~    %BASESEARCH%;
@@ -46,7 +46,7 @@
 ~~~       reverse="%IFDEFINED{"%INITSORT%" as="modified|date" then="on" else="off" glue="off" }%"
 ~~~    %FIDEFINED%
 ~~~    %STOPINCLUDE%
-</noautolink></verbatim>
+</verbatim>
 
 <!-- interrupt glue -->
 

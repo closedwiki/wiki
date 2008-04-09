@@ -10,7 +10,7 @@
 %RED%TODO%ENDCOLOR%
 
 ---+++++ Parameters
-   * BASESEARCH - %RED% REQUIRED:%ENDCOLOR% Base search string (in %TWIKIWEB%.DBCachePlugin DBQUERY format). For example: ==name = '.*'== - e.g. finds all topics.
+   * BASESEARCH - %RED% REQUIRED:%ENDCOLOR% Base search string (in %SYSTEMWEB%.DBCachePlugin DBQUERY format). For example: ==name = '.*'== - e.g. finds all topics.
    * EXCLUDE - Option regex for results to exclude. Defaults to ==\bWeb*== - e.g. excludes topics starting with "Web".
    * FACETS - Optional list of facets to use in the filter bar and search results.
    * INITSORT - Optionally set initial sort. Defaults to "modified".
@@ -26,19 +26,21 @@
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
-%~~  INCLUDE{"%TCAOWEB%.RenderBarFilterWithSort"  
+%~~  DBCALL{"%TCAOWEB%.RenderBarFilterWithSort"  
 ~~~     INITSORT="%IFDEFINED{"%INITSORT%" 
 ~~~          then="$percntINITSORT$percnt" else="modified" glue="off"}%" 
 ~~~    INITLIMIT="%IFDEFINED{"%INITLIMIT%" 
 ~~~          then="$percntINITLIMIT$percnt" else="all" glue="off"}%" 
+~~~    FACETS="%IFDEFINED{"%FACETS%" glue="off"}%"
 ~~~   }%
-%TABLE{tablewidth="100%" }%
+%TABLE{tablewidth="100%" columnwidths=",,,50px"}%
 %~~   DBQUERY{
 *~~       
-%~~       INCLUDE{"%TCAOWEB%.RenderSearchString"  
+%~~       DBCALL{"%TCAOWEB%.RenderSearchString"  
 ~~~           BASESEARCH="%IFDEFINED{"%BASESEARCH%" then="$test" else="name = '.*'" glue="off" }%" 
 ~~~           INITSORT="%IFDEFINED{"%INITSORT%" then="$test" else="modified" glue="off"}%"
 ~~~           INITLIMIT="%IFDEFINED{"%INITLIMIT%" then="$test" else="all" glue="off"}%" 
+~~~           FACETS="%IFDEFINED{"%FACETS%" glue="off"}%"
 ~~~        }% 
 ~~~        web="%BASEWEB%" 
 ~~~        exclude="%IFDEFINED{"%EXCLUDE%" then="$test" else="\bWeb*" glue="off"}%" 
@@ -57,7 +59,7 @@
 *~~                 $percntIFDEFINED{\"$expand(TopicType or Classification)\" 
 ~~~                       then=\"<noautolink>$expand(TopicType or Classification)</noautolink>\" glue=\"off\"}$percnt</em></span>  |
 ~~~                <noautolink>$formfield(Summary)</noautolink>   | 
-~~~                $percntMAINWEB$percnt.$expand(info.author) | $formatTime(info.date, '$day $month') |
+~~~                $percntUSERSWEB$percnt.$expand(info.author) | $formatTime(info.date, '$day $month') |
 ~~~         $percntFIDEFINED$percnt"
 ~~~     }%
 

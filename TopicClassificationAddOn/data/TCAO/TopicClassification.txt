@@ -6,7 +6,7 @@ _This topic provides the general overview of organizational framework provided b
 ---++ !TopicClassification in the <nop>%BASEWEB% Web
 
 Content within the <nop>%BASEWEB% web is organized using the following !TopicClassifications:
-%SEARCH{ "FORM.name\=.TopicClassForm;[C]lassification.*value\=.*\b[C]lassification\b" web="%BASEWEB%" type="regex" nonoise="on" order="topic" format="	* [[$web.$topic][$percntSPACEOUT{$topic}$percnt]] - <noautolink>$formfield(Summary) </noautolink>$n()$percntSEARCH{\"FORM.name\=.TopicClassForm;[C]lassification.*value\=.*\b$topic\b\" type=\"regex\" format=\"      * [[$dollarweb.$dollartopic][$dollarpercntSPACEOUT{$dollartopic}$dollarpercnt]] - <noautolink>$dollarformfield(Summary)</noautolink>\" nonoise=\"on\" separator=\"$dollarn\" }$nop%"}% 
+%SEARCH{ "[C]lassification.*value\=.*\b[C]lassification\b" web="%BASEWEB%" type="regex" nonoise="on" order="topic" format="	* [[$web.$topic][$percntSPACEOUT{$topic}$percnt]] - <noautolink>$formfield(Summary) </noautolink>$n()$percntSEARCH{\"[C]lassification.*value\=.*\b$topic\b\" type=\"regex\" format=\"      * [[$dollarweb.$dollartopic][$dollarpercntSPACEOUT{$dollartopic}$dollarpercnt]] - <noautolink>$dollarformfield(Summary)</noautolink>\" nonoise=\"on\" separator=\"$dollarn\" }$nop%"}% 
 
 *Using TopicClassification:*  
    * To _organize your topics_ using %BASEWEB%.TopicClassification, simply use the %BASEWEB%.CreateNewTopic "wizard."
