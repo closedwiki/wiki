@@ -120,7 +120,7 @@ sub init_edit {
                     # The lease is active
                     $def = 'lease_active';
                     $past = TWiki::Time::formatDelta(
-                        $t - $lease->{taken}, $session->{i18n} );
+                        $t - $lease->{taken}, $session->i18n );
                     $future = TWiki::Time::formatDelta(
                         $lease->{expires} - $t, $session->i18n );
                 }
