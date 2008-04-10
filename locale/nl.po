@@ -18,22 +18,22 @@ msgstr ""
 #. ($days)
 #: lib/TWiki/Time.pm:290
 msgid "%*(%1,day) "
-msgstr "%*(%1,dag) "
+msgstr "%*(%1,dag,dagen) "
 
 #. ($hours)
 #: lib/TWiki/Time.pm:293
 msgid "%*(%1,hour) "
-msgstr "%*(%1,uur) "
+msgstr "%*(%1,uur,uren) "
 
 #. ($mins)
 #: lib/TWiki/Time.pm:296
 msgid "%*(%1,minute) "
-msgstr "%*(%1,minuut) "
+msgstr "%*(%1,minuut,minuten) "
 
 #. ($secs)
 #: lib/TWiki/Time.pm:299
 msgid "%*(%1,second) "
-msgstr "%*(%1,seconden)"
+msgstr "%*(%1,seconde,seconden)"
 
 #: templates/oopsgeneric.tmpl:12 templates/oopsgeneric.tmpl:14
 #: templates/oopsgeneric.tmpl:16 templates/oopsgeneric.tmpl:7
@@ -1567,7 +1567,7 @@ msgstr ""
 
 #: templates/messages.tmpl:480
 msgid "If you came here by clicking on a question mark link"
-msgstr "Als je hier bent gekomen via een vraagtekenlink"
+msgstr "Als je hier bent gekomen via een directe creatielink"
 
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:40
 msgid "If you enter a different name, make sure the topic does  exist."
@@ -1716,10 +1716,11 @@ msgid ""
 "data cannot easily be merged though, so in this case you are recommended to "
 "check with %1 first."
 msgstr ""
-"Het kan waarschijnlijk geen kwaad om door te gaan om te bewerken - tenzij je "
+"Het kan waarschijnlijk geen kwaad om de pagina te bewerken - tenzij je "
 "van plan bent om gegevens te veranderen in een formulier op de pagina. Als %1 "
 "de pagina bewaart terwijl jij nog aan het bewerken bent, worden jullie "
-"wijzigingen samengevoegd - niets gaat verloren. Maar formuliergegevens kunnen " "niet gemakkelijk worden samengevoegd, dus in dat geval raden we je aan om "
+"wijzigingen samengevoegd - niets gaat verloren. Maar formuliergegevens kunnen "
+"niet gemakkelijk worden samengevoegd, dus in dat geval raden we je aan om "
 "eerst af te stemmen met %1."
 
 #: templates/twiki.tmpl:9
@@ -3334,7 +3335,9 @@ msgid ""
 "cannot easily be merged though, so in this case you are recommended to check "
 "with %1 first."
 msgstr ""
-"Ga gewoon door met bewerken - tenzij je van plan bent om gegevens in een " "paginaformulier te wijzigen. Als %1 de pagina bewaart terwijl jij nog aan het " "bewerken bent, worden jullie wijzigingen samengevoegd - niets gaat verloren. " "Maar formuliergegevens kunnen niet gemakkelijk worden samengevoegd, dus in " "dat geval raden we je aan om eerst te af te stemmen met %1."
+"Ga gewoon door met bewerken - tenzij je van plan bent om gegevens in een " "paginaformulier te wijzigen. Als %1 de pagina bewaart terwijl jij nog aan het " "bewerken bent, worden jullie wijzigingen samengevoegd - niets gaat verloren. "
+"Maar formuliergegevens kunnen niet gemakkelijk worden samengevoegd, dus in "
+"dat geval raden we je aan om eerst te af te stemmen met %1."
 
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:35
 msgid "You are here:"
