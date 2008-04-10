@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1207785725" format="1.1" version="1.18"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1207867754" format="1.1" version="1.20"}%
 ---+!! Tree Plugin
 
 Renders topics' parent-child relationships as hierarchical tree view. Useful for dynamic site maps and threads.
@@ -48,6 +48,7 @@ The following pseudo-variable are supported on top of the ones described in TWik
 |=levelprefix=| Specify a prefix to a node format. The prefix is inserted =$level= times at the beginning of the rendered node format. It allows generation of trees using TWiki bullet list syntax thus enabling usage of !TreePlugin [[#Combination_with_TreeBrowserPlug][in combination with TreeBrowserPlugin]]. | none |
 | =nodiv= | Suppress the =&lt;div&gt;= around the tree. Set to =2= to suppress =div= around =header=, =footer= and =zero=. Allows for trees concatenation. | none |
 | =separator= | Character string used to separate items in the tree | =\n= |
+| =nocache= | Set to 1 to disable caching mechanism for that specific tree. Really a developer setting. | 0 |
 
 
 ---++ Samples
@@ -87,8 +88,9 @@ For instance if you know that every topic in your tree has a common prefix you c
    * Set SHORTDESCRIPTION = Dynamic generation of TWiki topic trees 
 -->
 
-Specify plug-in settings on %MAINWEB%.TWikiPreferences using:
-   * Set #TREEPLUGIN_DEBUG_FAKE = 0
+Specify plug-in settings in =LocalSite.cfg=:
+   * Set ={Plugins}{$pluginName}{Debug}= to =1= to enable debug output. Set to =2= to get a lot more debug output.
+   * Set ={Plugins}{$pluginName}{NoCache}= to =1= to disable caching mechanism. Intended for development purposes only.
 
 ---++ Installation Instructions
 
@@ -105,8 +107,9 @@ Specify plug-in settings on %MAINWEB%.TWikiPreferences using:
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | None |
 | CPAN&nbsp;Dependencies: | none _(test package relies on Wiki:PerlUnit)_ |
-| Version: | 1.5 |
+| Version: | 1.6 |
 | Change&nbsp;History: | <!-- specify latest version first -->&nbsp; |
+| 10 Apr 2008 | 1.6 - File cache implementation. Massive performance improvement for Topic tree. No performance gain for Web tree. Added =nocache= parameter. Now using =LocalLib.cfg= for settings. By TWiki:Main.StephaneLenclud | 
 | 10 Apr 2008 | 1.5 - Slight performance improvement. Improved =header= parameter. Added =footer= and =zero= parameter. By TWiki:Main.StephaneLenclud | 
 | 29 Mar 2008 | 1.4 - Fixed endless loop in =imageoutline:thread=. Added =separator= parameter. By TWiki:Main.StephaneLenclud | 
 | 11 Jul 2007 | 1.3 - Fixed =$onum= to =$outnum= in documentation. Fixed endless loop on inconsistent/looping parent/child relationship. Not supporting =bookview= any more. Fixed =imageoutline:thread= not rendering.  By TWiki:Main.StephaneLenclud | 

@@ -348,12 +348,14 @@ sub createCache
     	}	
 		
 	foreach my $nodeId (sort keys %$nodesRef)
-		{
+		{        
 		my $node = $nodesRef->{$nodeId};	
+        #TWiki::Func::writeDebug( "- ${pluginName} Building cache for: " . $node->data('topic') ) if $debug;
 		if ($node!=$webRoot) #no point creating cache for the fake web root
 			{
 			$cache.=$node->data('topic');
-			my $children=allChildren($node);
+            $node->data($node->data('topic'),1); #Mark it as cached to prevent infinite loop
+			my $children=allChildren($node,$node->data('topic'));
 			if ($children)
 				{
 				$cache.=$children;
@@ -367,12 +369,14 @@ sub createCache
 
 =pod
 Get a comma separated list of children from a node
+
 @param The Node from which we need the list of children
-=cut	
+=cut
 
 sub allChildren
 	{
 	my $node=$_[0];	
+   	my $cacheId=$_[1];
 	my $res='';
 		
 	if ( scalar( @{ $node->children() } ) )
@@ -380,9 +384,10 @@ sub allChildren
        	my $count = 0;
        	foreach my $child ( @{ $node->children() } )
            	{
-        	$res.=',' . $child->data('topic');  	
-        		
-	        my $children=allChildren($child,$res); #recurse
+            return $res if (defined $child->data($cacheId)); #prevent endless recursion            
+            $child->data($cacheId,1); #Mark it as cached to prevent infinite loop
+        	$res.=',' . $child->data('topic');  	        		
+	        my $children=allChildren($child,$cacheId); #recurse
 	        if ($children)
 	        	{ 
 	        	$res.= $children;
@@ -392,9 +397,13 @@ sub allChildren
 	return $res;		
 	}
 
-=pod
 
-=cut	
+=pod
+Fetch the cache for the given Topic in the specified Web cache
+
+@param The Web for which to fetch the cache
+@param The Topic root cache we are interrested in
+=cut
 
 sub fetchCache
 	{
