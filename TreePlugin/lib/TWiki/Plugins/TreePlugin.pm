@@ -39,7 +39,7 @@ use vars qw(
 );
 
 $pluginName = 'TreePlugin';
-$VERSION = '1.4';
+$VERSION = '1.5';
 $RootLabel = "_RootLabel_";    # what we use to label the root of a tree if not a topic
 
 # =========================

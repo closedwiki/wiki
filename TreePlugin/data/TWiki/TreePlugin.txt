@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1206801436" format="1.1" version="1.17"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1207785725" format="1.1" version="1.18"}%
 ---+!! Tree Plugin
 
 Renders topics' parent-child relationships as hierarchical tree view. Useful for dynamic site maps and threads.
@@ -26,7 +26,9 @@ Renders topics' parent-child relationships as hierarchical tree view. Useful for
 |=includetopic=| Same meaning as TWiki.VarSEARCH =topic=. Can improve processing time. | none |
 |=startlevel=| The depth of the tree to start showing nodes from. To hide the root node, supply =startlevel="1"= (root is level 0). The displayed node depths are relative to the root topic. | =0= or =1= if =topic= is not specified |
 |=stoplevel=| The depth of the tree to show, relative to start level. | =999= | 
-|=header=| If specified output the value within a =&lt;div&gt;= of class =treePluginHeader=. | none |
+|=header=| Output the value within a =&lt;div&gt;= of class =treePluginHeader=. Suppressed if the tree is empty. | none |
+|=footer=| Output the value within a =&lt;div&gt;= of class =treePluginFooter=. Suppressed if the tree is empty. | none |
+|=zero=| Output the value within a =&lt;div&gt;= of class =treePluginZero= if the tree is empty. | none |
 |=bookview=| List topics in BookView form. %RED%Not supported from v0.9. Instead use something like: %ENDCOLOR% <verbatim>%TREE{topic="GrandParent" formatting="outline" format="$outnum $topic <br /> $summary <hr />"}%</verbatim> | none | 
 |=format=| Specify the format for each node (=outline= & =coloroutline=). \
 The following pseudo-variable are supported on top of the ones described in TWiki.FormattedSearch: <br />\
@@ -44,7 +46,7 @@ The following pseudo-variable are supported on top of the ones described in TWik
  =$children= - the text of all the node's children (if any) <br />\
 | none |
 |=levelprefix=| Specify a prefix to a node format. The prefix is inserted =$level= times at the beginning of the rendered node format. It allows generation of trees using TWiki bullet list syntax thus enabling usage of !TreePlugin [[#Combination_with_TreeBrowserPlug][in combination with TreeBrowserPlugin]]. | none |
-| =nodiv= | Suppress the =&lt;div&gt;= around the tree. Allows for trees concatenation. | none |
+| =nodiv= | Suppress the =&lt;div&gt;= around the tree. Set to =2= to suppress =div= around =header=, =footer= and =zero=. Allows for trees concatenation. | none |
 | =separator= | Character string used to separate items in the tree | =\n= |
 
 
@@ -103,8 +105,9 @@ Specify plug-in settings on %MAINWEB%.TWikiPreferences using:
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | None |
 | CPAN&nbsp;Dependencies: | none _(test package relies on Wiki:PerlUnit)_ |
-| Perl Version: | 5.0, 5.6.1, 5.8.7 |
+| Version: | 1.5 |
 | Change&nbsp;History: | <!-- specify latest version first -->&nbsp; |
+| 10 Apr 2008 | 1.5 - Slight performance improvement. Improved =header= parameter. Added =footer= and =zero= parameter. By TWiki:Main.StephaneLenclud | 
 | 29 Mar 2008 | 1.4 - Fixed endless loop in =imageoutline:thread=. Added =separator= parameter. By TWiki:Main.StephaneLenclud | 
 | 11 Jul 2007 | 1.3 - Fixed =$onum= to =$outnum= in documentation. Fixed endless loop on inconsistent/looping parent/child relationship. Not supporting =bookview= any more. Fixed =imageoutline:thread= not rendering.  By TWiki:Main.StephaneLenclud | 
 | 7 Apr 2007 | 1.2 - Documentation improvement. Adding =includetopic= parameter. By TWiki:Main.StephaneLenclud | 
