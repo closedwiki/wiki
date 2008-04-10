@@ -35,11 +35,12 @@ use TWiki::Plugins::TreePlugin::ImgNodeFormatter;
 # =========================
 use vars qw(
   $gWeb $gTopic $user $installWeb $VERSION $debug $INTREE
-  %FormatMap $RootLabel $AGdebugmsg $pluginName
+  %FormatMap $RootLabel $AGdebugmsg $pluginName $workAreaDir
+  $noCache
 );
 
 $pluginName = 'TreePlugin';
-$VERSION = '1.5';
+$VERSION = '1.6';
 $RootLabel = "_RootLabel_";    # what we use to label the root of a tree if not a topic
 
 # =========================
@@ -56,8 +57,11 @@ sub initPlugin {
 # $exampleCfgVar = &TWiki::Prefs::getPreferencesValue( "TreePlugin_EXAMPLE" ) || "default";
 
     # Get plugin debug flag
-    $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
-
+    #$debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
+    $debug = $debug = $TWiki::cfg{Plugins}{$pluginName}{Debug} || 0;
+    $noCache = $debug = $TWiki::cfg{Plugins}{$pluginName}{NoCache} || 0;
+    $workAreaDir = TWiki::Func::getWorkArea($pluginName);
+    
 
     &TWiki::Func::writeDebug("installWeb: $installWeb") if $debug;
 
@@ -70,9 +74,7 @@ sub initPlugin {
     TWiki::Func::registerTagHandler( 'TREE', \&HandleTreeTag );
 
     # Plugin correctly initialized
-    &TWiki::Func::writeDebug(
-        "- TWiki::Plugins::TreePlugin::initPlugin( $gWeb.$gTopic ) is OK")
-      if $debug;
+    &TWiki::Func::writeDebug("- TWiki::Plugins::TreePlugin::initPlugin( $gWeb.$gTopic ) is OK") if $debug;
     return 1;
 }
 
@@ -144,6 +146,10 @@ sub HandleTreeTag
    			}
         }
 
+    if (defined $params->{'nocache'})
+    	{
+	    $noCache=$params->('nocache');	
+    	}
         
                 
     my $attrFormat = $params->{'format'} || "";   
@@ -190,7 +196,19 @@ sub HandleTreeTag
     #Before doing the SEARCH, if no format was specified use formatter's default
     #SL: I know it's a bit mad what's going on between $attrFormat, $formatter->data('format') and $params->{'format'} but that will do for now
     $params->{'format'}=$formatter->data("format") if ($attrFormat eq "");
-
+    
+    #Shall we use our cache or not
+    if ($params->{'topic'} && !$noCache)
+    	{
+	    #Get our includetopic from the cache
+	    my $includeTopic=fetchCache($attrWeb,$params->{'topic'});
+	    if ($includeTopic)
+	    	{
+		    #We hit the cache overide our including topic parameter	
+	    	$params->{'includetopic'}=$includeTopic;		
+    		}
+    	}
+    
     #### Get SEARCH results 
     my $search = doSEARCH( $attrWeb, $params, $formatter );
 
@@ -207,7 +225,7 @@ sub HandleTreeTag
     #   * Populate hash of nodes/topics
     foreach ( split /\n/, $search ) {
         my ( $nodeWeb, $nodeTopic, $nodeParent, $nodeFormat ) = split (/\|/,$_,4);    # parse out node data
-        &TWiki::Func::writeDebug("SEARCH LINE: $nodeWeb, $nodeTopic, $nodeFormat") if $debug;  
+        &TWiki::Func::writeDebug("SEARCH LINE: $nodeWeb, $nodeTopic, $nodeFormat") if ($debug==2);  
         my $nodeId = "$nodeWeb.$nodeTopic";
         
         #If no node format default to the formatter's format     
@@ -236,7 +254,8 @@ sub HandleTreeTag
         	$node->data( 'parentid', $nodeParent);		
     		}
     }
-
+    
+    
     &TWiki::Func::writeDebug("Create root") if $debug;      
     #SL: to simplify we could even systematically create the web root, that would do no arm would save a few test... why not
     #If no root topic specified it means we are rendering web tree therefore create a fake web root object 
@@ -259,6 +278,9 @@ sub HandleTreeTag
         $node->data( 'parent', $parent );
         $parent->add_child($node); # hook me up
     }
+    
+    #Cache creation
+    createCache(\%nodes,$webRoot,$attrWeb) unless $noCache;
     
     #### Tree rendering
 
@@ -296,10 +318,112 @@ sub HandleTreeTag
         $renderedTree =~ s/\$Index/$Index++;$Index/egi;
     }
     
-    &TWiki::Func::writeDebug($renderedTree) if $debug;    
+    &TWiki::Func::writeDebug($renderedTree) if ($debug==2);    
     
     return $renderedTree;
 }
+
+
+=pod
+Build up our cache if needed.
+TODO: find away to do this asynchronously? fork or AJAX? It's probably good enough like that
+@param Hash reference containing all our nodes by id
+@param Node object of the web root just to make sure we don't try caching it
+@param The Web to creat the cache for
+=cut
+
+sub createCache
+	{
+	my $nodesRef=$_[0];
+	my $webRoot=$_[1];
+	my $aWeb=$_[2];
+	
+	my $cache='';
+	
+	#Create our file cache if needed
+    my $cacheFileName = "$workAreaDir/$aWeb.tree";
+    if (-e $cacheFileName)
+    	{
+	    return;
+    	}	
+		
+	foreach my $nodeId (sort keys %$nodesRef)
+		{
+		my $node = $nodesRef->{$nodeId};	
+		if ($node!=$webRoot) #no point creating cache for the fake web root
+			{
+			$cache.=$node->data('topic');
+			my $children=allChildren($node);
+			if ($children)
+				{
+				$cache.=$children;
+				}
+			$cache.="\n";	
+    		}	
+		}
+		
+    TWiki::Func::saveFile( $cacheFileName, $cache );			
+	}
+
+=pod
+Get a comma separated list of children from a node
+@param The Node from which we need the list of children
+=cut	
+
+sub allChildren
+	{
+	my $node=$_[0];	
+	my $res='';
+		
+	if ( scalar( @{ $node->children() } ) )
+		{
+       	my $count = 0;
+       	foreach my $child ( @{ $node->children() } )
+           	{
+        	$res.=',' . $child->data('topic');  	
+        		
+	        my $children=allChildren($child,$res); #recurse
+	        if ($children)
+	        	{ 
+	        	$res.= $children;
+        		}   	
+    		}    		    	
+		}
+	return $res;		
+	}
+
+=pod
+
+=cut	
+
+sub fetchCache
+	{
+	my $aWeb=$_[0];
+	my $aTopic=$_[1];	
+	
+    my $cacheFileName = "$workAreaDir/$aWeb.tree";
+    TWiki::Func::writeDebug( "- ${pluginName} Checking cache file: $cacheFileName" ) if $debug;
+    unless (-e $cacheFileName)
+    	{
+	    #no cache yet, try again next time	
+	    return '';
+    	}	
+			
+    my @lines=split /\n/, TWiki::Func::readFile( $cacheFileName);
+    foreach my $line(@lines)
+    	{
+	    #TWiki::Func::writeDebug( "- ${pluginName} Checking cache line" ) if $debug;	
+	    if ($line=~ /^$aTopic/)
+	    	{
+		    TWiki::Func::writeDebug( "- ${pluginName} Hit the cache" ) if $debug;
+		    return $line;
+	    	}	    		
+    	}
+    
+    TWiki::Func::writeDebug( "- ${pluginName} Won't hit the cache, something is very wrong!" ) if $debug;	
+    return '';		
+	}
+	
 
 =pod
 Create a new node object and add it to the given hash 
@@ -430,6 +554,21 @@ sub setFormatter {
 # allow other classes to see the installation web
 sub installWeb {
     return $installWeb;
+}
+
+sub afterSaveHandler {
+    # do not uncomment, use $_[0], $_[1]... instead
+    ### my ( $text, $topic, $web ) = @_;
+
+    TWiki::Func::writeDebug( "- ${pluginName}::beforeSaveHandler( $_[2].$_[1] )" ) if $debug;
+    
+    #Invalidate our cache for that web
+    my $cacheFileName = "$workAreaDir/$_[2].tree";
+    if (-e $cacheFileName)
+    	{
+	    unlink $cacheFileName;
+    	}	    
+    
 }
 
 
