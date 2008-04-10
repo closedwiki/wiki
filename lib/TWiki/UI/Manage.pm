@@ -638,7 +638,7 @@ sub _renameweb {
                 my $mdd = join(' ', @{$webTopicInfo{modifydenied}} ) || ($session->i18n->maketext('(none)'));
                 $mdd = substr($mdd, 0, 300).'... (more)'
                   if( length($mdd) > 300);
-                my $mdl = join(' ', @{$webTopicInfo{modifylocked}} ) || ($session->{i18n}->maketext('(none)'));
+                my $mdl = join(' ', @{$webTopicInfo{modifylocked}} ) || ($session->i18n->maketext('(none)'));
                 $mdl = substr($mdl, 0, 300).'... (more)'
                   if( length($mdl) > 300);
                 throw TWiki::OopsException(
