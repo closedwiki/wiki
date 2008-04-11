@@ -425,6 +425,7 @@ Details on how to install cairo, graphviz and imagemagick are beyond the scope o
 |  Plugin Author: | TWiki:Main/ColeBeck |
 |  Plugin Version: | 27 Jul 2006 (V1.300) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  10 Apr 2008: | TWikibug:Item5508 - Wiki Words in graph label text results in corrupted image maps. |
 |  17 Jan 2008: | TWikibug:Item5264 - Leaving 0 byte temporary files behind.  Also added "hideattachments" option. TWikibug:Item5259 - Strip whitespace from default settings.-- TWiki:Main.GeorgeClark |
 |  13 Jan 2008: | TWikibug:Item5212 Added named graphs, store hash tables in _work_area, Added dothash parameter, Moved all program paths to the configure interface.  Manual edits are no longer required. All file manipulation now done using TWiki::Func.  Use TWiki defined temporary directory.  TWikibug:Item5231 - Correct sandbox issue on TWiki 4.2 -- TWiki:Main.GeorgeClark |
 |  02 Mar 2007: | Updated link generation (img src) to be compatible with <nop>I18N webs and topics -- TWiki:Main.SteffenPoulsen |

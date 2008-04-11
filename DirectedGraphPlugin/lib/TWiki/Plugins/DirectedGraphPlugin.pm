@@ -414,7 +414,7 @@ sub handleDot
         # place map and "foo.png" at the source of the <dot> tag in $Web.$Topic
         my $loc = TWiki::Func::getPubUrlPath() . "/$web/$topic";
         my $src = TWiki::urlEncode("$loc/$outFilename.png");
-        return "$mapfile<img usemap=\"#$hashCode\" src=\"$src\"/>";
+	return "<noautolink> $mapfile<img usemap=\"#$hashCode\" src=\"$src\"/> </noautolink>";
     } else {
         # attach "foo.png" at the source of the <dot> tag in $Web.$Topic
         my $loc = TWiki::Func::getPubUrlPath() . "/$web/$topic";
