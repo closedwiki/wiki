@@ -672,6 +672,18 @@ PONG
             expect => "1"
         });
     push(@tests, {
+            test => '\''.$this->{test_web}.'.NonExitantLazyFox\' allows \'change\'',
+            expect => "1"
+        });
+    push(@tests, {
+            test => '\'NonExistantWeb.WebHome\' allows \'change\'',
+            expect => "0"
+        });
+    push(@tests, {
+            test => '\'NonExistantWeb.NonExitantLazyFox\' allows \'change\'',
+            expect => "0"
+        });
+    push(@tests, {
         test => "istopic 'LazyFox'",
         expect => "0"
        });
@@ -697,6 +709,10 @@ PONG
        });
     push(@tests, {
         test => "'NotAHopeInHellPal' allows 'view'",
+        expect => "1"
+       });
+    push(@tests, {
+        test => "'NotAHopeInHellPal.WebHome' allows 'view'",
         expect => "0"
        });
     $this->{twiki}->finish();
