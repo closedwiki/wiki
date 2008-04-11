@@ -248,6 +248,7 @@ Another great TWiki extension from the <a style="text-decoration:none" href="htt
 |  Plugin Author: | TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk inspired by the work of TWiki:Main.DavidWeller and TWiki:Main.PeterMasiar |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
+|  11 Apr 2008 | TWikibug:Item5518 corrected the template definition for bulletabove |
 |  5 Sep 2007 | TWikibug:Item3689 corrected =location= handling TWikibug:Item4181 added VarCOMMENT TWikibug:Item4402 corrected access check |
 |  22 Jun 2007 | Removed the long-deprecated =%TIME= (use %GMTIME instead). Minor doc changes |
 |  14021 | TWikibug:Item3755 Fixed incorrect handling of line terminators when targeting an anchor |
