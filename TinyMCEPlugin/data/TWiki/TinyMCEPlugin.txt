@@ -119,6 +119,7 @@ Another great TWiki extension from the <a style="text-decoration:none" href="htt
 |             | This package also includes the complete sources for version 2.1.1.1 of the !TinyMCE editor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  12 Apr 2008 | TWikibug:Item4946: I think I have finally fixed non-iso-8859-1 character sets. Painful. |
 |  31 Mar 2008 | TWikibug:Item5314: TWikibug:Item5457: Fixed pickaxe mode for editing UTF-8. Characters above 255 are converted to entitites, which is a bit of a PITA, but at least it no longer corrupts topics. *NOTE: YOU MUST UPGRADE WysiwygPlugin TO 16600 OR LATER* |
 |  28 Mar 2008 | TWikibug:Item5432: added upper case file extensions for images TWikibug:Item5206: fixed expansion of simple filenames entered in image popup TWikibug:Item5462: fixed hide attachment switch |
 |  25 Jan 2008 | TWikibug:Item5287: links entered through dialog weren't working |

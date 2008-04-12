@@ -212,6 +212,7 @@ sub TranslateHTML2TML {
         rewriteURL => \&postConvertURL,
         very_clean => 1, # aggressively polish saved HTML
     };
+
     $text = $html2tml->convert( $text, $opts );
 
     $text =~ s/\s+$/\n/s;
@@ -621,18 +622,8 @@ sub _restTML2HTML {
         return $tml;
     }
 
-    # Decode UTF-8 octets into wide characters, otherwise wide chars
-    # entered in the pickaxe mode in TinyMCE get grabled
-    require Encode;
-    $tml = Encode::decode_utf8($tml);
-
     my $html = TranslateTML2HTML(
         $tml, $session->{webName}, $session->{topicName} );
-
-    # Convert wide characters to HTML entities, to keep print happy (it
-    # fails on "Wide characters in print" otherwise, when writing the
-    # page)
-    $html =~ s/([^\x00-\xFF])/"&#".ord($1).";"/ge;
 
     # Add the secret id to trigger reconversion. Doesn't work if the
     # editor eats HTML comments, so the editor may need to put it back
@@ -649,24 +640,6 @@ sub _restHTML2TML {
         $html2tml = new TWiki::Plugins::WysiwygPlugin::HTML2TML();
     }
     my $html = TWiki::Func::getCgiQuery()->param('text') || '';
-
-    # Convert UTF-8 octets to characters to protect the HTML parser. If
-    # we don't do this HTML::Parser fails with "Parsing of undecoded UTF-8
-    # will give garbage when decoding entities".
-    require Encode;
-    $html = Encode::decode_utf8($html);
-
-    # it might seem sensible to:
-    # $html = TWiki::UTF82SiteCharSet($html);
-    # but it converts to the site charset, which will not work.
-
-    # Convert any wide chars in the resulting UTF-8 string to HTML entitities,
-    # otherwise the final print will fall over with "Wide character in print".
-    $html =~ s/([^\x00-\xFF])/"&#".ord($1).";"/ge;
-    # Using binmode(STDOUT, ":utf8") doesn't help; it just turns the output
-    # to mush.
-    # SMELL: Unfortunately this means that wide characters are always
-    # turned into entities in pickaxe mode.
 
     $html =~ s/<!--$SECRET_ID-->//go;
     my $tml = $html2tml->convert(
