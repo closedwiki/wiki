@@ -42,40 +42,50 @@ use base 'HTML::Parser';
 
 use strict;
 
+require Encode;
+require HTML::Parser;
+require HTML::Entities;
+
 require TWiki::Plugins::WysiwygPlugin::HTML2TML::Node;
 require TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf;
-require HTML::Parser;
 
-# Entities that are safe to convert back to 8-bit characters without
-# tripping over Perl's crappy UTF-8 support.
-my %safe_entities = (
-    iexcl  => 161, cent   => 162, pound  => 163,
-    curren => 164, yen    => 165, brvbar => 166, sect   => 167,
-    uml    => 168, copy   => 169, ordf   => 170, laquo  => 171,
-    not    => 172, shy    => 173, reg    => 174, macr   => 175,
-    deg    => 176, plusmn => 177, sup2   => 178, sup3   => 179,
-    acute  => 180, micro  => 181, para   => 182, middot => 183,
-    cedil  => 184, sup1   => 185, ordm   => 186, raquo  => 187,
-    frac14 => 188, frac12 => 189, frac34 => 190, iquest => 191,
-    Agrave => 192, Aacute => 193, Acirc  => 194, Atilde => 195,
-    Auml   => 196, Aring  => 197, AElig  => 198, Ccedil => 199,
-    Egrave => 200, Eacute => 201, Ecirc  => 202, Euml   => 203,
-    Igrave => 204, Iacute => 205, Icirc  => 206, Iuml   => 207,
-    ETH    => 208, Ntilde => 209, Ograve => 210, Oacute => 211,
-    Ocirc  => 212, Otilde => 213, Ouml   => 214, times  => 215,
-    Oslash => 216, Ugrave => 217, Uacute => 218, Ucirc  => 219,
-    Uuml   => 220, Yacute => 221, THORN  => 222, szlig  => 223,
-    agrave => 224, aacute => 225, acirc  => 226, atilde => 227,
-    auml   => 228, aring  => 229, aelig  => 230, ccedil => 231,
-    egrave => 232, eacute => 233, ecirc  => 234, uml    => 235,
-    igrave => 236, iacute => 237, icirc  => 238, iuml   => 239,
-    eth    => 240, ntilde => 241, ograve => 242, oacute => 243,
-    ocirc  => 244, otilde => 245, ouml   => 246, divide => 247,
-    oslash => 248, ugrave => 249, uacute => 250, ucirc  => 251,
-    uuml   => 252, yacute => 253, thorn  => 254, yuml   => 255,
+# Entities that we want to convert back to characters, rather
+# than leaving them as HTML entities.
+our @safeEntities = qw(
+    euro   iexcl  cent   pound  curren yen    brvbar sect
+    uml    copy   ordf   laquo  not    shy    reg    macr
+    deg    plusmn sup2   sup3   acute  micro  para   middot
+    cedil  sup1   ordm   raquo  frac14 frac12 frac34 iquest
+    Agrave Aacute Acirc  Atilde Auml   Aring  AElig  Ccedil
+    Egrave Eacute Ecirc  Euml   Igrave Iacute Icirc  Iuml
+    ETH    Ntilde Ograve Oacute Ocirc  Otilde Ouml   times
+    Oslash Ugrave Uacute Ucirc  Uuml   Yacute THORN  szlig
+    agrave aacute acirc  atilde auml   aring  aelig  ccedil
+    egrave eacute ecirc  uml    igrave iacute icirc  iuml
+    eth    ntilde ograve oacute ocirc  otilde ouml   divide
+    oslash ugrave uacute ucirc  uuml   yacute thorn  yuml
 );
 
-my $safe_entities_re = join('|', keys %safe_entities);
+our $safe_entities;
+
+# Convert the safe entities values to characters in the site charset.
+sub _prepSafeEntities {
+    return if $safe_entities;
+    my $encoding = Encode::resolve_alias(
+        $TWiki::cfg{Site}{CharSet} || 'iso-8859-15');
+    foreach my $entity (@safeEntities) {
+        $safe_entities->{$entity} =
+          Encode::encode(
+              $encoding,
+              HTML::Entities::decode_entities("&$entity;"));
+    }
+    # Special handling for euro symbol. The unicode
+    # entity is not mapped to the correct iso-18859-15
+    # codepoint by Encode::encode
+    if ($encoding =~ /iso-?8859-?15/i) {
+        $safe_entities->{euro} = chr(128);
+    }
+}
 
 =pod
 
@@ -135,10 +145,13 @@ sub convert {
     $opts = $WC::VERY_CLEAN
       if ( $options->{very_clean} );
 
-    # Item5138: Convert 8-bit entities back into characters
-    $text =~ s/&($safe_entities_re);/chr($safe_entities{$1})/ego;
-    $text =~ s/(&#(\d+);)/$2 > 127 && $2 <= 255 ? chr($2) : $1/eg;
-    $text =~ s/(&#x([\dA-Fa-f]+);)/(hex($2) > 127 && hex($2)) <= 255 ? chr(hex($2)) : $1/eg;
+    # If the site charset is UTF8, then there may be wide chars in the data
+    # (though it's not clear why CGI doesn't decode them). Anyway, if there
+    # are undecoded octets, the HTML parser will barf, so we have to decode
+    # them.
+    if( $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i ) {
+        $text = Encode::decode_utf8( $text );
+    }
 
     # get rid of nasties
     $text =~ s/\r//g;
@@ -148,7 +161,19 @@ sub convert {
     $this->eof();
     #print STDERR "Finished\n";
     $this->_apply( undef );
-    return $this->{stackTop}->rootGenerate( $opts );
+    $text = $this->{stackTop}->rootGenerate( $opts );
+
+    # Encode utf8 as octets to stop TWiki from barfing
+    # with Wide character in print. We have to do this
+    # before converting high-bit entities to characters.
+    $text = Encode::encode_utf8( $text );
+
+    # Convert entities that represent "safe" high-bit characters
+    # to byte characters if we are using an 8859 charset.
+    _prepSafeEntities();
+    HTML::Entities::_decode_entities($text, $safe_entities);
+
+    return $text;
 }
 
 # Autoclose tags without waiting for a /tag
