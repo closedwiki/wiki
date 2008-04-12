@@ -163,10 +163,10 @@ sub test_string_bops {
     $this->check("string~'??????'", 1);
     $this->check("string~'???????'", 0);
     $this->check("string~'?????'", 0);
-    $this->check("SomeTextToTestFor~'Text'", 0);
-    $this->check("SomeTextToTestFor~'*Text'", 0);
-    $this->check("SomeTextToTestFor~'Text*'", 0);
-    $this->check("SomeTextToTestFor~'*Text*'", 1);
+    $this->check("'SomeTextToTestFor'~'Text'", 0);
+    $this->check("'SomeTextToTestFor'~'*Text'", 0);
+    $this->check("'SomeTextToTestFor'~'Text*'", 0);
+    $this->check("'SomeTextToTestFor'~'*Text*'", 1);
     $this->check("string!='Str'", 1);
     $this->check("string!='String '", 1);
     $this->check("string!='String'", 0);
