@@ -613,9 +613,16 @@ sub _convertList {
             $bullet = $kid->{attrs}->{type}.'.';
         }
         my $spawn = '';
+        my $t;
         my $grandkid = $kid->{head};
+        # IE generates spurious empty divs inside LIs. Detect and skip
+        # them.
+        if( $grandkid->{tag} =~ /^div$/i
+              && $grandkid == $kid->{tail}
+                && scalar(keys %{$this->{attrs}}) == 0 ) {
+            $grandkid = $grandkid->{head};
+        }
         while ($grandkid) {
-            my $t;
             if( $grandkid->{tag} =~ /^[dou]l$/i ) {
                 #$spawn = _trim( $spawn );
                 $t = $grandkid->_convertList( $indent.$WC::TAB );
