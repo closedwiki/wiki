@@ -79,12 +79,6 @@ sub _prepSafeEntities {
               $encoding,
               HTML::Entities::decode_entities("&$entity;"));
     }
-    # Special handling for euro symbol. The unicode
-    # entity is not mapped to the correct iso-18859-15
-    # codepoint by Encode::encode
-    if ($encoding =~ /iso-?8859-?15/i) {
-        $safe_entities->{euro} = chr(128);
-    }
 }
 
 =pod
@@ -144,14 +138,6 @@ sub convert {
     my $opts = 0;
     $opts = $WC::VERY_CLEAN
       if ( $options->{very_clean} );
-
-    # If the site charset is UTF8, then there may be wide chars in the data
-    # (though it's not clear why CGI doesn't decode them). Anyway, if there
-    # are undecoded octets, the HTML parser will barf, so we have to decode
-    # them.
-    if( $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i ) {
-        $text = Encode::decode_utf8( $text );
-    }
 
     # get rid of nasties
     $text =~ s/\r//g;

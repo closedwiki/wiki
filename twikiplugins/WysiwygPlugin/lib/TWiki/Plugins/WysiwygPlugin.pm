@@ -616,6 +616,12 @@ sub _restTML2HTML {
     my ($session) = @_;
     my $tml = TWiki::Func::getCgiQuery()->param('text');
 
+    # encodeURIComponent encodes strings as UTF-8. But those strings
+    # originally came from the store, so we know they are in the site
+    # charset and can safely decode them.
+    my $conv = TWiki::UTF82SiteCharSet( $tml );
+    $tml = $conv if defined $conv;
+
     # if the secret ID is present, don't convert again. We are probably
     # going 'back' to this page (doesn't work on IE :-( )
     if ($tml =~ /<!--$SECRET_ID-->/) {
@@ -640,6 +646,11 @@ sub _restHTML2TML {
         $html2tml = new TWiki::Plugins::WysiwygPlugin::HTML2TML();
     }
     my $html = TWiki::Func::getCgiQuery()->param('text') || '';
+    # encodeURIComponent encodes strings as UTF-8. But those strings
+    # originally came from the store, so we know they are in the site
+    # charset and can safely decode them.
+    my $conv = TWiki::UTF82SiteCharSet( $html );
+    $html = $conv if defined $conv;
 
     $html =~ s/<!--$SECRET_ID-->//go;
     my $tml = $html2tml->convert(
