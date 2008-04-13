@@ -15,31 +15,29 @@
 # http://www.gnu.org/copyleft/gpl.html
 #
 
-## Bugfix:
-## Ammendments fro handling foreign named 
-## users like me (NielsKoldsø) are tagged NKO 
-##
+# This module contains the functionality of the bin/actionnotify script
+package TWiki::Plugins::ActionTrackerPlugin::ActionNotify;
+
 use strict;
 use integer;
 
 # Added by NKO to fix problem with non danish names
 use locale;
 
-use TWiki::Net;
+require Time::ParseDate;
 
-use TWiki::Attrs;
+require TWiki::Net;
 
-use TWiki::Plugins::ActionTrackerPlugin::Action;
-use TWiki::Plugins::ActionTrackerPlugin::ActionSet;
-use TWiki::Plugins::ActionTrackerPlugin::Format;
+require TWiki::Attrs;
 
-# This module contains the functionality of the bin/actionnotify script
-package TWiki::Plugins::ActionTrackerPlugin::ActionNotify;
+require TWiki::Plugins::ActionTrackerPlugin::Action;
+require TWiki::Plugins::ActionTrackerPlugin::ActionSet;
+require TWiki::Plugins::ActionTrackerPlugin::Format;
 
 my $wikiWordRE;
 my $options;
 
-use TWiki::Plugins::ActionTrackerPlugin::Options;
+require TWiki::Plugins::ActionTrackerPlugin::Options;
 
 # PUBLIC actionnotify script entry point. Reinitialises TWiki.
 #

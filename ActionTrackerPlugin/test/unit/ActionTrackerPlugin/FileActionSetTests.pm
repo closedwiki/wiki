@@ -26,44 +26,38 @@ sub set_up {
     TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("2 Jan 2002");
 
     my $t2 = "$this->{test_web}2";
-    $this->{twiki}->{store}->createWeb($this->{twiki}->{user}, $t2);
+    TWiki::Func::createWeb($t2);
     $this->{test_web_2} = $t2;
 
-    $this->{twiki}->{store}->saveTopic(
-        $this->{twiki}->{user}, $this->{test_web}, "Topic1", <<HERE);
+    TWiki::Func::saveTopic($this->{test_web}, "Topic1", undef, <<HERE);
 %ACTION{who=$TWiki::cfg{UsersWebName}.C,due="3 Jan 02",open}% C_open_ontime"),
 HERE
 
-    $this->{twiki}->{store}->saveTopic(
-        $this->{twiki}->{user},$this->{test_web}, "Topic2", <<HERE);
+    TWiki::Func::saveTopic($this->{test_web}, "Topic2", undef, <<HERE);
 %ACTION{who=A,due="1 Jun 2001",open}% <<EOF
 A_open_late
 EOF
 %ACTION{who=$this->{test_user_wikiname},due="1 Jun 2001",open}% $this->{test_user_wikiname}_open_late
 HERE
 
-    $this->{twiki}->{store}->saveTopic(
-        $this->{twiki}->{user}, $this->{test_web_2},
-        "WebNotify", <<'HERE');
+    TWiki::Func::saveTopic($this->{test_web_2},
+        "WebNotify", undef, <<'HERE');
    * MowGli - mowgli\@jungle.book
 
 HERE
 
-    $this->{twiki}->{store}->saveTopic(
-        $this->{twiki}->{user},$this->{test_web_2}, "Topic2", <<"HERE");
+    TWiki::Func::saveTopic($this->{test_web_2}, "Topic2", undef, <<"HERE");
 %ACTION{who=$TWiki::cfg{UsersWebName}.A,due="1 Jan 02",closed}% A_closed_ontime
 %ACTION{who=Blah.B,due="29 Jan 2010",open}% B_open_ontime
 HERE
 
-    $this->{twiki}->{store}->saveTopic(
-        $this->{twiki}->{user},$this->{test_web_2}, "Topic2", <<"HERE");
+    TWiki::Func::saveTopic($this->{test_web_2}, "Topic2", undef, <<"HERE");
 %ACTION{who=$TWiki::cfg{UsersWebName}.A,due="1 Jan 02",closed}% A_closed_ontime
 %ACTION{who=Blah.B,due="29 Jan 2010",open}% B_open_ontime
 HERE
 
     # Create a secret topic that should *NOT* be found
-    $this->{twiki}->{store}->saveTopic(
-        $this->{twiki}->{user},$this->{test_web_2}, "SecretTopic", <<HERE);
+    TWiki::Func::saveTopic($this->{test_web_2}, "SecretTopic", undef, <<HERE);
 %ACTION{who=$TWiki::cfg{UsersWebName}.IlyaKuryakin,due="1 Jan 02",closed}% A_closed_ontime
 %ACTION{who=JamesBond,due="29 Jan 2010",open}% B_open_ontime
    * Set ALLOWTOPICVIEW = $TWiki::cfg{UsersWebName}.ErnstBlofeld
@@ -72,8 +66,8 @@ HERE
 
 sub tear_down {
     my $this = shift;
-    $this->{twiki}->{store}->removeWeb(
-        $this->{twiki}->{user}, $this->{test_web_2});
+    $this->removeWebFixture(
+        $this->{twiki}, $this->{test_web_2});
     $this->SUPER::tear_down();
 }
 

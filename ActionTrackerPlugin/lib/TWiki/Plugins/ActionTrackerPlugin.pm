@@ -51,6 +51,8 @@ sub initPlugin {
     $doneHeader = 0;
 
     TWiki::Func::registerRESTHandler( 'update', \&_updateRESTHandler );
+    TWiki::Func::registerTagHandler(
+        'ACTIONSEARCH', \&_handleActionSearch, 'context-free');
 
     return 1;
 };
@@ -60,9 +62,7 @@ sub commonTagsHandler {
 
     return unless ( $_[0] =~ m/%ACTION.*{.*}%/o );
 
-    if ( !$initialised ) {
-        return unless _lazyInit($web, $topic);
-    }
+    return unless _lazyInit($web, $topic);
 
     TWiki::Func::addToHEAD('ACTIONTRACKERPLUGIN_CSS', <<HERE);
 <link rel="stylesheet" href="$options->{CSS}" type="text/css" media="all" />
@@ -74,78 +74,36 @@ HERE
     # Format actions in the topic.
     # Done this way so we get tables built up by
     # collapsing successive actions.
-    my $actionNumber = 0;
+    my $as = TWiki::Plugins::ActionTrackerPlugin::ActionSet::load(
+        $web, $topic, $otext, 1);
+    my $actionGroup;
     my $text = '';
-    my $actionSet = undef;
-    my $gathering;
-    my $pre;
-    my $attrs;
-    my $descr;
-    my $processAction = 0;
 
-    # FORMAT DEPENDANT ACTION SCAN HERE
-    foreach my $line ( split( /\r?\n/, $_[0] )) {
-        if ( $gathering ) {
-            if ( $line =~ m/^$gathering\b.*/ ) {
-                $gathering = undef;
-                $processAction = 1;
-            } else {
-                $descr .= $line."\n";
-                next;
-            }
-        } elsif ( $line =~ m/^(.*?)%ACTION{(.*?)}%(.*)/o ) {
-            ( $pre, $attrs, $descr ) = ( $1, $2, $3 );
-            if ( $pre ne '' ) {
-                if ( $pre !~ m/^[ \t]*$/o && $actionSet ) {
-                    # spit out pending action table if the pre text is more
-                    # than just spaces or tabs
-                    $text .=
-                      $actionSet->formatAsHTML( $defaultFormat, 'name',
-                                                $options->{USENEWWINDOW},
-                                               'atpDef') .
-                                                 "\n";
-                    $actionSet = undef;
-                }
-                $text .= $pre;
-            }
-
-            if ( $descr =~ m/\s*<<(\w+)\s*(.*)$/o ) {
-                $descr = $2;
-                $gathering = $1;
-                next;
-            }
-
-            $processAction = 1;
-        } else {
-            if ( $actionSet ) {
-                $text .=
-                  $actionSet->formatAsHTML( $defaultFormat, 'name',
-                                            $options->{USENEWWINDOW}, 'atpDef' ) .
-                                              "\n";
-                $actionSet = undef;
-            }
-            $text .= $line."\n";
-        }
-
-        if ( $processAction ) {
-            my $action = new TWiki::Plugins::ActionTrackerPlugin::Action(
-                $web, $topic, $actionNumber++, $attrs, $descr );
-            if ( !defined( $actionSet )) {
-                $actionSet =
+    foreach my $entry (@{$as->{ACTIONS}}) {
+        if (ref($entry)) {
+            if (!$actionGroup) {
+                $actionGroup =
                   new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
             }
-            $actionSet->add( $action );
-            $processAction = 0;
+            $actionGroup->add($entry);
+        } else {
+            if ($actionGroup) {
+                $text .= $actionGroup->formatAsHTML(
+                    $defaultFormat, 'name',
+                    $options->{USENEWWINDOW},
+                    'atpDef');
+                $actionGroup = undef;
+            }
+            $text .= $entry;
         }
     }
-    if ( $actionSet ) {
+    if ( $actionGroup ) {
         $text .=
-          $actionSet->formatAsHTML( $defaultFormat, 'name',
+          $actionGroup->formatAsHTML( $defaultFormat, 'name',
                                     $options->{USENEWWINDOW}, 'atpDef' );
     }
 
     $_[0] = $text;
-    $_[0] =~ s/%ACTIONSEARCH{(.*)?}%/&_handleActionSearch($web, $1)/geo;
     # COVERAGE OFF debug only
     if ( $options->{DEBUG} ) {
         $_[0] =~ s/%ACTIONNOTIFICATIONS{(.*?)}%/&_handleActionNotify($web, $1)/geo;
@@ -163,13 +121,35 @@ HERE
 # fully populated. This allows us to call either 'save' or 'preview'
 # to terminate the edit, as selected by the NOPREVIEW parameter.
 sub beforeEditHandler {
+    #my( $text, $topic, $web, $meta ) = @_;
+
+    if( TWiki::Func::getSkin() =~ /\baction\b/ ) {
+        return _beforeActionEdit(@_);
+    } else {
+        return _beforeNormalEdit(@_);
+    }
+}
+
+sub _beforeNormalEdit {
+    #my( $text, $topic, $web, $meta ) = @_;
+    # Coarse method of testing if modern action syntax is used
+    my $oc = scalar( $_[0] =~ m/%ACTION{.*?}%/g );
+    my $cc = scalar( $_[0] =~ m/%ENDACTION%/g );
+
+    if ($cc < $oc) {
+        return unless _lazyInit($_[2], $_[1]);
+
+        my $as = TWiki::Plugins::ActionTrackerPlugin::ActionSet::load(
+            $_[2], $_[1], $_[0], 1);
+        $_[0] = $as->stringify();
+    }
+}
+
+sub _beforeActionEdit {
     my( $text, $topic, $web, $meta ) = @_;
 
-    return unless ( TWiki::Func::getSkin() =~ /\baction\b/ );
+    return unless _lazyInit($web, $topic);
 
-    if ( !$initialised ) {
-        return unless _lazyInit($web, $topic);
-    }
     my $query = TWiki::Func::getCgiQuery();
 
     my $uid = $query->param( 'atp_action' );
@@ -204,8 +184,11 @@ sub beforeEditHandler {
     }
 
     # Find the action.
-    my ( $action, $pretext, $posttext ) =
-      TWiki::Plugins::ActionTrackerPlugin::Action::findActionByUID( $web, $topic, $text, $uid );
+    my $as = TWiki::Plugins::ActionTrackerPlugin::ActionSet::load(
+        $web, $topic, $text, 1);
+    my ( $action, $pre, $post ) = $as->splitOnAction( $uid );
+    my $pretext = $pre->stringify();
+    my $posttext = $post->stringify();
 
     $fields .= CGI::hidden( -name=>'pretext', -value=>$pretext );
     $fields .= CGI::hidden( -name=>'posttext', -value=>$posttext );
@@ -298,9 +281,7 @@ sub afterEditHandler {
     my $query = TWiki::Func::getCgiQuery();
     return unless ( $query->param( 'closeactioneditor' ));
 
-    if ( !$initialised ) {
-        return unless _lazyInit($_[2], $_[1]);
-    }
+    return unless _lazyInit($_[2], $_[1]);
 
     my $pretext = $query->param( 'pretext' ) || "";
     # Fix from RichardBaar 8/10/03 for Mozilla
@@ -338,9 +319,7 @@ sub beforeSaveHandler {
 
     return unless $text;
 
-    if ( !$initialised ) {
-        return unless _lazyInit($web, $topic);
-    }
+    return unless _lazyInit($web, $topic);
 
     my $query = TWiki::Func::getCgiQuery();
     return unless ( $query ); # Fix from GarethEdwards 13 Jun 2003
@@ -385,77 +364,52 @@ sub _addMissingAttributes {
     my $an = 0;
     my %seenUID;
 
-    # FORMAT DEPENDANT ACTION SCAN
-    foreach my $line ( split( /\r?\n/, $_[0] )) {
-        if ( $gathering ) {
-            if ( $line =~ m/^$gathering\b.*/ ) {
-                $gathering = undef;
-                $processAction = 1;
-            } else {
-                $descr .= "$line\n";
-                next;
-            }
-        } elsif ( $line =~ m/^(.*?)%ACTION{(.*?)}%(.*)$/o ) {
-            $text .= $1;
-            $attrs = $2;
-            $descr = $3;
-            if ( $descr =~ m/\s*\<\<(\w+)\s*(.*)$/o ) {
-                $descr = $2;
-                $gathering = $1;
-                next;
-            }
-            $processAction = 1;
-        } else {
-            $text .= "$line\n";
-        }
+    my $as = TWiki::Plugins::ActionTrackerPlugin::ActionSet::load(
+        $_[2], $_[1], $_[0], 1);
 
-        if ( $processAction ) {
-            my $action = new TWiki::Plugins::ActionTrackerPlugin::Action
-              ( $_[2], $_[1], $an, $attrs, $descr );
-            $action->populateMissingFields();
-            if ( $seenUID{$action->{uid}} ) {
-                # This can happen if there has been a careless
-                # cut and paste. In this case, the first instance
-                # of the action gets the old UID. This may banjax
-                # change notification, but it's better than the
-                # alternative!
-                $action->{uid} = $action->getNewUID();
-            }
-            $seenUID{$action->{uid}} = 1;
-            $text .= $action->stringify() . "\n";
-            $an++;
-            $processAction = 0;
+    foreach my $action (@{$as->{ACTIONS}}) {
+        next unless ref($action);
+        $action->populateMissingFields();
+        if ( $seenUID{$action->{uid}} ) {
+            # This can happen if there has been a careless
+            # cut and paste. In this case, the first instance
+            # of the action gets the old UID. This may banjax
+            # change notification, but it's better than the
+            # alternative!
+            $action->{uid} = $action->getNewUID();
         }
+        $seenUID{$action->{uid}} = 1;
     }
-    $_[0] = $text;
+    $_[0] = $as->stringify();
 }
 
 # =========================
 # Perform filtered search for all actions
 sub _handleActionSearch {
-    my ( $web, $expr ) = @_;
+    my( $session, $attrs, $topic, $web ) = @_;
 
-    my $attrs = new TWiki::Attrs( $expr, 1 );
+    return unless _lazyInit($web, $topic);
+
     # use default format unless overridden
     my $fmt;
-    my $fmts = $attrs->remove( "format" );
-    my $hdrs = $attrs->remove( "header" );
-    my $foot = $attrs->remove( "footer" );
-    my $sep = $attrs->remove( "separator" );
-    my $orient = $attrs->remove( "orient" );
-    my $sort = $attrs->remove( "sort" );
+    my $fmts = $attrs->remove( 'format' );
+    my $hdrs = $attrs->remove( 'header' );
+    my $foot = $attrs->remove( 'footer' );
+    my $sep = $attrs->remove( 'separator' );
+    my $orient = $attrs->remove( 'orient' );
+    my $sort = $attrs->remove( 'sort' );
     if ( defined( $fmts ) || defined( $hdrs ) || defined( $orient )) {
         $fmts = $defaultFormat->getFields() unless ( defined( $fmts ));
         $hdrs = $defaultFormat->getHeaders() unless ( defined( $hdrs ));
         $orient = $defaultFormat->getOrientation() unless ( defined( $orient ));
-        $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format( $hdrs, $fmts, $orient, "", "" );
+        $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format( $hdrs, $fmts, $orient, '', '' );
     } else {
         $fmt = $defaultFormat;
     }
 
     my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs( $web, $attrs, 0 );
     $actions->sort( $sort );
-    return $actions->formatAsHTML( $fmt, "href", $options->{USENEWWINDOW},
+    return $actions->formatAsHTML( $fmt, 'href', $options->{USENEWWINDOW},
                                    'atpSearch' );
 }
 
@@ -463,13 +417,19 @@ sub _handleActionSearch {
 sub _lazyInit {
     my ($web, $topic) = @_;
 
-    require TWiki::Attrs;
-    require Time::ParseDate;
-    require TWiki::Plugins::ActionTrackerPlugin::Options;
-    require TWiki::Plugins::ActionTrackerPlugin::Action;
-    require TWiki::Plugins::ActionTrackerPlugin::ActionSet;
-    require TWiki::Plugins::ActionTrackerPlugin::Format;
-    require TWiki::Plugins::ActionTrackerPlugin::ActionNotify;
+    return 1 if $initialised;
+
+    eval {
+        require TWiki::Attrs;
+        require TWiki::Plugins::ActionTrackerPlugin::Options;
+        require TWiki::Plugins::ActionTrackerPlugin::Action;
+        require TWiki::Plugins::ActionTrackerPlugin::ActionSet;
+        require TWiki::Plugins::ActionTrackerPlugin::Format;
+    };
+    if ($@) {
+        TWiki::Func::writeWarning("ActionTrackerPlugin: init failed $@");
+        return 0;
+    }
 
     $options = TWiki::Plugins::ActionTrackerPlugin::Options::load($web, $topic);
 
@@ -502,7 +462,10 @@ sub _handleActionNotify {
     my ( $web, $expr ) = @_;
 
     eval 'require TWiki::Plugins::ActionTrackerPlugin::ActionNotify';
-    return if $@;
+    if( $@ ) {
+        TWiki::Func::writeWarning("ATP: $@");
+        return;
+    }
 
     my $text = TWiki::Plugins::ActionTrackerPlugin::ActionNotify::doNotifications( $web, $expr, 1 );
 
@@ -550,45 +513,19 @@ sub _updateSingleAction {
     my $an = 0;
     my %seenUID;
 
-    # FORMAT DEPENDANT ACTION SCAN
-    my $result = '';
-    foreach my $line ( split( /\r?\n/, $text )) {
-        if ( $gathering ) {
-            if ( $line =~ m/^$gathering\b.*/ ) {
-                $gathering = undef;
-                $processAction = 1;
-            } else {
-                $descr .= "$line\n";
-                next;
-            }
-        } elsif ( $line =~ m/^(.*?)%ACTION{(.*?)}%(.*)$/o ) {
-            $result .= $1;
-            $attrs = $2;
-            $descr = $3;
-            if ( $descr =~ m/\s*\<\<(\w+)\s*(.*)$/o ) {
-                $descr = $2;
-                $gathering = $1;
-                next;
-            }
-            $processAction = 1;
-        } else {
-            $result .= "$line\n";
-        }
+    my $as = TWiki::Plugins::ActionTrackerPlugin::ActionSet::load(
+        $web, $topic, $text, 1);
 
-        if ( $processAction ) {
-            my $action = new TWiki::Plugins::ActionTrackerPlugin::Action
-              ( $web, $topic, $an, $attrs, $descr );
+    foreach my $action (@{$as->{ACTIONS}}) {
+        if (ref($action)) {
             if ($action->{uid} == $uid) {
                 foreach my $key (keys %changes) {
                     $action->{$key} = $changes{$key};
                 }
             }
-            $result .= $action->stringify() . "\n";
-            $an++;
-            $processAction = 0;
         }
     }
-    TWiki::Func::saveTopic($web, $topic, $meta, $result,
+    TWiki::Func::saveTopic($web, $topic, $meta, $as->stringify(),
                            { comment => 'atp save' });
 }
 

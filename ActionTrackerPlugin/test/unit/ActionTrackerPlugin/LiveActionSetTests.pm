@@ -25,39 +25,35 @@ sub set_up {
 
     my $meta = new TWiki::Meta($this->{twiki},$this->{test_web},"WhoCares");
 
-    $this->{twiki}->{store}->saveTopic(
-        $this->{twiki}->{user}, $this->{test_web}, "Topic1","
+    TWiki::Func::saveTopic($this->{test_web}, "Topic1", $meta, "
 %ACTION{who=$this->{users_web}.C,due=\"16 Dec 02\",open}% Test_Topic1_C_open_ontime",
-        $meta, { forcenewrevision=>1 });
+        { forcenewrevision=>1 });
 
-    $this->{twiki}->{store}->saveTopic(
-        $this->{twiki}->{user}, $this->{test_web}, "Topic2","
+    TWiki::Func::saveTopic($this->{test_web}, "Topic2", $meta, "
 %ACTION{who=A,due=\"2 Jan 02\",open}% Test_Topic2_A_open_late
-", $meta, { forcenewrevision=>1 });
+", { forcenewrevision=>1 });
 
-    $this->{twiki}->{store}->saveTopic( $this->{twiki}->{user}, $this->{test_web}, "WebNotify","
+    TWiki::Func::saveTopic($this->{test_web}, "WebNotify", undef, "
    * $this->{users_web}.A - fred\@sesame.street.com
 ");
 
-    $this->{twiki}->{store}->saveTopic(
-        $this->{twiki}->{user}, $this->{users_web}, "Topic2","
+    TWiki::Func::saveTopic($this->{users_web}, "Topic2", $meta, "
 %ACTION{who=$this->{users_web}.A,due=\"1 Jan 02\",closed}% Main_Topic2_A_closed_ontime
 %ACTION{who=B,due=\"29 Jan 2010\",open}% Main_Topic2_B_open_ontime
-%ACTION{who=E,due=\"29 Jan 2001\",open}% Main_Topic2_E_open_ontime", $meta, { forcenewrevision=>1 });
+%ACTION{who=E,due=\"29 Jan 2001\",open}% Main_Topic2_E_open_ontime", { forcenewrevision=>1 });
 
-    $this->{twiki}->{store}->saveTopic( $this->{twiki}->{user}, $this->{users_web}, "WebNotify","
+    TWiki::Func::saveTopic($this->{users_web}, "WebNotify", $meta, "
    * $this->{users_web}.C - sam\@sesame.street.com
-", $meta, { forcenewrevision=>1 });
-    $this->{twiki}->{store}->saveTopic(
-        $this->{twiki}->{user}, $this->{users_web}, "B","
+", { forcenewrevision=>1 });
+    TWiki::Func::saveTopic($this->{users_web}, "B", $meta, "
    * Email: joe\@sesame.street.com
-", $meta, { forcenewrevision=>1 });
-    $this->{twiki}->{store}->saveTopic( $this->{twiki}->{user}, $this->{users_web}, "E","
+", { forcenewrevision=>1 });
+    TWiki::Func::saveTopic($this->{users_web}, "E", $meta, "
    * Email: joe\@sesame.street.com
    * Email: fred\@sesame.street.com
    * Email: sam\@sesame.street.com
    * $this->{users_web}.GungaDin - gunga-din\@war_lords-home.ind
-", $meta, { forcenewrevision=>1 });
+", { forcenewrevision=>1 });
 }
 
 sub test_GetAllInMain {

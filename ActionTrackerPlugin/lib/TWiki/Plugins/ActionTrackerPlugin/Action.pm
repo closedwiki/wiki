@@ -387,16 +387,7 @@ sub stringify {
             }
         }
     }
-    if ( $descr =~ m/<(p|br)\s*\/>/io ) {
-        $descr =~ s/<p\s*\/>/\n\n/gio;
-        $descr =~ s/<br\s*\/>/\n/gio;
-        my $term = 'EOF';
-        while ( $descr =~ m/^$term/m ) {
-            $term .= 'F';
-        }
-        $descr = "<<$term\n$descr\n$term";
-    }
-    return '%ACTION{'.$attrs.' }% '.$descr;
+    return '%ACTION{'.$attrs.' }% '.$descr.' %ENDACTION%';
 }
 
 # PRIVATE STATIC make a canonical name (including the web) for a user
@@ -698,6 +689,7 @@ sub _formatField_state {
     foreach my $option (@{$types{state}->{values}}) {
         my %attrs;
         $attrs{selected} = 'selected' if ($option eq $this->{state});
+        $attrs{value} = $option; # Item4649
         $input .= CGI::option(\%attrs, $option);
     }
     return CGI::Select(
@@ -875,82 +867,6 @@ sub findChanges {
     }
 
     return 1;
-}
-
-# PUBLIC STATIC find the action in the text with the given uid,
-# splitting the rest of the text into text before the action,
-# and text after the action.
-sub findActionByUID {
-    my ( $web, $topic, $text, $uid ) = @_;
-
-    my $sn = -1;
-    if ( $uid =~ m/^AcTion(\d+)$/o ) {
-        $sn = $1;
-    }
-
-    my $action;
-    my $pretext = '';
-    my $posttext = '';
-    my $found = 0;
-    my $an = 0;
-    my $gathering;
-    my $attrs;
-    my $descr;
-    my $processAction = 0;
-
-    # FORMAT DEPENDANT ACTION SCAN
-    foreach my $line ( split( /\r?\n/, $text ) ) {
-        if ( $found ) {
-            $posttext .= $line."\n";
-        } elsif ( $gathering ) {
-            if ( $line =~ m/^$gathering\b.*/ ) {
-                #$gathering = undef; PetricFrank 1 Jul 2003
-                $processAction = 1;
-            } else {
-                $descr .= $line."\n";
-                next;
-            }
-        } elsif ( $line =~ m/^(.*?)%ACTION{(.*?)}%(.*)$/o ) {
-            $pretext .= $1;
-            $attrs = $2;
-            $descr = $3;
-            if ( $descr =~ m/\s*<<(\w+)\s*(.*)$/o ) {
-                $descr = $2;
-                $gathering = $1;
-                next;
-            }
-            $processAction = 1;
-        } else {
-            $pretext .= $line."\n";
-        }
-
-        if ( $processAction ) {
-            my $anAction = new TWiki::Plugins::ActionTrackerPlugin::Action( $web, $topic,
-                                                                            $an, $attrs, $descr );
-            my $auid = $anAction->{uid};
-            if ( ( defined( $auid ) && $auid eq $uid ) || $an == $sn ) {
-                $found = 1;
-                $action = $anAction;
-            } else {
-                # >>> Fix from PetricFrank 1 Jul 2003
-                $pretext .= '%ACTION{'.$attrs.'}%';
-                if ( $gathering ) {
-                    $pretext .= " <<$gathering\n";
-                }
-                $pretext .= $descr."\n";
-                if ( $gathering ) {
-                    $pretext .= $gathering."\n";
-                }
-                $gathering = undef;
-                # <<< end of fix from PetricFrank 1 Jul 2003
-            }
-            $an++;
-            $processAction = 0;
-        }
-    }
-    TWiki::Func::writeDebug('Action not found '.$uid) unless ( $action );
-
-    return ( $action, $pretext, $posttext );
 }
 
 # PUBLIC STATIC create a new action filling in attributes

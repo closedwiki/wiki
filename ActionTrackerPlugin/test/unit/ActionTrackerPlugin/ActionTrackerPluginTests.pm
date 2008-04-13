@@ -34,27 +34,22 @@ sub set_up {
 
     my $meta = new TWiki::Meta($this->{twiki}, $this->{test_web}, "Topic1");
     $meta->putKeyed('FIELD', {name=>'Who', title=>'Leela', value=>'Turanaga'});
-    $this->{twiki}->{store}->saveTopic(
-        $this->{twiki}->{user}, $this->{test_web}, "Topic1", "
-%ACTION{who=$this->{users_web}.Sam,due=\"3 Jan 02\",open}% Test0: Sam_open_late", $meta);
+    TWiki::Func::saveTopic($this->{test_web}, "Topic1", $meta, "
+%ACTION{who=$this->{users_web}.Sam,due=\"3 Jan 02\",open}% Test0: Sam_open_late");
 
-    $this->{twiki}->{store}->saveTopic(
-        $this->{twiki}->{user}, $this->{test_web}, "Topic2", "
+    TWiki::Func::saveTopic($this->{test_web}, "Topic2", undef, "
 %ACTION{who=Fred,due=\"2 Jan 02\",open}% Test1: Fred_open_ontime");
 
-    $this->{twiki}->{store}->saveTopic(
-        $this->{twiki}->{user}, $this->{test_web}, "WebNotify", "
+    TWiki::Func::saveTopic($this->{test_web}, "WebNotify", undef, "
    * $this->{users_web}.Fred - fred\@sesame.street.com
 ");
 
-    $this->{twiki}->{store}->saveTopic(
-        $this->{twiki}->{user}, $this->{test_web}, "WebPreferences", "
+    TWiki::Func::saveTopic($this->{test_web}, "WebPreferences", undef, "
    * Set ACTIONTRACKERPLUGIN_HEADERCOL = green
    * Set ACTIONTRACKERPLUGIN_EXTRAS = |plaintiffs,names,16|decision,text,16|sentencing,date|sentence,select,\"life\",\"5 years\",\"community service\"|
 ");
 
-    $this->{twiki}->{store}->saveTopic(
-        $this->{twiki}->{user}, $this->{users_web}, "Topic2", "
+    TWiki::Func::saveTopic($this->{users_web}, "Topic2", undef, "
 %META:TOPICINFO{author=\"guest\" date=\"1053267450\" format=\"1.0\" version=\"1.35\"}%
 %META:TOPICPARENT{name=\"WebHome\"}%
 %ACTION{who=$this->{users_web}.Fred,due=\"1 Jan 02\",closed}% Main0: Fred_closed_ontime
@@ -66,13 +61,13 @@ sub set_up {
 %META:FIELD{name=\"Know.OsVersion\" title=\"Know.OsVersion\" value=\"hhhhhh\"}%
 ");
 
-    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user}, $this->{users_web}, "WebNotify", "
+    TWiki::Func::saveTopic($this->{users_web}, "WebNotify", undef, "
    * $this->{users_web}.Sam - sam\@sesame.street.com
 ");
-    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user}, $this->{users_web}, "Joe", "
+    TWiki::Func::saveTopic($this->{users_web}, "Joe", undef, "
    * Email: joe\@sesame.street.com
 ");
-    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user}, $this->{users_web}, "TheWholeBunch", "
+    TWiki::Func::saveTopic($this->{users_web}, "TheWholeBunch", undef, "
    * Email: joe\@sesame.street.com
    * Email: fred\@sesame.street.com
    * Email: sam\@sesame.street.com
@@ -84,7 +79,8 @@ sub set_up {
 sub testActionSearchFn {
     my $this = shift;
     my $chosen = TWiki::Plugins::ActionTrackerPlugin::_handleActionSearch(
-        $this->{users_web}, "web=\".*\"");
+        $twiki, new TWiki::Attrs("web=\".*\""),
+        $this->{users_web}, $this->{test_topic});
     $this->assert_matches(qr/Test0:/, $chosen);
     $this->assert_matches(qr/Test1:/, $chosen);
     $this->assert_matches(qr/Main0:/, $chosen);
@@ -96,7 +92,8 @@ sub testActionSearchFn {
 sub testActionSearchFnSorted {
     my $this = shift;
     my $chosen = TWiki::Plugins::ActionTrackerPlugin::_handleActionSearch(
-        $this->{users_web}, "web=\".*\" sort=\"state,who\"");
+        $twiki, new TWiki::Attrs("web=\".*\" sort=\"state,who\""),
+        $this->{users_web}, $this->{test_topic});
     $this->assert_matches(qr/Test0:/, $chosen);
     $this->assert_matches(qr/Test1:/, $chosen);
     $this->assert_matches(qr/Main0:/, $chosen);

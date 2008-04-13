@@ -18,8 +18,8 @@ This plugin provides support for tracking actions embedded in TWiki topics. Acti
 This is particularly useful for [[http://en.wikipedia.org/wiki/Minutes][meeting minutes]]. As you write the minutes during the meeting, you simply enter the actions into the text and as soon as the topic is saved, the actions "go live". For example, at a recent meeting of the British Cabinet:
 <verbatim>
 GordonBrown agreed to a zero tax rate for all self-employed software engineers, to make up for past unfair treatment.
-%ACTION{who="GordonBrown" due="1st April 2008"}% Repay all unfairly levied taxes
-%ACTION{who="AlistairDarling" due="25th Dec 2007"}% Contact Santa to find out who is going to pay for it
+%ACTION{who="GordonBrown" due="5th April 2008"}% Repay all unfairly levied taxes %ENDACTION%
+%ACTION{who="AlistairDarling" due="25th Dec 2007"}% Contact Santa to find out who is going to pay for it %ENDACTION%
 AlistairDarling observed that this might adversely impact the government hors d'ouvres budget.
 </verbatim>
 But that's not the only application. The action tracker can also be used for:
@@ -44,7 +44,9 @@ Actions are nicely formatted for display, and automatic notification of actions 
 
 ---++ Actions
 
-Write the command =%<nop>ACTION{= _attributes_ =}%= anywhere in a TWiki topic. All the text following the final % up to the next end-of-line is taken as the action description. Standard attributes are
+__Note:__ if you have previously used this plugin you will note that the syntax of actions has changed. The plugin still recognises the old syntax, and will automatically upgrade topics when you edit them.
+
+Write the command =%<nop>ACTION{= _attributes_ =}% ...  %<nop>ENDACTION%= anywhere in a TWiki topic, where =...= represents the action description. Standard attributes are
 	| *Name* | *Value* | *Description* | *Auto-completed* |
 	| =who= | See [[#PeopleAnchor][People]] | The person or team responsible for completing the action. | current user |
 	| =due= | See [[#DateFormats][Date Formats]] | The due date | |
@@ -58,16 +60,13 @@ Write the command =%<nop>ACTION{= _attributes_ =}%= anywhere in a TWiki topic. A
 
 For example,
 <pre>
-%<nop>ACTION{ who="TWikiGuest" due="2 Jan 2004" state="open" notify="AttillaTheHun" }% An action for TWikiGuest
-</pre>
-If the action description doesn't all fit on one line you can use shell-style here-document syntax to grab the next few lines. For example,
-<pre>
-%<nop>ACTION{ who="LittleOysters" due="2 Jan 1884" state="open" }% &lt;&lt;EOF
+%<nop>ACTION{ who="TWikiGuest" due="2 Jan 2004" state="open" notify="AttillaTheHun" }% An action for TWikiGuest %<nop>ENDACTION%
+%<nop>ACTION{ who="LittleOysters" due="2 Jan 1884" state="open" }%
 The time has come, the walrus said,
 To speak of many things.
 Of shoes, and ships, and sealing wax,
 Of cabbages and kings.
-EOF
+%<nop>ENDACTION%
 </pre>
 The delimiter must be a sequence of alphanumeric characters, and the closing delimiter must be on a line of its own.
 
@@ -133,7 +132,7 @@ The following absolute date formats are recognised. Dates containing spaces must
 	* yy/mm		(only if year > 12)
 	* yy/mm/dd	(only if year > 12 and day < 32)
 
-You are *strongly* recommended never to use the 'mm/dd/yyyy or mm/dd/yyyy' formats, to avoid confusing users in Europe (like me). Note that due to limitations in the Time::Parsedate module, dates before 1970 will not work as expected.
+You are *strongly* recommended never to use the 'mm/dd/yy or mm/dd/yyyy' formats, to avoid confusing users outside of the US, Micronesia, the Phillipines and Palau (these are the [[http://en.wikipedia.org/wiki/Calendar_date][only places in the world that use mm/dd/yyyy]]). Note that due to limitations in the Time::Parsedate module, dates before 1970 will not work as expected.
 
 ---++++ Relative date formats
 When you are searching for fields containing dates (such as =closed=, =created= and =due=) you can specify dates relative to the current date and time. For example:
@@ -293,7 +292,7 @@ A default format for actions and action search results can be defined in this to
 
 As well as the standard attributes you can add non-standard attributes to actions, and use them in searches. For example:
 <pre>
-%<nop>ACTION{ who="EmperorHadrian" due="1 Jan 0053" state="closed" legion="7th" cohort="6th" maniple="3rd" }% Build a wall to keep the Scots out of England
+%<nop>ACTION{ who="EmperorHadrian" due="1 Jan 0053" state="closed" legion="7th" cohort="6th" maniple="3rd" }% Build a wall to keep the Scots out of England %<nop>ENDACTION%
 </pre>
 
 Non-standard attributes must be lower-case words. The following names may not be used for non-standard attributes:
@@ -329,8 +328,8 @@ If a non-standard attribute is declared as type =text= you can use perl regular 
 
 will match both of the following actions:
 <pre>
-%<nop>ACTION{ car="VolkswagenBeetle,AudiSport" ... }%
-%<nop>ACTION{ car="ToyotaSupra,MercedesCoupe,ColtLancer" ... }%
+%<nop>ACTION{ car="VolkswagenBeetle,AudiSport" ... }% ... %<nop>ENDACTION%
+%<nop>ACTION{ car="ToyotaSupra,MercedesCoupe,ColtLancer" ... }% ... %<nop>ENDACTION%
 </pre>
 
 ---
@@ -344,7 +343,7 @@ You can override the defaults for these values in %MAINWEB%.<nop>TWikiPreference
    *<nop> Set ACTIONTRACKERPLUGIN_EDITORIENT = rows
 </pre>
 ---++ Formatting how actions are displayed
-The format of an action output. The following fields can be output: =web=, =topic=, =text=, =who=, =due=, =notify=, =uid=, =creator=, =state=, =edit=, and any =ACTIOPNTRACKERPLUGIN_EXTRAS= you may have. These settings can be overridden in an =ACTIONSEARCH= command using the =format= and =header= attributes. =TABLEHEADER= defines the column headings, =TABLEFORMAT= defines the contents of the columns, and if =TABLEORIENT= is set to =rows=, action tables will be aligned as rows of values instead of the default columns of values.
+The format of an action output. The following fields can be output: =web=, =topic=, =text=, =who=, =due=, =notify=, =uid=, =creator=, =state=, =edit=, and any =ACTIONTRACKERPLUGIN_EXTRAS= you may have. These settings can be overridden in an =ACTIONSEARCH= command using the =format= and =header= attributes. =TABLEHEADER= defines the column headings, =TABLEFORMAT= defines the contents of the columns, and if =TABLEORIENT= is set to =rows=, action tables will be aligned as rows of values instead of the default columns of values.
    * ACTIONTRACKERPLUGIN_TABLEHEADER =| Assigned to | Due date | Description | State | Notify ||=
    * ACTIONTRACKERPLUGIN_TABLEFORMAT =| $who | $due | $text $link | $state | $notify | $edit |=
    * ACTIONTRACKERPLUGIN_TABLEORIENT =cols=
@@ -388,7 +387,7 @@ Set to 1 to enable debug features, including the undocumented =%<nop>ACTIONNOTIF
 
 %$INSTALL_INSTRUCTIONS%
 	* If the plugin is installed and enabled correctly you should see a formatted action below:
-%ACTION{who=TWikiGuest,due="1 Jan 2003",open}% Example action
+%ACTION{who=TWikiGuest,due="1 Jan 2003",open}% Example action %ENDACTION%
 	* ... and the result of a formatted search below:
 %ACTIONSEARCH{topic=ActionTrackerPlugin who=TWikiGuest header="|Who|Due|State|Description|" format="| $who |$due|$state|$text $link|" orient="rows" }%
 
@@ -404,26 +403,27 @@ Thanks are due to the following sponsors, who have helped make this plugin possi
 |  Plugin Author: | TWiki:Main/CrawfordCurrie, http://c-dot.co.uk |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
-|  17 Sep 2007 | Bugs:Item4648 $formfield wasn't working on 4.1.2 |
-|  12 Sep 2007 | Bugs:Item4609 fixed IE cacheing of edit screen - TWiki:Main.JoaquinBuendia |
-|  9 Sep 2007 | Bugs:Item4427, Bugs:Item4591 add the ability to search for multiple states using a regular expression Bugs:Item4574 fix interaction with !TinyMCEPlugin |
-|  31 Aug 2007 | Bugs:Item4528 - Support $formfield in ACTIONSEARCH (same semantics as for formatted search) Bugs:Item4529 - Remove link from description of action in the $text field of format. Sponsored by [[http://www.goldstarevents.com][Goldstar Events]]. |
-|  13 Aug 2007 | Bugs:Item4086 - =header= and =format= parameters give more control over formatting, improved mail sent for notifications (Richard Vinke)<br /> Bugs:Item4373 - added support for TBD action dates; in the process, changed default date store format to ISO for consistency with TWiki. (Crawford Currie)<br /> Bugs:Item4374 - support AJAX-like state changes from the view screen (Crawford Currie)<br /> Bugs:Item4442 - moved preference defaults out of the plugin topic, and verified correct function (Crawford Currie, sponsored by [[http://www.goldstarevents.com][Goldstar Events]]) |
-|  21 May 2007 | Bugs:Item3969 - 8bit email fix (TWiki:Main.WillNorris) |
-|  12958 | Bugs:Item3638 Fixed edit link for IE7 |
+|  13 Apr 2008 | TWikibug:Item4649: fixed AJAX updates on IE (TWiki:Main.JoaquinBuendia) TWikibug:Item4760: fixed WYSIWYG editing of topics containing actions |
+|  17 Sep 2007 | TWikibug:Item4648 $formfield wasn't working on 4.1.2 |
+|  12 Sep 2007 | TWikibug:Item4609 fixed IE cacheing of edit screen - TWiki:Main.JoaquinBuendia |
+|  9 Sep 2007 | TWikibug:Item4427, TWikibug:Item4591 add the ability to search for multiple states using a regular expression TWikibug:Item4574 fix interaction with !TinyMCEPlugin |
+|  31 Aug 2007 | TWikibug:Item4528 - Support $formfield in ACTIONSEARCH (same semantics as for formatted search) TWikibug:Item4529 - Remove link from description of action in the $text field of format. Sponsored by [[http://www.goldstarevents.com][Goldstar Events]]. |
+|  13 Aug 2007 | TWikibug:Item4086 - =header= and =format= parameters give more control over formatting, improved mail sent for notifications (Richard Vinke)<br /> TWikibug:Item4373 - added support for TBD action dates; in the process, changed default date store format to ISO for consistency with TWiki. (Crawford Currie)<br /> TWikibug:Item4374 - support AJAX-like state changes from the view screen (Crawford Currie)<br /> TWikibug:Item4442 - moved preference defaults out of the plugin topic, and verified correct function (Crawford Currie, sponsored by [[http://www.goldstarevents.com][Goldstar Events]]) |
+|  21 May 2007 | TWikibug:Item3969 - 8bit email fix (TWiki:Main.WillNorris) |
+|  12958 | TWikibug:Item3638 Fixed edit link for IE7 |
 |  12878 | putting styles.css file at the top of the html header so that \
          skins have a chance to override the defaults; \
          fixed generation of css classes; \
          added aptOpen and aptClose;\
          render actions correctly in twiki lists (TWiki:Main/MichaelDaum) |
-|  12652 | Fixes for Bugs:Item3446, Bugs:Item2127. Updates to tests and templates for recent core changes. |
+|  12652 | Fixes for TWikibug:Item3446, TWikibug:Item2127. Updates to tests and templates for recent core changes. |
 |  11556 | QBE topic made much friendlier using TWiki-4 features; minor bugfixes |
-|  10919 | Bugs:Item2606  actionnotify can now read email addresses from password manager as well as new TWiki4 style user topics. actionnotify requires TWiki-4.0.4 + hotfix-4.0.4-1 |
-|  8385 | Bugs:Item1443  style sheet bug makes yellow warning not show |
-|  8372 | Bugs:Item1434  moved actionnotify from bin into tools |
-|  8304 | Bugs:Item1305  removing dotted style from AT. Looks horrible in IE |
-|  8090 | Bugs:Item1304  removed unnecessary warning that may be breaking some sites |
-|  8089 | Bugs:Item1305  changed dotted to solid gray, as requested |
+|  10919 | TWikibug:Item2606  actionnotify can now read email addresses from password manager as well as new TWiki4 style user topics. actionnotify requires TWiki-4.0.4 + hotfix-4.0.4-1 |
+|  8385 | TWikibug:Item1443  style sheet bug makes yellow warning not show |
+|  8372 | TWikibug:Item1434  moved actionnotify from bin into tools |
+|  8304 | TWikibug:Item1305  removing dotted style from AT. Looks horrible in IE |
+|  8090 | TWikibug:Item1304  removed unnecessary warning that may be breaking some sites |
+|  8089 | TWikibug:Item1305  changed dotted to solid gray, as requested |
 |  26 Mar 2005 | 2.022 Corrected JSCalendar problems, and cleaned up lazy-loading of libraries. Added relative date specs to searches. |
 |  8 Feb 2005 | 2.021 Documentation fixes. |
 |  19 Nov 2004 | 2.020 Added conditions for date matching, and fixed config so that tests pass again. |

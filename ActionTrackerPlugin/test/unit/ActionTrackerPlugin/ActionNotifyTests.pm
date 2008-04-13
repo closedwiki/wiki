@@ -83,36 +83,36 @@ sub set_up {
     $this->registerUser("ActorSix", "Actor", "Six",
                         'actor6@correct-address');
 
-    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "TWikiFormGroup", <<'HERE');
+    TWiki::Func::saveTopic($this->{users_web}, "TWikiFormGroup", undef, <<'HERE');
 Garbage
       * Set GROUP = ActorThree, ActorFour
 More garbage
 HERE
-    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "WebNotify", <<HERE);
+    TWiki::Func::saveTopic($this->{users_web}, "WebNotify", undef, <<HERE);
 Garbage
    * $this->{users_web}.ActorFive - actor5\@correct.address
 More garbage
    * $this->{users_web}.ActorSix
 HERE
-    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{test_web}, "WebNotify", <<HERE
+    TWiki::Func::saveTopic($this->{test_web}, "WebNotify", undef, <<HERE
    * $this->{users_web}.ActorEight - actor-8\@correct.address
 HERE
                               );
-    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "EMailGroup", <<'HERE');
+    TWiki::Func::saveTopic($this->{users_web}, "EMailGroup", undef, <<'HERE');
    * Set GROUP = actorTwo@another-address.net,ActorFour
 HERE
 
-    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{test_web}, "Topic1", <<'HERE');
+    TWiki::Func::saveTopic($this->{test_web}, "Topic1", undef, <<'HERE');
 %ACTION{who="ActorOne,ActorTwo,ActorThree,ActorFour,ActorFive,ActorSix,ActorSeven,ActorEight" due="3 Jan 02" state=open}% A1: ontime
 HERE
-    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{test_web}, "Topic2", <<'HERE');
+    TWiki::Func::saveTopic($this->{test_web}, "Topic2", undef, <<'HERE');
 %ACTION{who="ActorOne,ActorTwo,ActorThree,ActorFour,ActorFive,ActorSix,actor.7@seven.net,ActorEight" due="2 Jan 02" state=closed}% A2: closed
 HERE
-    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "Topic1", <<'HERE');
+    TWiki::Func::saveTopic($this->{users_web}, "Topic1", undef, <<'HERE');
 %ACTION{who="ActorOne,ActorTwo,ActorThree,ActorFour,ActorFive,ActorSix,actor.7@seven.net,ActorEight,NonEntity",due="3 Jan 01",state=open}% A3: late
 %ACTION{who=TWikiFormGroup,due="4 Jan 01",state=open}% A4: late 
 HERE
-    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "Topic2", <<'HERE');
+    TWiki::Func::saveTopic($this->{users_web}, "Topic2", undef, <<'HERE');
 %ACTION{who=EMailGroup,due="2001-01-05",state=open}% A5: late
 %ACTION{who="ActorOne,ActorTwo,ActorThree,ActorFour,TWikiFormGroup,ActorFive,ActorSix,actor.7@seven.net,ActorEight,EMailGroup",due="6 Jan 99",open}% A6: late
 HERE

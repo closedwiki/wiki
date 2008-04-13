@@ -534,7 +534,7 @@ sub test_ToString {
     $s =~ s/ closed="2001-09-30"//o;
     $s =~ s/ closer="$this->{users_web}\.$TWiki::cfg{DefaultUserWikiName}"//o;
     $s =~ s/ state="closed"//o;
-    $this->assert_str_equals("%ACTION{ }% A new action", $s);
+    $this->assert_str_equals("%ACTION{ }% A new action %ENDACTION%", $s);
 
     $action = TWiki::Plugins::ActionTrackerPlugin::Action->new(
         "Test", "Topic", 9,
@@ -551,58 +551,50 @@ sub test_FindByUID {
     my $text = "
 %ACTION{uid=AaAa who=One,due=\"30 May 2002\"}% AOne
 %ACTION{uid=BbBb who=Two,due=\"30 May 2002\"}% ATwo\r
-%ACTION{who=Three,due=\"30 May 2002\"}% AThree
+%ACTION{who=Three,due=\"30 May 2002\",uid=\"Flib\"}% AThree %ENDACTION%
 %ACTION{uid=DdDd who=Four,due=\"30 May 2002\"}% <<EOF
 AFour
 EOF";
+    use TWiki::Plugins::ActionTrackerPlugin::ActionSet;
+    my $as = TWiki::Plugins::ActionTrackerPlugin::ActionSet::load(
+        "Test", "Topic", $text, 1);
 
-    my ($action,$pre,$post) = 
-      TWiki::Plugins::ActionTrackerPlugin::Action::findActionByUID(
-          "Test", "Topic",
-          $text, "AaAa");
+    my ( $action, $pre, $post ) = $as->splitOnAction( "AaAa" );
     $this->assert_str_equals($action->{text}, "AOne");
-    $this->assert_str_equals($pre,"
-");
-    $this->assert_str_equals(
-        $post,
-        "%ACTION{uid=BbBb who=Two,due=\"30 May 2002\"}% ATwo
-%ACTION{who=Three,due=\"30 May 2002\"}% AThree
-%ACTION{uid=DdDd who=Four,due=\"30 May 2002\"}% <<EOF\nAFour\nEOF\n");
-    ($action,$pre,$post) =
-      TWiki::Plugins::ActionTrackerPlugin::Action::findActionByUID(
-          "Test", "Topic",
-          $text, "BbBb");
-    $this->assert_str_equals($action->{text}, "ATwo");
-    $this->assert_str_equals($pre, "
-%ACTION{uid=AaAa who=One,due=\"30 May 2002\"}% AOne
-");
-    $this->assert_str_equals($post,
-                             "%ACTION{who=Three,due=\"30 May 2002\"}% AThree
-%ACTION{uid=DdDd who=Four,due=\"30 May 2002\"}% <<EOF\nAFour\nEOF\n");
-    ($action,$pre,$post) =
-      TWiki::Plugins::ActionTrackerPlugin::Action::findActionByUID(
-          "Test", "Topic",
-          $text, "AcTion2");
-    $this->assert_str_equals($action->{text}, "AThree");
-    $this->assert_str_equals($pre,"
-%ACTION{uid=AaAa who=One,due=\"30 May 2002\"}% AOne
-%ACTION{uid=BbBb who=Two,due=\"30 May 2002\"}% ATwo
-");
-    $this->assert_str_equals(
-        $post,
-        "%ACTION{uid=DdDd who=Four,due=\"30 May 2002\"}% <<EOF\nAFour\nEOF\n");
+    $this->assert_str_equals("\n", $pre->stringify());
+    $this->assert_str_equals('%ACTION{ due="2002-05-30" state="open" uid="BbBb" who="TemporaryActionTestsUsersWeb.Two" }% ATwo %ENDACTION%%ACTION{ due="2002-05-30" state="open" uid="Flib" who="TemporaryActionTestsUsersWeb.Three" }% AThree %ENDACTION%
+%ACTION{ due="2002-05-30" state="open" uid="DdDd" who="TemporaryActionTestsUsersWeb.Four" }% AFour %ENDACTION%', $post->stringify());
 
-    ($action,$pre,$post) =
-      TWiki::Plugins::ActionTrackerPlugin::Action::findActionByUID(
-          "Test", "Topic",
-          $text, "DdDd");
+    ( $action, $pre, $post ) = $as->splitOnAction( "BbBb" );
+    $this->assert_str_equals($action->{text}, "ATwo");
+    $this->assert_str_equals('
+%ACTION{ due="2002-05-30" state="open" uid="AaAa" who="TemporaryActionTestsUsersWeb.One" }% AOne %ENDACTION%', $pre->stringify());
+    $this->assert_str_equals('%ACTION{ due="2002-05-30" state="open" uid="Flib" who="TemporaryActionTestsUsersWeb.Three" }% AThree %ENDACTION%
+%ACTION{ due="2002-05-30" state="open" uid="DdDd" who="TemporaryActionTestsUsersWeb.Four" }% AFour %ENDACTION%',
+                            $post->stringify());
+    ( $action, $pre, $post ) = $as->splitOnAction( "Flib" );
+
+    $this->assert_str_equals('AThree', $action->{text});
+    $this->assert_str_equals('
+%ACTION{ due="2002-05-30" state="open" uid="AaAa" who="TemporaryActionTestsUsersWeb.One" }% AOne %ENDACTION%%ACTION{ due="2002-05-30" state="open" uid="BbBb" who="TemporaryActionTestsUsersWeb.Two" }% ATwo %ENDACTION%',
+                             $pre->stringify());
+    $this->assert_str_equals('
+%ACTION{ due="2002-05-30" state="open" uid="DdDd" who="TemporaryActionTestsUsersWeb.Four" }% AFour %ENDACTION%',
+                             $post->stringify());
+
+    ( $action, $pre, $post ) = $as->splitOnAction( "DdDd" );
     $this->assert_str_equals($action->{text}, "AFour");
-    $this->assert_str_equals($pre, "
-%ACTION{uid=AaAa who=One,due=\"30 May 2002\"}% AOne
-%ACTION{uid=BbBb who=Two,due=\"30 May 2002\"}% ATwo
-%ACTION{who=Three,due=\"30 May 2002\"}% AThree
-");
-    $this->assert_str_equals($post,"");
+    $this->assert_str_equals('
+%ACTION{ due="2002-05-30" state="open" uid="AaAa" who="TemporaryActionTestsUsersWeb.One" }% AOne %ENDACTION%%ACTION{ due="2002-05-30" state="open" uid="BbBb" who="TemporaryActionTestsUsersWeb.Two" }% ATwo %ENDACTION%%ACTION{ due="2002-05-30" state="open" uid="Flib" who="TemporaryActionTestsUsersWeb.Three" }% AThree %ENDACTION%
+',
+                             $pre->stringify());
+    $this->assert_str_equals("", $post->stringify());
+
+    ( $action, $pre, $post ) = $as->splitOnAction( "NotThere" );
+    $this->assert_null($action);
+    $this->assert_str_equals($as->stringify(),
+                             $pre->stringify());
+    $this->assert_str_equals("", $post->stringify());
 }
 
 sub test_FindChanges {
@@ -685,7 +677,7 @@ sub test_XtendTypes {
     $s =~ s/ who="$this->{users_web}\.$TWiki::cfg{DefaultUserWikiName}"//o;
     $s =~ s/ sentencing="2006-03-02"//o;
     $s =~ s/ sentence="5 years"//o;
-    $this->assert_str_equals("%ACTION{ }%", $s);
+    $this->assert_str_equals("%ACTION{ }% %ENDACTION%", $s);
 
     my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format(
         "", "|\$plaintiffs|","","\$plaintiffs");
@@ -776,7 +768,7 @@ sub test_CreateFromQuery {
     $chosen =~ s/ who="$this->{users_web}\.Who"//o;
     $chosen =~ s/ created="2003-05-01"//o;
     $chosen =~ s/ uid="UID"//o;
-    $this->assert_matches(qr/^%ACTION{\s*}% Text$/, $chosen, );
+    $this->assert_matches(qr/^%ACTION{\s*}% Text %ENDACTION%$/, $chosen, );
 }
 
 sub test_FormatForEditHidden {
