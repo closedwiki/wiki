@@ -694,12 +694,36 @@ sub _formatField_state {
     }
     return CGI::Select(
         {
-            onChange => 'atp_update(this, "%SCRIPTURLPATH{rest}%/ActionTrackerPlugin/update?topic='.
-              $this->{web}.'.'.$this->{topic}.
-                ';uid='.$this->{uid}.'", "state")',
+            onChange => 'atp_update(this,'
+              . '"%SCRIPTURLPATH{rest}%/ActionTrackerPlugin/update?topic='.
+                $this->{web}.'.'.$this->{topic}.
+                  ';uid='.$this->{uid}.'","state",this.value)',
             class => 'atpState'.$this->{state},
         },
         $input);
+}
+
+# Special 'close' button field for transition between any state and 'closed'
+sub _formatField_statebutton {
+    my ( $this, $args, $asHTML ) = @_;
+    return '' unless $asHTML;
+    return '' unless $this->{uid};
+
+    my ($tgtState, $buttonName) = ('closed', 'Close');
+    if ($args =~ /^(.*),(.*)$/) {
+        ($buttonName, $tgtState) = ($1, $2);
+    }
+    return '' if ($this->{state} eq $tgtState);
+
+    return CGI::input(
+        {
+            type => 'button',
+            value => $buttonName,
+            onclick =>
+              "atp_update(this,'%SCRIPTURLPATH{rest}%/ActionTrackerPlugin"
+               . "/update?topic=$this->{web}.$this->{topic}"
+                  . ";uid=$this->{uid}','state','closed')",
+        });
 }
 
 # PRIVATE format text field

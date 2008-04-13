@@ -68,7 +68,6 @@ Of shoes, and ships, and sealing wax,
 Of cabbages and kings.
 %<nop>ENDACTION%
 </pre>
-The delimiter must be a sequence of alphanumeric characters, and the closing delimiter must be on a line of its own.
 
 The fields with an entry in the 'Auto-completed' column are automatically filled in, if they are missing, whenever someone saves the topic containing the action. The default values are as indicated in the table. You can override this behaviour by providing values for any of these attributes when you type the action. __Note:__ you must __not__ provide a value for the =uid= (see [[#UiDs][UIDs]]) field!
 
@@ -283,6 +282,7 @@ The available =$formattingtokens= are:
 | =$quot= | Double quote (="=). |
 | =$percnt= | Percent sign (=%=) |
 | =$dollar= | Dollar sign (=$=) |
+| =$statebutton(name,state)= | Displays a button that will change the current state of the action to the named state. If the action is already in that state, nothing is displayed. =name= is the string used in the button and =state= is the name of the target state e.g. =$statebutton(Close,closed)= |
 The header and format parameters can also be used with the actionnotify script.
 
 A default format for actions and action search results can be defined in this topic or the Web<nop>Preferences topic of the current web. See [[#SettingsAnchor][Settings]] for more details.
@@ -354,7 +354,7 @@ Full URL of the CSS to use in formatting actions. This file is also called from 
 If an action has no due date defined when it is created, then it is treated (for sorting etc) as if it was due at this time. This is a number of seconds since 1st Jan 1970, and should be 0 to sort actions that have no due date to the start of a list, or a very large number to sort them to the end.
    * ACTIONTRACKERPLUGIN_DEFAULTDUE =9999999999=
 ---++ Formatting actions for editing
-The format of the fields in the action editor.
+The format of the fields in the action editor are set by:
    * ACTIONTRACKERPLUGIN_EDITHEADER =| Assigned to | Due date | State | Notify |=
    * ACTIONTRACKERPLUGIN_EDITFORMAT =| $who | $due | $state | $notify |=
    * ACTIONTRACKERPLUGIN_EDITORIENT =cols=
@@ -378,6 +378,10 @@ If set to 1, the action tracker will show action states using a drop-down menu, 
    * ACTIONTRACKERPLUGIN_ENABLESTATESHORTCUT =1=
 Note that each state has an associated CSS class (e.g. =atpStateopen=) that is used to render the HTML 'select' element when =ENABLESTATESHORTCUT= is on. If you extend the range of states, you will need to add new CSS classes as well.
 
+The strings used by the =$button$ switch. A =$closebutton= is a special
+   * ACTIONTRACKERPLUGIN_CLOSEBUTTONNAME =Close=
+   * ACTIONTRACKERPLUGIN_CLOSEBUTTONCLOSED =Closed=
+ 
 ---++ Debugging
 Set to 1 to enable debug features, including the undocumented =%<nop>ACTIONNOTIFICATIONS{}%= and =%<nop>ACTIONTRACKERPREFS%= features.
    * ACTIONTRACKERPLUGIN_DEBUG =0=
@@ -403,7 +407,7 @@ Thanks are due to the following sponsors, who have helped make this plugin possi
 |  Plugin Author: | TWiki:Main/CrawfordCurrie, http://c-dot.co.uk |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
-|  13 Apr 2008 | TWikibug:Item4649: fixed AJAX updates on IE (TWiki:Main.JoaquinBuendia) TWikibug:Item4760: fixed WYSIWYG editing of topics containing actions |
+|  13 Apr 2008 | TWikibug:Item4649: merged TWiki:Main.JoaquinBuendia's fix for AJAX updates on IE. TWikibug:Item4760: fixed WYSIWYG editing of topics containing actions TWikibug:Item5531: added simple button option for state changes |
 |  17 Sep 2007 | TWikibug:Item4648 $formfield wasn't working on 4.1.2 |
 |  12 Sep 2007 | TWikibug:Item4609 fixed IE cacheing of edit screen - TWiki:Main.JoaquinBuendia |
 |  9 Sep 2007 | TWikibug:Item4427, TWikibug:Item4591 add the ability to search for multiple states using a regular expression TWikibug:Item4574 fix interaction with !TinyMCEPlugin |

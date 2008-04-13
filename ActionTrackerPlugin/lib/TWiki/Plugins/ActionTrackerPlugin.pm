@@ -64,11 +64,13 @@ sub commonTagsHandler {
 
     return unless _lazyInit($web, $topic);
 
+    my $debug = $ENV{TWIKI_ASSERTS} ? '_src' : '';
+
     TWiki::Func::addToHEAD('ACTIONTRACKERPLUGIN_CSS', <<HERE);
 <link rel="stylesheet" href="$options->{CSS}" type="text/css" media="all" />
 HERE
-    TWiki::Func::addToHEAD('ACTIONTRACKERPLUGIN_JS', <<'HERE');
-<script type='text/javascript' src='%PUBURLPATH%/%TWIKIWEB%/ActionTrackerPlugin/atp.js'></script>
+    TWiki::Func::addToHEAD('ACTIONTRACKERPLUGIN_JS', <<HERE);
+<script type='text/javascript' src='%PUBURLPATH%/%TWIKIWEB%/ActionTrackerPlugin/atp$debug.js'></script>
 HERE
 
     # Format actions in the topic.
@@ -86,7 +88,7 @@ HERE
                   new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
             }
             $actionGroup->add($entry);
-        } else {
+        } elsif ($entry =~ /(\S|\n\s*\n)/s) {
             if ($actionGroup) {
                 $text .= $actionGroup->formatAsHTML(
                     $defaultFormat, 'name',
@@ -106,7 +108,7 @@ HERE
     $_[0] = $text;
     # COVERAGE OFF debug only
     if ( $options->{DEBUG} ) {
-        $_[0] =~ s/%ACTIONNOTIFICATIONS{(.*?)}%/&_handleActionNotify($web, $1)/geo;
+        $_[0] =~ s/%ACTIONNOTIFICATIONS{(.*?)}%/_handleActionNotify($web, $1)/geo;
     }
     # COVERAGE ON
 
@@ -431,7 +433,8 @@ sub _lazyInit {
         return 0;
     }
 
-    $options = TWiki::Plugins::ActionTrackerPlugin::Options::load($web, $topic);
+    $options = TWiki::Plugins::ActionTrackerPlugin::Options::load(
+        $web, $topic);
 
     $defaultFormat = new TWiki::Plugins::ActionTrackerPlugin::Format(
         $options->{TABLEHEADER},

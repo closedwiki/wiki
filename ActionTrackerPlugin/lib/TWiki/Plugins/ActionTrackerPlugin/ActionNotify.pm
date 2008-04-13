@@ -287,14 +287,13 @@ sub _getMailAddress {
         # } elsif ( $who =~ m/^(\w+)\.([A-Z]+[a-z]+[A-Z]+\w+)$/o ) {
     }
 	elsif ( $who =~ m/^($webNameRE)\.($wikiWordRE)$/o ) {
-        # A topic in a web
-        my ( $inweb, $intopic ) = ( $1, $2 );
-        if ( TWiki::Func::topicExists( $inweb, $intopic ) ) {
+        my( $inweb, $intopic ) = ( $1, $2 );
+        $addresses = TWiki::Func::wikiToEmail($intopic);
+
+        # LEGACY - Try and expand groups the old way
+        if( !$addresses && TWiki::Func::topicExists( $inweb, $intopic ) ) {
             my $text =
               TWiki::Func::readTopicText( $inweb, $intopic, undef, 1 );
-            # SMELL SMELL SMELL - handling of groups needs to be
-            # replaced with a proper API. This requires integration of
-            # the FuncUsersContrib and Michael Daum's user handling code.
             if ( $intopic =~ m/Group$/o ) {
                 # If it's a Group topic, match * Set GROUP = 
                 if ( $text =~ m/^\s+\*\s+Set\s+GROUP\s*=\s*([^\r\n]+)/mo ) {
@@ -304,11 +303,6 @@ sub _getMailAddress {
                     }
                     $addresses = join( ',', @people );
                 }
-            } else {
-                # Email address will be picked from provided by
-                # $TWiki::cfg{PasswordManager} if possible
-                # Otherwise email address is picked from users topic
-                $addresses = TWiki::Func::wikiToEmail($intopic);
             }
         }
     }

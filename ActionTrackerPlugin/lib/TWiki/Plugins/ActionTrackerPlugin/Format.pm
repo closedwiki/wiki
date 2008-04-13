@@ -270,13 +270,13 @@ sub _generateHTMLTable {
     my ( $this, $rows, $class ) = @_;
     my $a = {};
     $a->{class} = $class if $class;
-    my $text = CGI::start_table( $a );
+    my $text = CGI::start_table( {class => 'twikiFormTable' }, $a );
     my $i;
 
     if ( $this->{ORIENTATION} eq 'rows' ) {
         for ( $i = 0; $i <= $#{$this->{HEADINGS}}; $i++ ) {
             my $head = ${$this->{HEADINGS}}[$i];
-            my $row = CGI::th($head );
+            my $row = CGI::th( { align => 'right' }, $head);
             foreach my $col ( @$rows ) {
                 my $datum = @$col[$i];
                 $row .= $datum;
