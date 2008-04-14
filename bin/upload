@@ -29,4 +29,4 @@ BEGIN {
 
 use TWiki::UI;
 use TWiki::UI::Upload;
-TWiki::UI::run( \&TWiki::UI::Upload::upload );
+TWiki::UI::run( \&TWiki::UI::Upload::upload, upload=>1 );

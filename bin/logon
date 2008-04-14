@@ -36,7 +36,7 @@ BEGIN {
 #lets use the same code as login...
 use TWiki::UI;
 
-TWiki::UI::run( \&logon );
+TWiki::UI::run( \&logon, (login=>1, logon=>1) );
 
 sub logon {
     my $session = shift;

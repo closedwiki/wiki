@@ -28,4 +28,4 @@ BEGIN {
 
 use TWiki::UI;
 use TWiki::UI::Register;
-TWiki::UI::run( \&TWiki::UI::Register::register_cgi );
+TWiki::UI::run( \&TWiki::UI::Register::register_cgi, register=>1 );
