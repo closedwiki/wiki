@@ -14,9 +14,9 @@
 
 %TMPL:DEF{"titlestep"}%%TMPL:P{"title"}%%TMPL:END%
 
-%TMPL:DEF{"notestep"}%%IF{"$NOTE" then='---+++ %NOTE%'}%%TMPL:END%
+%TMPL:DEF{"notestep"}%%IF{"defined $NOTE" then='---+++ %NOTE%'}%%TMPL:END%
 
-%TMPL:DEF{"errorstep"}%%IF{"$BANNER" then='<div class="twikiNotification twikiAlert twikiUnvisited">%BANNER%%IF{"$ERROR" then='<!--%TMPL:P{"error"}%-->'}%</div>'}%%TMPL:END%
+%TMPL:DEF{"errorstep"}%%IF{"defined $BANNER" then='<div class="twikiNotification twikiAlert twikiUnvisited">%BANNER%%IF{"defined $ERROR" then='<!--%TMPL:P{"error"}%-->'}%</div>'}%%TMPL:END%
 
 %TMPL:DEF{"error"}%%MAKETEXT{"Error: [_1]" args="%ERROR%"}%%TMPL:END%
 
