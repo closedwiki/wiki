@@ -3772,25 +3772,26 @@ sub META {
     my $meta  = $this->inContext( 'can_render_meta' );
 
     return '' unless $meta;
+    my $result = '';
 
     my $option = $params->{_DEFAULT};
 
     if( $option eq 'form' ) {
         # META:FORM and META:FIELD
-        return $meta->renderFormForDisplay( $this->templates );
+        $result = $meta->renderFormForDisplay( $this->templates );
     } elsif ( $option eq 'formfield' ) {
         # a formfield from within topic text
-        return $meta->renderFormFieldForDisplay( $params );
+        $result = $meta->renderFormFieldForDisplay( $params );
     } elsif( $option eq 'attachments' ) {
         # renders attachment tables
-        return $this->attach->renderMetaData( $web, $topic, $meta, $params );
+        $result = $this->attach->renderMetaData( $web, $topic, $meta, $params );
     } elsif( $option eq 'moved' ) {
-        return $this->renderer->renderMoved( $web, $topic, $meta, $params );
+        $result = $this->renderer->renderMoved( $web, $topic, $meta, $params );
     } elsif( $option eq 'parent' ) {
-        return $this->renderer->renderParent( $web, $topic, $meta, $params );
+        $result = $this->renderer->renderParent( $web, $topic, $meta, $params );
     }
 
-    return '';
+    return expandStandardEscapes($result);
 }
 
 # Remove NOP tag in template topics but show content. Used in template
