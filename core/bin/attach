@@ -29,6 +29,6 @@ BEGIN {
 
 use TWiki::UI;
 use TWiki::UI::Upload;
-TWiki::UI::run( \&TWiki::UI::Upload::attach );
+TWiki::UI::run( \&TWiki::UI::Upload::attach, attach=>1 );
 
 

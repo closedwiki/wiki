@@ -38,4 +38,4 @@ BEGIN {
 
 use TWiki::UI;
 use TWiki::UI::Statistics;
-TWiki::UI::run( \&TWiki::UI::Statistics::statistics );
+TWiki::UI::run( \&TWiki::UI::Statistics::statistics, statistics=>1 );

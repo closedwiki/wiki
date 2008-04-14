@@ -28,5 +28,5 @@ BEGIN {
 
 use TWiki::UI;
 use TWiki::UI::Register;
-TWiki::UI::run( \&TWiki::UI::Register::resetPassword );
+TWiki::UI::run( \&TWiki::UI::Register::resetPassword, resetpasswd=>1 );
 
