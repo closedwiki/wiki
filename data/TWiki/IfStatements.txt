@@ -92,6 +92,7 @@ You %IF{"'%USERNAME%' ingroup 'TWikiAdminGroup'" then="are an admin" else="are a
 *Context identifiers* are used in TWiki to label various stages of the rendering process. They are especially useful for [[TWikiSkins][skin]] authors to find out where they are in the rendering process. The following context identifiers are available:
 | *id* | *context* |
 | absolute_urls | Set if absolute URLs are required |
+| attach | in attach script (see TWikiScripts) |
 | authenticated | a user is authenticated |
 | body_text  | when the body text is being processed in a view (useful in plugin handlers) |
 | can_login | current environment supports login |
@@ -103,15 +104,23 @@ You %IF{"'%USERNAME%' ingroup 'TWikiAdminGroup'" then="are an admin" else="are a
 | header_text | when the header text is being processed in a view (useful in plugin handlers) |
 | i18n_enabled | when user interface <nop>I18N support is enabled (i.e., user can choose the language for UI) |
 | inactive | if active links such as 'edit' and 'attach' should be disabled |
+| login & logon | in login / logon script (see TWikiScripts) |
+| manage | in manage script (see TWikiScripts) |
 | mirror | if this is a mirror |
 | new_topic | if the topic doesn't already exist |
 | oops | in oops script (see TWikiScripts) |
 | preview | in preview script (see TWikiScripts) |
+| register | in register script (see TWikiScripts) |
+| rename | in rename script (see TWikiScripts) |
+| resetpasswd | in resetpasswd script (see TWikiScripts) |
 | rss | if this is an RSS skin rendering |
 | save | in save script (see TWikiScripts) |
 | search | in search script (see TWikiScripts) |
+| statistics | in statistics script (see TWikiScripts) |
 | textareas_hijacked | provided for use by editors that highjack textareas, and want to signal this fact. This is used by skins, for example, so they can suppress extra controls when textareas have been hijacked. |
+| upload | in upload script (see TWikiScripts) |
 | view | in view script (see TWikiScripts) |
+| viewfile | in viewfile script (see TWikiScripts) |
 | rest | in rest script (see TWikiScripts) |
 | registration_supported | registration is supported by the current UserMapper |
 | registration_enabled | set if ={Register}{EnableNewUserRegistration}= is on, and registrationis supported |
