@@ -248,6 +248,7 @@ return sOut;
   <option>Tanzania</option>
   <option>Thailand</option>
   <option>Tajikistan</option>
+  <option>Trinidad and Tobago</option>
   <option>Tunisia</option>
   <option>Turkey</option>
   <option>Turkmenistan</option>
