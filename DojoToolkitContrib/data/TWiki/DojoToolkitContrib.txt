@@ -22,7 +22,7 @@ see the [[http://dojotoolkit.org/book/dojo-book-1-0][The Dojo Book]]
 
    
 ---++ Usage
-This Contrib is really a developer conveinience package, and should be used in conjunction with another TWiki Extension - such as TWiki:Plugins.RestPlugin.
+This Contrib is a conveinience package, and should be used in conjunction with another TWiki Extension - such as TWiki:Plugins.RestPlugin.
 
 It contains one function =TWiki::Contrib::DojoToolkitContrib::requireJS(dojoModuleName), that will add the dojo.js script to the HTML header, and add the =dojo.require= calls in order.
 
@@ -31,7 +31,7 @@ It contains one function =TWiki::Contrib::DojoToolkitContrib::requireJS(dojoModu
 Settings are stored as preferences variables. To reference a setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, e.g. ==%<nop>DOJOTOOLKITCONTRIB_STUB%==
 
    * One line description:
-      * Set SHORTDESCRIPTION = Add short description here of your DojoToolkitContrib contrib
+      * Set SHORTDESCRIPTION = Adds Dojo Toolkit javascript to TWiki.
 
    * Name of the perl package
       * Set STUB = %$STUB%
