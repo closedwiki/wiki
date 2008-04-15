@@ -634,6 +634,8 @@ pub/TWiki/DojoToolkitContrib/dijit/nls/loading.js
 pub/TWiki/DojoToolkitContrib/dijit/nls/ru
 pub/TWiki/DojoToolkitContrib/dijit/nls/ru/common.js
 pub/TWiki/DojoToolkitContrib/dijit/nls/ru/loading.js
+pub/TWiki/DojoToolkitContrib/dijit/nls/en
+pub/TWiki/DojoToolkitContrib/dijit/nls/en/common.js
 pub/TWiki/DojoToolkitContrib/dijit/Tooltip.js
 pub/TWiki/DojoToolkitContrib/dijit/templates
 pub/TWiki/DojoToolkitContrib/dijit/templates/Tooltip.html
