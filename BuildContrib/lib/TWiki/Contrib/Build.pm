@@ -414,19 +414,28 @@ sub _loadDependenciesFrom {
 sub _get_svn_version {
     my $this = shift;
     unless ( $this->{VERSION} ) {
-
-        # svn info all the files in the manifest
-        my $log =
-          $this->sys_action( 'svn', 'info',
-            map { "$this->{basedir}/$_->{name}" } @{ $this->{files} } );
-
-        my $max = 0;
-        foreach my $line ( split( /\n/, $log ) ) {
-            if ( $line =~ /^Last Changed Rev: (.*)$/ ) {
-                $max = $1 if $1 > $max;
+        $this->{VERSION} = 0;
+        #Shelling out with a large number of files dies, killing the build.
+        my $idx = 0;
+        while ($idx < scalar(@{ $this->{files} })) {
+            my @files;
+            # #@files = map { "$this->{basedir}/$_->{name}" } @{ $this->{files} };
+            my $limit = $idx+1000;
+            for (;$idx<$limit;$idx++) {
+                push(@files, $this->{basedir}.'/'.(${$this->{files}}[$idx]->{name}||''));
             }
+            # svn info all the files in the manifest
+            my $log =
+              $this->sys_action( 'svn', 'info', @files );
+
+            my $max = $this->{VERSION};
+            foreach my $line ( split( /\n/, $log ) ) {
+                if ( $line =~ /^Last Changed Rev: (.*)$/ ) {
+                    $max = $1 if $1 > $max;
+                }
+            }
+            $this->{VERSION} = $max;
         }
-        $this->{VERSION} = $max;
     }
     return $this->{VERSION};
 }
@@ -578,7 +587,9 @@ sub cp {
     }
     unless ( $this->{-n} ) {
         if ( -d $from ) {
-            mkdir($to) || warn 'Warning: Failed to make ' . $to . ': ' . $!;
+            unless ( -e $to ) {
+                mkdir($to) || warn 'Warning: Failed to make ' . $to . ': ' . $!;
+            }
         }
         else {
             File::Copy::copy( $from, $to )
@@ -990,7 +1001,7 @@ sub target_stage {
 
     foreach my $file ( @{ $this->{files} } ) {
         foreach my $filter (@stageFilters) {
-            if ( $file->{name} =~ /$filter->{RE}/ ) {
+            if (defined($file->{name}) && ( $file->{name} =~ /$filter->{RE}/ )) {
                 no strict 'refs';
                 &{ $filter->{filter} }(
                     $this,
@@ -1107,12 +1118,17 @@ sub copy_fileset {
     }
     foreach my $file (@$set) {
         my $name = $file->{name};
-        if ( !-e $from . '/' . $name ) {
-            die $from . '/' . $name . ' does not exist';
-        }
-        else {
-            $this->cp( $from . '/' . $name, $to . '/' . $name );
+        if (!defined($name)) {
+            print STDERR '['.$from.']['.($name||'undef')."] => $to\n";
             $uncopied--;
+        } else {
+            if ( !-e $from . '/' . $name ) {
+                die $from . '/' . $name . ' does not exist';
+            }
+            else {
+                $this->cp( $from . '/' . $name, $to . '/' . $name );
+                $uncopied--;
+            }
         }
     }
     die 'Files left uncopied' if ($uncopied);
