@@ -3008,7 +3008,7 @@ msgstr ""
 
 #: lib/TWiki/I18N.pm:293
 msgid "_language_name"
-msgstr ""
+msgstr "Suomi"
 
 #: data/TWiki/WebSearchAdvanced.txt:77
 #: data/TWiki/WebSearchAdvanced.txt:95

@@ -3395,7 +3395,7 @@ msgstr ""
 
 #: lib/TWiki/I18N.pm:292
 msgid "_language_name"
-msgstr ""
+msgstr "Български"
 
 #: data/TWiki/WebSearchAdvanced.txt:71 data/TWiki/WebSearchAdvanced.txt:89
 msgid "about !BookView"
