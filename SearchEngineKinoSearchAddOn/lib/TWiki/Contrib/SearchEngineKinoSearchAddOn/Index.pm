@@ -360,10 +360,12 @@ sub formsFieldNames {
 	foreach my $formName (@forms) {
 	    my $form = TWiki::Form->new($TWiki::Plugins::SESSION, $web, $formName);
 	    foreach my $fieldDef ( @{$form->{fields}} ) {
-		$fieldNames{$fieldDef->{name}} = 1;
+		my $fldName = $fieldDef->{name};
+		$fieldNames{$fldName} = 1 unless $fldName eq "";
 	    }
 	}
     }
+
     return %fieldNames
 }
 

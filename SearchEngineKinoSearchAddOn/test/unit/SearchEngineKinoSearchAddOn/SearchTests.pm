@@ -28,8 +28,8 @@ HERE
 Just an example topic wird MS Word
 Keyword: redmond
 HERE
-    $this->{twiki}->{store}->saveAttachment($this->{users_web}, "TopicWithWordAttachment", "Simple_example.doc",
-                                            $this->{twiki}->{user}, {file => "attachement_examples/Simple_example.doc"})
+    #$this->{twiki}->{store}->saveAttachment($this->{users_web}, "TopicWithWordAttachment", "Simple_example.doc",
+    #                                        $this->{twiki}->{user}, {file => "attachement_examples/Simple_example.doc"})
 }
 
 sub tear_down {

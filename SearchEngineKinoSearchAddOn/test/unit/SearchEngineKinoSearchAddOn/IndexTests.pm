@@ -4,6 +4,7 @@ use base qw( TWikiFnTestCase );
 
 use strict;
 
+
 use TWiki::Contrib::SearchEngineKinoSearchAddOn::Index;
 use TWiki::Contrib::SearchEngineKinoSearchAddOn::Search;
 
@@ -545,7 +546,7 @@ sub test_UmlauteInPDF {
 
 sub _testForWordInAttachment {
     my ($this, $file, $word) = (@_);
-    
+
     my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
 
     $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "TopicWithSpecialFile", <<'HERE');
