@@ -40,7 +40,7 @@ Simply gives you the output of the [[http://www.perforce.com/perforce/doc.073/ma
 Gives you the changes pending for integration for a specified branch specification. It is achieved by parsing the output of a single [[http://www.perforce.com/perforce/doc.073/manuals/cmdref/integrate.html][p4 integrate -n]] command and gathering the corresponding changes by running n times the relevant =p4 changes= commands.
 
 <verbatim>
-%P4CHANGES{"branch" format="format" header="header" footer="footer" description="description" reverse="reverse" ajax="ajax" label="label" }%
+%P4CHANGESPI{"branch" format="format" header="header" footer="footer" description="description" reverse="reverse" ajax="ajax" label="label" }%
 </verbatim>
 
 | *Parameter* | *description* | *example* | *default value* |
@@ -169,8 +169,9 @@ NOTE: It turns out that you don't even need to specify an existing =p4client= to
 |  Plug-in Author: | TWiki:Main.StephaneLenclud |
 |  Copyright: | © 2008, TWiki:Main.StephaneLenclud |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plug-in Version: | 02 Mar 2008 (V0.7) |
+|  Plug-in Version: | 16 Apr 2008 (V0.8) |
 |  Change History: | <!-- versions below in reverse order --> |
+|  16 Apr 2008: | Adding =-d= flag to integrate command. Fixing integrate command line parser.  |
 |  02 Mar 2008: | Adding usage recommendations. Fixed documentation following TWiki:Main.PeterThoeny review.  |
 |  28 Feb 2008: | Adding =P4CHANGESPI= and its REST interface. |
 |  27 Feb 2008: | Adding =$pipe= variable. |
@@ -189,4 +190,5 @@ NOTE: It turns out that you don't even need to specify an existing =p4client= to
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+
 
