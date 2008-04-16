@@ -422,7 +422,8 @@ sub _get_svn_version {
             # #@files = map { "$this->{basedir}/$_->{name}" } @{ $this->{files} };
             my $limit = $idx+1000;
             for (;$idx<$limit;$idx++) {
-                push(@files, $this->{basedir}.'/'.(${$this->{files}}[$idx]->{name}||''));
+                my $file = ${$this->{files}}[$idx];     #accessing ->{name} directly creats it.
+                push(@files, $this->{basedir}.'/'.($file->{name}||''));
             }
             # svn info all the files in the manifest
             my $log =
@@ -1001,7 +1002,7 @@ sub target_stage {
 
     foreach my $file ( @{ $this->{files} } ) {
         foreach my $filter (@stageFilters) {
-            if (defined($file->{name}) && ( $file->{name} =~ /$filter->{RE}/ )) {
+            if ( $file->{name} =~ /$filter->{RE}/ ) {
                 no strict 'refs';
                 &{ $filter->{filter} }(
                     $this,
@@ -1118,17 +1119,12 @@ sub copy_fileset {
     }
     foreach my $file (@$set) {
         my $name = $file->{name};
-        if (!defined($name)) {
-            print STDERR '['.$from.']['.($name||'undef')."] => $to\n";
+        if ( !-e $from . '/' . $name ) {
+            die $from . '/' . $name . ' does not exist';
+        }
+        else {
+            $this->cp( $from . '/' . $name, $to . '/' . $name );
             $uncopied--;
-        } else {
-            if ( !-e $from . '/' . $name ) {
-                die $from . '/' . $name . ' does not exist';
-            }
-            else {
-                $this->cp( $from . '/' . $name, $to . '/' . $name );
-                $uncopied--;
-            }
         }
     }
     die 'Files left uncopied' if ($uncopied);
