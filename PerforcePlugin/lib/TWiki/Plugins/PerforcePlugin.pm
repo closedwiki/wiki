@@ -425,7 +425,7 @@ sub handleP4ChangesPendingIntegration
 		}
 	
 	my $cmd=PerforceBaseCmd($p4port, $p4client, $p4user, $p4password);
-	my $integrateCmd="$cmd integrate $reverse -n -b $branchName 2>&1"; #redirect error output
+	my $integrateCmd="$cmd integrate $reverse -n -d -b $branchName 2>&1"; #redirect error output
 	
     #BAD: untaint the cmd. See: http://gunther.web66.com/FAQS/taintmode.html
     #Basically with perl -T you can't execute a system command but that trick fixes us.
