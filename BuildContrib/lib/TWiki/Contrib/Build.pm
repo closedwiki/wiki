@@ -417,24 +417,28 @@ sub _get_svn_version {
         $this->{VERSION} = 0;
         #Shelling out with a large number of files dies, killing the build.
         my $idx = 0;
-        while ($idx < scalar(@{ $this->{files} })) {
+        while ($idx < scalar(@{$this->{files}})) {
             my @files;
             # #@files = map { "$this->{basedir}/$_->{name}" } @{ $this->{files} };
-            my $limit = $idx+1000;
-            for (;$idx<$limit;$idx++) {
-                my $file = ${$this->{files}}[$idx];     #accessing ->{name} directly creats it.
+            my $limit = $idx + 1000;
+            $limit = scalar(@{$this->{files}}) if
+              $limit > scalar(@{$this->{files}});
+            while( $idx < $limit ) {
+                my $file = ${$this->{files}}[$idx++];     #accessing ->{name} directly creats it.
                 push(@files, $this->{basedir}.'/'.($file->{name}||''));
             }
             # svn info all the files in the manifest
-            my $log =
-              $this->sys_action( 'svn', 'info', @files );
+            my $max = $this->{VERSION} || 0;
+            eval {
+                my $log =
+                  $this->sys_action( 'svn', 'info', @files );
 
-            my $max = $this->{VERSION};
-            foreach my $line ( split( /\n/, $log ) ) {
-                if ( $line =~ /^Last Changed Rev: (.*)$/ ) {
-                    $max = $1 if $1 > $max;
+                foreach my $line ( split( /\n/, $log ) ) {
+                    if ( $line =~ /^Last Changed Rev: (.*)$/ ) {
+                        $max = $1 if $1 > $max;
+                    }
                 }
-            }
+            };
             $this->{VERSION} = $max;
         }
     }
