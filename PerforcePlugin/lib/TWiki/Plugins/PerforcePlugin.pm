@@ -83,7 +83,7 @@ $VERSION = '$Rev: 15942 (22 Jan 2008) $';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '0.7';
+$RELEASE = '0.8';
 
 # Short description of this plugin
 # One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
@@ -447,14 +447,14 @@ sub handleP4ChangesPendingIntegration
 		my $fromVersion1; 
 		my $fromVersion2; 
 	
-		if ($line=~/^(.+?) - .*integrate from (.+?)#(\d+),#(\d+)$/)
+		if ($line=~/^(.+?) - .* from (.+?)#(\d+),#(\d+)$/)
 			{
 			$toFile=$1;	
 			$fromFile=$2;	
 			$fromVersion1=$3; 
 			$fromVersion2=$4; 			
 			}
-		elsif ($line=~/^(.+?) - .*integrate from\s+(.+?)#(\d+)$/)
+		elsif ($line=~/^(.+?) - .* from\s+(.+?)#(\d+)$/)
 			{
 			$toFile=$1;	
 			$fromFile=$2;	
