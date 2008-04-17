@@ -5,6 +5,6 @@ Each TWiki web has an automatic e-mail notification service that sends you an e-
 
 %INCLUDE{"MailerContrib"}%
 
-__Note for System Administrators:__ Notification is supported by an add-on to the TWiki kernel called the !MailerContrib. See the MailerContrib topic for details of how to set up this service.
+__Note for System Administrators:__ Notification is supported by an add-on to the TWiki kernel called the !MailerContrib. See the [[%SYSTEMWEB%.MailerContrib][MailerContrib]] topic for details of how to set up this service.
 
-__Note:__ If you prefer a news feed, point your reader to %INCLUDINGWEB%.WebRss (for RSS 1.0 feeds) or %INCLUDINGWEB%.WebAtom (for ATOM 1.0 feeds). Learn more at %SYSTEMWEB%.WebRssBase and %SYSTEMWEB%.WebAtomBase, respectively.
+__Note:__ If you prefer a news feed, point your reader to [[%INCLUDINGWEB%.WebRss][WebRss]] (for RSS 1.0 feeds) or [[%INCLUDINGWEB%.WebAtom][WebAtom]] (for ATOM 1.0 feeds). Learn more at [[%SYSTEMWEB%.WebRssBase][WebRssBase]] and [[%SYSTEMWEB%.WebAtomBase][WebAtomBase]], respectively.

@@ -42,6 +42,10 @@
 | Single column no header |
 | text |
 
+---+++ Very simple table
+| Row 1 of 2 |
+||
+
 ---+++ Complex table
 | One One | One Two | One Three |
 | ^ | Two Two | Two Three |
@@ -117,6 +121,17 @@
 | 2 | def | stu | 31 Dec 1999 |
 | 3 | ghi | pqr | 15 Jan 2006 |
 
+---+++ Sorting icons
+| *One* |
+| %Y% |
+| %I% |
+| %Y% |
+| %Y% |
+| %P% |
+| %P% |
+| %Q% |
+| %I% |
+| %Y% |
 
 ---++ initsort
 

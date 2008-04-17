@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev$"}%
 ---+ TWiki Groups
 
-These groups can be used to define fine grained %SYSTEMWEB%.TWikiAccessControl in <nop>%WIKITOOLNAME%:
+These groups can be used to define fine grained [[%SYSTEMWEB%.TWikiAccessControl][TWikiAccessControl]] in <nop>%WIKITOOLNAME%:
 
 %GROUPS%
 
@@ -11,7 +11,7 @@ These groups can be used to define fine grained %SYSTEMWEB%.TWikiAccessControl i
 <div class="twikiFormStep twikiLast">
 %TABLE{databg="" cellborder="0" tableborder="0"}%
 | New Group: |<input type="text" name="topic" value="NameGroup" size="40" class="twikiInputField" />&nbsp;<input class="twikiSubmit" type="submit" value="Add"/>  |
-| |%ICON{"warning"}% __Note:__ A group topic name must be a %SYSTEMWEB%.WikiWord and __must__ end in =...Group=. New topics are based on TWikiGroupTemplate  |
+| |%ICON{"warning"}% __Note:__ A group topic name must be a [[%SYSTEMWEB%.WikiWord][WikiWord]] and __must__ end in =...Group=. New topics are based on [[TWikiGroupTemplate]]  |
 
 <input type="hidden" name="templatetopic" value="TWikiGroupTemplate"/>
 <input type="hidden" name="topicparent" value="%TOPIC%"/>
@@ -21,9 +21,9 @@ These groups can be used to define fine grained %SYSTEMWEB%.TWikiAccessControl i
 </div>
 </form>
 
-*IMPORTANT NOTE:* Think twice before restricting write access to a web or a topic, because an open system where everybody can contribute is the essence of %SYSTEMWEB%.WikiCulture. Experience shows that unrestricted write access works very well because:
+*IMPORTANT NOTE:* Think twice before restricting write access to a web or a topic, because an open system where everybody can contribute is the essence of [[%SYSTEMWEB%.WikiCulture][WikiCulture]]. Experience shows that unrestricted write access works very well because:
    * There is enough peer pressure to post only appropriate content.
    * Content does not get lost because topics are under revision control.
-   * A topic revision can be undone by a member of the %USERSWEB%.TWikiAdminGroup if necesssary.
+   * A topic revision can be undone by a member of the [[%USERSWEB%.TWikiAdminGroup][TWikiAdminGroup]] if necesssary.
 
-__Related topics:__ %SYSTEMWEB%.TWikiAccessControl, %WEBPREFSTOPIC%, %WIKIUSERSTOPIC%, %SYSTEMWEB%.WikiCulture
+__Related topics:__ [[%SYSTEMWEB%.TWikiAccessControl][TWikiAccessControl]], [[%WEBPREFSTOPIC%]], [[%WIKIUSERSTOPIC%]], [[%SYSTEMWEB%.WikiCulture][WikiCulture]]

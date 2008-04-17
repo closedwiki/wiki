@@ -258,7 +258,9 @@ sub view {
 
     my $ri = $session->renderer->renderRevisionInfo( $webName,
                                                      $topicName,
-                                                     $meta );
+                                                     $meta,
+                                                     undef,
+                                                     '$rev - $time - [[$wikiusername][$wikiname]]');
     $tmpl =~ s/%REVINFO%/$ri/go;
     $tmpl =~ s/%REVISIONS%/$revs/go;
 

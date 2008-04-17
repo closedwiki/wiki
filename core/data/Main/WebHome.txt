@@ -11,16 +11,16 @@ and [[%SYSTEMWEB%.TWikiPreferences]]). Replace this text with a description of y
 
 ---++ <nop>%WEB% Web Utilities
 <form action="%SCRIPTURLPATH{view}%/%INCLUDINGWEB%/WebSearch">
-   * %SYSTEMWEB%.WelcomeGuest - for first time visitors
+   * [[%SYSTEMWEB%.WelcomeGuest][WelcomeGuest]] - for first time visitors
    * [[%SYSTEMWEB%.TWikiRegistration][Registration]] - become a <nop>%WIKITOOLNAME% user
-   * %WIKIUSERSTOPIC% - list of users of this <nop>%WIKITOOLNAME% site
-   * TWikiGroups - list of groups used for access control
+   * [[%WIKIUSERSTOPIC%]] - list of users of this <nop>%WIKITOOLNAME% site
+   * [[TWikiGroups]] - list of groups used for access control
    * <input class="twikiInputField" type="text" name="search" size="22" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" /> - [[WebSearchAdvanced][advanced search]]
-   * WebTopicList - all topics in alphabetical order
-   * WebChanges - recent topic changes in this web
-   * WebNotify - subscribe to an e-mail alert sent when topics change
-   * WebRss, WebAtom - RSS and ATOM news feeds of topic changes
-   * WebStatistics - listing popular topics and top contributors
-   * WebPreferences - preferences of this web
+   * [[WebTopicList]] - all topics in alphabetical order
+   * [[WebChanges]] - recent topic changes in this web
+   * [[WebNotify]] - subscribe to an e-mail alert sent when topics change
+   * [[WebRss]], [[WebAtom]] - RSS and ATOM news feeds of topic changes
+   * [[WebStatistics]] - listing popular topics and top contributors
+   * [[WebPreferences]] - preferences of this web
 </form>
 

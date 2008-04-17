@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1172730733" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WEB% Web Preferences
 
-The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%]] web. These preferences overwrite the __site-level preferences__ in [[%SYSTEMWEB%.%WIKIPREFSTOPIC%]] and [[%LOCALSITEPREFS%]], and can be overwritten by __user preferences__ (your personal topic, eg: %USERSWEB%.%WIKINAME% in the [[%USERSWEB%.%HOMETOPIC%][%USERSWEB%]] web).
+The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%]] web. These preferences overwrite the __site-level preferences__ in [[%SYSTEMWEB%.%WIKIPREFSTOPIC%]] and [[%LOCALSITEPREFS%]], and can be overwritten by __user preferences__ (your personal topic, eg: [[%USERSWEB%.%WIKINAME%][%WIKINAME%]] in the [[%USERSWEB%.%HOMETOPIC%][%USERSWEB%]] web).
 
 %TOC%
 
@@ -19,10 +19,10 @@ These settings override the defaults for this web only. See [[%SYSTEMWEB%.TWikiP
       * WebTopicEditTemplate: Default template for new topics in this web. (Site-level is used if topic does not exist)
       * [[%SYSTEMWEB%.WebTopicEditTemplate]]: Site-level default topic template
 
-   * Comma separated list of *forms* that can be attached to topics in this web. See %SYSTEMWEB%.TWikiForms for more information.
+   * Comma separated list of *forms* that can be attached to topics in this web. See [[%SYSTEMWEB%.TWikiForms][TWikiForms]] for more information.
       * Set WEBFORMS = 
 
-   * Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the <nop>%WEB% web: (See %SYSTEMWEB%.TWikiAccessControl). Remove the # to enable any of these settings. Remember that an empty setting is a valid setting; setting DENYWEBVIEW to nothing means that anyone can view the web.
+   * Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the <nop>%WEB% web: (See [[%SYSTEMWEB%.TWikiAccessControl][TWikiAccessControl]]). Remove the # to enable any of these settings. Remember that an empty setting is a valid setting; setting DENYWEBVIEW to nothing means that anyone can view the web.
       * Set DENYWEBVIEW = 
       * Set ALLOWWEBVIEW = 
       * Set DENYWEBCHANGE = 
@@ -30,7 +30,7 @@ These settings override the defaults for this web only. See [[%SYSTEMWEB%.TWikiP
       * Set DENYWEBRENAME = 
       * Set ALLOWWEBRENAME = 
 
-   * Users or groups allowed to change or rename this <nop>%TOPIC% topic: (e.g., %USERSWEB%.TWikiAdminGroup)
+   * Users or groups allowed to change or rename this <nop>%TOPIC% topic: (e.g., [[%USERSWEB%.TWikiAdminGroup][TWikiAdminGroup]])
       * Set ALLOWTOPICCHANGE = %USERSWEB%.TWikiAdminGroup
       * Set ALLOWTOPICRENAME = %USERSWEB%.TWikiAdminGroup
 

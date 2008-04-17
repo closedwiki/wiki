@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="1"}%
 ---+ User Form
 
-This form defines the form of the home pages of registered TWiki users listed in TWikiUsers.
+This form defines the form of the home pages of registered TWiki users listed in [[%MAINWEB%.TWikiUsers][TWikiUsers]].
 
 | *Name* | *Type* | *Size* | *Values* | *Tooltip message* | *Attribute* |
 | <nop>FirstName | text | 40 | | | |
@@ -26,5 +26,5 @@ This form defines the form of the home pages of registered TWiki users listed in
 | <nop>WorkPhoneMobile | text | 40 |  |  | H |
 | <nop>WorkLocation | text | 40 |  |  | H |
 
-__Related topics:__ TWikiUsers, %TWIKIWEB%.TWikiForms, %TWIKIWEB%.TWikiRegistration
+__Related topics:__ [[TWikiUsers]], [[%TWIKIWEB%.TWikiForms][TWikiForms]], [[%TWIKIWEB%.TWikiRegistration][TWikiRegistration]]
 
