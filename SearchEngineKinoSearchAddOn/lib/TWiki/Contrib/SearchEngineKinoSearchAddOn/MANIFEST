@@ -2,6 +2,7 @@
 bin/kinosearch 0544
 data/TWiki/SearchEngineKinoSearchAddOn.txt 0644 Documentation
 data/TWiki/KinoSearch.txt 0644 Examples
+pub/TWiki/SearchEngineKinoSearchAddOn/KinoSearchResult.jpg 0644 Documentation
 lib/TWiki/Contrib/SearchEngineKinoSearchAddOn.pm 0644 Perl module
 lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/Index.pm
 lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/KinoSearch.pm

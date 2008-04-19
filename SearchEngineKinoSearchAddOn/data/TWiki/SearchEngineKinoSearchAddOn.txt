@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="BaseUserMapping_333" date="1194117186" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICINFO{author="BaseUserMapping_333" date="1208389508" format="1.1" version="1.2"}%
 <!--
 This topic is part of the documentation for SearchEngineKinoSearchAddOn and is
 automatically generated from Subversion. Do not edit it! Your edits
@@ -18,7 +18,11 @@ in Java). This is the base of this indexed search engine for TWiki. With <nop>Ki
 
 There is already an indexed search based on [[http://www.kasei.com/archives/001039.html][Plucene]]: TWiki:Plugins/SearchEnginePluceneAddOn. But Plucene is relatively slow and is not developed further. <nop>KinoSearch is the successor of Plucene and much faster and more scalable. Thus I created this search engine add-on based on the sources of !SearchEnginePluceneAddOn. 
 
+---++ Screenshot of a search results list
+
 ---++ Usage
+
+     <img src="%ATTACHURLPATH%/KinoSearchResult.jpg" alt="KinoSearchResult.jpg" width='743' height='561' />
 
 ---+++ Indexing with kinoindex
 
@@ -271,3 +275,6 @@ $TWiki::cfg{KinoSearchIndexDir} = '/home/httpd/twiki/kinosearch/index';
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 -- Main.MarkusHesse - 24 Aug 2007
+
+
+%META:FILEATTACHMENT{name="KinoSearchResult.jpg" attachment="KinoSearchResult.jpg" attr="" comment="" date="1208389508" path="KinoSearchResult.jpg" size="112106" stream="KinoSearchResult.jpg" tmpFilename="" user="BaseUserMapping_333" version="1"}%
