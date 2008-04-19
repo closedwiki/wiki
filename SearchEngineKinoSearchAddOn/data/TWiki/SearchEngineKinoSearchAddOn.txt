@@ -170,15 +170,15 @@ You need to install the following modules: <nop>KinoSearch,
  Spreadsheet::ParseExcel
 
 You can do that by running:
-      * perl -MCPAN -e "install <nop>KinoSearch"
-      * perl -MCPAN -e "install File::MMagic"
-      * perl -MCPAN -e "install Module::Pluggable"
-      * perl -MCPAN -e "install HTML::TreeBuilder"
-      * perl -MCPAN -e "install Spreadsheet::ParseExcel"
-      * perl -MCPAN -e "install !CharsetDetector"
-      * perl -MCPAN -e "install Encode"
+   * perl -MCPAN -e "install <nop>KinoSearch"
+   * perl -MCPAN -e "install File::MMagic"
+   * perl -MCPAN -e "install Module::Pluggable"
+   * perl -MCPAN -e "install HTML::TreeBuilder"
+   * perl -MCPAN -e "install Spreadsheet::ParseExcel"
+   * perl -MCPAN -e "install !CharsetDetector"
+   * perl -MCPAN -e "install Encode"
 
-   * _Note for Windows_: For Windows, make sure, you have a C-compiler in place. This is normally part of Visual Studio etc. 
+_Note for Windows_: For Windows, make sure, you have a C-compiler in place. This is normally part of Visual Studio etc. 
 
 ---+++ Installation of the add on itself
 
@@ -235,7 +235,9 @@ If you don't use the installer script, you need to install the add-on by hand:
      | ==kinosearch/index/== | directory for index files to be stored |
      | ==kinosearch/logs/== | the index and update logs will be written here - admin should monitor this folder |
 
-   * This add-on uses several preferences which should be set at [[%MAINWEB%.TWikiPreferences]]. All these preferences are optional. If you are fine with the default values given below, you need not change anything.
+---+++ Configuration
+
+This add-on uses several preferences which should be set at [[%MAINWEB%.TWikiPreferences]]. All these preferences are optional. If you are fine with the default values given below, you need not change anything.
 <verbatim>
    *  KinoSearch settings
       * Set KINOSEARCHINDEXEXTENSIONS = .pdf, .doc, .xml, .html, .txt, .xls, .ppt
@@ -248,12 +250,17 @@ If you don't use the installer script, you need to install the add-on by hand:
       * Set KINOSEARCHDEBUG = 0
       * Set KINOSEARCHMAXLIMIT = 2000
 </verbatim>
-   * You can optionally insert the following lines in your ==lib/LocalSite.cfg==. Thus you can determine where the index is created and where the log files are created. *Note*: The directories must exist. 
+
+You can optionally insert the following lines in your ==lib/LocalSite.cfg==. Thus you can determine where the index is created and where the log files are created. *Note*: The directories must exist. 
 <verbatim>
 $TWiki::cfg{KinoSearchLogDir} = '/home/httpd/twiki/kinosearch/logs';
 $TWiki::cfg{KinoSearchIndexDir} = '/home/httpd/twiki/kinosearch/index';
 </verbatim>
-   * Remember to edit the file ==kinosearch/bin/LocalLib.cfg== and modify ==twikiLibPath== accordingly to your configuration
+
+Remember to edit the file ==kinosearch/bin/LocalLib.cfg== and modify ==twikiLibPath== accordingly to your configuration
+
+---+++ Test of the installation
+
    * Test if the installation was successful:
       * Check that =antiword=, =abiword= or =wvHtml= is in place: Type =antiword=,  =abiword= or =wvHtml= on the prompt and check that the command exists.
       * Check that =pdftotext= is in place: Type =pdftotext= on the prompt and check that the command exists.
