@@ -59,15 +59,15 @@ use constant DEF_IMAGES => {
 # be nice, provide some default formats that work OK
 
 use constant DEF_FORMATS => {
-    SINGLE_MODE() => "\$images \$topic<br>",
+    SINGLE_MODE() => "\$images [[\$topic]]<br>",
     FOLDER_MODE() =>
-"<table border='0' cellspacing='0' cellpadding='0'><tr><td nowrap height='35'>\$images</td><td> \$web.\$topic</td></tr></table>",
+"<table border='0' cellspacing='0' cellpadding='0'><tr><td nowrap height='35'>\$images</td><td> [[\$web.\$topic][\$topic]]</td></tr></table>",
     THREAD_MODE() =>
-"<table border='0' cellspacing='0' cellpadding='0'><tr><td nowrap>\$images</td><td> \$web.\$topic </td></tr></table>",
+"<table border='0' cellspacing='0' cellpadding='0'><tr><td nowrap>\$images</td><td> [[\$web.\$topic][\$topic]] </td></tr></table>",
 
 #		THREAD_MODE()		=> "<table border=0 cellspacing=0 cellpadding=0><tr><td nowrap>\$images</td><td style={font-size:12pt}> \$topic  <span style={font-size:9pt;color:gray}>\$modTime</span></td></tr></table>",
     THREADEXP_MODE() =>
-"<table border='0' cellspacing='0' cellpadding='0'><tr><td nowrap>\$images</td><td> \$web.\$topic</td></tr></table>"
+"<table border='0' cellspacing='0' cellpadding='0'><tr><td nowrap>\$images</td><td> [[\$web.\$topic][\$topic]]</td></tr></table>"
 };
 
 # class to format the nodes in a tree using images
