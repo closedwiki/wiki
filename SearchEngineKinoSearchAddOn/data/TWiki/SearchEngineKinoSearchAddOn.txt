@@ -20,9 +20,9 @@ There is already an indexed search based on [[http://www.kasei.com/archives/0010
 
 ---++ Screenshot of a search results list
 
----++ Usage
-
      <img src="%ATTACHURLPATH%/KinoSearchResult.jpg" alt="KinoSearchResult.jpg" width='743' height='561' />
+
+---++ Usage
 
 ---+++ Indexing with kinoindex
 
@@ -73,8 +73,7 @@ underscore. Thus "something_with_underscore" will be treated as
 "something with underscore". This feature is extremely usefull, as you
 can search for the single words and need not know the complete word
 (Note: !KinoSearch has no possibility to search with wildcards!). But
-of course you need to know about it (Perhaps I will add some words in
-the documentation). If you want so search for
+of course you need to know about it. If you want so search for
 "something-combined-together", you need to search for "something
 combined together". If you add also the " to the search string, you
 are sure, that the three words are in that order one after the other. 
@@ -91,33 +90,53 @@ are sure, that the three words are in that order one after the other.
    * ==topic:WebHome== to get all the topics of a given name
    * ==+web:Sandbox +topic:Test== to get all the topics containing "Test" in their titles and belonging to the Sandbox web.
 
-_Note:_ the current version of !KinoSearch does not support wildcards.
+_Note:_ The current version of !KinoSearch does not support wildcards.
 
 
 ---++ Search form
+
 The following form submits text to the ==kinosearch== script. The installation instructions are detailed below.
+
 <form action="%SCRIPTURLPATH%/kinosearch%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%"}%/">
    <input type="text" name="search" size="32" /> <input type="submit" value="Search text" /> | [[%TWIKIWEB%.KinoSearch][Help]]
 </form>
 
 ---++ Indexing further document types
 
-The indexing of attached documents is realised in two steps: In the first step, the content of the document is changed to an ASCII string. This is called stringification. In the second step, this ASCII string is index with <nop>KinoSearch. This is the normal way in all index applications. 
+The indexing of attached documents is realised in two steps: In the
+first step, the content of the document is changed to an ASCII
+string. This is called stringification. In the second step, this ASCII
+string is index with <nop>KinoSearch. This is the normal way in all
+index applications.  
 
-To index different types of documents, it is necessary to have specialised stringifiers, i.e. classes to extract the ASCII text out of the document.  In this add-on, a plug-in mechanism is implemented, so that additional stringifiers can be added without changing the existing code. All stringifier plugins are stored in the directory =lib/TWiki/Contrib/KinoSearch/StringifierPlugins=. 
+To index different types of documents, it is necessary to have
+specialised stringifiers, i.e. classes to extract the ASCII text out
+of the document.  In this add-on, a plug-in mechanism is implemented,
+so that additional stringifiers can be added without changing the
+existing code. All stringifier plugins are stored in the directory
+=lib/TWiki/Contrib/KinoSearch/StringifierPlugins=.  
 
 You can add new stringifier plugins by just adding new files here. The minimum things to be implemented are:
    * The plugin must inherit from =TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyBase=
    * The plugin must register itself by =__PACKAGE__->register_handler($application, $file_extension)=;
    * The plugin must implement the method =$text = stringForFile ($filename)=
 
-Then you should extend the list in =KINOSEARCHINDEXEXTENSIONS=. Now the defined document type should be index and the new stringifier should be used.
+Then you should extend the list in =KINOSEARCHINDEXEXTENSIONS=. Now
+the defined document type should be index and the new stringifier
+should be used. 
 
-NOTE: If you just extend the list without having a special stringifier in place, this document type is treaded like an ASCII file. For binary document types, this may lead to problems (inpropper search results, long indexing times and potential indexing break downs).
+NOTE: If you just extend the list without having a special stringifier
+in place, this document type is treaded like an ASCII file. For binary
+document types, this may lead to problems (inpropper search results,
+long indexing times and potential indexing break downs). 
 
 ---++ Add-On Installation Instructions
 
-__Note:__ You do not need to install anything on the browser to use this add-on. The following instructions are for the administrator who installs the add-on on the server where TWiki is running. 
+__Note:__ You do not need to install anything on the browser to use
+this add-on. The following instructions are for the administrator who
+installs the add-on on the server where TWiki is running.  
+
+---+++ Backend for indexing Word documents
 
 Install a backend to stringify Word documents if you want to index
 Word documents. For this either install antiword, abiword or !wvWare.
@@ -137,10 +156,31 @@ should remove =.doc= from the =KINOSEARCHINDEXEXTENSIONS= variable.
 To install antiword for Debian you can do:
    * =aptitude install antiword=
 
+---+++ Backends for PDF, PPT
+
 Install xpdf and ppthtml, if you want to index attached PDF and PPT files:
    * For Debian you can use =aptitude install xpdf-utils= and =aptitude install ppthtml=
    * If you do not install =xpdf=, you should remove =.pdf= from the =KINOSEARCHINDEXEXTENSIONS= variable.
    * If you do not install =ppthtml=, you should remove =.ppt= from the =KINOSEARCHINDEXEXTENSIONS= variable.
+
+---+++ Installation of additional CPAN modules
+
+You need to install the following modules: <nop>KinoSearch,
+ File::MMagic, Module::Pluggable, HTML::TreeBuilder and
+ Spreadsheet::ParseExcel
+
+You can do that by running:
+      * perl -MCPAN -e "install <nop>KinoSearch"
+      * perl -MCPAN -e "install File::MMagic"
+      * perl -MCPAN -e "install Module::Pluggable"
+      * perl -MCPAN -e "install HTML::TreeBuilder"
+      * perl -MCPAN -e "install Spreadsheet::ParseExcel"
+      * perl -MCPAN -e "install !CharsetDetector"
+      * perl -MCPAN -e "install Encode"
+
+   * _Note for Windows_: For Windows, make sure, you have a C-compiler in place. This is normally part of Visual Studio etc. 
+
+---+++ Installation of the add on itself
 
 Like many other TWiki extensions, this module is shipped with a automatic installer script written using the BuildContrib.
 
@@ -150,7 +190,6 @@ Like many other TWiki extensions, this module is shipped with a automatic instal
       * Just download the BuildContrib_installer perl script and run it. 
    * Notes:
       * The installer script will
-         * automatically resolve dependencies,
          * copy files into the right places in your local install (even if you have renamed data directories),
          * check in new versions of any installed files that have existing RCS histories files in your existing install (such as topics).
          * If the $TWIKI_PACKAGES environment variable is set to point to a directory, the installer will try to get archives from there. Otherwise it will try to download from twiki.org or cpan.org, as appropriate.
@@ -164,20 +203,6 @@ Like many other TWiki extensions, this module is shipped with a automatic instal
       1. Manually copy the contents across to the relevant places in your TWiki installation.
       1. Repeat from step 1 for any missing dependencies. 
 
-If you don't use the installer script, you need to install some CPAN modules:
-*NOTE*: For some unknown reason, this seems to be necessary, even if you use the installer.
-
-   * Install the CPAN modules <nop>KinoSearch, File::MMagic, Module::Pluggable, HTML::TreeBuilder and Spreadsheet::ParseExcel by running:
-      * perl -MCPAN -e "install <nop>KinoSearch"
-      * perl -MCPAN -e "install File::MMagic"
-      * perl -MCPAN -e "install Module::Pluggable"
-      * perl -MCPAN -e "install HTML::TreeBuilder"
-      * perl -MCPAN -e "install Spreadsheet::ParseExcel"
-      * perl -MCPAN -e "install !CharsetDetector"
-      * perl -MCPAN -e "install Encode"
-
-
-   * _Note for Windows_: For Windows, make sure, you have a C-compiler in place. This is normally part of Visual Studio etc. 
 
 If you don't use the installer script, you need to install the add-on by hand:
    * Download the ZIP file from the Add-on Home (see below)
@@ -187,6 +212,7 @@ If you don't use the installer script, you need to install the add-on by hand:
      | ==data/TWiki/KinoSearch.txt== | Kino search topic |
      | ==data/TWiki/KinoSearch.txt,v== | Kino search topic repository |
      | ==data/TWiki/SearchEngineKinoSearchAddOn.txt== | Add-on topic |
+     | ==pub/TWiki/SearchEngineKinoSearchAddOn/KinoSearchResult.jpg== | Attachment |
      | ==templates/kinosearch.pattern.tmpl== | template used by new search script for the pattern skin |
      | ==kinosearch/bin/LocalLib.cfg== | this file is required and should be modified according to the twiki/lib absolute path of your installation |
      | ==kinosearch/bin/kinoindex== | script that indexes all topics |
