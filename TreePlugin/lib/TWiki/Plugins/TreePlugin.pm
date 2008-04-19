@@ -341,6 +341,7 @@ sub createCache
 	my $cache='';
 	
 	#Create our file cache if needed
+    $aWeb =~ s/\//./g;
     my $cacheFileName = "$workAreaDir/$aWeb.tree";
     if (-e $cacheFileName)
     	{
@@ -410,6 +411,7 @@ sub fetchCache
 	my $aWeb=$_[0];
 	my $aTopic=$_[1];	
 	
+    $aWeb =~ s/\//./g;
     my $cacheFileName = "$workAreaDir/$aWeb.tree";
     TWiki::Func::writeDebug( "- ${pluginName} Checking cache file: $cacheFileName" ) if $debug;
     unless (-e $cacheFileName)
@@ -572,7 +574,9 @@ sub afterSaveHandler {
     TWiki::Func::writeDebug( "- ${pluginName}::beforeSaveHandler( $_[2].$_[1] )" ) if $debug;
     
     #Invalidate our cache for that web
-    my $cacheFileName = "$workAreaDir/$_[2].tree";
+    my $aWeb = $_[2];
+    $aWeb =~ s/\//./g;
+    my $cacheFileName = "$workAreaDir/$aWeb.tree";
     if (-e $cacheFileName)
     	{
 	    unlink $cacheFileName;
