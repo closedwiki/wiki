@@ -156,6 +156,12 @@ should remove =.doc= from the =KINOSEARCHINDEXEXTENSIONS= variable.
 To install antiword for Debian you can do:
    * =aptitude install antiword=
 
+To install abiword for Debian you can do:
+   * =aptitude install abiword=
+
+To install !wvWare for Debian you can do:
+   * =aptitude install wv=
+
 ---+++ Backends for PDF, PPT
 
 Install xpdf and ppthtml, if you want to index attached PDF and PPT files:
