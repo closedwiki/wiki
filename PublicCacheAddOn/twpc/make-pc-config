@@ -23,7 +23,7 @@ fi
 shorturls=false
 if $verbose; then echo "lib=$lib"; fi
 
-# $1=key $2=default, globals: $cfg
+# $1=key $2=default (- means mandatory), globals: $cfg
 value () { 
   local res line=`grep '^[$]TWiki::cfg{'"$1"'}' $cfg`
   if test -n "$line"; then
@@ -83,6 +83,7 @@ if test -r "$lib/LocalSite.cfg"; then # 4.x
   cache="$work"/public_cache/cache
   hosturl=`value DefaultUrlHost -`
   binurl="$hosturl$bin"
+  scriptsuffix=`value ScriptSuffix`
   webhome=`value HomeTopicName WebHome`
   homeweb=`value HomeWebName Main`
   logfile=`value LogFileName $data/logfile.txt`
@@ -98,6 +99,7 @@ elif test -r "$lib/TWiki.cfg"; then # Cairo
   cache="$work"/public_cache/cache
   hosturl=`value_cairo defaultUrlHost -`
   binurl="$hosturl$bin"
+  scriptsuffix=`value_cairo ScriptSuffix`
   webhome=`value_cairo mainTopicname WebHome`
   homeweb=`value_cairo HomeWebName Main`
   logs=`value_cairo logDir $data`

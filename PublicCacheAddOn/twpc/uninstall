@@ -15,7 +15,7 @@ if ! test -e "$dest/setlib.cfg"; then
   else dest="$dest/bin"
 fi; fi
 
-files="pccr pcbd pccl pcal pced pcad pccr.c pccr.bin pc-view-backup pccr-installed vief pc-config pcge"
+files="pccr pcbd pccl pcal pced pcad pccr.c pccr.bin pc-view-backup pccr-installed vief pc-config pcge pc-kbashlib"
 
 is_twiki_view () { grep -qs 'use TWiki::' "$1"; }
 
@@ -23,7 +23,7 @@ cd $dest
 
 if test -e pc-config; then
   source pc-config
-  wget -q -O /dev/null "$binurl/pcad?clear_uninstall"
+  wget -q -O /dev/null "$binurl/pcad?uninstall"
   wget -q -O /dev/null "$binurl/pcad?reset"
 else
   lib=../lib; data=../data
@@ -46,6 +46,7 @@ fi
 
 rm -f $files $lib/TWiki/Plugins/PublicCachePlugin.pm \
       $data/TWiki/PublicCachePlugin.txt $data/TWiki/PublicCacheAddOn.txt
+if test -n "$scriptsuffix"; then rm -f vief$scriptsuffix; fi
 
 if $purge; then rm -f pc-options; fi
 
@@ -60,6 +61,45 @@ c
 wq
 EOF
 fi
+
+################################# remove TWiki.pm patch, old version
+if grep -sq '# TWikiPublicCache hook, if present' "$lib/TWiki.pm"; then
+  ed -s "$lib/TWiki.pm" >/dev/null <<\EOF
+H
+/# TWikiPublicCache hook, if present
+.,+5d
+wq
+EOF
+fi
+
+################################# remove TWiki.pm patch, new version
+if grep -sq '#TWikiPublicCacheAddOn_PatchInclude_START' "$lib/TWiki.pm"; then
+  ed -s "$lib/TWiki.pm" >/dev/null <<\EOF
+H
+/#TWikiPublicCacheAddOn_PatchInclude_START/,/#TWikiPublicCacheAddOn_PatchInclude_END/d
+wq
+EOF
+fi
+
+################################# remove View.pm patch
+if grep -sq '#TWikiPublicCacheAddOn_PatchExpire_START' "$lib/TWiki/UI/View.pm"; then
+  ed -s  "$lib/TWiki/UI/View.pm" >/dev/null <<\EOF
+H
+/#TWikiPublicCacheAddOn_PatchExpire_START/,/#TWikiPublicCacheAddOn_PatchExpire_END/d
+wq
+EOF
+fi
+
+################################# remove Func.pm patch
+if grep -sq '#TWikiPublicCacheAddOn_PatchFuncSaveFile_START' "$lib/TWiki/Func.pm"; then
+  ed -s  "$lib/TWiki/Func.pm" >/dev/null <<\EOF
+H
+/#TWikiPublicCacheAddOn_PatchFuncSaveFile_START/,/#TWikiPublicCacheAddOn_PatchFuncSaveFile_END/d
+wq
+EOF
+fi
+
+
 
 ### EMACS MODES
 ### Local Variables: ***

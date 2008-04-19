@@ -1,5 +1,6 @@
 #!/bin/bash
 #========= now, we must rebuild. This part can be left as slow code
+shopt -s extglob
 gzip=false;case "$HTTP_ACCEPT_ENCODING" in *gzip*)gzip=true;esac
 url=${PATH_INFO%/}
 bin=XXXbinXXX
@@ -8,6 +9,7 @@ data=XXXdataXXX
 logs=XXXlogsXXX
 cache=XXXcacheXXX
 homeweb=XXXhomewebXXX
+ss=XXXscriptsuffixXXX
 
 #echo 'Content-Type: text/plain';echo; echo "dir=$PWD";set;exit 0
 L () { date +"| %d %b %Y - %H:%M | guest | view | ${2#.} | $1 | $REMOTE_ADDR |" >>$logs/`date +'log%Y%m.txt'`; }
@@ -28,7 +30,7 @@ if test ! -f "$data"$url.txt; then
       fi ;;
   esac
   if test -z "$url" -o "$url" = /; then W "URL_BUT_NO_FILE (passthrough) $url"; fi
-  echo "Location: $bin/vief$url";echo; exit 0
+  echo "Location: $bin/vief$ss$url";echo; exit 0
 fi
 
 mkdir -p "$cache${url%/*}" "${cache}_tmp"
@@ -54,40 +56,41 @@ done
 
 # ok, we are the one going to create the cached page
 tmp="${cache}_tmp/$$"
-D "MISS $$ http://$SERVER_NAME:$SERVER_PORT$bin/vief$url"
+D "MISS $$ http://$SERVER_NAME:$SERVER_PORT$bin/vief$ss$url"
 
-if wget -q -O $tmp.raw "http://$SERVER_NAME:$SERVER_PORT$bin/vief$url" >/dev/null 2>&1; then
-  if ! grep -q '<base href="http://[^"]*'$bin'/login' $tmp.raw; then # ok, cache
-    D BUILT $$ "$cache$url".gz "http://$SERVER_NAME:$SERVER_PORT$bin/view$url"
-    sed -e 's,<a href="'$bin'/vie[wf]/,<a href="'$view'/,g' \
+# $tmp .hd=headers .bd=body
+wget -O - -S "http://$SERVER_NAME:$SERVER_PORT$bin/vief$ss$url" 2>$tmp.hd |\
+  sed -e 's,\(href=[^ ]*\)'$bin'/vie[fw]/,\1'"$view/,g" \
       -e 's,\(<base href="http://[^"]*\)'$bin'/vie[wf]/,\1'$view'/,g' \
-      <$tmp.raw >$tmp.mod
-    (echo 'Content-Type: text/html'; echo "Content-Encoding: gzip";
-     echo; gzip -9) <$tmp.mod >$tmp.gz
-    (echo 'Content-Type: text/html';echo;cat) <$tmp.mod >$tmp.raw
-    if $gzip;then cat $tmp.gz; else cat $tmp.raw; fi
-    if test ! -h "$cache$url".lk; then # strange. we'd better restart
-      let "time=$SECONDS-starttime"
-      W LOCK_MISSING $time "$cache$url"
-      rm -f $tmp.raw $tmp.mod $tmp.gz
-      exec ./pccr
-    fi
-    # avoid race conditions and broken pipe errors with an atomic replace
-    if test ! -e "$cache$url".nc; then # else %PCACHEEXPTIME{0}% var in topic
-      mv $tmp.raw "$cache$url".tx; mv $tmp.gz "$cache$url".gz
-    fi
-  else # protected page (/bin/login)
-    D "NOT_BUILT_AUTH $$ "$cache$url".nc $bin/view$url"
-    rm -f "$cache$url".*; >"$cache$url.nc"
-    echo "Location: $bin/vief$url";echo; exit 0
+      >$tmp.bd
+status=`grep -m 1 '^ *HTTP/' $tmp.hd`
+if test "${status##* }" = OK; then
+  D BUILT $$ "$cache$url".gz "http://$SERVER_NAME:$SERVER_PORT$bin/view$url"
+  type=`grep -m 1 '^ *Content-Type' $tmp.hd`; type="${type##*( )}"
+  etag=`date '+%s-%N'`
+  (echo "$type"; echo "Content-Encoding: gzip"; echo "ETag: \"$etag\""; echo
+   gzip -9) \
+    <$tmp.bd >$tmp.gz
+  (echo "$type";echo "ETag: \"$etag\""; echo;cat) <$tmp.bd >$tmp.raw
+  if $gzip;then cat $tmp.gz; else cat $tmp.raw; fi
+  if test ! -h "$cache$url".lk; then # strange. we'd better restart
+    let "time=$SECONDS-starttime"
+    W LOCK_MISSING $time "$cache$url"
+    rm -f $tmp.hd $tmp.bd $tmp.raw $tmp.gz 
+    exec ./pccr
   fi
-else # error
-  W "NOT_BUILT_ERR $$ "$cache$url".nc $bin/view$url"
-  rm -f "$cache$url".*; >"$cache$url.nc"
-  echo "Location: $bin/vief$url";echo; exit 0
+  # avoid race conditions and broken pipe errors with an atomic replace
+  if test ! -e "$cache$url".nc; then # else %PCACHEEXPTIME{0}% var in topic
+    mv $tmp.raw "$cache$url".tx; mv $tmp.gz "$cache$url".gz
+  fi
+else # protected page (Moved) or other non-OK status
+  D "NOT_BUILT $$ ${status##* } $cache$url.nc $bin/view$url"
+  rm -f "$cache$url".lk $tmp.hd $tmp.bd $tmp.raw $tmp.gz
+  >"$cache$url.nc"
+  echo "Location: $bin/vief$ss$url";echo; exit 0
 fi
 
-rm -f "$cache$url".lk $tmp.raw $tmp.mod $tmp.gz
+rm -f "$cache$url".lk $tmp.hd $tmp.bd $tmp.raw $tmp.gz
 exit 0
 
 ### EMACS MODES

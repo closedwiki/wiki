@@ -105,72 +105,52 @@ PCCR ALGORITHM VERSIONS
       * after a timeout "cleargrace" (default 17 mn) with no more edit from
         this IP, cache is reset, if all editors have also not edited for
 	at least "cleargracemin" (default 3mn)
+   * v3 introduced the PCACHEEXPTIME TWiki tag
+   * v4 used the PUBLIC_CACHE_EXPIRE TWiki var
 
 TODO:
+   * should work on sites with .pl extensions
+   * pcbd could cd to cache first, to avoid half building things if a cache
+     clear happens in mid-build
+   * pcad clear should be callable from cli, 
+      * Plugin should use it directly, optionally use wget for mod_perl
+      * scripts could call it to trigger a change (write) e.g. blog-generate
+   * document how other modules/scripts could use the cache
+   * pcge -v should not list private pages?
    * just after login we are redirected to vief
    * detailed stats: 
       * logs, uncacheable pages, expires. some terse stats moved in menu
       * stats menu then holds more detailed stats: stats per web
-   * pcge web build only this web. -ns not Main TWiki Sandbox
-     pcad option for this (build all / build)
+     decoding it from wget
+   * make-distrib should
+      * commit in SVN
+      * deploy Todo & Implementation ,txt pages as wiki pages
    * pcal, log analysis
    * option -s space-efficient: only store gzipped version, unzip on the
      demand. For C, use zlib to inflate.
-   * Content-type of cached pages non-html? (WebRss)
-     solutions?
-      wget -q --save-headers -O - 
-      http://www.bioinfo-user.org.uk/dokuwiki/doku.php?id=projects:wgetpl
-      command line API of view?
-      based on regexp?
-      optional, to gain speed, if RSS readers manage to use text/html ?
-      the trick may be to use completePageHandler
    * generational cache: if we know we are doomed, where to build new pages?
      in the new cache?
      A solution: 
-      * edit: move cache into a "dead" cache, create _changers in live
-      * read: try live cache, if not, "dead" one, if not build in live
-      * re-edit: move pages from live cache to dead cache
-      * edit gracedelay: removes dead cache
-      * pcad should be modified to clean both caches
-      * pccl could prune really old pages from dead one to allow a strategy
-        of keeping changers while at least one changers edit is fresh, 
-        instead of now first changers to expire forces the cache down
-   * make-distrib look at twiki topic last revison and compare to stored one
-   * pcad command to be removed from changers (or augment grace delay?)
-   * pcad command to be added to changers (to see co-worker work), but
-     must not trigger a cache clear: only add if there are others real editors
-     maybe create an non-empty changers file?
-   * to give to your co-workers, to review your work: a pcad url to set the 
-     above and redirect to the target
+      * pccr: if a changer use cache=cache_changers, including pcbd calls
+      * plugin: on write, clear cache_changers, create a new 
+      * on changers expire, clear cache, mv cache_changers as cache
    * pcad command to clean all cache pages older than ...
    * C version: make 2 versions, one checking for changer IP and one not
      make PublicCachePlugin install the first, and cache clear the 2nd
      variant: change a byte in executable binary
-   * put in SVN
 
 MAYBE TODO:
+   * ? see if we can get the mime-type header from the View.pm patch instead of
    * ? option for let logged people passthrough cache (how to detect them?)
    * ? put twpc files into a dir other than bin/? cgi/? (but what about view?)
-   * ? option: on save, juste clear the single page cache?
    * ? optional expire header
    * ? background crawling process to add & refresh an expire header to the
        cached pages, for the "ok now the site is final" moment
-   * ? have some URLs (authors?) not see the expire header
-   * ? clean per web, except...
-   * ? option or config or var to not cache topic / web / web tree
    * ? make an apache-based pccr, with rewite rules? see:
       * http://mail-archives.apache.org/mod_mbox/httpd-users/200701.mbox/%3C1C80FD8A7D2B2745B0396F4D2D0565B401AE4C6D@apwmsg01.alc.ca%3E
    * ? make a proper generic TrackChangesPlugin and use it: can call hooks,
        logs unix style: linenum isodate who action web.topic IP [attachment]
        list all actions (call to writeLog). convert script. per day?
    * ? check we could force cache in one language / localisation?
-   * ? use varnish as front end
    * ? cache directive in html comments in pages? (to set Expire per page)
-   * ? pcad: mark topic as uncacheable: pcad?uncache=/WEB/TOPIC
-       makes it survice cache clears
-   * ? pcad: remove cache for one topic and one web: 
-       pcad?delete=/WEB/TOPIC
-       removes also uncacheable mark if exists
-   * ? pccr: add an (N hours?) expire header - as an option
-   * ? make an apache module version of pccr
 

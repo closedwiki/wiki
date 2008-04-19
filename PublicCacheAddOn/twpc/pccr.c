@@ -66,7 +66,8 @@ main (int argc, char **argv) {
 
   /* do not cache if there is a query string */
   if (QUERY_STRING && QUERY_STRING[0]) {
-    twiki_url = strcat4mem(bin, strlen(bin), "/vief", 5, url, url_l, "?", 1,
+    twiki_url = strcat4mem(bin, strlen(bin), "XXXvief_nameXXX", 
+			   XXXvief_nlenXXX, url, url_l, "?", 1,
 			   QUERY_STRING, strlen(QUERY_STRING));
     D("BYPASS_QS", twiki_url);
     printf("Location: %s\n\n", twiki_url);
@@ -78,7 +79,8 @@ main (int argc, char **argv) {
   changer_file = strcat2mem(cache, cache_l, "/_changers/", 11, REMOTE_ADDR,
 			    strlen(REMOTE_ADDR));
   if (file_exists(changer_file)) {
-    twiki_url = strcat2mem(bin, strlen(bin), "/vief", 5, url, url_l);
+    twiki_url = strcat2mem(bin, strlen(bin), "XXXvief_nameXXX", 
+			   XXXvief_nlenXXX, url, url_l);
     D("BYPASS_CHANGER_IP", REMOTE_ADDR);
     printf("Location: %s\n\n", twiki_url);
     exit(0);
@@ -105,7 +107,8 @@ main (int argc, char **argv) {
 
   /* marked as never cached? */
   if (file_exists(cachefile_nc)) {
-    twiki_url = strcat2mem(bin, strlen(bin), "/vief", 5, url, url_l);
+    twiki_url = strcat2mem(bin, strlen(bin), "XXXvief_nameXXX", 
+			   XXXvief_nlenXXX, url, url_l);
     D("BYPASS_NC", twiki_url);
     printf("Location: %s\n\n", twiki_url);
     exit(0);

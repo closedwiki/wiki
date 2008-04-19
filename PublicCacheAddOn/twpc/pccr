@@ -9,6 +9,7 @@ data=XXXdataXXX
 logs=XXXlogsXXX
 webhome=XXXwebhomeXXX
 shorturls=XXXshorturlsXXX
+ss=XXXscriptsuffixXXX
 
 #echo 'Content-Type: text/plain';echo; echo "dir=$PWD";set;exit 0
 L () { date +"| %d %b %Y - %H:%M | guest | view | ${2#.} | $1 | $REMOTE_ADDR |" >>$logs/`date +'log%Y%m.txt'`; }
@@ -17,8 +18,8 @@ D () { echo `date '+%Y-%m-%d.%H:%M'` "$@" >>$logs/twpc-debug.txt; }
 
 # do not cache if there is a query string
 if test -n "$QUERY_STRING"; then
-  D BYPASS_QS "$bin/vief$PATH_INFO?$QUERY_STRING"
-  echo "Location: $bin/vief$PATH_INFO?$QUERY_STRING"; echo; exit 0
+  D BYPASS_QS "$bin/vief${ss}$PATH_INFO?$QUERY_STRING"
+  echo "Location: $bin/vief${ss}$PATH_INFO?$QUERY_STRING"; echo; exit 0
 fi
 
 # normalize
@@ -29,8 +30,8 @@ esac
 
 # if we are a changer, bypass cache
 if test -e "$cache/_changers"/$REMOTE_ADDR; then
-  D BYPASS_CHANGER_IP  "$bin/vief$url"
-  echo "Location: $bin/vief$url"; echo; exit 0
+  D BYPASS_CHANGER_IP  "$bin/vief${ss}$url"
+  echo "Location: $bin/vief${ss}$url"; echo; exit 0
 fi
 
 if $gzip; then
@@ -48,8 +49,8 @@ else
 fi
 # marked as never cached?
 if test -e "$cache$url.nc"; then 
-  D BYPASS_NC "$bin/vief$url"
-  echo "Location: $bin/vief$url"; echo; exit 0
+  D BYPASS_NC "$bin/vief${ss}$url"
+  echo "Location: $bin/vief${ss}$url"; echo; exit 0
 fi
 
 # Then, we must let the Cache Builder pcbd do its job
