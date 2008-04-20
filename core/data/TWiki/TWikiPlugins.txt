@@ -363,10 +363,10 @@ __%T% Tip:__ Plugins can be written to be compatible with older and newer TWiki 
 Here is an example; the TWiki:TWiki.TWikiPluginsSupplement#MaintainPlugins has more details.
 
 <verbatim>
-    if( $TWiki::Plugins::VERSION >= 1.010 ) {
-        $text = TWiki::Func::readTopicText( $theWeb, $theTopic, '', 1 );
+    if( $TWiki::Plugins::VERSION >= 1.1 ) {
+        @webs = TWiki::Func::getListOfWebs( 'user,public' );
     } else {
-        $text = TWiki::Func::readTopic( $theWeb, $theTopic );
+        @webs = TWiki::Func::getPublicWebList( );
     }
 </verbatim>
 
