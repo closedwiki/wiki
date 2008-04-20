@@ -3,6 +3,7 @@ package SearchTests;
 use base qw( TWikiFnTestCase );
 
 use strict;
+use CGI;
 
 use TWiki::Contrib::SearchEngineKinoSearchAddOn::Search;
 use TWiki::Contrib::SearchEngineKinoSearchAddOn::Index;
@@ -121,6 +122,83 @@ HERE
     if($restopic =~ m/(\w+)/) { $restopic =~ s/ .*//; }
     $this->assert(index($htmlString, $restopic), "Topic not in result");
     
+}
+
+sub test_search {
+    my $this = shift;
+    my $result;
+
+    my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
+    $ind->createIndex();
+
+    $result = $this->_search($this->{test_web},
+			     "Kino",
+			     $this->{test_user_wikiname},
+			     "startpoint");
+
+    $this->assert(index($result, "TopicWithoutAttachment") > 0,   "TopicWithoutAttachment not found");
+}
+
+# I check, if the access rights of the users are checked.
+sub test_search_with_users {
+    my $this = shift;
+    my $result;
+
+    # I add another user
+    $this->registerUser("TestUser2", "User", "TestUser2", 'testuser@an-address.net');
+
+    # Now I create a topic that only "TestUser2" can read
+    $this->{twiki}->{store}->saveTopic("TestUser2", $this->{users_web}, "TopicWithAccesControl", << 'HERE');
+Just an example topic
+Keyword: KeepOutHere
+      * Set ALLOWTOPICVIEW = UserTestUser2
+HERE
+
+    my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
+    $ind->createIndex();
+
+    # Let's see if TestUser2 can find his topic
+    $result = $this->_search($this->{test_web},
+			     "Kino",
+			     "TestUser2",
+			     "KeepOutHere");
+
+    $this->assert(index($result, "TopicWithAccesControl") > 0,   "TopicWithAccesControl not found");    
+
+    # No the reverse test: The normal test uses should not find the toipic
+    $result = $this->_search($this->{test_web},
+			     "Kino",
+			     $this->{test_user_wikiname},
+			     "KeepOutHere");
+
+    $this->assert(index($result, "TopicWithoutAttachment") < 0,   "TopicWithoutAttachment should not be found");
+}
+
+# Helper method to do a search.
+sub _search {
+    my ( $this, $web, $topic, $user, $searchString ) = @_;
+    
+    my $query = new CGI({
+        webName   => [ $web ],
+        topicName => [ $topic ],
+        search    => [ $searchString ],
+    });
+
+    $query->path_info( "$web/$topic" );
+
+    #my $twiki  = new TWiki( $this->{test_user_login}, $query );
+    my $twiki  = new TWiki( $user, $query );
+
+    my $search = TWiki::Contrib::SearchEngineKinoSearchAddOn::Search->newSearch();
+
+    # Note: With $twiki I hand over the just defined session. Thus I have full 
+    # control over query etc.
+    my ($text, $result) = $this->capture( \&TWiki::Contrib::SearchEngineKinoSearchAddOn::Search::search, $search, undef, $twiki);
+
+    $twiki->finish();
+    $text =~ s/\r//g;
+    $text =~ s/^.*?\n\n+//s; # remove CGI header
+    return $text;
 }
 
 1;

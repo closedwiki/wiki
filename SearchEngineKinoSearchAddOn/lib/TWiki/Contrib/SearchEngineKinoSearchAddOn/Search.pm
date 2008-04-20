@@ -29,43 +29,49 @@ sub newSearch {
     return $self->new("search")
 }
 
+# Method to do the search.
+# NOTE: The parameter $session is normally undef. I use it only for testing 
+# withing unit tests.
 sub search {
-    my ($self, $debug) = (@_);
+    my ($self, $debug, $session) = (@_);
     
     $self->{Debug}   = $debug;
     
+    my $query;
     my $mainWebname = TWiki::Func::getMainWebname();
     
     # write log entry - should be used throughout this script
     $debug && TWiki::Func::writeDebug( "kinosearch starting..." );
     
-    # TWiki::Func::getCgiQuery returns null, why?
-    # as we need the query-string to fetch the search and maybe other URL params,
-    # the solution is ...
-    my $query = new CGI;
+    if (! defined $session) {
+	$query   = new CGI;    
+	$session = new TWiki( undef, $query);
+    } else {
+	$query   = $session->{cgiQuery};
+    }
 
     # getting the web, the topic and the user from the SESSION object
-    my $webName    = $TWiki::Plugins::SESSION->{webName};
-    my $topicName  = $TWiki::Plugins::SESSION->{topicName};
-    my $remoteUser = $TWiki::Plugins::SESSION->{user}->{login}||"TWikiGuest";
-
+    my $webName    = $session->{webName};
+    my $topicName  = $session->{topicName};
+    my $remoteUser = $session->{user}||"TWikiGuest";
     my $websStr = $self->websStr($query);
     my $limit   = $self->limit($query);
-    
+
+    $remoteUser = TWiki::Func::userToWikiName($remoteUser);
+
     # getting some params - all params should be documented in KinoSearch topic
     my $search        = $query->param( "search" )    || "";
-    #my $limit         = $query->param( "limit" )     || "";
     my $nosummary     = $query->param( "nosummary" ) || "";
     my $noheader      = $query->param( "noheader" )  || "";
     my $nototal       = $query->param( "nototal" )   || "";
     my $showlock      = $query->param( "showlock" )  || "";
-    
+
     # usersearch will be printed out
     my $usersearch = $search;
     
     # let's start ...
     TWiki::Func::writeHeader( $query );
-    
+
     # some vars
     my $originalSearch = $search;
     my $tempVal = "";
@@ -124,7 +130,7 @@ sub search {
     # TWiki::Func::writeDebug( "tmp: $tmplSearch\n");
 
     $self->renderSearchHeader($usersearch, $tmplSearch );
-    
+
     # prepare for the result list
     my( $beforeText, $repeatText, $afterText ) = split( /%REPEAT%/, $tmplTable );
 
@@ -434,7 +440,9 @@ sub topicAllowed {
 
     # security check - default mapping for user guest is TWikiGuest, so if web/topic
     # does not allow this user to view the hit, it will be discarded
-    my $allowView = TWiki::Func::checkAccessPermission( "view", TWiki::Func::userToWikiName($remoteUser) , $text, $restopic, $resweb );
+    #my $allowView = TWiki::Func::checkAccessPermission( "view", TWiki::Func::userToWikiName($remoteUser) , $text, $restopic, $resweb );
+    #print "remoteUser = $remoteUser\n";
+    my $allowView = TWiki::Func::checkAccessPermission( "view", $remoteUser , $text, $restopic, $resweb );
     if( ! $allowView ) {
 	return 0;
     }
