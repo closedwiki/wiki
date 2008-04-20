@@ -69,9 +69,15 @@ By default, TWiki executes plugins in alphabetical order on plugin name. It is p
 
 ---+++ Plugin-Specific Settings
 
-Plugins are usually configured by variables accessible though the [[%SCRIPTURLPATH{"configure"}%][configure]] interface, but in some cases (usually older plugins) TWiki preferences are used. If a TWiki variable is defined in a plugin topic e.g:
-   * Set SETTING = Create dynamic foo bar reports
-Then these settings can be retrieved as preferences variables like =%&lt;pluginname&gt;_&lt;var&gt;%=. For example, =%<nop>RUBBERPLUGIN_SETTING%= shows the value of SETTING in the !RubberPlugin topic.
+Some plugins are configured with plugin preferences variables, newer plugins with configure variables.
+
+Configure variables are accessible though the [[%SCRIPTURLPATH{"configure"}%][configure]] interface. 
+
+Plugin preferences variables are defined in the plugin topic and can be overloaded. The SHORTDESCRIPTION preferences variable is always present, it is needed for the TWiki:Plugins repository on twiki.org. Example preferences variable defined in the TablePlugin topic:
+
+   * =Set SHORTDESCRIPTION = Control attributes of tables and sorting of table columns=
+ 
+Preferences variables of active plugins can be retrieved anywhere in TWiki with =%&lt;pluginname&gt;_&lt;var&gt;%=, such as =%<nop>TABLEPLUGIN_SHORTDESCRIPTION%=. They can also be redefined with the =%&lt;pluginname&gt;_&lt;var&gt;%= setting at a lower level in the [[%LOCALSITEPREFS%]] or at the web level. For an easier upgrade it is recommended to customize plugin preferences variables in <nop>%LOCALSITEPREFS% only.
 
 ---+++ Listing Active Plugins
 
@@ -160,7 +166,7 @@ In particular, files that should be web-accessible (graphics, Java applets ...) 
 
 The plugin API handles the details of connecting your Perl module with main TWiki code. When you're familiar with the [[#PluginAPI][Plugin API]], you're ready to develop plugins.
 
-_The TWiki::Plugins.BuildContrib module provides a lot of support for plugins development, including a plugin creator, automatic publishing support, and automatic installation script writer. If you plan on writing more than one plugin, you probably need it_.
+_The TWiki:Plugins.BuildContrib module provides a lot of support for plugins development, including a plugin creator, automatic publishing support, and automatic installation script writer. If you plan on writing more than one plugin, you probably need it_.
 
 ---+++ Creating the Perl Module 
 
