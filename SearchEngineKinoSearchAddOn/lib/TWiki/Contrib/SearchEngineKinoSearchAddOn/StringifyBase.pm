@@ -57,4 +57,32 @@ sub new {
     $self;
 }
 
+# Service method to remove the director $dir and  
+# all contence including sub directories
+sub rmtree {
+    my ($self, $dir) = @_;
+    local *DIR;
+
+    # If the dir is infact a file, I just delete that.
+    if (-f $dir) {
+	unlink($dir);
+    }
+
+    opendir (DIR, $dir) || return 0;
+    while (my $file = readdir(DIR)) {
+        # Ignores . and ..
+        next if ($file =~ /^\.{1,2}$/);
+
+        $file = "$dir/$file";
+        if (-d $file) {
+            $self->rmtree($file);
+        } elsif (-f $file) {
+            unlink($file);
+        }
+    }
+    closedir DIR;
+    rmdir($dir);
+    return 1;
+}
+
 1;

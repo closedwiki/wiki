@@ -40,9 +40,7 @@ sub stringForFile {
     $text = TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier->stringFor($tmp_file);
 
     # Deletes temp files (main html and images)
-    # FIXME: This not run on Windows systems
-    $cmd = "rm -f " . $tmp_file . "*";
-    `$cmd`;
+    $self->rmtree($tmp_file);
 
     return $text;
 }
