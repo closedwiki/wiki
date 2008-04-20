@@ -143,8 +143,9 @@ To eliminate the incompatibility problems that are bound to arise from active op
 ---+++ Security
 
    * Badly written plugins can open huge security holes in TWiki. This is especially true if care isn't taken to prevent execution of arbitrary commands on the server.
-   * Don't allow sensitive configuration data to be edited by users. it is better to add sensitive configuration options to the =%TWiki::cfg= hash than adding it as preferences in the plugin topic
-      * See TWiki:Plugins.MailInContrib for an example of this
+   * Don't allow sensitive configuration data to be edited by users. it is better to add sensitive configuration options to the =%TWiki::cfg= hash than adding it as preferences in the plugin topic.
+      * [[#ConfigSpec][Integrating with <code>configure</code>]] describes the steps
+      * TWiki:Plugins.MailInContrib has an example
       * TWiki:Plugins.BuildContrib can help you with this
    * Always use the TWiki::Sandbox to execute commands.
    * Always audit the plugins you install, and make sure you are happy with the level of security provided. While every effort is made to monitor plugin authors activities, at the end of the day they are uncontrolled user contributions.
@@ -342,6 +343,8 @@ All types can be followed by a comma-separated list of _attributes_.
 See =lib/TWiki.spec= for many more examples.
 
 =Config.spec= files are also used for other (non-plugin) extensions. in this case they are stored under the =Contrib= directory instead of the =Plugins= directory.
+
+TWiki:TWiki/SpecifyingConfigurationItemsForExtensions has supplemental documentation on configure settings.
 
 #MaintainPlugins
 ---++ Maintaining Plugins
