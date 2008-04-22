@@ -64,6 +64,7 @@ sub readManifest {
     my ( $baseDir, $path, $file, $noManifestFileHook ) = @_;
     $file ||= '';
     $file = $path . $file if $path;
+print STDERR "---- $baseDir, $path, $file\n";
 
     unless ( $file && open( PF, '<' . $file ) ) {
         print STDERR 'COULD NOT OPEN MANIFEST FILE ', $file, $NL;
@@ -104,6 +105,10 @@ sub readManifest {
                 }
                 else {
                     $permissions = '0444';
+                }
+                if (-d $baseDir.'/'.$name) {
+                    #default directories to traversable.
+                    $permissions = '0775';
                 }
             }
             $permissions = "0$permissions";
