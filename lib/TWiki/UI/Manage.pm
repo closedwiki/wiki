@@ -514,7 +514,7 @@ sub _renameweb {
         $webTopicInfo{referring}{refs1} = $refs1;
 
         my $lease_ref;
-        foreach my $ref (sort keys %refs) {
+        foreach my $ref (keys %refs) {
             if(defined($ref) && $ref ne "") {
                 $ref =~ s/\./\//go;
                 my (@path) = split(/\//,$ref);
