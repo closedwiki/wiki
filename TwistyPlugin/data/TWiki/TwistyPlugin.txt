@@ -14,6 +14,8 @@
 
 Twisty has a fallback mechanism in case !JavaScript is not available: all content is displayed and the control buttons are hidden.
 
+Twisty now uses a SKIN path mechanism to allow you to choose which implementation to use - you can choose from the 'TWiki default' (currently BehaviourContrib based), JQuery based, or Dojo Toolkit based. see #PluginSettings for details.
+
 %TOC{title="On this page:"}%
 
 ---++ Usage examples
@@ -554,52 +556,40 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 
    * Set SHORTDESCRIPTION = Twisty section !JavaScript library to open/close content dynamically
    * Set DEBUG = 0
+      
+---+++ Twisty implementation selection.
+By default, Twisty uses the BehaviourContrib javascript to make the content hide and show. If your TWiki (or complete web site) uses JQuery or Dojo toolkit, you can choose to use those for Twisty too.
+
+to select JQuery, you need to install and enable JQueryPlugin, and then add =jquery= to the front of your SKIN setting in %MAINWEB%.TWikiPreferences. eg. 
+   * Set <nop>SKIN = jquery,pattern
+
+to select Dojo toolkit, you need to install DojoToolkitContrib, and then add =dojo= to the front of your SKIN setting in %MAINWEB%.TWikiPreferences. eg. 
+   * Set <nop>SKIN = dojo,moveabletype
+
+to use the home made TWiki javascript Twisties, don't specify a javascript toolkit in %MAINWEB%.TWikiPreferences. eg. 
+   * Set <nop>SKIN = moveabletype
+
    
 ---++ Plugin Installation Instructions
    * Download the ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your root ($TWIKI_ROOT) directory. Content:
    | *File:* | *Description:* |
-   | ==TwistyBundleTWiki04x02_installer== |  |
-   | ==TwistyBundleTWiki04x02_installer.pl== |  |
-   | ==data/TWiki/TwistyBundleTWiki04x02.txt== |  |
-   | ==data/TWiki/BehaviourContrib.txt== |  |
-   | ==data/TWiki/TwistyContrib.txt== |  |
-   | ==data/TWiki/TwistyPlugin.txt== |  |
-   | ==lib/TWiki/Contrib/BehaviourContrib.pm== |  |
-   | ==lib/TWiki/Contrib/TwistyBundleTWiki04x02.pm== |  |
-   | ==lib/TWiki/Contrib/TwistyContrib.pm== |  |
-   | ==lib/TWiki/Plugins/TwistyPlugin.pm== |  |
-   | ==pub/TWiki/BehaviourContrib/behaviour.compressed.js== |  |
-   | ==pub/TWiki/BehaviourContrib/behaviour.compressed_src.js== |  |
-   | ==pub/TWiki/BehaviourContrib/behaviour.js== |  |
-   | ==pub/TWiki/BehaviourContrib/behaviour_src.js== |  |
-   | ==pub/TWiki/BehaviourContrib/cssQuery/cssQuery-p.js== |  |
-   | ==pub/TWiki/BehaviourContrib/cssQuery/src/cssQuery-level2.js== |  |
-   | ==pub/TWiki/BehaviourContrib/cssQuery/src/cssQuery-level3.js== |  |
-   | ==pub/TWiki/BehaviourContrib/cssQuery/src/cssQuery-standard.js== |  |
-   | ==pub/TWiki/BehaviourContrib/cssQuery/src/cssQuery.js== |  |
-   | ==pub/TWiki/BehaviourContrib/cssQuery/src/test.html== |  |
-   | ==pub/TWiki/BehaviourContrib/cssQuery/test.html== |  |
-   | ==pub/TWiki/TwistyContrib/twist.compressed.js== |  |
-   | ==pub/TWiki/TwistyContrib/twist.compressed_src.js== |  |
-   | ==pub/TWiki/TwistyContrib/twist.css== |  |
-   | ==pub/TWiki/TwistyContrib/twist.js== |  |
-   | ==pub/TWiki/TwistyContrib/twist_src.js== |  |
-
+%$MANIFEST%
    * Optionally, if it exists, run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.
    * Alternatively, manually make sure the dependencies listed in the table below are resolved.
-   None
+   %$DEPENDENCIES%
    * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 
 ---++ Plugin Info
 
-| Authors: | TWiki:Main.RafaelAlvarez, TWiki:Main.ArthurClemens |
-| Copyright &copy;: | 2005 Rafael Alvarez; 2006, 2007 Arthur Clemens |
+| Authors: | TWiki:Main.RafaelAlvarez, TWiki:Main.ArthurClemens, TWiki:Main.SvenDowideit |
+| Copyright &copy;: | 2005 Rafael Alvarez; 2006, 2007 Arthur Clemens, 2008 Sven Dowideit |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
-| Dependencies: | None |
-| Plugin&nbsp;Version: | 24 Nov 2007 (version 1.4.8)  |
+| Dependencies: | %$DEPENDENCIES% |
+| Plugin&nbsp;Version: | 16 Apr 2008 (version 1.5)  |
 | Change&nbsp;History: | <!-- versions below in reverse order -->&nbsp; |
+| 16 Apr 2008 | 1.5 pluggable JS using skin path, adding selectable JQuery and DojoToolkit support |
 | 24 Nov 2007 | 1.4.6 - 1.4.8 Arthur Clemens - Added format tokens. |
 | 07 Oct 2007 | 1.4.5 Arthur Clemens - Fix html tag with show/hide controls. |
 | 25 Sep 2007 | 1.4.4 Arthur Clemens - Fix rendering of headers when =prefix= is used. |

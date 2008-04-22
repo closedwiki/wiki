@@ -44,7 +44,7 @@ $VERSION = '$Rev: 15653 (19 Nov 2007) $';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.4.9';
+$RELEASE = '1.5';
 
 $pluginName = 'TwistyPlugin';
 
@@ -106,24 +106,11 @@ sub _addHeader {
     return if $doneHeader;
     $doneHeader = 1;
 
-    my $header .= <<'EOF';
-<style type="text/css" media="all">
-@import url("%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.css");
-</style>
-<script type='text/javascript' src='%PUBURL%/%TWIKIWEB%/BehaviourContrib/behaviour.compressed.js'></script>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikilib.js"></script>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiPref.js"></script>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twikiCSS.js"></script>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.compressed.js"></script>
-<script type="text/javascript">
-// <![CDATA[
-var styleText = '<style type="text/css" media="all">.twikiMakeVisible{display:inline;}.twikiMakeVisibleInline{display:inline;}.twikiMakeVisibleBlock{display:block;}.twikiMakeHidden{display:none;}</style>';
-document.write(styleText);
-// ]]>
-</script>
-EOF
+    #get twistyplugin.tmpl by default
+    TWiki::Func::loadTemplate( lc($pluginName) );
+    my $header = TWiki::Func::expandTemplate('twisty:header');
 
-    TWiki::Func::addToHEAD( 'TWISTYPLUGIN_TWISTY', $header );
+    TWiki::Func::addToHEAD( 'TWISTYPLUGIN_TWISTY', $header||'<!-- twisty:header not found in %SKIN% -->' );
 }
 
 sub _TWISTYSHOW {
