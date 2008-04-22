@@ -1,3 +1,4 @@
+if (twiki == undefined) var twiki = {};
 twiki.CSS = {
 
 	/**

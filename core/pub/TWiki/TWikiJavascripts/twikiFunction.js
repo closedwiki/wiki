@@ -1,4 +1,5 @@
 
+if (twiki == undefined) var twiki = {};
 twiki.Function = {
 
 	/**

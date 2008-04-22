@@ -1,6 +1,7 @@
 /**
 HTML utility functions.
 */
+if (twiki == undefined) var twiki = {};
 twiki.HTML = {
 
 	/**

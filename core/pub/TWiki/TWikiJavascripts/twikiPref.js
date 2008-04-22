@@ -10,6 +10,7 @@ Refactored for TWiki by Arthur Clemens 2006.
 /**
 The preferred way for reading and writing cookies is using getPref and setPref, otherwise the limit of 20 cookies per domain is reached soon. See http://twiki.org/cgi-bin/view/TWiki/TWikiSettingsCookie.
 */
+if (twiki == undefined) var twiki = {};
 
 twiki.Pref = {
 	
