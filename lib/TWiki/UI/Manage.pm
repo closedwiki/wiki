@@ -508,12 +508,8 @@ sub _renameweb {
         # and build up a hash containing permissions and lock info.
         $refs0 = getReferringTopics( $session, $oldWeb, undef, 0 );
         $refs1 = getReferringTopics( $session, $oldWeb, undef, 1 );
-        foreach my $ref (sort keys %$refs0) {
-            $refs{$ref} = $refs0->{$ref};
-        }
-        foreach my $ref (sort keys %$refs1) {
-            $refs{$ref} = $refs1->{$ref};
-        }
+        %refs = (%$refs0, %$refs1);
+        
         $webTopicInfo{referring}{refs0} = $refs0;
         $webTopicInfo{referring}{refs1} = $refs1;
 
