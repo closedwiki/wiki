@@ -190,6 +190,11 @@ sub afterEditHandler {
 sub TranslateHTML2TML {
     my( $text, $topic, $web ) = @_;
 
+    # encodeURIComponent encodes strings as UTF-8. Decode them.
+    # Have to do this here because the Save script is too stupid to do it.
+    require Encode;
+    $text = Encode::decode_utf8( $text );
+
     unless( $html2tml ) {
         require TWiki::Plugins::WysiwygPlugin::HTML2TML;
 
@@ -646,11 +651,9 @@ sub _restHTML2TML {
         $html2tml = new TWiki::Plugins::WysiwygPlugin::HTML2TML();
     }
     my $html = TWiki::Func::getCgiQuery()->param('text') || '';
-    # encodeURIComponent encodes strings as UTF-8. But those strings
-    # originally came from the store, so we know they are in the site
-    # charset and can safely decode them.
-    my $conv = TWiki::UTF82SiteCharSet( $html );
-    $html = $conv if defined $conv;
+
+    # encodeURIComponent encodes strings as UTF-8. Decode them.
+    $html = Encode::decode_utf8( $html );
 
     $html =~ s/<!--$SECRET_ID-->//go;
     my $tml = $html2tml->convert(
