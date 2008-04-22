@@ -304,7 +304,7 @@ sub buildNewTopic {
             if( $formDef && $prevMeta ) {
                 $newMeta->merge( $prevMeta, $formDef );
             }
-            $merged = [ $orev, $author, $rev||1 ];
+            $merged = [ $orev, $session->{users}->getWikiName($author), $rev||1 ];
         }
     }
 
