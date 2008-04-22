@@ -159,7 +159,7 @@ sub beforeSaveHandler {
 
     return unless defined( $query->param( 'wysiwyg_edit' ));
 
-    $_[0] = TranslateHTML2TML( @_ );
+    $_[0] = TranslateHTML2TML( _handleUTF8( $_[0] ), $_[1], $_[2] );
 }
 
 # This handler is invoked before a merge. Merges are done before the
@@ -172,28 +172,25 @@ sub beforeMergeHandler {
 # This handler is invoked *after* a merge, and only from the edit
 # script (so it's useless for a REST save)
 sub afterEditHandler {
-    #my( $text, $topic, $web ) = @_;
+    my( $text, $topic, $web ) = @_;
     my $query = TWiki::Func::getCgiQuery();
     return unless $query;
 
+    $text = _handleUTF8( $text );
+
     return unless defined( $query->param( 'wysiwyg_edit' )) ||
-      $_[0] =~ s/<!--$SECRET_ID-->//go;
+      $text =~ s/<!--$SECRET_ID-->//go;
 
     # Switch off wysiwyg_edit so it doesn't try to transform again in
     # the beforeSaveHandler
     $query->delete( 'wysiwyg_edit' );
 
-    $_[0] = TranslateHTML2TML( @_ );
+    $_[0] = TranslateHTML2TML( $text, $_[1], $_[2] );
 }
 
 # Invoked to convert HTML to TML (best efforts)
 sub TranslateHTML2TML {
     my( $text, $topic, $web ) = @_;
-
-    # encodeURIComponent encodes strings as UTF-8. Decode them.
-    # Have to do this here because the Save script is too stupid to do it.
-    require Encode;
-    $text = Encode::decode_utf8( $text );
 
     unless( $html2tml ) {
         require TWiki::Plugins::WysiwygPlugin::HTML2TML;
@@ -621,11 +618,7 @@ sub _restTML2HTML {
     my ($session) = @_;
     my $tml = TWiki::Func::getCgiQuery()->param('text');
 
-    # encodeURIComponent encodes strings as UTF-8. But those strings
-    # originally came from the store, so we know they are in the site
-    # charset and can safely decode them.
-    my $conv = TWiki::UTF82SiteCharSet( $tml );
-    $tml = $conv if defined $conv;
+    #_handleUTF8( $tml ); if not utf8?
 
     # if the secret ID is present, don't convert again. We are probably
     # going 'back' to this page (doesn't work on IE :-( )
@@ -653,7 +646,11 @@ sub _restHTML2TML {
     my $html = TWiki::Func::getCgiQuery()->param('text') || '';
 
     # encodeURIComponent encodes strings as UTF-8. Decode them.
-    $html = Encode::decode_utf8( $html );
+    if( defined $TWiki::cfg{Site}{CharSet}
+          && $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i) {
+        require Encode;
+        $html = Encode::decode_utf8( $html );
+    }
 
     $html =~ s/<!--$SECRET_ID-->//go;
     my $tml = $html2tml->convert(
@@ -807,6 +804,24 @@ sub _restAttachments {
 
     }
     return '['.join(',',@atts).']';
+}
+
+# If the site charset is UTF8 then we may get CGI parameters with encoded
+# UTF8 in them. We need to decode this, to avoid tools such as the
+# HTML::Parser falling over, and also make sure the output streams are
+# not going to barf when printing UTF8 characters. This ought
+# to be handled by the TWiki core, but isn't.
+sub _handleUTF8 {
+    my $text = shift;
+    if( defined $TWiki::cfg{Site}{CharSet}
+          && $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i) {
+        require Encode;
+        $text = Encode::decode_utf8( $text );
+
+        binmode(STDOUT, ":utf8");
+        binmode(STDERR, ":utf8");
+    }
+    return $text;
 }
 
 1;
