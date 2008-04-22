@@ -2,6 +2,7 @@
 Requires twikiCSS.js
 */
 
+if (twiki == undefined) var twiki = {};
 twiki.Form = {
 	
 	/*

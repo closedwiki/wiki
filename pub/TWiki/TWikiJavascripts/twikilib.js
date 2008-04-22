@@ -1,6 +1,5 @@
 // TWiki namespace
-var twiki;
-if (!twiki) twiki = {};
+if (twiki == undefined) var twiki = {};
 
 twiki.getMetaTag = function(inKey) {
     if (twiki.metaTags == null || twiki.metaTags.length == 0) {

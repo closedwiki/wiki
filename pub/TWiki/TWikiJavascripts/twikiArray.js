@@ -2,6 +2,7 @@
 Array utility functions.
 */
 
+if (twiki == undefined) var twiki = {};
 twiki.Array = {
 
 	/**

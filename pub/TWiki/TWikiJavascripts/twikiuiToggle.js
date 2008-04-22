@@ -82,6 +82,7 @@ Include these styles:
 
 */
 
+if (twiki == undefined) var twiki = {};
 if (twiki.ui == undefined) twiki.ui = {};
 twiki.ui.Toggle = function () {
 						
