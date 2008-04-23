@@ -283,6 +283,7 @@ Remember to edit the file ==kinosearch/bin/LocalLib.cfg== and modify ==twikiLibP
 |  Add-on Author: | TWiki:Main/MarkusHesse |
 |  Add-on Version: | v1.13 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+| 23 Apr 2008:  | v 1.14, Bugs:Item5273, Bugs:Item5546, Bugs:Item5550, Bugs:Item5552: Use current user in search script |
 | 27 Jan 2008:  | v 1.13, Bugs:Item5271: Option "show locked topics" now works |
 | 19 Jan 2008:  | v 1.12, Bugs:Item5270: Enhancement of stringifiers |
 | 19 Dec 2007:  | v 1.11, Additions on stringifiers, modification of output format |
