@@ -2,10 +2,10 @@
 <!--
    * Set SHORTDESCRIPTION = Associate a "state" with a topic and then control the work flow that the topic progresses through as content is added.
 -->
-TWiki benefits from the fact that every user can modify a topic instantly without restrictions. However sometimes you want to be able to associate a "state" with a topic and then control the work flow that the topic progresses through as content is added. 
 <div style="float:right">
 %ATTACHURL%/Flow.gif
 </div>
+TWiki benefits from the fact that every user can modify a topic instantly without restrictions. However sometimes you want to be able to associate a "state" with a topic and then control the work flow that the topic progresses through as content is added. 
 For example,
    * When writing documents compliant with ISO 9000 (e.g. a quality manual), it is essential that documents are approved by the management before they may be applied by the employees.
    * In a defect tracking data base, defects typically transition through a series of states from submission to resolution, with different actions available depending on the state of the defect.
@@ -14,10 +14,6 @@ For example,
 This plugin lets you associate a complex work flow with topics in your TWiki.
 
 A workflow can be associated with a single topic, or with an entire web. If a topic is under workflow control, you can define a set of _states_ for this topic (e.g. "under revision", "waiting for approval", "approved") and _transitions_ (e.g. "revise", "approve") between these states. Furthermore, you can define which users/groups are permitted to perform specific transistions. In this way, you can control, for example, who is allowed to "approve" a topic and who is not. 
-
-In order to print a list of which topics are under document control, have a look at the TWiki:Plugins.MakeCtrlTopicsListAddOn.
-
-%X% Note: This plugin only works with TWiki-4.0.0 and later.
 
 ---++ Usage
 
@@ -28,49 +24,62 @@ Note: you can hide the setting in a normal view using HTML comments, or better, 
 
 ---+++ Settings in the workflow description topic 
 
-The workflow description topic must contain one state table and one transition table. The state table has three columns, as in this example:
+The workflow description topic must contain one state table and one transition table. The state table describes the possible states a document may be in (nodes in the flow diagram above), and the transition table describes how documents move between states (arcs in the flow diagram).
 
-| *State* | *Allow Edit* | *Message* |
-| UNDERREVISION | | This document is being revised. |
-| APPROVED | | This documented has been approved for release. |
-| WAITINGFORQM | Main.<nop>User1,Main.Quality<nop>Group | This document is waiting for approval by the Quality Manager. |
-| WAITINGFORCEO | nobody | This document is waiting for approval by the CEO.|
+This is easiest illustrated using an example (available as Sandbox.DocumentApprovalWorkflow if the plugin is installed).
+
+The state table is a TWiki table with three columns:
+
+<verbatim>
+| *State*       | *Allow Edit* | *Message* |
+| UNDERREVISION | QualityGroup | This document is being revised. |
+| APPROVED      | nobody       | This document has been approved for release. |
+| WAITINGFORQM  | nobody       | This document is waiting for approval by the Quality Manager. |
+| WAITINGFORCTO | nobody       | This document is waiting for approval by the CTO.|
+</verbatim>
 
 Each row in the table defines a state where:
 	* the *State* column specifies a name for the state, 
 	* the *Allow Edit* column specifies who is permitted to edit the topic when it is in the state, and 
 	* the *Message* column defines a message which can be displayed on the document page when the document is in this state.
 
-In the example we have defined four states. Anyone can make changes to the document in UNDERREVISION state. Only =Main.<nop>User1= and =Main.<nop>QualityGroup= are permitted to make changes to the document when it is in the =WAITINGFORQM= state. Nobody can edit the document in =WAITINGFORCEO= state.
+In the example we have defined four states. Members of the
+!QualityGroup are permitted modify documents can make changes to the document
+in UNDERREVISION state. In all other states, nobody is allowed to edit the
+controlled document.
 
 The first state in the table is the initial/default state.
 
 %X% NOTE: The state table must be defined *before* the transition table!
 
 The transition table consists of four columns, as in this example:
-| *State* | *Action* | *Next State* | *Allowed* | *Form* |
-| APPROVED | revise | UNDERREVISION | Main.<nop>QualityGroup | <nop>ApprovedForm |
-| UNDERREVISION | send to Quality Manager for approval | WAITINGFORQM | Main.<nop>QualityGroup | In<nop>ProcessForm |
-| WAITINGFORQM | approve and send to CEO for approval| WAITINGFORCEO | Main.<nop>QualityManager |  |
-| WAITINGFORQM | reject and keep revising| UNDERREVISION | Main.<nop>QualityManager |  |
-| WAITINGFORCEO | approve | APPROVED | Main.<nop>TechnicalDirector | Approved<nop>Form |
-| WAITINGFORCEO | reject and keep revising | UNDERREVISION | Main.<nop>TechnicalDirector |  |
+<verbatim>
+| *State*        | *Action* | *Next State*  | *Allowed*                        | *Form*        |
+| APPROVED       | revise   | UNDERREVISION | QualityGroup                     | ApprovedForm  |
+| UNDERREVISION  | complete | WAITINGFORQM  | QualityGroup                     | InProcessForm |
+| WAITINGFORQM   | approve  | WAITINGFORCTO | QualityManager                   |               |
+| WAITINGFORQM   | reject   | UNDERREVISION | QualityManager,QualityGroup      |               |
+| WAITINGFORCTO  | approve  | APPROVED      | TechnicalDirector                | ApprovedForm  |
+| WAITINGFORCTO  | reject   | UNDERREVISION | TechnicalDirector,QualityManager |               |
+</verbatim>
 
 Each row in this table defines a transition from one state to another state:
-	* the *State* column contains the name of a state in the state table, 
-	* the *Action* column describes a possible action when the topic is in this state,
-	* the *Next State* column defines the new state of the document after the specified action is performed, and
-	* the *Allowed* column specifies who is allowed to perform the corresponding action. 
-	* The _optional_ *Form* column defines a form that is attached to the topic in this state.
+	* the *State* column contains the name of a state from the state table, 
+	* the *Action* column describes a possible action when the topic is in
+      this state,
+	* the *Next State* column defines the new state of the document after
+      the specified action has been performed,
+	* the *Allowed* column specifies who is allowed to perform the
+      corresponding action,
+	* the _optional_ *Form* column defines a form that is attached to
+      the topic in this state.
 
-In our example the Main.<nop>QualityGroup is allowed to revise the document. After finishing the revision, the document must be approved by the Main.<nop>QualityManager, and after that by the Main.<nop>TechnicalDirector. Even though they can't edit the document themselves (see state table above), they _can_ reject the revision and put the document back into the =UNDERREVISION= state. 
+In our example, anyone is allowed to revise the document when it is in =UNDERREVISION= state. After finishing the revision, the document can be transitioned to the =WAITINGFORQM= state by any member of the !QualityGroup. It must then be approved by the !QualityManager, and after that by the !TechnicalDirector. Even though they can't edit the document themselves (see state table above), they _can_ reject the revision and put the document back into the =UNDERREVISION= state. The !TechnicalDirector can transition the document to =APPROVED= state where it rests until a member of the !QualityGroup puts it under revision again.
 
-If a form name is given in the last column, this form will be attached to the topic, and the topic will put in edit mode to allow information to be provided in the form *when that state transition happens*. in the examples above, a form of type Approved<nop>Form will be attached to the topic when the CEO transitions the topic into =APPROVED= state.
-   * if there is already a form of a different type attached to the topic, then any fields that have the same name in the *new* form will be preserved.
+If a form name is given in the last column, this form will be attached to the topic, and the topic will put in edit mode to allow information to be provided in the form _when that state transition happens_. In the example above, a form of type Approved<nop>Form will be attached to the topic when the CTO transitions the topic into =APPROVED= state.
+   * if there is already a form of a different type attached to the topic, then any fields that have the same name in the _new_ form will be preserved.
    * If no form is given, the existing form (if any) is left in place.
 A typical usage of the form would be to collect additional information as the topic walks through the work flow, or to make information in the form unchangeable (by setting it to a =label= field) once a given state is reached.
-
-An example of a workflow that also controls the form information can be found in Sandbox.ControlledDocument (only available if the plugin is installed).
 
 You can also define other TWiki variables starting with =WORKFLOW= in the workflow description topic. These will be expanded to their defined values in any topic that uses the workflow. For example:
 	* Set WORKFLOWNOTICE = This topic is under document control.
@@ -129,11 +138,12 @@ __Note:__ For strict access control, the plugin should know who is looking at th
 |  Plugin Author: | TWiki:Main/ThomasHartkens, Dakar port and changes from 24 Jul 2006 by TWiki:Main/ThomasWeigert |
 |  Plugin Version: | 28 Jan 2008 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  23 Apr 2008: | Crawford Currie: TWikibug:Item5369: removed last of the core calls, fixed user management. Work supported by http://www.productbox.co.uk/ |
 |  28 Jan 2008: | Kenneth Lavrsen: Fixed his typo in code. Renamed the convert.pl to convert.pl.txt as most TWiki's including twiki.org does not allow .pl as extension and this creates problems when you want to update attachments |
 |  27 Jan 2008: | Markus Ueberall: Fixed for compatibility with TWiki 4.2.0 |
 |  10 Dec 2006: | Add =<nop>%WORKFLOWSTATE%=. |
 |  25 Sep 2006: | Restored ability to put workflow related tags into templates. Support the visual customization of the generated controls. |
-|  11463 | TWiki:Main.CrawfordCurrie rewrote the doc and corrected the install procedure |
+|  11463 | Crawford Currie rewrote the doc and corrected the install procedure |
 |  10 Aug 2006: | Added conversion script. |
 |  05 Aug 2006: | Converted from !ApprovalPlugin to %TOPIC%. |
 |  26 Jul 2006: | Minor bug fix. Additional examples provided. |
