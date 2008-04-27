@@ -202,7 +202,7 @@ sub _showDefault {
 
     return '' unless ( TWiki::Func::topicExists( $web, $topic ) );
 
-    my $query = $TWiki::Plugins::SESSION->{cgiQuery};
+    my $query = TWiki::Func::getCgiQuery();
     my $tagMode = $query->param('tagmode') || '';
 
     my $webTopic = "$web.$topic";
@@ -820,7 +820,7 @@ sub _newTag {
         push( @allTags, $tag );
         writeAllTags(@allTags);
         _writeLog("New tag '$tag'");
-        my $query = $TWiki::Plugins::SESSION->{cgiQuery};
+        my $query = TWiki::Func::getCgiQuery();
         my $from  = $query->param('from');
         if ($from) {
             $note =
@@ -1190,7 +1190,7 @@ sub _renameTag {
     my $newTag = TWiki::Func::extractNameValuePair( $attr, 'newtag' );
     my $note   = TWiki::Func::extractNameValuePair( $attr, 'note' ) || '';
 
-    my $query = $TWiki::Plugins::SESSION->{cgiQuery};
+    my $query = TWiki::Func::getCgiQuery();
     my $postChangeRequest = $query->param('postChangeRequest') || '';
     if ($postChangeRequest) {
         return _handlePostChangeRequest( 'rename', $oldTag, $newTag, $note );
@@ -1269,7 +1269,7 @@ sub _deleteTag {
     my $deleteTag = TWiki::Func::extractNameValuePair( $attr, 'oldtag' );
     my $note = TWiki::Func::extractNameValuePair( $attr, 'note' ) || '';
 
-    my $query = $TWiki::Plugins::SESSION->{cgiQuery};
+    my $query = TWiki::Func::getCgiQuery();
     my $postChangeRequest = $query->param('postChangeRequest') || '';
     if ($postChangeRequest) {
         return _handlePostChangeRequest( 'delete', $deleteTag, undef, $note );
