@@ -120,8 +120,8 @@ sub _loadTopic {
     my $tailMeta = 0;
     local $/ = "\n";
     while ( $line = <$fh> ) {
+	$all .= $line;
         if ( $line =~ m/^%META:FORM{name=\"([^\"]*)\"}%/o ) {
-            $all .= " $1 ";
             $form = new TWiki::Contrib::DBCacheContrib::Map() unless $form;
             my( $web, $topic ) = TWiki::Func::normalizeWebTopicName('', $1);
             $form->set( 'name', $web.'.'.$topic );
@@ -131,31 +131,26 @@ sub _loadTopic {
             $meta->set( $topic, $form );
             $tailMeta = 1;
         } elsif ( $line =~ m/^%META:TOPICPARENT{name=\"([^\"]*)\"}%/o ) {
-            $all .= " $1 ";
             $meta->set( 'parent', $1 );
             $tailMeta = 1;
         } elsif ( $line =~ m/^%META:TOPICINFO{(.*)}%/o ) {
             my $att = new TWiki::Contrib::DBCacheContrib::Map($1);
-            $all .= " $1 ";
             $att->set( '_up', $meta );
             $att->set( '_web', $this );
             $meta->set( 'info', $att );
         } elsif ( $line =~ m/^%META:TOPICMOVED{(.*)}%/o ) {
-            $all .= " $1 ";
             my $att = new TWiki::Contrib::DBCacheContrib::Map($1);
             $att->set( '_up', $meta );
             $att->set( '_web', $this );
             $meta->set( 'moved', $att );
             $tailMeta = 1;
         } elsif ( $line =~ m/^%META:FIELD{(.*)}%/o ) {
-            $all .= " $1 ";
             my $fs = new TWiki::Attrs($1);
             $form = new TWiki::Contrib::DBCacheContrib::Map() unless $form;
             $form->set( '_web', $this );
             $form->set( $fs->get('name'), $fs->get('value'));
             $tailMeta = 1;
         } elsif ( $line =~ m/^%META:FILEATTACHMENT{(.*)}%/o ) {
-            $all .= " $1 ";
             my $att = new TWiki::Contrib::DBCacheContrib::Map($1);
             $att->set( '_up', $meta );
             $att->set( '_web', $this );
@@ -167,7 +162,6 @@ sub _loadTopic {
             $atts->add( $att );
             $tailMeta = 1;
         } elsif ( $line =~ m/^%META:PREFERENCE{(.*)}%/o ) {
-            $all .= " $1 ";
             my $pref = new TWiki::Contrib::DBCacheContrib::Map($1);
             $pref->set( '_up', $meta);
             $pref->set( '_web', $this);
@@ -181,11 +175,8 @@ sub _loadTopic {
         } else {
             if ($this->can('readTopicLine')) {
                 $line = $this->readTopicLine( $topic, $meta, $line, $fh );
-            }
-            if ($line) {
-              $all .= " $line ";
-              $text .= $line;
-            }
+	    }
+	    $text .= $line if $line && $line !~ /%META:[A-Z].*?}%/o;
         }
     }
     close( $fh );

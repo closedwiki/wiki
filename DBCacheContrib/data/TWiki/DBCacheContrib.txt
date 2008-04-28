@@ -134,6 +134,7 @@ handler.
 |  License: | As required for the publication of all extensions to TWiki, this software is published under the terms of the GNU General Public License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details, published at http://www.gnu.org/copyleft/gpl.html |
 |  Version: | %$VERSION% |
 |  Change History: | |
+|  16347 | remove META data from text hash; include META data in all hash. TWiki:Main.MichaelDaum |
 |  16346 | caching all topic elements to an =all= field to allow th search in all of the text and the formfields like \
            the normal grep-based SEARCH does. TWiki:Main.MichaelDaum |
 |  15868 | fixed WITHIN_DAYS and EARLIER_THAN. TWiki:Main.MichaelDaum |
