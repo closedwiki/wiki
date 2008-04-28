@@ -51,7 +51,7 @@ sub logonCgi {
 sub logon {
   my ($query, $topic, $web) = @_;
 
-  &doInit();
+  doInit();
   writeDebug("called logon");
 
   my $thePathInfo = $query->path_info(); 
@@ -76,9 +76,6 @@ sub logon {
     writeDebug("redirecting to oopsregrequ");
     return;
   }
-
-  # init the NatSkinPlugin explicitely
-  &TWiki::Plugins::NatSkinPlugin::doInit();
 
   # check
   if ($theUser ne $defaultWikiUserName) {

@@ -23,7 +23,7 @@ package TWiki::Plugins::NatSkinPlugin::Search;
 use strict;
 use TWiki::Plugins::NatSkinPlugin;
 
-sub DEBUG { 0; }
+sub DEBUG { 0; } # toggle me
 
 ###############################################################################
 sub writeDebug {
@@ -47,8 +47,6 @@ sub new {
   my $class = shift;
   my $session = shift;
 
-  TWiki::Plugins::NatSkinPlugin::doInit();
-
   my $sandbox;
   unless (defined &TWiki::Sandbox::new) {
     writeDebug("this is this");
@@ -70,7 +68,7 @@ sub new {
     includeTopic => TWiki::Func::getPreferencesValue('NATSEARCHINCLUDETOPIC') || '',
     excludeTopic => TWiki::Func::getPreferencesValue('NATSEARCHEXCLUDETOPIC') || '',
     searchTemplate => TWiki::Func::getPreferencesValue('NATSEARCHTEMPLATE') || '',
-    ignoreCase => TWiki::Func::getPreferencesFlag('NATSEARCHIGNORECASE'),
+    ignoreCase => TWiki::Func::getPreferencesValue('NATSEARCHIGNORECASE'),
     limit => TWiki::Func::getPreferencesFlag('NATSEARCHLIMIT') || 0,
     globalSearch => TWiki::Func::getPreferencesFlag('NATSEARCHGLOBAL'),
     keywordSearch => TWiki::Func::getPreferencesFlag('NATSEARCHKEYWORDS'),
@@ -83,6 +81,9 @@ sub new {
   $this->{excludeTopic} =~ s/^\s*(.*)\s*$/$1/o;
 
   $this->{ignoreCase} = 1 unless defined $this->{ignoreCase};
+  $this->{ignoreCase} = ($this->{ignoreCase} =~ /1|on|yes/)?1:0;
+
+  writeDebug("ignoreCase=$this->{ignoreCase}");
 
   return bless ($this, $class);
 }
@@ -114,7 +115,7 @@ sub search {
 
   #writeDebug("searchTemplate name =$searchTemplate");
   writeDebug("theWeb=$theWeb");
-  $searchTemplate = &TWiki::Func::readTemplate($searchTemplate) if $searchTemplate;
+  $searchTemplate = &TWiki::Func::readTemplate($this->{searchTemplate}) if $this->{searchTemplate};
   $searchTemplate =  &TWiki::Func::readTemplate('search') unless $searchTemplate;
   $searchTemplate =~ s/^\s*(.*)\s*$/$1/os;
   
@@ -158,7 +159,11 @@ sub search {
   my $nrHits = 0;
   my %results = ();
 
+  # allow quotes in search strings
+  $theSearchString =~ s/\$quote/"/go;
+
   # upper case
+
   if ($theSearchString =~ /^[A-Z]/) {
     if ($theSearchString =~ /^(.*)\.(.*?)$/) {  # Special web.topic notation
       @webList = ($1);
@@ -343,6 +348,8 @@ sub contentSearch {
   my @searchTerms = parseQuery($theSearchString);
   return unless @searchTerms;
 
+  writeDebug("cmdTemplate=$cmdTemplate");
+
   # Collect the results for each web, put them into $results
   foreach my $thisWebName (@$theWebList) {
 
@@ -376,7 +383,7 @@ sub contentSearch {
 	eval {
 	  my ($result, $code) = $this->{sandbox}->sysCommand($cmdTemplate,
 	    PATTERN => $pattern, FILES => \@bag);
-	  #writeDebug("code=$code, result=$result");
+	  writeDebug("code=$code, result=$result");
 	  @notfiles = split(/\r?\n/, $result);
 	};
 	if ($@) {
@@ -395,7 +402,7 @@ sub contentSearch {
 	eval {
 	  my ($result, $code) = 
 	    $this->{sandbox}->sysCommand($cmdTemplate, PATTERN => $pattern, FILES => \@bag); 
-	  #writeDebug("code=$code, result=$result");
+	  writeDebug("code=$code, result=$result");
 	  @bag = split(/\r?\n/, $result);
 	};
 	if ($@) {
@@ -444,7 +451,7 @@ sub formatSearchResult {
 
     # sort topics by modification time, reverse
     my %modificationTime =
-      map { $_=>$this->getModificationTime($this, $_) }
+      map { $_=>$this->getModificationTime($thisWeb, $_) }
         keys %{$theResults->{$thisWeb}};
     my @sortedTopics =
       sort {$modificationTime{$b} <=> $modificationTime{$a}}
@@ -619,13 +626,17 @@ sub parseQuery {
 ##############################################################################
 # own filebased checker, breaks on other storage impls, breaks before anyway
 sub getModificationTime {
-  my $this = shift;
+  my ($this, $web, $topic) = @_;
+
+  $web =~ s/\./\//go;
 
   my $date = 0;
-  my $file = $this->{dataDir}.'/'.$_[0].'/'.$_[1].'.txt';
+  my $file = $this->{dataDir}.'/'.$web.'/'.$topic.'.txt';
+
   if (-e $file) {
     $date = (stat $file)[9] || 600000000;
   }
+
   return $date;
 }
 

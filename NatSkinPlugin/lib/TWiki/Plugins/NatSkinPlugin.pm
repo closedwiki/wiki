@@ -1,7 +1,7 @@
 ###############################################################################
 # NatSkinPlugin.pm - Plugin handler for the NatSkin.
 # 
-# Copyright (C) 2003-2007 MichaelDaum http://wikiring.de
+# Copyright (C) 2003-2008 MichaelDaum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,6 +19,7 @@
 package TWiki::Plugins::NatSkinPlugin;
 use strict;
 use TWiki::Func;
+use constant DEBUG => 0; # toggle me
 
 ###############################################################################
 use vars qw(
@@ -31,7 +32,7 @@ use vars qw(
 	$defaultStyle $defaultStyleBorder $defaultStyleSideBar
 	$defaultStyleButtons 
 	%maxRevs
-	$doneInit $doneInitKnownStyles $doneInitSkinState
+	$doneInitKnownStyles $doneInitSkinState
 	$lastStylePath
 	%knownStyles 
 	%knownVariations 
@@ -50,7 +51,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '3.00-pre16';
+$RELEASE = '3.00-pre18';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Supplements the bare bones NatSkin theme for TWiki';
 
@@ -63,8 +64,6 @@ $defaultStyleSideBar = 'left';
 $defaultVariation = 'off';
 $defaultStyleSearchBox = 'top';
 
-###############################################################################
-sub DEBUG {  0; } # toggle me
 
 ###############################################################################
 sub writeDebug {
@@ -92,6 +91,7 @@ sub initPlugin {
   TWiki::Func::registerTagHandler('WEBCOMPONENT', \&renderWebComponent);
   TWiki::Func::registerTagHandler('IFSKINSTATE', \&renderIfSkinState);
   TWiki::Func::registerTagHandler('TWIKIREGISTRATION', \&renderTWikiRegistration);
+  TWiki::Func::registerTagHandler('HTMLTITLE', \&renderHtmlTitle);
 
   # a more flexible variant
   TWiki::Func::registerTagHandler('NATFORMLIST', \&renderFormList);
@@ -103,9 +103,8 @@ sub initPlugin {
   TWiki::Func::registerTagHandler('NATMAXREV', \&renderMaxRevision);
 
   $isEnabled = 1;
-  $doneInit = 0;
-  $doneInitSkinState = 0;
   $doneHeader = 0;
+  $doneInitSkinState = 0;
 
   # don't initialize the following two to keep them in memory using perl accelerators
   #$doneInitKnownStyles = 0;
@@ -116,67 +115,6 @@ sub initPlugin {
   %maxRevs = (); # cache for getMaxRevision()
   %seenWebComponent = (); # used to prevent deep recursion
 
-  #writeDebug("done initPlugin at $baseWeb.$baseTopic for $currentUser");
-  return doInit();
-}
-
-###############################################################################
-# commonTagsHandler:
-# $_[0] - The text
-# $_[1] - The topic
-# $_[2] - The web
-sub commonTagsHandler {
-  return unless $isEnabled;
-  $currentTopic = $_[1];
-  $currentWeb = $_[2];
-
-  # conditional content
-  while ($_[0] =~ s/(\s*)%IFSKINSTATETHEN{(?!.*%IFSKINSTATETHEN)(.*?)}%\s*(.*?)\s*%FISKINSTATE%(\s*)/&renderIfSkinStateThen($2, $3, $1, $4)/geos) {
-    # nop
-  }
-
-  # spam obfuscator
-  if ($useEmailObfuscator) {
-    $_[0] =~ s/\[\[mailto\:([a-zA-Z0-9\-\_\.\+]+\@[a-zA-Z0-9\-\_\.]+\..+?)(?:\s+|\]\[)(.*?)\]\]/&renderEmailAddrs([$1], $2)/ge;
-    $_[0] =~ s/$STARTWW(?:mailto\:)?([a-zA-Z0-9\-\_\.\+]+\@[a-zA-Z0-9\-\_\.]+\.[a-zA-Z0-9\-\_]+)$ENDWW/&renderEmailAddrs([$1])/ge;
-  }
-}
-
-###############################################################################
-sub postRenderingHandler { 
-  return unless $isEnabled;
-  
-  # detect external links
-  if ($detectExternalLinks) {
-    $_[0] =~ s/<a\s+([^>]*?href=(?:\"|\'|&quot;)?)([^\"\'\s>]+(?:\"|\'|\s|&quot;>)?)/'<a '.renderExternalLink($1,$2)/geoi;
-    $_[0] =~ s/(<a\s+[^>]+ target="_blank" [^>]+) target="_top"/$1/go; # twiki4 adds target="_top" ... we kick it out again
-  }
-
-  # render email obfuscator
-  if ($useEmailObfuscator && $nrEmails) {
-    $useEmailObfuscator = 0;
-    &TWiki::Func::addToHEAD('EMAIL_OBFUSCATOR', &renderEmailObfuscator());
-    $useEmailObfuscator = 1;
-  }
-
-  # remove leftover tags of supported plugins if they are not installed
-  # so that they are remove from the NatSkin templates
-
-  $_[0] =~ s/%STARTALIASAREA%//go;
-  $_[0] =~ s/%STOPALIASAREA%//go;
-  $_[0] =~ s/%ALIAS{.*?}%//go;
-  $_[0] =~ s/%REDDOT{.*?}%//go;
-}
-
-###############################################################################
-# returns 1 on success, 0 if this plugin is disabled
-sub doInit {
-
-  return 1 if $doneInit;
-  $doneInit = 1;
-
-  writeDebug("called doInit");
-
   # get name of hometopic
   $homeTopic = TWiki::Func::getPreferencesValue('HOMETOPIC') 
     || $TWiki::cfg{HomeTopicName} || 'WebHome';
@@ -186,12 +124,12 @@ sub doInit {
 
   # clear NatSkinPlugin traces from session
   unless ($skin =~ /\b(nat|plain|rss|rssatom|atom)\b/) {
-    &TWiki::Func::clearSessionValue('SKINSTYLE');
-    &TWiki::Func::clearSessionValue('STYLEBORDER');
-    &TWiki::Func::clearSessionValue('STYLEBUTTONS');
-    &TWiki::Func::clearSessionValue('STYLESIDEBAR');
-    &TWiki::Func::clearSessionValue('STYLEVARIATION');
-    &TWiki::Func::clearSessionValue('STYLESEARCHBOX');
+    TWiki::Func::clearSessionValue('SKINSTYLE');
+    TWiki::Func::clearSessionValue('STYLEBORDER');
+    TWiki::Func::clearSessionValue('STYLEBUTTONS');
+    TWiki::Func::clearSessionValue('STYLESIDEBAR');
+    TWiki::Func::clearSessionValue('STYLEVARIATION');
+    TWiki::Func::clearSessionValue('STYLESEARCHBOX');
 
     #TWiki::Func::writeWarning("NatSkinPlugin used with skin $skin");
     $isEnabled = 0; # disable the plugin if it is used with a foreign skin
@@ -200,19 +138,19 @@ sub doInit {
   } 
 
   $isEnabled = 1;
-  $query = &TWiki::Func::getCgiQuery();
+  $query = TWiki::Func::getCgiQuery();
 
   # get skin state from session
-  &initKnownStyles();
-  &initSkinState();
+  initKnownStyles();
+  initSkinState();
 
-  $defaultWikiUserName = &TWiki::Func::getDefaultUserName();
-  $defaultWikiUserName = &TWiki::Func::userToWikiName($defaultWikiUserName, 1);
-  my $wikiUserName = &TWiki::Func::userToWikiName($currentUser, 1);
+  $defaultWikiUserName = TWiki::Func::getDefaultUserName();
+  $defaultWikiUserName = TWiki::Func::userToWikiName($defaultWikiUserName, 1);
+  my $wikiUserName = TWiki::Func::userToWikiName($currentUser, 1);
 
-  my $isScripted = &TWiki::Func::getContext()->{'command_line'}?1:0;
+  my $isScripted = TWiki::Func::getContext()->{'command_line'}?1:0;
 
-  $useEmailObfuscator = &TWiki::Func::getPreferencesFlag('OBFUSCATEEMAIL');
+  $useEmailObfuscator = TWiki::Func::getPreferencesFlag('OBFUSCATEEMAIL');
   if ($useEmailObfuscator) {
     if ($isScripted || !$query) { # are we in cgi mode?
       $useEmailObfuscator = 0; # batch mode, i.e. mailnotification
@@ -229,10 +167,50 @@ sub doInit {
     }
   }
   #writeDebug("useEmailObfuscator=$useEmailObfuscator");
-  $detectExternalLinks = &TWiki::Func::getPreferencesFlag('EXTERNALLINKS');
+  $detectExternalLinks = TWiki::Func::getPreferencesFlag('EXTERNALLINKS');
 
   writeDebug("done doInit");
   return 1;
+}
+
+###############################################################################
+# commonTagsHandler:
+# $_[0] - The text
+# $_[1] - The topic
+# $_[2] - The web
+sub commonTagsHandler {
+  return unless $isEnabled;
+  $currentTopic = $_[1];
+  $currentWeb = $_[2];
+
+  # conditional content
+  while ($_[0] =~ s/(\s*)%IFSKINSTATETHEN{(?!.*%IFSKINSTATETHEN)(.*?)}%\s*(.*?)\s*%FISKINSTATE%(\s*)/renderIfSkinStateThen($2, $3, $1, $4)/geos) {
+    # nop
+  }
+
+  # spam obfuscator
+  if ($useEmailObfuscator) {
+    $_[0] =~ s/\[\[mailto\:([a-zA-Z0-9\-\_\.\+]+\@[a-zA-Z0-9\-\_\.]+\..+?)(?:\s+|\]\[)(.*?)\]\]/renderEmailAddrs([$1], $2)/ge;
+    $_[0] =~ s/$STARTWW(?:mailto\:)?([a-zA-Z0-9\-\_\.\+]+\@[a-zA-Z0-9\-\_\.]+\.[a-zA-Z0-9\-\_]+)$ENDWW/renderEmailAddrs([$1])/ge;
+  }
+}
+
+###############################################################################
+sub postRenderingHandler { 
+  return unless $isEnabled;
+  
+  # detect external links
+  if ($detectExternalLinks) {
+    $_[0] =~ s/<a\s+([^>]*?href=(?:\"|\'|&quot;)?)([^\"\'\s>]+(?:\"|\'|\s|&quot;>)?)/'<a '.renderExternalLink($1,$2)/geoi;
+    $_[0] =~ s/(<a\s+[^>]+ target="_blank" [^>]+) target="_top"/$1/go; # twiki4 adds target="_top" ... we kick it out again
+  }
+
+  # render email obfuscator
+  if ($useEmailObfuscator && $nrEmails) {
+    $useEmailObfuscator = 0;
+    TWiki::Func::addToHEAD('EMAIL_OBFUSCATOR', renderEmailObfuscator());
+    $useEmailObfuscator = 1;
+  }
 }
 
 ###############################################################################
@@ -243,9 +221,11 @@ sub initKnownStyles {
   #writeDebug("called initKnownStyles");
   #writeDebug("stylePath=$stylePath, lastStylePath=$lastStylePath");
 
-  my $twikiWeb = &TWiki::Func::getTwikiWebname();
-  my $stylePath = &TWiki::Func::getPreferencesValue('STYLEPATH') 
+  my $twikiWeb = TWiki::Func::getTwikiWebname();
+  my $stylePath = TWiki::Func::getPreferencesValue('STYLEPATH') 
     || "$twikiWeb.NatSkin";
+
+  $stylePath =~ s/\%(SYSTEM|TWIKI)WEB\%/$twikiWeb/go;
 
   $lastStylePath ||= '';
 
@@ -261,7 +241,7 @@ sub initKnownStyles {
   %knownButtons = ();
   %knownThins = ();
   
-  my $pubDir = &TWiki::Func::getPubDir();
+  my $pubDir = TWiki::Func::getPubDir();
   foreach my $styleWebTopic (split(/[\s,]+/, $stylePath)) {
     my $styleWeb;
     my $styleTopic;
@@ -297,7 +277,7 @@ sub initKnownStyles {
 ###############################################################################
 sub initSkinState {
 
-  return if $doneInitSkinState;
+  return 1 if $doneInitSkinState;
 
   $doneInitSkinState = 1;
   %skinState = ();
@@ -367,30 +347,32 @@ sub initSkinState {
     $theRefresh = ($theRefresh eq 'on')?1:0;
     $theReset = ($theReset eq 'on')?1:0;
 
-    #writeDebug("theReset=$theReset, theRefresh=$theRefresh");
+    writeDebug("theReset=$theReset, theRefresh=$theRefresh");
 
-    if ($theRefresh || $theReset | $theStyle eq 'reset') {
+    if ($theRefresh || $theReset || $theStyle eq 'reset') {
       # clear the style cache
       $doneInitKnownStyles = 0; 
       $lastStylePath = '';
     }
 
     if ($theReset || $theStyle eq 'reset') {
-      #writeDebug("clearing session values");
+      writeDebug("clearing session values");
       
       $theStyle = '';
-      &TWiki::Func::clearSessionValue('SKINSTYLE');
-      &TWiki::Func::clearSessionValue('STYLEBORDER');
-      &TWiki::Func::clearSessionValue('STYLEBUTTONS');
-      &TWiki::Func::clearSessionValue('STYLESIDEBAR');
-      &TWiki::Func::clearSessionValue('STYLEVARIATION');
-      &TWiki::Func::clearSessionValue('STYLESEARCHBOX');
+      TWiki::Func::clearSessionValue('SKINSTYLE');
+      TWiki::Func::clearSessionValue('STYLEBORDER');
+      TWiki::Func::clearSessionValue('STYLEBUTTONS');
+      TWiki::Func::clearSessionValue('STYLESIDEBAR');
+      TWiki::Func::clearSessionValue('STYLEVARIATION');
+      TWiki::Func::clearSessionValue('STYLESEARCHBOX');
       my $redirectUrl = TWiki::Func::getViewUrl($baseWeb, $baseTopic);
       TWiki::Func::redirectCgiQuery($query, $redirectUrl); 
 	# we need to force a new request because the session value preferences
 	# are still loaded in the preferences cache; only clearing them in
 	# the session object is not enough right now but will be during the next
 	# request; so we redirect to the current url
+      $isEnabled = 0; 
+      return 0;
     } else {
       $theStyleBorder = $query->param('styleborder'); 
       $theStyleButtons = $query->param('stylebuttons'); 
@@ -411,12 +393,12 @@ sub initSkinState {
   }
 
   # handle style
-  my $prefStyle = &TWiki::Func::getPreferencesValue('SKINSTYLE') || 
+  my $prefStyle = TWiki::Func::getPreferencesValue('SKINSTYLE') || 
     $defaultStyle;
   $prefStyle =~ s/^\s*(.*)\s*$/$1/go;
   if ($theStyle && !$isFinalStyle) {
     $theStyle =~ s/^\s*(.*)\s*$/$1/go;
-    $doStickyStyle = 1 if $theStyle ne $prefStyle;
+    $doStickyStyle = 1 if lc($theStyle) ne lc($prefStyle);
   } else {
     $theStyle = $prefStyle;
   }
@@ -425,7 +407,7 @@ sub initSkinState {
   } else {
     $found = 0;
     foreach my $style (keys %knownStyles) {
-      if ($style eq $theStyle || lc $style eq lc $theStyle) {
+      if ($style eq $theStyle || lc($style) eq lc($theStyle)) {
 	$found = 1;
 	$theStyle = $style;
 	last;
@@ -439,7 +421,7 @@ sub initSkinState {
 
   # cycle styles
   if ($theSwitchStyle && !$isFinalStyle) {
-    $theSwitchStyle = lc $theSwitchStyle;
+    $theSwitchStyle = lc($theSwitchStyle);
     $doStickyStyle = 1;
     my $state = 0;
     my $firstStyle;
@@ -465,8 +447,9 @@ sub initSkinState {
   }
 
   # handle border
-  my $prefStyleBorder = &TWiki::Func::getPreferencesValue('STYLEBORDER') ||
+  my $prefStyleBorder = TWiki::Func::getPreferencesValue('STYLEBORDER') ||
     $defaultStyleBorder;
+
   $prefStyleBorder =~ s/^\s*(.*)\s*$/$1/go;
   if ($theStyleBorder && !$isFinalBorder) {
     $theStyleBorder =~ s/^\s*(.*)\s*$/$1/go;
@@ -483,7 +466,7 @@ sub initSkinState {
   $skinState{'border'} = $theStyleBorder;
 
   # handle buttons
-  my $prefStyleButtons = &TWiki::Func::getPreferencesValue('STYLEBUTTONS') ||
+  my $prefStyleButtons = TWiki::Func::getPreferencesValue('STYLEBUTTONS') ||
     $defaultStyleButtons;
   $prefStyleButtons =~ s/^\s*(.*)\s*$/$1/go;
   if ($theStyleButtons && !$isFinalButtons) {
@@ -499,7 +482,7 @@ sub initSkinState {
   $skinState{'buttons'} = $theStyleButtons;
 
   # handle sidebar 
-  my $prefStyleSideBar = &TWiki::Func::getPreferencesValue('STYLESIDEBAR') ||
+  my $prefStyleSideBar = TWiki::Func::getPreferencesValue('STYLESIDEBAR') ||
     $defaultStyleSideBar;
   $prefStyleSideBar =~ s/^\s*(.*)\s*$/$1/go;
   if ($theStyleSideBar && !$isFinalSideBar) {
@@ -515,7 +498,7 @@ sub initSkinState {
     if $theToggleSideBar && $theToggleSideBar !~ /^(left|right|both|off)$/;
 
   # handle searchbox
-  my $prefStyleSearchBox = &TWiki::Func::getPreferencesValue('STYLESEARCHBOX') ||
+  my $prefStyleSearchBox = TWiki::Func::getPreferencesValue('STYLESEARCHBOX') ||
     $defaultStyleSearchBox;
   $prefStyleSearchBox =~ s/^\s*(.*)\s*$/$1/go;
   if ($theStyleSearchBox && !$isFinalSearchBox) {
@@ -529,18 +512,18 @@ sub initSkinState {
   $skinState{'searchbox'} = $theStyleSearchBox;
 
   # handle variation 
-  my $prefStyleVariation = &TWiki::Func::getPreferencesValue('STYLEVARIATION') ||
+  my $prefStyleVariation = TWiki::Func::getPreferencesValue('STYLEVARIATION') ||
     $defaultVariation;
   $prefStyleVariation =~ s/^\s*(.*)\s*$/$1/go;
   if ($theStyleVariation && !$isFinalVariation) {
     $theStyleVariation =~ s/^\s*(.*)\s*$/$1/go;
-    $doStickyVariation = 1 if $theStyleVariation ne $prefStyleVariation;
+    $doStickyVariation = 1 if lc($theStyleVariation) ne lc($prefStyleVariation);
   } else {
     $theStyleVariation = $prefStyleVariation;
   }
   $found = 0;
   foreach my $variation (keys %knownVariations) {
-    if ($variation eq $theStyleVariation || lc $variation eq lc $theStyleVariation) {
+    if ($variation eq $theStyleVariation || lc($variation) eq lc($theStyleVariation)) {
       $found = 1;
       $theStyleVariation = $variation;
       last;
@@ -578,17 +561,17 @@ sub initSkinState {
   }
 
   # store sticky state into session
-  &TWiki::Func::setSessionValue('SKINSTYLE', $skinState{'style'}) 
+  TWiki::Func::setSessionValue('SKINSTYLE', $skinState{'style'}) 
     if $doStickyStyle;
-  &TWiki::Func::setSessionValue('STYLEBORDER', $skinState{'border'})
+  TWiki::Func::setSessionValue('STYLEBORDER', $skinState{'border'})
     if $doStickyBorder;
-  &TWiki::Func::setSessionValue('STYLEBUTTONS', $skinState{'buttons'})
+  TWiki::Func::setSessionValue('STYLEBUTTONS', $skinState{'buttons'})
     if $doStickyButtons;
-  &TWiki::Func::setSessionValue('STYLESIDEBAR', $skinState{'sidebar'})
+  TWiki::Func::setSessionValue('STYLESIDEBAR', $skinState{'sidebar'})
     if $doStickySideBar;
-  &TWiki::Func::setSessionValue('STYLEVARIATION', $skinState{'variation'})
+  TWiki::Func::setSessionValue('STYLEVARIATION', $skinState{'variation'})
     if $doStickyVariation;
-  &TWiki::Func::setSessionValue('STYLESEARCHBOX', $skinState{'searchbox'})
+  TWiki::Func::setSessionValue('STYLESEARCHBOX', $skinState{'searchbox'})
     if $doStickySearchBox;
 
   # misc
@@ -597,13 +580,13 @@ sub initSkinState {
   # temporary toggles
   $theToggleSideBar = 'off' if $theRaw && $skinState{'border'} eq 'thin';
   $theToggleSideBar = 'off' if 
-    $skinState{'action'} =~ /^(edit|editsection|manage|rdiff|changes|(.*search))$/;
+    $skinState{'action'} =~ /^(edit|editsection|genpdf|manage|rdiff|changes|(.*search))$/;
   $theToggleSideBar = 'off' if $skinState{'action'} =~ /^(login|logon|oops)$/;
 
   # switch the sidebar off if we need to authenticate
   if ($skinState{'action'} ne 'publish' && # SMELL to please PublishContrib
       $TWiki::cfg{AuthScripts} =~ /\b$skinState{'action'}\b/ &&
-      !&TWiki::Func::getContext()->{authenticated}) {
+      !TWiki::Func::getContext()->{authenticated}) {
       $theToggleSideBar = 'off';
   }
 
@@ -629,6 +612,7 @@ sub initSkinState {
   writeDebug("setting skin to $skin");
   $TWiki::Plugins::SESSION->{prefs}->pushPreferenceValues('SESSION', { SKIN => $skin } );      	
   
+  return 1;
 }
 
 ###############################################################################
@@ -683,7 +667,7 @@ sub renderIfSkinStateThen {
       (!$theFinal || grep(/$theFinal/, @{$skinState{'final'}}))) {
     #writeDebug("match then");
     if ($theThen =~ s/\$nop//go) {
-      $theThen = TWiki::Func::expandCommonVariables($theThen, $currentTopic, $currentWeb);
+#      $theThen = TWiki::Func::expandCommonVariables($theThen, $currentTopic, $currentWeb);
     }
     return $before.$theThen.$after if $theThen;
   } else {
@@ -693,7 +677,7 @@ sub renderIfSkinStateThen {
     } else {
       #writeDebug("match else");
       if ($theElse =~ s/\$nop//go) {
-	$theElse = TWiki::Func::expandCommonVariables($theElse, $currentTopic, $currentWeb);
+#	$theElse = TWiki::Func::expandCommonVariables($theElse, $currentTopic, $currentWeb);
       }
       return $before.$theElse.$after if $theElse;
     }
@@ -706,7 +690,7 @@ sub renderIfSkinStateThen {
 
 ###############################################################################
 sub renderTWikiRegistration {
-  my $twikiWeb = &TWiki::Func::getTwikiWebname();
+  my $twikiWeb = TWiki::Func::getTwikiWebname();
 
   my $twikiRegistrationTopic = 
     TWiki::Func::getPreferencesValue('TWIKIREGISTRATION');
@@ -716,9 +700,46 @@ sub renderTWikiRegistration {
   return $twikiRegistrationTopic;
 }
 
+###############################################################################
+sub renderHtmlTitle {
+  my ($session, $params, $theTopic, $theWeb) = @_;
+
+  my $theSep = $params->{separator} || ' - ';
+  my $theWikiToolName = $params->{wikitoolname} || 'on';
+  my $theSource = $params->{source} || '%TOPICTITLE%';
+
+  if ($theWikiToolName eq 'on') {
+    $theWikiToolName = TWiki::Func::getPreferencesValue("WIKITOOLNAME") || 'TWiki';
+    $theWikiToolName = $theSep.$theWikiToolName;
+  } elsif ($theWikiToolName eq 'off') {
+    $theWikiToolName = '';
+  } else {
+    $theWikiToolName = $theSep.$theWikiToolName;
+  }
+
+  my $htmlTitle = TWiki::Func::getPreferencesValue("HTMLTITLE");
+  if ($htmlTitle) {
+    return $htmlTitle; # deliberately not appending the WikiToolName
+  }
+
+  $theWeb =~ s/^.*[\.\/]//g;
+
+  # the source can be a preference variable or a TWikiTag
+  escapeParameter($theSource);
+  $htmlTitle = TWiki::Func::expandCommonVariables($theSource, $theTopic, $theWeb);
+  if ($htmlTitle && $htmlTitle ne $theSource) {
+    return $htmlTitle.$theSep.$theWeb.$theWikiToolName;
+  }
+
+  # fallback
+  return $theTopic.$theSep.$theWeb.$theWikiToolName;
+}
+
 
 ###############################################################################
 sub renderIfSkinState {
+  return '' unless $isEnabled;
+
   my ($session, $params) = @_;
 
   my $theStyle = $params->{_DEFAULT} || $params->{style};
@@ -742,13 +763,19 @@ sub renderIfSkinState {
       (!$theAction || $skinState{'action'} =~ /$theAction/) &&
       (!$theFinal || grep(/$theFinal/, @{$skinState{'final'}}))) {
 
-    &escapeParameter($theThen);
-    #writeDebug("match");
-    return $theThen if $theThen;
+    escapeParameter($theThen);
+    if ($theThen) {
+      $theThen = TWiki::Func::expandCommonVariables($theThen, $baseTopic, $baseWeb);
+      #writeDebug("match");
+      return $theThen;
+    }
   } else {
-    &escapeParameter($theElse);
-    #writeDebug("NO match");
-    return $theElse if $theElse;
+    escapeParameter($theElse);
+    if ($theElse) {
+      $theElse = TWiki::Func::expandCommonVariables($theElse, $baseTopic, $baseWeb);
+      #writeDebug("NO match");
+      return $theElse;
+    }
   }
 
   return '';
@@ -767,6 +794,7 @@ sub renderKnownVariations {
 ###############################################################################
 # TODO: prevent illegal skin states
 sub renderSetSkinState {
+  return '' unless $isEnabled;
   my ($session, $params) = @_;
 
   $skinState{'buttons'} = $params->{buttons} if $params->{buttons};
@@ -781,6 +809,8 @@ sub renderSetSkinState {
 
 ###############################################################################
 sub renderGetSkinState {
+  return '' unless $isEnabled;
+
   my ($session, $params) = @_;
 
   my $theFormat = $params->{_DEFAULT} || 
@@ -801,16 +831,19 @@ sub renderGetSkinState {
 
 ###############################################################################
 sub renderGetSkinStyle {
+  return '' unless $isEnabled;
 
   my $theStyle;
   my $theVariation;
-  $theStyle = $skinState{'style'};
+  $theStyle = $skinState{'style'} || 'off';
   return '' if $theStyle eq 'off';
 
   $theVariation = $skinState{'variation'} unless $skinState{'variation'} =~ /^(off|none)$/;
 
   # SMELL: why not use <link rel="stylesheet" href="..." type="text/css" media="all" />
   my $text = '';
+
+  # SMELL: check if a knownStyle has been used
 
   $text = 
     '<link rel="stylesheet" href="%PUBURL%/'.
@@ -848,7 +881,7 @@ sub renderUserActions {
 
   my $text = '';
   my $sepString = $params->{sep} || $params->{separator} || '<span class="natSep"> | </span>';
-  if (&TWiki::Func::getContext()->{authenticated}) {
+  if (TWiki::Func::getContext()->{authenticated}) {
     $text = $params->{_DEFAULT} || $params->{format} || 
     '$user$sep$logout$sep$print<br />'.
     '$edit$sep$attach$sep$move$sep$raw$sep$diff$sep$more';
@@ -877,7 +910,7 @@ sub renderUserActions {
     $theRaw = $query->param('raw');
   }
   $curRev =~ s/r?1\.//go;
-  my $maxRev = &getMaxRevision();
+  my $maxRev = getMaxRevision();
   if ($curRev && $curRev < $maxRev) {
     $editString = '<strike>%TMPL:P{"EDIT"}%</strike>';
     $attachString = '<strike>%TMPL:P{"ATTACH"}%</strike>';
@@ -889,32 +922,32 @@ sub renderUserActions {
     $editUrlParams = '&action=form' unless $whiteBoard;
     $editString = 
       '<a class="natEditTopicAction" rel="nofollow" href="'
-      . &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "edit") 
+      . TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "edit") 
       . '?t=' . time() 
       . $editUrlParams
       . '" accesskey="e" title="%TMPL:P{"EDIT_HELP"}%"><span>%TMPL:P{"EDIT"}%</span></a>';
     $attachString =
       '<a class="natAttachTopicAction" rel="nofollow" href="'
-      . &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "attach") 
+      . TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "attach") 
       . '" accesskey="a" title="%TMPL:P{"ATTACH_HELP"}%"><span>%TMPL:P{"ATTACH"}%</span></a>';
     $moveString =
       '<a class="natMoveTopicAction" rel="nofollow" href="'
-      . &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "rename", 'currentwebonly'=>'on')
+      . TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "rename", 'currentwebonly'=>'on')
       . '" accesskey="m" title="%TMPL:P{"MOVE_HELP"}%"><span>%TMPL:P{"MOVE"}%</span></a>';
 
   }
 
   # get string for raw/view action
-  my $rev = &getCurRevision($baseWeb, $baseTopic, $curRev);
+  my $rev = getCurRevision($baseWeb, $baseTopic, $curRev);
   if ($theRaw) {
     $rawString =
       '<a class="natViewTopicAction" href="' . 
-      &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "view") . 
+      TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "view") . 
       '?rev='.$rev.'" accesskey="r" title="%TMPL:P{"VIEW_HELP"}%"><span>%TMPL:P{"VIEW"}%</span></a>';
   } else {
     $rawString =
       '<a class="natRawTopicAction" href="' .  
-      &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "view") .  
+      TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "view") .  
       '?raw=on&rev='.$rev.'" accesskey="r" title="%TMPL:P{"RAW_HELP"}%"><span>%TMPL:P{"RAW"}%</span></a>';
   }
   
@@ -928,13 +961,13 @@ sub renderUserActions {
 
   $moreString =
       '<a class="natMoreTopicAction" rel="nofollow" href="' . 
-      &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "oops") . 
+      TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "oops") . 
       '?template=oopsmore" accesskey="x" title="'.
       '%TMPL:P{"MORE_HELP"}%"><span>%TMPL:P{"MORE"}%</span></a>';
 
   $printString =
     '<a class="natPrintTopicAction" rel="nofollow" href="'.
-    &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, 'view').
+    TWiki::Func::getScriptUrl($baseWeb, $baseTopic, 'view').
     '?cover=print.nat" accesskey="p" title="%MAKETEXT{"Print this topic"}%"><span>%MAKETEXT{"Print"}%</span></a>';
 
   my $loginUrl = renderLoginUrl();
@@ -1013,7 +1046,7 @@ sub renderWebComponent {
   #    This behavior allows for web component to be consistently rendered in foreign web using the =web= parameter. 
   #    It makes sure %WEB% is expanded to the appropriate value. 
   #    Although possible, usage of %BASEWEB% in web component topics might have undesired effect when web component is rendered from a foreign web. 
-  $text = &TWiki::Func::expandCommonVariables($text, $theComponent, $theWeb);
+  $text = TWiki::Func::expandCommonVariables($text, $theComponent, $theWeb);
 
   # ignore permission warnings here ;)
   $text =~ s/No permission to read.*//g;
@@ -1048,37 +1081,37 @@ sub getWebComponent {
   # get component for web
   my $text = '';
   my $meta = '';
-  my $mainWeb = &TWiki::Func::getMainWebname();
-  my $twikiWeb = &TWiki::Func::getTwikiWebname();
+  my $mainWeb = TWiki::Func::getMainWebname();
+  my $twikiWeb = TWiki::Func::getTwikiWebname();
 
   my $theWeb = $web;
   my $targetWeb = $web;
   my $theComponent = $component;
 
-  if (&TWiki::Func::topicExists($theWeb, $theComponent) &&
-      &TWiki::Func::checkAccessPermission('VIEW',$currentUser,undef,$theComponent, $theWeb)) {
+  if (TWiki::Func::topicExists($theWeb, $theComponent) &&
+      TWiki::Func::checkAccessPermission('VIEW',$currentUser,undef,$theComponent, $theWeb)) {
     # current
-    ($meta, $text) = &TWiki::Func::readTopic($theWeb, $theComponent);
+    ($meta, $text) = TWiki::Func::readTopic($theWeb, $theComponent);
   } else {
     $theWeb = $mainWeb;
     $theComponent = 'TWiki'.$component;
-    if (&TWiki::Func::topicExists($theWeb, $theComponent) &&
-        &TWiki::Func::checkAccessPermission('VIEW',$currentUser,undef,$theComponent, $theWeb)) {
+    if (TWiki::Func::topicExists($theWeb, $theComponent) &&
+        TWiki::Func::checkAccessPermission('VIEW',$currentUser,undef,$theComponent, $theWeb)) {
       # main
-      ($meta, $text) = &TWiki::Func::readTopic($theWeb, $theComponent);
+      ($meta, $text) = TWiki::Func::readTopic($theWeb, $theComponent);
     } else {
       $theWeb = $twikiWeb;
       #$theComponent = 'TWiki'.$component;
-      if (&TWiki::Func::topicExists($theWeb, $theComponent) &&
-          &TWiki::Func::checkAccessPermission('VIEW',$currentUser,undef,$theComponent, $theWeb)) {
+      if (TWiki::Func::topicExists($theWeb, $theComponent) &&
+          TWiki::Func::checkAccessPermission('VIEW',$currentUser,undef,$theComponent, $theWeb)) {
 	# twiki
-	($meta, $text) = &TWiki::Func::readTopic($theWeb, $theComponent);
+	($meta, $text) = TWiki::Func::readTopic($theWeb, $theComponent);
       } else {
 	$theWeb = $twikiWeb;
 	$theComponent = $component;
-	if (&TWiki::Func::topicExists($theWeb, $theComponent) &&
-            &TWiki::Func::checkAccessPermission('VIEW',$currentUser,undef,$theComponent, $theWeb)) {
-	  ($meta, $text) = &TWiki::Func::readTopic($theWeb, $theComponent);
+	if (TWiki::Func::topicExists($theWeb, $theComponent) &&
+            TWiki::Func::checkAccessPermission('VIEW',$currentUser,undef,$theComponent, $theWeb)) {
+	  ($meta, $text) = TWiki::Func::readTopic($theWeb, $theComponent);
 	} else {
 	  return ''; # not found
 	}
@@ -1144,7 +1177,7 @@ sub renderWebLink {
   $result =~ s/\$tooltip/$theTooltip/g;
   $result =~ s/\$name/$theName/g;
   $result =~ s/\$web/$theWeb/g;
-  $result =~ s/\$topic/$theWeb/g;
+  $result =~ s/\$topic/$homeTopic/g;
 
   return $result;
 }
@@ -1155,7 +1188,9 @@ sub renderLoginUrl {
   my $session = $TWiki::Plugins::SESSION;
   return '' unless $session;
 
-  my $loginManager = $session->{loginManager} || $session->{users}->{loginManager};
+  my $loginManager = $session->{loginManager} || # TWiki-4.2
+    $session->{users}->{loginManager} || # TWiki-4.???
+    $session->{client}; # TWiki-4.0
   return $loginManager->loginUrl();
 }
 
@@ -1172,7 +1207,7 @@ sub renderLogoutUrl {
     return '';
   } 
   
-  return &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, 'view', logout=>1);
+  return TWiki::Func::getScriptUrl($baseWeb, $baseTopic, 'view', logout=>1);
 }
 
 ###############################################################################
@@ -1206,7 +1241,7 @@ sub renderFormButton {
   $saveCmd = $query->param('cmd') || '' if $query;
   return '' if $saveCmd eq 'repRev';
 
-  my ($meta, $dumy) = &TWiki::Func::readTopic($baseWeb, $baseTopic);
+  my ($meta, $dumy) = TWiki::Func::readTopic($baseWeb, $baseTopic);
   my $formMeta = $meta->get('FORM'); 
   my $form = '';
   $form = $formMeta->{"name"} if $formMeta;
@@ -1222,16 +1257,17 @@ sub renderFormButton {
   if ($form) {
     $actionText = '%TMPL:P{"CHANGE_FORM"}%';
     $actionTitle = '%TMPL:P{"CHANGE_FORM_HELP"}%';
-  } elsif (&TWiki::Func::getPreferencesValue('WEBFORMS', $baseWeb)) {
+  } elsif (TWiki::Func::getPreferencesValue('WEBFORMS', $baseWeb)) {
     $actionText = '%TMPL:P{"ADD_FORM"}%';
     $actionTitle = '%TMPL:P{"ADD_FORM_HELP"}%';
   } else {
     return '';
   }
   
-  my $theFormat = $params->{_DEFAULT} || $params->{format};
-  $theFormat =~ s/\$1/<a href=\"javascript:submitEditForm('save', '$action');\" accesskey=\"f\" title=\"$actionTitle\">$actionText<\/a>/g;
+  my $theFormat = $params->{_DEFAULT} || $params->{format} || '$1';
+  $theFormat =~ s/\$1/<a href=\"\$url\" accesskey=\"f\" title=\"$actionTitle\"><span>$actionText<\/span><\/a>/g;
   $theFormat =~ s/\$url/javascript:submitEditForm('save', '$action');/g;
+  $theFormat =~ s/\$title/$actionTitle/g;
   $theFormat =~ s/\$action/$actionText/g;
   return $theFormat;
 }
@@ -1327,7 +1363,7 @@ sub renderRevisions {
   $rev1 = $query->param("rev1") if $query;
   $rev2 = $query->param("rev2") if $query;
 
-  my $topicExists = &TWiki::Func::topicExists($baseWeb, $baseTopic);
+  my $topicExists = TWiki::Func::topicExists($baseWeb, $baseTopic);
   if ($topicExists) {
     
     $rev1 = 0 unless $rev1;
@@ -1335,7 +1371,7 @@ sub renderRevisions {
     $rev1 =~ s/r?1\.//go;  # cut 'r' and major
     $rev2 =~ s/r?1\.//go;  # cut 'r' and major
 
-    my $maxRev = &getMaxRevision();
+    my $maxRev = getMaxRevision();
     $rev1 = $maxRev if $rev1 < 1;
     $rev1 = $maxRev if $rev1 > $maxRev;
     $rev2 = 1 if $rev2 < 1;
@@ -1385,7 +1421,7 @@ sub renderExternalLink {
 
   my $addClass = 0;
   my $text = $thePrefix.$theUrl;
-  my $urlHost = &TWiki::Func::getUrlHost();
+  my $urlHost = TWiki::Func::getUrlHost();
   my $httpsUrlHost = $urlHost;
   $httpsUrlHost =~ s/^http:\/\//https:\/\//go;
 
@@ -1423,17 +1459,15 @@ sub renderMaxRevision {
 sub getCurRevision {
   my ($thisWeb, $thisTopic, $thisRev) = @_;
 
-  my $rev;
+  my ($date, $user, $rev);
+
   $rev = $query->param("rev") if $query;
+
   if ($rev) {
     $rev =~ s/r?1\.//go;
-    return $rev;
+  } else {
+    ($date, $user, $rev) = TWiki::Func::getRevisionInfo($thisWeb, $thisTopic, $thisRev);
   }
-
-
-  my ($date, $user);
-
-  ($date, $user, $rev) = &TWiki::Func::getRevisionInfo($thisWeb, $thisTopic, $thisRev);
 
   return $rev;
 }
@@ -1446,7 +1480,7 @@ sub getPrevRevision {
 
   my $numberOfRevisions = $TWiki::cfg{NumberOfRevisions};
 
-  $rev = &getMaxRevision($thisWeb, $thisTopic) unless $rev;
+  $rev = getMaxRevision($thisWeb, $thisTopic) unless $rev;
   $rev =~ s/r?1\.//go; # cut major
   if ($rev > $numberOfRevisions) {
     $rev -= $numberOfRevisions;
@@ -1485,6 +1519,7 @@ sub getCgiAction {
   # not all cgi actions we want to distinguish set their context
   # so only use those we are sure of
   return 'edit' if $context->{'edit'};
+  return 'view' if $context->{'view'};
   # TODO: more
 
   # fall back to analyzing the path info
@@ -1506,11 +1541,12 @@ sub getCgiAction {
 sub escapeParameter {
   return '' unless $_[0];
 
-  $_[0] =~ s/\$nop//g;
+  $_[0] =~ s/\$percnt/%/g;
   $_[0] =~ s/\\n/\n/g;
+  $_[0] =~ s/\$nop//g;
   $_[0] =~ s/\$n/\n/g;
   $_[0] =~ s/\\%/%/g;
-  $_[0] =~ s/\$percnt/%/g;
+  $_[0] =~ s/\\"/"/g;
   $_[0] =~ s/\$dollar/\$/g;
 }
 
@@ -1566,6 +1602,7 @@ sub renderFormList {
   $result =~ s/\$web/$theWeb/g;
   $result =~ s/\$topic/$theTopic/g;
   escapeParameter($result);
+  $result = TWiki::Func::expandCommonVariables($result, $theTopic, $theWeb);
 
   return $result;
 }

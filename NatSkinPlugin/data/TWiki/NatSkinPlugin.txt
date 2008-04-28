@@ -255,7 +255,7 @@ The "guest" and "format" format strings can use the following variables
 ---+++ WEBCOMPONENT
 *Syntax*: =%<nop>WEBCOMPONENT{"name" web="&lt;name>" lineprefix="&lt;prefix>" multiple="<anything>"}%=
 
-*Arguments*: ==
+*Arguments*:
    * =name=: The name of the !WebComponent topic.
    * =web="&lt;name>"=: The web to fetch the component from. Default to the current web.
    * =lineprefix="&lt;prefix>"=: A prefix to be added to each line of the web component topic before inclusion. Typically three space characters.
@@ -280,7 +280,7 @@ By default the NatSkin comes with predefined components
    * [[%TWIKIWEB%.TWikiWebButtons]]
    * [[%TWIKIWEB%.TWikiWebLinks]]
    * [[%TWIKIWEB%.TWikiWebTopicActions]]
-   * [[%TWIKIWEB%.TWikiWebCss]]
+   * [[%TWIKIWEB%.TWikiWebHtmlHead]]
 
 Example: 
    * use =%<nop>WEBCOMPONENT{"WebSideBar"}%= to display a the sidebar component
@@ -292,13 +292,25 @@ see also:
 ---+++ WEBLINK
 *Syntax*: =%<nop>WEBLINK{web="..." name="..."}%=
 
-display a link to a WebHome with the given name and add the SITEMAPUSEDTO description to 
-to the hover balloon 
+display a link to a web with the its name and add the SITEMAPUSEDTO description to 
+to the hover balloon. The web name is stripped down to its distinguishing tail,
+removing all parent web names.
 
----+++ WIKIRELEASENAME
-*Syntax*: =%<nop>WIKIRELEASENAME%= 
+*Arguments*:
+   * web: name of the web to link to
+   * name: name to display instead of the web name
+   * format: format string for the web link
+   * marker: string to be added to inserted into the format string if the web link
+     points to the current web
 
-returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin is installed on 
+The following variables can be used in the format string:
+   * $web: full qualified name of the web, defaults to current web
+   * $topic: name of the topic to link to, defaults to <nop>WebHome
+   * $name: name of the web, all prefixes but its basename being stripped off
+   * $url: url for the link
+   * $marker: the marker set to the "marker" string if the link points to the current
+     web
+   * $tooltip: tooltip for the link, mostly used in a =title= argument of an anchor
 
 ---++ Installation Instructions
    * [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] the ZIP file
@@ -334,9 +346,9 @@ returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin 
    * Set SHORTDESCRIPTION = Supplements the bare bones NatSkin theme for TWiki
 -->
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Copyright &copy;: | 2003-2007, Michael Daum http://wikiring.de |
+|  Copyright &copy;: | 2003-2008, Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v3.00-pre17 |
+|  Plugin Version: | v3.00-pre18 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  13 Nov 2007: | propagating skin state to context to speed up template resolution, \
                   prepending style identifier to SKIN variable to be able to switch \
@@ -480,4 +492,4 @@ returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin 
 |  Feedback: | TWiki:Plugins/NatSkinPluginDev  |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main/MichaelDaum - 13 Nov 2007 
+-- TWiki:Main/MichaelDaum - 17 Jan 2008 
