@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1197049769" format="1.1" reprev="1.5" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1203093319" format="1.1" version="$Rev$"}%
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -138,8 +138,6 @@ The first matched grouping $1 will be used as the $item to sort the list.
 %STARTINCLUDE%
 <div class="text"><div class="comment">
 This is a first comment.
-This is a first comment.
-This is a first comment.
 </div><div class="posted">
 -- TWiki:Main.MichaelDaum on 22 Aug 2005
 </div></div>
@@ -164,104 +162,13 @@ This is a second comment.
   skip="1"
 }%
 
----+++ MAKEINDEX
+---+++ MAKEINDEX example
 compare with [[http://en.wikipedia.org/wiki/Category:Philosophy_articles_needing_attention][Philosophy articles needing attention]]
 
-%~~ MAKEINDEX{
-~~~   cols="3"
-~~~   "
-~~~   Absolute (philosophy),
-~~~   Accident (philosophy),
-~~~   Actualism,
-~~~   Talk:Adam Weishaupt,
-~~~   Alphabet of human thought,
-~~~   Alterity,
-~~~   Analytic philosophy,
-~~~   Analytic-synthetic distinction,
-~~~   Apologism,
-~~~   Bundle theory,
-~~~   Categories (Stoic),
-~~~   Causal chain,
-~~~   Causality,
-~~~   Coherentism,
-~~~   Conscience,
-~~~   Context principle,
-~~~   Contextualism,
-~~~   Cosmology,
-~~~   De dicto and de re,
-~~~   Dialectical monism,
-~~~   Difference (philosophy),
-~~~   Direct reference theory,
-~~~   Discourse ethics,
-~~~   Dualism,
-~~~   Emergentism,
-~~~   Essence,
-~~~   Ethical naturalism,
-~~~   Exemplification,
-~~~   Existentialism,
-~~~   Fatalism,
-~~~   French materialism,
-~~~   Futilitarianism,
-~~~   Hermeneutics,
-~~~   Hypokeimenon,
-~~~   Identity and change,
-~~~   Idolon tribus,
-~~~   Immanent evaluation,
-~~~   Indeterminacy (Philosophy),
-~~~   Individual,
-~~~   Inherence,
-~~~   Kennisbank Filosofie Nederland,
-~~~   Lazy Reason,
-~~~   Mike Lesser,
-~~~   Libertarianism (metaphysics),
-~~~   Logicism,
-~~~   Mad pain and Martian pain,
-~~~   Materialism,
-~~~   Meaning of life,
-~~~   Metakosmia,
-~~~   Metaphysical naturalism,
-~~~   Milesian school,
-~~~   Mind,
-~~~   Monism,
-~~~   Moral imperative,
-~~~   Multiplicity (philosophy),
-~~~   Mystical philosophy of antiquity,
-~~~   Nature (philosophy),
-~~~   Neomodernism,
-~~~   New England Transcendentalists,
-~~~   Nominalism,
-~~~   Non-archimedean time,
-~~~   Non-rigid designator,
-~~~   Object (philosophy),
-~~~   Ontic,
-~~~   Ontological reductionism,
-~~~   Phenomenology,
-~~~   Philosophical realism,
-~~~   Philosophical skepticism,
-~~~   Philosophy,
-~~~   Pluralism (philosophy),
-~~~   Post-structuralism,
-~~~   Postmodern philosophy,
-~~~   Preferentialism
-~~~   Present (time),
-~~~   Problem of universals,
-~~~   Process philosophy,
-~~~   Rational Animal,
-~~~   Rationalist movement,
-~~~   Relativism,
-~~~   Self (philosophy),
-~~~   Solipsism,
-~~~   Species (metaphysics),
-~~~   Specters of Marx,
-~~~   Substance theory,
-~~~   Talk:The Art of Being Right,
-~~~   Truth-value link,
-~~~   Universal (metaphysics),
-~~~   Utilitarianism,
-~~~   Value judgment,
-~~~   World riddle
-~~~ "
-~~~ format="[[http://en.wikipedia.org/wiki/$item][$item]]"
+%MAKEINDEX{
+  "Absolute (philosophy), Accident (philosophy), Actualism, Talk:Adam Weishaupt, Alphabet of human thought, Alterity, Analytic philosophy, Analytic-synthetic distinction, Apologism, Bundle theory, Categories (Stoic), Causal chain, Causality, Coherentism, Conscience, Context principle, Contextualism, Cosmology, De dicto and de re, Dialectical monism, Difference (philosophy), Direct reference theory, Discourse ethics, Dualism, Emergentism, Essence, Ethical naturalism, Exemplification, Existentialism, Fatalism, French materialism, Futilitarianism, Hermeneutics, Hypokeimenon, Identity and change, Idolon tribus, Immanent evaluation, Indeterminacy (Philosophy), Individual, Inherence, Kennisbank Filosofie Nederland, Lazy Reason, Mike Lesser, Libertarianism (metaphysics), Logicism, Mad pain and Martian pain, Materialism, Meaning of life, Metakosmia, Metaphysical naturalism, Milesian school, Mind, Monism, Moral imperative, Multiplicity (philosophy), Mystical philosophy of antiquity, Nature (philosophy), Neomodernism, New England Transcendentalists, Nominalism, Non-archimedean time, Non-rigid designator, Object (philosophy), Ontic, Ontological reductionism, Phenomenology, Philosophical realism, Philosophical skepticism, Philosophy, Pluralism (philosophy), Post-structuralism, Postmodern philosophy, Preferentialism Present (time), Problem of universals, Process philosophy, Rational Animal, Rationalist movement, Relativism, Self (philosophy), Solipsism, Species (metaphysics), Specters of Marx, Substance theory, Talk:The Art of Being Right, Truth-value link, Universal (metaphysics), Utilitarianism, Value judgment, World riddle" 
+  cols="3"
+  format="[[http://en.wikipedia.org/wiki/$item][$item]]"
 }%
 
 ---++ Plugin Installation Instructions
@@ -277,7 +184,7 @@ compare with [[http://en.wikipedia.org/wiki/Category:Philosophy_articles_needing
 -->
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2005-2007, Michael Daum http://wikiring.de |
+|  Copyright &copy;: | 2005-2008, Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | v1.40 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |

@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2005-2007 Michael Daum http://wikiring.de
+# Copyright (C) 2005-2008 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '1.40';
+$RELEASE = '1.41';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Substitute and extract information from content by using regular expressions';
 

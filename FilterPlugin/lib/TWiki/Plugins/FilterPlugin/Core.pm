@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2005-2007 Michael Daum http://wikiring.de
+# Copyright (C) 2005-2008 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,8 +19,9 @@ package TWiki::Plugins::FilterPlugin::Core;
 use strict;
 
 use vars qw($currentTopic $currentWeb $mixedAlphaNum);
+use POSIX qw(ceil);
 
-sub DEBUG { 0; } # toggle me
+use constant DEBUG => 0; # toggle me
 
 ###############################################################################
 sub init {
@@ -76,10 +77,12 @@ sub handleFilter {
     $theTopic = $2;
   }
   my $theExpand = $params->{expand} || 'on';
-  my $theSeparator = $params->{separator} || '';
+  my $theSeparator = $params->{separator};
   my $theExclude = $params->{exclude} || '';
   my $theSort = $params->{sort} || 'off';
   my $theReverse = $params->{reverse} || '';
+
+  $theSeparator = '' unless defined $theSeparator;
 
   # get the source text
   my $text = "";
@@ -155,7 +158,7 @@ sub handleFilter {
       next if $theExclude && $match =~ /^($theExclude)$/;
       next if $skip-- > 0;
       #writeDebug("match=$match");
-      $result =~ s/$thePattern/$match/gmsi;
+      $result =~ s/$thePattern/$match/msi;
       #writeDebug("($hits) result=$result");
       $hits--;
       last if $theLimit > 0 && $hits <= 0;
@@ -197,10 +200,12 @@ sub handleMakeIndex {
   my $thePattern = $params->{pattern} || '';
   my $theHeader = $params->{header} || '';
   my $theFooter = $params->{footer} || '';
+  my $theGroup = $params->{group};
 
   # sanitize params
   $theSort = ($theSort eq 'on')?1:0;
   $theUnique = ($theUnique eq 'on')?1:0;
+  $theGroup = " <h3>\$group</h3>\n" unless defined $theGroup;
 
   my $maxCols = $theCols;
   $maxCols =~ s/[^\d]//go;
@@ -219,13 +224,23 @@ sub handleMakeIndex {
   foreach my $item (split(/$theSplit/, $theList)) {
     next if $theExclude && $item =~ /^($theExclude)$/;
 
+    $item =~ s/<nop>//go;
     $item =~ s/^\s+//go;
     $item =~ s/\s+$//go;
     next unless $item;
 
+    writeDebug("item='$item'");
+
     if ($theUnique) {
       next if $seen{$item};
       $seen{$item} = 1;
+    }
+
+    my $group = '';
+    if ($item =~ /^\((.*?)\)(.*)$/) {
+      $group = $1;
+    } else {
+      $group = substr($item, 0, 1);
     }
 
     my $itemFormat = $theFormat;
@@ -236,16 +251,26 @@ sub handleMakeIndex {
       my $arg4 = $4 || '';
       my $arg5 = $5 || '';
       my $arg6 = $6 || '';
+      my $arg7 = $7 || '';
+      my $arg8 = $8 || '';
+      my $arg9 = $9 || '';
+      my $arg10 = $10 || '';
       $item = $arg1 if $arg1;
+      $itemFormat =~ s/\$10/$arg10/g;
       $itemFormat =~ s/\$1/$arg1/g;
       $itemFormat =~ s/\$2/$arg2/g;
       $itemFormat =~ s/\$3/$arg3/g;
       $itemFormat =~ s/\$4/$arg4/g;
       $itemFormat =~ s/\$5/$arg5/g;
       $itemFormat =~ s/\$6/$arg6/g;
+      $itemFormat =~ s/\$7/$arg7/g;
+      $itemFormat =~ s/\$8/$arg8/g;
+      $itemFormat =~ s/\$9/$arg9/g;
     }
+
     my %descriptor = (
       item=>$item,
+      group=>$group,
       format=>$itemFormat,
     );
     push @theList, \%descriptor;
@@ -260,32 +285,20 @@ sub handleMakeIndex {
 
   my $result = "<div class='fltMakeIndexWrapper'><table>\n<tr>\n";
 
-  # count number of different first letters
-  my $nrGroups = 0;
-  my $groupLetter = '';
-  foreach my $descriptor (@theList) {
-    my $item = $$descriptor{item};
-    my $firstLetter = substr($item, 0, 1);
-    if ($groupLetter ne $firstLetter) {
-      $nrGroups++;
-      $groupLetter = $firstLetter;
-    }
-  }
-  $groupLetter = ''; # reset
 
-  # - group letters count 2 rows 
   # - a col should at least contain a single group letter and one additional row 
-  my $colSize = int(($listSize + $nrGroups*2 + 0.5) / $maxCols) + 3;
+  my $colSize = ceil($listSize / $maxCols);
+  writeDebug("maxCols=$maxCols, colSize=$colSize, listSize=$listSize");
+
   my $listIndex = 0;
   my $insideList = 0;
   my $itemIndex = 0;
-
-  writeDebug("maxCols=$maxCols, colSize=$colSize, listSize=$listSize");
+  my $group = '';
 
   foreach my $colIndex (1..$maxCols) {
     $result .= "  <td valign='top'>\n";
 
-    writeDebug("new col");
+    #writeDebug("new col");
     my $rowIndex = 1;
     while (1) {
       my $descriptor = $theList[$listIndex];
@@ -293,28 +306,40 @@ sub handleMakeIndex {
       my $item = $$descriptor{item};
       writeDebug("listIndex=$listIndex, itemIndex=$itemIndex, colIndex=$colIndex, rowIndex=$rowIndex, item=$item, format=$format");
 
-      # construct group letter
-      my $firstLetter = substr($item, 0,1);
-      if ($groupLetter ne $firstLetter || $rowIndex == 1) {
-        $itemIndex += 2;
-        last if $itemIndex % $colSize < 2 && $colIndex < $maxCols; # prevent schusterjunge
+      # construct group format
+      my $thisGroup = $$descriptor{group};
+      my $cont = '';
+      if ($group ne $thisGroup || $rowIndex == 1) {
+        #last if $itemIndex % $colSize < 2 && $colIndex < $maxCols; # prevent schusterjunge
 
-        if ($firstLetter eq $groupLetter && $rowIndex == 1) {
-          $firstLetter .= ' <span>(cont.)</span>';
+        if ($thisGroup eq $group && $rowIndex == 1) {
+          $cont = " <span class='fltCont'>(cont.)</span>";
         } else {
-          $groupLetter = $firstLetter;
+          $group = $thisGroup;
         }
 
         if ($insideList) {
           $result .= "</ul>\n";
           $insideList = 0;
         }
-        $result .= "  <h3>$firstLetter</h3>\n";
+        my $groupFormat = $theGroup;
+        expandVariables($groupFormat,
+          group=>$group,
+          cont=>$cont,
+          index=>$listIndex+1,
+          count=>$listSize,
+          col=>$colIndex,
+          row=>$rowIndex,
+          item=>$item,
+        );
+        $result .= $groupFormat;
       }
 
       # construct line
       my $text = "  <li>$format</li>\n";
       expandVariables($text,
+        group=>$group,
+        cont=>'',
         index=>$listIndex+1,
         count=>$listSize,
         col=>$colIndex,
@@ -347,24 +372,26 @@ sub handleMakeIndex {
 
   expandVariables($theHeader, count=>$listSize);
   expandVariables($theFooter, count=>$listSize);
+
+  $result = &TWiki::Func::expandCommonVariables($theHeader.$result.$theFooter, $theTopic, $theWeb);
   #writeDebug("result=$result");
 
-  return $theHeader.$result.$theFooter;
+  return $result;
 }
 
 ###############################################################################
 sub handleFormatList {
   my ($session, $params, $theTopic, $theWeb) = @_;
   
-  #writeDebug("handleFormatList()");
+  writeDebug("handleFormatList(".$params->stringify().")");
 
   my $theList = $params->{_DEFAULT} || $params->{list} || '';
-  my $thePattern = $params->{pattern} || '\s*(.*)\s*';
+  my $thePattern = $params->{pattern} || '^\s*(.*?)\s*$';
   my $theFormat = $params->{format} || '$1';
   my $theHeader = $params->{header} || '';
   my $theFooter = $params->{footer} || '';
   my $theSplit = $params->{split} || '[,\s]+';
-  my $theSeparator = $params->{separator} || ', ';
+  my $theSeparator = $params->{separator};
   my $theLimit = $params->{limit} || -1; 
   my $theSkip = $params->{skip} || 0; 
   my $theSort = $params->{sort} || 'off';
@@ -372,26 +399,28 @@ sub handleFormatList {
   my $theExclude = $params->{exclude} || '';
   my $theReverse = $params->{reverse} || '';
 
+  $theSeparator = ', ' unless defined $theSeparator;
+
   $theList = &TWiki::Func::expandCommonVariables($theList, $theTopic, $theWeb)
     if expandVariables($theList);
 
-  #writeDebug("theList='$theList'");
-  #writeDebug("thePattern='$thePattern'");
-  #writeDebug("theFormat='$theFormat'");
-  #writeDebug("theSplit='$theSplit'");
-  #writeDebug("theSeparator='$theSeparator'");
-  #writeDebug("theLimit='$theLimit'");
-  #writeDebug("theSkip='$theSkip'");
-  #writeDebug("theSort='$theSort'");
-  #writeDebug("theUnique='$theUnique'");
-  #writeDebug("theExclude='$theExclude'");
+  writeDebug("theList='$theList'");
+  writeDebug("thePattern='$thePattern'");
+  writeDebug("theFormat='$theFormat'");
+  writeDebug("theSplit='$theSplit'");
+  writeDebug("theSeparator='$theSeparator'");
+  writeDebug("theLimit='$theLimit'");
+  writeDebug("theSkip='$theSkip'");
+  writeDebug("theSort='$theSort'");
+  writeDebug("theUnique='$theUnique'");
+  writeDebug("theExclude='$theExclude'");
 
   my %seen = ();
   my @result;
   my $count = 0;
   my $skip = $theSkip;
   foreach my $item (split(/$theSplit/, $theList)) {
-    #writeDebug("found '$item'");
+    writeDebug("found '$item'");
     next if $theExclude && $item =~ /^($theExclude)$/;
     next if $item =~ /^$/; # skip empty elements
     my $arg1 = '';
@@ -411,19 +440,19 @@ sub handleFormatList {
       next;
     }
     my $line = $theFormat;
-    #writeDebug("arg1=$arg1") if $arg1;
-    #writeDebug("arg2=$arg2") if $arg2;
-    #writeDebug("arg3=$arg3") if $arg3;
-    #writeDebug("arg4=$arg4") if $arg4;
-    #writeDebug("arg5=$arg5") if $arg5;
-    #writeDebug("arg6=$arg6") if $arg6;
+    writeDebug("arg1=$arg1") if $arg1;
+    writeDebug("arg2=$arg2") if $arg2;
+    writeDebug("arg3=$arg3") if $arg3;
+    writeDebug("arg4=$arg4") if $arg4;
+    writeDebug("arg5=$arg5") if $arg5;
+    writeDebug("arg6=$arg6") if $arg6;
     $line =~ s/\$1/$arg1/g;
     $line =~ s/\$2/$arg2/g;
     $line =~ s/\$3/$arg3/g;
     $line =~ s/\$4/$arg4/g;
     $line =~ s/\$5/$arg5/g;
     $line =~ s/\$6/$arg6/g;
-    #writeDebug("after susbst '$line'");
+    writeDebug("after susbst '$line'");
     if ($theUnique eq 'on') {
       next if $seen{$line};
       $seen{$line} = 1;
@@ -436,7 +465,7 @@ sub handleFormatList {
       last if $theLimit - $count == 0;
     }
   }
-  #writeDebug("count=$count");
+  writeDebug("count=$count");
   return '' if $count == 0;
 
   if ($theSort ne 'off') {
@@ -453,9 +482,7 @@ sub handleFormatList {
   $result = &TWiki::Func::expandCommonVariables($result, $theTopic, $theWeb)
     if expandVariables($result);
 
-  $result =~ s/\s+$//go; # SMELL what the hell: where do the linefeeds come from
-
-  #writeDebug("result=$result");
+  writeDebug("result=$result");
 
   return $result;
 }
