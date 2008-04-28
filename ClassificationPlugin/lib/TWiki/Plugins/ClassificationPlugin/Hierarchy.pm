@@ -19,7 +19,7 @@ use TWiki::Plugins::DBCachePlugin::Core;
 use TWiki::Plugins::ClassificationPlugin::Category;
 use Storable;
 
-use constant OBJECTVERSION => 0.42;
+use constant OBJECTVERSION => 0.43;
 use constant DEBUG => 0; # toggle me
 
 ###############################################################################
@@ -63,10 +63,10 @@ sub new {
   }
 
   if ($this && $this->{_version} == OBJECTVERSION) {
-    writeDebug("restored hierarchy object (v$this->{_version}) from $cacheFile");
+    #writeDebug("restored hierarchy object (v$this->{_version}) from $cacheFile");
     return $this;
   } else {
-    writeDebug("creating new object");
+    #writeDebug("creating new object");
   }
 
   $this = {
@@ -99,7 +99,7 @@ sub finish {
   }
 
   if ($gotUpdate) {
-    writeDebug("saving hierarchy");
+    #writeDebug("saving hierarchy");
     my $cacheFile = getCacheFile($this->{web});
     Storable::lock_store($this, $cacheFile);
   }
@@ -111,7 +111,7 @@ sub invalidate {
   my $this = shift;
 
   my $cacheFile = getCacheFile($this->{web});
-  writeDebug("invalidating hierarchy in web $this->{web}");
+  #writeDebug("invalidating hierarchy in web $this->{web}");
   unlink $cacheFile;
 }
 
@@ -172,10 +172,10 @@ sub init {
 
     } else {
       # process all categories of this topic and add the topic to the category
-      writeDebug("found categorized topic $topicName");
+      #writeDebug("found categorized topic $topicName");
       if ($cats) {
         foreach my $name (keys %$cats) {
-          writeDebug("adding it to category $name");
+          #writeDebug("adding it to category $name");
           my $cat = $this->getCategory($name);
           $cat = $this->createCategory($name) unless $cat;
           $cat->addTopic($topicName);
@@ -186,7 +186,7 @@ sub init {
     }
   }
 
-  writeDebug("checking for default categories");
+  #writeDebug("checking for default categories");
   $this->createCategory('TopCategory', title=>'TOP')
     unless defined $this->getCategory('TopCategory'); ; # every hierarchy has one top node
 
@@ -198,8 +198,9 @@ sub init {
     $cat->init();
   }
 
-  # compute distances
-  $this->computeDistance();
+  # reset distances, delay computeDistance til we need it
+  undef $this->{_distance};
+  $this->{gotUpdate} = 1;
 
   if (0) {
     foreach my $cat ($this->getCategories()) {
@@ -219,7 +220,9 @@ sub _printDistanceMatrix {
 
   my ($this, $distance) = @_;
 
-  $distance ||= $this->{_distance};
+  unless ($distance) {
+    $distance = $this->{_distance} || $this->computeDistance();
+  }
 
   foreach my $catName1 (sort $this->getCategoryNames()) {
     my $cat1 = $this->{categories}{$catName1};
@@ -230,7 +233,7 @@ sub _printDistanceMatrix {
       my $distance =  $$distance[$catId1][$catId2];
       next unless $distance;
       my ($min, $max) = @$distance;
-      writeDebug("distance($catName1/$catId1, $catName2/$catId2) = $min,$max");
+      #writeDebug("distance($catName1/$catId1, $catName2/$catId2) = $min,$max");
     }
   }
 }
@@ -241,17 +244,16 @@ sub _printDistanceMatrix {
 sub computeDistance {
   my $this = shift;
 
-  writeDebug("start computeDistance");
+  writeDebug("called computeDistance()");
 
   # init matrix
   my @distance;
   my $bottomCategory = $this->getCategory('BottomCategory');
   my $bottomId = $bottomCategory->{id};
 
-  my %seen = ();
+
   for my $cat ($this->getCategories()) {
     my $id = $cat->{id};
-    $seen{$id} = $cat->{name};
     @{$distance[$id][$id]} = (0,0); # diagonal
 
     my @children = $cat->getChildren();
@@ -261,7 +263,7 @@ sub computeDistance {
       }
     } else {
       unless ($id == $bottomId) { # bottom
-        @{$distance[$id][$bottomId]} = (1, 1); # leave nodes
+        @{$distance[$id][$bottomId]} = (1, 1); # leaf nodes
       }
     }
   }
@@ -269,8 +271,7 @@ sub computeDistance {
   # floyd-warshall algorithm for transitive closure
   # used to computing min- and max distances, reused in
   # subsumption and partof relations
-  my $maxId = $this->{idCounter};
-  #writeDebug("maxId=$maxId");
+  my $maxId = $this->{idCounter}-1;
   foreach my $catIId (0..$maxId) {
 
     foreach my $catJId (0..$maxId) {
@@ -279,7 +280,7 @@ sub computeDistance {
       my $distIJ = $distance[$catIId][$catJId];
 
       foreach my $catKId (0..$maxId) {
-        next if $catKId == $catIId; # skip current row
+        next if $catKId == $catIId || $catKId == $catJId; # skip current row
 
         my $distIK = $distance[$catIId][$catKId];
         next unless $distIK;
@@ -292,6 +293,7 @@ sub computeDistance {
 
         if (!$distIJ) {
           @$distIJ = ($minSum, $maxSum);
+          $distance[$catIId][$catJId] = $distIJ;
         } else {
 
           $$distIJ[0] = $minSum if $$distIJ[0] > $minSum;
@@ -317,7 +319,9 @@ sub computeDistance {
   $this->{_distance} = \@distance;
   $this->{gotUpdate} = 1;
 
-  writeDebug("stop computeDistance");
+  #writeDebug("done computeDistance");
+  
+  return \@distance;
 }
 
 ################################################################################
@@ -373,10 +377,11 @@ sub distance {
   }
 
   # gather the min and max distances between the two category sets
+  my $distance = $this->{_distance} || $this->computeDistance();
   my ($min, $max);
   foreach my $id1 (values %catSet1) {
     foreach my $id2 (values %catSet2) {
-      my $dist = $this->{_distance}[$id1][$id2];
+      my $dist = $$distance[$id1][$id2];
       next unless $dist;
       $min = abs($dist->[0]) if !defined($min) || abs($min) > abs($dist->[0]);
       $max = abs($dist->[1]) if !defined($max) || abs($max) < abs($dist->[1]);
@@ -419,6 +424,7 @@ sub catDistance {
     $id2 = $catObj->{id};
   }
 
+  $this->computeDistance() unless $this->{_distance};
   return $this->{_distance}[$id1][$id2];
 }
 
@@ -426,7 +432,7 @@ sub catDistance {
 sub computeCoocurrence {
   my $this = shift;
 
-  writeDebug("called computeCooccurrence()");
+  #writeDebug("called computeCooccurrence()");
 
   my $coocc = {};
   my $db = TWiki::Plugins::DBCachePlugin::Core::getDB($this->{web});
@@ -483,7 +489,7 @@ sub computeCoocurrence {
   $this->{_coOccurrence} = $coocc;
   $this->{gotUpdate} = 1;
 
-  writeDebug("done computeCooccurrence()");
+  #writeDebug("done computeCooccurrence()");
 
   return $coocc;
 }
@@ -896,7 +902,6 @@ sub toHTML {
 
   #writeDebug("result=$result");
   #writeDebug("done toHTML");
-
   return $header.$result.$footer;
 }
 

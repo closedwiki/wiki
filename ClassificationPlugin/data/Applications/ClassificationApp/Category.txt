@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1198968754" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1205883674" format="1.1" reprev="1.29" version="$Rev$"}%
 %META:TOPICPARENT{name="TopicType"}%
 ---+!! %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -19,7 +19,7 @@ See also: See CategorizedTopic, ClassifiedTopic, TaggedTopic, CategoryTemplate
 %ENDSECTION{name="documentation" type="section"}%
 
 ---++ Installation
-%DBCALL{"Applications.RenderTopicInstaller" TEXT="Install '%TOPIC%' TopicType in" TYPE="TopicStub, TopicType, AdminTool"}%
+%DBCALL{"Applications.RenderTopicInstaller" TEXT="Install '%TOPIC%' TopicType in" TYPE="TopicType, TopicStub, AdminTool"}%
 
 %STARTINCLUDE%
 ---++ Create a new category
@@ -34,7 +34,7 @@ See also: See CategorizedTopic, ClassifiedTopic, TaggedTopic, CategoryTemplate
 <input type="hidden" name="action" value="form" />
 <input type="hidden" name="TopicType" value="Category, CategorizedTopic" />
 <input type="hidden" name="topicparent" value="%BASEWEB%.%BASETOPIC%" />
-<input type="hidden" name="redirectto" value="%BASEWEB%.%BASETOPIC%" />
+<input type="hidden" name="redirectto" value="%SCRIPTURL{"view"}%/%BASEWEB%/%BASETOPIC%?refresh=on" />
 <table>
 <tr>
   <th class="twikiFirstCol">Title:</th>
@@ -53,7 +53,8 @@ See also: See CategorizedTopic, ClassifiedTopic, TaggedTopic, CategoryTemplate
   <td>
 %~~ DBCALL{"Applications.ClassificationApp.RenderEditCategoryBrowser" 
 ~~~   NAME="Category" 
-~~~   VALUE="%IFDEFINED{"%BASETOPIC%" as="Category" then="TopCategory" else="$test"}%"
+~~~   VALUE="%IFDEFINED{"%VALUE%" then="%VALUE%" else="TopCategory"}%"
+~~~   TOP="%IFDEFINED{"%TOP%" then="%TOP%" else="TopCategory"}%"
 ~~~   BUTTONS="off"
 ~~~ }%
   </td>
@@ -79,10 +80,10 @@ See also: See CategorizedTopic, ClassifiedTopic, TaggedTopic, CategoryTemplate
 ~~~       top="TopCategory"
 ~~~       exclude="TopCategory"
 ~~~       depth="2"
-~~~       format="$name;$web;$title;$summary;$leafs$n"
+~~~       format="$title;$topic;$web;$summary;$leafs$n"
 ~~~     }%
 *~~   "
-~~~   cols="3"
+~~~   cols="%IFDEFINED{"%CLASSIFICATIONPLUGIN_NRCOLS%" then="$test" else="3"}%"
 ~~~   header="<h2>Top categories</h2>
 ~~~     There 
 ~~~     $percntIFDEFINED{\"$count\" as=\"1\" 
@@ -91,9 +92,10 @@ See also: See CategorizedTopic, ClassifiedTopic, TaggedTopic, CategoryTemplate
 ~~~     }$percnt in this web."
 ~~~   split="\n"
 ~~~   pattern="(.*);(.*);(.*);(.*);(.*)"
-~~~   format="[[$2.$1][$3]]
+~~~   unique="on"
+~~~   format="[[$3.$2][$1]]
 ~~~     $percntIFDEFINED{\"$5\" then=\"&nbsp;($5)\"}$percnt
-*~~     &nbsp;$percntREDDOT{$2.$1}$percnt
+*~~     &nbsp;$percntREDDOT{$3.$2}$percnt
 ~~~     <div class='clsTopicInfo'>$4</div>
 ~~~  "
 ~~~ }%
@@ -105,10 +107,10 @@ See also: See CategorizedTopic, ClassifiedTopic, TaggedTopic, CategoryTemplate
 ~~~       top="TopCategory"
 ~~~       exclude="TopCategory"
 ~~~       mindepth="1"
-~~~       format="$name;$web;$title;$summary;$leafs$n$children"
+~~~       format="$title;$topic;$web;$summary;$leafs$n$children"
 ~~~     }%
 *~~   "
-~~~   cols="3"
+~~~   cols="%IFDEFINED{"%CLASSIFICATIONPLUGIN_NRCOLS%" then="$test" else="3"}%"
 ~~~   header="<h2>List of all child categories</h2>
 ~~~     There 
 ~~~     $percntIFDEFINED{\"$count\" as=\"1\" 
@@ -116,10 +118,11 @@ See also: See CategorizedTopic, ClassifiedTopic, TaggedTopic, CategoryTemplate
 ~~~       else=\" are $count child categories \"
 ~~~     }$percnt in this web."
 ~~~   split="\n"
+~~~   unique="on"
 ~~~   pattern="(.*);(.*);(.*);(.*);(.*)"
-~~~   format="[[$2.$1][$3]]
+~~~   format="[[$3.$2][$1]]
 ~~~     $percntIFDEFINED{\"$5\" then=\"&nbsp;($5)\"}$percnt
-*~~     &nbsp;$percntREDDOT{$2.$1}$percnt
+*~~     &nbsp;$percntREDDOT{$3.$2}$percnt
 ~~~     <div class='clsTopicInfo'>$4</div>
 ~~~  "
 ~~~ }%

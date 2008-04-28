@@ -4,10 +4,12 @@ data/Applications/ClassificationApp/ApplicationLicense.txt 0644
 data/Applications/ClassificationApp/ApplicationTopic.txt 0644
 data/Applications/ClassificationApp/AuthorTool.txt 0644
 data/Applications/ClassificationApp/CascadingStyleSheet.txt 0644
+data/Applications/ClassificationApp/CategorizedTopicRenderIndexItem.txt 0644
 data/Applications/ClassificationApp/CategorizedTopicTemplate.txt 0644
 data/Applications/ClassificationApp/CategorizedTopicViewTemplate.txt 0644
 data/Applications/ClassificationApp/CategorizedTopic.txt 0644
 data/Applications/ClassificationApp/CategoryBrowser.txt 0644
+data/Applications/ClassificationApp/CategoryRenderIndexItem.txt 0644
 data/Applications/ClassificationApp/CategoryTemplate.txt 0644
 data/Applications/ClassificationApp/CategoryViewTemplate.txt 0644
 data/Applications/ClassificationApp/Category.txt 0644
@@ -111,11 +113,10 @@ lib/TWiki/Form/Cat.pm 0644
 lib/TWiki/Plugins/ClassificationPlugin/Access.pm 0644
 lib/TWiki/Plugins/ClassificationPlugin/Category.pm 0644
 lib/TWiki/Plugins/ClassificationPlugin/Core.pm 0644
-lib/TWiki/Plugins/ClassificationPlugin/DEPENDENCIES 0644
 lib/TWiki/Plugins/ClassificationPlugin/Hierarchy.pm 0644
-lib/TWiki/Plugins/ClassificationPlugin/MANIFEST 0644
 lib/TWiki/Plugins/ClassificationPlugin/build.pl 0644
 lib/TWiki/Plugins/ClassificationPlugin.pm 0644
+pub/TWiki/ClassificationPlugin/FormDotPm-4_1_2.patch 0644
 pub/TWiki/ClassificationPlugin/aqua-pill-18.gif 0644
 pub/TWiki/ClassificationPlugin/classification.js 0644
 pub/TWiki/ClassificationPlugin/jquery.tagselector.js 0644

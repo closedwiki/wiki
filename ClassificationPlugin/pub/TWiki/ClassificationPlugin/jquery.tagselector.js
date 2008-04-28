@@ -271,6 +271,7 @@
       // add a tag to the selection ******************************************
       function setTags(tags, doSort) {
         //writeDebug("called setTags("+tags+")");
+
         clearSelection();
         var values;
         if (typeof(tags) == 'object') {
@@ -278,8 +279,11 @@
         } else {
           values = tags.split(/[, ]+/);
         }
+        if (!values.length) {
+          return;
+        }
         var filter = "#"+values.join(",#");
-        //writeDebug("filter="+filter);
+        writeDebug("filter="+filter);
         $(filter, $tagCloud).addClass("current");
         if (doSort) {
           values = values.sort();
@@ -312,7 +316,6 @@
         });
 
         initialTags = new Array();
-
         // tag cloud links
         $("a", $tagCloud).click(function() {
           this.blur(); 
@@ -321,6 +324,7 @@
           var term = $(this).attr('id');
           initialTags.push(term);
         });
+
         resetSelection();
       }
 

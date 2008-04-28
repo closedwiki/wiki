@@ -1,8 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1195762468" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1204299508" format="1.1" reprev="1.7" version="$Rev$"}%
 ---+!! <nop>%WEB% Web Preferences
 
 %TOC%
-<br clear="all" />
 
 ---+++ Naming
 Text to be displayed on the sitemap and in the headerbar describing this web
@@ -27,7 +26,7 @@ Flag to enable/disable listing this web on the sitemap:
    * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
 
 ---+++ Application Pointer
-<nop>DBCachePlugin settings registering the WebDB
+<nop>DBCachePlugin settings registering the !WebDB
 implementation for this web (don't change):
    * Set WEBDB = TWiki::Plugins::DBCachePlugin::WebDB
    * Set CLASSIFICATIONPLUGIN_AUTOREPARENT  = 1
@@ -53,5 +52,6 @@ __Related Topics__:
 
 %META:FORM{name="Applications.ApplicationTopic"}%
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="AdminTool"}%
+%META:FIELD{name="TopicTitle" attributes="" title="<nop>TopicTitle" value=""}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="Preferences of the <nop>%25WEB%25 web"}%
-%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TWikiWorkbench"}%
+%META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="ClassificationApp"}%

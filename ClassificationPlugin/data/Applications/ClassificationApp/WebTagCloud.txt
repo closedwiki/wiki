@@ -5,7 +5,7 @@
 See also: RenderWebTagCloud
 
 ---++ Installation
-%DBCALL{"Applications.RenderTopicInstaller"}%
+%DBCALL{"Applications.RenderTopicInstaller" TYPE="TopicStub"}%
 
 ---++ Implementation
 %STARTINCLUDE%<!-- -->

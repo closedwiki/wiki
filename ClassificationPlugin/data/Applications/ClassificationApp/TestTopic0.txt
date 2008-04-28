@@ -1,16 +1,17 @@
-%META:TOPICINFO{author="TWikiContributor" date="1196775404" format="1.1" version="$Rev$"}%
-%META:TOPICPARENT{name="TestCategory13"}%
+%META:TOPICINFO{author="TWikiContributor" date="1204297357" format="1.1" reprev="1.9" version="$Rev$"}%
+%META:TOPICPARENT{name="TestCategory11"}%
 <!--
    * Set VIEW_TEMPLATE = Applications.ClassificationApp.ClassifiedTopicView
 -->
 
 
-   * DISTANCE('TOP','BOTTOM') = %DISTANCE{from="TOP" to="BOTTOM"}%
+   * DISTANCE{from="TopCategory" to="BottomCategory" format="min=$min, max=$max"} = %DISTANCE{from="TopCategory" to="BottomCategory" format="min=$min, max=$max"}%
    * DISTANCE{from="%TOPIC%" to="TestCategory13"}: %DISTANCE{from="%TOPIC%" to="TestCategory13"}%
    * DISTANCE{from="%TOPIC%" to="TestCategory3"}: %DISTANCE{from="%TOPIC%" to="TestCategory3"}%
 
 %META:FORM{name="Applications.ClassificationApp.ClassifiedTopic"}%
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="ClassifiedTopic, TaggedTopic, CategorizedTopic"}%
+%META:FIELD{name="TopicTitle" attributes="" title="<nop>TopicTitle" value=""}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="foo bar"}%
 %META:FIELD{name="Tag" attributes="" title="Tag" value="client, fat, foo, sql"}%
-%META:FIELD{name="Category" attributes="" title="Category" value="TestCategory13"}%
+%META:FIELD{name="Category" attributes="" title="Category" value="TestCategory13, TestCategory11"}%

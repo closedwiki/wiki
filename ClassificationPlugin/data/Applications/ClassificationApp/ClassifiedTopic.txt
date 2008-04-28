@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1202208130" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1207038788" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopicType"}%
 ---+!! %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -14,14 +14,14 @@ See also: ClassifiedTopicTemplate, ClassifiedTopicViewTemplate
 %ENDSECTION{name="documentation" type="section"}%
 
 ---++ Installation
-%DBCALL{"Applications.RenderTopicInstaller" TEXT="Install '%TOPIC%' TopicType in" TYPE="TopicType" PARENT="TopicType"}%
+%DBCALL{"Applications.RenderTopicInstaller" TEXT="Install '%TOPIC%' TopicType in" TYPE="TopicType, TopicStub" PARENT="TopicType"}%
 
-%STARTINCLUDE%
+%STARTINCLUDE%<!-- classified topic -->
 ---++ Create a new topic
 %STARTSECTION{"factory"}%<!-- factory -->
 <div class="twikiPageForm">
 <form action="%SCRIPTURLPATH{"edit"}%/%BASEWEB%/" method="post">
-<input type="hidden" name="topicparent" value="%BASEWEB%.%BASETOPIC%" />
+<input type="hidden" name="topicparent" value="%BASEWEB%.WebHome" />
 <input type="hidden" name="web" value="%BASEWEB%" />
 <input type="hidden" name="onlynewtopic" value="on" />
 <input type="hidden" name="formtemplate" value="Applications.ClassificationApp.ClassifiedTopic" />
@@ -39,14 +39,15 @@ See also: ClassifiedTopicTemplate, ClassifiedTopicViewTemplate
   <th class="twikiFirstCol">&nbsp;</th>
   <td style="padding-top:1em">
     <input type="submit" class="twikiSubmit natOkButton" value="Submit" />
-    <input type="reset" class="twikiButton natCancelButton" value="Reset" />
+    <input type="reset" class="twikiButton natAltButton" value="Reset" />
+    <input type="button" class="twikiButton natCancelButton" value="Cancel" onclick="window.location.href='%SCRIPTURLPATH{"view"}%/%BASEWEB%/%HOMETOPIC%';" />
   </td>
 </tr>
 </table>
 </form> 
 </div>
 <!-- //factory -->%ENDSECTION{"factory"}%
-%STOPINCLUDE%
+<!-- //classified topic -->%STOPINCLUDE%
 
 ---++ %TOPIC% form
 | *Name:*| *Type:* | *Size:* | *Values:* | *Tooltip message:* | *Attributes:* |

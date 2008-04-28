@@ -128,3 +128,13 @@
 .fltMakeIndexWrapper table td {
   width:40em;
 }
+
+/* pattern skin tweaks */
+.patternTopic h1 a,
+.patternTopic h2 a,
+.patternTopic h3 a,
+.patternTopic h4 a,
+.patternTopic h5 a,
+.patternTopic h6 a {
+  text-decoration:none;
+}

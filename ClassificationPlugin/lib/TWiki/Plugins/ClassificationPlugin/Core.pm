@@ -15,9 +15,6 @@
 package TWiki::Plugins::ClassificationPlugin::Core;
 
 use strict;
-use TWiki::Plugins::DBCachePlugin::Core;
-use TWiki::Contrib::DBCacheContrib::Search;
-use TWiki::Plugins::ClassificationPlugin::Hierarchy;
 
 use vars qw(%hierarchies $baseWeb $baseTopic);
 
@@ -32,7 +29,7 @@ sub writeDebug {
 sub init {
   ($baseWeb, $baseTopic) = @_;
 
-
+  require TWiki::Contrib::DBCacheContrib::Search;
   TWiki::Contrib::DBCacheContrib::Search::addOperator(
     name=>'SUBSUMES', 
     prec=>4,
@@ -325,8 +322,10 @@ sub handleISA {
   #writeDebug("called handleISA()");
   my $thisWeb = $params->{web} || $baseWeb;
   my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $baseTopic;
-  my $theCategory = $params->{cat} || '';
+  my $theCategory = $params->{cat} || 'TopCategpory';
 
+  return 1 if $theCategory =~ /^TOP|TopCategory$/o;
+  return 0 if $theCategory =~ /^BOTTOM|BottomCategory$/o;
   return 0 unless $theCategory;
 
   ($thisWeb, $thisTopic) =
@@ -519,6 +518,7 @@ sub handleCATINFO {
   my $theFooter = $params->{footer} || '';
   my $thisWeb = $params->{web} || $baseWeb;
   my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $baseTopic;
+  my $theSubsumes = $params->{subsumes} || '';
 
   $theSep = ', ' unless defined $theSep;
 
@@ -528,10 +528,16 @@ sub handleCATINFO {
   my $hierarchy = getHierarchy($thisWeb);
   return '' unless $hierarchy;
 
+  $theSubsumes =~ s/^\s+//go;
+  $theSubsumes =~ s/\s+$//go;
+  my $subsumesCat = $hierarchy->getCategory($theSubsumes);
+
   my $categories;
-  $categories = $hierarchy->getCategoriesOfTopic($thisTopic)
-    unless defined $theCat;
-  $categories->{$theCat} = 1 if defined $theCat;
+  if ($theCat) { # cats mode
+    $categories->{$theCat} = 1;
+  } else { # dogs mode
+    $categories = $hierarchy->getCategoriesOfTopic($thisTopic);
+  }
 
   my @categories = keys %$categories;
   #@categories = grep (!/^(TopCategory|BottomCategory)$/, @categories);
@@ -544,14 +550,34 @@ sub handleCATINFO {
       next;
     }
     my $category = $hierarchy->getCategory($catName);
+
+    # skip catinfo from another branch of the hierarchy
+    next if $subsumesCat && !$hierarchy->subsumes($subsumesCat, $category);
+
     my $line = $theFormat;
     my $parents = '';
-    if ($line =~ /\$parents/) {
+    my $parentsName = '';
+    my $parentsTitle = '';
+    if ($line =~ /\$parents?\b/) {
       my @links = ();
       foreach my $parent ($category->getParents()) {
         push @links, "[[$thisWeb.$parent->{name}][$parent->{title}]]";
       }
       $parents = join(', ', @links);
+    }
+    if ($line =~ /\$parents?name/) {
+      my @names = ();
+      foreach my $parent ($category->getParents()) {
+        push @names, $parent->{name};
+      }
+      $parentsName = join(', ', @names);
+    }
+    if ($line =~ /\$parents?title/) {
+      my @titles = ();
+      foreach my $parent ($category->getParents()) {
+        push @titles, $parent->{title};
+      }
+      $parentsTitle = join(', ', @titles);
     }
     my $isCyclic = 0;
     $isCyclic = $category->isCyclic() if $theFormat =~ /\$cyclic/;
@@ -565,7 +591,9 @@ sub handleCATINFO {
     $line =~ s/\$name/$catName/g;
     $line =~ s/\$title/$title/g;
     $line =~ s/\$summary/$summary/g;
-    $line =~ s/\$parents/$parents/g;
+    $line =~ s/\$parents?name/$parentsName/g;
+    $line =~ s/\$parents?title/$parentsTitle/g;
+    $line =~ s/\$parents?/$parents/g;
     $line =~ s/\$cyclic/$isCyclic/g;
     push @result, $line;
   }
@@ -596,6 +624,7 @@ sub handleTAGINFO {
     TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
 
   # get tags
+  require TWiki::Plugins::DBCachePlugin::Core;
   my $db = TWiki::Plugins::DBCachePlugin::Core::getDB($thisWeb);
   return '' unless $db;
   my $topicObj = $db->fastget($thisTopic);
@@ -670,17 +699,17 @@ sub beforeSaveHandler {
   }
 
   # set the new parent topic
-  $meta->remove('TOPICPARENT');
   if (@allCats) {
     @allCats = sort @allCats;
     my $firstCat = shift @allCats;
     # TODO: check if the firstCat exists and only then set the parent
     # don't autoset to HomeTopic if TopCategory
     $firstCat = $TWiki::cfg{HomeTopic} if $firstCat eq 'TopCategory';
+    $meta->remove('TOPICPARENT');
     $meta->putKeyed('TOPICPARENT', {name=>$firstCat});
 
   } else {
-    $meta->putKeyed('TOPICPARENT', {name=>''});
+    #$meta->putKeyed('TOPICPARENT', {name=>''});
   }
 }
 
@@ -759,6 +788,7 @@ sub renderFormFieldForEditHandler {
 sub getTopicTypes {
   my ($web, $topic) = @_;
 
+  require TWiki::Plugins::DBCachePlugin::Core;
   my $db = TWiki::Plugins::DBCachePlugin::Core::getDB($web);
   return undef unless $db;
 
@@ -787,6 +817,7 @@ sub getHierarchy {
   my $web = shift;
 
   unless (defined $hierarchies{$web}) {
+    require TWiki::Plugins::ClassificationPlugin::Hierarchy;
     $hierarchies{$web} = new TWiki::Plugins::ClassificationPlugin::Hierarchy($web);
   }
 

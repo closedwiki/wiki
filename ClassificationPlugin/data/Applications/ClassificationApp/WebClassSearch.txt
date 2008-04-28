@@ -6,7 +6,7 @@
 See also: RenderWebClassSearch
 
 ---++ Installation
-%DBCALL{"Applications.RenderTopicInstaller"}%
+%DBCALL{"Applications.RenderTopicInstaller" TYPE="TopicStub"}%
 
 ---++ Implementation
 %STARTINCLUDE%<!-- -->

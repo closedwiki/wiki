@@ -4,7 +4,7 @@
 %FORMFIELD{"Summary"}%
 
 ---++ Installation
-%DBCALL{"Applications.RenderTopicInstaller" TEXT="Install '%TOPIC%' in" TYPE="AdminTool"}%
+%DBCALL{"Applications.RenderTopicInstaller" TEXT="Install '%TOPIC%' in" TYPE="AdminTool, TopicStub"}%
 
 %STARTINCLUDE%
 See the list of all [[%BASEWEB%.Categories][Categories]]

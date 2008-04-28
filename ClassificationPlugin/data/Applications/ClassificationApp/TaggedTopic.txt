@@ -14,7 +14,7 @@ See also: ClassifiedTopic, CategorizedTopic, TaggedTopicTemplate, TaggedTopicVie
 %ENDSECTION{name="documentation" type="section"}%
 
 ---++ Installation
-%DBCALL{"Applications.RenderTopicInstaller" TEXT="Install '%TOPIC%' TopicType in" TYPE="TopicType" PARENT="TopicType"}%
+%DBCALL{"Applications.RenderTopicInstaller" TEXT="Install '%TOPIC%' TopicType in" TYPE="TopicType, TopicStub" PARENT="TopicType"}%
 
 %STARTINCLUDE%
 ---+++ Create a new topic 

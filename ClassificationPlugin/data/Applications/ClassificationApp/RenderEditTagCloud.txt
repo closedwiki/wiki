@@ -56,7 +56,7 @@
 ~~~    }$percnt"
 ~~~    buckets="200"
 ~~~    offset="100"
-~~~    separator=" "
+~~~    separator="$n"
 ~~~    warn="off"
 ~~~    group=" <strong>$group</strong> "
 ~~~    format="<span 
