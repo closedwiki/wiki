@@ -19,7 +19,7 @@ See also: %TOPIC%Template
 %ENDSECTION{name="documentation" type="section"}%
 
 ---++ Installation
-%DBCALL{"RenderTopicInstaller" TEXT="Install '%TOPIC%' TopicType in" TYPE="TopicStub,TopicType"}%
+%DBCALL{"RenderTopicInstaller" TEXT="Install '%TOPIC%' TopicType in" TYPE="TopicStub, TopicType" PARENT="TopicType"}%
 
 ---++ Factory
 %STARTINCLUDE%

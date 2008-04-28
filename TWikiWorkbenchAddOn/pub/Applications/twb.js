@@ -1,6 +1,9 @@
 function wikify(sourceId, targetId, suffix) {
   var source = document.getElementById(sourceId);
   var target = document.getElementById(targetId);
+  if (!source || !target) {
+    return;
+  }
   var value = source.value;
   value = value.replace(/ä/g, "ae");
   value = value.replace(/ö/g, "oe");

@@ -10,7 +10,7 @@ See also: TWikiApplicationTemplate
 %ENDSECTION{"documentation"}%
 
 ---++ Installation
-%DBCALL{"RenderTopicInstaller" TEXT="Install '%TOPIC%' TopicType in" TYPE="TopicType" PARENT="TopicType"}%
+%DBCALL{"RenderTopicInstaller" TEXT="Install '%TOPIC%' TopicType in" TYPE="TopicType, TopicStub" PARENT="TopicType"}%
 
 ---++ Factory
 %STARTINCLUDE%

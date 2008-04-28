@@ -15,7 +15,7 @@ See also: %TOPIC%Template
 %ENDSECTION{"documentation"}%
 
 ---++ Installation
-%DBCALL{"Applications.RenderTopicInstaller" TEXT="Install '%TOPIC%' TopicType in"}%
+%DBCALL{"Applications.RenderTopicInstaller" TEXT="Install '%TOPIC%' TopicType in" TYPE="TopicType, TopicStub" PARENT="TopicType"}%
 
 ---++ Factory
 %STARTINCLUDE%

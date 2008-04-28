@@ -9,7 +9,7 @@ A frontpage is the first page a visitor get to see when he enters a dedicated ar
 is to ease the access to any furthe content. By definition all WebHome topics are FrontPages.
 
 ---++ Installation
-%DBCALL{"RenderTopicInstaller" TEXT="Install '%TOPIC%' TopicType in" TYPE="TopicType" PARENT="TopicType"}%
+%DBCALL{"RenderTopicInstaller" TEXT="Install '%TOPIC%' TopicType in" TYPE="TopicType, TopicStub" PARENT="TopicType"}%
 
 ---++ Factory
 %STARTINCLUDE%

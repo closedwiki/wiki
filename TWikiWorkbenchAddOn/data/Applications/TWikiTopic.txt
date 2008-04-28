@@ -26,7 +26,7 @@ See also: WebTopicEditTemplate
 %ENDSECTION{"documentation"}%
 
 ---++ Installation
-%DBCALL{"RenderTopicInstaller" PARENT="TopicType"}%
+%DBCALL{"RenderTopicInstaller" PARENT="TopicType, TopicStub" PARENT="TopicType"}%
 
 ---++ Factory
 %STARTINCLUDE%
