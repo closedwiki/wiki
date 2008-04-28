@@ -30,16 +30,22 @@ See the Sandbox.JQueryPluginExamples page for a demo of a couple of widgets used
 ---++ Included libraries
    1 jquery v1.2.3
    1 jquery.bgiframe
+   1 jquery.blockUI
+   1 jquery.debug
+   1 jquery.dimensions
    1 jquery.dom 
-   1 jquery.metadata 
    1 jquery.easing
    1 jquery.hoverIntent
    1 jquery.innerfade
+   1 jquery.metadata 
    1 jquery.nifty
    1 jquery.shrinkurls
-   1 jquery.tooltips
+   1 jquery.spinner
+   1 jquery.superfish
+   1 jquery.tabpane
+   1 jquery.tooltip
    1 jquery.treeview
-   1 jquery.blockUI
+
 
 
 ---++ Documentation
