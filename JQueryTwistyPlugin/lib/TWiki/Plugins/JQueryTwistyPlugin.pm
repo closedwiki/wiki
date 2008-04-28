@@ -42,7 +42,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.0';
+$RELEASE = '1.2';
 
 $pluginName = 'JQueryTwistyPlugin';
 
@@ -182,6 +182,10 @@ sub _TWISTYTOGGLE {
 sub _ENDTWISTYTOGGLE {
     my ( $session, $params, $theTopic, $theWeb ) = @_;
     my $mode = shift @modes;
+
+    return "<span class='twikiAlert'>woops, ordering error: got an ENDTWISTY before seeing a TWISTY</span>"
+      unless $mode;
+
     my $modeTag = ($mode) ? '</' . $mode . '>' : '';
     return $modeTag . _wrapInContentHtmlClose($mode);
 }

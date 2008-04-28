@@ -446,11 +446,12 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 ---++ Plugin Info
 
 | Authors: | TWiki:Main.RafaelAlvarez, TWiki:Main.ArthurClemens |
-| Copyright &copy;: | 2005 Rafael Alvarez; 2006, 2007 Arthur Clemens, 2007 Michael Daum |
+| Copyright &copy;: | 2005 Rafael Alvarez; 2006, 2007 Arthur Clemens, 2007-2008 Michael Daum |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
-| Plugin&nbsp;Version: | 1.1  |
+| Plugin&nbsp;Version: | 1.2  |
 | Change&nbsp;History: | <!-- versions below in reverse order -->&nbsp; |
+| 28 Apr 2008 | warn on wrong ordering of TWISTY ... ENDTWISTY |
 | 13 Feb 2008 | minor fixes for jquery-1.2.3 |
 | 15 Nov 2007 | first version forking <nop>TwistyPlugin/<nop>TwistyContrib |
 | Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
