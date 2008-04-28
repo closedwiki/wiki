@@ -17,17 +17,32 @@ package TWiki::Plugins::DBCachePlugin::Core;
 use strict;
 use vars qw( 
   $TranslationToken %webDB %webDBIsModified $wikiWordRegex $webNameRegex
-  $defaultWebNameRegex $linkProtocolPattern
-  $baseWeb $baseTopic
+  $defaultWebNameRegex $linkProtocolPattern $twikiWeb
+  $baseWeb $baseTopic %MON2NUM
 );
 use constant DEBUG => 0; # toggle me
 
 use TWiki::Contrib::DBCacheContrib;
 use TWiki::Contrib::DBCacheContrib::Search;
 use TWiki::Plugins::DBCachePlugin::WebDB;
+use TWiki::Sandbox;
+use Time::Local;
 
 $TranslationToken = "\0"; # from TWiki.pm
 
+%MON2NUM = (
+  Jan => 0,
+  Feb => 1,
+  Mar => 2,
+  Apr => 3,
+  May => 4,
+  Jun => 5,
+  Jul => 6,
+  Aug => 7,
+  Sep => 8,
+  Oct => 9,
+  Nov => 10,
+  Dec => 11);
 
 ###############################################################################
 sub writeDebug {
@@ -41,6 +56,13 @@ sub init {
 
   %webDBIsModified = ();
 
+  my $query = TWiki::Func::getCgiQuery();
+  my $doRefresh = $query->param('refresh') || '';
+  if ($doRefresh eq 'on') {
+    %webDB = ();
+    writeDebug("found refresh=on in urlparam");
+  }
+
   $wikiWordRegex = 
     TWiki::Func::getRegularExpression('wikiWordRegex');
   $webNameRegex = 
@@ -49,6 +71,27 @@ sub init {
     TWiki::Func::getRegularExpression('defaultWebNameRegex');
   $linkProtocolPattern = 
     TWiki::Func::getRegularExpression('linkProtocolPattern');
+  $twikiWeb = TWiki::Func::getTwikiWebname();
+}
+
+###############################################################################
+sub renderWikiWordHandler {
+  my ($theLinkText, $hasExplicitLinkLabel, $theWeb, $theTopic) = @_;
+
+  $theWeb = TWiki::Sandbox::untaintUnchecked($theWeb);# woops why is theWeb tainted
+  return if $hasExplicitLinkLabel;
+  return if $theWeb eq $twikiWeb; # hardcoded exception
+  
+  writeDebug("called renderWikiWordHandler($theLinkText, $theWeb, $theTopic)");
+
+  my $topicTitle = getTopicTitle($theWeb, $theTopic);
+  writeDebug("topicTitle=$topicTitle");
+
+  $theLinkText = $topicTitle if !$topicTitle && $topicTitle ne $theTopic;
+
+  writeDebug("theLinkText = $theLinkText");
+
+  return $theLinkText;
 }
 
 ###############################################################################
@@ -73,27 +116,25 @@ sub handleTOPICTITLE {
   my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $baseTopic;
   my $thisWeb = $params->{web} || $baseWeb;
 
-  ($thisWeb, $thisTopic) = TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
+  return getTopicTitle($thisWeb, $thisTopic);
+}
 
-  my $pageTitle = TWiki::Func::getPreferencesValue("TOPICTITLE");
-  return $pageTitle if $pageTitle;
+###############################################################################
+sub getTopicTitle {
+  my ($theWeb, $theTopic) = @_;
 
-  my $db = getDB($thisWeb);
-  return $thisTopic unless $db;
+  ($theWeb, $theTopic) = TWiki::Func::normalizeWebTopicName($theWeb, $theTopic);
 
-  my $topicObj = $db->fastget($thisTopic);
-  return $thisTopic unless $topicObj;
+  my $db = getDB($theWeb);
+  return $theTopic unless $db;
 
-  my $form = $topicObj->fastget('form');
-  return $thisTopic unless $form;
+  my $topicObj = $db->fastget($theTopic);
+  return $theTopic unless $topicObj;
 
-  my $formObj = $topicObj->fastget($form);
-  return $thisTopic unless $formObj;
+  my $topicTitle = $topicObj->fastget('topictitle');
+  return $topicTitle if $topicTitle;
 
-  my $title = $formObj->fastget('TopicTitle');
-  return $thisTopic unless $title;
-
-  return $title;
+  return $theTopic;
 }
 
 ###############################################################################
@@ -114,7 +155,7 @@ sub handleDBQUERY {
   my $theExclude = $params->{exclude};
   my $theSort = $params->{sort} || $params->{order} || 'name';
   my $theReverse = $params->{reverse} || 'off';
-  my $theSep = $params->{separator} || $params->{sep};
+  my $theSep = $params->{separator};
   my $theLimit = $params->{limit} || '';
   my $theSkip = $params->{skip} || 0;
   my $theHideNull = $params->{hidenull} || 'off';
@@ -123,6 +164,7 @@ sub handleDBQUERY {
   $theRemote = ($theRemote eq 'on')?1:0;
 
   $theFormat = '$topic' unless defined $theFormat;
+  $theSep = $params->{sep} unless defined $theSep;
   $theSep = '$n' unless defined $theSep;
   $theSep = '' if $theSep eq 'none';
 
@@ -148,7 +190,7 @@ sub handleDBQUERY {
   my ($topicNames, $hits, $msg) = $theDB->dbQuery($theSearch, 
     \@topicNames, $theSort, $theReverse, $theInclude, $theExclude);
 
-  return _inlineError($msg) if $msg;
+  return inlineError($msg) if $msg;
 
   $theLimit =~ s/[^\d]//go;
   $theLimit = scalar(@$topicNames) if $theLimit eq '';
@@ -178,13 +220,13 @@ sub handleDBQUERY {
 	$temp/geo;
       $format =~ s/\$expand\((.*?)\)/
         my $temp = $1;
-        $temp = _expandVariables($temp, $topicWeb, $topicName,
+        $temp = expandVariables($temp, $topicWeb, $topicName,
           topic=>$topicName, web=>$topicWeb, index=>$index, count=>$count);
         $temp = $theDB->expandPath($topicObj, $temp);
 	$temp =~ s#\)#${TranslationToken}#g;
 	$temp/geo;
-      $format =~ s/\$formatTime\((.*?)(?:,\s*'([^']*?)')?\)/_formatTime($theDB->expandPath($topicObj, $1), $2)/geo; # single quoted
-      $format = _expandVariables($format, $topicWeb, $topicName,
+      $format =~ s/\$formatTime\((.*?)(?:,\s*'([^']*?)')?\)/formatTime($theDB->expandPath($topicObj, $1), $2)/geo; # single quoted
+      $format = expandVariables($format, $topicWeb, $topicName,
 	topic=>$topicName, web=>$topicWeb, index=>$index, count=>$count);
       $format =~ s/${TranslationToken}/)/go;
       $format = &TWiki::Func::expandCommonVariables($format, $topicName, $topicWeb);
@@ -196,14 +238,106 @@ sub handleDBQUERY {
     }
   }
 
-  $theHeader = _expandVariables($theHeader, $thisWeb, $thisTopic, count=>$count, web=>$thisWeb) if defined $theHeader;
-  $theFooter = _expandVariables($theFooter, $thisWeb, $thisTopic, count=>$count, web=>$thisWeb) if defined $theFooter;
+  $theHeader = expandVariables($theHeader, $thisWeb, $thisTopic, count=>$count, web=>$thisWeb) if defined $theHeader;
+  $theFooter = expandVariables($theFooter, $thisWeb, $thisTopic, count=>$count, web=>$thisWeb) if defined $theFooter;
 
   $text = $theHeader.$text.$theFooter;
 
-  _fixInclude($session, $thisWeb, $text) if $theRemote;
+  fixInclude($session, $thisWeb, $text) if $theRemote;
 
   return $text;
+}
+
+###############################################################################
+# finds the correct topicfunction for this object topic.
+# this is constructed by checking for the existance of a topic derived from
+# the type information of the objec topic.
+sub findTopicMethod {
+  my ($session, $theWeb, $theTopic, $theObject) = @_;
+
+  writeDebug("called findTopicMethod($theWeb, $theTopic, $theObject)");
+
+  return undef unless $theObject;
+
+  my ($thisWeb, $thisObject) = &TWiki::Func::normalizeWebTopicName($theWeb, $theObject);
+
+  #writeDebug("object web=$thisWeb, topic=$thisObject");
+
+  # get form object
+  my $baseDB = getDB($thisWeb);
+
+  #writeDebug("1");
+
+  my $topicObj = $baseDB->fastget($thisObject);
+  return undef unless $topicObj;
+
+  #writeDebug("2");
+
+  my $form = $topicObj->fastget('form');
+  return undef unless $form;
+
+  #writeDebug("3");
+
+  my $formObj = $topicObj->fastget($form);
+  return undef unless $formObj;
+
+  #writeDebug("4");
+
+  # get type information on this object
+  my $topicTypes = $formObj->fastget('TopicType');
+  return undef unless $topicTypes;
+
+  #writeDebug("topicTypes=$topicTypes");
+
+  foreach my $topicType (split(/,/, $topicTypes)) {
+    $topicType =~ s/^\s+//o;
+    $topicType =~ s/\s+$//o;
+
+    #writeDebug("1");
+
+    # if not found in the current web, try to 
+    # find it in the web where this type is implemented
+    my $topicTypeObj = $baseDB->fastget($topicType);
+    next unless $topicTypeObj;
+
+    #writeDebug("2");
+
+    $form = $topicTypeObj->fastget('form');
+    next unless $form;
+
+    #writeDebug("3");
+
+    $formObj = $topicTypeObj->fastget($form);
+    next unless $formObj;
+
+    #writeDebug("4");
+
+    my $targetWeb;
+    my $target = $formObj->fastget('Target');
+    if ($target) {
+      $targetWeb = $1 if $target =~ /^(.*)[.\/](.*?)$/;
+    } 
+    $targetWeb = $thisWeb unless defined $targetWeb;
+
+
+    #writeDebug("5");
+
+    my $theMethod = $topicType.$theTopic;
+    my $targetDB = getDB($targetWeb);
+    writeDebug("checking $targetWeb.$theMethod");
+    return ($targetWeb, $theMethod) if $targetDB->fastget($theMethod);
+
+    #writeDebug("6");
+  }
+
+  # last resort: lookup the method in the Applications web
+  writeDebug("last resort check for Applications.$theTopic");
+  my $appDB = getDB('Applications');
+  return ('Applications', $theTopic) if $appDB->fastget($theTopic);
+
+
+  #writeDebug("5");
+  return undef;
 }
 
 ###############################################################################
@@ -212,8 +346,29 @@ sub handleDBCALL {
 
   my $thisTopic = $params->remove('_DEFAULT');
   return '' unless $thisTopic;
+
+  # check if this is an object call
+  my $theObject;
+  if ($thisTopic =~ /^(.*)->(.*)$/) {
+    $theObject = $1;
+    $thisTopic = $2;
+  }
+
   my $thisWeb;
   ($thisWeb, $thisTopic) = &TWiki::Func::normalizeWebTopicName($baseWeb, $thisTopic);
+
+  # find the actual implementation
+  if ($theObject) {
+    my ($methodWeb, $methodTopic) = findTopicMethod($session, $thisWeb, $thisTopic, $theObject);
+    if (defined $methodWeb) {
+      writeDebug("found impl at $methodWeb.$methodTopic");
+      $params->{OBJECT} = $theObject;
+      $thisWeb = $methodWeb;
+      $thisTopic = $methodTopic;
+    } else {
+      writeDebug("no impl found ... proceeding as non-method");
+    }
+  }
 
   $TWiki::Plugins::DBCachePlugin::addDependency->($thisWeb, $thisTopic);
 
@@ -235,7 +390,11 @@ sub handleDBCALL {
   my $topicObj = $thisDB->fastget($thisTopic);
   unless ($topicObj) {
     if ($warn) {
-      return _inlineError("ERROR: DBCALL can't find topic <nop>$thisTopic in <nop>$thisWeb");
+      if ($theObject) {
+        return inlineError("ERROR: DBCALL can't find method <nop>$thisTopic for object $theObject");
+      } else {
+        return inlineError("ERROR: DBCALL can't find topic <nop>$thisTopic in <nop>$thisWeb");
+      }
     } else {
       return '';
     }
@@ -245,7 +404,7 @@ sub handleDBCALL {
   my $wikiUserName = TWiki::Func::getWikiUserName();
   unless (TWiki::Func::checkAccessPermission('VIEW', $wikiUserName, undef, $thisTopic, $thisWeb)) {
     if ($warn) {
-      return _inlineError("ERROR: DBCALL access to '$thisWeb.$thisTopic' denied");
+      return inlineError("ERROR: DBCALL access to '$thisWeb.$thisTopic' denied");
     } 
     return '';
   }
@@ -254,7 +413,7 @@ sub handleDBCALL {
   my $sectionText = $topicObj->fastget("_section$section") if $topicObj;
   if (!$sectionText) {
     if($warn) {
-      return _inlineError("ERROR: DBCALL can't find section '$section' in topic '$thisWeb.$thisTopic'");
+      return inlineError("ERROR: DBCALL can't find section '$section' in topic '$thisWeb.$thisTopic'");
     } else {
       return '';
     }
@@ -266,7 +425,7 @@ sub handleDBCALL {
   $key .= $args;
   if ($session->{dbcalls}->{$key} || $count > 99) {
     if($warn) {
-      return _inlineError("ERROR: DBCALL reached max recursion at '$thisWeb.$thisTopic'");
+      return inlineError("ERROR: DBCALL reached max recursion at '$thisWeb.$thisTopic'");
     }
     return '';
   }
@@ -286,7 +445,7 @@ sub handleDBCALL {
   delete $context->{insideInclude};
 
   # fix local linx
-  _fixInclude($session, $thisWeb, $sectionText) if $remote;
+  fixInclude($session, $thisWeb, $sectionText) if $remote;
 
   # cleanup
   delete $session->{dbcalls}->{$key};
@@ -307,9 +466,9 @@ sub handleDBSTATS {
   my $thisTopic = $params->{topic} || $baseTopic;
   my $thePattern = $params->{pattern} || '(\w+)';
   my $theHeader = $params->{header} || '';
-  my $theFormat = $params->{format} || '   * $key: $count';
+  my $theFormat = $params->{format};
   my $theFooter = $params->{footer} || '';
-  my $theSep = $params->{separator} || $params->{sep};
+  my $theSep = $params->{separator};
   my $theFields = $params->{fields} || $params->{field} || 'text';
   my $theSort = $params->{sort} || $params->{order} || 'alpha';
   my $theReverse = $params->{reverse} || 'off';
@@ -317,6 +476,8 @@ sub handleDBSTATS {
   my $theHideNull = $params->{hidenull} || 'off';
   $theLimit =~ s/[^\d]//go;
 
+  $theFormat = '   * $key: $count' unless defined $theFormat;
+  $theSep = $params->{sep} unless defined $theSep;
   $theSep = '$n' unless defined $theSep;
 
   #writeDebug("theSearch=$theSearch");
@@ -424,7 +585,7 @@ sub handleDBSTATS {
       @{$record->{keyList}};
     $text = $theSep if $result;
     $text .= $theFormat;
-    $result .= &_expandVariables($text, 
+    $result .= &expandVariables($text, 
       $thisWeb,
       $thisTopic,
       'web'=>$thisWeb,
@@ -446,8 +607,8 @@ sub handleDBSTATS {
 
     last if $theLimit && $index == $theLimit;
   }
-  $theHeader = &_expandVariables($theHeader, $thisWeb, $thisTopic);
-  $theFooter = &_expandVariables($theFooter, $thisWeb, $thisTopic);
+  $theHeader = &expandVariables($theHeader, $thisWeb, $thisTopic);
+  $theFooter = &expandVariables($theFooter, $thisWeb, $thisTopic);
   $result = &TWiki::Func::expandCommonVariables($theHeader.$result.$theFooter, $thisTopic, $thisWeb);
 
   return $result;
@@ -469,7 +630,7 @@ sub handleDBDUMP {
 
   my $topicObj = $theDB->fastget($thisTopic) || '';
   unless ($topicObj) {
-    return _inlineError("$thisWeb.$thisTopic not found");
+    return inlineError("$thisWeb.$thisTopic not found");
   }
   my $result = "\n<noautolink>\n";
   $result .= "---++ [[$thisWeb.$thisTopic]]\n$topicObj\n";
@@ -548,6 +709,10 @@ sub handleDBDUMP {
 sub handleATTACHMENTS {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
+  writeDebug("called handleATTACHMENTS($theTopic, $theWeb)");
+  #writeDebug("params=".$params->stringify());
+
+
   # get parameters
   my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $baseTopic;
   my $thisWeb = $params->{web} || $baseWeb;
@@ -569,18 +734,21 @@ sub handleATTACHMENTS {
   my $theUser = $params->{user} || '.*';
   my $theHeader = $params->{header} || '';
   my $theFooter = $params->{footer} || '';
-  my $theFormat = $params->{format} || '| [[$url][$name]] |  $sizeK | <nobr>$date</nobr> | $wikiuser | $comment |';
-  my $theSeparator = $params->{separator} || $params->{sep};
+  my $theFormat = $params->{format};
+  my $theSeparator = $params->{separator};
   my $theSort = $params->{sort} || $params->{order} || 'name';
   my $theHideNull = $params->{hidenull} || 'off';
-  my $theComment = $params->{comment} = '.*';
+  my $theComment = $params->{comment} || '.*';
 
+  $theFormat = '| [[$url][$name]] |  $sizeK | <nobr>$date</nobr> | $wikiuser | $comment |' 
+    unless defined $theFormat;
+  $theSeparator = $params->{sep} unless defined $theSeparator;
   $theSeparator = "\n" unless defined $theSeparator;
 
   # get topic
   my $theDB = getDB($thisWeb);
   my $topicObj = $theDB->fastget($thisTopic) || '';
-  return _inlineError("$thisWeb.$thisTopic not found") unless $topicObj;
+  return inlineError("$thisWeb.$thisTopic not found") unless $topicObj;
 
   # sort attachments
   my $attachments = $topicObj->fastget('attachments');
@@ -601,8 +769,7 @@ sub handleATTACHMENTS {
       $attachments->getValues();
   }
 
-  writeDebug("called handleATTACHMENTS($thisWeb, $thisTopic)");
-
+  writeDebug("theComment=$theComment");
 
   # collect result
   my @result;
@@ -687,7 +854,7 @@ sub handleATTACHMENTS {
     $index++;
     my $text = $theFormat;
     $text =~ s/\$date\(([^\)]+)\)/_formatTile($date, $1)/ge;
-    $text = _expandVariables($text, $thisWeb, $thisTopic,
+    $text = expandVariables($text, $thisWeb, $thisTopic,
       'webdav'=>$webDavAction,
       'webdavUrl'=>$webDavUrl,
       'props'=>$propsAction,
@@ -702,7 +869,7 @@ sub handleATTACHMENTS {
       'attr'=>$attr,
       'autoattached'=>$autoattached,
       'comment'=>$comment,
-      'date'=>_formatTime($date),
+      'date'=>formatTime($date),
       'index'=>$index,
       'name'=>$name,
       'path'=>$path,
@@ -722,8 +889,8 @@ sub handleATTACHMENTS {
 
   return '' if $theHideNull eq 'on' && $index == 0;
 
-  $theHeader = _expandVariables($theHeader, $thisWeb, $thisTopic, count=>$index);
-  $theFooter = _expandVariables($theFooter, $thisWeb, $thisTopic, count=>$index);
+  $theHeader = expandVariables($theHeader, $thisWeb, $thisTopic, count=>$index);
+  $theFooter = expandVariables($theFooter, $thisWeb, $thisTopic, count=>$index);
 
   return $theHeader.join($theSeparator,@result).$theFooter;
 }
@@ -770,26 +937,26 @@ sub handleDBRECURSE {
   # query topics
   my $theDB = getDB($thisWeb);
   $params->{_count} = 0;
-  my $result = _formatRecursive($theDB, $thisWeb, $thisTopic, $params);
+  my $result = formatRecursive($theDB, $thisWeb, $thisTopic, $params);
   return '' unless $result;
 
   # render result
   return '' if $params->{hidenull} eq 'on' && $params->{_count} == 0;
 
   return 
-    _expandVariables(
+    expandVariables(
       ($params->{_count} == 1)?$params->{singleheader}:$params->{header}, 
       $thisWeb, $thisTopic, 
       count=>$params->{_count}).
     join($params->{separator},@$result).
-    _expandVariables(
+    expandVariables(
       ($params->{_count} == 1)?$params->{singlefooter}:$params->{footer}, 
       $thisWeb, $thisTopic, 
       count=>$params->{_count});
 }
 
 ###############################################################################
-sub _formatRecursive {
+sub formatRecursive {
   my ($theDB, $theWeb, $theTopic, $params, $seen, $depth, $number) = @_;
 
   # protection agains infinite recursion
@@ -802,7 +969,7 @@ sub _formatRecursive {
 
   return if $params->{depth} && $depth >= $params->{depth};
 
-  #writeDebug("called _formatRecursive($theWeb, $theTopic)");
+  #writeDebug("called formatRecursive($theWeb, $theTopic)");
   return unless $theTopic;
 
   # search sub topics
@@ -831,7 +998,7 @@ sub _formatRecursive {
     my $numberString = ($number)?"$number.$index":$index;
 
     my $text = ($nrTopics == 1)?$params->{single}:$params->{format};
-    $text = _expandVariables($text, $theWeb, $theTopic,
+    $text = expandVariables($text, $theWeb, $theTopic,
       'web'=>$theWeb,
       'topic'=>$topicName,
       'number'=>$numberString,
@@ -851,19 +1018,19 @@ sub _formatRecursive {
       my $temp = $theDB->expandPath($topicObj, $1);
       $temp =~ s#\)#${TranslationToken}#g;
       $temp/geo;
-    $text =~ s/\$formatTime\((.*?)(?:,\s*'([^']*?)')?\)/_formatTime($theDB->expandPath($topicObj, $1), $2)/geo; # single quoted
+    $text =~ s/\$formatTime\((.*?)(?:,\s*'([^']*?)')?\)/formatTime($theDB->expandPath($topicObj, $1), $2)/geo; # single quoted
 
     push @result, $text;
 
     # recurse
     my $subResult = 
-      _formatRecursive($theDB, $theWeb, $topicName, $params, $seen, 
+      formatRecursive($theDB, $theWeb, $topicName, $params, $seen, 
         $depth+1, $numberString);
     
 
     if ($subResult && @$subResult) {
       push @result, 
-        _expandVariables($params->{subheader}, $theWeb, $topicName, 
+        expandVariables($params->{subheader}, $theWeb, $topicName, 
           'web'=>$theWeb,
           'topic'=>$topicName,
           'number'=>$numberString,
@@ -871,7 +1038,7 @@ sub _formatRecursive {
           'count'=>$params->{_count},
         ).
         join($params->{separator},@$subResult).
-        _expandVariables($params->{subfooter}, $theWeb, $topicName, 
+        expandVariables($params->{subfooter}, $theWeb, $topicName, 
           'web'=>$theWeb,
           'topic'=>$topicName,
           'number'=>$numberString,
@@ -895,6 +1062,8 @@ sub getDB {
   # We do not need to reload the cache if we run on mod_perl or speedy_cgi or
   # whatever perl accelerator that keeps our global variables and 
   # the database wasn't modified!
+
+  $theWeb =~ s/\//\./go;
 
   my $isModified = 0;
   unless (defined $webDB{$theWeb}) {
@@ -946,7 +1115,7 @@ sub DESTROY_ALL {
 
 ###############################################################################
 # from TWiki::_INCLUDE
-sub _fixInclude {
+sub fixInclude {
   my $session = shift;
   my $thisWeb = shift;
   # $text next
@@ -955,9 +1124,9 @@ sub _fixInclude {
 
   # Must handle explicit [[]] before noautolink
   # '[[TopicName]]' to '[[Web.TopicName][TopicName]]'
-  $_[0] =~ s/\[\[([^\]]+)\]\]/&_fixIncludeLink($thisWeb, $1)/geo;
+  $_[0] =~ s/\[\[([^\]]+)\]\]/&fixIncludeLink($thisWeb, $1)/geo;
   # '[[TopicName][...]]' to '[[Web.TopicName][...]]'
-  $_[0] =~ s/\[\[([^\]]+)\]\[([^\]]+)\]\]/&_fixIncludeLink($thisWeb, $1, $2)/geo;
+  $_[0] =~ s/\[\[([^\]]+)\]\[([^\]]+)\]\]/&fixIncludeLink($thisWeb, $1, $2)/geo;
 
   $_[0] = $session->{renderer}->takeOutBlocks($_[0], 'noautolink', $removed);
 
@@ -970,8 +1139,8 @@ sub _fixInclude {
 }
 
 ###############################################################################
-# from TWiki::_fixIncludeLink
-sub _fixIncludeLink {
+# from TWiki::fixIncludeLink
+sub fixIncludeLink {
   my( $theWeb, $theLink, $theLabel ) = @_;
 
   # [[...][...]] link
@@ -989,7 +1158,7 @@ sub _fixIncludeLink {
 }
 
 ###############################################################################
-sub _expandVariables {
+sub expandVariables {
   my ($theFormat, $web, $topic, %params) = @_;
 
   return '' unless $theFormat;
@@ -1002,9 +1171,9 @@ sub _expandVariables {
   $theFormat =~ s/\$percnt/\%/go;
   $theFormat =~ s/\$nop//g;
   $theFormat =~ s/\$n/\n/go;
-  $theFormat =~ s/\$flatten\((.*?)\)/&_flatten($1)/ges;
-  $theFormat =~ s/\$rss\((.*?)\)/&_rss($1, $web, $topic)/ges;
-  $theFormat =~ s/\$encode\((.*?)\)/&_encode($1)/ges;
+  $theFormat =~ s/\$flatten\((.*?)\)/&flatten($1)/ges;
+  $theFormat =~ s/\$rss\((.*?)\)/&rss($1, $web, $topic)/ges;
+  $theFormat =~ s/\$encode\((.*?)\)/&entityEncode($1)/ges;
   $theFormat =~ s/\$trunc\((.*?),\s*(\d+)\)/substr($1,0,$2)/ges;
   $theFormat =~ s/\$t\b/\t/go;
   $theFormat =~ s/\$dollar/\$/go;
@@ -1013,17 +1182,100 @@ sub _expandVariables {
 }
 
 ###############################################################################
-# fault tolerant wrapper
-sub _formatTime {
-  my ($time, $format) = @_;
+# our own time format parser
+sub parseTime {
+  my $date = shift;
 
-  $time ||= 0;
-  return TWiki::Func::formatTime($time, $format)
+  my $sec = 0; my $min = 0; my $hour = 0; my $day = 1; my $mon = 0; my $year = 0;
+
+  # "31 Dec 2003 - 23:59", "31-Dec-2003 - 23:59", "31 Dec 2003 - 23:59 - any suffix"
+  if($date =~ m|([0-9]{1,2})[-\s/]+([A-Z][a-z][a-z])[-\s/]+([0-9]{4})[-\s/]+([0-9]{1,2}):([0-9]{1,2})|) {
+    $day = $1;
+    $mon = $MON2NUM{$2} || 0;
+    $year = $3 - 1900;
+    $hour = $4;
+    $min = $5;
+  }
+
+  # "31 Dec 2003", "31 Dec 03", "31-Dec-2003", "31/Dec/2003"
+  elsif($date =~ m|([0-9]{1,2})[-\s/]+([A-Z][a-z][a-z])[-\s/]+([0-9]{2,4})|) {
+    $day = $1;
+    $mon = $MON2NUM{$2} || 0;
+    $year = $3;
+    $year += 100 if $year < 80; # "05"   --> "105" (leave "99" as is)
+    $year -= 1900 if $year >= 1900; # "2005" --> "105"
+  }
+
+  # "2003/12/31 23:59:59", "2003-12-31-23-59-59", "2003.12.31.23.59.59"
+  elsif($date =~ m|([0-9]{4})[-/\.]([0-9]{1,2})[-/\.]([0-9]{1,2})[-/\.\,\s]+([0-9]{1,2})[-\:/\.]([0-9]{1,2})[-\:/\.]([0-9]{1,2})|) {
+    $year = $1 - 1900;
+    $mon = $2 - 1;
+    $day = $3;
+    $hour = $4;
+    $min = $5;
+    $sec = $6;
+  }
+
+  # "2003/12/31 23:59", "2003-12-31-23-59", "2003.12.31.23.59"
+  elsif($date =~ m|([0-9]{4})[-/\.]([0-9]{1,2})[-/\.]([0-9]{1,2})[-/\.\,\s]+([0-9]{1,2})[-\:/\.]([0-9]{1,2})|) {
+    $year = $1 - 1900;
+    $mon = $2 - 1;
+    $day = $3;
+    $hour = $4;
+    $min = $5;
+  }
+
+  # "2003/12/31", "2003-12-31"
+  elsif( $date =~ m|([0-9]{4})[-/]([0-9]{1,2})[-/]([0-9]{1,2})| ) {
+    $year = $1 - 1900;
+    $mon = $2 - 1;
+    $day = $3;
+  }
+
+  # "31.12.2001"
+  elsif( $date =~ m|([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})|) {
+    $day = $1;
+    $mon = $2 - 1;
+    $year = $3 - 1900;
+  }
+
+  # "12/31/2003", "12/31/03", "12-31-2003"
+  # (shh, don't tell anyone that we support ambiguous American dates, my boss asked me to)
+  elsif( $date =~ m|([0-9]{1,2})[-/]([0-9]{1,2})[-/]([0-9]{2,4})| ) {
+    $year = $3;
+    $mon = $1 - 1;
+    $day = $2;
+    $year += 100 if $year < 80; # "05"   --> "105" (leave "99" as is)
+    $year -= 1900 if  $year >= 1900; # "2005" --> "105"
+  }
+
+  else {
+    print STDERR "WARNING: unsupported date format '$date'\n";
+    return 0;
+  }
+
+  return timegm($sec, $min, $hour, $day, $mon, $year) if $date =~ /gmt/i;
+  return timelocal($sec, $min, $hour, $day, $mon, $year);
 }
 
 ###############################################################################
+# fault tolerant wrapper
+sub formatTime {
+  my ($time, $format) = @_;
+
+  $time ||= 0;
+
+  unless ($time =~ /^\d+$/) {
+    $time = parseTime($time);
+  }
+
+  return TWiki::Func::formatTime($time, $format)
+}
+
+
+###############################################################################
 # used to encode rss feeds
-sub _rss {
+sub rss {
   my ($text, $web, $topic) = @_;
 
   $text = "\n<noautolink>\n$text\n</noautolink>\n";
@@ -1040,7 +1292,7 @@ sub _rss {
 }
 
 ###############################################################################
-sub _encode {
+sub entityEncode {
   my $text = shift;
 
   $text =~ s/([[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|])/'&#'.ord($1).';'/ge;
@@ -1049,7 +1301,33 @@ sub _encode {
 }
 
 ###############################################################################
-sub _flatten {
+sub entityDecode {
+  my $text = shift;
+
+  $text =~ s/&#(\d+);/chr($1)/ge;
+  return $text;
+}
+
+###############################################################################
+sub urlEncode {
+  my $text = shift;
+
+  $text =~ s/([^0-9a-zA-Z-_.:~!*'\/%])/'%'.sprintf('%02x',ord($1))/ge;
+
+  return $text;
+}
+
+###############################################################################
+sub urlDecode {
+  my $text = shift;
+
+  $text =~ s/%([\da-f]{2})/chr(hex($1))/gei;
+
+  return $text;
+}
+
+###############################################################################
+sub flatten {
   my $text = shift;
 
   $text =~ s/&lt;/</g;
@@ -1075,7 +1353,7 @@ sub _flatten {
 }
 
 ###############################################################################
-sub _inlineError {
+sub inlineError {
   return "<div class=\"twikiAlert\">$_[0]</div>";
 }
 

@@ -122,6 +122,7 @@ sub onReload {
 
     # stored procedures
     my $text = $topic->fastget('text');
+    my $origText = $text;
 
     # get default section
     my $defaultSection = $text;
@@ -143,6 +144,37 @@ sub onReload {
       my $sectionText = $2;
       $topic->set("_section$name", $sectionText);
     }
+
+    # get topic title 
+    my $topicTitle = '';
+
+    my $prefs = $topic->fastget('preferences');
+    if ($prefs) {
+      foreach my $pref ($prefs->getValues()) {
+        my $name = $pref->fastget('name');
+        if ($name eq 'TOPICTITLE') {
+          $topicTitle = $pref->fastget('value');
+          last;
+        }
+      }
+    }
+    unless ($topicTitle) {
+      $origText =~ tr/\r//d;
+      if ($origText =~ /(?:^|\n)(?:\t|   )+\*\s+(?:Set|Local)\s+TOPICTITLE\s*=\s*(.*)(?:$|\n)/o) {
+        $topicTitle = $1 || '';
+      }
+    }
+    unless ($topicTitle) {
+      my $form = $topic->fastget('form');
+      if ($form) {
+        $form = $topic->fastget($form);
+        $topicTitle = $form->fastget('TopicTitle') || '';
+        $topicTitle = TWiki::urlDecode($topicTitle);
+      }
+    }
+    #print STDERR "found topictitle=$topicTitle\n" if $topicTitle;
+    $topic->set('topictitle', $topicTitle);
+
   }
 
   #print STDERR "DEBUG: DBCachePlugin::WebDB - done onReload()\n";

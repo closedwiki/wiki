@@ -41,13 +41,13 @@ sub initPlugin {
     return 0;
   }
   
-  TWiki::Func::registerTagHandler('DBQUERY', \&_DBQUERY);
-  TWiki::Func::registerTagHandler('DBCALL', \&_DBCALL);
-  TWiki::Func::registerTagHandler('DBSTATS', \&_DBSTATS);
-  TWiki::Func::registerTagHandler('DBDUMP', \&_DBDUMP); # for debugging
-  TWiki::Func::registerTagHandler('DBRECURSE', \&_DBRECURSE);
-  TWiki::Func::registerTagHandler('ATTACHMENTS', \&_ATTACHMENTS);
-  TWiki::Func::registerTagHandler('TOPICTITLE', \&_TOPICTITLE);
+  TWiki::Func::registerTagHandler('DBQUERY', \&DBQUERY);
+  TWiki::Func::registerTagHandler('DBCALL', \&DBCALL);
+  TWiki::Func::registerTagHandler('DBSTATS', \&DBSTATS);
+  TWiki::Func::registerTagHandler('DBDUMP', \&DBDUMP); # for debugging
+  TWiki::Func::registerTagHandler('DBRECURSE', \&DBRECURSE);
+  TWiki::Func::registerTagHandler('ATTACHMENTS', \&ATTACHMENTS);
+  TWiki::Func::registerTagHandler('TOPICTITLE', \&TOPICTITLE);
 
   TWiki::Func::registerRESTHandler('UpdateCache', \&updateCache );
 
@@ -92,32 +92,38 @@ sub afterSaveHandler {
 }
 
 ###############################################################################
+sub renderWikiWordHandler {
+  initCore();
+  return TWiki::Plugins::DBCachePlugin::Core::renderWikiWordHandler(@_);
+}
+
+###############################################################################
 # tags
-sub _DBQUERY {
+sub DBQUERY {
   initCore();
   return TWiki::Plugins::DBCachePlugin::Core::handleDBQUERY(@_);
 }
-sub _DBCALL {
+sub DBCALL {
   initCore();
   return TWiki::Plugins::DBCachePlugin::Core::handleDBCALL(@_);
 }
-sub _DBSTATS {
+sub DBSTATS {
   initCore();
   return TWiki::Plugins::DBCachePlugin::Core::handleDBSTATS(@_);
 }
-sub _DBDUMP {
+sub DBDUMP {
   initCore();
   return TWiki::Plugins::DBCachePlugin::Core::handleDBDUMP(@_);
 }
-sub _ATTACHMENTS {
+sub ATTACHMENTS {
   initCore();
   return TWiki::Plugins::DBCachePlugin::Core::handleATTACHMENTS(@_);
 }
-sub _DBRECURSE {
+sub DBRECURSE {
   initCore();
   return TWiki::Plugins::DBCachePlugin::Core::handleDBRECURSE(@_);
 }
-sub _TOPICTITLE {
+sub TOPICTITLE {
   initCore();
   return TWiki::Plugins::DBCachePlugin::Core::handleTOPICTITLE(@_);
 }
