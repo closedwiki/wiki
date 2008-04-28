@@ -4,6 +4,10 @@
 %TMPL:DEF{"editjavascript"}%<!-- editjavascript -->
 <script type="text/javascript">
 function submitEditForm(script, action) {
+  $("#savearea").val($("#topic").val());
+  $(".natEditBottomBar a").each(function () {
+    this.blur();
+  });
   if (typeof(beforeSubmitHandler) != 'undefined') {
     beforeSubmitHandler(script, action);
   }
@@ -21,59 +25,30 @@ function submitEditForm(script, action) {
 }
 </script>
 <!-- //editjavascript -->%TMPL:END%
-%TMPL:DEF{"templatejavascript"}%<!-- templatejavascript -->
-<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/jquery.natedit.js"></script>
+%TMPL:DEF{"nateditjavascript"}%<!-- jqueryscript -->
 <script type="text/javascript">
-
 $(function() {
   $("#topic").natedit({
-    autoHideToolbar:false,
     autoMaxExpand:true,
     signatureMarkup: ['-- ', '%WIKIUSERNAME%', ' - %DATE%'],
     gotImagePlugin: %IF{"context ImagePluginEnabled" then="true" else="false"}%,
     gotMathModePlugin: %IF{"context MathModePluginEnabled" then="true" else="false"}%
   });
+  var savetext = $("#savearea").val();
+  if (savetext) {
+    $("#topic").val(savetext);
+  }
+});
+</script>
+<!-- //jqueryscript -->%TMPL:END%
+%TMPL:DEF{"templatejavascript"}%<!-- templatejavascript -->
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/jquery.natedit.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/NatEditContrib/edit.js"></script>
+<script type="text/javascript">
+$(function() {
   window.setTimeout(fixHeightOfPane, 1);
 });
-
-var paneTop = -1;
-var bottomBarHeight = -1;
-function fixHeightOfPane() {
-
-  var $tab = $(".jqTab:first .jqTabContents");
-
-  if (paneTop < 0) {
-    var paneOffset = $tab.offset({
-      scroll:false,
-      border:true,
-      padding:true,
-      margin:true
-    });
-    paneTop = paneOffset.top;
-  }
-  if (bottomBarHeight < 0) {
-    bottomBarHeight = $(".natEditBottomBar").height();
-  }
-
-  var windowHeight = $(window).height();
-  var height = windowHeight-paneTop-bottomBarHeight-70;
-
-  // add new height to those containers, that don't have an natEditAutoMaxExpand element
-  $(".jqTab:visible .jqTabContents").filter(function(index) { 
-    return $(".natEditAutoMaxExpand", this).length == 0; 
-  }).each(function() {
-    $(this).height(height);
-  });
-
-  // add a slight timeout not to DoS IE 
-  // before enabling handler again
-  setTimeout(function() { 
-    $(window).one("resize", fixHeightOfPane);
-  }, 20);
-
-}
-
 </script>
+%TMPL:P{"nateditjavascript"}%
 %TMPL:P{"editjavascript"}%
 <!-- //templatejavascript -->%TMPL:END%
-

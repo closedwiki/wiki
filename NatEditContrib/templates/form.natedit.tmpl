@@ -1,8 +1,16 @@
 <!-- template: form.natedit.tmpl -->
 %TMPL:DEF{"changeform"}%<li id="changeform" ><a href="javascript:submitEditForm('save', 'replaceform');" accesskey="f" /><span>%MAKETEXT{"Change form"}%</span></a></li>
 <script type="text/javascript">
+var doneChangeForm;
 $(function() {
-  $("#changeform").insertBefore("#cancel");
+  if (!doneChangeForm) {
+    $("#changeform").each(function() {
+      doneChangeForm = 1;
+      $(this).insertBefore("#cancel").removeAttr("id");
+    });
+  } else {
+    $("#changeform").remove();
+  }
 });
 </script>%TMPL:END%
 

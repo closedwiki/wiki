@@ -1,10 +1,16 @@
 /* natedit base styles */
+#addform,
+#changeform {
+  display:none;
+}
 .natEdit .jqTabContents {
   overflow-x:hidden;
   overflow-y:auto;
 }
+.natEdit textarea,
 .natEditTextArea {
   _width:99% !important; /* bloddy IE */
+  font-family:monospace;
 }
 ul.natEditTextTools,
 ul.natEditHeadlineTools,
@@ -101,6 +107,9 @@ ul.natEditHelpTools {
   margin-top:0px;
 }
 
-.patternEditPage #patternPage {
-  font-size:100%;
+#patternOuter {
+  background-image:none;
+}
+#patternPage .twikiFormTable {
+  width:99%;
 }

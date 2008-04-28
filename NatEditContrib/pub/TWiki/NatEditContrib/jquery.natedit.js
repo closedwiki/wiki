@@ -21,7 +21,7 @@ function writeDebug(msg) {
     if (window.console && window.console.log) { // firebug console
       window.console.log("DEBUG: NatEdit - "+msg);
     } else {
-      //alert("DEBUG: NatEdit - "+msg)
+      alert("DEBUG: NatEdit - "+msg)
     }
   }
 };
@@ -155,11 +155,12 @@ $.natedit = {
    * init the gui
    */
   initGui: function(textarea, opts) {
-    //writeDebug("called initGui");
+    writeDebug("called initGui");
     var $textarea = $(textarea);
     var $natEdit = $textarea.wrap('<div class="natEdit"></div>').parent();
 
     if (opts.hideToolbar) {
+      writeDebug("no toolbar");
       return;
     }
 
@@ -292,7 +293,7 @@ $.natedit = {
     }
 
     if (opts.autoHideToolbar) {
-      //writeDebug("toggling toolbar on hover event");
+      writeDebug("toggling toolbar on hover event");
       $toolbar.hide();
 
       var toolbarState = 0;
@@ -302,13 +303,13 @@ $.natedit = {
         var tmp = textarea.value;
         if (toolbarState) {
           //writeDebug("slide down");
-          //$toolbar.slideDown("fast");
-          $toolbar.show();
+          $toolbar.slideDown("fast");
+          //$toolbar.show();
           textarea.value = tmp;
         } else {
           //writeDebug("slide up");
-          //$toolbar.slideUp("fast");
-          $toolbar.hide();
+          $toolbar.slideUp("fast");
+          //$toolbar.hide();
           textarea.value = tmp;
         }
         if (opts.autoMaxExpand) {
@@ -428,7 +429,7 @@ $.natedit = {
     var selRange = $.natedit.getSelectionRange(txtarea);
     var startPos = selRange.from;
     var endPos = selRange.to;
-    writeDebug("startPos="+startPos+", endPos="+endPos);
+    //writeDebug("startPos="+startPos+", endPos="+endPos);
 
     // at this point we need to expand the selection to the \n before the startPos, and after the endPos
     var adjustedStartPos = txtarea.value.lastIndexOf('\n', startPos-1);
@@ -560,37 +561,37 @@ $.natedit = {
    * adjust height of textarea to window height
    */
   autoMaxExpand: function(textarea) {
+    //writeDebug("called autoMaxExpand("+textarea+")");
     var $textarea = $(textarea);
 
-    writeDebug("called autoMaxExpand("+textarea+")");
 
     // get new window height
-    var $window = $(window);
-    if ($window.length) {
-      var windowHeight = $window.height();
-      writeDebug("windowHeight="+windowHeight);
-
-      var offset = $textarea.offset({scroll:false});
-      writeDebug("offset="+offset.top);
-
-      var newHeight = windowHeight-offset.top-90;
-      writeDebug("newHeight="+newHeight);
-
-      $textarea.height(newHeight);
-      
-      window.setTimeout(function() {
-        $window.one("resize", function() {
-          $.natedit.autoMaxExpand(textarea)
-        });
-      }, 100); 
+    var windowHeight = $(window).height();
+    if (!windowHeight) {
+      windowHeight = window.innerHeight;
     }
+    //writeDebug("windowHeight="+windowHeight);
+
+    var offset = $textarea.offset({scroll:false});
+    //writeDebug("offset="+offset.top);
+
+    var newHeight = windowHeight-offset.top-90;
+    //writeDebug("newHeight="+newHeight);
+
+    $textarea.height(newHeight);
+    
+    window.setTimeout(function() {
+      $(window).one("resize", function() {
+        $.natedit.autoMaxExpand(textarea)
+      });
+    }, 100); 
   },
 
   /*************************************************************************
    * adjust height of textarea according to content
    */
   autoExpand: function(args) {
-    writeDebug("called autoExpand()");
+    //writeDebug("called autoExpand()");
 
     var now = new Date();
     //

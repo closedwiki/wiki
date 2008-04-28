@@ -23,12 +23,13 @@
 <input type="hidden" name="action_save" value="" />
 <input type="hidden" name="action_checkpoint" value="" />
 <input type="hidden" name="action_cancel" value="" />
+<textarea rows="5" cols="22" style="display:none" id="savearea"></textarea>
 %TABPANE%
-%TAB{"Text" after="$.natedit.autoMaxExpand('#topic')"}% %TMPL:P{"textarea"}% %ENDTAB%
+%TAB{"%MAKETEXT{"Text"}%" after="$.natedit.autoMaxExpand('#topic')"}% %TMPL:P{"textarea"}% %ENDTAB%
 %TMPL:P{"form"}%<!-- -->
-%TAB{"Help" after="fixHeightOfPane()"}%%TMPL:P{"pagehelp"}%%ENDTAB%
+%TAB{"%MAKETEXT{"Help"}%" after="fixHeightOfPane()"}%%TMPL:P{"pagehelp"}%%ENDTAB%
 %ENDTABPANE%
-%TMPL:P{"formatbottom"}% %TMPL:P{"bottomtopicactions"}% %TMPL:P{"formend"}% %TMPL:END%
+%TMPL:P{"bottomtopicactions"}%%TMPL:P{"formend"}%%TMPL:END%
 
 %TMPL:DEF{"help"}%%TMPL:P{"edithelp"}%%TMPL:END%
 %TMPL:DEF{"pagehelp"}%<!-- -->
