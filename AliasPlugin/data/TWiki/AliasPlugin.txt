@@ -139,8 +139,9 @@ macro or listed in the following way:
 |  Plugin Author: | TWiki:Main/OthelloMaurer, TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003, Othello Maurer; 2003-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v2.20 |
+|  Version: | v2.30 |
 |  Change History: | &nbsp; |
+|  28 Apr 2008: | speed improvements |
 |  13 Nov 2007: | Item4959: disabled settings in plugin topic, \
                   removed DEFAULT_ALIASES |
 |  14 Sep 2007: | added view.alias.tmpl |
@@ -175,6 +176,6 @@ macro or listed in the following way:
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
 -- TWiki:Main/OthelloMaurer - 09 Oct 2003 %BR%
--- TWiki:Main/MichaelDaum - 13 Nov 2007
+-- TWiki:Main/MichaelDaum - 28 Apr 2008
 
 %META:FILEATTACHMENT{name="wikiringlogo40x40.png" attachment="wikiringlogo40x40.png" attr="h" comment="" date="1189787359" path="wikiringlogo40x40.png" size="2571" stream="wikiringlogo40x40.png" tmpFilename="" user="TWikiContributor" version="1"}%

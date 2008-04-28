@@ -20,7 +20,7 @@ use strict;
 use vars qw(
         $currentWeb $currentTopic $VERSION $RELEASE
         %aliasRegex %aliasValue %substHash
-	$debug $aliasWikiWordsOnly
+	$aliasWikiWordsOnly
 	%seenAliasWebTopics $wordRegex $wikiWordRegex $topicRegex $webRegex
 	$defaultWebNameRegex
 	$foundError $isInitialized $insideAliasArea
@@ -29,10 +29,9 @@ use vars qw(
         $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
     );
 
-use TWiki::Attrs;
 
 $VERSION = '$Rev$';
-$RELEASE = '2.20';
+$RELEASE = '2.30';
 $SHORTDESCRIPTION = 'Define aliases which will be replaced with arbitrary strings automatically';
 $NO_PREFS_IN_TOPIC = 1;
 
@@ -42,12 +41,11 @@ $TranslationToken= "\0\1\0";
 $TWikiCompatibility{endRenderingHandler} = 1.1;
 $TWikiCompatibility{outsidePREHandler} = 1.1;
 
-$debug = 0; # toggle me
+use constant DEBUG => 0; # toggle me
 
 # =========================
 sub writeDebug {
-  #TWiki::Func::writeDebug("AliasPlugin - " . $_[0]) if $debug;
-  print STDERR "AliasPlugin - ".$_[0]."\n" if $debug;
+  print STDERR "AliasPlugin - ".$_[0]."\n" if DEBUG;
 }
 
 # =========================
@@ -116,16 +114,17 @@ sub commonTagsHandler {
 }
 
 # =========================
-sub preRenderingHandler {
+sub DIS_preRenderingHandler {
 
   doInit();
   return unless $foundAliases;
 
-  #writeDebug("preRenderingHandler()");
+  writeDebug("### preRenderingHandler()");
   my $result = '';
   foreach my $line (split(/\r?\n/, $_[0])) {
     $insideAliasArea = 1 if $line =~ /%STARTALIASAREA%/;
     $insideAliasArea = 0 if $line =~ /%STOPALIASAREA%/;
+    writeDebug("line=$line, insideAliasArea=$insideAliasArea");
     $line = &handleAliasArea($line) if $insideAliasArea;
     $result .= $line . "\n";
   }
@@ -134,16 +133,46 @@ sub preRenderingHandler {
 }
 
 # =========================
-sub postRenderingHandler {
+sub DIS_postRenderingHandler {
+  writeDebug("### postRenderingHandler");
   $_[0] =~ s/%(START|STOP)ALIASAREA%//go;
-  $insideAliasArea = 0;
+  #$insideAliasArea = 0;
+}
+
+# =========================
+sub postRenderingHandler {
+  my $text = $_[0];
+
+  my $result = '';
+  if ($text =~ /^(.*?)%STARTALIASAREA%(.*)$/so) {
+    doInit();
+    writeDebug("found aliasara");
+    $result .= $1;
+    $text = $2;
+    my $post = '';
+    if ($text =~ /^(.*)%STOPALIASAREA%(.*?)$/so) {
+      $text = $1;
+      $post = $2;
+    }
+    $result .= handleAliasArea($text).$post;
+  } else {
+    #writeDebug("no alias area found in $text");
+  }
+
+  if ($result) {
+    $result =~ s/%(START|STOP)ALIASAREA%//go;
+    $_[0] = $result;
+    writeDebug("asserting result");
+  }
+
+  return 1;
 }
 
 # =========================
 sub handleAllAliasCmds {
   my ($web, $topic, $name, $args) = @_;
 
-  #writeDebug("handleAllAliasCmds($name)");
+  writeDebug("handleAllAliasCmds($name)");
   doInit(); # delayed initialization
 
   return handleAlias($web, $topic, $args) if $name eq 'ALIAS';
@@ -157,8 +186,9 @@ sub handleAliases {
   my ($web, $topic, $args) = @_;
 
   $args ||= '';
-  #writeDebug("handleAliases($args) called");
+  writeDebug("handleAliases($args) called");
 
+  require TWiki::Attrs;
   my $params = new TWiki::Attrs($args);
   my $theTopic = $params->{_DEFAULT} || $params->{topic};
   my $theRegex = $params->{regex} || 'off';
@@ -195,8 +225,9 @@ sub handleAliases {
 sub handleAlias {
   my ($web, $topic, $args) = @_;
 
-  #writeDebug("handleAlias() called");
+  writeDebug("handleAlias() called");
 
+  require TWiki::Attrs;
   my $params = new TWiki::Attrs($args);
   my $theKey = $params->{_DEFAULT} || $params->{name};
   my $theValue = $params->{value};
@@ -206,7 +237,7 @@ sub handleAlias {
     $theRegex =~ s/\$start/$START/go;
     $theRegex =~ s/\$stop/$STOP/go;
     addAliasPattern($theKey, $theValue, $theRegex);
-    #writeDebug("handleAlias(): added alias '$theKey' -> '$theValue')");
+    writeDebug("handleAlias(): added alias '$theKey' -> '$theValue')");
     return "";
   }
 
@@ -218,9 +249,10 @@ sub handleAlias {
 sub handleUnAlias {
   my ($web, $topic, $args) = @_;
 
-  #writeDebug("handleUnAlias() called");
+  writeDebug("handleUnAlias() called");
 
   if ($args) {
+    require TWiki::Attrs;
     my $params = new TWiki::Attrs($args);
     my $theKey = $params->{_DEFAULT} || $params->{name};
     if ($theKey) {
@@ -259,7 +291,7 @@ sub addAliasPattern {
   }
   $foundAliases = 1;
 
-  #writeDebug("aliasRegex{$key}=$aliasRegex{$key} aliasValue{$key}=$aliasValue{$key}");
+  writeDebug("aliasRegex{$key}=$aliasRegex{$key} aliasValue{$key}=$aliasValue{$key}");
 }
 
 # =========================
@@ -301,14 +333,14 @@ sub getAliases {
 sub getConvenientAlias {
   my ($key, $value) = @_;
 
-  #writeDebug("getConvenientAlias($key, $value) called");
+  writeDebug("getConvenientAlias($key, $value) called");
 
   # convenience for wiki-links
   if ($value =~ /^($webRegex\.|$defaultWebNameRegex\.|#)$topicRegex/) {
     $value = "\[\[$value\]\[$key\]\]";
   }
 
-  #writeDebug("returns '$value'");
+  writeDebug("returns '$value'");
 
   return $value;
 }
@@ -319,9 +351,16 @@ sub handleAliasArea {
   return '' unless $text;
 
   my @aliasKeys = keys %aliasRegex;
-  return $text if $foundError || !@aliasKeys;
+  if ($foundError) {
+    writeDebug("found error");
+    return $text;
+  }
+  if (!@aliasKeys) {
+    writeDebug("no alias keys");
+    return $text;
+  }
 
-  #writeDebug("handleAliasArea()");
+  writeDebug("handleAliasArea()");
 
   my $result = '';
 
@@ -362,7 +401,7 @@ sub handleAliasArea {
 		  $substr =~ s/$aliasRegex{$key}/&_doSetSubst(\$counter, $key)/gme;
 		}
 		if ($counter) {
-		  if ($debug) {
+		  if (DEBUG) {
 		    $substr =~ s/$TranslationToken(\d+)$TranslationToken/&_doPutSubst($1)/gme;
 		  } else {
 		    $substr =~ s/$TranslationToken(\d+)$TranslationToken/$substHash{$1}/gm;
@@ -391,7 +430,7 @@ sub _doSetSubst {
   
   $$counter++;
   $substHash{$$counter} = $aliasValue{$key};
-  #writeDebug("set counter=$$counter for $key=$aliasValue{$key}");
+  writeDebug("set counter=$$counter for $key=$aliasValue{$key}");
 
   return $TranslationToken."$$counter".$TranslationToken; 
 }
@@ -400,10 +439,10 @@ sub _doPutSubst {
   my $counter = shift;
 
   if (defined $substHash{$counter}) {
-    #writeDebug("put counter=$counter for $substHash{$counter}");
+    writeDebug("put counter=$counter for $substHash{$counter}");
     return $substHash{$counter};
   } else {
-    #writeDebug("oops, got no value for counter=$counter");
+    writeDebug("oops, got no value for counter=$counter");
     return 'ERROR ERROR'; # never reach
   }
 }
