@@ -247,6 +247,9 @@ label {
   font-family:arial, sans-serif;
   line-height:135%;
 }
+.natTopicActions .natSep {
+  color:#ddd;
+}
 .natSearchBox input {
   border:1px solid #eee;
 }

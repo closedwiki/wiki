@@ -11,8 +11,11 @@
 }
 .natWebButtons ul li {
   display:inline;
-  margin-right:10px;
+  float:left;
 }
 .natWebButtons ul a {
   text-decoration:none;
+  float:left;
+  padding:0px 3px;
+  margin:0px 6px 0px -3px;
 }

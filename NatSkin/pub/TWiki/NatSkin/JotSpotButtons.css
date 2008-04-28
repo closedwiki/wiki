@@ -4,13 +4,13 @@
 @import url('../../TWiki/NatSkin/BaseButtons.css');
 
 .natWebButtons {
-  padding:0px 10px;
+  padding:5px 15px;
   margin:0px;
   background:#9C9DCD;
   text-align:left;
 }
 .natWebButtonsContents {
-  padding:3px 0px 3px 0px;
+  padding:0px;
   color:#414483;
   font-weight:bold;
   font-family: Verdana, Arial, sans-serif;
@@ -25,7 +25,7 @@
   color:white;
   color:#414483;
 }
-.natWebButtons ul li a:hover {
+.natWebButtons ul a:hover {
   color:#FFCE00;
 }
 .natWebButtons ul a.current:hover {

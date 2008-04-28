@@ -37,11 +37,12 @@
   text-decoration:none;
   border:0px;
 }
-.natWebButtons ul li a {
+.natWebButtons ul a {
   color:white;
+  border:0px;
 }
 .natWebButtons ul a.current,
-.natWebButtons ul li a:hover {
+.natWebButtons ul a:hover {
   background:#732408;
   color:#FF7D08;
   text-decoration:none;

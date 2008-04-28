@@ -15,9 +15,13 @@ hr {
 }
 
 /* layout */
+html {
+  background-color: #0F314E;
+}
 .natBody {
   margin:0;
   padding:0;
+  background-color: #0F314E;
 }
 .natBodyContents {
   padding: 0px;
@@ -26,10 +30,10 @@ hr {
   text-align:left;
 }
 .natMiddleLeft {
-  padding:15px 15px 0px 20px;
+  padding:20px 10px 20px 20px;
 }
 .natMiddleRight {
-  padding:15px 10px 0px 15px;
+  padding:20px 20px 20px 10px;
 }
 
 .natTopLeftContents {
@@ -116,14 +120,18 @@ hr {
 }
 .natSideBarContents {
   font-family: 'Trebuchet MS', arial, sans-serif;
-  line-height:1.4em;
 }
 
 .natSideBar h2 {
+  margin:20px 0px 10px 0px;
   padding-left:0px;
 }
 .natSideBar a {
   font-weight:normal;
+}
+.natSideBar a:hover h3,
+.natSideBar a:hover {
+  text-decoration:underline;
 }
 .natSideBar h3,
 .natSideBar h3 a,
@@ -133,8 +141,8 @@ hr {
   color: #666666;
   font-weight:bold;
 }
-.natSideBarPersonal h2 a,
-h2.natSideBarTitle {
+.natSideBar h2 a,
+.natSideBar h2 {
   color: #B22222;
   font-size: 15px;
   font-weight: bold;
@@ -145,7 +153,7 @@ h2.natSideBarTitle {
 }
 
 .natSideBar ul {
-  margin:0px 0px 10px 3px;
+  margin:5px 0px 10px 10px;
 }
 .natSideBar ul ul {
   margin-left:0px;
@@ -160,7 +168,7 @@ h2.natSideBarTitle {
 /* main area */
 .natMiddle {
   color: #666666;
-  font-family: 'Trebuchet MS', sans-serif;
+  font-family: 'Trebuchet MS', arial, sans-serif;
   background:#FFFFFF;
 }
 

@@ -6,7 +6,7 @@
 <!-- -->%TMPL:INCLUDE{"changesjavascript"}%
 <!-- -->%TMPL:INCLUDE{"changesstyles"}%
 %TMPL:DEF{"bodyclass"}%natChangesBody%TMPL:END%
-%TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"changes"}%)%TMPL:END%
+%TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"changes"}%) - %WIKITOOLNAME%%TMPL:END%
 %TMPL:DEF{"meta"}% %HTTP_EQUIV_ON_VIEW% %TMPL:END%
 %TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>[[%TOPIC%]]%TMPL:END%
 %TMPL:DEF{"content"}% <!-- -->
@@ -23,7 +23,7 @@
   <th width="50%">
     <a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPICNAME%"><b>%TOPICNAME%</b></a>
   </th><th width="30%">
-    <a href="%SCRIPTURLPATH{"rdiff"}%/%WEB%/%TOPICNAME%">%TIME%</a> - %REVISION%
+    <a href="%SCRIPTURLPATH{"rdiff"}%/%WEB%/%TOPICNAME%?type=last">%TIME%</a> - %REVISION%
   </th><th width="20%">
     %AUTHOR%
   </th>

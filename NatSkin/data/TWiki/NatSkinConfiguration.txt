@@ -105,7 +105,7 @@ to your %TWIKIWEB%.TWikiPreferences like
 There is a set of variables that can be used influence how NatSkin behaves or renders pages.
 
 | *Name* | *Description* |
-| =PAGETITLE= | the &lt;title>...</title> of the html page; if no PAGETITLE is defined the NatSkin \
+| =HTMLTITLE= | the &lt;title>...</title> of the html page; if no HTMLTITLE is defined the NatSkin \
                 will check for some formfields (Headlines, <nop>TopicDescription) to be used as a html page title \
       and back off to the topic name |
 | =METAAUTHOR= | the value of this variable will be used to construct &lt;meta name="author" ... /> in the html head |

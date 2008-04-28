@@ -18,62 +18,53 @@
 .natTopBar a {
   color:white;
 }
+.natWebButtons {
+  background:inherit;
+}
+.natWebTitle,
 .natWebTitle a,
 .natWebButtons,
-.natWebButtons a {
+.natWebButtons ul a {
   color:white;
 }
-.natWebLocator {
+.natWebButtons ul a {
+  border:0px;
+}
+.natWebButtons ul a ,
+.natWebButtons ul a.current,
+.natWebButtons ul a.current:hover,
+.natWebButtons ul a:hover {
+  border:0px;
+}
+.natTopicActions .natSep {
   display:none;
 }
-.natWebSlogan,
-.natWebTitle {
+.natTopicActions {
+  margin-left:-5px;
+}
+.natTopicActions a,
+.natWebButtons ul a {
+  padding:3px 5px;
+  border:0px;
   color:white;
 }
-
-/* twiki table variation */
-.twikiPageForm table,
-.twikiTable th {
-  border:0px;
-  border-bottom:1px solid #d9d6e7;
-  background:transparent;
-}
-.natTopicForm .twikiTable {
-  background:transparent;
-}
-.natTopicForm {
-  border-top:2px solid #06c;
-  border-bottom:2px solid #06c;
-  background:#ddd;
-}
-.twikiPageForm th,
-.natTopicForm td {
-  background:transparent;
+.natWebButtons ul a.current {
+  background:white;
+  color:black;
   border:0px;
 }
-.twikiPageForm table th,
-.twikiPageForm table th a,
-.twikiPageForm table th,
-.natTopicForm table th a {
-  background:transparent;
-}
-.natTopicForm select,
-.twikiPageForm select,
-.twikiPageForm table textarea,
-.twikiPageForm table input,
-.natTopicForm table textarea,
-.natTopicForm table input {
-  background:#ddd;
-  border:0px;
-  border:1px solid #666666;
-}
-
-/* twiki toc variation */
-.twikiToc {
-  background:transparent;
-  border:0px;
-}
-.twikiToc li a:hover {
-  background:#06c;
+.natTopicActions a:hover,
+.natWebButtons ul a:hover {
+  background:#000439;
   color:white;
+  padding:3px 5px;
+  border:0px;
+  text-decoration:none;
 }
+.natWebSlogan {
+  display:none;
+}
+.natMain, .natSideBar {
+  border-top:0px;
+}
+

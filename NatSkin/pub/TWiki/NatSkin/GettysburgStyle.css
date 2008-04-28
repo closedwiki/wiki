@@ -20,6 +20,9 @@ body, input, textarea, select {
   font-size:14px;
 }
 
+html {
+  background:#eeeeee; 
+}
 .natBody {
   margin:0;
   padding:0;
@@ -30,12 +33,15 @@ body, input, textarea, select {
 }
 
 /* page layout */
+.natMain,
+.natMainFooter,
 .natSideBar {
-  padding:10px 20px 10px 20px;
+  padding:20px;
 }
+
 .natTopRightContents,
 .natTopLeftContents {
-  margin:10px 20px 20px 20px;
+  margin:20px 20px 20px 20px;
   font-family:arial,sans-serif;
 }
 
@@ -250,13 +256,16 @@ body, input, textarea, select {
   color:#333333;
   background:#999999;
 }
-.natSideBarContents {
-}
 
-.natSideBar h2 a:hover,
-.natSideBar li a:hover,
-.natWebLink a:hover {
+.natSideBar a:hover h3,
+.natSideBar a:hover {
   text-decoration:underline;
+  color:#ffcc66;
+}
+.natSideBar a:hover h2,
+.natSideBar h2 a:hover {
+  text-decoration:none;
+  color:#ffcc66;
 }
 
 .natSideBar h2,
@@ -266,22 +275,23 @@ body, input, textarea, select {
   padding:0px;
   color:#003366;
 }
-.natSideBarPersonal h2,
-h2.natSideBarTitle {
+.natSideBar h2 {
   border-bottom:1px dotted #ffffff;
   _border-bottom:1px solid #ffffff; /* IE only */
   color:#ffffff;
   font:normal 20px georgia,serif;
   letter-spacing:.1em;
-  padding-bottom:2px;
-  margin-bottom:12px;
+  margin:20px 0px 12px 0px;
+  padding: 0px 0px 2px 0px;
   text-align:left;
   color:white;
 }
-.natSideBarPersonal h2 a {
+.natSideBar h2 a {
   color:white;
 }
-
+.natSideBar h3 {
+  margin:12px 0px 6px 0px;
+}
 .natSideBar ul {
   color:#003366;
   padding-left:0px;
@@ -318,7 +328,6 @@ h2.natSideBarTitle {
 .natMainHeaderContents, 
 .natMainContents,
 .natMainFooterContents {
-  margin:20px;
   color:#444444;
   font:normal 14px/140% georgia,serif
 }
@@ -351,11 +360,14 @@ h2.natSideBarTitle {
 /* bottom */
 .natBottomBarContents {
   margin:20px;
-  font-size:95%;
+  font-size:90%;
 }
 .natBottomBarContents a:hover,
 .natBottomBarContents {
   color:#666666;
+}
+.natSyndicate {
+  margin:20px 0px;
 }
 
 /* supported plugins */

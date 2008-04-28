@@ -5,24 +5,23 @@
   border-bottom:0px;
 }
 .natWebButtons {
-  padding-left:0px;
-  padding-right:0px;
   border-bottom:1px solid #999999;
-}
-.natWebButtonsContents {
-  font-size:13px;
-  font-family:arial, sans-serif;
   padding:5px 15px;
 }
-.natWebButtons ul li {
-  margin-right:0px;
+.natWebButtonsContents {
+  font-family:arial, sans-serif;
 }
-.natWebButtons ul li a {
-  padding:5px 10px;
+.natWebButtons ul li {
+  margin:0px;
+  padding:0px;
+}
+.natWebButtons ul a {
+  margin:0px;
+  padding:3px 9px;
   color:white;
   font-weight:bold;
 }
-.natWebButtons ul li a:hover {
+.natWebButtons ul a:hover {
   text-decoration: none;
   color:#99ff66; 
 }

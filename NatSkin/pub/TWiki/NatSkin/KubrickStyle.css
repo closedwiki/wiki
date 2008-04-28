@@ -22,6 +22,9 @@ hr {
 }
 
 /* local basics */
+html {
+  background:#d5d6d7;
+}
 .natBody {
   margin:0;
   padding:0;
@@ -49,12 +52,16 @@ hr {
 /* top bar */
 .natTopLeft, .natTopRight {
   padding:0px;
+  vertical-align:top;
 }
-.natTopLeftContents {
-  margin:40px 0px 30px 20px;
+.natTopLeft {
+  padding:40px 0px 40px 15px;
 }
-.natTopRightContents {
-  margin:40px 20px 30px 15px;
+.natTopRight {
+  padding:40px 5px 40px 15px;
+}
+.natTopBarSizer {
+  height:auto;
 }
 .natSearchBox input {
   width:150px;
@@ -114,28 +121,29 @@ hr {
   color: #666;
   font-size:1em;
 }
-.natSideBar h2 {
+.natSideBar h2,
+.natSideBar h3 {
   font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
   font-size: 1.5em;
-  margin:0px;
-  margin-top:5px;
-  padding:0;
+  padding:0px;
   text-decoration: none;
   color:#444444;
+  line-height:150%;
+}
+.natSideBar h2 {
+  margin:1em 0em .5em 0em;
+}
+.natSideBar h3 {
+  font-size:1.0em;
 }
 
-.natSideBarTitle {
-  display:none;
-}
-.natSideBarPersonal h2 a {
-  font-weight:normal;
-  color:#444444;
-}
 .natSideBar h2,
 .natSideBar h2 a,
-.natWebLink a {
+.natSideBar h3,
+.natSideBar h3 a {
   font-weight:normal;
   color:#575757;
+  color:#444444;
 }
 .natSideBar a:hover {
   text-decoration:underline;
@@ -176,7 +184,7 @@ html>body .natSideBar ol { /* hide from IE */
 .natSideBar a.natFeedIcon {
   color:#959596;
 }
-.natSearchBox .natSideBarSearch input {
+.natSideBar .natSearchBox input {
   background:white;
   color: #444;
   padding: 2px 0 2px 2px;
@@ -191,6 +199,9 @@ html>body .natSideBar ol { /* hide from IE */
 }
 
 /* main */
+.natMainHeaderContents {
+  color:#0066cc;
+}
 .natMiddle {
   background-color: white;
   font-weight:normal;
@@ -287,13 +298,14 @@ html>body .natSideBar ol { /* hide from IE */
   background:#fff6bf;
   border-top:1px solid #ffd324;
   border-bottom:1px solid #ffd324;
-  text-align:center;
+  text-align:left;
 }
 .twikiTable th,
 .twikiTable th span,
 .twikiTable th font,
 .twikiTable th a {
   color:#0055aa;
+  font-weight:bold;
 }
 .twikiTable td {
   background:white;
@@ -348,6 +360,10 @@ html>body .natSideBar ol { /* hide from IE */
 .twikiPageForm table th,
 .natTopicForm table th a {
   background:#fff6bf;
+}
+.natTopicForm th,
+.twikiPageForm th {
+  text-align:right;
 }
 .natTopicForm select[multiple="on"] {
   width:99%;

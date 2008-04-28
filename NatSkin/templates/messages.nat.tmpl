@@ -1,5 +1,4 @@
-%TMPL:INCLUDE{"messages.tmpl"}%
-<!-- template: messages.nat.tmpl -->
+%TMPL:INCLUDE{"messages"}%
 %TMPL:DEF{"remove_user_done"}%<!-- removes contact note -->
 ---+++ %MAKETEXT{"User Account [_1] Deleted" args="<nop>%PARAM1%"}%
 %MAKETEXT{"Your user name has been removed from the Authentication System."}%
@@ -170,6 +169,12 @@ link in your email or enter the code in the box below to activate your membershi
 %MAKETEXT{"Did you want to ~[~[[_1]~]~[reset [_2]'s password~]~]?" args="%SCRIPTURLPATH{"view"}%/TWiki.ResetPassword?username=%PARAM1%,%PARAM1%"}%
 
 %MAKETEXT{"Alternatively go <a href=\"javascript:history.back()\">back</a> in your browser and choose a different username."}%
+%TMPL:END%
+%TMPL:DEF{"bad_loginname"}%
+---+++ %MAKETEXT{"Incorrect [_1]" args="%SYSTEMWEB%.LoginName"}%
+%MAKETEXT{"'[_1]' is not a valid [_2] " args="%PARAM1%,%SYSTEMWEB%.LoginName"}%
+
+%TMPL:P{"goback"}%
 %TMPL:END%
 %TMPL:DEF{"bad_wikiname"}%<!-- uses goback def -->
 ---+++ %MAKETEXT{"Incorrect [_1]" args="%TWIKIWEB%.WikiName"}%

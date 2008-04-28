@@ -6,7 +6,7 @@
 %TMPL:INCLUDE{"loginsidebar"}%<!-- -->
 %TMPL:INCLUDE{"loginjavascript"}%<!-- -->
 %TMPL:INCLUDE{"loginstyles"}%<!-- -->
-%TMPL:DEF{"title"}%Login%TMPL:END%
+%TMPL:DEF{"title"}%Login - %WIKITOOLNAME%%TMPL:END%
 %TMPL:DEF{"bodyclass"}%natLoginBody%TMPL:END%
 %TMPL:DEF{"meta"}% <meta name="robots" content="noindex, nofollow" /> %TMPL:END%
 %TMPL:DEF{"locator"}% %TMPL:END%
@@ -23,7 +23,7 @@
 %TMPL:END%
 %TMPL:DEF{"content"}%<div class="natLogin">
 <div class="natLoginMessage">
-<h1 class="natLoginHeading">%TMPL:P{"heading"}%</h1>
+<h1 class="natLoginHeading"><span>%TMPL:P{"heading"}%</span></h1>
 %TMPL:P{"message"}% 
 %TMPL:P{"contact"}% 
 </div></div> %TMPL:END%

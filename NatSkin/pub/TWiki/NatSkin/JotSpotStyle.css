@@ -20,6 +20,10 @@ a {
 a:hover {
   text-decoration:none;
 }
+html,
+.natBody {
+  background:#eee;
+}
 
 /* top bar */
 .natHeaderArt {
@@ -36,8 +40,8 @@ a:hover {
 }
 .natTopLeftContents,
 .natTopRightContents {
-  margin:0px 0px 10px 0px;
-  padding:10px;
+  margin:0px 0px 15px 0px;
+  padding:15px;
   height:40px;
   color: #D4D1FF;
 }
@@ -72,7 +76,7 @@ a:hover {
   vertical-align: top;
 }
 .natTopBarSizer {
-  height:70px;
+  height:auto;
 }
 .natWebSlogan {
   display:none;
@@ -86,15 +90,11 @@ a:hover {
   width:185px;
   padding:10px;
 }
-.natSideBarTitle {
-  display:none;
-  text-align: center;
-}
 .natSideBarContents {
   font-size:12px;
   background: #FFFFFF;
   overflow: hidden;
-  padding:5px;
+  padding:0px 10px 10px 10px;
   margin:0px;
   border-right: 1px solid #B3BCC0;
   border-bottom: 1px solid #B3BCC0;
@@ -115,9 +115,29 @@ a:hover {
   color:black;
   text-decoration:none;
 }
+.natSideBar h2 {
+  border-top:1px solid #CDDEF6;
+  margin:10px -10px 5px -10px;
+  padding:10px 10px 5px 10px;
+}
+h2.natSideBarTitle {
+  border:0px;
+  margin:0px;
+  padding:0px;
+}
+h2.natSideBarTitle a {
+  display:block;
+  padding:3px 10px 2px 10px;
+  margin:0px -10px 5px -10px;
+  border-bottom:1px solid #CDDEF6;
+}
+h2.natSideBarTitle a:hover {
+  background:#EEF6F6;
+  color:black;
+}
 .natSideBar h3 {
   font-size:14px;
-  margin:0px 0px 0px 5px;
+  margin:0px;
   color:black;
 }
 .natSideBar ol {
@@ -134,7 +154,7 @@ a:hover {
   border:1px solid #CDDEF6;
   list-style-type: none;
   padding:5px;
-  margin:0px -5px;
+  margin:0px -10px;
 }
 .navCurrent .natSubWebs {
   padding:0px;
@@ -170,7 +190,6 @@ a:hover {
 }
 .natSearchBoxTop {
   padding:0px;
-  margin-top:-5px;
 }
 .natSearchBoxTop input {
   border:1px solid  #4F518D;
@@ -188,14 +207,6 @@ a:hover {
 }
 .natSearchBoxPos1 input {
   border:1px solid #B3BCC0;
-}
-.natSideBarPersonal h2 {
-  border-top:1px solid #CDDEF6;
-  margin:10px -5px 5px -5px;
-  padding:10px;
-}
-.natSideBarPersonal {
-  padding:0px;
 }
 a:hover.natFeedIcon,
 a.natFeedIcon {
@@ -241,7 +252,7 @@ a.natFeedIcon {
 .natMainContents {
   background:white;
   margin:0px;
-  padding:10px;
+  padding:20px;
   font-size:14px;
   border-right: 1px solid #B3BCC0;
   _width:auto;
@@ -304,7 +315,7 @@ a.natFeedIcon {
   border-right: 1px solid #B3BCC0;
   border-bottom: 1px solid #B3BCC0;
   margin:0px;
-  padding:10px;
+  padding:20px;
   background:white;
   margin-bottom:10px;
 }
@@ -442,6 +453,7 @@ a.natFeedIcon {
   background:#D5EEB4;
   padding:4px 7px;
 }
+.twikiTable th font,
 .twikiTable th strong,
 .twikiTable th,
 .twikiTable th a {
@@ -478,7 +490,7 @@ a.twikiNewLink {
   margin:0px;
 }
 .blogSideBarSection {
-  margin:5px -5px;
+  margin:5px -10px;
   background:#EEF6F6;
   border:1px solid #CDDEF6;
   padding:10px;
@@ -490,7 +502,7 @@ a.imageHref {
   color: #0076A3;
 }
 .blogSideBarTechnorati .blogSideBarHeader {
-  margin:5px -5px;
+  margin:5px -10px;
 }
 .blogSideBarTechnorati {
   padding-left:15px;

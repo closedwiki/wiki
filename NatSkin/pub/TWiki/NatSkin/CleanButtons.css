@@ -3,22 +3,22 @@
 
 .natWebButtons {
   border-bottom:1px #aaaaaa dotted;
-  line-height:14px;
 }
 .natTopBar {
   border-bottom:0px;
 }
 .natWebButtons ul {
   margin:0px;
-  padding:5px 20px 5px 15px;
+  padding:0px 20px 0px 15px;
 }
 
 .natWebButtons ul li {
   margin:0px;
-  padding:0px 0px;
+  padding:0px;
 }
 .natWebButtons ul a {
-  padding:5px 7px;
+  margin:0px;
+  padding:3px 5px;
   font-weight:bold;
   border-right:1px solid #eee;
 }

@@ -11,7 +11,7 @@ data/TWiki/NatSkinStyleBrowser.txt 0644
 data/TWiki/NatSkinTemplates.txt 0644
 data/TWiki/NatSkin.txt 0644
 data/TWiki/TWikiWebButtons.txt 0644
-data/TWiki/TWikiWebCss.txt 0644
+data/TWiki/TWikiWebHtmlHead.txt 0644
 data/TWiki/TWikiWebLinks.txt 0644
 data/TWiki/TWikiWebMoreTopicActions.txt 0644
 data/TWiki/TWikiWebNothingFound.txt 0644
@@ -71,7 +71,6 @@ pub/TWiki/NatSkin/KubrickButtons.css 0644
 pub/TWiki/NatSkin/KubrickStyle.css 0644
 pub/TWiki/NatSkin/KubrickThin.css 0644
 pub/TWiki/NatSkin/Kubrick.jpeg 0644
-pub/TWiki/NatSkin/NoSideBar.css 0644
 pub/TWiki/NatSkin/NuozekBar.jpg 0644
 pub/TWiki/NatSkin/NuozekVariation.css 0644
 pub/TWiki/NatSkin/OrangeTunnelBar.jpg 0644
@@ -123,8 +122,7 @@ pub/TWiki/NatSkin/SubwayBar.jpg 0644
 pub/TWiki/NatSkin/SubwayVariation.css 0644
 pub/TWiki/NatSkin/WaterBar.jpg 0644
 pub/TWiki/NatSkin/WaterVariation.css 0644
-pub/TWiki/NatSkin/button_cancel.png 0644
-pub/TWiki/NatSkin/button_done.png 0644
+pub/TWiki/NatSkin/bottom-shade.png 0644
 pub/TWiki/NatSkin/dots.gif 0644
 pub/TWiki/NatSkin/external.png 0644
 pub/TWiki/NatSkin/favicon.ico 0644
@@ -133,7 +131,7 @@ pub/TWiki/NatSkin/feed-icon-12x12-gray.gif 0644
 pub/TWiki/NatSkin/feed-icon-12x12-gray.png 0644
 pub/TWiki/NatSkin/feed-icon-12x12.png 0644
 pub/TWiki/NatSkin/icon-doc-small.gif 0644
-pub/TWiki/NatSkin/natskin.js 0644
+pub/TWiki/NatSkin/left-shade.png 0644
 pub/TWiki/NatSkin/notspot_back.gif 0644
 pub/TWiki/NatSkin/notspot.gif 0644
 pub/TWiki/NatSkin/obfuscator.js 0644
@@ -149,6 +147,11 @@ pub/TWiki/NatSkin/q_gray.gif 0644
 pub/TWiki/NatSkin/q_red.gif 0644
 pub/TWiki/NatSkin/quote.gif 0644
 pub/TWiki/NatSkin/quote.png 0644
+pub/TWiki/NatSkin/quote-white.png 0644
+pub/TWiki/NatSkin/right-shade.png 0644
+pub/TWiki/NatSkin/separator.jpg 0644
+pub/TWiki/NatSkin/stripes.png 0644
+pub/TWiki/NatSkin/top-shade.png 0644
 pub/TWiki/NatSkin/wikiringlogo40x40.png 0644
 templates/addform.nat.tmpl 0644
 templates/attachagain.nat.tmpl 0644
@@ -164,13 +167,11 @@ templates/changeformsidebar.nat.tmpl 0644
 templates/changes.nat.tmpl 0644
 templates/editTableRow.nat.tmpl 0644
 templates/editform.nat.tmpl 0644
-templates/editformtoolbar.nat.tmpl 0644
 templates/editjavascript.nat.tmpl 0644
 templates/edit.nat.tmpl 0644
 templates/editsection.nat.tmpl 0644
 templates/editstyles.nat.tmpl 0644
 templates/edittext.nat.tmpl 0644
-templates/edittoolbar.nat.tmpl 0644
 templates/form.nat.tmpl 0644
 templates/formtables.nat.tmpl 0644
 templates/javascript.nat.tmpl 0644
@@ -225,7 +226,6 @@ templates/oopssaveerr.nat.tmpl 0644
 templates/oopssave.nat.tmpl 0644
 templates/oopssendmailerr.nat.tmpl 0644
 templates/oopssoftwareerr.nat.tmpl 0644
-templates/oopsstyles.nat.tmpl 0644
 templates/oopstopicexists.nat.tmpl 0644
 templates/oopsupload.nat.tmpl 0644
 templates/oopswrongpassword.nat.tmpl 0644
@@ -234,7 +234,6 @@ templates/plucsearch.nat.tmpl 0644
 templates/previewjavascript.nat.tmpl 0644
 templates/preview.nat.tmpl 0644
 templates/previewstyles.nat.tmpl 0644
-templates/previewtoolbar.nat.tmpl 0644
 templates/rdiff.nat.tmpl 0644
 templates/rdiffstyles.nat.tmpl 0644
 templates/rdifftopicactions.nat.tmpl 0644
@@ -261,12 +260,13 @@ templates/searchjavascript.nat.tmpl 0644
 templates/searchmeta.nat.tmpl 0644
 templates/search.nat.tmpl 0644
 templates/searchrenameview.nat.tmpl 0644
+templates/settingsjavascript.nat.tmpl 0644
 templates/settings.nat.tmpl 0644
-templates/settingstoolbar.nat.tmpl 0644
 templates/sidebar.nat.tmpl 0644
 templates/strings.nat.tmpl 0644
 templates/topbar.nat.tmpl 0644
 templates/viewbody.plain.nat.tmpl 0644
+templates/viewjavascript.nat.tmpl 0644
 templates/view.nat.tmpl 0644
 templates/view.plain.nat.tmpl 0644
 templates/view.print.nat.tmpl 0644

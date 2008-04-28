@@ -5,7 +5,7 @@
 %TMPL:INCLUDE{"attachsidebar"}%<!-- -->
 %TMPL:INCLUDE{"attachjavascript"}%<!-- -->
 %TMPL:INCLUDE{"attachstyles"}%<!-- -->
-%TMPL:DEF{"title"}%%TOPIC% (attach)%TMPL:END%
+%TMPL:DEF{"title"}%%TOPIC% (attach) - %WIKITOOLNAME%%TMPL:END%
 %TMPL:DEF{"bodyclass"}%natAttachBody%TMPL:END%
 %TMPL:DEF{"meta"}%<meta name="robots" content="noindex, nofollow" />%TMPL:END%
 %TMPL:DEF{"onloadscript"}%document.main.filepath.focus();%TMPL:END%
@@ -62,7 +62,6 @@
 </div>
 %IFDEFINEDTHEN{"%URLPARAM{"manage"}%" as="on"}%
 %$nopIFDEFINEDTHEN{"$percntMETA{\"attachments\" all=\"on\"}$percnt"}%
-<h2>%MAKETEXT{"Existing attachments for <nop>[_1]" args="%TOPIC%"}%</h2>
 <div class="natTopicAttachments"> $test </div>
 %$nopFIDEFINED%
 %FIDEFINED%

@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" />
 <meta http-equiv="Content-Style-Type" content="text/css" /> 
 <meta name="generator" content="TWiki/NatSkin" /> %TMPL:P{"meta"}%
-<title>%TMPL:P{"title"}% - %WIKITOOLNAME% - (%MAKETEXT{"printable"}%)</title>
+<title>%HTMLTITLE% - (%MAKETEXT{"printable"}%)</title>
 <base href="%SCRIPTURL{view}%/%WEB%/%TOPIC%"></base>
 <link rel="icon" href="%FAVICON%" type="image/x-icon" /> 
 <link rel="shortcut icon" href="%FAVICON%" type="image/x-icon" />
@@ -13,24 +13,22 @@
   Disable the conditional around GETSKINSTYLE when firefox has fixed printing of pages
   that import css. See https://bugzilla.mozilla.org/show_bug.cgi?id=154892 
 -->
-%IFDEFINED{"%URLPARAM{"css"}%" as="off" else="$percntGETSKINSTYLE$percnt"}%
-%TMPL:P{"javascript"}%
-%WEBCOMPONENT{"WebJavaScript"}%
+%IFDEFINED{"%URLPARAM{"css"}%" as="on" then="$percntGETSKINSTYLE$percnt"}%
+%TMPL:P{"styles"}%
 <style type="text/css">
+object#player,
 .natFeedIcon,
 .blogEntryFeed,
 .blogNavigation,
 .blogAddComment {
   display:none;
 }
-/*
 .natExternalLink:after {
-  content: " (" attr(href) ") ";
+  content:" (" attr(href) ") ";
 }
-*/
 </style>
-%TMPL:P{"styles"}%
-%WEBCOMPONENT{"WebCss"}%
+%TMPL:P{"javascript"}%
+%WEBCOMPONENT{"WebHtmlHead"}%
 </head>
 <body class="natBody natPrintBody">
 <div class="natBodyContents">

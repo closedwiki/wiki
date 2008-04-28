@@ -6,7 +6,7 @@
 %TMPL:INCLUDE{"moveattachmentjavascript"}%<!-- -->
 %TMPL:INCLUDE{"moveattachmentstyles"}%<!-- -->
 %TMPL:DEF{"bodyclass"}%natMoveAttachmentBody%TMPL:END%
-%TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"move attachment"}%)%TMPL:END%
+%TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"move attachment"}%) - %WIKITOOLNAME%%TMPL:END%
 %TMPL:DEF{"meta"}% <meta name="robots" content="noindex, nofollow" /> %TMPL:END%
 %TMPL:DEF{"onloadscript"}%document.rename.newtopic.focus();%TMPL:END%
 %TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>[[%TOPIC%]]%TMPL:END%
@@ -50,7 +50,20 @@
   <th>&nbsp;</th>
   <td><table style="width:auto" border="0">
     <tr>
-      <td align="right"><input type="checkbox" class="twikiCheckbox" name="totrash" id="totrash" onclick="var elem = document.rename.newweb; elem.value = (elem.value=='Trash')?'%WEB%':'Trash';"></td>
+      <td align="right"><input type="checkbox" class="twikiCheckbox" name="totrash" id="totrash" 
+~~~ onclick="
+~~~ var elem = document.rename.newweb; 
+~~~ if (elem.value == 'Trash') { 
+~~~   elem.value = '%WEB%';
+~~~   document.rename.newtopic.value = '%TOPIC%';
+~~~   document.rename.totrash.checked = false;
+~~~ } else {
+~~~   elem.value = 'Trash';
+~~~   document.rename.newtopic.value = 'TrashAttachment'; 
+~~~   document.rename.totrash.checked = true;
+~~~ }
+~~~ "
+~~~   ></td>
       <td><label for="totrash">%MAKETEXT{"Move to Trash"}%</label></td>
     </tr>
     </table>

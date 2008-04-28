@@ -6,12 +6,13 @@
 %TMPL:INCLUDE{"viewstyles"}%<!-- -->
 %TMPL:INCLUDE{"searchbox"}%<!-- -->
 %TMPL:DEF{"bodyclass"}%natViewBody%TMPL:END%
-%TMPL:DEF{"title"}%%IFDEFINED{"%PAGETITLE%" then="$test" else="%TOPIC% - %WEB%" glue="off"}%%TMPL:END%
+%TMPL:DEF{"title"}%%HTMLTITLE%%TMPL:END%
 %TMPL:DEF{"meta"}%%HTTP_EQUIV_ON_VIEW%
 %IFDEFINED{"%METAKEYWORDS%" then="<meta name=\"keywords\" content=\"$test\" />$n<meta http-equiv=\"keywords\" content=\"$test\" />"}%
 %IFDEFINED{"%METAAUTHOR%" glue="off" then="<meta name=\"author\" content=\"$test\" />"}%
 %IFDEFINED{"%METADESCRIPTION%" then="<meta name=\"description\" content=\"$test\" />"}%%TMPL:END%
 %TMPL:DEF{"content"}%%TEXT%
+%IFDEFINED{"%URLPARAM{"raw"}%" then="<div class='natButtonBox' style='text-align:right'><input type='button' class='natOkButton' onclick=\"window.location.href='%SCRIPTURL{view}%/%WEB%/%TOPIC%';\" value='Back' /></div>" glue="off"}%
 %META{"form"}% %TMPL:END%
 %TMPL:DEF{"contentheader"}% <!-- -->
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -22,18 +23,16 @@
     </div>
   </td>
   <td valign="top" align="right">
-    <dirtyarea>
     %IFDEFINEDTHEN{"$percntBROADCASTMESSAGE$percnt"}%
     <span class="natBroadCastToggle">
     %$nopTWISTYBUTTON{id="broadcastmessage" 
-      remeber="on"
+      remember="on"
       showlink="Broadcast on " hidelink="Broadcast off " 
       showimg="%ICONURLPATH{toggleopenleft-small}%"
       hideimg="%ICONURLPATH{toggleclose-small}%"
     }%
     </span>
     %FIDEFINED%
-    </dirtyarea>
   </td>
 </tr></table>%TMPL:END%
 %TMPL:DEF{"contentfooter"}%
@@ -43,8 +42,8 @@
 %IFDEFINEDTHEN{"$percntBROADCASTMESSAGE$percnt"}%
   %$nopTWISTYTOGGLE{id="broadcastmessage"
   mode="div" 
-  firststart="show"
-  remember="on" 
+  firstart="show"
+  remember="on"
 }%
 <div class="twikiBroadcastMessage"> $test </div>
 %$nopENDTWISTY%

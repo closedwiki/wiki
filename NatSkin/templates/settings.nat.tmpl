@@ -1,23 +1,27 @@
 %TMPL:INCLUDE{"page"}% 
-<!-- template: settings.nat.tmpl -->
-<!-- -->%TMPL:INCLUDE{"settingsbody"}%
-<!-- -->%TMPL:INCLUDE{"settingstopicactions"}%
-<!-- -->%TMPL:INCLUDE{"settingssidebar"}%
-<!-- -->%TMPL:INCLUDE{"settingsjavascript"}%
-<!-- -->%TMPL:INCLUDE{"settingsstyles"}%
-<!-- -->%TMPL:INCLUDE{"settingstoolbar"}%
-%TMPL:DEF{"bodyclass"}%natSettingsBody%TMPL:END%
-%TMPL:DEF{"meta"}% %HTTP_EQUIV_ON_EDIT% %TMPL:END%
-%TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"prefs"}%)%TMPL:END%
-%TMPL:DEF{"onloadscript"}%document.EditForm.text.focus();%TMPL:END%
-%TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>%TOPIC%%TMPL:END%
+%TMPL:INCLUDE{"edit"}%<!-- template: settings.nat.tmpl -->
+%TMPL:INCLUDE{"settingsbody"}%<!-- -->
+%TMPL:INCLUDE{"settingstopicactions"}%<!-- -->
+%TMPL:INCLUDE{"settingssidebar"}%<!-- -->
+%TMPL:INCLUDE{"settingsjavascript"}%<!-- -->
+%TMPL:INCLUDE{"settingsstyles"}%<!-- -->
+%TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"prefs"}%) - %WIKITOOLNAME%%TMPL:END%
 %TMPL:DEF{"content"}%<!-- -->
-<h2>%MAKETEXT{"Preference Settings for [_1]:" args="[[%WEB%.%TOPIC%]]"}%</h2>
-<div class="natEdit">
-<form name="SettingsForm" method="post" action="%SCRIPTURLPATH{"manage"}%/%WEB%/%TOPIC%">
-  <input type="hidden" name="action" value="saveSettings" />
-  <input type="hidden" name="originalrev" value="%ORIGINALREV%" />%TMPL:P{"edittoolbar"}%
-  <textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%">%TEXT%</textarea>
+<form name="EditForm" method="post" action="%SCRIPTURLPATH{"manage"}%/%WEB%/%TOPIC%">
+<input type="hidden" name="action_addform" value="" />
+<input type="hidden" name="action_cancel" value="" />
+<input type="hidden" name="action_checkpoint" value="" />
+<input type="hidden" name="action_preview" value="" />
+<input type="hidden" name="action_replaceform" value="" />
+<input type="hidden" name="action_save" value="" />
+<input type="hidden" name="action" value="saveSettings" />
+<input type="hidden" name="originalrev" value="%ORIGINALREV%" />
+%TABPANE%
+%TAB{"%MAKETEXT{"Preferences"}%"}%
+<textarea name="text" id="topic" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%">%TEXT%</textarea>
+%ENDTAB%
+%ENDTABPANE%
+%TMPL:P{"bottomtopicactions"}%
+%TMPL:P{"formend"}%<!-- -->
 </form>
-%TMPL:P{"bottomtopicactions"}%</div> 
 %TMPL:END%

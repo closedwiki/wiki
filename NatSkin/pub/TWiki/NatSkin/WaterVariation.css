@@ -8,9 +8,7 @@
 .natSearchBoxTop,
 .natTopicActions a,
 .natWebTitle,
-.natWebTitle a ,
-.natWebLocator a,
-.natWebLocator {
+.natWebTitle a {
   color:white;
 }
 
@@ -36,9 +34,12 @@
   text-decoration:none;
 }
 
-.natWebSlogan,
+.natWebSlogan {
+  display:none;
+}
 .natWebButtons {
   color:white;
+  background:inherit;
 }
 .natTopBar {
   border-top:0px;
@@ -50,22 +51,26 @@
 }
 
 /* web buttons */
-.natWebButtons ul li a {
+.natWebButtons ul a {
   padding:5px 10px 5px;
-  border-bottom:0px !important;
+  border:0px;
   color:white;
+  margin-left:-10px;
 }
 .natWebButtons ul a.current:hover {
   background:white;
   color:black;
+  border:0px;
 }
 .natWebButtons ul a.current {
   background:white;
   color:black;
+  border:0px;
 }
-.natWebButtons ul li a:hover {
+.natWebButtons ul a:hover {
   background:#ACDBEB;
   color:black;
+  border:0px;
 }
 
 /* twiki table variation */

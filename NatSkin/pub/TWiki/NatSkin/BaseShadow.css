@@ -9,7 +9,7 @@
 .natBoxBorderBottomRight,
 .natBoxBorderRight,
 .natBoxBorderLeft {
-  order:1px solid red;
+  border:1px solid red;
 }
 */
 

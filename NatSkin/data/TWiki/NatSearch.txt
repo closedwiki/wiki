@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1190366595" format="1.1" reprev="1.4" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1196671408" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="NatSkin"}%
 ---+!! %TOPIC%
 Search facility for the NatSkin.
@@ -6,7 +6,7 @@ Search facility for the NatSkin.
 %TOC%
 
 ---++ Description
-<nop>NatSearch unifies the Seach and the Jump box known from the standard TWiki. It 
+<nop>NatSearch unifies the Search and the Jump box known from the standard TWiki. It 
 uses one input field to either jump to a topic or perform a query. You can even
 use it as a quick way to create and edit new topic by entering =e:NewTopic= into the input field.
 
@@ -20,7 +20,7 @@ the search formfield:
    2 if your input starts with an uppercase letter but does not exist as a topic, a topic search tries
      to find it; if there is exactly one search hit, <nop>NatSearch jumps to it directly
    3 in any other case a combined topic+content search is conducted and its result is displayed in a table,
-     sorted by modification time, decending
+     sorted by modification time, descending
 
 ---++ Options
 The search string may be prepended with a set of options that are separated from the

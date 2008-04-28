@@ -10,11 +10,19 @@
   border:1px solid white;
 }
 .natWebTitle,
-.natWebTitle a,
-.natWebSlogan {
-  color:black;
+.natWebTitle a {
+  color:#bfdded;
 }
-.natWebSlogan,
-.natWebLocator {
+.natWebSlogan {
   display:none;
+}
+.natWebButtons {
+  background:inherit;
+}
+.natWebButtons ul a {
+  border:0px;
+  color:white;
+}
+.natTopicActions a {
+  color:#bfdded;
 }

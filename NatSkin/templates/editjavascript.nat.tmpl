@@ -1,9 +1,11 @@
-<!-- template: editjavascript.nat.tmpl -->
-%TMPL:INCLUDE{"javascript"}%<!-- -->
-%TMPL:INCLUDE{"editjavascript.natedit"}%<!-- -->
+%TMPL:INCLUDE{"editjavascript.natedit"}%<!-- template: editjavascript.nat.tmpl -->
 %TMPL:DEF{"editjavascript"}%
 <script type="text/javascript">
 function submitEditForm(script, action) {
+  $("#savearea").val($("#topic").val());
+  if (typeof(beforeSubmitHandler) != 'undefined') {
+    beforeSubmitHandler(script, action);
+  }
   if (action == 'add form') {
     document.EditForm.elements['submitChangeForm'].value = action;
   }
@@ -20,5 +22,4 @@ function submitEditForm(script, action) {
 %TMPL:DEF{"javascript"}%
 %TMPL:P{"defaultjavascript"}%
 %TMPL:P{"templatejavascript"}%
-%TMPL:P{"editjavascript"}%
 %TMPL:END%

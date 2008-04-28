@@ -3,9 +3,5 @@
 }
 .natPageBox {
   width:900px;
-  margin:1px auto 20px auto;
-}
-.natEditBody .natPageBox {
-  width:100%;
-  margin:0px;
+  margin:1px auto 120px auto;
 }

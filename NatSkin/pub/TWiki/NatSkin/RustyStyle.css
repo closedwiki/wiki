@@ -15,6 +15,9 @@ hr {
 }
 
 /* basics */
+html {
+  background:#6c6457;
+}
 .natBody {
   background:#6c6457;
   font-family:verdana,arial,sans-serif;
@@ -30,17 +33,7 @@ hr {
   _border-bottom:1px solid white; /* IE only */
   _border-left:1px solid white; /* IE only */
   _border-right:1px solid white; /* IE only */
-  padding:15px 0px;
-}
-.natMiddleLeft {
-  padding-left:15px;
-}
-.natMiddleRight {
-  padding-right:15px;
-}
-.natMain {
-  padding-left:15px;
-  padding-right:15px;
+  padding:15px;
 }
 .natSideBar .natExternalLink:after {
   display:none;
@@ -60,7 +53,6 @@ hr {
   background:#ff9831;
   font-weight:bold;
   line-height:140%;
-  text-transform:uppercase;
 }
 .twikiTable th,
 .twikiTable th span,
@@ -72,6 +64,7 @@ hr {
 .twikiTable td,
 .twikiTable {
   background:white;
+  padding:5px 7px;
 }
 .twikiTableEven td {
   background:#ffefb9;
@@ -97,7 +90,6 @@ hr {
   color:white;
   font-weight:bold;
   line-height:140%;
-  text-transform:uppercase;
 }
 .natTopicForm th a:hover,
 .natTopicForm th a {
@@ -106,8 +98,11 @@ hr {
 }
 
 /* twiki page form */
-.twikiPageForm table {
+.twikiPageForm {
   border:1px #ff9831 solid;
+  padding:5px;
+}
+.twikiPageForm table {
   border-collapse:collapse;
 }
 .twikiPageForm table table {
@@ -115,8 +110,8 @@ hr {
 }
 .twikiPageForm th,
 .twikiPageForm td {
-  border:1px #ff9831 ridge;
-  padding:2px 5px;
+  padding:5px 7px;
+  border:0px;
 }
 .twikiPageForm th {
   border-bottom:1px #ff9831 solid;
@@ -124,7 +119,6 @@ hr {
   color:white;
   font-weight:bold;
   line-height:140%;
-  text-transform:uppercase;
 }
 .twikiPageForm th a:hover,
 .twikiPageForm th a {
@@ -148,7 +142,6 @@ hr {
   color:white;
   font-weight:bold;
   line-height:140%;
-  text-transform:uppercase;
 }
 .natSearchHit {
   border:1px #ff9831 solid;
@@ -199,10 +192,10 @@ hr {
   _border-right:1px solid white; /* IE only */
 }
 .natTopLeftContents {
-  margin:10px 0px 20px 20px;
+  margin:20px 0px 20px 20px;
 }
 .natTopRightContents {
-  margin:10px 20px 20px 10px;
+  margin:20px 20px 20px 10px;
 }
 .natHeaderArt {
   background:#9C3300;
@@ -268,16 +261,26 @@ hr {
   font-size:95%;
 }
 
-.natWebLocator {
-  color:white;
-}
-
 .natAction {
   color:#ff9831;
 }
 
 .natTopicActions {
   font-size:95%;
+  line-height:17px;
+}
+.natTopicActions .natSep {
+  display:none;
+  color:#ffcc66 
+}
+.natTopicActions a {
+  margin-left:-7px;
+  padding:3px 7px;
+}
+.natTopicActions a:hover {
+  background:#ff9831;
+  color:white;
+  text-decoration:none;
 }
 
 /* sidebar */
@@ -288,32 +291,29 @@ hr {
 .natSideBar {
   background:#ff9831;
   color:#9C3300;
-  padding:0px;
 }
 .natSideBarContents {
   font-size:95%;
-  padding:15px;
 }
 
 .natSideBar h2 {
   font-size:12px;
-  margin:10px 0px 0px 0px;
-}
-.natSideBarPersonal h2,
-h2.natSideBarTitle {
+  padding:0px 5px;
+  margin:10px -5px 10px -5px;
   color:white;
   font-family:verdana,arial,sans-serif;
   font-size:14px;
   text-transform:uppercase;
   letter-spacing:.1em;
-  padding:0px 5px;
-  margin:0px -5px 10px;
   border-bottom:1px dotted white;
   _border-bottom:1px solid white; /* IE only */
   text-align:center;
 }
-.natSideBarPersonal h2 a {
+.natSideBar h2 a {
   color:white;
+}
+h2.natSideBarTitle {
+  margin-top:0px;
 }
 
 .natSideBar ol {
@@ -348,6 +348,9 @@ h2.natSideBarTitle {
 
 
 /* main area */
+.natMainContents {
+  margin:15px 0px 0px 0px;
+}
 .natMain, .natMainFooter {
   background:white;
   color:#444444;
@@ -402,7 +405,6 @@ h2.natSideBarTitle {
 /* BibtexPlugin */
 .bibsearch th {
   background:#ff9831;
-  text-transform:uppercase;
   color:white;
 }
 

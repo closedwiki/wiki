@@ -1,7 +1,7 @@
 %TMPL:INCLUDE{"oops"}%
 <!-- template: oopshistory.nat.tmpl -->
 %TMPL:DEF{"bodyclass"}%natOopsHistoryBody%TMPL:END%
-%TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"History"}%)%TMPL:END%
+%TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"History"}%) - %WIKITOOLNAME%%TMPL:END%
 %TMPL:DEF{"heading"}%%MAKETEXT{"Compare Revisions of [_1]" args="<nop>%TOPIC%"}% (r%HISTORY_REV1% - r%HISTORY_REV2%)%TMPL:END%
 %TMPL:DEF{"headingstyle"}%natNoteHeading%TMPL:END%
 %TMPL:DEF{"diffbin"}%%TMPL:P{context="CompareRevisionsAddonPluginEnabled" then="compare" else="rdiff"}%%TMPL:END% 

@@ -83,7 +83,7 @@ the templates by using the NatSkin as a base skin to create template modificatio
      navigation links
    * <nop>WebButtons: navigation tabs above the topic area
    * <nop>MySideBar: every user can extend the sidebar with a personalized navigation
-   * <nop>WebCss: additional css code per web
+   * <nop>WebHtmlHead: additional stuff to be put into the html head
    * <nop>WebJavaScript: additional javascript code per web
    * <nop>WebTopicActions: actions to manipulate TWiki topics
    * <nop>WebMoreTopicActions: actions when clicking on "More"
@@ -127,34 +127,32 @@ allways open an extra window.
 ---++ Skin Info
 <style type="text/css">
 .screenshotter {
-  height:130px;
   overflow:hidden;
-  position:relative;
+  height:130px;
 }
 .screenshotter img {
   width:600px;
-  position:absolute;
 }
 </style>
 
 |  Skin Author: | TWiki:Main/MichaelDaum |
-|  Copyright &copy;: | 2003-2007, Michael Daum http://wikiring.de |
+|  Copyright &copy;: | 2003-2008, Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Skin Version: | v3.0-pre17 |
+|  Skin Version: | v3.0-pre18 |
 |  Dependencies: | TWiki:Plugins/NatSkinPlugin |
 |  Description: | Driven by cascading stylesheets, Comes with 12 alternative styles, <nop>MoveableType and Wordpress Look-n-Feel |
 |  Base Name: | nat |
-|  Screenshot: | <div class="screenshotter" style="height:130px;overflow:hidden"><a href="%ATTACHURL%/Clean.jpeg"><img src="%ATTACHURL%/Clean.jpeg" title="Clean"/></a></div> |
-|  More Screenshots: | \
-   <div class="screenshotter"><a href="%ATTACHURL%/GeorgiaBlue.jpeg"><img src="%ATTACHURL%/GeorgiaBlue.jpeg" title="GeorgiaBlue"/></a></div>\
-   <div class="screenshotter"><a href="%ATTACHURL%/Gettysburg.jpeg"><img src="%ATTACHURL%/Gettysburg.jpeg" title="Gettysburg" /></a></div>\
-   <div class="screenshotter"><a href="%ATTACHURL%/IndependenceThin.jpeg"><img src="%ATTACHURL%/IndependenceThin.jpeg" title="IndependenceThin" /></a></div>\
-   <div class="screenshotter"><a href="%ATTACHURL%/Kubrick.jpeg"><img src="%ATTACHURL%/Kubrick.jpeg" title="Kubrick" /></a></div> \
-   <div class="screenshotter"><a href="%ATTACHURL%/PlainJane.jpeg"><img src="%ATTACHURL%/PlainJane.jpeg" title="PlainJane" /></a></div>\
-   <div class="screenshotter"><a href="%ATTACHURL%/SeaGreenThin.jpeg"><img src="%ATTACHURL%/SeaGreenThin.jpeg" title="SeaGreenThin" /></a></div>\
-   <div class="screenshotter"><a href="%ATTACHURL%/Rusty.jpeg"><img src="%ATTACHURL%/Rusty.jpeg" title="Rusty" /></a></div>\
-   <div class="screenshotter"><a href="%ATTACHURL%/SquashThin.jpeg"><img src="%ATTACHURL%/SquashThin.jpeg" title="SquashThin" /></a></div>\
-   <div class="screenshotter"><a href="%ATTACHURL%/StormyThin.jpeg"><img src="%ATTACHURL%/StormyThin.jpeg" title="StormyThin" /></a></div> |
+|  Screenshot: | <div class="screenshotter"><a href="%ATTACHURL%/Clean.jpeg"><img src="%ATTACHURL%/Clean.jpeg" title="Clean"/></a></div> |
+|  More Screenshots: \
+| <div class="screenshotter"><a href="%ATTACHURL%/GeorgiaBlue.jpeg"><img src="%ATTACHURL%/GeorgiaBlue.jpeg" title="GeorgiaBlue"/></a></div>\
+  <div class="screenshotter"><a href="%ATTACHURL%/Gettysburg.jpeg"><img src="%ATTACHURL%/Gettysburg.jpeg" title="Gettysburg" /></a></div>\
+  <div class="screenshotter"><a href="%ATTACHURL%/IndependenceThin.jpeg"><img src="%ATTACHURL%/IndependenceThin.jpeg" title="IndependenceThin" /></a></div>\
+  <div class="screenshotter"><a href="%ATTACHURL%/Kubrick.jpeg"><img src="%ATTACHURL%/Kubrick.jpeg" title="Kubrick" /></a></div> \
+  <div class="screenshotter"><a href="%ATTACHURL%/PlainJane.jpeg"><img src="%ATTACHURL%/PlainJane.jpeg" title="PlainJane" /></a></div>\
+  <div class="screenshotter"><a href="%ATTACHURL%/SeaGreenThin.jpeg"><img src="%ATTACHURL%/SeaGreenThin.jpeg" title="SeaGreenThin" /></a></div>\
+  <div class="screenshotter"><a href="%ATTACHURL%/Rusty.jpeg"><img src="%ATTACHURL%/Rusty.jpeg" title="Rusty" /></a></div>\
+  <div class="screenshotter"><a href="%ATTACHURL%/SquashThin.jpeg"><img src="%ATTACHURL%/SquashThin.jpeg" title="SquashThin" /></a></div>\
+  <div class="screenshotter"><a href="%ATTACHURL%/StormyThin.jpeg"><img src="%ATTACHURL%/StormyThin.jpeg" title="StormyThin" /></a></div> |
 |  Change&nbsp;History: | <!-- specify latest version first -->&nbsp; |
 |  13 Nov 2007: | reworking templates to use context instead of skin state, \
                   fixed initialization if <nop>NatEdit toolbar, \
@@ -414,6 +412,6 @@ allways open an extra window.
 
 __Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki:TWiki/TWikiSkinBrowser
 
--- TWiki:Main/MichaelDaum - 13 Nov 2007
+-- TWiki:Main/MichaelDaum - 17 Jan 2008
 
 %META:FILEATTACHMENT{name="wikiringlogo40x40.png" attachment="wikiringlogo40x40.png" attr="h" comment="" date="1189787359" path="wikiringlogo40x40.png" size="2571" stream="wikiringlogo40x40.png" tmpFilename="" user="TWikiContributor" version="1"}%

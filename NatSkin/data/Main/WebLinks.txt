@@ -11,7 +11,7 @@ Sidebar navigation in the %WEB% web. See also the %TWIKIWEB%.TWikiWebLinks
    * [[%MAINWEB%.TWikiGroups][%MAKETEXT{"Groups"}%]]
    * [[%TWIKIWEB%.ChangePassword][%MAKETEXT{"Password"}%]]%WEBCOMPONENT{"TWikiWebLinks"}% %IFDEFINEDTHEN{"%IFACCESS{"%LOCALSITEPREFS%" type="change"}%" as="1"}%
    * [[%LOCALSITEPREFS%][%MAKETEXT{"SitePreferences"}%]] %FIDEFINED%
-<!-- //main.weblinks -->%STOPINCLUDE%
+%STOPINCLUDE%
 
 
 <!--

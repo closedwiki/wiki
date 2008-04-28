@@ -2,6 +2,5 @@
 %STARTINCLUDE%<!-- twiki.weblinks -->
    * [[%TWIKIWEB%.InstalledPlugins][%MAKETEXT{"Plugins"}%]] %WEBCOMPONENT{"TWikiWebLinks"}%
 %IFDEFINEDTHEN{"%IFACCESS{"%TWIKIWEB%.TWikiPreferences" type="change"}%" as="1"}% <!-- -->
-   * [[%TWIKIWEB%.TWikiPreferences][%MAKETEXT{"SitePreferences"}%]]
-%FIDEFINED%
-<!-- //twiki.weblinks -->%STOPINCLUDE%
+   * [[%TWIKIWEB%.TWikiPreferences][%MAKETEXT{"SitePreferences"}%]] %FIDEFINED%
+%STOPINCLUDE%

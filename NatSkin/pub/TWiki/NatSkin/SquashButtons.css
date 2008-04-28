@@ -6,41 +6,34 @@
 }
 .natWebButtons {
   border-bottom: 1px solid #FFFFFF;
+  font-family:arial, sans-serif;
+  padding:0px 15px;
 }
 .natWebButtonsContents {
-  font-size:14px;
-  font-family:'Trebuchet MS', arial, sans-serif;
-  margin:5px 22px;
 }
 .natWebButtons ul li {
-  margin-right:4px;
+  margin:0px;
+  padding:0px;
 }
-.natWebButtons ul li a {
-  padding-right:10px;
+.natWebButtons ul a {
+  margin:0px;
+  padding:5px;
   color:white;
   font-weight:bold;
   letter-spacing: .1em;
 }
-.natWebButtons ul li a:hover {
+.natWebButtons ul a:hover {
   text-decoration: none;
-  /*
   background:#CC6600;
-  color:white;*/
-  color:#CC6600;
+  color:white;
 }
 
 .natWebButtons ul a.current:hover {
-  /*
   background:#aa4400;
-  */
-  color:#aa4400;
 }
 .natWebButtons ul a.current {
   text-decoration: none;
-  /*
   background:#CC6600;
   color:white;
-  */
-  color:#CC6600;
   border:0px;
 }

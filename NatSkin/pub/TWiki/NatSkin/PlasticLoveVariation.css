@@ -31,42 +31,36 @@
   color:#FE1C70;
 }
 .natWebSlogan {
-  color:#2BAFFA;
-  color:#FE1C70;
-  font-weight:bold;
-}
-/*
-.natWebTitle a {
-  text-decoration:underline;
-}
-*/
-.natWebLocator {
   display:none;
 }
 
 /* web buttons */
 .natWebButtons {
   padding-left:10px;
+  background:inherit;
 }
 .natWebButtonsContents {
   padding:5px 10px 5px;
 }
-.natWebButtons ul li a {
+.natWebButtons ul a {
+  border:0px;
   margin:0px;
   padding:2px 5px;
-  border-bottom:0px !important;
 }
 .natWebButtons ul a.current:hover {
   background:white;
   color:#FE1C70;
+  border:0px;
 }
 .natWebButtons ul a.current {
   background:white;
   color:black;
+  border:0px;
 }
-.natWebButtons ul li a:hover {
+.natWebButtons ul a:hover {
   background:#FE1C70;
   color:black;
+  border:0px;
 }
 
 /* forms 'n tables */
@@ -135,6 +129,10 @@
 
 .twikiToc li a:hover {
   background:#d9d6e7;
+}
+
+.natMain, .natSideBar {
+  border-top:0px;
 }
 
 /* blogging */

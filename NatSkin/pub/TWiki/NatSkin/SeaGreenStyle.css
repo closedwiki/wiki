@@ -16,7 +16,11 @@ hr {
 }
 
 /* basics */
+html {
+  background: #6699CC;
+}
 .natBody {
+  background: #6699CC;
   margin:0;
   padding:0;
   font-size:12px;
@@ -64,8 +68,6 @@ hr {
   color:#669966;
   text-decoration:underline;
 }
-.natWebLocator a,
-.natWebLocator,
 .natWebTitle a,
 .natWebTitle {
   font-family: Georgia, 'Times New Roman', serif;
@@ -88,6 +90,7 @@ hr {
 
 .natSearchBox input {
   font-size:12px;
+  padding:2px;
 }
 .natSearchBoxTop input {
   background:#99cc66;
@@ -107,6 +110,22 @@ hr {
   font-weight:bold;
   color:darkred;
 }
+.natTopicActions .natSep {
+  display:none;
+}
+.natTopicActions {
+  line-height:19px;
+  font-size:12px;
+}
+.natTopicActions a {
+  margin-left:-9px;
+  padding:4px 9px;
+}
+.natTopicActions a:hover {
+  background:#669966;
+  color:white;
+  text-decoration:none;
+}
 
 
 /* sidebar */
@@ -117,29 +136,31 @@ hr {
 .natSideBarContents {
   font-family: 'Trebuchet MS', arial, sans-serif;
 }
+.natSideBar h2 {
+  margin:1em 0em;
+  text-transform: uppercase;
+  letter-spacing: .2em;
+}
 .natSideBar h2,
 .natSideBar h2 a {
   font-size:14px;
-  color: #003366;
-}
-
-.natSideBarPersonal h2 a,
-h2.natSideBarTitle {
-  color: #666666;
+  color:#333333;
   font-weight: bold;
-  text-transform: uppercase;
   text-decoration:none;
-  letter-spacing: .2em;
+}
+h2.natSideBarTitle {
+  margin-top:0px;
+}
+.natSideBar h3,
+.natSideBar h3 a {
+  margin:0px;
+  color: #666666;
 }
 
 .natSideBar ol,
 .natSideBar ul {
-  margin:0px 20px;
-  padding-left:15px;
+  margin:5px 0px 5px 10px;
   color:#666666;
-}
-.natSideBar ol {
-  margin-left:10px;
 }
 
 .natSideBar ul ul {
@@ -153,7 +174,10 @@ h2.natSideBarTitle {
   padding-left:5px;
   padding-right:5px;
 }
-.natWebLink a:hover,
+.natSideBar a:hover h2,
+.natSideBar a:hover h3,
+.natSideBar h2 a:hover,
+.natSideBar h3 a:hover,
 .natSideBar a:hover {
   color:#669966;
   text-decoration:underline;
@@ -223,7 +247,11 @@ h2.natSideBarTitle {
   font-size:80%;
   line-height: 140%;
   color: #999999;
-  margin:0px 20px 5px
+  margin:20px;
+}
+.natCopyRight,
+.natSyndicate {
+  display:inline;
 }
 .natBottomBarContents a {
   color:#669966;

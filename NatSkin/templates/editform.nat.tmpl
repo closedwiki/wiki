@@ -1,6 +1,15 @@
-%TMPL:INCLUDE{"edit"}%
-%TMPL:INCLUDE{"editformtoolbar"}%
-<!-- template: editform.nat.tmpl -->
-%TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"edit form"}%)%TMPL:END%
+%TMPL:INCLUDE{"edit"}%<!-- template: editform.nat.tmpl -->
+%TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"edit form"}%) - %WIKITOOLNAME%%TMPL:END%
 %TMPL:DEF{"textarea"}%<div style="display:none"><textarea name="text" rows="10" cols="80">%TEXT%</textarea></div>%TMPL:END%
 %TMPL:DEF{"formend"}% <input type="hidden" name="editaction" value="form" /> %TMPL:END%
+%TMPL:DEF{"content"}% <!-- -->
+<form name="EditForm" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%" method="post">
+%TMPL:P{"formstart"}%
+%TABPANE%
+%TMPL:P{"textarea"}%
+%TMPL:P{"formfields"}%
+%TAB{"%MAKETEXT{"Help"}%" after="fixHeightOfPane()"}% %TMPL:P{"edithelp"}% %ENDTAB%
+%ENDTABPANE%
+%TMPL:P{"formend"}%
+%TMPL:P{"bottomtopicactions"}%
+</form> %TMPL:END%

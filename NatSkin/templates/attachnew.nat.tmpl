@@ -1,6 +1,6 @@
 %TMPL:INCLUDE{"attach"}%<!-- -->
 <!-- template: attachnew.nat.tmpl -->
-%TMPL:DEF{"previousdetails"}%<h2>%MAKETEXT{"Attach file to [_1]" args="%TOPIC%"}%</h2>%TMPL:END% 
+%TMPL:DEF{"previousdetails"}%<h2>%MAKETEXT{"Attach file to <nop>[_1]" args="%TOPICTITLE%"}%</h2>%TMPL:END% 
 %TMPL:DEF{"attachaction"}% <!--
 --><input type="submit" class="natOkButton" title="Upload selected file" value='%MAKETEXT{"Upload file"}%' />
 %IFDEFINEDTHEN{"$percntMETA{\"attachments\" all=\"on\"}$percnt"}%

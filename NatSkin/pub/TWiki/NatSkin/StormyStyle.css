@@ -15,10 +15,19 @@ a:hover, a:active {
 hr {
   border-bottom:1px solid #999999;
 }
+h1 {font-size:18px; margin-bottom:5px;}
+h2 {font-size:16px; margin-bottom:0px;}
+h3 {font-size:14px; margin-bottom:0px;}
+h4 {font-size:14px; margin-bottom:0px;}
+h5 {font-size:14px; margin-bottom:0px;}
+h6 {font-size:12px; margin-bottom:0px;}
 
 /* layout */
+html {
+  background:#6699cc;
+}
 .natBody {
-  background:#333333;
+  background:#6699cc;
   margin:0;
   padding:0;
   font-size:12px;
@@ -34,15 +43,9 @@ hr {
   margin:20px 0px 20px 20px;
 }
 .natMiddle {
-  padding:20px 10px 20px 10px;
+  padding:20px;
 }
 
-.natMainContents,
-.natMainHeaderContents,
-.natMainFooterContents,
-.natSideBarContents {
-  padding:5px 10px 5px 10px;
-}
 .natTopRight,
 .natSideBar {
   width:250px;
@@ -57,11 +60,13 @@ hr {
 /* twiki table */
 .twikiTable {
   font-size:95%;
+  margin:5px 1px;
 }
 .twikiTable td,
 .twikiTable th,
 .twikiTable {
   border:1px #aaaaaa solid;
+  padding:5px 7px;
 }
 
 .twikiTable th {
@@ -136,12 +141,14 @@ hr {
   background: #eeeeee;
   color:#cccccc;
   background:black;
+  border:0px;
 }
 .twikiPageForm th a {
   color:#cccccc;
 }
 .twikiPageForm td {
-  padding:3px;
+  padding:5px 7px;
+  border:0px;
 }
 
 /* search tables */
@@ -210,6 +217,7 @@ hr {
 }
 .natSearchBox input {
   font-size:12px;
+  padding:2px;
 }
 .natSearchBoxTop input {
   color:white;
@@ -224,6 +232,9 @@ hr {
 .natSearchBoxPos2,
 .natSearchBoxPos3 {
   margin:10px 0px;
+}
+.natTopicActions .natSep {
+  visibility:hidden;
 }
 
 .natWebTitle {
@@ -253,19 +264,26 @@ hr {
 .natSideBar h2 {
   padding-left:0px;
   font-size:14px;
-  margin-top:5px;
-}
-.natSideBarPersonal h2 a,
-.natSideBarTitle {
-  color:#cccccc;
-  letter-spacing:0.2px;
   font-family:verdana,arial,sans-serif;
   font-weight:bold;
-  text-transform:uppercase;
+  letter-spacing:0.2px;
+  margin:20px 0px 10px 0px;
+}
+.natSideBar h2 a,
+.natSideBar h2 {
+  color:#cccccc;
+}
+.natSideBar h2 a:hover,
+.natSideBar h3 a:hover {
+  text-decoration:none;
+  color:#99ff66;
+}
+.natSideBar h3 {
+  margin:10px 0px 0px 0px;
 }
 .natSideBar ul {
-  margin-left:0px;
-  padding-left:20px;
+  margin:0px;
+  padding:0px;
 }
 .natSideBar ul ul {
   margin-left:0px;
@@ -275,7 +293,7 @@ hr {
 
 .natNotes {
   padding-left:0px;
-  padding-right:10px;
+  padding-right:0px;
 }
 
 .natSideBar a.natFeedIcon {
@@ -286,6 +304,9 @@ hr {
 .natMiddle {
   background:#333333;
   color:#cccccc;
+}
+.natMainContents {
+  margin-top:20px;
 }
 .natMainHeaderContents {
   font-size:12px;
@@ -360,14 +381,14 @@ hr {
   line-height:130%;
 }
 .twikiToc ul {
-  margin-top:0px;
-  margin-bottom:0px;
+  margin:0px;
+  padding:0px;
 }
 .twikiToc ul ul {
   padding-left:20px;
 }
 .twikiTocTitle {
-  font-size:20px;
+  font-size:16px;
   font-weight:bold;
   padding-bottom:3px;
   margin-bottom:0px;

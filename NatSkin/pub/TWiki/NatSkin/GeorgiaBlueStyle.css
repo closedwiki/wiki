@@ -15,6 +15,9 @@ hr {
 }
 
 /* page layout */
+html {
+  background:#efefef;
+}
 .natBody {
   margin:0;
   padding:0;
@@ -39,14 +42,16 @@ hr {
 }
 .natTopRightContents,
 .natTopLeftContents {
-  margin:15px 20px;
+  margin:20px 20px;
 }
 
 
 /* top */
+.natHeaderArt {
+  background:#336699;
+}
 .natTopBar {
   border-top:3px solid #99ccff;
-  background:#336699;
 }
 .natWebTitle a {
   color:#ffffff;
@@ -92,23 +97,33 @@ hr {
 }
 
 /* twiki table */
-.twikiTable,
-.twikiTable th,
 .twikiTable td {
-  border:1px #aaaaaa solid;
+  border-bottom:1px #aaaaaa solid;
+  border-right:1px #aaaaaa solid;
   background:white;
+  padding:5px 7px;
+}
+.twikiTable {
+  border:2px solid white;
+}
+.natTopicAttachments .twikiTable {
+  border:1px #aaaaaa solid;
 }
 
 .twikiTable th {
+  padding:5px 7px;
+  border-right:1px #aaaaaa solid;
+  border-bottom:1px #aaaaaa solid;
   background:#eeeeee;
   font:bold 12px/140% verdana,arial,sans-serif;
-  text-transform:uppercase;
 }
+.twikiPageForm th a,
+.natTopicForm th a,
 .twikiTable th,
 .twikiTable th span,
 .twikiTable th font,
 .twikiTable th a {
-  color:#999966;
+  color:#336699;
 }
 .twikiDiffTable td {
   border:0px;
@@ -128,12 +143,7 @@ hr {
 .natTopicForm .twikiFirstCol,
 .natTopicForm th {
   background:#eeeeee;
-  color:#666;
   font:bold 12px/140% verdana,arial,sans-serif;
-  text-transform:uppercase;
-}
-.natTopicForm th a {
-  color:#999966;
 }
 
 .natTopicEditForm .twikiTable td {
@@ -158,18 +168,13 @@ hr {
 }
 .twikiPageForm table th,
 .twikiPageForm table td {
-  padding:5px;
+  padding:7px 5px;
 }
 .twikiPageForm th {
   background:#eeeeee;
-  color:#666;
+  color:#336699;
   font:bold 12px/140% verdana,arial,sans-serif;
-  text-transform:uppercase;
 }
-.twikiPageForm th a {
-  color:#999966;
-}
-
 
 /* sidebar */
 .natSideBarContents {
@@ -210,43 +215,44 @@ hr {
 }
 
 .natSideBar h2 {
-  padding:2px 5px 2px 15px;
-}
-.natSideBar .natWebLink a,
-.natSideBar h2,
-.natSideBar h2 a {
-  background:#eeeeee;
-  color:#666;
-  font:bold 12px verdana,arial,sans-serif;
-  text-transform:uppercase;
-}
-.natSideBarPersonal h2,
-h2.natSideBarTitle {
   background-color:inherit;
   border-bottom:1px dotted #999999;
   _border-bottom:1px solid #cccccc; /* IE only */
-  padding-left:15px;
   text-align:left;
   font:normal 14px verdana,arial,sans-serif;
   letter-spacing:.3em;
   text-transform:uppercase;
   text-decoration:none;
   color:#555;
+  padding:2px 5px 2px 15px;
+  margin:20px 0px 5px 0px;
 }
+.natSideBar h2 a,
 .natSideBarPersonal h2 a {
   color:#555;
   background:white;
   font:normal 14px verdana,arial,sans-serif;
   letter-spacing:.3em;
 }
-.natSideBar h3 {
+.natSideBar h2 a:hover {
+  text-decoration:none;
+}
+.natSideBar h3,
+.natSideBar h3 a {
+  background:#eeeeee;
+  color:#666;
+  text-transform:uppercase;
   font:bold 12px verdana,arial,sans-serif;
+}
+.natSideBar h3 {
+  padding:2px 5px 2px 15px;
+  margin:5px 0px;
 }
 
 .natSideBar ol,
 .natSideBar ul {
   font:normal 12px/150% verdana,arial,sans-serif;
-  padding-left:30px;
+  padding-left:15px;
 }
 .natSideBar ul {
   font-weight:bold;
@@ -327,7 +333,6 @@ h2.natSideBarTitle {
   color:#666;
   font-weight:bold;
   font-family:verdana,arial,sans-serif;
-  text-transform:uppercase;
   border-bottom:1px #aaaaaa solid;
   font-size:95%;
 }
@@ -371,7 +376,6 @@ h2.natSideBarTitle {
   color:#666;
   font:bold 14px/140% verdana,arial,sans-serif;
   text-align:center;
-  text-transform:uppercase;
   border-bottom:1px dotted #aaaaaa;
   _border-bottom:1px dotted #aaaaaa; /* IE only */
 }

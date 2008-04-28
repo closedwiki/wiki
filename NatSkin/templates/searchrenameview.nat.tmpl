@@ -20,7 +20,7 @@
   </th><th width="45%">
     <a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPICNAME%">%TOPICNAME%</a> 
   </th><th width="25%">
-    <a href="%SCRIPTURLPATH{"rdiff"}%/%WEB%/%TOPICNAME%">%TIME%</a> - %REVISION%
+    <a href="%SCRIPTURLPATH{"rdiff"}%/%WEB%/%TOPICNAME%?type=last">%TIME%</a> - %REVISION%
   </th><th width="20%">
     %AUTHOR%
   </th>
@@ -31,7 +31,7 @@
 </tr></table>
 <!-- debug: searchrenameview repeat end -->%REPEAT%<!-- debug: searchrenameview footer start-->
 <p>
-%SPLIT% <div class="natSearchTotal">%MAKETEXT{"Number of topics: <span>[_1]</span>" args="%NTOPICS%"}%</div>
+%SPLIT% <div class="natSearchTotal">%MAKETEXT{"Found <span>[_1]</span> topic(s)." args="%NTOPICS%"}%</div>
 %SPLIT%
 </form>
 %TMPL:END%

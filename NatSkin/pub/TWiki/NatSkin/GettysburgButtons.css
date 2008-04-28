@@ -13,13 +13,13 @@
   padding:0px 5px 10px;
   font-family:georgia,serif;
 }
-.natWebButtons ul li a {
+.natWebButtons ul a {
   font-weight:normal;
-  padding:5px 0px 5px;
   color:white;
+  border-bottom:5px solid #003366;
 }
 .natWebButtons ul a.current:hover,
-.natWebButtons ul li a:hover {
+.natWebButtons ul a:hover {
   text-decoration: none;
   border-bottom:5px solid #ffcc66;
 }

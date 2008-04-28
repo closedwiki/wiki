@@ -10,6 +10,13 @@ a:hover {
   color:#3f59bb;
 }
 
+h1 {font-size:16px;}
+h2 {font-size:14px;}
+h3 {font-size:14px;}
+h4 {font-size:14px;}
+h5 {font-size:14px;}
+h6 {font-size:14px;}
+
 hr {
   background:#aaaaaa;
   height:1px;
@@ -22,30 +29,26 @@ hr {
   padding:0;
   font-size:12px;
   font-family:arial,sans-serif;
-}
-.natBodyContents {
-  padding:10px;
   background:white;
 }
 
 .natTopLeftContents {
-  margin:10px 0px 10px 10px;
+  margin:20px 0px 20px 20px;
 }
 .natTopRightContents {
-  margin:10px;
+  margin:20px;
   font-size:11px;
+}
+.natTopicActions .natSep {
+  visibility:hidden;
 }
 
 .natMain {
   padding:0px;
   margin:0px;
 }
-.natMain,
-.natMainContents,
-.natMainHeaderContents,
-.natMainFooterContents,
-.natSideBarContents {
-  margin:10px 10px 0px 10px;
+.natMiddle {
+  padding:20px;
 }
 .natMainHeaderContents a {
   text-decoration:none;
@@ -85,7 +88,7 @@ hr {
 .twikiTable th span,
 .twikiTable th font,
 .twikiTable th a {
-  color:#666666;
+  color:#3f59bb;
 }
 .twikiTable th a:hover,
 .twikiTable th a {
@@ -119,8 +122,11 @@ hr {
 }
 
 /* twik page form */
+.twikiPageForm {
+  padding:5px;
+  border:1px solid #3f59bb;
+}
 .twikiPageForm table {
-  border:1px #aaaaaa solid;
   border-collapse:collapse;
 }
 .twikiPageForm table table {
@@ -128,7 +134,7 @@ hr {
 }
 .twikiPageForm th,
 .twikiPageForm td {
-  border:1px #aaaaaa ridge;
+  border:0px;
 }
 .twikiPageForm th {
   color:#666666;
@@ -155,14 +161,12 @@ hr {
 
 /* TOC */
 .twikiToc {
-  border:1px #aaaaaa solid;
   margin:5px 0px;
   padding-top:5px;
   padding-bottom:5px;
 }
 .twikiTocTitle {
   display:block;
-  padding:5px 25px 5px 10px;
   font-size:16px;
   font-weight:bold;
   margin-top:0px;
@@ -174,6 +178,7 @@ hr {
   text-decoration:none;
 }
 .twikiToc ul {
+  padding-left:0px;
   margin-top:5px;
   margin-bottom:5px;
 }
@@ -225,6 +230,7 @@ hr {
   background:transparent;
   font-weight:bold;
   margin:0px;
+  font-size:24px;
 }
 
 .natSearchBox input, 
@@ -232,8 +238,12 @@ hr {
   color:#666666;
 }
 .natSearchBox input {
-  border:1px solid #666666;
+  border:1px solid #aaa;
   font-weight:bold;
+  padding:2px;
+}
+.natSearchBox input:focus {
+  border:1px solid #3f59bb;
 }
 
 .natWebSlogan {
@@ -250,17 +260,14 @@ hr {
   color:#666666;
 }
 .natSideBar h2 {
-  padding:0px;
   font-size:16px;
-}
-.natSideBarPersonal h2 a,
-.natSideBarPersonal h2,
-.natSideBarTitle {
-  margin:0px;
+  margin:20px 0px 10px 0px;
   padding:0px;
   color:#3f59bb;
   font-weight:bold;
-  padding-left:2px;
+}
+.natSideBar h2 a {
+  color:#3f59bb;
 }
 .natSideBar ul {
   margin-left:0px;
@@ -271,22 +278,23 @@ hr {
   _border:1px solid white; /* IE fix */
 }
 
-.natSideBar h2,
 .natSideBar li {
-  padding:2px;
-}
-.natSideBar li {
-  margin-left:15px;
-  margin-bottom:0px;
-  margin-top:0px;
+  margin:0px;
 }
 .natSideBar ol li {
   margin-left:5px;
 }
-.natWebLink a:hover,
-.natSideBar li a:hover {
+.natSideBar h3 {
+  display:inline;
+  font-size:12px;
+}
+.natSideBar a:hover h2 ,
+.natSideBar a:hover h3 ,
+.natSideBar h2 a:hover,
+.natSideBar h3 a:hover,
+.natSideBar a:hover {
   background:#3f59bb;
-  background:#eeeeee;
+  color:white;
   text-decoration:none;
 }
 
@@ -318,34 +326,25 @@ hr {
 .natMain h1 a:link, .natMain h2 a:link, .natMain h3 a:link,
 .natMain h4 a:link, .natMain h5 a:link, .natMain h6 a:link {
   color:#666666;
+  margin-bottom:0px;
+}
+.natMain h1 {
+  margin-bottom:1.0em;
 }
 .natMain h1 a:hover, .natMain h2 a:hover, .natMain h3 a:hover,
 .natMain h4 a:hover, .natMain h5 a:hover, .natMain h6 a:hover {
   color:white;
 }
 .natMain h2 {
-  border-bottom:2px solid #3f59bb;
   padding-bottom:0.2em;
-  margin-bottom:0.5em;
-}
-.natMain h1 {font-size:18px;}
-.natMain h2 {font-size:16px;}
-.natMain h3 {font-size:15px;}
-.natMain h4 {font-size:14px;}
-.natMain h5 {font-size:14px;}
-.natMain h6 {font-size:12px; margin-top:5px}
-
-.natMain input,
-.natMain select,
-.natMain textarea {
-  font-size:14px;
+  margin-bottom:0px;
 }
 
 /* bottom */
 .natBottomBarContents {
   font-weight:bold;
   line-height:140%;
-  margin-bottom:5px;
+  margin:20px;
   color:#cccccc;
 }
 .natBottomBarContents a {

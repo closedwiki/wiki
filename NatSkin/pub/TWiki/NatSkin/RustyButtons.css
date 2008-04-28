@@ -3,26 +3,23 @@
 
 .natWebButtons {
   border-bottom:1px solid #ffffff;
-  padding-left:0px;
-  padding-right:0px;
+  padding:5px 10px 5px 15px;
 }
 .natWebButtonsContents {
   font-size:90%;
   font-family:verdana,arial,sans-serif;
-  letter-spacing:-1px;
-  padding:5px 10px 5px 15px;
-  text-transform:uppercase;
 }
 .natWebButtons ul li {
-  margin-right:4px;
+  margin:0px;
+  padding:0px;
 }
-.natWebButtons ul li a {
-  padding:5px 10px;
+.natWebButtons ul a {
+  padding:5px 7px;
   color:white;
   font-weight:bold;
 }
 .natWebButtons ul a.current:hover,
-.natWebButtons ul li a:hover {
+.natWebButtons ul a:hover {
   text-decoration: none;
   background:#ff9831;
   color:white;

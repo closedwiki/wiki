@@ -1,32 +1,49 @@
-%TMPL:INCLUDE{"page"}% <!-- -->
-<!-- template: edit.nat.tmpl -->
+%TMPL:INCLUDE{"page"}%<!-- template: edit.nat.tmpl -->
 %TMPL:INCLUDE{"editbody"}%<!-- -->
 %TMPL:INCLUDE{"edittopicactions"}%<!-- -->
 %TMPL:INCLUDE{"editjavascript"}%<!-- -->
 %TMPL:INCLUDE{"editstyles"}%<!-- -->
-%TMPL:INCLUDE{"edittoolbar"}%<!-- -->
 %TMPL:INCLUDE{"edithelp.natedit"}%<!-- -->
+%TMPL:INCLUDE{"edittoolbar.natedit"}%<!-- -->
 %TMPL:DEF{"bodyclass"}%natEditBody%TMPL:END%
 %TMPL:DEF{"meta"}% %HTTP_EQUIV_ON_EDIT% %TMPL:END%
-%TMPL:DEF{"title"}%%TOPIC% - (%MAKETEXT{"edit"}%)%TMPL:END%
-%TMPL:DEF{"onloadscript"}%
-  txtarea = document.EditForm.text; // tell natedit where our textarea is
-  document.EditForm.text.focus();
-%TMPL:END%
+%TMPL:DEF{"title"}%%TOPIC% - (%MAKETEXT{"edit"}%) - %WIKITOOLNAME%%TMPL:END%
 %TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span><b>%TOPIC%</b>%TMPL:END%
 %TMPL:DEF{"contentheader"}%<div class="natBreadCrumbs">%BREADCRUMBS{"%BASEWEB%.%BASETOPIC%" exclude="%BASETOPIC%" separator="<span class='natSep'>&nbsp;&#187; </span>" footer="<span class='natSep'>&nbsp;&#187; </span> <nop>%BASETOPIC%"}%</div>%TMPL:END%
 %TMPL:DEF{"content"}% <!-- -->
-<div class="natEdit">
 <form name="EditForm" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%" method="post">
 %TMPL:P{"formstart"}%
-%TMPL:P{"textarea"}%
-%TMPL:P{"formfields"}%
-%TMPL:P{"bottomtopicactions"}%
-%TMPL:P{"editoptions"}%
-%TMPL:P{"formend"}%
-</form> %TMPL:END%
+%TABPANE%
+%TAB{"%MAKETEXT{"Text"}%" after="$.natedit.autoMaxExpand('#topic')"}%%TMPL:P{"textarea"}%%ENDTAB%
+%TMPL:P{"formfields"}%<!-- -->
+%TAB{"Settings" after="fixHeightOfPane()"}% %TMPL:P{"settings"}% %ENDTAB%
+%TAB{"%MAKETEXT{"Help"}%" after="fixHeightOfPane()"}% %TMPL:P{"edithelp"}% %ENDTAB%
+%ENDTABPANE%
+%TMPL:P{"bottomtopicactions"}%<!-- -->
+%TMPL:P{"formend"}%<!-- -->
+</form>%TMPL:END%
 
-%TMPL:DEF{"textarea"}%<textarea id="topic" class="natEditTextArea" name="text" style="width:100%" wrap="virtual">%TEXT%</textarea>%TMPL:END%
+%TMPL:DEF{"DIStopicinfo"}%<!-- topicinfo -->
+<literal>
+<div class="natEditTopicInfo">
+  <table>
+  <tr class="natEditTopicTitle">
+    <th>Title:</th>
+    <td><input type="text" name="TopicTitle" size="80" value="%TOPICTITLE%"/></td>
+  </tr>
+  <tr class="natEditTopicSummary">
+    <th>Summary:</th>
+    <td><input type="text" name="Summary" size="80" value="%URLPARAM{"Summary" default="%FORMFIELD{"Summary"}%"}%" /></td>
+  </tr>
+  </table>
+</div>
+</literal>
+<!-- //topicinfo -->%TMPL:END%
+
+%TMPL:DEF{"textarea"}%<!-- textarea -->
+%TMPL:P{"topicinfo"}%<!-- dummy -->
+<textarea id="topic" class="natEditTextArea" name="text" style="width:99%" rows="22" cols="70">%TEXT%</textarea>
+<!-- //textarea -->%TMPL:END%
 
 %TMPL:DEF{"formstart"}% <!-- formstart -->
   <input type="hidden" name="action_addform" value="" />
@@ -45,16 +62,17 @@
   <input type="hidden" name="skin" value="%URLPARAM{"skin"}%" />
   <input type="hidden" name="submitChangeForm" value="" /> 
   <input type="hidden" name="forcenewrevision" value="%URLPARAM{"forcenewrevision"}%" />
-  <input type="hidden" name="rev" value="%URLPARAM{"rev"}%" /> %TMPL:P{"edittoolbar"}% %TMPL:END%
+  <input type="hidden" name="nowysiwyg" value="%URLPARAM{"nowysiwyg"}%" />
+  <input type="hidden" name="rev" value="%URLPARAM{"rev"}%" />
+  <textarea rows="5" cols="22" style="display:none" id="savearea"></textarea>
+<!-- //formstart -->%TMPL:END%
 
 %TMPL:DEF{"formfields"}%%FORMFIELDS%%TMPL:END%
 
-%TMPL:DEF{"editoptions"}%<!-- -->
-%TWISTY{id="editoptions" mode="div" showlink="More" hidelink="Less" remember="on"}%
+%TMPL:DEF{"settings"}%<!-- settings -->
 <div class="natSubmitOptions">
----+++ Options
 <b><label for="parent">%MAKETEXT{"Parent topic"}%:</b></label>
 <input type="text" id="parent" name="topicparent" size="40" value="%TOPICPARENT%" />
-</div>
-%TMPL:P{"edithelp"}% 
-%ENDTWISTY% %TMPL:END%
+</div>%TMPL:END%
+
+%TMPL:DEF{"formbutton"}%%FORMBUTTON{"<li class=\"natEditFormButton\"><a href=\"$url\" accesskey=\"f\" title=\"$title\"/><span>$action</span></a></li>"}%%TMPL:END%
