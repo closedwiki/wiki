@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1197051219" format="1.1" reprev="1.2" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1209405246" format="1.1" reprev="1.2" version="$Rev$"}%
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -48,6 +48,21 @@ Using the <nop>DBCacheContrib topic sections are stored into the topic object of
 The section between %<nop>STARTINCLUDE% ... %<nop>STOPINCLUDE% is called 
 =_sectiondefault= whereas all sections between %<nop>STARTSECTION{"&lt;name>"}% .... 
 %<nop>ENDSECTION{"&lt;name>"}% are called =_section&lt;name>= and are stored accordingly.
+
+
+In addition, DBCALL implements so called *TopicMethods*. A method call is of the
+form =%<nop>DBCALL{"SomeTopic->RenderMethod" ...}%= and will infer the actual
+=...RenderMethod= to be called on the base of the _TopicType_ of =SomeTopic=. !TopicTypes
+are a concept introduced by the TWiki:Plugins/TWikiWorkbenchAddOn. It basically refers
+to a convention to tag the type(s) of a topic in a formfield "TopicType". The lookup
+mechanism for !TopicMethods proceeds as normal if the DBCALl is not of the form
+="SomeTopic->RenderMethod"=. For example, if =SomeTopic= is of type =Video, <nop>MediaType, <nop>ClassifiedTopic=
+the lookup mechanism will try to find the methods =VideoRenderMethod=, =MediaTypeRenderMethod=
+and =ClassifiedTopicRenderMethod= in the given order and use the one found first. The web
+these types are defined in is infered on the base of the !TWikiForm definitions of each of 
+these types. If none of these type-specific methods is found the method call will fallback
+to a normal non-specific function call. The !TopicMethod itself is called with an implicit
+parameter =OBJECT= that refers to =SomeTopic=, that is the object this method has been called for.
 
 *ATTACHMENTS* lists the attachments of a given topic giving you a high degree of control about
 what and how to display attachments. 
@@ -428,7 +443,7 @@ You can also call the update from the command line - from the twiki/bin dir -
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2005-2008, Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.80 |
+|  Plugin Version: | v2.00 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  05 Feb 2008: | addded =rss()= feature to format strings |
 |   4 Jan 2008: | TWikibug:Item5319: fix empty separator |
@@ -501,4 +516,4 @@ You can also call the update from the command line - from the twiki/bin dir -
 
 -- TWiki:Main.MichaelDaum - 17 Jan 2008
 
-%META:FILEATTACHMENT{name="wikiringlogo40x40.png" attr="h" autoattached="0" comment="" date="1190996093" path="wikiringlogo40x40.png" size="2571" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="wikiringlogo40x40.png" attr="h" autoattached="1" comment="" date="1207666446" path="wikiringlogo40x40.png" size="2571" user="TWikiContributor" version="1"}%
