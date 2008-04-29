@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1209405246" format="1.1" reprev="1.2" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1209486030" format="1.1" reprev="1.1" version="$Rev$"}%
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -424,10 +424,10 @@ following is the default paramenter (omitting the #)
 ---+++ {DBCache}{alwaysUpdateCache} (DBCacheContrib setting)
 If  $TWiki::cfg{DBCache}{alwaysUpdateCache}  is set to FALSE (defaults to TRUE for compatibility)
 then DBCacheContrib will avoid calling _updateCache unless requested with =getDB($web, 1)=. _updateCache_ accesses every topic file in the web, so its an unnecessary performance hit.
-DBCacePlugin will then only request full _updateCache from the afterSaveHandler and from the new REST [[%SCRIPTURL{rest}%/DBCachePlugin/UpdateCache?topic=Web.WebHome][updateCache]] 
+DBCachePlugin will then only request full _updateCache from the afterSaveHandler and from the new REST [[%SCRIPTURL{rest}%/DBCachePlugin/UpdateCache?topic=Web.WebHome][updateCache]] 
 handler (change 'Web' to set which web to update).
 You can also call the update from the command line - from the twiki/bin dir -
-=./rest DBCachePlugin.UpdateCache topic=Web.WebHome=
+<verbatim>./rest DBCachePlugin.UpdateCache topic=Web.WebHome</verbatim>
 
 ---++ Plugin Installation Instructions
 
@@ -439,12 +439,12 @@ You can also call the update from the command line - from the twiki/bin dir -
 %$MANIFEST%
 
 ---++ Plugin Info
-
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2005-2008, Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | v2.00 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  28 Apr 2008: | implemented !TopicMethods in DBCALL |
 |  05 Feb 2008: | addded =rss()= feature to format strings |
 |   4 Jan 2008: | TWikibug:Item5319: fix empty separator |
 |  11 Dec 2007: | renamed PAGETITLE to TOPICTITLE, matching formfield <nop>TopicTitle |
@@ -514,6 +514,6 @@ You can also call the update from the command line - from the twiki/bin dir -
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 17 Jan 2008
+-- TWiki:Main.MichaelDaum - 28 Apr 2008
 
 %META:FILEATTACHMENT{name="wikiringlogo40x40.png" attr="h" autoattached="1" comment="" date="1207666446" path="wikiringlogo40x40.png" size="2571" user="TWikiContributor" version="1"}%
