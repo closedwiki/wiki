@@ -150,9 +150,16 @@ sub handleSection {
     $anchor =~ s/\//_/go;
     $anchor = 'chapter_'.$anchor.'_'.$$chapterNumber;
 
+    my $query = TWiki::Func::getCgiQuery();
+    my $queryString = $query->query_string();
+    $queryString = $queryString?"?$queryString":"";
+
     $args{redirectto} = 
       TWiki::Func::getScriptUrl($this->{baseWeb}, $this->{baseTopic}, 'view').
+      $queryString.
       "#$anchor";
+
+
 
     my $url = TWiki::Func::getScriptUrl($web, $topic, 'edit', %args);
 
@@ -180,7 +187,7 @@ sub handleSection {
 sub handleEXTRACTCHAPTER {
   my ($this, $session, $params, $theTopic, $theWeb) = @_;
 
-  #writeDebug("called handleEXTRACTCHAPTER(".$params->stringify.")");
+  writeDebug("called handleEXTRACTCHAPTER()");
 
   my $theFrom = $params->{from} || 0;
   my $theTo = $params->{to} || 9999999;
@@ -268,8 +275,8 @@ sub handleEXTRACTCHAPTER {
 
   my $result = substr($text, $fromPos, $length);
 
-  #writeDebug("BEGIN RESULT\n$result\nEND RESULT");
   $result = TWiki::entityEncode( $result, "\n" ) if $theEncode;
+  writeDebug("BEGIN RESULT\n$result\nEND RESULT");
   return $result;
 }
 

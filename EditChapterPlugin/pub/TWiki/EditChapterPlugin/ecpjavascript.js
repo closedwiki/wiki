@@ -33,15 +33,7 @@ if (true) {
             $ecpEdit.css('visibility','hidden');
             event.stopPropagation();
           }
-        ).click(function() {
-          var href = $ecpEdit.attr('href');
-          if (false) { // toggle me for debugging 
-            alert("href="+href);
-          } else {
-            window.location.href = href;
-          }
-          return false;
-        });
+        ); 
       }
     });
   });

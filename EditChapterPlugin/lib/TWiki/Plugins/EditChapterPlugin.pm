@@ -25,7 +25,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = '1.12';
+$RELEASE = '1.14';
 $SHORTDESCRIPTION = 'An easy sectional edit facility';
 
 $header = <<'HERE';
@@ -75,7 +75,6 @@ sub commonTagsHandler {
   my $context = TWiki::Func::getContext();
   return unless $context->{'view'};
   return unless $context->{'authenticated'};
-  return unless $context->{'body_text'};
 
   my $core = initCore($baseWeb, $baseTopic);
   $core->commonTagsHandler(@_);

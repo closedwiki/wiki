@@ -137,8 +137,11 @@ Many thanks to the following sponsors for supporting this work:
 |  Plugin Author(s): | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2008, Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.12 |
+|  Plugin Version: | v1.14 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  29 Apr 2008: | removed "literal" hack again; removed check for body_text context; \
+                  only the icon is clickable - was all of the heading before |
+|  13 Mar 2008: | add &lt;literal> ... &lt;/literal> for TWiki engines before 4.2 |
 |  14 Feb 2008: | have a little space in the default heading format to let <nop>TWikiMarkup do its job; \
                   added support for legacy heading markup like =--------#####= |
 |  05 Feb 2008: | compatibility with old <nop>PatternSkin versions |
