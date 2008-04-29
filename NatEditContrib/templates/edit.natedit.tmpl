@@ -7,6 +7,9 @@
 
 %TMPL:DEF{"twikistyle"}%%TMPL:P{"styles"}%%TMPL:END%
 
+%TMPL:DEF{"pagetitle"}%<h1 class="patternTemplateTitle"><nop>%TOPIC% %MAKETEXT{"(edit)"}%</h1>%TMPL:END%
+%TMPL:DEF{"pagetitlestylewrapper"}%<!-- backwards compatibility -->%TMPL:END%
+
 %TMPL:DEF{"styles"}%
 %TMPL:P{"stylesscreen"}%
 <style type="text/css" media="all">
@@ -15,7 +18,8 @@
 </style>
 %TMPL:END%
 
-%TMPL:DEF{"content"}% 
+%TMPL:DEF{"content"}%<!-- -->
+%TMPL:P{"pagetitle"}%
 %TMPL:P{"formstart"}%%TMPL:P{"formattop"}%
 <input type="hidden" name="action_addform" value="" />
 <input type="hidden" name="action_replaceform" value="" />

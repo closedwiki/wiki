@@ -107,9 +107,9 @@ ul.natEditHelpTools {
   margin-top:0px;
 }
 
-#patternOuter {
-  background-image:none;
-}
 #patternPage .twikiFormTable {
   width:99%;
+}
+#patternPage .jqTab {
+  background:white;
 }
