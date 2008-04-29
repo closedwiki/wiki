@@ -1,7 +1,7 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2003 Othello Maurer <maurer@nats.informatik.uni-hamburg.de>
-# Copyright (C) 2003-2007 Michael Daum http://wikiring.de
+# Copyright (C) 2003-2007 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -31,7 +31,7 @@ use vars qw(
 
 
 $VERSION = '$Rev$';
-$RELEASE = '2.30';
+$RELEASE = '2.31';
 $SHORTDESCRIPTION = 'Define aliases which will be replaced with arbitrary strings automatically';
 $NO_PREFS_IN_TOPIC = 1;
 
@@ -114,65 +114,42 @@ sub commonTagsHandler {
 }
 
 # =========================
-sub DIS_preRenderingHandler {
+sub preRenderingHandler {
 
   doInit();
   return unless $foundAliases;
 
   writeDebug("### preRenderingHandler()");
   my $result = '';
-  foreach my $line (split(/\r?\n/, $_[0])) {
-    $insideAliasArea = 1 if $line =~ /%STARTALIASAREA%/;
-    $insideAliasArea = 0 if $line =~ /%STOPALIASAREA%/;
-    writeDebug("line=$line, insideAliasArea=$insideAliasArea");
-    $line = &handleAliasArea($line) if $insideAliasArea;
-    $result .= $line . "\n";
+  my $text = $_[0];
+  my @areas = split(/%(START|STOP)ALIASAREA%/, $text);
+  foreach my $area (@areas) {
+    if ($area eq 'START') {
+      $insideAliasArea = 1;
+      next;
+    }
+    if ($area eq 'STOP' ) {
+      $insideAliasArea = 0;
+      next;
+    }
+    #writeDebug("insideAliasArea=$insideAliasArea, area='$area'");
+    $area = handleAliasArea($area) if $insideAliasArea;
+    $result .= $area;
   }
 
   $_[0] = $result;
 }
 
 # =========================
-sub DIS_postRenderingHandler {
-  writeDebug("### postRenderingHandler");
-  $_[0] =~ s/%(START|STOP)ALIASAREA%//go;
-  #$insideAliasArea = 0;
-}
-
-# =========================
 sub postRenderingHandler {
-  my $text = $_[0];
-
-  my $result = '';
-  if ($text =~ /^(.*?)%STARTALIASAREA%(.*)$/so) {
-    doInit();
-    writeDebug("found aliasara");
-    $result .= $1;
-    $text = $2;
-    my $post = '';
-    if ($text =~ /^(.*)%STOPALIASAREA%(.*?)$/so) {
-      $text = $1;
-      $post = $2;
-    }
-    $result .= handleAliasArea($text).$post;
-  } else {
-    #writeDebug("no alias area found in $text");
-  }
-
-  if ($result) {
-    $result =~ s/%(START|STOP)ALIASAREA%//go;
-    $_[0] = $result;
-    writeDebug("asserting result");
-  }
-
-  return 1;
+  $_[0] =~ s/%(START|STOP)ALIASAREA%//go;
 }
 
 # =========================
 sub handleAllAliasCmds {
   my ($web, $topic, $name, $args) = @_;
 
-  writeDebug("handleAllAliasCmds($name)");
+  #writeDebug("handleAllAliasCmds($name)");
   doInit(); # delayed initialization
 
   return handleAlias($web, $topic, $args) if $name eq 'ALIAS';
@@ -186,7 +163,7 @@ sub handleAliases {
   my ($web, $topic, $args) = @_;
 
   $args ||= '';
-  writeDebug("handleAliases($args) called");
+  #writeDebug("handleAliases($args) called");
 
   require TWiki::Attrs;
   my $params = new TWiki::Attrs($args);
@@ -225,7 +202,7 @@ sub handleAliases {
 sub handleAlias {
   my ($web, $topic, $args) = @_;
 
-  writeDebug("handleAlias() called");
+  #writeDebug("handleAlias() called");
 
   require TWiki::Attrs;
   my $params = new TWiki::Attrs($args);
@@ -237,7 +214,7 @@ sub handleAlias {
     $theRegex =~ s/\$start/$START/go;
     $theRegex =~ s/\$stop/$STOP/go;
     addAliasPattern($theKey, $theValue, $theRegex);
-    writeDebug("handleAlias(): added alias '$theKey' -> '$theValue')");
+    #writeDebug("handleAlias(): added alias '$theKey' -> '$theValue')");
     return "";
   }
 
@@ -249,7 +226,7 @@ sub handleAlias {
 sub handleUnAlias {
   my ($web, $topic, $args) = @_;
 
-  writeDebug("handleUnAlias() called");
+  #writeDebug("handleUnAlias() called");
 
   if ($args) {
     require TWiki::Attrs;
@@ -278,7 +255,7 @@ sub addAliasPattern {
 
   $regex ||= '';
 
-  writeDebug("called addAliasPattern($key, $value, $regex)");
+  #writeDebug("called addAliasPattern($key, $value, $regex)");
 
   if ($regex) {
     $aliasRegex{$key} = $regex;
@@ -291,7 +268,7 @@ sub addAliasPattern {
   }
   $foundAliases = 1;
 
-  writeDebug("aliasRegex{$key}=$aliasRegex{$key} aliasValue{$key}=$aliasValue{$key}");
+  #writeDebug("aliasRegex{$key}=$aliasRegex{$key} aliasValue{$key}=$aliasValue{$key}");
 }
 
 # =========================
@@ -306,7 +283,7 @@ sub getAliases {
   return if defined $seenAliasWebTopics{"$web.$topic"};
   $seenAliasWebTopics{"$web.$topic"} = 1;
 
-  writeDebug("getAliases($web, $topic)");
+  #writeDebug("getAliases($web, $topic)");
 
   # parse the plugin preferences lines
   unless (TWiki::Func::topicExists($web, $topic)) {
@@ -333,14 +310,14 @@ sub getAliases {
 sub getConvenientAlias {
   my ($key, $value) = @_;
 
-  writeDebug("getConvenientAlias($key, $value) called");
+  #writeDebug("getConvenientAlias($key, $value) called");
 
   # convenience for wiki-links
   if ($value =~ /^($webRegex\.|$defaultWebNameRegex\.|#)$topicRegex/) {
     $value = "\[\[$value\]\[$key\]\]";
   }
 
-  writeDebug("returns '$value'");
+  #writeDebug("returns '$value'");
 
   return $value;
 }
@@ -352,11 +329,11 @@ sub handleAliasArea {
 
   my @aliasKeys = keys %aliasRegex;
   if ($foundError) {
-    writeDebug("found error");
+    #writeDebug("found error");
     return $text;
   }
   if (!@aliasKeys) {
-    writeDebug("no alias keys");
+    #writeDebug("no alias keys");
     return $text;
   }
 
@@ -365,10 +342,10 @@ sub handleAliasArea {
   my $result = '';
 
   $text =~ s/<nop>/NOPTOKEN/g;
-  foreach my $line (split(/\n/, $text)) {
+#  foreach my $line (split(/\n/, $text)) {
 
     # escape html tags
-    while ($line =~ /([^<]*)((?:<[^>]*>)*|<)/g) {
+    while ($text =~ /([^<]*)((?:<[^>]*>)*|<)/go) {
       
       my $substr = $1;
       my $tail = $2;
@@ -377,7 +354,7 @@ sub handleAliasArea {
       
       # escape twiki tags
       if ($substr) {
-	while ($substr =~ /([^%]*)(((%[A-Z][a-zA-Z_0-9]+({[^}]+})?%)*)|%)/g) {
+	while ($substr =~ /([^%]*)(((%[A-Z][a-zA-Z_0-9]+({[^}]+})?%)*)|%)/go) {
 	
 	  my $substr = $1;
 	  my $tail = $2;
@@ -386,7 +363,7 @@ sub handleAliasArea {
 	  
 	  # escape twiki links
 	  if ($substr) {
-	    while ($substr =~ /([^\[]*)((?:\[[^\]]*\])*|\[)/g) {
+	    while ($substr =~ /([^\[]*)((?:\[[^\]]*\])*|\[)/go) {
 
 	      my $substr = $1;
 	      my $tail = $2;
@@ -417,7 +394,7 @@ sub handleAliasArea {
       }
       $result .= $tail if $tail;
     }
-  }
+#  }
   $result =~ s/NOPTOKEN/<nop>/g;
 
   #writeDebug("result is '$result'");
@@ -430,7 +407,7 @@ sub _doSetSubst {
   
   $$counter++;
   $substHash{$$counter} = $aliasValue{$key};
-  writeDebug("set counter=$$counter for $key=$aliasValue{$key}");
+  #writeDebug("set counter=$$counter for $key=$aliasValue{$key}");
 
   return $TranslationToken."$$counter".$TranslationToken; 
 }
@@ -439,10 +416,10 @@ sub _doPutSubst {
   my $counter = shift;
 
   if (defined $substHash{$counter}) {
-    writeDebug("put counter=$counter for $substHash{$counter}");
+    #writeDebug("put counter=$counter for $substHash{$counter}");
     return $substHash{$counter};
   } else {
-    writeDebug("oops, got no value for counter=$counter");
+    #writeDebug("oops, got no value for counter=$counter");
     return 'ERROR ERROR'; # never reach
   }
 }
