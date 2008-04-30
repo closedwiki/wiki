@@ -14,10 +14,9 @@
 	#patternScreen {
 		padding:0;
 	}
-	body html {
+	html body {
 		margin:0;
 		padding:0;
-		background-color:#fff;
 	}
 	#patternMain {
 		width:100%;
@@ -105,25 +104,12 @@
 		background-image:none;
 	}
 	.patternTopic {
-		margin-bottom:0;
+		padding-bottom:5em;
 	}
 	
 	/* hide attachment twisty controls */
 	#attachmentsshow,
 	#attachmentshide {
-		display:none;
-	}
-	#patternBottomBarContents {
-		background-color:#fff;
-		background-image:none;
-		border-top:1px solid #999;
-	}
-	#patternBottomBarContents,
-	#patternBottomBarContents a:link,
-	#patternBottomBarContents a:visited {
-		color:#666;
-	}
-	#patternBottomBarContents img {
 		display:none;
 	}
 	
@@ -132,9 +118,25 @@
 		display:none;
 	}
 	
+	.patternTopic h2.twikinetRoundedAttachments .twikinetHeader {
+		margin-left:0px;
+		margin-right:0px;
+		padding-left:0px;
+		padding-right:0px;
+	}
+	#patternMainContents {
+		margin-bottom:2em;
+	}
+	#patternBottomBarContents {
+		padding-top:0px;
+	}
+
 	/* Colors */
-	body {
-		background-color:#fff;
+	#patternMainContents,  
+	#patternTopBar,
+	#patternBottomBar,
+	html body {
+		background:#fff;
 	}
 	h1, h2, h3, h4, h5, h6 {
 		background-color:transparent;
@@ -196,7 +198,7 @@
 		background-color:#fff;
 	}
 	.patternTopicFooter {
-		margin:1em 0 0 0;
+		margin:0;
 	}
 	.patternRevInfo,
 	.twikiGrayText {
@@ -214,7 +216,18 @@
 	.twikiBroadcastMessage {
 		display:none;
 	}
-	
+	#patternBottomBarContents {
+		background-color:#fff;
+		background-image:none;
+	}
+	#patternBottomBarContents,
+	#patternBottomBarContents a:link,
+	#patternBottomBarContents a:visited {
+		color:#666;
+	}
+	#patternBottomBarContents img {
+		display:none;
+	}
 	/* define custom print styles here */
 
 }
