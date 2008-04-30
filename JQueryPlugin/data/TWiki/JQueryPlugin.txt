@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1186412852" format="1.1" reprev="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1209547841" format="1.1" reprev="1.2" version="$Rev$"}%
 ---+!! %TOPIC%
 <!--
    * Set SHORTDESCRIPTION = jQuery <nop>JavaScript library for TWiki
@@ -16,7 +16,7 @@
   </td>
 </tr>
 </table>
-This contrib contains the latest version of the [[http://jquery.com][jQuery]]
+This plugin contains the latest version of the [[http://jquery.com][jQuery]]
 <nop>JavaScript library. 
 
 <blockquote>
@@ -90,11 +90,11 @@ The following themes are provided:
      | *File:* | *Description:* |
 %$MANIFEST%
 
----++ Contrib Info
-|  Contrib Author(s): | TWiki:Main/MichaelDaum |
+---++ Plugin Info
+|  Plugin Author(s): | TWiki:Main/MichaelDaum |
 |  Copyright: | 2007-2008 Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL |
-|  Contrib Version: | v0.6 |
+|  Plugin Version: | v0.6 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  30 Apr 2008: | repackaged to contain jquery UI |
 |  13 Feb 2008: | upgrade to jquery-1.2.3, as well as most plugins |
@@ -106,9 +106,9 @@ The following themes are provided:
 |  10 Oct 2007: | upgraded to jQuery-1.1.4; compressed js and css |
 |  12 Jul 2007: | initial package containing jQuery-1.1.3.1 |
 |  Dependencies: | %$DEPENDENCIES% |
-|  Contrib Home: | http://twiki.org/cgi-bin/view/Plugins/JQueryContrib |
-|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/JQueryContribDev |
-|  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/JQueryContribAppraisal |
+|  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/JQueryPlugin |
+|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/JQueryPluginDev |
+|  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/JQueryPluginAppraisal |
 
 
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add
