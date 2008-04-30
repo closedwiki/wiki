@@ -13,7 +13,7 @@
 
 If this plugin is installed you will see a Flash movie displayed:
 
-%EMBEDFLASH{filename="%ATTACHURL%/sample.swf" width="550" height="400"}%
+%EMBEDFLASH{"%ATTACHURL%/sample.swf" width="550" height="400"}%
 
 ---++ General syntax
 
@@ -140,7 +140,7 @@ height="400px"
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ArthurClemens |
-|  Plugin Version: | 24 Mar 2008 (v1.2) |
+|  Plugin Version: | 30 Apr 2008 (v1.2.1) |
 |  Change History: | &nbsp; |
 |  24 Mar 2008: | Version 1.2 - Added =flashvar= attributes. |
 |  25 Feb 2008: | Version 1.1 - Added attributes. Write HTML embed/object tags with Javascript to prevent popup windows. If no javascript is available the =noscript= tag is used. |
