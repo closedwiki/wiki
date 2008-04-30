@@ -25,14 +25,12 @@ use vars qw(
   $NO_PREFS_IN_TOPIC
   $doneInit $doneHeader
   $header
-  $pluginName
 );
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.50'; 
+$RELEASE = 'v0.60'; 
 $SHORTDESCRIPTION = 'jQuery <nop>JavaScript library for TWiki';
 $NO_PREFS_IN_TOPIC = 1;
-$pluginName = 'JQueryPlugin';
 
 $header = <<'HERE';
 <link rel="stylesheet" href="%PUBURLPATH%/%TWIKIWEB%/JQueryPlugin/jquery-all.css" type="text/css" media="all" />
@@ -114,33 +112,32 @@ sub handleClear {
   return '<br clear="all" />';
 }
 
-#######################################
-
+###############################################################################
 sub handleJQueryScript	{
-  my($session, $params, $theTopic, $theWeb) = @_;   
-  my $scriptFileName=$params->{_DEFAULT};
-  return "<script type=\"text/javascript\" src=\"%PUBURLPATH%/%TWIKIWEB%/$pluginName/$scriptFileName\"></script>";
+  my ($session, $params, $theTopic, $theWeb) = @_;   
+
+  my $scriptFileName = $params->{_DEFAULT};
+  return '' unless $scriptFileName;
+  $scriptFileName .= '.js' unless $scriptFileName =~ /\.js$/;
+  return "<script type=\"text/javascript\" src=\"%PUBURLPATH%/%TWIKIWEB%/JQueryPlugin/$scriptFileName\"></script>";
 }
 
-#######################################
-
+###############################################################################
 sub handleJQueryTheme {
-  my($session, $params, $theTopic, $theWeb) = @_;   
-  my $themeName=$params->{_DEFAULT};
-  return "<link rel=\"stylesheet\" href=\"%PUBURLPATH%/%TWIKIWEB%/$pluginName/themes/$themeName/$themeName.all.css\" type=\"text/css\" media=\"screen\" title=\"$themeName\" />";
+  my ($session, $params, $theTopic, $theWeb) = @_;   
+
+  my $themeName = $params->{_DEFAULT};
+  return '' unless $themeName;
+
+  return "<style type='text/css'>\@import url(\"%PUBURLPATH%/%TWIKIWEB%/JQueryPlugin/themes/$themeName/$themeName.all.css\");</style>";
 }
 
-#######################################
-
+###############################################################################
 sub handleJQueryImagesUrlPath {
-  my($session, $params, $theTopic, $theWeb) = @_;   
-  my $image=$params->{_DEFAULT};
-  if (defined $image) {
-    return "%PUBURLPATH%/%TWIKIWEB%/$pluginName/images/$image";
-  }
-  else {
-    return "%PUBURLPATH%/%TWIKIWEB%/$pluginName/images";
-  }
+  my ($session, $params, $theTopic, $theWeb) = @_;   
+  my $image = $params->{_DEFAULT};
+  return "%PUBURLPATH%/%TWIKIWEB%/JQueryPlugin/images/$image" if defined $image;
+  return "%PUBURLPATH%/%TWIKIWEB%/JQueryPlugin/images";
 }
 
 
