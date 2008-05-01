@@ -1848,7 +1848,7 @@ sub _includeUrl {
     my $text = '';
 
     # For speed, read file directly if URL matches an attachment directory
-    if( $url =~ /^$this->{urlHost}$TWiki::cfg{PubUrlPath}\/([^\/\.]+)\/([^\/\.]+)\/([^\/]+)$/ ) {
+    if( $url =~ /^$this->{urlHost}$TWiki::cfg{PubUrlPath}\/($regex{webNameRegex})\/([^\/\.]+)\/([^\/]+)$/ ) {
         my $incWeb = $1;
         my $incTopic = $2;
         my $incAtt = $3;
