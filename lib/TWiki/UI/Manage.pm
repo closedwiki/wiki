@@ -290,10 +290,9 @@ sub rename {
         unless( $session->{store}->topicExists( $oldWeb, lcfirst $oldTopic )) {
             throw TWiki::OopsException(
                 'accessdenied',
-                def => 'no_such_topic',
+                def => 'no_such_topic_rename',
                 web => $oldWeb,
-                topic => $oldTopic,
-                params => [ 'rename' ] );
+                topic => $oldTopic );
         }
         $oldTopic = lcfirst $oldTopic;
     }
