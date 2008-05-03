@@ -3,8 +3,7 @@ data/TWiki/TinyMCEPlugin.txt 0644
 data/TWiki/TinyMCEQuickHelp.txt 0644
 lib/TWiki/Plugins/TinyMCEPlugin.pm 0644
 pub/TWiki/TinyMCEPlugin/wikiringlogo20x20.png 0644
-pub/TWiki/TinyMCEQuickHelp/Format_Drop_Down.png 0644
-pub/TWiki/TinyMCEQuickHelp/Styles_Drop_Down.png 0644
+pub/TWiki/TinyMCEQuickHelp/Format_Drop_Down.gif 0644
 pub/TWiki/TinyMCEPlugin/tinymce/changelog 0644
 pub/TWiki/TinyMCEPlugin/tinymce/docs/index.html 0644
 pub/TWiki/TinyMCEPlugin/tinymce/examples/example_advanced.css 0644
