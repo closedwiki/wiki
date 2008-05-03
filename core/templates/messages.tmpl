@@ -485,12 +485,26 @@ __%MAKETEXT{"Related topics:"}%__ %USERSWEB%.TWikiGroups, %SYSTEMWEB%.TWikiAcces
 ---+++ %MAKETEXT{"If you would like to create this web"}%
 %MAKETEXT{"You can ~[~[[_1]~]~[create a new web~]~] if you have permission. Contact [_2] if you have any questions." args="%SCRIPTURLPATH{"view"}%/%SYSTEMWEB%/ManagingWebs?newweb=%WEB%;newtopic=%TOPIC%#CreateNewWeb, %WIKIWEBMASTER%"}%
 %TMPL:END%
+%TMPL:DEF{"no_such_topic_message"}%
+---++ %MAKETEXT{"If you want to create the topic"}%
+[[%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?t=%SERVERTIME{"$year$mo$day$min$sec"}%][%MAKETEXT{"Create the topic"}%]]
+
+%MAKETEXT{"Contact [_1] if you have any questions." args="%WIKIWEBMASTER%"}%
+%TMPL:END%
 %TMPL:DEF{"no_such_topic"}%
 ---++ %MAKETEXT{"[_1] topic does not exist" args="\"%WEB%.%TOPIC%\""}%
-%MAKETEXT{"You are trying to [_1] a topic that does not exist." args="%PARAM1%"}%
+%MAKETEXT{"You are trying to perform an action on a topic that does not exist (action '[_1]')." args="%PARAM1%"}%
+%TMPL:P{"no_such_topic_message"}%
+%TMPL:END%
+%TMPL:DEF{"no_such_topic_template"}%
+---++ %MAKETEXT{"Template [_1] does not exist" args="\"%WEB%.%TOPIC%\""}%
+%MAKETEXT{"You are trying to create a topic from a template that does not exist." args="%PARAM1%"}%
 
----++ %MAKETEXT{"If you want to create the topic"}%
-[[%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?t=%SERVERTIME{"$year$mo$day$min$sec"}%][%MAKETEXT{"Create the topic"}%]].
+%MAKETEXT{"Contact [_1] if you have any questions." args="%WIKIWEBMASTER%"}%
+%TMPL:END%
+%TMPL:DEF{"no_such_topic_rename"}%
+---++ %MAKETEXT{"[_1] topic does not exist" args="\"%WEB%.%TOPIC%\""}%
+%MAKETEXT{"You are trying to rename a topic that does not exist." args="%PARAM1%"}%
 
 %MAKETEXT{"Contact [_1] if you have any questions." args="%WIKIWEBMASTER%"}%
 %TMPL:END%

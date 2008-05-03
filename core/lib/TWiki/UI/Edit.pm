@@ -48,7 +48,6 @@ sub edit {
 
 sub init_edit {
     my ( $session, $templateName )  = @_;
-
     my $query = $session->{cgiQuery};
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
@@ -217,10 +216,9 @@ sub init_edit {
             unless( $store->topicExists( $templateWeb, $templateTopic )) {
                 throw TWiki::OopsException(
                     'accessdenied',
-                    def => 'no_such_topic',
+                    def => 'no_such_topic_template',
                     web => $templateWeb,
-                    topic => $templateTopic,
-                    params => [ 'templatetopic' ] );
+                    topic => $templateTopic);
             }
 
             ( $meta, $text ) =

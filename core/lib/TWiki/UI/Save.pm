@@ -114,10 +114,9 @@ sub buildNewTopic {
         unless( $store->topicExists( $templateweb, $templatetopic )) {
             throw TWiki::OopsException(
                 'attention',
-                def => 'no_such_topic',
+                def => 'no_such_topic_template',
                 web => $templateweb,
-                topic => $templatetopic,
-                params => [ 'template from' ] );
+                topic => $templatetopic);
         }
     }
 
