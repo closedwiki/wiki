@@ -3797,7 +3797,7 @@ sub META {
         $result = $meta->renderFormForDisplay( $this->templates );
     } elsif ( $option eq 'formfield' ) {
         # a formfield from within topic text
-        $result = $meta->renderFormFieldForDisplay( $params );
+        $result = $meta->renderFormFieldForDisplay( $params->get('name'), '$value', $params );
     } elsif( $option eq 'attachments' ) {
         # renders attachment tables
         $result = $this->attach->renderMetaData( $web, $topic, $meta, $params );
