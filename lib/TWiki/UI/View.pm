@@ -256,10 +256,6 @@ sub view {
         $doingRev--;
     }
 
-    my $ri = $session->renderer->renderRevisionInfo( $webName,
-                                                     $topicName,
-                                                     $meta );
-    $tmpl =~ s/%REVINFO%/$ri/go;
     $tmpl =~ s/%REVISIONS%/$revs/go;
 
     ## SMELL: This is also used in TWiki::_TOC. Could insert a tag in
