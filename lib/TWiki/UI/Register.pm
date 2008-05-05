@@ -793,13 +793,15 @@ sub complete {
                                                 $e->stringify() ] );
     };
 
+    # Plugin to do some other post processing of the user. 
+    # for legacy, (callback to set cookies - now should use LoginHandler)
+    $session->{plugins}->registrationHandler( $data->{WebName},
+                                              $data->{WikiName},
+                                              $data->{LoginName},
+                                              $data );
+
     #only change the session's identity _if_ the registration was done by TWikiGuest
     if ( $session->{user} eq $session->{users}->getCanonicalUserID( $TWiki::cfg{DefaultUserLogin}) ) {
-        # Plugin callback to set cookies.
-        $session->{plugins}->registrationHandler( $data->{WebName},
-                                                  $data->{WikiName},
-                                                  $data->{LoginName} );
-    
         # let the client session know that we're logged in. (This probably
         # eliminates the need for the registrationHandler call above,
         # but we'll leave them both in here for now.)
