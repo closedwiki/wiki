@@ -149,7 +149,7 @@ sub expandHTML {
     }
     $html =~ s/%REVISION%/$frev/g;
     $html = TWiki::Func::expandCommonVariables(
-        $html, $this->{WEB}, $this->{TOPIC} );
+        $html, $this->{TOPIC}, $this->{WEB} );
     $html = TWiki::Func::renderText( $html );
     $html =~ s/%TEXTHEAD%/$this->{HTML_SUMMARY}/g;
 
