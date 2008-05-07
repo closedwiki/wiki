@@ -318,7 +318,7 @@ sub save {
         } else {
             my @p = ('#' => $anchor);
             unless ($no_return) {
-                push(@p, erp_active_table => $urps->{erp_active_topic});
+                push(@p, erp_active_topic => $urps->{erp_active_topic});
                 push(@p, erp_active_table => $urps->{erp_active_table});
                 push(@p, erp_active_row => $urps->{erp_active_row});
             }
