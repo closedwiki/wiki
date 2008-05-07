@@ -14,10 +14,17 @@ sub new {
     my $this = bless({}, $class);
     $this->{row} = $row;
     $this->{number} = $number;
-    $text =~ s/^(\s*)//;
-    $this->{precruft} = $1 || '';
-    $text =~ s/(\s*)$//;
-    $this->{postcruft} = $1 || '';
+    if ($text =~ /\S/) {
+        $text =~ s/^(\s*)//;
+        $this->{precruft} = $1 || '';
+        $text =~ s/(\s*)$//;
+        $this->{postcruft} = $1 || '';
+    } else {
+        # Cell just has spaces. Item5596.
+        $text = '';
+        $this->{precruft} = ' ';
+        $this->{postcruft} = ' ';
+    }
     if ($text =~ s/^\*(.*)\*$/$1/) {
         $this->{precruft} .= '*';
         $this->{postcruft} = '*'.$this->{postcruft};
