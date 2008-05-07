@@ -376,9 +376,12 @@ HERE
 
     $text = TWiki::Func::expandCommonVariables( $text,
                                                 $TWiki::cfg{HomeTopicName} );
+
     $text =~ s/<img src=.*?[^>]>/[IMG]/goi;  # remove all images
+
     # add the url host to any in-twiki urls that lack it
-    my $sup = TWiki::Func::getScriptUrlPath();
+    # SMELL: doesn't handle (undocumented) {ScriptUrlPaths}
+    my $sup = $TWiki::cfg{ScriptUrlPath};
     $sup =~ s#/$##;
     my $sun = TWiki::Func::getUrlHost() . $sup;
     $text =~ s#href=\"$sup/#href=\"$sun/#ogi;

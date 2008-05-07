@@ -281,7 +281,7 @@ sub _generateHTMLTable {
                 my $datum = @$col[$i];
                 $row .= $datum;
             }
-            $text .= CGI::Tr($row );
+            $text .= CGI::Tr($row )."\n";
         }
     } else {
         my $row = '';
