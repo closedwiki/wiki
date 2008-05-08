@@ -81,11 +81,13 @@ sub handleFilter {
   my $theExclude = $params->{exclude} || '';
   my $theSort = $params->{sort} || 'off';
   my $theReverse = $params->{reverse} || '';
+  
+  $theText ||= $params->{text};
 
   $theSeparator = '' unless defined $theSeparator;
 
   # get the source text
-  my $text = "";
+  my $text = '';
   if ($theText) { # direct text
     $text = $theText;
   } else { # topic text
@@ -116,13 +118,21 @@ sub handleFilter {
       my $arg4 = $4 || '';
       my $arg5 = $5 || '';
       my $arg6 = $6 || '';
+      my $arg7 = $7 || '';
+      my $arg8 = $8 || '';
+      my $arg9 = $9 || '';
+      my $arg10 = $10 || '';
       my $match = $theFormat;
+      $match =~ s/\$10/$arg10/g;
       $match =~ s/\$1/$arg1/g;
       $match =~ s/\$2/$arg2/g;
       $match =~ s/\$3/$arg3/g;
       $match =~ s/\$4/$arg4/g;
       $match =~ s/\$5/$arg5/g;
       $match =~ s/\$6/$arg6/g;
+      $match =~ s/\$7/$arg7/g;
+      $match =~ s/\$8/$arg8/g;
+      $match =~ s/\$9/$arg9/g;
       next if $theExclude && $match =~ /^($theExclude)$/;
       next if $skip-- > 0;
       push @result,$match;
@@ -140,25 +150,34 @@ sub handleFilter {
     $result = join($theSeparator, @result);
   } elsif ($theMode == 1) {
     # substitution mode
-    $result = $text;
-    while($text =~ /$thePattern/gsi) {
-      my $arg1 = $1 || '';
-      my $arg2 = $2 || '';
-      my $arg3 = $3 || '';
-      my $arg4 = $4 || '';
-      my $arg5 = $5 || '';
-      my $arg6 = $6 || '';
+    $result = '';
+    while($text =~ /(.*?)$thePattern/gsi) {
+      my $prefix = $1;
+      my $arg1 = $2 || '';
+      my $arg2 = $3 || '';
+      my $arg3 = $4 || '';
+      my $arg4 = $5 || '';
+      my $arg5 = $6 || '';
+      my $arg6 = $7 || '';
+      my $arg7 = $8 || '';
+      my $arg8 = $9 || '';
+      my $arg9 = $10 || '';
+      my $arg10 = $11 || '';
       my $match = $theFormat;
+      $match =~ s/\$10/$arg10/g;
       $match =~ s/\$1/$arg1/g;
       $match =~ s/\$2/$arg2/g;
       $match =~ s/\$3/$arg3/g;
       $match =~ s/\$4/$arg4/g;
       $match =~ s/\$5/$arg5/g;
       $match =~ s/\$6/$arg6/g;
+      $match =~ s/\$7/$arg7/g;
+      $match =~ s/\$8/$arg8/g;
+      $match =~ s/\$9/$arg9/g;
       next if $theExclude && $match =~ /^($theExclude)$/;
       next if $skip-- > 0;
       #writeDebug("match=$match");
-      $result =~ s/$thePattern/$match/msi;
+      $result .= $prefix.$match;
       #writeDebug("($hits) result=$result");
       $hits--;
       last if $theLimit > 0 && $hits <= 0;
@@ -188,7 +207,7 @@ sub handleExtract {
 sub handleMakeIndex {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
-  writeDebug("### called handleMakeIndex(".$params->stringify.")");
+  #writeDebug("### called handleMakeIndex(".$params->stringify.")");
   my $theList = $params->{_DEFAULT} || $params->{list} || '';
   my $theCols = $params->{cols} || 3;
   my $theFormat = $params->{format} || '$item';
@@ -216,7 +235,7 @@ sub handleMakeIndex {
   $theList = &TWiki::Func::expandCommonVariables($theList, $theTopic, $theWeb)
     if expandVariables($theList);
 
-  writeDebug("theList=$theList");
+  #writeDebug("theList=$theList");
 
   # create the item descriptors for each list item
   my @theList = ();
@@ -229,7 +248,7 @@ sub handleMakeIndex {
     $item =~ s/\s+$//go;
     next unless $item;
 
-    writeDebug("item='$item'");
+    #writeDebug("item='$item'");
 
     if ($theUnique) {
       next if $seen{$item};
@@ -288,7 +307,7 @@ sub handleMakeIndex {
 
   # - a col should at least contain a single group letter and one additional row 
   my $colSize = ceil($listSize / $maxCols);
-  writeDebug("maxCols=$maxCols, colSize=$colSize, listSize=$listSize");
+  #writeDebug("maxCols=$maxCols, colSize=$colSize, listSize=$listSize");
 
   my $listIndex = 0;
   my $insideList = 0;
@@ -304,7 +323,7 @@ sub handleMakeIndex {
       my $descriptor = $theList[$listIndex];
       my $format = $$descriptor{format};
       my $item = $$descriptor{item};
-      writeDebug("listIndex=$listIndex, itemIndex=$itemIndex, colIndex=$colIndex, rowIndex=$rowIndex, item=$item, format=$format");
+      #writeDebug("listIndex=$listIndex, itemIndex=$itemIndex, colIndex=$colIndex, rowIndex=$rowIndex, item=$item, format=$format");
 
       # construct group format
       my $thisGroup = $$descriptor{group};
@@ -383,7 +402,7 @@ sub handleMakeIndex {
 sub handleFormatList {
   my ($session, $params, $theTopic, $theWeb) = @_;
   
-  writeDebug("handleFormatList(".$params->stringify().")");
+  #writeDebug("handleFormatList(".$params->stringify().")");
 
   my $theList = $params->{_DEFAULT} || $params->{list} || '';
   my $thePattern = $params->{pattern} || '^\s*(.*?)\s*$';
@@ -404,23 +423,23 @@ sub handleFormatList {
   $theList = &TWiki::Func::expandCommonVariables($theList, $theTopic, $theWeb)
     if expandVariables($theList);
 
-  writeDebug("theList='$theList'");
-  writeDebug("thePattern='$thePattern'");
-  writeDebug("theFormat='$theFormat'");
-  writeDebug("theSplit='$theSplit'");
-  writeDebug("theSeparator='$theSeparator'");
-  writeDebug("theLimit='$theLimit'");
-  writeDebug("theSkip='$theSkip'");
-  writeDebug("theSort='$theSort'");
-  writeDebug("theUnique='$theUnique'");
-  writeDebug("theExclude='$theExclude'");
+  #writeDebug("theList='$theList'");
+  #writeDebug("thePattern='$thePattern'");
+  #writeDebug("theFormat='$theFormat'");
+  #writeDebug("theSplit='$theSplit'");
+  #writeDebug("theSeparator='$theSeparator'");
+  #writeDebug("theLimit='$theLimit'");
+  #writeDebug("theSkip='$theSkip'");
+  #writeDebug("theSort='$theSort'");
+  #writeDebug("theUnique='$theUnique'");
+  #writeDebug("theExclude='$theExclude'");
 
   my %seen = ();
   my @result;
   my $count = 0;
   my $skip = $theSkip;
   foreach my $item (split(/$theSplit/, $theList)) {
-    writeDebug("found '$item'");
+    #writeDebug("found '$item'");
     next if $theExclude && $item =~ /^($theExclude)$/;
     next if $item =~ /^$/; # skip empty elements
     my $arg1 = '';
@@ -440,19 +459,19 @@ sub handleFormatList {
       next;
     }
     my $line = $theFormat;
-    writeDebug("arg1=$arg1") if $arg1;
-    writeDebug("arg2=$arg2") if $arg2;
-    writeDebug("arg3=$arg3") if $arg3;
-    writeDebug("arg4=$arg4") if $arg4;
-    writeDebug("arg5=$arg5") if $arg5;
-    writeDebug("arg6=$arg6") if $arg6;
+    #writeDebug("arg1=$arg1") if $arg1;
+    #writeDebug("arg2=$arg2") if $arg2;
+    #writeDebug("arg3=$arg3") if $arg3;
+    #writeDebug("arg4=$arg4") if $arg4;
+    #writeDebug("arg5=$arg5") if $arg5;
+    #writeDebug("arg6=$arg6") if $arg6;
     $line =~ s/\$1/$arg1/g;
     $line =~ s/\$2/$arg2/g;
     $line =~ s/\$3/$arg3/g;
     $line =~ s/\$4/$arg4/g;
     $line =~ s/\$5/$arg5/g;
     $line =~ s/\$6/$arg6/g;
-    writeDebug("after susbst '$line'");
+    #writeDebug("after susbst '$line'");
     if ($theUnique eq 'on') {
       next if $seen{$line};
       $seen{$line} = 1;
@@ -465,7 +484,7 @@ sub handleFormatList {
       last if $theLimit - $count == 0;
     }
   }
-  writeDebug("count=$count");
+  #writeDebug("count=$count");
   return '' if $count == 0;
 
   if ($theSort ne 'off') {
@@ -482,7 +501,7 @@ sub handleFormatList {
   $result = &TWiki::Func::expandCommonVariables($result, $theTopic, $theWeb)
     if expandVariables($result);
 
-  writeDebug("result=$result");
+  #writeDebug("result=$result");
 
   return $result;
 }
