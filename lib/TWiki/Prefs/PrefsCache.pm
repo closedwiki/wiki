@@ -243,7 +243,7 @@ sub stringify {
 
     if( $html ) {
         $res = CGI::Tr( 
-                   CGI::th( {colspan=>2, class=>'twikiFirstCol'}, CGI::H3($this->{TYPE}.' '.
+                   CGI::th( {colspan=>2, class=>'twikiFirstCol'}, CGI::h3($this->{TYPE}.' '.
                               $this->{SOURCE} )))."\n";
     } else {
         $res = '******** '.$this->{TYPE}.' '.$this->{SOURCE}."\n";
