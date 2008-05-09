@@ -103,8 +103,8 @@ install: build
 	#move non-CPAN files out of cpan dir
 	mv debian/twiki/usr/share/perl5/DEPENDENCIES debian/twiki/usr/share/twiki/
 	mv debian/twiki/usr/share/perl5/CPAN debian/twiki/usr/share/twiki/
-	mv debian/twiki/var/lib/twiki/tools/native_search debian/twiki/usr/share/twiki/
-	chmod 644 debian/twiki/usr/share/twiki/native_search/*
+	#mv debian/twiki/var/lib/twiki/tools/native_search debian/twiki/usr/share/twiki/
+	#chmod 644 debian/twiki/usr/share/twiki/native_search/*
 	#can't move this away without code changes - better to move entire twikilib out of cpan dir.
 	#mv debian/twiki/usr/share/perl5/Assert.pm debian/twiki/usr/share/twiki/
 

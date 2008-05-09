@@ -23,7 +23,7 @@ fi
 
 if [ ! $1 ]
 then
-    BUILD_DIR=/tmp/build_twiki_plugins
+    BUILD_DIR=$START_DIR/build_twiki_plugins
     PLUGINFILE=PluginsList
     echo no contrib specified, building all in $BUILD_DIR
 
@@ -60,7 +60,7 @@ then
 	    if [ -r $BUILD_DIR/$PACKAGE*.changes ]
 	    then
        	    cd $START_DIR/experimental
-    	    reprepro --ignore=wrongdistribution   include experimental $BUILD_DIR/$PACKAGE*.changes
+    	    #reprepro --ignore=undefinedtarget --ignore=wrongdistribution include experimental $BUILD_DIR/$PACKAGE*.changes
     	    cd $BUILD_DIR
     	fi
     done;
@@ -92,8 +92,7 @@ echo "$PLUGINURL last modified : $LAST_MODIFIED"
 echo "Version : $VERSION"
 
 YEAR=$(date -d "$LAST_MODIFIED" +"%y")
-if [ [$YEAR != "07"] && [$YEAR != "06"] ]
-then
+if [  $YEAR != "08"  -a  $YEAR != "07"  -a  $YEAR != "06"  ]; then
     echo "Package too old, not building : $YEAR"
     exit 0
 fi
@@ -265,4 +264,4 @@ EOF
 chmod +x debian/rules
 
 #fakeroot dpkg-buildpackage -uc -us
-fakeroot dpkg-buildpackage -b -uc
+fakeroot dpkg-buildpackage -b -uc 
