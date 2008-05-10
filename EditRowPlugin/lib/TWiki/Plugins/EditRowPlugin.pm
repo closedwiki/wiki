@@ -313,7 +313,7 @@ sub save {
             my $p = '';
             unless ($no_return) {
                 $p = "?erp_active_topic=$urps->{erp_active_topic}";
-                $p = ";erp_active_table=$urps->{erp_active_table}";
+                $p .= ";erp_active_table=$urps->{erp_active_table}";
                 $p .= ";erp_active_row=$urps->{erp_active_row}";
             }
             $url = TWiki::Func::getScriptUrl($web, $topic, 'view').
