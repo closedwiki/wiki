@@ -154,7 +154,10 @@ STYLE
             # If this is an included topic, mark the table as having
             # being included so we don't attempt to reprocess it
             my ($precruft, $postcruft) = ('', '');
-            if ($_[3]) {
+            # NOTE: SESSION_TAGS is private to TWiki.pm, but the "official"
+            # mechanism for accessing its value is just silly i.e.
+            # TWiki::Func::expandCommonVariables("%INCLUDINGTOPIC%");
+            if (defined $TWiki::Plugins::SESSION->{SESSION_TAGS}{INCLUDINGTOPIC}) {
                 $precruft = "<!-- STARTINCLUDE $_[2].$_[1] -->\n";
                 $postcruft = "\n<!-- STOPINCLUDE $_[2].$_[1] -->";
             }
