@@ -395,6 +395,8 @@ Set to 1 to enable debug features, including the undocumented =%<nop>ACTIONNOTIF
 	* ... and the result of a formatted search below:
 %ACTIONSEARCH{topic=ActionTrackerPlugin who=TWikiGuest header="|Who|Due|State|Description|" format="| $who |$due|$state|$text $link|" orient="rows" }%
 
+Note that if you want to use the =action= template shipped with the TWiki:Plugins.CommentPlugin to create actions, then you must put the !CommentPlugin *before* the !ActionTrackerPlugin in the ={PluginsOrder}= configuration option.
+
 ---+ Plugin Info
 
 Another great TWiki extension from the <a style="text-decoration:none" href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiringlogo20x20.png" alt="" /> *WikiRing* </a> - __Working together to improve your wiki experience__!

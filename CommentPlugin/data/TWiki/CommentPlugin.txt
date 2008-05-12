@@ -78,7 +78,7 @@ A set of default comment templates are shipped with the plugin - see also Commen
 | =threadmode= | Wiki thread mode comment, signed and dated (server time) |
 | =tableprepend= | Comments, signed and dated (server time), formatted as an HTML table row, added below the anchor (which must be in an HTML &lt;table>) |
 | =tableappend= | Comments, signed and dated (server time), formatted as an HTML table row, added above the anchor (which must be in an HTML &lt;table>) |
-| =action= | Action added to action table directly above comment box (requires TWiki:Plugins/ActionTrackerPlugin) |
+| =action= | Action added to action table directly above comment box (see <a href="#Installation">Plugin Installation Instructions</a> below for immportant notes) |
 | =table= | Tablerows adding on end |
 | =toctalk= | Talk using TOC adding on end |
 | =bookmark= | Create a list of annotated bookmarks |
@@ -230,6 +230,7 @@ Two TWiki Preference variables are recognised by the CommentPlugin:
 | =%<nop>COMMENTPLUGIN_DEFAULT_TYPE%= | =above= | Default template type |
 These can be set in !TWikiPreferences, in !WebPreferences or in individual topics.
 
+#Installation
 ---++ Plugin Installation Instructions
 	* This plugin is pre-installed in most TWiki releases. However if you need to upgrade the plugin for any reason:
 	* Download the archive file from the Plugin web (see below)
@@ -240,6 +241,10 @@ These can be set in !TWikiPreferences, in !WebPreferences or in individual topic
 		* Manually resolve the dependencies listed below.
 		%$DEPENDENCIES%
 	* Use =configure= to enable the plugin
+
+Note that if you want to use the =action= template then you must also:
+   1 Install the TWiki:Plugins/ActionTrackerPlugin;
+   1 Put the !CommentPlugin *before* the !ActionTrackerPlugin in the ={PluginsOrder}= configuration option (in =configure=)
 
 ---++ Plugin Info
 
