@@ -53,23 +53,45 @@ sub test_createIndex {
     $ind->createIndex();
 
     # I check the succuessful created index by doing some searches.
-    my $search = TWiki::Contrib::SearchEngineKinoSearchAddOn::Search->newSearch();
+    $this->_indexOK();
+}
 
-    # Now I search for something.
-    my $docs = $search->docsForQuery( "startpoint");
-    my $hit  = $docs->fetch_hit_hashref;
-    $this->assert(defined($hit), "Hit for startpoint not found.");
-    my $topic = $hit->{topic};
-    $topic =~ s/ .*//;
-    $this->assert_str_equals($topic, "TopicWithoutAttachment", "Wrong topic for startpoint.");
+# I test that I can index a web even if it has access control
+# NOTE: There was a problem when a Form existed in an access controlled web.
+sub test_createIndexWithAccessControl {
+    my $this = shift;
+    $this->_createTopicWithoutAttachment();
+    $this->_createTopicWithWordAttachment();
 
-    # Lets seach for the MS Word attachment
-    $docs = $search->docsForQuery( "dummy");
-    $hit  = $docs->fetch_hit_hashref;
-    $this->assert(defined($hit), "Hit for MS Word not found.");
-    $topic = $hit->{topic};
-    $topic =~ s/ .*//;
-    $this->assert_str_equals($topic, "TopicWithWordAttachment", "Wrong topic for MS word.");
+    my $currUser = $TWiki::cfg{DefaultUserLogin};
+
+    # No I set the ALLOWWEBVIEW stuff
+    $this->{twiki}->{store}->saveTopic(
+        $currUser, $this->{test_web}, $TWiki::cfg{WebPrefsTopicName},
+        <<THIS
+If ALLOWWEB is set to a list of wikinames
+    * people in the list will be PERMITTED
+    * everyone else will be DENIED
+\t* Set ALLOWWEBVIEW = MrGreen MrYellow MrWhite
+\t* Set WEBFORMS = TestForm
+THIS
+                                , undef);
+    # Now the Form topic
+    $this->{twiki}->{store}->saveTopic(
+        $currUser, $this->{test_web}, "TestForm",
+        <<THIS
+| *Name* | *Type* | *Size* | *Values* | *Tooltip message* | *Attributes* | 
+| TipoAttivita | select | 1 |  | Selezionare il tipo di attivita effettuata | |
+| Autore | label | 40 | | |				       
+THIS
+                                , undef);
+
+    # Let's try to do the index
+    my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
+    $ind->createIndex();
+
+    # I check the succuessful created index by doing some searches.
+    $this->_indexOK();
 }
 
 sub test_updateIndex {
@@ -589,6 +611,29 @@ HERE
 
     $this->{twiki}->{store}->saveAttachment($this->{users_web}, "TopicWithWordAttachment", "Simple_example.doc",
                                             $this->{twiki}->{user}, {file => "attachement_examples/Simple_example.doc"})
+}
+
+sub _indexOK {
+    my $this = shift;
+    # I check, that the index is created correctly.
+    # I check the succuessful created index by doing some searches.
+    my $search = TWiki::Contrib::SearchEngineKinoSearchAddOn::Search->newSearch();
+
+    # Now I search for something.
+    my $docs = $search->docsForQuery( "startpoint");
+    my $hit  = $docs->fetch_hit_hashref;
+    $this->assert(defined($hit), "Hit for startpoint not found.");
+    my $topic = $hit->{topic};
+    $topic =~ s/ .*//;
+    $this->assert_str_equals($topic, "TopicWithoutAttachment", "Wrong topic for startpoint.");
+
+    # Lets seach for the MS Word attachment
+    $docs = $search->docsForQuery( "dummy");
+    $hit  = $docs->fetch_hit_hashref;
+    $this->assert(defined($hit), "Hit for MS Word not found.");
+    $topic = $hit->{topic};
+    $topic =~ s/ .*//;
+    $this->assert_str_equals($topic, "TopicWithWordAttachment", "Wrong topic for MS word.");
 }
 
 1;

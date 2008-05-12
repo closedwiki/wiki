@@ -358,7 +358,9 @@ sub formsFieldNames {
 	my @forms = split( /[,\s]+/, $legalForms );
 
 	foreach my $formName (@forms) {
-	    my $form = TWiki::Form->new($TWiki::Plugins::SESSION, $web, $formName);
+	    # NOTE: I use a new TWiki session with the admin user so that I can access any topic 
+	    # even when an access control is defined
+	    my $form = TWiki::Form->new(new TWiki($TWiki::cfg{AdminUserLogin}), $web, $formName);
 	    foreach my $fieldDef ( @{$form->{fields}} ) {
 		my $fldName = $fieldDef->{name};
 		$fieldNames{$fldName} = 1 unless $fldName eq "";
