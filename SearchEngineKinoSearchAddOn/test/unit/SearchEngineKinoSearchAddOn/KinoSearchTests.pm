@@ -76,8 +76,38 @@ sub test_skipWebs {
     TWiki::Func::setPreferencesValue( "KINOSEARCHINDEXSKIPWEBS", "web1, web2");
     %webs = $ks->skipWebs();
     foreach $a_web (@config_webs) {
-	$this->assert($webs{$a_web}, "Web $a_web not skipped in config.")
-	}
+	$this->assert($webs{$a_web}, "Web $a_web not skipped in config.")}
+
+    # Now let's try some different writings of the list
+    # Just a comma, no space
+    TWiki::Func::setPreferencesValue( "KINOSEARCHINDEXSKIPWEBS", "web1,web2");
+    %webs = $ks->skipWebs();
+    foreach $a_web (@config_webs) {
+	$this->assert($webs{$a_web}, "Web $a_web not skipped in config (comma, no space).")}
+
+    # Just additional spaces
+    TWiki::Func::setPreferencesValue( "KINOSEARCHINDEXSKIPWEBS", "web1,   web2");
+    %webs = $ks->skipWebs();
+    foreach $a_web (@config_webs) {
+	$this->assert($webs{$a_web}, "Web $a_web not skipped in config (additional spaces).")}
+
+    # Only space
+    TWiki::Func::setPreferencesValue( "KINOSEARCHINDEXSKIPWEBS", "web1 web2");
+    %webs = $ks->skipWebs();
+    foreach $a_web (@config_webs) {
+	$this->assert($webs{$a_web}, "Web $a_web not skipped in config (only space).")}
+
+    # Many spaces
+    TWiki::Func::setPreferencesValue( "KINOSEARCHINDEXSKIPWEBS", "web1    web2");
+    %webs = $ks->skipWebs();
+    foreach $a_web (@config_webs) {
+	$this->assert($webs{$a_web}, "Web $a_web not skipped in config (many space).")}
+
+    # Spaces before comma
+    TWiki::Func::setPreferencesValue( "KINOSEARCHINDEXSKIPWEBS", "web1  ,  web2");
+    %webs = $ks->skipWebs();
+    foreach $a_web (@config_webs) {
+	$this->assert($webs{$a_web}, "Web $a_web not skipped in config (many space).")}
 }
 
 sub test_skipAttachments {

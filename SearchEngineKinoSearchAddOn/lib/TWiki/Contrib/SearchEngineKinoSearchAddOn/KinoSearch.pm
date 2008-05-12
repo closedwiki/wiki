@@ -117,7 +117,7 @@ sub skipWebs {
     my $to_skip = TWiki::Func::getPreferencesValue( "KINOSEARCHINDEXSKIPWEBS" ) || "Trash, Sandbox, TWiki";
     my %skipwebs;
 
-    foreach my $tmpweb ( split( /\,\s+/, $to_skip ) ) {
+    foreach my $tmpweb ( split( /\,\s+|\,|\s+/, $to_skip ) ) {
 	$skipwebs{$tmpweb} = 1;
     }
     return %skipwebs;
