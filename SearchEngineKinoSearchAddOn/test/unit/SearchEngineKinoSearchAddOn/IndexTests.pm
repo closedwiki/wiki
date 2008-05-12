@@ -437,12 +437,12 @@ HERE
     $topic =~ s/ .*//;
     $this->assert_str_equals($topic, "TopicWithPdfAttachment", "Wrong topic for tile.");
     $this->assert_str_equals($this->{users_web}."TopicWithPdfAttachment".$attachment->{'name'}, 
-			     $hit->{'id_topic'}, "ID topic not O.K.");
-    $this->assert_str_equals($hit->{'name'}, $attachment->{'name'}, "Name not O.K.");
-    $this->assert_str_equals($hit->{'author'}, $attachment->{'user'}, "User not O.K.");
-    $this->assert_str_equals($hit->{'version'}, $attachment->{'version'}, "Version not O.K.");
+			     $hit->{'id_topic'},   "ID topic not O.K.");
+    $this->assert_str_equals($hit->{'name'},       $attachment->{'name'}, "Name not O.K.");
+    $this->assert_str_equals($hit->{'author'},     $attachment->{'user'}, "User not O.K.");
+    $this->assert_str_equals($hit->{'version'},    $attachment->{'version'}, "Version not O.K.");
     $this->assert_str_equals($hit->{'attachment'}, "yes", "Attachment not set to yes.");
-    
+    $this->assert_str_equals($hit->{'type'},       "pdf", "Type not O.K.");   
 }
 
 sub test_updateMarkerFile {

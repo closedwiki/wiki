@@ -140,7 +140,7 @@ sub indexer {
 			     analyzed => 0);
 
     # Name of the file (only attachments)
-    $invindexer->spec_field( name  => 'name');
+    $invindexer->spec_field( name => 'name');
 
     $invindexer->spec_field( name => 'bodytext' );
     
@@ -157,6 +157,7 @@ sub indexer {
     # Fields specific for attachments:
     $invindexer->spec_field( name => 'comment');
     $invindexer->spec_field( name => 'attachment');
+    $invindexer->spec_field( name => 'type');
 
     # Name of the form, if a topic has one.
     $invindexer->spec_field( name => 'form_name');
@@ -514,7 +515,10 @@ sub indexAttachment {
     my $name    = $attachment->{'name'};
     my $author  = $attachment->{'user'};
     my $rev     = $attachment->{'version'};
-    
+
+    my @bits = ( split( /\./, $name ) );
+    my $extension = lc $bits[$#bits];
+
     #my $date = $attachment->{'date'};
     #print "#2######## $date ###########\n";
     #my $date    = TWiki::Func::formatTime( $attachment->{'date'} );
@@ -534,6 +538,7 @@ sub indexAttachment {
     $doc->set_value(topic    => $topic);
     $doc->set_value(id_topic => $web.$topic.$name);
     $doc->set_value(name     => $name);
+    $doc->set_value(type     => $extension);
     $doc->set_value(bodytext => $attText);
 
     # processing the topic meta info

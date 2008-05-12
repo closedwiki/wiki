@@ -139,6 +139,37 @@ sub test_search {
     $this->assert(index($result, "TopicWithoutAttachment") > 0,   "TopicWithoutAttachment not found");
 }
 
+sub test_searchAttachments {
+    my $this = shift;
+    my $search = TWiki::Contrib::SearchEngineKinoSearchAddOn::Search->newSearch();
+
+    # Let's create something
+    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "TopicToSearch", <<'HERE');
+Just an example topic
+Keyword: BodyToSearchFor
+HERE
+
+    $this->{twiki}->{store}->saveAttachment($this->{users_web}, "TopicToSearch", "Simple_example.doc",
+                                            $this->{twiki}->{user}, {file => "attachement_examples/Simple_example.doc"});
+
+    my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
+    $ind->createIndex();
+
+    my $result = $this->_search($this->{test_web},
+			     "Kino",
+			     $this->{test_user_wikiname},
+			     "type:doc");
+
+    $this->assert(index($result, "TopicToSearch") > 0,   "TopicToSearch not found for type:doc");
+
+    $result = $this->_search($this->{test_web},
+			     "Kino",
+			     $this->{test_user_wikiname},
+			     "name:Simple_example.doc");
+
+    $this->assert(index($result, "TopicToSearch") > 0,   "TopicToSearch not found for name:Simple_example.doc");
+}
+
 # I check, if the access rights of the users are checked.
 sub test_search_with_users {
     my $this = shift;
