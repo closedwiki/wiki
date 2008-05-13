@@ -48,7 +48,7 @@ pre, code, tt {
 }
 blockquote {
    background-color:#fbfbfb;
-   border-color:#ddd;
+   border-color:#fbfbfb #fbfbfb #fbfbfb #ddd;
 }
 blockquote h2 {
    background:none;
