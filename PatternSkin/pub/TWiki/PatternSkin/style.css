@@ -63,7 +63,7 @@ ol li, ul li {}
 blockquote {
 	padding:.5em 1.25em;
 	border-style:solid;
-	border-width:0 0 0 3px;
+	border-width:1px 0 1px 3px;
 }
 
 /* Text */

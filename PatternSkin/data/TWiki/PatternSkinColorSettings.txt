@@ -237,7 +237,8 @@ pre, code, tt {
 }
 blockquote {
    background-color:%ACTIVE_FORM_BACKGROUND%;
-   border-color:%NEUTRAL_BORDER%;
+   border-color:%ACTIVE_FORM_BACKGROUND% %ACTIVE_FORM_BACKGROUND% %ACTIVE_FORM_BACKGROUND% %NEUTRAL_BORDER%;
+
 }
 blockquote h2 {
    background:none;
