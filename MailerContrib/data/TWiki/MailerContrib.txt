@@ -164,7 +164,7 @@ Many thanks to the following sponsors for supporting this work:
 |  License: | GPL |
 |  Version: | %$VERSION% |
 |  Change History: | |
-| 14 May 2008 | TWikibug:Item: spelling fixes - TWiki:Main.SvenDowideit |
+|  15 May 2008 | TWikibug:Item5232: TWiki:Main.CrawfordCurrie added support for non-ascii alphanumerics in topic names to WebNotify. TWikibug:Item5630: TWiki:Main.SvenDowideit fixed some spelling errors |
 |  25 Jan 2008 | TWikibug:Item4812: added TWiki:Main.BobGoldstein's noexpand patch for groups |
 |  2 Nov 2007 | TWikibug:Item4818: added quotes to support non-alphabetic and other wierd group names TWikibug:Item4887: corrected minor rendering error TWikibug:Item4917: removed dependence on symbolic web names |
 |  9 Sep 2007 | TWikibug:Item4326 workaround for possible error in !WebNotify API in old releases, Should not affect most users. |

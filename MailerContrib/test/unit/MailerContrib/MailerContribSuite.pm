@@ -1,7 +1,8 @@
-use strict;
-
 package MailerContribSuite;
 use base qw(TWikiFnTestCase);
+
+use strict;
+use locale;
 
 use TWiki::Contrib::MailerContrib;
 
@@ -35,6 +36,8 @@ my %finalText =
       TestTopic1221 => "What's up, Buck?",
       TestTopic2 => "roast my nipple-nuts",
       TestTopic21 => "smoke me a kipper, I'll be back for breakfast",
+      'RequêtesNon' => "make it so, number one",
+      'RequêtesOui' => "you're such a smeeee heeee",
      );
 
 sub new {
@@ -156,6 +159,12 @@ sub set_up {
               email => "email8\@example.com",
               entry => "'IT:admins': TestTopic1",
               topicsout => "",
+          },
+          # Francais
+          {
+              email => "test1\@example.com",
+              entry => "TestUser1 : Requêtes*",
+              topicsout => "RequêtesNon RequêtesOui",
           },
          );
 

@@ -18,12 +18,6 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
-use strict;
-
-require TWiki::Func;
-require TWiki::Contrib::MailerContrib::Subscriber;
-require TWiki::Contrib::MailerContrib::Subscription;
-
 =pod
 
 ---+ package TWiki::Contrib::MailerContrib::WebNotify
@@ -35,6 +29,13 @@ must be set up before this class is used.
 =cut
 
 package TWiki::Contrib::MailerContrib::WebNotify;
+
+use strict;
+use locale; # required for matching \w with international characters
+
+require TWiki::Func;
+require TWiki::Contrib::MailerContrib::Subscriber;
+require TWiki::Contrib::MailerContrib::Subscription;
 
 =pod
 
@@ -343,7 +344,7 @@ sub _load {
             $this->subscribe( $2, '*', 0 );
             $in_pre = 0;
         }
-        elsif ( $line =~ /^\s+\*\s$webRE($TWiki::regex{wikiWordRegex}|'.*?'|".*?"|$TWiki::cfg{MailerContrib}{EmailFilterIn})\s*(:(.*))?$/o
+        elsif ( $line =~ /^\s+\*\s$webRE($TWiki::regex{wikiWordRegex}|'.*?'|".*?"|$TWiki::cfg{MailerContrib}{EmailFilterIn})\s*(?::(.*))?$/o
                   && $1 ne $TWiki::cfg{DefaultUserWikiName}) {
             my $subscriber = $1;
             my $topics = $3;
@@ -380,7 +381,7 @@ sub _parsePages {
         }
     }
     if ( $spec =~ m/\S/ ) {
-        print STDERR "Badly formatted subscription for $who: $ospec\n";
+        print STDERR "Badly formatted page list at $who: $ospec\n";
     }
 }
 
