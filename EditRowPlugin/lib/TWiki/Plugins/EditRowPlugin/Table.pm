@@ -701,8 +701,7 @@ sub generateHelp {
         $text =~ s/%STOPINCLUDE%.*//s;
         $text =~ s/^\s*//s;
         $text =~ s/\s*$//s;
-        $text =~ s/\r?\n/ <br \/> /g;
-        $help = $text;
+        $help = $text . "\n";
     }
     return $help;
 }
