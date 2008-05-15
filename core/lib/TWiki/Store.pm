@@ -339,6 +339,7 @@ sub moveAttachment {
         # so we need to remove the attachment in nmeta
         if( $oldTopic eq $newTopic && $oldWeb eq $newWeb ) {
                $nmeta->remove( 'FILEATTACHMENT', $oldAttachment );
+	}
 
         # Add file attachment to new topic
         $fileAttachment->{name} = $newAttachment;
