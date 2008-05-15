@@ -335,6 +335,11 @@ sub moveAttachment {
         _noHandlersSave( $this, $user, $oldWeb, $oldTopic, $otext, $ometa,
                                 { notify => 0 } );
 
+        # we move the attachment in the the old topic
+        # so we need to remove the attachment in nmeta
+        if( $oldTopic eq $newTopic && $oldWeb eq $newWeb ) {
+               $nmeta->remove( 'FILEATTACHMENT', $oldAttachment );
+
         # Add file attachment to new topic
         $fileAttachment->{name} = $newAttachment;
         $fileAttachment->{movefrom} = $oldWeb.'.'.$oldTopic.'.'.$oldAttachment;
