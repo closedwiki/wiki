@@ -119,7 +119,7 @@ sub parseTables {
             next;
         }
 
-        elsif (!$disable && $line =~ /^\s*\|/) {
+        elsif (!$disable && $line =~ /^\s*\|/ && $active_table) {
             if ($line =~ s/\\$//) {
                 # Continuation
                 $openRow = $line;
