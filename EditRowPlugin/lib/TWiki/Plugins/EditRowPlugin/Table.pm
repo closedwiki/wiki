@@ -30,6 +30,10 @@ sub parseTables {
     my $nTables = 0;
     my $disable = 0;
     my $openRow = undef;
+    my @comments;
+
+    $text =~ s/(<!--.*?-->)/
+      push(@comments, $1); "\001-".scalar(@comments)."-\001"/seg;
 
     foreach my $line (split(/\r?\n/, $text)) {
         if ($line =~ /<(verbatim|literal)>/) {
@@ -160,6 +164,7 @@ sub parseTables {
         push(@tables, $line);
     }
 
+    my @result;
     foreach my $t (@tables) {
         if (UNIVERSAL::isa($t, 'TWiki::Plugins::EditRowPlugin::Table')) {
             if (!scalar(@{$t->{rows}}) &&
@@ -176,10 +181,14 @@ sub parseTables {
                     $t, 1, $precruft, $postcruft, \@cols);
                 push(@{$t->{rows}}, $row);
             }
+        } else {
+            # Expand comments again
+            $t =~ s/\001-(\d+)-\001/$comments[$1 - 1]/ges;
         }
+        push(@result, $t);
     }
 
-    return \@tables;
+    return \@result;
 }
 
 sub new {
