@@ -96,7 +96,7 @@ sub mailNotify {
     $context->{absolute_urls} = 1;
 
     $TWiki::cfg{MailerContrib}{EmailFilterIn} ||=
-      '[A-Za-z0-9\.+-_]+\@[A-Za-z0-9.-]+';
+      $TWiki::regex{emailAddrRegex};
 
     my $report = '';
     foreach my $web ( TWiki::Func::getListOfWebs( 'user ') ) {
