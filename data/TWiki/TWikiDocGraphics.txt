@@ -111,6 +111,8 @@ Other usage: [[%TOPIC%#Usage_extended][see below]].
 | <img src="%ATTACHURLPATH%/person.gif" alt="Person" title="Person" />  | =person.gif= | Person | =%<nop>ICON{person}%= |
 | <img src="%ATTACHURLPATH%/persons.gif" alt="Persons" title="Persons" />  | =persons.gif= | Persons | =%<nop>ICON{persons}%= |
 | <img src="%ATTACHURLPATH%/group.gif" alt="Group" title="Group" />  | =group.gif= | Group | =%<nop>ICON{group}%= |
+| <img src="%ATTACHURLPATH%/useractive.gif" alt="Active user" title="Active user" />  | =useractive.gif= | Active user | =%<nop>ICON{useractive}%= |
+| <img src="%ATTACHURLPATH%/userinactive.gif" alt="Inactive user" title="Inactive user" />  | =userinactive.gif= | Inactive user | =%<nop>ICON{userinactive}%= |
 | <img src="%ATTACHURLPATH%/building.gif" alt="Building" title="Building" />  | =building.gif= | Building | =%<nop>ICON{building}%= |
 | <img src="%ATTACHURLPATH%/buildings.gif" alt="Buildings" title="Buildings" />  | =buildings.gif= | Buildings | =%<nop>ICON{buildings}%= |
 | <img src="%ATTACHURLPATH%/logout.gif" alt="Log out" title="Log out" />  | =logout.gif= | Log out | =%<nop>ICON{logout}%= |
@@ -596,6 +598,8 @@ __Contributors:__ Most icons on this page were originally designed by TWiki:Main
 %META:FILEATTACHMENT{name="unchecked.gif" attr="" comment="" date="1169565034" path="unchecked.gif" size="96" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="up.gif" attr="" comment="" date="1169565034" path="up.gif" size="199" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="updated.gif" attr="" comment="" date="1169565034" path="updated.gif" size="401" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="useractive.gif" attr="" comment="" date="1193349525" path="useractive.gif" size="158" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="userinactive.gif" attr="" comment="" date="1193349525" path="userinactive.gif" size="158" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="uweb-bo.gif" attr="" comment="" date="1193349525" path="uweb-bo.gif" size="158" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="uweb-bo12.gif" attr="" comment="" date="1193349525" path="uweb-bo12.gif" size="890" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="uweb-g.gif" attr="" comment="" date="1193349525" path="uweb-g.gif" size="999" user="TWikiContributor" version=""}%
