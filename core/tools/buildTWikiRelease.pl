@@ -21,18 +21,19 @@ if ( grep('-sven', @ARGV) ) {
 
 
 
-my $twikiBranch = 'MAIN';
+my $twikiBranch = 'trunk';
 
 unless ( -e $twikiBranch ) {
    print STDERR "doing a fresh checkout\n";
-   `svn co http://svn.twiki.org/svn/twiki/branches/$twikiBranch > TWiki-svn.log`;
-   chdir($twikiBranch);
+   `svn co http://svn.twiki.org/svn/twiki/$twikiBranch > TWiki-svn.log`;
+   chdir($twikiBranch.'/core');
 } else {
 #TODO: should really do an svn revert..
    print STDERR "using existing checkout, removing ? files";
    chdir($twikiBranch);
    `svn status | grep ? | sed 's/?/rm -r/' | sh > TWiki-svn.log`;
    `svn up >> TWiki-svn.log`;
+   chdir('core');
 }
 
 my $twikihome = `pwd`;
