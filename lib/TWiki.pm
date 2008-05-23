@@ -3110,6 +3110,7 @@ sub INCLUDE {
     my $pattern = $params->remove('pattern');
     my $rev = $params->remove('rev');
     my $section = $params->remove('section');
+    undef $section if (defined($section) && $section eq '');     #no sense in considering an empty string as an unfindable section
     my $raw = $params->remove('raw') || '';
     my $warn = $params->remove('warn')
       || $this->{prefs}->getPreferencesValue( 'INCLUDEWARNING' );
