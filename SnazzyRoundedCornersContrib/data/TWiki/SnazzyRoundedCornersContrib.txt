@@ -31,9 +31,9 @@ One line description, required for extensions repository catalog.
 </b><b class="xb4%IDSHOW%"></b></b>
 <div class="xboxcontent%IDSHOW%" >
 <div>
-%INCLUDE{"%TOPICTOSHOW%" warn="%WARN%"}%
+%INCLUDE{"%TOPICTOSHOW%" %IF{"defined SECTION AND $SECTION != ''" then="section=\"%SECTION%\""}% warn="%WARN%"}%
 </div>
-  <span align="right"><font size="-6">Source: %TOPICTOSHOW% </font></span>
+  <span align="right"><font size="-6">Source: %TOPICTOSHOW% %IF{"defined SECTION" then="Section: %SECTION%"}%</font></span>
 </div>
 <b class="xbottom%IDSHOW%">
 <b class="xb4%IDSHOW%">
@@ -52,7 +52,7 @@ __Note:__ Snazzy curved box with thanks from http://cssplay.co.uk/boxes/snazzy.h
 usage:
 <verbatim>
 %INCLUDE{
-  "%TOPIC%" 
+  "%SYSTEMWEB%.SnazzyRoundedCornersContrib" 
   TOPICTOSHOW="WebTopicList" 
   BORDERCOLOR="%WEBBGCOLOR%" 
   BGCOLOR="#FAFAFA"
@@ -60,6 +60,7 @@ usage:
   WIDTH="300px" 
   HEIGHT="500px"
   IDSHOW="unique"
+  SECTION=""
 }%
 </verbatim>
 
@@ -85,6 +86,8 @@ Settings for demoing on this topic
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Contrib Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  May 2008: | add sectional INCLUDE support |
+|  Jul 2007: | initial release |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Contrib Home: | http://twiki.org/cgi-bin/view/Plugins/SnazzyRoundedCornersContrib |
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/SnazzyRoundedCornersContribDev |
