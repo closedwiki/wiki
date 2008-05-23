@@ -122,4 +122,27 @@ THIS
     $this->assert_str_equals('', $text);
 }
 
+# INCLUDE{"" section=""}% should act as though section was not set (ie, return the entire topic)
+sub test_5649 {
+    my $this = shift;
+    my $includedTopic = "TopicToInclude";
+    my $topicText = <<THIS;
+Snurfle
+%STARTSECTION{"suction"}%
+Such a section!
+%ENDSECTION{"suction"}%
+Out of scope
+THIS
+    my $handledTopicText = $topicText;
+    $handledTopicText =~ s/%(START|END)SECTION{"suction"}%//g;
+    
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $this->{other_web},
+        $includedTopic, $topicText);
+    my $text = $this->{twiki}->handleCommonTags(
+        "%INCLUDE{\"$this->{other_web}.$includedTopic\" section=\"\"}%",
+        $this->{test_web}, $this->{test_topic});
+    $this->assert_str_equals($handledTopicText, $text."\n");    #add \n because handleCommonTags removes it :/
+}
+
 1;
