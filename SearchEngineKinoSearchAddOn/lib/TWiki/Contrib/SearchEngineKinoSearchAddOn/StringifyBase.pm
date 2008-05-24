@@ -34,6 +34,7 @@ use constant DEFAULT_HANDLER => "TWiki::Contrib::SearchEngineKinoSearchAddOn::St
     sub handler_for {
         my ($self, $filename, $mime) = @_;
         if (exists $mime_handlers{$mime}) { return $mime_handlers{$mime} }
+	$filename = lc($filename);
         for my $spec (keys %extension_handlers) {
             if ($filename =~ /$spec$/) { return $extension_handlers{$spec} }
         }

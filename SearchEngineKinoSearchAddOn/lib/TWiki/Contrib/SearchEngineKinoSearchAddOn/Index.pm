@@ -489,7 +489,7 @@ sub indexTopic {
 
     if ( @attachments ) {
 	$self->log("Attachments available for: $web, $topic");
-	
+
 	foreach my $attachment (@attachments) {
 	    my $name = $attachment->{'name'};
 	    # the attachment extension has to be checked

@@ -41,4 +41,20 @@ sub test_rmtree {
     $this->assert(! (-f $tmp_dir), "File $tmp_dir not deleteted.");
 }
 
+sub test_handler_for {
+    my $this = shift;
+    my $stringifier = TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyBase->new();
+
+    my $handler = $stringifier->handler_for("test.pdf", "dummy");
+    $this->assert($handler->isa("TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::PDF"), 
+		  "Bad handler for test.pdf");
+
+    # I check that capital letters in the file name don't confuse the stringifier
+    $handler = $stringifier->handler_for("TEST.PDF", "dummy");
+    $this->assert($handler->isa("TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::PDF"), 
+		  "Bad handler for TEST.PDF");
+
+    print "$handler \n";
+}
+
 1;
