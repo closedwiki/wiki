@@ -143,10 +143,6 @@ sub _dropIn {
     return $thing->{text} if $thing->{encoding} eq 'NONE';
     my $method = 'CGI::'.$thing->{encoding};
     my $text = $thing->{text};
-    $text = _encodeEntities($text) if
-      $thing->{type} eq 'PROTECTED' ||
-        $thing->{type} eq 'STICKY' ||
-          $thing->{type} eq 'VERBATIM';
     no strict 'refs';
     return &$method({class => 'WYSIWYG_'.$thing->{type} }, $text);
     use strict 'refs';
@@ -451,9 +447,9 @@ sub _getRenderedVersion {
     $this->_putBackBlocks( $text, 'literal', 'div' );
 
     # replace verbatim with pre in the final output, with encoded entities
-    $this->_putBackBlocks( $text, 'verbatim', 'pre', \&_encodeEntities );
+    $this->_putBackBlocks( $text, 'verbatim', 'pre' );
 
-    $this->_putBackBlocks( $text, 'sticky', 'div', \&_encodeEntities );
+    $this->_putBackBlocks( $text, 'sticky', 'div' );
 
     $text =~ s/(<nop>)/$this->_liftOut($1, 'PROTECTED')/ge;
 
@@ -466,14 +462,6 @@ sub _addClass {
     } else {
         $_[0] = $_[1];
     }
-}
-
-sub _encodeEntities {
-    my $text = shift;
-    $text =~ s/([\000-\011\013-\037<&>'"\200-\277])/'&#'.ord($1).';'/ges;
-    $text =~ s/ /&nbsp;/g;
-    $text =~ s/\n/<br \/>/gs;
-    return $text;
 }
 
 sub _takeOutIMGTag {
