@@ -53,8 +53,6 @@ sub test_handler_for {
     $handler = $stringifier->handler_for("TEST.PDF", "dummy");
     $this->assert($handler->isa("TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::PDF"), 
 		  "Bad handler for TEST.PDF");
-
-    print "$handler \n";
 }
 
 1;
