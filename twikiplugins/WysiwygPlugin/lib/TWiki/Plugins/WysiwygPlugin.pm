@@ -41,10 +41,12 @@ use CGI qw( :cgi -any );
 
 use strict;
 
+use Assert;
+use Encode;
+
 require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
-
-use Assert;
+require TWiki::Plugins::WysiwygPlugin::Constants;
 
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $SECRET_ID $NO_PREFS_IN_TOPIC );
 use vars qw( $html2tml $tml2html $recursionBlock $imgMap );
@@ -159,7 +161,7 @@ sub beforeSaveHandler {
 
     return unless defined( $query->param( 'wysiwyg_edit' ));
 
-    $_[0] = TranslateHTML2TML( _handleUTF8( $_[0] ), $_[1], $_[2] );
+    $_[0] = TranslateHTML2TML( $_[0], $_[1], $_[2] );
 }
 
 # This handler is invoked before a merge. Merges are done before the
@@ -596,6 +598,59 @@ DEFAULT
     return 0;
 }
 
+# Text that is taken from a web page and added to the parameters of an XHR
+# by JavaScript is UTF-8 encoded. This is because UTF-8 is the default encoding
+# for XML, which XHR was designed to transport.
+
+# This function is used to decode such parameters to the currently selected
+# TWiki site character set.
+
+sub chcodes {
+    my $text = shift;
+    my $s = "";
+    for (my $i = 0; $i < length($text); $i++) {
+        $s = $s . " ". ord(substr($text, $i, 1));
+    }
+    return $s;
+}
+
+# Note that this transform is not as simple as an Encode::from_to, as
+# a number of unicode code points must be remapped for certain encodings.
+sub RESTParameter2SiteCharSet {
+    my ($text) = @_;
+
+    $text = Encode::decode_utf8($text, Encode::FB_PERLQQ);
+
+    $text = WC::mapUnicode2HighBit($text);
+
+    $text = Encode::encode(
+        $TWiki::cfg{Site}{CharSet}, $text, Encode::FB_PERLQQ);
+
+    return $text;
+}
+
+# Text that is taken from a web page and added to the parameters of an XHR
+# by JavaScript is UTF-8 encoded. This is because UTF-8 is the default encoding
+# for XML, which XHR was designed to transport. For usefulness in Javascript
+# the response to an XHR should also be UTF-8 encoded.
+# This function generates such a response.
+sub returnRESTResult {
+    my ($text) = @_;
+
+    $text = Encode::decode(
+        $TWiki::cfg{Site}{CharSet}, $text, Encode::FB_PERLQQ);
+
+    $text = WC::mapHighBit2Unicode($text);
+
+    $text = Encode::encode_utf8($text);
+
+    print "Content-Type: text/plain;charset=UTF-8\r\n";
+    my $len; { use bytes; $len = length($text); };
+    print "Content-length: ",$len,"\r\n";
+    print "\r\n";
+    print $text;
+}
+
 # Rest handler for use from Javascript. The 'text' parameter is used to
 # pass the text for conversion. The text must be URI-encoded (this is
 # to support use of this handler from XMLHttpRequest, which gets it
@@ -610,15 +665,11 @@ DEFAULT
 # request.req.onreadystatechange = ...;
 # req.send(params);
 #
-# Note how the text has been double-encoded; once (encodeURIComponent) for
-# the transfer encoding, and the second (escape) to protect it from unicode
-# problems.
-#
 sub _restTML2HTML {
     my ($session) = @_;
     my $tml = TWiki::Func::getCgiQuery()->param('text');
 
-    #_handleUTF8( $tml ); if not utf8?
+    $tml = RESTParameter2SiteCharSet($tml);
 
     # if the secret ID is present, don't convert again. We are probably
     # going 'back' to this page (doesn't work on IE :-( )
@@ -632,7 +683,11 @@ sub _restTML2HTML {
     # Add the secret id to trigger reconversion. Doesn't work if the
     # editor eats HTML comments, so the editor may need to put it back
     # in during final cleanup.
-    return '<!--'.$SECRET_ID.'-->'.$html;
+    $html = '<!--'.$SECRET_ID.'-->'.$html;
+
+    returnRESTResult($html);
+
+    return undef; # to prevent further processing
 }
 
 # Rest handler for use from Javascript
@@ -643,14 +698,9 @@ sub _restHTML2TML {
 
         $html2tml = new TWiki::Plugins::WysiwygPlugin::HTML2TML();
     }
-    my $html = TWiki::Func::getCgiQuery()->param('text') || '';
+    my $html = TWiki::Func::getCgiQuery()->param('text');
 
-    # encodeURIComponent encodes strings as UTF-8. Decode them.
-    if( defined $TWiki::cfg{Site}{CharSet}
-          && $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i) {
-        require Encode;
-        $html = Encode::decode_utf8( $html );
-    }
+    $html = RESTParameter2SiteCharSet($html);
 
     $html =~ s/<!--$SECRET_ID-->//go;
     my $tml = $html2tml->convert(
@@ -663,7 +713,9 @@ sub _restHTML2TML {
             very_clean => 1,
         });
 
-    return $tml;
+    returnRESTResult($tml);
+
+    return undef; # to prevent further processing
 }
 
 sub _restUpload {

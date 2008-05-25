@@ -49,38 +49,6 @@ require HTML::Entities;
 require TWiki::Plugins::WysiwygPlugin::HTML2TML::Node;
 require TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf;
 
-# Entities that we want to convert back to characters, rather
-# than leaving them as HTML entities.
-our @safeEntities = qw(
-    euro   iexcl  cent   pound  curren yen    brvbar sect
-    uml    copy   ordf   laquo  not    shy    reg    macr
-    deg    plusmn sup2   sup3   acute  micro  para   middot
-    cedil  sup1   ordm   raquo  frac14 frac12 frac34 iquest
-    Agrave Aacute Acirc  Atilde Auml   Aring  AElig  Ccedil
-    Egrave Eacute Ecirc  Euml   Igrave Iacute Icirc  Iuml
-    ETH    Ntilde Ograve Oacute Ocirc  Otilde Ouml   times
-    Oslash Ugrave Uacute Ucirc  Uuml   Yacute THORN  szlig
-    agrave aacute acirc  atilde auml   aring  aelig  ccedil
-    egrave eacute ecirc  uml    igrave iacute icirc  iuml
-    eth    ntilde ograve oacute ocirc  otilde ouml   divide
-    oslash ugrave uacute ucirc  uuml   yacute thorn  yuml
-);
-
-our $safe_entities;
-
-# Convert the safe entities values to characters in the site charset.
-sub _prepSafeEntities {
-    return if $safe_entities;
-    my $encoding = Encode::resolve_alias(
-        $TWiki::cfg{Site}{CharSet} || 'iso-8859-15');
-    foreach my $entity (@safeEntities) {
-        $safe_entities->{$entity} =
-          Encode::encode(
-              $encoding,
-              HTML::Entities::decode_entities("&$entity;"));
-    }
-}
-
 =pod
 
 ---++ ClassMethod new()
@@ -139,6 +107,13 @@ sub convert {
     $opts = $WC::VERY_CLEAN
       if ( $options->{very_clean} );
 
+    # If the text is UTF8-encoded we have to decode it first, otherwise
+    # the HTML parser will barf.
+    my $encoding = Encode::resolve_alias($TWiki::cfg{Site}{CharSet});
+    if ($encoding =~ /^utf-?8/) {
+        $text = Encode::decode_utf8($text);
+    }
+
     # get rid of nasties
     $text =~ s/\r//g;
     $this->_resetStack();
@@ -149,15 +124,13 @@ sub convert {
     $this->_apply( undef );
     $text = $this->{stackTop}->rootGenerate( $opts );
 
-    # Encode utf8 as octets to stop TWiki from barfing
-    # with Wide character in print. We have to do this
-    # before converting high-bit entities to characters.
-    $text = Encode::encode_utf8( $text );
+    # If the site charset is UTF8, we need to recode
+    if ($encoding =~ /^utf-?8/) {
+        $text = Encode::encode_utf8($text);
+    }
 
-    # Convert entities that represent "safe" high-bit characters
-    # to byte characters if we are using an 8859 charset.
-    _prepSafeEntities();
-    HTML::Entities::_decode_entities($text, $safe_entities);
+    # Decode safe entities back to characters
+    $text = WC::decodeSafeEntities($text);
 
     return $text;
 }

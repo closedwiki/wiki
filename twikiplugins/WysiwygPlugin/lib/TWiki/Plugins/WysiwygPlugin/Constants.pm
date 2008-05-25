@@ -200,4 +200,95 @@ our (%KNOWN_COLOUR);
 # '#DCDCDC' => 'gainsboro',
 # '#D3D3D3' => 'lightgrey',
 
+############ Encodings ###############
+
+# Mapping high-bit characters from unicode back to iso-8859-1
+# (a.k.a Windows 1252 a.k.a "ANSI") - http://www.alanwood.net/demos/ansi.html
+our %unicode2HighBit = (
+	chr(8364) => chr(128),	chr(8218) => chr(130),  chr(402)  => chr(131),
+	chr(8222) => chr(132),	chr(8230) => chr(133),	chr(8224) => chr(134),
+	chr(8225) => chr(135),  chr(710)  => chr(136),	chr(8240) => chr(137),
+    chr(352)  => chr(138),	chr(8249) => chr(139),  chr(338)  => chr(140),
+    chr(381)  => chr(142),	chr(8216) => chr(145),	chr(8217) => chr(146),
+	chr(8220) => chr(147),	chr(8221) => chr(148),	chr(8226) => chr(149),
+	chr(8211) => chr(150),	chr(8212) => chr(151),  chr(732)  => chr(152),
+	chr(8482) => chr(153),  chr(353)  => chr(154),	chr(8250) => chr(155),
+    chr(339)  => chr(156),  chr(382)  => chr(158),  chr(376)  => chr(159),
+);
+
+# Reverse mapping
+our %HighBit2Unicode = map { $unicode2HighBit{$_} => $_ } keys %unicode2HighBit;
+
+our $unicode2HighBitChars = join('', keys %unicode2HighBit);
+our $HighBit2UnicodeChars = join('', keys %HighBit2Unicode);
+
+# Entities that we want to convert back to characters, rather
+# than leaving them as HTML entities.
+our @safeEntities = qw(
+    euro   iexcl  cent   pound  curren yen    brvbar sect
+    uml    copy   ordf   laquo  not    shy    reg    macr
+    deg    plusmn sup2   sup3   acute  micro  para   middot
+    cedil  sup1   ordm   raquo  frac14 frac12 frac34 iquest
+    Agrave Aacute Acirc  Atilde Auml   Aring  AElig  Ccedil
+    Egrave Eacute Ecirc  Euml   Igrave Iacute Icirc  Iuml
+    ETH    Ntilde Ograve Oacute Ocirc  Otilde Ouml   times
+    Oslash Ugrave Uacute Ucirc  Uuml   Yacute THORN  szlig
+    agrave aacute acirc  atilde auml   aring  aelig  ccedil
+    egrave eacute ecirc  uml    igrave iacute icirc  iuml
+    eth    ntilde ograve oacute ocirc  otilde ouml   divide
+    oslash ugrave uacute ucirc  uuml   yacute thorn  yuml
+);
+
+# Map selected unicode characters back to high-bit chars if
+# iso-8859-1 is selected. This is required because the same characters
+# have different code points in unicode and iso-8859-1. For example,
+# &euro; is 128 in iso-8859-1 and 8364 in unicode.
+sub mapUnicode2HighBit {
+    my $text = shift;
+    if (Encode::resolve_alias($TWiki::cfg{Site}{CharSet} || 'iso-8859-1')
+        eq 'iso-8859-1') {
+        # Map unicode back to iso-8859 high-bit chars
+        $text =~ s/([$unicode2HighBitChars])/$unicode2HighBit{$1}/ge;
+    }
+    return $text;
+}
+
+# Map selected high-bit chars to unicode if
+# iso-8859-1 is selected.
+sub mapHighBit2Unicode {
+    my $text = shift;
+    if (Encode::resolve_alias($TWiki::cfg{Site}{CharSet} || 'iso-8859-1')
+        eq 'iso-8859-1') {
+        # Map unicode back to iso-8859 high-bit chars
+        $text =~ s/([$HighBit2UnicodeChars])/$HighBit2Unicode{$1}/ge;
+    }
+    return $text;
+}
+
+# Mapping from entity names to characters
+our $safe_entities;
+our $safe_entity_RE;
+
+# Convert the safe entities values to characters in the site charset.
+sub decodeSafeEntities {
+    my $text = shift;
+
+    unless ($safe_entities) {
+        my $encoding = Encode::resolve_alias(
+            $TWiki::cfg{Site}{CharSet} || 'iso-8859-1');
+        foreach my $entity (@safeEntities) {
+            # Decode the entity name to unicode
+            my $unicode = HTML::Entities::decode_entities("&$entity;");
+            if ($encoding eq 'iso-8859-1') {
+                # Map unicode back to iso-8859 high-bit chars
+                $unicode = mapUnicode2HighBit($unicode);
+            }
+            $safe_entities->{$entity} = Encode::encode($encoding, $unicode);
+        }
+        $safe_entity_RE = join('|', @safeEntities);
+    }
+    $text =~ s/&($safe_entity_RE);/$safe_entities->{$1}/g;
+    return $text;
+}
+
 1;
