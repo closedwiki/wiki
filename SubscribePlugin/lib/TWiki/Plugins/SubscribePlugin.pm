@@ -57,18 +57,6 @@ sub _SUBSCRIBE {
         }
     }
 
-    return _getbutton($session, $params, $topic, $web);
-}
-
-sub _getbutton{
-	my($session, $params, $topic, $web) = @_;
-
-    my $query = TWiki::Func::getCgiQuery();
-    my $form;
-    my $suid = $query->param( 'subscribe_uid' );
-
-    my $cur_user = TWiki::Func::getWikiName();
-	
 	my $who = $params->{who} || TWiki::Func::getWikiName();
     if ($who eq $TWiki::cfg{DefaultUserWikiName}) {
         $form = '';
@@ -83,7 +71,9 @@ sub _getbutton{
         my $unsubscribe = 0;
         # user has already subscribed.. so if he clicks again, he wants
         # to delete that subsciprtion
-        if ( $subscriber->isSubscribedTo($stopics) ) {
+        require TWiki::Contrib::MailerContrib::UpData;
+        my $db = new TWiki::Contrib::MailerContrib::Updata( $session, $web );
+        if ( $subscriber->isSubscribedTo($stopics, $db) ) {
         	$unsubscribe = 'yes';
         }	
 
@@ -114,8 +104,7 @@ sub _getbutton{
             $form =~ s/\$topics/$topics/g;
             $form =~ s/\$action/%MAKETEXT{"$actionName"}%/g;
         } else {
-            $form = CGI::a({href => $url},
-                           $actionName);
+            $form = CGI::a({href => $url}, $actionName);
         }
     }
 
