@@ -496,10 +496,19 @@ sub stringify {
 
     foreach my $type ( grep { /$types/ } keys %$this ) {
         foreach my $item ( @{$this->{$type}} ) {
+            #remove the internal 'info.rev'
+            my $topicRev = $item->{'rev'};
+            if ($type eq 'TOPICINFO') {
+                undef $item->{'rev'};
+            }
+            my @itemKeys = sort keys %$item;
             $s .= "$type: " .
               join(' ', map{ "$_='".($item->{$_}||'')."'" }
-                     sort keys %$item ) .
+                      @itemKeys ) .
                        "\n";
+            if ($type eq 'TOPICINFO' && defined($topicRev)) {
+                $item->{'rev'} = $topicRev;
+            }
         }
     }
     return $s;
@@ -721,6 +730,8 @@ sub _writeTypes {
                 $sep = ' ';
             }
             foreach my $key ( sort keys %$item ) {
+                #don't store the rev created in addTOPICINFO
+                next if ($type eq 'TOPICINFO' && $key eq 'rev');
                 if( $key ne 'name' ) {
                     $text .= $sep;
                     $text .= _writeKeyValue( $key, $item->{$key} );
@@ -752,6 +763,7 @@ sub addTOPICINFO {
           # RCS rev numbers save with them so old code can
           # read these topics
           version   => '1.'.$rev,
+          rev       => $rev,
           date      => $time,
           author    => $user,
           format    => $format,
