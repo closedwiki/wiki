@@ -129,8 +129,15 @@ sub convert {
         $text = Encode::encode_utf8($text);
     }
 
-    # Decode safe entities back to characters
-    $text = WC::decodeSafeEntities($text);
+    # Convert (safe) named entities back to the
+    # site charset. Numeric entities are mapped straight to the
+    # corresponding code point unless their value overflow.
+    require HTML::Entities;
+    HTML::Entities::_decode_entities($text,  WC::safeEntities());
+
+    # After decoding entities, we have to map unicode characters
+    # back to high bit
+    WC::mapUnicode2HighBit($text);
 
     return $text;
 }

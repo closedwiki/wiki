@@ -217,12 +217,41 @@ our %unicode2HighBit = (
 );
 
 # Reverse mapping
-our %HighBit2Unicode = map { $unicode2HighBit{$_} => $_ } keys %unicode2HighBit;
+our %highBit2Unicode = map { $unicode2HighBit{$_} => $_ } keys %unicode2HighBit;
 
 our $unicode2HighBitChars = join('', keys %unicode2HighBit);
-our $HighBit2UnicodeChars = join('', keys %HighBit2Unicode);
+our $highBit2UnicodeChars = join('', keys %highBit2Unicode);
+our $encoding;
 
-# Entities that we want to convert back to characters, rather
+sub encoding {
+    unless ($encoding) {
+        $encoding = Encode::resolve_alias(
+            $TWiki::cfg{Site}{CharSet} || 'iso-8859-1');
+    }
+    return $encoding;
+}
+
+# Map selected unicode characters back to high-bit chars if
+# iso-8859-1 is selected. This is required because the same characters
+# have different code points in unicode and iso-8859-1. For example,
+# &euro; is 128 in iso-8859-1 and 8364 in unicode.
+sub mapUnicode2HighBit {
+    if (encoding() eq 'iso-8859-1') {
+        # Map unicode back to iso-8859 high-bit chars
+        $_[0] =~ s/([$unicode2HighBitChars])/$unicode2HighBit{$1}/ge;
+    }
+}
+
+# Map selected high-bit chars to unicode if
+# iso-8859-1 is selected.
+sub mapHighBit2Unicode {
+    if (encoding() eq 'iso-8859-1') {
+        # Map unicode back to iso-8859 high-bit chars
+        $_[0] =~ s/([$highBit2UnicodeChars])/$highBit2Unicode{$1}/ge;
+    }
+}
+
+# Named entities that we want to convert back to characters, rather
 # than leaving them as HTML entities.
 our @safeEntities = qw(
     euro   iexcl  cent   pound  curren yen    brvbar sect
@@ -239,56 +268,37 @@ our @safeEntities = qw(
     oslash ugrave uacute ucirc  uuml   yacute thorn  yuml
 );
 
-# Map selected unicode characters back to high-bit chars if
-# iso-8859-1 is selected. This is required because the same characters
-# have different code points in unicode and iso-8859-1. For example,
-# &euro; is 128 in iso-8859-1 and 8364 in unicode.
-sub mapUnicode2HighBit {
-    my $text = shift;
-    if (Encode::resolve_alias($TWiki::cfg{Site}{CharSet} || 'iso-8859-1')
-        eq 'iso-8859-1') {
-        # Map unicode back to iso-8859 high-bit chars
-        $text =~ s/([$unicode2HighBitChars])/$unicode2HighBit{$1}/ge;
-    }
-    return $text;
-}
-
-# Map selected high-bit chars to unicode if
-# iso-8859-1 is selected.
-sub mapHighBit2Unicode {
-    my $text = shift;
-    if (Encode::resolve_alias($TWiki::cfg{Site}{CharSet} || 'iso-8859-1')
-        eq 'iso-8859-1') {
-        # Map unicode back to iso-8859 high-bit chars
-        $text =~ s/([$HighBit2UnicodeChars])/$HighBit2Unicode{$1}/ge;
-    }
-    return $text;
-}
-
 # Mapping from entity names to characters
 our $safe_entities;
-our $safe_entity_RE;
 
-# Convert the safe entities values to characters in the site charset.
-sub decodeSafeEntities {
-    my $text = shift;
-
+# Get a hash that maps the safe entities values to characters
+# in the site charset.
+sub safeEntities {
     unless ($safe_entities) {
-        my $encoding = Encode::resolve_alias(
-            $TWiki::cfg{Site}{CharSet} || 'iso-8859-1');
         foreach my $entity (@safeEntities) {
             # Decode the entity name to unicode
             my $unicode = HTML::Entities::decode_entities("&$entity;");
-            if ($encoding eq 'iso-8859-1') {
-                # Map unicode back to iso-8859 high-bit chars
-                $unicode = mapUnicode2HighBit($unicode);
-            }
-            $safe_entities->{$entity} = Encode::encode($encoding, $unicode);
+            # Map unicode back to iso-8859 high-bit chars if required
+            mapUnicode2HighBit($unicode);
+            $safe_entities->{$entity} = Encode::encode(encoding(), $unicode);
         }
-        $safe_entity_RE = join('|', @safeEntities);
     }
-    $text =~ s/&($safe_entity_RE);/$safe_entities->{$1}/g;
-    return $text;
+    return $safe_entities;
+}
+
+# Debug
+sub chCodes {
+    my $text = shift;
+    my $s = "";
+    for (my $i = 0; $i < length($text); $i++) {
+        my $ch = substr($text, $i, 1);
+        if (ord($ch) < 32 || ord($ch) > 127) {
+            $s = $s . '#' . ord($ch) . ';';
+        } else {
+            $s .= $ch;
+        }
+    }
+    return $s;
 }
 
 1;
