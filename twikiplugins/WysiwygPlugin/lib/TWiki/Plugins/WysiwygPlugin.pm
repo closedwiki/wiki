@@ -605,15 +605,6 @@ DEFAULT
 # This function is used to decode such parameters to the currently selected
 # TWiki site character set.
 
-sub chcodes {
-    my $text = shift;
-    my $s = "";
-    for (my $i = 0; $i < length($text); $i++) {
-        $s = $s . " ". ord(substr($text, $i, 1));
-    }
-    return $s;
-}
-
 # Note that this transform is not as simple as an Encode::from_to, as
 # a number of unicode code points must be remapped for certain encodings.
 sub RESTParameter2SiteCharSet {
@@ -621,7 +612,7 @@ sub RESTParameter2SiteCharSet {
 
     $text = Encode::decode_utf8($text, Encode::FB_PERLQQ);
 
-    $text = WC::mapUnicode2HighBit($text);
+    WC::mapUnicode2HighBit($text);
 
     $text = Encode::encode(
         $TWiki::cfg{Site}{CharSet}, $text, Encode::FB_PERLQQ);
@@ -640,7 +631,7 @@ sub returnRESTResult {
     $text = Encode::decode(
         $TWiki::cfg{Site}{CharSet}, $text, Encode::FB_PERLQQ);
 
-    $text = WC::mapHighBit2Unicode($text);
+    WC::mapHighBit2Unicode($text);
 
     $text = Encode::encode_utf8($text);
 
