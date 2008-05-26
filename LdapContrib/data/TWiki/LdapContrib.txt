@@ -18,6 +18,7 @@
   </td>
 </tr>
 </table>
+<br clear="both" />
 This package offers basic LDAP services for TWiki and offers authentication of
 TWiki users by binding to an LDAP server as well as incorporate LDAP user
 groups into TWiki's access control. Note, however that you need at least
@@ -152,7 +153,7 @@ removing illegal characters.
 Given the setting
 <verbatim>
 $TWiki::cfg{Ldap}{WikiNameAttribute} = 'givenName,sn';
-$TWiki::cfg{Ldap}{NormalizeWikiName} = 1;
+$TWiki::cfg{Ldap}{NormalizeWikiNames} = 1;
 </verbatim>
 The =givenName= and =sn= (surname) LDAP attributes will be fetched and concatenated
 to form a <nop>WikiName, so that "givenName=Hans-Peter,sn=Leuth�user-Schnarrenberg" will
@@ -161,11 +162,20 @@ If one of the <nop>WikiNameAttributes is 'mail' the =@mydomain.com= part will be
 all together.
 
 The login name can be normalized by enabling the
-<verbatim>$TWiki::cfg{Ldap}{NormalizeLoginName} = 1;</verbatim>
+<verbatim>$TWiki::cfg{Ldap}{NormalizeLoginNames} = 1;</verbatim>
 setting. However the normalized result will not be forced to be a cammel case <nop>WikiName.
 
 Similar to the <nop>WikiName of a user, group names can be normalized using
-<verbatim>$TWiki::cfg{Ldap}{NormalizeGroupName} = 1;</verbatim>
+<verbatim>$TWiki::cfg{Ldap}{NormalizeGroupNames} = 1;</verbatim>
+
+If a user in your LDAP directory changed his name, e.g. because of a mariage,
+this use can be mapped to his/her old account using an alias that points back
+from the old !WikiName to the new one. This is done using a setting like this:
+<verbatim>$TWiki::cfg{Ldap}{WikiNameAliases} = 'MaryMalone=MaryForrester, ...'</verbatim>
+The parameter takes a comma separated list of =FromWikiName=ToWikiName=. Whenever
+this account is still used in a TWiki access control list, its rights will be
+inheritted by the targeted =ToWikiName= account.
+
 
 ---++ SSO and <nop>LdapContrib
 First of all, <nop>LdapContrib does not provide any SSO solution. Nor does LDAP
@@ -253,7 +263,7 @@ $TWiki::cfg{Ldap}{UserBase} = 'ou=people,dc=my,dc=domain,dc=com';
 $TWiki::cfg{Ldap}{LoginFilter} = 'objectClass=posixAccount';
 $TWiki::cfg{Ldap}{LoginAttribute} = 'uid';
 $TWiki::cfg{Ldap}{WikiNameAttribute} = 'cn';
-$TWiki::cfg{Ldap}{NormalizeWikiName} = 1; 
+$TWiki::cfg{Ldap}{NormalizeWikiNames} = 1; 
 $TWiki::cfg{Ldap}{GroupBase} = 'ou=group,dc=my,dc=domain,dc=com';
 $TWiki::cfg{Ldap}{GroupFilter} = 'objectClass=posixGroup';
 $TWiki::cfg{Ldap}{GroupAttribute} = 'cn';
@@ -315,10 +325,14 @@ Define the <nop>WikiUserName attribute(s):
 <verbatim>$TWiki::cfg{Ldap}{WikiNameAttribute} = 'cn'; </verbatim>
 
 Enable/disable normalization of <nop>WikiUserNames as they come from LDAP:
-<verbatim>$TWiki::cfg{Ldap}{NormalizeWikiName} = 1; </verbatim>
+<verbatim>$TWiki::cfg{Ldap}{NormalizeWikiNames} = 1; </verbatim>
 
 Enable/disable normalization of login names as they come from LDAP:
-<verbatim>$TWiki::cfg{Ldap}{NormalizeLoginName} = 1; </verbatim>
+<verbatim>$TWiki::cfg{Ldap}{NormalizeLoginNames} = 1; </verbatim>
+
+Alias old !WikiNames to new account. This is a comma separated list of
+"OldName=NewName" values.
+<verbatim>$TWiki::cfg{Ldap}{WikiNameAliases} = '';</verbatim>
 
 Allow/disallow changing the LDAP password using TWiki's %TWIKIWEB%.ChangePassword feature
 <verbatim>$TWiki::cfg{Ldap}{AllowChangePassword} = 0; </verbatim>
@@ -350,7 +364,7 @@ Enable/disable reusage of groups defined in TWiki natively:
 <verbatim>$TWiki::cfg{Ldap}{TWikiGroupsBackoff} = 1; </verbatim>
 
 Enable/disable normalization of group names as they come from LDAP:
-<verbatim>$TWiki::cfg{Ldap}{NormalizeGroupName} = 1; </verbatim>
+<verbatim>$TWiki::cfg{Ldap}{NormalizeGroupNames} = 1; </verbatim>
 
 Enable/disable mapping LDAP groups; you might decide to set this to
 =0= and still use the =LdapUserMapping= implementation to construct proper
@@ -423,8 +437,13 @@ that the <nop>LdapContrib will force an update of the cache data.
    This work was partly funded by [[http://www.spanlink.com][Spanlink Communications]] and \
    [[http://www.trivadis.com][Trivadis]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v2.99.4 |
+|  Version: | v2.99.5 |
 |  Change History: | |
+|  25 May 2008: | added alias feature, \
+                  fixed normalization error, \
+                  fixed cache update issue\
+                  added login manager for 4.2 |
+|  05 May 2008: | implemented !WikiNamesAliases |
 |  14 Feb 2008: | allow to disable cache aging setting <nop>MaxCacheAge to zero |
 |  01 Feb 2008: | distinguish groups clashing with user names by appending a suffix |
 |  30 Jan 2008: | first beta towards TWiki-4.2 |
@@ -482,7 +501,7 @@ that the <nop>LdapContrib will force an update of the cache data.
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 
--- TWiki:Main/MichaelDaum - 14 Feb 2008
+-- TWiki:Main/MichaelDaum - 25 May 2008
 
 %META:FILEATTACHMENT{name="TWikiDotPm-4.1.2.patch" attr="" autoattached="0" comment="" date="1191603621" path="TWikiDotPm-4.1.2.patch" size="1538" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="wikiringlogo40x40.png" attr="h" autoattached="0" comment="" date="1190996093" path="wikiringlogo40x40.png" size="2571" user="TWikiContributor" version="1"}%
