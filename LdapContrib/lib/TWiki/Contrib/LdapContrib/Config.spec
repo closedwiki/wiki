@@ -88,7 +88,12 @@ $TWiki::cfg{Ldap}{NormalizeWikiNames} = 1;
 
 # **BOOLEAN**
 # Enable/disable normalization of login names
-$TWiki::cfg{Ldap}{NormalizeLoginName} = 0;
+$TWiki::cfg{Ldap}{NormalizeLoginNames} = 0;
+
+# **STRING**
+# Alias old !WikiNames to new account. This is a comma separated list of
+# "OldName=NewName" values.
+$TWiki::cfg{Ldap}{WikiNameAliases} = '';
 
 # **BOOLEAN**
 # Allow/disallow changing the LDAP password using TWiki's ChangePassword feature
@@ -142,7 +147,7 @@ $TWiki::cfg{Ldap}{TWikiGroupsBackoff} = 1;
 
 # **BOOLEAN**
 # Enable/disable normalization of group names as they come from LDAP:
-$TWiki::cfg{Ldap}{NormalizeGroupName} = 0;
+$TWiki::cfg{Ldap}{NormalizeGroupNames} = 0;
 
 # **BOOLEAN**
 # Enable use of LDAP groups in TWiki. If you switch this off the group-related settings

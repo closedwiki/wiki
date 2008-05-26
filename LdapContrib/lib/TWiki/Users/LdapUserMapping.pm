@@ -146,7 +146,7 @@ sub groupMembers {
 
   my $groupName = $group->wikiName;
 
-  $this->{ldap}->writeDebug("called groupMembers for $groupName");
+  #$this->{ldap}->writeDebug("called groupMembers for $groupName");
 
   my $ldapMembers;
   $ldapMembers = $this->{ldap}->getGroupMembers($groupName)
@@ -272,7 +272,7 @@ sub lookupWikiName {
   # no login names for groups
   return $wikiName if $this->isGroup($wikiName);
 
-  $this->{ldap}->writeDebug("called lookupWikiName($wikiName)");
+  #$this->{ldap}->writeDebug("called lookupWikiName($wikiName)");
 
   my $loginName;
   unless ($this->{ldap}{excludeMap}{$wikiName}) {
@@ -289,14 +289,18 @@ sub lookupWikiName {
   }
 
   # fallback
-  #$this->{ldap}->writeDebug("asking SUPER");
+  $this->{ldap}->writeDebug("asking lookupWikiName::SUPER for $wikiName");
   if ($TWiki::Plugins::VERSION < 1.2) {
     $loginName = $this->SUPER::lookupWikiName($wikiName)
   } else {
     $loginName = $this->SUPER::getLoginName($wikiName);
   }
 
-  return undef if $loginName eq '_unknown_';
+  if (defined($loginName)) {
+    return undef if $loginName eq '_unknown_';
+  } else {
+    $this->{ldap}->writeDebug("loginName for $wikiName not found");
+  }
   return $loginName;
 }
 

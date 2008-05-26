@@ -409,7 +409,7 @@ that the <nop>LdapContrib will force an update of the cache data.
    * Read the the above documentation, i.e. the [[#Configuration][Configuration]] section.
    * Use <a href="%SCRIPTURLPATH{"configure"}%">configure</a> to set the LDAP settings.
    * There's [[%ATTACHURL%/TWikiDotPm-4.1.2.patch][a patch for TWiki-4.1.2]] 
-     that backports the fixes to the =%<nop>GROUPS%= tag from TWiki-4.2 to
+     that backports the fixes to the =%<nop>GROUPS%= tag to
      suppress "new topic links" in the produced table. Apply it using 
      <verbatim>cd <twiki-root>/lib; patch < ../pub/TWiki/LdapContrib/TWikiDotPm-4.1.2.patch</verbatim>
 

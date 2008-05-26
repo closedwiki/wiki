@@ -24,11 +24,12 @@ use Digest::MD5 qw(md5_hex);
 use Unicode::MapUTF8 qw(from_utf8 to_utf8);
 use DB_File;
 use Net::LDAP::Control::Paged;
+use TWiki::Func;
 
 use vars qw($VERSION $RELEASE %sharedLdapContrib);
 
-$VERSION = '$Rev: 15691 (17 Dec 2007) $';
-$RELEASE = 'v2.99.4';
+$VERSION = '$Rev$';
+$RELEASE = 'v2.99.5';
 
 =begin text
 
@@ -76,6 +77,27 @@ sub writeDebug {
   $level ||= 1;
 
   print STDERR $msg."\n" if $level <= $this->{debug};
+}
+
+
+=begin text
+
+---+++ writeWarning($msg, $level) 
+
+Method to write a warning messages. Works also
+if TWiki::Plugins::SESSION isn't initialized yet.
+
+=cut
+
+sub writeWarning {
+  my ($this, $msg) = @_;
+
+  my $session = $TWiki::Plugins::SESSION || $this->{session};
+  if ($session) {
+    $session->writeWarning("LdapContrib - $msg");
+  } else {
+    print STDERR "LdapContrib - $msg\n";
+  }
 }
 
 
@@ -134,12 +156,11 @@ sub new {
     wikiNameAttribute=>$TWiki::cfg{Ldap}{WikiNameAttributes} 
       || $TWiki::cfg{Ldap}{WikiNameAttribute} || 'cn',
 
-    normalizeWikiName=>$TWiki::cfg{Ldap}{NormalizeWikiNames}
-      || $TWiki::cfg{Ldap}{NormalizeWikiName},
-    normalizeLoginName=>$TWiki::cfg{Ldap}{NormalizeLoginNames}
-      || $TWiki::cfg{Ldap}{NormalizeLoginName},
-    normalizeGroupName=>$TWiki::cfg{Ldap}{NormalizeGroupNames}
-      || $TWiki::cfg{Ldap}{NormalizeGroupName},
+    wikiNameAliases=>$TWiki::cfg{Ldap}{WikiNameAliases} || '',
+
+    normalizeWikiName=>$TWiki::cfg{Ldap}{NormalizeWikiNames},
+    normalizeLoginName=>$TWiki::cfg{Ldap}{NormalizeLoginNames},
+    normalizeGroupName=>$TWiki::cfg{Ldap}{NormalizeGroupNames},
 
     loginFilter=>$TWiki::cfg{Ldap}{LoginFilter} || 'objectClass=posixAccount',
     groupAttribute=>$TWiki::cfg{Ldap}{GroupAttribute} || 'cn',
@@ -171,14 +192,14 @@ sub new {
   $this->{session} = $session;
 
   if ($this->{useSASL}) {
-    $this->writeDebug("will use SASL authentication");
+    #$this->writeDebug("will use SASL authentication");
     require Authen::SASL;
   }
 
   # protect against actidental misconfiguration, that might lead
   # to an infinite loop during authorization etc.
   if ($this->{secondaryPasswordManager} eq 'TWiki::Users::LdapUser') {
-    TWiki::Func::writeWarning("hey, you want infinite loops? naw.");
+    $this->writeWarning("hey, you want infinite loops? naw.");
     $this->{secondaryPasswordManager} = '';
   }
   
@@ -190,12 +211,29 @@ sub new {
   mkdir $workArea unless -d $workArea;
   $this->{cacheFile} = $workArea.'/cache.db';
 
+  # normalize normalization flags
+  $this->{normalizeWikiName} = $TWiki::cfg{Ldap}{NormalizeWikiName} 
+    unless defined $this->{normalizeWikiName};
+  $this->{normalizeLoginName} = $TWiki::cfg{Ldap}{NormalizeLoginName} 
+    unless defined $this->{normalizeLoginName};
+  $this->{normalizeGroupName} = $TWiki::cfg{Ldap}{NormalizeGroupName} 
+    unless defined $this->{normalizeGroupName};
   $this->{normalizeWikiName} = 1 unless defined $this->{normalizeWikiName};
-  @{$this->{wikiNameAttributes}} = split(/,\s/, $this->{wikiNameAttribute});
+
+  @{$this->{wikiNameAttributes}} = split(/,\s*/, $this->{wikiNameAttribute});
 
   # create exclude map
-  my %excludeMap = map {$_ => 1} split(/,\s/, $this->{exclude});
+  my %excludeMap = map {$_ => 1} split(/,\s*/, $this->{exclude});
   $this->{excludeMap} = \%excludeMap;
+
+  # creating alias map
+  my %aliasMap = ();
+  foreach my $alias (split(/,\s*/, $this->{wikiNameAliases})) {
+    if ($alias =~ /^\s*(.+?)\s*=\s*(.+?)\s*$/) {
+      $aliasMap{$1} = $2;
+    }
+  }
+  $this->{wikiNameAliases} = \%aliasMap;
 
   # default value for cache expiration is every 24h
   $this->{maxCacheAge} = 86400 unless defined $this->{maxCacheAge};
@@ -218,7 +256,9 @@ sub getLdapContrib {
   my $session = shift;
 
   my $obj = $sharedLdapContrib{$session};
-  $obj = new TWiki::Contrib::LdapContrib($session) unless $obj;
+  return $obj if $obj;
+
+  $obj = new TWiki::Contrib::LdapContrib($session);
   $obj->initCache();
   $sharedLdapContrib{$session} = $obj;
 
@@ -238,7 +278,7 @@ by calling this method. The methods below will do that automatically when needed
 sub connect {
   my ($this, $dn, $passwd) = @_;
 
-  #$this->writeDebug("called connect");
+  $this->writeDebug("called connect");
   #$this->writeDebug("dn=$dn", 2) if $dn;
   #$this->writeDebug("passwd=***", 2) if $passwd;
 
@@ -304,13 +344,12 @@ a reconnect and possibly rebind as a different user.
 sub disconnect {
   my $this = shift;
 
-  if (defined($this->{ldap}) && $this->{isConnected}) {
-    #$this->writeDebug("called disconnect()");
+  return unless defined($this->{ldap}) && $this->{isConnected};
 
-    $this->{ldap}->unbind();
-    $this->{ldap} = undef;
-    $this->{isConnected} = 0;
-  }
+  $this->writeDebug("called disconnect()");
+  $this->{ldap}->unbind();
+  $this->{ldap} = undef;
+  $this->{isConnected} = 0;
 }
 
 =begin text
@@ -328,10 +367,10 @@ sub finish {
   $this->{isFinished} = 1;
 
   $this->writeDebug("finishing");
+  $this->disconnect();
   delete $sharedLdapContrib{$this->{session}};
   undef $this->{cacheDB};
   untie %{$this->{data}};
-  $this->disconnect();
 }
 
 
@@ -537,6 +576,8 @@ sub initCache {
   return unless $TWiki::cfg{UserMappingManager} =~ /LdapUserMapping/ ||
                 $TWiki::cfg{PasswordManager} =~ /LdapUser/;
 
+  $this->writeDebug("called initCache");
+
   # open database
   #$this->writeDebug("opening ldap cache from $this->{cacheFile}");
   $this->{cacheDB} = 
@@ -548,6 +589,7 @@ sub initCache {
   my $session = $this->{session}->{cgiQuery};
   $refresh = $session->param('refreshldap') || '' if $session;
   $refresh = $refresh eq 'on'?1:0;
+  $this->writeDebug("refreshing cache explicitly") if $refresh;
 
   if ($this->{maxCacheAge} > 0) { # is cache expiration enabled
 
@@ -565,7 +607,7 @@ sub initCache {
       $refresh = 1 if $cacheAge > $this->{maxCacheAge}
     }
 
-    $this->writeDebug("cacheAge=$cacheAge, lastUpdate=$lastUpdate, refresh=$refresh");
+    $this->writeDebug("cacheAge=$cacheAge, maxCacheAge=$this->{maxCacheAge}, lastUpdate=$lastUpdate, refresh=$refresh");
   }
 
   # clear to reload it
@@ -596,15 +638,15 @@ sub refreshCache {
     tie %tempData, 'DB_File', $tempCacheFile, O_CREAT|O_RDWR, 0664, $DB_HASH
     or die "Cannot open file $tempCacheFile: $!";
 
-  my $result = $this->refreshUsersCache(\%tempData);
-  if (defined($result) && $this->{mapGroups}) {
-    $result = $this->refreshGroupsCache(\%tempData);
+  my $isOk = $this->refreshUsersCache(\%tempData);
+  if ($isOk && $this->{mapGroups}) {
+    $isOk = $this->refreshGroupsCache(\%tempData);
   }
 
-  unless ($result) {
+  if (!$isOk) { # we had an error: keep the old cache til the error is resolved
     undef $tempCache;
     untie %tempData;
-    unlink $tempCacheFile; # not needed
+    unlink $tempCacheFile;
     return 0;
   }
 
@@ -670,7 +712,7 @@ sub refreshUsersCache {
     my $mesg = $this->search(@args);
     unless ($mesg) {
       #$this->writeDebug("oops, no result");
-      $this->writeDebug("error refeshing the user cashe: ".
+      $this->writeWarning("error refeshing the user cashe: ".
         $this->getError());
       $gotError = 1;
       last;
@@ -703,7 +745,7 @@ sub refreshUsersCache {
   }
 
   # check for error
-  return undef if $gotError;
+  return 0 if $gotError;
 
   # remember list of all user names
   $data->{WIKINAMES} = join(',', keys %wikiNames);
@@ -742,13 +784,14 @@ sub refreshGroupsCache {
   # read pages
   my $nrRecords = 0;
   my %groupNames;
+  my $gotError = 0;
   while (1) {
 
     # perform search
     my $mesg = $this->search(@args);
     unless ($mesg) {
       #$this->writeDebug("oops, no result");
-      $this->writeDebug("error refeshing the groups cashe: ".
+      $this->writeWarning("error refeshing the groups cashe: ".
         $this->getError());
       last;
     }
@@ -776,6 +819,9 @@ sub refreshGroupsCache {
     $page->size(0);
     $this->search(@args);
   }
+
+  # check for error
+  return 0 if $gotError;
 
   # remember list of all groups
   $data->{GROUPS} = join(',', keys %groupNames);
@@ -838,12 +884,12 @@ sub cacheUserFromEntry {
   }
   $wikiName ||= $loginName;
   if (defined($wikiNames->{$wikiName})) {
-    $this->writeDebug("WARNING: $dn clashes with wikiName $wikiNames->{$wikiName} on $wikiName");
+    $this->writeWarning("$dn clashes with wikiName $wikiNames->{$wikiName} on $wikiName");
     return 0;
   }
   $wikiNames->{$wikiName} = $dn;
   if (defined($loginNames->{$loginName})) {
-    $this->writeDebug("WARNING: $dn clashes with loginName $loginName->{$loginName} on $loginName");
+    $this->writeWarning("$dn clashes with loginName $loginNames->{$loginName} on $loginName");
     return 0;
   }
   $loginNames->{$loginName} = $dn;
@@ -895,7 +941,7 @@ sub cacheGroupFromEntry {
   }
 
   if (defined($groupNames->{$groupName})) {
-    $this->writeDebug("WARNING: $dn clashes with group $groupNames->{$groupName} on $groupName");
+    $this->writeWarning("$dn clashes with group $groupNames->{$groupName} on $groupName");
     return 0;
   }
 
@@ -906,7 +952,7 @@ sub cacheGroupFromEntry {
     } else {
       $groupSuffix = '_group';
     }
-    $this->writeDebug("WARNING: group $dn clashes with user $groupName ... appending $groupSuffix");
+    $this->writeWarning("group $dn clashes with user $groupName ... appending $groupSuffix");
     $groupName .= $groupSuffix;
   }
 
@@ -1094,7 +1140,16 @@ returns the loginNAme of a wikiName or undef if it does not exist
 
 sub getLoginOfWikiName {
   my ($this, $wikiName) = @_;
-  return TWiki::Sandbox::untaintUnchecked($this->{data}{"W2U::$wikiName"});
+
+  my $loginName = TWiki::Sandbox::untaintUnchecked($this->{data}{"W2U::$wikiName"});
+  
+  unless ($loginName) {
+    my $alias = $this->{wikiNameAliases}{$wikiName};
+    $loginName = TWiki::Sandbox::untaintUnchecked($this->{data}{"W2U::$alias"})
+      if defined($alias);
+  }
+
+  return $loginName;
 }
 
 =pod 
