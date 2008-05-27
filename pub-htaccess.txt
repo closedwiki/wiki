@@ -24,12 +24,14 @@ Options None
 # script execution but it may not be 100% safe only to rely on this. The safest
 # protection is to disabled all scripting.
 
-# If you have PHP4 or PHP5 installed make sure the directive below is enabled
+# If you have PHP4 or PHP5 installed as Apache module make sure the directive below is enabled
 # If you do not have PHP installed you will need to comment out the directory below
 # to avoid errors.
+# If PHP is installed as CGI this flag is not needed and will in fact make Apache fail 
 php_flag engine off
 
-#If you have PHP3 installed make sure the directive below is enabled
+# If you have PHP3 installed as Apache module make sure the directive below is enabled
+# If PHP is installed as CGI this flag is not needed and will in fact make Apache fail
 #php3_engine off
 
 # This line will redefine the mime type for the most common types of scripts
