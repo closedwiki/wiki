@@ -68,10 +68,6 @@
 
 %TMPL:DEF{"submit"}%<input tabindex='4' type='submit' class='twikiSubmit' value='%MAKETEXT{"Logon"}%' />%TMPL:END%
 
-%TMPL:DEF{"loginasadministratorstep"}%<div style="text-align:right">%TMPL:P{"loginasadministratorform"}%</div>%TMPL:END%
-
-%TMPL:DEF{"loginasadministratorform"}%<form action='%SCRIPTURLPATH{"login"}%/%WEB%/%TOPIC%' name='adminloginform' method='post'><input type="submit" name="sudo" value="%MAKETEXT{"Administrator login"}%" class="twikiEmulatedLink" style="margin:0px;padding:0px;border:none;background-color:transparent;vertical-align:middle;" />%TMPL:P{"formend"}%%TMPL:END%
-
 %{ please keep the spaces between the div and the TMPL seealsonote, it allows TWiki to process the emailaddress }%
 %TMPL:DEF{"seealsostep"}%<div class="twikiFormStep twikiGrayText twikiLast"> %TMPL:P{"seealsonote"}% </div><!-- /twikiFormStep-->%TMPL:END%
 
@@ -83,7 +79,6 @@
 %TMPL:P{"formend"}%
 %TMPL:P{"seealsostep"}%
 </div><!-- /twikiFormSteps-->
-%TMPL:P{"loginasadministratorstep"}%
 </div><!-- /twikiLogin-->%TMPL:END%
 
 %TMPL:DEF{"content"}%%TMPL:P{"form"}%%TMPL:END%
