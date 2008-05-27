@@ -638,6 +638,7 @@ sub test_ALLOWS_and_EXISTS{
    * Set ALLOWTOPICVIEW = WibbleFloon
    * Set ALLOWTOPICCHANGE = $wn
 PONG
+       
     my @tests;
     push(@tests, {
         test => "'%TOPIC%' allows 'change'",
@@ -715,6 +716,7 @@ PONG
         test => "'NotAHopeInHellPal.WebHome' allows 'view'",
         expect => "0"
        });
+       
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki();
     $this->{twiki}->{webName} = $this->{test_web}; # hack
@@ -728,5 +730,70 @@ PONG
     }
 }
 
+sub test_TOPICINFO{
+    my $this = shift;
+    
+    my $topicName = 'TopicInfo';
+    
+    my $wn = $this->{twiki}->{users}->getWikiName($this->{twiki}->{user});
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user},
+        $this->{test_web},
+        $topicName,
+        <<PONG);
+oneapeny twoapenny we all fall down
+PONG
+    my ($meta, $text) = $this->{twiki}->{store}->readTopic($this->{twiki}->{user},
+        $this->{test_web}, $topicName);
+    my $ti = $meta->get( 'TOPICINFO' );
+            
+    $this->assert_str_equals($ti->{version}, '1.1');
+    $this->assert_str_equals($ti->{rev}, '1');
+	$this->assert( $this->{twiki}->{store}->topicExists($this->{test_web}, $topicName) );
+    
+    my @tests;
+    push(@tests, {
+        test => $this->{test_web}.".$topicName/info.version = '1.1'",
+        expect => "1"
+       });
+    push(@tests, {
+        test => $this->{test_web}.".$topicName/info.rev = '1'",
+        expect => "1"
+       });
+#I don't yet understand why these are not identical to the ones above.
+#    push(@tests, {
+#        test => "info.version = '1.1'",
+#        expect => "1"
+#       });
+#    push(@tests, {
+#        test => "info.rev = '1'",
+#        expect => "1"
+#       });
+       
+    push(@tests, {
+        test => $this->{test_web}.".".$topicName."NotThere/info.version = '1.1'",
+        expect => "0"
+       });
+    push(@tests, {
+        test => $this->{test_web}.".".$topicName."NotThere/info.rev = '1'",
+        expect => "0"
+       });       
+#    push(@tests, {
+#        test => $this->{test_web}.".".$topicName."NotThere/info.rev",
+#        expect => "0"
+#       });       
+       
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki();
+    $this->{twiki}->{webName} = $this->{test_web}; # hack
+
+    foreach my $test (@tests) {
+        my $text = '%IF{"'.$test->{test}.'" then="1" else="0"}%';
+        my $result = $this->{twiki}->handleCommonTags(
+            $text, $this->{test_web}, $topicName);
+        $this->assert_str_equals($test->{expect}, $result,
+                                 "$text: '$result'");
+    }
+}
 
 1;
