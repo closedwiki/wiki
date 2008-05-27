@@ -72,7 +72,7 @@ sub _SUBSCRIBE {
         # user has already subscribed.. so if he clicks again, he wants
         # to delete that subsciprtion
         require TWiki::Contrib::MailerContrib::UpData;
-        my $db = new TWiki::Contrib::MailerContrib::Updata( $session, $web );
+        my $db = new TWiki::Contrib::MailerContrib::UpData( $session, $web );
         if ( $subscriber->isSubscribedTo($stopics, $db) ) {
         	$unsubscribe = 'yes';
         }	
