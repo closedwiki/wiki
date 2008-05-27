@@ -331,12 +331,6 @@ BEGIN {
     $functionTags{LANG} = sub { 
         $TWiki::cfg{Site}{Locale} =~ m/^([a-z]+_[a-z]+)/i ? $1 : 'en_US'; };
 
-    # Tell CGI.pm which charset we are using if not default
-    if( defined $TWiki::cfg{Site}{CharSet} &&
-          $TWiki::cfg{Site}{CharSet} !~ /^iso-?8859-?1$/io ) {
-        CGI::charset( $TWiki::cfg{Site}{CharSet} );
-    }
-
     # Set up pre-compiled regexes for use in rendering.  All regexes with
     # unchanging variables in match should use the '/o' option.
     # In the regex hash, all precompiled REs have "Regex" at the
@@ -1265,6 +1259,12 @@ sub new {
 
     $query ||= new CGI( {} );
     my $this = bless( {}, $class );
+
+    # Tell CGI.pm which charset we are using if not default
+    if( defined $TWiki::cfg{Site}{CharSet} &&
+          $TWiki::cfg{Site}{CharSet} !~ /^iso-?8859-?1$/io ) {
+        $query->charset( $TWiki::cfg{Site}{CharSet} );
+    }
 
     $this->{_HTMLHEADERS} = {};
     $this->{context} = $initialContext;
