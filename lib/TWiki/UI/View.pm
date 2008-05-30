@@ -185,8 +185,8 @@ sub view {
       $session->{prefs}->getPreferencesValue( 'VIEW_TEMPLATE' ) ||
         'view';
 
-    # Item4756: Always use default view template for raw=debug and raw=all
-    if( $raw eq 'debug' || $raw eq 'all' ) {
+    # Always use default view template for raw=debug, raw=all and raw=on
+    if( $raw =~ /^(debug|all|on)$/o ) {
         $template = 'view';
     }
 
