@@ -3320,7 +3320,7 @@ sub METASEARCH {
 
 sub DATE {
     my $this = shift;
-    return TWiki::Time::formatTime(time(), $TWiki::cfg{DefaultDateFormat}, 'gmtime');
+    return TWiki::Time::formatTime(time(), $TWiki::cfg{DefaultDateFormat}, $TWiki::cfg{DisplayTimeValues});
 }
 
 sub GMTIME {
