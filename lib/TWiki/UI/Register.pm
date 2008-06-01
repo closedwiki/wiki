@@ -9,7 +9,7 @@
 # file as follows:
 # Copyright (c) 1999-2004 Peter Thoeny, peter@thoeny.com
 #           (c) 2001 Kevin Atkinson, kevin twiki at atkinson dhs org
-#           (c) 2003 SvenDowideit
+#           (c) 2003-2008 SvenDowideit, SvenDowideit@home.org.au
 #           (c) 2003 Graeme Pyle graeme@raspberry dot co dot za
 #           (c) 2004 Martin Cleaver, Martin.Cleaver@BCS.org.uk
 #           (c) 2004 Gilles-Eric Descamps twiki at descamps.org
@@ -998,6 +998,9 @@ sub _buildConfirmationEmail {
     $templateText =~ s/%FIRSTLASTNAME%/$data->{Name}/go;
     $templateText =~ s/%WIKINAME%/$data->{WikiName}/go;
     $templateText =~ s/%EMAILADDRESS%/$data->{Email}/go;
+    
+    #add LoginName to make it clear to new users
+    my $loginName = $b1.' LoginName: '.$data->{LoginName}."\n";
 
     my ( $before, $after ) = split( /%FORMDATA%/, $templateText );
     foreach my $fd ( @{ $data->{form} } ) {
@@ -1009,7 +1012,11 @@ sub _buildConfirmationEmail {
         if ( $name ne 'Confirm' ) {
             $before .= $b1.' '.$name.': '.$value."\n";
         }
+        if ( $name eq 'LoginName' ) {
+            $loginName = '';
+        }
     }
+    $before .= $loginName;
     $templateText = $before.($after||'');
     $templateText = $session->handleCommonTags(
         $templateText, $TWiki::cfg{UsersWebName}, $data->{WikiName} );
