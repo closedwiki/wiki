@@ -244,10 +244,12 @@ var TWikiTiny = {
         if(onSave == null)
             onSave = false;
         var orig = url;
+        var pubUrl = TWikiTiny.getTWikiVar("PUBURL");
         var vsu = TWikiTiny.getTWikiVar("VIEWSCRIPTURL");
         url = TWikiTiny.expandVariables(url);
         if (onSave) {
-            if (url.indexOf(vsu + '/') == 0) {
+            if ((url.indexOf(pubUrl + '/') != 0) &&
+                (url.indexOf(vsu + '/') == 0)) {
                 url = url.substr(vsu.length + 1);
                 url = url.replace(/\/+/g, '.');
                 if (url.indexOf(TWikiTiny.getTWikiVar('WEB') + '.') == 0) {
