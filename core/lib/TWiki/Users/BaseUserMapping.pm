@@ -291,7 +291,7 @@ method in that module for details.
 sub isGroup {
     my ($this, $user) = @_;
 #TODO: what happens to the code if we implement this using an iterator too?
-    return grep(/$user/, $this->eachGroup());
+    return ($this->{GROUPS}->{$user});
 }
 
 
