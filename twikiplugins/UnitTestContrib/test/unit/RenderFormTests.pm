@@ -199,7 +199,7 @@ _hello world_
 </td></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> Issue 5 </td><td>
 Foo, Baz
 </td></tr></table>
-</div><!-- /twikiForm -->
+</div><!--/twikiForm-->
 HERE
     ($meta, $text) =
       $this->{twiki}->{store}->readTopic(undef, $this->{test_web}, $testtopic1);
@@ -221,7 +221,7 @@ Defect
 </td></tr><tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> Issue 5 </td><td>
 Foo, Baz
 </td></tr></table>
-</div><!-- /twikiForm -->
+</div><!--/twikiForm-->
 HERE
 }
 
