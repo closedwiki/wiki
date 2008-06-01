@@ -571,7 +571,9 @@ sub set_up_for_queries {
     my $text = <<'HERE';
 %META:TOPICINFO{author="TWikiUserMapping_guest" date="1178612772" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="WebHome"}%
+something before
 This is QueryTopic FURTLE
+somethig after
 %META:FORM{name="TestForm"}%
 %META:FIELD{name="Field1" attributes="H" title="A Field" value="A Field"}%
 %META:FIELD{name="Field2" attributes="" title="Another Field" value="2"}%
@@ -586,7 +588,9 @@ HERE
 
     $text = <<'HERE';
 %META:TOPICINFO{author="TWikiUserMapping_guest" date="12" format="1.1" version="1.2"}%
+first line
 This is QueryTopicTwo SMONG
+third line
 %META:TOPICPARENT{name="QueryTopic"}%
 %META:FORM{name="TestyForm"}%
 %META:FIELD{name="FieldA" attributes="H" title="B Field" value="7"}%
@@ -601,6 +605,13 @@ HERE
     $this->{twiki}->{store}->saveTopic(
         $this->{twiki}->{user}, $this->{test_web},
         'QueryTopicTwo', $text);
+	
+	$this->{twiki}->finish();
+    my $query = new CGI("");
+    $query->path_info("/$this->{test_web}/$this->{test_topic}");
+
+    $this->{twiki} = new TWiki(undef, $query);
+    $TWiki::Plugins::SESSION = $this->{twiki};
 }
 
 # NOTE: most query ops are tested in Fn_IF.pm, and are not re-tested here
@@ -838,6 +849,60 @@ sub verify_4347 {
         "%SEARCH{\"$this->{test_topic}\" scope=\"topic\" nonoise=\"on\" format=\"\$formfield(Blah)\"}%",
         $this->{test_web}, $this->{test_topic});
     $this->assert_str_equals('', $result);
+}
+
+
+sub verify_likeQuery {
+    my $this = shift;
+
+    $this->set_up_for_queries();
+    my $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"text ~ \'*SMONG*\'" '.$stdCrap,
+        $this->{test_web}, $this->{test_topic});
+    $this->assert_str_equals('QueryTopicTwo', $result);
+	
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"text ~ \'*QueryTopicTwo*\'" '.$stdCrap,
+        $this->{test_web}, $this->{test_topic});
+    $this->assert_str_equals('QueryTopicTwo', $result);
+
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"text ~ \'*SMONG*\'" '.$stdCrap,
+        $this->{test_web}, 'QueryTopicTwo');
+    $this->assert_str_equals('QueryTopicTwo', $result);
+	
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"text ~ \'*QueryTopicTwo*\'" '.$stdCrap,
+        $this->{test_web}, 'QueryTopicTwo');
+    $this->assert_str_equals('QueryTopicTwo', $result);
+
+}
+
+
+sub verify_likeQuery {
+    my $this = shift;
+
+    $this->set_up_for_queries();
+    my $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"text ~ \'*SMONG*\'" web="'.$this->{test_web}.'" '.$stdCrap,
+        $this->{test_web}, $this->{test_topic});
+    $this->assert_str_equals('QueryTopicTwo', $result);
+	
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"text ~ \'*QueryTopicTwo*\'" web="'.$this->{test_web}.'" '.$stdCrap,
+        $this->{test_web}, $this->{test_topic});
+    $this->assert_str_equals('QueryTopicTwo', $result);
+
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"text ~ \'*SMONG*\'" web="'.$this->{test_web}.'" '.$stdCrap,
+        $this->{test_web}, 'QueryTopicTwo');
+    $this->assert_str_equals('QueryTopicTwo', $result);
+	
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"text ~ \'*QueryTopicTwo*\'" web="'.$this->{test_web}.'" '.$stdCrap,
+        $this->{test_web}, 'QueryTopicTwo');
+    $this->assert_str_equals('QueryTopicTwo', $result);
+
 }
 
 1;

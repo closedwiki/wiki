@@ -307,7 +307,7 @@ sub OP_like {
             $expr =~ s/\\\?/./g;
             $expr =~ s/\\\*/.*/g;
             defined($_[0]) && defined($_[1]) &&
-              $_[0] =~ m/^$expr$/ ? 1 : 0;
+              $_[0] =~ m/^$expr$/s ? 1 : 0;
         } );
 }
 
