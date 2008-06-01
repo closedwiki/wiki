@@ -357,6 +357,18 @@ sub verify_isGroup {
     my $this = shift;
     $this->assert(TWiki::Func::isGroup('AandBGroup'));
     $this->assert(!TWiki::Func::isGroup('UserA'));
+
+
+    $this->assert(TWiki::Func::isGroup($TWiki::cfg{SuperAdminGroup}));
+    $this->assert(TWiki::Func::isGroup('TWikiBaseGroup'));
+
+    
+    #Item5540
+    $this->assert(!TWiki::Func::isGroup('S'));
+    $this->assert(!TWiki::Func::isGroup('1'));
+    $this->assert(!TWiki::Func::isGroup('AS'));
+    $this->assert(!TWiki::Func::isGroup(''));
+    $this->assert(!TWiki::Func::isGroup('#'));
 }
 
 sub verify_getCanonicalUserID_extended {

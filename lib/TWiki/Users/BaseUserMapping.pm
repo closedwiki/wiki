@@ -155,7 +155,7 @@ the details of the users we specialise in.
 
 sub handlesUser {
 	my ($this, $cUID, $login, $wikiname) = @_;
-	
+
 	return 1 if (defined($cUID) && defined($this->{U2L}{$cUID}));
 	return 1 if (defined($login) && defined($this->{L2U}{$login}));
 	return 1 if (defined($wikiname) && defined($this->{W2U}{$wikiname}));
@@ -291,7 +291,7 @@ method in that module for details.
 sub isGroup {
     my ($this, $user) = @_;
 #TODO: what happens to the code if we implement this using an iterator too?
-    return grep(/$user/, $this->eachGroup());
+    return ($this->{GROUPS}->{$user});
 }
 
 
