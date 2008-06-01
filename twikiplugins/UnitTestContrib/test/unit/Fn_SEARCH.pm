@@ -571,7 +571,7 @@ sub set_up_for_queries {
     my $text = <<'HERE';
 %META:TOPICINFO{author="TWikiUserMapping_guest" date="1178612772" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="WebHome"}%
-something before
+something before. Another
 This is QueryTopic FURTLE
 somethig after
 %META:FORM{name="TestForm"}%
@@ -876,6 +876,15 @@ sub verify_likeQuery {
         $this->{test_web}, 'QueryTopicTwo');
     $this->assert_str_equals('QueryTopicTwo', $result);
 
+    $result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"text ~ \'*Notinthetopics*\'" web="'.$this->{test_web}.'" '.$stdCrap,
+        $this->{test_web}, 'QueryTopicTwo');
+    $this->assert_str_equals('', $result);
+
+	$result = $this->{twiki}->handleCommonTags(
+        '%SEARCH{"text ~ \'*before. Another*\'" web="'.$this->{test_web}.'" '.$stdCrap,
+        $this->{test_web}, $this->{test_topic});
+    $this->assert_str_equals('QueryTopic', $result);
 }
 
 1;
