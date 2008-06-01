@@ -829,7 +829,7 @@ sub test_missingTemplateTopic {
         $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
     } catch TWiki::OopsException with {
         my $e = shift;
-        $this->assert_str_equals('no_such_topic', $e->{def});
+        $this->assert_str_equals('no_such_topic_template', $e->{def});
     } otherwise {
         $this->assert(0, shift);
     };
