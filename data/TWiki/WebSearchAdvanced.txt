@@ -39,7 +39,7 @@ zeroresults="%IF{ "defined search" then="on" else="off" }%"
 <input type="radio" class="twikiRadioButton" id="topictitle" name="scope" value="topic" %IF{" '%URLPARAM{"scope" default="all"}%' = 'topic' " then="checked=\"checked\"" else=""}% /><label for="topictitle"> %MAKETEXT{"Topic title"}%</label><br />
 <input type="radio" class="twikiRadioButton" id="both" name="scope" value="all" %IF{" '%URLPARAM{"scope" default="all"}%' = 'all' " then="checked=\"checked\"" else=""}% /><label for="both"> %MAKETEXT{"Both body and title"}%</label>
 <hr />
-<input type="checkbox" class="twikiCheckbox" id="web" name="web" %IF{" '%URLPARAM{web}%' = 'all'" then="checked=\"checked\"" else=""}% /><label for="web"> %MAKETEXT{"All public webs"}%</label> <span class="twikiSmall">%MAKETEXT{"(otherwise search [_1] Web only)" args="<nop>%INCLUDINGWEB%"}%</span>
+<input type="checkbox" class="twikiCheckbox" id="web" name="web" value="all" %IF{" '%URLPARAM{web}%' = 'all'" then="checked=\"checked\"" else=""}% /><label for="web"> %MAKETEXT{"All public webs"}%</label> <span class="twikiSmall">%MAKETEXT{"(otherwise search [_1] Web only)" args="<nop>%INCLUDINGWEB%"}%</span>
 </td>
 </tr>
 <tr>
