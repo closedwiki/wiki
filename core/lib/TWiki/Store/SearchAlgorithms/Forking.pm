@@ -61,7 +61,9 @@ sub search {
         $program =~ s/%DET{(.*?)\|.*?}%/$1/g;
     }
     if ($options->{wordboundaries} ) {
-        $searchString = '\b'.quotemeta( $searchString ).'\b';
+        # Item5529: Can't use quotemeta because $searchString may be UTF8 encoded
+        $searchString =~ s#([][|/\\$^*()+{};@?.{}])#\\$1#g;
+        $searchString = '\b'.$searchString.'\b';
     }
 
     # process topics in sets, fix for Codev.ArgumentListIsTooLongForSearch
