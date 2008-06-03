@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1141755053" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1212529094" format="1.1" version="$Rev$"}%
 ---+!! Welcome, %WIKIUSERNAME%!
 
 Welcome to <nop>%WIKITOOLNAME%! This is a TWikiSite (pronounced _twee-kee site_), a meeting place to work on common interests. Anyone can contribute using any web browser. <nop>%WIKITOOLNAME% looks like a normal web site... except that it encourages contribution and *editing* of pages, questions, answers, comments and updates.
@@ -35,7 +35,7 @@ Welcome to <nop>%WIKITOOLNAME%! This is a TWikiSite (pronounced _twee-kee site_)
 
 ---+++ Creating a page
 
-See a question mark link "<u>?</u>" behind a !WikiWord? That means that there's no topic yet for that TWikiWord. If you want to create a topic for that !WikiWord, just click on the question mark. The topic will be created and you will be in the editor window.
+See a question mark link "<u>?</u>" behind a !WikiWord? That means that there's no topic yet for that Sandbox.NewWikiWord%CALC{$INT($RAND(100000))}%. If you want to create a topic for that !WikiWord, just click on the question mark. The topic will be created and you will be in the editor window.
  
 ---+++ Viewing the history of a topic
 
