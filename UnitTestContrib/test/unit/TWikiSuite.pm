@@ -34,7 +34,6 @@ sub include_tests {
     require Cwd;
     $home = Cwd::abs_path($home);
 
-    @list = ();
     print STDERR "Getting extensions from $home/lib/MANIFEST\n";
     if (open(F, "$home/lib/MANIFEST")) {
         $read_manifest = 1;

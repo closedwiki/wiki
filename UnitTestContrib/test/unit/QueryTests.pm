@@ -170,6 +170,9 @@ sub test_string_bops {
     $this->check("string!='Str'", 1);
     $this->check("string!='String '", 1);
     $this->check("string!='String'", 0);
+    $this->check("string!='string'", 1);
+    $this->check("string='string'", 0);
+    $this->check("string~'string'", 0);
 }
 
 sub test_num_uops {
