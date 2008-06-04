@@ -223,6 +223,7 @@ If you don't use the installer script, you need to install the add-on by hand:
      | ==kinosearch/bin/LocalLib.cfg== | this file is required and should be modified according to the twiki/lib absolute path of your installation |
      | ==kinosearch/bin/kinoindex== | script that indexes all topics |
      | ==kinosearch/bin/kinoupdate== | script that updates the index |
+     | ==kinosearch/bin/ks_test== | script to test stringification |
      | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn.pm== | |
      | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/KinoSearch.pm== | base script with common functionality |
      | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/Index.pm== | functionality for creating and updating the index |
@@ -276,14 +277,48 @@ Remember to edit the file ==kinosearch/bin/LocalLib.cfg== and modify ==twikiLibP
       * Once finished, open a browser window and point it to the ==TWiki/KinoSearch== topic.
       * Just type a query and check the results.
 
+---+++ Test of stringification with =ks_test=
+
+Some users report problems with the stringification: The =kinoindex=
+scipts fails, takes too long on attachments or =kinosearch= does not yield correct
+results. Some times this may result from installation errors esp. of
+the installation of the backends for the stringification.
+
+=ks_test= give you the opportunity to test the stringification in
+advance.
+
+Usage: =ks_test stringify file_name=
+
+(I plan to extend ks_test, but at the moment the only possible second
+parameter is stringify).
+
+In the result you see, which stringifier is used and the result of the
+stringification.
+
+Example:
+
+<verbatim>
+/home/httpd/twiki/kinosearch/bin$ ./ks_test stringify /home/httpd/twiki_svn/SearchEngineKinoSearchAddOn/test/unit/SearchEngineKinoSearchAddOn/attachement_examples/Simple_example.doc
+
+Used stringifier: TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::DOC_antiword
+
+Stringified text:
+
+  Simple example  Keyword: dummy  Umlaute: Größer, Überschall, Änderung
+</verbatim>
+
+You see that the stringifier DOC_antiword is used and the resulting
+text seems to be O.K. 
+
 ---++ Add-On Info
 
    * Set SHORTDESCRIPTION = Fast indexed search with indexing of attachments like Word, Excel, PDF and PPT
 
 |  Add-on Author: | TWiki:Main/MarkusHesse |
-|  Add-on Version: | v1.15 |
-|  Update note | If you update from an older version to v1.15, remove the old index and create a complete new one with kinoindex|
+|  Add-on Version: | v1.16 |
+|  Update note | If you update from an older version to v1.15 or higher, remove the old index and create a complete new one with kinoindex|
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+| 4 Jun 2008:   | v 1.16, Bugs:Item5646: Problem with attachments with capital letter suffix |
 | 12 May 2008:  | v 1.15, Bugs:Item5579, Bugs:Item5580, Bugs:Item5619: Problem with ALLOWWEBVIEW and Forms fixed|
 | 23 Apr 2008:  | v 1.14, Bugs:Item5273, Bugs:Item5546, Bugs:Item5550, Bugs:Item5552: Use current user in search script |
 | 27 Jan 2008:  | v 1.13, Bugs:Item5271: Option "show locked topics" now works |
