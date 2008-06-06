@@ -55,7 +55,7 @@ The main difference between invoking this script and using WebChanges is that We
 =configure= is the browser script used for inspection and configuration of the TWiki configuration. None of the parameters to this script are useable for any purpose except =configure=. See [[%SCRIPTURLPATH{"configure"}%][configure]].
 
 ---+++ =edit=
-The =edit= scipt understands the following parameters, typically supplied by HTML input fields:
+The =edit= script understands the following parameters, typically supplied by HTML input fields:
 
 | *Parameter* | *Description* | *Default* |
 | =action= | Optional. Use the editaction template instead of the standard edit. If action=text, then hide the form. If action=form hide the normal text area and only edit the form. | |
@@ -64,7 +64,7 @@ The =edit= scipt understands the following parameters, typically supplied by HTM
 | =templatetopic= | The name of the template topic, copied to get the initial content | |
 | =text= | Initial text for the topic | |
 | =topicparent= | The parent topic | |
-| =formtemplate= | Name of the form to instantiate in the topic. Overrides the form set in the =templatetopic= if defined. | |
+| =formtemplate= | Name of the form to instantiate in the topic. Overrides the form set in the =templatetopic= if defined. (will remove the form is set to 'none') | |
 | =contenttype= | Optional parameter that defines the application type to write into the CGI header. Defaults to =text/html=. May be used to invoke alternative client applications | |
 | =anyname= | Any parameter can passed to the new topic; if the template topic contains =%<nop>URLPARAM{"anyname"}%=, it will be replaced by its value | |
 | =breaklock= | If set, any lease conflicts will be ignored, and the edit will proceed even if someone is already editing the topic. | |
@@ -236,7 +236,7 @@ The =save= script performs a range of save-related functions, as selected by the
 | =text= | New text of the topic | |
 | =forcenewrevision= | if set, forces a revision even if TWiki thinks one isn't needed | |
 | =topicparent= | If 'none' remove any current topic parent. If the name of a topic, set the topic parent to this. | |
-| =formtemplate= | if defined, use the named template for the form | |
+| =formtemplate= | if defined, use the named template for the form (will remove the form is set to 'none') | |
 | =editaction= | When action is =checkpoint=, =add form= or =replace form...=, this is used as the =action= parameter to the =edit= script that is redirected to after the save is complete. | |
 | =originalrev= | Revision on which the edit started. | |
 | =edit= | The script to use to edit the topic when action is =checkpoint= | =edit= |
