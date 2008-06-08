@@ -1219,6 +1219,7 @@ $this->{new_user_fullname} - $this->{new_user_wikiname} - $this->{new_user_email
    * Country: Saudi Arabia
    * Comment: 
    * Password: mypassword
+   * LoginName: 
 EOM
 
     $this->{twiki}->finish();
