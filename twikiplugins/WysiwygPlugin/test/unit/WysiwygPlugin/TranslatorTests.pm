@@ -1614,6 +1614,15 @@ there
 </p>
 HERE
       },
+      {
+          name => 'Item5664',
+          exec => $HTML2TML | $ROUNDTRIP,
+          html => '<ul> <li> A </li> </ul> B',
+          tml => <<HERE,
+   * A
+B
+HERE
+      },
      ];
 
 sub gen_compare_tests {

@@ -477,14 +477,70 @@ sub afterSaveHandler {
 HERE
 }
 
-sub test_beforeAttachmentSaveHandler {
+sub do_upload {
     my $this = shift;
+    my $fn = shift;
+    my $data = shift;
+
+    while( scalar(@_)) {
+        my $k = shift(@_);
+        my $v = shift(@_);
+        $this->{twiki}->{cgiQuery}->param($k, $v );
+    }
+    $this->{twiki}->{webName} = $this->{test_web};
+    $this->{twiki}->{topicName} = $this->{test_topic};
+    my $tmpfile = new CGITempFile(0);
+    my $fh = Fh->new($fn, $tmpfile->as_string, 0);
+    print $fh $data;
+    seek($fh,0,0);
+    $this->{twiki}->{cgiQuery}->{'.tmpfiles'}->{$$fh} = {
+        hndl => $fh, name => $tmpfile, info => {},
+    };
+    push(@{$this->{twiki}->{cgiQuery}->{'filepath'}}, $fh);
+
+    my $stream = $this->{twiki}->{cgiQuery}->upload( 'filepath' );
+    seek($stream,0,0);
+
+    require TWiki::UI::Upload;
+    my ($text, $result) = $this->capture( \&TWiki::UI::Upload::upload, $this->{twiki});
+    return $text;
+}
+
+sub test_attachmentSaveHandlers {
+    my $this = shift;
+    TWiki::Func::saveTopic(
+        $this->{test_web}, $this->{test_topic}, undef,
+        "   * Set ATTACHFILESIZELIMIT = 511\n" );
     $this->makePlugin('beforeAttachmentSaveHandler', <<'HERE');
 sub beforeAttachmentSaveHandler {
     my( $attrHashRef, $topic, $web ) = @_;
     $called->{beforeAttachmentSaveHandler}++;
 }
+sub afterAttachmentSaveHandler {
+    my( $attrHashRef, $topic, $web ) = @_;
+    $called->{afterAttachmentSaveHandler}++;
+}
 HERE
+    my $result = $this->do_upload(
+        'Flappadoodle.txt',
+        "BLAH",
+        hidefile => 0,
+        filecomment => 'Elucidate the goose',
+        createlink => 0,
+        changeproperties => 0,
+       );
+    $this->assert($result =~ /^OK/, $result);
+    $this->assert(open(F, "<$TWiki::cfg{PubDir}/$this->{test_web}/$this->{test_topic}/Flappadoodle.txt"));
+    $this->assert_str_equals("BLAH", <F>);
+    my ($meta, $text) = TWiki::Func::readTopic($this->{test_web},
+                                               $this->{test_topic});
+
+    # Check the meta
+    my $at = $meta->get('FILEATTACHMENT', 'Flappadoodle.txt');
+    $this->assert($at);
+    $this->assert_str_equals('Elucidate the goose', $at->{comment});
+    $this->checkCalls(1, 'beforeAttachmentSaveHandler');
+    $this->checkCalls(1, 'afterAttachmentSaveHandler');
 }
 
 sub test_beforeEditHandler {

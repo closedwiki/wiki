@@ -15,6 +15,8 @@
 package TWiki::Plugins::DBCachePlugin;
 
 use strict;
+use TWiki::Func;
+
 use vars qw( 
   $VERSION $RELEASE $SHORTDESCRIPTION $NO_PREFS_IN_TOPIC
   $currentWeb $currentTopic $currentUser $isInitialized

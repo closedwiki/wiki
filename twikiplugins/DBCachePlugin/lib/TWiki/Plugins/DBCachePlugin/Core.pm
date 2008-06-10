@@ -64,7 +64,9 @@ sub handleDBQUERY {
   my $theExclude = $params->{exclude};
   my $theSort = $params->{sort} || $params->{order} || 'name';
   my $theReverse = $params->{reverse} || 'off';
-  my $theSep = $params->{separator} || $params->{sep} || '$n';
+  my $theSep = $params->{separator};
+  $theSep = $params->{sep} unless defined $theSep;
+  $theSep = '$n' unless defined $theSep;
   my $theLimit = $params->{limit} || '';
   my $theSkip = $params->{skip} || 0;
   my $theHideNull = $params->{hidenull} || 'off';
