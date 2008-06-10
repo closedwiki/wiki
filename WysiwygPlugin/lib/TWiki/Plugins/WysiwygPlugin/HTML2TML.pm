@@ -116,6 +116,8 @@ sub convert {
 
     # get rid of nasties
     $text =~ s/\r//g;
+    $text =~ s.(</[uo]l>)\s*.$1.gis; # Item5664
+
     $this->_resetStack();
 
     $this->parse( $text );
