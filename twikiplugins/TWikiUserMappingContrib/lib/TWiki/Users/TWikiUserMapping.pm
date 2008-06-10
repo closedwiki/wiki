@@ -315,6 +315,7 @@ sub addUser {
     # add to the mapping caches
     my $user = _cacheUser( $this, $wikiname, $login );
     ASSERT($user) if DEBUG;
+
     # add name alphabetically to list
     foreach my $line ( split( /\r?\n/, $text) ) {
         # TODO: I18N fix here once basic auth problem with 8-bit user names is
@@ -881,8 +882,7 @@ sub findUserByWikiName {
             # mapping. We have to do this because TWiki defines access controls
             # in terms of mapped users, and if a wikiname is *missing* from the
             # mapping there is "no such user".
-            my $cUID = getCanonicalUserID( $this, $wn );
-            push( @users, $cUID);
+            push( @users, getCanonicalUserID( $this, $wn ));
         }
     } else {
         # The wikiname is also the login name, so we can just convert
