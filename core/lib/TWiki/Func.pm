@@ -1216,8 +1216,8 @@ Use it as follows:
 <verbatim>
     my $iterator = TWiki::Func::eachChangeSince(
         $web, time() - 7 * 24 * 60 * 60); # the last 7 days
-    while ($it->hasNext()) {
-        my $change = $it->next();
+    while ($iterator->hasNext()) {
+        my $change = $iterator->next();
         # $change is a perl hash that contains the following fields:
         # topic => topic name
         # user => wikiname - wikiname of user who made the change
