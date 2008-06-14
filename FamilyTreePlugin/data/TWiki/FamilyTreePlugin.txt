@@ -37,7 +37,7 @@ Note: searches over my paternal family tree (360 persons, 120 unions) are just a
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.CrawfordCurrie http://c-dot.co.uk |
+|  Plugin Author: | TWiki:Main.CrawfordCurrie http://c-dot.co.uk, TWiki:Main.GeorgeClark |
 |  Plugin Version: | %$VERSION% |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dependencies: | %$DEPENDENCIES% |
