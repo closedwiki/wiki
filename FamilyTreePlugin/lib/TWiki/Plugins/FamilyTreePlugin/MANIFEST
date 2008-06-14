@@ -29,3 +29,8 @@ data/FamilyTreePlugin/WebIndex.txt
 data/FamilyTreePlugin/WebPreferences.txt
 data/FamilyTreePlugin/WebSearch.txt
 data/FamilyTreePlugin/WebSearchAdvanced.txt
+pub/TWiki/FamilyTreePlugin/midChild.png
+pub/TWiki/FamilyTreePlugin/leftChild.png
+pub/TWiki/FamilyTreePlugin/rightChild.png
+pub/TWiki/FamilyTreePlugin/bottomChild.png
+pub/TWiki/FamilyTreePlugin/fiveHigh.png

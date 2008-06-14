@@ -16,6 +16,7 @@ $VERSION = '$Rev$';
 $RELEASE = 'TWiki-4';
 
 $pluginName = 'FamilyTreePlugin';  # Name of this Plugin
+my $imgs = "<nop>%PUBURL%/<nop>%TWIKIWEB%/FamilyTreePlugin";
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
@@ -99,13 +100,59 @@ sub _DESCENDANTS {
     my($session, $params, $topic, $web) = @_;
 
     my $to = $params->{_DEFAULT} || $topic;
+    my $style = <<HERE;
+<noautolink>
+<style>
+.borderTable {
+ margin: 0;
+ padding: 0;
+ height: 7px;
+ overflow: hidden;
+}
 
-    return _expandDescendants( $to );
+td.marriage {
+// Marriage container
+}
+table.marriage {
+ // Two-row table
+ border: none;
+}
+td.marriageText {
+ // First table row
+}
+td.marriageSpawn {
+ // Second table row
+}
+.bio {
+ width: auto;
+ border: dotted thin green;
+ margin: 7px;
+}
+.leftChild {
+ background: url($imgs/leftChild.png) top left repeat-x;
+ width: 7px;
+ height: 7px;
+}
+.rightChild {
+ background: url($imgs/rightChild.png) top right no-repeat;
+ height: 7px;
+}
+.midChild {
+ background: url($imgs/midChild.png) top left repeat-x;
+ height: 7px;
+}
+.bottomChild {
+ background: url($imgs/bottomChild.png) top left repeat-y;
+}
+</style>
+</noautolink>
+HERE
+    return $style._tabulateDescendants( $to );
 }
 
 # Handle the %GRDESCENDANTS% tag
 #  - Graph the descendants using GraphViz - DirectedGraphPlugin
-# 
+#
 sub _GRDESCENDANTS {
     my($session, $params, $topic, $web) = @_;
 
@@ -139,8 +186,7 @@ sub _GRDESCENDANTS {
     #return "<verbatim>" . $gdPrefix . _graphDescendants( $to ) . $gdSuffix . "</verbatim>";
 }
 
-
-# Generate a table representing all descendants of $who
+# Generate a digraph representing all descendants of $who
 sub _graphDescendants {
     my $who = shift;
 
@@ -152,77 +198,99 @@ sub _graphDescendants {
         my $kids = _getOffspring( $marriage );
         my $childs = '';
         my $cs = 1;
-        if(scalar(@$kids)) {
+        if (scalar(@$kids)) {
             foreach my $issue ( @$kids ) {
-	        $martable .= "$marriage -> $issue [arrowhead=\"none\"];\n";
+                $martable .= "$marriage -> $issue [arrowhead=\"none\"];\n";
                 $childs .=  _graphDescendants( $issue );
             }
             $cs = scalar(@$kids);
         } else {
-	    $node++;
+            $node++;
             $childs = "$marriage -> n$node [arrowhead=\"none\", style=\"dotted\"]";
-	    $childs .= "n$node [shape=plaintext,label=\"no issue\",fontname=\"Helvetica-Oblique\"];\n"; 
+            $childs .= "n$node [shape=plaintext,label=\"no issue\",fontname=\"Helvetica-Oblique\"];\n"; 
 	    }
-   
-        my $m1 = "%SPACEOUT{" . _getMale( $marriage ) . "}% m. %SPACEOUT{" . _getFemale( $marriage ) . "}%" ;
+        my $m1 = "%SPACEOUT{" . _getMale( $marriage ) .
+          "}% m. %SPACEOUT{" . _getFemale( $marriage ) . "}%" ;
 
-	my $mdate = TWiki::Func::expandCommonVariables( '%FORMFIELD{"Date" topic="'.$marriage.'"}%');
-	my $m3 = TWiki::Func::expandCommonVariables( '%FORMFIELD{"Disolved" topic="'.$marriage.'"}%');
-	if (length($m3) > 1) {   $mdate .= " - " . $m3 ;}
-	$m3 = TWiki::Func::expandCommonVariables( '%FORMFIELD{"Cause" topic="'.$marriage.'"}%');
-	if (length($m3) > 1) {   $mdate .= " (" . $m3 . ")" ;}
+        my $mdate = TWiki::Func::expandCommonVariables(
+            '%FORMFIELD{"Date" topic="'.$marriage.'"}%');
+        my $m3 = TWiki::Func::expandCommonVariables(
+            '%FORMFIELD{"Disolved" topic="'.$marriage.'"}%');
+        if (length($m3) > 1) {   $mdate .= " - " . $m3 ;}
+        $m3 = TWiki::Func::expandCommonVariables(
+            '%FORMFIELD{"Cause" topic="'.$marriage.'"}%');
+        if (length($m3) > 1) {
+            $mdate .= " (" . $m3 . ")";
+        }
 
-        if (length($mdate) > 1) { $mdate = "\\n " . $mdate; }
-	
-	my $m = " $marriage [shape=plaintext,label=\"$m1$mdate\" ];\n";
-         
+        if (length($mdate) > 1) {
+            $mdate = "\\n " . $mdate;
+        }
+        my $m = " $marriage [shape=plaintext,label=\"$m1$mdate\" ];\n";
         $martable .=  $m . $childs;
     }
     my $w = $who . "[shape=record,label=\"%SPACEOUT{$who}%" ;
     $w .= "\\l b. %FORMFIELD{\"Born\" topic=\"$who\"}%";
     $w .= "\\l d. %FORMFIELD{\"Died\" topic=\"$who\"}%\\l\" ];\n";
-    return  $w .
-       $martable ;
+    return  $w . $martable;
 }
 
 
 # Generate a table representing all descendants of $who
-sub _expandDescendants {
+sub _tabulateDescendants {
     my $who = shift;
 
     my $marriages = _getMarriages( $who );
-
+    my $fiveHigh = "<img src='$imgs/fiveHigh.png'>";
     my $martable = '';
     foreach my $marriage ( @$marriages ) {
         my $kids = _getOffspring( $marriage );
         my $childs = '';
         my $cs = 1;
+        my $extras = '';
         if(scalar(@$kids)) {
-            foreach my $issue ( @$kids ) {
-                $childs .= CGI::td(
-                    _expandDescendants( $issue ));
+            for (my $i = 0; $i < scalar(@$kids); $i++) {
+                my $issue = $kids->[$i];
+                my $class;
+                if (scalar(@$kids) == 1) {
+                    $extras = '<table width="100%" border=0 cellpadding=0 cellspacing=0 class=borderTable><tr><td width="50%">'.$fiveHigh.'</td><td class="bottomChild" width="50%">'.$fiveHigh.'</td></tr></table>';
+                    $class = 'bottomChild';
+                } elsif ($i == 0) {
+                    $class = '';
+                    $extras = '<table width="100%" border=0 cellpadding=0 cellspacing=0 class=borderTable><tr><td width="50%">'.$fiveHigh.'</td><td class="leftChild">'.$fiveHigh.'</td><td class="midChild">'.$fiveHigh.'</td></tr></table>';
+                } elsif ($i == scalar(@$kids) - 1) {
+                    $extras = '<table width="100%" border=0 cellpadding=0 cellspacing=0 class=borderTable><tr><td class="midChild">'.$fiveHigh.'</td><td width="7px" class="rightChild">'.$fiveHigh.'</td><td width="50%">'.$fiveHigh.'</td></tr></table>';
+                } else {
+                    $extras = '<table width="100%" border=0 cellpadding=0 cellspacing=0 class=borderTable><tr><td width="50%" class="midChild">'.$fiveHigh.'</td><td class="bottomChild" width="1px">'.$fiveHigh.'</td><td class="midChild">'.$fiveHigh.'</td></tr></table>';
+                }
+                $childs .= CGI::td($extras._tabulateDescendants( $issue ));
             }
             $cs = scalar(@$kids);
         } else {
-            $childs = CGI::td(CGI::em('no issue'));
+            $childs = CGI::td({align=>"center"}, CGI::em('no issue'));
         }
         my $m = "[[$marriage][%SPACEOUT{$marriage}%]]";
         $m .= CGI::br().CGI::em('%FORMFIELD{"Date" topic="'.$marriage.'"}%');
-        $martable .= CGI::td(
-            CGI::table( {style => 'border:none;'},
-                CGI::Tr(CGI::td({colspan=>$cs, align=>'center'}, $m)).
-                CGI::Tr({valign=>'top' },$childs)));
+        $martable .= CGI::td( {class => 'marriage' },
+            CGI::table(
+                {class => 'marriage',
+                 cellspacing => 0, cellpadding => 0 },
+                CGI::Tr(CGI::td(
+                    {colspan=>$cs, align=>'center',
+                     class=>'marriageText' }, $m)).
+                CGI::Tr(CGI::td({colspan=>$cs},
+                        '<table width="100%" border=0 cellpadding=0 cellspacing=0 class=borderTable><tr><td width="50%">'.$fiveHigh.'</td><td class="bottomChild" width="50%">'.$fiveHigh.'</td></tr></table>')).
+                CGI::Tr({ valign=>'top', class => 'marriageSpawn' },
+                        $childs)));
     }
     my $w = CGI::strong("[[$who][%SPACEOUT{$who}%]]");
     $w .= CGI::br().CGI::em('b. %FORMFIELD{"Born" topic="'.$who.'"}%');
     $w .= CGI::br().CGI::em('d. %FORMFIELD{"Died" topic="'.$who.'"}%');
-    $w = CGI::table( {style => 'border: dotted thin green; width:auto'},
-                     CGI::Tr(CGI::td($w)) );
-    return CGI::table({  },
-      CGI::Tr({valign=>'top' },
-              CGI::td({align=>'center',
+    $w = CGI::div( { class => 'bio' }, $w);
+    return CGI::table({ cellspacing => 0, cellpadding => 0, border=>0 },
+      CGI::Tr(CGI::td({valign => 'top', align=>'center',
                        colspan=>scalar(@$marriages)}, $w)).
-      CGI::Tr({valign=>'top' }, $martable ));
+      CGI::Tr($martable));
 }
 
 # Find out who $who married
