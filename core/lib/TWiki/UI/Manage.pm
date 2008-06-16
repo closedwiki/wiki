@@ -1293,8 +1293,11 @@ sub _saveSettings {
     my $originalrev = $query->param( 'originalrev' );
 
     $newMeta->remove( 'PREFERENCE' );  # delete previous settings
-    $settings =~ s($TWiki::regex{setVarRegex})
-      (&_handleSave($web, $topic, $1, $2, $3, $newMeta))mgeo;
+    # Note: $TWiki::regex{setVarRegex} cannot be used as it requires use in code
+    # that parses multiline settings line by line.
+    $settings =~
+      s(^(?:\t|   )+\*\s+(Set|Local)\s+($TWiki::regex{tagNameRegex})\s*=\s*?(.*)$)
+       (&_handleSave($web, $topic, $1, $2, $3, $newMeta))mgeo;
 
     my $saveOpts = {};
     $saveOpts->{minor} = 1;            # don't notify
