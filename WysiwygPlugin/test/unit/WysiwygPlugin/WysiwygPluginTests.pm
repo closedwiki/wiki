@@ -18,12 +18,9 @@
 # Tests for the plugin component
 #
 package WysiwygPluginTests;
+use base 'TWikiFnTestCase';
 
 use strict;
-
-use TWikiTestCase;
-
-use base qw(TWikiTestCase);
 
 use TWiki;
 use TWiki::Plugins::WysiwygPlugin;
@@ -41,6 +38,11 @@ sub set_up {
     $this->SUPER::set_up();
 
     $TWiki::cfg{Plugins}{WysiwygPlugin}{Enabled} = 1;
+    $WC::encoding = undef;
+    $WC::safe_entities = undef;
+    $TWiki::cfg{Site}{CharSet} = undef;
+    $TWiki::cfg{Site}{Locale} = undef;
+    $TWiki::cfg{Site}{UseLocale} = 0;
 }
 
 sub tear_down {
@@ -49,44 +51,229 @@ sub tear_down {
     $this->SUPER::tear_down();
 }
 
-sub detest_load {
-    my $this = shift;
+sub anal {
+    my $out = shift;
+    my @s;
+    foreach my $i (split(//, $out)) {
+        my $n = ord($i);
+        if ($n > 127) {
+            push(@s, $n);
+        } else {
+            push(@s, $i);
+        }
+    }
+    return join(' ', @s);
+}
+
+sub save_test {
+    my ($this, $charset, $firstchar, $lastchar) = @_;
+
+    $TWiki::cfg{Site}{CharSet} = $charset;
+
+    my @test;
+    for (my $i = $firstchar; $i <= $lastchar; $i++) {
+        push(@test, chr($i));
+    }
+    my $text = join('', @test).".";
+    my $t = $charset ? Encode::encode($charset, $text) : $text;
+
     my $query = new CGI({
-        'skin' => [ 'kupu' ],
+        'wysiwyg_edit' => [ 1 ],
+        'action_save' => [ 1 ],
+        'text' => [ $t ],
     });
-    $query->path_info( "/Sandbox/WysiwygPluginTest" );
+    $query->charset($charset) if $charset;
+    $query->path_info("/$this->{test_web}/WysiwygPluginTest");
+    $query->param(text => $t);
+
+    $TWiki::Plugins::SESSION = new TWiki('guest', $query );
+
+    require TWiki::UI::Save;
+    my ($dummy, $result) =
+      $this->capture( \&TWiki::UI::Save::save, $TWiki::Plugins::SESSION);
+
+    $this->assert(!$result, $result);
+    my ($meta, $out) = TWiki::Func::readTopic(
+        $this->{test_web}, 'WysiwygPluginTest');
+
+    $out =~ s/\s*$//s;
+
+    $this->assert($t eq $out, "'".anal($out)."' !=\n'".anal($t)."'");
+}
+
+sub TML2HTML_test {
+    my ($this, $charset, $firstchar, $lastchar) = @_;
+
+    # Is this enough? Regexes are inited before we get here, aren't they?
+    $TWiki::cfg{Site}{CharSet} = $charset;
+    CGI::charset($charset) if $charset;
+
+    my @test;
+    for (my $i = $firstchar; $i <= $lastchar; $i++) {
+        push(@test, chr($i));
+    }
+    my $text = join('', @test).".";
+    my $query = new CGI({
+        'wysiwyg_edit' => [ 1 ],
+        # REST parameters are always UTF8 encoded
+        'text' => [ Encode::encode_utf8($text) ],
+    });
 
     my $twiki = new TWiki('guest', $query );
 
-    $TWiki::Plugins::SESSION = new TWiki('guest', $query );
+    my ($out, $result) = $this->capture(
+        \&TWiki::Plugins::WysiwygPlugin::_restTML2HTML,
+        $twiki);
 
-    my $text = '[[WikiSyntax][syntax]] [[http://gnu.org][GNU]] [[http://xml.org][XML]]';
+    $this->assert(!$result, $result);
+    # Strip ASCII header
+    $this->assert_matches(qr/Content-Type: text\/plain;charset=UTF-8/, anal($out));
+    $out =~ s/^.*?\r\n\r\n//s;
 
-    # call the common tags handler. Can't call the twiki function because
-    # we are testing the plugin in the checkout area, not the one
-    # installed in the TWiki (if any)
-    TWiki::Plugins::WysiwygPlugin::commonTagsHandler( $text, "WysiwygPluginTest", "Sandbox" );
-    # Can't do this usefully, as the test topic is not on disc and
-    # therefore can't be loaded.
-    #$this->assert_equals('<a href="'.TWiki::Func::getViewUrl("Sandbox","WikiSyntax").'">syntax</a><a href="http://gnu.org">GNU</a><a href="http://xml.org">XML</a>', $text);
+    $out = Encode::decode_utf8($out);
+
+    my $id = "<!--$TWiki::Plugins::WysiwygPlugin::SECRET_ID-->";
+    $this->assert($out =~ s/^\s*$id<p>\s*//s, anal($out));
+    $out =~ s/\s*<\/p>\s*$//s;
+
+    require TWiki::Plugins::WysiwygPlugin::Constants;
+    WC::mapUnicode2HighBit($out);
+
+    $this->assert($text eq $out, "'".anal($out)."' !=\n'".anal($text)."'");
 }
 
-sub test_save {
-    my $this = shift;
-    # call the beforeSaveHandler
+sub HTML2TML_test {
+    my ($this, $charset, $firstchar, $lastchar) = @_;
+
+    # Is this enough? Regexes are inited before we get here, aren't they?
+    $TWiki::cfg{Site}{CharSet} = $charset;
+    CGI::charset($charset) if $charset;
+
+    my @test;
+    for (my $i = $firstchar; $i <= $lastchar; $i++) {
+        push(@test, chr($i));
+    }
+    my $text = join('', @test).".";
     my $query = new CGI({
         'wysiwyg_edit' => [ 1 ],
+        # REST parameters are always UTF8 encoded
+        'text' => [ Encode::encode_utf8($text) ],
     });
-    $query->path_info( "/Sandbox/WysiwygPluginTest" );
 
-    # this _should_ init the plugin
-    $TWiki::Plugins::SESSION = new TWiki('guest', $query );
-    my $text = '<a href="'.TWiki::Func::getViewUrl("Sandbox","WikiSyntax").'">syntax</a><a href="http://gnu.org">GNU</a><a href="http://xml.org">XML</a>';
+    my $twiki = new TWiki('guest', $query );
 
-    TWiki::Plugins::WysiwygPlugin::beforeSaveHandler( $text, "WysiwygPluginTest", "Sandbox" );
+    my ($out, $result) = $this->capture(
+        \&TWiki::Plugins::WysiwygPlugin::_restHTML2TML,
+        $twiki);
 
-    $this->assert_equals("[[WikiSyntax][syntax]] [[http://gnu.org][GNU]] [[http://xml.org][XML]]\n", $text);
+    $this->assert(!$result, $result);
+    # Strip ASCII header
+    $this->assert_matches(qr/Content-Type: text\/plain;charset=UTF-8/,
+                          anal($out));
+    $out =~ s/^.*?\r\n\r\n//s;
+
+    $out = Encode::decode_utf8($out);
+
+    require TWiki::Plugins::WysiwygPlugin::Constants;
+    WC::mapUnicode2HighBit($out);
+
+    $out =~ s/\s*$//s;
+
+    $this->assert($text eq $out, "'".anal($out)."' !=\n'".anal($text)."'");
 }
 
+# tests for various charsets
+sub test_restTML2HTML_undef {
+    my $this = shift;
+    $this->TML2HTML_test(undef, 127, 255);
+}
+
+sub test_restTML2HTML_iso_8859_1 {
+    my $this = shift;
+    $this->TML2HTML_test('iso-8859-1', 127, 255);
+}
+
+sub test_restTML2HTML_iso_8859_15 {
+    my $this = shift;
+    $this->TML2HTML_test('iso-8859-15', 127, 163);
+    $this->TML2HTML_test('iso-8859-15', 169, 179);
+    $this->TML2HTML_test('iso-8859-15', 181, 183);
+    $this->TML2HTML_test('iso-8859-15', 191, 255);
+}
+
+sub test_restTML2HTML_utf_8 {
+    my $this = shift;
+    $this->TML2HTML_test('utf-8', 127, 300);
+    $this->TML2HTML_test('utf-8', 301, 400);
+    $this->TML2HTML_test('utf-8', 401, 500);
+    # Chinese
+    $this->TML2HTML_test('utf-8', 8000, 9000);
+}
+
+sub test_restHTML2TML_undef {
+    my $this = shift;
+    $this->HTML2TML_test(undef, 127, 255);
+}
+
+sub test_restHTML2TML_iso_8859_1 {
+    my $this = shift;
+    $this->HTML2TML_test('iso-8859-1', 127, 255);
+}
+
+sub test_restHTML2TML_iso_8859_15 {
+    my $this = shift;
+    $this->HTML2TML_test('iso-8859-15', 127, 163);
+    $this->HTML2TML_test('iso-8859-15', 169, 179);
+    $this->HTML2TML_test('iso-8859-15', 181, 183);
+    $this->HTML2TML_test('iso-8859-15', 191, 255);
+}
+
+sub test_restHTML2TML_utf_8 {
+    my $this = shift;
+    $this->HTML2TML_test('utf-8', 127, 300);
+    $this->HTML2TML_test('utf-8', 301, 400);
+    $this->HTML2TML_test('utf-8', 401, 500);
+    # Chinese
+    $this->HTML2TML_test('utf-8', 8000, 9000);
+}
+
+sub test_save_undef {
+    my $this = shift;
+    $this->save_test(undef, 127, 255);
+}
+
+sub test_save_iso_8859_1 {
+    my $this = shift;
+    $this->save_test('iso-8859-1', 127, 255);
+}
+
+sub test_save_iso_8859_15 {
+    my $this = shift;
+    $this->save_test('iso-8859-15', 127, 163);
+    $this->save_test('iso-8859-15', 169, 179);
+    $this->save_test('iso-8859-15', 181, 183);
+    $this->save_test('iso-8859-15', 191, 255);
+}
+
+sub test_save_utf_8a {
+    my $this = shift;
+    $this->save_test('utf-8', 127, 300);
+}
+
+sub test_save_utf_8b {
+    my $this = shift;
+    $this->save_test('utf-8', 301, 400);
+}
+
+sub test_save_utf_8d {
+    my $this = shift;
+    $this->save_test('utf-8', 401, 500);
+}
+
+sub test_save_utf_8e {
+    my $this = shift;
+    # Chinese
+    $this->save_test('utf-8', 8000, 9000);
+}
 
 1;

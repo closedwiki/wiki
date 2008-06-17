@@ -109,8 +109,7 @@ sub convert {
 
     # If the text is UTF8-encoded we have to decode it first, otherwise
     # the HTML parser will barf.
-    my $encoding = Encode::resolve_alias($TWiki::cfg{Site}{CharSet});
-    if ($encoding =~ /^utf-?8/) {
+    if (WC::encoding() =~ /^utf-?8/) {
         $text = Encode::decode_utf8($text);
     }
 
@@ -127,7 +126,7 @@ sub convert {
     $text = $this->{stackTop}->rootGenerate( $opts );
 
     # If the site charset is UTF8, we need to recode
-    if ($encoding =~ /^utf-?8/) {
+    if (WC::encoding() =~ /^utf-?8/) {
         $text = Encode::encode_utf8($text);
     }
 

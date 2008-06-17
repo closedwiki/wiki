@@ -178,8 +178,8 @@ sub afterEditHandler {
     my $query = TWiki::Func::getCgiQuery();
     return unless $query;
 
-    if( defined $TWiki::cfg{Site}{CharSet}
-          && $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i) {
+    if ($TWiki::cfg{Site}{CharSet}
+        && $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i) {
         # If the site charset is utf-8, then form POSTs (such as the one
         # that got us here) are utf-8 encoded. we have to decode to prevent
         # the HTML parser from going tits up when it sees utf-8 in the data.
@@ -622,7 +622,7 @@ sub RESTParameter2SiteCharSet {
 
     WC::mapUnicode2HighBit($text);
 
-    if (defined $TWiki::cfg{Site}{CharSet}) {
+    if ($TWiki::cfg{Site}{CharSet}) {
         $text = Encode::encode(
             $TWiki::cfg{Site}{CharSet}, $text, Encode::FB_PERLQQ);
     }
@@ -638,7 +638,7 @@ sub RESTParameter2SiteCharSet {
 sub returnRESTResult {
     my ($text) = @_;
 
-    if (defined $TWiki::cfg{Site}{CharSet}) {
+    if ($TWiki::cfg{Site}{CharSet}) {
         $text = Encode::decode(
             $TWiki::cfg{Site}{CharSet}, $text, Encode::FB_PERLQQ);
     }
