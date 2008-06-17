@@ -178,7 +178,13 @@ sub afterEditHandler {
     my $query = TWiki::Func::getCgiQuery();
     return unless $query;
 
-    $text = _handleUTF8( $text );
+    if ($TWiki::cfg{Site}{CharSet}
+        && $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i) {
+        # If the site charset is utf-8, then form POSTs (such as the one
+        # that got us here) are utf-8 encoded. we have to decode to prevent
+        # the HTML parser from going tits up when it sees utf-8 in the data.
+        $text = Encode::decode_utf8( $text );
+    }
 
     return unless defined( $query->param( 'wysiwyg_edit' )) ||
       $text =~ s/<!--$SECRET_ID-->//go;
@@ -187,7 +193,9 @@ sub afterEditHandler {
     # the beforeSaveHandler
     $query->delete( 'wysiwyg_edit' );
 
-    $_[0] = TranslateHTML2TML( $text, $_[1], $_[2] );
+    $text = TranslateHTML2TML( $text, $_[1], $_[2] );
+
+    $_[0] = $text;
 }
 
 # Invoked to convert HTML to TML (best efforts)
@@ -614,8 +622,10 @@ sub RESTParameter2SiteCharSet {
 
     WC::mapUnicode2HighBit($text);
 
-    $text = Encode::encode(
-        $TWiki::cfg{Site}{CharSet}, $text, Encode::FB_PERLQQ);
+    if ($TWiki::cfg{Site}{CharSet}) {
+        $text = Encode::encode(
+            $TWiki::cfg{Site}{CharSet}, $text, Encode::FB_PERLQQ);
+    }
 
     return $text;
 }
@@ -628,8 +638,10 @@ sub RESTParameter2SiteCharSet {
 sub returnRESTResult {
     my ($text) = @_;
 
-    $text = Encode::decode(
-        $TWiki::cfg{Site}{CharSet}, $text, Encode::FB_PERLQQ);
+    if ($TWiki::cfg{Site}{CharSet}) {
+        $text = Encode::decode(
+            $TWiki::cfg{Site}{CharSet}, $text, Encode::FB_PERLQQ);
+    }
 
     WC::mapHighBit2Unicode($text);
 
@@ -847,24 +859,6 @@ sub _restAttachments {
 
     }
     return '['.join(',',@atts).']';
-}
-
-# If the site charset is UTF8 then we may get CGI parameters with encoded
-# UTF8 in them. We need to decode this, to avoid tools such as the
-# HTML::Parser falling over, and also make sure the output streams are
-# not going to barf when printing UTF8 characters. This ought
-# to be handled by the TWiki core, but isn't.
-sub _handleUTF8 {
-    my $text = shift;
-    if( defined $TWiki::cfg{Site}{CharSet}
-          && $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i) {
-        require Encode;
-        $text = Encode::decode_utf8( $text );
-
-        binmode(STDOUT, ":utf8");
-        binmode(STDERR, ":utf8");
-    }
-    return $text;
 }
 
 1;
