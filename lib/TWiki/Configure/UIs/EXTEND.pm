@@ -153,6 +153,7 @@ MESS
         print "<pre>\n";
         eval {
             no warnings 'redefine';
+            unshift(@INC, '.'); # needed to find tools/extender.pl
             do $installScript;
             use warnings 'redefine';
             die $@ if $@; # propagate
@@ -209,6 +210,11 @@ sub _findTarget {
     } elsif ($file =~ s#^templates/#$TWiki::cfg{TemplateDir}/#) {
     } elsif ($file =~ s#^locale/#$TWiki::cfg{LocalesDir}/#) {
     } elsif ($file =~ s#^(bin/\w+)$#$this->{root}$1$TWiki::cfg{ScriptSuffix}#) {
+        #This makes a couple of bad assumptions
+        #1. that the twiki's bin dir _is_ called bin
+        #2. that any file going into there _is_ a script - making installing the 
+        #   .htaccess file via this machanism impossible
+        #3. that softlinks are not in use (same issue below)
     } else {
         $file = File::Spec->catfile($this->{root}, $file);
     }
