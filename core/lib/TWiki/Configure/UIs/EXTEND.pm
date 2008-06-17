@@ -153,6 +153,7 @@ MESS
         print "<pre>\n";
         eval {
             no warnings 'redefine';
+            unshift(@INC, '.'); # needed to find tools/extender.pl
             do $installScript;
             use warnings 'redefine';
             die $@ if $@; # propagate

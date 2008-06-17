@@ -968,6 +968,7 @@ sub install {
     $PACKAGES_URL = shift;
     $MODULE = shift;
     my $rootModule = shift;
+    push(@_, '') if (scalar(@_) & 1);
     my %data = @_;
 
     foreach my $row (split(/\r?\n/, $data{MANIFEST})) {
