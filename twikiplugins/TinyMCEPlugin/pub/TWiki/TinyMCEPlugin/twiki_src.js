@@ -75,3 +75,52 @@ function handleKeyDown(e) {
 	if (code==27) return false;
 	return true;
 }
+
+/**
+Provided for use by editors that need to validate form elements before
+navigating away. Duplicated from TWikiJavascripts/twiki_edit.js to resolve Item5514
+*/
+function validateTWikiMandatoryFields(event) {
+    if (twiki.Pref.validateSuppressed) {
+        return true;
+    }
+    var ok = true;
+    var els = twiki.getElementsByClassName(document, 'select',
+                                               'twikiMandatory');
+    for (var j = 0; j < els.length; j++) {
+        var one = false;
+        for (var k = 0; k < els[j].options.length; k++) {
+            if (els[j].options[k].selected) {
+                one = true;
+                break;
+            }
+        }
+        if (!one) {
+            alert("The required form field '" + els[j].name +
+                  "' has no value.");
+            ok = false;
+        }
+    }
+    var taglist = new Array('input', 'textarea');
+    for (var i = 0; i < taglist.length; i++) {
+        els = twiki.getElementsByClassName(document, taglist[i],
+                                               'twikiMandatory');
+        for (var j = 0; j < els.length; j++) {
+            if (els[j].value == null || els[j].value.length == 0) {
+                alert("The required form field '" + els[j].name +
+                      "' has no value.");
+                ok = false;
+            }
+        }
+    }
+    return ok;
+}
+
+/**
+Used to dynamically set validation suppression, depending on which submit
+button is pressed (i.e. call this n 'Cancel').
+Duplicated from TWikiJavascripts/twiki_edit.js to resolve Item5514
+*/
+function suppressTWikiSaveValidation() {
+    twiki.Pref.validateSuppressed = true;
+}
