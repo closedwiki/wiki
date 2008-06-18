@@ -317,6 +317,10 @@ sub addUser {
     ASSERT($user) if DEBUG;
 
     # add name alphabetically to list
+    
+    # insidelist is used to see if we are before the first record or after the last
+    # 0 before, 1 inside, 2 after
+    my $insidelist = 0;
     foreach my $line ( split( /\r?\n/, $text) ) {
         # TODO: I18N fix here once basic auth problem with 8-bit user names is
         # solved
@@ -326,13 +330,22 @@ sub addUser {
                 $web = $1 || $TWiki::cfg{UsersWebName};
                 $name = $2;
                 $odate = $3;
+                $insidelist = 1;
             } elsif ( $line =~ /^\s+\*\s([A-Z]) - / ) {
                 #	* A - <a name="A">- - - -</a>^M
                 $name = $1;
+                $insidelist = 1;
+            } elsif ( $insidelist == 1 ) {
+                # After last entry we have a blank line or some comment
+                # We assume no blank lines inside the list of users
+                # We cannot look for last after Z because Z is not the last letter
+                # in all alphabets
+                $insidelist = 2;
+                $name = '';
             }
-            if( $name && ( $wikiname le $name ) ) {
-                # found alphabetical position
-                if( $wikiname eq $name ) {
+            if ( ( $name && ( $wikiname le $name ) ) || $insidelist == 2 ) {
+                # found alphabetical position or last record
+                if( $wikiname eq $name) {
                     # adjusting existing user - keep original registration date
                     $entry .= $odate;
                 } else {
