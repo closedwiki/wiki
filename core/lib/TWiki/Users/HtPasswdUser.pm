@@ -123,7 +123,7 @@ sub _readPasswd {
       throw Error::Simple( $TWiki::cfg{Htpasswd}{FileName}.' open failed: '.$! );
     my $line = '';
     while (defined ($line =<IN_FILE>) ) {
-        if( $line =~ /^(.*):(.*)(::(.*))?/ ) {      
+        if( $line =~ /^(.*?):(.*?)(?::(.*))?$/ ) {      
             $data->{$1}->{pass} = $2;
             $data->{$1}->{emails} = $3 || '';
         }
