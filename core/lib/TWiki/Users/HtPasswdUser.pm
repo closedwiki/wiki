@@ -121,9 +121,9 @@ sub _readPasswd {
     }
     open( IN_FILE, "<$TWiki::cfg{Htpasswd}{FileName}" ) ||
       throw Error::Simple( $TWiki::cfg{Htpasswd}{FileName}.' open failed: '.$! );
-    local $/ = undef;
-    foreach my $line ( split(/\r?\n/, <IN_FILE>) ) {
-        if( $line =~ /^(.*?):(.*?)(?::(.*))?$/ ) {
+    my $line = '';
+    while (defined ($line =<IN_FILE>) ) {
+        if( $line =~ /^(.*):(.*)(::(.*))?/ ) {      
             $data->{$1}->{pass} = $2;
             $data->{$1}->{emails} = $3 || '';
         }
