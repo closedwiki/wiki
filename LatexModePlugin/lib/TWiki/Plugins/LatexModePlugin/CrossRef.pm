@@ -37,7 +37,7 @@ sub handleSections {
         $label = 'sec:'.$label unless ($label =~ m/^sec:/);
     }
 
-    my $ret = '---'.$l.' '.$text." \n";
+    my $ret = '---'.$l.$e.' '.$text." \n";
     if (exists(TWiki::Func::getContext()->{'genpdflatex'})) {
         $ret .= '<latex>\label{'.$label."}</latex>\n" if ($label ne '');
         return($ret);

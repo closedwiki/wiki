@@ -58,9 +58,9 @@ Additional options can be included to modify the rendered result.  These include
 | *option* | *possible values* | *default* | *description* | 
 | inline | 0 or 1 | 0 | controls inline vs ownline rendering |
 | label | alpha-numeric | --- | produces a linkable equation number for ownline markup |
-| density | positive integer | %LATEXMODEPLUGIN_DENSITY% (set below) | controls rendered font size |
-| scale | positive number | %LATEXMODEPLUGIN_SCALE% (set below) | sets post-rendered image scaling |
-| gamma | positive number | %LATEXMODEPLUGIN_GAMMA% (set below) | controls rendered font darkness |
+| density | positive integer | %DENSITY% (set below) | controls rendered font size |
+| scale | positive number | %SCALE% (set below) | sets post-rendered image scaling |
+| gamma | positive number | %GAMMA% (set below) | controls rendered font darkness |
 | bgcolor | --- | 'white' | sets background color (details below) |
 | color | --- | 'black' | sets foreground font color (details below) |
 | attachment | alpha-numeric | --- | allows one to couple the latex command with an attached file.  Useful for latex graphics commands.  |
@@ -246,7 +246,7 @@ Cross-references to the label can be generated using %<nop>REFLATEX{sec:intro}%.
 To add automatic numbering to the sections, set the following parameter to a
 non-zero number.  Sections up to this depth will be numbered.
 <blockquote>
-   * Set <nop>LATEXMODEPLUGIN_MAXSECDEPTH = 3
+   * Set <nop>MAXSECDEPTH = 3
 </blockquote>
 The default setting is '0', which disables the numbering and section labels.
 
@@ -296,21 +296,27 @@ these plugin settings write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<
 		* Set SHORTDESCRIPTION = Enables <nop>LaTeX markup (mathematics and more) in TWiki topics
 
 	* Debug plugin: (See output in =data/debug.txt=)
-		* Set LATEXMODEPLUGIN_DEBUG = 0
+		* Set DEBUG = 0
 
 	* Set the dots-per-inch default density level for the rendered images (116 is suggested for 11pt browser fonts.)
-		* Set LATEXMODEPLUGIN_DENSITY = 116
+		* Set DENSITY = 116
 
 	* Set the gamma correction for the rendered images.  This controls how dark the rendered text appears
-		* Set LATEXMODEPLUGIN_GAMMA = 0.6
+		* Set GAMMA = 0.6
 
 	* Set the scaling for the image size.  Typically, set to '1'.
-		* Set LATEXMODEPLUGIN_SCALE = 1.0
+		* Set SCALE = 1.0
 
 	* Uncomment the following to define a site-wide custom color, <nop>DarkBlue.
-		* #Set LATEXMODEPLUGIN_PREAMBLE = \usepackage{color} \definecolor{DarkBlue}{rgb}{0,0.1,0.43} 
+		* #Set PREAMBLE = \usepackage{color} \definecolor{DarkBlue}{rgb}{0,0.1,0.43} 
 
 	* In addition, the following parameters are available at the *topic* level, =EQN=, =FIG=, =TBL=, to override the counter reset.  (i.e. if =&nbsp;&nbsp;&nbsp;*&nbsp;Set&nbsp;EQN&nbsp;=&nbsp;3= is declared in a topic, the first labeled equation will be given the number =4=).
+
+*Note:* It is recommended to declare these settings in the <nop>WikiPreferences or <nop>WebPreferences topics, so that they aren't lost when the plugin is upgraded.  In this case, the macro declarations should be preceded by =LATEXMODEPLUGIN_=.  E.g. to the set the font density default for a specific web, WEB, use:
+   * Set <nop>LATEXMODEPLUGIN_DENSITY = 200
+in the topic !WEB.WebPreferences.
+
+
 
 ---+++ Plugin Installation Instructions
 

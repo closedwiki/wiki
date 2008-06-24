@@ -941,6 +941,7 @@ sub makePNGs {
  
             if ($ret eq 0) {
                 open(OI,">$outimg");
+                binmode(OI);
                 print OI $data;
                 close(OI);
             }

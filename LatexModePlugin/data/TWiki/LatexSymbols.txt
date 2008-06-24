@@ -31,7 +31,7 @@
 
 |   *Symbol*      | *Latex Command* | |   *Symbol*   | *Latex Command* |
 |   %$\amalg$%    | \amalg (upsidedown pi) | |   %$ \mho $%   | \mho ( conductance - inverse of ohm ) |
-
+|   %$\nabla$%    | \nabla (upsidedown delta) |
 
 ---
 
