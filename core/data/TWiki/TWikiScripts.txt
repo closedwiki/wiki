@@ -61,7 +61,7 @@ The =edit= script understands the following parameters, typically supplied by HT
 | =action= | Optional. Use the editaction template instead of the standard edit. If action=text, then hide the form. If action=form hide the normal text area and only edit the form. | |
 | =onlynewtopic= | If set, error if topic already exists | |
 | =onlywikiname= | If set, error if topic name is not a WikiWord | |
-| =templatetopic= | The name of the template topic, copied to get the initial content | |
+| =templatetopic= | The name of the template topic, copied to get the initial content (new topic _only_) | |
 | =text= | Initial text for the topic | |
 | =topicparent= | The parent topic | |
 | =formtemplate= | Name of the form to instantiate in the topic. Overrides the form set in the =templatetopic= if defined. (will remove the form is set to 'none') | |
@@ -232,7 +232,7 @@ The =save= script performs a range of save-related functions, as selected by the
 | =onlynewtopic= | If set, error if topic already exists | |
 | =onlywikiname= | If set, error if topic name is not a WikiWord | |
 | =dontnotify= | if defined, suppress change notification | |
-| =templatetopic= | Name of a topic to use as a template for the text and form | |
+| =templatetopic= | Name of a topic to use as a template for the text and form (new topic _only_) | |
 | =text= | New text of the topic | |
 | =forcenewrevision= | if set, forces a revision even if TWiki thinks one isn't needed | |
 | =topicparent= | If 'none' remove any current topic parent. If the name of a topic, set the topic parent to this. | |
@@ -250,14 +250,14 @@ The parameters are interpreted in according to the following rules.
    1 The first sequence of ten or more =X= characters in the topic name will be converted to a number such that the resulting topic name is unique in the target web.
    1 When the action is =save=, =checkpoint=, =quietsave=, or =preview=:
       1 The new text is taken from the =text= parameter, if it is defined,
-         * otherwise it is taken from the =templatetopic=, if it is defined,
+         * otherwise it is taken from the =templatetopic=, if it is defined, (new topic _only_)
          * otherwise it is taken from the previous version of the topic, if any,
       1 The name of the new form is taken from the =formtemplate=, if defined
-         * otherwise it is taken from the =templatetopic=, if defined,
+         * otherwise it is taken from the =templatetopic=, if defined, (new topic _only_)
          * otherwise it is taken from the previous version of the topic, if any,
          * otherwise no form is attached.
       1 The value for each field in the form is taken from the query, if it is defined
-         * otherwise it is taken from the =templatetopic=, if defined,
+         * otherwise it is taken from the =templatetopic=, if defined, (new topic _only_)
          * otherwise it is taken from the previous version of the topic, if any,
          * otherwise it defaults to the empty string.
 
