@@ -14,6 +14,7 @@
 # Copyright (C) 1999 Peter Thoeny, peter@thoeny.com
 # Additional mess by Patrick Ohl - Biomax Bioinformatics AG
 # January 2003
+# fixes for TWiki 4.2 (c) 2008 SvenDowideit@fosiki.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -724,17 +725,11 @@ sub viewPDF {
    # Disable CGI feature of newer versions of htmldoc
    # (thanks to Brent Roberts for this fix)
    $ENV{HTMLDOC_NOCGI} = "yes";
-   system($htmldocCmd, @htmldocArgs);
-   if ($? == -1) {
-      die "Failed to start htmldoc ($htmldocCmd): $!\n";
-   }
-   elsif ($? & 127) {
-      printf STDERR "child died with signal %d, %s coredump\n",
-         ($? & 127),  ($? & 128) ? 'with' : 'without';
-      die "Conversion failed: '$!'";
-   }
-   else {
-      printf STDERR "child exited with value %d\n", $? >> 8 unless $? >> 8 == 0;
+   my ( $Output, $exit ) =
+     $TWiki::sandbox->sysCommand(
+         $htmldocCmd.' '.join(' ', @htmldocArgs) );
+   if( $exit ) {
+      die "error running htmldoc ($htmldocCmd): $Output\n";
    }
 
    #  output the HTML header and the output of HTMLDOC
