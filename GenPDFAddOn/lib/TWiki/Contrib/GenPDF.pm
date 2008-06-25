@@ -111,8 +111,44 @@ sub _getRenderedView {
          if $prefs{'recursive'}; # no point spoiling _everything_
       TWiki::Func::redirectCgiQuery($query, $text);
    }
+
+
+   my $session = $TWiki::Plugins::SESSION;
+   my $tmpl = $session->templates->readTemplate( 'view', $prefs{'skin'} ) || '%TEXT%';
+    my( $start, $end );
+    if( $tmpl =~ m/^(.*)%TEXT%(.*)$/s ) {
+        my @starts = split( /%STARTTEXT%/, $1 );
+        if ( $#starts > 0 ) {
+            # we know that there is something before %STARTTEXT%
+            $start = $starts[0];
+            $text = $starts[1] . $text;
+        } else {
+            $start = $1;
+        }
+        my @ends = split( /%ENDTEXT%/, $2 );
+        if ( $#ends > 0 ) {
+            # we know that there is something after %ENDTEXT%
+            $text .= $ends[0];
+            $end = $ends[1];
+        } else {
+            $end = $2;
+        }
+    } else {
+        my @starts = split( /%STARTTEXT%/, $tmpl );
+        if ( $#starts > 0 ) {
+            # we know that there is something before %STARTTEXT%
+            $start = $starts[0];
+            $text = $starts[1];
+        } else {
+            $start = $tmpl;
+            $text = '';
+        }
+        $end = '';
+    }
+
+   
    $text =~ s/\%TOC({.*?})?\%//g; # remove TWiki TOC
-   $text = TWiki::Func::expandCommonVariables($text, $topic, $webName);
+   $text = TWiki::Func::expandCommonVariables($start.$text.$end, $topic, $webName);
    $text = TWiki::Func::renderText($text);
 
    return $text;
@@ -411,7 +447,7 @@ sub _getPrefs {
   use constant SUBTITLE => "";
   use constant HEADERTOPIC => "";
   use constant TITLETOPIC => "";
-  use constant SKIN => "print.pattern";
+  use constant SKIN => "print";
   use constant RECURSIVE => undef;
   use constant FORMAT => "pdf14";
   use constant TOCLEVELS => 5;
