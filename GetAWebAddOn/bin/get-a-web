@@ -46,9 +46,18 @@ sub getaweb
     ($webName = $query->path_info()) =~ s|^/?(.*?)[\/\.](.*)\.(tar)$|$1|;
     my $saveasweb = $query->param('saveasweb' ) || $webName;
 
-    my $dataDir = $TWiki::cfg{DataDir} || $TWiki::dataDir;
-    my $pubDir = $TWiki::cfg{PubDir} || $TWiki::pubDir;
-    my $templateDir = $TWiki::cfg{TemplateDir} || $TWiki::templateDir;
+    my $dataDir;
+    my $pubDir;
+    my $templateDir;
+    if (defined(%TWiki::cfg)) {
+        $dataDir = $TWiki::cfg{DataDir};
+        $pubDir = $TWiki::cfg{PubDir};
+        $templateDir = $TWiki::cfg{TemplateDir};
+    }
+    #pre configure settings
+    $dataDir = $TWiki::dataDir if (!defined($dataDir) && defined($TWiki::dataDir));
+    $pubDir = $TWiki::pubDir if (!defined($pubDir) && defined($TWiki::pubDir));
+    $templateDir = $TWiki::templateDir if (!defined($templateDir) && defined($TWiki::templateDir));
 
     $error .= qq{web "$webName" doesn't exist<br/>} unless TWiki::Func::webExists( $webName );
     $error .= qq{data dir "$dataDir" doesn't exist<br/>} unless -d $dataDir;
