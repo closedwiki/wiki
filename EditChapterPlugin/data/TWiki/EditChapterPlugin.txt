@@ -137,8 +137,9 @@ Many thanks to the following sponsors for supporting this work:
 |  Plugin Author(s): | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2008, Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.14 |
+|  Plugin Version: | v1.15 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  26 Jun 2008: | new universal edit button |
 |  29 Apr 2008: | removed "literal" hack again; removed check for body_text context; \
                   only the icon is clickable - was all of the heading before |
 |  13 Mar 2008: | add &lt;literal> ... &lt;/literal> for TWiki engines before 4.2 |
