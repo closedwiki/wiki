@@ -255,15 +255,15 @@ Return a topic list, e.g. =( 'WebChanges',  'WebHome', 'WebIndex', 'WebNotify' )
 sub getTopicNames {
     my $this = shift;
 
-    opendir DIR, $TWiki::cfg{DataDir}.'/'.$this->{web};
+    opendir my $DIR, $TWiki::cfg{DataDir}.'/'.$this->{web};
     # the name filter is used to ensure we don't return filenames
     # that contain illegal characters as topic names.
     my @topicList =
       sort
         map { TWiki::Sandbox::untaintUnchecked( $_ ) }
           grep { !/$TWiki::cfg{NameFilter}/ && s/\.txt$// }
-            readdir( DIR );
-    closedir( DIR );
+            readdir( $DIR );
+    closedir( $DIR );
     return @topicList;
 }
 
@@ -278,7 +278,7 @@ Gets a list of names of subwebs in the current web
 sub getWebNames {
     my $this = shift;
     my $dir = $TWiki::cfg{DataDir}.'/'.$this->{web};
-    if( opendir( DIR, $dir ) ) {
+    if( opendir( my $DIR, $dir ) ) {
         my @tmpList =
           sort
             map { TWiki::Sandbox::untaintUnchecked( $_ ) }
@@ -286,8 +286,8 @@ sub getWebNames {
                      !/$TWiki::cfg{NameFilter}/ &&
                      -d $dir.'/'.$_
                    }
-                readdir( DIR );
-        closedir( DIR );
+                readdir( $DIR );
+        closedir( $DIR );
         return @tmpList;
     }
     return ();
@@ -541,16 +541,16 @@ sub copyTopic {
         _copyFile( $this->{rcsFile}, $new->{rcsFile} );
     }
 
-    if( opendir(DIR, $TWiki::cfg{PubDir}.'/'.$this->{web}.'/'.
+    if( opendir(my $DIR, $TWiki::cfg{PubDir}.'/'.$this->{web}.'/'.
                   $this->{topic} )) {
-        for my $att ( grep { !/^\./ } readdir DIR ) {
+        for my $att ( grep { !/^\./ } readdir $DIR ) {
             $att = TWiki::Sandbox::untaintUnchecked( $att );
             my $oldAtt = new TWiki::Store::RcsFile(
                 $this->{session}, $this->{web}, $this->{topic}, $att );
             $oldAtt->copyAttachment( $newWeb, $newTopic );
         }
 
-        closedir DIR;
+        closedir $DIR;
     }
     
     return;
@@ -869,8 +869,7 @@ sub _mktemp {
 sub _rmtree {
     my $root = shift;
 
-    my $D;
-    if( opendir( $D, $root ) ) {
+    if( opendir(my $D, $root ) ) {
         foreach my $entry ( grep { !/^\.+$/ } readdir( $D ) ) {
             $entry =~ /^(.*)$/;
             $entry = $root.'/'.$1;
@@ -1096,18 +1095,19 @@ Ignores files starting with _ or ending with ,v
 =cut
 
 sub getAttachmentList {
-	my( $this, $web, $topic ) = @_;
-	my $dir = dirForTopicAttachments($web, $topic);
+    my( $this, $web, $topic ) = @_;
+    my $dir = dirForTopicAttachments($web, $topic);
 		
-    opendir DIR, $dir || return '';
     my %attachmentList = ();
-    my @files = sort grep { m/^[^\.*_]/ } readdir( DIR );
-    @files = grep { !/.*,v/ } @files;
-    foreach my $attachment ( @files ) {
-    	my @stat = stat ($dir."/".$attachment);
-        $attachmentList{$attachment} = _constructAttributesForAutoAttached($attachment, \@stat);
+    if (opendir(my $DIR, $dir)) {
+        my @files = sort grep { m/^[^\.*_]/ } readdir( $DIR );
+        @files = grep { !/.*,v/ } @files;
+        foreach my $attachment ( @files ) {
+            my @stat = stat ($dir."/".$attachment);
+            $attachmentList{$attachment} = _constructAttributesForAutoAttached($attachment, \@stat);
+        }
+        closedir( $DIR );
     }
-    closedir( DIR );
     return %attachmentList;
 }
 
