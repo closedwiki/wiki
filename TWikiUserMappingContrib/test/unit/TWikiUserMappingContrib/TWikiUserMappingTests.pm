@@ -219,9 +219,10 @@ sub groupFix {
     $twiki->{users}->{mapping}->addUser( "auser","AaronUser", $me);
     $twiki->{users}->{mapping}->addUser( "guser","GeorgeUser", $me);
     $twiki->{users}->{mapping}->addUser( "zuser","ZebediahUser", $me);
+    $twiki->{users}->{mapping}->addUser( "scum","ScumUser", $me);
     $twiki->{store}->saveTopic(
         $twiki->{user}, $testUsersWeb, 'AmishGroup',
-        "   * Set GROUP = AaronUser,%MAINWEB%.GeorgeUser\n");
+        "   * Set GROUP = AaronUser,%MAINWEB%.GeorgeUser, scum\n");
     $twiki->{store}->saveTopic(
         $twiki->{user}, $testUsersWeb, 'BaptistGroup',
         "   * Set GROUP = GeorgeUser,$testUsersWeb.ZebediahUser\n");
@@ -246,7 +247,7 @@ sub test_groupMembers {
     my @l = ();
     while ($i->hasNext()) { push(@l, $i->next()) };
     my $k = join(',', map{$twiki->{users}->getLoginName($_)} sort @l);
-    $this->assert_str_equals("auser,guser", $k);
+    $this->assert_str_equals("auser,guser,scum", $k);
     $g = "BaptistGroup";
     $this->assert($twiki->{users}->isGroup($g));
 
