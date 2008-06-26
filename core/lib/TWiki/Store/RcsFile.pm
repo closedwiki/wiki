@@ -36,6 +36,7 @@ Refer to Store.pm for models of usage.
 package TWiki::Store::RcsFile;
 
 use strict;
+use warnings;
 use Assert;
 
 require File::Copy;
@@ -105,6 +106,8 @@ sub finish {
     undef $this->{attachment};
     undef $this->{searchFn};
     undef $this->{session};
+    
+    return;
 }
 
 # Used in subclasses for late initialisation during object creation
@@ -121,6 +124,8 @@ sub init {
             $this->initText();
         }
     }
+    
+    return;
 }
 
 # Make any missing paths on the way to this file
@@ -137,6 +142,8 @@ sub mkPathTo {
     if ($@) {
        throw Error::Simple("RCS: failed to create ${path}: $!");
     }
+    
+    return;
 }
 
 # SMELL: this should use TWiki::Time
@@ -375,6 +382,8 @@ sub moveWeb {
         _moveFile( $TWiki::cfg{PubDir}.'/'.$this->{web},
                    $TWiki::cfg{PubDir}.'/'.$newWeb );
     }
+    
+    return;
 }
 
 =pod
@@ -447,6 +456,8 @@ sub restoreLatestRevision {
     } else {
         saveFile( $this, $this->{file}, $text );
     }
+    
+    return;
 }
 
 =pod
@@ -469,6 +480,8 @@ sub removeWeb {
 
     _rmtree( $TWiki::cfg{DataDir}.'/'.$this->{web} );
     _rmtree( $TWiki::cfg{PubDir}.'/'.$this->{web} );
+    
+    return;
 }
 
 =pod
@@ -502,6 +515,8 @@ sub moveTopic {
         my $to = $TWiki::cfg{PubDir}.'/'.$newWeb.'/'.$newTopic;
         _moveFile( $from, $to );
     }
+    
+    return;
 }
 
 =pod
@@ -537,6 +552,8 @@ sub copyTopic {
 
         closedir DIR;
     }
+    
+    return;
 }
 
 =pod
@@ -559,6 +576,8 @@ sub moveAttachment {
     if( -e $this->{rcsFile} ) {
         _moveFile( $this->{rcsFile}, $new->{rcsFile} );
     }
+    
+    return;
 }
 
 =pod
@@ -584,6 +603,8 @@ sub copyAttachment {
     if( -e $this->{rcsFile} ) {
         _copyFile( $this->{rcsFile}, $new->{rcsFile} );
     }
+    
+    return;
 }
 
 =pod
@@ -625,6 +646,8 @@ sub setLock {
         unlink $filename ||
           throw Error::Simple( 'RCS: failed to delete '.$filename.': '.$! );
     }
+    
+    return;
 }
 
 =pod
@@ -666,6 +689,7 @@ sub setLease {
         unlink $filename ||
           throw Error::Simple( 'RCS: failed to delete '.$filename.': '.$! );
     }
+    return;
 }
 
 =pod
@@ -685,7 +709,7 @@ sub getLease {
         my $lease = { split( /\r?\n/, $t ) };
         return $lease;
     }
-    return undef;
+    return;
 }
 
 =pod
@@ -700,16 +724,18 @@ some store implementations when a topic is created, but never saved.
 sub removeSpuriousLeases {
     my( $this ) = @_;
     my $web = $TWiki::cfg{DataDir}.'/'.$this->{web}.'/';
-    if (opendir(W, $web)) {
-        foreach my $f (readdir(W)) {
+    my $W;
+    if (opendir($W, $web)) {
+        foreach my $f (readdir($W)) {
             if ($f =~ /^(.*)\.lease$/) {
                 if (! -e "$1.txt,v") {
                     unlink($f);
                 }
             }
         }
-        closedir(W);
+        closedir($W);
     }
+    return;
 }
 
 sub saveStream {
@@ -718,16 +744,17 @@ sub saveStream {
     ASSERT($fh) if DEBUG;
 
     mkPathTo( $this->{file} );
-    open( F, '>'.$this->{file} ) ||
+    my $F;
+    open( $F, '>', $this->{file} ) ||
         throw Error::Simple( 'RCS: open '.$this->{file}.' failed: '.$! );
-    binmode( F ) ||
+    binmode( $F ) ||
       throw Error::Simple( 'RCS: failed to binmode '.$this->{file}.': '.$! );
     my $text;
-    binmode(F);
+    binmode($F);
     while( read( $fh, $text, 1024 )) {
-        print F $text;
+        print $F $text;
     }
-    close(F) ||
+    close($F) ||
         throw Error::Simple( 'RCS: close '.$this->{file}.' failed: '.$! );;
 
     chmod( $TWiki::cfg{RCS}{filePermission}, $this->{file} );
@@ -742,6 +769,8 @@ sub _copyFile {
     unless( File::Copy::copy( $from, $to ) ) {
         throw Error::Simple( 'RCS: copy '.$from.' to '.$to.' failed: '.$! );
     }
+    
+    return;
 }
 
 sub _moveFile {
@@ -751,6 +780,8 @@ sub _moveFile {
     unless( File::Copy::move( $from, $to ) ) {
         throw Error::Simple( 'RCS: move '.$from.' to '.$to.' failed: '.$! );
     }
+    
+    return;
 }
 
 sub saveFile {
@@ -758,24 +789,26 @@ sub saveFile {
 
     mkPathTo( $name );
 
-    open( FILE, '>'.$name ) ||
+    my $FILE;
+    open($FILE, '>', $name ) ||
       throw Error::Simple( 'RCS: failed to create file '.$name.': '.$! );
-    binmode( FILE ) ||
+    binmode($FILE ) ||
       throw Error::Simple( 'RCS: failed to binmode '.$name.': '.$! );
-    print FILE $text;
-    close( FILE) ||
+    print $FILE $text;
+    close($FILE) ||
       throw Error::Simple( 'RCS: failed to create file '.$name.': '.$! );
-    return undef;
+    return;
 }
 
 sub readFile {
     my( $this, $name ) = @_;
     my $data;
-    if( open( IN_FILE, '<', $name )) {
-        binmode( IN_FILE );
+    my $IN_FILE;
+    if( open( $IN_FILE, '<', $name )) {
+        binmode( $IN_FILE );
         local $/ = undef;
-        $data = <IN_FILE>;
-        close( IN_FILE );
+        $data = <$IN_FILE>;
+        close( $IN_FILE );
     }
     $data ||= '';
     return $data;
@@ -836,8 +869,9 @@ sub _mktemp {
 sub _rmtree {
     my $root = shift;
 
-    if( opendir( D, $root ) ) {
-        foreach my $entry ( grep { !/^\.+$/ } readdir( D ) ) {
+    my $D;
+    if( opendir( $D, $root ) ) {
+        foreach my $entry ( grep { !/^\.+$/ } readdir( $D ) ) {
             $entry =~ /^(.*)$/;
             $entry = $root.'/'.$1;
             if( -d $entry ) {
@@ -855,7 +889,7 @@ sub _rmtree {
                 }
             }
         }
-        closedir(D);
+        closedir($D);
 
         if (!rmdir( $root )) {
             if ($TWiki::cfg{OS} ne 'WINDOWS') {
@@ -865,6 +899,7 @@ sub _rmtree {
             }
         }
     }
+    return;
 }
 
 =pod
@@ -878,7 +913,7 @@ Return a text stream that will supply the text stored in the topic.
 sub getStream {
     my( $this ) = shift;
     my $strm;
-    unless( open( $strm, '<'.$this->{file} )) {
+    unless( open( $strm, '<', $this->{file} )) {
         throw Error::Simple( 'RCS: stream open '.$this->{file}.
                                ' failed: '.$! );
     }
@@ -1046,7 +1081,7 @@ sub _constructAttributesForAutoAttached {
     if ($#$stat > 0) {
         return \%pairs;
     } else {
-        return undef;
+        return;
     }
 }
 
@@ -1142,6 +1177,7 @@ sub recordChange {
     my $text = join( "\n", map { join( "\t", @$_); } @changes );
 
     saveFile( $this, $file, $text );
+    return;
 }
 
 =pod
