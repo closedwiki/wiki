@@ -1,6 +1,8 @@
-use strict;
-
 package FuncUsersTests;
+
+use strict;
+use warnings;
+
 
 # Some basic tests for adding/removing users in the TWiki users topic,
 # and finding them again.
@@ -30,6 +32,7 @@ sub AllowLoginName {
     $loginname{UserC} = 'userc';
     $loginname{NonExistantuser} = 'nonexistantuser';
     $loginname{ScumBag} = 'scum';
+    $loginname{UserZ} = 'userz';
 }
 sub DontAllowLoginName {
     my $this = shift;
@@ -41,6 +44,7 @@ sub DontAllowLoginName {
     $loginname{UserC} = 'UserC';
     $loginname{NonExistantuser} = 'NonExistantuser';
     $loginname{ScumBag} = 'scum';   #the scum user was registered _before_ these options in the base class
+    $loginname{UserZ} = 'UserZ';
 }
 
 sub TemplateLoginManager {
@@ -115,6 +119,10 @@ sub set_up_for_verify {
             #$this->registerUser('86usera', '86User', 'A', 'user86a@example.com');
             $this->registerUser($loginname{UserB}, 'User', 'B', 'user@example.com');
             $this->registerUser($loginname{UserC}, 'User', 'C', 'userc@example.com;userd@example.com');
+
+            $this->registerUser($loginname{UserZ}, 'User', 'Z', 'userZ@example.com');
+
+
             $this->{twiki}->{store}->saveTopic(
                 $this->{twiki}->{user},
                 $this->{users_web}, 'AandBGroup',
@@ -130,7 +138,7 @@ sub set_up_for_verify {
             $this->{twiki}->{store}->saveTopic(
                 $this->{twiki}->{user},
                 $this->{users_web}, 'ScumGroup',
-                "   * Set GROUP = UserA, $TWiki::cfg{DefaultUserWikiName}");
+                "   * Set GROUP = UserA, $TWiki::cfg{DefaultUserWikiName}, $loginname{UserZ}");
             $this->{twiki}->{store}->saveTopic(
                 $this->{twiki}->{user},
                 $this->{users_web}, $TWiki::cfg{SuperAdminGroup},
@@ -189,7 +197,7 @@ sub verify_eachUser {
     if ($TWiki::cfg{UserMappingManager} eq 'TWiki::Users::BaseUserMapping') {
          @correctList = qw/TWikiContributor TWikiGuest TWikiRegistrationAgent UnknownUser/;
     } else {
-         @correctList = qw/TWikiContributor TWikiGuest TWikiRegistrationAgent UnknownUser User86A UserA UserA86 UserB UserC/;
+         @correctList = qw/TWikiContributor TWikiGuest TWikiRegistrationAgent UnknownUser User86A UserA UserA86 UserB UserC UserZ/;
          if ($TWiki::cfg{Register}{AllowLoginName} == 1) {
              push @correctList, 'ScumBag';      # this user is created in the base class with the assumption of AllowLoginName 
          } else {
@@ -284,6 +292,10 @@ sub verify_isGroupMember {
     $this->assert(TWiki::Func::isGroupMember('BandCGroup', 'UserB'));
     $this->assert(TWiki::Func::isGroupMember('BandCGroup', 'UserC'));
     $this->assert(TWiki::Func::isGroupMember('ScumGroup', 'TWikiGuest'));
+
+    $this->assert(TWiki::Func::isGroupMember('ScumGroup', 'UserZ'));
+    $this->assert(TWiki::Func::isGroupMember('ScumGroup', $loginname{UserZ}));
+
 }
 
 sub verify_eachMembership {
@@ -319,6 +331,23 @@ sub verify_eachMembership {
         push(@list, $g);
     }
     $this->assert_str_equals('TWikiBaseGroup,ScumGroup', sort join(',', @list));
+
+    $it = TWiki::Func::eachMembership($loginname{UserZ});
+    @list = ();
+    while ($it->hasNext()) {
+        my $g = $it->next();
+        push(@list, $g);
+    }
+    $this->assert_str_equals('ScumGroup', sort join(',', @list));
+    
+    $it = TWiki::Func::eachMembership('UserZ');
+    @list = ();
+    while ($it->hasNext()) {
+        my $g = $it->next();
+        push(@list, $g);
+    }
+    $this->assert_str_equals('ScumGroup', sort join(',', @list));
+
 }
 
 sub verify_eachMembershipDefault {
@@ -349,7 +378,7 @@ sub verify_eachGroupMember {
         my $g = $it->next();
         push(@list, $g);
     }
-    $this->assert_str_equals("UserA,$TWiki::cfg{DefaultUserWikiName}", sort join(',', @list));    
+    $this->assert_str_equals("UserA,$TWiki::cfg{DefaultUserWikiName},UserZ", sort join(',', @list));    
     
 }
 
@@ -471,7 +500,7 @@ sub verify_getWikiName_extended {
     #$TWiki::cfg{RenderLoggedInButUnknownUsers} is false, or undefined
     $this->assert_str_equals('TWikiUserMapping_NonExistantUser', TWiki::Func::getWikiName('TWikiUserMapping_NonExistantUser'));
     my $nonexistantuser_cUID = $this->{twiki}->{users}->getCanonicalUserID($loginname{NonExistantuser});
-    $this->annotate($nonexistantuser_cUID);			#returns guest
+    $this->annotate($nonexistantuser_cUID);      #returns guest
     $this->assert_str_equals($TWiki::cfg{DefaultUserWikiName}, TWiki::Func::getWikiName($nonexistantuser_cUID));
     $this->assert_str_equals($loginname{NonExistantuser}, TWiki::Func::getWikiName($loginname{NonExistantuser}));
     $this->assert_str_equals('NonExistantUser', TWiki::Func::getWikiName('NonExistantUser'));
@@ -529,7 +558,7 @@ sub verify_getWikiUserName_extended {
     #TODO: consider how to render unkown user's
     $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'NonExistantUserAsdf', TWiki::Func::getWikiUserName('NonExistantUserAsdf'));
     my $nonexistantuser_cUID = $this->{twiki}->{users}->getCanonicalUserID('nonexistantuserasdf');
-    $this->annotate($nonexistantuser_cUID);			#returns guest
+    $this->annotate($nonexistantuser_cUID);     #returns guest
     $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{DefaultUserWikiName}, TWiki::Func::getWikiUserName($nonexistantuser_cUID));
     $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'nonexistantuserasdf', TWiki::Func::getWikiUserName('nonexistantuserasdf'));
     $this->assert_str_equals($TWiki::cfg{UsersWebName}.'.'.'nonexistantuserasdfqwer', TWiki::Func::getWikiUserName('nonexistantuserasdfqwer'));
