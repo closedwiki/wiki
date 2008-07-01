@@ -205,6 +205,8 @@ BEGIN {
         REMOTE_PORT       => \&REMOTE_PORT_deprecated,
         REMOTE_USER       => \&REMOTE_USER_deprecated,
         REVINFO           => \&REVINFO,
+        REVTITLE          => \&REVTITLE,
+        REVARG            => \&REVARG,
         SCRIPTNAME        => \&SCRIPTNAME,
         SCRIPTURL         => \&SCRIPTURL,
         SCRIPTURLPATH     => \&SCRIPTURLPATH,
@@ -3353,6 +3355,27 @@ sub REVINFO {
 
     return $this->renderer->renderRevisionInfo( $web, $topic, undef,
                                                   $rev, $format );
+}
+
+sub REVTITLE {
+    my ( $this, $params, $theTopic, $theWeb ) = @_;
+    my $cgiQuery = $this->{cgiQuery};
+    my $out = '';
+    if( $cgiQuery ) {
+        my $cgiRev = $cgiQuery->param('rev');
+        $out = '(r'.$cgiRev.')' if ($cgiRev);
+    }
+    return $out;
+}
+sub REVARG {
+    my ( $this, $params, $theTopic, $theWeb ) = @_;
+    my $cgiQuery = $this->{cgiQuery};
+    my $out = '';
+    if( $cgiQuery ) {
+        my $cgiRev = $cgiQuery->param('rev');
+        $out = '&rev='.$cgiRev if ($cgiRev);
+    }
+    return $out;
 }
 
 sub ENCODE {
