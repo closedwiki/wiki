@@ -112,9 +112,7 @@ sub _getRenderedView {
       TWiki::Func::redirectCgiQuery($query, $text);
    }
 
-
-   my $session = $TWiki::Plugins::SESSION;
-   my $tmpl = $session->templates->readTemplate( 'view', $prefs{'skin'} ) || '%TEXT%';
+   my $tmpl = TWiki::Func::readTemplate( 'view', $prefs{'skin'} ) || '%TEXT%';
     my( $start, $end );
     if( $tmpl =~ m/^(.*)%TEXT%(.*)$/s ) {
         my @starts = split( /%STARTTEXT%/, $1 );
@@ -415,7 +413,7 @@ sub _fixHtml {
    # link internally if we include the topic
    for my $wikiword (@$refTopics) {
       $url = TWiki::Func::getScriptUrl($webName, $wikiword, 'view');
-      $html =~ s/([\'\"])$url$1/$1#$wikiword$1/g; # not anchored
+      $html =~ s/([\'\"])$url\1/$1#$wikiword$1/g; # not anchored
       $html =~ s/$url(#\w*)/$1/g; # anchored
    }
 
@@ -760,11 +758,17 @@ sub viewPDF {
 
 #   print STDERR "Calling htmldoc with args: @htmldocArgs\n";
 
+   #try the 4.2 sandbox
+   my $sandbox = $TWiki::sandbox;
+   if (!defined($sandbox)) {  #must be 4.1 or before.
+      $sandbox = $TWiki::Plugins::SESSION->{sandbox};
+   }
+
    # Disable CGI feature of newer versions of htmldoc
    # (thanks to Brent Roberts for this fix)
    $ENV{HTMLDOC_NOCGI} = "yes";
    my ( $Output, $exit ) =
-     $TWiki::sandbox->sysCommand(
+     $sandbox->sysCommand(
          $htmldocCmd.' '.join(' ', @htmldocArgs) );
    if( ! -e $outputFile ) {
       die "error running htmldoc ($htmldocCmd): $Output\n";
