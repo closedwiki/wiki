@@ -415,12 +415,12 @@ sub _fixHtml {
    # link internally if we include the topic
    for my $wikiword (@$refTopics) {
       $url = TWiki::Func::getScriptUrl($webName, $wikiword, 'view');
-      $html =~ s/([\'\"])$url\1/\1#$wikiword\1/g; # not anchored
+      $html =~ s/([\'\"])$url$1/$1#$wikiword$1/g; # not anchored
       $html =~ s/$url(#\w*)/$1/g; # anchored
    }
 
    # change <li type=> to <ol type=> 
-   $html =~ s/<ol>\s+<li\s+type="([AaIi])">/<ol type="\1">\n<li>/g;
+   $html =~ s/<ol>\s+<li\s+type="([AaIi])">/<ol type="$1">\n<li>/g;
    $html =~ s/<li\s+type="[AaIi]">/<li>/g;
 
    return $html;
@@ -766,7 +766,7 @@ sub viewPDF {
    my ( $Output, $exit ) =
      $TWiki::sandbox->sysCommand(
          $htmldocCmd.' '.join(' ', @htmldocArgs) );
-   if( $exit ) {
+   if( ! -e $outputFile ) {
       die "error running htmldoc ($htmldocCmd): $Output\n";
    }
 
