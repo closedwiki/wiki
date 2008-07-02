@@ -435,7 +435,11 @@ sub _renameweb {
     my $oldWeb = $session->{webName};
     my $query = $session->{cgiQuery};
     my $user = $session->{user};
-
+  
+    # If the user is not allowed to rename anything in the current web - stop here    
+    TWiki::UI::checkAccess( $session, $oldWeb, undef,
+                            'RENAME', $session->{user} );
+                              
     my $newParentWeb = $query->param( 'newparentweb' ) || '';
     unless ( !$newParentWeb || TWiki::isValidWebName( $newParentWeb, 1 )) {
         throw TWiki::OopsException
@@ -443,7 +447,7 @@ sub _renameweb {
             params => [ $newParentWeb ] );
     }
     $newParentWeb = TWiki::Sandbox::untaintUnchecked( $newParentWeb );
-
+      
     my $newSubWeb = $query->param( 'newsubweb' ) || '';;
     unless ( !$newSubWeb || TWiki::isValidWebName( $newSubWeb, 1 )) {
         throw TWiki::OopsException
@@ -460,9 +464,22 @@ sub _renameweb {
             $newWeb=$newSubWeb;
         }
     }
+
     my @tmp = split( /[\/\.]/, $oldWeb );
     pop( @tmp );
     my $oldParentWeb = join( '/', @tmp );
+
+    # If the user is not allowed to rename anything in the parent web - stop here
+    # This also ensures we check root webs for ALLOWROOTRENAME and DENYROOTRENAME
+    TWiki::UI::checkAccess( $session, $oldParentWeb || undef, undef,
+                            'RENAME', $session->{user} );
+                            
+    # If old web is a root web then also stop if ALLOW/DENYROOTCHANGE prevents access
+    if ( !$oldParentWeb ) {
+        TWiki::UI::checkAccess( $session, $oldParentWeb || undef, undef,
+                                'CHANGE', $session->{user} );
+    }
+
     my $newTopic;
     my $lockFailure = '';
     my $breakLock = $query->param( 'breaklock' );
@@ -475,12 +492,11 @@ sub _renameweb {
 
     if( $newWeb ) {
         if( $newParentWeb ) {
-            # SMELL: need to check change permissions of new parent web
             TWiki::UI::checkWebExists(
                 $session, $newParentWeb,
-                $TWiki::cfg{WebPrefsTopicName}, 'rename' );
+                $TWiki::cfg{WebPrefsTopicName}, 'rename' );              
         }
-
+        
         if( $store->webExists( $newWeb )) {
             throw TWiki::OopsException(
                 'attention',
@@ -489,13 +505,14 @@ sub _renameweb {
                 topic => $TWiki::cfg{WebPrefsTopicName},
                 params => [ $newWeb, $TWiki::cfg{WebPrefsTopicName} ] );
         }
+
+        # Check if we have change permission in the new parent
+        TWiki::UI::checkAccess( $session, $newParentWeb || undef, undef,
+                                'CHANGE', $session->{user} );
     }
 
     if( ! $newWeb || $confirm ) {
-
         my %refs;
-        my $refs0;
-        my $refs1;
         my $totalReferralAccess = 1;
         my $totalWebAccess = 1;
         my $modifyingLockedTopics;
@@ -505,46 +522,45 @@ sub _renameweb {
 
         # get a topic list for all the topics referring to this web,
         # and build up a hash containing permissions and lock info.
-        $refs0 = getReferringTopics( $session, $oldWeb, undef, 0 );
-        $refs1 = getReferringTopics( $session, $oldWeb, undef, 1 );
+        my $refs0 = getReferringTopics( $session, $oldWeb, undef, 0 );
+        my $refs1 = getReferringTopics( $session, $oldWeb, undef, 1 );
         %refs = (%$refs0, %$refs1);
         
         $webTopicInfo{referring}{refs0} = $refs0;
         $webTopicInfo{referring}{refs1} = $refs1;
 
         my $lease_ref;
-        foreach my $ref (keys %refs) {
-            if(defined($ref) && $ref ne "") {
+        foreach my $ref ( keys %refs ) {
+            if( defined( $ref ) && $ref ne "" ) {
                 $ref =~ s/\./\//go;
-                my (@path) = split(/\//,$ref);
-                my $webTopic = pop(@path);
-                my $webIter = join("/",@path);
+                my (@path) = split( /\//, $ref );
+                my $webTopic = pop( @path );
+                my $webIter = join( '/', @path );
 
                 $webIter = TWiki::Sandbox::untaintUnchecked( $webIter );
                 $webTopic = TWiki::Sandbox::untaintUnchecked( $webTopic );
-                if($confirm eq 'getlock') {
+                if( $confirm eq 'getlock' ) {
                     $store->setLease( $webIter, $webTopic, $user,
                                       $TWiki::cfg{LeaseLength});
-                    $lease_ref=$store->getLease($webIter,$webTopic);
-                } elsif ($confirm eq 'cancel') {
-                    $lease_ref=$store->getLease($webIter,$webTopic);
-                    if($lease_ref->{user} eq $user) {
+                    $lease_ref = $store->getLease( $webIter, $webTopic );
+                } elsif( $confirm eq 'cancel' ) {
+                    $lease_ref = $store->getLease( $webIter, $webTopic );
+                    if( $lease_ref->{user} eq $user ) {
                         $store->clearLease( $webIter, $webTopic );
                     }
                 }
                 my $wit = $webIter.'/'.$webTopic;
                 $webTopicInfo{modify}{$wit}{leaseuser} = $lease_ref->{user};
-                $webTopicInfo{modify}{$wit}{leasetime}=$lease_ref->{taken};
+                $webTopicInfo{modify}{$wit}{leasetime} = $lease_ref->{taken};
 
                 $modifyingLockedTopics++
-                  if(defined($webTopicInfo{modify}{$ref}{leaseuser}) &&
-                       $webTopicInfo{modify}{$ref}{leaseuser} ne $user);
+                  if( defined($webTopicInfo{modify}{$ref}{leaseuser} ) &&
+                       $webTopicInfo{modify}{$ref}{leaseuser} ne $user );
                 $webTopicInfo{modify}{$ref}{summary} = $refs{$ref};
                 $webTopicInfo{modify}{$ref}{access} =
-                  $session->security->checkAccessPermission('CHANGE', $user,
-                                                   undef, undef, $webTopic,
-                                                   $webIter);
-                if(!$webTopicInfo{modify}{$ref}{access}) {
+                  $session->security->checkAccessPermission(
+                      'CHANGE', $user, undef, undef, $webTopic, $webIter);
+                if( !$webTopicInfo{modify}{$ref}{access} ) {
                     $webTopicInfo{modify}{$ref}{accessReason} =
                       $session->security->getReason();
                 }
@@ -555,19 +571,19 @@ sub _renameweb {
 
         # get a topic list for this web and all its subwebs, and build
         # up a hash containing permissions and lock info.
-        (@webList) = $store->getListOfWebs('public',$oldWeb);
-        unshift(@webList,$oldWeb);
-        foreach my $webIter (@webList) {
+        (@webList) = $store->getListOfWebs( 'public', $oldWeb );
+        unshift( @webList, $oldWeb );
+        foreach my $webIter ( @webList ) {
             $webIter = TWiki::Sandbox::untaintUnchecked( $webIter );
-            my @webTopicList=$store->getTopicNames($webIter);
-            foreach my $webTopic (@webTopicList) {
+            my @webTopicList = $store->getTopicNames( $webIter );
+            foreach my $webTopic ( @webTopicList ) {
                 $webTopic = TWiki::Sandbox::untaintUnchecked( $webTopic );
                 if( $confirm eq 'getlock' ) {
                     $store->setLease( $webIter, $webTopic, $user,
                                       $TWiki::cfg{LeaseLength});
-                    $lease_ref = $store->getLease($webIter,$webTopic);
+                    $lease_ref = $store->getLease( $webIter, $webTopic );
                 } elsif ($confirm eq 'cancel') {
-                    $lease_ref = $store->getLease($webIter,$webTopic);
+                    $lease_ref = $store->getLease( $webIter, $webTopic );
                     if( $lease_ref->{user} eq $user ) {
                         $store->clearLease( $webIter, $webTopic );
                     }
@@ -577,12 +593,11 @@ sub _renameweb {
                 $webTopicInfo{move}{$wit}{leasetime} = $lease_ref->{taken};
 
                 $movingLockedTopics++
-                  if(defined($webTopicInfo{move}{$wit}{leaseuser}) &&
-                       $webTopicInfo{move}{$wit}{leaseuser} ne $user);
+                  if( defined($webTopicInfo{move}{$wit}{leaseuser}) &&
+                       $webTopicInfo{move}{$wit}{leaseuser} ne $user );
                 $webTopicInfo{move}{$wit}{access} =
-                  $session->security->checkAccessPermission('RENAME', $user,
-                                                   undef, undef, $webTopic,
-                                                   $webIter);
+                  $session->security->checkAccessPermission(
+                      'RENAME', $user, undef, undef, $webTopic, $webIter);
                 $webTopicInfo{move}{$wit}{accessReason} =
                   $session->security->getReason();
                 $totalWebAccess = ($totalWebAccess &
@@ -624,16 +639,20 @@ sub _renameweb {
                       @{$webTopicInfo{movelocked}} ) {
                     $nocontinue = 'style="display:none;"';
                 }
-                my $mvd = join(' ', @{$webTopicInfo{movedenied}} ) || ($session->i18n->maketext('(none)'));
+                my $mvd = join(' ', @{$webTopicInfo{movedenied}} )
+                  || ($session->i18n->maketext('(none)'));
                 $mvd = substr($mvd, 0, 300).'... (more)'
                   if( length($mvd) > 300);
-                my $mvl = join(' ', @{$webTopicInfo{movelocked}} ) || ($session->i18n->maketext('(none)'));
+                my $mvl = join(' ', @{$webTopicInfo{movelocked}} )
+                  || ($session->i18n->maketext('(none)'));
                 $mvl = substr($mvl, 0, 300).'... (more)'
                   if( length($mvl) > 300);
-                my $mdd = join(' ', @{$webTopicInfo{modifydenied}} ) || ($session->i18n->maketext('(none)'));
+                my $mdd = join(' ', @{$webTopicInfo{modifydenied}} )
+                  || ($session->i18n->maketext('(none)'));
                 $mdd = substr($mdd, 0, 300).'... (more)'
                   if( length($mdd) > 300);
-                my $mdl = join(' ', @{$webTopicInfo{modifylocked}} ) || ($session->i18n->maketext('(none)'));
+                my $mdl = join(' ', @{$webTopicInfo{modifylocked}} )
+                  || ($session->i18n->maketext('(none)'));
                 $mdl = substr($mdl, 0, 300).'... (more)'
                   if( length($mdl) > 300);
                 throw TWiki::OopsException(
@@ -672,30 +691,30 @@ sub _renameweb {
     _moveWeb( $session, $oldWeb, $newWeb, $refs );
 
     # now remove lease on all topics inside $newWeb.
-    my (@webList) = $store->getListOfWebs('public',$newWeb);
-    unshift(@webList,$newWeb);
+    my (@webList) = $store->getListOfWebs( 'public', $newWeb );
+    unshift( @webList, $newWeb );
     foreach my $webIter (@webList) {
         $webIter = TWiki::Sandbox::untaintUnchecked( $webIter );
         my @webTopicList=$store->getTopicNames($webIter);
-        foreach my $webTopic (@webTopicList) {
+        foreach my $webTopic ( @webTopicList ) {
             $webTopic = TWiki::Sandbox::untaintUnchecked( $webTopic );
             $store->clearLease( $webIter, $webTopic );
         }
     }
 
     # also remove lease on all referring topics
-    foreach my $ref (@$refs) {
+    foreach my $ref ( @$refs ) {
         $ref =~ s/\./\//go;
-        my (@path)=split(/\//,$ref);
-        my $webTopic=pop(@path);
+        my (@path) = split( /\//, $ref );
+        my $webTopic = pop( @path );
         $webTopic = TWiki::Sandbox::untaintUnchecked( $webTopic );
-        my $webIter=join("/",@path);
+        my $webIter = join( "/", @path );
         $webIter = TWiki::Sandbox::untaintUnchecked( $webIter );
         $store->clearLease( $webIter, $webTopic );
     }
 
     my $new_url = '';
-    if ( $newWeb =~ /^$TWiki::cfg{TrashWebName}\b/ &&
+    if( $newWeb =~ /^$TWiki::cfg{TrashWebName}\b/ &&
            $oldWeb !~ /^$TWiki::cfg{TrashWebName}\b/ ) {
 
         # redirect to parent
