@@ -112,37 +112,39 @@ sub _getRenderedView {
       TWiki::Func::redirectCgiQuery($query, $text);
    }
 
-   my $tmpl = TWiki::Func::readTemplate( 'view', $prefs{'skin'} ) || '%TEXT%';
-    my( $start, $end );
-    if( $tmpl =~ m/^(.*)%TEXT%(.*)$/s ) {
-        my @starts = split( /%STARTTEXT%/, $1 );
-        if ( $#starts > 0 ) {
-            # we know that there is something before %STARTTEXT%
-            $start = $starts[0];
-            $text = $starts[1] . $text;
-        } else {
-            $start = $1;
-        }
-        my @ends = split( /%ENDTEXT%/, $2 );
-        if ( $#ends > 0 ) {
-            # we know that there is something after %ENDTEXT%
-            $text .= $ends[0];
-            $end = $ends[1];
-        } else {
-            $end = $2;
-        }
-    } else {
-        my @starts = split( /%STARTTEXT%/, $tmpl );
-        if ( $#starts > 0 ) {
-            # we know that there is something before %STARTTEXT%
-            $start = $starts[0];
-            $text = $starts[1];
-        } else {
-            $start = $tmpl;
-            $text = '';
-        }
-        $end = '';
-    }
+   my $skin = $prefs{'cover'}.','.$prefs{'skin'};
+   my $tmpl = TWiki::Func::readTemplate($prefs{'template'}, $skin) || '%TEXT%';
+
+   my( $start, $end );
+   if( $tmpl =~ m/^(.*)%TEXT%(.*)$/s ) {
+       my @starts = split( /%STARTTEXT%/, $1 );
+       if ( $#starts > 0 ) {
+           # we know that there is something before %STARTTEXT%
+           $start = $starts[0];
+           $text = $starts[1] . $text;
+       } else {
+           $start = $1;
+       }
+       my @ends = split( /%ENDTEXT%/, $2 );
+       if ( $#ends > 0 ) {
+           # we know that there is something after %ENDTEXT%
+           $text .= $ends[0];
+           $end = $ends[1];
+       } else {
+           $end = $2;
+       }
+   } else {
+       my @starts = split( /%STARTTEXT%/, $tmpl );
+       if ( $#starts > 0 ) {
+           # we know that there is something before %STARTTEXT%
+           $start = $starts[0];
+           $text = $starts[1];
+       } else {
+           $start = $tmpl;
+           $text = '';
+       }
+       $end = '';
+   }
 
    
    $text =~ s/\%TOC({.*?})?\%//g; # remove TWiki TOC
@@ -408,12 +410,12 @@ sub _fixHtml {
    my $pdir = TWiki::Func::getPubDir();
    my $purlp = TWiki::Func::getPubUrlPath();
 
-   $html =~ s!<img(.*?) src="($url)?$purlp!<img$1 src="$pdir\/!sgi;
-   $html =~ s/<a(.*?) href="\//<a$1 href="$url\//sgi;
+   $html =~ s!<img(.*?) src="($url)?$purlp!<img$1 src="$pdir\/!gi;
+   $html =~ s/<a(.*?) href="\//<a$1 href="$url\//gi;
    # link internally if we include the topic
    for my $wikiword (@$refTopics) {
       $url = TWiki::Func::getScriptUrl($webName, $wikiword, 'view');
-      $html =~ s/([\'\"])$url\1/$1#$wikiword$1/g; # not anchored
+      $html =~ s/([\'\"])$url/$1#$wikiword/g; # not anchored
       $html =~ s/$url(#\w*)/$1/g; # anchored
    }
 
@@ -445,7 +447,9 @@ sub _getPrefs {
   use constant SUBTITLE => "";
   use constant HEADERTOPIC => "";
   use constant TITLETOPIC => "";
-  use constant SKIN => "print";
+  use constant SKIN => "pattern";
+  use constant COVER => "print";
+  use constant TEMPLATE => "view";
   use constant RECURSIVE => undef;
   use constant FORMAT => "pdf14";
   use constant TOCLEVELS => 5;
@@ -468,6 +472,7 @@ sub _getPrefs {
   use constant PERMISSIONS => undef;
   use constant MARGINS => undef;
   use constant BODYCOLOR => undef;
+  use constant STRUCT => 'book';
 
 
    # header/footer topic
@@ -489,9 +494,16 @@ sub _getPrefs {
 
    $prefs{'subject'} = $query->param('pdfsubject') || TWiki::Func::getPreferencesValue("GENPDFADDON_SUBJECT") || SUBJECT;
 
-   $prefs{'skin'} = $query->param('skin') || TWiki::Func::getPreferencesValue("GENPDFADDON_SKIN") || '';
-   # Force a skin if the current value if the user didn't supply one (note that supplying a null one if OK)
-   $prefs{'skin'} = SKIN unless (defined $prefs{'skin'} || !defined $query->param('skin'));
+   # get skin path based on urlparams and genpdfaddon settings
+   $prefs{'skin'} = $query->param('skin') || TWiki::Func::getPreferencesValue("GENPDFADDON_SKIN") || SKIN;
+   $prefs{'cover'} = $query->param('cover') || TWiki::Func::getPreferencesValue("GENPDFADDON_COVER") || COVER;
+
+   # get view template
+   $prefs{'template'} = $query->param('template') || TWiki::Func::getPreferencesValue('VIEW_TEMPLATE') || TEMPLATE;
+
+   # get htmldoc structure mode
+   $prefs{'struct'} = $query->param('pdfstruct') || TWiki::Func::getPreferencesValue('GENPDFADDON_MODE') || STRUCT;
+   $prefs{'struct'} = STRUCT unless $prefs{'struct'} =~ /^(book|webpage|continuous)$/o;
 
    # Get TOC header/footer. Set to default if nothing useful given
    $prefs{'tocheader'} = $query->param('pdftocheader') || TWiki::Func::getPreferencesValue("GENPDFADDON_TOCHEADER") || '';
@@ -567,6 +579,7 @@ This is the core method to convert the current page into PDF format.
 =cut
 
 sub viewPDF {
+   open(STDERR, ">>$TWiki::cfg{DataDir}/error.log"); # redirect errors to a log file
 
    # initialize module wide variables
    $query = new CGI;
@@ -587,6 +600,7 @@ sub viewPDF {
 
    # Set a default skin in the query
    $query->param('skin', $prefs{'skin'});
+   $query->param('cover', $prefs{'cover'});
 
    # Check for existence
    TWiki::Func::redirectCgiQuery($query,
@@ -690,6 +704,7 @@ sub viewPDF {
       # Get ready to display HTML topic
       my $htmlData = _getRenderedView($webName, $topic);
 
+
       # Fix topic text (i.e. correct any problems with the HTML that htmldoc might not like
       $htmlData = _fixHtml($htmlData, $topic, $webName, \@topics);
 
@@ -718,7 +733,7 @@ sub viewPDF {
 
    # Convert contentFile to PDF using HTMLDOC
    my @htmldocArgs;
-   push @htmldocArgs, "--book",
+   push @htmldocArgs, "--$prefs{'struct'}",
                       "--quiet",
                       "--links",
                       "--linkstyle", "plain",
@@ -756,7 +771,7 @@ sub viewPDF {
 
    push @htmldocArgs, @contentFiles;
 
-#   print STDERR "Calling htmldoc with args: @htmldocArgs\n";
+   #print STDERR "Calling htmldoc with args: @htmldocArgs\n";
 
    #try the 4.2 sandbox
    my $sandbox = $TWiki::sandbox;
