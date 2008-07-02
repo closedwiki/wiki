@@ -50,7 +50,7 @@ sub manage {
     my $session = shift;
 
     my $action = $session->{cgiQuery}->param( 'action' ) || '';
-TWiki::Func::writeDebug("manage; action=$action");
+
     if( $action eq 'createweb' ) {
         _createWeb( $session );
     } elsif( $action eq 'changePassword' ) {
@@ -292,7 +292,7 @@ sub rename {
                 'accessdenied',
                 def => 'no_such_topic_rename',
                 web => $oldWeb,
-                topic => $oldTopic);
+                topic => $oldTopic );
         }
         $oldTopic = lcfirst $oldTopic;
     }
@@ -436,6 +436,10 @@ sub _renameweb {
     my $query = $session->{cgiQuery};
     my $user = $session->{user};
 
+    # If the user is not allowed to rename anything in the current web - stop here    
+    TWiki::UI::checkAccess( $session, $oldWeb, undef,
+                            'RENAME', $session->{user} );
+
     my $newParentWeb = $query->param( 'newparentweb' ) || '';
     unless ( !$newParentWeb || TWiki::isValidWebName( $newParentWeb, 1 )) {
         throw TWiki::OopsException
@@ -460,9 +464,22 @@ sub _renameweb {
             $newWeb=$newSubWeb;
         }
     }
+
     my @tmp = split( /[\/\.]/, $oldWeb );
     pop( @tmp );
     my $oldParentWeb = join( '/', @tmp );
+
+    # If the user is not allowed to rename anything in the parent web - stop here
+    # This also ensures we check root webs for ALLOWROOTRENAME and DENYROOTRENAME
+    TWiki::UI::checkAccess( $session, $oldParentWeb || undef, undef,
+                            'RENAME', $session->{user} );
+                            
+    # If old web is a root web then also stop if ALLOW/DENYROOTCHANGE prevents access
+    if ( !$oldParentWeb ) {
+        TWiki::UI::checkAccess( $session, $oldParentWeb || undef, undef,
+                                'CHANGE', $session->{user} );
+    }
+
     my $newTopic;
     my $lockFailure = '';
     my $breakLock = $query->param( 'breaklock' );
@@ -475,8 +492,7 @@ sub _renameweb {
 
     if( $newWeb ) {
         if( $newParentWeb ) {
-            # SMELL: need to check change permissions of new parent web
-            TWiki::UI::checkWebExists(
+             TWiki::UI::checkWebExists(
                 $session, $newParentWeb,
                 $TWiki::cfg{WebPrefsTopicName}, 'rename' );
         }
@@ -489,6 +505,10 @@ sub _renameweb {
                 topic => $TWiki::cfg{WebPrefsTopicName},
                 params => [ $newWeb, $TWiki::cfg{WebPrefsTopicName} ] );
         }
+
+        # Check if we have change permission in the new parent
+        TWiki::UI::checkAccess( $session, $newParentWeb || undef, undef,
+                                'CHANGE', $session->{user} );
     }
 
     if( ! $newWeb || $confirm ) {
@@ -510,7 +530,7 @@ sub _renameweb {
         $webTopicInfo{referring}{refs1} = $refs1;
 
         my $lease_ref;
-        foreach my $ref ( keys %refs) {
+        foreach my $ref ( keys %refs ) {
             if( defined( $ref ) && $ref ne "" ) {
                 $ref =~ s/\./\//go;
                 my (@path) = split( /\//, $ref );
@@ -524,7 +544,7 @@ sub _renameweb {
                                       $TWiki::cfg{LeaseLength});
                     $lease_ref = $store->getLease( $webIter, $webTopic );
                 } elsif( $confirm eq 'cancel' ) {
-                    $lease_ref=$store->getLease( $webIter, $webTopic );
+                    $lease_ref = $store->getLease( $webIter, $webTopic );
                     if( $lease_ref->{user} eq $user ) {
                         $store->clearLease( $webIter, $webTopic );
                     }
@@ -534,7 +554,7 @@ sub _renameweb {
                 $webTopicInfo{modify}{$wit}{leasetime} = $lease_ref->{taken};
 
                 $modifyingLockedTopics++
-                  if( defined($webTopicInfo{modify}{$ref}{leaseuser}) &&
+                  if( defined($webTopicInfo{modify}{$ref}{leaseuser} ) &&
                         $webTopicInfo{modify}{$ref}{leaseuser} ne $user );
                 $webTopicInfo{modify}{$ref}{summary} = $refs{$ref};
                 $webTopicInfo{modify}{$ref}{access} =
