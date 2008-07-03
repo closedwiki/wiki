@@ -7,7 +7,6 @@
    * Set EDIT_TEMPLATE = Applications.FormEdit
    * Set VIEW_TEMPLATE = Applications.HiddenFormView
 -->
-See also: [[%FORMFIELD{"Target"}%]]
 %STARTSECTION{type="templateonly"}%
 %RED%Note, this is only a template.%ENDCOLOR%
 
@@ -17,9 +16,6 @@ See also: TopicStub
    * Set EDIT_TEMPLATE =
 -->
 %ENDSECTION{type="templateonly"}%
-<!--
-   * Set DEPENDENCIES = TopicStub
--->
 
 
 %META:FORM{name="Applications.ApplicationTopic"}%

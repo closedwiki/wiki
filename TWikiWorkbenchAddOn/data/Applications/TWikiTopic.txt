@@ -26,7 +26,7 @@ See also: WebTopicEditTemplate
 %ENDSECTION{"documentation"}%
 
 ---++ Installation
-%DBCALL{"RenderTopicInstaller" PARENT="TopicType, TopicStub" PARENT="TopicType"}%
+%DBCALL{"RenderTopicInstaller" TYPE="%TOPIC%" PARENT="TopicType"}%
 
 ---++ Factory
 %STARTINCLUDE%
@@ -66,11 +66,6 @@ See also: WebTopicEditTemplate
 | TopicType | checkbox | 3 |%DBCALL{"Applications.GetTopicTypes" remote="off"}%| Document type  | |
 | <nop>TopicTitle | text | 75 | | title | |
 | Summary | text | 75 | | short description of the role of this topic |  |
-
-
-<!--
-   * Set DEPENDENCIES = TopicType
--->
 
 
 %META:FORM{name="Applications.TopicType"}%

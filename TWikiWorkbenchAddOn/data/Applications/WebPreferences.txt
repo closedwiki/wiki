@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1176879224" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1212998694" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WEB% Web Preferences
 
 %TOC%
@@ -62,6 +62,6 @@ __Related Topics__:
    * [[%TWIKIWEB%.TWikiPreferences]]
 
 %META:FORM{name="Applications.ApplicationTopic"}%
-%META:FIELD{name="TopicType" attributes="" title="TopicType" value="AdminTool"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="WebTool"}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="Preferences of the <nop>%25WEB%25 web"}%
 %META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TWikiWorkbench"}%

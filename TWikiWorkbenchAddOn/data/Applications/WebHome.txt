@@ -19,11 +19,10 @@ new applications.
 
 <!--
    * Set VIEW_TEMPLATE = Applications.HiddenFormView
-   * #Set DENYTOPICVIEW = %MAINWEB%.TWikiGuest
 -->
 
 
 %META:FORM{name="Applications.ApplicationTopic"}%
-%META:FIELD{name="TopicType" attributes="" title="TopicType" value="FrontPage"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="WebTool"}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="%25SITEMAPWHAT%25"}%
 %META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TWikiWorkbench"}%

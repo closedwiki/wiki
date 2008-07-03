@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1175708355" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1213008418" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopicTemplate"}%
 ---+ %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -15,7 +15,7 @@ See also: %TOPIC%Template
 %ENDSECTION{"documentation"}%
 
 ---++ Installation
-%DBCALL{"Applications.RenderTopicInstaller" TEXT="Install '%TOPIC%' TopicType in" TYPE="TopicType, TopicStub" PARENT="TopicType"}%
+%DBCALL{"Applications.RenderTopicInstaller" TEXT="Install '%TOPIC%' TopicType in" TYPE="TopicType"}%
 
 ---++ Factory
 %STARTINCLUDE%
@@ -28,9 +28,6 @@ See also: %TOPIC%Template
 }%
 
 %DBCALL{"Applications.RenderTopicsOfType" THEWEB="%U%NOP%RLPARAM{"web"}%"}%
-<!--
-   * Set DEPENDENCIES = TopicType
--->
 %STOPINCLUDE%
 
 ---++ %TOPIC% form
@@ -42,5 +39,6 @@ See also: %TOPIC%Template
 
 %META:FORM{name="Applications.ApplicationTopic"}%
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicTemplate"}%
+%META:FIELD{name="TopicTitle" attributes="" title="<nop>TopicTitle" value="TopicTypeTemplate"}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="Template to create TopicTypes"}%
 %META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TWikiWorkbench"}%

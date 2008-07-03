@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1139339192" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1212998721" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{}%
 <noautolink>
 %~~ DBQUERY{
@@ -10,6 +10,6 @@
 <noautolink>
 
 %META:FORM{name="Applications.ApplicationTopic"}%
-%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="Applications.WebTool"}%
 %META:FIELD{name="Summary" attributes="M" title="Summary" value="List of all topics in this web"}%
 %META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TWikiWorkbench"}%

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="micha" date="1206982559" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1206982559" format="1.1" reprev="1.2" version="$Rev$"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+!! Function: %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -18,40 +18,66 @@
 <verbatim>
 %STARTINCLUDE%<!-- render twiki application webhome -->
 <noautolink>
----++ AuthorTools
-%~~ DBQUERY{"TopicType=~'\bAuthorTool\b' AND TWikiApplication='%APP%' "
-~~~   remote="on"
-~~~   web="%BASEWEB%"
-~~~   hidenull="on"
-~~~   format="   * [[$web.$topic][$topic]]: $formfield(Summary)"
-~~~ }%
----++ TopicTypes
 %~~ DBQUERY{"TopicType=~'\bTopicType\b' AND TWikiApplication='%APP%'"
 ~~~   remote="on"
+~~~   header="<h2>[[TopicTypes]]</h2>$n"
 ~~~   web="%BASEWEB%"
 ~~~   hidenull="on"
-~~~   format="   * [[$web.$topic][$topic]]: $formfield(Summary)"
+~~~   format="   1 [[$web.$topic][$topic]]: $expand(Summary or TopicTitle)"
 ~~~ }%
----++ TopicFunctions
-%~~ DBQUERY{"TopicType=~'\bTopicFunction\b' AND TWikiApplication='%APP%'"
+%~~ DBQUERY{"TopicType=~'\bTWikiForm\b' AND !(TopicType=~'\bTopicType\b')
+~~~     AND TWikiApplication='%APP%'"
 ~~~   remote="on"
+~~~   header="<h2>[[TWikiForms]]</h2>$n"
 ~~~   web="%BASEWEB%"
 ~~~   hidenull="on"
-~~~   format="   * [[$web.$topic][$topic]]: $formfield(Summary)"
+~~~   format="   1 [[$web.$topic][$topic]]: $expand(Summary or TopicTitle)"
 ~~~ }%
----++ TopicViews
-%~~ DBQUERY{"TopicType=~'\bTopicView\b' AND TWikiApplication='%APP%'"
+%~~ DBQUERY{"TopicType=~'\bTWikiFormAttribute\b'
+~~~     AND TWikiApplication='%APP%'"
 ~~~   remote="on"
+~~~   header="<h2>[[TWikiFormAttributes]]</h2>$n"
 ~~~   web="%BASEWEB%"
 ~~~   hidenull="on"
-~~~   format="   * [[$web.$topic][$topic]]: $formfield(Summary)"
+~~~   format="   1 [[$web.$topic][$topic]]: $expand(Summary or TopicTitle)"
 ~~~ }%
----++ TopicTemplates
 %~~ DBQUERY{"TopicType=~'\bTopicTemplate\b' AND TWikiApplication='%APP%'"
 ~~~   remote="on"
 ~~~   web="%BASEWEB%"
 ~~~   hidenull="on"
-~~~   format="   * [[$web.$topic][$topic]]: $formfield(Summary)"
+~~~   header="<h2>[[TopicTemplates]]</h2>$n"
+~~~   format="   1 [[$web.$topic][$topic]]: $expand(Summary or TopicTitle)"
+~~~ }%
+%~~ DBQUERY{"TopicType=~'\bTopicFunction\b' AND TWikiApplication='%APP%'"
+~~~   remote="on"
+~~~   web="%BASEWEB%"
+~~~   hidenull="on"
+~~~   header="<h2>[[TopicFunctions]]</h2>$n"
+~~~   format="   1 [[$web.$topic][$topic]]: $expand(Summary or TopicTitle)"
+~~~ }%
+%~~ DBQUERY{"TopicType=~'\bTopicView\b' AND TWikiApplication='%APP%'"
+~~~   remote="on"
+~~~   web="%BASEWEB%"
+~~~   hidenull="on"
+~~~   header="<h2>[[TopicViews]]</h2>$n"
+~~~   format="   1 [[$web.$topic][$topic]]: $expand(Summary or TopicTitle)"
+~~~ }%
+%~~ DBQUERY{
+~~~   "TopicType=~'\bApplicationTopic\b' 
+~~~     AND !(TopicType=~'\b(TopicType|TWikiForm|TopicTemplate|TopicFunction|TopicView|WebTool)\b')
+~~~     AND TWikiApplication='%APP%'"
+~~~   remote="on"
+~~~   header="<h2>Other [[ApplicationTopics]]</h2>$n"
+~~~   web="%BASEWEB%"
+~~~   hidenull="on"
+~~~   format="   1 [[$web.$topic][$topic]]: $expand(Summary or TopicTitle)"
+~~~ }%
+%~~ DBQUERY{"TopicType=~'\bWebTool\b' AND TWikiApplication='%APP%'"
+~~~   remote="on"
+~~~   web="%BASEWEB%"
+~~~   hidenull="on"
+~~~   header="<h2>[[WebTools]]</h2>$n"
+~~~   format="   1 [[$web.$topic][$topic]]: $expand(Summary or TopicTitle)"
 ~~~ }%
 </noautolink>
 <!-- //render twiki application webhome -->%STOPINCLUDE%
@@ -72,10 +98,6 @@
 
 %DBCALL{"Applications.GnuGeneralPublicLicense" section="notice"}%
 </div>
-<!--
-   * Set DEPENDENCIES = TopicFunction
--->
-
 
 
 %META:FORM{name="Applications.ApplicationTopic"}%

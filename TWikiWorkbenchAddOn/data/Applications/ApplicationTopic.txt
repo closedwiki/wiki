@@ -4,7 +4,7 @@
 %FORMFIELD{"Summary"}%
 
 ---++ Installation
-%DBCALL{"RenderTopicInstaller" TEXT="Install '%TOPIC%' TopicType in" TYPE="TopicType" PARENT="TopicType, TopicStub"}%
+%DBCALL{"RenderTopicInstaller" TEXT="Install '%TOPIC%' TopicType in" TYPE="TopicType" PARENT="TopicType"}%
 
 ---++ Factory
 %STARTINCLUDE%
@@ -33,10 +33,6 @@ more specific TopicTypes like the topic creator for TopicFunctions etc.
 | <nop>TopicTitle | text | 75 | | title | |
 | Summary | text | 75 | | Short description of the role of this topic | |
 | TWikiApplication| select | 1 |%FLEXWEBLIST{subwebs="Applications" header="none, " footer="TWikiWorkbench" format="$name, "}%| Application this topic belongs to | |
-
-<!--
-   * Set DEPENDENCIES = TopicType
--->
 
 
 %META:FORM{name="Applications.TopicType"}%

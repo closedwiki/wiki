@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1194434861" format="1.1" reprev="1.4" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1213608938" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopicType"}%
 ---+!! %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -13,5 +13,6 @@ See also: [[%FORMFIELD{"Target"}%]]
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicStub, TopicType"}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="TopicTypes for topics on the administrative level"}%
 %META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TWikiWorkbench"}%
-%META:FIELD{name="Target" attributes="" title="Target" value="Applications.AdminTool"}%
+%META:FIELD{name="Target" attributes="" title="Target" value="Applications.WebTool"}%
 %META:FIELD{name="Section" attributes="" title="Section" value=""}%
+%META:TOPICMOVED{by="micha" date="1212999324" from="_TWikiApplicationTemplate.AdminTool" to="_TWikiApplicationTemplate.WebTool"}%

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1184013397" format="1.1" reprev="1.4" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1212999732" format="1.1" version="$Rev$"}%
 ---+!! Welcome to the %WEB% web
 
 This a template web that contains a Applications.TWikiWorkbench to create a new Applications.TWikiApplication.
@@ -8,48 +8,7 @@ This a template web that contains a Applications.TWikiWorkbench to create a new 
 
 %DBCALL{"Applications.FirstSteps"}%
 
-
-
-<noautolink>
-%~~ DBQUERY{"TopicType=~'\bAuthorTool\b'"
-~~~   hidenull="on"
-~~~   header="---++ Author Tools$n"
-~~~   format="   * [[$web.$topic][$topic]]: $formfield(Summary)"
-~~~ }%
-
-%~~ DBQUERY{"TopicType=~'\bDevelopmentTool\b'"
-~~~   hidenull="on"
-~~~   header="---++ Development Tools$n"
-~~~   format="   * [[$web.$topic][$topic]]: $formfield(Summary)"
-~~~ }%
-
-%~~ DBQUERY{"TopicType=~'\bAdminTool\b'"
-~~~   hidenull="on"
-~~~   header="---++ Admin Tools$n"
-~~~   format="   * [[$web.$topic][$topic]]: $formfield(Summary)"
-~~~ }%
-</noautolink>
-
-<!--
-%!TOC%
-%!DBCALL{"Applications.RenderTopicTypeCloud" TYPE="TWikiApplication"}%
-%!DBCALL{"Applications.RenderTopicTypeCloud" TYPE="TopicType"}%
-%!DBCALL{"Applications.RenderTopicTypeCloud" TYPE="TWikiForm"}%
-%!DBCALL{"Applications.RenderTopicTypeCloud" 
-  TYPE="TopicFunction" 
-  FILTER="\bRender"
-  FORMAT="[[%BASEWEB%.Render$term][Render$term]]"
-}%
-%!DBCALL{"Applications.RenderTopicTypeCloud" TYPE="TopicView"}%
-%!DBCALL{"Applications.RenderTopicTypeCloud" TYPE="TopicTemplate"}%
--->
-
-<style type="text/css">
-.twbGroup {
-  font-size:1.1em;
-  font-weight:bold;
-}
-</style>
+%DBCALL{"Applications.RenderTWikiApplicationWebHome" APP="%FLEXWEBLIST{webs="%WEB%" format="$name"}%"}%
 
 <!--
    * Set VIEW_TEMPLATE = Applications.HiddenFormView
@@ -57,6 +16,7 @@ This a template web that contains a Applications.TWikiWorkbench to create a new 
 
 
 %META:FORM{name="Applications.ApplicationTopic"}%
-%META:FIELD{name="TopicType" attributes="" title="TopicType" value="FrontPage"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="WebTool"}%
+%META:FIELD{name="TopicTitle" attributes="" title="<nop>TopicTitle" value="WebHome"}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="%25SITEMAPWHAT%25"}%
 %META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TWikiWorkbench"}%

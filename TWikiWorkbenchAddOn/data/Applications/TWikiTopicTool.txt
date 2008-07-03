@@ -1,5 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1158328029" format="1.1" reprev="1.1" version="$Rev$"}%
-%META:TOPICPARENT{name="AuthorTool"}%
 ---+!! [[%BASEWEB%.%BASETOPIC%][%BASETOPIC%]]
 %FORMFIELD{"Summary"}%
 
@@ -7,7 +6,7 @@
 %DBCALL{"Applications.RenderSimpleTopicCreator" 
   TEXT="Topic" 
   VALUE="..."
-  TYPE="%TOPIC%"
+  TYPE="%TOPIC%, TopicStub"
   TEMPLATE="WebTopicEditTemplate"
   PARENT="WebHome"
 }%
@@ -16,6 +15,6 @@
 
 
 %META:FORM{name="Applications.ApplicationTopic"}%
-%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AuthorTool"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="ApplicationTopic"}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="Tool to create TWikiTopics"}%
 %META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TWikiWorkbench"}%

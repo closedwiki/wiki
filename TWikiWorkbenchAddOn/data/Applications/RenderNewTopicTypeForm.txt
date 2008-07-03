@@ -25,7 +25,7 @@
 <input type="hidden" name="Summary" value="" />
 <input type="hidden" name="topicparent" value="%NAME%" />
 <input type="submit" value="New <nop>%NAME%" class="blogSubmitButton" />
-<input type="text" name="topic" size="40" />
+<input class="twikiInputField" type="text" name="topic" size="40" />
 </form> 
 </div>
 ~~~

@@ -10,9 +10,6 @@
 
 See also: TopicView
 %ENDSECTION{type="templateonly"}%
-<!--
-   * Set DEPENDENCIES = TopicView
--->
 
 %META:FORM{name="Applications.ApplicationTopic"}%
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicTemplate"}%

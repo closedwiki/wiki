@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1159799217" format="1.1" reprev="1.2" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1212998721" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{}%
 ---+ <nop>%TOPIC%
 
@@ -17,6 +17,6 @@ Format:
 
 
 %META:FORM{name="Applications.ApplicationTopic"}%
-%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="Applications.WebTool"}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="EMail subscription service for the %25WEB%25 web"}%
 %META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TWikiWorkbench"}%

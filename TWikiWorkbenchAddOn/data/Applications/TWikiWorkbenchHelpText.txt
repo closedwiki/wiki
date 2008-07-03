@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1159628032" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1212998693" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+!! %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -36,6 +36,6 @@ the [[Applications.TopicType][TopicTypes]].
 
 
 %META:FORM{name="Applications.ApplicationTopic"}%
-%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="WebTool"}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="Help texts used in this application"}%
 %META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TWikiWorkbench"}%

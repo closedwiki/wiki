@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1185722140" format="1.1" reprev="1.9" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1212998693" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopicType"}%
 ---+ %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -6,23 +6,17 @@
 ---++ Documentation
 %STARTSECTION{name="documentation" type="section"}%
 Note, that there is no creator to build a topic of this kind as it is a pure "marker type", that is topics
-are created with another creator tool and then in addition marked to be an AdminTool. Topics of this type
+are created with another creator tool and then in addition marked to be an WebTool. Topics of this type
 are ApplicationTopics too and take associated TWikiForm.
-See also DevelopmentTool.
 %ENDSECTION{name="documentation" type="section"}%
 
 ---++ Installation
-%DBCALL{"RenderTopicInstaller" TEXT="Install '%TOPIC%' TopicType in" TYPE="TopicType, TopicStub" PARENT="TopicType"}%
+%DBCALL{"RenderTopicInstaller" TEXT="Install '%TOPIC%' TopicType in" TYPE="TopicType" PARENT="TopicType"}%
 
 %STARTINCLUDE%
 %DBCALL{"Applications.RenderTopicsOfType" THEWEB="%URLPARAM{"web"}%"}%
 %STOPINCLUDE%
 
-
-
-<!--
-   * Set DEPENDENCIES = TopicType
--->
 
 
 

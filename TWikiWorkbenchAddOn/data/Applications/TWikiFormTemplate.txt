@@ -8,10 +8,6 @@
 | <nop>TopicTitle | text | 75 | | title | |
 | Summary | text | 75 | | Short description of the role of this topic | |
 
-<!--
-   * Set DEPENDENCIES = TWikiForm
--->
-
 See also: %TWIKIWEB%.TWikiForms
 %STARTSECTION{type="templateonly"}%
 %RED%Note, this is only a template.%ENDCOLOR%

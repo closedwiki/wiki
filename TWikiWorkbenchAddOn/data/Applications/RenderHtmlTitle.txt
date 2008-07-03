@@ -11,11 +11,8 @@ NONE
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%<noautolink>
-*~~
-%~~ DBQUERY{topic="%BASEWEB%.%BASETOPIC%"
-~~~   format="$expand(TopicTitle or topic) - $expand(Summary and ' -') $web"
-~~~ }%
-*~~ </noautolink>%STOPINCLUDE%
+%TOPICTITLE% - %FORMATLIST{"%BASEWEB%" reverse="on" split="[./]" format="$1" separator=" - "}%
+</noautolink>%STOPINCLUDE%
 </verbatim>
 
 <!-- interrupt glue -->

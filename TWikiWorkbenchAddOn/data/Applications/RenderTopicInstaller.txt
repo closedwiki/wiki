@@ -20,7 +20,7 @@ TopicStub is to be created.
    * TEXT: label of the input field, defaults to "Install BASETOPIC in"
    * NAME: name of the topic to be created, defaults to BASETOPIC
    * SOURCE: used to specify the TopicStub's target to be created, defaults to BASEWEB.BASETOPIC
-   * PARENT: topicparent of the new topic, defaults to BASEWEB.BASETOPIC
+   * PARENT: topicparent of the new topic, defaults to HOMETOPIC
    * TEMPLATE: TopicTemplate used to create this topic, defaults to Applications.TopicStubTemplate
    * FORM: TWikiForm used for this topic, defaults to Applications.TopicStub
    * TYPE: type of the new topic, defaults to TopicStub
@@ -39,7 +39,7 @@ TopicStub is to be created.
 <input type="hidden" name="topicparent" value="%IFDEFINED{"%PARENT%" then="%PARENT%" else="%HOMETOPIC%"}%" />
 <input type="hidden" name="templatetopic" value="%IFDEFINED{"%TEMPLATE%" then="%TEMPLATE%" else="Applications.TopicStubTemplate"}%" />
 <input type="hidden" name="formtemplate" value="%IFDEFINED{"%FORM%" then="%FORM%" else="Applications.TopicStub"}%" />
-<input type="hidden" name="TopicType" value="%IFDEFINED{"%TYPE%" then="%TYPE%" else="TopicStub"}%" />
+<input type="hidden" name="TopicType" value="%IFDEFINED{"%TYPE%" then="TopicStub, %TYPE%" else="TopicStub"}%" />
 <input type="hidden" name="Target" value="%IFDEFINED{"%SOURCE%" then="%SOURCE%" else="%BASEWEB%.%BASETOPIC%"}%" />
 %IFDEFINED{"%EXTRA%"}%
 <input type="hidden" name="topic" value="%IFDEFINED{"%NAME%" then="%NAME%" else="<nop>%BASETOPIC%"}%" />
@@ -79,10 +79,6 @@ TopicStub is to be created.
 
 %DBCALL{"Applications.GnuGeneralPublicLicense" section="notice"}%
 </div>
-<!--
-   * Set DEPENDENCIES = TopicFunction
--->
-
 
 
 %META:FORM{name="Applications.ApplicationTopic"}%

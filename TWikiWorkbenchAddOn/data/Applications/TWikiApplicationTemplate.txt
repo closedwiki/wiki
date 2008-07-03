@@ -23,9 +23,6 @@ See also: TWikiApplication
 
 ---++ Manifest
 %DBCALL{"Applications.RenderApplicationManifest" THEWEB="%WEB%"}%
-<!--
-   * Set DEPENDENCIES = TWikiApplication
--->
 
 %META:FORM{name="Applications.ApplicationTopic"}%
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicTemplate"}%

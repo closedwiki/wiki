@@ -37,9 +37,6 @@
 
 %DBCALL{"Applications.GnuGeneralPublicLicense" section="notice"}%
 </div>
-<!--
-   * Set DEPENDENCIES = TopicFunction
--->
 
 %STARTSECTION{type="templateonly"}%
 %RED%Note, this is only a template.%ENDCOLOR%

@@ -12,16 +12,17 @@ documentation for this application.
 
 ---+++ Model
 When starting to write a new <nop>TWikiApplication, you may proceed by creating new TopicTypes, that are specific
-for it. TopicTypes will define the data model, and optionally an AuthorTool that helps in creating a new topic of
-the new type. 
+for it. TopicTypes will define the data model, and optionally an installer and a factory that help in deploying and 
+creating a new topic of the new type. 
 
 Now create a few instances of the new TopicType. For now, it only has a plain text and probably a TWikiForm attached
-to it. The AuthorTool can create a topic using a TopicTemplate as a blueprint. This blueprint shall have all the
-specific means pre-installed that are needed to properly display a topic of that type.
+to it. The TopicTypes are used to create a topic of that type, together with an optional TopicTemplate as a blueprint. 
+This blueprint shall have all the specific means pre-installed that are needed
+to properly display a topic of that type.
 
 ---+++ View
 After you created the data model and a few topic instances of that type, you can start writing
-TopicFunctions to refine the AuthorTools. For example create a <nop>RenderMyNewTopicType that displays the data
+TopicFunctions to control this data. For example create a <nop>RenderMyNewTopicType that displays the data
 of one topic. Now create a TopicView that includes a call to this new TopicFunction. Then apply the TopicView to
 a topic by setting its VIEW_TEMPLATE property. Add this setting to the TopicTemplate so that each newly authored
 topic of that type will have the correct view applied to it.

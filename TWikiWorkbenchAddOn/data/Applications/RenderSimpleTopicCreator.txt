@@ -45,7 +45,7 @@
 <input type="hidden" name="Summary" value="" />
 <table style="width:auto"><tr>
 <th>New <nop>%IFDEFINED{"%TEXT%" then="%TEXT%" else="%BASETOPIC%"}%</th>
-<td><input class="twbTopicTypeNewText" type="text" name="topic" size="40" value="%IFDEFINED{"%VALUE%"}%"/></td>
+<td><input class="twikiInputField twbTopicTypeNewText" type="text" name="topic" size="40" value="%IFDEFINED{"%VALUE%"}%"/></td>
 <td><input type="submit" value="Ok" class="twikiSubmit twbTopicTypeNewButton natOkButton" /></td>
 </tr></table>
 </form> 

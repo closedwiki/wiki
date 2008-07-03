@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1199100332" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1213045346" format="1.1" reprev="1.2" version="$Rev$"}%
 %META:TOPICPARENT{name="TopicType"}%
 ---+ %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -11,25 +11,38 @@ a TWikiForm definition to initialize the new topic with the given properties by 
 for the content, and attaching the given <nop>TWikiForm.
 
 %ENDSECTION{"documentation"}%
+---++ Installation
+%DBCALL{"RenderTopicInstaller" TEXT="Install '%TOPIC%' TopicType in" TYPE="TopicType"}%
 
+---++ Factory
+%STARTINCLUDE%
 %DBCALL{"Applications.RenderSimpleTopicCreator" 
-  TEXT="%TOPIC%" 
+  TEXT="template" 
   VALUE="..."
   TYPE="%TOPIC%"
   TEMPLATE="Applications.%TOPIC%Template"
   FORM="Applications.ApplicationTopic"
 }%
-
-%DBCALL{"Applications.RenderTopicsOfType" THEWEB="%URLPARAM{"web"}%"}%
+---++ Topics of type '%TOPIC%'
+<noautolink>
+%~~ DBQUERY{"TopicType=~'\bTopicTemplate\b'"
+~~~   web="%BASEWEB%"
+~~~   header="$percntTABLE{tablewidth=\"100%\"}$percnt$n
+~~~           | *Nr*
+~~~           | *Name*
+~~~           | *Summary*
+~~~           |$n"
+~~~   format="| $index
+~~~           | [[$web.$topic][$expand(topictitle or topic)]]
+~~~           | $expand(Summary)
+~~~           |"
+~~~ }%
 %STOPINCLUDE%
-<!--
-   * Set DEPENDENCIES = TopicType
--->
 
 
 %META:FORM{name="Applications.TopicType"}%
-%META:FIELD{name="TopicType" attributes="" title="TopicType" value="DevelopmentTool, DocuTopic, TopicType"}%
-%META:FIELD{name="TopicTitle" attributes="" title="<nop>TopicTitle" value=""}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="DocuTopic, TopicType"}%
+%META:FIELD{name="TopicTitle" attributes="" title="<nop>TopicTitle" value="TopicTemplate"}%
 %META:FIELD{name="Inheritance" attributes="" title="Inheritance" value="ApplicationTopic"}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="Blueprints of TWiki content"}%
 %META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TWikiWorkbench"}%

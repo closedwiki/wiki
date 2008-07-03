@@ -15,11 +15,11 @@
 <table>
 <tr>
 <td class="twikiFirstCol">Name:</td>
-<td><input name="newweb" type="text" value="Applications...." size="50" /></td>
+<td><input class="twikiInputField" name="newweb" type="text" value="Applications...." size="50" /></td>
 </tr>
 <tr>
 <td class="twikiFirstCol">Description:</td>
-<td><input type="text" name="sitemapwhat" value="" size="50" /></td>
+<td><input class="twikiInputField" type="text" name="sitemapwhat" value="" size="50" /></td>
 </tr>
 <tr>
 <td class="twikiFirstCol">&nbsp;</td>
