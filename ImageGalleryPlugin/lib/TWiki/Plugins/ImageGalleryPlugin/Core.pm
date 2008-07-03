@@ -2,7 +2,7 @@
 # TWiki WikiClone ($wikiversion has version info)
 #
 # Copyright (C) 2002-2003 Will Norris. All Rights Reserved. (wbniv@saneasylumstudios.com)
-# Copyright (C) 2005 Michael Daum <micha@nats.informatik.uni-hamurg.de>
+# Copyright (C) 2005-2008 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -28,24 +28,32 @@ sub new {
   my ($class, $id, $topic, $web) = @_;
   my $this = bless({}, $class);
 
-  eval 'use Image::Magick;';
   $web =~ s/\//\./go;
 
   # init
+
+  # Graphics::Magick is less buggy than Image::Magick
+  my $impl = 
+    $TWiki::cfg{ImageGalleryPlugin}{Impl} || 
+    $TWiki::cfg{ImagePlugin}{Impl} || 'Image::Magick'; 
+
+  eval "use $impl";
+  die $@ if $@;
+  $this->{mage} = new $impl;
+
   $this->{id} = $id;
-  $this->{query} = &TWiki::Func::getCgiQuery();
-  $this->{mage} = new Image::Magick;
+  $this->{query} = TWiki::Func::getCgiQuery();
   $this->{isDakar} = defined $TWiki::RELEASE;
   $this->{topic} = $topic;
   $this->{web} = $web;
   $this->{doRefresh} = 0;
   $this->{errorMsg} = ''; # from image mage
 
-  $this->{wikiUserName} = &TWiki::Func::getWikiUserName();
-  $this->{pubDir} = &TWiki::Func::getPubDir();
+  $this->{wikiUserName} = TWiki::Func::getWikiUserName();
+  $this->{pubDir} = TWiki::Func::getPubDir();
   $this->{imagesDir} = $this->{pubDir}.'/images';
-  $this->{pubUrlPath} = &TWiki::Func::getPubUrlPath();
-  $this->{twikiWebName} = &TWiki::Func::getTwikiWebname();
+  $this->{pubUrlPath} = TWiki::Func::getPubUrlPath();
+  $this->{twikiWebName} = TWiki::Func::getTwikiWebname();
 
   my $defaultThumbSizes = $TWiki::cfg{Plugins}{ImageGalleryPlugin}{ThumbSizes} || [];
   # get predefined thumbnail sizes
@@ -64,7 +72,7 @@ sub new {
   # get image mimes
   my $mimeTypesFilename = ($this->{isDakar})?
     $TWiki::cfg{MimeTypesFileName}:$TWiki::mimeTypesFilename;
-  my $fileContent = &TWiki::Func::readFile($mimeTypesFilename);
+  my $fileContent = TWiki::Func::readFile($mimeTypesFilename);
   $this->{isImageSuffix} = ();
   foreach my $line (split(/\r?\n/, $fileContent)) {
     next if $line =~ /^#/;
@@ -101,7 +109,7 @@ sub isImage {
   writeDebug("called isImage(". $attachment->{name}.")");
 
   my $suffix = '';
-  if ($attachment->{name} =~ /\.(.+)$/) {
+  if ($attachment->{name} =~ /\.(.+?)$/) {
     $suffix = lc($1);
   }
 
@@ -179,6 +187,13 @@ sub init {
     $this->{doThumbTitles} = $this->{doTitles};
   }
 
+  $this->{listsvg} = $params->{listsvg} || 'off';
+  $this->{listsvg} = ($this->{listsvg} eq 'on')?1:0;
+
+  $this->{warn} = $params->{warn};
+  $this->{warn} = 'no images found' unless defined $this->{warn};
+  $this->{warn} = '' if $this->{warn} eq 'off';
+
   $this->{limit} = $params->{limit} || 0;
   $this->{skip} = $params->{skip} || 0;
 
@@ -193,7 +208,7 @@ sub init {
     $this->{field} = 'name';
   }
 
-  $this->{sort} = $params->{sort} || 'date';
+  $this->{sort} = $params->{sort} || 'name';
   $this->{sort} = 'date' unless $this->{sort} =~ /^date|name|comment|size$/;
 
   $this->{reverse} = $params->{rev} || $params->{reverse} || 'off';
@@ -227,6 +242,10 @@ sub render {
     next if $found;
     my $img = "$this->{igpDir}/$entry->{name}";
     my $thumb = "$this->{igpDir}/thumb_$entry->{name}";
+    if ($entry->{name} =~ /\.svgz?$/) {
+      $img .= 'png'; 
+      $thumb .= 'png'; 
+    }
 
     $img = $this->normalizeFileName($img);
     $thumb = $this->normalizeFileName($thumb);
@@ -276,11 +295,11 @@ sub renderImage {
 
   my $result = '';
 
-  my $firstFile;
-  my $lastFile;
-  my $nextFile;
-  my $thisImage;
-  my $prevFile;
+  my $firstImg;
+  my $lastImg;
+  my $nextImg;
+  my $thisImg;
+  my $prevImg;
 
   my $state = 0;
 
@@ -291,48 +310,56 @@ sub renderImage {
     $state = 2 if $state == 1;
     $state = 1 if $image->{name} eq $filename; 
     
-    $firstFile = $image->{name} if ! $firstFile;
-    $prevFile = $image->{name} if $state == 0;
-    $thisImage = $image if $state == 1;
-    $nextFile = $image->{name} if $state == 2;
-    $lastFile = $image->{name};
+    $firstImg = $image->{name} if ! $firstImg;
+    $prevImg = $image->{name} if $state == 0;
+    $thisImg = $image if $state == 1;
+    $nextImg = $image->{name} if $state == 2;
+    $lastImg = $image->{name};
   }
-  return &renderError("unknown file $filename") if !$thisImage;
-
-  my $viewUrl = &TWiki::Func::getViewUrl($this->{web}, $this->{topic});
+  return renderError("unknown file $filename") if !$thisImg;
 
   # document relations
   if ($this->{doDocRels}) {
     $result .=
-      "<link rel=\"parent\" href=\"$viewUrl\" title=\"Thumbnails\" />\n";
-    if ($firstFile && $firstFile ne $filename) {
+      "<link rel=\"parent\" href=\"".
+       TWiki::Func::getViewUrl($thisImg->{IGP_web}, $thisImg->{IGP_topic}) .
+      "\" title=\"Thumbnails\" />\n";
+    if ($firstImg && $firstImg ne $filename) {
       $result .=
-        "<link rel=\"first\" href=\"$viewUrl?id=$this->{id}&filename=$firstFile#igp$this->{id}\" title=\"$firstFile\" />\n";
+        "<link rel=\"first\" href=\"".
+        TWiki::Func::getViewUrl($firstImg->{IGP_web}, $firstImg->{IGP_topic}) .
+        "?id=$this->{id}&filename=$firstImg#igp$this->{id}\" title=\"$firstImg\" />\n";
     }
-    if ($lastFile && $lastFile ne $filename) {
+    if ($lastImg && $lastImg ne $filename) {
       $result .=
-          "<link rel=\"last\" href=\"$viewUrl?id=$this->{id}&filename=$lastFile#igp$this->{id}\" title=\"$lastFile\" />\n";
+          "<link rel=\"last\" href=\"".
+          TWiki::Func::getViewUrl($lastImg->{IGP_web}, $lastImg->{IGP_topic}) .
+          "?id=$this->{id}&filename=$lastImg#igp$this->{id}\" title=\"$lastImg\" />\n";
     }
-    if ($nextFile && $lastFile ne $filename) {
+    if ($nextImg && $lastImg ne $filename) {
       $result .=
-          "<link rel=\"next\" href=\"$viewUrl?id=$this->{id}&filename=$nextFile#igp$this->{id}\" title=\"$nextFile\" />\n";
+          "<link rel=\"next\" href=\"".
+          TWiki::Func::getViewUrl($nextImg->{IGP_web}, $nextImg->{IGP_topic}) .
+          "?id=$this->{id}&filename=$nextImg#igp$this->{id}\" title=\"$nextImg\" />\n";
     }
-    if ($prevFile && $firstFile ne $filename) {
+    if ($prevImg && $firstImg ne $filename) {
       $result .=
-        "<link rel=\"previous\" href=\"$viewUrl?id=$this->{id}&filename=$prevFile#igp$this->{id}\" title=\"$prevFile\" />\n";
+        "<link rel=\"previous\" href=\"".
+        TWiki::Func::getViewUrl($prevImg->{IGP_web}, $prevImg->{IGP_topic}) .
+        "?id=$this->{id}&filename=$prevImg#igp$this->{id}\" title=\"$prevImg\" />\n";
     }
   }
 
   # collect image information
-  $this->computeImageSize($thisImage);
-  if (!$this->createImg($thisImage)) {
-    return &renderError($this->{errorMsg});
+  $this->computeImageSize($thisImg);
+  if (!$this->createImg($thisImg)) {
+    return renderError($this->{errorMsg});
   }
 
   # title
   if ($this->{doTitles}) {
     $result .= "<div class=\"igpPictureTitle\"><h2>"
-      . $this->replaceVars($this->{title}, $thisImage)
+      . $this->replaceVars($this->{title}, $thisImg)
       . "</h2></div>\n";
   }
 
@@ -341,26 +368,34 @@ sub renderImage {
 
   # navi
   $result .= "<tr><td class=\"igpNavigation\">";
-  if ($firstFile && $firstFile ne $filename) {
-    $result .= "<a href=\"$viewUrl?id=$this->{id}&filename=$firstFile#igp$this->{id}\">first</a>";
+  if ($firstImg && $firstImg ne $filename) {
+    $result .= "<a href=\"".
+    TWiki::Func::getViewUrl($thisImg->{IGP_web}, $thisImg->{IGP_topic}) .
+    "?id=$this->{id}&filename=$firstImg#igp$this->{id}\">first</a>";
   } else {
     $result .= "first";
   }
   $result .= ' | ';
-  if ($prevFile) {
-    $result .= "<a href=\"$viewUrl?id=$this->{id}&filename=$prevFile#igp$this->{id}\">prev</a>";
+  if ($prevImg) {
+    $result .= "<a href=\"".
+    TWiki::Func::getViewUrl($prevImg->{IGP_web}, $prevImg->{IGP_topic}) .
+    "?id=$this->{id}&filename=$prevImg#igp$this->{id}\">prev</a>";
   } else {
     $result .= "prev";
   }
   $result .= " | [[$this->{web}.$this->{topic}][up]] | ";
-  if ($nextFile) {
-    $result .= "<a href=\"$viewUrl?id=$this->{id}&filename=$nextFile#igp$this->{id}\">next</a>";
+  if ($nextImg) {
+    $result .= "<a href=\"".
+    TWiki::Func::getViewUrl($nextImg->{IGP_web}, $nextImg->{IGP_topic}) .
+    "?id=$this->{id}&filename=$nextImg#igp$this->{id}\">next</a>";
   } else {
     $result .= "next";
   }
   $result .= ' | ';
-  if ($lastFile && $lastFile ne $filename) {
-    $result .= "<a href=\"$viewUrl?id=$this->{id}&filename=$lastFile#igp$this->{id}\">last</a>";
+  if ($lastImg && $lastImg ne $filename) {
+    $result .= "<a href=\"".
+    TWiki::Func::getViewUrl($lastImg->{IGP_web}, $lastImg->{IGP_topic}) .
+    "?id=$this->{id}&filename=$lastImg#igp$this->{id}\">last</a>";
   } else {
     $result .= "last";
   }
@@ -368,7 +403,7 @@ sub renderImage {
 
   # img
   $result .= "<tr><td class=\"igpPicture\">" 
-    . $this->replaceVars($this->{format}, $thisImage)
+    . $this->replaceVars($this->{format}, $thisImg)
     . "</td></tr></table>\n";
 
   return $result;
@@ -382,9 +417,7 @@ sub renderThumbnails {
   #writeDebug("renderThumbnails()");
 
   if (!@{$this->{images}}) {
-    my $msg = "no images found";
-    #writeDebug($msg);
-    return &renderError($msg); 
+    return renderError($this->{warn}); 
   }
 
   my $maxCols = $this->{columns};
@@ -404,13 +437,14 @@ sub renderThumbnails {
     }
 
     $result .= "<td width=\"" . (100 / $maxCols) . "%\" class=\"igpThumbNail\"><a href=\""
-      .  &TWiki::Func::getScriptUrl($this->{web}, $this->{topic}, "view")
+      .  TWiki::Func::getViewUrl($image->{IGP_web}, $image->{IGP_topic})
       . "?id=$this->{id}&filename=$image->{name}#igp$this->{id}\">"
-      . "<img src=\"$this->{imagesPubUrl}/thumb_$image->{name}\" "
-      . "title=\"$image->{IGP_comment}\" alt=\"$image->{name}\"/></a></td>\n";
+      . "<img src=\"$this->{imagesPubUrl}/thumb_$image->{name}"
+      . (($image->{name} =~ /\.svgz?$/ )?'.png':'')
+      . "\" title=\"$image->{IGP_comment}\" alt=\"$image->{name}\"/></a></td>\n";
 
     if (!$this->createImg($image, 1)) {
-      return &renderError($this->{errorMsg});
+      return renderError($this->{errorMsg});
     }
 
     $imageNr++;
@@ -464,9 +498,15 @@ sub renderTitleRow {
 sub renderRedDot {
   my ($this, $image) = @_;
 
+  my $changeAccessOK =
+    TWiki::Func::checkAccessPermission("change", $this->{wikiUserName}, undef,
+      $image->{IGP_topic}, $image->{IGP_web});
+
+  return '' unless $changeAccessOK;
+
   return 
     "<span class=\"igpRedDot\"><a href=\"" 
-    . &TWiki::Func::getScriptUrl($image->{IGP_web}, $image->{IGP_topic}, "attach")
+    . TWiki::Func::getScriptUrl($image->{IGP_web}, $image->{IGP_topic}, "attach")
     . "?filename=$image->{name}\">.</a></span>";
 }
 
@@ -481,7 +521,7 @@ sub getImages {
   foreach my $webtopic (@{$this->{topics}}) {
     my ($theWeb, $theTopic) = TWiki::Func::normalizeWebTopicName($this->{web}, $webtopic);
     writeDebug("reading from $theWeb.$theTopic}");
-    my $viewAccessOK = &TWiki::Func::checkAccessPermission("view", $this->{wikiUserName}, undef, 
+    my $viewAccessOK = TWiki::Func::checkAccessPermission("view", $this->{wikiUserName}, undef, 
       $theTopic, $theWeb);
 
     if (!$viewAccessOK) {
@@ -489,7 +529,7 @@ sub getImages {
       next;
     }
 
-    my ($meta, undef) = &TWiki::Func::readTopic($theWeb, $theTopic);
+    my ($meta, undef) = TWiki::Func::readTopic($theWeb, $theTopic);
 
     foreach my $image ($meta->find('FILEATTACHMENT')) {
       next unless $this->isImage($image);
@@ -497,9 +537,9 @@ sub getImages {
       next if $this->{include} && $image->{$this->{field}} !~ /$this->{include}/;
       
       # SMELL work around for Image::Magick segfaulting reading svg image files
-      next if $image->{name} =~ /svg$/i;
+      next if !$this->{listsvg} && $image->{name} =~ /svgz?$/i;
 
-      $image->{IGP_comment} = &getImageTitle($image);
+      $image->{IGP_comment} = getImageTitle($image);
       $image->{IGP_sizeK} = sprintf("%dk", $image->{size} / 1024);
       $image->{IGP_topic} = $theTopic;
       $image->{IGP_web} = $theWeb;
@@ -515,7 +555,7 @@ sub getImages {
 
       # check for file existence
       if (! -e $image->{IGP_filename}) {
-        &TWiki::Func::writeWarning("attachment error in " .
+        TWiki::Func::writeWarning("attachment error in " .
           "$image->{IGP_web}.$image->{IGP_topic}: " .
           "no such file '$image->{IGP_filename}'");
         next;
@@ -693,6 +733,8 @@ sub replaceVars {
 
   if ($image) {
 
+    my $imageName = $image->{name}.(($image->{name} =~ /\.svgz?$/ )?'.png':'');
+
     $format =~ s/\$reddot/$this->renderRedDot($image)/goes;
     $format =~ s/\$width/$image->{IGP_width}/gos;
     $format =~ s/\$height/$image->{IGP_height}/gos;
@@ -704,17 +746,18 @@ sub replaceVars {
     $format =~ s/\$comment/$image->{IGP_comment}/geos;
     $format =~ s/\$imgnr/$image->{IGP_imgnr}/gos;
 
-    $format =~ s/\$date(\{([^\}]*)\})?/&formatTime($image->{date}, $2)/goes;
+    $format =~ s/\$date(\{([^\}]*)\})?/formatTime($image->{date}, $2)/goes;
     $format =~ s/\$version/$image->{version}/gos;
-    $format =~ s/\$name/$image->{name}/gos;
+    $format =~ s/\$name/$imageName/gos;
     $format =~ s/\$size/$image->{size}/gos;
     $format =~ s/\$wikiusername/$image->{user}/gos;
     $format =~ s/\$username/TWiki::Func::wikiToUserName($image->{user})/geos;
-    $format =~ s,\$thumburl,$this->{imagesPubUrl}/thumb_$image->{name},gos;
-    $format =~ s,\$imageurl,$this->{imagesPubUrl}/$image->{name},gos;
+    $format =~ s,\$thumburl,$this->{imagesPubUrl}/thumb_$imageName,gos;
+    $format =~ s,\$imageurl,$this->{imagesPubUrl}/$imageName,gos;
     $format =~ s,\$origurl,$image->{IGP_url},gos;
     $format =~ s/\$web/$image->{IGP_web}/gos;
     $format =~ s/\$topic/$image->{IGP_topic}/gos;
+
   }
 
   $format =~ s/\$nrimgs/scalar @{$this->{images}}/geos;
@@ -736,7 +779,8 @@ sub createImg {
   
   my $prefix = ($thumbMode)?'thumb_':'';
 
-  my $target = "$this->{igpDir}/$prefix$image->{name}";
+  my $target = "$this->{igpDir}/$prefix$image->{name}".
+               (($image->{name} =~ /\.svgz?$/)?'.png':'');
   $target = $this->normalizeFileName($target);
 
   my $entry = $this->{info}{$image->{name}};
@@ -758,14 +802,14 @@ sub createImg {
   #writeDebug("mage->scale");
   if ($thumbMode) {
     $error = 
-      $this->{mage}->Scale(geometry=>"$image->{IGP_thumbwidth}x$image->{IGP_thumbheight}");
+      $this->{mage}->Resize(geometry=>"$image->{IGP_thumbwidth}x$image->{IGP_thumbheight}");
   } else {
     $error = 
-      $this->{mage}->Scale(geometry=>"$image->{IGP_width}x$image->{IGP_height}");
+      $this->{mage}->Resize(geometry=>"$image->{IGP_width}x$image->{IGP_height}");
   }
   #writeDebug("done mage->scale");
   if ($error =~ /(\d+)/) {
-    #writeDebug("Scale(): error=$error");
+    #writeDebug("Resize(): error=$error");
     $this->{errorMsg} .= " $error";
     return 0 if $1 >= 400;
   }
@@ -822,11 +866,11 @@ sub normalizeFileName {
   #writeDebug("normalizeFileName($fileName)");
 
   if (defined &TWiki::Sandbox::normalizeFileName) {
-    return &TWiki::Sandbox::normalizeFileName($fileName);
+    return TWiki::Sandbox::normalizeFileName($fileName);
   }
 
   if (defined &TWiki::normalizeFileName) {
-    return &TWiki::normalizeFileName($fileName);
+    return TWiki::normalizeFileName($fileName);
   }
     
   return $fileName;
@@ -835,6 +879,7 @@ sub normalizeFileName {
 # =========================
 sub renderError {
   my $msg = shift;
+  return '' unless $msg;
   return "<span class=\"igpAlert\">Error: $msg</span>" ;
 }
 
@@ -864,7 +909,7 @@ sub readInfo {
   $this->{infoChanged} = 1;
   return unless -e $this->{infoFile};
 
-  my $text = &TWiki::Func::readFile($this->{infoFile});
+  my $text = TWiki::Func::readFile($this->{infoFile});
   foreach my $line (split(/\n/, $text)) {
     my $entry;
     if ($line =~ /^name=(.*), version=(.*), origwidth=(.*), origheight=(.*), width=(.*), height=(.*), thumbwidth=(.*), thumbheight=(.*)$/) {
@@ -922,13 +967,13 @@ sub writeInfo {
 
   #writeDebug("writing infoFile=$this->{infoFile}");
 
-  &TWiki::Func::saveFile($this->{infoFile}, $text);
+  TWiki::Func::saveFile($this->{infoFile}, $text);
 }
 
 # =========================
 # static
 sub writeDebug {
-  #&TWiki::Func::writeDebug("ImageGalleryPlugin - $_[0]");
+  #TWiki::Func::writeDebug("ImageGalleryPlugin - $_[0]");
   print STDERR "ImageGalleryPlugin - $_[0]\n" if DEBUG;
 }
 

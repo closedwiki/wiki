@@ -30,7 +30,6 @@
 
 /* title of a thumbnail */
 .igpThumbNailTitle {
-  font-size:small;
   vertical-align:top;
 }
 
@@ -63,7 +62,6 @@ h2 .igpRedDot a,
 .igpRedDot a {
   color:red;
   font-weight:bold;
-  font-size:small;
   text-decoration:none;
 }
 
