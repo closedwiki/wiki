@@ -187,8 +187,9 @@ compare with [[http://en.wikipedia.org/wiki/Category:Philosophy_articles_needing
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2005-2008, Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.50 |
+|  Plugin Version: | v1.51 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  03 Jul 2008: | sorting a list _before_, not _after_, formatting it in FORMATLIST |
 |  08 May 2008: | added 'text' parameter to SUBST and EXTRACT; \
                   fixed SUBST as it was pretty useless before |
 |  07 Dec 2007: | added MAKEINDEX, added lazy compilation |
@@ -217,6 +218,6 @@ compare with [[http://en.wikipedia.org/wiki/Category:Philosophy_articles_needing
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 08 May 2008
+-- TWiki:Main.MichaelDaum - 03 Jul 2008
 
 %META:FILEATTACHMENT{name="wikiringlogo40x40.png" attr="h" autoattached="1" comment="" date="1189788323" path="wikiringlogo40x40.png" size="2571" user="TWikiContributor" version="1"}%

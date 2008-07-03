@@ -434,11 +434,21 @@ sub handleFormatList {
   #writeDebug("theUnique='$theUnique'");
   #writeDebug("theExclude='$theExclude'");
 
+  my @theList = split(/$theSplit/, $theList);
+  if ($theSort ne 'off') {
+    if ($theSort eq 'alpha' || $theSort eq 'on') {
+      @theList = sort {uc($a) cmp uc($b)} @theList;
+    } elsif ($theSort eq 'num') {
+      @theList = sort {$a <=> $b} @theList;
+    }
+  }
+  @theList = reverse @theList if $theReverse eq 'on';
+
   my %seen = ();
   my @result;
   my $count = 0;
   my $skip = $theSkip;
-  foreach my $item (split(/$theSplit/, $theList)) {
+  foreach my $item (@theList) {
     #writeDebug("found '$item'");
     next if $theExclude && $item =~ /^($theExclude)$/;
     next if $item =~ /^$/; # skip empty elements
@@ -486,15 +496,6 @@ sub handleFormatList {
   }
   #writeDebug("count=$count");
   return '' if $count == 0;
-
-  if ($theSort ne 'off') {
-    if ($theSort eq 'alpha' || $theSort eq 'on') {
-      @result = sort {uc($a) cmp uc($b)} @result;
-    } elsif ($theSort eq 'num') {
-      @result = sort {$a <=> $b} @result;
-    }
-  }
-  @result = reverse @result if $theReverse eq 'on';
 
   my $result = $theHeader.join($theSeparator, @result).$theFooter;
   $result =~ s/\$count/$count/g;
