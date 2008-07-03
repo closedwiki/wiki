@@ -78,16 +78,18 @@ sub init {
 sub renderWikiWordHandler {
   my ($theLinkText, $hasExplicitLinkLabel, $theWeb, $theTopic) = @_;
 
+  return undef if !defined($theWeb) and !defined($theTopic); 
+    # does not work out for TWikis < 4.2
+
   $theWeb = TWiki::Sandbox::untaintUnchecked($theWeb);# woops why is theWeb tainted
   return if $hasExplicitLinkLabel;
-  return if $theWeb eq $twikiWeb; # hardcoded exception
   
   writeDebug("called renderWikiWordHandler($theLinkText, $theWeb, $theTopic)");
 
   my $topicTitle = getTopicTitle($theWeb, $theTopic);
   writeDebug("topicTitle=$topicTitle");
 
-  $theLinkText = $topicTitle if !$topicTitle && $topicTitle ne $theTopic;
+  $theLinkText = $topicTitle;# if $topicTitle && $topicTitle ne $theTopic;
 
   writeDebug("theLinkText = $theLinkText");
 
@@ -163,7 +165,12 @@ sub handleDBQUERY {
   $theRemote = ($theRemote =~ /^(on|force|1|yes)$/)?1:0;
   $theRemote = ($theRemote eq 'on')?1:0;
 
+  # normalize 
+  $theSkip =~ s/[^-\d]//go;
+  $theSkip = 0 if $theSkip eq '';
+  $theSkip = 0 if $theSkip < 0;
   $theFormat = '$topic' unless defined $theFormat;
+  $theFormat = '' if $theFormat eq 'none';
   $theSep = $params->{sep} unless defined $theSep;
   $theSep = '$n' unless defined $theSep;
   $theSep = '' if $theSep eq 'none';
@@ -176,16 +183,11 @@ sub handleDBQUERY {
   } else {
     $thisTopic = $baseTopic;
     if ($theTopics) {
-      @topicNames = split(/[,\s+]/, $theTopics);
+      @topicNames = split(/\s*,\*/, $theTopics);
     }
   }
   my $theDB = getDB($thisWeb);
 
-  # normalize 
-  $theSkip =~ s/[^-\d]//go;
-  $theSkip = 0 if $theSkip eq '';
-  $theSkip = 0 if $theSkip < 0;
-  $theFormat = '' if $theFormat eq 'none';
 
   my ($topicNames, $hits, $msg) = $theDB->dbQuery($theSearch, 
     \@topicNames, $theSort, $theReverse, $theInclude, $theExclude);
@@ -196,7 +198,6 @@ sub handleDBQUERY {
   $theLimit = scalar(@$topicNames) if $theLimit eq '';
   $theLimit += $theSkip;
 
-
   my $count = scalar(@$topicNames);
   return '' if ($count <= $theSkip) && $theHideNull eq 'on';
 
@@ -206,6 +207,7 @@ sub handleDBQUERY {
     my $index = 0;
     my $isFirst = 1;
     foreach my $topicName (@$topicNames) {
+      #writeDebug("topicName=$topicName");
       $index++;
       next if $index <= $theSkip;
       my $topicObj = $hits->{$topicName};
@@ -255,7 +257,7 @@ sub handleDBQUERY {
 sub findTopicMethod {
   my ($session, $theWeb, $theTopic, $theObject) = @_;
 
-  writeDebug("called findTopicMethod($theWeb, $theTopic, $theObject)");
+  #writeDebug("called findTopicMethod($theWeb, $theTopic, $theObject)");
 
   return undef unless $theObject;
 
@@ -289,7 +291,7 @@ sub findTopicMethod {
 
   #writeDebug("topicTypes=$topicTypes");
 
-  foreach my $topicType (split(/,/, $topicTypes)) {
+  foreach my $topicType (split(/\s*,\s*/, $topicTypes)) {
     $topicType =~ s/^\s+//o;
     $topicType =~ s/\s+$//o;
 
@@ -794,7 +796,7 @@ sub handleATTACHMENTS {
     next if $theMinDate && $date < $theMinDate;
     next if $theMaxDate && $date > $theMaxDate;
 
-    my $user = $attachment->fastget('user');
+    my $user = $attachment->fastget('user') || 'UnknownUser';
     if (defined(&TWiki::Users::getWikiName)) {# TWiki-4.2 onwards
       my $session = $TWiki::Plugins::SESSION;
       $user = $session->{users}->getWikiName($user);

@@ -146,10 +146,12 @@ sub onReload {
     }
 
     # get topic title 
-    my $topicTitle = '';
+    my $topicTitle;
 
+    # 1. get from preferences
     my $prefs = $topic->fastget('preferences');
     if ($prefs) {
+      #print STDERR "trying prefs\n";
       foreach my $pref ($prefs->getValues()) {
         my $name = $pref->fastget('name');
         if ($name eq 'TOPICTITLE') {
@@ -158,20 +160,58 @@ sub onReload {
         }
       }
     }
-    unless ($topicTitle) {
+
+    # 2. get inline preferences
+    unless (defined $topicTitle) {
+      #print STDERR "trying inline prefs\n";
       $origText =~ tr/\r//d;
       if ($origText =~ /(?:^|\n)(?:\t|   )+\*\s+(?:Set|Local)\s+TOPICTITLE\s*=\s*(.*)(?:$|\n)/o) {
-        $topicTitle = $1 || '';
+        $topicTitle = $1;
       }
     }
-    unless ($topicTitle) {
+
+    # 3. get from form
+    unless (defined $topicTitle) {
       my $form = $topic->fastget('form');
       if ($form) {
+        #print STDERR "trying form\n";
         $form = $topic->fastget($form);
         $topicTitle = $form->fastget('TopicTitle') || '';
         $topicTitle = TWiki::urlDecode($topicTitle);
       }
     }
+
+    # 4. get from h1
+#    unless (defined $topicTitle) {
+#      #print STDERR "trying h1\n";
+#      #print STDERR "origText=\n$origText\n";
+#      if ($origText =~ /(?:^|\n)(?:(?:---+\+(?!\+)(?:!!)?\s*(.*?)\s*)|(?:<h1[^>]*>\s*(.*?)\s*<\/h1>))(?:\n|$)/o) {
+#        #print STDERR "found in heading\n";
+#        $topicTitle = $1 || $2;
+#        if ($topicTitle =~ /\%TOPICTITLE({.*})?\%/o ||
+#            $topicTitle =~ /\%WIKI(USER)NAME\%/o ||
+#            $topicTitle =~ /\%USERINFO({.*})?\%/o) {
+#          $topicTitle = undef; # not this time
+#        }
+#
+#        # strip some 
+#        if (defined $topicTitle) {
+#          $topicTitle =~ s/\%TOPIC\%/$topicName/g;
+#          $topicTitle =~ s/\[\[.*\]\[(.*)\]\]/$1/go;
+#          $topicTitle =~ s/\[\[(.*)\]\]/$1/go;
+#          $topicTitle =~ s/<a[^>]*>(.*)<\/a>/$1/go;
+#          $topicTitle = TWiki::Func::expandCommonVariables($topicTitle, $topicName, $this->{web});
+#        }
+#      }
+#    }
+
+    
+    # 5. use topic name
+    unless ($topicTitle) {
+      #print STDERR "defaulting to topic name\n";
+      $topicTitle = $topicName; 
+    }
+
     #print STDERR "found topictitle=$topicTitle\n" if $topicTitle;
     $topic->set('topictitle', $topicTitle);
 
@@ -205,7 +245,7 @@ sub dbQuery {
   $theReverse ||= '';
   $theSearch  ||= '';
 
-#print STDERR "DEBUG: called dbQuery($theSearch, $theTopics, $theSort, $theReverse) in $this->{web}\n";
+  #print STDERR "DEBUG: called dbQuery($theSearch, $theTopics, $theSort, $theReverse) in $this->{web}\n";
 
   # get max hit set
   my @topicNames;
