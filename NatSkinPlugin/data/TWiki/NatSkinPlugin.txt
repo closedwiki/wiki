@@ -141,24 +141,6 @@ paramters:
    * =web=
    * =topic=
 
----+++ NATLOGINURL
-*Syntax*: =%<nop>NATLOGINURL%
-
-returns an url to a login depending on the current scheme. This
-will be a link to
-   * =natlogon= on any legacy twiki releases or in case the <nop>LoginManager is set to "none"
-   * =login= on using dakar's <nop>TemplateLogin 
-   * =viewauth= using <nop>ApacheLogin
-
----+++ NATLOGOUTURL
-*Syntax*: =%<nop>NATLOGOUT%=
-
-returns an url to a logout depending on the current login scheme. This
-will be a link to
-   * =natlogon= on any legacy twiki releases or in case the <nop>LoginManager is set to "none"
-   * =view...?logout=1= on using dakar's <nop>TemplateLogin 
-   * the empty string in case you are using <nop>ApacheLogin (you can't logout explicitely)
-
 ---+++ NATMAXREV
 *Syntax*: =%<nop>NATMAXREV%= 
 
@@ -236,15 +218,20 @@ display separate sets of actions for anonymous or authenticated users.
    * guest="$login$sep$register$sep$print": format string of actions for guests
    * format="$user$sep$logout$sep$print&lt;br />$edit$sep$attach$sep$move$sep$raw$sep$diff$sep$more":
      format string of actions for authenticated users
+   * restrictedactions="...": list of user actions that are disabled if the user
+     has got no write access to the current topic
+   * help="...": help topic used for =$help=, defaults to %TWIKIWEB%.TWikiUsersGuide (see below)
 
 The "guest" and "format" format strings can use the following variables
    * $attach: link to "attach" topic action
    * $diff: link to diff
    * $edit: link to edit
+   * $help: link to a help page
    * $login: link to log in
    * $logout: link to log out
    * $more: link to more dialog
    * $move: link to move dialog
+   * $pdf: link to export pdf using the TWiki:Plugins/GenPDFAddOn
    * $print: link to print action
    * $raw: link to display topic in raw format
    * $register: link to registration
@@ -348,8 +335,18 @@ The following variables can be used in the format string:
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2008, Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v3.00-pre18 |
+|  Plugin Version: | v3.00-pre20 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  03 Jul 2008: | removed unused NATLOGINURL, NATLOGOUTURL, NATDIFFURL; \
+                  removed auto-disabling the plugin on non-nat skins; \
+                  fixed patching the skinpath not to include the cover; \
+                  added support for the <nop>GenPDFAddOn; \
+                  added =restrictedactions= parameter to USERACTIONS to disable specific \
+                  user actions if he/she has no write access to the current topic; \
+                  fixed issue in WEBCOMPONENTS that could be used to reveil read-protected topics \
+                  (reported by Martin Dahlö); \
+                  implemented a google-like display of hit results in (nat)search; \
+                  sorting natsearch results accross all webs - not per web |
 |  13 Nov 2007: | propagating skin state to context to speed up template resolution, \
                   prepending style identifier to SKIN variable to be able to switch \
                   the markup together with the css, \
@@ -492,4 +489,4 @@ The following variables can be used in the format string:
 |  Feedback: | TWiki:Plugins/NatSkinPluginDev  |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main/MichaelDaum - 17 Jan 2008 
+-- TWiki:Main/MichaelDaum - 03 Jul 2008 

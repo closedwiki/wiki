@@ -1,7 +1,7 @@
 ###############################################################################
 # TWiki WikiClone ($wikiversion has version info)
 #
-# Copyright (C) 2003-2007 MichaelDaum http://wikiring.de
+# Copyright (C) 2003-2008 MichaelDaum http://michaeldaumconsulting.com
 #
 # Based on photonsearch
 # Copyright (C) 2001 Esteban Manchado Velázquez, zoso@foton.es
@@ -22,8 +22,7 @@ package TWiki::Plugins::NatSkinPlugin::Search;
 
 use strict;
 use TWiki::Plugins::NatSkinPlugin;
-
-sub DEBUG { 0; } # toggle me
+use constant DEBUG => 0; # toggle me
 
 ###############################################################################
 sub writeDebug {
@@ -48,7 +47,7 @@ sub new {
   my $session = shift;
 
   my $sandbox;
-  unless (defined &TWiki::Sandbox::new) {
+  unless (defined TWiki::Sandbox::new) {
     writeDebug("this is this");
     eval "use TWiki::Contrib::DakarContrib;";
     $sandbox = new TWiki::Sandbox();
@@ -82,6 +81,7 @@ sub new {
 
   $this->{ignoreCase} = 1 unless defined $this->{ignoreCase};
   $this->{ignoreCase} = ($this->{ignoreCase} =~ /1|on|yes/)?1:0;
+  $this->{modificationTime} = ();
 
   writeDebug("ignoreCase=$this->{ignoreCase}");
 
@@ -111,12 +111,12 @@ sub search {
     $theLimit =~ s/[^\d]//g;
     $this->{limit} = $theLimit;
   }
+  $this->{limit} = 0 unless $this->{limit};
   writeDebug("limit=$this->{limit}");
 
-  #writeDebug("searchTemplate name =$searchTemplate");
   writeDebug("theWeb=$theWeb");
-  $searchTemplate = &TWiki::Func::readTemplate($this->{searchTemplate}) if $this->{searchTemplate};
-  $searchTemplate =  &TWiki::Func::readTemplate('search') unless $searchTemplate;
+  $searchTemplate = $this->{searchTemplate} || 'search';
+  $searchTemplate = TWiki::Func::readTemplate($searchTemplate);
   $searchTemplate =~ s/^\s*(.*)\s*$/$1/os;
   
   # separate and process options
@@ -128,13 +128,13 @@ sub search {
   if ($options =~ /^e(dit)?$/) {
     my ($editWeb, $editTopic) = TWiki::Func::normalizeWebTopicName($web, $theSearchString);
     my $editUrl = TWiki::Func::getScriptUrl($editWeb, $editTopic, 'edit', 't', time());
-    &TWiki::Func::redirectCgiQuery($query, $editUrl);
+    TWiki::Func::redirectCgiQuery($query, $editUrl);
     return '';
   }
   if ($options =~ /^n(ew)?$/) {
     my ($editWeb, $editTopic) = TWiki::Func::normalizeWebTopicName($web, $theSearchString);
     my $editUrl = TWiki::Func::getScriptUrl($editWeb, $editTopic, 'edit', 'onlynewtopic', 'on', 't', time());
-    &TWiki::Func::redirectCgiQuery($query, $editUrl);
+    TWiki::Func::redirectCgiQuery($query, $editUrl);
     return '';
   }
   $this->{keywordSearch} = ($options =~ /k/ || $this->{keywordSearch}) ? 1 : 0;
@@ -148,6 +148,7 @@ sub search {
     @webList = TWiki::Func::getPublicWebList();
     @webList = grep (/^$this->{includeWeb}$/, @webList) if $this->{includeWeb};
     @webList = grep (!/^$this->{excludeWeb}$/, @webList) if $this->{excludeWeb};
+    @webList = grep (!/$TWiki::cfg{TrashWebName}/, @webList);
   }
   unshift(@webList, $web) unless grep (/^$web$/, @webList);
   writeDebug("webList=@webList");
@@ -172,9 +173,9 @@ sub search {
     # (1) try a jump
     writeDebug("(1) try a jump");
     foreach my $thisWeb (@webList) {
-      if (&TWiki::Func::topicExists($thisWeb, $theSearchString)) {
-	my $viewUrl = &TWiki::Func::getViewUrl($thisWeb, $theSearchString);
-	&TWiki::Func::redirectCgiQuery($query, $viewUrl);
+      if (TWiki::Func::topicExists($thisWeb, $theSearchString)) {
+	my $viewUrl = TWiki::Func::getViewUrl($thisWeb, $theSearchString);
+	TWiki::Func::redirectCgiQuery($query, $viewUrl);
 	writeDebug("jump");
 	return '';
       } 
@@ -192,8 +193,8 @@ sub search {
     if ($nrHits == 1) {
       my $resultWeb = (keys %results)[0];
       my $resultTopic = (keys %{$results{$resultWeb}})[0];
-      my $viewUrl = &TWiki::Func::getViewUrl($resultWeb, $resultTopic);
-      &TWiki::Func::redirectCgiQuery($query, $viewUrl);
+      my $viewUrl = TWiki::Func::getViewUrl($resultWeb, $resultTopic);
+      TWiki::Func::redirectCgiQuery($query, $viewUrl);
       writeDebug("jump");
       return '';
     }
@@ -232,8 +233,8 @@ sub search {
   #writeDebug("tmplNumber='$tmplNumber'");
   #writeDebug("tmplTail='$tmplTail'");
 
-  $tmplHead = &TWiki::Func::expandCommonVariables($tmplHead, $topic, $web);
-  $tmplHead = &TWiki::Func::renderText($tmplHead);
+  $tmplHead = TWiki::Func::expandCommonVariables($tmplHead, $topic, $web);
+  $tmplHead = TWiki::Func::renderText($tmplHead);
   $tmplHead =~ s|</*nop/*>||goi;
   $tmplHead =~ s/%TOPIC%/$topic/go;
   $tmplHead =~ s/%SEARCHSTRING%/$origSearch/go;
@@ -242,8 +243,8 @@ sub search {
   if ($nrHits) {
     $tmplNumber =~ s/%NTOPICS%/$nrHits/go;
     $tmplNumber .= $tmplSearch if $theSearchBox eq 'on';
-    $tmplNumber = &TWiki::Func::expandCommonVariables($tmplNumber, $topic, $web);
-    $tmplNumber = &TWiki::Func::renderText($tmplNumber);
+    $tmplNumber = TWiki::Func::expandCommonVariables($tmplNumber, $topic, $web);
+    $tmplNumber = TWiki::Func::renderText($tmplNumber);
     $result .= $tmplNumber;
     $result .= $this->formatSearchResult($tmplTable, \%results, $theSearchString);
   } else {
@@ -259,8 +260,8 @@ sub search {
   }
 
   # get last part of full HTML page
-  $tmplTail = &TWiki::Func::expandCommonVariables($tmplTail, $topic, $web);
-  $tmplTail = &TWiki::Func::renderText($tmplTail);
+  $tmplTail = TWiki::Func::expandCommonVariables($tmplTail, $topic, $web);
+  $tmplTail = TWiki::Func::renderText($tmplTail);
   $tmplTail =~ s|</*nop/*>||goi;   # remove <nop> tag
   $result .= $tmplTail;
 
@@ -318,14 +319,14 @@ sub topicSearch {
 	}
       };
       if ($@) {
-	&TWiki::Func::writeWarning("natsearch: pattern=$pattern failed to compile");
+	TWiki::Func::writeWarning("natsearch: pattern=$pattern failed to compile");
 	return;
       }
     }
 
     # filter out non-viewable topics
     @topics = 
-      grep {&TWiki::Func::checkAccessPermission("view", $this->{userName}, undef, $_, $thisWebName);}
+      grep {TWiki::Func::checkAccessPermission("view", $this->{userName}, undef, $_, $thisWebName);}
       @topics;
 
     foreach my $topic (@topics) {
@@ -387,7 +388,7 @@ sub contentSearch {
 	  @notfiles = split(/\r?\n/, $result);
 	};
 	if ($@) {
-	  &TWiki::Func::writeWarning("natsearch: pattern=$pattern files=@bag - $@");
+	  TWiki::Func::writeWarning("natsearch: pattern=$pattern files=@bag - $@");
 	  return;
 	}
 	chomp(@notfiles);
@@ -402,11 +403,11 @@ sub contentSearch {
 	eval {
 	  my ($result, $code) = 
 	    $this->{sandbox}->sysCommand($cmdTemplate, PATTERN => $pattern, FILES => \@bag); 
-	  writeDebug("code=$code, result=$result");
+	  #writeDebug("code=$code, result=$result");
 	  @bag = split(/\r?\n/, $result);
 	};
 	if ($@) {
-	  &TWiki::Func::writeWarning("natsearch: pattern=$pattern files=@bag - $@");
+	  TWiki::Func::writeWarning("natsearch: pattern=$pattern files=@bag - $@");
 	  return;
 	}
 	chomp(@bag);
@@ -420,7 +421,7 @@ sub contentSearch {
 
     # filter out non-viewable topics
     @bag = 
-      grep {&TWiki::Func::checkAccessPermission("view", $this->{userName}, "", $_, $thisWebName);} @bag;
+      grep {TWiki::Func::checkAccessPermission("view", $this->{userName}, "", $_, $thisWebName);} @bag;
 
     foreach my $topic (@bag) {
       $results->{$thisWebName}{$topic} = 1;
@@ -436,77 +437,93 @@ sub formatSearchResult {
 
   my $noSpamPadding = $TWiki::cfg{AntiSpam}{EmailPadding};
   my $result = '';
+
+  # collect hit set
+  my %webResults = ();
+  my %modificationTime = ();
+  foreach my $thisWeb (keys %{$theResults}) {
+
+    # sort topics by modification time, reverse
+    foreach my $thisTopic (keys %{$theResults->{$thisWeb}}) {
+      $modificationTime{"$thisWeb.$thisTopic"} = 
+        $this->getModificationTime($thisWeb, $thisTopic);
+    }
+    my @sortedTopics =
+      sort {$modificationTime{"$thisWeb.$b"} <=> $modificationTime{"$thisWeb.$a"}}
+          keys %{$theResults->{$thisWeb}};
+
+    my $length = scalar(@sortedTopics);
+    splice(@sortedTopics, $this->{limit}, $length) if $this->{limit} && $length > $this->{limit};
+    foreach my $thisTopic (@sortedTopics) {
+      $webResults{"$thisWeb.$thisTopic"} = [$thisWeb, $thisTopic];
+    }
+  }
+
+  # sort over all webs
+  my @sortedTopics =
+    sort {$modificationTime{$b} <=> $modificationTime{$a}}
+        keys %webResults;
+
+  #writeDebug("sortedTopics=@sortedTopics");
       
-  # get hits in all webs
-  foreach my $thisWeb (sort keys %{$theResults}) {
+  # format hits
+  my $index = 0;
+  foreach my $thisWebTopic (@sortedTopics) {
+    my ($thisWeb, $thisTopic) = @{$webResults{$thisWebTopic}};
+    #writeDebug("thisWeb=$thisWeb, thisTopic=$thisTopic");
     my ($beforeText, $repeatText, $afterText) = split(/%REPEAT%/, $theTemplate);
 
     # get web header
     $beforeText =~ s/%WEB%/$thisWeb/o;
-    $beforeText = &TWiki::Func::expandCommonVariables($beforeText, $this->{homeTopic}, $thisWeb);
-    $afterText  = &TWiki::Func::expandCommonVariables($afterText, $this->{homeTopic}, $thisWeb);
-    $beforeText = &TWiki::Func::renderText($beforeText, $thisWeb);
+    $beforeText = TWiki::Func::expandCommonVariables($beforeText, $this->{homeTopic}, $thisWeb);
+    $afterText  = TWiki::Func::expandCommonVariables($afterText, $this->{homeTopic}, $thisWeb);
+    $beforeText = TWiki::Func::renderText($beforeText, $thisWeb);
     $beforeText =~ s|</*nop/*>||goi;   # remove <nop> tag
     $result .= $beforeText;
 
-    # sort topics by modification time, reverse
-    my %modificationTime =
-      map { $_=>$this->getModificationTime($thisWeb, $_) }
-        keys %{$theResults->{$thisWeb}};
-    my @sortedTopics =
-      sort {$modificationTime{$b} <=> $modificationTime{$a}}
-          keys %{$theResults->{$thisWeb}};
 
-    # get hits in all topics
-    my $index = 0;
-    my $limit = $this->{limit};
-    foreach my $thisTopic (@sortedTopics) {
-      $limit--;
-      my $tempVal = $repeatText;
+    # get topic information
+    my ($meta, $text) = TWiki::Func::readTopic($thisWeb, $thisTopic);
+    my ($revDate, $revUser, $revNum ) = $meta->getRevisionInfo();
+    $revDate = TWiki::Func::formatTime($revDate);
+    $revUser ||= 'UnknownUser';
+    $revUser = TWiki::Func::getWikiUserName($revUser);
 
-      # get topic information
-      my ($meta, $text) = &TWiki::Func::readTopic($thisWeb, $thisTopic);
-      my ($revDate, $revUser, $revNum ) = $meta->getRevisionInfo();
-      $revDate = &TWiki::Func::formatTime($revDate);
-      $revUser ||= 'UnknownUser';
-      $revUser = TWiki::Func::getWikiUserName($revUser);
+    # insert the topic information into the template
+    my $tempVal = $repeatText;
+    $tempVal =~ s/%WEB%/$thisWeb/go;
+    $tempVal =~ s/%TIME%/$revDate/go;
+    $tempVal =~ s/%TOPICNAME%/$thisTopic/go;
+    if ($revNum > 1) {
+      $revNum = "r1.$revNum";
+    } else {
+      $revNum = '<span class="natSearchNewTopic">%TMPL:P{"NEW"}%</span>';
+    } 
+    $tempVal =~ s/%REVISION%/$revNum/go;
+    $tempVal =~ s/%AUTHOR%/$revUser/go;
 
-      # insert the topic information into the template
-      $tempVal =~ s/%WEB%/$thisWeb/go;
-      $tempVal =~ s/%TIME%/$revDate/go;
-      $tempVal =~ s/%TOPICNAME%/$thisTopic/go;
-      if ($revNum > 1) {
-	$revNum = "r1.$revNum";
-      } else {
-	$revNum = '<span class="natSearchNewTopic">%TMPL:P{"NEW"}%</span>';
-      } 
-      $tempVal =~ s/%REVISION%/$revNum/go;
-      $tempVal =~ s/%AUTHOR%/$revUser/go;
+    # render twiki markup
+    $tempVal = TWiki::Func::expandCommonVariables($tempVal, $thisTopic, $thisWeb);
+    $tempVal = TWiki::Func::renderText($tempVal);
 
-      # render twiki markup
-      $tempVal = &TWiki::Func::expandCommonVariables($tempVal, $thisTopic, $thisWeb);
-      $tempVal = &TWiki::Func::renderText($tempVal);
+    # remove mail trace
+    $text =~ s/([A-Za-z0-9\.\+\-\_]+)\@([A-Za-z0-9\.\-]+\..+?)/$1$noSpamPadding$2/go;
 
-      # remove mail trace
-      $text =~ s/([A-Za-z0-9\.\+\-\_]+)\@([A-Za-z0-9\.\-]+\..+?)/$1$noSpamPadding$2/go;
+    # render search hit
+    my $summary = $this->makeTopicSummary($text, $thisTopic, $thisWeb, $theSearchString);
+    
+    $tempVal =~ s/%TEXTHEAD%/$summary/go;
+    $tempVal =~ s|</*nop/*>||goi;   # remove <nop> tag
 
-      # render search hit
-      my $summary = $this->makeTopicSummary($text, $thisTopic, $thisWeb, $theSearchString);
-      
-      $tempVal =~ s/%TEXTHEAD%/$summary/go;
-      $tempVal =~ s|</*nop/*>||goi;   # remove <nop> tag
+    # fiddle in even/odd CSS classes
+    my $hitClass = ($index % 2)?'natSearchEvenHit':'natSearchOddHit';
+    $index++;
+    $tempVal =~ s/(class="natSearchHit)"/$1 $hitClass"/g;
 
-      # fiddle in even/odd CSS classes
-      my $hitClass = ($index % 2)?'natSearchEvenHit':'natSearchOddHit';
-      $index++;
-      $tempVal =~ s/(class="natSearchHit)"/$1 $hitClass"/g;
+    # get this hit
+    $result .= $tempVal;
 
-      # get this hit
-      $result .= $tempVal;
-      last if $limit == 0;
-    }
-
-    $afterText = &TWiki::Func::renderText($afterText, $thisWeb);
+    $afterText = TWiki::Func::renderText($afterText, $thisWeb);
     $afterText =~ s|</*nop/*>||goi;   # remove <nop> tag
     $result .= $afterText;
   }
@@ -555,7 +572,7 @@ sub makeTopicSummary {
       }
     };
     if ($@) {
-      &TWiki::Func::writeWarning("natsearch: pattern=$pattern failed to compile");
+      TWiki::Func::writeWarning("natsearch: pattern=$pattern failed to compile");
       $errorFound = 1;
       last;
     }
@@ -630,13 +647,16 @@ sub getModificationTime {
 
   $web =~ s/\./\//go;
 
-  my $date = 0;
-  my $file = $this->{dataDir}.'/'.$web.'/'.$topic.'.txt';
+  my $date = $this->{modificationTime}{$web.$topic};
+  return $date if defined $date;
 
+  $date = 0;
+  my $file = $this->{dataDir}.'/'.$web.'/'.$topic.'.txt';
   if (-e $file) {
     $date = (stat $file)[9] || 600000000;
   }
 
+  $this->{modificationTime}{$web.$topic} = $date;
   return $date;
 }
 
