@@ -107,11 +107,11 @@ sub handleButton {
   my $theStyle = $params->{style} || '';
   my $theSize = $params->{size} || '100%';
   my $theHref = $params->{href} || 'javascript:void(0);';
-  my $theTitle = $params->{title} || '';
-  my $theOnClick = $params->{onclick} || '';
-  my $theOnMouseOver = $params->{onmouseover} || '';
-  my $theOnMouseOut = $params->{onmouseout} || '';
-  my $theOnFocus = $params->{onfocus} || '';
+  my $theTitle = $params->{title};
+  my $theOnClick = $params->{onclick};
+  my $theOnMouseOver = $params->{onmouseover};
+  my $theOnMouseOut = $params->{onmouseout};
+  my $theOnFocus = $params->{onfocus};
 
   $theBackground = '#2ae' if $theBackground eq 'bluish';
   $theBackground = '#9d4' if $theBackground eq 'greenish';
@@ -131,14 +131,19 @@ sub handleButton {
   my $result = 
     '<a class="jqButton" '.
     'href="'.$theHref.'" '.
-    'title="'.$theTitle.'" '.
     'style="'.
       $theBackground.
       $theForeground.
       'font-size:'.$theSize.'; '.
-      'line-height:120%; '.
+      'line-height:normal; '.
       $theStyle.
-    '" ><i></i><span><span></span><i></i>'.
+    '"';
+  $result .= ' title="'.$theTitle.'" ' if defined $theTitle;
+  $result .= ' onclick="'.$theOnClick.'" ' if defined $theOnClick;
+  $result .= ' onmouseover="'.$theOnMouseOver.'" ' if defined $theOnMouseOver;
+  $result .= ' onmouseout="'.$theOnMouseOut.'" ' if defined $theOnMouseOut;
+  $result .= ' onfocus="'.$theOnFocus.'" ' if defined $theOnFocus;
+  $result .= '><i></i><span><span></span><i></i>'.
     expandVariables($theText,$theWeb, $theTopic).
     '</span></a>';
 

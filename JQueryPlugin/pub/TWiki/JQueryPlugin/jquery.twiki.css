@@ -7,6 +7,7 @@
   text-decoration: none !important;
   cursor: pointer;
   text-align:center;
+  margin-right:5px;
 }
 .jqButton i,
 .jqButton span {

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1209546226" format="1.1" reprev="1.3" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1212763293" format="1.1" version="$Rev$"}%
 ---+!! Examples for TWiki.JQueryPlugin
 
 %TOC%
@@ -7,9 +7,9 @@
 Include the jQuery javascript we need
 -->
 
-%JQTHEME{"ogray"}%
+%JQTHEME{"flora"}%
 %JQSCRIPT{"jquery.spinner"}%
-%JQSCRIPT{"jquery.dimensions"}%
+%JQSCRIPT{"ui.core"}%
 %JQSCRIPT{"ui.mouse"}%
 %JQSCRIPT{"ui.draggable"}%
 %JQSCRIPT{"ui.resizable"}%

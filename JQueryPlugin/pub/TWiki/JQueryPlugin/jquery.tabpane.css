@@ -15,8 +15,8 @@
   display:block;
 }
 .jqTabContents {
-  clear:both;
   padding:5px;
+  clear:both;
   overflow-x:hidden;
   overflow-y:auto;
 }

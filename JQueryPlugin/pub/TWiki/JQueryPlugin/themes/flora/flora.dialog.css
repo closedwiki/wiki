@@ -3,7 +3,6 @@
 .flora .ui-dialog,
 .flora.ui-dialog {
 	background-color: #e6f7d4;
-   z-index: 1000;
 }
 
 .flora .ui-dialog .ui-dialog-titlebar,

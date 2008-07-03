@@ -44,9 +44,9 @@
   background-repeat:no-repeat !important;
 }
 .treeview li.collapsable, 
-.treeview li.expandable { background-position: 0 -176px !important; }
+.treeview li.expandable { background-position: 0 -175px !important; }
 
-.treeview .expandable-hitarea { background-position: -80px -3px !important; }
+.treeview .expandable-hitarea { background-position: -80px -1px !important; }
 
 .treeview li.last { background-position: 0 -1766px !important; }
 .treeview li.lastCollapsable, 

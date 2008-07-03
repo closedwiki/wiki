@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1209547841" format="1.1" reprev="1.2" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1209548528" format="1.1" reprev="1.1" version="$Rev$"}%
 ---+!! %TOPIC%
 <!--
    * Set SHORTDESCRIPTION = jQuery <nop>JavaScript library for TWiki
@@ -46,6 +46,7 @@ See the Sandbox.JQueryPluginExamples page for a demo of a couple of widgets used
    1 jquery.tooltip
    1 jquery.treeview
    1 ui.accordion
+   1 ui.datepicker
    1 ui.dialog
    1 ui.draggable
    1 ui.droppable
@@ -55,8 +56,6 @@ See the Sandbox.JQueryPluginExamples page for a demo of a couple of widgets used
    1 ui.slider
    1 ui.sortable
    1 ui.tabs
-
-
 
 ---++ Documentation
    * [[http://docs.jquery.com/How_jQuery_Works][Getting the feet wet]]
@@ -94,8 +93,10 @@ The following themes are provided:
 |  Plugin Author(s): | TWiki:Main/MichaelDaum |
 |  Copyright: | 2007-2008 Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL |
-|  Plugin Version: | v0.6 |
+|  Plugin Version: | v0.8 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  03 Jul 2008: | updated to ui-1.5.1 |
+|  05 Jun 2008: | updated to jquery-1.2.6 and ui-1.5-RC1 |
 |  30 Apr 2008: | repackaged to contain jquery UI |
 |  13 Feb 2008: | upgrade to jquery-1.2.3, as well as most plugins |
 |  17 Jan 2008: | added jquery.metadata plugin; \

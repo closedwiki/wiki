@@ -1,16 +1,10 @@
 /**************** ESSENTIAL STYLES ***************/
 /* remove any default styles */
-.natMain ul.superfish li {
-  padding-left:1em;
-}
-.superfish {
+.superfish, .superfish * {
   margin:0;
   padding:0;
   list-style:none;
   line-height:2.5em;
-}
-ul.superfish li {
-  background-image:none;
 }
 
 /* nested submenu ul elements */
@@ -35,7 +29,7 @@ ul.superfish li {
 
 /* all li elements */
 .superfish li {
-  background:none;
+  padding-left:1em;
   float:left; 
     /* must float all li elements. Vertical submenu items are restrained by
      * parent ul width (see .superfish ul rules above) 
@@ -220,15 +214,6 @@ ul.superfish li {
 ul.superfish a {
   text-decoration:none;
   color:inherit;
-}
-DIS_ul.superfish a {
-  padding: .75em 0; 
-    /* note that the top and bottom padding will affect the 'top' value (marked
-     * with the word "VARIABLE") of the second tier of.superfish (see
-     * "essential rules" above and alter accordingly) 
-     */
-  text-decoration:none;
-  text-indent: 2em;
 }
 
 /* if link text runs over two or more lines, you will want padding in the

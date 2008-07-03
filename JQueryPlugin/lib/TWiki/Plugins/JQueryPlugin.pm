@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (c) 2007 Michael Daum, daum@wikiring.de
+# Copyright (c) 2007-2008 Michael Daum, http://michaeldaumconsulting.com
 # 
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
@@ -28,7 +28,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.60'; 
+$RELEASE = '0.80'; 
 $SHORTDESCRIPTION = 'jQuery <nop>JavaScript library for TWiki';
 $NO_PREFS_IN_TOPIC = 1;
 
@@ -139,6 +139,5 @@ sub handleJQueryImagesUrlPath {
   return "%PUBURLPATH%/%TWIKIWEB%/JQueryPlugin/images/$image" if defined $image;
   return "%PUBURLPATH%/%TWIKIWEB%/JQueryPlugin/images";
 }
-
 
 1;

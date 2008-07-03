@@ -3,11 +3,40 @@ TARGET= \
   jquery-all.js \
   jquery-all.css \
   jquery.superfish.js \
-  jquery.superfish.css
+  jquery.superfish.css \
+  jquery.debug.js \
+  jquery.spinner.js \
+  ui.accordion.js \
+  ui.core.js \
+  ui.datepicker.js \
+  ui.dialog.js \
+  ui.draggable.js \
+  ui.droppable.js \
+  ui.mouse.js \
+  ui.resizable.js \
+  ui.selectable.js \
+  ui.slider.js \
+  ui.sortable.js \
+  ui.tabs.js \
+  effects.blind.js \
+  effects.bounce.js \
+  effects.clip.js \
+  effects.core.js \
+  effects.drop.js \
+  effects.explode.js \
+  effects.fold.js \
+  effects.highlight.js \
+  effects.pulsate.js \
+  effects.scale.js \
+  effects.shake.js \
+  effects.slide.js \
+  effects.transfer.js
 
 MINIFYJS=$(TWIKIROOT)/tools/minifyjs
 MINIFYCSS=$(TWIKIROOT)/tools/minifycss
 
+
+.SUFFIXES: .js .css
 
 all: $(TARGET)
 clean: 
@@ -21,11 +50,10 @@ JS_SOURCES=\
   jquery.bgiframe.js \
   jquery.shrinkurls.js \
   jquery.blockUI.js \
-  jquery.dimensions.js \
   jquery.innerfade.js \
   jquery.dom.js \
-  jquery.nifty.js \
   jquery.tooltip.js \
+  jquery.nifty.js \
   jquery.treeview.uncompressed.js \
   jquery.twiki.js \
   jquery.tabpane.js
@@ -45,10 +73,6 @@ jquery-all.css: $(CSS_SOURCES) Makefile
 	@echo creating $@
 	@$(MINIFYCSS) $(CSS_SOURCES) > $@
 
-jquery.superfish.js: jquery.superfish.uncompressed.js
-	@echo creating $@
+%.js: %.uncompressed.js
+	@echo creating $@ from $<
 	@$(MINIFYJS) $< > $@
-
-jquery.superfish.css: jquery.superfish.uncompressed.css
-	@echo creating $@
-	@$(MINIFYCSS) $< > $@
