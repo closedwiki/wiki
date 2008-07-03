@@ -51,7 +51,7 @@ into the current topic will search all images at the given topic.
 ---++ Syntax 
 =%<nop>IMAGE{"foo.gif" ...}%=
 
-There are four predefined format types (simple, link, thumbnail, frame, float)
+There are four predefined format types (plain, simple, link, thumbnail, frame, float)
 that can be used by setting the =type= paramenter (see below).  In addition
 there is a free-form =format= parameter to specify any other possible html
 layout.  The Wikipedia format is also supported. See
@@ -80,7 +80,7 @@ The image name is mandatory.  Further arguments are optional.
 | =style= | (see html specs) | empty |
 | =title= | title text | *alt* value |
 | =topic= | valid TWiki topic name | topic part of IMGALBUM value or current topic |
-| =type=  |  simple&#124;link&#124;thumb[nail]&#124;frame&#124;float"  | empty  |
+| =type=  |  simple&#124;link&#124;thumb[nail]&#124;frame&#124;float"  | plain  |
 | =web= | valid TWiki web name | web part of IMGALBUM value or current topic |
 | =width= | integer value | image width |
 | =warn= | on/off, surpress error warnings | on |
@@ -134,7 +134,7 @@ order is left-to-right-inside-out.
 ---++ Examples
 
    * =%<nop>IMAGE{"foo.gif" size="100" align="left" caption="This is my caption"}%=  (resize to 100 pixels, text flows right, with caption)
-   * =%<nop>IMAGE{"foo.gif" type="thumb" align="center"}%=  (Resize to %<nop>IMGPLUGIN_THUMBNAIL% size, and center image)
+   * =%<nop>IMAGE{"foo.gif" type="thumb" align="center"}%=  (Resize to %<nop>THUMBNAIL_SIZE% size, and center image)
    
 
 ---++ Plugin Installation Instructions
@@ -162,9 +162,12 @@ order is left-to-right-inside-out.
 |  Plugin Author: | TWiki:Main.CraigMeyer |
 |  Copyright: | &copy; 2006, TWiki:Main.CraigMeyer, %BR% &copy; 2006-2008 Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 1.1 |
+|  Plugin Version: | 1.20 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  03 Jul 2008: | plainify text to be used in a html attribute position, e.g. titles; \
+|  03 Jul 2008: | fixed parsing the type parameter; \
+                  fixing docu about the default THUMBNAIL_SIZE; \
+                  added new default format =plain=; \
+                  plainify text to be used in a html attribute position, e.g. titles; \
                   default to no img alignment; \
                   refresh images on a =?refresh=on= url param; \
                   using LWP::UserAgent instead of LWP::Simple to mirror images; \

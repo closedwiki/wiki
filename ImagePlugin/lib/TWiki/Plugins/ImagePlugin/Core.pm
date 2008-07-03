@@ -38,19 +38,23 @@ BEGIN {
 };
 
 use vars qw(
-  $frameFormat $linkFormat $simpleFormat 
+  $frameFormat $linkFormat $simpleFormat $plainFormat
   $magnifyFormat $captionFormat $floatFormat
   $clearFormat
 );
 
-use constant DEBUG => 0; # toggle me
+use constant DEBUG => 1; # toggle me
 
 # SMELL: become plugin preference values
 $linkFormat = 
-  '<a id="$id" class="imageLink" href="$href" title="$title">$text</a>';
+  '<a id="$id" class="imageLink" href="$href" title="$title" style="$style">$text</a>';
+
+$plainFormat = 
+  '<img class="imagePlain imagePlain_$align $class" border="0" src="$src" alt="$alt" title="$title" width="$width" height="$height" '.
+  'longdesc="$desc" $mousein $mouseout style="$style" align="$align" />';
 
 $simpleFormat = 
-  '<a href="$href" id="$id" class="imageHref imageSimple $class" title="$title" style="$style">'.
+  '<a href="$href" id="$id" class="imageHref imageSimple imageSimple_$align $class" title="$title" style="$style">'.
     '<img border="0" src="$src" alt="$alt" width="$width" height="$height" longdesc="$desc" $mousein $mouseout/>'.
   '</a>';
   
@@ -58,17 +62,17 @@ $frameFormat =
   '<div id="$id" class="imageFrame imageFrame_$align $class" style="_width:$framewidthpx;max-width:$framewidthpx;$style">'.
     '<a href="$href" class="imageHref" title="$title">'.
       '<img border="0" src="$src" alt="$alt" width="$width" height="$height" longdesc="$desc" $mousein $mouseout/>'.
-    '</a>'.
+    '</a> '.
     '$captionFormat'.
-  '</div>';
+  ' </div>';
 
 $floatFormat = 
   '<div id="$id" class="imageFloat imageFloat_$align $class" style="$style">'.
     '<a href="$href" class="imageHref" title="$title">'.
       '<img border="0" src="$src" alt="$alt" width="$width" height="$height" longdesc="$desc" $mousein $mouseout/>'.
-    '</a>'.
+    '</a> '.
     '$captionFormat'.
-  '</div>';
+  ' </div>';
 
 $clearFormat =
   '<br class="imageClear" clear="all" />';
@@ -81,7 +85,7 @@ $magnifyFormat =
   '<div class="imageMagnify">'.
     '<a href="$href" title="Enlarge">'.
       '<img border="0" src="$magnifyIcon" width="$magnifyWidth" height="$magnifyHeight" alt="Enlarge" />'.
-    '</a>'.
+    ' </a>'.
   '</div>';
 
 ###############################################################################
@@ -103,7 +107,7 @@ sub new {
   $this->{magnifyHeight} = 11; # TODO: make this configurable/autodetected/irgnored
 
   $this->{thumbSize} = 
-    TWiki::Func::getPluginPreferencesValue('THUMBNAIL_SIZE') || 180;
+    TWiki::Func::getPreferencesValue('THUMBNAIL_SIZE') || 180;
   $this->{baseWeb} = $baseWeb;
   $this->{baseTopic} = $baseTopic;
   $this->{errorMsg} = ''; # from image mage
@@ -154,7 +158,13 @@ sub handleIMAGE {
   $params->{mousein} ||= '';
   $params->{mouseout} ||= '';
   $params->{style} ||= '';
+
+  # validate args
   $params->{type} = 'thumb' if $params->{type} eq 'thumbnail';
+  if ($params->{type} eq 'thumb' && !$params->{size}) {
+    $params->{size} = $this->{thumbSize}
+  }
+  $params->{type} = 'plain' unless $params->{type};
   if ($params->{size} =~ /^(\d+)(px)?x?(\d+)?(px)?$/) {
     $params->{size} = $3?"$1x$3":$1;
   }
@@ -298,7 +308,9 @@ sub handleIMAGE {
   # format result
   my $result = $params->{format} || '';
   if (!$result) {
-    if ($params->{type} eq 'simple') {
+    if ($params->{type} eq 'plain') {
+      $result = $plainFormat;
+    } elsif ($params->{type} eq 'simple') {
       $result = $simpleFormat;
     } elsif ($params->{type} eq 'link') {
       $result = $linkFormat;
@@ -489,9 +501,6 @@ sub parseWikipediaParams {
       $params->{caption} = $arg unless $params->{caption};
     }
   }
-  $params->{type} = 'simple' if !$params->{align} && !$params->{type};
-  $params->{size} = $this->{thumbSize}
-    if $params->{type} eq 'thumb' && !$params->{size};
 }
 
 ###############################################################################

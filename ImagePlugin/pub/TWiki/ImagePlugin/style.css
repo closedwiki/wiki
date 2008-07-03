@@ -25,6 +25,7 @@ a.imageHref {
 .imageSimple {
   overflow:auto;
 }
+.imageSimple_right,
 .imageFrame_right,
 .imageFloat_right {
   clear:right;
@@ -36,6 +37,7 @@ a.imageHref {
 .imageFloat_right {
   margin:0px 0px 0px 10px;
 }
+.imageSimple_left,
 .imageFrame_left,
 .imageFloat_left {
   clear:left;
@@ -47,6 +49,7 @@ a.imageHref {
 .imageFloat_left {
   margin:0px 10px 0px 0px;
 }
+.imageSimple_center,
 .imageFrame_center,
 .imageFloat_center {
   text-align:center;
@@ -69,7 +72,10 @@ a.imageHref {
   float:right;
   margin:.3em 0px .1em 0px;
 }
-.imageMagnify image {
+.imageCaption .imageMagnify a {
+  text-decoration:none;
+}
+.imageMagnify img {
   border:0px;
   margin:0 1px;
 }
