@@ -124,7 +124,8 @@ sub _getTemplateFromTemplateExistence {
     TWiki::Func::writeDebug("- ${pluginName}: called _getTemplateFromTemplateExistence($formName, $topic, $web)") if $debug;
     my ($templateWeb, $templateTopic) = TWiki::Func::normalizeWebTopicName($web, $formName);
     
-    my $templateName = $formName;
+    $templateWeb =~ s/\//\./go;
+    my $templateName = $templateWeb.'.'.$templateTopic;
     $templateName =~ s/Form$//;
     $templateName .= $isEditAction?'Edit':'View';
 
