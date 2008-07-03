@@ -173,10 +173,11 @@ and allows more complex <nop>TWikiMarkup in the then/else branches.
    * Set SHORTDESCRIPTION = Render content conditionally
 -->
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2006-2007, Michael Daum http://wikiring.de |
+|  Copyright &copy;: | 2006-2008, Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.01 |
+|  Plugin Version: | v1.02 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  03 Jul 2008: | more rookie perl errors | 
 |  05 Oct 2007: | fixed a rookie perl error |
 |  20 Jun 2007: | added IFEXISTS ;\
                   make use of TWiki-4 APIs for speed improvements |
@@ -197,4 +198,6 @@ and allows more complex <nop>TWikiMarkup in the then/else branches.
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
 
--- TWiki:Main.MichaelDaum - 05 Oct 2007
+-- TWiki:Main.MichaelDaum - 03 Jul 2008
+
+%META:FILEATTACHMENT{name="wikiringlogo40x40.png" attachment="wikiringlogo40x40.png" attr="h" comment="" date="1189787359" path="wikiringlogo40x40.png" size="2571" stream="wikiringlogo40x40.png" tmpFilename="" user="TWikiContributor" version="1"}%

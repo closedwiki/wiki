@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2006-2007 Michael Daum http://wikiring.de
+# Copyright (C) 2006-2008 Michael Daum http://wikiring.de
 #
 # Based on the NatSkinPlugin
 #
@@ -22,7 +22,7 @@ package TWiki::Plugins::IfDefinedPlugin;
 use TWiki::Attrs;
 use strict;
 use vars qw( 
-  $VERSION $RELEASE $debug 
+  $VERSION $RELEASE
   $currentAction 
   $baseWeb $baseTopic
   $currentWeb $currentTopic
@@ -30,15 +30,15 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = 'v1.01';
+$RELEASE = 'v1.02';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Render content conditionally';
-$debug = 0; # toggle me
+
+use constant DEBUG => 0; # toggle me
 
 ###############################################################################
 sub writeDebug {
-  #&TWiki::Func::writeDebug('- IfDefinedPlugin - '.$_[0]) if $debug;
-  print STDERR '- IfDefinedPlugin - '.$_[0]."\n" if $debug;
+  print STDERR '- IfDefinedPlugin - '.$_[0]."\n" if DEBUG;
 }
 
 ###############################################################################
@@ -74,13 +74,14 @@ sub handleIfDefined {
   my $params = new TWiki::Attrs($args);
   my $theVariable = $params->{_DEFAULT};
   my $theAction = $params->{action} || '';
-  my $theThen = $params->{then} || $theVariable;
+  my $theThen = $params->{then};
   my $theElse = $params->{else} || '';
   my $theGlue = $params->{glue} || 'on';
   my $theAs = $params->{as};
 
   $theVariable = '' unless defined $theVariable;
   $theAs = '.+' unless defined $theAs;
+  $theThen = $theVariable unless defined $theThen;
 
   &escapeParameter($theThen);
   &escapeParameter($theElse);
@@ -128,13 +129,13 @@ sub handleIfDefinedThen {
 sub ifDefinedImpl {
   my ($theVariable, $theAction, $theThen, $theElse, $theElsIfArgs, $before, $after, $theGlue, $theAs) = @_;
 
-  writeDebug("called ifDefinedImpl()");
-  writeDebug("theVariable='$theVariable'");
+  #writeDebug("called ifDefinedImpl()");
+  #writeDebug("theVariable='$theVariable'");
   #writeDebug("theAction='$theAction'");
   #writeDebug("theThen='$theThen'");
   #writeDebug("theElse='$theElse'");
   #writeDebug("theElsIfArgs='$theElsIfArgs'") if $theElsIfArgs;
-  writeDebug("theAs='$theAs'");
+  #writeDebug("theAs='$theAs'");
   
   $before = '' if ($theGlue eq 'on') || !$before;
   $after = '' if ($theGlue eq 'on') || !$after;
@@ -183,14 +184,17 @@ sub handleIfExists {
   my $params = new TWiki::Attrs($args);
   my $theGlue = $params->{glue} || 'on';
   my $theWebTopic = $params->{_DEFAULT} || $params->{topic} || "$currentWeb.$currentTopic";
-  my $theThen = $params->{then} || '1';
-  my $theElse = $params->{else} || '0';
+  my $theThen = $params->{then};
+  my $theElse = $params->{else};
+  
+  $theThen = 1 unless defined $theThen;
+  $theElse = 0 unless defined $theElse;
 
   my ($thisWeb, $thisTopic) = TWiki::Func::normalizeWebTopicName($currentWeb, $theWebTopic);
   my $doesExist = TWiki::Func::topicExists($thisWeb, $thisTopic);
   my $result = ($doesExist)?$theThen:$theElse;
 
-  $result = TWiki::Func::expandCommonVariables($result, $currentTopic, $currentWeb)
+  $result = TWiki::Func::expandCommonVariables($result, $currentTopic, $currentWeb)  
     if &escapeParameter($result, web=>$thisWeb, topic=>$thisTopic);
 
   $before = '' if ($theGlue eq 'on') || !$before;
@@ -209,9 +213,12 @@ sub handleIfAccess {
   my $theWebTopic = $params->{_DEFAULT} || $params->{topic} || $currentTopic;
   my $theType = $params->{type} || 'view';
   my $theUser = $params->{user} || TWiki::Func::getWikiName();
-  my $theThen = $params->{then} || '1';
-  my $theElse = $params->{else} || '0';
+  my $theThen = $params->{then};
+  my $theElse = $params->{else};
   my $theGlue = $params->{glue} || 'on';
+
+  $theThen = 1 unless defined $theThen;
+  $theElse = 0 unless defined $theElse;
 
   $theType = 'change' if $theType =~ /^edit$/i;
 
@@ -223,7 +230,7 @@ sub handleIfAccess {
 
   my $result = ($hasAccess)?$theThen:$theElse;
 
-  $result = TWiki::Func::expandCommonVariables($result, $currentTopic, $currentWeb)
+  $result = TWiki::Func::expandCommonVariables($result, $currentTopic, $currentWeb) 
     if &escapeParameter($result, web=>$thisWeb, topic=>$thisTopic);
 
   #writeDebug("result=$result");
