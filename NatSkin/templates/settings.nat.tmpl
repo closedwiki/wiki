@@ -5,8 +5,10 @@
 %TMPL:INCLUDE{"settingssidebar"}%<!-- -->
 %TMPL:INCLUDE{"settingsjavascript"}%<!-- -->
 %TMPL:INCLUDE{"settingsstyles"}%<!-- -->
-%TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"prefs"}%) - %WIKITOOLNAME%%TMPL:END%
-%TMPL:DEF{"content"}%<!-- -->
+%TMPL:DEF{"title"}%%TOPICTITLE% (%MAKETEXT{"prefs"}%) - %WIKITOOLNAME%%TMPL:END%
+%TMPL:DEF{"contenttitle"}%<h1>[[%WEB%.%TOPIC%][%WEBLINK{format="$web"}%.%TOPIC%]] (%MAKETEXT{"prefs"}%)</h1>%TMPL:END%
+%TMPL:DEF{"content"}%<!-- content -->
+%TMPL:P{"contenttitle"}%
 <form name="EditForm" method="post" action="%SCRIPTURLPATH{"manage"}%/%WEB%/%TOPIC%">
 <input type="hidden" name="action_addform" value="" />
 <input type="hidden" name="action_cancel" value="" />
@@ -24,4 +26,4 @@
 %TMPL:P{"bottomtopicactions"}%
 %TMPL:P{"formend"}%<!-- -->
 </form>
-%TMPL:END%
+<!-- //content -->%TMPL:END%

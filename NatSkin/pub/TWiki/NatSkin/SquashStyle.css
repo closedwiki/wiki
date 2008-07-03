@@ -162,6 +162,9 @@ html {
   padding:0;
   font-size:12px;
 }
+button {
+  font-size:12px;
+}
 .natBodyContents {
   text-align:left;
   padding:0px;
@@ -188,6 +191,10 @@ html {
   font-family: 'Trebuchet MS', arial, sans-serif;
   color:white;
   border-bottom: 1px solid #FFFFFF;
+  line-height:160%;
+  vertical-align:middle;
+  height:120px;
+  padding:0px;
 }
 .natWebTitle {
   font-family: 'Trebuchet MS', arial, sans-serif;
@@ -204,7 +211,7 @@ html {
   color:#CC6600;
 }
 .natWebSlogan {
-  color:#CC6600;
+  display:none;
 }
 
 .natSearchBox input {
@@ -236,20 +243,24 @@ html {
 }
 
 .natTopicActions {
-  line-height:19px;
   font-size:12px;
 }
 .natTopicActions .natSep {
-  visibility:hidden;
+  display:none;
 }
+.natTopicActions .natDisabledTopicAction,
 .natTopicActions a {
-  padding:5px;
-  margin:0px -5px;
+  margin:0px -1px;
+  padding:3px 5px;
 }
 .natTopicActions a:hover {
   text-decoration: none;
   background:#CC6600;
   color:white;
+}
+
+.natTopicActions .natDisabledTopicAction {
+  color:#F5CD98;
 }
 
 /* sidebar */

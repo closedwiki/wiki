@@ -6,10 +6,9 @@
 %TMPL:INCLUDE{"moveattachmentjavascript"}%<!-- -->
 %TMPL:INCLUDE{"moveattachmentstyles"}%<!-- -->
 %TMPL:DEF{"bodyclass"}%natMoveAttachmentBody%TMPL:END%
-%TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"move attachment"}%) - %WIKITOOLNAME%%TMPL:END%
+%TMPL:DEF{"title"}%%TOPICTITLE% (%MAKETEXT{"move attachment"}%) - %WIKITOOLNAME%%TMPL:END%
 %TMPL:DEF{"meta"}% <meta name="robots" content="noindex, nofollow" /> %TMPL:END%
 %TMPL:DEF{"onloadscript"}%document.rename.newtopic.focus();%TMPL:END%
-%TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>[[%TOPIC%]]%TMPL:END%
 %TMPL:DEF{"content"}%<!-- -->
 <form name="rename" action="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%">
 %IFDEFINEDTHEN{"%URLPARAM{"newweb"}%" as="Trash"}%

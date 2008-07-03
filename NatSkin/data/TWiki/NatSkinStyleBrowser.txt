@@ -19,7 +19,7 @@ See the TWiki.NatSkinPlugin documentation on how to use style settings in your p
 %IFSKINSTATETHEN{final="all"}%
 <!-- %RED%all styles and switches are final%ENDCOLOR% -->
 %ELSESKINSTATE%
-<form action="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%" method="post">
+<form action="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%" _method="post">
 <table border="0">
 %IFSKINSTATETHEN{final="style"}% %ELSESKINSTATE%
 <tr><td colspan="3"> *%MAKETEXT{"Style"}%:* </td></tr>
@@ -132,3 +132,6 @@ See the TWiki.NatSkinPlugin documentation on how to use style settings in your p
 </td></tr></table>
 %STOPINCLUDE%
 
+<!--
+   * Set SKIN = nat
+-->

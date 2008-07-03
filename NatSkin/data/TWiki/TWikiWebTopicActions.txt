@@ -2,4 +2,9 @@
 ---+ %TOPIC%
 Default site-level configuration for the !WebTopicActions !WebComponent
 
-%STARTINCLUDE%%USERACTIONS%%STOPINCLUDE%
+%STARTINCLUDE%<!-- twikiwebtopicactions -->
+%USERACTIONS{
+  format="$user$sep$help$sep$logout$sep$print<br />$edit$sep$attach$sep$move$sep$raw$sep$diff$sep$more"
+  guest="$login$sep$register$sep$print"
+}%
+<!-- //twikiwebtopicactions -->%STOPINCLUDE%

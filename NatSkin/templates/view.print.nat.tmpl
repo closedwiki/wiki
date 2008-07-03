@@ -23,9 +23,6 @@ object#player,
 .blogAddComment {
   display:none;
 }
-.natExternalLink:after {
-  content:" (" attr(href) ") ";
-}
 </style>
 %TMPL:P{"javascript"}%
 %WEBCOMPONENT{"WebHtmlHead"}%
@@ -43,10 +40,10 @@ object#player,
 </div>
 </body>
 </html>
-%TMPL:DEF{"content"}%%STARTALIASAREA%%TEXT% 
+%TMPL:DEF{"content"}%%TEXT% 
 %META{"form"}% 
-%STOPALIASAREA% %TMPL:END%
+%TMPL:END%
 <!-- template: view.print.nat.tmpl -->
 %TMPL:INCLUDE{"strings"}%
 %TMPL:INCLUDE{"styles"}%
-%TMPL:INCLUDE{"javascript"}%
+%TMPL:INCLUDE{"printjavascript"}%

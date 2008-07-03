@@ -73,9 +73,10 @@ hr {
 }
 
 blockquote {
-  margin:0.5em 0em 0.5em 2em;
+  margin:1.0em 0em 1.0em 2em;
 }
 
+button,
 html {
   font-size:12px; 
 }
@@ -83,6 +84,9 @@ html {
 input, textarea, select, body { 
   font-size:100%;
   line-height:normal;
+}
+.twikiCheckbox {
+  margin:0px 3px 0px 0px;
 }
 h1 { font-size:180%;}
 h2 { font-size:160%;}
@@ -92,6 +96,20 @@ h5 { font-size:110%; margin-top:10px;margin-bottom:0px;}
 h6 { font-size:110%; margin-top:10px;margin-bottom:0px;}
 h1, h2, h3, h4, h5, h6 {
   line-height:normal;
+}
+
+p {
+  margin:1.0em 0em 0em 0em;
+}
+
+dt {
+  font-weight:bold;
+}
+
+pre, code,
+.natMain .twikiTextareaRawView,
+.natEditTextArea {
+  font-family:"Bitstream Vera Sans Mono", "Andale Mono", Courier, monospace;
 }
 
 /* extra divs */
@@ -115,7 +133,7 @@ h1, h2, h3, h4, h5, h6 {
 .natMiddle, 
 .natTopBarSizer,
 .natSideBar, natSideBarContents			{ border: 1px solid red }
-.natMain, .natMainContents, natMainHeaderContents
+.natMain, .natMainContents, .natMainHeaderContents
 .natSideBar, .natSideBarContents,
 .natMainFooter, natMainFooterContents {
   border:1px solid red;
@@ -179,6 +197,11 @@ h1, h2, h3, h4, h5, h6 {
 .natOopsMoreBody .natMainHeaderContents {
   display:none;
 }
+.natOopsMessage {
+  width:700px;
+  margin:0px auto;
+}
+
 .natLayoutTable {
   table-layout:fixed;
   width:100%;
@@ -205,9 +228,6 @@ h1, h2, h3, h4, h5, h6 {
   max-width:280px;
 }
 .natTopLeft,
-.natTopRight {
-  padding-bottom:10px;
-}
 .natTopRight {
   vertical-align:bottom;
 }
@@ -241,10 +261,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* login */
-.natLoginBody .natMainHeaderContents {
+.natLoginBody natMainHeaderContents {
   display:none;
 }
-.natLoginBody .natLoginMessage {
+.natLoginMessage {
   margin:0px auto;
   width:500px;
 }
@@ -352,7 +372,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .natMainFooterContents,
 .natMainHeaderContents {
-  padding:1px;
+  padding:0px;
   margin:0px;
 }
 .natMainContents pre {
@@ -364,14 +384,7 @@ h1, h2, h3, h4, h5, h6 {
 .DISABLEDnatMainContents > pre { /* hide from IE */
   /*\*/ overflow:auto !important; /* */ overflow:scroll; /* for Mac Safari */
 }
-.natMainContents > ul, .natMainContents > ol {
-  margin-top:10px;
-  margin-bottom:10px;
-}
 
-.natMain dt {
-  font-weight:bold;
-}
 
 /* login */
 .natLogonFormHolder {
@@ -404,8 +417,11 @@ h1, h2, h3, h4, h5, h6 {
 .natEditBody .natTopBar {
   display:none;
 }
+.natEditBody h1 {
+  margin-bottom:1em;
+}
 .natEditTopicInfo {
-  margin:0.5em 0em 2em 0em;
+  margin:0.5em 0em 1em 0em;
 }
 .natEditTopicInfo table {
   width:100%;
@@ -413,6 +429,9 @@ h1, h2, h3, h4, h5, h6 {
 .natEditTopicInfo table th,
 .natEditTopicInfo table td {
   padding:0px 0px 5px 0px;
+}
+.natEditBody table th.twikiFirstCol {
+  width:10em;
 }
 
 .natBottomTopicActions {
@@ -482,40 +501,16 @@ h1, h2, h3, h4, h5, h6 {
   text-align:left;
   vertical-align:top;
 }
-.natSearchHit,
-.natSearchTable {
-  width:100%;
-  border-collapse:collapse;
+.natSearchHit {
+  margin:1.5em 0em;
 }
-.natSearchTable th {
-  padding-left:5px;
-  padding-right:5px;
-}
-.natSearchHit th,
-.natSearchTable th {
-  text-align:left;
-}
-.natSearchTable td {
-  vertical-align:top;
-}
-.natSearchHit th,
-.natSearchHit td {
-  padding:5px;
-}
-.natSearchTotal {
-  margin-bottom:10px;
-  font-weight:bold;
-}
-
 .natSearchTotal span {
   color:red;
 }
 .natSearchString {
-  margin-bottom:10px;
   font-weight:bold;
   color:red;
 }
-
 .natSearch {
   font-weight:bold;
 }
@@ -539,7 +534,7 @@ h1, h2, h3, h4, h5, h6 {
   padding:5px;
   margin-top:2ex;
   margin-bottom:2ex;
-  font-family:monospace;
+  font-family:"Bitstream Vera Sans Mono", "Andale Mono", Courier, monospace;
   color:red;
 }
 
@@ -561,6 +556,7 @@ h1, h2, h3, h4, h5, h6 {
 .natAltButton {
   color:blue;
 }
+.twikiButtonCancel,
 .natCancelButton {
   color:red;
 }
@@ -720,7 +716,6 @@ a.natFeedIcon {
 /* twiki forms */
 .natTopicForm {
   overflow:auto;
-  margin-top:1em;
   padding:1px; /* konqueror fix */
 }
 .natTopicForm .twikiFirstCol,
@@ -772,10 +767,6 @@ a.natFeedIcon {
   border:0px;
 }
 
-.twikiFormStep {
-  margin:1em 0px;
-}
-
 .natTopicForm table table,
 .natTopicForm table table td {
   border:0px;
@@ -788,6 +779,27 @@ a.natFeedIcon {
 .natTopicFormLabel {
   margin-top:3px;
   margin-bottom:3px;
+}
+
+.twikiFormStep {
+  padding:0.5em 1em 0.75em;
+  margin:0em;
+}
+.natMain .twikiFormStep h2,
+.natMain .twikiFormStep h3,
+.natMain .twikiFormStep h4,
+.twikiFormStep h2,
+.twikiFormStep h3,
+.twikiFormStep h4 {
+  border:none;
+  margin:0em 0em 0.1em 0em;
+  padding:0px;
+  background:none;
+  font-size:100%;
+  font-weight:bold;
+}
+.twikiFormStep p {
+  margin:0.35em 0em;
 }
 
 /* twikiDiff */
@@ -961,8 +973,6 @@ img.alignleft {
   font-weight:bold;
   margin-left:2px;
   margin-right:2px;
-  line-height:25%;
-  font-size:18px;
   text-decoration:none;
 }
 
@@ -1095,18 +1105,19 @@ img.alignleft {
 }
 
 /* classification plugin */
-.natMainContents .clsTopicInfo h1 {
+.clsTopicInfo h1 {
   border-bottom:0px;
+  margin-top:0px;
   margin-bottom:5px;
 }
-.natMainContents .clsTopicInfo a {
+.clsTopicInfo a {
   text-decoration:none;
   background-image:none;
 }
 .clsTopicInfo .twikiCurrentTopicLink {
   color:inherit;
 }
-.natMainContents .clsTopicInfoSep {
+.clsTopicInfoSep {
   margin-bottom:21px;
 }
 

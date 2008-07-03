@@ -3,7 +3,7 @@
 ---+ %MAKETEXT{"[_1]'s sidebar" args="%WIKIUSERNAME%"}%
 
 %STARTINCLUDE%<!-- mysidebar -->
-<h2 >[[%MAINWEB%.%WIKINAME%SideBar][%MAKETEXT{"MySideBar"}%]]%REDDOT%</h2>
+<h2 > [[%MAINWEB%.%WIKINAME%SideBar][MySideBar]]</h2>
 %TWISTY{
    mode="div"
    prefix="<div>"

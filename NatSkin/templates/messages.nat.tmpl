@@ -6,7 +6,8 @@
 %MAKETEXT{"Your [[[_1]][homepage]] has _not_ been removed yet." args="%MAINWEB%.%PARAM1%"}%
 
 %MAKETEXT{"Please email [_1] to request this."
- args="<a href=\"mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Delete&#32;User&amp;body=%PARAM1%\">%WIKIWEBMASTER%</a>"}%
+ args="<a href='mailto:%WIKIWEBMASTER%?subject=%ENCODE{"%WIKITOOLNAME% Delete User"}%&amp;body=%ENCODE{"%PARAM1%"}%'>%WIKIWEBMASTER%</a>"
+}%
 <style type="text/css">.natContact {display:none}</style>
 %TMPL:END%
 %TMPL:DEF{"missing_action"}%<!-- uses goback template -->
@@ -149,17 +150,17 @@ link in your email or enter the code in the box below to activate your membershi
 %MAKETEXT{"An e-mail could not be delivered."}% 
 
 *%MAKETEXT{"Mail to"}%*:
-<verbatim>
+<pre>
 %PARAM1%
-</verbatim>
+</pre>
 
 *%MAKETEXT{"Errors"}%*: 
-<verbatim>
+<pre>
 %PARAM2%
-</verbatim>
+</pre>
 
 %MAKETEXT{"Please notify your [_1] administrator [_2]"
- args="<nop>%WIKITOOLNAME%,<a href=\"mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Send%20Mail%20Error\">%WIKIWEBMASTER%</a>"}%
+ args="<nop>%WIKITOOLNAME%,<a href=\"mailto:%WIKIWEBMASTER%?subject=%ENCODE{"%WIKITOOLNAME% Send Mail Error"}%\">%WIKIWEBMASTER%</a>"}%
 <style type="text/css">.natContact {display:none}</style>
 %TMPL:END%
 %TMPL:DEF{"already_exists"}%<!-- only one contact message -->
@@ -231,9 +232,9 @@ link in your email or enter the code in the box below to activate your membershi
 %MAKETEXT{"During save of [_1] an error was found by the version control system."
  args="<nop>%WEB%.<nop>%TOPIC%"}%
 
-<verbatim>
+<pre>
 %PARAM1%
-</verbatim>
+</pre>
 
 %MAKETEXT{"Please notify your [_1] administrator [_2]." args="<nop>%WIKITOOLNAME%,%WIKIWEBMASTER%"}%
 
@@ -244,12 +245,12 @@ link in your email or enter the code in the box below to activate your membershi
 ---+++ %MAKETEXT{"Attachment delete failed"}%
 %MAKETEXT{"During deletion of attachment =[_1]= an error was found." args="%URLPARAM{attachment}%"}% 
 
-<verbatim>
+<pre>
 %PARAM4%
-</verbatim>
+</pre>
 
 %MAKETEXT{"Please notify your [_1]" args="<nop>%WIKITOOLNAME%"}% 
-<a href="mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Delete&#32;Error&amp;body=%PARAM4%">%WIKIWEBMASTER%</a>.
+<a href="mailto:%WIKIWEBMASTER%?subject=%ENCODE{"%WIKITOOLNAME% Delete Error"}%&amp;body=%ENCODE{"%PARAM4%"}%">%WIKIWEBMASTER%</a>.
 <style type="text/css">.natContact {display:none}</style>
 %TMPL:END%
 %TMPL:DEF{"upload_name_changed"}%<!-- uses goback def -->
@@ -325,11 +326,28 @@ template that doesn't exist." args="%PARAM2%"}%
 
 %TMPL:P{"goback"}%
 %TMPL:END%
+%TMPL:DEF{"no_such_topic_message"}%
+---++ %MAKETEXT{"If you want to create the topic"}%
+[[%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?t=%SERVERTIME{"$year$mo$day$min$sec"}%][%MAKETEXT{"Create the topic"}%]]
+
+%TMPL:END%
 %TMPL:DEF{"no_such_topic"}% <!-- -->
 ---++ %MAKETEXT{"\"[_1]\" topic does not exist" args="%WEB%.%TOPIC%"}%
 %MAKETEXT{"You are trying to [_1] a topic that does not exist." args="%PARAM1%"}%
 
 %MAKETEXT{"If you want to create the topic then [[[_1]][click here]]." args="%SCRIPTURLPATH{\"edit\"}%/%WEB%/%TOPIC%?t=%SERVERTIME{\"$year$mo$day$min$sec\"}%"}%
+%TMPL:END%
+%TMPL:DEF{"no_such_topic_template"}%
+---++ %MAKETEXT{"Template [_1] does not exist" args="\"%WEB%.%TOPIC%\""}%
+%MAKETEXT{"You are trying to create a topic from a template that does not exist." args="%PARAM1%"}%
+
+%TMPL:P{"goback"}%
+%TMPL:END%
+%TMPL:DEF{"no_such_topic_rename"}%
+---++ %MAKETEXT{"[_1] topic does not exist" args="\"%WEB%.%TOPIC%\""}%
+%MAKETEXT{"You are trying to rename a topic that does not exist." args="%PARAM1%"}%
+
+%TMPL:P{"goback"}%
 %TMPL:END%
 %TMPL:DEF{"no_such_attachment"}% <!-- removed contact -->
 ---++ %MAKETEXT{"Attachment '[_1]' does not exist" args="%PARAM2%"}%

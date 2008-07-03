@@ -138,7 +138,7 @@ allways open an extra window.
 |  Skin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2008, Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Skin Version: | v3.0-pre18 |
+|  Skin Version: | v3.0-pre20 |
 |  Dependencies: | TWiki:Plugins/NatSkinPlugin |
 |  Description: | Driven by cascading stylesheets, Comes with 12 alternative styles, <nop>MoveableType and Wordpress Look-n-Feel |
 |  Base Name: | nat |
@@ -154,6 +154,22 @@ allways open an extra window.
   <div class="screenshotter"><a href="%ATTACHURL%/SquashThin.jpeg"><img src="%ATTACHURL%/SquashThin.jpeg" title="SquashThin" /></a></div>\
   <div class="screenshotter"><a href="%ATTACHURL%/StormyThin.jpeg"><img src="%ATTACHURL%/StormyThin.jpeg" title="StormyThin" /></a></div> |
 |  Change&nbsp;History: | <!-- specify latest version first -->&nbsp; |
+|  03 Jul 2008: | added support for TWiki:Plugins/OpenOffice2TWikiAddOn;\
+                  added support for TWiki:Plugins/EmployeePortalPlugin; \
+                  various improvements on all default themes; \
+                  improvements wrt latest release of TWiki:Plugins/NatEditContrib; \
+                  support for TOPICTITLE feature of TWiki:Plugins/DBCachePlugin ;\
+                  fixed oops errors showing html entities instead of readable error msg; \
+                  improved usability in error messages; \
+                  shrinking urls in attachments to prevent bloating the attachments table; \
+                  improved login screen; \
+                  added support for the new universal edit button's link relation; \
+                  improved help texts for user actions; \
+                  putting attachments comments in an extra line of the table to prevent \
+                  bloating it; \
+                  improved usability of natsearch dialog; \
+                  using a google-like SEARCH result; \
+                  added more body classes to indicate the skin state on the css level |
 |  13 Nov 2007: | reworking templates to use context instead of skin state, \
                   fixed initialization if <nop>NatEdit toolbar, \
                   improved usability of selecting a diff pair in <nop>HistoryPlugin, \
@@ -412,6 +428,6 @@ allways open an extra window.
 
 __Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki:TWiki/TWikiSkinBrowser
 
--- TWiki:Main/MichaelDaum - 17 Jan 2008
+-- TWiki:Main/MichaelDaum - 03 Jul 2008
 
 %META:FILEATTACHMENT{name="wikiringlogo40x40.png" attachment="wikiringlogo40x40.png" attr="h" comment="" date="1189787359" path="wikiringlogo40x40.png" size="2571" stream="wikiringlogo40x40.png" tmpFilename="" user="TWikiContributor" version="1"}%

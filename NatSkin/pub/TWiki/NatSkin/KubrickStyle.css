@@ -34,6 +34,9 @@ html {
   font-size:11px;
   line-height:150%;
 }
+button {
+  font-size:11px;
+}
 .natBodyContents {
   background:white;
   text-align:left;
@@ -52,7 +55,7 @@ html {
 /* top bar */
 .natTopLeft, .natTopRight {
   padding:0px;
-  vertical-align:top;
+  vertical-align:bottom;
 }
 .natTopLeft {
   padding:40px 0px 40px 15px;
@@ -94,6 +97,13 @@ html {
 }
 .natTopicActions {
   font-size:1.0em;
+}
+.natTopicActions a,
+.natTopicActions .natDisabledTopicAction {
+  padding:3px 5px;
+}
+.natTopicActions .natSep {
+  display:none;
 }
 
 .natWebTitle {
@@ -376,11 +386,13 @@ html>body .natSideBar ol { /* hide from IE */
 .twikiPageForm table input,
 .natTopicForm table textarea,
 .natTopicForm table input {
-  border:1px solid #d9d6e7;
   margin:2px;
   font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
   color:#444;
   padding:2px;
+}
+.natTopicEditForm textarea {
+  border:1px inset #d9d6e7;
 }
 .natTopicFormFirstCol a,
 .natTopicFormFirstCol {

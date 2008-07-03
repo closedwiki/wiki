@@ -149,7 +149,8 @@ pub/TWiki/NatSkin/quote.gif 0644
 pub/TWiki/NatSkin/quote.png 0644
 pub/TWiki/NatSkin/quote-white.png 0644
 pub/TWiki/NatSkin/right-shade.png 0644
-pub/TWiki/NatSkin/separator.jpg 0644
+pub/TWiki/NatSkin/stormy_tab_left_on.gif 0644
+pub/TWiki/NatSkin/stormy_tab_right_on.gif 0644
 pub/TWiki/NatSkin/stripes.png 0644
 pub/TWiki/NatSkin/top-shade.png 0644
 pub/TWiki/NatSkin/wikiringlogo40x40.png 0644
@@ -165,6 +166,7 @@ templates/body.nat.tmpl 0644
 templates/changeform.nat.tmpl 0644
 templates/changeformsidebar.nat.tmpl 0644
 templates/changes.nat.tmpl 0644
+templates/comments.nat.tmpl 0644
 templates/editTableRow.nat.tmpl 0644
 templates/editform.nat.tmpl 0644
 templates/editjavascript.nat.tmpl 0644
@@ -181,6 +183,7 @@ templates/mailnotify.nat.tmpl 0644
 templates/messages.nat.tmpl 0644
 templates/moveattachment.nat.tmpl 0644
 templates/moveattachmentsidebar.nat.tmpl 0644
+templates/oo2twiki.nat.tmpl 0644
 templates/oopsaccesschange.nat.tmpl 0644
 templates/oopsaccesscreateweb.nat.tmpl 0644
 templates/oopsaccessdenied.nat.tmpl 0644
@@ -234,6 +237,7 @@ templates/plucsearch.nat.tmpl 0644
 templates/previewjavascript.nat.tmpl 0644
 templates/preview.nat.tmpl 0644
 templates/previewstyles.nat.tmpl 0644
+templates/printjavascript.nat.tmpl 0644
 templates/rdiff.nat.tmpl 0644
 templates/rdiffstyles.nat.tmpl 0644
 templates/rdifftopicactions.nat.tmpl 0644

@@ -31,7 +31,14 @@ hr {
   font-family:arial,sans-serif;
   background:white;
 }
+button {
+  font-size:12px;
+}
 
+.natTopBar {
+  line-height:160%;
+  vertical-align:bottom;
+}
 .natTopLeftContents {
   margin:20px 0px 20px 20px;
 }
@@ -39,8 +46,19 @@ hr {
   margin:20px;
   font-size:11px;
 }
+.natTopicActions {
+  color:#666;
+  color:#C1BDC1;
+}
 .natTopicActions .natSep {
-  visibility:hidden;
+  display:none;
+}
+.natTopicActions a,
+.natTopicActions .natDisabledTopicAction {
+  padding:3px 5px;
+}
+.natTopicActions a {
+  color:#3f59bb;
 }
 
 .natMain {
@@ -230,7 +248,7 @@ hr {
   background:transparent;
   font-weight:bold;
   margin:0px;
-  font-size:24px;
+  font-size:30px;
 }
 
 .natSearchBox input, 
@@ -247,8 +265,7 @@ hr {
 }
 
 .natWebSlogan {
-  padding-left:0px;
-  color:#3f59bb;
+  display:none;
 }
 
 /* sidebar */

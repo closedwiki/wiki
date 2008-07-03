@@ -24,6 +24,7 @@
 .natWebButtons ul a:hover {
   text-decoration: none;
   color:#99ff66; 
+  background:#555555;
 }
 
 .natWebButtons ul a.current:hover {
@@ -34,4 +35,5 @@
   background:#555555;
   color:#eeeeee;
   border:0px;
+  margin:0px 2px;
 }

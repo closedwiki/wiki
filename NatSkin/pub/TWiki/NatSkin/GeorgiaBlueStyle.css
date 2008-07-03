@@ -66,12 +66,25 @@ html {
   font:bold 12px verdana,arial,sans-serif;
   color:#99ccff;
 }
+.natWebSlogan {
+  display:none;
+}
 
 .natTopRight, .natTopRight a {
   color:#99ccff;
 }
 .natTopRight a:hover {
   color:#bbeeff;
+}
+.natTopicActions a,
+.natTopicActions .natDisabledTopicAction {
+  padding:3px 5px;
+}
+.natTopicActions a:hover {
+  color:#f5f5f5;
+}
+.natTopicActions .natDisabledTopicAction {
+  color:#6F96B5;
 }
 
 .natSearchBox {
@@ -304,6 +317,7 @@ html {
   color:#336699;
 }
 
+button,
 .natMiddle input,
 .natMiddle select,
 .natMiddle textarea {

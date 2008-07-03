@@ -7,9 +7,8 @@
 %TMPL:INCLUDE{"renamestyles"}%<!-- -->
 %TMPL:DEF{"bodyclass"}%natRenameBody%TMPL:END%
 %TMPL:DEF{"meta"}% <meta name="robots" content="noindex, nofollow" /> %TMPL:END%
-%TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"rename"}%) - %WIKITOOLNAME%%TMPL:END%
+%TMPL:DEF{"title"}%%TOPICTITLE% (%MAKETEXT{"rename"}%) - %WIKITOOLNAME%%TMPL:END%
 %TMPL:DEF{"onloadscript"}%document.rename.newtopic.focus();%TMPL:END%
-%TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>[[%TOPIC%]]%TMPL:END%
 %TMPL:DEF{"content"}%<!-- -->
 <form method="POST" name="rename" action="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%">
 <!--input type="hidden" name="confirm" value="on"-->

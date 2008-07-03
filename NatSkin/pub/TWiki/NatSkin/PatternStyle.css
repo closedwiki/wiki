@@ -11,6 +11,9 @@
   voice-family:inherit;
   font-size:12px;
 }
+button {
+  font-size:12px;
+}
 
 p {
   margin:1em 0 0 0;
@@ -247,8 +250,18 @@ label {
   font-family:arial, sans-serif;
   line-height:135%;
 }
+.natTopicActions {
+  line-height:160%;
+}
 .natTopicActions .natSep {
-  color:#ddd;
+  display:none;
+}
+.natTopicActions a,
+.natTopicActions .natDisabledTopicAction {
+  padding:3px 5px;
+}
+.natTopicActions .natDisabledTopicAction {
+  color:#C1BDC1;
 }
 .natSearchBox input {
   border:1px solid #eee;

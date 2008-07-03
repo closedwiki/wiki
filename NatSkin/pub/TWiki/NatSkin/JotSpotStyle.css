@@ -11,6 +11,9 @@ body{
   margin: 0;
   font-size:12px;
 }
+button {
+  font-size:12px;
+}
 
 a:link,
 a {
@@ -83,6 +86,25 @@ html,
 }
 .natTopBar a {
   color: #FFCE00;
+}
+
+.natTopicActions {
+  line-height:160%;
+}
+.natTopicActions a,
+.natTopicActions .natDisabledTopicAction {
+  padding:3px 5px;
+  text-decoration:none;
+}
+.natTopicActions .natSep {
+  display:none;
+}
+.natTopicActions .natDisabledTopicAction {
+  color:#8387AB;
+}
+.natTopicActions a:hover {
+  background:#9C9DCD;
+  color:#414483;
 }
 
 /* sidebar */

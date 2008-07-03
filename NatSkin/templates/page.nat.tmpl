@@ -15,7 +15,7 @@
 %TMPL:P{"javascript"}%
 %WEBCOMPONENT{"WebHtmlHead"}%
 </head>
-<body class="natBody %TMPL:P{"bodyclass"}% %IFSKINSTATE{border="thin" then="natBodyThin"}% %IFSKINSTATE{border="on" then="natBodyBorder"}%">%TMPL:P{"body"}%</body>
+<body class="%TMPL:P{"defaultbodyclass"}% %TMPL:P{"bodyclass"}% %IFSKINSTATE{sidebar="left" then="natBodyLeft"}% %IFSKINSTATE{border="thin" then="natBodyThin"}% %IFSKINSTATE{border="on" then="natBodyBorder"}%">%TMPL:P{"body"}%</body>
 </html>
 %TMPL:INCLUDE{"strings"}%
 %TMPL:INCLUDE{"body"}%

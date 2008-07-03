@@ -25,6 +25,9 @@ html {
   padding:0;
   font-size:12px;
 }
+button {
+  font-size:12px;
+}
 .natBodyContents {
   font-family:arial, sans-serif;
 }
@@ -62,7 +65,10 @@ html {
   font-family:'Trebuchet MS', arial, sans-serif;
   border-bottom: 2px solid #6699CC;
   color:white;
-  line-height:16px;
+  line-height:160%;
+  vertical-align:middle;
+  height:120px;
+  padding:0px;
 }
 .natTopBar a:hover {
   color:#669966;
@@ -74,7 +80,6 @@ html {
 }
 .natWebTitle {
   text-transform: none;
-  padding-bottom:10px;
 }
 
 .natTopLeft,
@@ -85,7 +90,7 @@ html {
 }
 
 .natWebSlogan {
-  color:#669966;
+  display:none;
 }
 
 .natSearchBox input {
@@ -114,11 +119,11 @@ html {
   display:none;
 }
 .natTopicActions {
-  line-height:19px;
   font-size:12px;
 }
+.natTopicActions .natDisabledTopicAction,
 .natTopicActions a {
-  margin-left:-9px;
+  margin-left:-6px;
   padding:4px 9px;
 }
 .natTopicActions a:hover {
@@ -127,6 +132,9 @@ html {
   text-decoration:none;
 }
 
+.natTopicActions .natDisabledTopicAction {
+  color:#CAE8A8;
+}
 
 /* sidebar */
 .natTopRight,

@@ -9,7 +9,6 @@
 %TMPL:DEF{"title"}%Login - %WIKITOOLNAME%%TMPL:END%
 %TMPL:DEF{"bodyclass"}%natLoginBody%TMPL:END%
 %TMPL:DEF{"meta"}% <meta name="robots" content="noindex, nofollow" /> %TMPL:END%
-%TMPL:DEF{"locator"}% %TMPL:END%
 %TMPL:DEF{"LOG_IN_BANNER"}%Please enter your username and password.%TMPL:END%
 %TMPL:DEF{"LOGGED_IN_BANNER"}%%MAINWEB%.%WIKINAME% is currently logged in.%TMPL:END%
 %TMPL:DEF{"NEW_USER_NOTE"}%Enter a new username and password to change identity.%TMPL:END%
@@ -32,5 +31,6 @@
 %MAKETEXT{"Contact [_1] if you have any questions." args="<a href='mailto:%WIKIWEBMASTER%?subject=%ENCODE{\"%WIKITOOLNAME%: Request for support\"}%&&body=%ENCODE{\"Hello, I have got a question ...\"}%'>%WIKIWEBMASTER%</a>"}%
 </div> %TMPL:END%
 %TMPL:DEF{"seealso"}%
-*%MAKETEXT{"See also:"}%* %TWIKIREGISTRATION%, %TWIKIWEB%.ResetPassword, %TWIKIWEB%.ChangePassword 
+[[%TWIKIWEB%.ResetPassword][%MAKETEXT{"Did you forget your password?"}%]] %BR%
+[[%TWIKIREGISTRATION%][%MAKETEXT{"Do you want to become a registered user?"}%]]
 %TMPL:END%

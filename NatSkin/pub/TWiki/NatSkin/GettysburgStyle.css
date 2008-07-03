@@ -16,7 +16,7 @@ a:hover, a:active {
 hr {
   border-bottom:1px solid #aaaaaa;
 }
-body, input, textarea, select {
+body, input, textarea, select, button {
   font-size:14px;
 }
 
@@ -224,6 +224,20 @@ html {
 }
 .natTopRight a:hover {
   color:#ffcc66;
+}
+.natTopicActions {
+  line-height:140%;
+}
+.natTopicActions a,
+.natTopicActions .natDisabledTopicAction {
+  padding:3px 5px;
+}
+.natTopicActions .natSep {
+  display:none;
+}
+.natTopicActions .natDisabledTopicAction {
+  color:#516B86;
+  color:#7289A2;
 }
 
 .natSearchBox input {
