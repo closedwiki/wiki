@@ -19,10 +19,10 @@ If you want to hide the web navigation from <nop>TWikiGuests then uncomment the 
   hideimg="%ICONURLPATH{"minus"}%"
   remember="on"
 }%
-<div class="jqTreeview closed">
+<div class="jqTreeview closed unique">
 %~~ FLEXWEBLIST{
 ~~~   webs="%MAINWEB%,User,People,public,%TWIKIWEB%" 
-~~~   exclude="(TestCases|Trash)" 
+~~~   exclude="^(TestCases|Trash).*" 
 ~~~   adminwebs="Applications.*"
 ~~~   header="<ul>"
 ~~~   format="<li>$percntWEBLINK{\"$web\"}$percnt"

@@ -286,7 +286,8 @@ sub hashWebs {
     my $parentName = $webs{$key}{parentName};
     if ($parentName) {
       $webs{$key}{parent} = $webs{$parentName};
-      push @{$webs{$parentName}{children}}, $webs{$key};
+      push @{$webs{$parentName}{children}}, $webs{$key}
+        if defined $webs{$parentName};
     }
   }
   #writeDebug("keys=".join(',',sort keys %webs));
