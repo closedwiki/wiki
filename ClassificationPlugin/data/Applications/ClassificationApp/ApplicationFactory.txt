@@ -7,7 +7,6 @@
    * Set EDIT_TEMPLATE = Applications.FormEdit
    * Set VIEW_TEMPLATE = Applications.HiddenFormView
 -->
-See also: [[%FORMFIELD{"Target"}%]]
 
 
 %META:FORM{name="Applications.TopicStub"}%

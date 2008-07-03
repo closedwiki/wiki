@@ -16,7 +16,7 @@
    * plugin definition 
    */
   $.fn.tagSelector = function(options) {
-    //writeDebug("called tagSelector()");
+    writeDebug("called tagSelector()");
    
     // build main options before element iteration
     var opts = $.extend({}, $.fn.tagSelector.defaults, options);
@@ -41,7 +41,7 @@
 
       // key handler *********************************************************
       function handleKeys(ev) {
-        //writeDebug("called handleKey(), event type="+ev.type+" keyCode="+ev.keyCode);
+        writeDebug("called handleKey(), event type="+ev.type+" keyCode="+ev.keyCode);
 
         // key press
         if (ev.type == 'keypress') {
@@ -97,24 +97,28 @@
         }
         $("a", $tagCloud).removeClass('typed current');
         var selection = $input.val();
-        var values = selection.split(/[, ]+/);
-        var last = values[values.length-1];
+        //writeDebug("selection="+selection);
+        var tmpValues = selection.split(/\s*,\s*/);
+        var values = new Array();
+        for (var i = 0; i < tmpValues.length; i++) {
+          values.push(tmpValues[i].replace(/([^0-9A-Za-z_])/, '\\$1'));
+        }
         var filter = "a#"+values.join(",a#");
         //writeDebug("filter="+filter);
         $(filter, $tagCloud).addClass("current");
 
+        var last = tmpValues[tmpValues.length-1];
         if (last.match(/^ *$/)) {
           return;
         }
-
-        $("a", $tagCloud).each(function() {
+        $("a[id^="+last+"]", $tagCloud).each(function() {
           var id = $(this).attr('id');
-          if(id.indexOf(last) == 0) {
+          if (selection.indexOf(id) < 0) {
             $(this).addClass("typed");
           }
         });
       }
-     
+
       // tab handler *********************************************************
       function handleTabKey() {
         //writeDebug("called handleTabKey()");
@@ -122,7 +126,8 @@
         elem.focus();
 
         var currentTags = $input.val();
-        var values = currentTags.split(/[, ]+/);
+        //writeDebug("currentTags="+currentTags);
+        var values = currentTags.split(/\s*,\s*/);
         var last = values.pop();
         var startPos = elem.selectionStart;
         var endPos = elem.selectionEnd;
@@ -141,9 +146,9 @@
         // find all matching tags
         var matchedTags = new Array();
         currentTags = values.join(", ");
-        $("a", $tagCloud).each(function() {
+        $("a[id^="+last+"]", $tagCloud).each(function() {
           var id = $(this).attr('id');
-          if (id.indexOf(last) == 0 && currentTags.indexOf(id) < 0) {
+          if (currentTags.indexOf(id) < 0) {
             matchedTags.push(id);
           }
         });
@@ -210,7 +215,7 @@
       function handleReturnKey() {
         //writeDebug("called handleReturnKey()");
         var currentTags = $input.val();
-        var values = currentTags.split(/[, ]+/);
+        var values = currentTags.split(/\s*,\s*/);
         var newValues = new Object();
 
         // remove dupplicates
@@ -244,7 +249,7 @@
         //writeDebug("called toggleTag("+tag+")");
 
         var currentValues = $input.val() || '';
-        currentValues = currentValues.split(/[, ]+/);
+        currentValues = currentValues.split(/\s*,\s*/);
         var found = false;
         var newValues = new Array();
         for (var i = 0; i < currentValues.length; i++)  {
@@ -277,13 +282,17 @@
         if (typeof(tags) == 'object') {
           values = tags;
         } else {
-          values = tags.split(/[, ]+/);
+          values = tags.split(/\s*,\s*/);
         }
         if (!values.length) {
           return;
         }
-        var filter = "#"+values.join(",#");
-        writeDebug("filter="+filter);
+        var tmpValues = new Array()
+        for (var i = 0; i < values.length; i++) {
+          tmpValues.push(values[i].replace(/([^0-9A-Za-z_])/, '\\$1'));
+        }
+        var filter = "#"+tmpValues.join(",#");
+        //writeDebug("filter="+filter);
         $(filter, $tagCloud).addClass("current");
         if (doSort) {
           values = values.sort();
@@ -305,6 +314,7 @@
       // init ****************************************************************
       function init() {
         // events 
+        writeDebug("called init()");
         $input.keyup(handleKeys).keypress(handleKeys);
         $(thisOpt.clearButton, $this).click(function() {
           clearSelection();
@@ -318,6 +328,7 @@
         initialTags = new Array();
         // tag cloud links
         $("a", $tagCloud).click(function() {
+          writeDebug("click");
           this.blur(); 
           toggleTag($(this).attr('id'));
         }).filter(".current").each(function() {
@@ -352,7 +363,7 @@
       if (window.console && window.console.log) {
         window.console.log(msg);
       } else { 
-        alert(msg);
+        //alert(msg);
       }
     }
   };

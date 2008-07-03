@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2006-2007 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2006-2008 Michael Daum http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -15,7 +15,8 @@
 package TWiki::Plugins::ClassificationPlugin::Category;
 
 use strict;
-sub DEBUG { 0; }
+
+use constant DEBUG => 0; # toggle me
 
 ###############################################################################
 # static
@@ -33,6 +34,7 @@ sub new {
 
   my $this = {
     name=>$name,
+    origWeb=>$hierarchy->{web},
     id=>$hierarchy->{idCounter}++,
     hierarchy=>$hierarchy,
     summary=>'',
@@ -46,9 +48,25 @@ sub new {
   # register to hierarchy
   $hierarchy->setCategory($name, $this);
 
-  writeDebug("new category name=$this->{name} title=$this->{title} web=$hierarchy->{web}"); 
+  #writeDebug("new category name=$this->{name} title=$this->{title} web=$hierarchy->{web}"); 
 
   return $this;
+}
+
+###############################################################################
+sub purgeCache {
+  my $this = shift;
+
+  #writeDebug("purging category cache for $this->{name}");
+  undef $this->{_topics};
+  undef $this->{_prefs};
+  undef $this->{_subsumes};
+  undef $this->{_contains};
+  undef $this->{_nrLeafs};
+  undef $this->{_isCyclic};
+  undef $this->{_perms};
+
+  $this->{gotUpdate} = 1;
 }
 
 ###############################################################################
@@ -56,24 +74,18 @@ sub new {
 sub DESTROY {
   my $this = shift;
 
-  #writeDebug("called DESTROY for category $this->{name}");
-
-  # breaking cyclic references
+  $this->purgeCache();
+  undef $this->{icon};
   undef $this->{parents};
   undef $this->{children};
-  undef $this->{topics};
   undef $this->{hierarchy};
-  undef $this->{_subsumes};
-  undef $this->{_contains};
-  undef $this->{_nrLeafs};
-  undef $this->{_isCyclic};
-  undef $this->{_perms};
 }
 
 ###############################################################################
 sub init {
   my $this = shift;
 
+  #writeDebug("init category $this->{name}");
   foreach my $name (keys %{$this->{parents}}) {
     my $parent = $this->{parents}{$name};
 
@@ -105,7 +117,9 @@ sub countLeafs {
     $nrLeafs = scalar($this->getLeafs());
     $this->{_nrLeafs} = $nrLeafs;
     $this->{gotUpdate} = 1;
+    #writeDebug("countLeafs($this->{name})=$nrLeafs");
   }
+
 
   return $nrLeafs;
 }
@@ -125,10 +139,51 @@ sub getLeafs {
   }
 
   foreach my $child ($this->getChildren()) {
+    next if $child->{name} eq 'BottomCategory';
     $child->getLeafs($result, $seen);
   }
 
   return keys %$result;
+}
+
+###############################################################################
+# recursive version of the Wallace-Kollias for transitive closure
+sub computeDistance {
+  my ($this, $distance, $ancestors) = @_;
+
+  my $thisId = $this->{id};
+  return if $ancestors->{$thisId};
+
+
+  # become an ancestor
+  $ancestors->{$thisId} = $this;
+  $$distance[$thisId][$thisId] = 0;
+      
+  # loop over all ancestors
+  foreach my $ancestor (values %$ancestors) {
+    next unless $ancestor;
+    my $ancestorId = $ancestor->{id};
+    my $newDistance = $$distance[$ancestorId][$thisId] + 1;
+
+    # loop over all children
+    foreach my $child ($this->getChildren()) {
+      my $childId = $child->{id};
+      my $ancestorToChild = $$distance[$ancestorId][$childId];
+
+      # ... to find out if there is a shorter path
+      if (!$ancestorToChild || $newDistance < $ancestorToChild) {
+        $$distance[$ancestorId][$childId] = $newDistance;
+        #writeDebug("computed distance ($ancestor->{name},$child->{name})=$newDistance");
+      }
+    }
+  }
+
+  # recursion
+  foreach my $child ($this->getChildren()) {
+    $child->computeDistance($distance, $ancestors);
+  }
+
+  $ancestors->{$thisId} = 0;
 }
 
 ###############################################################################
@@ -151,7 +206,7 @@ sub contains {
   my ($this, $topic, $seen) = @_;
 
   my $result = $this->{_contains}{$topic};
-  return $result if defined $result;
+  #return $result if defined $result;
 
   $result = 0;
   my $hierarchy = $this->{hierarchy};
@@ -174,9 +229,15 @@ sub setParents {
   my $this = shift;
 
   #writeDebug("called $this->{name}->setParents(@_)");
-  foreach my $name (@_) {
-    my $parent = $this->{hierarchy}->getCategory($name) || 1;
-    $this->{parents}{$name} = $parent;
+  foreach my $parent (@_) {
+    my $parentObj = $parent;
+    my $parentName = $parent;
+    if(ref($parentObj)) {
+      $parentName = $parentObj->{name};
+    } else {
+      $parentObj = $this->{hierarchy}->getCategory($parent) || 1;
+    }
+    $this->{parents}{$parentName} = $parentObj;
   }
   $this->{gotUpdate} = 1;
 }
@@ -188,19 +249,31 @@ sub getParents {
 }
 
 ###############################################################################
-# register a topic in that category
-sub addTopic {
-  my ($this, $topic) = @_;
-
-  #writeDebug("called addTopic($topic");
-  $this->{topics}{$topic} = 1;
-}
-
-###############################################################################
 sub getTopics {
   my $this = shift;
 
-  return keys %{$this->{topics}};
+  unless (defined($this->{_topics})) {
+
+    writeDebug("refreshing _topics in $this->{name}");
+
+    my $hierarchy = $this->{hierarchy};
+    my $db = TWiki::Plugins::DBCachePlugin::Core::getDB($hierarchy->{web});
+
+    foreach my $topicName ($db->getKeys()) {
+      my $topicObj = $db->fastget($topicName);
+
+      my $cats = $hierarchy->getCategoriesOfTopic($topicObj);
+      next unless $cats;
+
+      foreach my $name (keys %$cats) {
+        next unless $name eq $this->{name};
+        #writeDebug("adding $topicName it to category $this->{name}");
+        $this->{_topics}{$topicName} = 1;
+      }
+    }
+  }
+
+  return keys %{$this->{_topics}};
 }
 
 ###############################################################################
@@ -244,10 +317,16 @@ sub isCyclic {
   my $result = $this->{_isCyclic};
   return $result if defined $result;
 
+  #writeDebug("called isCyclic($this->{name})");
+
   $result = 0;
   foreach my $child ($this->getChildren()) {
+    next if $child->{name} eq 'BottomCategory';
     $result = $child->subsumes($this);
-    last if $result;
+    if ($result) {
+      #writeDebug("child $child->{name} subsumes $this->{name}: $result");
+      last;
+    }
   }
   
   # cache
@@ -277,7 +356,7 @@ sub checkAccessPermission {
 
   unless (defined $access) {
     my $topic = $this->{name};
-    my $web = $this->{hierarchy}->{web};
+    my $web = $this->{origWeb};
     #writeDebug("checking $type access to category $web.$topic for $user");
     $access = TWiki::Func::checkAccessPermission($type, $user, undef, $topic, $web);
   
@@ -298,9 +377,148 @@ sub checkAccessPermission {
 }
 
 ###############################################################################
-# get all preferences, merged with those from parent categories
 sub getPreferences {
+  my ($this) = @_;
+
+  unless ($this->{_prefs}) {
+    require TWiki::Prefs::PrefsCache;
+    $this->{_prefs} = new TWiki::Prefs::PrefsCache($this->{hierarchy}->{_prefs}, undef, 'CAT', 
+      $this->{origWeb}, $this->{name}); 
+  }
+  
+  return $this->{_prefs};
 }
+
+###############################################################################
+sub importCategories {
+  my ($this, $impCats, $seen) = @_;
+
+  return unless $impCats;
+  $seen ||= {};
+
+  #writeDebug("called importCategories($impCats)");
+  #writeDebug("already seen=".join(',', sort keys %$seen));
+
+  my $thisHierarchy = $this->{hierarchy};
+  my $thisWeb = $thisHierarchy->{web};
+  foreach my $impCat (split(/\s*,\s*/, $impCats)) {
+
+    my ($impWeb, $impTopic) = TWiki::Func::normalizeWebTopicName($thisWeb, $impCat);
+    $impWeb =~ s/\//\./go;
+    next unless TWiki::Func::webExists($impWeb);
+
+    # SMELL: prevent deep recursion of two webs importing each other's categories
+    my $impHierarchy = TWiki::Plugins::ClassificationPlugin::getHierarchy($impWeb);
+    next unless $impHierarchy;
+
+    $impCat = $impHierarchy->getCategory($impTopic);
+    next unless $impCat;
+    
+    # import all child categories of impCat
+    foreach my $impChild ($impCat->getChildren()) {
+      my $name = $impChild->{name};
+      next if $name eq 'BottomCategory';
+
+      next if $seen->{$name};
+      $seen->{$name} = 1;
+      #writeDebug("importing category $name from $impChild->{hierarchy}->{web}");
+      my %parents = map {$_->{name}=>1} $impChild->getParents();
+      $parents{$this->{name}} = 1;
+
+      my $cat = $thisHierarchy->getCategory($name);
+      $cat = $thisHierarchy->createCategory($name);
+      $cat->setTitle($impChild->{title});
+      $cat->setSummary($impChild->{summary});
+      $cat->setParents(keys %parents);
+      $cat->setIcon($impChild->getIcon());
+      $cat->{origWeb} = $impWeb;
+
+      # recurse
+      $cat->importCategories("$impWeb.$name", $seen);
+    }
+  }
+
+  $this->{gotUpdate} = 1;
+  #writeDebug("done importCategories()");
+}
+
+###############################################################################
+sub setIcon {
+  my ($this, $icon) = @_;
+
+  $this->{icon} = $icon;
+  $this->{gotUpdate} = 1;
+  return $icon;
+}
+
+###############################################################################
+sub getIcon {
+  my $this = shift;
+
+  return $this->{icon} || 'folder.gif';
+}
+
+###############################################################################
+sub getIconUrl {
+  my $this = shift;
+
+  my $icon = $this->{icon} || 'folder.gif';
+
+  return 
+    $TWiki::cfg{PubUrlPath}.
+    '/Applications/ClassificationApp/IconSet/'.
+    $icon;
+
+}
+
+###############################################################################
+sub getLink {
+  my $this = shift;
+
+  return "<a href='".$this->getUrl()."'>$this->{title}</a>";
+}
+
+###############################################################################
+sub getUrl {
+  my $this = shift;
+  
+  my $hierWeb = $this->{hierarchy}->{web};
+  if ($hierWeb ne $this->{origWeb}) {
+    return TWiki::Func::getScriptUrl($hierWeb, 
+      'Category', 'view', name=>$this->{name});
+  }
+
+  return TWiki::Func::getScriptUrl($hierWeb, 
+      $this->{name}, 'view');
+}
+
+###############################################################################
+# get a list of all offsprings
+sub getSubCategories {
+  my ($this, $minDepth, $maxDepth) = @_;
+
+  my %result = ();
+  $minDepth ||= 1;
+  $maxDepth ||= 99999999;
+  $this->_getSubCategories($minDepth, $maxDepth, \%result);
+  return values %result;
+}
+
+sub _getSubCategories {
+  my ($this, $minDepth, $maxDepth, $result) = @_;
+
+  return if $maxDepth <= 0;
+
+  my $botCat = $this->{hierarchy}->{_bottom};
+  foreach my $child ($this->getChildren()) {
+    next if $child eq $botCat;
+    next if $result->{$child->{name}};
+
+    $result->{$child->{name}} = $child if $minDepth <= 1;
+    $child->_getSubCategories($minDepth-1, $maxDepth-1, $result);
+  }
+}
+
 
 ###############################################################################
 sub toHTML {
@@ -317,20 +535,24 @@ sub toHTML {
   return '' if $seen->{$this};
   $seen->{$this} = 1;
 
-  return '' unless $this->checkAccessPermission();
+  #return '' unless $this->checkAccessPermission();
 
   my $subResult = '';
   my $header = $params->{header} || '';
   my $footer = $params->{footer} || '';
-  my $format = $params->{format} || '<ul><li>$link ($count) $children</li></ul>';
+  my $format = $params->{format};
+
+  $format = '<ul><li> <a href="$url"><img src="$icon" />$title</a> ($leafs) $children</li></ul>' 
+    unless defined $format;
 
   #writeDebug("toHTML() nrCalls=$$nrCalls, name=$this->{name}");
 
   # format sub-categories
   my @children = sort {$a->{name} cmp $b->{name}} $this->getChildren();
-  my $nrChildren = @children;
+  my $nrChildren = @children-1;
   my $childIndex = 1;
   foreach my $child (@children) {
+    next if $child->{name} eq 'BottomCategory';
     $subResult .= $child->toHTML($params, $nrCalls, $childIndex, $nrChildren, $seen, $depth+1);
     $childIndex++;
   }
@@ -353,20 +575,25 @@ sub toHTML {
 
   $params->{seen}{$this->{name}} = 1;
 
-  my $nrTopics = scalar(keys %{$this->{topics}});
-  my $nrSubcats = scalar(keys %{$this->{children}});
+  my $nrTopics = scalar(keys %{$this->{_topics}});
+  my $nrSubcats = scalar(keys %{$this->{children}})-1;
   my $isCyclic = 0;
   $isCyclic = $this->isCyclic() if $format =~ /\$cyclic/;
 
   $subResult = $header.$subResult.$footer if $subResult;
 
+  my $indent = $params->{indent} || '   ';
+  $indent = $indent x $depth;
+
+  my $iconUrl = $this->getIconUrl();
+
   return TWiki::Plugins::ClassificationPlugin::Core::expandVariables($format, 
     'link'=>($this->{name} =~ /^(TopCategory|BottomCategory)$/)?
-      "<b>$this->{title}</b>":
-      "[[$this->{hierarchy}->{web}.$this->{name}][$this->{title}]]",
+      "<b>$this->{title}</b>":$this->getLink(),
     'url'=>($this->{name} =~ /^(TopCategory|BottomCategory)$/)?"":
-      '%SCRIPTURL{"view"}%/'."$this->{hierarchy}->{web}/$this->{name}",
+      $this->getUrl(),
     'web'=>$this->{hierarchy}->{web}, 
+    'origweb'=>$this->{origWeb} || '', 
     'topic'=>$this->{name},
     'name'=>$this->{name},
     'summary'=>$this->{summary},
@@ -380,6 +607,9 @@ sub toHTML {
     'leafs'=>$nrLeafs,
     'cyclic'=>$isCyclic,
     'id'=>$this->{id},
+    'depth'=>$depth,
+    'indent'=>$indent,
+    'icon'=>$iconUrl,
   );
 }
 

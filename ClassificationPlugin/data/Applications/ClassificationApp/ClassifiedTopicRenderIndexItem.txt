@@ -8,7 +8,7 @@
 ---++ Documentation
 %STARTSECTION{name="documentation" type="section"}%
 This method is called by RenderCategory to display
-a summary for an object listed within the Category topic.
+a summary for an object of type ClassifiedTopic.
 
 ---+++++ Parameters
    * OBJECT
@@ -19,12 +19,12 @@ a summary for an object listed within the Category topic.
 <verbatim>
 %STARTINCLUDE%<!-- ClassifiedTopicRenderIndexItem -->
 %~~ DBQUERY{topic="%OBJECT%"
-~~~   format="<div class='clsIndexItem'>[[$web.$topic][$expand(TopicTitle or topic)]]
+~~~   format="<div class='clsIndexItem clsTopicItem clsCassifiedTopicItem'>[[$web.$topic][$expand(TopicTitle or topic)]]
 *~~     &nbsp;$percntREDDOT{$web.$topic}$percnt
-~~~     <div class='clsTopicInfo'>$expand(Summary)
-~~~      <div class='clsAuthorDateInfo'>last modified $formatTime(info.date)
+~~~     <div class='clsTopicInfo'>$expand(Summary and ', ')
+~~~      <span class='clsAuthorDateInfo'>last modified $formatTime(info.date)
 ~~~        by $percntSPACEOUT{$expand(info.author)}$percnt</div>
-~~~     </div></div>
+~~~     </span></div>
 ~~~   "
 ~~~ }%
 <!-- //ClassifiedTopicRenderIndexItem -->%STOPINCLUDE%
@@ -45,9 +45,6 @@ a summary for an object listed within the Category topic.
 
 %DBCALL{"Applications.GnuGeneralPublicLicense" section="notice"}%
 </div>
-<!--
-   * Set DEPENDENCIES = TopicFunction
--->
 
 
 

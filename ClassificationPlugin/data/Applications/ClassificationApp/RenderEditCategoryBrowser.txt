@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1196956623" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1214232094" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+!! Function: %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -11,8 +11,9 @@
 ---+++++ Parameters
    * THEWEB: the web where to look for classes, defaults to BASEWEB
    * NAME: name of the formfield to render the browser for
+   * TITLE: title for the formfield (optional)
    * VALUE: list of pre-selected categories
-   * TOP: node from where to start the category, defaults to 'TopCategory'
+   * TOP: node from where to start the category
    * EXCLUDE: filter to exclude categories
    * BUTTONS: on or off, defaults to on
 
@@ -24,10 +25,11 @@
 <verbatim>
 %STARTINCLUDE%<div id="clsCatSelector_%NAME%"><noautolink>
 ~~~ <input type="hidden" size="75" name="%NAME%" id="%NAME%" value="%IFDEFINED{"%VALUE%"}%" />
+~~~ %IFDEFINED{"%TITLE%" then="<h3 class='clsBrowserTitle'>%TITLE%</h3>"}%
 ~~~ <div class="clsBrowser jqTreeview">
 %~~ HIERARCHY{
 ~~~   web="%IFDEFINED{"%THEWEB%" then="$test" else="%BASEWEB%"}%"
-~~~   top="%IFDEFINED{"%TOP%" then="$test" else="TopCategory"}%"
+~~~   top="%IFDEFINED{"%TOP%" then="$test"}%"
 ~~~   %IFDEFINED{"%EXCLUDE%" then="exclude=\"$test\"" glue="off"}%
 ~~~   header="<ul>"
 ~~~   footer="</ul>"
@@ -40,15 +42,15 @@
 ~~~     }$percnt\">
 *~~     <a href=\"javascript:void(0)\"
 ~~~        onclick=\"this.blur(); toggleValue('%NAME%','$name', 'clsCatSelector_%NAME%');\" 
-~~~        id=\"$name\"
+~~~        class=\"$name
 ~~~        $percntIFDEFINED{\"%VALUE%\" as=\".*\b$name\b.*\" glue=\"off\"
-~~~          then=\"class=\\"current\\"\"
-~~~        }$percnt
+~~~          then=\" current\"
+~~~        }$percnt\"
 ~~~        title=\"$summary\">
-*~~       $title</a>
+~~~        <img src='$icon' alt='$percntENCODE{$title}$percnt'/>
+~~~       $title</a>
 ~~~     $children</li>"
 ~~~ }%
-~~~ </noautolink>
 ~~~ </div>
 ~~~ %IFDEFINEDTHEN{"%BUTTONS%" as="off"}%%ELSEDEFINED%
 ~~~ <div class="clsButtonBox">
@@ -58,6 +60,7 @@
 ~~~   onclick="clsSetSelection('%NAME%', 'clsCatSelector_%NAME%', '%IFDEFINED{"%VALUE%"}%')" />
 ~~~ </div>
 ~~~ %FIDEFINED%
+~~~ </noautolink>
 ~~~ </div>
 ~~~ %STOPINCLUDE%
 </verbatim>
@@ -71,7 +74,7 @@
 </div>
 <div class="alt">
 *Categories B*:
-%DBCALL{"%TOPIC%" NAME="CategoryB" VALUE="TestCategory2"}%
+%DBCALL{"%TOPIC%" NAME="CategoryB" VALUE="CorporateCategory"}%
 </div>
 
 %DBCALL{"Applications.RenderFunctionCallers"}%

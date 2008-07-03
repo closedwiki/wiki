@@ -49,9 +49,6 @@ none
 
 %DBCALL{"Applications.GnuGeneralPublicLicense" section="notice"}%
 </div>
-<!--
-   * Set DEPENDENCIES = TopicFunction
--->
 
 
 

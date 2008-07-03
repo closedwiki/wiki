@@ -9,11 +9,6 @@ this is a test
 
 
 
-<!--
-   * Set VIEW_TEMPLATE = Applications.ClassificationApp.TaggedTopicView
--->
-
-
 %META:FORM{name="Applications.ClassificationApp.TaggedTopic"}%
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="TaggedTopic"}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="yet another test topic"}%

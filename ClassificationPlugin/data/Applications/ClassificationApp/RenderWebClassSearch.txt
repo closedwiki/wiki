@@ -29,15 +29,15 @@
 <table>
 <tr>
    <th>Text:</th>
-   <td><input type="text" name="qtext" size="50" value="%IFDEFINED{"%QTEXT%"}%" />
+   <td><input class="twikiInputField" type="text" name="qtext" size="50" value="%IFDEFINED{"%QTEXT%"}%" />
 </tr>
 <tr>
    <th>Tags:</th>
-   <td><input type="text" name="qtags" size="50" value="%IFDEFINED{"%QTAGS%"}%" /> 
+   <td><input class="twikiInputField" type="text" name="qtags" size="50" value="%IFDEFINED{"%QTAGS%"}%" /> 
 </tr>
 <tr>
    <th>Categories:</th>
-   <td><input type="text" name="qcats" size="50" value="%IFDEFINED{"%QCATS%"}%" />
+   <td><input class="twikiInputField" type="text" name="qcats" size="50" value="%IFDEFINED{"%QCATS%"}%" />
 </tr>
 <tr>
   <th>&nbsp;</th>
@@ -113,9 +113,6 @@
 
 %DBCALL{"Applications.GnuGeneralPublicLicense" section="notice"}%
 </div>
-<!--
-   * Set DEPENDENCIES = TopicFunction
--->
 
 
 

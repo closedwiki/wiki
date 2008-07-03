@@ -13,49 +13,55 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 package TWiki::Plugins::ClassificationPlugin;
-
 use strict;
-use TWiki::Plugins::ClassificationPlugin::Core;
-use TWiki::Plugins::ClassificationPlugin::Access;
+use TWiki::Contrib::DBCacheContrib::Search;
 
 use vars qw( 
   $VERSION $RELEASE $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
-  $doneHeader
+  $doneHeader $doneInit $baseTopic $baseWeb
 );
 
 $VERSION = '$Rev$';
-$RELEASE = '0.50';
+$RELEASE = '0.60';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'A topic classification plugin and application';
 
 ###############################################################################
 sub initPlugin {
-  my ($baseTopic, $baseWeb) = @_;
+  ($baseTopic, $baseWeb) = @_;
 
-  TWiki::Func::registerTagHandler('HIERARCHY', 
-    \&TWiki::Plugins::ClassificationPlugin::Core::handleHIERARCHY);
-  TWiki::Func::registerTagHandler('ISA', 
-    \&TWiki::Plugins::ClassificationPlugin::Core::handleISA);
-  TWiki::Func::registerTagHandler('SUBSUMES', 
-    \&TWiki::Plugins::ClassificationPlugin::Core::handleSUBSUMES);
-  TWiki::Func::registerTagHandler('CATFIELD', 
-    \&TWiki::Plugins::ClassificationPlugin::Core::handleCATFIELD);
-  TWiki::Func::registerTagHandler('TAGFIELD', 
-    \&TWiki::Plugins::ClassificationPlugin::Core::handleTAGFIELD);
-  TWiki::Func::registerTagHandler('TAGRELATEDTOPICS', 
-    \&TWiki::Plugins::ClassificationPlugin::Core::handleTAGRELATEDTOPICS);
-  TWiki::Func::registerTagHandler('CATINFO', 
-    \&TWiki::Plugins::ClassificationPlugin::Core::handleCATINFO);
-  TWiki::Func::registerTagHandler('TAGINFO', 
-    \&TWiki::Plugins::ClassificationPlugin::Core::handleTAGINFO);
-  TWiki::Func::registerTagHandler('DISTANCE', 
-    \&TWiki::Plugins::ClassificationPlugin::Core::handleDISTANCE);
-  TWiki::Func::registerTagHandler('TAGCOOCCURRENCE', 
-    \&TWiki::Plugins::ClassificationPlugin::Core::handleTAGCOOCCURRENCE);
+  TWiki::Func::registerTagHandler('HIERARCHY', \&handleHIERARCHY);
+  TWiki::Func::registerTagHandler('ISA', \&handleISA);
+  TWiki::Func::registerTagHandler('SUBSUMES', \&handleSUBSUMES);
+  TWiki::Func::registerTagHandler('CATFIELD', \&handleCATFIELD);
+  TWiki::Func::registerTagHandler('TAGFIELD', \&handleTAGFIELD);
+  TWiki::Func::registerTagHandler('TAGRELATEDTOPICS', \&handleTAGRELATEDTOPICS);
+  TWiki::Func::registerTagHandler('CATINFO', \&handleCATINFO);
+  TWiki::Func::registerTagHandler('TAGINFO', \&handleTAGINFO);
+  TWiki::Func::registerTagHandler('DISTANCE', \&handleDISTANCE);
+  TWiki::Func::registerTagHandler('TAGCOOCCURRENCE', \&handleTAGCOOCCURRENCE);
 
-  TWiki::Plugins::ClassificationPlugin::Core::init($baseWeb, $baseTopic);
-#  TWiki::Plugins::ClassificationPlugin::Access::init($baseWeb, $baseTopic);
+  TWiki::Contrib::DBCacheContrib::Search::addOperator(
+    name=>'SUBSUMES', 
+    prec=>4,
+    arity=>2,
+    exec=>\&OP_subsumes,
+  );
+  TWiki::Contrib::DBCacheContrib::Search::addOperator(
+    name=>'ISA', 
+    prec=>4,
+    arity=>2,
+    exec=>\&OP_isa,
+  );
+  TWiki::Contrib::DBCacheContrib::Search::addOperator(
+    name=>'DISTANCE', 
+    prec=>5,
+    arity=>2,
+    exec=>\&OP_distance,
+  );
+
   $doneHeader = 0;
+  $doneInit = 0;
   return 1;
 }
 
@@ -78,30 +84,125 @@ sub commonTagsHandler {
 }
 
 ###############################################################################
+sub init {
+  return if $doneInit;
+  $doneInit = 1;
+  require TWiki::Plugins::ClassificationPlugin::Core;
+  TWiki::Plugins::ClassificationPlugin::Core::init($baseWeb, $baseTopic);
+
+#  require TWiki::Plugins::ClassificationPlugin::Access;
+#  TWiki::Plugins::ClassificationPlugin::Access::init($baseWeb, $baseTopic);
+}
+
+###############################################################################
 sub beforeSaveHandler {
+  init();
   return TWiki::Plugins::ClassificationPlugin::Core::beforeSaveHandler(@_);
 }
 
 ###############################################################################
 sub afterSaveHandler {
+  init();
   return TWiki::Plugins::ClassificationPlugin::Core::afterSaveHandler(@_);
 }
 
 ###############################################################################
 # SMELL: I'd prefer a proper finishHandler, alas it does not exist
 sub modifyHeaderHandler {
+  init();
   TWiki::Plugins::ClassificationPlugin::Core::finish(@_);
 }
 
 ###############################################################################
 sub renderFormFieldForEditHandler {
-  return TWiki::Plugins::ClassificationPlugin::Core::renderFormFieldForEditHandler(@_);
+  init();
+  return 
+    TWiki::Plugins::ClassificationPlugin::Core::renderFormFieldForEditHandler(@_);
 }
 
 ###############################################################################
 # perl api
 sub getHierarchy {
+  init();
   return TWiki::Plugins::ClassificationPlugin::Core::getHierarchy(@_);
+}
+
+###############################################################################
+sub OP_subsumes {
+  init();
+  return TWiki::Plugins::ClassificationPlugin::Core::OP_subsumes(@_);
+}
+
+###############################################################################
+sub OP_isa {
+  init();
+  return TWiki::Plugins::ClassificationPlugin::Core::OP_isa(@_);
+}
+
+###############################################################################
+sub OP_distance {
+  init();
+  return TWiki::Plugins::ClassificationPlugin::Core::OP_distance(@_);
+}
+
+###############################################################################
+sub handleHIERARCHY {
+  init();
+  return TWiki::Plugins::ClassificationPlugin::Core::handleHIERARCHY(@_);
+}
+
+###############################################################################
+sub handleISA {
+  init();
+  return TWiki::Plugins::ClassificationPlugin::Core::handleISA(@_);
+}
+
+###############################################################################
+sub handleSUBSUMES {
+  init();
+  return TWiki::Plugins::ClassificationPlugin::Core::handleSUBSUMES(@_);
+}
+
+###############################################################################
+sub handleCATFIELD {
+  init();
+  return TWiki::Plugins::ClassificationPlugin::Core::handleCATFIELD(@_);
+}
+
+###############################################################################
+sub handleTAGFIELD {
+  init();
+  return TWiki::Plugins::ClassificationPlugin::Core::handleTAGFIELD(@_);
+}
+
+###############################################################################
+sub handleTAGRELATEDTOPICS {
+  init();
+  return TWiki::Plugins::ClassificationPlugin::Core::handleTAGRELATEDTOPICS(@_);
+}
+
+###############################################################################
+sub handleCATINFO {
+  init();
+  return TWiki::Plugins::ClassificationPlugin::Core::handleCATINFO(@_);
+}
+
+###############################################################################
+sub handleTAGINFO {
+  init();
+  return TWiki::Plugins::ClassificationPlugin::Core::handleTAGINFO(@_);
+}
+
+###############################################################################
+sub handleDISTANCE {
+  init();
+  return TWiki::Plugins::ClassificationPlugin::Core::handleDISTANCE(@_);
+}
+
+###############################################################################
+sub handleTAGCOOCCURRENCE {
+  init();
+  return TWiki::Plugins::ClassificationPlugin::Core::handleTAGCOOCCURRENCE(@_);
 }
 
 1;

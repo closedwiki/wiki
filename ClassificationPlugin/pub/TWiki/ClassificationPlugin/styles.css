@@ -35,16 +35,22 @@
   color:white !important;
   text-decoration:none;
 }
+.clsIconSelector,
 .clsBrowser,
 #clsTagSelector .clsTagCloud {
   padding:5px;
   border:1px solid #ccc;
   margin-bottom:5px;
 }
-.clsButtonBox {
-  margin:0.5em 0em;
-  height:18px;
+.clsTagSelector table td,
+.clsTagSelector table th {
+  padding:0em 1em 0em 0em;
 }
+.clsTagSelector table {
+  margin:5px 0px;
+  width:auto !important;
+}
+.clsButtonBox
 .aquaPillSelected,
 .aquaPill {
   background-repeat:no-repeat;
@@ -127,6 +133,41 @@
 }
 .fltMakeIndexWrapper table td {
   width:40em;
+}
+
+.fltMakeIndexWrapper .clsSubCategories {
+  margin-top:0.2em;
+  margin-bottom:0.2em;
+}
+.fltMakeIndexWrapper .clsSubCategories a,
+.fltMakeIndexWrapper .clsSubCategories {
+  color:gray;
+}
+.clsTopicItem {
+  padding-left:18px;
+  background-image:url(../../Applications/ClassificationApp/IconSet/text.png); 
+  background-repeat:no-repeat;
+}
+.clsCategoryItem {
+  padding-left:18px;
+  background-image:url(../../Applications/ClassificationApp/IconSet/folder.gif);
+  background-repeat:no-repeat;
+}
+
+/* icon selector */
+.clsEditIcon {
+  margin:0px 5px 5px 0px;
+  border:2px solid white;
+  padding:1px;
+  display:block;
+  float:left;
+}
+.clsEditIcon.selected {
+  border:2px solid red;
+  background:#eee;
+}
+.clsIconSelector input {
+  display:none;
 }
 
 /* pattern skin tweaks */

@@ -4,35 +4,10 @@
 The ClassificationApp offers two things: traditional content categorization as well as folksomony using
 tags.
 
+%TOC%
 
-<noautolink>
-%~~ DBQUERY{"TopicType=~'\bAuthorTool\b' AND TWikiApplication='ClassificationApp' "
-~~~   hidenull="on"
-~~~   header="---++ [[AuthorTools]]$n"
-~~~   format="   * [[$web.$topic][$topic]]: $formfield(Summary)"
-~~~ }%
-%~~ DBQUERY{"TopicType=~'\bTopicType\b' AND TWikiApplication='ClassificationApp'"
-~~~   hidenull="on"
-~~~   header="---++ [[TopicTypes]]$n"
-~~~   format="   * [[$web.$topic][$topic]]: $formfield(Summary)"
-~~~ }%
-%~~ DBQUERY{"TopicType=~'\bTopicFunction\b' AND TWikiApplication='ClassificationApp'"
-~~~   hidenull="on"
-~~~   header="---++ [[TopicFunctions]]$n"
-~~~   format="   * [[$web.$topic][$topic]]: $formfield(Summary)"
-~~~ }%
-%~~ DBQUERY{"TopicType=~'\bTopicView\b' AND TWikiApplication='ClassificationApp'"
-~~~   hidenull="on"
-~~~   header="---++ [[TopicViews]]$n"
-~~~   format="   * [[$web.$topic][$topic]]: $formfield(Summary)"
-~~~ }%
-%~~ DBQUERY{"TopicType=~'\bTopicTemplate\b' AND TWikiApplication='ClassificationApp'"
-~~~   hidenull="on"
-~~~   header="---++ [[TopicTemplates]]$n"
-~~~   format="   * [[$web.$topic][$topic]]: $formfield(Summary)"
-~~~ }%
 
-</noautolink>
+%DBCALL{"Applications.RenderTWikiApplicationWebHome" APP="%FLEXWEBLIST{webs="%WEB%" format="$name"}%"}%
 
 
 <!--
@@ -41,7 +16,7 @@ tags.
 
 
 %META:FORM{name="Applications.ApplicationTopic"}%
-%META:FIELD{name="TopicType" attributes="" title="TopicType" value="FrontPage"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="WebTool"}%
 %META:FIELD{name="TopicTitle" attributes="" title="<nop>TopicTitle" value=""}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="%25SITEMAPWHAT%25"}%
 %META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TWikiWorkbench"}%

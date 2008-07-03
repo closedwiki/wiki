@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2006-2007 Michael Daum http://michaeldaumconsulting.com
+# Copyright (C) 2006-2008 Michael Daum http://michaeldaumconsulting.com
 # 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,8 +18,9 @@ use strict;
 use TWiki::Plugins::DBCachePlugin::Core;
 use TWiki::Plugins::ClassificationPlugin::Category;
 use Storable;
+require TWiki::Prefs;
 
-use constant OBJECTVERSION => 0.43;
+use constant OBJECTVERSION => 0.49;
 use constant DEBUG => 0; # toggle me
 
 ###############################################################################
@@ -47,6 +48,7 @@ sub new {
   my $class = shift;
   my $web = shift;
 
+  $web =~ s/\//\./go;
   #writeDebug("new hierarchy for web $web");
   my $this;
   my $cacheFile = getCacheFile($web);
@@ -63,10 +65,10 @@ sub new {
   }
 
   if ($this && $this->{_version} == OBJECTVERSION) {
-    #writeDebug("restored hierarchy object (v$this->{_version}) from $cacheFile");
+    writeDebug("restored hierarchy object (v$this->{_version}) from $cacheFile");
     return $this;
   } else {
-    #writeDebug("creating new object");
+    writeDebug("creating new object");
   }
 
   $this = {
@@ -99,7 +101,7 @@ sub finish {
   }
 
   if ($gotUpdate) {
-    #writeDebug("saving hierarchy");
+    writeDebug("saving hierarchy $this->{web}");
     my $cacheFile = getCacheFile($this->{web});
     Storable::lock_store($this, $cacheFile);
   }
@@ -107,12 +109,44 @@ sub finish {
 }
 
 ################################################################################
-sub invalidate {
-  my $this = shift;
+# mode = 0 -> do nothing
+# mode = 1 -> a tagged topic has been saved
+# mode = 2 -> a categorized topic has been saved
+# mode = 3 -> a classified topic has been saved
+# mode = 4 -> a category has been saved
+# mode = 5 -> clear all
+sub purgeCache {
+  my ($this, $mode) = @_;
 
-  my $cacheFile = getCacheFile($this->{web});
-  #writeDebug("invalidating hierarchy in web $this->{web}");
-  unlink $cacheFile;
+  return unless $mode;
+  writeDebug("purging hierarchy cache for $this->{web} - mode = $mode");
+
+  if ($mode == 1 || $mode == 3 || $mode > 4) { # tagged and classified topics
+    undef $this->{_tagIntersection};
+    undef $this->{_coOccurrence};
+  } 
+
+  if ($mode > 1) { # categorized and classified topics
+    foreach my $cat ($this->getCategories()) {
+      $cat->purgeCache() if $cat;
+    }
+  } 
+
+  if ($mode > 3) { # category topics
+    undef $this->{_categories};
+    undef $this->{_distance};
+    undef $this->{_prefs};
+    undef $this->{_top};
+    undef $this->{_bottom};
+    undef $this->{_aclAttribute};
+  }
+
+  if ($mode > 4) { # clear all of the rest
+    undef $this->{_catFields};
+    undef $this->{_tagFields};
+  }
+
+  $this->{gotUpdate} = 1;
 }
 
 ################################################################################
@@ -120,26 +154,21 @@ sub invalidate {
 sub DESTROY {
   my $this = shift;
 
-  foreach my $cat ($this->getCategories()) {
-    $cat->DESTROY() if $cat;
-  }
-  undef $this->{categories};
-  undef $this->{_catFields};
-  undef $this->{_tagFields};
-  undef $this->{_distance};
-  undef $this->{_tagIntersection};
-  undef $this->{_aclAttribute};
+  $this->purgeCache(5);
 }
 
 ################################################################################
 sub init {
   my $this = shift;
 
-  #writeDebug("called Hierarchy::init");
+  writeDebug("called Hierarchy::init for $this->{web}");
+  my $session = $TWiki::Plugins::SESSION;
+  $this->{_prefs} = new TWiki::Prefs($session);
 
   my $db = TWiki::Plugins::DBCachePlugin::Core::getDB($this->{web});
 
   # itterate over all topics and collect categories
+  my $seenImport = {};
   foreach my $topicName ($db->getKeys()) {
     my $topicObj = $db->fastget($topicName);
     my $form = $topicObj->fastget("form");
@@ -150,15 +179,13 @@ sub init {
     my $topicType = $form->fastget("TopicType");
     next unless $topicType;
 
-    # get all categories of this topic
-    my $cats = $this->getCategoriesOfTopic($topicObj);
-
     if ($topicType =~ /\bCategory\b/) {
       # this topic is a category in itself
-      #writeDebug("found category '$topicName'");
+      #writeDebug("found category '$topicName' in web $this->{web}");
       my $cat = $this->getCategory($topicName);
       $cat = $this->createCategory($topicName) unless $cat;
 
+      my $cats = $this->getCategoriesOfTopic($topicObj);
       if ($cats) {
         $cat->setParents(keys %$cats);
       } else {
@@ -166,35 +193,54 @@ sub init {
       }
 
       my $summary = $form->fastget("Summary") || '';
+      $summary =~ s/<nop>//go;
+      $summary =~ s/^\s+//go;
+      $summary =~ s/\s+$//go;
+
       my $title = $form->fastget("TopicTitle") || $topicName;
+      $title =~ s/<nop>//go;
+      $title =~ s/^\s+//go;
+      $title =~ s/\s+$//go;
       $cat->setSummary($summary);
       $cat->setTitle($title);
+      $cat->setIcon($form->fastget("Icon"));
 
-    } else {
-      # process all categories of this topic and add the topic to the category
-      #writeDebug("found categorized topic $topicName");
-      if ($cats) {
-        foreach my $name (keys %$cats) {
-          #writeDebug("adding it to category $name");
-          my $cat = $this->getCategory($name);
-          $cat = $this->createCategory($name) unless $cat;
-          $cat->addTopic($topicName);
-        }
-      } else {
-        #writeDebug("no cats found for $topicName");
-      }
+      # import foregin categories
+      $cat->importCategories($form->fastget("ImportedCategory"), $seenImport);
     }
   }
 
   #writeDebug("checking for default categories");
-  $this->createCategory('TopCategory', title=>'TOP')
-    unless defined $this->getCategory('TopCategory'); ; # every hierarchy has one top node
+  # every hierarchy has one top node
+  my $topCat = 
+    $this->getCategory('TopCategory') || 
+    $this->createCategory('TopCategory', title=>'TOP');
 
-  $this->createCategory('BottomCategory', title=>'BOTTOM')
-    unless defined $this->getCategory('BottomCategory');; # every hierarchy has one BOTTOM node
+  # every hierarchy has one BOTTOM node
+  my $bottomCat = 
+    $this->getCategory('BottomCategory') ||
+    $this->createCategory('BottomCategory', title=>'BOTTOM');
+
+  # remember these
+  $this->{_top} = $topCat;
+  $this->{_bottom} = $bottomCat;
 
   # init nested structures
   foreach my $cat ($this->getCategories()) {
+    $cat->init();
+  }
+
+  # add categories with no children as a parent to BottomCategory
+  my @bottomParents = ();
+  foreach my $cat ($this->getCategories()) {
+    next if $cat->getChildren() || $cat == $bottomCat;
+    $cat->addChild($bottomCat);
+    push @bottomParents, $cat;
+  }
+  $bottomCat->setParents(@bottomParents);
+
+  # init these again
+  foreach my $cat (@bottomParents) {
     $cat->init();
   }
 
@@ -210,60 +256,139 @@ sub init {
       }
       writeDebug($text);
     }
-    $this->_printDistanceMatrix();
+    $this->printDistanceMatrix();
   }
+
+  writeDebug("done init $this->{web}");
 }
 
 ################################################################################
-sub _printDistanceMatrix {
+sub printDistanceMatrix {
   return unless DEBUG;
 
-  my ($this, $distance) = @_;
+  my ($this) = @_;
 
-  unless ($distance) {
-    $distance = $this->{_distance} || $this->computeDistance();
-  }
+  my $distance = $this->{_distance} || $this->computeDistance();
 
   foreach my $catName1 (sort $this->getCategoryNames()) {
-    my $cat1 = $this->{categories}{$catName1};
+    my $cat1 = $this->{_categories}{$catName1};
     my $catId1 = $cat1->{id};
     foreach my $catName2 (sort $this->getCategoryNames()) {
-      my $cat2 = $this->{categories}{$catName2};
+      my $cat2 = $this->{_categories}{$catName2};
       my $catId2 = $cat2->{id};
-      my $distance =  $$distance[$catId1][$catId2];
-      next unless $distance;
-      my ($min, $max) = @$distance;
-      #writeDebug("distance($catName1/$catId1, $catName2/$catId2) = $min,$max");
+      my $dist =  $$distance[$catId1][$catId2];
+      next unless $dist;
+      writeDebug("distance($catName1/$catId1, $catName2/$catId2) = $dist");
     }
   }
 }
 
 ################################################################################
-# computes the distance between all categories using a modified floyd-warshall
-# algorithm for transitive closures
+# computes the distance between all categories using a Wallace-Kollias
+# algorith for transitive closure
 sub computeDistance {
   my $this = shift;
 
-  writeDebug("called computeDistance()");
+  my @distance;
+
+  writeDebug("called computeDistance() Wallace-Kollias");
+
+  my $topId = $this->{_top}->{id};
+  $distance[$topId][$topId] = 0;
+
+  my $bottomId = $this->{_bottom}->{id};
+  $distance[$bottomId][$bottomId] = 0;
+
+  # root of induction
+  my %ancestors = ($topId=>$this->{_top});
+  
+  writeDebug("propagate");
+  foreach my $child ($this->{_top}->getChildren()) {
+    $distance[$topId][$child->{id}] = 1;
+    $child->computeDistance(\@distance, \%ancestors);
+  }
+
+  writeDebug("finit");
+  my $maxId = $this->{idCounter}-1;
+  for my $id1 (0..$maxId) {
+    for my $id2 ($id1..$maxId) {
+      next if $id1 == $id2;
+      my $dist = $distance[$id1][$id2];
+      if (defined($dist)) {
+        $distance[$id2][$id1] = -$dist;
+      } else {
+        $dist = $distance[$id2][$id1];
+        $distance[$id1][$id2] = -$dist if defined $dist;
+      }
+    }
+  }
+
+  writeDebug("done computeDistance() Wallace-Kollias");
+
+  if (0) {
+    my $oldDistance = $this->DISABLED_computeDistance();
+    foreach my $catName1 (sort $this->getCategoryNames()) {
+      my $cat1 = $this->{_categories}{$catName1};
+      my $catId1 = $cat1->{id};
+      foreach my $catName2 (sort $this->getCategoryNames()) {
+        my $cat2 = $this->{_categories}{$catName2};
+        my $catId2 = $cat2->{id};
+        my $dist =  $distance[$catId1][$catId2];
+        my $oldDist = $$oldDistance[$catId1][$catId2];
+        if (defined($dist)) {
+          if (defined($oldDist)) {
+            if ($oldDist == $dist) {
+              #writeDebug("distance($ancestors{$id1}->{name},$ancestors{$id2}->{name}) = $dist ... OK");
+            } else {
+              writeDebug("distance($catName1,$catName2) = $dist != $oldDist");
+            }
+          } else {
+            writeDebug("distance($catName1,$catName2) = $dist ... but NO OLD");
+          }
+        } else {
+          if (defined($oldDist)) {
+            writeDebug("distance($catName1,$catName2) = $oldDist ... but NO NEW");
+          }
+        }
+      }
+    }
+  }
+
+  $this->{_distance} = \@distance;
+  $this->{gotUpdate} = 1;
+
+  return \@distance;
+}
+
+################################################################################
+# computes the distance between all categories using a modified floyd-warshall
+# algorithm for transitive closures
+sub DISABLED_computeDistance {
+  my $this = shift;
+
+  writeDebug("called computeDistance_FLOYD_WARSHALL()");
 
   # init matrix
+  my $totalIterations = 0;
+  my $effectiveIteratons = 0;
+
   my @distance;
-  my $bottomCategory = $this->getCategory('BottomCategory');
-  my $bottomId = $bottomCategory->{id};
+  my $bottomId = $this->{_bottom}->{id};
 
 
+  writeDebug("init");
   for my $cat ($this->getCategories()) {
     my $id = $cat->{id};
-    @{$distance[$id][$id]} = (0,0); # diagonal
+    $distance[$id][$id] = 0; # diagonal
 
     my @children = $cat->getChildren();
     if (@children) {
       foreach my $child (@children) {
-        @{$distance[$id][$child->{id}]} = (1,1); # direct contectedness
+        $distance[$id][$child->{id}] = 1; # direct contectedness
       }
     } else {
       unless ($id == $bottomId) { # bottom
-        @{$distance[$id][$bottomId]} = (1, 1); # leaf nodes
+        $distance[$id][$bottomId] = 1; # leaf nodes
       }
     }
   }
@@ -272,6 +397,8 @@ sub computeDistance {
   # used to computing min- and max distances, reused in
   # subsumption and partof relations
   my $maxId = $this->{idCounter}-1;
+  writeDebug("propagate");
+  writeDebug("maxId=$maxId");
   foreach my $catIId (0..$maxId) {
 
     foreach my $catJId (0..$maxId) {
@@ -280,6 +407,7 @@ sub computeDistance {
       my $distIJ = $distance[$catIId][$catJId];
 
       foreach my $catKId (0..$maxId) {
+        $totalIterations++;
         next if $catKId == $catIId || $catKId == $catJId; # skip current row
 
         my $distIK = $distance[$catIId][$catKId];
@@ -288,50 +416,41 @@ sub computeDistance {
         my $distKJ = $distance[$catKId][$catJId];
         next unless $distKJ;
 
-        my $minSum = $$distIK[0]+$$distKJ[0];
-        my $maxSum = $$distIK[1]+$$distKJ[1];
-
-        if (!$distIJ) {
-          @$distIJ = ($minSum, $maxSum);
-          $distance[$catIId][$catJId] = $distIJ;
-        } else {
-
-          $$distIJ[0] = $minSum if $$distIJ[0] > $minSum;
-          $$distIJ[1] = $maxSum if $$distIJ[1] < $maxSum;
-
-        }
+        my $minSum = $distIK+$distKJ;
+        $distance[$catIId][$catJId] = $minSum if !$distIJ || $distIJ > $minSum;
+        $effectiveIteratons++;
       }
     }
   }
 
   # fill other half of the matrix, the reverse relation,
   # we are using qubic memory already anyway
+  writeDebug("finit");
   for my $id1 (0..$maxId) {
     for my $id2 (0..$maxId) {
       next if $id1 == $id2;
       my $dist = $distance[$id1][$id2];
       next unless $dist;
-      $distance[$id2][$id1][0] = -$$dist[0];
-      $distance[$id2][$id1][1] = -$$dist[1];
+      $distance[$id2][$id1] = -$dist;
     }
   }
 
   $this->{_distance} = \@distance;
   $this->{gotUpdate} = 1;
 
-  #writeDebug("done computeDistance");
+  writeDebug("totalIterations=$totalIterations, effectiveIteratons=$effectiveIteratons");
+  writeDebug("done computeDistance");
   
   return \@distance;
 }
 
 ################################################################################
-# this computes the distance (min and max) between two categories or a topic
+# this computes the minimum distance between two categories or a topic
 # and a category or between two topics. if a non-category topic is under
 # consideration then all of its categories are measured against each other
-# while computing the overall minimal and maximal distances.  so simplest case
+# while computing the overall minimal distances.  so simplest case
 # is measuring the distance between two categories; the most general case is
-# computing the min and max distance between two sets of categories.
-# returns a list (min, max)
+# computing the min distance between two sets of categories.
 sub distance {
   my ($this, $topic1, $topic2) = @_;
 
@@ -344,7 +463,7 @@ sub distance {
   # to be taken under consideration
 
   # check topic1
-  #writeDebug("checking topic1");
+  my $extraDistance = 0;
   my $catObj = $this->getCategory($topic1);
   if ($catObj) { # known category
     $catSet1{$topic1} = $catObj->{id};
@@ -355,10 +474,10 @@ sub distance {
       $catObj = $this->getCategory($name);
       $catSet1{$name} = $catObj->{id} if $catObj;
     }
+    $extraDistance++; # going to its categories is one extra step
   }
 
   # check topic2
-  #writeDebug("checking topic2");
   $catObj = $this->getCategory($topic2);
   if ($catObj) { # known category
     $catSet2{$topic2} = $catObj->{id};
@@ -369,35 +488,32 @@ sub distance {
       $catObj = $this->getCategory($name);
       $catSet2{$name} = $catObj->{id} if $catObj
     }
+    $extraDistance++; # going to its categories is one extra step
   }
 
   if (DEBUG) {
-    writeDebug("catSet1 = ".join(',', sort keys %catSet1));
-    writeDebug("catSet2 = ".join(',', sort keys %catSet2));
+    #writeDebug("catSet1 = ".join(',', sort keys %catSet1));
+    #writeDebug("catSet2 = ".join(',', sort keys %catSet2));
   }
 
-  # gather the min and max distances between the two category sets
+  # get the min distance between the two category sets
   my $distance = $this->{_distance} || $this->computeDistance();
-  my ($min, $max);
+  my $min;
   foreach my $id1 (values %catSet1) {
     foreach my $id2 (values %catSet2) {
       my $dist = $$distance[$id1][$id2];
-      next unless $dist;
-      $min = abs($dist->[0]) if !defined($min) || abs($min) > abs($dist->[0]);
-      $max = abs($dist->[1]) if !defined($max) || abs($max) < abs($dist->[1]);
+      next unless defined $dist;
+      $min = $dist if !defined($min) || abs($min) > abs($dist);
     }
   }
-
-  # just to make sure
-  $min = $max unless defined $min;
-  $max = $min unless defined $max;
 
   # both sets aren't connected
   return undef unless defined($min);
 
-  #writeDebug("min=$min, max=$max");
+  $min += $extraDistance;
+  #writeDebug("min=$min");
 
-  return [$min, $max];
+  return $min;
 }
 
 ################################################################################
@@ -407,25 +523,29 @@ sub catDistance {
 
   my $id1;
   my $id2;
+  my $cat1Obj = $cat1;
+  my $cat2Obj = $cat2;
 
   if (ref($cat1)) {
     $id1 = $cat1->{id};
   } else {
-    my $catObj = $this->getCategory($cat1);
-    return undef unless defined $catObj;
-    $id1 = $catObj->{id};
+    $cat1Obj = $this->getCategory($cat1);
+    return undef unless defined $cat1Obj;
+    $id1 = $cat1Obj->{id};
   }
 
   if (ref($cat2)) {
     $id2 = $cat2->{id};
   } else {
-    my $catObj = $this->getCategory($cat2);
-    return undef unless defined $catObj;
-    $id2 = $catObj->{id};
+    $cat2Obj = $this->getCategory($cat2);
+    return undef unless defined $cat2Obj;
+    $id2 = $cat2Obj->{id};
   }
 
   $this->computeDistance() unless $this->{_distance};
-  return $this->{_distance}[$id1][$id2];
+  my $dist = $this->{_distance}[$id1][$id2];
+  #writeDebug("catDistance($cat1Obj->{name}, $cat2Obj->{name})=$dist");
+  return $dist;
 }
 
 ################################################################################
@@ -449,7 +569,11 @@ sub computeCoocurrence {
     my $tags = $form->fastget("Tag");
     next unless $tags;
 
-    my @tags = map {$_ =~ s/^\s+//go; $_ =~ s/\s+$//go; $_} split(/\s*,\s*/, $tags);
+    my @tags = 
+      sort 
+        map {$_ =~ s/^\s+//go; $_ =~ s/\s+$//go; $_} 
+          split(/\s*,\s*/, $tags);
+
     my $length = scalar(@tags);
     next unless $length > 0;
 
@@ -535,14 +659,26 @@ sub getTagIntersection {
   # get current tags
   my $db = TWiki::Plugins::DBCachePlugin::Core::getDB($this->{web});
   my $thisTopicObj = $db->fastget($thisTopic);
-  return undef unless $thisTopicObj;
+  unless ($thisTopicObj) {
+    $this->{_tagIntersection}{$thisTopic} = $tagIntersection;
+    $this->{gotUpdate} = 1;
+    return undef;
+  }
 
   my $thisForm = $thisTopicObj->fastget("form");
-  return undef unless $thisForm;
+  unless ($thisForm) {
+    $this->{_tagIntersection}{$thisTopic} = $tagIntersection;
+    $this->{gotUpdate} = 1;
+    return undef;
+  }
 
   $thisForm = $thisTopicObj->fastget($thisForm);
   my $tags = $thisForm->fastget('Tag');
-  return undef unless $tags;
+  unless ($tags) {
+    $this->{_tagIntersection}{$thisTopic} = $tagIntersection;
+    $this->{gotUpdate} = 1;
+    return undef;
+  }
 
   # create initial tag hash
   my %thisTagHash = ();
@@ -604,15 +740,8 @@ sub getTagIntersection {
 sub subsumes {
   my ($this, $cat1, $cat2) = @_;
 
-  my $distance = $this->catDistance($cat1, $cat2);
-
-  return 0 unless defined $distance;
-  my ($min, undef) = @$distance;
-
-  my $result = ($min >= 0)?1:0;
-  #writeDebug("subsumes($cat1, $cat2) = $result");
-
-  return $result;
+  my $result = $this->catDistance($cat1, $cat2);
+  return (defined($result) && $result > 0)?1:0;
 }
 
 ################################################################################
@@ -850,23 +979,23 @@ sub getTagFields {
 
 ###############################################################################
 sub getCategories {
-  return values %{$_[0]->{categories}}
+  return values %{$_[0]->{_categories}}
 }
 
 ###############################################################################
 sub getCategoryNames {
-  return keys %{$_[0]->{categories}}
+  return keys %{$_[0]->{_categories}}
 }
 
 
 ###############################################################################
 sub getCategory {
-  return $_[0]->{categories}{$_[1]};
+  return $_[0]->{_categories}{$_[1]};
 }
 
 ###############################################################################
 sub setCategory {
-  $_[0]->{categories}{$_[1]} = $_[2];
+  $_[0]->{_categories}{$_[1]} = $_[2];
 }
 
 ###############################################################################
@@ -910,23 +1039,26 @@ sub toHTML {
 sub getPreferences {
   my ($this, @cats) = @_;
 
-  my $session = $TWiki::Plugins::SESSION;
+  unless ($this->{_prefs}) {
+    my $session = $TWiki::Plugins::SESSION;
 
-  require TWiki::Prefs;
-  my $prefs = new TWiki::Prefs($session);
+    require TWiki::Prefs;
+    my $prefs = new TWiki::Prefs($session);
 
-  require TWiki::Prefs::PrefsCache;
-  $prefs = new TWiki::Prefs::PrefsCache($prefs, undef, 'WEB'); 
-    # SMELL what kind of type do we need
+    require TWiki::Prefs::PrefsCache;
+    $prefs = new TWiki::Prefs::PrefsCache($prefs, undef, 'CAT'); 
 
-  foreach my $cat (@cats) {
-    $cat =~ s/^\s+//go;
-    $cat =~ s/\s+$//go;
-    my $catObj = $this->getCategory($cat);
-    $prefs = $catObj->getPreferences($prefs);
+    foreach my $cat (@cats) {
+      $cat =~ s/^\s+//go;
+      $cat =~ s/\s+$//go;
+      my $catObj = $this->getCategory($cat);
+      $prefs = $catObj->getPreferences($prefs);
+    }
+
+    $this->{_prefs} = $prefs;
   }
 
-  return $prefs;
+  return $this->{_prefs};
 }
 
 ###############################################################################

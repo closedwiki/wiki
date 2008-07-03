@@ -10,5 +10,3 @@
 %META:FIELD{name="TopicTitle" attributes="" title="<nop>TopicTitle" value="TOP"}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value=""}%
 %META:FIELD{name="Category" attributes="" title="Category" value=""}%
-%META:TOPICMOVED{by="micha" date="1197994274" from="Demo.TopCategoryOld" to="Demo.TopCategory"}%
-%META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" type="Set" value="Applications.ClassificationApp.CategoryView"}%

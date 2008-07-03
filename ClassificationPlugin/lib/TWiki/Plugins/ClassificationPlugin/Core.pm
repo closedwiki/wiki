@@ -22,39 +22,23 @@ use constant DEBUG => 0; # toggle me
 
 ###############################################################################
 sub writeDebug {
-  print STDERR 'ClassificationPlugin::Core - '.$_[0]."\n" if DEBUG;
+  print STDERR '- ClassificationPlugin::Core - '.$_[0]."\n" if DEBUG;
 }
 
 ###############################################################################
 sub init {
   ($baseWeb, $baseTopic) = @_;
 
-  require TWiki::Contrib::DBCacheContrib::Search;
-  TWiki::Contrib::DBCacheContrib::Search::addOperator(
-    name=>'SUBSUMES', 
-    prec=>4,
-    arity=>2,
-    exec=>\&OP_subsumes,
-  );
-  TWiki::Contrib::DBCacheContrib::Search::addOperator(
-    name=>'ISA', 
-    prec=>4,
-    arity=>2,
-    exec=>\&OP_isa,
-  );
-  TWiki::Contrib::DBCacheContrib::Search::addOperator(
-    name=>'DISTANCE', 
-    prec=>5,
-    arity=>2,
-    exec=>\&OP_distance,
-  );
+  %hierarchies = ();
 }
 
 ###############################################################################
 sub finish {
 
   foreach my $hierarchy (values %hierarchies) {
-    $hierarchy->finish() if defined $hierarchy;
+    next unless defined $hierarchy;
+    $hierarchy->finish();
+    undef $hierarchies{$hierarchy->{web}};
   }
 }
 
@@ -93,11 +77,8 @@ sub OP_distance {
   return 0 unless ( defined $lval  && defined $rval);
 
   my $hierarchy = getHierarchy($baseWeb);
-  my $distance = $hierarchy->distance($lval, $rval);
-  return '' unless $distance;
-  my ($min, undef) = @$distance;
-
-  return $min;
+  my $dist = $hierarchy->distance($lval, $rval);
+  return $dist || 0;
 }
 
 ###############################################################################
@@ -117,7 +98,6 @@ sub handleTAGCOOCCURRENCE {
   my $theAllPairs = $params->{allpairs} || 'on';
 
   $theAllPairs = ($theAllPairs eq 'on')?1:0;
-
   $theArraySep = ',' unless defined($theArraySep);
 
   my $hierarchy = getHierarchy($thisWeb);
@@ -192,17 +172,19 @@ sub handleTAGCOOCCURRENCE {
       }
     } else {
       # mode 1: full cooccurrence matrix
+      my %seen;
       foreach my $theTag1 (sort keys %{$coocc}) {
         my @coocurringTags = sort keys %{$$coocc{$theTag1}};
-        writeDebug("coocurringTags($theTag1)=@coocurringTags");
+        #writeDebug("coocurringTags($theTag1)=@coocurringTags");
         my $arrayResult = '';
+
         if ($theFormat =~ /\$array/) {
           my @arrayResult = ();
-          my %seen;
           foreach my $tag (@coocurringTags) {
             next if $seen{$theTag1}{$tag};
             next if $seen{$tag}{$theTag1};
             $seen{$theTag1}{$tag} = 1;
+            $seen{$tag}{$theTag1} = 1;
             push @arrayResult, expandVariables($theArrayFormat,
               tag2=>$tag,
               count=>$$coocc{$theTag1}{$tag},
@@ -212,11 +194,11 @@ sub handleTAGCOOCCURRENCE {
         }
 
         if ($theAllPairs) {
-          my %seen;
           foreach my $theTag2 (@coocurringTags) {
             next if $seen{$theTag1}{$theTag2};
             next if $seen{$theTag2}{$theTag1};
             $seen{$theTag1}{$theTag2} = 1;
+            $seen{$theTag2}{$theTag1} = 1;
             my $count = $$coocc{$theTag1}{$theTag2};
             if (defined($count)) {
               push @result,  expandVariables($theFormat,
@@ -270,6 +252,7 @@ sub handleTAGRELATEDTOPICS {
 
   my $hierarchy = getHierarchy($thisWeb);
   my $tagIntersection = $hierarchy->getTagIntersection($thisTopic);
+  return unless $tagIntersection;
 
   # sort most intersecting first
   my @foundTopics = 
@@ -359,17 +342,20 @@ sub handleSUBSUMES {
   my $cat1 = $hierarchy->getCategory($theCat1);
   return 0 unless $cat1;
 
+  my $result = 0;
   foreach my $catName (split(/\s*,\s*/,$theCat2)) {
     $catName =~ s/^\s+//g;
     $catName =~ s/\s+$//g;
     next unless $catName;
     my $cat2 = $hierarchy->getCategory($catName);
     next unless $cat2;
-    return 1 if $cat1->subsumes($cat2);
+    $result = $cat1->subsumes($cat2) || 0;
+    last if $result;
   }
 
+  #writeDebug("result=$result");
 
-  return 0;
+  return $result;
 }
 
 ###############################################################################
@@ -379,27 +365,22 @@ sub handleDISTANCE {
   my $thisWeb = $params->{web} || $baseWeb;
   my $theFrom = $params->{_DEFAULT} || $params->{from} || $baseTopic;
   my $theTo = $params->{to} || 'TopCategory';
-  my $theFormat = $params->{format} || '$min';
   my $theAbs = $params->{abs} || 'off';
+  my $theFormat = $params->{format} || '$dist';
 
   #writeDebug("called handleDISTANCE($theFrom, $theTo)");
 
   my $hierarchy = getHierarchy($thisWeb);
-
   my $distance = $hierarchy->distance($theFrom, $theTo);
+
   return '' unless defined $distance;
-  my ($min, $max) = @$distance;
 
-  if ($theAbs eq 'on') {
-    $min = abs($min);
-    $max = abs($max);
-  }
+  $distance = abs($distance) if $theAbs eq 'on';
 
-  #writeDebug("distance=@$distance");
+  #writeDebug("distance=$distance");
 
   my $result = $theFormat;
-  $result =~ s/\$min/$min/g;
-  $result =~ s/\$max/$max/g;
+  $result =~ s/\$dist/$distance/g;
 
   return $result;
 }
@@ -519,11 +500,21 @@ sub handleCATINFO {
   my $thisWeb = $params->{web} || $baseWeb;
   my $thisTopic = $params->{_DEFAULT} || $params->{topic} || $baseTopic;
   my $theSubsumes = $params->{subsumes} || '';
+  my $theSortChildren = $params->{sortchildren} || 'off';
+  my $theMaxChildren = $params->{maxchildren} || 0;
+  my $theHideNull = $params->{hidenull} || 'off';
 
   $theSep = ', ' unless defined $theSep;
+  $theMaxChildren =~ s/[^\d]//go;
+  $theMaxChildren = 0 unless defined $theMaxChildren;
 
-  ($thisWeb, $thisTopic) = 
-    TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
+  if ($theCat) { # cats mode
+    ($thisWeb, $theCat) = 
+      TWiki::Func::normalizeWebTopicName($thisWeb, $theCat);
+  } else { # dogs mode
+    ($thisWeb, $thisTopic) = 
+      TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
+  }
 
   my $hierarchy = getHierarchy($thisWeb);
   return '' unless $hierarchy;
@@ -550,28 +541,36 @@ sub handleCATINFO {
       next;
     }
     my $category = $hierarchy->getCategory($catName);
+    unless ($category) {
+      writeDebug("Woops: there's no category '$catName' ... found in $thisTopic");
+      next;
+    }
+
 
     # skip catinfo from another branch of the hierarchy
     next if $subsumesCat && !$hierarchy->subsumes($subsumesCat, $category);
 
     my $line = $theFormat;
+
     my $parents = '';
-    my $parentsName = '';
-    my $parentsTitle = '';
     if ($line =~ /\$parents?\b/) {
       my @links = ();
       foreach my $parent ($category->getParents()) {
-        push @links, "[[$thisWeb.$parent->{name}][$parent->{title}]]";
+        push @links, $parent->getLink();
       }
       $parents = join(', ', @links);
     }
-    if ($line =~ /\$parents?name/) {
+
+    my $parentsName = '';
+    if ($line =~ /\$parents?names?/) {
       my @names = ();
       foreach my $parent ($category->getParents()) {
         push @names, $parent->{name};
       }
       $parentsName = join(', ', @names);
     }
+
+    my $parentsTitle = '';
     if ($line =~ /\$parents?title/) {
       my @titles = ();
       foreach my $parent ($category->getParents()) {
@@ -579,22 +578,131 @@ sub handleCATINFO {
       }
       $parentsTitle = join(', ', @titles);
     }
+
+    my $parentLinks = '';
+    if ($line =~ /\$parents?links?/) {
+      my @links = ();
+      foreach my $parent ($category->getParents()) {
+        push @links, $parent->getLink();
+      }
+      $parentLinks = join(', ', @links);
+    }
+
+    my $parentUrls = '';
+    if ($line =~ /\$parents?urls?/) {
+      my @urls = ();
+      foreach my $parent ($category->getParents()) {
+        push @urls, $parent->getUrl();
+      }
+      $parentUrls = join(', ', @urls);
+    }
+
+    my @children;
+    my $moreChildren = '';
+    if ($line =~ /\$children/) {
+      @children = $category->getChildren();
+      @children = grep {$_->{name} ne 'BottomCategory'} 
+        @children;
+
+      if ($theHideNull eq 'on') {
+        @children = grep {$_->countLeafs() > 0} 
+          @children;
+      }
+
+      if ($theSortChildren eq 'on') {
+        @children = 
+          sort {$b->countLeafs() <=> $a->countLeafs() || 
+                $a->{title} cmp $b->{title}} 
+            @children;
+      }
+
+      if ($theMaxChildren && $theMaxChildren < @children) {
+        if (splice(@children, $theMaxChildren)) {
+          $moreChildren = $params->{morechildren} || '';
+        }
+      }
+    }
+
+    my $children = '';
+    if ($line =~ /\$children?\b/) {
+      my @links = ();
+      foreach my $child (@children) {
+        push @links, $child->getLink();
+      }
+      $children = join(', ', @links);
+    }
+
+    my $childrenName = '';
+    if ($line =~ /\$children?names?/) {
+      my @names = ();
+      foreach my $child (@children) {
+        push @names, $child->{name};
+      }
+      $childrenName = join(', ', @names);
+    }
+
+    my $childrenTitle = '';
+    if ($line =~ /\$children?title/) {
+      my @titles = ();
+      foreach my $child (@children) {
+        push @titles, $child->{title};
+      }
+      $childrenTitle = join(', ', @titles);
+    }
+
+    my $childrenLinks = '';
+    if ($line =~ /\$children?links?/) {
+      my @links = ();
+      foreach my $child (@children) {
+        push @links, $child->getLink();
+      }
+      $childrenLinks = join(', ', @links);
+    }
+
+    my $childrenUrls = '';
+    if ($line =~ /\$children?urls?/) {
+      my @urls = ();
+      foreach my $child (@children) {
+        push @urls, $child->getUrl();
+      }
+      $childrenUrls = join(', ', @urls);
+    }
+
     my $isCyclic = 0;
     $isCyclic = $category->isCyclic() if $theFormat =~ /\$cyclic/;
+
+    my $countLeafs = '';
+    $countLeafs = $category->countLeafs() if $theFormat=~ /\$leafs/;
+
     my $title = $category->{title} || $catName;
-    my $link = "[[$thisWeb.$catName][$title]]";
-    my $url = TWiki::Func::getScriptUrl($thisWeb, $catName, 'view');
-    my $summary = $category->{summary} || $title;
+    my $link = $category->getLink();
+    my $url = $category->getUrl();
+    my $summary = $category->{summary} || '';
+
+    my $iconUrl = $category->getIconUrl();
+
+    $line =~ s/\$more/$moreChildren/g;
     $line =~ s/\$link/$link/g;
     $line =~ s/\$url/$url/g;
     $line =~ s/\$web/$thisWeb/g;
-    $line =~ s/\$name/$catName/g;
+    $line =~ s/\$origweb/$category->{origWeb}/g;
+    $line =~ s/\$(name|topic)/$catName/g;
     $line =~ s/\$title/$title/g;
     $line =~ s/\$summary/$summary/g;
     $line =~ s/\$parents?name/$parentsName/g;
     $line =~ s/\$parents?title/$parentsTitle/g;
+    $line =~ s/\$parents?links?/$parentLinks/g;
+    $line =~ s/\$parents?urls?/$parentUrls/g;
     $line =~ s/\$parents?/$parents/g;
     $line =~ s/\$cyclic/$isCyclic/g;
+    $line =~ s/\$leafs/$countLeafs/g;
+
+    $line =~ s/\$children?name/$childrenName/g;
+    $line =~ s/\$children?title/$childrenTitle/g;
+    $line =~ s/\$children?links?/$childrenLinks/g;
+    $line =~ s/\$children?urls?/$childrenUrls/g;
+    $line =~ s/\$children?/$children/g;
+    $line =~ s/\$icon/$iconUrl/g;
     push @result, $line;
   }
   return '' unless @result;
@@ -663,67 +771,101 @@ sub handleTAGINFO {
 sub beforeSaveHandler {
   my ( $text, $topic, $web, $meta ) = @_;
 
+  #writeDebug("beforeSaveHandler($topic, $web)");
   my $doAutoReparent = TWiki::Func::getPreferencesFlag('CLASSIFICATIONPLUGIN_AUTOREPARENT', $web);
   $doAutoReparent = 1 unless defined $doAutoReparent;
 
-  return unless $doAutoReparent;
+  if ($doAutoReparent) {
 
-  unless ($meta) {
-    my $session = $TWiki::Plugins::SESSION;
-    $meta = new TWiki::Meta($session, $web, $topic );
-    $session->{store}->extractMetaData( $meta, \$text );
-  }
-
-  # get categories of this topic,
-  # must get it from current meta data
-  my $topicType = $meta->get('FIELD', 'TopicType');
-  return unless $topicType;
-  $topicType = $topicType->{value};
-  return unless $topicType =~ /ClassifiedTopic|CategorizedTopic|Category/;
-
-  my @allCats;
-  my $hierarchy = getHierarchy($web);
-  my $catFields = $hierarchy->getCatFields(split(/\s*,\s*/,$topicType));
-
-  # get categories from meta data
-  foreach my $field (@$catFields) {
-    my $cats = $meta->get('FIELD',$field);
-    next unless $cats;
-    $cats = $cats->{value};
-    next unless $cats;
-    foreach my $cat (split(/\s*,\s*/,$cats)) {
-      $cat =~ s/^\s+//go;
-      $cat =~ s/\s+$//go;
-      push @allCats, $cat;
+    unless ($meta) {
+      my $session = $TWiki::Plugins::SESSION;
+      $meta = new TWiki::Meta($session, $web, $topic );
+      $session->{store}->extractMetaData( $meta, \$text );
     }
-  }
 
-  # set the new parent topic
-  if (@allCats) {
-    @allCats = sort @allCats;
-    my $firstCat = shift @allCats;
-    # TODO: check if the firstCat exists and only then set the parent
-    # don't autoset to HomeTopic if TopCategory
-    $firstCat = $TWiki::cfg{HomeTopic} if $firstCat eq 'TopCategory';
-    $meta->remove('TOPICPARENT');
-    $meta->putKeyed('TOPICPARENT', {name=>$firstCat});
+    # get categories of this topic,
+    # must get it from current meta data
+    my $topicType = $meta->get('FIELD', 'TopicType');
+    return unless $topicType;
+    $topicType = $topicType->{value};
+    return unless $topicType =~ /ClassifiedTopic|CategorizedTopic|Category/;
 
-  } else {
-    #$meta->putKeyed('TOPICPARENT', {name=>''});
+    my @allCats;
+    my $hierarchy = getHierarchy($web);
+    my $catFields = $hierarchy->getCatFields(split(/\s*,\s*/,$topicType));
+
+    # get categories from meta data
+    foreach my $field (@$catFields) {
+      my $cats = $meta->get('FIELD',$field);
+      next unless $cats;
+      $cats = $cats->{value};
+      next unless $cats;
+      foreach my $cat (split(/\s*,\s*/,$cats)) {
+        $cat =~ s/^\s+//go;
+        $cat =~ s/\s+$//go;
+        push @allCats, $cat;
+      }
+    }
+
+    # set the new parent topic
+    if (@allCats) {
+      @allCats = sort @allCats;
+      my $firstCat = shift @allCats;
+      # TODO: check if the firstCat exists and only then set the parent
+      # don't autoset to HomeTopic if TopCategory
+      $firstCat = $TWiki::cfg{HomeTopic} if $firstCat eq 'TopCategory';
+      $meta->remove('TOPICPARENT');
+      $meta->putKeyed('TOPICPARENT', {name=>$firstCat});
+
+    } else {
+      #$meta->putKeyed('TOPICPARENT', {name=>''});
+    }
   }
 }
 
 ###############################################################################
-# TODO: only invalidate the hierarchy if relevant information has changed
 sub afterSaveHandler {
-  # my ( $text, $topic, $web, $error, $meta ) = @_;
-  my $web = $_[2];
+  my (undef, $targetTopic, $targetWeb) = @_;
 
-  # reset cache
-  my $hierarchy = getHierarchy($web);
-  $hierarchy->invalidate();
-  $hierarchy->DESTROY();
-  $hierarchies{$web} = undef;
+  writeDebug("afterSaveHandler($targetTopic, $targetWeb)");
+
+  my $topicTypes = getTopicTypes($targetWeb, $baseTopic);
+  return unless $topicTypes;
+
+  my $mode = 0;
+
+  foreach my $topicType (@$topicTypes) {
+    $mode = 1 if $topicType eq 'TaggedTopic';
+    $mode = 2 if $topicType eq 'CategorizedTopic';
+    $mode = 3 if $topicType eq 'ClassifiedTopic';
+    $mode = 4 if $topicType eq 'Category';
+    last if $mode;
+  }
+
+  # try even harder if it missing the CategorizedTopic TopicType but
+  # still uses categories
+  if ($mode < 2) { 
+    my $hierarchy = getHierarchy($baseWeb); # using baseWeb, e.g. not Trash
+    my $catFields = $hierarchy->getCatFields(@$topicTypes);
+    if ($catFields && @$catFields) {
+      $mode = ($mode < 1)?2:3;
+    }
+  }
+
+  if ($mode) {
+    my $hierarchy;
+
+    $hierarchy = getHierarchy($targetWeb);
+    $hierarchy->purgeCache($mode);
+#    $hierarchy->init();
+
+    if ($targetWeb ne $baseWeb) {
+      $hierarchy = getHierarchy($baseWeb);
+      $hierarchy->purgeCache($mode);
+#      $hierarchy->init();
+    }
+  }
+  finish(); # not called by modifyHeaderHandler
 }
 
 ###############################################################################
@@ -793,7 +935,7 @@ sub getTopicTypes {
   return undef unless $db;
 
   my $topicObj = $db->fastget($topic);
-  return undef unless $db;
+  return undef unless $topicObj;
 
   my $form = $topicObj->fastget("form");
   return undef unless $form;
@@ -831,11 +973,11 @@ sub expandVariables {
   #writeDebug("called expandVariables($theFormat)");
 
   foreach my $key (keys %params) {
-    die "params{$key} undefined" unless defined($params{$key});
+    #die "params{$key} undefined" unless defined($params{$key});
     $theFormat =~ s/\$$key\b/$params{$key}/g;
   }
   $theFormat =~ s/\$percnt/\%/go;
-  $theFormat =~ s/\$nop//g;
+  $theFormat =~ s/\$nop//go;
   $theFormat =~ s/\$n/\n/go;
   $theFormat =~ s/\$t\b/\t/go;
   $theFormat =~ s/\$dollar/\$/go;

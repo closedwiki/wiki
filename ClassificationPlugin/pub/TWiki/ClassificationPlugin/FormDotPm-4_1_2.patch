@@ -26,7 +26,7 @@ Index: Form.pm
 +
 +            require TWiki::Plugins::ClassificationPlugin;
 +            my $hierarchy = TWiki::Plugins::ClassificationPlugin::getHierarchy($web);
-+            my @cats = keys %{$hierarchy->{categories}};
++            my @cats = $hierarchy->getCategoryNames();
 +            my @newValues = ();
 +            foreach my $cat (@cats) {
 +              push @newValues, $cat if $vset{$cat};

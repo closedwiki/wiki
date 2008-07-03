@@ -1,17 +1,17 @@
-%META:TOPICINFO{author="TWikiContributor" date="1204297357" format="1.1" reprev="1.9" version="$Rev$"}%
-%META:TOPICPARENT{name="TestCategory11"}%
-<!--
-   * Set VIEW_TEMPLATE = Applications.ClassificationApp.ClassifiedTopicView
--->
-
-
+%META:TOPICINFO{author="TWikiContributor" date="1214238900" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="PlansAndPresentations"}%
    * DISTANCE{from="TopCategory" to="BottomCategory" format="min=$min, max=$max"} = %DISTANCE{from="TopCategory" to="BottomCategory" format="min=$min, max=$max"}%
-   * DISTANCE{from="%TOPIC%" to="TestCategory13"}: %DISTANCE{from="%TOPIC%" to="TestCategory13"}%
-   * DISTANCE{from="%TOPIC%" to="TestCategory3"}: %DISTANCE{from="%TOPIC%" to="TestCategory3"}%
+   * DISTANCE{from="%TOPIC%" to="PlansAndPresentations"}: %DISTANCE{from="%TOPIC%" to="PlansAndPresentations"}%
+   * DISTANCE{from="%TOPIC%" to="MarketingCategory"}: %DISTANCE{from="%TOPIC%" to="MarketingCategory"}%
+
+
+TestTopic0
+
+   * Set TOPICTITLE = Foo
 
 %META:FORM{name="Applications.ClassificationApp.ClassifiedTopic"}%
-%META:FIELD{name="TopicType" attributes="" title="TopicType" value="ClassifiedTopic, TaggedTopic, CategorizedTopic"}%
-%META:FIELD{name="TopicTitle" attributes="" title="<nop>TopicTitle" value=""}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="ClassifiedTopic, CategorizedTopic, TaggedTopic"}%
+%META:FIELD{name="TopicTitle" attributes="" title="<nop>TopicTitle" value="TestTopic0"}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="foo bar"}%
 %META:FIELD{name="Tag" attributes="" title="Tag" value="client, fat, foo, sql"}%
-%META:FIELD{name="Category" attributes="" title="Category" value="TestCategory13, TestCategory11"}%
+%META:FIELD{name="Category" attributes="" title="Category" value="PlansAndPresentations, TestCategory11"}%

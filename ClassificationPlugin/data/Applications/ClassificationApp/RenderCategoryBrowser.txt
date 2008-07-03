@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1185729160" format="1.1" reprev="1.10" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1214233433" format="1.1" reprev="1.2" version="$Rev$"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+!! Function: %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -20,7 +20,7 @@
 
 ---++ Implementation
 <verbatim>
-%STARTINCLUDE%<div class="clsBrowser jqTreeview %IFDEFINED{"%UNIQUE%" as="off" then=" " else=" unique"}%">
+%STARTINCLUDE%<div class="clsBrowser jqTreeview %IFDEFINED{"%UNIQUE%" as="on" then="unique" else=" "}%">
 ~~~ <noautolink>
 %~~ HIERARCHY{
 ~~~   web="%IFDEFINED{"%THEWEB%" then="$test" else="%BASEWEB%"}%"
@@ -40,11 +40,12 @@
 ~~~            then=\"class=\\"twikiCurrentTopicLink\\"\"
 ~~~          }$percnt
 ~~~          title=\"$summary\">
-*~~         $title</a>
+~~~         <img src='$icon' alt='$percntENCODE{$title}$percnt'/>
+~~~         $title</a>
 ~~~       $percntIFDEFINED{\"$cyclic\" as=\"1\" 
 ~~~         then=\" <span class='twikiAlert'>C</span>\"
 ~~~       }$percnt
-~~~       $percntIFDEFINED{\"$count \" as=\"0 \" then=\" \" else=\" ($count)\"}$percnt
+~~~       $percntIFDEFINED{\"$leafs \" as=\"0 \" then=\" \" else=\" ($leafs)\"}$percnt
 ~~~       $children</li>"
 ~~~ }%
 ~~~ </noautolink>
@@ -60,7 +61,7 @@
 </div>
 
 <div class="alt">
-%DBCALL{"%TOPIC%" UNIQUE="on" TOP="TestCategory"}%
+%DBCALL{"%TOPIC%" UNIQUE="on" TOP="IntranetDirectory"}%
 </div>
 
 %DBCALL{"Applications.RenderFunctionCallers"}%
@@ -71,9 +72,6 @@
 
 %DBCALL{"Applications.GnuGeneralPublicLicense" section="notice"}%
 </div>
-<!--
-   * Set DEPENDENCIES = TopicFunction
--->
 
 
 

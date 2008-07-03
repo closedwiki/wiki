@@ -4,13 +4,9 @@
 %RED%Note, this is only a template.%ENDCOLOR%
 
 See also: TopicTemplate, ClassifiedTopicViewTemplate
-<!--
-   * Local VIEW_TEMPLATE =
--->
 %ENDSECTION{type="templateonly"}%
 
 %META:FORM{name="Applications.ApplicationTopic"}%
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicTemplate"}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="Template for classified topics"}%
 %META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="ClassificationApp"}%
-%META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" type="Set" value="Applications.ClassificationApp.ClassifiedTopicView"}%

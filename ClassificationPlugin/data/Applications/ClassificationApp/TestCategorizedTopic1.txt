@@ -7,4 +7,3 @@
 %META:FIELD{name="TopicTitle" attributes="" title="<nop>TopicTitle" value=""}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="This is a test topic with a nop  in it"}%
 %META:FIELD{name="Category" attributes="" title="Category" value="TestCategory3, TestCategory8, TestCategory4"}%
-%META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" type="Set" value="Applications.ClassificationApp.CategorizedTopicView"}%

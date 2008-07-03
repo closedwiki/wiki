@@ -6,7 +6,7 @@
 See also: RenderWebClassSearch
 
 ---++ Installation
-%DBCALL{"Applications.RenderTopicInstaller" TYPE="TopicStub"}%
+%DBCALL{"Applications.RenderTopicInstaller"}%
 
 ---++ Implementation
 %STARTINCLUDE%<!-- -->
@@ -19,7 +19,7 @@ See also: RenderWebClassSearch
 <!-- -->%STOPINCLUDE%
 
 %META:FORM{name="Applications.ApplicationTopic"}%
-%META:FIELD{name="TopicType" attributes="" title="TopicType" value="ApplicationFactory, ApplicationTopic, AuthorTool"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="ApplicationFactory, ApplicationTopic"}%
 %META:FIELD{name="TopicTitle" attributes="" title="<nop>TopicTitle" value=""}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="Advanced Classification Search"}%
 %META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="ClassificationApp"}%

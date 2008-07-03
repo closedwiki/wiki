@@ -5,18 +5,25 @@
 See also: RenderWebTagCloud
 
 ---++ Installation
-%DBCALL{"Applications.RenderTopicInstaller" TYPE="TopicStub"}%
+%DBCALL{"Applications.RenderTopicInstaller"}%
 
 ---++ Implementation
-%STARTINCLUDE%<!-- -->
+%STARTINCLUDE%<!-- applications.classificationapp.webtagcloud -->
 %~~ DBCALL{"Applications.ClassificationApp.RenderWebTagCloud" 
 ~~~   QUERY="%URLPARAM{"search"}%" 
+~~~   CAT="%URLPARAM{"cat"}%" 
+~~~   TOPCAT="%URLPARAM{"topcat" default="%TOPCAT%"}%"
+~~~   EXCLUDECAT="%URLPARAM{"excludecat" default="%EXCLUDECAT%"}%"
+~~~   RECENCY="%URLPARAM{"recency"}%"
+~~~   MIN="%URLPARAM{"min"}%"
 ~~~   MIN="%MIN%"
+~~~   CATTITLE="%CATTITLE%"
+~~~   SHOWFILTER="on"
 ~~~ }%
-<!-- -->%STOPINCLUDE%
+<!-- //applications.classificationapp.webtagcloud -->%STOPINCLUDE%
 
 
 %META:FORM{name="Applications.ApplicationTopic"}%
-%META:FIELD{name="TopicType" attributes="" title="TopicType" value="ApplicationFactory, ApplicationTopic, AuthorTool"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="ApplicationFactory, ApplicationTopic, WebTool"}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="Access topics based on their tags"}%
 %META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="ClassificationApp"}%

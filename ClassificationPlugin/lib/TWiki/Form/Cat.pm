@@ -46,7 +46,7 @@ sub getOptions {
   $this->{value} = '';
 
   my $hierarchy = TWiki::Plugins::ClassificationPlugin::getHierarchy($web);
-  my @options = keys %{$hierarchy->{categories}};
+  my @options = $hierarchy->getCategoryNames();
 
   return \@options;
 }

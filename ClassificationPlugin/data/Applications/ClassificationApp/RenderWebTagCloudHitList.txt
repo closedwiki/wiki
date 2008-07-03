@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1194470007" format="1.1" reprev="1.6" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1213786209" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+!! Function: %TOPIC%
 %FORMFIELD{"Summary"}%
@@ -23,6 +23,28 @@
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
+*~~
+<noautolink>
+%~~ MAKEINDEX{"
+%~~   DBQUERY{"TopicType=~'\b(Tagged|Classified)Topic\b' %QUERY%"
+~~~    web="%BASEWEB%"
+~~~    limit="%IFDEFINED{"%LIMIT%" then="$test"}%" 
+~~~    format="$expand(topictitle);$topic;$web"
+~~~    separator="$n"
+~~~   }%"
+~~~   cols="%IFDEFINED{"%CLASSIFICATIONPLUGIN_NRCOLS%" then="$test" else="3"}%"
+~~~   header="<h2 >Found $count topic(s)</h2>"
+~~~   split="\n"
+~~~   pattern="(.*);(.*);(.*)"
+~~~   format="$percntDBCALL{\"$3.$2->RenderIndexItem\"}$percnt"
+~~~ "
+~~~ }%
+%STOPINCLUDE%
+</verbatim>
+
+---++ Old Implementation
+<verbatim>
+%STARTSECTION{"oldimpl"}%
 *~~
 %~~ DBQUERY{"TopicType=~'\b(Tagged|Classified)Topic\b' %QUERY%"
 ~~~    web="%BASEWEB%"
@@ -58,7 +80,7 @@
 ~~~      </div></noautolink>"
 ~~~ }%
 ~~~
-%STOPINCLUDE%
+%ENDSECTION{"oldimpl"}%
 </verbatim>
 
 <!-- interrupt glue -->
@@ -76,13 +98,11 @@
 
 %DBCALL{"Applications.GnuGeneralPublicLicense" section="notice"}%
 </div>
-<!--
-   * Set DEPENDENCIES = TopicFunction
--->
 
 
 
 %META:FORM{name="Applications.ApplicationTopic"}%
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="DocuTopic, TopicFunction"}%
+%META:FIELD{name="TopicTitle" attributes="" title="<nop>TopicTitle" value="RenderWebTagCloudHitList"}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="Renders the hit list in a WebTagCloud selection"}%
 %META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="ClassificationApp"}%

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1159799272" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1212998697" format="1.1" version="$Rev$"}%
 ---+ %TOPIC%
 %FORMFIELD{"Summary"}%
 
@@ -21,6 +21,6 @@ See also: WebSideBar
 -->
 
 %META:FORM{name="Applications.ApplicationTopic"}%
-%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="WebTool"}%
 %META:FIELD{name="Summary" attributes="" title="Summary" value="WebSideBar used by the TWiki.PatternSkin"}%
 %META:FIELD{name="TWikiApplication" attributes="" title="TWikiApplication" value="TWikiWorkbench"}%

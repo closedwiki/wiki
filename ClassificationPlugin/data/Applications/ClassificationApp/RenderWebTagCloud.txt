@@ -12,12 +12,80 @@
    * MIN: minimum frequency of a tags to be shown
    * TAGCLOUDTOPIC: topic where to jump to when a tag is clicked, defaults to BASETOPIC
    * RECENCY: limit search for tags on most recently changed topics
+   * CAT: restrict tag cloud to this category; displays all tags of all categories if unspecified
+   * CATTITLE: title of the category filter, defaults to 'Category'
+   * TOPCAT: optional top category to display the category filter for
+   * EXCLUDECAT: optionally exclude a category category from filter, defaults to <nop>TopCategory
+   * SHOWFILTER: toggle the filter form, defaults to hidden
 
 %ENDSECTION{name="documentation" type="section"}%
 
 ---++ Implementation
 <verbatim>
-%STARTINCLUDE%<noautolink>
+%STARTINCLUDE%
+<noautolink>
+<script type="text/javascript">
+function submitTagCloud(clickedTag) {
+  var form = document.getElementById('tagCloudForm');
+  var newTags = new Array();
+  var allTags = form.search.value.split(/\s*,\s*/);
+  var found = 0;
+  for (var i = 0; i < allTags.length; i++) {
+    var tag = allTags[i];
+    if (tag.match(clickedTag)) {
+      found = 1;
+    } else {
+      if (tag) {
+        newTags.push(tag);
+      }
+    }
+  }
+  if (!found) {
+    newTags.push(clickedTag);
+  }
+  form.search.value = newTags.join(",");
+  form.submit();
+}
+</script>
+~~~ <form id="tagCloudForm" action="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%IFDEFINED{"%TAGCLOUDTOPIC%" then="$test" else="%BASETOPIC%"}%">
+~~~   <input type="hidden" name="search" value="%URLPARAM{"search"}%" />
+%~~ IFDEFINEDTHEN{"%SHOWFILTER%" as="on"}%
+%~~ $nopTWISTY{
+~~~   link="&nbsp;Filter" 
+~~~   firststart="hide" 
+~~~   remember="on"
+~~~   prefix="<h3>" 
+~~~   suffix="</h3>" 
+~~~   showimgleft="%ICONURLPATH{plus}%"
+~~~   hideimgleft="%ICONURLPATH{minus}%"
+~~~ }%
+~~~ <div class="twikiPageForm"> 
+~~~   <table class="twikiTable" style="width:auto"><tr>
+~~~     <th>%IFDEFINED{"%CATTITLE%" then="%CATTITLE%" else="Category"}%:</th>
+~~~     <td>
+~~~       <select name="cat" style="max-width:20em">
+~~~         <option value='' %IFDEFINED{"%CAT%" as="" then=" selected"}%>ALL</option>
+%~~         HIERARCHY$nop{
+~~~           web="%BASEWEB%"
+~~~           top="%IFDEFINED{"%TOPCAT%" then="%TOPCAT%" else="TopCategory"}%"
+~~~           exclude="%IFDEFINED{"%EXCLUDECAT%" then="%EXCLUDECAT%" else="TopCategory"}%"
+~~~           indent="&nbsp;"
+~~~           format="<option value='$topic' 
+~~~             $percntIFDEFINED{\"%CAT%\" as=\"$topic\" 
+~~~               then=\" selected\"
+~~~             }$percnt>$indent $title</option>$n$children"
+~~~         }%
+~~~       </select> 
+~~~     </td>
+~~~     <td>&nbsp;
+~~~     <input type="submit" class="natOkButton" value="OK" />
+~~~     <input type="button" class="natCancelButton" value="Cancel" onclick="window.location.href='%SCRIPTURL{"view"}%/%BASEWEB%/%BASETOPIC%';" />
+~~~     </td>
+~~~   </tr>
+~~~   </table>
+~~~ </div>
+%~~ $nopENDTWISTY%
+%~~ FIDEFINED%
 %~~ TAGCLOUD{
 ~~~   "$percntDBQUERY{
 ~~~     \"TopicType=~'\b(Tagged|Classified)Topic\b'
@@ -26,6 +94,7 @@
 ~~~         format=\" Tag=~'\b$1\b' \"
 ~~~         separator=\"AND\"
 ~~~       }$percnt
+~~~       %IFDEFINED{"%CAT%" then=" AND topic ISA '%CAT%'"}%
 ~~~     \"
 ~~~     order=\"modified\"
 ~~~     reverse=\"on\"
@@ -35,35 +104,24 @@
 ~~~   }$percnt"
 ~~~   buckets="200"
 ~~~   offset="100"
+~~~   split=","
 ~~~   min="%IFDEFINED{"%MIN%" then="$test" else="0"}%"
-~~~   split="[,\s]+"
 ~~~   header="<div class=\"clsTagCloud\">"
 ~~~   group="<strong>$group</strong>"
 ~~~   format="<a rel=\"nofollow\" name=\"$term\"
 ~~~        style=\"font-size:$weight%;
 ~~~                color:$fadeRGB(194,199,204,0,102,204);\"
-~~~        href=\"%SCRIPTURLPATH{"view"}%/%BASEWEB%/
-*~~          %IFDEFINED{"%TAGCLOUDTOPIC%" then="$test" else="%BASETOPIC%"}%
-~~~          $percntFORMATLIST{
-~~~            $percntIFDEFINED{\"%QUERY%\" 
-~~~                as=\".*\b$term\b.*\" 
-~~~                then=\"\\"$test\\" exclude=\\"$term\\"\" 
-~~~                else=\"\\"$test,$term\\"\"
-~~~                glue=\"off\"
-~~~            }$percnt 
-~~~            header=\"?search=\" 
-~~~            unique=\"on\" 
-~~~            separator=\",\" 
-~~~          }$percnt#result\"
-~~~          $percntIFDEFINED{\"%QUERY%\"
-~~~            as=\".*\b$term\b.*\"
-~~~            then=\"class=\\"current\\"\"
-~~~            glue=\"off\"
-~~~          }$percnt
-~~~          title=\"found $count time(s)\"
+~~~        href=\"javascript:submitTagCloud('$term')\"
+~~~        $percntIFDEFINED{\"%QUERY%\"
+~~~          as=\".*\b$term\b.*\"
+~~~          then=\"class=\\"current\\"\"
+~~~          glue=\"off\"
+~~~        }$percnt
+~~~        title=\"found $count time(s)\"
 ~~~     >$term</a>"
 ~~~   footer="</ul></div>"
 ~~~ }%
+~~~ </form>
 %IFDEFINEDTHEN{"%QUERY%" glue="off"}%
 <a name="results"></a>
 %~~   $nopDBCALL{"Applications.ClassificationApp.RenderWebTagCloudHitList"
@@ -72,8 +130,10 @@
 ~~~         header="AND" 
 ~~~         format=" Tag=~'\b$1\b' "
 ~~~         separator="AND"
-~~~       }%"
-~~~     PARAMS="search=%QUERY%"
+~~~       }%
+~~~     %IFDEFINED{"%CAT%" then=" AND topic ISA '%CAT%'"}%
+~~~     "
+~~~     PARAMS="search=%QUERY%;cat=%CAT%;recency=%RECENCY%;min=%MIN%"
 ~~~     HILITE="Tag"
 ~~~   }%
 %FIDEFINED%
@@ -82,11 +142,14 @@
 </verbatim>
 
 
-<!-- interrupt glue -->
-
 ---++ Test
 <div class="alt">
-%DBCALL{"%TOPIC%" QUERY="%URLPARAM{"search"}%"}%
+%DBCALL{"%TOPIC%" 
+  QUERY="%URLPARAM{"search"}%" 
+  CAT="%URLPARAM{"cat"}%" 
+  RECENCY="%URLPARAM{"recency"}%"
+  MIN="%URLPARAM{"min"}%"
+}%
 </div>
 
 %DBCALL{"Applications.RenderFunctionCallers"}%
@@ -97,9 +160,6 @@
 
 %DBCALL{"Applications.GnuGeneralPublicLicense" section="notice"}%
 </div>
-<!--
-   * Set DEPENDENCIES = TopicFunction
--->
 
 
 

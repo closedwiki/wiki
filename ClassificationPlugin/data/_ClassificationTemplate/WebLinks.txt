@@ -4,9 +4,9 @@
 
 %STARTINCLUDE%<!-- -->
    * [[ClassifiedTopic][%MAKETEXT{"New Topic"}%]]
-   * [[CategoryBrowser][Categories]]
-   * [[WebTagCloud][TagCloud]]
-   * [[TopicType][TopicTypes]]
+   * [[Category][Categories]]
+   * [[CategoryBrowser][Category Browser]]
+   * [[WebTagCloud][Tags]]
    * [[WebTopicList][%MAKETEXT{"Index"}%]]
    * [[WebChanges][%MAKETEXT{"Changes"}%]]
    * [[WebNotify][%MAKETEXT{"Notifications"}%]]

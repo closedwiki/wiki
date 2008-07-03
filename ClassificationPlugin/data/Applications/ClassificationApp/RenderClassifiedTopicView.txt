@@ -9,7 +9,8 @@
 %STARTSECTION{name="documentation" type="section"}%
 
 ---+++++ Parameters
-none
+This function renders a view for a classified topic,
+showing its category and tagging info in the top.
 
 ---+++++ Css
    * 
@@ -53,9 +54,6 @@ none
 
 %DBCALL{"Applications.GnuGeneralPublicLicense" section="notice"}%
 </div>
-<!--
-   * Set DEPENDENCIES = TopicFunction
--->
 
 
 

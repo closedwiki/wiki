@@ -1,7 +1,8 @@
+
 var prevHiliteElements = new Array();
 function hiliteElements (elemNames, className) {
   setClassOfNames(prevHiliteElements,'');
-  elemNames = elemNames.split(/[, ]+/);
+  elemNames = elemNames.split(/\s*,\s*/);
   prevHiliteElements = elemNames;
   setClassOfNames(elemNames, className);
 }
@@ -26,40 +27,19 @@ function setClassOfElems(elems, className) {
     elems[i].className = className;
   }
 }
-function pressButton(button) {
-  button.blur();
-
-  if ($(button).is("#clsNewCategoryButton")) {
-    $("#clsNewTopicButton").removeClass("aquaPillSelected");
-    $("#clsNewTopic:visible").hide();
-    $("#clsBrowseButton").removeClass("aquaPillSelected");
-    $("#clsBrowser:visible").hide();
-    $("#clsNewCategoryButton").toggleClass("aquaPillSelected");
-    $("#clsNewCategory").slideToggle();
-  } else if ($(button).is("#clsNewTopicButton")) {
-    $("#clsNewCategoryButton").removeClass("aquaPillSelected");
-    $("#clsNewCategory:visible").hide();
-    $("#clsBrowseButton").removeClass("aquaPillSelected");
-    $("#clsBrowser:visible").hide();
-    $("#clsNewTopicButton").toggleClass("aquaPillSelected");
-    $("#clsNewTopic").slideToggle();
-  } else {
-    $("#clsNewCategoryButton").removeClass("aquaPillSelected");
-    $("#clsNewCategory:visible").hide();
-    $("#clsNewTopicButton").removeClass("aquaPillSelected");
-    $("#clsNewTopic:visible").hide();
-    $("#clsBrowseButton").toggleClass("aquaPillSelected");
-    $("#clsBrowser").slideToggle();
-  }
-}
 
 /* TODO: this is only used by the category editor; so make the category editor
  * a proper jquery plugin like the jquery.tagselector component
  */
 function toggleValue(fieldName, theValue, selector) {
+  writeDebug("toggleValue("+fieldName+","+theValue+","+selector+")");
 
   var values = $("input#"+fieldName).val() || '';
-  values = values.split(/[, ]+/);
+  writeDebug("values="+values);
+  values = values.split(/\s*,\s*/);
+
+  clsClearSelection(fieldName, selector, values);
+
   var found = false;
   var newValues = new Array();
   for (var i = 0; i < values.length; i++)  {
@@ -77,19 +57,44 @@ function toggleValue(fieldName, theValue, selector) {
     newValues.push(theValue)
   }
 
-  clsSetSelection(fieldName, selector, ""+newValues);
+  clsSetSelection(fieldName, selector, newValues);
 }
-function clsSetSelection(fieldName, selector, selection) {
-  clsClearSelection(fieldName, selector);
-  var values = selection.split(/[, ]+/);
+function clsSetSelection(fieldName, selector, values) {
+  if (typeof(values) == 'string') {
+    values = values.split(/\s*,\s*/);
+  }
+  writeDebug("clsSetSelection("+fieldName+","+selector+","+values+")");
+
   for (var i = 0; i < values.length; i++) {
-    $("#"+selector+" a#"+values[i]).addClass("current");
+    $("#"+selector+" a."+values[i]).addClass("current");
   }
   $("input#"+fieldName).val(values.sort().join(", "));
 }
-function clsClearSelection(fieldName, selector) {
-  $("#"+selector+" input#"+fieldName).val("");
+function clsClearSelection(fieldName, selector, values) {
+  /*$("#"+selector+" input#"+fieldName).val("");
   $("#"+selector+" a").removeClass('current');
-  $("#"+selector+" a").removeClass('typed');
+  $("#"+selector+" a").removeClass('typed');*/
+  writeDebug("clsClearSelection("+fieldName+","+selector+","+values+")");
+
+  if (typeof(values) == 'undefined') {
+    $("#"+selector+" a").removeClass('current hover typed');
+  } else {
+    for (var i = 0; i < values.length; i++) {
+      $("#"+selector+" a."+values[i]).removeClass("current hover typed");
+    }
+  }
+  $("#"+selector+" input#"+fieldName).val("");
 }
+
+var clsDebug = 0;
+function writeDebug(msg) {
+  if (clsDebug) {
+    msg = "DEBUG: ClassSelector - "+msg;
+    if (window.console && window.console.log) {
+      window.console.log(msg);
+    } else { 
+      //alert(msg);
+    }
+  }
+};
 
