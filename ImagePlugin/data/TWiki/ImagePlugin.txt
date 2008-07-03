@@ -139,7 +139,7 @@ order is left-to-right-inside-out.
 
 ---++ Plugin Installation Instructions
 
-   * [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] the ZIP file
+   * Download the ZIP file
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
 %$MANIFEST%
@@ -160,12 +160,21 @@ order is left-to-right-inside-out.
 -->
 
 |  Plugin Author: | TWiki:Main.CraigMeyer |
-|  Copyright: | &copy; 2006, TWiki:Main.CraigMeyer, %copy; 2006-2008 MichaelDaum http://michaeldaumconsulting.com |
+|  Copyright: | &copy; 2006, TWiki:Main.CraigMeyer, %BR% &copy; 2006-2008 Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 1.0 |
+|  Plugin Version: | 1.1 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  03 Jul 2008: | plainify text to be used in a html attribute position, e.g. titles; \
+                  default to no img alignment; \
+                  refresh images on a =?refresh=on= url param; \
+                  using LWP::UserAgent instead of LWP::Simple to mirror images; \
+                  using =Resize= instead of =Scale= for higher quality thumbnails; \
+                  don't encrypt the href param |
+|  03 Mar 2008: | make implementation of image mage configurable, \
+                 defaulting to Graphics::Magick as Image::Magick has got issues \
+                 using perl accellerators like mod_perl, speedy-cgi |
 |  03 Jan 2008: | added processing of remote images |
-|  18 Dec 2006: | fixed image lookup order; fixed html formats; added I18N workaround |
+|  18 Dec 2006: | fixed image lookup order; fixed html formats; added <nop>I18N workaround |
 |  18 Aug 2006: | fixed html errors; \
                   removed references to <nop>ImgPlugin thus not showing the magnify-clip; \
 		  some html and css fixes to resemble closer to the <nop>MediaWiki examples |
@@ -173,7 +182,7 @@ order is left-to-right-inside-out.
 |  16 June 2006: | released into the public |
 |  10 May 2006: | Initial version by forking <nop>ImgPlugin |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
-|  CPAN Dependencies: | CPAN:Image::Magick; CPAN:LWP::Simple; CPAN::Digest::MD5 |
+|  CPAN Dependencies: | CPAN:Graphics::Magick; CPAN:LWP::UserAgent; CPAN:Digest::MD5 |
 |  Other Dependencies: |  |
 |  Perl Version: | 5.8 |
 |  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
@@ -183,7 +192,7 @@ order is left-to-right-inside-out.
 
 
 -- TWiki:Main.CraigMeyer %BR%
--- TWiki:Main.MichaelDaum - 03 Jan 2008
+-- TWiki:Main.MichaelDaum - 03 Jul 2008
 
 %META:FILEATTACHMENT{name="style.css" attr="" autoattached="1" comment="" date="1168442621" path="style.css" size="1423" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="magnify-clip.png" attr="" autoattached="1" comment="" date="1160383253" path="magnify-clip.png" size="267" user="TWikiContributor" version="1"}%

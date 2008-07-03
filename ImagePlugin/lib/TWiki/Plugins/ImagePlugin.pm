@@ -25,10 +25,10 @@
 package TWiki::Plugins::ImagePlugin;
 
 use strict;
-use vars qw( $VERSION $RELEASE $imageCore $doneHeader $imgStyle $baseWeb $baseTopic);
+use vars qw( $VERSION $RELEASE $doneHeader $imageCore $imgStyle $baseWeb $baseTopic);
 
 $VERSION = '$Rev$';
-$RELEASE = '1.0'; # please increase on every upload to twiki.org
+$RELEASE = '1.1'; # please increase on every upload to twiki.org
 
 ###############################################################################
 sub initPlugin {
@@ -82,6 +82,5 @@ sub getCore {
 # schedule tag handlers
 sub _IMAGE { getCore($baseWeb, $baseTopic)->handleIMAGE(@_); }
 
-###############################################################################
 1;
 

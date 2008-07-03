@@ -25,7 +25,6 @@
 package TWiki::Plugins::ImagePlugin::Core;
 
 use strict;
-use Image::Magick;
 
 BEGIN {
   # coppied over from TWiki.pm to cure Item3087
@@ -52,13 +51,13 @@ $linkFormat =
 
 $simpleFormat = 
   '<a href="$href" id="$id" class="imageHref imageSimple $class" title="$title" style="$style">'.
-    '<img border="0" align="middle" src="$src" alt="$alt" width="$width" height="$height" longdesc="$desc" $mousein $mouseout/>'.
+    '<img border="0" src="$src" alt="$alt" width="$width" height="$height" longdesc="$desc" $mousein $mouseout/>'.
   '</a>';
   
 $frameFormat = 
   '<div id="$id" class="imageFrame imageFrame_$align $class" style="_width:$framewidthpx;max-width:$framewidthpx;$style">'.
     '<a href="$href" class="imageHref" title="$title">'.
-      '<img border="0" align="middle" src="$src" alt="$alt" width="$width" height="$height" longdesc="$desc" $mousein $mouseout/>'.
+      '<img border="0" src="$src" alt="$alt" width="$width" height="$height" longdesc="$desc" $mousein $mouseout/>'.
     '</a>'.
     '$captionFormat'.
   '</div>';
@@ -66,7 +65,7 @@ $frameFormat =
 $floatFormat = 
   '<div id="$id" class="imageFloat imageFloat_$align $class" style="$style">'.
     '<a href="$href" class="imageHref" title="$title">'.
-      '<img border="0" align="middle" src="$src" alt="$alt" width="$width" height="$height" longdesc="$desc" $mousein $mouseout/>'.
+      '<img border="0" src="$src" alt="$alt" width="$width" height="$height" longdesc="$desc" $mousein $mouseout/>'.
     '</a>'.
     '$captionFormat'.
   '</div>';
@@ -76,12 +75,12 @@ $clearFormat =
  
 # helper formats
 $captionFormat =
-  '<div class="imageCaption">$caption</div>';
+  '<div class="imageCaption"> $caption </div>';
 
 $magnifyFormat =
   '<div class="imageMagnify">'.
     '<a href="$href" title="Enlarge">'.
-      '<img border="0" align="middle" src="$magnifyIcon" width="$magnifyWidth" height="$magnifyHeight" alt="Enlarge" />'.
+      '<img border="0" src="$magnifyIcon" width="$magnifyWidth" height="$magnifyHeight" alt="Enlarge" />'.
     '</a>'.
   '</div>';
 
@@ -107,8 +106,19 @@ sub new {
     TWiki::Func::getPluginPreferencesValue('THUMBNAIL_SIZE') || 180;
   $this->{baseWeb} = $baseWeb;
   $this->{baseTopic} = $baseTopic;
-  $this->{mage} = undef;
   $this->{errorMsg} = ''; # from image mage
+
+  # Graphics::Magick is less buggy than Image::Magick
+  my $impl = 
+    $TWiki::cfg{ImagePlugin}{Impl} || 
+    $TWiki::cfg{ImageGalleryPlugin}{Impl} || 
+    'Image::Magick'; 
+
+  writeDebug("creating new image mage using $impl");
+  eval "use $impl";
+  die $@ if $@;
+  $this->{mage} = new $impl;
+  writeDebug("done");
 
   return $this;
 }
@@ -136,7 +146,7 @@ sub handleIMAGE {
   $params->{width} ||= '';
   $params->{height} ||= '';
   $params->{caption} ||= '';
-  $params->{align} ||= 'right';
+  $params->{align} ||= 'none';
   $params->{class} ||= '';
   $params->{footer} ||= '';
   $params->{header} ||= '';
@@ -154,12 +164,17 @@ sub handleIMAGE {
   my $imgTopic;
   my $imgPath;
   my $pubDir = TWiki::Func::getPubDir();
-  my $pubUrl= TWiki::Func::getUrlHost().TWiki::Func::getPubUrlPath();
+  my $pubUrlPath = TWiki::Func::getPubUrlPath();
+  my $urlHost = TWiki::Func::getUrlHost();
+  my $pubUrl = $urlHost.$pubUrlPath;
   my $albumTopic;
+  my $query = TWiki::Func::getCgiQuery();
+  my $doRefresh = $query->param('refresh') || 0;
+  $doRefresh = ($doRefresh =~ /^(on|1|yes)$/g)?1:0;
 
   # search image
-  if ($origFile =~ /^http:\/\/.*/) {
-    require LWP::Simple;
+  if ($origFile =~ /^https?:\/\/.*/) {
+    require LWP::UserAgent;
     require Digest::MD5;
     my $url = $origFile;
     my $ext = '';
@@ -175,19 +190,25 @@ sub handleIMAGE {
     $imgPath .= '/'.$imgTopic;
     mkdir($imgPath) unless -d $imgPath;
     $imgPath .= '/'.$origFile;
-    unless (-e $imgPath) {
+    unless (-e $imgPath && !$doRefresh) {
       writeDebug("fetching $url into $imgPath");
-      my $responseCode = LWP::Simple::getstore($url, $imgPath);
-      if (LWP::Simple::is_error($responseCode)) {
-        $this->{errorMsg} = "($responseCode) can't fetch image from <nop>'$url'";
+      my $ua = LWP::UserAgent->new;
+      $ua->timeout(10);
+      $ua->env_proxy;
+      my $response = $ua->mirror($url, $imgPath);
+      unless ($response->is_success) {
+        my $status = $response->status_line;
+        $this->{errorMsg} = "can't fetch image from <nop>'$url': $status";
         return $this->inlineError($params);
       }
     }
-  } elsif ($origFile =~ /^(.*)\/(.*?)$/) {
+  } elsif ($origFile =~ /^(?:$pubUrl|$pubUrlPath)?(.*)\/(.*?)$/) {
     # part of the filename
     $origFile = $2;
     ($imgWeb, $imgTopic) = TWiki::Func::normalizeWebTopicName($imgWeb, $1);
     $imgPath = $pubDir.'/'.$imgWeb.'/'.$imgTopic.'/'.$origFile;
+
+    writeDebug("looking for an image file at $imgPath");
 
     # you said so but it still is not there
     unless (-e $imgPath) {
@@ -257,13 +278,13 @@ sub handleIMAGE {
   $params->{desc} ||= $params->{title};
   $params->{href} ||= $origFileUrl;
 
-  #writeDebug("type=$params->{type}, align=$params->{align}");
-  #writeDebug("size=$params->{size}, width=$params->{width}, height=$params->{height}");
+  writeDebug("type=$params->{type}, align=$params->{align}");
+  writeDebug("size=$params->{size}, width=$params->{width}, height=$params->{height}");
 
   # compute image
   my $imgInfo = 
     $this->getImageInfo($imgWeb, $imgTopic, $origFile, 
-      $params->{size}, $params->{width}, $params->{height});
+      $params->{size}, $params->{width}, $params->{height}, $doRefresh);
 
   unless ($imgInfo) {
     #TWiki::Func::writeWarning("ImagePlugin - $this->{errorMsg}");
@@ -273,8 +294,6 @@ sub handleIMAGE {
   # For compatibility with i18n-characters in file names, encode urls (as TWiki.pm/viewfile does for attachment names in general)
   my $thumbFileUrl = $pubUrl.'/'.$imgWeb.'/'.$imgTopic.'/'.$imgInfo->{file};
   $thumbFileUrl = TWiki::urlEncode($thumbFileUrl);
-  my $encHref   = $params->{href};
-  $encHref      = TWiki::urlEncode($encHref);
 
   # format result
   my $result = $params->{format} || '';
@@ -318,7 +337,12 @@ sub handleIMAGE {
   } else {
     $result =~ s/\$mouseout//go;
   }
-  $result =~ s/\$href/$encHref/g;
+  my $title = plainify($params->{title});
+  my $desc = plainify($params->{desc});
+  my $alt = plainify($params->{alt});
+  my $href = $params->{href};
+
+  $result =~ s/\$href/$href/g;
   $result =~ s/\$src/$thumbFileUrl/g;
   $result =~ s/\$height/$imgInfo->{height}/g;
   $result =~ s/\$width/$imgInfo->{width}/g;
@@ -331,9 +355,9 @@ sub handleIMAGE {
   $result =~ s/\$id/$params->{id}/g;
   $result =~ s/\$style/$params->{style}/g;
   $result =~ s/\$align/$params->{align}/g;
-  $result =~ s/\$alt/$params->{alt}/g;
-  $result =~ s/\$title/$params->{title}/g;
-  $result =~ s/\$desc/$params->{desc}/g;
+  $result =~ s/\$alt/<noautolink>$alt<\/noautolink>/g;
+  $result =~ s/\$title/<noautolink>$title<\/noautolink>/g;
+  $result =~ s/\$desc/<noautolink>$desc<\/noautolink>/g;
 
   $result =~ s/\$dollar/\$/go;
   $result =~ s/\$percnt/\%/go;
@@ -346,6 +370,23 @@ sub handleIMAGE {
 } 
 
 ###############################################################################
+sub plainify {
+  my $text = shift;
+
+  $text =~ s/<!--.*?-->//gs;          # remove all HTML comments
+  $text =~ s/\&[a-z]+;/ /g;           # remove entities
+  $text =~ s/\[\[([^\]]*\]\[)(.*?)\]\]/$2/g;
+  $text =~ s/<[^>]*>//g;              # remove all HTML tags
+  $text =~ s/[\[\]\*\|=_\&\<\>]/ /g;  # remove Wiki formatting chars
+  $text =~ s/^\-\-\-+\+*\s*\!*/ /gm;  # remove heading formatting and hbar
+  $text =~ s/^\s+//o;                  # remove leading whitespace
+  $text =~ s/\s+$//o;                  # remove trailing whitespace
+  $text =~ s/"/ /o;
+
+  return $text;
+}
+
+###############################################################################
 # get info about the image and its thumbnail cousin, resize source image if
 # a $size was specified, returns a pointer to a hash with the following entries:
 #    * file: the name of the source file or its thumbnail 
@@ -356,14 +397,10 @@ sub handleIMAGE {
 #    * origHeight: height of the source image
 # returns undef on error
 sub getImageInfo {
-  my ($this, $imgWeb, $imgTopic, $imgFile, $size, $width, $height) = @_;
+  my ($this, $imgWeb, $imgTopic, $imgFile, $size, $width, $height, $doRefresh) = @_;
 
-  writeDebug("called getImageInfo($imgWeb, $imgTopic, $imgFile, $size, $width, $height)");
+  writeDebug("called getImageInfo($imgWeb, $imgTopic, $imgFile, $size, $width, $height, $doRefresh)");
 
-  unless ($this->{mage}) {
-    $this->{mage} = new Image::Magick;
-  }
-  
   $this->{errorMsg} = '';
 
   my %imgInfo;
@@ -375,10 +412,10 @@ sub getImageInfo {
   writeDebug("pinging $imgPath/$imgFile");
   ($imgInfo{origWidth}, $imgInfo{origHeight}) = $this->{mage}->Ping($imgPath.'/'.$imgFile);
 
-  if ($size || $width || $height) {
+  if ($size || $width || $height || $doRefresh) {
     my $newImgFile = "_${size}_${width}_${height}_$imgFile";
 
-    if (-f $imgPath.'/'.$newImgFile) { # cached
+    if (-f $imgPath.'/'.$newImgFile && !$doRefresh) { # cached
       ($imgInfo{width}, $imgInfo{height}) = $this->{mage}->Ping($imgPath.'/'.$newImgFile);
     } else { 
       
@@ -394,7 +431,7 @@ sub getImageInfo {
       $args{geometry} = $size if $size;
       $args{width} = $width if $width;
       $args{height} = $height if $height;
-      $error = $this->{mage}->Scale(%args);
+      $error = $this->{mage}->Resize(%args);
       if ($error =~ /(\d+)/) {
 	$this->{errorMsg} = $error;
 	return undef if $1 >= 400;
@@ -408,15 +445,16 @@ sub getImageInfo {
       }
       ($imgInfo{width}, $imgInfo{height}) = $this->{mage}->Get('width', 'height');
 
-      # forget
-      my $mage = $this->{mage};
-      @$mage = (); 
     }
     $imgInfo{file} = $newImgFile;
   } else {
     $imgInfo{width} = $imgInfo{origWidth};
     $imgInfo{height} = $imgInfo{origHeight};
   }
+
+  # forget images
+  my $mage = $this->{mage};
+  @$mage = (); 
   
   return \%imgInfo;
 } 
