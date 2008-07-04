@@ -262,6 +262,17 @@ sub getTopics {
     foreach my $topicName ($db->getKeys()) {
       my $topicObj = $db->fastget($topicName);
 
+      my $form = $topicObj->fastget("form");
+      next unless $form;
+
+      $form = $topicObj->fastget($form);
+      next unless $form;
+
+      my $topicTypes = $form->fastget('TopicType');
+      next unless $topicTypes;
+
+      next if $topicTypes =~ /\bCategory\b/o;
+
       my $cats = $hierarchy->getCategoriesOfTopic($topicObj);
       next unless $cats;
 
