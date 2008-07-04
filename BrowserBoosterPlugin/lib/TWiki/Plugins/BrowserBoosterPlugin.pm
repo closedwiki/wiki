@@ -22,12 +22,12 @@ require TWiki::Plugins; # For the API version
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $pluginName $NO_PREFS_IN_TOPIC );
 
 $VERSION = '$Rev$';
-$RELEASE = 'TWiki-4.2';
+$RELEASE = '1.01';
 $SHORTDESCRIPTION = 'Embeds js and css files into the page to reduce the number of http objects.';
 $NO_PREFS_IN_TOPIC = 1;
 $pluginName = 'BrowserBoosterPlugin';
 
-sub DEBUG { 0; } # toggle me
+use constant DEBUG => 0; # toggle me
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
@@ -78,7 +78,7 @@ sub importJavascript {
     $text    =~ m/src=["'](.*?)["']/i;
     my $file = $1;
     my $src  = $1;
-    $file    =~ s/($TWiki::cfg{DefaultUrlHost})?$TWiki::cfg{PubUrlPath}/$TWiki::cfg{PubDir}/ge;
+    $file    =~ s/.*$TWiki::cfg{PubUrlPath}/$TWiki::cfg{PubDir}/g;
 
     # read file
     my $fileContent = readFile( $file );
@@ -87,8 +87,7 @@ sub importJavascript {
     return $text unless $fileContent; # just to make sure
 
     $fileContent =~ s/<(\/?script)/&lt;$1/go;
-    return "\n" . '<!-- ' . $src . ' -->' ."\n" . '<script type="text/javascript">'."\n" . $fileContent . "\n</script>\n";
-
+    return "\n<!-- BrowserBoosterPlugin: $src -->\n" . '<script type="text/javascript">'."\n" . $fileContent . "\n</script>\n";
 }
 
 sub parseStylesheet {
@@ -114,20 +113,8 @@ sub rewriteUrls {
 sub importStylesheet {
     my ( $url, $prefix, $suffix ) = @_;
     my $retval = "";
-    my $file   = "";
-    my $dir    = $TWiki::cfg{PubDir};
-
-    if ( $url =~ m/^http/ ) {
-      # url with host
-      $file             = $url;
-      my $twiki_pub_url = $TWiki::cfg{DefaultUrlHost} . $TWiki::cfg{PubUrlPath};
-      $file             =~ s/$twiki_pub_url/$dir/ge;
-    } else {
-      # url without host
-      $file             = $url;
-      my $twiki_pub_url = $TWiki::cfg{PubUrlPath};
-      $file             =~ s/$twiki_pub_url/$dir/ge;
-    }
+    my $file   = $url;
+    $file =~ s/.*$TWiki::cfg{PubUrlPath}/$TWiki::cfg{PubDir}/g;
 
     if ( $file ) {
       my $fileContent = readFile( $file );
@@ -141,7 +128,7 @@ sub importStylesheet {
       # SMELL: We should maintain a list of visited urls to prevent loops
     }
 
-    return $prefix . $retval . $suffix;
+    return $prefix . "/* BrowserBoosterPlugin: $url */\n" . $retval . $suffix;
 }
 
 sub doStyleContainer {

@@ -43,6 +43,8 @@ Many thanks to the following contributors for supporting this work:
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  05 Jul 2008: | fix Bugs:Item5590, better handling of import urls, patch by [[TWiki:Main.MichaelDaum][MD]] |
+|  07 Apr 2008: | initial version |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/BrowserBoosterPlugin |
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/BrowserBoosterPluginDev |
