@@ -310,13 +310,13 @@ sub renderImage {
     $state = 2 if $state == 1;
     $state = 1 if $image->{name} eq $filename; 
     
-    $firstImg = $image->{name} if ! $firstImg;
-    $prevImg = $image->{name} if $state == 0;
+    $firstImg = $image unless $firstImg;
+    $prevImg = $image if $state == 0;
     $thisImg = $image if $state == 1;
-    $nextImg = $image->{name} if $state == 2;
-    $lastImg = $image->{name};
+    $nextImg = $image if $state == 2;
+    $lastImg = $image;
   }
-  return renderError("unknown file $filename") if !$thisImg;
+  return renderError("unknown file $filename") unless $thisImg;
 
   # document relations
   if ($this->{doDocRels}) {
@@ -324,29 +324,29 @@ sub renderImage {
       "<link rel=\"parent\" href=\"".
        TWiki::Func::getViewUrl($thisImg->{IGP_web}, $thisImg->{IGP_topic}) .
       "\" title=\"Thumbnails\" />\n";
-    if ($firstImg && $firstImg ne $filename) {
+    if ($firstImg && $firstImg->{name} ne $filename) {
       $result .=
         "<link rel=\"first\" href=\"".
         TWiki::Func::getViewUrl($firstImg->{IGP_web}, $firstImg->{IGP_topic}) .
-        "?id=$this->{id}&filename=$firstImg#igp$this->{id}\" title=\"$firstImg\" />\n";
+        "?id=$this->{id}&filename=$firstImg->{name}#igp$this->{id}\" title=\"$firstImg->{name}\" />\n";
     }
-    if ($lastImg && $lastImg ne $filename) {
+    if ($lastImg && $lastImg->{name} ne $filename) {
       $result .=
           "<link rel=\"last\" href=\"".
           TWiki::Func::getViewUrl($lastImg->{IGP_web}, $lastImg->{IGP_topic}) .
-          "?id=$this->{id}&filename=$lastImg#igp$this->{id}\" title=\"$lastImg\" />\n";
+          "?id=$this->{id}&filename=$lastImg->{name}#igp$this->{id}\" title=\"$lastImg->{name}\" />\n";
     }
-    if ($nextImg && $lastImg ne $filename) {
+    if ($nextImg && $nextImg->{name} ne $filename) {
       $result .=
           "<link rel=\"next\" href=\"".
           TWiki::Func::getViewUrl($nextImg->{IGP_web}, $nextImg->{IGP_topic}) .
-          "?id=$this->{id}&filename=$nextImg#igp$this->{id}\" title=\"$nextImg\" />\n";
+          "?id=$this->{id}&filename=$nextImg->{name}#igp$this->{id}\" title=\"$nextImg->{name}\" />\n";
     }
-    if ($prevImg && $firstImg ne $filename) {
+    if ($prevImg && $prevImg->{name} ne $filename) {
       $result .=
         "<link rel=\"previous\" href=\"".
         TWiki::Func::getViewUrl($prevImg->{IGP_web}, $prevImg->{IGP_topic}) .
-        "?id=$this->{id}&filename=$prevImg#igp$this->{id}\" title=\"$prevImg\" />\n";
+        "?id=$this->{id}&filename=$prevImg->{name}#igp$this->{id}\" title=\"$prevImg->{name}\" />\n";
     }
   }
 
@@ -368,10 +368,10 @@ sub renderImage {
 
   # navi
   $result .= "<tr><td class=\"igpNavigation\">";
-  if ($firstImg && $firstImg ne $filename) {
+  if ($firstImg && $firstImg->{name} ne $filename) {
     $result .= "<a href=\"".
     TWiki::Func::getViewUrl($thisImg->{IGP_web}, $thisImg->{IGP_topic}) .
-    "?id=$this->{id}&filename=$firstImg#igp$this->{id}\">first</a>";
+    "?id=$this->{id}&filename=$firstImg->{name}#igp$this->{id}\">first</a>";
   } else {
     $result .= "first";
   }
@@ -379,23 +379,25 @@ sub renderImage {
   if ($prevImg) {
     $result .= "<a href=\"".
     TWiki::Func::getViewUrl($prevImg->{IGP_web}, $prevImg->{IGP_topic}) .
-    "?id=$this->{id}&filename=$prevImg#igp$this->{id}\">prev</a>";
+    "?id=$this->{id}&filename=$prevImg->{name}#igp$this->{id}\">prev</a>";
   } else {
     $result .= "prev";
   }
-  $result .= " | [[$this->{web}.$this->{topic}][up]] | ";
+  $result .= " | <a href=\"".
+    TWiki::Func::getViewUrl($this->{web},$this->{topic})."#igp$this->{id}".
+    "\">up</a> |";
   if ($nextImg) {
     $result .= "<a href=\"".
     TWiki::Func::getViewUrl($nextImg->{IGP_web}, $nextImg->{IGP_topic}) .
-    "?id=$this->{id}&filename=$nextImg#igp$this->{id}\">next</a>";
+    "?id=$this->{id}&filename=$nextImg->{name}#igp$this->{id}\">next</a>";
   } else {
     $result .= "next";
   }
   $result .= ' | ';
-  if ($lastImg && $lastImg ne $filename) {
+  if ($lastImg && $lastImg->{name} ne $filename) {
     $result .= "<a href=\"".
     TWiki::Func::getViewUrl($lastImg->{IGP_web}, $lastImg->{IGP_topic}) .
-    "?id=$this->{id}&filename=$lastImg#igp$this->{id}\">last</a>";
+    "?id=$this->{id}&filename=$lastImg->{name}#igp$this->{id}\">last</a>";
   } else {
     $result .= "last";
   }
