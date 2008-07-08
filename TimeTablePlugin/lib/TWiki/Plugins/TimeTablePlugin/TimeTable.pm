@@ -23,9 +23,6 @@ package TWiki::Plugins::TimeTablePlugin::TimeTable;
 use strict;
 ###use warnings;
 
-
-
-
 use CGI;
 use Date::Calc qw(:all);
 use POSIX qw(ceil);
@@ -213,10 +210,11 @@ sub _initDefaults {
 		tablecellpadding => 0,
 		tablecellspacing => 1,
 		textwrapper => 'browser',
+		rotatetable => 0,
 	);
 
 	@renderedOptions = ('tablecaption', 'name' , 'navprev', 'navnext', 'wholetimerowtext');
-	@flagOptions = ('compatmode','showweekend','displaytime','forcestartdate','wholetimerow','showmonthheader','clicktooltip');
+	@flagOptions = ('compatmode','showweekend','displaytime','forcestartdate','wholetimerow','showmonthheader','clicktooltip','rotatetable');
 
 
         %months = ( Jan=>1, Feb=>2, Mar=>3, Apr=>4, May=>5, Jun=>6, 
@@ -504,8 +502,153 @@ sub _setParams {
 	$_[2]{$_[1]}=$options{$_[0]} if defined $options{$_[0]} && $options{$_[0]} !~ /^\s*$/;
 }
 # =========================
+sub _renderRotatedTable {
+	my ($entries_ref) = @_;
+
+	my ($dd,$mm,$yy)=&_getStartDate();
+	my ($tyy, $tmm, $tdd) = Today();
+	my $startDateDays = Date_to_Days($yy,$mm,$dd);
+	my $todayDays = Date_to_Days($tyy,$tmm,$tdd);
+	
+	my ($starttime,$endtime) = ( &_getTime($options{'starttime'}), &_getTime($options{'endtime'}));
+	my $tooltips = "";
+
+	my $text = "";
+
+	my($tr,$td);
+	$text .= $cgi->a({-name=>"ttpa$ttid"},"");
+
+	my $tableparms = {class=>'timeTablePluginTable', id=>'timeTablePluginTable'.$ttid };
+	&_setParams('tablebgcolor','bgcolor',$tableparms);
+	&_setParams('tablewidth','width', $tableparms);
+	&_setParams('tableborder','border', $tableparms);
+	&_setParams('tablecellpadding','cellpadding', $tableparms);
+	&_setParams('tablecellspacing','cellspacing', $tableparms);
+	
+	$text .= $cgi->start_table($tableparms); # surrounding table
+	$text .= $cgi->caption($options{'tablecaption'});
+
+	my $namecell=$cgi->td({-rowspan=>2, -align=>'right'}, (defined $options{'name'}? $options{'name'}:"")
+			.'<br/>'._renderNav(0).'&nbsp;'._renderNav(1));
+	## render day header
+	$tr="";
+	my $htr="";
+	my $colspan=1 + (($endtime-$starttime)/$options{'timeinterval'});
+
+	my %entryKeys;
+	my %entryRows;
+	for (my $day = 0; $day < $options{'days'}; $day++) {
+
+		my $dowentries_ref = $$entries_ref{$day+1};
+
+		my ($yy1,$mm1,$dd1)= Add_Delta_Days($yy,$mm,$dd,$day);
+		my $dow = Day_of_Week($yy1,$mm1,$dd1);
+		my $days = Date_to_Days($yy1,$mm1,$dd1);
+		next if (!$options{'showweekend'})&&($dow>5);
+		my ($bgcolor,$fgcolor) = _getDayColors($day);
+
+		$tr.=$cgi->th({colspan=>$colspan, style=>"color:$fgcolor;background-color:$bgcolor;"}, _mystrftime($yy1,$mm1,$dd1));
+		## render hour header
+		for (my $min=$starttime; $min <=$endtime; $min+=$options{'timeinterval'}) {
+			($bgcolor,$fgcolor) = _getTimeColors($min, $days==$todayDays);
+			$htr.=$cgi->th({style=>"background-color:$bgcolor;color:$fgcolor;"}, _renderTime($min));
+
+			## collect entries and initialize rows:
+			my $mentries = &_getMatchingEntries($dowentries_ref, $min, $options{'timeinterval'}, $starttime);
+			foreach my $mentry_ref ( @{$mentries})  {
+				$entryKeys{$$mentry_ref{'descr'}}=1;
+				$entryRows{$$mentry_ref{'descr'}}="";
+			}
+		}
+
+	}
+	my $timelinetop=$cgi->Tr($namecell.$tr).$cgi->Tr($htr);
+	my $timelinebuttom=$cgi->Tr($namecell.$htr).$cgi->Tr($tr);
+
+	$text.=$timelinetop if $options{'showtimeline'}=~m/(left|top|both)/i;
+
+
+	my %ignore;
+	my $counter = 0;
+	for (my $day = 0; $day < $options{'days'}; $day++) {
+		my ($yy1,$mm1,$dd1)=Add_Delta_Days($yy,$mm,$dd,$day);
+		my $dowentries_ref = $$entries_ref{$day+1};
+		for (my $min=$starttime; $min<=$endtime;$min+=$options{'timeinterval'}) {
+			my $mentries = &_getMatchingEntries($dowentries_ref, $min, $options{'timeinterval'}, $starttime);
+			my @visitedEntries;
+			foreach my $mentry_ref (@{$mentries}) {
+				$counter++;
+				next if (defined $ignore{$$mentry_ref{'descr'}}{$day}{$min});
+				my $rs = &_getEntryRows($mentry_ref, $min, $starttime, $endtime, $options{'timeinterval'});
+				$tooltips .= &_renderTooltip($mentry_ref, $day, $min, $counter, $yy1,$mm1,$dd1);
+				my ($onmouseover, $onmouseout, $onclick);
+				$onmouseover="ttpTooltipShow('TTP_DIV_${ttid}_${day}_${min}_${counter}', 'TTP_TD_${ttid}_${day}_${min}_${counter}',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);";
+				$onmouseout="ttpTooltipHide('TTP_DIV_${ttid}_${day}_${min}_${counter}');";
+				my $title="";
+				if ($options{'clicktooltip'}) {
+					$title = $options{'clicktooltiptext'};
+					$onclick=$onmouseover;
+					$onmouseover="";
+					$onmouseout="";
+				} else {
+					$title = undef; $onclick= "";
+				}
+				for (my $i=0; $i<$rs; $i++) { 
+					$ignore{$$mentry_ref{'descr'}}{$day}{$min + ($i*$options{'timeinterval'})}=1;
+				}
+				$entryRows{$$mentry_ref{'descr'}}.= $cgi->td(
+					{
+						-title=>$title,
+						-colspan=>$rs,
+						-bgcolor=>$$mentry_ref{'bgcolor'}?$$mentry_ref{'bgcolor'}:$options{eventbgcolor},
+						-id=>"TTP_TD_${ttid}_${day}_${min}_${counter}",
+						-onclick=>$onclick,
+						-onmouseover=>$onmouseover,
+						-onmouseout=>$onmouseout,
+					},'&nbsp;');
+				push @visitedEntries, $$mentry_ref{'descr'} unless grep /\Q$$mentry_ref{'descr'}\E/, @visitedEntries;
+			}
+			foreach my $entry (keys %entryKeys) {
+				$entryRows{$entry} .= $cgi->td({-title=>_renderTime($min)}, '&nbsp;') 
+					unless (defined $ignore{$entry}{$day}{$min}) || grep /\@$entry\E/, @visitedEntries;
+			}
+		}
+	}
+	foreach my $entry (sort keys %entryKeys) {
+		$text.=$cgi->Tr($cgi->th({-align=>'left'}, $entry).$entryRows{$entry});
+	}
+		
+	$text.=$timelinebuttom if $options{'showtimeline'}=~m/(right|buttom|both)/i;
+
+	$text .= $cgi->end_table();
+	$text .= $tooltips;
+	return $text;
+
+}
+# =========================
+sub _getDayColors {
+	my ($day) =  @_;
+
+	my ($dd,$mm,$yy) = _getStartDate();
+	my $startDateDays = Date_to_Days($yy,$mm,$dd);
+	my ($tyy,$tmm,$tdd) = Today();
+	my $todayDays = Date_to_Days($tyy,$tmm,$tdd);
+	my ($yy1,$mm1,$dd1)= Add_Delta_Days($yy,$mm,$dd,$day);
+	my $dow = Day_of_Week($yy1,$mm1,$dd1);
+
+	my $colbgcolor = $options{(($dow>5)?'weekendbgcolor':'tableheadercolor')};
+	$colbgcolor = $options{'todaybgcolor'} if ($options{'todaybgcolor'})&&($todayDays==$startDateDays+$day);
+	$colbgcolor = '' unless defined $colbgcolor;
+	my $colfgcolor = $options{(($dow>5)?'weekendfgcolor':'black')};
+	$colfgcolor = $options{'todayfgcolor'} if ($options{'todayfgcolor'})&&($todayDays==$startDateDays+$day);
+	$colfgcolor = '' unless defined $colfgcolor;
+	return ($colbgcolor, $colfgcolor);
+}
+# =========================
 sub _render {
 	my ($entries_ref) = @_;
+
+	return _renderRotatedTable(@_) if ($options{rotatetable}); 
 
 	my ($dd,$mm,$yy)=&_getStartDate();
 	my ($tyy, $tmm, $tdd) = Today();
@@ -565,12 +708,8 @@ sub _render {
 		my ($yy1,$mm1,$dd1)= Add_Delta_Days($yy,$mm,$dd,$day);
 		my $dow = Day_of_Week($yy1,$mm1,$dd1);
 		next if (!$options{'showweekend'})&&($dow>5);
-		my $colbgcolor = $options{(($dow>5)?'weekendbgcolor':'tableheadercolor')};
-		$colbgcolor = $options{'todaybgcolor'} if ($options{'todaybgcolor'})&&($todayDays==$startDateDays+$day);
-		$colbgcolor = '' unless defined $colbgcolor;
-		my $colfgcolor = $options{(($dow>5)?'weekendfgcolor':'black')};
-		$colfgcolor = $options{'todayfgcolor'} if ($options{'todayfgcolor'})&&($todayDays==$startDateDays+$day);
-		$colfgcolor = '' unless defined $colfgcolor;
+
+		my ($colbgcolor, $colfgcolor) = _getDayColors($day);
 
 		###$tr .= $cgi->td({-style=>(($colfgcolor ne '')?"color:$colfgcolor":''), -bgcolor=>$colbgcolor,-valign=>"top", -align=>"center", -title=>&_mystrftime($yy1,$mm1,$dd1,$options{'tooltipdateformat'}), -width=>$options{'tablecolumnwidth'}?$options{'tablecolumnwidth'}:(90/$options{'days'}).'%'},&_mystrftime($yy1,$mm1,$dd1));
 		$tr .= $cgi->td({-style=>(($colfgcolor ne '')?"color:$colfgcolor":''), -bgcolor=>$colbgcolor,-valign=>"top", -align=>"center", -title=>&_mystrftime($yy1,$mm1,$dd1,$options{'tooltipdateformat'}), -width=>$options{'tablecolumnwidth'}?$options{'tablecolumnwidth'}:''},&_mystrftime($yy1,$mm1,$dd1));
@@ -919,6 +1058,20 @@ sub _renderTooltip {
 	return $tooltip;
 }
 # =========================
+sub _getTimeColors {
+	my ($min, $enableNowColors) = @_;
+	my ($wst,$wet) = ( &_getTime($options{'workingstarttime'}), &_getTime($options{'workingendtime'}) );
+	my ($bla,$minutes,$hours) = localtime();
+	my ($now) = $minutes + (60 * $hours);
+	my $bgcolor = (($min>=$wst)&&($min<=$wet))?$options{'workingbgcolor'}:$options{'tableheadercolor'};
+	my $fgcolor = $options{'workingfgcolor'};
+	if ($enableNowColors && ($now>=$min)&&($now<=$min+$options{'timeinterval'})) {
+		$bgcolor = $options{'nowbgcolor'} if defined $options{'nowbgcolor'};
+		$fgcolor = $options{'nowfgcolor'} if defined $options{'nowfgcolor'};
+	}
+	return ($bgcolor, $fgcolor);
+}
+# =========================
 sub _renderTimeline {
 	###my $td = $cgi->start_table({-rules=>"rows",-border=>'1',-cellpadding=>'0',-cellspacing=>'0'});
 	my $td = $cgi->start_table({-bgcolor=>"#fafafa", -cellpadding=>'0',-cellspacing=>'1'}); # XXXX time line table
@@ -929,12 +1082,7 @@ sub _renderTimeline {
 	my ($now) = $minutes + (60 * $hours);
 
 	for (my $min=$starttime; $min <=$endtime ; $min+=$interval) {
-		my $bgcolor = (($min>=$wst)&&($min<=$wet))?$options{'workingbgcolor'}:$options{'tableheadercolor'};
-		my $fgcolor = $options{'workingfgcolor'};
-		if (($now>=$min)&&($now<=$min+$interval)) {
-			$bgcolor = $options{'nowbgcolor'} if defined $options{'nowbgcolor'};
-			$fgcolor = $options{'nowfgcolor'} if defined $options{'nowfgcolor'};
-		}
+		my ($bgcolor, $fgcolor) = _getTimeColors($min,1);
 		$td .= $cgi->Tr($cgi->td({
 			-bgcolor=>$bgcolor,
 			-align=>"right"},

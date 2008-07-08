@@ -1,5 +1,9 @@
-lib/TWiki/Plugins/TimeTablePlugin/TimeTable.pm
-lib/TWiki/Plugins/TimeTablePlugin.pm
-pub/TWiki/TimeTablePlugin/example.png
-pub/TWiki/TimeTablePlugin/timetabletooltips.js
-data/TWiki/TimeTablePlugin.txt
+lib/TWiki/Plugins/TimeTablePlugin/TimeTable.pm NEW
+lib/TWiki/Plugins/TimeTablePlugin.pm NEW
+pub/TWiki/TimeTablePlugin/example.png NEW
+pub/TWiki/TimeTablePlugin/timetabletooltips.js NEW
+data/TWiki/TimeTablePlugin.txt NEW
+data/TWiki/VarTIMETABLE.txt NEW
+data/TWiki/VarTTCM.txt NEW
+data/TWiki/VarTTTOPICSETUP.txt NEW
+

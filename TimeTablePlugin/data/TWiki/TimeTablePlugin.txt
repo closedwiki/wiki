@@ -34,8 +34,8 @@ The TimeTablePlugin supports
    * (self-defined) time zones (attributes: =timezone, timezoneabbr=)
    * all HolidaylistPlugin and CalendarPlugin event types if the compatibility mode is enabled (=compatmode="on"=)
    * navigation to other weeks (only if compatibility mode is enabled: =compatmode="on"=)
-   * own colors for a every event (add the foreground/background colors to a event definition or use the =%<nop>TTCM%= tag of the compatibility mode)
-   * using event definitions from other topics (attribute: =topic=) - including overwrite of the time zone (e.g. =topic="EvenTopic2:-3=)
+   * own colors for every event (add the foreground/background colors to a event definition or use the =%<nop>TTCM%= tag of the compatibility mode)
+   * event definitions from other topics (attribute: =topic=) - including overwrite of the time zone (e.g. =topic="EvenTopic2:-3=)
    * customization of 
       * all text outputs and colors (attributes: =name, headerformat, ...=)
       * the table rendering (attributes: =days, startdate, timeinterval, showtimeline, ...=)
@@ -87,7 +87,8 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 | compatmode | if set to "1" all TWiki:Plugins.CalendarPlugin event types are supported (related: compatibility mode attributes); %X% the description field can contain a time range (without any whitespaces, e.g. 1pm-2pm) or a %<nop>TTCM%-Tag (e.g. ==%<nop>TTCM{"7:00-1:00pm,white,black"}%== ) with a time range and optional foreground and background color and *without* any *whitespaces* | compatmode="0" |
 | days    | days to show | days="7" |
 | endtime | a end time, e.g. 18:00, 6:00pm, ...  | endtime="8:00pm" |
-| lang | Language used for weekdays in the table header and for event entries (e.g: English, Deutsch, Franï¿½ais, Espaï¿½ol, Nederlands, Dansk, suomi, ...) | lang="English" |
+| lang | Language used for weekdays in the table header and for event entries (e.g: English, Deutsch, Français, Español, Nederlands, Dansk, suomi, ...) | lang="English" |
+| rotatetable | enables/disables table rotation | rotatetable="off" |
 | showweekend | show weekend if set to '1' | showweekend="1" |
 | starttime | a start time, e.g. 7:00, 8a.m., 9:15a.m. ... | starttime="7:00am" |
 | textwrapper | sets the text wrapper for the event entry text (default: =browser=); =plugin=: text is wrapped by the TimeTablePlugin (old behavior but stable); =browser=: text is wrapped by the web browser | textwrapper="plugin" |
@@ -101,10 +102,10 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 | workingstarttime | working hours start time | workingstarttime="9:00am" |
 |  *Compatibility Mode:*  |||
 | cmheaderformat | table header format of a day; a subset of strftime conversion specifiers is supported (only date not time specifiers; see manual page or TWiki:Codev.ConvergeDateTimeFormattingModels) | cmheaderformat="&lt;font&nbsp;title=\"%A - %d %b %Y\" size=\"-2\">%a&lt;br/&gt;%e&lt;/font&gt;" |
-| daynames | custom day names (a list separated by a 'ï¿½' and starting on Monday; overwrites lang attribute) | daynames="Mï¿½Tï¿½Wï¿½Tï¿½Fï¿½Sï¿½S" |
+| daynames | custom day names (a list separated by a '¦' and starting on Monday; overwrites lang attribute) | daynames="M¦T¦W¦T¦F¦S¦S" |
 | forcestartdate | if set to 1 the timetable starts with the given startdate ('0' means: the timetable view starts with Monday') | forcestartdate="0" |
 | month | set a month (e.g. Jan, Feb ... or 01, 02, ... 12 ) or a month offset (e.g. +0, +1, -2,...) | month="+1" |
-| monthnames | custom month names (a list separated by 'ï¿½' and starting on January; overwrites lang attribute) | monthnames="Jï¿½Fï¿½Mï¿½Aï¿½Mï¿½Jï¿½Jï¿½Aï¿½Sï¿½Oï¿½Nï¿½D" |
+| monthnames | custom month names (a list separated by '¦' and starting on January; overwrites lang attribute) | monthnames="J¦F¦M¦A¦M¦J¦J¦A¦S¦O¦N¦D" |
 | navnext | navigation button to the next n days | navnext="&amp;gt;&amp;gt;" |
 | navnexttitle | title text (tooltip text) for the navigation button to the next n days | navnexttitle="Next %n day(s)" |
 | navprev | navigation button to the previous n days | navprev="&amp;lt;&amp;lt;" |
@@ -223,7 +224,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
    * Show timeline on the =left=, =right= or =both= sides (default: both):
       * # Set SHOWTIMELINE = left
 
-   * Language (default: English - see manual page of Date::Calc perl module, e.g: English, Deutsch, Franï¿½ais, Espaï¿½ol, Nederlands, Dansk, suomi, ...): 
+   * Language (default: English - see manual page of Date::Calc perl module, e.g: English, Deutsch, Français, Español, Nederlands, Dansk, suomi, ...): 
       * # Set LANG = Deutsch
 
    * Enable/Disable compatibility mode (default: off) to (dis)allow TWiki:Plugins.CalendarPlugin event types:
@@ -276,7 +277,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | V1.014 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  V1.014 (BETA) | TWiki:Main.DanielRohde: added documentation requested by TWiki:Main.PeterThoeny |
+|  V1.014 (BETA) | TWiki:Main.DanielRohde: added documentation requested by TWiki:Main.PeterThoeny; added rotated table feature requested by TWiki:Main.VickiBrown |
 |  V1.013 (24 May 2007) | TWiki:Main.DanielRohde: fixed major time parsing bug reported by TWiki:Main.LarsEik; fixed major bug: events with a time range before start time should not be displayed; fixed major TTCM bug reported by TWiki:Main.ArthurClemens; added URL parameter feature; added new attributes (textwrapper, tableborder, tablewidth, tablecell...); added browser based text wrapping feature requested by TWiki:Main.ArthurClemens |
 |  V1.012 (14 May 2007) | TWiki:Main.DanielRohde: fixed readTopicText bug reported TWiki:Main.JoachimRahn; added month header feature (attributes: showmonthheader, monthheader...); added new tooltip feature (clicktooltip...) |
 |  V1.011 (1 Mar 2007) | TWiki:Main.DanielRohde: added fontsize attribute; fixed HTML bug (validation); |
