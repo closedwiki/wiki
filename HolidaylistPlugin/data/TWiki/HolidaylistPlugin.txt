@@ -111,6 +111,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | removeatwork | set to "1" to remove persons without calendar entries from table | removeatwork="0" |
 | showmonthheader | set to "1" to show a additional month header | showmonthheader="0" |
 | showpubholidays | show public holidays as separate lines (rows) in table (related: enablepubholidays, pubholidayicon) | showpubholidays="0" |
+| showsumcol | enables/disables summary column | showsumcol="off" | 
 | showweekends | show weekends if set to 1 | showweekends="0" |
 | startdate | a start date (e.g. '1 Oct 2005') or a day offset (e.g. '10', '+30' or '-30') | startdate="+0" |
 | topic | a comma separated list of source topics | topic="%<nop>TOPIC%" |
@@ -146,6 +147,9 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | navprevhalftitle | title text (tooltip text) for the navigation button to the previous =navdays/2= days (%n will be replaced with the half number of days to show) | navprevtitle="Previous %n day(s)" |
 | navprevtitle | title text (tooltip text) for the navigation button to the previous =navdays= days (%n will be replaced with the number of days to show) | navprevtitle="Previous %n day(s)" |
 | nwidth | cell width of the first column | nwidth="120px" |
+| sumcolformat | summary column format; %h will be substituded by the number of <i>h</i>olidays; %w will be substituted by the number of days at <i>w</i>ork | sumcolformat="%h" |
+| sumcolheader | summary column header (related attributes: =showsumcol, sumcolformat, sumcoltitle=) | sumcolheader="#off" |
+| sumcoltitle  | tooltip text for the summary column header (related attributes: =showsumcol, sumcolformat, sumcolheader=) | sumcoltitle="number of days not at work" |
 | tablebgcolor | table background color | tablebgcolor="white" |
 | tablecaption | table caption | tablecaption="&amp;nbsp;" |
 | tablecaptionalign | table caption alignment (top, bottom, left, right) | tablecaptionalign="top" |
@@ -228,8 +232,9 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterJones, TWiki:Main.DanielRohde |
-|  Plugin Version: | v1.023 (19 Jan 2008) |
+|  Plugin Version: | v1.024 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  v1.024 (BETA) | TWiki:Main.DanielRohde: added summary column feature requested by TWiki:Main.GarySprague |
 |  v1.023 (19 Jan 2008) | TWiki:Main.KennethLavrsen: fixed Item5190 - does not like whitespace after the smiley. This makes the plugin work with TWiki 4.2.0 and Wysiwyg |
 |  v1.022 (18 Jun 2007) | TWiki:Main.DanielRohde: added documentation requested by TWiki:Main.PeterThoeny; fixed type (on=off bug) |
 |  v1.021 (20 Apr 2007) | TWiki:Main.DanielRohde: fixed minor HTML bug reported by TWiki:Main.JfMacaud; added month header feature (showmonthheader attribute) requested by Rikard Johansson; fixed some minor bugs (documentation, preferences handling); |

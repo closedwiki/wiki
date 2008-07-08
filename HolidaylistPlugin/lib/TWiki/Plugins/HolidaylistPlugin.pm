@@ -88,7 +88,8 @@ $VERSION = '$Rev$';
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
 
-$REVISION = '1.0.23'; #kjl# fixed Item5190 - does not like whitespace after the smiley. This makes the plugin work with TWiki 4.2.0 and Wysiwyg
+$REVISION = '1.0.24'; #dro# added summary column feature requested by TWiki:Main.GarySprague
+#$REVISION = '1.0.23'; #kjl# fixed Item5190 - does not like whitespace after the smiley. This makes the plugin work with TWiki 4.2.0 and Wysiwyg
 #$REVISION = '1.0.22'; #dro# added documentation requested by TWiki:Main.PeterThoeny; fixed typo (on=off bug)
 #$REVISION = '1.021'; #dro# fixed minor HTML bug reported by TWiki:Main.JfMacaud; added month header feature (showmonthheader attribute) requested by Rikard Johansson; fixed some minor bugs (documentation, preferences handling);
 #$REVISION = '1.020'; #dro# added week attribute requested by TWiki:Main.JanFilipsky; added tooltip to day headers;
@@ -210,6 +211,10 @@ sub initDefaults() {
 		week => undef,
 		showmonthheader => undef,
 		monthheaderformat => '%B',
+		showsumcol => 0,
+		sumcolformat=> '%h',		# %h -> holidays, %w -> days at work
+		sumcolheader=> '#off',
+		sumcoltitle=> 'number of days not at work',
 	);
 
 	# reminder: don't forget change documentation (HolidaylistPlugin topic) if you add a new rendered option
@@ -217,7 +222,7 @@ sub initDefaults() {
 
 	# options to turn or switch things on (1) or off (0)
 	# this special handling allows 'on'/'yes';'off'/'no' values additionally to '1'/'0'
-	@flagOptions = ( 'showweekends', 'removeatwork', 'compatmode', 'enablepubholidays', 'showpubholidays', 'navenable','showmonthheader' );
+	@flagOptions = ( 'showweekends', 'removeatwork', 'compatmode', 'enablepubholidays', 'showpubholidays', 'navenable','showmonthheader', 'showsumcol');
 
 	%months = ( Jan=>1, Feb=>2, Mar=>3, Apr=>4, May=>5, Jun=>6, 
 	            Jul=>7, Aug=>8, Sep=>9, Oct=>10, Nov=>11, Dec=>12 );
@@ -906,8 +911,13 @@ sub renderHolidaylist() {
 			($yy1,$mm1,$dd1) = Add_Delta_Days($yy1,$mm1,$dd1, $daysdiff);
 			$restdays -= $daysdiff;
 		}
+		if ($options{showsumcol}) {
+			$text.='<th align="center" rowspan="2" title="'.$options{sumcoltitle}.'" bgcolor="'.$options{tableheadercolor}.'">'.$options{sumcolheader}.'</th>';
+		}
 		$text .= '</tr><tr>';
 	}
+
+	# render header:
 
 	for (my $i=0; $i< $options{days}; $i++) {
 		my ($yy1,$mm1,$dd1) = Add_Delta_Days($yy, $mm, $dd, $i);
@@ -931,6 +941,10 @@ sub renderHolidaylist() {
 		$text.='</noautolink>';
 		$text.='</th>';
 	}
+	if (!$options{showmonthheader} && $options{showsumcol}) {
+		$text.='<th align="center"  title="'.$options{sumcoltitle}.'" bgcolor="'.$options{tableheadercolor}.'">'.$options{sumcolheader}.'</th>';
+	}
+	
 
 	$text .= "</tr>\n";
 
@@ -963,6 +977,9 @@ sub renderHolidaylist() {
 		# ignore table rows without a entry if removeatwork == 1
 		next if $options{removeatwork} && !grep(/[^0]+/, join('', map( $_ || 0, @{$ptableref})));
 
+		my $sum_off = 0;
+		my $sum_work = 0;
+
 		$person =~ s/\@all//ig if $options{enablepubholidays};
 		$text .= '<tr><th align="left"><noautolink>'.TWiki::Func::renderText($person,$web).'</noautolink></th>';
 		for (my $i=0; $i<$options{days}; $i++) {
@@ -975,8 +992,16 @@ sub renderHolidaylist() {
 
 			$text.= '<td align="center" bgcolor="'.$bgcolor.'"><noautolink>';
 
+			if ((defined $$ptableref[$i] && $$ptableref[$i]>0) 
+					|| ( $options{enablepubholidays} && defined $$aptableref[$i] && $$aptableref[$i]>0)) {
+				$sum_off++;
+			} else {
+				$sum_work++;
+			}
+
                         if (($dow < 6)||$options{showweekends}) { 
 				my $icon= $iconstates{ defined $$ptableref[$i]?$$ptableref[$i]:0};
+			
 
 				# overwrite personal holidays with public holidays:
 				if ($options{enablepubholidays} && defined $$aptableref[$i]) {
@@ -1017,6 +1042,12 @@ sub renderHolidaylist() {
 				$text.= '&nbsp;';
 			}
                         $text.= '</noautolink></td>';
+		}
+		if ($options{showsumcol}) {
+			my $sumcol = $options{sumcolformat};
+			$sumcol=~s/%w/$sum_work/g;
+			$sumcol=~s/%h/$sum_off/g;
+			$text.= '<th class="hlpSummaryColun" title="'.$options{sumcoltitle}.'">'.$sumcol.'</th>';
 		}
 		$text .= "</tr>\n";
 	}
