@@ -1052,11 +1052,13 @@ sub renderHolidaylist() {
 		}
 		if ($options{showsumcol}) {
 			my $sumcol = $options{sumcolformat};
-			$sumcol=~s/%ww/$sum_work_withoutweekend/g;
-			$sumcol=~s/%hh/$sum_off_withoutweekend/g;
-			$sumcol=~s/%w/$sum_work/g;
-			$sumcol=~s/%h/$sum_off/g;
-			$text.= '<th class="hlpSummaryColumn" title="'.$options{sumcoltitle}.'">'.$sumcol.'</th>';
+			my $sumcoltitle = $options{sumcoltitle};
+			my %rh = ( '%ww' => $sum_work_withoutweekend, '%w' => $sum_work,
+				   '%hh' => $sum_off_withoutweekend, '%h' => $sum_off,
+			);
+			$sumcol=~s/%(.)(\1)?/$rh{"%\L$1$2\E"}/eg;
+			$sumcoltitle=~s/%(.)(\1)?/$rh{"%\L$1$2\E"}/eg;
+			$text.= '<th class="hlpSummaryColumn" title="'.$sumcoltitle.'">'.$sumcol.'</th>';
 		}
 		$text .= "</tr>\n";
 	}
