@@ -100,7 +100,7 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 | wholetimerow | enables/disables a whole-time event row (related attributes: wholetimerowtext, wholetimerowtitle) | wholetimerow="0" |
 | workingendtime | working hours end time | workingendtime="5:00pm" |
 | workingstarttime | working hours start time | workingstarttime="9:00am" |
-|  *Compatibility Mode:*  |||
+|  *Compatibility Mode:* <br/>(%X% =compatmode="on"= is required %X%)  |||
 | cmheaderformat | table header format of a day; a subset of strftime conversion specifiers is supported (only date not time specifiers; see manual page or TWiki:Codev.ConvergeDateTimeFormattingModels) | cmheaderformat="&lt;font&nbsp;title=\"%A - %d %b %Y\" size=\"-2\">%a&lt;br/&gt;%e&lt;/font&gt;" |
 | daynames | custom day names (a list separated by a '¦' and starting on Monday; overwrites lang attribute) | daynames="M¦T¦W¦T¦F¦S¦S" |
 | forcestartdate | if set to 1 the timetable starts with the given startdate ('0' means: the timetable view starts with Monday') | forcestartdate="0" |
