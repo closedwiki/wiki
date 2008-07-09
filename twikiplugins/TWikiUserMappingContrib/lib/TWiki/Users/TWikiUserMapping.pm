@@ -145,8 +145,9 @@ sub handlesUser {
         # Used when (if) TWikiUserMapping is subclassed
         return 1 if ( defined $cUID && $cUID =~ /^($this->{mapping_id})/ );
     }
+
 	return 1 if ($login && $this->getLoginName( $login ));
-#	return 1 if ($wikiname && $this->findUserByWikiName( $wikiname ));
+
 	return 0;
 }
 
@@ -166,7 +167,6 @@ characters, and must correspond 1:1 to the login name.
 
 sub getCanonicalUserID {
     my( $this, $login, $dontcheck ) = @_;
-#    print STDERR "\nTWikiUserMapping::getCanonicalUserID($login, ".($dontcheck||'undef').")";
 
     unless ($dontcheck) {
         return unless (_userReallyExists($this, $login));
@@ -174,7 +174,7 @@ sub getCanonicalUserID {
 
     $login = TWiki::Users::forceCUID($login);
     $login = $this->{mapping_id}.$login;
-#print STDERR " OK ($login)";
+
     return $login;
 }
 
@@ -410,14 +410,14 @@ If there is no matching WikiName or LoginName, it returns undef.
 
 sub getWikiName {
     my ($this, $cUID) = @_;
-	ASSERT($cUID) if DEBUG;
-	ASSERT($cUID =~ /^$this->{mapping_id}/) if DEBUG;
+    ASSERT($cUID) if DEBUG;
+    ASSERT($cUID =~ /^$this->{mapping_id}/) if DEBUG;
 	
-	my $wikiname;
-#    $cUID =~ s/^$this->{mapping_id}//;
+    my $wikiname;
+
     if( $TWiki::cfg{Register}{AllowLoginName} ) {
         _loadMapping( $this );
-        $wikiname = $this->{U2W}->{$cUID}
+        $wikiname = $this->{U2W}->{$cUID};
     } else {
         # If the mapping isn't enabled there's no point in loading it
     }
@@ -427,11 +427,9 @@ sub getWikiName {
         $wikiname = getLoginName( $this, $cUID );
         if ($wikiname) {
             $wikiname =~ s/$TWiki::cfg{NameFilter}//go;
-            $wikiname =~ s/\.//go;
         }
     }
-
-#print STDERR "--------------------------------------cUID : $cUID => $wikiname\n";	
+	
     return $wikiname;
  
 }
@@ -658,12 +656,15 @@ sub isInGroup {
     ASSERT($user) if DEBUG;
 
     my @users;
+    my $users = $this->{session}->{users};
+    my $cUID = $users->getCanonicalUserID($user);
     my $it = $this->eachGroupMember($group);
     while ($it->hasNext()) {
         my $u = $it->next();
-        next if $scanning->{$u};
-        $scanning->{$u} = 1;
-        return 1 if $u eq $user;
+        my $uCUID = $users->getCanonicalUserID($u);
+        next if $scanning->{$uCUID};
+        $scanning->{$uCUID} = 1;
+        return 1 if $uCUID eq $cUID;
         if( $this->isGroup($u) ) {
             return 1 if $this->isInGroup( $user, $u, $scanning);
         }
@@ -920,14 +921,17 @@ Returns 1 on success, undef on failure.
 
 sub checkPassword {
     my( $this, $userName, $pw ) = @_;
-	$this->ASSERT_IS_USER_LOGIN_ID($userName) if DEBUG;
-    return $this->{passwords}->checkPassword(
-        $userName, $pw);
+    $this->ASSERT_IS_USER_LOGIN_ID($userName) if DEBUG;
+    return $this->{passwords}->checkPassword( $userName, $pw );
 }
 
 =begin twiki
 
 ---++ ObjectMethod setPassword( $user, $newPassU, $oldPassU ) -> $boolean
+
+BEWARE: $user should be a cUID, but is a login when the resetPassword functionality is used.
+The UserMapper needs to convert either one to a valid login for use by the Password manager
+TODO: needs fixing
 
 If the $oldPassU matches matches the user's password, then it will
 replace it with $newPassU.
@@ -1125,7 +1129,8 @@ sub _expandUserList {
 
     my @l;
     foreach my $ident ( split( /[\,\s]+/, $names )) {
-        $ident =~ s/^.*\.//;       # Dump the web specifier
+        # Dump the web specifier if userweb
+        $ident =~ s/^($TWiki::cfg{UsersWebName}|%USERSWEB%|%MAINWEB%)\.//;
         next unless $ident;
         if( $this->isGroup( $ident )) {
             my $it = $this->eachGroupMember( $ident );

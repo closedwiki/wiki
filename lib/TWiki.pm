@@ -3895,7 +3895,6 @@ sub USERINFO {
         $user = $params->{_DEFAULT};
         return '' if !$user;
         # map wikiname to a login name
-        $user =~ s/^.*\.//; # kill web
         my $users = $this->{users}->findUserByWikiName($user);
         return '' unless $users && scalar(@$users);
         $user = $users->[0];
