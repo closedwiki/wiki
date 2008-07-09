@@ -981,6 +981,8 @@ sub renderHolidaylist() {
 		my $sum_off_withoutweekend = 0;
 		my $sum_work = 0;
 		my $sum_work_withoutweekend = 0;
+		my $sum_pubholidays = 0;
+		my $sum_pubholidays_withoutweekend = 0;
 
 		$person =~ s/\@all//ig if $options{enablepubholidays};
 		$text .= '<tr><th align="left"><noautolink>'.TWiki::Func::renderText($person,$web).'</noautolink></th>';
@@ -994,6 +996,7 @@ sub renderHolidaylist() {
 
 			$text.= '<td align="center" bgcolor="'.$bgcolor.'"><noautolink>';
 
+			$sum_pubholidays++ if ($options{enablepubholidays} && defined $$aptableref[$i] && $$aptableref[$i]>0);
 			if ((defined $$ptableref[$i] && $$ptableref[$i]>0) 
 					|| ( $options{enablepubholidays} && defined $$aptableref[$i] && $$aptableref[$i]>0)) {
 				$sum_off++;
@@ -1003,6 +1006,8 @@ sub renderHolidaylist() {
 
                         if (($dow < 6)||$options{showweekends}) { 
 				my $icon= $iconstates{ defined $$ptableref[$i]?$$ptableref[$i]:0};
+				$sum_pubholidays_withoutweekend++ 
+					if ($dow<6 && $options{enablepubholidays} && defined $$aptableref[$i] && $$aptableref[$i]>0);
 			
 				if ($dow < 6 && defined $$ptableref[$i] && $$ptableref[$i]>0 && ( (!defined $$aptableref[$i]) || ($$aptableref[$i]<=0))) {
 					$sum_off_withoutweekend++;
@@ -1055,9 +1060,10 @@ sub renderHolidaylist() {
 			my $sumcoltitle = $options{sumcoltitle};
 			my %rh = ( '%ww' => $sum_work_withoutweekend, '%w' => $sum_work,
 				   '%hh' => $sum_off_withoutweekend, '%h' => $sum_off,
+				   '%pp' => $sum_pubholidays_withoutweekend, '%p' => $sum_pubholidays,
 			);
-			$sumcol=~s/%(.)(\1)?/$rh{"%\L$1$2\E"}/eg;
-			$sumcoltitle=~s/%(.)(\1)?/$rh{"%\L$1$2\E"}/eg;
+			$sumcol=~s/%(.)(\1)?/$rh{"%\L$1".(defined $2?$2:"")."\E"}/eg;
+			$sumcoltitle=~s/%(.)(\1)?/$rh{"%\L$1".(defined $2?$2:"")."\E"}/eg;
 			$text.= '<th class="hlpSummaryColumn" title="'.$sumcoltitle.'">'.$sumcol.'</th>';
 		}
 		$text .= "</tr>\n";
