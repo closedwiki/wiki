@@ -544,10 +544,10 @@ sub _renderRotatedTable {
 		my ($yy1,$mm1,$dd1)= Add_Delta_Days($yy,$mm,$dd,$day);
 		my $dow = Day_of_Week($yy1,$mm1,$dd1);
 		my $days = Date_to_Days($yy1,$mm1,$dd1);
-		next if (!$options{'showweekend'})&&($dow>5);
 		my ($bgcolor,$fgcolor) = _getDayColors($day);
 
 		$tr.=$cgi->th({colspan=>$colspan, style=>"color:$fgcolor;background-color:$bgcolor;"}, _mystrftime($yy1,$mm1,$dd1));
+		next if (!$options{'showweekend'})&&($dow>5);
 		## render hour header
 		for (my $min=$starttime; $min <=$endtime; $min+=$options{'timeinterval'}) {
 			($bgcolor,$fgcolor) = _getTimeColors($min, $days==$todayDays);
@@ -563,7 +563,7 @@ sub _renderRotatedTable {
 
 	}
 	my $timelinetop=$cgi->Tr($namecell.$tr).$cgi->Tr($htr);
-	my $timelinebuttom=$cgi->Tr($namecell.$htr).$cgi->Tr($tr);
+	my $timelinebottom=$cgi->Tr($namecell.$htr).$cgi->Tr($tr);
 
 	$text.=$timelinetop if $options{'showtimeline'}=~m/(left|top|both)/i;
 
@@ -618,7 +618,7 @@ sub _renderRotatedTable {
 		$text.=$cgi->Tr($cgi->th({-align=>'left'}, $entry).$entryRows{$entry});
 	}
 		
-	$text.=$timelinebuttom if $options{'showtimeline'}=~m/(right|buttom|both)/i;
+	$text.=$timelinebottom if $options{'showtimeline'}=~m/(right|bottom|both)/i;
 
 	$text .= $cgi->end_table();
 	$text .= $tooltips;
