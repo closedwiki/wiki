@@ -1004,7 +1004,7 @@ sub renderHolidaylist() {
                         if (($dow < 6)||$options{showweekends}) { 
 				my $icon= $iconstates{ defined $$ptableref[$i]?$$ptableref[$i]:0};
 			
-				if ($dow < 6 && defined $$ptableref[$i] && $$ptableref[$i]>0) {
+				if ($dow < 6 && defined $$ptableref[$i] && $$ptableref[$i]>0 && ( (!defined $$aptableref[$i]) || ($$aptableref[$i]<=0))) {
 					$sum_off_withoutweekend++;
 				} else {
 					$sum_work_withoutweekend++;
