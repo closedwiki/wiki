@@ -147,7 +147,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | navprevhalftitle | title text (tooltip text) for the navigation button to the previous =navdays/2= days (%n will be replaced with the half number of days to show) | navprevtitle="Previous %n day(s)" |
 | navprevtitle | title text (tooltip text) for the navigation button to the previous =navdays= days (%n will be replaced with the number of days to show) | navprevtitle="Previous %n day(s)" |
 | nwidth | cell width of the first column | nwidth="120px" |
-| sumcolformat | summary column format; %h will be substituded by the number of <i>h</i>olidays; %w will be substituted by the number of days at <i>w</i>ork | sumcolformat="%h" |
+| sumcolformat | summary column format; %h will be substituded by the number of <i>h</i>olidays; %w will be substituted by the number of days at <i>w</i>ork; %hh will be substituted by the number of <i>h</i>olidays without weekends and public holidays; %ww will be substituted by the number of working days without weekends | sumcolformat="%h" |
 | sumcolheader | summary column header (related attributes: =showsumcol, sumcolformat, sumcoltitle=) | sumcolheader="#off" |
 | sumcoltitle  | tooltip text for the summary column header (related attributes: =showsumcol, sumcolformat, sumcolheader=) | sumcoltitle="number of days not at work" |
 | tablebgcolor | table background color | tablebgcolor="white" |

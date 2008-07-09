@@ -978,7 +978,9 @@ sub renderHolidaylist() {
 		next if $options{removeatwork} && !grep(/[^0]+/, join('', map( $_ || 0, @{$ptableref})));
 
 		my $sum_off = 0;
+		my $sum_off_withoutweekend = 0;
 		my $sum_work = 0;
+		my $sum_work_withoutweekend = 0;
 
 		$person =~ s/\@all//ig if $options{enablepubholidays};
 		$text .= '<tr><th align="left"><noautolink>'.TWiki::Func::renderText($person,$web).'</noautolink></th>';
@@ -1002,6 +1004,11 @@ sub renderHolidaylist() {
                         if (($dow < 6)||$options{showweekends}) { 
 				my $icon= $iconstates{ defined $$ptableref[$i]?$$ptableref[$i]:0};
 			
+				if ($dow < 6 && defined $$ptableref[$i] && $$ptableref[$i]>0) {
+					$sum_off_withoutweekend++;
+				} else {
+					$sum_work_withoutweekend++;
+				}
 
 				# overwrite personal holidays with public holidays:
 				if ($options{enablepubholidays} && defined $$aptableref[$i]) {
@@ -1045,9 +1052,11 @@ sub renderHolidaylist() {
 		}
 		if ($options{showsumcol}) {
 			my $sumcol = $options{sumcolformat};
+			$sumcol=~s/%ww/$sum_work_withoutweekend/g;
+			$sumcol=~s/%hh/$sum_off_withoutweekend/g;
 			$sumcol=~s/%w/$sum_work/g;
 			$sumcol=~s/%h/$sum_off/g;
-			$text.= '<th class="hlpSummaryColun" title="'.$options{sumcoltitle}.'">'.$sumcol.'</th>';
+			$text.= '<th class="hlpSummaryColumn" title="'.$options{sumcoltitle}.'">'.$sumcol.'</th>';
 		}
 		$text .= "</tr>\n";
 	}
