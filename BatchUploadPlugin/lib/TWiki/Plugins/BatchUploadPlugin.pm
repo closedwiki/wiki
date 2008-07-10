@@ -22,7 +22,7 @@ package TWiki::Plugins::BatchUploadPlugin;
 # Originally by Vito Miliano EPIC Added 22 Mar 2003
 # Modified by ZacharyHamm, JohannesMartin, DiabJerius
 # Converted to a plugin by MartinCleaver
-# Updated by ArthurClemens
+# Updated by ArthurClemens, MarkusUeberall
 
 use strict;
 use Archive::Zip qw(:ERROR_CODES :CONSTANTS :PKZIP_CONSTANTS);
@@ -32,6 +32,7 @@ use diagnostics;
 use vars qw(
   $web $topic $user $installWeb $VERSION $RELEASE $pluginName
   $debug $pluginEnabled $stack $stackDepth $MAX_STACK_DEPTH
+  $importFileComments $fileCommentFlags
 );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -42,7 +43,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.3';
+$RELEASE = '1.4';
 
 $pluginName = 'BatchUploadPlugin';    # Name of this Plugin
 
@@ -71,6 +72,9 @@ sub initPlugin {
     $debug = TWiki::Func::getPluginPreferencesFlag("DEBUG");
 
     $pluginEnabled = TWiki::Func::getPluginPreferencesValue("ENABLED") || 0;
+
+    $importFileComments = TWiki::Func::getPluginPreferencesFlag("IMPORTFILECOMMENTS");
+    $fileCommentFlags = TWiki::Func::getPluginPreferencesFlag("FILECOMMENTFLAGS");
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug("- ${pluginName}::initPlugin( $web.$topic ) is OK")
@@ -116,7 +120,9 @@ sub beforeAttachmentSaveHandler {
     my $result = updateAttachment(
         $web, $topic, $attachmentName,
         $attrHashRef->{"tmpFilename"},
-        $attrHashRef->{"comment"}
+        $attrHashRef->{"comment"},
+        $cgiQuery->param('hidefile') || '',
+        $cgiQuery->param('createlink') || ''
     );
 
     if ($result) {
@@ -158,7 +164,9 @@ sub updateAttachment {
         $topic,
         $originalZipName,
         $zipArchive,    # cgi name
-        $fileComment
+        $fileComment,
+        $hideFlag,
+        $linkFlag
     ) = @_;
 
     my ( $zip, %processedFiles, $tempDir );
@@ -190,9 +198,7 @@ sub updateAttachment {
 
     # Loop through processed files.
     foreach my $fileNameKey ( sort keys %processedFiles ) {
-        my ( $fileName ) =
-          @{ $processedFiles{$fileNameKey} };
-
+        my $fileName = $processedFiles{$fileNameKey}->{name};
         my $tmpFilename = $fileNameKey;
 
         my ( $fileSize, $fileUser, $fileDate, $fileVersion ) = "";
@@ -204,23 +210,31 @@ sub updateAttachment {
         # use current time for upload
         $fileDate = time();
 
-        my $hideFile = 0;
-        $fileComment = "Extracted from $originalZipName" unless $fileComment;
+        # use the upload form values only if these settings have not been specified in the zip file comment
+        my $hideFile = $processedFiles{$fileNameKey}->{hide} || $hideFlag;
+        my $linkFile = $processedFiles{$fileNameKey}->{createlink} || $linkFlag;
+
+        # attachment inherits the zip file comment; if none given, the the upload form comment is used
+        # (last resort is a hardcoded, non-localized comment)
+        my $tmpFileComment = $processedFiles{$fileNameKey}->{comment};
+        $tmpFileComment = $fileComment unless $tmpFileComment;
+        $tmpFileComment = "Extracted from $originalZipName" unless $tmpFileComment;
 
         TWiki::Func::writeDebug(
-"$pluginName - Trying to attach: fileName=$fileName, fileSize=$fileSize, fileDate=$fileDate, fileComment=$fileComment, tmpFilename=$tmpFilename"
+"$pluginName - Trying to attach: fileName=$fileName, fileSize=$fileSize, fileDate=$fileDate, fileComment=$tmpFileComment, tmpFilename=$tmpFilename"
         ) if $debug;
 
         TWiki::Func::saveAttachment(
             $webName, $topic,
             my $result = $fileName,
             {
-                file     => $fileName,
-                filepath => $tmpFilename,
-                hide     => $hideFile,
-                filesize => $fileSize,
-                filedate => $fileDate,
-                comment  => $fileComment
+                file       => $fileName,
+                filepath   => $tmpFilename,
+                hide       => $hideFile,
+                createlink => $linkFile,
+                filesize   => $fileSize,
+                filedate   => $fileDate,
+                comment    => $tmpFileComment
             }
         );
 
@@ -257,7 +271,7 @@ sub doUnzip {
 
     my ( $tempDir, $zip ) = @_;
 
-    my ( @memberNames, $fileName, $member, $buffer, %good, $zipRet );
+    my ( @memberNames, $fileName, $fileComment, $hideFile, $linkFile, $member, $buffer, %good, $zipRet );
 
     @memberNames = $zip->memberNames();
 
@@ -284,6 +298,37 @@ sub doUnzip {
         # Append .txt to files like we do to normal attachments
         $fileName =~ s/$TWiki::cfg{UploadFilter}/$1\.txt/goi;
 
+        $hideFile = undef;
+        $linkFile = undef;
+        if ( $importFileComments || $fileCommentFlags ) {
+            # determine file comment
+            # search comment for prefixes "-/+L", "-/+H" ((don't) insert link/hide attachment)
+            # NB we don't allow whitespace between flags, only last setting of each flag type counts
+            $fileComment = $member->fileComment();
+            if ($fileCommentFlags && ($fileComment =~ /^\s*([+-][hl])+(\s.+|$)/i)) {
+                $fileComment =~ s/^\s+//;
+                while ($fileComment =~ /^([+-][hl])(.*)$/i) {
+                    my $options = $1;
+                    $fileComment = $2;
+
+                    my $opval = substr($options, 0, 1);
+		    $opval =~ tr/+-/10/;
+
+                    my $opkey = uc(substr($options, 1, 1));
+                    if ($opkey eq "H") {
+                        $hideFile = $opval;
+                    } else {
+                        $linkFile = $opval;
+                    }
+                }
+                $fileComment =~ s/^\s+//;
+            }
+            if ( !$importFileComments ) {
+                $fileComment = undef;
+            }
+	    
+        }
+
         if ( $debug && ( $fileName ne $origFileName ) ) {
             TWiki::Func::writeDebug(
                 "$pluginName - Renamed file $origFileName to $fileName");
@@ -292,7 +337,12 @@ sub doUnzip {
         $zipRet =
           $zip->extractMemberWithoutPaths( $member, "$tempDir/$fileName" );
         if ( $zipRet == AZ_OK ) {
-            $good{"$tempDir/$fileName"} = [ $fileName ];
+            $good{"$tempDir/$fileName"} = {
+                name       => $fileName,
+                comment    => $fileComment,
+                hide       => $hideFile,
+                createlink => $linkFile
+            };
         }
         else {
 
