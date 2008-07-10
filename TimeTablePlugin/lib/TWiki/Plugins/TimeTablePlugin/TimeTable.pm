@@ -617,12 +617,15 @@ sub _renderRotatedTable {
 				## collect and render conflict entries:
 				if (defined $ignore{$descr}{$day}{$min}) {
 					my $crow="";
+
+					## search next free slot:
 					my $ci = 0;
 					while ($ignoreconflictitem{$descr}[$ci]{$day}{$min}) { $ci++; }
 					
 					$counter++;
 					## get colspan (cs):
 					my $cs = &_getEntryRows($mentry_ref, $min, $starttime, $endtime, $options{'timeinterval'});
+
 					## fill up if new row:
 					if ($ci>$#{$conflictitems{$descr}}) {
 						## fill up day(s) before current day:
@@ -636,8 +639,11 @@ sub _renderRotatedTable {
 							$crow.=$cgi->td({-title=>_renderTime($min)}, '&nbsp;');
 						}
 					}
+
 					## render entry:
 					$crow.=_renderEntry($mentry_ref, $day, $min, $counter, $cs);
+
+					## add new entry or extend existing entry:
 					if ($ci>$#{$conflictitems{$descr}}) {
 						push(@{$conflictitems{$descr}}, $crow);
 						$ci=$#{$conflictitems{$descr}};
@@ -676,8 +682,7 @@ sub _renderRotatedTable {
 		}
 	}
 	foreach my $entry (sort keys %entryKeys) {
-		my $rowspan = $#{$conflictitems{$entry}}==-1 ? 1 : ($#{$conflictitems{$entry}} + 2);
-		$text.=$cgi->Tr($cgi->th({-align=>'left', -valign=>'top', -rowspan=>$rowspan }, $entry).$entryRows{$entry});
+		$text.=$cgi->Tr($cgi->th({-align=>'left', -valign=>'top', -rowspan=>$#{$conflictitems{$entry}} + 2 }, $entry).$entryRows{$entry});
 		for (my $i=0; $i<=$#{$conflictitems{$entry}}; $i++) {
 			$text.=$cgi->Tr($conflictitems{$entry}[$i]);
 		}
