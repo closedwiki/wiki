@@ -502,6 +502,40 @@ sub _setParams {
 	$_[2]{$_[1]}=$options{$_[0]} if defined $options{$_[0]} && $options{$_[0]} !~ /^\s*$/;
 }
 # =========================
+sub _getMouseAndTitleData {
+	my ($day,$min,$counter) = @_;
+	my ($onmouseover, $onmouseout, $onclick, $title) = ( "", "", "", "");
+	$onmouseover="ttpTooltipShow('TTP_DIV_${ttid}_${day}_${min}_${counter}', 'TTP_TD_${ttid}_${day}_${min}_${counter}',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);";
+	$onmouseout="ttpTooltipHide('TTP_DIV_${ttid}_${day}_${min}_${counter}');";
+	if ($options{'clicktooltip'}) {
+		$title = $options{'clicktooltiptext'};
+		$onclick=$onmouseover;
+		$onmouseover="";
+		$onmouseout="";
+	} else {
+		$title = undef; $onclick= "";
+	}
+	return ($onmouseover, $onmouseout, $onclick, $title);
+}
+# =========================
+sub _renderEntry {
+	my ($mentry_ref, $day, $min, $counter, $rs) = @_;
+	my $text = "";
+	my ($onmouseover, $onmouseout, $onclick, $title)  = _getMouseAndTitleData($day,$min,$counter);
+	$text = $cgi->td(
+		{
+			-title=>$title,
+			-colspan=>$rs,
+			-bgcolor=>$$mentry_ref{'bgcolor'}?$$mentry_ref{'bgcolor'}:$options{eventbgcolor},
+			-id=>"TTP_TD_${ttid}_${day}_${min}_${counter}",
+			-onclick=>$onclick,
+			-onmouseover=>$onmouseover,
+			-onmouseout=>$onmouseout,
+		},'&nbsp;');
+
+	return $text;
+}
+# =========================
 sub _renderRotatedTable {
 	my ($entries_ref) = @_;
 
@@ -570,6 +604,8 @@ sub _renderRotatedTable {
 
 	my %ignore;
 	my $counter = 0;
+	my %conflictitems;
+	my %ignoreconflictitem;
 	for (my $day = 0; $day < $options{'days'}; $day++) {
 		my ($yy1,$mm1,$dd1)=Add_Delta_Days($yy,$mm,$dd,$day);
 		my $dowentries_ref = $$entries_ref{$day+1};
@@ -577,45 +613,74 @@ sub _renderRotatedTable {
 			my $mentries = &_getMatchingEntries($dowentries_ref, $min, $options{'timeinterval'}, $starttime);
 			my @visitedEntries;
 			foreach my $mentry_ref (@{$mentries}) {
+				my $descr = $$mentry_ref{'descr'};
+				## collect and render conflict entries:
+				if (defined $ignore{$descr}{$day}{$min}) {
+					my $crow="";
+					my $ci = 0;
+					while ($ignoreconflictitem{$descr}[$ci]{$day}{$min}) { $ci++; }
+					
+					$counter++;
+					## get colspan (cs):
+					my $cs = &_getEntryRows($mentry_ref, $min, $starttime, $endtime, $options{'timeinterval'});
+					## fill up if new row:
+					if ($ci>$#{$conflictitems{$descr}}) {
+						## fill up day(s) before current day:
+						for (my $d=0; $d<$day; $d++) {
+							for (my $m=$starttime; $m<=$endtime; $m+=$options{'timeinterval'}) {
+								$crow.=$cgi->td({-title=>_renderTime($min)}, '&nbsp;');
+							}
+						}
+						## fill up time before current time for the current day:
+						for (my $m=$starttime; $m<$min; $m+=$options{'timeinterval'}) {
+							$crow.=$cgi->td({-title=>_renderTime($min)}, '&nbsp;');
+						}
+					}
+					## render entry:
+					$crow.=_renderEntry($mentry_ref, $day, $min, $counter, $cs);
+					if ($ci>$#{$conflictitems{$descr}}) {
+						push(@{$conflictitems{$descr}}, $crow);
+						$ci=$#{$conflictitems{$descr}};
+					} else {
+						$conflictitems{$descr}[$ci] .= $crow;
+					}
+					for (my $i=0; $i<$cs; $i++)  {
+						$ignoreconflictitem{$descr}[$ci]{$day}{$min + ( $i * $options{'timeinterval'}) } = 1;
+					}
+					$tooltips.= &_renderTooltip($mentry_ref, $day, $min, $counter, $yy1,$mm1,$dd1);
+				}
+
+
+				next if (defined $ignore{$descr}{$day}{$min});
+
 				$counter++;
-				next if (defined $ignore{$$mentry_ref{'descr'}}{$day}{$min});
+
 				my $rs = &_getEntryRows($mentry_ref, $min, $starttime, $endtime, $options{'timeinterval'});
-				$tooltips .= &_renderTooltip($mentry_ref, $day, $min, $counter, $yy1,$mm1,$dd1);
-				my ($onmouseover, $onmouseout, $onclick);
-				$onmouseover="ttpTooltipShow('TTP_DIV_${ttid}_${day}_${min}_${counter}', 'TTP_TD_${ttid}_${day}_${min}_${counter}',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);";
-				$onmouseout="ttpTooltipHide('TTP_DIV_${ttid}_${day}_${min}_${counter}');";
-				my $title="";
-				if ($options{'clicktooltip'}) {
-					$title = $options{'clicktooltiptext'};
-					$onclick=$onmouseover;
-					$onmouseover="";
-					$onmouseout="";
-				} else {
-					$title = undef; $onclick= "";
-				}
 				for (my $i=0; $i<$rs; $i++) { 
-					$ignore{$$mentry_ref{'descr'}}{$day}{$min + ($i*$options{'timeinterval'})}=1;
+					$ignore{$descr}{$day}{$min + ($i*$options{'timeinterval'})}=1;
 				}
-				$entryRows{$$mentry_ref{'descr'}}.= $cgi->td(
-					{
-						-title=>$title,
-						-colspan=>$rs,
-						-bgcolor=>$$mentry_ref{'bgcolor'}?$$mentry_ref{'bgcolor'}:$options{eventbgcolor},
-						-id=>"TTP_TD_${ttid}_${day}_${min}_${counter}",
-						-onclick=>$onclick,
-						-onmouseover=>$onmouseover,
-						-onmouseout=>$onmouseout,
-					},'&nbsp;');
-				push @visitedEntries, $$mentry_ref{'descr'} unless grep /\Q$$mentry_ref{'descr'}\E/, @visitedEntries;
+				$entryRows{$$mentry_ref{'descr'}}.=_renderEntry($mentry_ref, $day, $min, $counter, $rs);
+				push @visitedEntries, $descr unless grep /\Q$descr\E/, @visitedEntries;
+				$tooltips .= &_renderTooltip($mentry_ref, $day, $min, $counter, $yy1,$mm1,$dd1);
 			}
 			foreach my $entry (keys %entryKeys) {
+				## fill up entries:
 				$entryRows{$entry} .= $cgi->td({-title=>_renderTime($min)}, '&nbsp;') 
 					unless (defined $ignore{$entry}{$day}{$min}) || grep /\@$entry\E/, @visitedEntries;
+				## fill up conflict items:
+				for (my $i=0; $i<=$#{$conflictitems{$entry}}; $i++) {
+					$conflictitems{$entry}[$i].=$cgi->td({-title=>_renderTime($min)}, '&nbsp;')
+						unless $ignoreconflictitem{$entry}[$i]{$day}{$min};
+				}
 			}
 		}
 	}
 	foreach my $entry (sort keys %entryKeys) {
-		$text.=$cgi->Tr($cgi->th({-align=>'left'}, $entry).$entryRows{$entry});
+		my $rowspan = $#{$conflictitems{$entry}}==-1 ? 1 : ($#{$conflictitems{$entry}} + 2);
+		$text.=$cgi->Tr($cgi->th({-align=>'left', -valign=>'top', -rowspan=>$rowspan }, $entry).$entryRows{$entry});
+		for (my $i=0; $i<=$#{$conflictitems{$entry}}; $i++) {
+			$text.=$cgi->Tr($conflictitems{$entry}[$i]);
+		}
 	}
 		
 	$text.=$timelinebottom if $options{'showtimeline'}=~m/(right|bottom|both)/i;
@@ -804,17 +869,7 @@ sub _render {
 					my ($text,$title) = &_renderText($mentry_ref, $rs, $fillRows);
 					$tooltips .= &_renderTooltip($mentry_ref, $day, $min, $counter, $yy1,$mm1,$dd1);
 					my ($onmouseover, $onmouseout, $onclick);
-					$onmouseover="ttpTooltipShow('TTP_DIV_${ttid}_${day}_${min}_${counter}', 'TTP_TD_${ttid}_${day}_${min}_${counter}',$options{'tooltipfixleft'},$options{'tooltipfixtop'},true);";
-					$onmouseout="ttpTooltipHide('TTP_DIV_${ttid}_${day}_${min}_${counter}');";
-					if ($options{'clicktooltip'}) {
-						$title = $options{'clicktooltiptext'};
-						$onclick=$onmouseover;
-						$onmouseover="";
-						$onmouseout="";
-					} else {
-						$title = undef; $onclick= "";
-					}
-					
+					($onmouseover, $onmouseout, $onclick, $title)  = _getMouseAndTitleData($day,$min,$counter);
 					my $style = $options{'textwrapper'}=~/^plugin$/i?'white-space: nowrap;':''; 
 					$itr.=$cgi->td({
 							-style=>$style,
