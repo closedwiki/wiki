@@ -45,6 +45,16 @@ sub initPlugin {
     # back off if there is a view template already and we are not in override mode
     my $currentTemplate = TWiki::Func::getPreferencesValue($templateVar);
     return 1 if $currentTemplate && !$override;
+
+    # check if this is a new topic and - if so - try to derive the templateName from
+    # the WebTopicEditTemplate
+    if (!TWiki::Func::topicExists($web, $topic)) {
+      if (TWiki::Func::topicExists($web, 'WebTopicEditTemplate')) {
+        $topic = 'WebTopicEditTemplate';
+      } else {
+        return 1;
+      }
+    }
 	
     # get form-name
     my ( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );

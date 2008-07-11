@@ -52,8 +52,9 @@ You can override this behaviour in =configure=.
 |  Plugin Author: | TWiki:Main.OliverKrueger |
 |  Copyright: | &copy; 2007, !KontextWork, Germany |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 03 Jul 2008 |
+|  Plugin Version: | 11 Jul 2008 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  11 Jul 2008: | Item5770: try to derive the EDIT_TEMPLATE of a new topic using the <nop>WebTopicEditTemplate (MD) |
 |  03 Jul 2008: | Item5747: fixed normalizing web part of form names (MD) |
 |  13 Nov 2007: | added EDIT_TEMPLATE, speed improvements, docu (MD) |
 |  29 Oct 2007: | Item4904: made specification of view template skin agnostic, \
@@ -68,4 +69,4 @@ You can override this behaviour in =configure=.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main/MichaelDaum - 03 Jul 2008
+-- TWiki:Main/MichaelDaum - 11 Jul 2008
