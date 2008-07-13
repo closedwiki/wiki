@@ -1058,10 +1058,13 @@ s/\$pattern\((.*?\s*\.\*)\)/getTextPattern( $text, $1 )/ges;
 sub _sortTopics {
     my ( $this, $web, $topics, $sortfield, $revSort ) = @_;
 
+    my $users = $this->{session}->{users};
     my $topicInfo = {};
     foreach my $topic (@$topics) {
         $topicInfo->{$topic} =
           _extractTopicInfo( $this, $web, $topic, $sortfield );
+          $topicInfo->{$topic}->{editby} =
+            $users->getWikiName( $topicInfo->{$topic}->{editby} );
     }
     if ($revSort) {
         @$topics = map { $_->[1] }
