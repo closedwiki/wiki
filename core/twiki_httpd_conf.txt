@@ -60,7 +60,7 @@ BrowserMatchNoCase ^$ blockAccess
 	SetHandler cgi-script
 
 	# Password file for TWiki users
-	AuthUserFile /var/www/twiki/data/.htpasswd
+	AuthUserFile /home/httpd/twiki/data/.htpasswd
 	AuthName 'Enter your WikiName: (First name and last name, no space, no dots, capitalized, e.g. JohnSmith). Cancel to register if you do not have one.'
 	AuthType Basic
 	
@@ -112,6 +112,8 @@ BrowserMatchNoCase ^$ blockAccess
 
 #### Change the path to match your local installation
 <Directory "/home/httpd/twiki/pub">
+    #if you are using an svn checkout an pseudo-install.pl, you will need to enable symlinks
+    #Options FollowSymLinks
 	Options None
 	AllowOverride Limit
 	Allow from all
