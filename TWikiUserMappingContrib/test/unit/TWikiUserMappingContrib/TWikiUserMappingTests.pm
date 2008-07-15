@@ -172,17 +172,14 @@ sub testLoad {
     close(F);
 
     my $zuser_id = $twiki->{users}->{mapping}->addUser( "zuser","ZebediahUser", $me);
-    $twiki->{users}->{mapping}->ASSERT_IS_CANONICAL_USER_ID($zuser_id);
     my $auser_id = $twiki->{users}->{mapping}->addUser( "auser","AaronUser", $me);
-    $twiki->{users}->{mapping}->ASSERT_IS_CANONICAL_USER_ID($auser_id);
     my $guser_id = $twiki->{users}->{mapping}->addUser( "guser","GeorgeUser", $me);
-    $twiki->{users}->{mapping}->ASSERT_IS_CANONICAL_USER_ID($guser_id);
     # deliberate repeat
     $twiki->{users}->{mapping}->addUser( "zuser","ZebediahUser", $me);
     # find a nonexistent user to force a cache read
     $twiki->finish();
     $twiki = new TWiki();
-    my $n = $twiki->{users}->{mapping}->getCanonicalUserID("auser");
+    my $n = $twiki->{users}->{mapping}->login2cUID("auser");
     $this->assert_str_equals($n, $auser_id);    
     $this->assert_str_equals("AaronUser", $twiki->{users}->getWikiName($n));
     $this->assert_str_equals("auser", $twiki->{users}->getLoginName($n));

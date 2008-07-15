@@ -56,14 +56,12 @@ sub test_7 {
 
 sub test_8 {
     my $this = shift;
-    my $u = $this->{twiki}->{users};
-    $this->simpleTest(test => '$ WIKINAME = \''.$u->getWikiName($this->{twiki}->{user})."'", then=>1, else=>0);
+    $this->simpleTest(test => '$ WIKINAME = \''.TWiki::Func::getWikiName($this->{twiki}->{user})."'", then=>1, else=>0);
 }
 
 sub test_8a {
     my $this = shift;
-    my $u = $this->{twiki}->{users};
-    $this->simpleTest(test => '$ \'WIKINAME\' = \''.$u->getWikiName($this->{twiki}->{user})."'", then=>1, else=>0);
+    $this->simpleTest(test => '$ \'WIKINAME\' = \''.TWiki::Func::getWikiName($this->{twiki}->{user})."'", then=>1, else=>0);
 }
 
 sub test_9 {
@@ -241,25 +239,73 @@ sub test_41 {
     $this->simpleTest(test => "0 or not not 1 and 1", then=>1, else=>0);
 }
 
+# ingroup test against a non-group that is a valid user wikiname
 sub test_42 {
+    my $this = shift;
+    $this->simpleTest(test => "'".TWiki::Func::getWikiName($this->{twiki}->{user})."' ingroup 'TWikiGuest'", then=>0, else=>1);
+}
+
+sub test_42a {
+    my $this = shift;
+    $this->simpleTest(test => "'".TWiki::Func::wikiToUserName(TWiki::Func::getWikiName($this->{twiki}->{user}))."' ingroup 'TWikiGuest'", then=>0, else=>1);
+}
+
+sub test_42b {
     my $this = shift;
     $this->simpleTest(test => "'".$this->{twiki}->{user}."' ingroup 'TWikiGuest'", then=>0, else=>1);
 }
 
+# ingroup test against a non-group that is a non-existant group
 sub test_43 {
+    my $this = shift;
+    $this->simpleTest(test => "'".TWiki::Func::getWikiName($this->{twiki}->{user})."' ingroup 'ThereHadBetterBeNoSuchGroup'", then=>0, else=>1);
+}
+
+sub test_43a {
+    my $this = shift;
+    $this->simpleTest(test => "'".TWiki::Func::wikiToUserName(TWiki::Func::getWikiName($this->{twiki}->{user}))."' ingroup 'ThereHadBetterBeNoSuchGroup'", then=>0, else=>1);
+}
+
+sub test_43b {
     my $this = shift;
     $this->simpleTest(test => "'".$this->{twiki}->{user}."' ingroup 'ThereHadBetterBeNoSuchGroup'", then=>0, else=>1);
 }
 
+# ingroup test against a valid group the user is not a member of
 sub test_44 {
+    my $this = shift;
+    $this->simpleTest(test => "'".TWiki::Func::wikiToUserName(TWiki::Func::getWikiName($this->{twiki}->{user}))."' ingroup '$TWiki::cfg{SuperAdminGroup}'",
+         then=>0, else=>1);
+}
+
+sub test_44a {
+    my $this = shift;
+    $this->simpleTest(test => "'".TWiki::Func::getWikiName($this->{twiki}->{user})."' ingroup '$TWiki::cfg{SuperAdminGroup}'",
+         then=>0, else=>1);
+}
+
+sub test_44b {
     my $this = shift;
     $this->simpleTest(test => "'".$this->{twiki}->{user}."' ingroup '$TWiki::cfg{SuperAdminGroup}'",
          then=>0, else=>1);
 }
 
+# ingroup test against a group the user is a member of
 sub test_45 {
     my $this = shift;
-    $this->simpleTest(test => "'".$this->{twiki}->{user}."' ingroup 'GropeGroup'", then=>1, else=>0);
+    $this->simpleTest(test => "'".TWiki::Func::wikiToUserName(TWiki::Func::getWikiName($this->{twiki}->{user}))."' ingroup 'GropeGroup'", then=>1, else=>0);
+}
+
+sub test_45a {
+    my $this = shift;
+    $this->simpleTest(test => "'".TWiki::Func::getWikiName($this->{twiki}->{user})."' ingroup 'GropeGroup'", then=>1, else=>0);
+}
+
+sub test_45b {
+    my $this = shift;
+    # Test using cUID should FAIL. Users of %IF should only use login and
+    # display names, the cUID is internal use only.
+    $this->simpleTest(test => "'".$this->{twiki}->{user}."' ingroup 'GropeGroup'", then=>0, else=>1);
 }
 
 sub test_46 {
@@ -344,26 +390,22 @@ sub test_61 {
 
 sub test_62 {
     my $this = shift;
-    my $u = $this->{twiki}->{users};
-    $this->simpleTest(test => "'".$u->getWikiName($this->{twiki}->{user})."' ingroup 'TWikiGuest'", then=>0, else=>1);
+    $this->simpleTest(test => "'".TWiki::Func::getWikiName($this->{twiki}->{user})."' ingroup 'TWikiGuest'", then=>0, else=>1);
 }
 
 sub test_63 {
     my $this = shift;
-    my $u = $this->{twiki}->{users};
-    $this->simpleTest(test => "'".$u->getWikiName($this->{twiki}->{user})."' ingroup 'ThereHadBetterBeNoSuchGroup'", then=>0, else=>1);
+    $this->simpleTest(test => "'".TWiki::Func::getWikiName($this->{twiki}->{user})."' ingroup 'ThereHadBetterBeNoSuchGroup'", then=>0, else=>1);
 }
 
 sub test_64 {
     my $this = shift;
-    my $u = $this->{twiki}->{users};
-    $this->simpleTest(test => "'".$u->getWikiName($this->{twiki}->{user})."' ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>0, else=>1);
+    $this->simpleTest(test => "'".TWiki::Func::getWikiName($this->{twiki}->{user})."' ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>0, else=>1);
 }
 
 sub test_65 {
     my $this = shift;
-    my $u = $this->{twiki}->{users};
-    $this->simpleTest(test => "'".$u->getWikiName($this->{twiki}->{user})."' ingroup 'GropeGroup'", then=>1, else=>0);
+    $this->simpleTest(test => "'".TWiki::Func::getWikiName($this->{twiki}->{user})."' ingroup 'GropeGroup'", then=>1, else=>0);
 }
 
 sub test_66 {
@@ -448,50 +490,42 @@ sub test_81 {
 
 sub test_82 {
     my $this = shift;
-    my $u = $this->{twiki}->{users};
-    $this->simpleTest(test => "'".$u->getCanonicalUserID($TWiki::cfg{AdminUserLogin})."' ingroup 'TWikiGuest'", then=>0, else=>1);
+    $this->simpleTest(test => "'".$TWiki::cfg{AdminUserLogin}."' ingroup 'TWikiGuest'", then=>0, else=>1);
 }
 
 sub test_83 {
     my $this = shift;
-    my $u = $this->{twiki}->{users};
-    $this->simpleTest(test => "'".$u->getCanonicalUserID($TWiki::cfg{AdminUserLogin})."' ingroup 'ThereHadBetterBeNoSuchGroup'", then=>0, else=>1);
+    $this->simpleTest(test => "'".$TWiki::cfg{AdminUserLogin}."' ingroup 'ThereHadBetterBeNoSuchGroup'", then=>0, else=>1);
 }
 
 sub test_84 {
     my $this = shift;
-    my $u = $this->{twiki}->{users};
-    $this->simpleTest(test => "'".$u->getCanonicalUserID($TWiki::cfg{AdminUserLogin})."' ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>1, else=>0);
+    $this->simpleTest(test => "'".$TWiki::cfg{AdminUserLogin}."' ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>1, else=>0);
 }
 
 sub test_85 {
     my $this = shift;
-    my $u = $this->{twiki}->{users};
-    $this->simpleTest(test => "'".$u->getCanonicalUserID($TWiki::cfg{AdminUserLogin})."' ingroup 'GropeGroup'", then=>0, else=>1);
+    $this->simpleTest(test => "'".$TWiki::cfg{AdminUserLogin}."' ingroup 'GropeGroup'", then=>0, else=>1);
 }
 
 sub test_86 {
     my $this = shift;
-    my $u = $this->{twiki}->{users};
-    $this->simpleTest(test => "'".$u->getCanonicalUserID($TWiki::cfg{DefaultUserLogin})."' ingroup 'TWikiGuest'", then=>0, else=>1);
+    $this->simpleTest(test => "'".$TWiki::cfg{DefaultUserLogin}."' ingroup 'TWikiGuest'", then=>0, else=>1);
 }
 
 sub test_87 {
     my $this = shift;
-    my $u = $this->{twiki}->{users};
-    $this->simpleTest(test => "'".$u->getCanonicalUserID($TWiki::cfg{DefaultUserLogin})."' ingroup 'ThereHadBetterBeNoSuchGroup'", then=>0, else=>1);
+    $this->simpleTest(test => "'".$TWiki::cfg{DefaultUserLogin}."' ingroup 'ThereHadBetterBeNoSuchGroup'", then=>0, else=>1);
 }
 
 sub test_88 {
     my $this = shift;
-    my $u = $this->{twiki}->{users};
-    $this->simpleTest(test => "'".$u->getCanonicalUserID($TWiki::cfg{DefaultUserLogin})."' ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>0, else=>1);
+    $this->simpleTest(test => "'".$TWiki::cfg{DefaultUserLogin}."' ingroup '".$TWiki::cfg{SuperAdminGroup}."'", then=>0, else=>1);
 }
 
 sub test_89 {
     my $this = shift;
-    my $u = $this->{twiki}->{users};
-    $this->simpleTest(test => "'".$u->getCanonicalUserID($TWiki::cfg{DefaultUserLogin})."' ingroup 'GropeGroup'", then=>1, else=>0);
+    $this->simpleTest(test => "'".$TWiki::cfg{DefaultUserLogin}."' ingroup 'GropeGroup'", then=>1, else=>0);
 }
 
 sub test_90 {
@@ -544,11 +578,10 @@ sub set_up {
     my $this = shift;
     $this->SUPER::set_up(@_);
     
-    my $u = $this->{twiki}->{users};
     $this->{twiki}->{store}->saveTopic(
         $this->{twiki}->{user}, $this->{users_web},
         "GropeGroup",
-        "   * Set GROUP = ".$u->getWikiName($this->{twiki}->{user})."\n");
+        "   * Set GROUP = ".TWiki::Func::getWikiName($this->{twiki}->{user})."\n");
 }
 
 sub simpleTest {
@@ -629,7 +662,7 @@ PONG
 
 sub test_ALLOWS_and_EXISTS{
     my $this = shift;
-    my $wn = $this->{twiki}->{users}->getWikiName($this->{twiki}->{user});
+    my $wn = TWiki::Func::getWikiName($this->{twiki}->{user});
     $this->{twiki}->{store}->saveTopic(
         $this->{twiki}->{user},
         $this->{test_web},

@@ -67,6 +67,8 @@ sub set_up {
                         $this->{test_user_forename},
                         $this->{test_user_surname},
                         $this->{test_user_email});
+    $this->{test_user_cuid} =
+      $this->{twiki}->{users}->getCanonicalUserID($this->{test_user_login});
     $this->{twiki}->{store}->saveTopic(
         $this->{twiki}->{user}, $this->{test_web},
         $this->{test_topic}, "BLEEGLE\n");

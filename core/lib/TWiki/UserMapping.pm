@@ -42,7 +42,7 @@ and a unique user id that the mapper uses to identify the user.
 The null prefix is reserver for the TWikiUserMapping for compatibility
 with old TWiki releases.
 
-__Note:__ in all the following documentation, =$user= refers to a
+__Note:__ in all the following documentation, =$cUID= refers to a
 *canonical user id*.
 
 =cut
@@ -118,7 +118,9 @@ sub supportsRegistration {
 Called by the TWiki::Users object to determine which loaded mapping
 to use for a given user (must be fast).
 
-Default is *false*
+The user can be identified by any of $cUID, $login or $wikiname. Any of
+these parameters may be undef, and they should be tested in order; cUID
+first, then login, then wikiname.
 
 =cut
 
@@ -128,22 +130,22 @@ sub handlesUser {
 
 =begin twiki
 
----++ ObjectMethod getCanonicalUserID ($login, $dontcheck) -> cUID
+---++ ObjectMethod login2cUID($login, $dontcheck) -> cUID
 
 Convert a login name to the corresponding canonical user name. The
 canonical name can be any string of 7-bit alphanumeric and underscore
-characters, and must correspond 1:1 to the login name.
+characters, and must map 1:1 to the login name.
 (undef on failure)
 
-(if dontcheck is true, return a cUID for a nonexistant user too - used for registration)
+(if $dontcheck is true, return a cUID for a nonexistant user too.
+This is used for registration)
 
 Subclasses *must* implement this method.
 
-
 =cut
 
-sub getCanonicalUserID {
-    ASSERT(0);
+sub login2cUID {
+    ASSERT(0, 'Must be implemented');
 }
 
 =pod
@@ -163,10 +165,10 @@ sub getLoginName {
 
 =pod
 
----++ ObjectMethod addUser ($login, $wikiname, $password, $emails) -> cUID
+---++ ObjectMethod addUser ($login, $wikiname, $password, $emails) -> $cUID
 
 Add a user to the persistant mapping that maps from usernames to wikinames
-and vice-versa, via a *canonical user id* (cUID).
+and vice-versa.
 
 $login and $wikiname must be acceptable to $TWiki::cfg{NameFilter}.
 $login must *always* be specified. $wikiname may be undef, in which case
@@ -193,7 +195,7 @@ sub addUser {
 
 =pod
 
----++ ObjectMethod removeUser( $user ) -> $boolean
+---++ ObjectMethod removeUser( $cUID ) -> $boolean
 
 Delete the users entry from this mapper. Throws an Error::Simple if
 user removal is not supported (the default).
@@ -207,7 +209,7 @@ sub removeUser {
 
 =pod
 
----++ ObjectMethod getWikiName ($cUID) -> wikiname
+---++ ObjectMethod getWikiName ($cUID) -> $wikiname
 
 Map a canonical user name to a wikiname.
 
@@ -237,10 +239,10 @@ sub userExists {
 
 =pod
 
----++ ObjectMethod eachUser () -> listIterator of cUIDs
+---++ ObjectMethod eachUser () -> TWiki::ListIterator of cUIDs
 
-Called from TWiki::Users. See the documentation of the corresponding
-method in that module for details.
+Get an iterator over the list of all the registered users *not* including
+groups.
 
 Subclasses *must* implement this method.
 
@@ -254,8 +256,12 @@ sub eachUser {
 
 ---++ ObjectMethod eachGroupMember ($group) ->  TWiki::ListIterator of cUIDs
 
-Called from TWiki::Users. See the documentation of the corresponding
-method in that module for details.
+Return a iterator over the canonical user ids of users that are members
+of this group. Should only be called on groups.
+
+Note that groups may be defined recursively, so a group may contain other
+groups. This method should *only* return users i.e. all contained groups
+should be fully expanded.
 
 Subclasses *must* implement this method.
 
@@ -267,10 +273,11 @@ sub eachGroupMember {
 
 =pod
 
----++ ObjectMethod isGroup ($user) -> boolean
+---++ ObjectMethod isGroup ($name) -> boolean
 
-Called from TWiki::Users. See the documentation of the corresponding
-method in that module for details.
+Establish if a user refers to a group or not. If $name is not
+a group name it will probably be a canonical user id, though that
+should not be assumed.
 
 Subclasses *must* implement this method.
 
@@ -282,10 +289,9 @@ sub isGroup {
 
 =pod
 
----++ ObjectMethod eachGroup () -> ListIterator of groupnames
+---++ ObjectMethod eachGroup () -> TWiki::ListIterator of groupnames
 
-Called from TWiki::Users. See the documentation of the corresponding
-method in that module for details.
+Get an iterator over the list of all the groups.
 
 Subclasses *must* implement this method.
 
@@ -297,10 +303,9 @@ sub eachGroup {
 
 =pod
 
----++ ObjectMethod eachMembership($cUID) -> ListIterator of groups this user is in
+---++ ObjectMethod eachMembership($cUID) -> TWiki::ListIterator of groups this user is in
 
-Called from TWiki::Users. See the documentation of the corresponding
-method in that module for details.
+Return an iterator over the names of groups that $cUID is a member of.
 
 Subclasses *must* implement this method.
 
@@ -312,9 +317,9 @@ sub eachMembership {
 
 =pod
 
----++ ObjectMethod isAdmin( $user ) -> $boolean
+---++ ObjectMethod isAdmin( $cUID ) -> $boolean
 
-True if the user is an administrator. Default is *false*
+True if the user is an administrator.
 
 =cut
 
@@ -324,16 +329,29 @@ sub isAdmin {
 
 =pod
 
----++ ObjectMethod isInGroup ($user, $group, $scanning) -> bool
+---++ ObjectMethod isInGroup ($cUID, $group) -> $bool
 
-Called from TWiki::Users. See the documentation of the corresponding
-method in that module for details.
-
-Default is *false*
+Test if the user identified by $cUID is in the given group. The default
+implementation iterates over all the members of $group, which is rather
+inefficient.
 
 =cut
 
 sub isInGroup {
+    my( $this, $cUID, $group, $scanning ) = @_;
+    ASSERT($cUID) if DEBUG;
+    $scanning ||= {}; # Recursion block
+    my @users;
+    my $it = $this->eachGroupMember($group);
+    while ($it->hasNext()) {
+        my $u = $it->next();
+        next if $scanning->{$u};
+        $scanning->{$u} = 1;
+        return 1 if $u eq $cUID;
+        if( $this->isGroup($u) ) {
+            return 1 if $this->isInGroup( $cUID, $u, $scanning);
+        }
+    }
     return 0;
 }
 
@@ -344,8 +362,6 @@ sub isInGroup {
 Return a list of canonical user names for the users that have this email
 registered with the password manager or the user mapping manager.
 
-Returns an empty list by default.
-
 =cut
 
 sub findUserByEmail {
@@ -354,14 +370,12 @@ sub findUserByEmail {
 
 =pod
 
----++ ObjectMethod getEmails($user) -> @emailAddress
+---++ ObjectMethod getEmails($name) -> @emailAddress
 
-If this is a user, return their email addresses. If it is a group,
+If $name is a cUID, return that user's email addresses. If it is a group,
 return the addresses of everyone in the group.
 
 Duplicates should be removed from the list.
-
-By default, returns the empty list.
 
 =cut
 
@@ -371,9 +385,9 @@ sub getEmails {
 
 =pod
 
----++ ObjectMethod setEmails($user, @emails)
+---++ ObjectMethod setEmails($cUID, @emails)
 
-Set the email address(es) for the given user. Does nothing by default.
+Set the email address(es) for the given user.
 
 =cut
 
@@ -383,9 +397,12 @@ sub setEmails {
 =pod
 
 ---++ ObjectMethod findUserByWikiName ($wikiname) -> list of cUIDs associated with that wikiname
+   * =$wikiname= - wikiname to look up
+Return a list of canonical user names for the users that have this wikiname.
+Since a single wikiname might be used by multiple login ids, we need a list.
 
-Called from TWiki::Users. See the documentation of the corresponding
-method in that module for details.
+Note that if $wikiname is the name of a group, the group will *not* be
+expanded.
 
 Subclasses *must* implement this method.
 
@@ -397,9 +414,11 @@ sub findUserByWikiName {
 
 =pod
 
----++ ObjectMethod checkPassword( $userName, $passwordU ) -> $boolean
+---++ ObjectMethod checkPassword( $login, $passwordU ) -> $boolean
 
-Finds if the password is valid for the given user.
+Finds if the password is valid for the given user. This is called using
+a login name rather than a cUID because the user may not have been mapped
+at the time it is called.
 
 Returns 1 on success, undef on failure.
 
@@ -413,7 +432,7 @@ sub checkPassword {
 
 =pod
 
----++ ObjectMethod setPassword( $user, $newPassU, $oldPassU ) -> $boolean
+---++ ObjectMethod setPassword( $cUID, $newPassU, $oldPassU ) -> $boolean
 
 If the $oldPassU matches matches the user's password, then it will
 replace it with $newPassU.
@@ -440,51 +459,12 @@ sub setPassword {
 Returns a string indicating the error that happened in the password handlers
 TODO: these delayed errors should be replaced with Exceptions.
 
-returns undef if no error 9the default)
+returns undef if no error (the default)
 
 =cut
 
 sub passwordError {
     return undef;
-}
-
-=pod
-
----++ ObjectMethod ASSERT_IS_CANONICAL_USER_ID( $user_id ) -> $boolean
-
-Used for debugging to ensure we are actually passing a canonical_id
-
-=cut
-
-sub ASSERT_IS_CANONICAL_USER_ID {
-#    my( $this, $user_id ) = @_;
-#    print STDERR "ASSERT_IS_CANONICAL_USER_ID($user_id)";
-#    ASSERT( $user_id =~/^$this->{mapping_id}/e );
-}
-
-=pod
-
----++ ObjectMethod ASSERT_IS_USER_LOGIN_ID( $user_login ) -> $boolean
-
-Used for debugging to ensure we are actually passing a user login
-
-=cut
-
-sub ASSERT_IS_USER_LOGIN_ID {
-}
-
-=pod
-
----++ ObjectMethod ASSERT_IS_USER_DISPLAY_NAME( $user_display ) -> $boolean
-
-Used for debugging to ensure we are actually passing a user display_name
-(commonly a WikiWord Name)
-
-Returns true by default.
-
-=cut
-
-sub ASSERT_IS_USER_DISPLAY_NAME {
 }
 
 1;

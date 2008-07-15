@@ -46,7 +46,6 @@ sub do_test {
 
     $actual = $session->handleCommonTags( $actual, $webName, $topicName );
     $actual = $session->renderer->getRenderedVersion( $actual, $webName, $topicName );
-
     $this->assert_html_equals($expected, $actual);
 }
 # current topic WikiWord
