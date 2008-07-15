@@ -1401,6 +1401,8 @@ sub new {
             # SMELL: why not just use $query->script_name?
             $this->{scriptUrlPath} = $2;
         }
+    } elsif( $url && $url =~ m!^([^:]*://[^/]*).*$!) {
+        $this->{urlHost} = $1;
     } else {
         $this->{urlHost} = $TWiki::cfg{DefaultUrlHost};
     }
