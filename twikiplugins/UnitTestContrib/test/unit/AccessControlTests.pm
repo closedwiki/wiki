@@ -398,4 +398,22 @@ THIS
     $this->DENIED($this->{test_web},$testTopic,"VIEW",$MrOrange);
 }
 
+sub test_webDotUserName {
+    my $this = shift;
+    $this->{twiki}->{store}->saveTopic( $currUser, $this->{test_web}, $testTopic,
+                                <<THIS
+If ALLOWTOPIC is set
+   1. people in the list are PERMITTED
+   2. everyone else is DENIED
+\t* Set ALLOWTOPICVIEW = MrYellow,%USERSWEB%.MrOrange,Nosuchweb.MrGreen,%MAINWEB%.MrBlue,%TWIKIWEB%.MrWhite
+THIS
+                                , undef);
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki();
+    $this->PERMITTED($this->{test_web},$testTopic,"VIEW",$MrOrange);
+    $this->DENIED($this->{test_web},$testTopic,"VIEW",$MrGreen);
+    $this->PERMITTED($this->{test_web},$testTopic,"VIEW",$MrYellow);
+    $this->DENIED($this->{test_web},$testTopic,"VIEW",$MrWhite);
+    $this->PERMITTED($this->{test_web},$testTopic,"view",$MrBlue);
+}
 1;

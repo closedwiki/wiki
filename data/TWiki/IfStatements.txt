@@ -15,7 +15,7 @@ The basic syntax of a condition is the same as [[QuerySearch][the syntax used fo
 | allows | ='X' allows 'Y'= is true if web/topic 'X' exists and allows access mode 'Y' for the current user. Web access rights are only checked if there is no topic called 'X'. |
 | istopic | =istopic 'X'= is true if topic 'X' exists |
 | isweb | =isweb 'X'= is true if web 'X' exists |
-| ingroup | ='X' ingroup 'Y'= is true if user 'X' is in group 'Y' |
+| ingroup | ='X' ingroup 'Y'= is true if user 'X' is in group 'Y'. 'X' can be a login name or a wikiname. |
 | defined | True if a preference variable or url parameter of this name is defined. |
 | $ | expands a URL parameter or [[TWikiVariables][TWikiVariable]] name. Plugin handlers *are not called*. Built-in variables and user-defined preferences are supported. You can pass a limited subset of parameters to TWiki variables by enclosing the variable name in single quotes; for example, =$ 'VARIABLE{value}'=. The ='VARIABLE{value}'= string may *not* contain quotes (' or "). |
 | {X} | expands to the value of the configuration variable {X} - for example, ={ScriptUrlPath}= |
@@ -24,18 +24,18 @@ __Examples:__
 
 1. TWiki variable defined or not
 <verbatim>
-%IF{"defined WIKINAME" then="WIKINAME is defined" else="WIKINAME is not defined"}%
+%IF{"defined 'WIKINAME'" then="WIKINAME is defined" else="WIKINAME is not defined"}%
 </verbatim>
 
 2. Compare TWiki variable
 <verbatim>
-You are %IF{ "$ WIKINAME='TWikiGuest' and not defined OPEN_DAY" then="not" }% allowed to
+You are %IF{ "$ WIKINAME='TWikiGuest' and not defined 'OPEN_DAY'" then="not" }% allowed to
 %IF{ "context view" then="view" else="edit"}% this TWiki today.
 </verbatim>
 
 3. URL parameter
 <verbatim>
-%IF{ "defined search" then="Search: $percntURLPARAM{search}$percnt" else="No search passed in"}%
+%IF{ "defined 'search'" then="Search: $percntURLPARAM{search}$percnt" else="No search passed in"}%
 </verbatim>
 
 4. Range test on URL parameter

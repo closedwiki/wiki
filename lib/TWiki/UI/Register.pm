@@ -670,15 +670,16 @@ sub changePassword {
                                     params => [ 'oldpassword' ] );
     }
 
+    my $cUID = $users->getCanonicalUserID($user);
+
     unless( $users->isAdmin( $requestUser ) ||
-              $users->checkPassword( $user, $oldpassword)) {
+              $users->checkPassword( $cUID, $oldpassword)) {
         throw TWiki::OopsException( 'attention',
                                     web => $webName,
                                     topic => $topic,
                                     def => 'wrong_password');
     }
 
-    my $cUID = $users->getCanonicalUserID($user);
     if( defined $email ) {
         my $return = $users->setEmails($cUID, split(/\s+/, $email) );
     }
@@ -995,6 +996,8 @@ sub _buildConfirmationEmail {
     my ( $session, $data, $templateText, $hidePassword ) = @_;
 
     $data->{Name} ||= $data->{WikiName};
+    $data->{LoginName} = '' unless defined $data->{LoginName};
+
     $templateText =~ s/%FIRSTLASTNAME%/$data->{Name}/go;
     $templateText =~ s/%WIKINAME%/$data->{WikiName}/go;
     $templateText =~ s/%EMAILADDRESS%/$data->{Email}/go;

@@ -655,14 +655,25 @@ user)
  
 *Since:* TWiki::Plugins::VERSION 1.2
 
-=cut 
- 
+=cut
+
 sub getCanonicalUserID {
 	my $user = shift;
 	return $TWiki::Plugins::SESSION->{user} unless ($user);
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    my $users = $TWiki::Plugins::SESSION->{users};
-    return $users->getCanonicalUserID( $user );
+    my $cUID;
+    if ($user) {
+        $cUID =
+          $TWiki::Plugins::SESSION->{users}->getCanonicalUserID( $user );
+        if (!$cUID) {
+            # Not a login name or a wiki name. Is it a valid cUID?
+            my $ln = $TWiki::Plugins::SESSION->{users}->getLoginName($user);
+            $cUID = $user if defined $ln && $ln ne 'unknown';
+        }
+    } else {
+        $cUID = $TWiki::Plugins::SESSION->{user};
+    }
+    return $cUID;
 }
 
 =pod
@@ -681,10 +692,14 @@ Return: =$wikiName= Wiki Name, e.g. ='JohnDoe'=
 =cut
 
 sub getWikiName {
-	my $user = shift || $TWiki::Plugins::SESSION->{user};
+	my $user = shift;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    my $users = $TWiki::Plugins::SESSION->{users};
-    return $users->getWikiName( $user );
+    my $cUID = getCanonicalUserID( $user );
+    unless( defined $cUID ) {
+        my ($w, $u) = normalizeWebTopicName($TWiki::cfg{UsersWebName}, $user);
+        return $u;
+    }
+    return $TWiki::Plugins::SESSION->{users}->getWikiName( $cUID );
 }
  
 =pod 
@@ -707,7 +722,12 @@ sub getWikiUserName {
 
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     my $users = $TWiki::Plugins::SESSION->{users};
-    return $users->webDotWikiName($user);
+    my $cUID = getCanonicalUserID( $user );
+    unless( defined $cUID ) {
+        my ($w, $u) = normalizeWebTopicName($TWiki::cfg{UsersWebName}, $user);
+        return "$w.$u";
+    }
+    return $TWiki::Plugins::SESSION->{users}->webDotWikiName($cUID);
 }
 
 =pod
@@ -732,10 +752,13 @@ sub wikiToUserName {
     my( $wiki ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return '' unless $wiki;
-    my $users = $TWiki::Plugins::SESSION->{users};
 
-    my $cUID = $users->getCanonicalUserID($wiki);
-    return $users->getLoginName($cUID) if ($cUID);
+    my $cUID = getCanonicalUserID($wiki);
+    if ($cUID) {
+        my $login = $TWiki::Plugins::SESSION->{users}->getLoginName($cUID);
+        return undef if $login eq 'unknown';
+        return $login;
+    }
     return undef;
 }
 
@@ -759,7 +782,7 @@ sub userToWikiName {
     return '' unless $login;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     my $users = $TWiki::Plugins::SESSION->{users};
-    my $user = $users->getCanonicalUserID( $login );
+    my $user = getCanonicalUserID( $login );
     return  ( $dontAddWeb ? $login : ( $TWiki::cfg{UsersWebName} . '.' . $login ) )
         unless $users->userExists( $user );
     return $users->getWikiName( $user ) if $dontAddWeb;
@@ -806,21 +829,26 @@ sub emailToWikiNames {
 Returns the registered email addresses of the named user. If $wikiname is
 undef, returns the registered email addresses for the logged-in user.
 
+Since TWiki 4.2.1, $wikiname may also be the name of a group.
+
 *Since:* TWiki::Plugins::VERSION 1.2
 
 =cut
 
 sub wikinameToEmails {
     my( $wikiname ) = @_;
-
     if( $wikiname ) {
-        my $lns = $TWiki::Plugins::SESSION->{users}->findUserByWikiName(
-            $wikiname );
-        my @em = ();
-        foreach my $user ( @$lns ) {
-            push(@em, $TWiki::Plugins::SESSION->{users}->getEmails( $user ));
+        if (isGroup($wikiname)) {
+            return $TWiki::Plugins::SESSION->{users}->getEmails( $wikiname );
+        } else {
+            my $uids = $TWiki::Plugins::SESSION->{users}->findUserByWikiName(
+                $wikiname );
+            my @em = ();
+            foreach my $user (@$uids) {
+                push(@em, $TWiki::Plugins::SESSION->{users}->getEmails( $user ));
+            }
+            return @em;
         }
-        return @em;
     } else {
         my $user = $TWiki::Plugins::SESSION->{user};
         return $TWiki::Plugins::SESSION->{users}->getEmails( $user );
@@ -857,11 +885,9 @@ the currently logged-in user is assumed.
 =cut
 
 sub isAnAdmin {
-    my ($user) = @_;
-
-    $user ||= $TWiki::Plugins::SESSION->{user};
-
-    return $TWiki::Plugins::SESSION->{users}->isAdmin( $user );
+    my $user = shift;
+    return $TWiki::Plugins::SESSION->{users}->isAdmin(
+        getCanonicalUserID( $user ));
 }
 
 =pod
@@ -890,7 +916,7 @@ sub isGroupMember {
     if( $user ) {
         #my $login = wikiToUserName( $user );
         #return 0 unless $login;
-        $user = $users->getCanonicalUserID( $user );
+        $user = getCanonicalUserID( $user );
     } else {
         $user = $TWiki::Plugins::SESSION->{user};
     }
@@ -943,7 +969,7 @@ sub eachMembership {
     if( $user ) {
         my $login = wikiToUserName( $user );
         return 0 unless $login;
-        $user = $users->getCanonicalUserID( $login );
+        $user = getCanonicalUserID( $login );
     } else {
         $user = $TWiki::Plugins::SESSION->{user};
     }

@@ -1447,8 +1447,10 @@ sub verify_resetPassword_NoTWikiUsersEntry {
     $this->registerAccount();
     
     #Remove the TWikiUsers entry - by deleting it :)
-    $this->{twiki}->{store}->moveTopic(  $TWiki::cfg{UsersWebName}, $TWiki::cfg{UsersTopicName}, 
-    		$TWiki::cfg{UsersWebName}, $TWiki::cfg{UsersTopicName}.'DELETED', $TWiki::cfg{AdminUserLogin} );
+    $this->{twiki}->{store}->moveTopic(
+        $TWiki::cfg{UsersWebName}, $TWiki::cfg{UsersTopicName}, 
+        $TWiki::cfg{UsersWebName}, $TWiki::cfg{UsersTopicName}.'DELETED',
+        TWiki::Func::getCanonicalUserID($TWiki::cfg{AdminUserLogin}) );
     #force a reload to unload existing user caches, and then restart as guest
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki();

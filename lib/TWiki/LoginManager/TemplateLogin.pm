@@ -163,8 +163,12 @@ sub login {
     my $error = '';
 
     if( $loginName ) {
-        my $validation = $users->checkPassword( $loginName, $loginPass );
-        $error = $users->passwordError();
+        my $cUID = $users->getCanonicalUserID(undef, $loginName, undef);
+        my $validation;
+        if (defined($cUID)) {
+            $users->checkPassword( $cUID, $loginPass );
+            $error = $users->passwordError();
+        }
 
         if( $validation ) {
             $this->userLoggedIn( $loginName );
@@ -185,7 +189,9 @@ sub login {
     # TODO: add JavaScript password encryption in the template
     # to use a template)
     $origurl ||= '';
-    $twiki->{prefs}->pushPreferenceValues('SESSION', {ORIGURL=>$origurl, BANNER=>$banner, NOTE=>$note, ERROR=>$error});
+    $twiki->{prefs}->pushPreferenceValues(
+        'SESSION',
+        {ORIGURL=>$origurl, BANNER=>$banner, NOTE=>$note, ERROR=>$error});
 
     $tmpl = $twiki->handleCommonTags( $tmpl, $web, $topic );
     $tmpl = $twiki->renderer->getRenderedVersion( $tmpl, '' );

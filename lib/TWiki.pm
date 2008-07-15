@@ -1658,7 +1658,8 @@ sub writeLog {
     my $user = shift;
 
     $user ||= $this->{user};
-    $user = $this->{users}->getLoginName( $user ) if ($this->{users});
+    $user = ($this->{users}->getLoginName( $user ) || 'unknown')
+      if ($this->{users});
 
     if( $user eq $cfg{DefaultUserLogin} ) {
        my $cgiQuery = $this->{cgiQuery};
@@ -3912,14 +3913,18 @@ sub USERINFO {
 
     if ($info =~ /\$username/) {
         my $username = $this->{users}->getLoginName($user);
+        $username = 'unknown' unless defined $username;
         $info =~ s/\$username/$username/g;
     }
     if ($info =~ /\$wikiname/) {
         my $wikiname = $this->{users}->getWikiName( $user );
+        $wikiname = 'UnknownUser' unless defined $wikiname;
         $info =~ s/\$wikiname/$wikiname/g;
     }
     if ($info =~ /\$wikiusername/) {
         my $wikiusername = $this->{users}->webDotWikiName($user);
+        $wikiusername = "$TWiki::cfg{UsersWebName}.UnknownUser"
+          unless defined $wikiusername;
         $info =~ s/\$wikiusername/$wikiusername/g;
     }
     if ($info =~ /\$emails/) {

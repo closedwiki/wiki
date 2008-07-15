@@ -273,11 +273,11 @@ sub verify_isAnAdmin {
         my $u = $iterator->next();
         $u =~ /.*\.(.*)/;
         $TWiki::Plugins::SESSION->{user} = $u;
-        if (($u eq $TWiki::cfg{AdminUserWikiName}) ||
-           ($u eq 'UserA')) {
-	        $this->assert(TWiki::Func::isAnAdmin($u), $u);
+        my $sadmin = TWiki::Func::isAnAdmin($u);
+        if ($u eq $TWiki::cfg{AdminUserWikiName} || $u eq 'UserA') {
+	        $this->assert($sadmin, $u);
         } else {
-	        $this->assert(!TWiki::Func::isAnAdmin($u), $u);
+	        $this->assert(!$sadmin, $u);
         }
     }
 }
@@ -291,7 +291,7 @@ sub verify_isGroupMember {
     $this->assert(!TWiki::Func::isGroupMember('BandCGroup'));
     $this->assert(TWiki::Func::isGroupMember('BandCGroup', 'UserB'));
     $this->assert(TWiki::Func::isGroupMember('BandCGroup', 'UserC'));
-    $this->assert(TWiki::Func::isGroupMember('ScumGroup', 'TWikiGuest'));
+    $this->assert(TWiki::Func::isGroupMember('ScumGroup', $TWiki::cfg{DefaultUserWikiName}));
 
     $this->assert(TWiki::Func::isGroupMember('ScumGroup', 'UserZ'));
     $this->assert(TWiki::Func::isGroupMember('ScumGroup', $loginname{UserZ}));
@@ -441,7 +441,8 @@ sub verify_getCanonicalUserID_extended {
 
     #TODO: consider how to render unkown user's
     $this->assert_null($this->{twiki}->{users}->getCanonicalUserID($loginname{NonExistantuser}));
-    $this->assert_null(TWiki::Func::getCanonicalUserID($loginname{NonExistantuser}));
+    my $cUID = TWiki::Func::getCanonicalUserID($loginname{NonExistantuser});
+    $this->assert_null($cUID, $cUID);
     $this->assert_null(TWiki::Func::getCanonicalUserID('NonExistantUser'));
     $this->assert_null(TWiki::Func::getCanonicalUserID($TWiki::cfg{UsersWebName}.'.'.'NonExistantUser'));
     $this->assert_null(TWiki::Func::getCanonicalUserID($TWiki::cfg{UsersWebName}.'.'.'NonExistantUser86'));
@@ -498,6 +499,7 @@ sub verify_getWikiName_extended {
 
     #TODO: consider how to render unkown user's
     #$TWiki::cfg{RenderLoggedInButUnknownUsers} is false, or undefined
+
     $this->assert_str_equals('TWikiUserMapping_NonExistantUser', TWiki::Func::getWikiName('TWikiUserMapping_NonExistantUser'));
     my $nonexistantuser_cUID = $this->{twiki}->{users}->getCanonicalUserID($loginname{NonExistantuser});
     $this->annotate($nonexistantuser_cUID);      #returns guest

@@ -30,20 +30,20 @@ sub set_up {
     $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
     $TWiki::cfg{UseClientSessions} = 1;
     $TWiki::cfg{PasswordManager} = "TWiki::Users::HtPasswdUser";
-    $TWiki::cfg{Register}{EnableNewUserRegistration} = 1; 
-    $TWiki::cfg{Register}{AllowLoginName} = 0; 
-    $TWiki::cfg{DisplayTimeValues} = 'gmtime'; 
+    $TWiki::cfg{Register}{EnableNewUserRegistration} = 1;
+    $TWiki::cfg{Register}{AllowLoginName} = 0;
+    $TWiki::cfg{DisplayTimeValues} = 'gmtime';
 }
 
 sub setup_new_session() {
     my $this = shift;
 	
-	my ( $query, $text );   
+	my ( $query, $text );
     $query = new CGI ({});
     $query->path_info( "/Main/WebHome" );
     $ENV{SCRIPT_NAME} = "view";
-    $this->{twiki}->finish();#close this TWiki session - its using the wrong mapper and login
-	
+
+    # close this TWiki session - its using the wrong mapper and login
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( undef, $query );
 }
@@ -59,8 +59,10 @@ sub set_up_user {
     if ($this->{twiki}->{users}->supportsRegistration()) {
         $userWikiName = 'JoeDoe';
         $userLogin = $userWikiName;
-        $userLogin = 'joe' if ($TWiki::cfg{Register}{AllowLoginName} == 1);
-	    $user_id = $this->{twiki}->{users}->addUser( $userLogin, $userWikiName, 'secrect_password', 'email@home.org.au');
+        $userLogin = 'joe' if ($TWiki::cfg{Register}{AllowLoginName});
+	    $user_id = $this->{twiki}->{users}->addUser(
+            $userLogin, $userWikiName, 'secrect_password',
+            'email@home.org.au');
 	    $this->annotate("create $userLogin user - cUID = $user_id , login $userLogin , wikiname: $userWikiName\n");
     } else {
         $userLogin = $TWiki::cfg{AdminUserLogin};
@@ -156,25 +158,21 @@ sub std_tests {
 	$CuidWithMappers =~ s/UUUUUUUUUU/$serializedName/e;
 
 	$this->assert_not_null($this->{twiki}->{user});
-	$this->{twiki}->{users}-> ASSERT_IS_CANONICAL_USER_ID($this->{twiki}->{user});
 	$this->{twiki}->{store}->saveTopic($this->{twiki}->{user}, $this->{test_web}, 'CuidWithMappers', $CuidWithMappers);
 #test that all 4 raw internal values are ok cUIDs
 	my ( $date, $user, $rev, $comment ) = $this->{twiki}->{store}->getRevisionInfo($this->{test_web}, 'CuidWithMappers');
 	$this->assert_not_null($user);
-	$this->{twiki}->{users}-> ASSERT_IS_CANONICAL_USER_ID($user);
 
     my ($meta, $text) = $this->{twiki}->{store}->readTopic($this->{twiki}->{user}, $this->{test_web}, 'CuidWithMappers');
 
     my $topicinfo = $meta->get( 'TOPICINFO');
 	$this->assert_not_null($topicinfo->{author});
-	$this->{twiki}->{users}->ASSERT_IS_CANONICAL_USER_ID($topicinfo->{author});
 	$this->assert_str_equals('BaseUserMapping_666', $topicinfo->{author});#render the topic, make sure we're seeing NO cUIDs, and WikiNames for all known users
 	#parse meta output
     $this->assert( $meta->count( "FILEATTACHMENT" ) == 1, "Should be one item" );
 
     my $file1 = $meta->get( 'FILEATTACHMENT');
 	$this->assert_not_null($file1->{'user'});
-	$this->{twiki}->{users}->ASSERT_IS_CANONICAL_USER_ID($file1->{'user'});
 	$this->assert_str_equals('home.org.au.png', $file1->{'name'});
 
 
@@ -182,7 +180,6 @@ sub std_tests {
     foreach my $attachment ( @attachments ) {
       	$this->annotate("FILEATTACHMENT user = ".$attachment->{'user'});
 		$this->assert_not_null($attachment->{'user'});
-		$this->{twiki}->{users}->ASSERT_IS_CANONICAL_USER_ID($attachment->{'user'});
     }
 
 #test func outputs
