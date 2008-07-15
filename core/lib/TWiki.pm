@@ -1272,7 +1272,8 @@ sub new {
     # Tell CGI.pm which charset we are using if not default
     if( defined $TWiki::cfg{Site}{CharSet} &&
           $TWiki::cfg{Site}{CharSet} !~ /^iso-?8859-?1$/io ) {
-        $query->charset( $TWiki::cfg{Site}{CharSet} );
+        # Item5710: A bug in CGI::charset means we cannot use $query->charset
+        CGI::charset( $TWiki::cfg{Site}{CharSet} );
     }
 
     $this->{_HTMLHEADERS} = {};
