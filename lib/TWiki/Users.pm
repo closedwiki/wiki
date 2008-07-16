@@ -609,15 +609,18 @@ sub getLoginName {
     return $this->{cUID2Login}->{$cUID}
       if ( defined( $this->{cUID2Login}->{$cUID} ) );
 
-    my $login = $this->_getMapping($cUID)->getLoginName($cUID)
-      if ( $cUID && $this->_getMapping($cUID) );
+    my $mapping = $this->_getMapping($cUID);
+    my $login;
+    if( $cUID && $mapping ) {
+        $login = $mapping->getLoginName($cUID)
+    }
 
     if( defined $login ) {
         $this->{cUID2Login}->{$cUID} = $login;
         $this->{login2cUID}->{$login} = $cUID;
     }
 
-    return $this->{cUID2Login}->{$cUID};
+    return $login;
 }
 
 =pod

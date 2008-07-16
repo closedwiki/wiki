@@ -10,7 +10,7 @@ use TWiki;
 use Error qw( :try );
 
 sub new {
-    $TWiki::cfg{Register}{AllowLoginName}    =  1;
+    $TWiki::cfg{Register}{AllowLoginName} =  1;
     my $self = shift()->SUPER::new('REVINFO', @_);
     return $self;
 }
@@ -66,6 +66,54 @@ sub test_formatUser {
         '%REVINFO{format="$username $wikiname $wikiusername"}%',
         $this->{test_web}, 'GlumDrop');
     $this->assert_str_equals("$this->{test_user_login} $this->{test_user_wikiname} $this->{users_web}\.$this->{test_user_wikiname}", $ui);
+}
+
+sub test_compatibility1 {
+    my $this = shift;
+    # Create a topic with raw meta to force a wikiname into the author field.
+    # The wikiname must be for a user who is in TWikiUsers.
+    # This test is specific to the "traditional" text database implementation,
+    # either RcsWrap or RcsLite.
+    if ($TWiki::cfg{StoreImpl} ne 'RcsLite' &&
+          $TWiki::cfg{StoreImpl} ne 'RcsWrap') {
+        return;
+    }
+    $this->assert(open(
+        F, '>', "$TWiki::cfg{DataDir}/$this->{test_web}/CrikeyMoses.txt"));
+    print F <<'HERE';
+%META:TOPICINFO{author="ScumBag" date="1120846368" format="1.1" version="$Rev: 16686 $"}%
+HERE
+    close(F);
+    my $ui = $this->{twiki}->handleCommonTags(
+        '%REVINFO{format="$username $wikiname"}%',
+        $this->{test_web}, 'CrikeyMoses');
+    # The wikiname can't be mapped back to a login name (the mapping is
+    # one-to-many) so the login name is unknown.
+    $this->assert_str_equals("unknown ScumBag", $ui);
+
+}
+
+sub test_compatibility2 {
+    my $this = shift;
+    # Create a topic with raw meta to force a wikiname into the author field.
+    # The wikiname must be for a user who is in TWikiUsers.
+    # This test is specific to the "traditional" text database implementation,
+    # either RcsWrap or RcsLite.
+    if ($TWiki::cfg{StoreImpl} ne 'RcsLite' &&
+          $TWiki::cfg{StoreImpl} ne 'RcsWrap') {
+        return;
+    }
+    $this->assert(open(
+        F, '>', "$TWiki::cfg{DataDir}/$this->{test_web}/CrikeyMoses.txt"));
+    print F <<'HERE';
+%META:TOPICINFO{author="scum" date="1120846368" format="1.1" version="$Rev: 16686 $"}%
+HERE
+    close(F);
+    my $ui = $this->{twiki}->handleCommonTags(
+        '%REVINFO{format="$username $wikiname"}%',
+        $this->{test_web}, 'CrikeyMoses');
+    $this->assert_str_equals("scum ScumBag", $ui);
+
 }
 
 # SMELL: need to test for other revs specified by the 'rev' parameter
