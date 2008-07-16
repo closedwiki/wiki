@@ -49,6 +49,9 @@ sub handleTab {
   my $theName = $params->{_DEFAULT} || $params->{name} || 'Tab';
   my $beforeHandler = $params->{before} || '';
   my $afterHandler = $params->{after} || '';
+  my $afterLoadHandler = $params->{afterload} || '';
+  my $url = $params->{url} || '';
+  my $container = $params->{container} || '';
   my $tabId = 'jqTab'.($tabCounter++);
 
   my @metaData = ();
@@ -59,6 +62,16 @@ sub handleTab {
   if ($afterHandler) {
     $afterHandler =~ s/'/\\'/go;
     push @metaData,  "afterHandler: '$afterHandler'";
+  }
+  if ($afterLoadHandler) {
+    $afterLoadHandler =~ s/'/\\'/go;
+    push @metaData,  "afterLoadHandler: '$afterLoadHandler'";
+  }
+  if ($url) {
+    push @metaData , "url: '$url'";
+  }
+  if ($container) {
+    push @metaData , "container: '$container'";
   }
   my $metaData = scalar(@metaData)?' {'.join(',', @metaData).'}':'';
 

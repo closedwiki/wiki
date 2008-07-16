@@ -132,7 +132,7 @@
 
 /* treeview plugin */
 .jqTreeview {
-  display:none;
+  display:none; /* activated using js */
 }
 .jqTreeview.red  li { background-image: url(images/treeview-red-line.gif); }
 .jqTreeview.red .hitarea, 
@@ -153,3 +153,11 @@
 .jqTreeview.famfamfam .hitarea, 
 .jqTreeview.famfamfam li.lastCollapsable, 
 .jqTreeview.famfamfam li.lastExpandable { background-image: url(images/treeview-famfamfam.gif); } 
+
+.jqAjaxLoader,
+.treeview .placeholder {
+  background: url(images/spinner.gif) 0 0 no-repeat;
+  height: 16px;
+  width: 16px;
+  display: block;
+}

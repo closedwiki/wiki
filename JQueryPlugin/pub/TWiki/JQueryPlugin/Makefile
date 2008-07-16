@@ -54,7 +54,8 @@ JS_SOURCES=\
   jquery.dom.js \
   jquery.tooltip.js \
   jquery.nifty.js \
-  jquery.treeview.uncompressed.js \
+  jquery.treeview.js \
+  jquery.treeview.async.js \
   jquery.twiki.js \
   jquery.tabpane.js
 

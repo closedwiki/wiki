@@ -11,7 +11,8 @@ b.niftycorners,b.niftyfill{display:block}b.niftycorners *{display:block;height:1
 .jqTreeview.gray li.lastCollapsable,
 .jqTreeview.gray li.lastExpandable{background-image:url(images/treeview-gray.gif);}.jqTreeview.famfamfam li{background-image:url(images/treeview-famfamfam-line.gif);}.jqTreeview.famfamfam .hitarea,
 .jqTreeview.famfamfam li.lastCollapsable,
-.jqTreeview.famfamfam li.lastExpandable{background-image:url(images/treeview-famfamfam.gif);}
+.jqTreeview.famfamfam li.lastExpandable{background-image:url(images/treeview-famfamfam.gif);}.jqAjaxLoader,
+.treeview .placeholder{background:url(images/spinner.gif) 0 0 no-repeat;height:16px;width:16px;display:block;}
 .jqTabPane{display:none;}.jqTabPane form{margin:0px;padding:0px;}.jqTab{display:none;margin-top:-1px;border:1px solid #BDBEC5;padding:2px;}.jqTab.current{display:block;}.jqTabContents{padding:5px;clear:both;overflow-x:hidden;overflow-y:auto;}ul.jqTabGroup{margin:0px !important;padding:0px !important;height:29px;list-style:none;}ul.jqTabGroup li{background-color:transparent !important;background-image:url('tab_right.gif') !important;background-repeat:no-repeat !important;background-position:right top !important;float:left;padding:0px 3px 0px 0px !important;margin:0px 4px 0px 0px !important;height:29px;line-height:100%;}ul.jqTabGroup a:active,
 ul.jqTabGroup a:hover,
 ul.jqTabGroup a:link,

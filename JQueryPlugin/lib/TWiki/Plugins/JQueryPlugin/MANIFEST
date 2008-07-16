@@ -71,10 +71,12 @@ pub/TWiki/JQueryPlugin/i18n/ui.datepicker-zh-TW.js 0644
 pub/TWiki/JQueryPlugin/images/file.gif 0644
 pub/TWiki/JQueryPlugin/images/folder-closed.gif 0644
 pub/TWiki/JQueryPlugin/images/folder.gif 0644
-pub/TWiki/JQueryPlugin/images/linux_spinner.png 0644
 pub/TWiki/JQueryPlugin/images/minus.gif 0644
 pub/TWiki/JQueryPlugin/images/plus.gif 0644
-pub/TWiki/JQueryPlugin/images/spotlight_spinner_big.png 0644
+pub/TWiki/JQueryPlugin/images/spinner_arrows.gif 0644
+pub/TWiki/JQueryPlugin/images/spinner_big.png 0644
+pub/TWiki/JQueryPlugin/images/spinner.gif 0644
+pub/TWiki/JQueryPlugin/images/spinner.png 0644
 pub/TWiki/JQueryPlugin/images/treeview-black.gif 0644
 pub/TWiki/JQueryPlugin/images/treeview-black-line.gif 0644
 pub/TWiki/JQueryPlugin/images/treeview-default.gif 0644
@@ -122,6 +124,8 @@ pub/TWiki/JQueryPlugin/jquery.tabpane.js 0644
 pub/TWiki/JQueryPlugin/jquery.tabpane.uncompressed.js 0644
 pub/TWiki/JQueryPlugin/jquery.tooltip.js 0644
 pub/TWiki/JQueryPlugin/jquery.tooltip.uncompressed.js 0644
+pub/TWiki/JQueryPlugin/jquery.treeview.async.js 0644
+pub/TWiki/JQueryPlugin/jquery.treeview.async.uncompressed.js 0644
 pub/TWiki/JQueryPlugin/jquery.treeview.css 0644
 pub/TWiki/JQueryPlugin/jquery.treeview.js 0644
 pub/TWiki/JQueryPlugin/jquery.treeview.uncompressed.js 0644

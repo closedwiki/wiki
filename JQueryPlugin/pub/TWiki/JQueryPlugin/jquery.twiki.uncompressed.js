@@ -204,6 +204,9 @@ $(function(){
       if (parentClass.match(/\bunique\b/)) {
         args['unique'] = true;
       }
+      if (parentClass.match(/\bprerendered\b/)) {
+        args['prerendered'] = true;
+      }
       args['animated'] = 'fast';
       if (parentClass.match(/\bspeed_(fast|slow|normal|none|[\d\.]+)\b/)) {
         var speed = RegExp.$1;

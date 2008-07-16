@@ -9,7 +9,7 @@ options.headers
 $.removeData(this.element[0],"accordion");this.element.removeClass("ui-accordion").unbind(".accordion");}});function scopeCallback(callback,scope){return function(){return callback.apply(scope,arguments);};};function completed(cancel){if(!$.data(this,"accordion")){return;}
 var instance=$.data(this,"accordion");var options=instance.options;options.running=cancel?0:--options.running;if(options.running){return;}
 if(options.clearStyle){options.toShow.add(options.toHide).css({height:"",overflow:""});}
-$(this).triggerHandler("accordionchange",[null,options.data],options.change);}
+$(this).triggerHandler("accordionchange",[$.event.fix({type:'accordionchange',target:instance.element[0]}),options.data],options.change);}
 function toggle(toShow,toHide,data,clickedActive,down){var options=$.data(this,"accordion").options;options.toShow=toShow;options.toHide=toHide;options.data=data;var complete=scopeCallback(completed,this);options.running=toHide.size()===0?toShow.size():toHide.size();if(options.animated){if(!options.alwaysOpen&&clickedActive){$.ui.accordion.animations[options.animated]({toShow:jQuery([]),toHide:toHide,complete:complete,down:down,autoHeight:options.autoHeight});}else{$.ui.accordion.animations[options.animated]({toShow:toShow,toHide:toHide,complete:complete,down:down,autoHeight:options.autoHeight});}}else{if(!options.alwaysOpen&&clickedActive){toShow.toggle();}else{toHide.hide();toShow.show();}
 complete(true);}}
 function clickHandler(event){var options=$.data(this,"accordion").options;if(options.disabled){return false;}

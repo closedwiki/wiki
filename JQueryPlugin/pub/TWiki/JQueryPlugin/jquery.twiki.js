@@ -27,6 +27,7 @@ if(foundh2){$("h2",this).nifty(h2args);}
 $(this).nifty(divargs);});return this;}});$(function(){var $jqTreeviews;if(true){$jqTreeviews=$(".jqTreeview");$jqTreeviews.children("> ul").each(function(){var args=Array();var parentClass=$(this).parent().attr('class');if(parentClass.match(/\bopen\b/)){args['collapsed']=false;}
 if(parentClass.match(/\bclosed?\b/)){args['collapsed']=true;}
 if(parentClass.match(/\bunique\b/)){args['unique']=true;}
+if(parentClass.match(/\bprerendered\b/)){args['prerendered']=true;}
 args['animated']='fast';if(parentClass.match(/\bspeed_(fast|slow|normal|none|[\d\.]+)\b/)){var speed=RegExp.$1;if(speed=="none"){delete args['animated'];}else{args['animated']=speed;}}
 $(this).treeview(args);});}
 if(false){$(".twikiAttachments .twikiTable a").shrinkUrls({size:25,trunc:'middle'});}
