@@ -23,6 +23,8 @@ require TWiki::Prefs;
 use constant OBJECTVERSION => 0.49;
 use constant DEBUG => 0; # toggle me
 
+use vars qw(%insideInit);
+
 ###############################################################################
 # static
 sub writeDebug {
@@ -127,7 +129,7 @@ sub purgeCache {
   } 
 
   if ($mode > 1) { # categorized and classified topics
-    foreach my $cat ($this->getCategories()) {
+    foreach my $cat (values %{$this->{_categories}}) {
       $cat->purgeCache() if $cat;
     }
   } 
@@ -161,6 +163,10 @@ sub DESTROY {
 sub init {
   my $this = shift;
 
+  # be anal
+  die "recursive call to Hierarchy::init" if $insideInit{$this->{web}};
+  $insideInit{$this->{web}} = 1;
+
   writeDebug("called Hierarchy::init for $this->{web}");
   my $session = $TWiki::Plugins::SESSION;
   $this->{_prefs} = new TWiki::Prefs($session);
@@ -182,7 +188,7 @@ sub init {
     if ($topicType =~ /\bCategory\b/) {
       # this topic is a category in itself
       #writeDebug("found category '$topicName' in web $this->{web}");
-      my $cat = $this->getCategory($topicName);
+      my $cat = $this->{_categories}{$topicName};
       $cat = $this->createCategory($topicName) unless $cat;
 
       my $cats = $this->getCategoriesOfTopic($topicObj);
@@ -213,12 +219,12 @@ sub init {
   #writeDebug("checking for default categories");
   # every hierarchy has one top node
   my $topCat = 
-    $this->getCategory('TopCategory') || 
+    $this->{_categories}{'TopCategory'} || 
     $this->createCategory('TopCategory', title=>'TOP');
 
   # every hierarchy has one BOTTOM node
   my $bottomCat = 
-    $this->getCategory('BottomCategory') ||
+    $this->{_categories}{'BottomCategory'} ||
     $this->createCategory('BottomCategory', title=>'BOTTOM');
 
   # remember these
@@ -226,13 +232,13 @@ sub init {
   $this->{_bottom} = $bottomCat;
 
   # init nested structures
-  foreach my $cat ($this->getCategories()) {
+  foreach my $cat (values %{$this->{_categories}}) {
     $cat->init();
   }
 
   # add categories with no children as a parent to BottomCategory
   my @bottomParents = ();
-  foreach my $cat ($this->getCategories()) {
+  foreach my $cat (values %{$this->{_categories}}) {
     next if $cat->getChildren() || $cat == $bottomCat;
     $cat->addChild($bottomCat);
     push @bottomParents, $cat;
@@ -249,7 +255,7 @@ sub init {
   $this->{gotUpdate} = 1;
 
   if (0) {
-    foreach my $cat ($this->getCategories()) {
+    foreach my $cat (values %{$this->{_categories}}) {
       my $text = "$cat->{name}:";
       foreach my $child ($cat->getChildren()) {
 	$text .= " $child->{name}";
@@ -260,6 +266,7 @@ sub init {
   }
 
   writeDebug("done init $this->{web}");
+  undef $insideInit{$this->{web}};
 }
 
 ################################################################################
@@ -979,18 +986,47 @@ sub getTagFields {
 
 ###############################################################################
 sub getCategories {
-  return values %{$_[0]->{_categories}}
+  my $this = shift;
+
+  unless (defined($this->{_categories})) {
+    $this->init();
+    die "init returned no categories" unless defined $this->{_categories};
+  }
+  return values %{$this->{_categories}}
 }
 
 ###############################################################################
 sub getCategoryNames {
-  return keys %{$_[0]->{_categories}}
+  my $this = shift;
+
+  unless (defined($this->{_categories})) {
+    $this->init();
+    die "init returned no categories" unless defined $this->{_categories};
+  }
+  return keys %{$this->{_categories}}
 }
 
 
 ###############################################################################
 sub getCategory {
-  return $_[0]->{_categories}{$_[1]};
+  my ($this, $name) = @_;
+
+  unless (defined($this->{_categories})) {
+    $this->init();
+    die "init returned no categories" unless defined $this->{_categories};
+  }
+  my $cat = $this->{_categories}{$name};
+
+  unless ($cat) {
+    # try id
+    if ($name =~ /^\d+/) {
+      foreach my $cat (keys %{$this->{_categories}}) {
+        last if $cat->{id} == $name;
+      }
+    }
+  }
+
+  return $cat
 }
 
 ###############################################################################
@@ -1019,19 +1055,34 @@ sub toHTML {
   my $top = $params->{top} || 'TopCategory';
   my $header = $params->{header} || '';
   my $footer = $params->{footer} || '';
+  my $separator = $params->{separator} || '';
 
-  my $result = '';
+  my @result;
   foreach my $name (split(/\s*,\s*/,$top)) {
     #writeDebug("searching for category $name");
     my $cat = $this->getCategory($name);
     next unless $cat;
     #writeDebug("found category ".$cat->{name});
-    $result .= $cat->toHTML($params, \$nrCalls);
+    my $catResult =  $cat->toHTML($params, \$nrCalls);
+    push @result, $catResult if $catResult
+  }
+  my $result = '';
+  if (@result) {
+    $separator = TWiki::Plugins::ClassificationPlugin::Core::expandVariables($separator);
+    $result = join($separator, @result);
   }
 
-  #writeDebug("result=$result");
+  $header = TWiki::Plugins::ClassificationPlugin::Core::expandVariables($header,
+    depth=>0,
+    indent=>'',
+  );
+  $footer = TWiki::Plugins::ClassificationPlugin::Core::expandVariables($footer,
+    depth=>0,
+    indent=>'',
+  );
+
   #writeDebug("done toHTML");
-  return $header.$result.$footer;
+  return TWiki::Func::expandCommonVariables($header.$result.$footer);
 }
 
 ###############################################################################

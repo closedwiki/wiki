@@ -17,7 +17,7 @@ package TWiki::Plugins::ClassificationPlugin::Access;
 use strict;
 use TWiki::Plugins::ClassificationPlugin;
 
-sub DEBUG { 1; }
+use constant  DEBUG => 1; # toggle m
 
 use constant NO_CATACL => 0;
 use constant DENY_ALLOW => 1;

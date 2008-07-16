@@ -90,6 +90,7 @@ data/Applications/ClassificationApp/RenderCategory.txt 0644
 data/Applications/ClassificationApp/RenderClassifiedTopicView.txt 0644
 data/Applications/ClassificationApp/RenderEditCategoryBrowser.txt 0644
 data/Applications/ClassificationApp/RenderEditTagCloud.txt 0644
+data/Applications/ClassificationApp/RenderHierarchyAsJSON.txt 0644
 data/Applications/ClassificationApp/RenderIconSelector.txt 0644
 data/Applications/ClassificationApp/RenderTaggedTopicView.txt 0644
 data/Applications/ClassificationApp/RenderWebClassSearch.txt 0644
@@ -317,7 +318,6 @@ pub/Applications/ClassificationApp/IconSet/world.png 0644
 pub/Applications/ClassificationApp/IconSet/wrench_orange.png 0644
 pub/Applications/ClassificationApp/IconSet/wrench.png 0644
 pub/TWiki/ClassificationPlugin/FormDotPm-4_1_2.patch 0644
-pub/TWiki/ClassificationPlugin/aqua-pill-18.gif 0644
 pub/TWiki/ClassificationPlugin/classification.js 0644
 pub/TWiki/ClassificationPlugin/jquery.tagselector.js 0644
 pub/TWiki/ClassificationPlugin/styles.css 0644

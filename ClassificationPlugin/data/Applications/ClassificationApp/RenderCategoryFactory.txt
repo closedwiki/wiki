@@ -31,7 +31,6 @@ in the baseweb will be listed below.
 <input type="hidden" name="action" value="form" />
 <input type="hidden" name="TopicType" value="Category, CategorizedTopic" />
 <input type="hidden" name="topicparent" value="%BASEWEB%.%BASETOPIC%" />
-<input type="hidden" name="redirectto" value="%SCRIPTURL{"view"}%/%BASEWEB%/%BASETOPIC%?refresh=on" />
 <table>
 <tr>
   <th class="twikiFirstCol">Title:</th>

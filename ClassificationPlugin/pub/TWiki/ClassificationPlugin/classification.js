@@ -63,10 +63,11 @@ function clsSetSelection(fieldName, selector, values) {
   if (typeof(values) == 'string') {
     values = values.split(/\s*,\s*/);
   }
-  writeDebug("clsSetSelection("+fieldName+","+selector+","+values+")");
 
   for (var i = 0; i < values.length; i++) {
-    $("#"+selector+" a."+values[i]).addClass("current");
+    if (values[i]) {
+      $("#"+selector+" a."+values[i]).addClass("current");
+    }
   }
   $("input#"+fieldName).val(values.sort().join(", "));
 }

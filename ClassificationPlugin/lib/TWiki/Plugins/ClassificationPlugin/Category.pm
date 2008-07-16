@@ -548,10 +548,10 @@ sub toHTML {
 
   #return '' unless $this->checkAccessPermission();
 
-  my $subResult = '';
   my $header = $params->{header} || '';
   my $footer = $params->{footer} || '';
   my $format = $params->{format};
+  my $separator = $params->{separator} || '';
 
   $format = '<ul><li> <a href="$url"><img src="$icon" />$title</a> ($leafs) $children</li></ul>' 
     unless defined $format;
@@ -562,11 +562,35 @@ sub toHTML {
   my @children = sort {$a->{name} cmp $b->{name}} $this->getChildren();
   my $nrChildren = @children-1;
   my $childIndex = 1;
-  foreach my $child (@children) {
-    next if $child->{name} eq 'BottomCategory';
-    $subResult .= $child->toHTML($params, $nrCalls, $childIndex, $nrChildren, $seen, $depth+1);
-    $childIndex++;
+  my @subResult;
+
+  my $open = $params->{open};
+  my $doChildren = 1;
+  if ($open) {
+    $doChildren = 0;
+    foreach my $opener (split(/\s*,\s*/, $open)) {
+      if ($this->{hierarchy}->subsumes($this, $opener)) {
+        $doChildren = 1;
+        last;
+      }
+    }
   }
+
+  if ($doChildren) {
+    foreach my $child (@children) {
+      next if $child->{name} eq 'BottomCategory';
+      my $childResult = $child->toHTML($params, $nrCalls, $childIndex, $nrChildren, $seen, $depth+1);
+      push @subResult, $childResult if $childResult;
+      $childIndex++;
+    }
+  }
+
+  my $subResult = '';
+  if (@subResult) {
+    $separator = TWiki::Plugins::ClassificationPlugin::Core::expandVariables($separator);
+    $subResult = join($separator, @subResult);
+  }
+
   $seen->{$this} = 0;
 
   my $minDepth = $params->{mindepth};
@@ -575,28 +599,74 @@ sub toHTML {
 
   return $subResult
     if defined $params->{exclude} && $this->{name} =~ /^($params->{exclude})$/;
+
   return $subResult
     if defined $params->{include} && $this->{name} !~ /^($params->{include})$/;
 
   my $nrLeafs = $this->countLeafs();
+
   return $subResult
     if defined $params->{hidenull} && $params->{hidenull} eq 'on' && !$nrLeafs;
+
   return $subResult
     if defined $params->{duplicates} && $params->{duplicates} eq 'off' && $params->{seen}{$this->{name}};
 
   $params->{seen}{$this->{name}} = 1;
 
   my $nrTopics = scalar(keys %{$this->{_topics}});
-  my $nrSubcats = scalar(keys %{$this->{children}})-1;
+  my $nrSubcats = scalar(grep !/^BottomCategory$/, keys %{$this->{children}});
   my $isCyclic = 0;
   $isCyclic = $this->isCyclic() if $format =~ /\$cyclic/;
-
-  $subResult = $header.$subResult.$footer if $subResult;
 
   my $indent = $params->{indent} || '   ';
   $indent = $indent x $depth;
 
   my $iconUrl = $this->getIconUrl();
+
+
+  if ($subResult) {
+    $header = TWiki::Plugins::ClassificationPlugin::Core::expandVariables($header,
+      'web'=>$this->{hierarchy}->{web}, 
+      'origweb'=>$this->{origWeb} || '', 
+      'topic'=>$this->{name},
+      'name'=>$this->{name},
+      'summary'=>$this->{summary},
+      'title'=>$this->{title},
+      'children'=>$subResult,
+      'siblings'=>$nrSiblings,
+      'count'=>$nrTopics,
+      'index'=>$index,
+      'subcats'=>$nrSubcats,
+      'call'=>$$nrCalls++,
+      'leafs'=>$nrLeafs,
+      'cyclic'=>$isCyclic,
+      'id'=>$this->{id},
+      'depth'=>$depth,
+      'indent'=>$indent,
+      'icon'=>$iconUrl,
+    );
+    $footer = TWiki::Plugins::ClassificationPlugin::Core::expandVariables($footer,
+      'web'=>$this->{hierarchy}->{web}, 
+      'origweb'=>$this->{origWeb} || '', 
+      'topic'=>$this->{name},
+      'name'=>$this->{name},
+      'summary'=>$this->{summary},
+      'title'=>$this->{title},
+      'children'=>$subResult,
+      'siblings'=>$nrSiblings,
+      'count'=>$nrTopics,
+      'index'=>$index,
+      'subcats'=>$nrSubcats,
+      'call'=>$$nrCalls++,
+      'leafs'=>$nrLeafs,
+      'cyclic'=>$isCyclic,
+      'id'=>$this->{id},
+      'depth'=>$depth,
+      'indent'=>$indent,
+      'icon'=>$iconUrl,
+    );
+    $subResult = $header.$subResult.$footer;
+  }
 
   return TWiki::Plugins::ClassificationPlugin::Core::expandVariables($format, 
     'link'=>($this->{name} =~ /^(TopCategory|BottomCategory)$/)?

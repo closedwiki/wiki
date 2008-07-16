@@ -769,25 +769,26 @@ sub handleTAGINFO {
 # reparent based on the category we are in
 # takes the first category in alphabetic order
 sub beforeSaveHandler {
-  my ( $text, $topic, $web, $meta ) = @_;
+  my ($text, $topic, $web, $meta) = @_;
 
-  #writeDebug("beforeSaveHandler($topic, $web)");
+  writeDebug("beforeSaveHandler($web, $topic)");
   my $doAutoReparent = TWiki::Func::getPreferencesFlag('CLASSIFICATIONPLUGIN_AUTOREPARENT', $web);
   $doAutoReparent = 1 unless defined $doAutoReparent;
 
-  if ($doAutoReparent) {
+  unless ($meta) {
+    my $session = $TWiki::Plugins::SESSION;
+    $meta = new TWiki::Meta($session, $web, $topic, $text);
+  }
 
-    unless ($meta) {
-      my $session = $TWiki::Plugins::SESSION;
-      $meta = new TWiki::Meta($session, $web, $topic );
-      $session->{store}->extractMetaData( $meta, \$text );
-    }
+  # get topic type info
+  my $topicType = $meta->get('FIELD', 'TopicType');
+  return unless $topicType;
+  $topicType = $topicType->{value};
+
+  if ($doAutoReparent) {
 
     # get categories of this topic,
     # must get it from current meta data
-    my $topicType = $meta->get('FIELD', 'TopicType');
-    return unless $topicType;
-    $topicType = $topicType->{value};
     return unless $topicType =~ /ClassifiedTopic|CategorizedTopic|Category/;
 
     my @allCats;
@@ -820,51 +821,42 @@ sub beforeSaveHandler {
     } else {
       #$meta->putKeyed('TOPICPARENT', {name=>''});
     }
+  } else {
+    writeDebug("not autoreparenting");
   }
-}
 
-###############################################################################
-sub afterSaveHandler {
-  my (undef, $targetTopic, $targetWeb) = @_;
-
-  writeDebug("afterSaveHandler($targetTopic, $targetWeb)");
-
-  my $topicTypes = getTopicTypes($targetWeb, $baseTopic);
-  return unless $topicTypes;
-
+  # cache invalidation
   my $mode = 0;
-
-  foreach my $topicType (@$topicTypes) {
-    $mode = 1 if $topicType eq 'TaggedTopic';
-    $mode = 2 if $topicType eq 'CategorizedTopic';
-    $mode = 3 if $topicType eq 'ClassifiedTopic';
-    $mode = 4 if $topicType eq 'Category';
-    last if $mode;
-  }
+  $mode = 1 if $topicType =~ /\bTaggedTopic\b/;
+  $mode = 2 if $topicType =~ /\bCategorizedTopic\b/;
+  $mode = 3 if $topicType =~ /\bClassifiedTopic\b/;
+  $mode = 4 if $topicType =~ /\bCategory\b/;
 
   # try even harder if it missing the CategorizedTopic TopicType but
   # still uses categories
   if ($mode < 2) { 
-    my $hierarchy = getHierarchy($baseWeb); # using baseWeb, e.g. not Trash
-    my $catFields = $hierarchy->getCatFields(@$topicTypes);
+    my $hierarchy = getHierarchy($web); 
+    my $catFields = $hierarchy->getCatFields(split(/\s*,\s*/,$topicType));
     if ($catFields && @$catFields) {
       $mode = ($mode < 1)?2:3;
     }
   }
 
+  writeDebug("mode=$mode");
+
   if ($mode) {
     my $hierarchy;
 
-    $hierarchy = getHierarchy($targetWeb);
+    $hierarchy = getHierarchy($web);
     $hierarchy->purgeCache($mode);
 #    $hierarchy->init();
-
-    if ($targetWeb ne $baseWeb) {
-      $hierarchy = getHierarchy($baseWeb);
-      $hierarchy->purgeCache($mode);
-#      $hierarchy->init();
-    }
   }
+}
+
+###############################################################################
+sub afterSaveHandler {
+  #my ($text, $topic, $web, $meta) = @_;
+
   finish(); # not called by modifyHeaderHandler
 }
 
