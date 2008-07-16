@@ -545,10 +545,10 @@ sub _renderEntryWithTimeTitle {
 }
 # =========================
 sub _renderRotatedTable {
-my ($entries_ref) = @_;
+	my ($entries_ref) = @_;
 
-my ($dd,$mm,$yy)=&_getStartDate();
-my ($tyy, $tmm, $tdd) = Today();
+	my ($dd,$mm,$yy)=&_getStartDate();
+	my ($tyy, $tmm, $tdd) = Today();
 	my $startDateDays = Date_to_Days($yy,$mm,$dd);
 	my $todayDays = Date_to_Days($tyy,$tmm,$tdd);
 	
@@ -587,9 +587,12 @@ my ($tyy, $tmm, $tdd) = Today();
 		my $dow = Day_of_Week($yy1,$mm1,$dd1);
 		my $days = Date_to_Days($yy1,$mm1,$dd1);
 		my ($bgcolor,$fgcolor) = _getDayColors($day);
-
-		$tr.=$cgi->th({colspan=>$colspan, style=>"color:$fgcolor;background-color:$bgcolor;"}, _mystrftime($yy1,$mm1,$dd1));
-		next if (!$options{'showweekend'})&&($dow>5);
+		
+		$tr.=$cgi->th({-colspan=>$colspan, -style=>"color:$fgcolor;background-color:$bgcolor;"}, _mystrftime($yy1,$mm1,$dd1));
+		if ((!$options{'showweekend'})&&($dow>5)) {
+			$htr.=$cgi->th({-colspan=>$colspan,-style=>"background-color:$bgcolor;color:$fgcolor;"}, '&nbsp;');
+			next;
+		}
 		## render hour header
 		for (my $min=$starttime; $min <=$endtime; $min+=$options{'timeinterval'}) {
 			($bgcolor,$fgcolor) = _getTimeColors($min, $days==$todayDays);
@@ -618,7 +621,21 @@ my ($tyy, $tmm, $tdd) = Today();
 	my %ignoreconflictitem;
 	for (my $day = 0; $day < $options{'days'}; $day++) {
 		my ($yy1,$mm1,$dd1)=Add_Delta_Days($yy,$mm,$dd,$day);
+		my $dow = Day_of_Week($yy1,$mm1,$dd1);
 		my $dowentries_ref = $$entries_ref{$day+1};
+		my ($bgcolor,$fgcolor) = _getDayColors($day);
+
+		if (($dow>5)&&(!$options{'showweekend'})) {
+			foreach my $entry (keys %entryKeys) {
+				$entryRows{$entry}.=$cgi->td({-colspan=>$colspan, -style=>"background-color:$bgcolor;color:$fgcolor"}, '&nbsp;');
+				for (my $i=0; $i<=$#{$conflictitems{$entry}}; $i++) {
+					$conflictitems{$entry}[$i].=
+						$cgi->td({-colspan=>$colspan, -style=>"background-color:$bgcolor;color:$fgcolor"},'&nbsp;');
+				}
+			}
+			
+			next;
+		}
 		for (my $min=$starttime; $min<=$endtime;$min+=$options{'timeinterval'}) {
 			my $mentries = &_getMatchingEntries($dowentries_ref, $min, $options{'timeinterval'}, $starttime);
 			my @visitedEntries;
@@ -640,13 +657,22 @@ my ($tyy, $tmm, $tdd) = Today();
 					if ($ci>$#{$conflictitems{$descr}}) {
 						## fill up day(s) before current day:
 						for (my $d=0; $d<$day; $d++) {
-							for (my $m=$starttime; $m<=$endtime; $m+=$options{'timeinterval'}) {
-								$crow.=$cgi->td(_renderEntryWithTimeTitle($m,'&nbsp;'));
+							my ($bg,$fg) = _getDayColors($d);
+							my ($yy2,$mm2,$dd2)=Add_Delta_Days($yy,$mm,$dd,$d);
+							my $fdow = Day_of_Week($yy2,$mm2,$dd2);
+							if (!$options{'showweekend'}&&($fdow>5)) {
+								$crow.=$cgi->td({-colspan=>$colspan,-style=>"background-color:$bg;color:$fg;"},'&nbsp;');
+								
+							} else {
+								for (my $m=$starttime; $m<=$endtime; $m+=$options{'timeinterval'}) {
+									$crow.=$cgi->td(_renderEntryWithTimeTitle($m,'&nbsp;'));
+								}
 							}
 						}
 						## fill up time before current time for the current day:
 						for (my $m=$starttime; $m<$min; $m+=$options{'timeinterval'}) {
-							$crow.=$cgi->td(_renderEntryWithTimeTitle($m,'&nbsp;'));
+							my ($bg,$fg)= _getTimeColors($m);
+							$crow.=$cgi->td({"background-color:$bg;color:$fg;"},_renderEntryWithTimeTitle($m,'&nbsp;'));
 						}
 					}
 
@@ -682,11 +708,11 @@ my ($tyy, $tmm, $tdd) = Today();
 			foreach my $entry (keys %entryKeys) {
 				## fill up entries:
 				$entryRows{$entry} .= $cgi->td(_renderEntryWithTimeTitle($min,'&nbsp;')) 
-					unless (defined $ignore{$entry}{$day}{$min}) || grep /\@$entry\E/, @visitedEntries;
+					unless (defined $ignore{$entry}{$day}{$min}) || grep /\@$entry\E/, @visitedEntries || ($options{'showweekend'}&&$dow>5);
 				## fill up conflict items:
 				for (my $i=0; $i<=$#{$conflictitems{$entry}}; $i++) {
 					$conflictitems{$entry}[$i].=$cgi->td(_renderEntryWithTimeTitle($min,'&nbsp;'))
-						unless $ignoreconflictitem{$entry}[$i]{$day}{$min};
+						unless $ignoreconflictitem{$entry}[$i]{$day}{$min} || ($options{'showweekend'}&&$dow>5);
 				}
 			}
 		}
