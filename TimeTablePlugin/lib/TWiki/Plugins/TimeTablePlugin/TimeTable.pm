@@ -536,11 +536,19 @@ sub _renderEntry {
 	return $text;
 }
 # =========================
+sub _renderEntryWithTimeTitle {
+	my($min,$entry)=@_;
+	return $cgi->div({
+		-title=>&_renderTime($min,'12am').' / '.&_renderTime($min,24)
+			.((defined $options{'timezone'})&&($options{'timezone'} ne '0')?' '.$options{'timezone'}:'')
+		}, $entry); 
+}
+# =========================
 sub _renderRotatedTable {
-	my ($entries_ref) = @_;
+my ($entries_ref) = @_;
 
-	my ($dd,$mm,$yy)=&_getStartDate();
-	my ($tyy, $tmm, $tdd) = Today();
+my ($dd,$mm,$yy)=&_getStartDate();
+my ($tyy, $tmm, $tdd) = Today();
 	my $startDateDays = Date_to_Days($yy,$mm,$dd);
 	my $todayDays = Date_to_Days($tyy,$tmm,$tdd);
 	
@@ -585,7 +593,9 @@ sub _renderRotatedTable {
 		## render hour header
 		for (my $min=$starttime; $min <=$endtime; $min+=$options{'timeinterval'}) {
 			($bgcolor,$fgcolor) = _getTimeColors($min, $days==$todayDays);
-			$htr.=$cgi->th({style=>"background-color:$bgcolor;color:$fgcolor;"}, _renderTime($min));
+			$htr.=$cgi->th({style=>"background-color:$bgcolor;color:$fgcolor;"}, 
+					_renderEntryWithTimeTitle($min, _renderTime($min)) 
+					);
 
 			## collect entries and initialize rows:
 			my $mentries = &_getMatchingEntries($dowentries_ref, $min, $options{'timeinterval'}, $starttime);
@@ -671,11 +681,11 @@ sub _renderRotatedTable {
 			}
 			foreach my $entry (keys %entryKeys) {
 				## fill up entries:
-				$entryRows{$entry} .= $cgi->td({-title=>_renderTime($min)}, '&nbsp;') 
+				$entryRows{$entry} .= $cgi->td({-title=>_renderTime($min)}, _renderEntryWithTimeTitle($min,'&nbsp;')) 
 					unless (defined $ignore{$entry}{$day}{$min}) || grep /\@$entry\E/, @visitedEntries;
 				## fill up conflict items:
 				for (my $i=0; $i<=$#{$conflictitems{$entry}}; $i++) {
-					$conflictitems{$entry}[$i].=$cgi->td({-title=>_renderTime($min)}, '&nbsp;')
+					$conflictitems{$entry}[$i].=$cgi->td({-title=>_renderTime($min)}, _renderEntryWithTimeTitle($min,'&nbsp;'))
 						unless $ignoreconflictitem{$entry}[$i]{$day}{$min};
 				}
 			}
