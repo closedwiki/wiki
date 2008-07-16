@@ -1556,7 +1556,6 @@ Obtain and render revision info for a topic.
 sub renderRevisionInfo {
     my( $this, $web, $topic, $meta, $rrev, $format ) = @_;
     my $store = $this->{session}->{store};
-    my $users = $this->{session}->{users};
 
     if( $rrev ) {
         $rrev = $store->cleanUpRevID( $rrev );
@@ -1572,9 +1571,10 @@ sub renderRevisionInfo {
     my $wn = '';
     my $un = '';
     if( $user ) {
-        $wun = $users->webDotWikiName($user);
-        $wn = $users->getWikiName( $user );
-        $un = $users->getLoginName($user);
+        my $users = $this->{session}->{users};
+        $wun = $users->webDotWikiName($user) || 'Unknown User';
+        $wn = $users->getWikiName( $user ) || 'UnknownUser';
+        $un = $users->getLoginName($user) || 'unknown';
     }
 
     my $value = $format || 'r$rev - $date - $time - $wikiusername';
