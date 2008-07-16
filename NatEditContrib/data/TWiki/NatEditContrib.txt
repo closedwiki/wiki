@@ -81,9 +81,9 @@ Sponsored by [[http://www.trivadis.com][Trivadis AG]] & [[http://twiki.net][TWIK
 |  Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2007-2008 Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v2.11 |
+|  Version: | v2.12 |
 |  Change History: | |
-|  16 Jul 2008 | fixed calculation of tab height |
+|  16 Jul 2008 | fixed calculation of tab height; removed =topicinfo= makro as it is in conflict with <nop>PatternSkin |
 |  03 Jul 2008 | improved skin to ease integration into <nop>TWikiApplication |
 |  29 Apr 2008 | added workaround for regression error in IE6+7's textarea; \
                  be backwards compatible to legacy pattern skins |

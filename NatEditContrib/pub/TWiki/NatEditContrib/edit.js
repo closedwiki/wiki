@@ -4,12 +4,17 @@ function handleKeyDown () { }
 var bottomBarHeight = -1;
 function fixHeightOfPane() {
 
-  var paneOffset = $(".jqTab:visible .jqTabContents").offset({
+  var selector = (newTab)?"#"+newTab:".jqTab:visible";
+  selector += " .jqTabContents";
+  //alert("newTab="+newTab+" selector="+selector);
+  var $container = $(selector);
+  var paneOffset = $container.offset({
     scroll:false,
     border:true,
     padding:true,
     margin:true
   });
+
 
   if (typeof(paneOffset) != 'undefined') {
 
@@ -17,6 +22,7 @@ function fixHeightOfPane() {
     if (bottomBarHeight < 0) {
       bottomBarHeight = $(".natEditBottomBar").height();
     }
+    //alert("container="+$container.parent().attr('id')+" paneTop="+paneTop+" bottomBarHeight="+bottomBarHeight);
 
     var windowHeight = $(window).height();
     if (!windowHeight) {

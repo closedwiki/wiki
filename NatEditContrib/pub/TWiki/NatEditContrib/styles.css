@@ -11,6 +11,7 @@
 .natEditTextArea {
   _width:99% !important; /* bloddy IE */
   font-family:"Bitstream Vera Sans Mono", "Andale Mono", Courier, monospace;
+  font-size:12px;
 }
 ul.natEditTextTools,
 ul.natEditHeadlineTools,
