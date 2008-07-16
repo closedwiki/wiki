@@ -25,7 +25,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '3.71';
+$RELEASE = '3.72';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Displays image gallery with auto-generated thumbnails from attachments';
 

@@ -174,8 +174,9 @@ Note, that the $comment variable will only display =&lt;comment&gt;= , that is w
 |  Plugin Author: | TWiki:Main/MichaelDaum, TWiki:Main/WillNorris |
 |  Copyright &copy;: | 2002-2003, Will Norris; 2005-2008, Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v3.71 |
+|  Plugin Version: | v3.72 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  16 Jul 2008 | don't crash on images that start with a digits pattern |
 |  07 Jul 2008 | fixing use of string as hash |
 |  03 Jul 2008 | applying patch by Aurélio A. Heckert (see Bugs:Item5753); \
                  using =Resize= instead of =Scale= for higher quality thumbnails; \
@@ -216,6 +217,6 @@ Note, that the $comment variable will only display =&lt;comment&gt;= , that is w
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 07 Jul 2008
+-- TWiki:Main.MichaelDaum - 16 Jul 2008
 
 %META:FILEATTACHMENT{name="wikiringlogo40x40.png" attachment="wikiringlogo40x40.png" attr="h" comment="" date="1189787359" path="wikiringlogo40x40.png" size="2571" stream="wikiringlogo40x40.png" tmpFilename="" user="TWikiContributor" version="1"}%

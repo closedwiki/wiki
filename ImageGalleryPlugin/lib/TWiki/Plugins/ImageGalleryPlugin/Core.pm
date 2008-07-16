@@ -550,7 +550,7 @@ sub getImages {
         $this->{pubDir} . "/$image->{IGP_web}/$image->{IGP_topic}/$image->{name}");
       $image->{IGP_url} = 
         $this->{pubUrlPath} . "/$image->{IGP_web}/$image->{IGP_topic}/$image->{name}";
-      if ($image->{IGP_comment} =~ /^([0-9]+)\s*-\s*(.*)$/) {
+      if ($image->{IGP_comment} =~ /^([0-9]+)\s+-\s+(.*)$/) {
         $image->{IGP_imgnr} = $1;
         $image->{IGP_comment} = $2;
       }
