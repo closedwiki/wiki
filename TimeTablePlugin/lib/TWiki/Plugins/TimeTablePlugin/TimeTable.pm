@@ -641,12 +641,12 @@ my ($tyy, $tmm, $tdd) = Today();
 						## fill up day(s) before current day:
 						for (my $d=0; $d<$day; $d++) {
 							for (my $m=$starttime; $m<=$endtime; $m+=$options{'timeinterval'}) {
-								$crow.=$cgi->td({-title=>_renderTime($min)}, '&nbsp;');
+								$crow.=$cgi->td(_renderEntryWithTimeTitle($m,'&nbsp;'));
 							}
 						}
 						## fill up time before current time for the current day:
 						for (my $m=$starttime; $m<$min; $m+=$options{'timeinterval'}) {
-							$crow.=$cgi->td({-title=>_renderTime($min)}, '&nbsp;');
+							$crow.=$cgi->td(_renderEntryWithTimeTitle($m,'&nbsp;'));
 						}
 					}
 
@@ -681,11 +681,11 @@ my ($tyy, $tmm, $tdd) = Today();
 			}
 			foreach my $entry (keys %entryKeys) {
 				## fill up entries:
-				$entryRows{$entry} .= $cgi->td({-title=>_renderTime($min)}, _renderEntryWithTimeTitle($min,'&nbsp;')) 
+				$entryRows{$entry} .= $cgi->td(_renderEntryWithTimeTitle($min,'&nbsp;')) 
 					unless (defined $ignore{$entry}{$day}{$min}) || grep /\@$entry\E/, @visitedEntries;
 				## fill up conflict items:
 				for (my $i=0; $i<=$#{$conflictitems{$entry}}; $i++) {
-					$conflictitems{$entry}[$i].=$cgi->td({-title=>_renderTime($min)}, _renderEntryWithTimeTitle($min,'&nbsp;'))
+					$conflictitems{$entry}[$i].=$cgi->td(_renderEntryWithTimeTitle($min,'&nbsp;'))
 						unless $ignoreconflictitem{$entry}[$i]{$day}{$min};
 				}
 			}
