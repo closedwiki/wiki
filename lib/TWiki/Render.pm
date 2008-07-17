@@ -1249,7 +1249,6 @@ sub TML2PlainText {
     $text =~ s/\[\[([^\]]*\]\[)(.*?)\]\]/$2/g;
     # remove "Web." prefix from "Web.TopicName" link
     $text =~ s/$STARTWW(($TWiki::regex{webNameRegex})\.($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex}))/$3/g;
-    $text =~ s/<[^>]*>//g;              # remove all HTML tags
     $text =~ s/[\[\]\*\|=_\&\<\>]/ /g;  # remove Wiki formatting chars
     $text =~ s/^\-\-\-+\+*\s*\!*/ /gm;  # remove heading formatting and hbar
     $text =~ s/[\+\-]+/ /g;             # remove special chars
