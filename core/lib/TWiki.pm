@@ -3805,7 +3805,7 @@ sub META {
     return '' unless $meta;
     my $result = '';
 
-    my $option = $params->{_DEFAULT};
+    my $option = $params->{_DEFAULT} || '';
 
     if( $option eq 'form' ) {
         # META:FORM and META:FIELD
@@ -3886,9 +3886,8 @@ sub USERINFO {
         $user = $params->{_DEFAULT};
         return '' if !$user;
         # map wikiname to a login name
-        my $users = $this->{users}->findUserByWikiName($user);
-        return '' unless $users && scalar(@$users);
-        $user = $users->[0];
+        $user = $this->{users}->getCanonicalUserID($user);
+        return '' unless $user;
         return '' if( $TWiki::cfg{AntiSpam}{HideUserDetails} &&
                         !$this->{users}->isAdmin( $this->{user} ) &&
                           $user ne $this->{user} );
