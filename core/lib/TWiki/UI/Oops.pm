@@ -113,7 +113,7 @@ sub oops {
         $tmplData = CGI::start_html()
           . CGI::h1('TWiki Installation Error')
             . 'Template "'.$tmplName.'" not found.'.CGI::p()
-              . 'Check the configuration setting for {TemplateDir}.'
+              . 'Check the configuration settings for {TemplateDir} and {TemplatePath}.'
                 .CGI::end_html();
     } else {
         if( defined $def ) {
