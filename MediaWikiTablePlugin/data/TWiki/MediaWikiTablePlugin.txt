@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1158936993" format="1.1" reprev="1.2" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1216281716" format="1.1" version="$Rev$"}%
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -620,9 +620,9 @@ this example.  Note that wrap-around of text is forced.
 !width="225"|Effect
 !width="225"|Games Found In
 |-
-|Pok� Ball || Regular Pok� Ball || All Versions
+|Pok&eacute; Ball || Regular Pok&eacute; Ball || All Versions
 |-
-|Great Ball || Better than a Pok� Ball || All Versions
+|Great Ball || Better than a Pok&eacute; Ball || All Versions
 |}
 </verbatim></div>
 
@@ -632,9 +632,9 @@ this example.  Note that wrap-around of text is forced.
 !width="225"|Effect
 !width="225"|Games Found In
 |-
-|Pok� Ball || Regular Pok� Ball || All Versions
+|Pok&eacute; Ball || Regular Pok&eacute; Ball || All Versions
 |-
-|Great Ball || Better than a Pok� Ball || All Versions
+|Great Ball || Better than a Pok&eacute; Ball || All Versions
 |}
 </div>
 
@@ -1245,10 +1245,11 @@ Wiki markup like <code>_text_</code> instead of "font-style:italic".
    * Set SHORTDESCRIPTION = Format tables the <nop>MediaWiki way
 -->
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2006-2007, Michael Daum http://wikiring.de |
+|  Copyright &copy;: | 2006-2008, Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.00 |
+|  Plugin Version: | v1.01 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  17 Jul 2008: | fixed some Wikipedia:Mojibake in documentation | 
 |  13 Nov 2007: | minor performance tweaks |
 |  13 Oct 2006: | table markup may start have whitespaces at the beginning of a line |
 |  22 Sep 2006: | Initial version |
@@ -1260,6 +1261,6 @@ Wiki markup like <code>_text_</code> instead of "font-style:italic".
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main/MichaelDaum - 13 Nov 2007
+-- TWiki:Main/MichaelDaum - 17 Jul 2008
 
 %META:FILEATTACHMENT{name="wikiringlogo40x40.png" attachment="wikiringlogo40x40.png" attr="h" comment="" date="1189787359" path="wikiringlogo40x40.png" size="2571" stream="wikiringlogo40x40.png" tmpFilename="" user="TWikiContributor" version="1"}%
