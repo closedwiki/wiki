@@ -188,7 +188,6 @@ sub checkPerlModules {
 
     my $e = '';
     foreach my $mod (@$mods) {
-        next if $INC{$mod->{name} . '.pm'}; # skip if already included
         $mod->{minimumVersion} ||= 0;
         $mod->{disposition} ||= '';
         my $n = '';
@@ -222,6 +221,7 @@ sub checkPerlModules {
         } else {
             $mod_version ||= 'Unknown version';
             $n = $this->NOTE($mod_version.' installed');
+            $n .= ' Desc: ' . $mod->{usage} if $mod->{usage};
         }
         $e .= $this->setting($mod->{name}, $n);
     }
