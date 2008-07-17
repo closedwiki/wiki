@@ -239,7 +239,7 @@ sub _expandAttrs {
         return TWiki::Time::formatTime( $info->{date} || 0 );
     }
     elsif ( $attr eq 'USER' ) {
-        my $infousername = $info->{user};
+        my $infousername = $info->{user} || 'UnknownUser';
         $infousername =~ s/^$TWiki::cfg{UsersWebName}\.//;
         return $users->webDotWikiName($infousername);
     }
