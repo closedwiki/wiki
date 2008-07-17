@@ -163,10 +163,10 @@ sub login {
     my $error = '';
 
     if( $loginName ) {
-        my $cUID = $users->getCanonicalUserID(undef, $loginName, undef);
+        my $cUID = $users->getCanonicalUserID($loginName);
         my $validation;
         if (defined($cUID)) {
-            $users->checkPassword( $cUID, $loginPass );
+            $validation = $users->checkPassword( $cUID, $loginPass );
             $error = $users->passwordError();
         }
 
