@@ -658,8 +658,8 @@ user)
 =cut
 
 sub getCanonicalUserID {
-	my $user = shift;
-	return $TWiki::Plugins::SESSION->{user} unless ($user);
+    my $user = shift;
+    return $TWiki::Plugins::SESSION->{user} unless ($user);
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     my $cUID;
     if ($user) {
@@ -692,7 +692,7 @@ Return: =$wikiName= Wiki Name, e.g. ='JohnDoe'=
 =cut
 
 sub getWikiName {
-	my $user = shift;
+    my $user = shift;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     my $cUID = getCanonicalUserID( $user );
     unless( defined $cUID ) {
@@ -718,10 +718,8 @@ Return: =$wikiName= Wiki Name, e.g. ="Main.JohnDoe"=
 =cut
 
 sub getWikiUserName {
-	my $user = shift || $TWiki::Plugins::SESSION->{user};
-
+    my $user = shift;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    my $users = $TWiki::Plugins::SESSION->{users};
     my $cUID = getCanonicalUserID( $user );
     unless( defined $cUID ) {
         my ($w, $u) = normalizeWebTopicName($TWiki::cfg{UsersWebName}, $user);
@@ -824,7 +822,7 @@ sub emailToWikiNames {
 
 =pod
 
----+++ wikiNameToEmails( $wikiname ) -> @emails
+---+++ wikinameToEmails( $wikiname ) -> @emails
    * =$wikiname= - wikiname of user to look up
 Returns the registered email addresses of the named user. If $wikiname is
 undef, returns the registered email addresses for the logged-in user.
@@ -1092,12 +1090,10 @@ sub checkAccessPermission {
     return 1 unless ( $user );
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     $text = undef unless $text;
-    my $login = $TWiki::Plugins::SESSION->{users}->findUserByWikiName(
-        $user );
-    $login = [ $TWiki::cfg{DefaultUserLogin} ] unless(
-        $login && scalar(@$login));
+    my $cUID = getCanonicalUserID($user) ||
+        getCanonicalUserID($TWiki::cfg{DefaultUserLogin});
     return $TWiki::Plugins::SESSION->security->checkAccessPermission(
-        $type, $login->[0], $text, $meta, $topic, $web );
+        $type, $cUID, $text, $meta, $topic, $web );
 }
 
 =pod
@@ -1625,7 +1621,9 @@ Return: =( $meta, $text )= Meta data object and topic text
 fully documented in the source code documentation shipped with the
 release, or can be inspected in the =lib/TWiki/Meta.pm= file.
 
-This method *ignores* topic access permissions. You should be careful to use =checkAccessPermissions= to ensure the current user has read access to the topic.
+This method *ignores* topic access permissions. You should be careful to use
+=checkAccessPermissions= to ensure the current user has read access to the
+topic.
 
 *Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
 
@@ -2016,12 +2014,12 @@ example:
 TWiki::Func::addToHEAD('PATTERN_STYLE','<link id="twikiLayoutCss" rel="stylesheet" type="text/css" href="%PUBURL%/TWiki/PatternSkin/layout.css" media="all" />')
 </verbatim>
 
-=cut=	
+=cut=
 
 sub addToHEAD {
-	my( $tag, $header ) = @_;
+    my( $tag, $header ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-	$TWiki::Plugins::SESSION->addToHEAD( $tag, $header );
+    $TWiki::Plugins::SESSION->addToHEAD( $tag, $header );
 }
 
 =pod
