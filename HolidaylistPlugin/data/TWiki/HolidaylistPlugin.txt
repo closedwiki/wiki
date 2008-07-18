@@ -173,12 +173,16 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 ---+++ Statistics Column Format
 *Usage:* =statcolformat=" &lt;column1 format &gt; | &lt;column2 format &gt; | ..."=
 <br/>
+%X% =statcolheader= should have the same number of columns ( counts of ='|'= shoud be equal)
+<br/>
 *Example:* <br/> display three statistics columns: =%<nop>HOLIDAYLIST{showstatcol="on" statcolformat="%{ll:sick}(%{l:sick}) | %{ll:holidays}(%{l:holidays}) | %{ww}(%{w}) of %{dd}(%{d}) " statcolheader="sick | holidays | work "}%=
 
 
 | *Variable* | *Description* |
 | %{d} | number of days |
 | %{dd} | number of days without weekends | 
+| %{h} | number of days in holidays |
+| %{hh} | number of days in holidays without weekends and public holidays |
 | %{i} | all icons and icon counts |
 | %{i:<i>ICON</i>} | count of <i>ICON</i> icons |
 | %{ii} | all icons and icon counts without weekends and public holidays |

@@ -1019,6 +1019,7 @@ sub renderHolidaylist() {
 			if ((defined $$ptableref[$i] && $$ptableref[$i]>0) 
 					|| ( $options{enablepubholidays} && defined $$aptableref[$i] && $$aptableref[$i]>0)) {
 				$sum_off++;
+				$statistics{holidays}++;
 				$statistics{icons}{$$itableref[$i]}++ if defined $$itableref[$i]; 
 				$statistics{locations}{$$ltableref[$i]{location}}++ if defined $$ltableref[$i]{location};
 			} else {
@@ -1045,6 +1046,7 @@ sub renderHolidaylist() {
 
 				if ($dow < 6 && defined $$ptableref[$i] && $$ptableref[$i]>0 && ( (!defined $$aptableref[$i]) || ($$aptableref[$i]<=0))) {
 					$sum_off_withoutweekend++;
+					$statistics{'holidays-w'}++;
 					$statistics{'icons-w'}{(defined $$itableref[$i]?$$itableref[$i]:$icon)}++;
 					$statistics{'locations-w'}{$$ltableref[$i]{location}}++ if defined $$ltableref[$i]{location};
 				} else {
@@ -1153,6 +1155,11 @@ sub renderStatistics {
 		$statcoltitle=~s/\%{ii:([^}]+)}/(defined $statistics{'icons-w'}{$1}?$statistics{'icons-w'}{$1}:0)/egi;
 		$statcoltitle=~s/\%{l:([^}]+)}/(defined $statistics{locations}{$1}?$statistics{locations}{$1}:0)/egi;
 		$statcoltitle=~s/\%{ll:([^}]+)}/(defined $statistics{'locations-w'}{$1}?$statistics{'locations-w'}{$1}:0)/egi;
+
+		$statcol=~s/\%{h:?}/$statistics{holidays}/egi;
+		$statcol=~s/\%{hh:?}/$statistics{'holidays-w'}/egi;
+		$statcoltitle=~s/\%{h:?}/$statistics{holidays}/egi;
+		$statcoltitle=~s/\%{hh:?}/$statistics{'holidays-w'}/egi;
 
 		$statcol=~s/\%{w:?}/$statistics{work}/egi;
 		$statcol=~s/\%{ww:?}/$statistics{'work-w'}/egi;
