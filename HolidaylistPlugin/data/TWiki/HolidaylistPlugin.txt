@@ -67,7 +67,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 |^| ==&nbsp;* MMM yyyy - name - location== | ==&nbsp;* Jun 2005 - Sam - in Sidney== | 
 |^| ==&nbsp;* MMM yyyy - name - location - icon== | ==&nbsp;* Nov 2005 - Lisa - is ill for a complete month - :skull:== |
 |^| ==&nbsp;* MMM yyyy - MMM yyyy - name== | ==&nbsp;* Jun 2005 - Jul 2005 - Lily== |
-|^| ==&nbsp;* MMM yyyy - MMM yyyy - name -location== | ==&nbsp;* Feb 2005 - Apr 2005 - Lisa - is not at work==|
+|^| ==&nbsp;* MMM yyyy - MMM yyyy - name - location== | ==&nbsp;* Feb 2005 - Apr 2005 - Lisa - is not at work==|
 |^| ==&nbsp;* MMM yyyy - MMM yyyy - name - location - icon==| ==&nbsp;* Nov 2005 - Dec 2005 - Lola - is 2 month not at work - :yes:== |
 | Exception | insert the following before the name field and after a date (range): \
   ==&nbsp;X { dd MMM yyyy, dd MMM yyy - dd MMM yyyy }== | ==&nbsp;* Dec 2005 X { 5 Dec 2005 - 7 Dec 2005, 12 Dec 2005 } - Sarah - will be away for the complete december except between 5 Dec and 7 Dec and on 12 Dec 2005== |
@@ -111,8 +111,8 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | removeatwork | set to "1" to remove persons without calendar entries from table | removeatwork="0" |
 | showmonthheader | set to "1" to show a additional month header | showmonthheader="0" |
 | showpubholidays | show public holidays as separate lines (rows) in table (related: enablepubholidays, pubholidayicon) | showpubholidays="0" |
-| showsumcol | enables/disables summary column | showsumcol="off" | 
-| showstatcol | enable/disables statistics column | showsumcol="off" | 
+| showstatcol | enable/disables statistics column(s) | showsumcol="off" | 
+| showstatrow | enable/disables statistics row(s) | showsumrow="off" | 
 | showweekends | show weekends if set to 1 | showweekends="0" |
 | startdate | a start date (e.g. '1 Oct 2005') or a day offset (e.g. '10', '+30' or '-30') | startdate="+0" |
 | topic | a comma separated list of source topics | topic="%<nop>TOPIC%" |
@@ -148,12 +148,12 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | navprevhalftitle | title text (tooltip text) for the navigation button to the previous =navdays/2= days (%n will be replaced with the half number of days to show) | navprevtitle="Previous %n day(s)" |
 | navprevtitle | title text (tooltip text) for the navigation button to the previous =navdays= days (%n will be replaced with the number of days to show) | navprevtitle="Previous %n day(s)" |
 | nwidth | cell width of the first column | nwidth="120px" |
-| statcolformat | statistics column format (related: showstatcol, statcolheader, statcoltitle); see [[#StatisticsColumnFormat][Statistics Column Format/Title section]] | statcolformat="%{ll} &#124; %{ii}" |
-| statcolheader | statistics header (related: showstatcol, statcolformat, statcoltitle) | statcolheader="locations &#124; icons" |
-| statcoltitle | statistics tooltip (related: showstatcol, statcolformat, statcolheader); see  [[#StatisticsColumnFormat][Statistics Column Format/Title section]] | statcoltitle="statistics" |
-| sumcolformat | summary column format; %h will be substituded by the number of <i>h</i>olidays; %w will be substituted by the number of days at <i>w</i>ork; %hh will be substituted by the number of <i>h</i>olidays without weekends and public holidays; %ww will be substituted by the number of working days without weekends | sumcolformat="%h" |
-| sumcolheader | summary column header (related attributes: =showsumcol, sumcolformat, sumcoltitle=) | sumcolheader="#off" |
-| sumcoltitle  | tooltip text for the summary column header; variable substition is also available - see =sumcolformat= (related attributes: =showsumcol, sumcolformat, sumcolheader=) | sumcoltitle="number of days not at work" |
+| statcolformat | statistics column format (related: showstatcol, statcolheader, statcoltitle); see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statcolformat="%{hh}" |
+| statcolheader | statistics header (related: showstatcol, statcolformat, statcoltitle); use '&#124;' to separate multiple column headers | statcolheader="#" |
+| statcoltitle | statistics tooltip (related: showstatcol, statcolformat, statcolheader); see  [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statcoltitle="%{ll}" |
+| statrowformat | statistics row format (related: showstatrow, statrowheader, statrowtitle); see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statrowformat="%{hh}" |
+| statrowheader | statistics header (related: showstatrow, statrowformat, statrowtitle); use '&#124;' to separate multiple row headers | statrowheader="#" |
+| statrowtitle | statistics tooltip (related: showstatrow, statrowformat, statrowheader); see  [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statrowtitle="%{ll}" |
 | tablebgcolor | table background color | tablebgcolor="white" |
 | tablecaption | table caption | tablecaption="&amp;nbsp;" |
 | tablecaptionalign | table caption alignment (top, bottom, left, right) | tablecaptionalign="top" |
@@ -170,16 +170,18 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 	* Every attribute of %<nop>HOLIDAYLIST% can also be used as plugin setting. You only have to use capital letters.
 
 #StatisticsColumnFormat
----+++ Statistics Column Format/Title
+---+++ Statistics Column/Row Format/Title
 *Usage:* 
 <br/> =statcolformat=" &lt;column1 format&gt; | &lt;column2 format&gt; | ..."=
 <br/> =statcoltitle=" &lt;column1 format&gt; | &lt;column2 format&gt; | ..."=
-   * you can define multiple columns in =statcolformat= and =statcoltitle=, simple use '|' as separator
-   * you can use variables in the  =&lt;column? format&gt;= definitions (see table below), e.g. =statcolformat="%{l}"=
-   * %X% =statcolheader= should have the same number of columns (count of ='|'= should be equal)
+<br/> =statrowformat=" &lt;row1 format&gt; | &lt;row2 format&gt; | ..."=
+<br/> =statrowtitle=" &lt;row1 format&gt; | &lt;row2 format&gt; | ..."=
+   * you can define multiple columns/rows in =statcolformat/statrowformat= and =statcoltitle/statrowtitle=, simple use '|' as separator
+   * you can use variables in the  =&lt;column/row? format&gt;= definitions (see table below), e.g. =statcolformat="%{l}"=
+   * %X% =statcolheader/statrowheader= should have the same number of columns/rows (count of ='|'= should be equal)
 *Example:* <br/> display three statistics columns: =%<nop>HOLIDAYLIST{showstatcol="on" statcolformat="%{ll:sick}(%{l:sick}) | %{ll:holidays}(%{l:holidays}) | %{ww}(%{w}) of %{dd}(%{d}) " statcolheader="sick | holidays | work "}%=
 
-| *Substituted Variables in =statcolformat/statcoltitle= &nbsp;* ||
+| *Substituted Statistics Variables* ||
 | *Variable* | *Description* |
 | %{d} | number of days |
 | %{dd} | number of days without weekends | 
@@ -192,6 +194,10 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | %{l} | all locations and location counts |
 | %{l:<i>LOCATION</i>} | location count of <i>LOCATION</i> |
 | %{ll:<i>LOCATION</i>} | location count of <i>LOCATION</i> without weekends and public holidays |
+| %{p} | day count of public holidays |
+| %{pp} | day count of public holidays without weekends |
+| %{w} | = %{d} - %{h} (day count at work) |
+| %{ww} | = %{dd} - %{hh} (day count at work without weekends and public holidays) |
 
 
 ---++ Example
@@ -263,7 +269,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 |  Plugin Author: | TWiki:Main.PeterJones, TWiki:Main.DanielRohde |
 |  Plugin Version: | v1.024 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  v1.024 (BETA) | TWiki:Main.DanielRohde: added summary column and statistics column(s) feature requested by TWiki:Main.GarySprague |
+|  v1.024 (BETA) | TWiki:Main.DanielRohde: added statistics feature requested by TWiki:Main.GarySprague |
 |  v1.023 (19 Jan 2008) | TWiki:Main.KennethLavrsen: fixed Item5190 - does not like whitespace after the smiley. This makes the plugin work with TWiki 4.2.0 and Wysiwyg |
 |  v1.022 (18 Jun 2007) | TWiki:Main.DanielRohde: added documentation requested by TWiki:Main.PeterThoeny; fixed type (on=off bug) |
 |  v1.021 (20 Apr 2007) | TWiki:Main.DanielRohde: fixed minor HTML bug reported by TWiki:Main.JfMacaud; added month header feature (showmonthheader attribute) requested by Rikard Johansson; fixed some minor bugs (documentation, preferences handling); |
