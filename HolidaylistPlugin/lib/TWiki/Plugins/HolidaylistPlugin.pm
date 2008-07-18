@@ -1113,8 +1113,10 @@ sub renderStatistics {
 	my %statistics = %{$statisticsref};
 	my $text="";
 
+	my @statcoltitles = split(/\|/, $options{statcoltitle});
 	foreach my $statcol (split /\|/, $options{statcolformat}) {
-		my $statcoltitle = $options{statcoltitle};
+		my $statcoltitle = shift(@statcoltitles);
+		$statcoltitle=$options{statcoltitle} unless defined $statcoltitle;
 		if (($statcol=~/\%{ll:?}/i)||($statcoltitle=~/\%{ll:?}/i)) {
 			my $t="";
 			foreach my $location (keys %{$statistics{'locations-w'}}) {
