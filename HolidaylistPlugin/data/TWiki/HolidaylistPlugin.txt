@@ -181,8 +181,8 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | %{dd} | number of days without weekends | 
 | %{i} | all icons and icon counts |
 | %{i:<i>ICON</i>} | count of <i>ICON</i> icons |
-| %{ii} | all icons and icon counts without weekands and public holidays |
-| %{ii:<i>ICON</i>} | count of <i>ICON</i> icons without weekands and public holidays |
+| %{ii} | all icons and icon counts without weekends and public holidays |
+| %{ii:<i>ICON</i>} | count of <i>ICON</i> icons without weekends and public holidays |
 | %{l} | all locations and location counts |
 | %{l:<i>LOCATION</i>} | location count of <i>LOCATION</i> |
 | %{ll:<i>LOCATION</i>} | location count of <i>LOCATION</i> without weekends and public holidays |
