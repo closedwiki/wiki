@@ -88,7 +88,7 @@ $VERSION = '$Rev$';
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
 
-$REVISION = '1.0.24'; #dro# added summary column feature requested by TWiki:Main.GarySprague
+$REVISION = '1.0.24'; #dro# added summary column and statistics column(s) feature requested by TWiki:Main.GarySprague
 #$REVISION = '1.0.23'; #kjl# fixed Item5190 - does not like whitespace after the smiley. This makes the plugin work with TWiki 4.2.0 and Wysiwyg
 #$REVISION = '1.0.22'; #dro# added documentation requested by TWiki:Main.PeterThoeny; fixed typo (on=off bug)
 #$REVISION = '1.021'; #dro# fixed minor HTML bug reported by TWiki:Main.JfMacaud; added month header feature (showmonthheader attribute) requested by Rikard Johansson; fixed some minor bugs (documentation, preferences handling);
@@ -215,6 +215,10 @@ sub initDefaults() {
 		sumcolformat=> '%h',		# %h -> holidays, %w -> days at work
 		sumcolheader=> '#off',
 		sumcoltitle=> 'number of days not at work',
+		showstatcol => 0,
+		statcolheader => 'locations | icons ',
+		statcolformat => '%{ll} | %{ii}',
+		statcoltitle => 'statistics',
 	);
 
 	# reminder: don't forget change documentation (HolidaylistPlugin topic) if you add a new rendered option
@@ -222,7 +226,7 @@ sub initDefaults() {
 
 	# options to turn or switch things on (1) or off (0)
 	# this special handling allows 'on'/'yes';'off'/'no' values additionally to '1'/'0'
-	@flagOptions = ( 'showweekends', 'removeatwork', 'compatmode', 'enablepubholidays', 'showpubholidays', 'navenable','showmonthheader', 'showsumcol');
+	@flagOptions = ( 'showweekends', 'removeatwork', 'compatmode', 'enablepubholidays', 'showpubholidays', 'navenable','showmonthheader', 'showsumcol', 'showstatcol');
 
 	%months = ( Jan=>1, Feb=>2, Mar=>3, Apr=>4, May=>5, Jun=>6, 
 	            Jul=>7, Aug=>8, Sep=>9, Oct=>10, Nov=>11, Dec=>12 );
@@ -484,7 +488,8 @@ sub handleDateRange {
 	for (my $i=0; ($i < $options{days}) && (($date+$i)<=$end); $i++) {
 		next if $$excref[$i];
 		if (($date+$i)>=$start) {
-			$$ltableref[$i]=$descr;
+			$$ltableref[$i]{descr}=$descr;
+			$$ltableref[$i]{location}=$location;
 			if (defined $icon) {
 				$$ptableref[$i]=4;
 				$$itableref[$i]=$icon;
@@ -643,7 +648,8 @@ sub handleCalendarEvents {
 			
 			if (($mm1==$m) && ($dd1==$d)) {
 				$$ptableref[$i] = 5;
-				$$ltableref[$i] = $descr . ' ('.($y-$yy1).')';
+				$$ltableref[$i]{descr} = $descr . ' ('.($y-$yy1).')';
+				$$ltableref[$i]{location} = $location;
 				$$itableref[$i] = $icon;
 			}
 		}
@@ -660,7 +666,8 @@ sub handleCalendarEvents {
 			my ($y,$m,$d) = Add_Delta_Days($yy,$mm,$dd,$i);
 			if (($m==$mm1)&&($d==$dd1)) {
 				$$ptableref[$i] = 5;
-				$$ltableref[$i] = $descr;
+				$$ltableref[$i]{descr} = $descr;
+				$$ltableref[$i]{location} = $descr;
 				$$itableref[$i] = $icon;
 			}
 		}
@@ -696,7 +703,8 @@ sub handleCalendarEvents {
 
 				if (($dd2)&&($dd2==$d)) {
 					$$ptableref[$i] = 5;
-					$$ltableref[$i] = $descr;
+					$$ltableref[$i]{desc} = $descr;
+					$$ltableref[$i]{location} = $location;
 					$$itableref[$i] = $icon;
 				}
 			}
@@ -711,7 +719,8 @@ sub handleCalendarEvents {
 			my ($y,$m,$d) = Add_Delta_Days($yy,$mm,$dd,$i);
 			if ($strdate == $d) {
 				$$ptableref[$i] = 5;
-				$$ltableref[$i] = $descr;
+				$$ltableref[$i]{descr} = $descr;
+				$$ltableref[$i]{location} = $location;
 				$$itableref[$i] = $icon;
 			}
 		}
@@ -758,7 +767,8 @@ sub handleCalendarEvents {
 			    && ( (!defined $end)   || ($date<=$end) )
 			   ) {
 				$$ptableref[$i] = 5;
-				$$ltableref[$i] = $descr;
+				$$ltableref[$i]{descr} = $descr;
+				$$ltableref[$i]{location} = $location;
 				$$itableref[$i] = $icon;
 			}
 		}
@@ -806,7 +816,8 @@ sub handleCalendarEvents {
 			next if $$excref[$i];
 			if (($startDays+$i) >= $start) {
 				$$ptableref[$i] = 5;
-				$$ltableref[$i] = $descr;
+				$$ltableref[$i]{descr} = $descr;
+				$$ltableref[$i]{location} = $location;
 				$$itableref[$i] = $icon;
 			}
 		} # for
@@ -911,8 +922,11 @@ sub renderHolidaylist() {
 			($yy1,$mm1,$dd1) = Add_Delta_Days($yy1,$mm1,$dd1, $daysdiff);
 			$restdays -= $daysdiff;
 		}
-		if ($options{showsumcol}) {
-			$text.='<th align="center" rowspan="2" title="'.$options{sumcoltitle}.'" bgcolor="'.$options{tableheadercolor}.'">'.$options{sumcolheader}.'</th>';
+		$text.='<th align="center" rowspan="2" bgcolor="'.$options{tableheadercolor}.'">'.$options{sumcolheader}.'</th>' if ($options{showsumcol});
+		if ($options{showstatcol}) {
+			foreach my $h (split(/\|/,$options{statcolheader})) {
+				$text.='<th align="center" rowspan="2" bgcolor="'.$options{tableheadercolor}.'">'.$h.'</th>';
+			}
 		}
 		$text .= '</tr><tr>';
 	}
@@ -941,10 +955,13 @@ sub renderHolidaylist() {
 		$text.='</noautolink>';
 		$text.='</th>';
 	}
-	if (!$options{showmonthheader} && $options{showsumcol}) {
-		$text.='<th align="center"  title="'.$options{sumcoltitle}.'" bgcolor="'.$options{tableheadercolor}.'">'.$options{sumcolheader}.'</th>';
-	}
+	$text.='<th align="center" bgcolor="'.$options{tableheadercolor}.'">'.$options{sumcolheader}.'</th>' if (!$options{showmonthheader} && $options{showsumcol}); 
+	if ((!$options{showmonthheader}) && $options{showstatcol}) {
+		foreach my $h (split(/\|/,$options{statcolheader})) {
+			$text.='<th align="center" bgcolor="'.$options{tableheadercolor}.'">'.$h.'</th>';
+		}
 	
+	}
 
 	$text .= "</tr>\n";
 
@@ -984,6 +1001,8 @@ sub renderHolidaylist() {
 		my $sum_pubholidays = 0;
 		my $sum_pubholidays_withoutweekend = 0;
 
+		my %statistics;
+
 		$person =~ s/\@all//ig if $options{enablepubholidays};
 		$text .= '<tr><th align="left"><noautolink>'.TWiki::Func::renderText($person,$web).'</noautolink></th>';
 		for (my $i=0; $i<$options{days}; $i++) {
@@ -1000,20 +1019,21 @@ sub renderHolidaylist() {
 			if ((defined $$ptableref[$i] && $$ptableref[$i]>0) 
 					|| ( $options{enablepubholidays} && defined $$aptableref[$i] && $$aptableref[$i]>0)) {
 				$sum_off++;
+				$statistics{icons}{$$itableref[$i]}++ if defined $$itableref[$i]; 
+				$statistics{locations}{$$ltableref[$i]{location}}++ if defined $$ltableref[$i]{location};
 			} else {
 				$sum_work++;
+				$statistics{work}++;
 			}
+			$statistics{days}++;
+			$statistics{'days-w'}++ if $dow < 6;
+
 
                         if (($dow < 6)||$options{showweekends}) { 
 				my $icon= $iconstates{ defined $$ptableref[$i]?$$ptableref[$i]:0};
 				$sum_pubholidays_withoutweekend++ 
 					if ($dow<6 && $options{enablepubholidays} && defined $$aptableref[$i] && $$aptableref[$i]>0);
 			
-				if ($dow < 6 && defined $$ptableref[$i] && $$ptableref[$i]>0 && ( (!defined $$aptableref[$i]) || ($$aptableref[$i]<=0))) {
-					$sum_off_withoutweekend++;
-				} else {
-					$sum_work_withoutweekend++;
-				}
 
 				# overwrite personal holidays with public holidays:
 				if ($options{enablepubholidays} && defined $$aptableref[$i]) {
@@ -1022,14 +1042,26 @@ sub renderHolidaylist() {
 					$$ltableref[$i]=$$altableref[$i];
 				}
 
+
+				if ($dow < 6 && defined $$ptableref[$i] && $$ptableref[$i]>0 && ( (!defined $$aptableref[$i]) || ($$aptableref[$i]<=0))) {
+					$sum_off_withoutweekend++;
+					$statistics{'icons-w'}{(defined $$itableref[$i]?$$itableref[$i]:$icon)}++;
+					$statistics{'locations-w'}{$$ltableref[$i]{location}}++ if defined $$ltableref[$i]{location};
+				} else {
+					$sum_work_withoutweekend++;
+					$statistics{'work-w'}++;
+				}
+
+
 				if (defined $$itableref[$i]) {
 					$icon = $$itableref[$i];
 					$icon = TWiki::Func::renderText($icon, $web) if $icon !~ /^(\s|\&nbsp\;)*$/;
 				}
+
 				# could fail if HTML::Entities is not installed:
 				eval { 
 					require HTML::Entities;
-					my $location = $$ltableref[$i] if defined $ltableref;
+					my $location = $$ltableref[$i]{descr} if defined $ltableref;
 					if (defined $location) {
 						$location =~ s/\@all//ig if $options{enablepubholidays}; # remove @all
 
@@ -1066,12 +1098,77 @@ sub renderHolidaylist() {
 			$sumcoltitle=~s/%(.)(\1)?/$rh{"%\L$1".(defined $2?$2:"")."\E"}/eg;
 			$text.= '<th class="hlpSummaryColumn" title="'.$sumcoltitle.'">'.$sumcol.'</th>';
 		}
+		$text .= renderStatistics(\%statistics) if ($options{showstatcol});
 		$text .= "</tr>\n";
 	}
 	$text .= '</table></noautolink>';
 
 	return $text;
 }
+# =========================
+sub renderStatistics {
+	my ($statisticsref) = @_;
+	my %statistics = %{$statisticsref};
+	my $text="";
+
+	foreach my $statcol (split /\|/, $options{statcolformat}) {
+		my $statcoltitle = $options{statcoltitle};
+		if (($statcol=~/\%{ll:?}/i)||($statcoltitle=~/\%{ll:?}/i)) {
+			my $t="";
+			foreach my $location (keys %{$statistics{'locations-w'}}) {
+				$t.="$location: $statistics{'locations-w'}{$location}; &nbsp;";
+			}
+			$statcol=~s/\%{ll:?}/$t/g;
+			$statcoltitle=~s/\%{ll:?}/$t/g;
+		}
+		if (($statcol=~/\%{l}/i)||($statcoltitle=~/\%{l}/i)) {
+			my $t="";
+			foreach my $location (keys %{$statistics{'locations'}}) {
+				$t.="$location: $statistics{'locations'}{$location}; &nbsp;";
+			}
+			$statcol=~s/\%{l:?}/$t/g;
+			$statcoltitle=~s/\%{l:?}/$t/g;
+		}
+		if (($statcol=~/\%{ii:?}/i)||($statcoltitle=~/\%{ii:?}/i)) {
+			my $t="";
+			foreach my $icon (keys %{$statistics{'icons-w'}}) {
+				$t.=" $icon : $statistics{'icons-w'}{$icon}; &nbsp;";
+			}
+			$statcol=~s/\%{ii:?}/$t/g;
+			$statcoltitle=~s/\%{ii:?}/$t/g;
+		}
+		if (($statcol=~/\%{i:?}/i)||($statcoltitle=~/\%{i:?}/i)) {
+			my $t="";
+			foreach my $icon (keys %{$statistics{'icons-w'}}) {
+				$t.=" $icon : $statistics{'icons-w'}{$icon}; &nbsp;";
+			}
+			$statcol=~s/\%{i:?}/$t/g;
+			$statcoltitle=~s/\%{i:?}/$t/g;
+		}
+		$statcol=~s/\%{i:([^}]+)}/(defined $statistics{icons}{$1}?$statistics{icons}{$1}:0)/egi;
+		$statcol=~s/\%{ii:([^}]+)}/(defined $statistics{'icons-w'}{$1}?$statistics{'icons-w'}{$1}:0)/egi;
+		$statcol=~s/\%{l:([^}]+)}/(defined $statistics{locations}{$1}?$statistics{locations}{$1}:0)/egi;
+		$statcol=~s/\%{ll:([^}]+)}/(defined $statistics{'locations-w'}{$1}?$statistics{'locations-w'}{$1}:0)/egi;
+		$statcoltitle=~s/\%{i:([^}]+)}/(defined $statistics{icons}{$1}?$statistics{icons}{$1}:0)/egi;
+		$statcoltitle=~s/\%{ii:([^}]+)}/(defined $statistics{'icons-w'}{$1}?$statistics{'icons-w'}{$1}:0)/egi;
+		$statcoltitle=~s/\%{l:([^}]+)}/(defined $statistics{locations}{$1}?$statistics{locations}{$1}:0)/egi;
+		$statcoltitle=~s/\%{ll:([^}]+)}/(defined $statistics{'locations-w'}{$1}?$statistics{'locations-w'}{$1}:0)/egi;
+
+		$statcol=~s/\%{w:?}/$statistics{work}/egi;
+		$statcol=~s/\%{ww:?}/$statistics{'work-w'}/egi;
+		$statcoltitle=~s/\%{w:?}/$statistics{work}/egi;
+		$statcoltitle=~s/\%{ww:?}/$statistics{'work-w'}/egi;
+
+		$statcol=~s/\%{d:?}/$statistics{days}/egi;
+		$statcol=~s/\%{dd:?}/$statistics{'days-w'}/egi;
+		$statcoltitle=~s/\%{d:?}/$statistics{days}/egi;
+		$statcoltitle=~s/\%{dd:?}/$statistics{'days-w'}/egi;
+
+		$text.='<th class="hlpStatisticsColumn" title="'.$statcoltitle.'">'.$statcol.'</th>';
+	}
+	return $text;
+}
+
 # =========================
 sub renderNav {
 	my ($nextp) = @_;
