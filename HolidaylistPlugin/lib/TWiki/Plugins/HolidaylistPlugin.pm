@@ -1120,7 +1120,7 @@ sub renderStatistics {
 		if (($statcol=~/\%{ll:?}/i)||($statcoltitle=~/\%{ll:?}/i)) {
 			my $t="";
 			foreach my $location (keys %{$statistics{'locations-w'}}) {
-				$t.="$location: $statistics{'locations-w'}{$location}; &nbsp;";
+				$t.="$statistics{'locations-w'}{$location} x $location; &nbsp;";
 			}
 			$statcol=~s/\%{ll:?}/$t/g;
 			$statcoltitle=~s/\%{ll:?}/$t/g;
@@ -1128,7 +1128,7 @@ sub renderStatistics {
 		if (($statcol=~/\%{l}/i)||($statcoltitle=~/\%{l}/i)) {
 			my $t="";
 			foreach my $location (keys %{$statistics{'locations'}}) {
-				$t.="$location: $statistics{'locations'}{$location}; &nbsp;";
+				$t.="$statistics{'locations'}{$location} x $location; &nbsp;";
 			}
 			$statcol=~s/\%{l:?}/$t/g;
 			$statcoltitle=~s/\%{l:?}/$t/g;
@@ -1136,7 +1136,7 @@ sub renderStatistics {
 		if (($statcol=~/\%{ii:?}/i)||($statcoltitle=~/\%{ii:?}/i)) {
 			my $t="";
 			foreach my $icon (keys %{$statistics{'icons-w'}}) {
-				$t.=" $icon : $statistics{'icons-w'}{$icon}; &nbsp;";
+				$t.="$statistics{'icons-w'}{$icon} x $icon ; &nbsp;";
 			}
 			$statcol=~s/\%{ii:?}/$t/g;
 			$statcoltitle=~s/\%{ii:?}/$t/g;
@@ -1144,7 +1144,7 @@ sub renderStatistics {
 		if (($statcol=~/\%{i:?}/i)||($statcoltitle=~/\%{i:?}/i)) {
 			my $t="";
 			foreach my $icon (keys %{$statistics{'icons-w'}}) {
-				$t.=" $icon : $statistics{'icons-w'}{$icon}; &nbsp;";
+				$t.="$statistics{'icons-w'}{$icon} x $icon ; &nbsp;";
 			}
 			$statcol=~s/\%{i:?}/$t/g;
 			$statcoltitle=~s/\%{i:?}/$t/g;
