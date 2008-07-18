@@ -148,9 +148,9 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | navprevhalftitle | title text (tooltip text) for the navigation button to the previous =navdays/2= days (%n will be replaced with the half number of days to show) | navprevtitle="Previous %n day(s)" |
 | navprevtitle | title text (tooltip text) for the navigation button to the previous =navdays= days (%n will be replaced with the number of days to show) | navprevtitle="Previous %n day(s)" |
 | nwidth | cell width of the first column | nwidth="120px" |
-| statcolformat | statistics column format (related: showstatcol, statcolheader, statcoltitle); see [[#StatisticsColumnFormat][Statistics Column Format section]] | statcolformat="%{ll} &#124; %{ii}" |
+| statcolformat | statistics column format (related: showstatcol, statcolheader, statcoltitle); see [[#StatisticsColumnFormat][Statistics Column Format/Title section]] | statcolformat="%{ll} &#124; %{ii}" |
 | statcolheader | statistics header (related: showstatcol, statcolformat, statcoltitle) | statcolheader="locations &#124; icons" |
-| statcoltitle | statistics tooltip (related: showstatcol, statcolformat, statcolheader)  | statcoltitle="statistics" |
+| statcoltitle | statistics tooltip (related: showstatcol, statcolformat, statcolheader); see  [[#StatisticsColumnFormat][Statistics Column Format/Title section]] | statcoltitle="statistics" |
 | sumcolformat | summary column format; %h will be substituded by the number of <i>h</i>olidays; %w will be substituted by the number of days at <i>w</i>ork; %hh will be substituted by the number of <i>h</i>olidays without weekends and public holidays; %ww will be substituted by the number of working days without weekends | sumcolformat="%h" |
 | sumcolheader | summary column header (related attributes: =showsumcol, sumcolformat, sumcoltitle=) | sumcolheader="#off" |
 | sumcoltitle  | tooltip text for the summary column header; variable substition is also available - see =sumcolformat= (related attributes: =showsumcol, sumcolformat, sumcolheader=) | sumcoltitle="number of days not at work" |
@@ -170,14 +170,16 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 	* Every attribute of %<nop>HOLIDAYLIST% can also be used as plugin setting. You only have to use capital letters.
 
 #StatisticsColumnFormat
----+++ Statistics Column Format
-*Usage:* =statcolformat=" &lt;column1 format &gt; | &lt;column2 format &gt; | ..."=
-<br/>
-%X% =statcolheader= should have the same number of columns ( counts of ='|'= shoud be equal)
-<br/>
+---+++ Statistics Column Format/Title
+*Usage:* 
+<br/> =statcolformat=" &lt;column1 format&gt; | &lt;column2 format&gt; | ..."=
+<br/> =statcoltitle=" &lt;column1 format&gt; | &lt;column2 format&gt; | ..."=
+   * you can define multiple columns in =statcolformat= and =statcoltitle=, simple use '|' as separator
+   * you can use variables in the  =&lt;column? format&gt;= definitions (see table below), e.g. =statcolformat="%{l}"=
+   * %X% =statcolheader= should have the same number of columns (count of ='|'= should be equal)
 *Example:* <br/> display three statistics columns: =%<nop>HOLIDAYLIST{showstatcol="on" statcolformat="%{ll:sick}(%{l:sick}) | %{ll:holidays}(%{l:holidays}) | %{ww}(%{w}) of %{dd}(%{d}) " statcolheader="sick | holidays | work "}%=
 
-
+| *Substituted Variables in =statcolformat/statcoltitle= &nbsp;* ||
 | *Variable* | *Description* |
 | %{d} | number of days |
 | %{dd} | number of days without weekends | 
