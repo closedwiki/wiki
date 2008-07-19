@@ -211,9 +211,9 @@ __Note:__ The Plugin uses base settings like date format, language and style fro
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Copyright: | &copy; 2002-2007, TWiki:Main.PeterThoeny ([[http://www.twiki.net/][TWIKI.NET]]) and TWiki Contributors |
+|  Copyright: | &copy; 2002-2008, TWiki:Main.PeterThoeny ([[http://www.twiki.net/][TWIKI.NET]]) and TWiki Contributors |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 4.8.2 (07 Apr 2008) |
+|  Plugin Version: | 4.8.3 (19 Jul 2008) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
 |  20 Mar 2008: | 4.8: Arthur Clemens: Code refactoring; disabled table sort when editing; removed usage of =$percnt= to prevent variable expansion (is now done automatically); made Javascript interface aware of headers and footers, and of =changerows="off"=; improved feedback on row move. |
 |  25 Dec 2007: | 4.7.1: Arthur Clemens: Added warning if =include= parameter topic does not exist. |
