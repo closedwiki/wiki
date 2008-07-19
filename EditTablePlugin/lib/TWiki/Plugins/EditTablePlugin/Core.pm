@@ -1564,7 +1564,9 @@ sub _takeOutTables {
                 $storedTableRow = '';
             }
             if ( $inEditTable && !$hasEditTableTag ) {
+
                 if (/^\s*\|.*\|\s*$/) {
+
                     $doCopyLine = 0;
                     push( @tableLines, $_ );
 
@@ -1594,6 +1596,12 @@ sub _takeOutTables {
                         }
                         undef @tableMatrix;    # reset table matrix
                     }
+                    else {
+
+                        # not (or no longer) inside a table
+                        $doCopyLine  = 1;
+                        $inEditTable = 0;
+                    }
                     my $tableRef;
                     $tableRef->{'text'} = join( "\n", @tableLines );
                     $tableRef->{'tag'} = $editTableTag;
@@ -1605,6 +1613,7 @@ sub _takeOutTables {
                 }
             }
         }    # if ( !$insidePRE )
+
         $tablesTakenOutText .= $_ . "\n" if $doCopyLine;
     }    # foreach
 
