@@ -218,7 +218,7 @@ sub initDefaults() {
 		showstatrow => 0,
 		statrowformat => ' %{hh} ',
 		statrowheader => '#',
-		statrowtitle => ' %{ll}(%{l})',
+		statrowtitle => ' %{ll}',
 	);
 
 	# reminder: don't forget change documentation (HolidaylistPlugin topic) if you add a new rendered option
@@ -924,7 +924,7 @@ sub renderHolidaylist() {
 		}
 		if ($options{showstatcol}) {
 			foreach my $h (split(/\|/,$options{statcolheader})) {
-				$text.='<th align="center" rowspan="2" bgcolor="'.$options{tableheadercolor}.'">'.$h.'</th>';
+				$text.='<th valign="bottom" align="center" rowspan="2" bgcolor="'.$options{tableheadercolor}.'">'.$h.'</th>';
 			}
 		}
 		$text .= '</tr><tr>';
@@ -956,7 +956,7 @@ sub renderHolidaylist() {
 	}
 	if ((!$options{showmonthheader}) && $options{showstatcol}) {
 		foreach my $h (split(/\|/,$options{statcolheader})) {
-			$text.='<th align="center" bgcolor="'.$options{tableheadercolor}.'">'.$h.'</th>';
+			$text.='<th valign="bottom" align="center" bgcolor="'.$options{tableheadercolor}.'">'.$h.'</th>';
 		}
 	
 	}
@@ -1117,40 +1117,51 @@ sub renderHolidaylist() {
 }
 # =========================
 sub substStatisticsVars {
-	my ($textformat, $titleformat, $statisticsref) = @_;
+
+	my ($textformat, $titleformat, $statisticsref ) = @_;
+
+	return (_substStatisticsVars($textformat, $statisticsref), _substStatisticsVars($titleformat,$statisticsref));
+
+}
+
+# =========================
+sub _substStatisticsVars {
+	my ($textformat, $statisticsref) = @_;
+
+	my $text = $textformat;
+
+
+	$statisticsref = { } unless defined $statisticsref;
+
 	my %statistics = %{$statisticsref};
-	my ($text, $title) = ($textformat, $titleformat);
-	if (($textformat=~/\%{ll:?}/i)||($titleformat=~/\%{ll:?}/i)) {
+
+	if ($textformat=~/\%{ll:?}/i) {
 		my $t="";
 		foreach my $location (sort keys %{$statistics{'locations-w'}}) {
 			$t.="$statistics{'locations-w'}{$location} x $location; &nbsp;";
 		}
 		$text=~s/\%{ll:?}/$t/g;
-		$title=~s/\%{ll:?}/$t/g;
 	}
-	if (($textformat=~/\%{l}/i)||($titleformat=~/\%{l}/i)) {
+	if ($textformat=~/\%{l}/i) {
 		my $t="";
 		foreach my $location (sort keys %{$statistics{'locations'}}) {
 			$t.="$statistics{'locations'}{$location} x $location; &nbsp;";
 		}
 		$text=~s/\%{l:?}/$t/g;
-		$title=~s/\%{l:?}/$t/g;
 	}
-	if (($textformat=~/\%{ii:?}/i)||($titleformat=~/\%{ii:?}/i)) {
+	if ($textformat=~/\%{ii:?}/i) {
 		my $t="";
 		foreach my $icon (keys %{$statistics{'icons-w'}}) {
 			$t.="$statistics{'icons-w'}{$icon} x $icon ; &nbsp;";
 		}
 		$text=~s/\%{ii:?}/$t/g;
-		$title=~s/\%{ii:?}/$t/g;
 	}
-	if (($textformat=~/\%{i:?}/i)||($titleformat=~/\%{i:?}/i)) {
+	if ($textformat=~/\%{i:?}/i) {
 		my $t="";
 		foreach my $icon (keys %{$statistics{'icons-w'}}) {
 			$t.="$statistics{'icons-w'}{$icon} x $icon ; &nbsp;";
 		}
 		$text=~s/\%{i:?}/$t/g;
-		$title=~s/\%{i:?}/$t/g;
 	}
 	sub _vz {
 		return defined $_[0]?$_[0]:0;
@@ -1159,49 +1170,29 @@ sub substStatisticsVars {
 	$text=~s/\%{ii:([^}]+)}/_vz($statistics{'icons-w'}{$1})/egi;
 	$text=~s/\%{l:([^}]+)}/_vz($statistics{locations}{$1})/egi;
 	$text=~s/\%{ll:([^}]+)}/_vz($statistics{'locations-w'}{$1})/egi;
-	$title=~s/\%{i:([^}]+)}/_vz($statistics{icons}{$1})/egi;
-	$title=~s/\%{ii:([^}]+)}/_vz($statistics{'icons-w'}{$1})/egi;
-	$title=~s/\%{l:([^}]+)}/_vz($statistics{locations}{$1})/egi;
-	$title=~s/\%{ll:([^}]+)}/_vz($statistics{'locations-w'}{$1})/egi;
 
 	$text=~s/\%hh/_vz($statistics{'holidays-w'})/egi;
 	$text=~s/\%h/_vz($statistics{holidays})/egi;
 	$text=~s/\%{h:?}/_vz($statistics{holidays})/egi;
 	$text=~s/\%{hh:?}/_vz($statistics{'holidays-w'})/egi;
-	$title=~s/\%hh/_vz($statistics{'holidays-w'})/egi;
-	$title=~s/\%h/_vz($statistics{holidays})/egi;
-	$title=~s/\%{h:?}/_vz($statistics{holidays})/egi;
-	$title=~s/\%{hh:?}/_vz($statistics{'holidays-w'})/egi;
 
 	$text=~s/\%pp/_vz($statistics{'pubholidays-w'})/egi;
 	$text=~s/\%p/_vz($statistics{pubholidays})/egi;
 	$text=~s/\%{p:?}/_vz($statistics{pubholidays})/egi;
 	$text=~s/\%{pp:?}/_vz($statistics{'pubholidays-w'})/egi;
-	$title=~s/\%pp/_vz($statistics{'pubholidays-w'})/egi;
-	$title=~s/\%p/_vz($statistics{pubholidays})/egi;
-	$title=~s/\%{p:?}/_vz($statistics{pubholidays})/egi;
-	$title=~s/\%{pp:?}/_vz($statistics{'pubholidays-w'})/egi;
 
 	$text=~s/\%ww/_vz($statistics{'work-w'})/egi;
 	$text=~s/\%w/_vz($statistics{work})/egi;
 	$text=~s/\%{w:?}/_vz($statistics{work})/egi;
 	$text=~s/\%{ww:?}/_vz($statistics{'work-w'})/egi;
-	$title=~s/\%ww/_vz($statistics{'work-w'})/egi;
-	$title=~s/\%w/_vz($statistics{work})/egi;
-	$title=~s/\%{w:?}/_vz($statistics{work})/egi;
-	$title=~s/\%{ww:?}/_vz($statistics{'work-w'})/egi;
 
 	$text=~s/\%dd/_vz($statistics{'days-w'})/egi;
 	$text=~s/\%d/_vz($statistics{days})/egi;
 	$text=~s/\%{d:?}/_vz($statistics{days})/egi;
 	$text=~s/\%{dd:?}/_vz($statistics{'days-w'})/egi;
-	$title=~s/\%dd/_vz($statistics{'days-w'})/egi;
-	$title=~s/\%d/_vz($statistics{days})/egi;
-	$title=~s/\%{d:?}/_vz($statistics{days})/egi;
-	$title=~s/\%{dd:?}/_vz($statistics{'days-w'})/egi;
 
 	
-	return ($text, $title);
+	return $text;
 }
 # =========================
 sub renderStatisticsRow {
