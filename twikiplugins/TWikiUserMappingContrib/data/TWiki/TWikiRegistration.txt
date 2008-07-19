@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1167679739" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1216489724" format="1.0" version="$Rev$"}%
 ---+ %MAKETEXT{"Registration"}%
 
 %IF{"context registration_supported" 
@@ -163,6 +163,7 @@ return sOut;
   <option>Cyprus</option>
   <option>Czech Republic</option>
   <option>Denmark</option>
+  <option>Dominican Republic</option>
   <option>Ecuador</option>
   <option>Egypt</option>
   <option>El Salvador</option>
@@ -245,9 +246,9 @@ return sOut;
   <option>Switzerland</option>
   <option>Syria</option>
   <option>Taiwan</option>
+  <option>Tajikistan</option>
   <option>Tanzania</option>
   <option>Thailand</option>
-  <option>Tajikistan</option>
   <option>Trinidad and Tobago</option>
   <option>Tunisia</option>
   <option>Turkey</option>
