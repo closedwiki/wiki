@@ -67,7 +67,7 @@ The view is controlled by CGI parameters as follows:
 sub view {
     my $session = shift;
 
-    my $query = $session->{cgiQuery};
+    my $query = $session->{request};
     my $webName = $session->{webName};
     my $topicName = $session->{topicName};
 
@@ -419,7 +419,7 @@ Some parameters are passed in CGI query:
 sub viewfile {
     my $session = shift;
 
-    my $query = $session->{cgiQuery};
+    my $query = $session->{request};
 
     my $topic = $session->{topicName};
     my $webName = $session->{webName};

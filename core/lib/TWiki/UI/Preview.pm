@@ -31,7 +31,7 @@ require Assert;
 sub preview {
     my $session = shift;
 
-    my $query = $session->{cgiQuery};
+    my $query = $session->{request};
     my $web = $session->{webName};
     my $topic = $session->{topicName};
     my $user = $session->{user};

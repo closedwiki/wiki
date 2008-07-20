@@ -79,7 +79,7 @@ sub register_cgi {
 
     # NB. bulkRegister invoked from ManageCgiScript.
 
-    my $action = $session->{cgiQuery}->param('action') || '';
+    my $action = $session->{request}->param('action') || '';
 
     if ($action eq 'register') {
       if (!$session->inContext('registration_supported')) {
@@ -146,7 +146,7 @@ sub bulkRegister {
     my $topic = $session->{topicName};
     my $web = $session->{webName};
     my $userweb = $TWiki::cfg{UsersWebName};
-    my $query = $session->{cgiQuery};
+    my $query = $session->{request};
 
     # absolute URL context for email generation
     $session->enterContext('absolute_urls');
@@ -353,7 +353,7 @@ This is called through: TWikiRegistration -> RegisterCgiScript -> here
 sub register {
     my( $session ) = @_;
 
-    my $query = $session->{cgiQuery};
+    my $query = $session->{request};
     my $data = _getDataFromQuery( $query, $query->param() );
 
     $data->{webName} = $session->{webName};
@@ -369,7 +369,7 @@ sub register {
 sub _requireVerification {
     my ($session) = @_;
 
-    my $query = $session->{cgiQuery};
+    my $query = $session->{request};
     my $topic = $session->{topicName};
     my $web = $session->{webName};
 
@@ -444,7 +444,7 @@ point intended to be called from UI::run
 
 sub resetPassword {
     my $session = shift;
-    my $query = $session->{cgiQuery};
+    my $query = $session->{request};
     my $topic = $session->{topicName};
     my $web = $session->{webName};
     my $user = $session->{user};
@@ -612,7 +612,7 @@ sub changePassword {
 
     my $topic = $session->{topicName};
     my $webName = $session->{webName};
-    my $query = $session->{cgiQuery};
+    my $query = $session->{request};
     my $requestUser = $session->{user};
 
     my $oldpassword = $query->param( 'oldpassword' );
@@ -731,7 +731,7 @@ This is called: on receipt of the activation password -> RegisterCgiScript -> he
 sub verifyEmailAddress {
     my( $session ) = @_;
 
-    my $code = $session->{cgiQuery}->param('code');
+    my $code = $session->{request}->param('code');
     unless( $code ) {
         throw Error::Simple( 'verifyEmailAddress: no verification code!');
     }
@@ -752,7 +752,7 @@ sub complete {
 
     my $topic = $session->{topicName};
     my $web = $session->{webName};
-    my $query = $session->{cgiQuery};
+    my $query = $session->{request};
 	my $code = $query->param('code');
 
 	my $data;

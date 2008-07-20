@@ -189,8 +189,8 @@ sub load {
     if( defined( &$sub ) ) {
         no strict 'refs';
         $user = &$sub( $this->{session}->{remoteUser},
-                       $this->{session}->{cgiQuery}->url(),
-                       $this->{session}->{cgiQuery}->path_info());
+                       $this->{session}->{request}->url(),
+                       $this->{session}->{request}->path_info());
         use strict 'refs';
     }
     #print STDERR "Compile $p: ".timestr(timediff(new Benchmark, $begin))."\n";

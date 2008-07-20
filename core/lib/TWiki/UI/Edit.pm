@@ -48,7 +48,7 @@ sub edit {
 
 sub init_edit {
     my ( $session, $templateName )  = @_;
-    my $query = $session->{cgiQuery};
+    my $query = $session->{request};
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
     my $user = $session->{user};
@@ -203,7 +203,7 @@ sub init_edit {
             $tmpl =~ s/%FORCENEWREVISIONCHECKBOX%/checked="checked"/go;
         } else {
             # no checkbox in template, so force revision
-            $session->{cgiQuery}->param(-name => 'forcenewrevision', -value => '1');
+            $session->{request}->param(-name => 'forcenewrevision', -value => '1');
         }
     }
     
@@ -326,7 +326,7 @@ sub init_edit {
                 topic => $session->{topicName},
                 params => [ $templateWeb, $form ] );
         }
-        $formDef->getFieldValuesFromQuery( $session->{cgiQuery}, $meta );
+        $formDef->getFieldValuesFromQuery( $session->{request}, $meta );
         # And render them for editing
         # SMELL: these are both side-effecting functions, that will set
         # default values for fields if they are not set in the meta.
@@ -352,7 +352,7 @@ sub finalize_edit {
 
     my ( $session, $text, $tmpl ) = @_;
 
-    my $query = $session->{cgiQuery};
+    my $query = $session->{request};
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
     my $user = $session->{user};

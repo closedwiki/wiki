@@ -46,7 +46,7 @@ sub generate {
     ASSERT($session->isa( 'TWiki')) if DEBUG;
 
     my $page = $session->templates->readTemplate( 'changeform' );
-    my $q = $session->{cgiQuery};
+    my $q = $session->{request};
 
     my $store = $session->{store};
     my $formName = $q->param( 'formtemplate' ) || '';

@@ -74,7 +74,7 @@ sub forceAuthentication {
     my $twiki = $this->{twiki};
 
     unless( $twiki->inContext( 'authenticated' )) {
-        my $query = $twiki->{cgiQuery};
+        my $query = $twiki->{request};
         # Redirect with passthrough so we don't lose the original query params
         my $twiki = $this->{twiki};
         my $topic = $twiki->{topicName};

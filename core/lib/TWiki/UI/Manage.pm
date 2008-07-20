@@ -49,7 +49,7 @@ invoked via the =UI::run= method.
 sub manage {
     my $session = shift;
 
-    my $action = $session->{cgiQuery}->param( 'action' ) || '';
+    my $action = $session->{request}->param( 'action' ) || '';
 
     if( $action eq 'createweb' ) {
         _createWeb( $session );
@@ -86,7 +86,7 @@ sub _removeUser {
 
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
-    my $query = $session->{cgiQuery};
+    my $query = $session->{request};
     my $user = $session->{user};
 
     my $password = $query->param( 'password' );
@@ -148,7 +148,7 @@ sub _createWeb {
 
     my $topicName = $session->{topicName};
     my $webName = $session->{webName};
-    my $query = $session->{cgiQuery};
+    my $query = $session->{request};
     my $user = $session->{user};
 
     my $newWeb = $query->param( 'newweb' ) || '';
@@ -248,7 +248,7 @@ sub rename {
 
     my $oldTopic = $session->{topicName};
     my $oldWeb = $session->{webName};
-    my $query = $session->{cgiQuery};
+    my $query = $session->{request};
     my $action = $query->param( 'action' ) || '';
 
     if( $action eq 'renameweb' ) {
@@ -433,7 +433,7 @@ sub _renameweb {
     my $session = shift;
 
     my $oldWeb = $session->{webName};
-    my $query = $session->{cgiQuery};
+    my $query = $session->{request};
     my $user = $session->{user};
 
     # If the user is not allowed to rename anything in the current web - stop here    
@@ -832,7 +832,7 @@ sub _newTopicScreen {
     my( $session, $oldWeb, $oldTopic, $newWeb, $newTopic, $attachment,
         $confirm, $doAllowNonWikiWord ) = @_;
 
-    my $query = $session->{cgiQuery};
+    my $query = $session->{request};
     my $tmplname = $query->param( 'template' ) || '';
     my $tmpl = '';
     my $skin = $session->getSkin();
@@ -986,7 +986,7 @@ sub _newWebScreen {
     my( $session, $oldWeb, $newWeb,
         $confirm, $webTopicInfoRef ) = @_;
 
-    my $query = $session->{cgiQuery};
+    my $query = $session->{request};
     my $tmpl = '';
 
     $newWeb = $oldWeb unless ( $newWeb );
@@ -1105,7 +1105,7 @@ sub _newWebScreen {
 sub _getReferringTopicsListFromURL {
     my( $session, $oldWeb, $oldTopic, $newWeb, $newTopic ) = @_;
 
-    my $query = $session->{cgiQuery};
+    my $query = $session->{request};
     my @result;
     foreach my $topic ( $query->param( 'referring_topics' ) ) {
         push @result, $topic;
@@ -1308,7 +1308,7 @@ sub _saveSettings {
     my $newMeta = new TWiki::Meta( $session, $web, $topic );
     $newMeta->copyFrom( $currMeta );
 
-    my $query = $session->{cgiQuery};
+    my $query = $session->{request};
     my $settings = $query->param( 'text' );
     my $originalrev = $query->param( 'originalrev' );
 
@@ -1381,7 +1381,7 @@ sub _restoreRevision {
                                     topic => $topic,
                                     params => [ 'change', 'denied' ]);
 	}
-	$session->{cgiQuery}->delete('action');
+	$session->{request}->delete('action');
     require TWiki::UI::Edit;
 	TWiki::UI::Edit::edit( $session );
 }

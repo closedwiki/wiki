@@ -405,7 +405,7 @@ TODO:
 sub diff {
     my $session = shift;
 
-    my $query = $session->{cgiQuery};
+    my $query = $session->{request};
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
 

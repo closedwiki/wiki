@@ -76,7 +76,7 @@ Triggered on auth fail
 sub forceAuthentication {
     my $this = shift;
     my $twiki = $this->{twiki};
-    my $query = $twiki->{cgiQuery};
+    my $query = $twiki->{request};
 
     # See if there is an 'auth' version
     # of this script, may be a result of not being logged in.
@@ -171,7 +171,7 @@ returns the userLogin if stored in the apache CGI query (ie session)
 sub getUser {
     my $this = shift;
 
-    my $query = $this->{twiki}->{cgiQuery};
+    my $query = $this->{twiki}->{request};
     my $authUser;
     # Ignore remote user if we got here via an error
     unless (($ENV{REDIRECT_STATUS} || 0) >= 400 ) {

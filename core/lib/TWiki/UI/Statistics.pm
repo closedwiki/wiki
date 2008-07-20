@@ -72,9 +72,9 @@ sub statistics {
     my $tmp = '';
     # web to redirect to after finishing
     my $destWeb = $TWiki::cfg{UsersWebName};
-    my $logDate = $session->{cgiQuery}->param( 'logdate' ) || '';
+    my $logDate = $session->{request}->param( 'logdate' ) || '';
     $logDate =~ s/[^0-9]//g;  # remove all non numerals
-    $debug = $session->{cgiQuery}->param( 'debug' );
+    $debug = $session->{request}->param( 'debug' );
 
     unless( $session->inContext( 'command_line' )) {
         # running from CGI
@@ -141,7 +141,7 @@ sub statistics {
       _collectLogData( $session, $TMPFILE, $logMonthYear );
 
     my @weblist;
-    my $webSet = TWiki::Sandbox::untaintUnchecked($session->{cgiQuery}->param( 'webs' )) || $session->{requestedWebName};
+    my $webSet = TWiki::Sandbox::untaintUnchecked($session->{request}->param( 'webs' )) || $session->{requestedWebName};
     if( $webSet) {
         # do specific webs
         push( @weblist, split( /,\s*/, $webSet ));

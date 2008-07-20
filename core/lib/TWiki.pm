@@ -638,7 +638,7 @@ Does *not* add a =Content-length= header.
 sub generateHTTPHeaders {
     my( $this, $query, $pageType, $contentType ) = @_;
 
-    $query = $this->{cgiQuery} unless $query;
+    $query = $this->{request} unless $query;
 
     # Handle Edit pages - future versions will extend to caching
     # of other types of page, with expiry time driven by page type.
@@ -690,7 +690,7 @@ sub generateHTTPHeaders {
 
     # New (since 1.026)
     $this->{plugins}->dispatch(
-        'modifyHeaderHandler', $hopts, $this->{cgiQuery} );
+        'modifyHeaderHandler', $hopts, $this->{request} );
 
     # add cookie(s)
     $this->{users}->{loginManager}->modifyHeader( $hopts );
@@ -735,7 +735,7 @@ sub isRedirectSafe {
 sub _getRedirectUrl {
     my $session = shift;
 
-    my $query = $session->{cgiQuery};
+    my $query = $session->{request};
     my $redirecturl = $query->param( 'redirectto' );
     return '' unless $redirecturl;
 
@@ -765,7 +765,7 @@ sub _getRedirectUrl {
 
 Redirects the request to =$url=, *unless*
    1 It is overridden by a plugin declaring a =redirectCgiQueryHandler=.
-   1 =$session->{cgiQuery}= is =undef= or
+   1 =$session->{request}= is =undef= or
    1 $query->param('noredirect') is set to a true value.
 Thus a redirect is only generated when in a CGI context.
 
@@ -788,7 +788,7 @@ server.
 sub redirect {
     my( $this, $url, $passthru, $action_redirectto ) = @_;
 
-    my $query = $this->{cgiQuery};
+    my $query = $this->{request};
     # if we got here without a query, there's not much more we can do
     return unless $query;
 
@@ -874,7 +874,7 @@ redirect target is reached.
 
 sub cacheQuery {
     my $this = shift;
-    my $query = $this->{cgiQuery};
+    my $query = $this->{request};
 
     return '' unless (scalar($query->param()));
     # Don't double-cache
@@ -1007,16 +1007,16 @@ sub getSkin {
 
     my $skinpath = $this->{prefs}->getPreferencesValue( 'SKIN' ) || '';
 
-    if( $this->{cgiQuery} ) {
-        my $resurface = $this->{cgiQuery}->param( 'skin' );
+    if( $this->{request} ) {
+        my $resurface = $this->{request}->param( 'skin' );
         $skinpath = $resurface if $resurface;
     }
 
     my $epidermis = $this->{prefs}->getPreferencesValue( 'COVER' );
     $skinpath = $epidermis.','.$skinpath if $epidermis;
 
-    if( $this->{cgiQuery} ) {
-        $epidermis = $this->{cgiQuery}->param( 'cover' );
+    if( $this->{request} ) {
+        $epidermis = $this->{request}->param( 'cover' );
         $skinpath = $epidermis.','.$skinpath if $epidermis;
     }
 
@@ -1318,7 +1318,7 @@ sub new {
     my $topic = $query->param( 'topic' );
     if( $topic ) {
         if( $topic =~ m#^$regex{linkProtocolPattern}://#o &&
-            $this->{cgiQuery} ) {
+            $this->{request} ) {
             # redirect to URI
             $this->{webName} = '';
             $this->redirect( $topic );
@@ -1621,7 +1621,7 @@ sub finish {
     $this->{i18n}->finish() if $this->{i18n};
 
     undef $this->{_HTMLHEADERS};
-    undef $this->{cgiQuery};
+    undef $this->{request};
     undef $this->{urlHost};
     undef $this->{web};
     undef $this->{topic};
@@ -1663,7 +1663,7 @@ sub writeLog {
       if ($this->{users});
 
     if( $user eq $cfg{DefaultUserLogin} ) {
-       my $cgiQuery = $this->{cgiQuery};
+       my $cgiQuery = $this->{request};
        if( $cgiQuery ) {
            my $agent = $cgiQuery->user_agent();
            if( $agent ) {
@@ -1983,7 +1983,7 @@ sub _TOC {
                                                $verbatim);
 
     # Find URL parameters
-    my $query = $this->{cgiQuery};
+    my $query = $this->{request};
     my @qparams = ();
     foreach my $name ( $query->param ) {
       next if ($name eq 'keywords');
@@ -3023,7 +3023,7 @@ sub _includeWarning {
 
 sub FORMFIELD {
     my ( $this, $params, $topic, $web ) = @_;	
-    my $cgiQuery = $this->{cgiQuery};
+    my $cgiQuery = $this->{request};
     my $cgiRev = $cgiQuery->param('rev') if( $cgiQuery );
     $params->{rev} = $cgiRev;
     return $this->renderer->renderFORMFIELD( $params, $topic, $web );
@@ -3255,7 +3255,7 @@ sub HTTP {
     my( $this, $params ) = @_;
     my $res;
     if( $params->{_DEFAULT} ) {
-        $res = $this->{cgiQuery}->http( $params->{_DEFAULT} );
+        $res = $this->{request}->http( $params->{_DEFAULT} );
     }
     $res = '' unless defined( $res );
     return $res;
@@ -3265,7 +3265,7 @@ sub HTTPS {
     my( $this, $params ) = @_;
     my $res;
     if( $params->{_DEFAULT} ) {
-        $res = $this->{cgiQuery}->https( $params->{_DEFAULT} );
+        $res = $this->{request}->https( $params->{_DEFAULT} );
     }
     $res = '' unless defined( $res );
     return $res;
@@ -3333,7 +3333,7 @@ sub REVINFO {
     my $format = $params->{_DEFAULT} || $params->{format};
     my $web    = $params->{web} || $theWeb;
     my $topic  = $params->{topic} || $theTopic;
-    my $cgiQuery = $this->{cgiQuery};
+    my $cgiQuery = $this->{request};
     my $cgiRev = '';
     $cgiRev = $cgiQuery->param('rev') if( $cgiQuery );
     my $rev = $params->{rev} || $cgiRev || '';
@@ -3344,7 +3344,7 @@ sub REVINFO {
 
 sub REVTITLE {
     my ( $this, $params, $theTopic, $theWeb ) = @_;
-    my $cgiQuery = $this->{cgiQuery};
+    my $cgiQuery = $this->{request};
     my $out = '';
     if( $cgiQuery ) {
         my $cgiRev = $cgiQuery->param('rev');
@@ -3354,7 +3354,7 @@ sub REVTITLE {
 }
 sub REVARG {
     my ( $this, $params, $theTopic, $theWeb ) = @_;
-    my $cgiQuery = $this->{cgiQuery};
+    my $cgiQuery = $this->{request};
     my $out = '';
     if( $cgiQuery ) {
         my $cgiRev = $cgiQuery->param('rev');
@@ -3498,21 +3498,21 @@ sub TOPICLIST {
 
 sub QUERYSTRING {
     my $this = shift;
-    return $this->{cgiQuery}->query_string();
+    return $this->{request}->query_string();
 }
 
 sub QUERYPARAMS {
     my ( $this, $params ) = @_;
-    return '' unless $this->{cgiQuery};
+    return '' unless $this->{request};
     my $format = defined $params->{format} ? $params->{format} :
       '$name=$value';
     my $separator = defined $params->{separator} ? $params->{separator} : "\n";
     my $encoding = $params->{encoding} || '';
 
     my @list;
-    foreach my $name ( $this->{cgiQuery}->param() ) {
+    foreach my $name ( $this->{request}->param() ) {
         # Issues multi-valued parameters as separate hiddens
-        my $value = $this->{cgiQuery}->param( $name );
+        my $value = $this->{request}->param( $name );
         if ($encoding) {
             $value = _encode($encoding, $value);
         }
@@ -3534,9 +3534,9 @@ sub URLPARAM {
     $separator="\n" unless (defined $separator);
 
     my $value;
-    if( $this->{cgiQuery} ) {
+    if( $this->{request} ) {
         if( TWiki::isTrue( $multiple )) {
-            my @valueArray = $this->{cgiQuery}->param( $param );
+            my @valueArray = $this->{request}->param( $param );
             if( @valueArray ) {
                 # join multiple values properly
                 unless( $multiple =~ m/^on$/i ) {
@@ -3551,7 +3551,7 @@ sub URLPARAM {
                 $value = join ( $separator, @valueArray );
             }
         } else {
-            $value = $this->{cgiQuery}->param( $param );
+            $value = $this->{request}->param( $param );
         }
     }
     if( defined $value ) {

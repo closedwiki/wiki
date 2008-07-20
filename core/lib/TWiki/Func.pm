@@ -238,7 +238,7 @@ Return: =$query= CGI query object; or 0 if script is called as a shell script
 
 sub getCgiQuery {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    return $TWiki::Plugins::SESSION->{cgiQuery};
+    return $TWiki::Plugins::SESSION->{request};
 }
 
 =pod

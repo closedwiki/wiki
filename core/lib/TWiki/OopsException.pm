@@ -159,7 +159,7 @@ sub redirect {
     my $url = $session->getScriptUrl(
         1, 'oops', $this->{web}, $this->{topic}, @p);
     while( my $p = shift( @p )) {
-        $session->{cgiQuery}->param(
+        $session->{request}->param(
             -name => $p, -value => shift( @p ));
     }
     $session->redirect( $url, 1 );

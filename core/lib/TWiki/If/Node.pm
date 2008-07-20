@@ -109,8 +109,8 @@ sub OP_dollar {
     throw Error::Simple('No context in which to evaluate "'.
                           $a->stringify().'"') unless $session;
     my $text = $a->_evaluate(@_) || '';
-    if( $text && defined( $session->{cgiQuery}->param( $text ))) {
-        return $session->{cgiQuery}->param( $text );
+    if( $text && defined( $session->{request}->param( $text ))) {
+        return $session->{request}->param( $text );
     }
     $text = "%$text%";
     TWiki::expandAllTags($session, \$text,
@@ -128,7 +128,7 @@ sub OP_defined {
                           $a->stringify().'"') unless $session;
     my $eval =  $a->_evaluate(@_);
     return 0 unless $eval;
-    return 1 if( defined( $session->{cgiQuery}->param( $eval )));
+    return 1 if( defined( $session->{request}->param( $eval )));
     return 1 if( defined(
         $session->{prefs}->getPreferencesValue( $eval )));
     return 1 if( defined( $session->{SESSION_TAGS}{$eval} ));

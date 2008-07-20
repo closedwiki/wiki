@@ -178,7 +178,7 @@ sub load {
     my %lookup;
 
     my $session = $this->{session};
-    my $query = $session->{cgiQuery};
+    my $query = $session->{request};
 
     my @pluginList = ();
     my %already;

@@ -107,7 +107,7 @@ sub makeLoginManager {
     ASSERT($twiki->isa( 'TWiki')) if DEBUG;
     
     #user is trying to sudo login - use BaseUserMapping
-    if ($twiki->{cgiQuery}->param('sudo')) {
+    if ($twiki->{request}->param('sudo')) {
         #promote / login to internal twiki admin
         $twiki->enterContext('sudo_login');
     }
@@ -287,7 +287,7 @@ sub loadSession {
 
     return $authUser if $twiki->inContext( 'command_line' );
 
-    my $query = $twiki->{cgiQuery};
+    my $query = $twiki->{request};
 
     $this->{_haveCookie} = $query->raw_cookie();
 
@@ -511,7 +511,7 @@ sub userLoggedIn {
         unless( $this->{_cgisession} ) {
             $this->{_cgisession} =
               CGI::Session->new(
-                  undef, $twiki->{cgiQuery},
+                  undef, $twiki->{request},
                   { Directory => "$TWiki::cfg{WorkingDir}/tmp" } );
             die CGI::Session->errstr() unless $this->{_cgisession};
         }
@@ -755,7 +755,7 @@ sub modifyHeader {
     return unless $this->{_cgisession};
     return if $TWiki::cfg{Sessions}{MapIP2SID};
 
-    my $query = $this->{twiki}->{cgiQuery};
+    my $query = $this->{twiki}->{request};
     _pushCookie( $this );
     $hopts->{cookie} = $this->{_cookies};
 }

@@ -50,7 +50,7 @@ sub oops_cgi {
     my $session = shift;
     my $topic = $session->{topicName};
     my $web = $session->{webName};
-    my $query = $session->{cgiQuery};
+    my $query = $session->{request};
 
     oops( $session, $web, $topic, $query, 0 );
 }

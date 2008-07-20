@@ -54,7 +54,7 @@ Generates a prompt page for adding an attachment.
 sub attach {
     my $session = shift;
 
-    my $query = $session->{cgiQuery};
+    my $query = $session->{request};
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
 
@@ -153,7 +153,7 @@ STDOUT, starting with 'OK' on success and 'ERROR' on failure.
 sub upload {
     my $session = shift;
 
-    my $query = $session->{cgiQuery};
+    my $query = $session->{request};
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
     my $user = $session->{user};
