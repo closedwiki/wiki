@@ -80,7 +80,7 @@ sub forceAuthentication {
         my $topic = $twiki->{topicName};
         my $web = $twiki->{webName};
         my $url = $twiki->getScriptUrl( 0, 'login', $web, $topic);
-        $query->param( -name=>'origurl', -value=>$ENV{REQUEST_URI} );
+        $query->param( -name=>'origurl', -value=> $twiki->{request}->uri );
         $twiki->redirect( $url, 1 );
         return 1;
     }
@@ -103,7 +103,7 @@ sub loginUrl {
     my $topic = $twiki->{topicName};
     my $web = $twiki->{webName};
     return $twiki->getScriptUrl( 0, 'login', $web, $topic,
-                                 origurl => $ENV{REQUEST_URI} );
+                                 origurl => $twiki->{request}->uri );
 }
 
 =pod

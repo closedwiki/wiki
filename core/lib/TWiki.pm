@@ -805,12 +805,12 @@ sub redirect {
         $url = $redir if ($redir);
     }
 
-    if ($passthru && defined $ENV{REQUEST_METHOD}) {
+    if ( $passthru && defined $query->method() ) {
         my $existing = '';
         if ($url =~ s/\?(.*)$//) {
             $existing = $1;
         }
-        if ($ENV{REQUEST_METHOD} eq 'POST') {
+        if ($query->method() eq 'POST') {
             # Redirecting from a post to a get
             my $cache = $this->cacheQuery();
             if ($cache) {
@@ -1673,7 +1673,7 @@ sub writeLog {
        }
     }
 
-    my $remoteAddr = $ENV{REMOTE_ADDR} || '';
+    my $remoteAddr = $this->{request}->remoteAddress() || '';
     my $text = "$user | $action | $webTopic | $extra | $remoteAddr |";
 
     _writeReport( $this, $TWiki::cfg{LogFileName}, $text );
@@ -3274,25 +3274,29 @@ sub HTTPS {
 #deprecated functionality, now implemented using %ENV%
 #move to compatibility plugin in TWiki5
 sub HTTP_HOST_deprecated {
-    return $ENV{HTTP_HOST} || '';
+    return $_[0]->{request}->header('Host') || '';
 }
 
 #deprecated functionality, now implemented using %ENV%
 #move to compatibility plugin in TWiki5
 sub REMOTE_ADDR_deprecated {
-    return $ENV{REMOTE_ADDR} || '';
+    return $_[0]->{request}->remoteAddress() || '';
 }
 
 #deprecated functionality, now implemented using %ENV%
 #move to compatibility plugin in TWiki5
 sub REMOTE_PORT_deprecated {
-    return $ENV{REMOTE_PORT} || '';
+# CGI/1.1 (RFC 3875) doesn't specify REMOTE_PORT,
+# but some webservers implement it. However, since
+# it's not RFC compliant, TWiki should not rely on 
+# it. So we get more portability. 
+    return '';
 }
 
 #deprecated functionality, now implemented using %ENV%
 #move to compatibility plugin in TWiki5
 sub REMOTE_USER_deprecated {
-    return $ENV{REMOTE_USER} || '';
+    return $_[0]->{request}->remoteUser() || '';
 }
 
 # Only does simple search for topicmoved at present, can be expanded when required
@@ -3389,13 +3393,31 @@ sub _encode {
 
 sub ENV {
     my ($this, $params) = @_;
-
-    return '' unless $params->{_DEFAULT} &&
-      defined $TWiki::cfg{AccessibleENV} &&
-        $params->{_DEFAULT} =~ /$TWiki::cfg{AccessibleENV}/o;
-    my $val = $ENV{$params->{_DEFAULT}};
-    return 'not set' unless defined $val;
-    return $val;
+    
+    my $key = $params->{_DEFAULT};
+    return '' unless $key && defined $TWiki::cfg{AccessibleENV} && $key =~ /$TWiki::cfg{AccessibleENV}/o;
+    my $val;
+    if ( $key =~ /^HTTPS?_(.*)/ ) {
+        $val = $this->{request}->header($1);
+    }
+    elsif ( $key eq 'REQUEST_METHOD' ) {
+        $val = $this->{request}->method;
+    }
+    elsif ( $key eq 'REMOTE_USER' ) {
+        $val = $this->{request}->remoteUser;
+    }
+    elsif ( $key eq 'REMOTE_ADDR' ) {
+        $val = $this->{request}->remoteAddress;
+    }
+    else {
+        # TSA SMELL: TWiki::Request doesn't support 
+        # SERVER_\w+, REMOTE_HOST and REMOTE_IDENT.
+        # Use %ENV as fallback, but for ones above
+        # wil probably not behave as expected if
+        # running with non-CGI engine.
+        $val = $ENV{$key};
+    }
+    return defined $val ? $val : 'not set';
 }
 
 sub SEARCH {
@@ -3742,25 +3764,7 @@ sub MAKETEXT {
 }
 
 sub SCRIPTNAME {
-    #my ( $this, $params, $theTopic, $theWeb ) = @_;
-    # try SCRIPT_FILENAME
-    my $value = $ENV{SCRIPT_FILENAME};
-    if( $value ) {
-        $value =~ s!.*/([^/]+)$!$1!o;
-        return $value;
-    }
-    # try SCRIPT_URL (won't work with url rewriting)
-    $value = $ENV{SCRIPT_URL};
-    if( $value ) {
-        # e.g. '/cgi-bin/view.cgi/TWiki/WebHome'
-        # cut URL path to get 'view.cgi/TWiki/WebHome'
-        $value =~ s|^$TWiki::cfg{ScriptUrlPath}/?||o;
-        # cut extended path to get 'view.cgi'
-        $value =~ s|/.*$||;
-        return $value;
-    }
-    # no joy
-    return '';
+    return $_[0]->{request}->action;
 }
 
 sub SCRIPTURL {
