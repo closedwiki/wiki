@@ -228,6 +228,7 @@ sub initDefaults() {
 		stattitle => undef,
 		statheader => undef,
 		showstatsum => 1,
+		statformat_perc => '%3.2f%%',
 	);
 
 	# reminder: don't forget change documentation (HolidaylistPlugin topic) if you add a new rendered option
@@ -1209,6 +1210,55 @@ sub _substStatisticsVars {
 	$text=~s/\%{d:?}/_vz($statistics{days})/egi;
 	$text=~s/\%{dd:?}/_vz($statistics{'days-w'})/egi;
 
+
+	# percentages:
+	sub _dz {
+		return defined $_[0]?$_[0]:0;
+	};
+	sub _perc {
+		return _dz($_[1])==0 ? "n.d." : sprintf($options{statformat_perc},(_dz($_[0]) * 100 / _dz($_[1])));
+	}
+	# locations to days:
+	$text=~s/\%{ld:([^}]+)}/_perc($statistics{locations}{$1}, $statistics{days})/egi;
+	$text=~s/\%{ldd:([^}]+)}/_perc($statistics{locations}{$1}, $statistics{'days-w'})/egi;
+	$text=~s/\%{lld:([^}]+)}/_perc($statistics{locations}{$1}, $statistics{days})/egi;
+	$text=~s/\%{lldd:([^}]+)}/_perc($statistics{locations}{$1}, $statistics{'days-w'})/egi;
+
+	# locations to holidays:
+	$text=~s/\%{lh:([^}]+)}/_perc($statistics{locations}{$1}, $statistics{holidays})/egi;
+	$text=~s/\%{lhh:([^}]+)}/_perc($statistics{locations}{$1}, $statistics{'holidays-w'})/egi;
+	$text=~s/\%{llh:([^}]+)}/_perc($statistics{locations}{$1}, $statistics{holidays})/egi;
+	$text=~s/\%{llhh:([^}]+)}/_perc($statistics{locations}{$1}, $statistics{'holidays-w'})/egi;
+
+	# icons to days:
+	$text=~s/\%{id:([^}]+)}/_perc($statistics{icons}{$1}, $statistics{days})/egi;
+	$text=~s/\%{idd:([^}]+)}/_perc($statistics{icons}{$1}, $statistics{'days-w'})/egi;
+	$text=~s/\%{iid:([^}]+)}/_perc($statistics{icons}{$1}, $statistics{days})/egi;
+	$text=~s/\%{iidd:([^}]+)}/_perc($statistics{icons}{$1}, $statistics{'days-w'})/egi;
+
+	# icons to holidays:
+	$text=~s/\%{ih:([^}]+)}/_perc($statistics{icons}{$1}, $statistics{holidays})/egi;
+	$text=~s/\%{ihh:([^}]+)}/_perc($statistics{icons}{$1}, $statistics{'holidays-w'})/egi;
+	$text=~s/\%{iih:([^}]+)}/_perc($statistics{icons}{$1}, $statistics{holidays})/egi;
+	$text=~s/\%{iihh:([^}]+)}/_perc($statistics{icons}{$1}, $statistics{'holidays-w'})/egi;
+
+	# holidays to days:
+	$text=~s/\%{hd:?}/_perc($statistics{holidays},$statistics{days})/egi;
+	$text=~s/\%{hdd:?}/_perc($statistics{holidays},$statistics{'days-w'})/egi;
+	$text=~s/\%{hhd:?}/_perc($statistics{'holidays-w'}, $statistics{days})/egi;
+	$text=~s/\%{hhdd:?}/_perc($statistics{'holidays-w'}, $statistics{'days-w'})/egi;
+
+	# public holidays to days:
+	$text=~s/\%{pd:?}/_perc($statistics{pubholidays},$statistics{days})/egi;
+	$text=~s/\%{pdd:?}/_perc($statistics{pubholidays},$statistics{'days-w'})/egi;
+	$text=~s/\%{ppd:?}/_perc($statistics{'pubholidays-w'}, $statistics{days})/egi;
+	$text=~s/\%{ppdd:?}/_perc($statistics{'pubholidays-w'}, $statistics{'days-w'})/egi;
+
+	# working days to days:
+	$text=~s/\%{wd:?}/_perc($statistics{work}, $statistics{days})/egi;
+	$text=~s/\%{wdd:?}/_perc($statistics{work}, $statistics{'days-w'})/egi;
+	$text=~s/\%{wwd:?}/_perc($statistics{'work-w'}, $statistics{days})/egi;
+	$text=~s/\%{wwdd:?}/_perc($statistics{'work-w'}, $statistics{'days-w'})/egi;
 	
 	return $text;
 }

@@ -202,6 +202,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 
 | *Substituted Statistics Variables* ||
 | *Variable* | *Description* |
+| *Counters* ||
 | %{d} | number of days |
 | %{dd} | number of days without weekends | 
 | %{h} | number of days in holidays |
@@ -218,6 +219,14 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | %{pp} | day count of public holidays without weekends |
 | %{w} | = %{d} - %{h} (day count at work) |
 | %{ww} | = %{dd} - %{hh} (day count at work without weekends and public holidays) |
+| *Percentages* ||
+| %{hd}, %{hdd},<br/> %{hhd}, %{hhdd} | holidays-to-days percentage with (single 'h'/'d') or without weekends and public holidays ('hh'/'dd') |
+| %{id:<i>ICON</i>}, %{idd:<i>ICON</i>},<br/> %{iid:<i>ICON</i>}, %{iidd:<i>ICON</i>} | icon-to-days percentage with (single 'i'/'d') or without weekends and public holidays ('ii'/'dd') |
+| %{ih:<i>ICON</i>}, %{ihh:<i>ICON</i>},<br/> %{iih:<i>ICON</i>}, %{iihh:<i>ICON</i>} | icon-to-holidays percentage with (single 'i'/'h') or without weekends and public holidays ('ii'/'dd') |
+| %{ld:<i>LOCATION</i>}, %{ldd:<i>LOCATION</i>},<br/> %{lld:<i>LOCATION</i>}, %{lldd:<i>LOCATION</i>} | location-to-days percentage with (single 'l'/'d') or without weekends and public holidays ('ll'/'dd') |
+| %{lh:<i>LOCATION</i>}, %{lhh:<i>LOCATION</i>},<br/> %{llh:<i>LOCATION</i>}, %{llhh:<i>LOCATION</i>} | location-to-holidays percentage with (single 'l'/'h') or without weekends and public holidays ('ll'/'hh') |
+| %{pd}, %{pdd},<br/> %{ppd}, %{ppdd} | public holidays-to-days percentage with (single 'p'/'d') or without weekends ('pp'/'dd') |
+| %{wd}, %{wdd},<br/> %{wwd}, %{wwdd} | working days-to-days percentage with (single 'w'/'d') or without weekends ('ww'/'dd') |
 
 
 ---++ Example
