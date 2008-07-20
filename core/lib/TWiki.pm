@@ -15,7 +15,8 @@ Global variables are avoided wherever possible to avoid problems
 with CGI accelerators such as mod_perl.
 
 ---++ Public Data members
-   * =cgiQuery=         Pointer to the CGI::
+   * =request=          Pointer to the TWiki::Request
+   * =response=         Pointer to the TWiki::Respose
    * =context=          Hash of context ids
    * moved: =loginManager=     TWiki::LoginManager singleton (moved to TWiki::Users)
    * =plugins=          TWiki::Plugins singleton
@@ -30,7 +31,7 @@ with CGI accelerators such as mod_perl.
                         not consistently used. Avoid.
    * =security=         TWiki::Access singleton
    * =SESSION_TAGS=     Hash of TWiki variables whose value is specific to
-                        the current CGI request.
+                        the current request.
    * =store=            TWiki::Store singleton
    * =topicName=        Name of topic found in URL path or =topic= URL
                         parameter
@@ -47,7 +48,9 @@ with CGI accelerators such as mod_perl.
 use strict;
 use Assert;
 use Error qw( :try );
-use CGI;             # Always required to get the CGI object
+use CGI;             # Always required to get html generation tags;
+use TWiki::Response;
+use TWiki::Request;
 
 require 5.005;       # For regex objects and internationalisation
 
@@ -72,6 +75,7 @@ use vars qw(
             $TRUE
             $FALSE
             $sandbox
+            $engine
             $ifParser
            );
 
@@ -114,6 +118,7 @@ sub getTWikiLibDir {
     if( $twikiLibDir =~ /^\./ ) {
         print STDERR "WARNING: TWiki lib path $twikiLibDir is relative; you should make it absolute, otherwise some scripts may not run from the command line.";
         my $bin;
+        # TSA SMELL : Should not assume environment variables and get data from request
         if( $ENV{SCRIPT_FILENAME} &&
             $ENV{SCRIPT_FILENAME} =~ /^(.+)\/[^\/]+$/ ) {
             # CGI script name
@@ -463,6 +468,15 @@ BEGIN {
     # initialize lib directory early because of later 'cd's
     getTWikiLibDir();
 
+    # initialize the runtime engine
+    if (defined $TWiki::cfg{Engine}) {
+        $engine = eval qq(use $TWiki::cfg{Engine}; $TWiki::cfg{Engine}->new);
+        die $@ if $@;
+    }
+    else {
+        $engine = undef;
+    }
+
     Monitor::MARK('Static configuration loaded');
 };
 
@@ -581,32 +595,24 @@ sub writeCompletePage {
         my $htmlHeader = join(
             "\n",
             map { '<!--'.$_.'-->'.$this->{_HTMLHEADERS}{$_} }
-              sort keys %{$this->{_HTMLHEADERS}} );
+              keys %{$this->{_HTMLHEADERS}} );
         $text =~ s!(</head>)!$htmlHeader$1!i if $htmlHeader;
         chomp($text);
     }
 
     my $hdr = $this->generateHTTPHeaders( undef, $pageType, $contentType );
+	my $hdr;
+    foreach my $header ( keys %{ $this->{response}->headers } ) {
+        $hdr .= $header . ': ' . $_ . "\x0D0A"
+          foreach $this->{response}->getHeader($header);
+    }
+	$hdr .= "\x0D0A";
 
     # Call final handler
     $this->{plugins}->dispatch(
         'completePageHandler',$text, $hdr);
 
-    # HTTP1.1 says a content-length should _not_ be specified unless
-    # the length is known. There is a bug in Netscape such that it
-    # interprets a 0 content-length as "download until disconnect"
-    # but that is a bug. The correct way is to not set a content-length.
-    unless( $this->inContext('command_line') ) {
-        # FIXME: Defer next line until we have Codev.UnicodeSupport
-        # - too 5.8 dependent
-        # my $len = do { use bytes; length( $text ); };
-        my $len = length($text);
-        $hdr =~ s/\n$/Content-Length: $len\n\n/s if $len;
-    } else {
-        $hdr = '';
-    }
-
-    print $hdr.$text;
+    $this->{response}->body($text);
 }
 
 =pod
@@ -689,7 +695,7 @@ sub generateHTTPHeaders {
     # add cookie(s)
     $this->{users}->{loginManager}->modifyHeader( $hopts );
 
-    return CGI::header( $hopts );
+    $this->{response}->headers( $hopts );
 }
 
 =pod
@@ -845,12 +851,11 @@ sub redirect {
 
 
     return if( $this->{plugins}->dispatch(
-        'redirectCgiQueryHandler', $query, $url ));
+        'redirectCgiQueryHandler', $this->{response}, $url ));
 
     # SMELL: this is a bad breaking of encapsulation: the loginManager
     # should just modify the url, then the redirect should only happen here.
-    return if( $this->{users}->{loginManager}->redirectCgiQuery( $query, $url ) );
-    die "Login manager returned 0 from redirectCgiQuery";
+    return !$this->{users}->{loginManager}->redirectCgiQuery( $query, $url );
 }
 
 =pod
@@ -1247,7 +1252,7 @@ Constructs a new TWiki object. Parameters are taken from the query object.
    * =$loginName= is the login username (*not* the wikiname) of the user you
      want to be logged-in if none is available from a session or browser.
      Used mainly for side scripts and debugging.
-   * =$query= the CGI query (may be undef, in which case an empty query
+   * =$query= the TWiki::Request query (may be undef, in which case an empty query
      is used)
    * =\%initialContext= - reference to a hash containing context
      name=value pairs to be pre-installed in the context hash
@@ -1256,7 +1261,7 @@ Constructs a new TWiki object. Parameters are taken from the query object.
 
 sub new {
     my( $class, $login, $query, $initialContext ) = @_;
-
+	ASSERT(UNIVERSAL::isa($query, 'TWiki::Request'));
     Monitor::MARK("Static compilation complete");
 
     # Compatibility; not used except maybe in plugins
@@ -1266,14 +1271,15 @@ sub new {
     # Set command_line context if there is no query
     $initialContext ||= defined( $query ) ? {} : { command_line => 1 };
 
-    $query ||= new CGI( {} );
+    $query ||= new TWiki::Request();
     my $this = bless( {}, $class );
+    $this->{request} = $query;
+    $this->{response} = new TWiki::Response();
 
-    # Tell CGI.pm which charset we are using if not default
+    # Tell TWiki::Response which charset we are using if not default
     if( defined $TWiki::cfg{Site}{CharSet} &&
           $TWiki::cfg{Site}{CharSet} !~ /^iso-?8859-?1$/io ) {
-        # Item5710: A bug in CGI::charset means we cannot use $query->charset
-        CGI::charset( $TWiki::cfg{Site}{CharSet} );
+		$this->{response}->charset( $TWiki::cfg{Site}{CharSet} );
     }
 
     $this->{_HTMLHEADERS} = {};
@@ -1289,8 +1295,6 @@ sub new {
     $this->{plugins} = new TWiki::Plugins( $this );
     require TWiki::Store;
     $this->{store} = new TWiki::Store( $this );
-    # cache CGI information in the session object
-    $this->{cgiQuery} = $query;
 
     $this->{remoteUser} = $login;	#use login as a default (set when running from cmd line)
     require TWiki::Users;
@@ -1316,8 +1320,9 @@ sub new {
         if( $topic =~ m#^$regex{linkProtocolPattern}://#o &&
             $this->{cgiQuery} ) {
             # redirect to URI
-                print $this->redirect( $topic );
-                exit;   #we seriously don't want to go through normal TWiki operations if we're redirecting..
+            $this->{webName} = '';
+            $this->redirect( $topic );
+            return $this;
         } elsif( $topic =~ /((?:.*[\.\/])+)(.*)/ ) {
             # is 'bin/script?topic=Webname.SomeTopic'
             $web   = $1;
@@ -1332,20 +1337,7 @@ sub new {
         $topic = '';
     }
 
-    # SMELL: "The Microsoft Internet Information Server is broken with
-    # respect to additional path information. If you use the Perl DLL
-    # library, the IIS server will attempt to execute the additional
-    # path information as a Perl script. If you use the ordinary file
-    # associations mapping, the path information will be present in the
-    # environment, but incorrect. The best thing to do is to avoid using
-    # additional path information."
-
-    # Clean up PATH_INFO problems, e.g.  Support.CobaltRaqInstall.  A valid
-    # PATH_INFO is '/Main/WebHome', i.e. the text after the script name;
-    # invalid PATH_INFO is often a full path starting with '/cgi-bin/...'.
     my $pathInfo = $query->path_info();
-    my $cgiScriptName = $ENV{SCRIPT_NAME} || '';
-    $pathInfo =~ s!$cgiScriptName/!/!i;
 
     # Get the web and topic names from PATH_INFO
     if( $pathInfo =~ /\/((?:.*[\.\/])+)(.*)/ ) {
@@ -1465,6 +1457,7 @@ sub new {
     # Finish plugin initialization - register handlers
     $this->{plugins}->enable();
 
+    # SMELL: Every place should localize it before use, so it's not necessary here.
     $TWiki::Plugins::SESSION = $this;
 
     Monitor::MARK("TWiki session created");
@@ -1614,7 +1607,7 @@ Break circular references.
 sub finish {
     my $this = shift;
 
-    map { $_->finish() } values %{$this->{forms}};
+    $_->finish() foreach values %{$this->{forms}};
     $this->{plugins}->finish() if $this->{plugins};
     $this->{users}->finish() if $this->{users};
     $this->{prefs}->finish() if $this->{prefs};
@@ -1642,6 +1635,7 @@ sub finish {
     undef $this->{user};
     undef $this->{SESSION_TAGS};
     undef $this->{_INCLUDES};
+    undef $this->{response};
 }
 
 =pod
@@ -2925,10 +2919,10 @@ sub initialize {
     my ( $pathInfo, $theRemoteUser, $topic, $theUrl, $query ) = @_;
 
     if( !$query ) {
-        $query = new CGI( {} );
+        $query = new TWiki::Request( {} );
     }
     if( $query->path_info() ne $pathInfo ) {
-        $query->path_info( $pathInfo );
+        $query->path_info( "/$0/" . $pathInfo );
     }
     if( $topic ) {
         $query->param( -name => 'topic', -value => '' );
