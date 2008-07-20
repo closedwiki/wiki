@@ -1,0 +1,727 @@
+# Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
+#
+# Copyright (C) 1999-2007 Peter Thoeny, peter@thoeny.org
+# and TWiki Contributors. All Rights Reserved. TWiki Contributors
+# are listed in the AUTHORS file in the root of this distribution.
+# NOTE: Please extend that file, not this notice.
+#
+# This module is based/inspired on Catalyst framework, and also CGI,
+# CGI::Simple and HTTP::Headers modules. Refer to
+#
+# http://search.cpan.org/~mramberg/Catalyst-Runtime-5.7010/lib/Catalyst.pm,
+# http://search.cpan.org/~lds/CGI.pm-3.29/CGI.pm,
+# http://search.cpan.org/author/ANDYA/CGI-Simple-1.103/lib/CGI/Simple.pm, and
+# http://search.cpan.org/~gaas/libwww-perl-5.808/lib/HTTP/Headers.pm
+# 
+# for credits and liscence details.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version. For
+# more details read LICENSE in the root of this distribution.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# As per the GPL, removal of this notice is prohibited.
+
+=pod
+
+---+!! package TWiki::Request
+
+Class to encapsulate request data.
+
+Fields:
+   * =action= action requested (view, edit, save, ...)
+   * =cookies= hashref whose keys are cookie names and values
+               are CGI::Cookie objects
+   * =headers= hashref whose keys are header name
+   * =method= request method (GET, HEAD, POST)
+   * =param= hashref of parameters, both query and body ones
+   * =path_info= path_info of request (eg. /WebName/TopciName)
+   * =remote_address= Client's IP address
+   * =remote_user= Remote HTTP authenticated user
+   * =secure= Boolean value about use of encryption
+   * =server_port= Port that the webserver listens on
+   * =uploads= hashref whose keys are parameter name of uploaded
+               files
+   * =uri= the request uri
+
+=cut
+
+package TWiki::Request;
+
+use strict;
+use Assert;
+use Error;
+use IO::File;
+use CGI::Util qw(rearrange);
+
+=begin twiki
+
+---++ ClassMethod new([$initializer])
+
+Constructs a TWiki::Request object.
+   * =$initializer= - may be a filehandle or hashref.
+      * If it's a filehandle, it'll be used to reload the TWiki::Request
+        object. See =save= method. Note: Restore only parameters
+      * It can be a hashref whose keys are parameter names. Values may be 
+        arrayref's to multivalued parameters. Same note as above.
+
+=cut
+
+sub new {
+    my ( $proto, $initializer ) = @_;
+
+    my $this;
+
+    my $class = ref($proto) || $proto;
+
+    $this = {
+        action         => '',
+        cookies        => {},
+        headers        => {},
+        method         => undef,
+        param          => {},
+        path_info      => '',
+        remote_address => '',
+        remote_user    => undef,
+        secure         => 0,
+        server_port    => undef,
+        uploads        => {},
+        uri            => '',
+    };
+
+    bless $this, $class;
+
+    if ( ref($initializer) && ref($initializer) eq 'HASH' ) {
+        my %param;
+        while ( my ( $key, $value ) = each %$initializer ) {
+            if ( exists $param{$key} ) {
+                push @{ $param{$key} }, ref($value) eq 'ARRAY' ? @$value : $value;
+            }
+            else {
+                $param{$key} = ref($value) eq 'ARRAY' ? [@$value] : [$value];
+            }
+        }
+        while ( my ( $key, $value ) = each %param ) {
+            $this->param( -name => $key, -value => $value );
+        }
+    }
+    elsif ( ref($initializer) && UNIVERSAL::isa($initializer, 'GLOB') ) {
+        my %param;
+        local $/ = "\n";
+        while (<$initializer>) {
+            chomp;
+            last if /^=/;
+            my ( $key, $value ) = map { TWiki::urlDecode($_) } split /=/;
+            if ( exists $param{$key} ) {
+                push @{ $param{$key} }, $value;
+            }
+            else {
+                $param{$key} = [$value];
+            }
+        }
+        while ( my ( $key, $value ) = each %param ) {
+            $this->param( -name => $key, -value => $value );
+        }
+    }
+    return $this;
+}
+
+=begin twiki
+
+---++ ObjectMethod action() -> $action
+
+Gets/Sets action requested (view, edit, save, ...)
+
+=cut
+
+sub action {
+    return @_ == 1 ? $_[0]->{action} : ( $_[0]->{action} = $_[1] );
+}
+
+=begin twiki
+
+---++ ObjectMethod method( [ $method ] ) -> $method
+
+Sets/Gets request method (GET, HEAD, POST).
+
+=cut
+
+sub method {
+    return @_ == 1 ? $_[0]->{method} : ( $_[0]->{method} = $_[1] );
+}
+
+=begin twiki
+
+---++ ObjectMethod pathInfo( [ $path ] ) -> $path
+
+Sets/Gets request path info. Implicitly sets request action.
+
+Called with '/view/WebName/TopicName' sets request action to 'view' and
+pathInfo to '/WebName/TopicName'. Called without parameters returns
+current pathInfo.
+
+There is a =path_info()= alias for compatibility with CGI.
+
+=cut
+
+*path_info = \&pathInfo;
+
+sub pathInfo {
+    my $this = shift;
+    if ( @_ > 0 ) {
+        $this->{path_info} = shift;
+        local $^W = 0;
+        $this->{path_info} =~ s{^/([a-zA-Z]*?)(/.*)?$}{$2};
+        $this->{action} = $1;
+    }
+    return $this->{path_info};
+}
+
+=begin twiki
+
+---++ ObjectMethod protocol() -> $protocol
+
+Returns 'https' if secure connection. 'http' otherwise.
+
+=cut
+
+# SMELL : review this
+sub protocol {
+    return $_[0]->secure ? 'https' : 'http';
+}
+
+=begin twiki
+
+---++ ObjectMethod uri( [$uri] ) -> $uri
+
+Gets/Sets request uri.
+
+=cut
+
+sub uri {
+    return @_ == 1 ? $_[0]->{uri} : ( $_[0]->{uri} = $_[1] );
+}
+
+=begin twiki
+
+---++ ObjectMethod queryString() -> $query_string
+
+Returns query_string part of request uri, if any.
+
+=query_string()= alias provided for compatibility with CGI.
+
+=cut
+
+*query_string = \&queryString;
+
+sub queryString {
+    my $this = shift;
+    my @params;
+    foreach my $name ( $this->param ) {
+        my $key = TWiki::urlEncode($name);
+        push @params,
+          map { $key . "=" . TWiki::urlEncode($_) } $this->param($name);
+    }
+    return join(';', @params);
+}
+
+=begin twiki
+
+---++ ObjectMethod url( [-full => 1, 
+                         -relative => 1, 
+                         -path => 1, 
+                         -query => 1] ) -> $url
+
+Returns many url info. 
+   * If called without parameters or with -full => 1 returns full url, e.g. 
+     http://twiki.org/cgi-bin/view/Codev/WebHome?raw=on
+   * -relative => 1 returns relative action path, e.g. view
+   * -path => 1, -query => 1 also includes path info and query string
+     respectively
+
+Resonabily compatible with CGI corresponding method. Currently support
+neither -absolute nor -rewrite.
+
+=cut
+
+sub url {
+    my ($this, @p) = @_;
+
+    my ( $relative, $full, $base, $path_info, $query ) = rearrange(
+        [
+            qw(RELATIVE FULL BASE), [qw(PATH PATH_INFO)],
+            [qw(QUERY_STRING QUERY)],
+        ],
+        @p
+    );
+    my $url;
+    $full++ if $base || !$relative;
+    my $path = $this->pathInfo;
+    my $name = $this->action;
+    if ( $full ) {
+        my $vh = $this->header( 'Host' );
+        $url = $vh ? $this->protocol . '://' . $vh : $TWiki::cfg{DefaultUrlHost};
+        return $url if $base;
+        $url .= $TWiki::cfg{ScriptUrlPath} . '/' . $this->action;
+    }
+    elsif ( $relative ) {
+        $url = $name;
+    }
+    $url .= $path if $path_info && defined $path;
+    my $queryString =  $this->queryString();
+    $url .= '?'. $queryString if $query && $queryString;
+    $url = '' unless defined $url;
+    return TWiki::urlEncode( $url );
+}
+
+=begin twiki
+
+---++ ObjectMethod secure( [$secure] ) -> $secure
+
+Gets/Sets connection's secure flag.
+
+=cut
+
+sub secure {
+    return @_ == 1 ? $_[0]->{secure} : ( $_[0]->{secure} = $_[1] );
+}
+
+=begin twiki
+
+---++ ObjectMethod remoteAddress( [$ip] ) -> $ip
+
+Gets/Sets client IP address.
+
+=remote_addr()= alias for compatibility with CGI.
+
+=cut
+
+*remote_addr = \&remoteAddress;
+
+sub remoteAddress {
+    return @_ == 1
+      ? $_[0]->{remote_address}
+      : ( $_[0]->{remote_address} = $_[1] );
+}
+
+=begin twiki
+
+---++ ObjectMethod remoteUser( [$userName] ) -> $userName
+
+Gets/Sets remote user's name.
+
+=remote_user()= alias for compatibility with CGI.
+
+=cut
+
+*remote_user = \&remoteUser;
+
+sub remoteUser {
+    return @_ == 1 ? $_[0]->{remote_user} : ( $_[0]->{remote_user} = $_[1] );
+}
+
+=begin twiki
+
+---++ ObjectMethod queryParam( [-name => $name, -value => $value             |
+                                -name => $name, -values => [ $v1, $v2, ... ] |
+                                $name, $v1, $v2, ...                         |
+                                name, [ $v1, $v2, ... ]                     
+                               ] ) -> @paramNames | @values | $firstValue
+
+This methos is used by engines, during its prepare phase. Should not be used
+anywhere else. Since bodyParam must exist and it has different semantics from
+param method, this one exists for symmetry, and could be modified in the 
+future, so it could be possible to get query and body parameters independently.
+
+=cut
+
+sub queryParam {
+    my $this = shift;
+    return $this->param(@_);
+}
+
+=begin twiki
+
+---++ ObjectMethod bodyParam( ... ) -> ...
+
+Adds parameters passed within request body. It keeps previous values,
+but places new ones first.
+
+=cut
+
+sub bodyParam {
+    my ( $this, @p ) = @_;
+    
+    my ( $key, $newValue ) = rearrange( [ 'NAME', [qw(VALUE VALUES)] ], @p );
+
+    # If a parameter is defined at both query string and body, CGI.pm
+    # places body values first, but all values are available. However, 
+    # CGI::param replaces previous values with new ones whenever called, 
+    # so we need to rescue old values and append them to the new ones. 
+    # This way, this class behaves the same as CGI.pm and so does 'param' 
+    # method.
+    my @values = $this->param($key);
+    if ( ref($newValue) && ref($newValue) eq 'ARRAY' ) {
+        unshift @values, @$newValue;
+    }
+    else {
+        unshift @values, $newValue;
+    }
+    return $this->param(-name => $key, -values => \@values);
+}
+ 
+=begin twiki
+
+---++ ObjectMethod param( [-name => $name, -value => $value             |
+                           -name => $name, -values => [ $v1, $v2, ... ] |
+                           $name, $v1, $v2, ...                         |
+                           name, [ $v1, $v2, ... ]                     
+                           ] ) -> @paramNames | @values | $firstValue
+
+   * Called without parameters returns all parameter names
+   * Called only with parameter name or with -name => 'name'
+      * In list context returns all values associated (maybe empty list)
+      * In scalar context returns first value (maybe undef)
+   * Called with name and list of values or with 
+     -name => 'name', -value => 'value' or -name => 'name', -values => [ ... ]
+     sets parameter value
+
+Resonably compatible with CGI.
+
+=cut
+
+sub param {
+    my ( $this, @p ) = @_;
+
+    my ( $key, $value ) = rearrange( [ 'NAME', [qw(VALUE VALUES)] ], @p );
+
+    return keys %{ $this->{param} } unless $key;
+    if ( defined $value ) {
+        $this->{param}->{$key} =
+            ref $value && ref $value eq 'ARRAY' ? $value : [$value];
+    }
+    if ( defined $this->{param}->{$key} ) {
+        return wantarray
+            ? @{ $this->{param}->{$key} }
+            : $this->{param}->{$key}->[0];
+    }
+    else {
+        return wantarray ? () : undef;
+    }
+}
+
+=begin twiki
+
+---++ ObjectMethod cookie($name [, $value, $path, $secure, $expires]) -> $value
+
+   * If called  without parameters returns a list of cookie names.
+   * If called only with =$name= parameter returns value of cookie 
+     with that name or undef if it doesn't exist.
+   * If called with defined $value and other  parameters returns a 
+     CGI::Cookie  object  created  with those  parameters. Doesn't 
+     store this new created cookie within request object. This way 
+     for compatibility with CGI.
+
+=cut
+
+sub cookie {
+    eval { require CGI::Cookie; 1 } or throw Error::Simple($@);
+    my ( $this, @p ) = @_;
+    my ( $name, $value, $path, $secure, $expires ) =
+      rearrange( [ 'NAME', [qw(VALUE VALUES)], 'PATH', 'SECURE', 'EXPIRES' ],
+        @p );
+    unless ( defined $value ) {
+        return keys %{ $this->{cookies} } unless $name;
+        return ()                         unless $this->{cookies}->{$name};
+        return $this->{cookies}->{$name}->value;
+    }
+    return new CGI::Cookie(
+        -name    => $name,
+        -value   => $value,
+        -path    => $path || '/',
+        -secure  => $secure || $this->secure,
+        -expires => $expires || abs( $TWiki::cfg{Sessions}{ExpireAfter} )
+    );
+}
+
+=begin twiki
+
+ObjectMethod cookies( \%cookies ) -> $hashref
+
+Gets/Sets cookies hashref. Keys are cookie names
+and values CGI::Cookie objects.
+
+=cut
+
+sub cookies {
+    return @_ == 1 ? $_[0]->{cookies} : ( $_[0]->{cookies} = $_[1] );
+}
+
+=begin twiki
+
+---++ ObjectMethod delete( $paramName )
+
+Deletes parameter name and value(s) from request.
+
+=Delete()= alias provided for compatibility with CGI
+
+=cut
+
+*Delete = \&delete;
+
+sub delete {
+    my $this = shift;
+    foreach ( @_ ) {
+        if ( my $upload = $this->{uploads}->{$_} ) {
+            $upload->finish;
+            CORE::delete $this->{uploads}->{$_};
+        }
+        CORE::delete $this->{param}->{$_};
+    }
+}
+
+=begin twiki
+
+---++ ObjectMethod deleteAll()
+
+Deletes all parameter name and value(s).
+
+=delete_all()= alias provided for compatibility with CGI.
+
+=cut
+
+*delete_all = \&deleteAll;
+
+sub deleteAll {
+    my $this = shift;
+    $this->delete( $this->param() );
+}
+
+=begin twiki
+
+---++ ObjectMethod header( [ $name | $h1 => $v1, $h2 => $v2 ] ) -> @values
+
+Gets/Sets header field. If called without parametes returns
+all present header field names. Multivalued header can be set
+by passing an arrayref to values.
+
+If called with only =$name= parameter, returns values associated.
+
+Can be called with a hash to set multiple headers.
+
+*Doesn't compatible with CGI*, since CGI correspondent is a 
+response write method. CGI scripts obtain headers from %ENV
+or =http= method. %ENV is not available and must be replaced
+by calls to this and other methods of this class. =http= is
+provided for compatibility, but is deprecated. Use this one
+instead.
+
+Calls to CGI =header= method must be replaced by calls to
+TWiki::Response =header= method.
+
+=cut
+
+sub header {
+    my $this = shift;
+    return keys %{ $this->{headers} } unless @_;
+    my (@old);
+    my %seen;
+    while (@_) {
+        my $field = shift;
+        my $op = @_ ? ( $seen{ lc($field) }++ ? 'PUSH' : 'SET' ) : 'GET';
+        @old = $this->_header( $field, shift, $op );
+    }
+    return @old    if wantarray;
+    return $old[0] if @old <= 1;
+    join( ", ", @old );
+}
+
+=begin twiki
+
+---++ ObjectMethod save( $fh )
+
+Saves object state to filehandle. Object may be loaded latter
+passing $fh to new constructor.
+
+=cut
+
+sub save {
+    my ( $this, $fh ) = @_;
+    local ( $\, $, ) = ( '', '' );
+    foreach my $name ( $this->param ) {
+        my $key = TWiki::urlEncode($name);
+        print $fh $key, "=", TWiki::urlEncode($_), "\n"
+          foreach $this->param($name);
+    }
+    print $fh "=\n";
+}
+
+=begin twiki
+
+---++ ObjectMethod upload( $name ) -> $handle
+
+Called with file name parameter returns an open filehandle
+to uploaded file.
+
+=cut
+
+sub upload {
+    my ( $this, $name ) = @_;
+    my $upload = $this->{uploads}->{$name};
+    return defined $upload ? $upload->handle : undef;
+}
+
+=begin twiki
+
+---++ ObjectMethod uploadInfo() -> $headers
+
+Returns a hashref to information about uploaded 
+files as sent by browser.
+
+=cut
+
+sub uploadInfo {
+    return $_[0]->{uploads}->{ $_[1] }->uploadInfo;
+}
+
+=begin twiki
+
+---++ ObjectMethod tmpFileName( $fname ) -> $tmpFileName
+
+Returns the name of temporarly created file to store uploaded $fname.
+
+$fname may be obtained by calling =param()= with form field name.
+
+=cut
+
+sub tmpFileName {
+    my ( $this, $fname ) = @_;
+    return
+      exists $this->{uploads}->{$fname} ? $this->{uploads}->{$fname}->tmpFileName : undef;
+}
+
+=begin twiki
+
+---++ ObjectMethod uploads( [ \%uploads ] ) -> $hashref
+
+Gets/Sets request uploads field. Keys are uploaded file names,
+as sent by browser, and values are TWiki::Request::Upload objects.
+
+=cut
+
+sub uploads {
+    return @_ == 1 ? $_[0]->{uploads} : ( $_[0]->{uploads} = $_[1] );
+}
+
+# ======== possible accessors =======
+# auth_type
+# content_length
+# content_type
+
+=begin twiki
+
+---++ ObjectMethod http( [$header] ) -> $value DEPRECATED
+
+Called without parameters returns a list of all available header filed names.
+
+Given a field name returns value associated.
+
+http('HTTP_USER_AGENT'); http('User-Agent') and http('User_Agent') 
+are equivalent.
+
+Please, use =header()= instead. Present only for compatibility with CGI.
+
+=cut
+
+sub http {
+    my ($this, $p) = @_;
+    if ( defined $p ) {
+        $p =~ s/^https?-//i;
+        return $this->header( $p );
+    }
+    return $this->header();
+}
+
+=begin twiki
+
+---++ ObjectMethod https( [$name] ) -> $value || $secure DEPRECATED
+
+Similar to =http()= method above. Called with no parameters returns
+secure flag.
+
+Please, use =header()= and =secure()= instead. 
+Present only for compatibility with CGI.
+
+=cut
+
+sub https {
+    my ($this, $p) = @_;
+    return $this->secure if !defined $p || $p =~ /^https$/i;
+    $p =~ tr/a-z_/A-Z-/;
+    $p =~ s/^HTTPS?-//;
+    return $this->header( $p );
+}
+
+=begin twiki
+
+---++ ObjectMethod userAgent() -> $userAgent;
+
+Convenience method to get User-Agent string.
+
+=user_agent()= alias provided for compatibility with CGI.
+
+=cut
+
+*user_agent = \&userAgent;
+
+sub userAgent { shift->header('User-Agent') };
+
+=begin twiki
+
+---++ ObjectMethod referer()
+
+Convenience method to get Referer uri.
+
+=cut
+
+sub referer   { shift->header('Referer')    };
+
+# ======== Private methods ==========
+
+sub _header {
+    my ( $this, $field, $val, $op ) = @_;
+
+    unless ( $field =~ /^:/ ) {
+        $field =~ tr/_/-/;
+        my $old = $field;
+        $field = lc $field;
+    }
+
+    my $h = $this->{headers}->{$field};
+    my @old = ref($h) eq 'ARRAY' ? @$h : ( defined($h) ? ($h) : () );
+
+    $op ||= defined($val) ? 'SET' : 'GET';
+    unless ( $op eq 'GET' || ( $op eq 'INIT' && @old ) ) {
+        if ( defined($val) ) {
+            my @new = ( $op eq 'PUSH' ) ? @old : ();
+            if ( ref($val) ne 'ARRAY' ) {
+                push( @new, $val );
+            }
+            else {
+                push( @new, @$val );
+            }
+            $this->{headers}->{$field} = @new > 1 ? \@new : $new[0];
+        }
+        elsif ( $op ne 'PUSH' ) {
+            delete $this->{headers}->{$field};
+        }
+    }
+    return @old;
+}
+
+1;

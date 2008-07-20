@@ -532,6 +532,7 @@ lib/TWiki/LineIterator.pm 0444
 lib/TWiki/ListIterator.pm 0444
 lib/TWiki/LoginManager.pm 0444
 lib/TWiki/LoginManager/ApacheLogin.pm 0444
+lib/TWiki/LoginManager/Session.pm 0444
 lib/TWiki/LoginManager/TemplateLogin.pm 0444
 lib/TWiki/Merge.pm 0444
 lib/TWiki/Meta.pm 0444
@@ -549,6 +550,8 @@ lib/TWiki/Query/Node.pm 0444
 lib/TWiki/Query/HoistREs.pm 0444
 lib/TWiki/Query/Parser.pm 0444
 lib/TWiki/Render.pm 0444
+lib/TWiki/Request.pm 0444
+lib/TWiki/Response.pm 0444
 lib/TWiki/Sandbox.pm 0444
 lib/TWiki/Search.pm 0444
 lib/TWiki/Store.pm 0444
