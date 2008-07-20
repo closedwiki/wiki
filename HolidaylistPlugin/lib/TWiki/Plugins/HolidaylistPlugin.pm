@@ -76,7 +76,7 @@ use vars qw(
 	$theWeb $theTopic $attributes
 	$startDays
 	@processedTopics
-	$hlid
+	$hlid 
     );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -219,6 +219,15 @@ sub initDefaults() {
 		statrowformat => ' %{hh} ',
 		statrowheader => '#',
 		statrowtitle => ' %{ll}',
+		statformat_ll => '%{ll:%LOCATION} x %LOCATION; ',
+		statformat_l => '%{l:%LOCATION} x %LOCATION; ',
+		statformat_ii => '%{ii:%ICON} x %ICON ; ',
+		statformat_i => '%{i:%ICON} x %ICON ; ',
+		statformat_0 => 0,
+		statformat => undef,
+		stattitle => undef,
+		statheader => undef,
+		showstatsum => 1,
 	);
 
 	# reminder: don't forget change documentation (HolidaylistPlugin topic) if you add a new rendered option
@@ -226,7 +235,7 @@ sub initDefaults() {
 
 	# options to turn or switch things on (1) or off (0)
 	# this special handling allows 'on'/'yes';'off'/'no' values additionally to '1'/'0'
-	@flagOptions = ( 'showweekends', 'removeatwork', 'compatmode', 'enablepubholidays', 'showpubholidays', 'navenable','showmonthheader','showstatcol', 'showstatrow');
+	@flagOptions = ( 'showweekends', 'removeatwork', 'compatmode', 'enablepubholidays', 'showpubholidays', 'navenable','showmonthheader','showstatcol', 'showstatrow','showstatsum');
 
 	%months = ( Jan=>1, Feb=>2, Mar=>3, Apr=>4, May=>5, Jun=>6, 
 	            Jul=>7, Aug=>8, Sep=>9, Oct=>10, Nov=>11, Dec=>12 );
@@ -419,7 +428,7 @@ sub getStartDate() {
 		($yy,$mm,$dd) = Monday_of_Week($week, $yy) if ($matched);
 	}
 	# handle paging:
-	my $cgi = &TWiki::Func::getCgiQuery();
+	my $cgi=TWiki::Func::getCgiQuery();
 	if (defined $cgi->param('hlppage'.$hlid)) {
 		if ($cgi->param('hlppage'.$hlid) =~ m/^([\+\-]?[\d\.]+)$/) {
 			my $hlppage = $1; 
@@ -923,7 +932,7 @@ sub renderHolidaylist() {
 			$restdays -= $daysdiff;
 		}
 		if ($options{showstatcol}) {
-			foreach my $h (split(/\|/,$options{statcolheader})) {
+			foreach my $h (split(/\|/,getStatOption('statheader','statcolheader'))) {
 				$text.='<th valign="bottom" align="center" rowspan="2" bgcolor="'.$options{tableheadercolor}.'">'.$h.'</th>';
 			}
 		}
@@ -955,7 +964,7 @@ sub renderHolidaylist() {
 		$text.='</th>';
 	}
 	if ((!$options{showmonthheader}) && $options{showstatcol}) {
-		foreach my $h (split(/\|/,$options{statcolheader})) {
+		foreach my $h (split(/\|/,getStatOption('statheader','statcolheader'))) {
 			$text.='<th valign="bottom" align="center" bgcolor="'.$options{tableheadercolor}.'">'.$h.'</th>';
 		}
 	
@@ -1111,6 +1120,7 @@ sub renderHolidaylist() {
 		$text .= "</tr>\n";
 	}
 	$text .= renderStatisticsRow(\%rowstatistics, \%sumstatistics) if ($options{showstatrow});
+	$text .= renderStatisticsSumRow(\%sumstatistics) if ($options{showstatcol}&&(!$options{showstatrow})&&($options{showstatsum}));
 	$text .= '</table></noautolink>';
 
 	return $text;
@@ -1138,33 +1148,41 @@ sub _substStatisticsVars {
 	if ($textformat=~/\%{ll:?}/i) {
 		my $t="";
 		foreach my $location (sort keys %{$statistics{'locations-w'}}) {
-			$t.="$statistics{'locations-w'}{$location} x $location; &nbsp;";
+			my $f=$options{statformat_ll};
+			$f=~s/\%LOCATION/$location/g;
+			$t.=$f;
 		}
 		$text=~s/\%{ll:?}/$t/g;
 	}
 	if ($textformat=~/\%{l}/i) {
 		my $t="";
 		foreach my $location (sort keys %{$statistics{'locations'}}) {
-			$t.="$statistics{'locations'}{$location} x $location; &nbsp;";
+			my $f=$options{statformat_l};
+			$f=~s/\%LOCATION/$location/g;
+			$t.=$f;
 		}
 		$text=~s/\%{l:?}/$t/g;
 	}
 	if ($textformat=~/\%{ii:?}/i) {
 		my $t="";
 		foreach my $icon (keys %{$statistics{'icons-w'}}) {
-			$t.="$statistics{'icons-w'}{$icon} x $icon ; &nbsp;";
+			my $f=$options{statformat_ii};
+			$f=~s/\%ICON/$icon/g;
+			$t.=$f;
 		}
 		$text=~s/\%{ii:?}/$t/g;
 	}
 	if ($textformat=~/\%{i:?}/i) {
 		my $t="";
 		foreach my $icon (keys %{$statistics{'icons-w'}}) {
-			$t.="$statistics{'icons-w'}{$icon} x $icon ; &nbsp;";
+			my $f=$options{statformat_i};
+			$f=~s/\%ICON/$icon/g;
+			$t.=$f;
 		}
 		$text=~s/\%{i:?}/$t/g;
 	}
 	sub _vz {
-		return defined $_[0]?$_[0]:0;
+		return defined $_[0]?$_[0]:defined $options{statformat_0}?$options{statformat_0}:0;
 	};
 	$text=~s/\%{i:([^}]+)}/_vz($statistics{icons}{$1})/egi;
 	$text=~s/\%{ii:([^}]+)}/_vz($statistics{'icons-w'}{$1})/egi;
@@ -1195,22 +1213,52 @@ sub _substStatisticsVars {
 	return $text;
 }
 # =========================
+sub getStatOption {
+	return (defined $options{$_[0]}) ? $options{$_[0]} : $options{$_[1]};
+}
+# =========================
+sub renderStatisticsSumRow {
+	my ($sumstatisticsref) = @_;
+	my $cgi=TWiki::Func::getCgiQuery();
+	my $text = "";
+	my $row="";
+	my @stattitles=split(/\|/,getStatOption('stattitle','statcoltitle'));
+	foreach my $statcol (split(/\|/,getStatOption('statformat','statcolformat'))) {
+		my $stattitle = shift @stattitles;
+		$stattitle = getStatOption('stattitle','statcoltitle') unless defined $stattitle;
+		my ($txt,$t) = substStatisticsVars($statcol, $stattitle, $sumstatisticsref);
+		$row.=$cgi->th({-valign=>"top", -title=>$t}, $txt);
+	}
+	
+	$text.= $cgi->Tr({-bgcolor=>$options{tableheadercolor}},$cgi->th({-colspan=>$options{days}+1,-align=>'right'},'&nbsp;').$row);
+
+	return $text;
+}
+# =========================
 sub renderStatisticsRow {
 	my ($statisticsref, $sumstatisticsref) = @_;
+	my $cgi=TWiki::Func::getCgiQuery();
 	my $text = "";
 	my ($dd,$mm,$yy) = getStartDate();
 
 	my ($ty,$tm,$td) = Today();
 	my $today = Date_to_Days($ty,$tm,$td);
 
-	my @rowheaders = split(/\|/, $options{statrowheader});
-	my @rowtitles = split(/\|/, $options{statrowtitle});
+	my $statrowformat = getStatOption('statformat','statrowformat');
+	my $statrowtitle  = getStatOption('stattitle', 'statrowtitle');
+	my $statrowheader = getStatOption('statheader','statrowheader');
+
+	TWiki::Func::writeWarning("statrowformat=$statrowformat");
+
+	my @rowformats = split(/\|/, $statrowformat);
+	my @rowheaders = split(/\|/, $statrowheader);
+	my @rowtitles = split(/\|/, $statrowtitle);
 	my $showsums=0;
-	foreach my $rowformat (split(/\|/,$options{statrowformat})) {
+	foreach my $rowformat (@rowformats) {
 		my $rowheader = shift(@rowheaders);
 		my $rowtitle  = shift(@rowtitles);
-		$rowheader = $options{statrowheader} unless defined $rowheader;
-		$rowtitle = $options{statrowtitle} unless defined $rowtitle;
+		$rowheader = $statrowheader unless defined $rowheader;
+		$rowtitle = $statrowtitle unless defined $rowtitle;
 		my $row = "";
 		for (my $i=0; $i<$options{days}; $i++) {
 			my ($yy1,$mm1,$dd1) = Add_Delta_Days($yy,$mm,$dd,$i);
@@ -1218,31 +1266,36 @@ sub renderStatisticsRow {
 			my $date = Date_to_Days($yy1,$mm1,$dd1);
 			my ($text,$title) = substStatisticsVars($rowformat, $rowtitle, $$statisticsref{$i});
 			
-			my ($colbgcolor,$colfgcolor)=("","");
-			$colfgcolor=qq@style="color:$options{todayfgcolor};"@ if (defined $options{todayfgcolor}) && ($date == $today);
-			$colbgcolor=qq@bgcolor="$options{todaybgcolor}"@ if (defined $options{todaybgcolor}) && ($date == $today);
-			
+			my $style="";
+			$style.="color:$options{todayfgcolor};" if (defined $options{todayfgcolor}) && ($date == $today);
+			$style.="background-color:$options{todaybgcolor};" if (defined $options{todaybgcolor}) && ($date == $today);
 			if (($dow<6)||($options{showweekends})) {
-				$row.='<th '.$colfgcolor.' '.$colbgcolor.' title="'.$title.'">'.$text.'</th>';
+				$row.=$cgi->th({-style=>$style,-title=>$title},$text);
 			} else {
-				$row.='<th '.$colfgcolor.' '.$colbgcolor.'>&nbsp;</th>';
+				$row.=$cgi->th({-style=>$style,-title=>$title},'&nbsp;');
 			}
 		}
 
 		if ((!$showsums)&&($options{showstatcol})) {
 			$showsums=1;
-			my @rowspanf = split(/\|/,$options{statrowformat});
+			my @rowspanf = split(/\|/,$statrowformat);
 			my $rowspan=$#rowspanf + 1;
-			my @stattitles=split(/\|/,$options{statcoltitle});
-			foreach my $statcol (split(/\|/,$options{statcolformat})) {
-				my $stattitle = shift @stattitles;
-				$stattitle = $options{statcoltitle} unless defined $stattitle;
-				my ($txt,$t) = substStatisticsVars($statcol, $stattitle, $sumstatisticsref);
-				$row.='<th valign="top" rowspan="'.$rowspan.'" title="'.$t.'">'.$txt.'</th>';
+			if ($options{showstatsum}) {
+				my @stattitles=split(/\|/,getStatOption('stattitle','statcoltitle'));
+				foreach my $statcol (split(/\|/,getStatOption('statformat','statcolformat'))) {
+					my $stattitle = shift @stattitles;
+					$stattitle = getStatOption('stattitle','statcoltitle') unless defined $stattitle;
+					my ($txt,$t) = substStatisticsVars($statcol, $stattitle, $sumstatisticsref);
+					$row.=$cgi->th({-valign=>"top", -rowspan=>$rowspan, -title=>$t}, $txt);
+				}
+			} else {
+				my @colspanf = split(/|/,getStatOption('statformat','statcolformat'));
+				my $colspan = $#colspanf + 1;
+				$row.=$cgi->th({-rowspan=>$rowspan, -colspan=>$colspan},'&nbsp;');
 			}
 		}
 		
-		$text.='<tr bgcolor="'.$options{tableheadercolor}.'"><th align="right">'.$rowheader.'</th>'.$row.'</tr>';
+		$text.=$cgi->Tr({-bgcolor=>$options{tableheadercolor}}, $cgi->th({-align=>"right"},$rowheader).$row);
 	}
 
 	return $text;
@@ -1251,13 +1304,14 @@ sub renderStatisticsRow {
 sub renderStatisticsCol {
 	my ($statisticsref) = @_;
 	my $text="";
+	my $cgi=TWiki::Func::getCgiQuery();
 
-	my @statcoltitles = split(/\|/, $options{statcoltitle});
-	foreach my $statcol (split /\|/, $options{statcolformat}) {
+	my @statcoltitles = split(/\|/, getStatOption('stattitle','statcoltitle'));
+	foreach my $statcol (split /\|/, getStatOption('statformat','statcolformat')) {
 		my $statcoltitle = shift(@statcoltitles);
-		$statcoltitle=$options{statcoltitle} unless defined $statcoltitle;
+		$statcoltitle=getStatOption('stattitle','statcoltitle') unless defined $statcoltitle;
 		($statcol,$statcoltitle)=substStatisticsVars($statcol,$statcoltitle,$statisticsref);
-		$text.='<th bgcolor="'.$options{tableheadercolor}.'" class="hlpStatisticsColumn" title="'.$statcoltitle.'">'.$statcol.'</th>';
+		$text.=$cgi->th({-bgcolor=>$options{tableheadercolor}, -class=>"hlpStatisticsColumn", -title=>$statcoltitle}, $statcol);
 	}
 	return $text;
 }

@@ -1,4 +1,13 @@
 %META:TOPICINFO{author="TWikiContributor" date="1181041089" format="1.0" version="$Rev$"}%
+<!--
+This topic is part of the documentation for HolidaylistPlugin and is
+automatically generated from Subversion. Do not edit it! Your edits
+will be lost the next time the topic is uploaded!
+
+If you want to report an error in the topic, please raise a report at
+http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/HolidaylistPlugin
+-->
+
 ---+!! <nop>HolidaylistPlugin</nop>
 
 %TOC%
@@ -88,7 +97,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 </verbatim>
 	* You can put the entries to another topic and use the topic attribute, e.g:
 <verbatim>
-		%HOLIDAYLIST{topic="TimeTableDataTopic" tablecaption="Planned Holidays (see TimeTableDataTopic)"}%=
+		%HOLIDAYLIST{topic="TimeTableDataTopic" tablecaption="Planned Holidays (see TimeTableDataTopic)"}%
 </verbatim>
 	* You can hide '@all' in an entry if you put it into HTML comments, e.g: 
 <verbatim>
@@ -111,8 +120,9 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | removeatwork | set to "1" to remove persons without calendar entries from table | removeatwork="0" |
 | showmonthheader | set to "1" to show a additional month header | showmonthheader="0" |
 | showpubholidays | show public holidays as separate lines (rows) in table (related: enablepubholidays, pubholidayicon) | showpubholidays="0" |
-| showstatcol | enable/disables statistics column(s) | showsumcol="off" | 
-| showstatrow | enable/disables statistics row(s) | showsumrow="off" | 
+| showstatcol | enables/disables statistics column(s) | showsumcol="off" | 
+| showstatrow | enables/disables statistics row(s) | showsumrow="off" | 
+| showstatsum | enables/disables statistics summary below/behind the statistics columns/rows; works only in conjunction with showstatcol and/or showstatrow | showstatsum="on" | 
 | showweekends | show weekends if set to 1 | showweekends="0" |
 | startdate | a start date (e.g. '1 Oct 2005') or a day offset (e.g. '10', '+30' or '-30') | startdate="+0" |
 | topic | a comma separated list of source topics | topic="%<nop>TOPIC%" |
@@ -148,12 +158,6 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | navprevhalftitle | title text (tooltip text) for the navigation button to the previous =navdays/2= days (%n will be replaced with the half number of days to show) | navprevtitle="Previous %n day(s)" |
 | navprevtitle | title text (tooltip text) for the navigation button to the previous =navdays= days (%n will be replaced with the number of days to show) | navprevtitle="Previous %n day(s)" |
 | nwidth | cell width of the first column | nwidth="120px" |
-| statcolformat | statistics column format (related: showstatcol, statcolheader, statcoltitle); see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statcolformat="%{hh}" |
-| statcolheader | statistics header (related: showstatcol, statcolformat, statcoltitle); use '&#124;' to separate multiple column headers | statcolheader="#" |
-| statcoltitle | statistics tooltip (related: showstatcol, statcolformat, statcolheader); see  [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statcoltitle="%{ll}" |
-| statrowformat | statistics row format (related: showstatrow, statrowheader, statrowtitle); see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statrowformat="%{hh}" |
-| statrowheader | statistics header (related: showstatrow, statrowformat, statrowtitle); use '&#124;' to separate multiple row headers | statrowheader="#" |
-| statrowtitle | statistics tooltip (related: showstatrow, statrowformat, statrowheader); see  [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statrowtitle="%{ll}" |
 | tablebgcolor | table background color | tablebgcolor="white" |
 | tablecaption | table caption | tablecaption="&amp;nbsp;" |
 | tablecaptionalign | table caption alignment (top, bottom, left, right) | tablecaptionalign="top" |
@@ -163,6 +167,21 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | todayfgcolor | foreground color for today cells (usefull for a dark todaybgcolor) | todayfgcolor="black" |
 | weekendbgcolor | background color of weekend header and data table cells | weekendbgcolor="%<nop>WEBBGCOLOR%" |
 | width | width of table in pixels or percent | width="100%" |
+|  *Table Formatting - Statistics<br/>(%X% showstatcol or showstatrow should be enabled)*  |||
+| statcolformat | statistics column format (related: showstatcol, statcolheader, statcoltitle); see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statcolformat="%{hh}" |
+| statcolheader | statistics header (related: showstatcol, statcolformat, statcoltitle); use '&#124;' to separate multiple column headers | statcolheader="#" |
+| statcoltitle | statistics tooltip (related: showstatcol, statcolformat, statcolheader); see  [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statcoltitle="%{ll}" |
+| statformat | statistics format; overwrites statcolformat and statrowformat | undefined / statformat="%{hh}" |
+| statformat_0 | defines the string for the zero value of all statistics variables; [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statformat_0="0" |
+| statformat_i | format for a single %{i} variable value; %ICON will be substituted by the icon; see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statformat_i="%{i:%ICON} x %ICON ;" |
+| statformat_ii | format for a single %{ii} variable value; %ICON will be substituted by the icon; see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statformat_ii="%{ii:%ICON} x %ICON ;" |
+| statformat_l | format for a single %{l} variable value; %LOCATION will be substituted by the location; see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statformat_l="%{l:%LOCATION} x %LOCATION;" |
+| statformat_ll | format for a single %{ll} variable value; %LOCATION will be substituted by the location; see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statformat_ll="%{ll:%LOCATION} x %LOCATION;" |
+| statheader | statistics header; overwrites statcolheader and statrowheader | undefined / statheader="#" | 
+| statrowformat | statistics row format (related: showstatrow, statrowheader, statrowtitle); see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statrowformat="%{hh}" |
+| statrowheader | statistics header (related: showstatrow, statrowformat, statrowtitle); use '&#124;' to separate multiple row headers | statrowheader="#" |
+| statrowtitle | statistics tooltip (related: showstatrow, statrowformat, statrowheader); see  [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statrowtitle="%{ll}" |
+| stattitle | statistics tooltip; overwrites statrowtitle and statcoltitle | undefined / stattitle="%{ll}" |
 
 
 *Hints:* 
