@@ -579,6 +579,7 @@ lib/TWiki/UI/Oops.pm 0444
 lib/TWiki/UI/Preview.pm 0444
 lib/TWiki/UI/RDiff.pm 0444
 lib/TWiki/UI/Register.pm 0444
+lib/TWiki/UI/Rest.pm 0444
 lib/TWiki/UI/Save.pm 0444
 lib/TWiki/UI/Search.pm 0444
 lib/TWiki/UI/Statistics.pm 0444
