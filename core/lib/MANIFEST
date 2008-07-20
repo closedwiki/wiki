@@ -19,7 +19,6 @@
 !include TwistyContrib/lib/TWiki/Contrib/TwistyContrib
 !include TwistyPlugin/lib/TWiki/Plugins/TwistyPlugin
 !include WysiwygPlugin/lib/TWiki/Plugins/WysiwygPlugin
-
 AUTHORS 0444
 COPYING 0444
 COPYRIGHT 0444
@@ -41,6 +40,7 @@ bin/manage 0555
 bin/oops 0555
 bin/preview 0555
 bin/rdiff 0555
+bin/rdiffauth 0555
 bin/register 0555
 bin/rename 0555
 bin/resetpasswd 0555
@@ -49,8 +49,10 @@ bin/save 0555
 bin/search 0555
 bin/setlib.cfg 0444
 bin/statistics 0555
+bin/twiki_cgi.pl 0555
 bin/upload 0555
 bin/view 0555
+bin/viewauth 0555
 bin/viewfile 0555
 data/Main/TWikiAdminUser.txt 0644
 data/Main/TWikiContributor.txt 0644
@@ -510,6 +512,11 @@ lib/TWiki/Configure/UIs/UPDATE.pm 0444
 lib/TWiki/Configure/UIs/Value.pm 0444
 lib/TWiki/Configure/Value.pm 0444
 lib/TWiki/Configure/Valuer.pm 0444
+lib/TWiki/Engine.pm 0444
+lib/TWiki/Engine 0444
+lib/TWiki/Engine/CGI.pm 0444
+lib/TWiki/Engine/CLI.pm 0444
+lib/TWiki/EngineException.pm 0444
 lib/TWiki/Form.pm 0444
 lib/TWiki/Form/Checkbox.pm 0444
 lib/TWiki/Form/FieldDefinition.pm 0444
