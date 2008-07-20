@@ -5,6 +5,17 @@
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
 #
+# Part of this module is based on "bin/twiki" script, which is:
+#    Copyright (C) 2005 Martin at Cleaver.org
+#    Copyright (C) 2005-2007 TWiki Contributors
+# 
+# and also based/inspired on Catalyst framework, whose Author is
+# Sebastian Riedel. Refer to
+#
+# http://search.cpan.org/~mramberg/Catalyst-Runtime-5.7010/lib/Catalyst.pm
+# 
+# for more credit and liscence details.
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -19,145 +30,151 @@
 
 =pod
 
----+ package TWiki::UI
+---+!! package TWiki::UI
 
-Service functions used by the UI packages
+Coordinator of execution flow and service functions used by the UI packages
 
 =cut
 
 package TWiki::UI;
-
 use strict;
-use Error qw( :try );
+
+BEGIN {
+    $TWiki::cfg{SwitchBoard} = {
+        'attach'      => [ 'TWiki::UI::Upload',     'attach',        { attach      => 1 } ],
+        'changes'     => [ 'TWiki::UI::Changes',    'changes',       { changes     => 1 } ],
+        'edit'        => [ 'TWiki::UI::Edit',       'edit',          { edit        => 1 } ],
+        'login'       => [ undef,                   'logon',         { (login=>1, logon=>1) } ],
+        'logon'       => [ undef,                   'logon',         { (login=>1, logon=>1) } ],
+        'manage'      => [ 'TWiki::UI::Manage',     'manage',        { manage      => 1 } ],
+        'oops'        => [ 'TWiki::UI::Oops',       'oops_cgi',      { oops        => 1 } ],
+        'preview'     => [ 'TWiki::UI::Preview',    'preview',       { preview     => 1 } ],
+        'rdiffauth'   => [ 'TWiki::UI::RDiff',      'diff',          { diff        => 1 } ],
+        'rdiff'       => [ 'TWiki::UI::RDiff',      'diff',          { diff        => 1 } ],
+        'register'    => [ 'TWiki::UI::Register',   'register_cgi',  { register    => 1 } ],
+        'rename'      => [ 'TWiki::UI::Manage',     'rename',        { rename      => 1 } ],
+        'resetpasswd' => [ 'TWiki::UI::Register',   'resetPassword', { resetpasswd => 1 } ],
+        'rest'        => [ 'TWiki::UI::Rest',       'rest',          { rest        => 1 } ],
+        'save'        => [ 'TWiki::UI::Save',       'save',          { save        => 1 } ],
+        'search'      => [ 'TWiki::UI::Search',     'search',        { search      => 1 } ],
+        'statistics'  => [ 'TWiki::UI::Statistics', 'statistics',    { statistics  => 1 } ],
+        'upload'      => [ 'TWiki::UI::Upload',     'upload',        { upload      => 1 } ],
+        'viewauth'    => [ 'TWiki::UI::View',       'view',          { view        => 1 } ],
+        'viewfile'    => [ 'TWiki::UI::View',       'viewfile',      { viewfile    => 1 } ],
+        'view'        => [ 'TWiki::UI::View',       'view',          { view        => 1 } ],
+    };
+}
+
+use Error qw(:try);
 use Assert;
 
-require TWiki;
-require TWiki::Sandbox;
-require TWiki::OopsException;
+use TWiki;
+use TWiki::Request;
+use TWiki::Response;
+use TWiki::OopsException;
+use TWiki::EngineException;
+use CGI;
+
+# Used to lazily load UI handler modules
+our %isInitialized = ();
 
 sub TRACE_PASSTHRU {
     # Change to a 1 to trace passthrough
     0;
 };
 
-=pod
+=begin twiki
 
----++ StaticMethod run( \&method, ... )
+---++ StaticMethod handleRequest($req) -> $res
 
-Entry point for execution of a UI function. The parameter is a
-reference to the method.
-
-... is a list of name-value pairs that define initial context identifiers
-that must be set during initPlugin. This set will be extended to include
-command_line if the script is detected as being run outside the browser.
+Main coordinator of request-process-response cycle.
 
 =cut
 
-sub run {
-    my ( $method, %initialContext ) = @_;
+sub handleRequest {
+    my $req = shift;
 
-    my ( $query, $pathInfo, $user, $url, $topic );
+    my $res;
+    my $dispatcher = $TWiki::cfg{SwitchBoard}{$req->action()};
+    unless (defined $dispatcher && ref($dispatcher) eq 'ARRAY') {
+        $res = new TWiki::Response();
+        $res->header(-type => 'text/html', -status => '404');
+        my $html = CGI::start_html('404 Not Found');
+        $html .=   CGI::h1('Not Found');
+        $html .=   CGI::p("The requested URL " . $req->uri . " was not found on this server.");
+        $html .=   CGI::end_html();
+        $res->body($html);
+        return $res;
+    }
+    my ( $package, $function, $context ) = @$dispatcher;
 
-    # Use unbuffered IO
-    $| = 1;
-
-    # -------------- Only needed to work around an Apache 2.0 bug on Unix
-    # OPTIONAL
-    # If you are running TWiki on Apache 2.0 on Unix you might experience
-    # TWiki scripts hanging forever. This is a known Apache 2.0 bug. A fix is 
-    # available at http://issues.apache.org/bugzilla/show_bug.cgi?id=22030.
-    # You are recommended to patch your Apache installation.
-    #
-    # As a workaround, uncomment ONE of the lines below. As a drawback,
-    # errors will not be reported to the browser via CGI::Carp any more.
-
-    # Opening STDERR here and not in the BEGIN block as some perl accelerators
-    # close STDERR after each request so that we need to reopen it here again
-
-    # open(STDERR, ">>/dev/null");      # throw away cgi script errors, or
-    # open(STDERR, ">>$TWiki::cfg{DataDir}/error.log"); # redirect errors to a log file
-
-
-    if( DEBUG || $TWiki::cfg{WarningsAreErrors} ) {
-        # For some mysterious reason if this handler is defined
-        # in 'new TWiki' it gets lost again before we get here
-        $SIG{__WARN__} = sub { die @_; };
+    if ($package && !$isInitialized{$package}) {
+        eval qq(use $package);
+        die $@ if $@;
+        $isInitialized{$package} = 1;
     }
 
-    if( $ENV{'GATEWAY_INTERFACE'} ) {
-        # script is called by browser
-        $query = new CGI;
+    my $sub;
+    $sub  = $package.'::' if $package;
+    $sub .= $function;
 
-        if( $TWiki::cfg{DrainStdin} ) {
-            # drain STDIN.  This may be necessary if the script is called
-            # due to a redirect and the original query was a POST. In this
-            # case the web server is waiting to write the POST data to
-            # this script's STDIN, but CGI.pm won't drain STDIN as it is
-            # seeing a GET because of the redirect, not a POST.  This script
-            # tries to write to STDOUT, which goes back to the web server,
-            # but the server isn't paying attention to that (as its waiting for
-            # the script to _read_, not _write_), and everything blocks.
-            # Some versions of apache seem to be more susceptible than others to
-            # this.
-            my $content_length =
-                defined($ENV{'CONTENT_LENGTH'}) ? $ENV{'CONTENT_LENGTH'} : 0;
-            read(STDIN, my $buf, $content_length, 0 ) if $content_length;
-        }
-        my $cache = $query->param('twiki_redirect_cache');
-        # Never trust input data from a query. We will only accept an MD5 32 character string
-        if ($cache && $cache =~ /^([a-f0-9]{32})$/) {
-            $cache = $1;
-            # Read cached post parameters
-            my $passthruFilename = $TWiki::cfg{WorkingDir} . '/tmp/passthru_' . $cache;
-            if (open(F, '<'.$passthruFilename)) {
-                local $/;
-                if (TRACE_PASSTHRU) {
-                    print STDERR "Passthru: Loading cache for ",
-                      $query->url(),'?',$query->query_string(),"\n";
-                    print STDERR <F>,"\n";
-                    close(F);
-                    open(F, '<'.$passthruFilename);
-                }
-                $query = new CGI(\*F);
+    if ( UNIVERSAL::isa($TWiki::engine, 'TWiki::Engine::CLI') ) {
+        $context->{command_line} = 1;
+    }
+
+    $res = execute($req, \&$sub, %$context );
+    return $res;
+}
+
+=begin twiki
+
+---++ StaticMethod execute($req, $sub, %initialContext) -> $res
+
+Creates a TWiki session object with %initalContext and calls
+$sub method. Returns the TWiki::Response object generated
+
+=cut
+
+sub execute {
+    my ($req, $sub, %initialContext ) = @_;
+
+    my $cache = $req->param('twiki_redirect_cache');
+    # Never trust input data from a query. We will only accept an MD5 32 character string
+    if ( $cache && $cache =~ /^([a-f0-9]{32})$/ ) {
+        $cache = $1;
+        # Read cached post parameters
+        my $passthruFilename =
+          $TWiki::cfg{WorkingDir} . '/tmp/passthru_' . $cache;
+        if ( open( F, '<', $passthruFilename ) ) {
+            local $/;
+            if (TRACE_PASSTHRU) {
+                print STDERR "Passthru: Loading cache for ", $req->url(),
+                  '?', $req->query_string(), "\n";
+                print STDERR <F>, "\n";
                 close(F);
-                unlink($passthruFilename);
-                print STDERR "Passthru: Loaded and unlinked $passthruFilename\n"
-                  if TRACE_PASSTHRU;
-            } else {
-                print STDERR "Passthru: Could not find $passthruFilename\n"
-                  if TRACE_PASSTHRU;
+                open( F, '<' . $passthruFilename );
             }
+            $req = new TWiki::Request( \*F, $req );
+            close(F);
+            unlink($passthruFilename);
+            print STDERR "Passthru: Loaded and unlinked $passthruFilename\n"
+              if TRACE_PASSTHRU;
         }
-    } else {
-        # script is called by cron job or user
-        $initialContext{command_line} = 1;
-
-        $user = $TWiki::cfg{SuperAdminGroup};
-        $query = new CGI();
-        while( scalar( @ARGV )) {
-            my $arg = shift( @ARGV );
-            if ( $arg =~ /^-?([A-Za-z0-9_]+)$/o ) {
-                my $name = $1;
-                my $arg = TWiki::Sandbox::untaintUnchecked( shift( @ARGV ));
-                if( $name eq 'user' ) {
-                    $user = $arg;
-                } else {
-                    $query->param( -name => $name, -value => $arg );
-                }
-            } else {
-                $query->path_info( TWiki::Sandbox::untaintUnchecked( $arg ));
-            }
+        else {
+            print STDERR "Passthru: Could not find $passthruFilename\n"
+              if TRACE_PASSTHRU;
         }
     }
 
-    my $session = new TWiki( $user, $query, \%initialContext );
-
-    local $SIG{__DIE__} = \&Carp::confess;
+    my $session = new TWiki( $req->remoteUser, $req, \%initialContext );
+    my $res;
 
     try {
         $session->{users}->{loginManager}->checkAccess();
-        &$method( $session );
-    } catch TWiki::AccessControlException with {
+        &$sub( $session );
+        $res = $session->{response};
+    } 
+    catch TWiki::AccessControlException with {
         my $e = shift;
         unless( $session->{users}->{loginManager}->forceAuthentication() ) {
             # Login manager did not want to authenticate, perhaps because
@@ -170,34 +187,70 @@ sub run {
 
             $exception->redirect( $session );
         }
-
-    } catch TWiki::OopsException with {
+        $res = $session->{response};
+    }
+    catch TWiki::OopsException with {
         shift->redirect( $session );
-
-    } catch Error::Simple with {
+        $res = $session->{response};
+    }
+    catch Error::Simple with {
         my $e = shift;
-        print "Content-type: text/plain\n\n";
-        if( DEBUG ) {
+        $res = new TWiki::Response;
+        $res->header( -type => 'text/plain' );
+        if (DEBUG) {
             # output the full message and stacktrace to the browser
-            print $e->stringify();
-        } else {
+            $res->body( $e->stringify() );
+        }
+        else {
             my $mess = $e->stringify();
             print STDERR $mess;
-            $session->writeWarning( $mess );
+            $session->writeWarning($mess);
             # tell the browser where to look for more help
-            print 'TWiki detected an internal error - please check your TWiki logs and webserver logs for more information.'."\n\n";
+            my $text = 'TWiki detected an internal error - please check your TWiki logs and webserver logs for more information.'."\n\n";
             $mess =~ s/ at .*$//s;
             # cut out pathnames from public announcement
             $mess =~ s#/[\w./]+#path#g;
-            print $mess;
+            $text .= $mess;
+            $res->body($text);
         }
-    } otherwise {
-        print "Content-type: text/plain\n\n";
-        print "Unspecified error";
+    }
+    catch TWiki::EngineException with {
+        my $e   = shift;
+        my $res = $e->{response};
+        unless (defined $res) {
+            $res = new TWiki::Response();
+            $res->header( -type => 'text/html', -status => $e->{status} );
+            my $html = CGI::start_html( $e->{status} . ' Bad Request' );
+            $html .= CGI::h1('Bad Request');
+            $html .= CGI::p( $e->{reason} );
+            $html .= CGI::end_html();
+            $res->body($html);
+        }
+        $TWiki::engine->finalizeError($res);
+        return $e->{status};
+    }
+    otherwise {
+        $res = new TWiki::Response;
+        $res->header(-type => 'text/plain');
+        $res->body( "Unspecified error" );
     };
 
-    # Finished with the session
     $session->finish();
+    return $res;
+}
+
+=begin twiki
+
+---++ StaticMethod logon($session)
+
+Handler to "logon" action.
+   * =$session= is a TWiki session object
+
+=cut
+
+sub logon {
+  my $session = shift;
+  $session->{users}->{loginManager}->login( $session->{request}, $session );
 }
 
 =pod twiki
