@@ -80,11 +80,8 @@ sub forceAuthentication {
 
     # See if there is an 'auth' version
     # of this script, may be a result of not being logged in.
-    my $script = $ENV{SCRIPT_FILENAME};
-    $script =~ s/^(.*\/)([^\/]+?)($TWiki::cfg{ScriptSuffix})?$/$1/o;
-    my $scriptPath = $1;
-    my $scriptName = $2;
-    $script = $scriptPath.$scriptName.'auth'.$TWiki::cfg{ScriptSuffix};
+    my $scriptName = $twiki->{request}->action();
+    my $newAction = $scriptName.'auth'.$TWiki::cfg{ScriptSuffix};
 
     if( ! $query->remote_user() && exists $TWiki::cfg{SwitchBoard}{$newAction} ) {
         # Assemble the new URL using the host, the changed script name,

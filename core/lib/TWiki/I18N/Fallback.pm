@@ -30,7 +30,10 @@ sub new {
 }
 
 sub finish {
-    # No data, nothing to do
+    # No data, nothing to do.
+    # Must call SUPER finish to avoid memory leaks
+    my $this = shift;
+    $this->SUPER::finish(@_);
 }
 
 sub maketext {

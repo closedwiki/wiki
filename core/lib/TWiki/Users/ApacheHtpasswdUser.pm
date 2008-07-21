@@ -74,7 +74,7 @@ returns true if the password file is not currently modifyable
 
 =cut
 
-readOnly {
+sub readOnly {
     my $this = shift;
     my $path = $TWiki::cfg{Htpasswd}{FileName};
     #TODO: what if the data dir is also read only?
@@ -88,6 +88,7 @@ readOnly {
 sub canFetchUsers {
     return 1;
 }
+
 sub fetchUsers {
     my $this = shift;
     my @users = $this->{apache}->fetchUsers();
