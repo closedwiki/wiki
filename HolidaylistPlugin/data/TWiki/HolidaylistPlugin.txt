@@ -177,6 +177,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | statformat_ii | format for a single %{ii} variable value; %ICON will be substituted by the icon; see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statformat_ii="%{ii:%ICON} x %ICON ;" |
 | statformat_l | format for a single %{l} variable value; %LOCATION will be substituted by the location; see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statformat_l="%{l:%LOCATION} x %LOCATION;" |
 | statformat_ll | format for a single %{ll} variable value; %LOCATION will be substituted by the location; see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statformat_ll="%{ll:%LOCATION} x %LOCATION;" |
+| statformat_perc | percentage format | statformat_perc="%3.1f%%" |
 | statheader | statistics header; overwrites statcolheader and statrowheader | undefined / statheader="#" | 
 | statrowformat | statistics row format (related: showstatrow, statrowheader, statrowtitle); see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statrowformat="%{hh}" |
 | statrowheader | statistics header (related: showstatrow, statrowformat, statrowtitle); use '&#124;' to separate multiple row headers | statrowheader="#" |
@@ -195,10 +196,19 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 <br/> =statcoltitle=" &lt;column1 format&gt; | &lt;column2 format&gt; | ..."=
 <br/> =statrowformat=" &lt;row1 format&gt; | &lt;row2 format&gt; | ..."=
 <br/> =statrowtitle=" &lt;row1 format&gt; | &lt;row2 format&gt; | ..."=
+<br/> =statformat=" &lt;column1/row1 format&gt; | &lt;column2/row2 format&gt; | ..."=
+<br/> =stattitle=" &lt;column1/row1 format&gt; | &lt;column2/row2 format&gt; | ..."=
    * you can define multiple columns/rows in =statcolformat/statrowformat= and =statcoltitle/statrowtitle=, simple use '|' as separator
-   * you can use variables in the  =&lt;column/row? format&gt;= definitions (see table below), e.g. =statcolformat="%{l}"=
+   * you can use variables in the  =&lt;column/row? format&gt;= definitions (see table below), e.g. =statcolformat="%{l}"= 
+   * if you use the same format definitions for statrowformat and statcolformat, statrowtitle and statcoltitle or statrowheader and statcolheader you should use the statformat, stattitle or statheader attributes
    * %X% =statcolheader/statrowheader= should have the same number of columns/rows (count of ='|'= should be equal)
-*Example:* <br/> display three statistics columns: =%<nop>HOLIDAYLIST{showstatcol="on" statcolformat="%{ll:sick}(%{l:sick}) | %{ll:holidays}(%{l:holidays}) | %{ww}(%{w}) of %{dd}(%{d}) " statcolheader="sick | holidays | work "}%=
+*Example:* 
+   * display three statistics columns and rows; tooltips with percentage of days without weekends and public holidays:
+     <verbatim>
+%HOLIDAYLIST{startdate="21 Jul 2008" showstatcol="on" showstatrow="on" statformat="%{ll:sick} | %{ll:holidays} | %{ww} " statheader="sick | holidays | @work " stattitle="%{lldd:sick}|%{lldd:holidays}|%{wwdd}"}%
+   * 21 Jul 2008 - Sam - sick
+   * 23 Jul 2008 - 25 Jul 2008 - Sam - holidays
+     </verbatim>
 
 | *Substituted Statistics Variables* ||
 | *Variable* | *Description* |
@@ -207,19 +217,19 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | %{dd} | number of days without weekends | 
 | %{h} | number of days in holidays |
 | %{hh} | number of days in holidays without weekends and public holidays |
-| %{i} | all icons and icon counts |
+| %{i} | all icons and icon counts; use statformat_i to format an entry |
 | %{i:<i>ICON</i>} | count of <i>ICON</i> icons |
-| %{ii} | all icons and icon counts without weekends and public holidays |
+| %{ii} | all icons and icon counts without weekends and public holidays; use statformat_ii to format an entry |
 | %{ii:<i>ICON</i>} | count of <i>ICON</i> icons without weekends and public holidays |
-| %{l} | all locations and location counts |
+| %{l} | all locations and location counts; use statformat_l to format an entry |
 | %{l:<i>LOCATION</i>} | location count of <i>LOCATION</i> |
-| %{ll} | all locations and location counts without weekends and publich holidays |
+| %{ll} | all locations and location counts without weekends and publich holidays; use statformat_ll to fromat an entry |
 | %{ll:<i>LOCATION</i>} | location count of <i>LOCATION</i> without weekends and public holidays |
 | %{p} | day count of public holidays |
 | %{pp} | day count of public holidays without weekends |
 | %{w} | = %{d} - %{h} (day count at work) |
 | %{ww} | = %{dd} - %{hh} (day count at work without weekends and public holidays) |
-| *Percentages* ||
+| *Percentages (value format attribute: statformat_perc)* ||
 | %{hd}, %{hdd},<br/> %{hhd}, %{hhdd} | holidays-to-days percentage with (single 'h'/'d') or without weekends and public holidays ('hh'/'dd') |
 | %{id:<i>ICON</i>}, %{idd:<i>ICON</i>},<br/> %{iid:<i>ICON</i>}, %{iidd:<i>ICON</i>} | icon-to-days percentage with (single 'i'/'d') or without weekends and public holidays ('ii'/'dd') |
 | %{ih:<i>ICON</i>}, %{ihh:<i>ICON</i>},<br/> %{iih:<i>ICON</i>}, %{iihh:<i>ICON</i>} | icon-to-holidays percentage with (single 'i'/'h') or without weekends and public holidays ('ii'/'dd') |
