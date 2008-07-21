@@ -36,7 +36,7 @@ sub _viewSection {
     $twiki->{webName} = 'TestCases';
     $twiki->{topicName} = 'IncludeFixtures';
 
-    my $query = $twiki->{cgiQuery};
+    my $query = $twiki->{request};
     $query->param('-name'=>'skin','-value'=>'text');
     $query->path_info('TestCases/IncludeFixtures');
 

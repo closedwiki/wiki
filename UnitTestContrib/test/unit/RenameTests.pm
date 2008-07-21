@@ -7,7 +7,6 @@ use base qw(TWikiFnTestCase);
 use strict;
 use TWiki;
 use TWiki::UI::Manage;
-use CGI;
 use Error ':try';
 
 my $notawwtopic1 = "random";
@@ -27,7 +26,7 @@ sub set_up {
 
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki(
-        $this->{test_user_login}, new CGI({topic=>"/$this->{test_web}/OldTopic"}));
+        $this->{test_user_login}, new TWiki::Request({topic=>"/$this->{test_web}/OldTopic"}));
 
     $this->{new_web} = $this->{test_web}.'New';
     $this->{twiki}->{store}->createWeb(
@@ -306,7 +305,7 @@ THIS
 # Rename OldTopic to NewTopic within the same web
 sub test_rename_oldwebnewtopic {
     my $this = shift;
-    my $query = new CGI({
+    my $query = new TWiki::Request({
                          action => [ 'rename' ],
                          newweb => [ $this->{test_web} ],
                          newtopic => [ 'NewTopic' ],
@@ -318,7 +317,7 @@ sub test_rename_oldwebnewtopic {
 
     $this->{twiki}->finish();
     # The topic in the path should not matter
-    $query->path_info( "/$this->{test_web}/SanityCheck" );
+    $query->path_info( "/script/$this->{test_web}/SanityCheck" );
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $TWiki::Plugins::SESSION = $this->{twiki};
     $this->capture(\&TWiki::UI::Manage::rename, $this->{twiki} );
@@ -426,7 +425,7 @@ THIS
 # Rename OldTopic to a different web, keeping the same topic name
 sub test_rename_newweboldtopic {
     my $this = shift;
-    my $query = new CGI({
+    my $query = new TWiki::Request({
                          action => [ 'rename' ],
                          newweb => [ $this->{new_web} ],
                          newtopic => [ 'OldTopic' ],
@@ -436,7 +435,7 @@ sub test_rename_newweboldtopic {
                          topic => 'OldTopic'
                         });
 
-    $query->path_info("/$this->{test_web}" );
+    $query->path_info("/script/$this->{test_web}" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $TWiki::Plugins::SESSION = $this->{twiki};
@@ -562,7 +561,7 @@ THIS
     $this->{twiki}->{store}->saveTopic(
         $this->{twiki}->{user}, $this->{test_web}, 'lowercase',
                                 $topictext, $meta );
-    my $query = new CGI({
+    my $query = new TWiki::Request({
         action   => 'rename',
         topic    => 'lowercase',
         newweb   => $this->{test_web},
@@ -570,7 +569,7 @@ THIS
         referring_topics => [ "$this->{test_web}.NewTopic" ],
     });
 
-    $query->path_info("/$this->{test_web}" );
+    $query->path_info("/script/$this->{test_web}" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $TWiki::Plugins::SESSION = $this->{twiki};
@@ -594,14 +593,14 @@ sub test_accessRenameRestrictedTopic {
     $this->{twiki}->{store}->saveTopic(
         $this->{twiki}->{user}, $this->{test_web}, 'OldTopic',
                                 $topictext, $meta );
-    my $query = new CGI({
+    my $query = new TWiki::Request({
                          action   => 'rename',
                          topic    => 'OldTopic',
                          newweb   => $this->{test_web},
                          newtopic => 'NewTopic',
                         });
 
-    $query->path_info("/$this->{test_web}" );
+    $query->path_info("/script/$this->{test_web}" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $TWiki::Plugins::SESSION = $this->{twiki};
@@ -621,14 +620,14 @@ sub test_accessRenameRestrictedWeb {
     $this->{twiki}->{store}->saveTopic(
         $this->{twiki}->{user}, $this->{test_web},
         $TWiki::cfg{WebPrefsTopicName}, $topictext, $meta );
-    my $query = new CGI({
+    my $query = new TWiki::Request({
                          action   => 'rename',
                          topic    => 'OldTopic',
                          newweb   => $this->{test_web},
                          newtopic => 'NewTopic',
                         });
 
-    $query->path_info("/$this->{test_web}" );
+    $query->path_info("/script/$this->{test_web}" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $TWiki::Plugins::SESSION = $this->{twiki};
@@ -648,14 +647,14 @@ sub test_leaseReleasemeLetMeGo {
     $this->{twiki}->{store}->setLease(
         $this->{test_web}, 'OldTopic', $this->{twiki}->{user}, 1000);
 
-    my $query = new CGI({
+    my $query = new TWiki::Request({
                          action   => 'rename',
                          topic    => 'OldTopic',
                          newweb   => $this->{test_web},
                          newtopic => 'NewTopic',
                         });
 
-    $query->path_info("/$this->{test_web}" );
+    $query->path_info("/script/$this->{test_web}" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $TWiki::Plugins::SESSION = $this->{twiki};

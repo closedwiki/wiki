@@ -7,7 +7,7 @@ package ClientTests;
 
 use base qw(TWikiFnTestCase);
 
-use CGI;
+use TWiki::Request;
 use Error qw( :try );
 
 use TWiki;
@@ -108,11 +108,9 @@ sub verify_edit {
     #close this TWiki session - its using the wrong mapper and login
     $this->{twiki}->finish();
 
-    $query = new CGI({});
-    $query->path_info( "/$this->{test_web}/$this->{test_topic}" );
-    $ENV{SCRIPT_NAME} = "edit";
+    $query = new TWiki::Request();
+    $query->path_info( "edit/$this->{test_web}/$this->{test_topic}" );
     $this->{twiki} = new TWiki( undef, $query );
-    delete $ENV{SCRIPT_NAME};
 
     $this->set_up_user();
     try {
@@ -123,13 +121,11 @@ sub verify_edit {
         $this->assert(0,shift->stringify());
     };
 
-    $query = new CGI ({});
-    $query->path_info( "/$this->{test_web}/$this->{test_topic}?breaklock=1" );
+    $query = new TWiki::Request();
+    $query->path_info( "edit/$this->{test_web}/$this->{test_topic}?breaklock=1" );
     $this->{twiki}->finish();
 
-    $ENV{SCRIPT_NAME} = "edit";
     $this->{twiki} = new TWiki( undef, $query );
-    delete $ENV{SCRIPT_NAME};
 
     try {
         $text = $this->capture( \&TWiki::UI::Edit::edit, $this->{twiki} );
@@ -143,15 +139,13 @@ sub verify_edit {
         }
     };
 
-    $query = new CGI ({});
-    $query->path_info( "/$this->{test_web}/$this->{test_topic}" );
+    $query = new TWiki::Request();
+    $query->path_info( "edit/$this->{test_web}/$this->{test_topic}" );
     $this->{twiki}->finish();
 
     $this->annotate("new session using $userLogin\n");
 
-    $ENV{SCRIPT_NAME} = "edit";
     $this->{twiki} = new TWiki( $userLogin, $query );
-    delete $ENV{SCRIPT_NAME};
 
     #clear the lease - one of the previous tests may have different usermapper & thus different user
     TWiki::Func::setTopicEditLock($this->{test_web}, $this->{test_topic}, 0);
