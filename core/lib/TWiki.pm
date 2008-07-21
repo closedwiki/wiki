@@ -601,7 +601,7 @@ sub writeCompletePage {
         chomp($text);
     }
 
-    my $hdr = $this->generateHTTPHeaders( undef, $pageType, $contentType );
+    $this->generateHTTPHeaders( undef, $pageType, $contentType );
 	my $hdr;
     foreach my $header ( keys %{ $this->{response}->headers } ) {
         $hdr .= $header . ': ' . $_ . "\x0D0A"
@@ -3349,21 +3349,22 @@ sub REVINFO {
 
 sub REVTITLE {
     my ( $this, $params, $theTopic, $theWeb ) = @_;
-    my $cgiQuery = $this->{request};
+    my $request = $this->{request};
     my $out = '';
-    if( $cgiQuery ) {
-        my $cgiRev = $cgiQuery->param('rev');
-        $out = '(r'.$cgiRev.')' if ($cgiRev);
+    if( $request ) {
+        my $rev = $request->param('rev');
+        $out = '(r'.$rev.')' if ($rev);
     }
     return $out;
 }
+
 sub REVARG {
     my ( $this, $params, $theTopic, $theWeb ) = @_;
-    my $cgiQuery = $this->{request};
+    my $request = $this->{request};
     my $out = '';
-    if( $cgiQuery ) {
-        my $cgiRev = $cgiQuery->param('rev');
-        $out = '&rev='.$cgiRev if ($cgiRev);
+    if( $request ) {
+        my $rev = $request->param('rev');
+        $out = '&rev='.$rev if ($rev);
     }
     return $out;
 }
@@ -3521,7 +3522,7 @@ sub TOPICLIST {
 
 sub QUERYSTRING {
     my $this = shift;
-    return $this->{request}->query_string();
+    return $this->{request}->queryString();
 }
 
 sub QUERYPARAMS {
