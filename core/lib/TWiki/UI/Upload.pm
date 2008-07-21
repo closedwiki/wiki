@@ -273,7 +273,7 @@ sub upload {
     my $message = ( $doPropsOnly ) ?
       'properties changed' : "$fileName uploaded";
 
-    print 'OK ',$message,"\n";
+    print 'OK ',$message,"\n" if $session->inContext('command_line');
 }
 
 1;

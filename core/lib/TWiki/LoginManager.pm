@@ -77,15 +77,6 @@ use Error qw( :try );
 
 require TWiki::Sandbox;
 
-BEGIN {
-    # suppress stupid warning in CGI::Cookie
-    if ( exists $ENV{MOD_PERL} ) {
-        if ( !defined( $ENV{MOD_PERL_API_VERSION} )) {
-            $ENV{MOD_PERL_API_VERSION} = 1;
-        }
-    }
-}
-
 # Marker chars
 use vars qw( $M1 $M2 $M3 );
 $M1 = chr(5);
@@ -114,19 +105,19 @@ sub makeLoginManager {
 
     if( $TWiki::cfg{UseClientSessions} &&
           !$twiki->inContext( 'command_line' )) {
-
-        my $use = 'use CGI::Session';
+        
+        my $use = 'use TWiki::LoginManager::Session';
         if( $TWiki::cfg{Sessions}{UseIPMatching} ) {
             $use .= ' qw(-ip-match)';
         }
         $use .= '; use CGI::Cookie';
         eval $use;
         throw Error::Simple( $@ ) if $@;
-        if( $CGI::Session::VERSION eq "4.10" ) {
+        if( $TWiki::LoginManager::Session::VERSION eq "4.10" ) {
             # 4.10 is broken; see Item1989
-            $CGI::Session::NAME = 'TWIKISID';
+            $TWiki::LoginManager::Session::NAME = 'TWIKISID';
         } else {
-            CGI::Session->name( 'TWIKISID' );
+            TWiki::LoginManager::Session->name( 'TWIKISID' );
         }
     }
 
@@ -231,10 +222,11 @@ if( $TWiki::cfg{Trace}{LoginManager} ) {
 
 =cut
 
+# TSA: Forced to make this a object method
 sub _IP2SID {
-    my( $sid ) = @_;
+    my( $this, $sid ) = @_;
 
-    my $ip = $ENV{'REMOTE_ADDR'};
+    my $ip = $this->{twiki}->{request}->address;
 
     return undef unless $ip; # no IP address, can't map
 
@@ -289,7 +281,7 @@ sub loadSession {
 
     my $query = $twiki->{request};
 
-    $this->{_haveCookie} = $query->raw_cookie();
+    $this->{_haveCookie} = $query->header('Cookie');
 
     _trace($this, "URL ".$query->url());
     if( $this->{_haveCookie} ) {
@@ -301,7 +293,7 @@ sub loadSession {
     # Item3568: CGI::Session from 4.0 already does the -d and creates the
     # sessions directory if it does not exist. For performance reasons we
     # only test for and create session file directory for older CGI::Session
-    if( $CGI::Session::VERSION < 4.0 ) {
+    if( $TWiki::LoginManager::Session::VERSION < 4.0 ) {
         unless ( -d "$TWiki::cfg{WorkingDir}/tmp" ) {
             unless ( mkdir($TWiki::cfg{WorkingDir}) &&
                        mkdir("$TWiki::cfg{WorkingDir}/tmp") ) {
@@ -314,24 +306,24 @@ sub loadSession {
     # if necessary.
     if( $TWiki::cfg{Sessions}{MapIP2SID} ) {
         # map the end user IP address to SID
-        my $sid = _IP2SID();
+        my $sid = $this->_IP2SID();
         if( $sid ) {
-            $this->{_cgisession} = CGI::Session->new(
+            $this->{_cgisession} = TWiki::LoginManager::Session->new(
                 undef, $sid, { Directory => "$TWiki::cfg{WorkingDir}/tmp" } );
         } else {
-            $this->{_cgisession} = CGI::Session->new(
+            $this->{_cgisession} = TWiki::LoginManager::Session->new(
                 undef, undef,
                 { Directory => "$TWiki::cfg{WorkingDir}/tmp" } );
             _trace($this, "New IP2SID session");
-            _IP2SID( $this->{_cgisession}->id() );
+            $this->_IP2SID( $this->{_cgisession}->id() );
         }
     } else {
-        $this->{_cgisession} = CGI::Session->new(
+        $this->{_cgisession} = TWiki::LoginManager::Session->new(
             undef, $query,
             { Directory => "$TWiki::cfg{WorkingDir}/tmp" } );
     }
 
-    die CGI::Session->errstr() unless $this->{_cgisession};
+    die TWiki::LoginManager::Session->errstr() unless $this->{_cgisession};
     _trace($this, "Opened session");
 
     _trace($this, "Webserver says user is $authUser") if( $authUser );
@@ -374,8 +366,8 @@ sub loadSession {
         	$authUser = $sudoUser;
         } else {
 	        _trace($this, "User is logging out");
-	        my $origurl = $ENV{HTTP_REFERER} || $query->url().$query->path_info();
-	        #TODO: 
+	        my $origurl = $query->referer() || $query->url().$query->path_info();
+            #TODO:
 	        $query->delete('logout');	#lets avoid infinite loops
     	    $this->redirectCgiQuery( $query, $origurl );
         	$authUser = undef;
@@ -385,7 +377,7 @@ sub loadSession {
     $this->userLoggedIn( $authUser );
 
     $twiki->{SESSION_TAGS}{SESSIONID} = $this->{_cgisession}->id();
-    $twiki->{SESSION_TAGS}{SESSIONVAR} = $CGI::Session::NAME;
+    $twiki->{SESSION_TAGS}{SESSIONVAR} = $TWiki::LoginManager::Session::NAME;
 
     return $authUser;
 }
@@ -410,8 +402,7 @@ sub checkAccess {
 
     unless( $twiki->inContext( 'authenticated' ) ||
               $TWiki::cfg{LoginManager} eq 'none' ) {
-        my $script = $ENV{'SCRIPT_NAME'} || $ENV{'SCRIPT_FILENAME'};
-        $script =~ s@^.*/([^./]+)@$1@g if $script;
+        my $script = $twiki->{request}->action;
 
         if( defined $script && $this->{_authScripts}{$script} ) {
             my $topic = $twiki->{topicName};
@@ -510,10 +501,10 @@ sub userLoggedIn {
         # create new session if necessary
         unless( $this->{_cgisession} ) {
             $this->{_cgisession} =
-              CGI::Session->new(
+              TWiki::LoginManager::Session->new(
                   undef, $twiki->{request},
                   { Directory => "$TWiki::cfg{WorkingDir}/tmp" } );
-            die CGI::Session->errstr() unless $this->{_cgisession};
+            die TWiki::LoginManager::Session->errstr() unless $this->{_cgisession};
         }
     }
     if( $authUser && $authUser ne $TWiki::cfg{DefaultUserLogin} ) {
@@ -591,7 +582,7 @@ sub _rewriteURL {
 
     my $sessionId = $this->{_cgisession}->id();
     return $url unless $sessionId;
-    return $url if $url =~ m/\?$CGI::Session::NAME=/;
+    return $url if $url =~ m/\?$TWiki::LoginManager::Session::NAME=/;
 
     my $s = _myScriptURLRE( $this );
 
@@ -600,7 +591,7 @@ sub _rewriteURL {
     if( $url !~ /:/ || $url =~ /^$s/ ) {
 
         # strip off existing params
-        my $params = "?$CGI::Session::NAME=$sessionId";
+        my $params = "?$TWiki::LoginManager::Session::NAME=$sessionId";
         if( $url =~ s/\?(.*)$// ) {
             $params .= ';'.$1;
         }
@@ -639,7 +630,7 @@ sub _rewriteFORM {
     my $s = _myScriptURLRE( $this );
 
     if( $url !~ /:/ || $url =~ /^($s)/ ) {
-        $rest .= CGI::hidden( -name => $CGI::Session::NAME,
+        $rest .= CGI::hidden( -name => $TWiki::LoginManager::Session::NAME,
                               -value => $this->{_cgisession}->id());
     }
     return $url.$rest;
@@ -700,7 +691,7 @@ sub endRenderingHandler {
 sub _pushCookie {
     my $this = shift;
 
-    my $cookie = CGI::Cookie->new( -name => $CGI::Session::NAME,
+    my $cookie = CGI::Cookie->new( -name => $TWiki::LoginManager::Session::NAME,
                                    -value => $this->{_cgisession}->id(),
                                    -path => '/' );
     # An expiry time is only set if the session has the REMEMBER variable
@@ -755,9 +746,9 @@ sub modifyHeader {
     return unless $this->{_cgisession};
     return if $TWiki::cfg{Sessions}{MapIP2SID};
 
-    my $query = $this->{twiki}->{request};
+    my $response = $this->{twiki}->{response};
     _pushCookie( $this );
-    $hopts->{cookie} = $this->{_cookies};
+    $response->cookies( $this->{_cookies} );
 }
 
 =pod
@@ -769,13 +760,14 @@ Generate an HTTP redirect on STDOUT, if you can. Return 1 if you did.
 
 =cut
 
+# TSA SMELL: better to rename this...
 sub redirectCgiQuery {
 
     my( $this, $query, $url ) = @_;
 
     if( $this->{_cgisession} ) {
         $url = _rewriteURL( $this, $url )
-          unless( !$TWiki::cfg{Sessions}{IDsInURLs} || $this->{_haveCookie} );
+            unless( !$TWiki::cfg{Sessions}{IDsInURLs} || $this->{_haveCookie} );
 
         # This usually won't be important, but just in case they haven't
         # yet received the cookie and happen to be redirecting, be sure
@@ -792,10 +784,10 @@ sub redirectCgiQuery {
 
     if( $TWiki::cfg{Sessions}{MapIP2SID} ) {
         _trace($this, "Redirect to $url WITHOUT cookie");
-        print $query->redirect( -url => $url );
+        $this->{twiki}->{response}->redirect( -url => $url );
     } else {
         _trace($this, "Redirect to $url with cookie");
-        print $query->redirect( -url => $url, -cookie => $this->{_cookies} );
+        $this->{twiki}->{response}->redirect( -url => $url, -cookie => $this->{_cookies} );
     }
 
     return 1;

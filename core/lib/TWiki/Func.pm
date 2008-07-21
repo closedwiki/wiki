@@ -1945,9 +1945,7 @@ Return:             none
 sub writeHeader {
     my( $query, $len ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    my $hdr = $TWiki::Plugins::SESSION->generateHTTPHeaders( $query );
-    $hdr =~ s/\n\n/\nContent-Length: $len\n\n/ if $len;
-    print $hdr;
+    $TWiki::Plugins::SESSION->generateHTTPHeaders( $query );
 }
 
 =pod

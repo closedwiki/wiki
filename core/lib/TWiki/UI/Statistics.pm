@@ -78,8 +78,9 @@ sub statistics {
 
     unless( $session->inContext( 'command_line' )) {
         # running from CGI
-        print $session->generateHTTPHeaders();
-        print CGI::start_html(-title=>'TWiki: Create Usage Statistics');
+        $session->generateHTTPHeaders();
+        $session->{response}->body(
+            CGI::start_html( -title => 'TWiki: Create Usage Statistics' ) );
     }
     # Initial messages
     _printMsg( $session, 'TWiki: Create Usage Statistics' );
@@ -179,7 +180,8 @@ sub statistics {
                                rel => 'nofollow' }, "$webName.$tmp") );
     }
     _printMsg( $session, 'End creating usage statistics' );
-    print CGI::end_html() unless( $session->inContext( 'command_line' ) );
+    $session->{response}->body( $session->{response}->body . CGI::end_html() )
+        unless ( $session->inContext('command_line') );
 }
 
 # Debug only
@@ -481,7 +483,7 @@ sub _printMsg {
         }
         $msg =~ s/==([A-Z]*)==/'=='.CGI::span( { class=>'twikiAlert' }, $1 ).'=='/ge;
     }
-    print $msg,"\n";
+    $session->{response}->body( $session->{response}->body . $msg . "\n" );
 }
 
 1;

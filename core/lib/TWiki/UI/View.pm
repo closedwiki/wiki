@@ -37,9 +37,6 @@ use strict;
 use integer;
 use Monitor;
 
-use CGI::Carp qw( fatalsToBrowser );
-use CGI qw( -any ); # pretty basic, this
-
 require TWiki;
 require TWiki::UI;
 require TWiki::Sandbox;
@@ -451,6 +448,9 @@ sub viewfile {
                                     topic => $topic,
                                     params => [ 'viewfile', $fileName||'?' ] );
     }
+# TSA SMELL: Maybe could be less memory hungry if get a file handle
+# and set response body to it. This way engines could send data the
+# best way possible to each one
     my $fileContent = $session->{store}->readAttachment(
         $session->{user}, $webName, $topic, $fileName, $rev );
 
@@ -458,13 +458,8 @@ sub viewfile {
     my $length =  length( $fileContent );
     my $dispo = 'inline;filename='.$fileName;
 
-    print <<HERE;
-Content-type: $type
-Content-length: $length
-Content-Disposition: $dispo
-
-$fileContent
-HERE
+    $session->{response}->header(-type => $type, qq(Content-Disposition="$dispo") );
+    $session->{response}->body($fileContent);
 }
 
 sub _suffixToMimeType {

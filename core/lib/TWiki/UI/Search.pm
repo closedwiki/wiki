@@ -153,6 +153,7 @@ sub search {
     
 }
 
+# TSA SMELL: Review this in case of defining _callback above
 sub _contentCallback {
     TWiki::spamProof( $_[1] );
 #FIXME: if you're going to define a callback, you have to convert from TML too    

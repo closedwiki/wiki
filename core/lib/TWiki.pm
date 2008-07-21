@@ -504,13 +504,13 @@ sub UTF82SiteCharSet {
     if ( $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i ) {
         # warn if using Perl older than 5.8
         if( $] <  5.008 ) {
-            print STDERR 'UTF-8 not remotely supported on Perl ', $],
-              ' - use Perl 5.8 or higher..' ;
+            $this->writeWarning( 'UTF-8 not remotely supported on Perl '.$].
+                                 ' - use Perl 5.8 or higher..' );
         }
 
         # We still don't have Codev.UnicodeSupport
-        print STDERR 'UTF-8 not yet supported as site charset -',
-          'TWiki is likely to have problems';
+        $this->writeWarning( 'UTF-8 not yet supported as site charset -'.
+                             'TWiki is likely to have problems' );
         return $text;
     }
 
@@ -531,10 +531,10 @@ sub UTF82SiteCharSet {
             my $charEncoding =
               Encode::resolve_alias( $TWiki::cfg{Site}{CharSet} );
             if( not $charEncoding ) {
-                print STDERR
-                  'Conversion to "',$TWiki::cfg{Site}{CharSet},
-                    '" not supported, or name not recognised - check ',
-                      '"perldoc Encode::Supported"';
+                $this->writeWarning
+                  ( 'Conversion to "'.$TWiki::cfg{Site}{CharSet}.
+                    '" not supported, or name not recognised - check '.
+                    '"perldoc Encode::Supported"' );
             } else {
                 # Convert text using Encode:
                 # - first, convert from UTF8 bytes into internal
@@ -550,9 +550,10 @@ sub UTF82SiteCharSet {
             require Unicode::MapUTF8;    # Pre-5.8 Perl versions
             my $charEncoding = $TWiki::cfg{Site}{CharSet};
             if( not Unicode::MapUTF8::utf8_supported_charset($charEncoding) ) {
-                print STDERR 'Conversion to "',$TWiki::cfg{Site}{CharSet},
-                  '" not supported, or name not recognised - check ',
-                    '"perldoc Unicode::MapUTF8"';
+                $this->writeWarning
+                  ( 'Conversion to "'.$TWiki::cfg{Site}{CharSet}.
+                    '" not supported, or name not recognised - check '.
+                    '"perldoc Unicode::MapUTF8"' );
             } else {
                 # Convert text
                 $text =
