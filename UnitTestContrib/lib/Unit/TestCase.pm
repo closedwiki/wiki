@@ -275,24 +275,25 @@ sub capture {
     my $this = shift;
     my $proc = shift;
 
-    require File::Temp;
-    my $tmpdir = File::Temp::tempdir(CLEANUP => 1);
-
     my $text = undef;
+    my $response = undef;
     my @params = @_;
     my $result;
 
-    {
-        local *STDOUT;
-        open(STDOUT, ">$tmpdir/data");
+    $result = &$proc( @params );
+    $response = UNIVERSAL::isa( $params[0], 'TWiki' ) ? 
+                $params[0]->{response}                :
+                $TWiki::Plugins::SESSION->{response};
 
-        $result = &$proc( @params );
+    # Capture headers
+    TWiki::Engine->finalizeCookies( $response );
+    foreach my $header ( keys %{ $response->headers } ) {
+        $text .= $header . ': ' . $_ . TWiki::Engine::CRLF
+          foreach $response->getHeader($header);
     }
-
-    open(FH, "$tmpdir/data");
-    local $/ = undef;
-    $text = <FH>;
-    close(FH);
+    $text .= TWiki::Engine::CRLF;
+    # Capture body
+    $text .= $response->body() if $response->body();
 
     return ( $text, $result );
 }

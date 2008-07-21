@@ -19,6 +19,7 @@ sub _findRelativeTo {
 }
 
 BEGIN {
+	$TWiki::cfg{Engine} = 'TWiki::Engine::CGI';
     # root the tree
     my $here = Cwd::abs_path;
 
