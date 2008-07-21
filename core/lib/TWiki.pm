@@ -482,7 +482,7 @@ BEGIN {
 
 =pod
 
----++ StaticMethod UTF82SiteCharSet( $utf8 ) -> $ascii
+---++ ObjectMethod UTF82SiteCharSet( $utf8 ) -> $ascii
 
 Auto-detect UTF-8 vs. site charset in string, and convert UTF-8 into site
 charset.
@@ -490,7 +490,7 @@ charset.
 =cut
 
 sub UTF82SiteCharSet {
-    my $text = shift;
+    my( $this, $text ) = @_;
 
     return $text unless( defined $TWiki::cfg{Site}{CharSet} );
 
@@ -1366,12 +1366,12 @@ sub new {
     # Convert UTF-8 web and topic name from URL into site charset if necessary 
     # SMELL: merge these two cases, browsers just don't mix two encodings in one URL
     # - can also simplify into 2 lines by making function return unprocessed text if no conversion
-    my $webNameTemp = UTF82SiteCharSet( $this->{webName} );
+    my $webNameTemp = $this->UTF82SiteCharSet( $this->{webName} );
     if ( $webNameTemp ) {
         $this->{webName} = $webNameTemp;
     }
 
-    my $topicNameTemp = UTF82SiteCharSet( $this->{topicName} );
+    my $topicNameTemp = $this->UTF82SiteCharSet( $this->{topicName} );
     if ( $topicNameTemp ) {
         $this->{topicName} = $topicNameTemp;
     }
