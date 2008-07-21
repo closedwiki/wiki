@@ -39,8 +39,8 @@ sub setup_new_session() {
     my $this = shift;
 	
 	my ( $query, $text );
-    $query = new CGI ({});
-    $query->path_info( "/Main/WebHome" );
+    $query = new TWiki::Request ({});
+    $query->path_info( "/script/Main/WebHome" );
     $ENV{SCRIPT_NAME} = "view";
 
     # close this TWiki session - its using the wrong mapper and login
