@@ -636,7 +636,7 @@ sub RESTParameter2SiteCharSet {
 # the response to an XHR should also be UTF-8 encoded.
 # This function generates such a response.
 sub returnRESTResult {
-    my ($text) = @_;
+    my ($text, $response) = @_;
 
     if ($TWiki::cfg{Site}{CharSet}) {
         $text = Encode::decode(
@@ -647,11 +647,20 @@ sub returnRESTResult {
 
     $text = Encode::encode_utf8($text);
 
-    print "Content-Type: text/plain;charset=UTF-8\r\n";
-    my $len; { use bytes; $len = length($text); };
-    print "Content-length: ",$len,"\r\n";
-    print "\r\n";
-    print $text;
+    # Before TWiki5 there was no TWiki::Response. Since this code
+    # needs to work on all versions, this test is required.
+    if ( ref($response) && UNIVERSAL::isa( $response, 'TWiki::Response' ) ) {
+        $response->header( -type => 'text/plain', -charset => 'UTF-8' );
+        $response->body($text);
+    }
+    else {
+        print "Content-Type: text/plain;charset=UTF-8\r\n";
+        my $len;
+        { use bytes; $len = length($text); };
+        print "Content-length: ", $len, "\r\n";
+        print "\r\n";
+        print $text;
+    }
 }
 
 # Rest handler for use from Javascript. The 'text' parameter is used to
@@ -669,7 +678,7 @@ sub returnRESTResult {
 # req.send(params);
 #
 sub _restTML2HTML {
-    my ($session) = @_;
+    my ($session, $subject, $verb, $response) = @_;
     my $tml = TWiki::Func::getCgiQuery()->param('text');
 
     $tml = RESTParameter2SiteCharSet($tml);
@@ -688,14 +697,14 @@ sub _restTML2HTML {
     # in during final cleanup.
     $html = '<!--'.$SECRET_ID.'-->'.$html;
 
-    returnRESTResult($html);
+    returnRESTResult($html, $response);
 
     return undef; # to prevent further processing
 }
 
 # Rest handler for use from Javascript
 sub _restHTML2TML {
-    my ($session) = @_;
+    my ($session, $subject, $verb, $response) = @_;
     unless( $html2tml ) {
         require TWiki::Plugins::WysiwygPlugin::HTML2TML;
 
@@ -716,13 +725,13 @@ sub _restHTML2TML {
             very_clean => 1,
         });
 
-    returnRESTResult($tml);
+    returnRESTResult($tml, $response);
 
     return undef; # to prevent further processing
 }
 
 sub _restUpload {
-    my ($session) = @_;
+    my ($session, $subject, $verb, $response) = @_;
     my $query = TWiki::Func::getCgiQuery();
     my $topic = $query->param('topic');
     $topic =~ /^(.*)\.([^.]*)$/;
@@ -748,10 +757,17 @@ sub _restUpload {
     unless (TWiki::Func::checkAccessPermission(
         'CHANGE', TWiki::Func::getWikiName(), undef, $topic, $web)) {
         my $error = "Access denied";
-        print CGI::header(-status => 401);
-        print $error;
-        print STDERR $error;
-        return;
+        if ( ref($response) && UNIVERSAL::isa( $response, 'TWiki::Response' ) )
+        {
+            $response->header( -status => 401 );
+            $response->body($error);
+        }
+        else {
+            print CGI::header( -status => 401 );
+            print $error;
+            print STDERR $error;
+        }
+        return undef;
     }
 
     my ($fileSize, $fileDate, $tmpFileName);
@@ -771,11 +787,19 @@ sub _restUpload {
             $fileDate = $stats[9];
         }
 
-        unless($fileSize && $fileName) {
+        unless ( $fileSize && $fileName ) {
             my $error = "Zero-sized file upload";
-            print CGI::header(-status => 500);
-            print $error;
-            print STDERR $error;
+            if ( ref($response)
+                && UNIVERSAL::isa( $response, 'TWiki::Response' ) )
+            {
+                $response->header( -status => 500 );
+                $response->body($error);
+            }
+            else {
+                print CGI::header( -status => 500 );
+                print $error;
+                print STDERR $error;
+            }
             return undef;
         }
 
@@ -783,11 +807,19 @@ sub _restUpload {
             'ATTACHFILESIZELIMIT');
         $maxSize = 0 unless ($maxSize =~ /([0-9]+)/o);
 
-        if ($maxSize && $fileSize > $maxSize * 1024) {
+        if ( $maxSize && $fileSize > $maxSize * 1024 ) {
             my $error = "OVERSIZED UPLOAD";
-            print CGI::header(-status => 500);
-            print $error;
-            print STDERR $error;
+            if ( ref($response)
+                && UNIVERSAL::isa( $response, 'TWiki::Response' ) )
+            {
+                $response->header( -status => 500 );
+                $response->body($error);
+            }
+            else {
+                print CGI::header( -status => 500 );
+                print $error;
+                print STDERR $error;
+            }
             return undef;
         }
     }
@@ -811,9 +843,16 @@ sub _restUpload {
     close($stream) if $stream;
 
     if ($error) {
-        print CGI::header(-status => 500);
-        print $error;
-        print STDERR $error;
+        if ( ref($response) && UNIVERSAL::isa( $response, 'TWiki::Response' ) )
+        {
+            $response->header( -status => 500 );
+            $response->body($error);
+        }
+        else {
+            print CGI::header( -status => 500 );
+            print $error;
+            print STDERR $error;
+        }
         return undef;
     }
 
@@ -835,7 +874,7 @@ sub _unquote {
 
 # Get, and return, a list of attachments using JSON
 sub _restAttachments {
-    my ($session) = @_;
+    my ($session, $subject, $verb, $response) = @_;
     my ($web, $topic) = TWiki::Func::normalizeWebTopicName(
         undef, TWiki::Func::getCgiQuery()->param('topic'));
     my ($meta, $text) = TWiki::Func::readTopic($web, $topic);
@@ -843,10 +882,17 @@ sub _restAttachments {
         'VIEW', TWiki::Func::getWikiName(),
         $text, $topic, $web, $meta)) {
         my $error = "Access denied";
-        print CGI::header(-status => 401);
-        print $error;
-        print STDERR $error;
-        return;
+        if ( ref($response) && UNIVERSAL::isa( $response, 'TWiki::Response' ) )
+        {
+            $response->header( -status => 401 );
+            $response->body($error);
+        }
+        else {
+            print CGI::header( -status => 401 );
+            print $error;
+            print STDERR $error;
+        }
+        return undef;
     }
     # Create a JSON list of attachment data, sorted by name
     my @atts;
