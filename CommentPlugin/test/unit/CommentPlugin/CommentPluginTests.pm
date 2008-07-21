@@ -178,13 +178,13 @@ HERE
 
     # Compose the query
     my $comm = "This is the comment";
-    my $query = new CGI(
+    my $query = new TWiki::Request(
                         {
                          'comment_action' => 'save',
                          'comment_type' => $type,
                          'comment' => $comm,
                         });
-    $query->path_info("/$web/$topic");
+    $query->path_info("/script/$web/$topic");
     if ( $anchor ) {
         $query->param(-name=>'comment_anchor', -value=>$anchor);
     } elsif ( $location) {
@@ -327,14 +327,14 @@ HERE
 
     # Compose the query
     my $comm = "This is the comment";
-    my $query = new CGI(
+    my $query = new TWiki::Request(
                         {
                          'comment_action' => 'save',
                          'comment_type' => 'above',
                          'comment' => $comm,
                          'comment_nopost' => 'on',
                         });
-    $query->path_info("/$this->{test_web}/$this->{test_topic}");
+    $query->path_info("/script/$this->{test_web}/$this->{test_topic}");
 
     my $session = new TWiki( $TWiki::cfg{DefaultUserLoginName}, $query);
     my $text = "Ignore this text";
@@ -371,7 +371,7 @@ HERE
 
     # Compose the query
     my $comm = "This is the comment";
-    my $query = new CGI(
+    my $query = new TWiki::Request(
                         {
                          'comment_action' => 'save',
                          'comment_type' => 'above',
@@ -379,7 +379,7 @@ HERE
                          'comment_remove' => '0',
                          'comment_index' => '99',
                         });
-    $query->path_info("/$this->{test_web}/$this->{test_topic}");
+    $query->path_info("/script/$this->{test_web}/$this->{test_topic}");
 
     my $session = new TWiki( $TWiki::cfg{DefaultUserLoginName}, $query);
     my $text = "Ignore this text";
