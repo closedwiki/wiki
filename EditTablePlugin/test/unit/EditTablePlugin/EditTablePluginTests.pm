@@ -141,7 +141,7 @@ sub test_editSimple {
     my $pubUrlTWikiWeb =
       TWiki::Func::getUrlHost() . TWiki::Func::getPubUrlPath() . '/TWiki';
 
-    my $query = new CGI(
+    my $query = new TWiki::Request(
         {
             etedit    => ['on'],
             ettablenr => ['1'],
@@ -187,14 +187,14 @@ sub test_editFormat {
 SOMETHING %EDITTABLE{format="| row, -1 | text, 10, init | textarea, 3x10, init | select, 3, option 1, option 2, option 3 | radio, 3, A, B, C, D, E | checkbox, 3, A, B, C, D, E | label, 0, LABEL | date,11,,%d %b %Y |"}%
 INPUT
 
-    my $query = new CGI(
+    my $query = new TWiki::Request(
         {
             etedit    => ['on'],
             ettablenr => ['1'],
         }
     );
 
-    $query->path_info("/$webName/$topicName");
+    $query->path_info("/script/$webName/$topicName");
 
     my $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
@@ -238,14 +238,14 @@ sub test_editAddRow {
 | 0 | init |
 INPUT
 
-    my $query = new CGI(
+    my $query = new TWiki::Request(
         {
             etedit    => ['on'],
             ettablenr => ['1'],
         }
     );
 
-    $query->path_info("/$webName/$topicName");
+    $query->path_info("/script/$webName/$topicName");
 
     my $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
@@ -274,7 +274,7 @@ EXPECTED
     $this->do_testHtmlOutput( $expected, $result, 0 );
 
     # Add 2 rows
-    $query = new CGI(
+    $query = new TWiki::Request(
         {
             etedit    => ['on'],
             etaddrow  => ['1'],
@@ -286,7 +286,7 @@ EXPECTED
         }
     );
 
-    $query->path_info("/$webName/$topicName");
+    $query->path_info("/script/$webName/$topicName");
 
     $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
@@ -337,7 +337,7 @@ EXPECTED
 
     $this->do_testHtmlOutput( $expected, $result, 1 );
 
-    $query = new CGI(
+    $query = new TWiki::Request(
         {
             etsave    => ['on'],
             etrows    => ['3'],
@@ -347,7 +347,7 @@ EXPECTED
             etcell3x2 => ['test3'],
         }
     );
-    $query->path_info("/$webName/$topicName");
+    $query->path_info("/script/$webName/$topicName");
 
     TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
         $input );
@@ -357,8 +357,8 @@ EXPECTED
 
     my ( $saveResult, $ecode ) = $this->capture(
         sub {
-            print TWiki::Func::expandCommonVariables( $input,
-                $this->{test_topic}, $this->{test_web}, undef );
+            $twiki->{response}->body(TWiki::Func::expandCommonVariables( $input,
+                $this->{test_topic}, $this->{test_web}, undef ) );
         }
     );
     $this->assert( $saveResult =~ /Status: 302/ );
@@ -393,13 +393,13 @@ sub test_SelectBox {
     my $pubUrlTWikiWeb =
       TWiki::Func::getUrlHost() . TWiki::Func::getPubUrlPath() . '/TWiki';
 
-    my $query = new CGI(
+    my $query = new TWiki::Request(
         {
             etedit    => ['on'],
             ettablenr => ['1'],
         }
     );
-    $query->path_info("/$webName/$topicName");
+    $query->path_info("/script/$webName/$topicName");
 
     my $text = <<INPUT;
 %EDITTABLE{format="|select, 1, a, b, c, d|select,1,a,b,c,d|select,1 ,a , b, c, d|select, 1 , a , b , c , d |" }%
@@ -458,13 +458,13 @@ sub test_VariableExpansionInCheckboxAndRadioButtons {
     my $pubUrlTWikiWeb =
       TWiki::Func::getUrlHost() . TWiki::Func::getPubUrlPath() . '/TWiki';
 
-    my $query = new CGI(
+    my $query = new TWiki::Request(
         {
             etedit    => ['on'],
             ettablenr => ['1'],
         }
     );
-    $query->path_info("/$webName/$topicName");
+    $query->path_info("/script/$webName/$topicName");
 
     my $text = <<INPUT;
 %EDITTABLE{format="| radio, 1, :skull:, :cool: | checkbox, 1, :skull:, :cool: |"}%
@@ -573,13 +573,13 @@ sub test_VariablePlaceholdersEdit {
 %EDITTABLE{format="| text, 30, \$percntY\$percnt | text, 30, \$percntTOPIC\$percnt |"}%
 INPUT
 
-    my $query = new CGI(
+    my $query = new TWiki::Request(
         {
             etedit    => ['on'],
             ettablenr => ['1'],
         }
     );
-    $query->path_info("/$webName/$topicName");
+    $query->path_info("/script/$webName/$topicName");
 
     my $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
@@ -631,26 +631,26 @@ sub test_saveNoFormat {
 | *URL* | *Name* | *By* | *Comment* |
 | http://twiki.org | TWiki | me | dodo |
 INPUT
-    my $query = new CGI(
+    my $query = new TWiki::Request(
         {
             etedit    => ['on'],
             ettablenr => ['1'],
         }
     );
 
-    $query->path_info("/$webName/$topicName");
+    $query->path_info("/script/$webName/$topicName");
 
     my $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
 
-    $query = new CGI(
+    $query = new TWiki::Request(
         {
             etsave    => ['on'],
             ettablenr => ['1'],
         }
     );
 
-    $query->path_info("/$webName/$topicName");
+    $query->path_info("/script/$webName/$topicName");
 
     TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
         $input );
@@ -660,8 +660,8 @@ INPUT
 
     my ( $saveResult, $ecode ) = $this->capture(
         sub {
-            print TWiki::Func::expandCommonVariables( $input,
-                $this->{test_topic}, $this->{test_web}, undef );
+            $twiki->{response}->body( TWiki::Func::expandCommonVariables( $input,
+                $this->{test_topic}, $this->{test_web}, undef ) );
         }
     );
 
@@ -696,19 +696,19 @@ sub test_saveWithHeaderAndFooter {
 | Project D | SW | P1 | CT5 | SW Dev | 2 | 4 | 2 || 2 || 6345 | %CALC{"\$EVAL(\$T(R\$ROW():C6) * \$T(R\$ROW():C\$COLUMN(-1)))"}% | Q4 |
 | Total ||||| *%CALC{"\$SUM(\$ABOVE())"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* | *%CALC{"\$SUMPRODUCT(R2:C6..R\$ROW(-1):C6, R2:C\$COLUMN(0)..R\$ROW(-1):C\$COLUMN(0))"}%* || *%CALC{"\$SUM(\$ABOVE())"}%* ||
 INPUT
-    my $query = new CGI(
+    my $query = new TWiki::Request(
         {
             etedit    => ['on'],
             ettablenr => ['1'],
         }
     );
 
-    $query->path_info("/$webName/$topicName");
+    $query->path_info("/script/$webName/$topicName");
 
     my $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
 
-    $query = new CGI(
+    $query = new TWiki::Request(
         {
             etsave    => ['on'],
             etrows    => ['5'],
@@ -716,7 +716,7 @@ INPUT
         }
     );
 
-    $query->path_info("/$webName/$topicName");
+    $query->path_info("/script/$webName/$topicName");
 
     TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
         $input );
@@ -726,8 +726,8 @@ INPUT
 
     my ( $saveResult, $ecode ) = $this->capture(
         sub {
-            print TWiki::Func::expandCommonVariables( $input,
-                $this->{test_topic}, $this->{test_web}, undef );
+            $twiki->{response}->body( TWiki::Func::expandCommonVariables( $input,
+                $this->{test_topic}, $this->{test_web}, undef ) );
         }
     );
 
@@ -768,30 +768,30 @@ sub test_keepSpacesInEmptyCellsWithTexts {
 | ABC | X |
 | DEF | |
 INPUT
-    my $query = new CGI(
+    my $query = new TWiki::Request(
         {
             etedit    => ['on'],
             ettablenr => ['1'],
         }
     );
-    $query->path_info("/$webName/$topicName");
+    $query->path_info("/script/$webName/$topicName");
     my $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
-    $query = new CGI(
+    $query = new TWiki::Request(
         {
             etsave    => ['on'],
             ettablenr => ['1'],
         }
     );
-    $query->path_info("/$webName/$topicName");
+    $query->path_info("/script/$webName/$topicName");
     TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
         $input );
     $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
     my ( $saveResult, $ecode ) = $this->capture(
         sub {
-            print TWiki::Func::expandCommonVariables( $input,
-                $this->{test_topic}, $this->{test_web}, undef );
+            $twiki->{response}->body(TWiki::Func::expandCommonVariables( $input,
+                $this->{test_topic}, $this->{test_web}, undef ) );
         }
     );
     my ( $meta, $newtext ) = TWiki::Func::readTopic( $webName, $topicName );
@@ -826,30 +826,30 @@ sub test_keepSpacesInEmptyCellsWithDates {
 | Blabla 1 | 07 Sep 2007 | | 07 Sep 2007 |
 | Blabla 5 | 16 Nov 2007 | 21 Nov 2007 | |
 INPUT
-    my $query = new CGI(
+    my $query = new TWiki::Request(
         {
             etedit    => ['on'],
             ettablenr => ['1'],
         }
     );
-    $query->path_info("/$webName/$topicName");
+    $query->path_info("/script/$webName/$topicName");
     my $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
-    $query = new CGI(
+    $query = new TWiki::Request(
         {
             etsave    => ['on'],
             ettablenr => ['1'],
         }
     );
-    $query->path_info("/$webName/$topicName");
+    $query->path_info("/script/$webName/$topicName");
     TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
         $input );
     $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
     my ( $saveResult, $ecode ) = $this->capture(
         sub {
-            print TWiki::Func::expandCommonVariables( $input,
-                $this->{test_topic}, $this->{test_web}, undef );
+            $twiki->{response}->body(TWiki::Func::expandCommonVariables( $input,
+                $this->{test_topic}, $this->{test_web}, undef ) );
         }
     );
     my ( $meta, $newtext ) = TWiki::Func::readTopic( $webName, $topicName );
@@ -886,30 +886,30 @@ sub test_addSpacesToEmptyCells {
 || X |
 | DEF ||
 INPUT
-    my $query = new CGI(
+    my $query = new TWiki::Request(
         {
             etedit    => ['on'],
             ettablenr => ['1'],
         }
     );
-    $query->path_info("/$webName/$topicName");
+    $query->path_info("/script/$webName/$topicName");
     my $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
-    $query = new CGI(
+    $query = new TWiki::Request(
         {
             etsave    => ['on'],
             ettablenr => ['1'],
         }
     );
-    $query->path_info("/$webName/$topicName");
+    $query->path_info("/script/$webName/$topicName");
     TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
         $input );
     $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
     my ( $saveResult, $ecode ) = $this->capture(
         sub {
-            print TWiki::Func::expandCommonVariables( $input,
-                $this->{test_topic}, $this->{test_web}, undef );
+            $twiki->{response}->body(TWiki::Func::expandCommonVariables( $input,
+                $this->{test_topic}, $this->{test_web}, undef ) );
         }
     );
     my ( $meta, $newtext ) = TWiki::Func::readTopic( $webName, $topicName );
@@ -979,30 +979,30 @@ sub test_keepStars {
 %EDITTABLE{}%
 | * <small>Name of the client (prefilled)</small> |
 INPUT
-    my $query = new CGI(
+    my $query = new TWiki::Request(
         {
             etedit    => ['on'],
             ettablenr => ['1'],
         }
     );
-    $query->path_info("/$webName/$topicName");
+    $query->path_info("/script/$webName/$topicName");
     my $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
-    $query = new CGI(
+    $query = new TWiki::Request(
         {
             etsave    => ['on'],
             ettablenr => ['1'],
         }
     );
-    $query->path_info("/$webName/$topicName");
+    $query->path_info("/script/$webName/$topicName");
     TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
         $input );
     $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
     my ( $saveResult, $ecode ) = $this->capture(
         sub {
-            print TWiki::Func::expandCommonVariables( $input,
-                $this->{test_topic}, $this->{test_web}, undef );
+            $twiki->{response}->body(TWiki::Func::expandCommonVariables( $input,
+                $this->{test_topic}, $this->{test_web}, undef ) );
         }
     );
     my ( $meta, $newtext ) = TWiki::Func::readTopic( $webName, $topicName );
@@ -1032,30 +1032,30 @@ sub test_lineBreaksInsideInputField {
 %EDITTABLE{ changerows="off" quietsave="off"  }%
 | <small><table><tr><td>TD...Technical Documentation <br />TM...Translation Management <br />PC...Product Catalogs </td><td>PS...Processes and Systems <br />FM...Feedback Management <br />KL...Knowledge Logistics</td></tr></table></small> |
 INPUT
-    my $query = new CGI(
+    my $query = new TWiki::Request(
         {
             etedit    => ['on'],
             ettablenr => ['1'],
         }
     );
-    $query->path_info("/$webName/$topicName");
+    $query->path_info("/script/$webName/$topicName");
     my $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
-    $query = new CGI(
+    $query = new TWiki::Request(
         {
             etsave    => ['on'],
             ettablenr => ['1'],
         }
     );
-    $query->path_info("/$webName/$topicName");
+    $query->path_info("/script/$webName/$topicName");
     TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
         $input );
     $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
     my ( $saveResult, $ecode ) = $this->capture(
         sub {
-            print TWiki::Func::expandCommonVariables( $input,
-                $this->{test_topic}, $this->{test_web}, undef );
+            $twiki->{response}->body(TWiki::Func::expandCommonVariables( $input,
+                $this->{test_topic}, $this->{test_web}, undef ) );
         }
     );
     my ( $meta, $newtext ) = TWiki::Func::readTopic( $webName, $topicName );
