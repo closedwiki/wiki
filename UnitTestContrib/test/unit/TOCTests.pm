@@ -18,7 +18,6 @@ use strict;
 use TWiki;
 use TWiki::UI::Edit;
 use TWiki::Form;
-use CGI;
 use Error qw( :try );
 
 my $testweb = "TestWeb";
@@ -89,7 +88,7 @@ sub setup_TOCtests {
   my $attr = new TWiki::Attrs( $params );
   foreach my $k ( keys %$attr ) {
     next if $k eq '_RAW';
-    $twiki->{cgiQuery}->param( -name=>$k, -value=>$attr->{$k});
+    $twiki->{request}->param( -name=>$k, -value=>$attr->{$k});
   }
 
   # Now generate the TOC

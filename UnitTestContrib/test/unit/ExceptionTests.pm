@@ -86,7 +86,7 @@ sub test_AccessControlException {
 
 sub test_oopsScript {
     my $this = shift;
-    my $query = new CGI({
+    my $query = new TWiki::Request({
         skin => 'none',
         template => 'oopsgeneric',
         def => 'message',

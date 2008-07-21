@@ -7,7 +7,6 @@ use base qw(TWikiFnTestCase);
 use strict;
 use TWiki;
 use TWiki::UI::View;
-use CGI;
 use Error qw( :try );
 
 sub list_tests {
@@ -39,11 +38,11 @@ sub list_tests {
 
 sub run_testcase {
     my ( $this, $testcase ) = @_;
-    my $query = new CGI({
+    my $query = new TWiki::Request({
         test=>'compare',
         debugenableplugins=>'TestFixturePlugin,InterwikiPlugin',
         skin=>'pattern'});
-    $query->path_info( "TestCases/$testcase" );
+    $query->path_info( "/view/TestCases/$testcase" );
     $TWiki::cfg{Plugins}{TestFixturePlugin}{Enabled} = 1;
     my $twiki = new TWiki( $this->{test_user_login}, $query );
     $twiki->{store}->saveTopic(

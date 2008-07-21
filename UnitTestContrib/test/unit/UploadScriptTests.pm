@@ -6,6 +6,8 @@ use base qw(TWikiFnTestCase);
 
 use strict;
 use TWiki;
+use TWiki::Request;
+use TWiki::Request::Upload;
 use TWiki::UI::Upload;
 use CGI;
 use Error qw( :try );
@@ -39,16 +41,20 @@ sub do_upload {
         my $v = shift(@_);
         $args{$k} = [ $v ];
     }
-    my $query = new CGI(\%args);
-    $query->path_info( "$this->{test_web}/$this->{test_topic}" );
+    my $query = new TWiki::Request(\%args);
+    $query->path_info( "/script/$this->{test_web}/$this->{test_topic}" );
+	my %uploads = ();
     my $tmpfile = new CGITempFile(0);
     my $fh = Fh->new($fn, $tmpfile->as_string, 0);
     print $fh $data;
     seek($fh,0,0);
-    $query->{'.tmpfiles'}->{$$fh} = {
-        hndl => $fh, name => $tmpfile, info => {},
-    };
-    push(@{$query->{'filepath'}}, $fh);
+	$query->param( -name => 'filepath', -value => $fn );
+    $uploads{filepath} = new TWiki::Request::Upload(
+        name    => 'filepath',
+        headers => {},
+        tmpname => $tmpfile->as_string
+    );
+	$query->uploads( \%uploads );
 
     my $stream = $query->upload( 'filepath' );
     seek($stream,0,0);
@@ -90,8 +96,8 @@ sub test_oversized_upload {
         webName => [ $this->{test_web} ],
         topicName => [ $this->{test_topic} ],
        );
-    my $query = new CGI(\%args);
-    $query->path_info( "$this->{test_web}/$this->{test_topic}" );
+    my $query = new TWiki::Request(\%args);
+    $query->path_info( "/script/$this->{test_web}/$this->{test_topic}" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $TWiki::Plugins::SESSION = $this->{twiki};

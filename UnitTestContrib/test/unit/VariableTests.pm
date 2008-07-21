@@ -15,8 +15,8 @@ sub set_up {
 
     $this->SUPER::set_up();
 
-    my $query = new CGI("");
-    $query->path_info("/$this->{test_web}/$this->{test_topic}");
+    my $query = new TWiki::Request("");
+    $query->path_info("/script/$this->{test_web}/$this->{test_topic}");
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki('scum', $query);
 }

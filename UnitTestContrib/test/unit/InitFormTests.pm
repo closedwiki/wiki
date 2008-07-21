@@ -37,7 +37,6 @@ use Error qw( :try );
 use TWiki;
 use TWiki::UI::Edit;
 use TWiki::Form;
-use CGI;
 use Error qw( :try );
 
 my $testweb = "TestWeb";
@@ -180,7 +179,7 @@ sub setup_formtests {
   my $attr = new TWiki::Attrs( $params );
   foreach my $k ( keys %$attr ) {
     next if $k eq '_RAW';
-    $this->{twiki}->{cgiQuery}->param( -name=>$k, -value=>$attr->{$k});
+    $this->{twiki}->{request}->param( -name=>$k, -value=>$attr->{$k});
   }
 
   # Now generate the form. We pass a template which throws everything away

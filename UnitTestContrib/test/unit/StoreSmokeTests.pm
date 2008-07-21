@@ -7,7 +7,6 @@ use strict;
 use TWiki;
 use TWiki::Meta;
 use Error qw( :try );
-use CGI;
 use TWiki::UI::Save;
 use TWiki::OopsException;
 use Devel::Symdump;
@@ -225,12 +224,12 @@ sub verify_releaselocksonsave {
     my $meta = new TWiki::Meta($this->{twiki}, $this->{test_web}, $topic);
 
     # create rev 1 as TestUser1
-    my $query = new CGI ({
+    my $query = new TWiki::Request ({
                           originalrev => [ 0 ],
                           'action' => [ 'save' ],
                           text => [ "Before\nBaseline\nText\nAfter\n" ],
                          });
-    $query->path_info( "/$this->{test_web}/$topic" );
+    $query->path_info( "/script/$this->{test_web}/$topic" );
 
     $this->{twiki} = new TWiki( $testUser1, $query );
     try {
@@ -244,13 +243,13 @@ sub verify_releaselocksonsave {
     };
 
     # create rev 2 as TestUser1
-    $query = new CGI ({
+    $query = new TWiki::Request ({
                        originalrev => [ 1 ],
                        'action' => [ 'save' ],
                        text => [ "Before\nChanged\nLines\nAfter\n" ],
                        forcenewrevision => [ 1 ],
                       });
-    $query->path_info( "/$this->{test_web}/$topic" );
+    $query->path_info( "/script/$this->{test_web}/$topic" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $testUser1, $query );
     try {
@@ -264,14 +263,14 @@ sub verify_releaselocksonsave {
     };
 
     # now TestUser2 has a go, based on rev 1
-    $query = new CGI ({
+    $query = new TWiki::Request ({
                        originalrev => [ 1 ],
                        'action' => [ 'save' ],
                        text => [ "Before\nSausage\nChips\nAfter\n" ],
                        forcenewrevision => [ 1 ],
                       });
 
-    $query->path_info( "/$this->{test_web}/$topic" );
+    $query->path_info( "/script/$this->{test_web}/$topic" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $testUser2, $query );
     try {

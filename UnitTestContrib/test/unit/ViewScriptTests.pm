@@ -7,7 +7,6 @@ use base qw(TWikiFnTestCase);
 use strict;
 use TWiki;
 use TWiki::UI::View;
-use CGI;
 use Error qw( :try );
 
 my $twiki;
@@ -74,12 +73,12 @@ sub set_up {
 
 sub setup_view {
     my ( $this, $web, $topic, $tmpl ) = @_;
-    my $query = new CGI({
+    my $query = new TWiki::Request({
         webName => [ $web ],
         topicName => [ $topic ],
         template => [ $tmpl ],
     });
-    $query->path_info( "$web/$topic" );
+    $query->path_info( "/view/$web/$topic" );
     $twiki = new TWiki( $this->{test_user_login}, $query );
     my ($text, $result) = $this->capture( \&TWiki::UI::View::view, $twiki);
     $twiki->finish();

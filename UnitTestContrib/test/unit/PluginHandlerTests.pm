@@ -27,7 +27,7 @@ use strict;
 # | outsidePREHandler            | test_renderingHandlers |
 # | postRenderingHandler         | test_renderingHandlers |
 # | preRenderingHandler          | test_renderingHandlers |
-# | redirectCgiQueryHandler      | *untested* |
+# | redirectrequestHandler      | *untested* |
 # | registrationHandler          | *untested* |
 # | renderFormFieldForEditHandler| *untested* |
 # | renderWikiWordHandler        | *untested* |
@@ -49,7 +49,6 @@ use base qw(TWikiFnTestCase);
 
 use strict;
 use TWiki;
-use CGI;
 use Error qw( :try );
 use TWiki::Plugin;
 use Symbol qw(delete_package);
@@ -214,9 +213,9 @@ sub initializeUserHandler {
     my $ru = $_[0] || 'undef';
     die "RU $ru" unless $ru eq ($TWiki::Plugins::SESSION->{remoteUser}||'undef');
     my $url = $_[1] || 'undef';
-    die "URL $url" unless $url eq ($TWiki::Plugins::SESSION->{cgiQuery}->url() || undef);
+    die "URL $url" unless $url eq ($TWiki::Plugins::SESSION->{request}->url() || undef);
     my $path = $_[2] || 'undef';
-    die "PATH $path" unless $path eq ($TWiki::Plugins::SESSION->{cgiQuery}->path_info() || 'undef');
+    die "PATH $path" unless $path eq ($TWiki::Plugins::SESSION->{request}->path_info() || 'undef');
 }
 HERE
     $this->checkCalls(1, 'earlyInitPlugin');
@@ -527,12 +526,12 @@ sub mergeHandler {
 HERE
 }
 
-sub test_redirectCgiQueryHandler {
+sub test_redirectrequestHandler {
     my $this = shift;
-    $this->makePlugin('redirectCgiQueryHandler', <<'HERE');
-sub redirectCgiQueryHandler {
+    $this->makePlugin('redirectrequestHandler', <<'HERE');
+sub redirectrequestHandler {
     my ( $query, $url ) = @_;
-    $called->{redirectCgiQueryHandler}++;
+    $called->{redirectrequestHandler}++;
 }
 HERE
 }

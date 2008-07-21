@@ -18,8 +18,8 @@ sub set_up {
 
     # You can now safely modify $TWiki::cfg
 
-    $topicquery = new CGI( '' );
-    $topicquery->path_info( '/TestCases/WebHome' );
+    $topicquery = new TWiki::Request( '' );
+    $topicquery->path_info( '/script/TestCases/WebHome' );
     try {
         $this->{twiki} = new TWiki( 'AdminUser' || '' );
         my $user = $this->{twiki}->{user};

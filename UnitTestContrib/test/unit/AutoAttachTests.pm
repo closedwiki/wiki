@@ -12,7 +12,6 @@ use strict;
 use TWiki;
 use TWiki::Meta;
 use Error qw( :try );
-use CGI;
 use TWiki::UI::Save;
 use TWiki::OopsException;
 use Devel::Symdump;

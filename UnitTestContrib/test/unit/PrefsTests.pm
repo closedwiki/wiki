@@ -33,8 +33,8 @@ sub set_up {
 
     $twiki = $this->{twiki};
 
-    $topicquery = new CGI( "" );
-    $topicquery->path_info("/$this->{test_web}/$this->{test_topic}");
+    $topicquery = new TWiki::Request( "" );
+    $topicquery->path_info("/script/$this->{test_web}/$this->{test_topic}");
 
     try {
         $twiki->{store}->saveTopic(
@@ -323,8 +323,8 @@ sub test_local_to_default {
     $this->assert_str_equals("GLOBAL",
                              $t->{prefs}->getPreferencesValue("SOURCE"));
 
-    my $localquery = new CGI( "" );
-    $localquery->path_info("/$testSysWeb/$TWiki::cfg{SitePrefsTopicName}");
+    my $localquery = new TWiki::Request( "" );
+    $localquery->path_info("/script/$testSysWeb/$TWiki::cfg{SitePrefsTopicName}");
     $t->finish();
     $t = new TWiki( $this->{test_user_login}, $localquery );
     $this->assert_str_equals("LOCAL",
@@ -343,8 +343,8 @@ sub test_local_to_site {
                              $t->{prefs}->getPreferencesValue("SOURCE"));
     my($tw, $tt ) = $t->normalizeWebTopicName('',
                                             $TWiki::cfg{LocalSitePreferences});
-    my $localquery = new CGI( "" );
-    $localquery->path_info("$tw/$tt");
+    my $localquery = new TWiki::Request( "" );
+    $localquery->path_info("/script/$tw/$tt");
     $t->finish();
     $t = new TWiki( $this->{test_user_login}, $localquery );
     $this->assert_str_equals("LOCAL",
@@ -362,8 +362,8 @@ sub test_local_to_user {
     $this->assert_str_equals("GLOBAL",
                              $t->{prefs}->getPreferencesValue("SOURCE"));
 
-    my $localquery = new CGI( "" );
-    $localquery->path_info("/$TWiki::cfg{UsersWebName}/$this->{test_user_wikiname}");
+    my $localquery = new TWiki::Request( "" );
+    $localquery->path_info("/script/$TWiki::cfg{UsersWebName}/$this->{test_user_wikiname}");
     $t->finish();
     $t = new TWiki( $this->{test_user_login}, $localquery );
     $this->assert_str_equals("LOCAL",
@@ -381,8 +381,8 @@ sub test_local_to_web {
     $this->assert_str_equals("GLOBAL",
                              $t->{prefs}->getPreferencesValue("SOURCE"));
 
-    my $localquery = new CGI( "" );
-    $localquery->path_info("/$this->{test_web}/$TWiki::cfg{WebPrefsTopicName}");
+    my $localquery = new TWiki::Request( "" );
+    $localquery->path_info("/script/$this->{test_web}/$TWiki::cfg{WebPrefsTopicName}");
     $t->finish();
     $t = new TWiki( $this->{test_user_login}, $localquery );
     $this->assert_str_equals("LOCAL",
