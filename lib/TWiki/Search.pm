@@ -808,28 +808,39 @@ sub searchWeb {
                 my $out = '';
 
                 $text = pop(@multipleHitLines) if ( scalar(@multipleHitLines) );
+                
+                my $wikiusername = $users->webDotWikiName($ru);
+                $wikiusername = "$TWiki::cfg{UsersWebName}.UnknownUser"
+                    unless defined $wikiusername;
 
                 if ($format) {
                     $out = $format;
                     $out =~ s/\$web/$web/gs;
-                    $out =~
-s/\$topic\(([^\)]*)\)/TWiki::Render::breakName( $topic, $1 )/ges;
+                    $out =~ s/\$topic\(([^\)]*)\)/TWiki::Render::breakName( 
+                                                  $topic, $1 )/ges;
                     $out =~ s/\$topic/$topic/gs;
                     $out =~ s/\$date/$revDate/gs;
                     $out =~ s/\$isodate/$isoDate/gs;
                     $out =~ s/\$rev/$revNum/gs;
-                    $out =~ s/\$wikiusername/$users->webDotWikiName($ru)/ges;
-                    $out =~ s/\$wikiname/$users->getWikiName($ru)/ges;
-                    $out =~ s/\$username/$users->getLoginName($ru)/ges;
+                    $out =~ s/\$wikiusername/$wikiusername/ges;
+
+                    my $wikiname = $users->getWikiName($ru);
+                    $wikiname = 'UnknownUser' unless defined $wikiname;
+                    $out =~ s/\$wikiname/$wikiname/ges;
+                    
+                    my $username = $users->getLoginName($ru);
+                    $username = 'unknown' unless defined $username;
+                    $out =~ s/\$username/$username/ges;
+                    
                     my $r1info = {};
-                    $out =~
-s/\$createdate/_getRev1Info( $this, $web, $topic, 'date', $r1info )/ges;
-                    $out =~
-s/\$createusername/_getRev1Info( $this, $web, $topic, 'username', $r1info )/ges;
-                    $out =~
-s/\$createwikiname/_getRev1Info( $this, $web, $topic, 'wikiname', $r1info )/ges;
-                    $out =~
-s/\$createwikiusername/_getRev1Info( $this, $web, $topic, 'wikiusername', $r1info )/ges;
+                    $out =~ s/\$createdate/_getRev1Info(
+                            $this, $web, $topic, 'date', $r1info )/ges;
+                    $out =~ s/\$createusername/_getRev1Info(
+                            $this, $web, $topic, 'username', $r1info )/ges;
+                    $out =~ s/\$createwikiname/_getRev1Info(
+                            $this, $web, $topic, 'wikiname', $r1info )/ges;
+                    $out =~ s/\$createwikiusername/_getRev1Info(
+                            $this, $web, $topic, 'wikiusername', $r1info )/ges;
 
                     if ( $out =~ m/\$text/ ) {
                         ( $meta, $text ) =
@@ -857,7 +868,7 @@ s/\$createwikiusername/_getRev1Info( $this, $web, $topic, 'wikiusername', $r1inf
                         ( $this->{session}->i18n->maketext('NEW') ) );
                 }
                 $out =~ s/%REVISION%/$srev/o;
-                $out =~ s/%AUTHOR%/$users->webDotWikiName($ru)/e;
+                $out =~ s/%AUTHOR%/$wikiusername/e;
 
                 if ($doBookView) {
 
