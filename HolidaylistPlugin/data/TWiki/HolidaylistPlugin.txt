@@ -178,6 +178,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | statformat_l | format for a single %{l} variable value; %LOCATION will be substituted by the location; see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statformat_l="%{l:%LOCATION} x %LOCATION;" |
 | statformat_ll | format for a single %{ll} variable value; %LOCATION will be substituted by the location; see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statformat_ll="%{ll:%LOCATION} x %LOCATION;" |
 | statformat_perc | percentage format | statformat_perc="%3.1f%%" |
+| statformat_unknown | will be used for unknown locations or icons if one of the statistics variables %{l}, %{ll}, %{i} or %{ii}) is  replaced | statformat_unknown="unknown" |
 | statheader | statistics header; overwrites statcolheader and statrowheader | undefined / statheader="#" | 
 | statrowformat | statistics row format (related: showstatrow, statrowheader, statrowtitle); see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statrowformat="%{hh}" |
 | statrowheader | statistics header (related: showstatrow, statrowformat, statrowtitle); use '&#124;' to separate multiple row headers | statrowheader="#" |
@@ -230,13 +231,13 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | %{w} | = %{d} - %{h} (day count at work) |
 | %{ww} | = %{dd} - %{hh} (day count at work without weekends and public holidays) |
 | *Percentages (value format attribute: statformat_perc)* ||
-| %{hd}, %{hdd},<br/> %{hhd}, %{hhdd} | holidays-to-days percentage with (single 'h'/'d') or without weekends and public holidays ('hh'/'dd') |
-| %{id:<i>ICON</i>}, %{idd:<i>ICON</i>},<br/> %{iid:<i>ICON</i>}, %{iidd:<i>ICON</i>} | icon-to-days percentage with (single 'i'/'d') or without weekends and public holidays ('ii'/'dd') |
-| %{ih:<i>ICON</i>}, %{ihh:<i>ICON</i>},<br/> %{iih:<i>ICON</i>}, %{iihh:<i>ICON</i>} | icon-to-holidays percentage with (single 'i'/'h') or without weekends and public holidays ('ii'/'dd') |
-| %{ld:<i>LOCATION</i>}, %{ldd:<i>LOCATION</i>},<br/> %{lld:<i>LOCATION</i>}, %{lldd:<i>LOCATION</i>} | location-to-days percentage with (single 'l'/'d') or without weekends and public holidays ('ll'/'dd') |
-| %{lh:<i>LOCATION</i>}, %{lhh:<i>LOCATION</i>},<br/> %{llh:<i>LOCATION</i>}, %{llhh:<i>LOCATION</i>} | location-to-holidays percentage with (single 'l'/'h') or without weekends and public holidays ('ll'/'hh') |
-| %{pd}, %{pdd},<br/> %{ppd}, %{ppdd} | public holidays-to-days percentage with (single 'p'/'d') or without weekends ('pp'/'dd') |
-| %{wd}, %{wdd},<br/> %{wwd}, %{wwdd} | working days-to-days percentage with (single 'w'/'d') or without weekends ('ww'/'dd') |
+| %{hd}, %{hdd},<br/> %{hhd}, %{hhdd} | holidays-to-days percentage with ('h'/'d') or without weekends and public holidays ('hh'/'dd') |
+| %{id:<i>ICON</i>}, %{idd:<i>ICON</i>},<br/> %{iid:<i>ICON</i>}, %{iidd:<i>ICON</i>} | icon-to-days percentage with ('i'/'d') or without weekends and public holidays ('ii'/'dd') |
+| %{ih:<i>ICON</i>}, %{ihh:<i>ICON</i>},<br/> %{iih:<i>ICON</i>}, %{iihh:<i>ICON</i>} | icon-to-holidays percentage with ('i'/'h') or without weekends and public holidays ('ii'/'dd') |
+| %{ld:<i>LOCATION</i>}, %{ldd:<i>LOCATION</i>},<br/> %{lld:<i>LOCATION</i>}, %{lldd:<i>LOCATION</i>} | location-to-days percentage with ('l'/'d') or without weekends and public holidays ('ll'/'dd') |
+| %{lh:<i>LOCATION</i>}, %{lhh:<i>LOCATION</i>},<br/> %{llh:<i>LOCATION</i>}, %{llhh:<i>LOCATION</i>} | location-to-holidays percentage with ('l'/'h') or without weekends and public holidays ('ll'/'hh') |
+| %{pd}, %{pdd},<br/> %{ppd}, %{ppdd} | public holidays-to-days percentage with ('p'/'d') or without weekends ('pp'/'dd') |
+| %{wd}, %{wdd},<br/> %{wwd}, %{wwdd} | working days-to-days percentage with ('w'/'d') or without weekends ('ww'/'dd') |
 
 
 ---++ Example

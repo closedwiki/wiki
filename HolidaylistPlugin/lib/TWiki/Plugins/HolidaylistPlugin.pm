@@ -1029,19 +1029,19 @@ sub renderHolidaylist() {
 					|| ( $options{enablepubholidays} && defined $$aptableref[$i] && $$aptableref[$i]>0)) {
 				$statistics{holidays}++;
 				$statistics{icons}{$$itableref[$i]}++ if defined $$itableref[$i]; 
-				$statistics{icons}{unknown}++ if ! defined $$itableref[$i]; 
+				$statistics{icons}{$options{statformat_unknown}}++ if ! defined $$itableref[$i]; 
 				$statistics{locations}{$$ltableref[$i]{location}}++ if defined $$ltableref[$i]{location};
-				$statistics{locations}{unknown}++ if ! defined $$ltableref[$i]{location};
+				$statistics{locations}{$options{statformat_unknown}}++ if ! defined $$ltableref[$i]{location};
 				$rowstatistics{$i}{holidays}++;
 				$rowstatistics{$i}{icons}{$$itableref[$i]}++ if defined $$itableref[$i]; 
-				$rowstatistics{$i}{icons}{unknown}++ if ! defined $$itableref[$i]; 
+				$rowstatistics{$i}{icons}{$options{statformat_unknown}}++ if ! defined $$itableref[$i]; 
 				$rowstatistics{$i}{locations}{$$ltableref[$i]{location}}++ if defined $$ltableref[$i]{location};
-				$rowstatistics{$i}{locations}{unknown}++ if ! defined $$ltableref[$i]{location};
+				$rowstatistics{$i}{locations}{$options{statformat_unknown}}++ if ! defined $$ltableref[$i]{location};
 				$sumstatistics{holidays}++;
 				$sumstatistics{icons}{$$itableref[$i]}++ if defined $$itableref[$i]; 
-				$sumstatistics{icons}{unknown}++ if ! defined $$itableref[$i]; 
+				$sumstatistics{icons}{$options{statformat_unknown}}++ if ! defined $$itableref[$i]; 
 				$sumstatistics{locations}{$$ltableref[$i]{location}}++ if defined $$ltableref[$i]{location};
-				$sumstatistics{locations}{unknown}++ if !defined $$ltableref[$i]{location};
+				$sumstatistics{locations}{$options{statformat_unknown}}++ if !defined $$ltableref[$i]{location};
 				
 			} else {
 				$statistics{work}++;
@@ -1077,15 +1077,15 @@ sub renderHolidaylist() {
 					$statistics{'holidays-w'}++;
 					$statistics{'icons-w'}{(defined $$itableref[$i]?$$itableref[$i]:$icon)}++;
 					$statistics{'locations-w'}{$$ltableref[$i]{location}}++ if defined $$ltableref[$i]{location};
-					$statistics{'locations-w'}{unknown}++ if ! defined $$ltableref[$i]{location};
+					$statistics{'locations-w'}{$options{statformat_unknown}}++ if ! defined $$ltableref[$i]{location};
 					$rowstatistics{$i}{'holidays-w'}++;
 					$rowstatistics{$i}{'icons-w'}{(defined $$itableref[$i]?$$itableref[$i]:$icon)}++;
 					$rowstatistics{$i}{'locations-w'}{$$ltableref[$i]{location}}++ if defined $$ltableref[$i]{location};
-					$rowstatistics{$i}{'locations-w'}{unknown}++ if ! defined $$ltableref[$i]{location};
+					$rowstatistics{$i}{'locations-w'}{$options{statformat_unknown}}++ if ! defined $$ltableref[$i]{location};
 					$sumstatistics{'holidays-w'}++;
 					$sumstatistics{'icons-w'}{(defined $$itableref[$i]?$$itableref[$i]:$icon)}++;
 					$sumstatistics{'locations-w'}{$$ltableref[$i]{location}}++ if defined $$ltableref[$i]{location};
-					$sumstatistics{'locations-w'}{unknown}++ if ! defined $$ltableref[$i]{location};
+					$sumstatistics{'locations-w'}{$options{statformat_unknown}}++ if ! defined $$ltableref[$i]{location};
 				} else {
 					$statistics{'work-w'}++;
 					$rowstatistics{$i}{'work-w'}++;
@@ -1160,8 +1160,7 @@ sub _substStatisticsVars {
 		my $t="";
 		foreach my $location (sort keys %{$statistics{'locations-w'}}) {
 			my $f=$options{statformat_ll};
-			my $l=$location eq 'unknown'?$options{'statformat_unknown'}:$location;
-			$f=~s/\%LOCATION/$l/g;
+			$f=~s/\%LOCATION/$location/g;
 			$t.=$f;
 		}
 		$text=~s/\%{ll:?}/$t/g;
@@ -1170,8 +1169,7 @@ sub _substStatisticsVars {
 		my $t="";
 		foreach my $location (sort keys %{$statistics{'locations'}}) {
 			my $f=$options{statformat_l};
-			my $l=$location eq 'unknown'?$options{'statformat_unknown'}:$location;
-			$f=~s/\%LOCATION/$l/g;
+			$f=~s/\%LOCATION/$location/g;
 			$t.=$f;
 		}
 		$text=~s/\%{l:?}/$t/g;
