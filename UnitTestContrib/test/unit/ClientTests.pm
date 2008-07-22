@@ -66,7 +66,7 @@ sub set_up_for_verify {
     my $this = shift;
 
     $this->{twiki}->finish() if $this->{twiki};
-    $this->{twiki} = new TWiki();
+    $this->{twiki} = new TWiki(undef, new TWiki::Request());
     $this->assert($TWiki::cfg{TempfileDir} && -d $TWiki::cfg{TempfileDir});
     $TWiki::cfg{UseClientSessions} = 1;
     $TWiki::cfg{PasswordManager} = "TWiki::Users::HtPasswdUser";
@@ -151,5 +151,33 @@ sub verify_edit {
     TWiki::Func::setTopicEditLock($this->{test_web}, $this->{test_topic}, 0);
 }
 
+sub verify_sudo_login {
+    my $this = shift;
+
+    unless ($this->{twiki}->{users}->{loginManager}->can("login")) {
+        return;
+    }
+    $this->{twiki}->finish();
+    my $secret = "a big mole on my left buttock";
+    my $crypted = crypt($secret, "12");
+    $TWiki::cfg{Password} = $crypted;
+
+    my $query = new TWiki::Request({
+        username => [ $TWiki::cfg{AdminUserLogin} ],
+        password => [ $secret ],
+        Logon => [ 1 ],
+        skin => [ 'none' ],
+    });
+    $query->path_info( "/$this->{test_web}/$this->{test_topic}" );
+
+    $this->{twiki} = new TWiki(undef, $query);
+    my ($text, $result) = $this->capture(
+        sub {
+            my $session = shift;
+            $session->{users}->{loginManager}->login(
+                $query, $session);
+        }, $this->{twiki});
+    $this->assert($text =~ /Status: 302/, $text);
+}
 
 1;
