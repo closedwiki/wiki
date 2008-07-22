@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: TWiki $Id\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2007-09-27 11:41+0800\n"
-"Last-Translator: Che Dong <chedong@gmail.com>\n"
-"Language-Team: TWiki Chinese <chedong@yahoo.com>\n"
+"PO-Revision-Date: 2007-12-04 13:09-0300\n"
+"Last-Translator: Che Dong <chedong AT gmail.com>\n"
+"Language-Team: TWiki Chinese <chedong at gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -97,14 +97,14 @@ msgstr "你可以通過 %1 修改密碼"
 msgid "%1 for changing your password"
 msgstr "你可以通過 %1 修改密碼"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:40
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:30
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:47
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:37
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:85
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:28
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:38
 msgid "%1 has a list of other TWiki users"
 msgstr "其他TWiki用戶的列表位於 %1"
 
-#: templates/messages.tmpl:416
+#: templates/messages.tmpl:423
 msgid "%1 has been editing the topic for %2 and the lease is still active for another %3."
 msgstr "%1 已經被編輯了 %2 ， %3 後將被釋放"
 
@@ -125,15 +125,16 @@ msgstr "%1 有TWiki用戶文檔列表"
 msgid "%1 is an invalid name for a new web"
 msgstr "%1 是個非法的新目錄名稱"
 
-#: templates/login.tmpl:7
+#: templates/login.sudo.tmpl:4
+#: templates/login.tmpl:6
 msgid "%1 is currently logged in"
 msgstr "%1 已經登錄"
 
-#: templates/messages.tmpl:397
+#: templates/messages.tmpl:404
 msgid "%1 is currently set to %2"
 msgstr "%1 現在被設置為 %2"
 
-#: templates/messages.tmpl:414
+#: templates/messages.tmpl:421
 msgid "%1 is editing %2."
 msgstr "%1 正在編輯 %2"
 
@@ -149,7 +150,7 @@ msgstr "%1 是被刪除附件指向的主題。"
 msgid "%1 lists all TWiki user tools"
 msgstr "%1 有個完整的TWiki用戶工具列表"
 
-#: templates/messages.tmpl:422
+#: templates/messages.tmpl:429
 msgid "%1 may still be editing %2."
 msgstr "%1 可能仍在編輯 %2 。"
 
@@ -157,7 +158,7 @@ msgstr "%1 可能仍在編輯 %2 。"
 #   $date,
 #   $by)
 #. ("<nop>$toWeb.<nop>$toTopic",                                             "<nop>$fromWeb.<nop>$fromTopic",                                             $date,                                             $by)
-#: lib/TWiki/Render.pm:199
+#: lib/TWiki/Render.pm:200
 msgid "%1 moved from %2 on %3 by %4"
 msgstr "%1 由 %4 從 %2 移動到 %3"
 
@@ -173,7 +174,7 @@ msgstr "%1 定制目錄屬性"
 msgid "%1 to start working on the new web"
 msgstr "%1 開始在新目錄上工作"
 
-#: templates/messages.tmpl:482
+#: templates/messages.tmpl:489
 msgid "%1 topic does not exist"
 msgstr "%1 主題不存在"
 
@@ -185,20 +186,20 @@ msgstr "放棄"
 msgid "&Edit text"
 msgstr "文本編輯"
 
-#: templates/twiki.tmpl:103
-#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:159
+#: templates/twiki.tmpl:96
+#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:155
 msgid "&History"
 msgstr "歷史"
 
-#: twikiplugins/ClassicSkin/templates/view.classic.tmpl:28
-msgid "&WYSIWYG"
-msgstr "視覺化編輯"
-
-#: templates/messages.tmpl:257
+#: templates/messages.tmpl:262
 msgid "'%1' is not a valid %2 "
 msgstr "'%1' 不是一個合法的 %2 "
 
-#: templates/login.tmpl:11
+#: data/TWiki/WebTopicCreator.txt:2
+msgid "'Create New Topic' page has moved"
+msgstr "\"創建新主題\" %1 頁已經被移走"
+
+#: templates/login.tmpl:10
 msgid "(%1 login)"
 msgstr "(%1 登錄)"
 
@@ -207,7 +208,7 @@ msgstr "(%1 登錄)"
 msgid "(%1 vs. %2)"
 msgstr "(%1 對比 %2)"
 
-#: data/TWiki/WebSearchAdvanced.txt:82
+#: data/TWiki/WebSearchAdvanced.txt:76
 msgid "(=all= to show all topics)"
 msgstr "(=所有= 顯示所有主題)"
 
@@ -215,7 +216,7 @@ msgstr "(=所有= 顯示所有主題)"
 msgid "(Use a topic name in TWiki.WikiNotation)"
 msgstr "(在 TWiki.WikiNotation 使用一個主題名)"
 
-#: templates/messages.tmpl:154
+#: templates/messages.tmpl:156
 msgid "(__Suggestion:__ How about uploading your picture to your topic?)"
 msgstr "(__建議:__ 上傳一個關於您的主題的圖片?)"
 
@@ -258,7 +259,7 @@ msgstr "(變更)"
 msgid "(delete attachment)"
 msgstr "(刪除附件)"
 
-#: templates/renamedelete.tmpl:14
+#: templates/renamedelete.tmpl:4
 msgid "(delete)"
 msgstr "(刪除)"
 
@@ -285,7 +286,7 @@ msgstr "(如何登錄) LoginName:"
 msgid "(identifies you to others) WikiName:"
 msgstr "(將您和其他人區別開) WikiName:"
 
-#: templates/login.tmpl:5
+#: templates/login.tmpl:4
 msgid "(login)"
 msgstr "（登錄為）"
 
@@ -293,7 +294,7 @@ msgstr "（登錄為）"
 msgid "(move attachment)"
 msgstr "(移動附件)"
 
-#: data/TWiki/WebTopicCreatorTemplate.txt:49
+#: data/TWiki/WebCreateNewTopicTemplate.txt:56
 msgid "(no parent, orphaned topic)"
 msgstr "(無父主題，孤立文章)"
 
@@ -320,8 +321,8 @@ msgstr "(哎)"
 msgid "(optional)"
 msgstr "（可選）"
 
-#: data/TWiki/WebSearch.txt:39
-#: data/TWiki/WebSearchAdvanced.txt:49
+#: data/TWiki/WebSearch.txt:33
+#: data/TWiki/WebSearchAdvanced.txt:43
 msgid "(otherwise search %1 Web only)"
 msgstr "(否則只搜索%1目錄)"
 
@@ -355,11 +356,14 @@ msgstr "（保存錯誤）"
 msgid "(search result)"
 msgstr "( 搜索結果 )"
 
+#: templates/search.tmpl:7
+#: twikiplugins/ClassicSkin/templates/search.classic.tmpl:7
+#: twikiplugins/PatternSkin/templates/search.pattern.tmpl:5
 #: twikiplugins/PatternSkin/templates/search.pattern.tmpl:9
 msgid "(search results)"
 msgstr "(搜索結果)"
 
-#: data/TWiki/WebSearchAdvanced.txt:65
+#: data/TWiki/WebSearchAdvanced.txt:59
 msgid "(semicolon =;= for and)"
 msgstr "(用分號 =;= 結束)"
 
@@ -368,11 +372,11 @@ msgstr "(用分號 =;= 結束)"
 msgid "(set preferences)"
 msgstr "(設置屬性)"
 
-#: templates/messages.tmpl:270
+#: templates/messages.tmpl:275
 msgid "(single character first name)"
 msgstr "(單字元名稱)"
 
-#: templates/messages.tmpl:269
+#: templates/messages.tmpl:274
 msgid "(single character last name)"
 msgstr "(單字元姓氏)"
 
@@ -380,8 +384,7 @@ msgstr "(單字元姓氏)"
 msgid "(skipped)"
 msgstr "(忽略)"
 
-#: templates/attachagain.tmpl:19
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:31
+#: templates/attachagain.tmpl:18
 msgid "*Change comment:* If you use _Change Properties_ to change a comment, the comment shown in the topic will change, but the comment shown against the attachment history will be the comment when the file was uploaded."
 msgstr "*修改備註:* 如果使用_Change Properties_ 改變評論文章中的評論也會改變, 但附件歷史中的評論將仍然是上傳時的評論 "
 
@@ -393,15 +396,13 @@ msgstr "*格式説明：*"
 msgid "*Important:* the information provided in this form will be stored in a database on the TWiki server. This database is accessible to anyone who can access the server through the web (though passwords will be encrypted, and e-mail addresses will be obfusticated to help prevent spamming). Your country, or the country where the server is hosted, may have Data Protection laws governing the maintenance of such databases. If you are in doubt, you should contact %1 for details of the Data Protection Policy of this TWiki server before registering."
 msgstr "*重要提示:* 本表單提供的資訊將被存儲在TWiki伺服器的資料目錄中，資料可以被所有 可以通過WEB訪問的用戶看到（雖然密碼經過加密，電子郵件位址將經過變形以避免垃圾電子郵件）.您的國家/或者伺服器所在國家可能由相關法律維護此類資料，如有疑問請註冊前向 %1 詢問關於TWiki的的資料保護策略."
 
-#: templates/attachagain.tmpl:20
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:32
+#: templates/attachagain.tmpl:19
 msgid "*Local file:* If you select a different file in _Local file:_, it is this that will be updated or added."
 msgstr "*本地檔:* 如果您選擇了另外的 _本地檔:_ 這個檔將被更新或者添加."
 
-#: templates/attachagain.tmpl:18
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:30
-msgid "*Properties:* The comment and visibility (i.e. is attachment hidden) can be changed without uploading a file by pressing \"Change Properties only\"; see <a target=\"HiddenAttachment\" onclick=\"return launchWindow('%1','HiddenAttachment')\" href=\"%2\" rel='nofollow'>HiddenAttachment</a>."
-msgstr "*屬性:* 檔的注釋和可見性(例如：附件隱藏)可以被更改而不通過上傳檔後\"只改變檔屬性\"按鈕 參見<a target=\"HiddenAttachment\" onclick=\"return launchWindow('%1','HiddenAttachment')\" href=\"%2\" rel='nofollow'>隱藏附件</a>."
+#: templates/attachagain.tmpl:17
+msgid "*Properties:* The comment and visibility (i.e. is attachment hidden) can be changed without uploading a file by pressing \"Change Properties only\"; see %1."
+msgstr "*屬性:* 注釋和可見性(例如：附件隱藏)可以被更改而不通過上傳檔後\"只改變檔屬性\"按鈕 參見 %1."
 
 #: data/TWiki/WikiSyntaxSummary.txt:9
 msgid "*bold* put word/phrase in asterisks: =<nop>*your phrase*="
@@ -457,24 +458,24 @@ msgstr "只<em>在 %1 目錄</em>中"
 msgid "<em>in all public webs</em>"
 msgstr "<em>在所有公開的目錄</em>"
 
-#: templates/messages.tmpl:471
+#: templates/messages.tmpl:478
 msgid "A %1 is divided into webs; each one represents one subject, one area of collaboration. You are trying to %2 in a web that does not exist."
 msgstr "%1分成多個目錄，每個目錄包含一個主題/協作空間您想訪問的 %2目錄不存在"
 
-#: templates/messages.tmpl:349
+#: templates/messages.tmpl:354
 msgid "A =.txt= extension is appended to some filenames for security reasons"
 msgstr "出於安全考慮，一些文件被加上了=.txt=副檔名"
 
-#: templates/messages.tmpl:121
+#: templates/messages.tmpl:123
 msgid "A color starts with a # sign, followed by 6 hexadecimal numbers, e.g. =#FFFF00=."
 msgstr "顏色以 # 標記開始 後面是個6位元16進制數位組成 例如： =#FFFF00=."
 
 #. ($data->{Email})
-#: lib/TWiki/UI/Register.pm:795
+#: lib/TWiki/UI/Register.pm:829
 msgid "A confirmation e-mail has been sent to %1"
 msgstr "確認電子郵件已經被發送到 %1 "
 
-#: templates/messages.tmpl:475
+#: templates/messages.tmpl:482
 msgid "A link to a topic located in another web is written like %1. Make sure that the name of the web is not spelt wrongly on the previous page; fix the link if necessary."
 msgstr "相似%1的主題的鏈結位於另外一個目錄中，請確認目錄名沒有拼寫錯誤，如必要請修正錯誤鏈結"
 
@@ -482,7 +483,7 @@ msgstr "相似%1的主題的鏈結位於另外一個目錄中，請確認目錄�
 msgid "A more extensive changes list is available via [[%1][Recent Changes]]."
 msgstr "更多擴展變更列表位於菜單的 [[%1][最新修改]] 中"
 
-#: templates/messages.tmpl:445
+#: templates/messages.tmpl:452
 msgid "A new system-generated password for your login name %1 (!WikiName %2) has been sent to your registered e-mail address. If your e-mail address is no longer valid, please contact %3"
 msgstr "系統為 %1 (!WikiName %2 )*自動*生成的新密碼已經被發送到你註冊的電子郵件位址，如果你的註冊電子郵件不生效，請聯繫 %3 "
 
@@ -495,11 +496,11 @@ msgstr "主題範本用於初始化新創建主題的內容。"
 msgid "Access Denied"
 msgstr "禁止訪問"
 
-#: templates/messages.tmpl:453
+#: templates/messages.tmpl:460
 msgid "Access check on %1 failed"
 msgstr "訪問檢查%1失敗"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:53
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:52
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:14
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:19
 msgid "Access keys"
@@ -511,7 +512,7 @@ msgstr "訪問快捷鍵"
 msgid "Action"
 msgstr "變更"
 
-#: templates/messages.tmpl:454
+#: templates/messages.tmpl:461
 msgid "Action %1: %2."
 msgstr "變更 %1: %2."
 
@@ -520,11 +521,15 @@ msgstr "變更 %1: %2."
 msgid "Add form"
 msgstr "添加表單"
 
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:122
+msgid "Add row"
+msgstr "添加行"
+
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:283
 msgid "Add your name to the list of users in the %1 topic in the %2 web."
 msgstr "將您的名字添加到%2目錄%1主題的用戶列表中。"
 
-#: templates/messages.tmpl:337
+#: templates/messages.tmpl:342
 msgid "Adding a %1 variable in WebPreferences"
 msgstr "添加 %1 參數到WebPreferences中"
 
@@ -532,32 +537,40 @@ msgstr "添加 %1 參數到WebPreferences中"
 msgid "Admin Maintenance"
 msgstr "管理員維護"
 
+#: templates/login.sudo.tmpl:3
+msgid "Admin TWiki User Authentication"
+msgstr "TWiki管理員用戶認證"
+
+#: templates/login.tmpl:56
+msgid "Administrator login"
+msgstr "管理員登錄"
+
 #: data/TWiki/WebSearchAdvanced.txt:3
 msgid "Advanced Search"
 msgstr "高級搜索"
 
-#: data/TWiki/WebSearch.txt:30
+#: data/TWiki/WebSearch.txt:24
 msgid "Advanced search"
 msgstr "高級搜索"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:18
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:20
 msgid "After submitting this form your e-mail will be changed, and you will be returned to this form."
 msgstr "提交表單後，您的密碼將被修改，並返回當前表單"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:10
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:12
 msgid "After submitting this form your password will be changed."
 msgstr "提交表單後您的密碼將被修改。"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:10
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:15
 msgid "After submitting this form, you will receive an e-mail with your new, *system-generated* password, and a link to a page where you can change it."
 msgstr "提交表單後，您將收到一封新的郵件：包含一個新的由系統自動生成的密碼並鏈結到一個修改密碼頁面。"
 
-#: data/TWiki/WebSearch.txt:39
-#: data/TWiki/WebSearchAdvanced.txt:49
+#: data/TWiki/WebSearch.txt:33
+#: data/TWiki/WebSearchAdvanced.txt:43
 msgid "All public webs"
 msgstr "所有的公開目錄"
 
-#: data/TWiki/WebSearchAdvanced.txt:95
+#: data/TWiki/WebSearchAdvanced.txt:89
 msgid "All topics in %1"
 msgstr "在%1中的所有主題"
 
@@ -565,11 +578,11 @@ msgstr "在%1中的所有主題"
 msgid "Allow non <nop>WikiWord for the new topic name"
 msgstr "允許使用非<nop>WikiWord 作為新主題名稱"
 
-#: templates/messages.tmpl:251
+#: templates/messages.tmpl:256
 msgid "Alternatively hit back to go back to TWiki.TWikiRegistration and choose a different username."
-msgstr "另外，也可以點擊“返回”回到 TWiki.TWikiRegistration 選擇另外一個用戶名 "
+msgstr "另外，也可以點擊\"返回\"回到 TWiki.TWikiRegistration 選擇另外一個用戶名 "
 
-#: templates/messages.tmpl:238
+#: templates/messages.tmpl:243
 msgid "An e-mail could not be delivered. Please notify your %1 administrator, %2"
 msgstr "一封電子郵件已經被發送，請通知您的 %1 管理員 %2"
 
@@ -585,8 +598,7 @@ msgstr "並使用基本目錄進行組裝"
 msgid "Any changes you made to the topic before coming to this page are preserved."
 msgstr "您對所有當前主題的之前修改已經被保留。"
 
-#: templates/viewtopicactionbuttons.tmpl:74
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:74
+#: templates/viewtopicactionbuttons.tmpl:64
 msgid "Attach"
 msgstr "附件"
 
@@ -599,10 +611,10 @@ msgstr "附一個檔到 %1"
 msgid "Attach image or document on %1"
 msgstr "附圖到%1"
 
-#: templates/attach.tmpl:19
+#: templates/attach.tmpl:17
 #: templates/attachnew.tmpl:6
 #: templates/attachnew.tmpl:8
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:38
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:37
 msgid "Attach new file"
 msgstr "添加一個新檔"
 
@@ -610,7 +622,7 @@ msgstr "添加一個新檔"
 msgid "Attachment"
 msgstr "附件"
 
-#: templates/messages.tmpl:491
+#: templates/messages.tmpl:498
 msgid "Attachment '%1' does not exist"
 msgstr "附件'%1'不存在"
 
@@ -638,18 +650,18 @@ msgstr "附件 "
 msgid "Attachments help"
 msgstr "附件幫助"
 
-#: templates/attach.tmpl:9
+#: templates/attach.tmpl:7
 msgid "Attachments of %1"
 msgstr "%1 的其他附件"
 
-#: templates/attach.tmpl:48
+#: templates/attach.tmpl:47
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:58
 msgid "Attachments will not be shown in topic view page."
 msgstr "附件將不在主題的查看頁中顯示"
 
 #: templates/oopsaccessdenied.tmpl:5
 #: templates/oopsattention.tmpl:5
-#: templates/oopslanguagechanged.tmpl:17
+#: templates/oopslanguagechanged.tmpl:11
 #: templates/oopsleaseconflict.tmpl:4
 #: templates/oopssaveerr.tmpl:10
 #: twikiplugins/ClassicSkin/templates/oopsaccessdenied.classic.tmpl:4
@@ -684,9 +696,8 @@ msgid "Back to topic"
 msgstr "回到主題"
 
 #: templates/oopsmore.tmpl:37
-#: templates/viewtopicactionbuttons.tmpl:97
+#: templates/viewtopicactionbuttons.tmpl:87
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:17
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:97
 msgid "Backlinks"
 msgstr "反向鏈結"
 
@@ -698,16 +709,16 @@ msgstr "在%2目錄中指向%1的反向鏈結"
 msgid "Backlinks to %1 in all Webs"
 msgstr "在所有目錄中指向%1的反向鏈結"
 
-#: templates/messages.tmpl:275
+#: templates/messages.tmpl:280
 msgid "Bad password"
 msgstr "錯誤的密碼"
 
-#: templates/messages.tmpl:116
+#: templates/messages.tmpl:118
 msgid "Base web %1 is missing or does not exist"
 msgstr "基礎目錄%1丟失或不存在"
 
-#: data/TWiki/WebSearch.txt:37
-#: data/TWiki/WebSearchAdvanced.txt:47
+#: data/TWiki/WebSearch.txt:31
+#: data/TWiki/WebSearchAdvanced.txt:41
 msgid "Both body and title"
 msgstr "內容和標題"
 
@@ -720,19 +731,21 @@ msgid "By default, viewing the Trash web is restricted to %1. If you would like 
 msgstr "缺省情況下，只有 %1 成員有查看垃圾箱目錄的許可權，如果要允許所有用戶有查看許可權，請刪除垃圾箱目錄的 WebPreferences 中 =ALLOWWEBVIEW= 的相關限制"
 
 #: templates/messages.tmpl:44
-#: templates/messages.tmpl:443
+#: templates/messages.tmpl:450
 msgid "Can't find user %1"
 msgstr "無法找到用戶%1"
 
-#: templates/messages.tmpl:444
+#: templates/messages.tmpl:451
 msgid "Can't get an e-mail address for %1 (required for password reset)"
 msgstr "無法獲得 %1 的電子郵件位址(用於密碼重置) "
 
-#: templates/twiki.tmpl:81
+#: templates/twiki.tmpl:74
+#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:64
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:124
 msgid "Cancel"
 msgstr "取消"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:47
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:46
 msgid "Cancel editing and discard changes"
 msgstr "取消編輯並撤銷更改"
 
@@ -740,7 +753,7 @@ msgstr "取消編輯並撤銷更改"
 msgid "Cannot create %1 because it already exists."
 msgstr "無法創建%1 因為已經存在"
 
-#: templates/messages.tmpl:112
+#: templates/messages.tmpl:114
 msgid "Cannot create web %1 because it already exists"
 msgstr "無法創建%1目錄，因為已經存在"
 
@@ -749,7 +762,7 @@ msgstr "無法創建%1目錄，因為已經存在"
 msgid "Cannot rename %1 to %2 because it already exists."
 msgstr "無法重命名%1成%2，因為已經存在"
 
-#: data/TWiki/WebSearchAdvanced.txt:64
+#: data/TWiki/WebSearchAdvanced.txt:58
 msgid "Case sensitive"
 msgstr "區分字母大小寫"
 
@@ -765,7 +778,7 @@ msgstr "修改密碼"
 msgid "Change comment and properties only"
 msgstr "只改變屬性"
 
-#: templates/renamebase.tmpl:18
+#: templates/renamebase.tmpl:15
 msgid "Change from:"
 msgstr "更改自："
 
@@ -784,19 +797,19 @@ msgstr "在所有目錄中改變所有指向!%1的主題中的鏈結"
 msgid "Change links in topics that refer to !%1 in the %2 Web:"
 msgstr "更改所有指向非 %1 主題中的鏈結(在 %2 目錄中)"
 
-#: templates/renamebase.tmpl:60
+#: templates/renamebase.tmpl:56
 msgid "Change links in topics that refer to %1 in any Web:"
 msgstr "在所有目錄中改變所有指向%1的主題中的鏈結"
 
-#: templates/renamebase.tmpl:57
+#: templates/renamebase.tmpl:53
 msgid "Change links in topics that refer to %1 in the %2 Web:"
 msgstr "更改所有指向%1主題中的鏈結(在%2目錄中)"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:23
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:30
 msgid "Change password"
 msgstr "修改密碼"
 
-#: templates/attachagain.tmpl:22
+#: templates/attachagain.tmpl:21
 msgid "Change properties only"
 msgstr "只更改屬性"
 
@@ -827,16 +840,16 @@ msgid "Changes"
 msgstr "更新"
 
 #. ($r2, $r1)
-#: lib/TWiki/UI/RDiff.pm:482
+#: lib/TWiki/UI/RDiff.pm:483
 msgid "Changes from r%1 to r%2"
 msgstr "從 r%1 更改到 r%2"
 
-#: templates/messages.tmpl:395
-msgid "Check your configuration setting for {TemplateDir}. If that's not the problem, it may be because you have a setting of %1 that is pointing to a template that doesn't exist."
-msgstr "檢查配置中的{TemplateDir}配置，如果這不是問題的原因，可能是由於 %1 指向的範本不存在"
+#: templates/messages.tmpl:402
+msgid "Check your configuration settings for {TemplateDir} and {TemplatePath}. If that's not the problem, it may be because you have a setting of %1 that is pointing to a template that doesn't exist."
+msgstr "檢查配置中的{TemplateDir}和{TemplatePath}配置，如果這不是問題的原因，可能是由於 %1 指向的範本不存在"
 
-#: templates/renamebase.tmpl:46
-#: templates/renamedelete.tmpl:41
+#: templates/renamebase.tmpl:42
+#: templates/renamedelete.tmpl:31
 msgid "Checked topics will be updated to point to the new topic location."
 msgstr "選定的主題將被更新指向一個新的主題位址。"
 
@@ -844,7 +857,7 @@ msgstr "選定的主題將被更新指向一個新的主題位址。"
 msgid "Checked topics will be updated to point to the new web name."
 msgstr "選定的主題將被更新指向新的目錄名"
 
-#: templates/oopsmore.tmpl:112
+#: templates/oopsmore.tmpl:113
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:23
 msgid "Child topics in %1 web"
 msgstr "在%1目錄中的子主題"
@@ -854,23 +867,23 @@ msgid "Choose a new form for %1"
 msgstr "為 %1 選擇一個新的表單"
 
 #: lib/TWiki/Form/Checkbox.pm:39
-#: templates/renamebase.tmpl:43
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:34
 msgid "Clear all"
 msgstr "清除所有"
 
-#: lib/TWiki/Render.pm:182
+#: lib/TWiki/Render.pm:183
 msgid "Click to move topic back to previous location, with option to change references."
 msgstr "點擊移動主題到以前的位置，包含設置的修改 "
 
-#: twikiplugins/TwistyPlugin/data/TWiki/TwistyPlugin.txt:407
+#: twikiplugins/TwistyPlugin/data/TWiki/TwistyPlugin.txt:548
 msgid "Close"
 msgstr "關閉"
 
-#: templates/messages.tmpl:120
+#: templates/messages.tmpl:122
 msgid "Color %1 has an invalid format"
 msgstr "顏色 %1包含非法的格式"
 
-#: templates/attach.tmpl:27
+#: templates/attach.tmpl:26
 #: templates/attachtables.tmpl:37
 #: templates/attachtables.tmpl:4
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:46
@@ -891,40 +904,49 @@ msgstr "比較版本"
 msgid "Confirm rename or move"
 msgstr "確認重命名和移動"
 
+#: templates/messages.tmpl:31
+msgid "Confirm your changes using TWiki's [[%1][topic history comparison tool (diff)]]."
+msgstr "確認你的修改： 使用TWiki的[[%1][主題歷史版本比較工具 (diff)]]"
+
 #: templates/oopsleaseconflict.tmpl:6
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:5
 msgid "Conflict"
 msgstr "衝突"
 
-#: templates/messages.tmpl:456
-#: templates/messages.tmpl:464
-#: templates/messages.tmpl:488
-#: templates/messages.tmpl:494
+#: templates/messages.tmpl:463
+#: templates/messages.tmpl:471
+#: templates/messages.tmpl:495
+#: templates/messages.tmpl:501
+#: templates/messages.tmpl:510
 msgid "Contact %1 if you have any questions."
 msgstr "如有問題，請聯繫 %1"
 
-#: templates/messages.tmpl:387
+#: templates/messages.tmpl:394
 msgid "Continue and try to rename web?"
 msgstr "繼續並重命名目錄？"
 
+#: data/TWiki/WebTopicCreator.txt:4
+msgid "Continue to create the new page"
+msgstr "創建新頁面"
+
 #: data/TWiki/TWikiPreferences.txt:40
-#: data/TWiki/WebPreferences.txt:27
+#: data/TWiki/WebPreferences.txt:33
 msgid "Copyright &&copy; by the contributing authors. All material on this collaboration platform is the property of the contributing authors."
 msgstr "版權所有 &&copy; 作者 在協作平臺上的所有資料歸於內容貢獻者所有"
 
-#: templates/messages.tmpl:130
+#: templates/messages.tmpl:132
 msgid "Could not create the new web %1"
 msgstr "無法創建新目錄%1"
 
-#: templates/messages.tmpl:393
+#: templates/messages.tmpl:400
 msgid "Could not find template"
 msgstr "找不到範本"
 
-#: templates/messages.tmpl:448
+#: templates/messages.tmpl:455
 msgid "Could not perform search. Error was: %1"
 msgstr "無法搜索，錯誤： %1"
 
-#: templates/messages.tmpl:307
+#: templates/messages.tmpl:312
 msgid "Could not save %1."
 msgstr "無法保存%1"
 
@@ -932,7 +954,7 @@ msgstr "無法保存%1"
 msgid "Country:"
 msgstr "國家:"
 
-#: data/TWiki/WebTopicViewTemplate.txt:28
+#: data/TWiki/WebTopicViewTemplate.txt:27
 msgid "Create '%1'"
 msgstr "創建 '%1'"
 
@@ -946,12 +968,12 @@ msgstr "創建<nop>TestTopic###"
 msgid "Create New Topic"
 msgstr "創建新主題"
 
-#: data/TWiki/WebTopicCreatorTemplate.txt:20
-#: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:40
+#: data/TWiki/WebCreateNewTopicTemplate.txt:6
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebCreateNewTopicTemplate.txt:40
 msgid "Create New Topic in %1 Web"
 msgstr "Neues Topic im %1 Web anlegen"
 
-#: templates/attach.tmpl:40
+#: templates/attach.tmpl:39
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:56
 msgid "Create a link to the attached file"
 msgstr "創建一個附件鏈結"
@@ -973,14 +995,14 @@ msgstr "根據名稱創建"
 msgid "Create personal sidebar"
 msgstr "創建個人工具欄"
 
-#: templates/messages.tmpl:486
+#: templates/messages.tmpl:493
 msgid "Create the topic"
 msgstr "創建主題"
 
-#: data/TWiki/TWikiPreferences.txt:321
-#: data/TWiki/TWikiPreferences.txt:323
-#: data/TWiki/WebTopicCreatorTemplate.txt:53
-#: lib/TWiki/Render.pm:88
+#: data/TWiki/TWikiPreferences.txt:314
+#: data/TWiki/TWikiPreferences.txt:316
+#: data/TWiki/WebCreateNewTopicTemplate.txt:60
+#: lib/TWiki/Render.pm:89
 msgid "Create this topic"
 msgstr "創建這個主題"
 
@@ -988,11 +1010,11 @@ msgstr "創建這個主題"
 msgid "Create your personal %1 topic using your WikiName as topic name, and add the data you submitted to the topic."
 msgstr "根據您的WikiName創建個人%1主題 並在主題上添加資料."
 
-#: templates/messages.tmpl:336
+#: templates/messages.tmpl:341
 msgid "Creating a suitable Form Definition topic"
 msgstr "創建適當的表單定義主題"
 
-#: templates/renamedelete.tmpl:20
+#: templates/renamedelete.tmpl:10
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:9
 msgid "Current location:"
 msgstr "當前位置："
@@ -1001,7 +1023,7 @@ msgstr "當前位置："
 msgid "Current parent:"
 msgstr "當前父主題："
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:16
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:23
 msgid "Current password"
 msgstr "當前的密碼"
 
@@ -1019,13 +1041,13 @@ msgstr "尊敬的 %1"
 msgid "Debug"
 msgstr "調試"
 
-#: data/TWiki/WebTopicCreatorTemplate.txt:51
+#: data/TWiki/WebCreateNewTopicTemplate.txt:58
 msgid "Default template"
 msgstr "缺省範本"
 
-#: templates/renamedelete.tmpl:17
-#: templates/renamedelete.tmpl:44
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:37
+#: templates/renamedelete.tmpl:34
+#: templates/renamedelete.tmpl:7
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:29
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:25
 msgid "Delete"
 msgstr "刪除"
@@ -1033,6 +1055,10 @@ msgstr "刪除"
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:28
 msgid "Delete attachment"
 msgstr "刪除附件"
+
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:123
+msgid "Delete last row"
+msgstr "刪除最後一行"
 
 #: templates/oopsmore.tmpl:19
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:5
@@ -1054,7 +1080,7 @@ msgstr "說明一下檔，方便別人瞭解其中內容。"
 msgid "Details in separate window"
 msgstr "在新視窗看詳細內容"
 
-#: data/TWiki/WebTopicViewTemplate.txt:13
+#: data/TWiki/WebTopicViewTemplate.txt:11
 msgid "Did you spell the %1 correctly?"
 msgstr "%1 是否拼寫正確？"
 
@@ -1066,28 +1092,28 @@ msgstr "您是否想 [[%1][重新設置%2的密碼]]?"
 msgid "Difference:"
 msgstr "差異："
 
-#: templates/preview.tmpl:10
+#: templates/preview.tmpl:11
 msgid "Do not forget to save your changes"
 msgstr "別忘記保存修改"
 
-#: templates/attach.tmpl:48
+#: templates/attach.tmpl:47
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:58
 msgid "Do not show attachment in table"
 msgstr "在表格中不顯示附件"
 
-#: data/TWiki/WebSearchAdvanced.txt:76
+#: data/TWiki/WebSearchAdvanced.txt:70
 msgid "Do show:"
 msgstr "Anzeigen:"
 
-#: data/TWiki/WebTopicViewTemplate.txt:27
+#: data/TWiki/WebTopicViewTemplate.txt:26
 msgid "Do you wish to create the topic %1?"
 msgstr "您是否希望創建主題'%1'?"
 
-#: data/TWiki/WebTopicViewTemplate.txt:20
+#: data/TWiki/WebTopicViewTemplate.txt:18
 msgid "Do you wish to navigate quickly to a similar topic?"
 msgstr "您是否想快速查看相關主題？"
 
-#: data/TWiki/WebSearchAdvanced.txt:69
+#: data/TWiki/WebSearchAdvanced.txt:63
 msgid "Don't show:"
 msgstr "不要顯示:"
 
@@ -1107,7 +1133,7 @@ msgstr "在將%1重命名成%2期間發生(%3)錯誤 請通知%4管理員"
 msgid "During rename of web %1 to %2 an error (%3) was found. Please notify your %4 administrator."
 msgstr "在將%1重命名成%2期間發生(%3)錯誤 請通知%4管理員"
 
-#: templates/messages.tmpl:366
+#: templates/messages.tmpl:371
 #: templates/oopssaveerr.tmpl:17
 msgid "During save of %1 an error was found by the version control system. Please notify your %2 administrator."
 msgstr "在保存%1期間，發現一個版本控制錯誤 請通知%2管理員"
@@ -1116,7 +1142,7 @@ msgstr "在保存%1期間，發現一個版本控制錯誤 請通知%2管理員"
 msgid "E-mail address:"
 msgstr "電子郵件位址："
 
-#: templates/messages.tmpl:178
+#: templates/messages.tmpl:183
 msgid "E-mail changed successfully!"
 msgstr "電子郵件修改成功!"
 
@@ -1124,8 +1150,7 @@ msgstr "電子郵件修改成功!"
 msgid "Each preference has the syntax"
 msgstr "每個屬性都符合語法"
 
-#: templates/viewtopicactionbuttons.tmpl:50
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:50
+#: templates/viewtopicactionbuttons.tmpl:45
 msgid "Edit"
 msgstr "編輯"
 
@@ -1134,7 +1159,7 @@ msgstr "編輯"
 msgid "Edit Anyway"
 msgstr "強制編輯"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:20
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:15
 msgid "Edit help"
 msgstr "編輯幫助"
 
@@ -1142,11 +1167,18 @@ msgstr "編輯幫助"
 msgid "Edit personal data"
 msgstr "編輯個人資料"
 
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:118
+msgid "Edit table"
+msgstr "編輯表格"
+
 #: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:10
 msgid "Edit text"
 msgstr "編輯文本"
 
-#: twikiplugins/ClassicSkin/templates/view.classic.tmpl:28
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:119
+msgid "Edit this table"
+msgstr "編輯這個表格"
+
 #: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:18
 msgid "Edit this topic text"
 msgstr "編輯這個主題的文本"
@@ -1156,70 +1188,79 @@ msgstr "編輯這個主題的文本"
 msgid "Edit topic preference settings"
 msgstr "編輯屬性設置"
 
-#: templates/messages.tmpl:292
+#: templates/messages.tmpl:297
 msgid "Either the code is not valid, or you have already confirmed your registration using it."
 msgstr "您的註冊碼不對或者您早先已經用這個代碼完成了確認。"
 
-#: templates/messages.tmpl:357
+#: templates/messages.tmpl:362
 msgid "Either you did not specify a file name, or the file you are trying to upload %1 has no content. You may not upload an empty file."
 msgstr "由於沒有提供檔案名稱或您上傳的檔 %1 沒有內容。不能上傳空檔。"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:74
+#: lib/TWiki/UI/Register.pm:418
+#: lib/TWiki/UI/Register.pm:455
+msgid "Email has been disabled for this TWiki installation"
+msgstr "本TWiki服務已經禁用了郵件"
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:73
 msgid "Enlarge edit box"
 msgstr "擴大編輯框"
 
-#: templates/login.tmpl:8
+#: templates/login.tmpl:7
 msgid "Enter a new username and password to change identity"
 msgstr "輸入新用戶名和密碼以改變身份"
 
+#: templates/login.sudo.tmpl:18
+msgid "Enter the TWiki Administrator user or login as set in %1"
+msgstr "輸入TWiki管理員用戶名或登錄為 %1 組"
+
 #: twikiplugins/ClassicSkin/templates/login.classic.tmpl:21
 msgid "Enter your TWiki.LoginName. (Typically First name and last name, no space, no dots, capitalized, e.g. !JohnSmith, unless you chose otherwise). Visit %TWIKIWEB%.TWikiRegistration if you do not have one."
-msgstr "輸入你的 TWiki.LoginName (典型的寫法姓＋名，沒有空格，沒有點. 首字母大寫，例如: CheDong 除非您另外選擇了其他名稱) 如果您沒有註冊請訪問 %TWIKIWEB%.TWikiRegistration "
+msgstr "輸入你的TWiki.LoginName (典型的寫法姓＋名，沒有空格，沒有點. 首字母大寫，例如: CheDong 除非您另外選擇了其他名稱) 如果您沒有註冊請訪問 %TWIKIWEB%.TWikiRegistration "
 
-#: templates/messages.tmpl:228
+#: templates/messages.tmpl:233
 msgid "Error registering new user"
 msgstr "註冊新用戶發生錯誤"
 
-#: templates/messages.tmpl:219
+#: templates/messages.tmpl:224
 msgid "Error registering user %1"
 msgstr "註冊 %1 發生錯誤"
 
-#: templates/messages.tmpl:365
+#: templates/messages.tmpl:370
 msgid "Error saving topic"
 msgstr "保存主題失敗"
 
-#: templates/login.tmpl:28
+#: templates/login.tmpl:21
 msgid "Error: %1"
 msgstr "錯誤： %1"
 
-#: templates/messages.tmpl:436
+#: templates/messages.tmpl:443
 msgid "Error: File attachment at %1,%2 does not exist"
 msgstr "錯誤： 檔附件於%1, %2不存在"
 
-#: templates/messages.tmpl:438
+#: templates/messages.tmpl:445
 msgid "Error: Unsupported content type: %1 (Must be =text/html=, =text/plain= or =text/css=)"
 msgstr "錯誤: 不支援的內容烈性: %1 (只能為 =text/html=, =text/plain= 或 =text/css=)"
 
-#: templates/messages.tmpl:437
+#: templates/messages.tmpl:444
 msgid "Error: Unsupported protocol. (Must be 'http://domain/...')"
 msgstr "錯誤: 不支援的協定 (必須為'http://domain/..')"
 
-#: templates/messages.tmpl:242
+#: templates/messages.tmpl:247
 msgid "Errors"
 msgstr "錯誤"
 
-#: templates/messages.tmpl:446
+#: templates/messages.tmpl:453
 msgid "Failed to include URL %1"
 msgstr "包含URL %1 失敗"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:25
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:14
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:16
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:32
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:21
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:26
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:90
 msgid "Fields marked %1 are required"
 msgstr "標記為%1的欄位必填"
 
-#: templates/messages.tmpl:342
+#: templates/messages.tmpl:347
 msgid "File has been uploaded with different name"
 msgstr "檔已經用其他名稱上傳"
 
@@ -1238,7 +1279,7 @@ msgstr "創建您的帳號完成，您可以開始使用您的WikiName編輯頁�
 msgid "First Name:"
 msgstr "姓："
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:30
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:29
 msgid "Force new revision"
 msgstr "強制新版本"
 
@@ -1246,40 +1287,46 @@ msgstr "強制新版本"
 msgid "Forgotten your password?"
 msgstr "忘記您的密碼了？"
 
-#: templates/messages.tmpl:314
+#: templates/messages.tmpl:319
 msgid "Form Definition %1 missing"
 msgstr "表單定義%1缺失"
 
-#: templates/messages.tmpl:319
+#: templates/messages.tmpl:324
 msgid "Form definition missing"
 msgstr "表單定義缺失"
 
-#: templates/renamebase.tmpl:70
-msgid "Get help on <a target='ManagingTopics' onclick=\"return launchWindow('%1','ManagingTopics')\" href=\"%2\" rel='nofollow'>Renaming and moving topics</a>."
-msgstr "獲得關於 <a target='ManagingTopics' onclick=\"return launchWindow('%1','ManagingTopics')\" href=\"%2\" rel='nofollow'>重命名和移動主題</a>的幫助."
+#: templates/renamebase.tmpl:66
+msgid "Get help on <a target='ManagingTopics' class='twikiPopUp' href='%1' rel='nofollow'>Renaming and moving topics</a>."
+msgstr "獲得關於 <a target='ManagingTopics' class='twikiPopUp' href='%1' rel='nofollow'>重命名和移動主題</a>的幫助."
 
 #: templates/renamewebbase.tmpl:50
-msgid "Get help on <a target='ManagingWebs' onclick=\"return launchWindow('%1','ManagingWebs')\" href=\"%2\" rel='nofollow'>Renaming and moving webs</a>."
-msgstr "獲得關於 <a target='ManagingWebs' onclick=\"return launchWindow('%1','ManagingWebs')\" href=\"%2\" rel='nofollow'>重命名和移動目錄</a>的幫助."
+msgid "Get help on <a target='ManagingWebs' class='twikiPopUp' href='%1' rel='nofollow'>Renaming and moving webs</a>."
+msgstr "獲得關於 <a target='ManagingWebs' class='twikiPopUp' href='%1' rel='nofollow'>重命名和移動目錄</a>的幫助."
 
 #: templates/settings.tmpl:26
-msgid "Get help on <a target='TWikiVariables' onclick=\"return launchWindow('%1','TWikiVariables')\" href='%2' rel='nofollow'>Setting topic preferences</a>."
-msgstr "獲得關於<a target='TWikiVariables' onclick=\"return launchWindow('%1','TWikiVariables')\" href='%2' rel='nofollow'>設置主題配置</a>的幫助."
+msgid "Get help on <a target='TWikiVariables' class='twikiPopUp' href='%1' rel='nofollow'>Setting topic preferences</a>."
+msgstr "獲得關於<a target='TWikiVariables' class='twikiPopUp' href='%1' rel='nofollow'>設置主題配置</a>的幫助."
 
-#: templates/twiki.tmpl:83
+#: data/TWiki/WebSearch.txt:5
+#: data/TWiki/WebSearchAdvanced.txt:5
+msgid "Get notified on changes on this search"
+msgstr "獲得此搜索的修改通知"
+
+#: templates/twiki.tmpl:76
+#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:66
 msgid "Go back"
 msgstr "返回"
 
-#: templates/messages.tmpl:311
+#: templates/messages.tmpl:316
 msgid "Go back in your browser and insert information for all mandatory fields."
 msgstr "回到流覽器上一頁並輸入所有必填的欄位"
 
-#: templates/messages.tmpl:370
+#: templates/messages.tmpl:377
 #: templates/oopssaveerr.tmpl:21
 msgid "Go back in your browser and save your changes locally."
 msgstr "回到流覽器上一頁並本地保存所有變更"
 
-#: templates/messages.tmpl:266
+#: templates/messages.tmpl:271
 msgid "Good examples:"
 msgstr "好的樣例:"
 
@@ -1291,19 +1338,28 @@ msgstr "群組"
 msgid "Hello %1"
 msgstr "您好 %1"
 
-#: templates/twiki.tmpl:107
+#: templates/twiki.tmpl:100
 #: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:9
 msgid "Hello %1!"
 msgstr "您好 %1！"
 
-#: data/TWiki/WebSearch.txt:30
-#: data/TWiki/WebSearchAdvanced.txt:38
+#: data/TWiki/WebSearch.txt:24
+#: data/TWiki/WebSearchAdvanced.txt:32
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:38
 msgid "Help"
 msgstr "説明"
 
-#: templates/attach.tmpl:46
+#: templates/attach.tmpl:45
 msgid "Hide file"
 msgstr "隱藏文件 "
+
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:38
+msgid "Hide help"
+msgstr "隱藏説明"
+
+#: templates/messages.tmpl:109
+msgid "Hierarchical Webs is currently disabled, you cannot create Nested webs."
+msgstr "子目錄目前被禁用，你無法創建嵌套目錄"
 
 #: templates/registernotify.tmpl:16
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:16
@@ -1315,37 +1371,37 @@ msgstr "附上您的照片嗎?"
 msgid "How to activate your %1 registration"
 msgstr "如何啟動您的%1註冊"
 
-#: templates/messages.tmpl:344
+#: templates/messages.tmpl:349
 msgid "However, the filename has been changed from %1 to %2. Please make a note of it."
 msgstr "檔已經從 %1 命名成 %2 請加上備註"
 
-#: templates/login.tmpl:44
+#: templates/login.tmpl:48
 msgid "I forgot my password"
 msgstr "我忘記密碼了"
 
 #: data/TWiki/TWikiPreferences.txt:40
-#: data/TWiki/WebPreferences.txt:27
+#: data/TWiki/WebPreferences.txt:33
 msgid "Ideas, requests, problems regarding %1? <a href='%2'>Send feedback</a>"
 msgstr "關於%1建議，需求，問題： 請<a href='%2'>發送回饋</a>"
 
-#: templates/messages.tmpl:328
+#: templates/messages.tmpl:333
 msgid "If this line isn't present see _upgrade_ section below"
 msgstr "如果這行不顯示請看下面的 _升級_ "
 
-#: templates/messages.tmpl:322
+#: templates/messages.tmpl:327
 msgid "If this topic is missing create it, otherwise check it for errors."
 msgstr "如果此主題沒有創建，請創建它。否則請檢查錯誤"
 
-#: data/TWiki/WebSearch.txt:49
-#: data/TWiki/WebSearchAdvanced.txt:92
+#: data/TWiki/WebSearch.txt:43
+#: data/TWiki/WebSearchAdvanced.txt:86
 msgid "If you already know the name of the topic, enter the name of the topic into the [[%1][Jump box]] at the top"
 msgstr "如果已知主題的名稱，請在頂部的[[%1][跳轉框]]中輸入主題名稱"
 
-#: templates/messages.tmpl:407
+#: templates/messages.tmpl:414
 msgid "If you are developing a <nop>TWikiApplication, see %1 for a description of the correct parameters."
 msgstr "如果你開發一個TWikiApplication 請參考%1查找適當的參數說明"
 
-#: templates/messages.tmpl:473
+#: templates/messages.tmpl:480
 msgid "If you came here by clicking on a question mark link"
 msgstr "如果您來到這裏是通過點擊一個問號鏈結"
 
@@ -1364,14 +1420,14 @@ msgstr "如果您錯誤的收到這封郵件：某人( %1 )已經在 %2 網站�
 msgid "If you have any questions about registration, send an e-mail to %1."
 msgstr "如果您有任何關於註冊的問題請發送郵件給 %1。"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:39
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:29
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:29
+#: templates/login.tmpl:58
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:46
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:36
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:39
 msgid "If you have any questions, please contact %1"
 msgstr "如果您有任何問題，請聯繫%1。"
 
 #: data/TWiki/VarMAKETEXT.txt:16
-#: templates/login.tmpl:52
 #: templates/mailresetpassword.tmpl:14
 #: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:14
 msgid "If you have any questions, please contact %1."
@@ -1382,15 +1438,15 @@ msgstr "如果您有任何問題請聯繫%1."
 msgid "If you haven't set a password yet or you want to reset it, go to: %1"
 msgstr "如果您沒有設置密碼或者想重新設置密碼，請到: %1"
 
-#: templates/messages.tmpl:405
+#: templates/messages.tmpl:412
 msgid "If you received a link to this topic in an e-mail or just want to look at the topic, [[%1][cancel save]] to go to %2."
 msgstr "如果你從電子郵件中收到這個主題的鏈結或者只是想查看主題，請[[%1][取消保存]] 轉到 %2"
 
-#: templates/messages.tmpl:485
+#: templates/messages.tmpl:492
 msgid "If you want to create the topic"
 msgstr "如果您希望創建主題"
 
-#: templates/messages.tmpl:478
+#: templates/messages.tmpl:485
 msgid "If you would like to create this web"
 msgstr "如果您希望創建此目錄"
 
@@ -1402,25 +1458,25 @@ msgstr "如果您舊的郵件地址都不規則（您無法收到任何郵件）
 msgid "If your user topic is not protected from changes by other people, and you don't register an e-mail address using this form, then your user account could be hijacked by someone else."
 msgstr "如果你的用戶主題沒有保護不被其他用戶編輯，並且您未用這個表單註冊一個郵件位址，你的帳戶有可能被他人盜用。"
 
-#: templates/attach.tmpl:40
+#: templates/attach.tmpl:39
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:56
 msgid "Images will be displayed, for other attachments a link will be created."
 msgstr "圖片將被顯示，其他附件鏈結將被創建"
 
-#: data/TWiki/WebSearchAdvanced.txt:59
+#: data/TWiki/WebSearchAdvanced.txt:53
 msgid "In reversed order"
 msgstr "反排序"
 
-#: templates/messages.tmpl:347
+#: templates/messages.tmpl:352
 msgid "In some cases, TWiki changes the name of the uploaded file to make it safe and accessible across all platforms:"
 msgstr "在某些情況下TWiki會修改上傳的檔案名以保證在各個平臺上都可以訪問："
 
-#: templates/messages.tmpl:256
-#: templates/messages.tmpl:263
+#: templates/messages.tmpl:261
+#: templates/messages.tmpl:268
 msgid "Incorrect %1"
 msgstr "不正確的 %1"
 
-#: templates/messages.tmpl:266
+#: templates/messages.tmpl:271
 msgid "Incorrect %1.WikiNames:"
 msgstr "不正確的 %1.WikiNames"
 
@@ -1428,7 +1484,7 @@ msgstr "不正確的 %1.WikiNames"
 msgid "Incorrect Password"
 msgstr "不正確的密碼"
 
-#: templates/messages.tmpl:403
+#: templates/messages.tmpl:410
 msgid "Incorrect parameters to the =%1= script"
 msgstr "=%1=腳本中的錯誤的參數"
 
@@ -1441,29 +1497,29 @@ msgstr "=%1=腳本中的錯誤的參數"
 msgid "Index"
 msgstr "索引"
 
-#: templates/messages.tmpl:230
+#: templates/messages.tmpl:235
 msgid "Internal error when sending email to %1."
 msgstr "發送郵件給 %1 時內部出錯"
 
-#: templates/messages.tmpl:351
+#: templates/messages.tmpl:356
 msgid "International (8-bit) characters are removed (replaced by US-ASCII equivalents for Latin-1)"
 msgstr "國際字元(8位元)已經沒刪除（並使用和Latin-1相同的US-ASCII字元代替）"
 
-#: templates/messages.tmpl:289
+#: templates/messages.tmpl:294
 msgid "Invalid Activation Code"
 msgstr "不正確的啟動碼"
 
-#: templates/messages.tmpl:281
+#: templates/messages.tmpl:286
 msgid "Invalid e-mail address"
 msgstr "不正確的電子郵件位址"
 
-#: templates/messages.tmpl:418
+#: templates/messages.tmpl:425
 msgid "It is probably OK to go ahead and edit - unless you intend to change data in a form attached to the topic. If %1 actually _does_ save the topic while you are editing, your changes will be merged, and nothing will be lost. Form data cannot easily be merged though, so in this case you are recommended to check with %1 first."
 msgstr "繼續保存和編輯也許沒有問題，除非您希望改變表單數據，如果%1 _真的_在您編輯的時候保存，您的修改將和他們的合併，，沒有任何資料會丟失。但是表單數據無法簡單地合併，所以在這種情況下建議您先和 %1 聯繫。"
 
 #: templates/twiki.tmpl:9
-msgid "It's usually best to choose a <a target='WikiWord' onclick=\"launchWindow('%SYSTEMWEB%','WikiWord'); return false;\" href='%1' rel='nofollow'>WikiWord</a> for the new topic name, otherwise automatic linking may not work. Characters not allowed in topic names, such as spaces will automatically be removed."
-msgstr "最好使用一個<a target='WikiWord' onclick=\"return launchWindow('%1','WikiWord')\" href='%1' rel='nofollow'>WikiWord</a>創建新主題，否則自動鏈結生成可能不起作用。而其他不被允許作為主題名稱的字元，例如：空格將被自動刪除。"
+msgid "It's usually best to choose a <a target='WikiWord' class='twikiPopUp' href='%1' rel='nofollow'>WikiWord</a> for the new topic name, otherwise automatic linking may not work. Characters not allowed in topic names, such as spaces will automatically be removed."
+msgstr "創建新主題的時候最好使用一個 <a target='WikiWord' class='twikiPopUp' href='%1' rel='nofollow'>WikiWord</a>, 否則自動鏈結生成可能不起作用。而其他不被允許作為主題名稱的字元，例如：空格將被自動刪除。"
 
 #: templates/renameweb.tmpl:17
 msgid "It's usually best to choose a short name for the new web, as it is easier to link to them later on. Characters not allowed in web names, such as spaces will automatically be removed."
@@ -1471,7 +1527,7 @@ msgstr "一般情況下最好選擇一個短名稱作為新的目錄名稱，這
 
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarSearch.txt:2
 #: twikiplugins/PatternSkin/data/TWiki/WebTopBar.txt:7
-#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:56
+#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:36
 msgid "Jump"
 msgstr "跳轉"
 
@@ -1479,15 +1535,15 @@ msgstr "跳轉"
 msgid "Last Name:"
 msgstr "名："
 
-#: data/TWiki/WebSearchAdvanced.txt:57
+#: data/TWiki/WebSearchAdvanced.txt:51
 msgid "Last editor"
 msgstr "最後編輯者"
 
-#: data/TWiki/WebSearchAdvanced.txt:56
+#: data/TWiki/WebSearchAdvanced.txt:50
 msgid "Last modified time"
 msgstr "最後更新時間"
 
-#: data/TWiki/WebSearchAdvanced.txt:81
+#: data/TWiki/WebSearchAdvanced.txt:75
 msgid "Limit results to:"
 msgstr "限制結果到:"
 
@@ -1503,12 +1559,12 @@ msgstr "行: %1"
 msgid "Line: %1 to %2"
 msgstr "行: %1 到 %2"
 
-#: templates/attach.tmpl:38
+#: templates/attach.tmpl:37
 msgid "Link"
 msgstr "鏈結 "
 
-#: data/TWiki/WebSearch.txt:50
-#: data/TWiki/WebSearchAdvanced.txt:93
+#: data/TWiki/WebSearch.txt:44
+#: data/TWiki/WebSearchAdvanced.txt:87
 msgid "List all topics in the %1 web in alphabetical order"
 msgstr "按字母順序列出%1目錄所有主題"
 
@@ -1516,8 +1572,8 @@ msgstr "按字母順序列出%1目錄所有主題"
 msgid "List more similar topic in this web"
 msgstr "列出相關主題："
 
-#: data/TWiki/WebSearch.txt:51
-#: data/TWiki/WebSearchAdvanced.txt:94
+#: data/TWiki/WebSearch.txt:45
+#: data/TWiki/WebSearchAdvanced.txt:88
 msgid "List topics that start with the letter:"
 msgstr "列出所有以某個字母開頭的:"
 
@@ -1533,7 +1589,7 @@ msgstr "登錄"
 msgid "Log Out"
 msgstr "登出"
 
-#: templates/messages.tmpl:458
+#: templates/messages.tmpl:465
 msgid "Log in as [[%SCRIPTURL{login}%?sudo=sudo][internal admin]] if you need to quickly fix something"
 msgstr "如果您想快速修正錯誤，請以[[%SCRIPTURL{login}%?sudo=sudo][內部管理員]]身份登錄。"
 
@@ -1542,20 +1598,20 @@ msgstr "如果您想快速修正錯誤，請以[[%SCRIPTURL{login}%?sudo=sudo][�
 msgid "Login name %1"
 msgstr "登錄名 %1"
 
-#: templates/login.tmpl:50
+#: templates/login.tmpl:54
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:193
 msgid "Logon"
 msgstr "登錄為"
 
-#: templates/messages.tmpl:240
+#: templates/messages.tmpl:245
 msgid "Mail to"
 msgstr "郵寄給"
 
-#: data/TWiki/WebSearchAdvanced.txt:63
+#: data/TWiki/WebSearchAdvanced.txt:57
 msgid "Make search:"
 msgstr "搜索:"
 
-#: templates/messages.tmpl:207
+#: templates/messages.tmpl:212
 msgid "Missing Fields"
 msgstr "缺少多個欄位"
 
@@ -1563,8 +1619,7 @@ msgstr "缺少多個欄位"
 msgid "Missing action command"
 msgstr "缺少操作命令"
 
-#: data/TWiki/WebSearch.txt:17
-#: data/TWiki/WebSearchAdvanced.txt:25
+#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:39
 msgid "Modify search"
 msgstr "修改搜索:"
 
@@ -1572,19 +1627,17 @@ msgstr "修改搜索:"
 msgid "More formatting help"
 msgstr "更多格式幫助"
 
-#: templates/rdiff.tmpl:6
-#: templates/viewtopicactionbuttons.tmpl:84
+#: templates/viewtopicactionbuttons.tmpl:74
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:29
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:84
 msgid "More topic actions..."
 msgstr "更多主題操作……"
 
-#: twikiplugins/TwistyPlugin/data/TWiki/TwistyPlugin.txt:405
+#: twikiplugins/TwistyPlugin/data/TWiki/TwistyPlugin.txt:546
 msgid "More..."
 msgstr "更多…"
 
 #: templates/moveattachment.tmpl:36
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:37
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:29
 msgid "Move"
 msgstr "移動"
 
@@ -1600,7 +1653,7 @@ msgstr "移動附件到目錄："
 msgid "Move file attachment"
 msgstr "移動檔附件"
 
-#: templates/attachagain.tmpl:22
+#: templates/attachagain.tmpl:21
 msgid "Move or delete attachment"
 msgstr "移動或刪除附件"
 
@@ -1608,7 +1661,7 @@ msgstr "移動或刪除附件"
 msgid "Move to web:"
 msgstr "移動到目錄:"
 
-#: templates/renamedelete.tmpl:26
+#: templates/renamedelete.tmpl:16
 msgid "Move topic to web:"
 msgstr "移動主題到目錄："
 
@@ -1620,7 +1673,7 @@ msgstr "移動/重命名"
 msgid "My Links"
 msgstr "我的鏈結"
 
-#: lib/TWiki/Search.pm:855
+#: lib/TWiki/Search.pm:857
 msgid "NEW"
 msgstr "新"
 
@@ -1628,15 +1681,15 @@ msgstr "新"
 msgid "Name of new web is missing"
 msgstr "新目錄名稱缺失"
 
-#: templates/messages.tmpl:143
+#: templates/messages.tmpl:145
 msgid "New User Registration disabled"
 msgstr "禁止新用戶註冊"
 
-#: templates/messages.tmpl:134
+#: templates/messages.tmpl:136
 msgid "New User Registration not supported"
 msgstr "不支援新用戶註冊"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:28
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:35
 msgid "New e-mails (space-separated list)"
 msgstr "新郵件地址(空格分割的列表)"
 
@@ -1649,7 +1702,7 @@ msgstr "自從%2後 %1中新建或修改的主題"
 msgid "New parent web:"
 msgstr "新的父目錄:"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:17
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:24
 msgid "New password"
 msgstr "新密碼"
 
@@ -1665,25 +1718,25 @@ msgstr "新目錄名稱:"
 msgid "Newer revision:"
 msgstr "更新版本："
 
-#: templates/oopsmore.tmpl:113
+#: templates/oopsmore.tmpl:114
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:24
 msgid "No child topics"
 msgstr "無子主題"
 
-#: templates/messages.tmpl:435
+#: templates/messages.tmpl:442
 msgid "No permission to view %1"
 msgstr "無許可權查看 %1"
 
-#: templates/oopsmore.tmpl:108
+#: templates/oopsmore.tmpl:109
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:57
 msgid "No previous revision exists."
 msgstr "沒有前一個版本。"
 
-#: templates/messages.tmpl:200
+#: templates/messages.tmpl:205
 msgid "No users to reset passwords for."
 msgstr "沒有用戶重新設置密碼給."
 
-#: templates/renamedelete.tmpl:41
+#: templates/renamedelete.tmpl:31
 msgid "Not recommended when deleting a topic."
 msgstr "刪除一個主題的時候不推薦。"
 
@@ -1691,8 +1744,8 @@ msgstr "刪除一個主題的時候不推薦。"
 msgid "Note that any URLs that refer to the attachment will be broken after this move."
 msgstr "主題：任何引用此附件的URL都將斷掉"
 
-#: templates/messages.tmpl:294
-#: templates/messages.tmpl:346
+#: templates/messages.tmpl:299
+#: templates/messages.tmpl:351
 #: templates/registerconfirm.tmpl:13
 #: templates/registernotify.tmpl:22
 #: twikiplugins/ClassicSkin/templates/registerconfirm.classic.tmpl:13
@@ -1701,7 +1754,7 @@ msgstr "主題：任何引用此附件的URL都將斷掉"
 msgid "Note:"
 msgstr "注意:"
 
-#: data/TWiki/WebTopicViewTemplate.txt:4
+#: data/TWiki/WebTopicViewTemplate.txt:2
 msgid "Note: This topic does not exist"
 msgstr "注意：本主題不存在"
 
@@ -1718,17 +1771,18 @@ msgstr "佈告"
 
 #: templates/search.text.tmpl:15
 #: templates/searchformat.tmpl:10
-#: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:16
 #: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:5
+#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:38
 msgid "Number of topics:"
 msgstr "主題數量:"
 
-#: templates/messages.tmpl:168
-#: templates/messages.tmpl:175
+#: templates/messages.tmpl:173
+#: templates/messages.tmpl:180
 #: templates/oopsaccessdenied.tmpl:7
 #: templates/oopssaveerr.tmpl:14
-#: templates/twiki.tmpl:82
+#: templates/twiki.tmpl:75
 #: twikiplugins/ClassicSkin/templates/oopsaccessdenied.classic.tmpl:6
+#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:65
 msgid "OK"
 msgstr "OK"
 
@@ -1740,21 +1794,19 @@ msgstr "舊版本"
 msgid "Once registered you can login using your %1 and password."
 msgstr "註冊後您可以使用%1和密碼登錄"
 
-#: templates/messages.tmpl:462
+#: templates/messages.tmpl:469
 msgid "Only members of the %1 are allowed to perform this action."
 msgstr "只有%1的成員允許進行這些操作"
 
-#: twikiplugins/ClassicSkin/templates/edit.classic.tmpl:18
+#: templates/login.tmpl:8
+msgid "Oops: we could not recognize you. Try again or %1."
+msgstr "抱歉： 我們無法識別你，請再次嘗試或 %1"
+
 #: twikiplugins/ClassicSkin/templates/preview.classic.tmpl:10
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:27
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:30
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:53
-#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:14
-#: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:19
 msgid "Opens page in new window"
 msgstr "在新視窗打開頁面"
 
-#: templates/renamedelete.tmpl:29
+#: templates/renamedelete.tmpl:19
 msgid "Optionally change topic name:"
 msgstr "更改的主題"
 
@@ -1774,8 +1826,8 @@ msgstr "組織名稱："
 msgid "Other Country"
 msgstr "其他國家"
 
-#: data/TWiki/WebSearch.txt:48
-#: data/TWiki/WebSearchAdvanced.txt:91
+#: data/TWiki/WebSearch.txt:42
+#: data/TWiki/WebSearchAdvanced.txt:85
 msgid "Other search options:"
 msgstr "其他搜索選項:"
 
@@ -1783,27 +1835,27 @@ msgstr "其他搜索選項:"
 msgid "Otherwise, use this form to get a new one e-mailed to you."
 msgstr "否則，用這個表發送一封新的郵件給你。"
 
-#: templates/login.tmpl:39
+#: templates/login.tmpl:45
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:188
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:25
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:27
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:41
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:34
 msgid "Password"
 msgstr "密碼"
 
-#: templates/messages.tmpl:164
+#: templates/messages.tmpl:166
 msgid "Password changed successfully!"
 msgstr "密碼修改成功!"
 
-#: templates/messages.tmpl:171
+#: templates/messages.tmpl:176
 msgid "Password could not be changed"
 msgstr "密碼無法修改"
 
-#: templates/messages.tmpl:199
-#: templates/messages.tmpl:203
+#: templates/messages.tmpl:204
+#: templates/messages.tmpl:208
 msgid "Password reset failed"
 msgstr "密碼重設失敗"
 
-#: templates/messages.tmpl:213
+#: templates/messages.tmpl:218
 msgid "Passwords do not match"
 msgstr "密碼不匹配"
 
@@ -1812,13 +1864,13 @@ msgstr "密碼不匹配"
 msgid "Personal Preferences"
 msgstr "個人設置"
 
-#: data/TWiki/WebTopicCreatorTemplate.txt:49
+#: data/TWiki/WebCreateNewTopicTemplate.txt:56
 #: templates/oopsmore.tmpl:55
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:30
 msgid "Pick from a list"
 msgstr "從列表中選擇"
 
-#: templates/messages.tmpl:123
+#: templates/messages.tmpl:125
 msgid "Pick one of the %1."
 msgstr "從%1挑選一個."
 
@@ -1826,19 +1878,23 @@ msgstr "從%1挑選一個."
 msgid "Placeholder for trashed attachments"
 msgstr "丟棄附件的存放地"
 
-#: templates/messages.tmpl:253
-#: templates/messages.tmpl:303
+#: templates/messages.tmpl:258
+#: templates/messages.tmpl:308
 msgid "Please contact %1 if you have any questions."
 msgstr "如有問題請聯繫%1."
 
-#: templates/messages.tmpl:138
-#: templates/messages.tmpl:147
-#: templates/messages.tmpl:223
-#: templates/messages.tmpl:232
+#: templates/messages.tmpl:140
+#: templates/messages.tmpl:149
+#: templates/messages.tmpl:228
+#: templates/messages.tmpl:237
 msgid "Please contact %1."
 msgstr "請聯繫 %1 。"
 
-#: templates/login.tmpl:6
+#: templates/login.sudo.tmpl:7
+msgid "Please enter the TWiki admin password"
+msgstr "請輸入TWiki管理員的用戶名和密碼"
+
+#: templates/login.tmpl:12
 msgid "Please enter your username and password"
 msgstr "請輸入您的用戶名和密碼"
 
@@ -1848,7 +1904,7 @@ msgstr "請輸入您的用戶名和密碼"
 msgid "Please go _back_ in your browser and try a new name."
 msgstr "請在流覽器中_返回_上一頁試一個新名字"
 
-#: templates/messages.tmpl:358
+#: templates/messages.tmpl:363
 msgid "Please go back in your browser and check again."
 msgstr "請在流覽器中返回上一頁並重新檢查."
 
@@ -1858,16 +1914,16 @@ msgstr "請在流覽器中返回上一頁：選擇一個主題名為 %1.WikiWord
 
 #: templates/messages.tmpl:100
 #: templates/messages.tmpl:104
-#: templates/messages.tmpl:109
-#: templates/messages.tmpl:113
-#: templates/messages.tmpl:117
-#: templates/messages.tmpl:127
-#: templates/messages.tmpl:210
-#: templates/messages.tmpl:216
-#: templates/messages.tmpl:260
-#: templates/messages.tmpl:272
-#: templates/messages.tmpl:278
-#: templates/messages.tmpl:286
+#: templates/messages.tmpl:111
+#: templates/messages.tmpl:115
+#: templates/messages.tmpl:119
+#: templates/messages.tmpl:129
+#: templates/messages.tmpl:215
+#: templates/messages.tmpl:221
+#: templates/messages.tmpl:265
+#: templates/messages.tmpl:277
+#: templates/messages.tmpl:283
+#: templates/messages.tmpl:291
 #: templates/messages.tmpl:37
 #: templates/messages.tmpl:41
 #: templates/messages.tmpl:59
@@ -1877,11 +1933,6 @@ msgstr "請返回上一頁再試"
 #: templates/messages.tmpl:45
 msgid "Please make sure you spelled the %1 correctly and try again. If you get stuck, please mail %2."
 msgstr "請確認您拼寫%1正確並重試，如果仍不成功，請發郵件給%2。"
-
-#: templates/attach.tmpl:6
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:24
-msgid "Please see <a target='TWikiVariables' onclick=\"return launchWindow('%1','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a> for more information about attaching files."
-msgstr "請參考<a target='TWikiVariables' onclick=\"return launchWindow('%1','FileAttachment')\" href='' rel='nofollow'>檔附件</a>條目，獲得更多關於檔附件的資訊。"
 
 #: templates/mailresetpassword.tmpl:12
 #: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:12
@@ -1908,6 +1959,10 @@ msgstr "屬性"
 msgid "Quick edit of existing preferences (edit the topic text to set new preferences)"
 msgstr "快速編輯現有屬性（編輯主題並設置新屬性）"
 
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:121
+msgid "Quiet save"
+msgstr "快速修改"
+
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:10
 #: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:10
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:11
@@ -1920,7 +1975,7 @@ msgstr "RSS數據源"
 msgid "Read %1 to get a quick overview of this collaboration platform. To learn more, study the TWikiTutorial, which is accessible from the same link."
 msgstr "看一下%1，對這個協同平臺的有一個大概的瞭解，更多可以參考%TWIKIWEB%.TWikiTutorial."
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:30
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:29
 msgid "Read new revision help text in new window"
 msgstr "再新視窗查看修訂幫助"
 
@@ -1929,8 +1984,8 @@ msgid "Read on"
 msgstr "閱讀"
 
 #: data/Sandbox/WebHome.txt:21
-#: data/TWiki/WebSearch.txt:52
-#: data/TWiki/WebSearchAdvanced.txt:96
+#: data/TWiki/WebSearch.txt:46
+#: data/TWiki/WebSearchAdvanced.txt:90
 msgid "Recently changed topics"
 msgstr "最新更改的主題"
 
@@ -1938,7 +1993,7 @@ msgstr "最新更改的主題"
 msgid "Refresh"
 msgstr "刷新"
 
-#: templates/twiki.tmpl:107
+#: templates/twiki.tmpl:100
 #: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:9
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
 msgid "Register"
@@ -1952,11 +2007,11 @@ msgstr "註冊用戶可以[[%1][修改密碼]] 和[[%2][重設密碼]]"
 msgid "Registration"
 msgstr "註冊"
 
-#: templates/messages.tmpl:292
+#: templates/messages.tmpl:297
 msgid "Registration codes can only be used once."
 msgstr "註冊碼智慧被使用一次。"
 
-#: data/TWiki/WebSearchAdvanced.txt:65
+#: data/TWiki/WebSearchAdvanced.txt:59
 msgid "Regular expression search"
 msgstr "正則運算式搜索"
 
@@ -1967,24 +2022,24 @@ msgstr "相關主題："
 #: data/Sandbox/WebNotify.txt:10
 #: data/Trash/WebNotify.txt:9
 #: data/_default/WebNotify.txt:8
-#: templates/messages.tmpl:460
 #: templates/messages.tmpl:467
+#: templates/messages.tmpl:474
 #: twikiplugins/TWikiUserMappingContrib/data/Main/TWikiGroupTemplate.txt:10
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:45
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:35
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:33
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:52
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:42
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:43
 msgid "Related topics:"
 msgstr "相關主題:"
 
-#: twikiplugins/ClassicSkin/templates/login.classic.tmpl:11
+#: twikiplugins/ClassicSkin/templates/login.classic.tmpl:10
 msgid "Remember me"
 msgstr "記住我"
 
-#: templates/login.tmpl:46
+#: templates/login.tmpl:50
 msgid "Remember me on this computer"
 msgstr "在這台電腦上記住我"
 
-#: templates/messages.tmpl:180
+#: templates/messages.tmpl:185
 msgid "Remember to update your user topic if you want your e-mail change to be reflected there as well."
 msgstr "如果需要接受變更通知，請更新你的用戶主題中的郵件位址"
 
@@ -1992,7 +2047,7 @@ msgstr "如果需要接受變更通知，請更新你的用戶主題中的郵件
 msgid "Remember your password?"
 msgstr "記住密碼？"
 
-#: data/TWiki/WebTopicViewTemplate.txt:13
+#: data/TWiki/WebTopicViewTemplate.txt:11
 msgid "Remember, a %1 is case sensitive."
 msgstr "請記住： %1 是區分大小寫字母的"
 
@@ -2045,11 +2100,11 @@ msgstr "替換表單..."
 msgid "Reset Password"
 msgstr "重新設置密碼:"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:22
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:32
 msgid "Reset password"
 msgstr "重新設置密碼:"
 
-#: templates/oopsmore.tmpl:105
+#: templates/oopsmore.tmpl:106
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:53
 msgid "Restore"
 msgstr "回滾"
@@ -2063,20 +2118,20 @@ msgstr "回滾主題"
 msgid "Restore topic to revision:"
 msgstr "保存主題到版本："
 
-#: templates/oopsmore.tmpl:105
+#: templates/oopsmore.tmpl:106
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:53
 msgid "Restore topic to this revision"
 msgstr "保存主題為此版本"
 
-#: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:32
+#: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:12
 msgid "Results from %1 web"
 msgstr "%1目錄中的結果"
 
-#: templates/messages.tmpl:184
+#: templates/messages.tmpl:189
 msgid "Return to %1."
 msgstr "回到%1"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:18
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:25
 msgid "Retype new password"
 msgstr "重新輸入新密碼"
 
@@ -2107,20 +2162,24 @@ msgid "S = Save, C = Cancel"
 msgstr "S = 保存, C = 取消"
 
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:14
-msgid "S = Save, Q = Quiet save, K = Checkpoint, D = Discard"
-msgstr "S = 保存, Q = 安靜保存, K = 修訂點, D = 放棄"
+msgid "S = Save, Q = Quiet save, K = Save and Continue, D = Discard"
+msgstr "S = 保存, Q = 快速保存, K = 保存並繼續編輯 , D = 放棄"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:53
-msgid "S = Save, Q = Quiet save, K = Checkpoint, P = Preview, C = Cancel"
-msgstr "S = 保存, Q = 安靜保存, K = 修訂點, P = 預覽, C = 取消"
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:52
+msgid "S = Save, Q = Quiet save, K = Save and Continue, P = Preview, C = Cancel"
+msgstr "S = 保存, Q = 快速保存, K = 修訂點, P = 預覽, C = 取消"
+
+#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:120
+msgid "Save table"
+msgstr "保存表格"
 
 #: templates/registernotifyadmin.tmpl:16
 #: twikiplugins/ClassicSkin/templates/registernotifyadmin.classic.tmpl:16
 msgid "Saved to:"
 msgstr "保存到:"
 
-#: data/TWiki/WebSearch.txt:30
-#: data/TWiki/WebSearchAdvanced.txt:38
+#: data/TWiki/WebSearch.txt:24
+#: data/TWiki/WebSearchAdvanced.txt:32
 #: data/_default/WebHome.txt:11
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:7
 #: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:7
@@ -2130,7 +2189,7 @@ msgstr "保存到:"
 #: twikiplugins/PatternSkin/data/TWiki/WebTopBar.txt:9
 #: twikiplugins/PatternSkin/data/Trash/WebLeftBar.txt:5
 #: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:6
-#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:57
+#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:37
 msgid "Search"
 msgstr "搜索"
 
@@ -2153,7 +2212,7 @@ msgstr "在所有目錄中搜索鏈結到這裏的主題"
 msgid "Search similar topics in all public webs"
 msgstr "在所有公開目錄中搜索相似主題"
 
-#: data/TWiki/WebSearchAdvanced.txt:70
+#: data/TWiki/WebSearchAdvanced.txt:64
 msgid "Search string"
 msgstr "搜索字元"
 
@@ -2162,12 +2221,12 @@ msgstr "搜索字元"
 msgid "Search the %1 Web for topics that link to here"
 msgstr "在%1目錄中搜索鏈結到這裏的主題"
 
-#: data/TWiki/WebSearch.txt:35
-#: data/TWiki/WebSearchAdvanced.txt:43
+#: data/TWiki/WebSearch.txt:29
+#: data/TWiki/WebSearchAdvanced.txt:37
 msgid "Search where:"
 msgstr "搜索哪里:"
 
-#: templates/search.tmpl:36
+#: templates/search.tmpl:33
 #: templates/searchformat.tmpl:9
 #: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:1
 msgid "Searched:"
@@ -2181,7 +2240,7 @@ msgstr "安全提示："
 msgid "See %1 for a list of existing users or register as new user in %2."
 msgstr "查看%1完整用戶列表或者在%2註冊新用戶"
 
-#: templates/messages.tmpl:315
+#: templates/messages.tmpl:320
 msgid "See %1 for information about Form Definitions."
 msgstr "查看%1獲得更多關於表單定義的資訊"
 
@@ -2210,7 +2269,7 @@ msgstr "選擇"
 msgid "Select a new local file to update attachment"
 msgstr "選擇一個新的檔，更新附件"
 
-#: templates/renamebase.tmpl:43
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:34
 msgid "Select all"
 msgstr "選擇所有"
 
@@ -2219,7 +2278,7 @@ msgid "Select topic parent:"
 msgstr "選擇一個父主題："
 
 #: templates/edit.tmpl:47
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:71
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:70
 msgid "Select, copy and paste your signature text to the bottom of your entry"
 msgstr "選擇/複製/粘貼您的簽名文字到條目的底部"
 
@@ -2244,7 +2303,7 @@ msgstr "設置新父主題 "
 msgid "Set new topic parent"
 msgstr "設置新父主題"
 
-#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:7
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:11
 msgid "Show help"
 msgstr "顯示幫助"
 
@@ -2252,7 +2311,7 @@ msgstr "顯示幫助"
 msgid "Show tool-tip topic info on mouse-over of %1 links, on or off:"
 msgstr "在滑鼠移動到 %1 鏈結上時顯示幫助提示：打開或關閉"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:74
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:73
 msgid "Shrink edit box"
 msgstr "縮小編輯框"
 
@@ -2264,7 +2323,7 @@ msgstr "並列"
 msgid "Similar topics in this web (if any):"
 msgstr "在此目錄中的相關主題(如有):"
 
-#: data/TWiki/WebSearchAdvanced.txt:38
+#: data/TWiki/WebSearchAdvanced.txt:32
 msgid "Simple search"
 msgstr "簡單搜索"
 
@@ -2281,11 +2340,11 @@ msgstr "大小"
 msgid "Some add schedule information and vacation notice."
 msgstr "某些添加計畫資訊和假期自動回復"
 
-#: templates/messages.tmpl:350
+#: templates/messages.tmpl:355
 msgid "Some characters such as =&#126;=, =$=, =@=, =%= are removed"
 msgstr "一些類似於 =&#126;=, =$=, =@=, =%= 已經刪除"
 
-#: templates/messages.tmpl:295
+#: templates/messages.tmpl:300
 msgid "Some mail tools have an error that causes them to send the same request twice when you click on a link. It you did this, it is possible that you actually *have* registered successfully."
 msgstr "有些郵件工具會在您點擊同一個鏈結連續2次發送請求出錯，如果您已經如此操作，可能已經註冊成功。"
 
@@ -2298,11 +2357,19 @@ msgstr "某些用戶將個人麼戶變成一個收藏鏈結： 他們正在工�
 msgid "Sorry, Registration has been temporarily disabled"
 msgstr "抱歉，註冊已經暫時禁用"
 
-#: data/TWiki/WebSearchAdvanced.txt:53
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/BulkRegistration.txt:60
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/BulkResetPassword.txt:17
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:21
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:13
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:16
+msgid "Sorry, the password system is currently read only, please contact %1"
+msgstr "抱歉，密碼系統目前是唯讀的，請聯繫 %1"
+
+#: data/TWiki/WebSearchAdvanced.txt:47
 msgid "Sort results by:"
 msgstr "對結果排序:"
 
-#: templates/messages.tmpl:348
+#: templates/messages.tmpl:353
 msgid "Spaces are replaced by underscores"
 msgstr "空格已經用下劃線代替"
 
@@ -2313,8 +2380,8 @@ msgstr "空格已經用下劃線代替"
 msgid "Statistics"
 msgstr "統計"
 
-#: templates/messages.tmpl:194
-#: templates/messages.tmpl:300
+#: templates/messages.tmpl:199
+#: templates/messages.tmpl:305
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:295
 msgid "Submit"
 msgstr "提交"
@@ -2332,16 +2399,16 @@ msgstr "提交的內容:"
 msgid "Subscribe / Unsubscribe in:"
 msgstr "訂閱/退訂"
 
-#: data/TWiki/WebSearchAdvanced.txt:71
+#: data/TWiki/WebSearchAdvanced.txt:65
 msgid "Summaries"
 msgstr "摘要"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:74
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:73
 msgid "Switch to monotype or propotional font"
 msgstr "切換到等寬或合適的字體"
 
-#: data/TWiki/WebSearch.txt:31
-#: data/TWiki/WebSearchAdvanced.txt:39
+#: data/TWiki/WebSearch.txt:25
+#: data/TWiki/WebSearchAdvanced.txt:33
 msgid "TIP: to search for all topics that contain =\"SOAP\"=, =\"WSDL\"=, a literal =\"web service\"=, but not =\"shampoo\"=, write:"
 msgstr "巧門: 搜索所有主題包含 =\"SOAP\"=, =\"WSDL\"= =\"web service\"= 但不包含 =\"shampoo\"= 的寫, "
 
@@ -2362,13 +2429,13 @@ msgstr "TWikis用戶介面有多種語言，如果想在本次回話中改變語
 msgid "Test Topics"
 msgstr "測試主題"
 
-#: data/TWiki/WebSearch.txt:37
-#: data/TWiki/WebSearchAdvanced.txt:45
+#: data/TWiki/WebSearch.txt:31
+#: data/TWiki/WebSearchAdvanced.txt:39
 msgid "Text body"
 msgstr "文本內容"
 
-#: templates/messages.tmpl:152
-#: templates/messages.tmpl:187
+#: templates/messages.tmpl:154
+#: templates/messages.tmpl:192
 msgid "Thank you for registering"
 msgstr "謝謝您註冊"
 
@@ -2382,11 +2449,15 @@ msgstr "謝謝您註冊 %1 協作平臺，請保存這個郵件以備未來參�
 msgid "Thank you for registering in the %1 collaboration platform. Your verification code is %2."
 msgstr "謝謝您註冊%1協作平臺. 您的校驗碼為%2."
 
-#: templates/messages.tmpl:264
+#: templates/messages.tmpl:504
+msgid "That user has already been activated "
+msgstr "用戶已經被啟動"
+
+#: templates/messages.tmpl:269
 msgid "The %1 field must be your first and last name in %2, e.g. your capitalized first and last name with spaces removed."
 msgstr "%1 欄位必須是姓名，姓氏在 %2 ，例如：大寫的姓氏拼音和去掉空格的名字。 "
 
-#: templates/messages.tmpl:258
+#: templates/messages.tmpl:263
 msgid "The %1 field must match the {LoginNameFilterIn} filter for this site"
 msgstr "%1 欄位必須符合本站的註冊名 {LoginNameFilterIn} 過濾規則"
 
@@ -2394,7 +2465,7 @@ msgstr "%1 欄位必須符合本站的註冊名 {LoginNameFilterIn} 過濾規則
 msgid "The %1 topic already exists"
 msgstr "主題%1已經存在"
 
-#: templates/messages.tmpl:470
+#: templates/messages.tmpl:477
 msgid "The %1 web does not exist"
 msgstr "%1目錄不存在"
 
@@ -2409,11 +2480,11 @@ msgstr "%1目錄是一個沙盤用於測試，歡迎任何人添加和刪除條�
 msgid "The %1 web of TWiki. TWiki is a Web-Based Collaboration Platform for the Enterprise."
 msgstr "TWiki的 %1 目錄. TWiki是一個基於WEB的企業級線上協作系統。"
 
-#: templates/messages.tmpl:145
+#: templates/messages.tmpl:147
 msgid "The Administrator has disabled new user registration."
 msgstr "系統管理員已經禁用了新用戶註冊。"
 
-#: templates/messages.tmpl:290
+#: templates/messages.tmpl:295
 msgid "The activation code %1 is invalid."
 msgstr "啟動碼%1不合法."
 
@@ -2421,43 +2492,43 @@ msgstr "啟動碼%1不合法."
 msgid "The attachment and any history will be moved to the new topic."
 msgstr "附件和任何歷史將移動到新主題."
 
-#: templates/messages.tmpl:426
+#: templates/messages.tmpl:433
 msgid "The chances are good that %1 has simply navigated away from the edit page without saving."
 msgstr "如果是 %1 流覽到編輯頁而沒有保存，這種情況還是沒有問題的。"
 
-#: templates/renamebase.tmpl:74
+#: templates/renamebase.tmpl:70
 msgid "The checkmarked topics will be updated (another form will appear which will _eventually_ allow you to rename any topics that were locked)"
 msgstr "被標記的主題將被更新(另外一個表格_實際上_允許您重命名任何鎖定的主題)"
 
-#: templates/messages.tmpl:282
+#: templates/messages.tmpl:287
 msgid "The e-mail address for this account is not valid."
 msgstr "這個帳號的電子郵件位址不合法。"
 
-#: templates/messages.tmpl:442
+#: templates/messages.tmpl:449
 msgid "The entry for user %1 was missing in the password system."
 msgstr "用戶%1在密碼系統中缺失"
 
-#: templates/messages.tmpl:343
+#: templates/messages.tmpl:348
 msgid "The file has been uploaded and attached properly to the %1 topic."
 msgstr "檔已經被上傳並附加在主題%1上"
 
-#: templates/messages.tmpl:377
+#: templates/messages.tmpl:384
 msgid "The following topics are locked for edit, and cannot be moved:"
 msgstr "以下主題被鎖定或正在編輯，無法被移動:"
 
-#: templates/messages.tmpl:383
+#: templates/messages.tmpl:390
 msgid "The following topics refer to topics in this web, but are being edited:"
 msgstr "以下為在此目錄中引用此主題的主題，但由編輯:"
 
-#: templates/messages.tmpl:380
+#: templates/messages.tmpl:387
 msgid "The following topics refer to topics in this web, but you are denied access to them:"
 msgstr "以下為此目錄中引用此主題的主題：但您沒有許可權訪問:"
 
-#: templates/messages.tmpl:321
+#: templates/messages.tmpl:326
 msgid "The form should be defined in the topic %1"
 msgstr "表單將被在%1中定義"
 
-#: templates/messages.tmpl:424
+#: templates/messages.tmpl:431
 msgid "The lease on this topic expired %1 ago."
 msgstr "主題佔用已經於 %1 過期。"
 
@@ -2473,35 +2544,39 @@ msgstr "新目錄已經被創建"
 msgid "The password you entered in the *old password* field is incorrect."
 msgstr "在*舊密碼*欄位輸入的密碼不正確."
 
-#: templates/messages.tmpl:309
+#: templates/messages.tmpl:314
 msgid "The required field %1 was not filled in."
 msgstr "必填的欄位%1沒有填寫"
 
-#: templates/messages.tmpl:136
+#: templates/messages.tmpl:138
 msgid "The selected User System does not support new user registration."
 msgstr "選擇的用戶系統並不支援新用戶註冊"
 
-#: data/TWiki/WebTopicViewTemplate.txt:6
+#: data/TWiki/WebTopicViewTemplate.txt:4
 msgid "The topic %1 you are trying to access does not exist, yet."
 msgstr "您搜索的主題%1不存在。"
 
-#: templates/messages.tmpl:324
+#: templates/messages.tmpl:329
 msgid "The topic is in an old format"
 msgstr "主題是舊格式"
 
-#: templates/messages.tmpl:214
+#: templates/messages.tmpl:219
 msgid "The two passwords you entered do not match."
 msgstr "兩次輸入的密碼不匹配."
 
-#: templates/messages.tmpl:373
+#: templates/messages.tmpl:506
+msgid "The user %1 has already been activated, and should be able to log in."
+msgstr "用戶%1已經被啟動並可以登錄。"
+
+#: templates/messages.tmpl:380
 msgid "There are problems with renaming this web:"
 msgstr "重命名此目錄時出錯:"
 
-#: templates/messages.tmpl:221
+#: templates/messages.tmpl:226
 msgid "There has been a problem adding your user id to the Password system."
 msgstr "在添加您的用戶名到密碼系統的時候出錯。"
 
-#: templates/messages.tmpl:327
+#: templates/messages.tmpl:332
 msgid "There should be a line that includes %1, look for %2 (or %3)"
 msgstr "必須包含一行包含 %1 參考%2(或%3) "
 
@@ -2509,11 +2584,11 @@ msgstr "必須包含一行包含 %1 參考%2(或%3) "
 msgid "This TWiki does _not_ support new User Registration"
 msgstr "這個TWiki_不_支持新用戶註冊"
 
-#: templates/messages.tmpl:334
+#: templates/messages.tmpl:339
 msgid "This can be automatically upgraded by:"
 msgstr "這將被自動更新:"
 
-#: templates/messages.tmpl:317
+#: templates/messages.tmpl:322
 msgid "This could be for several reasons:"
 msgstr "可能由很多問題引起:"
 
@@ -2541,19 +2616,19 @@ msgstr "這是一個在 %1 註冊用戶的自動電子郵件提醒。"
 msgid "This is the Trash. Here you can undelete topics; deleted attachments are in TrashAttachment."
 msgstr "這是垃圾箱，這裏您可以反刪除主題，刪除在 TrashAttachment 中的附件"
 
-#: templates/renamedelete.tmpl:35
+#: templates/renamedelete.tmpl:25
 msgid "This name has been chosen so it doesn't conflict with any other topics already in the %1 web."
 msgstr "這個名稱已經被選定，以便不會和其他在%1中的主題衝突"
 
-#: templates/messages.tmpl:332
+#: templates/messages.tmpl:337
 msgid "This requires the form definition to be present."
 msgstr "這要求表單定義."
 
-#: templates/messages.tmpl:276
+#: templates/messages.tmpl:281
 msgid "This site requires at least %1 character passwords"
 msgstr "這裏需要至少 %1 個字元的密碼"
 
-#: data/TWiki/WebTopicViewTemplate.txt:25
+#: data/TWiki/WebTopicViewTemplate.txt:19
 msgid "This topic has moved to %1."
 msgstr "這個主題已經被移動到 %1 。"
 
@@ -2562,6 +2637,7 @@ msgid "This topic name is not recommended because it will not be linked automati
 msgstr "主題名不被建議，因為無法自動鏈結，細節請參考：%1"
 
 #: templates/viewprint.tmpl:13
+#: twikiplugins/ClassicSkin/templates/viewprint.classic.tmpl:11
 msgid "This topic:"
 msgstr "本主題:"
 
@@ -2587,17 +2663,17 @@ msgstr "為了註冊為新用戶，請填寫以下表格"
 msgid "To see if %1 has finished editing yet, click "
 msgstr "檢查 %1 是否已經編輯完畢，請按"
 
-#: templates/renamebase.tmpl:32
+#: templates/renamebase.tmpl:29
 #: templates/renameconfirm.tmpl:14
 msgid "To topic:"
 msgstr "到主題 "
 
-#: templates/renamebase.tmpl:25
+#: templates/renamebase.tmpl:22
 #: templates/renameconfirm.tmpl:10
 msgid "To web:"
 msgstr "去目錄:"
 
-#: templates/messages.tmpl:306
+#: templates/messages.tmpl:311
 msgid "Topic Save Error"
 msgstr "主題保存錯誤"
 
@@ -2605,25 +2681,27 @@ msgstr "主題保存錯誤"
 msgid "Topic attachments"
 msgstr "主題附件"
 
-#: templates/messages.tmpl:330
+#: templates/messages.tmpl:335
 msgid "Topic can not be upgraded from old style category table"
 msgstr "主題無法從舊風格的目錄表格更新"
 
-#: data/TWiki/WebSearchAdvanced.txt:55
+#: data/TWiki/WebSearchAdvanced.txt:49
 msgid "Topic name"
 msgstr "主題名稱"
 
-#: data/TWiki/WebTopicCreatorTemplate.txt:22
-#: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:44
+#: data/TWiki/WebCreateNewTopicTemplate.txt:29
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebCreateNewTopicTemplate.txt:44
 msgid "Topic name:"
 msgstr "主題名稱:"
 
-#: data/TWiki/WebTopicCreatorTemplate.txt:27
-#: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:51
+#: data/TWiki/WebCreateNewTopicTemplate.txt:34
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebCreateNewTopicTemplate.txt:51
 msgid "Topic parent:"
 msgstr "父主題:"
 
 #: templates/viewprint.tmpl:14
+#: twikiplugins/ClassicSkin/templates/viewprint.classic.tmpl:12
+#: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:19
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:37
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:62
 msgid "Topic revision:"
@@ -2637,8 +2715,8 @@ msgstr "主題保存錯誤"
 msgid "Topic templates in %1 Web"
 msgstr "在 %1 目錄中的主題範本"
 
-#: data/TWiki/WebSearch.txt:37
-#: data/TWiki/WebSearchAdvanced.txt:46
+#: data/TWiki/WebSearch.txt:31
+#: data/TWiki/WebSearchAdvanced.txt:40
 msgid "Topic title"
 msgstr "主題標題"
 
@@ -2646,7 +2724,7 @@ msgstr "主題標題"
 msgid "Topic was merged"
 msgstr "主題被合併"
 
-#: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:25
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebCreateNewTopicTemplate.txt:25
 msgid "Topic will be named: "
 msgstr "主題將被命名為："
 
@@ -2659,7 +2737,7 @@ msgstr "在 %1 目錄中的主題"
 msgid "Topics in %1 web:"
 msgstr "在 %1 目錄中的主題："
 
-#: data/TWiki/WebSearchAdvanced.txt:82
+#: data/TWiki/WebSearchAdvanced.txt:76
 msgid "Topics per web"
 msgstr "每個目錄的主題"
 
@@ -2675,7 +2753,7 @@ msgstr "引用此目錄但被其他用戶編輯的主題:"
 msgid "Topics which refer to this web that you do not have permission to change:"
 msgstr "引用此目錄但您沒有許可權改變的主題:"
 
-#: data/TWiki/WebSearchAdvanced.txt:72
+#: data/TWiki/WebSearchAdvanced.txt:66
 msgid "Total matches"
 msgstr "共匹配"
 
@@ -2688,7 +2766,7 @@ msgstr "再試"
 msgid "Uncomment preferences variables to activate them (remove the #-sign). Help and details on preferences variables are available in %1."
 msgstr "請將注釋符號 # 刪除以啟用相應參數設置，更多參數說明請參考 %1"
 
-#: templates/login.tmpl:9
+#: templates/login.sudo.tmpl:5
 msgid "Unrecognised user and/or password"
 msgstr "無法識別用戶名/密碼"
 
@@ -2700,27 +2778,27 @@ msgstr "無法識別的操作%1"
 msgid "Update attachment %1 on %2"
 msgstr "在 %2 更新附件 %1"
 
-#: templates/renamebase.tmpl:53
+#: templates/renamebase.tmpl:49
 #: templates/renamewebbase.tmpl:27
 msgid "Update links"
 msgstr "更新鏈結"
 
-#: templates/attachagain.tmpl:22
+#: templates/attachagain.tmpl:21
 #: templates/attachnew.tmpl:9
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:41
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:33
 #: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:7
 msgid "Upload file"
 msgstr "上傳文件"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:40
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:39
 msgid "Upload up to %1 KB."
 msgstr "上傳文件大小上限： %1 KB."
 
-#: templates/messages.tmpl:362
+#: templates/messages.tmpl:367
 msgid "Uploaded file %1 exceeds limit of %2 KB"
 msgstr "上傳的文件%1大小超過了%2 KB上限"
 
-#: templates/messages.tmpl:361
+#: templates/messages.tmpl:366
 msgid "Uploaded file is too big"
 msgstr "上傳的文件過大"
 
@@ -2729,8 +2807,8 @@ msgstr "上傳的文件過大"
 msgid "Use %1 instead."
 msgstr "用 %1 代替"
 
-#: data/TWiki/WebTopicCreatorTemplate.txt:32
-#: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebTopicCreatorTemplate.txt:58
+#: data/TWiki/WebCreateNewTopicTemplate.txt:39
+#: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebCreateNewTopicTemplate.txt:58
 msgid "Use template:"
 msgstr "使用範本："
 
@@ -2742,9 +2820,9 @@ msgstr "用戶帳號 %1 被刪除"
 msgid "User Reference"
 msgstr "用戶屬性"
 
-#: templates/login.tmpl:32
+#: templates/login.tmpl:33
 #: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:182
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:18
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:32
 msgid "Username"
 msgstr "用戶名"
 
@@ -2752,7 +2830,7 @@ msgstr "用戶名"
 msgid "Users"
 msgstr "用戶"
 
-#: templates/messages.tmpl:161
+#: templates/messages.tmpl:163
 msgid "Users with automatically generated passwords should proceed immediately to [[%1][change password]] to change their password to something memorable."
 msgstr "用戶使用自動生成的密碼可以到[[%1][修改密碼]]改成容易記住的密碼."
 
@@ -2781,24 +2859,28 @@ msgstr "查看差別"
 msgid "View previous topic revision"
 msgstr "查看主題的前一個版本"
 
+#: templates/oopsleaseconflict.tmpl:28
+#: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:33
+msgid "View raw text without formatting"
+msgstr "查看沒有格式的源代碼"
+
 #: templates/oopsmore.tmpl:91
 msgid "View revision:"
 msgstr "查看修訂版："
 
-#: data/TWiki/WebTopicCreatorTemplate.txt:51
+#: data/TWiki/WebCreateNewTopicTemplate.txt:58
 msgid "View templates"
 msgstr "查看範本"
 
 #: templates/oopsleaseconflict.tmpl:28
-#: templates/rdiff.tmpl:6
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:33
 #: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:10
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:29
 msgid "View topic"
 msgstr "查看主題"
 
-#: templates/twiki.tmpl:103
-#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:159
+#: templates/twiki.tmpl:96
+#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:155
 msgid "View total topic history"
 msgstr "主題完整修訂歷史"
 
@@ -2806,25 +2888,23 @@ msgstr "主題完整修訂歷史"
 msgid "WARNING:"
 msgstr "警告:"
 
-#: data/TWiki/TWikiPreferences.txt:84
-#: templates/viewtopicactionbuttons.tmpl:52
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:52
-msgid "WYSIWYG"
-msgstr "WYSIWYG"
-
-#: templates/messages.tmpl:440
+#: templates/messages.tmpl:447
 msgid "Warning: Can't INCLUDE %1 repeatedly, topic is already included. %2"
 msgstr "警告: 不能重複包含%1， 主題已經包含了%2"
 
-#: templates/messages.tmpl:439
+#: templates/messages.tmpl:446
 msgid "Warning: Can't find topic %1.%2"
 msgstr "警告: 無法找到主題%1.%2"
 
-#: lib/TWiki/UI/Register.pm:792
+#: lib/TWiki/UI/Register.pm:826
 msgid "Warning: Could not send confirmation email"
 msgstr "警告： 無法發出確認郵件"
 
-#: templates/messages.tmpl:447
+#: lib/TWiki/UI/Register.pm:833
+msgid "Warning: Could not send confirmation email, email has been disabled"
+msgstr "警告： 無法發出確認郵件，郵件已經被禁用"
+
+#: templates/messages.tmpl:454
 msgid "Warning: This site does not allow %<nop>INCLUDE% of URLs"
 msgstr "警告： 這個網站不允許 %<nop>INCLUDE% 鏈結"
 
@@ -2855,19 +2935,19 @@ msgstr "誰"
 msgid "Would you like to go to:"
 msgstr "您喜歡去:"
 
-#: templates/messages.tmpl:246
+#: templates/messages.tmpl:251
 msgid "You are already registered"
 msgstr "您已經註冊"
 
-#: templates/messages.tmpl:155
+#: templates/messages.tmpl:157
 msgid "You are also listed in the %1 topic"
 msgstr "您也被列在了%1主題中"
 
-#: templates/messages.tmpl:374
+#: templates/messages.tmpl:381
 msgid "You are denied access to the following topics in the web:"
 msgstr "在本目錄中，您被禁止在以下主題訪問:"
 
-#: templates/messages.tmpl:428
+#: templates/messages.tmpl:435
 msgid "You are encouraged to go ahead and edit - unless you intend to change data in a form attached to the topic. If %1 actually _does_ save while you are editing, your changes will be merged, and nothing will be lost. Form data cannot easily be merged though, so in this case you are recommended to check with %1 first."
 msgstr "繼續保存和編輯一般沒有問題，除非您希望改變表單數據，如果 %1 _真的_在您編輯的時候保存，您的修改將和他們的合併，但是表單數據無法簡單合併，所以在這種情況下建議您先和 %1 聯繫。"
 
@@ -2879,19 +2959,19 @@ msgstr "您在這："
 msgid "You are recommended to choose short names, preferably less than 10 characters, starting with an upper-case alphabetic character and using only alphanumeric characters. If you want to create a template web (a web just used as a base to create new webs) choose a name that starts with an underscore and has only alphanumeric characters."
 msgstr "建議您使用短名稱，最好少於10個字母，以大寫字母開頭：只使用英文字母，如果你想使用範本目錄(用來創建新目錄的目錄)選擇一個名稱以下劃線和字母"
 
-#: templates/messages.tmpl:483
+#: templates/messages.tmpl:490
 msgid "You are trying to %1 a topic that does not exist."
 msgstr "您在%1目錄上搜索的主題不存在."
 
-#: templates/messages.tmpl:492
+#: templates/messages.tmpl:499
 msgid "You are trying to %1 an attachment that does not exist."
 msgstr "您想%1的附件不存在。"
 
-#: templates/messages.tmpl:479
+#: templates/messages.tmpl:486
 msgid "You can [[%1][create a new web]] if you have permission. Contact %2 if you have any questions."
 msgstr "您如有有許可權可以 [[%1][創建一個新目錄]], 如有任何問題，聯繫%2."
 
-#: templates/messages.tmpl:125
+#: templates/messages.tmpl:127
 msgid "You can also use the names of the standard HTML colors (black, silver, gray, white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, blue, teal, or aqua)"
 msgstr "你可以使用標準HTML顏色的名稱：(black, silver, gray, white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, blue, teal, or aqua)"
 
@@ -2904,30 +2984,30 @@ msgstr "你可以通過%1修改密碼"
 msgid "You can give this web a different name."
 msgstr "你可以將這個目錄重命名成另外一個目錄名"
 
-#: templates/messages.tmpl:31
-msgid "You can see the differences [[%1][here]]."
-msgstr "您可以在[[%1][這裏]]查看差別"
-
 #: templates/oopschangelanguage.tmpl:7
 msgid "You can set your favorite language permanently by setting the %1 variable in your user topic."
 msgstr "您在你的用戶主題中通過 %1 的變數永久設置您喜歡的語言參數"
 
-#: templates/messages.tmpl:247
+#: templates/messages.tmpl:252
 msgid "You cannot register twice, the name %1 is already registered."
 msgstr "您不能註冊2次，%1已經註冊過"
 
-#: templates/messages.tmpl:140
-#: templates/messages.tmpl:149
-#: templates/messages.tmpl:225
-#: templates/messages.tmpl:234
+#: templates/messages.tmpl:142
+#: templates/messages.tmpl:151
+#: templates/messages.tmpl:230
+#: templates/messages.tmpl:239
 msgid "You have *not* been registered."
 msgstr "您*尚未*註冊"
 
-#: templates/messages.tmpl:352
+#: templates/messages.tmpl:357
 msgid "You may be able to get your TWiki administrator to change the settings if they are inappropriate for your environment."
 msgstr "如果您覺得環境設置不合適，可以讓TWiki的管理員幫助更改。"
 
-#: templates/messages.tmpl:166
+#: templates/messages.tmpl:508
+msgid "You may have clicked a registration verification link that you had already visited."
+msgstr "你可以點擊剛才訪問過的註冊校驗鏈結"
+
+#: templates/messages.tmpl:170
 msgid "You may need to close your browser to make this change take effect."
 msgstr "您需要關閉流覽器以便讓更改生效。"
 
@@ -2940,26 +3020,26 @@ msgstr "您現在需要校驗你的電子郵件位址。當電子郵件發送後
 msgid "You really ought to register a valid e-mail address. If TWiki can't find a registered e-mail for you in the secret database, it will look in your user topic for a line like this:"
 msgstr "您真的最好註冊一個合法的郵件地址，如果TWiki無法找到您的註冊郵件地址，它將在您的用戶主題中找以下一行："
 
-#: templates/oopsmore.tmpl:105
+#: templates/oopsmore.tmpl:106
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:53
 msgid "You will be able to review the topic before saving it to a new revision"
 msgstr "您可以在保存到新版本之前審查主題"
 
-#: templates/messages.tmpl:339
+#: templates/messages.tmpl:344
 msgid "You will probably have to ask your administrator, %1, to do this."
 msgstr "您也許需要問一下管理員 %1 以進行這個操作"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:26
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:15
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:17
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:33
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:22
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:27
 msgid "Your %1.LoginName"
 msgstr "你的 %1.LoginName"
 
-#: templates/messages.tmpl:189
+#: templates/messages.tmpl:194
 msgid "Your activation code has been sent to %1.  Either click on the link in your e-mail or enter the code in the box below to activate your membership. (This code is of the form \"YourName.xxxxxxxxxx\")"
 msgstr "您的啟動碼已經被發送到 %1 。點擊電子郵件中的鏈結或者在下面輸入代碼以啟動會員資格（啟動碼格式 \"YourName.xxxx\"）"
 
-#: templates/oopslanguagechanged.tmpl:20
+#: templates/oopslanguagechanged.tmpl:14
 msgid "Your language will be changed to %1 from the next screen. You will be redirected to there right now. If you aren't, [[%2][click to proceed]]."
 msgstr "您的語言將在下一屏中被改成 %1， 現在您馬上將被轉向到那裏，如果沒有轉向請[[%2][點擊這裏]]轉向。 "
 
@@ -2977,20 +3057,20 @@ msgstr "您的密碼:"
 msgid "Your personal %1 topic is located at %2. You can customize it as you like:"
 msgstr "您個人的 %1位於 %2 您可以按照自己的習慣定制 "
 
-#: templates/messages.tmpl:153
+#: templates/messages.tmpl:155
 msgid "Your personal TWiki topic %1 has been created"
 msgstr "您的個人TWiki頁 %1已經被創建；"
 
-#: templates/messages.tmpl:182
+#: templates/messages.tmpl:187
 msgid "Your registered e-mail address(es) are updated to: %1."
 msgstr "您的註冊郵箱位址已經被更新為 %1"
 
 #: templates/edit.tmpl:47
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:71
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:70
 msgid "Your signature to copy/paste:"
 msgstr "您用於複製/粘貼的簽名"
 
-#: templates/messages.tmpl:173
+#: templates/messages.tmpl:178
 msgid "Your system may not support changing passwords through TWiki. Check with your TWiki administrator."
 msgstr "您的系統也許不支援通過TWiki修改密碼，請聯繫TWiki管理員。"
 
@@ -3002,7 +3082,7 @@ msgstr "您的用戶名已經從認證系統中刪除。"
 msgid "Your user topic has not been renamed. Please e-mail %1 to request this."
 msgstr "您的用戶主題尚未重命名 請發送電子郵件給 %1 申請。"
 
-#: templates/messages.tmpl:326
+#: templates/messages.tmpl:331
 msgid "[[%1][Debug topic text]]."
 msgstr "[[%1][調試：主題文本]]。"
 
@@ -3011,16 +3091,16 @@ msgid "[multiple of 3 spaces] * [space] Set [space] VARIABLENAME [space] = [valu
 msgstr "[3個空格] * [空格] Set [空格] VARIABLENNAME [空格] = [值]"
 
 # please enter the name of your language here (written in the native language):
-#: lib/TWiki/I18N.pm:293
+#: lib/TWiki/I18N.pm:292
 msgid "_language_name"
 msgstr "簡體中文"
 
-#: data/TWiki/WebSearchAdvanced.txt:77
-#: data/TWiki/WebSearchAdvanced.txt:95
+#: data/TWiki/WebSearchAdvanced.txt:71
+#: data/TWiki/WebSearchAdvanced.txt:89
 msgid "about !BookView"
 msgstr "關於 !BookView"
 
-#: data/TWiki/WebSearchAdvanced.txt:65
+#: data/TWiki/WebSearchAdvanced.txt:59
 msgid "about regular expression search"
 msgstr "關於正則運算式搜索"
 
@@ -3064,20 +3144,24 @@ msgstr "和"
 msgid "change, update, previous revisions, move, delete..."
 msgstr "變更, 更新, 前一個版本, 移動, 刪除……"
 
-#: templates/renamebase.tmpl:43
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:34
 msgid "checkboxes of referenced topics"
 msgstr "構選相關主題"
 
-#: templates/messages.tmpl:399
+#: templates/messages.tmpl:406
 msgid "don't forget to check your Topic Settings"
 msgstr "請勿忘記檢查您的主題設置"
 
-#: templates/messages.tmpl:208
+#: templates/messages.tmpl:213
 msgid "fields are required."
 msgstr "欄位必填"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:27
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:30
+#: templates/attach.tmpl:5
+msgid "has more information about attaching files."
+msgstr "有%1更多關於附件的資訊"
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:26
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:29
 msgid "help"
 msgstr "説明"
 
@@ -3119,36 +3203,36 @@ msgstr "現在 %1"
 
 #: templates/changeform.tmpl:13
 #: templates/moveattachment.tmpl:36
-#: templates/preview.tmpl:17
+#: templates/preview.tmpl:18
 #: templates/rename.tmpl:20
 #: templates/renameconfirm.tmpl:29
-#: templates/renamedelete.tmpl:44
+#: templates/renamedelete.tmpl:34
 #: templates/renameweb.tmpl:33
 #: templates/renamewebconfirm.tmpl:16
-#: templates/twiki.tmpl:107
+#: templates/twiki.tmpl:100
 #: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:9
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:37
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:41
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:29
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:33
 #: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:7
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:36
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:35
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:10
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:25
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:16
 msgid "or"
 msgstr "或"
 
-#: templates/preview.tmpl:12
-#: templates/preview.tmpl:8
+#: templates/preview.tmpl:13
+#: templates/preview.tmpl:9
 msgid "preview"
 msgstr "預覽"
 
-#: lib/TWiki/Render.pm:192
+#: lib/TWiki/Render.pm:193
 msgid "put it back"
 msgstr "放回"
 
 #: data/TWiki/WebChanges.txt:2
-#: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:32
+#: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:12
 msgid "retrieved at %1"
 msgstr "在 %1 檢索出"
 
@@ -3162,98 +3246,80 @@ msgstr "只搜索在 _%1 目錄_ 中的鏈結"
 msgid "scans links in _all public webs_"
 msgstr "搜索_所有公開目錄_"
 
-#: templates/viewtopicactionbuttons.tmpl:19
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:19
+#: templates/viewtopicactionbuttons.tmpl:14
 msgid "title='Attach an image or document to this topic' accesskey='a'>&Attach"
 msgstr "title='添加一個圖片或者文檔到這個主題' accesskey='a'>添加附件"
 
 #: templates/viewtopicactionbuttons.tmpl:4
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:4
 msgid "title='Create new topic' accesskey='c'>&Create"
 msgstr "title='創建新主題' accesskey='c'>創建"
 
-#: templates/viewtopicactionbuttons.tmpl:13
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:13
-msgid "title='Create this topic' accesskey='w'>Create (&WYSIWYG)"
-msgstr "title='Create this topic text' accesskey='w'>Create (&WYSIWYG)"
-
-#: templates/viewtopicactionbuttons.tmpl:22
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:22
+#: templates/viewtopicactionbuttons.tmpl:17
 msgid "title='Delete or rename this topic; set parent topic; view and compare revisions' accesskey='m'>&More topic actions"
 msgstr "title='刪除或重命名此主題，設置父主題，查看和比較版本' accesskey='m'>更多主題操作"
 
 #: templates/viewtopicactionbuttons.tmpl:7
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:7
 msgid "title='Edit this topic text' accesskey='e'>&Edit"
 msgstr "title='編輯主題' accesskey='e'>&編輯"
 
-#: templates/viewtopicactionbuttons.tmpl:10
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:10
-msgid "title='Edit this topic text' accesskey='w'>&WYSIWYG"
-msgstr "title='編輯主題文本' accesskey='w'>&所見即所得編輯"
-
-#: templates/viewtopicactionbuttons.tmpl:26
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:26
+#: templates/viewtopicactionbuttons.tmpl:21
 msgid "title='Printable version of this topic' accesskey='p'>&Print version"
 msgstr "title='本主題的列印版' accesskey='p' >列印版"
 
-#: templates/viewtopicactionbuttons.tmpl:33
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:33
+#: templates/viewtopicactionbuttons.tmpl:9
+msgid "title='Raw Edit this topic text' accesskey='w'>Ra&w edit"
+msgstr "title='編輯主題源碼' accesskey='w'>&w編輯源碼"
+
+#: templates/viewtopicactionbuttons.tmpl:28
 msgid "title='Search all webs for topics that link to here' accesskey='l'>A&ll Webs"
 msgstr "title='在所有目錄中搜索鏈結到這裏的主題' accesskey='l'>全站搜索"
 
-#: templates/viewtopicactionbuttons.tmpl:35
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:35
+#: templates/viewtopicactionbuttons.tmpl:30
 msgid "title='Search the %1 Web for topics that link to here' accesskey='b'>&Backlinks"
 msgstr "title='在 %1 目錄中搜索鏈結到這裏的主題' accesskey='b'>反向鏈結"
 
-#: templates/viewtopicactionbuttons.tmpl:31
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:31
+#: templates/viewtopicactionbuttons.tmpl:26
 msgid "title='Search the %1 Web for topics that link to here' accesskey='b'>We&b"
 msgstr "title='在%1目錄中搜索鏈結到這裏的主題' accesskey='b'>搜索"
 
-#: templates/viewtopicactionbuttons.tmpl:43
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:43
+#: templates/viewtopicactionbuttons.tmpl:38
 msgid "title='View raw text without formatting' accesskey='r'>&Raw View"
 msgstr "title='查看沒有格式的源碼' accesskey='r'>沒有格式的源代碼"
 
-#: templates/viewtopicactionbuttons.tmpl:16
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:16
+#: templates/viewtopicactionbuttons.tmpl:11
 msgid "title='View topic' accesskey='v'>&View topic"
 msgstr "title='查看主題' accesskey='v'>&查看主題"
 
-#: templates/viewtopicactionbuttons.tmpl:38
-#: templates/viewtopicactionbuttons.tmpl:40
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:38
-#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:40
+#: templates/viewtopicactionbuttons.tmpl:33
+#: templates/viewtopicactionbuttons.tmpl:35
 msgid "title='View total topic history' accesskey='h'>&History"
 msgstr "title='查看主題歷史' accesskey='h'>修訂歷史"
 
-#: lib/TWiki.pm:3917
+#: lib/TWiki.pm:3942
 msgid "user list truncated"
 msgstr "用戶列表已經清空"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:47
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:46
 msgid "value='Cancel' accesskey='c'"
 msgstr "value='取消' accesskey='c'"
-
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:43
-msgid "value='Checkpoint' accesskey='k'"
-msgstr "value='暫存' accesskey='k'"
 
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:12
 msgid "value='Discard' accesskey='d'"
 msgstr "value='放棄' accesskey='d'"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:45
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:44
 msgid "value='Preview' accesskey='p'"
 msgstr "value='預覽' accesskey='p'"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:41
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:40
 msgid "value='Quiet save' accesskey='q'"
 msgstr "value='安靜保存' accesskey='q'"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:39
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
+msgid "value='Save and Continue' accesskey='k'"
+msgstr "value='保存並繼續' accesskey='k'"
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:38
 msgid "value='Save' accesskey='s'"
 msgstr "value='保存' accesskey='s'"
 
@@ -3262,10 +3328,50 @@ msgstr "value='保存' accesskey='s'"
 msgid "view"
 msgstr "查看"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:12
+#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:22
 msgid "you *must* have at least one valid registered e-mail to be able to reset your password. If none of your registered e-mail addresses is valid, and you have forgotten your password, contact %1."
 msgstr "您*必須*擁有1個經過驗證的電子郵箱位址以便於重新設置密碼，如果你沒有郵箱位址，忘記密碼後請聯繫 %1"
 
+#, fuzzy
+#~ msgid ""
+#~ "It's usually best to choose a <a target='WikiWord' onclick=\"launchWindow"
+#~ "('%1','WikiWord'); return false;\" href='%2' rel='nofollow'>WikiWord</a> "
+#~ "for the new topic name, otherwise automatic linking may not work. "
+#~ "Characters not allowed in topic names, such as spaces will automatically "
+#~ "be removed."
+#~ msgstr ""
+#~ "最好使用一個<a target='WikiWord' onclick=\"return launchWindow('%"
+#~ "1','WikiWord')\" href='%1' rel='nofollow'>WikiWord</a>創建新主題，否則自動"
+#~ "鏈結生成可能不起作用。而其他不被允許作為主題名稱的字元，例如：空格將被自動"
+#~ "刪除。"
+#~ msgid "You can see the differences [[%1][here]]."
+#~ msgstr "您可以在[[%1][這裏]]查看差別"
+
+#, fuzzy
+#~ msgid "or [[%1][log in as administrator]]"
+#~ msgstr "給管理員的提示"
+
+#, fuzzy
+#~ msgid "or %1"
+#~ msgstr "現在 %1"
+#~ msgid "&WYSIWYG"
+#~ msgstr "視覺化編輯"
+#~ msgid ""
+#~ "Please see <a target='TWikiVariables' onclick=\"return launchWindow('%"
+#~ "1','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a> for more "
+#~ "information about attaching files."
+#~ msgstr ""
+#~ "請參考<a target='TWikiVariables' onclick=\"return launchWindow('%"
+#~ "1','FileAttachment')\" href='' rel='nofollow'>檔附件</a>條目，獲得更多關"
+#~ "於檔附件的資訊。"
+#~ msgid "WYSIWYG"
+#~ msgstr "WYSIWYG"
+#~ msgid "title='Create this topic' accesskey='w'>Create (&WYSIWYG)"
+#~ msgstr "title='Create this topic text' accesskey='w'>Create (&WYSIWYG)"
+#~ msgid "title='Edit this topic text' accesskey='w'>&WYSIWYG"
+#~ msgstr "title='編輯主題文本' accesskey='w'>&所見即所得編輯"
+#~ msgid "value='Checkpoint' accesskey='k'"
+#~ msgstr "value='暫存' accesskey='k'"
 #~ msgid "%1 has a list of other TWiki users."
 #~ msgstr "其他TWiki用戶的列表 %1"
 #~ msgid "Click here"
@@ -3278,20 +3384,6 @@ msgstr "您*必須*擁有1個經過驗證的電子郵箱位址以便於重新設
 #, fuzzy
 #~ msgid "Hello %1!</strong>"
 #~ msgstr "您好 %1"
-
-#, fuzzy
-#~ msgid ""
-#~ "It's usually best to choose a <a target='WikiWord' onclick=\"return "
-#~ "launchWindow('%1','WikiWord')\" href='%2' rel='nofollow'>WikiWord</a> for "
-#~ "the new topic name, otherwise automatic linking may not work. Characters "
-#~ "not allowed in topic names, such as spaces will automatically be removed."
-#~ msgstr ""
-#~ "創建新主題的時候最好使用一個 <a target='WikiWord' onclick=\"return "
-#~ "launchWindow('%1','WikiWord')\" href='%1' rel='nofollow'>WikiWord</a>, 否"
-#~ "則自動鏈結生成可能不起作用。而其他不被允許作為主題名稱的字元，例如：空格將"
-#~ "被自動刪除。"
-#~ msgid "Note to administrator"
-#~ msgstr "給管理員的提示"
 #~ msgid ""
 #~ "Once you have created the topic, consider adding links in related topics "
 #~ "to the new topic so that there are more ways people can discover it."
@@ -3307,8 +3399,6 @@ msgstr "您*必須*擁有1個經過驗證的電子郵箱位址以便於重新設
 #~ msgstr ""
 #~ "這個表單只會被{PasswordManager}用做修改密碼，如果更改密碼在另外一個主題"
 #~ "中，提示您的組織成員如何更改密碼。"
-#~ msgid "(more)"
-#~ msgstr "(更多)"
 #~ msgid ""
 #~ "*Bug:* Internet Explorer 4.0 or earlier: If you get an \"Internal Server "
 #~ "Error\" message when you upload a file, you need to try again. It should "
@@ -3335,14 +3425,10 @@ msgstr "您*必須*擁有1個經過驗證的電子郵箱位址以便於重新設
 #~ msgstr "目前表單中的資料將丟失(舊版本資料仍保留)"
 #~ msgid "Hide attachments"
 #~ msgstr "隱藏附件"
-#~ msgid "Hide help"
-#~ msgstr "隱藏説明"
 #~ msgid "History:"
 #~ msgstr "歷史:"
 #~ msgid "Language Changed"
 #~ msgstr "語言變更"
-#~ msgid "More Actions on Topic %1"
-#~ msgstr "關於主題%1的更多操作"
 #~ msgid "Not recommended when deleting a web."
 #~ msgstr "刪除一個目錄的時候不推薦。"
 #~ msgid "Notices:"
@@ -3388,8 +3474,6 @@ msgstr "您*必須*擁有1個經過驗證的電子郵箱位址以便於重新設
 #~ msgstr "使用等寬字體"
 #~ msgid "Use proportional spaced font"
 #~ msgstr "使用變寬字體"
-#~ msgid "View raw text without formatting"
-#~ msgstr "查看沒有格式的源代碼"
 #~ msgid "You can move the topic to a different web."
 #~ msgstr "你可以移動主題到另外一個目錄中"
 #~ msgid "You can review your changes in your personal TWiki topic %1"
@@ -3626,10 +3710,6 @@ msgstr "您*必須*擁有1個經過驗證的電子郵箱位址以便於重新設
 #, fuzzy
 #~ msgid "Edit preference settings for %1"
 #~ msgstr "編輯屬性設置"
-
-#, fuzzy
-#~ msgid "Edit this topic"
-#~ msgstr "編輯這個主題的文本"
 
 #, fuzzy
 #~ msgid "Error message"
@@ -4446,3 +4526,14 @@ msgstr "您*必須*擁有1個經過驗證的電子郵箱位址以便於重新設
 #~ msgstr "學習TWiki，訪問%1"
 #~ msgid "[[%1][Search]] for similar topics in all public webs"
 #~ msgstr "在所有空開的目錄中[[%1][查找]]相似主題"
+
+
+#: templates/oopsmore.tmpl:3
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:12
+msgid "(more)"
+msgstr "(更多)"
+
+#: templates/oopsmore.tmpl:7
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:18
+msgid "More Actions on Topic %1"
+msgstr "關於主題%1的更多操作"

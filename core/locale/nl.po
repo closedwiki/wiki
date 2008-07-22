@@ -423,7 +423,7 @@ msgid ""
 "%1."
 msgstr ""
 "*Eigenschappen:* De toelichting en zichtbaarheid (of een bijlage verborgen "
-"is) kun je wijzigen zonder een bestand te uploaden. Klik op \"Alleen "eigenschappen wijzigen\"; zie %1."
+"is) kun je wijzigen zonder een bestand te uploaden. Klik op \"Alleen eigenschappen wijzigen\"; zie %1."
 
 #: data/TWiki/WikiSyntaxSummary.txt:9
 msgid "*bold* put word/phrase in asterisks: =<nop>*your phrase*="
