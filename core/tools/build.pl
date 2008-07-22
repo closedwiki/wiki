@@ -16,12 +16,12 @@ BEGIN {
     pop(@path); # the script name
 
     while (scalar(@path) > 0) {
-        last if -d join( '/', @path).'/twikiplugins/BuildContrib';
+        last if -d join( '/', @path).'/../BuildContrib';
         pop( @path );
     }
 
     if(scalar(@path)) {
-        unshift @INC, join( '/', @path ).'/twikiplugins/BuildContrib/lib';
+        unshift @INC, join( '/', @path ).'/../BuildContrib/lib';
     }
 }
 

@@ -190,6 +190,10 @@ sub new {
     # Read the manifest
 
     my $manifest = _findRelativeTo( $buildpldir, 'MANIFEST' );
+    if (!defined($manifest)) {
+        #the twiki core MANIFEST is in the lib dir, not the tools dir
+        $manifest = _findRelativeTo( $libpath, 'MANIFEST' );
+    }
     ( $this->{files}, $this->{other_modules} ) =
       TWiki::Contrib::BuildContrib::BaseBuild::readManifest( $this->{basedir},
         '', $manifest, sub { exit(1) } );
@@ -214,13 +218,21 @@ sub new {
     ##############################################################
     # Work out the dependencies
 
-    $this->_loadDependenciesFrom($buildpldir);
+    my $dependancies = _findRelativeTo( $buildpldir, 'DEPENDENCIES' );
+    if (!defined($dependancies)) {
+        #the twiki core DEPENDENCIES is in the lib dir, not the tools dir
+        $dependancies = _findRelativeTo( $libpath, 'DEPENDENCIES' );
+    }
+    $this->_loadDependenciesFrom($dependancies);
 
     # Pull in dependencies from other modules
     if ( $this->{other_modules} ) {
         foreach my $module ( @{ $this->{other_modules} } ) {
             try {
-                $this->_loadDependenciesFrom("$basedir/$module");
+                my $depsfile = _findRelativeTo("$basedir/$module", 'DEPENDENCIES' );
+                die 'Failed to find DEPENDENCIES for ' . $module unless $depsfile && -f $depsfile;
+
+                $this->_loadDependenciesFrom($depsfile);
             }
             catch Error::Simple with {
                 warn "WARNING: no dependencies in $basedir/$module " . shift;
@@ -366,13 +378,11 @@ sub _addDependency {
 }
 
 sub _loadDependenciesFrom {
-    my ( $this, $module ) = @_;
+    my ( $this, $depsFile ) = @_;
 
-    my $deps = _findRelativeTo( $module, 'DEPENDENCIES' );
-    die 'Failed to find DEPENDENCIES for ' . $module unless $deps && -f $deps;
     my $condition = 1;
-    if ( -f $deps ) {
-        open( PF, '<' . $deps ) || die 'Failed to open ' . $deps;
+    if ( -f $depsFile ) {
+        open( PF, '<' . $depsFile ) || die 'Failed to open ' . $depsFile;
         while ( my $line = <PF> ) {
             if ( $line =~ /^\s*$/ || $line =~ /^\s*#/ ) {
             }
@@ -400,12 +410,12 @@ sub _loadDependenciesFrom {
                 $condition = 1;
             }
             else {
-                warn 'WARNING: LINE ' . $line . ' IN ' . $deps . ' IGNORED';
+                warn 'WARNING: LINE ' . $line . ' IN ' . $depsFile . ' IGNORED';
             }
         }
     }
     else {
-        warn 'WARNING: no ' . $deps
+        warn 'WARNING: no ' . $depsFile
           . '; dependencies will only be extracted from code';
     }
     close(PF);
