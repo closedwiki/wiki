@@ -3,7 +3,7 @@ unless ( scalar(@ARGV) ) {
     print <<DOC;
 Build an extension
 
-When run from the 'twikiplugins' directory of a TWiki checkout, this
+When run from the 'trunk' directory of a TWiki trunk checkout, this
 script will build the BuildContrib-enabled extension named in the
 first parameter. The second parameter is the build target for the extension.
 
@@ -15,8 +15,14 @@ DOC
     exit 1;
 }
 
+my $arg = '';
 my $extension = shift(@ARGV);
+if ($extension eq '-v') {
+    $arg = $extension;
+    $extension = shift(@ARGV);
+}
 $extension =~ s./+$..;
+my $target = shift(@ARGV) || '';
 
 my $extdir = "Contrib";
 if ( $extension =~ /Plugin$/ ) {
@@ -28,6 +34,11 @@ unless ( -e "$scriptDir/build.pl" ) {
     die "$scriptDir/build.pl not found";
 }
 
+my $call = './build.pl '.$arg.' '.$target;
+print "calling build.pl in $scriptDir\n" if ($arg eq '-v');
+
 use Cwd;
 chdir($scriptDir);
-do 'build.pl';
+print `$call`;
+
+
