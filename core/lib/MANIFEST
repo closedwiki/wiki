@@ -513,7 +513,6 @@ lib/TWiki/Configure/UIs/Value.pm 0444
 lib/TWiki/Configure/Value.pm 0444
 lib/TWiki/Configure/Valuer.pm 0444
 lib/TWiki/Engine.pm 0444
-lib/TWiki/Engine 0444
 lib/TWiki/Engine/CGI.pm 0444
 lib/TWiki/Engine/CLI.pm 0444
 lib/TWiki/EngineException.pm 0444
