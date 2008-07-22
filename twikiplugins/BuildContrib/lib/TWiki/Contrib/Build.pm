@@ -577,7 +577,9 @@ chmod notation.
 
 sub prot {
     my ($this, $perms, $file) = @_;
-    $this->perl_action("chmod($perms,'$file')");
+    if (! -d $file) {   #skip directories
+        $this->perl_action("chmod($perms,'$file')");
+    }
 }
 
 =pod
