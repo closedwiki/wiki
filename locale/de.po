@@ -2,7 +2,7 @@
 # This file is distributed under the same license as TWiki itself
 # Copyright (C) 2005 Peter Thoeny, peter@thoeny.com and TWiki Contributors.
 # Translators:
-# TWiki:Main/AndreUlrich, 2006-2008
+# TWiki:Main/AndreUlrich, 2006,2007,2008
 # TWiki:Main/OliverKrueger, 2006
 msgid ""
 ""
@@ -162,7 +162,7 @@ msgstr "%1 wird noch von %2 bearbeitet."
 #.("<nop>$toWeb.<nop>$toTopic",                                             "<nop>$fromWeb.<nop>$fromTopic",                                             $date,                                             $by)
 #: lib/TWiki/Render.pm:200
 msgid "%1 moved from %2 on %3 by %4"
-msgstr "%1 wurde von %4 von %2 nach %3 verschoben"
+msgstr "%1 wurde von %4 nach %2 am %3 verschoben"
 
 #: templates/messages.tmpl:22
 msgid "%1 to create another web"
