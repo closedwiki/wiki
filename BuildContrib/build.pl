@@ -3,8 +3,9 @@ unless ( scalar(@ARGV) ) {
     print <<DOC;
 Build an extension
 
-When run from the 'trunk' directory of a TWiki trunk checkout, this
-script will build the BuildContrib-enabled extension named in the
+When run from the 'trunk' directory of a TWiki trunk checkout
+or the twikiplugins dir of 4.2.x and prior checkouts ,
+this script will build the BuildContrib-enabled extension named in the
 first parameter. The second parameter is the build target for the extension.
 
 Examples:
