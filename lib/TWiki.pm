@@ -1304,7 +1304,7 @@ sub new {
     delete @ENV{ qw( IFS CDPATH ENV BASH_ENV ) };
 
     my $url = $query->url();
-    if( $url && $url =~ m!^([^:]*://[^/]*)(.*)/.*$! && $2 ) {
+    if( $url && $url =~ m{^([^:]*://[^/]*).*$} ) {
         $this->{urlHost} = $1;
         # If the urlHost in the url is localhost, this is a lot less
         # useful than the default url host. This is because new CGI("")
@@ -1315,16 +1315,19 @@ sub new {
         } elsif( $TWiki::cfg{RemovePortNumber} ) {
             $this->{urlHost} =~ s/\:[0-9]+$//;
         }
-        if( $TWiki::cfg{GetScriptUrlFromCgi} ) {
-            # SMELL: this is a really dangerous hack. It will fail
-            # spectacularly with mod_perl.
-            # SMELL: why not just use $query->script_name?
-            $this->{scriptUrlPath} = $2;
-        }
-    } elsif( $url && $url =~ m!^([^:]*://[^/]*).*$!) {
-        $this->{urlHost} = $1;
     } else {
         $this->{urlHost} = $TWiki::cfg{DefaultUrlHost};
+    }
+    if (   $TWiki::cfg{GetScriptUrlFromCgi}
+        && $url
+        && $url =~ m{^[^:]*://[^/]*(.*)/.*$}
+        && $1 )
+    {
+
+        # SMELL: this is a really dangerous hack. It will fail
+        # spectacularly with mod_perl.
+        # SMELL: why not just use $query->script_name?
+        $this->{scriptUrlPath} = $1;
     }
 
     my $web = '';
