@@ -167,73 +167,83 @@ sub execute {
     }
 
     my $session = new TWiki( $req->remoteUser, $req, \%initialContext );
-    my $res;
+    my $res = $session->{response};
 
-    try {
-        $session->{users}->{loginManager}->checkAccess();
-        &$sub( $session );
-        $res = $session->{response};
-    } 
-    catch TWiki::AccessControlException with {
-        my $e = shift;
-        unless( $session->{users}->{loginManager}->forceAuthentication() ) {
-            # Login manager did not want to authenticate, perhaps because
-            # we are already authenticated.
-            my $exception = new TWiki::OopsException(
-                'accessdenied',
-                web => $e->{web}, topic => $e->{topic},
-                def => 'topic_access',
-                params => [ $e->{mode}, $e->{reason} ] );
+    unless ( defined $session->{response}->status()
+        && $session->{response}->status() =~ /^\s*3\d\d/ )
+    {
+        try {
+            $session->{users}->{loginManager}->checkAccess();
+            &$sub($session);
+        }
+        catch TWiki::AccessControlException with {
+            my $e = shift;
+            unless ( $session->{users}->{loginManager}->forceAuthentication() )
+            {
 
-            $exception->redirect( $session );
+                # Login manager did not want to authenticate, perhaps because
+                # we are already authenticated.
+                my $exception = new TWiki::OopsException(
+                    'accessdenied',
+                    web    => $e->{web},
+                    topic  => $e->{topic},
+                    def    => 'topic_access',
+                    params => [ $e->{mode}, $e->{reason} ]
+                );
+
+                $exception->redirect($session);
+            }
         }
-        $res = $session->{response};
-    }
-    catch TWiki::OopsException with {
-        shift->redirect( $session );
-        $res = $session->{response};
-    }
-    catch Error::Simple with {
-        my $e = shift;
-        $res = new TWiki::Response;
-        $res->header( -type => 'text/plain' );
-        if (DEBUG) {
-            # output the full message and stacktrace to the browser
-            $res->body( $e->stringify() );
+        catch TWiki::OopsException with {
+            shift->redirect($session);
         }
-        else {
-            my $mess = $e->stringify();
-            print STDERR $mess;
-            $session->writeWarning($mess);
-            # tell the browser where to look for more help
-            my $text = 'TWiki detected an internal error - please check your TWiki logs and webserver logs for more information.'."\n\n";
-            $mess =~ s/ at .*$//s;
-            # cut out pathnames from public announcement
-            $mess =~ s#/[\w./]+#path#g;
-            $text .= $mess;
-            $res->body($text);
+        catch Error::Simple with {
+            my $e = shift;
+            $res = new TWiki::Response;
+            $res->header( -type => 'text/plain' );
+            if (DEBUG) {
+
+                # output the full message and stacktrace to the browser
+                $res->body( $e->stringify() );
+            }
+            else {
+                my $mess = $e->stringify();
+                print STDERR $mess;
+                $session->writeWarning($mess);
+
+                # tell the browser where to look for more help
+                my $text =
+'TWiki detected an internal error - please check your TWiki logs and webserver logs for more information.'
+                  . "\n\n";
+                $mess =~ s/ at .*$//s;
+
+                # cut out pathnames from public announcement
+                $mess =~ s#/[\w./]+#path#g;
+                $text .= $mess;
+                $res->body($text);
+            }
         }
-    }
-    catch TWiki::EngineException with {
-        my $e   = shift;
-        my $res = $e->{response};
-        unless (defined $res) {
-            $res = new TWiki::Response();
-            $res->header( -type => 'text/html', -status => $e->{status} );
-            my $html = CGI::start_html( $e->{status} . ' Bad Request' );
-            $html .= CGI::h1('Bad Request');
-            $html .= CGI::p( $e->{reason} );
-            $html .= CGI::end_html();
-            $res->body($html);
+        catch TWiki::EngineException with {
+            my $e   = shift;
+            my $res = $e->{response};
+            unless ( defined $res ) {
+                $res = new TWiki::Response();
+                $res->header( -type => 'text/html', -status => $e->{status} );
+                my $html = CGI::start_html( $e->{status} . ' Bad Request' );
+                $html .= CGI::h1('Bad Request');
+                $html .= CGI::p( $e->{reason} );
+                $html .= CGI::end_html();
+                $res->body($html);
+            }
+            $TWiki::engine->finalizeError($res);
+            return $e->{status};
         }
-        $TWiki::engine->finalizeError($res);
-        return $e->{status};
+        otherwise {
+            $res = new TWiki::Response;
+            $res->header( -type => 'text/plain' );
+            $res->body("Unspecified error");
+        };
     }
-    otherwise {
-        $res = new TWiki::Response;
-        $res->header(-type => 'text/plain');
-        $res->body( "Unspecified error" );
-    };
 
     $session->finish();
     return $res;
