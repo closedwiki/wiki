@@ -225,7 +225,7 @@ sub queryString {
     foreach my $name ( $this->param ) {
         my $key = TWiki::urlEncode($name);
         push @params,
-          map { $key . "=" . TWiki::urlEncode($_) } $this->param($name);
+          map { $key . "=" . TWiki::urlEncode($_ || '') } $this->param($name);
     }
     return join(';', @params);
 }
