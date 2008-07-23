@@ -761,5 +761,19 @@ PONG
     }
 }
 
+sub test_DOS {
+    my $this = shift;
+    my $text = <<'PONG';
+   * Set LOOP = %IF{"$ LOOP = '1'" then="ping" else="pong"}%
+PONG
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user},
+        $this->{test_web},$this->{test_topic}, $text);
+    $this->{twiki}->{prefs}->pushPreferences(
+        $this->{test_web}, $this->{test_topic}, 'TOPIC' );
+    my $result = $this->{twiki}->handleCommonTags(
+        $text, $this->{test_web}, $this->{test_topic});
+    $this->assert_str_equals("   * Set LOOP = pong\n", $result);
+}
 
 1;
