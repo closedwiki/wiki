@@ -2,6 +2,7 @@
 package TWiki::Plugins::SubscribePlugin;
 
 use strict;
+require TWiki::Func;
 
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC $uid $WEB $TOPIC);
 
