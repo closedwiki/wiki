@@ -239,7 +239,12 @@ sub createField {
 
     my $class = $type;
     $class =~ /^(\w*)/; # cut off +buttons etc
-    $class = 'TWiki::Form::'.ucfirst($1);
+	#The following is a workaround for a bug in Perl 5.8.4 that was ultimately fixed on Perl 5.8.7-8
+	# see http://bugs.debian.org/303308
+	# using $class=TWiki::Sandbox::untaintUnchecked($class) also works but is one more method call.
+    my $workaround=$1;
+    $class = 'TWiki::Form::'.ucfirst($workaround);
+
     eval 'require '.$class;
     if( $@ ) {
         # Type not available; use base type
