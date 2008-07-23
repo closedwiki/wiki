@@ -8,9 +8,11 @@ Here is a list of the plugins currently installed and enabled on this TWiki site
 
 Administrators can enable and disable plugins using [[%SCRIPTURLPATH{"configure"}%][%ICON{"wrench"}% configure]].
 
----++ Contrib Modules
+---++ All Contrib Modules
+This list includs Plugins, some some of which may be disabed in configure, or due to other reasons.
+See %SYSTEMWEB%.TWikiSkinBrowser for an overview of the installed Skins.
 
-%SEARCH{ ".+(Contrib|AddOn)$" type="regex" scope="topic" nonoise="on" format="   * [[$topic]]" }%
+%SEARCH{ ".+(Contrib|AddOn|Plugin|Skin)$" type="regex" scope="topic" nonoise="on" format="   * [[$topic]]" }%
 
 
 ---++ Plugin Diagnostics 
@@ -18,4 +20,4 @@ Administrators can enable and disable plugins using [[%SCRIPTURLPATH{"configure"
 
 __Note:__ The diagnostics are provided by the =%<nop>FAILEDPLUGINS%= variable
 
-__Related Topics:__ TWikiPlugins, %WIKIPREFSTOPIC%, AdminDocumentationCategory, AdminToolsCategory
+__Related Topics:__ TWikiPlugins, %WIKIPREFSTOPIC%, AdminDocumentationCategory, AdminToolsCategory, TWikiSkinBrowser
