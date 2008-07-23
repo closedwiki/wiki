@@ -11,7 +11,11 @@ Node class for the result of an If statement parse
 package TWiki::If::Node;
 use base 'TWiki::Query::Node';
 
+use strict;
+
 require TWiki::Infix::Node;
+
+our %dollaring;
 
 sub newLeaf {
     my( $class, $val, $type ) = @_;
@@ -112,10 +116,15 @@ sub OP_dollar {
     if( $text && defined( $session->{request}->param( $text ))) {
         return $session->{request}->param( $text );
     }
+
+    return '' if $dollaring{$text}; # Recursion block
+    $dollaring{$text} = 1;
     $text = "%$text%";
     TWiki::expandAllTags($session, \$text,
                          $session->{topicName},
                          $session->{webName});
+    delete $dollaring{$text};
+
     return $text || '';
 }
 
