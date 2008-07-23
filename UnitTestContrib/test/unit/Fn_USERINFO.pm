@@ -34,11 +34,20 @@ sub test_basic {
         $TWiki::cfg{DefaultUserLogin}.", $TWiki::cfg{UsersWebName}.".$TWiki::cfg{DefaultUserWikiName}.", ", $ui);
 }
 
-sub test_withUser {
+sub test_withWikiName {
     my $this = shift;
 
     $TWiki::cfg{AntiSpam}{HideUserDetails} = 0;
     my $ui = $this->{twiki}->handleCommonTags('%USERINFO{"ScumBag"}%', $this->{test_web}, $this->{test_topic});
+    $this->assert_str_equals(
+        "scum, $TWiki::cfg{UsersWebName}.ScumBag, scumbag\@example.com", $ui);
+}
+
+sub test_withLogin {
+    my $this = shift;
+
+    $TWiki::cfg{AntiSpam}{HideUserDetails} = 0;
+    my $ui = $this->{twiki}->handleCommonTags('%USERINFO{"scum"}%', $this->{test_web}, $this->{test_topic});
     $this->assert_str_equals(
         "scum, $TWiki::cfg{UsersWebName}.ScumBag, scumbag\@example.com", $ui);
 }

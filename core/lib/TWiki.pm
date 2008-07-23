@@ -1262,7 +1262,7 @@ Constructs a new TWiki object. Parameters are taken from the query object.
 
 sub new {
     my( $class, $login, $query, $initialContext ) = @_;
-	ASSERT(UNIVERSAL::isa($query, 'TWiki::Request'));
+	ASSERT(!$query || UNIVERSAL::isa($query, 'TWiki::Request'));
     Monitor::MARK("Static compilation complete");
 
     # Compatibility; not used except maybe in plugins
