@@ -19,6 +19,7 @@
 # For licensing info read LICENSE file in the TWiki root.
 #
 # Author: Crawford Currie http://c-dot.co.uk
+# Author: Eugen Mayer http://impressimpressive-media.de
 #
 # This plugin helps with permissions management by displaying the web
 # permissions in a big table that can easily be edited. It updates
@@ -161,7 +162,6 @@ sub WEBPERMISSIONS {
     $page .= $tab . CGI::end_form();
     return $page;
 }
-
 sub TOPICPERMISSIONS {
     my( $session, $params, $topic, $web ) = @_;
 
@@ -418,6 +418,31 @@ sub _getListOfGroups {
     return @list;
 }
 
+# Gets all users which have access to the given topic. This functions respects hierchical webs and climbs up the ladder
+# if a web does not set any access permissions
+sub getUsersByWebPreferenceValue {
+    my( $mode, $web, $topic, $perm ) = @_;
+    if($TWiki::cfg{EnableHierarchicalWebs}) {
+       $_ = $web;
+        my @webs = split("/");
+       while(scalar(@webs) > 0) {
+               my $curWeb = pop(@webs);
+               my $users =  $TWiki::Plugins::SESSION->{prefs}->getWebPreferencesValue($perm."WEB".$mode, $curWeb, $topic );
+
+               # we found users, so there have been settings to define acces. No need to check parent webs, as these settings are overriding
+               return $users if(defined($users));
+
+               #else continue with the parentwebs, if there are any
+       }
+    }
+    else {
+       # no hierchical webs, so just return the users of the current web
+        return $TWiki::Plugins::SESSION->{prefs}->getWebPreferencesValue($perm."WEB".$mode, $web, $topic );
+    }
+
+    return undef;
+}
+
 # Formerly in FuncUsersContrib, this method has been imported to the plugin
 # since we decided to go with iuterators for the users interface
 # _getACLs( \@modes, $web, $topic ) -> \%acls
@@ -450,7 +475,6 @@ sub _getACLs {
         $context = 'WEB';
         $topic = $TWiki::cfg{WebPrefsTopicName};
     }
-
     my @knownusers = _getListOfUsers();
     push(@knownusers, _getListOfGroups());
 
@@ -468,16 +492,21 @@ sub _getACLs {
         foreach my $perm ( 'ALLOW', 'DENY' ) {
             my $users;
             if ($context eq 'WEB') {
-                $users = $TWiki::Plugins::SESSION->{prefs}->getWebPreferencesValue(
-                    $perm.$context.$mode, $web, $topic );
+
+               $users = getUsersByWebPreferenceValue($mode, $web, $topic, $perm);
                 #print STDERR "$perm$context$mode ($web) is not defined\n" unless defined($users);
             } else {
                 $users = $TWiki::Plugins::SESSION->{prefs}->getTopicPreferencesValue(
                     $perm.$context.$mode, $web, $topic );
-                #print STDERR "$perm$context$mode ($web, $topic) is not defined\n" unless defined($users);
+               unless(defined($users)) { #as we did not find any settings in the topic, we have to look in the web prefs
+
+                       #print STDERR "$perm$context$mode ($web, $topic) is not defined\n";
+                       $users = getUsersByWebPreferenceValue($mode, $web, $topic,$perm);
+
+                       #print STDERR $perm."WEB".$mode." ($web, $topic) is not defined\n" unless defined($users);
+               };
             }
             next unless defined($users);
-            #print STDERR "$perm$context$mode\n";
 
             my @lusers =
               grep { $_ }
