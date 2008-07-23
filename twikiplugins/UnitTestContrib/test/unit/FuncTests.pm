@@ -338,9 +338,9 @@ sub test_extractParameters {
 sub test_w2em {
     my $this = shift;
 
+    my $ems = join(',', $this->{twiki}->{users}->getEmails(
+        $this->{twiki}->{user}));
     my $user = TWiki::Func::getWikiName();
-
-    my $ems = join(',', $this->{twiki}->{users}->getEmails($this->{twiki}->{user}));
     $this->assert_str_equals($ems, TWiki::Func::wikiToEmail($user));
 }
 
@@ -471,6 +471,58 @@ END
     $access = TWiki::Func::checkAccessPermission(
         'VIEW',
         $TWiki::cfg{DefaultUserWikiName},
+        "   * Set ALLOWTOPICVIEW = $TWiki::cfg{DefaultUserWikiName}\n",
+        $topic, $this->{test_web}, $meta);
+    $this->assert(!$access);
+}
+
+# Since 4.2.1, checkAccessPermission accepts a login name
+sub test_checkAccessPermission_421 {
+    my $this = shift;
+    my $topic = "NoWayJose";
+
+	TWiki::Func::saveTopicText( $this->{test_web}, $topic, <<END,
+\t* Set DENYTOPICVIEW = $TWiki::cfg{DefaultUserWikiName}
+END
+ );
+    eval{$this->{twiki}->finish()};
+    $this->{twiki} = new TWiki();
+    $TWiki::Plugins::SESSION = $this->{twiki};
+    my $access = TWiki::Func::checkAccessPermission(
+        'VIEW', $TWiki::cfg{DefaultUserLogin}, undef, $topic, $this->{test_web});
+    $this->assert(!$access);
+    $access = TWiki::Func::checkAccessPermission(
+        'VIEW', $TWiki::cfg{DefaultUserLogin}, '', $topic, $this->{test_web});
+    $this->assert(!$access);
+    $access = TWiki::Func::checkAccessPermission(
+        'VIEW', $TWiki::cfg{DefaultUserLogin}, 0, $topic, $this->{test_web});
+    $this->assert(!$access);
+    $access = TWiki::Func::checkAccessPermission(
+        'VIEW', $TWiki::cfg{DefaultUserLogin}, "Please me, let me go",
+        $topic, $this->{test_web});
+    $this->assert($access);
+    # make sure meta overrides text, as documented - Item2953
+    my $meta = new TWiki::Meta($this->{twiki}, $this->{test_web}, $topic);
+    $meta->putKeyed('PREFERENCE', {
+        name => 'ALLOWTOPICVIEW',
+        title => 'ALLOWTOPICVIEW',
+        type => 'Set',
+        value => $TWiki::cfg{DefaultUserWikiName}});
+    $access = TWiki::Func::checkAccessPermission(
+        'VIEW',
+        $TWiki::cfg{DefaultUserLogin},
+        "   * Set ALLOWTOPICVIEW = NotASoul\n",
+        $topic, $this->{test_web}, $meta);
+    $this->assert($access);
+    $meta = new TWiki::Meta($this->{twiki}, $this->{test_web}, $topic);
+    $meta->putKeyed('PREFERENCE', {
+        name => 'DENYTOPICVIEW',
+        title => 'DENYTOPICVIEW',
+        type => 'Set',
+        value => $TWiki::cfg{DefaultUserWikiName} });
+    $access = TWiki::Func::checkAccessPermission(
+        'VIEW',
+        $TWiki::cfg{DefaultUserLogin},
         "   * Set ALLOWTOPICVIEW = $TWiki::cfg{DefaultUserWikiName}\n",
         $topic, $this->{test_web}, $meta);
     $this->assert(!$access);
