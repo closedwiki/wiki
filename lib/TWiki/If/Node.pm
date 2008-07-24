@@ -117,8 +117,12 @@ sub OP_dollar {
         return $session->{cgiQuery}->param( $text );
     }
 
-    return '' if $dollaring{$text}; # Recursion block
-    $dollaring{$text} = 1;
+    # Block after 5 levels.
+    if ($dollaring{$text} && $dollaring{$text} > 5) {
+        delete $dollaring{$text};
+        return '';
+    }
+    $dollaring{$text}++;
     $text = "%$text%";
     TWiki::expandAllTags($session, \$text,
                          $session->{topicName},
