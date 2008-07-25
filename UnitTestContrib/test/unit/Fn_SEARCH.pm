@@ -607,10 +607,11 @@ HERE
         'QueryTopicTwo', $text);
 	
 	$this->{twiki}->finish();
-    my $query = new CGI("");
+    my $query = new TWiki::Request("");
     $query->path_info("/$this->{test_web}/$this->{test_topic}");
 
     $this->{twiki} = new TWiki(undef, $query);
+    $this->assert_str_equals($this->{test_web}, $this->{twiki}->{webName});
     $TWiki::Plugins::SESSION = $this->{twiki};
 }
 
@@ -878,8 +879,7 @@ sub verify_likeQuery {
 
 }
 
-
-sub verify_likeQuery {
+sub verify_likeQuery2 {
     my $this = shift;
 
     $this->set_up_for_queries();

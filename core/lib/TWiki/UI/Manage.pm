@@ -87,26 +87,26 @@ sub _removeUser {
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
     my $query = $session->{request};
-    my $user = $session->{user};
+    my $cUID = $session->{user};
 
     my $password = $query->param( 'password' );
 
     # check if user entry exists
     my $users = $session->{users};
-    if( !$users->userExists( $user )) {
+    if( !$users->userExists( $cUID )) {
         throw TWiki::OopsException(
             'attention',
             web => $webName,
             topic => $topic,
             def => 'notwikiuser',
-            params => [ $session->{users}->getWikiName( $user ) ] );
+            params => [ $session->{users}->getWikiName( $cUID ) ] );
     }
 
     #check to see it the user we are trying to remove is a member of a group.
     #initially we refuse to delete the user
     #in a later implementation we will remove the from the group 
     #(if Access.pm implements it..)
-    my $git = $users->eachMembership($user);
+    my $git = $users->eachMembership($cUID);
     if( $git->hasNext() ) {
         my $list = '';
         while ($git->hasNext()) {
@@ -117,24 +117,25 @@ sub _removeUser {
             web => $webName,
             topic => $topic,
             def => 'in_a_group',
-            params => [ $session->{users}->getWikiName( $user ), $list ] );
+            params => [ $session->{users}->getWikiName( $cUID ), $list ] );
     }
 
-    unless( $users->checkPassword($user, $password)) {
+    unless( $users->checkPassword(
+        $session->{users}->getLoginName($cUID), $password)) {
         throw TWiki::OopsException( 'attention',
                                     web => $webName,
                                     topic => $topic,
                                     def => 'wrong_password' );
     }
 
-    $users->removeUser( $user );
+    $users->removeUser( $cUID );
 
     throw TWiki::OopsException(
         'attention',
         def => 'remove_user_done',
         web => $webName,
         topic => $topic,
-        params => [ $users->getWikiName( $user ) ] );
+        params => [ $users->getWikiName( $cUID ) ] );
 }
 
 sub _isValidHTMLColor {
@@ -149,7 +150,7 @@ sub _createWeb {
     my $topicName = $session->{topicName};
     my $webName = $session->{webName};
     my $query = $session->{request};
-    my $user = $session->{user};
+    my $cUID = $session->{user};
 
     my $newWeb = $query->param( 'newweb' ) || '';
     unless( $newWeb ) {
@@ -200,14 +201,14 @@ sub _createWeb {
     my $opts = {
         # Set permissions such that only the creating user can modify the
         # web preferences
-        ALLOWTOPICCHANGE => $session->{users}->getWikiName($user),
+        ALLOWTOPICCHANGE => $session->{users}->getWikiName($cUID),
         ALLOWTOPICRENAME => 'nobody',
     };
     foreach my $p ($query->param()) {
         $opts->{uc($p)} = $query->param($p);
     }
 
-    my $err = $session->{store}->createWeb( $user, $newWeb, $baseWeb, $opts );
+    my $err = $session->{store}->createWeb( $cUID, $newWeb, $baseWeb, $opts );
     if( $err ) {
         throw TWiki::OopsException
           ( 'attention', def => 'web_creation_error',
@@ -434,7 +435,7 @@ sub _renameweb {
 
     my $oldWeb = $session->{webName};
     my $query = $session->{request};
-    my $user = $session->{user};
+    my $cUID = $session->{user};
 
     # If the user is not allowed to rename anything in the current web - stop here    
     TWiki::UI::checkAccess( $session, $oldWeb, undef,
@@ -540,12 +541,12 @@ sub _renameweb {
                 $webIter = TWiki::Sandbox::untaintUnchecked( $webIter );
                 $webTopic = TWiki::Sandbox::untaintUnchecked( $webTopic );
                 if( $confirm eq 'getlock' ) {
-                    $store->setLease( $webIter, $webTopic, $user,
+                    $store->setLease( $webIter, $webTopic, $cUID,
                                       $TWiki::cfg{LeaseLength});
                     $lease_ref = $store->getLease( $webIter, $webTopic );
                 } elsif( $confirm eq 'cancel' ) {
                     $lease_ref = $store->getLease( $webIter, $webTopic );
-                    if( $lease_ref->{user} eq $user ) {
+                    if( $lease_ref->{user} eq $cUID ) {
                         $store->clearLease( $webIter, $webTopic );
                     }
                 }
@@ -555,11 +556,11 @@ sub _renameweb {
 
                 $modifyingLockedTopics++
                   if( defined($webTopicInfo{modify}{$ref}{leaseuser} ) &&
-                        $webTopicInfo{modify}{$ref}{leaseuser} ne $user );
+                        $webTopicInfo{modify}{$ref}{leaseuser} ne $cUID );
                 $webTopicInfo{modify}{$ref}{summary} = $refs{$ref};
                 $webTopicInfo{modify}{$ref}{access} =
                   $session->security->checkAccessPermission(
-                      'CHANGE', $user, undef, undef, $webTopic, $webIter);
+                      'CHANGE', $cUID, undef, undef, $webTopic, $webIter);
                 if( !$webTopicInfo{modify}{$ref}{access} ) {
                     $webTopicInfo{modify}{$ref}{accessReason} =
                       $session->security->getReason();
@@ -579,12 +580,12 @@ sub _renameweb {
             foreach my $webTopic ( @webTopicList ) {
                 $webTopic = TWiki::Sandbox::untaintUnchecked( $webTopic );
                 if( $confirm eq 'getlock' ) {
-                    $store->setLease( $webIter, $webTopic, $user,
+                    $store->setLease( $webIter, $webTopic, $cUID,
                                       $TWiki::cfg{LeaseLength});
                     $lease_ref = $store->getLease( $webIter, $webTopic );
                 } elsif ($confirm eq 'cancel') {
                     $lease_ref = $store->getLease( $webIter, $webTopic );
-                    if( $lease_ref->{user} eq $user ) {
+                    if( $lease_ref->{user} eq $cUID ) {
                         $store->clearLease( $webIter, $webTopic );
                     }
                 }
@@ -594,10 +595,10 @@ sub _renameweb {
 
                 $movingLockedTopics++
                   if( defined($webTopicInfo{move}{$wit}{leaseuser}) &&
-                        $webTopicInfo{move}{$wit}{leaseuser} ne $user );
+                        $webTopicInfo{move}{$wit}{leaseuser} ne $cUID );
                 $webTopicInfo{move}{$wit}{access} =
                   $session->security->checkAccessPermission(
-                      'RENAME', $user, undef, undef, $webTopic, $webIter);
+                      'RENAME', $cUID, undef, undef, $webTopic, $webIter);
                 $webTopicInfo{move}{$wit}{accessReason} =
                   $session->security->getReason();
                 $totalWebAccess = ($totalWebAccess &
@@ -617,7 +618,7 @@ sub _renameweb {
             # its subwebs.
             push( @{$webTopicInfo{movelocked}},
               grep { defined($webTopicInfo{move}{$_}{leaseuser}) &&
-                       $webTopicInfo{move}{$_}{leaseuser} ne $user }
+                       $webTopicInfo{move}{$_}{leaseuser} ne $cUID }
                 sort keys %{$webTopicInfo{move}} );
 
             # Next, build up a list of all the referrers which the
@@ -630,7 +631,7 @@ sub _renameweb {
             # currently locked.
             push( @{$webTopicInfo{modifylocked}},
               grep { defined($webTopicInfo{modify}{$_}{leaseuser}) &&
-                       $webTopicInfo{modify}{$_}{leaseuser} ne $user }
+                       $webTopicInfo{modify}{$_}{leaseuser} ne $cUID }
                 sort keys %{$webTopicInfo{modify}} );
 
             unless( $confirm ) {
@@ -951,7 +952,7 @@ sub _moveWeb {
     $oldWeb =~ s/\./\//go;
     $newWeb =~ s/\./\//go;
 
-    my $user = $session->{user};
+    my $cUID = $session->{user};
 
     if( $store->webExists( $newWeb )) {
         throw TWiki::OopsException( 'attention',
@@ -966,7 +967,7 @@ sub _moveWeb {
     _updateWebReferringTopics( $session, $oldWeb, $newWeb, $refs );
 
     try {
-        $store->moveWeb( $oldWeb, $newWeb, $user );
+        $store->moveWeb( $oldWeb, $newWeb, $cUID );
     } catch Error::Simple  with {
         my $e = shift;
         throw TWiki::OopsException( 'attention',
@@ -1181,7 +1182,7 @@ sub _updateReferringTopics {
     my $store = $session->{store};
     my $renderer = $session->renderer;
     require TWiki::Render;
-    my $user = $session->{user};
+    my $cUID = $session->{user};
     my $options =
       {
           pre => 1, # process lines in PRE blocks
@@ -1196,7 +1197,7 @@ sub _updateReferringTopics {
           $session->normalizeWebTopicName( '', $item );
 
         if ( $store->topicExists($itemWeb, $itemTopic) ) {
-            $store->lockTopic( $user, $itemWeb, $itemTopic );
+            $store->lockTopic( $cUID, $itemWeb, $itemTopic );
             try {
                 my( $meta, $text ) =
                   $store->readTopic( undef, $itemWeb, $itemTopic, undef );
@@ -1207,14 +1208,14 @@ sub _updateReferringTopics {
                   ( qw/^(FIELD|FORM|TOPICPARENT)$/, undef,
                     \&TWiki::Render::replaceTopicReferences, $options );
 
-                $store->saveTopic( $user, $itemWeb, $itemTopic,
+                $store->saveTopic( $cUID, $itemWeb, $itemTopic,
                                    $text, $meta,
                                    { minor => 1 } );
             } catch TWiki::AccessControlException with {
                 my $e = shift;
                 $session->writeWarning( $e->stringify() );
             } finally {
-                $store->unlockTopic( $user, $itemWeb, $itemTopic );
+                $store->unlockTopic( $cUID, $itemWeb, $itemTopic );
             };
         }
     }
@@ -1227,7 +1228,7 @@ sub _updateWebReferringTopics {
     my $renderer = $session->renderer;
     require TWiki::Render;
 
-    my $user = $session->{user};
+    my $cUID = $session->{user};
     my $options =
       {
        oldWeb => $oldWeb,
@@ -1239,7 +1240,7 @@ sub _updateWebReferringTopics {
           $session->normalizeWebTopicName( '', $item );
 
         if ( $store->topicExists($itemWeb, $itemTopic) ) {
-            $store->lockTopic( $user, $itemWeb, $itemTopic );
+            $store->lockTopic( $cUID, $itemWeb, $itemTopic );
             try {
                 my( $meta, $text ) =
                   $store->readTopic( undef, $itemWeb, $itemTopic, undef );
@@ -1251,14 +1252,14 @@ sub _updateWebReferringTopics {
                   ( qw/^(FIELD|FORM|TOPICPARENT)$/, undef,
                     \&TWiki::Render::replaceWebReferences, $options );
 
-                $store->saveTopic( $user, $itemWeb, $itemTopic,
+                $store->saveTopic( $cUID, $itemWeb, $itemTopic,
                                    $text, $meta,
                                    { minor => 1 } );
             } catch TWiki::AccessControlException with {
                 my $e = shift;
                 $session->writeWarning( $e->stringify() );
             } finally {
-                $store->unlockTopic( $user, $itemWeb, $itemTopic );
+                $store->unlockTopic( $cUID, $itemWeb, $itemTopic );
             };
         }
     }
@@ -1299,7 +1300,7 @@ sub _saveSettings {
     my $session = shift;
     my $topic = $session->{topicName};
     my $web = $session->{webName};
-    my $user = $session->{user};
+    my $cUID = $session->{user};
 
     # set up editing session
     my ( $currMeta, $currText ) =
@@ -1327,13 +1328,13 @@ sub _saveSettings {
     if ( $originalrev ) {
         my ( $date, $author, $rev ) = $newMeta->getRevisionInfo();
         # If the last save was by me, don't merge
-        if ( $rev ne $originalrev && $author ne $user ) {
+        if ( $rev ne $originalrev && $author ne $cUID ) {
             $newMeta->merge( $currMeta );
         }
     }
 
     try {
-        $session->{store}->saveTopic( $user, $web, $topic,
+        $session->{store}->saveTopic( $cUID, $web, $topic,
                                     $currText, $newMeta, $saveOpts );
     } catch Error::Simple with {
         throw TWiki::OopsException( 'attention',
@@ -1371,9 +1372,9 @@ sub _restoreRevision {
 	# read the current topic
 	my ( $meta, $text ) =
 		  $session->{store}->readTopic( undef, $web, $topic, undef ); 
-	my $user = $session->{user};
+	my $cUID = $session->{user};
 	if ( !$session->security->checkAccessPermission(
-        'change', $user, $text, $meta, $topic, $web ) ) {
+        'change', $cUID, $text, $meta, $topic, $web ) ) {
 		# user has no permission to change the topic
 		throw TWiki::OopsException( 'accessdenied',
                                     def => 'topic_access',

@@ -87,16 +87,14 @@ HERE
     my $ui = $this->{twiki}->handleCommonTags(
         '%REVINFO{format="$username $wikiname"}%',
         $this->{test_web}, 'CrikeyMoses');
-    # The wikiname can't be mapped back to a login name (the mapping is
-    # one-to-many) so the login name is unknown.
-    $this->assert_str_equals("unknown ScumBag", $ui);
+    $this->assert_str_equals("scum ScumBag", $ui);
 
 }
 
 sub test_compatibility2 {
     my $this = shift;
-    # Create a topic with raw meta to force a wikiname into the author field.
-    # The wikiname must be for a user who is in TWikiUsers.
+    # Create a topic with raw meta to force a login into the author field.
+    # The login must be for a user who is in TWikiUsers.
     # This test is specific to the "traditional" text database implementation,
     # either RcsWrap or RcsLite.
     if ($TWiki::cfg{StoreImpl} ne 'RcsLite' &&

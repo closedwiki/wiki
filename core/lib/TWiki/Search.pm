@@ -197,7 +197,6 @@ sub _queryTopics {
     my( $this, $web, $query, @topicList ) = @_;
 
     my $store = $this->{session}->{store};
-
     my $matches = $store->searchInWebMetaData(
         $query, $web, \@topicList);
 

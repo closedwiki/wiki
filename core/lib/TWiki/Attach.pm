@@ -239,9 +239,18 @@ sub _expandAttrs {
         return TWiki::Time::formatTime( $info->{date} || 0 );
     }
     elsif ( $attr eq 'USER' ) {
-        my $infousername = $info->{user} || 'UnknownUser';
-        $infousername =~ s/^$TWiki::cfg{UsersWebName}\.//;
-        return $users->webDotWikiName($infousername);
+        my $user = $info->{user} || 'UnknownUser';
+        my $cUID;
+        if( $user ) {
+            $cUID = $users->getCanonicalUserID( $user );
+            if (!$cUID) {
+                # Not a login name or a wiki name. Is it a valid cUID?
+                my $ln = $users->getLoginName($user);
+                $cUID = $user if defined $ln && $ln ne 'unknown';
+            }
+        }
+
+        return $users->webDotWikiName($cUID);
     }
     else {
         return $TWiki::TranslationToken.'A_'.$attr.$TWiki::TranslationToken;
