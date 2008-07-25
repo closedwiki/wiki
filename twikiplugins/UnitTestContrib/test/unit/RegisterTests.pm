@@ -212,12 +212,24 @@ sub TWikiUserMapping {
 # See the pod doc in Unit::TestCase for details of how to use this
 sub fixture_groups {
     return (
-        [ 'TemplateLoginManager', 'ApacheLoginManager', 'NoLoginManager' ],
-        [ 'AllowLoginName', 'DontAllowLoginName'],
-#        [ 'HtPasswdManager', 'NonePasswdManager'],
-        [ 'HtPasswdManager' ],
-#        [ 'TWikiUserMapping', 'BaseUserMapping' ] );
-        [ 'TWikiUserMapping' ] );
+        [
+            'TemplateLoginManager',
+            'ApacheLoginManager',
+            'NoLoginManager',
+           ],
+        [
+            'AllowLoginName',
+            'DontAllowLoginName',
+           ],
+        [
+            'HtPasswdManager',
+            #'NonePasswdManager',
+           ],
+        [
+            'TWikiUserMapping',
+            #'BaseUserMapping',
+           ]
+       );
 }
 
 #delay the calling of set_up til after the cfg's are set by above closure
@@ -1463,7 +1475,8 @@ sub verify_resetPassword_NoTWikiUsersEntry {
     my $newPassU = '12345';
     my $oldPassU = 1;   #force set
     $this->assert($this->{twiki}->{users}->setPassword( $cUID, $newPassU, $oldPassU ));
-    $this->assert($this->{twiki}->{users}->checkPassword( $this->{new_user_login}, $newPassU ));
+    $this->assert($this->{twiki}->{users}->checkPassword(
+        $this->{new_user_login}, $newPassU ));
     my @emails = $this->{twiki}->{users}->getEmails($cUID);
     $this->assert_str_equals($this->{new_user_email}, $emails[0]);
 

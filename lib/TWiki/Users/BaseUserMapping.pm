@@ -93,7 +93,7 @@ sub new {
         TWikiRegistrationAgent           => $this->{mapping_id}.'222'
     };
     $this->{U2E} = {$this->{mapping_id}.'333' => $TWiki::cfg{WebMasterEmail}};
-    $this->{U2P} = {$this->{mapping_id}.'333' => $TWiki::cfg{Password}};
+    $this->{L2P} = {$TWiki::cfg{AdminUserLogin} => $TWiki::cfg{Password}};
 
     $this->{GROUPS} = {
         $TWiki::cfg{SuperAdminGroup} => [$this->{mapping_id}.'333'],
@@ -121,7 +121,7 @@ sub finish {
     my $this = shift;
     undef $this->{U2L};
     undef $this->{U2W};
-    undef $this->{U2P};
+    undef $this->{L2P};
     undef $this->{U2E};
     undef $this->{L2U};
     undef $this->{W2U};
@@ -377,7 +377,7 @@ sub findUserByWikiName {
 
 =pod
 
----++ ObjectMethod checkPassword( $cUID, $passwordU ) -> $boolean
+---++ ObjectMethod checkPassword( $login, $passwordU ) -> $boolean
 
 Finds if the password is valid for the given user.
 
@@ -386,15 +386,15 @@ Returns 1 on success, undef on failure.
 =cut
 
 sub checkPassword {
-    my( $this, $cUID, $pass ) = @_;
+    my( $this, $login, $pass ) = @_;
 
-    my $hash = $this->{U2P}->{$cUID};
+    my $hash = $this->{L2P}->{$login};
     if( $hash && crypt( $pass, $hash ) eq $hash ) {
-        return 1;   #yay, you've passed
+        return 1;   # yay, you've passed
     }
     # be a little more helpful to the admin
-    if( $cUID eq $this->{mapping_id}.'333' && !$hash ) {
-        $this->{error} = 'To login as '.$this->getLoginName($cUID).
+    if( $login eq $TWiki::cfg{AdminUserLogin} && !$hash ) {
+        $this->{error} = 'To login as '.$login.
           ', you must set {Password} in configure';
     }
     return 0;

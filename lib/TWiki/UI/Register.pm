@@ -616,14 +616,14 @@ sub changePassword {
     my $requestUser = $session->{user};
 
     my $oldpassword = $query->param( 'oldpassword' );
-    my $user = $query->param( 'username' );
+    my $login = $query->param( 'username' );
     my $passwordA = $query->param( 'password' );
     my $passwordB = $query->param( 'passwordA' );
     my $email = $query->param( 'email' );
     my $topicName = $query->param( 'TopicName' );
 
     # check if required fields are filled in
-    unless( $user ) {
+    unless( $login ) {
         throw TWiki::OopsException( 'attention',
                                     web => $webName,
                                     topic => $topic,
@@ -633,12 +633,12 @@ sub changePassword {
 
     my $users = $session->{users};
 
-    unless ($user) {
+    unless ($login) {
         throw TWiki::OopsException( 'attention',
                                     web => $webName,
                                     topic => $topic,
                                     def => 'notwikiuser',
-                                    params => [ $user ] );
+                                    params => [ $login ] );
     }
 
     my $changePass = 0;
@@ -670,16 +670,15 @@ sub changePassword {
                                     params => [ 'oldpassword' ] );
     }
 
-    my $cUID = $users->getCanonicalUserID($user);
-
     unless( $users->isAdmin( $requestUser ) ||
-              $users->checkPassword( $cUID, $oldpassword)) {
+              $users->checkPassword( $login, $oldpassword)) {
         throw TWiki::OopsException( 'attention',
                                     web => $webName,
                                     topic => $topic,
                                     def => 'wrong_password');
     }
 
+    my $cUID = $users->getCanonicalUserID($login);
     if( defined $email ) {
         my $return = $users->setEmails($cUID, split(/\s+/, $email) );
     }
@@ -701,7 +700,7 @@ sub changePassword {
                                         topic => $topic,
                                         def => 'password_not_changed');
         } else {
-            $session->writeLog('changepasswd', $user);
+            $session->writeLog('changepasswd', $login);
         }
         # OK - password changed
         throw TWiki::OopsException( 'attention',

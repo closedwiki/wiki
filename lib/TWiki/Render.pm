@@ -1568,9 +1568,14 @@ sub renderRevisionInfo {
     my $un = '';
     if( $user ) {
         my $users = $this->{session}->{users};
-        $wun = $users->webDotWikiName($user) || 'Unknown User';
-        $wn = $users->getWikiName( $user ) || 'UnknownUser';
-        $un = $users->getLoginName($user) || 'unknown';
+        my $cUID = $users->getCanonicalUserID( $user );
+        if (!$cUID) {
+            my $ln = $users->getLoginName($user);
+            $cUID = $user if defined $ln && $ln ne 'unknown';
+        }
+        $wun = $users->webDotWikiName($cUID) || 'Unknown User';
+        $wn = $users->getWikiName( $cUID ) || 'UnknownUser';
+        $un = $users->getLoginName($cUID) || 'unknown';
     }
 
     my $value = $format || 'r$rev - $date - $time - $wikiusername';

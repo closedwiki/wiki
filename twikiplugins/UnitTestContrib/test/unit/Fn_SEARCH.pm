@@ -851,8 +851,7 @@ sub verify_4347 {
     $this->assert_str_equals('', $result);
 }
 
-
-sub verify_likeQuery {
+sub verify_likeQuery2 {
     my $this = shift;
 
     $this->set_up_for_queries();

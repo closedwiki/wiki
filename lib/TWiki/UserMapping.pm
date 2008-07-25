@@ -416,7 +416,7 @@ sub findUserByWikiName {
 
 ---++ ObjectMethod checkPassword( $login, $passwordU ) -> $boolean
 
-Finds if the password is valid for the given user. This is called using
+Finds if the password is valid for the given login. This is called using
 a login name rather than a cUID because the user may not have been mapped
 at the time it is called.
 

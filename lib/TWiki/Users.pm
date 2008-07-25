@@ -109,6 +109,7 @@ sub new {
     # override (in TWiki.pm)
     $this->{remoteUser} =
       $this->{loginManager}->loadSession( $session->{remoteUser} );
+
     $this->{remoteUser} = $TWiki::cfg{DefaultUserLogin}
       unless ( defined( $this->{remoteUser} ) );
 
@@ -258,8 +259,9 @@ sub initialiseUser {
 
     my $cUID;
     if( defined($login) && $login ne '' ) {
+        # In the case of a user mapper that accepts any identifier as
+        # a cUID, 
         $cUID = $this->getCanonicalUserID($login);
-
         # see BugsItem4771 - it seems that authenticated, but unmapped
         # users have rights too
         if( !defined($cUID) ) {
@@ -413,31 +415,21 @@ sub getCanonicalUserID {
     } elsif( defined( $this->{wikiName2cUID}->{$identifier} )) {
         $cUID = $this->{wikiName2cUID}->{$identifier};
     } else {
-        # See if any known mappings recognise the identifier as a cUID
-        my $testMapping = $this->_getMapping( undef, $identifier, undef, 1 );
+        # See if a mapping recognises the identifier as a login name
+        my $mapping = $this->_getMapping( undef, $identifier, undef, 1 );
+        $cUID = $mapping->login2cUID( $identifier ) if $mapping;
+        unless( $cUID ) {
+            # Finally see if it's a valid user wikiname
 
-        if( $testMapping && $testMapping->getLoginName($identifier) ) {
-            # The mapping claims to recognise this cUID
-            $cUID = $identifier;
-        } else {
-            # See if the current mapping recognises the identifier as a
-            # login name
-            my $mapping = $this->_getMapping(
-                undef, $identifier, $identifier );
-            $cUID = $mapping->login2cUID( $identifier );
-            unless ($cUID) {
-                # Finally see if it's a valid user wikiname
+            # Strip users web id (legacy, probably specific to
+            # TWikiUserMappingContrib but may be used by other mappers
+            # that support user topics)
+            my ( $dummy, $nid ) =
+              $this->{session}->normalizeWebTopicName( '', $identifier );
+            $identifier = $nid if ($dummy eq $TWiki::cfg{UsersWebName});
 
-                # Strip users web id (legacy, probably specific to
-                # TWikiUserMappingContrib but may be used by other mappers
-                # that support user topics)
-                my ( $dummy, $nid ) =
-                  $this->{session}->normalizeWebTopicName( '', $identifier );
-                $identifier = $nid if ($dummy eq $TWiki::cfg{UsersWebName});
-
-                my $found = $this->findUserByWikiName($identifier);
-                $cUID = $found->[0] if ( $found && scalar(@$found) );
-            }
+            my $found = $this->findUserByWikiName($identifier);
+            $cUID = $found->[0] if ( $found && scalar(@$found) );
         }
     }
     return $cUID;
@@ -612,7 +604,7 @@ sub getLoginName {
     my $mapping = $this->_getMapping($cUID);
     my $login;
     if( $cUID && $mapping ) {
-        $login = $mapping->getLoginName($cUID)
+        $login = $mapping->getLoginName($cUID);
     }
 
     if( defined $login ) {
@@ -832,9 +824,12 @@ sub eachMembership {
 
 =pod
 
----++ ObjectMethod checkPassword( $cUID, $passwordU ) -> $boolean
+---++ ObjectMethod checkLogin( $login, $passwordU ) -> $boolean
 
-Finds if the password is valid for the given user.
+Finds if the password is valid for the given user. This method is
+called using the login name rather than the $cUID so that it can be called
+with a user who can be authenticated, but may not be mappable to a
+cUID (yet).
 
 Returns 1 on success, undef on failure.
 
@@ -844,8 +839,9 @@ its there (and we're in sudo_context?) use that..
 =cut
 
 sub checkPassword {
-    my ( $this, $cUID, $pw ) = @_;
-    return $this->_getMapping($cUID)->checkPassword( $cUID, $pw );
+    my ( $this, $login, $pw ) = @_;
+    my $mapping = $this->_getMapping(undef, $login, undef, 0);
+    return $mapping->checkPassword( $login, $pw );
 }
 
 =pod
