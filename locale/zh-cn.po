@@ -1911,8 +1911,7 @@ msgstr "只有%1的成员允许进行这些操作"
 #: templates/login.tmpl:8
 #, fuzzy
 msgid ""
-"Oops: we could not recognize you. Try again or [[%SYSTEMWEB%.ResetPassword][%"
-"1]]."
+"Oops: we could not recognize you. Try again or [[%1][reset your password]]."
 msgstr "抱歉： 我们无法识别你，请再次尝试或 %1"
 
 #: twikiplugins/ClassicSkin/templates/preview.classic.tmpl:10

@@ -2013,13 +2013,12 @@ msgstr "Når du er blevet registreret kan du logge ind med dit %1 og password."
 msgid "Only members of the %1 are allowed to perform this action."
 msgstr "Kun medlemmer af %1 må udføre denne handling."
 
-#: templates/login.tmpl:
+#: templates/login.tmpl:8
 msgid ""
-"Oops: we could not recognize you. Try again or [[%SYSTEMWEB%.ResetPassword][%"
-"1]]."
+"Oops: we could not recognize you. Try again or [[%1][reset your password]]."
 msgstr ""
-"Vi kunne ikke genkende dig. Forsøg igen eller "
-"[[%SYSTEMWEB%.ResetPassword][%1]]."
+"Hovsa. Vi kunne ikke genkende dig. Forsøg igen eller [[%1][nulstil dit "
+"password]]."
 
 #: twikiplugins/ClassicSkin/templates/preview.classic.tmpl:10
 msgid "Opens page in new window"

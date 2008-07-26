@@ -2004,11 +2004,11 @@ msgid "Only members of the %1 are allowed to perform this action."
 msgstr "Solo ai membri di %1 è permesso eseguire questa azione.."
 
 #: templates/login.tmpl:8
-#, fuzzy
 msgid ""
-"Oops: we could not recognize you. Try again or [[%SYSTEMWEB%.ResetPassword][%"
-"1]]."
-msgstr "Oops: non ti riconosco. Prova ancora o %1"
+"Oops: we could not recognize you. Try again or [[%1][reset your password]]."
+msgstr ""
+"Oops: Non ti riconosco. Prova ancora una volta o [[%1][ripristini la parola "
+"d&#39;accesso]]."
 
 #: twikiplugins/ClassicSkin/templates/preview.classic.tmpl:10
 msgid "Opens page in new window"

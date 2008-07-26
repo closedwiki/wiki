@@ -2015,9 +2015,9 @@ msgstr "Apenas integrantes do %1 têm permissão para realizar essa ação."
 
 #: templates/login.tmpl:8
 msgid ""
-"Oops: we could not recognize you. Try again or [[%SYSTEMWEB%.ResetPassword][%"
-"1]]."
-msgstr "Oops: não conseguimos identificar você. Tente novamente ou [[%SYSTEMWEB%.ResetPassword][%1]]."
+"Oops: we could not recognize you. Try again or [[%1][reset your password]]."
+msgstr "Oops: não conseguimos identificar você. Tente novamente ou [[%1]"
+"[restaurar sua senha]]."
 
 #: twikiplugins/ClassicSkin/templates/preview.classic.tmpl:10
 msgid "Opens page in new window"

@@ -1717,7 +1717,7 @@ msgid ""
 "International (8-bit) characters are removed (replaced by US-ASCII "
 "equivalents for Latin-1)"
 msgstr ""
-"インターナショナルキャラクター(8桁)を削除しました（Latin-1と同じUS-ASCIIで置"
+"イ³ターナショナルキャラクター(8桁)を削除しました（Latin-1と同じUS-ASCIIで置"
 "き換えました）"
 
 #: templates/messages.tmpl:294
@@ -2040,8 +2040,7 @@ msgstr "%1のメンバーのみこの操作を行うことが許可されます"
 
 #: templates/login.tmpl:8
 msgid ""
-"Oops: we could not recognize you. Try again or [[%SYSTEMWEB%.ResetPassword][%"
-"1]]."
+"Oops: we could not recognize you. Try again or [[%1][reset your password]]."
 msgstr ""
 
 #: twikiplugins/ClassicSkin/templates/preview.classic.tmpl:10

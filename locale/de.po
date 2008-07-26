@@ -2014,9 +2014,12 @@ msgstr "Nur Mitglieder von %1 dürfen diese Aktion durchführen."
 
 #: templates/login.tmpl:8
 msgid ""
-"Oops: we could not recognize you. Try again or [[%SYSTEMWEB%.ResetPassword][%"
-"1]]."
-msgstr "Oops: Wir konnten Sie nicht authentifizieren. Versuchen Sie es erneut oder [[%SYSTEMWEB%.ResetPassword][%1]]."
+"Oops: we could not recognize you. Try again or [[%1][reset your password]]."
+msgstr ""
+"Oops: Wir konnten Sie nicht authentifizieren. Versuchen Sie es erneut oder"
+" [[%1][setzen Sie ihr Passwort zurück]]."
+
+setzen Sie ihr Passwort zurück
 
 #: twikiplugins/ClassicSkin/templates/preview.classic.tmpl:10
 msgid "Opens page in new window"
