@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="GeorgeClark" date="1200278593" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1209265028" format="1.1" reprev="1.2" version="1.2"}%
 %META:TOPICPARENT{name="DirectedGraphPlugin"}%
 ---+!! Overview of directed graph editing
 
@@ -297,6 +297,162 @@ Following the last group definition we define all edges.
 </tr>
 </table>
 
+---+++ Ladder Diagrams
+
+<table>
+<tr><td valign="top">
+*The graph:*
+
+<dot map="1" file="ladder_diagram" dothash="off">
+digraph ladder {  ranksep=".1"; nodesep=".1"; size="3,3.5"; 
+
+# Define the defaults
+  node [shape=point fontsize=10]
+  edge [dir=none fontsize=10]
+
+# Define the top nodes
+  left [shape=none]
+  right [shape=none]
+
+# Column labels
+  a [shape=none]
+  b [shape=none]
+  c [shape=none]
+  d [shape=none]
+
+# Leftmost vertical column
+  left -> a [style=invis]  a -> a1 [style=invis] 
+  a1 -> a2 -> a3 -> a4 -> a5 -> a6 -> a7 -> a8 -> a9 -> a10 ->
+    a11 -> a12 -> a13 [weight=1000]
+
+# Rightmost vertical column
+  right -> d [style=invis]   d -> d1 [style = invis]
+  d1 -> d2 -> d3 -> d4 -> d5 -> d6 -> d7 -> d8 -> d9 -> d10 ->
+    d11 -> d12 -> d13 [weight=1000]
+
+# Draw the top labels with the dotted line
+  { rank=same; left right
+    left -> right [style=dotted]  }
+
+# Draw the 4 column headings, no line
+  { rank=same; 
+    edge[style=invis]
+    a -> b -> c -> d   }
+
+# Draw the two center columns
+  b1 -> b2 -> b3 -> b4 -> b5 -> b6 -> b7 -> b8 -> b9 -> b10
+  c1 -> c2 -> c3 -> c4 -> c5 -> c6 -> c7 -> c8 -> c9 -> c10
+  
+# Now each step in the ladder
+  { rank=same; 
+    a2 -> b2 [dir=forward label="S1" URL="http://twiki.org/" ]  }
+  { rank=same; 
+    b3 -> c3 [dir=forward label="S2" URL="#EndNote" ]  }
+  { rank=same; 
+    c4 -> d4 [dir=forward label="A"]  }
+  { rank=same; 
+    c5 -> d5 [dir=back label="B"]  }
+  { rank=same; 
+    b6 -> c6 [dir=back label="C"]  }
+  { rank=same; 
+    a7 -> b7 [dir=back label="D"]  }
+  { rank=same; 
+    a8 -> b8 [dir=forward label="E"]  }
+  { rank=same; 
+    a9 -> b9 [dir=back label="F"]
+    b9 -> c9 [dir=forward label="G"]  }
+  { rank=same; 
+    a10 -> b10 [dir=back label="H"]  }
+  { rank=same; 
+    a11 -> d11 [dir=forward label="I"]  }
+  { rank=same; 
+    a12 -> d12 [style=dashed dir=both label="J"]  }
+}
+</dot>
+</td>
+<td valign="top">
+*The code:*
+
+<verbatim>
+<dot map=1>
+digraph ladder {  ranksep=".1"; nodesep=".1"; 
+
+# Define the defaults
+  node [shape=point fontsize=10]
+  edge [dir=none fontsize=10]
+
+# Define the top nodes
+  left [shape=none]
+  right [shape=none]
+
+# Column labels
+  a [shape=none]
+  b [shape=none]
+  c [shape=none]
+  d [shape=none]
+
+# Leftmost vertical column
+  left -> a [style=invis]  a -> a1 [style=invis] 
+  a1 -> a2 -> a3 -> a4 -> a5 -> a6 -> a7 -> a8 -> a9 -> a10 ->
+    a11 -> a12 -> a13 [weight=1000]
+
+# Rightmost vertical column
+  right -> d [style=invis]   d -> d1 [style = invis]
+  d1 -> d2 -> d3 -> d4 -> d5 -> d6 -> d7 -> d8 -> d9 -> d10 ->
+    d11 -> d12 -> d13 [weight=1000]
+
+# Draw the top labels with the dotted line
+  { rank=same; left right
+    left -> right [style=dotted]  }
+
+# Draw the 4 column headings, no line
+  { rank=same; 
+    edge[style=invis]
+    a -> b -> c -> d   }
+
+# Draw the two center columns
+  b1 -> b2 -> b3 -> b4 -> b5 -> b6 -> b7 -> b8 -> b9 -> b10
+  c1 -> c2 -> c3 -> c4 -> c5 -> c6 -> c7 -> c8 -> c9 -> c10
+  
+# Now each step in the ladder
+  { rank=same; 
+    a2 -> b2 [dir=forward label="S1" URL="http://twiki.org/" ]  }
+  { rank=same; 
+    b3 -> c3 [dir=forward label="S2" ]  }
+  { rank=same; 
+    c4 -> d4 [dir=forward label="A"]  }
+  { rank=same; 
+    c5 -> d5 [dir=back label="B"]  }
+  { rank=same; 
+    b6 -> c6 [dir=back label="C"]  }
+  { rank=same; 
+    a7 -> b7 [dir=back label="D"]  }
+  { rank=same; 
+    a8 -> b8 [dir=forward label="E"]  }
+  { rank=same; 
+    a9 -> b9 [dir=back label="F"]
+    b9 -> c9 [dir=forward label="G"]  }
+  { rank=same; 
+    a10 -> b10 [dir=back label="H"]  }
+  { rank=same; 
+    a11 -> d11 [dir=forward label="I"]  }
+  { rank=same; 
+    a12 -> d12 [style=dashed dir=both label="J"]  }
+}
+</dot>
+</verbatim>
+<td valign=top>
+*Explanation:*
+The ladder diagram uses the =weight= operand to force straight edges.  The heaver the weight, the edge will be shorter, straighter, and closer to vertical. 
+
+Defaults are established using =dir=none= for the edges.  This causes the edge lines to be undirected, and are drawn without an arrow.
+
+The edges of the top two rows specify =style=invisible=. This keeps the columns aligned, but omits drawing any lines.
+
+Each horizontal "rung" in the ladder is kept on the same level by specifying =rank=same=
+</td>
+</tr>
+</table>
 ---+++ Node types
 
 Choose the shape of a node by adding the attribute =shape= to the node definition.
@@ -614,3 +770,5 @@ digraph G {
 %META:FILEATTACHMENT{name="add_subgraphs.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200238" path="add_subgraphs.png" size="11651" user="Main.GeorgeClark" version="1"}%
 %META:FILEATTACHMENT{name="example1.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200238" path="example1.png" size="7080" user="Main.GeorgeClark" version="1"}%
 %META:FILEATTACHMENT{name="shape_Msquare.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1200200241" path="shape_Msquare.png" size="644" user="Main.GeorgeClark" version="1"}%
+%META:FILEATTACHMENT{name="ladder_diagram.png" attachment="ladder_diagram.png" attr="h" comment="<nop>DirectedGraphPlugin: DOT graph" date="1209265027" size="7904" stream="GLOB(0x8639e5c)" tmpFilename="/var/www/SVN/twiki/core/working/tmp/DGP5Xa3z5UkAh.png" user="BaseUserMapping_333" version="1"}%
+%META:FILEATTACHMENT{name="ladder_diagram.cmapx" attachment="ladder_diagram.cmapx" attr="h" comment="<nop>DirectedGraphPlugin: DOT graph" date="1209265027" size="739" stream="GLOB(0x8639f10)" tmpFilename="/var/www/SVN/twiki/core/working/tmp/DGP4wJVBoxIY1.cmapx" user="BaseUserMapping_333" version="1"}%

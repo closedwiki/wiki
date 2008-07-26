@@ -30,15 +30,26 @@
 package TWiki::Plugins::DirectedGraphPlugin;
 
 # =========================
+use strict;
+
 use vars qw(
-  $web $topic $user $installWeb $VERSION $RELEASE $pluginName
-  $debug $exampleCfgVar $sandbox $isInitialized $antialiasDefault
-  $densityDefault $sizeDefault $vectorFormatsDefault $engineDefault
-  $libraryDefault $enginePath $magickPath $workAreaDir $grNum
-  $toolsPath $perlCmd $hideAttachDefault $usWeb
+  $web $usWeb $topic $user $installWeb $VERSION $RELEASE $pluginName
+  $debugDefault $antialiasDefault $densityDefault $sizeDefault 
+  $vectorFormatsDefault $hideAttachDefault $inlineAttachDefault 
+  $engineDefault $libraryDefault $deleteAttachDefault
+  $enginePath $magickPath $toolsPath $perlCmd $engineCmd $dotHelper
+  $HASH_CODE_LENGTH 
+  $antialiasCmd  
 );
 
-use vars qw( %TWikiCompatibility );
+use Digest::MD5 qw( md5_hex );
+use Storable qw(store retrieve freeze thaw);
+
+use File::Path;
+use File::Temp;
+use File::Spec;
+
+#use vars qw( %TWikiCompatibility );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -50,31 +61,36 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
-use strict;
 
-$pluginName = 'DirectedGraphPlugin';
-use Digest::MD5 qw( md5_hex );
+$pluginName = 'DirectedGraphPlugin'; 
 
-#the MD5 and hash table are used to create a unique name for each graph
-use File::Path;
-use File::Temp;
+$HASH_CODE_LENGTH    = 32;
 
-my $HASH_CODE_LENGTH    = 32;
-my %hashed_math_strings = ();
+$dotHelper = "DirectedGraphPlugin.pl";
+$engineCmd = " %HELPERSCRIPT|F% %DOT|F% %WORKDIR|F% %INFILE|F% %IOSTRING|U% %ERRFILE|F% ";
+$antialiasCmd = "convert -density %DENSITY|N% -geometry %GEOMETRY|S% %INFILE|F% %OUTFILE|F%";
 
+# The session variables are used to store the file names and md5hash of the input to the dot command
+#   xxxHashArray{SET} - Set to 1 if the array has been initialized
+#   xxxHashArray{GRNUM} - Counts the unnamed graphs for the page 
+#   xxxHashArray{FORMATS}{<filename>} - contains the list of output file types for the input file
+#   xxxHashArray{MD5HASH}{<filename>} - contains the hash of the input used to create the files
 
-my $dotHelper = "DirectedGraphPlugin.pl";
-my $engineCmd      = " %HELPERSCRIPT|F% %DOT|F% %WORKDIR|F% %INFILE|F% %IOSTRING|U% %ERRFILE|F% ";
-my $antialiasCmd = "convert -density %DENSITY|N% -geometry %GEOMETRY|S% %INFILE|F% %OUTFILE|F%";
-my $tempdir = "";
 
 # =========================
 sub initPlugin
 {
     ( $topic, $web, $user, $installWeb ) = @_;
 
+    &_writeDebug(" >>> initPlugin Entered");
+
+    my $doInit;
+    
+    if ((defined $doInit) && $doInit ) { return 1; }
+    $doInit = 1;
+
     $usWeb = $web;
-    $usWeb =~ s/\//_/g;
+    $usWeb =~ s/\//_/g;    #Convert any subweb separators to underscore
 
     # check for Plugins.pm versions
     if ( $TWiki::Plugins::VERSION < 1 ) {
@@ -83,33 +99,32 @@ sub initPlugin
     }
 
     if ( defined $TWiki::cfg{DataDir} ) {
-       # TWiki-4 or more recent
-       # path to dot, neato, twopi, circo and fdp (including trailing /)
-       $enginePath = $TWiki::cfg{DirectedGraphPlugin}{enginePath};
-       # path to imagemagick convert routine
-       $magickPath = $TWiki::cfg{DirectedGraphPlugin}{magickPath};
-       # path to imagemagick convert routine
-       $toolsPath = $TWiki::cfg{DirectedGraphPlugin}{toolsPath};
-       # path to imagemagick convert routine
-       $perlCmd = $TWiki::cfg{DirectedGraphPlugin}{perlCmd};
+        # TWiki-4 or more recent
+        # path to dot, neato, twopi, circo and fdp (including trailing /)
+        $enginePath = $TWiki::cfg{DirectedGraphPlugin}{enginePath};
+        # path to imagemagick convert routine
+        $magickPath = $TWiki::cfg{DirectedGraphPlugin}{magickPath};
+        # path to imagemagick convert routine
+        $toolsPath = $TWiki::cfg{DirectedGraphPlugin}{toolsPath};
+        # path to imagemagick convert routine
+        $perlCmd = $TWiki::cfg{DirectedGraphPlugin}{perlCmd};
     } else {
-       # Cairo or earlier
-       $enginePath = '/usr/bin/';
-       $magickPath = '/usr/bin/';
-       $toolsPath = '/var/www/wapa412/htdocs/tools/';
-       $perlCmd = '/usr/bin/perl';
+        # Cairo or earlier  MANUALLY EDIT THESE PATHS AS REQUIRED
+        $enginePath = '/usr/bin/';
+        $magickPath = '/usr/bin/';
+        $toolsPath = '/path/to/twiki/tools/';
+        $perlCmd = '/usr/bin/perl';
        }
        
-    die "Path to GraphViz commands not defined use bin/configure or edit DirectedGraphPlugin.pm " unless $enginePath;
-    
-    if ( defined $TWiki::cfg{TempfileDir} ) {
-       $tempdir = $TWiki::cfg{TempfileDir};
-    } else {
-       $tempdir = File::Spec->tmpdir();
-       }
+    die "Path to GraphViz commands not defined. Use bin/configure or edit DirectedGraphPlugin.pm " unless $enginePath;
+
+    # for getRegularExpression
+    if ( $TWiki::Plugins::VERSION < 1.020 ) {
+        eval 'use TWiki::Contrib::CairoContrib;';
+    }
 
     # Get plugin debug flag
-    $debug = TWiki::Func::getPreferencesFlag("\U$pluginName\E_DEBUG");
+    $debugDefault = TWiki::Func::getPreferencesFlag("\U$pluginName\E_DEBUG");
 
     # Get plugin antialias default
     $antialiasDefault = TWiki::Func::getPreferencesValue("\U$pluginName\E_ANTIALIAS");
@@ -132,105 +147,112 @@ sub initPlugin
     # Get plugin hideattachments default
     $hideAttachDefault = TWiki::Func::getPreferencesValue("\U$pluginName\E_HIDEATTACHMENTS");
 
-    # Initialize graph number for auto-generated graphs.
-    $grNum = 0;
+    # Get the default inline  attachment default
+    $inlineAttachDefault = TWiki::Func::getPreferencesValue("\U$pluginName\E_INLINEATTACHMENT");
 
+    # Get plugin deleteattachments default
+    $deleteAttachDefault = TWiki::Func::getPreferencesValue("\U$pluginName\E_DELETEATTACHMENTS");
+
+    # Read in the attachment information from previous runs
+    #  and save it into a session variable for use by the tag handlers
+    # Also clear the new attachment table that will be built from this run
+
+    my %oldHashArray = _loadHashCodes();  # Load the -filehash file into the old hash               
+    TWiki::Func::setSessionValue( 'DGP_hash', freeze \%oldHashArray);
+    TWiki::Func::clearSessionValue( 'DGP_newhash');  # blank slate for new attachments
+    
     # Plugin correctly initialized
-    TWiki::Func::writeDebug("- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK")
-      if $debug;
+    &_writeDebug("- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) initialized OK") ;
+
   return 1;
 } ### sub initPlugin
 
-sub doInit
-{
-  return if $isInitialized;
-
-  unless (defined &TWiki::Sandbox::new) {
-    eval "use TWiki::Contrib::DakarContrib;";
-    $sandbox = new TWiki::Sandbox();
-  } else {
-    $sandbox = $TWiki::sharedSandbox # 4.0 - 4.1.2
-      || $TWiki::sandbox; # 4.2
-  }
-
-
-    &writeDebug("called doInit");
-
-    # for getRegularExpression
-    if ( $TWiki::Plugins::VERSION < 1.020 ) {
-        eval 'use TWiki::Contrib::CairoContrib;';
-    }
-
-    $workAreaDir = TWiki::Func::getWorkArea('DirectedGraphPlugin');
-
-    &writeDebug("doInit( ) is OK");
-    $isInitialized = 1;
-
-  return '';
-} ### sub doInit
 
 # =========================
 sub commonTagsHandler
 {
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-    TWiki::Func::writeDebug("- ${pluginName}::commonTagsHandler( $_[2].$_[1] )")
-      if $debug;
-
-    # This is the place to define customized tags and variables
-    # Called by sub handleCommonTags, after %INCLUDE:"..."%
-    
-    $web = $_[2];
-    $usWeb = $web;
-    $usWeb =~ s/\//_/g;  #Change slash to underscore to handle subwebs in the workarea
+#
+    if ( ($_[1] ne $topic) || ($_[2] ne $web)) {
+        &_writeDebug(" SKIPPING commonTagsHandler  web = |$web|  topic = |$topic|  $_[2] $_[1] ");
+        return;
+        }
+    &_writeDebug("- ${pluginName}::commonTagsHandler( $_[2].$_[1] )");
 
     #pass everything within <dot> tags to handleDot function
-    $_[0] =~ s/<DOT(.*?)>(.*?)<\/DOT>/&handleDot($2,$1)/giseo;
+    # - Returns true if any matches were found.
+    
+    ($_[0] =~ s/<DOT(.*?)>(.*?)<\/DOT>/&_handleDot($2,$1)/giseo) 
+    
+    &_writeDebug(" <<< EXIT  commonTagsHandler  ");
+
 } ### sub commonTagsHandler
 
 # =========================
-sub handleDot
+sub _handleDot
 {
-    $grNum++;   # Increment a sequential graph number for un-named graphs
+    &_writeDebug(" >>> _handleDot Entered ");
 
-    my $errMsg = &doInit();
-  return $errMsg if $errMsg;
+    # Retrieve new attachments hash from the session variable from previous passes
+    my %newHashArray = ();
+    my $newHashRef =  thaw(TWiki::Func::getSessionValue('DGP_newhash'));
+    if ($newHashRef) {
+        %newHashArray = %{ $newHashRef };
+    } else {
+        &_writeDebug(" _handleDot is initializing the newHashArray");
+        $newHashArray{SET} = 1;  # Tell afterCommonTagsHandler that commonTagsHandler has run.
+        $newHashArray{GRNUM} = 0;  # Initialize graph count
+    }
 
-    my $attr = $_[1] || "";
-    my $desc = $_[0] || "";
+    my %oldHashArray = ();
+    my $oldHashRef =  thaw(TWiki::Func::getSessionValue('DGP_hash'));
+    if ($oldHashRef) {
+        %oldHashArray = %{ $oldHashRef };
+    } 
+
+    my $tempdir = "";
+    if ( defined $TWiki::cfg{TempfileDir} ) {
+        $tempdir = $TWiki::cfg{TempfileDir};
+    } else {
+        $tempdir = File::Spec->tmpdir();
+    }
+
+    my $attr = $_[1] || "";  # Attributes from the <dot ...> tag
+    my $desc = $_[0] || "";  # GraphViz input between the <dot> ... </dot> tags
+
+    my $grNum = $newHashArray{GRNUM};
 
     my %params = TWiki::Func::extractParameters($attr);  #extract all parms into a hash array
 
+    # parameters with defaults set in the DirectedGraphPlugin topic.
     my $antialias = $params{antialias} || $antialiasDefault;;
     my $density = $params{density} || $densityDefault;
     my $size = $params{size} || $sizeDefault;
     my $vectorFormats = $params{vectorformats} || $vectorFormatsDefault;
     my $engine = $params{engine} || $engineDefault;
     my $library = $params{library} || $libraryDefault;
+    my $hideAttach = $params{hideattachments} || $hideAttachDefault ;
+    my $inlineAttach = $params{inline} || $inlineAttachDefault ;
+
+    # parameters with hardcoded defaults
     my $outFilename = $params{file} || "";
     my $doMap = $params{map} || "";
     my $dotHash = $params{dothash} || "on";
-    my $hideAttach = $params{hideattachments} || $hideAttachDefault ;
 
-    # Strip all leading / trailing white space - WYSIWYG seems to pad it.
-    $antialias =~ s/^\s+//;
+    # Global parameters only specified in the DirectedGraphPlugin topic.
+    # $debugDefault          
+    # $deleteAttachDefault
+
+    # Strip all trailing white space on any parameters set by set statements - WYSIWYG seems to pad it.
     $antialias =~ s/\s+$//;
-    $density =~ s/^\s+//;
     $density =~ s/\s+$//;
-    $size =~ s/^\s+//;
     $size =~ s/\s+$//;
-    $vectorFormats =~ s/^\s+//;
     $vectorFormats =~ s/\s+$//;
-    $engine =~ s/^\s+//;
     $engine  =~ s/\s+$//;
-    $library =~ s/^\s+//;
     $library =~ s/\s+$//;
-    $outFilename =~ s/^\s+//;
-    $outFilename =~ s/\s+$//;
-    $dotHash =~ s/^\s+//;
-    $dotHash =~ s/\s+$//;
-    $hideAttach =~ s/^\s+//;
     $hideAttach =~ s/\s+$//;
+    $inlineAttach =~ s/\s+$//;
+    $deleteAttachDefault =~ s/\s+$//;
     
     # Make sure outFilename is clean 
     $outFilename = TWiki::Sandbox::sanitizeAttachmentName($outFilename) if ($outFilename ne "");
@@ -240,27 +262,37 @@ sub handleDot
         $antialias = 0;
     }
 
+    #
+    ###  Validate all of the <dot ...> input parameters
+    #
+
     unless ( $density =~ m/^\d+$/o ) {
-      return
-"<font color=\"red\"><nop>DirectedGraph Error: density parameter should be given as a number (was: $density)</font>";
+      return "<font color=\"red\"><nop>DirectedGraph Error: density parameter should be given as a number (was: $density)</font>";
     }
+
     unless ( $size =~ m/^\d+x\d+$/o ) {
-      return
-"<font color=\"red\"><nop>DirectedGraph Error: size parameter should be given in format: widthxheight (was: $size)</font>";
+      return "<font color=\"red\"><nop>DirectedGraph Error: size parameter should be given in format: widthxheight (was: $size)</font>";
     }
 
     unless ( $engine =~ m/^(dot|neato|twopi|circo|fdp)$/o ) {
-      return
-"<font color=\"red\"><nop>DirectedGraph Error: engine parameter must be one of the following: dot, neato, twopi, circo or fdp (was: $engine)</font>";
+      return "<font color=\"red\"><nop>DirectedGraph Error: engine parameter must be one of the following: dot, neato, twopi, circo or fdp (was: $engine)</font>";
     }
 
     unless ( $dotHash =~ m/^(on|off)$/o ) {
-          return "<font color=\"red\"><nop>DirectedGraph Error: dothash must be either \"off\" or \"on\" (was: $dotHash)</font>";
-       }
+      return "<font color=\"red\"><nop>DirectedGraph Error: dothash must be either \"off\" or \"on\" (was: $dotHash)</font>";
+    }
 
     unless ( $hideAttach =~ m/^(on|off)$/o ) {
-          return "<font color=\"red\"><nop>DirectedGraph Error: hideattachments  must be either \"off\" or \"on\" (was: $hideAttach)</font>";
-       }
+      return "<font color=\"red\"><nop>DirectedGraph Error: hideattachments  must be either \"off\" or \"on\" (was: $hideAttach)</font>";
+    }
+
+    unless ( $inlineAttach =~ m/^(png|jpg)$/o ) {
+      return "<font color=\"red\"><nop>DirectedGraph Error: inline  must be either \"jpg\" or \"png\" (was: $inlineAttach)</font>";
+    }
+
+    unless ( $deleteAttachDefault =~ m/^(on|off)$/o ) {
+      return "<font color=\"red\"><nop>DirectedGraph Error in defaults: DELETEATTACHMENTS  must be either \"off\" or \"on\" (was: $deleteAttachDefault)</font>";
+    }
 
     my $hide = undef;   
     if ( $hideAttach =~ m/off/o ) {
@@ -276,8 +308,8 @@ sub handleDot
         $chkHash = 1;
     }	
 
-    # FIXME  This is not safe for the Store rewrite.  
-    # Need to copy attachments to a temporary directory!
+    # SMELL:  This is not safe for the Store rewrite.  
+    # Need to copy library attachments to a temporary directory for access by graphViz!
 
     $library =~ s/\./\//;
     my $workingDir = TWiki::Func::getPubDir() . "/$library";
@@ -291,41 +323,58 @@ sub handleDot
         $doMap = 1;
     }
 
-    &writeDebug(
+    &_writeDebug(
 "incoming: $desc, $attr , antialias = $antialias, density = $density, size = $size, vectorformats = $vectorFormats, engine = $engine, library = $library, doMap = $doMap, hash = $dotHash \n"
     );
 
     foreach my $prm (keys(%params)) {
-            &writeDebug( "PARAMETER $prm value is $params{$prm} \n");
+            &_writeDebug( "PARAMETER $prm value is $params{$prm}");
    }
 
     # compute the MD5 hash of this string.  This used to detect
     # if any parameters or input change from run to run
     # Attachments recreated if the hash changes
 
-    my $hashCode =
-      md5_hex( "DOT" . $desc . $attr . $antialias . $density . $size . $vectorFormats . $engine . $library . $doMap );
+    # Hash is calculated against the <dot> command parameters and input, 
+    # along with any parameters that are set in the Default topic which would modify the results.
+    # Parameters that are only set as part of the <dot> command do not need to be explicitly coded, 
+    # as they are include in $attr.
 
-    $hashed_math_strings{"$hashCode"} = $_[0];
+    my $hashCode =
+      md5_hex( "DOT" . $desc . $attr . $antialias . $density . $size . $vectorFormats . $engine . $library . $hideAttach . $inlineAttach );
 
     # If a filename is not provided, set it to a name, with incrementing number.
-    if ($outFilename eq "") {$outFilename = "DirectedGraphPlugin_"."$grNum";} 
+    if ($outFilename eq "") {   #no filename?  Create a new name
+       $grNum++;          # increment graph number.  
+       $outFilename = "DirectedGraphPlugin_"."$grNum";
+    }
     
-    my $oldHashCode = TWiki::Func::readFile( "$workAreaDir/${usWeb}_${topic}_${outFilename}");
+    # Make sure vectorFormats includes all required file types
+    $vectorFormats =~ s/,/ /g ;  #Replace any comma's in the list with spaces.  
+    $vectorFormats .= " ".$inlineAttach if !($vectorFormats =~ m/$inlineAttach/);  # whatever specified inline is mandatory
+    $vectorFormats .= " ps" if (($antialias) && !($vectorFormats =~ m/ps/));       # postscript for antialias or as requested
+    $vectorFormats .= " cmapx" if (($doMap) && !($vectorFormats =~ m/cmapx/));     # client side map
+    $vectorFormats =~ s/none//g ;         # remove the "none" if set by default
 
+    my $oldHashCode = $oldHashArray{MD5HASH}{$outFilename} || " ";  # retrieve hash code for filename
+
+    $newHashArray{MD5HASH}{$outFilename} = $hashCode;         # hash indexed by filename
+    $newHashArray{FORMATS}{$outFilename} = $vectorFormats; # output formats for eventual cleanup 
+
+    &_writeDebug("$outFilename: oldhash = $oldHashCode  newhash = $hashCode");
 
     #  If the hash codes don't match, the graph needs to be recreated
     #  otherwise just use the previous graph already attached.
-    #  Also check if someone has deleted the attachment and recreate if needed
-    #
+    #  Also check if the inline attachment is missing and recreate if needed
+    
     if ( (($oldHashCode ne $hashCode) && $chkHash ) | 
-         not TWiki::Func::attachmentExists( $web, $topic, "$outFilename.png" )) {
+         not TWiki::Func::attachmentExists( $web, $topic, "$outFilename.$inlineAttach" )) {
 
-        # Make sure vectorFormats includes all required file types
-        # dups okay, will scrub them out below.
-        $vectorFormats .= " png";
-        $vectorFormats .= " ps" if ($antialias);
-        $vectorFormats .= " cmapx" if ($doMap);
+        &_writeDebug(" >>> Processing changed dot tag or missing file $outFilename.$inlineAttach <<< ");
+
+        my $sandbox = undef;
+        $sandbox = $TWiki::sharedSandbox # 4.0 - 4.1.2
+            || $TWiki::sandbox; # 4.2
 
         my $outString = "";
         my %tempFile;
@@ -337,15 +386,12 @@ sub handleDot
                          DIR => $tempdir,
 	                 UNLINK => 0, #  Manually unlink later if debug not specified.
                          SUFFIX => ".$key" );
-                 # Don't create the GraphViz PNG output if antialias is requested			 
-                 $outString .= "-T$key -o$tempFile{$key} " unless ($antialias && $key eq "png");
+                 # Don't create the GraphViz inline output if antialias is requested			 
+                 $outString .= "-T$key -o$tempFile{$key} " unless ($antialias && $key eq "$inlineAttach");
                  $attachFile{$key} = "$outFilename.$key";
-              }   
-           }
-        }
-
-        # Save the hash for the new graph.
-        if ( $chkHash ) { TWiki::Func::saveFile( "$workAreaDir/${usWeb}_${topic}_${outFilename}", $hashCode ); } 
+              } ### if (!exists ($tempFile   
+           } ### if ($key ne "none"
+        } ### foreach my $key
 
         # Create a new temporary file to pass to GraphViz
         my $dotFile = new File::Temp(TEMPLATE => 'DiGraphPluginXXXXXXXXXX',
@@ -366,44 +412,52 @@ sub handleDot
             );
 	
 	if ($status) {
-	     unlink $dotFile          unless $debug;
-             return showError( $status, $output, $hashed_math_strings{"$hashCode"}, $dotFile.".err" );
+	     unlink $dotFile          unless $debugDefault;
+              return _showError( $status, $output, $desc, $dotFile.".err" );
 	     } ### if ($status)
-	unlink "$dotFile.err" unless $debug;     
-        unlink $dotFile unless $debug;
+	unlink "$dotFile.err" unless $debugDefault;     
+        unlink $dotFile unless $debugDefault;
 
-	### Possible improvement - let the engine create the PNG file and
+	### SMELL: Possible improvement - let the engine create the PNG file and
 	### then set the size & density below to match so the image map
 	### matches correctly.
 
-        if ($antialias) {  # Convert the postscript image to the png
+        if ($antialias) {  # Convert the postscript image to the inline format
             my ( $output, $status ) = $sandbox->sysCommand(
                 $magickPath . $antialiasCmd,
                 DENSITY  => $density,
                 GEOMETRY => $size,
                 INFILE   => "$tempFile{'ps'}",
-                OUTFILE  => "$tempFile{'png'}"
+                OUTFILE  => "$tempFile{$inlineAttach}"
             );
-            &writeDebug("dgp-png: output: $output \n status: $status");
+            &_writeDebug("dgp-antialias: output: $output \n status: $status");
             if ($status) {
-              return &showError( $status, $output, $hashed_math_strings{"$hashCode"} );
+              return &_showError( $status, $output, $desc );
             } ### if ($status)
         } ### if ($antialias)
 
         foreach my $key (keys(%attachFile)) {
+            my @stats = stat $tempFile{$key};
+            my $fileSize = $stats[7];
+            my $fileDate = $stats[9];
             TWiki::Func::saveAttachment(
                 $web, $topic,
                 "$attachFile{$key}",
                 {
 		    file => "$tempFile{$key}",
+		    filedate => $fileDate,
+		    filesize => $fileSize,
                     comment => '<nop>DirectedGraphPlugin: DOT graph',
                     hide    => $hide
                 }
             );
-        unlink $tempFile{$key} unless $debug ;
+        unlink $tempFile{$key} unless $debugDefault ;
         } ### foreach my $key (keys....
 
     } ### else [ if ($oldHashCode ne $hashCode) |
+
+    $newHashArray{GRNUM} = $grNum;
+    TWiki::Func::setSessionValue( 'DGP_newhash', freeze \%newHashArray);
 
     if ($doMap) {
         # read and format map
@@ -411,20 +465,25 @@ sub handleDot
         $mapfile =~ s/(<map\ id\=\")(.*?)(\"\ name\=\")(.*?)(\">)/$1$hashCode$3$hashCode$5/go;
         $mapfile =~ s/[\n\r]/ /go;
 
-        # place map and "foo.png" at the source of the <dot> tag in $Web.$Topic
+        # place map and inline image  at the source of the <dot> tag in $Web.$Topic
         my $loc = TWiki::Func::getPubUrlPath() . "/$web/$topic";
-        my $src = TWiki::urlEncode("$loc/$outFilename.png");
-	return "<noautolink> $mapfile<img usemap=\"#$hashCode\" src=\"$src\"/> </noautolink>";
+        my $src = TWiki::urlEncode("$loc/$outFilename.$inlineAttach");
+        return "<noautolink>$mapfile<img usemap=\"#$hashCode\" src=\"$src\"/></noautolink>";
     } else {
-        # attach "foo.png" at the source of the <dot> tag in $Web.$Topic
+        # attach the inline image  at the source of the <dot> tag in $Web.$Topic
         my $loc = TWiki::Func::getPubUrlPath() . "/$web/$topic";
-        my $src = TWiki::urlEncode("$loc/$outFilename.png");
+        my $src = TWiki::urlEncode("$loc/$outFilename.$inlineAttach");
       return "<img src=\"$src\"/>";
     } ### else [ if ($doMap)
 } ### sub handleDot
 
-# =========================
-sub showError
+
+### sub _showError
+#
+#   Display any GraphViz reported errors inline into the file
+#   For easier debuggin of malformed <dot> tags.
+
+sub _showError
 {
     my ( $status, $output, $text, $errFile ) = @_;
 
@@ -434,59 +493,244 @@ sub showError
         open (ERRFILE, $errFile);
         my @errLines = <ERRFILE>;
         $text = "*DirectedGraphPlugin error:* <verbatim>" . join("", @errLines) . "</verbatim>";
-        unlink $errFile unless $debug;
+        unlink $errFile unless $debugDefault;
     }
 
     my $line = 1;
     $text =~ s/\n/sprintf("\n%02d: ", $line++)/ges if ($text);
     $output .= "<pre>$text\n</pre>";
   return "<font color=\"red\"><nop>DirectedGraph Error ($status): $output</font>";
-} ### sub showError
+} ### sub _showError
 
-sub writeDebug
+### sub _writeDebug
+#
+#   Writes a common format debug message if debug is enabled
+
+sub _writeDebug
 {
-    &TWiki::Func::writeDebug( "$pluginName - " . $_[0] ) if $debug;
-}
+    &TWiki::Func::writeDebug( "$pluginName - " . $_[0] ) if $debugDefault;
+} ### SUB _writeDebug
+
+
+### sub afterRenameHandler
+#
+#   This routine will rename or delete any workarea files.  If topic is renamed
+#   to the Trash web, then the workarea files are simply removed, otherwise they
+#   are renamed to the new Web and topic name.
 
 sub afterRenameHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $oldWeb, $oldTopic, $oldAttachment, $newWeb, $newTopic, $newAttachment ) = @_;
 
     my $oldweb = $_[0];
-    my $oldUsWeb = $oldweb;
-    $oldUsWeb =~ s/\//_/g; #Change slash to underscore to handle subwebs in the workarea
+    $oldweb =~ s/\//_/g;  # convert subweb separators to underscore
     my $oldtopic = $_[1];
     my $newweb = $_[3];
-    my $newUsWeb = $newweb;
-    $newUsWeb =~ s/\//_/g; #Change slash to underscore to handle subwebs in the workarea
+    $newweb =~ s/\//_/g;  # convert subweb separators to underscore
     my $newtopic = $_[4];
     my $workAreaDir = TWiki::Func::getWorkArea('DirectedGraphPlugin');
     
-   TWiki::Func::writeDebug( "- ${pluginName}::afterRenameHandler( " .
-                            "$_[0].$_[1] $_[2] -> $_[3].$_[4] $_[5] )" ) if $debug;
+   &_writeDebug( "- ${pluginName}::afterRenameHandler( " .
+                            "$_[0].$_[1] $_[2] -> $_[3].$_[4] $_[5] )" );
 
    # Find all files in the workarea directory for the old topic
    # rename them unless new web is Trash, otherwise delete them.
    # 
-   # files are named either $web_$topic_graph_nn 
+   # files are named any of $web_$topic_DirectedGraphPlugin_n 
    #                     or $web_$topic_<user specified name>
+   #                     or $web_$topic-filehash
    #
 
    opendir(DIR, $workAreaDir) || die "<ERR> Can't find directory --> $workAreaDir !";
    
-   my @wfiles  = grep { /^${oldUsWeb}_${oldtopic}_/ } readdir(DIR);
+   my @wfiles  = grep { /^${oldweb}_${oldtopic}-/ } readdir(DIR);
    foreach my $f (@wfiles) {
-      my $prefix = "${oldUsWeb}_${oldtopic}_";
+      my $prefix = "${oldweb}_${oldtopic}-";
       my ($suffix) = ($f =~  "^$prefix(.*)" );
       $f = TWiki::Sandbox::untaintUnchecked($f);
       if ($newweb eq "Trash") {
          unlink "$workAreaDir/$f";
       } else {
-         my $newname = "${newUsWeb}_${newtopic}_${suffix}";
+         my $newname = "${newweb}_${newtopic}-${suffix}";
 	 $newname = TWiki::Sandbox::untaintUnchecked($newname);
+	 &_writeDebug(" Renaming $workAreaDir/$f to $workAreaDir/$newname ");
          rename ("$workAreaDir/$f", "$workAreaDir/$newname");
       }
   }
-}
+} ### sub afterRenameHandler
+
+### sub _loadHashCodes    
+#
+#   This routine loads the hash array from the stored file in the workarea directory
+#   It also will convert any older style hash files into the new single file written
+#   by the Storable routines.
+
+sub _loadHashCodes {
+
+    my $workAreaDir = TWiki::Func::getWorkArea('DirectedGraphPlugin');
+
+    opendir(DIR, $workAreaDir) || die "<ERR> Can't find directory --> $workAreaDir !";
+
+    my %tempHash;
+    my %typeHash;
+
+    if (-e "$workAreaDir/${usWeb}_${topic}-filehash") {
+        &_writeDebug(" loading filehash  ");
+        my $hashref = retrieve("$workAreaDir/${usWeb}_${topic}-filehash");
+        %tempHash = %$hashref;
+        return %tempHash;
+    }
+
+    ### Temporary Code - Convert file hash codes 
+    ### and delete the old files from the workarea
+    ### Also insert any old format attachments into the table 
+    ### for later cleanup.
+    
+    # Get all the attachments filenames and extract their types
+
+    my ($met, $tex) =  TWiki::Func::readTopic( $web, $topic );
+    my @attachments = $met->find( 'FILEATTACHMENT' );
+        foreach my $a (@attachments) {
+	    my $aname = $a->{name};
+            my ($n, $t) = $aname =~ m/^(.*)\.(.*)$/; # Split file name and type
+	    &_writeDebug("    - Attach = |$aname| Name = |$n| Type = |$t| ");
+            $typeHash{$n} .= " ".$t;
+	    my ($on) = $n =~ m/^graph([0-9a-f]{32})$/;   # old style attachment graph<hashcode>.xxx
+	    if ($on) {   
+	        $tempHash{MD5HASH}{$n} = $on;
+		$tempHash{FORMATS}{$n} .= " ".$t;
+	    } # if ($on)	
+        } # foreach my $a
+
+    # Read in all of the hash files for the generated attachments
+    # and build a new format hash table.  
+
+    my @wfiles  = grep { /^${usWeb}_${topic}_/ } readdir(DIR);
+        foreach my $f (@wfiles) {
+            my $key = TWiki::readFile("$workAreaDir/$f");
+            $f = TWiki::Sandbox::untaintUnchecked($f);
+	    unlink "$workAreaDir/$f";              # delete the old style hash file
+            $f =~ s/^${usWeb}_${topic}_(.*)/$1/g;    # recover the original attachment filename
+            $tempHash{FORMATS}{$f} = $typeHash{$f};   # insert hash of types found in attachment table
+	    $tempHash{MD5HASH}{$f} = $key;            # insert hash indexed by filename
+	    &_writeDebug("$f = |$tempHash{MD5HASH}{$f}| types |$tempHash{FORMATS}{$f}| ");
+        }
+
+    # Write out new hashfile
+    if (keys %tempHash) {
+        &_writeDebug("    - Writing hashfile ");
+        store \%tempHash, "$workAreaDir/${usWeb}_${topic}-filehash";
+    }
+    return %tempHash;
+
+} ### sub _loadHashCodes
+
+
+#
+#  sub afterCommonTagsHandler
+#   - Find any files or file types that are no longer needed
+#     and move to Trash with a unique name.
+#
+sub afterCommonTagsHandler {
+
+    if ( ($_[1] ne $topic) || ($_[2] ne $web)) {
+        &_writeDebug(" SKIPPING afterCommonTagsHandler  web = |$web|  topic = |$topic|  $_[2] $_[1] ");
+        return;
+        }
+
+   &_writeDebug( " >>> afterCommonTagsHandler entered ");
+
+
+    my %newHash = ();
+    my $newHashRef = thaw(TWiki::Func::getSessionValue('DGP_newhash')) ;
+
+    if ($newHashRef) {   # DGP_newhash existed
+        &_writeDebug("     -- newHashRef existed in session - writing out ");
+        %newHash = %{ $newHashRef }; 
+        my $workAreaDir = TWiki::Func::getWorkArea('DirectedGraphPlugin');
+        store \%newHash, "$workAreaDir/${usWeb}_${topic}-filehash"; 
+
+        if ($newHash{SET}) {  # dot tags have been processed
+            my %oldHash = ();
+            my $oldHashRef = thaw(TWiki::Func::getSessionValue('DGP_hash'))  ;
+            if ($oldHashRef) {%oldHash = %{ $oldHashRef }; }
+
+            &_writeDebug(" afterCommon - Value of SET s $newHash{SET} ");
+            &_writeDebug(" delete = $deleteAttachDefault");
+            &_writeDebug(" keys = ".(keys %oldHash));
+
+
+            if (($deleteAttachDefault) && (keys %oldHash) ) {  # If there are any old files to deal with
+                foreach my $filename (keys %{$oldHash{FORMATS}}) {       # Extract filename
+		    my $oldTypes = $oldHash{FORMATS}{$filename} || "";
+	            if ($debugDefault) {
+                        &_writeDebug("old  $filename ... types= $oldTypes ") ;
+                        &_writeDebug("new  $filename ... types= $newHash{FORMATS}{$filename} ") ;
+                    } ### if ($debugDefault 
+		    if ($oldTypes) {
+                        foreach my $oldsuffix (split (" ",$oldTypes )) {
+	                    if ( !($newHash{FORMATS}{$filename} =~ (/$oldsuffix/) )) {
+	                       _deleteAttach("$filename.$oldsuffix");
+	                    }   ### if (%newHash
+	                } ### foreach my $olsduffix
+		    } ### if ($oldTypes)	
+                } ### foreach my $filename 
+            } ### if (keys %{$oldHash
+
+            # Clear the session values
+            TWiki::Func::clearSessionValue('DGP_hash');
+            TWiki::Func::clearSessionValue('DGP_newhash');
+        } ### if ($newHash{SET}	
+    } ### if ($newHashRef)
+
+} ### sub afterCommonTagsHandler
+
+
+### sub _deleteAttach
+#
+#   Handles moving unneeded attachments to the Trash web with a new name which includes
+#   the Web name and Topic name.  On older versions of TWiki, it simply deleted the files
+#   with perl's unlink.
+
+sub _deleteAttach {
+
+    my $fn = TWiki::Sandbox::normalizeFileName($_[0]);
+
+    if (TWiki::Func::attachmentExists( $web, $topic, $fn )) {
+
+        # If the TrashAttachment topic is missing, create it.
+        if (!TWiki::Func::topicExists( $TWiki::cfg{TrashWebName}, 'TrashAttachment' ) ) {
+            &_writeDebug(" ### Creating missing TrashAttachment topic ");
+
+            #my $meta = new TWiki::Meta($this->{twiki},$TWiki::cfg{TrashWebname},"TrashAttachment");
+            #$meta=>put( "TOPICINFO", {author => "TWikiContributor" date => "1092762941" format => "1.0" version => "3" );
+            #$meta=>put( "TOPICPARENT", { name => "$web.WebHome" } );
+
+            my $text = "---+ %MAKETEXT{\"Placeholder for trashed attachments\"}%\n";
+            TWiki::Func::saveTopic( "$TWiki::cfg{TrashWebName}", "TrashAttachment", undef, $text, undef );
+	    }
+     
+        
+        &_writeDebug(" >>> Trashing $web . $topic . $fn");
+
+        my $i = 0;
+	my $of = $fn;
+        while (TWiki::Func::attachmentExists( $TWiki::cfg{TrashWebName}, 'TrashAttachment', "$web.$topic.$of" )) {
+	   &_writeDebug(" ------ duplicate in trash  $of");
+	   $i++;
+	   $of .= "$i";
+	   }
+
+        TWiki::Func::moveAttachment( $web ,
+            $topic,
+            $fn,
+            $TWiki::cfg{TrashWebName},
+            'TrashAttachment', 
+	    "$web.$topic.$of" ); 
+        }    
+
+
+} ### sub _deleteFile
 
 1;
+
