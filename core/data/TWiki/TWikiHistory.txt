@@ -5,7 +5,9 @@
 %TOC%
 
 #FreetownRelease
----++ TWiki Release 4.2 (Freetown), 22 Jan 2008
+---++ TWiki Release 4.2.1 (Freetown) released %$DATE%
+
+Patch release following the 4.2.0 released 22 Jan 2008
 
 __New Features and Enhancements of TWiki Release 4.2__
 
