@@ -310,7 +310,7 @@ msgstr "(ingen)"
 #: twikiplugins/ClassicSkin/templates/oopsaccessdenied.classic.tmpl:3
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:3
 msgid "(oops)"
-msgstr ""
+msgstr "(OBS)"
 
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:276
 msgid "(optional)"
@@ -1344,6 +1344,10 @@ msgid ""
 "no dots, capitalized, e.g. !JohnSmith, unless you chose otherwise). Visit %"
 "TWIKIWEB%.TWikiRegistration if you do not have one."
 msgstr ""
+"Brug dit TWiki brugernavn. (Typisk fornavn og efternavn, uden mellemrum, "
+"uden punktum, store begyndelsesbogstaver. Fx !JohnSmith, med mindre du "
+"har valgt noget andet). Gå til %TWIKIWEB%.TWikiRegistration hvis du ikke "
+"har et brugernavn"
 
 #: templates/messages.tmpl:233
 msgid "Error registering new user"
@@ -2009,17 +2013,17 @@ msgstr "Når du er blevet registreret kan du logge ind med dit %1 og password."
 msgid "Only members of the %1 are allowed to perform this action."
 msgstr "Kun medlemmer af %1 må udføre denne handling."
 
-#: templates/login.tmpl:8
-#, fuzzy
+#: templates/login.tmpl:
 msgid ""
 "Oops: we could not recognize you. Try again or [[%SYSTEMWEB%.ResetPassword][%"
 "1]]."
-msgstr "Oops: Vi kunne ikke genkende dig. Forsøg igen eller %1."
+msgstr ""
+"Vi kunne ikke genkende dig. Forsøg igen eller "
+"[[%SYSTEMWEB%.ResetPassword][%1]]."
 
 #: twikiplugins/ClassicSkin/templates/preview.classic.tmpl:10
-#, fuzzy
 msgid "Opens page in new window"
-msgstr "Læs hjælpeteksten til Gennemtving nyt versionsnummer i et nyt vindue"
+msgstr "Åbn side i et nyt vindue"
 
 #: templates/renamedelete.tmpl:19
 msgid "Optionally change topic name:"
@@ -2259,7 +2263,7 @@ msgstr "Relaterede sider:"
 
 #: twikiplugins/ClassicSkin/templates/login.classic.tmpl:10
 msgid "Remember me"
-msgstr ""
+msgstr "Husk mig"
 
 #: templates/login.tmpl:65
 msgid "Remember me on this computer"
@@ -2386,7 +2390,7 @@ msgstr "Versioner"
 
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:19
 msgid "S = Save, C = Cancel"
-msgstr "S = Gem (Save), C = (Fortryd) Cancel"
+msgstr "S = Gem (Save), C = Fortryd (Cancel)"
 
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:14
 msgid "S = Save, Q = Quiet save, K = Save and Continue, D = Discard"
@@ -2686,9 +2690,8 @@ msgstr ""
 "i bunden af siden, og du vil blive returneret til den side du kom fra."
 
 #: templates/messages.tmpl:498
-#, fuzzy
 msgid "Template %1 does not exist"
-msgstr "%1-webbet eksisterer ikke"
+msgstr "Skabelon %1 eksisterer ikke"
 
 #: data/Sandbox/WebHome.txt:6
 msgid "Test Topics"
@@ -3248,9 +3251,8 @@ msgid "WARNING:"
 msgstr "ADVARSEL:"
 
 #: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:179
-#, fuzzy
 msgid "Warning: 'include' topic does not exist!"
-msgstr "BEMÆRK: Denne Wiki-side er ikke oprettet endnu"
+msgstr "BEMÆRK: 'incluce'-siden er ikke oprettet endnu"
 
 #: templates/messages.tmpl:447
 msgid "Warning: Can't INCLUDE %1 repeatedly, topic is already included. %2"
@@ -3360,21 +3362,20 @@ msgstr ""
 "Du forsøger at udføre handlingen %1 på en vedhæftet fil der ikke eksisterer."
 
 #: templates/messages.tmpl:499
-#, fuzzy
 msgid "You are trying to create a topic from a template that does not exist."
-msgstr "Du forsøger at udføre handlingen %1 på en side der ikke eksisterer."
+msgstr "Du forsøger at oprette en side fra en skabelon der ikke eksisterer."
 
 #: templates/messages.tmpl:494
-#, fuzzy
 msgid ""
 "You are trying to perform an action on a topic that does not exist (action '%"
 "1')."
-msgstr "Du forsøger at udføre handlingen %1 på en side der ikke eksisterer."
+msgstr ""
+"Du forsøger at udføre en handling på en side der ikke eksisterer (handling '%"
+"1')."
 
 #: templates/messages.tmpl:505
-#, fuzzy
 msgid "You are trying to rename a topic that does not exist."
-msgstr "Du forsøger at udføre handlingen %1 på en side der ikke eksisterer."
+msgstr "Du forsøger at omdøbe en side der ikke eksisterer."
 
 #: templates/messages.tmpl:484
 msgid ""
@@ -3526,7 +3527,7 @@ msgstr "Din(e) registrerede e-mail adresse(r) er opdateret til: %1"
 #: templates/edit.tmpl:48
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:68
 msgid "Your signature to copy/paste:"
-msgstr "Din signatur (til copy/paste)"
+msgstr "Din signatur (til copy/paste):"
 
 #: templates/messages.tmpl:178
 msgid ""
@@ -3646,15 +3647,14 @@ msgstr "angiver obligatoriske felter"
 
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:15
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:9
-#, fuzzy
 msgid "looking for references in _%1 web_ only"
-msgstr "finder referencer (i _alle offentlige webs_)"
+msgstr "finder referencer kun i _%1-webbet_"
 
 #: data/TWiki/RenameWeb.txt:3
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:13
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:7
 msgid "looking for references in _all public webs_"
-msgstr "finder referencer (i _alle offentlige webs_)"
+msgstr "finder referencer i _alle offentlige webs_"
 
 #: templates/attachtables.tmpl:12
 msgid "manage"
