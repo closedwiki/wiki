@@ -1,5 +1,5 @@
 %META:TOPICINFO{author="TWikiContributor" date="1177700623" format="1.1" version="$Rev$"}%
----+!! TWiki Release 4.2.0 (Freetown), %$DATE%
+---+!! TWiki Release 4.2.1 (Freetown), %$DATE%
 
 %TOC%
 
@@ -10,6 +10,8 @@ TWiki Release 4.2.0 is a minor release. TWiki releases are either major (major n
 TWiki Release 4.2.0 introduces some good enhancements and quite many bug fixes since 4.1.2.
 
 The development team has done everything to maintain full compatibility with topics generated in TWiki-4.0 and there are no changes to the topic format when using normal !TWikiUserMapping
+
+TWiki Release 4.2.1 is a patch release with around 120 bug fixes.
 
 ---++ Pre-installed Extensions
 
@@ -59,6 +61,32 @@ The feature related to the config option TWiki::cfg{RCS}{useSubDir} has been rem
 The removal was announced in a news letter and in a proposal topic, and discussed at several release meetings, and noone objected against its removal.
 
 If you have run TWiki with this feature (maybe with a self implemented fix of the code) you will need to simply copy all the ,v files in all RCS directories to the directory above (where you find the .txt file or the attached filed) when you upgrade to 4.2.1.
+
+---+++ Highlights of bug fixes since 4.2.0
+
+   * Much more stable Wysiwyg editor
+      * Better support for non-English characters
+      * Better handling of bullet points
+      * Pickaxe feature which enables quick swap between Wysiwyg and raw edit is more stable
+      * Attachment of files within Wysiwyg editor working better
+      * Linking feature fixed
+   * More stable !EditTablePlugin
+   * Better support for UTF8 though UTF8 is still regarded as experimental and features such as wiki words do not work with non-english characters. UTF8 will be a good choice for languages such as Chinese, Japanese and Korean
+   * Better support for non English charsets
+   * Easier configuration of language settings in configure
+   * Renaming of webs much improved
+   * Compatibility with perl 5.10
+   * Fixes related to mandatory fields in forms
+   * Universal edit button with Firefox extension
+   * Access controls using login ID instead of wikiname which was broken in 4.2.0 works again
+   * Search features have had a few bugs fixed
+   * Several bugs related to attaching files have been fixed
+   * Some cross site scripting possibilities have been eliminated
+   * Plugins that uses beforeAttachmentSaveHandler now works stable (e.g. !BlackListPlugin)
+   * The feature of having RCS files (the ,v file) in a separate directory never worked. Feature has now been removed as it really does not give any advantages.
+   * User mapping feature improved to ensure 1:1 mapping between canonical user ID and login ID which is important for security
+
+See the full list of bug fixes at the bottom of this topic.
 
 ---++ Important Changes since 4.1.2
 
@@ -522,6 +550,20 @@ The 4.2.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 | [[%BUGS%/Item1748][Item1748]] | Attach help contains note for Internet Explorer 4 that can be removed now |
 | [[%BUGS%/Item1582][Item1582]] | configure needs a backlink to the TWiki/WebHome |
 </noautolink>
+
+---++  TWiki 4.2.1 Minor Release - Details
+
+The 4.2.1 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x02 revision %$VERSION%. 
+
+---++ Fixes
+
+<noautolink>
+Kenneth will insert list here in the last minute
+</noautolink>
+
+---++ Enhancements
+
+None!
 
 <!-- Note: Do not use Bugs: interwiki links because interwiki rule might not be defined
    * Set BUGS = http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs
