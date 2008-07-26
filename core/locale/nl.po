@@ -2016,10 +2016,8 @@ msgstr ""
 "Alleen leden van de %1 hebben de mogelijkheid deze actie uit te voeren."
 
 #: templates/login.tmpl:8
-#, fuzzy
 msgid ""
-"Oops: we could not recognize you. Try again or [[%SYSTEMWEB%.ResetPassword][%"
-"1]]."
+"Oops: we could not recognize you. Try again or [[%1][reset your password]]."
 msgstr ""
 "Ahem: we konden je niet herkennen. Probeer het opnieuw of [[%1][stel een "
 "nieuw wachtwoord in]]."

@@ -2022,8 +2022,7 @@ msgstr "Pouze členové %1 jsou oprávnění provést tuto akci."
 
 #: templates/login.tmpl:8
 msgid ""
-"Oops: we could not recognize you. Try again or [[%SYSTEMWEB%.ResetPassword][%"
-"1]]."
+"Oops: we could not recognize you. Try again or [[%1][reset your password]]."
 msgstr ""
 
 #: twikiplugins/ClassicSkin/templates/preview.classic.tmpl:10

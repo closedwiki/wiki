@@ -1984,11 +1984,11 @@ msgid "Only members of the %1 are allowed to perform this action."
 msgstr "Bara medlemmar av %1 får göra detta."
 
 #: templates/login.tmpl:8
-#, fuzzy
 msgid ""
-"Oops: we could not recognize you. Try again or [[%SYSTEMWEB%.ResetPassword][%"
-"1]]."
-msgstr "Hoppsan: vi kommer inte ihåg vem du är. Försök igen eller %1."
+"Oops: we could not recognize you. Try again or [[%1][reset your password]]."
+msgstr ""
+"Hoppsan: vi kommer inte ihåg vem du är. Försök igen eller [[%1]"
+"[nollställ ditt lösenord]]."
 
 #: twikiplugins/ClassicSkin/templates/preview.classic.tmpl:10
 msgid "Opens page in new window"
