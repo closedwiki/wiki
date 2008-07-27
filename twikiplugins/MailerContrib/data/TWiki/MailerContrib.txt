@@ -134,6 +134,8 @@ will generate change notifications for all webs, except the =Sandbox= web.
 </verbatim>
 will generate newsletters from *all* webs every week on midnight Saturday.
 
+%X% Note: Multiple instances of mailnotify script are not allowed to be executed simutaneously. If you need to run the script multiple times with different options, make sure the cron jobs are scheduled so a previous run has finished before the next starts. You can also write a small script that runs mailnotify in sequence as described in TWiki:Support.DuplicateNotificationsFromMailerCon.
+
 <!--
 	* Set STUB = TWiki::Contrib::Mailer
 	* Set SHORTDESCRIPTION = Supports e-mail notification of changes.
@@ -164,6 +166,7 @@ Many thanks to the following sponsors for supporting this work:
 |  License: | GPL |
 |  Version: | %$VERSION% |
 |  Change History: | |
+|  27 Jul 2008 | TWikibug:Item5776: TWiki:Main.KennethLavrsen added note to warn against running multiple instances of mailnotify at the same time. |
 |  15 May 2008 | TWikibug:Item5232: TWiki:Main.CrawfordCurrie added support for non-ascii alphanumerics in topic names to WebNotify. TWikibug:Item5630: TWiki:Main.SvenDowideit fixed some spelling errors |
 |  25 Jan 2008 | TWikibug:Item4812: added TWiki:Main.BobGoldstein's noexpand patch for groups |
 |  2 Nov 2007 | TWikibug:Item4818: added quotes to support non-alphabetic and other wierd group names TWikibug:Item4887: corrected minor rendering error TWikibug:Item4917: removed dependence on symbolic web names |
