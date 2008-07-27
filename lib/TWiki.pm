@@ -1638,6 +1638,7 @@ sub finish {
     undef $this->{user};
     undef $this->{SESSION_TAGS};
     undef $this->{_INCLUDES};
+    undef $this->{evaluating_if};
 }
 
 =pod
@@ -3080,10 +3081,22 @@ sub IF {
         $ifParser = new TWiki::If::Parser();
     }
 
+    my $texpr = $params->{_DEFAULT};
     my $expr;
     my $result;
+
+    # Recursion block.
+    $this->{evaluating_if} ||= {};
+    # Block after 5 levels.
+    if ($this->{evaluating_if}->{$texpr} &&
+          $this->{evaluating_if}->{$texpr} > 5) {
+        delete $this->{evaluating_if}->{$texpr};
+        return '';
+    }
+    $this->{evaluating_if}->{$texpr}++;
+
     try {
-        $expr = $ifParser->parse( $params->{_DEFAULT} );
+        $expr = $ifParser->parse( $texpr );
         unless( $meta ) {
             require TWiki::Meta;
             $meta = new TWiki::Meta( $this, $web, $topic );
@@ -3100,6 +3113,8 @@ sub IF {
         $result = $this->inlineAlert(
             'alerts', 'generic', 'IF{', $params->stringify(), '}:',
             $e->{-text} );
+    } finally {
+        delete $this->{evaluating_if}->{$texpr};
     };
     return $result;
 }
