@@ -15,8 +15,6 @@ use strict;
 
 require TWiki::Infix::Node;
 
-our %dollaring;
-
 sub newLeaf {
     my( $class, $val, $type ) = @_;
     if( $type == $TWiki::Infix::Node::NAME && $val =~ /^({\w+})+$/) {
@@ -117,17 +115,10 @@ sub OP_dollar {
         return $session->{request}->param( $text );
     }
 
-    # Block after 5 levels.
-    if ($dollaring{$text} && $dollaring{$text} > 5) {
-        delete $dollaring{$text};
-        return '';
-    }
-    $dollaring{$text}++;
     $text = "%$text%";
     TWiki::expandAllTags($session, \$text,
                          $session->{topicName},
                          $session->{webName});
-    delete $dollaring{$text};
 
     return $text || '';
 }
