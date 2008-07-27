@@ -28,7 +28,7 @@ $VERSION = '$Rev: 14207 $';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.2.4';
+$RELEASE = '1.2.5';
 
 $pluginName = 'AttachmentListPlugin';    # Name of this Plugin
 
@@ -49,7 +49,8 @@ sub initPlugin {
     $defaultFormat = '   * [[$fileUrl][$fileName]] $fileComment';
 
     # Get plugin preferences
-    $defaultFormat = TWiki::Func::getPreferencesValue('FORMAT')
+    $defaultFormat =
+         TWiki::Func::getPreferencesValue('FORMAT')
       || TWiki::Func::getPluginPreferencesValue('FORMAT')
       || $defaultFormat;
 
@@ -58,7 +59,8 @@ sub initPlugin {
     $imageFormat = '<img src=\'$fileUrl\' alt=\'$fileComment\' />';
 
     # Get plugin preferences
-    $imageFormat = TWiki::Func::getPreferencesValue('IMAGE_FORMAT')
+    $imageFormat =
+         TWiki::Func::getPreferencesValue('IMAGE_FORMAT')
       || TWiki::Func::getPluginPreferencesValue('IMAGE_FORMAT')
       || $imageFormat;
 
@@ -111,6 +113,7 @@ sub handleFileList {
     my $excludeWebs            = $params->{'excludeweb'} || '';
     my $excludeFiles           = $params->{'excludefile'} || '';
     my $includeFilePattern     = $params->{'includefilepattern'} || undef;
+    my $excludeFilePattern     = $params->{'excludefilepattern'} || undef;
     my $excludeExtensionsParam = $params->{'excludeextension'} || '';
     my $extensionsParam        = $params->{"extension"}
       || $params->{"filter"};  # "abc, def" syntax. Substring match will be used
@@ -136,6 +139,9 @@ sub handleFileList {
           : 0;    # don't hide by default
     }
 
+    TWiki::Func::writeDebug("params->{'topic'}=$params->{'topic'}");
+    TWiki::Func::writeDebug("includeFilePattern=$includeFilePattern");
+
     my %excludedFiles = makeHashFromString($excludeFiles);
 
     # store once for re-use in loop
@@ -144,9 +150,10 @@ sub handleFileList {
     my @files =
       createAttachmentList( $topic, $web, $excludeTopics, $excludeWebs );
 
-    my $sortedFiles = sortFileData( \@files, $sort, $sortOrder, $fromDate, $toDate );
+    my $sortedFiles =
+      sortFileData( \@files, $sort, $sortOrder, $fromDate, $toDate );
     my @sortedFiles = @$sortedFiles;
-    
+
     my $count = 0;
     foreach my $fileData (@sortedFiles) {
 
@@ -167,6 +174,7 @@ sub handleFileList {
           );
 
         my $filename = $attachment->{name};
+        TWiki::Func::writeDebug("filename=$filename");
 
         # filter on extension
         my $fileExtension = $attachment->{_AttachmentListPlugin_extension};
@@ -183,6 +191,9 @@ sub handleFileList {
         # filter excluded files by regex pattern
         if ( defined $includeFilePattern ) {
             next unless ( $filename =~ /$includeFilePattern/ );
+        }
+        if ( defined $excludeFilePattern ) {
+            next if ( $filename =~ /$excludeFilePattern/ );
         }
 
         my $attrSize    = $attachment->{size};
@@ -297,8 +308,13 @@ sub handleFileList {
             $s =~ s/\$hidden/$hidden/g;
         }
 
-        my $fileUrl =
-          $pubUrl . "/$attachmentTopicWeb/$attachmentTopic/$filename";
+        my $webEnc = $attachmentTopicWeb;
+        $webEnc =~ s/([^-_.a-zA-Z0-9])/sprintf("%%%02x",ord($1))/eg;
+        my $topicEnc = $attachmentTopic;
+        $topicEnc =~ s/([^-_.a-zA-Z0-9])/sprintf("%%%02x",ord($1))/eg;
+        my $fileEnc = $filename;
+        $fileEnc =~ s/([^-_.a-zA-Z0-9])/sprintf("%%%02x",ord($1))/eg;
+        my $fileUrl = "$pubUrl/$webEnc/$topicEnc/$fileEnc";
 
         $s =~ s/\$fileUrl/$fileUrl/g;
         $s =~ s/\$fileTopic/$attachmentTopic/g;
@@ -317,6 +333,7 @@ sub handleFileList {
     }
     else {
         $header .= "\n" if ( $header ne '' );
+        $footer = "\n" . $footer if ( $footer ne '' );
         $outtext = $header . $outtext . $footer;
     }
 
