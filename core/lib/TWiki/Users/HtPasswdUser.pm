@@ -185,6 +185,19 @@ sub encrypt {
         my $toEncode= "$login:$TWiki::cfg{AuthRealm}:$passwd";
         return Digest::MD5::md5_hex( $toEncode );
 
+    } elsif ( $TWiki::cfg{Htpasswd}{Encoding} eq 'crypt-md5' ) {
+        my $salt = $this->fetchPass($login) unless $fresh;
+        if ( $fresh || !$salt ) {
+            $salt = '$1$';
+            my @saltchars= ('.', '/', 0..9, 'A'..'Z', 'a'..'z');
+            foreach my $i (0..7) {
+                # generate a salt not only from rand() but also mixing in the users login name: unecessary
+                $salt .= $saltchars[(int(rand($#saltchars+1)) + $i + ord(substr($login , $i % length($login), 1))) % ($#saltchars+1)];
+            }
+        }
+        my $ret = crypt( $passwd, substr( $salt, 0, 11 ) );
+        return $ret;
+
     } elsif ( $TWiki::cfg{Htpasswd}{Encoding} eq 'plain' ) {
         return $passwd;
 
@@ -217,7 +230,6 @@ sub fetchPass {
 
 sub setPassword {
     my ( $this, $login, $newUserPassword, $oldUserPassword ) = @_;
-
     if( defined( $oldUserPassword )) {
         unless( $oldUserPassword eq '1') {
             return 0 unless $this->checkPassword( $login, $oldUserPassword );
@@ -234,6 +246,7 @@ sub setPassword {
         _savePasswd( $db );
     } catch Error::Simple with {
         $this->{error} = $!;
+        print STDERR "ERROR: failed to resetPassword - $!";
         return undef;
     };
 
