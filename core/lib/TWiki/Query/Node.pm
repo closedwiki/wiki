@@ -370,6 +370,7 @@ sub OP_dot {
     my %domain = @_;
     my $a = $this->{params}[0];
     my $lval = $a->evaluate( @_ );
+    return undef unless( defined $lval );
     my $b = $this->{params}[1];
     my $res = $b->evaluate( data=>$lval, tom=>$domain{tom} );
     if (ref($res) eq 'ARRAY' && scalar(@$res) == 1) {
