@@ -1176,7 +1176,6 @@ sub test_TOPICINFO {
 
     my $topicName = 'TopicInfo';
 
-    my $wn = $this->{twiki}->{users}->getWikiName( $this->{twiki}->{user} );
     $this->{twiki}->{store}->saveTopic( $this->{twiki}->{user},
         $this->{test_web}, $topicName, <<PONG);
 oneapeny twoapenny we all fall down
@@ -1189,79 +1188,68 @@ PONG
     $this->assert_str_equals( $ti->{version}, '1.1' );
     $this->assert_str_equals( $ti->{rev},     '1' );
     $this->assert(
-        $this->{twiki}->{store}->topicExists( $this->{test_web}, $topicName ) );
+        $this->{twiki}->{store}->topicExists(
+            $this->{test_web}, $topicName ) );
 
     my @tests;
+
+    push(@tests,
+         {
+             test => "info.version = '1.1'",
+             expect => "1",
+         });
+    push(@tests,
+         {
+             test => "info.rev = '1'",
+             expect => "1",
+         });
+
     push(
         @tests,
         {
-            test   => $this->{test_web} . ".$topicName/info.version = '1.1'",
+            test   => "'$this->{test_web}.$topicName'/info.version = '1.1'",
+            expect => "1"
+           }
+    );
+    push(
+        @tests,
+        {
+            test   => "'$this->{test_web}.$topicName'/info.rev = '1'",
             expect => "1"
         }
     );
-    push(
-        @tests,
-        {
-            test   => $this->{test_web} . ".$topicName/info.rev = '1'",
-            expect => "1"
-        }
-    );
-
-    #I don't yet understand why these are not identical to the ones above.
-    #    push(@tests, {
-    #        test => "info.version = '1.1'",
-    #        expect => "1"
-    #       });
-    #    push(@tests, {
-    #        test => "info.rev = '1'",
-    #        expect => "1"
-    #       });
 
     push(
         @tests,
         {
-            test => $this->{test_web} . "."
-              . $topicName
-              . "NotThere/info.version = '1.1'",
+            test   => "istopic fields[name='nonExistantField']",
             expect => "0"
         }
     );
     push(
         @tests,
         {
-            test => $this->{test_web} . "."
-              . $topicName
-              . "NotThere/info.rev = '1'",
+            test   => "defined('Sandbox.TestTopic0NotExist'/info.rev)",
+            expect => "0"
+        }
+    );
+    push(
+        @tests,
+        {
+            test   => "'Sandbox.TestTopic0NotExist'/info.rev = 'rev'",
             expect => "0"
         }
     );
 
-#the following gives a different result on http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item5674
-    push(
-        @tests,
-        {
-            test   => "istopic fields[name='nonEdistantField']",
-            expect => "0"
-        }
-    );
-    push(
-        @tests,
-        {
-            test   => "defined(Sandbox.TestTopic0NotExist/info.rev)",
-            expect => "0"
-        }
-    );
-    push(
-        @tests,
-        {
-            test   => "Sandbox.TestTopic0NotExist/info.rev = 'rev'",
-            expect => "0"
-        }
-    );
-
-    $this->{twiki}->finish();
-    $this->{twiki} = new TWiki();
-    $this->{twiki}->{webName} = $this->{test_web};    # hack
+    foreach my $test (@tests) {
+        my $text = '%IF{"' . $test->{test} . '" then="1" else="0"}%';
+        my $result =
+          $this->{twiki}
+          ->handleCommonTags( $text, $this->{test_web}, $topicName, $meta );
+        #print STDERR "RUN $text => $result\n";
+        $this->assert_str_equals( $test->{expect}, $result,
+            "$text: '$result'" );
+    }
 }
 
 1;
