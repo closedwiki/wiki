@@ -1358,6 +1358,9 @@ sub extractMetaData {
         $format = $ti->{format} || $STORE_FORMAT_VERSION;
         # Make sure we update the topic format
         $ti->{format} = $STORE_FORMAT_VERSION;
+        #add the rev derived from version=''
+        $ti->{version} =~ /\d*\.(\d*)/;
+        $ti->{rev} = $1;
     }
 
     my $endMeta = 0;
