@@ -50,7 +50,7 @@ sub new {
     my $this = $class->SUPER::new( $session );
     #$this->{apache} = new Apache::Htpasswd
     #  ( { passwdFile => $TWiki::cfg{Htpasswd}{FileName} } );
-	my @configuration =  (
+	my @config =  (
 			DBType =>					$TWiki::cfg{HTTPDUserAdminContrib}{DBType} || 'Text',
 			Host =>						$TWiki::cfg{HTTPDUserAdminContrib}{Host} || '',
 			Port =>						$TWiki::cfg{HTTPDUserAdminContrib}{Port} || '',
@@ -70,8 +70,9 @@ sub new {
 			PasswordField =>			$TWiki::cfg{HTTPDUserAdminContrib}{PasswordField} || '',
 			#Debug =>				1
              );
-
-    $this->{userDatabase} = new HTTPD::UserAdmin(@configuration);
+             
+    $this->{configuration} = \@config;
+    $this->{userDatabase} = new HTTPD::UserAdmin(@{$this->{configuration}});
 	
 	print STDERR "new HTTPDAuth".join(', ', $this->{userDatabase}->list())."\n" if ($TWiki::cfg{HTTPDUserAdminContrib}{Debug});
 
@@ -112,7 +113,7 @@ sub checkPassword {
     my ( $this, $login, $password ) = @_;
 	
 	#TODO: this should be extracted to a new LoginManager i think
-	my $authen = new HTTPD::Authen ($this->{userDatabase});
+	my $authen = new HTTPD::Authen (@{$this->{configuration}});
 	return $authen->check($login, $password);
 }
 

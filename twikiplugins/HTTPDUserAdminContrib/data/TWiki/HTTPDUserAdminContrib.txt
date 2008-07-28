@@ -32,6 +32,7 @@ From there you can use that file in the =Text= =DBType=, use =dbmmanage= to impo
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Contrib Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  July 2008 | version 1.1 - small reliability fix to the DB based auth. |
 |  July 2007 | version 1 - initial release |
 |  Dependencies: | %$DEPENDENCIES% |
 |  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, HTTPDUserAdminContrib nn% |

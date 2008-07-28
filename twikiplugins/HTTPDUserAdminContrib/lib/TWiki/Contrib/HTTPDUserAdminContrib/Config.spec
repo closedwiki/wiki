@@ -7,7 +7,7 @@
 $TWiki::cfg{HTTPDUserAdminContrib}{DBType} = "Text";
 
 # **STRING 200**
-#DB - The database name (Default is '.htpasswd' for DBM & Text databases)
+#DB - The database name (Default is '.htpasswd' for DBM & Text databases) 
 $TWiki::cfg{HTTPDUserAdminContrib}{DB} = $TWiki::cfg{Htpasswd}{FileName};
 
 # **STRING 30**
@@ -58,8 +58,8 @@ $TWiki::cfg{HTTPDUserAdminContrib}{User} = "";
 #Auth - Database login password
 $TWiki::cfg{HTTPDUserAdminContrib}{Auth} = "";
 # **STRING 30**
-#Driver - Driver for DBI (Default is 'mSQL')
-$TWiki::cfg{HTTPDUserAdminContrib}{Driver} = "mSQL";
+#Driver - Driver for DBI (Default is 'mysql')
+$TWiki::cfg{HTTPDUserAdminContrib}{Driver} = "mysql";
 # **STRING 30**
 #UserTable - Table with field names below
 $TWiki::cfg{HTTPDUserAdminContrib}{UserTable} = "";
