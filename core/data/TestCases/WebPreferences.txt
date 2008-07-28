@@ -43,7 +43,7 @@ __Preferences:__
 		* #Set ALLOWTOPICCHANGE = 
 		* #Set ALLOWTOPICRENAME = 
 
-	* Web preferences that are *not* allowed to be overridden by user preferences:
+   * Web preferences that are *not* allowed to be overridden by sub-web, user or topic preferences:
 		* Set FINALPREFERENCES = WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME, SAUSAGES
 
    * Try and kidnap a final preference from TWikiPreferences. The FINALPREFERENCES setting there should block this
