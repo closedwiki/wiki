@@ -43,11 +43,7 @@ BEGIN {
         require locale;
         import locale ();
     }
-    # no point calling rand() without this 
-    # See Camel-3 pp 800.  "Do not call =srand()= multiple times in your
-    # program ... just do it once at the top of your program or you won't
-    # get random numbers out of =rand()=
-    srand( time() ^ ($$ + ($$ << 15)) );
+    #moved srand call to TWiki::Users::BEGIN, as there is a call to rand there that would not be covered if some other TWiki::Users::Password impl was used.
 }
 
 sub new {
