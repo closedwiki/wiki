@@ -139,9 +139,27 @@ sub doTests {
     }
 }
 
-sub test_htpasswd_crypt {
+
+sub TODO_test_htpasswd_plain {
     my $this = shift;
-    $TWiki::cfg{Htpasswd}{Encoding} = 'crypt';
+    $TWiki::cfg{Htpasswd}{Encoding} = 'plain';
+    my $impl = new TWiki::Users::HtPasswdUser($this->{twiki});
+    $this->assert($impl);
+    $this->doTests($impl, 1);
+}
+
+sub TODO_test_htpasswd_md5 {
+    my $this = shift;
+    $TWiki::cfg{Htpasswd}{Encoding} = 'md5';
+    my $impl = new TWiki::Users::HtPasswdUser($this->{twiki});
+    $this->assert($impl);
+    $this->doTests($impl, 1);
+}
+
+
+sub test_htpasswd_crypt_md5 {
+    my $this = shift;
+    $TWiki::cfg{Htpasswd}{Encoding} = 'crypt-md5';
     my $impl = new TWiki::Users::HtPasswdUser($this->{twiki});
     $this->assert($impl);
     $this->doTests($impl, 1);

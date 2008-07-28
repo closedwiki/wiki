@@ -441,7 +441,7 @@ $TWiki::cfg{MinPasswordLength} = 1;
 # password file with the right encoding.
 $TWiki::cfg{Htpasswd}{FileName} = '$TWiki::cfg{DataDir}/.htpasswd';
 
-# **SELECT crypt,sha1,md5,plain**
+# **SELECT crypt,sha1,md5,plain,crypt-md5**
 # Password encryption, for the TWiki::Users::HtPasswdUser password manager.
 # You can use the <tt>htpasswd</tt> Apache program to create a new
 # password file with the right encoding.
@@ -455,6 +455,7 @@ $TWiki::cfg{Htpasswd}{FileName} = '$TWiki::cfg{DataDir}/.htpasswd';
 # if the {AuthRealm} changes, any existing MD5 encoded passwords will be
 # invalidated by the change!</dd>
 # <dt>plain</dt><dd> stores passwords as plain text (no encryption).</dd>
+# <dt>crypt-md5</dt><dd>Enable use of standard libc (/etc/shadow) crypt-md5 password (like $1$saltsalt$hashashhashhashhash...$) which are stronger than the crypt paswords, salted, and the salt is stored in the encrypted password string as in normal crypt passwords. </dd>
 # </dl>
 $TWiki::cfg{Htpasswd}{Encoding} = 'crypt';
 
