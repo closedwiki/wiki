@@ -436,7 +436,7 @@ sub _linkToolTipInfo {
           $this->{session}->{prefs}->getPreferencesValue('LINKTOOLTIPINFO')
             || '';
         $this->{LINKTOOLTIPINFO} = '$username - $date - r$rev: $summary'
-          if( TWiki::isTrue( $this->{LINKTOOLTIPINFO} ));
+          if( 'on' eq lc($this->{LINKTOOLTIPINFO}) );
     }
     return '' unless( $this->{LINKTOOLTIPINFO} );
     return '' if( $this->{LINKTOOLTIPINFO} =~ /^off$/i );
