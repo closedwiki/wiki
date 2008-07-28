@@ -234,7 +234,7 @@ sub setEmails {
 
 =pod
 
----++ ObjectMethod findLoginByEmail($email) -> \@users
+---++ ObjectMethod findUserByEmail($email) -> \@users
 Returns an array of login names that relate to a email address.
 Defaut behaviour is a nop, which will result in the user mapping manager
 being asked for its opinion. If subclass implementations return a value for

@@ -650,7 +650,7 @@ sub findUserByEmail {
     ASSERT($email) if DEBUG;
     my @users;
     if( $this->{passwords}->isManagingEmails()) {
-        my $logins = $this->{passwords}->findLoginByEmail( $email );
+        my $logins = $this->{passwords}->findUserByEmail( $email );
         if (defined $logins) {
             foreach my $l ( @$logins ) {
                 $l = $this->login2cUID( $l );
