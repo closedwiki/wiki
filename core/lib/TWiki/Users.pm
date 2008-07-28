@@ -423,7 +423,18 @@ sub getCanonicalUserID {
     } else {
         # See if a mapping recognises the identifier as a login name
         my $mapping = $this->_getMapping( undef, $identifier, undef, 1 );
-        $cUID = $mapping->login2cUID( $identifier ) if $mapping;
+        if( $mapping ) {
+            if( $mapping->can('login2cUID' )) {
+                $cUID = $mapping->login2cUID( $identifier );
+            } elsif( $mapping->can('getCanonicalUserID' )) {
+                # Old name of login2cUID. Name changed to avoid confusion
+                # with TWiki::Users::getCanonicalUserID. See
+                # Codev.UserMapperChangesBetween420And421 for more.
+                $cUID = $mapping->getCanonicalUserID( $identifier );
+            } else {
+                die("Broken user mapping $mapping; does not implement login2cUID");
+            }
+        }
         unless( $cUID ) {
             # Finally see if it's a valid user wikiname
 
