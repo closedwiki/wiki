@@ -90,16 +90,17 @@ sub generate {
 
     my $redirectTo = $q->param( 'redirectto' ) || '';
     $page =~ s/%REDIRECTTO%/$redirectTo/go;
+    
+    my $text = '';
+    $text = "<input type=\"hidden\" name=\"action\" value=\"$editaction\" />"
+        if $editaction;
+    $page =~ s/%EDITACTION%/$text/go;
 
     $page = $session->handleCommonTags( $page, $web, $topic );
     $page = $session->renderer->getRenderedVersion( $page, $web, $topic );
 
-    my $text = CGI::hidden( -name => 'text', -value => $q->param( 'text' ) );
+    $text = CGI::hidden( -name => 'text', -value => $q->param( 'text' ) );
     $page =~ s/%TEXT%/$text/go;
-    $text = '';
-    #$text = CGI::hidden( -name => 'action', -value => $editaction ) if $editaction;
-    $text .= "<input type=\"hidden\" name=\"action\" value=\"$editaction\" />" if $editaction;
-    $page =~ s/%EDITACTION%/$text/go;
 
     return $page;
 }
