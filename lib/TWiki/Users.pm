@@ -87,6 +87,11 @@ BEGIN {
         require locale;
         import locale();
     }
+	# no point calling rand() without this 
+    # See Camel-3 pp 800.  "Do not call =srand()= multiple times in your
+    # program ... just do it once at the top of your program or you won't
+    # get random numbers out of =rand()=
+    srand( time() ^ ($$ + ($$ << 15)) );
 }
 
 =pod
@@ -307,7 +312,8 @@ custom mappers and registration modules.
 =cut
 
 sub randomPassword {
-    return $password || int( rand(9999999999) );
+    return $password || 
+        join("", (".", "/", 0..9, "A".."Z", "a".."z")[rand(64), rand(64), rand(64), rand(64), rand(64), rand(64), rand(64), rand(64)]);
 }
 
 =pod
