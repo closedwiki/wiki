@@ -142,6 +142,11 @@ This is used for registration)
 
 Subclasses *must* implement this method.
 
+Note: This method was previously (in TWiki 4.2.0) known as getCanonicalUserID.
+The name was changed to avoid confusion with TWiki::Users::getCanonicalUserID,
+which has a more generic function. However to support older user mappers,
+getCanonicalUserID will still be called if login2cUID is not defined.
+
 =cut
 
 sub login2cUID {
