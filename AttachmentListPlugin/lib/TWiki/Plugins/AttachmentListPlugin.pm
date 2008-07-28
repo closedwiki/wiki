@@ -28,7 +28,7 @@ $VERSION = '$Rev: 14207 $';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.2.5';
+$RELEASE = '1.2.6';
 
 $pluginName = 'AttachmentListPlugin';    # Name of this Plugin
 
@@ -139,9 +139,6 @@ sub handleFileList {
           : 0;    # don't hide by default
     }
 
-    TWiki::Func::writeDebug("params->{'topic'}=$params->{'topic'}");
-    TWiki::Func::writeDebug("includeFilePattern=$includeFilePattern");
-
     my %excludedFiles = makeHashFromString($excludeFiles);
 
     # store once for re-use in loop
@@ -174,7 +171,6 @@ sub handleFileList {
           );
 
         my $filename = $attachment->{name};
-        TWiki::Func::writeDebug("filename=$filename");
 
         # filter on extension
         my $fileExtension = $attachment->{_AttachmentListPlugin_extension};
