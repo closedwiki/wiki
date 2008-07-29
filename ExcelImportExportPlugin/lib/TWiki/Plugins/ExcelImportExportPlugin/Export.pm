@@ -258,7 +258,7 @@ sub topics2excel {
     my $row = 0;
     foreach my $name (@sortorder) {
         if ( defined($orientation{$name}) && $orientation{$name} eq 'v' ) {
-            $worksheet->write( $row, $col, $shortname{$name}, $headerformat90 );
+            $worksheet->write( $row, $col, ($shortname{$name}||$name), $headerformat90 );
             $worksheet->write_comment( $row, $col, $name, height => 10 );
             if ( defined( $width{$name} ) ) {
                 $worksheet->set_column( $col, $col, $width{$name} );
@@ -268,7 +268,7 @@ sub topics2excel {
             }
         }
         else {
-            $worksheet->write( $row, $col, $shortname{$name}, $headerformat );
+            $worksheet->write( $row, $col, ($shortname{$name}||$name), $headerformat );
             $worksheet->write_comment( $row, $col, $name, height => 10 );
             if ( defined( $width{$name} ) ) {
                 $worksheet->set_column( $col, $col, $width{$name} );
