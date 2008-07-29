@@ -23,12 +23,15 @@ use TWiki::Func;
 use Spreadsheet::WriteExcel;
 use Date::Manip;
 
+## SMELL: Check which settings should be read from preferences.
+
 sub topics2excel {
 
   my $session = shift;
   $TWiki::Plugins::SESSION = $session;
 
   my $query = $session->{cgiQuery};
+## SMELL: The spreadsheet _must_ be attached to the same topic where the map is
   my $web = $session->{webName};
   my $basetopic = $session->{topicName};
   my $userName = $session->{user};
@@ -47,12 +50,14 @@ sub topics2excel {
 	       DEBUG => 0,
 	       TOPICCOLUMN => "TOPIC",
 	       PAGEWIDTH => 215,
-	       DATETIMEFORMAT => "yyyymmdd",
+	       DATETIMEFORMAT => "dd mmm yyyy",
 	       FILENAME => "$basetopic.xls",   # not used
 	       TEMPLATETOPIC => "Template",    # topic name ending that will be excluded e.g. BugTemplate or FeatureTemplate
+	       MAPPING => '',
+	       FORM => '',
 	      );
 
-  foreach my $key (qw(FORM TOPICPARENT UPLOADFILE NEWTOPICTEMPLATE FORCCEOVERWRITE TOPICCOLUMN DEBUG )) {
+  foreach my $key (qw(FORM TOPICPARENT UPLOADFILE NEWTOPICTEMPLATE FORCCEOVERWRITE TOPICCOLUMN DEBUG DATETIMEFORMAT)) {
     my $value=&TWiki::Func::getPreferencesValue( $key  );
     if (defined $value and $value !~ /^\s*$/) {
       $config{$key} =$value;
@@ -61,18 +66,18 @@ sub topics2excel {
     }
   }
 
+## SMELL: Need to sort out the preferences between setting and parameters....
+  $config{MAPPING}    = $query->param('map') || $config{MAPPING};
+  $config{FORM}       = $query->param('template') || $config{FORM};
+  $config{DEBUG}      = $TWiki::Plugins::ExcelImportExportPlugin::debug;
+
   if ($config{FORM} eq '') {
-    &TWiki::Func::writeHeader( $query ) ;
-    print "  * Set FORM =  XXXXX\n\nis missing in $web.$basetopic\n";
-    return;
+    ## SMELL: Should we throw an oops alert instead?
+    TWiki::Func::writeDebug("ExcelImportExportPlugin: No form definition given. No data will be exported.");
+    TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getScriptUrl( $web, $basetopic, "view" ));
   }
 
   my $xlsfile = "-";
-# FOR TESTING
-#  my $xlsfilename = $basetopic . 'out.xls';
-#  my $xlsfile = $TWiki::cfg{PubDir}."/$web/$basetopic/$xlsfilename";
-
-  my ( $meta, $text ) = &TWiki::Func::readTopic( $web, $basetopic );
 
   # Create a new Excel workbook
   my $workbook = Spreadsheet::WriteExcel->new($xlsfile) or die "Problems creating new Excel $xlsfile file: $!";
@@ -126,10 +131,34 @@ sub topics2excel {
   $urlformat90->copy($urlformat);
   $urlformat90->set_rotation(90);
 
-
-
   my $countvertical=0; # number of vertical columns
 
+## SMELL: should normalize web/topic names
+  # Get export information from form
+  my $form = new TWiki::Form( $session, $web, $config{FORM} );
+  my $fieldDefs = $form->{fields};
+  foreach my $field ( @{$fieldDefs} ) {
+    # NAME
+    my $name = $field->{title};
+    $name=~ s/^\s*//go;
+    $name=~ s/\s*$//go;
+    push(@sortorder,$name);
+
+    # TYPE
+    my $type = $field->{type};
+    $type=~ s/^\s*//go;
+    $type=~ s/\s*$//go;
+    if($type =~ m/date/ ) {
+       $type{$name}='date';
+    } else {
+       $type{$name}="text";
+    }
+    
+  }
+
+  # Read in the mapping data to configure the upload fields (if present)
+  if ( $config{MAPPING} ) {
+  my ( $meta, $text ) = &TWiki::Func::readTopic( $web, $config{MAPPING} );
 
   # used code from TWiki::Forms
   $text =~ s/\\\r?\n//go; # remove trailing '\' and join continuation lines
@@ -143,17 +172,17 @@ sub topics2excel {
 	# NAME
 	$name=~ s/^\s*//go;
 	$name=~ s/\s*$//go;
-	$name=~ s/[^A-Za-z0-9_\.]//go;
-	push(@sortorder,$name);
 
 	# TYPE
 	$type=~ s/^\s*//go;
 	$type=~ s/\s*$//go;
-	if($type =~ m/\s*(text|date|number)\s*/ ) {
-	  $type{$name}=$1;
-	} else {
-	  $type{$name}="text";
-        }
+        unless( $type{$name} ) {
+	  if($type =~ m/\s*(text|date|number)\s*/ ) {
+	    $type{$name}=$1;
+	  } else {
+	    $type{$name}="text";
+          }
+	}
 
 	# WIDTH
 	$width=~ s/^\s*//go;
@@ -185,7 +214,6 @@ sub topics2excel {
         $shortname{$name}=$name;
 	$shortname=~ s/^\s*//go;
 	$shortname=~ s/\s*$//go;
-	$shortname=~ s/[^A-Za-z0-9_\.]//go;
 	if ($shortname ne '' ) {
 	  $shortname{$name}=$shortname;
 	}
@@ -193,6 +221,7 @@ sub topics2excel {
        $inBlock = 0;
       }
     }
+  }
   }
 
 
@@ -234,14 +263,13 @@ sub topics2excel {
     # BUG: first read the topic and that check the permissions
     if (&TWiki::Func::checkAccessPermission( 'VIEW', &TWiki::Func::getWikiUserName(), '', $topic, $web )) {
       my ( $meta, $text ) = &TWiki::Func::readTopic( $web, $topic );
-      # %META:FORM{name="IssueForm"}%
       if ($meta->{FORM}[0]{name} eq $config{FORM} and not $topic =~ /$config{TEMPLATETOPIC}$/ ) { # Exclude the template topcic
 	my %value;
 	$value{$config{TOPICCOLUMN}}=$topic;
 	$value{$config{TEXTTOPIC}}=$text;   # capture the raw text without metadata
 	$value{$config{LINECOLUMN}}=$row;
 	foreach my $field (@{$meta->{'FIELD'}}) {  # TODO:  this should be $meta->find('FIELD')
-	  $value{$field->{'name'}}=$field->{'value'};
+	  $value{$field->{'title'}}=$field->{'value'};
 	}
 	foreach my $name (@sortorder) { # create an entry in the sheet for each column
 	  if ($name eq $config{TOPICCOLUMN} ) {  # Special handling of the topic column as it needs to be clickable link
@@ -305,12 +333,16 @@ sub table2excel {
 	       DEBUG => 0,
 	       TOPICCOLUMN => "TOPIC",
 	       PAGEWIDTH => 215,
-	       DATETIMEFORMAT => "yyyymmdd",
+	       DATETIMEFORMAT => "dd mmm yyyy",
 	       FILENAME => "$basetopic.xls",   # not used
 	       TEMPLATETOPIC => "Template",    # topic name ending that will be excluded e.g. BugTemplate or FeatureTemplate
+	       UPLOADFILE => $basetopic,
+	       UPLOADTOPIC => $basetopic,
+	       MAPPING => '',
+	       FORM => '',
 	      );
 
-  foreach my $key (qw(FORM TOPICPARENT UPLOADFILE NEWTOPICTEMPLATE FORCCEOVERWRITE TOPICCOLUMN DEBUG )) {
+  foreach my $key (qw(FORM TOPICPARENT UPLOADFILE NEWTOPICTEMPLATE FORCCEOVERWRITE TOPICCOLUMN DEBUG DATETIMEFORMAT)) {
     my $value=&TWiki::Func::getPreferencesValue( $key  );
     if (defined $value and $value !~ /^\s*$/) {
       $config{$key} =$value;
@@ -319,24 +351,26 @@ sub table2excel {
     }
   }
 
-  ## Need to sort out the preferences between setting and parameters....
-  $config{UPLOADFILE} = $query->param('file') || $basetopic;
-  $config{UPLOADTOPIC}= $query->param('topic') || $basetopic;
-  $config{MAPPING}    = $query->param('map') || $basetopic;
+## SMELL: Need to sort out the preferences between setting and parameters....
+  $config{UPLOADFILE} = $query->param('file') || $config{UPLOADFILE};
+  $config{UPLOADTOPIC}= $query->param('uploadtopic') || $config{UPLOADTOPIC};
+  $config{MAPPING}    = $query->param('map') || $config{MAPPING};
+  $config{FORM}       = $query->param('template') || $config{FORM};
   $config{DEBUG}      = $TWiki::Plugins::ExcelImportExportPlugin::debug;
 
   ( $config{UPLOADWEB}, $config{UPLOADTOPIC} ) =
-      $TWiki::Plugins::SESSION->normalizeWebTopicName( $web, $config{UPLOADTOPIC} );
+      $session->normalizeWebTopicName( $web, $config{UPLOADTOPIC} );
 
 
-  if (0 && $config{FORM} eq '') {
-    ## Note that there must actually be a form defined in the designated topic.... this should be checked...
-    ## Not a nice alert
-    throw TWiki::OopsException( 'alerts',
-				def => 'generic',
-				web => $_[2],
-				topic => $_[1],
-				params => [ 'Form not defined in ', $web.$basetopic, '', '' ] );
+## SMELL: If we later find out we cannot infer the header, we have already started writing the spreadsheet which sends that to the screen. We never get a chance to throw the exception. Either insist that form is defined or move the checking earlier.
+  if ( $config{FORM} eq '' ) {
+    TWiki::Func::writeDebug("ExcelImportExportPlugin: No form definition given. Headers will be derived from table.");
+## SMELL: Not a nice alert
+#    throw TWiki::OopsException( 'alerts',
+#				def => 'generic',
+#				web => $_[2],
+#				topic => $_[1],
+#				params => [ 'Form not defined in ', $web.$basetopic, '', '' ] );
 
 
   }
@@ -360,7 +394,6 @@ sub table2excel {
   $worksheet->repeat_rows(0);     # Repeat the first row when printing
   $worksheet->fit_to_pages(1,12); # ToDo This should take into account how many issues are printed
   $worksheet->set_landscape();
-
 
   #  Add and define a formats
   my $normalformat = $workbook->add_format(text_wrap=>1,
@@ -401,8 +434,37 @@ sub table2excel {
 
   my $countvertical=0; # number of vertical columns
 
+## SMELL: should normalize web/topic names
+  if ( $config{FORM} ) {
+  # Get export information from form
+  my $form = new TWiki::Form( $session, $web, $config{FORM} );
+  my $fieldDefs = $form->{fields};
+  foreach my $field ( @{$fieldDefs} ) {
+    # NAME
+    my $name = $field->{title};
+    $name=~ s/^\s*//go;
+    $name=~ s/\s*$//go;
+    push(@sortorder,$name);
+    $shortname{$name}=$name;
 
-  # Read in the template file configuring the upload fields
+
+    # TYPE
+    my $type = $field->{type};
+    $type=~ s/^\s*//go;
+    $type=~ s/\s*$//go;
+    if($type =~ m/date/ ) {
+       $type{$name}='date';
+       $format{$name}=$dateformat;
+    } else {
+       $type{$name}="text";
+       $format{$name}=$normalformat;
+    }
+    
+  }
+  }
+
+  # Read in the mapping data to configure the upload fields (if present)
+  if ( $config{MAPPING} ) {
   my ( $meta, $text ) = &TWiki::Func::readTopic( $web, $config{MAPPING} );
 
   # used code from TWiki::Forms
@@ -414,19 +476,21 @@ sub table2excel {
     } else {
       if( $inBlock && s/^\s*\|//o ) {
         my( $name, $shortname, $width, $orientation, $type) = split( /\|/ );
-	# NAME
-	$name=~ s/^\s*//go;
-	$name=~ s/\s*$//go;
-	$name=~ s/[^A-Za-z0-9_\.]//go;
-	push(@sortorder,$name);
+
+        # NAME
+        $name=~ s/^\s*//go;
+        $name=~ s/\s*$//go;
+	push(@sortorder,$name) unless $config{FORM};
 
 	# TYPE
 	$type=~ s/^\s*//go;
 	$type=~ s/\s*$//go;
-	if($type =~ m/\s*(text|date|number)\s*/ ) {
-	  $type{$name}=$1;
-	} else {
-	  $type{$name}="text";
+        unless( $type{$name} ) {
+	  if($type =~ m/\s*(text|date|number)\s*/ ) {
+	    $type{$name}=$1;
+	  } else {
+	    $type{$name}="text";
+          }
         }
 
 	# WIDTH
@@ -456,10 +520,9 @@ sub table2excel {
 	}
 
 	# SHORTNAME
-        $shortname{$name}=$name;
+        $shortname{$name}=$name unless $config{FORM};
 	$shortname=~ s/^\s*//go;
 	$shortname=~ s/\s*$//go;
-	$shortname=~ s/[^A-Za-z0-9_\.]//go;
 	if ($shortname ne '' ) {
 	  $shortname{$name}=$shortname;
 	}
@@ -468,7 +531,7 @@ sub table2excel {
       }
     }
   }
-
+  }
 
   # Create the header row and the configuration sheet
   my $horizontalcolwidth=($config{PAGEWIDTH}-($countvertical*$config{VERTICALCOLWIDTH}))/($#sortorder-$countvertical);
@@ -484,7 +547,7 @@ sub table2excel {
         $worksheet->set_column($col,$col,2.66);
       }
     } else {
-      $worksheet->write($row, $col,$shortname{$name}, $headerformat);
+      $worksheet->write($row, $col, $shortname{$name}, $headerformat);
       $worksheet->write_comment($row, $col, $name,height=>10);
       if (defined($width{$name}) ){
         $worksheet->set_column($col,$col,$width{$name});
@@ -501,30 +564,62 @@ sub table2excel {
   }
 
   # read the table and write them in the Excel sheet
-  ( $meta, $text ) = &TWiki::Func::readTopic( $web, $basetopic );
-
+  my ( $meta, $text ) = &TWiki::Func::readTopic( $web, $basetopic );
+  # Need to expand searches to handle tables generated from search.
+  ## SMELL: Need to expand FormQueryPlugin based searches also...
+  ## SMELL: What if there are tags in the search?
+  $text =~ s/%SEARCH{(.*)}%/$session->_SEARCH( new TWiki::Attrs($1), $basetopic, $web )/geo;
+  
   my $insideTable = 0;
   my $beforeTable = 0;
   my @labels;
   foreach( split( /\r?\n/, "$text\n<nop>\n" ) ) {
-    if( m/\%TABLE2EXCEL/o ) {
+    if( m/\%TABLE2EXCEL/o || m/table2excel/o ) {
       $beforeTable = 1;
       next;
     }
     next unless $beforeTable;
     if( /^\s*\|\s*(.*)\s*\|\s*$/ ) {
       # found table row
+      my $tablerow = $1;
       # if first row, store columns
       unless ( $insideTable ) {
-	@labels = split (/\s*\|\s*/, $1);
+	@labels = split (/\s*\|\s*/, $tablerow);
+	if ( $labels[0] =~ m/\*.*\*/ ) {
+	  # first row is header row
+	  unless ( $config{FORM} ) {
+	    foreach my $name ( @labels ) {
+	      $name =~ s/^\*(.*)\*$/$1/o;
+              push(@sortorder,$name);
+	    }
+	    $tablerow = join( "|", @labels); # There is probably a better way to remove the * around the entries...
+          } else {
+            $insideTable = 1;
+            $row++;
+            $col=0;
+            next;
+          }
+        } else {
+	  unless ( $config{FORM} || $config{MAPPING} ) {
+## SMELL: Not a nice alert
+             throw TWiki::OopsException( 'alerts',
+				def => 'generic',
+				web => $_[2],
+				topic => $_[1],
+				params => [ 'Form not defined in ', $web.$basetopic, '', '' ] );
+          }
+	  # there was no header row, we are inside table
+	  $insideTable = 1;
+          $row++;
+        }
       }
-      my @fields = split (/\s*\|\s*/, $1);
+      my @fields = split (/\s*\|\s*/, $tablerow);
       $col=0;
       my %value;
       foreach my $fld (@fields) {
 	# process fields
 	$value{$config{LINECOLUMN}}=$row;
-	$value{$labels[$col]}=$fld;
+	$value{$sortorder[$col]}=$fld;
 	$col++;
       }
       $col=0;
@@ -538,7 +633,7 @@ sub table2excel {
 	} elsif ($type{$name} eq 'text' ) {
 	  $worksheet->write_string($row, $col, $value{$name}, $format{$name});
 	} else {
-	  ## What would that be? Default is 'text'
+	  ## Should only happen for header row
 	  $worksheet->write($row, $col, $value{$name}, $format{$name});
 	}
 	$col++;
@@ -551,6 +646,8 @@ sub table2excel {
       last;
     }
   }
+  
+  TWiki::Func::writeDebug("Exported " . ($row - 2) . " rows.") if $config{DEBUG};
 
 
   print $query->header(-type=>'application/vnd.ms-excel', -expire=>'now');

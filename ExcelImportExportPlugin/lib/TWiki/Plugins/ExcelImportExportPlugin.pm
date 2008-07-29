@@ -67,6 +67,8 @@ sub initPlugin {
                                      'context-free' );
     TWiki::Func::registerTagHandler( 'TABLE2EXCEL', \&table2excel,
                                      'context-free' );
+    TWiki::Func::registerTagHandler( 'UPLOADEXCEL2TABLE', \&uploadexcel2table,
+                                     'context-free' );
 
     # Plugin correctly initialized
 
@@ -79,14 +81,27 @@ sub excel2table {
   return TWiki::Plugins::ExcelImportExportPlugin::Import::excel2table ( @_ );
 }
 
+sub uploadexcel2table {
+  my( $session, $params, $topic, $webName ) = @_;
+  # The template defining the table schema
+  my $template  = $params->{template} || '';
+  # The topic at which we will put the table data
+  my $uploadtopic = $params->{"_DEFAULT"} || $params->{topic} || $topic;
+
+  return "<form name=\"main\" enctype=\"multipart/form-data\" action=\"%SCRIPTURLPATH{\"uploadexcel\"}%/%WEB%/%TOPIC%\" method=\"post\"><input class=\"twikiInputField\" type=\"file\" name=\"filepath\" value=\"%FILEPATH%\" size=\"30\" /><input type=\"hidden\" value=\"$template\" name=\"template\" /><input type=\"hidden\" value=\"$uploadtopic\" name=\"uploadtopic\" /><input type=\"hidden\" name=\"filename\" value=\"%FILENAME%\" /> &nbsp; <input type=\"submit\" value=\"Upload excel\" /></form>";
+
+}
+
 sub table2excel {
   my( $session, $params, $topic, $webName ) = @_;
-  my $filename  = $params->{"_DEFAULT"} || $params->{file} || $topic;
-  my $filetopic = $params->{topic} || $topic;
-  my $mapping   = $params->{map} || $topic;
-  my $template  = $params->{template} || $topic;
+  my $filename  = $params->{file} || $topic;
+  my $uploadtopic = $params->{"_DEFAULT"} || $params->{topic} || $topic;
+  my $mapping   = $params->{map} || '';
+  my $template  = $params->{template} || '';
 
-  return "<form action=\"%SCRIPTURLPATH%/table2excel%SCRIPTSUFFIX%/%WEB%/%TOPIC%\"><input type=\"hidden\" value=\"$filename\" name=\"file\" /><input type=\"hidden\" value=\"$filetopic\" name=\"topic\" /><input type=\"hidden\" value=\"$mapping\" name=\"map\" /><input type=\"submit\" value=\"Export table\" /></form>";
+## SMELL: Parameter "topic" seems to serve no function
+  return "<form action=\"%SCRIPTURLPATH{\"table2excel\"}%/%WEB%/%TOPIC%\"><input type=\"hidden\" value=\"$template\" name=\"template\" /><input type=\"hidden\" value=\"$uploadtopic\" name=\"uploadtopic\" /><input type=\"hidden\" value=\"$filename\" name=\"file\" /><input type=\"hidden\" value=\"$mapping\" name=\"map\" /><input type=\"submit\" value=\"Export table\" />
+</form>";
 
 }
 
