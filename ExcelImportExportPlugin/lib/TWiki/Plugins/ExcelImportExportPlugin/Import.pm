@@ -60,6 +60,17 @@ sub excel2topics {
   $config{TOPICTEXT}= $query->param('topictext') || $config{TOPICTEXT};
   $config{NEWTOPICTEMPLATE}= $query->param('newtopictemplate') || $config{NEWTOPICTEMPLATE};
   $config{DEBUG}      = $TWiki::Plugins::ExcelImportExportPlugin::debug;
+    #use the current definition of the TWikiForm
+    my $formDef = new TWiki::Form( $session, $webName, $config{FORM} );
+    unless( $formDef ) {
+        throw TWiki::OopsException(
+            'attention',
+            def => 'no_form_def',
+            web => $session->{webName},
+            topic => $session->{topicName},
+            params => [ $webName, $config{FORM} ] );
+    }
+
 
 
   my $xlsfile = $TWiki::cfg{PubDir}."/$webName/$topic/$config{UPLOADFILE}";
@@ -154,33 +165,49 @@ sub excel2topics {
 	  $changed=1;
 	}
 
-
 	my %field;
 ## SMELL: Only copies the entries that are in the topic template. Should
 ## SMELL: this be the topics listed in the form/map instead?
 	# search through all fields and find the field with the name $colname
+	my $foundField;
 	foreach my $field ($meta->find("FIELD")) {
+#        $log .= "....$field?\n";
 	  if ($$field{"title"} eq $colname) {
+        #$log .= $$field{"title"}." eq $colname ... ".$$field{"value"}." ne ".$data{$colname}."\n";
 	    if ($$field{"value"} ne $data{$colname} ) {
+          $log .= $$field{"value"}." ne ".$data{$colname}."\n";
 	      my $msg="      $webName/$newtopic: $colname: old value=".$$field{"value"}." new value=$data{$colname}";
 	      $config{DEBUG} && TWiki::Func::writeWarning($msg);
 	      $log.="$msg\n";
 	      $changed=1;
-	      # replace CR/LF and "
-## SMELL: Need to use new format
-	      #$data{$colname} =~ s/(\r*\n|\r)/%_N_%/g;
-	      #$data{$colname} =~ s/\"/%_Q_%/g;
+
 	      my $fld = {
-			 name =>TWiki::Form::_cleanField($colname),
+			 name =>cleanField($colname),
 			 title=>$colname,
 			 value=>$data{$colname},
 			};
 	      $meta->putKeyed( "FIELD", $fld);
 	    }
+		$foundField = 1;
 	    last; # found the field
 	  }
 	}
-      }
+	#if the field was not in the topic, see if it should
+	unless ($foundField) {
+	  if (grep { $colname eq $_->{name} } @{$formDef->getFields()} ) {
+        $log .= "adding missing $colname\n";
+	      my $fld = {
+			 name =>cleanField($colname),
+			 title=>$colname,
+			 value=>$data{$colname},
+			};
+	      $meta->putKeyed( "FIELD", $fld);
+	      $changed=1;
+	  }
+	}
+	
+	
+  }
 
       if ($changed) {		# only save if something has changed
 	my ( $oopsUrl, $loginName, $unlockTime ) = TWiki::Func::checkTopicEditLock( $webName, $newtopic );
@@ -210,6 +237,27 @@ sub excel2topics {
   print $query->header(-type=>'text/plain', -expire=>'now');
   print $log;
 
+}
+
+=pod
+
+---++ cleanField(string) => string
+
+=cut
+
+sub cleanField {
+    my $val = shift;
+
+    # replace CR/LF and "
+    ## SMELL: Need to use new format
+    #$data{$colname} =~ s/(\r*\n|\r)/%_N_%/g;
+    #$data{$colname} =~ s/\"/%_Q_%/g;
+
+    $val =~ s/<\/?(nop|noautolink)\/?>//go;
+    $val =~ s/^\s+//g;
+    $val =~ s/\s+$//g;
+    
+    return $val;
 }
 
 =pod
