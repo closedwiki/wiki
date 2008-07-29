@@ -55,20 +55,21 @@ $pluginName = 'ExcelImportExportPlugin';
 =cut
 
 sub initPlugin {
-    my( $topic, $web, $user, $installWeb ) = @_;
+    my ( $topic, $web, $user, $installWeb ) = @_;
 
     # check for Plugins.pm versions
-    if( $TWiki::Plugins::VERSION < 1.1 ) {
-        TWiki::Func::writeWarning( "This plugin works only for TWiki4 and later." );
+    if ( $TWiki::Plugins::VERSION < 1.1 ) {
+        TWiki::Func::writeWarning(
+            "This plugin works only for TWiki4 and later.");
         return 0;
     }
 
     TWiki::Func::registerTagHandler( 'EXCEL2TABLE', \&excel2table,
-                                     'context-free' );
+        'context-free' );
     TWiki::Func::registerTagHandler( 'TABLE2EXCEL', \&table2excel,
-                                     'context-free' );
+        'context-free' );
     TWiki::Func::registerTagHandler( 'UPLOADEXCEL2TABLE', \&uploadexcel2table,
-                                     'context-free' );
+        'context-free' );
 
     # Plugin correctly initialized
 
@@ -76,31 +77,35 @@ sub initPlugin {
 }
 
 sub excel2table {
-  eval 'use TWiki::Plugins::ExcelImportExportPlugin::Import';
-  die $@ if $@;
-  return TWiki::Plugins::ExcelImportExportPlugin::Import::excel2table ( @_ );
+    eval 'use TWiki::Plugins::ExcelImportExportPlugin::Import';
+    die $@ if $@;
+    return TWiki::Plugins::ExcelImportExportPlugin::Import::excel2table(@_);
 }
 
 sub uploadexcel2table {
-  my( $session, $params, $topic, $webName ) = @_;
-  # The template defining the table schema
-  my $template  = $params->{template} || '';
-  # The topic at which we will put the table data
-  my $uploadtopic = $params->{"_DEFAULT"} || $params->{topic} || $topic;
+    my ( $session, $params, $topic, $webName ) = @_;
 
-  return "<form name=\"main\" enctype=\"multipart/form-data\" action=\"%SCRIPTURLPATH{\"uploadexcel\"}%/%WEB%/%TOPIC%\" method=\"post\"><input class=\"twikiInputField\" type=\"file\" name=\"filepath\" value=\"%FILEPATH%\" size=\"30\" /><input type=\"hidden\" value=\"$template\" name=\"template\" /><input type=\"hidden\" value=\"$uploadtopic\" name=\"uploadtopic\" /><input type=\"hidden\" name=\"filename\" value=\"%FILENAME%\" /> &nbsp; <input type=\"submit\" value=\"Upload excel\" /></form>";
+    # The template defining the table schema
+    my $template = $params->{template} || '';
+
+    # The topic at which we will put the table data
+    my $uploadtopic = $params->{"_DEFAULT"} || $params->{topic} || $topic;
+
+    return
+"<form name=\"main\" enctype=\"multipart/form-data\" action=\"%SCRIPTURLPATH{\"uploadexcel\"}%/%WEB%/%TOPIC%\" method=\"post\"><input class=\"twikiInputField\" type=\"file\" name=\"filepath\" value=\"%FILEPATH%\" size=\"30\" /><input type=\"hidden\" value=\"$template\" name=\"template\" /><input type=\"hidden\" value=\"$uploadtopic\" name=\"uploadtopic\" /><input type=\"hidden\" name=\"filename\" value=\"%FILENAME%\" /> &nbsp; <input type=\"submit\" value=\"Upload excel\" /></form>";
 
 }
 
 sub table2excel {
-  my( $session, $params, $topic, $webName ) = @_;
-  my $filename  = $params->{file} || $topic;
-  my $uploadtopic = $params->{"_DEFAULT"} || $params->{topic} || $topic;
-  my $mapping   = $params->{map} || '';
-  my $template  = $params->{template} || '';
+    my ( $session, $params, $topic, $webName ) = @_;
+    my $filename = $params->{file} || $topic;
+    my $uploadtopic = $params->{"_DEFAULT"} || $params->{topic} || $topic;
+    my $mapping     = $params->{map}        || '';
+    my $template    = $params->{template}   || '';
 
 ## SMELL: Parameter "topic" seems to serve no function
-  return "<form action=\"%SCRIPTURLPATH{\"table2excel\"}%/%WEB%/%TOPIC%\"><input type=\"hidden\" value=\"$template\" name=\"template\" /><input type=\"hidden\" value=\"$uploadtopic\" name=\"uploadtopic\" /><input type=\"hidden\" value=\"$filename\" name=\"file\" /><input type=\"hidden\" value=\"$mapping\" name=\"map\" /><input type=\"submit\" value=\"Export table\" />
+    return
+"<form action=\"%SCRIPTURLPATH{\"table2excel\"}%/%WEB%/%TOPIC%\"><input type=\"hidden\" value=\"$template\" name=\"template\" /><input type=\"hidden\" value=\"$uploadtopic\" name=\"uploadtopic\" /><input type=\"hidden\" value=\"$filename\" name=\"file\" /><input type=\"hidden\" value=\"$mapping\" name=\"map\" /><input type=\"submit\" value=\"Export table\" />
 </form>";
 
 }
