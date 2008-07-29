@@ -28,7 +28,7 @@ Two programs are provided:
 
 	* Set FORM = IssueTrackingForm 
 	* Set DEBUG = 0
-	* Set TEXTTOPIC = TEXT
+	* Set TOPICTEXT = TEXT
 	* Set TOPICCOLUMN = TOPIC
 
 ---+++ Import Settings

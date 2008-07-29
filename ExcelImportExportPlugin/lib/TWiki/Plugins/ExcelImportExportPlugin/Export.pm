@@ -46,7 +46,7 @@ sub topics2excel {
     my %config = (
         VERTICALCOLWIDTH =>
           2.66,    # width of a column that is turn by 90 degree, i.e. one line
-        TEXTTOPIC      => "TEXT",
+        TOPICTEXT      => "TEXT",
         LINECOLUMN     => "Line",
         DEBUG          => 0,
         TOPICCOLUMN    => "TOPIC",
@@ -169,6 +169,8 @@ sub topics2excel {
         }
 
     }
+    push( @sortorder, $config{TOPICTEXT} );
+    push( @sortorder, $config{TOPICCOLUMN} );
 
     # Read in the mapping data to configure the upload fields (if present)
     if ( $config{MAPPING} ) {
@@ -305,7 +307,7 @@ sub topics2excel {
             {    # Exclude the template topcic
                 my %value;
                 $value{ $config{TOPICCOLUMN} } = $topic;
-                $value{ $config{TEXTTOPIC} } =
+                $value{ $config{TOPICTEXT} } =
                   $text;    # capture the raw text without metadata
                 $value{ $config{LINECOLUMN} } = $row;
                 foreach my $field ( @{ $meta->{'FIELD'} } )
@@ -403,7 +405,7 @@ sub table2excel {
     my %config = (
         VERTICALCOLWIDTH =>
           2.66,    # width of a column that is turn by 90 degree, i.e. one line
-        TEXTTOPIC      => "TEXT",
+        TOPICTEXT      => "TEXT",
         LINECOLUMN     => "Line",
         DEBUG          => 0,
         TOPICCOLUMN    => "TOPIC",
