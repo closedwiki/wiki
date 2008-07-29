@@ -257,7 +257,7 @@ sub topics2excel {
     my $col = 0;
     my $row = 0;
     foreach my $name (@sortorder) {
-        if ( $orientation{$name} eq 'v' ) {
+        if ( defined($orientation{$name}) && $orientation{$name} eq 'v' ) {
             $worksheet->write( $row, $col, $shortname{$name}, $headerformat90 );
             $worksheet->write_comment( $row, $col, $name, height => 10 );
             if ( defined( $width{$name} ) ) {
@@ -300,7 +300,7 @@ sub topics2excel {
           )
         {
             my ( $meta, $text ) = &TWiki::Func::readTopic( $web, $topic );
-            if ( $meta->{FORM}[0]{name} eq $config{FORM}
+            if ( defined($meta->{FORM}[0]{name}) && $meta->{FORM}[0]{name} eq $config{FORM}
                 and not $topic =~ /$config{TEMPLATETOPIC}$/ )
             {    # Exclude the template topcic
                 my %value;
@@ -350,6 +350,10 @@ sub topics2excel {
                             $format{$name} );
                     }
                     elsif ( $type{$name} eq 'text' ) {
+                        if (!defined($value{$name})) {
+                            #print STDERR "value of $name undefined - defaulting to ''\n";
+                            $value{$name} = '';
+                        }
                         $worksheet->write_string( $row, $col, $value{$name},
                             $format{$name} );
                     }
@@ -751,6 +755,10 @@ s/%SEARCH{(.*)}%/$session->_SEARCH( new TWiki::Attrs($1), $basetopic, $web )/geo
                         $format{$name} );
                 }
                 elsif ( $type{$name} eq 'text' ) {
+                    if (!defined($value{$name})) {
+                        #print STDERR "value of $name undefined - defaulting to ''\n";
+                        $value{$name} = '';
+                    }
                     $worksheet->write_string( $row, $col, $value{$name},
                         $format{$name} );
                 }
