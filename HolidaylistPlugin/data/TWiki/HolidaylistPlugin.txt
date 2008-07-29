@@ -79,7 +79,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 |^| ==&nbsp;* MMM yyyy - MMM yyyy - name - location== | ==&nbsp;* Feb 2005 - Apr 2005 - Lisa - is not at work==|
 |^| ==&nbsp;* MMM yyyy - MMM yyyy - name - location - icon==| ==&nbsp;* Nov 2005 - Dec 2005 - Lola - is 2 month not at work - :yes:== |
 | Exception | insert the following before the name field and after a date (range): \
-  ==&nbsp;X { dd MMM yyyy, dd MMM yyy - dd MMM yyyy }== | ==&nbsp;* Dec 2005 X { 5 Dec 2005 - 7 Dec 2005, 12 Dec 2005 } - Sarah - will be away for the complete december except between 5 Dec and 7 Dec and on 12 Dec 2005== |
+  ==&nbsp;X { dd MMM yyyy, dd MMM yyy - dd MMM yyyy }== | ==&nbsp;* Dec 2005 X { 5 Dec 2005 - 7 Dec 2005, 12 Dec 2005 } - Sarah - will be away for the complete December except between 5 Dec and 7 Dec and on 12 Dec 2005== |
 | Public Holidays | just type '@all' in the name field | ==&nbsp;* 25 Dec 2005 - Christmas Day @all== | 
 
 
@@ -110,7 +110,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | *Attribute* | *Comment* | *Default / Example* |
 |  *Behavior*  |||
 | compatmode  | if set to "1" all TWiki:Plugins.CalendarPlugin event types are supported (related: compatmodeicon) | compatmode="0" |
-| daynames | costum daynames (a list separated by a '&brvbar;' and starting on Monday; overwrites lang attribute) | daynames="M&brvbar;T&brvbar;W&brvbar;T&brvbar;F&brvbar;S&brvbar;S" |
+| daynames | custom daynames (a list separated by a '&brvbar;' and starting on Monday; overwrites lang attribute) | daynames="M&brvbar;T&brvbar;W&brvbar;T&brvbar;F&brvbar;S&brvbar;S" |
 | days | number of days to show |days="30" |
 | enablepubholidays | enables/disables public holidays (bullet list entries with a @all in a person field; related: showpubholidays, pubholidayicon) | enablepubholidays="1" |
 | lang | language (related: daynames, monthnames) | lang="English" |
@@ -139,11 +139,11 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | border | table border | border="1" |
 | cellpadding | table cell padding | cellpadding="1" |
 | cellspacing | tabel cell spacing | cellspacing="0" |
-| daynames | costum daynames (a list separated by a '&brvbar;' and starting on Monday; overwrites lang attribute) | daynames="M&brvbar;T&brvbar;W&brvbar;T&brvbar;F&brvbar;S&brvbar;S" |
+| daynames | custom daynames (a list separated by a '&brvbar;' and starting on Monday; overwrites lang attribute) | daynames="M&brvbar;T&brvbar;W&brvbar;T&brvbar;F&brvbar;S&brvbar;S" |
 | headerformat | table header format of a day; a subset of strftime conversion specifiers is supported (only date not time specificiers; see manual page or TWiki:Codev.ConvergeDateTimeFormattingModels) | headerformat="&lt;font&nbsp;size=\"-2\">%b&lt;br/&gt;%a&lt;br/&gt;%e&lt;/font&gt;" |
 | lang | language (related: daynames, monthnames) | lang="English" |
 | monthheaderformat | month header format (related: showmonthheader) | monthheaderformat="%B" |
-| monthnames | costum month names (a list separated by '&brvbar;' and starting on January; overwrites lang attribute) | monthnames="J&brvbar;F&brvbar;M&brvbar;A&brvbar;M&brvbar;J&brvbar;J&brvbar;A&brvbar;S&brvbar;O&brvbar;N&brvbar;D" |
+| monthnames | custom month names (a list separated by '&brvbar;' and starting on January; overwrites lang attribute) | monthnames="J&brvbar;F&brvbar;M&brvbar;A&brvbar;M&brvbar;J&brvbar;J&brvbar;A&brvbar;S&brvbar;O&brvbar;N&brvbar;D" |
 | name | header content of the first cell header |name="Name" |
 | navdays | defines the days to navigate to (default: value of the =days= attribute) | navdays="30" |
 | navenable | enable/disable navigation (1 - enabled; 0 - disabled) | navenable="1" |
@@ -307,9 +307,9 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterJones, TWiki:Main.DanielRohde |
-|  Plugin Version: | v1.024 (BETA) |
+|  Plugin Version: | v1.024 (29 Jul 2008) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  v1.024 (BETA) | TWiki:Main.DanielRohde: added statistics feature requested by TWiki:Main.GarySprague |
+|  v1.024 (29 Jul 2008) | TWiki:Main.DanielRohde: added statistics feature requested by TWiki:Main.GarySprague |
 |  v1.023 (19 Jan 2008) | TWiki:Main.KennethLavrsen: fixed Item5190 - does not like whitespace after the smiley. This makes the plugin work with TWiki 4.2.0 and Wysiwyg |
 |  v1.022 (18 Jun 2007) | TWiki:Main.DanielRohde: added documentation requested by TWiki:Main.PeterThoeny; fixed type (on=off bug) |
 |  v1.021 (20 Apr 2007) | TWiki:Main.DanielRohde: fixed minor HTML bug reported by TWiki:Main.JfMacaud; added month header feature (showmonthheader attribute) requested by Rikard Johansson; fixed some minor bugs (documentation, preferences handling); |
