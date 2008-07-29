@@ -22,6 +22,7 @@ use TWiki;
 use TWiki::Func;
 use TWiki::Render;
 use TWiki::Meta;
+use TWiki::Form;
 
 sub excel2topics {
 

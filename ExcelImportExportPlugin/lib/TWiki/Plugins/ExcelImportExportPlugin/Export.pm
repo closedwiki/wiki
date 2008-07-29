@@ -20,6 +20,7 @@ package TWiki::Plugins::ExcelImportExportPlugin::Export;
 use strict;
 use TWiki;
 use TWiki::Func;
+use TWiki::Form;
 use Spreadsheet::WriteExcel;
 use Date::Manip;
 
