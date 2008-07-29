@@ -132,10 +132,12 @@ Look at the example in Sandbox...
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ThomasWeigert, based on code by TWiki:Main.ClausLanghans |
-|  Copyright: | &copy; 2001-2006, %TWIKIWEB%.TWikiContributor |
+|  Copyright: | &copy; 2001-2008, %TWIKIWEB%.TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 13 Aug 2006 |
+|  Plugin Version: | July 2008 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  July 2008: | 4.2.x compatibility, 
+                Update Topic data from changed Form definition. - SvenDowideit@wikiring.com |
 |  04 Nov 2006: | Added abilty to upload spreadsheet. Rewritten for consistency and made more resilient. Enhanced documentation. |
 |  13 Aug 2006: | Initial version |
 |  TWiki Dependency: |  |

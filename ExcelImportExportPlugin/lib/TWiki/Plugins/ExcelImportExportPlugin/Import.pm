@@ -93,7 +93,7 @@ sub excel2topics {
     for (my $col = $WorkSheet->{MinCol} ;	defined $WorkSheet->{MaxCol} && $col <= $WorkSheet->{MaxCol} ; $col++) {
       my $cell = $WorkSheet->{Cells}[0][$col];
       if (defined $cell and $cell->Value ne '') {
-	$colname{$col}=$cell->Value if($cell);
+	$colname{$col}=cleanField($cell->Value) if($cell);
 	$log.="  Column $col = $colname{$col}\n";
       }
     }
@@ -107,9 +107,13 @@ sub excel2topics {
 	  $data{$colname{$col}}=$cell->Value;
 	}
       }
-      my $newtopic=$data{$config{"TOPICCOLUMN"}};
+      my $newtopic;
+      if ( defined($data{$config{"TOPICCOLUMN"}}) ) {
+          $newtopic=$data{$config{"TOPICCOLUMN"}};
+      } else {
 ## SMELL: Make default topic name configurable
-      $newtopic = 'ExcelRow'.$ct++;
+          $newtopic = 'ExcelRow'.$ct++;
+      }
       next if ($newtopic eq '') ; # Emtpy row
 
       # Writing the topic
