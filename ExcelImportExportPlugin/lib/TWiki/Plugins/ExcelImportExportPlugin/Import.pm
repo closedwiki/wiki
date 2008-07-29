@@ -51,7 +51,6 @@ sub excel2topics {
       $config{$key} =~ s/^\s*//go;
       $config{$key} =~ s/\s*$//go;
     }
-    $log.="  $key=$config{$key}\n";
   }
 
   $config{UPLOADFILE} = $query->param('file') || $config{UPLOADFILE};
@@ -71,7 +70,9 @@ sub excel2topics {
             params => [ $webName, $config{FORM} ] );
     }
 
-
+  foreach my $key (qw(FORM TOPICPARENT UPLOADFILE NEWTOPICTEMPLATE FORCCEOVERWRITE TOPICCOLUMN TOPICTEXT DEBUG)) {
+    $log.="  $key=$config{$key}\n";
+  }
 
   my $xlsfile = $TWiki::cfg{PubDir}."/$webName/$topic/$config{UPLOADFILE}";
   $xlsfile = TWiki::Sandbox::untaintUnchecked( $xlsfile );
@@ -108,8 +109,8 @@ sub excel2topics {
 	}
       }
       my $newtopic;
-      if ( defined($data{$config{"TOPICCOLUMN"}}) ) {
-          $newtopic=$data{$config{"TOPICCOLUMN"}};
+      if ( defined($data{$config{TOPICCOLUMN}}) ) {
+          $newtopic=$data{$config{TOPICCOLUMN}};
       } else {
 ## SMELL: Make default topic name configurable
           $newtopic = 'ExcelRow'.$ct++;
@@ -152,20 +153,20 @@ sub excel2topics {
       foreach my $colname (values %colname) {
 
 	# Overwrite the text. As a safety measure only overwrite the text if it is not empty.
-	if ($colname eq $config{"TOPICTEXT"} 
-	    and  not $data{$config{"TOPICTEXT"}} =~ m/^\s*$/ 
-	    and  $data{$config{"TOPICTEXT"}} ne $text){
-	  my $msg="      $webName/$newtopic: topic text has changed";
+	if ($colname eq $config{TOPICTEXT} 
+	    and  not $data{$config{TOPICTEXT}} =~ m/^\s*$/ 
+	    and  $data{$config{TOPICTEXT}} ne $text){
+	  my $msg="      $webName/$newtopic: topic text has changed in column named: [".$config{TOPICTEXT}." / $colname]";
 	  $config{DEBUG} && TWiki::Func::writeWarning($msg);
 	  $log.="$msg\n";
 	  $log.="vvvvvvvvvvvvvvvvvvv old vvvvvvvvvvvvvvvvvvv \n";
 	  $log.="$text\n";
 	  $log.="^^^^^^^^^^^^^^^^^^^ old ^^^^^^^^^^^^^^^^^^^ \n";
 	  $log.="vvvvvvvvvvvvvvvvvvv new vvvvvvvvvvvvvvvvvvv \n";
-	  $log.=$data{$config{"TEXTTOPIC"}}."\n";
+	  $log.=$data{$config{TOPICTEXT}}."\n";
 	  $log.="^^^^^^^^^^^^^^^^^^^ new ^^^^^^^^^^^^^^^^^^^ \n";
 
-	  $text=$data{$config{TEXTTOPIC}};
+	  $text=$data{$config{TOPICTEXT}};
 	  $changed=1;
 	}
 
