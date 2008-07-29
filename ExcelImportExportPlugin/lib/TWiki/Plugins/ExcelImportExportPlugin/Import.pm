@@ -80,7 +80,7 @@ sub excel2topics {
         qw(FORM TOPICPARENT UPLOADFILE NEWTOPICTEMPLATE FORCCEOVERWRITE TOPICCOLUMN TOPICTEXT DEBUG)
       )
     {
-        $log .= "  $key=$config{$key}\n";
+        $log .= "  $key=" . ( $config{$key} || 'undef' ) . "\n";
     }
 
     my $xlsfile = $TWiki::cfg{PubDir} . "/$webName/$topic/$config{UPLOADFILE}";
@@ -219,9 +219,18 @@ sub excel2topics {
                     if ( $$field{"title"} eq $colname ) {
 
 #$log .= $$field{"title"}." eq $colname ... ".$$field{"value"}." ne ".$data{$colname}."\n";
-                        if ( $$field{"value"} ne $data{$colname} ) {
+#print STDERR join(', ', ($newtopic, ($colname||'undef'), ($data{$colname}||'undef'), ($$field{"value"}||'undef'),  "\n"));
+                        if (
+                            ( defined( $data{$colname} ) )
+                            && #undefined incoming value == don't change the value in the topic.
+                            (
+                                ( $$field{"value"} || 'undef' ) ne
+                                $data{$colname}
+                            )
+                          )
+                        { #undefined value in the topic == do change the value if we can.
                             $log .=
-                                $$field{"value"} . " ne "
+                              ( $$field{"value"} || 'undef' ) . " ne "
                               . $data{$colname} . "\n";
                             my $msg =
                                 "      $webName/$newtopic: $colname: old value="
