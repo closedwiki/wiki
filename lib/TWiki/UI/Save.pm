@@ -226,6 +226,11 @@ sub buildNewTopic {
             # chuck up if there is at least one field value defined in the
             # query and a mandatory field was not defined in the
             # query or by an existing value.
+	    # Item5428: clean up <nop>'s
+	    @$missing = map {
+	    			s/<nop>//g;
+				$_
+	    			} @$missing;
             throw TWiki::OopsException(
                 'attention',
                 def=>'mandatory_field',
