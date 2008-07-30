@@ -880,6 +880,21 @@ sub test_93 {
     $this->simpleTest( test => "istopic \$'Not a web'", then => 0, else => 1 );
 }
 
+sub test_93a {
+    my $this = shift;
+    $this->simpleTest( test => "istopic fields[name='nonExistantField']", then => 0, else => 1 );
+}
+
+sub test_93b {
+    my $this = shift;
+    $this->simpleTest( test => "istopic fields[name='nonExistantField'].value", then => 0, else => 1 );
+}
+
+sub test_93a {
+    my $this = shift;
+    $this->simpleTest( test => "istopic fields[name='nonExistantField']", then => 0, else => 1 );
+}
+
 sub test_94 {
     my $this = shift;
     $this->simpleTest( test => "isweb \$ 'SYSTEMWEB'", then => 1, else => 0 );
@@ -916,6 +931,15 @@ sub set_up {
         "   * Set GROUP = "
           . TWiki::Func::getWikiName( $this->{twiki}->{user} ) . "\n"
     );
+
+    # Create WebHome topic to trap existance errors related to
+    # normalizeWebTopicName
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user},
+        $this->{test_web},
+        "WebHome",
+        "Gormless gimboid\n"
+    );
 }
 
 sub simpleTest {
@@ -936,6 +960,7 @@ sub simpleTest {
       $this->{twiki}
       ->handleCommonTags( $text, $this->{test_web}, $this->{test_topic},
         $meta );
+    #print STDERR "$text => $result\n";
     $this->assert_equals( '1', $result, $text . " => " . $result );
 }
 
