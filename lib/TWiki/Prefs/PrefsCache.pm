@@ -213,6 +213,9 @@ sub insert {
     my( $this, $type, $key, $value ) = @_;
 
     return 0 if $this->{CONTEXT}->isFinalised( $key );
+    
+    # Item3824 - we do not allow TOPIC and WEB to be altered by settings
+    return 0 if ( $key eq 'TOPIC' or $key eq 'WEB' );
 
     $value =~ tr/\r//d;                 # Delete \r
     $value =~ tr/\t/ /;                 # replace TAB by space
