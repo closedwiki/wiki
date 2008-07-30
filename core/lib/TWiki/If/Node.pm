@@ -87,8 +87,10 @@ sub OP_istopic {
     my $session = $domain{tom}->session;
     throw Error::Simple('No context in which to evaluate "'.
                           $a->stringify().'"') unless $session;
-    my ($web, $topic) = $session->normalizeWebTopicName(
-        $session->{webName}, $a->_evaluate(@_) || '');
+    my( $web, $topic) = ( $session->{webName}, $a->_evaluate(@_));
+    return 0 unless defined $topic; # null topic cannot possibly exist
+    ($web, $topic) = $session->normalizeWebTopicName($web, $topic);
+
     return $session->{store}->topicExists($web, $topic) ? 1 : 0;
 }
 
