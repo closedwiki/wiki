@@ -1,35 +1,42 @@
 # See bottom of file for copyright and license details
 
-=pod
+=begin twiki
 
----+ package TWiki::If::Parser
-
-Support for the conditions in %IF{} statements.
+---+ package TWiki::If::OP_dollar
 
 =cut
 
-package TWiki::If::Parser;
-use base 'TWiki::Query::Parser';
+package TWiki::If::OP_dollar;
+use base 'TWiki::Query::UnaryOP';
 
 use strict;
-use Assert;
-use TWiki::If::Node;
 
 sub new {
-    my( $class ) = @_;
+    my $class = shift;
+    return $class->SUPER::new(
+        name => '$',
+        prec => 600);
+}
 
-    my $this = $class->SUPER::new({
-        nodeClass => 'TWiki::If::Node',
-        words => qr/([A-Z][A-Z0-9_:]+|({[A-Z0-9_]+})+)/i});
-    die "{Operators}{If} is undefined; re-run configure"
-      unless defined( $TWiki::cfg{Operators}{If} );
-    foreach my $op (@{$TWiki::cfg{Operators}{If}}) {
-        eval "require $op";
-        ASSERT(!$@) if DEBUG;
-        $this->addOperator($op->new());
+sub evaluate {
+    my $this = shift;
+    my $node = shift;
+    my $a = $node->{params}->[0];
+    my %domain = @_;
+    my $session = $domain{tom}->session;
+    throw Error::Simple('No context in which to evaluate "'.
+                          $a->stringify().'"') unless $session;
+    my $text = $a->_evaluate(@_) || '';
+    if( $text && defined( $session->{cgiQuery}->param( $text ))) {
+        return $session->{cgiQuery}->param( $text );
     }
 
-    return $this;
+    $text = "%$text%";
+    TWiki::expandAllTags($session, \$text,
+                         $session->{topicName},
+                         $session->{webName});
+
+    return $text || '';
 }
 
 1;

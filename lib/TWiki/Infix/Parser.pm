@@ -83,10 +83,10 @@ sub new {
 
 =pod
 
----++ ObjectMethod addOperator(%oper)
+---++ ObjectMethod addOperator(\%oper)
 Add an operator to the parser.
 
-=%oper= is a hash, containing the following fields:
+=\%oper= is a hash (or an object), containing the following fields:
    * =name= - operator string
    * =prec= - operator precedence, positive non-zero integer.
      Larger number => higher precedence.
@@ -110,8 +110,8 @@ by the parser.
 =cut
 
 sub addOperator {
-    my $this = shift;
-    push( @{$this->{operators}}, { @_ } );
+    my( $this, $op ) = @_;
+    push( @{$this->{operators}}, $op );
     $this->{initialised} = 0;
 }
 

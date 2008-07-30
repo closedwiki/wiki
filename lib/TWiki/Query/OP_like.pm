@@ -1,38 +1,38 @@
 # See bottom of file for copyright and license details
 
-=pod
+=begin twiki
 
----+ package TWiki::If::Parser
-
-Support for the conditions in %IF{} statements.
+---+ package TWiki::Query::OP_like
 
 =cut
 
-package TWiki::If::Parser;
-use base 'TWiki::Query::Parser';
+package TWiki::Query::OP_like;
+use base 'TWiki::Query::BinaryOP';
 
 use strict;
-use Assert;
-use TWiki::If::Node;
 
 sub new {
-    my( $class ) = @_;
+    my $class = shift;
+    return $class->SUPER::new(name => '~', prec => 500);
+}
 
-    my $this = $class->SUPER::new({
-        nodeClass => 'TWiki::If::Node',
-        words => qr/([A-Z][A-Z0-9_:]+|({[A-Z0-9_]+})+)/i});
-    die "{Operators}{If} is undefined; re-run configure"
-      unless defined( $TWiki::cfg{Operators}{If} );
-    foreach my $op (@{$TWiki::cfg{Operators}{If}}) {
-        eval "require $op";
-        ASSERT(!$@) if DEBUG;
-        $this->addOperator($op->new());
-    }
-
-    return $this;
+sub evaluate {
+    my $this = shift;
+    my $node = shift;
+    return $this->evalTest( $node,
+        \@_,
+        sub {
+            my $expr = quotemeta($_[1]);
+            # quotemeta will have escapes * and ? wildcards
+            $expr =~ s/\\\?/./g;
+            $expr =~ s/\\\*/.*/g;
+            defined($_[0]) && defined($_[1]) &&
+              $_[0] =~ m/^$expr$/s ? 1 : 0;
+        } );
 }
 
 1;
+
 
 __DATA__
 

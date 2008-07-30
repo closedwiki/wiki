@@ -1,35 +1,37 @@
 # See bottom of file for copyright and license details
 
-=pod
+=begin twiki
 
----+ package TWiki::If::Parser
-
-Support for the conditions in %IF{} statements.
+---+ package TWiki::If::OP_defined
 
 =cut
 
-package TWiki::If::Parser;
-use base 'TWiki::Query::Parser';
+package TWiki::If::OP_defined;
+use base 'TWiki::Query::UnaryOP';
 
 use strict;
-use Assert;
-use TWiki::If::Node;
 
 sub new {
-    my( $class ) = @_;
+    my $class = shift;
+    return $class->SUPER::new( name => 'defined', prec => 600 );
+}
 
-    my $this = $class->SUPER::new({
-        nodeClass => 'TWiki::If::Node',
-        words => qr/([A-Z][A-Z0-9_:]+|({[A-Z0-9_]+})+)/i});
-    die "{Operators}{If} is undefined; re-run configure"
-      unless defined( $TWiki::cfg{Operators}{If} );
-    foreach my $op (@{$TWiki::cfg{Operators}{If}}) {
-        eval "require $op";
-        ASSERT(!$@) if DEBUG;
-        $this->addOperator($op->new());
-    }
-
-    return $this;
+sub evaluate {
+    my $this = shift;
+    my $node = shift;
+    my $a = $node->{params}->[0];
+    my %domain = @_;
+    my $session = $domain{tom}->session;
+    throw Error::Simple('No context in which to evaluate "'.
+                          $a->stringify().'"') unless $session;
+    my $eval =  $a->_evaluate(@_);
+    return 0 unless $eval;
+    return 1 if( defined( $session->{cgiQuery}->param( $eval )));
+    return 1 if( defined(
+        $session->{prefs}->getPreferencesValue( $eval )));
+    return 1 if( defined( $session->{SESSION_TAGS}{$eval} ));
+    return 1 if( defined( $TWiki::functionTags{$eval} ));
+    return 0;
 }
 
 1;

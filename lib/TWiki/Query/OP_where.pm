@@ -1,35 +1,40 @@
 # See bottom of file for copyright and license details
 
-=pod
+=begin twiki
 
----+ package TWiki::If::Parser
-
-Support for the conditions in %IF{} statements.
+---+ package TWiki::Query::OP_where
 
 =cut
 
-package TWiki::If::Parser;
-use base 'TWiki::Query::Parser';
+package TWiki::Query::OP_where;
+use base 'TWiki::Query::BinaryOP';
 
 use strict;
-use Assert;
-use TWiki::If::Node;
 
 sub new {
-    my( $class ) = @_;
+    my $class = shift;
+    return $class->SUPER::new( name => '[', close => ']', prec => 800 );
+}
 
-    my $this = $class->SUPER::new({
-        nodeClass => 'TWiki::If::Node',
-        words => qr/([A-Z][A-Z0-9_:]+|({[A-Z0-9_]+})+)/i});
-    die "{Operators}{If} is undefined; re-run configure"
-      unless defined( $TWiki::cfg{Operators}{If} );
-    foreach my $op (@{$TWiki::cfg{Operators}{If}}) {
-        eval "require $op";
-        ASSERT(!$@) if DEBUG;
-        $this->addOperator($op->new());
+sub evaluate {
+    my $this = shift;
+    my $node = shift;
+    my %domain = @_;
+    my $a = $node->{params}[0];
+    my $lval = $a->evaluate( @_ );
+    my $b = $node->{params}[1];
+    if (ref($lval) eq 'ARRAY') {
+        my @res;
+        foreach my $el (@$lval) {
+            if ($b->evaluate( data=>$el, tom=>$domain{tom} )) {
+                push(@res, $el);
+            }
+        }
+        return undef unless scalar( @res );
+        return \@res;
+    } else {
+        return $b->evaluate( data=>$lval, tom=>$domain{tom} );
     }
-
-    return $this;
 }
 
 1;
