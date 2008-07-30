@@ -1180,6 +1180,18 @@ $TWiki::cfg{MimeTypesFileName} = '$TWiki::cfg{DataDir}/mime.types';
 # who should develop with it switched on.
 $TWiki::cfg{WarningsAreErrors} = $FALSE;
 
+# **PERL H**
+# List of operators permitted in structured search queries.
+# Each operator is implemented by a class. Not visible in the
+# configure UI.
+$TWiki::cfg{Operators}{Query} = [ 'TWiki::Query::OP_and', 'TWiki::Query::OP_eq', 'TWiki::Query::OP_lc', 'TWiki::Query::OP_lte', 'TWiki::Query::OP_not', 'TWiki::Query::OP_ref', 'TWiki::Query::OP_d2n', 'TWiki::Query::OP_gte', 'TWiki::Query::OP_length', 'TWiki::Query::OP_lt', 'TWiki::Query::OP_ob', 'TWiki::Query::OP_uc', 'TWiki::Query::OP_dot', 'TWiki::Query::OP_gt', 'TWiki::Query::OP_like', 'TWiki::Query::OP_ne', 'TWiki::Query::OP_or', 'TWiki::Query::OP_where' ];
+
+# **PERL H**
+# List of operators permitted in %IF statements.
+# Each operator is implemented by a class. Not visible in the
+# configure UI.
+$TWiki::cfg{Operators}{If} = [ 'TWiki::If::OP_allows', 'TWiki::If::OP_defined', 'TWiki::If::OP_ingroup', 'TWiki::If::OP_isweb', 'TWiki::If::OP_context', 'TWiki::If::OP_dollar', 'TWiki::If::OP_istopic' ];
+
 #---+ Plugins
 # *PLUGINS* Marker used by bin/configure script - do not remove!
 # The plugins listed below were discovered by searching the @INC path for

@@ -1,36 +1,30 @@
 # See bottom of file for copyright and license details
 
-=pod
+=begin twiki
 
----+ package TWiki::If::Parser
-
-Support for the conditions in %IF{} statements.
+---+ package TWiki::Query::OP_lc
 
 =cut
 
-package TWiki::If::Parser;
-use base 'TWiki::Query::Parser';
+package TWiki::Query::OP_lc;
+use base 'TWiki::Query::UnaryOP';
 
 use strict;
-use Assert;
-use TWiki::If::Node;
 
 sub new {
-    my( $class ) = @_;
+    my $class = shift;
 
-    my $this = $class->SUPER::new({
-        nodeClass => 'TWiki::If::Node',
-        words => qr/([A-Z][A-Z0-9_:]+|({[A-Z0-9_]+})+)/i});
-    die "{Operators}{If} is undefined; re-run configure"
-      unless defined( $TWiki::cfg{Operators}{If} );
-    foreach my $op (@{$TWiki::cfg{Operators}{If}}) {
-        eval "require $op";
-        ASSERT(!$@) if DEBUG;
-        $this->addOperator($op->new());
-    }
-
-    return $this;
+    return $class->SUPER::new(
+        name => 'lc',
+        prec => 600,
+        casematters => 1);
 }
+
+sub evaluate {
+    my $this = shift;
+    my $node = shift;
+    return $this->evalUnary( $node, sub { lc( shift ) }, @_ );
+};
 
 1;
 
