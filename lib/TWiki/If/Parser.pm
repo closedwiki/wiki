@@ -20,14 +20,44 @@ sub new {
 
     my $this = $class->SUPER::new({
         nodeClass => 'TWiki::If::Node',
-        words => qr/([A-Z][A-Z0-9_:]+|({[A-Z0-9_]+})+)/i});
-    die "{Operators}{If} is undefined; re-run configure"
-      unless defined( $TWiki::cfg{Operators}{If} );
-    foreach my $op (@{$TWiki::cfg{Operators}{If}}) {
-        eval "require $op";
-        ASSERT(!$@) if DEBUG;
-        $this->addOperator($op->new());
-    }
+        words => qr/([A-Za-z][\w:]+|({\w+})+)/});
+
+    # See TWiki::Query::Parser.pm for an explanation of 'exec'
+    $this->addOperator(
+        name => 'context',
+        prec => 600, arity => 1, casematters => 0,
+        exec => 'OP_context',
+       );
+    $this->addOperator(
+        name => 'allows',
+        prec => 600, arity => 2, casematters => 0,
+        exec => 'OP_allows',
+       );
+    $this->addOperator(
+        name => '$',
+        prec => 600, arity => 1,
+        exec => 'OP_dollar',
+       );
+    $this->addOperator(
+        name => 'defined',
+        prec => 600, arity => 1, casematters => 0,
+        exec => 'OP_defined',
+       );
+    $this->addOperator(
+        name => 'istopic',
+        prec => 600, arity => 1, casematters => 0,
+        exec => 'OP_istopic',
+       );
+    $this->addOperator(
+        name => 'isweb',
+        prec => 600, arity => 1, casematters => 0,
+        exec => 'OP_isweb',
+       );
+    $this->addOperator(
+        name => 'ingroup',
+        prec => 600, arity => 2, casematters => 1,
+        exec => 'OP_ingroup',
+       );       
 
     return $this;
 }

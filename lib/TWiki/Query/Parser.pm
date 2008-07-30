@@ -14,7 +14,6 @@ use base 'TWiki::Infix::Parser';
 use TWiki::Query::Node;
 
 use strict;
-use Assert;
 
 # Operators
 #
@@ -36,13 +35,97 @@ sub new {
     $options->{words} ||= qr/[A-Z][A-Z0-9_:]*/i;
     $options->{nodeClass} ||= 'TWiki::Query::Node';
     my $this = $class->SUPER::new($options);
-    die "{Operators}{Query} is undefined; re-run configure"
-      unless defined( $TWiki::cfg{Operators}{Query} );
-    foreach my $op (@{$TWiki::cfg{Operators}{Query}}) {
-        eval "require $op";
-        ASSERT(!$@) if DEBUG;
-        $this->addOperator($op->new());
-    }
+    $this->addOperator(
+            name => 'lc',
+            prec => 600, arity => 1, casematters => 0,
+            exec => 'OP_lc',
+        );
+    $this->addOperator(
+            name => 'uc',
+            prec => 600, arity => 1, casematters => 0,
+            exec => 'OP_uc',
+        );
+    $this->addOperator(
+            name => 'd2n',
+            prec => 600, arity => 1, casematters => 0,
+            exec => 'OP_d2n',
+        );
+    $this->addOperator(
+            name => 'length',
+            prec => 600, arity => 1, casematters => 0,
+            exec => 'OP_length',
+        );
+    $this->addOperator(
+            name => '=',
+            prec => 500, arity => 2,
+            exec => 'OP_eq',
+        );
+    $this->addOperator(
+            name => '~', # LIKE
+            prec => 500, arity => 2,
+            exec => 'OP_like',
+        );
+    $this->addOperator(
+            name => '!=',
+            prec => 500, arity => 2,
+            exec => 'OP_ne',
+        );
+    $this->addOperator(
+            name => '>=',
+            prec => 400, arity => 2,
+            exec => 'OP_gte',
+        );
+    $this->addOperator(
+            name => '<=',
+            prec => 400, arity => 2,
+            exec => 'OP_lte',
+        );
+    $this->addOperator(
+            name => '>',
+            prec => 400, arity => 2,
+            exec => 'OP_gt',
+        );
+    $this->addOperator(
+            name => '<',
+            prec => 400, arity => 2,
+            exec => 'OP_lt',
+        );
+    $this->addOperator(
+            name => 'not',
+            prec => 300, arity => 1, casematters => 0,
+            exec => 'OP_not',
+        );
+    $this->addOperator(
+            name => 'and',
+            prec => 200, arity => 2, casematters => 0,
+            exec => 'OP_and',
+        );
+    $this->addOperator(
+            name => 'or',
+            prec => 100, arity => 2, casematters => 0,
+            exec => 'OP_or',
+        );
+    $this->addOperator(
+            name => '(', close => ')',
+            prec => 1000, arity => 1,
+            exec => 'OP_ob',
+        );
+    $this->addOperator(
+            name => '.',
+            prec => 800, arity => 2,
+            exec => 'OP_dot',
+        );
+    $this->addOperator(
+            name => '/',
+            prec => 700, arity => 2,
+            exec => 'OP_ref',
+        );
+    $this->addOperator(
+            name => '[', close => ']',
+            prec => 800, arity => 2,
+            exec => 'OP_where',
+        );
+
     return $this;
 }
 
