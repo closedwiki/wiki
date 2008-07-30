@@ -37,7 +37,7 @@ sub getUrl
 {
     my ( $theHost, $thePort, $theUrl, $theHeader ) = @_;
     my $result = '';
-    my $req = "GET $theUrl HTTP/1.0\r\n$theHeader\r\n\r\n";
+    my $req = "GET $theUrl HTTP/1.0\r\n$theHeader\r\nUser-Agent: TWikigeturl.pl\r\n\r\n"; 
     my ( $iaddr, $paddr, $proto );
     $iaddr   = inet_aton( $theHost );
     $paddr   = sockaddr_in( $thePort, $iaddr );
