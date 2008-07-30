@@ -310,6 +310,8 @@ sub excel2topics {
 =pod
 
 ---++ cleanField(string) => string
+clean the field name - remove spaces, and nop's
+
 
 =cut
 
@@ -322,8 +324,7 @@ sub cleanField {
     #$data{$colname} =~ s/\"/%_Q_%/g;
 
     $val =~ s/<\/?(nop|noautolink)\/?>//go;
-    $val =~ s/^\s+//g;
-    $val =~ s/\s+$//g;
+    $val =~ s/\s//g;
 
     return $val;
 }
