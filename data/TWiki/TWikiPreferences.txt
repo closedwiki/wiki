@@ -343,6 +343,12 @@ You can introduce new VARIABLES and use them in your topics and templates. There
    * %X% The sequential order of the preference settings is significant. Define preferences that use other preferences FIRST. For example, set ==<nop>WEBCOPYRIGHT== before ==<nop>WIKIWEBMASTER== since the copyright notice uses the TWiki administrator e-mail address.
    * %X% In order to protect your custom variables from being overwritten when upgrading the [[%SYSTEMWEB%.%TOPIC%]] topic, it is recommended that custom variables are defined in [[%USERSWEB%.%TOPIC%]].
 
+---++ Protected System Settings
+
+The following settings are declared final to protect them as read only. These are system variables that should 
+never be attempted set or altered in any preference topic or topic settings. 
+
+   * Set FINALPREFERENCES = WEB, TOPIC
 
 ---++ Related Topics
 
