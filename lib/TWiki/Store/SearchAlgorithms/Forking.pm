@@ -66,6 +66,12 @@ sub search {
         $searchString = '\b'.$searchString.'\b';
     }
 
+    if ($TWiki::cfg{DetailedOS} eq 'MSWin32') {
+    	#Item5849: try to escape the ^ and "" for native windows grep and apache
+        $searchString =~ s/\[\^/[^^/g;
+        $searchString =~ s/"/""/g;
+    }
+
     # process topics in sets, fix for Codev.ArgumentListIsTooLongForSearch
     my $maxTopicsInSet = 512; # max number of topics for a grep call
     my @take = @$topics;
