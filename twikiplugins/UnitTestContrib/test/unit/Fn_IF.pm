@@ -890,9 +890,14 @@ sub test_93b {
     $this->simpleTest( test => "istopic fields[name='nonExistantField'].value", then => 0, else => 1 );
 }
 
-sub test_93a {
+sub test_93c {
     my $this = shift;
-    $this->simpleTest( test => "istopic fields[name='nonExistantField']", then => 0, else => 1 );
+    $this->simpleTest( test => "defined fields[name='nonExistantField']", then => 0, else => 1 );
+}
+
+sub test_93d {
+    my $this = shift;
+    $this->simpleTest( test => "defined fields[name='nonExistantField'].value", then => 0, else => 1 );
 }
 
 sub test_94 {
