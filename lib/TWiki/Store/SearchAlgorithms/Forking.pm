@@ -99,7 +99,7 @@ sub search {
     }
     my %seen;
     # Note use of / and \ as dir separators, to support Winblows
-    $matches =~ s/([^\/\\]*)\.txt(:(.*))?$/push( @{$seen{$1}}, $3 ); ''/gem;
+    $matches =~ s/([^\/\\]*)\.txt(:(.*))?$/push( @{$seen{$1}}, ($3||'') ); ''/gem;
 
     return \%seen;
 }
