@@ -1405,7 +1405,7 @@ sub setTopicEditLock {
    * =\%options= - ref to hash of save options
      =\%options= may include:
      | =dontlog= | don't log this change in twiki log |
-     | =comment= | comment for save |
+     | =forcenewrevision= | force the save to increment the revision counter |
      | =minor= | True if this is a minor change, and is not to be notified |
 Return: error message or undef.
 
@@ -1415,7 +1415,7 @@ For example,
 <verbatim>
 my( $meta, $text ) = TWiki::Func::readTopic( $web, $topic )
 $text =~ s/APPLE/ORANGE/g;
-TWiki::Func::saveTopic( $web, $topic, $meta, $text, { comment => 'refruited' } );
+TWiki::Func::saveTopic( $web, $topic, $meta, $text, { forcenewrevision => 1 } );
 </verbatim>
 
 __Note:__ Plugins handlers ( e.g. =beforeSaveHandler= ) will be called as
