@@ -1,0 +1,4 @@
+# Release manifest for FirebugLitePlugin
+data/TWiki/FirebugLitePlugin.txt 0644 Documentation
+lib/TWiki/Plugins/FirebugLitePlugin.pm 0644 Perl module
+

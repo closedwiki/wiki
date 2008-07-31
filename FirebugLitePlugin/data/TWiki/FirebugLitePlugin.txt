@@ -1,0 +1,47 @@
+---+!! !FirebugLitePlugin
+<!--
+One line description, required for extensions repository catalog.
+   * Set SHORTDESCRIPTION = FirebugLite javascript based debugger for IE, Opera, Safari and FireFox
+-->
+%SHORTDESCRIPTION%
+
+%TOC%
+
+see http://getfirebug.com/lite.html
+
+Firebug is an extension for Firefox, but what happens when you need to test your pages in Internet Explorer, Opera, and Safari?
+
+The solution is Firebug Lite, a JavaScript file you can insert into your pages to simulate some Firebug features in browsers that are not named "Firefox".
+
+Firebug Lite creates the variables "firebug" and "pi" and doesn't affect or interfere with HTML elements that aren't created by itself
+
+---++ Usage
+   1 install and enable %TOPIC%
+   2 hit F12 - this should bring up the firebuglite console.
+   
+---++ TODO
+   1 change the path to the =firebug-lite.css= file to a local TWiki path
+   2 add a setting to add =debug="true"= to the html tag, to always bring up the console.
+
+---++ Installation Instructions
+
+%$INSTALL_INSTRUCTIONS%
+
+---++ Plugin Info
+
+Many thanks to the following sponsors for supporting this work:
+   * Acknowledge any sponsors here
+
+|  Plugin Author(s): | TWiki:Main.SvenDowideit |
+|  Copyright: | &copy; |
+|  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
+|  Plugin Version: | %$VERSION% |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  Dependencies: | %$DEPENDENCIES% |
+|  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/FirebugLitePlugin |
+|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/FirebugLitePluginDev |
+|  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/FirebugLitePluginAppraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the feedback topic on twiki.org instead. -->
