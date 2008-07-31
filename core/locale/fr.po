@@ -2223,9 +2223,8 @@ msgid "RSS Feed"
 msgstr "Fil RSS"
 
 #: templates/viewtopicactionbuttons.tmpl:61
-#, fuzzy
 msgid "Raw edit"
-msgstr "Dernier·e auteur·e"
+msgstr "Modifier le code source"
 
 #: templates/registernotify.tmpl:10
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:10
@@ -2735,9 +2734,8 @@ msgstr ""
 "sur \"Annuler\", afin de retourner à la page précédente."
 
 #: templates/messages.tmpl:498
-#, fuzzy
 msgid "Template %1 does not exist"
-msgstr "Le web %1 n'existe pas"
+msgstr "Le template %1 n'existe pas"
 
 #: data/Sandbox/WebHome.txt:6
 msgid "Test Topics"
@@ -3309,9 +3307,8 @@ msgid "WARNING:"
 msgstr "ATTENTION :"
 
 #: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:179
-#, fuzzy
 msgid "Warning: 'include' topic does not exist!"
-msgstr "NB : Cette page Wiki n'existe pas"
+msgstr "NB : Cette 'include'-page Wiki n'existe pas"
 
 #: templates/messages.tmpl:447
 msgid "Warning: Can't INCLUDE %1 repeatedly, topic is already included. %2"
@@ -3423,21 +3420,20 @@ msgid "You are trying to %1 an attachment that does not exist."
 msgstr "Vous tentez de %1 un fichier attaché qui n'existe pas."
 
 #: templates/messages.tmpl:499
-#, fuzzy
 msgid "You are trying to create a topic from a template that does not exist."
-msgstr "Vous tentez de %1 une page qui n'existe pas."
+msgstr "Vous tentez de créer une page d'un template qui n'existe pas."
 
 #: templates/messages.tmpl:494
-#, fuzzy
 msgid ""
 "You are trying to perform an action on a topic that does not exist (action '%"
 "1')."
-msgstr "Vous tentez de %1 une page qui n'existe pas."
+msgstr ""
+"Vous tentez d'effectuer une action sur une page qui n'existe pas. (action '%"
+"1')."
 
 #: templates/messages.tmpl:505
-#, fuzzy
 msgid "You are trying to rename a topic that does not exist."
-msgstr "Vous tentez de %1 une page qui n'existe pas."
+msgstr "Vous tentez de renommer une page qui n'existe pas."
 
 #: templates/messages.tmpl:484
 msgid ""
