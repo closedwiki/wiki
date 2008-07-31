@@ -92,8 +92,8 @@ sub initPlugin {
     my $setting = $TWiki::cfg{Plugins}{FirebugLitePlugin}{ExampleSetting} || 0;
     $debug = $TWiki::cfg{Plugins}{FirebugLitePlugin}{Debug} || 0;
 
-    Func::loadTemplate(lc($pluginName));
-    my $firebugHeader = Func::expandTemplate($debug?'firebug':'firebug-compressed');
+    TWiki::Func::loadTemplate(lc($pluginName));
+    my $firebugHeader = TWiki::Func::expandTemplate($debug?'firebug':'firebug-compressed');
     TWiki::Func::addToHEAD($pluginName, $firebugHeader);
 
     # Plugin correctly initialized

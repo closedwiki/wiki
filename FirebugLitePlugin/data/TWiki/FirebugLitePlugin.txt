@@ -1,9 +1,11 @@
 ---+!! !FirebugLitePlugin
 <!--
 One line description, required for extensions repository catalog.
-   * Set SHORTDESCRIPTION = FirebugLite javascript based debugger for IE, Opera, Safari and FireFox
+   * Set SHORTDESCRIPTION = Firebug Lite javascript based debugger for IE, Opera, Safari and Firefox
 -->
 %SHORTDESCRIPTION%
+
+<a href="http://getfirebug.com/"><img src="%ATTACHURLPATH%/firebug-web-development.png" style="float:right" alt="Firebug web development"/></a>
 
 %TOC%
 
@@ -11,7 +13,7 @@ see http://getfirebug.com/lite.html
 
 Firebug is an extension for Firefox, but what happens when you need to test your pages in Internet Explorer, Opera, and Safari?
 
-The solution is Firebug Lite, a JavaScript file you can insert into your pages to simulate some Firebug features in browsers that are not named "Firefox".
+The solution is Firebug Lite, a <nop>JavaScript file you can insert into your pages to simulate some Firebug features in browsers that are not named "Firefox".
 
 Firebug Lite creates the variables "firebug" and "pi" and doesn't affect or interfere with HTML elements that aren't created by itself
 
@@ -32,9 +34,9 @@ Firebug Lite creates the variables "firebug" and "pi" and doesn't affect or inte
 Many thanks to the following sponsors for supporting this work:
    * Acknowledge any sponsors here
 
-|  Plugin Author(s): | TWiki:Main.SvenDowideit |
-|  Copyright: | &copy; |
-|  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
+|  Plugin Author(s): | TWiki:Main.SvenDowideit - SvenDowideit@wikiring.com - <img src="%ATTACHURLPATH%/wikiringlogo20x20.png" /> [[http://www.wikiring.com][WikiRing.com]] |
+|  Copyright: | see http://getfirebug.com/ |
+|  Licenses: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] (TWiki plugin) && [[http://www.mozilla.org/MPL/][Mozilla Public License 1.1]] (the js and css) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  Dependencies: | %$DEPENDENCIES% |
