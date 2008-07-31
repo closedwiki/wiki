@@ -49,6 +49,7 @@ sub do_upload {
         hndl => $fh, name => $tmpfile, info => {},
     };
     push(@{$query->{'filepath'}}, $fh);
+    $query->param('filepath', $fh);
 
     my $stream = $query->upload( 'filepath' );
     seek($stream,0,0);
