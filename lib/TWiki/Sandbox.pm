@@ -466,6 +466,14 @@ sub sysCommand {
             $cmd = $path.' '.$cq.
               join($cq.' '.$cq, map { s/$cq/\\$cq/g; $_ } @args).$cq;
         }
+        
+
+        if (($TWiki::cfg{DetailedOS} eq 'MSWin32') && 
+            (length($cmd) > 8192)) {
+            #heck, on pre WinXP its only 2048 - http://support.microsoft.com/kb/830473
+            print STDERR "WARNING: Sandbox::sysCommand commandline probably too long (".length($cmd).")\n";
+        }
+        
         open( OLDERR, '>&STDERR' ) || die "Can't steal STDERR: $!";
         open( STDERR, '>'.File::Spec->devnull());
         $data = `$cmd`;
