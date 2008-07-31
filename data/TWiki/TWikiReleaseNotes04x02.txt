@@ -54,6 +54,14 @@ TWiki 4.2.0 is shipped with
 
 ---++ Important Changes since 4.2.0
 
+---+++ Perl 5.8 is now minimum requirement with Wysiwyg
+
+In TWiki 4.2.1 the support of international characters has been improved. Especially when using the Wysiwyg editor. This requires that perl internally works with unicode and that the Encode CPAN lib is installed. For this reason Perl 5.8.X is required for Wysiwyg support. TWiki will run with perl 5.6.1 if !WysiwygPlugin is disabled.
+
+---+++ TWiki now installs and works with Perl 5.10.0.
+
+Newer distributions of Linux now ships with Perl 5.10.0. TWiki has been tested with Perl 5.10.0 and it should work fine. If the CGI library is version 3.37 you will need to update it to a newer version as the 3.37 contains some fatal bugs. Simply updating your perl using the standard update feature in your distribution may be enough to cure this problem.
+
 ---+++ The RCS files in subdirectories feature removed
 
 The feature related to the config option TWiki::cfg{RCS}{useSubDir} has been removed. It never really worked and there are all sorts of issues related to it with respect to distribution of extensions and packaged applications, and it does not really add any performance advantages. So instead of trying to repair a bad feature that never really worked it was decided to remove it.
