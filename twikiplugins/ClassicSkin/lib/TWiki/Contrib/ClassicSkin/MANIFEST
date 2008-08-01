@@ -30,9 +30,6 @@ templates/oopsleaseconflict.classic.tmpl  0444
 templates/oopsmore.classic.tmpl  0444
 templates/preview.classic.tmpl  0444
 templates/rdiff.classic.tmpl  0444
-templates/registerconfirm.classic.tmpl 0444
-templates/registernotify.classic.tmpl 0444
-templates/registernotifyadmin.classic.tmpl 0444
 templates/rename.classic.tmpl  0444
 templates/renamebase.classic.tmpl  0444
 templates/renameconfirm.classic.tmpl  0444
