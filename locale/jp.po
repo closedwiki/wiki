@@ -2,15 +2,15 @@
 # This file is distributed under the same license as TWiki itself
 # Copyright (C) 2005-2007 Peter Thoeny, and TWiki Contributors.
 # Translators:
-#   TWiki:Main/KenYuminaga, 2007
+#   TWiki:Main/KenYuminaga, 2008
 msgid ""
 msgstr ""
 "Project-Id-Version: TWiki $Id\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2007-09-05 14:11-0300\n"
-"Last-Translator: Ken <ken.yuminaga@gmail.com>;\n"
-"Language-Team: TWiki Japanese &lt;<ken.yuminaga@gmail.com>&gt;\n"
+"PO-Revision-Date: 2007-08-01 00:38-0800\n"
+"Last-Translator: Ken <ken.yuminaga at gmail.com>;\n"
+"Language-Team: TWiki Japanese &lt;<ken.yuminaga at gmail.com>&gt;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -177,29 +177,25 @@ msgid "%1 topic does not exist"
 msgstr "%1 トピックは存在しません"
 
 #: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:11
-#, fuzzy
 msgid "&Cancel"
-msgstr "キャンセル"
+msgstr "&キャンセル"
 
 #: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:14
-#, fuzzy
 msgid "&Edit text"
-msgstr "テキストを編集します"
+msgstr "&テキスト編集"
 
 #: templates/twiki.tmpl:101
 #: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:158
-#, fuzzy
 msgid "&History"
-msgstr "ヒストリー:"
+msgstr "&履歴"
 
 #: templates/messages.tmpl:262
 msgid "'%1' is not a valid %2 "
 msgstr "'%1' は有効なな %2 です"
 
 #: data/TWiki/WebTopicCreator.txt:2
-#, fuzzy
 msgid "'Create New Topic' page has moved"
-msgstr "Neues Topic im %1 Web anlegen"
+msgstr "'新規トピックス作成'ページが移動されました"
 
 #: templates/login.tmpl:12
 msgid "(%1 login)"
@@ -223,9 +219,8 @@ msgid "(__Suggestion:__ How about uploading your picture to your topic?)"
 msgstr "(__提案:__ あなたのトピックに関するピクチャをアップロードしませんか?)"
 
 #: templates/oopsaccessdenied.tmpl:4
-#, fuzzy
 msgid "(access denied)"
-msgstr "アクセスが拒否されました"
+msgstr "(アクセスが拒否されました)"
 
 #: templates/attachnew.tmpl:2
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:8
@@ -286,9 +281,8 @@ msgid "(identifies you to others) WikiName:"
 msgstr "(他の人と区別します) WikiName:"
 
 #: templates/login.tmpl:4
-#, fuzzy
 msgid "(login)"
-msgstr "ログイン"
+msgstr "(ログイン)"
 
 #: templates/oopsmore.tmpl:3
 msgid "(more)"
@@ -325,9 +319,8 @@ msgid "(otherwise search %1 Web only)"
 msgstr "(そうしないと、%1 ウェブのみ検索されます)"
 
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:45
-#, fuzzy
 msgid "(raw view)"
-msgstr "元のテキスト"
+msgstr "(元のビュー)"
 
 #: templates/oopsmore.tmpl:21 templates/oopsmore.tmpl:30
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:13
@@ -341,17 +334,14 @@ msgid "(rename)"
 msgstr "(リネーム)"
 
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:45
-#, fuzzy
 msgid "(revision %1)"
-msgstr "改訂"
+msgstr "(改訂 %1)"
 
 #: templates/oopssaveerr.tmpl:8
-#, fuzzy
 msgid "(save error)"
-msgstr "トピック保存エラー"
+msgstr "(保存エラー)"
 
 #: templates/searchformat.tmpl:3
-#, fuzzy
 msgid "(search result)"
 msgstr "(検索結果)"
 
@@ -423,57 +413,47 @@ msgstr ""
 "のファイルが更新又は追加されます。"
 
 #: templates/attachagain.tmpl:17
-#, fuzzy
 msgid ""
 "*Properties:* The comment and visibility (i.e. is attachment hidden) can be "
 "changed without uploading a file by pressing \"Change Properties only\"; see "
 "%1."
 msgstr ""
 "*プロパティ:* アップロードする時に\"プロパティのみ変更\"ボタンを押下しなくて"
-"も、ファイルのコメントや可視性(例えば、隠しファイル)を変更することが出来ま"
-"す。&lt;a target=\"HiddenAttachment\" onclick=\"return launchWindow('%"
-"1','HiddenAttachment')\" href=\"%2\" rel='nofollow'&gt;隠しファイル&lt;/a&gt;"
-"参照"
+"も、ファイルのコメントや可視性(例えば、隠しファイル)を変更することが出来ます。"
+"%1参照"
 
 #: data/TWiki/WikiSyntaxSummary.txt:9
-#, fuzzy
 msgid "*bold* put word/phrase in asterisks: =<nop>*your phrase*="
-msgstr "* ボールド* 文字をアスタリスクの間に入れます：=&lt;nop&gt;*文字*="
+msgstr "* ボールド* 文字をアスタリスクの間に入れます：=<nop>*文字*="
 
 #: data/TWiki/WikiSyntaxSummary.txt:10
-#, fuzzy
 msgid ""
 "*bullet list* 3 spaces, asterisk, 1 space: =&&nbsp;&&nbsp;&&nbsp;*&&nbsp;"
 "your text="
 msgstr ""
-"*ブレットリスト* 三つのスペース，アスタリスク，一つのスペース： =&amp;&amp;"
-"nbsp;&amp;&amp;nbsp;&amp;&amp;nbsp;*&amp;&amp;nbsp;文字="
+"*ブレットリスト* 三つのスペース，アスタリスク，一つのスペース： =&&nbsp;&&nbsp;&&nbsp;*&&nbsp;"
+"テキスト="
 
 #: data/TWiki/WikiSyntaxSummary.txt:14
-#, fuzzy
 msgid ""
 "*external links* =http://yahoo.com= or =[<nop>[http://yahoo.com/][link to "
 "Yahoo]]="
 msgstr ""
-"*リンク* トピック名又はリンク： =%1=, =http://twiki.org=, 又は =[&lt;nop&gt;"
-"[http://twiki.org/][twikiにリンクします]]="
+"*外部リンク* =http://yahoo.com= 又は =[<nop>[http://yahoo.com/]["
+"Yahooにリンクします]]="
 
 #: data/TWiki/WikiSyntaxSummary.txt:11
-#, fuzzy
 msgid "*headings* 3 dashes, 1 to 6 pluses, 1 space: =---++&&nbsp;Your Heading="
 msgstr ""
-"*ヘッダー*三つのダッシュ，1～6個のプラス記号，一つのスペース： =---++&amp;"
-"&amp;nbsp; ヘッダー="
+"*ヘッダー*三つのダッシュ，1～6個のプラス記号，一つのスペース： =---++&&nbsp;ヘッダー="
 
 #: data/TWiki/WikiSyntaxSummary.txt:12
-#, fuzzy
 msgid "*italic* put word/phrase in underscores: =_<nop>your words_="
-msgstr "*イタリック* 文字をアンダースコアの間に入れます： =_&lt;nop&gt;文字_="
+msgstr "*イタリック* 文字をアンダースコアの間に入れます： =_<nop>文字_="
 
 #: data/TWiki/WikiSyntaxSummary.txt:15
-#, fuzzy
 msgid "*monospaced* put word/phrase in equal signs: =<nop>=your words=="
-msgstr "*同じ幅* 文字を等号の間に入れます： =&lt;nop&gt;=文字=="
+msgstr "*同じ幅* 文字を等号の間に入れます： =<nop>=文字=="
 
 #: data/TWiki/WikiSyntaxSummary.txt:16
 msgid "*paragraphs* separate with blank line"
@@ -488,36 +468,31 @@ msgid "..."
 msgstr "…"
 
 #: templates/oopsmore.tmpl:14
-#, fuzzy
 msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
 msgstr ""
-"本トピック &lt;a href='%1' rel='nofollow'&gt;設定を編集します&lt;/a&gt;"
+"本トピック <a href='%1' rel='nofollow'>設定を編集します</a>"
 
 #: data/TWiki/WebChanges.txt:8
-#, fuzzy
 msgid ""
 "<a href='%1'>RSS feed</a>, recent changes with <a href='%2'>50</a>, <a "
 "href='%3' rel='nofollow'>100</a>, <a href='%4' rel='nofollow'>200</a>, <a "
 "href='%5' rel='nofollow'>500</a>, <a href='%6' rel='nofollow'>1000</a> "
 "topics, <a href='%7' rel='nofollow'>all changes</a>"
 msgstr ""
-"&lt;a href='%1'&gt;RSSフィード&lt;/a&gt;, 最新の &lt;a href='%2'&gt;50&lt;/"
-"a&gt;件, &lt;a href='%3' rel='nofollow'&gt;100&lt;/a&gt;件, &lt;a href='%4' "
-"rel='nofollow'&gt;200&lt;/a&gt;件, &lt;a href='%5' rel='nofollow'&gt;500&lt;/"
-"a&gt;件, &lt;a href='%6' rel='nofollow'&gt;1000&lt;/a&gt;件 更新トピック, "
-"&lt;a href='%7' rel='nofollow'&gt;全ての更新トピック&lt;/a&gt;"
+"<a href='%1'>RSS フィード</a>, 最新の変更トピック <a href='%2'>50件</a>, <a "
+"href='%3' rel='nofollow'>100件</a>, <a href='%4' rel='nofollow'>200件</a>, <a "
+"href='%5' rel='nofollow'>500件</a>, <a href='%6' rel='nofollow'>1000件</a> "
+"topics, <a href='%7' rel='nofollow'>全ての更新トピック</a>"
 
 #: templates/oopsmore.tmpl:41
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:21
-#, fuzzy
 msgid "<em>in %1 web</em> only"
-msgstr "&lt;em&gt; %1 ウェブ&lt;/em&gt;のみにあります"
+msgstr "<em> %1 ウェブ</em> のみにあります"
 
 #: templates/oopsmore.tmpl:39
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:19
-#, fuzzy
 msgid "<em>in all public webs</em>"
-msgstr "全てのウェブを検索します"
+msgstr "全てのパブリックウェブにあります"
 
 #: templates/messages.tmpl:476
 msgid ""
@@ -558,7 +533,6 @@ msgid "A more extensive changes list is available via [[%1][Recent Changes]]."
 msgstr "もっと多くの拡張変更リストがメニューの [[%1][最新変更]] にあります"
 
 #: templates/messages.tmpl:452
-#, fuzzy
 msgid ""
 "A new system-generated password for your login name %1 (!WikiName %2) has "
 "been sent to your registered e-mail address. If your e-mail address is no "
@@ -602,9 +576,8 @@ msgid "Add form"
 msgstr "フォームを追加します"
 
 #: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:174
-#, fuzzy
 msgid "Add row"
-msgstr "フォームを追加します"
+msgstr "行を追加します"
 
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:285
 msgid "Add your name to the list of users in the %1 topic in the %2 web."
@@ -619,9 +592,8 @@ msgid "Admin Maintenance"
 msgstr "管理者メンテナンス"
 
 #: templates/login.sudo.tmpl:3
-#, fuzzy
 msgid "Admin TWiki User Authentication"
-msgstr "%1 ユーザー認証"
+msgstr "Admin TWiki ユーザー認証"
 
 #: data/TWiki/WebSearchAdvanced.txt:3
 msgid "Advanced Search"
@@ -656,9 +628,8 @@ msgid "All public webs"
 msgstr "全てのパブリックウェブ"
 
 #: templates/twiki.tmpl:7
-#, fuzzy
 msgid "Allow non <nop>WikiWord for the new topic name"
-msgstr "ノン&lt;nop&gt;WikiWord を新しいトピック名としてもいいです。"
+msgstr "ノン<nop>WikiWord を新しいトピック名としてもいいです。"
 
 #: templates/messages.tmpl:256
 msgid ""
@@ -687,10 +658,9 @@ msgid "And populated with topics from the base web"
 msgstr "また、ベースウェブより構成されました"
 
 #: templates/changeform.tmpl:28
-#, fuzzy
 msgid ""
 "Any changes you made to the topic before coming to this page are preserved."
-msgstr "現在のトピックへのすべての変更を保存しました。"
+msgstr "このページに移動する前にトピックへのすべての変更を保存しました。"
 
 #: templates/viewtopicactionbuttons.tmpl:66
 msgid "Attach"
@@ -736,19 +706,16 @@ msgid "Attachment move failed"
 msgstr "添付ファイルの移動に失敗しました"
 
 #: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:7
-#, fuzzy
 msgid "Attachments"
 msgstr "添付ファイル"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:14
-#, fuzzy
 msgid "Attachments help"
-msgstr "添付ファイル"
+msgstr "添付ファイルヘルプ"
 
 #: templates/attach.tmpl:7
-#, fuzzy
 msgid "Attachments of %1"
-msgstr "%1 のほかの添付ファイル "
+msgstr "%1 の添付ファイル "
 
 #: templates/attach.tmpl:47
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:58
@@ -778,7 +745,6 @@ msgstr "利用可能な情報"
 
 #: templates/changeform.tmpl:34
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:13
-#, fuzzy
 msgid "Available form templates"
 msgstr "可能なフォームテンプレート"
 
@@ -907,9 +873,8 @@ msgid "Change password"
 msgstr "パスワードを変更します"
 
 #: templates/attachagain.tmpl:21
-#, fuzzy
 msgid "Change properties only"
-msgstr "トピック変更"
+msgstr "プロパティのみ変更"
 
 #: templates/edit.tmpl:7
 msgid "Change topic"
@@ -943,14 +908,13 @@ msgid "Changes from r%1 to r%2"
 msgstr " r%1 から r%2に変更します"
 
 #: templates/messages.tmpl:402
-#, fuzzy
 msgid ""
 "Check your configuration settings for {TemplateDir} and {TemplatePath}. If "
 "that's not the problem, it may be because you have a setting of %1 that is "
 "pointing to a template that doesn't exist."
 msgstr ""
-"{TemplateDir}の設定をチェックします。ここが問題の原因でなければ、 %1 のリンク"
-"先のテンプレートが存在しない可能性があります"
+"{TemplateDir}と{TemplatePath}の設定をチェックします。ここが問題の原因でなければ、 %1 のリンク"
+"先のテンプレートが存在しない可能性があります。"
 
 #: templates/renamebase.tmpl:42 templates/renamedelete.tmpl:31
 msgid "Checked topics will be updated to point to the new topic location."
@@ -1031,18 +995,16 @@ msgid "Continue and try to rename web?"
 msgstr "続けてウェブをリネームしますか？"
 
 #: data/TWiki/WebTopicCreator.txt:4
-#, fuzzy
 msgid "Continue to create the new page"
-msgstr "新ウェブ%1を作成できませんでした"
+msgstr "続けて新しいページを作成します"
 
 #: data/TWiki/TWikiPreferences.txt:40 data/TWiki/WebPreferences.txt:33
-#, fuzzy
 msgid ""
 "Copyright &&copy; by the contributing authors. All material on this "
 "collaboration platform is the property of the contributing authors."
 msgstr ""
-"コピーライト &amp;&amp;copy; 著作者 　本プラットフォームにあるあらゆる物は本"
-"プラットフォームの貢献者たちに帰属します"
+"コピーライト &&copy; 著作者。本プラットフォームにあるあらゆる物は本"
+"プラットフォームの貢献者たちに帰属します。"
 
 #: templates/messages.tmpl:132
 msgid "Could not create the new web %1"
@@ -1069,9 +1031,8 @@ msgid "Create '%1'"
 msgstr "作成 '%1'"
 
 #: data/Sandbox/WebHome.txt:18
-#, fuzzy
 msgid "Create <nop>TestTopic###"
-msgstr "作成&lt;nop&gt;TestTopic###"
+msgstr "<nop>テストトピック###を作成します"
 
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:5
 #: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:5
@@ -1106,9 +1067,8 @@ msgid "Create personal sidebar"
 msgstr "個人サイドバーを作成します"
 
 #: templates/messages.tmpl:488
-#, fuzzy
 msgid "Create the topic"
-msgstr "このトピックを作成します"
+msgstr "トピックを作成します"
 
 #: data/TWiki/TWikiPreferences.txt:314 data/TWiki/TWikiPreferences.txt:316
 #: data/TWiki/WebCreateNewTopicTemplate.txt:60 lib/TWiki/Render.pm:89
@@ -1167,9 +1127,8 @@ msgid "Delete attachment"
 msgstr "添付ファイルを削除します"
 
 #: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:175
-#, fuzzy
 msgid "Delete last row"
-msgstr "トピックを削除します"
+msgstr "一番最後の行を削除します"
 
 #: templates/oopsmore.tmpl:19
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:5
@@ -1187,7 +1146,6 @@ msgid "Describe the file so other people know what it is."
 msgstr "他の人に理解してもらうためにファイルの内容を説明します。"
 
 #: lib/TWiki/Form.pm:261
-#, fuzzy
 msgid "Details in separate window"
 msgstr "クリックしてほかのウィンドウで詳細を確認します"
 
@@ -1204,9 +1162,8 @@ msgid "Difference:"
 msgstr "差異："
 
 #: templates/preview.tmpl:11
-#, fuzzy
 msgid "Do not forget to save your changes"
-msgstr "トピック設定のチェックを忘れないでください"
+msgstr "変更を保存することを忘れないでください"
 
 #: templates/attach.tmpl:47
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:58
@@ -1289,27 +1246,24 @@ msgid "Edit Anyway"
 msgstr "強制編集します"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:13
-#, fuzzy
 msgid "Edit help"
-msgstr "テキストを編集します"
+msgstr "ヘルプを編集します"
 
 #: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:5
 msgid "Edit personal data"
 msgstr "個人データを編集します"
 
 #: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:170
-#, fuzzy
 msgid "Edit table"
-msgstr "テキストを編集します"
+msgstr "テーブルを編集します"
 
 #: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:10
 msgid "Edit text"
 msgstr "テキストを編集します"
 
 #: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:171
-#, fuzzy
 msgid "Edit this table"
-msgstr "このトピックのテキストを編集します"
+msgstr "このテーブルを編集します"
 
 #: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:18
 msgid "Edit this topic text"
@@ -1344,9 +1298,8 @@ msgid "Enlarge edit box"
 msgstr "編集枠を拡大します"
 
 #: templates/login.tmpl:7
-#, fuzzy
 msgid "Enter a new username and password to change identity"
-msgstr "ユーザー名とパスワードを入力してアイデンティティを変更します"
+msgstr "新しいユーザー名とパスワードを入力してアイデンティティを変更します"
 
 #: templates/login.sudo.tmpl:18
 msgid "Enter the TWiki Administrator user or login as set in %1"
@@ -1376,9 +1329,8 @@ msgid "Error saving topic"
 msgstr "トピックの保存に失敗しました"
 
 #: templates/login.tmpl:29
-#, fuzzy
 msgid "Error: %1"
-msgstr "エラー"
+msgstr "エラー: %1"
 
 #: templates/messages.tmpl:443
 msgid "Error: File attachment at %1,%2 does not exist"
@@ -1450,34 +1402,28 @@ msgid "Form definition missing"
 msgstr "フォーム定義が失われました"
 
 #: templates/renamebase.tmpl:66
-#, fuzzy
 msgid ""
 "Get help on <a target='ManagingTopics' class='twikiPopUp' href='%1' "
 "rel='nofollow'>Renaming and moving topics</a>."
 msgstr ""
-"&lt;a target='ManagingTopics' onclick=\"return launchWindow('%"
-"1','ManagingTopics')\" href=\"%2\" rel='nofollow'&gt;リネームとトピックの移動"
-"&lt;/a&gt;に関するヘルプを獲得します。"
+"<a target='ManagingTopics' class='twikiPopUp' href='%1' "
+"rel='nofollow'>トピックのリネームと移動</a>に関するヘルプを獲得します。"
 
 #: templates/renamewebbase.tmpl:50
-#, fuzzy
 msgid ""
 "Get help on <a target='ManagingWebs' class='twikiPopUp' href='%1' "
 "rel='nofollow'>Renaming and moving webs</a>."
 msgstr ""
-"&lt;a target='ManagingTopics' onclick=\"return launchWindow('%"
-"1','ManagingTopics')\" href=\"%2\" rel='nofollow'&gt;リネームとトピックの移動"
-"&lt;/a&gt;に関するヘルプを獲得します。"
+"<a target='ManagingWebs' class='twikiPopUp' href='%1' "
+"rel='nofollow'>ウェブのリネームと移動</a>に関するヘルプを獲得します。"
 
 #: templates/settings.tmpl:26
-#, fuzzy
 msgid ""
 "Get help on <a target='TWikiVariables' class='twikiPopUp' href='%1' "
 "rel='nofollow'>Setting topic preferences</a>."
 msgstr ""
-"&lt;a target='TWikiVariables' onclick=\"return launchWindow('%"
-"1','TWikiVariables')\" href='%2' rel='nofollow'&gt;トピックの構成設定&lt;/"
-"a&gt;のヘルプ情報を獲得します。"
+"<a target='TWikiVariables' class='twikiPopUp' href='%1' "
+"rel='nofollow'>トピックの構成設定</a>に関するヘルプを獲得します。"
 
 #: data/TWiki/WebSearch.txt:5 data/TWiki/WebSearchAdvanced.txt:5
 msgid "Get notified on changes on this search"
@@ -1511,7 +1457,6 @@ msgstr "こんにちは %1"
 
 #: templates/twiki.tmpl:105
 #: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:9
-#, fuzzy
 msgid "Hello %1!"
 msgstr "こんにちは %1"
 
@@ -1521,7 +1466,6 @@ msgid "Help"
 msgstr "ヘルプ"
 
 #: templates/attach.tmpl:45
-#, fuzzy
 msgid "Hide file"
 msgstr "ファイルを隠します"
 
@@ -1555,11 +1499,9 @@ msgid "I forgot my password"
 msgstr "パスワードを忘れました"
 
 #: data/TWiki/TWikiPreferences.txt:40 data/TWiki/WebPreferences.txt:33
-#, fuzzy
 msgid "Ideas, requests, problems regarding %1? <a href='%2'>Send feedback</a>"
 msgstr ""
-"%1に対する提案や、要求、また問題を &lt;a href='%2'&gt;フィードバック願いしま"
-"す&lt;/a&gt;"
+"%1?に対する提案や、要求、また問題を <a href='%2'>フィードバック願います</a>"
 
 #: templates/messages.tmpl:333
 msgid "If this line isn't present see _upgrade_ section below"
@@ -1580,13 +1522,12 @@ msgstr ""
 "名をご入力ください"
 
 #: templates/messages.tmpl:414
-#, fuzzy
 msgid ""
 "If you are developing a <nop>TWikiApplication, see %1 for a description of "
 "the correct parameters."
 msgstr ""
 "TWikiApplicationを開発している場合、%1を参考に適当なパラメーター説明をご覧く"
-"ださい"
+"ださい。"
 
 #: templates/messages.tmpl:478
 msgid "If you came here by clicking on a question mark link"
@@ -1616,7 +1557,6 @@ msgstr "登録に対して何か疑問がございましたら %1宛てにメー
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:46
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:36
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:39
-#, fuzzy
 msgid "If you have any questions, please contact %1"
 msgstr "何か疑問がございましたら、%1までご連絡ください。"
 
@@ -1742,17 +1682,16 @@ msgstr ""
 "ませんので、この場合、まず %1 までお問合せたほうがいいです。"
 
 #: templates/twiki.tmpl:9
-#, fuzzy
 msgid ""
 "It's usually best to choose a <a target='WikiWord' class='twikiPopUp' href='%"
 "1' rel='nofollow'>WikiWord</a> for the new topic name, otherwise automatic "
 "linking may not work. Characters not allowed in topic names, such as spaces "
 "will automatically be removed."
 msgstr ""
-"新トピックを作成する時、&lt;a target='WikiWord' onclick=\"return launchWindow"
-"('%1','WikiWord')\" href='%1' rel='nofollow'&gt;WikiWord&lt;/a&gt;を使用した"
-"ほうがいいです。そうしないと、オートリンクの生成が無効になる可能性がありま"
-"す。他に、トピック名として認められないキャラクター、例えばスペースは自動的に"
+"新トピックを作成する時、<a target='WikiWord' class='twikiPopUp' href='%"
+"1' rel='nofollow'>WikiWord</a>を使用したほうがいいです。"
+"そうしないと、オートリンクの生成が無効になる可能性があります。"
+"他に、トピック名として認められないキャラクター、例えばスペースは自動的に"
 "削除されます。"
 
 #: templates/renameweb.tmpl:17
@@ -1800,7 +1739,6 @@ msgid "Line: %1 to %2"
 msgstr "行: %1 to%2"
 
 #: templates/attach.tmpl:37
-#, fuzzy
 msgid "Link"
 msgstr "リンク"
 
@@ -1817,9 +1755,8 @@ msgid "List topics that start with the letter:"
 msgstr "あるアルファベットで始まるトピックを全て一覧表示します:"
 
 #: data/Main/TWikiPreferences.txt:2
-#, fuzzy
 msgid "Local customisations of site-wide preferences"
-msgstr "%1 ウェブプロパティをカスタマイズします"
+msgstr "site-wideプロパティをカスタマイズします"
 
 #: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:6
 msgid "Log In"
@@ -1894,9 +1831,8 @@ msgid "Move file attachment"
 msgstr "添付ファイルを移動します"
 
 #: templates/attachagain.tmpl:21
-#, fuzzy
 msgid "Move or delete attachment"
-msgstr "添付ファイルを移動します"
+msgstr "添付ファイルを移動又は削除します"
 
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:21
 msgid "Move to web:"
@@ -1907,9 +1843,8 @@ msgid "Move topic to web:"
 msgstr "トピックをウェブに移動します："
 
 #: lib/TWiki/UI/Manage.pm:1040
-#, fuzzy
 msgid "Move/Rename"
-msgstr "リネーム"
+msgstr "移動/リネーム"
 
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:64
 msgid "My Links"
@@ -1971,9 +1906,8 @@ msgstr " %1を見る権限がありません"
 
 #: templates/oopsmore.tmpl:108
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:57
-#, fuzzy
 msgid "No previous revision exists."
-msgstr "前のトピックバージョンを確認します"
+msgstr "前のトピックバージョンが存在しません"
 
 #: templates/messages.tmpl:205
 msgid "No users to reset passwords for."
@@ -2127,14 +2061,12 @@ msgid "Please contact %1."
 msgstr " %1 までご連絡ください。"
 
 #: templates/login.sudo.tmpl:7
-#, fuzzy
 msgid "Please enter the TWiki admin password"
-msgstr "ユーザー名とパスワードをご入力ください:"
+msgstr "TWiki adminパスワードをご入力ください:"
 
 #: templates/login.tmpl:14
-#, fuzzy
 msgid "Please enter your username and password"
-msgstr "ユーザー名とパスワードをご入力ください:"
+msgstr "ユーザー名とパスワードをご入力ください"
 
 #: templates/messages.tmpl:71 templates/messages.tmpl:77
 #: templates/messages.tmpl:83
@@ -2212,9 +2144,8 @@ msgid "RSS Feed"
 msgstr ""
 
 #: templates/viewtopicactionbuttons.tmpl:61
-#, fuzzy
 msgid "Raw edit"
-msgstr "(編集)"
+msgstr "編集"
 
 #: templates/registernotify.tmpl:10
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:10
@@ -2356,26 +2287,22 @@ msgstr "パスワードリセット:"
 
 #: templates/oopsmore.tmpl:105
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:53
-#, fuzzy
 msgid "Restore"
-msgstr "登録"
+msgstr "回復"
 
 #: templates/oopsmore.tmpl:100
-#, fuzzy
 msgid "Restore topic"
-msgstr "トピックを削除します"
+msgstr "トピックを回復します"
 
 #: templates/oopsmore.tmpl:102
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:51
-#, fuzzy
 msgid "Restore topic to revision:"
-msgstr "前のトピックバージョンを確認します"
+msgstr "トピックを改訂版に回復します"
 
 #: templates/oopsmore.tmpl:105
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:53
-#, fuzzy
 msgid "Restore topic to this revision"
-msgstr "前のトピックバージョンを確認します"
+msgstr "トピックをこの改訂版に回復します"
 
 #: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:12
 msgid "Results from %1 web"
@@ -2408,7 +2335,6 @@ msgstr "改訂"
 
 #: templates/oopsmore.tmpl:87
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:56
-#, fuzzy
 msgid "Revisions"
 msgstr "改訂"
 
@@ -2417,22 +2343,19 @@ msgid "S = Save, C = Cancel"
 msgstr ""
 
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:14
-#, fuzzy
 msgid "S = Save, Q = Quiet save, K = Save and Continue, D = Discard"
-msgstr "S = 保存, Q = 静かな保存, K = チェックポイント, D =放棄"
+msgstr "S = 保存, Q = 静的な保存, K = 保存して続けます, D =放棄"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:50
-#, fuzzy
 msgid ""
 "S = Save, Q = Quiet save, K = Save and Continue, P = Preview, C = Cancel"
 msgstr ""
-"S = 保存, Q = 静かな保存, K = チェックポイント, P = プレビュー, C = キャンセ"
+"S = 保存, Q = 静的な保存, K = 保存して続けます, P = プレビュー, C = キャンセ"
 "ル"
 
 #: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:172
-#, fuzzy
 msgid "Save table"
-msgstr "保存先:"
+msgstr "テーブルを保存します"
 
 #: templates/registernotifyadmin.tmpl:16
 #: twikiplugins/ClassicSkin/templates/registernotifyadmin.classic.tmpl:16
@@ -2454,12 +2377,10 @@ msgid "Search"
 msgstr "検索"
 
 #: templates/backlinksallwebs.tmpl:7
-#, fuzzy
 msgid "Search %1 Web only"
 msgstr "%1ウェブのみを検索します"
 
 #: templates/backlinksweb.tmpl:7
-#, fuzzy
 msgid "Search all webs"
 msgstr "全てのウェブを検索します"
 
@@ -2534,9 +2455,8 @@ msgid "Select all"
 msgstr "全て選択"
 
 #: templates/oopsmore.tmpl:54
-#, fuzzy
 msgid "Select topic parent:"
-msgstr "ステップ1：親トピックを選択してください："
+msgstr "親トピックを選択してください："
 
 #: templates/edit.tmpl:48
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:68
@@ -2557,7 +2477,6 @@ msgid "Set all"
 msgstr "全て設定"
 
 #: templates/oopsmore.tmpl:58
-#, fuzzy
 msgid "Set new parent"
 msgstr "新しい親トピックを設定します"
 
@@ -2610,10 +2529,9 @@ msgid "Some add schedule information and vacation notice."
 msgstr "いくつかの追加スケジュールと休暇自動通知"
 
 #: templates/messages.tmpl:355
-#, fuzzy
 msgid "Some characters such as =&#126;=, =$=, =@=, =%= are removed"
 msgstr ""
-"いくつかの =&amp;#126;=, =$=, =@=, =%= に似たキャラクターが削除されました"
+"=&#126;=, =$=, =@=, =%=のようなキャラクターがいくつか削除されました"
 
 #: templates/messages.tmpl:300
 msgid ""
@@ -2695,9 +2613,8 @@ msgstr ""
 "write:を含まない全てのトピックを検索します"
 
 #: templates/login.tmpl:3
-#, fuzzy
 msgid "TWiki User Authentication"
-msgstr "%1 ユーザー認証"
+msgstr "TWikiユーザー認証"
 
 #: templates/mailresetpassword.tmpl:3
 #: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:3
@@ -2717,9 +2634,8 @@ msgstr ""
 "さい。"
 
 #: templates/messages.tmpl:498
-#, fuzzy
 msgid "Template %1 does not exist"
-msgstr "%1ウェブは存在しません"
+msgstr "テンプレート%1は存在しません"
 
 #: data/Sandbox/WebHome.txt:6
 msgid "Test Topics"
@@ -3070,18 +2986,16 @@ msgstr "親トピック:"
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:19
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:47
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:72
-#, fuzzy
 msgid "Topic revision:"
-msgstr "親トピック:"
+msgstr "トピック改訂:"
 
 #: templates/oopssaveerr.tmpl:12
 msgid "Topic save error"
 msgstr "トピック保存エラー"
 
 #: data/TWiki/WebTemplateTopics.txt:2
-#, fuzzy
 msgid "Topic templates in %1 Web"
-msgstr " %1 ウェブにあるトピック："
+msgstr " %1 ウェブにあるトピックテンプレート"
 
 #: data/TWiki/WebSearch.txt:31 data/TWiki/WebSearchAdvanced.txt:39
 msgid "Topic title"
@@ -3096,9 +3010,8 @@ msgid "Topic will be named: "
 msgstr "トピックはこの名称に命名されます："
 
 #: templates/search.tmpl:14
-#, fuzzy
 msgid "Topics in %1 web"
-msgstr " %1 ウェブにあるトピック："
+msgstr " %1 ウェブにあるトピック"
 
 #: templates/search.text.tmpl:4
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:14
@@ -3142,9 +3055,8 @@ msgstr ""
 "1を参照してください"
 
 #: templates/login.sudo.tmpl:5
-#, fuzzy
 msgid "Unrecognised user and/or password"
-msgstr "認識されないユーザー名/パスワード"
+msgstr "認識できないユーザー名/パスワード"
 
 #: templates/messages.tmpl:40
 msgid "Unrecognized action command %1"
@@ -3155,9 +3067,8 @@ msgid "Update attachment %1 on %2"
 msgstr " %2 で添付ファイル %1を更新します"
 
 #: templates/renamebase.tmpl:49 templates/renamewebbase.tmpl:27
-#, fuzzy
 msgid "Update links"
-msgstr "ファイル%1を更新します"
+msgstr "リンクを更新します"
 
 #: templates/attachagain.tmpl:21 templates/attachnew.tmpl:9
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:28
@@ -3225,7 +3136,6 @@ msgid "Version history of %1"
 msgstr "%1 のバージョンヒストリー"
 
 #: templates/oopsmore.tmpl:91
-#, fuzzy
 msgid "View"
 msgstr "ビュー"
 
@@ -3244,7 +3154,6 @@ msgid "View raw text without formatting"
 msgstr "ファーマットされていない元のテキストを確認します"
 
 #: templates/oopsmore.tmpl:90
-#, fuzzy
 msgid "View revision:"
 msgstr "改訂を確認します"
 
@@ -3269,9 +3178,8 @@ msgid "WARNING:"
 msgstr "警告:"
 
 #: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:179
-#, fuzzy
 msgid "Warning: 'include' topic does not exist!"
-msgstr "注意：このトピックは存在しません"
+msgstr "警告：'include'トピックは存在しません！"
 
 #: templates/messages.tmpl:447
 msgid "Warning: Can't INCLUDE %1 repeatedly, topic is already included. %2"
@@ -3286,15 +3194,13 @@ msgid "Warning: Could not send confirmation email"
 msgstr "警告： 確認のメールが送信できません"
 
 #: lib/TWiki/UI/Register.pm:835
-#, fuzzy
 msgid "Warning: Could not send confirmation email, email has been disabled"
-msgstr "警告： 確認のメールが送信できません"
+msgstr "警告： 確認のメールが送信できませんでした。メールは利用不可になっています。"
 
 #: templates/messages.tmpl:454
-#, fuzzy
 msgid "Warning: This site does not allow %<nop>INCLUDE% of URLs"
 msgstr ""
-"警告： このウェブサイトでは %&lt;nop&gt;INCLUDE% リンクは使用できません"
+"警告： このウェブサイトでは %<nop>INCLUDE% リンクは使用できません"
 
 #: data/TWiki/WebSearch.txt:3
 msgid "Web Search"
@@ -3374,21 +3280,18 @@ msgid "You are trying to %1 an attachment that does not exist."
 msgstr "%1しようとする添付ファイルは存在しません。"
 
 #: templates/messages.tmpl:499
-#, fuzzy
 msgid "You are trying to create a topic from a template that does not exist."
-msgstr "検索しようとするトピックが%1ウェブに存在しません。"
+msgstr "作成しようとするトピックのテンプレートは存在しません。"
 
 #: templates/messages.tmpl:494
-#, fuzzy
 msgid ""
 "You are trying to perform an action on a topic that does not exist (action '%"
 "1')."
 msgstr "%1しようとするトピックは存在しません。"
 
 #: templates/messages.tmpl:505
-#, fuzzy
 msgid "You are trying to rename a topic that does not exist."
-msgstr "%1しようとするトピックは存在しません。"
+msgstr "リネームしようとするトピックは存在しません。"
 
 #: templates/messages.tmpl:484
 msgid ""
@@ -3496,13 +3399,12 @@ msgstr ""
 "クティブコードのフォーマット \"YourName.xxxx\"）"
 
 #: templates/oopslanguagechanged.tmpl:16
-#, fuzzy
 msgid ""
 "Your language will be changed to %1 from the next screen. You will be "
 "redirected to there right now. If you aren't, [[%2][click to proceed]]."
 msgstr ""
 "次のスクリーンからあなたの言語は%1 に変更されます。今すぐそこに移動します。移"
-"動しなかった場合は、[[%2][ここをクリック]]して、移動してください "
+"動しなかった場合は、[[%2][ここをクリック]]して、移動してください。"
 
 #: templates/mailresetpassword.tmpl:10
 #: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:10
@@ -3551,9 +3453,8 @@ msgstr ""
 "でください。"
 
 #: templates/messages.tmpl:331
-#, fuzzy
 msgid "[[%1][Debug topic text]]."
-msgstr " [[%1][デバッグ：トピックテキスト]]をクリックしてください。"
+msgstr " [[%1][デバッグトピックテキスト]]。"
 
 #: templates/settings.tmpl:28
 msgid ""
@@ -3627,9 +3528,8 @@ msgid "fields are required."
 msgstr "フィールドは必須入力です"
 
 #: templates/attach.tmpl:5
-#, fuzzy
 msgid "has more information about attaching files."
-msgstr "%1よりもっと多くのフォーム定義情報を見ます"
+msgstr "もっと多くの添付ファイル情報があります。"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:24
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:27
@@ -3690,7 +3590,6 @@ msgid "or"
 msgstr "又は"
 
 #: templates/preview.tmpl:13 templates/preview.tmpl:9
-#, fuzzy
 msgid "preview"
 msgstr "(プレビュー)"
 
@@ -3704,29 +3603,24 @@ msgid "retrieved at %1"
 msgstr " %1 から探し出します"
 
 #: templates/oopsmore.tmpl:23 templates/oopsmore.tmpl:32
-#, fuzzy
 msgid "scans links in _%1 web_ only"
-msgstr "_%1 ウェブ_ の中のレファレンスを確認します"
+msgstr "_%1 ウェブ_ の中のリンクのみをスキャンします"
 
 #: templates/oopsmore.tmpl:21 templates/oopsmore.tmpl:30
-#, fuzzy
 msgid "scans links in _all public webs_"
-msgstr "全てのウェブを検索します"
+msgstr "_全てのパブリックウェブ_の中のリンクをスキャンします"
 
 #: templates/viewtopicactionbuttons.tmpl:14
-#, fuzzy
 msgid "title='Attach an image or document to this topic' accesskey='a'>&Attach"
 msgstr ""
 "title='イメージ又はドキュメントをこのトピックに添付します' accesskey='a'&gt;"
 "添付"
 
 #: templates/viewtopicactionbuttons.tmpl:4
-#, fuzzy
 msgid "title='Create new topic' accesskey='c'>&Create"
-msgstr "title='トピックを作成します' accesskey='c'&gt;作成"
+msgstr "title='新しいトピックを作成します' accesskey='c'&gt;作成"
 
 #: templates/viewtopicactionbuttons.tmpl:17
-#, fuzzy
 msgid ""
 "title='Delete or rename this topic; set parent topic; view and compare "
 "revisions' accesskey='m'>&More topic actions"
@@ -3735,64 +3629,54 @@ msgstr ""
 "比較' accesskey='m'&gt;もっと多くのトピックアクション"
 
 #: templates/viewtopicactionbuttons.tmpl:7
-#, fuzzy
 msgid "title='Edit this topic text' accesskey='e'>&Edit"
-msgstr "title='このトピックを編集します' accesskey='e'&gt;&amp;編集"
+msgstr "title='このトピックを編集します' accesskey='e'&gt;編集"
 
 #: templates/viewtopicactionbuttons.tmpl:21
-#, fuzzy
 msgid "title='Printable version of this topic' accesskey='p'>&Print version"
 msgstr ""
 "title='このトピックの印刷用バージョン' accesskey='p'&gt;印刷用バージョン"
 
 #: templates/viewtopicactionbuttons.tmpl:9
-#, fuzzy
 msgid "title='Raw Edit this topic text' accesskey='w'>Ra&w edit"
-msgstr "title='このトピックを編集します' accesskey='e'&gt;&amp;編集"
+msgstr "title='このトピックテキストを編集します' accesskey='w'&gt;編集"
 
 #: templates/viewtopicactionbuttons.tmpl:28
-#, fuzzy
 msgid ""
 "title='Search all webs for topics that link to here' accesskey='l'>A&ll Webs"
 msgstr ""
 "title='全てのウェブからここにリンクするトピックを検索します' "
-"accesskey='l'&gt;全てのウェブ検索"
+"accesskey='l'&gt;全てのウェブ"
 
 #: templates/viewtopicactionbuttons.tmpl:30
-#, fuzzy
 msgid ""
 "title='Search the %1 Web for topics that link to here' "
 "accesskey='b'>&Backlinks"
 msgstr ""
-"title='%1ウェブからここにリンクするトピックを検索します' accesskey='b'&gt;検"
-"索"
+"title='%1ウェブからここにリンクするトピックを検索します' accesskey='b'&gt;バック"
+"リンク"
 
 #: templates/viewtopicactionbuttons.tmpl:26
-#, fuzzy
 msgid ""
 "title='Search the %1 Web for topics that link to here' accesskey='b'>We&b"
 msgstr ""
-"title='%1ウェブからここにリンクするトピックを検索します' accesskey='b'&gt;検"
-"索"
+"title='%1ウェブからここにリンクするトピックを検索します' accesskey='b'&gt;ウェブ"
 
 #: templates/viewtopicactionbuttons.tmpl:38
-#, fuzzy
 msgid "title='View raw text without formatting' accesskey='r'>&Raw View"
 msgstr ""
 "title='フォーマットされていない元のテキストを確認します' accesskey='r'&gt;"
-"フォーマットされていない元のテキスト"
+"確認"
 
 #: templates/viewtopicactionbuttons.tmpl:11
-#, fuzzy
 msgid "title='View topic' accesskey='v'>&View topic"
-msgstr "title='トピックを確認します' accesskey='v'&gt;&amp;トピック確認"
+msgstr "title='トピックを確認します' accesskey='v'&gt;トピック確認"
 
 #: templates/viewtopicactionbuttons.tmpl:33
 #: templates/viewtopicactionbuttons.tmpl:35
-#, fuzzy
 msgid "title='View total topic history' accesskey='h'>&History"
 msgstr ""
-"title=''トピックのヒストリーを確認します' accesskey='h'&gt;ヒストリー修正"
+"title=''トピックの履歴を確認します' accesskey='h'&gt;履歴"
 
 #: lib/TWiki.pm:3976
 msgid "user list truncated"
@@ -3815,9 +3699,8 @@ msgid "value='Quiet save' accesskey='q'"
 msgstr "value='静かな保存' accesskey='q'"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:40
-#, fuzzy
 msgid "value='Save and Continue' accesskey='k'"
-msgstr "value='保存' accesskey='s'"
+msgstr "value='保存して続けます' accesskey='k'"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:36
 msgid "value='Save' accesskey='s'"
@@ -3838,22 +3721,20 @@ msgstr ""
 "なメールアドレスが一つでもない場合、又はパスワードを忘れた場合は、 %1までご連"
 "絡ください。"
 
-#, fuzzy
 #~ msgid "&WYSIWYG"
-#~ msgstr "WYSIWYG"
+#~ msgstr "&WYSIWYG"
 
 #~ msgid "All topics in %1"
 #~ msgstr "%1の中の全てのトピック"
 
-#, fuzzy
 #~ msgid ""
 #~ "Please see <a target='TWikiVariables' onclick=\"return launchWindow('%"
 #~ "1','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a> for more "
 #~ "information about attaching files."
 #~ msgstr ""
-#~ "*ヘルプ:* &lt;a target='TWikiVariables' onclick=\"return launchWindow('%"
-#~ "1','FileAttachment')\" href='' rel='nofollow'&gt;添付ファイル&lt;/a&gt;を"
-#~ "参照すると、もっと多くのアップロード関連情報が提供されます。"
+#~ "<a target='TWikiVariables' onclick=\"return launchWindow('%"
+#~ "1','FileAttachment')\" href='' rel='nofollow'>添付ファイル</a> を参照すると、"
+#~ "もっと多くの添付ファイル関連情報が提供されます。"
 
 #~ msgid "WYSIWYG"
 #~ msgstr "WYSIWYG"
@@ -3861,15 +3742,13 @@ msgstr ""
 #~ msgid "You can see the differences [[%1][here]]."
 #~ msgstr " [[%1][ここ]]で差異を確認することができます"
 
-#, fuzzy
 #~ msgid "title='Create this topic' accesskey='w'>Create (&WYSIWYG)"
 #~ msgstr ""
-#~ "title='Create this topic text' accesskey='w'&gt;Create (&amp;WYSIWYG)"
+#~ "title='このトピックを作成します' accesskey='w'&gt;作成(&WYSIWYG)"
 
-#, fuzzy
 #~ msgid "title='Edit this topic text' accesskey='w'>&WYSIWYG"
 #~ msgstr ""
-#~ "title='このトピックのテキストを編集します' accesskey='w'&gt;&amp; WYSIWYG "
+#~ "title='このトピックのテキストを編集します' accesskey='w'&gt;WYSIWYG "
 
 #~ msgid "value='Checkpoint' accesskey='k'"
 #~ msgstr "value='チェックポイント' accesskey='k'"
@@ -4051,570 +3930,508 @@ msgstr ""
 #~ msgid "to see if %1 has finished editing yet."
 #~ msgstr " %1 への編集が終わったかどうかを確認します"
 
-#, fuzzy
 #~ msgid "New Group"
 #~ msgstr "ニューグループ"
 
-#, fuzzy
 #~ msgid "\"%1\" is an invalid name for a new web."
-#~ msgstr "%1 は有効な新ウェブ名ではありません"
+#~ msgstr "\"%1\" は有効な新ウェブ名ではありません。"
 
-#, fuzzy
 #~ msgid "\"%1\" topic does not exist"
-#~ msgstr "%1トピックが存在しません"
+#~ msgstr "\"%1\"トピックは存在しません"
 
-#, fuzzy
 #~ msgid "%1 - Automated notification of topic changes"
-#~ msgstr "トピックの変更を自動的に通知します"
+#~ msgstr "%1 -トピックの変更を自動的に通知します"
 
-#, fuzzy
 #~ msgid "%1 has no permission to %2 *%3*."
-#~ msgstr " %1にアクセスする権限がありません"
+#~ msgstr "%1には%2 *%3*にアクセスする権限がありません。"
 
-#, fuzzy
 #~ msgid "%1 has no permission to view topic [[%2]]."
-#~ msgstr " %1にアクセスする権限がありません"
+#~ msgstr "%1にはトピック[[%2]]にアクセスする権限がありません。"
 
-#, fuzzy
 #~ msgid "%1 web:"
-#~ msgstr "%1 ウェブ"
+#~ msgstr "%1 ウェブ:"
 
-#, fuzzy
 #~ msgid "*Tip:* More options in WebSearch"
-#~ msgstr "(もっと多くの検索オプション)"
+#~ msgstr "*Tip:*もっと多くの検索オプション"
 
-#, fuzzy
 #~ msgid "... for user %1."
-#~ msgstr "ユーザー %1が見つかりませんでした"
+#~ msgstr "ユーザー %1が見つかりませんでした。"
 
-#, fuzzy
 #~ msgid "1. Form definition missing"
-#~ msgstr "フォーム定義がありません"
+#~ msgstr "1. フォーム定義がありません"
 
-#, fuzzy
 #~ msgid "2. Topic can not be upgraded from old style category table"
-#~ msgstr "トピックは古いスタイルカテゴリテーブルから更新できません"
+#~ msgstr "2. トピックは古いスタイルカテゴリテーブルから更新できません"
 
-#, fuzzy
 #~ msgid ""
 #~ "A color starts with the number sign, followed by 6 hexadecimal numbers, e."
 #~ "g. yellow is =#FFFF00=."
 #~ msgstr ""
-#~ "色は # 記号から始まります。後ろは6桁の16進数からなります。 例えば、"
-#~ "=#FFFF00=."
+#~ "色は # 記号から始まります。後ろは6桁の16進数からなります。 例えば、黄色は"
+#~ "=#FFFF00=になります。"
 
-#, fuzzy
 #~ msgid "About Topics"
-#~ msgstr "トピックテスト"
+#~ msgstr "トピックについて"
 
-#, fuzzy
 #~ msgid "Add a new form to &lt;nop&gt;%1"
-#~ msgstr "フォームテンプレートから新しく追加します"
+#~ msgstr "&lt;nop&gt;%1にフォームを新しく追加します"
 
-#, fuzzy
 #~ msgid "Adding a =WEBFORMS= variable in WebPreferences"
-#~ msgstr " %1 をWebPreferencesに追加します"
+#~ msgstr "=WEBFORMS=変数をWebPreferencesに追加します"
 
-#, fuzzy
 #~ msgid "Allow non &lt;nop&gt;WikiWord for the new topic name."
-#~ msgstr "ノン &lt;nop&gt;WikiWord を新ウェブ名としてもいいです"
+#~ msgstr "ノン&lt;nop&gt;WikiWord を新しいトピック名としてもいいです。"
 
-#, fuzzy
 #~ msgid ""
 #~ "Alternatively go &lt;a href=\"javascript:history.back()\"&gt;back&lt;/"
 #~ "a&gt; in your browser and choose a different username."
-#~ msgstr "前に戻って再度試してください"
+#~ msgstr "前に戻って異なるユーザ名を選択して再度試してください。"
 
-#, fuzzy
 #~ msgid "An e-mail could not be delivered."
-#~ msgstr "一通のメールが送信されませんでした。 %1 管理者 %2までご連絡ください"
+#~ msgstr "一通のメールが送信されませんでした。"
 
-#, fuzzy
 #~ msgid "An email address is required before a password can be reset."
-#~ msgstr "パスワードをリセットする前にメールアドレスが必要です"
+#~ msgstr "パスワードをリセットする前にメールアドレスが必要です。"
 
-#, fuzzy
 #~ msgid "Attach image or document to this topic"
 #~ msgstr "イメージやドキュメントをこのトピックに添付します"
 
-#, fuzzy
 #~ msgid "Attachment move error"
-#~ msgstr "添付ファイルを移動できませんでした"
+#~ msgstr "添付ファイル移動エラー"
 
-#, fuzzy
 #~ msgid "Base web:"
-#~ msgstr "%1 ウェブ"
+#~ msgstr "ベースウェブ:"
 
-#, fuzzy
 #~ msgid "Bold text"
-#~ msgstr "テキスト編集"
+#~ msgstr "ボールドテキスト"
 
-#, fuzzy
 #~ msgid "Can not rename to %1 as this already exists!"
-#~ msgstr "名前を%1から%2に変更できませんでした（既に存在しています）"
+#~ msgstr "名前を%1に変更できませんでした！（既に存在しています）"
 
-#, fuzzy
 #~ msgid "Can't find the username &lt;b&gt;%1&lt;/b&gt;"
-#~ msgstr "ユーザー%1が見つかりませんでした"
+#~ msgstr "ユーザー名&lt;b&gt;%1&lt;/b&gt;が見つかりませんでした"
 
-#, fuzzy
 #~ msgid "Can't find user \"%1\"."
-#~ msgstr "ユーザー%1が見つかりませんでした"
+#~ msgstr "ユーザー\"%1\"が見つかりませんでした。"
 
-#, fuzzy
 #~ msgid "Can't get an email address for %1"
 #~ msgstr " %1 のメールアドレスを取得できませんでした"
 
-#, fuzzy
 #~ msgid "Cancel and abandon changes"
 #~ msgstr "変更をキャンセルします"
 
-#, fuzzy
 #~ msgid "Center text"
-#~ msgstr "(テキスト編集)"
+#~ msgstr "センターテキスト"
 
-#, fuzzy
 #~ msgid "Change Access Denied"
 #~ msgstr "アクセスが拒否されました"
 
 #~ msgid "Change form"
 #~ msgstr "フォーム変更"
 
-#, fuzzy
 #~ msgid "Change links in topics that refer to %1 in the %1 Web:"
-#~ msgstr "全ての%1トピックを参照するリンクを変更します(%2ウェブの中で)"
+#~ msgstr "%1ウェブの中で、全ての%1トピックを参照するリンクを変更します"
 
-#, fuzzy
 #~ msgid "Change links in topics that refer to %1.%2 in any Web:"
-#~ msgstr "全てのウェブの中で、全ての%1トピックを参照するリンクを変更します"
+#~ msgstr "全てのウェブの中で、全ての%1.%2トピックを参照するリンクを変更します"
 
-#, fuzzy
 #~ msgid "Change references"
-#~ msgstr "設定"
+#~ msgstr "設定を変更します"
 
-#, fuzzy
 #~ msgid "Change the current form of &lt;nop&gt;%1"
-#~ msgstr "既に存在する添付ファイル"
+#~ msgstr "&lt;nop&gt;%1現在のフォームを変更します"
 
-#, fuzzy
 #~ msgid ""
 #~ "Chose a topic name that is a %1 or check the allow non-Wiki Word box."
 #~ msgstr ""
-#~ "前のページに戻ってトピック名が %1.WikiWord に一致するトピック名を選択する"
-#~ "か、ノンWiki Word許可を選択してください。"
+#~ "トピック名が%1に一致する名称を選択してください。又はノ"
+#~ "ンWikiWordにチェックを入れてください。"
 
-#, fuzzy
 #~ msgid "Clear"
-#~ msgstr "全てクリア"
+#~ msgstr "クリア"
 
-#, fuzzy
 #~ msgid "Comment:"
 #~ msgstr "コメント:"
 
-#, fuzzy
 #~ msgid "Compare Revisions of %1"
-#~ msgstr "バージョン比較"
+#~ msgstr "%1のバージョンを比較します"
 
-#, fuzzy
 #~ msgid "Could not find template =%1="
-#~ msgstr "テンプレートが見つかりませんでした"
+#~ msgstr "テンプレート=%1=が見つかりませんでした"
 
-#, fuzzy
 #~ msgid "Create New Web"
 #~ msgstr "新ウェブを作成します"
 
-#, fuzzy
 #~ msgid "Create Web Access Denied"
 #~ msgstr "アクセスが拒否されました"
 
-#, fuzzy
 #~ msgid "Create a link to the attached file at the end of the topic."
-#~ msgstr "添付ファイルへのリンクを作成します"
+#~ msgstr "トピックの終わりに添付ファイルへのリンクを作成します。"
 
-#, fuzzy
 #~ msgid "Currently being edited:"
-#~ msgstr "現在の親トピック："
+#~ msgstr "現在編集されています"
 
-#, fuzzy
 #~ msgid "Deleting Attachments"
 #~ msgstr "添付ファイル削除"
 
-#, fuzzy
 #~ msgid "Deleting Topics"
 #~ msgstr "トピック削除"
 
-#, fuzzy
 #~ msgid "Documentation"
-#~ msgstr "現在の位置："
+#~ msgstr "ドキュメンテーション"
 
-#, fuzzy
 #~ msgid "Done"
-#~ msgstr "(無)"
+#~ msgstr "無"
 
-#, fuzzy
 #~ msgid "During deletion of attachment =%1= an error was found."
 #~ msgstr ""
-#~ "添付ファイル =%1=を削除するときにエラーが発生しました。%2管理者までご連絡"
-#~ "ください"
+#~ "添付ファイル =%1=を削除するときにエラーが発生しました。"
 
-#, fuzzy
 #~ msgid "During rename of topic %1 to %2 an error (%3) was found."
 #~ msgstr ""
-#~ "名前を%1から%2に変更するときに(%3)エラーが発生しました。%4管理者までご連絡"
-#~ "ください"
+#~ "トピック名を%1から%2に変更するときに(%3)エラーが発生しました。"
 
-#, fuzzy
 #~ msgid "During rename of topic %1 to %2 an error was found."
 #~ msgstr ""
-#~ "名前を%1から%2に変更するときに(%3)エラーが発生しました。%4管理者までご連絡"
-#~ "ください"
+#~ "トピック名を%1から%2に変更するときにエラーが発生しました。"
 
-#, fuzzy
 #~ msgid "During rename of web %1 to %2 an error (%3) was found."
 #~ msgstr ""
-#~ "名前を%1から%2に変更するときに(%3)エラーが発生しました。%4管理者までご連絡"
-#~ "ください"
+#~ "ウェブ名を%1から%2に変更するときに(%3)エラーが発生しました。"
 
-#, fuzzy
 #~ msgid "During save of %1 an error was found by the version control system."
 #~ msgstr ""
-#~ "%1を保存するときにバージョンコントロールエラーが発生しました。%2管理者まで"
-#~ "ご連絡ください"
+#~ "%1を保存するときにバージョンコントロールエラーが発生しました。"
 
-#, fuzzy
 #~ msgid ""
 #~ "During save of file %1 an error was found by the version control system."
 #~ msgstr ""
-#~ "%1を保存するときにバージョンコントロールエラーが発生しました。%2管理者まで"
-#~ "ご連絡ください"
+#~ "ファイル%1を保存するときにバージョンコントロールエラーが発生しました。"
 
-#, fuzzy
 #~ msgid "Edit preference settings for %1"
-#~ msgstr "プロパティ設定を編集します"
+#~ msgstr "%1のプロパティ設定を編集します"
 
-#, fuzzy
 #~ msgid "Error message"
 #~ msgstr "エラーメッセージ"
 
-#, fuzzy
+
 #~ msgid "Error: Cannot create this web because it already exists"
-#~ msgstr " %1ウェブは既に存在していますので、作成できませんでした"
+#~ msgstr "エラー: ウェブは既に存在していますので、作成できませんでした"
 
-#, fuzzy
+
 #~ msgid "Error: Could not copy topics to the new web"
-#~ msgstr "新ウェブ%1を作成できませんでした"
+#~ msgstr "トピックを新ウェブにコピーできませんでした"
 
-#, fuzzy
+
 #~ msgid "Error: Could not create the new web"
-#~ msgstr "新ウェブ%1を作成できませんでした"
+#~ msgstr "エラー: 新ウェブを作成できませんでした"
 
-#, fuzzy
+
 #~ msgid "Error: Could not update the &lt;nop&gt;WebPreferences"
-#~ msgstr "新ウェブ%1を作成できませんでした"
+#~ msgstr "&lt;nop&gt;ウェブ設定を更新できませんでした"
 
-#, fuzzy
+
 #~ msgid "Error: Invalid name of new web"
-#~ msgstr "%1は有効な新ウェブ名ではありません"
+#~ msgstr "エラー: 有効な新ウェブ名ではありません"
 
-#, fuzzy
+
 #~ msgid "Error: Name of base web is missing or does not exist"
-#~ msgstr "ベースウェブ%1が失われたか存在しません"
+#~ msgstr "エラー: ベースウェブ名が失われたか存在しません"
 
-#, fuzzy
+
 #~ msgid "Error: Name of new web is missing"
-#~ msgstr "新ウェブ名が失われました"
+#~ msgstr "エラー: 新ウェブ名が失われました"
 
-#, fuzzy
+
 #~ msgid "Error: Web color is missing or has an invalid format"
-#~ msgstr "カラー %1に無効なフォーマットが含まれています"
+#~ msgstr "エラー: ウェブカラーが失われたか無効なフォーマットが含まれています"
 
-#, fuzzy
+
 #~ msgid "Existing Web:"
-#~ msgstr "既に存在している添付ファイル"
+#~ msgstr "既に存在しているウェブ"
 
-#, fuzzy
+
 #~ msgid "Existing attachments for &lt;nop&gt;%1"
-#~ msgstr "既に存在している添付ファイル"
+#~ msgstr "&lt;nop&gt;%1に既に存在している添付ファイル"
 
-#, fuzzy
+
 #~ msgid "File Attachment"
 #~ msgstr "添付ファイル"
 
-#, fuzzy
+
 #~ msgid "File Attachments"
 #~ msgstr "添付ファイル"
 
-#, fuzzy
+
 #~ msgid "Formatted Search"
 #~ msgstr "高度な検索"
 
-#, fuzzy
-#~ msgid "Get a fresh page of the topic %1"
-#~ msgstr "フォームは%1に定義されます"
 
-#, fuzzy
+#~ msgid "Get a fresh page of the topic %1"
+#~ msgstr "トピック%1を最新のページ情報に更新します"
+
+
 #~ msgid ""
 #~ "Go &lt;a href=\"javascript:history.back()\"&gt;back&lt;/a&gt; in your "
 #~ "browser and save your changes locally."
-#~ msgstr "前のページに戻って全ての変更をローカルに保存します"
+#~ msgstr "前のページに戻って全ての変更をローカルに保存します。"
 
-#, fuzzy
+
 #~ msgid "Hide attachment in normal topic view."
-#~ msgstr "添付ファイルはトピックビューのページに表示されません"
+#~ msgstr "添付ファイルはノーマルトピックビューのページに表示されません。"
 
-#, fuzzy
+
 #~ msgid "Hiding Attachments"
 #~ msgstr "隠された添付ファイル"
 
 #~ msgid "Horizontal size of text edit box:"
-#~ msgstr "編集枠の高さ:"
+#~ msgstr "編集枠の幅:"
 
 #~ msgid "If you intend to do a full text search:"
 #~ msgstr "フルテキストサーチをしたければ:"
 
-#, fuzzy
+
 #~ msgid "If you want to create the topic then [[%1][click here]]."
-#~ msgstr "トピックを作成をしたければ"
+#~ msgstr "トピックを作成をしたければ[[%1][ここをクリック]]。"
 
-#, fuzzy
+
 #~ msgid "Ignore wiki formatting"
-#~ msgstr "もっと多くのフォーマットに関するヘルプ情報"
+#~ msgstr "wikiフォーマットを無視します"
 
-#, fuzzy
+
 #~ msgid "Incorrect &lt;nop&gt;WikiName"
-#~ msgstr "不正な %1.WikiNames"
+#~ msgstr "不正な&lt;nop&gt;WikiName"
 
-#, fuzzy
+
 #~ msgid "Italic text"
-#~ msgstr "テキスト編集"
+#~ msgstr "イタリックテキスト"
 
-#, fuzzy
+
 #~ msgid "Linking to Attachments"
-#~ msgstr "既に存在している添付ファイル"
+#~ msgstr "添付ファイルへのリンク"
 
-#, fuzzy
+
 #~ msgid "Links"
 #~ msgstr "リンク"
 
-#, fuzzy
+
 #~ msgid "Local file:"
 #~ msgstr "ローカルファイル"
 
-#, fuzzy
+
 #~ msgid "Locked Topics"
-#~ msgstr "トピックテスト"
+#~ msgstr "ロックされたトピック"
 
-#, fuzzy
+
 #~ msgid "Login to %1"
-#~ msgstr "ログイン名 %1"
+#~ msgstr "%1にログインします"
 
-#, fuzzy
+
 #~ msgid "Logout"
 #~ msgstr "ログアウト"
 
-#, fuzzy
+
 #~ msgid "Logout of %1"
-#~ msgstr "ログアウト"
+#~ msgstr "%1からログアウトします"
 
-#, fuzzy
+
 #~ msgid "Mail Error"
-#~ msgstr "宛先"
+#~ msgstr "メールエラー"
 
-#, fuzzy
+
 #~ msgid "Minor changes"
-#~ msgstr "変更無し"
+#~ msgstr "マイナーチェンジ"
 
-#, fuzzy
+
 #~ msgid "Missing Fields =&lt;span class=\"twikiAlert\"&gt;**&lt;/span&gt;="
-#~ msgstr "必須項目 %1をご入力ください"
+#~ msgstr "必須項目=&lt;span class=\"twikiAlert\"&gt;**&lt;/span&gt;=をご入力ください"
 
-#, fuzzy
+
 #~ msgid "More"
 #~ msgstr "もっと多く"
 
-#, fuzzy
+
 #~ msgid "More topic actions"
 #~ msgstr "もっと多くのトピックアクション"
 
-#, fuzzy
+
 #~ msgid "Move or Delete File \"%1\""
-#~ msgstr "ファイル %1を移動又は削除します"
+#~ msgstr "ファイル \"%1\"を移動又は削除します"
 
-#, fuzzy
+
 #~ msgid "Move or rename this topic"
-#~ msgstr "このトピックを作成します"
+#~ msgstr "このトピックを移動又はリネームします"
 
-#, fuzzy
+
 #~ msgid "Move topic error"
-#~ msgstr "トピックを移動します："
+#~ msgstr "トピック移動エラー"
 
-#, fuzzy
+
 #~ msgid "Moving Attachments"
 #~ msgstr "移動した添付ファイル"
 
-#, fuzzy
+
 #~ msgid "Navigation"
-#~ msgstr "布告"
+#~ msgstr "ナビゲーション"
 
-#, fuzzy
+
 #~ msgid "New or changed topics in the %1 web, since %2 GMT:"
-#~ msgstr "%2後、 %1に新規作成又は変更されたトピック"
+#~ msgstr "%2 GMT後、%1に新規作成又は変更されたトピック:"
 
-#, fuzzy
+
 #~ msgid "New topic name is not a &lt;nop&gt;WikiWord"
-#~ msgstr "新トピック名%1は%2ではありません"
+#~ msgstr "新トピック名は%2&lt;nop&gt;WikiWordではありません"
 
-#, fuzzy
+
 #~ msgid "Newer revision"
-#~ msgstr "新バージョン："
+#~ msgstr "新バージョン"
 
-#, fuzzy
+
 #~ msgid "No permission:"
-#~ msgstr " %1にアクセスする権限がありません"
+#~ msgstr "アクセス権限無し:"
 
-#, fuzzy
+
 #~ msgid ""
 #~ "Note: The new web has been created successfully and populated with topics "
 #~ "from the base web"
-#~ msgstr "ベースウェブより構成されました"
+#~ msgstr "新ウェブが作成され、且つベースウェブのトピックより構成されました"
 
 #~ msgid "Notes"
 #~ msgstr "注意"
 
-#, fuzzy
-#~ msgid "Number of topics: &lt;span&gt;%1&lt;/span&gt;"
-#~ msgstr "トピック数:"
 
-#, fuzzy
+#~ msgid "Number of topics: &lt;span&gt;%1&lt;/span&gt;"
+#~ msgstr "トピック数: &lt;span&gt;%1&lt;/span&gt;"
+
+
 #~ msgid "Older revision"
 #~ msgstr "古いバージョン"
 
-#, fuzzy
+
 #~ msgid "Parent"
 #~ msgstr "親"
 
-#, fuzzy
+
 #~ msgid "Parrent web"
-#~ msgstr "新親ウェブ:"
+#~ msgstr "親ウェブ"
 
-#, fuzzy
+
 #~ msgid "Password Format Error"
-#~ msgstr "パスワードが違います"
+#~ msgstr "パスワードのフォーマットが違います"
 
-#, fuzzy
+
 #~ msgid "Please ask your %1 administrator %2, to do this."
-#~ msgstr "一通のメールが送信されませんでした。 %1 管理者 %2までご連絡ください"
+#~ msgstr "%1管理者 %2までご連絡ください。"
 
-#, fuzzy
+
 #~ msgid "Please check out the WebPreferences or try again."
-#~ msgstr "前のページに戻ってもう一度試してください"
+#~ msgstr "WebPreferencesをチェックアウトするか、もう一度試してください。"
 
-#, fuzzy
+
 #~ msgid ""
 #~ "Please chose a topic name that is a %1 or check the _Allow non-Wiki Word_ "
 #~ "&amp;nbsp;box."
 #~ msgstr ""
-#~ "前のページに戻ってトピック名が %1.WikiWord に一致するトピック名を選択する"
-#~ "か、ノンWiki Word許可を選択してください。"
+#~ "トピック名が%1に一致する名称を選択してください。又はノ"
+#~ "ンWikiWordにチェックを入れてください。"
 
-#, fuzzy
+
 #~ msgid "Please email %1 to request this."
 #~ msgstr ""
-#~ "あなたのユーザートピックはまだリネームされています。 %1 にメールして申し込"
-#~ "んでください。"
+#~ " %1 にメールして申し込んでください。"
 
-#, fuzzy
+
 #~ msgid ""
 #~ "Please go &lt;a href=\"javascript:history.back()\"&gt;back&lt;/a&gt; in "
 #~ "your browser and try again."
-#~ msgstr "前のページに戻ってもう一度試してください"
+#~ msgstr "前のページに戻ってもう一度試してください。"
 
-#, fuzzy
+
 #~ msgid "Please notify your %1 administrator %2"
-#~ msgstr "一通のメールが送信されませんでした。 %1 管理者 %2までご連絡ください"
+#~ msgstr " %1 管理者 %2までご連絡ください"
 
-#, fuzzy
+
 #~ msgid "Please notify your %1 administrator %2."
-#~ msgstr "一通のメールが送信されませんでした。 %1 管理者 %2までご連絡ください"
+#~ msgstr " %1 管理者 %2までご連絡ください"
 
-#, fuzzy
+
 #~ msgid "Please notify your %1 administrator and explain how to reproduce it:"
-#~ msgstr "一通のメールが送信されませんでした。 %1 管理者 %2までご連絡ください"
+#~ msgstr " %1 管理者 %2までご連絡の上、どのように再現するかご説明ください"
 
 #~ msgid "Please try again."
 #~ msgstr "もう一度試してください"
 
-#, fuzzy
+
 #~ msgid "Preference Settings for %1:"
-#~ msgstr "設定"
+#~ msgstr "%1設定:"
 
-#, fuzzy
+
 #~ msgid "Preview your changes"
-#~ msgstr "最新の変更をプレビューします："
+#~ msgstr "変更をプレビューします"
 
-#, fuzzy
+
 #~ msgid "Print"
-#~ msgstr "プリント"
+#~ msgstr "印刷"
 
-#, fuzzy
+
 #~ msgid "Print this page"
-#~ msgstr "このトピックのテキストを編集します"
+#~ msgstr "このページを印刷します"
 
-#, fuzzy
+
 #~ msgid "Problems could arise for two reasons:"
-#~ msgstr "いくつかの原因が考えられます:"
+#~ msgstr "二つの原因が考えられます:"
 
-#, fuzzy
+
 #~ msgid "Reference Manual"
-#~ msgstr "ユーザープロパティ"
+#~ msgstr "マニュアル設定"
 
-#, fuzzy
+
 #~ msgid "Register on %1"
-#~ msgstr "登録"
+#~ msgstr "%1登録"
 
-#, fuzzy
+
 #~ msgid "Rename Access Denied"
 #~ msgstr "アクセスが拒否されました"
 
-#, fuzzy
+
 #~ msgid "Rename Web"
-#~ msgstr "リネーム"
+#~ msgstr "ウェブリネーム"
 
-#, fuzzy
+
 #~ msgid "Rename anyway"
-#~ msgstr "リネーム"
+#~ msgstr "任意にリネームします"
 
-#, fuzzy
+
 #~ msgid "Request to reset your TWiki password"
-#~ msgstr "%1 を通じてパスワードを変更することができます"
+#~ msgstr "TWikiパスワードをリセットすることを要求します"
 
-#, fuzzy
+
 #~ msgid "Reset"
 #~ msgstr "リセット"
 
-#, fuzzy
+
 #~ msgid "Save and exit"
-#~ msgstr "保存先:"
+#~ msgstr "保存して閉じます"
 
-#, fuzzy
+
 #~ msgid "Searchbox off"
-#~ msgstr "検索"
+#~ msgstr "サーチボックスオフ"
 
-#, fuzzy
+
 #~ msgid "Select the [[Trash.WebHome][Trash]] web to delete the topic."
-#~ msgstr "%1ウェブを選択してトピックを削除します"
+#~ msgstr "[[Trash.WebHome][Trash]]ウェブを選択してトピックを削除します。"
 
-#, fuzzy
+
 #~ msgid "Select..."
-#~ msgstr "選択"
+#~ msgstr "選択..."
 
-#, fuzzy
+
 #~ msgid "SitePreferences"
-#~ msgstr "設定"
+#~ msgstr "サイト設定"
 
-#, fuzzy
+
 #~ msgid "Software Error"
-#~ msgstr "トピック保存エラー"
+#~ msgstr "ソフトウェアエラー"
 
 #~ msgid ""
 #~ "Style of text edit box. =width: 99%= for full window width (default), "
@@ -4623,340 +4440,341 @@ msgstr ""
 #~ "編集枠スタイル. =width: 99%= フルウィンドウ幅(デフォルト),  =width: auto= "
 #~ "閉じる"
 
-#, fuzzy
+
 #~ msgid "Submit changes"
-#~ msgstr "(変更)"
+#~ msgstr "変更を保存します"
 
-#, fuzzy
+
 #~ msgid "Subscript text"
-#~ msgstr "テキスト編集"
+#~ msgstr "サブスクリプトテキスト"
 
-#, fuzzy
+
 #~ msgid "Superscript text"
-#~ msgstr "セキュリティ注意："
+#~ msgstr "スーパースクリプトテキスト"
 
-#, fuzzy
+
 #~ msgid "Syndicate this site"
-#~ msgstr "このトピックのテキストを編集します"
+#~ msgstr "このサイトをシンジケートします"
 
-#, fuzzy
+
 #~ msgid "TWiki Variables"
-#~ msgstr "プリント"
+#~ msgstr "TWiki変数"
 
-#, fuzzy
+
 #~ msgid "TextFormatting"
-#~ msgstr "*フォーマットヘルプ：*"
+#~ msgstr "テキストフォーマット"
 
-#, fuzzy
+
 #~ msgid ""
 #~ "The %1 field must be your first and lastname in %2, e.g. your capitalized "
 #~ "first and lastname with spaces removed."
 #~ msgstr ""
 #~ "%1 に名前、 %2 に名字を入力しなければなりません。例えば、スペースを抜いた"
-#~ "大文字で書かれた名前と名字"
+#~ "大文字で書かれた名前と名字。"
 
-#, fuzzy
+
 #~ msgid "The email address entered is not valid."
 #~ msgstr "入力されたメールアドレスが有効ではありません。"
 
-#, fuzzy
+
 #~ msgid ""
 #~ "The new web has been created, however not all topics could be copied from "
 #~ "the base web."
-#~ msgstr "ベースウェブより構成されました"
+#~ msgstr "新ウェブが作成されましたが、ベースウェブよりすべてのトピックをコピー"
+#~ "できませんでした。"
 
-#, fuzzy
+
 #~ msgid ""
 #~ "The password you entered in the *password* field is incorrect. Please try "
 #~ "again."
-#~ msgstr "*元のパスワード*に入力したパスワードが違います。"
+#~ msgstr "ご入力のパスワードが違います。もう一度試してみてください。"
 
-#, fuzzy
+
 #~ msgid ""
 #~ "The required field =&lt;span class=\"twikiAlert\"&gt;**&lt;/span&gt;= *%"
 #~ "1* was not filled in."
-#~ msgstr "必須入力の%1をご入力ください"
+#~ msgstr "必須入力の=&lt;span class=\"twikiAlert\"&gt;**&lt;/span&gt;= *%1*"
+#~ "をご入力ください。"
 
-#, fuzzy
+
 #~ msgid ""
 #~ "There should be a line that includes =META:FORM=, look for name=\"&lt;"
 #~ "formName&gt;\""
-#~ msgstr " %1を含む行が必要です。%2(又は%3)参照 "
+#~ msgstr " =META:FORM= を含む行が必要です。name=\"&lt;formName&gt;\"参照"
 
-#, fuzzy
+
 #~ msgid "This is an automated email from %1."
 #~ msgstr " %1 からの自動送信メールです。"
 
-#, fuzzy
+
 #~ msgid ""
 #~ "This requires the form definition to be present. This can be "
 #~ "automatically upgraded by:"
-#~ msgstr "フォーム定義が必要です。"
+#~ msgstr "フォーム定義が必要です。これは次によって自動的に更新されます。"
 
-#, fuzzy
+
 #~ msgid "To"
 #~ msgstr "ウェブへ:"
 
-#, fuzzy
+
 #~ msgid "To edit the topic anyway, hit 'Edit&amp;nbsp;Anyway'."
 #~ msgstr ""
 #~ "強制的にこのトピックを編集するには、'強制編集'をクリックしてください"
 
-#, fuzzy
+
 #~ msgid ""
 #~ "To edit topics on this %1 collaborative web, you must be registered as a "
 #~ "user."
 #~ msgstr ""
-#~ "このTwikiSiteページを編集するには、ユーザー名とパスワードを登録する必要が"
-#~ "あります。"
+#~ "この%1ウェブを編集するには、ユーザー登録をおこなう必要があります。"
 
-#, fuzzy
+
 #~ msgid "To register as a new user:"
 #~ msgstr "以下の表に必要な項目を記入して登録を行ってください"
 
-#, fuzzy
+
 #~ msgid ""
 #~ "To see if they have finished their edit yet, click 'Try&amp;nbsp;Again'"
 #~ msgstr ""
-#~ " %1 の編集が終了したかどうかを確認するには、'再度試す'をクリックしてくださ"
-#~ "い。"
+#~ "編集が終了したかどうかを確認するには、'再度試す'をクリックしてください。"
 
-#, fuzzy
+
 #~ msgid "To:"
 #~ msgstr "ウェブへ:"
 
-#, fuzzy
+
 #~ msgid "Topic"
-#~ msgstr "トピックへ "
+#~ msgstr "トピック"
 
-#, fuzzy
+
 #~ msgid "Topic Caching"
-#~ msgstr "トピック添付ファイル"
+#~ msgstr "トピックキャッシング"
 
-#, fuzzy
+
 #~ msgid "Topic Meta data"
 #~ msgstr "トピックのメタデータ"
 
-#, fuzzy
+
 #~ msgid "Topic does not exist"
-#~ msgstr "%1トピックが存在しません"
+#~ msgstr "トピックが存在しません"
 
-#, fuzzy
+
 #~ msgid "Topic is not saved yet"
-#~ msgstr "トピックを保存するときにエラーが発生しました"
+#~ msgstr "トピックがまだ保存されていません"
 
-#, fuzzy
+
 #~ msgid "Topic preferences"
-#~ msgstr "設定"
+#~ msgstr "トピック設定"
 
-#, fuzzy
+
 #~ msgid "Unrecognized action command:"
-#~ msgstr "認識されないコマンド%1"
+#~ msgstr "認識されないアクションコマンド:"
 
-#, fuzzy
+
 #~ msgid "Update attachment"
-#~ msgstr " %2 で添付ファイル %1を更新します"
+#~ msgstr "添付ファイルを更新します"
 
-#, fuzzy
+
 #~ msgid "Update ref:"
-#~ msgstr "更新"
+#~ msgstr "更新:"
 
-#, fuzzy
+
 #~ msgid "Uploaded file \"%1\" does not exist or is empty"
-#~ msgstr "アップロードファイル%1が存在しないか空のファイルです"
+#~ msgstr "アップロードファイル\"%1\"が存在しないか空のファイルです"
 
-#, fuzzy
+
 #~ msgid "Uploaded file \"&lt;nop&gt;%1\" does not exist or is empty."
-#~ msgstr "アップロードファイル%1が存在しないか空のファイルです"
+#~ msgstr "アップロードファイル\"&lt;nop&gt;%1\"が存在しないか空のファイルです。"
 
-#, fuzzy
+
 #~ msgid "Variables"
-#~ msgstr "プリント"
+#~ msgstr "変数"
 
 #~ msgid "Vertical size of text edit box:"
 #~ msgstr "テキストボックスの高さ:"
 
-#, fuzzy
+
 #~ msgid "View Access Denied"
 #~ msgstr "アクセスが拒否されました"
 
-#, fuzzy
+
 #~ msgid "View Previous Topic Revision"
 #~ msgstr "トピックの前のバージョンを確認します"
 
-#, fuzzy
+
 #~ msgid "View all diffs"
-#~ msgstr "差異を確認します"
+#~ msgstr "すべての差異を確認します"
 
-#, fuzzy
+
 #~ msgid "View formatted topic"
-#~ msgstr "トピックを確認します"
+#~ msgstr "フォーマットされたトピックを確認します"
 
-#, fuzzy
+
 #~ msgid "View raw topic"
-#~ msgstr "トピックを確認します"
+#~ msgstr "元のトピックを確認します"
 
-#, fuzzy
+
 #~ msgid "View raw topic text"
-#~ msgstr "トピックを確認します"
+#~ msgstr "元のトピックテキストを確認します"
 
-#, fuzzy
+
 #~ msgid "View topic history"
-#~ msgstr "トピックヒストリーを確認します"
+#~ msgstr "トピック履歴を確認します"
 
-#, fuzzy
+
 #~ msgid "Vote Access Denied"
 #~ msgstr "アクセスが拒否されました"
 
-#, fuzzy
+
 #~ msgid "Web:"
-#~ msgstr "ウェブ"
+#~ msgstr "ウェブ:"
 
-#, fuzzy
+
 #~ msgid "Welcome Guest"
-#~ msgstr "ようこそ%1ウェブへ"
+#~ msgstr "ようこそ"
 
-#, fuzzy
+
 #~ msgid "Welcome to the %1"
-#~ msgstr "ようこそ%1ウェブへ"
+#~ msgstr "ようこそ%1へ"
 
 #~ msgid "Write protect your home page: (set it to your %1)"
 #~ msgstr ""
 #~ "あなたのホームページをライトプロテクトしてください: (あなたの%1に設定して"
 #~ "ください)"
 
-#, fuzzy
+
 #~ msgid "You are not registered"
 #~ msgstr "まだ登録していません"
 
-#, fuzzy
+
 #~ msgid ""
 #~ "You can [[%1][create a new web]] if you have the permission. Contact %2 "
 #~ "if you have any questions."
 #~ msgstr ""
 #~ "権限があれば [[%1][新ウェブを作成する]]ことができます。何か疑問がございま"
-#~ "したら、%2までご連絡ください"
+#~ "したら、%2までご連絡ください。"
 
-#, fuzzy
+
 #~ msgid ""
 #~ "You might go &lt;a href=\"javascript:history.back()\"&gt;back&lt;/a&gt; "
 #~ "in your browser and save your changes locally."
-#~ msgstr "前のページ戻って全ての変更をローカルに保存してください"
+#~ msgstr "前のページ戻って全ての変更をローカルに保存してください。"
 
-#, fuzzy
+
 #~ msgid ""
 #~ "Your language will be reset to the global default from the next screen "
 #~ "on. You will be redirected to there right now. If you aren't, [[%1][click "
 #~ "here]] to proceed."
 #~ msgstr ""
-#~ "次のスクリーンからあなたの言語は%1 に変更されます。今すぐそこに移動しま"
-#~ "す。移動しなかった場合は、[[%2][ここをクリック]]して、移動してください"
+#~ "次のスクリーンからあなたの言語はグローバルデフォルトに変更されます。"
+#~ "今すぐそこに移動します。移動しなかった場合は、[[%1][ここをクリック]]して、"
+#~ "移動してください。"
 
-#, fuzzy
+
 #~ msgid "Your signature with timestamp"
-#~ msgstr "あなたの複製/貼り付けのためのシグネチャー"
+#~ msgstr "あなたのタイムスタンプ付きシグネチャー"
 
-#, fuzzy
+
 #~ msgid "changes"
 #~ msgstr "(変更)"
 
-#, fuzzy
+
 #~ msgid "debug"
 #~ msgstr "デバッグ"
 
-#, fuzzy
+
 #~ msgid "edit form"
-#~ msgstr "(フォームを編集します)"
+#~ msgstr "フォームを編集します"
 
-#, fuzzy
+
 #~ msgid "go back to &lt;nop&gt;%1"
-#~ msgstr "トップに戻ります"
+#~ msgstr "&lt;nop&gt;%1に戻ります"
 
-#, fuzzy
+
 #~ msgid "more"
 #~ msgstr "(もっと多く)"
 
-#, fuzzy
+
 #~ msgid "move"
 #~ msgstr "移動"
 
-#, fuzzy
+
 #~ msgid "move or delete %1"
-#~ msgstr "ファイル %1を移動、又は削除します"
+#~ msgstr "%1を移動、又は削除します"
 
-#, fuzzy
+
 #~ msgid "next"
-#~ msgstr "インデックス"
+#~ msgstr "次へ"
 
-#, fuzzy
+
 #~ msgid "note"
-#~ msgstr "注意:"
+#~ msgstr "注意"
 
-#, fuzzy
+
 #~ msgid "oops"
 #~ msgstr "(え、)"
 
-#, fuzzy
-#~ msgid "prefs"
-#~ msgstr "グループ"
 
-#, fuzzy
+#~ msgid "prefs"
+#~ msgstr "初期設定"
+
+
 #~ msgid "prev"
 #~ msgstr "(プレビュー)"
 
-#, fuzzy
-#~ msgid "printable"
-#~ msgstr "プリント"
 
-#, fuzzy
+#~ msgid "printable"
+#~ msgstr "印刷可能"
+
+
 #~ msgid "props"
 #~ msgstr "グループ"
 
-#, fuzzy
+
 #~ msgid "rename"
 #~ msgstr "(リネーム)"
 
-#, fuzzy
-#~ msgid "rename web"
-#~ msgstr "新トピックを作成します"
 
-#, fuzzy
+#~ msgid "rename web"
+#~ msgstr "ウェブをリネームします"
+
+
 #~ msgid "search"
 #~ msgstr "検索"
 
-#, fuzzy
+
 #~ msgid "sequential"
 #~ msgstr "シーケンシャル"
 
-#, fuzzy
+
 #~ msgid "side by side"
 #~ msgstr "並列"
 
-#, fuzzy
+
 #~ msgid "single character first name"
 #~ msgstr "(シングルキャラクターの名前)"
 
-#, fuzzy
+
 #~ msgid "single character last name"
 #~ msgstr "(シングルキャラクターの名字)"
 
-#, fuzzy
+
 #~ msgid "the %1 home?"
-#~ msgstr "%1トップページ"
+#~ msgstr "%1トップページ?"
 
-#, fuzzy
+
 #~ msgid "the %1 to customize the web specific preferences or"
-#~ msgstr "%1 ウェブのプロパティをカスタマイズします"
+#~ msgstr "ウェブのプロパティをカスタマイズする%1又は"
 
-#, fuzzy
+
 #~ msgid "the %1 to start working on the new web,"
-#~ msgstr "%1 新ウェブ上で仕事を始めます"
+#~ msgstr "新ウェブ上で仕事を始める%1,"
 
-#, fuzzy
+
 #~ msgid "Registered users can [%1[change]] and [%2[reset]] their passwords."
 #~ msgstr ""
 #~ "登録したユーザーは[[%1][パスワード変更]] と[[%2][パスワードリセット]]する"
-#~ "ことができます"
+#~ "ことができます。"
 
 #~ msgid "&amp;Attach"
 #~ msgstr "添付"
@@ -4988,9 +4806,9 @@ msgstr ""
 #~ msgid "We&amp;b"
 #~ msgstr "ウェブ"
 
-#, fuzzy
+
 #~ msgid "Topic:"
-#~ msgstr "トピックへ "
+#~ msgstr "トピック:"
 
 #~ msgid "Hide formatting help"
 #~ msgstr "フォーマットヘルプを隠します"
@@ -5008,17 +4826,17 @@ msgstr ""
 #~ "%1のスペルが正しいかどうかを確認してもう一度試してください。%2が大文字と小"
 #~ "文字を区別することを忘れないでください"
 
-#, fuzzy
+
 #~ msgid "More options in WebSearch"
-#~ msgstr "(もっと多くの検索オプション)"
+#~ msgstr "もっと多くの検索オプション"
 
-#, fuzzy
+
 #~ msgid "Registration for %1 (%2)"
-#~ msgstr "%1 - %2 (%3) の登録"
+#~ msgstr "%1 (%2) の登録"
 
-#, fuzzy
+
 #~ msgid "Release edit lock"
-#~ msgstr "編集枠を拡大します"
+#~ msgstr "編集ロックを解除します"
 
 #~ msgid ""
 #~ "See &lt;a href='%1'&gt;100&lt;/a&gt;, &lt;a href='%2'&gt;200&lt;/a&gt;, "
@@ -5032,7 +4850,7 @@ msgstr ""
 #~ msgid "See &lt;a href='%1'&gt;all&lt;/a&gt; changes"
 #~ msgstr " &lt;a href='%1'&gt;全ての&lt;/a&gt;変更を確認します"
 
-#, fuzzy
+
 #~ msgid "Set Parent Topic"
 #~ msgstr "親トピックをセットします"
 
@@ -5043,13 +4861,13 @@ msgstr ""
 #~ "Use the [[WebSearch][Search]] link on top of this page, or do a simple"
 #~ msgstr "このページのトップにある[[WebSearch][検索]]をお使い、又は"
 
-#, fuzzy
-#~ msgid "Missing Fields =%1="
-#~ msgstr "いくつか失われたフィールド"
 
-#, fuzzy
+#~ msgid "Missing Fields =%1="
+#~ msgstr "失われたフィールド=%1="
+
+
 #~ msgid "%1 (note)"
-#~ msgstr "(無し)"
+#~ msgstr "%1(無し)"
 
 #~ msgid "(More options in WebSearch)"
 #~ msgstr "(もっと多くの検索オプション)"
@@ -5060,9 +4878,9 @@ msgstr ""
 #~ msgid "Choose a new form template"
 #~ msgstr "新フォームテンプレートを選択してください"
 
-#, fuzzy
+
 #~ msgid "Pick one of the %1.StandardColors."
-#~ msgstr "%1から一つを選択してください。"
+#~ msgstr "%1.StandardColorsから一つを選択しします。"
 
 #~ msgid "The checkmarked topics will be updated"
 #~ msgstr "マークされたトピックは更新されます"
@@ -5074,11 +4892,11 @@ msgstr ""
 #~ "あなたのユーザー名とパスワードを追加するときにエラーが発生しました。%1まで"
 #~ "ご連絡ください"
 
-#, fuzzy
+
 #~ msgid "raw text format."
 #~ msgstr "元のテキストのフォーマット"
 
-#, fuzzy
+
 #~ msgid "sidebyside"
 #~ msgstr "並列"
 
@@ -5138,17 +4956,17 @@ msgstr ""
 #~ msgid "Update image or document on %1"
 #~ msgstr "イメージ又はドキュメント%1を更新します"
 
-#, fuzzy
+
 #~ msgid "Note__:"
-#~ msgstr "注意:"
+#~ msgstr "注意__:"
 
-#, fuzzy
+
 #~ msgid "Request password reset"
-#~ msgstr "パスワードを入力し直してください:"
+#~ msgstr "パスワードを入力し直してください"
 
-#, fuzzy
+
 #~ msgid "Company URL: %BR% (or department URL)"
-#~ msgstr "会社 URL: &lt;br&gt; (又は部署 URL)"
+#~ msgstr "会社 URL: %BR%  (又は部署 URL)"
 
 #~ msgid "Company name:"
 #~ msgstr "会社名:"
