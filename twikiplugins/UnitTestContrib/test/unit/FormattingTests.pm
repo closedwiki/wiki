@@ -114,6 +114,19 @@ ACTUAL
     $this->do_test($expected, $actual);
 }
 
+# [[Url Alt TextAlt]]
+sub test_squabbedUrlAltTextOldUndocumentedUse {
+    my $this = shift;
+    my $expected = <<EXPECTED;
+<a href="$this->{sup}/$TWiki::cfg{SystemWebName}/$TWiki::cfg{HomeTopicName}" target="_top">Alt <nop>TextAlt</a>
+EXPECTED
+
+    my $actual = <<ACTUAL;
+[[$this->{sup}/$TWiki::cfg{SystemWebName}/$TWiki::cfg{HomeTopicName} Alt TextAlt]]
+ACTUAL
+    $this->do_test($expected, $actual);
+}
+
 sub test_escapedWikiWord {
     my $this = shift;
     my $expected = <<EXPECTED;
@@ -197,6 +210,8 @@ EXPECTED
 ACTUAL
     $this->do_test($expected, $actual);
 }
+
+
 
 sub test_noppedUnderscore {
     my $this = shift;
@@ -635,6 +650,30 @@ sub test_4067_entities {
     my $this = shift;
     my $actual = "&#131; &#x005A; &#X004E; &amp;";
     my $expected = $actual;
+    $this->do_test($expected, $actual);
+}
+
+sub test_externalLinkWithSpacedUrl {
+    my $this = shift;
+    my $expected = <<EXPECTED;
+<a href="http://twiki.org/p/pub/Some\%20File\%20WikiWord\%20And\%20Spaces.txt" target="_top">topic</a>
+EXPECTED
+
+    my $actual = <<ACTUAL;
+[[http://twiki.org/p/pub/Some File WikiWord And Spaces.txt ][topic]]
+ACTUAL
+    $this->do_test($expected, $actual);
+}
+
+sub test_internalLinkWithSpacedUrl {
+    my $this = shift;
+    my $expected = <<EXPECTED;
+<a class="twikiCurrentWebHomeLink twikiLink" href="$this->{sup}/$this->{test_web}/WebHome">topic</a>
+EXPECTED
+
+    my $actual = <<ACTUAL;
+[[Web Home][topic]]
+ACTUAL
     $this->do_test($expected, $actual);
 }
 
