@@ -81,15 +81,10 @@ The =mailincron= script takes one optional parameter, <tt>debug</tt>, which take
 
 To run the script you need to set up a cron job. For example, to transfer mail into the TWiki once every hour you might write:
 <verbatim>
-0 * * * * cd /home/twiki/bin && ./mailincron 2&>1 >> /home/twiki/logs/mailincron.log
+0 * * * * cd /home/twiki/bin && ../tools/mailincron 2&>1 >> /home/twiki/logs/mailincron.log
 </verbatim>
 You _must_ run the script from the bin directory.
 Make sure that the cron is run by a user with the permissions needed to read and write the TWiki data directory.
-
-The script can also be run from a browser, though this is intended primarily for testing. From the browser, the 'debug' parameter is passed as a CGI parameter e.g.
-<verbatim>
-http://my.twiki/bin/mailincron?debug=on
-</verbatim>
 
 This is a brand-new development, not related in any to the original TWiki:Plugins/MailInAddon. Due acknowledgement is made to those early pioneers for the idea. ;-)
 
@@ -106,6 +101,7 @@ Many thanks to the following sponsors for supporting this work:
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 | Change History: | |
+|  1 Aug 2008 | Bugs:Item5450: minor doc fix |
 |  8 Sep 2007 | Bugs:Item4575 various ideas from Dev topic, tested against 4.2.0 |
 |  12412 | Fixed Bugs:Item3334 by removing dependency on !FuncUsersContrib |
 |  10239 | Added support for listing attachments in-line with the mail |
