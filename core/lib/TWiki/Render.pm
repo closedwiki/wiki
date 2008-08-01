@@ -756,6 +756,7 @@ sub _externalLink {
         $opt = ' target="_top"';
     }
     $text ||= $url;
+    $url =~ s/ /%20/g;  #Item5787: if a url has spaces, escape them so the url has less chance of being broken by later parsing.
     # SMELL: Can't use CGI::a here, because it encodes ampersands in
     # the link, and those have already been encoded once in the
     # rendering loop (they are identified as "stand-alone"). One
