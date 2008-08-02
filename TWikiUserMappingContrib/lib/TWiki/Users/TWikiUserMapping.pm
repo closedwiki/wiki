@@ -36,7 +36,7 @@ This class implements the basic TWiki behaviour using topics to store users,
 but is also designed to be subclassed so that other services can be used.
 
 Subclasses should be named 'XxxxUserMapping' so that configure can find them.
- 
+
 =cut
 
 package TWiki::Users::TWikiUserMapping;
@@ -58,11 +58,15 @@ for any required TWiki services.
 
 =cut
 
+# The null mapping name is reserved for TWiki for backward-compatibility.
+# We declare this as a global variable so we can override it during testing.
+our $TWIKI_USER_MAPPING_ID = '';
+#our $TWIKI_USER_MAPPING_ID = 'TestMapping_';
+
 sub new {
     my( $class, $session ) = @_;
 
-    # The null mapping name is reserved for TWiki for backward-compatibility
-    my $this = $class->SUPER::new( $session, '' );
+    my $this = $class->SUPER::new( $session, $TWIKI_USER_MAPPING_ID );
 
     my $implPasswordManager = $TWiki::cfg{PasswordManager};
     $implPasswordManager = 'TWiki::Users::Password'
@@ -70,7 +74,7 @@ sub new {
     eval "require $implPasswordManager";
     die $@ if $@;
     $this->{passwords} = $implPasswordManager->new( $session );
-    
+
     #if password manager says sorry, we're read only today
     #'none' is a special case, as it means we're not actually using the password manager for
     # registration.
@@ -370,13 +374,21 @@ sub addUser {
         # brand new file - add to end
         $result .= "$entry$today\n";
     }
-    $store->saveTopic(
-        # SMELL: why is this Admin and not the RegoAgent??
-        $this->{session}->{users}->getCanonicalUserID(
-            $TWiki::cfg{AdminUserLogin}),
-        $TWiki::cfg{UsersWebName},
-        $TWiki::cfg{UsersTopicName},
-        $result, $meta );
+    try {
+        $store->saveTopic(
+            # SMELL: why is this Admin and not the RegoAgent??
+            $this->{session}->{users}->getCanonicalUserID(
+                $TWiki::cfg{AdminUserLogin}),
+            $TWiki::cfg{UsersWebName},
+            $TWiki::cfg{UsersTopicName},
+            $result, $meta );
+    } catch Error::Simple with {
+        # Failed to add user; must remove them from the password system too,
+        # otherwise their next registration attempt will be blocked
+        my $e = shift;
+        $this->{passwords}->removeUser($login);
+        throw $e;
+    };
 
     #can't call setEmails here - user may be in the process of being registered
     #TODO; when registration is moved into the mapping, setEmails will happend after the createUserTOpic
@@ -529,7 +541,6 @@ sub eachGroupMember {
     my $users = $this->{session}->{users};
 
     my $members = [];
-
     if( !$expanding{$group} &&
           $store->topicExists( $TWiki::cfg{UsersWebName}, $group )) {
         $expanding{$group} = 1;
@@ -873,7 +884,7 @@ sub findUserByWikiName {
 
 =begin twiki
 
----++ ObjectMethod checkPassword( $cUID, $passwordU ) -> $boolean
+---++ ObjectMethod checkPassword( $login, $password ) -> $boolean
 
 Finds if the password is valid for the given user.
 
@@ -882,9 +893,8 @@ Returns 1 on success, undef on failure.
 =cut
 
 sub checkPassword {
-    my( $this, $cUID, $pw ) = @_;
-    return $this->{passwords}->checkPassword(
-        $this->getLoginName($cUID), $pw );
+    my( $this, $login, $pw ) = @_;
+    return $this->{passwords}->checkPassword( $login, $pw );
 }
 
 =begin twiki
@@ -1053,13 +1063,13 @@ sub _expandUserList {
             }
         } else {
             # Might be a wiki name (wiki names may map to several cUIDs)
-            my %names = map { $_ => 1 }
+            my %namelist = map { $_ => 1 }
               @{$this->{session}->{users}->findUserByWikiName( $ident )};
             # May be a login name (login names map to a single cUID)
             my $cUID = $this->{session}->{users}->getCanonicalUserID(
                 $ident );
-            $names{$cUID} = 1 if $cUID;
-            push( @l, keys %names );
+            $namelist{$cUID} = 1 if $cUID;
+            push( @l, keys %namelist );
         }
     }
     return \@l;
