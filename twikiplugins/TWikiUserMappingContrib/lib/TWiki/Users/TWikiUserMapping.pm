@@ -36,7 +36,7 @@ This class implements the basic TWiki behaviour using topics to store users,
 but is also designed to be subclassed so that other services can be used.
 
 Subclasses should be named 'XxxxUserMapping' so that configure can find them.
- 
+
 =cut
 
 package TWiki::Users::TWikiUserMapping;
@@ -370,13 +370,22 @@ sub addUser {
         # brand new file - add to end
         $result .= "$entry$today\n";
     }
-    $store->saveTopic(
-        # SMELL: why is this Admin and not the RegoAgent??
-        $this->{session}->{users}->getCanonicalUserID(
-            $TWiki::cfg{AdminUserLogin}),
-        $TWiki::cfg{UsersWebName},
-        $TWiki::cfg{UsersTopicName},
-        $result, $meta );
+
+    try {
+        $store->saveTopic(
+            # SMELL: why is this Admin and not the RegoAgent??
+            $this->{session}->{users}->getCanonicalUserID(
+                $TWiki::cfg{AdminUserLogin}),
+            $TWiki::cfg{UsersWebName},
+            $TWiki::cfg{UsersTopicName},
+            $result, $meta );
+    } catch Error::Simple with {
+        # Failed to add user; must remove them from the password system too,
+        # otherwise their next registration attempt will be blocked
+        my $e = shift;
+        $this->{passwords}->removeUser($login);
+        throw $e;
+    };
 
     #can't call setEmails here - user may be in the process of being registered
     #TODO; when registration is moved into the mapping, setEmails will happend after the createUserTOpic

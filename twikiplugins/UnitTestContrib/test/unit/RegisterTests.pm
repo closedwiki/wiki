@@ -1384,6 +1384,84 @@ sub test_3951 {
     };
 }
 
+# "User gets added to password system, despite a failure adding
+#  them to the mapping"
+sub test_4061 {
+    my $this = shift;
+    $TWiki::cfg{Register}{AllowLoginName} = 0;
+    $TWiki::cfg{Register}{NeedVerification} = 0;
+    $TWiki::cfg{Register}{EnableNewUserRegistration} = 1;
+    $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';
+    $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
+    my $query = new CGI ({
+                          'TopicName' => [
+                                          'TWikiRegistration'
+                                         ],
+                          'Twk1Email' => [
+                                          $this->{new_user_email}
+                                         ],
+                          'Twk1WikiName' => [
+                                             $this->{new_user_wikiname}
+                                            ],
+                          'Twk1Name' => [
+                                         $this->{new_user_fullname}
+                                        ],
+                          'Twk0Comment' => [
+                                            ''
+                                           ],
+                          'Twk1FirstName' => [
+                                              $this->{new_user_fname}
+                                             ],
+                          'Twk1LastName' => [
+                                             $this->{new_user_sname}
+                                            ],
+                          'action' => [
+                                       'register'
+                                      ]
+                         });
+
+    # Make TWikiUsers read-only
+    chmod(0444, "$TWiki::cfg{DataDir}/$this->{users_web}/TWikiUsers.txt");
+
+    $query->path_info( "/$this->{users_web}/TWikiRegistration" );
+    $this->{twiki}->finish();
+    $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
+    $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
+
+    $this->assert(open(F, "<", $TWiki::cfg{Htpasswd}{FileName}));
+    local $/;
+    my $before = <F>;
+    close(F);
+
+    try {
+        TWiki::UI::Register::register_cgi($this->{twiki});
+    } catch TWiki::OopsException with {
+        my $e = shift;
+        $this->assert_str_equals("attention", $e->{template},$e->stringify());
+        $this->assert_str_equals("problem_adding", $e->{def}, $e->stringify());
+
+        # Verify that they have not been added to .htpasswd
+        $this->assert(open(F, "<", $TWiki::cfg{Htpasswd}{FileName}));
+        local $/;
+        my $stuff = <F>;
+        close(F);
+        $this->assert_str_equals($before, $stuff);
+
+        # Verify they have no user topic
+        $this->assert(!TWiki::Func::topicExists(
+            $this->{users_web}, $this->{new_user_wikiname}));
+
+    } catch TWiki::AccessControlException with {
+        my $e = shift;
+        $this->assert(0, $e->stringify);
+    } catch Error::Simple with {
+        $this->assert(0, shift->stringify());
+    } otherwise {
+        $this->assert(0, "expected an oops redirect");
+    } finally {
+        chmod(0777, "$TWiki::cfg{DataDir}/$this->{users_web}/TWikiUsers.txt");
+    };
+}
 
 ################################################################################
 ################################ RESET EMAIL TESTS ##########################
