@@ -1561,11 +1561,22 @@ sub renderRevisionInfo {
         $rrev = $store->cleanUpRevID( $rrev );
     }
 
-    unless( $meta ) {
+    my( $date, $user, $rev, $comment );
+    if( $meta ) {
+        ( $date, $user, $rev, $comment ) = $meta->getRevisionInfo( $rrev );
+    } else {
         my $text;
-        ( $meta, $text ) = $store->readTopic( undef, $web, $topic, $rrev );
+        if( $store->topicExists( $web, $topic )) {
+            ( $meta, $text ) = $store->readTopic( undef, $web, $topic, $rrev );
+            ( $date, $user, $rev, $comment ) = $meta->getRevisionInfo( $rrev );
+        } else {
+            # non-existant topic
+            $date = 0;
+            $user = undef;
+            $rev = 0;
+            $comment = '';
+        }
     }
-    my( $date, $user, $rev, $comment ) = $meta->getRevisionInfo( $rrev );
 
     my $wun = '';
     my $wn = '';
