@@ -1172,7 +1172,7 @@ msgstr "Borrar tema..."
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:48
 msgid "Describe the file so other people know what it is."
-msgstr "Describe el archivo, de manera que otros sepan que es."
+msgstr "Describa el archivo, de manera que otros sepan que es."
 
 #: lib/TWiki/Form.pm:261
 msgid "Details in separate window"
@@ -1804,7 +1804,7 @@ msgstr "Iniciar sesión"
 
 #: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:7
 msgid "Log Out"
-msgstr "Cerrar session"
+msgstr "Cerrar sesión"
 
 #: templates/mailresetpassword.tmpl:9
 #: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:9
@@ -2020,7 +2020,7 @@ msgstr "Solo miembros del %1 tienen permiso de realizar esta acción."
 msgid ""
 "Oops: we could not recognize you. Try again or [[%1][reset your password]]."
 msgstr ""
-"Oops: no pudimos reconocerle. Intentelo de nuevo o [[%1][cambie su contraseña]]."
+"Oops: no l@ pudimos reconocer. Inténtelo nuevamente o [[%1][cambie su contraseña]]."
 
 #: twikiplugins/ClassicSkin/templates/preview.classic.tmpl:10
 msgid "Opens page in new window"
