@@ -182,6 +182,15 @@ When deciding whether to grant access, TWiki evaluates the following rules in or
       * people in the list will be *PERMITTED*
       * everyone else will be *DENIED*
    1 If you got this far, access is *PERMITTED*
+   
+---++ Access control and INCLUDE
+
+ALLOWTOPICVIEW and ALLOWTOPICCHANGE only applies to the topic in which the settings are defined. If a topic A includes another topic B, topic A does not inherit the access rights of the included topic B.
+
+Examples: Topic A includes topic B
+
+   * If the included topic B has ALLOWTOPICCHANGE set to block editing for a user, it does not prevent editing the including topic A.
+   * If the included topic B has ALLOWTOPICVIEW set to block view for a user, the user can still view topic A but he cannot see the included topic B. He will see a message _No permission to view B_ 
 
 ---++ Access Control quick recipes
 
