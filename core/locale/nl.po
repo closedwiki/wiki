@@ -180,7 +180,7 @@ msgstr "&Afbreken"
 
 #: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:14
 msgid "&Edit text"
-msgstr "Tekst b&ewerken"
+msgstr "Tekst &bewerken"
 
 #: templates/twiki.tmpl:101
 #: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:158
@@ -675,7 +675,7 @@ msgstr ""
 
 #: templates/viewtopicactionbuttons.tmpl:66
 msgid "Attach"
-msgstr "&Bijlage bijvoegen"
+msgstr "Bij&lage bijvoegen"
 
 #: templates/attachnew.tmpl:4
 #: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:4
@@ -2192,9 +2192,8 @@ msgid "RSS Feed"
 msgstr "RSS Feed"
 
 #: templates/viewtopicactionbuttons.tmpl:61
-#, fuzzy
 msgid "Raw edit"
-msgstr "Laatste bewerker"
+msgstr "Brontekst bewerken"
 
 #: templates/registernotify.tmpl:10
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:10
@@ -2689,9 +2688,8 @@ msgstr ""
 "op \"Afbreken\" onderaan de pagina."
 
 #: templates/messages.tmpl:498
-#, fuzzy
 msgid "Template %1 does not exist"
-msgstr "Het %1 web bestaat nog niet"
+msgstr "Template %1 bestaat niet"
 
 #: data/Sandbox/WebHome.txt:6
 msgid "Test Topics"
@@ -3260,9 +3258,8 @@ msgid "WARNING:"
 msgstr "WAARSCHUWING:"
 
 #: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:179
-#, fuzzy
 msgid "Warning: 'include' topic does not exist!"
-msgstr "Let op: Deze pagina bestaat niet"
+msgstr "Let op: ingevoegde pagina bestaat niet!"
 
 #: templates/messages.tmpl:447
 msgid "Warning: Can't INCLUDE %1 repeatedly, topic is already included. %2"
@@ -3373,21 +3370,18 @@ msgid "You are trying to %1 an attachment that does not exist."
 msgstr "Je probeert om te %1 bij een bijlage die niet bestaat."
 
 #: templates/messages.tmpl:499
-#, fuzzy
 msgid "You are trying to create a topic from a template that does not exist."
-msgstr "Je probeert om te %1 bij een pagina die niet bestaat."
+msgstr "Je probeert een pagina aan te maken van een template dat niet bestaat."
 
 #: templates/messages.tmpl:494
-#, fuzzy
 msgid ""
 "You are trying to perform an action on a topic that does not exist (action '%"
 "1')."
-msgstr "Je probeert om te %1 bij een pagina die niet bestaat."
+msgstr "Je probeert een bewerking te doen op een pagina die niet bestaat (actie '% 1')."
 
 #: templates/messages.tmpl:505
-#, fuzzy
 msgid "You are trying to rename a topic that does not exist."
-msgstr "Je probeert om te %1 bij een pagina die niet bestaat."
+msgstr "Je probeert een pagina die niet bestaat ter hernoemen."
 
 #: templates/messages.tmpl:484
 msgid ""
@@ -3716,7 +3710,7 @@ msgstr "zoekt in _alle publieke webs_"
 msgid "title='Attach an image or document to this topic' accesskey='a'>&Attach"
 msgstr ""
 "title='Voeg een afbeelding of document toe aan deze pagina' "
-"accesskey='b'>&Bijlage"
+"accesskey='l'>Bij&lage"
 
 #: templates/viewtopicactionbuttons.tmpl:4
 msgid "title='Create new topic' accesskey='c'>&Create"
@@ -3740,7 +3734,7 @@ msgstr "title='Printbare versie van deze pagina' accesskey='p'>&Printversie"
 
 #: templates/viewtopicactionbuttons.tmpl:9
 msgid "title='Raw Edit this topic text' accesskey='w'>Ra&w edit"
-msgstr "title='Bewerk pagina in brontekst' accesskey='b'>Bewerk &brontekst"
+msgstr "title='Bewerk pagina in brontekst' accesskey='e'>Brontekst b&ewerken"
 
 #: templates/viewtopicactionbuttons.tmpl:28
 msgid ""
@@ -3820,16 +3814,3 @@ msgstr ""
 "wachtwoord opnieuw te kunnen instellen. Als geen van je geregistreerde e-"
 "mailadressen geldig zijn, en je je wachtwoord bent vergeten, neem dan "
 "contact op met %1."
-
-#~ msgid "Administrator login"
-#~ msgstr "Beheerder login"
-
-#~ msgid "All topics in %1"
-#~ msgstr "Alle pagina&#39;s in %1"
-
-#~ msgid ""
-#~ "Log in as [[%SCRIPTURL{login}%?sudo=sudo][internal admin]] if you need to "
-#~ "quickly fix something"
-#~ msgstr ""
-#~ "Log in als [[%SCRIPTURL{login}%?sudo=sudo][beheerder]] als je snel iets "
-#~ "moet aanpassen"
