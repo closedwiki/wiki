@@ -164,8 +164,9 @@ Many thanks to the following sponsors for supporting this work:
 |  Author: | TWiki:Main/CrawfordCurrie (http://c-dot.co.uk) |
 |  Copyright &copy;: | 2004, Wind River Systems; 2006, http://WikiRing.com |
 |  License: | GPL |
-|  Version: | %$VERSION% |
+|  Version: | 03 Aug 2008 |
 |  Change History: | |
+|  03 Aug 2008 | TWiki 4.2.1 release version |
 |  27 Jul 2008 | TWikibug:Item5776: TWiki:Main.KennethLavrsen added note to warn against running multiple instances of mailnotify at the same time. |
 |  15 May 2008 | TWikibug:Item5232: TWiki:Main.CrawfordCurrie added support for non-ascii alphanumerics in topic names to WebNotify. TWikibug:Item5630: TWiki:Main.SvenDowideit fixed some spelling errors |
 |  25 Jan 2008 | TWikibug:Item4812: added TWiki:Main.BobGoldstein's noexpand patch for groups |
