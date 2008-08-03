@@ -11,8 +11,9 @@ This is not really a skin. It is the set of default templates, shown if no skin 
 |  Screenshot: | <a href="%ATTACHURL%/fullscreen.gif"><img src="%ATTACHURL%/screenshot.gif" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Base Name: | classic |
 |  Skin Author: | TWiki:Main/PeterThoeny |
-|  Skin Version: | 21 May 2007 (v1.001) |
+|  Skin Version: | 03 Aug 2008 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  03 May 2008 | TWiki 4.2.1 release version |
 |  21 May 2007 | Bugs:Item3969 - 8bit email fix (TWiki:Main.WillNorris) |
 |  25 Jul 2004: | Initial version (v1.000) |
 |  Dependencies: |  |
