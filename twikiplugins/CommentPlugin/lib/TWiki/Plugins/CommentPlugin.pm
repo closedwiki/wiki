@@ -37,7 +37,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'TWiki-4';
+$RELEASE = '03 Aug 2008';
 
 $SHORTDESCRIPTION = 'Allows users to quickly post comments to a page without an edit/preview/save cycle';
 

@@ -58,7 +58,7 @@ $VERSION = '$Rev: 14913 (17 Sep 2007) $';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '03 Aug 2008';
 
 BEGIN {
     # 'Use locale' for internationalisation of Perl sorting and searching - 

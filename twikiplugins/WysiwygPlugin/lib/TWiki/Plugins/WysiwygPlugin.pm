@@ -56,7 +56,7 @@ $SHORTDESCRIPTION = 'Translator framework for Wysiwyg editors';
 $NO_PREFS_IN_TOPIC = 1;
 $VERSION = '$Rev$';
 
-$RELEASE = 'TWiki-4.2';
+$RELEASE = '03 Aug 2008';
 
 $SECRET_ID = 'WYSIWYG content - do not remove this comment, and never use this identical text in your topics';
 

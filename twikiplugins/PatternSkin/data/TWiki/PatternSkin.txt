@@ -83,8 +83,9 @@ For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Re
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=pattern][Preview with this skin]] |
 |  Base Name: | pattern |
 |  Skin Author: | TWiki:Main/ArthurClemens |
-|  Skin Version: | 13 Jul 2007 (v3.0.0) | 
+|  Skin Version: | 03 Aug 2008 (v3.0.1) | 
 |  History: | <!-- specify latest version first -->&nbsp; |
+|  03 Aug 2008: | v.3.0.1 - TWiki 4.2.1 (Edinburgh) RELEASE VERSION |
 |  13 Jul 2007: | v.3.0.0 - TWiki 4.2.0 (Edinburgh) RELEASE VERSION |
 |  15 Jan 2006: | v.2.0.6 - TWiki 4.1.0 (Edinburgh) RELEASE VERSION |
 |  26 Sep 2006: | v.2.0.5 - Fixed form background colors |
