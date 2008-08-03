@@ -22,7 +22,7 @@ The editor uses a translator module to convert from TWiki markup language (TML) 
 ---++ Installation Instructions
 
 __NOTES:__
-   * This plugin comes pre-installed on TWiki 4.2.0. You should only need to re-install if there is an upgrade to the plugin.
+   * This plugin comes pre-installed on TWiki 4.2.X. You should only need to re-install if there is an upgrade to the plugin.
    * It requires the very latest revision of WysiwygPlugin. It will *not* work with the version shipped with TWiki 4.1.2.
    * When installed, it *replaces* the old "textarea" editor. If you want to maintain access to the old editor from the standard screens, follow the instructions under [[#InstallingOnOldTWikis][Configuring the buttons on TWiki < 4.2.0]].
 
@@ -114,12 +114,13 @@ When installed on TWiki versions before 4.2.0, this plugin *replaces* the old te
 Another great TWiki extension from the <a style="text-decoration:none" href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiringlogo20x20.png" alt="" /> *WikiRing* </a> - working together to improve your wiki experience!
 
 |  Plugin Author(s): | TWiki:Main.CrawfordCurrie |
-|  Plugin Version: | %$VERSION% |
-|  Copyright: | &copy; 2007 Crawford Currie http://c-dot.co.uk |
+|  Plugin Version: | 03 Aug 2008 %$VERSION% |
+|  Copyright: | &copy; 2007-2008 Crawford Currie http://c-dot.co.uk |
 |             | This package also includes the complete sources for version 2.1.1.1 of the !TinyMCE editor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  4 May 2008 | TWikibug:Item5547: Change mechanism by which TMCE recognises textareas to camp on. Use class instead of element name. |
+|  03 Aug 2008 | TWiki 4.2.1 release version |
+|  04 May 2008 | TWikibug:Item5547: Change mechanism by which TMCE recognises textareas to camp on. Use class instead of element name. |
 |  12 Apr 2008 | TWikibug:Item4946: I think I have finally fixed non-iso-8859-1 character sets. Painful. |
 |  31 Mar 2008 | TWikibug:Item5314: TWikibug:Item5457: Fixed pickaxe mode for editing UTF-8. Characters above 255 are converted to entitites, which is a bit of a PITA, but at least it no longer corrupts topics. *NOTE: YOU MUST UPGRADE WysiwygPlugin TO 16600 OR LATER* |
 |  28 Mar 2008 | TWikibug:Item5432: added upper case file extensions for images TWikibug:Item5206: fixed expansion of simple filenames entered in image popup TWikibug:Item5462: fixed hide attachment switch |
