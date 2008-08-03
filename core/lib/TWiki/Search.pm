@@ -759,7 +759,7 @@ sub searchWeb {
             my $cUID = $users->getCanonicalUserID($ru);
             if (!$cUID) {
                 # Not a login name or a wiki name. Is it a valid cUID?
-                my $ln = $users->{users}->getLoginName($ru);
+                my $ln = $users->getLoginName($ru);
                 $cUID = $ru if defined $ln && $ln ne 'unknown';
             }
 
