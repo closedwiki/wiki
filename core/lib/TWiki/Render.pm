@@ -1593,6 +1593,9 @@ sub renderRevisionInfo {
             $wn = $users->getWikiName( $cUID );
             $un = $users->getLoginName($cUID);
         }
+        # If we are still unsure, then use whatever is saved in the meta.
+        # But obscure it if the RenderLoggedInButUnknownUsers is enabled.
+        $user = 'unknown' if $TWiki::cfg{RenderLoggedInButUnknownUsers};
         $wun ||= $user;
         $wn ||= $user;
         $un ||= $user;

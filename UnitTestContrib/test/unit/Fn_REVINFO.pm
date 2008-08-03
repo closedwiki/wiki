@@ -130,11 +130,16 @@ sub test_5873 {
 %META:TOPICINFO{author="eltonjohn" date="1120846368" format="1.1" version="$Rev: 16686 $"}%
 HERE
     close(F);
+    $TWiki::cfg{RenderLoggedInButUnknownUsers} = 0;
     my $ui = $this->{twiki}->handleCommonTags(
         '%REVINFO{format="$username $wikiname $wikiusername"}%',
         $this->{test_web}, 'GeeWillikins');
     $this->assert_str_equals("eltonjohn eltonjohn eltonjohn", $ui);
-
+    $TWiki::cfg{RenderLoggedInButUnknownUsers} = 1;
+    $ui = $this->{twiki}->handleCommonTags(
+        '%REVINFO{format="$username $wikiname $wikiusername"}%',
+        $this->{test_web}, 'GeeWillikins');
+    $this->assert_str_equals("unknown unknown unknown", $ui);
 }
 
 # SMELL: need to test for other revs specified by the 'rev' parameter
