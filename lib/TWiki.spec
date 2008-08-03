@@ -383,10 +383,10 @@ $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
 $TWiki::cfg{Register}{AllowLoginName} = $FALSE;
 
 # **BOOLEAN EXPERT**
-# If Logins are managed from outside TWiki, and their TWikiName
-# mapping does not exist, You can highlight this (for security reasons)
-# by setting this to true 
-# adds UnknownUser (<nop>$cUID)
+# If a login name (or an internal user id) cannot be mapped to a wikiname,
+# then the user is unknown. By default the user will be displayed using
+# whatever identity is stored for them. For security reasons you may want
+# to obscure this stored id by setting this option to true.
 $TWiki::cfg{RenderLoggedInButUnknownUsers} = $FALSE;
 
 # **BOOLEAN**
