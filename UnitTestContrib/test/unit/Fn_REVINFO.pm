@@ -114,6 +114,29 @@ HERE
 
 }
 
+sub test_5873 {
+    my $this = shift;
+    # Create a topic with raw meta to force a login into the author field.
+    # The login must be for a user who does not exist.
+    # This test is specific to the "traditional" text database implementation,
+    # either RcsWrap or RcsLite.
+    if ($TWiki::cfg{StoreImpl} ne 'RcsLite' &&
+          $TWiki::cfg{StoreImpl} ne 'RcsWrap') {
+        return;
+    }
+    $this->assert(open(
+        F, '>', "$TWiki::cfg{DataDir}/$this->{test_web}/GeeWillikins.txt"));
+    print F <<'HERE';
+%META:TOPICINFO{author="eltonjohn" date="1120846368" format="1.1" version="$Rev: 16686 $"}%
+HERE
+    close(F);
+    my $ui = $this->{twiki}->handleCommonTags(
+        '%REVINFO{format="$username $wikiname $wikiusername"}%',
+        $this->{test_web}, 'GeeWillikins');
+    $this->assert_str_equals("eltonjohn eltonjohn eltonjohn", $ui);
+
+}
+
 # SMELL: need to test for other revs specified by the 'rev' parameter
 
 # SMELL: need to test for the format parameter strings:
