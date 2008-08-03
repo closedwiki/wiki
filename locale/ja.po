@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: TWiki $Id\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2007-08-01 00:38-0800\n"
+"PO-Revision-Date: 2008-08-03 19:36-0800\n"
 "Last-Translator: Ken <ken.yuminaga at gmail.com>;\n"
 "Language-Team: TWiki Japanese &lt;<ken.yuminaga at gmail.com>&gt;\n"
 "MIME-Version: 1.0\n"
@@ -178,16 +178,16 @@ msgstr "%1 トピックは存在しません"
 
 #: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:11
 msgid "&Cancel"
-msgstr "&キャンセル"
+msgstr "キャンセル"
 
 #: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:14
 msgid "&Edit text"
-msgstr "&テキスト編集"
+msgstr "テキスト編集"
 
 #: templates/twiki.tmpl:101
 #: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:158
 msgid "&History"
-msgstr "&履歴"
+msgstr "履歴"
 
 #: templates/messages.tmpl:262
 msgid "'%1' is not a valid %2 "
@@ -629,7 +629,7 @@ msgstr "全てのパブリックウェブ"
 
 #: templates/twiki.tmpl:7
 msgid "Allow non <nop>WikiWord for the new topic name"
-msgstr "ノン<nop>WikiWord を新しいトピック名としてもいいです。"
+msgstr "新しいトピック名はWikiWordでない名前を許可します"
 
 #: templates/messages.tmpl:256
 msgid ""
@@ -711,7 +711,7 @@ msgstr "添付ファイル"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:14
 msgid "Attachments help"
-msgstr "添付ファイルヘルプ"
+msgstr "ヘルプファイルの添付"
 
 #: templates/attach.tmpl:7
 msgid "Attachments of %1"
@@ -1003,7 +1003,7 @@ msgid ""
 "Copyright &&copy; by the contributing authors. All material on this "
 "collaboration platform is the property of the contributing authors."
 msgstr ""
-"コピーライト &&copy; 著作者。本プラットフォームにあるあらゆる物は本"
+"コピーライト &&copy; 著作者。本プラットフォームにある全ての物は本"
 "プラットフォームの貢献者たちに帰属します。"
 
 #: templates/messages.tmpl:132
@@ -1480,7 +1480,7 @@ msgstr ""
 #: templates/registernotify.tmpl:16
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:16
 msgid "How about attaching your photo?"
-msgstr "あなたの写真を添付しますか?"
+msgstr "あなたの写真を添付してはいかがですか?"
 
 #: templates/registerconfirm.tmpl:4
 #: twikiplugins/ClassicSkin/templates/registerconfirm.classic.tmpl:4
@@ -1609,7 +1609,7 @@ msgstr ""
 #: templates/attach.tmpl:39
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:56
 msgid "Images will be displayed, for other attachments a link will be created."
-msgstr "イメージが表示されます。他の添付ファイルのリンクが作成されます"
+msgstr "画像が表示されます。他の添付ファイルのリンクが作成されます"
 
 #: data/TWiki/WebSearchAdvanced.txt:52
 msgid "In reversed order"
@@ -2062,7 +2062,7 @@ msgstr " %1 までご連絡ください。"
 
 #: templates/login.sudo.tmpl:7
 msgid "Please enter the TWiki admin password"
-msgstr "TWiki adminパスワードをご入力ください:"
+msgstr "TWiki adminのパスワードをご入力ください:"
 
 #: templates/login.tmpl:14
 msgid "Please enter your username and password"
@@ -2145,7 +2145,7 @@ msgstr ""
 
 #: templates/viewtopicactionbuttons.tmpl:61
 msgid "Raw edit"
-msgstr "編集"
+msgstr "ソースを編集"
 
 #: templates/registernotify.tmpl:10
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:10
@@ -2344,13 +2344,13 @@ msgstr ""
 
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:14
 msgid "S = Save, Q = Quiet save, K = Save and Continue, D = Discard"
-msgstr "S = 保存, Q = 静的な保存, K = 保存して続けます, D =放棄"
+msgstr "S = 保存, Q = 静的保存, K = 保存して続けます, D =破棄する"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:50
 msgid ""
 "S = Save, Q = Quiet save, K = Save and Continue, P = Preview, C = Cancel"
 msgstr ""
-"S = 保存, Q = 静的な保存, K = 保存して続けます, P = プレビュー, C = キャンセ"
+"S = 保存, Q = 静的保存, K = 保存して続けます, P = プレビュー, C = キャンセ"
 "ル"
 
 #: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:172
@@ -3287,7 +3287,7 @@ msgstr "作成しようとするトピックのテンプレートは存在しま
 msgid ""
 "You are trying to perform an action on a topic that does not exist (action '%"
 "1')."
-msgstr "%1しようとするトピックは存在しません。"
+msgstr "トピックが存在したいため、操作できない (操作: %1)"
 
 #: templates/messages.tmpl:505
 msgid "You are trying to rename a topic that does not exist."
@@ -3335,7 +3335,7 @@ msgstr "重複登録できません。%1は既に登録されました"
 #: templates/messages.tmpl:142 templates/messages.tmpl:151
 #: templates/messages.tmpl:230 templates/messages.tmpl:239
 msgid "You have *not* been registered."
-msgstr "*まだ*登録していません"
+msgstr "*ま *登録していません"
 
 #: templates/messages.tmpl:357
 msgid ""
@@ -3608,12 +3608,12 @@ msgstr "_%1 ウェブ_ の中のリンクのみをスキャンします"
 
 #: templates/oopsmore.tmpl:21 templates/oopsmore.tmpl:30
 msgid "scans links in _all public webs_"
-msgstr "_全てのパブリックウェブ_の中のリンクをスキャンします"
+msgstr "全てのパブリックウェブの中のリンクを検索します"
 
 #: templates/viewtopicactionbuttons.tmpl:14
 msgid "title='Attach an image or document to this topic' accesskey='a'>&Attach"
 msgstr ""
-"title='イメージ又はドキュメントをこのトピックに添付します' accesskey='a'&gt;"
+"title='画像又はファイルをこのトピックに添付します' accesskey='a'&gt;"
 "添付"
 
 #: templates/viewtopicactionbuttons.tmpl:4
@@ -3639,7 +3639,7 @@ msgstr ""
 
 #: templates/viewtopicactionbuttons.tmpl:9
 msgid "title='Raw Edit this topic text' accesskey='w'>Ra&w edit"
-msgstr "title='このトピックテキストを編集します' accesskey='w'&gt;編集"
+msgstr "title='このトピックソースを編集します' accesskey='w'&gt;編集"
 
 #: templates/viewtopicactionbuttons.tmpl:28
 msgid ""
@@ -3688,7 +3688,7 @@ msgstr "value='キャンセル' accesskey='c'"
 
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:12
 msgid "value='Discard' accesskey='d'"
-msgstr "value='放棄' accesskey='d'"
+msgstr "value='破棄' accesskey='d'"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
 msgid "value='Preview' accesskey='p'"
@@ -3880,10 +3880,10 @@ msgstr ""
 #~ "更する方法を教えてください。"
 
 #~ msgid "To *cancel* and discard any changes: Press the [Discard] button."
-#~ msgstr "変更を*キャンセル*します： [キャンセル] ボタンを押してください。"
+#~ msgstr "変更を<b>キャンセル</b>または破棄します： [Discard] ボタンを押してください。"
 
 #~ msgid "To *save* changes: Press the [Save Changes] button."
-#~ msgstr "変更を*保存*します: [変更を保存] ボタンを押してください。"
+#~ msgstr "変更を<b>保存</b>します: [変更を保存] ボタンを押してください。"
 
 #~ msgid ""
 #~ "To delete this web: move this web to the Trash web by renaming it to %1."
@@ -3994,7 +3994,7 @@ msgstr ""
 #~ msgstr "パスワードをリセットする前にメールアドレスが必要です。"
 
 #~ msgid "Attach image or document to this topic"
-#~ msgstr "イメージやドキュメントをこのトピックに添付します"
+#~ msgstr "画像やファイルをこのトピックに添付します"
 
 #~ msgid "Attachment move error"
 #~ msgstr "添付ファイル移動エラー"
@@ -4114,72 +4114,55 @@ msgstr ""
 #~ msgid "Error message"
 #~ msgstr "エラーメッセージ"
 
-
 #~ msgid "Error: Cannot create this web because it already exists"
 #~ msgstr "エラー: ウェブは既に存在していますので、作成できませんでした"
-
 
 #~ msgid "Error: Could not copy topics to the new web"
 #~ msgstr "トピックを新ウェブにコピーできませんでした"
 
-
 #~ msgid "Error: Could not create the new web"
 #~ msgstr "エラー: 新ウェブを作成できませんでした"
-
 
 #~ msgid "Error: Could not update the &lt;nop&gt;WebPreferences"
 #~ msgstr "&lt;nop&gt;ウェブ設定を更新できませんでした"
 
-
 #~ msgid "Error: Invalid name of new web"
 #~ msgstr "エラー: 有効な新ウェブ名ではありません"
-
 
 #~ msgid "Error: Name of base web is missing or does not exist"
 #~ msgstr "エラー: ベースウェブ名が失われたか存在しません"
 
-
 #~ msgid "Error: Name of new web is missing"
 #~ msgstr "エラー: 新ウェブ名が失われました"
-
 
 #~ msgid "Error: Web color is missing or has an invalid format"
 #~ msgstr "エラー: ウェブカラーが失われたか無効なフォーマットが含まれています"
 
-
 #~ msgid "Existing Web:"
 #~ msgstr "既に存在しているウェブ"
-
 
 #~ msgid "Existing attachments for &lt;nop&gt;%1"
 #~ msgstr "&lt;nop&gt;%1に既に存在している添付ファイル"
 
-
 #~ msgid "File Attachment"
 #~ msgstr "添付ファイル"
-
 
 #~ msgid "File Attachments"
 #~ msgstr "添付ファイル"
 
-
 #~ msgid "Formatted Search"
 #~ msgstr "高度な検索"
 
-
 #~ msgid "Get a fresh page of the topic %1"
 #~ msgstr "トピック%1を最新のページ情報に更新します"
-
 
 #~ msgid ""
 #~ "Go &lt;a href=\"javascript:history.back()\"&gt;back&lt;/a&gt; in your "
 #~ "browser and save your changes locally."
 #~ msgstr "前のページに戻って全ての変更をローカルに保存します。"
 
-
 #~ msgid "Hide attachment in normal topic view."
 #~ msgstr "添付ファイルはノーマルトピックビューのページに表示されません。"
-
 
 #~ msgid "Hiding Attachments"
 #~ msgstr "隠された添付ファイル"
@@ -4190,106 +4173,80 @@ msgstr ""
 #~ msgid "If you intend to do a full text search:"
 #~ msgstr "フルテキストサーチをしたければ:"
 
-
 #~ msgid "If you want to create the topic then [[%1][click here]]."
 #~ msgstr "トピックを作成をしたければ[[%1][ここをクリック]]。"
-
 
 #~ msgid "Ignore wiki formatting"
 #~ msgstr "wikiフォーマットを無視します"
 
-
 #~ msgid "Incorrect &lt;nop&gt;WikiName"
 #~ msgstr "不正な&lt;nop&gt;WikiName"
-
 
 #~ msgid "Italic text"
 #~ msgstr "イタリックテキスト"
 
-
 #~ msgid "Linking to Attachments"
 #~ msgstr "添付ファイルへのリンク"
-
 
 #~ msgid "Links"
 #~ msgstr "リンク"
 
-
 #~ msgid "Local file:"
 #~ msgstr "ローカルファイル"
-
 
 #~ msgid "Locked Topics"
 #~ msgstr "ロックされたトピック"
 
-
 #~ msgid "Login to %1"
 #~ msgstr "%1にログインします"
-
 
 #~ msgid "Logout"
 #~ msgstr "ログアウト"
 
-
 #~ msgid "Logout of %1"
 #~ msgstr "%1からログアウトします"
-
 
 #~ msgid "Mail Error"
 #~ msgstr "メールエラー"
 
-
 #~ msgid "Minor changes"
 #~ msgstr "マイナーチェンジ"
-
 
 #~ msgid "Missing Fields =&lt;span class=\"twikiAlert\"&gt;**&lt;/span&gt;="
 #~ msgstr "必須項目=&lt;span class=\"twikiAlert\"&gt;**&lt;/span&gt;=をご入力ください"
 
-
 #~ msgid "More"
 #~ msgstr "もっと多く"
-
 
 #~ msgid "More topic actions"
 #~ msgstr "もっと多くのトピックアクション"
 
-
 #~ msgid "Move or Delete File \"%1\""
 #~ msgstr "ファイル \"%1\"を移動又は削除します"
-
 
 #~ msgid "Move or rename this topic"
 #~ msgstr "このトピックを移動又はリネームします"
 
-
 #~ msgid "Move topic error"
 #~ msgstr "トピック移動エラー"
-
 
 #~ msgid "Moving Attachments"
 #~ msgstr "移動した添付ファイル"
 
-
 #~ msgid "Navigation"
 #~ msgstr "ナビゲーション"
-
 
 #~ msgid "New or changed topics in the %1 web, since %2 GMT:"
 #~ msgstr "%2 GMT後、%1に新規作成又は変更されたトピック:"
 
-
 #~ msgid "New topic name is not a &lt;nop&gt;WikiWord"
 #~ msgstr "新トピック名は%2&lt;nop&gt;WikiWordではありません"
-
 
 #~ msgid "Newer revision"
 #~ msgstr "新バージョン"
 
-
 #~ msgid "No permission:"
 #~ msgstr "アクセス権限無し:"
-
 
 #~ msgid ""
 #~ "Note: The new web has been created successfully and populated with topics "
@@ -4299,34 +4256,26 @@ msgstr ""
 #~ msgid "Notes"
 #~ msgstr "注意"
 
-
 #~ msgid "Number of topics: &lt;span&gt;%1&lt;/span&gt;"
 #~ msgstr "トピック数: &lt;span&gt;%1&lt;/span&gt;"
-
 
 #~ msgid "Older revision"
 #~ msgstr "古いバージョン"
 
-
 #~ msgid "Parent"
 #~ msgstr "親"
-
 
 #~ msgid "Parrent web"
 #~ msgstr "親ウェブ"
 
-
 #~ msgid "Password Format Error"
 #~ msgstr "パスワードのフォーマットが違います"
-
 
 #~ msgid "Please ask your %1 administrator %2, to do this."
 #~ msgstr "%1管理者 %2までご連絡ください。"
 
-
 #~ msgid "Please check out the WebPreferences or try again."
 #~ msgstr "WebPreferencesをチェックアウトするか、もう一度試してください。"
-
 
 #~ msgid ""
 #~ "Please chose a topic name that is a %1 or check the _Allow non-Wiki Word_ "
@@ -4335,25 +4284,20 @@ msgstr ""
 #~ "トピック名が%1に一致する名称を選択してください。又はノ"
 #~ "ンWikiWordにチェックを入れてください。"
 
-
 #~ msgid "Please email %1 to request this."
 #~ msgstr ""
 #~ " %1 にメールして申し込んでください。"
-
 
 #~ msgid ""
 #~ "Please go &lt;a href=\"javascript:history.back()\"&gt;back&lt;/a&gt; in "
 #~ "your browser and try again."
 #~ msgstr "前のページに戻ってもう一度試してください。"
 
-
 #~ msgid "Please notify your %1 administrator %2"
 #~ msgstr " %1 管理者 %2までご連絡ください"
 
-
 #~ msgid "Please notify your %1 administrator %2."
 #~ msgstr " %1 管理者 %2までご連絡ください"
-
 
 #~ msgid "Please notify your %1 administrator and explain how to reproduce it:"
 #~ msgstr " %1 管理者 %2までご連絡の上、どのように再現するかご説明ください"
@@ -4361,74 +4305,56 @@ msgstr ""
 #~ msgid "Please try again."
 #~ msgstr "もう一度試してください"
 
-
 #~ msgid "Preference Settings for %1:"
 #~ msgstr "%1設定:"
-
 
 #~ msgid "Preview your changes"
 #~ msgstr "変更をプレビューします"
 
-
 #~ msgid "Print"
 #~ msgstr "印刷"
-
 
 #~ msgid "Print this page"
 #~ msgstr "このページを印刷します"
 
-
 #~ msgid "Problems could arise for two reasons:"
 #~ msgstr "二つの原因が考えられます:"
 
-
 #~ msgid "Reference Manual"
-#~ msgstr "マニュアル設定"
-
+#~ msgstr "マニュアルを確認"
 
 #~ msgid "Register on %1"
 #~ msgstr "%1登録"
 
-
 #~ msgid "Rename Access Denied"
 #~ msgstr "アクセスが拒否されました"
-
 
 #~ msgid "Rename Web"
 #~ msgstr "ウェブリネーム"
 
-
 #~ msgid "Rename anyway"
 #~ msgstr "任意にリネームします"
-
 
 #~ msgid "Request to reset your TWiki password"
 #~ msgstr "TWikiパスワードをリセットすることを要求します"
 
-
 #~ msgid "Reset"
 #~ msgstr "リセット"
-
 
 #~ msgid "Save and exit"
 #~ msgstr "保存して閉じます"
 
-
 #~ msgid "Searchbox off"
 #~ msgstr "サーチボックスオフ"
-
 
 #~ msgid "Select the [[Trash.WebHome][Trash]] web to delete the topic."
 #~ msgstr "[[Trash.WebHome][Trash]]ウェブを選択してトピックを削除します。"
 
-
 #~ msgid "Select..."
 #~ msgstr "選択..."
 
-
 #~ msgid "SitePreferences"
 #~ msgstr "サイト設定"
-
 
 #~ msgid "Software Error"
 #~ msgstr "ソフトウェアエラー"
@@ -4440,30 +4366,23 @@ msgstr ""
 #~ "編集枠スタイル. =width: 99%= フルウィンドウ幅(デフォルト),  =width: auto= "
 #~ "閉じる"
 
-
 #~ msgid "Submit changes"
 #~ msgstr "変更を保存します"
-
 
 #~ msgid "Subscript text"
 #~ msgstr "サブスクリプトテキスト"
 
-
 #~ msgid "Superscript text"
 #~ msgstr "スーパースクリプトテキスト"
-
 
 #~ msgid "Syndicate this site"
 #~ msgstr "このサイトをシンジケートします"
 
-
 #~ msgid "TWiki Variables"
 #~ msgstr "TWiki変数"
 
-
 #~ msgid "TextFormatting"
 #~ msgstr "テキストフォーマット"
-
 
 #~ msgid ""
 #~ "The %1 field must be your first and lastname in %2, e.g. your capitalized "
@@ -4472,10 +4391,8 @@ msgstr ""
 #~ "%1 に名前、 %2 に名字を入力しなければなりません。例えば、スペースを抜いた"
 #~ "大文字で書かれた名前と名字。"
 
-
 #~ msgid "The email address entered is not valid."
 #~ msgstr "入力されたメールアドレスが有効ではありません。"
-
 
 #~ msgid ""
 #~ "The new web has been created, however not all topics could be copied from "
@@ -4483,12 +4400,10 @@ msgstr ""
 #~ msgstr "新ウェブが作成されましたが、ベースウェブよりすべてのトピックをコピー"
 #~ "できませんでした。"
 
-
 #~ msgid ""
 #~ "The password you entered in the *password* field is incorrect. Please try "
 #~ "again."
 #~ msgstr "ご入力のパスワードが違います。もう一度試してみてください。"
-
 
 #~ msgid ""
 #~ "The required field =&lt;span class=\"twikiAlert\"&gt;**&lt;/span&gt;= *%"
@@ -4496,31 +4411,25 @@ msgstr ""
 #~ msgstr "必須入力の=&lt;span class=\"twikiAlert\"&gt;**&lt;/span&gt;= *%1*"
 #~ "をご入力ください。"
 
-
 #~ msgid ""
 #~ "There should be a line that includes =META:FORM=, look for name=\"&lt;"
 #~ "formName&gt;\""
 #~ msgstr " =META:FORM= を含む行が必要です。name=\"&lt;formName&gt;\"参照"
 
-
 #~ msgid "This is an automated email from %1."
 #~ msgstr " %1 からの自動送信メールです。"
-
 
 #~ msgid ""
 #~ "This requires the form definition to be present. This can be "
 #~ "automatically upgraded by:"
 #~ msgstr "フォーム定義が必要です。これは次によって自動的に更新されます。"
 
-
 #~ msgid "To"
-#~ msgstr "ウェブへ:"
-
+#~ msgstr "To"
 
 #~ msgid "To edit the topic anyway, hit 'Edit&amp;nbsp;Anyway'."
 #~ msgstr ""
 #~ "強制的にこのトピックを編集するには、'強制編集'をクリックしてください"
-
 
 #~ msgid ""
 #~ "To edit topics on this %1 collaborative web, you must be registered as a "
@@ -4528,64 +4437,49 @@ msgstr ""
 #~ msgstr ""
 #~ "この%1ウェブを編集するには、ユーザー登録をおこなう必要があります。"
 
-
 #~ msgid "To register as a new user:"
 #~ msgstr "以下の表に必要な項目を記入して登録を行ってください"
-
 
 #~ msgid ""
 #~ "To see if they have finished their edit yet, click 'Try&amp;nbsp;Again'"
 #~ msgstr ""
 #~ "編集が終了したかどうかを確認するには、'再度試す'をクリックしてください。"
 
-
 #~ msgid "To:"
 #~ msgstr "ウェブへ:"
-
 
 #~ msgid "Topic"
 #~ msgstr "トピック"
 
-
 #~ msgid "Topic Caching"
 #~ msgstr "トピックキャッシング"
-
 
 #~ msgid "Topic Meta data"
 #~ msgstr "トピックのメタデータ"
 
-
 #~ msgid "Topic does not exist"
 #~ msgstr "トピックが存在しません"
-
 
 #~ msgid "Topic is not saved yet"
 #~ msgstr "トピックがまだ保存されていません"
 
-
 #~ msgid "Topic preferences"
 #~ msgstr "トピック設定"
-
 
 #~ msgid "Unrecognized action command:"
 #~ msgstr "認識されないアクションコマンド:"
 
-
 #~ msgid "Update attachment"
 #~ msgstr "添付ファイルを更新します"
-
 
 #~ msgid "Update ref:"
 #~ msgstr "更新:"
 
-
 #~ msgid "Uploaded file \"%1\" does not exist or is empty"
 #~ msgstr "アップロードファイル\"%1\"が存在しないか空のファイルです"
 
-
 #~ msgid "Uploaded file \"&lt;nop&gt;%1\" does not exist or is empty."
 #~ msgstr "アップロードファイル\"&lt;nop&gt;%1\"が存在しないか空のファイルです。"
-
 
 #~ msgid "Variables"
 #~ msgstr "変数"
@@ -4593,46 +4487,35 @@ msgstr ""
 #~ msgid "Vertical size of text edit box:"
 #~ msgstr "テキストボックスの高さ:"
 
-
 #~ msgid "View Access Denied"
 #~ msgstr "アクセスが拒否されました"
-
 
 #~ msgid "View Previous Topic Revision"
 #~ msgstr "トピックの前のバージョンを確認します"
 
-
 #~ msgid "View all diffs"
 #~ msgstr "すべての差異を確認します"
-
 
 #~ msgid "View formatted topic"
 #~ msgstr "フォーマットされたトピックを確認します"
 
-
 #~ msgid "View raw topic"
 #~ msgstr "元のトピックを確認します"
-
 
 #~ msgid "View raw topic text"
 #~ msgstr "元のトピックテキストを確認します"
 
-
 #~ msgid "View topic history"
 #~ msgstr "トピック履歴を確認します"
-
 
 #~ msgid "Vote Access Denied"
 #~ msgstr "アクセスが拒否されました"
 
-
 #~ msgid "Web:"
 #~ msgstr "ウェブ:"
 
-
 #~ msgid "Welcome Guest"
 #~ msgstr "ようこそ"
-
 
 #~ msgid "Welcome to the %1"
 #~ msgstr "ようこそ%1へ"
@@ -4642,10 +4525,8 @@ msgstr ""
 #~ "あなたのホームページをライトプロテクトしてください: (あなたの%1に設定して"
 #~ "ください)"
 
-
 #~ msgid "You are not registered"
 #~ msgstr "まだ登録していません"
-
 
 #~ msgid ""
 #~ "You can [[%1][create a new web]] if you have the permission. Contact %2 "
@@ -4654,12 +4535,10 @@ msgstr ""
 #~ "権限があれば [[%1][新ウェブを作成する]]ことができます。何か疑問がございま"
 #~ "したら、%2までご連絡ください。"
 
-
 #~ msgid ""
 #~ "You might go &lt;a href=\"javascript:history.back()\"&gt;back&lt;/a&gt; "
 #~ "in your browser and save your changes locally."
 #~ msgstr "前のページ戻って全ての変更をローカルに保存してください。"
-
 
 #~ msgid ""
 #~ "Your language will be reset to the global default from the next screen "
@@ -4670,106 +4549,80 @@ msgstr ""
 #~ "今すぐそこに移動します。移動しなかった場合は、[[%1][ここをクリック]]して、"
 #~ "移動してください。"
 
-
 #~ msgid "Your signature with timestamp"
 #~ msgstr "あなたのタイムスタンプ付きシグネチャー"
-
 
 #~ msgid "changes"
 #~ msgstr "(変更)"
 
-
 #~ msgid "debug"
 #~ msgstr "デバッグ"
-
 
 #~ msgid "edit form"
 #~ msgstr "フォームを編集します"
 
-
 #~ msgid "go back to &lt;nop&gt;%1"
 #~ msgstr "&lt;nop&gt;%1に戻ります"
-
 
 #~ msgid "more"
 #~ msgstr "(もっと多く)"
 
-
 #~ msgid "move"
 #~ msgstr "移動"
-
 
 #~ msgid "move or delete %1"
 #~ msgstr "%1を移動、又は削除します"
 
-
 #~ msgid "next"
 #~ msgstr "次へ"
-
 
 #~ msgid "note"
 #~ msgstr "注意"
 
-
 #~ msgid "oops"
-#~ msgstr "(え、)"
-
+#~ msgstr "注意"
 
 #~ msgid "prefs"
-#~ msgstr "初期設定"
-
+#~ msgstr "オプション"
 
 #~ msgid "prev"
-#~ msgstr "(プレビュー)"
-
+#~ msgstr "戻る"
 
 #~ msgid "printable"
 #~ msgstr "印刷可能"
 
-
 #~ msgid "props"
-#~ msgstr "グループ"
-
+#~ msgstr "props"
 
 #~ msgid "rename"
-#~ msgstr "(リネーム)"
-
+#~ msgstr "リネーム"
 
 #~ msgid "rename web"
 #~ msgstr "ウェブをリネームします"
 
-
 #~ msgid "search"
 #~ msgstr "検索"
 
-
 #~ msgid "sequential"
-#~ msgstr "シーケンシャル"
-
+#~ msgstr "縦に並べる"
 
 #~ msgid "side by side"
-#~ msgstr "並列"
-
+#~ msgstr "横に並べる"
 
 #~ msgid "single character first name"
-#~ msgstr "(シングルキャラクターの名前)"
-
+#~ msgstr "シングルキャラクターの名前"
 
 #~ msgid "single character last name"
-#~ msgstr "(シングルキャラクターの名字)"
-
+#~ msgstr "シングルキャラクターの名字"
 
 #~ msgid "the %1 home?"
 #~ msgstr "%1トップページ?"
 
-
 #~ msgid "the %1 to customize the web specific preferences or"
 #~ msgstr "ウェブのプロパティをカスタマイズする%1又は"
 
-
 #~ msgid "the %1 to start working on the new web,"
 #~ msgstr "新ウェブ上で仕事を始める%1,"
-
 
 #~ msgid "Registered users can [%1[change]] and [%2[reset]] their passwords."
 #~ msgstr ""
@@ -4789,7 +4642,7 @@ msgstr ""
 #~ msgstr "プリント"
 
 #~ msgid "&amp;Raw View"
-#~ msgstr "&amp;元ビュー"
+#~ msgstr "&amp;ソースの表示"
 
 #~ msgid "&amp;View topic"
 #~ msgstr "&amp;トピックをビューします"
@@ -4805,7 +4658,6 @@ msgstr ""
 
 #~ msgid "We&amp;b"
 #~ msgstr "ウェブ"
-
 
 #~ msgid "Topic:"
 #~ msgstr "トピック:"
@@ -4826,14 +4678,11 @@ msgstr ""
 #~ "%1のスペルが正しいかどうかを確認してもう一度試してください。%2が大文字と小"
 #~ "文字を区別することを忘れないでください"
 
-
 #~ msgid "More options in WebSearch"
 #~ msgstr "もっと多くの検索オプション"
 
-
 #~ msgid "Registration for %1 (%2)"
 #~ msgstr "%1 (%2) の登録"
-
 
 #~ msgid "Release edit lock"
 #~ msgstr "編集ロックを解除します"
@@ -4850,7 +4699,6 @@ msgstr ""
 #~ msgid "See &lt;a href='%1'&gt;all&lt;/a&gt; changes"
 #~ msgstr " &lt;a href='%1'&gt;全ての&lt;/a&gt;変更を確認します"
 
-
 #~ msgid "Set Parent Topic"
 #~ msgstr "親トピックをセットします"
 
@@ -4861,13 +4709,11 @@ msgstr ""
 #~ "Use the [[WebSearch][Search]] link on top of this page, or do a simple"
 #~ msgstr "このページのトップにある[[WebSearch][検索]]をお使い、又は"
 
-
 #~ msgid "Missing Fields =%1="
 #~ msgstr "失われたフィールド=%1="
 
-
 #~ msgid "%1 (note)"
-#~ msgstr "%1(無し)"
+#~ msgstr "%1(注意)"
 
 #~ msgid "(More options in WebSearch)"
 #~ msgstr "(もっと多くの検索オプション)"
@@ -4878,9 +4724,8 @@ msgstr ""
 #~ msgid "Choose a new form template"
 #~ msgstr "新フォームテンプレートを選択してください"
 
-
 #~ msgid "Pick one of the %1.StandardColors."
-#~ msgstr "%1.StandardColorsから一つを選択しします。"
+#~ msgstr "[[%1.StandardColors][スタンダードカラー]]から一つを選択しします。"
 
 #~ msgid "The checkmarked topics will be updated"
 #~ msgstr "マークされたトピックは更新されます"
@@ -4892,13 +4737,11 @@ msgstr ""
 #~ "あなたのユーザー名とパスワードを追加するときにエラーが発生しました。%1まで"
 #~ "ご連絡ください"
 
-
 #~ msgid "raw text format."
 #~ msgstr "元のテキストのフォーマット"
 
-
 #~ msgid "sidebyside"
-#~ msgstr "並列"
+#~ msgstr "sidebyside"
 
 #~ msgid ""
 #~ "Checked topics will be updated to point to the new attachment location."
@@ -4954,16 +4797,13 @@ msgstr ""
 #~ "添付ファイルを削除するには、ウェブ%1、トピック %2の下に移動してください。"
 
 #~ msgid "Update image or document on %1"
-#~ msgstr "イメージ又はドキュメント%1を更新します"
-
+#~ msgstr "画像又はファイル%1を更新します"
 
 #~ msgid "Note__:"
 #~ msgstr "注意__:"
 
-
 #~ msgid "Request password reset"
-#~ msgstr "パスワードを入力し直してください"
-
+#~ msgstr "パスワードのリセットを要求します"
 
 #~ msgid "Company URL: %BR% (or department URL)"
 #~ msgstr "会社 URL: %BR%  (又は部署 URL)"
