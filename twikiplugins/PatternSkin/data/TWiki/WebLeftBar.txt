@@ -17,6 +17,7 @@
    * TextFormattingRules
    * TWikiVariables
    * FormattedSearch
+   * QuerySearch
    * TWikiDocGraphics
    * TWikiSkinBrowser
    * InstalledPlugins
