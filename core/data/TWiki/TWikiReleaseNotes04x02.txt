@@ -574,6 +574,7 @@ The 4.2.1 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 ---++ Fixes
 
 <noautolink>
+| [[%BUGS%/Item5876][Item5876]] | Make query search ref more clear in !VarSEARCH. |
 | [[%BUGS%/Item5873][Item5873]] | REVINFO shows unknown user instead of the author value when it cannot map. |
 | [[%BUGS%/Item5868][Item5868]] | ApacheHtpasswdUser compile error |
 | [[%BUGS%/Item5866][Item5866]] | shortcircuit TWiki::_processTags shortpath for 10-30% TWiki render speed improvement |
