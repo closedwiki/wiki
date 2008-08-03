@@ -1,9 +1,9 @@
 %META:TOPICINFO{author="TWikiContributor" date="1178746198" format="1.1" version="$Rev$"}%
-%INCLUDE{"%IF{"context can_login" then="%TWIKIWEB%.WebLeftBarLogin" else="<nop>"}%" warn="off"}%
+%INCLUDE{"%IF{"context can_login" then="%SYSTEMWEB%.WebLeftBarLogin" else="<nop>"}%" warn="off"}%
 
    * <b>[[%INCLUDINGWEB%.%HOMETOPIC%][ %ICON{"home"}% <nop>%MAKETEXT{"[_1] Web" args="%INCLUDINGWEB%"}%]]</b>
-   * %IF{"istopic '%MAINWEB%.TWikiUsers'" else=" $percntICON{\"person\"}$percnt $percntMAKETEXT{\"Users\"}$percnt" then="[[$percntMAINWEB$percnt.TWikiUsers][ $percntICON{\"person\"}$percnt $percntMAKETEXT{\"Users\"}$percnt]]"}%
-   * [[%MAINWEB%.TWikiGroups][ %ICON{"group"}% %MAKETEXT{"Groups"}%]]
+   * %IF{"istopic '%USERSWEB%.TWikiUsers'" else=" $percntICON{\"person\"}$percnt $percntMAKETEXT{\"Users\"}$percnt" then="[[$percntUSERSWEB$percnt.TWikiUsers][ $percntICON{\"person\"}$percnt $percntMAKETEXT{\"Users\"}$percnt]]"}%
+   * [[%USERSWEB%.TWikiGroups][ %ICON{"group"}% %MAKETEXT{"Groups"}%]]
    * [[WebTopicList][ %ICON{"index"}% %MAKETEXT{"Index"}%]]
    * [[%INCLUDINGWEB%.WebSearch][ %ICON{"searchtopic"}% %MAKETEXT{"Search"}%]]
    * [[WebChanges][ %ICON{"changes"}% %MAKETEXT{"Changes"}%]]
@@ -17,6 +17,7 @@
    * TextFormattingRules
    * TWikiVariables
    * FormattedSearch
+   * QuerySearch
    * TWikiDocGraphics
    * TWikiSkinBrowser
    * InstalledPlugins
@@ -37,4 +38,4 @@
    * [[UserDocumentationCategory][User Documentation]]
    * [[UserToolsCategory][User Tools]]
 
-%INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
+%INCLUDE{ "%SYSTEMWEB%.WebLeftBarWebsList" }%
