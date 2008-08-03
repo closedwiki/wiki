@@ -1,0 +1,73 @@
+%META:TOPICINFO{author="ThomasWeigert" date="1077529065" format="1.0" version="1.7"}%
+%META:TOPICPARENT{name="TWikiPlugins"}%
+---++ %TOPIC%
+
+This plugin allows you to query Trac for tickets and other data and format the returned results. This plugin was derived from TWiki:Plugins.BugzillaQueryPlugin, but as the two databases differ significantly, so do the details of these two plugins.
+
+---+++ Syntax Rules
+<blockquote style="background-color:#f5f5f5">
+	* =%<nop>TRAC{"tickets"}%=
+	* =%<nop>TRAC{status = "new, assigned"}%=
+	* =%<nop>TRAC{"component" owner="%WIKINAME%"}%=
+</blockquote>
+
+---++++ Allowed attributes
+By default, the 'ticket' table is queried, but the default parameter of the !%TRAC% tag can be used to select any table in the trac data base. The other parameters of the !%TRAC% tag refer to the columns in the selected table and can be used to narrow the data retrieved.
+
+For example, the first query above just retrieves all rows in the ticket table. The second query retrieves those rows in the ticket table, where the status column is either 'new' or 'assigned'. The final query searches the component table for rows where the owner is '%WIKINAME%'.
+
+The trac data base scheme is described at [[http://trac.edgewall.org/wiki/TracDev/DatabaseSchema][trac db]].
+
+The output is formatted as specified in the =FORMAT= setting. The attribute 'format' can be used to override that setting for a given query.
+
+---++++ Syntax and variables in 'format' attribute
+Columns in the table are referred to with the same naming conventions as for attributes, preceded by the '$' symbol.
+<blockquote style="background-color:#f5f5f5">
+Examples:
+	* =%<nop>TRAC{ format="| $id | $status | $owner |" }%=
+	* =%<nop>TRAC{ format="   * Bug $id is in status $status and was assigned to $owner" }%=
+</blockquote>
+
+---+++ <nop>%TOPIC% Settings
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>TRACQUERYPLUGIN_&lt;setting&gt;%==, e.g., ==%<nop>TRACQUERYPLUGIN_SHORTDESCRIPTION%==
+
+<blockquote style="background-color:#f5f5f5">
+<!--		* Set URL = https://my.domain/trac/ -->
+   * Set SHORTDESCRIPTION = This plugin allows to query data from Trac data bases.
+   * Set FORMAT = | $id | $severity | $priority | $status | $resolution | $reporter | $component | $summary |
+      * The default format for queries. Can be overridden by the format attribute for a specific query.
+   * Set CUSTOM = test_one, test_two, test_three, test_four, test_five, test_six
+      * A comma-separated list of field names of trac custom ticket fields. If these are given, and the custom fields are defined, the query can also refer to the custom fields. Note that this query implies a number of join operations, as the custom fields are stored in a separate table.
+   * Set DEBUG = 0
+</blockquote>
+
+---+++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the Plugin on the TWiki server. 
+
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module. |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic. |
+     | ==lib/TWiki/Plugins/%TOPIC%/Config.spec== | Configuration specification file. |
+   * Configure and enable the Plugin:
+      * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
+      * Configure the settings for =TRAC_DOMAIN= and =TRAC_DB_NAME=. Currently, only an SQLite data base is supported; =TRAC_DB_NAME= is used to construct the DSN. If your data base requires that a user is defined for access, configure =TRAC_USER= and =TRAC_PASSWD=. It might be best to give this user only read-only permissions, via the trac permission settings.
+   * Change the Plugin settings above, if required.
+
+---+++ Plugin Info
+|  Plugin Author: | TWiki:Main.ThomasWeigert |
+|  Plugin Version: | 1.00 |
+|  TWiki Dependency: | none |
+|  CPAN Dependencies: | DBI |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.0 |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ TWiki:Plugins.BugzillaQueryPlugin
+
+-- TWiki:Main.ThomasWeigert - 02 Aug 2008
+
