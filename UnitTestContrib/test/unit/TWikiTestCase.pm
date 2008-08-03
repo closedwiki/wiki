@@ -23,6 +23,8 @@ BEGIN {
     $SIG{__DIE__} = sub { Carp::confess $_[0] };
 };
 
+our $didOnlyOnceChecks = 0;
+
 # Temporary directory to store work files in (sessions, logs etc).
 # Will be cleaned up after running the tests unless the environment
 # variable TWIKI_DEBUG_KEEP is true
@@ -33,6 +35,52 @@ sub new {
     my $class = shift;
     my $self = $class->SUPER::new(@_);
     return $self;
+}
+
+# Checks we only need to run once per test run
+sub onceOnlyChecks {
+    return if $didOnlyOnceChecks;
+
+    # Make sure we can create directories in $TWiki::cfg{DataDir}, otherwise
+    # the tests will mysteriously fail.
+    my $t = "$TWiki::cfg{DataDir}/UnitTestCheckDir";
+    if (-e $t) {
+        rmdir($t) || die "Could not remove old $t: $!";
+    }
+    mkdir($t)
+      || die "Could not create $t: $!\nUser running tests ".
+        "has to be able to create directories in $TWiki::cfg{DataDir}";
+    rmdir($t) || die "Could not remove $t: $!";
+
+    # Make sure we can disallow write permissions. TWiki tests should
+    # always be run as a non-admin user, so that they can test scenarios
+    # where access permissions are denied.
+    $t = "$TWiki::cfg{DataDir}/UnitTestCheckFile";
+    if (-e $t) {
+        unlink($t)
+          || die "Could not remove old $t: $!";
+    }
+    open(F, '>', $t)
+      || die "Could not create $t: $!\nUser running tests ".
+        "has to be able to create files in $TWiki::cfg{DataDir}";
+    print F "Blah";
+    close(F);
+    chmod(0444, $t)
+      || die "Failed to change permissions on $t: $!\n User running tests ".
+        "must be able to change permissions on files it creates.";
+    if (open(F, '>', $t)) {
+        close(F);
+        unlink($t);
+        die "Failed to protect a $t for write\nUser running tests ".
+          "must be able to protect a file from write. ".
+            "Perhaps you are running as the superuser?";
+    }
+    chmod(0777, $t)
+      || die "Failed to change permissions on $t: $!\nUser running tests ".
+        "must be able to change permissions on files it creates.";
+    unlink($t) || die "Could not remove $t: $!";
+
+    $didOnlyOnceChecks = 1;
 }
 
 use Cwd;
@@ -67,6 +115,8 @@ sub set_up {
     $TWiki::cfg{AdminUserWikiName} = 'AdminUser';
     $TWiki::cfg{AdminUserLogin} = 'root';
     $TWiki::cfg{SuperAdminGroup} = 'AdminGroup';
+
+    onceOnlyChecks();
 
     # Disable/enable plugins so that only core extensions (those defined
     # in lib/MANIFEST) are enabled, but they are *all* enabled.
