@@ -756,7 +756,7 @@ sub wikiToUserName {
     my $cUID = getCanonicalUserID($wiki);
     if ($cUID) {
         my $login = $TWiki::Plugins::SESSION->{users}->getLoginName($cUID);
-        return undef if $login eq 'unknown';
+        return undef if !$login || $login eq 'unknown';
         return $login;
     }
     return undef;

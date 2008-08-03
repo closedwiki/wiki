@@ -756,9 +756,14 @@ sub searchWeb {
             my $ru     = $topicInfo->{$topic}->{editby} || 'UnknownUser';
             my $revNum = $topicInfo->{$topic}->{revNum} || 0;
 
+            my $cUID = $users->getCanonicalUserID($ru);
+            if (!$cUID) {
+                # Not a login name or a wiki name. Is it a valid cUID?
+                my $ln = $users->{users}->getLoginName($ru);
+                $cUID = $ru if defined $ln && $ln ne 'unknown';
+            }
+
             # Check security
-            # FIXME - how do we deal with user login not being available if
-            # coming from search script?
             my $allowView = $topicInfo->{$topic}->{allowView};
             next unless $allowView;
 
@@ -807,8 +812,8 @@ sub searchWeb {
                 my $out = '';
 
                 $text = pop(@multipleHitLines) if ( scalar(@multipleHitLines) );
-                
-                my $wikiusername = $users->webDotWikiName($ru);
+
+                my $wikiusername = $users->webDotWikiName($cUID);
                 $wikiusername = "$TWiki::cfg{UsersWebName}.UnknownUser"
                     unless defined $wikiusername;
 
@@ -823,11 +828,11 @@ sub searchWeb {
                     $out =~ s/\$rev/$revNum/gs;
                     $out =~ s/\$wikiusername/$wikiusername/ges;
 
-                    my $wikiname = $users->getWikiName($ru);
+                    my $wikiname = $users->getWikiName($cUID);
                     $wikiname = 'UnknownUser' unless defined $wikiname;
                     $out =~ s/\$wikiname/$wikiname/ges;
                     
-                    my $username = $users->getLoginName($ru);
+                    my $username = $users->getLoginName($cUID);
                     $username = 'unknown' unless defined $username;
                     $out =~ s/\$username/$username/ges;
                     
@@ -894,7 +899,7 @@ sub searchWeb {
                     $out =~
 s/\$summary(?:\(([^\)]*)\))?/$renderer->makeTopicSummary( $text, $topic, $web, $1 )/ges;
                     $out =~
-s/\$changes(?:\(([^\)]*)\))?/$renderer->summariseChanges($ru,$web,$topic,$1,$revNum)/ges;
+s/\$changes(?:\(([^\)]*)\))?/$renderer->summariseChanges($cUID,$web,$topic,$1,$revNum)/ges;
                     $out =~
 s/\$formfield\(\s*([^\)]*)\s*\)/displayFormField( $meta, $1 )/ges;
                     $out =~
