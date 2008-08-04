@@ -75,6 +75,9 @@ sub handleQuery
   my $format = $attributes->{format} || TWiki::Func::getPreferencesValue( "\U$pluginName\E_FORMAT" ) || "| \$id | \$severity | \$priority | \$status | \$reporter | \$component | \$description |";
   
   my $table = $attributes->{"_DEFAULT"} || 'ticket';
+  my $separator = $attributes->{separator};
+  my $newline = $attributes->{newline} || "\n";
+  my $limit = $attributes->{limit} || 0;
   my $custom = '';
   my @cfields = ();
 
@@ -124,8 +127,8 @@ sub handleQuery
       } elsif ( $key eq "description" ) {
 	$statement .= "$table.$key GLOB '*$tvalue*' ";
       } elsif ( $key eq "keyword" ) {
-	#SMELL: need to find one keyword
-	$statement .= "keyworddefs.name = '$tvalue' ";
+	#Should we isolate single keywords?
+	$statement .= "$table.key GLOB '*$tvalue*' ";
       } else {
 	$statement .= "$table.$key = '$tvalue' ";
       }
@@ -136,31 +139,29 @@ sub handleQuery
     $statement .= "AND " if ( ( $i >= 0 ) && ( $i < $#keys ) );
     $i++;
   }
-  # SMELL: we need to also retrieve the custom fields for a ticket
-  # How can we match against those?
   &TWiki::Func::writeDebug( "ST = $statement" ) if $debug;
   my $tmp = $sqldb->prepare($statement);
   $tmp->execute();
+
   my $result = '';
-  while ( my $row = $tmp->fetchrow_hashref ) {
-    my $s = $format;
-    foreach my $field ( keys( %{$row} ) ) {
-      my $value = $$row{$field};
+  while ( my $r = $tmp->fetchrow_hashref ) {
+    my $row = $format;
+    foreach my $field ( keys( %{$r} ) ) {
+      my $value = $$r{$field};
+      $value ||= '';
       # Here we would insert special code to look up in another table
       #	      ( $value, $field ) = getField( "description", "component", "name", $$row{$field}, "component" ) if ( $field eq "component" );
-      if ( $field eq 'time' || $field eq 'changetime' ) {
-	use Time::Local;
-	my ($sec, $min, $hour, $d, $m, $y, $wd, $yd) = localtime($value);
-	$value = sprintf("%04d-%02d-%02d", $y + 1900, $m + 1, $d);
-      }
-      $value ||= '';
+      $value = TWiki::Time::formatTime( $value ) if ($field eq 'time' || $field eq 'changetime');
       $value =~ s/\r?\n/%BR%/gos;
-      $s =~ s/\$$field/$value/g;
+
+      $row =~ s/\$$field/$value/g;
     }
-    $result .= "$s\n";
+    $result .= "$row\n";
   }
+
   $sqldb->disconnect;
   return $result;
+
 }
 
 sub getField

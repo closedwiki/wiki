@@ -60,7 +60,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.ThomasWeigert |
 |  Plugin Version: | 1.00 |
 |  TWiki Dependency: | none |
-|  CPAN Dependencies: | DBI |
+|  CPAN Dependencies: | <table border="1"><tr><th>Name</th><th>Version</th><th>Description</th></tr><tr><td align="left">DBI</td><td align="left">&gt;=1.35</td><td align="left">Required</td></tr><tr><td align="left">DBD::SQLite</td><td align="left">&gt;=1.14</td><td align="left">Required</td></tr></table> |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.0 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
