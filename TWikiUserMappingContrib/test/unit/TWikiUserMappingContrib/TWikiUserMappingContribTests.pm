@@ -74,7 +74,7 @@ sub setup_new_session() {
 	
 	my ( $query, $text );
     $query = new TWiki::Request ({});
-    $query->path_info( "/script/Main/WebHome" );
+    $query->path_info( "/Main/WebHome" );
     $ENV{SCRIPT_NAME} = "view";
 
     # close this TWiki session - its using the wrong mapper and login
