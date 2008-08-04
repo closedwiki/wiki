@@ -24,8 +24,6 @@ use warnings;
 BEGIN {
     if ( defined $ENV{GATEWAY_INTERFACE} ) {
         $TWiki::cfg{Engine} = 'TWiki::Engine::CGI';
-        my $action = (split m!/!, $ENV{SCRIPT_NAME})[-1];
-        $ENV{PATH_INFO} = "/$action" . $ENV{PATH_INFO};
         use CGI::Carp qw(fatalsToBrowser);
         $SIG{__DIE__} = \&CGI::Carp::confess;
     }

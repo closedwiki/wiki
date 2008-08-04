@@ -159,11 +159,9 @@ sub method {
 
 ---++ ObjectMethod pathInfo( [ $path ] ) -> $path
 
-Sets/Gets request path info. Implicitly sets request action.
+Sets/Gets request path info.
 
-Called with '/view/WebName/TopicName' sets request action to 'view' and
-pathInfo to '/WebName/TopicName'. Called without parameters returns
-current pathInfo.
+Called without parameters returns current pathInfo.
 
 There is a =path_info()= alias for compatibility with CGI.
 
@@ -172,14 +170,7 @@ There is a =path_info()= alias for compatibility with CGI.
 *path_info = \&pathInfo;
 
 sub pathInfo {
-    my $this = shift;
-    if ( @_ > 0 ) {
-        $this->{path_info} = shift;
-        local $^W = 0;
-        $this->{path_info} =~ s{^/([a-zA-Z]*?)(/.*)?$}{$2};
-        $this->{action} = $1;
-    }
-    return $this->{path_info};
+    return @_ == 1 ? $_[0]->{path_info} : ( $_[0]->{path_info} = $_[1] );
 }
 
 =begin twiki

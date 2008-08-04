@@ -96,9 +96,24 @@ sub preparePath {
     # PATH_INFO is '/Main/WebHome', i.e. the text after the script name;
     # invalid PATH_INFO is often a full path starting with '/cgi-bin/...'.
     my $pathInfo = $ENV{PATH_INFO} || '';
-    my $cgiScriptName = $ENV{SCRIPT_NAME} || '';
+    unless ( defined $ENV{SCRIPT_NAME} ) {
+        # CGI/1.1 (rfc3875) states that the server MUST set
+        # SCRIPT_NAME, so if it doens't we have a broken server
+        my $reason = 'SCRIPT_NAME environment variable not defined';
+        my $res = new TWiki::Response();
+        $res->header(-type => 'text/html', -status => 500);
+        my $html = CGI::start_html( '500 - Internal Server Error' );
+        $html .= CGI::h1('Internal Server Error');
+        $html .= CGI::p( $reason );
+        $html .= CGI::end_html();
+        $res->body($html);
+        throw TWiki::EngineException(500, $reason, $res);
+    }
+    my $cgiScriptName = $ENV{SCRIPT_NAME};
     $pathInfo =~ s{$cgiScriptName/}{/}i;
     $req->pathInfo( $pathInfo );
+    my $action = (split m!/!, ($ENV{SCRIPT_NAME} || ''))[-1];
+    $req->action($action);
     $req->uri( $ENV{REQUEST_URI} );
 }
 
