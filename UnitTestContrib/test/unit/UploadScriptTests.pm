@@ -42,7 +42,7 @@ sub do_upload {
         $args{$k} = [ $v ];
     }
     my $query = new TWiki::Request(\%args);
-    $query->path_info( "/script/$this->{test_web}/$this->{test_topic}" );
+    $query->path_info( "/$this->{test_web}/$this->{test_topic}" );
     my %uploads = ();
     my $tmpfile = new CGITempFile(0);
     my $fh = Fh->new($fn, $tmpfile->as_string, 0);
@@ -97,7 +97,7 @@ sub test_oversized_upload {
         topicName => [ $this->{test_topic} ],
        );
     my $query = new TWiki::Request(\%args);
-    $query->path_info( "/script/$this->{test_web}/$this->{test_topic}" );
+    $query->path_info( "/$this->{test_web}/$this->{test_topic}" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $TWiki::Plugins::SESSION = $this->{twiki};

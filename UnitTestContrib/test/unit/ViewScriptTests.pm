@@ -78,7 +78,7 @@ sub setup_view {
         topicName => [ $topic ],
         template => [ $tmpl ],
     });
-    $query->path_info( "/view/$web/$topic" );
+    $query->path_info( "/$web/$topic" );
     $twiki = new TWiki( $this->{test_user_login}, $query );
     my ($text, $result) = $this->capture( \&TWiki::UI::View::view, $twiki);
     $twiki->finish();

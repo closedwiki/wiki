@@ -144,7 +144,7 @@ If ALLOWTOPIC is set
 THIS
                                 , undef);
     my $topicquery = new TWiki::Request( "" );
-    $topicquery->path_info("/script/$this->{test_web}/$testTopic");
+    $topicquery->path_info("/$this->{test_web}/$testTopic");
     # renew TWiki, so WebPreferences gets re-read
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki(undef, $topicquery);

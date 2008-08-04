@@ -445,7 +445,7 @@ sub registerVerifyOk {
                                       ]
                          });
 
-    $query->path_info( "/script/$this->{users_web}/TWikiRegistration" );
+    $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
     $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
@@ -477,7 +477,7 @@ sub registerVerifyOk {
                                     'verify'
                                    ]
                       });
-    $query->path_info( "/script/$this->{users_web}/TWikiRegistration" );
+    $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin},$query);
     $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
@@ -541,7 +541,7 @@ sub verify_registerBadVerify {
                                        'register'
                                       ]
                          });
-    $query->path_info( "/script/$this->{users_web}/TWikiRegistration" );
+    $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
     $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
@@ -573,7 +573,7 @@ sub verify_registerBadVerify {
             'verify'
            ]
     });
-    $query->path_info( "/script/$this->{users_web}/TWikiRegistration" );
+    $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
     $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
@@ -637,7 +637,7 @@ sub verify_registerNoVerifyOk {
                                       ]
                          });
 
-    $query->path_info( "/script/$this->{users_web}/TWikiRegistration" );
+    $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
     $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
@@ -698,7 +698,7 @@ sub verify_rejectShortPassword {
                           'action'        => ['register'],
                          });
 
-    $query->path_info( "/script/$this->{users_web}/TWikiRegistration" );
+    $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
     $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
@@ -744,7 +744,7 @@ sub verify_shortPassword {
             'action'        => ['register'],
         });
 
-    $query->path_info( "/script/$this->{users_web}/TWikiRegistration" );
+    $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
     $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
@@ -790,7 +790,7 @@ sub verify_duplicateActivation {
                           'Twk1LastName'  => [$this->{new_user_sname}],
                           'action'        => ['register'],
                       });
-    $query->path_info( "/script/$this->{users_web}/TWikiRegistration" );
+    $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki} = TWiki->new($TWiki::cfg{DefaultUserName}, $query);
     $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
     try {
@@ -818,7 +818,7 @@ sub verify_duplicateActivation {
     $query = new TWiki::Request ({'code'   => [$code],
                         'action' => ['verify'],
                     });
-    $query->path_info( "/script/$this->{users_web}/TWikiRegistration" );
+    $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki} = TWiki->new($TWiki::cfg{DefaultUserName},$query);
     $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
     try {
@@ -842,7 +842,7 @@ sub verify_duplicateActivation {
     $query = new TWiki::Request ({'code'   => [$code],
                         'action' => ['verify'],
                     });
-    $query->path_info( "/script/$this->{users_web}/TWikiRegistration" );
+    $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki} = TWiki->new($TWiki::cfg{DefaultUserName},$query);
     $this->{twiki}->net->setMailHandler(\&sentMail);
     try {
@@ -896,7 +896,7 @@ sub verify_resetPasswordOkay {
                                       ]
                          });
 
-    $query->path_info( '/script/'.$this->{users_web}.'/WebHome' );
+    $query->path_info( '/'.$this->{users_web}.'/WebHome' );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
     $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
@@ -944,7 +944,7 @@ sub verify_resetPasswordNoSuchUser {
                                       ]
                          });
 
-    $query->path_info( '/script/.'.$this->{users_web}.'/WebHome' );
+    $query->path_info( '/.'.$this->{users_web}.'/WebHome' );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
     $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
@@ -986,7 +986,7 @@ sub verify_resetPasswordNeedPrivilegeForMultipleReset {
                                       ]
                          });
 
-    $query->path_info( '/script/.'.$this->{users_web}.'/WebHome' );
+    $query->path_info( '/.'.$this->{users_web}.'/WebHome' );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
     $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
@@ -1031,7 +1031,7 @@ sub verify_resetPasswordNoPassword {
                                       ]
                          });
 
-    $query->path_info( '/script/'.$this->{users_web}.'/WebHome' );
+    $query->path_info( '/'.$this->{users_web}.'/WebHome' );
     unlink $TWiki::cfg{Htpasswd}{FileName};
 
     $this->{twiki}->finish();
@@ -1138,7 +1138,7 @@ EOM
                                                    ],
                          });
 
-    $query->path_info( "/script/$this->{test_web}/$regTopic" );
+    $query->path_info( "/$this->{test_web}/$regTopic" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{SuperAdminGroup}, $query);
     $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
@@ -1297,7 +1297,7 @@ sub verify_disabled_registration {
                                       ]
                          });
 
-    $query->path_info( "/script/$this->{users_web}/TWikiRegistration" );
+    $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
     $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
@@ -1359,7 +1359,7 @@ sub test_3951 {
                                       ]
                          });
 
-    $query->path_info( "/script/$this->{users_web}/TWikiRegistration" );
+    $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
     $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
@@ -1502,7 +1502,7 @@ sub verify_resetEmailOkay {
                                       ]
                          });
 
-    $query->path_info( '/script/'.$this->{users_web}.'/WebHome' );
+    $query->path_info( '/'.$this->{users_web}.'/WebHome' );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki($this->{new_user_login}, $query);
     $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
@@ -1570,7 +1570,7 @@ sub verify_resetPassword_NoTWikiUsersEntry {
                                       ]
                          });
 
-    $query->path_info( '/script/'.$this->{users_web}.'/WebHome' );
+    $query->path_info( '/'.$this->{users_web}.'/WebHome' );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
     $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);

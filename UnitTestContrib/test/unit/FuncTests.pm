@@ -89,7 +89,7 @@ sub test_getScriptUrl {
     $this->assert_matches(qr!/$ss/$this->{users_web}/WebHome!, $result );
 
     my $q = new TWiki::Request( {} );
-    $q->path_info( '/script/Sausages/AndMash' );
+    $q->path_info( '/Sausages/AndMash' );
     $TWiki::Plugins::SESSION = new TWiki(undef, $q);
 
     $result = TWiki::Func::getScriptUrl ( "Sausages", "AndMash", 'wibble' );

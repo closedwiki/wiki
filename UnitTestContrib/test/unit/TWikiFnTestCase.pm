@@ -50,7 +50,7 @@ sub set_up {
     $TWiki::cfg{MinPasswordLength} = 0;
     $TWiki::cfg{UsersWebName} = $this->{users_web};
     my $query = new TWiki::Request("");
-    $query->path_info("/script/$this->{test_web}/$this->{test_topic}");
+    $query->path_info("/$this->{test_web}/$this->{test_topic}");
 
     $this->{twiki} = new TWiki(undef, $query);
     $TWiki::Plugins::SESSION = $this->{twiki};
@@ -108,7 +108,7 @@ sub registerUser {
                           'action' => [ 'register' ]
                          });
 
-    $query->path_info( "/script/$this->{users_web}/TWikiRegistration" );
+    $query->path_info( "/$this->{users_web}/TWikiRegistration" );
 
     my $twiki = new TWiki(undef, $query);
     $twiki->net->setMailHandler(\&TWikiFnTestCase::sentMail);

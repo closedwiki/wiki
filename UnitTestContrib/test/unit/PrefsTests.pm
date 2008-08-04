@@ -34,7 +34,7 @@ sub set_up {
     $twiki = $this->{twiki};
 
     $topicquery = new TWiki::Request( "" );
-    $topicquery->path_info("/script/$this->{test_web}/$this->{test_topic}");
+    $topicquery->path_info("/$this->{test_web}/$this->{test_topic}");
 
     try {
         $twiki->{store}->saveTopic(
@@ -324,7 +324,7 @@ sub test_local_to_default {
                              $t->{prefs}->getPreferencesValue("SOURCE"));
 
     my $localquery = new TWiki::Request( "" );
-    $localquery->path_info("/script/$testSysWeb/$TWiki::cfg{SitePrefsTopicName}");
+    $localquery->path_info("/$testSysWeb/$TWiki::cfg{SitePrefsTopicName}");
     $t->finish();
     $t = new TWiki( $this->{test_user_login}, $localquery );
     $this->assert_str_equals("LOCAL",
@@ -344,7 +344,7 @@ sub test_local_to_site {
     my($tw, $tt ) = $t->normalizeWebTopicName('',
                                             $TWiki::cfg{LocalSitePreferences});
     my $localquery = new TWiki::Request( "" );
-    $localquery->path_info("/script/$tw/$tt");
+    $localquery->path_info("/$tw/$tt");
     $t->finish();
     $t = new TWiki( $this->{test_user_login}, $localquery );
     $this->assert_str_equals("LOCAL",
@@ -363,7 +363,7 @@ sub test_local_to_user {
                              $t->{prefs}->getPreferencesValue("SOURCE"));
 
     my $localquery = new TWiki::Request( "" );
-    $localquery->path_info("/script/$TWiki::cfg{UsersWebName}/$this->{test_user_wikiname}");
+    $localquery->path_info("/$TWiki::cfg{UsersWebName}/$this->{test_user_wikiname}");
     $t->finish();
     $t = new TWiki( $this->{test_user_login}, $localquery );
     $this->assert_str_equals("LOCAL",
@@ -382,7 +382,7 @@ sub test_local_to_web {
                              $t->{prefs}->getPreferencesValue("SOURCE"));
 
     my $localquery = new TWiki::Request( "" );
-    $localquery->path_info("/script/$this->{test_web}/$TWiki::cfg{WebPrefsTopicName}");
+    $localquery->path_info("/$this->{test_web}/$TWiki::cfg{WebPrefsTopicName}");
     $t->finish();
     $t = new TWiki( $this->{test_user_login}, $localquery );
     $this->assert_str_equals("LOCAL",

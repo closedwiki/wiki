@@ -229,7 +229,7 @@ sub verify_releaselocksonsave {
                           'action' => [ 'save' ],
                           text => [ "Before\nBaseline\nText\nAfter\n" ],
                          });
-    $query->path_info( "/script/$this->{test_web}/$topic" );
+    $query->path_info( "/$this->{test_web}/$topic" );
 
     $this->{twiki} = new TWiki( $testUser1, $query );
     try {
@@ -249,7 +249,7 @@ sub verify_releaselocksonsave {
                        text => [ "Before\nChanged\nLines\nAfter\n" ],
                        forcenewrevision => [ 1 ],
                       });
-    $query->path_info( "/script/$this->{test_web}/$topic" );
+    $query->path_info( "/$this->{test_web}/$topic" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $testUser1, $query );
     try {
@@ -270,7 +270,7 @@ sub verify_releaselocksonsave {
                        forcenewrevision => [ 1 ],
                       });
 
-    $query->path_info( "/script/$this->{test_web}/$topic" );
+    $query->path_info( "/$this->{test_web}/$topic" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $testUser2, $query );
     try {

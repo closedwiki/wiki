@@ -107,7 +107,7 @@ sub test_AUTOINC {
         action => [ 'save' ],
         text => [ 'nowt' ],
     });
-    $query->path_info( '/script/' . $this->{test_web}.'.TestAutoAUTOINC00' );
+    $query->path_info( '/' . $this->{test_web}.'.TestAutoAUTOINC00' );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     my %old;
@@ -146,7 +146,7 @@ sub test_XXXXXXXXXX {
         action => [ 'save' ],
         text => [ 'nowt' ],
     });
-    $query->path_info( '/script/' . $this->{test_web}.'.TestTopicXXXXXXXXXX' );
+    $query->path_info( '/' . $this->{test_web}.'.TestTopicXXXXXXXXXX' );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     my %old;
@@ -184,7 +184,7 @@ sub test_XXXXXXXXX {
         action => [ 'save' ],
         text => [ 'nowt' ],
     });
-    $query->path_info("/script/$this->{test_web}/TestTopicXXXXXXXXX");
+    $query->path_info("/$this->{test_web}/TestTopicXXXXXXXXX");
     $this->assert(
         !$this->{twiki}->{store}->topicExists($this->{test_web},'TestTopic0'));
     $this->{twiki}->finish();
@@ -213,7 +213,7 @@ sub test_XXXXXXXXXXX {
         action => [ 'save' ],
         text => [ 'nowt' ],
     });
-    $query->path_info("/script/$this->{test_web}/TestTopicXXXXXXXXXXX");
+    $query->path_info("/$this->{test_web}/TestTopicXXXXXXXXXXX");
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     my %old;

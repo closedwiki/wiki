@@ -42,7 +42,7 @@ sub run_testcase {
         test=>'compare',
         debugenableplugins=>'TestFixturePlugin,InterwikiPlugin',
         skin=>'pattern'});
-    $query->path_info( "/view/TestCases/$testcase" );
+    $query->path_info( "/TestCases/$testcase" );
     $TWiki::cfg{Plugins}{TestFixturePlugin}{Enabled} = 1;
     my $twiki = new TWiki( $this->{test_user_login}, $query );
     $twiki->{store}->saveTopic(

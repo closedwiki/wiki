@@ -317,7 +317,7 @@ sub test_rename_oldwebnewtopic {
 
     $this->{twiki}->finish();
     # The topic in the path should not matter
-    $query->path_info( "/script/$this->{test_web}/SanityCheck" );
+    $query->path_info( "/$this->{test_web}/SanityCheck" );
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $TWiki::Plugins::SESSION = $this->{twiki};
     $this->capture(\&TWiki::UI::Manage::rename, $this->{twiki} );
@@ -435,7 +435,7 @@ sub test_rename_newweboldtopic {
                          topic => 'OldTopic'
                         });
 
-    $query->path_info("/script/$this->{test_web}" );
+    $query->path_info("/$this->{test_web}" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $TWiki::Plugins::SESSION = $this->{twiki};
@@ -569,7 +569,7 @@ THIS
         referring_topics => [ "$this->{test_web}.NewTopic" ],
     });
 
-    $query->path_info("/script/$this->{test_web}" );
+    $query->path_info("/$this->{test_web}" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $TWiki::Plugins::SESSION = $this->{twiki};
@@ -600,7 +600,7 @@ sub test_accessRenameRestrictedTopic {
                          newtopic => 'NewTopic',
                         });
 
-    $query->path_info("/script/$this->{test_web}" );
+    $query->path_info("/$this->{test_web}" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $TWiki::Plugins::SESSION = $this->{twiki};
@@ -627,7 +627,7 @@ sub test_accessRenameRestrictedWeb {
                          newtopic => 'NewTopic',
                         });
 
-    $query->path_info("/script/$this->{test_web}" );
+    $query->path_info("/$this->{test_web}" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $TWiki::Plugins::SESSION = $this->{twiki};
@@ -654,7 +654,7 @@ sub test_leaseReleasemeLetMeGo {
                          newtopic => 'NewTopic',
                         });
 
-    $query->path_info("/script/$this->{test_web}" );
+    $query->path_info("/$this->{test_web}" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $TWiki::Plugins::SESSION = $this->{twiki};

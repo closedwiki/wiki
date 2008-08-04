@@ -109,7 +109,7 @@ sub verify_edit {
     $this->{twiki}->finish();
 
     $query = new TWiki::Request();
-    $query->path_info( "edit/$this->{test_web}/$this->{test_topic}" );
+    $query->path_info( "/$this->{test_web}/$this->{test_topic}" );
     $this->{twiki} = new TWiki( undef, $query );
 
     $this->set_up_user();
@@ -122,7 +122,7 @@ sub verify_edit {
     };
 
     $query = new TWiki::Request();
-    $query->path_info( "edit/$this->{test_web}/$this->{test_topic}?breaklock=1" );
+    $query->path_info( "/$this->{test_web}/$this->{test_topic}?breaklock=1" );
     $this->{twiki}->finish();
 
     $this->{twiki} = new TWiki( undef, $query );
@@ -140,7 +140,7 @@ sub verify_edit {
     };
 
     $query = new TWiki::Request();
-    $query->path_info( "edit/$this->{test_web}/$this->{test_topic}" );
+    $query->path_info( "/$this->{test_web}/$this->{test_topic}" );
     $this->{twiki}->finish();
 
     $this->annotate("new session using $userLogin\n");

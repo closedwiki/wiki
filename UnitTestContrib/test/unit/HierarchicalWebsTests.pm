@@ -232,7 +232,7 @@ sub test_squab_simple {
     my $this = shift;
 
     my $query = new TWiki::Request("");
-    $query->path_info("/script/$testWeb/NonExistant");
+    $query->path_info("/$testWeb/NonExistant");
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
@@ -250,7 +250,7 @@ sub test_squab_subweb {
 
     # Make a query that should set topic=$testSubWeb
     my $query = new TWiki::Request("");
-    $query->path_info("/script/$testWeb/NonExistant");
+    $query->path_info("/$testWeb/NonExistant");
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
@@ -267,7 +267,7 @@ sub test_squab_subweb_full_path {
 
     # Make a query that should set topic=$testSubWeb
     my $query = new TWiki::Request("");
-    $query->path_info("/script/$testWeb/NonExistant");
+    $query->path_info("/$testWeb/NonExistant");
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
@@ -284,7 +284,7 @@ sub test_squab_subweb_wih_topic {
 
     # Make a query that should set topic=$testSubWeb
     my $query = new TWiki::Request("");
-    $query->path_info("/script/$testWeb/NonExistant");
+    $query->path_info("/$testWeb/NonExistant");
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
@@ -304,7 +304,7 @@ sub test_squab_full_path_with_topic {
 
     # Make a query that should set topic=$testSubWeb
     my $query = new TWiki::Request("");
-    $query->path_info("/script/$testWeb/NonExistant");
+    $query->path_info("/$testWeb/NonExistant");
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
@@ -324,7 +324,7 @@ sub test_squab_path_to_topic_in_subweb {
 
     # Make a query that should set topic=$testSubWeb
     my $query = new TWiki::Request("");
-    $query->path_info("/script/$testWeb/NonExistant");
+    $query->path_info("/$testWeb/NonExistant");
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
@@ -343,7 +343,7 @@ sub test_WEBLIST_all {
     my $this = shift;
 
     my $query = new TWiki::Request("");
-    $query->path_info("/script/$testWeb/WebHome");
+    $query->path_info("/$testWeb/WebHome");
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
@@ -358,7 +358,7 @@ sub test_WEBLIST_relative {
     my $this = shift;
 
     my $query = new TWiki::Request("");
-    $query->path_info("/script/$testWeb/WebHome");
+    $query->path_info("/$testWeb/WebHome");
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
@@ -371,7 +371,7 @@ sub test_WEBLIST_end {
     my $this = shift;
 
     my $query = new TWiki::Request("");
-    $query->path_info("/script/$testWeb/WebHome");
+    $query->path_info("/$testWeb/WebHome");
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
 
