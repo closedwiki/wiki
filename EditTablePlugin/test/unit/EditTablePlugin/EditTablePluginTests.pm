@@ -194,7 +194,7 @@ INPUT
         }
     );
 
-    $query->path_info("/script/$webName/$topicName");
+    $query->path_info("/$webName/$topicName");
 
     my $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
@@ -245,7 +245,7 @@ INPUT
         }
     );
 
-    $query->path_info("/script/$webName/$topicName");
+    $query->path_info("/$webName/$topicName");
 
     my $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
@@ -286,7 +286,7 @@ EXPECTED
         }
     );
 
-    $query->path_info("/script/$webName/$topicName");
+    $query->path_info("/$webName/$topicName");
 
     $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
@@ -347,7 +347,7 @@ EXPECTED
             etcell3x2 => ['test3'],
         }
     );
-    $query->path_info("/script/$webName/$topicName");
+    $query->path_info("/$webName/$topicName");
 
     TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
         $input );
@@ -399,7 +399,7 @@ sub test_SelectBox {
             ettablenr => ['1'],
         }
     );
-    $query->path_info("/script/$webName/$topicName");
+    $query->path_info("/$webName/$topicName");
 
     my $text = <<INPUT;
 %EDITTABLE{format="|select, 1, a, b, c, d|select,1,a,b,c,d|select,1 ,a , b, c, d|select, 1 , a , b , c , d |" }%
@@ -464,7 +464,7 @@ sub test_VariableExpansionInCheckboxAndRadioButtons {
             ettablenr => ['1'],
         }
     );
-    $query->path_info("/script/$webName/$topicName");
+    $query->path_info("/$webName/$topicName");
 
     my $text = <<INPUT;
 %EDITTABLE{format="| radio, 1, :skull:, :cool: | checkbox, 1, :skull:, :cool: |"}%
@@ -579,7 +579,7 @@ INPUT
             ettablenr => ['1'],
         }
     );
-    $query->path_info("/script/$webName/$topicName");
+    $query->path_info("/$webName/$topicName");
 
     my $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
@@ -638,7 +638,7 @@ INPUT
         }
     );
 
-    $query->path_info("/script/$webName/$topicName");
+    $query->path_info("/$webName/$topicName");
 
     my $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
@@ -650,7 +650,7 @@ INPUT
         }
     );
 
-    $query->path_info("/script/$webName/$topicName");
+    $query->path_info("/$webName/$topicName");
 
     TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
         $input );
@@ -703,7 +703,7 @@ INPUT
         }
     );
 
-    $query->path_info("/script/$webName/$topicName");
+    $query->path_info("/$webName/$topicName");
 
     my $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
@@ -716,7 +716,7 @@ INPUT
         }
     );
 
-    $query->path_info("/script/$webName/$topicName");
+    $query->path_info("/$webName/$topicName");
 
     TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
         $input );
@@ -774,7 +774,7 @@ INPUT
             ettablenr => ['1'],
         }
     );
-    $query->path_info("/script/$webName/$topicName");
+    $query->path_info("/$webName/$topicName");
     my $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
     $query = new TWiki::Request(
@@ -783,7 +783,7 @@ INPUT
             ettablenr => ['1'],
         }
     );
-    $query->path_info("/script/$webName/$topicName");
+    $query->path_info("/$webName/$topicName");
     TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
         $input );
     $twiki = new TWiki( undef, $query );
@@ -832,7 +832,7 @@ INPUT
             ettablenr => ['1'],
         }
     );
-    $query->path_info("/script/$webName/$topicName");
+    $query->path_info("/$webName/$topicName");
     my $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
     $query = new TWiki::Request(
@@ -841,7 +841,7 @@ INPUT
             ettablenr => ['1'],
         }
     );
-    $query->path_info("/script/$webName/$topicName");
+    $query->path_info("/$webName/$topicName");
     TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
         $input );
     $twiki = new TWiki( undef, $query );
@@ -892,7 +892,7 @@ INPUT
             ettablenr => ['1'],
         }
     );
-    $query->path_info("/script/$webName/$topicName");
+    $query->path_info("/$webName/$topicName");
     my $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
     $query = new TWiki::Request(
@@ -901,7 +901,7 @@ INPUT
             ettablenr => ['1'],
         }
     );
-    $query->path_info("/script/$webName/$topicName");
+    $query->path_info("/$webName/$topicName");
     TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
         $input );
     $twiki = new TWiki( undef, $query );
@@ -985,7 +985,7 @@ INPUT
             ettablenr => ['1'],
         }
     );
-    $query->path_info("/script/$webName/$topicName");
+    $query->path_info("/$webName/$topicName");
     my $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
     $query = new TWiki::Request(
@@ -994,7 +994,7 @@ INPUT
             ettablenr => ['1'],
         }
     );
-    $query->path_info("/script/$webName/$topicName");
+    $query->path_info("/$webName/$topicName");
     TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
         $input );
     $twiki = new TWiki( undef, $query );
@@ -1038,7 +1038,7 @@ INPUT
             ettablenr => ['1'],
         }
     );
-    $query->path_info("/script/$webName/$topicName");
+    $query->path_info("/$webName/$topicName");
     my $twiki = new TWiki( undef, $query );
     $TWiki::Plugins::SESSION = $twiki;
     $query = new TWiki::Request(
@@ -1047,7 +1047,7 @@ INPUT
             ettablenr => ['1'],
         }
     );
-    $query->path_info("/script/$webName/$topicName");
+    $query->path_info("/$webName/$topicName");
     TWiki::Func::saveTopic( $this->{test_web}, $this->{test_topic}, undef,
         $input );
     $twiki = new TWiki( undef, $query );
