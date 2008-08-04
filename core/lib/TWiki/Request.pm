@@ -327,6 +327,22 @@ sub remoteUser {
 
 =begin twiki
 
+---++ ObjectMethod serverPort( [$userName] ) -> $userName
+
+Gets/Sets server user's name.
+
+=server_port()= alias for compatibility with CGI.
+
+=cut
+
+*server_port = \&serverPort;
+
+sub serverPort {
+    return @_ == 1 ? $_[0]->{server_port} : ( $_[0]->{server_port} = $_[1] );
+}
+
+=begin twiki
+
 ---++ ObjectMethod queryParam( [-name => $name, -value => $value             |
                                 -name => $name, -values => [ $v1, $v2, ... ] |
                                 $name, $v1, $v2, ...                         |
@@ -514,7 +530,7 @@ If called with only =$name= parameter, returns values associated.
 
 Can be called with a hash to set multiple headers.
 
-*Doesn't compatible with CGI*, since CGI correspondent is a 
+*Not compatible with CGI*, since CGI correspondent is a 
 response write method. CGI scripts obtain headers from %ENV
 or =http= method. %ENV is not available and must be replaced
 by calls to this and other methods of this class. =http= is
