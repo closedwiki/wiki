@@ -1686,7 +1686,7 @@ sub set_up {
     $TWiki::cfg{Plugins}{WysiwygPlugin}{Enabled} = 1;
 
     my $query = new TWiki::Request("");
-    $query->path_info("/script/Current/TestTopic");
+    $query->path_info("/Current/TestTopic");
     $this->{twiki} = new TWiki(undef, $query);
     $TWiki::Plugins::SESSION = $this->{twiki};
 }

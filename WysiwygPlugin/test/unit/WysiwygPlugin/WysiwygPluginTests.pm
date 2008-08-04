@@ -82,7 +82,7 @@ sub save_test {
         'action_save' => [ 1 ],
         'text' => [ $t ],
     });
-    $query->path_info("/save/$this->{test_web}/WysiwygPluginTest" );
+    $query->path_info("/$this->{test_web}/WysiwygPluginTest" );
     $query->param(text => $t);
 
     $TWiki::Plugins::SESSION = new TWiki('guest', $query );
