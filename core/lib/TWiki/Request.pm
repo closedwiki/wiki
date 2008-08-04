@@ -40,6 +40,7 @@ Fields:
    * =headers= hashref whose keys are header name
    * =method= request method (GET, HEAD, POST)
    * =param= hashref of parameters, both query and body ones
+   * =param_list= arrayref with parameter names in received order
    * =path_info= path_info of request (eg. /WebName/TopciName)
    * =remote_address= Client's IP address
    * =remote_user= Remote HTTP authenticated user
@@ -85,6 +86,7 @@ sub new {
         headers        => {},
         method         => undef,
         param          => {},
+        param_list     => [],
         path_info      => '',
         remote_address => '',
         remote_user    => undef,
@@ -97,21 +99,24 @@ sub new {
     bless $this, $class;
 
     if ( ref($initializer) && ref($initializer) eq 'HASH' ) {
-        my %param;
+        my %param = ();
+        my @plist = ();
         while ( my ( $key, $value ) = each %$initializer ) {
             if ( exists $param{$key} ) {
                 push @{ $param{$key} }, ref($value) eq 'ARRAY' ? @$value : $value;
             }
             else {
                 $param{$key} = ref($value) eq 'ARRAY' ? [@$value] : [$value];
+                push @plist, $key;
             }
         }
-        while ( my ( $key, $value ) = each %param ) {
-            $this->param( -name => $key, -value => $value );
+        foreach my $key (@plist) {
+            $this->param( -name => $key, -value => $param{$key} );
         }
     }
     elsif ( ref($initializer) && UNIVERSAL::isa($initializer, 'GLOB') ) {
-        my %param;
+        my %param = ();
+        my @plist = ();
         local $/ = "\n";
         while (<$initializer>) {
             chomp;
@@ -121,11 +126,12 @@ sub new {
                 push @{ $param{$key} }, $value;
             }
             else {
+                push @plist, $key;
                 $param{$key} = [$value];
             }
         }
-        while ( my ( $key, $value ) = each %param ) {
-            $this->param( -name => $key, -value => $value );
+        foreach my $key (@plist) {
+            $this->param( -name => $key, -value => $param{$key} );
         }
     }
     return $this;
@@ -216,7 +222,7 @@ sub queryString {
     foreach my $name ( $this->param ) {
         my $key = TWiki::urlEncode($name);
         push @params,
-          map { $key . "=" . TWiki::urlEncode($_ || '') } $this->param($name);
+          map { $key . "=" . TWiki::urlEncode(defined $_ ? $_ : '') } $this->param($name);
     }
     return join(';', @params);
 }
@@ -407,10 +413,12 @@ sub param {
 
     my ( $key, $value ) = rearrange( [ 'NAME', [qw(VALUE VALUES)] ], @p );
 
-    return keys %{ $this->{param} } unless $key;
+    return @{ $this->{param_list} } unless $key;
     if ( defined $value ) {
+        push @{ $this->{param_list} }, $key
+          unless exists $this->{param}->{$key};
         $this->{param}->{$key} =
-            ref $value && ref $value eq 'ARRAY' ? $value : [$value];
+          ref $value && ref $value eq 'ARRAY' ? $value : [$value];
     }
     if ( defined $this->{param}->{$key} ) {
         return wantarray
@@ -483,12 +491,13 @@ Deletes parameter name and value(s) from request.
 
 sub delete {
     my $this = shift;
-    foreach ( @_ ) {
-        if ( my $upload = $this->{uploads}->{$_} ) {
+    foreach my $p (@_) {
+        if ( my $upload = $this->{uploads}->{$p} ) {
             $upload->finish;
-            CORE::delete $this->{uploads}->{$_};
+            CORE::delete $this->{uploads}->{$p};
         }
-        CORE::delete $this->{param}->{$_};
+        CORE::delete $this->{param}->{$p};
+        @{ $this->{param_list} } = grep { $_ ne $p } @{ $this->{param_list} };
     }
 }
 

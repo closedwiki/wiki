@@ -176,15 +176,16 @@ Subclasses may redefine this method and call SUPER with query string obtained.
 sub prepareQueryParameters {
     my ($this, $req, $queryString) = @_;
     my @pairs = split /[&;]/, $queryString;
-    my ( $param, $value, %params );
+    my ( $param, $value, %params, @plist );
     foreach ( @pairs ) {
         ( $param, $value ) =
           map { tr/+/ /; s/%([0-9a-fA-F]{2})/chr(hex($1))/oge; $_ } 
           split '=', $_, 2;
         push @{ $params{$param} }, $value;
+        push @plist, $param;
     }
-    while ( ( $param, $value ) = each %params ) {
-        $req->queryParam( $param, $value );
+    foreach my $param (@plist) {
+        $req->queryParam( $param, $params{$param} );
     }
 }
 
