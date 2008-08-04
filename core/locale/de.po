@@ -3779,7 +3779,7 @@ msgstr "value='Stilles Speichern' accesskey='q'"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:40
 msgid "value='Save and Continue' accesskey='k'"
-msgstr "value='&Zwischenspeichern' accesskey='z'"
+msgstr "value='Zwischenspeichern' accesskey='z'"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:36
 msgid "value='Save' accesskey='s'"
