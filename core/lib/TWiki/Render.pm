@@ -1561,6 +1561,10 @@ sub renderRevisionInfo {
         $rrev = $store->cleanUpRevID( $rrev );
     }
 
+	#normalise.
+    ( $web, $topic ) =
+		$this->{session}->normalizeWebTopicName( $web, $topic );
+
     my( $date, $user, $rev, $comment );
     if( $meta ) {
         ( $date, $user, $rev, $comment ) = $meta->getRevisionInfo( $rrev );

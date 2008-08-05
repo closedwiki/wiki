@@ -1321,12 +1321,23 @@ Test if topic exists
    * =$web= - Web name, optional, e.g. ='Main'=
    * =$topic= - Topic name, required, e.g. ='TokyoOffice'=, or ="Main.TokyoOffice"=
 
+ Warning: topicExists does not call
+     ( $web, $topic ) =
+       $this->{session}->normalizeWebTopicName( $web, $topic );
+ for you (it'd make TWiki even slower) so make sure you do so.
+ 
 =cut
-
+  
 sub topicExists {
     my( $this, $web, $topic ) = @_;
     $web =~ s#\.#/#go;
     ASSERT(defined($topic)) if DEBUG;
+    if (DEBUG) {
+	    my     ( $webTest, $topicTest ) =
+		    $this->{session}->normalizeWebTopicName( $web, $topic );
+	    ASSERT($topic eq $topicTest);
+	    ASSERT($web eq $webTest);
+    }
     return 0 unless $topic;
 
     my $handler = _getHandler( $this, $web, $topic );
