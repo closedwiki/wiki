@@ -36,7 +36,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
    * Set SHORTDESCRIPTION = This plugin allows to query data from Trac data bases.
    * Set FORMAT = | $id | $severity | $priority | $status | $resolution | $reporter | $component | $summary |
       * The default format for queries. Can be overridden by the format attribute for a specific query.
-   * Set CUSTOM = test_one, test_two, test_three, test_four, test_five, test_six
+   * Set CUSTOM = 
       * A comma-separated list of field names of trac custom ticket fields. If these are given, and the custom fields are defined, the query can also refer to the custom fields. Note that this query implies a number of join operations, as the custom fields are stored in a separate table.
    * Set DEBUG = 0
 </blockquote>
@@ -53,12 +53,12 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
      | ==lib/TWiki/Plugins/%TOPIC%/Config.spec== | Configuration specification file. |
    * Configure and enable the Plugin:
       * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
-      * Configure the settings for =TRAC_DOMAIN= and =TRAC_DB_NAME=. Currently, only an SQLite data base is supported; =TRAC_DB_NAME= is used to construct the DSN. If your data base requires that a user is defined for access, configure =TRAC_USER= and =TRAC_PASSWD=. It might be best to give this user only read-only permissions, via the trac permission settings.
+      * Configure the settings for the trac database. Select the type of data base (SQLite or !MySQL), and enter the appropriate settings. If your data base requires that a user is defined for access, configure =TRAC_USER= and =TRAC_PASSWD=. It might be best to give this user only read-only permissions, via the trac permission settings.
    * Change the Plugin settings above, if required.
 
 ---+++ Plugin Info
 |  Plugin Author: | TWiki:Main.ThomasWeigert |
-|  Plugin Version: | 1.00 |
+|  Plugin Version: | 1.01 |
 |  TWiki Dependency: | none |
 |  CPAN Dependencies: | <table border="1"><tr><th>Name</th><th>Version</th><th>Description</th></tr><tr><td align="left">DBI</td><td align="left">&gt;=1.35</td><td align="left">Required</td></tr><tr><td align="left">DBD::SQLite</td><td align="left">&gt;=1.14</td><td align="left">Required</td></tr></table> |
 |  Other Dependencies: | none |

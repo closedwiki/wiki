@@ -25,9 +25,9 @@ use strict;
 
 # =========================
 use vars qw( $web $topic $user $installWeb $VERSION $debug $RELEASE $pluginName
-  %db $url $showBugScript $bugListScript $dbHost $dbName $dbUser $dbPasswd );
+  %db $url $showBugScript $bugListScript $dbHost $dbName $dbUser $dbPasswd $dbPort $dbType );
 
-$VERSION = '$Rev: 0000 $';
+$VERSION = '$Rev: 17316 (03 Aug 2008) $';
 $RELEASE = 'TWiki 4.2';
 $pluginName = "TracQueryPlugin";  # Name of this Plugin
 $debug = 0;
@@ -50,8 +50,11 @@ sub initPlugin
   $url = TWiki::Func::getPreferencesValue( "\U$pluginName\E_URL" );
   if ( $url =~ /\/$/ ) { $url =~ s/(.*?)\/$/$1/; }
   
-  $dbHost = $TWiki::cfg{Plugins}{TracQueryPlugin}{TRAC_DOMAIN} || '';   # Trac database domain
+  $dbType = $TWiki::cfg{Plugins}{TracQueryPlugin}{TRAC_DB} || 'SQLite';   # Trac data base (either SQLite or MySQL)
+  $dbType = lc($dbType);
   $dbName = $TWiki::cfg{Plugins}{TracQueryPlugin}{TRAC_DB_NAME};   # Trac database name
+  $dbHost = $TWiki::cfg{Plugins}{TracQueryPlugin}{TRAC_HOST} || '';   # Trac database host
+  $dbPort = $TWiki::cfg{Plugins}{TracQueryPlugin}{TRAC_DB_PORT};   # Trac database name
   $dbUser = $TWiki::cfg{Plugins}{TracQueryPlugin}{TRAC_USER} || '';  # user who has access to $dbName database
   $dbPasswd = $TWiki::cfg{Plugins}{TracQueryPlugin}{TRAC_PASSWD} || '';     # password for $dbUser
 
@@ -151,7 +154,7 @@ sub handleQuery
       $value ||= '';
       # Here we would insert special code to look up in another table
       #	      ( $value, $field ) = getField( "description", "component", "name", $$row{$field}, "component" ) if ( $field eq "component" );
-      $value = TWiki::Time::formatTime( $value ) if ($field eq 'time' || $field eq 'changetime');
+      $value = TWiki::Time::formatTime( $value ) if ( $field eq 'time' || $field eq 'changetime' || $field eq 'due' || $field eq 'completed' ) && $value;
       $value =~ s/\r?\n/%BR%/gos;
 
       $row =~ s/\$$field/$value/g;
@@ -183,7 +186,14 @@ sub openDB
   my ( $this ) = @_;
 
   unless (defined($this->{DB})) {
-    $this->{DB} = DBI->connect( "dbi:SQLite:dbname=$dbName", $dbUser, $dbPasswd, {PrintError=>1, RaiseError=>0} );
+    if ($dbType eq 'sqlite') {
+      $this->{DB} = DBI->connect( "dbi:SQLite:dbname=$dbName", $dbUser, $dbPasswd, {PrintError=>1, RaiseError=>0} );
+    } elsif ($dbType eq 'mysql') {
+      my $host = '';
+      $host .= ";host=$dbHost" if ( $dbHost ne '' );
+      $host .= ";port=$dbPort" if ( $dbPort ne '' );
+      $this->{DB} = DBI->connect("DBI:mysql:$dbName$host", $dbUser, $dbPasswd, {PrintError=>1, RaiseError=>0});
+    }
   }
   ## TW: should we test for failure to connect to db?
   return $this->{DB};
