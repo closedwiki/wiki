@@ -1687,13 +1687,21 @@ sub handler {
         my $cgi = TWiki::Func::getCgiQuery();
         return unless $cgi;
 
-        # Extract and attach existing parameters
-        my $plist = $cgi->query_string();
-        $plist =~ s/\;/\&/go;
-        $plist =~ s/\&?sortcol.*up=[0-9]+\&?//go;
-        $plist .= '&' if $plist;
-        $url = $cgi->url . $cgi->path_info() . '?' . $plist;
-        $url =~ s/\&/\&amp;/go;
+        # Copy existing values
+        my (@origSort, @origTable, @origUp);
+        @origSort  = $cgi->param('sortcol');
+        @origTable = $cgi->param('table');
+        @origUp    = $cgi->param('up');
+        $cgi->delete('sortcol', 'table', 'up');
+        $url = $cgi->url(-full => 1, -path => 1) . '?';
+        my $queryString = $cgi->query_string();
+        $url .= $queryString . ';' if $queryString;
+
+        # Restore parameters, so we don't interfere on the remaining execution
+        $cgi->param( -name => 'sortcol', -value => \@origSort );
+        $cgi->param( -name => 'table',   -value => \@origTable );
+        $cgi->param( -name => 'up',      -value => \@origUp );
+
         $sortColFromUrl =
           $cgi->param('sortcol');    # zero based: 0 is first column
         $requestedTable = $cgi->param('table');
