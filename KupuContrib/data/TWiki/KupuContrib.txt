@@ -4,7 +4,7 @@
 -->
 %SHORTDESCRIPTION%
 
-<img src="%ATTACHURL%/screenshot.jpg" alt="Screenshot" />
+%RED% *This Contrib is no longer supported for TWiki versions from 4.1.0. You are recommended to use the TWiki:Plugins.TinyMCEPlugin instead. If you require the KupuContrib supported, please contact TWiki:Main.CrawfordCurrie* %ENDCOLOR%
 
 %TOC%
 
@@ -92,6 +92,7 @@ This extension is brought to you by a [[http://wikiring.com][WikiRing <a href="h
 |  License | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Contrib Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  5 Aug 2008 | Bugs:Item5885 TWiki:Main.CrawfordCurrie dropped support for this contrib |
 |  14 Jun 2007 | Bugs:Item4116 fix to make it work with VIEW_TEMPLATE |
 |  12119 | Split out of WysiwygPlugin |
 |  11538 | Minor doc updates, minor fixes to spacing in lists, integrated Koen Marten's template topic patch |
