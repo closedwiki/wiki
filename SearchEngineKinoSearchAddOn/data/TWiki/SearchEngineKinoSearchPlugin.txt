@@ -1,0 +1,65 @@
+%META:TOPICINFO{author="BaseUserMapping_333" date="1207714807" format="1.1" version="1.3"}%
+---+!! <nop>%TOPIC%
+
+_A plugin wrapper around the SearchEngineKinoSearchAddOn_
+
+Allows embedding a KinoSearch in any page with a custom format it will automatically update the index when saving, renaming or adding an attachment.
+
+It can take a long time to update when dealing with large attachments
+
+WARNING: This is very new code, it works for me but I have not extensively tested it.
+
+%TOC%
+
+---++ Syntax Rules
+
+%<nop>KINOSEARCH{'Search String' format='Formatting string'}%
+
+format takes the following variables to place content.
+   * $icon - An icon to display filetype when showing attachments
+   * $match - The Twiki Name of the page being displayed
+   * $locked - Show if a page is locked
+   * $texthead - Summary text
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>NEWPLUGIN_SHORTDESCRIPTION%==
+
+   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = _A plugin wrapper around the SearchEngineKinoSearchAddOn_
+
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
+
+   * Download the ZIP file from the Plugin Home (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * Configure the Plugin:
+      * Change the Plugin settings as needed
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.DavidGuest |
+|  Copyright: | &copy; 2007, TWiki:Main.DavidGuest |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 07 Apr 2008 (V1.000) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  09 Apr 2008: | Version 1.1, Added auto index updater code |
+|  07 Apr 2008: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | %TWIKIWEB%.SearchEngineKinoSearchAddOn |
+|  Perl Version: | 5.005 |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences, SearchEngineKinoSearchAddOn
