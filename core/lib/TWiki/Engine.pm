@@ -56,7 +56,7 @@ sub CRLF { "\x0D\x0A" }
 
 =begin twiki
 
----++ ClasstMethod new() -> $engine
+---++ ClassMethod new() -> $engine
 
 Constructs an engine object.
 

@@ -42,14 +42,15 @@ use TWiki::Request;
 use TWiki::Request::Upload;
 use TWiki::Response;
 
-sub prepareRequest {
+sub prepare {
     my $this = shift;
     $this->{argv} = [ @ARGV ]; # Copy, so original @ARGV doesn't get modified
     while( scalar( @{ $this->{argv} } ) ) {
         my $arg = shift( @{ $this->{argv} } );
-        if ( $arg =~ /^-?([A-Za-z0-9_]+)$/o ) {
+        if ( $arg =~ /^-?([A-Za-z0-9_]+)(?:=(.*))?$/o ) {
             my $name = $1;
-            my $arg = TWiki::Sandbox::untaintUnchecked( shift( @{ $this->{argv} } ));
+            my $arg = TWiki::Sandbox::untaintUnchecked(
+                defined $2 ? $2 : shift( @{ $this->{argv} } ));
             if( $name eq 'user' ) {
                 $this->{user} = $arg;
             } else {
@@ -60,7 +61,7 @@ sub prepareRequest {
         }
     }
     delete $this->{argv};
-    $this->SUPER::prepareRequest(@_);
+    $this->SUPER::prepare(@_);
 }
 
 sub prepareConnection {
@@ -77,22 +78,14 @@ sub prepareConnection {
 
 sub preparePath {
     my ( $this, $req ) = @_;
-    $this->SUPER::preparePath($req);
     my ( $script ) = $0 =~ m{([^/\\:]+)$};
-    if ( exists $this->{path_info} ) {
-        $req->pathInfo( "/$script/" . $this->{path_info} );
-        delete $this->{path_info};
-    }
-    else {
-#        $req->pathInfo('');
-        $req->action($script);
-    }
+    my $action = (split( '/', $script))[-1];
+    $req->action($action);
 }
 
-sub prepareParameters {
+sub prepareQueryParameters {
     my ( $this, $req ) = @_;
-    $this->SUPER::prepareParameters( $req );
-    while ( my ( $name, $values ) = each %{ $this->{params} } ) {
+    while( my( $name, $values ) = each %{ $this->{params} } ) {
         $req->param( -name => $name, -value =>  $values );
     }
     delete $this->{params};
