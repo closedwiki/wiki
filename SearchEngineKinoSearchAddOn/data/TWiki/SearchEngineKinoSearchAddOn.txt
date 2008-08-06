@@ -176,13 +176,17 @@ You need to install the following modules: <nop>KinoSearch,
  Spreadsheet::ParseExcel
 
 You can do that by running:
-   * perl -MCPAN -e "install <nop>KinoSearch"
-   * perl -MCPAN -e "install File::MMagic"
-   * perl -MCPAN -e "install Module::Pluggable"
-   * perl -MCPAN -e "install HTML::TreeBuilder"
-   * perl -MCPAN -e "install Spreadsheet::ParseExcel"
-   * perl -MCPAN -e "install !CharsetDetector"
-   * perl -MCPAN -e "install Encode"
+<noautolink>
+<verbatim>
+perl -MCPAN -e "install KinoSearch"
+perl -MCPAN -e "install File::MMagic"
+perl -MCPAN -e "install Module::Pluggable"
+perl -MCPAN -e "install HTML::TreeBuilder"
+perl -MCPAN -e "install Spreadsheet::ParseExcel"
+perl -MCPAN -e "install CharsetDetector"
+perl -MCPAN -e "install Encode"
+</verbatim>
+</noautolink>
 
 _Note for Windows_: For Windows, make sure, you have a C-compiler in place. This is normally part of Visual Studio etc. 
 
@@ -315,11 +319,12 @@ text seems to be O.K.
    * Set SHORTDESCRIPTION = Fast indexed search with indexing of attachments like Word, Excel, PDF and PPT
 
 |  Add-on Author: | TWiki:Main/MarkusHesse |
-|  Add-on Version: | v1.16 |
+|  Add-on Version: | v1.17 |
 |  Update note | If you update from an older version to v1.15 or higher, remove the old index and create a complete new one with kinoindex|
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+| 6 Aug 2008:   | v 1.17, Bugs:Item5717: persist use form choices, Bugs:Item5647: cope better with attachment problems -- TWiki:Main.SvenDowideit |
 | 4 Jun 2008:   | v 1.16, Bugs:Item5646: Problem with attachments with capital letter suffix |
-| 12 May 2008:  | v 1.15, Bugs:Item5579, Bugs:Item5580, Bugs:Item5619: Problem with ALLOWWEBVIEW and Forms fixed|
+| 12 May 2008:  | v 1.15, Bugs:Item5579, Bugs:Item5580, Bugs:Item5619: Problem with ALLOWWEBVIEW and Forms fixed |
 | 23 Apr 2008:  | v 1.14, Bugs:Item5273, Bugs:Item5546, Bugs:Item5550, Bugs:Item5552: Use current user in search script |
 | 27 Jan 2008:  | v 1.13, Bugs:Item5271: Option "show locked topics" now works |
 | 19 Jan 2008:  | v 1.12, Bugs:Item5270: Enhancement of stringifiers |
