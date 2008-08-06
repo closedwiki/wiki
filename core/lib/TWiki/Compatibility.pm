@@ -235,6 +235,7 @@ sub _getOldAttachAttr {
         } else {
             $fileUser = $users->getLoginName($fileUser) if $fileUser;
         }
+        $fileUser ||= '';
         $fileUser =~ s/ //go;
         ( $before, $fileComment, $after ) = split( /<(?:\/)*TwkFileComment>/, $atext );
         if( ! $fileComment ) { $fileComment = ''; }
