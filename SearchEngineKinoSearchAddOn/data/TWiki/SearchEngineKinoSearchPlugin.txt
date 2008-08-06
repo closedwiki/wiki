@@ -49,8 +49,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DavidGuest |
 |  Copyright: | &copy; 2007, TWiki:Main.DavidGuest |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 07 Apr 2008 (V1.000) |
+|  Plugin Version: | 06 Aug 2008 (V1.200) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  06 Aug 2008: | Version 1.2, brought Plugin into SearchEngineKinoSearchAddOn package, and svn - TWiki:Main.SvenDowideit |
 |  09 Apr 2008: | Version 1.1, Added auto index updater code |
 |  07 Apr 2008: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |

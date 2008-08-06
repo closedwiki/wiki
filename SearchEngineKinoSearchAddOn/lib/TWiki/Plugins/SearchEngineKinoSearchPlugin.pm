@@ -1,4 +1,4 @@
-package TWiki::Plugins::KinoSearchPlugin;
+package TWiki::Plugins::SearchEngineKinoSearchPlugin;
 
 use TWiki::Contrib::SearchEngineKinoSearchAddOn::Search;
 use TWiki::Contrib::SearchEngineKinoSearchAddOn::Index;
