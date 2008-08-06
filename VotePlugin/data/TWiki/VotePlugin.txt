@@ -168,6 +168,7 @@ The weighting topic applies to all votes in the scope of the =%<nop>VOTEPLUGIN_W
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | &nbsp; | 
+|  6 Aug 2008 | Bugs:Item5769 correct default handling of transcluded rates |
 |  1 Jul 2007: | Bugs:Item4310 : abstracted out TWiki:Plugins.RatingContrib, and modified the code to be tolerant of forms within forms - TWiki:Main/CrawfordCurrie |
 |  24 Jun 2007: | Bugs:ItemItem4298: fixed secret switch. Item4200: added VarVOTE. - TWiki:Main/CrawfordCurrie |
 |  11 Jun 2007: | Bugs:Item4235 - removed excess newlines, fixed separator - TWiki:Main/CrawfordCurrie |

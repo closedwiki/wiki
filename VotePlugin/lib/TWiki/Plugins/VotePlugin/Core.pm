@@ -30,6 +30,9 @@ $debug = 0; # toggle me
 sub handleVote {
     my ($session, $params, $topic, $web) = @_;
 
+    $web = TWiki::Func::expandCommonVariables('%BASEWEB%');
+    $topic = TWiki::Func::expandCommonVariables('%BASETOPIC%');
+
     unless ($pubUrlPath) {
         $pubUrlPath = TWiki::Func::getPubUrlPath().'/'.TWiki::Func::getTwikiWebname().'/VotePlugin';
     }
@@ -201,7 +204,8 @@ sub handleVote {
         vote_isSecret => $isSecret,
         vote_isOpen => $isOpen,
         vote_saveTo => $saveto,
-        vote_inTopic => "$web.$topic");
+        vote_inTopic => "$web.$topic",
+       );
 
     # Do we need a submit button?
     my $needSubmit = scalar(@prompts) > 1;
