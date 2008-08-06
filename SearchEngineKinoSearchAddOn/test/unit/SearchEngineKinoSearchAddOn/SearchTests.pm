@@ -10,6 +10,13 @@ use TWiki::Contrib::SearchEngineKinoSearchAddOn::Index;
 
 sub new {
     my $self = shift()->SUPER::new('Search', @_);
+    
+    $self->{attachmentDir} = 'attachement_examples/';
+    if (! -e $self->{attachmentDir}) {
+        #running from twiki/test/unit
+        $self->{attachmentDir} = 'SearchEngineKinoSearchAddOn/attachement_examples/';
+    }
+    
     return $self;
 }
 
@@ -30,7 +37,7 @@ Just an example topic wird MS Word
 Keyword: redmond
 HERE
     #$this->{twiki}->{store}->saveAttachment($this->{users_web}, "TopicWithWordAttachment", "Simple_example.doc",
-    #                                        $this->{twiki}->{user}, {file => "attachement_examples/Simple_example.doc"})
+    #                                        $this->{twiki}->{user}, {file => $this->{attachmentDir}."Simple_example.doc"})
 }
 
 sub tear_down {
@@ -150,7 +157,7 @@ Keyword: BodyToSearchFor
 HERE
 
     $this->{twiki}->{store}->saveAttachment($this->{users_web}, "TopicToSearch", "Simple_example.doc",
-                                            $this->{twiki}->{user}, {file => "attachement_examples/Simple_example.doc"});
+                                            $this->{twiki}->{user}, {file => $this->{attachmentDir}."Simple_example.doc"});
 
     my $ind = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
     $ind->createIndex();

@@ -8,7 +8,13 @@ use TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyBase;
 use TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier;
 
 sub set_up {
-        my $this = shift;
+    my $this = shift;
+    
+    $this->{attachmentDir} = 'attachement_examples/';
+    if (! -e $this->{attachmentDir}) {
+        #running from twiki/test/unit
+        $this->{attachmentDir} = 'SearchEngineKinoSearchAddOn/attachement_examples/';
+    }
 
     $this->SUPER::set_up();
     # Use RcsLite so we can manually gen topic revs
@@ -21,7 +27,7 @@ Just an example topic wird MS Word
 Keyword: redmond
 HERE
     $this->{twiki}->{store}->saveAttachment($this->{users_web}, "TopicWithWordAttachment", "Simple_example.doc",
-                                            $this->{twiki}->{user}, {file => "attachement_examples/Simple_example.doc"})
+                                            $this->{twiki}->{user}, {file => $this->{attachmentDir}."Simple_example.doc"})
 }
 
 sub tear_down {
@@ -34,7 +40,7 @@ sub test_stringForFile {
     my $stringifier = TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::DOC_antiword->new();
 
     my $text  = $stringifier->stringForFile('attachement_examples/Simple_example.doc');
-    my $text2 = TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier->stringFor('attachement_examples/Simple_example.doc');
+    my $text2 = TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier->stringFor($this->{attachmentDir}.'Simple_example.doc');
 
     #print "Test : $text\n";
     #print "Test2: $text2\n";
@@ -52,7 +58,7 @@ sub test_SpecialCharacters {
     my $this = shift;
     my $stringifier = TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::DOC_antiword->new();
 
-    my $text  = $stringifier->stringForFile('attachement_examples/Simple_example.doc');
+    my $text  = $stringifier->stringForFile($this->{attachmentDir}.'Simple_example.doc');
 
     $this->assert(($text =~ m\Größer\)==1, "Text Größer not found.");
 }

@@ -10,6 +10,13 @@ use TWiki::Contrib::SearchEngineKinoSearchAddOn::Search;
 
 sub new {
     my $self = shift()->SUPER::new('Index', @_);
+    
+    $self->{attachmentDir} = 'attachement_examples/';
+    if (! -e $self->{attachmentDir}) {
+        #running from twiki/test/unit
+        $self->{attachmentDir} = 'SearchEngineKinoSearchAddOn/attachement_examples/';
+    }
+    
     return $self;
 }
 
@@ -148,7 +155,7 @@ HERE
 
     # Now let's add an attachment
     $this->{twiki}->{store}->saveAttachment($this->{users_web}, "NewOrChangedTopicUpdate2", "Simple_example.doc",
-					    $this->{twiki}->{user}, {file => "attachement_examples/Simple_example.doc"});
+					    $this->{twiki}->{user}, {file => $this->{attachmentDir}."Simple_example.doc"});
     
     $ind->updateIndex();
     $docs = $search->docsForQuery( "dummy");
@@ -158,7 +165,7 @@ HERE
 
     # Now let't change the attachment
     $this->{twiki}->{store}->saveAttachment($this->{users_web}, "NewOrChangedTopicUpdate2", "Simple_example.doc",
-					    $this->{twiki}->{user}, {file => "attachement_examples/Simple_example2.doc"});
+					    $this->{twiki}->{user}, {file => $this->{attachmentDir}."Simple_example2.doc"});
     $ind->updateIndex();
     $docs = $search->docsForQuery( "additions");
     $hit  = $docs->fetch_hit_hashref;
@@ -360,7 +367,7 @@ Just an example topic with MS Excel
 Keyword: spreadsheet
 HERE
     $this->{twiki}->{store}->saveAttachment($this->{users_web}, "TopicWithExcelAttachment", "Simple_example.xls",
-                                            $this->{twiki}->{user}, {file => "attachement_examples/Simple_example.xls"});
+                                            $this->{twiki}->{user}, {file => $this->{attachmentDir}."Simple_example.xls"});
     # FIXME: How can I add a Form?
 
     # Let's index the topic
@@ -415,7 +422,7 @@ Just an example topic with PDF
 Keyword: spreadsheet
 HERE
     $this->{twiki}->{store}->saveAttachment($this->{users_web}, "TopicWithPdfAttachment", "Simple_example.pdf",
-                                            $this->{twiki}->{user}, {file => "attachement_examples/Simple_example.pdf"});
+                                            $this->{twiki}->{user}, {file => $this->{attachmentDir}."Simple_example.pdf"});
 
     # Let's index the atachment
     # Preparations
@@ -576,7 +583,7 @@ Just an example topic.
 Keyword: Superspecific
 HERE
     $this->{twiki}->{store}->saveAttachment($this->{users_web}, "TopicWithSpecialFile", $file,
-                                            $this->{twiki}->{user}, {file => "attachement_examples/$file"});
+                                            $this->{twiki}->{user}, {file => $this->{attachmentDir}.$file});
 
     TWiki::Func::setPreferencesValue( "KINOSEARCHINDEXSKIPWEBS", "Main, Sandbox, TWiki, TestCases, Trash");
     $ind->createIndex();
@@ -610,7 +617,7 @@ Keyword: redmond
 HERE
 
     $this->{twiki}->{store}->saveAttachment($this->{users_web}, "TopicWithWordAttachment", "Simple_example.doc",
-                                            $this->{twiki}->{user}, {file => "attachement_examples/Simple_example.doc"})
+                                            $this->{twiki}->{user}, {file => $this->{attachmentDir}."Simple_example.doc"})
 }
 
 sub _indexOK {

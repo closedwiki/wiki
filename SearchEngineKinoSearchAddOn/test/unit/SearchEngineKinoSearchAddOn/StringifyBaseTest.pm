@@ -9,6 +9,12 @@ use TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyBase;
 
 sub set_up {
     my $this = shift;
+    
+    $this->{attachmentDir} = 'tree_example/';
+    if (! -e $this->{attachmentDir}) {
+        #running from twiki/test/unit
+        $this->{attachmentDir} = 'SearchEngineKinoSearchAddOn/tree_example/';
+    }
 
     $this->SUPER::set_up();
 }
@@ -26,7 +32,7 @@ sub test_rmtree {
     # Note: Here I use unix commands and don't care on windows compatibility.
     my $tmp_dir = tmpnam();
 
-    my $cmd = "cp -R tree_example $tmp_dir";
+    my $cmd = "cp -R $this->{attachmentDir} $tmp_dir";
     `$cmd`;
 
     # Now lets try to remove that dir
@@ -35,7 +41,7 @@ sub test_rmtree {
     $this->assert(! (-f $tmp_dir), "Directory $tmp_dir not deleteted.");
 
     # Now try to delete just a file
-    $cmd = "cp -R tree_example\test_file.txt $tmp_dir";
+    $cmd = "cp -R $this->{attachmentDir}\test_file.txt $tmp_dir";
     $stringifier->rmtree($tmp_dir);
 
     $this->assert(! (-f $tmp_dir), "File $tmp_dir not deleteted.");
