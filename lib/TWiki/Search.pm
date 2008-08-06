@@ -249,6 +249,7 @@ sub _searchTopics {
                 \@topicList,
                 {
                     type                => $type,
+                    scope               => $scope,
                     casesensitive       => $options->{'caseSensitive'},
                     wordboundaries      => $options->{'wordBoundaries'},
                     files_without_match => 1
