@@ -1,8 +1,8 @@
 /*
-Copyright (c) 2007, Yahoo! Inc. All rights reserved.
+Copyright (c) 2008, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-version: 2.2.2
+version: 2.5.2
 */
 
 /**
@@ -109,6 +109,16 @@ YAHOO.util.CustomEvent = function(type, oScope, silent, signature) {
                 new YAHOO.util.CustomEvent(onsubscribeType, this, true);
 
     } 
+
+
+    /**
+     * In order to make it possible to execute the rest of the subscriber
+     * stack when one thows an exception, the subscribers exceptions are
+     * caught.  The most recent exception is stored in this property
+     * @property lastError
+     * @type Error
+     */
+    this.lastError = null;
 };
 
 /**
@@ -204,25 +214,30 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
      *                   true otherwise
      */
     fire: function() {
-        var len=this.subscribers.length;
+
+        this.lastError = null;
+
+        var errors = [],
+            len=this.subscribers.length;
+
         if (!len && this.silent) {
             return true;
         }
 
-        var args=[], ret=true, i;
-
-        for (i=0; i<arguments.length; ++i) {
-            args.push(arguments[i]);
-        }
-
-        var argslength = args.length;
+        var args=[].slice.call(arguments, 0), ret=true, i, rebuild=false;
 
         if (!this.silent) {
         }
 
+        // make a copy of the subscribers so that there are
+        // no index problems if one subscriber removes another.
+        var subs = this.subscribers.slice(), throwErrors = YAHOO.util.Event.throwErrors;
+
         for (i=0; i<len; ++i) {
-            var s = this.subscribers[i];
-            if (s) {
+            var s = subs[i];
+            if (!s) {
+                rebuild=true;
+            } else {
                 if (!this.silent) {
                 }
 
@@ -233,21 +248,38 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
                     if (args.length > 0) {
                         param = args[0];
                     }
-                    ret = s.fn.call(scope, param, s.obj);
+
+                    try {
+                        ret = s.fn.call(scope, param, s.obj);
+                    } catch(e) {
+                        this.lastError = e;
+                        // errors.push(e);
+                        if (throwErrors) {
+                            throw e;
+                        }
+                    }
                 } else {
-                    ret = s.fn.call(scope, this.type, args, s.obj);
+                    try {
+                        ret = s.fn.call(scope, this.type, args, s.obj);
+                    } catch(ex) {
+                        this.lastError = ex;
+                        if (throwErrors) {
+                            throw ex;
+                        }
+                    }
                 }
+
                 if (false === ret) {
                     if (!this.silent) {
                     }
 
-                    //break;
-                    return false;
+                    break;
+                    // return false;
                 }
             }
         }
 
-        return true;
+        return (ret !== false);
     },
 
     /**
@@ -256,9 +288,11 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
      * @return {int} The number of listeners unsubscribed
      */
     unsubscribeAll: function() {
-        for (var i=0, len=this.subscribers.length; i<len; ++i) {
-            this._delete(len - 1 - i);
+        for (var i=this.subscribers.length-1; i>-1; i--) {
+            this._delete(i);
         }
+
+        this.subscribers=[];
 
         return i;
     },
@@ -274,7 +308,7 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
             delete s.obj;
         }
 
-        // delete this.subscribers[index];
+        // this.subscribers[index]=null;
         this.subscribers.splice(index, 1);
     },
 
@@ -314,7 +348,7 @@ YAHOO.util.Subscriber = function(fn, obj, override) {
      * @property obj
      * @type object
      */
-    this.obj = obj || null;
+    this.obj = YAHOO.lang.isUndefined(obj) ? null : obj;
 
     /**
      * The default execution scope for the event listener is defined when the
@@ -370,7 +404,7 @@ YAHOO.util.Subscriber.prototype.contains = function(fn, obj) {
  * @method toString
  */
 YAHOO.util.Subscriber.prototype.toString = function() {
-    return "Subscriber { obj: " + (this.obj || "")  + 
+    return "Subscriber { obj: " + this.obj  + 
            ", override: " +  (this.override || "no") + " }";
 };
 
@@ -408,15 +442,6 @@ if (!YAHOO.util.Event) {
          * @private
          */
         var loadComplete =  false;
-
-        /**
-         * True when the document is initially usable
-         * @property DOMReady
-         * @type boolean
-         * @static
-         * @private
-         */
-        var DOMReady = false;
 
         /**
          * Cache of wrapped listeners
@@ -489,28 +514,38 @@ if (!YAHOO.util.Event) {
         var counter = 0;
         
         /**
-         * addListener/removeListener can throw errors in unexpected scenarios.
-         * These errors are suppressed, the method returns false, and this property
-         * is set
-         * @property lastError
-         * @type Error
+         * Normalized keycodes for webkit/safari
+         * @property webkitKeymap
+         * @type {int: int}
+         * @private
+         * @static
+         * @final
          */
-        var lastError = null;
+        var webkitKeymap = {
+            63232: 38, // up
+            63233: 40, // down
+            63234: 37, // left
+            63235: 39, // right
+            63276: 33, // page up
+            63277: 34, // page down
+            25: 9      // SHIFT-TAB (Safari provides a different key code in
+                       // this case, even though the shiftKey modifier is set)
+        };
 
         return {
 
             /**
              * The number of times we should look for elements that are not
              * in the DOM at the time the event is requested after the document
-             * has been loaded.  The default is 200@amp;50 ms, so it will poll
-             * for 10 seconds or until all outstanding handlers are bound
+             * has been loaded.  The default is 2000@amp;20 ms, so it will poll
+             * for 40 seconds or until all outstanding handlers are bound
              * (whichever comes first).
              * @property POLL_RETRYS
              * @type int
              * @static
              * @final
              */
-            POLL_RETRYS: 200,
+            POLL_RETRYS: 2000,
 
             /**
              * The poll interval in milliseconds
@@ -519,7 +554,7 @@ if (!YAHOO.util.Event) {
              * @static
              * @final
              */
-            POLL_INTERVAL: 10,
+            POLL_INTERVAL: 20,
 
             /**
              * Element to bind, int constant
@@ -559,13 +594,14 @@ if (!YAHOO.util.Event) {
 
             /**
              * Object passed in by the user that will be returned as a 
-             * parameter to the callback, int constant
+             * parameter to the callback, int constant.  Specific to
+             * unload listeners
              * @property OBJ
              * @type int
              * @static
              * @final
              */
-            OBJ: 3,
+            UNLOAD_OBJ: 3,
 
             /**
              * Adjusted scope, either the element we are registering the event
@@ -578,62 +614,95 @@ if (!YAHOO.util.Event) {
             ADJ_SCOPE: 4,
 
             /**
-             * Safari detection is necessary to work around the preventDefault
-             * bug that makes it so you can't cancel a href click from the 
-             * handler.  Since this function has been used outside of this
-             * utility, it was changed to detect all KHTML browser to be more
-             * friendly towards the non-Safari browsers that share the engine.
-             * Internally, the preventDefault bug detection now uses the
-             * webkit property.
+             * The original obj passed into addListener
+             * @property OBJ
+             * @type int
+             * @static
+             * @final
+             */
+            OBJ: 5,
+
+            /**
+             * The original scope parameter passed into addListener
+             * @property OVERRIDE
+             * @type int
+             * @static
+             * @final
+             */
+            OVERRIDE: 6,
+
+            /**
+             * addListener/removeListener can throw errors in unexpected scenarios.
+             * These errors are suppressed, the method returns false, and this property
+             * is set
+             * @property lastError
+             * @static
+             * @type Error
+             */
+            lastError: null,
+
+            /**
+             * Safari detection
              * @property isSafari
              * @private
              * @static
-             * @deprecated
+             * @deprecated use YAHOO.env.ua.webkit
              */
-            isSafari: (/KHTML/gi).test(navigator.userAgent),
+            isSafari: YAHOO.env.ua.webkit,
             
             /**
-             * If WebKit is detected, we keep track of the version number of
-             * the engine.  The webkit property will contain a string with
-             * the webkit version number if webkit is detected, null
-             * otherwise.
-             * Safari 1.3.2 (312.6): 312.8.1 <-- currently the latest
-             *                       available on Mac OSX 10.3.
-             * Safari 2.0.2: 416 <-- hasOwnProperty introduced
-             * Safari 2.0.4: 418 <-- preventDefault fixed (I believe)
-             * Safari 2.0.4 (419.3): 418.9.1 <-- current release
-             *
-             * http://developer.apple.com/internet/safari/uamatrix.html
+             * webkit version
              * @property webkit
              * @type string
+             * @private
              * @static
+             * @deprecated use YAHOO.env.ua.webkit
              */
-            webkit: function() {
-                var v=navigator.userAgent.match(/AppleWebKit\/([^ ]*)/);
-                if (v&&v[1]) {
-                    return v[1];
-                }
-                return null;
-            }(),
+            webkit: YAHOO.env.ua.webkit,
             
             /**
-             * IE detection needed to properly calculate pageX and pageY.  
-             * capabilities checking didn't seem to work because another 
-             * browser that does not provide the properties have the values 
-             * calculated in a different manner than IE.
+             * IE detection 
              * @property isIE
              * @private
              * @static
+             * @deprecated use YAHOO.env.ua.ie
              */
-            isIE: (!this.webkit && !navigator.userAgent.match(/opera/gi) && 
-                    navigator.userAgent.match(/msie/gi)),
+            isIE: YAHOO.env.ua.ie,
 
             /**
              * poll handle
              * @property _interval
+             * @static
              * @private
              */
             _interval: null,
+
+            /**
+             * document readystate poll handle
+             * @property _dri
+             * @static
+             * @private
+             */
+             _dri: null,
+
+            /**
+             * True when the document is initially usable
+             * @property DOMReady
+             * @type boolean
+             * @static
+             */
+            DOMReady: false,
+
+            /**
+             * Errors thrown by subscribers of custom events are caught
+             * and the error message is written to the debug console.  If
+             * this property is set to true, it will also re-throw the
+             * error.
+             * @property throwErrors
+             * @type boolean
+             * @default false
+             */
+            throwErrors: false,
 
             /**
              * @method startInterval
@@ -656,43 +725,37 @@ if (!YAHOO.util.Event) {
              * The number of times it will poll and the frequency are
              * configurable.  By default it will poll for 10 seconds.
              *
+             * <p>The callback is executed with a single parameter:
+             * the custom object parameter, if provided.</p>
+             *
              * @method onAvailable
              *
-             * @param {string}   p_id the id of the element to look for.
+             * @param {string||string[]}   p_id the id of the element, or an array
+             * of ids to look for.
              * @param {function} p_fn what to execute when the element is found.
              * @param {object}   p_obj an optional object to be passed back as
              *                   a parameter to p_fn.
-             * @param {boolean}  p_override If set to true, p_fn will execute
-             *                   in the scope of p_obj
-             *
-             * @static
-             */
-            onAvailable: function(p_id, p_fn, p_obj, p_override) {
-                onAvailStack.push( { id:         p_id, 
-                                     fn:         p_fn, 
-                                     obj:        p_obj, 
-                                     override:   p_override, 
-                                     checkReady: false    } );
-                retryCount = this.POLL_RETRYS;
-                this.startInterval();
-            },
-
-            /**
-             * Executes the supplied callback when the DOM is first usable.
-             *
-             * @method onDOMReady
-             *
-             * @param {function} p_fn what to execute when the element is found.
-             * @param {object}   p_obj an optional object to be passed back as
-             *                   a parameter to p_fn.
-             * @param {boolean}  p_scope If set to true, p_fn will execute
+             * @param {boolean|object}  p_override If set to true, p_fn will execute
              *                   in the scope of p_obj, if set to an object it
              *                   will execute in the scope of that object
-             *
+             * @param checkContent {boolean} check child node readiness (onContentReady)
              * @static
              */
-            onDOMReady: function(p_fn, p_obj, p_override) {
-                this.DOMReadyEvent.subscribe(p_fn, p_obj, p_override);
+            onAvailable: function(p_id, p_fn, p_obj, p_override, checkContent) {
+
+                var a = (YAHOO.lang.isString(p_id)) ? [p_id] : p_id;
+
+                for (var i=0; i<a.length; i=i+1) {
+                    onAvailStack.push({id:         a[i], 
+                                       fn:         p_fn, 
+                                       obj:        p_obj, 
+                                       override:   p_override, 
+                                       checkReady: checkContent });
+                }
+
+                retryCount = this.POLL_RETRYS;
+
+                this.startInterval();
             },
 
             /**
@@ -700,26 +763,73 @@ if (!YAHOO.util.Event) {
              * state of sibling elements to determine if the content of the
              * available element is safe to modify.
              *
+             * <p>The callback is executed with a single parameter:
+             * the custom object parameter, if provided.</p>
+             *
              * @method onContentReady
              *
              * @param {string}   p_id the id of the element to look for.
              * @param {function} p_fn what to execute when the element is ready.
              * @param {object}   p_obj an optional object to be passed back as
              *                   a parameter to p_fn.
-             * @param {boolean}  p_override If set to true, p_fn will execute
-             *                   in the scope of p_obj
+             * @param {boolean|object}  p_override If set to true, p_fn will execute
+             *                   in the scope of p_obj.  If an object, p_fn will
+             *                   exectute in the scope of that object
              *
              * @static
              */
             onContentReady: function(p_id, p_fn, p_obj, p_override) {
-                onAvailStack.push( { id:         p_id, 
-                                     fn:         p_fn, 
-                                     obj:        p_obj, 
-                                     override:   p_override,
-                                     checkReady: true      } );
+                this.onAvailable(p_id, p_fn, p_obj, p_override, true);
+            },
 
-                retryCount = this.POLL_RETRYS;
-                this.startInterval();
+            /**
+             * Executes the supplied callback when the DOM is first usable.  This
+             * will execute immediately if called after the DOMReady event has
+             * fired.   @todo the DOMContentReady event does not fire when the
+             * script is dynamically injected into the page.  This means the
+             * DOMReady custom event will never fire in FireFox or Opera when the
+             * library is injected.  It _will_ fire in Safari, and the IE 
+             * implementation would allow for us to fire it if the defered script
+             * is not available.  We want this to behave the same in all browsers.
+             * Is there a way to identify when the script has been injected 
+             * instead of included inline?  Is there a way to know whether the 
+             * window onload event has fired without having had a listener attached 
+             * to it when it did so?
+             *
+             * <p>The callback is a CustomEvent, so the signature is:</p>
+             * <p>type &lt;string&gt;, args &lt;array&gt;, customobject &lt;object&gt;</p>
+             * <p>For DOMReady events, there are no fire argments, so the
+             * signature is:</p>
+             * <p>"DOMReady", [], obj</p>
+             *
+             *
+             * @method onDOMReady
+             *
+             * @param {function} p_fn what to execute when the element is found.
+             * @param {object}   p_obj an optional object to be passed back as
+             *                   a parameter to p_fn.
+             * @param {boolean|object}  p_scope If set to true, p_fn will execute
+             *                   in the scope of p_obj, if set to an object it
+             *                   will execute in the scope of that object
+             *
+             * @static
+             */
+            onDOMReady: function(p_fn, p_obj, p_override) {
+                if (this.DOMReady) {
+                    setTimeout(function() {
+                        var s = window;
+                        if (p_override) {
+                            if (p_override === true) {
+                                s = p_obj;
+                            } else {
+                                s = p_override;
+                            }
+                        }
+                        p_fn.call(s, "DOMReady", [], p_obj);
+                    }, 0);
+                } else {
+                    this.DOMReadyEvent.subscribe(p_fn, p_obj, p_override);
+                }
             },
 
             /**
@@ -727,22 +837,24 @@ if (!YAHOO.util.Event) {
              *
              * @method addListener
              *
-             * @param {Object}   el        The html element to assign the 
-             *                             event to
+             * @param {String|HTMLElement|Array|NodeList} el An id, an element 
+             *  reference, or a collection of ids and/or elements to assign the 
+             *  listener to.
              * @param {String}   sType     The type of event to append
              * @param {Function} fn        The method the event invokes
              * @param {Object}   obj    An arbitrary object that will be 
              *                             passed as a parameter to the handler
-             * @param {boolean}  override  If true, the obj passed in becomes
-             *                             the execution scope of the listener
-             * @return {boolean} True if the action was successful or defered,
+             * @param {Boolean|object}  override  If true, the obj passed in becomes
+             *                             the execution scope of the listener. If an
+             *                             object, this object becomes the execution
+             *                             scope.
+             * @return {Boolean} True if the action was successful or defered,
              *                        false if one or more of the elements 
              *                        could not have the listener attached,
              *                        or if the operation throws an exception.
              * @static
              */
             addListener: function(el, sType, fn, obj, override) {
-
 
                 if (!fn || !fn.call) {
                     return false;
@@ -760,7 +872,7 @@ if (!YAHOO.util.Event) {
                     }
                     return ok;
 
-                } else if (typeof el == "string") {
+                } else if (YAHOO.lang.isString(el)) {
                     var oEl = this.getEl(el);
                     // If the el argument is a string, we assume it is 
                     // actually the id of the element.  If the page is loaded
@@ -813,11 +925,11 @@ if (!YAHOO.util.Event) {
                 // wrap the function so we can return the obj object when
                 // the event fires;
                 var wrappedFn = function(e) {
-                        return fn.call(scope, YAHOO.util.Event.getEvent(e), 
+                        return fn.call(scope, YAHOO.util.Event.getEvent(e, el), 
                                 obj);
                     };
 
-                var li = [el, sType, fn, wrappedFn, scope];
+                var li = [el, sType, fn, wrappedFn, scope, obj, override];
                 var index = listeners.length;
                 // cache the listener so we can try to automatically unload
                 listeners[index] = li;
@@ -875,10 +987,11 @@ if (!YAHOO.util.Event) {
              * @private
              */
             fireLegacyEvent: function(e, legacyIndex) {
-                var ok=true,le,lh,li,scope,ret;
+                var ok=true, le, lh, li, scope, ret;
                 
-                lh = legacyHandlers[legacyIndex];
-                for (var i=0,len=lh.length; i<len; ++i) {
+                lh = legacyHandlers[legacyIndex].slice();
+                for (var i=0, len=lh.length; i<len; ++i) {
+                // for (var i in lh.length) {
                     li = lh[i];
                     if ( li && li[this.WFN] ) {
                         scope = li[this.ADJ_SCOPE];
@@ -934,22 +1047,23 @@ if (!YAHOO.util.Event) {
             },
                     
             /**
-             * Removes an event handler
+             * Removes an event listener
              *
              * @method removeListener
              *
-             * @param {Object} el the html element or the id of the element to 
-             * assign the event to.
+             * @param {String|HTMLElement|Array|NodeList} el An id, an element 
+             *  reference, or a collection of ids and/or elements to remove
+             *  the listener from.
              * @param {String} sType the type of event to remove.
              * @param {Function} fn the method the event invokes.  If fn is
-             * undefined, then all event handlers for the type of event are 
-             * removed.
+             *  undefined, then all event handlers for the type of event are 
+             *  removed.
              * @return {boolean} true if the unbind was successful, false 
-             * otherwise.
+             *  otherwise.
              * @static
              */
             removeListener: function(el, sType, fn) {
-                var i, len;
+                var i, len, li;
 
                 // The el argument can be a string
                 if (typeof el == "string") {
@@ -957,7 +1071,7 @@ if (!YAHOO.util.Event) {
                 // The el argument can be an array of elements or element ids.
                 } else if ( this._isValidCollection(el)) {
                     var ok = true;
-                    for (i=0,len=el.length; i<len; ++i) {
+                    for (i=el.length-1; i>-1; i--) {
                         ok = ( this.removeListener(el[i], sType, fn) && ok );
                     }
                     return ok;
@@ -968,16 +1082,16 @@ if (!YAHOO.util.Event) {
                     return this.purgeElement(el, false, sType);
                 }
 
-
                 if ("unload" == sType) {
 
-                    for (i=0, len=unloadListeners.length; i<len; i++) {
-                        var li = unloadListeners[i];
+                    for (i=unloadListeners.length-1; i>-1; i--) {
+                        li = unloadListeners[i];
                         if (li && 
                             li[0] == el && 
                             li[1] == sType && 
                             li[2] == fn) {
                                 unloadListeners.splice(i, 1);
+                                // unloadListeners[i]=null;
                                 return true;
                         }
                     }
@@ -992,7 +1106,7 @@ if (!YAHOO.util.Event) {
                 // try and take advantage of it, which is not possible.
                 var index = arguments[3];
   
-                if ("undefined" == typeof index) {
+                if ("undefined" === typeof index) {
                     index = this._getCacheIndex(el, sType, fn);
                 }
 
@@ -1010,12 +1124,14 @@ if (!YAHOO.util.Event) {
                     var llist = legacyHandlers[legacyIndex];
                     if (llist) {
                         for (i=0, len=llist.length; i<len; ++i) {
+                        // for (i in llist.length) {
                             li = llist[i];
                             if (li && 
                                 li[this.EL] == el && 
                                 li[this.TYPE] == sType && 
                                 li[this.FN] == fn) {
                                     llist.splice(i, 1);
+                                    // llist[i]=null;
                                     break;
                             }
                         }
@@ -1034,13 +1150,16 @@ if (!YAHOO.util.Event) {
                 delete listeners[index][this.WFN];
                 delete listeners[index][this.FN];
                 listeners.splice(index, 1);
+                // listeners[index]=null;
 
                 return true;
 
             },
 
             /**
-             * Returns the event's target element
+             * Returns the event's target element.  Safari sometimes provides
+             * a text node, and this is automatically resolved to the text
+             * node's parent so that it behaves like other browsers.
              * @method getTarget
              * @param {Event} ev the event
              * @param {boolean} resolveTextNode when set to true the target's
@@ -1064,14 +1183,14 @@ if (!YAHOO.util.Event) {
              * @return {HTMLElement} the normized node
              * @static
              */
-            resolveTextNode: function(node) {
-                // if (node && node.nodeName && 
-                        // "#TEXT" == node.nodeName.toUpperCase()) {
-                if (node && 3 == node.nodeType) {
-                    return node.parentNode;
-                } else {
-                    return node;
-                }
+            resolveTextNode: function(n) {
+                try {
+                    if (n && 3 == n.nodeType) {
+                        return n.parentNode;
+                    }
+                } catch(e) { }
+
+                return n;
             },
 
             /**
@@ -1215,10 +1334,11 @@ if (!YAHOO.util.Event) {
              * this function at all.
              * @method getEvent
              * @param {Event} e the event parameter from the handler
+             * @param {HTMLElement} boundEl the element the listener is attached to
              * @return {Event} the event 
              * @static
              */
-            getEvent: function(e) {
+            getEvent: function(e, boundEl) {
                 var ev = e || window.event;
 
                 if (!ev) {
@@ -1243,7 +1363,13 @@ if (!YAHOO.util.Event) {
              * @static
              */
             getCharCode: function(ev) {
-                return ev.charCode || ev.keyCode || 0;
+                var code = ev.keyCode || ev.charCode || 0;
+
+                // webkit key normalization
+                if (YAHOO.env.ua.webkit && (code in webkitKeymap)) {
+                    code = webkitKeymap[code];
+                }
+                return code;
             },
 
             /**
@@ -1254,7 +1380,7 @@ if (!YAHOO.util.Event) {
              * @private
              */
             _getCacheIndex: function(el, sType, fn) {
-                for (var i=0,len=listeners.length; i<len; ++i) {
+                for (var i=0, l=listeners.length; i<l; i=i+1) {
                     var li = listeners[i];
                     if ( li                 && 
                          li[this.FN] == fn  && 
@@ -1301,12 +1427,16 @@ if (!YAHOO.util.Event) {
              * @private
              */
             _isValidCollection: function(o) {
-                return ( o                    && // o is something
-                         o.length             && // o is indexed
-                         typeof o != "string" && // o is not a string
-                         !o.tagName           && // o is not an HTML element
-                         !o.alert             && // o is not a window
-                         typeof o[0] != "undefined" );
+                try {
+                    return ( o                     && // o is something
+                             typeof o !== "string" && // o is not a string
+                             o.length              && // o is indexed
+                             !o.tagName            && // o is not an HTML element
+                             !o.alert              && // o is not a window
+                             typeof o[0] !== "undefined" );
+                } catch(ex) {
+                    return false;
+                }
 
             },
 
@@ -1315,7 +1445,8 @@ if (!YAHOO.util.Event) {
              * @property elCache
              * DOM element cache
              * @static
-             * @deprecated Elements are not cached any longer
+             * @deprecated Elements are not cached due to issues that arise when
+             * elements are removed and re-added
              */
             elCache: {},
 
@@ -1328,7 +1459,7 @@ if (!YAHOO.util.Event) {
              * @deprecated Elements are not cached any longer
              */
             getEl: function(id) {
-                return document.getElementById(id);
+                return (typeof id === "string") ? document.getElementById(id) : id;
             },
 
             /**
@@ -1353,18 +1484,20 @@ if (!YAHOO.util.Event) {
              * @private
              */
             _load: function(e) {
+
                 if (!loadComplete) {
                     loadComplete = true;
                     var EU = YAHOO.util.Event;
 
-                    // just in case DOMReady did not go off for some reason
+                    // Just in case DOMReady did not go off for some reason
                     EU._ready();
 
-                    // Remove the listener to assist with the IE memory issue, but not
-                    // for other browsers because FF 1.0x does not like it.
-                    if (this.isIE) {
-                        EU._simpleRemove(window, "load", EU._load);
-                    }
+                    // Available elements may not have been detected before the
+                    // window load event fires. Try to find them now so that the
+                    // the user is more likely to get the onAvailable notifications
+                    // before the window load notification
+                    EU._tryPreloadAttach();
+
                 }
             },
 
@@ -1376,9 +1509,9 @@ if (!YAHOO.util.Event) {
              * @private
              */
             _ready: function(e) {
-                if (!DOMReady) {
-                    DOMReady=true;
-                    var EU = YAHOO.util.Event;
+                var EU = YAHOO.util.Event;
+                if (!EU.DOMReady) {
+                    EU.DOMReady=true;
 
                     // Fire the content ready custom event
                     EU.DOMReadyEvent.fire();
@@ -1398,13 +1531,25 @@ if (!YAHOO.util.Event) {
              */
             _tryPreloadAttach: function() {
 
-                if (this.locked) {
-                    return false;
+                if (onAvailStack.length === 0) {
+                    retryCount = 0;
+                    clearInterval(this._interval);
+                    this._interval = null;
+                    return;
                 }
 
+                if (this.locked) {
+                    return;
+                }
 
-                if (this.isIE && !DOMReady) {
-                    return false;
+                if (this.isIE) {
+                    // Hold off if DOMReady has not fired and check current
+                    // readyState to protect against the IE operation aborted
+                    // issue.
+                    if (!this.DOMReady) {
+                        this.startInterval();
+                        return;
+                    }
                 }
 
                 this.locked = true;
@@ -1416,7 +1561,7 @@ if (!YAHOO.util.Event) {
                 // tested appropriately
                 var tryAgain = !loadComplete;
                 if (!tryAgain) {
-                    tryAgain = (retryCount > 0);
+                    tryAgain = (retryCount > 0 && onAvailStack.length > 0);
                 }
 
                 // onAvailable
@@ -1434,32 +1579,20 @@ if (!YAHOO.util.Event) {
                     item.fn.call(scope, item.obj);
                 };
 
-                var i,len,item,el;
+                var i, len, item, el, ready=[];
 
-                // onAvailable
-                for (i=0,len=onAvailStack.length; i<len; ++i) {
+                // onAvailable onContentReady
+                for (i=0, len=onAvailStack.length; i<len; i=i+1) {
                     item = onAvailStack[i];
-                    if (item && !item.checkReady) {
+                    if (item) {
                         el = this.getEl(item.id);
                         if (el) {
-                            executeItem(el, item);
-                            onAvailStack[i] = null;
-                        } else {
-                            notAvail.push(item);
-                        }
-                    }
-                }
-
-                // onContentReady
-                for (i=0,len=onAvailStack.length; i<len; ++i) {
-                    item = onAvailStack[i];
-                    if (item && item.checkReady) {
-                        el = this.getEl(item.id);
-
-                        if (el) {
-                            // The element is available, but not necessarily ready
-                            // @todo should we test parentNode.nextSibling?
-                            if (loadComplete || el.nextSibling) {
+                            if (item.checkReady) {
+                                if (loadComplete || el.nextSibling || !tryAgain) {
+                                    ready.push(item);
+                                    onAvailStack[i] = null;
+                                }
+                            } else {
                                 executeItem(el, item);
                                 onAvailStack[i] = null;
                             }
@@ -1468,11 +1601,24 @@ if (!YAHOO.util.Event) {
                         }
                     }
                 }
+                
+                // make sure onContentReady fires after onAvailable
+                for (i=0, len=ready.length; i<len; i=i+1) {
+                    item = ready[i];
+                    executeItem(this.getEl(item.id), item);
+                }
 
-                retryCount = (notAvail.length === 0) ? 0 : retryCount - 1;
+
+                retryCount--;
 
                 if (tryAgain) {
-                    // we may need to strip the nulled out items here
+                    for (i=onAvailStack.length-1; i>-1; i--) {
+                        item = onAvailStack[i];
+                        if (!item || !item.id) {
+                            onAvailStack.splice(i, 1);
+                        }
+                    }
+
                     this.startInterval();
                 } else {
                     clearInterval(this._interval);
@@ -1480,8 +1626,6 @@ if (!YAHOO.util.Event) {
                 }
 
                 this.locked = false;
-
-                return true;
 
             },
 
@@ -1498,19 +1642,18 @@ if (!YAHOO.util.Event) {
              * @static
              */
             purgeElement: function(el, recurse, sType) {
-                var elListeners = this.getListeners(el, sType);
+                var oEl = (YAHOO.lang.isString(el)) ? this.getEl(el) : el;
+                var elListeners = this.getListeners(oEl, sType), i, len;
                 if (elListeners) {
-                    for (var i=0,len=elListeners.length; i<len ; ++i) {
+                    for (i=elListeners.length-1; i>-1; i--) {
                         var l = elListeners[i];
-                        // can't use the index on the changing collection
-                        //this.removeListener(el, l.type, l.fn, l.index);
-                        this.removeListener(el, l.type, l.fn);
+                        this.removeListener(oEl, l.type, l.fn);
                     }
                 }
 
-                if (recurse && el && el.childNodes) {
-                    for (i=0,len=el.childNodes.length; i<len ; ++i) {
-                        this.purgeElement(el.childNodes[i], recurse, sType);
+                if (recurse && oEl && oEl.childNodes) {
+                    for (i=0,len=oEl.childNodes.length; i<len ; ++i) {
+                        this.purgeElement(oEl.childNodes[i], recurse, sType);
                     }
                 }
             },
@@ -1519,14 +1662,15 @@ if (!YAHOO.util.Event) {
              * Returns all listeners attached to the given element via addListener.
              * Optionally, you can specify a specific type of event to return.
              * @method getListeners
-             * @param el {HTMLElement} the element to inspect 
+             * @param el {HTMLElement|string} the element or element id to inspect 
              * @param sType {string} optional type of listener to return. If
              * left out, all listeners will be returned
              * @return {Object} the listener. Contains the following fields:
              * &nbsp;&nbsp;type:   (string)   the type of event
              * &nbsp;&nbsp;fn:     (function) the callback supplied to addListener
              * &nbsp;&nbsp;obj:    (object)   the custom object supplied to addListener
-             * &nbsp;&nbsp;adjust: (boolean)  whether or not to adjust the default scope
+             * &nbsp;&nbsp;adjust: (boolean|object)  whether or not to adjust the default scope
+             * &nbsp;&nbsp;scope: (boolean)  the derived scope based on the adjust parameter
              * &nbsp;&nbsp;index:  (int)      its position in the Event util listener cache
              * @static
              */           
@@ -1534,24 +1678,27 @@ if (!YAHOO.util.Event) {
                 var results=[], searchLists;
                 if (!sType) {
                     searchLists = [listeners, unloadListeners];
-                } else if (sType == "unload") {
+                } else if (sType === "unload") {
                     searchLists = [unloadListeners];
                 } else {
                     searchLists = [listeners];
                 }
 
-                for (var j=0;j<searchLists.length; ++j) {
+                var oEl = (YAHOO.lang.isString(el)) ? this.getEl(el) : el;
+
+                for (var j=0;j<searchLists.length; j=j+1) {
                     var searchList = searchLists[j];
-                    if (searchList && searchList.length > 0) {
+                    if (searchList) {
                         for (var i=0,len=searchList.length; i<len ; ++i) {
                             var l = searchList[i];
-                            if ( l  && l[this.EL] === el && 
+                            if ( l  && l[this.EL] === oEl && 
                                     (!sType || sType === l[this.TYPE]) ) {
                                 results.push({
                                     type:   l[this.TYPE],
                                     fn:     l[this.FN],
                                     obj:    l[this.OBJ],
-                                    adjust: l[this.ADJ_SCOPE],
+                                    adjust: l[this.OVERRIDE],
+                                    scope:  l[this.ADJ_SCOPE],
                                     index:  i
                                 });
                             }
@@ -1571,21 +1718,23 @@ if (!YAHOO.util.Event) {
              */
             _unload: function(e) {
 
-                var EU = YAHOO.util.Event, i, j, l, len, index;
+                var EU = YAHOO.util.Event, i, j, l, len, index,
+                         ul = unloadListeners.slice();
 
+                // execute and clear stored unload listeners
                 for (i=0,len=unloadListeners.length; i<len; ++i) {
-                    l = unloadListeners[i];
+                    l = ul[i];
                     if (l) {
                         var scope = window;
                         if (l[EU.ADJ_SCOPE]) {
                             if (l[EU.ADJ_SCOPE] === true) {
-                                scope = l[EU.OBJ];
+                                scope = l[EU.UNLOAD_OBJ];
                             } else {
                                 scope = l[EU.ADJ_SCOPE];
                             }
                         }
-                        l[EU.FN].call(scope, EU.getEvent(e), l[EU.OBJ] );
-                        unloadListeners[i] = null;
+                        l[EU.FN].call(scope, EU.getEvent(e, l[EU.EL]), l[EU.UNLOAD_OBJ] );
+                        ul[i] = null;
                         l=null;
                         scope=null;
                     }
@@ -1593,30 +1742,21 @@ if (!YAHOO.util.Event) {
 
                 unloadListeners = null;
 
-                if (listeners && listeners.length > 0) {
-                    j = listeners.length;
-                    while (j) {
-                        index = j-1;
-                        l = listeners[index];
+                // Remove listeners to handle IE memory leaks
+                //if (YAHOO.env.ua.ie && listeners && listeners.length > 0) {
+                
+                // 2.5.0 listeners are removed for all browsers again.  FireFox preserves
+                // at least some listeners between page refreshes, potentially causing
+                // errors during page load (mouseover listeners firing before they
+                // should if the user moves the mouse at the correct moment).
+                if (listeners) {
+                    for (j=listeners.length-1; j>-1; j--) {
+                        l = listeners[j];
                         if (l) {
-                            EU.removeListener(l[EU.EL], l[EU.TYPE], 
-                                    l[EU.FN], index);
+                            EU.removeListener(l[EU.EL], l[EU.TYPE], l[EU.FN], j);
                         } 
-                        j = j - 1;
                     }
                     l=null;
-
-                    EU.clearCache();
-                }
-
-                for (i=0,len=legacyEvents.length; i<len; ++i) {
-                    // dereference the element
-                    //delete legacyEvents[i][0];
-                    legacyEvents[i][0] = null;
-
-                    // delete the array item
-                    //delete legacyEvents[i];
-                    legacyEvents[i] = null;
                 }
 
                 legacyEvents = null;
@@ -1668,6 +1808,8 @@ if (!YAHOO.util.Event) {
              * compatibility
              * @method regCE
              * @private
+             * @static
+             * @deprecated still here for backwards compatibility
              */
             regCE: function() {
                 // does nothing
@@ -1737,50 +1879,50 @@ if (!YAHOO.util.Event) {
          */
         EU.on = EU.addListener;
 
-        /////////////////////////////////////////////////////////////
-        // DOMReady
-        // based on work by: Dean Edwards/John Resig/Matthias Miller 
+/*! DOMReady: based on work by: Dean Edwards/John Resig/Matthias Miller */
 
         // Internet Explorer: use the readyState of a defered script.
         // This isolates what appears to be a safe moment to manipulate
         // the DOM prior to when the document's readyState suggests
         // it is safe to do so.
         if (EU.isIE) {
-	
-            document.write(
-'<scr' + 'ipt id="_yui_eu_dr" defer="true" src="//:"></script>');
-        
-            var el = document.getElementById("_yui_eu_dr");
-            el.onreadystatechange = function() {
-                if ("complete" == this.readyState) {
-                    this.parentNode.removeChild(this);
-                    YAHOO.util.Event._ready();
-                }
-            };
 
-            el=null;
-
-            // Process onAvailable/onContentReady items when when the 
+            // Process onAvailable/onContentReady items when the 
             // DOM is ready.
             YAHOO.util.Event.onDOMReady(
                     YAHOO.util.Event._tryPreloadAttach,
                     YAHOO.util.Event, true);
-        
-        // Safari: The document's readyState in Safari currently will
-        // change to loaded/complete before images are loaded.
-        } else if (EU.webkit) {
+            
+            var n = document.createElement('p');  
 
-            EU._drwatch = setInterval(function(){
+            EU._dri = setInterval(function() {
+                try {
+                    // throws an error if doc is not ready
+                    n.doScroll('left');
+                    clearInterval(EU._dri);
+                    EU._dri = null;
+                    EU._ready();
+                    n = null;
+                } catch (ex) { 
+                }
+            }, EU.POLL_INTERVAL); 
+
+        
+        // The document's readyState in Safari currently will
+        // change to loaded/complete before images are loaded.
+        } else if (EU.webkit && EU.webkit < 525) {
+
+            EU._dri = setInterval(function() {
                 var rs=document.readyState;
                 if ("loaded" == rs || "complete" == rs) {
-                    clearInterval(EU._drwatch);
-                    EU._drwatch = null;
+                    clearInterval(EU._dri);
+                    EU._dri = null;
                     EU._ready();
                 }
             }, EU.POLL_INTERVAL); 
 
         // FireFox and Opera: These browsers provide a event for this
-        // moment.
+        // moment.  The latest WebKit releases now support this event.
         } else {
 
             EU._simpleAdd(document, "DOMContentLoaded", EU._ready);
@@ -1788,10 +1930,12 @@ if (!YAHOO.util.Event) {
         }
         /////////////////////////////////////////////////////////////
 
+
         EU._simpleAdd(window, "load", EU._load);
         EU._simpleAdd(window, "unload", EU._unload);
         EU._tryPreloadAttach();
     })();
+
 }
 /**
  * EventProvider is designed to be used with YAHOO.augment to wrap 
@@ -1828,7 +1972,6 @@ YAHOO.util.EventProvider.prototype = {
      * @method subscribe
      * @param p_type     {string}   the type, or name of the event
      * @param p_fn       {function} the function to exectute when the event fires
-     * @param p_obj
      * @param p_obj      {Object}   An object to be passed along when the event 
      *                              fires
      * @param p_override {boolean}  If true, the obj passed in becomes the 
@@ -1855,7 +1998,9 @@ YAHOO.util.EventProvider.prototype = {
     /**
      * Unsubscribes one or more listeners the from the specified event
      * @method unsubscribe
-     * @param p_type {string}   The type, or name of the event
+     * @param p_type {string}   The type, or name of the event.  If the type
+     *                          is not specified, it will attempt to remove
+     *                          the listener from all hosted events.
      * @param p_fn   {Function} The subscribed function to unsubscribe, if not
      *                          supplied, all subscribers will be removed.
      * @param p_obj  {Object}   The custom object passed to subscribe.  This is
@@ -1867,16 +2012,29 @@ YAHOO.util.EventProvider.prototype = {
      */
     unsubscribe: function(p_type, p_fn, p_obj) {
         this.__yui_events = this.__yui_events || {};
-        var ce = this.__yui_events[p_type];
-        if (ce) {
-            return ce.unsubscribe(p_fn, p_obj);
+        var evts = this.__yui_events;
+        if (p_type) {
+            var ce = evts[p_type];
+            if (ce) {
+                return ce.unsubscribe(p_fn, p_obj);
+            }
         } else {
-            return false;
+            var ret = true;
+            for (var i in evts) {
+                if (YAHOO.lang.hasOwnProperty(evts, i)) {
+                    ret = ret && evts[i].unsubscribe(p_fn, p_obj);
+                }
+            }
+            return ret;
         }
+
+        return false;
     },
     
     /**
-     * Removes all listeners from the specified event
+     * Removes all listeners from the specified event.  If the event type
+     * is not specified, all listeners from all hosted custom events will
+     * be removed.
      * @method unsubscribeAll
      * @param p_type {string}   The type, or name of the event
      */
@@ -1924,7 +2082,7 @@ YAHOO.util.EventProvider.prototype = {
         } else {
 
             var scope  = opts.scope  || this;
-            var silent = opts.silent || null;
+            var silent = (opts.silent);
 
             var ce = new YAHOO.util.CustomEvent(p_type, scope, silent,
                     YAHOO.util.CustomEvent.FLAT);
@@ -1961,23 +2119,23 @@ YAHOO.util.EventProvider.prototype = {
      * @param p_type    {string}  the type, or name of the event
      * @param arguments {Object*} an arbitrary set of parameters to pass to 
      *                            the handler.
-     * @return {boolean} the return value from CustomEvent.fire, or null if 
-     *                   the custom event does not exist.
+     * @return {boolean} the return value from CustomEvent.fire
+     *                   
      */
     fireEvent: function(p_type, arg1, arg2, etc) {
 
         this.__yui_events = this.__yui_events || {};
         var ce = this.__yui_events[p_type];
 
-        if (ce) {
-            var args = [];
-            for (var i=1; i<arguments.length; ++i) {
-                args.push(arguments[i]);
-            }
-            return ce.fire.apply(ce, args);
-        } else {
+        if (!ce) {
             return null;
         }
+
+        var args = [];
+        for (var i=1; i<arguments.length; ++i) {
+            args.push(arguments[i]);
+        }
+        return ce.fire.apply(ce, args);
     },
 
     /**
@@ -2017,6 +2175,15 @@ YAHOO.util.EventProvider.prototype = {
 * @param {Object}      handler  An object literal representing the handler. 
 * @param {String}      event    Optional. The event (keydown or keyup) to 
 *                               listen for. Defaults automatically to keydown.
+*
+* @knownissue the "keypress" event is completely broken in Safari 2.x and below.
+*             the workaround is use "keydown" for key listening.  However, if
+*             it is desired to prevent the default behavior of the keystroke,
+*             that can only be done on the keypress event.  This makes key
+*             handling quite ugly.
+* @knownissue keydown is also broken in Safari 2.x and below for the ESC key.
+*             There currently is no workaround other than choosing another
+*             key to listen for.
 */
 YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
     if (!attachTo) {
@@ -2095,7 +2262,6 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
             e.ctrlKey  == keyData.ctrl) { // if we pass this, all modifiers match
             
             var dataItem;
-            var keyPressed;
 
             if (keyData.keys instanceof Array) {
                 for (var i=0;i<keyData.keys.length;i++) {
@@ -2180,4 +2346,36 @@ YAHOO.util.KeyListener.KEYDOWN = "keydown";
 * @type String
 */
 YAHOO.util.KeyListener.KEYUP = "keyup";
-YAHOO.register("event", YAHOO.util.Event, {version: "2.2.2", build: "204"});
+
+/**
+ * keycode constants for a subset of the special keys
+ * @property KEY
+ * @static
+ * @final
+ */
+YAHOO.util.KeyListener.KEY = {
+    ALT          : 18,
+    BACK_SPACE   : 8,
+    CAPS_LOCK    : 20,
+    CONTROL      : 17,
+    DELETE       : 46,
+    DOWN         : 40,
+    END          : 35,
+    ENTER        : 13,
+    ESCAPE       : 27,
+    HOME         : 36,
+    LEFT         : 37,
+    META         : 224,
+    NUM_LOCK     : 144,
+    PAGE_DOWN    : 34,
+    PAGE_UP      : 33, 
+    PAUSE        : 19,
+    PRINTSCREEN  : 44,
+    RIGHT        : 39,
+    SCROLL_LOCK  : 145,
+    SHIFT        : 16,
+    SPACE        : 32,
+    TAB          : 9,
+    UP           : 38
+};
+YAHOO.register("event", YAHOO.util.Event, {version: "2.5.2", build: "1076"});

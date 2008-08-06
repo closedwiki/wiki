@@ -3,27 +3,38 @@
 <head>
 	<title>API: dragdrop   DD.js  (YUI Library)</title>
 	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
 </head>
 
 <body id="yahoo-com">
+
 <div id="doc3" class="yui-t2">
 
 	<div id="hd">
-        <h1>Yahoo! UI Library</h1>
-        <h3>Drag and Drop&nbsp; <span class="subtitle">2.2.2</span></h3>
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>Drag and Drop&nbsp; <span class="subtitle">2.5.2</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_dragdrop.html">dragdrop</a>
                 
                  &gt; DD.js (source view) 
             </p>
+
 	</div>
 
 	<div id="bd">
 		<div id="yui-main">
 			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
 
                     <div id="srcout">
+                        <style>
+                            #doc3 #classopts { display:none; }
+                        </style>
 <div class="highlight" ><pre><span class="c">/**</span>
 <span class="c"> * A DragDrop implementation where the linked element follows the </span>
 <span class="c"> * mouse cursor during a drag.</span>
@@ -46,7 +57,7 @@
 
     <span class="c">/**</span>
 <span class="c">     * When set to true, the utility automatically tries to scroll the browser</span>
-<span class="c">     * window wehn a drag and drop element is dragged near the viewport boundary.</span>
+<span class="c">     * window when a drag and drop element is dragged near the viewport boundary.</span>
 <span class="c">     * Defaults to true.</span>
 <span class="c">     * @property scroll</span>
 <span class="c">     * @type boolean</span>
@@ -125,7 +136,10 @@
         <span class="o">}</span>
         
         <span class="k">this</span><span class="o">.</span><span class="nx">cachePosition</span><span class="o">(</span><span class="nx">oCoord</span><span class="o">.</span><span class="nx">x</span><span class="o">,</span> <span class="nx">oCoord</span><span class="o">.</span><span class="nx">y</span><span class="o">);</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">autoScroll</span><span class="o">(</span><span class="nx">oCoord</span><span class="o">.</span><span class="nx">x</span><span class="o">,</span> <span class="nx">oCoord</span><span class="o">.</span><span class="nx">y</span><span class="o">,</span> <span class="nx">el</span><span class="o">.</span><span class="nx">offsetHeight</span><span class="o">,</span> <span class="nx">el</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">);</span>
+        <span class="k">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+        <span class="nx">setTimeout</span><span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+            <span class="nx">self</span><span class="o">.</span><span class="nx">autoScroll</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="nx">self</span><span class="o">,</span> <span class="nx">oCoord</span><span class="o">.</span><span class="nx">x</span><span class="o">,</span> <span class="nx">oCoord</span><span class="o">.</span><span class="nx">y</span><span class="o">,</span> <span class="nx">el</span><span class="o">.</span><span class="nx">offsetHeight</span><span class="o">,</span> <span class="nx">el</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">);</span>
+        <span class="o">},</span> <span class="m">0</span><span class="o">);</span>
     <span class="o">},</span>
 
     <span class="c">/**</span>
@@ -296,6 +310,98 @@
 <span class="c"></span>
 <span class="c">    */</span>
 
+<span class="c">/**</span>
+<span class="c">* @event mouseDownEvent</span>
+<span class="c">* @description Provides access to the mousedown event. The mousedown does not always result in a drag operation.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+
+<span class="c">/**</span>
+<span class="c">* @event b4MouseDownEvent</span>
+<span class="c">* @description Provides access to the mousedown event, before the mouseDownEvent gets fired. Returning false will cancel the drag.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+
+<span class="c">/**</span>
+<span class="c">* @event mouseUpEvent</span>
+<span class="c">* @description Fired from inside DragDropMgr when the drag operation is finished.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+
+<span class="c">/**</span>
+<span class="c">* @event b4StartDragEvent</span>
+<span class="c">* @description Fires before the startDragEvent, returning false will cancel the startDrag Event.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+
+<span class="c">/**</span>
+<span class="c">* @event startDragEvent</span>
+<span class="c">* @description Occurs after a mouse down and the drag threshold has been met. The drag threshold default is either 3 pixels of mouse movement or 1 full second of holding the mousedown. </span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+
+<span class="c">/**</span>
+<span class="c">* @event b4EndDragEvent</span>
+<span class="c">* @description Fires before the endDragEvent. Returning false will cancel.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+
+<span class="c">/**</span>
+<span class="c">* @event endDragEvent</span>
+<span class="c">* @description Fires on the mouseup event after a drag has been initiated (startDrag fired).</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+
+<span class="c">/**</span>
+<span class="c">* @event dragEvent</span>
+<span class="c">* @description Occurs every mousemove event while dragging.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+<span class="c">/**</span>
+<span class="c">* @event b4DragEvent</span>
+<span class="c">* @description Fires before the dragEvent.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+<span class="c">/**</span>
+<span class="c">* @event invalidDropEvent</span>
+<span class="c">* @description Fires when the dragged objects is dropped in a location that contains no drop targets.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+<span class="c">/**</span>
+<span class="c">* @event b4DragOutEvent</span>
+<span class="c">* @description Fires before the dragOutEvent</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+<span class="c">/**</span>
+<span class="c">* @event dragOutEvent</span>
+<span class="c">* @description Fires when a dragged object is no longer over an object that had the onDragEnter fire. </span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+<span class="c">/**</span>
+<span class="c">* @event dragEnterEvent</span>
+<span class="c">* @description Occurs when the dragged object first interacts with another targettable drag and drop object.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+<span class="c">/**</span>
+<span class="c">* @event b4DragOverEvent</span>
+<span class="c">* @description Fires before the dragOverEvent.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+<span class="c">/**</span>
+<span class="c">* @event dragOverEvent</span>
+<span class="c">* @description Fires every mousemove event while over a drag and drop object.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+<span class="c">/**</span>
+<span class="c">* @event b4DragDropEvent </span>
+<span class="c">* @description Fires before the dragDropEvent</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+<span class="c">/**</span>
+<span class="c">* @event dragDropEvent</span>
+<span class="c">* @description Fires when the dragged objects is dropped on another.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
 <span class="o">});</span>
 </pre></div>
                     </div>
@@ -316,9 +422,15 @@
 
                                 <li class=""><a href="module_calendar.html">calendar</a></li>
 
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
                                 <li class=""><a href="module_connection.html">connection</a></li>
 
                                 <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
 
                                 <li class=""><a href="module_datasource.html">datasource</a></li>
 
@@ -328,15 +440,35 @@
 
                                 <li class="selected"><a href="module_dragdrop.html">dragdrop</a></li>
 
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
                                 <li class=""><a href="module_element.html">element</a></li>
 
                                 <li class=""><a href="module_event.html">event</a></li>
 
+                                <li class=""><a href="module_get.html">get</a></li>
+
                                 <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
 
                                 <li class=""><a href="module_logger.html">logger</a></li>
 
                                 <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
 
                                 <li class=""><a href="module_slider.html">slider</a></li>
 
@@ -344,7 +476,13 @@
 
                                 <li class=""><a href="module_treeview.html">treeview</a></li>
 
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
                                 <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
                         </ul>
                     </div>
 

@@ -3,26 +3,33 @@
 <head>
 	<title>API: animation  YAHOO.util.Anim   (YUI Library)</title>
 	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
 </head>
 
 <body id="yahoo-com">
+
 <div id="doc3" class="yui-t2">
 
 	<div id="hd">
-        <h1>Yahoo! UI Library</h1>
-        <h3>animation&nbsp; <span class="subtitle">2.2.2</span></h3>
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>animation&nbsp; <span class="subtitle">2.5.2</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_animation.html">animation</a>
                  &gt; YAHOO.util.Anim 
                 
             </p>
+
 	</div>
 
 	<div id="bd">
 		<div id="yui-main">
 			<div class="yui-b">
-
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
 
                     <h2>
                         
@@ -43,9 +50,7 @@
                         <dl class="subclasses">
                             <dt>Known Subclasses:</dd>
                             <dd>
-                                    <a href="YAHOO.util.Scroll.html">YAHOO.util.Scroll</a>
                                     <a href="YAHOO.util.ColorAnim.html">YAHOO.util.ColorAnim</a>
-                                    <a href="YAHOO.util.Motion.html">YAHOO.util.Motion</a>
                             </dd>
                        </dl>
                 
@@ -57,7 +62,7 @@
                     </div>
 
                         <div class="section constructor details">
-                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <h3 id="constructor">Constructor</h3>
                         <div class="content">
                             <div class="detail">
                                 <strong>YAHOO.util.Anim</strong>
@@ -117,9 +122,10 @@ All attribute names use camelCase.
                     </div>
 
                         <div class="section field details">
-                            <h3><a name="field_detail">Properties</a></h3>
+                            <h3 id="properties">Properties</h3>
                             <div class="content">
-                                    <h4><a name="_onComplete">_onComplete</a>
+                                    <div class="private">
+                                    <h4><a name="property__onComplete">_onComplete</a>
                                         <code>- private object</code>
                                     </h4>
                                     <div class="detail">
@@ -132,7 +138,9 @@ All attribute names use camelCase.
 
 
                                     <hr />
-                                    <h4><a name="_onStart">_onStart</a>
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property__onStart">_onStart</a>
                                         <code>- private object</code>
                                     </h4>
                                     <div class="detail">
@@ -145,7 +153,9 @@ All attribute names use camelCase.
 
 
                                     <hr />
-                                    <h4><a name="_onTween">_onTween</a>
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property__onTween">_onTween</a>
                                         <code>- private object</code>
                                     </h4>
                                     <div class="detail">
@@ -158,7 +168,9 @@ All attribute names use camelCase.
 
 
                                     <hr />
-                                    <h4><a name="actualFrames">actualFrames</a>
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property_actualFrames">actualFrames</a>
                                         <code>- private Int</code>
                                     </h4>
                                     <div class="detail">
@@ -171,7 +183,9 @@ All attribute names use camelCase.
 
 
                                     <hr />
-                                    <h4><a name="attributes">attributes</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_attributes">attributes</a>
                                         <code>- Object</code>
                                     </h4>
                                     <div class="detail">
@@ -189,7 +203,9 @@ Optional additional member include "from" (the value the attribute should start 
 
 
                                     <hr />
-                                    <h4><a name="currentFrame">currentFrame</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_currentFrame">currentFrame</a>
                                         <code>- Int</code>
                                     </h4>
                                     <div class="detail">
@@ -203,7 +219,9 @@ In time-based animations, this is used by AnimMgr to ensure the animation finish
 
 
                                     <hr />
-                                    <h4><a name="duration">duration</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_duration">duration</a>
                                         <code>- Number</code>
                                     </h4>
                                     <div class="detail">
@@ -216,7 +234,9 @@ In time-based animations, this is used by AnimMgr to ensure the animation finish
 
 
                                     <hr />
-                                    <h4><a name="el">el</a>
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property_el">el</a>
                                         <code>- private HTMLElement</code>
                                     </h4>
                                     <div class="detail">
@@ -229,7 +249,9 @@ In time-based animations, this is used by AnimMgr to ensure the animation finish
 
 
                                     <hr />
-                                    <h4><a name="isAnimated">isAnimated</a>
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property_isAnimated">isAnimated</a>
                                         <code>- private Boolean</code>
                                     </h4>
                                     <div class="detail">
@@ -242,7 +264,9 @@ In time-based animations, this is used by AnimMgr to ensure the animation finish
 
 
                                     <hr />
-                                    <h4><a name="method">method</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_method">method</a>
                                         <code>- Function</code>
                                     </h4>
                                     <div class="detail">
@@ -256,7 +280,9 @@ Defaults to "YAHOO.util.Easing.easeNone".
 
 
                                     <hr />
-                                    <h4><a name="startTime">startTime</a>
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property_startTime">startTime</a>
                                         <code>- private Date</code>
                                     </h4>
                                     <div class="detail">
@@ -269,7 +295,9 @@ Defaults to "YAHOO.util.Easing.easeNone".
 
 
                                     <hr />
-                                    <h4><a name="totalFrames">totalFrames</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_totalFrames">totalFrames</a>
                                         <code>- Int</code>
                                     </h4>
                                     <div class="detail">
@@ -283,7 +311,9 @@ In time-based animations, this is used by AnimMgr to ensure the animation finish
 
 
                                     <hr />
-                                    <h4><a name="useSeconds">useSeconds</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_useSeconds">useSeconds</a>
                                         <code>- Boolean</code>
                                     </h4>
                                     <div class="detail">
@@ -297,6 +327,7 @@ Defaults to true.
 
 
                                     <hr />
+                                    </div>
 
 
                             </div>
@@ -304,10 +335,11 @@ Defaults to true.
 
 
                         <div class="section method details">
-                            <h3><a name="methodDetails">Methods</a></h3>
+                            <h3 id="methods">Methods</h3>
                             <div class="content">
+                                    <div class="">
                                     <h4>
-                                        <a name="animate">animate</a></h4>
+                                        <a name="method_animate">animate</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -338,8 +370,10 @@ Defaults to true.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="doMethod">doMethod</a></h4>
+                                        <a name="method_doMethod">doMethod</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -398,8 +432,10 @@ Defaults to true.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getAttribute">getAttribute</a></h4>
+                                        <a name="method_getAttribute">getAttribute</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -442,8 +478,10 @@ Defaults to true.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getDefaultUnit">getDefaultUnit</a></h4>
+                                        <a name="method_getDefaultUnit">getDefaultUnit</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -486,8 +524,10 @@ Defaults to true.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getEl">getEl</a></h4>
+                                        <a name="method_getEl">getEl</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -518,8 +558,10 @@ Defaults to true.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getStartTime">getStartTime</a></h4>
+                                        <a name="method_getStartTime">getStartTime</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -550,8 +592,10 @@ Defaults to true.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="init">init</a></h4>
+                                        <a name="method_init">init</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -621,8 +665,10 @@ All attribute names use camelCase.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="isAnimated">isAnimated</a></h4>
+                                        <a name="method_isAnimated">isAnimated</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -653,8 +699,10 @@ All attribute names use camelCase.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="private">
                                     <h4>
-                                        <a name="onTween">onTween</a></h4>
+                                        <a name="method_onTween">onTween</a></h4>
                                     <div class="detail">
                                         <code>
                                          private 
@@ -685,8 +733,10 @@ All attribute names use camelCase.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="setAttribute">setAttribute</a></h4>
+                                        <a name="method_setAttribute">setAttribute</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -745,8 +795,44 @@ All attribute names use camelCase.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="setRuntimeAttribute">setRuntimeAttribute</a></h4>
+                                        <a name="method_setEl">setEl</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>setEl</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Changes the animated element
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="method_setRuntimeAttribute">setRuntimeAttribute</a></h4>
                                     <div class="detail">
                                         <code>
                                          private 
@@ -789,8 +875,10 @@ All attribute names use camelCase.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="stop">stop</a></h4>
+                                        <a name="method_stop">stop</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -833,8 +921,10 @@ All attribute names use camelCase.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="toString">toString</a></h4>
+                                        <a name="method_toString">toString</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -865,15 +955,17 @@ All attribute names use camelCase.
 
                                     </div>
                                     <hr />
+                                    </div>
                             </div>
                         </div>
 
 
                         <div class="section method details">
-                            <h3><a name="methodDetails">Events</a></h3>
+                            <h3 id="events">Events</h3>
                             <div class="content">
+                                    <div class="">
                                     <h4>
-                                        <a name="onComplete">onComplete</a></h4>
+                                        <a name="event_onComplete">onComplete</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -900,8 +992,10 @@ Listen via subscribe method (e.g. myAnim.onComplete.subscribe(someFunction)
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="onStart">onStart</a></h4>
+                                        <a name="event_onStart">onStart</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -928,8 +1022,10 @@ Listen via subscribe method (e.g. myAnim.onStart.subscribe(someFunction)
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="onTween">onTween</a></h4>
+                                        <a name="event_onTween">onTween</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -956,6 +1052,7 @@ Listen via subscribe method (e.g. myAnim.onTween.subscribe(someFunction)
 
                                     </div>
                                     <hr />
+                                    </div>
                             </div>
                         </div>
 
@@ -980,9 +1077,15 @@ Listen via subscribe method (e.g. myAnim.onTween.subscribe(someFunction)
 
                                 <li class=""><a href="module_calendar.html">calendar</a></li>
 
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
                                 <li class=""><a href="module_connection.html">connection</a></li>
 
                                 <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
 
                                 <li class=""><a href="module_datasource.html">datasource</a></li>
 
@@ -992,15 +1095,35 @@ Listen via subscribe method (e.g. myAnim.onTween.subscribe(someFunction)
 
                                 <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
 
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
                                 <li class=""><a href="module_element.html">element</a></li>
 
                                 <li class=""><a href="module_event.html">event</a></li>
 
+                                <li class=""><a href="module_get.html">get</a></li>
+
                                 <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
 
                                 <li class=""><a href="module_logger.html">logger</a></li>
 
                                 <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
 
                                 <li class=""><a href="module_slider.html">slider</a></li>
 
@@ -1008,7 +1131,13 @@ Listen via subscribe method (e.g. myAnim.onTween.subscribe(someFunction)
 
                                 <li class=""><a href="module_treeview.html">treeview</a></li>
 
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
                                 <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
                         </ul>
                     </div>
 
@@ -1041,43 +1170,43 @@ Listen via subscribe method (e.g. myAnim.onTween.subscribe(someFunction)
                     <div class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
-                                <li><a href="#_onComplete">_onComplete</a>
+                                <li class="private"><a href="#property__onComplete">_onComplete</a>
                                         <!--<code>&lt;Boolean&gt;</code>-->
                                 </li>
-                                <li><a href="#_onStart">_onStart</a>
+                                <li class="private"><a href="#property__onStart">_onStart</a>
                                         <!--<code>&lt;Boolean&gt;</code>-->
                                 </li>
-                                <li><a href="#_onTween">_onTween</a>
+                                <li class="private"><a href="#property__onTween">_onTween</a>
                                         <!--<code>&lt;Boolean&gt;</code>-->
                                 </li>
-                                <li><a href="#actualFrames">actualFrames</a>
+                                <li class="private"><a href="#property_actualFrames">actualFrames</a>
                                         <!--<code>&lt;Boolean&gt;</code>-->
                                 </li>
-                                <li><a href="#attributes">attributes</a>
+                                <li class=""><a href="#property_attributes">attributes</a>
                                         <!--<code>&lt;Boolean&gt;</code>-->
                                 </li>
-                                <li><a href="#currentFrame">currentFrame</a>
+                                <li class=""><a href="#property_currentFrame">currentFrame</a>
                                         <!--<code>&lt;Boolean&gt;</code>-->
                                 </li>
-                                <li><a href="#duration">duration</a>
+                                <li class=""><a href="#property_duration">duration</a>
                                         <!--<code>&lt;Boolean&gt;</code>-->
                                 </li>
-                                <li><a href="#el">el</a>
+                                <li class="private"><a href="#property_el">el</a>
                                         <!--<code>&lt;Boolean&gt;</code>-->
                                 </li>
-                                <li><a href="#isAnimated">isAnimated</a>
+                                <li class="private"><a href="#property_isAnimated">isAnimated</a>
                                         <!--<code>&lt;Boolean&gt;</code>-->
                                 </li>
-                                <li><a href="#method">method</a>
+                                <li class=""><a href="#property_method">method</a>
                                         <!--<code>&lt;Boolean&gt;</code>-->
                                 </li>
-                                <li><a href="#startTime">startTime</a>
+                                <li class="private"><a href="#property_startTime">startTime</a>
                                         <!--<code>&lt;Boolean&gt;</code>-->
                                 </li>
-                                <li><a href="#totalFrames">totalFrames</a>
+                                <li class=""><a href="#property_totalFrames">totalFrames</a>
                                         <!--<code>&lt;Boolean&gt;</code>-->
                                 </li>
-                                <li><a href="#useSeconds">useSeconds</a>
+                                <li class=""><a href="#property_useSeconds">useSeconds</a>
                                         <!--<code>&lt;Boolean&gt;</code>-->
                                 </li>
                         </ul>
@@ -1086,44 +1215,47 @@ Listen via subscribe method (e.g. myAnim.onTween.subscribe(someFunction)
                     <div class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
-                                <li><!--<code>void</code>-->
-                                <a href="#animate">animate</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_animate">animate</a>
                                 </li>
-                                <li><!--<code>Number</code>-->
-                                <a href="#doMethod">doMethod</a>
+                                <li class=""><!--<code>Number</code>-->
+                                <a href="#method_doMethod">doMethod</a>
                                 </li>
-                                <li><!--<code>Number</code>-->
-                                <a href="#getAttribute">getAttribute</a>
+                                <li class=""><!--<code>Number</code>-->
+                                <a href="#method_getAttribute">getAttribute</a>
                                 </li>
-                                <li><!--<code>String</code>-->
-                                <a href="#getDefaultUnit">getDefaultUnit</a>
+                                <li class=""><!--<code>String</code>-->
+                                <a href="#method_getDefaultUnit">getDefaultUnit</a>
                                 </li>
-                                <li><!--<code>HTMLElement</code>-->
-                                <a href="#getEl">getEl</a>
+                                <li class=""><!--<code>HTMLElement</code>-->
+                                <a href="#method_getEl">getEl</a>
                                 </li>
-                                <li><!--<code>Date</code>-->
-                                <a href="#getStartTime">getStartTime</a>
+                                <li class=""><!--<code>Date</code>-->
+                                <a href="#method_getStartTime">getStartTime</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#init">init</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_init">init</a>
                                 </li>
-                                <li><!--<code>Boolean</code>-->
-                                <a href="#isAnimated">isAnimated</a>
+                                <li class=""><!--<code>Boolean</code>-->
+                                <a href="#method_isAnimated">isAnimated</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#onTween">onTween</a>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method_onTween">onTween</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#setAttribute">setAttribute</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_setAttribute">setAttribute</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#setRuntimeAttribute">setRuntimeAttribute</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_setEl">setEl</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#stop">stop</a>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method_setRuntimeAttribute">setRuntimeAttribute</a>
                                 </li>
-                                <li><!--<code>String</code>-->
-                                <a href="#toString">toString</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_stop">stop</a>
+                                </li>
+                                <li class=""><!--<code>String</code>-->
+                                <a href="#method_toString">toString</a>
                                 </li>
                         </ul>
                     </div>
@@ -1131,14 +1263,14 @@ Listen via subscribe method (e.g. myAnim.onTween.subscribe(someFunction)
                     <div class="module">
                         <h4>Events</h4>
                         <ul class="content">        
-                                <li>
-                                <a href="#onComplete">onComplete</a>
+                                <li class="">
+                                <a href="#event_onComplete">onComplete</a>
                                 </li>
-                                <li>
-                                <a href="#onStart">onStart</a>
+                                <li class="">
+                                <a href="#event_onStart">onStart</a>
                                 </li>
-                                <li>
-                                <a href="#onTween">onTween</a>
+                                <li class="">
+                                <a href="#event_onTween">onTween</a>
                                 </li>
                         </ul>
                     </div>

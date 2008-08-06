@@ -3,26 +3,33 @@
 <head>
 	<title>API: element  YAHOO.util.Element   (YUI Library)</title>
 	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
 </head>
 
 <body id="yahoo-com">
+
 <div id="doc3" class="yui-t2">
 
 	<div id="hd">
-        <h1>Yahoo! UI Library</h1>
-        <h3>element&nbsp; <span class="subtitle">2.2.2</span></h3>
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>element&nbsp; <span class="subtitle">2.5.2</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_element.html">element</a>
                  &gt; YAHOO.util.Element 
                 
             </p>
+
 	</div>
 
 	<div id="bd">
 		<div id="yui-main">
 			<div class="yui-b">
-
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
 
                     <h2>
                         
@@ -47,10 +54,19 @@
                         <dl class="subclasses">
                             <dt>Known Subclasses:</dd>
                             <dd>
-                                    <a href="YAHOO.widget.Tab.html">YAHOO.widget.Tab</a>
-                                    <a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a>
-                                    <a href="YAHOO.widget.TabView.html">YAHOO.widget.TabView</a>
+                                    <a href="YAHOO.widget.Toolbar.html">YAHOO.widget.Toolbar</a>
+                                    <a href="YAHOO.util.Resize.html">YAHOO.util.Resize</a>
+                                    <a href="YAHOO.widget.Layout.html">YAHOO.widget.Layout</a>
+                                    <a href="YAHOO.widget.ImageCropper.html">YAHOO.widget.ImageCropper</a>
+                                    <a href="YAHOO.widget.SimpleEditor.html">YAHOO.widget.SimpleEditor</a>
+                                    <a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>
+                                    <a href="YAHOO.widget.ColorPicker.html">YAHOO.widget.ColorPicker</a>
+                                    <a href="YAHOO.widget.ToolbarButton.html">YAHOO.widget.ToolbarButton</a>
                                     <a href="YAHOO.widget.ButtonGroup.html">YAHOO.widget.ButtonGroup</a>
+                                    <a href="YAHOO.widget.ProfilerViewer.html">YAHOO.widget.ProfilerViewer</a>
+                                    <a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a>
+                                    <a href="YAHOO.widget.Tab.html">YAHOO.widget.Tab</a>
+                                    <a href="YAHOO.widget.TabView.html">YAHOO.widget.TabView</a>
                             </dd>
                        </dl>
                 
@@ -62,7 +78,7 @@ event listeners, using dom methods, and managing attributes.
                     </div>
 
                         <div class="section constructor details">
-                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <h3 id="constructor">Constructor</h3>
                         <div class="content">
                             <div class="detail">
                                 <strong>YAHOO.util.Element</strong>
@@ -102,9 +118,10 @@ represents the Element.
                     </div>
 
                         <div class="section field details">
-                            <h3><a name="field_detail">Properties</a></h3>
+                            <h3 id="properties">Properties</h3>
                             <div class="content">
-                                    <h4><a name="DOM_EVENTS">DOM_EVENTS</a>
+                                    <div class="">
+                                    <h4><a name="property_DOM_EVENTS">DOM_EVENTS</a>
                                         <code>- Object</code>
                                     </h4>
                                     <div class="detail">
@@ -117,6 +134,7 @@ represents the Element.
 
 
                                     <hr />
+                                    </div>
 
 
                             </div>
@@ -127,7 +145,7 @@ represents the Element.
                             <div class="content">
                                 <code>
                                     
-                                        <a href="YAHOO.util.AttributeProvider.html#_configs">_configs</a>
+                                        <a class="private" href="YAHOO.util.AttributeProvider.html#property__configs">_configs</a>
                                 </code>
                             </div>
                         </div>
@@ -136,17 +154,18 @@ represents the Element.
                             <div class="content">
                                 <code>
                                     
-                                        <a href="YAHOO.util.EventProvider.html#__yui_events">__yui_events</a>,
-                                        <a href="YAHOO.util.EventProvider.html#__yui_subscribers">__yui_subscribers</a>
+                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_events">__yui_events</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_subscribers">__yui_subscribers</a>
                                 </code>
                             </div>
                         </div>
 
                         <div class="section method details">
-                            <h3><a name="methodDetails">Methods</a></h3>
+                            <h3 id="methods">Methods</h3>
                             <div class="content">
+                                    <div class="private">
                                     <h4>
-                                        <a name="_registerHTMLAttr">_registerHTMLAttr</a></h4>
+                                        <a name="method__registerHTMLAttr">_registerHTMLAttr</a></h4>
                                     <div class="detail">
                                         <code>
                                          private 
@@ -206,8 +225,10 @@ register the config to.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="addClass">addClass</a></h4>
+                                        <a name="method_addClass">addClass</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -250,8 +271,10 @@ register the config to.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="addListener">addListener</a></h4>
+                                        <a name="method_addListener">addListener</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -320,8 +343,10 @@ can be listened for.  All handlers receive an event object.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="appendChild">appendChild</a></h4>
+                                        <a name="method_appendChild">appendChild</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -332,7 +357,7 @@ can be listened for.  All handlers receive an event object.
                                            (
                                                 
                                                         
-                                                         deep
+                                                         child
                                                     
                                                 
                                             )
@@ -347,8 +372,8 @@ can be listened for.  All handlers receive an event object.
                                                 <dl>
                                                     <dt>Parameters:</dt>
                                                         <dd>
-                                                            <code>deep &lt;Boolean&gt;</code>
-                                                             Whether or not to do a deep clone
+                                                            <code>child &lt;YAHOO.util.Element || HTMLElement&gt;</code>
+                                                             The element to append.
                                                         </dd>
                                                 </dl>
 
@@ -364,8 +389,10 @@ can be listened for.  All handlers receive an event object.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="appendTo">appendTo</a></h4>
+                                        <a name="method_appendTo">appendTo</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -416,8 +443,10 @@ can be listened for.  All handlers receive an event object.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="fireQueue">fireQueue</a></h4>
+                                        <a name="method_fireQueue">fireQueue</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -448,8 +477,10 @@ can be listened for.  All handlers receive an event object.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getElementsByClassName">getElementsByClassName</a></h4>
+                                        <a name="method_getElementsByClassName">getElementsByClassName</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -501,8 +532,10 @@ conjunction with class name
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getElementsByTagName">getElementsByTagName</a></h4>
+                                        <a name="method_getElementsByTagName">getElementsByTagName</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -545,8 +578,10 @@ conjunction with class name
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getStyle">getStyle</a></h4>
+                                        <a name="method_getStyle">getStyle</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -589,8 +624,10 @@ conjunction with class name
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="hasChildNodes">hasChildNodes</a></h4>
+                                        <a name="method_hasChildNodes">hasChildNodes</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -621,8 +658,10 @@ conjunction with class name
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="hasClass">hasClass</a></h4>
+                                        <a name="method_hasClass">hasClass</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -665,8 +704,10 @@ conjunction with class name
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="initAttributes">initAttributes</a></h4>
+                                        <a name="method_initAttributes">initAttributes</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -709,8 +750,10 @@ conjunction with class name
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="insertBefore">insertBefore</a></h4>
+                                        <a name="method_insertBefore">insertBefore</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -762,8 +805,10 @@ the element before.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="on">on</a></h4>
+                                        <a name="method_on">on</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -830,8 +875,10 @@ the element before.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="removeChild">removeChild</a></h4>
+                                        <a name="method_removeChild">removeChild</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -874,8 +921,10 @@ the element before.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="removeClass">removeClass</a></h4>
+                                        <a name="method_removeClass">removeClass</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -918,8 +967,10 @@ the element before.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="removeListener">removeListener</a></h4>
+                                        <a name="method_removeListener">removeListener</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -970,8 +1021,10 @@ the element before.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="replaceChild">replaceChild</a></h4>
+                                        <a name="method_replaceChild">replaceChild</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1022,8 +1075,10 @@ the element before.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="replaceClass">replaceClass</a></h4>
+                                        <a name="method_replaceClass">replaceClass</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1074,8 +1129,10 @@ the element before.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="setStyle">setStyle</a></h4>
+                                        <a name="method_setStyle">setStyle</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1126,6 +1183,77 @@ the element before.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_subscribe">subscribe</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>subscribe</strong>
+                                           (
+                                                
+                                                        
+                                                         type
+                                                    
+                                                
+                                                        , 
+                                                         fn
+                                                    
+                                                
+                                                        , 
+                                                         obj
+                                                    
+                                                
+                                                        , 
+                                                         scope
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Alias for addListener
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>type &lt;String&gt;</code>
+                                                             The name of the event to listen for
+                                                        </dd>
+                                                        <dd>
+                                                            <code>fn &lt;Function&gt;</code>
+                                                             The function call when the event fires
+                                                        </dd>
+                                                        <dd>
+                                                            <code>obj &lt;Any&gt;</code>
+                                                             A variable to pass to the handler
+                                                        </dd>
+                                                        <dd>
+                                                            <code>scope &lt;Object&gt;</code>
+                                                             The object to use for the scope of the handler
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                             </div>
                         </div>
 
@@ -1133,20 +1261,7 @@ the element before.
                                 <h4>Methods inherited from <a href="YAHOO.util.AttributeProvider.html">YAHOO.util.AttributeProvider</a>:</h4>
                                 <div class="content">
                                     <code>
-                                        
-                                            <a href="YAHOO.util.AttributeProvider.html#configureAttribute">configureAttribute</a>,
-                                            <a href="YAHOO.util.AttributeProvider.html#fireBeforeChangeEvent">fireBeforeChangeEvent</a>,
-                                            <a href="YAHOO.util.AttributeProvider.html#fireChangeEvent">fireChangeEvent</a>,
-                                            <a href="YAHOO.util.AttributeProvider.html#get">get</a>,
-                                            <a href="YAHOO.util.AttributeProvider.html#getAttributeConfig">getAttributeConfig</a>,
-                                            <a href="YAHOO.util.AttributeProvider.html#getAttributeKeys">getAttributeKeys</a>,
-                                            <a href="YAHOO.util.AttributeProvider.html#refresh">refresh</a>,
-                                            <a href="YAHOO.util.AttributeProvider.html#register">register</a>,
-                                            <a href="YAHOO.util.AttributeProvider.html#resetAttributeConfig">resetAttributeConfig</a>,
-                                            <a href="YAHOO.util.AttributeProvider.html#resetValue">resetValue</a>,
-                                            <a href="YAHOO.util.AttributeProvider.html#set">set</a>,
-                                            <a href="YAHOO.util.AttributeProvider.html#setAttributeConfig">setAttributeConfig</a>,
-                                            <a href="YAHOO.util.AttributeProvider.html#setAttributes">setAttributes</a>
+                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_configureAttribute">configureAttribute</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_fireBeforeChangeEvent">fireBeforeChangeEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_fireChangeEvent">fireChangeEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_get">get</a><span class="">,</span>                                            <a class="private" href="YAHOO.util.AttributeProvider.html#method_getAttributeConfig">getAttributeConfig</a><span class="private">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_getAttributeKeys">getAttributeKeys</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_refresh">refresh</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_register">register</a><span class="">,</span>                                            <a class="private" href="YAHOO.util.AttributeProvider.html#method_resetAttributeConfig">resetAttributeConfig</a><span class="private">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_resetValue">resetValue</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_set">set</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_setAttributeConfig">setAttributeConfig</a><span class="">,</span>                                            <a class="" href="YAHOO.util.AttributeProvider.html#method_setAttributes">setAttributes</a>
                                     </code>
                                 </div>
                             </div>
@@ -1154,22 +1269,54 @@ the element before.
                                 <h4>Methods inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
                                 <div class="content">
                                     <code>
-                                        
-                                            <a href="YAHOO.util.EventProvider.html#createEvent">createEvent</a>,
-                                            <a href="YAHOO.util.EventProvider.html#fireEvent">fireEvent</a>,
-                                            <a href="YAHOO.util.EventProvider.html#hasEvent">hasEvent</a>,
-                                            <a href="YAHOO.util.EventProvider.html#subscribe">subscribe</a>,
-                                            <a href="YAHOO.util.EventProvider.html#unsubscribe">unsubscribe</a>,
-                                            <a href="YAHOO.util.EventProvider.html#unsubscribeAll">unsubscribeAll</a>
+                                            <a class="" href="YAHOO.util.EventProvider.html#method_createEvent">createEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_fireEvent">fireEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_hasEvent">hasEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_subscribe">subscribe</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_unsubscribe">unsubscribe</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_unsubscribeAll">unsubscribeAll</a>
                                     </code>
                                 </div>
                             </div>
 
                         <div class="section method details">
-                            <h3><a name="methodDetails">Events</a></h3>
+                            <h3 id="events">Events</h3>
                             <div class="content">
+                                    <div class="">
                                     <h4>
-                                        <a name="available">available</a></h4>
+                                        <a name="event_appendTo">appendTo</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>appendTo</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires after the Element is appended to another Element.
+<p>See: <a href="#addListener">Element.addListener</a></p>
+<p><strong>Event fields:</strong><br>
+<code>&lt;String&gt; type</code> appendTo<br>
+<code>&lt;HTMLElement/Element&gt;
+target</code> the HTMLElement/Element being appended to 
+<p><strong>Usage:</strong><br>
+<code>var handler = function(e) {var target = e.target};<br>
+myTabs.addListener('appendTo', handler);</code></p>
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_available">available</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1203,8 +1350,88 @@ myTabs.addListener('available', handler);</code></p>
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="contentReady">contentReady</a></h4>
+                                        <a name="event_beforeAppendTo">beforeAppendTo</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeAppendTo</strong>
+
+                                            (
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires before the Element is appended to another Element.
+<p>See: <a href="#addListener">Element.addListener</a></p>
+<p><strong>Event fields:</strong><br>
+<code>&lt;String&gt; type</code> beforeAppendTo<br>
+<code>&lt;HTMLElement/Element&gt;
+target</code> the HTMLElement/Element being appended to 
+<p><strong>Usage:</strong><br>
+<code>var handler = function(e) {var target = e.target};<br>
+myTabs.addListener('beforeAppendTo', handler);</code></p>
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_beforeElementChange">beforeElementChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>beforeElementChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires before the value for the configuration attribute 'element' changes. Return false to cancel the attribute change.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the current attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_contentReady">contentReady</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1238,15 +1465,58 @@ myTabs.addListener('contentReady', handler);</code></p>
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="event_elementChange">elementChange</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                            <strong>elementChange</strong>
+
+                                            (
+                                                
+                                                        
+                                                         eventInfo
+                                                    
+                                                
+                                            )
+
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Fires when the value for the configuration attribute 'element' changes.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>eventInfo &lt;{oldValue: any, newValue: any}&gt;</code>
+                                                            An object containing the previous attribute value and the new value.
+                                                        </dd>
+                                                </dl>
+
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                             </div>
                         </div>
 
 
 
                         <div class="section field details">
-                            <h3><a name="field_detail">Configuration Attributes</a></h3>
+                            <h3 id="configattributes">Configuration Attributes</h3>
                             <div class="content">
-                                    <h4><a name="element">element</a>
+                                    <div class="">
+                                    <h4><a name="config_element">element</a>
                                         <code>- HTMLElement</code>
                                     </h4>
                                     <div class="detail">
@@ -1258,6 +1528,7 @@ myTabs.addListener('contentReady', handler);</code></p>
      
 
                                     <hr />
+                                    </div>        
 
                             </div>
                         </div>
@@ -1280,9 +1551,15 @@ myTabs.addListener('contentReady', handler);</code></p>
 
                                 <li class=""><a href="module_calendar.html">calendar</a></li>
 
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
                                 <li class=""><a href="module_connection.html">connection</a></li>
 
                                 <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
 
                                 <li class=""><a href="module_datasource.html">datasource</a></li>
 
@@ -1292,15 +1569,35 @@ myTabs.addListener('contentReady', handler);</code></p>
 
                                 <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
 
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
                                 <li class="selected"><a href="module_element.html">element</a></li>
 
                                 <li class=""><a href="module_event.html">event</a></li>
 
+                                <li class=""><a href="module_get.html">get</a></li>
+
                                 <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
 
                                 <li class=""><a href="module_logger.html">logger</a></li>
 
                                 <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
 
                                 <li class=""><a href="module_slider.html">slider</a></li>
 
@@ -1308,7 +1605,13 @@ myTabs.addListener('contentReady', handler);</code></p>
 
                                 <li class=""><a href="module_treeview.html">treeview</a></li>
 
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
                                 <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
                         </ul>
                     </div>
 
@@ -1333,7 +1636,7 @@ myTabs.addListener('contentReady', handler);</code></p>
                     <div class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
-                                <li><a href="#DOM_EVENTS">DOM_EVENTS</a>
+                                <li class=""><a href="#property_DOM_EVENTS">DOM_EVENTS</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
                         </ul>
@@ -1342,65 +1645,68 @@ myTabs.addListener('contentReady', handler);</code></p>
                     <div class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
-                                <li><!--<code>void</code>-->
-                                <a href="#_registerHTMLAttr">_registerHTMLAttr</a>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method__registerHTMLAttr">_registerHTMLAttr</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#addClass">addClass</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_addClass">addClass</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#addListener">addListener</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_addListener">addListener</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#appendChild">appendChild</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_appendChild">appendChild</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#appendTo">appendTo</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_appendTo">appendTo</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#fireQueue">fireQueue</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_fireQueue">fireQueue</a>
                                 </li>
-                                <li><!--<code>Array</code>-->
-                                <a href="#getElementsByClassName">getElementsByClassName</a>
+                                <li class=""><!--<code>Array</code>-->
+                                <a href="#method_getElementsByClassName">getElementsByClassName</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#getElementsByTagName">getElementsByTagName</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_getElementsByTagName">getElementsByTagName</a>
                                 </li>
-                                <li><!--<code>String</code>-->
-                                <a href="#getStyle">getStyle</a>
+                                <li class=""><!--<code>String</code>-->
+                                <a href="#method_getStyle">getStyle</a>
                                 </li>
-                                <li><!--<code>Boolean</code>-->
-                                <a href="#hasChildNodes">hasChildNodes</a>
+                                <li class=""><!--<code>Boolean</code>-->
+                                <a href="#method_hasChildNodes">hasChildNodes</a>
                                 </li>
-                                <li><!--<code>Boolean</code>-->
-                                <a href="#hasClass">hasClass</a>
+                                <li class=""><!--<code>Boolean</code>-->
+                                <a href="#method_hasClass">hasClass</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#initAttributes">initAttributes</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_initAttributes">initAttributes</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#insertBefore">insertBefore</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_insertBefore">insertBefore</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#on">on</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_on">on</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#removeChild">removeChild</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_removeChild">removeChild</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#removeClass">removeClass</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_removeClass">removeClass</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#removeListener">removeListener</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_removeListener">removeListener</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#replaceChild">replaceChild</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_replaceChild">replaceChild</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#replaceClass">replaceClass</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_replaceClass">replaceClass</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#setStyle">setStyle</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_setStyle">setStyle</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_subscribe">subscribe</a>
                                 </li>
                         </ul>
                     </div>
@@ -1408,11 +1714,23 @@ myTabs.addListener('contentReady', handler);</code></p>
                     <div class="module">
                         <h4>Events</h4>
                         <ul class="content">        
-                                <li>
-                                <a href="#available">available</a>
+                                <li class="">
+                                <a href="#event_appendTo">appendTo</a>
                                 </li>
-                                <li>
-                                <a href="#contentReady">contentReady</a>
+                                <li class="">
+                                <a href="#event_available">available</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_beforeAppendTo">beforeAppendTo</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_beforeElementChange">beforeElementChange</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_contentReady">contentReady</a>
+                                </li>
+                                <li class="">
+                                <a href="#event_elementChange">elementChange</a>
                                 </li>
                         </ul>
                     </div>
@@ -1420,8 +1738,8 @@ myTabs.addListener('contentReady', handler);</code></p>
                     <div class="module">
                         <h4>Configuration Attributes</h4>
                         <ul class="content">        
-                                <li>
-                                <a href="#element">element</a>
+                                <li class="">
+                                <a href="#config_element">element</a>
                                 </li>
                         </ul>
                     </div>

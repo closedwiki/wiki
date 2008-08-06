@@ -3,26 +3,33 @@
 <head>
 	<title>API: logger  YAHOO.widget.LogMsg   (YUI Library)</title>
 	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
 </head>
 
 <body id="yahoo-com">
+
 <div id="doc3" class="yui-t2">
 
 	<div id="hd">
-        <h1>Yahoo! UI Library</h1>
-        <h3>Logger Widget&nbsp; <span class="subtitle">2.2.2</span></h3>
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>Logger Widget&nbsp; <span class="subtitle">2.5.2</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_logger.html">logger</a>
                  &gt; YAHOO.widget.LogMsg 
                 
             </p>
+
 	</div>
 
 	<div id="bd">
 		<div id="yui-main">
 			<div class="yui-b">
-
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
 
                     <h2>
                         
@@ -48,7 +55,7 @@
                     </div>
 
                         <div class="section constructor details">
-                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <h3 id="constructor">Constructor</h3>
                         <div class="content">
                             <div class="detail">
                                 <strong>YAHOO.widget.LogMsg</strong>
@@ -78,9 +85,10 @@
                     </div>
 
                         <div class="section field details">
-                            <h3><a name="field_detail">Properties</a></h3>
+                            <h3 id="properties">Properties</h3>
                             <div class="content">
-                                    <h4><a name="category">category</a>
+                                    <div class="">
+                                    <h4><a name="property_category">category</a>
                                         <code>- String</code>
                                     </h4>
                                     <div class="detail">
@@ -93,7 +101,9 @@
 
 
                                     <hr />
-                                    <h4><a name="msg">msg</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_msg">msg</a>
                                         <code>- String</code>
                                     </h4>
                                     <div class="detail">
@@ -106,7 +116,9 @@
 
 
                                     <hr />
-                                    <h4><a name="source">source</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_source">source</a>
                                         <code>- String</code>
                                     </h4>
                                     <div class="detail">
@@ -119,7 +131,9 @@
 
 
                                     <hr />
-                                    <h4><a name="sourceDetail">sourceDetail</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_sourceDetail">sourceDetail</a>
                                         <code>- String</code>
                                     </h4>
                                     <div class="detail">
@@ -133,7 +147,9 @@ including the first word (if any).
 
 
                                     <hr />
-                                    <h4><a name="time">time</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_time">time</a>
                                         <code>- Date</code>
                                     </h4>
                                     <div class="detail">
@@ -146,6 +162,7 @@ including the first word (if any).
 
 
                                     <hr />
+                                    </div>
 
 
                             </div>
@@ -176,9 +193,15 @@ including the first word (if any).
 
                                 <li class=""><a href="module_calendar.html">calendar</a></li>
 
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
                                 <li class=""><a href="module_connection.html">connection</a></li>
 
                                 <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
 
                                 <li class=""><a href="module_datasource.html">datasource</a></li>
 
@@ -188,15 +211,35 @@ including the first word (if any).
 
                                 <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
 
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
                                 <li class=""><a href="module_element.html">element</a></li>
 
                                 <li class=""><a href="module_event.html">event</a></li>
 
+                                <li class=""><a href="module_get.html">get</a></li>
+
                                 <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
 
                                 <li class="selected"><a href="module_logger.html">logger</a></li>
 
                                 <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
 
                                 <li class=""><a href="module_slider.html">slider</a></li>
 
@@ -204,7 +247,13 @@ including the first word (if any).
 
                                 <li class=""><a href="module_treeview.html">treeview</a></li>
 
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
                                 <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
                         </ul>
                     </div>
 
@@ -231,19 +280,19 @@ including the first word (if any).
                     <div class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
-                                <li><a href="#category">category</a>
+                                <li class=""><a href="#property_category">category</a>
                                         <!--<code>&lt;Date&gt;</code>-->
                                 </li>
-                                <li><a href="#msg">msg</a>
+                                <li class=""><a href="#property_msg">msg</a>
                                         <!--<code>&lt;Date&gt;</code>-->
                                 </li>
-                                <li><a href="#source">source</a>
+                                <li class=""><a href="#property_source">source</a>
                                         <!--<code>&lt;Date&gt;</code>-->
                                 </li>
-                                <li><a href="#sourceDetail">sourceDetail</a>
+                                <li class=""><a href="#property_sourceDetail">sourceDetail</a>
                                         <!--<code>&lt;Date&gt;</code>-->
                                 </li>
-                                <li><a href="#time">time</a>
+                                <li class=""><a href="#property_time">time</a>
                                         <!--<code>&lt;Date&gt;</code>-->
                                 </li>
                         </ul>

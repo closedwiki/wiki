@@ -3,26 +3,33 @@
 <head>
 	<title>API: container  YAHOO.widget.Panel   (YUI Library)</title>
 	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
 </head>
 
 <body id="yahoo-com">
+
 <div id="doc3" class="yui-t2">
 
 	<div id="hd">
-        <h1>Yahoo! UI Library</h1>
-        <h3>Container&nbsp; <span class="subtitle">2.2.2</span></h3>
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>Container&nbsp; <span class="subtitle">2.5.2</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_container.html">container</a>
                  &gt; YAHOO.widget.Panel 
                 
             </p>
+
 	</div>
 
 	<div id="bd">
 		<div id="yui-main">
 			<div class="yui-b">
-
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
 
                     <h2>
                         
@@ -51,11 +58,12 @@
   
 
                     <div class="summary description">
-                        Panel is an implementation of Overlay that behaves like an OS window, with a draggable header and an optional close icon at the top right.
+                        Panel is an implementation of Overlay that behaves like an OS window, 
+with a draggable header and an optional close icon at the top right.
                     </div>
 
                         <div class="section constructor details">
-                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <h3 id="constructor">Constructor</h3>
                         <div class="content">
                             <div class="detail">
                                 <strong>YAHOO.widget.Panel</strong>
@@ -78,19 +86,21 @@
                                                     <code>el
                                                     &lt;String&gt; 
                                                     </code>
-                                                    	The element ID representing the Panel <em>OR</em>
+                                                     The element ID representing the Panel <em>OR</em>
                                                 </dd>
                                                 <dd>
                                                     <code>el
                                                     &lt;HTMLElement&gt; 
                                                     </code>
-                                                    	The element representing the Panel
+                                                     The element representing the Panel
                                                 </dd>
                                                 <dd>
                                                     <code>userConfig
                                                     &lt;Object&gt; 
                                                     </code>
-                                                    	The configuration object literal containing the configuration that should be set for this Panel. See configuration documentation for more details.
+                                                     The configuration object literal containing 
+the configuration that should be set for this Panel. See configuration 
+documentation for more details.
                                                 </dd>
                                         </dl>
                                     
@@ -101,9 +111,10 @@
                     </div>
 
                         <div class="section field details">
-                            <h3><a name="field_detail">Properties</a></h3>
+                            <h3 id="properties">Properties</h3>
                             <div class="content">
-                                    <h4><a name="YAHOO.widget.Panel._DEFAULT_CONFIG">YAHOO.widget.Panel._DEFAULT_CONFIG</a>
+                                    <div class="private">
+                                    <h4><a name="property_DEFAULT_CONFIG">DEFAULT_CONFIG</a>
                                         <code>- private final Object</code>
                                     </h4>
                                     <div class="detail">
@@ -116,7 +127,9 @@
 
 
                                     <hr />
-                                    <h4><a name="YAHOO.widget.Panel._EVENT_TYPES">YAHOO.widget.Panel._EVENT_TYPES</a>
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property_EVENT_TYPES">EVENT_TYPES</a>
                                         <code>- private final Object</code>
                                     </h4>
                                     <div class="detail">
@@ -129,7 +142,9 @@
 
 
                                     <hr />
-                                    <h4><a name="YAHOO.widget.Panel.CSS_PANEL">YAHOO.widget.Panel.CSS_PANEL</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_YAHOO.widget.Panel.CSS_PANEL">YAHOO.widget.Panel.CSS_PANEL</a>
                                         <code>- static final String</code>
                                     </h4>
                                     <div class="detail">
@@ -142,12 +157,15 @@
 
 
                                     <hr />
-                                    <h4><a name="YAHOO.widget.Panel.CSS_PANEL_CONTAINER">YAHOO.widget.Panel.CSS_PANEL_CONTAINER</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_YAHOO.widget.Panel.CSS_PANEL_CONTAINER">YAHOO.widget.Panel.CSS_PANEL_CONTAINER</a>
                                         <code>- static final String</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
-                                            Constant representing the default CSS class used for a Panel's wrapping container
+                                            Constant representing the default CSS class used for a Panel's 
+wrapping container
                                         </div>
                                     </div>
      
@@ -155,6 +173,24 @@
 
 
                                     <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_YAHOO.widget.Panel.FOCUSABLE">YAHOO.widget.Panel.FOCUSABLE</a>
+                                        <code>- static Array</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Constant representing the default set of focusable elements 
+on the pagewhich Modal Panels will prevent access to, when
+the modal mask is displayed
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
 
 
                             </div>
@@ -165,19 +201,19 @@
                             <div class="content">
                                 <code>
                                     
-                                        <a href="YAHOO.widget.Module.html#body">body</a>,
-                                        <a href="YAHOO.widget.Module.html#browser">browser</a>,
-                                        <a href="YAHOO.widget.Module.html#cfg">cfg</a>,
-                                        <a href="YAHOO.widget.Module.html#contructor">contructor</a>,
-                                        <a href="YAHOO.widget.Module.html#element">element</a>,
-                                        <a href="YAHOO.widget.Module.html#footer">footer</a>,
-                                        <a href="YAHOO.widget.Module.html#header">header</a>,
-                                        <a href="YAHOO.widget.Module.html#id">id</a>,
-                                        <a href="YAHOO.widget.Module.html#imageRoot">imageRoot</a>,
-                                        <a href="YAHOO.widget.Module.html#isSecure">isSecure</a>,
-                                        <a href="YAHOO.widget.Module.html#platform">platform</a>,
-                                        <a href="YAHOO.widget.Module.html#YAHOO.widget.Module._DEFAULT_CONFIG">YAHOO.widget.Module._DEFAULT_CONFIG</a>,
-                                        <a href="YAHOO.widget.Module.html#YAHOO.widget.Module._EVENT_TYPES">YAHOO.widget.Module._EVENT_TYPES</a>
+                                        <a class="" href="YAHOO.widget.Module.html#property_body">body</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Module.html#property_browser">browser</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Module.html#property_cfg">cfg</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Module.html#property_contructor">contructor</a><span class="">,</span>
+                                        <a class="private" href="YAHOO.widget.Module.html#property_DEFAULT_CONFIG">DEFAULT_CONFIG</a><span class="private">,</span>
+                                        <a class="" href="YAHOO.widget.Module.html#property_element">element</a><span class="">,</span>
+                                        <a class="private" href="YAHOO.widget.Module.html#property_EVENT_TYPES">EVENT_TYPES</a><span class="private">,</span>
+                                        <a class="" href="YAHOO.widget.Module.html#property_footer">footer</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Module.html#property_header">header</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Module.html#property_id">id</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Module.html#property_imageRoot">imageRoot</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Module.html#property_isSecure">isSecure</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.Module.html#property_platform">platform</a>
                                 </code>
                             </div>
                         </div>
@@ -186,18 +222,178 @@
                             <div class="content">
                                 <code>
                                     
-                                        <a href="YAHOO.widget.Overlay.html#YAHOO.widget.Overlay._DEFAULT_CONFIG">YAHOO.widget.Overlay._DEFAULT_CONFIG</a>,
-                                        <a href="YAHOO.widget.Overlay.html#YAHOO.widget.Overlay._EVENT_TYPES">YAHOO.widget.Overlay._EVENT_TYPES</a>,
-                                        <a href="YAHOO.widget.Overlay.html#YAHOO.widget.Overlay._initialized">YAHOO.widget.Overlay._initialized</a>
+                                        <a class="private" href="YAHOO.widget.Overlay.html#property_DEFAULT_CONFIG">DEFAULT_CONFIG</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.Overlay.html#property_EVENT_TYPES">EVENT_TYPES</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.Overlay.html#property_YAHOO.widget.Overlay._initialized">YAHOO.widget.Overlay._initialized</a>
                                 </code>
                             </div>
                         </div>
 
                         <div class="section method details">
-                            <h3><a name="methodDetails">Methods</a></h3>
+                            <h3 id="methods">Methods</h3>
                             <div class="content">
+                                    <div class="protected">
                                     <h4>
-                                        <a name="buildMask">buildMask</a></h4>
+                                        <a name="method__addFocusHandlers">_addFocusHandlers</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         protected 
+                                        
+                                        
+                                        void
+                                            <strong>_addFocusHandlers</strong>
+                                           (
+                                                
+                                                        
+                                                         p_sType
+                                                    
+                                                
+                                                        , 
+                                                         p_aArgs
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            "showMask" event handler that adds a "focus" event handler to all
+focusable elements in the document to enforce a Panel instance's 
+modality from being compromised.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_sType &lt;String&gt;</code>
+                                                              Custom event type
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_aArgs &lt;Array&gt;</code>
+                                                              Custom event arguments
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="method__onElementFocus">_onElementFocus</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_onElementFocus</strong>
+                                           (
+                                                
+                                                        
+                                                         e
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            "focus" event handler for a focuable element. Used to automatically 
+blur the element when it receives focus to ensure that a Panel 
+instance's modality is not compromised.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>e &lt;Event&gt;</code>
+                                                             The DOM event object
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="protected">
+                                    <h4>
+                                        <a name="method__removeFocusHandlers">_removeFocusHandlers</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         protected 
+                                        
+                                        
+                                        void
+                                            <strong>_removeFocusHandlers</strong>
+                                           (
+                                                
+                                                        
+                                                         p_sType
+                                                    
+                                                
+                                                        , 
+                                                         p_aArgs
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            "hideMask" event handler that removes all "focus" event handlers added 
+by the "addFocusEventHandlers" method.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_sType &lt;String&gt;</code>
+                                                              Event type
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_aArgs &lt;Array&gt;</code>
+                                                              Event Arguments
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_buildMask">buildMask</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -210,7 +406,8 @@
                                         </code>
                                         
                                         <div class="description">
-                                            Builds the mask that is laid over the document when the Panel is configured to be modal.
+                                            Builds the mask that is laid over the document when the Panel is 
+configured to be modal.
                                         </div>
 
                                         <div class="description">
@@ -228,8 +425,10 @@
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="buildWrapper">buildWrapper</a></h4>
+                                        <a name="method_buildWrapper">buildWrapper</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -242,7 +441,10 @@
                                         </code>
                                         
                                         <div class="description">
-                                            Builds the wrapping container around the Panel that is used for positioning the shadow and matte underlays. The container element is assigned to a  local instance variable called container, and the element is reinserted inside of it.
+                                            Builds the wrapping container around the Panel that is used for 
+positioning the shadow and matte underlays. The container element is 
+assigned to a  local instance variable called container, and the 
+element is reinserted inside of it.
                                         </div>
 
                                         <div class="description">
@@ -260,8 +462,10 @@
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="configClose">configClose</a></h4>
+                                        <a name="method_configClose">configClose</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -287,7 +491,9 @@
                                         </code>
                                         
                                         <div class="description">
-                                            The default event handler fired when the "close" property is changed. The method controls the appending or hiding of the close icon at the top right of the Panel.
+                                            The default event handler fired when the "close" property is changed.
+The method controls the appending or hiding of the close icon at the 
+top right of the Panel.
                                         </div>
 
                                         <div class="description">
@@ -296,15 +502,17 @@
                                                     <dt>Parameters:</dt>
                                                         <dd>
                                                             <code>type &lt;String&gt;</code>
-                                                            	The CustomEvent type (usually the property name)
+                                                             The CustomEvent type (usually the property name)
                                                         </dd>
                                                         <dd>
                                                             <code>args &lt;Object[]&gt;</code>
-                                                            	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+                                                             The CustomEvent arguments. For configuration 
+handlers, args[0] will equal the newly applied value for the property.
                                                         </dd>
                                                         <dd>
                                                             <code>obj &lt;Object&gt;</code>
-                                                            	The scope object. For configuration handlers, this will usually equal the owner.
+                                                             The scope object. For configuration handlers, 
+this will usually equal the owner.
                                                         </dd>
                                                 </dl>
 
@@ -320,8 +528,10 @@
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="configDraggable">configDraggable</a></h4>
+                                        <a name="method_configDraggable">configDraggable</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -347,7 +557,8 @@
                                         </code>
                                         
                                         <div class="description">
-                                            The default event handler fired when the "draggable" property is changed.
+                                            The default event handler fired when the "draggable" property 
+is changed.
                                         </div>
 
                                         <div class="description">
@@ -356,15 +567,17 @@
                                                     <dt>Parameters:</dt>
                                                         <dd>
                                                             <code>type &lt;String&gt;</code>
-                                                            	The CustomEvent type (usually the property name)
+                                                             The CustomEvent type (usually the property name)
                                                         </dd>
                                                         <dd>
                                                             <code>args &lt;Object[]&gt;</code>
-                                                            	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+                                                             The CustomEvent arguments. For configuration 
+handlers, args[0] will equal the newly applied value for the property.
                                                         </dd>
                                                         <dd>
                                                             <code>obj &lt;Object&gt;</code>
-                                                            	The scope object. For configuration handlers, this will usually equal the owner.
+                                                             The scope object. For configuration handlers, 
+this will usually equal the owner.
                                                         </dd>
                                                 </dl>
 
@@ -380,8 +593,10 @@
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="configHeight">configHeight</a></h4>
+                                        <a name="method_configHeight">configHeight</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -416,15 +631,17 @@
                                                     <dt>Parameters:</dt>
                                                         <dd>
                                                             <code>type &lt;String&gt;</code>
-                                                            	The CustomEvent type (usually the property name)
+                                                             The CustomEvent type (usually the property name)
                                                         </dd>
                                                         <dd>
                                                             <code>args &lt;Object[]&gt;</code>
-                                                            	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+                                                             The CustomEvent arguments. For configuration 
+handlers, args[0] will equal the newly applied value for the property.
                                                         </dd>
                                                         <dd>
                                                             <code>obj &lt;Object&gt;</code>
-                                                            	The scope object. For configuration handlers, this will usually equal the owner.
+                                                             The scope object. For configuration handlers, 
+this will usually equal the owner.
                                                         </dd>
                                                 </dl>
 
@@ -440,8 +657,10 @@
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="configKeyListeners">configKeyListeners</a></h4>
+                                        <a name="method_configKeyListeners">configKeyListeners</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -467,7 +686,8 @@
                                         </code>
                                         
                                         <div class="description">
-                                            The default event handler fired when the "keylisteners" property is changed.
+                                            The default event handler fired when the "keylisteners" property 
+is changed.
                                         </div>
 
                                         <div class="description">
@@ -476,15 +696,17 @@
                                                     <dt>Parameters:</dt>
                                                         <dd>
                                                             <code>type &lt;String&gt;</code>
-                                                            	The CustomEvent type (usually the property name)
+                                                             The CustomEvent type (usually the property name)
                                                         </dd>
                                                         <dd>
                                                             <code>args &lt;Object[]&gt;</code>
-                                                            	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+                                                             The CustomEvent arguments. For configuration
+handlers, args[0] will equal the newly applied value for the property.
                                                         </dd>
                                                         <dd>
                                                             <code>obj &lt;Object&gt;</code>
-                                                            	The scope object. For configuration handlers, this will usually equal the owner.
+                                                             The scope object. For configuration handlers, 
+this will usually equal the owner.
                                                         </dd>
                                                 </dl>
 
@@ -500,8 +722,10 @@
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="configModal">configModal</a></h4>
+                                        <a name="method_configModal">configModal</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -527,7 +751,9 @@
                                         </code>
                                         
                                         <div class="description">
-                                            The default event handler fired when the "modal" property is changed. This handler subscribes or unsubscribes to the show and hide events to handle the display or hide of the modality mask.
+                                            The default event handler fired when the "modal" property is 
+changed. This handler subscribes or unsubscribes to the show and hide
+events to handle the display or hide of the modality mask.
                                         </div>
 
                                         <div class="description">
@@ -536,15 +762,17 @@
                                                     <dt>Parameters:</dt>
                                                         <dd>
                                                             <code>type &lt;String&gt;</code>
-                                                            	The CustomEvent type (usually the property name)
+                                                             The CustomEvent type (usually the property name)
                                                         </dd>
                                                         <dd>
                                                             <code>args &lt;Object[]&gt;</code>
-                                                            	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+                                                             The CustomEvent arguments. For configuration 
+handlers, args[0] will equal the newly applied value for the property.
                                                         </dd>
                                                         <dd>
                                                             <code>obj &lt;Object&gt;</code>
-                                                            	The scope object. For configuration handlers, this will usually equal the owner.
+                                                             The scope object. For configuration handlers, 
+this will usually equal the owner.
                                                         </dd>
                                                 </dl>
 
@@ -560,8 +788,10 @@
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="configUnderlay">configUnderlay</a></h4>
+                                        <a name="method_configUnderlay">configUnderlay</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -587,7 +817,8 @@
                                         </code>
                                         
                                         <div class="description">
-                                            The default event handler fired when the "underlay" property is changed.
+                                            The default event handler fired when the "underlay" property 
+is changed.
                                         </div>
 
                                         <div class="description">
@@ -596,15 +827,17 @@
                                                     <dt>Parameters:</dt>
                                                         <dd>
                                                             <code>type &lt;String&gt;</code>
-                                                            	The CustomEvent type (usually the property name)
+                                                             The CustomEvent type (usually the property name)
                                                         </dd>
                                                         <dd>
                                                             <code>args &lt;Object[]&gt;</code>
-                                                            	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+                                                             The CustomEvent arguments. For configuration 
+handlers, args[0] will equal the newly applied value for the property.
                                                         </dd>
                                                         <dd>
                                                             <code>obj &lt;Object&gt;</code>
-                                                            	The scope object. For configuration handlers, this will usually equal the owner.
+                                                             The scope object. For configuration handlers, 
+this will usually equal the owner.
                                                         </dd>
                                                 </dl>
 
@@ -620,8 +853,10 @@
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="configWidth">configWidth</a></h4>
+                                        <a name="method_configWidth">configWidth</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -656,15 +891,17 @@
                                                     <dt>Parameters:</dt>
                                                         <dd>
                                                             <code>type &lt;String&gt;</code>
-                                                            	The CustomEvent type (usually the property name)
+                                                             The CustomEvent type (usually the property name)
                                                         </dd>
                                                         <dd>
                                                             <code>args &lt;Object[]&gt;</code>
-                                                            	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+                                                             The CustomEvent arguments. For configuration 
+handlers, args[0] will equal the newly applied value for the property.
                                                         </dd>
                                                         <dd>
                                                             <code>obj &lt;Object&gt;</code>
-                                                            	The scope object. For configuration handlers, this will usually equal the owner.
+                                                             The scope object. For configuration handlers, 
+this will usually equal the owner.
                                                         </dd>
                                                 </dl>
 
@@ -680,8 +917,10 @@
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="configzIndex">configzIndex</a></h4>
+                                        <a name="method_configzIndex">configzIndex</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -716,15 +955,17 @@
                                                     <dt>Parameters:</dt>
                                                         <dd>
                                                             <code>type &lt;String&gt;</code>
-                                                            	The CustomEvent type (usually the property name)
+                                                             The CustomEvent type (usually the property name)
                                                         </dd>
                                                         <dd>
                                                             <code>args &lt;Object[]&gt;</code>
-                                                            	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+                                                             The CustomEvent arguments. For configuration 
+handlers, args[0] will equal the newly applied value for the property.
                                                         </dd>
                                                         <dd>
                                                             <code>obj &lt;Object&gt;</code>
-                                                            	The scope object. For configuration handlers, this will usually equal the owner.
+                                                             The scope object. For configuration handlers, 
+this will usually equal the owner.
                                                         </dd>
                                                 </dl>
 
@@ -740,8 +981,10 @@
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="destroy">destroy</a></h4>
+                                        <a name="method_destroy">destroy</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -754,7 +997,8 @@
                                         </code>
                                         
                                         <div class="description">
-                                            Removes the Panel element from the DOM and sets all child elements to null.
+                                            Removes the Panel element from the DOM and sets all child elements
+to null.
                                         </div>
 
                                         <div class="description">
@@ -772,8 +1016,10 @@
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="hideMask">hideMask</a></h4>
+                                        <a name="method_hideMask">hideMask</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -804,8 +1050,10 @@
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="init">init</a></h4>
+                                        <a name="method_init">init</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -829,7 +1077,10 @@
                                         </code>
                                         
                                         <div class="description">
-                                            The Overlay initialization method, which is executed for Overlay and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
+                                            The Overlay initialization method, which is executed for Overlay and 
+all of its subclasses. This method is automatically called by the 
+constructor, and  sets up all DOM references for pre-existing markup, 
+and creates required markup if it is not already present.
                                         </div>
 
                                         <div class="description">
@@ -838,15 +1089,17 @@
                                                     <dt>Parameters:</dt>
                                                         <dd>
                                                             <code>el &lt;String&gt;</code>
-                                                            	The element ID representing the Overlay <em>OR</em>
+                                                             The element ID representing the Overlay <em>OR</em>
                                                         </dd>
                                                         <dd>
                                                             <code>el &lt;HTMLElement&gt;</code>
-                                                            	The element representing the Overlay
+                                                             The element representing the Overlay
                                                         </dd>
                                                         <dd>
                                                             <code>userConfig &lt;Object&gt;</code>
-                                                            	The configuration object literal containing the configuration that should be set for this Overlay. See configuration documentation for more details.
+                                                             The configuration object literal 
+containing the configuration that should be set for this Overlay. 
+See configuration documentation for more details.
                                                         </dd>
                                                 </dl>
 
@@ -862,8 +1115,10 @@
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="initDefaultConfig">initDefaultConfig</a></h4>
+                                        <a name="method_initDefaultConfig">initDefaultConfig</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -876,7 +1131,8 @@
                                         </code>
                                         
                                         <div class="description">
-                                            Initializes the class's configurable properties which can be changed using the Panel's Config object (cfg).
+                                            Initializes the class's configurable properties which can be changed 
+using the Panel's Config object (cfg).
                                         </div>
 
                                         <div class="description">
@@ -894,8 +1150,10 @@
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="initEvents">initEvents</a></h4>
+                                        <a name="method_initEvents">initEvents</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -908,7 +1166,8 @@
                                         </code>
                                         
                                         <div class="description">
-                                            Initializes the custom events for Module which are fired automatically at appropriate times by the Module class.
+                                            Initializes the custom events for Module which are fired 
+automatically at appropriate times by the Module class.
                                         </div>
 
                                         <div class="description">
@@ -926,60 +1185,10 @@
 
                                     </div>
                                     <hr />
-                                    <h4>
-                                        <a name="onDomResize">onDomResize</a></h4>
-                                    <div class="detail">
-                                        <code>
-                                        
-                                        
-                                        
-                                        void
-                                            <strong>onDomResize</strong>
-                                           (
-                                                
-                                                        
-                                                         e
-                                                    
-                                                
-                                                        , 
-                                                         obj
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description">
-                                            Event handler fired when the resize monitor element is resized.
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl>
-                                                    <dt>Parameters:</dt>
-                                                        <dd>
-                                                            <code>e &lt;DOMEvent&gt;</code>
-                                                            	The resize DOM event
-                                                        </dd>
-                                                        <dd>
-                                                            <code>obj &lt;Object&gt;</code>
-                                                            	The scope object
-                                                        </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code>
-                                                        void
-                                                    </code></dt>
-                                                    <dd></dd>
-                                                </dl>
-             
-                                        </div>
-
                                     </div>
-                                    <hr />
+                                    <div class="">
                                     <h4>
-                                        <a name="registerDragDrop">registerDragDrop</a></h4>
+                                        <a name="method_registerDragDrop">registerDragDrop</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1010,8 +1219,10 @@
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="removeMask">removeMask</a></h4>
+                                        <a name="method_removeMask">removeMask</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1042,8 +1253,10 @@
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="render">render</a></h4>
+                                        <a name="method_render">render</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1063,7 +1276,13 @@
                                         </code>
                                         
                                         <div class="description">
-                                            Renders the Panel by inserting the elements that are not already in the main Panel into their correct places. Optionally appends the Panel to the specified node prior to the render's execution. NOTE: For Panels without existing markup, the appendToNode argument is REQUIRED. If this argument is ommitted and the current element is not present in the document, the function will return false, indicating that the render was a failure.
+                                            Renders the Panel by inserting the elements that are not already in 
+the main Panel into their correct places. Optionally appends the 
+Panel to the specified node prior to the render's execution. NOTE: 
+For Panels without existing markup, the appendToNode argument is 
+REQUIRED. If this argument is ommitted and the current element is 
+not present in the document, the function will return false, 
+indicating that the render was a failure.
                                         </div>
 
                                         <div class="description">
@@ -1072,11 +1291,13 @@
                                                     <dt>Parameters:</dt>
                                                         <dd>
                                                             <code>appendToNode &lt;String&gt;</code>
-                                                            	The element id to which the Module should be appended to prior to rendering <em>OR</em>
+                                                             The element id to which the Module 
+should be appended to prior to rendering <em>OR</em>
                                                         </dd>
                                                         <dd>
                                                             <code>appendToNode &lt;HTMLElement&gt;</code>
-                                                            	The element to which the Module should be appended to prior to rendering
+                                                             The element to which the Module 
+should be appended to prior to rendering
                                                         </dd>
                                                 </dl>
 
@@ -1092,8 +1313,10 @@
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="showMask">showMask</a></h4>
+                                        <a name="method_showMask">showMask</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1124,8 +1347,10 @@
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="sizeMask">sizeMask</a></h4>
+                                        <a name="method_sizeMask">sizeMask</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1138,7 +1363,8 @@
                                         </code>
                                         
                                         <div class="description">
-                                            Sets the size of the modality mask to cover the entire scrollable area of the document
+                                            Sets the size of the modality mask to cover the entire scrollable 
+area of the document
                                         </div>
 
                                         <div class="description">
@@ -1156,8 +1382,10 @@
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="sizeUnderlay">sizeUnderlay</a></h4>
+                                        <a name="method_sizeUnderlay">sizeUnderlay</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1188,8 +1416,51 @@
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="toString">toString</a></h4>
+                                        <a name="method_stackMask">stackMask</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>stackMask</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets the zindex of the mask, if it exists, based on the zindex of 
+the Panel element. The zindex of the mask is set to be one less 
+than the Panel element's zindex.
+<p>NOTE: This method will not bump up the zindex of the Panel
+to ensure that the mask has a non-negative zindex. If you require the
+mask zindex to be 0 or higher, the zindex of the Panel 
+should be set to a value higher than 0, before this method is called.
+</p>
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_toString">toString</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1220,6 +1491,7 @@
 
                                     </div>
                                     <hr />
+                                    </div>
                             </div>
                         </div>
 
@@ -1227,25 +1499,7 @@
                                 <h4>Methods inherited from <a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a>:</h4>
                                 <div class="content">
                                     <code>
-                                        
-                                            <a href="YAHOO.widget.Module.html#appendToBody">appendToBody</a>,
-                                            <a href="YAHOO.widget.Module.html#appendToFooter">appendToFooter</a>,
-                                            <a href="YAHOO.widget.Module.html#appendToHeader">appendToHeader</a>,
-                                            <a href="YAHOO.widget.Module.html#configMonitorResize">configMonitorResize</a>,
-                                            <a href="YAHOO.widget.Module.html#configVisible">configVisible</a>,
-                                            <a href="YAHOO.widget.Module.html#destroy">destroy</a>,
-                                            <a href="YAHOO.widget.Module.html#hide">hide</a>,
-                                            <a href="YAHOO.widget.Module.html#init">init</a>,
-                                            <a href="YAHOO.widget.Module.html#initDefaultConfig">initDefaultConfig</a>,
-                                            <a href="YAHOO.widget.Module.html#initEvents">initEvents</a>,
-                                            <a href="YAHOO.widget.Module.html#initResizeMonitor">initResizeMonitor</a>,
-                                            <a href="YAHOO.widget.Module.html#onDomResize">onDomResize</a>,
-                                            <a href="YAHOO.widget.Module.html#render">render</a>,
-                                            <a href="YAHOO.widget.Module.html#setBody">setBody</a>,
-                                            <a href="YAHOO.widget.Module.html#setFooter">setFooter</a>,
-                                            <a href="YAHOO.widget.Module.html#setHeader">setHeader</a>,
-                                            <a href="YAHOO.widget.Module.html#show">show</a>,
-                                            <a href="YAHOO.widget.Module.html#toString">toString</a>
+                                            <a class="protected" href="YAHOO.widget.Module.html#method__addToParent">_addToParent</a><span class="protected">,</span>                                            <a class="protected" href="YAHOO.widget.Module.html#method__initResizeMonitor">_initResizeMonitor</a><span class="protected">,</span>                                            <a class="private" href="YAHOO.widget.Module.html#method__supportsCWResize">_supportsCWResize</a><span class="private">,</span>                                            <a class="" href="YAHOO.widget.Module.html#method_appendToBody">appendToBody</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Module.html#method_appendToFooter">appendToFooter</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Module.html#method_appendToHeader">appendToHeader</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Module.html#method_configMonitorResize">configMonitorResize</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Module.html#method_configVisible">configVisible</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Module.html#method_destroy">destroy</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Module.html#method_hide">hide</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Module.html#method_init">init</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Module.html#method_initDefaultConfig">initDefaultConfig</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Module.html#method_initEvents">initEvents</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Module.html#method_initResizeMonitor">initResizeMonitor</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Module.html#method_onDomResize">onDomResize</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Module.html#method_render">render</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Module.html#method_setBody">setBody</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Module.html#method_setFooter">setFooter</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Module.html#method_setHeader">setHeader</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Module.html#method_show">show</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Module.html#method_toString">toString</a>
                                     </code>
                                 </div>
                             </div>
@@ -1253,43 +1507,17 @@
                                 <h4>Methods inherited from <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>:</h4>
                                 <div class="content">
                                     <code>
-                                        
-                                            <a href="YAHOO.widget.Overlay.html#align">align</a>,
-                                            <a href="YAHOO.widget.Overlay.html#center">center</a>,
-                                            <a href="YAHOO.widget.Overlay.html#configConstrainToViewport">configConstrainToViewport</a>,
-                                            <a href="YAHOO.widget.Overlay.html#configContext">configContext</a>,
-                                            <a href="YAHOO.widget.Overlay.html#configFixedCenter">configFixedCenter</a>,
-                                            <a href="YAHOO.widget.Overlay.html#configHeight">configHeight</a>,
-                                            <a href="YAHOO.widget.Overlay.html#configIframe">configIframe</a>,
-                                            <a href="YAHOO.widget.Overlay.html#configVisible">configVisible</a>,
-                                            <a href="YAHOO.widget.Overlay.html#configWidth">configWidth</a>,
-                                            <a href="YAHOO.widget.Overlay.html#configX">configX</a>,
-                                            <a href="YAHOO.widget.Overlay.html#configXY">configXY</a>,
-                                            <a href="YAHOO.widget.Overlay.html#configY">configY</a>,
-                                            <a href="YAHOO.widget.Overlay.html#configzIndex">configzIndex</a>,
-                                            <a href="YAHOO.widget.Overlay.html#destroy">destroy</a>,
-                                            <a href="YAHOO.widget.Overlay.html#doCenterOnDOMEvent">doCenterOnDOMEvent</a>,
-                                            <a href="YAHOO.widget.Overlay.html#enforceConstraints">enforceConstraints</a>,
-                                            <a href="YAHOO.widget.Overlay.html#hideIframe">hideIframe</a>,
-                                            <a href="YAHOO.widget.Overlay.html#hideMacGeckoScrollbars">hideMacGeckoScrollbars</a>,
-                                            <a href="YAHOO.widget.Overlay.html#init">init</a>,
-                                            <a href="YAHOO.widget.Overlay.html#initDefaultConfig">initDefaultConfig</a>,
-                                            <a href="YAHOO.widget.Overlay.html#initEvents">initEvents</a>,
-                                            <a href="YAHOO.widget.Overlay.html#moveTo">moveTo</a>,
-                                            <a href="YAHOO.widget.Overlay.html#onDomResize">onDomResize</a>,
-                                            <a href="YAHOO.widget.Overlay.html#showIframe">showIframe</a>,
-                                            <a href="YAHOO.widget.Overlay.html#showMacGeckoScrollbars">showMacGeckoScrollbars</a>,
-                                            <a href="YAHOO.widget.Overlay.html#syncPosition">syncPosition</a>,
-                                            <a href="YAHOO.widget.Overlay.html#toString">toString</a>
+                                            <a class="protected" href="YAHOO.widget.Overlay.html#method__primeXYFromDOM">_primeXYFromDOM</a><span class="protected">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_align">align</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_bringToTop">bringToTop</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_center">center</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_configConstrainToViewport">configConstrainToViewport</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_configContext">configContext</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_configFixedCenter">configFixedCenter</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_configHeight">configHeight</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_configIframe">configIframe</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_configVisible">configVisible</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_configWidth">configWidth</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_configX">configX</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_configXY">configXY</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_configY">configY</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_configzIndex">configzIndex</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_destroy">destroy</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_doCenterOnDOMEvent">doCenterOnDOMEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_enforceConstraints">enforceConstraints</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_getConstrainedXY">getConstrainedXY</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_hideIframe">hideIframe</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_hideMacGeckoScrollbars">hideMacGeckoScrollbars</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_init">init</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_initDefaultConfig">initDefaultConfig</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_initEvents">initEvents</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_moveTo">moveTo</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_onDomResize">onDomResize</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_showIframe">showIframe</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_showMacGeckoScrollbars">showMacGeckoScrollbars</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_stackIframe">stackIframe</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_syncIframe">syncIframe</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_syncPosition">syncPosition</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.Overlay.html#method_toString">toString</a>
                                     </code>
                                 </div>
                             </div>
 
                         <div class="section method details">
-                            <h3><a name="methodDetails">Events</a></h3>
+                            <h3 id="events">Events</h3>
                             <div class="content">
+                                    <div class="">
                                     <h4>
-                                        <a name="dragEvent">dragEvent</a></h4>
+                                        <a name="event_dragEvent">dragEvent</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1315,8 +1543,10 @@
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="hideMaskEvent">hideMaskEvent</a></h4>
+                                        <a name="event_hideMaskEvent">hideMaskEvent</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1342,8 +1572,10 @@
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="showMaskEvent">showMaskEvent</a></h4>
+                                        <a name="event_showMaskEvent">showMaskEvent</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1369,6 +1601,7 @@
 
                                     </div>
                                     <hr />
+                                    </div>
                             </div>
                         </div>
 
@@ -1377,22 +1610,7 @@
                             <h4>Events inherited from <a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a>:</h4>
                             <div class="content">
                                 <code>
-                                    
-                                        <a href="YAHOO.widget.Module.html#appendEvent">appendEvent</a>,
-                                        <a href="YAHOO.widget.Module.html#beforeHideEvent">beforeHideEvent</a>,
-                                        <a href="YAHOO.widget.Module.html#beforeInitEvent">beforeInitEvent</a>,
-                                        <a href="YAHOO.widget.Module.html#beforeRenderEvent">beforeRenderEvent</a>,
-                                        <a href="YAHOO.widget.Module.html#beforeShowEvent">beforeShowEvent</a>,
-                                        <a href="YAHOO.widget.Module.html#changeBodyEvent">changeBodyEvent</a>,
-                                        <a href="YAHOO.widget.Module.html#changeContentEvent">changeContentEvent</a>,
-                                        <a href="YAHOO.widget.Module.html#changeFooterEvent">changeFooterEvent</a>,
-                                        <a href="YAHOO.widget.Module.html#changeHeaderEvent">changeHeaderEvent</a>,
-                                        <a href="YAHOO.widget.Module.html#destroyEvent">destroyEvent</a>,
-                                        <a href="YAHOO.widget.Module.html#hideEvent">hideEvent</a>,
-                                        <a href="YAHOO.widget.Module.html#initEvent">initEvent</a>,
-                                        <a href="YAHOO.widget.Module.html#renderEvent">renderEvent</a>,
-                                        <a href="YAHOO.widget.Module.html#showEvent">showEvent</a>,
-                                        <a href="YAHOO.widget.Module.html#YAHOO.widget.Module.textResizeEvent">YAHOO.widget.Module.textResizeEvent</a>
+                                        <a class="" href="YAHOO.widget.Module.html#event_appendEvent">appendEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Module.html#event_beforeHideEvent">beforeHideEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Module.html#event_beforeInitEvent">beforeInitEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Module.html#event_beforeRenderEvent">beforeRenderEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Module.html#event_beforeShowEvent">beforeShowEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Module.html#event_changeBodyEvent">changeBodyEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Module.html#event_changeContentEvent">changeContentEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Module.html#event_changeFooterEvent">changeFooterEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Module.html#event_changeHeaderEvent">changeHeaderEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Module.html#event_destroyEvent">destroyEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Module.html#event_hideEvent">hideEvent</a>                                        <a class="" href="YAHOO.widget.Module.html#event_initEvent">initEvent</a>                                        <a class="" href="YAHOO.widget.Module.html#event_renderEvent">renderEvent</a>                                        <a class="" href="YAHOO.widget.Module.html#event_showEvent">showEvent</a>                                        <a class="" href="YAHOO.widget.Module.html#event_YAHOO.widget.Module.textResizeEvent">YAHOO.widget.Module.textResizeEvent</a>
                                 </code>
                             </div>
                         </div>
@@ -1400,19 +1618,16 @@
                             <h4>Events inherited from <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>:</h4>
                             <div class="content">
                                 <code>
-                                    
-                                        <a href="YAHOO.widget.Overlay.html#beforeMoveEvent">beforeMoveEvent</a>,
-                                        <a href="YAHOO.widget.Overlay.html#moveEvent">moveEvent</a>,
-                                        <a href="YAHOO.widget.Overlay.html#YAHOO.widget.Overlay.windowResizeEvent">YAHOO.widget.Overlay.windowResizeEvent</a>,
-                                        <a href="YAHOO.widget.Overlay.html#YAHOO.widget.Overlay.windowScrollEvent">YAHOO.widget.Overlay.windowScrollEvent</a>
+                                        <a class="" href="YAHOO.widget.Overlay.html#event_beforeMoveEvent">beforeMoveEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Overlay.html#event_moveEvent">moveEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Overlay.html#event_YAHOO.widget.Overlay.windowResizeEvent">YAHOO.widget.Overlay.windowResizeEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Overlay.html#event_YAHOO.widget.Overlay.windowScrollEvent">YAHOO.widget.Overlay.windowScrollEvent</a><span class="">,</span>
                                 </code>
                             </div>
                         </div>
 
                         <div class="section field details">
-                            <h3><a name="field_detail">Configuration Attributes</a></h3>
+                            <h3 id="configattributes">Configuration Attributes</h3>
                             <div class="content">
-                                    <h4><a name="close">close</a>
+                                    <div class="">
+                                    <h4><a name="config_close">close</a>
                                         <code>- Boolean</code>
                                     </h4>
                                     <div class="detail">
@@ -1427,12 +1642,30 @@
                                     </div>        
 
                                     <hr />
-                                    <h4><a name="draggable">draggable</a>
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="config_draggable">draggable</a>
                                         <code>- Boolean</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
-                                            True if the Panel should be draggable.  Default value is "true" if the Drag and Drop utility is included, otherwise it is "false."
+                                            Boolean specifying if the Panel should be draggable.  The default 
+value is "true" if the Drag and Drop utility is included, 
+otherwise it is "false." <strong>PLEASE NOTE:</strong> There is a 
+known issue in IE 6 (Strict Mode and Quirks Mode) and IE 7 
+(Quirks Mode) where Panels that either don't have a value set for 
+their "width" configuration property, or their "width" 
+configuration property is set to "auto" will only be draggable by
+placing the mouse on the text of the Panel's header element.
+To fix this bug, draggable Panels missing a value for their 
+"width" configuration property, or whose "width" configuration 
+property is set to "auto" will have it set to the value of 
+their root HTML element's offsetWidth before they are made 
+visible.  The calculated width is then removed when the Panel is   
+hidden. <em>This fix is only applied to draggable Panels in IE 6 
+(Strict Mode and Quirks Mode) and IE 7 (Quirks Mode)</em>. For 
+more information on this issue see:
+SourceForge bugs #1726972 and #1589210.
                                         </div>
                                     </div>
  
@@ -1442,27 +1675,28 @@
                                     </div>        
 
                                     <hr />
-                                    <h4><a name="keylisteners">keylisteners</a>
-                                        <code>- YAHOO.util.KeyListener[]</code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description">
-                                            A KeyListener (or array of KeyListeners) that will be enabled when the Panel is shown, and disabled when the Panel is hidden.
-                                        </div>
-                                    </div>
- 
-     
-                                    <div class="default">
-                                        Default Value: null
                                     </div>        
-
-                                    <hr />
-                                    <h4><a name="modal">modal</a>
+                                    <div class="">
+                                    <h4><a name="config_dragOnly">dragOnly</a>
                                         <code>- Boolean</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
-                                            True if the Panel should be displayed in a modal fashion, automatically creating a transparent mask over the document that will not be removed until the Panel is dismissed.
+                                            Boolean specifying if the draggable Panel should be drag only, not interacting with drop 
+targets on the page.
+<p>
+When set to true, draggable Panels will not check to see if they are over drop targets,
+or fire the DragDrop events required to support drop target interaction (onDragEnter, 
+onDragOver, onDragOut, onDragDrop etc.).
+If the Panel is not designed to be dropped on any target elements on the page, then this 
+flag can be set to true to improve performance.
+</p>
+<p>
+When set to false, all drop target related events will be fired.
+</p>
+<p>
+The property is set to false by default to maintain backwards compatibility but should be 
+set to true if drop target interaction is not required for the Panel, to improve performance.</p>
                                         </div>
                                     </div>
  
@@ -1472,12 +1706,57 @@
                                     </div>        
 
                                     <hr />
-                                    <h4><a name="underlay">underlay</a>
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="config_keylisteners">keylisteners</a>
+                                        <code>- YAHOO.util.KeyListener[]</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            A KeyListener (or array of KeyListeners) that will be enabled 
+when the Panel is shown, and disabled when the Panel is hidden.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: null
+                                    </div>        
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="config_modal">modal</a>
+                                        <code>- Boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            True if the Panel should be displayed in a modal fashion, 
+automatically creating a transparent mask over the document that
+will not be removed until the Panel is dismissed.
+                                        </div>
+                                    </div>
+ 
+     
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+                                    <hr />
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="config_underlay">underlay</a>
                                         <code>- String</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
-                                            Sets the type of underlay to display for the Panel. Valid values are "shadow", "matte", and "none".
+                                            Sets the type of underlay to display for the Panel. Valid values 
+are "shadow," "matte," and "none".  <strong>PLEASE NOTE:</strong> 
+The creation of the underlay element is deferred until the Panel 
+is initially made visible.  For Gecko-based browsers on Mac
+OS X the underlay elment is always created as it is used as a 
+shim to prevent Aqua scrollbars below a Panel instance from poking 
+through it (See SourceForge bug #836476).
                                         </div>
                                     </div>
  
@@ -1487,6 +1766,7 @@
                                     </div>        
 
                                     <hr />
+                                    </div>        
 
                             </div>
                         </div>
@@ -1495,10 +1775,7 @@
                             <h4>Configuration attributes inherited from <a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a>:</h4>
                             <div class="content">
                                 <code>
-                                    
-                                        <a href="YAHOO.widget.Module.html#effect">effect</a>,
-                                        <a href="YAHOO.widget.Module.html#monitorresize">monitorresize</a>,
-                                        <a href="YAHOO.widget.Module.html#visible">visible</a>
+                                        <a class="" href="YAHOO.widget.Module.html#config_appendtodocumentbody">appendtodocumentbody</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Module.html#config_effect">effect</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Module.html#config_monitorresize">monitorresize</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Module.html#config_visible">visible</a><span class="">,</span>
                                 </code>
                             </div>
                         </div>
@@ -1506,17 +1783,7 @@
                             <h4>Configuration attributes inherited from <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>:</h4>
                             <div class="content">
                                 <code>
-                                    
-                                        <a href="YAHOO.widget.Overlay.html#constraintoviewport">constraintoviewport</a>,
-                                        <a href="YAHOO.widget.Overlay.html#context">context</a>,
-                                        <a href="YAHOO.widget.Overlay.html#fixedcenter">fixedcenter</a>,
-                                        <a href="YAHOO.widget.Overlay.html#height">height</a>,
-                                        <a href="YAHOO.widget.Overlay.html#iframe">iframe</a>,
-                                        <a href="YAHOO.widget.Overlay.html#width">width</a>,
-                                        <a href="YAHOO.widget.Overlay.html#x">x</a>,
-                                        <a href="YAHOO.widget.Overlay.html#xy">xy</a>,
-                                        <a href="YAHOO.widget.Overlay.html#y">y</a>,
-                                        <a href="YAHOO.widget.Overlay.html#zIndex">zIndex</a>
+                                        <a class="" href="YAHOO.widget.Overlay.html#config_constraintoviewport">constraintoviewport</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Overlay.html#config_context">context</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Overlay.html#config_fixedcenter">fixedcenter</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Overlay.html#config_height">height</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Overlay.html#config_iframe">iframe</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Overlay.html#config_width">width</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Overlay.html#config_x">x</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Overlay.html#config_xy">xy</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Overlay.html#config_y">y</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.Overlay.html#config_zIndex">zIndex</a><span class="">,</span>
                                 </code>
                             </div>
                         </div>
@@ -1538,9 +1805,15 @@
 
                                 <li class=""><a href="module_calendar.html">calendar</a></li>
 
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
                                 <li class=""><a href="module_connection.html">connection</a></li>
 
                                 <li class="selected"><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
 
                                 <li class=""><a href="module_datasource.html">datasource</a></li>
 
@@ -1550,15 +1823,35 @@
 
                                 <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
 
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
                                 <li class=""><a href="module_element.html">element</a></li>
 
                                 <li class=""><a href="module_event.html">event</a></li>
 
+                                <li class=""><a href="module_get.html">get</a></li>
+
                                 <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
 
                                 <li class=""><a href="module_logger.html">logger</a></li>
 
                                 <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
 
                                 <li class=""><a href="module_slider.html">slider</a></li>
 
@@ -1566,7 +1859,13 @@
 
                                 <li class=""><a href="module_treeview.html">treeview</a></li>
 
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
                                 <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
                         </ul>
                     </div>
 
@@ -1603,17 +1902,20 @@
                     <div class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
-                                <li><a href="#YAHOO.widget.Panel._DEFAULT_CONFIG">YAHOO.widget.Panel._DEFAULT_CONFIG</a>
-                                        <!--<code>&lt;String&gt;</code>-->
+                                <li class="private"><a href="#property_DEFAULT_CONFIG">DEFAULT_CONFIG</a>
+                                        <!--<code>&lt;Array&gt;</code>-->
                                 </li>
-                                <li><a href="#YAHOO.widget.Panel._EVENT_TYPES">YAHOO.widget.Panel._EVENT_TYPES</a>
-                                        <!--<code>&lt;String&gt;</code>-->
+                                <li class="private"><a href="#property_EVENT_TYPES">EVENT_TYPES</a>
+                                        <!--<code>&lt;Array&gt;</code>-->
                                 </li>
-                                <li><a href="#YAHOO.widget.Panel.CSS_PANEL">YAHOO.widget.Panel.CSS_PANEL</a>
-                                        <!--<code>&lt;String&gt;</code>-->
+                                <li class=""><a href="#property_YAHOO.widget.Panel.CSS_PANEL">YAHOO.widget.Panel.CSS_PANEL</a>
+                                        <!--<code>&lt;Array&gt;</code>-->
                                 </li>
-                                <li><a href="#YAHOO.widget.Panel.CSS_PANEL_CONTAINER">YAHOO.widget.Panel.CSS_PANEL_CONTAINER</a>
-                                        <!--<code>&lt;String&gt;</code>-->
+                                <li class=""><a href="#property_YAHOO.widget.Panel.CSS_PANEL_CONTAINER">YAHOO.widget.Panel.CSS_PANEL_CONTAINER</a>
+                                        <!--<code>&lt;Array&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property_YAHOO.widget.Panel.FOCUSABLE">YAHOO.widget.Panel.FOCUSABLE</a>
+                                        <!--<code>&lt;Array&gt;</code>-->
                                 </li>
                         </ul>
                     </div>
@@ -1621,74 +1923,83 @@
                     <div class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
-                                <li><!--<code>void</code>-->
-                                <a href="#buildMask">buildMask</a>
+                                <li class="protected"><!--<code>void</code>-->
+                                <a href="#method__addFocusHandlers">_addFocusHandlers</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#buildWrapper">buildWrapper</a>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method__onElementFocus">_onElementFocus</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#configClose">configClose</a>
+                                <li class="protected"><!--<code>void</code>-->
+                                <a href="#method__removeFocusHandlers">_removeFocusHandlers</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#configDraggable">configDraggable</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_buildMask">buildMask</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#configHeight">configHeight</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_buildWrapper">buildWrapper</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#configKeyListeners">configKeyListeners</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_configClose">configClose</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#configModal">configModal</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_configDraggable">configDraggable</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#configUnderlay">configUnderlay</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_configHeight">configHeight</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#configWidth">configWidth</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_configKeyListeners">configKeyListeners</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#configzIndex">configzIndex</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_configModal">configModal</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#destroy">destroy</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_configUnderlay">configUnderlay</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#hideMask">hideMask</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_configWidth">configWidth</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#init">init</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_configzIndex">configzIndex</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#initDefaultConfig">initDefaultConfig</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_destroy">destroy</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#initEvents">initEvents</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_hideMask">hideMask</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#onDomResize">onDomResize</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_init">init</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#registerDragDrop">registerDragDrop</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_initDefaultConfig">initDefaultConfig</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#removeMask">removeMask</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_initEvents">initEvents</a>
                                 </li>
-                                <li><!--<code>boolean</code>-->
-                                <a href="#render">render</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_registerDragDrop">registerDragDrop</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#showMask">showMask</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_removeMask">removeMask</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#sizeMask">sizeMask</a>
+                                <li class=""><!--<code>boolean</code>-->
+                                <a href="#method_render">render</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#sizeUnderlay">sizeUnderlay</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_showMask">showMask</a>
                                 </li>
-                                <li><!--<code>String</code>-->
-                                <a href="#toString">toString</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_sizeMask">sizeMask</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_sizeUnderlay">sizeUnderlay</a>
+                                </li>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_stackMask">stackMask</a>
+                                </li>
+                                <li class=""><!--<code>String</code>-->
+                                <a href="#method_toString">toString</a>
                                 </li>
                         </ul>
                     </div>
@@ -1696,14 +2007,14 @@
                     <div class="module">
                         <h4>Events</h4>
                         <ul class="content">        
-                                <li>
-                                <a href="#dragEvent">dragEvent</a>
+                                <li class="">
+                                <a href="#event_dragEvent">dragEvent</a>
                                 </li>
-                                <li>
-                                <a href="#hideMaskEvent">hideMaskEvent</a>
+                                <li class="">
+                                <a href="#event_hideMaskEvent">hideMaskEvent</a>
                                 </li>
-                                <li>
-                                <a href="#showMaskEvent">showMaskEvent</a>
+                                <li class="">
+                                <a href="#event_showMaskEvent">showMaskEvent</a>
                                 </li>
                         </ul>
                     </div>
@@ -1711,20 +2022,23 @@
                     <div class="module">
                         <h4>Configuration Attributes</h4>
                         <ul class="content">        
-                                <li>
-                                <a href="#close">close</a>
+                                <li class="">
+                                <a href="#config_close">close</a>
                                 </li>
-                                <li>
-                                <a href="#draggable">draggable</a>
+                                <li class="">
+                                <a href="#config_draggable">draggable</a>
                                 </li>
-                                <li>
-                                <a href="#keylisteners">keylisteners</a>
+                                <li class="">
+                                <a href="#config_dragOnly">dragOnly</a>
                                 </li>
-                                <li>
-                                <a href="#modal">modal</a>
+                                <li class="">
+                                <a href="#config_keylisteners">keylisteners</a>
                                 </li>
-                                <li>
-                                <a href="#underlay">underlay</a>
+                                <li class="">
+                                <a href="#config_modal">modal</a>
+                                </li>
+                                <li class="">
+                                <a href="#config_underlay">underlay</a>
                                 </li>
                         </ul>
                     </div>

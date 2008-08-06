@@ -3,27 +3,38 @@
 <head>
 	<title>API: treeview   TreeView.js  (YUI Library)</title>
 	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
 </head>
 
 <body id="yahoo-com">
+
 <div id="doc3" class="yui-t2">
 
 	<div id="hd">
-        <h1>Yahoo! UI Library</h1>
-        <h3>TreeView Widget&nbsp; <span class="subtitle">2.2.2</span></h3>
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>TreeView Widget&nbsp; <span class="subtitle">2.5.2</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_treeview.html">treeview</a>
                 
                  &gt; TreeView.js (source view) 
             </p>
+
 	</div>
 
 	<div id="bd">
 		<div id="yui-main">
 			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
 
                     <div id="srcout">
+                        <style>
+                            #doc3 #classopts { display:none; }
+                        </style>
 <div class="highlight" ><pre><span class="c">/**</span>
 <span class="c"> * The treeview widget is a generic tree building tool.</span>
 <span class="c"> * @module treeview</span>
@@ -117,9 +128,7 @@
 <span class="c">     * in YAHOO.widget.TVAnim)</span>
 <span class="c">     */</span>
     <span class="nx">setExpandAnim</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">type</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">TVAnim</span><span class="o">.</span><span class="nx">isValid</span><span class="o">(</span><span class="nx">type</span><span class="o">))</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_expandAnim</span> <span class="o">=</span> <span class="nx">type</span><span class="o">;</span>
-        <span class="o">}</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">_expandAnim</span> <span class="o">=</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">TVAnim</span><span class="o">.</span><span class="nx">isValid</span><span class="o">(</span><span class="nx">type</span><span class="o">))</span> <span class="o">?</span> <span class="nx">type</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
     <span class="o">},</span>
 
     <span class="c">/**</span>
@@ -129,9 +138,7 @@
 <span class="c">     * YAHOO.widget.TVAnim)</span>
 <span class="c">     */</span>
     <span class="nx">setCollapseAnim</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">type</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">TVAnim</span><span class="o">.</span><span class="nx">isValid</span><span class="o">(</span><span class="nx">type</span><span class="o">))</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_collapseAnim</span> <span class="o">=</span> <span class="nx">type</span><span class="o">;</span>
-        <span class="o">}</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">_collapseAnim</span> <span class="o">=</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">TVAnim</span><span class="o">.</span><span class="nx">isValid</span><span class="o">(</span><span class="nx">type</span><span class="o">))</span> <span class="o">?</span> <span class="nx">type</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
     <span class="o">},</span>
 
     <span class="c">/**</span>
@@ -303,14 +310,15 @@
         <span class="c">// Set up the root node</span>
 <span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">root</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">RootNode</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
 
-        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LogWriter</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="k">var</span> <span class="nx">LW</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LogWriter</span><span class="o">;</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span> <span class="o">=</span> <span class="o">(</span><span class="nx">LW</span><span class="o">)</span> <span class="o">?</span> <span class="k">new</span> <span class="nx">LW</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">())</span> <span class="o">:</span> <span class="nx">YAHOO</span><span class="o">;</span>
 
         <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;tree init: &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">);</span>
 
-        <span class="c">//YAHOO.util.Event.onContentReady(this.id, this.handleAvailable, this, true);</span>
-<span class="c"></span>        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">,</span> <span class="s2">&quot;click&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">handleClick</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-    <span class="o">},</span>
-
+        <span class="c">// YAHOO.util.Event.onContentReady(this.id, this.handleAvailable, this, true);</span>
+<span class="c"></span>        <span class="c">// YAHOO.util.Event.on(this.id, &quot;click&quot;, this.handleClick, this, true);</span>
+<span class="c"></span>    <span class="o">},</span>
 
     <span class="c">//handleAvailable: function() {</span>
 <span class="c"></span>        <span class="c">//var Event = YAHOO.util.Event;</span>
@@ -447,6 +455,39 @@
     <span class="o">},</span>
 
     <span class="c">/**</span>
+<span class="c">     * Returns the treeview node reference for an anscestor element</span>
+<span class="c">     * of the node, or null if it is not contained within any node</span>
+<span class="c">     * in this tree.</span>
+<span class="c">     * @method getNodeByElement</span>
+<span class="c">     * @param {HTMLElement} the element to test</span>
+<span class="c">     * @return {YAHOO.widget.Node} a node reference or null</span>
+<span class="c">     */</span>
+    <span class="nx">getNodeByElement</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="k">var</span> <span class="nx">p</span><span class="o">=</span><span class="nx">el</span><span class="o">,</span> <span class="nx">m</span><span class="o">,</span> <span class="nx">re</span><span class="o">=</span><span class="sr">/ygtv([^\d]*)(.*)/</span><span class="o">;</span>
+
+        <span class="k">do</span> <span class="o">{</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="nx">p</span> <span class="o">&amp;&amp;</span> <span class="nx">p</span><span class="o">.</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">m</span> <span class="o">=</span> <span class="nx">p</span><span class="o">.</span><span class="nx">id</span><span class="o">.</span><span class="nx">match</span><span class="o">(</span><span class="nx">re</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">m</span> <span class="o">&amp;&amp;</span> <span class="nx">m</span><span class="o">[</span><span class="m">2</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">getNodeByIndex</span><span class="o">(</span><span class="nx">m</span><span class="o">[</span><span class="m">2</span><span class="o">]);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+
+            <span class="nx">p</span> <span class="o">=</span> <span class="nx">p</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
+
+            <span class="k">if</span> <span class="o">(!</span><span class="nx">p</span> <span class="o">||</span> <span class="o">!</span><span class="nx">p</span><span class="o">.</span><span class="nx">tagName</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="o">}</span>
+
+        <span class="o">}</span> 
+        <span class="k">while</span> <span class="o">(</span><span class="nx">p</span><span class="o">.</span><span class="nx">id</span> <span class="o">!==</span> <span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">&amp;&amp;</span> <span class="nx">p</span><span class="o">.</span><span class="nx">tagName</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">!==</span> <span class="s2">&quot;body&quot;</span><span class="o">);</span>
+
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">},</span>
+
+    <span class="c">/**</span>
 <span class="c">     * Removes the node and its children, and optionally refreshes the </span>
 <span class="c">     * branch of the tree that was affected.</span>
 <span class="c">     * @method removeNode</span>
@@ -479,6 +520,18 @@
     <span class="o">},</span>
 
     <span class="c">/**</span>
+<span class="c">     * wait until the animation is complete before deleting </span>
+<span class="c">     * to avoid javascript errors</span>
+<span class="c">     * @method _removeChildren_animComplete</span>
+<span class="c">     * @param o the custom event payload</span>
+<span class="c">     * @private</span>
+<span class="c">     */</span>
+    <span class="nx">_removeChildren_animComplete</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">o</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">unsubscribe</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_removeChildren_animComplete</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">removeChildren</span><span class="o">(</span><span class="nx">o</span><span class="o">.</span><span class="nx">node</span><span class="o">);</span>
+    <span class="o">},</span>
+
+    <span class="c">/**</span>
 <span class="c">     * Deletes this nodes child collection, recursively.  Also collapses</span>
 <span class="c">     * the node, and resets the dynamic load flag.  The primary use for</span>
 <span class="c">     * this method is to purge a node and allow it to fetch its data</span>
@@ -487,18 +540,33 @@
 <span class="c">     * @param {Node} node the node to purge</span>
 <span class="c">     */</span>
     <span class="nx">removeChildren</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">node</span><span class="o">)</span> <span class="o">{</span> 
+
+        <span class="k">if</span> <span class="o">(</span><span class="nx">node</span><span class="o">.</span><span class="nx">expanded</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c">// wait until the animation is complete before deleting to</span>
+<span class="c"></span>            <span class="c">// avoid javascript errors</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_collapseAnim</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s2">&quot;animComplete&quot;</span><span class="o">,</span> 
+                        <span class="k">this</span><span class="o">.</span><span class="nx">_removeChildren_animComplete</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Node</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">collapse</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="nx">node</span><span class="o">);</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="nx">node</span><span class="o">.</span><span class="nx">collapse</span><span class="o">();</span>
+        <span class="o">}</span>
+
         <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Removing children for &quot;</span> <span class="o">+</span> <span class="nx">node</span><span class="o">);</span>
         <span class="k">while</span> <span class="o">(</span><span class="nx">node</span><span class="o">.</span><span class="nx">children</span><span class="o">.</span><span class="nx">length</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_deleteNode</span><span class="o">(</span><span class="nx">node</span><span class="o">.</span><span class="nx">children</span><span class="o">[</span><span class="m">0</span><span class="o">]);</span>
         <span class="o">}</span>
 
+        <span class="k">if</span> <span class="o">(</span><span class="nx">node</span><span class="o">.</span><span class="nx">isRoot</span><span class="o">())</span> <span class="o">{</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Node</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">expand</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="nx">node</span><span class="o">);</span>
+        <span class="o">}</span>
+
         <span class="nx">node</span><span class="o">.</span><span class="nx">childrenRendered</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
         <span class="nx">node</span><span class="o">.</span><span class="nx">dynamicLoadComplete</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-        <span class="k">if</span> <span class="o">(</span><span class="nx">node</span><span class="o">.</span><span class="nx">expanded</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">node</span><span class="o">.</span><span class="nx">collapse</span><span class="o">();</span>
-        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="nx">node</span><span class="o">.</span><span class="nx">updateIcon</span><span class="o">();</span>
-        <span class="o">}</span>
+
+        <span class="nx">node</span><span class="o">.</span><span class="nx">updateIcon</span><span class="o">();</span>
     <span class="o">},</span>
 
     <span class="c">/**</span>
@@ -698,19 +766,27 @@
 <span class="c"> * images to preload, default is ygtv</span>
 <span class="c"> * @static</span>
 <span class="c"> */</span>
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">TreeView</span><span class="o">.</span><span class="nx">preload</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">prefix</span><span class="o">)</span> <span class="o">{</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">TreeView</span><span class="o">.</span><span class="nx">preload</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">prefix</span><span class="o">)</span> <span class="o">{</span>
     <span class="nx">prefix</span> <span class="o">=</span> <span class="nx">prefix</span> <span class="o">||</span> <span class="s2">&quot;ygtv&quot;</span><span class="o">;</span>
-    <span class="k">var</span> <span class="nx">styles</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;tn&quot;</span><span class="o">,</span><span class="s2">&quot;tm&quot;</span><span class="o">,</span><span class="s2">&quot;tmh&quot;</span><span class="o">,</span><span class="s2">&quot;tp&quot;</span><span class="o">,</span><span class="s2">&quot;tph&quot;</span><span class="o">,</span><span class="s2">&quot;ln&quot;</span><span class="o">,</span><span class="s2">&quot;lm&quot;</span><span class="o">,</span><span class="s2">&quot;lmh&quot;</span><span class="o">,</span><span class="s2">&quot;lp&quot;</span><span class="o">,</span><span class="s2">&quot;lph&quot;</span><span class="o">,</span><span class="s2">&quot;loading&quot;</span><span class="o">];</span>
 
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Preloading images: &quot;</span> <span class="o">+</span> <span class="nx">prefix</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;TreeView&quot;</span><span class="o">);</span>
+
+    <span class="k">var</span> <span class="nx">styles</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;tn&quot;</span><span class="o">,</span><span class="s2">&quot;tm&quot;</span><span class="o">,</span><span class="s2">&quot;tmh&quot;</span><span class="o">,</span><span class="s2">&quot;tp&quot;</span><span class="o">,</span><span class="s2">&quot;tph&quot;</span><span class="o">,</span><span class="s2">&quot;ln&quot;</span><span class="o">,</span><span class="s2">&quot;lm&quot;</span><span class="o">,</span><span class="s2">&quot;lmh&quot;</span><span class="o">,</span><span class="s2">&quot;lp&quot;</span><span class="o">,</span><span class="s2">&quot;lph&quot;</span><span class="o">,</span><span class="s2">&quot;loading&quot;</span><span class="o">];</span>
+    <span class="c">// var styles = [&quot;tp&quot;];</span>
+<span class="c"></span>
     <span class="k">var</span> <span class="nx">sb</span> <span class="o">=</span> <span class="o">[];</span>
     
-    <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">styles</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span> 
+    <span class="c">// save the first one for the outer container</span>
+<span class="c"></span>    <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">1</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">styles</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span> 
         <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;span class=&quot;&#39;</span> <span class="o">+</span> <span class="nx">prefix</span> <span class="o">+</span> <span class="nx">styles</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&amp;#160;&lt;/span&gt;&#39;</span><span class="o">;</span>
     <span class="o">}</span>
 
     <span class="k">var</span> <span class="nx">f</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;div&quot;</span><span class="o">);</span>
     <span class="k">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">f</span><span class="o">.</span><span class="nx">style</span><span class="o">;</span>
+    <span class="nx">s</span><span class="o">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">prefix</span> <span class="o">+</span> <span class="nx">styles</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
     <span class="nx">s</span><span class="o">.</span><span class="nx">position</span> <span class="o">=</span> <span class="s2">&quot;absolute&quot;</span><span class="o">;</span>
+    <span class="nx">s</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="s2">&quot;1px&quot;</span><span class="o">;</span>
+    <span class="nx">s</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="s2">&quot;1px&quot;</span><span class="o">;</span>
     <span class="nx">s</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="s2">&quot;-1000px&quot;</span><span class="o">;</span>
     <span class="nx">s</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span> <span class="s2">&quot;-1000px&quot;</span><span class="o">;</span>
     <span class="nx">f</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">sb</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span><span class="s2">&quot;&quot;</span><span class="o">);</span>
@@ -743,9 +819,15 @@
 
                                 <li class=""><a href="module_calendar.html">calendar</a></li>
 
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
                                 <li class=""><a href="module_connection.html">connection</a></li>
 
                                 <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
 
                                 <li class=""><a href="module_datasource.html">datasource</a></li>
 
@@ -755,15 +837,35 @@
 
                                 <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
 
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
                                 <li class=""><a href="module_element.html">element</a></li>
 
                                 <li class=""><a href="module_event.html">event</a></li>
 
+                                <li class=""><a href="module_get.html">get</a></li>
+
                                 <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
 
                                 <li class=""><a href="module_logger.html">logger</a></li>
 
                                 <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
 
                                 <li class=""><a href="module_slider.html">slider</a></li>
 
@@ -771,7 +873,13 @@
 
                                 <li class="selected"><a href="module_treeview.html">treeview</a></li>
 
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
                                 <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
                         </ul>
                     </div>
 

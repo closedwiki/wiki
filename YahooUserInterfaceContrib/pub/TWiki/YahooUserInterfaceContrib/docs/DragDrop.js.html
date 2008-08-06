@@ -3,27 +3,38 @@
 <head>
 	<title>API: dragdrop   DragDrop.js  (YUI Library)</title>
 	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
 </head>
 
 <body id="yahoo-com">
+
 <div id="doc3" class="yui-t2">
 
 	<div id="hd">
-        <h1>Yahoo! UI Library</h1>
-        <h3>Drag and Drop&nbsp; <span class="subtitle">2.2.2</span></h3>
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>Drag and Drop&nbsp; <span class="subtitle">2.5.2</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_dragdrop.html">dragdrop</a>
                 
                  &gt; DragDrop.js (source view) 
             </p>
+
 	</div>
 
 	<div id="bd">
 		<div id="yui-main">
 			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
 
                     <div id="srcout">
+                        <style>
+                            #doc3 #classopts { display:none; }
+                        </style>
 <div class="highlight" ><pre><span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
 
 <span class="k">var</span> <span class="nx">Event</span><span class="o">=</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">;</span> 
@@ -81,7 +92,20 @@
 <span class="o">};</span>
 
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DragDrop</span><span class="o">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="o">{</span>
-
+    <span class="c">/**</span>
+<span class="c">     * An Object Literal containing the events that we will be using: mouseDown, b4MouseDown, mouseUp, b4StartDrag, startDrag, b4EndDrag, endDrag, mouseUp, drag, b4Drag, invalidDrop, b4DragOut, dragOut, dragEnter, b4DragOver, dragOver, b4DragDrop, dragDrop</span>
+<span class="c">     * By setting any of these to false, then event will not be fired.</span>
+<span class="c">     * @property events</span>
+<span class="c">     * @type object</span>
+<span class="c">     */</span>
+    <span class="nx">events</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+    <span class="c">/**</span>
+<span class="c">    * @method on</span>
+<span class="c">    * @description Shortcut for EventProvider.subscribe, see &lt;a href=&quot;YAHOO.util.EventProvider.html#subscribe&quot;&gt;YAHOO.util.EventProvider.subscribe&lt;/a&gt;</span>
+<span class="c">    */</span>
+    <span class="nx">on</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">.</span><span class="nx">apply</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">);</span>
+    <span class="o">},</span>
     <span class="c">/**</span>
 <span class="c">     * The id of the element associated with this object.  This is what we </span>
 <span class="c">     * refer to as the &quot;linked element&quot; because the size and position of </span>
@@ -192,9 +216,9 @@
     <span class="nx">unlock</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="nx">locked</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span> <span class="o">},</span>
 
     <span class="c">/**</span>
-<span class="c">     * By default, all insances can be a drop target.  This can be disabled by</span>
+<span class="c">     * By default, all instances can be a drop target.  This can be disabled by</span>
 <span class="c">     * setting isTarget to false.</span>
-<span class="c">     * @method isTarget</span>
+<span class="c">     * @property isTarget</span>
 <span class="c">     * @type boolean</span>
 <span class="c">     */</span>
     <span class="nx">isTarget</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
@@ -202,10 +226,16 @@
     <span class="c">/**</span>
 <span class="c">     * The padding configured for this drag and drop object for calculating</span>
 <span class="c">     * the drop zone intersection with this object.</span>
-<span class="c">     * @method padding</span>
+<span class="c">     * @property padding</span>
 <span class="c">     * @type int[]</span>
 <span class="c">     */</span>
     <span class="nx">padding</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
+    <span class="c">/**</span>
+<span class="c">     * If this flag is true, do not fire drop events. The element is a drag only element (for movement not dropping)</span>
+<span class="c">     * @property dragOnly</span>
+<span class="c">     * @type Boolean</span>
+<span class="c">     */</span>
+    <span class="nx">dragOnly</span><span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
 
     <span class="c">/**</span>
 <span class="c">     * Cached reference to the linked element</span>
@@ -343,6 +373,30 @@
 <span class="c">     * @default false</span>
 <span class="c">     */</span>
     <span class="nx">hasOuterHandles</span><span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Property that is assigned to a drag and drop object when testing to</span>
+<span class="c">     * see if it is being targeted by another dd object.  This property</span>
+<span class="c">     * can be used in intersect mode to help determine the focus of</span>
+<span class="c">     * the mouse interaction.  DDM.getBestMatch uses this property first to</span>
+<span class="c">     * determine the closest match in INTERSECT mode when multiple targets</span>
+<span class="c">     * are part of the same interaction.</span>
+<span class="c">     * @property cursorIsOver</span>
+<span class="c">     * @type boolean</span>
+<span class="c">     */</span>
+    <span class="nx">cursorIsOver</span><span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
+
+    <span class="c">/**</span>
+<span class="c">     * Property that is assigned to a drag and drop object when testing to</span>
+<span class="c">     * see if it is being targeted by another dd object.  This is a region</span>
+<span class="c">     * that represents the area the draggable element overlaps this target.</span>
+<span class="c">     * DDM.getBestMatch uses this property to compare the size of the overlap</span>
+<span class="c">     * to that of other targets in order to determine the closest match in</span>
+<span class="c">     * INTERSECT mode when multiple targets are part of the same interaction.</span>
+<span class="c">     * @property overlap </span>
+<span class="c">     * @type YAHOO.util.Region</span>
+<span class="c">     */</span>
+    <span class="nx">overlap</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
 
     <span class="c">/**</span>
 <span class="c">     * Code that executes immediately before the startDrag event</span>
@@ -489,8 +543,8 @@
 <span class="c">     * @method onAvailable</span>
 <span class="c">     */</span>
     <span class="nx">onAvailable</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span> 
-        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;onAvailable (base)&quot;</span><span class="o">);</span> 
-    <span class="o">},</span>
+        <span class="c">//this.logger.log(&quot;onAvailable (base)&quot;); </span>
+<span class="c"></span>    <span class="o">},</span>
 
     <span class="c">/**</span>
 <span class="c">     * Returns a reference to the linked element</span>
@@ -526,9 +580,15 @@
 <span class="c">     */</span>
     <span class="nx">init</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">id</span><span class="o">,</span> <span class="nx">sGroup</span><span class="o">,</span> <span class="nx">config</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">initTarget</span><span class="o">(</span><span class="nx">id</span><span class="o">,</span> <span class="nx">sGroup</span><span class="o">,</span> <span class="nx">config</span><span class="o">);</span>
-        <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">,</span> <span class="s2">&quot;mousedown&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">handleMouseDown</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+        <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_domRef</span> <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">,</span> <span class="s2">&quot;mousedown&quot;</span><span class="o">,</span> 
+                        <span class="k">this</span><span class="o">.</span><span class="nx">handleMouseDown</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+
         <span class="c">// Event.on(this.id, &quot;selectstart&quot;, Event.preventDefault);</span>
-<span class="c"></span>    <span class="o">},</span>
+<span class="c"></span>        <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="o">.</span><span class="nx">events</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="nx">i</span> <span class="o">+</span> <span class="s1">&#39;Event&#39;</span><span class="o">);</span>
+        <span class="o">}</span>
+        
+    <span class="o">},</span>
 
     <span class="c">/**</span>
 <span class="c">     * Initializes Targeting functionality only... the object does not</span>
@@ -543,15 +603,19 @@
         <span class="c">// configuration attributes </span>
 <span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">config</span> <span class="o">=</span> <span class="nx">config</span> <span class="o">||</span> <span class="o">{};</span>
 
+        <span class="k">this</span><span class="o">.</span><span class="nx">events</span> <span class="o">=</span> <span class="o">{};</span>
+
         <span class="c">// create a local reference to the drag and drop manager</span>
 <span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">DDM</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DDM</span><span class="o">;</span>
-        <span class="c">// initialize the groups array</span>
+
+        <span class="c">// initialize the groups object</span>
 <span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">groups</span> <span class="o">=</span> <span class="o">{};</span>
 
         <span class="c">// assume that we have an element reference instead of an id if the</span>
 <span class="c"></span>        <span class="c">// parameter is not a string</span>
 <span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">id</span> <span class="o">!==</span> <span class="s2">&quot;string&quot;</span><span class="o">)</span> <span class="o">{</span>
             <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;id is not a string, assuming it is an HTMLElement&quot;</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_domRef</span> <span class="o">=</span> <span class="nx">id</span><span class="o">;</span>
             <span class="nx">id</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">generateId</span><span class="o">(</span><span class="nx">id</span><span class="o">);</span>
         <span class="o">}</span>
 
@@ -592,6 +656,34 @@
 <span class="c">     * @method applyConfig</span>
 <span class="c">     */</span>
     <span class="nx">applyConfig</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">events</span> <span class="o">=</span> <span class="o">{</span>
+            <span class="nx">mouseDown</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+            <span class="nx">b4MouseDown</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+            <span class="nx">mouseUp</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+            <span class="nx">b4StartDrag</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+            <span class="nx">startDrag</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+            <span class="nx">b4EndDrag</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+            <span class="nx">endDrag</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+            <span class="nx">drag</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+            <span class="nx">b4Drag</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+            <span class="nx">invalidDrop</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+            <span class="nx">b4DragOut</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+            <span class="nx">dragOut</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+            <span class="nx">dragEnter</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+            <span class="nx">b4DragOver</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+            <span class="nx">dragOver</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+            <span class="nx">b4DragDrop</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
+            <span class="nx">dragDrop</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="o">};</span>
+        
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">config</span><span class="o">.</span><span class="nx">events</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="o">.</span><span class="nx">config</span><span class="o">.</span><span class="nx">events</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">config</span><span class="o">.</span><span class="nx">events</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">===</span> <span class="kc">false</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">events</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
 
         <span class="c">// configurable properties: </span>
 <span class="c"></span>        <span class="c">//    padding, isTarget, maintainOffset, primaryButtonOnly</span>
@@ -599,7 +691,7 @@
         <span class="k">this</span><span class="o">.</span><span class="nx">isTarget</span>          <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">config</span><span class="o">.</span><span class="nx">isTarget</span> <span class="o">!==</span> <span class="kc">false</span><span class="o">);</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">maintainOffset</span>    <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">config</span><span class="o">.</span><span class="nx">maintainOffset</span><span class="o">);</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">primaryButtonOnly</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">config</span><span class="o">.</span><span class="nx">primaryButtonOnly</span> <span class="o">!==</span> <span class="kc">false</span><span class="o">);</span>
-
+        <span class="k">this</span><span class="o">.</span><span class="nx">dragOnly</span> <span class="o">=</span> <span class="o">((</span><span class="k">this</span><span class="o">.</span><span class="nx">config</span><span class="o">.</span><span class="nx">dragOnly</span> <span class="o">===</span> <span class="kc">true</span><span class="o">)</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span><span class="o">);</span>
     <span class="o">},</span>
 
     <span class="c">/**</span>
@@ -608,8 +700,8 @@
 <span class="c">     * @private</span>
 <span class="c">     */</span>
     <span class="nx">handleOnAvailable</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;handleOnAvailable&quot;</span><span class="o">);</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">available</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="c">//this.logger.log(&quot;handleOnAvailable&quot;);</span>
+<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">available</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">resetConstraints</span><span class="o">();</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">onAvailable</span><span class="o">();</span>
     <span class="o">},</span>
@@ -648,7 +740,11 @@
         <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">();</span>
 
         <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">DDM</span><span class="o">.</span><span class="nx">verifyEl</span><span class="o">(</span><span class="nx">el</span><span class="o">))</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot; element is broken&quot;</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">el</span> <span class="o">&amp;&amp;</span> <span class="nx">el</span><span class="o">.</span><span class="nx">style</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">el</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">==</span> <span class="s1">&#39;none&#39;</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot; can not get initial position, element style is display: none&quot;</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot; element is broken&quot;</span><span class="o">);</span>
+            <span class="o">}</span>
             <span class="k">return</span><span class="o">;</span>
         <span class="o">}</span>
 
@@ -811,8 +907,19 @@
         <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;firing onMouseDown events&quot;</span><span class="o">);</span>
 
         <span class="c">// firing the mousedown events prior to calculating positions</span>
-<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">b4MouseDown</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">onMouseDown</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+<span class="c"></span>        <span class="k">var</span> <span class="nx">b4Return</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">b4MouseDown</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">events</span><span class="o">.</span><span class="nx">b4MouseDown</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">b4Return</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;b4MouseDownEvent&#39;</span><span class="o">,</span> <span class="nx">e</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">var</span> <span class="nx">mDownReturn</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">onMouseDown</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">events</span><span class="o">.</span><span class="nx">mouseDown</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">mDownReturn</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;mouseDownEvent&#39;</span><span class="o">,</span> <span class="nx">e</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="k">if</span> <span class="o">((</span><span class="nx">b4Return</span> <span class="o">===</span> <span class="kc">false</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="nx">mDownReturn</span> <span class="o">===</span> <span class="kc">false</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;b4MouseDown or onMouseDown returned false, exiting drag&#39;</span><span class="o">);</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
 
         <span class="k">this</span><span class="o">.</span><span class="nx">DDM</span><span class="o">.</span><span class="nx">refreshCache</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">groups</span><span class="o">);</span>
         <span class="c">// var self = this;</span>
@@ -849,8 +956,14 @@
         <span class="o">}</span>
     <span class="o">},</span>
 
+    <span class="c">/**</span>
+<span class="c">     * @method clickValidator</span>
+<span class="c">     * @description Method validates that the clicked element</span>
+<span class="c">     * was indeed the handle or a valid child of the handle</span>
+<span class="c">     * @param {Event} e </span>
+<span class="c">     */</span>
     <span class="nx">clickValidator</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">var</span> <span class="nx">target</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getTarget</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
+        <span class="k">var</span> <span class="nx">target</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getTarget</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
         <span class="k">return</span> <span class="o">(</span> <span class="k">this</span><span class="o">.</span><span class="nx">isValidHandleChild</span><span class="o">(</span><span class="nx">target</span><span class="o">)</span> <span class="o">&amp;&amp;</span>
                     <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">==</span> <span class="k">this</span><span class="o">.</span><span class="nx">handleElId</span> <span class="o">||</span> 
                         <span class="k">this</span><span class="o">.</span><span class="nx">DDM</span><span class="o">.</span><span class="nx">handleWasClicked</span><span class="o">(</span><span class="nx">target</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">))</span> <span class="o">);</span>
@@ -1135,19 +1248,18 @@
     <span class="c">/**</span>
 <span class="c">     * resetConstraints must be called if you manually reposition a dd element.</span>
 <span class="c">     * @method resetConstraints</span>
-<span class="c">     * @param {boolean} maintainOffset</span>
 <span class="c">     */</span>
     <span class="nx">resetConstraints</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
 
-        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;resetConstraints&quot;</span><span class="o">);</span>
-
+        <span class="c">//this.logger.log(&quot;resetConstraints&quot;);</span>
+<span class="c"></span>
         <span class="c">// Maintain offsets if necessary</span>
 <span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">initPageX</span> <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="nx">initPageX</span> <span class="o">===</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;init pagexy: &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">initPageX</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span> <span class="o">+</span> 
-                               <span class="k">this</span><span class="o">.</span><span class="nx">initPageY</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;last pagexy: &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">lastPageX</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span> <span class="o">+</span> 
-                               <span class="k">this</span><span class="o">.</span><span class="nx">lastPageY</span><span class="o">);</span>
-            <span class="c">// figure out how much this thing has moved</span>
+            <span class="c">//this.logger.log(&quot;init pagexy: &quot; + this.initPageX + &quot;, &quot; + </span>
+<span class="c"></span>                               <span class="c">//this.initPageY);</span>
+<span class="c"></span>            <span class="c">//this.logger.log(&quot;last pagexy: &quot; + this.lastPageX + &quot;, &quot; + </span>
+<span class="c"></span>                               <span class="c">//this.lastPageY);</span>
+<span class="c"></span>            <span class="c">// figure out how much this thing has moved</span>
 <span class="c"></span>            <span class="k">var</span> <span class="nx">dx</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">maintainOffset</span><span class="o">)</span> <span class="o">?</span> <span class="k">this</span><span class="o">.</span><span class="nx">lastPageX</span> <span class="o">-</span> <span class="k">this</span><span class="o">.</span><span class="nx">initPageX</span> <span class="o">:</span> <span class="m">0</span><span class="o">;</span>
             <span class="k">var</span> <span class="nx">dy</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">maintainOffset</span><span class="o">)</span> <span class="o">?</span> <span class="k">this</span><span class="o">.</span><span class="nx">lastPageY</span> <span class="o">-</span> <span class="k">this</span><span class="o">.</span><span class="nx">initPageY</span> <span class="o">:</span> <span class="m">0</span><span class="o">;</span>
 
@@ -1217,7 +1329,100 @@
     <span class="o">}</span>
 
 <span class="o">};</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">augment</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DragDrop</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">EventProvider</span><span class="o">);</span>
 
+<span class="c">/**</span>
+<span class="c">* @event mouseDownEvent</span>
+<span class="c">* @description Provides access to the mousedown event. The mousedown does not always result in a drag operation.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+
+<span class="c">/**</span>
+<span class="c">* @event b4MouseDownEvent</span>
+<span class="c">* @description Provides access to the mousedown event, before the mouseDownEvent gets fired. Returning false will cancel the drag.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+
+<span class="c">/**</span>
+<span class="c">* @event mouseUpEvent</span>
+<span class="c">* @description Fired from inside DragDropMgr when the drag operation is finished.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+
+<span class="c">/**</span>
+<span class="c">* @event b4StartDragEvent</span>
+<span class="c">* @description Fires before the startDragEvent, returning false will cancel the startDrag Event.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+
+<span class="c">/**</span>
+<span class="c">* @event startDragEvent</span>
+<span class="c">* @description Occurs after a mouse down and the drag threshold has been met. The drag threshold default is either 3 pixels of mouse movement or 1 full second of holding the mousedown. </span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+
+<span class="c">/**</span>
+<span class="c">* @event b4EndDragEvent</span>
+<span class="c">* @description Fires before the endDragEvent. Returning false will cancel.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+
+<span class="c">/**</span>
+<span class="c">* @event endDragEvent</span>
+<span class="c">* @description Fires on the mouseup event after a drag has been initiated (startDrag fired).</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+
+<span class="c">/**</span>
+<span class="c">* @event dragEvent</span>
+<span class="c">* @description Occurs every mousemove event while dragging.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+<span class="c">/**</span>
+<span class="c">* @event b4DragEvent</span>
+<span class="c">* @description Fires before the dragEvent.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+<span class="c">/**</span>
+<span class="c">* @event invalidDropEvent</span>
+<span class="c">* @description Fires when the dragged objects is dropped in a location that contains no drop targets.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+<span class="c">/**</span>
+<span class="c">* @event b4DragOutEvent</span>
+<span class="c">* @description Fires before the dragOutEvent</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+<span class="c">/**</span>
+<span class="c">* @event dragOutEvent</span>
+<span class="c">* @description Fires when a dragged object is no longer over an object that had the onDragEnter fire. </span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+<span class="c">/**</span>
+<span class="c">* @event dragEnterEvent</span>
+<span class="c">* @description Occurs when the dragged object first interacts with another targettable drag and drop object.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+<span class="c">/**</span>
+<span class="c">* @event b4DragOverEvent</span>
+<span class="c">* @description Fires before the dragOverEvent.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+<span class="c">/**</span>
+<span class="c">* @event dragOverEvent</span>
+<span class="c">* @description Fires every mousemove event while over a drag and drop object.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+<span class="c">/**</span>
+<span class="c">* @event b4DragDropEvent </span>
+<span class="c">* @description Fires before the dragDropEvent</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
+<span class="c">/**</span>
+<span class="c">* @event dragDropEvent</span>
+<span class="c">* @description Fires when the dragged objects is dropped on another.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">*/</span>
 <span class="o">})();</span>
 </pre></div>
                     </div>
@@ -1238,9 +1443,15 @@
 
                                 <li class=""><a href="module_calendar.html">calendar</a></li>
 
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
                                 <li class=""><a href="module_connection.html">connection</a></li>
 
                                 <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
 
                                 <li class=""><a href="module_datasource.html">datasource</a></li>
 
@@ -1250,15 +1461,35 @@
 
                                 <li class="selected"><a href="module_dragdrop.html">dragdrop</a></li>
 
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
                                 <li class=""><a href="module_element.html">element</a></li>
 
                                 <li class=""><a href="module_event.html">event</a></li>
 
+                                <li class=""><a href="module_get.html">get</a></li>
+
                                 <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
 
                                 <li class=""><a href="module_logger.html">logger</a></li>
 
                                 <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
 
                                 <li class=""><a href="module_slider.html">slider</a></li>
 
@@ -1266,7 +1497,13 @@
 
                                 <li class=""><a href="module_treeview.html">treeview</a></li>
 
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
                                 <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
                         </ul>
                     </div>
 

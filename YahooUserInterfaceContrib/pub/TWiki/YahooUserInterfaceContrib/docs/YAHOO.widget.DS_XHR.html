@@ -3,26 +3,33 @@
 <head>
 	<title>API: autocomplete  YAHOO.widget.DS_XHR   (YUI Library)</title>
 	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
 </head>
 
 <body id="yahoo-com">
+
 <div id="doc3" class="yui-t2">
 
 	<div id="hd">
-        <h1>Yahoo! UI Library</h1>
-        <h3>AutoComplete Widget&nbsp; <span class="subtitle">2.2.2</span></h3>
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>AutoComplete Widget&nbsp; <span class="subtitle">2.5.2</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_autocomplete.html">autocomplete</a>
                  &gt; YAHOO.widget.DS_XHR 
                 
             </p>
+
 	</div>
 
 	<div id="bd">
 		<div id="yui-main">
 			<div class="yui-b">
-
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
 
                     <h2>
                         
@@ -50,7 +57,7 @@ query results.
                     </div>
 
                         <div class="section constructor details">
-                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <h3 id="constructor">Constructor</h3>
                         <div class="content">
                             <div class="detail">
                                 <strong>YAHOO.widget.DS_XHR</strong>
@@ -99,9 +106,10 @@ results as JSON, XML, or delimited flat-file data.
                     </div>
 
                         <div class="section field details">
-                            <h3><a name="field_detail">Properties</a></h3>
+                            <h3 id="properties">Properties</h3>
                             <div class="content">
-                                    <h4><a name="_oConn">_oConn</a>
+                                    <div class="private">
+                                    <h4><a name="property__oConn">_oConn</a>
                                         <code>- private Object</code>
                                     </h4>
                                     <div class="detail">
@@ -114,13 +122,14 @@ results as JSON, XML, or delimited flat-file data.
 
 
                                     <hr />
-                                    <h4><a name="connMgr">connMgr</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_connMgr">connMgr</a>
                                         <code>- Object</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
-                                            Alias to YUI Connection Manager. Allows implementers to specify their own
-subclasses of the YUI Connection Manager utility.
+                                            Alias to YUI Connection Manager, to allow implementers to customize the utility.
                                         </div>
                                     </div>
      
@@ -131,7 +140,9 @@ subclasses of the YUI Connection Manager utility.
 
 
                                     <hr />
-                                    <h4><a name="connTimeout">connTimeout</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_connTimeout">connTimeout</a>
                                         <code>- Number</code>
                                     </h4>
                                     <div class="detail">
@@ -149,7 +160,9 @@ greater than zero will use the Connection utility's Auto-Abort feature.
 
 
                                     <hr />
-                                    <h4><a name="ERROR_DATAXHR">ERROR_DATAXHR</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_ERROR_DATAXHR">ERROR_DATAXHR</a>
                                         <code>- static final String</code>
                                     </h4>
                                     <div class="detail">
@@ -162,7 +175,9 @@ greater than zero will use the Connection utility's Auto-Abort feature.
 
 
                                     <hr />
-                                    <h4><a name="responseStripAfter">responseStripAfter</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_responseStripAfter">responseStripAfter</a>
                                         <code>- String</code>
                                     </h4>
                                     <div class="detail">
@@ -180,7 +195,9 @@ be ignored.
 
 
                                     <hr />
-                                    <h4><a name="responseType">responseType</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_responseType">responseType</a>
                                         <code>- String</code>
                                     </h4>
                                     <div class="detail">
@@ -197,7 +214,9 @@ and YAHOO.widget.DS_XHR.TYPE_FLAT.
 
 
                                     <hr />
-                                    <h4><a name="scriptQueryAppend">scriptQueryAppend</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_scriptQueryAppend">scriptQueryAppend</a>
                                         <code>- String</code>
                                     </h4>
                                     <div class="detail">
@@ -216,7 +235,9 @@ When defined, queries will be sent to
 
 
                                     <hr />
-                                    <h4><a name="scriptQueryParam">scriptQueryParam</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_scriptQueryParam">scriptQueryParam</a>
                                         <code>- String</code>
                                     </h4>
                                     <div class="detail">
@@ -233,7 +254,9 @@ sent to &#60;scriptURI&#62;?&#60;scriptQueryParam&#62;=userinput
 
 
                                     <hr />
-                                    <h4><a name="scriptURI">scriptURI</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_scriptURI">scriptURI</a>
                                         <code>- String</code>
                                     </h4>
                                     <div class="detail">
@@ -247,7 +270,9 @@ queries will be sent to &#60;scriptURI&#62;?&#60;scriptQueryParam&#62;=userinput
 
 
                                     <hr />
-                                    <h4><a name="TYPE_FLAT">TYPE_FLAT</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_TYPE_FLAT">TYPE_FLAT</a>
                                         <code>- static final Number</code>
                                     </h4>
                                     <div class="detail">
@@ -260,7 +285,9 @@ queries will be sent to &#60;scriptURI&#62;?&#60;scriptQueryParam&#62;=userinput
 
 
                                     <hr />
-                                    <h4><a name="TYPE_JSON">TYPE_JSON</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_TYPE_JSON">TYPE_JSON</a>
                                         <code>- static final Number</code>
                                     </h4>
                                     <div class="detail">
@@ -273,7 +300,9 @@ queries will be sent to &#60;scriptURI&#62;?&#60;scriptQueryParam&#62;=userinput
 
 
                                     <hr />
-                                    <h4><a name="TYPE_XML">TYPE_XML</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_TYPE_XML">TYPE_XML</a>
                                         <code>- static final Number</code>
                                     </h4>
                                     <div class="detail">
@@ -286,6 +315,7 @@ queries will be sent to &#60;scriptURI&#62;?&#60;scriptQueryParam&#62;=userinput
 
 
                                     <hr />
+                                    </div>
 
 
                             </div>
@@ -296,21 +326,22 @@ queries will be sent to &#60;scriptURI&#62;?&#60;scriptQueryParam&#62;=userinput
                             <div class="content">
                                 <code>
                                     
-                                        <a href="YAHOO.widget.DataSource.html#_aCache">_aCache</a>,
-                                        <a href="YAHOO.widget.DataSource.html#_sName">_sName</a>,
-                                        <a href="YAHOO.widget.DataSource.html#maxCacheEntries">maxCacheEntries</a>,
-                                        <a href="YAHOO.widget.DataSource.html#queryMatchCase">queryMatchCase</a>,
-                                        <a href="YAHOO.widget.DataSource.html#queryMatchContains">queryMatchContains</a>,
-                                        <a href="YAHOO.widget.DataSource.html#queryMatchSubset">queryMatchSubset</a>
+                                        <a class="private" href="YAHOO.widget.DataSource.html#property__aCache">_aCache</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.widget.DataSource.html#property__sName">_sName</a><span class="private">,</span>
+                                        <a class="" href="YAHOO.widget.DataSource.html#property_maxCacheEntries">maxCacheEntries</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.DataSource.html#property_queryMatchCase">queryMatchCase</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.DataSource.html#property_queryMatchContains">queryMatchContains</a><span class="">,</span>
+                                        <a class="" href="YAHOO.widget.DataSource.html#property_queryMatchSubset">queryMatchSubset</a>
                                 </code>
                             </div>
                         </div>
 
                         <div class="section method details">
-                            <h3><a name="methodDetails">Methods</a></h3>
+                            <h3 id="methods">Methods</h3>
                             <div class="content">
+                                    <div class="">
                                     <h4>
-                                        <a name="doQuery">doQuery</a></h4>
+                                        <a name="method_doQuery">doQuery</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -370,8 +401,10 @@ passed back to a callback function.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="parseResponse">parseResponse</a></h4>
+                                        <a name="method_parseResponse">parseResponse</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -431,6 +464,7 @@ is always stashed in the [0] element of each result object.
 
                                     </div>
                                     <hr />
+                                    </div>
                             </div>
                         </div>
 
@@ -438,14 +472,7 @@ is always stashed in the [0] element of each result object.
                                 <h4>Methods inherited from <a href="YAHOO.widget.DataSource.html">YAHOO.widget.DataSource</a>:</h4>
                                 <div class="content">
                                     <code>
-                                        
-                                            <a href="YAHOO.widget.DataSource.html#_addCacheElem">_addCacheElem</a>,
-                                            <a href="YAHOO.widget.DataSource.html#_doQueryCache">_doQueryCache</a>,
-                                            <a href="YAHOO.widget.DataSource.html#_init">_init</a>,
-                                            <a href="YAHOO.widget.DataSource.html#doQuery">doQuery</a>,
-                                            <a href="YAHOO.widget.DataSource.html#flushCache">flushCache</a>,
-                                            <a href="YAHOO.widget.DataSource.html#getResults">getResults</a>,
-                                            <a href="YAHOO.widget.DataSource.html#toString">toString</a>
+                                            <a class="private" href="YAHOO.widget.DataSource.html#method__addCacheElem">_addCacheElem</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.DataSource.html#method__doQueryCache">_doQueryCache</a><span class="private">,</span>                                            <a class="private" href="YAHOO.widget.DataSource.html#method__init">_init</a><span class="private">,</span>                                            <a class="" href="YAHOO.widget.DataSource.html#method_doQuery">doQuery</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.DataSource.html#method_flushCache">flushCache</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.DataSource.html#method_getResults">getResults</a><span class="">,</span>                                            <a class="" href="YAHOO.widget.DataSource.html#method_toString">toString</a>
                                     </code>
                                 </div>
                             </div>
@@ -456,13 +483,7 @@ is always stashed in the [0] element of each result object.
                             <h4>Events inherited from <a href="YAHOO.widget.DataSource.html">YAHOO.widget.DataSource</a>:</h4>
                             <div class="content">
                                 <code>
-                                    
-                                        <a href="YAHOO.widget.DataSource.html#cacheFlushEvent">cacheFlushEvent</a>,
-                                        <a href="YAHOO.widget.DataSource.html#cacheQueryEvent">cacheQueryEvent</a>,
-                                        <a href="YAHOO.widget.DataSource.html#dataErrorEvent">dataErrorEvent</a>,
-                                        <a href="YAHOO.widget.DataSource.html#getCachedResultsEvent">getCachedResultsEvent</a>,
-                                        <a href="YAHOO.widget.DataSource.html#getResultsEvent">getResultsEvent</a>,
-                                        <a href="YAHOO.widget.DataSource.html#queryEvent">queryEvent</a>
+                                        <a class="" href="YAHOO.widget.DataSource.html#event_cacheFlushEvent">cacheFlushEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.DataSource.html#event_cacheQueryEvent">cacheQueryEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.DataSource.html#event_dataErrorEvent">dataErrorEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.widget.DataSource.html#event_getCachedResultsEvent">getCachedResultsEvent</a>                                        <a class="" href="YAHOO.widget.DataSource.html#event_getResultsEvent">getResultsEvent</a>                                        <a class="" href="YAHOO.widget.DataSource.html#event_queryEvent">queryEvent</a>
                                 </code>
                             </div>
                         </div>
@@ -486,9 +507,15 @@ is always stashed in the [0] element of each result object.
 
                                 <li class=""><a href="module_calendar.html">calendar</a></li>
 
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
                                 <li class=""><a href="module_connection.html">connection</a></li>
 
                                 <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
 
                                 <li class=""><a href="module_datasource.html">datasource</a></li>
 
@@ -498,15 +525,35 @@ is always stashed in the [0] element of each result object.
 
                                 <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
 
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
                                 <li class=""><a href="module_element.html">element</a></li>
 
                                 <li class=""><a href="module_event.html">event</a></li>
 
+                                <li class=""><a href="module_get.html">get</a></li>
+
                                 <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
 
                                 <li class=""><a href="module_logger.html">logger</a></li>
 
                                 <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
 
                                 <li class=""><a href="module_slider.html">slider</a></li>
 
@@ -514,7 +561,13 @@ is always stashed in the [0] element of each result object.
 
                                 <li class=""><a href="module_treeview.html">treeview</a></li>
 
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
                                 <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
                         </ul>
                     </div>
 
@@ -525,6 +578,7 @@ is always stashed in the [0] element of each result object.
                                 <li class=""><a href="YAHOO.widget.DataSource.html">YAHOO.widget.DataSource</a></li>
                                 <li class=""><a href="YAHOO.widget.DS_JSArray.html">YAHOO.widget.DS_JSArray</a></li>
                                 <li class=""><a href="YAHOO.widget.DS_JSFunction.html">YAHOO.widget.DS_JSFunction</a></li>
+                                <li class=""><a href="YAHOO.widget.DS_ScriptNode.html">YAHOO.widget.DS_ScriptNode</a></li>
                                 <li class="selected"><a href="YAHOO.widget.DS_XHR.html">YAHOO.widget.DS_XHR</a></li>
                         </ul>
                     </div>
@@ -540,40 +594,40 @@ is always stashed in the [0] element of each result object.
                     <div class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
-                                <li><a href="#_oConn">_oConn</a>
+                                <li class="private"><a href="#property__oConn">_oConn</a>
                                         <!--<code>&lt;Number&gt;</code>-->
                                 </li>
-                                <li><a href="#connMgr">connMgr</a>
+                                <li class=""><a href="#property_connMgr">connMgr</a>
                                         <!--<code>&lt;Number&gt;</code>-->
                                 </li>
-                                <li><a href="#connTimeout">connTimeout</a>
+                                <li class=""><a href="#property_connTimeout">connTimeout</a>
                                         <!--<code>&lt;Number&gt;</code>-->
                                 </li>
-                                <li><a href="#ERROR_DATAXHR">ERROR_DATAXHR</a>
+                                <li class=""><a href="#property_ERROR_DATAXHR">ERROR_DATAXHR</a>
                                         <!--<code>&lt;Number&gt;</code>-->
                                 </li>
-                                <li><a href="#responseStripAfter">responseStripAfter</a>
+                                <li class=""><a href="#property_responseStripAfter">responseStripAfter</a>
                                         <!--<code>&lt;Number&gt;</code>-->
                                 </li>
-                                <li><a href="#responseType">responseType</a>
+                                <li class=""><a href="#property_responseType">responseType</a>
                                         <!--<code>&lt;Number&gt;</code>-->
                                 </li>
-                                <li><a href="#scriptQueryAppend">scriptQueryAppend</a>
+                                <li class=""><a href="#property_scriptQueryAppend">scriptQueryAppend</a>
                                         <!--<code>&lt;Number&gt;</code>-->
                                 </li>
-                                <li><a href="#scriptQueryParam">scriptQueryParam</a>
+                                <li class=""><a href="#property_scriptQueryParam">scriptQueryParam</a>
                                         <!--<code>&lt;Number&gt;</code>-->
                                 </li>
-                                <li><a href="#scriptURI">scriptURI</a>
+                                <li class=""><a href="#property_scriptURI">scriptURI</a>
                                         <!--<code>&lt;Number&gt;</code>-->
                                 </li>
-                                <li><a href="#TYPE_FLAT">TYPE_FLAT</a>
+                                <li class=""><a href="#property_TYPE_FLAT">TYPE_FLAT</a>
                                         <!--<code>&lt;Number&gt;</code>-->
                                 </li>
-                                <li><a href="#TYPE_JSON">TYPE_JSON</a>
+                                <li class=""><a href="#property_TYPE_JSON">TYPE_JSON</a>
                                         <!--<code>&lt;Number&gt;</code>-->
                                 </li>
-                                <li><a href="#TYPE_XML">TYPE_XML</a>
+                                <li class=""><a href="#property_TYPE_XML">TYPE_XML</a>
                                         <!--<code>&lt;Number&gt;</code>-->
                                 </li>
                         </ul>
@@ -582,11 +636,11 @@ is always stashed in the [0] element of each result object.
                     <div class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
-                                <li><!--<code>void</code>-->
-                                <a href="#doQuery">doQuery</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_doQuery">doQuery</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#parseResponse">parseResponse</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_parseResponse">parseResponse</a>
                                 </li>
                         </ul>
                     </div>

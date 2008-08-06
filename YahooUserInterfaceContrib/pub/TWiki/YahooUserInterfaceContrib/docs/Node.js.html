@@ -3,27 +3,38 @@
 <head>
 	<title>API: treeview   Node.js  (YUI Library)</title>
 	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
 </head>
 
 <body id="yahoo-com">
+
 <div id="doc3" class="yui-t2">
 
 	<div id="hd">
-        <h1>Yahoo! UI Library</h1>
-        <h3>TreeView Widget&nbsp; <span class="subtitle">2.2.2</span></h3>
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>TreeView Widget&nbsp; <span class="subtitle">2.5.2</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_treeview.html">treeview</a>
                 
                  &gt; Node.js (source view) 
             </p>
+
 	</div>
 
 	<div id="bd">
 		<div id="yui-main">
 			<div class="yui-b">
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
 
                     <div id="srcout">
+                        <style>
+                            #doc3 #classopts { display:none; }
+                        </style>
 <div class="highlight" ><pre><span class="c">/**</span>
 <span class="c"> * The base class for all tree nodes.  The node&#39;s presentation and behavior in</span>
 <span class="c"> * response to mouse events is handled in Node subclasses.</span>
@@ -31,7 +42,8 @@
 <span class="c"> * @class Node</span>
 <span class="c"> * @uses YAHOO.util.EventProvider</span>
 <span class="c"> * @param oData {object} a string or object containing the data that will</span>
-<span class="c"> * be used to render this node</span>
+<span class="c"> * be used to render this node, and any custom attributes that should be</span>
+<span class="c"> * stored with the node (which is available in noderef.data).</span>
 <span class="c"> * @param oParent {Node} this node&#39;s parent node</span>
 <span class="c"> * @param expanded {boolean} the initial expanded/collapsed state</span>
 <span class="c"> * @constructor</span>
@@ -206,6 +218,17 @@
     <span class="nx">nowrap</span><span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
 
     <span class="c">/**</span>
+<span class="c">     * If true, the node will alway be rendered as a leaf node.  This can be</span>
+<span class="c">     * used to override the presentation when dynamically loading the entire</span>
+<span class="c">     * tree.  Setting this to true also disables the dynamic load call for the</span>
+<span class="c">     * node.</span>
+<span class="c">     * @property isLeaf</span>
+<span class="c">     * @type boolean</span>
+<span class="c">     * @default false</span>
+<span class="c">     */</span>
+    <span class="nx">isLeaf</span><span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
+
+    <span class="c">/**</span>
 <span class="c">     * The node type</span>
 <span class="c">     * @property _type</span>
 <span class="c">     * @private</span>
@@ -309,6 +332,14 @@
         <span class="o">}</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">children</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">children</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="nx">childNode</span><span class="o">;</span>
         <span class="nx">childNode</span><span class="o">.</span><span class="nx">applyParent</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+
+        <span class="c">// part of the IE display issue workaround. If child nodes</span>
+<span class="c"></span>        <span class="c">// are added after the initial render, and the node was</span>
+<span class="c"></span>        <span class="c">// instantiated with expanded = true, we need to show the</span>
+<span class="c"></span>        <span class="c">// children div now that the node has a child.</span>
+<span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">childrenRendered</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">expanded</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">getChildrenEl</span><span class="o">().</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+        <span class="o">}</span>
 
         <span class="k">return</span> <span class="nx">childNode</span><span class="o">;</span>
     <span class="o">},</span>
@@ -593,19 +624,28 @@
 <span class="c">     * toggle style, and collapses its siblings if multiExpand is not set.</span>
 <span class="c">     * @method expand</span>
 <span class="c">     */</span>
-    <span class="nx">expand</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nx">expand</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">lazySource</span><span class="o">)</span> <span class="o">{</span>
         <span class="c">// Only expand if currently collapsed.</span>
-<span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">expanded</span><span class="o">)</span> <span class="o">{</span> <span class="k">return</span><span class="o">;</span> <span class="o">}</span>
-
-        <span class="c">// fire the expand event handler</span>
-<span class="c"></span>        <span class="k">var</span> <span class="nx">ret</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">tree</span><span class="o">.</span><span class="nx">onExpand</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
-
-        <span class="k">if</span> <span class="o">(</span><span class="kc">false</span> <span class="o">===</span> <span class="nx">ret</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Expand was stopped by the abstract onExpand&quot;</span><span class="o">);</span>
-            <span class="k">return</span><span class="o">;</span>
+<span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">expanded</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">lazySource</span><span class="o">)</span> <span class="o">{</span> 
+            <span class="k">return</span><span class="o">;</span> 
         <span class="o">}</span>
-        
-        <span class="nx">ret</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">tree</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;expand&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+
+        <span class="k">var</span> <span class="nx">ret</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+
+        <span class="c">// When returning from the lazy load handler, expand is called again</span>
+<span class="c"></span>        <span class="c">// in order to render the new children.  The &quot;expand&quot; event already</span>
+<span class="c"></span>        <span class="c">// fired before fething the new data, so we need to skip it now.</span>
+<span class="c"></span>        <span class="k">if</span> <span class="o">(!</span><span class="nx">lazySource</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c">// fire the expand event handler</span>
+<span class="c"></span>            <span class="nx">ret</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">tree</span><span class="o">.</span><span class="nx">onExpand</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="kc">false</span> <span class="o">===</span> <span class="nx">ret</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Expand was stopped by the abstract onExpand&quot;</span><span class="o">);</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="o">}</span>
+            
+            <span class="nx">ret</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">tree</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;expand&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+        <span class="o">}</span>
 
         <span class="k">if</span> <span class="o">(</span><span class="kc">false</span> <span class="o">===</span> <span class="nx">ret</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Expand was stopped by the custom event handler&quot;</span><span class="o">);</span>
@@ -617,11 +657,11 @@
             <span class="k">return</span><span class="o">;</span>
         <span class="o">}</span>
 
-        <span class="k">if</span> <span class="o">(!</span> <span class="k">this</span><span class="o">.</span><span class="nx">childrenRendered</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">childrenRendered</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;children not rendered yet&quot;</span><span class="o">);</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">getChildrenEl</span><span class="o">().</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">renderChildren</span><span class="o">();</span>
         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;CHILDREN RENDERED&quot;</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;children already rendered&quot;</span><span class="o">);</span>
         <span class="o">}</span>
 
         <span class="k">this</span><span class="o">.</span><span class="nx">expanded</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
@@ -775,14 +815,19 @@
 <span class="c">     * @return {boolean} true if this node&#39;s children are to be loaded dynamically</span>
 <span class="c">     */</span>
     <span class="nx">isDynamic</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> 
-        <span class="k">var</span> <span class="nx">lazy</span> <span class="o">=</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">isRoot</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_dynLoad</span> <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="nx">tree</span><span class="o">.</span><span class="nx">root</span><span class="o">.</span><span class="nx">_dynLoad</span><span class="o">));</span>
-        <span class="c">// this.logger.log(&quot;isDynamic: &quot; + lazy);</span>
-<span class="c"></span>        <span class="k">return</span> <span class="nx">lazy</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">isLeaf</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">isRoot</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_dynLoad</span> <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="nx">tree</span><span class="o">.</span><span class="nx">root</span><span class="o">.</span><span class="nx">_dynLoad</span><span class="o">));</span>
+            <span class="c">// this.logger.log(&quot;isDynamic: &quot; + lazy);</span>
+<span class="c"></span>            <span class="c">// return lazy;</span>
+<span class="c"></span>        <span class="o">}</span>
     <span class="o">},</span>
 
     <span class="c">/**</span>
 <span class="c">     * Returns the current icon mode.  This refers to the way childless dynamic</span>
-<span class="c">     * load nodes appear.</span>
+<span class="c">     * load nodes appear (this comes into play only after the initial dynamic</span>
+<span class="c">     * load request produced no children).</span>
 <span class="c">     * @method getIconMode</span>
 <span class="c">     * @return {int} 0 for collapse style, 1 for leaf node style</span>
 <span class="c">     */</span>
@@ -803,8 +848,12 @@
 <span class="c">     * checking for this condition.</span>
 <span class="c">     */</span>
     <span class="nx">hasChildren</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">checkForLazyLoad</span><span class="o">)</span> <span class="o">{</span> 
-        <span class="k">return</span> <span class="o">(</span> <span class="k">this</span><span class="o">.</span><span class="nx">children</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">||</span> 
-                <span class="o">(</span><span class="nx">checkForLazyLoad</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">isDynamic</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">dynamicLoadComplete</span><span class="o">)</span> <span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">isLeaf</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="o">(</span> <span class="k">this</span><span class="o">.</span><span class="nx">children</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">||</span> 
+<span class="o">(</span><span class="nx">checkForLazyLoad</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">isDynamic</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">dynamicLoadComplete</span><span class="o">)</span> <span class="o">);</span>
+        <span class="o">}</span>
     <span class="o">},</span>
 
     <span class="c">/**</span>
@@ -844,14 +893,25 @@
 <span class="c">     */</span>
     <span class="nx">getChildrenHtml</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
 
+
         <span class="k">var</span> <span class="nx">sb</span> <span class="o">=</span> <span class="o">[];</span>
         <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;div class=&quot;ygtvchildren&quot;&#39;</span><span class="o">;</span>
         <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; id=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getChildrenElId</span><span class="o">()</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
-        <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">expanded</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="c">// This is a workaround for an IE rendering issue, the child div has layout</span>
+<span class="c"></span>        <span class="c">// in IE, creating extra space if a leaf node is created with the expanded</span>
+<span class="c"></span>        <span class="c">// property set to true.</span>
+<span class="c"></span>        <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">expanded</span> <span class="o">||</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">hasChildren</span><span class="o">())</span> <span class="o">{</span>
             <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39; style=&quot;display:none;&quot;&#39;</span><span class="o">;</span>
         <span class="o">}</span>
         <span class="nx">sb</span><span class="o">[</span><span class="nx">sb</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;&gt;&#39;</span><span class="o">;</span>
 
+        <span class="c">// this.logger.log([&quot;index&quot;, this.index, </span>
+<span class="c"></span>                         <span class="c">// &quot;hasChildren&quot;, this.hasChildren(true), </span>
+<span class="c"></span>                         <span class="c">// &quot;expanded&quot;, this.expanded, </span>
+<span class="c"></span>                         <span class="c">// &quot;renderHidden&quot;, this.renderHidden, </span>
+<span class="c"></span>                         <span class="c">// &quot;isDynamic&quot;, this.isDynamic()]);</span>
+<span class="c"></span>
         <span class="c">// Don&#39;t render the actual child node HTML unless this node is expanded.</span>
 <span class="c"></span>        <span class="k">if</span> <span class="o">(</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">hasChildren</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">expanded</span><span class="o">)</span> <span class="o">||</span>
                 <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">renderHidden</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">isDynamic</span><span class="o">())</span> <span class="o">)</span> <span class="o">{</span>
@@ -939,11 +999,11 @@
 <span class="c">     * @method loadComplete</span>
 <span class="c">     */</span>
     <span class="nx">loadComplete</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;loadComplete: &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">index</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">index</span> <span class="o">+</span> <span class="s2">&quot; loadComplete, children: &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">children</span><span class="o">.</span><span class="nx">length</span><span class="o">);</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">getChildrenEl</span><span class="o">().</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">completeRender</span><span class="o">();</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">dynamicLoadComplete</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">isLoading</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">expand</span><span class="o">();</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">expand</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">tree</span><span class="o">.</span><span class="nx">locked</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
     <span class="o">},</span>
 
@@ -1041,9 +1101,15 @@
 
                                 <li class=""><a href="module_calendar.html">calendar</a></li>
 
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
                                 <li class=""><a href="module_connection.html">connection</a></li>
 
                                 <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
 
                                 <li class=""><a href="module_datasource.html">datasource</a></li>
 
@@ -1053,15 +1119,35 @@
 
                                 <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
 
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
                                 <li class=""><a href="module_element.html">element</a></li>
 
                                 <li class=""><a href="module_event.html">event</a></li>
 
+                                <li class=""><a href="module_get.html">get</a></li>
+
                                 <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
 
                                 <li class=""><a href="module_logger.html">logger</a></li>
 
                                 <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
 
                                 <li class=""><a href="module_slider.html">slider</a></li>
 
@@ -1069,7 +1155,13 @@
 
                                 <li class="selected"><a href="module_treeview.html">treeview</a></li>
 
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
                                 <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
                         </ul>
                     </div>
 

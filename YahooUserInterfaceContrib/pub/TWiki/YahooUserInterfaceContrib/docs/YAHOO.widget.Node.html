@@ -3,26 +3,33 @@
 <head>
 	<title>API: treeview  YAHOO.widget.Node   (YUI Library)</title>
 	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
 </head>
 
 <body id="yahoo-com">
+
 <div id="doc3" class="yui-t2">
 
 	<div id="hd">
-        <h1>Yahoo! UI Library</h1>
-        <h3>TreeView Widget&nbsp; <span class="subtitle">2.2.2</span></h3>
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>TreeView Widget&nbsp; <span class="subtitle">2.5.2</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_treeview.html">treeview</a>
                  &gt; YAHOO.widget.Node 
                 
             </p>
+
 	</div>
 
 	<div id="bd">
 		<div id="yui-main">
 			<div class="yui-b">
-
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
 
                     <h2>
                         
@@ -47,9 +54,9 @@
                         <dl class="subclasses">
                             <dt>Known Subclasses:</dd>
                             <dd>
+                                    <a href="YAHOO.widget.TextNode.html">YAHOO.widget.TextNode</a>
                                     <a href="YAHOO.widget.HTMLNode.html">YAHOO.widget.HTMLNode</a>
                                     <a href="YAHOO.widget.RootNode.html">YAHOO.widget.RootNode</a>
-                                    <a href="YAHOO.widget.TextNode.html">YAHOO.widget.TextNode</a>
                             </dd>
                        </dl>
                 
@@ -61,7 +68,7 @@ response to mouse events is handled in Node subclasses.
                     </div>
 
                         <div class="section constructor details">
-                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <h3 id="constructor">Constructor</h3>
                         <div class="content">
                             <div class="detail">
                                 <strong>YAHOO.widget.Node</strong>
@@ -87,7 +94,8 @@ response to mouse events is handled in Node subclasses.
                                                     &lt;object&gt; 
                                                     </code>
                                                       a string or object containing the data that will
-be used to render this node
+be used to render this node, and any custom attributes that should be
+stored with the node (which is available in noderef.data).
                                                 </dd>
                                                 <dd>
                                                     <code>oParent
@@ -110,9 +118,10 @@ be used to render this node
                     </div>
 
                         <div class="section field details">
-                            <h3><a name="field_detail">Properties</a></h3>
+                            <h3 id="properties">Properties</h3>
                             <div class="content">
-                                    <h4><a name="_dynLoad">_dynLoad</a>
+                                    <div class="private">
+                                    <h4><a name="property__dynLoad">_dynLoad</a>
                                         <code>- private boolean</code>
                                     </h4>
                                     <div class="detail">
@@ -126,7 +135,9 @@ data dynamically.
 
 
                                     <hr />
-                                    <h4><a name="_type">_type</a>
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property__type">_type</a>
                                         <code>- private object</code>
                                     </h4>
                                     <div class="detail">
@@ -139,7 +150,9 @@ data dynamically.
 
 
                                     <hr />
-                                    <h4><a name="children">children</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_children">children</a>
                                         <code>- Node[]</code>
                                     </h4>
                                     <div class="detail">
@@ -152,7 +165,9 @@ data dynamically.
 
 
                                     <hr />
-                                    <h4><a name="childrenRendered">childrenRendered</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_childrenRendered">childrenRendered</a>
                                         <code>- boolean</code>
                                     </h4>
                                     <div class="detail">
@@ -166,7 +181,9 @@ children, and set to false when new children are added.
 
 
                                     <hr />
-                                    <h4><a name="data">data</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_data">data</a>
                                         <code>- object</code>
                                     </h4>
                                     <div class="detail">
@@ -180,7 +197,9 @@ value, and the data can be used in getNodeHtml().
 
 
                                     <hr />
-                                    <h4><a name="dataLoader">dataLoader</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_dataLoader">dataLoader</a>
                                         <code>- function</code>
                                     </h4>
                                     <div class="detail">
@@ -193,7 +212,9 @@ value, and the data can be used in getNodeHtml().
 
 
                                     <hr />
-                                    <h4><a name="depth">depth</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_depth">depth</a>
                                         <code>- int</code>
                                     </h4>
                                     <div class="detail">
@@ -206,7 +227,9 @@ value, and the data can be used in getNodeHtml().
 
 
                                     <hr />
-                                    <h4><a name="dynamicLoadComplete">dynamicLoadComplete</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_dynamicLoadComplete">dynamicLoadComplete</a>
                                         <code>- boolean</code>
                                     </h4>
                                     <div class="detail">
@@ -220,7 +243,9 @@ expanded.  This flag is set to true once the data has been fetched.
 
 
                                     <hr />
-                                    <h4><a name="expanded">expanded</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_expanded">expanded</a>
                                         <code>- boolean</code>
                                     </h4>
                                     <div class="detail">
@@ -233,7 +258,9 @@ expanded.  This flag is set to true once the data has been fetched.
 
 
                                     <hr />
-                                    <h4><a name="hasIcon">hasIcon</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_hasIcon">hasIcon</a>
                                         <code>- boolean</code>
                                     </h4>
                                     <div class="detail">
@@ -248,7 +275,9 @@ extra info about the parent, rather than an actual node.
 
 
                                     <hr />
-                                    <h4><a name="href">href</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_href">href</a>
                                         <code>- string</code>
                                     </h4>
                                     <div class="detail">
@@ -262,7 +291,9 @@ be set so that it toggles the node.
 
 
                                     <hr />
-                                    <h4><a name="iconMode">iconMode</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_iconMode">iconMode</a>
                                         <code>- int</code>
                                     </h4>
                                     <div class="detail">
@@ -278,7 +309,9 @@ iconMode to have it display like a leaf node instead.
 
 
                                     <hr />
-                                    <h4><a name="index">index</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_index">index</a>
                                         <code>- int</code>
                                     </h4>
                                     <div class="detail">
@@ -291,7 +324,30 @@ iconMode to have it display like a leaf node instead.
 
 
                                     <hr />
-                                    <h4><a name="isLoading">isLoading</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_isLeaf">isLeaf</a>
+                                        <code>- boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            If true, the node will alway be rendered as a leaf node.  This can be
+used to override the presentation when dynamically loading the entire
+tree.  Setting this to true also disables the dynamic load call for the
+node.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: false
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_isLoading">isLoading</a>
                                         <code>- boolean</code>
                                     </h4>
                                     <div class="detail">
@@ -305,7 +361,9 @@ callback to return.
 
 
                                     <hr />
-                                    <h4><a name="multiExpand">multiExpand</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_multiExpand">multiExpand</a>
                                         <code>- boolean</code>
                                     </h4>
                                     <div class="detail">
@@ -318,7 +376,9 @@ callback to return.
 
 
                                     <hr />
-                                    <h4><a name="nextSibling">nextSibling</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_nextSibling">nextSibling</a>
                                         <code>- Node</code>
                                     </h4>
                                     <div class="detail">
@@ -331,7 +391,9 @@ callback to return.
 
 
                                     <hr />
-                                    <h4><a name="nowrap">nowrap</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_nowrap">nowrap</a>
                                         <code>- boolean</code>
                                     </h4>
                                     <div class="detail">
@@ -348,7 +410,9 @@ to wrap.
 
 
                                     <hr />
-                                    <h4><a name="parent">parent</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_parent">parent</a>
                                         <code>- Node</code>
                                     </h4>
                                     <div class="detail">
@@ -361,7 +425,9 @@ to wrap.
 
 
                                     <hr />
-                                    <h4><a name="previousSibling">previousSibling</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_previousSibling">previousSibling</a>
                                         <code>- Node</code>
                                     </h4>
                                     <div class="detail">
@@ -374,7 +440,9 @@ to wrap.
 
 
                                     <hr />
-                                    <h4><a name="renderHidden">renderHidden</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_renderHidden">renderHidden</a>
                                         <code>- boolean</code>
                                     </h4>
                                     <div class="detail">
@@ -389,7 +457,9 @@ need this, and implement it if we do.
 
 
                                     <hr />
-                                    <h4><a name="target">target</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_target">target</a>
                                         <code>- string</code>
                                     </h4>
                                     <div class="detail">
@@ -402,7 +472,9 @@ need this, and implement it if we do.
 
 
                                     <hr />
-                                    <h4><a name="tree">tree</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_tree">tree</a>
                                         <code>- TreeView</code>
                                     </h4>
                                     <div class="detail">
@@ -415,6 +487,7 @@ need this, and implement it if we do.
 
 
                                     <hr />
+                                    </div>
 
 
                             </div>
@@ -425,17 +498,18 @@ need this, and implement it if we do.
                             <div class="content">
                                 <code>
                                     
-                                        <a href="YAHOO.util.EventProvider.html#__yui_events">__yui_events</a>,
-                                        <a href="YAHOO.util.EventProvider.html#__yui_subscribers">__yui_subscribers</a>
+                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_events">__yui_events</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_subscribers">__yui_subscribers</a>
                                 </code>
                             </div>
                         </div>
 
                         <div class="section method details">
-                            <h3><a name="methodDetails">Methods</a></h3>
+                            <h3 id="methods">Methods</h3>
                             <div class="content">
+                                    <div class="private">
                                     <h4>
-                                        <a name="appendChild">appendChild</a></h4>
+                                        <a name="method_appendChild">appendChild</a></h4>
                                     <div class="detail">
                                         <code>
                                          private 
@@ -478,8 +552,10 @@ need this, and implement it if we do.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="appendTo">appendTo</a></h4>
+                                        <a name="method_appendTo">appendTo</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -522,8 +598,10 @@ need this, and implement it if we do.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="applyParent">applyParent</a></h4>
+                                        <a name="method_applyParent">applyParent</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -569,8 +647,10 @@ make it possible to move a branch from one tree to another.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="collapse
+                                        <a name="method_collapse
 toggle style.">collapse
 toggle style.</a></h4>
                                     <div class="detail">
@@ -604,8 +684,10 @@ toggle style.</strong>
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="collapseAll">collapseAll</a></h4>
+                                        <a name="method_collapseAll">collapseAll</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -636,8 +718,10 @@ toggle style.</strong>
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="completeRender">completeRender</a></h4>
+                                        <a name="method_completeRender">completeRender</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -668,8 +752,10 @@ toggle style.</strong>
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="expand">expand</a></h4>
+                                        <a name="method_expand">expand</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -701,8 +787,10 @@ toggle style, and collapses its siblings if multiExpand is not set.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="expandAll">expandAll</a></h4>
+                                        <a name="method_expandAll">expandAll</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -733,8 +821,10 @@ toggle style, and collapses its siblings if multiExpand is not set.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getAncestor">getAncestor</a></h4>
+                                        <a name="method_getAncestor">getAncestor</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -777,8 +867,10 @@ toggle style, and collapses its siblings if multiExpand is not set.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getChildrenEl">getChildrenEl</a></h4>
+                                        <a name="method_getChildrenEl">getChildrenEl</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -809,8 +901,10 @@ toggle style, and collapses its siblings if multiExpand is not set.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getChildrenElId">getChildrenElId</a></h4>
+                                        <a name="method_getChildrenElId">getChildrenElId</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -841,8 +935,10 @@ toggle style, and collapses its siblings if multiExpand is not set.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="private">
                                     <h4>
-                                        <a name="getChildrenHtml">getChildrenHtml</a></h4>
+                                        <a name="method_getChildrenHtml">getChildrenHtml</a></h4>
                                     <div class="detail">
                                         <code>
                                          private 
@@ -875,8 +971,10 @@ unless this node is expanded.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getDepthStyle">getDepthStyle</a></h4>
+                                        <a name="method_getDepthStyle">getDepthStyle</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -922,8 +1020,10 @@ does not have a next sibling
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getEl">getEl</a></h4>
+                                        <a name="method_getEl">getEl</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -954,8 +1054,10 @@ does not have a next sibling
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getElId">getElId</a></h4>
+                                        <a name="method_getElId">getElId</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -986,8 +1088,10 @@ does not have a next sibling
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getHoverStyle">getHoverStyle</a></h4>
+                                        <a name="method_getHoverStyle">getHoverStyle</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1018,8 +1122,10 @@ does not have a next sibling
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getHtml">getHtml</a></h4>
+                                        <a name="method_getHtml">getHtml</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1050,8 +1156,10 @@ does not have a next sibling
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getIconMode">getIconMode</a></h4>
+                                        <a name="method_getIconMode">getIconMode</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1065,7 +1173,8 @@ does not have a next sibling
                                         
                                         <div class="description">
                                             Returns the current icon mode.  This refers to the way childless dynamic
-load nodes appear.
+load nodes appear (this comes into play only after the initial dynamic
+load request produced no children).
                                         </div>
 
                                         <div class="description">
@@ -1083,8 +1192,10 @@ load nodes appear.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getNodeHtml">getNodeHtml</a></h4>
+                                        <a name="method_getNodeHtml">getNodeHtml</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1116,8 +1227,10 @@ support different types of nodes.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getSiblings">getSiblings</a></h4>
+                                        <a name="method_getSiblings">getSiblings</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1148,8 +1261,10 @@ support different types of nodes.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getStyle">getStyle</a></h4>
+                                        <a name="method_getStyle">getStyle</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1180,8 +1295,10 @@ support different types of nodes.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getToggleEl">getToggleEl</a></h4>
+                                        <a name="method_getToggleEl">getToggleEl</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1212,8 +1329,10 @@ support different types of nodes.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getToggleElId">getToggleElId</a></h4>
+                                        <a name="method_getToggleElId">getToggleElId</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1244,8 +1363,10 @@ support different types of nodes.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getToggleLink">getToggleLink</a></h4>
+                                        <a name="method_getToggleLink">getToggleLink</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1276,8 +1397,10 @@ support different types of nodes.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="hasChildren">hasChildren</a></h4>
+                                        <a name="method_hasChildren">hasChildren</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1326,8 +1449,10 @@ checking for this condition.</dd>
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="hideChildren">hideChildren</a></h4>
+                                        <a name="method_hideChildren">hideChildren</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1358,8 +1483,10 @@ checking for this condition.</dd>
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="init">init</a></h4>
+                                        <a name="method_init">init</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1419,8 +1546,10 @@ be used to render this node
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="insertAfter">insertAfter</a></h4>
+                                        <a name="method_insertAfter">insertAfter</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1463,8 +1592,10 @@ be used to render this node
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="insertBefore">insertBefore</a></h4>
+                                        <a name="method_insertBefore">insertBefore</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1507,8 +1638,10 @@ be used to render this node
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="private">
                                     <h4>
-                                        <a name="isChildOf">isChildOf</a></h4>
+                                        <a name="method_isChildOf">isChildOf</a></h4>
                                     <div class="detail">
                                         <code>
                                          private 
@@ -1552,8 +1685,10 @@ supplied Node, else -1.</dd>
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="isDynamic">isDynamic</a></h4>
+                                        <a name="method_isDynamic">isDynamic</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1587,8 +1722,10 @@ defined in the root node
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="isRoot">isRoot</a></h4>
+                                        <a name="method_isRoot">isRoot</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1619,8 +1756,10 @@ defined in the root node
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="loadComplete">loadComplete</a></h4>
+                                        <a name="method_loadComplete">loadComplete</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1652,8 +1791,10 @@ in dynamic load situations.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="refresh">refresh</a></h4>
+                                        <a name="method_refresh">refresh</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1685,8 +1826,10 @@ node is expanded and new children have been added.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="private">
                                     <h4>
-                                        <a name="renderChildren">renderChildren</a></h4>
+                                        <a name="method_renderChildren">renderChildren</a></h4>
                                     <div class="detail">
                                         <code>
                                          private 
@@ -1718,8 +1861,10 @@ is expanded.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="setDynamicLoad">setDynamicLoad</a></h4>
+                                        <a name="method_setDynamicLoad">setDynamicLoad</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1775,8 +1920,10 @@ displayed.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="showChildren">showChildren</a></h4>
+                                        <a name="method_showChildren">showChildren</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1807,8 +1954,10 @@ displayed.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="toggle">toggle</a></h4>
+                                        <a name="method_toggle">toggle</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1839,8 +1988,10 @@ displayed.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="toString">toString</a></h4>
+                                        <a name="method_toString">toString</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1871,6 +2022,7 @@ displayed.
 
                                     </div>
                                     <hr />
+                                    </div>
                             </div>
                         </div>
 
@@ -1878,22 +2030,17 @@ displayed.
                                 <h4>Methods inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
                                 <div class="content">
                                     <code>
-                                        
-                                            <a href="YAHOO.util.EventProvider.html#createEvent">createEvent</a>,
-                                            <a href="YAHOO.util.EventProvider.html#fireEvent">fireEvent</a>,
-                                            <a href="YAHOO.util.EventProvider.html#hasEvent">hasEvent</a>,
-                                            <a href="YAHOO.util.EventProvider.html#subscribe">subscribe</a>,
-                                            <a href="YAHOO.util.EventProvider.html#unsubscribe">unsubscribe</a>,
-                                            <a href="YAHOO.util.EventProvider.html#unsubscribeAll">unsubscribeAll</a>
+                                            <a class="" href="YAHOO.util.EventProvider.html#method_createEvent">createEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_fireEvent">fireEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_hasEvent">hasEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_subscribe">subscribe</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_unsubscribe">unsubscribe</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_unsubscribeAll">unsubscribeAll</a>
                                     </code>
                                 </div>
                             </div>
 
                         <div class="section method details">
-                            <h3><a name="methodDetails">Events</a></h3>
+                            <h3 id="events">Events</h3>
                             <div class="content">
+                                    <div class="">
                                     <h4>
-                                        <a name="parentChange">parentChange</a></h4>
+                                        <a name="event_parentChange">parentChange</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1922,6 +2069,7 @@ one tree to another.
 
                                     </div>
                                     <hr />
+                                    </div>
                             </div>
                         </div>
 
@@ -1946,9 +2094,15 @@ one tree to another.
 
                                 <li class=""><a href="module_calendar.html">calendar</a></li>
 
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
                                 <li class=""><a href="module_connection.html">connection</a></li>
 
                                 <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
 
                                 <li class=""><a href="module_datasource.html">datasource</a></li>
 
@@ -1958,15 +2112,35 @@ one tree to another.
 
                                 <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
 
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
                                 <li class=""><a href="module_element.html">element</a></li>
 
                                 <li class=""><a href="module_event.html">event</a></li>
 
+                                <li class=""><a href="module_get.html">get</a></li>
+
                                 <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
 
                                 <li class=""><a href="module_logger.html">logger</a></li>
 
                                 <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
 
                                 <li class=""><a href="module_slider.html">slider</a></li>
 
@@ -1974,7 +2148,13 @@ one tree to another.
 
                                 <li class="selected"><a href="module_treeview.html">treeview</a></li>
 
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
                                 <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
                         </ul>
                     </div>
 
@@ -2011,70 +2191,73 @@ one tree to another.
                     <div class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
-                                <li><a href="#_dynLoad">_dynLoad</a>
+                                <li class="private"><a href="#property__dynLoad">_dynLoad</a>
                                         <!--<code>&lt;TreeView&gt;</code>-->
                                 </li>
-                                <li><a href="#_type">_type</a>
+                                <li class="private"><a href="#property__type">_type</a>
                                         <!--<code>&lt;TreeView&gt;</code>-->
                                 </li>
-                                <li><a href="#children">children</a>
+                                <li class=""><a href="#property_children">children</a>
                                         <!--<code>&lt;TreeView&gt;</code>-->
                                 </li>
-                                <li><a href="#childrenRendered">childrenRendered</a>
+                                <li class=""><a href="#property_childrenRendered">childrenRendered</a>
                                         <!--<code>&lt;TreeView&gt;</code>-->
                                 </li>
-                                <li><a href="#data">data</a>
+                                <li class=""><a href="#property_data">data</a>
                                         <!--<code>&lt;TreeView&gt;</code>-->
                                 </li>
-                                <li><a href="#dataLoader">dataLoader</a>
+                                <li class=""><a href="#property_dataLoader">dataLoader</a>
                                         <!--<code>&lt;TreeView&gt;</code>-->
                                 </li>
-                                <li><a href="#depth">depth</a>
+                                <li class=""><a href="#property_depth">depth</a>
                                         <!--<code>&lt;TreeView&gt;</code>-->
                                 </li>
-                                <li><a href="#dynamicLoadComplete">dynamicLoadComplete</a>
+                                <li class=""><a href="#property_dynamicLoadComplete">dynamicLoadComplete</a>
                                         <!--<code>&lt;TreeView&gt;</code>-->
                                 </li>
-                                <li><a href="#expanded">expanded</a>
+                                <li class=""><a href="#property_expanded">expanded</a>
                                         <!--<code>&lt;TreeView&gt;</code>-->
                                 </li>
-                                <li><a href="#hasIcon">hasIcon</a>
+                                <li class=""><a href="#property_hasIcon">hasIcon</a>
                                         <!--<code>&lt;TreeView&gt;</code>-->
                                 </li>
-                                <li><a href="#href">href</a>
+                                <li class=""><a href="#property_href">href</a>
                                         <!--<code>&lt;TreeView&gt;</code>-->
                                 </li>
-                                <li><a href="#iconMode">iconMode</a>
+                                <li class=""><a href="#property_iconMode">iconMode</a>
                                         <!--<code>&lt;TreeView&gt;</code>-->
                                 </li>
-                                <li><a href="#index">index</a>
+                                <li class=""><a href="#property_index">index</a>
                                         <!--<code>&lt;TreeView&gt;</code>-->
                                 </li>
-                                <li><a href="#isLoading">isLoading</a>
+                                <li class=""><a href="#property_isLeaf">isLeaf</a>
                                         <!--<code>&lt;TreeView&gt;</code>-->
                                 </li>
-                                <li><a href="#multiExpand">multiExpand</a>
+                                <li class=""><a href="#property_isLoading">isLoading</a>
                                         <!--<code>&lt;TreeView&gt;</code>-->
                                 </li>
-                                <li><a href="#nextSibling">nextSibling</a>
+                                <li class=""><a href="#property_multiExpand">multiExpand</a>
                                         <!--<code>&lt;TreeView&gt;</code>-->
                                 </li>
-                                <li><a href="#nowrap">nowrap</a>
+                                <li class=""><a href="#property_nextSibling">nextSibling</a>
                                         <!--<code>&lt;TreeView&gt;</code>-->
                                 </li>
-                                <li><a href="#parent">parent</a>
+                                <li class=""><a href="#property_nowrap">nowrap</a>
                                         <!--<code>&lt;TreeView&gt;</code>-->
                                 </li>
-                                <li><a href="#previousSibling">previousSibling</a>
+                                <li class=""><a href="#property_parent">parent</a>
                                         <!--<code>&lt;TreeView&gt;</code>-->
                                 </li>
-                                <li><a href="#renderHidden">renderHidden</a>
+                                <li class=""><a href="#property_previousSibling">previousSibling</a>
                                         <!--<code>&lt;TreeView&gt;</code>-->
                                 </li>
-                                <li><a href="#target">target</a>
+                                <li class=""><a href="#property_renderHidden">renderHidden</a>
                                         <!--<code>&lt;TreeView&gt;</code>-->
                                 </li>
-                                <li><a href="#tree">tree</a>
+                                <li class=""><a href="#property_target">target</a>
+                                        <!--<code>&lt;TreeView&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property_tree">tree</a>
                                         <!--<code>&lt;TreeView&gt;</code>-->
                                 </li>
                         </ul>
@@ -2083,124 +2266,124 @@ one tree to another.
                     <div class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
-                                <li><!--<code>Node</code>-->
-                                <a href="#appendChild">appendChild</a>
+                                <li class="private"><!--<code>Node</code>-->
+                                <a href="#method_appendChild">appendChild</a>
                                 </li>
-                                <li><!--<code>Node</code>-->
-                                <a href="#appendTo">appendTo</a>
+                                <li class=""><!--<code>Node</code>-->
+                                <a href="#method_appendTo">appendTo</a>
                                 </li>
-                                <li><!--<code>boolean</code>-->
-                                <a href="#applyParent">applyParent</a>
+                                <li class=""><!--<code>boolean</code>-->
+                                <a href="#method_applyParent">applyParent</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#collapse
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_collapse
 toggle style.">collapse
 toggle style.</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#collapseAll">collapseAll</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_collapseAll">collapseAll</a>
                                 </li>
-                                <li><!--<code>string</code>-->
-                                <a href="#completeRender">completeRender</a>
+                                <li class=""><!--<code>string</code>-->
+                                <a href="#method_completeRender">completeRender</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#expand">expand</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_expand">expand</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#expandAll">expandAll</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_expandAll">expandAll</a>
                                 </li>
-                                <li><!--<code>Node</code>-->
-                                <a href="#getAncestor">getAncestor</a>
+                                <li class=""><!--<code>Node</code>-->
+                                <a href="#method_getAncestor">getAncestor</a>
                                 </li>
-                                <li><!--<code>HTMLElement</code>-->
-                                <a href="#getChildrenEl">getChildrenEl</a>
+                                <li class=""><!--<code>HTMLElement</code>-->
+                                <a href="#method_getChildrenEl">getChildrenEl</a>
                                 </li>
-                                <li><!--<code>string</code>-->
-                                <a href="#getChildrenElId">getChildrenElId</a>
+                                <li class=""><!--<code>string</code>-->
+                                <a href="#method_getChildrenElId">getChildrenElId</a>
                                 </li>
-                                <li><!--<code>string</code>-->
-                                <a href="#getChildrenHtml">getChildrenHtml</a>
+                                <li class="private"><!--<code>string</code>-->
+                                <a href="#method_getChildrenHtml">getChildrenHtml</a>
                                 </li>
-                                <li><!--<code>string</code>-->
-                                <a href="#getDepthStyle">getDepthStyle</a>
+                                <li class=""><!--<code>string</code>-->
+                                <a href="#method_getDepthStyle">getDepthStyle</a>
                                 </li>
-                                <li><!--<code>HTMLElement</code>-->
-                                <a href="#getEl">getEl</a>
+                                <li class=""><!--<code>HTMLElement</code>-->
+                                <a href="#method_getEl">getEl</a>
                                 </li>
-                                <li><!--<code>string</code>-->
-                                <a href="#getElId">getElId</a>
+                                <li class=""><!--<code>string</code>-->
+                                <a href="#method_getElId">getElId</a>
                                 </li>
-                                <li><!--<code>string</code>-->
-                                <a href="#getHoverStyle">getHoverStyle</a>
+                                <li class=""><!--<code>string</code>-->
+                                <a href="#method_getHoverStyle">getHoverStyle</a>
                                 </li>
-                                <li><!--<code>string</code>-->
-                                <a href="#getHtml">getHtml</a>
+                                <li class=""><!--<code>string</code>-->
+                                <a href="#method_getHtml">getHtml</a>
                                 </li>
-                                <li><!--<code>int</code>-->
-                                <a href="#getIconMode">getIconMode</a>
+                                <li class=""><!--<code>int</code>-->
+                                <a href="#method_getIconMode">getIconMode</a>
                                 </li>
-                                <li><!--<code>string</code>-->
-                                <a href="#getNodeHtml">getNodeHtml</a>
+                                <li class=""><!--<code>string</code>-->
+                                <a href="#method_getNodeHtml">getNodeHtml</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#getSiblings">getSiblings</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_getSiblings">getSiblings</a>
                                 </li>
-                                <li><!--<code>string</code>-->
-                                <a href="#getStyle">getStyle</a>
+                                <li class=""><!--<code>string</code>-->
+                                <a href="#method_getStyle">getStyle</a>
                                 </li>
-                                <li><!--<code>HTMLElement</code>-->
-                                <a href="#getToggleEl">getToggleEl</a>
+                                <li class=""><!--<code>HTMLElement</code>-->
+                                <a href="#method_getToggleEl">getToggleEl</a>
                                 </li>
-                                <li><!--<code>string</code>-->
-                                <a href="#getToggleElId">getToggleElId</a>
+                                <li class=""><!--<code>string</code>-->
+                                <a href="#method_getToggleElId">getToggleElId</a>
                                 </li>
-                                <li><!--<code>string</code>-->
-                                <a href="#getToggleLink">getToggleLink</a>
+                                <li class=""><!--<code>string</code>-->
+                                <a href="#method_getToggleLink">getToggleLink</a>
                                 </li>
-                                <li><!--<code>boolean</code>-->
-                                <a href="#hasChildren">hasChildren</a>
+                                <li class=""><!--<code>boolean</code>-->
+                                <a href="#method_hasChildren">hasChildren</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#hideChildren">hideChildren</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_hideChildren">hideChildren</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#init">init</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_init">init</a>
                                 </li>
-                                <li><!--<code>Node</code>-->
-                                <a href="#insertAfter">insertAfter</a>
+                                <li class=""><!--<code>Node</code>-->
+                                <a href="#method_insertAfter">insertAfter</a>
                                 </li>
-                                <li><!--<code>Node</code>-->
-                                <a href="#insertBefore">insertBefore</a>
+                                <li class=""><!--<code>Node</code>-->
+                                <a href="#method_insertBefore">insertBefore</a>
                                 </li>
-                                <li><!--<code>boolean</code>-->
-                                <a href="#isChildOf">isChildOf</a>
+                                <li class="private"><!--<code>boolean</code>-->
+                                <a href="#method_isChildOf">isChildOf</a>
                                 </li>
-                                <li><!--<code>boolean</code>-->
-                                <a href="#isDynamic">isDynamic</a>
+                                <li class=""><!--<code>boolean</code>-->
+                                <a href="#method_isDynamic">isDynamic</a>
                                 </li>
-                                <li><!--<code>boolean</code>-->
-                                <a href="#isRoot">isRoot</a>
+                                <li class=""><!--<code>boolean</code>-->
+                                <a href="#method_isRoot">isRoot</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#loadComplete">loadComplete</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_loadComplete">loadComplete</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#refresh">refresh</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_refresh">refresh</a>
                                 </li>
-                                <li><!--<code>string</code>-->
-                                <a href="#renderChildren">renderChildren</a>
+                                <li class="private"><!--<code>string</code>-->
+                                <a href="#method_renderChildren">renderChildren</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#setDynamicLoad">setDynamicLoad</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_setDynamicLoad">setDynamicLoad</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#showChildren">showChildren</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_showChildren">showChildren</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#toggle">toggle</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_toggle">toggle</a>
                                 </li>
-                                <li><!--<code>string</code>-->
-                                <a href="#toString">toString</a>
+                                <li class=""><!--<code>string</code>-->
+                                <a href="#method_toString">toString</a>
                                 </li>
                         </ul>
                     </div>
@@ -2208,8 +2391,8 @@ toggle style.</a>
                     <div class="module">
                         <h4>Events</h4>
                         <ul class="content">        
-                                <li>
-                                <a href="#parentChange">parentChange</a>
+                                <li class="">
+                                <a href="#event_parentChange">parentChange</a>
                                 </li>
                         </ul>
                     </div>

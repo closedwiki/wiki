@@ -3,26 +3,33 @@
 <head>
 	<title>API: slider  YAHOO.widget.Slider   (YUI Library)</title>
 	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
 </head>
 
 <body id="yahoo-com">
+
 <div id="doc3" class="yui-t2">
 
 	<div id="hd">
-        <h1>Yahoo! UI Library</h1>
-        <h3>Slider Widget&nbsp; <span class="subtitle">2.2.2</span></h3>
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>Slider Widget&nbsp; <span class="subtitle">2.5.2</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_slider.html">slider</a>
                  &gt; YAHOO.widget.Slider 
                 
             </p>
+
 	</div>
 
 	<div id="bd">
 		<div id="yui-main">
 			<div class="yui-b">
-
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
 
                     <h2>
                         
@@ -57,7 +64,7 @@ clicked.
                     </div>
 
                         <div class="section constructor details">
-                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <h3 id="constructor">Constructor</h3>
                         <div class="content">
                             <div class="detail">
                                 <strong>YAHOO.widget.Slider</strong>
@@ -114,9 +121,26 @@ clicked.
                     </div>
 
                         <div class="section field details">
-                            <h3><a name="field_detail">Properties</a></h3>
+                            <h3 id="properties">Properties</h3>
                             <div class="content">
-                                    <h4><a name="animate">animate</a>
+                                    <div class="private">
+                                    <h4><a name="property__silent">_silent</a>
+                                        <code>- private boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Indicates whether or not events will be supressed for the current
+slide operation
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_animate">animate</a>
                                         <code>- boolean</code>
                                     </h4>
                                     <div class="detail">
@@ -129,7 +153,9 @@ clicked.
 
 
                                     <hr />
-                                    <h4><a name="animationDuration">animationDuration</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_animationDuration">animationDuration</a>
                                         <code>- int</code>
                                     </h4>
                                     <div class="detail">
@@ -146,7 +172,9 @@ in seconds.
 
 
                                     <hr />
-                                    <h4><a name="backgroundEnabled">backgroundEnabled</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_backgroundEnabled">backgroundEnabled</a>
                                         <code>- boolean</code>
                                     </h4>
                                     <div class="detail">
@@ -159,7 +187,9 @@ in seconds.
 
 
                                     <hr />
-                                    <h4><a name="baselinePos">baselinePos</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_baselinePos">baselinePos</a>
                                         <code>- [int, int]</code>
                                     </h4>
                                     <div class="detail">
@@ -174,7 +204,27 @@ operation.
 
 
                                     <hr />
-                                    <h4><a name="enableKeys">enableKeys</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_dragOnly">dragOnly</a>
+                                        <code>- boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Override the default setting of dragOnly to true.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: true
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_enableKeys">enableKeys</a>
                                         <code>- boolean</code>
                                     </h4>
                                     <div class="detail">
@@ -187,7 +237,9 @@ operation.
 
 
                                     <hr />
-                                    <h4><a name="isTarget">isTarget</a>
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property_isTarget">isTarget</a>
                                         <code>- private object</code>
                                     </h4>
                                     <div class="detail">
@@ -200,13 +252,15 @@ operation.
 
 
                                     <hr />
-                                    <h4><a name="keyIncrement">keyIncrement</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_keyIncrement">keyIncrement</a>
                                         <code>- int</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
                                             Specifies the number of pixels the arrow keys will move the slider.
-Default is 25.
+Default is 20.
                                         </div>
                                     </div>
      
@@ -214,7 +268,25 @@ Default is 25.
 
 
                                     <hr />
-                                    <h4><a name="moveComplete">moveComplete</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_lastOffset">lastOffset</a>
+                                        <code>- [int, int]</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Saved offset used to protect against NaN problems when slider is
+set to display:none
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_moveComplete">moveComplete</a>
                                         <code>- Boolean</code>
                                     </h4>
                                     <div class="detail">
@@ -234,11 +306,51 @@ never see it.
                                         
 
                                     <div class="deprecated">
-                                        <strong>Deprecated: </strong>use the slideEnd event instead
+                                        <strong>Deprecated:</strong> use the slideEnd event instead
                                     </div>        
 
                                     <hr />
-                                    <h4><a name="thumb">thumb</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_SOURCE_SET_VALUE">SOURCE_SET_VALUE</a>
+                                        <code>- final object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Constant for valueChangeSource, indicating that the value was altered
+by a programmatic call to setValue/setRegionValue.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: 2
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_SOURCE_UI_EVENT">SOURCE_UI_EVENT</a>
+                                        <code>- final object</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            Constant for valueChangeSource, indicating that the user clicked or
+dragged the slider to change the value.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default">
+                                        Default Value: 1
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_thumb">thumb</a>
                                         <code>- YAHOO.widget.SliderThumb</code>
                                     </h4>
                                     <div class="detail">
@@ -252,7 +364,9 @@ reposition the thumb when the background is clicked
 
 
                                     <hr />
-                                    <h4><a name="thumbCenterPoint">thumbCenterPoint</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_thumbCenterPoint">thumbCenterPoint</a>
                                         <code>- {"x": int, "y": int}</code>
                                     </h4>
                                     <div class="detail">
@@ -266,7 +380,9 @@ place it in the correct position when the background is clicked.
 
 
                                     <hr />
-                                    <h4><a name="tickPause">tickPause</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_tickPause">tickPause</a>
                                         <code>- int</code>
                                     </h4>
                                     <div class="detail">
@@ -280,7 +396,9 @@ faster the animation (by default)
 
 
                                     <hr />
-                                    <h4><a name="type">type</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_type">type</a>
                                         <code>- string</code>
                                     </h4>
                                     <div class="detail">
@@ -293,12 +411,18 @@ faster the animation (by default)
 
 
                                     <hr />
-                                    <h4><a name="YAHOO.widget.Slider.ANIM_AVAIL">YAHOO.widget.Slider.ANIM_AVAIL</a>
-                                        <code>- static boolean</code>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_valueChangeSource">valueChangeSource</a>
+                                        <code>- int</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
-                                            By default, animation is available if the animation library is detected.
+                                            When the slider value changes, this property is set to identify where
+the update came from.  This will be either 1, meaning the slider was
+clicked or dragged, or 2, meaning that it was set via a setValue() call.
+This can be used within event handlers to apply some of the logic only
+when dealing with one source or another.
                                         </div>
                                     </div>
      
@@ -306,6 +430,22 @@ faster the animation (by default)
 
 
                                     <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_YAHOO.widget.Slider.ANIM_AVAIL">YAHOO.widget.Slider.ANIM_AVAIL</a>
+                                        <code>- static boolean</code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description">
+                                            By default, animation is available if the animation utility is detected.
+                                        </div>
+                                    </div>
+     
+                                        
+
+
+                                    <hr />
+                                    </div>
 
 
                             </div>
@@ -316,33 +456,39 @@ faster the animation (by default)
                             <div class="content">
                                 <code>
                                     
-                                        <a href="YAHOO.util.DragDrop.html#__ygDragDrop">__ygDragDrop</a>,
-                                        <a href="YAHOO.util.DragDrop.html#_domRef">_domRef</a>,
-                                        <a href="YAHOO.util.DragDrop.html#available">available</a>,
-                                        <a href="YAHOO.util.DragDrop.html#config">config</a>,
-                                        <a href="YAHOO.util.DragDrop.html#constrainX">constrainX</a>,
-                                        <a href="YAHOO.util.DragDrop.html#constrainY">constrainY</a>,
-                                        <a href="YAHOO.util.DragDrop.html#deltaX">deltaX</a>,
-                                        <a href="YAHOO.util.DragDrop.html#deltaY">deltaY</a>,
-                                        <a href="YAHOO.util.DragDrop.html#dragElId">dragElId</a>,
-                                        <a href="YAHOO.util.DragDrop.html#groups">groups</a>,
-                                        <a href="YAHOO.util.DragDrop.html#handleElId">handleElId</a>,
-                                        <a href="YAHOO.util.DragDrop.html#hasOuterHandles">hasOuterHandles</a>,
-                                        <a href="YAHOO.util.DragDrop.html#id">id</a>,
-                                        <a href="YAHOO.util.DragDrop.html#invalidHandleClasses">invalidHandleClasses</a>,
-                                        <a href="YAHOO.util.DragDrop.html#invalidHandleIds">invalidHandleIds</a>,
-                                        <a href="YAHOO.util.DragDrop.html#invalidHandleTypes">invalidHandleTypes</a>,
-                                        <a href="YAHOO.util.DragDrop.html#locked">locked</a>,
-                                        <a href="YAHOO.util.DragDrop.html#maintainOffset">maintainOffset</a>,
-                                        <a href="YAHOO.util.DragDrop.html#maxX">maxX</a>,
-                                        <a href="YAHOO.util.DragDrop.html#maxY">maxY</a>,
-                                        <a href="YAHOO.util.DragDrop.html#minX">minX</a>,
-                                        <a href="YAHOO.util.DragDrop.html#minY">minY</a>,
-                                        <a href="YAHOO.util.DragDrop.html#primaryButtonOnly">primaryButtonOnly</a>,
-                                        <a href="YAHOO.util.DragDrop.html#startPageX">startPageX</a>,
-                                        <a href="YAHOO.util.DragDrop.html#startPageY">startPageY</a>,
-                                        <a href="YAHOO.util.DragDrop.html#xTicks">xTicks</a>,
-                                        <a href="YAHOO.util.DragDrop.html#yTicks">yTicks</a>
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property___ygDragDrop">__ygDragDrop</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property__domRef">_domRef</a><span class="private">,</span>
+                                        <a class="" href="YAHOO.util.DragDrop.html#property_available">available</a><span class="">,</span>
+                                        <a class="" href="YAHOO.util.DragDrop.html#property_config">config</a><span class="">,</span>
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property_constrainX">constrainX</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property_constrainY">constrainY</a><span class="private">,</span>
+                                        <a class="" href="YAHOO.util.DragDrop.html#property_cursorIsOver">cursorIsOver</a><span class="">,</span>
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property_deltaX">deltaX</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property_deltaY">deltaY</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property_dragElId">dragElId</a><span class="private">,</span>
+                                        <a class="" href="YAHOO.util.DragDrop.html#property_dragOnly">dragOnly</a><span class="">,</span>
+                                        <a class="" href="YAHOO.util.DragDrop.html#property_events">events</a><span class="">,</span>
+                                        <a class="" href="YAHOO.util.DragDrop.html#property_groups">groups</a><span class="">,</span>
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property_handleElId">handleElId</a><span class="private">,</span>
+                                        <a class="" href="YAHOO.util.DragDrop.html#property_hasOuterHandles">hasOuterHandles</a><span class="">,</span>
+                                        <a class="" href="YAHOO.util.DragDrop.html#property_id">id</a><span class="">,</span>
+                                        <a class="" href="YAHOO.util.DragDrop.html#property_invalidHandleClasses">invalidHandleClasses</a><span class="">,</span>
+                                        <a class="" href="YAHOO.util.DragDrop.html#property_invalidHandleIds">invalidHandleIds</a><span class="">,</span>
+                                        <a class="" href="YAHOO.util.DragDrop.html#property_invalidHandleTypes">invalidHandleTypes</a><span class="">,</span>
+                                        <a class="" href="YAHOO.util.DragDrop.html#property_isTarget">isTarget</a><span class="">,</span>
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property_locked">locked</a><span class="private">,</span>
+                                        <a class="" href="YAHOO.util.DragDrop.html#property_maintainOffset">maintainOffset</a><span class="">,</span>
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property_maxX">maxX</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property_maxY">maxY</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property_minX">minX</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property_minY">minY</a><span class="private">,</span>
+                                        <a class="" href="YAHOO.util.DragDrop.html#property_overlap">overlap</a><span class="">,</span>
+                                        <a class="" href="YAHOO.util.DragDrop.html#property_padding">padding</a><span class="">,</span>
+                                        <a class="" href="YAHOO.util.DragDrop.html#property_primaryButtonOnly">primaryButtonOnly</a><span class="">,</span>
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property_startPageX">startPageX</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.util.DragDrop.html#property_startPageY">startPageY</a><span class="private">,</span>
+                                        <a class="" href="YAHOO.util.DragDrop.html#property_xTicks">xTicks</a><span class="">,</span>
+                                        <a class="" href="YAHOO.util.DragDrop.html#property_yTicks">yTicks</a>
                                 </code>
                             </div>
                         </div>
@@ -351,17 +497,18 @@ faster the animation (by default)
                             <div class="content">
                                 <code>
                                     
-                                        <a href="YAHOO.util.EventProvider.html#__yui_events">__yui_events</a>,
-                                        <a href="YAHOO.util.EventProvider.html#__yui_subscribers">__yui_subscribers</a>
+                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_events">__yui_events</a><span class="private">,</span>
+                                        <a class="private" href="YAHOO.util.EventProvider.html#property___yui_subscribers">__yui_subscribers</a>
                                 </code>
                             </div>
                         </div>
 
                         <div class="section method details">
-                            <h3><a name="methodDetails">Methods</a></h3>
+                            <h3 id="methods">Methods</h3>
                             <div class="content">
+                                    <div class="private">
                                     <h4>
-                                        <a name="_getNextX">_getNextX</a></h4>
+                                        <a name="method__getNextX">_getNextX</a></h4>
                                     <div class="detail">
                                         <code>
                                          private 
@@ -392,8 +539,10 @@ faster the animation (by default)
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="private">
                                     <h4>
-                                        <a name="_getNextY">_getNextY</a></h4>
+                                        <a name="method__getNextY">_getNextY</a></h4>
                                     <div class="detail">
                                         <code>
                                          private 
@@ -424,8 +573,10 @@ faster the animation (by default)
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="private">
                                     <h4>
-                                        <a name="b4MouseDown">b4MouseDown</a></h4>
+                                        <a name="method_b4MouseDown">b4MouseDown</a></h4>
                                     <div class="detail">
                                         <code>
                                          private 
@@ -456,8 +607,10 @@ faster the animation (by default)
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="private">
                                     <h4>
-                                        <a name="endMove">endMove</a></h4>
+                                        <a name="method_endMove">endMove</a></h4>
                                     <div class="detail">
                                         <code>
                                          private 
@@ -488,8 +641,10 @@ faster the animation (by default)
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="private">
                                     <h4>
-                                        <a name="fireEvents">fireEvents</a></h4>
+                                        <a name="method_fireEvents">fireEvents</a></h4>
                                     <div class="detail">
                                         <code>
                                          private 
@@ -538,8 +693,10 @@ be refreshed before proceeding.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="private">
                                     <h4>
-                                        <a name="focus">focus</a></h4>
+                                        <a name="method_focus">focus</a></h4>
                                     <div class="detail">
                                         <code>
                                          private 
@@ -571,8 +728,10 @@ accessibility features
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getThumb">getThumb</a></h4>
+                                        <a name="method_getThumb">getThumb</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -603,8 +762,10 @@ accessibility features
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getValue">getValue</a></h4>
+                                        <a name="method_getValue">getValue</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -635,8 +796,10 @@ accessibility features
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getXValue">getXValue</a></h4>
+                                        <a name="method_getXValue">getXValue</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -667,8 +830,10 @@ accessibility features
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getYValue">getYValue</a></h4>
+                                        <a name="method_getYValue">getYValue</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -699,8 +864,10 @@ accessibility features
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="handleKeyDown">handleKeyDown</a></h4>
+                                        <a name="method_handleKeyDown">handleKeyDown</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -745,8 +912,10 @@ arrow key, home, or end as long as enableKeys is set to true.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="handleKeyPress">handleKeyPress</a></h4>
+                                        <a name="method_handleKeyPress">handleKeyPress</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -792,8 +961,10 @@ happens in handleKeyDown.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="private">
                                     <h4>
-                                        <a name="handleThumbChange">handleThumbChange</a></h4>
+                                        <a name="method_handleThumbChange">handleThumbChange</a></h4>
                                     <div class="detail">
                                         <code>
                                          private 
@@ -824,8 +995,10 @@ happens in handleKeyDown.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="initSlider">initSlider</a></h4>
+                                        <a name="method_initSlider">initSlider</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -868,8 +1041,10 @@ happens in handleKeyDown.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="initThumb">initThumb</a></h4>
+                                        <a name="method_initThumb">initThumb</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -912,8 +1087,10 @@ happens in handleKeyDown.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="lock">lock</a></h4>
+                                        <a name="method_lock">lock</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -944,8 +1121,10 @@ happens in handleKeyDown.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="private">
                                     <h4>
-                                        <a name="moveOneTick">moveOneTick</a></h4>
+                                        <a name="method_moveOneTick">moveOneTick</a></h4>
                                     <div class="detail">
                                         <code>
                                          private 
@@ -989,8 +1168,10 @@ for the animation when tick marks are defined
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="private">
                                     <h4>
-                                        <a name="moveThumb">moveThumb</a></h4>
+                                        <a name="method_moveThumb">moveThumb</a></h4>
                                     <div class="detail">
                                         <code>
                                          private 
@@ -1010,6 +1191,10 @@ for the animation when tick marks are defined
                                                 
                                                         , 
                                                          skipAnim
+                                                    
+                                                
+                                                        , 
+                                                         midMove
                                                     
                                                 
                                             )
@@ -1037,6 +1222,11 @@ cursor and the background during the mouseup event
                                                             <code>skipAnim &lt;boolean&gt;</code>
                                                              don't animate if the move happend onDrag
                                                         </dd>
+                                                        <dd>
+                                                            <code>midMove &lt;boolean&gt;</code>
+                                                             set to true if this is not terminating
+the slider movement
+                                                        </dd>
                                                 </dl>
 
                                                 <dl>
@@ -1051,8 +1241,10 @@ cursor and the background during the mouseup event
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="onAvailable">onAvailable</a></h4>
+                                        <a name="method_onAvailable">onAvailable</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1083,8 +1275,10 @@ cursor and the background during the mouseup event
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="onChange">onChange</a></h4>
+                                        <a name="method_onChange">onChange</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1141,8 +1335,10 @@ offset, the second the vertical.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="private">
                                     <h4>
-                                        <a name="onDrag">onDrag</a></h4>
+                                        <a name="method_onDrag">onDrag</a></h4>
                                     <div class="detail">
                                         <code>
                                          private 
@@ -1173,8 +1369,10 @@ offset, the second the vertical.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="private">
                                     <h4>
-                                        <a name="onMouseDown">onMouseDown</a></h4>
+                                        <a name="method_onMouseDown">onMouseDown</a></h4>
                                     <div class="detail">
                                         <code>
                                          private 
@@ -1205,8 +1403,10 @@ offset, the second the vertical.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="onSliderEnd">onSliderEnd</a></h4>
+                                        <a name="method_onSliderEnd">onSliderEnd</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1240,8 +1440,10 @@ offset, the second the vertical.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="onSlideStart">onSlideStart</a></h4>
+                                        <a name="method_onSlideStart">onSlideStart</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1275,8 +1477,10 @@ offset, the second the vertical.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="setRegionValue">setRegionValue</a></h4>
+                                        <a name="method_setRegionValue">setRegionValue</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1300,6 +1504,10 @@ offset, the second the vertical.
                                                 
                                                         , 
                                                          force
+                                                    
+                                                
+                                                        , 
+                                                         silent
                                                     
                                                 
                                             )
@@ -1332,6 +1540,10 @@ for this move action (but not others).
                                                             <code>force &lt;boolean&gt;</code>
                                                              ignore the locked setting and set value anyway
                                                         </dd>
+                                                        <dd>
+                                                            <code>silent &lt;boolean&gt;</code>
+                                                             when true, do not fire events
+                                                        </dd>
                                                 </dl>
 
                                                 <dl>
@@ -1346,8 +1558,10 @@ for this move action (but not others).
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="setStartSliderState">setStartSliderState</a></h4>
+                                        <a name="method_setStartSliderState">setStartSliderState</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1378,8 +1592,10 @@ for this move action (but not others).
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="setThumbCenterPoint">setThumbCenterPoint</a></h4>
+                                        <a name="method_setThumbCenterPoint">setThumbCenterPoint</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1411,8 +1627,10 @@ we can position the element correctly when the background is clicked
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="setValue">setValue</a></h4>
+                                        <a name="method_setValue">setValue</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1432,6 +1650,10 @@ we can position the element correctly when the background is clicked
                                                 
                                                         , 
                                                          force
+                                                    
+                                                
+                                                        , 
+                                                         silent
                                                     
                                                 
                                             )
@@ -1459,6 +1681,10 @@ for this move action (but not others).
                                                             <code>force &lt;boolean&gt;</code>
                                                              ignore the locked setting and set value anyway
                                                         </dd>
+                                                        <dd>
+                                                            <code>silent &lt;boolean&gt;</code>
+                                                             when true, do not fire events
+                                                        </dd>
                                                 </dl>
 
                                                 <dl>
@@ -1473,8 +1699,10 @@ for this move action (but not others).
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="private">
                                     <h4>
-                                        <a name="thumbMouseUp">thumbMouseUp</a></h4>
+                                        <a name="method_thumbMouseUp">thumbMouseUp</a></h4>
                                     <div class="detail">
                                         <code>
                                          private 
@@ -1487,7 +1715,7 @@ for this move action (but not others).
                                         </code>
                                         
                                         <div class="description">
-                                            Handles mouseup event on the slider background
+                                            Handles mouseup event on the thumb
                                         </div>
 
                                         <div class="description">
@@ -1505,8 +1733,10 @@ for this move action (but not others).
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="toString">toString</a></h4>
+                                        <a name="method_toString">toString</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1537,8 +1767,10 @@ for this move action (but not others).
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="unlock">unlock</a></h4>
+                                        <a name="method_unlock">unlock</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1569,8 +1801,10 @@ for this move action (but not others).
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="verifyOffset">verifyOffset</a></h4>
+                                        <a name="method_verifyOffset">verifyOffset</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1614,8 +1848,97 @@ baseline position, the constraints for the thumb are reset
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="YAHOO.widget.Slider.getHorizSlider">YAHOO.widget.Slider.getHorizSlider</a></h4>
+                                        <a name="method_YAHOO.widget.Slider.getHorizDualSlider">YAHOO.widget.Slider.getHorizDualSlider</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        DualSlider
+                                            <strong>YAHOO.widget.Slider.getHorizDualSlider</strong>
+                                           (
+                                                
+                                                        
+                                                         bg
+                                                    
+                                                
+                                                        , 
+                                                         minthumb
+                                                    
+                                                
+                                                        , 
+                                                         maxthumb
+                                                    
+                                                
+                                                        , 
+                                                         range
+                                                    
+                                                
+                                                        , 
+                                                         iTickSize
+                                                    
+                                                
+                                                        , 
+                                                         initVals
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Factory method for creating a horizontal dual-thumb slider
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>bg &lt;String&gt;</code>
+                                                             the id of the slider's background element
+                                                        </dd>
+                                                        <dd>
+                                                            <code>minthumb &lt;String&gt;</code>
+                                                             the id of the min thumb
+                                                        </dd>
+                                                        <dd>
+                                                            <code>maxthumb &lt;String&gt;</code>
+                                                             the id of the thumb thumb
+                                                        </dd>
+                                                        <dd>
+                                                            <code>range &lt;int&gt;</code>
+                                                             the number of pixels the thumbs can move within
+                                                        </dd>
+                                                        <dd>
+                                                            <code>iTickSize &lt;int&gt;</code>
+                                                             (optional) the element should move this many pixels
+at a time
+                                                        </dd>
+                                                        <dd>
+                                                            <code>initVals &lt;Array&gt;</code>
+                                                             (optional) [min,max] Initial thumb placement
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        DualSlider
+                                                    </code></dt>
+                                                    <dd>a horizontal dual-thumb slider control</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_YAHOO.widget.Slider.getHorizSlider">YAHOO.widget.Slider.getHorizSlider</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1691,8 +2014,10 @@ should move a certain number pixels at a time.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="YAHOO.widget.Slider.getSliderRegion">YAHOO.widget.Slider.getSliderRegion</a></h4>
+                                        <a name="method_YAHOO.widget.Slider.getSliderRegion">YAHOO.widget.Slider.getSliderRegion</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1785,8 +2110,97 @@ should move a certain number pixels at a time.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="YAHOO.widget.Slider.getVertSlider">YAHOO.widget.Slider.getVertSlider</a></h4>
+                                        <a name="method_YAHOO.widget.Slider.getVertDualSlider">YAHOO.widget.Slider.getVertDualSlider</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                         static 
+                                        
+                                        DualSlider
+                                            <strong>YAHOO.widget.Slider.getVertDualSlider</strong>
+                                           (
+                                                
+                                                        
+                                                         bg
+                                                    
+                                                
+                                                        , 
+                                                         minthumb
+                                                    
+                                                
+                                                        , 
+                                                         maxthumb
+                                                    
+                                                
+                                                        , 
+                                                         range
+                                                    
+                                                
+                                                        , 
+                                                         iTickSize
+                                                    
+                                                
+                                                        , 
+                                                         initVals
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Factory method for creating a vertical dual-thumb slider.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>bg &lt;String&gt;</code>
+                                                             the id of the slider's background element
+                                                        </dd>
+                                                        <dd>
+                                                            <code>minthumb &lt;String&gt;</code>
+                                                             the id of the min thumb
+                                                        </dd>
+                                                        <dd>
+                                                            <code>maxthumb &lt;String&gt;</code>
+                                                             the id of the thumb thumb
+                                                        </dd>
+                                                        <dd>
+                                                            <code>range &lt;int&gt;</code>
+                                                             the number of pixels the thumbs can move within
+                                                        </dd>
+                                                        <dd>
+                                                            <code>iTickSize &lt;int&gt;</code>
+                                                             (optional) the element should move this many pixels
+at a time
+                                                        </dd>
+                                                        <dd>
+                                                            <code>initVals &lt;Array&gt;</code>
+                                                             (optional) [min,max] Initial thumb placement
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        DualSlider
+                                                    </code></dt>
+                                                    <dd>a vertical dual-thumb slider control</dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_YAHOO.widget.Slider.getVertSlider">YAHOO.widget.Slider.getVertSlider</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1862,6 +2276,7 @@ should move a certain number pixels at a time.
 
                                     </div>
                                     <hr />
+                                    </div>
                             </div>
                         </div>
 
@@ -1869,63 +2284,7 @@ should move a certain number pixels at a time.
                                 <h4>Methods inherited from <a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a>:</h4>
                                 <div class="content">
                                     <code>
-                                        
-                                            <a href="YAHOO.util.DragDrop.html#addInvalidHandleClass">addInvalidHandleClass</a>,
-                                            <a href="YAHOO.util.DragDrop.html#addInvalidHandleId">addInvalidHandleId</a>,
-                                            <a href="YAHOO.util.DragDrop.html#addInvalidHandleType">addInvalidHandleType</a>,
-                                            <a href="YAHOO.util.DragDrop.html#addToGroup">addToGroup</a>,
-                                            <a href="YAHOO.util.DragDrop.html#applyConfig">applyConfig</a>,
-                                            <a href="YAHOO.util.DragDrop.html#b4Drag">b4Drag</a>,
-                                            <a href="YAHOO.util.DragDrop.html#b4DragDrop">b4DragDrop</a>,
-                                            <a href="YAHOO.util.DragDrop.html#b4DragOut">b4DragOut</a>,
-                                            <a href="YAHOO.util.DragDrop.html#b4DragOver">b4DragOver</a>,
-                                            <a href="YAHOO.util.DragDrop.html#b4EndDrag">b4EndDrag</a>,
-                                            <a href="YAHOO.util.DragDrop.html#b4MouseDown">b4MouseDown</a>,
-                                            <a href="YAHOO.util.DragDrop.html#b4StartDrag">b4StartDrag</a>,
-                                            <a href="YAHOO.util.DragDrop.html#clearConstraints">clearConstraints</a>,
-                                            <a href="YAHOO.util.DragDrop.html#clearTicks">clearTicks</a>,
-                                            <a href="YAHOO.util.DragDrop.html#endDrag">endDrag</a>,
-                                            <a href="YAHOO.util.DragDrop.html#getDragEl">getDragEl</a>,
-                                            <a href="YAHOO.util.DragDrop.html#getEl">getEl</a>,
-                                            <a href="YAHOO.util.DragDrop.html#getTargetCoord">getTargetCoord</a>,
-                                            <a href="YAHOO.util.DragDrop.html#getTick">getTick</a>,
-                                            <a href="YAHOO.util.DragDrop.html#handleMouseDown">handleMouseDown</a>,
-                                            <a href="YAHOO.util.DragDrop.html#handleOnAvailable">handleOnAvailable</a>,
-                                            <a href="YAHOO.util.DragDrop.html#init">init</a>,
-                                            <a href="YAHOO.util.DragDrop.html#initTarget">initTarget</a>,
-                                            <a href="YAHOO.util.DragDrop.html#isLocked">isLocked</a>,
-                                            <a href="YAHOO.util.DragDrop.html#isTarget">isTarget</a>,
-                                            <a href="YAHOO.util.DragDrop.html#isValidHandleChild">isValidHandleChild</a>,
-                                            <a href="YAHOO.util.DragDrop.html#lock">lock</a>,
-                                            <a href="YAHOO.util.DragDrop.html#onAvailable">onAvailable</a>,
-                                            <a href="YAHOO.util.DragDrop.html#onDrag">onDrag</a>,
-                                            <a href="YAHOO.util.DragDrop.html#onDragDrop">onDragDrop</a>,
-                                            <a href="YAHOO.util.DragDrop.html#onDragEnter">onDragEnter</a>,
-                                            <a href="YAHOO.util.DragDrop.html#onDragOut">onDragOut</a>,
-                                            <a href="YAHOO.util.DragDrop.html#onDragOver">onDragOver</a>,
-                                            <a href="YAHOO.util.DragDrop.html#onInvalidDrop">onInvalidDrop</a>,
-                                            <a href="YAHOO.util.DragDrop.html#onMouseDown">onMouseDown</a>,
-                                            <a href="YAHOO.util.DragDrop.html#onMouseUp">onMouseUp</a>,
-                                            <a href="YAHOO.util.DragDrop.html#padding">padding</a>,
-                                            <a href="YAHOO.util.DragDrop.html#removeFromGroup">removeFromGroup</a>,
-                                            <a href="YAHOO.util.DragDrop.html#removeInvalidHandleClass">removeInvalidHandleClass</a>,
-                                            <a href="YAHOO.util.DragDrop.html#removeInvalidHandleId">removeInvalidHandleId</a>,
-                                            <a href="YAHOO.util.DragDrop.html#removeInvalidHandleType">removeInvalidHandleType</a>,
-                                            <a href="YAHOO.util.DragDrop.html#resetConstraints">resetConstraints</a>,
-                                            <a href="YAHOO.util.DragDrop.html#setDragElId">setDragElId</a>,
-                                            <a href="YAHOO.util.DragDrop.html#setHandleElId">setHandleElId</a>,
-                                            <a href="YAHOO.util.DragDrop.html#setInitialPosition">setInitialPosition</a>,
-                                            <a href="YAHOO.util.DragDrop.html#setOuterHandleElId">setOuterHandleElId</a>,
-                                            <a href="YAHOO.util.DragDrop.html#setPadding">setPadding</a>,
-                                            <a href="YAHOO.util.DragDrop.html#setStartPosition">setStartPosition</a>,
-                                            <a href="YAHOO.util.DragDrop.html#setXConstraint">setXConstraint</a>,
-                                            <a href="YAHOO.util.DragDrop.html#setXTicks">setXTicks</a>,
-                                            <a href="YAHOO.util.DragDrop.html#setYConstraint">setYConstraint</a>,
-                                            <a href="YAHOO.util.DragDrop.html#setYTicks">setYTicks</a>,
-                                            <a href="YAHOO.util.DragDrop.html#startDrag">startDrag</a>,
-                                            <a href="YAHOO.util.DragDrop.html#toString">toString</a>,
-                                            <a href="YAHOO.util.DragDrop.html#unlock">unlock</a>,
-                                            <a href="YAHOO.util.DragDrop.html#unreg">unreg</a>
+                                            <a class="" href="YAHOO.util.DragDrop.html#method_addInvalidHandleClass">addInvalidHandleClass</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_addInvalidHandleId">addInvalidHandleId</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_addInvalidHandleType">addInvalidHandleType</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_addToGroup">addToGroup</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_applyConfig">applyConfig</a><span class="">,</span>                                            <a class="private" href="YAHOO.util.DragDrop.html#method_b4Drag">b4Drag</a><span class="private">,</span>                                            <a class="private" href="YAHOO.util.DragDrop.html#method_b4DragDrop">b4DragDrop</a><span class="private">,</span>                                            <a class="private" href="YAHOO.util.DragDrop.html#method_b4DragOut">b4DragOut</a><span class="private">,</span>                                            <a class="private" href="YAHOO.util.DragDrop.html#method_b4DragOver">b4DragOver</a><span class="private">,</span>                                            <a class="private" href="YAHOO.util.DragDrop.html#method_b4EndDrag">b4EndDrag</a><span class="private">,</span>                                            <a class="private" href="YAHOO.util.DragDrop.html#method_b4MouseDown">b4MouseDown</a><span class="private">,</span>                                            <a class="private" href="YAHOO.util.DragDrop.html#method_b4StartDrag">b4StartDrag</a><span class="private">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_clearConstraints">clearConstraints</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_clearTicks">clearTicks</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_clickValidator">clickValidator</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_endDrag">endDrag</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_getDragEl">getDragEl</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_getEl">getEl</a><span class="">,</span>                                            <a class="private" href="YAHOO.util.DragDrop.html#method_getTargetCoord">getTargetCoord</a><span class="private">,</span>                                            <a class="private" href="YAHOO.util.DragDrop.html#method_getTick">getTick</a><span class="private">,</span>                                            <a class="private" href="YAHOO.util.DragDrop.html#method_handleMouseDown">handleMouseDown</a><span class="private">,</span>                                            <a class="private" href="YAHOO.util.DragDrop.html#method_handleOnAvailable">handleOnAvailable</a><span class="private">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_init">init</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_initTarget">initTarget</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_isLocked">isLocked</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_isValidHandleChild">isValidHandleChild</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_lock">lock</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_on">on</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_onAvailable">onAvailable</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_onDrag">onDrag</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_onDragDrop">onDragDrop</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_onDragEnter">onDragEnter</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_onDragOut">onDragOut</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_onDragOver">onDragOver</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_onInvalidDrop">onInvalidDrop</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_onMouseDown">onMouseDown</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_onMouseUp">onMouseUp</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_removeFromGroup">removeFromGroup</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_removeInvalidHandleClass">removeInvalidHandleClass</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_removeInvalidHandleId">removeInvalidHandleId</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_removeInvalidHandleType">removeInvalidHandleType</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_resetConstraints">resetConstraints</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_setDragElId">setDragElId</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_setHandleElId">setHandleElId</a><span class="">,</span>                                            <a class="private" href="YAHOO.util.DragDrop.html#method_setInitialPosition">setInitialPosition</a><span class="private">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_setOuterHandleElId">setOuterHandleElId</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_setPadding">setPadding</a><span class="">,</span>                                            <a class="private" href="YAHOO.util.DragDrop.html#method_setStartPosition">setStartPosition</a><span class="private">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_setXConstraint">setXConstraint</a><span class="">,</span>                                            <a class="private" href="YAHOO.util.DragDrop.html#method_setXTicks">setXTicks</a><span class="private">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_setYConstraint">setYConstraint</a><span class="">,</span>                                            <a class="private" href="YAHOO.util.DragDrop.html#method_setYTicks">setYTicks</a><span class="private">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_startDrag">startDrag</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_toString">toString</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_unlock">unlock</a><span class="">,</span>                                            <a class="" href="YAHOO.util.DragDrop.html#method_unreg">unreg</a>
                                     </code>
                                 </div>
                             </div>
@@ -1933,22 +2292,17 @@ should move a certain number pixels at a time.
                                 <h4>Methods inherited from <a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a>:</h4>
                                 <div class="content">
                                     <code>
-                                        
-                                            <a href="YAHOO.util.EventProvider.html#createEvent">createEvent</a>,
-                                            <a href="YAHOO.util.EventProvider.html#fireEvent">fireEvent</a>,
-                                            <a href="YAHOO.util.EventProvider.html#hasEvent">hasEvent</a>,
-                                            <a href="YAHOO.util.EventProvider.html#subscribe">subscribe</a>,
-                                            <a href="YAHOO.util.EventProvider.html#unsubscribe">unsubscribe</a>,
-                                            <a href="YAHOO.util.EventProvider.html#unsubscribeAll">unsubscribeAll</a>
+                                            <a class="" href="YAHOO.util.EventProvider.html#method_createEvent">createEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_fireEvent">fireEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_hasEvent">hasEvent</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_subscribe">subscribe</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_unsubscribe">unsubscribe</a><span class="">,</span>                                            <a class="" href="YAHOO.util.EventProvider.html#method_unsubscribeAll">unsubscribeAll</a>
                                     </code>
                                 </div>
                             </div>
 
                         <div class="section method details">
-                            <h3><a name="methodDetails">Events</a></h3>
+                            <h3 id="events">Events</h3>
                             <div class="content">
+                                    <div class="">
                                     <h4>
-                                        <a name="change">change</a></h4>
+                                        <a name="event_change">change</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1998,8 +2352,10 @@ x offset for region sliders
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="slideEnd">slideEnd</a></h4>
+                                        <a name="event_slideEnd">slideEnd</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -2025,8 +2381,10 @@ x offset for region sliders
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="slideStart">slideStart</a></h4>
+                                        <a name="event_slideStart">slideStart</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -2052,10 +2410,19 @@ x offset for region sliders
 
                                     </div>
                                     <hr />
+                                    </div>
                             </div>
                         </div>
 
 
+                        <div class="section field inheritance">
+                            <h4>Events inherited from <a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a>:</h4>
+                            <div class="content">
+                                <code>
+                                        <a class="" href="YAHOO.util.DragDrop.html#event_b4DragDropEvent">b4DragDropEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.util.DragDrop.html#event_b4DragEvent">b4DragEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.util.DragDrop.html#event_b4DragOutEvent">b4DragOutEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.util.DragDrop.html#event_b4DragOverEvent">b4DragOverEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.util.DragDrop.html#event_b4EndDragEvent">b4EndDragEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.util.DragDrop.html#event_b4MouseDownEvent">b4MouseDownEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.util.DragDrop.html#event_b4StartDragEvent">b4StartDragEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.util.DragDrop.html#event_dragDropEvent">dragDropEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.util.DragDrop.html#event_dragEnterEvent">dragEnterEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.util.DragDrop.html#event_dragEvent">dragEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.util.DragDrop.html#event_dragOutEvent">dragOutEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.util.DragDrop.html#event_dragOverEvent">dragOverEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.util.DragDrop.html#event_endDragEvent">endDragEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.util.DragDrop.html#event_invalidDropEvent">invalidDropEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.util.DragDrop.html#event_mouseDownEvent">mouseDownEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.util.DragDrop.html#event_mouseUpEvent">mouseUpEvent</a><span class="">,</span>                                        <a class="" href="YAHOO.util.DragDrop.html#event_startDragEvent">startDragEvent</a><span class="">,</span>
+                                </code>
+                            </div>
+                        </div>
 
 
 
@@ -2076,9 +2443,15 @@ x offset for region sliders
 
                                 <li class=""><a href="module_calendar.html">calendar</a></li>
 
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
                                 <li class=""><a href="module_connection.html">connection</a></li>
 
                                 <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
 
                                 <li class=""><a href="module_datasource.html">datasource</a></li>
 
@@ -2088,15 +2461,35 @@ x offset for region sliders
 
                                 <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
 
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
                                 <li class=""><a href="module_element.html">element</a></li>
 
                                 <li class=""><a href="module_event.html">event</a></li>
 
+                                <li class=""><a href="module_get.html">get</a></li>
+
                                 <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
 
                                 <li class=""><a href="module_logger.html">logger</a></li>
 
                                 <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
 
                                 <li class="selected"><a href="module_slider.html">slider</a></li>
 
@@ -2104,13 +2497,20 @@ x offset for region sliders
 
                                 <li class=""><a href="module_treeview.html">treeview</a></li>
 
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
                                 <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
                         </ul>
                     </div>
 
                     <div class="module">
                         <h4>Classes</h4>
                         <ul class="content">
+                                <li class=""><a href="YAHOO.widget.DualSlider.html">YAHOO.widget.DualSlider</a></li>
                                 <li class="selected"><a href="YAHOO.widget.Slider.html">YAHOO.widget.Slider</a></li>
                                 <li class=""><a href="YAHOO.widget.SliderThumb.html">YAHOO.widget.SliderThumb</a></li>
                         </ul>
@@ -2119,6 +2519,7 @@ x offset for region sliders
                     <div class="module">
                         <h4>Files</h4>
                         <ul class="content">        
+                                <li class=""><a href="DualSlider.js.html">DualSlider.js</a></li>
                                 <li class=""><a href="Slider.js.html">Slider.js</a></li>
                                 <li class=""><a href="SliderThumb.js.html">SliderThumb.js</a></li>
                         </ul>
@@ -2127,43 +2528,61 @@ x offset for region sliders
                     <div class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
-                                <li><a href="#animate">animate</a>
+                                <li class="private"><a href="#property__silent">_silent</a>
                                         <!--<code>&lt;boolean&gt;</code>-->
                                 </li>
-                                <li><a href="#animationDuration">animationDuration</a>
+                                <li class=""><a href="#property_animate">animate</a>
                                         <!--<code>&lt;boolean&gt;</code>-->
                                 </li>
-                                <li><a href="#backgroundEnabled">backgroundEnabled</a>
+                                <li class=""><a href="#property_animationDuration">animationDuration</a>
                                         <!--<code>&lt;boolean&gt;</code>-->
                                 </li>
-                                <li><a href="#baselinePos">baselinePos</a>
+                                <li class=""><a href="#property_backgroundEnabled">backgroundEnabled</a>
                                         <!--<code>&lt;boolean&gt;</code>-->
                                 </li>
-                                <li><a href="#enableKeys">enableKeys</a>
+                                <li class=""><a href="#property_baselinePos">baselinePos</a>
                                         <!--<code>&lt;boolean&gt;</code>-->
                                 </li>
-                                <li><a href="#isTarget">isTarget</a>
+                                <li class=""><a href="#property_dragOnly">dragOnly</a>
                                         <!--<code>&lt;boolean&gt;</code>-->
                                 </li>
-                                <li><a href="#keyIncrement">keyIncrement</a>
+                                <li class=""><a href="#property_enableKeys">enableKeys</a>
                                         <!--<code>&lt;boolean&gt;</code>-->
                                 </li>
-                                <li><a href="#moveComplete">moveComplete</a>
+                                <li class="private"><a href="#property_isTarget">isTarget</a>
                                         <!--<code>&lt;boolean&gt;</code>-->
                                 </li>
-                                <li><a href="#thumb">thumb</a>
+                                <li class=""><a href="#property_keyIncrement">keyIncrement</a>
                                         <!--<code>&lt;boolean&gt;</code>-->
                                 </li>
-                                <li><a href="#thumbCenterPoint">thumbCenterPoint</a>
+                                <li class=""><a href="#property_lastOffset">lastOffset</a>
                                         <!--<code>&lt;boolean&gt;</code>-->
                                 </li>
-                                <li><a href="#tickPause">tickPause</a>
+                                <li class=""><a href="#property_moveComplete">moveComplete</a>
                                         <!--<code>&lt;boolean&gt;</code>-->
                                 </li>
-                                <li><a href="#type">type</a>
+                                <li class=""><a href="#property_SOURCE_SET_VALUE">SOURCE_SET_VALUE</a>
                                         <!--<code>&lt;boolean&gt;</code>-->
                                 </li>
-                                <li><a href="#YAHOO.widget.Slider.ANIM_AVAIL">YAHOO.widget.Slider.ANIM_AVAIL</a>
+                                <li class=""><a href="#property_SOURCE_UI_EVENT">SOURCE_UI_EVENT</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property_thumb">thumb</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property_thumbCenterPoint">thumbCenterPoint</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property_tickPause">tickPause</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property_type">type</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property_valueChangeSource">valueChangeSource</a>
+                                        <!--<code>&lt;boolean&gt;</code>-->
+                                </li>
+                                <li class=""><a href="#property_YAHOO.widget.Slider.ANIM_AVAIL">YAHOO.widget.Slider.ANIM_AVAIL</a>
                                         <!--<code>&lt;boolean&gt;</code>-->
                                 </li>
                         </ul>
@@ -2172,110 +2591,116 @@ x offset for region sliders
                     <div class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
-                                <li><!--<code>void</code>-->
-                                <a href="#_getNextX">_getNextX</a>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method__getNextX">_getNextX</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#_getNextY">_getNextY</a>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method__getNextY">_getNextY</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#b4MouseDown">b4MouseDown</a>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method_b4MouseDown">b4MouseDown</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#endMove">endMove</a>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method_endMove">endMove</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#fireEvents">fireEvents</a>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method_fireEvents">fireEvents</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#focus">focus</a>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method_focus">focus</a>
                                 </li>
-                                <li><!--<code>SliderThumb</code>-->
-                                <a href="#getThumb">getThumb</a>
+                                <li class=""><!--<code>SliderThumb</code>-->
+                                <a href="#method_getThumb">getThumb</a>
                                 </li>
-                                <li><!--<code>int</code>-->
-                                <a href="#getValue">getValue</a>
+                                <li class=""><!--<code>int</code>-->
+                                <a href="#method_getValue">getValue</a>
                                 </li>
-                                <li><!--<code>int</code>-->
-                                <a href="#getXValue">getXValue</a>
+                                <li class=""><!--<code>int</code>-->
+                                <a href="#method_getXValue">getXValue</a>
                                 </li>
-                                <li><!--<code>int</code>-->
-                                <a href="#getYValue">getYValue</a>
+                                <li class=""><!--<code>int</code>-->
+                                <a href="#method_getYValue">getYValue</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#handleKeyDown">handleKeyDown</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_handleKeyDown">handleKeyDown</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#handleKeyPress">handleKeyPress</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_handleKeyPress">handleKeyPress</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#handleThumbChange">handleThumbChange</a>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method_handleThumbChange">handleThumbChange</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#initSlider">initSlider</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_initSlider">initSlider</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#initThumb">initThumb</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_initThumb">initThumb</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#lock">lock</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_lock">lock</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#moveOneTick">moveOneTick</a>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method_moveOneTick">moveOneTick</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#moveThumb">moveThumb</a>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method_moveThumb">moveThumb</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#onAvailable">onAvailable</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_onAvailable">onAvailable</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#onChange">onChange</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_onChange">onChange</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#onDrag">onDrag</a>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method_onDrag">onDrag</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#onMouseDown">onMouseDown</a>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method_onMouseDown">onMouseDown</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#onSliderEnd">onSliderEnd</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_onSliderEnd">onSliderEnd</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#onSlideStart">onSlideStart</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_onSlideStart">onSlideStart</a>
                                 </li>
-                                <li><!--<code>boolean</code>-->
-                                <a href="#setRegionValue">setRegionValue</a>
+                                <li class=""><!--<code>boolean</code>-->
+                                <a href="#method_setRegionValue">setRegionValue</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#setStartSliderState">setStartSliderState</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_setStartSliderState">setStartSliderState</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#setThumbCenterPoint">setThumbCenterPoint</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_setThumbCenterPoint">setThumbCenterPoint</a>
                                 </li>
-                                <li><!--<code>boolean</code>-->
-                                <a href="#setValue">setValue</a>
+                                <li class=""><!--<code>boolean</code>-->
+                                <a href="#method_setValue">setValue</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#thumbMouseUp">thumbMouseUp</a>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method_thumbMouseUp">thumbMouseUp</a>
                                 </li>
-                                <li><!--<code>string</code>-->
-                                <a href="#toString">toString</a>
+                                <li class=""><!--<code>string</code>-->
+                                <a href="#method_toString">toString</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#unlock">unlock</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_unlock">unlock</a>
                                 </li>
-                                <li><!--<code>boolean</code>-->
-                                <a href="#verifyOffset">verifyOffset</a>
+                                <li class=""><!--<code>boolean</code>-->
+                                <a href="#method_verifyOffset">verifyOffset</a>
                                 </li>
-                                <li><!--<code>Slider</code>-->
-                                <a href="#YAHOO.widget.Slider.getHorizSlider">YAHOO.widget.Slider.getHorizSlider</a>
+                                <li class=""><!--<code>DualSlider</code>-->
+                                <a href="#method_YAHOO.widget.Slider.getHorizDualSlider">YAHOO.widget.Slider.getHorizDualSlider</a>
                                 </li>
-                                <li><!--<code>Slider</code>-->
-                                <a href="#YAHOO.widget.Slider.getSliderRegion">YAHOO.widget.Slider.getSliderRegion</a>
+                                <li class=""><!--<code>Slider</code>-->
+                                <a href="#method_YAHOO.widget.Slider.getHorizSlider">YAHOO.widget.Slider.getHorizSlider</a>
                                 </li>
-                                <li><!--<code>Slider</code>-->
-                                <a href="#YAHOO.widget.Slider.getVertSlider">YAHOO.widget.Slider.getVertSlider</a>
+                                <li class=""><!--<code>Slider</code>-->
+                                <a href="#method_YAHOO.widget.Slider.getSliderRegion">YAHOO.widget.Slider.getSliderRegion</a>
+                                </li>
+                                <li class=""><!--<code>DualSlider</code>-->
+                                <a href="#method_YAHOO.widget.Slider.getVertDualSlider">YAHOO.widget.Slider.getVertDualSlider</a>
+                                </li>
+                                <li class=""><!--<code>Slider</code>-->
+                                <a href="#method_YAHOO.widget.Slider.getVertSlider">YAHOO.widget.Slider.getVertSlider</a>
                                 </li>
                         </ul>
                     </div>
@@ -2283,14 +2708,14 @@ x offset for region sliders
                     <div class="module">
                         <h4>Events</h4>
                         <ul class="content">        
-                                <li>
-                                <a href="#change">change</a>
+                                <li class="">
+                                <a href="#event_change">change</a>
                                 </li>
-                                <li>
-                                <a href="#slideEnd">slideEnd</a>
+                                <li class="">
+                                <a href="#event_slideEnd">slideEnd</a>
                                 </li>
-                                <li>
-                                <a href="#slideStart">slideStart</a>
+                                <li class="">
+                                <a href="#event_slideStart">slideStart</a>
                                 </li>
                         </ul>
                     </div>

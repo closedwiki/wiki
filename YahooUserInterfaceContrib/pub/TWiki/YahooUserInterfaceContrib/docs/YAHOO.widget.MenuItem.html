@@ -3,26 +3,33 @@
 <head>
 	<title>API: menu  YAHOO.widget.MenuItem   (YUI Library)</title>
 	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
 </head>
 
 <body id="yahoo-com">
+
 <div id="doc3" class="yui-t2">
 
 	<div id="hd">
-        <h1>Yahoo! UI Library</h1>
-        <h3>Menu&nbsp; <span class="subtitle">2.2.2</span></h3>
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>Menu&nbsp; <span class="subtitle">2.5.2</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_menu.html">menu</a>
                  &gt; YAHOO.widget.MenuItem 
                 
             </p>
+
 	</div>
 
 	<div id="bd">
 		<div id="yui-main">
 			<div class="yui-b">
-
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
 
                     <h2>
                         
@@ -43,8 +50,8 @@
                         <dl class="subclasses">
                             <dt>Known Subclasses:</dd>
                             <dd>
-                                    <a href="YAHOO.widget.ContextMenuItem.html">YAHOO.widget.ContextMenuItem</a>
                                     <a href="YAHOO.widget.MenuBarItem.html">YAHOO.widget.MenuBarItem</a>
+                                    <a href="YAHOO.widget.ContextMenuItem.html">YAHOO.widget.ContextMenuItem</a>
                             </dd>
                        </dl>
                 
@@ -55,7 +62,7 @@
                     </div>
 
                         <div class="section constructor details">
-                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <h3 id="constructor">Constructor</h3>
                         <div class="content">
                             <div class="detail">
                                 <strong>YAHOO.widget.MenuItem</strong>
@@ -123,9 +130,10 @@ for more details.
                     </div>
 
                         <div class="section field details">
-                            <h3><a name="field_detail">Properties</a></h3>
+                            <h3 id="properties">Properties</h3>
                             <div class="content">
-                                    <h4><a name="_oAnchor">_oAnchor</a>
+                                    <div class="private">
+                                    <h4><a name="property__oAnchor">_oAnchor</a>
                                         <code>- private <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
 one-html.html#ID-48250443">HTMLAnchorElement</a></code>
                                     </h4>
@@ -143,25 +151,9 @@ one-html.html#ID-48250443">HTMLAnchorElement</a></code>
 
 
                                     <hr />
-                                    <h4><a name="_oCheckedIndicator">_oCheckedIndicator</a>
-                                        <code>- private <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
-level-one-html.html#ID-58190037">HTMLElement</a></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description">
-                                            Object reference to the menu item's checkmark image.
-                                        </div>
                                     </div>
-     
-                                        
-                                    <div class="default">
-                                        Default Value: <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
-level-one-html.html#ID-58190037">HTMLElement</a>
-                                    </div>        
-
-
-                                    <hr />
-                                    <h4><a name="_oHelpTextEM">_oHelpTextEM</a>
+                                    <div class="private">
+                                    <h4><a name="property__oHelpTextEM">_oHelpTextEM</a>
                                         <code>- private <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
 one-html.html#ID-58190037">HTMLElement</a></code>
                                     </h4>
@@ -179,7 +171,9 @@ one-html.html#ID-58190037">HTMLElement</a></code>
 
 
                                     <hr />
-                                    <h4><a name="_oOnclickAttributeValue">_oOnclickAttributeValue</a>
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property__oOnclickAttributeValue">_oOnclickAttributeValue</a>
                                         <code>- private Object</code>
                                     </h4>
                                     <div class="detail">
@@ -196,7 +190,9 @@ one-html.html#ID-58190037">HTMLElement</a></code>
 
 
                                     <hr />
-                                    <h4><a name="_oSubmenu">_oSubmenu</a>
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property__oSubmenu">_oSubmenu</a>
                                         <code>- private YAHOO.widget.Menu</code>
                                     </h4>
                                     <div class="detail">
@@ -212,23 +208,9 @@ one-html.html#ID-58190037">HTMLElement</a></code>
 
 
                                     <hr />
-                                    <h4><a name="_oText">_oText</a>
-                                        <code>- private TextNode</code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description">
-                                            Object reference to the menu item's text node.
-                                        </div>
                                     </div>
-     
-                                        
-                                    <div class="default">
-                                        Default Value: null
-                                    </div>        
-
-
-                                    <hr />
-                                    <h4><a name="_sClassName">_sClassName</a>
+                                    <div class="private">
+                                    <h4><a name="property__sClassName">_sClassName</a>
                                         <code>- private String</code>
                                     </h4>
                                     <div class="detail">
@@ -244,7 +226,9 @@ one-html.html#ID-58190037">HTMLElement</a></code>
 
 
                                     <hr />
-                                    <h4><a name="browser">browser</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_browser">browser</a>
                                         <code>- String</code>
                                     </h4>
                                     <div class="detail">
@@ -255,43 +239,14 @@ one-html.html#ID-58190037">HTMLElement</a></code>
      
                                         
 
-
-                                    <hr />
-                                    <h4><a name="CHECKED_TEXT">CHECKED_TEXT</a>
-                                        <code>- final String</code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description">
-                                            String representing the text to be used for the checked 
-indicator element (<code>&#60;em&#62;</code>).
-                                        </div>
-                                    </div>
-     
-                                        
-                                    <div class="default">
-                                        Default Value: "Checked."
+                                    <div class="deprecated">
+                                        <strong>Deprecated:</strong> Use YAHOO.env.ua
                                     </div>        
 
-
                                     <hr />
-                                    <h4><a name="COLLAPSED_SUBMENU_INDICATOR_TEXT">COLLAPSED_SUBMENU_INDICATOR_TEXT</a>
-                                        <code>- final String</code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description">
-                                            String representing the text for the <code>&#60;em&#62;</code>
-element used for the submenu arrow indicator.
-                                        </div>
                                     </div>
-     
-                                        
-                                    <div class="default">
-                                        Default Value: "Submenu collapsed.  Click to expand submenu."
-                                    </div>        
-
-
-                                    <hr />
-                                    <h4><a name="constructor">constructor</a>
+                                    <div class="">
+                                    <h4><a name="property_constructor">constructor</a>
                                         <code>- YAHOO.widget.MenuItem</code>
                                     </h4>
                                     <div class="detail">
@@ -307,7 +262,9 @@ element used for the submenu arrow indicator.
 
 
                                     <hr />
-                                    <h4><a name="CSS_CLASS_NAME">CSS_CLASS_NAME</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_CSS_CLASS_NAME">CSS_CLASS_NAME</a>
                                         <code>- final String</code>
                                     </h4>
                                     <div class="detail">
@@ -324,42 +281,43 @@ element used for the submenu arrow indicator.
 
 
                                     <hr />
-                                    <h4><a name="DISABLED_CHECKED_TEXT">DISABLED_CHECKED_TEXT</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_CSS_LABEL_CLASS_NAME">CSS_LABEL_CLASS_NAME</a>
                                         <code>- final String</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
-                                            String representing the text to be used for the checked 
-indicator element (<code>&#60;em&#62;</code>) when the menu item 
-is disabled.
+                                            String representing the CSS class(es) to be applied to the 
+menu item's <code>&#60;a&#62;</code> element.
                                         </div>
                                     </div>
      
                                         
                                     <div class="default">
-                                        Default Value: "Checked. (Item disabled.)"
+                                        Default Value: "yuimenuitemlabel"
                                     </div>        
 
 
                                     <hr />
-                                    <h4><a name="DISABLED_SUBMENU_INDICATOR_TEXT">DISABLED_SUBMENU_INDICATOR_TEXT</a>
-                                        <code>- final String</code>
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property_DEFAULT_CONFIG">DEFAULT_CONFIG</a>
+                                        <code>- private final Object</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
-                                            String representing the text for the submenu arrow indicator 
-element (<code>&#60;em&#62;</code>) when the menu item is disabled.
+                                            Constant representing the MenuItem's configuration properties
                                         </div>
                                     </div>
      
                                         
-                                    <div class="default">
-                                        Default Value: "Submenu collapsed.  (Item disabled.)."
-                                    </div>        
 
 
                                     <hr />
-                                    <h4><a name="element">element</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_element">element</a>
                                         <code>- <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
 one-html.html#ID-74680021">HTMLLIElement</a></code>
                                     </h4>
@@ -378,24 +336,24 @@ one-html.html#ID-74680021">HTMLLIElement</a></code>
 
 
                                     <hr />
-                                    <h4><a name="EXPANDED_SUBMENU_INDICATOR_TEXT">EXPANDED_SUBMENU_INDICATOR_TEXT</a>
-                                        <code>- final String</code>
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property_EVENT_TYPES">EVENT_TYPES</a>
+                                        <code>- private final Object</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
-                                            String representing the text for the submenu arrow indicator 
-element (<code>&#60;em&#62;</code>) when the submenu is visible.
+                                            Constant representing the name of the MenuItem's events
                                         </div>
                                     </div>
      
                                         
-                                    <div class="default">
-                                        Default Value: "Submenu expanded.  Click to collapse submenu."
-                                    </div>        
 
 
                                     <hr />
-                                    <h4><a name="groupIndex">groupIndex</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_groupIndex">groupIndex</a>
                                         <code>- Number</code>
                                     </h4>
                                     <div class="detail">
@@ -412,7 +370,9 @@ item belongs.
 
 
                                     <hr />
-                                    <h4><a name="id">id</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_id">id</a>
                                         <code>- String</code>
                                     </h4>
                                     <div class="detail">
@@ -431,7 +391,9 @@ be created using the "generateId" method of the Dom utility.
 
 
                                     <hr />
-                                    <h4><a name="index">index</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_index">index</a>
                                         <code>- Number</code>
                                     </h4>
                                     <div class="detail">
@@ -448,7 +410,9 @@ its group.
 
 
                                     <hr />
-                                    <h4><a name="parent">parent</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_parent">parent</a>
                                         <code>- YAHOO.widget.Menu</code>
                                     </h4>
                                     <div class="detail">
@@ -464,7 +428,9 @@ its group.
 
 
                                     <hr />
-                                    <h4><a name="srcElement">srcElement</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_srcElement">srcElement</a>
                                         <code>- <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
 one-html.html#ID-74680021">HTMLLIElement</a>|<a href="http://www.w3.
 org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-38450247">
@@ -490,7 +456,9 @@ Level-1-20000929/level-one-html.html#ID-70901257">HTMLOptionElement</a>
 
 
                                     <hr />
-                                    <h4><a name="SUBMENU_TYPE">SUBMENU_TYPE</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_SUBMENU_TYPE">SUBMENU_TYPE</a>
                                         <code>- final YAHOO.widget.Menu</code>
                                     </h4>
                                     <div class="detail">
@@ -504,26 +472,9 @@ add when parsing the child nodes of the menu item's source HTML element.
 
 
                                     <hr />
-                                    <h4><a name="submenuIndicator">submenuIndicator</a>
-                                        <code>- <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
-level-one-html.html#ID-58190037">HTMLElement</a></code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description">
-                                            Object reference to the <code>&#60;em&#62;</code> element 
-used to create the submenu indicator for the menu item.
-                                        </div>
                                     </div>
-     
-                                        
-                                    <div class="default">
-                                        Default Value: <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
-level-one-html.html#ID-58190037">HTMLElement</a>
-                                    </div>        
-
-
-                                    <hr />
-                                    <h4><a name="value">value</a>
+                                    <div class="">
+                                    <h4><a name="property_value">value</a>
                                         <code>- Object</code>
                                     </h4>
                                     <div class="detail">
@@ -539,32 +490,7 @@ level-one-html.html#ID-58190037">HTMLElement</a>
 
 
                                     <hr />
-                                    <h4><a name="YAHOO.widget.MenuItem._DEFAULT_CONFIG">YAHOO.widget.MenuItem._DEFAULT_CONFIG</a>
-                                        <code>- private final Object</code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description">
-                                            Constant representing the MenuItem's configuration properties
-                                        </div>
                                     </div>
-     
-                                        
-
-
-                                    <hr />
-                                    <h4><a name="YAHOO.widget.MenuItem._EVENT_TYPES">YAHOO.widget.MenuItem._EVENT_TYPES</a>
-                                        <code>- private final Object</code>
-                                    </h4>
-                                    <div class="detail">
-                                        <div class="description">
-                                            Constant representing the name of the MenuItem's events
-                                        </div>
-                                    </div>
-     
-                                        
-
-
-                                    <hr />
 
 
                             </div>
@@ -572,54 +498,11 @@ level-one-html.html#ID-58190037">HTMLElement</a>
 
 
                         <div class="section method details">
-                            <h3><a name="methodDetails">Methods</a></h3>
+                            <h3 id="methods">Methods</h3>
                             <div class="content">
+                                    <div class="private">
                                     <h4>
-                                        <a name="_checkDOMNode">_checkDOMNode</a></h4>
-                                    <div class="detail">
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        Boolean
-                                            <strong>_checkDOMNode</strong>
-                                           (
-                                                
-                                                        
-                                                         p_oObject
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description">
-                                            Determines if an object is an HTML element.
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl>
-                                                    <dt>Parameters:</dt>
-                                                        <dd>
-                                                            <code>p_oObject &lt;Object&gt;</code>
-                                                             Object to be evaluated.
-                                                        </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code>
-                                                        Boolean
-                                                    </code></dt>
-                                                    <dd></dd>
-                                                </dl>
-             
-                                        </div>
-
-                                    </div>
-                                    <hr />
-                                    <h4>
-                                        <a name="_createRootNodeStructure">_createRootNodeStructure</a></h4>
+                                        <a name="method__createRootNodeStructure">_createRootNodeStructure</a></h4>
                                     <div class="detail">
                                         <code>
                                          private 
@@ -650,65 +533,10 @@ level-one-html.html#ID-58190037">HTMLElement</a>
 
                                     </div>
                                     <hr />
-                                    <h4>
-                                        <a name="_getFirstElement">_getFirstElement</a></h4>
-                                    <div class="detail">
-                                        <code>
-                                         private 
-                                        
-                                        
-                                        <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
-level-one-html.html#ID-58190037">HTMLElement</a>
-                                            <strong>_getFirstElement</strong>
-                                           (
-                                                
-                                                        
-                                                         p_oElement
-                                                    
-                                                
-                                                        , 
-                                                         p_sTagName
-                                                    
-                                                
-                                            )
-                                        </code>
-                                        
-                                        <div class="description">
-                                            Returns an HTML element's first HTML element node.
-                                        </div>
-
-                                        <div class="description">
-
-                                                <dl>
-                                                    <dt>Parameters:</dt>
-                                                        <dd>
-                                                            <code>p_oElement &lt;<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
-level-one-html.html#ID-58190037">HTMLElement</a>&gt;</code>
-                                                             Object 
-reference specifying the element to be evaluated.
-                                                        </dd>
-                                                        <dd>
-                                                            <code>p_sTagName &lt;String&gt;</code>
-                                                             Optional. String specifying the tagname of 
-the element to be retrieved.
-                                                        </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
-                                                    <code>
-                                                        <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
-level-one-html.html#ID-58190037">HTMLElement</a>
-                                                    </code></dt>
-                                                    <dd></dd>
-                                                </dl>
-             
-                                        </div>
-
                                     </div>
-                                    <hr />
+                                    <div class="private">
                                     <h4>
-                                        <a name="_initSubTree">_initSubTree</a></h4>
+                                        <a name="method__initSubTree">_initSubTree</a></h4>
                                     <div class="detail">
                                         <code>
                                          private 
@@ -740,8 +568,65 @@ the child nodes to instantiate other menus.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="private">
                                     <h4>
-                                        <a name="blur">blur</a></h4>
+                                        <a name="method__onSubmenuBeforeHide">_onSubmenuBeforeHide</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                         private 
+                                        
+                                        
+                                        void
+                                            <strong>_onSubmenuBeforeHide</strong>
+                                           (
+                                                
+                                                        
+                                                         p_sType
+                                                    
+                                                
+                                                        , 
+                                                         p_aArgs
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            "beforehide" Custom Event handler for a submenu.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl>
+                                                    <dt>Parameters:</dt>
+                                                        <dd>
+                                                            <code>p_sType &lt;String&gt;</code>
+                                                             String representing the name of the event that 
+was fired.
+                                                        </dd>
+                                                        <dd>
+                                                            <code>p_aArgs &lt;Array&gt;</code>
+                                                             Array of arguments sent when the event was fired.
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="">
+                                    <h4>
+                                        <a name="method_blur">blur</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -773,8 +658,10 @@ blur event.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="configChecked">configChecked</a></h4>
+                                        <a name="method_configChecked">configChecked</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -836,8 +723,10 @@ that fired the event.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="configClassName">configClassName</a></h4>
+                                        <a name="method_configClassName">configClassName</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -899,8 +788,10 @@ that fired the event.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="configDisabled">configDisabled</a></h4>
+                                        <a name="method_configDisabled">configDisabled</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -962,8 +853,10 @@ that fired the event.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="configEmphasis">configEmphasis</a></h4>
+                                        <a name="method_configEmphasis">configEmphasis</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1025,8 +918,10 @@ that fired the event.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="configHelpText">configHelpText</a></h4>
+                                        <a name="method_configHelpText">configHelpText</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1088,8 +983,10 @@ that fired the event.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="configOnClick">configOnClick</a></h4>
+                                        <a name="method_configOnClick">configOnClick</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1151,8 +1048,10 @@ that fired the event.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="configSelected">configSelected</a></h4>
+                                        <a name="method_configSelected">configSelected</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1214,8 +1113,10 @@ that fired the event.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="configStrongEmphasis">configStrongEmphasis</a></h4>
+                                        <a name="method_configStrongEmphasis">configStrongEmphasis</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1277,8 +1178,10 @@ that fired the event.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="configSubmenu">configSubmenu</a></h4>
+                                        <a name="method_configSubmenu">configSubmenu</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1340,8 +1243,10 @@ that fired the event.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="configTarget">configTarget</a></h4>
+                                        <a name="method_configTarget">configTarget</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1403,8 +1308,10 @@ that fired the event.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="configText">configText</a></h4>
+                                        <a name="method_configText">configText</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1466,8 +1373,10 @@ that fired the event.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="configURL">configURL</a></h4>
+                                        <a name="method_configURL">configURL</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1529,8 +1438,10 @@ that fired the event.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="destroy">destroy</a></h4>
+                                        <a name="method_destroy">destroy</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1562,8 +1473,10 @@ from its parent <code>&#60;ul&#62;</code> element.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="focus">focus</a></h4>
+                                        <a name="method_focus">focus</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1595,8 +1508,10 @@ focus event.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getNextEnabledSibling">getNextEnabledSibling</a></h4>
+                                        <a name="method_getNextEnabledSibling">getNextEnabledSibling</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1627,8 +1542,10 @@ focus event.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getPreviousEnabledSibling">getPreviousEnabledSibling</a></h4>
+                                        <a name="method_getPreviousEnabledSibling">getPreviousEnabledSibling</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1659,8 +1576,10 @@ focus event.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="hasFocus">hasFocus</a></h4>
+                                        <a name="method_hasFocus">hasFocus</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1692,8 +1611,10 @@ has focus.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="init">init</a></h4>
+                                        <a name="method_init">init</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1773,8 +1694,10 @@ for more details.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="initDefaultConfig">initDefaultConfig</a></h4>
+                                        <a name="method_initDefaultConfig">initDefaultConfig</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1805,8 +1728,10 @@ for more details.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="toString">toString</a></h4>
+                                        <a name="method_toString">toString</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1837,15 +1762,17 @@ for more details.
 
                                     </div>
                                     <hr />
+                                    </div>
                             </div>
                         </div>
 
 
                         <div class="section method details">
-                            <h3><a name="methodDetails">Events</a></h3>
+                            <h3 id="events">Events</h3>
                             <div class="content">
+                                    <div class="">
                                     <h4>
-                                        <a name="blurEvent">blurEvent</a></h4>
+                                        <a name="event_blurEvent">blurEvent</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1871,8 +1798,10 @@ for more details.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="clickEvent">clickEvent</a></h4>
+                                        <a name="event_clickEvent">clickEvent</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1899,8 +1828,10 @@ back the DOM Event object as an argument.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="destroyEvent">destroyEvent</a></h4>
+                                        <a name="event_destroyEvent">destroyEvent</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1927,8 +1858,10 @@ element is removed from its parent <code>&#60;ul&#62;</code> element.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="focusEvent">focusEvent</a></h4>
+                                        <a name="event_focusEvent">focusEvent</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1954,8 +1887,10 @@ element is removed from its parent <code>&#60;ul&#62;</code> element.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="keyDownEvent">keyDownEvent</a></h4>
+                                        <a name="event_keyDownEvent">keyDownEvent</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1982,8 +1917,10 @@ focus.  Passes back the DOM Event object as an argument.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="keyPressEvent">keyPressEvent</a></h4>
+                                        <a name="event_keyPressEvent">keyPressEvent</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -2010,8 +1947,10 @@ menu item has focus.  Passes back the DOM Event object as an argument.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="keyUpEvent">keyUpEvent</a></h4>
+                                        <a name="event_keyUpEvent">keyUpEvent</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -2038,8 +1977,10 @@ focus.  Passes back the DOM Event object as an argument.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="mouseDownEvent">mouseDownEvent</a></h4>
+                                        <a name="event_mouseDownEvent">mouseDownEvent</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -2066,8 +2007,10 @@ back the DOM Event object as an argument.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="mouseOutEvent">mouseOutEvent</a></h4>
+                                        <a name="event_mouseOutEvent">mouseOutEvent</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -2094,8 +2037,10 @@ the DOM Event object as an argument.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="mouseOverEvent">mouseOverEvent</a></h4>
+                                        <a name="event_mouseOverEvent">mouseOverEvent</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -2122,8 +2067,10 @@ back the DOM Event object as an argument.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="mouseUpEvent">mouseUpEvent</a></h4>
+                                        <a name="event_mouseUpEvent">mouseUpEvent</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -2150,15 +2097,17 @@ is over the menu item.  Passes back the DOM Event object as an argument.
 
                                     </div>
                                     <hr />
+                                    </div>
                             </div>
                         </div>
 
 
 
                         <div class="section field details">
-                            <h3><a name="field_detail">Configuration Attributes</a></h3>
+                            <h3 id="configattributes">Configuration Attributes</h3>
                             <div class="content">
-                                    <h4><a name="checked">checked</a>
+                                    <div class="">
+                                    <h4><a name="config_checked">checked</a>
                                         <code>- Boolean</code>
                                     </h4>
                                     <div class="detail">
@@ -2174,7 +2123,9 @@ with a checkmark.
                                     </div>        
 
                                     <hr />
-                                    <h4><a name="classname">classname</a>
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="config_classname">classname</a>
                                         <code>- String</code>
                                     </h4>
                                     <div class="detail">
@@ -2192,7 +2143,9 @@ item's CSS_CLASS_NAME constant.
                                     </div>        
 
                                     <hr />
-                                    <h4><a name="disabled">disabled</a>
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="config_disabled">disabled</a>
                                         <code>- Boolean</code>
                                     </h4>
                                     <div class="detail">
@@ -2209,24 +2162,32 @@ or fire events.)
                                     </div>        
 
                                     <hr />
-                                    <h4><a name="emphasis">emphasis</a>
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="config_emphasis">emphasis</a>
                                         <code>- Boolean</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
                                             Boolean indicating if the text of the menu item will be 
-rendered with emphasis.  When building a menu from existing HTML the 
-value of this property will be interpreted from the menu's markup.
+rendered with emphasis.
                                         </div>
                                     </div>
  
+                                    <div class="deprecated">
+                                        <strong>Deprecated</strong> Use "text" configuration property to add emphasis.  
+For example: <code>oMenuItem.cfg.setProperty("text", "&#60;em&#62;Some 
+Text&#60;/em&#62;");</code>
+                                    </div>        
      
                                     <div class="default">
                                         Default Value: false
                                     </div>        
 
                                     <hr />
-                                    <h4><a name="helptext">helptext</a>
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="config_helptext">helptext</a>
                                         <code>- String|<a href="http://www.w3.org/TR/
 2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-58190037">
 HTMLElement</a></code>
@@ -2234,23 +2195,30 @@ HTMLElement</a></code>
                                     <div class="detail">
                                         <div class="description">
                                             String specifying additional instructional text to 
-accompany the text for the nenu item.
+accompany the text for the menu item.
                                         </div>
                                     </div>
  
+                                    <div class="deprecated">
+                                        <strong>Deprecated</strong> Use "text" configuration property to add help text markup.  
+For example: <code>oMenuItem.cfg.setProperty("text", "Copy &#60;em 
+class=\"helptext\"&#62;Ctrl + C&#60;/em&#62;");</code>
+                                    </div>        
      
                                     <div class="default">
                                         Default Value: null
                                     </div>        
 
                                     <hr />
-                                    <h4><a name="onclick">onclick</a>
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="config_onclick">onclick</a>
                                         <code>- Object</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
                                             Object literal representing the code to be executed when 
-the button is clicked.  Format:<br> <code> {<br> 
+the item is clicked.  Format:<br> <code> {<br> 
 <strong>fn:</strong> Function,   &#47;&#47; The handler to call when 
 the event fires.<br> <strong>obj:</strong> Object, &#47;&#47; An 
 object to  pass back to the handler.<br> <strong>scope:</strong> 
@@ -2265,7 +2233,9 @@ Object &#47;&#47; The object to use for the scope of the handler.
                                     </div>        
 
                                     <hr />
-                                    <h4><a name="selected">selected</a>
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="config_selected">selected</a>
                                         <code>- Boolean</code>
                                     </h4>
                                     <div class="detail">
@@ -2281,25 +2251,32 @@ be highlighted.
                                     </div>        
 
                                     <hr />
-                                    <h4><a name="strongemphasis">strongemphasis</a>
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="config_strongemphasis">strongemphasis</a>
                                         <code>- Boolean</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
                                             Boolean indicating if the text of the menu item will be 
-rendered with strong emphasis.  When building a menu from existing 
-HTML the value of this property will be interpreted from the
-menu's markup.
+rendered with strong emphasis.
                                         </div>
                                     </div>
  
+                                    <div class="deprecated">
+                                        <strong>Deprecated</strong> Use "text" configuration property to add strong emphasis.  
+For example: <code>oMenuItem.cfg.setProperty("text", "&#60;strong&#62; 
+Some Text&#60;/strong&#62;");</code>
+                                    </div>        
      
                                     <div class="default">
                                         Default Value: false
                                     </div>        
 
                                     <hr />
-                                    <h4><a name="submenu">submenu</a>
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="config_submenu">submenu</a>
                                         <code>- Menu|String|Object|<a href="http://www.w3.org/TR/2000/
 WD-DOM-Level-1-20000929/level-one-html.html#ID-58190037">
 HTMLElement</a></code>
@@ -2324,7 +2301,9 @@ menu.</li></ul>
                                     </div>        
 
                                     <hr />
-                                    <h4><a name="target">target</a>
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="config_target">target</a>
                                         <code>- String</code>
                                     </h4>
                                     <div class="detail">
@@ -2344,7 +2323,9 @@ will be interpreted from the menu's markup.
                                     </div>        
 
                                     <hr />
-                                    <h4><a name="text">text</a>
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="config_text">text</a>
                                         <code>- String</code>
                                     </h4>
                                     <div class="detail">
@@ -2361,7 +2342,9 @@ will be interpreted from the menu's markup.
                                     </div>        
 
                                     <hr />
-                                    <h4><a name="url">url</a>
+                                    </div>        
+                                    <div class="">
+                                    <h4><a name="config_url">url</a>
                                         <code>- String</code>
                                     </h4>
                                     <div class="detail">
@@ -2378,6 +2361,7 @@ of this property will be interpreted from the menu's markup.
                                     </div>        
 
                                     <hr />
+                                    </div>        
 
                             </div>
                         </div>
@@ -2400,9 +2384,15 @@ of this property will be interpreted from the menu's markup.
 
                                 <li class=""><a href="module_calendar.html">calendar</a></li>
 
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
                                 <li class=""><a href="module_connection.html">connection</a></li>
 
                                 <li class=""><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
 
                                 <li class=""><a href="module_datasource.html">datasource</a></li>
 
@@ -2412,15 +2402,35 @@ of this property will be interpreted from the menu's markup.
 
                                 <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
 
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
                                 <li class=""><a href="module_element.html">element</a></li>
 
                                 <li class=""><a href="module_event.html">event</a></li>
 
+                                <li class=""><a href="module_get.html">get</a></li>
+
                                 <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
 
                                 <li class=""><a href="module_logger.html">logger</a></li>
 
                                 <li class="selected"><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
 
                                 <li class=""><a href="module_slider.html">slider</a></li>
 
@@ -2428,7 +2438,13 @@ of this property will be interpreted from the menu's markup.
 
                                 <li class=""><a href="module_treeview.html">treeview</a></li>
 
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
                                 <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
                         </ul>
                     </div>
 
@@ -2438,7 +2454,7 @@ of this property will be interpreted from the menu's markup.
                                 <li class=""><a href="YAHOO.widget.ContextMenu.html">YAHOO.widget.ContextMenu</a></li>
                                 <li class=""><a href="YAHOO.widget.ContextMenuItem.html">YAHOO.widget.ContextMenuItem</a></li>
                                 <li class=""><a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a></li>
-                                <li class=""><a href="YAHOO.widget.Menubar.html">YAHOO.widget.Menubar</a></li>
+                                <li class=""><a href="YAHOO.widget.MenuBar.html">YAHOO.widget.MenuBar</a></li>
                                 <li class=""><a href="YAHOO.widget.MenuBarItem.html">YAHOO.widget.MenuBarItem</a></li>
                                 <li class="selected"><a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></li>
                                 <li class=""><a href="YAHOO.widget.MenuManager.html">YAHOO.widget.MenuManager</a></li>
@@ -2461,82 +2477,61 @@ of this property will be interpreted from the menu's markup.
                     <div class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
-                                <li><a href="#_oAnchor">_oAnchor</a>
+                                <li class="private"><a href="#property__oAnchor">_oAnchor</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
-                                <li><a href="#_oCheckedIndicator">_oCheckedIndicator</a>
+                                <li class="private"><a href="#property__oHelpTextEM">_oHelpTextEM</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
-                                <li><a href="#_oHelpTextEM">_oHelpTextEM</a>
+                                <li class="private"><a href="#property__oOnclickAttributeValue">_oOnclickAttributeValue</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
-                                <li><a href="#_oOnclickAttributeValue">_oOnclickAttributeValue</a>
+                                <li class="private"><a href="#property__oSubmenu">_oSubmenu</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
-                                <li><a href="#_oSubmenu">_oSubmenu</a>
+                                <li class="private"><a href="#property__sClassName">_sClassName</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
-                                <li><a href="#_oText">_oText</a>
+                                <li class=""><a href="#property_browser">browser</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
-                                <li><a href="#_sClassName">_sClassName</a>
+                                <li class=""><a href="#property_constructor">constructor</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
-                                <li><a href="#browser">browser</a>
+                                <li class=""><a href="#property_CSS_CLASS_NAME">CSS_CLASS_NAME</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
-                                <li><a href="#CHECKED_TEXT">CHECKED_TEXT</a>
+                                <li class=""><a href="#property_CSS_LABEL_CLASS_NAME">CSS_LABEL_CLASS_NAME</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
-                                <li><a href="#COLLAPSED_SUBMENU_INDICATOR_TEXT">COLLAPSED_SUBMENU_INDICATOR_TEXT</a>
+                                <li class="private"><a href="#property_DEFAULT_CONFIG">DEFAULT_CONFIG</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
-                                <li><a href="#constructor">constructor</a>
+                                <li class=""><a href="#property_element">element</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
-                                <li><a href="#CSS_CLASS_NAME">CSS_CLASS_NAME</a>
+                                <li class="private"><a href="#property_EVENT_TYPES">EVENT_TYPES</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
-                                <li><a href="#DISABLED_CHECKED_TEXT">DISABLED_CHECKED_TEXT</a>
+                                <li class=""><a href="#property_groupIndex">groupIndex</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
-                                <li><a href="#DISABLED_SUBMENU_INDICATOR_TEXT">DISABLED_SUBMENU_INDICATOR_TEXT</a>
+                                <li class=""><a href="#property_id">id</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
-                                <li><a href="#element">element</a>
+                                <li class=""><a href="#property_index">index</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
-                                <li><a href="#EXPANDED_SUBMENU_INDICATOR_TEXT">EXPANDED_SUBMENU_INDICATOR_TEXT</a>
+                                <li class=""><a href="#property_parent">parent</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
-                                <li><a href="#groupIndex">groupIndex</a>
+                                <li class=""><a href="#property_srcElement">srcElement</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
-                                <li><a href="#id">id</a>
+                                <li class=""><a href="#property_SUBMENU_TYPE">SUBMENU_TYPE</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
-                                <li><a href="#index">index</a>
-                                        <!--<code>&lt;Object&gt;</code>-->
-                                </li>
-                                <li><a href="#parent">parent</a>
-                                        <!--<code>&lt;Object&gt;</code>-->
-                                </li>
-                                <li><a href="#srcElement">srcElement</a>
-                                        <!--<code>&lt;Object&gt;</code>-->
-                                </li>
-                                <li><a href="#SUBMENU_TYPE">SUBMENU_TYPE</a>
-                                        <!--<code>&lt;Object&gt;</code>-->
-                                </li>
-                                <li><a href="#submenuIndicator">submenuIndicator</a>
-                                        <!--<code>&lt;Object&gt;</code>-->
-                                </li>
-                                <li><a href="#value">value</a>
-                                        <!--<code>&lt;Object&gt;</code>-->
-                                </li>
-                                <li><a href="#YAHOO.widget.MenuItem._DEFAULT_CONFIG">YAHOO.widget.MenuItem._DEFAULT_CONFIG</a>
-                                        <!--<code>&lt;Object&gt;</code>-->
-                                </li>
-                                <li><a href="#YAHOO.widget.MenuItem._EVENT_TYPES">YAHOO.widget.MenuItem._EVENT_TYPES</a>
+                                <li class=""><a href="#property_value">value</a>
                                         <!--<code>&lt;Object&gt;</code>-->
                                 </li>
                         </ul>
@@ -2545,81 +2540,77 @@ of this property will be interpreted from the menu's markup.
                     <div class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
-                                <li><!--<code>Boolean</code>-->
-                                <a href="#_checkDOMNode">_checkDOMNode</a>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method__createRootNodeStructure">_createRootNodeStructure</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#_createRootNodeStructure">_createRootNodeStructure</a>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method__initSubTree">_initSubTree</a>
                                 </li>
-                                <li><!--<code><a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
-level-one-html.html#ID-58190037">HTMLElement</a></code>-->
-                                <a href="#_getFirstElement">_getFirstElement</a>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method__onSubmenuBeforeHide">_onSubmenuBeforeHide</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#_initSubTree">_initSubTree</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_blur">blur</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#blur">blur</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_configChecked">configChecked</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#configChecked">configChecked</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_configClassName">configClassName</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#configClassName">configClassName</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_configDisabled">configDisabled</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#configDisabled">configDisabled</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_configEmphasis">configEmphasis</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#configEmphasis">configEmphasis</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_configHelpText">configHelpText</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#configHelpText">configHelpText</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_configOnClick">configOnClick</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#configOnClick">configOnClick</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_configSelected">configSelected</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#configSelected">configSelected</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_configStrongEmphasis">configStrongEmphasis</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#configStrongEmphasis">configStrongEmphasis</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_configSubmenu">configSubmenu</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#configSubmenu">configSubmenu</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_configTarget">configTarget</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#configTarget">configTarget</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_configText">configText</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#configText">configText</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_configURL">configURL</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#configURL">configURL</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_destroy">destroy</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#destroy">destroy</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_focus">focus</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#focus">focus</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_getNextEnabledSibling">getNextEnabledSibling</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#getNextEnabledSibling">getNextEnabledSibling</a>
+                                <li class=""><!--<code>YAHOO.widget.MenuItem</code>-->
+                                <a href="#method_getPreviousEnabledSibling">getPreviousEnabledSibling</a>
                                 </li>
-                                <li><!--<code>YAHOO.widget.MenuItem</code>-->
-                                <a href="#getPreviousEnabledSibling">getPreviousEnabledSibling</a>
+                                <li class=""><!--<code>Boolean</code>-->
+                                <a href="#method_hasFocus">hasFocus</a>
                                 </li>
-                                <li><!--<code>Boolean</code>-->
-                                <a href="#hasFocus">hasFocus</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_init">init</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#init">init</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_initDefaultConfig">initDefaultConfig</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#initDefaultConfig">initDefaultConfig</a>
-                                </li>
-                                <li><!--<code>String</code>-->
-                                <a href="#toString">toString</a>
+                                <li class=""><!--<code>String</code>-->
+                                <a href="#method_toString">toString</a>
                                 </li>
                         </ul>
                     </div>
@@ -2627,38 +2618,38 @@ level-one-html.html#ID-58190037">HTMLElement</a></code>-->
                     <div class="module">
                         <h4>Events</h4>
                         <ul class="content">        
-                                <li>
-                                <a href="#blurEvent">blurEvent</a>
+                                <li class="">
+                                <a href="#event_blurEvent">blurEvent</a>
                                 </li>
-                                <li>
-                                <a href="#clickEvent">clickEvent</a>
+                                <li class="">
+                                <a href="#event_clickEvent">clickEvent</a>
                                 </li>
-                                <li>
-                                <a href="#destroyEvent">destroyEvent</a>
+                                <li class="">
+                                <a href="#event_destroyEvent">destroyEvent</a>
                                 </li>
-                                <li>
-                                <a href="#focusEvent">focusEvent</a>
+                                <li class="">
+                                <a href="#event_focusEvent">focusEvent</a>
                                 </li>
-                                <li>
-                                <a href="#keyDownEvent">keyDownEvent</a>
+                                <li class="">
+                                <a href="#event_keyDownEvent">keyDownEvent</a>
                                 </li>
-                                <li>
-                                <a href="#keyPressEvent">keyPressEvent</a>
+                                <li class="">
+                                <a href="#event_keyPressEvent">keyPressEvent</a>
                                 </li>
-                                <li>
-                                <a href="#keyUpEvent">keyUpEvent</a>
+                                <li class="">
+                                <a href="#event_keyUpEvent">keyUpEvent</a>
                                 </li>
-                                <li>
-                                <a href="#mouseDownEvent">mouseDownEvent</a>
+                                <li class="">
+                                <a href="#event_mouseDownEvent">mouseDownEvent</a>
                                 </li>
-                                <li>
-                                <a href="#mouseOutEvent">mouseOutEvent</a>
+                                <li class="">
+                                <a href="#event_mouseOutEvent">mouseOutEvent</a>
                                 </li>
-                                <li>
-                                <a href="#mouseOverEvent">mouseOverEvent</a>
+                                <li class="">
+                                <a href="#event_mouseOverEvent">mouseOverEvent</a>
                                 </li>
-                                <li>
-                                <a href="#mouseUpEvent">mouseUpEvent</a>
+                                <li class="">
+                                <a href="#event_mouseUpEvent">mouseUpEvent</a>
                                 </li>
                         </ul>
                     </div>
@@ -2666,41 +2657,41 @@ level-one-html.html#ID-58190037">HTMLElement</a></code>-->
                     <div class="module">
                         <h4>Configuration Attributes</h4>
                         <ul class="content">        
-                                <li>
-                                <a href="#checked">checked</a>
+                                <li class="">
+                                <a href="#config_checked">checked</a>
                                 </li>
-                                <li>
-                                <a href="#classname">classname</a>
+                                <li class="">
+                                <a href="#config_classname">classname</a>
                                 </li>
-                                <li>
-                                <a href="#disabled">disabled</a>
+                                <li class="">
+                                <a href="#config_disabled">disabled</a>
                                 </li>
-                                <li>
-                                <a href="#emphasis">emphasis</a>
+                                <li class="">
+                                <a href="#config_emphasis">emphasis</a>
                                 </li>
-                                <li>
-                                <a href="#helptext">helptext</a>
+                                <li class="">
+                                <a href="#config_helptext">helptext</a>
                                 </li>
-                                <li>
-                                <a href="#onclick">onclick</a>
+                                <li class="">
+                                <a href="#config_onclick">onclick</a>
                                 </li>
-                                <li>
-                                <a href="#selected">selected</a>
+                                <li class="">
+                                <a href="#config_selected">selected</a>
                                 </li>
-                                <li>
-                                <a href="#strongemphasis">strongemphasis</a>
+                                <li class="">
+                                <a href="#config_strongemphasis">strongemphasis</a>
                                 </li>
-                                <li>
-                                <a href="#submenu">submenu</a>
+                                <li class="">
+                                <a href="#config_submenu">submenu</a>
                                 </li>
-                                <li>
-                                <a href="#target">target</a>
+                                <li class="">
+                                <a href="#config_target">target</a>
                                 </li>
-                                <li>
-                                <a href="#text">text</a>
+                                <li class="">
+                                <a href="#config_text">text</a>
                                 </li>
-                                <li>
-                                <a href="#url">url</a>
+                                <li class="">
+                                <a href="#config_url">url</a>
                                 </li>
                         </ul>
                     </div>

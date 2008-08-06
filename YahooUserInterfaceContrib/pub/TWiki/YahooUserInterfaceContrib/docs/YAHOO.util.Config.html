@@ -3,26 +3,33 @@
 <head>
 	<title>API: container  YAHOO.util.Config   (YUI Library)</title>
 	<link rel="stylesheet" type="text/css" href="assets/api.css">
+    <script type="text/javascript" src="assets/api-js"></script>
+    <script type="text/javascript" src="assets/ac-js"></script>
 </head>
 
 <body id="yahoo-com">
+
 <div id="doc3" class="yui-t2">
 
 	<div id="hd">
-        <h1>Yahoo! UI Library</h1>
-        <h3>Container&nbsp; <span class="subtitle">2.2.2</span></h3>
+        <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
+        <h3>Container&nbsp; <span class="subtitle">2.5.2</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_container.html">container</a>
                  &gt; YAHOO.util.Config 
                 
             </p>
+
 	</div>
 
 	<div id="bd">
 		<div id="yui-main">
 			<div class="yui-b">
-
+            <form name="yui-classopts-form">
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+            </form>
 
                     <h2>
                         
@@ -44,11 +51,15 @@
   
 
                     <div class="summary description">
-                        Config is a utility used within an Object to allow the implementer to maintain a list of local configuration properties and listen for changes to those properties dynamically using CustomEvent. The initial values are also maintained so that the configuration can be reset at any given point to its initial state.
+                        Config is a utility used within an Object to allow the implementer to
+maintain a list of local configuration properties and listen for changes 
+to those properties dynamically using CustomEvent. The initial values are 
+also maintained so that the configuration can be reset at any given point 
+to its initial state.
                     </div>
 
                         <div class="section constructor details">
-                        <h3><a name="constructor_detail">Constructor</a></h3>
+                        <h3 id="constructor">Constructor</h3>
                         <div class="content">
                             <div class="detail">
                                 <strong>YAHOO.util.Config</strong>
@@ -67,7 +78,7 @@
                                                     <code>owner
                                                     &lt;Object&gt; 
                                                     </code>
-                                                    	The owner Object to which this Config Object belongs
+                                                     The owner Object to which this Config Object belongs
                                                 </dd>
                                         </dl>
                                     
@@ -78,14 +89,16 @@
                     </div>
 
                         <div class="section field details">
-                            <h3><a name="field_detail">Properties</a></h3>
+                            <h3 id="properties">Properties</h3>
                             <div class="content">
-                                    <h4><a name="config">config</a>
+                                    <div class="private">
+                                    <h4><a name="property_config">config</a>
                                         <code>- private Object</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
-                                            Maintains the local collection of configuration property objects and their specified values
+                                            Maintains the local collection of configuration property objects and 
+their specified values
                                         </div>
                                     </div>
      
@@ -93,7 +106,9 @@
 
 
                                     <hr />
-                                    <h4><a name="eventQueue">eventQueue</a>
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property_eventQueue">eventQueue</a>
                                         <code>- private Object</code>
                                     </h4>
                                     <div class="detail">
@@ -106,12 +121,15 @@
 
 
                                     <hr />
-                                    <h4><a name="initialConfig">initialConfig</a>
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property_initialConfig">initialConfig</a>
                                         <code>- private Object</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
-                                            Maintains the local collection of configuration property objects as they were initially applied.
+                                            Maintains the local collection of configuration property objects as 
+they were initially applied.
 This object is used when resetting a property.
                                         </div>
                                     </div>
@@ -120,7 +138,9 @@ This object is used when resetting a property.
 
 
                                     <hr />
-                                    <h4><a name="owner">owner</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_owner">owner</a>
                                         <code>- Object</code>
                                     </h4>
                                     <div class="detail">
@@ -133,12 +153,15 @@ This object is used when resetting a property.
 
 
                                     <hr />
-                                    <h4><a name="queueInProgress">queueInProgress</a>
+                                    </div>
+                                    <div class="">
+                                    <h4><a name="property_queueInProgress">queueInProgress</a>
                                         <code>- Boolean</code>
                                     </h4>
                                     <div class="detail">
                                         <div class="description">
-                                            Boolean flag that specifies whether a queue is currently being executed
+                                            Boolean flag that specifies whether a queue is currently 
+being executed
                                         </div>
                                     </div>
      
@@ -146,7 +169,9 @@ This object is used when resetting a property.
 
 
                                     <hr />
-                                    <h4><a name="YAHOO.util.Config.BOOLEAN_TYPE">YAHOO.util.Config.BOOLEAN_TYPE</a>
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property_YAHOO.util.Config.BOOLEAN_TYPE">YAHOO.util.Config.BOOLEAN_TYPE</a>
                                         <code>- private static final object</code>
                                     </h4>
                                     <div class="detail">
@@ -159,7 +184,9 @@ This object is used when resetting a property.
 
 
                                     <hr />
-                                    <h4><a name="YAHOO.util.Config.CONFIG_CHANGED_EVENT">YAHOO.util.Config.CONFIG_CHANGED_EVENT</a>
+                                    </div>
+                                    <div class="private">
+                                    <h4><a name="property_YAHOO.util.Config.CONFIG_CHANGED_EVENT">YAHOO.util.Config.CONFIG_CHANGED_EVENT</a>
                                         <code>- private static final object</code>
                                     </h4>
                                     <div class="detail">
@@ -172,6 +199,7 @@ This object is used when resetting a property.
 
 
                                     <hr />
+                                    </div>
 
 
                             </div>
@@ -179,10 +207,11 @@ This object is used when resetting a property.
 
 
                         <div class="section method details">
-                            <h3><a name="methodDetails">Methods</a></h3>
+                            <h3 id="methods">Methods</h3>
                             <div class="content">
+                                    <div class="">
                                     <h4>
-                                        <a name="addProperty">addProperty</a></h4>
+                                        <a name="method_addProperty">addProperty</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -213,11 +242,12 @@ This object is used when resetting a property.
                                                     <dt>Parameters:</dt>
                                                         <dd>
                                                             <code>key &lt;String&gt;</code>
-                                                            	The configuration property's name
+                                                             The configuration property's name
                                                         </dd>
                                                         <dd>
                                                             <code>propertyObject &lt;Object&gt;</code>
-                                                            	The Object containing all of this property's arguments
+                                                             The Object containing all of this 
+property's arguments
                                                         </dd>
                                                 </dl>
 
@@ -233,8 +263,10 @@ This object is used when resetting a property.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="applyConfig">applyConfig</a></h4>
+                                        <a name="method_applyConfig">applyConfig</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -256,8 +288,10 @@ This object is used when resetting a property.
                                         </code>
                                         
                                         <div class="description">
-                                            Applies a key-value Object literal to the configuration, replacing any existing values, and queueing the property events.
-Although the values will be set, fireQueue() must be called for their associated events to execute.
+                                            Applies a key-value Object literal to the configuration, replacing  
+any existing values, and queueing the property events.
+Although the values will be set, fireQueue() must be called for their 
+associated events to execute.
                                         </div>
 
                                         <div class="description">
@@ -266,11 +300,13 @@ Although the values will be set, fireQueue() must be called for their associated
                                                     <dt>Parameters:</dt>
                                                         <dd>
                                                             <code>userConfig &lt;Object&gt;</code>
-                                                            	The configuration Object literal
+                                                             The configuration Object literal
                                                         </dd>
                                                         <dd>
                                                             <code>init &lt;Boolean&gt;</code>
-                                                            		When set to true, the initialConfig will be set to the userConfig passed in, so that calling a reset will reset the properties to the passed values.
+                                                              When set to true, the initialConfig will 
+be set to the userConfig passed in, so that calling a reset will 
+reset the properties to the passed values.
                                                         </dd>
                                                 </dl>
 
@@ -286,8 +322,10 @@ Although the values will be set, fireQueue() must be called for their associated
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="checkBoolean">checkBoolean</a></h4>
+                                        <a name="method_checkBoolean">checkBoolean</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -314,7 +352,7 @@ Although the values will be set, fireQueue() must be called for their associated
                                                     <dt>Parameters:</dt>
                                                         <dd>
                                                             <code>val &lt;Object&gt;</code>
-                                                            	The value to validate
+                                                             The value to validate
                                                         </dd>
                                                 </dl>
 
@@ -330,8 +368,10 @@ Although the values will be set, fireQueue() must be called for their associated
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="checkNumber">checkNumber</a></h4>
+                                        <a name="method_checkNumber">checkNumber</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -358,7 +398,7 @@ Although the values will be set, fireQueue() must be called for their associated
                                                     <dt>Parameters:</dt>
                                                         <dd>
                                                             <code>val &lt;Object&gt;</code>
-                                                            	The value to validate
+                                                             The value to validate
                                                         </dd>
                                                 </dl>
 
@@ -374,8 +414,45 @@ Although the values will be set, fireQueue() must be called for their associated
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="fireEvent">fireEvent</a></h4>
+                                        <a name="method_destroy">destroy</a></h4>
+                                    <div class="detail">
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong>destroy</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description">
+                                            Sets all properties to null, unsubscribes all listeners from each 
+property's change event and all listeners from the configChangedEvent.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code>
+                                                        void
+                                                    </code></dt>
+                                                    <dd></dd>
+                                                </dl>
+             
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="private">
+                                    <h4>
+                                        <a name="method_fireEvent">fireEvent</a></h4>
                                     <div class="detail">
                                         <code>
                                          private 
@@ -406,11 +483,11 @@ Although the values will be set, fireQueue() must be called for their associated
                                                     <dt>Parameters:</dt>
                                                         <dd>
                                                             <code>key &lt;String&gt;</code>
-                                                            			The configuration property's name
+                                                             The configuration property's name
                                                         </dd>
                                                         <dd>
                                                             <code>Object &lt;value&gt;</code>
-                                                            		The value of the correct type for the property
+                                                             The value of the correct type for the property
                                                         </dd>
                                                 </dl>
 
@@ -426,8 +503,10 @@ Although the values will be set, fireQueue() must be called for their associated
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="fireQueue">fireQueue</a></h4>
+                                        <a name="method_fireQueue">fireQueue</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -458,8 +537,10 @@ Although the values will be set, fireQueue() must be called for their associated
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getConfig">getConfig</a></h4>
+                                        <a name="method_getConfig">getConfig</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -472,7 +553,8 @@ Although the values will be set, fireQueue() must be called for their associated
                                         </code>
                                         
                                         <div class="description">
-                                            Returns a key-value configuration map of the values currently set in the Config Object.
+                                            Returns a key-value configuration map of the values currently set in  
+the Config Object.
                                         </div>
 
                                         <div class="description">
@@ -490,8 +572,10 @@ Although the values will be set, fireQueue() must be called for their associated
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="getProperty">getProperty</a></h4>
+                                        <a name="method_getProperty">getProperty</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -518,7 +602,7 @@ Although the values will be set, fireQueue() must be called for their associated
                                                     <dt>Parameters:</dt>
                                                         <dd>
                                                             <code>key &lt;String&gt;</code>
-                                                            	The name of the property
+                                                             The name of the property
                                                         </dd>
                                                 </dl>
 
@@ -534,8 +618,10 @@ Although the values will be set, fireQueue() must be called for their associated
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="init">init</a></h4>
+                                        <a name="method_init">init</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -562,7 +648,8 @@ Although the values will be set, fireQueue() must be called for their associated
                                                     <dt>Parameters:</dt>
                                                         <dd>
                                                             <code>owner &lt;Object&gt;</code>
-                                                            	The owner Object to which this Config Object belongs
+                                                             The owner Object to which this Config 
+Object belongs
                                                         </dd>
                                                 </dl>
 
@@ -578,8 +665,10 @@ Although the values will be set, fireQueue() must be called for their associated
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="outputEventQueue">outputEventQueue</a></h4>
+                                        <a name="method_outputEventQueue">outputEventQueue</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -592,7 +681,8 @@ Although the values will be set, fireQueue() must be called for their associated
                                         </code>
                                         
                                         <div class="description">
-                                            Returns a string representation of the Config object's current CustomEvent queue
+                                            Returns a string representation of the Config object's current 
+CustomEvent queue
                                         </div>
 
                                         <div class="description">
@@ -603,15 +693,18 @@ Although the values will be set, fireQueue() must be called for their associated
                                                     <code>
                                                         String
                                                     </code></dt>
-                                                    <dd>The string list of CustomEvents currently queued for execution</dd>
+                                                    <dd>The string list of CustomEvents currently queued 
+for execution</dd>
                                                 </dl>
              
                                         </div>
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="queueProperty">queueProperty</a></h4>
+                                        <a name="method_queueProperty">queueProperty</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -633,7 +726,8 @@ Although the values will be set, fireQueue() must be called for their associated
                                         </code>
                                         
                                         <div class="description">
-                                            Sets the value of a property and queues its event to execute. If the event is already scheduled to execute, it is
+                                            Sets the value of a property and queues its event to execute. If the 
+event is already scheduled to execute, it is
 moved from its current position to the end of the queue.
                                         </div>
 
@@ -643,11 +737,11 @@ moved from its current position to the end of the queue.
                                                     <dt>Parameters:</dt>
                                                         <dd>
                                                             <code>key &lt;String&gt;</code>
-                                                            	The name of the property
+                                                             The name of the property
                                                         </dd>
                                                         <dd>
                                                             <code>value &lt;String&gt;</code>
-                                                            	The value to set the property to
+                                                             The value to set the property to
                                                         </dd>
                                                 </dl>
 
@@ -656,15 +750,18 @@ moved from its current position to the end of the queue.
                                                     <code>
                                                         Boolean
                                                     </code></dt>
-                                                    <dd>true, if the set was successful, false if it failed.</dd>
+                                                    <dd>true, if the set was successful, false if 
+it failed.</dd>
                                                 </dl>
              
                                         </div>
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="refireEvent">refireEvent</a></h4>
+                                        <a name="method_refireEvent">refireEvent</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -691,7 +788,7 @@ moved from its current position to the end of the queue.
                                                     <dt>Parameters:</dt>
                                                         <dd>
                                                             <code>key &lt;String&gt;</code>
-                                                            	The name of the property
+                                                             The name of the property
                                                         </dd>
                                                 </dl>
 
@@ -707,8 +804,10 @@ moved from its current position to the end of the queue.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="refresh">refresh</a></h4>
+                                        <a name="method_refresh">refresh</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -721,7 +820,8 @@ moved from its current position to the end of the queue.
                                         </code>
                                         
                                         <div class="description">
-                                            Refires the events for all configuration properties using their current values.
+                                            Refires the events for all configuration properties using their 
+current values.
                                         </div>
 
                                         <div class="description">
@@ -739,8 +839,10 @@ moved from its current position to the end of the queue.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="resetProperty">resetProperty</a></h4>
+                                        <a name="method_resetProperty">resetProperty</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -767,7 +869,7 @@ moved from its current position to the end of the queue.
                                                     <dt>Parameters:</dt>
                                                         <dd>
                                                             <code>key &lt;String&gt;</code>
-                                                            	The name of the property
+                                                             The name of the property
                                                         </dd>
                                                 </dl>
 
@@ -783,8 +885,10 @@ moved from its current position to the end of the queue.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="setProperty">setProperty</a></h4>
+                                        <a name="method_setProperty">setProperty</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -810,7 +914,8 @@ moved from its current position to the end of the queue.
                                         </code>
                                         
                                         <div class="description">
-                                            Sets the value of a property. If the silent property is passed as true, the property's event will not be fired.
+                                            Sets the value of a property. If the silent property is passed as 
+true, the property's event will not be fired.
                                         </div>
 
                                         <div class="description">
@@ -819,15 +924,16 @@ moved from its current position to the end of the queue.
                                                     <dt>Parameters:</dt>
                                                         <dd>
                                                             <code>key &lt;String&gt;</code>
-                                                            		The name of the property
+                                                             The name of the property
                                                         </dd>
                                                         <dd>
                                                             <code>value &lt;String&gt;</code>
-                                                            		The value to set the property to
+                                                             The value to set the property to
                                                         </dd>
                                                         <dd>
                                                             <code>silent &lt;Boolean&gt;</code>
-                                                            	Whether the value should be set silently, without firing the property event.
+                                                             Whether the value should be set silently, 
+without firing the property event.
                                                         </dd>
                                                 </dl>
 
@@ -843,8 +949,10 @@ moved from its current position to the end of the queue.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="subscribeToConfigEvent">subscribeToConfigEvent</a></h4>
+                                        <a name="method_subscribeToConfigEvent">subscribeToConfigEvent</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -874,7 +982,8 @@ moved from its current position to the end of the queue.
                                         </code>
                                         
                                         <div class="description">
-                                            Subscribes an external handler to the change event for any given property.
+                                            Subscribes an external handler to the change event for any 
+given property.
                                         </div>
 
                                         <div class="description">
@@ -883,19 +992,22 @@ moved from its current position to the end of the queue.
                                                     <dt>Parameters:</dt>
                                                         <dd>
                                                             <code>key &lt;String&gt;</code>
-                                                            			The property name
+                                                             The property name
                                                         </dd>
                                                         <dd>
                                                             <code>handler &lt;Function&gt;</code>
-                                                            		The handler function to use subscribe to the property's event
+                                                             The handler function to use subscribe to 
+the property's event
                                                         </dd>
                                                         <dd>
                                                             <code>obj &lt;Object&gt;</code>
-                                                            			The Object to use for scoping the event handler (see CustomEvent documentation)
+                                                             The Object to use for scoping the event handler 
+(see CustomEvent documentation)
                                                         </dd>
                                                         <dd>
                                                             <code>override &lt;Boolean&gt;</code>
-                                                            	Optional. If true, will override "this" within the handler to map to the scope Object passed into the method.
+                                                             Optional. If true, will override "this"  
+within the handler to map to the scope Object passed into the method.
                                                         </dd>
                                                 </dl>
 
@@ -904,15 +1016,18 @@ moved from its current position to the end of the queue.
                                                     <code>
                                                         Boolean
                                                     </code></dt>
-                                                    <dd>True, if the subscription was successful, otherwise false.</dd>
+                                                    <dd>True, if the subscription was successful, 
+otherwise false.</dd>
                                                 </dl>
              
                                         </div>
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="toString">toString</a></h4>
+                                        <a name="method_toString">toString</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -943,8 +1058,10 @@ moved from its current position to the end of the queue.
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="unsubscribeFromConfigEvent">unsubscribeFromConfigEvent</a></h4>
+                                        <a name="method_unsubscribeFromConfigEvent">unsubscribeFromConfigEvent</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -970,7 +1087,8 @@ moved from its current position to the end of the queue.
                                         </code>
                                         
                                         <div class="description">
-                                            Unsubscribes an external handler from the change event for any given property.
+                                            Unsubscribes an external handler from the change event for any 
+given property.
                                         </div>
 
                                         <div class="description">
@@ -979,15 +1097,17 @@ moved from its current position to the end of the queue.
                                                     <dt>Parameters:</dt>
                                                         <dd>
                                                             <code>key &lt;String&gt;</code>
-                                                            			The property name
+                                                             The property name
                                                         </dd>
                                                         <dd>
                                                             <code>handler &lt;Function&gt;</code>
-                                                            		The handler function to use subscribe to the property's event
+                                                             The handler function to use subscribe to 
+the property's event
                                                         </dd>
                                                         <dd>
                                                             <code>obj &lt;Object&gt;</code>
-                                                            			The Object to use for scoping the event handler (see CustomEvent documentation)
+                                                             The Object to use for scoping the event 
+handler (see CustomEvent documentation)
                                                         </dd>
                                                 </dl>
 
@@ -996,15 +1116,18 @@ moved from its current position to the end of the queue.
                                                     <code>
                                                         Boolean
                                                     </code></dt>
-                                                    <dd>True, if the unsubscription was successful, otherwise false.</dd>
+                                                    <dd>True, if the unsubscription was successful, 
+otherwise false.</dd>
                                                 </dl>
              
                                         </div>
 
                                     </div>
                                     <hr />
+                                    </div>
+                                    <div class="">
                                     <h4>
-                                        <a name="YAHOO.util.Config.alreadySubscribed">YAHOO.util.Config.alreadySubscribed</a></h4>
+                                        <a name="method_YAHOO.util.Config.alreadySubscribed">YAHOO.util.Config.alreadySubscribed</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1030,7 +1153,8 @@ moved from its current position to the end of the queue.
                                         </code>
                                         
                                         <div class="description">
-                                            Checks to determine if a particular function/Object pair are already subscribed to the specified CustomEvent
+                                            Checks to determine if a particular function/Object pair are already 
+subscribed to the specified CustomEvent
                                         </div>
 
                                         <div class="description">
@@ -1039,15 +1163,16 @@ moved from its current position to the end of the queue.
                                                     <dt>Parameters:</dt>
                                                         <dd>
                                                             <code>evt &lt;YAHOO.util.CustomEvent&gt;</code>
-                                                            	The CustomEvent for which to check the subscriptions
+                                                             The CustomEvent for which to check 
+the subscriptions
                                                         </dd>
                                                         <dd>
                                                             <code>fn &lt;Function&gt;</code>
-                                                            	The function to look for in the subscribers list
+                                                             The function to look for in the subscribers list
                                                         </dd>
                                                         <dd>
                                                             <code>obj &lt;Object&gt;</code>
-                                                            	The execution scope Object for the subscription
+                                                             The execution scope Object for the subscription
                                                         </dd>
                                                 </dl>
 
@@ -1056,22 +1181,25 @@ moved from its current position to the end of the queue.
                                                     <code>
                                                         Boolean
                                                     </code></dt>
-                                                    <dd>true, if the function/Object pair is already subscribed to the CustomEvent passed in</dd>
+                                                    <dd>true, if the function/Object pair is already subscribed 
+to the CustomEvent passed in</dd>
                                                 </dl>
              
                                         </div>
 
                                     </div>
                                     <hr />
+                                    </div>
                             </div>
                         </div>
 
 
                         <div class="section method details">
-                            <h3><a name="methodDetails">Events</a></h3>
+                            <h3 id="events">Events</h3>
                             <div class="content">
+                                    <div class="">
                                     <h4>
-                                        <a name="configChangedEvent">configChangedEvent</a></h4>
+                                        <a name="event_configChangedEvent">configChangedEvent</a></h4>
                                     <div class="detail">
                                         <code>
                                         
@@ -1085,7 +1213,8 @@ moved from its current position to the end of the queue.
                                         </code>
                                         
                                         <div class="description">
-                                            Custom Event, notifying subscribers when Config properties are set (setProperty is called without the silent flag
+                                            Custom Event, notifying subscribers when Config properties are set 
+(setProperty is called without the silent flag
                                         </div>
 
                                         <div class="description">
@@ -1097,6 +1226,7 @@ moved from its current position to the end of the queue.
 
                                     </div>
                                     <hr />
+                                    </div>
                             </div>
                         </div>
 
@@ -1121,9 +1251,15 @@ moved from its current position to the end of the queue.
 
                                 <li class=""><a href="module_calendar.html">calendar</a></li>
 
+                                <li class=""><a href="module_charts.html">charts</a></li>
+
+                                <li class=""><a href="module_colorpicker.html">colorpicker</a></li>
+
                                 <li class=""><a href="module_connection.html">connection</a></li>
 
                                 <li class="selected"><a href="module_container.html">container</a></li>
+
+                                <li class=""><a href="module_cookie.html">cookie</a></li>
 
                                 <li class=""><a href="module_datasource.html">datasource</a></li>
 
@@ -1133,15 +1269,35 @@ moved from its current position to the end of the queue.
 
                                 <li class=""><a href="module_dragdrop.html">dragdrop</a></li>
 
+                                <li class=""><a href="module_editor.html">editor</a></li>
+
                                 <li class=""><a href="module_element.html">element</a></li>
 
                                 <li class=""><a href="module_event.html">event</a></li>
 
+                                <li class=""><a href="module_get.html">get</a></li>
+
                                 <li class=""><a href="module_history.html">history</a></li>
+
+                                <li class=""><a href="module_imagecropper.html">imagecropper</a></li>
+
+                                <li class=""><a href="module_imageloader.html">imageloader</a></li>
+
+                                <li class=""><a href="module_json.html">json</a></li>
+
+                                <li class=""><a href="module_layout.html">layout</a></li>
 
                                 <li class=""><a href="module_logger.html">logger</a></li>
 
                                 <li class=""><a href="module_menu.html">menu</a></li>
+
+                                <li class=""><a href="module_profiler.html">profiler</a></li>
+
+                                <li class=""><a href="module_profilerviewer.html">profilerviewer</a></li>
+
+                                <li class=""><a href="module_resize.html">resize</a></li>
+
+                                <li class=""><a href="module_selector.html">selector</a></li>
 
                                 <li class=""><a href="module_slider.html">slider</a></li>
 
@@ -1149,7 +1305,13 @@ moved from its current position to the end of the queue.
 
                                 <li class=""><a href="module_treeview.html">treeview</a></li>
 
+                                <li class=""><a href="module_uploader.html">uploader</a></li>
+
                                 <li class=""><a href="module_yahoo.html">yahoo</a></li>
+
+                                <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
+
+                                <li class=""><a href="module_yuitest.html">yuitest</a></li>
                         </ul>
                     </div>
 
@@ -1186,25 +1348,25 @@ moved from its current position to the end of the queue.
                     <div class="module">
                         <h4>Properties</h4>
                         <ul class="content">        
-                                <li><a href="#config">config</a>
+                                <li class="private"><a href="#property_config">config</a>
                                         <!--<code>&lt;object&gt;</code>-->
                                 </li>
-                                <li><a href="#eventQueue">eventQueue</a>
+                                <li class="private"><a href="#property_eventQueue">eventQueue</a>
                                         <!--<code>&lt;object&gt;</code>-->
                                 </li>
-                                <li><a href="#initialConfig">initialConfig</a>
+                                <li class="private"><a href="#property_initialConfig">initialConfig</a>
                                         <!--<code>&lt;object&gt;</code>-->
                                 </li>
-                                <li><a href="#owner">owner</a>
+                                <li class=""><a href="#property_owner">owner</a>
                                         <!--<code>&lt;object&gt;</code>-->
                                 </li>
-                                <li><a href="#queueInProgress">queueInProgress</a>
+                                <li class=""><a href="#property_queueInProgress">queueInProgress</a>
                                         <!--<code>&lt;object&gt;</code>-->
                                 </li>
-                                <li><a href="#YAHOO.util.Config.BOOLEAN_TYPE">YAHOO.util.Config.BOOLEAN_TYPE</a>
+                                <li class="private"><a href="#property_YAHOO.util.Config.BOOLEAN_TYPE">YAHOO.util.Config.BOOLEAN_TYPE</a>
                                         <!--<code>&lt;object&gt;</code>-->
                                 </li>
-                                <li><a href="#YAHOO.util.Config.CONFIG_CHANGED_EVENT">YAHOO.util.Config.CONFIG_CHANGED_EVENT</a>
+                                <li class="private"><a href="#property_YAHOO.util.Config.CONFIG_CHANGED_EVENT">YAHOO.util.Config.CONFIG_CHANGED_EVENT</a>
                                         <!--<code>&lt;object&gt;</code>-->
                                 </li>
                         </ul>
@@ -1213,62 +1375,65 @@ moved from its current position to the end of the queue.
                     <div class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
-                                <li><!--<code>void</code>-->
-                                <a href="#addProperty">addProperty</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_addProperty">addProperty</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#applyConfig">applyConfig</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_applyConfig">applyConfig</a>
                                 </li>
-                                <li><!--<code>Boolean</code>-->
-                                <a href="#checkBoolean">checkBoolean</a>
+                                <li class=""><!--<code>Boolean</code>-->
+                                <a href="#method_checkBoolean">checkBoolean</a>
                                 </li>
-                                <li><!--<code>Boolean</code>-->
-                                <a href="#checkNumber">checkNumber</a>
+                                <li class=""><!--<code>Boolean</code>-->
+                                <a href="#method_checkNumber">checkNumber</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#fireEvent">fireEvent</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_destroy">destroy</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#fireQueue">fireQueue</a>
+                                <li class="private"><!--<code>void</code>-->
+                                <a href="#method_fireEvent">fireEvent</a>
                                 </li>
-                                <li><!--<code>Object</code>-->
-                                <a href="#getConfig">getConfig</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_fireQueue">fireQueue</a>
                                 </li>
-                                <li><!--<code>Object</code>-->
-                                <a href="#getProperty">getProperty</a>
+                                <li class=""><!--<code>Object</code>-->
+                                <a href="#method_getConfig">getConfig</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#init">init</a>
+                                <li class=""><!--<code>Object</code>-->
+                                <a href="#method_getProperty">getProperty</a>
                                 </li>
-                                <li><!--<code>String</code>-->
-                                <a href="#outputEventQueue">outputEventQueue</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_init">init</a>
                                 </li>
-                                <li><!--<code>Boolean</code>-->
-                                <a href="#queueProperty">queueProperty</a>
+                                <li class=""><!--<code>String</code>-->
+                                <a href="#method_outputEventQueue">outputEventQueue</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#refireEvent">refireEvent</a>
+                                <li class=""><!--<code>Boolean</code>-->
+                                <a href="#method_queueProperty">queueProperty</a>
                                 </li>
-                                <li><!--<code>void</code>-->
-                                <a href="#refresh">refresh</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_refireEvent">refireEvent</a>
                                 </li>
-                                <li><!--<code>Boolean</code>-->
-                                <a href="#resetProperty">resetProperty</a>
+                                <li class=""><!--<code>void</code>-->
+                                <a href="#method_refresh">refresh</a>
                                 </li>
-                                <li><!--<code>Boolean</code>-->
-                                <a href="#setProperty">setProperty</a>
+                                <li class=""><!--<code>Boolean</code>-->
+                                <a href="#method_resetProperty">resetProperty</a>
                                 </li>
-                                <li><!--<code>Boolean</code>-->
-                                <a href="#subscribeToConfigEvent">subscribeToConfigEvent</a>
+                                <li class=""><!--<code>Boolean</code>-->
+                                <a href="#method_setProperty">setProperty</a>
                                 </li>
-                                <li><!--<code>String</code>-->
-                                <a href="#toString">toString</a>
+                                <li class=""><!--<code>Boolean</code>-->
+                                <a href="#method_subscribeToConfigEvent">subscribeToConfigEvent</a>
                                 </li>
-                                <li><!--<code>Boolean</code>-->
-                                <a href="#unsubscribeFromConfigEvent">unsubscribeFromConfigEvent</a>
+                                <li class=""><!--<code>String</code>-->
+                                <a href="#method_toString">toString</a>
                                 </li>
-                                <li><!--<code>Boolean</code>-->
-                                <a href="#YAHOO.util.Config.alreadySubscribed">YAHOO.util.Config.alreadySubscribed</a>
+                                <li class=""><!--<code>Boolean</code>-->
+                                <a href="#method_unsubscribeFromConfigEvent">unsubscribeFromConfigEvent</a>
+                                </li>
+                                <li class=""><!--<code>Boolean</code>-->
+                                <a href="#method_YAHOO.util.Config.alreadySubscribed">YAHOO.util.Config.alreadySubscribed</a>
                                 </li>
                         </ul>
                     </div>
@@ -1276,8 +1441,8 @@ moved from its current position to the end of the queue.
                     <div class="module">
                         <h4>Events</h4>
                         <ul class="content">        
-                                <li>
-                                <a href="#configChangedEvent">configChangedEvent</a>
+                                <li class="">
+                                <a href="#event_configChangedEvent">configChangedEvent</a>
                                 </li>
                         </ul>
                     </div>
