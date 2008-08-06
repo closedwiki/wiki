@@ -403,11 +403,13 @@ sub writeFieldNames {
     my ( $self, %fieldNames ) = (@_);
     my $fName = $self->fieldNamesFileName();
 
-    open( FILE, ">$fName" );
-    foreach my $name ( keys %fieldNames ) {
-        print FILE $name, "\n";
+    my $FILE;
+    if ( open( $FILE, ">$fName" ) ) {
+        foreach my $name ( keys %fieldNames ) {
+            print $FILE $name, "\n";
+        }
+        close($FILE);
     }
-    close(FILE);
 }
 
 # Yields a hash table keyed on the names of all existing field
@@ -420,13 +422,15 @@ sub readFieldNames {
     my $fName = $self->fieldNamesFileName();
     my %fieldNames;
 
-    open( FILE, "<$fName" );
-    my @names = <FILE>;
-    close(FILE);
-
-    foreach my $name (@names) {
-        $name =~ s/\n//;
-        $fieldNames{$name} = 1;
+    my $FILE;
+    if ( open( $FILE, "<$fName" ) ) {
+        my @names = <$FILE>;
+        close($FILE);
+        
+        foreach my $name (@names) {
+            $name =~ s/\n//;
+            $fieldNames{$name} = 1;
+        }
     }
 
     return %fieldNames;
@@ -492,6 +496,7 @@ sub indexTopic {
                 my $name = $field->{"name"};
                 if ( $fldNames{$name} ) {
                     my $value = $field->{"value"};
+                    next if (!defined($value)); #field not there.
                     $doc->set_value( $name => $value );
                 }
             }
@@ -556,6 +561,8 @@ sub indexAttachment {
     my $attText =
       TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier->stringFor(
         $filename);
+        
+    return if (!defined($attText)); #attachment may not be there.
 
     # new Kino document for the current topic
     my $doc = $invindexer->new_doc;
@@ -573,7 +580,9 @@ sub indexAttachment {
 
     # processing the topic meta info
     # the author can be used as a search criteria
-    $doc->set_value( author => $author );
+    if (defined($author)) {
+        $doc->set_value( author => $author );
+    }
 
     # version and date are stored as meta data in the doc
     # just for showing them when displaying the hits collection
@@ -689,9 +698,11 @@ sub saveUpdateMarker {
 
     my $file = $self->updateMarkerFile($web);
 
-    open( FILE, ">$file" );
-    print FILE $start_time;
-    close(FILE);
+    my $FILE;
+    if (open( $FILE, ">$file" )) {
+        print $FILE $start_time;
+        close($FILE);
+    }
 }
 
 # QS
@@ -701,10 +712,12 @@ sub readUpdateMarker {
     my $file = $self->updateMarkerFile($web);
 
     if ( -e $file ) {
-        open( FILE, "<$file" );
-        my $data = <FILE>;
-        close(FILE);
-        return $data;
+        my $FILE;
+        if (open( $FILE, "<$file" )) {
+            my $data = <$FILE>;
+            close($FILE);
+            return $data;
+        }
     }
     return '';
 }
@@ -716,10 +729,12 @@ sub readChanges {
     my $changes_file = $TWiki::cfg{DataDir} . "/$web/.changes";
 
     if ( -e $changes_file ) {
-        open( FILE, "<$changes_file" );
-        my @data = <FILE>;
-        close(FILE);
-        return @data;
+        my $FILE;
+        if (open( $FILE, "<$changes_file" )) {
+            my @data = <$FILE>;
+            close($FILE);
+            return @data;
+        }
     }
     return '';
 }
