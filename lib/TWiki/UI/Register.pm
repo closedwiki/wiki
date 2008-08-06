@@ -379,7 +379,7 @@ sub _requireVerification {
 
     require TWiki::Users;
     $data->{VerificationCode} =
-      $data->{WikiName}.'.'.TWiki::Users::randomPassword();
+      $data->{WikiName}.'.'.int(rand(99999999));
 
     require Data::Dumper;
 
