@@ -377,7 +377,6 @@ sub _requireVerification {
     $data->{LoginName} ||= $data->{WikiName};
     $data->{webName} = $web;
 
-    require TWiki::Users;
     $data->{VerificationCode} =
       $data->{WikiName}.'.'.int(rand(99999999));
 
