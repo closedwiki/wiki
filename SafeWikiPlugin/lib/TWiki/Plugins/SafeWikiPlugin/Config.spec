@@ -6,7 +6,7 @@
 # example:
 # <tt>javascript: fn(param1, "param2")</tt>. You can
 # use other TWiki::cfg variables in the the strings here.
-$TWiki::cfg{Plugins}{SafeWikiPlugin}{SafeHandler} = ['^(\s*javascript:)?(\s*return)?\s*\w+\((\w+|\'[^\']*\'|"[^"]*")(\s*,\s*(\w+|\'[^\']*\'|"[^"]*"))*\)[\s;]*(return\s+(\w+|\'[^\']*\'|"[^"]*")[\s;]*)?$'];
+$TWiki::cfg{Plugins}{SafeWikiPlugin}{SafeHandler} = ['^(\s*javascript:)?(\s*return)?\s*\w+\s*\(((\w+|\'[^\']*\'|"[^"]*")(\s*,\s*(\w+|\'[^\']*\'|"[^"]*"))*|\s*)?\)[\s;]*(return\s+(\w+|\'[^\']*\'|"[^"]*")[\s;]*)?$'];
 
 # **STRING 30**
 # String used to replace dodgy URIs. Can be a URI if you want.
