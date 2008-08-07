@@ -636,7 +636,7 @@ sub RESTParameter2SiteCharSet {
 # the response to an XHR should also be UTF-8 encoded.
 # This function generates such a response.
 sub returnRESTResult {
-    my ($text) = @_;
+    my ($response, $status, $text) = @_;
 
     if ($TWiki::cfg{Site}{CharSet}) {
         $text = Encode::decode(
@@ -647,11 +647,31 @@ sub returnRESTResult {
 
     $text = Encode::encode_utf8($text);
 
-    print "Content-Type: text/plain;charset=UTF-8\r\n";
-    my $len; { use bytes; $len = length($text); };
-    print "Content-length: ",$len,"\r\n";
-    print "\r\n";
-    print $text;
+    # TWiki5 introduces the TWiki::Response object, which handles all
+    # responses.
+    if (UNIVERSAL::isa( $response, 'TWiki::Response')) {
+        $response->header(
+            -status => $status,
+            -type => 'text/plain',
+            -charset => 'UTF-8');
+        $response->body($text);
+    } else { # Pre-TWiki-5.
+        # Turn off AUTOFLUSH
+        # See http://perl.apache.org/docs/2.0/user/coding/coding.html
+        local $| = 0;
+        my $query = TWiki::Func::getCgiQuery();
+        if (defined($query)) {
+            my $len;
+            { use bytes; $len = length($text); };
+            print $query->header(
+                -status => $status,
+                -type => 'text/plain',
+                -charset => 'UTF-8',
+                -Content_length => $len);
+            print $text;
+        }
+    }
+    print STDERR $text if ($status >= 400);
 }
 
 # Rest handler for use from Javascript. The 'text' parameter is used to
@@ -669,7 +689,7 @@ sub returnRESTResult {
 # req.send(params);
 #
 sub _restTML2HTML {
-    my ($session) = @_;
+    my ($session, $plugin, $verb, $response) = @_;
     my $tml = TWiki::Func::getCgiQuery()->param('text');
 
     $tml = RESTParameter2SiteCharSet($tml);
@@ -688,14 +708,14 @@ sub _restTML2HTML {
     # in during final cleanup.
     $html = '<!--'.$SECRET_ID.'-->'.$html;
 
-    returnRESTResult($html);
+    returnRESTResult($response, 200, $html);
 
     return undef; # to prevent further processing
 }
 
 # Rest handler for use from Javascript
 sub _restHTML2TML {
-    my ($session) = @_;
+    my ($session, $plugin, $verb, $response) = @_;
     unless( $html2tml ) {
         require TWiki::Plugins::WysiwygPlugin::HTML2TML;
 
@@ -716,13 +736,12 @@ sub _restHTML2TML {
             very_clean => 1,
         });
 
-    returnRESTResult($tml);
-
+    returnRESTResult($response, 200, $tml);
     return undef; # to prevent further processing
 }
 
 sub _restUpload {
-    my ($session) = @_;
+    my ($session, $plugin, $verb, $response) = @_;
     my $query = TWiki::Func::getCgiQuery();
     my $topic = $query->param('topic');
     $topic =~ /^(.*)\.([^.]*)$/;
@@ -747,11 +766,8 @@ sub _restUpload {
 
     unless (TWiki::Func::checkAccessPermission(
         'CHANGE', TWiki::Func::getWikiName(), undef, $topic, $web)) {
-        my $error = "Access denied";
-        print CGI::header(-status => 401);
-        print $error;
-        print STDERR $error;
-        return;
+        returnRESTResult($response, 401, "Access denied");
+        return undef; # to prevent further processing
     }
 
     my ($fileSize, $fileDate, $tmpFileName);
@@ -772,11 +788,8 @@ sub _restUpload {
         }
 
         unless($fileSize && $fileName) {
-            my $error = "Zero-sized file upload";
-            print CGI::header(-status => 500);
-            print $error;
-            print STDERR $error;
-            return undef;
+            returnRESTResult($response, 500, "Zero-sized file upload");
+            return undef; # to prevent further processing
         }
 
         my $maxSize = TWiki::Func::getPreferencesValue(
@@ -784,11 +797,8 @@ sub _restUpload {
         $maxSize = 0 unless ($maxSize =~ /([0-9]+)/o);
 
         if ($maxSize && $fileSize > $maxSize * 1024) {
-            my $error = "OVERSIZED UPLOAD";
-            print CGI::header(-status => 500);
-            print $error;
-            print STDERR $error;
-            return undef;
+            returnRESTResult($response, 500, "OVERSIZED UPLOAD");
+            return undef; # to prevent further processing
         }
     }
 
@@ -811,10 +821,8 @@ sub _restUpload {
     close($stream) if $stream;
 
     if ($error) {
-        print CGI::header(-status => 500);
-        print $error;
-        print STDERR $error;
-        return undef;
+        returnRESTResult($response, 500, $error);
+        return undef; # to prevent further processing
     }
 
     # Otherwise allow the rest dispatcher to write a 200
@@ -835,18 +843,14 @@ sub _unquote {
 
 # Get, and return, a list of attachments using JSON
 sub _restAttachments {
-    my ($session) = @_;
+    my ($session, $plugin, $verb, $response) = @_;
     my ($web, $topic) = TWiki::Func::normalizeWebTopicName(
         undef, TWiki::Func::getCgiQuery()->param('topic'));
     my ($meta, $text) = TWiki::Func::readTopic($web, $topic);
     unless (TWiki::Func::checkAccessPermission(
-        'VIEW', TWiki::Func::getWikiName(),
-        $text, $topic, $web, $meta)) {
-        my $error = "Access denied";
-        print CGI::header(-status => 401);
-        print $error;
-        print STDERR $error;
-        return;
+        'VIEW', TWiki::Func::getWikiName(), $text, $topic, $web, $meta)) {
+        returnRESTResult($response, 401, "Access denied");
+        return undef; # to prevent further processing
     }
     # Create a JSON list of attachment data, sorted by name
     my @atts;
