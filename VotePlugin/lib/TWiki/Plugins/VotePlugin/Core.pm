@@ -552,8 +552,8 @@ sub showLineOfStars {
     $row =~ s/\$perc/$perc/g;
     $row =~ s/\$mylast/$myLast/g;
     require TWiki::Contrib::RatingContrib;
-    my $eAttrs;
-    if ($submit) {
+    my $eAttrs = {};
+    if ($submit && !$needSubmit) {
         $eAttrs = {
             onChange =>
               "javascript: document.getElementById('$form').submit()" };
