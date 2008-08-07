@@ -477,7 +477,7 @@ sub getIdent {
 
     if ($isOpen) {
         my $date = _getLocalDate();
-        $ident = "$ENV{REMOTE_ADDR},$user,$date";
+        $ident = ($ENV{REMOTE_ADDR}||'').",$user,$date";
     } else {
         $ident = $user;
     }
@@ -559,7 +559,8 @@ sub showLineOfStars {
               "javascript: document.getElementById('$form').submit()" };
     }
     my $ul = TWiki::Contrib::RatingContrib::renderRating(
-        'vote_data_'.$prompt->{name}, $max, $row =~ /\$small/, $mean, $eAttrs);
+        'vote_data_'.$prompt->{name}, $max, ($row =~ /\$small/) ? 1 : 0,
+        $mean, $eAttrs);
 
     $row =~ s/\$(small|large)/$ul/g;
 

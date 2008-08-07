@@ -168,10 +168,10 @@ The weighting topic applies to all votes in the scope of the =%<nop>VOTEPLUGIN_W
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | &nbsp; | 
-|  6 Aug 2008 | Bugs:Item5769 correct default handling of transcluded rates |
-|  1 Jul 2007: | Bugs:Item4310 : abstracted out TWiki:Plugins.RatingContrib, and modified the code to be tolerant of forms within forms - TWiki:Main/CrawfordCurrie |
-|  24 Jun 2007: | Bugs:ItemItem4298: fixed secret switch. Item4200: added VarVOTE. - TWiki:Main/CrawfordCurrie |
-|  11 Jun 2007: | Bugs:Item4235 - removed excess newlines, fixed separator - TWiki:Main/CrawfordCurrie |
+|  7 Aug 2008 | TWikibug:Item5769 correct default handling of transcluded rates TWikibug:Item5766 $large is once again large |
+|  1 Jul 2007: | TWikibug:Item4310 : abstracted out TWiki:Plugins.RatingContrib, and modified the code to be tolerant of forms within forms - TWiki:Main/CrawfordCurrie |
+|  24 Jun 2007: | TWikibug:ItemItem4298: fixed secret switch. Item4200: added VarVOTE. - TWiki:Main/CrawfordCurrie |
+|  11 Jun 2007: | TWikibug:Item4235 - removed excess newlines, fixed separator - TWiki:Main/CrawfordCurrie |
 |   8 Jun 2007: | Added =submit= - TWiki:Main/CrawfordCurrie |
 |   6 Jun 2007: | Added =global=, =open=, =secret=, =format=, =chart=, =saveto=, =VOTEPLUGIN_WEIGHTINGS=, bayesian averaging - TWiki:Main/CrawfordCurrie |
 |  31 Aug 2006: | added NO_PREFS_IN_TOPIC |
