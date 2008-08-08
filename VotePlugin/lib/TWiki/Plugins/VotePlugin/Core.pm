@@ -51,6 +51,7 @@ sub handleVote {
     my $bayesian = isTrue($params->{bayesian}, 0);
     my $submit =   isTrue($params->{submit}, 1);
     my $saveto =   $params->{saveto};
+    my $canReset = canReset($id);
 
     my @prompts = ();
 
@@ -117,6 +118,15 @@ sub handleVote {
     # check attributes
     if (!scalar(@prompts)) {
         return inlineError("no prompts specified ".$params->stringify());
+    }
+
+    my $mess;
+    if ($canReset) {
+        my $query = TWiki::Func::getCgiQuery();
+        if (defined $query->param('Reset'.$id)) {
+            clearVotesData($web, $topic, $id, $isGlobal, $saveto);
+            $mess = "$id has been reset";
+        }
     }
 
     # read in the votes
@@ -248,7 +258,7 @@ sub handleVote {
             }
             my $o = { name => 'vote_data_'.$key, size => 1 };
             unless ($needSubmit) {
-                $o->{onchange} = 'javacript: submit()';
+                $o->{onchange} = 'javascript: submit()';
             }
             my $select = $submit ? CGI::Select($o, $opts) : '';
 
@@ -273,11 +283,46 @@ sub handleVote {
         }
         $result = "$result$separator</form>";
     }
+    if ($canReset) {
+        if ($mess) {
+            $result .= CGI::span({class => 'twikiAlert'}, $mess);
+        } else {
+            $result .= ' '
+              . CGI::start_form(-name => 'resetForm',
+                                -action => '')
+                . CGI::submit({ name => 'Reset'.$id, value=>'Reset '.$id })
+                  . CGI::end_form();
+        }
+    }
     # Render tables and remove newlines
     # so we can embed votes in TWiki tables
     $result = TWiki::Func::renderText($result);
     $result =~ s/\n//g;
     return $result;
+}
+
+###############################################################################
+# Check if the current user can reset a vote, and if they can, return a
+# button that does it
+sub canReset {
+    my $id = shift;
+
+    my $controls = TWiki::Func::getPreferencesValue('VOTEPLUGIN_RESETTERS');
+    return '' unless (defined $controls);
+    foreach my $control (split(/\s*;\s*/, $controls)) {
+        next unless $control =~ /^\s*(\w+)\s*\((.*)\)\s*$/;
+        my ($who, $whats) = ($1, $2);
+        next unless $who eq TWiki::Func::getWikiName();
+        foreach my $ide (split(/\s*,\s*/, $whats)) {
+            $ide = quotemeta($ide);
+            $ide =~ s/\\\*/.*/g;
+            $ide =~ s/\\\?/./g;
+            if ($id =~ /^$ide$/) {
+                return 1;
+            }
+        }
+    }
+    return 0;
 }
 
 ###############################################################################
@@ -359,6 +404,31 @@ sub saveVotesData {
         seek(VOTES, 0, 2); # seek EOF in case someone else appended
         # stuff while we were waiting
         print VOTES $voteData;
+        # unlock and close
+        flock(VOTES, LOCK_UN);
+        close VOTES;
+    }
+}
+
+sub clearVotesData {
+    my ($web, $topic, $id, $isGlobal, $saveto) = @_;
+    if ($saveto) {
+        my $text = '';
+        $saveto =~ /(.*)/;
+        my ($vw, $vt) = TWiki::Func::normalizeWebTopicName($web, $1);
+        if (TWiki::Func::topicExists($vw, $vt)) {
+            $text = TWiki::Func::readTopicText( $vw, $vt );
+        }
+        $text =~ s/(^|\r?\n)(\|[^\r\n]*\|\r?\n)*$/$1/s;
+        TWiki::Func::saveTopicText($vw, $vt, $text, 1, 1);
+    } else {
+        my $votesFile = getVotesFile($web, $topic, $id, $isGlobal);
+        # open and lock the votes
+        open(VOTES, ">>$votesFile") || die "cannot append $votesFile";
+        flock(VOTES, LOCK_EX); # wait for exclusive rights
+        seek(VOTES, 0, 2); # seek EOF in case someone else appended
+        # stuff while we were waiting
+        print VOTES '';
         # unlock and close
         flock(VOTES, LOCK_UN);
         close VOTES;

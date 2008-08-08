@@ -15,6 +15,8 @@ There are two ways to vote for an item:
    * *rate*: give something a rating (a number of stars) <br /><img src="%ATTACHURLPATH%/example_stars.gif" />
 A single poll can mix and match the different vote types.
 
+%TOC%
+
 Polls can be _open_ or _closed_. You don't have to log in to vote in an open
 poll, but you are restricted to one vote per poll per user per calendar
 date. You have to log in to vote on a closed vote, but you are restricted to
@@ -106,7 +108,7 @@ the [[TWikiVariables][TWikiVariable]] =VOTEPLUGIN_DEFAULTS= to be a parameter st
  You can do this in an individual topic, for an entire web (in !WebPreferences), or for the whole TWiki (in %MAINWEB%.<nop>TWikiPreferences).
 
 #FormattingResults
----+++ Formatting the Results
+---+++ Formatting the Results of a Poll
 Each item in the poll has a results display next to it (are as part of it in the case of stars). The =format= parameter is used to control how this is displayed. It is usually used to define a row in a TWiki table, and is expands once for each =stars= and once for each option in a =select=.
 
 The =format= parameter is a string that can include the following formatting tokens:
@@ -153,11 +155,32 @@ For example,
 The numbers are percentages. A user who isn't otherwise weighted has a weighting of 100. A weighting lower that 100 reduces their influence on the vote, and a weighting higher than 100 increases it. In the example above,
    * !AlbertCamus has a weight of 100, as does !AdamSmith (who gets the default)
    * !SunTszu's votes only count for half as much as !AlbertCamus'
-   * !NiccolaMachiavelli has ten times as much influence as !AlbertCamus and !AdamSmith, and twenty times as much as !SunTszu.
+   * !NiccoloMachiavelli has ten times as much influence as !AlbertCamus and !AdamSmith, and twenty times as much as !SunTszu.
 The weighting topic applies to all votes in the scope of the =%<nop>VOTEPLUGIN_WEIGHTINGS%= setting.
+
+---+++ Resetting a Poll
+Sometimes you want to be able to clear the results of a poll. Access to this feature is controlled using the =VOTEPLUGIN_RESETTERS= TWiki variable. This variable defines a (semicolon-separated) list of wiki names and a (comma-separated) list of the IDs of votes they are allowed to reset. You can use =*= as a wildcard in the vote IDs. For example, in a =Web<nop>Preferences= topic you can write
+<verbatim>
+   * Set VOTEPLUGIN_RESETTERS = GeorgeWBush(*);RobertMugabe(zimbabwe);SimonCowell(*Idol, XFactor)
+   * Set FINALPREFERENCES = VOTEPLUGIN_RESETTERS
+</verbatim>
+to allow
+   * !GeorgeWBush to reset any vote he likes,
+   * !RobertMugabe to reset the results of any vote with the id =zimbabwe=,
+   * !SimonCowell to reset the results of all votes with an ID ending in =Idol= and any vote with the ID =XFactor=.
+If a user has sufficient rights to reset a vote, then a button will be generated next to the vote prompt which, when clicked, will reset the results for that vote to initial conditions.
+
+Note that it is important to finalise the setting, otherwise it can be overridden in individual topics by anyone with =CHANGE= access. If you don't define =VOTEPLUGIN_RESETTERS= no-one can reset _any_ votes.
 
 ---++ Plugin Installation Instructions
 %$INSTALL_INSTRUCTIONS%
+
+%X% *IMPORTANT* If you don't want anyone to be able to reset votes on your site, then make sure you:
+<verbatim>
+   * Set VOTEPLUGIN_RESETTERS = none
+</verbatim>
+in Main.<nop>TWikiPreferences, and add =VOTEPLUGIN_RESETTERS= to =FINALPREFERENCES=.
+</verbatim>
 
 ---++ Plugin Info
 <!-- provided for compatibility only
@@ -168,7 +191,7 @@ The weighting topic applies to all votes in the scope of the =%<nop>VOTEPLUGIN_W
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | &nbsp; | 
-|  7 Aug 2008 | TWikibug:Item5768 suppress submission of individual ratings in a multi-row vote TWikibug:Item5769 correct default handling of transcluded rates TWikibug:Item5766 $large is once again large |
+|  8 Aug 2008 | TWikibug:Item5768 suppress submission of individual ratings in a multi-row vote TWikibug:Item5769 correct default handling of transcluded rates TWikibug:Item5766 $large is once again large TWikibug:Item5771 support for resetting votes. |
 |  1 Jul 2007: | TWikibug:Item4310 : abstracted out TWiki:Plugins.RatingContrib, and modified the code to be tolerant of forms within forms - TWiki:Main/CrawfordCurrie |
 |  24 Jun 2007: | TWikibug:ItemItem4298: fixed secret switch. Item4200: added VarVOTE. - TWiki:Main/CrawfordCurrie |
 |  11 Jun 2007: | TWikibug:Item4235 - removed excess newlines, fixed separator - TWiki:Main/CrawfordCurrie |
