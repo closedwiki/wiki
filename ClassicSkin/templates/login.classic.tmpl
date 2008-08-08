@@ -22,9 +22,9 @@
 <form action='%SCRIPTURLPATH{"login"}%/%WEB%/%TOPIC%' method='post'>
 <table border='0'>
 <tr><th>Username</th><td>
-<input type='text' size='30' name='username' value='%URLPARAM{"username"}%' />
+<input type='text' size='30' name='username' value='%URLPARAM{"username"}%'  %TMPL:P{context="no_auto_complete_login" then="autocomplete_off"}% />
 </td></tr><tr><th>Password</th><td>
-<input type='password' size='30' name='password' value='' />
+<input type='password' size='30' name='password' value=''  %TMPL:P{context="no_auto_complete_login" then="autocomplete_off"}% />
 %TMPL:P{context="can_remember_login" then="rememberbox"}%
 </td></tr></table>
 <literal>
@@ -36,6 +36,8 @@
 </form>
 <p />
 %TMPL:END%
+
+%TMPL:DEF{"autocomplete_off"}% autocomplete='off' %TMPL:END%
 
 %TMPL:P{"htmldoctype"}%
 %TMPL:P{"head"}%

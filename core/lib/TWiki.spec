@@ -287,6 +287,12 @@ $TWiki::cfg{Sessions}{MapIP2SID} = 0;
 # </li></ol>
 $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';
 
+# **BOOLEAN EXPERT**
+# Browsers typically remember your login and passwords to make authentication 
+# more convenient for users. If your TWiki is used on public terminals, or other
+# you can prevent this, forcing the user to enter the login and password every time.
+$TWiki::cfg{TemplateLogin}{PreventBrowserRememberingPassword} = 0;
+
 # **REGEX EXPERT**
 # The perl regular expression used to constrain user login names. Some
 # environments may require funny characters in login names, such as \.

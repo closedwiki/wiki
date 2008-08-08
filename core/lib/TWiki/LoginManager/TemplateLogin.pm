@@ -57,6 +57,9 @@ sub new {
     if ($TWiki::cfg{Sessions}{ExpireCookiesAfter}) {
         $session->enterContext( 'can_remember_login' );
     }
+    if ($TWiki::cfg{TemplateLogin}{PreventBrowserRememberingPassword}) {
+        $session->enterContext( 'no_auto_complete_login' );
+    }
     return $this;
 }
 

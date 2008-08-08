@@ -69,6 +69,7 @@ Template Login asks for a username and password in a web page, and processes the
    1 Use the [[%SCRIPTURLPATH{"configure"}%][configure]] interface to
       1 select the =TWiki::Client::TemplateLogin= login manager (on the Security Settings pane).
       1 select the appropriate password manager for your system, or provide your own.
+      1 %H% there is also an EXPERT configure setting ={TemplateLogin}{PreventBrowserRememberingPassword}= that you can set to prevent Browsers from remembering username and passwords if you are concerned about public terminal usage.
    1 Register yourself in the TWikiRegistration topic.
     <br /> %H% Check that the password manager recognises the new user. If you are using =.htpasswd= files, check that a new line with the username and encrypted password is added to the =.htpasswd= file. If not, you probably got a path wrong, or the permissions may not allow the webserver user to write to that file.
    1 Create a new topic to check if authentication works.
@@ -115,9 +116,9 @@ TWikiAccessControl has more information on setting up access controls.
 
 ---++++ Logons via bin/logon
 
-Any time a user enters a page that needs authentication, they will be forced to log on. It may be convenient to have a "logon" as well, to give the system a chance to identify the user and retrieve their personal settings. It may be convenient to force them to log on.
+Any time a user requests a page that needs authentication, they will be forced to log on. It may be convenient to have a "logon" link as well, to give the system a chance to identify the user and retrieve their personal settings. It may be convenient to force them to log on.
 
-The ==bin/logon== script accomplishes this. The ==bin/logon== script must be setup in the ==bin/.htaccess== file to be a script which requires a =valid user=. However, once authenticated, it will simply redirect the user to the view URL for the page from which the =logon= script was linked.
+The ==bin/logon== script enables this. If you are using Apache Login, the ==bin/logon== script must be setup in the ==bin/.htaccess== file to be a script which requires a =valid user=. Once authenticated, it will redirect the user to the view URL for the page from which the =logon= script was linked.
 
 #TrackSessions
 ---++ Sessions
@@ -222,4 +223,4 @@ See TWiki:TWiki.SecuringTWikiSite for more information.
 %STOPINCLUDE%
 __Related Topics:__ AdminDocumentationCategory, TWikiAccessControl, TWiki:TWiki.TWikiUserAuthenticationSupplement, TWiki:TWiki.SecuringTWikiSite
 
--- __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.MikeMannix, TWiki:Main.CrawfordCurrie
+-- __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.MikeMannix, TWiki:Main.CrawfordCurrie, TWiki:Main.SvenDowideit

@@ -36,7 +36,7 @@
 %QUERYPARAMS{encoding="entity" format="<input type='hidden' name='$name' value='$value' />"}%
 </literal><input type="hidden" name="origurl" value="%ORIGURL%" /></form>%TMPL:END%
 
-%TMPL:DEF{"usernamefield"}%<input tabindex='1' type='text' class='twikiInputField twikiFocus' size='40' name='username' value='%URLPARAM{"usernamestep"}%' />%TMPL:END%
+%TMPL:DEF{"usernamefield"}%<input tabindex='1' type='text' class='twikiInputField twikiFocus' size='40' name='username' value='%URLPARAM{"usernamestep"}%' %TMPL:P{context="no_auto_complete_login" then="autocomplete_off"}% />%TMPL:END%
 
 %TMPL:DEF{"usernamestep"}%<div class="twikiFormStep">
 ---+++ %MAKETEXT{"Username"}%
@@ -49,7 +49,9 @@
 
 %TMPL:DEF{"usernamefieldhelp"}%%TWISTY{mode="span" showlink="%MAKETEXT{"Help"}%" hidelink="%MAKETEXT{"Hide help"}%" remember="on"}% <div class="twikiHelp">%TMPL:P{"usernamenote"}%</div> %ENDTWISTY%%TMPL:END%
 
-%TMPL:DEF{"passwordfield"}%<input tabindex='2' type='password' class='twikiInputField' size='40' name='password' value='' />%TMPL:END%
+%TMPL:DEF{"passwordfield"}%<input tabindex='2' type='password' class='twikiInputField' size='40' name='password' value='' %TMPL:P{context="no_auto_complete_login" then="autocomplete_off"}% />%TMPL:END%
+
+%TMPL:DEF{"autocomplete_off"}% autocomplete='off' %TMPL:END%
 
 %TMPL:DEF{"passwordfieldnoteremember"}%%TMPL:P{"passwordfield"}% %TMPL:P{"passwordnote"}%
 %TMPL:P{context="can_remember_login" then="rememberbox"}%%TMPL:END%
