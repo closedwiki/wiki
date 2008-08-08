@@ -1,5 +1,5 @@
 %META:TOPICINFO{author="TWikiContributor" date="1177700623" format="1.1" version="$Rev$"}%
----+!! TWiki Release 4.2.1 (Freetown), %$DATE%
+---+!! TWiki Release 4.2.2 (Freetown), %$DATE%
 
 %TOC%
 
@@ -7,13 +7,16 @@
 
 TWiki 4.2.0 was released 22 Jan 2008 and introduced some hot new features that make TWiki a better user experience for both beginners and experienced application developers. It also contained quite a number of bugfixes since 4.1.2.
 
-TWiki 4.2.1 is a patch release which only contains bug fixes. More than 150 bugs have been fixed since the release of 4.2.1 in all areas of TWiki.
+TWiki 4.2.1 is a patch release which only contains bug fixes. More than 150 bugs have been fixed since the release of 4.2.0 in all areas of TWiki.
 
-It is highly recommended to upgrade TWiki 4.2.0 to 4.2.1. Users will find the 4.2.1 much more stable in daily use.
+TWiki 4.2.2 is a patch release which only contains bug fixes. More than __TODO__ bugs have been fixed since the release of 4.2.1 in all areas of TWiki.
+
+
+It is highly recommended to upgrade TWiki 4.2.x to 4.2.2. Users will find the 4.2.2 much more stable in daily use.
 
 ---++ Pre-installed Extensions
 
-TWiki 4.2.1 is shipped with
+TWiki 4.2.2 is shipped with
 
    * *Plugins:* !CommentPlugin, !EditTablePlugin, !EmptyPlugin, !InterwikiPlugin, !PreferencesPlugin, !RenderListPlugin, !SlideShowPlugin, !SmiliesPlugin, !SpreadSheetPlugin, !TablePlugin, !TinyMCEPlugin, !TwistyPlugin, !WysiwygPlugin
    * *Contribs:* !BehaviourContrib, !JSCalendarContrib, !MailerContrib, !TipsContrib, !TWikiUserMappingContrib, !TwistyContrib
@@ -49,6 +52,14 @@ TWiki 4.2.1 is shipped with
       * Many new functions in the API for plugin developers.
       * Table of Content (TOC) feature enhanced 
       * User Mapping (mapping between login name and !WikiName) code has been extended to allow pluggable modules to integrate with all sorts of alternative authentication and Management schemes. For normal cases you use the default !TWikiUserMapping which is using the !Main.TWikiUsers topic to map between login and !WikiName. A new !BaseUserMapping is provided for TWikis where you only have guests and an administrator. In this case you use the login and password given in configure to login as an admin.
+
+---++ Important Changes since 4.2.1
+This is a fast trip bug fix for issues found during upgrades from 4.2.0 to 4.2.1.
+---+++ Highlights of bug fixes since 4.2.1
+
+__TODO__
+
+See the full list of bug fixes at the bottom of this topic.
 
 ---++ Important Changes since 4.2.0
 
@@ -567,7 +578,7 @@ The 4.2.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 | [[%BUGS%/Item1582][Item1582]] | configure needs a backlink to the TWiki/WebHome |
 </noautolink>
 
----++  TWiki 4.2.1 Minor Release - Details
+---++  TWiki 4.2.1 Patch Release - Details
 
 The 4.2.1 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x02 revision %$VERSION%. 
 
@@ -732,6 +743,20 @@ The 4.2.1 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 | [[%BUGS%/Item3502][Item3502]] | preview of a slideshow is corrupted |
 | [[%BUGS%/Item3048][Item3048]] | Documented that CGI version 2.89 causes character entities to not be escaped in Raw View  |
 | [[%BUGS%/Item1861][Item1861]] | Document EDITACTION |
+</noautolink>
+
+---++ Enhancements
+
+None!
+
+---++  TWiki 4.2.2 Patch Release - Details
+
+The 4.2.2 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x02 revision TODO (10 Aug 2008). 
+
+---++ Fixes
+
+<noautolink>
+TODO
 </noautolink>
 
 ---++ Enhancements
