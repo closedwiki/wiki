@@ -1693,7 +1693,7 @@ sub handler {
         @origTable = $cgi->param('table');
         @origUp    = $cgi->param('up');
         $cgi->delete('sortcol', 'table', 'up');
-        $url = $cgi->url(-full => 1, -path => 1) . '?';
+        $url = $cgi->url(-absolute=>1, -path_info=>1) . '?';
         my $queryString = $cgi->query_string();
         $url .= $queryString . ';' if $queryString;
 
