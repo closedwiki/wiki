@@ -32,9 +32,6 @@ use Cwd;
 
 my $systemWeb = "TemporaryRegisterTestsSystemWeb";
 
-# Override random password generator with an impossible password
-#$this->{twiki}->{DebugVerificationCode} = "80808080808";
-
 sub new {
     my $this = shift()->SUPER::new('Registration', @_);
     # your state for fixture here
