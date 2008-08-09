@@ -135,7 +135,8 @@ sub prepareBodyParameters {
     return unless $ENV{CONTENT_LENGTH};
     my %p = $this->{cgi}->Vars;
     while ( my ( $key, $value ) = each %p ) {
-        $req->bodyParam( -name => $key, -value => [ split /\0/, $value ] );
+        my @values = $value =~ /\0/ ? (split /\0/, $value) : ($value);
+        $req->bodyParam( -name => $key, -value => \@values );
         $this->{uploads}->{$key} = 1 if scalar $this->{cgi}->upload($key);
     }
 }
