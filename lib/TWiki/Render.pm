@@ -341,8 +341,8 @@ sub _fixedFontText {
     # preserve white space, so replace it by '&nbsp; ' patterns
     $theText =~ s/\t/   /g;
     $theText =~ s|((?:[\s]{2})+)([^\s])|'&nbsp; ' x (length($1) / 2) . $2|eg;
-    $theText = CGI::b( $theText ) if $theDoBold;
-    return CGI::code( $theText );
+    $theText = CGI->b( $theText ) if $theDoBold;
+    return CGI->code( $theText );
 }
 
 # Build an HTML &lt;Hn> element with suitable anchor for linking from %<nop>TOC%
