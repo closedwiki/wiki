@@ -377,9 +377,12 @@ sub _requireVerification {
     $data->{LoginName} ||= $data->{WikiName};
     $data->{webName} = $web;
 
-    require TWiki::Users;
+    require TWiki::Users;   #SMELL to use its BEGIN to initialise Rand?
     $data->{VerificationCode} =
       $data->{WikiName}.'.'.int(rand(99999999));
+      
+    #SMELL: used for Register unit tests
+    $session->{DebugVerificationCode} = $data->{VerificationCode};
 
     require Data::Dumper;
 

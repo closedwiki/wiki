@@ -33,7 +33,7 @@ use Cwd;
 my $systemWeb = "TemporaryRegisterTestsSystemWeb";
 
 # Override random password generator with an impossible password
-$TWiki::Users::password = "80808080808";
+#$this->{twiki}->{DebugVerificationCode} = "80808080808";
 
 sub new {
     my $this = shift()->SUPER::new('Registration', @_);
@@ -122,7 +122,7 @@ sub registerAccount {
     my $query = new CGI(
         {
             'code' => [
-                "$this->{new_user_wikiname}.$TWiki::Users::password"
+                $this->{twiki}->{DebugVerificationCode}
                ],
             'action' => [
                 'verify'
@@ -412,7 +412,7 @@ EOF
 
 
 #Register a user, and then verify it
-#Assumes the verification code is $TWiki::Users::password
+#Assumes the verification code is $this->{twiki}->{DebugVerificationCode}
 sub registerVerifyOk {
     my $this = shift;
     $TWiki::cfg{Register}{NeedVerification}  =  1;
@@ -469,7 +469,7 @@ sub registerVerifyOk {
         $this->assert(0, "expected an oops redirect");
     };
 
-    my $code = shift || "$this->{new_user_wikiname}.$TWiki::Users::password";
+    my $code = shift || $this->{twiki}->{DebugVerificationCode};
     $query = new CGI ({
                        'code' => [
                                   $code
@@ -565,7 +565,7 @@ sub verify_registerBadVerify {
         $this->assert(0, "expected an oops redirect");
     };
 
-    my $code = "$this->{test_user_wikiname}.bad.$TWiki::Users::password";
+    my $code = "bad.$this->{twiki}->{DebugVerificationCode}";
     $query = new CGI ({
         'code' => [
             $code
@@ -599,7 +599,7 @@ sub verify_registerBadVerify {
     $this->assert_matches(qr/From: $TWiki::cfg{WebMasterName} <$TWiki::cfg{WebMasterEmail}>/,$mess);
     $this->assert_matches(qr/To: .*\b$this->{new_user_email}\b/,$mess);
     # check the verification code
-    $this->assert_matches(qr/'$this->{new_user_wikiname}\.$TWiki::Users::password'/,$mess);
+    $this->assert_matches(qr/'$this->{twiki}->{DebugVerificationCode}'/,$mess);
 }
 
 
@@ -815,7 +815,7 @@ sub verify_duplicateActivation {
 
     # For verification process everything including finish(), so don't just
     # call verifyEmails
-    my $code = shift || "$this->{new_user_wikiname}.$TWiki::Users::password";
+    my $code = shift || $this->{twiki}->{DebugVerificationCode};
     $query = CGI->new ({'code'   => [$code],
                         'action' => ['verify'],
                     });
@@ -1208,7 +1208,7 @@ sub verify_buildRegistrationEmail {
                             'name' => 'Password',
                            }
                           ],
-                'VerificationCode' => "$this->{new_user_wikiname}.$TWiki::Users::password",
+                'VerificationCode' => $this->{twiki}->{DebugVerificationCode},
                 'Name' => $this->{new_user_fullname},
                 'webName' => $this->{users_web},
                 'WikiName' => $this->{new_user_wikiname},
