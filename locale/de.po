@@ -162,7 +162,7 @@ msgstr "%1 wird noch von %2 bearbeitet."
 #.("<nop>$toWeb.<nop>$toTopic",                                             "<nop>$fromWeb.<nop>$fromTopic",                                             $date,                                             $by)
 #: lib/TWiki/Render.pm:200
 msgid "%1 moved from %2 on %3 by %4"
-msgstr "%1 wurde von %4 nach %2 am %3 verschoben"
+msgstr "%1 wurde durch %4 von %2 am %3 hierher verschoben"
 
 #: templates/messages.tmpl:22
 msgid "%1 to create another web"
