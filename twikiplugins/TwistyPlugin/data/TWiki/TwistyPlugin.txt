@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="BaseUserMapping_333" date="1195487956" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1195487956" format="1.1" version="1.2"}%
 ---+!! <nop>%TOPIC%
 
 *A "twisty" is an interface toggle control to show and hide content.*
