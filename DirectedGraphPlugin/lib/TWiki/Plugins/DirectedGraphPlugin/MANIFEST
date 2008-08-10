@@ -1,5 +1,4 @@
-DirectedGraphPlugin_installer 0644
-DirectedGraphPlugin_installer.pl 0644
+data/TWiki/DirectedGraphPlugin.txt 0644
 data/TWiki/HowtoDirectedGraphs.txt 0644
 lib/TWiki/Plugins/DirectedGraphPlugin.pm 0644
 lib/TWiki/Plugins/DirectedGraphPlugin/Config.spec 0644
