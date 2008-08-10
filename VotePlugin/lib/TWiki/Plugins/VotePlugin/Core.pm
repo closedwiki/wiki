@@ -56,7 +56,7 @@ sub handleVote {
     my @prompts = ();
 
     my $defaultStarsFormat =
-      '| $key$reset | $small<small>Score: $score, My vote: $mylast, Total votes: $sum</small> |';
+      '| $key$reset | $small<div class="star-info">Score: $score, My vote: $mylast, Total votes: $sum</div> |';
     my $defaultSelectFormat =  '| $key$reset | $prompt | $bars |';
     my $defaultChartFormat = '<div>$bar(300) $option $perc% ($score)</div>';
 
