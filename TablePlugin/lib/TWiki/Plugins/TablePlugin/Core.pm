@@ -1698,9 +1698,9 @@ sub handler {
         $url .= $queryString . ';' if $queryString;
 
         # Restore parameters, so we don't interfere on the remaining execution
-        $cgi->param( -name => 'sortcol', -value => \@origSort );
-        $cgi->param( -name => 'table',   -value => \@origTable );
-        $cgi->param( -name => 'up',      -value => \@origUp );
+        $cgi->param( -name => 'sortcol', -value => \@origSort )  if @origSort;
+        $cgi->param( -name => 'table',   -value => \@origTable ) if @origTable;
+        $cgi->param( -name => 'up',      -value => \@origUp )    if @origUp;
 
         $sortColFromUrl =
           $cgi->param('sortcol');    # zero based: 0 is first column
