@@ -36,7 +36,7 @@ HEAD
         $hidden = CGI::input($input_attrs);
     }
 
-    my $lis = CGI::li(
+    my $result = CGI::div(
         {
             class=>'current-rating',
             id => 'rate_display_'.$name,
@@ -50,16 +50,15 @@ HEAD
                   'px;z-index:'.($size - $i + 2) };
             $attrs->{href} = "javascript:RatingClicked('rate_value_$name',".
               "'rate_display_$name', $i, $blockWidth)";
-            $lis .= CGI::li(
-                CGI::a($attrs, $i));
+            $result .= CGI::a($attrs, $i);
         }
     }
 
-    return CGI::ul(
+    return CGI::div(
         {
             class=>'star-rating'.$style,
             style=>'width:'.($size * $blockWidth).'px',
-        }, $lis);
+        }, $result);
 }
 
 1;
