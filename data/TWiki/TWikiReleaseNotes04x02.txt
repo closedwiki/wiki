@@ -760,6 +760,7 @@ The 4.2.2 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 <noautolink>
 | [[%BUGS%/Item5892][Item5892]] | Registration with verification fails in 4.2.1 |
 | [[%BUGS%/Item5884][Item5884]] | REVINFO{"$rev" topic="Bugs.ReleaseNotesTml"}  seems to be returning '0' |
+| [[%BUGS%/Item5880][Item5880]] | !TablePlugin may delete query parameters after reordering some table |
 | [[%BUGS%/Item5898][Item5898]] | prevent the browser from saving passwords in template login |
 | [[%BUGS%/Item5888][Item5888]] | simple refactoring to expand the possibility of more advanced SEARCH implementations. |
 | [[%BUGS%/Item5887][Item5887]] | TWiki Compatibility has an undefined variariable error |
