@@ -209,7 +209,7 @@ In Func getOopsUrl and permissionsSet have been declared deprecated. There is no
 
 ---++  TWiki 4.2.0 Minor Release - Details
 
-The 4.2.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x02 revision %$VERSION%. 
+The 4.2.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x02 revision 16277 (22 Jan 2008)
 
 ---++ Fixes
 
@@ -582,7 +582,7 @@ The 4.2.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 
 ---++  TWiki 4.2.1 Patch Release - Details
 
-The 4.2.1 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x02 revision %$VERSION%. 
+The 4.2.1 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x02 revision 17311 (03 Aug 2008)
 
 ---++ Fixes
 
@@ -766,6 +766,7 @@ The 4.2.2 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 | [[%BUGS%/Item5904][Item5904]] | Translation bug in the german translation in TWiki 4.2.1 |
 | [[%BUGS%/Item5907][Item5907]] | fix author for topics in release |
 | [[%BUGS%/Item5906][Item5906]] | VarEDITACTION topic was missing from MANIFEST |
+| [[%BUGS%/Item4683][Item4683]] | that putting the word CGI into ==='s makes it dissapear. |
 </noautolink>
 
 ---++ Enhancements
