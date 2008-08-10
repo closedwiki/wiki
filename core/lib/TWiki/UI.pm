@@ -154,7 +154,7 @@ sub execute {
                 close(F);
                 open( F, '<' . $passthruFilename );
             }
-            $req = new TWiki::Request( \*F, $req );
+            $req->load(\*F);
             close(F);
             unlink($passthruFilename);
             print STDERR "Passthru: Loaded and unlinked $passthruFilename\n"

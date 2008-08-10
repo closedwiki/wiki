@@ -115,24 +115,7 @@ sub new {
         }
     }
     elsif ( ref($initializer) && UNIVERSAL::isa($initializer, 'GLOB') ) {
-        my %param = ();
-        my @plist = ();
-        local $/ = "\n";
-        while (<$initializer>) {
-            chomp;
-            last if /^=/;
-            my ( $key, $value ) = map { TWiki::urlDecode($_) } split /=/;
-            if ( exists $param{$key} ) {
-                push @{ $param{$key} }, $value;
-            }
-            else {
-                push @plist, $key;
-                $param{$key} = [$value];
-            }
-        }
-        foreach my $key (@plist) {
-            $this->param( -name => $key, -value => $param{$key} );
-        }
+        $this->load($initializer);
     }
     return $this;
 }
@@ -562,7 +545,7 @@ sub header {
 ---++ ObjectMethod save( $fh )
 
 Saves object state to filehandle. Object may be loaded latter
-passing $fh to new constructor.
+passing $fh to new constructor or by calling load().
 
 =cut
 
@@ -575,6 +558,37 @@ sub save {
           foreach $this->param($name);
     }
     print $fh "=\n";
+}
+
+=begin twiki
+
+---++ ObjectMethod load( $fh )
+
+Loads object state from filehandle, probably created with
+a previous save().
+
+=cut
+
+sub load {
+    my ($this, $file) = @_;
+    my %param = ();
+    my @plist = ();
+    local $/ = "\n";
+    while (<$file>) {
+        chomp;
+        last if /^=/;
+        my ( $key, $value ) = map { TWiki::urlDecode($_) } split /=/;
+        if ( exists $param{$key} ) {
+            push @{ $param{$key} }, $value;
+        }
+        else {
+            push @plist, $key;
+            $param{$key} = [$value];
+        }
+    }
+    foreach my $key (@plist) {
+        $this->param( -name => $key, -value => $param{$key} );
+    }
 }
 
 =begin twiki
