@@ -40,6 +40,7 @@ use base 'TWiki::Engine';
 use TWiki::Request;
 use TWiki::Request::Upload;
 use TWiki::Response;
+use Assert;
 
 sub run { 
     my $this = shift;
@@ -111,9 +112,26 @@ sub preparePath {
     }
     my $cgiScriptName = $ENV{SCRIPT_NAME};
     $pathInfo =~ s{$cgiScriptName/}{/}i;
-    $req->pathInfo( $pathInfo );
-    my $action = (split m!/!, ($ENV{SCRIPT_NAME} || ''))[-1];
+    
+    my $action;
+    if ( exists $ENV{TWIKI_ACTION} ) {
+        $action = $ENV{TWIKI_ACTION};
+    }
+    elsif ( length $pathInfo > 0 ) {
+        $pathInfo =~ m{^/([^/]+)(.*)};
+        my $first = $1 || '';
+        if ( exists $TWiki::cfg{SwitchBoard}{$first} ) {
+            $action   = $first;
+            $pathInfo = $2 || '';
+        }
+        else {
+            $action = 'view';
+        }
+    }
+    ASSERT( defined $action && length $action > 0 ) if DEBUG;
+    ASSERT( defined $pathInfo ) if DEBUG;
     $req->action($action);
+    $req->pathInfo( $pathInfo );
     $req->uri( $ENV{REQUEST_URI} );
 }
 

@@ -37,34 +37,55 @@ Refer to TWiki::Engine documentation for explanation about methos below.
 package TWiki::Engine::CLI;
 
 use strict;
-use base 'TWiki::Engine::CGI';
+use base 'TWiki::Engine';
 use TWiki::Request;
 use TWiki::Request::Upload;
 use TWiki::Response;
 
-sub prepare {
+sub run {
     my $this = shift;
-    $this->{argv} = [ @ARGV ]; # Copy, so original @ARGV doesn't get modified
-    while( scalar( @{ $this->{argv} } ) ) {
-        my $arg = shift( @{ $this->{argv} } );
+    my @args = @ARGV;  # Copy, so original @ARGV doesn't get modified
+    while ( scalar @args ) {
+        my $arg = shift @args;
         if ( $arg =~ /^-?([A-Za-z0-9_]+)(?:=(.*))?$/o ) {
             my $name = $1;
-            my $arg = TWiki::Sandbox::untaintUnchecked(
-                defined $2 ? $2 : shift( @{ $this->{argv} } ));
-            if( $name eq 'user' ) {
+            my $arg  = TWiki::Sandbox::untaintUnchecked(
+                defined $2 ? $2 : (shift @args) );
+            if ( $name eq 'user' ) {
                 $this->{user} = $arg;
-            } else {
-                push @{$this->{params}->{$name}}, $arg;
             }
-        } else {
-            $this->{path_info} = TWiki::Sandbox::untaintUnchecked( $arg );
+            else {
+                push @{ $this->{plist} }, $name
+                  unless exists $this->{params}->{$name};
+                push @{ $this->{params}->{$name} }, $arg;
+            }
+        }
+        else {
+            $this->{path_info} = TWiki::Sandbox::untaintUnchecked($arg);
         }
     }
-    delete $this->{argv};
-    $this->SUPER::prepare(@_);
+    my $req = $this->prepare;
+    if ( UNIVERSAL::isa($req, 'TWiki::Request') ) {
+        my $res = TWiki::UI::handleRequest($req);
+        $this->finalize( $res, $req );
+    }
 }
 
 sub prepareConnection {
+    my ( $this, $req ) = @_;
+    $req->remoteAddress('127.0.0.1');
+}
+
+sub prepareQueryParameters {
+    my ( $this, $req ) = @_;
+    foreach my $name ( @{ $this->{plist} } ) {
+        $req->param( -name => $name, -value => $this->{params}->{$name} );
+    }
+    delete $this->{plist};
+    delete $this->{params};
+}
+
+sub prepareHeaders { 
     my ( $this, $req ) = @_;
     if ( defined $this->{user} ) {
         $req->remoteUser( $this->{user} );
@@ -73,25 +94,25 @@ sub prepareConnection {
     else {
         $req->remoteUser( $TWiki::cfg{SuperAdminGroup} );
     }
-    $req->remoteAddress('127.0.0.1');
 }
 
 sub preparePath {
     my ( $this, $req ) = @_;
-    my ( $script ) = $0 =~ m{([^/\\:]+)$};
-    my $action = (split( '/', $script))[-1];
-    $req->action($action);
-}
-
-sub prepareQueryParameters {
-    my ( $this, $req ) = @_;
-    while( my( $name, $values ) = each %{ $this->{params} } ) {
-        $req->param( -name => $name, -value =>  $values );
+    $req->action( $ENV{TWIKI_ACTION} );
+    delete $ENV{TWIKI_ACTION};
+    if ( exists $this->{path_info} ) {
+        $req->pathInfo( $this->{path_info} );
+        delete $this->{path_info};
     }
-    delete $this->{params};
 }
 
-# No headers when running from command line
+sub prepareCookies { }
+
 sub finalizeHeaders { }
+
+sub write {
+    my ( $this, $buffer ) = @_;
+    print $buffer;
+}
 
 1;

@@ -28,10 +28,10 @@ BEGIN {
         $SIG{__DIE__} = \&CGI::Carp::confess;
     }
     else {
-        $TWiki::cfg{Engine} = 'TWiki::Engine::CLI';
-        require Carp;
-        $SIG{__DIE__} = \&Carp::confess;
+        print STDERR "This script should not be called from command line.\n";
+        exit(1);
     }
+    delete $ENV{TWIKI_ACTION} if exists $ENV{TWIKI_ACTION};
     @INC = ('.', grep { $_ ne '.' } @INC);
     require 'setlib.cfg';
 }
