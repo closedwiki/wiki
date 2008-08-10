@@ -1,4 +1,5 @@
-data/TWiki/DirectedGraphPlugin.txt 0644
+DirectedGraphPlugin_installer 0644
+DirectedGraphPlugin_installer.pl 0644
 data/TWiki/HowtoDirectedGraphs.txt 0644
 lib/TWiki/Plugins/DirectedGraphPlugin.pm 0644
 lib/TWiki/Plugins/DirectedGraphPlugin/Config.spec 0644
@@ -25,6 +26,8 @@ pub/TWiki/HowtoDirectedGraphs/arrow_normal.png 0644
 pub/TWiki/HowtoDirectedGraphs/arrow_odot.png 0644
 pub/TWiki/HowtoDirectedGraphs/example1.png 0644
 pub/TWiki/HowtoDirectedGraphs/grouping_nodes.png 0644
+pub/TWiki/HowtoDirectedGraphs/ladder_diagram.cmapx 0644
+pub/TWiki/HowtoDirectedGraphs/ladder_diagram.png 0644
 pub/TWiki/HowtoDirectedGraphs/shape_Mcircle.png 0644
 pub/TWiki/HowtoDirectedGraphs/shape_Mdiamond.png 0644
 pub/TWiki/HowtoDirectedGraphs/shape_Msquare.png 0644
@@ -51,4 +54,3 @@ pub/TWiki/HowtoDirectedGraphs/shape_tripleoctagon.png 0644
 pub/TWiki/HowtoDirectedGraphs/simple_two_nodes.png 0644
 pub/TWiki/HowtoDirectedGraphs/with_labels.png 0644
 tools/DirectedGraphPlugin.pl 0644
-
