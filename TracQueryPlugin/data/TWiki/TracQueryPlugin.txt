@@ -58,6 +58,21 @@ Examples:
 	* =%<nop>TRACSUM{ "totalhours" milestone="Goal One" }%=
 </blockquote>
 
+---+++ Nested Queries
+
+Queries can be nested. For example, retrieve some rows and compute the sum of a field in a related table. The idea is to build the nested search string using a formatted search in the first search. Note that quotes must be escaped by preceding them with slash, the nested query must be protected from execution by using =$percnt= in the tag, and format fields can be prevented from early evaluation by substituting =$dollar= when needed.
+
+<blockquote style="background-color:#f5f5f5">
+Examples:
+<pre>
+%<nop>TRAC{ "milestone" format = "| $name | $percntTRACSUM{ \"totalhours\" milestone=\"$name\" }$percnt | $percntTRACSUM{ \"estimatedhours\" milestone=\"$name\" }$percnt | $due |" }%
+</pre>
+</blockquote>
+
+Retrieves the milestone table, and for each milestone, finds the sum of the totalhours and estimatedhours attribute, respectively (this custom field is applied by the trac estimation plugin).
+
+
+
 ---+++ <nop>%TOPIC% Settings
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>TRACQUERYPLUGIN_&lt;setting&gt;%==, e.g., ==%<nop>TRACQUERYPLUGIN_SHORTDESCRIPTION%==
 
