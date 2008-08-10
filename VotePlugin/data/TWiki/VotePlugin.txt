@@ -121,6 +121,7 @@ The =format= parameter is a string that can include the following formatting tok
 | =$mylast= | Expands to my last rating (for =stars= items only) |
 | =$small= | Expands to the star rating bar, using small stars (mutually exclusive with =$large=) |
 | =$large= | Expands to the star rating bar, using large stars (mutually exclusive with =$small=) |
+| =$reset= | Expands to a reset button, if the viewer has reset rights (see [[#Reset][Resetting a Poll]], below). Without reset rights, expands to nothing. |
 
 The =chart= parameter defines the format of each bar in the bar chart that is generated for each option in the corresponding =select=.
 | =$bar(<i>N</i>)= | Expands to the coloured bar used to show the popularity of this option. <i>N</i> is the required total width of the bar in pixels. |
@@ -158,6 +159,7 @@ The numbers are percentages. A user who isn't otherwise weighted has a weighting
    * !NiccoloMachiavelli has ten times as much influence as !AlbertCamus and !AdamSmith, and twenty times as much as !SunTszu.
 The weighting topic applies to all votes in the scope of the =%<nop>VOTEPLUGIN_WEIGHTINGS%= setting.
 
+#Reset
 ---+++ Resetting a Poll
 Sometimes you want to be able to clear the results of a poll. Access to this feature is controlled using the =VOTEPLUGIN_RESETTERS= TWiki variable. This variable defines a (semicolon-separated) list of wiki names and a (comma-separated) list of the IDs of votes they are allowed to reset. You can use =*= as a wildcard in the vote IDs. For example, in a =Web<nop>Preferences= topic you can write
 <verbatim>
@@ -168,7 +170,7 @@ to allow
    * !GeorgeWBush to reset any vote he likes,
    * !RobertMugabe to reset the results of any vote with the id =zimbabwe=,
    * !SimonCowell to reset the results of all votes with an ID ending in =Idol= and any vote with the ID =XFactor=.
-If a user has sufficient rights to reset a vote, then a button will be generated next to the vote prompt which, when clicked, will reset the results for that vote to initial conditions.
+If a user has sufficient rights to reset a vote, then a button will be generated in the vote prompt which, when clicked, will reset the results for that vote to initial conditions. If you have used a =format= parameters for the vote, then =$reset= will expand to the reset button.
 
 Note that it is important to finalise the setting, otherwise it can be overridden in individual topics by anyone with =CHANGE= access. If you don't define =VOTEPLUGIN_RESETTERS= no-one can reset _any_ votes.
 
@@ -191,7 +193,7 @@ in Main.<nop>TWikiPreferences, and add =VOTEPLUGIN_RESETTERS= to =FINALPREFERENC
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | &nbsp; | 
-|  8 Aug 2008 | TWikibug:Item5768 suppress submission of individual ratings in a multi-row vote TWikibug:Item5769 correct default handling of transcluded rates TWikibug:Item5766 $large is once again large TWikibug:Item5771 support for resetting votes. |
+|  10 Aug 2008 | TWikibug:Item5768 suppress submission of individual ratings in a multi-row vote TWikibug:Item5769 correct default handling of transcluded rates TWikibug:Item5766 $large is once again large TWikibug:Item5771 support for resetting votes. |
 |  1 Jul 2007: | TWikibug:Item4310 : abstracted out TWiki:Plugins.RatingContrib, and modified the code to be tolerant of forms within forms - TWiki:Main/CrawfordCurrie |
 |  24 Jun 2007: | TWikibug:ItemItem4298: fixed secret switch. Item4200: added VarVOTE. - TWiki:Main/CrawfordCurrie |
 |  11 Jun 2007: | TWikibug:Item4235 - removed excess newlines, fixed separator - TWiki:Main/CrawfordCurrie |

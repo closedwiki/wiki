@@ -56,8 +56,8 @@ sub handleVote {
     my @prompts = ();
 
     my $defaultStarsFormat =
-      '| $key | $small<small>Score: $score, My vote: $mylast, Total votes: $sum</small> |';
-    my $defaultSelectFormat =  '| $key | $prompt | $bars |';
+      '| $key$reset | $small<small>Score: $score, My vote: $mylast, Total votes: $sum</small> |';
+    my $defaultSelectFormat =  '| $key$reset | $prompt | $bars |';
     my $defaultChartFormat = '<div>$bar(300) $option $perc% ($score)</div>';
 
     if (defined($params->{style})) {
@@ -267,6 +267,7 @@ sub handleVote {
                 $totalVotes{$id}{$key}, $params));
         }
     }
+
     my $result = join($separator, @rows);
     if ($submit) {
         my $hiddens = '';
@@ -275,25 +276,33 @@ sub handleVote {
                 { type => 'hidden', name => $k, value => $v });
         }
         # Don't use CGI::form because it generates TML-busting newlines
-        $result = "<form id='$id' action='$act' method='post'>$hiddens$separator$result";
+        my $form = CGI::start_form(-id => $id, -action => $act,
+                                  -method => 'post');
+        $form =~ s/\r?\n//g; # CGI::start_form adds unwanted \n's
+        $result = $form.$hiddens.$separator.$result;
         if ($needSubmit) {
             $result .= $separator.CGI::submit(
                 { name=> 'OK', value=>'OK',
                   style=>'color:green'});
         }
-        $result = "$result$separator</form>";
+        $result .= $separator.CGI::end_form();
     }
+
     if ($canReset) {
         if ($mess) {
-            $result .= CGI::span({class => 'twikiAlert'}, $mess);
+            $mess = CGI::span({class => 'twikiAlert'}, $mess);
         } else {
-            $result .= ' '
-              . CGI::start_form(-name => 'resetForm',
-                                -action => '')
-                . CGI::submit({ name => 'Reset'.$id, value=>'Reset '.$id })
-                  . CGI::end_form();
+            $mess = CGI::start_form(-name => 'resetForm',
+                                    -action => '');
+            $mess =~ s/\r?\n//g; # CGI::start_form adds unwanted \n's
+            $mess .= CGI::submit({ name => 'Reset'.$id, value=>'Reset'})
+              . CGI::end_form();
         }
+        $result =~ s/\$reset/ $mess /g;
+    } else {
+        $result =~ s/\$reset//g;
     }
+
     # Render tables and remove newlines
     # so we can embed votes in TWiki tables
     $result = TWiki::Func::renderText($result);
@@ -419,7 +428,7 @@ sub clearVotesData {
         if (TWiki::Func::topicExists($vw, $vt)) {
             $text = TWiki::Func::readTopicText( $vw, $vt );
         }
-        $text =~ s/(^|\r?\n)(\|[^\r\n]*\|\r?\n)*$/$1/s;
+        $text =~ s/(^|\n)((\|.*\||\s+)\n+)*$/$1/s;
         TWiki::Func::saveTopicText($vw, $vt, $text, 1, 1);
     } else {
         my $votesFile = getVotesFile($web, $topic, $id, $isGlobal);
