@@ -25,7 +25,7 @@ use strict;
 
 # =========================
 use vars qw( $web $topic $user $installWeb $VERSION $debug $RELEASE $pluginName
-  %db $url $dbHost $dbName $dbUser $dbPasswd $dbPort $dbType );
+  %db $url $dbHost $dbName $dbUser $dbPasswd $dbPort $dbType %schema );
 
 $VERSION = '$Rev: 17316 (03 Aug 2008) $';
 $RELEASE = 'TWiki 4.2';
@@ -60,6 +60,23 @@ sub initPlugin
 
   TWiki::Func::registerTagHandler( 'TRAC', \&handleQuery,
                                      'context-free' );
+  TWiki::Func::registerTagHandler( 'TRACSUM', \&handleSumQuery,
+                                     'context-free' );
+  TWiki::Func::registerTagHandler( 'TRACMIN', \&handleMinQuery,
+                                     'context-free' );
+  TWiki::Func::registerTagHandler( 'TRACMAX', \&handleMaxQuery,
+                                     'context-free' );
+  TWiki::Func::registerTagHandler( 'TRACCOUNT', \&handleCountQuery,
+                                     'context-free' );
+  TWiki::Func::registerTagHandler( 'TRACAVG', \&handleAvgQuery,
+                                     'context-free' );
+
+  
+  %schema = ( # All have 'name' as key field, omitted
+	     version => ['time', 'description'],
+	     milestone => ['due', 'completed', 'description'],
+	     component => ['owner', 'description']
+	    );
 
   # Plugin correctly initialized
   TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
@@ -68,6 +85,15 @@ sub initPlugin
 
 # =========================
 
+# In a more generic application, it might be better to change the
+# query syntax to something like { ... search='     '... }
+# where the text in the search attribute gives the query to be performed.
+# e.g. for the examples in the docu
+# search=""
+# search="status='new|assigned'"
+# search="owner='%WIKINAME%'"
+# and use operators as in DBCacheContrib or QuerySearch
+
 sub handleQuery
 {
   my ($session, $attributes, $topic, $web) = @_;
@@ -75,12 +101,25 @@ sub handleQuery
   my $webName = $session->{webName};
   my $topicName = $session->{topicName};
 
-  my $format = $attributes->{format} || TWiki::Func::getPreferencesValue( "\U$pluginName\E_FORMAT" ) || "| \$id | \$severity | \$priority | \$status | \$reporter | \$component | \$description |";
-  
-  my $table = $attributes->{"_DEFAULT"} || 'ticket';
-  my $separator = $attributes->{separator};
-  my $newline = $attributes->{newline} || "\n";
-  my $limit = $attributes->{limit} || 0;
+  my $format = $attributes->remove('format') || TWiki::Func::getPreferencesValue( "\U$pluginName\E_FORMAT" ) || "| \$id | \$severity | \$priority | \$status | \$reporter | \$component | \$description |";
+  my $separator = $attributes->remove('separator');
+  my $newline = $attributes->remove('newline');
+
+  my $res = performQuery($attributes);
+  my $text = formatResult( $res, $format, $separator, $newline );
+  return CGI::span({class=>'twikiAlert'},'Query returned no results')
+    unless $text;
+  return $text;
+
+}
+
+sub performQuery {
+
+  my ($attributes) = @_;
+
+  my @tables = split(/\s*,\s*/, $attributes->remove("_DEFAULT") || 'ticket');
+  my $table = shift @tables;
+  my $limit = $attributes->remove('limit') || 0;
   my $custom = '';
   my @cfields = ();
 
@@ -90,10 +129,8 @@ sub handleQuery
   }
 
   $attributes->remove($TWiki::Attrs::RAWKEY);
-  $attributes->remove($TWiki::Attrs::DEFAULTKEY);
-  $attributes->remove('format');
 
-  my $sqldb = openDB(%db);
+  my $sqldb = openDB(\%db);
   return unless $sqldb;
 
   my $statement = "SELECT *";
@@ -103,6 +140,13 @@ sub handleQuery
     foreach ( @cfields ) {
       $statement .= ", c$cnt.value AS $_";
       $cnt++;
+    }
+  }
+  if ( @tables ) {
+    foreach my $tbl ( @tables ) {
+      foreach ( @{$schema{$tbl}} ) {
+	$statement .= ", $tbl.$_ AS ${tbl}_$_";
+      }
     }
   }
   $statement .= " FROM $table";
@@ -115,6 +159,12 @@ sub handleQuery
       $cnt++;
     }
   }
+  if ( @tables ) {
+    # make a join for each additional table to be merged
+    foreach my $tbl ( @tables ) {
+      $statement .= " LEFT OUTER JOIN $tbl ON ($table.$tbl = $tbl.name)";
+    }
+  }
   my @keys = keys %{$attributes};
   $statement .= " WHERE " unless ( $attributes->isEmpty );
   my $i = 0;
@@ -125,8 +175,10 @@ sub handleQuery
     foreach my $tvalue ( @tmp ) {
       #EXCEPTIONS
       # Here we would insert special code to look up in another table
-      #        ( $tvalue, $key ) = getField( "name", "component", "description", $tvalue, "component" ) if ( $key eq "component" );
-      #/EXCEPTIONS
+      #        ( $tvalue, $key ) = getFieldFromDB( "name", "component", "description", $tvalue, "component" ) if ( $key eq "component" );
+      #EXCEPTIONS
+      # Should there be special handling for keywords (e.g., recognize full
+      # keywords only from a list of keywords?
       if ( $key eq "summary" ) {
 	$statement .= "$table.$key GLOB '*$tvalue*' ";
       } elsif ( $key eq "description" ) {
@@ -144,42 +196,148 @@ sub handleQuery
     $statement .= "AND " if ( ( $i >= 0 ) && ( $i < $#keys ) );
     $i++;
   }
-  &TWiki::Func::writeDebug( "ST = $statement" ) if $debug;
+  &TWiki::Func::writeDebug( "statement = $statement" ) if $debug;
   my $tmp = $sqldb->prepare($statement);
   return unless $tmp;
   $tmp->execute();
+  my @res = ();
+  while (my $r = $tmp->fetchrow_hashref ) {
+    push @res, $r;
+  }
+  $tmp->finish;
+  return \@res;
 
-  my $result = '';
-  while ( my $r = $tmp->fetchrow_hashref ) {
-    my $row = $format;
-    foreach my $field ( keys( %{$r} ) ) {
-      my $value = $$r{$field};
-      $value ||= '';
-      # Here we would insert special code to look up in another table
-      #	      ( $value, $field ) = getField( "description", "component", "name", $$row{$field}, "component" ) if ( $field eq "component" );
-      $value = TWiki::Time::formatTime( $value ) if ( $field eq 'time' || $field eq 'changetime' || $field eq 'due' || $field eq 'completed' ) && $value;
-      $value =~ s/\r?\n/%BR%/gos;
+}
 
-      $row =~ s/\$$field/$value/g;
-    }
-    $result .= "$row\n";
+sub formatResult {
+
+  my ( $res, $format, $theSeparator, $newLine ) = @_;
+
+  my $mixedAlpha = $TWiki::regex{mixedAlpha};
+  my $numeric = $TWiki::regex{numeric};
+  if( $theSeparator ) {
+    $theSeparator =~ s/\$n\(\)/\n/gos;  # expand "$n()" to new line
+    $theSeparator =~ s/\$n([^$mixedAlpha]|$)/\n$1/gos;
+  }
+  if( $newLine ) {
+    $newLine =~ s/\$n\(\)/\n/gos;  # expand "$n()" to new line
+    $newLine =~ s/\$n([^$mixedAlpha]|$)/\n$1/gos;
+  } else {
+    $newLine = '%BR%';
   }
 
-  $sqldb->disconnect;
+  my $result = '';
+  foreach my $r ( @{$res} ) {
+    my $row = $format;
+
+    $row =~ s/\$milestonetotalhours/getCustomFieldSum('totalhours','milestone',getField($r,'name'))/geo;
+    $row =~ s/\$milestoneestimatedhours/getCustomFieldSum('estimatedhours','milestone',getField($r,'name'))/geo;
+
+    $row = TWiki::expandStandardEscapes( $row );
+
+    $row =~ s/\$([$mixedAlpha]+)\.([$mixedAlpha]+)\(\s*([^\)]*)\s*\)/breakName(getField($r,$1,$2), $3)/geo;
+    $row =~ s/\$([$mixedAlpha]+)\.([$mixedAlpha]+)/getField($r,$1,$2)/geo;
+    $row =~ s/\$([$mixedAlpha]+)\(\s*([^\)]*)\s*\)/breakName(getField($r,$1), $2)/geo;
+    $row =~ s/\$([$mixedAlpha]+)/getField($r,$1)/geo;
+
+    $row =~ s/\r?\n/$newLine/gos;
+    if( $theSeparator ) {
+      $row .= $theSeparator;
+    } else {
+      $row =~ s/([^\n])$/$1\n/os;    # add new line at end if needed
+    }
+    $row = TWiki::expandStandardEscapes( $row );
+
+    $result .= $row;
+  }
+
   return $result;
 
 }
 
-sub getField
+sub breakName {
+  my ( $text, $args ) = @_;
+  $text = TWiki::Render::breakName($text, $args) if $args;
+  return $text;
+}
+
+sub getField {
+  my ( $row, $fld, $fld2 ) = @_;
+  my $field = $fld2 || $fld;
+  $fld = "${fld}_$fld2" if $fld2;
+  my $value = $$row{$fld};
+  $value ||= '';
+  $value = TWiki::Time::formatTime( $value ) if ( $field eq 'time' || $field eq 'changetime' || $field eq 'due' || $field eq 'completed' ) && $value;
+
+  return $value;
+}
+
+sub getCustomFieldAggregate
 {
-  my ( $what, $table, $field, $value, $key ) = @_;
-  my $sqldb = openDB(%db);
-  my $statement = "SELECT $what FROM $table WHERE $field = '$value'";
-	my $tmp = $sqldb->prepare( $statement );
+  my ( $func, $field, $key, $value ) = @_;
+  my $sqldb = openDB(\%db);
+  my $statement = "SELECT $func(c1.value) FROM ticket LEFT OUTER JOIN ticket_custom c1 ON (ticket.id = c1.ticket AND c1.name = '$field') WHERE $key='$value'";
+  my $tmp = $sqldb->prepare( $statement );
   $tmp->execute();
   my @row = $tmp->fetchrow_array();
   $tmp->finish;
-  $sqldb->disconnect();
+  return $row[0] || '';
+}
+
+sub handleSumQuery
+{
+  shift @_;
+  return handleAggregateQuery('SUM', @_);
+}
+
+sub handleMaxQuery
+{
+  shift @_;
+  return handleAggregateQuery('MAX', @_);
+}
+
+sub handleMinQuery
+{
+  shift @_;
+  return handleAggregateQuery('MIN', @_);
+}
+
+sub handleCountQuery
+{
+  shift @_;
+  return handleAggregateQuery('COUNT', @_);
+}
+
+sub handleAvgQuery
+{
+  shift @_;
+  return handleAggregateQuery('AVG', @_);
+}
+
+sub handleAggregateQuery
+{
+  my ($func, $attributes, $topic, $web) = @_;
+
+  $attributes->remove($TWiki::Attrs::RAWKEY);
+  my $what = $attributes->remove("_DEFAULT") || return '';
+  my $key = (keys(%$attributes))[0] || return '';
+  my $value = $attributes->{$key} || return '';
+
+  my $result = getCustomFieldAggregate( $func, $what, $key, $value );
+
+  return $result;
+
+}
+
+sub getFieldFromDB
+{
+  my ( $what, $table, $field, $value, $key ) = @_;
+  my $sqldb = openDB(\%db);
+  my $statement = "SELECT $what FROM $table WHERE $field = '$value'";
+  my $tmp = $sqldb->prepare( $statement );
+  $tmp->execute();
+  my @row = $tmp->fetchrow_array();
+  $tmp->finish;
   return ( $row[0], $key );
 }
 
@@ -209,5 +367,17 @@ sub makeArray
   $str =~ s/\s//g;
   return split( /,/, $str );
 }
+
+sub completePageHandler {
+  #my($html, $httpHeaders) = @_;
+  # modify $_[0] or $_[1] if you must change the HTML or headers
+
+  # Close the data base
+  $db{DB}->disconnect if defined($db{DB});
+  $db{DB} = undef;
+
+}
+
+
 
 1;
