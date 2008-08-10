@@ -57,7 +57,9 @@ TWiki 4.2.2 is shipped with
 This is a fast trip bug fix for issues found during upgrades from 4.2.0 to 4.2.1.
 ---+++ Highlights of bug fixes since 4.2.1
 
-__TODO__
+   * Registration with verification fails in 4.2.1
+   * =REVINFO= with web specified in topic param renders as though topic does not exist.
+   * TWiki::Compatibility has undefined variable error
 
 See the full list of bug fixes at the bottom of this topic.
 
@@ -751,7 +753,7 @@ None!
 
 ---++  TWiki 4.2.2 Patch Release - Details
 
-The 4.2.2 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x02 revision TODO (10 Aug 2008). 
+The 4.2.2 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x02 revision 17389 (10 Aug 2008). 
 
 ---++ Fixes
 
