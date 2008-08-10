@@ -25,7 +25,7 @@ use strict;
 
 # =========================
 use vars qw( $web $topic $user $installWeb $VERSION $debug $RELEASE $pluginName
-  %db $url $showBugScript $bugListScript $dbHost $dbName $dbUser $dbPasswd $dbPort $dbType );
+  %db $url $dbHost $dbName $dbUser $dbPasswd $dbPort $dbType );
 
 $VERSION = '$Rev: 17316 (03 Aug 2008) $';
 $RELEASE = 'TWiki 4.2';
@@ -47,7 +47,7 @@ sub initPlugin
 
   # Get plugin debug flag
   $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
-  $url = TWiki::Func::getPreferencesValue( "\U$pluginName\E_URL" );
+  $url = TWiki::Func::getPreferencesValue( "\U$pluginName\E_URL" ) || '';
   if ( $url =~ /\/$/ ) { $url =~ s/(.*?)\/$/$1/; }
   
   $dbType = $TWiki::cfg{Plugins}{TracQueryPlugin}{TRAC_DB} || 'SQLite';   # Trac data base (either SQLite or MySQL)
@@ -94,6 +94,8 @@ sub handleQuery
   $attributes->remove('format');
 
   my $sqldb = openDB(%db);
+  return unless $sqldb;
+
   my $statement = "SELECT *";
   if ( @cfields ) {
     # make a renaming for every custom field
@@ -124,7 +126,7 @@ sub handleQuery
       #EXCEPTIONS
       # Here we would insert special code to look up in another table
       #        ( $tvalue, $key ) = getField( "name", "component", "description", $tvalue, "component" ) if ( $key eq "component" );
-      #EXCEPTIONS
+      #/EXCEPTIONS
       if ( $key eq "summary" ) {
 	$statement .= "$table.$key GLOB '*$tvalue*' ";
       } elsif ( $key eq "description" ) {
@@ -144,6 +146,7 @@ sub handleQuery
   }
   &TWiki::Func::writeDebug( "ST = $statement" ) if $debug;
   my $tmp = $sqldb->prepare($statement);
+  return unless $tmp;
   $tmp->execute();
 
   my $result = '';
