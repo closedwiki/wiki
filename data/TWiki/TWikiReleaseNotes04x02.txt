@@ -753,7 +753,7 @@ None!
 
 ---++  TWiki 4.2.2 Patch Release - Details
 
-The 4.2.2 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x02 revision 17394 (10 Aug 2008). 
+The 4.2.2 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x02 revision 17396 (10 Aug 2008). 
 
 ---++ Fixes
 
