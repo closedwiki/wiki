@@ -230,33 +230,43 @@ neither -absolute nor -rewrite.
 =cut
 
 sub url {
-    my ($this, @p) = @_;
+    my ( $this, @p ) = @_;
 
-    my ( $relative, $full, $base, $path_info, $query ) = rearrange(
+    my ( $relative, $absolute, $full, $base, $path_info, $query ) = rearrange(
         [
-            qw(RELATIVE FULL BASE), [qw(PATH PATH_INFO)],
+            qw(RELATIVE ABSOLUTE FULL BASE), [qw(PATH PATH_INFO)],
             [qw(QUERY_STRING QUERY)],
         ],
         @p
     );
     my $url;
-    $full++ if $base || !$relative;
+    $full++ if $base || !( $relative || $absolute );
     my $path = $this->pathInfo;
     my $name = $this->action;
-    if ( $full ) {
-        my $vh = $this->header( 'Host' );
-        $url = $vh ? $this->protocol . '://' . $vh : $TWiki::cfg{DefaultUrlHost};
+    if ($full) {
+        my $vh = $this->header('X-Forwarded-Host') || $this->header('Host');
+        $url =
+          $vh ? $this->protocol . '://' . $vh : $TWiki::cfg{DefaultUrlHost};
         return $url if $base;
-        $url .= $TWiki::cfg{ScriptUrlPath} . '/' . $this->action;
+        $url .=
+          defined $TWiki::cfg{ScriptUrlPaths}{ $this->action }
+          ? $TWiki::cfg{ScriptUrlPaths}{ $this->action }
+          : $TWiki::cfg{ScriptUrlPath} . '/' . $this->action;
     }
-    elsif ( $relative ) {
+    elsif ($relative) {
         $url = $name;
     }
+    elsif ($absolute) {
+        $url =
+          defined $TWiki::cfg{ScriptUrlPaths}{ $this->action }
+          ? $TWiki::cfg{ScriptUrlPaths}{ $this->action }
+          : $TWiki::cfg{ScriptUrlPath} . '/' . $this->action;
+    }
     $url .= $path if $path_info && defined $path;
-    my $queryString =  $this->queryString();
-    $url .= '?'. $queryString if $query && $queryString;
+    my $queryString = $this->queryString();
+    $url .= '?' . $queryString if $query && $queryString;
     $url = '' unless defined $url;
-    return TWiki::urlEncode( $url );
+    return TWiki::urlEncode($url);
 }
 
 =begin twiki
