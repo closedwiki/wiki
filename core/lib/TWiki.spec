@@ -1196,7 +1196,7 @@ $TWiki::cfg{Operators}{Query} = [ 'TWiki::Query::OP_and', 'TWiki::Query::OP_eq',
 # List of operators permitted in %IF statements.
 # Each operator is implemented by a class. Not visible in the
 # configure UI.
-$TWiki::cfg{Operators}{If} = [ 'TWiki::If::OP_allows', 'TWiki::If::OP_defined', 'TWiki::If::OP_ingroup', 'TWiki::If::OP_isweb', 'TWiki::If::OP_context', 'TWiki::If::OP_dollar', 'TWiki::If::OP_istopic' ];
+$TWiki::cfg{Operators}{If} = [ 'TWiki::If::OP_allows', 'TWiki::If::OP_defined', 'TWiki::If::OP_isempty','TWiki::If::OP_ingroup', 'TWiki::If::OP_isweb', 'TWiki::If::OP_context', 'TWiki::If::OP_dollar', 'TWiki::If::OP_istopic' ];
 
 #---+ Plugins
 # *PLUGINS* Marker used by bin/configure script - do not remove!

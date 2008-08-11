@@ -952,6 +952,14 @@ sub simpleTest {
     $this->{twiki}->enterContext('test');
     $TWiki::cfg{Fnargle} = 'Fleeble';
     $TWiki::cfg{A}{B} = 'C';
+    $this->{twiki}->{request}->queryParam('notempty','v');
+    $this->{twiki}->{request}->queryParam('empty','');
+    $this->{twiki}->{request}->queryParam('notempty','v');
+    $this->{twiki}->{request}->queryParam('empty','');
+    $this->{twiki}->{prefs}->setPreferencesValue( 'NOTEMPTY', 'V' );
+    $this->{twiki}->{prefs}->setPreferencesValue( 'EMPTY', '' );
+    $this->{twiki}->{SESSION_TAGS}{'SNOTEMPTY'}='V';
+    $this->{twiki}->{SESSION_TAGS}{'SEMPTY'}='';
 
     my $meta =
       new TWiki::Meta( $this->{twiki}, $this->{test_web}, $this->{test_topic} );
@@ -1301,6 +1309,65 @@ PONG
         $this->assert_str_equals( $test->{expect}, $result,
             "$text: '$result'" );
     }
+}
+
+
+sub test_ISEMPTY_PARAM_NOTTHERE {
+    my $this = shift;
+    $this->simpleTest( test => 'isempty notthere', then => 1, else => 0 );
+}
+
+sub test_ISEMPTY_PARAM_EMPTY {
+    my $this = shift;
+    $this->simpleTest( test => 'defined empty', then => 1, else => 0 );
+    $this->simpleTest( test => 'isempty empty', then => 1, else => 0 );
+}
+
+sub test_ISEMPTY_PARAM_NOTEMPTY {
+    my $this = shift;
+    $this->simpleTest( test => 'isempty notempty', then => 0, else => 1 );
+}
+
+sub test_ISEMPTY_PREF_NOTTHERE {
+    my $this = shift;
+    $this->simpleTest( test => 'isempty NOTTHERE', then => 1, else => 0 );
+}
+
+sub test_ISEMPTY_PREF_EMPTY {
+    my $this = shift;
+    $this->simpleTest( test => 'defined EMPTY', then => 1, else => 0 );
+    $this->simpleTest( test => 'isempty EMPTY', then => 1, else => 0 );
+}
+
+sub test_ISEMPTY_PREF_NOTEMPTY {
+    my $this = shift;
+    $this->simpleTest( test => 'isempty SNOTEMPTY', then => 0, else => 1 );
+}
+
+sub test_ISEMPTY_SESSION_NOTTHERE {
+    my $this = shift;
+    $this->simpleTest( test => 'isempty SNOTTHERE', then => 1, else => 0 );
+}
+
+sub test_ISEMPTY_SESSION_EMPTY {
+    my $this = shift;
+    $this->simpleTest( test => 'defined SEMPTY', then => 1, else => 0 );
+    $this->simpleTest( test => 'isempty SEMPTY', then => 1, else => 0 );
+}
+
+sub test_ISEMPTY_SESSION_NOTEMPTY {
+    my $this = shift;
+    $this->simpleTest( test => 'isempty NOTEMPTY', then => 0, else => 1 );
+}
+
+sub test_ISEMPTY_EXPR_EMPTY {
+    my $this = shift;
+    $this->simpleTest( test => "isempty ''", then => 1, else => 0 );
+}
+
+sub test_ISEMPTY_EXPR_UNDEF {
+    my $this = shift;
+    $this->simpleTest( test => "isempty undef", then => 1, else => 0 );
 }
 
 1;
