@@ -432,15 +432,7 @@ sub clearVotesData {
         TWiki::Func::saveTopicText($vw, $vt, $text, 1, 1);
     } else {
         my $votesFile = getVotesFile($web, $topic, $id, $isGlobal);
-        # open and lock the votes
-        open(VOTES, ">>$votesFile") || die "cannot append $votesFile";
-        flock(VOTES, LOCK_EX); # wait for exclusive rights
-        seek(VOTES, 0, 2); # seek EOF in case someone else appended
-        # stuff while we were waiting
-        print VOTES '';
-        # unlock and close
-        flock(VOTES, LOCK_UN);
-        close VOTES;
+        unlink($votesFile) || die "cannot remove $votesFile: $!";
     }
 }
 
