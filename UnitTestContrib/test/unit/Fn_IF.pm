@@ -952,10 +952,10 @@ sub simpleTest {
     $this->{twiki}->enterContext('test');
     $TWiki::cfg{Fnargle} = 'Fleeble';
     $TWiki::cfg{A}{B} = 'C';
-    $this->{twiki}->{request}->queryParam('notempty','v');
-    $this->{twiki}->{request}->queryParam('empty','');
-    $this->{twiki}->{request}->queryParam('notempty','v');
-    $this->{twiki}->{request}->queryParam('empty','');
+    $this->{twiki}->{request}->param('notempty','v');
+    $this->{twiki}->{request}->param('empty','');
+    $this->{twiki}->{request}->param('notempty','v');
+    $this->{twiki}->{request}->param('empty','');
     $this->{twiki}->{prefs}->setPreferencesValue( 'NOTEMPTY', 'V' );
     $this->{twiki}->{prefs}->setPreferencesValue( 'EMPTY', '' );
     $this->{twiki}->{SESSION_TAGS}{'SNOTEMPTY'}='V';
