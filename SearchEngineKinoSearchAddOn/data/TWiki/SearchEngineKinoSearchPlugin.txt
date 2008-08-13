@@ -9,6 +9,8 @@ It can take a long time to update when dealing with large attachments
 
 WARNING: This is very new code, it works for me but I have not extensively tested it.
 
+This Plugin now also adds restHandlers to index, update and search the kinoIndex - removing the need for external scripts.
+
 %TOC%
 
 ---++ Syntax Rules
@@ -20,6 +22,23 @@ format takes the following variables to place content.
    * $match - The Twiki Name of the page being displayed
    * $locked - Show if a page is locked
    * $texthead - Summary text
+   
+---++ Rest Handler Usage (the rest handlers require that you are logged into TWiki)
+These restHandlers can be called from te browser, or from the comman line
+(best done as the user that the web server is run as to make sure permissions are ok) - and thus from cron.
+---+++ create Index
+   * %SCRIPTURL{rest}%/SearchEngineKinoSearchPlugin/index
+   * cd twiki/bin ; rest SearchEngineKinoSearchPlugin.index
+---+++ update Index
+%SCRIPTURL{rest}%/SearchEngineKinoSearchPlugin/update
+---+++ search Index
+__TODO:__ while search works, the template it uses isn't useable as its tuned for the =kinosearch= cgi atm.
+
+%SCRIPTURL{rest}%/SearchEngineKinoSearchPlugin/search
+
+<form action="%SCRIPTURL{rest}%/SearchEngineKinoSearchPlugin/search/%INTURLENCODE{"%INCLUDINGWEB%"}%/">
+   <input type="text" name="search" size="32" /> <input type="submit" value="Search text" /> | [[%TWIKIWEB%.KinoSearch][Help]]
+</form>
 
 ---++ Plugin Settings
 

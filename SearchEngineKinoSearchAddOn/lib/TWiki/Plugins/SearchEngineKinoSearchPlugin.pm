@@ -13,7 +13,7 @@ $VERSION = '$Rev: 8749 $';
 $RELEASE = 'bodge';
 $SHORTDESCRIPTION = 'Kino Search Plugin (mmm not sure if this will work)';
 $NO_PREFS_IN_TOPIC = 1;
-$pluginName = 'KinoSearch';
+$pluginName = 'SearchEngineKinoSearchPlugin';
 
 sub initPlugin
 {
@@ -26,7 +26,37 @@ sub initPlugin
 
     TWiki::Func::registerTagHandler('KINOSEARCH', \&_KINOSEARCH);
 
+    $debug = $TWiki::cfg{Plugins}{EmptyPlugin}{Debug} || 0;
+    TWiki::Func::registerRESTHandler('search', \&_search);
+    TWiki::Func::registerRESTHandler('index', \&_index);
+    TWiki::Func::registerRESTHandler('update', \&_update);
+
     return 1;
+}
+
+sub _search {
+    my $session = shift;
+    
+    use TWiki::Contrib::SearchEngineKinoSearchAddOn::Search;
+    
+    my $searcher = TWiki::Contrib::SearchEngineKinoSearchAddOn::Search->newSearch();
+    return $searcher->search($debug, $session);
+}
+sub _index {
+    my $session = shift;
+
+    use TWiki::Contrib::SearchEngineKinoSearchAddOn::Index;
+    
+    my $indexer = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
+    return $indexer->createIndex($debug);
+}
+sub _update {
+    my $session = shift;
+    
+    use TWiki::Contrib::SearchEngineKinoSearchAddOn::Index;
+    
+    my $indexer = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newUpdateIndex();
+    return $indexer->updateIndex($debug);
 }
 
 sub _KINOSEARCH {
@@ -84,7 +114,7 @@ sub afterRenameHandler {
     my $indexer = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newUpdateIndex();
     my @topicsToUpdate = ($oldtopic);
     $indexer->removeTopics($oldweb, @topicsToUpdate);
-    my @topicsToUpdate = ($newtopic);
+    @topicsToUpdate = ($newtopic);
     $indexer->addTopics($newtopic, @topicsToUpdate);
 }
 

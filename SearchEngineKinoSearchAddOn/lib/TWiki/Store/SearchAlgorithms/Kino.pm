@@ -41,6 +41,10 @@ sub search {
 #TODO: MASSIVE LIMITATION: as the current KinoSearch does not support wildcards, it can't really
 # be used for partial matches on anything.
 
+    #just a bit experimental
+    my $showAttachments = $TWiki::cfg{Plugins}{EmptyPlugin}{showAttachments};
+
+
     my $scope = $options->{scope} || 'text';
 #print STDERR "search : type=$options->{type}, scope=$scope ($searchString) (".scalar(@$topics).")\n";
 
@@ -72,7 +76,8 @@ sub search {
 	$scopePrefix = '';
     } elsif ( $scope eq 'attachments' ) {
 	#damnit, TWiki::Search excludes this
-	#$searchAttachments = " AND (attachment:yes)"
+	$searchAttachments = " AND (attachment:yes)"
+	$showAttachments = 1;
     } elsif ( $scope eq 'topic' ) {
 	$scopePrefix = 'topic:';
     } elsif ( $scope eq 'text' ) {
@@ -116,7 +121,7 @@ sub search {
     my $ntopics = 0;
 
     my %seen;
-
+    
     # output the list of hits
     while ( my $hit = $docs->fetch_hit_hashref ) {
         my $resweb   = $hit->{web};
@@ -140,9 +145,18 @@ sub search {
      #	        next;
      #	    }
 
-        #print STDERR "$resweb.$restopic\n";
-
-        push( @{ $seen{$restopic} }, $hit->{excerpt} );
+	if ($hit->{attachment}) {
+	    if ($showAttachments) {
+		my $name = $hit->{name};
+		my $url = " %PUBURL%/$resweb/$restopic/$name ";
+    #print STDERR "$resweb.$restopic - $name\n";
+		push( @{ $seen{$url} }, $url );
+	    }
+	} else {
+	    #assume its a topic.
+#print STDERR "$resweb.$restopic\n";
+            push( @{ $seen{"$restopic"} }, $hit->{excerpt} );
+	}
     }
 
     return \%seen;

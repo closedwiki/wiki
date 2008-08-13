@@ -377,6 +377,7 @@ sub formsFieldNames {
 
 # NOTE: I use a new TWiki session with the admin user so that I can access any topic
 # even when an access control is defined
+#TODO: SMELL: this is a horrible waste of resources, creating _ONE_ TWiki object may be justified
             my $form =
               TWiki::Form->new( new TWiki( $TWiki::cfg{AdminUserLogin} ),
                 $web, $formName );
@@ -558,6 +559,9 @@ sub indexAttachment {
 
     my $pubpath  = $self->pubPath();
     my $filename = "$pubpath/$web/$topic/$name";
+    #untaint..
+    $filename =~ /(.*)/;
+    $filename = $1;
     my $attText =
       TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier->stringFor(
         $filename);
