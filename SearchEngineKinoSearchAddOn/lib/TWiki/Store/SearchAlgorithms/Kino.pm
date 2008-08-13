@@ -42,7 +42,7 @@ sub search {
 # be used for partial matches on anything.
 
     #just a bit experimental
-    my $showAttachments = $TWiki::cfg{Plugins}{EmptyPlugin}{showAttachments};
+    my $showAttachments = $TWiki::cfg{Plugins}{SearchEngineKinoSearchAddOn}{showAttachments} || 0;
 
 
     my $scope = $options->{scope} || 'text';

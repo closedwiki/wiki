@@ -6,11 +6,11 @@ use TWiki::Contrib::SearchEngineKinoSearchAddOn::Index;
 # =========================
 use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE $debug
-        $exampleCfgVar $webName $topicName
+        $webName $topicName $enableOnSaveUpdates
     );
 
 $VERSION = '$Rev: 8749 $';
-$RELEASE = 'bodge';
+$RELEASE = '0.5';
 $SHORTDESCRIPTION = 'Kino Search Plugin (mmm not sure if this will work)';
 $NO_PREFS_IN_TOPIC = 1;
 $pluginName = 'SearchEngineKinoSearchPlugin';
@@ -24,9 +24,11 @@ sub initPlugin
         return 0;
     }
 
+    $debug = $TWiki::cfg{Plugins}{SearchEngineKinoSearchPlugin}{Debug} || 0;
+    $enableOnSaveUpdates = $TWiki::cfg{Plugins}{SearchEngineKinoSearchPlugin}{EnableOnSaveUpdates} || 0;
+
     TWiki::Func::registerTagHandler('KINOSEARCH', \&_KINOSEARCH);
 
-    $debug = $TWiki::cfg{Plugins}{EmptyPlugin}{Debug} || 0;
     TWiki::Func::registerRESTHandler('search', \&_search);
     TWiki::Func::registerRESTHandler('index', \&_index);
     TWiki::Func::registerRESTHandler('update', \&_update);
@@ -93,6 +95,7 @@ sub _KINOSEARCH {
 }
 
 sub afterSaveHandler {
+    return if ($enableOnSaveUpdates == 1);  #disabled - they can make save's take too long
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $text, $topic, $web, $error, $meta ) = @_;
     my $web = $_[2];
@@ -104,6 +107,7 @@ sub afterSaveHandler {
 }
 
 sub afterRenameHandler {
+    return if ($enableOnSaveUpdates == 1);  #disabled - they can make save's take too long
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $oldWeb, $oldTopic, $oldAttachment, $newWeb, $newTopic, $newAttachment ) = @_;
     my $oldweb = $_[0];
@@ -119,6 +123,7 @@ sub afterRenameHandler {
 }
 
 sub afterAttachmentSaveHandler {
+    return if ($enableOnSaveUpdates == 1);  #disabled - they can make save's take too long
     # do not uncomment, use $_[0], $_[1]... instead
     ###   my( $attrHashRef, $topic, $web ) = @_;
     my $web = $_[2];
