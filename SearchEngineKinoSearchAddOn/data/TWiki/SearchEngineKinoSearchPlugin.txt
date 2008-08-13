@@ -3,7 +3,8 @@
 
 _A plugin wrapper around the SearchEngineKinoSearchAddOn_
 
-Allows embedding a KinoSearch in any page with a custom format it will automatically update the index when saving, renaming or adding an attachment.
+Allows embedding a KinoSearch in any page with a custom format it will automatically update the index when saving,
+renaming or adding an attachment.
 
 It can take a long time to update when dealing with large attachments
 

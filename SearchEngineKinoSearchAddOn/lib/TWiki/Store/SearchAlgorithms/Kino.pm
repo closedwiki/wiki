@@ -76,7 +76,7 @@ sub search {
 	$scopePrefix = '';
     } elsif ( $scope eq 'attachments' ) {
 	#damnit, TWiki::Search excludes this
-	$searchAttachments = " AND (attachment:yes)"
+	#$searchAttachments = " AND (attachment:yes)"
 	$showAttachments = 1;
     } elsif ( $scope eq 'topic' ) {
 	$scopePrefix = 'topic:';
