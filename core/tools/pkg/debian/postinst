@@ -46,7 +46,7 @@ if [ "$RET" = true ]; then
 		    for web in $webs; do
 		    	    date +%s > /var/lib/twiki/data/$web/.mailnotify
     		    done
-			if [ ! -e /var/www/twiki/pub/wikiHome.gif ]; then
+			if [ ! -e /var/lib/twiki/pub/wikiHome.gif ]; then
 				tar -zxk -C / -f /usr/share/twiki/twiki-pub.tar.gz
 			fi
        	fi
@@ -74,15 +74,19 @@ if [ ! -e /var/lib/twiki/data/TWiki/TWikiPreferences.txt ]; then
 	perl -pi~ -e 's/^(\s*\*\s*Set\s*SMTPMAILHOST\s*=\s*).*(\r\n)$/$1$2/;' /var/lib/twiki/data/TWiki/TWikiPreferences.txt
 fi
 
+# user + password authorized to run configure script
+db_get twiki/adminuser
+configuser="$RET"
+perl -pi~ -e '$U=q{'"$RET"'}; s/^([^#]*Require user).*/$1 $U/g;' /etc/twiki/apache.conf
 
+db_get twiki/adminpassword
+configpassword="$RET"
 
 # prevent further confusion: done with debconfig
 
 # regrettably, this doesn't actually permit us to do further I/O.
 # Rewrite this in perl, if we ever find a non-kerberos example of how
 # to do so.
-
-db_stop
 
 case "$1" in
     configure)
@@ -132,10 +136,10 @@ case "$1" in
 			#if the user has installed without initial universe then we can't do this
 			if [ ! -e /var/lib/twiki/data/.htpasswd ]; then
 			    touch /var/lib/twiki/data/.htpasswd
-		       	    $HTPASSWDCMD -b /var/lib/twiki/data/.htpasswd TWikiGuest guest
-			    chown $TWIKI_OWNER.www-data /var/lib/twiki/data/.htpasswd
 			    chmod 660 /var/lib/twiki/data/.htpasswd
 			fi
+		       	$HTPASSWDCMD -b /var/lib/twiki/data/.htpasswd "$configuser" "$configpassword"
+			chown $TWIKI_OWNER.www-data /var/lib/twiki/data/.htpasswd
 		fi
 	fi
 
@@ -172,7 +176,7 @@ case "$1" in
 		ln -s /usr/share/perl5 /var/lib/twiki/lib
 	fi
 	if [ ! -e /var/lib/twiki/pub ]; then
-		ln -s /var/www/twiki/pub /var/lib/twiki/pub
+		ln -s /var/lib/twiki/pub /var/lib/twiki/pub
 	fi
 	if [ ! -e /var/lib/twiki/bin ]; then
 		ln -s /usr/lib/cgi-bin/twiki/ /var/lib/twiki/bin
@@ -186,9 +190,15 @@ case "$1" in
 	chown $TWIKI_OWNER.www-data /etc/twiki/LocalSite.cfg
 	chown -R $TWIKI_OWNER.www-data /var/lib/twiki
 	chown -R $TWIKI_OWNER.www-data /var/lib/twiki/locale
-	chown -R $TWIKI_OWNER.www-data /var/lib/twiki/plugins_lib
 	chown -R $TWIKI_OWNER.www-data /var/lib/twiki/templates
 	chown -R $TWIKI_OWNER.www-data /var/lib/twiki/tools
+
+	# erase configuser password
+        db_reset "twiki/adminpassword"
+	db_fset  "twiki/adminpassword" "seen" "false" || true
+
+	db_stop
+
 	
 	# reload apache configs
 	for server in $servers; do
@@ -197,6 +207,7 @@ case "$1" in
                 	/etc/init.d/$server reload
 		fi
 	done
+
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

@@ -1,6 +1,6 @@
-twiki (1:4.2.1-1) unstable; urgency=high
+twiki (1:4.2.2-1) unstable; urgency=high
 
-  * update to 4.2.1 release (Closes: #462560)
+  * update to 4.2.2 release (Closes: #462560)
   * add enabling of apache modules (Closes: #439680)
   * mention the cronjobs in the README.Debian (Closes: #426394)
   * change redirects so they are relative paths, not localhost
@@ -8,8 +8,48 @@ twiki (1:4.2.1-1) unstable; urgency=high
   * change RedirectMatch's to use relative paths (Closes: #454347)
   * fix control Depends line (Closes: #453193)
   * change configure to use any valid-user - TWikiGuest is silly
+  * move pub to /var/lib/twiki/pub and use apache.conf
  
- -- Sven Dowideit <SvenDowideit@DistributedINFORMATION.com>  Mon, 4 Aug 2008 09:53:40 +0100 
+ -- Sven Dowideit <SvenDowideit@DistributedINFORMATION.com>  Mon, 18 Aug 2008 09:53:40 +0100 
+
+twiki (1:4.1.2-4) unstable; urgency=emergency
+
+  * squash softlink exploit on session directory (Closes: #494648)
+  * related issue with passthrough files (Closes: #468159)
+  * fix dependancys on apache* rather than apache*-common (Closes: #482285)
+  * remove TWikiGuest user with hardcoded password from htpassword.
+  * Build instructions moved from section -arch to -indep (closes lintian warning).
+
+ -- Sven Dowideit <SvenDowideit@DistributedINFORMATION.com>  Thu, 14 Aug 2008 09:53:40 +0100
+
+twiki (1:4.1.2-3.2) unstable; urgency=high
+
+  * Non-maintainer upload.
+  * Protect configure script which used to be world accessible as a
+    trivial user : will now be accessible only from localhost as a
+    specific user, which is configured through Debconf. (Closes: #485562)
+  * Added spanish translation , thanks to Fernando C. Estrada (Closes:
+    #458573).
+  * Improved docs in NEWS.Debian and README.Debian
+  * Improved wording of debconf templates
+  * Updated debconf translations following call for updates (thanks to
+    Christian Perrier) :
+    - Galician : Closes: #488377
+    - Vietnamese : Closes: #488383
+    - Norwegian Bokmål. Closes: #488387
+    - Romanian : Closes: #488712
+    - French : Closes: #488758
+    - Portuguese : Closes: #488893
+    - Basque : Closes: #488933
+    - Czech : Closes: #489439
+    - German : Closes: #489527
+    - Russian : Closes: #489530
+  * Removed obsolete br.po (see pt_BR.po instead) translation file.
+  * Add new Finnish translation of the debconf templates, thanks to Esko
+    Arajärvi (Closes: #489147).
+  * Properly clean after dpatch
+
+ -- Olivier Berger <olivier.berger@it-sudparis.eu>  Wed, 16 Jul 2008 15:04:09 +0200
 
 twiki (1:4.1.2-3.1) unstable; urgency=low
 
@@ -28,7 +68,7 @@ twiki (1:4.1.2-3) unstable; urgency=high
 
  -- Sven Dowideit <SvenDowideit@DistributedINFORMATION.com>  Mon, 29 Oct 2007 09:53:40 +0100
 
- twiki  (1:4.1.2-2) unstable; urgency=high
+twiki (1:4.1.2-2) unstable; urgency=high
 
   * secure /var/www/twiki/pub/_work_areas (Closes: #444982)
     CVE-2007-5193

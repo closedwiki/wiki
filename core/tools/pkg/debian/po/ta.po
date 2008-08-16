@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: twiki\n"
-"Report-Msgid-Bugs-To: svenud@ozemail.com.au\n"
-"POT-Creation-Date: 2007-02-17 09:09+0100\n"
+"Report-Msgid-Bugs-To: twiki@packages.debian.org\n"
+"POT-Creation-Date: 2008-07-16 11:58+0200\n"
 "PO-Revision-Date: 2007-02-17 10:56+0530\n"
 "Last-Translator: Dr.T.Vasudevan <agnihot3@gmail.com>\n"
 "Language-Team: TAMIL <ubuntu-l10n-tam@lists.ubuntu.com>\n"
@@ -19,21 +19,19 @@ msgstr ""
 #. Type: string
 #. Description
 #: ../templates:1001
-msgid "Top-level URL of the server TWiki runs under:"
+#, fuzzy
+#| msgid "Top-level URL of the server TWiki runs under:"
+msgid "URL of the server TWiki runs under:"
 msgstr "டிவிகி (TWiki) இயங்கும் சேவையகத்தின் உயர் மட்ட யுஆர்எல்:"
 
 #. Type: string
 #. Description
 #: ../templates:1001
 msgid ""
-"For a normal install, this should be a URL for your web server's full name, "
-"which is used to construct URLs on some pages.  The install will serve up "
-"the data by adding \"twiki\" to the end of this setting; it is also needed "
-"for certain redirections."
+"Please enter the web server URL (such as \"http://www.example.org/\"). "
+"Complete TWiki URLs will be constructed from this value plus the string "
+"\"twiki/\"."
 msgstr ""
-"வழக்கமான நிறுவலுக்கு இது சில பக்கங்களுக்கு யுஆர்எல் அமைக்கும் உங்கள் வலைசேவையகத்தின் "
-"யுஆர்எல் ஆக இருக்க வேண்டும். இந்த நிறுவல் இந்த அமைப்புக்கு பின் \"twiki\" என குறிப்பிட்டு "
-"தரவை தரும். மற்றும் சில மாற்று திசை வேலைக்கும் தேவைப் படும்."
 
 #. Type: string
 #. Description
@@ -44,9 +42,13 @@ msgstr "இந்த டிவிகி இன் வலைஅமைப்பா
 #. Type: string
 #. Description
 #: ../templates:2001
+#, fuzzy
+#| msgid ""
+#| "This email address gets mail for new user registration, and is listed on "
+#| "the \"oops\" page when things go wrong."
 msgid ""
-"This email address gets mail for new user registration, and is listed on the "
-"\"oops\" page when things go wrong."
+"Please enter the email address that will receive new user registration mail. "
+"This address will also be displayed in the \"oops\" page when errors occur."
 msgstr ""
 "இந்த மின்னஞ்சல் முகவரி புதிய பயனர் பதிவுக்கு அஞ்சல் பெறும். மற்றும் பிழை நேரும் காலத்து "
 "\"oops\" பக்கத்தில் இடம் பெறும்."
@@ -54,7 +56,9 @@ msgstr ""
 #. Type: boolean
 #. Description
 #: ../templates:3001
-msgid "Install default wiki Topic Set on initial install?"
+#, fuzzy
+#| msgid "Install default wiki Topic Set on initial install?"
+msgid "Perform install of default wiki Topic Set?"
 msgstr "முதல் நிறுவலில் முன்னிருப்பு விகி பொருள் அமைப்பு (Topic Set) ஐ நிறுவலாமா?"
 
 #. Type: boolean
@@ -62,12 +66,35 @@ msgstr "முதல் நிறுவலில் முன்னிருப�
 #: ../templates:3001
 msgid ""
 "TWiki includes a complete \"starter kit\" which includes user registration "
-"pages, documentation, and tutorials.  Only decline if you're re-installing "
-"TWiki after deleting the package and want to keep the old data, or if you've "
-"got a TWiki data set from your own manual install.  If data/Main/WebHome.txt "
-"is present, the starter kit will not be unpacked.  The starter kit files can "
-"be found in /usr/share/twiki/twiki-data.tar.gz (and twiki-pub.tar.gz), if "
-"you want to install it manually or compare your topics with the new version."
+"pages, documentation, and tutorials."
+msgstr ""
+
+#. Type: boolean
+#. Description
+#: ../templates:3001
+msgid ""
+"Accept this option unless you want to use an existing TWiki data set (for "
+"instance, one left over from a previous installation)."
+msgstr ""
+
+#. Type: boolean
+#. Description
+#: ../templates:3001
+#, fuzzy
+#| msgid ""
+#| "TWiki includes a complete \"starter kit\" which includes user "
+#| "registration pages, documentation, and tutorials.  Only decline if you're "
+#| "re-installing TWiki after deleting the package and want to keep the old "
+#| "data, or if you've got a TWiki data set from your own manual install.  If "
+#| "data/Main/WebHome.txt is present, the starter kit will not be unpacked.  "
+#| "The starter kit files can be found in /usr/share/twiki/twiki-data.tar.gz "
+#| "(and twiki-pub.tar.gz), if you want to install it manually or compare "
+#| "your topics with the new version."
+msgid ""
+"If data/Main/WebHome.txt is present, the starter kit will not be unpacked. "
+"The starter kit files can be found in /usr/share/twiki/twiki-data.tar.gz "
+"(and twiki-pub.tar.gz) if you want to install it manually or compare the "
+"topics with the new version."
 msgstr ""
 "டிவிகியில் முழுமையான \"starter kit\" (ஆரம்ப பொதி) உள்ளது. இது பயனர் பதிவு பக்கம், "
 "ஆவணங்கள், பயிற்சிகள் ஆகியவற்றை உள்ளடக்கியது. நீங்கள் டிவிகியை மறு நிறுவல் செய்யும் போது "
@@ -92,3 +119,100 @@ msgid ""
 msgstr ""
 "நீங்கள் ஒரு பயனரை உருவாக்கிய பின் அந்த பயனருக்கு நிர்வாகி அனுமதிகளை கட்டுப் படுத்த Main."
 "TWikiAdminGroup ஐ திருத்தவும்."
+
+#. Type: string
+#. Description
+#: ../templates:5001
+msgid "Apache user allowed access to 'configure' script:"
+msgstr ""
+
+#. Type: string
+#. Description
+#. Translators, do not translate "'configure'" script's name
+#: ../templates:5001
+msgid ""
+"Please enter the username of the apache user who will be allowed to run the "
+"configure script at http://localhost/cgi-bin/twiki/configure."
+msgstr ""
+
+#. Type: password
+#. Description
+#. Translators, do not translate "configuser" in the variable
+#: ../templates:6001
+msgid "Password for '${configuser}':"
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../templates:6001
+msgid ""
+"Please enter the password of the apache user who will be allowed to run the "
+"configure script at http://localhost/cgi-bin/twiki/configure."
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../templates:7001
+msgid "Password confirmation:"
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../templates:7001
+msgid "Please re-enter the same password, for verification."
+msgstr ""
+
+#. Type: error
+#. Description
+#: ../templates:8001
+msgid "Password mismatch"
+msgstr ""
+
+#. Type: error
+#. Description
+#: ../templates:8001
+msgid ""
+"The passwords you entered didn't match. You will have to enter them again."
+msgstr ""
+
+#~ msgid "Top-level URL of the server TWiki runs under:"
+#~ msgstr "டிவிகி (TWiki) இயங்கும் சேவையகத்தின் உயர் மட்ட யுஆர்எல்:"
+
+#~ msgid ""
+#~ "For a normal install, this should be a URL for your web server's full "
+#~ "name, which is used to construct URLs on some pages.  The install will "
+#~ "serve up the data by adding \"twiki\" to the end of this setting; it is "
+#~ "also needed for certain redirections."
+#~ msgstr ""
+#~ "வழக்கமான நிறுவலுக்கு இது சில பக்கங்களுக்கு யுஆர்எல் அமைக்கும் உங்கள் வலைசேவையகத்தின் "
+#~ "யுஆர்எல் ஆக இருக்க வேண்டும். இந்த நிறுவல் இந்த அமைப்புக்கு பின் \"twiki\" என "
+#~ "குறிப்பிட்டு தரவை தரும். மற்றும் சில மாற்று திசை வேலைக்கும் தேவைப் படும்."
+
+#~ msgid ""
+#~ "This email address gets mail for new user registration, and is listed on "
+#~ "the \"oops\" page when things go wrong."
+#~ msgstr ""
+#~ "இந்த மின்னஞ்சல் முகவரி புதிய பயனர் பதிவுக்கு அஞ்சல் பெறும். மற்றும் பிழை நேரும் "
+#~ "காலத்து \"oops\" பக்கத்தில் இடம் பெறும்."
+
+#~ msgid "Install default wiki Topic Set on initial install?"
+#~ msgstr "முதல் நிறுவலில் முன்னிருப்பு விகி பொருள் அமைப்பு (Topic Set) ஐ நிறுவலாமா?"
+
+#~ msgid ""
+#~ "TWiki includes a complete \"starter kit\" which includes user "
+#~ "registration pages, documentation, and tutorials.  Only decline if you're "
+#~ "re-installing TWiki after deleting the package and want to keep the old "
+#~ "data, or if you've got a TWiki data set from your own manual install.  If "
+#~ "data/Main/WebHome.txt is present, the starter kit will not be unpacked.  "
+#~ "The starter kit files can be found in /usr/share/twiki/twiki-data.tar.gz "
+#~ "(and twiki-pub.tar.gz), if you want to install it manually or compare "
+#~ "your topics with the new version."
+#~ msgstr ""
+#~ "டிவிகியில் முழுமையான \"starter kit\" (ஆரம்ப பொதி) உள்ளது. இது பயனர் பதிவு "
+#~ "பக்கம், ஆவணங்கள், பயிற்சிகள் ஆகியவற்றை உள்ளடக்கியது. நீங்கள் டிவிகியை மறு நிறுவல் "
+#~ "செய்யும் போது பழைய தரவுகளை அப்படியே வைத்துக் கொள்ள நினைத்தால் மட்டும் அல்லது கைமுறை "
+#~ "நிறுவலின் தரவு இருந்தால் மட்டும் வேண்டாம் என சொல்லுங்கள். data/Main/WebHome.txt "
+#~ "கோப்பு இருப்பின் இந்த ஆரம்ப பொதி அவிழ்க்கப் பட மாட்டாது. கைமுறை நிறுவல் செய்ய "
+#~ "நினைத்தாலோ அல்லது புதிய வடிவத்துடன் உங்கள் பொருட்களுடன் ஒப்பிட வேண்டுமானாலோ ஆரம்பப் "
+#~ "பொதியின் கோப்புகளை /usr/share/twiki/twiki-data.tar.gz ( மற்றும் twiki-pub.tar."
+#~ "gz) இல் காணலாம்."

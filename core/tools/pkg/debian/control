@@ -1,9 +1,9 @@
 Source: twiki
 Section: web
 Priority: optional
-Maintainer: Sven Dowideit <svenud@ozemail.com.au>
+Maintainer: Sven Dowideit <SvenDowideit@DistributedINFORMATION.com>
 Build-Depends: debhelper (>= 5), tardy, po-debconf, dpatch
-Standards-Version: 3.7.2
+Standards-Version: 3.8.0
 
 Package: twiki
 Architecture: all

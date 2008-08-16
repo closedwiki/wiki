@@ -1,7 +1,6 @@
-var/www/twiki/pub
+var/lib/twiki/pub
 var/lib/twiki/templates
 var/lib/twiki/data
-var/lib/twiki/plugins_lib
 var/log/twiki
 usr/lib/cgi-bin/twiki
 usr/share/perl5
