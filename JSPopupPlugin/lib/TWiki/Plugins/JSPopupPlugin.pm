@@ -186,7 +186,7 @@ sub handlePopupLink {
 
     my $display = 'display:none;';
     my $event = 'return twiki.JSPopupPlugin.openPopupSectional(event, \'popupSection'.$popupSectionNumber.'\');';#ASSUME onclick
-    my $output = $query->a(
+    my $output = CGI::a(
                     {
                         id => 'popupSection'.$popupSectionNumber,
                         href =>     $url, 
