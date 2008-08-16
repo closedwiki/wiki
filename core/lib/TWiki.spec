@@ -558,7 +558,7 @@ $TWiki::cfg{AllowRedirectUrl}  = $FALSE;
 # Defines the filter-in regexp that must match the names of environment
 # variables that can be seen using the %ENV{}% TWiki variable. Set it to
 # '^.*$' to allow all environment variables to be seen (not recommended).
-$TWiki::cfg{AccessibleENV} = '^(HTTP_\w+|REMOTE_\w+|SERVER_\w+|REQUEST_\w+|MOD_PERL)$';
+$TWiki::cfg{AccessibleENV} = '^(HTTP_\w+|REMOTE_\w+|SERVER_\w+|REQUEST_\w+|MOD_PERL|TWIKI_ACTION)$';
 
 #---+ Anti-spam measures
 

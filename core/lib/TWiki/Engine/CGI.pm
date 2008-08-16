@@ -124,11 +124,8 @@ sub preparePath {
             $action   = $first;
             $pathInfo = $2 || '';
         }
-        else {
-            $action = 'view';
-        }
     }
-    ASSERT( defined $action && length $action > 0 ) if DEBUG;
+    $action ||= 'view';
     ASSERT( defined $pathInfo ) if DEBUG;
     $req->action($action);
     $req->pathInfo( $pathInfo );
