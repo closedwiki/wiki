@@ -397,6 +397,46 @@ You simply swap the bucket contents. Using either a template or a topic template
 </verbatim>
 </blockquote>
 
+---+++ I want to put the topic form in a twisty
+
+The attachment tables are placed in a open/close twisty. You can do the same for the topic form.
+
+Edit =templates/formtables.pattern.tmpl= to have this code:
+<verbatim>
+%{ These templates define the form attached at the bottom of viewed page. }%
+
+%TMPL:DEF{"starttopicformwisty"}%%TWISTY{id="topicformlist" mode="div" remember="on" link="%MAKETEXT{"Form"}%" showimgleft="%ICONURLPATH{toggleopen}%" hideimgleft="%ICONURLPATH{toggleclose}%"}%%TMPL:END%
+
+%TMPL:DEF{"endtopicformwisty"}%%ENDTWISTY%%TMPL:END%
+
+%{ Start of form table }%
+%TMPL:DEF{FORM:display:header}%<div class="twikiForm">%TMPL:P{"starttopicformwisty"}%
+<table class='twikiFormTable' border='1'>%TMPL:P{FORM:display:header:headerrow}%%TMPL:END%
+
+%{ Header }%
+%TMPL:DEF{FORM:display:header:headerrow}%<tr><th class='twikiFormTableHRow twikiFirstCol' colspan='2'>
+[[%A_TITLE%]]
+</th></tr>%TMPL:END%
+
+%{ Each row }%
+%TMPL:DEF{FORM:display:row}%<tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'> %A_TITLE% </td><td>
+%A_VALUE%
+</td></tr>%TMPL:END%
+
+%{ Footer }%
+%TMPL:DEF{FORM:display:footer}%</table>%TMPL:P{FORM:display:footer:editlink}%
+%TMPL:P{"endtopicformwisty"}%</div><!-- /twikiForm -->%TMPL:END%
+</verbatim>
+
+To give the twisty toggle link the same style as the attachment twisty link, add this to pattern skin's =style.css=:
+<verbatim>
+.twikiForm .twistyTrigger .twikiLinkLabel {
+   font-size:122%; /* h4 size */
+   font-weight:bold;
+}
+</verbatim>
+
+
 ---+++ I only want to show the WYSIWYG button on explicit pages
 In [[Main.TWikiPreferences]], set =COMPOSER= to a blank value:
 <blockquote>
