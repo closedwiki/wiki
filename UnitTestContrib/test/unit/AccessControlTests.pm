@@ -143,7 +143,7 @@ If ALLOWTOPIC is set
 \t* Set ALLOWTOPICVIEW = %USERSWEB%.MrOrange
 THIS
                                 , undef);
-    my $topicquery = new TWiki::Request( "" );
+    my $topicquery = new Unit::Request( "" );
     $topicquery->path_info("/$this->{test_web}/$testTopic");
     # renew TWiki, so WebPreferences gets re-read
     $this->{twiki}->finish();

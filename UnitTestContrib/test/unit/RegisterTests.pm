@@ -115,7 +115,7 @@ sub registerAccount {
 
     $this->registerVerifyOk();
 
-    my $query = new TWiki::Request(
+    my $query = new Unit::Request(
         {
             'code' => [
                 $this->{twiki}->{DebugVerificationCode}
@@ -412,7 +412,7 @@ EOF
 sub registerVerifyOk {
     my $this = shift;
     $TWiki::cfg{Register}{NeedVerification}  =  1;
-    my $query = new TWiki::Request ({
+    my $query = new Unit::Request ({
                           'TopicName' => [
                                           'TWikiRegistration'
                                          ],
@@ -466,7 +466,7 @@ sub registerVerifyOk {
     };
 
     my $code = shift || $this->{twiki}->{DebugVerificationCode};
-    $query = new TWiki::Request ({
+    $query = new Unit::Request ({
                        'code' => [
                                   $code
                                  ],
@@ -509,7 +509,7 @@ sub registerVerifyOk {
 sub verify_registerBadVerify {
     my $this = shift;
     $TWiki::cfg{Register}{NeedVerification}  =  1;
-    my $query = new TWiki::Request ({
+    my $query = new Unit::Request ({
                           'TopicName' => [
                                           'TWikiRegistration'
                                          ],
@@ -562,7 +562,7 @@ sub verify_registerBadVerify {
     };
 
     my $code = $this->{twiki}->{DebugVerificationCode};
-    $query = new TWiki::Request ({
+    $query = new Unit::Request ({
         'code' => [
             $code
            ],
@@ -604,7 +604,7 @@ sub verify_registerBadVerify {
 sub verify_registerNoVerifyOk {
     my $this = shift;
     $TWiki::cfg{Register}{NeedVerification}  =  0;
-    my $query = new TWiki::Request ({
+    my $query = new Unit::Request ({
                           'TopicName' => [
                                           'TWikiRegistration'
                                          ],
@@ -681,7 +681,7 @@ sub verify_rejectShortPassword {
     $TWiki::cfg{MinPasswordLength}           =  6;
     $TWiki::cfg{PasswordManager}             =  'TWiki::Users::HtPasswdUser';
     $TWiki::cfg{Register}{AllowLoginName}    =  0;
-    my $query = new TWiki::Request ({
+    my $query = new Unit::Request ({
                           'TopicName'     => ['TWikiRegistration'],
                           'Twk1Email'     => [$this->{new_user_email}],
                           'Twk1WikiName'  => [$this->{new_user_wikiname}],
@@ -726,7 +726,7 @@ sub verify_shortPassword {
     $TWiki::cfg{MinPasswordLength}           =  6;
     $TWiki::cfg{PasswordManager}             =  'TWiki::Users::HtPasswdUser';
     $TWiki::cfg{Register}{AllowLoginName}    =  1;
-    my $query = new TWiki::Request(
+    my $query = new Unit::Request(
         {
             'TopicName'     => ['TWikiRegistration'],
             'Twk1Email'     => [$this->{new_user_email}],
@@ -778,7 +778,7 @@ sub verify_duplicateActivation {
 
     # Start similar to registration with verification
     $TWiki::cfg{Register}{NeedVerification}  =  1;
-    my $query = new TWiki::Request ({'TopicName'     => ['TWikiRegistration'],
+    my $query = new Unit::Request ({'TopicName'     => ['TWikiRegistration'],
                           'Twk1Email'     => [$this->{new_user_email}],
                           'Twk1WikiName'  => [$this->{new_user_wikiname}],
                           'Twk1Name'      => [$this->{new_user_fullname}],
@@ -812,7 +812,7 @@ sub verify_duplicateActivation {
     # For verification process everything including finish(), so don't just
     # call verifyEmails
     my $code = shift || $this->{twiki}->{DebugVerificationCode};
-    $query = new TWiki::Request ({'code'   => [$code],
+    $query = new Unit::Request ({'code'   => [$code],
                         'action' => ['verify'],
                     });
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
@@ -836,7 +836,7 @@ sub verify_duplicateActivation {
 
     # and now for something completely different: Do it all over again
     @TWikiFnTestCase::mails = ();
-    $query = new TWiki::Request ({'code'   => [$code],
+    $query = new Unit::Request ({'code'   => [$code],
                         'action' => ['verify'],
                     });
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
@@ -880,7 +880,7 @@ sub verify_resetPasswordOkay {
     my @emails = $this->{twiki}->{users}->getEmails($cUID);
     $this->assert_str_equals($this->{new_user_email}, $emails[0]);
 
-    my $query = new TWiki::Request (
+    my $query = new Unit::Request (
                          {
                           'LoginName' => [
                                           $this->{new_user_login}
@@ -928,7 +928,7 @@ sub verify_resetPasswordNoSuchUser {
     my $this = shift;
     # This time we don't set up the testWikiName, so it should fail.
 
-    my $query = new TWiki::Request (
+    my $query = new Unit::Request (
                          {
                           'LoginName' => [
                                           $this->{new_user_wikiname}
@@ -969,7 +969,7 @@ sub verify_resetPasswordNeedPrivilegeForMultipleReset {
     my $this = shift;
     # This time we don't set up the testWikiName, so it should fail.
 
-    my $query = new TWiki::Request (
+    my $query = new Unit::Request (
                          {
                           'LoginName' => [
                                           $this->{test_user_wikiname},
@@ -1015,7 +1015,7 @@ sub verify_resetPasswordNoPassword {
 
     $this->registerAccount();
 
-    my $query = new TWiki::Request (
+    my $query = new Unit::Request (
                          {
                           'LoginName' => [
                                           $this->{new_user_wikiname}
@@ -1123,7 +1123,7 @@ EOM
     print $fh $testReg;
     $fh->close;
 
-    my $query = new TWiki::Request ({
+    my $query = new Unit::Request ({
                           'LogTopic' => [
                                          $logTopic
                                         ],
@@ -1264,7 +1264,7 @@ sub verify_disabled_registration {
     my $this = shift;
     $TWiki::cfg{Register}{EnableNewUserRegistration} = 0;
     $TWiki::cfg{Register}{NeedVerification}  =  0;
-    my $query = new TWiki::Request ({
+    my $query = new Unit::Request ({
                           'TopicName' => [
                                           'TWikiRegistration'
                                          ],
@@ -1329,7 +1329,7 @@ sub test_3951 {
     $TWiki::cfg{Register}{EnableNewUserRegistration} = 1;
     $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';
     $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
-    my $query = new TWiki::Request ({
+    my $query = new Unit::Request ({
                           'TopicName' => [
                                           'TWikiRegistration'
                                          ],
@@ -1389,7 +1389,7 @@ sub test_4061 {
     $TWiki::cfg{Register}{EnableNewUserRegistration} = 1;
     $TWiki::cfg{LoginManager} = 'TWiki::LoginManager::TemplateLogin';
     $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
-    my $query = new TWiki::Request ({
+    my $query = new Unit::Request ({
                           'TopicName' => [
                                           'TWikiRegistration'
                                          ],
@@ -1477,7 +1477,7 @@ sub verify_resetEmailOkay {
     $this->assert($this->{twiki}->{users}->setPassword( $cUID, $newPassU, $oldPassU ));
     my $newEmail =  'UnitEmail@home.org.au';
 
-    my $query = new TWiki::Request (
+    my $query = new Unit::Request (
                          {
                           'LoginName' => [
                                           $this->{new_user_login}
@@ -1554,7 +1554,7 @@ sub verify_resetPassword_NoTWikiUsersEntry {
     my @emails = $this->{twiki}->{users}->getEmails($cUID);
     $this->assert_str_equals($this->{new_user_email}, $emails[0]);
 
-    my $query = new TWiki::Request (
+    my $query = new Unit::Request (
                          {
                           'LoginName' => [
                                           $this->{new_user_login}

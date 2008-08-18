@@ -14,6 +14,8 @@ package TWikiFnTestCase;
 use base 'TWikiTestCase';
 
 use TWiki;
+use Unit::Request;
+use Unit::Response;
 use TWiki::UI::Register;
 use Error qw( :try );
 
@@ -49,10 +51,12 @@ sub set_up {
     $TWiki::cfg{Register}{NeedVerification} = 0;
     $TWiki::cfg{MinPasswordLength} = 0;
     $TWiki::cfg{UsersWebName} = $this->{users_web};
-    my $query = new TWiki::Request("");
+    my $query = new Unit::Request("");
     $query->path_info("/$this->{test_web}/$this->{test_topic}");
 
-    $this->{twiki} = new TWiki(undef, $query);
+    $this->{twiki}    = new TWiki( undef, $query );
+    $this->{request}  = $query;
+    $this->{response} = new Unit::Response();
     $TWiki::Plugins::SESSION = $this->{twiki};
     @mails = ();
     $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
@@ -80,7 +84,6 @@ sub tear_down {
     $this->removeWebFixture( $this->{twiki}, $this->{test_web} );
     $this->removeWebFixture( $this->{twiki}, $TWiki::cfg{UsersWebName} );
     unlink($TWiki::cfg{Htpasswd}{FileName});
-
     $this->SUPER::tear_down();
 
 }
@@ -96,7 +99,7 @@ sub sentMail {
 sub registerUser {
     my ($this, $loginname, $forename, $surname, $email) = @_;
 
-    my $query = new TWiki::Request ({
+    my $query = new Unit::Request ({
                           'TopicName' => [ 'TWikiRegistration'  ],
                           'Twk1Email' => [ $email ],
                           'Twk1WikiName' => [ "$forename$surname" ],
@@ -129,7 +132,7 @@ sub registerUser {
     };
     $twiki->finish();
     # Reload caches
-    my $q = $this->{twiki}->{request};
+    my $q = $this->{request};
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki(undef, $q);
     $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);

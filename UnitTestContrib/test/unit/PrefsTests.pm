@@ -33,7 +33,7 @@ sub set_up {
 
     $twiki = $this->{twiki};
 
-    $topicquery = new TWiki::Request( "" );
+    $topicquery = new Unit::Request( "" );
     $topicquery->path_info("/$this->{test_web}/$this->{test_topic}");
 
     try {
@@ -323,7 +323,7 @@ sub test_local_to_default {
     $this->assert_str_equals("GLOBAL",
                              $t->{prefs}->getPreferencesValue("SOURCE"));
 
-    my $localquery = new TWiki::Request( "" );
+    my $localquery = new Unit::Request( "" );
     $localquery->path_info("/$testSysWeb/$TWiki::cfg{SitePrefsTopicName}");
     $t->finish();
     $t = new TWiki( $this->{test_user_login}, $localquery );
@@ -343,7 +343,7 @@ sub test_local_to_site {
                              $t->{prefs}->getPreferencesValue("SOURCE"));
     my($tw, $tt ) = $t->normalizeWebTopicName('',
                                             $TWiki::cfg{LocalSitePreferences});
-    my $localquery = new TWiki::Request( "" );
+    my $localquery = new Unit::Request( "" );
     $localquery->path_info("/$tw/$tt");
     $t->finish();
     $t = new TWiki( $this->{test_user_login}, $localquery );
@@ -362,7 +362,7 @@ sub test_local_to_user {
     $this->assert_str_equals("GLOBAL",
                              $t->{prefs}->getPreferencesValue("SOURCE"));
 
-    my $localquery = new TWiki::Request( "" );
+    my $localquery = new Unit::Request( "" );
     $localquery->path_info("/$TWiki::cfg{UsersWebName}/$this->{test_user_wikiname}");
     $t->finish();
     $t = new TWiki( $this->{test_user_login}, $localquery );
@@ -381,7 +381,7 @@ sub test_local_to_web {
     $this->assert_str_equals("GLOBAL",
                              $t->{prefs}->getPreferencesValue("SOURCE"));
 
-    my $localquery = new TWiki::Request( "" );
+    my $localquery = new Unit::Request( "" );
     $localquery->path_info("/$this->{test_web}/$TWiki::cfg{WebPrefsTopicName}");
     $t->finish();
     $t = new TWiki( $this->{test_user_login}, $localquery );

@@ -103,7 +103,7 @@ CONTENT
 # AUTOINC
 sub test_AUTOINC {
     my $this = shift;
-    my $query = new TWiki::Request({
+    my $query = new Unit::Request({
         action => [ 'save' ],
         text => [ 'nowt' ],
     });
@@ -142,7 +142,7 @@ sub test_AUTOINC {
 # 10X
 sub test_XXXXXXXXXX {
     my $this = shift;
-    my $query = new TWiki::Request({
+    my $query = new Unit::Request({
         action => [ 'save' ],
         text => [ 'nowt' ],
     });
@@ -180,7 +180,7 @@ sub test_XXXXXXXXXX {
 # 9X
 sub test_XXXXXXXXX {
     my $this = shift;
-    my $query = new TWiki::Request({
+    my $query = new Unit::Request({
         action => [ 'save' ],
         text => [ 'nowt' ],
     });
@@ -209,7 +209,7 @@ sub test_XXXXXXXXX {
 #11X
 sub test_XXXXXXXXXXX {
     my $this = shift;
-    my $query = new TWiki::Request({
+    my $query = new Unit::Request({
         action => [ 'save' ],
         text => [ 'nowt' ],
     });
@@ -234,7 +234,7 @@ sub test_XXXXXXXXXXX {
 
 sub test_emptySave {
     my $this = shift;
-    my $query = new TWiki::Request({
+    my $query = new Unit::Request({
         action => [ 'save' ],
         topic => [ $this->{test_web}.'.EmptyTestSaveScriptTopic' ]
        });
@@ -249,7 +249,7 @@ sub test_emptySave {
 
 sub test_simpleTextSave {
     my $this = shift;
-    my $query = new TWiki::Request({
+    my $query = new Unit::Request({
         text => [ 'CORRECT' ],
         action => [ 'save' ],
         topic => [ $this->{test_web}.'.DeleteTestSaveScriptTopic' ]
@@ -265,7 +265,7 @@ sub test_simpleTextSave {
 
 sub test_templateTopicTextSave {
     my $this = shift;
-    my $query = new TWiki::Request({
+    my $query = new Unit::Request({
         text => [ 'Template Topic' ],
         action => [ 'save' ],
         topic => [ $this->{test_web}.'.TemplateTopic' ]
@@ -273,7 +273,7 @@ sub test_templateTopicTextSave {
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query);
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
-    $query = new TWiki::Request({
+    $query = new Unit::Request({
         templatetopic => [ 'TemplateTopic' ],
         action => [ 'save' ],
         topic => [ $this->{test_web}.'.TemplateTopic' ]
@@ -289,7 +289,7 @@ sub test_templateTopicTextSave {
 # Save over existing topic
 sub test_prevTopicTextSave {
     my $this = shift;
-    my $query = new TWiki::Request({
+    my $query = new Unit::Request({
                          text => [ 'WRONG' ],
                          action => [ 'save' ],
                          topic => [ $this->{test_web}.'.PrevTopicTextSave' ]
@@ -297,7 +297,7 @@ sub test_prevTopicTextSave {
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query);
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
-    $query = new TWiki::Request({
+    $query = new Unit::Request({
                          text => [ 'CORRECT' ],
                          action => [ 'save' ],
                          topic => [ $this->{test_web}.'.PrevTopicTextSave' ]
@@ -313,7 +313,7 @@ sub test_prevTopicTextSave {
 # Save over existing topic with no text
 sub test_prevTopicEmptyTextSave {
     my $this = shift;
-    my $query = new TWiki::Request({
+    my $query = new Unit::Request({
                          text => [ 'CORRECT' ],
                          action => [ 'save' ],
                          topic => [ $this->{test_web}.'.PrevTopicEmptyTextSave' ]
@@ -321,7 +321,7 @@ sub test_prevTopicEmptyTextSave {
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query);
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
-    $query = new TWiki::Request({
+    $query = new Unit::Request({
                          action => [ 'save' ],
                          topic => [ $this->{test_web}.'.PrevTopicEmptyTextSave' ]
                         });
@@ -335,7 +335,7 @@ sub test_prevTopicEmptyTextSave {
 
 sub test_simpleFormSave {
     my $this = shift;
-    my $query = new TWiki::Request({
+    my $query = new Unit::Request({
                          text => [ 'CORRECT' ],
                          formtemplate => [ 'TestForm1' ],
                          action => [ 'save' ],
@@ -356,7 +356,7 @@ sub test_simpleFormSave {
 
 sub test_templateTopicFormSave {
     my $this = shift;
-    my $query = new TWiki::Request({
+    my $query = new Unit::Request({
                          text => [ 'Template Topic' ],
                          formtemplate => [ 'TestForm1' ],
                          'Select' =>
@@ -371,7 +371,7 @@ sub test_templateTopicFormSave {
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
 
     my($xmeta, $xtext) = $this->{twiki}->{store}->readTopic(undef, $this->{test_web}, 'TemplateTopic');
-    $query = new TWiki::Request({
+    $query = new Unit::Request({
                          templatetopic => [ 'TemplateTopic' ],
                          action => [ 'save' ],
                          topic => [ $this->{test_web}.'.TemplateTopicAgain' ]
@@ -390,7 +390,7 @@ sub test_templateTopicFormSave {
 
 sub test_prevTopicFormSave {
     my $this = shift;
-    my $query = new TWiki::Request({
+    my $query = new Unit::Request({
                          text => [ 'Template Topic' ],
                          formtemplate => [ 'TestForm1' ],
                          'Select' =>
@@ -403,7 +403,7 @@ sub test_prevTopicFormSave {
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query);
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
-    $query = new TWiki::Request({
+    $query = new Unit::Request({
                       action => [ 'save' ],
                       'Textfield' =>
                       [ 'Barney' ],
@@ -421,7 +421,7 @@ sub test_prevTopicFormSave {
 
 sub test_simpleFormSave1 {
     my $this = shift;
-    my $query = new TWiki::Request({
+    my $query = new Unit::Request({
                          action => [ 'save' ],
 			 text   => [ $testtext_nometa ],
                          formtemplate => [ 'TestForm1' ],
@@ -454,7 +454,7 @@ sub test_simpleFormSave2 {
     $this->{twiki}->{store}->extractMetaData( $oldmeta, $oldtext );
     $this->{twiki}->{store}->saveTopic( $this->{test_user_login}, $this->{test_web}, 'SimpleFormSave2',
                                 $testform1, $oldmeta );
-    my $query = new TWiki::Request({
+    my $query = new Unit::Request({
                          action => [ 'save' ],
 			 text   => [ $testtext_nometa ],
                          formtemplate => [ 'TestForm3' ],
@@ -489,7 +489,7 @@ sub test_simpleFormSave3 {
     $this->{twiki}->{store}->saveTopic(
         $this->{test_user_login}, $this->{test_web}, 'SimpleFormSave3',
         $testform1, $oldmeta );
-    my $query = new TWiki::Request(
+    my $query = new Unit::Request(
         {
             action => [ 'save' ],
             text   => [ $testtext_nometa ],
@@ -517,7 +517,7 @@ sub test_templateTopicWithMeta {
     my $this = shift;
 
     TWiki::Func::saveTopicText($this->{test_web},"TemplateTopic",$testtext1);
-    my $query = new TWiki::Request(
+    my $query = new Unit::Request(
         {
             templatetopic => [ 'TemplateTopic' ],
             action => [ 'save' ],
@@ -556,7 +556,7 @@ sub test_merge {
 
     # Now build a query for the save at the end of the first edit,
     # forcing a revision increment.
-    my $query1 = new TWiki::Request(
+    my $query1 = new Unit::Request(
         {
             action => [ 'save' ],
             text   => [ "Soggy bat" ],
@@ -586,7 +586,7 @@ GUMP
 
     # Build a second query for the other save, based on the same original
     # version as the previous edit
-    my $query2 = new TWiki::Request(
+    my $query2 = new Unit::Request(
         {
             action => [ 'save' ],
             text   => [ "Wet rat" ],
@@ -654,7 +654,7 @@ sub test_restoreRevision {
     my $this = shift;
     
     # first write topic without meta
-    my $query = new TWiki::Request({
+    my $query = new Unit::Request({
         text => [ 'FIRST REVISION' ],
         action => [ 'save' ],
         topic => [ $this->{test_web}.'.DeleteTestRestoreRevisionTopic' ]
@@ -670,7 +670,7 @@ sub test_restoreRevision {
     $this->assert_equals(1, $orgRev);
         
     # write second revision with meta
-    $query = new TWiki::Request({
+    $query = new Unit::Request({
                          action => [ 'save' ],
 			 text   => [ 'SECOND REVISION' ],
 			             originalrev => $original,
@@ -694,7 +694,7 @@ sub test_restoreRevision {
 
     # now restore topic to revision 1
     # the form should be removed as well
-    $query = new TWiki::Request({
+    $query = new Unit::Request({
         action => [ 'manage' ],
         rev => 1,
         forcenewrevision => 1,
@@ -712,7 +712,7 @@ sub test_restoreRevision {
     
     # and restore topic to revision 2
     # the form should be re-appended
-    $query = new TWiki::Request({
+    $query = new Unit::Request({
         action => [ 'manage' ],
         rev => 2,
         forcenewrevision => 1,
@@ -771,7 +771,7 @@ sub test_1897 {
     sleep(1); # tick the clock to ensure the date changes
 
     # A saves again, reprev triggers to create rev 1 again
-    $query = new TWiki::Request(
+    $query = new Unit::Request(
         {
             action => [ 'save' ],
             text   => [ "Sweaty\ncat" ],
@@ -790,7 +790,7 @@ sub test_1897 {
     $this->assert_str_equals("Sweaty\ncat\n", $text);
 
     # User B saves; make sure we get a merge notice.
-    $query = new TWiki::Request(
+    $query = new Unit::Request(
         {
             action => [ 'save' ],
             text   => [ "Smelly\nrat" ],
@@ -818,7 +818,7 @@ sub test_1897 {
 sub test_missingTemplateTopic {
     my $this = shift;
     $this->{twiki}->finish();
-    my $query = new TWiki::Request({
+    my $query = new Unit::Request({
         templatetopic => [ 'NonExistantTemplateTopic' ],
         action => [ 'save' ],
         topic => [ $this->{test_web}.'.FlibbleDeDib' ]

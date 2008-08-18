@@ -6,7 +6,10 @@ use base qw(TWikiTestCase);
 
 use strict;
 
+use TWiki;
 use TWiki::UI::View;
+use Unit::Request;
+use Unit::Response;
 
 my $twiki;
 
@@ -20,7 +23,10 @@ sub set_up {
     my $this = shift;
 
     $this->SUPER::set_up();
-    $twiki = TWiki->new();
+    my $query = new Unit::Request();
+    $twiki = TWiki->new( undef, $query );
+    $this->{request}  = $query;
+    $this->{response} = new Unit::Response();
 }
 
 sub tear_down {
@@ -36,11 +42,10 @@ sub _viewSection {
     $twiki->{webName} = 'TestCases';
     $twiki->{topicName} = 'IncludeFixtures';
 
-    my $query = $twiki->{request};
-    $query->param('-name'=>'skin','-value'=>'text');
-    $query->path_info('TestCases/IncludeFixtures');
+    $this->{request}->param('-name'=>'skin','-value'=>'text');
+    $this->{request}->path_info('TestCases/IncludeFixtures');
 
-    $query->param('-name'=>'section','-value'=>$section);
+    $this->{request}->param('-name'=>'section','-value'=>$section);
     my ($text,$result)  =  $this->capture( \&TWiki::UI::View::view, $twiki);
     $text =~ s/(.*?)\r?\n\r?\n//s;
 

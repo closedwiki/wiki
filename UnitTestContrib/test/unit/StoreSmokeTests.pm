@@ -224,7 +224,7 @@ sub verify_releaselocksonsave {
     my $meta = new TWiki::Meta($this->{twiki}, $this->{test_web}, $topic);
 
     # create rev 1 as TestUser1
-    my $query = new TWiki::Request ({
+    my $query = new Unit::Request ({
                           originalrev => [ 0 ],
                           'action' => [ 'save' ],
                           text => [ "Before\nBaseline\nText\nAfter\n" ],
@@ -243,7 +243,7 @@ sub verify_releaselocksonsave {
     };
 
     # create rev 2 as TestUser1
-    $query = new TWiki::Request ({
+    $query = new Unit::Request ({
                        originalrev => [ 1 ],
                        'action' => [ 'save' ],
                        text => [ "Before\nChanged\nLines\nAfter\n" ],
@@ -263,7 +263,7 @@ sub verify_releaselocksonsave {
     };
 
     # now TestUser2 has a go, based on rev 1
-    $query = new TWiki::Request ({
+    $query = new Unit::Request ({
                        originalrev => [ 1 ],
                        'action' => [ 'save' ],
                        text => [ "Before\nSausage\nChips\nAfter\n" ],

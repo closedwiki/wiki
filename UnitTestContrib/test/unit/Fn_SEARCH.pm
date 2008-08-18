@@ -607,7 +607,7 @@ HERE
         'QueryTopicTwo', $text);
 	
 	$this->{twiki}->finish();
-    my $query = new TWiki::Request("");
+    my $query = new Unit::Request("");
     $query->path_info("/$this->{test_web}/$this->{test_topic}");
 
     $this->{twiki} = new TWiki(undef, $query);

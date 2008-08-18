@@ -86,7 +86,7 @@ sub test_AccessControlException {
 
 sub test_oopsScript {
     my $this = shift;
-    my $query = new TWiki::Request({
+    my $query = new Unit::Request({
         skin => 'none',
         template => 'oopsgeneric',
         def => 'message',

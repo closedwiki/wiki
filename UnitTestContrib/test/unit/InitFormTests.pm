@@ -37,6 +37,8 @@ use Error qw( :try );
 use TWiki;
 use TWiki::UI::Edit;
 use TWiki::Form;
+use Unit::Request;
+use Unit::Response;
 use Error qw( :try );
 
 my $testweb = "TestWeb";
@@ -133,21 +135,23 @@ sub set_up {
     my $this = shift;
     $this->SUPER::set_up();
 
-    $this->{twiki} = new TWiki();
+    my $query = new Unit::Request();
+    $this->{twiki}    = new TWiki( undef, $query );
+    $this->{request}  = $query;
+    $this->{response} = new Unit::Response();
     $user = $this->{twiki}->{user};
 
-    $aurl = $this->{twiki}->getPubUrl(1, $testweb, $testform);
+    $aurl = $this->{twiki}->getPubUrl( 1, $testweb, $testform );
     $surl = $this->{twiki}->getScriptUrl(1);
 
-    $this->{twiki}->{store}->createWeb($user, $testweb);
-
+    $this->{twiki}->{store}->createWeb( $user, $testweb );
 
     $TWiki::Plugins::SESSION = $this->{twiki};
-    TWiki::Func::saveTopicText( $testweb, $testtopic1, $testtext1, 1, 1 );
-    TWiki::Func::saveTopicText( $testweb, $testtopic2, $testtext2, 1, 1 );
-    TWiki::Func::saveTopicText( $testweb, $testtopic3, $testtext3, 1, 1 );
-    TWiki::Func::saveTopicText( $testweb, $testform, $testform1, 1, 1 );
-    TWiki::Func::saveTopicText( $testweb, $testtmpl, $testtmpl1, 1, 1 );
+    TWiki::Func::saveTopicText( $testweb, $testtopic1,      $testtext1, 1, 1 );
+    TWiki::Func::saveTopicText( $testweb, $testtopic2,      $testtext2, 1, 1 );
+    TWiki::Func::saveTopicText( $testweb, $testtopic3,      $testtext3, 1, 1 );
+    TWiki::Func::saveTopicText( $testweb, $testform,        $testform1, 1, 1 );
+    TWiki::Func::saveTopicText( $testweb, $testtmpl,        $testtmpl1, 1, 1 );
     TWiki::Func::saveTopicText( $testweb, "MyeditTemplate", $edittmpl1, 1, 1 );
     $this->{twiki}->enterContext('edit');
 }
@@ -179,7 +183,7 @@ sub setup_formtests {
   my $attr = new TWiki::Attrs( $params );
   foreach my $k ( keys %$attr ) {
     next if $k eq '_RAW';
-    $this->{twiki}->{request}->param( -name=>$k, -value=>$attr->{$k});
+    $this->{request}->param( -name=>$k, -value=>$attr->{$k});
   }
 
   # Now generate the form. We pass a template which throws everything away

@@ -18,6 +18,8 @@ use strict;
 use TWiki;
 use TWiki::UI::Edit;
 use TWiki::Form;
+use Unit::Request;
+use Unit::Response;
 use Error qw( :try );
 
 my $testweb = "TestWeb";
@@ -58,8 +60,11 @@ sub new {
 sub set_up {
     my $this = shift;
     $this->SUPER::set_up();
-
-    $twiki = new TWiki();
+    
+    my $query = new Unit::Request();
+    $twiki = new TWiki( undef, $query );
+    $this->{request}  = $query;
+    $this->{response} = new Unit::Response;
     $user = $twiki->{user};
 
     $surl = $twiki->getScriptUrl(1);
@@ -88,7 +93,7 @@ sub setup_TOCtests {
   my $attr = new TWiki::Attrs( $params );
   foreach my $k ( keys %$attr ) {
     next if $k eq '_RAW';
-    $twiki->{request}->param( -name=>$k, -value=>$attr->{$k});
+    $this->{request}->param( -name=>$k, -value=>$attr->{$k});
   }
 
   # Now generate the TOC

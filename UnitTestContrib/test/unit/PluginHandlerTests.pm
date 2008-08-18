@@ -213,9 +213,9 @@ sub initializeUserHandler {
     my $ru = $_[0] || 'undef';
     die "RU $ru" unless $ru eq ($TWiki::Plugins::SESSION->{remoteUser}||'undef');
     my $url = $_[1] || 'undef';
-    die "URL $url" unless $url eq ($TWiki::Plugins::SESSION->{request}->url() || undef);
+    die "URL $url" unless $url eq (TWiki::Func::getCgiQuery()->url() || undef);
     my $path = $_[2] || 'undef';
-    die "PATH $path" unless $path eq ($TWiki::Plugins::SESSION->{request}->path_info() || 'undef');
+    die "PATH $path" unless $path eq (TWiki::Func::getCgiQuery->path_info() || 'undef');
 }
 HERE
     $this->checkCalls(1, 'earlyInitPlugin');

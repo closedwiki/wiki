@@ -33,7 +33,7 @@ BEGIN {
 
     die "Cannot locate bin/setlib.cfg" unless $root;
 
-    $root =~ s#/bin/setlib.cfg$##;
+    $root =~ s{/bin/setlib.cfg$}{};
 
     unshift @INC, "$root/test/unit";
     unshift @INC, "$root/bin";

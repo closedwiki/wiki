@@ -38,7 +38,7 @@ sub list_tests {
 
 sub run_testcase {
     my ( $this, $testcase ) = @_;
-    my $query = new TWiki::Request({
+    my $query = new Unit::Request({
         test=>'compare',
         debugenableplugins=>'TestFixturePlugin,InterwikiPlugin',
         skin=>'pattern'});

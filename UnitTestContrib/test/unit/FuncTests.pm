@@ -67,7 +67,7 @@ sub test_getViewUrl {
 
     $TWiki::Plugins::SESSION = new TWiki(
         undef,
-        new TWiki::Request( { topic=>"Sausages.AndMash" } ));
+        new Unit::Request( { topic=>"Sausages.AndMash" } ));
 
     $result = TWiki::Func::getViewUrl ( "Sausages", "AndMash" );
     $this->assert_matches(qr!/$ss/Sausages/AndMash!, $result );
@@ -88,7 +88,7 @@ sub test_getScriptUrl {
     $result = TWiki::Func::getScriptUrl ( "", "WebHome", 'wibble' );
     $this->assert_matches(qr!/$ss/$this->{users_web}/WebHome!, $result );
 
-    my $q = new TWiki::Request( {} );
+    my $q = new Unit::Request( {} );
     $q->path_info( '/Sausages/AndMash' );
     $TWiki::Plugins::SESSION = new TWiki(undef, $q);
 
