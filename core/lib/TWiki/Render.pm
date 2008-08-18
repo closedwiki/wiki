@@ -20,6 +20,9 @@ require TWiki::Time;
 use vars qw( $placeholderMarker );
 $placeholderMarker = 0;
 
+# Used to generate unique anchors
+my %anchornames = ();
+
 # defaults for trunctation of summary text
 my $TMLTRUNC = 162;
 my $PLAINTRUNC = 70;
@@ -354,14 +357,18 @@ sub _makeAnchorHeading {
     # - Build '<nop><h1><a name='atext'></a> heading </h1>' markup
     # - Initial '<nop>' is needed to prevent subsequent matches.
     # - filter out $TWiki::regex{headerPatternNoTOC} ( '!!' and '%NOTOC%' )
-    my $anchorName =       $this->makeAnchorName( $text, 0 );
-    my $compatAnchorName = $this->makeAnchorName( $text, 1 );
+    my $anchorName = $this->makeUniqueAnchorName( $text, 0 );
+    #  if the generated uniqe anchor name is 'compatible', it won't change:
+    my $compatAnchorName = $this->makeAnchorName( $anchorName, 1 );
+
     # filter '!!', '%NOTOC%'
     $text =~ s/$TWiki::regex{headerPatternNoTOC}//o;
     my $html = '<nop><h'.$theLevel.'>';
     $html .= CGI::a( { name => $anchorName }, '' );
-    $html .= CGI::a( { name => $compatAnchorName }, '')
-      if( $compatAnchorName ne $anchorName );
+    if( $compatAnchorName ne $anchorName ) {
+        $compatAnchorName = $this->makeUniqueAnchorName( $anchorName, 1 );
+        $html .= CGI::a( { name => $compatAnchorName }, '');
+    }
     $html .= ' '.$text.' </h'.$theLevel.'>';
 
     return $html;
@@ -426,6 +433,38 @@ sub makeAnchorName {
 
     return $anchorName;
 }
+
+
+=pod
+
+---++ ObjectMethod makeUniqueAnchorName($anchorName, $compatibility) -> $anchorName
+
+   * =$anchorName= - the unprocessed anchor name
+   * =$compatibilityMode= - SMELL: compatibility with *what*?? Who knows. :-(
+
+Build a valid HTML anchor name (unique w.r.t. the list stored in %anchornames)
+
+=cut
+
+sub makeUniqueAnchorName {
+    my( $this, $text, $compatibilityMode ) = @_;
+
+    my $anchorName = $this->makeAnchorName( $text, $compatibilityMode );
+
+    # ensure that the generated anchor name is unique
+    my $cnt = 2;
+    my $suffix = '';
+    while (exists $anchornames{$anchorName . $suffix}) {
+        $suffix = '_' . $cnt++;
+        # limit resulting name to 32 chars
+        $anchorName = substr($anchorName, 0, 32 - length($suffix));
+    }
+    $anchorName .= $suffix;
+    $anchornames{$anchorName} = 1;
+
+    return $anchorName;
+}
+
 
 # Returns =title='...'= tooltip info in case LINKTOOLTIPINFO perferences variable is set. 
 # Warning: Slower performance if enabled.
@@ -885,6 +924,8 @@ sub getRenderedVersion {
     
     @{$this->{LIST}} = ();
 
+    %anchornames = ();
+
     # Initial cleanup
     $text =~ s/\r//g;
     # whitespace before <! tag (if it is the first thing) is illegal
@@ -1002,6 +1043,10 @@ sub getRenderedVersion {
     $text =~ s/$TWiki::TranslationToken(#x?[0-9a-f]+;)/&$1/goi;
     $text =~ s/$TWiki::TranslationToken(\w+;)/&$1/go;
 
+    # '#WikiName' anchors (moved in front in order to retain original names if possible)
+    # SMELL: in case this type of anchor (presumably user-defined) gets renamed, it should be noted somewhere
+    $text =~ s/^(\#)($TWiki::regex{wikiWordRegex})/CGI::a({name=>$this->makeUniqueAnchorName($2)},'')/geom;
+
     # Headings
     # '<h6>...</h6>' HTML rule
     $text =~ s/$TWiki::regex{headerPatternHt}/_makeAnchorHeading( $this,$2,$1)/geo;
@@ -1107,8 +1152,7 @@ sub getRenderedVersion {
 
     $text = join( '', @result );
 
-    # '#WikiName' anchors
-    $text =~ s/^(\#)($TWiki::regex{wikiWordRegex})/CGI::a( { name=>$this->makeAnchorName( $2 )}, '')/geom;
+    # <nop>WikiWords
     $text =~ s/${STARTWW}==(\S+?|\S[^\n]*?\S)==$ENDWW/_fixedFontText($1,1)/gem;
     $text =~ s/${STARTWW}__(\S+?|\S[^\n]*?\S)__$ENDWW/<strong><em>$1<\/em><\/strong>/gm;
     $text =~ s/${STARTWW}\*(\S+?|\S[^\n]*?\S)\*$ENDWW/<strong>$1<\/strong>/gm;

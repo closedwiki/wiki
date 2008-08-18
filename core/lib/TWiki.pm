@@ -1998,47 +1998,71 @@ sub _TOC {
       push @qparams, $name => $query->param($name);
     }
 
-    # SMELL: this handling of <pre> is archaic.
-    # SMELL: use forEachLine
-    foreach my $line ( split( /\r?\n/, $text ) ) {
-        my $level;
-        if ( $line =~ m/$regex{headerPatternDa}/o ) {
-            $line = $2;
-            $level = length $1;
-        } elsif ( $line =~ m/$regex{headerPatternHt}/io ) {
-            $line = $2;
-            $level = $1;
-        } else {
-            next;
-        }
+    # NB: While we're processing $text line by line here,
+    # $this->renderer->getRendereredVersion() 'allocates' unique anchor names by
+    # first replacing '#WikiWord', followed by regex{headerPatternHt} and
+    # regex{headerPatternDa}. In order to stay in sync and not 'clutter'/slow
+    # down the renderer code, we have to adhere to this order here as well
+    my @regexps = ('^(\#)('.$regex{wikiWordRegex}.')',
+                   $regex{headerPatternHt},
+                   $regex{headerPatternDa});
+    my @lines = split( /\r?\n/, $text );
+    my %anchors = ();
+    my %headings = ();
+    my %levels = ();
+    for my $i (0 .. $#regexps) {
+        my $lineno = 0;
+        # SMELL: use forEachLine
+        foreach my $line (@lines) {
+            $lineno++;
+            if ($line =~ m/$regexps[$i]/) {
+                my ($level, $heading) = ($1, $2);
+                my $anchor = $this->renderer->makeUniqueAnchorName($heading);
 
-        if( $line && ($level >= $minDepth) && ($level <= $maxDepth) ) {
-            # cut TOC exclude '---+ heading !! exclude this bit'
-            $line =~ s/\s*$regex{headerPatternNoTOC}.+$//go;
-            next unless $line;
-            my $anchor = $this->renderer->makeAnchorName( $line );
-            $highest = $level if( $level < $highest );
-            my $tabs = "\t" x $level;
-            # Remove *bold*, _italic_ and =fixed= formatting
-            $line =~ s/(^|[\s\(])\*([^\s]+?|[^\s].*?[^\s])\*($|[\s\,\.\;\:\!\?\)])/$1$2$3/g;
-            $line =~ s/(^|[\s\(])_+([^\s]+?|[^\s].*?[^\s])_+($|[\s\,\.\;\:\!\?\)])/$1$2$3/g;
-            $line =~ s/(^|[\s\(])=+([^\s]+?|[^\s].*?[^\s])=+($|[\s\,\.\;\:\!\?\)])/$1$2$3/g;
-            # Prevent WikiLinks
-            $line =~ s/\[\[.*?\]\[(.*?)\]\]/$1/g;  # '[[...][...]]'
-            $line =~ s/\[\[(.*?)\]\]/$1/ge;        # '[[...]]'
-            $line =~ s/([\s\(])($regex{webNameRegex})\.($regex{wikiWordRegex})/$1<nop>$3/go;  # 'Web.TopicName'
-            $line =~ s/([\s\(])($regex{wikiWordRegex})/$1<nop>$2/go;  # 'TopicName'
-            $line =~ s/([\s\(])($regex{abbrevRegex})/$1<nop>$2/go;    # 'TLA'
-            $line =~ s/([\s\-\*\(])([$regex{mixedAlphaNum}]+\:)/$1<nop>$2/go; # 'Site:page' Interwiki link
-            # Prevent manual links
-            $line =~ s/<[\/]?a\b[^>]*>//gi;
-            # create linked bullet item, using a relative link to anchor
-            my $target = $isSameTopic ?
-                         _make_params(0, '#'=>$anchor,@qparams) :
-                         $this->getScriptUrl(0,'view',$web,$topic,'#'=>$anchor,@qparams);
-            $line = $tabs.'* ' .  CGI::a({href=>$target},$line);
-            $result .= "\n".$line;
-        }
+                if ($i > 0) {
+                    # SMELL: needed only because Render::_makeAnchorHeading uses it
+                    my $compatAnchor = $this->renderer->makeAnchorName($anchor, 1);
+                    $compatAnchor = $this->renderer->makeUniqueAnchorName($anchor,1)
+                        if ($compatAnchor ne $anchor);
+
+                    $heading =~ s/\s*$regex{headerPatternNoTOC}.+$//go;
+                    next unless $heading;
+
+                    $level = length $level if ($i == 2);
+                    if( ($level >= $minDepth) && ($level <= $maxDepth) ) {
+                        $anchors{$lineno} = $anchor;
+                        $headings{$lineno} = $heading;
+                        $levels{$lineno} = $level;
+		    }
+		}
+	    }
+	}
+    }
+
+    # SMELL: this handling of <pre> is archaic.
+    foreach my $lineno (sort{$a <=> $b}(keys %headings)) {
+        my ($level, $line, $anchor) = ($levels{$lineno}, $headings{$lineno}, $anchors{$lineno});
+        $highest = $level if( $level < $highest );
+        my $tabs = "\t" x $level;
+        # Remove *bold*, _italic_ and =fixed= formatting
+        $line =~ s/(^|[\s\(])\*([^\s]+?|[^\s].*?[^\s])\*($|[\s\,\.\;\:\!\?\)])/$1$2$3/g;
+        $line =~ s/(^|[\s\(])_+([^\s]+?|[^\s].*?[^\s])_+($|[\s\,\.\;\:\!\?\)])/$1$2$3/g;
+        $line =~ s/(^|[\s\(])=+([^\s]+?|[^\s].*?[^\s])=+($|[\s\,\.\;\:\!\?\)])/$1$2$3/g;
+        # Prevent WikiLinks
+        $line =~ s/\[\[.*?\]\[(.*?)\]\]/$1/g;  # '[[...][...]]'
+        $line =~ s/\[\[(.*?)\]\]/$1/ge;        # '[[...]]'
+        $line =~ s/([\s\(])($regex{webNameRegex})\.($regex{wikiWordRegex})/$1<nop>$3/go;  # 'Web.TopicName'
+        $line =~ s/([\s\(])($regex{wikiWordRegex})/$1<nop>$2/go;  # 'TopicName'
+        $line =~ s/([\s\(])($regex{abbrevRegex})/$1<nop>$2/go;    # 'TLA'
+        $line =~ s/([\s\-\*\(])([$regex{mixedAlphaNum}]+\:)/$1<nop>$2/go; # 'Site:page' Interwiki link
+        # Prevent manual links
+        $line =~ s/<[\/]?a\b[^>]*>//gi;
+        # create linked bullet item, using a relative link to anchor
+        my $target = $isSameTopic ?
+                     _make_params(0, '#'=>$anchor,@qparams) :
+                     $this->getScriptUrl(0,'view',$web,$topic,'#'=>$anchor,@qparams);
+        $line = $tabs.'* ' .  CGI::a({href=>$target},$line);
+        $result .= "\n".$line;
     }
 
     if( $result ) {
