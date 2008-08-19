@@ -50,7 +50,7 @@ sub _index {
     use TWiki::Contrib::SearchEngineKinoSearchAddOn::Index;
     
     my $indexer = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
-    return $indexer->createIndex($debug);
+    return $indexer->createIndex($debug, 1);
 }
 sub _update {
     my $session = shift;
@@ -95,7 +95,7 @@ sub _KINOSEARCH {
 }
 
 sub afterSaveHandler {
-    return if ($enableOnSaveUpdates == 1);  #disabled - they can make save's take too long
+    return if ($enableOnSaveUpdates != 1);  #disabled - they can make save's take too long
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $text, $topic, $web, $error, $meta ) = @_;
     my $web = $_[2];
@@ -107,7 +107,7 @@ sub afterSaveHandler {
 }
 
 sub afterRenameHandler {
-    return if ($enableOnSaveUpdates == 1);  #disabled - they can make save's take too long
+    return if ($enableOnSaveUpdates != 1);  #disabled - they can make save's take too long
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $oldWeb, $oldTopic, $oldAttachment, $newWeb, $newTopic, $newAttachment ) = @_;
     my $oldweb = $_[0];
@@ -123,7 +123,7 @@ sub afterRenameHandler {
 }
 
 sub afterAttachmentSaveHandler {
-    return if ($enableOnSaveUpdates == 1);  #disabled - they can make save's take too long
+    return if ($enableOnSaveUpdates != 1);  #disabled - they can make save's take too long
     # do not uncomment, use $_[0], $_[1]... instead
     ###   my( $attrHashRef, $topic, $web ) = @_;
     my $web = $_[2];

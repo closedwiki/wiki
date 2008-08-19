@@ -28,5 +28,6 @@ lib/TWiki/Store/SearchAlgorithms/Kino.pm #highly experimental SEARCH backend tha
 lib/TWiki/Plugins/SearchEngineKinoSearchPlugin.pm
 lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/Config.spec
 data/TWiki/SearchEngineKinoSearchPlugin.txt
+data/TWiki/VarKINOSEARCH.txt
 templates/search.kino.tmpl
 

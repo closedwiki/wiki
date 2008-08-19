@@ -16,7 +16,6 @@ in Java). This is the base of this indexed search engine for TWiki. With <nop>Ki
    * if your TWiki has grown so big, that normal search is too slow or
    * if you want to do search not only on the topics but also the attachments.
 
-There is already an indexed search based on [[http://www.kasei.com/archives/001039.html][Plucene]]: TWiki:Plugins/SearchEnginePluceneAddOn. But Plucene is relatively slow and is not developed further. <nop>KinoSearch is the successor of Plucene and much faster and more scalable. Thus I created this search engine add-on based on the sources of !SearchEnginePluceneAddOn. 
 
 ---++ Screenshot of a search results list
 
@@ -24,40 +23,30 @@ There is already an indexed search based on [[http://www.kasei.com/archives/0010
 
 ---++ Usage
 
----+++ Indexing with kinoindex
-
-With the script ==kinoindex== you index all the public webs. For each topic the text body, the title, the form fields and attached documents are indexed.
-
-By now, you should run this script manually after installation to create the index files used by <nop>KinoSearch. If you want, you can also schedule a weekly or monthly crontab job to create the index files again, or maybe execute it manually when you take down your server for maintenance tasks. To prevent browser access, it has been placed out of the public bin folder.
-
----+++ Updating with kinoupdate
-
-The ==kinoupdate== script uses the web's ==.changes== files to know about topic modifications. Also, a ==.kinoupdate== file is used on each web directory storing the last timestamp the script was run on it. So when this script is executed, it first checks if there are any topic updates since last execution. The most recent topic updates are removed from the index and then reindexed again.
-
-This script should be executed by an hourly crontab. As before, this script has been placed out of the public bin folder.
-
----+++ Attachment file types to be indexed
-
-All the PDF, HTML, DOC, XLS and text attachments are indexed by default. If you want to override this setting you can use a TWiki preference ==KINOSEARCHINDEXEXTENSIONS==. You can copy & paste the next lines in your [[%MAINWEB%.TWikiPreferences]] topic
-<verbatim>
-   * KinoSearch settings
-      * Set KINOSEARCHINDEXEXTENSIONS = .pdf, .html, .txt, .doc, .xls
-</verbatim>
-or whatever extensions you want. If you add other file extensions, they are treated as ASCII files. If needed, you can add more specialised stringifiers for further document types ( see [[SearchEngineKinoSearchAddOn#Indexing_further_document_types][Indexing further document types]]).
-
----+++ Indexing of form fields
-
-All form fields are indexed. For this, the form templates are checked and the included fields are indexed. Additionally the name of the form of a topic is stored in the field =form_name=. How to search for this is described below.
-
-
-*Note*: With =kinoupdate= only the form fields that existed at the
- time the initial index was created are indexed. Thus if you add a
- form or if you add a new field to an existing form, you should create a new index with =kinoindex=.
-
-
 ---+++ Searching with kinosearch
 
 The ==kinosearch== script uses a template ==kinosearch.pattern.tmpl== (if you use the pattern skin). There is also a *KinoSearch* topic with a form ready to use with the *kinosearch* script.
+
+If you have enabled the SearchEngineKinoSearchPlugin, you can use the rest handler either from a URL (this works only for a smaller TWiki), or the command line. The syntax is identical to the =kinosearch= script.
+   * =%SCRIPTURL{rest}%/SearchEngineKinoSearchPlugin/search=
+   * =cd twiki/bin ; ./rest SearchEngineKinoSearchPlugin.search=
+   
+The following form submits text to the ==kinosearch== script. The installation instructions are detailed below.
+
+<form action="%SCRIPTURLPATH%/kinosearch%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%"}%/">
+   <input type="text" name="search" size="32" /> <input type="submit" value="Search text" /> | [[%TWIKIWEB%.KinoSearch][Help]]
+</form>
+
+%INCLUDE{"VarKINOSEARCH"}%
+
+---+++ (experimental) Integrating KinoSearch into TWiki's internal =SEARCH= 
+
+By setting =$TWiki::cfg{RCS}{SearchAlgorithm} = 'TWiki::Store::SearchAlgorithms::Kino';= (a setting in the _Store settings_ section in =configure=), 
+TWiki will use the KinoSearch index for any inbuilt search (including WebSearch) that it can (for regex searches it will fall back to the =Forking= search algorithm).
+
+If you want TWiki's WebSearch to also show you attachment results (when you select the 'Both body and title' option), you need to also set ={SearchEngineKinoSearchAddOn}{showAttachments}=1=, and add =kino= to the front of your =SKIN= setting.
+
+The reason this feature is experimental, is that kinosearch does not do partial matching, so searching for =TAG= will not match text like =%TAG{"something"}%=, only instances where the word TAG is seperated by whitespace. TWiki's SEARCH expects total partial matching.
 
 ---++++ Query syntax
 
@@ -92,22 +81,64 @@ are sure, that the three words are in that order one after the other.
 
 _Note:_ The current version of !KinoSearch does not support wildcards.
 
+---++ Indexing
+__Note:__ The =kinoindex=, =kinoupdate= and =kinosearch= scripts will be deprecated over time in favour of the restHandlers, both for security reasons, and to make compatibility with TWiki 5.0 easier.
+---+++ Creating a new Index
 
----++ Search form
+Each topic's text body, title, form fields and attached documents are indexed.
 
-The following form submits text to the ==kinosearch== script. The installation instructions are detailed below.
+You should run this script manually after installation to create the index files used by <nop>KinoSearch. 
+You can also schedule a weekly or monthly crontab job to create the index files again, or execute it manually when you take down your server for maintenance tasks. To prevent browser access, it has been placed out of the public bin folder.
+   * =cd twiki/kinosearch/bin ; ./kinoindex=
 
-<form action="%SCRIPTURLPATH%/kinosearch%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%"}%/">
-   <input type="text" name="search" size="32" /> <input type="submit" value="Search text" /> | [[%TWIKIWEB%.KinoSearch][Help]]
-</form>
+If you have enabled the SearchEngineKinoSearchPlugin, you can use the rest handler either from a URL (this works only for a smaller TWiki), or the command line
+   * =%SCRIPTURL{rest}%/SearchEngineKinoSearchPlugin/index=
+   * =cd twiki/bin ; ./rest SearchEngineKinoSearchPlugin.index=
+
+---+++ Updating your Index
+
+The ==kinoupdate== script uses the web's ==.changes== files to know about topic modifications. 
+Also, a ==.kinoupdate== file is used on each web directory storing the last timestamp the script was run on it. 
+So when this script is executed, it first checks if there are any topic updates since last execution. 
+The most recent topic updates are removed from the index and then reindexed again.
+   * =cd twiki/kinosearch/bin ; ./kinoupdate=
+
+If you have enabled the SearchEngineKinoSearchPlugin, you can use the rest handler either from a URL (this works only for a smaller TWiki), or the command line
+   * =%SCRIPTURL{rest}%/SearchEngineKinoSearchPlugin/update=
+   * =cd twiki/bin ; ./rest SearchEngineKinoSearchPlugin.update=
+
+This script should be executed by an hourly crontab. As before, this script has been placed out of the public bin folder.
+<verbatim>
+# m h  dom mon dow   command
+35  *  *   *   *     cd /path/to/you/twiki/bin ; ./rest SearchEngineKinoSearchPlugin.update
+</verbatim>
+
+You can also optionally use SearchEngineKinoSearchPlugin's updateHandlers to automatically update the index whenever a topic is modified (or an attachment uploaded) by setting ={SearchEngineKinoSearchPlugin}{EnableOnSaveUpdates}= to true in the _Extensions_ section of configure. __Warning__ this can cause topic saves and attachments to become unacceptably slow, as the index update happens before the browser operation has completed.
+
+---+++ Attachment file types to be indexed
+
+All the PDF, HTML, DOC, XLS and text attachments are indexed by default. If you want to override this setting you can use a TWiki preference ==KINOSEARCHINDEXEXTENSIONS==. You can copy & paste the next lines in your [[%MAINWEB%.TWikiPreferences]] topic
+<verbatim>
+   * KinoSearch settings
+      * Set KINOSEARCHINDEXEXTENSIONS = .pdf, .html, .txt, .doc, .xls
+</verbatim>
+or whatever extensions you want. If you add other file extensions, they are treated as ASCII files. If needed, you can add more specialised stringifiers for further document types ( see [[SearchEngineKinoSearchAddOn#Indexing_further_document_types][Indexing further document types]]).
+
+---+++ Indexing of form fields
+
+All form fields are indexed. For this, the form templates are checked and the included fields are indexed. Additionally the name of the form of a topic is stored in the field =form_name=. How to search for this is described below.
+
+
+__Note__: With =kinoupdate= only the form fields that existed at the
+ time the initial index was created are indexed. Thus if you add a
+ form or if you add a new field to an existing form, you should create a new index with =kinoindex=.
+
 
 ---++ Indexing further document types
 
-The indexing of attached documents is realised in two steps: In the
-first step, the content of the document is changed to an ASCII
-string. This is called stringification. In the second step, this ASCII
-string is index with <nop>KinoSearch. This is the normal way in all
-index applications.  
+The indexing of attached documents is realised in two steps: 
+   1 the content of the document is changed to an ASCII string. This is called stringification. 
+   2 this ASCII string is indexed with <nop>KinoSearch. This is the normal way in all index applications.  
 
 To index different types of documents, it is necessary to have
 specialised stringifiers, i.e. classes to extract the ASCII text out
@@ -121,9 +152,8 @@ You can add new stringifier plugins by just adding new files here. The minimum t
    * The plugin must register itself by =__PACKAGE__->register_handler($application, $file_extension)=;
    * The plugin must implement the method =$text = stringForFile ($filename)=
 
-Then you should extend the list in =KINOSEARCHINDEXEXTENSIONS=. Now
-the defined document type should be index and the new stringifier
-should be used. 
+Then you should add to the list in =KINOSEARCHINDEXEXTENSIONS= in %MAINWEB%.TWikiPreferences. Now
+the defined document type should be indexed and the new stringifier should be used. 
 
 NOTE: If you just extend the list without having a special stringifier
 in place, this document type is treaded like an ASCII file. For binary
@@ -144,28 +174,24 @@ Word documents. For this either install antiword, abiword or !wvWare.
 __Note:__ This add-on comes with stringifiers for all three of
 them. Depending on what is installed, the right stringifiers is used. 
 
-__Note2:__ If you install more than one of the three backends, it is not
-predictable, which of them is used. If you want to be sure, delete the
-not used stringifiers from the directory
-=lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins=
-(either =DOC_antiword.pm=, =DOC_abiword.pm= or =DOC_wv.pm=).
+__Note2:__ If you install more than one of the three backends, you must select one of them in the configure ={SearchEngineKinoSearchAddOn}{WordIndexer}= setting.
 
 __Note2:__ If you do not install any of the mentioned backends, you
 should remove =.doc= from the =KINOSEARCHINDEXEXTENSIONS= variable. 
 
-To install antiword for Debian you can do:
-   * =aptitude install antiword=
+To install antiword for Debian you can:
+   * =apt-get install antiword=
 
-To install abiword for Debian you can do:
-   * =aptitude install abiword=
+To install abiword for Debian you can:
+   * =apt-get install abiword=
 
-To install !wvWare for Debian you can do:
-   * =aptitude install wv=
+To install !wvWare for Debian you can:
+   * =apt-get install wv=
 
 ---+++ Backends for PDF, PPT
 
 Install xpdf and ppthtml, if you want to index attached PDF and PPT files:
-   * For Debian you can use =aptitude install xpdf-utils= and =aptitude install ppthtml=
+   * For Debian you can use =apt-get install xpdf-utils ppthtml=
    * If you do not install =xpdf=, you should remove =.pdf= from the =KINOSEARCHINDEXEXTENSIONS= variable.
    * If you do not install =ppthtml=, you should remove =.ppt= from the =KINOSEARCHINDEXEXTENSIONS= variable.
 
@@ -188,7 +214,7 @@ perl -MCPAN -e "install Encode"
 </verbatim>
 </noautolink>
 
-_Note for Windows_: For Windows, make sure, you have a C-compiler in place. This is normally part of Visual Studio etc. 
+_Note for Windows_: For Windows, make sure you have a C-compiler in place. This is normally part of Visual Studio etc. 
 
 ---+++ Installation of the add on itself
 
@@ -212,44 +238,22 @@ Like many other TWiki extensions, this module is shipped with a automatic instal
       1. Download and unpack one of the .zip or .tgz archives to a temporary directory.
       1. Manually copy the contents across to the relevant places in your TWiki installation.
       1. Repeat from step 1 for any missing dependencies. 
+   * use =configure= to configure the advanced features 
+      * enable SearchEngineKinoSearchPlugin
+      * ={SearchEngineKinoSearchAddOn}{showAttachments}=
+      * ={SearchEngineKinoSearchPlugin}{EnableOnSaveUpdates}=
+      * ={SearchEngineKinoSearchAddOn}{WordIndexer}=
+      * =$TWiki::cfg{RCS}{SearchAlgorithm} = 'TWiki::Store::SearchAlgorithms::Kino';= 
+      * <nop>Set <nop>SKIN=kino,%SKIN%
 
 
-If you don't use the installer script, you need to install the add-on by hand:
-   * Download the ZIP file from the Add-on Home (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-     | *File:* | *Description:* |
-     | ==bin/kinosearch== | script that searches the index files |
-     | ==data/TWiki/KinoSearch.txt== | Kino search topic |
-     | ==data/TWiki/KinoSearch.txt,v== | Kino search topic repository |
-     | ==data/TWiki/SearchEngineKinoSearchAddOn.txt== | Add-on topic |
-     | ==pub/TWiki/SearchEngineKinoSearchAddOn/KinoSearchResult.jpg== | Attachment |
-     | ==templates/kinosearch.pattern.tmpl== | template used by new search script for the pattern skin |
-     | ==kinosearch/bin/LocalLib.cfg== | this file is required and should be modified according to the twiki/lib absolute path of your installation |
-     | ==kinosearch/bin/kinoindex== | script that indexes all topics |
-     | ==kinosearch/bin/kinoupdate== | script that updates the index |
-     | ==kinosearch/bin/ks_test== | script to test stringification |
-     | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn.pm== | |
-     | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/KinoSearch.pm== | base script with common functionality |
-     | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/Index.pm== | functionality for creating and updating the index |
-     | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/Search.pm== | functionality to search the index |
-     | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/Stringifier.pm== | Class to stringify attached files |
-     | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifyBase.pm== | Base class for stringifier plugins |
-     | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins== | Directory with stringifier plugins |
-     | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/DOC_antiword.pm== | Stringifier for MS Word documents using antiword|
-     | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/DOC_abiword.pm== | Stringifier for MS Word documents using abiword |
-     | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/DOC_wv.pm== | Stringifier for MS Word documents using wv |
-     | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/HTML.pm== | Stringifier for html files |
-     | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/PDF.pm== | Stringifier for pdf files |
-     | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/Text.pm== | Stringifier for ASCII files |
-     | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/XLS.pm== | Stringifier for MS Excel files |
-     | ==lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/PPT.pm== | Stringifier for MS Powerpoint files |     
-     | ==kinosearch/index/== | directory for index files to be stored |
-     | ==kinosearch/logs/== | the index and update logs will be written here - admin should monitor this folder |
+%$INSTALL_INSTRUCTIONS%
 
 ---+++ Configuration
 
 This add-on uses several preferences which should be set at [[%MAINWEB%.TWikiPreferences]]. All these preferences are optional. If you are fine with the default values given below, you need not change anything.
 <verbatim>
+(Note, these are not where the defaults are set)
    *  KinoSearch settings
       * Set KINOSEARCHINDEXEXTENSIONS = .pdf, .doc, .xml, .html, .txt, .xls, .ppt
       * Set KINOSEARCHSEARCHATTACHMENTSONLY = 0
@@ -262,7 +266,8 @@ This add-on uses several preferences which should be set at [[%MAINWEB%.TWikiPre
       * Set KINOSEARCHMAXLIMIT = 2000
 </verbatim>
 
-You can optionally insert the following lines in your ==lib/LocalSite.cfg==. Thus you can determine where the index is created and where the log files are created. *Note*: The directories must exist. 
+You can also =configure= (The Extensions:SearchEngineKinoSearchAddOn section) where the index and log files are created. 
+*Note*: The directories must exist. 
 <verbatim>
 $TWiki::cfg{KinoSearchLogDir} = '/home/httpd/twiki/kinosearch/logs';
 $TWiki::cfg{KinoSearchIndexDir} = '/home/httpd/twiki/kinosearch/index';
@@ -316,12 +321,13 @@ text seems to be O.K.
 
 ---++ Add-On Info
 
-   * Set SHORTDESCRIPTION = Fast indexed search with indexing of attachments like Word, Excel, PDF and PPT
+   * Set SHORTDESCRIPTION = Fast indexed SEARCH of topics and attachments (eg Word, Excel, PDF and PPT)
 
-|  Add-on Author: | TWiki:Main/MarkusHesse |
-|  Add-on Version: | v1.17 |
+|  Add-on Author: | TWiki:Main/MarkusHesse and TWiki:Main.SvenDowideit |
+|  Add-on Version: | %$VERSION% |
 |  Update note | If you update from an older version to v1.15 or higher, remove the old index and create a complete new one with kinoindex|
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+| 20 Aug 2008:  | v 1.18, added Integrated SEARCH, SearchEngineKinoSearchPlugin, restHandlers, updated code and tests -- TWiki:Main.SvenDowideit |
 | 6 Aug 2008:   | v 1.17, Bugs:Item5717: persist use form choices, Bugs:Item5647: cope better with attachment problems -- TWiki:Main.SvenDowideit |
 | 4 Jun 2008:   | v 1.16, Bugs:Item5646: Problem with attachments with capital letter suffix |
 | 12 May 2008:  | v 1.15, Bugs:Item5579, Bugs:Item5580, Bugs:Item5619: Problem with ALLOWWEBVIEW and Forms fixed |
@@ -356,7 +362,7 @@ text seems to be O.K.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
--- Main.MarkusHesse - 24 Aug 2007
+
 
 
 %META:FILEATTACHMENT{name="KinoSearchResult.jpg" attachment="KinoSearchResult.jpg" attr="" comment="" date="1208389508" path="KinoSearchResult.jpg" size="112106" stream="KinoSearchResult.jpg" tmpFilename="" user="BaseUserMapping_333" version="1"}%

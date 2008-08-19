@@ -8,21 +8,20 @@ renaming or adding an attachment.
 
 It can take a long time to update when dealing with large attachments
 
-WARNING: This is very new code, it works for me but I have not extensively tested it.
-
 This Plugin now also adds restHandlers to index, update and search the kinoIndex - removing the need for external scripts.
 
 %TOC%
 
----++ Syntax Rules
+---++ USAGE
 
-%<nop>KINOSEARCH{'Search String' format='Formatting string'}%
+---+++ Integrating KinoSearch into TWiki's internal =SEARCH= 
 
-format takes the following variables to place content.
-   * $icon - An icon to display filetype when showing attachments
-   * $match - The Twiki Name of the page being displayed
-   * $locked - Show if a page is locked
-   * $texthead - Summary text
+By setting =$TWiki::cfg{RCS}{SearchAlgorithm} = 'TWiki::Store::SearchAlgorithms::Kino';= (a setting in the _Store settings_ section in =configure=), 
+TWiki will use the KinoSearch index for any inbuilt search (including WebSearch) that it can (for regex searches it will fall back to the =Forking= search algorithm).
+
+If you want TWiki's WebSearch to also show you attachment results (when you select the 'search all' option), you need to also set ={SearchEngineKinoSearchAddOn}{showAttachments}=1=, and add =kino= to the front of your =SKIN= setting.
+
+%INCLUDE{"VarKINOSEARCH"}%
    
 ---++ Rest Handler Usage (the rest handlers require that you are logged into TWiki)
 These restHandlers can be called from te browser, or from the comman line
@@ -66,12 +65,12 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.DavidGuest |
+|  Plugin Author: | TWiki:Main.DavidGuest and TWiki:Main.SvenDowideit|
 |  Copyright: | &copy; 2007, TWiki:Main.DavidGuest |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 06 Aug 2008 (V1.200) |
+|  Plugin Version: | 20 Aug 2008 (V1.200) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  06 Aug 2008: | Version 1.2, brought Plugin into SearchEngineKinoSearchAddOn package, and svn - TWiki:Main.SvenDowideit |
+|  20 Aug 2008: | Version 1.2, brought Plugin into SearchEngineKinoSearchAddOn package, and svn, and added restHandlers for indexing & searching - TWiki:Main.SvenDowideit |
 |  09 Apr 2008: | Version 1.1, Added auto index updater code |
 |  07 Apr 2008: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |

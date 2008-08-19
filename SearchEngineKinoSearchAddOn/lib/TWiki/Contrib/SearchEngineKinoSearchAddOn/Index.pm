@@ -350,6 +350,7 @@ sub websToIndex {
         else {
 
             #print "Indexing $web topics\n";
+            $self->log("adding $web topics");
             push( @webList, $web );
         }
     }

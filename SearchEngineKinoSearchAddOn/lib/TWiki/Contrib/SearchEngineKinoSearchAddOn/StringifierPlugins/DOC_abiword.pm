@@ -14,10 +14,16 @@ package TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::DOC_abiwo
 use base 'TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyBase';
 use File::Temp qw/tmpnam/;
 use Encode;
+use TWiki;
 
+#only load abiword if the user has selected it in configure - Sven has had no success with it
+if (defined($TWiki::cfg{SearchEngineKinoSearchAddOn}{WordIndexer}) && 
+    ($TWiki::cfg{SearchEngineKinoSearchAddOn}{WordIndexer} eq 'abiword')) {
 # Only if abiword exists, I register myself.
-if (__PACKAGE__->_programExists("abiword")){
-    __PACKAGE__->register_handler("application/word", ".doc");}
+    if (__PACKAGE__->_programExists('abiword')){
+        __PACKAGE__->register_handler("application/word", ".doc");
+    }
+}
 
 
 

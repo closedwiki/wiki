@@ -64,7 +64,7 @@ sub log {
 	my $logtime = TWiki::Func::formatTime( time(), '$rcs', 'servertime' ); 
 	$self->{Log}->print( "| $logtime | $logString\n");
 
-	print "$logString\n";
+	print STDERR "$logString\n";
     }
 }
 
@@ -114,6 +114,8 @@ sub pubPath {
 # List of webs that shall not be indexed
 # QS
 sub skipWebs {
+    #TODO: the defaults should not be here in code
+    #the settings should be added to the Config.spec file.
     my $to_skip = TWiki::Func::getPreferencesValue( "KINOSEARCHINDEXSKIPWEBS" ) || "Trash, Sandbox, TWiki";
     my %skipwebs;
 

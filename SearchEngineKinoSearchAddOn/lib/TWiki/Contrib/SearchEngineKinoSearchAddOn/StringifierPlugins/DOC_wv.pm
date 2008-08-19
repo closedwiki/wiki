@@ -14,9 +14,13 @@ package TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::DOC_wv;
 use base 'TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyBase';
 use File::Temp qw/tmpnam/;
 
-# Only if wv exists, I register myself.
-if (__PACKAGE__->_programExists("wvHtml")){
-    __PACKAGE__->register_handler("application/word", ".doc");}
+if (!defined($TWiki::cfg{SearchEngineKinoSearchAddOn}{WordIndexer}) || 
+    ($TWiki::cfg{SearchEngineKinoSearchAddOn}{WordIndexer} eq 'wvHtml')) {
+    # Only if wv exists, I register myself.
+    if (__PACKAGE__->_programExists("wvHtml")){
+        __PACKAGE__->register_handler("application/word", ".doc");
+    }
+}
 
 sub stringForFile {
     my ($self, $file) = @_;

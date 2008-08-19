@@ -39,10 +39,11 @@ sub test_stringForFile {
     my $this = shift;
     my $stringifier = TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::Text->new();
 
-    my $text  = $stringifier->stringForFile('attachement_examples/Simple_example.txt');
+    my $text  = $stringifier->stringForFile($this->{attachmentDir}.'Simple_example.txt');
     my $text2 = TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier->stringFor($this->{attachmentDir}.'Simple_example.txt');
 
     $this->assert(defined($text), "No text returned.");
+    
     $this->assert_str_equals($text, $text2, "TXT stringifier not well registered.");
 
     my $ok = $text =~ /woodstock/;

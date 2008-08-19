@@ -19,6 +19,8 @@ sub set_up {
     $this->SUPER::set_up();
     # Use RcsLite so we can manually gen topic revs
     $TWiki::cfg{StoreImpl} = 'RcsLite';
+    $TWiki::cfg{SearchEngineKinoSearchAddOn}{WordIndexer} = 'antiword';
+
 
     $this->registerUser("TestUser", "User", "TestUser", 'testuser@an-address.net');
 
@@ -39,7 +41,7 @@ sub test_stringForFile {
     my $this = shift;
     my $stringifier = TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::DOC_antiword->new();
 
-    my $text  = $stringifier->stringForFile('attachement_examples/Simple_example.doc');
+    my $text  = $stringifier->stringForFile($this->{attachmentDir}.'Simple_example.doc');
     my $text2 = TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier->stringFor($this->{attachmentDir}.'Simple_example.doc');
 
     #print "Test : $text\n";

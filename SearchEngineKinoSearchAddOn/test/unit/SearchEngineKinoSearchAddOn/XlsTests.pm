@@ -11,6 +11,12 @@ sub set_up {
     my $this = shift;
 
     $this->SUPER::set_up();
+    $this->{attachmentDir} = 'attachement_examples/';
+    if (! -e $this->{attachmentDir}) {
+        #running from twiki/test/unit
+        $this->{attachmentDir} = 'SearchEngineKinoSearchAddOn/attachement_examples/';
+    }
+
     # Use RcsLite so we can manually gen topic revs
     #$TWiki::cfg{StoreImpl} = 'RcsLite';
 
@@ -26,8 +32,8 @@ sub test_stringForFile {
     my $this = shift;
     my $stringifier = TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::XLS->new();
 
-    my $text  = $stringifier->stringForFile('attachement_examples/Simple_example.xls');
-    my $text2 = TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier->stringFor('attachement_examples/Simple_example.xls');
+    my $text  = $stringifier->stringForFile($this->{attachmentDir}.'Simple_example.xls');
+    my $text2 = TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier->stringFor($this->{attachmentDir}.'Simple_example.xls');
 
     $this->assert(defined($text), "No text returned.");
     $this->assert_str_equals($text, $text2, "DOC stringifier not well registered.");
@@ -42,11 +48,11 @@ sub test_SpecialCharacters {
     my $this = shift;
     my $stringifier = TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::XLS->new();
 
-    my $text  = $stringifier->stringForFile('attachement_examples/Simple_example.xls');
+    my $text  = $stringifier->stringForFile($this->{attachmentDir}.'Simple_example.xls');
     
     $this->assert($text =~ m\Größer\, "Text Größer not found.");
 		  
-    $text  = $stringifier->stringForFile('attachement_examples/Portuguese_example.xls');
+    $text  = $stringifier->stringForFile($this->{attachmentDir}.'Portuguese_example.xls');
 
     # print "Text = $text\n";
     $this->assert($text =~ m\Formatação\, "Text Formatação not found.");		  
@@ -59,7 +65,7 @@ sub test_Numbers {
     my $this = shift;
     my $stringifier = TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::XLS->new();
 
-    my $text  = $stringifier->stringForFile('attachement_examples/Simple_example.xls');
+    my $text  = $stringifier->stringForFile($this->{attachmentDir}.'Simple_example.xls');
 
     #print "Test = $text\n";
 
@@ -75,7 +81,7 @@ sub test_calculatedNumbers {
     my $this = shift;
     my $stringifier = TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::XLS->new();
 
-    my $text  = $stringifier->stringForFile('attachement_examples/Simple_example.xls');
+    my $text  = $stringifier->stringForFile($this->{attachmentDir}.'Simple_example.xls');
 
     $this->assert(($text =~ m\217\)==1,  "Number 200 + 17 not found.");
     $this->assert(($text =~ m\5\)==1, "Number 5 not found.");

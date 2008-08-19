@@ -39,7 +39,7 @@ sub test_stringForFile {
     my $this = shift;
     my $stringifier = TWiki::Contrib::SearchEngineKinoSearchAddOn::StringifyPlugins::PDF->new();
 
-    my $text  = $stringifier->stringForFile('attachement_examples/Simple_example.pdf');
+    my $text  = $stringifier->stringForFile($this->{attachmentDir}.'Simple_example.pdf');
     my $text2 = TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier->stringFor($this->{attachmentDir}.'Simple_example.pdf');
 
     $this->assert(defined($text), "No text returned.");

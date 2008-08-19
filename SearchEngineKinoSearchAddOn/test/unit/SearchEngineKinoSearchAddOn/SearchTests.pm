@@ -16,7 +16,6 @@ sub new {
         #running from twiki/test/unit
         $self->{attachmentDir} = 'SearchEngineKinoSearchAddOn/attachement_examples/';
     }
-    
     return $self;
 }
 
