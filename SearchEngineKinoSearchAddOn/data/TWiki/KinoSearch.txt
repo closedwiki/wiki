@@ -62,6 +62,6 @@ can also replace the existing search field with this one.
 
 _Note:_ the current version of !KinoSearch does not support wildcards.
 
-__See also:__ TWiki.SearchEngineKinoSeachAddOn
+__See also:__ TWiki.SearchEngineKinoSearchAddOn
 
 -- TWiki:Main/MarkusHesse - 12 Dec 2007

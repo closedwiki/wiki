@@ -22,6 +22,7 @@ in Java). This is the base of this indexed search engine for TWiki. With <nop>Ki
      <img src="%ATTACHURLPATH%/KinoSearchResult.jpg" alt="KinoSearchResult.jpg"   />
 
 ---++ Usage
+See the KinoSearch topic for a quick Usage and setup.
 
 ---+++ Searching with kinosearch
 
@@ -261,7 +262,7 @@ This add-on uses several preferences which should be set at [[%MAINWEB%.TWikiPre
       * Set KINOSEARCHINDEXEXTENSIONS = .pdf, .doc, .xml, .html, .txt, .xls, .ppt
       * Set KINOSEARCHSEARCHATTACHMENTSONLY = 0
       * Set KINOSEARCHSEARCHATTACHMENTSONLYLABEL = Display only attachments
-      * Set KINOSEARCHINDEXSKIPWEBS = Trash, Sandbox, TWiki
+      * Set KINOSEARCHINDEXSKIPWEBS = Trash, Sandbox
       * Set KINOSEARCHINDEXSKIPATTACHMENTS = Web.SomeTopic.AnAttachment.txt, Web.OtherTopic.OtherAttachment.pdf
       * Set KINOSEARCHANALYSERLANGUAGE = en
       * Set KINOSEARCHSUMMARYLENGTH = 300

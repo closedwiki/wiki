@@ -116,7 +116,7 @@ sub pubPath {
 sub skipWebs {
     #TODO: the defaults should not be here in code
     #the settings should be added to the Config.spec file.
-    my $to_skip = TWiki::Func::getPreferencesValue( "KINOSEARCHINDEXSKIPWEBS" ) || "Trash, Sandbox, TWiki";
+    my $to_skip = TWiki::Func::getPreferencesValue( "KINOSEARCHINDEXSKIPWEBS" ) || "Trash, Sandbox";
     my %skipwebs;
 
     foreach my $tmpweb ( split( /\,\s+|\,|\s+/, $to_skip ) ) {
