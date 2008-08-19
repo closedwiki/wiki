@@ -46,7 +46,7 @@ sub search {
 
 
     my $scope = $options->{scope} || 'text';
-print STDERR "search : type=$options->{type}, scope=$scope ($searchString) (".scalar(@$topics).")\n";
+#print STDERR "search : type=$options->{type}, scope=$scope ($searchString) (".scalar(@$topics).")\n";
 
     my $searcher =
       TWiki::Contrib::SearchEngineKinoSearchAddOn::Search->newSearch();
@@ -113,7 +113,7 @@ print STDERR "search : type=$options->{type}, scope=$scope ($searchString) (".sc
     #actually need to just do _this_ Store's web.
     $search = $searcher->searchStringForWebs( $search, $web );
 
-print STDERR "Kino: $search\n";
+#print STDERR "Kino: $search\n";
 
     #do the search.
     my $docs = $searcher->docsForQuery($search);
@@ -150,12 +150,12 @@ print STDERR "Kino: $search\n";
                 ( $scope eq 'all' ) ){
 		my $name = $hit->{name};
 		my $url = " %PUBURL%/$resweb/$restopic/$name ";
-print STDERR "$resweb.$restopic - $name\n";
+#print STDERR "$resweb.$restopic - $name\n";
 		push( @{ $seen{$url} }, $url );
 	    }
 	} else {
 	    #assume its a topic.
-print STDERR "$resweb.$restopic\n";
+#print STDERR "$resweb.$restopic\n";
             push( @{ $seen{"$restopic"} }, $hit->{excerpt} );
 	}
     }
