@@ -19,7 +19,7 @@ in Java). This is the base of this indexed search engine for TWiki. With <nop>Ki
 
 ---++ Screenshot of a search results list
 
-     <img src="%ATTACHURLPATH%/KinoSearchResult.jpg" alt="KinoSearchResult.jpg" width='743' height='561' />
+     <img src="%ATTACHURLPATH%/KinoSearchResult.jpg" alt="KinoSearchResult.jpg"   />
 
 ---++ Usage
 
@@ -40,6 +40,9 @@ The following form submits text to the ==kinosearch== script. The installation i
 %INCLUDE{"VarKINOSEARCH"}%
 
 ---+++ (experimental) Integrating KinoSearch into TWiki's internal =SEARCH= 
+
+<div style="float:right"><a href="%ATTACHURLPATH%/KinoSEARCH.jpg"><img src="%ATTACHURLPATH%/KinoSEARCH.jpg" alt="integrated SEARCH results" width='400' /></a></div>
+
 
 By setting =$TWiki::cfg{RCS}{SearchAlgorithm} = 'TWiki::Store::SearchAlgorithms::Kino';= (a setting in the _Store settings_ section in =configure=), 
 TWiki will use the KinoSearch index for any inbuilt search (including WebSearch) that it can (for regex searches it will fall back to the =Forking= search algorithm).

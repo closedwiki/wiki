@@ -42,11 +42,11 @@ sub search {
 # be used for partial matches on anything.
 
     #just a bit experimental
-    my $showAttachments = $TWiki::cfg{Plugins}{SearchEngineKinoSearchAddOn}{showAttachments} || 0;
+    my $showAttachments = $TWiki::cfg{SearchEngineKinoSearchAddOn}{showAttachments} || 0;
 
 
     my $scope = $options->{scope} || 'text';
-#print STDERR "search : type=$options->{type}, scope=$scope ($searchString) (".scalar(@$topics).")\n";
+print STDERR "search : type=$options->{type}, scope=$scope ($searchString) (".scalar(@$topics).")\n";
 
     my $searcher =
       TWiki::Contrib::SearchEngineKinoSearchAddOn::Search->newSearch();
@@ -113,7 +113,7 @@ sub search {
     #actually need to just do _this_ Store's web.
     $search = $searcher->searchStringForWebs( $search, $web );
 
-#print STDERR "Kino: $search\n";
+print STDERR "Kino: $search\n";
 
     #do the search.
     my $docs = $searcher->docsForQuery($search);
@@ -146,15 +146,16 @@ sub search {
      #	    }
 
 	if ($hit->{attachment}) {
-	    if ($showAttachments) {
+	    if (($showAttachments) &&
+                ( $scope eq 'all' ) ){
 		my $name = $hit->{name};
 		my $url = " %PUBURL%/$resweb/$restopic/$name ";
-    #print STDERR "$resweb.$restopic - $name\n";
+print STDERR "$resweb.$restopic - $name\n";
 		push( @{ $seen{$url} }, $url );
 	    }
 	} else {
 	    #assume its a topic.
-#print STDERR "$resweb.$restopic\n";
+print STDERR "$resweb.$restopic\n";
             push( @{ $seen{"$restopic"} }, $hit->{excerpt} );
 	}
     }
