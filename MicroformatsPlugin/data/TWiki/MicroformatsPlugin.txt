@@ -9,6 +9,9 @@ One line description, required for extensions repository catalog.
 %TOC%
 
 ---++ Usage
+This Plugins adds support for a number of [[http://microformats.org][microformats]]. 
+   1 [[http://microid.org][microid]], which allows a user to Verifiably Claim their User Topic, through the use of a hash of the Url and their registered email address
+      * The microid will be automatically added to the html header when viewing any user's topic.
 
 ---++ Examples
 

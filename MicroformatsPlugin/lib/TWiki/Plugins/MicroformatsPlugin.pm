@@ -15,74 +15,19 @@
 
 ---+ package TWiki::Plugins::MicroformatsPlugin
 
-To interact with TWiki use ONLY the official API functions
-in the TWiki::Func module. Do not reference any functions or
-variables elsewhere in TWiki, as these are subject to change
-without prior warning, and your plugin may suddenly stop
-working.
-
-For increased performance, all handlers except initPlugin are
-disabled below. *To enable a handler* remove the leading DISABLE_ from
-the function name. For efficiency and clarity, you should comment out or
-delete the whole of handlers you don't use before you release your
-plugin.
-
-__NOTE:__ When developing a plugin it is important to remember that
-TWiki is tolerant of plugins that do not compile. In this case,
-the failure will be silent but the plugin will not be available.
-See %TWIKIWEB%.TWikiPlugins#FAILEDPLUGINS for error messages.
-
-__NOTE:__ Defining deprecated handlers will cause the handlers to be 
-listed in %TWIKIWEB%.TWikiPlugins#FAILEDPLUGINS. See
-%TWIKIWEB%.TWikiPlugins#Handlig_deprecated_functions
-for information on regarding deprecated handlers that are defined for
-compatibility with older TWiki versions.
-
-__NOTE:__ When writing handlers, keep in mind that these may be invoked
-on included topics. For example, if a plugin generates links to the current
-topic, these need to be generated before the afterCommonTagsHandler is run,
-as at that point in the rendering loop we have lost the information that we
-the text had been included from another topic.
-
 =cut
 
 
 package TWiki::Plugins::MicroformatsPlugin;
 
-# Always use strict to enforce variable scoping
-use strict;
-
 require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
-# $VERSION is referred to by TWiki, and is the only global variable that
-# *must* exist in this package.
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC );
-
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'TWiki-4.2';
-
-# Short description of this plugin
-# One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
 $SHORTDESCRIPTION = 'microformat support for TWiki';
-
-# You must set $NO_PREFS_IN_TOPIC to 0 if you want your plugin to use preferences
-# stored in the plugin topic. This default is required for compatibility with
-# older plugins, but imposes a significant performance penalty, and
-# is not recommended. Instead, use $TWiki::cfg entries set in LocalSite.cfg, or
-# if you want the users to be able to change settings, then use standard TWiki
-# preferences that can be defined in your Main.TWikiPreferences and overridden
-# at the web and topic level.
 $NO_PREFS_IN_TOPIC = 1;
-
-# Name of this Plugin, only used in this module
 $pluginName = 'MicroformatsPlugin';
 
 =pod
@@ -92,28 +37,6 @@ $pluginName = 'MicroformatsPlugin';
    * =$web= - the name of the web in the current CGI query
    * =$user= - the login name of the user
    * =$installWeb= - the name of the web the plugin is installed in
-
-REQUIRED
-
-Called to initialise the plugin. If everything is OK, should return
-a non-zero value. On non-fatal failure, should write a message
-using TWiki::Func::writeWarning and return 0. In this case
-%FAILEDPLUGINS% will indicate which plugins failed.
-
-In the case of a catastrophic failure that will prevent the whole
-installation from working safely, this handler may use 'die', which
-will be trapped and reported in the browser.
-
-You may also call =TWiki::Func::registerTagHandler= here to register
-a function to handle variables that have standard TWiki syntax - for example,
-=%MYTAG{"my param" myarg="My Arg"}%. You can also override internal
-TWiki variable handling functions this way, though this practice is unsupported
-and highly dangerous!
-
-__Note:__ Please align variables names with the Plugin name, e.g. if 
-your Plugin is called FooBarPlugin, name variables FOOBAR and/or 
-FOOBARSOMETHING. This avoids namespace issues.
-
 
 =cut
 
@@ -126,25 +49,45 @@ sub initPlugin {
         return 0;
     }
 
-    # Example code of how to get a preference value, register a variable handler
-    # and register a RESTHandler. (remove code you do not need)
-
-    # Set plugin preferences in LocalSite.cfg, like this:
-    # $TWiki::cfg{Plugins}{MicroformatsPlugin}{ExampleSetting} = 1;
-    # Always provide a default in case the setting is not defined in
-    # LocalSite.cfg. See TWiki.TWikiPlugins for help in adding your plugin
-    # configuration to the =configure= interface.
-    my $setting = $TWiki::cfg{Plugins}{MicroformatsPlugin}{ExampleSetting} || 0;
     $debug = $TWiki::cfg{Plugins}{MicroformatsPlugin}{Debug} || 0;
+    my $enableMicroIds = $TWiki::cfg{Plugins}{MicroformatsPlugin}{enableMicroIds} || 0;
+    #TWiki::Func::registerTagHandler( 'EXAMPLETAG', \&_EXAMPLETAG );
+    #TWiki::Func::registerRESTHandler('example', \&restExample);
+    
+    if (($enableMicroIds) &&
+        ($web eq TWiki::Func::getMainWebname())) {
+        if (defined(TWiki::Func::wikiToUserName("$web.$topic"))) {
+            my $algorithm = $TWiki::cfg{Plugins}{MicroformatsPlugin}{MicroIdAlgol} || 'sha1';
+        
+            my $algor;
+            if ($algorithm eq 'md5')  {
+                require Digest::MD5;
+                $algor = Digest::MD5->new;
+            } else {
+                require Digest::SHA1;
+                $algor = Digest::SHA1->new;
+            }
 
-    # register the _EXAMPLETAG function to handle %EXAMPLETAG{...}%
-    # This will be called whenever %EXAMPLETAG% or %EXAMPLETAG{...}% is
-    # seen in the topic text.
-    TWiki::Func::registerTagHandler( 'EXAMPLETAG', \&_EXAMPLETAG );
+            # Hash the ID's
+            my @emails = TWiki::Func::wikinameToEmails($topic);
+            #TODO: maybe make one microid per known email?
+            if (scalar(@emails) > 0) {
+                my $indv = $algor->add($emails[0])->hexdigest();
+                $algor->reset();
+                my $serv = $algor->add(TWiki::Func::getViewUrl( $web, $topic))->hexdigest();
+                $algor->reset();
 
-    # Allow a sub to be called from the REST interface 
-    # using the provided alias
-    TWiki::Func::registerRESTHandler('example', \&restExample);
+                # Hash the ID's together and set as the legacy MicroID token
+                my $hash = $algor->add($indv . $serv)->hexdigest();
+
+                #TODO: need to extract the mailto and http from the id's
+                my $microid = 'mailto+http:'.$algorithm.':'.$hash;
+                my $header = '<meta name="microid" content="'.$microid.'"/>';
+
+                TWiki::Func::addToHEAD('http://microid.org', $header);
+            }
+        }
+    }
 
     # Plugin correctly initialized
     return 1;
