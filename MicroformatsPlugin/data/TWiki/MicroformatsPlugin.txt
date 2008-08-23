@@ -1,4 +1,5 @@
 ---+!! !MicroformatsPlugin
+<a href="http://microformats.org/" style="float:right;padding:12px;"><img src="%ATTACHURLPATH%/logo.gif" alt="microformats"/></a>
 <!--
 One line description, required for extensions repository catalog.
    * Set SHORTDESCRIPTION = microformat support for TWiki
@@ -17,11 +18,10 @@ One line description, required for extensions repository catalog.
 
 ---++ Plugin Info
 
-Many thanks to the following sponsors for supporting this work:
-   * Acknowledge any sponsors here
+   * [[http://factorycity.net/projects/microformats-icons/][Microformat Icons]] by [[http://bartelme.at/][Wolfgang Bartelme]]
 
-|  Plugin Author(s): | |
-|  Copyright: | &copy; |
+|  Plugin Author: | TWiki:Main.SvenDowideit - SvenDowideit@fosiki.com - <img src="%ATTACHURLPATH%/wikiringlogo20x20.png" /> [[http://www.wikiring.com][WikiRing.com]] |
+|  Copyright: | &copy; 2008, SvenDowideit@fosiki.com |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
@@ -32,4 +32,8 @@ Many thanks to the following sponsors for supporting this work:
 
 __Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the feedback topic on twiki.org instead. -->
+
+-- SvenDowideit@fosiki.com - [[http://www.wikiring.com][WikiRing.com]]
+
+%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="wikiringlogo20x20.png" date="1161609076" size="1343" user="Main.SvenDowideit" version="1"}%
+%META:FILEATTACHMENT{name="logo.gif" attr="h" comment="http://microformats.org/wordpress/wp-content/themes/microformats/img/logo.gif" date="1161609076" size="1343" user="" version="1"}%
