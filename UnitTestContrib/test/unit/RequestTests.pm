@@ -12,27 +12,27 @@ sub test_empty_new {
     my $this = shift;
     my $req = new TWiki::Request("");
 
-    $this->assert_equals($req->action, '', '$req->action() not empty');
-    $this->assert_equals($req->pathInfo, '', '$req->pathInfo() not empty');
-    $this->assert_equals($req->remoteAddress, '', '$req->remoteAddress() not empty');
-    $this->assert_equals($req->uri, '', '$req->uri() not empty');
+    $this->assert_str_equals('', $req->action, '$req->action() not empty');
+    $this->assert_str_equals('', $req->pathInfo, '$req->pathInfo() not empty');
+    $this->assert_str_equals('', $req->remoteAddress, '$req->remoteAddress() not empty');
+    $this->assert_str_equals('', $req->uri, '$req->uri() not empty');
     $this->assert_null($req->method, '$req->method() not null');
     $this->assert_null($req->remoteUser, '$req->remoteUser() not null');
     $this->assert_null($req->serverPort, '$req->serverPort() not null');
 
     my @list = $req->header();
-    $this->assert_equals(scalar @list, 0, '$req->header not empty');
+    $this->assert_str_equals(0, scalar @list, '$req->header not empty');
     
     @list = $req->param();
-    $this->assert_equals(scalar @list, 0, '$req->param not empty');
+    $this->assert_str_equals(0, scalar @list, '$req->param not empty');
 
     my $ref = $req->cookies();
-    $this->assert_equals(ref($ref), 'HASH', '$req->cookies did not returned a hashref');
-    $this->assert_equals(scalar keys %$ref, 0, '$req->cookies not empty');
+    $this->assert_str_equals('HASH', ref($ref), '$req->cookies did not returned a hashref');
+    $this->assert_str_equals(0, scalar keys %$ref, '$req->cookies not empty');
     
     $ref = $req->uploads();
-    $this->assert_equals(ref($ref), 'HASH', '$req->uploads did not returned a hashref');
-    $this->assert_equals(scalar keys %$ref, 0, '$req->uploads not empty');
+    $this->assert_str_equals('HASH', ref($ref), '$req->uploads did not returned a hashref');
+    $this->assert_str_equals(0, scalar keys %$ref, '$req->uploads not empty');
 }
 
 sub test_new_from_hash {
@@ -45,17 +45,17 @@ sub test_new_from_hash {
         multi_undef => [],
     );
     my $req = new TWiki::Request(\%init);
-    $this->assert_equals(scalar $req->param(), 5, 'Wrong number of parameteres');
-    $this->assert_equals($req->param('simple'), 's1', 'Wrong parameter value');
-    $this->assert_equals($req->param('simple2'), 's2', 'Wrong parameter value');
-    $this->assert_equals(scalar $req->param('multi'), 'm1', 'Wrong parameter value');
+    $this->assert_str_equals(5, scalar $req->param(), 'Wrong number of parameteres');
+    $this->assert_str_equals('s1', $req->param('simple'), 'Wrong parameter value');
+    $this->assert_str_equals('s2', $req->param('simple2'), 'Wrong parameter value');
+    $this->assert_str_equals('m1', scalar $req->param('multi'), 'Wrong parameter value');
     my @values = $req->param('multi');
-    $this->assert_equals(scalar @values, 2, 'Wrong number of values');
-    $this->assert_equals($values[0], 'm1', 'Wrong parameter value');
-    $this->assert_equals($values[1], 'm2', 'Wrong parameter value');
-    $this->assert_equals($req->param('undef'), undef, 'Wrong parameter value');
+    $this->assert_str_equals(2, scalar @values, 'Wrong number of values');
+    $this->assert_str_equals('m1', $values[0], 'Wrong parameter value');
+    $this->assert_str_equals('m2', $values[1], 'Wrong parameter value');
+    $this->assert_null($req->param('undef'), 'Wrong parameter value');
     @values = $req->param('multi_undef');
-    $this->assert_equals(scalar @values, 0, 'Wrong parameter value');
+    $this->assert_str_equals(0, scalar @values, 'Wrong parameter value');
 }
 
 sub test_new_from_file {
@@ -73,62 +73,74 @@ EOF
 );
     seek($tmp, 0, 0);
     my $req = new TWiki::Request($tmp);
-    $this->assert_equals(scalar $req->param(), 4, 'Wrong number of parameters');
-    $this->assert_equals($req->param('simple'), 's1', 'Wrong parameter value');
-    $this->assert_equals($req->param('simple2'), 's2', 'Wrong parameter value');
+    $this->assert_str_equals(4, scalar $req->param(), 'Wrong number of parameters');
+    $this->assert_str_equals('s1', $req->param('simple'), 'Wrong parameter value');
+    $this->assert_str_equals('s2', $req->param('simple2'), 'Wrong parameter value');
     my @values = $req->param('multi');
-    $this->assert_equals(scalar @values, 2, 'Wrong number o values');
-    $this->assert_equals($values[0], 'm1', 'Wrong parameter value');
-    $this->assert_equals($values[1], 'm2', 'Wrong parameter value');
-    $this->assert_equals($req->param('undef'), undef, 'Wrong parameter value');
+    $this->assert_str_equals(2, scalar @values, 'Wrong number o values');
+    $this->assert_str_equals('m1', $values[0], 'Wrong parameter value');
+    $this->assert_str_equals('m2', $values[1], 'Wrong parameter value');
+    $this->assert_null($req->param('undef'), 'Wrong parameter value');
 }
 
-sub test_get_action {
+sub test_action {
+    my $this = shift;
+    my $req = new TWiki::Request("");
+    foreach (qw(view edit save upload preview rdiff)) {
+        $this->assert_str_not_equals($_, $req->action, 'Wrong initial "action" value');
+        $req->action($_);
+        $this->assert_str_equals($_, $req->action, 'Wrong action value');
+        $this->assert_str_equals($_, $ENV{TWIKI_ACTION}, 'Wrong TWIKI_ACTION environment');
+    }
 }
 
-sub test_set_action {
+sub test_method {
+    my $this = shift;
+    my $req = new TWiki::Request("");
+    foreach (qw(GET HEAD POST)) {
+        $this->assert_str_not_equals($_, $req->method || '', 'Wrong initial "method" value');
+        $req->method($_);
+        $this->assert_str_equals($_, $req->method, 'Wrong method value');
+    }
 }
 
-sub test_get_method {
+sub test_pathInfo {
+    my $this = shift;
+    my $req = new TWiki::Request("");
+    foreach (qw(/ /abc /abc/ /abc/def /abc/def/), '') {
+        $this->assert_str_not_equals($_, $req->pathInfo, 'Wrong initial "pathInfo" value');
+        $req->pathInfo($_);
+        $this->assert_str_equals($_, $req->pathInfo, 'Wrong pathInfo value');
+    }
 }
 
-sub test_set_method {
+sub test_protocol {
+    my $this = shift;
+    my $req = new TWiki::Request("");
+    $req->secure(0);
+    $this->assert_str_equals('http', $req->protocol, 'Wrong protocol');
+    $this->assert_num_equals(0, $req->secure, 'Wrong secure flag');
+    $req->secure(1);
+    $this->assert_str_equals('https', $req->protocol, 'Wrong protocol');
+    $this->assert_num_equals(1, $req->secure, 'Wrong secure flag');
 }
 
-sub test_get_pathInfo {
+sub test_uri {
 }
 
-sub test_set_pathInfo {
+sub test_remoteAddress {
 }
 
-sub test_get_uri {
+sub test_remoteUser {
 }
 
-sub test_set_uri {
-}
-
-sub test_get_secure {
-}
-
-sub test_set_secure {
-}
-
-sub test_get_remoteAddress {
-}
-
-sub test_set_remoteAddress {
-}
-
-sub test_get_remoteUser {
-}
-
-sub test_set_remoteUser {
-}
-
-sub test_get_serverPort {
-}
-
-sub test_set_serverPort {
+sub test_serverPort {
+    my $this = shift;
+    my $req = new TWiki::Request("");
+    foreach (qw(80 443 8080)) {
+        $req->serverPort($_);
+        $this->assert_num_equals($_, $req->serverPort, 'Wrong serverPort value');
+    }
 }
 
 sub test_queryString_x {
