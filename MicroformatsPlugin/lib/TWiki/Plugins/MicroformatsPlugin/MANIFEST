@@ -4,11 +4,18 @@ lib/TWiki/Plugins/MicroformatsPlugin.pm 0644 Perl module
 lib/TWiki/Plugins/MicroformatsPlugin/Config.spec
 
 templates/hcard.tmpl
+templates/hcalendar.tmpl
 templates/hcardcss.tmpl
 
 pub/TWiki/MicroformatsPlugin/expose-mf.css
+#http://code.google.com/p/js-hcalendar/
+pub/TWiki/MicroformatsPlugin/hcalendar.js
+pub/TWiki/MicroformatsPlugin/calendar.css
+pub/TWiki/MicroformatsPlugin/hcard.css
+pub/TWiki/MicroformatsPlugin/minicalendar.css
 
 
+pub/TWiki/MicroformatsPlugin/MicroID.png
 pub/TWiki/MicroformatsPlugin/icon-set.png
 pub/TWiki/MicroformatsPlugin/xfn-sweetheart-met.png
 pub/TWiki/MicroformatsPlugin/Vote_Template.psd

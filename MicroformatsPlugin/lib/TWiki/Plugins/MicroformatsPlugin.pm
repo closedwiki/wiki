@@ -22,6 +22,7 @@ package TWiki::Plugins::MicroformatsPlugin;
 
 require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
+use Time::ParseDate;
 
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC 
     $enablehCardOnUserTopic %isUserTopic);
@@ -54,6 +55,7 @@ sub initPlugin {
 
     $debug = $TWiki::cfg{Plugins}{MicroformatsPlugin}{Debug} || 0;
     TWiki::Func::registerTagHandler( 'HCARD', \&_HCARD );
+    TWiki::Func::registerTagHandler( 'HCALENDAR', \&_HCALENDAR );
     #TWiki::Func::registerRESTHandler('example', \&restExample);
     
     my $enableMicroIds = $TWiki::cfg{Plugins}{MicroformatsPlugin}{enableMicroIds} || 1;
@@ -161,12 +163,45 @@ sub _HCARD {
     my $hCardTmpl = TWiki::Func::readTemplate('hcard');
 
     $hCardTmpl =~ s/%HCARDUSER%/$wikiName/ge;
-    $hCardTmpl =~ s/%HCARDNAME%/lc($wikiName)/ge;
+    $hCardTmpl =~ s/%HCARDNAME%/$wikiName/ge;
     
     my $hCardCss = TWiki::Func::readTemplate('hcardcss');
     TWiki::Func::addToHEAD('hCardCss', $hCardCss);
 
     return "$hCardTmpl";
+}
+sub _HCALENDAR {
+    my($session, $params, $theTopic, $theWeb) = @_;
+
+    my $start = $params->{start} || '';
+    my $end = $params->{end} || '';
+    my $url = $params->{url} || '';
+    my $location = $params->{location} || '';
+    my $description = $params->{description} || '';
+    my $summary = $params->{summary} || $description || $start;
+    
+    
+    
+    my $hCalendarTmpl = TWiki::Func::readTemplate('hcalendar');
+
+    $hCalendarTmpl =~ s/%HSTART%/$start/ge;
+    $hCalendarTmpl =~ s/%HEND%/$end/ge;
+    $hCalendarTmpl =~ s/%HURL%/$url/ge;
+    $hCalendarTmpl =~ s/%HLOCATION%/$location/ge;
+    $hCalendarTmpl =~ s/%HSUMMARY%/$summary/ge;
+    $hCalendarTmpl =~ s/%HDESCRIPTION%/$description/ge;
+    
+    my $calname = $summary;
+    $calname =~ s/[^\d]//;
+    $hCalendarTmpl =~ s/%HCALNAME%/$calname/ge;
+    $hCalendarTmpl =~ s/\n//g;
+    
+print STDERR "HCALENDAR> $start - $summary\n";
+
+    my $hCalendarCss = TWiki::Func::readTemplate('hcardcss');
+    TWiki::Func::addToHEAD('hCardCss', $hCalendarCss);
+
+    return "$hCalendarTmpl";
 }
 
 =pod
@@ -329,12 +364,15 @@ __NOTE:__ meta-data is _not_ embedded in the text passed to this
 handler.
 
 =cut
-
-sub DISABLE_afterCommonTagsHandler {
+sub DIbeforeCommonTagsHandler {
+#sub afterCommonTagsHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $text, $topic, $web, $meta ) = @_;
+  
+
 
     TWiki::Func::writeDebug( "- ${pluginName}::afterCommonTagsHandler( $_[2].$_[1] )" ) if $debug;
+    
 }
 
 =pod
@@ -384,9 +422,41 @@ Since TWiki::Plugins::VERSION = '1.026'
 
 =cut
 
-sub DISABLE_preRenderingHandler {
+sub beforeCommonTagsHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     #my( $text, $pMap ) = @_;
+    
+return unless (TWiki::Func::getContext()->{'view'});
+
+    my $foundTime=0;
+    my @processedText;
+    my @lines = split( /([\n\r]+)/, $_[0] );
+    foreach my $line (@lines) {
+        my $bullet = '';
+        my $recurring = '';
+        if ($line =~ s/^(\s+[*\d]\s+)//) {        #CalendarPlugin style - bullets.
+            $bullet = $1;
+            if ($line =~ s/([wLAE]\s+)//) {
+                $recurring = $1;
+            }
+        }
+        #NOTE: parsedate needs the date to be at the begining of the string
+        my ($seconds, $remaining) = parsedate($line, FUZZY => 1);
+        if (defined($seconds) && ($seconds ne '')) {
+            #print STDERR "> ".TWiki::Func::formatTime($seconds)." : $remaining ($line)\n";
+            
+            my $newline = ($bullet).($recurring)."\%HCALENDAR{start=\"".TWiki::Func::formatTime($seconds, '$iso')."\" summary=\"$remaining\"}\%";
+            print STDERR ">>> $newline\n";
+            push(@processedText, $newline);
+            $foundTime++;
+        } else {
+            #print STDERR "ERROR : $remaining  ($line)\n";
+            push(@processedText, $line);
+        }
+    }
+    if ($foundTime>0) {
+        $_[0] = join('', @processedText);
+    }
 }
 
 =pod
