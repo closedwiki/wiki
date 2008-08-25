@@ -23,7 +23,8 @@ package TWiki::Plugins::MicroformatsPlugin;
 require TWiki::Func;    # The plugins API
 require TWiki::Plugins; # For the API version
 
-use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC );
+use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC 
+    $enablehCardOnUserTopic %isUserTopic);
 $VERSION = '$Rev$';
 $RELEASE = 'TWiki-4.2';
 $SHORTDESCRIPTION = 'microformat support for TWiki';
@@ -48,54 +49,94 @@ sub initPlugin {
         TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
         return 0;
     }
+    
+    #TODO: should reset $isUserTopic{$key} in _finish()
 
     $debug = $TWiki::cfg{Plugins}{MicroformatsPlugin}{Debug} || 0;
-    my $enableMicroIds = $TWiki::cfg{Plugins}{MicroformatsPlugin}{enableMicroIds} || 0;
-    #TWiki::Func::registerTagHandler( 'EXAMPLETAG', \&_EXAMPLETAG );
+    TWiki::Func::registerTagHandler( 'HCARD', \&_HCARD );
     #TWiki::Func::registerRESTHandler('example', \&restExample);
     
-    if (($enableMicroIds) &&
-        ($web eq TWiki::Func::getMainWebname())) {
-        if (defined(TWiki::Func::wikiToUserName("$web.$topic"))) {
-            my $algorithm = $TWiki::cfg{Plugins}{MicroformatsPlugin}{MicroIdAlgol} || 'sha1';
-        
-            my $algor;
-            if ($algorithm eq 'md5')  {
-                require Digest::MD5;
-                $algor = Digest::MD5->new;
-            } else {
-                require Digest::SHA1;
-                $algor = Digest::SHA1->new;
-            }
-
-            # Hash the ID's
-            my @emails = TWiki::Func::wikinameToEmails($topic);
-            #TODO: maybe make one microid per known email?
-            if (scalar(@emails) > 0) {
-                my $indv = $algor->add($emails[0])->hexdigest();
-                $algor->reset();
-                my $serv = $algor->add(TWiki::Func::getViewUrl( $web, $topic))->hexdigest();
-                $algor->reset();
-
-                # Hash the ID's together and set as the legacy MicroID token
-                my $hash = $algor->add($indv . $serv)->hexdigest();
-
-                #TODO: need to extract the mailto and http from the id's
-                my $microid = 'mailto+http:'.$algorithm.':'.$hash;
-                my $header = '<meta name="microid" content="'.$microid.'"/>';
-
-                TWiki::Func::addToHEAD('http://microid.org', $header);
-            }
-        }
+    my $enableMicroIds = $TWiki::cfg{Plugins}{MicroformatsPlugin}{enableMicroIds} || 1;
+    $enablehCardOnUserTopic = $TWiki::cfg{Plugins}{MicroformatsPlugin}{enablehCardOnUserTopic} || 1;
+    if (($enableMicroIds) && (_isUserTopic($web, $topic))) {
+        addMicroIDToHEAD($web, $topic);
+    }
+    if ($enablehCardOnUserTopic && _isUserTopic($web, $topic)) {
+        #yes, this is woeful
+        #TODO: find a repliable way to addd arbitary content to a topic view.
+        $enablehCardOnUserTopic = 0;
+        #$_[0] = "%HCARD{'$web.$topic'}%".$_[0];
+        #TWiki::Func::addToHEAD('hCard', 
+        #    "<div type='hcard' style='display:none;'>%HCARD{\"$web.$topic\"}%</div>");
     }
 
     # Plugin correctly initialized
     return 1;
 }
 
+sub addMicroIDToHEAD {
+    my $web = shift;
+    my $topic = shift;
+    #code here adapted from Web::MicroID - not using it yet - adding CPAN dependancies 
+    #scares too many TWiki admins
+    my $algorithm = $TWiki::cfg{Plugins}{MicroformatsPlugin}{MicroIdAlgol} || 'sha1';
+
+    my $algor;
+    if ($algorithm eq 'md5')  {
+        require Digest::MD5;
+        $algor = Digest::MD5->new;
+    } else {
+        require Digest::SHA1;
+        $algor = Digest::SHA1->new;
+    }
+
+    # Hash the ID's
+    my @emails = TWiki::Func::wikinameToEmails($topic);
+    #TODO: maybe make one microid per known email?
+    if (scalar(@emails) > 0) {
+        my $indv = $algor->add($emails[0])->hexdigest();
+        $algor->reset();
+        my $serv = $algor->add(TWiki::Func::getViewUrl( $web, $topic))->hexdigest();
+        $algor->reset();
+
+        # Hash the ID's together and set as the legacy MicroID token
+        my $hash = $algor->add($indv . $serv)->hexdigest();
+
+        #TODO: need to extract the mailto and http from the id's
+        #TODO: watch out, the + will soon be replaced, due to html validation errors
+        my $microid = 'mailto+http:'.$algorithm.':'.$hash;
+        my $header = '<meta name="microid" content="'.$microid.'"/>';
+
+        TWiki::Func::addToHEAD('http://microid.org', $header);
+    }
+
+    return;
+}
+
+sub _isUserTopic {
+    my $web = shift;
+    my $topic = shift;
+    
+    my $key = "$web.$topic";
+
+    return $isUserTopic{$key} if defined($isUserTopic{$key});
+    $isUserTopic{$key} = 0;
+    if (
+        ($web eq TWiki::Func::getMainWebname()) &&
+        (TWiki::Func::topicExists($web, $topic)) &&
+        (defined(TWiki::Func::wikiToUserName("$web.$topic")))
+        ) {
+        $isUserTopic{$key} = 1;
+    }
+    return $isUserTopic{$key};
+}
+
+
+###########################################
+
 # The function used to handle the %EXAMPLETAG{...}% variable
 # You would have one of these for each variable you want to process.
-sub _EXAMPLETAG {
+sub _HCARD {
     my($session, $params, $theTopic, $theWeb) = @_;
     # $session  - a reference to the TWiki session object (if you don't know
     #             what this is, just ignore it)
@@ -110,6 +151,19 @@ sub _EXAMPLETAG {
     # For example, %EXAMPLETAG{'hamburger' sideorder="onions"}%
     # $params->{_DEFAULT} will be 'hamburger'
     # $params->{sideorder} will be 'onions'
+    my $wikiName;
+    if (defined($params->{_DEFAULT}) &&
+        (_isUserTopic(TWiki::Func::normalizeWebTopicName(TWiki::Func::getMainWebname(), $params->{_DEFAULT})))) {
+        $wikiName = $params->{_DEFAULT}
+    } else {
+        $wikiName = TWiki::Func::getWikiName();
+    }
+    my $hCardTmpl = TWiki::Func::readTemplate('hcard');
+
+    $hCardTmpl =~ s/%HCARDUSER%/$wikiName/ge;
+    $hCardTmpl =~ s/%HCARDNAME%/lc($wikiName)/ge;
+
+    return "$hCardTmpl";
 }
 
 =pod
@@ -249,6 +303,8 @@ sub DISABLE_beforeCommonTagsHandler {
     ### my ( $text, $topic, $web, $meta ) = @_;
 
     TWiki::Func::writeDebug( "- ${pluginName}::beforeCommonTagsHandler( $_[2].$_[1] )" ) if $debug;
+    
+
 }
 
 =pod
