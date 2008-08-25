@@ -12,6 +12,9 @@ One line description, required for extensions repository catalog.
 This Plugins adds support for a number of [[http://microformats.org][microformats]]. 
    1 [[http://microid.org][MicroID]], which allows a user to Verifiably Claim their User Topic, through the use of a hash of the Url and their registered email address
       * The microid will be automatically added to the html header when viewing any user's topic.
+   1 [[http://microformats.org/wiki/hcard][hCard]], a simple, open, distributed format for representing TWiki users. 
+      * useage: =%<nop>HCARD{"WikiName"}% - uses the TWiki.UserForm data on a user's Topic to create a hCard.
+      * 
 
 ---++ Examples
 
