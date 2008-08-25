@@ -4,6 +4,10 @@ lib/TWiki/Plugins/MicroformatsPlugin.pm 0644 Perl module
 lib/TWiki/Plugins/MicroformatsPlugin/Config.spec
 
 templates/hcard.tmpl
+templates/hcardcss.tmpl
+
+pub/TWiki/MicroformatsPlugin/expose-mf.css
+
 
 pub/TWiki/MicroformatsPlugin/icon-set.png
 pub/TWiki/MicroformatsPlugin/xfn-sweetheart-met.png

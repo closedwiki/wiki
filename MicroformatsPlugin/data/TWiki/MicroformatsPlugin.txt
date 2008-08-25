@@ -12,11 +12,12 @@ One line description, required for extensions repository catalog.
 This Plugins adds support for a number of [[http://microformats.org][microformats]]. 
    1 [[http://microid.org][MicroID]], which allows a user to Verifiably Claim their User Topic, through the use of a hash of the Url and their registered email address
       * The microid will be automatically added to the html header when viewing any user's topic.
-   1 [[http://microformats.org/wiki/hcard][hCard]], a simple, open, distributed format for representing TWiki users. 
+   1 <img src="%ATTACHURLPATH%/icon-hcard.png" alt="xfn"/>[[http://microformats.org/wiki/hcard][hCard]] with a little xfn, a simple, open, distributed format for representing TWiki users. 
       * useage: =%<nop>HCARD{"WikiName"}% - uses the TWiki.UserForm data on a user's Topic to create a hCard.
-      * 
+      * perhaps will need to use JS to auto add hCards to user topics?
 
 ---++ Examples
+
 
 ---++ Installation Instructions
 
@@ -25,6 +26,7 @@ This Plugins adds support for a number of [[http://microformats.org][microformat
 ---++ Plugin Info
 
    * [[http://factorycity.net/projects/microformats-icons/][Microformat Icons]] by [[http://bartelme.at/][Wolfgang Bartelme]]
+   * [[http://www.hicksdesign.co.uk/journal/highlight-microformats-with-css][expose-mf.css]] by Hicks Design
 
 |  Plugin Author: | TWiki:Main.SvenDowideit - SvenDowideit@fosiki.com - <img src="%ATTACHURLPATH%/wikiringlogo20x20.png" /> [[http://www.wikiring.com][WikiRing.com]] |
 |  Copyright: | &copy; 2008, SvenDowideit@fosiki.com |
@@ -41,5 +43,6 @@ __Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCa
 
 -- SvenDowideit@fosiki.com - [[http://www.wikiring.com][WikiRing.com]]
 
-%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="wikiringlogo20x20.png" date="1161609076" size="1343" user="Main.SvenDowideit" version="1"}%
-%META:FILEATTACHMENT{name="logo.gif" attr="h" comment="http://microformats.org/wordpress/wp-content/themes/microformats/img/logo.gif" date="1161609076" size="1343" user="" version="1"}%
+%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="wikiringlogo20x20.png" date="1161609076" size="" user="Main.SvenDowideit" version="1"}%
+%META:FILEATTACHMENT{name="logo.gif" attr="h" comment="http://microformats.org/wordpress/wp-content/themes/microformats/img/logo.gif" date="1161609076" size="" user="" version="1"}%
+%META:FILEATTACHMENT{name="icon-hcard.png" attr="h" comment="http://microformats.org/wiki/icons" date="1161609076" size="" user="" version="1"}%

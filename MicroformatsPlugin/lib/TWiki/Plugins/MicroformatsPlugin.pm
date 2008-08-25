@@ -162,6 +162,9 @@ sub _HCARD {
 
     $hCardTmpl =~ s/%HCARDUSER%/$wikiName/ge;
     $hCardTmpl =~ s/%HCARDNAME%/lc($wikiName)/ge;
+    
+    my $hCardCss = TWiki::Func::readTemplate('hcardcss');
+    TWiki::Func::addToHEAD('hCardCss', $hCardCss);
 
     return "$hCardTmpl";
 }
