@@ -55,7 +55,7 @@ sub initPlugin {
 
     $debug = $TWiki::cfg{Plugins}{MicroformatsPlugin}{Debug} || 0;
     TWiki::Func::registerTagHandler( 'HCARD', \&_HCARD );
-    TWiki::Func::registerTagHandler( 'HCALENDAR', \&_HCALENDAR );
+    TWiki::Func::registerTagHandler( 'HEVENT', \&_HEVENT );
     #TWiki::Func::registerRESTHandler('example', \&restExample);
     
     my $enableMicroIds = $TWiki::cfg{Plugins}{MicroformatsPlugin}{enableMicroIds} || 1;
@@ -170,7 +170,7 @@ sub _HCARD {
 
     return "$hCardTmpl";
 }
-sub _HCALENDAR {
+sub _HEVENT {
     my($session, $params, $theTopic, $theWeb) = @_;
 
     my $start = $params->{start} || '';
@@ -182,7 +182,7 @@ sub _HCALENDAR {
     
     
     
-    my $hCalendarTmpl = TWiki::Func::readTemplate('hcalendar');
+    my $hCalendarTmpl = TWiki::Func::readTemplate('hevent');
 
     $hCalendarTmpl =~ s/%HSTART%/$start/ge;
     $hCalendarTmpl =~ s/%HEND%/$end/ge;
@@ -196,7 +196,7 @@ sub _HCALENDAR {
     $hCalendarTmpl =~ s/%HCALNAME%/$calname/ge;
     $hCalendarTmpl =~ s/\n//g;
     
-print STDERR "HCALENDAR> $start - $summary\n";
+print STDERR "HEVENT> $start - $summary\n";
 
     my $hCalendarCss = TWiki::Func::readTemplate('hcardcss');
     TWiki::Func::addToHEAD('hCardCss', $hCalendarCss);
@@ -445,7 +445,7 @@ return unless (TWiki::Func::getContext()->{'view'});
         if (defined($seconds) && ($seconds ne '')) {
             #print STDERR "> ".TWiki::Func::formatTime($seconds)." : $remaining ($line)\n";
             
-            my $newline = ($bullet).($recurring)."\%HCALENDAR{start=\"".TWiki::Func::formatTime($seconds, '$iso')."\" summary=\"$remaining\"}\%";
+            my $newline = ($bullet).($recurring)."\%HEVENT{start=\"".TWiki::Func::formatTime($seconds, '$iso')."\" summary=\"$remaining\"}\%";
             print STDERR ">>> $newline\n";
             push(@processedText, $newline);
             $foundTime++;

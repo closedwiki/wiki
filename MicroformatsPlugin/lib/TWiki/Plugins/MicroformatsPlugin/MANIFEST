@@ -4,7 +4,7 @@ lib/TWiki/Plugins/MicroformatsPlugin.pm 0644 Perl module
 lib/TWiki/Plugins/MicroformatsPlugin/Config.spec
 
 templates/hcard.tmpl
-templates/hcalendar.tmpl
+templates/hevent.tmpl
 templates/hcardcss.tmpl
 
 pub/TWiki/MicroformatsPlugin/expose-mf.css

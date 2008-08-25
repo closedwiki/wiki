@@ -139,7 +139,7 @@ function parseDT(dt) {
   } else {
     dtText = dt.firstChild.data;
   }
-  var result = dtText.match( /^(\d{4})(\d{2})(\d{2})/ );
+  var result = dtText.match( /^(\d{4})-?(\d{2})-?(\d{2})/ );
   if (result == null) {
     debug("didn't recognize DT: " + dtText);
   }
