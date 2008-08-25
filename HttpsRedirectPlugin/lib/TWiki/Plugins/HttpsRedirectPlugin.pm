@@ -117,6 +117,10 @@ FOOBARSOMETHING. This avoids namespace issues.
 
 =cut
 
+
+
+
+
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
 
@@ -137,34 +141,57 @@ sub initPlugin {
     my $setting = $TWiki::cfg{Plugins}{HttpsRedirectPlugin}{ExampleSetting} || 0;
     $debug = $TWiki::cfg{Plugins}{HttpsRedirectPlugin}{Debug} || 0;
 
-    unless (TWiki::Func::isGuest) #If the user is no guest
+
+
+    if (TWiki::Func::isGuest) 
     	{
-		if (TWiki::Func::getContext()->{'view'}) #If we are on the view script
-			{				
-			#$url = expandCommonVariables("%URL_HOST%/%SCRIPTNAME%%SCRIPTSUFFIX/%WEB%/%TOPIC%?%QUERYSTRING%");	
-			
+		#If we are guest, force HTTPS on login
+		if (TWiki::Func::getContext()->{'login'}) #If we are on the login script
+			{							
 			#Build up our URL			
 			my $query=&TWiki::Func::getCgiQuery();	
 			my $url=$query->url() . $query->path_info();
 			if ($query->query_string())
 				{
 				$url.= '?' . $query->query_string();	
-				}		
-				
+				}
 
-			#$url.= $web .'/' . $topic;
-	
-			
+				
 			unless ($url=~/^https/) #Unless we are already using HTTPS
 				{
 				#Redirect to HTTPS URL and quite				
 				$url=~s/^http/https/;				
+				TWiki::Func::writeDebug("HTTPS redirect to: $url" ) if ($debug);
 				TWiki::Func::redirectCgiQuery($query, $url);							
 				$TWiki::Plugins::SESSION->finish();				
 				exit(0);
 				}
 			}	    	    
+
     	}
+	else
+		{
+		#If the user is no guest always force HTTPS
+	
+		#Get our URL			
+		my $query=&TWiki::Func::getCgiQuery();	
+		my $url=$query->url() . $query->path_info();
+		if ($query->query_string())
+			{
+			$url.= '?' . $query->query_string();	
+			}
+
+				
+		unless ($url=~/^https/) #Unless we are already using HTTPS
+			{
+			#Redirect to HTTPS URL and quite				
+			$url=~s/^http/https/;				
+			TWiki::Func::writeDebug("HTTPS redirect to: $url" ) if ($debug);
+			TWiki::Func::redirectCgiQuery($query, $url);							
+			$TWiki::Plugins::SESSION->finish();				
+			exit(0);
+			}	    	    
+		}
     
     
     

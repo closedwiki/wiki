@@ -1,7 +1,8 @@
+%META:TOPICINFO{author="StephaneLenclud" date="1219703787" format="1.1" reprev="1.2" version="1.2"}%
 ---+!! !HttpsRedirectPlugin
 <!--
 One line description, required for extensions repository catalog.
-   * Set SHORTDESCRIPTION = Redirect authenticated users to HTTPS url.
+   * Set SHORTDESCRIPTION = Redirect authenticated users to HTTPS URL.
 -->
 %SHORTDESCRIPTION%
 
@@ -9,7 +10,9 @@ One line description, required for extensions repository catalog.
 
 ---++ Usage
 
----++ Examples
+The HTTPS redirect plug-in is designed to help you run a web site where guest users can access pages through HTTP and authenticated users will be forced to use HTTPS.
+This plug-in do not expose any TWiki =%TAG%=. Simply activate the plug-in from =configure= to take advantage of its functionality.
+Once enabled it will force authenticated users to use HTTPS by redirecting them to HTTPS URL if needed. Guests will be redirected to HTTPS only when accessing the login screen.
 
 ---++ Installation Instructions
 
@@ -18,7 +21,7 @@ One line description, required for extensions repository catalog.
 ---++ Plugin Info
 
 Many thanks to the following sponsors for supporting this work:
-   * Acknowledge any sponsors here
+   * http://slion.net
 
 |  Plugin Author(s): | |
 |  Copyright: | &copy; |
