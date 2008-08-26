@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="OlivierBerger" date="1219762726" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICINFO{author="OlivierBerger" date="1219765248" format="1.1" reprev="1.4" version="1.4"}%
 <!--
 This topic is part of the documentation for CasLoginContrib and is
 automatically generated from Subversion. Do not edit it! Your edits
@@ -30,7 +30,7 @@ To activate it, you will specify =TWiki::LoginManager::CasLogin= (or =TWiki::Cli
 
 Configure the following variables to activate this Login manager :
 <verbatim>
-$TWiki::cfg{LoginManager} = 'TWiki::LoginManager::CasLogin'; # or 'TWiki::Client::CasLogin'; for TWiki 4.1.x)
+$TWiki::cfg{LoginManager} = 'TWiki::LoginManager::CasLogin'; # or 'TWiki::Client::CasLogin'; for TWiki 4.1.x
 $TWiki::cfg{CAS}{casUrl} = 'https://yourcas.yourdomain/cas';
 $TWiki::cfg{CAS}{CAFile} = '/etc/ssl/certs/your_CAS.pem';
 </verbatim>
@@ -58,6 +58,7 @@ You'll find the original version of Main.CharlieReitsma meant for TWiki 4.2 in C
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Contrib Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  v. 0.%$VERSION% | Updating documentation, adding Config.spec, managing Contrib sources in SVN. |
 |  v. 2 (20080815) | Adding <nop>TWiki::LoginManager::CasLogin for TWiki 4.2 to ship both versions at the same time. |
 |  v. 1 (20080814) | Initial release with <nop>TWiki::Client::CasLogin, only for TWiki 4.1.2. |
 |  Dependencies: | %$DEPENDENCIES% |
