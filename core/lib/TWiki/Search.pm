@@ -1194,7 +1194,8 @@ sub displayFormField {
     }
 
     return $meta->renderFormFieldForDisplay(
-        $name, '$value', { break => $breakArgs, protectdollar => 1 } );
+        $name, '$value', 
+	{ break => $breakArgs, protectdollar => 1, showhidden => 1} );
 }
 
 # Returns the topic revision info of the base version,

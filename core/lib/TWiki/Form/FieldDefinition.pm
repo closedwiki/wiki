@@ -313,10 +313,12 @@ sub renderForDisplay {
     my( $this, $format, $value, $attrs ) = @_;
     ASSERT(!$attrs || ref($attrs) eq 'HASH') if DEBUG;
     
-    my $fa = $this->{attributes} || '';
-    if ( $fa =~ /H/ ) {
-        return '';
-    }
+    if ( !$attrs->{showhidden} ) {
+        my $fa = $this->{attributes} || '';
+	if ( $fa =~ /H/ ) {
+	   return '';
+	}
+    }	   
 
     require TWiki::Render;
     $value = TWiki::Render::protectFormFieldValue( $value, $attrs );
