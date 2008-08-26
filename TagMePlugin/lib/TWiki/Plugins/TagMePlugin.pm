@@ -33,7 +33,7 @@ use vars qw(
   $alphaNum $doneHeader $normalizeTagInput $lineRegex $topicsRegex
 );
 
-$VERSION    = '1.046';
+$VERSION    = '1.047';
 $RELEASE    = 'TWiki 4';
 $pluginName = 'TagMePlugin';    # Name of this Plugin
 
@@ -356,7 +356,9 @@ sub _showAllTags {
     my $exclude   = TWiki::Func::extractNameValuePair( $attr, 'exclude' );
     my $by        = TWiki::Func::extractNameValuePair( $attr, 'by' );
     my $format    = TWiki::Func::extractNameValuePair( $attr, 'format' );
+    my $prefix    = TWiki::Func::extractNameValuePair( $attr, 'prefix' );
     my $separator = TWiki::Func::extractNameValuePair( $attr, 'separator' );
+    my $suffix    = TWiki::Func::extractNameValuePair( $attr, 'suffix' );
     my $minSize   = TWiki::Func::extractNameValuePair( $attr, 'minsize' );
     my $maxSize   = TWiki::Func::extractNameValuePair( $attr, 'maxsize' );
     my $minCount  = TWiki::Func::extractNameValuePair( $attr, 'mincount' );
@@ -508,7 +510,7 @@ sub _showAllTags {
               } @tags
         );
     }
-    return $text;
+    return $text ? $prefix.$text.$suffix : $text;
 }
 
 # =========================

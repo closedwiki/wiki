@@ -126,7 +126,9 @@ The Plugin handles a =%<nop>TAGME{}%= variable that performs different actions. 
 	  | =minsize="90"= | Minimum size of tag =$size= (typically percent font size) | ="90"= |
 	  | =maxsize="180"= | Maximum size of tag =$size= | ="180"= |
 	  | =format="..."= | Format of a tag, tokens =$tag=, =$size=, =$marker= (adds selected="selected" for use in html options), =$count=, =$order= | ="$tag"= |
+	  | =prefix="..."= | Printed before the list of tags if it is not empty, =$n= can be used for newlines. e.g: =prefix="Tags: &lt;i&gt;"= | =""= |
 	  | =separator=", "= | Separator between tags | =", "=, unless =format= has been specified |
+	  | =suffix="..."= | Printed after the list of tags if it is not empty, =$n= can be used for newlines. e.g: =suffix="&lt;/i&gt;"= | =""= |
 
 	* =%<nop>TAGME{ tpaction="query" ... }%= - tag search
 	  | *Parameter* | *Comment* | *Default* |
@@ -349,8 +351,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/PeterThoeny, TWiki:Main/ArthurClemens |
 |  Copyright: | &copy; 2006-2007, Peter Thoeny, [[http://www.twiki.net/][TWIKI.NET]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 16 Oct 2007 (V1.046) |
+|  Plugin Version: | 26 Aug 2008 (V1.047) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  26 Aug 2008: | Colas Nahaboo: prefix & suffic options to TAGME |
 |  16 Oct 2007: | Arthur Clemens: added backward compatible example template. |
 |  26 Sep 2007: | TWiki:Main.CrawfordCurrie TWikibug:Item4728 fixed incorrect cloud font sizes to reflect relative importance of tags actually being displayed |
 |  11 Sep 2007: | Arthur Clemens: updated example template to TWiki template convention. |
