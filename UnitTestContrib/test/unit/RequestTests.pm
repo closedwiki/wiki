@@ -126,12 +126,31 @@ sub test_protocol {
 }
 
 sub test_uri {
+    my $this = shift;
+    my $req = new TWiki::Request("");
+    foreach (qw(/ /abc/def /abc/ /Web/Topic?a=b&b=c), '') {
+        $this->assert_str_not_equals($_, $req->uri, 'Wrong initial "uri" value');
+        $req->uri($_);
+        $this->assert_str_equals($_, $req->uri, 'Wrong uri value');
+    }
 }
 
 sub test_remoteAddress {
+    my $this = shift;
+    my $req = new TWiki::Request("");
+    foreach (qw(127.0.0.1 10.1.1.1 192.168.0.1)) {
+        $req->remoteAddress($_);
+        $this->assert_str_equals($_, $req->remoteAddress, 'Wrong remoteAddress value');
+    }
 }
 
 sub test_remoteUser {
+    my $this = shift;
+    my $req = new TWiki::Request("");
+    foreach (qw(TWikiGuest guest foo bar Baz)) {
+        $req->remoteUser($_);
+        $this->assert_str_equals($_, $req->remoteUser, 'Wrong remoteUser value');
+    }
 }
 
 sub test_serverPort {
@@ -176,10 +195,7 @@ sub test_param_x {
 sub test_cookie_x {
 }
 
-sub test_get_cookies {
-}
-
-sub test_set_cookies {
+sub test_cookies {
 }
 
 sub test_delete {
@@ -206,10 +222,7 @@ sub test_uploadInfo {
 sub test_tmpFileName {
 }
 
-sub test_get_uploads {
-}
-
-sub test_set_uploads {
+sub test_uploads {
 }
 
 sub test_accessors {
