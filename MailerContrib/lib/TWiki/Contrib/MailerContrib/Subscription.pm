@@ -23,26 +23,31 @@ matching pages that the user is subscribed to.
 
 package TWiki::Contrib::MailerContrib::Subscription;
 
+use Assert;
+
+use TWiki::Contrib::MailerContrib::Constants;
+
 =pod
 
----++ new($pages, $childDepth, $news)
+---++ new($pages, $childDepth, $options)
    * =$pages= - Wildcarded expression matching subscribed pages
-   * =$childDepth= - Depth of children of $topic to notify changes for. Defaults to 0
-   * =$mode= - ! if this is a non-changes subscription and the topics should
-   be mailed evebn if there are no changes. ? to mail the full topic only
-   if there are changes. undef to mail changes only.
+   * =$childDepth= - Depth of children of $topic to notify changes
+     for. Defaults to 0
+   * =$options= - bitmask of MailerConst options
 Create a new subscription.
 
 =cut
 
 sub new {
-    my ( $class, $topics, $depth, $mode ) = @_;
+    my ( $class, $topics, $depth, $opts ) = @_;
+
+    ASSERT(defined($opts) && $opts =~ /^\d*$/) if DEBUG;
 
     my $this = bless( {}, $class );
 
     $this->{topics} = $topics || '';
     $this->{depth} = $depth || 0;
-    $this->{mode} = $mode || '';
+    $this->{options} = $opts || 0;
 
     $topics =~ s/[^\w\*]//g;
     $topics =~ s/\*/\.\*\?/g;
@@ -60,10 +65,10 @@ Return a string representation of this object, in Web<nop>Notify format.
 
 sub stringify {
     my $this = shift;
-
-    my $record = $this->{topics} . ($this->{mode} || '');
+    my $record = $this->{topics};
     # convert RE back to wildcard
     $record =~ s/\.\*\?/\*/;
+    $record .= $this->getMode();
     $record .= " ($this->{depth})" if ( $this->{depth} );
     return $record;
 }
@@ -113,8 +118,9 @@ specified by another subscription. Thus:
 sub covers {
     my( $this, $tother, $db ) = @_;
 
-    # A different mode never matches
-    return 0 unless $this->{mode} eq $tother->{mode};
+    # Does the mode cover the other subscription?
+    return 0 unless
+      (($this->{options} & $tother->{options}) == $tother->{options});
 
     # do they match without taking into account the depth?
     return 0 unless( $this->matches($tother->{topics}, undef, 0) );
@@ -135,16 +141,19 @@ sub covers {
 =pod
 
 ---++ getMode() -> $mode
-Return ! if this is a non-changes subscription and the topics should
-be mailed even if there are no changes. ? to mail the full topic only
-if there are changes. undef to mail changes only.
+Get the newsletter mode of this subscription ('', '?' or '!') as
+specified in WebNotify.
 
 =cut
 
 sub getMode {
     my $this = shift;
 
-    return $this->{mode};
+    if ($this->{options} & $MailerConst::FULL_TOPIC) {
+        return '!' if ($this->{options} & $MailerConst::ALWAYS);
+        return '?';
+    }
+    return '';
 }
 
 =pod
@@ -156,7 +165,7 @@ Compare two subscriptions.
 
 sub equals {
     my( $this, $tother ) = @_;
-    return 0 unless ($this->{mode} eq $tother->{mode});
+    return 0 unless ($this->{options} eq $tother->{options});
     return 0 unless ($this->{depth} == $tother->{depth});
     return 0 unless ($this->{topics} eq $tother->{topics});
 }

@@ -33,6 +33,8 @@ package TWiki::Contrib::MailerContrib::WebNotify;
 use strict;
 use locale; # required for matching \w with international characters
 
+use Assert;
+
 require TWiki::Func;
 require TWiki::Contrib::MailerContrib::Subscriber;
 require TWiki::Contrib::MailerContrib::Subscription;
@@ -128,19 +130,19 @@ sub getSubscribers {
 
 =pod
 
----++ subscribe($name, $topics, $depth)
+---++ subscribe($name, $topics, $depth, $options)
    * =$name= - Name of subscriber (wikiname with no web or email address)
    * =$topics= - wildcard expression giving topics to subscribe to
    * =$depth= - Child depth to scan (default 0)
-   * =$mode= - ! if this is a non-changes subscription and the topics should
-   be mailed even if there are no changes. ? to mail the full topic only
-   if there are changes. undef to mail changes only.
+   * =$options= - Bitmap of Mailer::Const options
 Add a subscription, adding the subscriber if necessary.
 
 =cut
 
 sub subscribe {
-    my ( $this, $name, $topics, $depth, $mode ) = @_;
+    my ( $this, $name, $topics, $depth, $opts ) = @_;
+
+    ASSERT(defined($opts) && $opts =~ /^\d*$/) if DEBUG;
 
     my @names = ($name);
     unless ($this->{noexpandgroups}) {
@@ -164,7 +166,7 @@ sub subscribe {
     foreach my $n (@names) {
         my $subscriber = $this->getSubscriber( $n );
         my $sub = new TWiki::Contrib::MailerContrib::Subscription(
-            $topics, $depth, $mode );
+            $topics, $depth, $opts );
         $subscriber->subscribe( $sub );
     }
 }
@@ -206,7 +208,7 @@ sub unsubscribe {
     foreach my $n (@names) {
         my $subscriber = $this->getSubscriber( $n );
         my $sub = new TWiki::Contrib::MailerContrib::Subscription(
-            $topics, $depth );
+            $topics, $depth, 0 );
         $subscriber->unsubscribe( $sub );
     }
 }
@@ -250,6 +252,9 @@ sub processChange {
 
     my $topic = $change->{TOPIC};
     my $web = $change->{WEB};
+    my %authors = map { $_ => 1 }
+      @{TWiki::Contrib::MailerContrib::Subscriber::getEmailAddressesForUser(
+          $change->{author})};
 
     foreach my $name ( keys %{$this->{subscribers}} ) {
         my $subscriber = $this->{subscribers}{$name};
@@ -262,7 +267,12 @@ sub processChange {
             my $emails = $subscriber->getEmailAddresses();
             if( $emails && scalar( @$emails )) {
                 foreach my $email ( @$emails ) {
-                    if ($subs->getMode()) { # ? or !
+                    # Skip this change if the subscriber is the author
+                    # of the change, and we are not always sending
+                    next if (!($subs->{options} & $MailerConst::ALWAYS)
+                               && $authors{$email});
+
+                    if ($subs->{options} & $MailerConst::FULL_TOPIC) {
                         push( @{$allSet->{$topic}}, $email );
                     } else {
                         my $at = $seenSet->{$email}{$topic};
@@ -297,8 +307,7 @@ sub processCompulsory {
         my $subscriber = $this->{subscribers}{$name};
         my $subs = $subscriber->isSubscribedTo( $topic, $db );
         next unless $subs;
-        my $mode = $subs->getMode();
-        next if (!defined($mode) || $mode ne '!');
+        next unless ($subs->{options} & $MailerConst::ALWAYS);
         unless( $subscriber->isUnsubscribedFrom( $topic, $db )) {
             my $emails = $subscriber->getEmailAddresses();
             if( $emails ) {
@@ -338,21 +347,25 @@ sub _load {
     foreach my $baseline ( split ( /\r?\n/, $text )) {
         my $line = TWiki::Func::expandCommonVariables(
             $baseline, $this->{topic}, $this->{web}, $meta);
-        if( $line =~ /^\s+\*\s$webRE($TWiki::regex{wikiWordRegex})\s+\-\s+($TWiki::cfg{MailerContrib}{EmailFilterIn})/o
+        if( $line =~ /^\s+\*\s$webRE($TWiki::regex{wikiWordRegex})\s+\-\s+($TWiki::cfg{MailerContrib}{EmailFilterIn}+)\s*$/o
               && $1 ne $TWiki::cfg{DefaultUserWikiName}) {
             # Main.WikiName - email@domain (legacy format)
-            $this->subscribe( $2, '*', 0 );
+            $this->subscribe( $2, '*', 0, 0 );
             $in_pre = 0;
         }
-        elsif ( $line =~ /^\s+\*\s$webRE($TWiki::regex{wikiWordRegex}|'.*?'|".*?"|$TWiki::cfg{MailerContrib}{EmailFilterIn})\s*(?::(.*))?$/o
+        elsif ( $line =~ /^\s+\*\s$webRE($TWiki::regex{wikiWordRegex}|'.*?'|".*?"|$TWiki::cfg{MailerContrib}{EmailFilterIn})\s*(:.*)?$/o
                   && $1 ne $TWiki::cfg{DefaultUserWikiName}) {
             my $subscriber = $1;
-            my $topics = $3;
-            $subscriber =~ s/^(['"])(.*)\1$/$2/;
-            if (defined($topics) && $topics) {
+            # Get the topic list from the last bracket matched. Have to do it
+            # this awkward way because the email filter may contain braces
+            my $topics = $+;
+            # email addresses can't start with :
+            $topics = undef unless ($topics =~ s/^://);
+            $subscriber =~ s/^(['"])(.*)\1$/$2/; # remove quotes
+            if ($topics) {
                 $this->_parsePages( $subscriber, $topics );
             } else {
-                $this->subscribe($subscriber, '*', 0 );
+                $this->subscribe($subscriber, '*', 0, 0 );
             }
             $in_pre = 0;
         }
@@ -372,16 +385,23 @@ sub _parsePages {
     my $ospec = $spec;
     $spec =~ s/,/ /g;
     while ( $spec =~ s/^\s*([+-])?\s*([\w\*]+)([!?]?)\s*(?:\((\d+)\))?// ) {
-        my $mode = $3 or 0;
+        my $opts = 0;
+        if ($3) {
+            $opts |= $MailerConst::FULL_TOPIC;
+            if ($3 =~ /!/) {
+                $opts |= $MailerConst::ALWAYS;
+            }
+        }
         my $kids = $4 or 0;
         if ( $1 && $1 eq '-' ) {
             $this->unsubscribe( $who, $2, $kids );
         } else {
-            $this->subscribe( $who, $2, $kids, $mode );
+            $this->subscribe( $who, $2, $kids, $opts );
         }
     }
     if ( $spec =~ m/\S/ ) {
-        print STDERR "Badly formatted page list at $who: $ospec\n";
+        TWiki::Func::writeWarning(
+            "Badly formatted page list at $who: $ospec");
     }
 }
 
@@ -394,8 +414,9 @@ sub _emailWarn {
     # Topic we are notifying on.
     unless (defined $this->{nomail}{$name}) {
         $this->{nomail}{$name} = 1;
-        print STDERR "WARNING: Failed to find permitted email for '".
-          $subscriber->stringify()."' when processing web '$web'\n";
+        TWiki::Func::writeWarning(
+            "Failed to find permitted email for '".
+              $subscriber->stringify()."' when processing web '$web'");
     }
 }
 

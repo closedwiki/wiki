@@ -36,8 +36,10 @@ my %finalText =
       TestTopic1221 => "What's up, Buck?",
       TestTopic2 => "roast my nipple-nuts",
       TestTopic21 => "smoke me a kipper, I'll be back for breakfast",
-      'RequêtesNon' => "make it so, number one",
-      'RequêtesOui' => "you're such a smeeee heeee",
+      # High-bit chars - assumes {Site}{CharSet} is set for a high-bit
+      # encoding. No tests for multibyte encodings :-(
+      'RequêtesNon' => "makê it so, number onê",
+      'RequêtesOui' => "you're such a smêêêêêê heeee",
      );
 
 sub new {
@@ -50,6 +52,8 @@ sub set_up {
     $this->SUPER::set_up();
 
     $TWiki::cfg{EnableHierarchicalWebs} = 1;
+    $TWiki::cfg{MailerContrib}{EmailFilterIn} ||=
+      $TWiki::regex{emailAddrRegex};
 
     $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
 
@@ -160,24 +164,34 @@ sub set_up {
               entry => "'IT:admins': TestTopic1",
               topicsout => "",
           },
-          # Francais
-          {
-              email => "test1\@example.com",
-              entry => "TestUser1 : Requêtes*",
-              topicsout => "RequêtesNon RequêtesOui",
-          },
          );
+
+    if (!$TWiki::cfg{Site}{CharSet}
+          || $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859/) {
+        # High-bit chars - assumes {Site}{CharSet} is set for a high-bit
+        # encoding. No tests for multibyte encodings :-(
+        push(@specs, # Francais
+             {
+                 email => "test1\@example.com",
+                 entry => "TestUser1 : Requêtes*",
+                 topicsout => "RequêtesNon RequêtesOui",
+             },
+            );
+    } else {
+        print STDERR "WARNING: High-bit tests disabled for $TWiki::cfg{Site}{CharSet}\n";
+    }
 
     my $s = "";
     foreach my $spec (@specs) {
         $s .= "   * $spec->{entry}\n";
     }
-
     foreach my $web ($this->{test_web}, $testWeb2) {
-        my $meta = new TWiki::Meta($this->{twiki},$web,"WebNotify");
+        my $meta = new TWiki::Meta($this->{twiki},$web,
+                                   $TWiki::cfg{NotifyTopicName});
         $meta->put( "TOPICPARENT", { name => "$web.WebHome" } );
-        TWiki::Func::saveTopic( $web, "WebNotify", $meta,
+        TWiki::Func::saveTopic( $web, $TWiki::cfg{NotifyTopicName}, $meta,
                                     "Before\n${s}After");
+
         $meta = new TWiki::Meta($this->{twiki},$web,"TestTopic1");
         $meta->put( "TOPICPARENT", { name => "WebHome" } );
         TWiki::Func::saveTopic( $web, "TestTopic1", $meta,
@@ -390,12 +404,15 @@ sub testSubweb {
     }
     foreach my $spec (@specs) {
         if ($spec->{topicsout} ne "") {
-            $this->assert($matched{$spec->{email}},
-                          "Expected mails for ".$spec->{email} . " got " .
+            $this->assert(
+                $matched{$spec->{email}},
+                "Expected mails for ".$spec->{email} .
+                  " but only saw mails for " .
                             join(" ", keys %matched));
         } else {
-            $this->assert(!$matched{$spec->{email}},
-                          "Unexpected mails for ".$spec->{email} . " got " .
+            $this->assert(
+                !$matched{$spec->{email}},
+                "Didn't expect mails for ".$spec->{email} . "; got " .
                             join(" ", keys %matched));
         }
     }
@@ -405,35 +422,40 @@ sub testCovers {
     my $this = shift;
 
     my $s1 = new TWiki::Contrib::MailerContrib::Subscription(
-        'A', 0, undef);
+        'A', 0, 0);
     $this->assert($s1->covers($s1));
 
     my $s2 = new TWiki::Contrib::MailerContrib::Subscription(
-        'A', 0, '!');
+        'A', 0, $MailerConst::FULL_TOPIC);
     $this->assert(!$s1->covers($s2));
 
     $s1 = new TWiki::Contrib::MailerContrib::Subscription(
-        'A*', 0, '!');
+        'A', 0, $MailerConst::ALWAYS | $MailerConst::FULL_TOPIC);
+    $this->assert($s1->covers($s2));
+    $this->assert(!$s2->covers($s1));
+
+    $s1 = new TWiki::Contrib::MailerContrib::Subscription(
+        'A*', 0, $MailerConst::FULL_TOPIC);
     $this->assert($s1->covers($s2));
     $this->assert(!$s2->covers($s1));
 
     $s2 = new TWiki::Contrib::MailerContrib::Subscription(
-        'A', 1, '!');
+        'A', 1, $MailerConst::FULL_TOPIC);
     $this->assert(!$s1->covers($s2));
     $this->assert(!$s2->covers($s1));
 
     $s1 = new TWiki::Contrib::MailerContrib::Subscription(
-        'A*', 1, '!');
+        'A*', 1, $MailerConst::FULL_TOPIC);
     $this->assert($s1->covers($s2));
     $this->assert(!$s2->covers($s1));
 
     $s2 = new TWiki::Contrib::MailerContrib::Subscription(
-        'A*B', 1, '!');
+        'A*B', 1, $MailerConst::FULL_TOPIC);
     $this->assert($s1->covers($s2));
     $this->assert(!$s2->covers($s1));
 
     $s1 = new TWiki::Contrib::MailerContrib::Subscription(
-        'AxB', 0, '!');
+        'AxB', 0, $MailerConst::FULL_TOPIC);
     $this->assert(!$s1->covers($s2));
     $this->assert($s2->covers($s1));
 }
@@ -449,12 +471,15 @@ sub testExcluded {
    * good@example.com: *
 HERE
 
-    my $meta = new TWiki::Meta($this->{twiki},$this->{test_web},"WebNotify");
+    my $meta = new TWiki::Meta($this->{twiki},$this->{test_web},
+                               $TWiki::cfg{NotifyTopicName});
     $meta->put( "TOPICPARENT", { name => "$this->{test_web}.WebHome" } );
-    TWiki::Func::saveTopic( $this->{test_web}, "WebNotify", $meta,
-        "Before\n${s}After",
-        $meta);
-    TWiki::Contrib::MailerContrib::mailNotify( [ $this->{test_web} ], $this->{twiki}, 0 );
+    TWiki::Func::saveTopic( $this->{test_web}, $TWiki::cfg{NotifyTopicName},
+                            $meta,
+                            "Before\n${s}After",
+                            $meta);
+    TWiki::Contrib::MailerContrib::mailNotify(
+        [ $this->{test_web} ], $this->{twiki}, 0 );
 
     my %matched;
     foreach my $message ( @TWikiFnTestCase::mails ) {
@@ -465,6 +490,63 @@ HERE
         $this->assert_str_equals('good@example.com', $mailto, $mailto);
     }
     #print "REPORT\n",join("\n\n", @TWikiFnTestCase::mails);
+}
+
+sub testExpansion {
+    my $this = shift;
+
+    my $s = <<'HERE';
+%SEARCH{"gribble.com" multiple="on" topic="%TOPIC%" format="   * search@example.com: *"}%
+gribble.com
+HERE
+
+    my $meta = new TWiki::Meta($this->{twiki},$this->{test_web},
+                               $TWiki::cfg{NotifyTopicName});
+    $meta->put( "TOPICPARENT", { name => "$this->{test_web}.WebHome" } );
+    TWiki::Func::saveTopic( $this->{test_web}, $TWiki::cfg{NotifyTopicName},
+                            $meta,
+                            "Before\n${s}After",
+                            $meta);
+    TWiki::Contrib::MailerContrib::mailNotify( [ $this->{test_web} ], $this->{twiki}, 0 );
+
+    my %matched;
+    foreach my $message ( @TWikiFnTestCase::mails ) {
+        next unless $message;
+        $message =~ /^To: (.*?)$/m;
+        my $mailto = $1;
+        $this->assert($mailto, $message);
+        $this->assert_str_equals('search@example.com', $mailto, $mailto);
+    }
+    #print "REPORT\n",join("\n\n", @TWikiFnTestCase::mails);
+}
+
+sub test_5949 {
+    my $this = shift;
+    my $s = <<'HERE';
+   * TestUser1: SpringCabbage
+HERE
+    my $meta = new TWiki::Meta($this->{twiki},$this->{test_web},
+                               $TWiki::cfg{NotifyTopicName});
+    $meta->put( "TOPICPARENT", { name => "$this->{test_web}.WebHome" } );
+    TWiki::Func::saveTopic( $this->{test_web},
+                            $TWiki::cfg{NotifyTopicName}, $meta,
+                            "Before\n${s}After",
+                            $meta);
+
+    my $wn = new TWiki::Contrib::MailerContrib::WebNotify(
+        $TWiki::Plugins::SESSION, $this->{test_web},
+        $TWiki::cfg{NotifyTopicName}, 1 );
+    $this->assert_str_equals(<<HERE, $wn->stringify());
+Before
+   * TestUser1: SpringCabbage
+After
+HERE
+    $wn->unsubscribe("TestUser1", "SpringCabbage");
+    $this->assert_str_equals(<<HERE, $wn->stringify());
+Before
+   * TestUser1:  - SpringCabbage
+After
+HERE
 }
 
 1;

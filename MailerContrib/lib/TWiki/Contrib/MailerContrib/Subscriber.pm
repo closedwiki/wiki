@@ -67,37 +67,55 @@ sub getEmailAddresses {
     my $this = shift;
 
     unless ( defined( $this->{emails} )) {
-        if ( $this->{name} =~ /^$TWiki::cfg{MailerContrib}{EmailFilterIn}$/ ) {
-            push( @{$this->{emails}}, $this->{name} );
+        $this->{emails} = getEmailAddressesForUser( $this->{name});
+    }
+    return $this->{emails};
+}
+
+=pod
+
+---++ STATIC getEmailAddressesForUser() -> \@list
+Get a list of email addresses for the user(s) represented by this
+subscription. Static method provided for use by other modules.
+
+=cut
+
+sub getEmailAddressesForUser {
+    my $name = shift;
+    my $emails = [];
+
+    return $emails unless $name;
+
+    if ( $name =~ /^$TWiki::cfg{MailerContrib}{EmailFilterIn}$/ ) {
+        push( @{$emails}, $name );
+    } else {
+        my $users = $TWiki::Plugins::SESSION->{users};
+        if ($users->can('findUserByWikiName')) {
+            # User is represented by a wikiname. Map to a canonical
+            # userid.
+            my $list = $users->findUserByWikiName($name);
+            foreach my $user (@$list) {
+                # Automatically expands groups
+                push( @{$emails}, $users->getEmails($user) );
+            }
         } else {
-            my $users = $TWiki::Plugins::SESSION->{users};
-            if ($users->can('findUserByWikiName')) {
-                # User is represented by a wikiname. Map to a canonical
-                # userid.
-                my $list = $users->findUserByWikiName($this->{name});
-                foreach my $user (@$list) {
-                    # Automatically expands groups
-                    push( @{$this->{emails}}, $users->getEmails($user) );
-                }
+            # Old code; use the user object
+            my $user = $users->findUser( $name, undef, 1 );
+            if( $user ) {
+                push( @{$emails}, $user->emails() );
             } else {
-                # Old code; use the user object
-                my $user = $users->findUser( $this->{name}, undef, 1 );
+                $user = $users->findUser(
+                    $name, $name, 1 );
                 if( $user ) {
-                    push( @{$this->{emails}}, $user->emails() );
+                    push( @{$emails}, $user->emails() );
                 } else {
-                    $user = $users->findUser(
-                        $this->{name}, $this->{name}, 1 );
-                    if( $user ) {
-                        push( @{$this->{emails}}, $user->emails() );
-                    } else {
-                        # unknown - can't find an email
-                        $this->{emails} = [];
-                    }
+                    # unknown - can't find an email
+                    $emails = [];
                 }
             }
         }
     }
-    return $this->{emails};
+    return $emails;
 }
 
 # Add a subsciption to an internal list, optimising the list so that
