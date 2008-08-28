@@ -40,7 +40,7 @@ use vars qw(
 );
 
 $pluginName = 'TreePlugin';
-$VERSION = '1.6';
+$VERSION = '1.7';
 $RootLabel = "_RootLabel_";    # what we use to label the root of a tree if not a topic
 
 # =========================
@@ -58,8 +58,8 @@ sub initPlugin {
 
     # Get plugin debug flag
     #$debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
-    $debug = $debug = $TWiki::cfg{Plugins}{$pluginName}{Debug} || 0;
-    $noCache = $debug = $TWiki::cfg{Plugins}{$pluginName}{NoCache} || 0;
+    $debug = $TWiki::cfg{Plugins}{$pluginName}{Debug} || 0;
+    $noCache = $TWiki::cfg{Plugins}{$pluginName}{NoCache} || 0;
     $workAreaDir = TWiki::Func::getWorkArea($pluginName);
     
 
@@ -279,8 +279,14 @@ sub HandleTreeTag
         $parent->add_child($node); # hook me up
     }
     
-    #Cache creation
-    createCache(\%nodes,$webRoot,$attrWeb) unless $noCache;
+    
+	#Only create our cache if excludetopic and includetopic are not defined. 
+	#In fact we only want to create cache if we were SEARCHing a whole web, otherwise we would create partial and inconsistent cache
+	if (!defined $params->{'excludetopic'} && !defined $params->{'includetopic'})
+    	{
+		#Cache creation
+    	createCache(\%nodes,$webRoot,$attrWeb) unless $noCache;
+		}
     
     #### Tree rendering
 
@@ -340,11 +346,14 @@ sub createCache
 	
 	my $cache='';
 	
+	TWiki::Func::writeDebug( "- ${pluginName} Creating cache...")  if $debug;
+
 	#Create our file cache if needed
     $aWeb =~ s/\//./g;
     my $cacheFileName = "$workAreaDir/$aWeb.tree";
     if (-e $cacheFileName)
     	{
+		TWiki::Func::writeDebug( "- ${pluginName} Cache already exists!")  if $debug;
 	    return;
     	}	
 		
@@ -352,7 +361,7 @@ sub createCache
 		{        
 		my $node = $nodesRef->{$nodeId};	
         #TWiki::Func::writeDebug( "- ${pluginName} Building cache for: " . $node->data('topic') ) if $debug;
-		if ($node!=$webRoot) #no point creating cache for the fake web root
+		if (!defined $webRoot || $node!=$webRoot) #no point creating cache for the fake web root
 			{
 			$cache.=$node->data('topic');
             $node->data($node->data('topic'),1); #Mark it as cached to prevent infinite loop
@@ -366,6 +375,7 @@ sub createCache
 		}
 		
     TWiki::Func::saveFile( $cacheFileName, $cache );			
+	TWiki::Func::writeDebug( "- ${pluginName} Cache created!")  if $debug;
 	}
 
 =pod
