@@ -37,7 +37,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '1.4';
 
 $pluginName = 'ToolTipPlugin';  # Name of this Plugin
 
@@ -74,7 +74,7 @@ sub postRenderingHandler
     
     # this search and replace could be made more robust if this were ever called more than once
     # (more than once with the </body> tag in the text, that is)
-    $_[0] =~ s|(</body>)|<script type="text/javascript" src="$TWiki::cfg{DefaultUrlHost}$TWiki::cfg{PubUrlPath}/$TWiki::cfg{SystemWebName}/$pluginName/wz_tooltip.js"></script>$1|;
+    $_[0] =~ s|(</body>)|<script type="text/javascript" src="$TWiki::cfg{DefaultUrlHost}$TWiki::cfg{PubUrlPath}/$TWiki::cfg{SystemWebName}/$pluginName/wz_tooltip.js"></script>$1| if ($ToolTipID);
 }
 
 sub handleToolTip
@@ -103,14 +103,15 @@ sub handleToolTip
     my $theTARGET   = &TWiki::Func::extractNameValuePair( "$attr", "TARGET" )    || ""; 
 
 
-    $attr =~ s/INCLUDE\s*=\s*\"([^\"]*)\"//g;
-    $attr =~ s/URL\s*=\s*\"([^\"]*)\"//g;
-    $attr =~ s/TARGET\s*=\s*\"([^\"]*)\"//g;
-    $attr =~ s/TEXT\s*=\s*\"([^\"]*)\"//g;
-    $attr =~ s/(\S+)\s*=\s*\"([^\"]*)\"/this.T_$1=\'$2\';/g;
+    $attr =~ s/INCLUDE\s*=\s*\"([^\"]*)\"//g;   # remove INCLUDE from attributes
+    $attr =~ s/URL\s*=\s*\"([^\"]*)\"//g;       # remove URL from attributes
+    $attr =~ s/TARGET\s*=\s*\"([^\"]*)\"//g;    # remove TARGET from attributes
+    $attr =~ s/TEXT\s*=\s*\"([^\"]*)\"//g;      # remove TEXT from attributes
+    $attr =~ s/(\S+)\s*=\s*\"([^\"]*)\"/$1, \'$2\',/g;   # Convert each parameter to Tip format "ATTR, VALUE"
+    $attr =~ s/\s+$//;                           # Strip any trailing spaces
+    $attr =~ s/, \'(\d+)\',/, $1,/g;             # Strip quotes from decimal parameters
+    chop($attr) if (substr($attr,-1) eq ",");    # and any trailing comma
    
-    $attr =~ s/=\'(\d+)\'/=$1/g; # For decimal values, remove quotes
-
     if ( $TextInclude )
     {
      TWiki::Func::writeDebug( "topic : $TextInclude");
@@ -135,7 +136,9 @@ sub handleToolTip
     { 
       $out.="target=\"$theTARGET\""; 
     }
-    $out.= " onmouseover=\"$attr;return escape('$theText')\">";
+
+    $out.= " onmouseover=\"Tip('$theText', $attr)\" onmouseout=\"UnTip()\">";
+    TWiki::Func::writeDebug( "topic : $out");
 
     $ToolTipID+=1;
     $ToolTipOpened+=1;
