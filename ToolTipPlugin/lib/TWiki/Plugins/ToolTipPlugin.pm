@@ -87,7 +87,7 @@ sub handleToolTip
   { 
     if ( $ToolTipOpened>0 ) 
     {
-      $out="</A>"; 
+      $out="</a>"; 
       $ToolTipOpened-=1;
     }
     else
@@ -145,6 +145,5 @@ sub handleToolTip
   }
   return ("$out");
 }
-
 
 1;

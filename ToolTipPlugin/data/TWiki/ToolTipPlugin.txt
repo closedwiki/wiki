@@ -13,7 +13,7 @@ You can use one or more %TOOLTIP{TEXT="there are soo many parameters..." BGCOLOR
 
 <!--  Have to escape the following - WYSIWYG corrupts the inline img tags in the tip. -->
 <sticky>
-Note that you can also %TOOLTIP{TEXT="You can also insert &lt;img src=\'%ATTACHURLPATH%/ToolTipPhoto.gif\'&gt; gif/jpg photos in your text... this is simply HTML! (but remember to escape &lt;, &gt;, \', !I18N chars, and autolink !WikiWords, etc :-))!" TITLE="PHOTOS !" FONTCOLOR="#336699" SHADOWCOLOR="#ccaacc" FONTSIZE="18px" WIDTH="400"}% do this %TOOLTIP{END}% and %TOOLTIP{TEXT="you can set a background image so to get a nice tool tip and also add some &lt;img src=\'%ATTACHURLPATH%/ToolTipPhoto.gif\'&gt; gif/jpg photos" FONTCOLOR="#336699" TITLE="Background image" SHADOWCOLOR="#ccaacc" FONTSIZE="18px" WIDTH="190" BGIMG="%ATTACHURLPATH%/tt_bg.jpg"}% this %TOOLTIP{END}% too !.
+Note that you can also %TOOLTIP{TEXT="You can also insert &lt;img src=\'%ATTACHURLPATH%/ToolTipPhoto.gif\'&gt; gif/jpg photos in your text...  this is simply HTML! (but remember to escape &lt;, &gt;, \', !I18N chars, and autolink !WikiWords, etc :-))!" TITLE="PHOTOS !" FONTCOLOR="#336699" SHADOWCOLOR="#ccaacc" FONTSIZE="18px" WIDTH="400"}% do this %TOOLTIP{END}% and %TOOLTIP{TEXT="you can set a background image so to get a nice tool tip and also add some &lt;img src=\'%ATTACHURLPATH%/ToolTipPhoto.gif\'&gt; gif/jpg photos" FONTCOLOR="#336699" TITLE="Background image" SHADOWCOLOR="#ccaacc" FONTSIZE="18px" WIDTH="190" BGIMG="%ATTACHURLPATH%/ToolTipBackground.jpg"}% this %TOOLTIP{END}% too !.
 </sticky>
 
 %N%: A nice feature is to get clickable TWiki site map in <nop>ToolTip.  These are "Sticky" and don't dismiss when the mouse moves away.
