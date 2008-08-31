@@ -1430,21 +1430,25 @@ END
     my @attachments;
     my %uploaded;    # flag already uploaded
 
-    $newform{text} =~ s/%META:FILEATTACHMENT(.*)%/push(@attachments, $1)/ge;
-    foreach my $a (@attachments) {
-        $a =~ /name="([^"]*)"/;
-        my $name = $1;
-        next if $uploaded{$name};
-        next if $name =~ /^$to(\.zip|\.tgz|_installer|\.md5)$/;
-        $a =~ /comment="([^"]*)"/;
-        my $comment = $1;
-        $a =~ /attr="([^"]*)"/;
-        my $attrs = $1 || '';
+    my $doupattachements = ask("Do you want to upload the attachments?", 1);
+        
+    if ($doupattachements) {
+        $newform{text} =~ s/%META:FILEATTACHMENT(.*)%/push(@attachments, $1)/ge;
+        foreach my $a (@attachments) {
+            $a =~ /name="([^"]*)"/;
+            my $name = $1;
+            next if $uploaded{$name};
+            next if $name =~ /^$to(\.zip|\.tgz|_installer|\.md5)$/;
+            $a =~ /comment="([^"]*)"/;
+            my $comment = $1;
+            $a =~ /attr="([^"]*)"/;
+            my $attrs = $1 || '';
 
-        $this->_uploadAttachment( $userAgent, $user, $pass, $name,
-            $this->{basedir} . '/pub/TWiki/' . $this->{project} . '/' . $name,
-            $comment, $attrs =~ /h/ ? 1 : 0 );
-        $uploaded{$name} = 1;
+            $this->_uploadAttachment( $userAgent, $user, $pass, $name,
+                $this->{basedir} . '/pub/TWiki/' . $this->{project} . '/' . $name,
+                $comment, $attrs =~ /h/ ? 1 : 0 );
+            $uploaded{$name} = 1;
+        }
     }
 
     my $doup = ask( "Do you want to upload the archives and installers?", 1 );
@@ -1500,8 +1504,7 @@ sub _postForm {
     my $response =
       $userAgent->post( $url, $form, 'Content_Type' => 'form-data' );
 
-    if (   $response->is_redirect()
-        && $response->headers->header('Location') =~ /oopsaccessdenied/ )
+    if (   $response->is_redirect() && $response->headers->header('Location') =~ /oopsaccessdenied|login/ ) 
     {
 
         # Try login if we got access denied despite passing creds
@@ -1513,7 +1516,7 @@ sub _postForm {
 
         #print STDERR "Fallthrough login attempt returned ".
         #  $response->request->uri,' -- ', $response->status_line, "\n",
-        #    $response->headers->header('Location')."\n".
+        #   $response->headers->header('Location')."\n".
         #      $response->content()."\n",
         #        $response->headers->header('Set-Cookie')."\n";
         # Post the upload again; we should be logged in
@@ -1523,8 +1526,7 @@ sub _postForm {
     die 'Upload failed ', $response->request->uri,
       ' -- ', $response->status_line, "\n", 'Aborting', "\n",
       $response->as_string
-      unless $response->is_redirect
-          && $response->headers->header('Location') !~ /oops/;
+      unless $response->is_redirect && $response->headers->header('Location') !~ /oops/;
 
     my $sleep = $GLACIERMELT;
     if ( $sleep > 0 ) {
