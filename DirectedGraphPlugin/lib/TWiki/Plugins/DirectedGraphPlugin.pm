@@ -468,9 +468,11 @@ sub _handleDot
 
         ### Attach all of the files to the topic.  If a hard path is specified,
         ### then use perl file I/O, otherwise use TWiki API.
+	&_writeDebug( "### forceAttachAPI = |$forceAttachAPI|  attachPath = |$attachPath| ");
         #
         foreach my $key (keys(%attachFile)) {
-            if ($attachPath && !$forceAttachAPI eq "on") {
+            if (($attachPath) && !($forceAttachAPI eq "on")) {
+               &_writeDebug("attaching $attachFile{$key} using direct file I/O  ");
                _make_path($topic, $web);
                umask( 002 );
                copy( "$tempFile{$key}", "$attachPath/$web/$topic/$attachFile{$key}");
@@ -503,7 +505,7 @@ sub _handleDot
     #  and $attachUrlPath is provided,  and use of the API is not forced.
 
     my $urlPath = undef;
-    if ($attachPath && $attachUrlPath && !$forceAttachAPI eq "on") {
+    if (($attachPath) && ($attachUrlPath) && !($forceAttachAPI eq "on")) {
         $urlPath = $attachUrlPath;
         } else {
         $urlPath = TWiki::Func::getPubUrlPath(); 
@@ -761,7 +763,7 @@ sub _deleteAttach {
 
     if (_attachmentExists( $web, $topic, $fn )) {
 
-        if ($attachPath && !$forceAttachAPI eq "on") {    # Direct file I/O requested
+        if (($attachPath) && !($forceAttachAPI eq "on")) {    # Direct file I/O requested
 	     unlink "$attachPath/$web/$topic/$fn";
              &_writeDebug(" ### Unlinked $attachPath/$web/$topic/$fn ");
 
@@ -831,7 +833,7 @@ sub _make_path {
 sub _attachmentExists {
    my ( $web, $topic, $fn ) = @_;
 
-   if ($attachPath && !$forceAttachAPI eq "on") {
+   if (($attachPath) && !($forceAttachAPI eq "on")) {
       return ( -e "$attachPath/$web/$topic/$fn" )
       } else {
       return TWiki::Func::attachmentExists( $web, $topic, $fn )
