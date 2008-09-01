@@ -52,8 +52,6 @@ sub set_up {
     $this->SUPER::set_up();
 
     $TWiki::cfg{EnableHierarchicalWebs} = 1;
-    $TWiki::cfg{MailerContrib}{EmailFilterIn} ||=
-      $TWiki::regex{emailAddrRegex};
 
     $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
 

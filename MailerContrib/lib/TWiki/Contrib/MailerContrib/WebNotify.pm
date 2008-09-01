@@ -36,6 +36,7 @@ use locale; # required for matching \w with international characters
 use Assert;
 
 require TWiki::Func;
+require TWiki::Contrib::MailerContrib;
 require TWiki::Contrib::MailerContrib::Subscriber;
 require TWiki::Contrib::MailerContrib::Subscription;
 
@@ -58,6 +59,9 @@ sub new {
     my ( $class, $session, $web, $topic, $noexpandgroups ) = @_;
 
     my $this = bless( {}, $class );
+
+    # Ensure the contrib is initialised
+    TWiki::Contrib::MailerContrib::initContrib();
 
     $this->{web} = $web;
     $this->{topic} = $topic || $TWiki::cfg{NotifyTopicName} || 'WebNotify';

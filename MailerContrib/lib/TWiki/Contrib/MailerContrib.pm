@@ -48,6 +48,12 @@ use vars qw ( $VERSION $RELEASE $verbose );
 $VERSION = '$Rev$';
 $RELEASE = '03 Aug 2008';
 
+# PROTECTED STATIC ensure the contrib is initernally initialised
+sub initContrib {
+    $TWiki::cfg{MailerContrib}{EmailFilterIn} ||=
+      $TWiki::regex{emailAddrRegex};
+}
+
 =pod
 
 ---++ StaticMethod mailNotify($webs, $session, $verbose, $exwebs)
@@ -95,8 +101,7 @@ sub mailNotify {
     # absolute URL context for email generation
     $context->{absolute_urls} = 1;
 
-    $TWiki::cfg{MailerContrib}{EmailFilterIn} ||=
-      $TWiki::regex{emailAddrRegex};
+    initContrib();
 
     my $report = '';
     foreach my $web ( TWiki::Func::getListOfWebs( 'user ') ) {
