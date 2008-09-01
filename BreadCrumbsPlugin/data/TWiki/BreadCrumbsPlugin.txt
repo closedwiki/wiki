@@ -12,7 +12,7 @@
 %TOC%
 ---++ Description
 This plugin helps you to locate where you are, and shows you how
-you can escape from there using breadcrumbs navigation. 
+you can escape from there using breadcrumbs navigation.
 
 Two types of breadcrumb are supported; "location" breadcrumbs, which show you
 where you are in the site hierarchy, taking into account topic parent relationships, and "path" breadcrumbs, that simply show you where you have been, but without going in circles.
@@ -21,7 +21,7 @@ In a way, location breadcrumbs have always been supported by TWiki using the
 =META{"parent"}= variable to display the list of parent topics. Since version
 4.x  TWiki also supports hierarchical subwebs, but the breadcrumbs support of
 TWiki does not allow the display of parent webs as part of of the location
-breadcrumbs. 
+breadcrumbs.
 
 Path breadcrumbs show you which topics you visited to reach the current topic. If you revisit a topic you visited earlier, the path is trimmed back to that topic, so it gives you a sort of visual history of where you have been on the site. Path breadcrumbs require that you have session support enabled.
 
@@ -34,7 +34,7 @@ While most settings are given as part of the =BREADCRUMBS= tag, there are a few 
 to improve rendering breadcrumbs.
 
 ---+++ Enabling Path breadcrumbs
-To switch on recording the path breadcrumbs, set the =BREADCRUMBSPLUGIN_RECORDTRAIL= to =on=. 
+To switch on recording the path breadcrumbs, set the =BREADCRUMBSPLUGIN_RECORDTRAIL= to =on=.
 Otherwise the click path of the user won't be recorded and the =type= setting to the
 BREADCRUMBS will result in an undefined behaviour.
 
@@ -69,11 +69,11 @@ in a topic in the =TOPICTITLE= preference variable or in a formfield 'TopicTitle
       * =once=: short formf of =webonce, topiconce=
    * =spaceout=: space out !WikiWords inserting a separator (defaults to 'off')
    * =spaceoutsep=: separator to be used when spacing out !WikiWords
-   * =maxlength=: maximum length of a breadcrumbs before inserting an ellipsis in the middle, 
+   * =maxlength=: maximum length of a breadcrumbs before inserting an ellipsis in the middle,
      0 meaning disable this feature (defaults to 0)
    * =ellipsis=: character sequence to be inserted when reducing the maxlength of the breadcrumbs
      (defaults to ' ... ')
-      
+
 *Pseudo-variables*: %BR%
 Each of the above format strings (format, header, footer,
 separator) may contain special variables:
@@ -82,7 +82,7 @@ separator) may contain special variables:
    * =$webtopic=: the full =web.topic= of the breadcrumb (twiki syntax)
    * =$target=: the full =web/topic= of the breadcrumb (url syntax)
    * =$name=: name of the breadcrumbs item this is the !TopicTitle, spaced out or normal topic name
-     topic 
+     topic
    * =$n=: replaced with a newline char (\n)
    * =$percnt=: replaced with a percent char (%)
    * =$dollar=: replaced with a dollar char ($)
@@ -104,8 +104,8 @@ separator) may contain special variables:
 ---+++ breadcrumbs to a non-existent location
 <verbatim>
 %BREADCRUMBS{
-  "Web1/Web2/Web3.Topic" 
-  format="$name" 
+  "Web1/Web2/Web3.Topic"
+  format="$name"
   separator=" &#187; "}%
 </verbatim>
 %BREADCRUMBS{"Web1/Web2/Web3.Topic" format="$name" separator=" &#187; "}%
@@ -113,36 +113,36 @@ separator) may contain special variables:
 ----+++ recurse="off"
 <verbatim>
 %BREADCRUMBS{
-  "Web1/Web2/Web3.Topic" 
-  format="$name" 
-  separator=" &#187; " 
+  "Web1/Web2/Web3.Topic"
+  format="$name"
+  separator=" &#187; "
   recurse="off"}%
 </verbatim>
 %BREADCRUMBS{"Web1/Web2/Web3.Topic" format="$name" separator=" &#187; " recurse="off"}%
 
 ----+++ recurse="once"
 <verbatim>
-%BREADCRUMBS{"Web1/Web2/Web3.Topic" 
-  format="$name" 
-  separator=" &#187; " 
+%BREADCRUMBS{"Web1/Web2/Web3.Topic"
+  format="$name"
+  separator=" &#187; "
   recurse="once"}%
 </verbatim>
 %BREADCRUMBS{"Web1/Web2/Web3.Topic" format="$name" separator=" &#187; " recurse="once"}%
 
 ---+++ include
 <verbatim>
-%BREADCRUMBS{"Web1/Web2/Web3.Topic" 
-  format="$name" 
-  separator=" &#187; " 
+%BREADCRUMBS{"Web1/Web2/Web3.Topic"
+  format="$name"
+  separator=" &#187; "
   include="Web(1|3).*"}%
 </verbatim>
 %BREADCRUMBS{"Web1/Web2/Web3.Topic" format="$name" separator=" &#187; " include=".*(1|3).*"}%
 
 ---+++ exclude
 <verbatim>
-%BREADCRUMBS{"Web1/Web2/Web3.Topic" 
-  format="$name" 
-  separator=" &#187; " 
+%BREADCRUMBS{"Web1/Web2/Web3.Topic"
+  format="$name"
+  separator=" &#187; "
   exclude="Web2"}%
 </verbatim>
 %BREADCRUMBS{"Web1/Web2/Web3.Topic" format="$name" separator=" &#187; " exclude="Web2"}%
@@ -154,14 +154,15 @@ separator) may contain special variables:
 ---++ Plugin Info
 <!-- provided for compatibility only
    * Set SHORTDESCRIPTION = A flexible way to display breadcrumbs navigation
-   * Set TOPICTITLE = %TOPIC% - %SHORTDESCRIPTION%
+   * Set TOPICTITLE = BreadCrumbsPlugin
 -->
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006-2008, Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v2.00 (%$VERSION%) |
+|  Plugin Version: | v2.01 (%$VERSION%) |
 |  Change History: | &nbsp; |
+|  01 Sep 2008: | TWiki:Main.OliverKrueger Bugs:Item5972 fixed: minor cosmetics |
 |  28 Apr 2008: | many new features for 2.0: topic titles, ellipsis, ... |
 |  08 May 2007: | respect HOMETOPIC setting, don't hardcoded '<nop>WebHome' |
 |  19 Apr 2007: | TWiki:Main.CrawfordCurrie added =topicformat= |

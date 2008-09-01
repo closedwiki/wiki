@@ -20,7 +20,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = 'v2.00';
+$RELEASE = 'v2.01';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'A flexible way to display breadcrumbs navigation';
 
@@ -31,7 +31,7 @@ sub initPlugin {
 
   my $doRecordTrail = TWiki::Func::getPreferencesValue('BREADCRUMBSPLUGIN_RECORDTRAIL') || '';
   $doRecordTrail = ($doRecordTrail eq 'on')?1:0;
-  
+
   if ($doRecordTrail) {
     init();
     TWiki::Plugins::BreadCrumbsPlugin::Core::recordTrail($_[1], $_[0]);
