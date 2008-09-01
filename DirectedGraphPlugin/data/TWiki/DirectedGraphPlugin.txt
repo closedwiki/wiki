@@ -1,5 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1209256870" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICINFO{author="BaseUserMapping_333" date="1219629245" format="1.1" reprev="1.3" version="1.3"}%
 ---+!! Directed Graph Plugin
+%TABLE{databg="#AAAAFF"}%
+| To avoid topic corruption, please do not edit with WYSIWYG Editor |
 
 %TOC%
 
@@ -7,22 +9,24 @@
 
 Graph visualization is a way of representing structural information as diagrams of abstract graphs and networks. Automatic graph drawing has many important applications in software engineering, database and web design, networking, and in visual interfaces for many other domains.
 
-This plugin uses [[http://www.graphviz.org/][Graphviz's]] applications to create an image of a directed graph. The directed graph is described using a simple text markup called "The DOT Language".  This markup is written between ==&lt;dot&gt; ... &lt;/dot&gt;== tags.   By default, a png image attachment is created and displayed inline, replacing the ==&lt;dot&gt;== markup.  Any other requested formats are saved as attachments.  
+This plugin uses [[http://www.graphviz.org/][Graphviz's]] applications to create an image of a directed graph. The directed graph is described using a simple text markup called "The DOT Language".  This markup is written between <verbatim><dot> ... </dot></verbatim> tags.   By default, a png image attachment is created and displayed inline, replacing the <verbatim><dot></verbatim> markup.  Any other requested formats are saved as attachments.  
 
-| %X% This version of the plugin uses the TWik API to manipulate the attached graphs.  The first user to view a topic containing a directed graph will be denied access if they do not have update permission.  If defaults or DOT parameters have changed, viewing the topic may modify attachments, which will require update permission. |
+| %X% By default, this version of the plugin uses the TWik API to manipulate the attached graphs.  The first user to view a topic containing a directed graph will be denied access if they do not have update permission.  If defaults or DOT parameters have changed, viewing the topic may modify attachments, which will require update permission. |
 
 | %X% *Caution* The plugin will also update attached files during __Preview__.  if the edit is subsequently canceled, the attachments will be regenerated again. |
 
 A MD5 hash is calculated for each dot command input and the results saved in the TWiki work_area directory. The hash file is named with the Web name, the Topic name, and the string ==-filehash==  The location of the workarea has changed in recent TWiki releases.  If the calculated hash matches on subsequent page visits, the attached graphics files are used without rerunning Graphviz. If the hash doesn't match, the attachments are regenerated.  
 
-Default behavior is to leave any previously generated attachments even if the =&lt;dot&gt;= tags are removed from the file.  If the configuration setting DELETEATTACHMENTS is enabled, then the plugin will remove any old attachments that are not needed.  However if the final =&lt;dot&gt;= tag is removed, the attachments will not be deleted. 
+Default behavior is to leave any previously generated attachments even if the =&lt;dot&gt;= tags are removed from the file.  If the configuration setting DELETEATTACHMENTS is enabled, then the plugin will remove any old attachments that are not needed.  However if the final =&lt;dot&gt;= tag is removed, the plugin is not invoked, and the attachments will not be deleted. 
 
+<blockquote>
 | %X% *Caution!* If a topic has not previously been processed by this version of the plugin, attachments named using the original "Graph[32 character hex checksum].jpg will *all* be deleted from the topic when this parameter is enabled! Once the new ==-filehash== file has been created, old style attachments will not be deleted.  If you want to go back and clean up the old atachment filenames, you can remove the =Web_Topic-filehash= file from the workare directory. |
+</blockquote>
 
 In TWiki 4.2.0 and later, if a topic is renamed, the ==-filehash== file in the TWiki workarea directory will be renamed as well and regeneration of attachment files will be avoided.  In previous versions, there is no afterRenameHandler.  The hash file will be orphaned, and the graphics attachments will be regenerated when the page is displayed.
 
 
-| %X% *Caution* =&lt;dot&gt;= syntax is not currently compatible with the WYSIWYG editor.  Raw editing is recommended |
+| %X% *Caution* =&lt;dot&gt;= syntax is not currently compatible with the WYSIWYG editor.  Raw editing is recommended, or use &lt;sticky&gt; tags to protect the dot tags. |
 
 Also note that after changes that modify the order of generated image names, it may be necessary to refresh the browser cache with shift-reload.
 
@@ -49,7 +53,9 @@ You can use the following parameters in the =dot= tag to control the rendering o
 | =file="file_prefix"= | Overrides the dynamically generated filenames. If specified, must be unique for each graph within a single topic! Suffix is still generated automatically based upon file type.  | =graph_nn= nn increments per graph |
 | =hideattachments="on"= | Set whether or not attachments should be hidden from the attachment table | =on= |
 | =inlineattachment="png"= | Specifies the type of file to be attached inline to the page.  Must be png or jpg. | =png= |
+| =linkattachments="off"= | Add links for file types other than the inline type if present | =off= |
 | =dothash="on"= | Controls the hash calculation against the dot command input. If the dot hash is disabled, a previously created .png file will not be recreated unless the attachment is deleted, or the =dothash= parameter is enabled or removed. This can be used to create a portable topic and attachments that can be moved without regenerating all of the graphs. Used in the HowtoDirectedGraphs topic. | =on= |
+| =forceattachapi="off"= | Force standard TWiki attachment API processing.  Ignores setting of configure attachPath and attachUrlPath parameters.  Used to create portable topic across TWiki installations. | =off= |
 | *Postscript based Antialiasing (optional)* |||
 | =antialias="on"= | Enable antialiasing of current graph by setting this to =on=. Note that if Graphviz is installed with the cairo rendering engine, this option should not be needed. When enabled, a postscript image is created, and post-processed with the ImageMagick "convert" utility. | =off= |
 | =density="300"= | Passed to the imagemagick =convert= utility. Specifies the dots per inch used for image generation.  | =300= |
@@ -360,8 +366,14 @@ Changes to the settings marked %X% will cause changes to the file hash.  This wi
    * %X% Set the format for inline attachment files. 
       * Set INLINEATTACHMENT = png
 
+   * Include links for other attachment types if specified. 
+      * Set LINKATTACHMENTS = on
+
    * If enabled, the plugin will delete any remaining attachments when  a =&lt;dot&gt;= is removed or modified.
       * Set DELETEATTACHMENTS = off
+
+   * If enabled, the plugin will ignore the "configure" settings of =attachPath= and =attachUrlPath=.  Forcing use of the attachment API can be used to create topics that are portable across TWiki installations.  (for example, the HowtoDirectedGraphs topic)  It can be also used to get standard attachment revision history handling on the generated attachments. [This parameter is ignored and the TWiki attachment API always used if the configure settings =attachPath= and =attachUrlPath= are not supplied.
+      * Set FORCEATTACHAPI = off
 
    * %X% Default image size (pixels, =widthxheight=) for antialias option (keeps aspect ratio; enlarges until max of one of the dimensions is reached). 
       * Set SIZE = 800x600
@@ -386,17 +398,19 @@ __Note:__ The following instructions are for the administrator who installs the 
    * Download the ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory.
    * Using the TWiki =configure= interface, set the paths to the graphviz =dot= and <nop>ImageMagick =convert= commands, along with perl, and the TWiki tools directory.
+   * [Optional] Set the attachPath and attachUrlPath.  These can be set to match the TWiki pubUrlPath and pubDir settings, or set to a web-readable directory outside of TWiki.  
+      * If not set, the standard TWiki "attach" API will be used by the plugin. View users will require "update" permission if the plugin needs to regenerate the attached files.
+      * If the attachPath is set, standard TWiki attachment handling will be bypassed and files will be written directly to this path.  Attachments will not be subject to revision controls.
+      * If the attachPath is _not_ the TWiki pub directory, then the attachUrlPath must be configured for the plugin to generate correct URLs.
+      * %X% The plugin does not attempt to manage attachments across changes between direct file I/O and the TWiki API.  Attachments can be orphaned when these parameters are changed.
 
-   * %X% For TWiki 4.0.1, the =configure= interface does not set plugin variables.  Manually insert the following four lines into the lib/TWiki.cfg file 
+   * %X% For TWiki 4.0.1, the =configure= interface does not set plugin variables.  Manually insert the following lines into the lib/TWiki.cfg file 
       * =$TWiki::cfg{DirectedGraphPlugin}{enginePath} = '/usr/bin/';=
       * =$TWiki::cfg{DirectedGraphPlugin}{magickPath} = '/usr/bin/';=
       * =$TWiki::cfg{DirectedGraphPlugin}{toolsPath} = '[complete path of twiki/tools/ directory]';=
       * =$TWiki::cfg{DirectedGraphPlugin}{perlCmd} = '/usr/bin/perl';=
-
----+++ Common Installation Errors      
-
-   *  __Directed<nop>Graph Error (2):__ The toolsPath variable is not properly configured or the web server was unable to execute the ==DirectedGraphPlugin.pl== helper script in the tools directory.
-   * __Directed<nop>Graph Error (127): Problem executing dot command__  The enginePath variable does not point to the location of the dot command, or there was some problem executing the dot command.
+      * =$TWiki::cfg{DirectedGraphPlugin}{attachPath} = '';=   [optional]
+      * =$TWiki::cfg{DirectedGraphPlugin}{attachUrlPath} = '';= [optional]
 
 Plugin zip content:
 | *File:* | *Description:* |
@@ -414,7 +428,7 @@ Dependencies:
 | cairo | cairo graphics processor for native !GraphViz antialiasing (optional) |
 | graphviz-cairo plugin | cairo rendering plugin for !Graphviz (optional - not needed in latest versions of !GraphViz) |
 | <nop>ImageMagick | Postprocessor for antialiasing rendered graphs (optional) |
-| Digest::MD5 | MD5 Perl module |
+| Digest::MD5, Storable, File::Copy, File::Path, File::Spec, File::Temp | Perl modules |
 | Web fonts | Fonts required for dot's png creations |
 
 To install the web fonts, download this [[http://biostat.mc.vanderbilt.edu/twiki/pub/TWiki/DirectedGraphPlugin/webfonts-1.0-5.noarch.rpm][rpm]] and run the command *rpm --install webfonts-1.0-5.noarch.rpm* (Red Hat only).
@@ -459,7 +473,8 @@ Details on how to install cairo, graphviz and imagemagick are beyond the scope o
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order --> |
-|  26 Jul 2008: | TWikibug:Item5332 - Attachment handing needs improvements.  Remove old attachments, Add support for inline .jpg files, Use single workarea file per topic.<br />  TWikibug:Item5349 - DirectedGraphPlugin uses too many global variables |
+|  31 Aug 2008: | TWikibug:Item5954: DirectedGraphPlugin should permit direct file I/O --TWiki:Main.GeorgeClark | 
+|  26 Jul 2008: | TWikibug:Item5332 - Attachment handing needs improvements.  Remove old attachments, Add support for inline .jpg files, Use single workarea file per topic.<br />  TWikibug:Item5349 - DirectedGraphPlugin uses too many global variables  -- TWiki:Main.GeorgeClark |
 |  10 Apr 2008: | TWikibug:Item5508 - Wiki Words in graph label text results in corrupted image maps. |
 |  03 Mar 2008: | TWikibug:Item5403 - Cannot create graphs in subwebs -- TWiki:Main.GeorgeClark |
 |  17 Jan 2008: | TWikibug:Item5264 - Leaving 0 byte temporary files behind. Also added "hideattachments" option. <br /> TWikibug:Item5259 - Strip whitespace from default settings.-- TWiki:Main.GeorgeClark |

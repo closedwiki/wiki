@@ -35,9 +35,9 @@ use strict;
 use vars qw(
   $web $usWeb $topic $user $installWeb $VERSION $RELEASE $pluginName
   $debugDefault $antialiasDefault $densityDefault $sizeDefault 
-  $vectorFormatsDefault $hideAttachDefault $inlineAttachDefault 
-  $engineDefault $libraryDefault $deleteAttachDefault
-  $enginePath $magickPath $toolsPath $perlCmd $engineCmd $dotHelper
+  $vectorFormatsDefault $hideAttachDefault $inlineAttachDefault $linkFilesDefault
+  $engineDefault $libraryDefault $deleteAttachDefault $forceAttachAPI $forceAttachAPIDefault
+  $enginePath $magickPath $toolsPath $attachPath $attachUrlPath $perlCmd $engineCmd $dotHelper
   $HASH_CODE_LENGTH 
   $antialiasCmd  
 );
@@ -48,6 +48,7 @@ use Storable qw(store retrieve freeze thaw);
 use File::Path;
 use File::Temp;
 use File::Spec;
+use File::Copy;   # Used for TWiki attach API bypass
 
 #use vars qw( %TWikiCompatibility );
 
@@ -106,6 +107,10 @@ sub initPlugin
         $magickPath = $TWiki::cfg{DirectedGraphPlugin}{magickPath};
         # path to imagemagick convert routine
         $toolsPath = $TWiki::cfg{DirectedGraphPlugin}{toolsPath};
+        # path to store attachments - optional.  If not provided, TWiki attachment API is used
+        $attachPath = $TWiki::cfg{DirectedGraphPlugin}{attachPath};
+        # URL to retrieve attachments - optional.  If not provided, TWiki pub path is used.
+        $attachUrlPath = $TWiki::cfg{DirectedGraphPlugin}{attachUrlPath};
         # path to imagemagick convert routine
         $perlCmd = $TWiki::cfg{DirectedGraphPlugin}{perlCmd};
     } else {
@@ -150,8 +155,14 @@ sub initPlugin
     # Get the default inline  attachment default
     $inlineAttachDefault = TWiki::Func::getPreferencesValue("\U$pluginName\E_INLINEATTACHMENT");
 
+    # Get the default link file attachment default
+    $linkFilesDefault = TWiki::Func::getPreferencesValue("\U$pluginName\E_LINKATTACHMENTS");
+
     # Get plugin deleteattachments default
     $deleteAttachDefault = TWiki::Func::getPreferencesValue("\U$pluginName\E_DELETEATTACHMENTS");
+
+    # Get plugin deleteattachments default
+    $forceAttachAPIDefault = TWiki::Func::getPreferencesValue("\U$pluginName\E_FORCEATTACHAPI");
 
     # Read in the attachment information from previous runs
     #  and save it into a session variable for use by the tag handlers
@@ -233,6 +244,8 @@ sub _handleDot
     my $library = $params{library} || $libraryDefault;
     my $hideAttach = $params{hideattachments} || $hideAttachDefault ;
     my $inlineAttach = $params{inline} || $inlineAttachDefault ;
+       $forceAttachAPI = $params{forceattachapi} || $forceAttachAPIDefault ;
+    my $linkFiles = $params{linkfiles} || $linkFilesDefault ;
 
     # parameters with hardcoded defaults
     my $outFilename = $params{file} || "";
@@ -253,6 +266,7 @@ sub _handleDot
     $hideAttach =~ s/\s+$//;
     $inlineAttach =~ s/\s+$//;
     $deleteAttachDefault =~ s/\s+$//;
+    $forceAttachAPI =~ s/\s+$//;
     
     # Make sure outFilename is clean 
     $outFilename = TWiki::Sandbox::sanitizeAttachmentName($outFilename) if ($outFilename ne "");
@@ -286,12 +300,20 @@ sub _handleDot
       return "<font color=\"red\"><nop>DirectedGraph Error: hideattachments  must be either \"off\" or \"on\" (was: $hideAttach)</font>";
     }
 
+    unless ( $linkFiles =~ m/^(on|off)$/o ) {
+      return "<font color=\"red\"><nop>DirectedGraph Error: links  must be either \"off\" or \"on\" (was: $linkFiles)</font>";
+    }
+
     unless ( $inlineAttach =~ m/^(png|jpg)$/o ) {
       return "<font color=\"red\"><nop>DirectedGraph Error: inline  must be either \"jpg\" or \"png\" (was: $inlineAttach)</font>";
     }
 
     unless ( $deleteAttachDefault =~ m/^(on|off)$/o ) {
       return "<font color=\"red\"><nop>DirectedGraph Error in defaults: DELETEATTACHMENTS  must be either \"off\" or \"on\" (was: $deleteAttachDefault)</font>";
+    }
+
+    unless ( $forceAttachAPI =~ m/^(on|off)$/o ) {
+      return "<font color=\"red\"><nop>DirectedGraph Error in defaults: FORCEATTACHAPI  must be either \"off\" or \"on\" (was: $forceAttachAPI)</font>";
     }
 
     my $hide = undef;   
@@ -356,6 +378,8 @@ sub _handleDot
     $vectorFormats .= " cmapx" if (($doMap) && !($vectorFormats =~ m/cmapx/));     # client side map
     $vectorFormats =~ s/none//g ;         # remove the "none" if set by default
 
+    my %attachFile;  # Hash to store attachment file names - key is the file type.
+
     my $oldHashCode = $oldHashArray{MD5HASH}{$outFilename} || " ";  # retrieve hash code for filename
 
     $newHashArray{MD5HASH}{$outFilename} = $hashCode;         # hash indexed by filename
@@ -366,9 +390,18 @@ sub _handleDot
     #  If the hash codes don't match, the graph needs to be recreated
     #  otherwise just use the previous graph already attached.
     #  Also check if the inline attachment is missing and recreate if needed
+    #
+    foreach my $key (split(" ",$vectorFormats) ) {
+       if ( $key ne "none" ) {   # skip the bogus default
+           $attachFile{$key} = "$outFilename.$key";
+       } ### if ($key ne "none"
+    } ### foreach my $key
+    #
+    #
+
     
     if ( (($oldHashCode ne $hashCode) && $chkHash ) | 
-         not TWiki::Func::attachmentExists( $web, $topic, "$outFilename.$inlineAttach" )) {
+         not _attachmentExists( $web, $topic, "$outFilename.$inlineAttach" )) {
 
         &_writeDebug(" >>> Processing changed dot tag or missing file $outFilename.$inlineAttach <<< ");
 
@@ -378,19 +411,16 @@ sub _handleDot
 
         my $outString = "";
         my %tempFile;
-        my %attachFile;
-        foreach my $key (split(" ",$vectorFormats) ) {
-           if ( $key ne "none" ) {   # skip the bogus default
-              if (!exists ($tempFile{$key})) {
-                 $tempFile{$key} = new File::Temp(TEMPLATE => 'DGPXXXXXXXXXX',
+
+        foreach my $key (keys(%attachFile)) {
+            if (!exists ($tempFile{$key})) {
+                $tempFile{$key} = new File::Temp(TEMPLATE => 'DGPXXXXXXXXXX',
                          DIR => $tempdir,
 	                 UNLINK => 0, #  Manually unlink later if debug not specified.
                          SUFFIX => ".$key" );
-                 # Don't create the GraphViz inline output if antialias is requested			 
-                 $outString .= "-T$key -o$tempFile{$key} " unless ($antialias && $key eq "$inlineAttach");
-                 $attachFile{$key} = "$outFilename.$key";
-              } ### if (!exists ($tempFile   
-           } ### if ($key ne "none"
+                # Don't create the GraphViz inline output if antialias is requested			 
+                $outString .= "-T$key -o$tempFile{$key} " unless ($antialias && $key eq "$inlineAttach");
+            } ### if (!exists ($tempFile   
         } ### foreach my $key
 
         # Create a new temporary file to pass to GraphViz
@@ -436,28 +466,61 @@ sub _handleDot
             } ### if ($status)
         } ### if ($antialias)
 
+        ### Attach all of the files to the topic.  If a hard path is specified,
+        ### then use perl file I/O, otherwise use TWiki API.
+        #
         foreach my $key (keys(%attachFile)) {
-            my @stats = stat $tempFile{$key};
-            my $fileSize = $stats[7];
-            my $fileDate = $stats[9];
-            TWiki::Func::saveAttachment(
-                $web, $topic,
-                "$attachFile{$key}",
-                {
-		    file => "$tempFile{$key}",
-		    filedate => $fileDate,
-		    filesize => $fileSize,
-                    comment => '<nop>DirectedGraphPlugin: DOT graph',
-                    hide    => $hide
-                }
-            );
-        unlink $tempFile{$key} unless $debugDefault ;
+            if ($attachPath && !$forceAttachAPI eq "on") {
+               _make_path($topic, $web);
+               umask( 002 );
+               copy( "$tempFile{$key}", "$attachPath/$web/$topic/$attachFile{$key}");
+            } else {
+                my @stats = stat $tempFile{$key};
+                my $fileSize = $stats[7];
+                my $fileDate = $stats[9];
+                TWiki::Func::saveAttachment(
+                    $web, $topic,
+                    "$attachFile{$key}",
+                    {
+		        file => "$tempFile{$key}",
+		        filedate => $fileDate,
+	                filesize => $fileSize,
+                        comment => '<nop>DirectedGraphPlugin: DOT graph',
+                        hide    => $hide
+                    }
+                );
+            } # else if ($attachPath)
+            unlink $tempFile{$key} unless $debugDefault ;
         } ### foreach my $key (keys....
 
     } ### else [ if ($oldHashCode ne $hashCode) |
 
     $newHashArray{GRNUM} = $grNum;
     TWiki::Func::setSessionValue( 'DGP_newhash', freeze \%newHashArray);
+
+    #  Build the path to use for attachment URL's
+    #  $attachUrlPath is used only if attachments are stored in an explicit path
+    #  and $attachUrlPath is provided,  and use of the API is not forced.
+
+    my $urlPath = undef;
+    if ($attachPath && $attachUrlPath && !$forceAttachAPI eq "on") {
+        $urlPath = $attachUrlPath;
+        } else {
+        $urlPath = TWiki::Func::getPubUrlPath(); 
+        }
+
+    #  Build a manual link for each specified file type except for
+    #  The "inline" file format, and any image map file
+    
+    my $fileLinks = "";
+    if ($linkFiles) {
+       $fileLinks = "<br />";
+       foreach my $key (keys(%attachFile)) {
+           if (($key ne $inlineAttach) && ($key ne "cmapx")) {
+              $fileLinks .= "<a href=" . $urlPath . TWiki::urlEncode("/$web/$topic/$attachFile{$key}") . ">[$key]</a> ";
+              } # if (($key ne
+           } # foreach my $key
+        } # if ($linkFiles
 
     if ($doMap) {
         # read and format map
@@ -466,14 +529,14 @@ sub _handleDot
         $mapfile =~ s/[\n\r]/ /go;
 
         # place map and inline image  at the source of the <dot> tag in $Web.$Topic
-        my $loc = TWiki::Func::getPubUrlPath() . "/$web/$topic";
+        my $loc = $urlPath . "/$web/$topic";
         my $src = TWiki::urlEncode("$loc/$outFilename.$inlineAttach");
-        return "<noautolink>$mapfile<img usemap=\"#$hashCode\" src=\"$src\"/></noautolink>";
+        return "<noautolink>$mapfile<img usemap=\"#$hashCode\" src=\"$src\"/></noautolink>$fileLinks";
     } else {
         # attach the inline image  at the source of the <dot> tag in $Web.$Topic
-        my $loc = TWiki::Func::getPubUrlPath() . "/$web/$topic";
+        my $loc = $urlPath . "/$web/$topic";
         my $src = TWiki::urlEncode("$loc/$outFilename.$inlineAttach");
-      return "<img src=\"$src\"/>";
+      return "<img src=\"$src\"/>$fileLinks";
     } ### else [ if ($doMap)
 } ### sub handleDot
 
@@ -690,47 +753,90 @@ sub afterCommonTagsHandler {
 #
 #   Handles moving unneeded attachments to the Trash web with a new name which includes
 #   the Web name and Topic name.  On older versions of TWiki, it simply deleted the files
-#   with perl's unlink.
+#   with perl's unlink.  Also use unlink if direct file I/O requested.
 
 sub _deleteAttach {
 
     my $fn = TWiki::Sandbox::normalizeFileName($_[0]);
 
-    if (TWiki::Func::attachmentExists( $web, $topic, $fn )) {
+    if (_attachmentExists( $web, $topic, $fn )) {
 
-        # If the TrashAttachment topic is missing, create it.
-        if (!TWiki::Func::topicExists( $TWiki::cfg{TrashWebName}, 'TrashAttachment' ) ) {
-            &_writeDebug(" ### Creating missing TrashAttachment topic ");
+        if ($attachPath && !$forceAttachAPI eq "on") {    # Direct file I/O requested
+	     unlink "$attachPath/$web/$topic/$fn";
+             &_writeDebug(" ### Unlinked $attachPath/$web/$topic/$fn ");
 
-            #my $meta = new TWiki::Meta($this->{twiki},$TWiki::cfg{TrashWebname},"TrashAttachment");
-            #$meta=>put( "TOPICINFO", {author => "TWikiContributor" date => "1092762941" format => "1.0" version => "3" );
-            #$meta=>put( "TOPICPARENT", { name => "$web.WebHome" } );
+        } else {    # TWiki attach API used
+            # If the TrashAttachment topic is missing, create it.
+            if (!TWiki::Func::topicExists( $TWiki::cfg{TrashWebName}, 'TrashAttachment' ) ) {
+                &_writeDebug(" ### Creating missing TrashAttachment topic ");
+                my $text = "---+ %MAKETEXT{\"Placeholder for trashed attachments\"}%\n";
+                TWiki::Func::saveTopic( "$TWiki::cfg{TrashWebName}", "TrashAttachment", undef, $text, undef );
+                } # if (! TWiki::Func::topicExists
+         
+            &_writeDebug(" >>> Trashing $web . $topic . $fn");
+ 
+            my $i = 0;
+            my $of = $fn;
+            while (TWiki::Func::attachmentExists( $TWiki::cfg{TrashWebName}, 'TrashAttachment', "$web.$topic.$of" )) {
+                &_writeDebug(" ------ duplicate in trash  $of");
+                $i++;
+                $of .= "$i";
+            } # while (TWiki::Func
 
-            my $text = "---+ %MAKETEXT{\"Placeholder for trashed attachments\"}%\n";
-            TWiki::Func::saveTopic( "$TWiki::cfg{TrashWebName}", "TrashAttachment", undef, $text, undef );
-	    }
-     
-        
-        &_writeDebug(" >>> Trashing $web . $topic . $fn");
-
-        my $i = 0;
-	my $of = $fn;
-        while (TWiki::Func::attachmentExists( $TWiki::cfg{TrashWebName}, 'TrashAttachment', "$web.$topic.$of" )) {
-	   &_writeDebug(" ------ duplicate in trash  $of");
-	   $i++;
-	   $of .= "$i";
-	   }
-
-        TWiki::Func::moveAttachment( $web ,
-            $topic,
-            $fn,
-            $TWiki::cfg{TrashWebName},
-            'TrashAttachment', 
-	    "$web.$topic.$of" ); 
-        }    
-
-
+            TWiki::Func::moveAttachment( $web ,
+                $topic,
+                $fn,
+                $TWiki::cfg{TrashWebName},
+                'TrashAttachment', 
+	        "$web.$topic.$of" ); 
+        } # else if ($attachPath)   
+    } # _attachmentExists    
 } ### sub _deleteFile
+
+#
+#  _make_path 
+#    For direct file i/o, make sure the target directory exists
+#    returns the target directory for the attachments.
+#
+sub _make_path {
+    my ( $topic, $web ) = @_;
+
+    my @webs = split('/',$web);   # Split web in case subwebs are present
+    my $dir = TWiki::Func::getPubDir();
+
+    foreach my $val (@webs) {     # Process each subweb in the web path
+        $dir .= '/'.$val;
+        if( ! -e $dir ) {
+            umask( 002 );
+            mkdir( $dir, 0775 );
+        }  # if (! -e $dir
+    } # foreach
+
+    # If the top level "pub/$web/$topic" directory doesn't exist, create
+    # it.
+    $dir .= '/'.$topic;
+    if( ! -e "$dir" ) {
+        umask( 002 );
+        mkdir( $dir, 0775 );
+    }
+    # Return the complete path to target directory
+    return ($dir);
+} ### sub _make_path
+
+
+#
+# _attachmentExists
+#    Check if attachment exists - use TWiki API or direct file I/O
+#
+sub _attachmentExists {
+   my ( $web, $topic, $fn ) = @_;
+
+   if ($attachPath && !$forceAttachAPI eq "on") {
+      return ( -e "$attachPath/$web/$topic/$fn" )
+      } else {
+      return TWiki::Func::attachmentExists( $web, $topic, $fn )
+      }
+}
 
 1;
 
