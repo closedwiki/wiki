@@ -201,11 +201,14 @@ The list of skins can be appended, for instance: =tagme,corporate,pattern=.
 For the "blog" style, use for a simple "Tags: list-of-tags (edit)" at the top
 of the page:
 <pre>
-   * Set S<nop>KIN = tagme_styleblogbutton,pattern
+   * Set S<nop>KIN = tagme_styleblog,pattern
 </pre>
 And for an alternate style, with no tags line shown if no tags exists, and
 the button to open the tag edit frame placed at the right of the Edit and
-Attach ones, in the same style, on the upper right.
+Attach ones, in the same style, on the upper right:
+<pre>
+   * Set S<nop>KIN = tagme_styleblogbutton,pattern
+</pre>
 
 <div class="twikiNotification" style="padding:.5em 20px; margin:1em 0; background-color:#ffc;">
 *For TWiki 4.1, use:*
