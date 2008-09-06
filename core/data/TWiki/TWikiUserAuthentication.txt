@@ -30,7 +30,7 @@ __%T% Tip:__ TWiki:TWiki.TWikiUserAuthenticationSupplement on TWiki.org has supp
 #PasswordManagement
 ---++ Password Management
 
-As shipped, TWiki supports the Apache 'htpasswd' password manager. This manager supports the use of =.htpasswd= files on the server. These files can be unique to TWiki, or can be shared with other applications (such as an Apache webserver). A variety of password encodings are supported for flexibility when re-using existing files. See the descriptive comments in the Security Settings section of the [[%SCRIPTURLPATH{"configure"}%][configure] interface for more details.
+As shipped, TWiki supports the Apache 'htpasswd' password manager. This manager supports the use of =.htpasswd= files on the server. These files can be unique to TWiki, or can be shared with other applications (such as an Apache webserver). A variety of password encodings are supported for flexibility when re-using existing files. See the descriptive comments in the Security Settings section of the [[%SCRIPTURLPATH{"configure"}%][configure]] interface for more details.
 
 You can easily plug in alternate password management modules to support interfaces to other third-party authentication databases.
 
