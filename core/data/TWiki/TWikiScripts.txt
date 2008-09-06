@@ -193,7 +193,7 @@ This REST ([[http://en.wikipedia.org/wiki/REST][Representational State Transfer]
 The =rest= script supports the following parameters:
 | =username= | If =TemplateLogin=, or a similar login manager not embedded in the web server, is used, then you need to pass a username and password to the server. The =username= and =password= parameters are used for this purpose. |
 | =password= | See =username= |
-| =topic= | If defined as the full name (including web) of a topic, then when the script starts up plugins will be passed this as the "current" topic. If not defined, then %USERWEB%.%HOMETOPIC% will be passed to plugins. |
+| =topic= | If defined as the full name (including web) of a topic, then when the script starts up plugins will be passed this as the "current" topic. If not defined, then [[%USERSWEB%.%HOMETOPIC%]] will be passed to plugins. |
 | =endPoint= | Where to redirect the response once the request is served, in the form "Web.Topic" |
 
 The function is free to use any other query parameters for its own purposes.
