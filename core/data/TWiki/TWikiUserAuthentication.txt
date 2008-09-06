@@ -48,6 +48,8 @@ New user registration uses the password manager to set and change passwords and 
 
 The registration process is also responsible for creating user topics, and setting up the mapping information used by the User Mapping support.
 
+__%X% Note:__ If you are restricting the entire <nop>%USERWEB% web to !TWikiGuest, you are required to add !TWikiRegistrationAgent to ALLOWWEBCHANGE in your =%USERWEB%/WebPreferences=. By doing so, new users are able to register without any errors.
+
 #LoginManagement
 ---++ Login Management
 
