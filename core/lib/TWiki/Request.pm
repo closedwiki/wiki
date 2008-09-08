@@ -98,20 +98,12 @@ sub new {
 
     bless $this, $class;
 
-    if ( ref($initializer) && ref($initializer) eq 'HASH' ) {
-        my %param = ();
-        my @plist = ();
+    if ( ref($initializer) eq 'HASH' ) {
         while ( my ( $key, $value ) = each %$initializer ) {
-            if ( exists $param{$key} ) {
-                push @{ $param{$key} }, ref($value) eq 'ARRAY' ? @$value : $value;
-            }
-            else {
-                $param{$key} = ref($value) eq 'ARRAY' ? [@$value] : [$value];
-                push @plist, $key;
-            }
-        }
-        foreach my $key (@plist) {
-            $this->param( -name => $key, -value => $param{$key} );
+            $this->param(
+                -name  => $key,
+                -value => ref($value) eq 'ARRAY' ? [@$value] : [$value]
+            );
         }
     }
     elsif ( ref($initializer) && UNIVERSAL::isa($initializer, 'GLOB') ) {
@@ -214,7 +206,8 @@ sub queryString {
 
 =begin twiki
 
----++ ObjectMethod url( [-full => 1, 
+---++ ObjectMethod url( [-full => 1,
+                         -absolute => 1,
                          -relative => 1, 
                          -path => 1, 
                          -query => 1] ) -> $url
@@ -222,12 +215,13 @@ sub queryString {
 Returns many url info. 
    * If called without parameters or with -full => 1 returns full url, e.g. 
      http://twiki.org/cgi-bin/view/Codev/WebHome?raw=on
+   * -absolute => 1 returns absolute action path, e.g. /twiki/bin/view
    * -relative => 1 returns relative action path, e.g. view
    * -path => 1, -query => 1 also includes path info and query string
      respectively
 
-Resonabily compatible with CGI corresponding method. Currently support
-neither -absolute nor -rewrite.
+Resonabily compatible with CGI corresponding method.
+Currently doesn't support -rewrite. See Item5914.
 
 =cut
 
@@ -374,7 +368,7 @@ sub bodyParam {
     # This way, this class behaves the same as CGI.pm and so does 'param' 
     # method.
     my @values = $this->param($key);
-    if ( ref($newValue) && ref($newValue) eq 'ARRAY' ) {
+    if ( ref($newValue) eq 'ARRAY' ) {
         unshift @values, @$newValue;
     }
     else {
@@ -412,8 +406,7 @@ sub param {
     if ( defined $value ) {
         push @{ $this->{param_list} }, $key
           unless exists $this->{param}->{$key};
-        $this->{param}->{$key} =
-          ref $value && ref $value eq 'ARRAY' ? $value : [$value];
+        $this->{param}->{$key} = ref $value eq 'ARRAY' ? $value : [$value];
     }
     if ( defined $this->{param}->{$key} ) {
         return wantarray
@@ -589,7 +582,8 @@ sub load {
     while (<$file>) {
         chomp;
         last if /^=/;
-        my ( $key, $value ) = map { TWiki::urlDecode($_) } split /=/;
+        my ( $key, $value ) =
+          map { defined $_ ? TWiki::urlDecode($_) : $_ } split /=/;
         if ( exists $param{$key} ) {
             push @{ $param{$key} }, $value;
         }
