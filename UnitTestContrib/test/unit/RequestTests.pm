@@ -162,10 +162,18 @@ sub test_serverPort {
     }
 }
 
-sub test_queryString_x {
-# Verify CGI.pm behavior:
-# - Query & body_param (only one, only the other, both)
-# refer to new_from_file
+sub test_queryString {
+    my $this = shift;
+    my $req  = new TWiki::Request("");
+    $req->param( -name => 'simple1', -value => 's1' );
+    $this->assert_equals( 'simple1=s1', $req->query_string,
+        'Wrong query string' );
+    $req->param( -name => 'simple2', -value => 's2' );
+    $this->assert_matches( 'simple1=s1[;&]simple2=s2', $req->query_string,
+        'Wrong query string' );
+    $req->param( -name => 'multi', -value => [qw(m1 m2)] );
+    $this->assert_matches( 'simple1=s1[;&]simple2=s2[;&]multi=m1[;&]multi=m2',
+        $req->query_string, 'Wrong query string' );
 }
 
 sub test_url_full {
