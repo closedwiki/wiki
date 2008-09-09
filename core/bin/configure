@@ -337,7 +337,9 @@ if( $action eq 'image' ) {
     # print $query->header(-type => $query->param('type'));
     # So use this instead:
     print 'Content-type: '.$query->param('type')."\n\n";
-    if( open(F, 'logos/'.$query->param('image' ))) {
+    my $image = $query->param('image' );
+    $image =~ /([-a-z0-9.]+)/i; # filter-in
+    if( open(F, 'logos/'.$1)) {
         local $/ = undef;
         print <F>;
         close(F);
