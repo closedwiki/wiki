@@ -1,8 +1,12 @@
 %META:TOPICINFO{author="tisser_n" date="1043231880" format="1.0" version="1.4"}%
 %META:TOPICPARENT{name="TWikiPreferences"}%
----++ Syntax Highlighting TWiki Plugin
+<!--
+   * Set SHORTDESCRIPTION = This Plugin is used to emphasize the rendering of your wiki text according to several languages.
+-->
 
-The Syntax Highlighting Twiki Plugin is used to emphasize the rendering of your wiki text according to several languages.
+---++ Syntax Highlighting Plugin
+
+The Syntax Highlighting Plugin is used to emphasize the rendering of your wiki text according to several languages.
 
 It currently uses =enscript= to render its output.
 
@@ -62,42 +66,45 @@ It supports the following languages :
 
 ---+++ Syntax Rules
 
-To enable syntax highlighting on some text, just type :
+To use this plugin, use the following syntax:
 
-<verbatim>%begin [numbered] language% 
+<verbatim>
+%CODE{lang="..." [num="10"]}% 
+...code...
+%ENDCODE%
+</verbatim>
 
-	 some text belonging to the language
+The language can be any from the above list. The =num= setting is optional and
+will set the starting line number.
 
-%end%</verbatim> where language is one of the list above, and numbered an optional keyword triggering the line numbering feature.
-
-Notice that the =%begin language%= and =%end%= must be left alone on one single line.
-
-----+++ Example
+----+++ Examples
 
 The following text :
 
-<verbatim>%begin c++% 
+<verbatim> 
+%CODE{"c++"}%
 #include <iostream>
 int main()
 {
   std::cout << "Hello, world." << std::endl;
 }
-%end% </verbatim>
-gives :
+%ENDCODE%
+</verbatim>
 
-%begin c++%
+gives (if installed):
+
+%CODE{"c++"}%
 #include <iostream>
 int main()
 {
   std::cout << "Hello, world." << std::endl;
 }
-%end%
-
-_If you do not see a nice colorized piece of code above this, you should check if the plugin is well installed._
+%ENDCODE%
 
 You can also output numbered lines starting at 10 with this text:
 
-<verbatim>%begin numbered:10 sh% 
+<verbatim>
+%CODE{"sh" num="10"}% 
 #!/bin/sh
 languages=`enscript --help-highlight | grep 'Name:' | cut -d ' ' -f 2`
 for l in $languages; do
@@ -105,10 +112,12 @@ for l in $languages; do
 	* $l
 EOF
 done
-%end% </verbatim>
-which outputs:
+%ENDCODE% 
+</verbatim>
 
-%begin numbered:10 sh%
+gives (if installed):
+
+%CODE{"sh" num="10"}%
 #!/bin/sh
 languages=`enscript --help-highlight | grep 'Name:' | cut -d ' ' -f 2`
 for l in $languages; do
@@ -116,75 +125,45 @@ for l in $languages; do
 	* $l
 EOF
 done
+%ENDCODE%
+
+---+++ Plugin Settings
+
+Use configure to change the settings for this plugin.
+
+---+++ Change of Syntax
+
+This plugin used to use the following syntax:
+
+<verbatim>
+%begin sh%
+...code...
 %end%
+</verbatim>
 
----+++ <nop>%TOPIC% Settings
-
-Plugin settings are stored as preferences variables. To reference
-a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>DEFAULTPLUGIN_SHORTDESCRIPTION%==
-
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = This Plugin is used to emphasize the rendering of your wiki text according to several languages.
-
-	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 0
+This has been changed to be more consistent with other twiki variables. There is a script included which will replace the old syntax with the new. To use it, copy it from the =tools= directory and into your =data= directory. When you run it, it will look through your webs and replace the syntax. Note that its not the best script in the world, so always test it on a copy of your data first!
 
 ---+++ Plugin Installation Instructions
 
-	* Make sure you have GNU enscript 1.6.3 or above installed.
+%$INSTALL_INSTRUCTIONS%
 
-	* Unzip the =SyntaxHighlighting.zip= package in your TWiki installation directory.
+---+++ Plugin Files
 
-	* If the installation is correct, you should see some highlighted text in this page.
+%$MANIFEST%
 
-	* If you want support for additional languages (for customized or future enscript versions), you must edit the plugin file and add your languages to the languages array. _(Make sure that your =enscript= version supports the languages you add.)_
-
----+++ Known Bugs
-
----++++ Enscript oddities
-
-<verbatim>
-%begin numbered sh% 
-# youpi
-%end% 
-</verbatim>
-
-gives
-
-%begin numbered sh%
-# youpi
-%end%
-
-Because =enscript= strangely adds an extra line (for closing its emphasizing markers) between the matched  &lt;pre&gt; &lt;/pre&gt; to its html output.
-
-Working around such a weird behavior is ... not planned.
-
----++++ WikiWords on last line
-
-<verbatim>%begin sh%
-UnmatchedWikiword :)
-MatchedWikiWord :(
-%end%</verbatim>
-
-gives
-
-%begin sh%
-UnmatchedWikiword :)
-MatchedWikiWord :(
-%end%
-
-Adding a newline at the end of input stops TWiki in its greedy matching, but this workaround is not an acceptable solution. Feel free to find another one ....
 ---+++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.NicolasTisserand, TWiki:Main.NicolasBurrus, Perceval Anichini |
-|  Plugin Version: | 12 Jul 2002 |
-|  Change History: | 12 Jul 2002: Initial version |
-|  CPAN Dependencies: | none |
-|  Other Dependencies: | GNU enscript 1.6.3 |
-|  Perl Version: | 5.0 |
-|  Plugin Home: | http://www.lrde.epita.fr/cgi-bin/twiki/view/TWiki/SyntaxHighlightingPlugin |
-|  Feedback: | TWiki:Main.NicolasTisserand |
+|  Plugin Author: | TWiki:Main.AndrewRJones |
+|  Previous Authors: | TWiki:Main.NicolasTisserand, TWiki:Main.NicolasBurrus, Perceval Anichini |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | %$VERSION% |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  11 Sep 2008 | Bugs:Item5995 - Rewritten to work on TWiki 4.2 |
+|  12 Jul 2002: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  Dependencies: | enscript, CPAN:IPC::Run |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- TWiki:Main.NicolasTisserand - 12 Jul 2002
