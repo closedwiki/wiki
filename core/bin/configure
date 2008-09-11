@@ -332,17 +332,31 @@ my $expertsMode = defined($query->param('expert'));
 # Handle serving an image embedded in the configure page, before generating
 # any other output
 if( $action eq 'image' ) {
-    # SMELL: this call is correct, but causes a perl error
-    # on some versions of CGI.pm
-    # print $query->header(-type => $query->param('type'));
-    # So use this instead:
-    print 'Content-type: '.$query->param('type')."\n\n";
-    my $image = $query->param('image' );
-    $image =~ /([-a-z0-9.]+)/i; # filter-in
-    if( open(F, 'logos/'.$1)) {
-        local $/ = undef;
-        print <F>;
-        close(F);
+    my $image = $query->param('image' ); 
+    $image =~ /^([-.\w]+)$/; # filter-in 
+    $image = $1;
+    if( (defined($image)) && 
+        (($image eq 'favicon.ico') ||
+        ($image eq 'T-logo34x26-t.gif') ||
+        ($image eq 'T-logo-140x40-t.gif') ||
+        ($image eq 'warning.gif') ||
+        ($image eq 'info.gif')) ) {
+        #ignore $query->param('type') and set it using our special knowledge
+        my $type = 'image/gif';
+        if ($image =~ /.*\.ico$/) {
+            $type = 'image/x-icon';
+        }
+
+        if (open(my $F, '<', 'logos/'.$image)) {
+            local $/ = undef;
+            # SMELL: this call is correct, but causes a perl error
+            # on some versions of CGI.pm
+            # print $query->header(-type => $query->param('type'));
+            # So use this instead:
+            print 'Content-type: '.$type."\n\n";
+            print <$F>;
+            close($F);
+        }
     }
     exit 0;
 }
@@ -357,7 +371,7 @@ my @meta = (
                  -type=>'image/x-icon' } ),
     CGI::Link(
         { -rel=>'shortcut icon',
-          -href=>$scriptName.'?action=image;image=logos/favicon.ico;type=image/x-icon',
+          -href=>$scriptName.'?action=image;image=favicon.ico;type=image/x-icon',
           -type=>'image/x-icon' } ),
     CGI::script( { language => 'JavaScript',
                    type => 'text/javascript' }, TWiki::Configure::JS::js1() ),
