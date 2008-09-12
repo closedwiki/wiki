@@ -1998,6 +1998,11 @@ sub _TOC {
       push @qparams, $name => $query->param($name);
     }
 
+    # clear the set of unique anchornames in order to inhibit the 'relabeling' of
+    # anchor names if the same topic is processed more than once, cf. explanation
+    # in handleCommonTags()
+    $this->renderer->_eraseAnchorNameMemory();
+
     # NB: While we're processing $text line by line here,
     # $this->renderer->getRendereredVersion() 'allocates' unique anchor names by
     # first replacing '#WikiWord', followed by regex{headerPatternHt} and
@@ -2017,12 +2022,12 @@ sub _TOC {
             $lineno++;
             if ($line =~ m/$regexps[$i]/) {
                 my ($level, $heading) = ($1, $2);
-                my $anchor = $this->renderer->makeUniqueAnchorName($heading);
+                my $anchor = $this->renderer->makeUniqueAnchorName($web, $topic, $heading);
 
                 if ($i > 0) {
                     # SMELL: needed only because Render::_makeAnchorHeading uses it
                     my $compatAnchor = $this->renderer->makeAnchorName($anchor, 1);
-                    $compatAnchor = $this->renderer->makeUniqueAnchorName($anchor,1)
+                    $compatAnchor = $this->renderer->makeUniqueAnchorName($web, $topic, $anchor, 1)
                         if ($compatAnchor ne $anchor);
 
                     $heading =~ s/\s*$regex{headerPatternNoTOC}.+$//go;
@@ -2896,6 +2901,14 @@ sub handleCommonTags {
 
     # 'Special plugin tag' TOC hack, must be done after all other expansions
     # are complete, and has to reprocess the entire topic.
+
+    # We need to keep track of the 'TOC topics' here in order to ensure that each 
+    # of these topics is only processed once (this is due to the fact that the
+    # renaming of ambiguous anchors has to work context-less and cannot recognize
+    # whether a particular heading has been converted before)--alternatively, we
+    # could just clear the 'anchorname memory' and keep reprocessing topics
+    # (the latter solution is slower if th same TOC is included multiple times)
+    # current solution: let _TOC() clear the hash which holds the anchornames
     $text =~ s/%TOC(?:{(.*?)})?%/$this->_TOC($text, $theTopic, $theWeb, $1)/ge;
 
     # Codev.FormattedSearchWithConditionalOutput: remove <nop> lines,

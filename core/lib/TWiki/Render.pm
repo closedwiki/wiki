@@ -350,14 +350,13 @@ sub _fixedFontText {
 
 # Build an HTML &lt;Hn> element with suitable anchor for linking from %<nop>TOC%
 sub _makeAnchorHeading {
-    my( $this, $text, $theLevel ) = @_;
-
+    my( $this, $text, $theLevel, $topic, $web ) = @_;
     $text =~ s/^\s*(.*?)\s*$/$1/;
 
     # - Build '<nop><h1><a name='atext'></a> heading </h1>' markup
     # - Initial '<nop>' is needed to prevent subsequent matches.
     # - filter out $TWiki::regex{headerPatternNoTOC} ( '!!' and '%NOTOC%' )
-    my $anchorName = $this->makeUniqueAnchorName( $text, 0 );
+    my $anchorName = $this->makeUniqueAnchorName( $web, $topic, $text, 0 );
     #  if the generated uniqe anchor name is 'compatible', it won't change:
     my $compatAnchorName = $this->makeAnchorName( $anchorName, 1 );
 
@@ -366,7 +365,7 @@ sub _makeAnchorHeading {
     my $html = '<nop><h'.$theLevel.'>';
     $html .= CGI::a( { name => $anchorName }, '' );
     if( $compatAnchorName ne $anchorName ) {
-        $compatAnchorName = $this->makeUniqueAnchorName( $anchorName, 1 );
+        $compatAnchorName = $this->makeUniqueAnchorName( $web, $topic, $anchorName, 1 );
         $html .= CGI::a( { name => $compatAnchorName }, '');
     }
     $html .= ' '.$text.' </h'.$theLevel.'>';
@@ -435,9 +434,17 @@ sub makeAnchorName {
 }
 
 
+# dispose of the set of known unique anchornames in order to inhibit the
+# 'relabeling' of anchor names if the same topic is processed more than once,
+# cf. explanation in TWiki::handleCommonTags()
+sub _eraseAnchorNameMemory {
+    %anchornames = ();
+}
+
+
 =pod
 
----++ ObjectMethod makeUniqueAnchorName($anchorName, $compatibility) -> $anchorName
+---++ ObjectMethod makeUniqueAnchorName($web, $topic, $anchorName, $compatibility) -> $anchorName
 
    * =$anchorName= - the unprocessed anchor name
    * =$compatibilityMode= - SMELL: compatibility with *what*?? Who knows. :-(
@@ -447,20 +454,22 @@ Build a valid HTML anchor name (unique w.r.t. the list stored in %anchornames)
 =cut
 
 sub makeUniqueAnchorName {
-    my( $this, $text, $compatibilityMode ) = @_;
+    my( $this, $web, $topic, $text, $compatibilityMode ) = @_;
+    $web = "undef" if (!defined($web));
+    $topic = "undef" if (!defined($topic));
 
     my $anchorName = $this->makeAnchorName( $text, $compatibilityMode );
 
     # ensure that the generated anchor name is unique
     my $cnt = 1;
     my $suffix = '';
-    while (exists $anchornames{$anchorName . $suffix}) {
+    while (exists $anchornames{$web . '.' . $topic . '#' . $anchorName . $suffix}) {
         $suffix = '_autorenamed' . $cnt++;
         # limit resulting name to 32 chars
         $anchorName = substr($anchorName, 0, 32 - length($suffix));
     }
     $anchorName .= $suffix;
-    $anchornames{$anchorName} = 1;
+    $anchornames{$web . '.' . $topic . '#' . $anchorName} = 1;
 
     return $anchorName;
 }
@@ -1045,13 +1054,13 @@ sub getRenderedVersion {
 
     # '#WikiName' anchors (moved in front in order to retain original names if possible)
     # SMELL: in case this type of anchor (presumably user-defined) gets renamed, it should be noted somewhere
-    $text =~ s/^(\#)($TWiki::regex{wikiWordRegex})/CGI::a({name=>$this->makeUniqueAnchorName($2)},'')/geom;
+    $text =~ s/^(\#)($TWiki::regex{wikiWordRegex})/CGI::a({name=>$this->makeUniqueAnchorName($theWeb,$theTopic,$2)},'')/geom;
 
     # Headings
     # '<h6>...</h6>' HTML rule
-    $text =~ s/$TWiki::regex{headerPatternHt}/_makeAnchorHeading( $this,$2,$1)/geo;
+    $text =~ s/$TWiki::regex{headerPatternHt}/_makeAnchorHeading($this,$2,$1,$theTopic,$theWeb)/geo;
     # '----+++++++' rule
-    $text =~ s/$TWiki::regex{headerPatternDa}/_makeAnchorHeading( $this,$2,(length($1)))/geo;
+    $text =~ s/$TWiki::regex{headerPatternDa}/_makeAnchorHeading($this,$2,(length($1)),$theTopic,$theWeb)/geo;
 
     # Horizontal rule
     my $hr = CGI::hr();
