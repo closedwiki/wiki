@@ -2,9 +2,16 @@
 
 Description: tests for TOCs included from other topics and with funny deprecated syntaxes.
 
+<i>This test also demonstrates that redundant anchor names (either specified in TML syntax or
+generated using the =makeUniqueAnchorName()= subroutine in =Render.pm=)
+now get renamed automatically; currently, this is actually done twice (once for TOC and once
+for the topic contents), yet all references must be in sync at any time. %BR%
+For details cf. TWiki:Codev/FixAnchorHandling, TWikibug:Item1607 </i>
+
 [[%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
 
 Designed by: Crawford Currie
+%BR% Modified by: Markus Ueberall (documented anchor name handling)
 
 <table><tr><th>Expected</th><th>Actual</th></tr>
 <tr valign="top"><td>
@@ -43,7 +50,7 @@ Designed by: Crawford Currie
 </li>
 <li> <a href="?@URLPARAMS#H1_2">H1 <!--2--></a>
 <ul>
-<li> <a href="?@URLPARAMS#H2_2">H2</a>
+<li> <a href="?@URLPARAMS#H2_autorenamed1">H2</a>
 <ul>
 <li>
 <ul>
@@ -57,11 +64,11 @@ Designed by: Crawford Currie
 </li>
 <li> <a href="?@URLPARAMS#hash_H1">hash H1</a>
 <ul>
-<li> <a href="?@URLPARAMS#H2_3">H2</a>
+<li> <a href="?@URLPARAMS#H2_autorenamed2">H2</a>
 </li>
 </ul>
 </li>
-<li> <a href="?@URLPARAMS#hash_H1_2">hash H1</a>
+<li> <a href="?@URLPARAMS#hash_H1_autorenamed1">hash H1</a>
 <ul>
 <li> <a href="?@URLPARAMS#normal_H2">normal H2</a>
 </li>

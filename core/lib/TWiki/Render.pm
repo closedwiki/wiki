@@ -452,10 +452,10 @@ sub makeUniqueAnchorName {
     my $anchorName = $this->makeAnchorName( $text, $compatibilityMode );
 
     # ensure that the generated anchor name is unique
-    my $cnt = 2;
+    my $cnt = 1;
     my $suffix = '';
     while (exists $anchornames{$anchorName . $suffix}) {
-        $suffix = '_' . $cnt++;
+        $suffix = '_autorenamed' . $cnt++;
         # limit resulting name to 32 chars
         $anchorName = substr($anchorName, 0, 32 - length($suffix));
     }

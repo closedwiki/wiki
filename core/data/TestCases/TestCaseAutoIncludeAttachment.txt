@@ -5,11 +5,12 @@ Description: Tests for inclusion of attachments
 [[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
 
 Designed by: Crawford Currie
+%BR% Modified by: Markus Ueberall (redundant anchor names get renamed, cf. TestCaseAutoTOC)
 
 ---+ Existing attachment
 ---++ Expected
 <!-- expected -->
-<h1><a name="heading_1_2"></a>heading 1</h1>
+<h1><a name="heading_1_autorenamed1"></a>heading 1</h1>
 <!-- /expected -->
 ---++ Actual
 <!-- actual -->
