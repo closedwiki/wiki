@@ -562,6 +562,10 @@ sub _Warn {
 sub _Log {
     my ( $text, $web, $topic ) = @_;
 
+    _Debug($text);
+
+    return; # As this uses an internal twiki function, it is unreliable and therefore disabled
+
     my $logAction = $TWiki::cfg{Plugins}{$pluginName}{Log} || 1;
 
     if ($logAction) {
@@ -571,8 +575,6 @@ sub _Log {
         : TWiki::Store::writeLog( "approval", "$web.$topic", $text );
         TWiki::Store::writeLog( "approval", "$web.$topic", $text );
     }
-
-    _Debug($text);
 }
 
 1;

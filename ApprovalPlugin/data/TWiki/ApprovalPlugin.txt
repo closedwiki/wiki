@@ -11,7 +11,7 @@ One line description, required for extensions repository catalog.
 
 ---++ Introduction
 
-This plugin is a rewrite of the TWiki:Plugins.WorkflowPlugin by TWiki:Main.ThomasWeigert, which supports much the same functionality except a couple of the varaibles (=%<nop>WORKFLOWLASTTIME_State%=, =%<nop>WORKFLOWLASTVERSION_State%=) and the use of %TWIKIWEB%.TWikiForms in states. However, it does support concurrent reviewing and notifications on state change, which is not supported by the Workflow plugin.
+This plugin is a rewrite of the TWiki:Plugins.WorkflowPlugin by TWiki:Main.ThomasWeigert, which supports much the same functionality except a couple of the varaibles (=%<nop>WORKFLOWLASTTIME_State%=, =%<nop>WORKFLOWLASTVERSION_State%=) and the use of %TWIKIWEB%.TWikiForms in states. However, it does support concurrent reviewing and notifications on state change, which is not supported by the Workflow plugin. It was decided to spin this off seperatly as it is not backwords compatible.
 
 ---++ Usage
 
@@ -103,7 +103,7 @@ The plugin will expand any =%<nop>APPROVAL{"action"}%= tags found in the control
    | ="pref" name="..."= | Displays the named preference set in the approval topic (see %TOPIC%#Preferences). |
    | ="reviewedby"= | Shows who has already reviewed the current state. |
 
----+++ Examples
+---++ Examples
 
 There is an example of an approval definition topic and a document under control in the Sandbox web. The links are below:
    * Sandbox.ApprovalDefinitionExample
@@ -112,6 +112,12 @@ There is an example of an approval definition topic and a document under control
       * Example controlled topic
 
 __Note__ The examples will only work if the plugin is installed and enabled.
+
+---++ Notes
+
+   * This plugin should work with groups defined in the transition table, but this is currently *untested*. If you want to use groups, please let us know your findings in TWiki:Plugins.ApprovalPluginDev.
+
+   * The users in the transition table must have permission to change the controlled topic when they approve a state, otherwise TWiki will throw an access control exception. There is a message to the user if this is the case.
 
 ---++ Installation Instructions
 
@@ -122,20 +128,14 @@ __Note__ The examples will only work if the plugin is installed and enabled.
    | *File:* | *Description:* |
 %$MANIFEST%
 
----++ Notes
-
-   * This plugin should work with groups defined in the transition table, but this is currently *untested*. If you want to use groups, please let us know your findings in TWiki:Plugins.ApprovalPluginDev.
-
-   * The users in the transition table must have permission to change the controlled topic when they approve a state, otherwise TWiki will throw an access control exception. There is a message to the user if this is the case.
-
 ---++ Plugin Info
 
 |  Plugin Author(s): | TWiki:Main.AndrewRJones |
 |  Plugin Version: | %$VERSION% |
-|  Copyright: | &copy; 2007 TWiki:Main.AndrewRJones |
+|  Copyright: | &copy; 2007 - 2008 TWiki:Main.AndrewRJones |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  14487 | Bugs:Item4422 - Initial version |
+|  12 Sep 2008 | Bugs:Item4422 - Initial version |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/ApprovalPlugin |
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/ApprovalPluginDev |
