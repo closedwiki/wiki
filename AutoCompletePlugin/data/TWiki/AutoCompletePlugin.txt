@@ -51,7 +51,7 @@ You can use many of same attributes as you would in topics, except the following
 
 ---+++ Example
 
-If installed, the following should create an jump box (TWiki 4.1):
+If installed, the following should create an jump box (TWiki 4.2):
 
 __Source:__
 <verbatim>
@@ -60,7 +60,7 @@ var SubmitJump = function(sType, aArgs) {
     document.myJumpForm.submit();
 }
 </script>
-<form name="myJumpForm" action="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%">%AUTOCOMPLETE{ name="topic" datatopic="Sandbox.AutoCompletePluginTestData"  datasection="topiclist" value="Jump" formname="myJumpForm" class="twikiInputField patternFormFieldDefaultColor" onfocus="clearDefaultandCSS(this);" onblur="setDefaultText(this);" itemselecthandler="SubmitJump" size="128px" }%</form>
+<form name="myJumpForm" action="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%">%AUTOCOMPLETE{name="topic" datatopic="Sandbox.AutoCompletePluginTestData" onfocus="twiki.Form.clearBeforeFocusText(this);" onblur="twiki.Form.restoreBeforeFocusText(this);" datasection="topiclist" value="Jump" formname="myJumpForm" class="twikiInputField twikiInputFieldBeforeFocus"  itemselecthandler="SubmitJump" size="128px" }%</form>
 </verbatim>
 
 __Rendered:__
@@ -69,7 +69,7 @@ var SubmitJump = function(sType, aArgs) {
     document.myJumpForm.submit();
 }
 </script>
-<form name="myJumpForm" action="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%">%AUTOCOMPLETE{ name="topic" datatopic="Sandbox.AutoCompletePluginTestData"  datasection="topiclist" value="Jump" formname="myJumpForm" class="twikiInputField patternFormFieldDefaultColor" onfocus="clearDefaultandCSS(this);" onblur="setDefaultText(this);" itemselecthandler="SubmitJump" size="128px" }%</form>
+<form name="myJumpForm" action="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%">%AUTOCOMPLETE{name="topic" datatopic="Sandbox.AutoCompletePluginTestData" onfocus="twiki.Form.clearBeforeFocusText(this);" onblur="twiki.Form.restoreBeforeFocusText(this);" datasection="topiclist" value="Jump" formname="myJumpForm" class="twikiInputField twikiInputFieldBeforeFocus"  itemselecthandler="SubmitJump" size="128px" }%</form>
 
 ---++ Installation Instructions
 
@@ -83,10 +83,11 @@ var SubmitJump = function(sType, aArgs) {
 ---++ Plugin Info
 
 |  Plugin Author(s): | TWiki:Main.AndrewRJones |
-|  Copyright: | &copy; 2007, TWiki:Main.AndrewRJones |
+|  Copyright: | &copy; 2007 - 2008, TWiki:Main.AndrewRJones |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  12 Sept 2008 | Bugs:Item5745 - Updated to use latest YUI (2.5.2); Fixed forms for 4.2; Fixed Jump Form example for 4.2 |
 |  14585 | Bugs:Item4469 - Removed extra self-closing div-tag tail; Fixed Jump Form example |
 |  14413 | Bugs:Item4369 - Allow users to define their own item select handler |
 |  14391 | Bugs:Item4356 - Class names not being added |

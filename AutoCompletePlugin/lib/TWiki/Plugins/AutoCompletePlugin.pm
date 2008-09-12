@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2007 Andrew Jones, andrewjones86@googlemail.com
+# Copyright (C) 2007 - 2008 Andrew Jones, andrewjones86@googlemail.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -46,6 +46,8 @@ sub initPlugin {
 
     TWiki::Func::registerTagHandler( 'AUTOCOMPLETE', \&_handleTag );
 
+    _Debug( 'init OK' );
+
     # Plugin correctly initialized
     return 1;
 }
@@ -54,6 +56,8 @@ sub initPlugin {
 # handles autocomplete boxes in topics
 sub _handleTag {
 #    my($session, $params, $theTopic, $theWeb) = @_;
+
+    _Debug( 'Found in topic' );
   
     return _createTextfield($_[1]);
 }
@@ -63,11 +67,15 @@ sub renderFormFieldForEditHandler {
     my ( $name, $type, $size, $value, $attributes, $possibleValues ) = @_;
     return undef unless $type eq 'autocomplete';
 
+    _Debug( 'Found in form' );
+
     my %params = TWiki::Func::extractParameters($possibleValues);
     
     $params{name} = $name;
     $params{size} = $size;
-    $params{value} = $value;
+    unless( $value eq $possibleValues ){
+	$params{value} = $value;
+    }
     $params{class} = 'twikiInputField twikiEditFormTextField';
 
     return _createTextfield(\%params);
@@ -241,8 +249,8 @@ sub _addYUI {
              . '<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/YahooUserInterfaceContrib/build/autocomplete/autocomplete-min.js"></script>'
     } else {
         _Debug( 'YahooUserInterfaceContrib is not installed, using Yahoo servers' );
-        $yui = '<script type="text/javascript" src="http://yui.yahooapis.com/2.2.2/build/yahoo-dom-event/yahoo-dom-event.js"></script>'
-             . '<script type="text/javascript" src="http://yui.yahooapis.com/2.2.2/build/autocomplete/autocomplete-min.js"></script>';
+        $yui = '<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/yahoo-dom-event/yahoo-dom-event.js"></script>'
+             . '<script type="text/javascript" src="http://yui.yahooapis.com/2.5.2/build/autocomplete/autocomplete-min.js"></script>';
     }
 
     TWiki::Func::addToHEAD($pluginName . '_yui', $yui);    
