@@ -27,8 +27,8 @@ Designed by: Crawford Currie
 ---++ Headings
 ---+++ Expected
 <!-- expected HEADS -->
-<h2><a name="Sushi"></a>Sushi</h2>
-<h3><a name="Maguro"></a>Maguro</h3>
+<h2><a name="Sushi_2"></a>Sushi</h2>
+<h3><a name="Maguro_2"></a>Maguro</h3>
 <!-- /expected -->
 ---+++ Actual
 <!-- actual -->
