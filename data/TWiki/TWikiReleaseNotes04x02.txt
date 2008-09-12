@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1177700623" format="1.1" version="$Rev$"}%
----+!! TWiki Release 4.2.2 (Freetown), %$DATE%
+%META:TOPICINFO{author="TWikiContributor" date="1177700623" format="1.1" version="3"}%
+---+!! TWiki Release 4.2.2 (Freetown), 00:54:17 11 August 2008
 
 %TOC%
 
@@ -11,12 +11,13 @@ TWiki 4.2.1 is a patch release which only contains bug fixes. More than 150 bugs
 
 TWiki 4.2.2 is a patch release which only contains bug fixes. The major issues fixed since the release of 4.2.1 in all areas of TWiki are the registration verification code validation, and web specified =REVINFO= usage.
 
+TWiki 4.2.3 is a patch release which only contains an emergency fix to the configure script to close an exploit found in the configure script when left unprotected using apache auth (see the _Protect the configure script_ step in the TWiki.TWikiInstallationGuide).
 
-It is highly recommended to upgrade TWiki 4.2.x to 4.2.2. Users will find the 4.2.2 much more stable in daily use.
+It is highly recommended to upgrade TWiki 4.2.x to 4.2.3. Users will find the 4.2.3 much more stable in daily use.
 
 ---++ Pre-installed Extensions
 
-TWiki 4.2.2 is shipped with
+TWiki 4.2.3 is shipped with
 
    * *Plugins:* !CommentPlugin, !EditTablePlugin, !EmptyPlugin, !InterwikiPlugin, !PreferencesPlugin, !RenderListPlugin, !SlideShowPlugin, !SmiliesPlugin, !SpreadSheetPlugin, !TablePlugin, !TinyMCEPlugin, !TwistyPlugin, !WysiwygPlugin
    * *Contribs:* !BehaviourContrib, !JSCalendarContrib, !MailerContrib, !TipsContrib, !TWikiUserMappingContrib, !TwistyContrib
@@ -52,6 +53,9 @@ TWiki 4.2.2 is shipped with
       * Many new functions in the API for plugin developers.
       * Table of Content (TOC) feature enhanced 
       * User Mapping (mapping between login name and !WikiName) code has been extended to allow pluggable modules to integrate with all sorts of alternative authentication and Management schemes. For normal cases you use the default !TWikiUserMapping which is using the !Main.TWikiUsers topic to map between login and !WikiName. A new !BaseUserMapping is provided for TWikis where you only have guests and an administrator. In this case you use the login and password given in configure to login as an admin.
+
+---++ Important Changes since 4.2.2
+TWiki 4.2.3 is a patch release which only contains an emergency fix to the configure script to close an exploit found in the configure script when left unprotected using apache auth (see the _Protect the configure script_ step in the TWiki.TWikiInstallationGuide).
 
 ---++ Important Changes since 4.2.1
 This is a fast trip bug fix for issues found during upgrades from 4.2.0 to 4.2.1.
