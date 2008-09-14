@@ -455,21 +455,25 @@ Build a valid HTML anchor name (unique w.r.t. the list stored in %anchornames)
 
 sub makeUniqueAnchorName {
     my( $this, $web, $topic, $text, $compatibilityMode ) = @_;
-    $web = "undef" if (!defined($web));
-    $topic = "undef" if (!defined($topic));
+    $web = '' if (!defined($web));
+    $topic = '' if (!defined($topic));
 
     my $anchorName = $this->makeAnchorName( $text, $compatibilityMode );
 
     # ensure that the generated anchor name is unique
     my $cnt = 1;
+    my $prefix = $web . '.' . $topic . '#';
     my $suffix = '';
-    while (exists $anchornames{$web . '.' . $topic . '#' . $anchorName . $suffix}) {
-        $suffix = '_autorenamed' . $cnt++;
+    while (exists $anchornames{$prefix . $anchorName . $suffix}) {
+        # $anchorName.$suffix must _always_ be 'compatible', or things would get complicated
+        $suffix = '_AN' . $cnt++;
         # limit resulting name to 32 chars
         $anchorName = substr($anchorName, 0, 32 - length($suffix));
+        # this is only needed because '__' would not be 'compatible'
+        $anchorName =~ s/_+$//g;
     }
     $anchorName .= $suffix;
-    $anchornames{$web . '.' . $topic . '#' . $anchorName} = 1;
+    $anchornames{$prefix . $anchorName} = 1;
 
     return $anchorName;
 }

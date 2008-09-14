@@ -50,7 +50,7 @@ Designed by: Crawford Currie
 </li>
 <li> <a href="?@URLPARAMS#H1_2">H1 <!--2--></a>
 <ul>
-<li> <a href="?@URLPARAMS#H2_autorenamed1">H2</a>
+<li> <a href="?@URLPARAMS#H2_AN1">H2</a>
 <ul>
 <li>
 <ul>
@@ -64,11 +64,11 @@ Designed by: Crawford Currie
 </li>
 <li> <a href="?@URLPARAMS#hash_H1">hash H1</a>
 <ul>
-<li> <a href="?@URLPARAMS#H2_autorenamed2">H2</a>
+<li> <a href="?@URLPARAMS#H2_AN2">H2</a>
 </li>
 </ul>
 </li>
-<li> <a href="?@URLPARAMS#hash_H1_autorenamed1">hash H1</a>
+<li> <a href="?@URLPARAMS#hash_H1_AN1">hash H1</a>
 <ul>
 <li> <a href="?@URLPARAMS#normal_H2">normal H2</a>
 </li>
