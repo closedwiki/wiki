@@ -27,6 +27,7 @@ package TWiki::Plugins::ToolTipPlugin;    # change the package name and $pluginN
 use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE $pluginName
         $debug  $DefaultReadersFormat $ToolTipID $ToolTipOpened
+        $incBalloon $incCenter $incFollow
     );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -56,6 +57,15 @@ sub initPlugin
 
     $DefaultReadersFormat = &TWiki::Func::getPreferencesValue ("TOOLTIPPLUGIN_READERSFORMAT") || "<li> %READERNAME% : %READERDATE%";
 
+    # Flags to indicate that optional javascript files should be included
+    # in the <script tags
+    #
+    $incBalloon = 0;  # Need tip_balloon.js
+    $incCenter = 0;   # Need tip_centerwindow.js
+    $incFollow = 0;   # Need tip_followscroll.js
+
+
+
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
 
@@ -69,12 +79,19 @@ sub initPlugin
 sub postRenderingHandler
 {
 	TWiki::Func::writeDebug( "- ${pluginName}::postRenderingHandler( $web.$topic )" ) if $debug;
+
     $_[0] =~ s/%TOOLTIP{(.*?)}%/&handleToolTip($1)/ge;
     $_[0] =~ s/%TOOLTIP%/&handleToolTip("")/ge;
     
     # this search and replace could be made more robust if this were ever called more than once
     # (more than once with the </body> tag in the text, that is)
-    $_[0] =~ s|(</body>)|<script type="text/javascript" src="$TWiki::cfg{DefaultUrlHost}$TWiki::cfg{PubUrlPath}/$TWiki::cfg{SystemWebName}/$pluginName/wz_tooltip.js"></script>$1| if ($ToolTipID);
+
+    my $scripts = "<script type=\"text/javascript\" src=\"$TWiki::cfg{PubUrlPath}/$TWiki::cfg{SystemWebName}/$pluginName/wz_tooltip.js\"></script>\n";
+    $scripts .= "<script type=\"text/javascript\" src=\"$TWiki::cfg{PubUrlPath}/$TWiki::cfg{SystemWebName}/$pluginName/tip_centerwindow.js\"></script>\n" if ($incCenter);
+    $scripts .= "<script type=\"text/javascript\" src=\"$TWiki::cfg{PubUrlPath}/$TWiki::cfg{SystemWebName}/$pluginName/tip_followscroll.js\"></script>\n" if ($incFollow);
+    $scripts .= "<script type=\"text/javascript\" src=\"$TWiki::cfg{PubUrlPath}/$TWiki::cfg{SystemWebName}/$pluginName/tip_balloon.js\"></script>\n" if ($incBalloon);
+
+    $_[0] =~ s|(</body>)|$scripts$1| if ($ToolTipID);  # Insert scripts only if %TIP 
 }
 
 sub handleToolTip
@@ -82,7 +99,6 @@ sub handleToolTip
   my $attr = shift;
 
   my $out="";
-
   if ( ($attr =~ /END/) || ($attr =~ /^$/) )
   { 
     if ( $ToolTipOpened>0 ) 
@@ -97,6 +113,15 @@ sub handleToolTip
   }
   else
   {
+    TWiki::Func::writeDebug( "TOOLTIP - BEFORE : $attr") if $debug;
+
+    # WikiWords that are unresolved create a <span> ... </span> containing double-quotes
+    # And resolved WikiWords create <a ...> tags containing double-quotes.  
+    # Both of these are automatically inserted by TWiki rendering and break the TEXT=" " string
+
+    $attr =~ s/<span\s+(.*?)<\/span>/&fixupSpan($1)/ge;   # Fixup any double-quotes found within <span> tags
+    $attr =~ s/<a\s+([^>]+)>/&fixupUrl($1)/ge;            # Fixup any double-quotes found within <a> tags
+
     my $theText     = &TWiki::Func::extractNameValuePair( "$attr", "TEXT" )      || ""; 
     my $TextInclude = &TWiki::Func::extractNameValuePair( "$attr", "INCLUDE" )   || ""; 
     my $theURL      = &TWiki::Func::extractNameValuePair( "$attr", "URL" )       || "javascript:void(0);"; 
@@ -111,10 +136,22 @@ sub handleToolTip
     $attr =~ s/\s+$//;                           # Strip any trailing spaces
     $attr =~ s/, \'(\d+)\',/, $1,/g;             # Strip quotes from decimal parameters
     chop($attr) if (substr($attr,-1) eq ",");    # and any trailing comma
+    TWiki::Func::writeDebug( "TOOLTIP - AFTER : $attr") if $debug;
+
+    # Add a defautl BALLOONIMGPATH if BALLON is true and path is not provided
+    #
+    if ( $attr =~ m/BALLOON, '[Tt][Rr][Uu][Ee]'/o ) {
+       $attr .= ", BALLOONIMGPATH,  '$TWiki::cfg{PubUrlPath}/$TWiki::cfg{SystemWebName}/$pluginName/'" if (! $attr =~ m/BALLOONIMGPATH,/o );
+       $incBalloon = 1;
+       }
+
+    $incCenter = 1 if ( $attr =~ m/CENTERWINDOW, '[Tt][Rr][Uu][Ee]'/o ) ;
+    $incFollow = 1 if ( $attr =~ m/FOLLOWSCROLL, '[Tt][Rr][Uu][Ee]'/o ) ;
+       
    
     if ( $TextInclude )
     {
-     TWiki::Func::writeDebug( "topic : $TextInclude");
+     TWiki::Func::writeDebug( "topic : $TextInclude") if $debug;
      $theText="Invalid topic name <b>$TextInclude</b> !";
      my( $iweb, $itopic ) = split('\.', $TextInclude);
      if ( ! $itopic ) { $itopic=$iweb; $iweb=$web; }
@@ -138,7 +175,6 @@ sub handleToolTip
     }
 
     $out.= " onmouseover=\"Tip('$theText', $attr)\" onmouseout=\"UnTip()\">";
-    TWiki::Func::writeDebug( "topic : $out");
 
     $ToolTipID+=1;
     $ToolTipOpened+=1;
@@ -146,4 +182,25 @@ sub handleToolTip
   return ("$out");
 }
 
+#
+## Quote any double-quotes found between <a> and </a> tags
+#
+sub fixupUrl 
+{
+    my $url = shift;
+    TWiki::Func::writeDebug( "TOOLTIP-URL $url") if $debug;
+    $url =~ s/\"/\&quot\;/g;
+    return ("<a $url>");
+}
+
+# 
+## Quote any double-quotes found between <span> </span> tags
+#
+sub fixupSpan 
+{
+    my $span = shift;
+    TWiki::Func::writeDebug( "TOOLTIP-SPAN $span") if $debug;
+    $span =~ s/\"/\&quot\;/g;
+    return ("<span $span</span>");
+}
 1;
