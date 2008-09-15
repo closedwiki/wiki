@@ -207,6 +207,7 @@ sub queryString {
 =begin twiki
 
 ---++ ObjectMethod url( [-full => 1,
+                         -base => 1,
                          -absolute => 1,
                          -relative => 1, 
                          -path => 1, 
@@ -214,8 +215,9 @@ sub queryString {
 
 Returns many url info. 
    * If called without parameters or with -full => 1 returns full url, e.g. 
-     http://twiki.org/cgi-bin/view/Codev/WebHome?raw=on
-   * -absolute => 1 returns absolute action path, e.g. /twiki/bin/view
+     http://twiki.org/cgi-bin/view
+   * If called with -base => 1 returns base url, e.g. http://twiki.org
+   * -absolute => 1 returns absolute action path, e.g. /cgi-bin/view
    * -relative => 1 returns relative action path, e.g. view
    * -path => 1, -query => 1 also includes path info and query string
      respectively
@@ -262,7 +264,7 @@ sub url {
     my $queryString = $this->queryString();
     $url .= '?' . $queryString if $query && $queryString;
     $url = '' unless defined $url;
-    return TWiki::urlEncode($url);
+    return $url;
 }
 
 =begin twiki
