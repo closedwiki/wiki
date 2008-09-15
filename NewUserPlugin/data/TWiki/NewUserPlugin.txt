@@ -10,7 +10,7 @@
   </td>
 </tr>
 </table>
-This plugin is of use in those cases where TWiki users are registered and authenticated externally, 
+This plugin is of use in those cases where TWiki users are registered and authenticated externally,
 for example using LDAP.
 So users are not registered to TWiki using its own registration workflow and therefore don't
 have a user topic in the %MAINWEB% web.
@@ -22,13 +22,24 @@ This plugin fills that gap and creates a user's topic if it does not yet exist.
 -->
 You can customize the template that is used to create a new user topic
 by setting the =NEWUSERTEMPLATE= preference variable (e.g. in %MAINWEB%.TWikiPreferences):
-   
+
    * Set NEWUSERTEMPLATE = %TWIKIWEB%.NewLdapUserTemplate
 
 If not set, it defaults to <nop>NewUserTemplate. This plugin comes with an example template,
 NewLdapUserTemplate, to illustrate how to extract user data from an LDAP directory and integrate
 the information into the user's topic dynamically. You will need to install the
 TWiki:Plugins/LdapNgPlugin and the TWiki:Plugins/GluePlugin to make use of it.
+
+---++ Syntax
+On creation of the user home topic only =%WIKINAME%=, =%USERNAME%= and =%WIKIUSERNAME%=
+get expanded by default. To expand additional VARIABLES, you can use the =%EXPAND{}%= syntax.
+All percent signs have to be escaped by =$percnt=, deeper recursion levels may
+use =$dollar=, too. Multiline EXPANDs are not supported.
+
+Example:
+<verbatim>
+%EXPAND{$percntGMTIME{"$year-$mo-$day"}$percnt}%
+</verbatim>
 
 ---++ Installation Instructions
 
@@ -40,8 +51,9 @@ This work is partly funded by [[http://www.hennerich.de][T+T Hennerich <nop>GmbH
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2006-2008, Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.04 |
+|  Plugin Version: | v1.05 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  15 Sep 2008 | TWiki:Main.OliverKrueger: added EXPAND feature, removed noise in debug.txt |
 |  12 Feb 2008 | remove leading/trailing whitespaces from NEWUSERTEMPLATE filename |
 |  09 Jan 2008 | fixed spelling error |
 |  03 Jan 2008 | fixed default values for NEWUSERTEMPLATE, clearing unset LDAP attributes |
