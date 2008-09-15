@@ -7,6 +7,13 @@ use warnings;
 use TWiki::Request;
 use TWiki::Request::Upload;
 
+sub set_up {
+    my $this = shift;
+    $this->SUPER::set_up(@_);
+    $TWiki::cfg{ScriptUrlPath} = '/twiki/bin';
+    delete $TWiki::cfg{ScriptUrlPaths};
+}
+
 # Test default empty constructor
 sub test_empty_new {
     my $this = shift;
@@ -176,19 +183,85 @@ sub test_queryString {
         $req->query_string, 'Wrong query string' );
 }
 
-sub test_url_full {
+sub perform_url_test {
+    my $this = shift;
+    my $req  = new TWiki::Request("");
+    my ( $secure, $host, $action, $path ) = @_;
+    $req->secure($secure);
+    $req->header( Host => $host );
+    $req->action($action);
+    $req->path_info($path);
+    $req->param( -name => 'simple1', -value => 's1 s1' );
+    $req->param( -name => 'simple2', -value => 's2' );
+    $req->param( -name => 'multi',   -value => [qw(m1 m2)] );
+    my $base = $secure ? 'https' : 'http';
+    $base .= '://' . $host;
+    $this->assert_str_equals( $base, $req->url( -base => 1 ),
+        'Wrong BASE url' );
+    my $absolute .= $TWiki::cfg{ScriptUrlPath} . "/$action";
+    $this->assert_str_equals( $base . $absolute, $req->url, 'Wrong FULL url' );
+    $this->assert_str_equals( $absolute,
+        $req->url( -absolute => 1, 'Wrong ABSOLUTE url' ) );
+    $this->assert_str_equals( $action,
+        $req->url( -relative => 1, 'Wrong RELATIVE url' ) );
+
+    $this->assert_str_equals(
+        $base . $absolute . $path,
+        $req->url( -full => 1, -path => 1 ),
+        'Wrong FULL+PATH url'
+    );
+    $this->assert_str_equals(
+        $absolute . $path,
+        $req->url( -absolute => 1, -path => 1 ),
+        'Wrong ABSOLUTE+PATH url'
+    );
+    $this->assert_str_equals(
+        $action . $path,
+        $req->url( -relative => 1, -path => 1 ),
+        'Wrong RELATIVE+PATH url'
+    );
+
+    my $query = '\?simple1=s1%20s1[&;]simple2=s2[;&]multi=m1[;&]multi=m2';
+    $base =~ s/\./\\./g;
+    $this->assert_matches(
+        $base . $absolute . $query,
+        $req->url( -full => 1, -query => 1 ),
+        'Wrong FULL+QUERY_STRING url'
+    );
+    $this->assert_matches(
+        $absolute . $query,
+        $req->url( -absolute => 1, -query => 1 ),
+        'Wrong ABSOLUTE+QUERY_STRING url'
+    );
+    $this->assert_matches(
+        $action . $query,
+        $req->url( -relative => 1, -query => 1 ),
+        'Wrong RELATIVE+QUERY_STRING url'
+    );
+
+    $this->assert_matches(
+        $base . $absolute . $query,
+        $req->url( -full => 1, -query => 1, -path => 1 ),
+        'Wrong FULL+PATH_INFO+QUERY_STRING url'
+    );
+    $this->assert_matches(
+        $absolute . $query,
+        $req->url( -absolute => 1, -query => 1, -path => 1 ),
+        'Wrong ABSOLUTE+PATH_INFO+QUERY_STRING url'
+    );
+    $this->assert_matches(
+        $action . $query,
+        $req->url( -relative => 1, -query => 1, -path => 1 ),
+        'Wrong RELATIVE+PATH_INFO+QUERY_STRING url'
+    );
 }
 
-sub test_url_absolute {
-}
-
-sub test_url_relative {
-}
-
-sub test_url_with_path {
-}
-
-sub test_url_with_queryString {
+sub test_url {
+    my $this = shift;
+    $this->perform_url_test(0, 'foo.bar',  'baz', '/Web/Topic');
+    $this->perform_url_test(1, 'foo.bar',  'baz', '/Web/Topic');
+    $this->perform_url_test(0, 'example.com', 'view', '/Main/WebHome');
+    $this->perform_url_test(1, 'example.com', 'edit', '/Sandbox/TestTopic');
 }
 
 sub test_queryParam_x {
