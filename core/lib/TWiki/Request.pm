@@ -351,17 +351,22 @@ sub queryParam {
 
 =begin twiki
 
----++ ObjectMethod bodyParam( ... ) -> ...
+---++ ObjectMethod bodyParam( [-name => $name, -value => $value             |
+                               -name => $name, -values => [ $v1, $v2, ... ] |
+                               $name, $v1, $v2, ...                         |
+                               name, [ $v1, $v2, ... ]                     
+                              ] ) -> @paramNames | @values | $firstValue
 
 Adds parameters passed within request body. It keeps previous values,
-but places new ones first.
+but places new ones first. Should be called only by engines. Otherwise
+use param() method.
 
 =cut
 
 sub bodyParam {
     my ( $this, @p ) = @_;
     
-    my ( $key, $newValue ) = rearrange( [ 'NAME', [qw(VALUE VALUES)] ], @p );
+    my ( $key, @newValue ) = rearrange( [ 'NAME', [qw(VALUE VALUES)] ], @p );
 
     # If a parameter is defined at both query string and body, CGI.pm
     # places body values first, but all values are available. However, 
@@ -370,13 +375,13 @@ sub bodyParam {
     # This way, this class behaves the same as CGI.pm and so does 'param' 
     # method.
     my @values = $this->param($key);
-    if ( ref($newValue) eq 'ARRAY' ) {
-        unshift @values, @$newValue;
+    if ( ref($newValue[0]) eq 'ARRAY' ) {
+        unshift @values, @{$newValue[0]}
     }
     else {
-        unshift @values, $newValue;
+        unshift @values, @newValue;
     }
-    return $this->param(-name => $key, -values => \@values);
+    return $this->param($key, @values);
 }
  
 =begin twiki
@@ -402,13 +407,14 @@ Resonably compatible with CGI.
 sub param {
     my ( $this, @p ) = @_;
 
-    my ( $key, $value ) = rearrange( [ 'NAME', [qw(VALUE VALUES)] ], @p );
+    my ( $key, @value ) = rearrange( [ 'NAME', [qw(VALUE VALUES)] ], @p );
 
     return @{ $this->{param_list} } unless $key;
-    if ( defined $value ) {
+    if ( defined $value[0] ) {
         push @{ $this->{param_list} }, $key
           unless exists $this->{param}->{$key};
-        $this->{param}->{$key} = ref $value eq 'ARRAY' ? $value : [$value];
+        $this->{param}->{$key} =
+          ref $value[0] eq 'ARRAY' ? $value[0] : [@value];
     }
     if ( defined $this->{param}->{$key} ) {
         return wantarray
