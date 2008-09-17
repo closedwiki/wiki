@@ -141,7 +141,7 @@ sub handleToolTip
     # Add a defautl BALLOONIMGPATH if BALLON is true and path is not provided
     #
     if ( $attr =~ m/BALLOON, '[Tt][Rr][Uu][Ee]'/o ) {
-       $attr .= ", BALLOONIMGPATH,  '$TWiki::cfg{PubUrlPath}/$TWiki::cfg{SystemWebName}/$pluginName/'" if (! $attr =~ m/BALLOONIMGPATH,/o );
+       $attr .= ", BALLOONIMGPATH,  '$TWiki::cfg{PubUrlPath}/$TWiki::cfg{SystemWebName}/$pluginName/'" if (!($attr =~ m/BALLOONIMGPATH,/o));
        $incBalloon = 1;
        }
 

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="BaseUserMapping_333" date="1221431091" format="1.1" reprev="1.15" version="1.15"}%
+%META:TOPICINFO{author="BaseUserMapping_333" date="1221616557" format="1.1" reprev="1.16" version="1.16"}%
 ---+!! <nop>%TOPIC%
 
 This is a plugin to generate dynamic Tool Tips in HTML + javascript (mouseover event). This tooltip is based on http://www.walterzorn.com/tooltip/tooltip_e.htm
@@ -11,10 +11,10 @@ This is a plugin to generate dynamic Tool Tips in HTML + javascript (mouseover e
 
 You can use one or more %TOOLTIP{TEXT="there are soo many parameters..." BGCOLOR="#FF8000" FONTCOLOR="#00FF80" TITLE="PARAMETERS" SHADOWCOLOR="#ccaacc" FONTSIZE="30px"}%parameters%TOOLTIP{END}% to get your own and nice tool tip !.
 
-%TOOLTIP{TEXT="Set BALLOON=&quot;true&quot;  The BALLOONIMGPATH will default to the pub directory for this topic. "  FONTCOLOR="#336699" SHADOWCOLOR="#ccaacc" FONTSIZE="18px" BALLOON="true" WIDTH="450"}% And with the latest version you can have Balloon style tips! %TOOLTIP{END}%.
-
-<!--  Have to escape the following - WYSIWYG corrupts the inline img tags in the tip. -->
+<!--  Have to escape the following - WYSIWYG corrupts the inline img tags and &quot; encoding in the tip. -->
 <sticky>
+%TOOLTIP{TEXT="Set BALLOON=&quot;true&quot;  The BALLOONIMGPATH will default to the pub directory for this topic. "  FONTCOLOR="#336699" SHADOWCOLOR="#ccaacc" FONTSIZE="18px" BALLOON="true" WIDTH="450" }% And with the latest version you can have Balloon style tips! %TOOLTIP{END}%.
+
 Note that you can also %TOOLTIP{TEXT="You can also insert <img src=\'%ATTACHURLPATH%/ToolTipPhoto.gif\'> gif/jpg photos and WikiWords in your text...  this is simply HTML! (but remember to escape single quotes (\'), I18N chars, etc :-)), and set STICKY=&quot;true&quot; if you want the links usable." STICKY="true" TITLE="PHOTOS !" FONTCOLOR="#336699" SHADOWCOLOR="#ccaacc" FONTSIZE="18px" WIDTH="400"}% do this %TOOLTIP{END}% and %TOOLTIP{TEXT="you can set a background image so to get a nice tool tip and also add some <img src=\'%ATTACHURLPATH%/ToolTipPhoto.gif\'> gif/jpg photos" FONTCOLOR="#336699" TITLE="Background image" SHADOWCOLOR="#ccaacc" FONTSIZE="18px" WIDTH="190" BGIMG="%ATTACHURLPATH%/ToolTipBackground.jpg"}% this %TOOLTIP{END}% too !.
 </sticky>
 
