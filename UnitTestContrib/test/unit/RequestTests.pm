@@ -30,9 +30,10 @@ sub test_empty_new {
     my @list = $req->header();
     $this->assert_str_equals(0, scalar @list, '$req->header not empty');
     
+    @list = ();
     @list = $req->param();
     $this->assert_str_equals(0, scalar @list, '$req->param not empty');
-
+    
     my $ref = $req->cookies();
     $this->assert_str_equals('HASH', ref($ref), '$req->cookies did not returned a hashref');
     $this->assert_str_equals(0, scalar keys %$ref, '$req->cookies not empty');
@@ -264,13 +265,172 @@ sub test_url {
     $this->perform_url_test(1, 'example.com', 'edit', '/Sandbox/TestTopic');
 }
 
-sub test_queryParam_x {
+sub test_query_param {
+    my $this = shift;
+    my $req  = new TWiki::Request("");
+    
+    $req->queryParam( -name => 'q1', -value => 'v1' );
+    my @result = $req->param('q1');
+    $this->assert_str_equals( 'v1', $result[0],
+        'wrong value from queryParam()' );
+    $this->assert_num_equals(
+        1,
+        scalar @result,
+        'wrong number of returned values from queryParam()'
+    );
+    $req->queryParam( -name => 'q2', -values => [qw(v1 v2)] );
+    
+    @result = ();
+    @result = $req->param('q2');
+    $this->assert_str_equals( 'v1', $result[0],
+        'wrong value from queryParam()' );
+    $this->assert_str_equals( 'v2', $result[1],
+        'wrong value from queryParam()' );
+    $this->assert_num_equals(
+        2,
+        scalar @result,
+        'wrong number of returned values from queryParam()'
+    );
+    $req->queryParam('p', qw(qv1 qv2 qv3));
+    
+    @result = ();
+    @result =  $req->param('p');
+    $this->assert_str_equals( 'qv1', $result[0],
+        'wrong value from queryParam()' );
+    $this->assert_str_equals( 'qv2', $result[1],
+        'wrong value from queryParam()' );
+    $this->assert_str_equals( 'qv3', $result[2],
+        'wrong value from queryParam()' );
+    $this->assert_num_equals(
+        3,
+        scalar @result,
+        'wrong number of returned values from queryParam()'
+    );
+    
+    @result = ();
+    @result = $req->queryParam();
+    $this->assert_str_equals( 'q1', $result[0],
+        'wrong parameter name from queryParam()' );
+    $this->assert_str_equals( 'q2', $result[1],
+        'wrong parameter name from queryParam()' );
+    $this->assert_str_equals( 'p',  $result[2],
+        'wrong parameter name from queryParam()' );
+    $this->assert_num_equals(
+        3,
+        scalar @result,
+        'wrong number of returned values from queryParam()'
+    );
+    
+    @result = ();
+    @result = (scalar $req->param('q2'));
+    $this->assert_str_equals( 'v1', $result[0],
+        'wrong parameter name from queryParam()' );
+    $this->assert_num_equals(
+        1,
+        scalar @result,
+        'wrong number of returned values from queryParam()'
+    );
+
+    @result = ();
+    @result = (scalar $req->queryParam('nonexistent'));
+    $this->assert_str_equals(1, scalar @result, '$req->param(nonexistent) not empty');
+    $this->assert_null($result[0], q{$req->param(nonexistent) didn't return undef});
+    
+    @result = ();
+    @result = $req->queryParam('nonexistent');
+    $this->assert_str_equals(0, scalar @result, '$req->param(nonexistent) not empty');
 }
 
-sub test_bodyParam_x {
+sub test_body_param {
+    my $this = shift;
+    my $req  = new TWiki::Request("");
+    $req->bodyParam( -name => 'q1', -value => 'v1' );
+    my @result = $req->param('q1');
+    $this->assert_str_equals( 'v1', $result[0],
+        'wrong value from bodyParam()' );
+    $this->assert_num_equals(
+        1,
+        scalar @result,
+        'wrong number of returned values from bodyParam()'
+    );
+    $req->bodyParam( -name => 'q2', -values => [qw(v1 v2)] );
+    @result = ();
+    @result = $req->param('q2');
+    $this->assert_str_equals( 'v1', $result[0],
+        'wrong value from bodyParam()' );
+    $this->assert_str_equals( 'v2', $result[1],
+        'wrong value from bodyParam()' );
+    $this->assert_num_equals(
+        2,
+        scalar @result,
+        'wrong number of returned values from bodyParam()'
+    );
+    $req->bodyParam('p', qw(qv1 qv2 qv3));
+    @result = ();
+    @result =  $req->param('p');
+    $this->assert_str_equals( 'qv1', $result[0],
+        'wrong value from bodyParam()' );
+    $this->assert_str_equals( 'qv2', $result[1],
+        'wrong value from bodyParam()' );
+    $this->assert_str_equals( 'qv3', $result[2],
+        'wrong value from bodyParam()' );
+    $this->assert_num_equals(
+        3,
+        scalar @result,
+        'wrong number of returned values from bodyParam()'
+    );
+    @result = ();
+    @result = $req->bodyParam();
+    $this->assert_str_equals( 'q1', $result[0],
+        'wrong parameter name from bodyParam()' );
+    $this->assert_str_equals( 'q2', $result[1],
+        'wrong parameter name from bodyParam()' );
+    $this->assert_str_equals( 'p',  $result[2],
+        'wrong parameter name from bodyParam()' );
+    $this->assert_num_equals(
+        3,
+        scalar @result,
+        'wrong number of returned values from bodyParam()'
+    );
+    @result = ();
+    @result = (scalar $req->param('q2'));
+    $this->assert_str_equals( 'v1', $result[0],
+        'wrong parameter name from bodyParam()' );
+    $this->assert_num_equals(
+        1,
+        scalar @result,
+        'wrong number of returned values from bodyParam()'
+    );
+    
+    @result = ();
+    @result = (scalar $req->bodyParam('nonexistent'));
+    $this->assert_str_equals(1, scalar @result, '$req->param(nonexistent) not empty');
+    $this->assert_null($result[0], q{$req->param(nonexistent) didn't return undef});
+    
+    @result = ();
+    @result = $req->bodyParam('nonexistent');
+    $this->assert_str_equals(0, scalar @result, '$req->param(nonexistent) not empty');
 }
 
-sub test_param_x {
+sub test_query_body_param {
+    my $this = shift;
+    my $req  = new TWiki::Request("");
+    $req->queryParam( -name => 'p', -values => [qw(qv1 qv2)] );
+    $req->bodyParam(  -name => 'p', -values => [qw(bv1 bv2)] );
+    my @result = $req->param('p');
+    $this->assert_num_equals(
+        4,
+        scalar @result,
+        'wrong number of returned values from bodyParam()+queryParam()'
+    );
+    $this->assert_str_equals( 'bv1', $result[0],
+        'wrong value on bodyParam()+queryparam()' );
+    $this->assert_str_equals( 'bv2', $result[1],
+        'wrong value on bodyParam()+queryparam()' );
+    $this->assert_str_equals( 'qv1', $result[2],
+        'wrong value on bodyParam()+queryparam()' );
+    $this->assert_str_equals( 'qv2', $result[3],
+        'wrong value on bodyParam()+queryparam()' );
 }
 
 sub test_cookie_x {
