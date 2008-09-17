@@ -20,7 +20,7 @@
 
 
 %TMPL:DEF{"searchbody"}%%SPLIT%%TMPL:P{"repeatedsearchblock"}%%SPLIT%
-<div class="patternSearchResultCount">%MAKETEXT{"Number of topics:"}% <b>%NTOPICS%</b></div>%TMPL:END%
+<div class="patternSearchResultCount"><span class="twikiLeft">%MAKETEXT{"Number of topics:"}% <b>%NTOPICS%</b></span><span class="twikiRight">%ICON{feed}% <a href='?%QUERYSTRING%;skin=none;rss=on'>Subscribe to these results</a></span></div>%TMPL:END%
 
 
 

@@ -65,6 +65,7 @@ sub search {
     my $noheader      = $query->param( "noheader" )  || "";
     my $nototal       = $query->param( "nototal" )   || "";
     my $showlock      = $query->param( "showlock" )  || "";
+    my $rss           = $query->param( "rss" )       || "";
 
     # usersearch will be printed out
     my $usersearch = $search;
@@ -88,9 +89,13 @@ sub search {
     $search = $self->searchStringForWebs($search, $websStr);
 
     # load the template
-    my $tmpl = TWiki::Func::readTemplate( "kinosearch" );
+    if( $rss ){
+        $tmpl = TWiki::Func::readTemplate( "kinosearchrss" );
+    } else {
+        $tmpl = TWiki::Func::readTemplate( "kinosearch" );
+    }
     $tmpl =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
-    
+
     # split the template into sections
     my( $tmplHead, $tmplSearch,
         $tmplTable, $tmplNumber, $tmplTail ) = split( /%SPLIT%/, $tmpl );
@@ -111,6 +116,9 @@ sub search {
     # print page heading
     $tmplHead = TWiki::Func::renderText( $tmplHead );
     $tmplHead =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
+    if( $rss ){
+       $tmplHead =~ s|<p />||goi;   # remove <p /> tag
+    }
     print $tmplHead;
 
     # if configured, show only attachments option
@@ -144,6 +152,9 @@ sub search {
        $beforeText = TWiki::Func::expandCommonVariables( $beforeText, $topic );
        $beforeText = TWiki::Func::renderText( $beforeText, $webName );
        $beforeText =~ s|</*nop/*>||goi;   # remove <nop> tag
+       if( $rss ){
+       $beforeText =~ s|<p />||goi;   # remove <p /> tag
+       }
        print $beforeText;
      }
 
@@ -173,9 +184,14 @@ sub search {
 	if (! $self->topicAllowed($restopic, $resweb,  $text, $remoteUser)) {
 	    next;
 	}
-
-	my $htmlString = $self->renderHtmlStringFor($hit, $repeatText, $nosummary, $showlock);
-	print $htmlString;
+    
+    my $outString;
+    if( $rss ) {
+        $outString = $self->renderRssStringFor($hit, $repeatText, $nosummary, $showlock);
+    } else {
+        $outString = $self->renderHtmlStringFor($hit, $repeatText, $nosummary, $showlock);
+    }
+	print $outString;
 	
 	# one more in the bag
 	$ntopics += 1;
@@ -187,6 +203,9 @@ sub search {
     $afterText  = TWiki::Func::expandCommonVariables( $afterText, $topic );
     $afterText = TWiki::Func::renderText( $afterText, $webName );
     $afterText =~ s|</*nop/*>||goi;   # remove <nop> tag
+    if( $rss ){
+        $afterText =~ s|<p />||goi;   # remove <p /> tag
+    }
     print $afterText;
 
     # print "Number of topics:" part
@@ -196,11 +215,17 @@ sub search {
 	$thisNumber = TWiki::Func::renderText( $thisNumber, $webName );
 	$thisNumber =~ s|</*nop/*>||goi;   # remove <nop> tag
 	print $thisNumber;
+    if( $rss ){
+        $thisNumber =~ s|<p />||goi;   # remove <p /> tag
+    }
     }
 
     # print last part of the HTML page
     $tmplTail = TWiki::Func::renderText( $tmplTail );
     $tmplTail =~ s|</*nop/*>||goi;   # remove <nop> tag
+    if( $rss ){
+        $tmplTail =~ s|<p />||goi;   # remove <p /> tag
+    }
     print $tmplTail;
 
     return;
@@ -411,6 +436,117 @@ sub renderHtmlStringFor {
     }
     $tempVal = TWiki::Func::renderText( $tempVal, $resweb );
     $tempVal =~ s|</*nop/*>||goi;   # remove <nop> tag
+    
+    return $tempVal;
+}
+
+# Return the RSS friendly string to render the given hit.
+# AndrewRJones 17 Sep 2008
+sub renderRssStringFor {
+    my ($self, $hit, $repeatText, $nosummary, $showlock) = (@_);
+
+    my $mainWebname = TWiki::Func::getMainWebname();
+
+    my $tempVal = $repeatText;
+    my $resweb = $hit->{web};
+    my $restopic = $hit->{topic};
+    # For partial name search of topics, just hold the first part of the string
+    if($restopic =~ m/(\w+)/) { $restopic =~ s/ .*//; }
+
+    my $revUser = "";
+    my $revDate = "";
+    my $revNum = "";
+    my $locked = "";
+    my $lockinguser = "";
+    my $name = "";
+    my $comment = "";
+
+    # is the hit an attachment ?
+    my $fieldattachment = $hit->{attachment};
+    if ( $fieldattachment ) {
+	$name = $hit->{name};
+	$comment = $hit->{comment} || ""; 
+	if ($comment) {
+	    $comment = " - $comment";
+	    
+	    # Don't know, why this was in. 
+	    # If I do this, I remove also special characters like "Ä", "É" etc.
+	    #$comment =~ s/([\x{80}-\x{FFFF}])/'.'/gse; # FIXME bt now just get rid of UTF8
+	}
+    } else {
+	$name = "";
+    }
+
+    # read topic
+    #my( $meta, $text ) = TWiki::Func::readTopic( $resweb, $restopic );
+    #$text =~ s/%WEB%/$resweb/gos;
+    #$text =~ s/%TOPIC%/$restopic/gos;
+
+    # recover data from the hit so it can be displayed
+    if ( $hit->{author} ) {
+	$revUser = $hit->{author};
+	$revUser = TWiki::Func::userToWikiName($revUser);
+
+	if ($revUser !~ "$mainWebname.") { $revUser = "$mainWebname.$revUser"; }
+	$revNum = $hit->{version};
+	$revDate = $hit->{date};
+    }
+
+    $tempVal =~ s/%WEB%/$resweb/go;
+    $tempVal =~ s/%SCORE%//go;
+    
+    # field $name only is present if the hit is an attachment
+    if ($name) {
+	# URL for the file
+	$tempVal =~ s/%MATCH%/<a href="%PUBURLPATH%\/$resweb\/$restopic\/$name">$name<\/a>/go;
+	# no locking information for attachments
+	$locked = ""; $lockinguser = "";
+    } else {
+	# HTML Link URL for the topic
+	$tempVal =~ s/%MATCH%/\[\[$resweb\.$restopic\]\]/go;
+    # Plain title
+    $tempVal =~ s/%MATCHTITLE%/$resweb\.$restopic/go;
+    # Plain URL
+    $tempVal =~ s!%MATCHURL%!\%SCRIPTURL{"view"}\%/$resweb/$restopic!go;
+    
+	# if locks are to be displayed, then find it out for each hit
+	if ($showlock) {
+	    ($url, $lockinguser, $locked) = TWiki::Func::checkTopicEditLock($resweb, $restopic);
+	    if ($lockinguser) { $lockinguser = TWiki::Func::userToWikiName( $lockinguser, "0" ); }
+	}
+    }
+
+    # revision number
+	$revNum = "r$revNum";
+
+    # now, just replace the template elements with values and render
+    if ($locked) {
+	$tempVal =~ s/%LOCKED%/$lockinguser ($locked)/o;
+    }
+    $tempVal =~ s/%LOCKED%/ /o;
+    $tempVal =~ s/%TIME%/$revDate/o;
+    $tempVal =~ s/%TOPICNAME%/$restopic/o;
+    $tempVal =~ s/%REVISION%/$revNum/o;
+    $tempVal =~ s/%AUTHOR%/$revUser/o;
+    $tempVal = TWiki::Func::expandCommonVariables( $tempVal, $restopic, $resweb );
+    $tempVal = TWiki::Func::renderText( $tempVal, $resweb );
+    
+    if( $nosummary ) {
+	# no summaries
+	$tempVal =~ s/%TEXTHEAD%//go;
+	$tempVal =~ s/&nbsp;//go;
+    } else {
+	if ($name) {
+	    # summaries for attachments
+	    $tempVal =~ s/%TEXTHEAD%/\[\[$resweb\.$restopic\]\]$comment \[$hit->{excerpt}\]/go;
+	} else {
+	    # summaries for topics
+	    $tempVal =~ s/%TEXTHEAD%/$hit->{excerpt}/go;
+	}
+    }
+    $tempVal = TWiki::Func::renderText( $tempVal, $resweb );
+    $tempVal =~ s|</*nop/*>||goi;   # remove <nop> tag
+    $tempVal =~ s|<p />||goi;   # remove <p /> tag
     
     return $tempVal;
 }

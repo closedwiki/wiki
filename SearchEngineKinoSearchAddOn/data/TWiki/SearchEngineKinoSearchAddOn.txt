@@ -85,6 +85,10 @@ are sure, that the three words are in that order one after the other.
 
 _Note:_ The current version of !KinoSearch does not support wildcards.
 
+---++++ RSS Feeds
+
+RSS 2.0 feeds can be set up for any search results. To access the feed append =&rss=on;skin=none= to the end of the search url. There is a link to the feed from the results page in the default templates.
+
 ---++ Indexing
 __Note:__ The =kinoindex=, =kinoupdate= and =kinosearch= scripts will be deprecated over time in favour of the restHandlers, both for security reasons, and to make compatibility with TWiki 5.0 easier.
 ---+++ Creating a new Index
