@@ -346,6 +346,7 @@ future, so it could be possible to get query and body parameters independently.
 
 sub queryParam {
     my $this = shift;
+    return undef if $this->method && $this->method eq 'POST';
     return $this->param(@_);
 }
 
@@ -394,7 +395,7 @@ sub bodyParam {
 
    * Called without parameters returns all parameter names
    * Called only with parameter name or with -name => 'name'
-      * In list context returns all values associated (maybe empty list)
+      * In list context returns all associated values (maybe empty list)
       * In scalar context returns first value (maybe undef)
    * Called with name and list of values or with 
      -name => 'name', -value => 'value' or -name => 'name', -values => [ ... ]
@@ -448,9 +449,10 @@ sub cookie {
         @p );
     unless ( defined $value ) {
         return keys %{ $this->{cookies} } unless $name;
-        return ()                         unless $this->{cookies}->{$name};
-        return $this->{cookies}->{$name}->value;
+        return () unless $this->{cookies}->{$name};
+        return $this->{cookies}->{$name}->value if defined $name && $name ne '';
     }
+    return undef unless defined $name && $name ne '';
     return new CGI::Cookie(
         -name    => $name,
         -value   => $value,
@@ -475,9 +477,9 @@ sub cookies {
 
 =begin twiki
 
----++ ObjectMethod delete( $paramName )
+---++ ObjectMethod delete( @paramNames )
 
-Deletes parameter name and value(s) from request.
+Deletes parameters from request.
 
 =Delete()= alias provided for compatibility with CGI
 
@@ -488,9 +490,10 @@ Deletes parameter name and value(s) from request.
 sub delete {
     my $this = shift;
     foreach my $p (@_) {
-        if ( my $upload = $this->{uploads}->{$p} ) {
+        next unless $this->param($p);
+        if ( my $upload = $this->{uploads}->{$this->param($p)} ) {
             $upload->finish;
-            CORE::delete $this->{uploads}->{$p};
+            CORE::delete $this->{uploads}->{$this->param($p)};
         }
         CORE::delete $this->{param}->{$p};
         @{ $this->{param_list} } = grep { $_ ne $p } @{ $this->{param_list} };
@@ -516,15 +519,20 @@ sub deleteAll {
 
 =begin twiki
 
----++ ObjectMethod header( [ $name | $h1 => $v1, $h2 => $v2 ] ) -> @values
+---++ ObjectMethod header([-name => $name, -value  => $value            |
+                           -name => $name, -values => [ $v1, $v2, ... ] |
+                           $name, $v1, $v2, ...                         |
+                           name, [ $v1, $v2, ... ]                     
+                           ] ) -> @paramNames | @values | $firstValue
 
-Gets/Sets header field. If called without parametes returns
-all present header field names. Multivalued header can be set
-by passing an arrayref to values.
-
-If called with only =$name= parameter, returns values associated.
-
-Can be called with a hash to set multiple headers.
+Gets/Sets a header field:
+   * Called without parameters returns all header field names
+   * Called only with header field name or with -name => 'name'
+      * In list context returns all associated values (maybe empty list)
+      * In scalar context returns the first value (maybe undef)
+   * Called with name and list of values or with 
+     -name => 'name', -value => 'value' or -name => 'name', -values => [ ... ]
+     sets header field value
 
 *Not compatible with CGI*, since CGI correspondent is a 
 response write method. CGI scripts obtain headers from %ENV
@@ -539,18 +547,25 @@ TWiki::Response =header= method.
 =cut
 
 sub header {
-    my $this = shift;
-    return keys %{ $this->{headers} } unless @_;
-    my (@old);
-    my %seen;
-    while (@_) {
-        my $field = shift;
-        my $op = @_ ? ( $seen{ lc($field) }++ ? 'PUSH' : 'SET' ) : 'GET';
-        @old = $this->_header( $field, shift, $op );
+    my ( $this, @p ) = @_;
+    my ( $key, @value ) = rearrange( [ 'NAME', [qw(VALUE VALUES)] ], @p );
+
+    return keys %{ $this->{headers} } unless $key;
+    $key =~ tr/_/-/;
+    $key = lc $key;
+
+    if ( defined $value[0] ) {
+        $this->{headers}->{$key} =
+          ref $value[0] eq 'ARRAY' ? $value[0] : [@value];
     }
-    return @old    if wantarray;
-    return $old[0] if @old <= 1;
-    join( ", ", @old );
+    if ( defined $this->{headers}->{$key} ) {
+        return wantarray
+          ? @{ $this->{headers}->{$key} }
+          : $this->{headers}->{$key}->[0];
+    }
+    else {
+        return wantarray ? () : undef;
+    }
 }
 
 =begin twiki
@@ -567,8 +582,10 @@ sub save {
     local ( $\, $, ) = ( '', '' );
     foreach my $name ( $this->param ) {
         my $key = TWiki::urlEncode($name);
-        print $fh $key, "=", TWiki::urlEncode($_), "\n"
-          foreach $this->param($name);
+        foreach my $value ($this->param($name)) {
+            $value = '' unless defined $value;
+            print $fh $key, "=", TWiki::urlEncode($value), "\n"
+        }
     }
     print $fh "=\n";
 }
@@ -616,13 +633,13 @@ to uploaded file.
 
 sub upload {
     my ( $this, $name ) = @_;
-    my $upload = $this->{uploads}->{$name};
+    my $upload = $this->{uploads}->{$this->param($name)};
     return defined $upload ? $upload->handle : undef;
 }
 
 =begin twiki
 
----++ ObjectMethod uploadInfo() -> $headers
+---++ ObjectMethod uploadInfo( $fname ) -> $headers
 
 Returns a hashref to information about uploaded 
 files as sent by browser.
@@ -645,8 +662,9 @@ $fname may be obtained by calling =param()= with form field name.
 
 sub tmpFileName {
     my ( $this, $fname ) = @_;
-    return
-      exists $this->{uploads}->{$fname} ? $this->{uploads}->{$fname}->tmpFileName : undef;
+    return $this->{uploads}->{$fname}
+      ? $this->{uploads}->{$fname}->tmpFileName
+      : undef;
 }
 
 =begin twiki
@@ -685,7 +703,7 @@ Please, use =header()= instead. Present only for compatibility with CGI.
 sub http {
     my ($this, $p) = @_;
     if ( defined $p ) {
-        $p =~ s/^https?-//i;
+        $p =~ s/^https?[_-]//i;
         return $this->header( $p );
     }
     return $this->header();
@@ -704,11 +722,8 @@ Present only for compatibility with CGI.
 =cut
 
 sub https {
-    my ($this, $p) = @_;
-    return $this->secure if !defined $p || $p =~ /^https$/i;
-    $p =~ tr/a-z_/A-Z-/;
-    $p =~ s/^HTTPS?-//;
-    return $this->header( $p );
+    my ( $this, $p ) = @_;
+    return !defined $p || $p =~ /^https$/i ? $this->secure : $this->http($p);
 }
 
 =begin twiki
@@ -734,38 +749,5 @@ Convenience method to get Referer uri.
 =cut
 
 sub referer   { shift->header('Referer')    };
-
-# ======== Private methods ==========
-
-sub _header {
-    my ( $this, $field, $val, $op ) = @_;
-
-    unless ( $field =~ /^:/ ) {
-        $field =~ tr/_/-/;
-        my $old = $field;
-        $field = lc $field;
-    }
-
-    my $h = $this->{headers}->{$field};
-    my @old = ref($h) eq 'ARRAY' ? @$h : ( defined($h) ? ($h) : () );
-
-    $op ||= defined($val) ? 'SET' : 'GET';
-    unless ( $op eq 'GET' || ( $op eq 'INIT' && @old ) ) {
-        if ( defined($val) ) {
-            my @new = ( $op eq 'PUSH' ) ? @old : ();
-            if ( ref($val) ne 'ARRAY' ) {
-                push( @new, $val );
-            }
-            else {
-                push( @new, @$val );
-            }
-            $this->{headers}->{$field} = @new > 1 ? \@new : $new[0];
-        }
-        elsif ( $op ne 'PUSH' ) {
-            delete $this->{headers}->{$field};
-        }
-    }
-    return @old;
-}
 
 1;

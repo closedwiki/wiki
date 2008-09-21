@@ -136,7 +136,6 @@ sub prepareBody {
     my ( $this, $req ) = @_;
    
     return unless $ENV{CONTENT_LENGTH};
-    CGI::initialize_globals();
     my $cgi = new CGI();
     my $err = $cgi->cgi_error;
     throw TWiki::EngineException($1, $2)
@@ -148,11 +147,11 @@ sub prepareBodyParameters {
     my ( $this, $req ) = @_;
     
     return unless $ENV{CONTENT_LENGTH};
-    my %p = $this->{cgi}->Vars;
-    while ( my ( $key, $value ) = each %p ) {
-        my @values = $value =~ /\0/ ? (split /\0/, $value) : ($value);
-        $req->bodyParam( -name => $key, -value => \@values );
-        $this->{uploads}->{$key} = 1 if scalar $this->{cgi}->upload($key);
+    my @plist = $this->{cgi}->param();
+    foreach my $pname ( @plist ) {
+        my @values = $this->{cgi}->param($pname);
+        $req->bodyParam( -name => $pname, -value => \@values );
+        $this->{uploads}->{$pname} = 1 if scalar $this->{cgi}->upload($pname);
     }
 }
 
@@ -163,8 +162,7 @@ sub prepareUploads {
     my %uploads;
     foreach my $key ( keys %{ $this->{uploads} } ) {
         my $fname = $this->{cgi}->param($key);
-        $uploads{$key} = new TWiki::Request::Upload(
-            name    => $key,
+        $uploads{$fname} = new TWiki::Request::Upload(
             headers => $this->{cgi}->uploadInfo($fname),
             tmpname => $this->{cgi}->tmpFileName($fname),
         );

@@ -48,7 +48,6 @@ sub new {
     my ( $proto, %args ) = @_;
     my $class = ref($proto) || $proto;
     my $this = {
-        fname   => $args{name},
         headers => $args{headers},
         tmpname => $args{tmpname},
     };
@@ -68,7 +67,6 @@ Deletes temp file associated.
 # documentation" of the live fields in the object.
 sub finish {
     my $this = shift;
-    undef $this->{fname};
     undef $this->{headers};
     # Note: untaint filename. Taken from CGI.pm
     unlink ( $this->tmpFileName =~ m{^([a-zA-Z0-9_ \'\":/.\$\\-]+)$} );
@@ -97,7 +95,9 @@ Returns an open filehandle to uploaded file.
 =cut
 
 sub handle {
-    return new IO::File( $_[0]->{tmpname}, '<' );
+    my $fh = new IO::File( $_[0]->{tmpname}, '<' );
+    $fh->binmode;
+    return $fh;
 }
 
 =begin twiki
