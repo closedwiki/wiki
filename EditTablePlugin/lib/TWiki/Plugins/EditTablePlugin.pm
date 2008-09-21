@@ -23,7 +23,7 @@ use strict;
 
 use vars qw(
   $web $topic $user $VERSION $RELEASE $debug
-  $query $renderingWeb $usesJavascriptInterface $viewModeHeaderDone $editModeHeaderDone $encodeStart $encodeEnd $prefsInitialized
+  $query $usesJavascriptInterface $viewModeHeaderDone $editModeHeaderDone $encodeStart $encodeEnd $prefsInitialized
   %editMode %saveMode $ASSET_URL
 );
 
@@ -35,7 +35,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '4.8.4';
+$RELEASE = '4.8.5';
 
 $encodeStart = '--EditTableEncodeStart--';
 $encodeEnd   = '--EditTableEncodeEnd--';
@@ -65,7 +65,6 @@ sub initPlugin {
     $viewModeHeaderDone = 0;
     $editModeHeaderDone = 0;
     $prefsInitialized   = 0;
-    $renderingWeb       = $web;
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug(

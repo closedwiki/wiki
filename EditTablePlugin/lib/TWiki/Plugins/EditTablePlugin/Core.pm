@@ -242,7 +242,7 @@ s/$editTablePluginRE/&handleEditTableTag( $theWeb, $theTopic, $1, $2 )/geo;
 
         if ( $doSave && ( $tableNr != $saveTableNr ) ) {
 
-            # nothing (rewrite this condition...)
+            # nothing (TODO: rewrite this condition...)
         }
         else {
 
@@ -1100,7 +1100,7 @@ sub inputElement {
         TWiki::Plugins::EditTablePlugin::encodeValue($theValue)
           unless ( $theValue eq '' );
         $theValue = "\*$theValue\*" if ( $isHeader and $digestedCellValue );
-        $text .= hiddenField( $preSp, $theName, $theValue );
+        $text .= ' ' . hiddenField( $preSp, $theName, $theValue );
         $text = "\*$text\*" if ($isHeader);
 
     }
@@ -1328,8 +1328,8 @@ sub addSpaceToBothSides {
     return $text if $text eq '';
 
     $text = " $text ";
-    $text =~ s/^\s+/ /;    # remove extra spaces
-    $text =~ s/\s+$/ /;
+    $text =~ s/^[[:space:]]+/ /;    # remove extra spaces
+    $text =~ s/[[:space:]]+$/ /;
     return $text;
 }
 
@@ -1632,8 +1632,8 @@ Trim any leading and trailing white space and/or '*'.
 sub _trim {
     my ($totrim) = @_;
     for my $element (@$totrim) {
-        $element =~ s/^[\s\*]+//;    # Strip off leading white
-        $element =~ s/[\s\*]+$//;    # Strip off trailing white
+        $element =~ s/^[[:space:]]+//;    # Strip leading spaces
+        $element =~ s/[[:space:]]+$//;    # Strip trailing spaces
     }
 }
 
