@@ -74,7 +74,7 @@ ACTUAL
 sub test_simpleTheadTableUsingTablePlugin {
     my $this = shift;
 
-    my $cgi = $this->{twiki}->{request};
+    my $cgi = $this->{request};
     my $url = $cgi->url(-absolute => 1);
 
     my $expected = <<EXPECTED;
@@ -146,7 +146,7 @@ ACTUAL
 sub test_doubleTheadTableUsingTablePlugin {
     my $this = shift;
 
-    my $cgi = $this->{twiki}->{request};
+    my $cgi = $this->{request};
     my $url = $cgi->url(-absolute => 1);
 
     my $expected = <<EXPECTED;
@@ -189,7 +189,7 @@ ACTUAL
 sub test_doubleTheadandTfootTableusingTablePlugin {
     my $this = shift;
 
-    my $cgi = $this->{twiki}->{request};
+    my $cgi = $this->{request};
     my $url = $cgi->url(-absolute => 1);
 
     my $expected = <<EXPECTED;
