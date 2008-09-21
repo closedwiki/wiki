@@ -271,211 +271,366 @@ sub test_query_param {
     
     $req->queryParam( -name => 'q1', -value => 'v1' );
     my @result = $req->param('q1');
-    $this->assert_str_equals( 'v1', $result[0],
-        'wrong value from queryParam()' );
-    $this->assert_num_equals(
-        1,
-        scalar @result,
-        'wrong number of returned values from queryParam()'
-    );
+    $this->assert_deep_equals(['v1'], \@result, 'wrong value from queryParam()');
+    
     $req->queryParam( -name => 'q2', -values => [qw(v1 v2)] );
-    
-    @result = ();
     @result = $req->param('q2');
-    $this->assert_str_equals( 'v1', $result[0],
-        'wrong value from queryParam()' );
-    $this->assert_str_equals( 'v2', $result[1],
-        'wrong value from queryParam()' );
-    $this->assert_num_equals(
-        2,
-        scalar @result,
-        'wrong number of returned values from queryParam()'
-    );
+    $this->assert_deep_equals([qw(v1 v2)], \@result, 'wrong value from queryParam()');
+    
     $req->queryParam('p', qw(qv1 qv2 qv3));
-    
-    @result = ();
     @result =  $req->param('p');
-    $this->assert_str_equals( 'qv1', $result[0],
-        'wrong value from queryParam()' );
-    $this->assert_str_equals( 'qv2', $result[1],
-        'wrong value from queryParam()' );
-    $this->assert_str_equals( 'qv3', $result[2],
-        'wrong value from queryParam()' );
-    $this->assert_num_equals(
-        3,
-        scalar @result,
-        'wrong number of returned values from queryParam()'
-    );
+    $this->assert_deep_equals([qw(qv1 qv2 qv3)], \@result, 'wrong value from queryParam()');
     
-    @result = ();
     @result = $req->queryParam();
-    $this->assert_str_equals( 'q1', $result[0],
-        'wrong parameter name from queryParam()' );
-    $this->assert_str_equals( 'q2', $result[1],
-        'wrong parameter name from queryParam()' );
-    $this->assert_str_equals( 'p',  $result[2],
-        'wrong parameter name from queryParam()' );
-    $this->assert_num_equals(
-        3,
-        scalar @result,
-        'wrong number of returned values from queryParam()'
-    );
+    $this->assert_deep_equals([qw(q1 q2 p)], \@result, 'wrong parameter name from queryParam()');
     
-    @result = ();
     @result = (scalar $req->param('q2'));
-    $this->assert_str_equals( 'v1', $result[0],
-        'wrong parameter name from queryParam()' );
-    $this->assert_num_equals(
-        1,
-        scalar @result,
-        'wrong number of returned values from queryParam()'
-    );
+    $this->assert_deep_equals(['v1'], \@result, 'wrong parameter name from queryParam()');
 
-    @result = ();
     @result = (scalar $req->queryParam('nonexistent'));
-    $this->assert_str_equals(1, scalar @result, '$req->param(nonexistent) not empty');
-    $this->assert_null($result[0], q{$req->param(nonexistent) didn't return undef});
+    $this->assert_deep_equals([undef], \@result, 'wrong parameter name from queryParam()');
     
-    @result = ();
     @result = $req->queryParam('nonexistent');
-    $this->assert_str_equals(0, scalar @result, '$req->param(nonexistent) not empty');
+    $this->assert_num_equals(0, scalar @result, 'wrong parameter name from queryParam()');
+
+    $req = new TWiki::Request("");
+    $req->method('POST');
+    $req->queryParam( -name => 'q1', -value => 'v1' );
+    @result = $req->param('q1');
+    $this->assert_num_equals(0, scalar @result, 'wrong value from queryParam()');
 }
 
 sub test_body_param {
     my $this = shift;
     my $req  = new TWiki::Request("");
+    
     $req->bodyParam( -name => 'q1', -value => 'v1' );
     my @result = $req->param('q1');
-    $this->assert_str_equals( 'v1', $result[0],
-        'wrong value from bodyParam()' );
-    $this->assert_num_equals(
-        1,
-        scalar @result,
-        'wrong number of returned values from bodyParam()'
-    );
+    $this->assert_deep_equals(['v1'], \@result, 'wrong value from bodyParam()');
+    
     $req->bodyParam( -name => 'q2', -values => [qw(v1 v2)] );
-    @result = ();
     @result = $req->param('q2');
-    $this->assert_str_equals( 'v1', $result[0],
-        'wrong value from bodyParam()' );
-    $this->assert_str_equals( 'v2', $result[1],
-        'wrong value from bodyParam()' );
-    $this->assert_num_equals(
-        2,
-        scalar @result,
-        'wrong number of returned values from bodyParam()'
-    );
+    $this->assert_deep_equals([qw(v1 v2)], \@result, 'wrong value from bodyParam()');
+    
     $req->bodyParam('p', qw(qv1 qv2 qv3));
-    @result = ();
     @result =  $req->param('p');
-    $this->assert_str_equals( 'qv1', $result[0],
-        'wrong value from bodyParam()' );
-    $this->assert_str_equals( 'qv2', $result[1],
-        'wrong value from bodyParam()' );
-    $this->assert_str_equals( 'qv3', $result[2],
-        'wrong value from bodyParam()' );
-    $this->assert_num_equals(
-        3,
-        scalar @result,
-        'wrong number of returned values from bodyParam()'
-    );
-    @result = ();
+    $this->assert_deep_equals([qw(qv1 qv2 qv3)], \@result, 'wrong value from bodyParam()');
+    
     @result = $req->bodyParam();
-    $this->assert_str_equals( 'q1', $result[0],
-        'wrong parameter name from bodyParam()' );
-    $this->assert_str_equals( 'q2', $result[1],
-        'wrong parameter name from bodyParam()' );
-    $this->assert_str_equals( 'p',  $result[2],
-        'wrong parameter name from bodyParam()' );
-    $this->assert_num_equals(
-        3,
-        scalar @result,
-        'wrong number of returned values from bodyParam()'
-    );
-    @result = ();
+    $this->assert_deep_equals([qw(q1 q2 p)], \@result, 'wrong parameter name from bodyParam()');
+    
     @result = (scalar $req->param('q2'));
-    $this->assert_str_equals( 'v1', $result[0],
-        'wrong parameter name from bodyParam()' );
-    $this->assert_num_equals(
-        1,
-        scalar @result,
-        'wrong number of returned values from bodyParam()'
-    );
-    
-    @result = ();
+    $this->assert_deep_equals(['v1'], \@result, 'wrong parameter name from bodyParam()');
+
     @result = (scalar $req->bodyParam('nonexistent'));
-    $this->assert_str_equals(1, scalar @result, '$req->param(nonexistent) not empty');
-    $this->assert_null($result[0], q{$req->param(nonexistent) didn't return undef});
+    $this->assert_deep_equals([undef], \@result, 'wrong parameter name from bodyParam()');
     
-    @result = ();
     @result = $req->bodyParam('nonexistent');
-    $this->assert_str_equals(0, scalar @result, '$req->param(nonexistent) not empty');
-}
-
-sub test_query_body_param {
-    my $this = shift;
-    my $req  = new TWiki::Request("");
-    $req->queryParam( -name => 'p', -values => [qw(qv1 qv2)] );
-    $req->bodyParam(  -name => 'p', -values => [qw(bv1 bv2)] );
-    my @result = $req->param('p');
-    $this->assert_num_equals(
-        4,
-        scalar @result,
-        'wrong number of returned values from bodyParam()+queryParam()'
-    );
-    $this->assert_str_equals( 'bv1', $result[0],
-        'wrong value on bodyParam()+queryparam()' );
-    $this->assert_str_equals( 'bv2', $result[1],
-        'wrong value on bodyParam()+queryparam()' );
-    $this->assert_str_equals( 'qv1', $result[2],
-        'wrong value on bodyParam()+queryparam()' );
-    $this->assert_str_equals( 'qv2', $result[3],
-        'wrong value on bodyParam()+queryparam()' );
-}
-
-sub test_cookie_x {
+    $this->assert_deep_equals([], \@result, 'wrong parameter name from bodyParam()');
 }
 
 sub test_cookies {
+    my $this    = shift;
+    my $req     = new TWiki::Request("");
+    my %cookies = ();
+    $cookies{c1} = $req->cookie( -name => 'c1', -value => 'value1' );
+    $this->assert(
+        UNIVERSAL::isa( $cookies{c1}, 'CGI::Cookie' ),
+        "cookie() didn't return a CGI::Cookie object"
+    );
+    $cookies{c2} = $req->cookie( -name => 'c2', -value => 'value2' );
+    my @result = $req->cookie();
+    $this->assert_num_equals(
+        0,
+        scalar @result,
+        'cookie() method must not store cookies created'
+    );
+    
+    $req->cookies( \%cookies );
+    @result = $req->cookie();
+    $this->assert_deep_equals(
+        [qw(c1 c2)],
+        [ sort @result ],
+        'wrong returned cookie names'
+    );
+    $this->assert_equals( 'value1', $req->cookie('c1'), 'wrong cookie value' );
+    $this->assert_equals( 'value2', $req->cookie('c2'), 'wrong cookie value' );
+    
+    @result = $req->cookie('nonexistent');
+    $this->assert_num_equals(
+        0,
+        scalar @result,
+        'returned value for non-existent cookie name'
+    );
+
+    $result[0] = $req->cookie(-value => 'test');
+    $this->assert_null($result[0], 'cookie() did not return undef for invalid parameters');
+    
+    $result[0] = $req->cookie(-value => 'test', -name=> '');
+    $this->assert_null($result[0], 'cookie() did not return undef for invalid parameters');
+    
+    $result[0] = $req->cookie(
+        -name    => 'c3',
+        -value   => 'value3',
+        -path    => '/test',
+        -expires => '1234',
+        -secure  => 1
+    );
+    $result[1] = new CGI::Cookie(
+        -name    => 'c3',
+        -value   => 'value3',
+        -path    => '/test',
+        -expires => '1234',
+        -secure  => 1
+    );
+    $this->assert_deep_equals($result[0], $result[1], 'Wrong returned cookie');
 }
 
 sub test_delete {
+    my $this = shift;
+    my $req  = new TWiki::Request("");
+
+    $req->param( -name => 'q2', -values => [qw(v1 v2)] );
+    $req->param( -name => 'q1', -value  => 'v1' );
+    $req->param( 'p', qw(qv1 qv2 qv3) );
+    $req->param( -name => 'q3', -value => 'v3' );
+    require File::Temp;
+    my $tmp = File::Temp->new( UNLINK => 0 );
+    my ( %uploads, %headers ) = ();
+    %headers = (
+        'Content-Type'        => 'text/plain',
+        'Content-Disposition' => 'form-data; name="file"; filename="Temp.txt"'
+    );
+    $req->param( file => "Temp.txt" );
+    $uploads{"Temp.txt"} = new TWiki::Request::Upload(
+        headers => {%headers},
+        tmpname => $tmp->filename,
+    );
+    $req->uploads( \%uploads );
+
+    my @result = $req->param();
+    $this->assert_deep_equals( [qw(q2 q1 p q3 file)], \@result,
+        'wrong returned parameter values' );
+
+    $req->delete('q1');
+    @result = $req->param();
+    $this->assert_deep_equals( [qw(q2 p q3 file)], \@result,
+        'wrong returned parameter values' );
+
+    $req->Delete(qw(q2 q3));
+    @result = $req->param();
+    $this->assert_deep_equals( [qw(p file)], \@result,
+        'wrong returned parameter values' );
+
+    $req->delete('file');
+    @result = $req->param();
+    $this->assert_deep_equals( [qw(p)], \@result,
+        'wrong returned parameter values' );
+    $this->assert( !-e $tmp->filename,
+        'Uploaded file not deleted after call to delete()' );
 }
 
 sub test_delete_all {
+    my $this = shift;
+    my $req  = new TWiki::Request("");
+
+    $req->param( -name => 'q2', -values => [qw(v1 v2)] );
+    $req->param( -name => 'q1', -value  => 'v1' );
+    $req->param( 'p', qw(qv1 qv2 qv3) );
+    $req->param( -name => 'q3', -value  => 'v3' );
+    require File::Temp;
+    my $tmp = File::Temp->new( UNLINK => 0 );
+    my ( %uploads, %headers ) = ();
+    %headers = (
+        'Content-Type'        => 'text/plain',
+        'Content-Disposition' => 'form-data; name="file"; filename="Temp.txt"'
+    );
+    $req->param( file => "Temp.txt" );
+    $uploads{"Temp.txt"} = new TWiki::Request::Upload(
+        headers => {%headers},
+        tmpname => $tmp->filename,
+    );
+    $req->uploads( \%uploads );
+    
+    my @result = $req->param();
+    $this->assert_deep_equals( [qw(q2 q1 p q3 file)], \@result,
+        'wrong returned parameter values' );
+    
+    $req->deleteAll();
+    @result = $req->param();
+    $this->assert_num_equals(0, scalar @result, "deleteAll didn't work");
+    
+    $req->param( -name => 'q2', -values => [qw(v1 v2)] );
+    $req->param( -name => 'q1', -value  => 'v1' );
+    $req->param( 'p', qw(qv1 qv2 qv3) );
+    $req->param( -name => 'q3', -value  => 'v3' );
+    $tmp = File::Temp->new( UNLINK => 0 );
+    $req->param( file => "Temp.txt" );
+    $uploads{"Temp.txt"} = new TWiki::Request::Upload(
+        headers => {%headers},
+        tmpname => $tmp->filename,
+    );
+    $req->uploads( \%uploads );
+    
+    $req->delete_all();
+    @result = $req->param();
+    $this->assert_num_equals(0, scalar @result, "deleteAll didn't work");
 }
 
-sub test_header_x {
+sub test_header {
+    my $this = shift;
+    my $req  = new TWiki::Request("");
+    
+    $req->header( 'h-1' => 'v1' );
+    my @result = $req->header('H-1');
+    $this->assert_deep_equals(['v1'], \@result, 'wrong value from header()');
+    
+    $req->header( 'h2' => [qw(v1 v2)] );
+    
+    @result = $req->header('h2');
+    $this->assert_deep_equals([qw(v1 v2)], \@result, 'wrong value from header()');
+    
+    $req->header('h', qw(v1 v2 v3));
+    @result =  $req->header('h');
+    $this->assert_deep_equals([qw(v1 v2 v3)], \@result, 'wrong value from header()');
+    
+    @result = sort $req->header();
+    $this->assert_deep_equals([qw(h h-1 h2)], \@result, 'wrong header field names from header()');
+    
+    @result = (scalar $req->header('h2'));
+    $this->assert_deep_equals(['v1'], \@result, 'wrong header field values from header()');
+
+    @result = (scalar $req->header('nonexistent'));
+    $this->assert_deep_equals([undef], \@result, 'wrong header field values from header()');
+    
+    @result = $req->header('nonexistent');
+    $this->assert_deep_equals([], \@result, 'wrong header field values from header()');
 }
 
-sub test_save_x {
+sub test_save {
+    my $this = shift;
+    my $req = new TWiki::Request("");
+    $req->param(-name => 'simple', -value => 's1');
+    $req->param(-name => 'simple2', -value => 's2');
+    $req->param(-name => 'multi', -value => [qw(m1 m2)]);
+    $req->param(-name => 'undef', -value => [undef]);
+    require File::Temp;
+    my $tmp = File::Temp->new(UNLINK => 1);
+    $req->save($tmp);
+    seek($tmp, 0, 0);
+    $this->assert_str_equals(<<EOF
+simple=s1
+simple2=s2
+multi=m1
+multi=m2
+undef=
+=
+EOF
+, join('', <$tmp>), 'Wrong generated file');
 }
 
-sub test_load_x {
+sub test_load {
+    my $this = shift;
+    require File::Temp;
+    my $tmp = File::Temp->new(UNLINK => 1);
+    print($tmp <<EOF
+simple=s1
+simple2=s2
+multi=m1
+multi=m2
+undef=
+=
+EOF
+);
+    seek($tmp, 0, 0);
+    my $req = new TWiki::Request("");
+    $req->load($tmp);
+    $this->assert_str_equals(4, scalar $req->param(), 'Wrong number of parameters');
+    $this->assert_str_equals('s1', $req->param('simple'), 'Wrong parameter value');
+    $this->assert_str_equals('s2', $req->param('simple2'), 'Wrong parameter value');
+    my @values = $req->param('multi');
+    $this->assert_str_equals(2, scalar @values, 'Wrong number o values');
+    $this->assert_str_equals('m1', $values[0], 'Wrong parameter value');
+    $this->assert_str_equals('m2', $values[1], 'Wrong parameter value');
+    $this->assert_null($req->param('undef'), 'Wrong parameter value');
 }
 
-sub test_upload_x {
-}
+sub test_upload {
+    my $this = shift;
+    my $req  = new TWiki::Request("");
 
-sub test_uploadInfo {
-}
+    require File::Temp;
+    my $tmp = File::Temp->new( UNLINK => 1 );
+    print( $tmp <<EOF
+Arbitrary file...
+EOF
+    );
+    seek($tmp, 0, 0);
+    my ( %uploads, %headers ) = ();
+    %headers = (
+        'Content-Type'        => 'text/plain',
+        'Content-Disposition' => 'form-data; name="file"; filename="Temp.txt"'
+    );
+    $req->param( file => "Temp.txt" );
+    $uploads{"Temp.txt"} = new TWiki::Request::Upload(
+        headers => {%headers},
+        tmpname => $tmp->filename,
+    );
+    $req->uploads( \%uploads );
 
-sub test_tmpFileName {
-}
-
-sub test_uploads {
+    my $fname = $req->param('file');
+    $this->assert_deep_equals(
+        \%headers,
+        $req->uploadInfo($fname),
+        'Wrong uploadInfo'
+    );
+    $this->assert_str_equals(
+        $tmp->filename,
+        $req->tmpFileName($fname),
+        'Wrong tmpFileName()'
+    );
+    my $fh = $req->upload('file');
+    my $text = join('', <$fh>);
+    $this->assert_str_equals("Arbitrary file...\n", $text, 'Wrong file contents');
 }
 
 sub test_accessors {
-}
-
-# Test CGI.pm interface compatibility
-sub test_cgi_compat {
     my $this = shift;
-# - Verify methods availability:
-#   - Aliases
-#   - http()
-#   - https()
+    my $req  = new TWiki::Request("");
+
+    my $accept =
+      'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8';
+    $req->header( 'User-Agent' => 'Mozilla/5.0' );
+    $req->header( 'Referer'    => 'http://foo.bar' );
+    $req->header( 'Accept'     => $accept );
+    $req->secure(0);
+
+    $this->assert_str_equals( 'Mozilla/5.0', $req->user_agent,
+        'Wrong User-Agent' );
+    $this->assert_str_equals( 'Mozilla/5.0', $req->userAgent,
+        'Wrong User-Agent' );
+    $this->assert_str_equals( 'http://foo.bar', $req->referer,
+        'Wrong referer()' );
+    $this->assert_str_equals( $accept, $req->http('accept'),
+        'Wrong value from http()' );
+    $this->assert_str_equals(
+        $accept,
+        $req->http('http_accept'),
+        'Wrong value from http()'
+    );
+    $this->assert_str_equals(
+        $accept,
+        $req->http('HTTP_ACCEPT'),
+        'Wrong value from http()'
+    );
+    $this->assert_num_equals( 0, $req->https, 'Wrong https flag' );
+
+    $req->secure(1);
+    $this->assert_num_equals( 1, $req->https('https'), 'Wrong https flag' );
+
+    my @result = sort $req->http();
+    $this->assert_deep_equals( [qw(accept referer user-agent)],
+        \@result, 'Wrong header field names' );
 }
 
 1;
