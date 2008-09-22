@@ -157,6 +157,7 @@ sub execute {
             $req->load(\*F);
             close(F);
             unlink($passthruFilename);
+            $req->delete('twiki_redirect_cache');
             print STDERR "Passthru: Loaded and unlinked $passthruFilename\n"
               if TRACE_PASSTHRU;
         }
