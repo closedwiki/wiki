@@ -51,8 +51,7 @@ sub do_upload {
         $query->param( -name => 'filepath', -value => $fn );
         my %uploads = ();
         require TWiki::Request::Upload;
-        $uploads{filepath} = new TWiki::Request::Upload(
-            name    => 'filepath',
+        $uploads{$fh} = new TWiki::Request::Upload(
             headers => {},
             tmpname => $tmpfile->as_string
         );
