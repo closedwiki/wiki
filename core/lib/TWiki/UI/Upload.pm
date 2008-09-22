@@ -187,10 +187,8 @@ sub upload {
 
     unless( $doPropsOnly ) {
         my $fh = $query->param( 'filepath' );
-        # $fh is both a file name *and* a file handle (see the CGI doc)
 
         try {
-            # SMELL: use of undocumented CGI::tmpFileName
             $tmpFilePath = $query->tmpFileName( $fh );
         } catch Error::Simple with {
             # Item5130, Item5133 - Illegal file name, bad path,
