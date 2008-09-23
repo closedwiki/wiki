@@ -78,10 +78,10 @@ Gets/Sets response status.
 
 sub status {
     my ( $this, $status ) = @_;
-    if ( $status ) {
-        $this->{status} = $status;
+    if ($status) {
+        $this->{status} = $status =~ /^\d{3}/ ? $status : undef;
     }
-    return $_[0]->{status};
+    return $this->{status};
 }
 
 =begin twiki
@@ -185,7 +185,16 @@ are scalars for single-valued headers or arrayref for multivalued ones.
 =cut
 
 sub headers {
-    return @_ == 1 ? $_[0]->{headers} : ( $_[0]->{headers} = $_[1] );
+    my ($this, $hdr) = @_;
+    if ($hdr) {
+        my %headers = ();
+        while ( my ($key, $value) = each %$hdr ) {
+            $key =~ s/(?:^|(?<=-))(.)([^-]*)/\u$1\L$2\E/g;
+            $headers{$key} = $value;
+        }
+        $this->{headers} = \%headers;
+    }
+    return $this->{headers};
 }
 
 =begin twiki
@@ -201,6 +210,7 @@ associated with $name.
 sub getHeader {
     my ( $this, $hdr ) = @_;
     return keys %{ $this->{headers} } unless $hdr;
+    $hdr =~ s/(?:^|(?<=-))(.)([^-]*)/\u$1\L$2\E/g;
     my $value = $this->{headers}->{$hdr};
     return ref $value ? @$value : ( $value );
 }
@@ -215,7 +225,10 @@ Deletes headers whose names are passed.
 
 sub deleteHeader {
     my $this = shift;
-    delete $this->{headers}->{$_} foreach @_;
+    foreach (@_) {
+        ( my $hdr = $_ ) =~ s/(?:^|(?<=-))(.)([^-]*)/\u$1\L$2\E/g;
+        delete $this->{headers}->{$hdr};
+    }
 }
 
 =begin twiki
@@ -228,6 +241,8 @@ Adds $value to list of values associated with header $name.
 
 sub pushHeader {
     my ( $this, $hdr, $value ) = @_;
+
+    $hdr =~ s/(?:^|(?<=-))(.)([^-]*)/\u$1\L$2\E/g;
     my $cur = $this->{headers}->{$hdr};
     if ( $cur ) {
         if ( ref $cur ) {
@@ -244,7 +259,7 @@ sub pushHeader {
 
 =begin twiki
 
----++ ObjectMethod cookies( [ \@cookies ] ) -> \@cookies
+---++ ObjectMethod cookies( [ \@cookies ] ) -> @cookies
 
 Gets/Sets response cookies. Parameter, if passed, *must* be an arrayref.
 
