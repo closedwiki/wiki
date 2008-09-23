@@ -176,6 +176,7 @@ BEGIN {
 
     # Default handlers for different %TAGS%
     %functionTags = (
+        ADDTOHEAD         => \&ADDTOHEAD,
         ALLVARIABLES      => \&ALLVARIABLES,
         ATTACHURL         => \&ATTACHURL,
         ATTACHURLPATH     => \&ATTACHURLPATH,
@@ -209,6 +210,7 @@ BEGIN {
         REMOTE_ADDR       => \&REMOTE_ADDR_deprecated,
         REMOTE_PORT       => \&REMOTE_PORT_deprecated,
         REMOTE_USER       => \&REMOTE_USER_deprecated,
+        RENDERHEAD        => \&RENDERHEAD,
         REVINFO           => \&REVINFO,
         REVTITLE          => \&REVTITLE,
         REVARG            => \&REVARG,
@@ -2928,25 +2930,131 @@ sub handleCommonTags {
 
 =pod
 
----++ ObjectMethod addToHEAD( $id, $html )
+---++ ObjectMethod ADDTOHEAD( $args )
 
 Add =$html= to the HEAD tag of the page currently being generated.
 
 Note that TWiki variables may be used in the HEAD. They will be expanded
 according to normal variable expansion rules.
 
-The 'id' is used to ensure that multiple adds of the same block of HTML don't
-result in it being added many times.
+---+++ =%<nop>ADDTOHEAD%=
+You can write =%ADDTOHEAD{...}%= in a topic or template. This variable accepts the following parameters:
+   * =_DEFAULT= optional, id of the head block. Used to generate a comment in the output HTML.
+   * =text= optional, text to use for the head block. Mutually exclusive with =topic=.
+   * =topic= optional, full TWiki path name of a topic that contains the full text to use for the head block. Mutually exclusive with =text=. Example: =topic="%WEB%.MyTopic"=.
+   * =requires= optional, comma-separated list of id's of other head blocks this one depends on.
+=%<nop>ADDTOHEAD%= expands in-place to the empty string, unless there is an error in which case the variable expands to an error string.
+
+Use =%<nop>RENDERHEAD%= to generate the sorted head tags.
 
 =cut
 
+sub ADDTOHEAD {
+    my ($this, $args, $topic, $web) = @_;
+
+    my $_DEFAULT = $args->{_DEFAULT};
+    my $text = $args->{text};
+    $topic = $args->{topic};
+    my $requires = $args->{requires};
+    if (defined $topic) {
+        ($web, $topic) = $this->normalizeWebTopicName($web, $topic);
+        my $dummy = undef;
+        ($dummy, $text) = $this->{store}->readTopic($this->{user}, $web, $topic);
+    }
+    $text = $_DEFAULT unless defined $text;
+    $text = '' unless defined $text;
+
+    $this->addToHEAD($_DEFAULT, $text, $requires);
+    return '';
+}
+
 sub addToHEAD {
-	my ($this, $tag, $header) = @_;
-	
+	my( $this, $tag, $header, $requires ) = @_;
+
+    # Expand TWiki variables in the header
 	$header = $this->handleCommonTags( $header, $this->{webName},
                                        $this->{topicName} );
 	
-	$this->{_HTMLHEADERS}{$tag} = $header;
+    $this->{_SORTEDHEADS} ||= {};
+    $tag ||= '';
+
+    $requires ||= '';
+    my $debug = '';
+
+    # Resolve to references to build DAG
+    my @requires;
+    foreach my $req (split(/,\s*/, $requires)) {
+        unless ($this->{_SORTEDHEADS}->{$req}) {
+            $this->{_SORTEDHEADS}->{$req} = {
+                tag => $req,
+                requires => [],
+                header => '',
+            };
+        }
+        push(@requires, $this->{_SORTEDHEADS}->{$req});
+    }
+    my $record = $this->{_SORTEDHEADS}->{$tag};
+    unless ($record) {
+        $record = { tag => $tag };
+        $this->{_SORTEDHEADS}->{$tag} = $record;
+    }
+    $record->{requires} = \@requires;
+    $record->{header} = $header;
+
+    # Temporary, for compatibility until %RENDERHEAD% is embedded
+    # in the skins
+    $this->{_HTMLHEADERS}{GENERATED_HEADERS} = _genHeaders($this);
+}
+
+sub _visit {
+    my ($v, $visited, $list) = @_;
+    return if $visited->{$v};
+    foreach my $r (@{$v->{requires}}) {
+        _visit($r, $visited, $list);
+    }
+    push(@$list, $v);
+    $visited->{$v} = 1;
+}
+
+sub _genHeaders {
+    my ($this) = @_;
+    return '' unless $this->{_SORTEDHEADS};
+
+    # Loop through the vertices of the graph, in any order, initiating
+    # a depth-first search for any vertex that has not already been
+    # visited by a previous search. The desired topological sorting is
+    # the reverse postorder of these searches. That is, we can construct
+    # the ordering as a list of vertices, by adding each vertex to the
+    # start of the list at the time when the depth-first search is
+    # processing that vertex and has returned from processing all children
+    # of that vertex. Since each edge and vertex is visited once, the
+    # algorithm runs in linear time.
+    my %visited;
+    my @total;
+    foreach my $v (values %{$this->{_SORTEDHEADS}}) {
+        _visit($v, \%visited, \@total);
+    }
+
+    return join(
+        "\n",
+        map { "<!-- $_->{tag} --> $_->{header}" } @total);
+}
+
+=pod
+
+---+++ %<nop}RENDERHEAD%
+=%RENDERHEAD%= should be written where you want the sorted head tags to be generated. This will normally be in a template. The variable expands to a sorted list of the head blocks added up to the point the RENDERHEAD variable is expanded. Each expanded head block is preceded by an HTML comment that records the ID of the head block.
+
+Head blocks are sorted to satisfy all their =requires= constraints.
+The output order of blocks with no =requires= value is undefined. If cycles
+exist in the dependency order, the cycles will be broken but the resulting
+order of blocks in the cycle is undefined.
+
+=cut
+
+sub RENDERHEAD {
+    my $this = shift;
+    return _genHeaders($this);
 }
 
 =pod

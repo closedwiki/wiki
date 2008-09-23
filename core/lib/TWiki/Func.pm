@@ -2001,13 +2001,14 @@ sub redirectCgiQuery {
 
 =pod
 
----+++ addToHEAD( $id, $header )
+---+++ addToHEAD( $id, $header, $requires )
 
 Adds =$header= to the HTML header (the <head> tag).
 This is useful for Plugins that want to include some javascript custom css.
    * =$id= - Unique ID to prevent the same HTML from being duplicated. Plugins should use a prefix to prevent name clashes (e.g EDITTABLEPLUGIN_JSCALENDAR)
    * =$header= - the HTML to be added to the <head> section. The HTML must be valid in a HEAD tag - no checks are performed.
-
+   * =requires= optional, comma-separated list of id's of other head blocks this one depends on.
+   
 All TWiki variables present in =$header= will be expanded before being inserted into the =<head>= section.
 
 Note that this is _not_ the same as the HTTP header, which is modified through the Plugins =modifyHeaderHandler=.
@@ -2016,15 +2017,15 @@ Note that this is _not_ the same as the HTTP header, which is modified through t
 
 example:
 <verbatim>
-TWiki::Func::addToHEAD('PATTERN_STYLE','<link id="twikiLayoutCss" rel="stylesheet" type="text/css" href="%PUBURL%/TWiki/PatternSkin/layout.css" media="all" />')
+TWiki::Func::addToHEAD('PATTERN_STYLE','<link id="twikiLayoutCss" rel="stylesheet" type="text/css" href="%PUBURL%/TWiki/PatternSkin/layout.css" media="all" />');
 </verbatim>
 
 =cut=
 
 sub addToHEAD {
-    my( $tag, $header ) = @_;
+    my( $tag, $header, $requires ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    $TWiki::Plugins::SESSION->addToHEAD( $tag, $header );
+    $TWiki::Plugins::SESSION->addToHEAD( @_ );
 }
 
 =pod
