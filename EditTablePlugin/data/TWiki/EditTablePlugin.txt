@@ -213,8 +213,9 @@ __Note:__ The Plugin uses base settings like date format, language and style fro
 |  Plugin Author: | TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2002-2008, TWiki:Main.PeterThoeny ([[http://www.twiki.net/][TWIKI.NET]]) and TWiki Contributors |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 4.8.5 (21 Sep 2008) |
+|  Plugin Version: | 4.8.6 (24 Sep 2008) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  24 Sep 2008: | 4.8.6 Fix parsing of header labels |
 |  21 Sep 2008: | 4.8.5 Fix rendering of TML inside label |
 |  03 Aug 2008: | 4.8.4 TWiki 4.2.1 release version |
 |  19 Jul 2008: | 4.8.3 Bugfix release |

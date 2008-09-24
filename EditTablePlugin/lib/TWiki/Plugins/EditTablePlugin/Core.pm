@@ -1099,9 +1099,9 @@ sub inputElement {
         $theValue = $cell if ( defined $cell );    # original value from file
         TWiki::Plugins::EditTablePlugin::encodeValue($theValue)
           unless ( $theValue eq '' );
-        $theValue = "\*$theValue\*" if ( $isHeader and $digestedCellValue );
-        $text .= ' ' . hiddenField( $preSp, $theName, $theValue );
+        #$theValue = "\*$theValue\*" if ( $isHeader and $digestedCellValue );
         $text = "\*$text\*" if ($isHeader);
+        $text .= ' ' . hiddenField( $preSp, $theName, $theValue );
 
     }
     elsif ( $type eq 'textarea' ) {
