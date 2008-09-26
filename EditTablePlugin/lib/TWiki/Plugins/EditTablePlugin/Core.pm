@@ -1099,6 +1099,7 @@ sub inputElement {
         $theValue = $cell if ( defined $cell );    # original value from file
         TWiki::Plugins::EditTablePlugin::encodeValue($theValue)
           unless ( $theValue eq '' );
+
         #$theValue = "\*$theValue\*" if ( $isHeader and $digestedCellValue );
         $text = "\*$text\*" if ($isHeader);
         $text .= ' ' . hiddenField( $preSp, $theName, $theValue );
@@ -1183,7 +1184,12 @@ sub handleTableRow {
         $theRow =~ s/\|\s*$//o;
         my $rowID = $query->param("etrow_id$theRowNr");
         $rowID = $theRowNr if !defined $rowID;
-        my @cells = split( /\|/, $theRow );
+        my @cells;
+        my $isNewRowFromHeader = ( $theRowNr <= 1 ) && ( $params{'header'} );
+        @cells =
+          $isNewRowFromHeader
+          ? split( /\|/, $params{'header'} )
+          : split( /\|/, $theRow );
         my $tmp = @cells;
         $nrCols = $tmp if ( $tmp > $nrCols );    # expand number of cols
         my $val         = '';
@@ -1244,7 +1250,7 @@ sub handleTableRow {
             $cell =~
               s/E_T_P_NOP//go;    # remove escaping of variables inside cells
 
-            if ( ( $theRowNr <= 1 ) && ( $params{'header'} ) ) {
+            if ($isNewRowFromHeader) {
                 unless ($cell) {
                     if ( $params{'header'} =~ /^on$/i ) {
                         if (   ( @format >= $col )
