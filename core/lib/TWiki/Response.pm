@@ -44,7 +44,7 @@ Fields:
 package TWiki::Response;
 use strict;
 use Assert;
-use CGI::Util 'rearrange';
+use CGI::Util qw(rearrange expires);
 
 =begin twiki
 
@@ -103,10 +103,12 @@ sub charset {
                           -status     => $status,
                           -cookie     => $cookie || \@cookies,
                           -attachment => $attachName,
+                          -charset    => $charset,
+                          -expires    => $expires,
                           -HeaderN    => ValueN )
 
 Sets response header. Resonably compatible with CGI. 
-Doesn't support -nph, -expires, -target and -p3p.
+Doesn't support -nph, -target and -p3p.
 
 =cut
 
@@ -116,10 +118,10 @@ sub header {
 
     # Ugly hack to avoid html escape in CGI::Util::rearrange
     local $CGI::Q = { escape => 0 };
-    my ( $type, $status, $cookie, $charset, $attachment, @other ) = rearrange(
+    my ( $type, $status, $cookie, $charset, $expires, $attachment, @other ) = rearrange(
         [
             [ 'TYPE',   'CONTENT_TYPE', 'CONTENT-TYPE' ], 'STATUS',
-            [ 'COOKIE', 'COOKIES' ],    'CHARSET',
+            [ 'COOKIE', 'COOKIES' ],    'CHARSET', 'EXPIRES',
             'ATTACHMENT',
         ],
         @p
@@ -168,6 +170,10 @@ sub header {
           ref($cookie) && ref($cookie) eq 'ARRAY' ? @$cookie : ($cookie);
         $this->cookies( \@cookie );
     }
+    $this->{headers}->{Expires} = expires( $expires, 'http' )
+      if ( defined $expires );
+    $this->{headers}->{Date} = expires( 0, 'http' )
+      if defined $expires || $cookie;
     $this->{headers}->{'Content-Disposition'} =
       "attachment; filename=\"$attachment\""
       if $attachment;
@@ -295,8 +301,8 @@ sub body {
 
 ---++ ObjectMethod redirect( $uri, $status, $cookies |
                              -Location => $uri, 
-                             -Status => $status, 
-                             -Cookies => $cookies )
+                             -Status   => $status, 
+                             -Cookies  => $cookies )
 
 Populate object with redirect response headers.
 
@@ -315,13 +321,11 @@ sub redirect {
             ],
             @p
     );
-    throw Error::Simple('TWiki::Response::redirect called without url param')
-        unless $url;
+    
+    return undef unless $url;
+    return undef if ( $status && $status !~ /^\s*3\d\d.*/ );
+    
     my @headers = (-Location => $url);
-     
-    throw Error::Simple(
-        'TWiki::Response::redirect called with invalid redirect status')
-        if ( $status && $status !~ /^\s*3\d\d.*/ );
     push @headers, '-Status' => ( $status || '302 Found' );
     push @headers, '-Cookie' => $cookies if $cookies;
     $this->header(@headers);

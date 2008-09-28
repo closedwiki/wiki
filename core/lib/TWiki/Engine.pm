@@ -358,14 +358,15 @@ Should populate $res' headers field with cookies, if any.
 
 sub finalizeCookies {
     my ( $this, $res ) = @_;
-    
+
     # SMELL: Review comment below, from CGI:
     #    if the user indicates an expiration time, then we need
     #    both an Expires and a Date header (so that the browser is
     #    uses OUR clock)
     $res->pushHeader( 'Set-Cookie',
-        UNIVERSAL::isa( $_, 'CGI::Cookie' ) ? $_->as_string : $_ )
-        foreach $res->cookies;
+        Scalar::Util::blessed $_
+          && $_->isa('CGI::Cookie') ? $_->as_string : $_ )
+      foreach $res->cookies;
 }
 
 =begin twiki
