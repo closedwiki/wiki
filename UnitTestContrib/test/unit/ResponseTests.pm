@@ -6,13 +6,6 @@ use warnings;
 
 use TWiki::Response;
 
-sub set_up {
-    my $this = shift;
-    $this->SUPER::set_up(@_);
-    $TWiki::cfg{ScriptUrlPath} = '/twiki/bin';
-    delete $TWiki::cfg{ScriptUrlPaths};
-}
-
 sub test_empty_new {
     my $this = shift;
     my $res = new TWiki::Response;
@@ -130,5 +123,112 @@ sub test_headers {
         'Wrong header fields'
     );
 }
+
+sub test_cookie {
+    my $this = shift;
+    my $res  = new TWiki::Response('');
+    require CGI::Cookie;
+    my $c1 = new CGI::Cookie(
+        -name   => 'TWIKISID',
+        -value  => '80eaee753351a6d4d050320ce4d60822',
+        -domain => 'localhost'
+    );
+    my $c2 = new CGI::Cookie( -name => 'Foo', -value => 'Bar' );
+    $res->cookies([$c1, $c2]);
+    $this->assert_deep_equals([$c1, $c2], [$res->cookies], 'Wrong returned cookies');
+}
+
+sub test_body {
+    my $this   = shift;
+    my $res    = new TWiki::Response('');
+    my $length = int( rand( 2**20 ) );
+    my $body;
+    for ( my $i = 0 ; $i < $length ; $i++ ) {
+        $body .= chr( int( rand(256) ) );
+    }
+    $res->body($body);
+    $this->assert_str_equals( $body, $res->body, 'Wrong returned body' );
+    $this->assert_num_equals(
+        $length,
+        $res->getHeader('Content-Length'),
+        'Wrong Content-Length header'
+    );
+}
+
+sub test_redirect {
+    my $this = shift;
+
+    my $res = new TWiki::Response('');
+    my ( $uri, $status ) = ();
+    $uri = 'http://foo.bar';
+    $res->redirect($uri);
+    $this->assert_str_equals(
+        $uri,
+        $res->getHeader('Location'),
+        'Wrong Location header'
+    );
+    $this->assert_matches(
+        '^3\d\d',
+        $res->getHeader('Status'),
+        'Wrong generated Status code'
+    );
+
+    $res    = new TWiki::Response('');
+    $uri    = 'http://bar.foo.baz/path/to/script/path/info';
+    $status = '301 Moved Permanently';
+    require CGI::Cookie;
+    my $cookie = new CGI::Cookie(
+        -name   => 'Cookie',
+        -value  => 'tasty cookie',
+        -domain => '.foo.baz'
+    );
+    $res->redirect( -status => $status, -Location => $uri, -Cookie => $cookie );
+    $this->assert_str_equals(
+        $uri,
+        $res->getHeader('Location'),
+        'Wrong Location header'
+    );
+    $this->assert_str_equals(
+        $status,
+        $res->getHeader('Status'),
+        'Wrong returned Status header'
+    );
+    $this->assert_deep_equals(
+        [$cookie],
+        [ $res->cookies ],
+        'Wrong cookie!'
+    );
+}
+
+sub test_header {
+    my $this = shift;
+    my $res  = new TWiki::Response('');
+
+    my $cookie = CGI::Cookie->new(
+        -name    => 'Foo',
+        -value   => 'bar',
+        -expires => '+1h'
+    );
+    $res->header(
+        -type       => 'text/plain',
+        -status     => '200 OK',
+        -cookie     => $cookie,
+        -expires    => '+2h',
+        -Connection => 'close',
+        -charset    => 'utf8',
+    );
+    $this->assert_str_equals(
+        'text/plain; charset=utf8',
+        $res->getHeader('Content-Type'),
+        'Wrong content-type'
+    );
+    $this->assert_str_equals('200 OK', $res->getHeader('Status'), 'Wrong status');
+    $this->assert_str_equals('close', $res->getHeader('Connection'), 'Wrong custom header value');
+    $this->assert_not_null($res->getHeader('expires'), 'Expires header not defined');
+    $this->assert_not_null($res->getHeader('date'), 'Date header not defined');
+    $this->assert_str_equals('utf8', $res->charset, 'charset object field not defined');
+    $this->assert_deep_equals([$cookie], [$res->cookies], 'Cookie not defined');
+}
+
 
 1;
