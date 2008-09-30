@@ -129,8 +129,9 @@ This plugin is pre-installed with your TWiki release. You should not have to ins
 |  Plugin Author: | TWiki:Main/JohnTalintyre, TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2001-2008, TWiki:Main/JohnTalintyre, Peter@Thoeny.org ([[http://www.twiki.net/][TWIKI.NET]]), TWiki Contributors |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 1.034 (03 Aug 2008) |
+|  Plugin Version: | 1.035 (30 Sep 2008) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  30 Sep 2008 | 1.035 Fix sorting of attachment date column.  |
 |  03 Aug 2008 | 1.034 TWiki 4.2.1 release version |
 |  20 Mar 2008 | 1.033 TWikibug:Item5387: allow rowspanned columns to contain HTML tags; otherwise it is impossible to add an invisible anchor to a rowspanned cell |
 |  16 Dec 2007 | 1.030: Kenneth Lavrsen: Fixed the problem of tables being sorted by by TablePlugin while the table is being edited by plugins such as EditTablePlugin. This required adding a new attribute =disableallsort= so plugins such as EditTablePlugin can temporarily disable all sorting for a table. Additionally the CGI variable (URL parameter or hidden formfield) =sort= can be set to "off" which disables all header sorting in the topic. This is used by plugins such as EditTablePlugin to disable the sorting by clicking header fields during editing of tables. Ref: TWikibug:Item5135 and TWikibug:Item2690. |

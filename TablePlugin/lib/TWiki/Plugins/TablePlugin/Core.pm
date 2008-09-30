@@ -505,8 +505,7 @@ sub _parseParameters {
 sub _convertToNumberAndDate {
     my ($text) = @_;
 
-    $text =~ s/&nbsp;/ /go;
-    $text =~ s/<\/?nobr>/ /go;
+    $text = _stripHtml($text);
 
     my $num  = undef;
     my $date = undef;
@@ -533,6 +532,12 @@ m|^\s*([0-9]{1,2})[-\s/]*([A-Z][a-z][a-z])[-\s/]*([0-9]{4})\s*-\s*([0-9][0-9]):(
         $year += 1900 if ( length($year) == 2 && $year > 80 );
         $year += 2000 if ( length($year) == 2 );
         $date = timegm( 0, 0, 0, $1, $mon2num{$2}, $year - 1900 );
+    }
+    elsif ( $text =~ /^\s*([0-9]+)(\.([0-9]))*(.?)*$/ ) {
+
+        # for example for attachment sizes: 1.1 K
+        # but also for other strings that start with a number
+        $num = scalar("$1$2");
     }
     elsif ( $text =~ /^\s*[0-9]+(\.[0-9]+)?\s*$/ ) {
         $num = $text;
@@ -747,6 +752,7 @@ sub _guessColumnType {
         # else
         $columnIsValid = 1;
         ( $num, $date ) = _convertToNumberAndDate( $row->[$col]->{text} );
+
         $isDate = 0 if ( !defined($date) );
         $isNum  = 0 if ( !defined($num) );
         last if ( !$isDate && !$isNum );
@@ -777,7 +783,7 @@ sub _stripHtml {
     $text = _getImageTextForSorting($orgtext) if ( $text eq '' );
     $text =~ s/[\[\]\*\|=_\&\<\>]/ /g;    # remove Wiki formatting chars
     $text =~ s/^ *//go;                   # strip leading space space
-    $text = lc($text);                    # convert to lower case
+
     return $text;
 }
 
@@ -1309,7 +1315,7 @@ sub emitTable {
             }
         }
 
-        $stype = $columnType{'UNDEFINED'};
+        $stype = $columnType{'UNDEFINED'}; # default value
 
         # only get the column type if within bounds
         if ( $sortCol < $maxCols ) {
@@ -1328,13 +1334,13 @@ sub emitTable {
                 # SMELL: efficient? That's not efficient!
                 @curTable = map { $_->[0] }
                   sort { $b->[1] cmp $a->[1] }
-                  map { [ $_, _stripHtml( $_->[$sortCol]->{text} ) ] }
+                  map { [ $_, lc( $_->[$sortCol]->{text} ) ] }
                   @curTable;
             }
             if ( $currentSortDirection == $sortDirection{'ASCENDING'} ) {
                 @curTable = map { $_->[0] }
                   sort { $a->[1] cmp $b->[1] }
-                  map { [ $_, _stripHtml( $_->[$sortCol]->{text} ) ] }
+                  map { [ $_, lc( $_->[$sortCol]->{text} ) ] }
                   @curTable;
             }
         }
