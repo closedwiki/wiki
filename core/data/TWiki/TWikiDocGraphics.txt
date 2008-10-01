@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1196729838" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1222844046" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and Filetype icons
 
 This is the TWiki icon library. The graphics can be used in topics and by web applications. 
@@ -61,6 +61,11 @@ Other usage: [[%TOPIC%#Usage_extended][see below]].
 | <img src="%ATTACHURLPATH%/starred.gif" alt="Red star, highlight" title="Red star, highlight" />  | =starred.gif= | Red star, highlight | =%<nop>S%=, =%<nop>ICON{starred}%= |
 | <img src="%ATTACHURLPATH%/stop.gif" alt="Stop" title="Stop" />  | =stop.gif= | Stop | =%<nop>ICON{stop}%= |
 | <img src="%ATTACHURLPATH%/target.gif" alt="Target" title="Target" />  | =target.gif= | Target | =%<nop>ICON{target}%= |
+| <img src="%ATTACHURLPATH%/target-blue.gif" alt="Target - blue" title="Target - blue" />  | =target-blue.gif= | Target - blue | =%<nop>ICON{target-blue}%= |
+| <img src="%ATTACHURLPATH%/target-gray.gif" alt="Target - gray" title="Target - gray" />  | =target-gray.gif= | Target - gray | =%<nop>ICON{target-gray}%= |
+| <img src="%ATTACHURLPATH%/target-green.gif" alt="Target - green" title="Target - green" />  | =target-green.gif= | Target - green | =%<nop>ICON{target-green}%= |
+| <img src="%ATTACHURLPATH%/target-orange.gif" alt="Target - orange" title="Target - orange" />  | =target-orange.gif= | Target - orange | =%<nop>ICON{target-orange}%= |
+| <img src="%ATTACHURLPATH%/target-red.gif" alt="Target - red" title="Target - red" />  | =target-red.gif= | Target - red | =%<nop>ICON{target-red}%= |
 | <img src="%ATTACHURLPATH%/tip.gif" alt="Tip, idea" title="Tip, idea" />  | =tip.gif= | Tip, idea | =%<nop>T%=, =%<nop>ICON{tip}%= |
 | <img src="%ATTACHURLPATH%/video.gif" alt="Video" title="Video" />  | =video.gif= | Video, 13x10 | =&lt;img src="%<nop>ICONURL{video}%" width="13" height="10" alt="Video" border="0" /&gt;= |
 | <img src="%ATTACHURLPATH%/warning.gif" alt="Warning, important" title="Warning, important" />  | =warning.gif= | Warning, important | =%<nop>X%=, =%<nop>ICON{warning}%= |
@@ -578,6 +583,11 @@ __Contributors:__ Most icons on this page were originally designed by TWiki:Main
 %META:FILEATTACHMENT{name="tag-yellow.gif" attr="" comment="" date="1169565034" path="tag-yellow.gif" size="348" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="tag.gif" attr="" comment="" date="1169565034" path="tag.gif" size="348" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="target.gif" attr="" comment="" date="1169565034" path="target.gif" size="261" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="target-blue.gif" comment="" date="1222843427" path="target-blue.gif" size="972" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="target-gray.gif" comment="" date="1222843442" path="target-gray.gif" size="967" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="target-green.gif" comment="" date="1222843435" path="target-green.gif" size="978" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="target-orange.gif" comment="" date="1222843419" path="target-orange.gif" size="963" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="target-red.gif" attr="" comment="" date="1169565034" path="target-red.gif" size="261" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="tip.gif" attr="" comment="" date="1169565034" path="tip.gif" size="233" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="todo.gif" attr="" comment="" date="1169565034" path="todo.gif" size="318" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="toggleclose-mini.gif" attr="" comment="" date="1169565034" path="toggleclose-mini.gif" size="51" user="TWikiContributor" version=""}%
