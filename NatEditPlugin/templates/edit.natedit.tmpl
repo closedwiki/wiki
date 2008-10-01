@@ -7,6 +7,7 @@
 
 %TMPL:DEF{"twikistyle"}%%TMPL:P{"styles"}%%TMPL:END%
 
+%TMPL:DEF{"titleaction"}%%MAKETEXT{"(edit)"}% %TMPL:END%
 %TMPL:DEF{"pagetitle"}%<h1 class="patternTemplateTitle"><nop>%TOPIC% %MAKETEXT{"(edit)"}%</h1>%TMPL:END%
 %TMPL:DEF{"pagetitlestylewrapper"}%<!-- backwards compatibility -->%TMPL:END%
 
@@ -19,6 +20,7 @@
 %TMPL:END%
 
 %TMPL:DEF{"content"}%<!-- -->
+<div class="natEdit">
 %TMPL:P{"pagetitle"}%
 %TMPL:P{"formstart"}%%TMPL:P{"formattop"}%
 <input type="hidden" name="action_addform" value="" />
@@ -29,7 +31,7 @@
 <input type="hidden" name="action_cancel" value="" />
 <textarea rows="5" cols="22" style="display:none" id="savearea"></textarea>
 %TMPL:P{"tabpane"}%<!-- -->
-%TMPL:P{"bottomtopicactions"}%%TMPL:P{"formend"}%%TMPL:END%
+%TMPL:P{"bottomtopicactions"}%%TMPL:P{"formend"}%</div>%TMPL:END%
 
 %TMPL:DEF{"help"}%%TMPL:P{"edithelp"}%%TMPL:END%
 %TMPL:DEF{"pagehelp"}%<!-- -->
@@ -47,8 +49,21 @@
 
 %TMPL:DEF{"formfields"}%%TMPL:P{"form"}%%TMPL:END%
 
+%TMPL:DEF{"topicmeta"}%<!-- topicmeta -->
+<div class="natEditTopicInfo"><literal>
+  <table>
+  <tr class="natEditTopicTitle">
+    <th>Title:</th>
+    <td><input class="twikiInputField" type="text" name="TopicTitle" size="80" value="%URLPARAM{"TopicTitle" default="%TOPICTITLE%" type="html"}%" /></td>
+  </tr>
+  </table>
+</literal></div>
+<!-- //topicmeta -->%TMPL:END%
+
+
 %TMPL:DEF{"firsttab"}%<!-- firsttab -->
 %TAB{"%MAKETEXT{"Text"}%" after="$.natedit.autoMaxExpand('#topic')"}%
+%TMPL:P{"topicmeta"}%
 %TMPL:P{"textarea"}%<!-- -->
 %ENDTAB%
 <!-- //firsttab -->%TMPL:END%

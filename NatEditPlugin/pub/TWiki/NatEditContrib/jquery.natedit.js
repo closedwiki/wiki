@@ -18,10 +18,12 @@
  */
 function writeDebug(msg) {
   if ($.natedit.defaults.debug) {
+    var msg = "DEBUG: NatEdit - "+msg;
     if (window.console && window.console.log) { // firebug console
-      window.console.log("DEBUG: NatEdit - "+msg);
+      window.console.log(msg);
     } else {
-      alert("DEBUG: NatEdit - "+msg)
+      //$("#natExtraDiv4").append(msg+"<br />");
+      //alert(msg);
     }
   }
 };
@@ -118,10 +120,10 @@ $.natedit = {
     imageButton: '<li class="natEditImageButton"><a href="javascript:void(0)" title="Embed image"><span>Image</span></a></li>',
     verbatimButton: '<li class="natEditVerbatimButton"><a href="javascript:void(0)" title="Ignore wiki formatting"><span>Verbatim</span></a></li>',
     signatureButton: '<li class="natEditSignatureButton"><a href="javascript:void(0)" title="Your signature with timestamp"><span>Sign</span></a></li>',
-    h1Markup: ['\n---+ ','Headline text','\n'],
-    h2Markup: ['\n---++ ','Headline text','\n'],
-    h3Markup: ['\n---+++ ','Headline text','\n'],
-    h4Markup: ['\n---++++ ','Headline text','\n'],
+    h1Markup: ['---+ ','%TOPIC%',''],
+    h2Markup: ['---++ ','Headline text',''],
+    h3Markup: ['---+++ ','Headline text',''],
+    h4Markup: ['---++++ ','Headline text',''],
     boldMarkup: ['*', 'Bold text', '*'],
     italicMarkup: ['_', 'Italic text', '_'],
     monoMarkup: ['=', 'Monospace text', '='],
@@ -167,25 +169,25 @@ $.natedit = {
     var width = $(textarea).width();
 
     // toolbar
-    var $headlineTools = $('<ul class="natEditHeadlineTools"></ul>').
+    var $headlineTools = $('<ul class="natEditButtonBox"></ul>').
       append(
         $(opts.h1Button).click(function() {
-          $.natedit.insertTag(textarea, opts.h1Markup);
+          $.natedit.insertLineTag(textarea, opts.h1Markup);
         })).
       append(
         $(opts.h2Button).click(function() {
-          $.natedit.insertTag(textarea, opts.h2Markup);
+          $.natedit.insertLineTag(textarea, opts.h2Markup);
         })).
       append(
         $(opts.h3Button).click(function() {
-          $.natedit.insertTag(textarea, opts.h3Markup);
+          $.natedit.insertLineTag(textarea, opts.h3Markup);
         })).
       append(
         $(opts.h4Button).click(function() {
-          $.natedit.insertTag(textarea, opts.h4Markup);
+          $.natedit.insertLineTag(textarea, opts.h4Markup);
         }));
 
-    var $textTools = $('<ul class="natEditTextTools"></ul>').
+    var $textTools = $('<ul class="natEditButtonBox"></ul>').
       append(
         $(opts.boldButton).click(function() {
           $.natedit.insertTag(textarea, opts.boldMarkup);
@@ -207,7 +209,7 @@ $.natedit = {
           $.natedit.insertTag(textarea, opts.strikeMarkup);
         }));
 
-    var $paragraphTools = $('<ul class="natEditParagraphTools"></ul>').
+    var $paragraphTools = $('<ul class="natEditButtonBox"></ul>').
       append(
         $(opts.leftButton).click(function() {
           $.natedit.insertTag(textarea, opts.leftMarkup);
@@ -225,7 +227,7 @@ $.natedit = {
           $.natedit.insertTag(textarea, opts.justifyMarkup);
         }));
 
-    var $listTools = $('<ul class="natEditListTools"></ul>').
+    var $listTools = $('<ul class="natEditButtonBox"></ul>').
       append(
         $(opts.numberedButton).click(function() {
           $.natedit.insertLineTag(textarea, opts.numberedListMarkup);
@@ -244,7 +246,7 @@ $.natedit = {
         }));
 
 
-    var $objectTools = $('<ul class="natEditObjectTools"></ul>').
+    var $objectTools = $('<ul class="natEditButtonBox"></ul>').
       append(
         $(opts.extButton).click(function() {
           $.natedit.insertTag(textarea, opts.extMarkup);
@@ -338,83 +340,107 @@ $.natedit = {
   /*************************************************************************
    * work horse 1
    */
-  insertTag: function(textarea, markup) {
+  insertTag: function(txtarea, markup) {
     var tagOpen = markup[0];
     var sampleText = markup[1];
     var tagClose = markup[2];
-    //writeDebug("called insertTag("+tagOpen+", "+sampleText+", "+tagClose+")");
-    textarea.focus();
+    writeDebug("called insertTag("+tagOpen+", "+sampleText+", "+tagClose+")");
+    txtarea.focus();
+      
+    $.natedit.getSelectionRange(txtarea);
 
-    // IE
-    if (document.selection && !$.browser.opera) {
-      var theSelection = document.selection.createRange().text;
+    var startPos = txtarea.selectionStart;
+    var endPos = txtarea.selectionEnd;
+    var text = txtarea.value;
+    var scrollTop = txtarea.scrollTop;
+    var theSelection = text.substring(startPos, endPos);
 
-      if (!theSelection) {
-        theSelection = sampleText;
-      }
+    writeDebug("startPos="+startPos+" endPos="+endPos);
 
-      if (theSelection.charAt(theSelection.length - 1) == " ") { 
-        // exclude ending space char, if any
-        theSelection = theSelection.substring(0, theSelection.length - 1);
-        tagClose += " ";
-      }
-      document.selection.createRange().text = 
-        tagOpen + theSelection + tagClose;
-
-    // Mozilla
-    } else if (textarea.selectionStart || textarea.selectionStart == '0') {
-      var replaced = false;
-      var startPos = textarea.selectionStart;
-      var endPos = textarea.selectionEnd;
-      var scrollTop = textarea.scrollTop;
-      var theSelection = (textarea.value).substring(startPos, endPos);
-
-      if (endPos - startPos > 0) {
-        replaced = true;
-      }
-      if (!theSelection) {
-        theSelection = sampleText;
-      }
-      if (theSelection.charAt(theSelection.length - 1) == " ") { 
-        // exclude ending space char, if any
-        subst = 
-          tagOpen + 
-          theSelection.substring(0, (theSelection.length - 1)) + 
-          tagClose + " ";
-      } else {
-        subst = tagOpen + theSelection + tagClose;
-      }
-      textarea.value = 
-        textarea.value.substring(0, startPos) + subst +
-        textarea.value.substring(endPos, textarea.value.length);
-
-      // set new selection
-      if (replaced) {
-        startPos = endPos = 
-          startPos + 
-          tagOpen.length + 
-          theSelection.length + 
-          tagClose.length;
-      } else {
-        startPos += tagOpen.length;
-        endPos = startPos + theSelection.length;
-      }
-      textarea.scrollTop = scrollTop;
-      if (typeof(textarea.setSelectionRange) == 'function') {
-        textarea.setSelectionRange(startPos, endPos);
-      } else {
-        textarea.selectionStart = startPos;
-        textarea.selectionEnd = endPos;
-      }
+    if (!theSelection) {
+      theSelection = sampleText;
     }
 
-    if (textarea.createTextRange) {
-      textarea.caretPos = 
-        document.selection.createRange().duplicate();
+    if (theSelection.charAt(theSelection.length - 1) == " ") { 
+      // exclude ending space char, if any
+      subst = 
+        tagOpen + 
+        theSelection.substring(0, (theSelection.length - 1)) + 
+        tagClose + " ";
+    } else {
+      subst = tagOpen + theSelection + tagClose;
     }
-    $(textarea).trigger("keypress");
+
+    txtarea.value = 
+      text.substring(0, startPos) + subst +
+      text.substring(endPos, text.length);
+
+    // set new selection
+    startPos += tagOpen.length;
+    endPos = startPos + theSelection.length;
+    txtarea.scrollTop = scrollTop;
+    $.natedit.setSelectionRange(txtarea, startPos, endPos);
+    $(txtarea).trigger("keypress");
   },
 
+  /*************************************************************************
+   * compatibility method for IE: this sets txtarea.selectionStart and
+   * txtarea.selectionEnd of the current selection in the given textarea 
+   */
+  getSelectionRange: function(txtarea) {
+     writeDebug("called getSelectionRange()");
+
+     if (document.selection && !$.browser.opera) {    // IE
+      writeDebug("IE");
+      txtarea.focus();
+
+      var text = txtarea.value;
+      var c = "\001";
+      var range = document.selection.createRange();
+      var selection = range.text || "";
+      var rangeCopy = range.duplicate();
+      rangeCopy.moveToElementText(txtarea);
+      range.text = c;
+      var pos = (rangeCopy.text.indexOf(c));
+
+      range.moveStart("character", -1);
+      range.text = selection;
+
+
+      if (pos < 0) {
+        pos = text.length;
+        selection = "";
+      }
+
+      txtarea.selectionStart = pos;
+
+      if (selection == "") {
+        txtarea.selectionEnd = pos;
+      } else {
+        txtarea.selectionEnd = pos + selection.length;
+      }
+
+    }
+  },
+
+  /*************************************************************************
+   * set the selection
+   */
+  setSelectionRange: function(txtarea, start, end) {
+    txtarea.focus();
+    if (txtarea.createTextRange && !$.browser.opera) {
+      var lineFeeds = txtarea.value.substring(0, start).replace(/[^\r]/g, "").length;
+      var range = txtarea.createTextRange();
+      range.collapse(true);
+      range.moveStart('character', start-lineFeeds);
+      range.moveEnd('character', end-start);
+      range.select();
+    } else { 
+      txtarea.selectionStart = start;
+      txtarea.selectionEnd = end;
+    }
+  },
+ 
   /*************************************************************************
    * work horse 2:
    * used for line oriented tags - like bulleted lists
@@ -423,41 +449,46 @@ $.natedit = {
    * if there is a selection, select the entire line for each line selected
    */
   insertLineTag: function(txtarea, markup) {
+    writeDebug("called inisertLineTag("+txtarea+", "+markup+")");
     var tagOpen = markup[0];
     var sampleText = markup[1];
     var tagClose = markup[2];
-    var selRange = $.natedit.getSelectionRange(txtarea);
-    var startPos = selRange.from;
-    var endPos = selRange.to;
-    //writeDebug("startPos="+startPos+", endPos="+endPos);
+
+    $.natedit.getSelectionRange(txtarea);
+
+    var startPos = txtarea.selectionStart
+    var endPos = txtarea.selectionEnd;
+    var text = txtarea.value;
+
+    writeDebug("startPos="+startPos+" endPos="+endPos);
 
     // at this point we need to expand the selection to the \n before the startPos, and after the endPos
-    var adjustedStartPos = txtarea.value.lastIndexOf('\n', startPos-1);
-    if (adjustedStartPos == -1) {
-      startPos = 0; // first line in textarea has no \n
-    } else if (adjustedStartPos < startPos) {
-      startPos = adjustedStartPos+1;
+    while (startPos > 0 && 
+      text.charCodeAt(startPos-1) != 13 &&
+      text.charCodeAt(startPos-1) != 10) 
+    {
+      startPos--;
     }
 
-    var adjustedEndPos = txtarea.value.indexOf('\n', endPos);
-    if (adjustedEndPos == -1) {
-      endPos = txtarea.value.length; // first line in textarea has no \n
-    } else if ((adjustedEndPos > endPos) && 
-      (txtarea.value.charAt(endPos) != '\n')  && 
-      (txtarea.value.charAt(endPos) != '\r')) {
-      endPos = adjustedEndPos;
+    while (endPos < text.length && 
+      text.charCodeAt(endPos) != 13 && 
+      text.charCodeAt(endPos) != 10) 
+    {
+      endPos++;
     }
-   
+
+    writeDebug("startPos="+startPos+" endPos="+endPos);
+
     var scrollTop = txtarea.scrollTop;
-    var theSelection = (txtarea.value).substring(startPos, endPos);
+    var theSelection = text.substring(startPos, endPos);
 
     if (!theSelection) {
       theSelection = sampleText;
     }
-      
-    var pre = txtarea.value.substring(0, startPos);
-    var post = txtarea.value.substring(endPos, txtarea.value.length);
-      
+
+    var pre = text.substring(0, startPos);
+    var post = text.substring(endPos, text.length);
+
     // test if it is a multi-line selection, and if so, add tagOpen&tagClose to each line
     var lines = theSelection.split(/\r?\n/);
     var isMultiline = lines.length>1?true:false;
@@ -474,12 +505,7 @@ $.natedit = {
         if ((tagOpen == '') && (sampleText == '') && (tagClose == '')) {
           subst = line.replace(/^   (\* |\d+ |\d+\. )?/, '');
         } else {
-          if (line.match(/^(   )*(   (\*|\d+|\d+\.) )/) &&
-              (tagOpen.match(/^(   )*(   (\*|\d+|\d+\.) )/))) {
-            subst = line.replace(/   (\* |\d+ |\d+\. )/, tagOpen);
-          } else {
-            subst = tagOpen + line + tagClose;
-          }
+          subst = tagOpen + line + tagClose;
         }
       }
 
@@ -490,71 +516,11 @@ $.natedit = {
 
     txtarea.value = pre + modifiedSelection + post;
 
-    if (document.selection && !$.browser.opera) {
-      //IE
-      txtarea.focus();
-      var range = txtarea.createTextRange();
-      range.collapse(true);
-               
-      var ctrlR = pre.replace(/[^\r]/g, '');     //ranges don't seem to 'count' the \r chars :/
-                
-      range.moveStart("character", startPos-ctrlR.length + (isMultiline?0:tagOpen.length));
-      range.moveEnd("character", modifiedSelection.length);
-      range.select();
-    } else {
-      txtarea.focus();
-      //set new selection
-      var cPos = startPos + modifiedSelection.length;
-      txtarea.selectionStart = startPos + (isMultiline?0:tagOpen.length);
-      txtarea.selectionEnd = cPos;
-      txtarea.scrollTop = scrollTop;
-    }
-  },
+    startPos += (isMultiline?0:tagOpen.length);
+    endPos = startPos + modifiedSelection.length - (isMultiline?0:tagOpen.length-tagClose.length);
 
-  /*************************************************************************
-   * returns {from: int, to: int} marking the offsets of the 
-   * current selection in the given textarea 
-   */
-  getSelectionRange: function(txtarea) {
-     var selRange = {};
-
-     if (document.selection && !$.browser.opera) {    // IE
-      var theSelection = document.selection.createRange().text();
-
-      if (theSelection != null) {
-        selRange.to = theSelection.length;
-      } else {
-        selRange.to = 0;
-      }
-
-      { // SMELL: put that in a local function to prevent redundancy further down
-        // nasty cursor stuff - as createRange stuff breaks when you don't have a selection
-        txtarea.focus();
-        var txtareaText = txtarea.value; // backup
-        var c  = "\001";
-        var sel = document.selection.createRange();
-        var dul = sel.duplicate(); 
-        dul.moveToElementText(txtarea);
-        sel.text = c;
-        // seems there is a problem with counting \r's IE
-        var tempText = dul.text;
-        sel.moveStart('character',-1);
-        var tempText = tempText.substring(0, tempText.indexOf(c));
-        selRange.from  = tempText.length;
-        txtarea.value = txtareaText; // restore
-      }
-      selRange.to+= selRange.from;
-      
-    } else { 
-      // FF, opera safari, etc
-   
-      selRange.from = txtarea.selectionStart;
-      selRange.to = txtarea.selectionEnd;
-    }
-
-    //writeDebug(from+', '+to);
-
-    return selRange;
+    $.natedit.setSelectionRange(txtarea, startPos, endPos);
+    txtarea.scrollTop = scrollTop;
   },
 
   /*************************************************************************
