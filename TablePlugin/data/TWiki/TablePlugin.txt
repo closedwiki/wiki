@@ -129,7 +129,7 @@ This plugin is pre-installed with your TWiki release. You should not have to ins
 |  Plugin Author: | TWiki:Main/JohnTalintyre, TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2001-2008, TWiki:Main/JohnTalintyre, Peter@Thoeny.org ([[http://www.twiki.net/][TWIKI.NET]]), TWiki Contributors |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 1.035 (30 Sep 2008) |
+|  Plugin Version: | 1.036 (01 Oct 2008) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
 |  30 Sep 2008 | 1.035 Fix sorting of attachment date column.  |
 |  03 Aug 2008 | 1.034 TWiki 4.2.1 release version |

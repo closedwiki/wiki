@@ -537,9 +537,12 @@ m|^\s*([0-9]{1,2})[-\s/]*([A-Z][a-z][a-z])[-\s/]*([0-9]{4})\s*-\s*([0-9][0-9]):(
 
         # for example for attachment sizes: 1.1 K
         # but also for other strings that start with a number
-        $num = scalar("$1$2");
+        my $num1 = $1 || 0;
+        my $num2 = $2 || 0;
+        $num = scalar("$num1$num2");
     }
     elsif ( $text =~ /^\s*[0-9]+(\.[0-9]+)?\s*$/ ) {
+
         $num = $text;
     }
 
