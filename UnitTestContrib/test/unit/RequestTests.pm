@@ -392,6 +392,7 @@ sub test_delete {
 
     $req->param( -name => 'q2', -values => [qw(v1 v2)] );
     $req->param( -name => 'q1', -value  => 'v1' );
+    $req->param( -name => 'null', -value => 0);
     $req->param( 'p', qw(qv1 qv2 qv3) );
     $req->param( -name => 'q3', -value => 'v3' );
     require File::Temp;
@@ -409,15 +410,15 @@ sub test_delete {
     $req->uploads( \%uploads );
 
     my @result = $req->param();
-    $this->assert_deep_equals( [qw(q2 q1 p q3 file)], \@result,
+    $this->assert_deep_equals( [qw(q2 q1 null p q3 file)], \@result,
         'wrong returned parameter values' );
 
     $req->delete('q1');
     @result = $req->param();
-    $this->assert_deep_equals( [qw(q2 p q3 file)], \@result,
+    $this->assert_deep_equals( [qw(q2 null p q3 file)], \@result,
         'wrong returned parameter values' );
 
-    $req->Delete(qw(q2 q3));
+    $req->Delete(qw(q2 q3 null));
     @result = $req->param();
     $this->assert_deep_equals( [qw(p file)], \@result,
         'wrong returned parameter values' );

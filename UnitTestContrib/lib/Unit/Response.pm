@@ -30,13 +30,14 @@ BEGIN {
 sub new {
     die "You must call Unit::Response::new() *after* TWiki::new()\n"
       unless defined $res;
+    bless $res, __PACKAGE__ unless $res->isa(__PACKAGE__);
     return $res;
 }
 
 sub DESTROY {
     my $this = shift;
     $res = undef;
-    $this->SUPER::DESTROY(@_);
+    bless $this, $Unit::Response::ISA[0];
 }
 
 1;
