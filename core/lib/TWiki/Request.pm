@@ -413,14 +413,14 @@ sub param {
     return @{ $this->{param_list} } unless $key;
     if ( defined $value[0] ) {
         push @{ $this->{param_list} }, $key
-          unless exists $this->{param}->{$key};
-        $this->{param}->{$key} =
+          unless exists $this->{param}{$key};
+        $this->{param}{$key} =
           ref $value[0] eq 'ARRAY' ? $value[0] : [@value];
     }
-    if ( defined $this->{param}->{$key} ) {
+    if ( defined $this->{param}{$key} ) {
         return wantarray
-            ? @{ $this->{param}->{$key} }
-            : $this->{param}->{$key}->[0];
+            ? @{ $this->{param}{$key} }
+            : $this->{param}{$key}->[0];
     }
     else {
         return wantarray ? () : undef;
@@ -449,8 +449,8 @@ sub cookie {
         @p );
     unless ( defined $value ) {
         return keys %{ $this->{cookies} } unless $name;
-        return () unless $this->{cookies}->{$name};
-        return $this->{cookies}->{$name}->value if defined $name && $name ne '';
+        return () unless $this->{cookies}{$name};
+        return $this->{cookies}{$name}->value if defined $name && $name ne '';
     }
     return undef unless defined $name && $name ne '';
     return new CGI::Cookie(
@@ -490,12 +490,12 @@ Deletes parameters from request.
 sub delete {
     my $this = shift;
     foreach my $p (@_) {
-        next unless $this->param($p);
-        if ( my $upload = $this->{uploads}->{$this->param($p)} ) {
+        next unless exists $this->{param}{$p};
+        if ( my $upload = $this->{uploads}{$this->param($p)} ) {
             $upload->finish;
-            CORE::delete $this->{uploads}->{$this->param($p)};
+            CORE::delete $this->{uploads}{$this->param($p)};
         }
-        CORE::delete $this->{param}->{$p};
+        CORE::delete $this->{param}{$p};
         @{ $this->{param_list} } = grep { $_ ne $p } @{ $this->{param_list} };
     }
 }
@@ -555,13 +555,13 @@ sub header {
     $key = lc $key;
 
     if ( defined $value[0] ) {
-        $this->{headers}->{$key} =
+        $this->{headers}{$key} =
           ref $value[0] eq 'ARRAY' ? $value[0] : [@value];
     }
-    if ( defined $this->{headers}->{$key} ) {
+    if ( defined $this->{headers}{$key} ) {
         return wantarray
-          ? @{ $this->{headers}->{$key} }
-          : $this->{headers}->{$key}->[0];
+          ? @{ $this->{headers}{$key} }
+          : $this->{headers}{$key}->[0];
     }
     else {
         return wantarray ? () : undef;
@@ -633,7 +633,7 @@ to uploaded file.
 
 sub upload {
     my ( $this, $name ) = @_;
-    my $upload = $this->{uploads}->{$this->param($name)};
+    my $upload = $this->{uploads}{$this->param($name)};
     return defined $upload ? $upload->handle : undef;
 }
 
@@ -647,7 +647,7 @@ files as sent by browser.
 =cut
 
 sub uploadInfo {
-    return $_[0]->{uploads}->{ $_[1] }->uploadInfo;
+    return $_[0]->{uploads}{ $_[1] }->uploadInfo;
 }
 
 =begin twiki
@@ -662,8 +662,8 @@ $fname may be obtained by calling =param()= with form field name.
 
 sub tmpFileName {
     my ( $this, $fname ) = @_;
-    return $this->{uploads}->{$fname}
-      ? $this->{uploads}->{$fname}->tmpFileName
+    return $this->{uploads}{$fname}
+      ? $this->{uploads}{$fname}->tmpFileName
       : undef;
 }
 
