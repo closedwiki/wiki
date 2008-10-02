@@ -157,14 +157,20 @@ sub handleToolTip
      if ( ! $itopic ) { $itopic=$iweb; $iweb=$web; }
      if( TWiki::Func::topicExists( $iweb, $itopic ) ) 
      {
-        my ( $meta, $text ) = &TWiki::Func::readTopic( $iweb, $itopic );
-        $text =~ s/.*?%STARTINCLUDE%//os;
-        $text =~ s/%STOPINCLUDE%.*//os;
-        $theText = &TWiki::Func::expandCommonVariables($text, $itopic, $iweb);
-        $theText = &TWiki::Func::renderText( $theText );
-        $theText =~ s/\'//g;
-        $theText =~ s/\"//g;
-        $theText =~ s/\n//g;
+         $theText="<b> Denied: view of topic <nop>$params->{INCLUDE} not permitted</b>  !";
+         my ( $meta, $text ) = &TWiki::Func::readTopic( $iweb, $itopic );
+
+         if (TWiki::Func::checkAccessPermission(
+             'VIEW', TWiki::Func::getWikiName(), $text, $itopic, $iweb, $meta)) {
+
+            $text =~ s/.*?%STARTINCLUDE%//os;
+            $text =~ s/%STOPINCLUDE%.*//os;
+            $theText = &TWiki::Func::expandCommonVariables($text, $itopic, $iweb);
+            $theText = &TWiki::Func::renderText( $theText );
+            $theText =~ s/\'//g;
+            $theText =~ s/\"//g;
+            $theText =~ s/\n//g;
+         }
      } 
     }
 
