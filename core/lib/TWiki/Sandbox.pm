@@ -393,6 +393,7 @@ sub sysCommand {
             }
         } else {
             # Child - run the command
+            untie(*STDERR);
             open (STDERR, '>'.File::Spec->devnull()) || die "Can't kill STDERR: '$!'";
             unless ( exec( $path, @args ) ) {
                 syswrite(STDOUT, $key . ": $!\n");
@@ -440,7 +441,8 @@ sub sysCommand {
             # that tees the output. Unfortunately, what we need here is a plain
             # file handle, so we need to make sure we untie it. untie is a
             # NOP if STDOUT is not tied.
-            untie( *STDOUT ); untie( *STDERR );
+            untie(*STDOUT);
+            untie(*STDERR);
 
             open(STDOUT, ">&=".fileno( $writeHandle )) or die;
 
