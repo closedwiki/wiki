@@ -122,18 +122,18 @@ The same tooltip is displayed if Plugin is installed and not:
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PatrickNomblot  |
-|  Plugin Version: | 1.3 |
+|  Plugin Version: | %$VERSION% |
 |  Change History: | |
+|  2 Aug 2008 | TWiki:Main/GeorgeClark:  TWikibug:Item6040: Incomplete implementation of a TWiki::Func routine has security implications |
 |  28 Aug 2008 | TWiki:Main/GeorgeClark: TWikibug:Item5966: Syntax changed for calling wz_tooltip.js, updated to =wz_tooltip.js= V5.20, reworked documentation, .js file only included when %TOOLTIP is present in the topic. Also added support for optional extensions for balloon, scrolling and centered tips. |
 |  15 Apr 2006 | TWiki:Main/SteffenPoulsen: Updated with new version of =wz_tooltip.js= (updated browser support), support for Dakar, cleaned up doc a bit |
 |  21 Nov 2003 | TWiki:Main/PatrickNomblot: Initial version |
 |  10 Sep 2004 | TWiki:Main/PatrickNomblot: tooltip text can comes from any TOPIC |
 |  29 Dec 2005 | TWiki:Main/AndreUlrich: updated to wz_tooltip.js v. 3.38; added further parameters |
-|  CPAN Dependencies: | none |
-|  Other Dependencies: | ?? |
-|  Perl Version: | 5.6 |
+|  Dependencies: | %$DEPENDENCIES% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
