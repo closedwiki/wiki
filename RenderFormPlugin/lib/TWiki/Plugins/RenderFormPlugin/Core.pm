@@ -327,7 +327,7 @@ sub _renderFormField {
 		}
 		else { 
 			if ($options{mode} eq 'view') {
-				$td = $$def{value};
+				$td = (!defined $$def{value} || $$def{value} eq "") ? "&nbsp;" : $$def{value};
 			} else {
 				$td = $cgi->textfield({-size=>$$def{size}, -name=>$$def{name}, -default=>$$def{value}});
 			}
