@@ -8,7 +8,9 @@ $VERSION = '$Rev$';
 
 $RELEASE = 'Dakar';
 
-$REVISION = '1.000'; #dro# initial version
+
+$REVISION = '1.001'; #dro# changed topicparent default; added and fixed docs; 
+#$REVISION = '1.000'; #dro# initial version
 
 $pluginName = 'RenderFormPlugin';
 

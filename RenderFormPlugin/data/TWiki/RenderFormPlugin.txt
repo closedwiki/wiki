@@ -44,7 +44,7 @@ Features:
      </verbatim>
    * Sandbox.SimpleHelpDesk topic:
      <verbatim>
-%RENDERFORM{"SimpleHelpDeskForm" hidden="Answer,State" createbutton="submit" hideheader="yes" text="Back to !SimpleHelpDesk" topicparent="SimpleHelpDesk"}%
+%RENDERFORM{"SimpleHelpDeskForm" hidden="Answer,State" createbutton="submit" hideheader="yes" text="Back to !SimpleHelpDesk"}%
   
 | *Question* | *Date* | *State* |
 %SEARCH{search="SimpleHelpDesk\d+" scope="topic" type="regex" nonoise="on" format="| <a href=\"SimpleHelpDesk?rfp_topic=$topic;rfp_hidden=;rfp_hideheader=off\">$formfield(Question)</a> | $date | $formfield(State) |"}% 
@@ -52,6 +52,42 @@ Features:
 %TOPIC% 
      </verbatim>
 
+---+++ Nice Help Desk
+   * Sandbox.NiceHelpDeskForm topic:
+     <verbatim>
+| *Name* | *Type* | *Size* | *Values* | *Tooltip message* | *Attributes* |
+| Question | text | 80 | | | M |
+| Details | textarea | 80x10 | | please fill in some details ... | |
+| Answer | textarea | 80x10 | | Answer | |
+| State | select | 1 | open,closed | | |
+     </verbatim>
+   * Sandbox.NiceHelpDeskTemplate:
+     <verbatim>
+%TOC%
+---++ Question: %FORMFIELD{"Question"}% - State: %FORMFIELD{"State"}%
+
+Details:
+
+<pre>
+%FORMFIELD{"Details" default="no details"}%
+</pre>
+
+---++ Answer
+%FORMFIELD{"Answer" default="no answer yet"}%
+
+---++ Comments
+%COMMENT{type="threadmode"}%
+
+     </verbatim>
+   * Sandbox.NiceHelpDesk topic:
+     <verbatim>
+%RENDERFORM{"NiceHelpDeskForm" templatetopic="NiceHelpDeskTemplate" hidden="Answer,State" createbutton="submit" hideheader="yes"}%
+
+| *Question* | *Date* | *State* | *Action* |
+%SEARCH{search="NiceHelpDesk\d+" scope="topic" type="regex" nonoise="on" format="| [[$topic][$formfield(Question)]]| $date | $formfield(State) | <a href=\"NiceHelpDesk?rfp_topic=$topic;rfp_hidden=;rfp_hideheader=off\" title=\"View form data\">[V]</a>  <a href=\"NiceHelpDesk?rfp_topic=$topic;rfp_hidden=;rfp_hideheader=off;rfp_mode=edit\" title=\"edit form data\">[E]</a>  | "}%
+
+%TOPIC%
+     </verbatim>
 
 ---++ Attributes
 
@@ -108,8 +144,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2008, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | V1.000 (04 Oct 2008) |
+|  Plugin Version: | V1.001 (BETA) |
 |  Change History: | <!-- versions below in reverse order --> |
+|  V1.001 (BETA): | TWiki:Main:DanielRohde: changed topicparent default; added and fixed docs; |
 |  V1.000 (04 Oct 2008): | TWiki:Main:DanielRohde: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
