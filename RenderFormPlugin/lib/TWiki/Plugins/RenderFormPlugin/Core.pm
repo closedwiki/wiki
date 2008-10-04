@@ -174,6 +174,8 @@ sub render {
 					-action=>TWiki::Func::getScriptUrl($theWeb, $topic, $options{script}));
 	$text .= $cgi->a({-name=>"$formName"},"");
 
+	$options{topicparent} = "$theWeb.$theTopic" unless defined $options{topicparent};
+
 	$text .= $cgi->hidden(-name=>'formtemplate', -default=>$options{form});
 	$text .= $cgi->hidden(-name=>'templatetopic', -default=>$options{templatetopic}) if defined $options{templatetopic};
 	$text .= $cgi->hidden(-name=>'text', -default=>$options{text}) if defined $options{text} && !defined $options{templatetopic};
@@ -489,7 +491,7 @@ sub _readTWikiFormsDef {
 	my @mand = ();
 
 
-	my $data = _readTopicText($web,$topic);
+	my $data = TWiki::Func::expandCommonVariables(_readTopicText($web,$topic), $topic, $web);
 
 
 	foreach my $line (split(/[\r\n]+/, $data)) {
@@ -499,7 +501,7 @@ sub _readTWikiFormsDef {
 		next if $cols[1] =~ /\*[^\*]*\*/; ## ignore header
 
 		my @values = ( );
-		my $value = defined $cols[4] ? TWiki::Func::expandCommonVariables($cols[4], $topic,$web) : undef;
+		my $value = $cols[4];
 
 		if ( !defined $value || $value =~ /^\s*$/ ) {
 			@values = @ { _getFormFieldValues($cols[1], $web) } ;

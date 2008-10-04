@@ -70,7 +70,7 @@ Features:
 | =templatetopic= | a template topic; useful for the create mode | undefined / templatetopic="MyHelpDeskTopicTemplate" |
 | =text= | the topic text;  text will be ignored if a templatetopic is defined | undefined / text="my small topic text" |
 | =topic= | an existing topic for edit and view mode or a topic template name for a new topic (create mode) (e.g. <nop>TestFormDataXXXXXXXXXX) | topic="%<nop>TOPIC%XXXXXXXXXX" / topic="TestFormData%<nop>SERVERTIME{$epoch}%" |
-| =topicparent= | a topic parent; useful for the create mode | undefined / topicparent="MyHelpDesk" |
+| =topicparent= | a topic parent; useful for the create mode; if undefined the form topic will be used | undefined / topicparent="MyHelpDesk" |
 
 
 
