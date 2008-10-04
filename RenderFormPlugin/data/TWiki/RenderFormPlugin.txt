@@ -1,0 +1,126 @@
+%META:TOPICINFO{author="TWikiContributor" date="1222960273" format="1.1" version="$Rev$"}%
+---+!! <nop>%TOPIC%
+The RenderFormPlugin handles the tag %<nop>RENDERFORM{...}%. The tag will be replaced by a form that is defined and looks like TWiki.TWikiForms. It helps you to create a new topic with TWiki.TWikiForms or to edit or view  existing topic form data. The form data can be changed without pushing the topic edit button. The tag can be used at any topic to show, edit or create TWiki.TWikiForms data from any other topic.
+
+Features:
+   * supports all form field types of TWiki.TWikiForms (text, textarea, checkbox, checkbox+buttons , date, select, select+multi, radio, label) 
+   * supports 3 modes (=mode= option): create (default), edit, view (default if a topic exists)
+   * mode switching: edit to view and view to edit 
+   * simple !JavaScript based form field validator for mandatory fields
+   * hide some form fields (=hidden= option)
+   * change display order of form fields (=order= option)
+   * use URL parameters to overwrite attributes (query parameter names: =rfp_&lt;attribute&gt;=)
+
+%TOC%
+
+---++ Syntax Rules
+   * Usage: =%<nop>RENDERFORM{attr1="val1" attr2="val2" ...}%=
+   * Example: =%<nop>RENDERFORM{"TWikiFormDefinition"}% (=%<nop>RENDERFORM{form="TWikiFormDefinition"}%=)
+
+---++ Quick Start Guide
+
+   1 Create a new topic (e.g. Sandbox.TestForm) for your TWiki.TWikiForms definition and put the following to the new topic (%X% TWiki.EditTablePlugin required):
+     <verbatim>
+%EDITTABLE{format="|text,20,|select,1,label,text,textarea,select,select+multi,checkbox,checkbox+buttons,radio,date|text,6,1|text,50|text,20|text,5,|"}%
+| *Name* | *Type* | *Size* | *Values* | *Tooltip message* | *Attributes* |
+     </verbatim>
+   1 Add some new rows to your TWiki.TWikiForms definition by editing the definition table.
+   1 Create a new topic (e.g. Sandbox.TestTopic) and put the following to this new topic:
+     <verbatim>
+%RENDERFORM{"TestForm")%
+
+%SEARCH{search="TestTopic\d+" scope="topic" type="regex"}%
+     </verbatim>
+   1 Have fun by creating new topics with forms (e.g. topic names: Sandbox.TestTopic0, Sandbox.TestTopic1, ...). :-)
+---++ Examples
+---+++ Simple Help Desk
+   * Sandbox.SimpleHelpDeskForm topic:
+     <verbatim>
+| *Name* | *Type* | *Size* | *Values* | *Tooltip message* | *Attributes* |
+| Question | text | 80 | | | M |
+| Details | textarea | 80x10 | | please fill in some details ... | |
+| Answer | textarea | 80x10 | | Answer | |
+| State | select | 1 | open,closed | | |
+     </verbatim>
+   * Sandbox.SimpleHelpDesk topic:
+     <verbatim>
+%RENDERFORM{"SimpleHelpDeskForm" hidden="Answer,State" createbutton="submit" hideheader="yes" text="Back to !SimpleHelpDesk" topicparent="SimpleHelpDesk"}%
+  
+| *Question* | *Date* | *State* |
+%SEARCH{search="SimpleHelpDesk\d+" scope="topic" type="regex" nonoise="on" format="| <a href=\"SimpleHelpDesk?rfp_topic=$topic;rfp_hidden=;rfp_hideheader=off\">$formfield(Question)</a> | $date | $formfield(State) |"}% 
+
+%TOPIC% 
+     </verbatim>
+
+
+---++ Attributes
+
+| *Attribute* | *Description* | *Default / Example* |
+| =dateformat= | overwrites the JSCALENDARDATEFORMAT preference for date fields | undefined / dateformat="%m/%d/%Y" |
+| =donotnotify= | disables notifications | undefined / donotnotify="on" |
+| =form= | (required attribute) a name of a topic with a TWiki.TWikiForms definition | undefined / form="MyTestForm" |
+| =hidden= | a comma separated list of form field names to hide in all modes | undefined / hidden="Field1,Field2" |
+| =hideheader= | if set, disables the form header | hideheader="no" |
+| =mode= | render mode of the form, allowed values: create (default), edit, view (default if =topic= exists) | mode="create" |
+| =onlynewtopic= | disables overwrite of existing topics | onlynewtopic="on" |
+| =onlywikiname= | disallows the usage of non-[[TWiki.WikiWords]] for topic names | onlywikiname="on" |
+| =order= | changes the display order of form fields; order gets a comma separated list of field names; if the order list is incomplete all missing and unhidden form fields will be added; there are special values for order: [:alpha:], [:dalpha:], [:num:] and [:dnum:], e.g. order="[:alpha:]" to sort all fields alphanumerical | undefined / order="Field1, Field2" |
+| =script= | changes the behavior of update/create modes; allowed values: save - saves the form data; edit - edit the resulting topic | script="save" | 
+| =template= | a template name for predefined attributes | undefined / template="helpdesk" |
+| =templatetopic= | a template topic; useful for the create mode | undefined / templatetopic="MyHelpDeskTopicTemplate" |
+| =text= | the topic text;  text will be ignored if a templatetopic is defined | undefined / text="my small topic text" |
+| =topic= | an existing topic for edit and view mode or a topic template name for a new topic (create mode) (e.g. <nop>TestFormDataXXXXXXXXXX) | topic="%<nop>TOPIC%XXXXXXXXXX" / topic="TestFormData%<nop>SERVERTIME{$epoch}%" |
+| =topicparent= | a topic parent; useful for the create mode | undefined / topicparent="MyHelpDesk" |
+
+
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;ATTRIBUTENAME&gt;%== to your Main.TWikiPreferences topic, i.e. ==%<nop>RENDERFORM_SHORTDESCRIPTION%==
+
+You can also use template based preferences, just write ==RENDERFORM_TEMPLATE_&lt;templatename&gt;_&lt;ATTRIBUTENAME&gt;==.
+
+   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Create new topics with simple forms like TWiki.TWikiForms.
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
+
+   * Download the ZIP file from the Plugin Home (see below)
+      * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+      | *File:* | *Description:* |
+      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+      | ==data/TWiki/VarRENDERFORM.txt== | Plugin Variables topic  |
+      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+      | ==lib/TWiki/Plugins/%TOPIC%/Core.pm== | Plugin Perl module |
+   * Configure the Plugin: 
+      * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
+      * Change the Plugin settings as needed
+   * Test if the installation was successful: 
+      * see Examples section
+
+
+---++ Plugin Info
+|  Plugin Author: | TWiki:Main.DanielRohde |
+|  Copyright: | © 2007, TWiki:Main.DanielRohde |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 04 Oct 2008 (V1.000) |
+|  Change History: | <!-- versions below in reverse order --> |
+|  04 Oct 2008: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+
+
+-- Main.DanielRohde - 04 Oct 2008
