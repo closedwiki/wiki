@@ -22,6 +22,8 @@ use base 'TWikiFnTestCase';
 
 use strict;
 
+use Unit::Request;
+use Unit::Response;
 use TWiki;
 use TWiki::Plugins::WysiwygPlugin;
 
@@ -77,7 +79,7 @@ sub save_test {
     my $text = join('', @test).".";
     my $t = $charset ? Encode::encode($charset, $text) : $text;
 
-    my $query = new TWiki::Request({
+    my $query = new Unit::Request({
         'wysiwyg_edit' => [ 1 ],
         'action_save' => [ 1 ],
         'text' => [ $t ],
@@ -114,7 +116,7 @@ sub TML2HTML_test {
         push(@test, chr($i));
     }
     my $text = join('', @test).".";
-    my $query = new TWiki::Request({
+    my $query = new Unit::Request({
         'wysiwyg_edit' => [ 1 ],
         # REST parameters are always UTF8 encoded
         'text' => [ Encode::encode_utf8($text) ],
@@ -155,7 +157,7 @@ sub HTML2TML_test {
         push(@test, chr($i));
     }
     my $text = join('', @test).".";
-    my $query = new TWiki::Request({
+    my $query = new Unit::Request({
         'wysiwyg_edit' => [ 1 ],
         # REST parameters are always UTF8 encoded
         'text' => [ Encode::encode_utf8($text) ],
