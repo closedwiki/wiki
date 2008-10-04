@@ -11,6 +11,8 @@ package TWikiUserMappingContribTests;
 
 use base qw( TWikiFnTestCase );
 
+use Unit::Request;
+use Unit::Response;
 use TWiki;
 use Error qw( :try );
 
@@ -73,7 +75,7 @@ sub setup_new_session() {
     my $this = shift;
 	
 	my ( $query, $text );
-    $query = new TWiki::Request ({});
+    $query = new Unit::Request ({});
     $query->path_info( "/Main/WebHome" );
     $ENV{SCRIPT_NAME} = "view";
 
