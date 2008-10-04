@@ -106,11 +106,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 |  Plugin Author: | TWiki:Main.DanielRohde |
-|  Copyright: | © 2007, TWiki:Main.DanielRohde |
+|  Copyright: | &copy; 2008, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 04 Oct 2008 (V1.000) |
+|  Plugin Version: | V1.000 (04 Oct 2008) |
 |  Change History: | <!-- versions below in reverse order --> |
-|  04 Oct 2008: | Initial version |
+|  V1.000 (04 Oct 2008): | TWiki:Main:DanielRohde: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |

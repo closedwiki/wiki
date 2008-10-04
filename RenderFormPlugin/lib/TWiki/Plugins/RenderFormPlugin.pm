@@ -2,11 +2,13 @@ package TWiki::Plugins::RenderFormPlugin;
 
 use strict;
 
-use vars qw( $VERSION $RELEASE $debug $pluginName );
+use vars qw( $VERSION $RELEASE $REVISION $debug $pluginName );
 
 $VERSION = '$Rev$';
 
 $RELEASE = 'Dakar';
+
+$REVISION = '1.000'; #dro# initial version
 
 $pluginName = 'RenderFormPlugin';
 
