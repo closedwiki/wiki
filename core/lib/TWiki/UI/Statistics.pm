@@ -248,6 +248,7 @@ sub _collectLogData {
         }
         while( !$logFileUserName && scalar( @fields )) {
             $logFileUserName = shift @fields;
+            $logFileUserName = TWiki::Func::getCanonicalUserID($logFileUserName);
         }
 
         my( $opName, $webTopic, $notes, $ip ) = @fields;
