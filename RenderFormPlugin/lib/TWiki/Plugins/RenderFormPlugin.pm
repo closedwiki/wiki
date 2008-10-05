@@ -9,7 +9,7 @@ $VERSION = '$Rev$';
 $RELEASE = 'Dakar';
 
 
-$REVISION = '1.001'; #dro# changed topicparent default; added and fixed docs; fixed date field bug
+$REVISION = '1.001'; #dro# changed topicparent default; added and fixed docs; fixed date field bug; fixed non-word character in field names bug;
 #$REVISION = '1.000'; #dro# initial version
 
 $pluginName = 'RenderFormPlugin';

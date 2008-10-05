@@ -194,7 +194,7 @@ sub render {
 	###$text .= $cgi->start_table(-cellspacing=>0, -cellpadding=>2, -class=>"twikiTable", -border=>1);
 	
 	my $button= _getSwitchButton($theTopic,$theWeb);
-	$text .= "|  * ".($options{mode} eq 'create'?"<nop>":"")."$theWeb.$topic$button / $options{form} * ||\n" unless $options{hideheader};
+	$text .= "|  * ".($options{mode} eq 'create'?"<nop>":"")."$topic$button / $options{form} * ||\n" unless $options{hideheader};
 	
 	###$text .= $cgi->Tr($cgi->th({-class=>'twikiFirstCol', -bgcolor=>'%WEBBGCOLOR%', -align=>'right',-colspan=>2}, $cgi->strong(" ".($options{mode} eq 'create'?"<nop>":"")."$theWeb.$topic / $options{form} ")));
 
@@ -204,11 +204,12 @@ sub render {
 			next;
 		}
 		my ($td,$tadd) = _renderFormField($cgi,$def,$formName);
-		$text .= '|  *'.$cgi->span({title=>$$def{tooltip}}, " ".$$def{name} . ($$def{attr}=~/M/ ?" *":" ") . $tadd  ) . '*|'.$td.'|';
+		$text .= '|  *'.$cgi->span({title=>$$def{tooltip}}, " ".$$def{title} . ($$def{attr}=~/M/ ?" %RED%*%ENDCOLOR%":" ") . $tadd  ) . '*|'.$td.'|';
 		###$text .= $cgi->Tr($cgi->th({-bgcolor=>'%WEBBGCOLOR%', -class=>'twikiFirstCol', -align=>'right'}," *".$cgi->span({title=>$$def{tooltip}}, " ".$$def{name} . ($$def{attr}=~/M/ ?" *":" ") . $tadd  ) . '* ') .$cgi->td($td));
 		$text .= "\n";
 	}
 	###$text .= $cgi->end_table();
+	$text .= "||  %RED%*%ENDCOLOR% indicates mandatory fields|\n" if $#mand != -1;
 	$text .= $cgi->submit(-name=>'Save', -value=>$options{$options{mode}.'button'}) unless $options{mode}  eq 'view';
 	$text .= $hiddenText;
 	$text .= $cgi->end_form();
@@ -407,6 +408,7 @@ sub _readTopicFormData {
 		}
 
 	}
+	_dump($attr);
 
 }
 # =========================
@@ -426,7 +428,7 @@ sub _renderButtons {
 	my $size = $$def{size};
 	my $valuesRef = $$def{values};
 
-	my @defaults = defined $$def{default} ? split(/\,\s*/, $$def{default}) : ();
+	my @defaults = defined $$def{default} ? split(/,\s*/, $$def{default}) : ();
 
 	$type='checkbox' if $type=~/^checkbox/;
 
@@ -511,10 +513,13 @@ sub _readTWikiFormsDef {
 			}
 		}
 
-		push @defs, { name=>$cols[1], type=>_get($cols[2],'text'), size=>_get($cols[3],80), value=>_get($value,""), values=>\@values, tooltip=>_get($cols[5],$cols[1]), attr=>_get($cols[6],"") };
-		$attr{$cols[1]}=$defs[$#defs];
+		my $name = $cols[1];
+		$name=~s/\W//g;
 
-		push @mand, $cols[1] if $defs[$#defs]{attr}=~/M/i;
+		push @defs, { name=>$name, title=>$cols[1],  type=>_get($cols[2],'text'), size=>_get($cols[3],80), value=>_get($value,""), values=>\@values, tooltip=>_get($cols[5],$cols[1]), attr=>_get($cols[6],"") };
+		$attr{$name}=$defs[$#defs];
+
+		push @mand, $name if $defs[$#defs]{attr}=~/M/i;
 		
 	}
 	return (\@defs,\%attr,\@mand);
