@@ -113,7 +113,11 @@ Details:
 
 %INCLUDE{"RenderFormPluginExampleForm"}%
 
-%RENDERFORM{"RenderFormPluginExampleForm"}%
+#RenderFormExamples
+%RENDERFORM{"TWiki.RenderFormPluginExampleForm" topic="Sandbox.%TOPIC%XXXXXXXXXX"}%
+
+| *Topic* | *Date* |
+%SEARCH{search="RenderFormPlugin\d+" web="Sandbox" type="regex" scope="topic" nonoise="on" format="| <a href=\"%TOPIC%?rfp_topic=$web.$topic#RenderFormExamples\">$topic</a> | $date |"}%
 
 ---++ Plugin Settings
 
@@ -152,7 +156,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | V1.001 (BETA) |
 |  Change History: | <!-- versions below in reverse order --> |
-|  V1.001 (BETA): | TWiki:Main:DanielRohde: changed topicparent default; added and fixed docs; |
+|  V1.001 (BETA): | TWiki:Main:DanielRohde: changed topicparent default; added and fixed docs; fixed date field bug |
 |  V1.000 (04 Oct 2008): | TWiki:Main:DanielRohde: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
