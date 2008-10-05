@@ -320,7 +320,7 @@ sub _renderFormField {
 				$td = $$def{value};
 			} else {
 				my $dateformat = defined $options{dateformat} ? $options{dateformat} : TWiki::Func::getPreferencesValue('JSCALENDARDATEFORMAT');
-				$dateformat="%m/%d/%Y" unless defined $dateformat;
+				$dateformat="%d %b %Y" unless defined $dateformat;
 				my $id=$formName.$$def{name}; 
 				$td = $cgi->textfield({-id=>$id,-name=>$$def{name},-default=>$$def{value},-size=>$$def{size},-readonly=>'readonly'})
 					.$cgi->image_button(-name=>'calendar', -src=>'%PUBURLPATH%/TWiki/JSCalendarContrib/img.gif', 

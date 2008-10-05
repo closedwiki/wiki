@@ -1,7 +1,7 @@
 | *Name* | *Type* | *Size* | *Values* | *Tooltip message* | *Attributes* |
 | Label | label | 0 | an example | label tooltip |
 | Text | text | 10 | | text tooltip | M |
-| Textarea | textarea | 10x2 | textarea tooltip | |
+| Textarea | textarea | 10x2 | | textarea tooltip | |
 | Select | select | 1 | ,1,2 | select tooltip | |
 | Select+Multi | select+multi | 5 | 1,2,3,4,5 | select+multi tooltip | | 
 | Checkbox | checkbox | 2 | 1,2,3,4,5 | checkbox tooltip | | 
