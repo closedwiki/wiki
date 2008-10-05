@@ -206,12 +206,12 @@ sub queryString {
 
 =begin twiki
 
----++ ObjectMethod url( [-full => 1,
-                         -base => 1,
+---++ ObjectMethod url( [-full     => 1,
+                         -base     => 1,
                          -absolute => 1,
                          -relative => 1, 
-                         -path => 1, 
-                         -query => 1] ) -> $url
+                         -path     => 1, 
+                         -query    => 1] ) -> $url
 
 Returns many url info. 
    * If called without parameters or with -full => 1 returns full url, e.g. 
@@ -222,8 +222,8 @@ Returns many url info.
    * -path => 1, -query => 1 also includes path info and query string
      respectively
 
-Resonabily compatible with CGI corresponding method.
-Currently doesn't support -rewrite. See Item5914.
+Reasonably compatible with CGI corresponding method. Doesn't support
+-rewrite. See Item5914.
 
 =cut
 
@@ -240,25 +240,22 @@ sub url {
     my $url;
     $full++ if $base || !( $relative || $absolute );
     my $path = $this->pathInfo;
-    my $name = $this->action;
+    my $name =
+      defined $TWiki::cfg{ScriptUrlPaths}{ $this->action }
+      ? $TWiki::cfg{ScriptUrlPaths}{ $this->action }
+      : $TWiki::cfg{ScriptUrlPath} . '/' . $this->action;
     if ($full) {
         my $vh = $this->header('X-Forwarded-Host') || $this->header('Host');
         $url =
           $vh ? $this->protocol . '://' . $vh : $TWiki::cfg{DefaultUrlHost};
         return $url if $base;
-        $url .=
-          defined $TWiki::cfg{ScriptUrlPaths}{ $this->action }
-          ? $TWiki::cfg{ScriptUrlPaths}{ $this->action }
-          : $TWiki::cfg{ScriptUrlPath} . '/' . $this->action;
+        $url .= $name;
     }
     elsif ($relative) {
-        $url = $name;
+        ($url) = $name =~ m{([^/]+)$};
     }
     elsif ($absolute) {
-        $url =
-          defined $TWiki::cfg{ScriptUrlPaths}{ $this->action }
-          ? $TWiki::cfg{ScriptUrlPaths}{ $this->action }
-          : $TWiki::cfg{ScriptUrlPath} . '/' . $this->action;
+        $url = $name;
     }
     $url .= $path if $path_info && defined $path;
     my $queryString = $this->queryString();

@@ -129,7 +129,8 @@ sub preparePath {
     ASSERT( defined $pathInfo ) if DEBUG;
     $req->action($action);
     $req->pathInfo( $pathInfo );
-    $req->uri( $ENV{REQUEST_URI} );
+    $req->uri( $ENV{REQUEST_URI}
+          || $req->url( -absolute => 1, -path => 1, -query => 1 ) );
 }
 
 sub prepareBody {
