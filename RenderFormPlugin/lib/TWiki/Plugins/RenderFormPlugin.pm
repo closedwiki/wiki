@@ -9,7 +9,7 @@ $VERSION = '$Rev$';
 $RELEASE = 'Dakar';
 
 
-$REVISION = '1.001'; #dro# changed topicparent default; added and fixed docs; 
+$REVISION = '1.001'; #dro# changed topicparent default; added and fixed docs; fixed date field bug
 #$REVISION = '1.000'; #dro# initial version
 
 $pluginName = 'RenderFormPlugin';
@@ -33,10 +33,11 @@ sub commonTagsHandler {
 
     TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
 
-    # do custom extension rule, like for example:
     use TWiki::Plugins::RenderFormPlugin::Core;
+
     eval {
-        $_[0] =~ s/%RENDERFORM{(.*)}%/TWiki::Plugins::RenderFormPlugin::Core::render($1,$_[1],$_[2])/ge;
+        $_[0] =~ s@\%RENDERFORM{(.*)}\%@'%INCLUDE{"%TWIKIWEB%/JSCalendarContribInline"}%'.TWiki::Plugins::RenderFormPlugin::Core::render($1,$_[1],$_[2])@ge;
+	$_[0] =~ s/\%(START|STOP)RENDERFORMDEF({[^}]*})?\%//sg;
     };
     TWiki::Func::writeWarning($@) if $@;
 }

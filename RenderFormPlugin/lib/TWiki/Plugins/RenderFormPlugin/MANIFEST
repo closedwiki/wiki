@@ -1,6 +1,7 @@
 # Release manifest for RenderFormPlugin
 data/TWiki/RenderFormPlugin.txt 0644 Documentation
 data/TWiki/VarRENDERFORM.txt 0644 Documentation
+data/TWiki/RenderFormPluginExampleForm.txt 0644 Documentation
 lib/TWiki/Plugins/RenderFormPlugin.pm 0644 Perl module
 lib/TWiki/Plugins/RenderFormPlugin/Core.pm 0644 Perl module
 

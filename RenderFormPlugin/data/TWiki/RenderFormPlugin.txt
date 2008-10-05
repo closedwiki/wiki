@@ -3,6 +3,7 @@
 The RenderFormPlugin handles the tag %<nop>RENDERFORM{...}%. The tag will be replaced by a form that is defined and looks like TWiki.TWikiForms. It helps you to create a new topic with TWiki.TWikiForms or to edit or view  existing topic form data. The form data can be changed without pushing the topic edit button. The tag can be used at any topic to show, edit or create TWiki.TWikiForms data from any other topic.
 
 Features:
+   * easy to use: 1. define a form, 2. put the %<nop>RENDERFORM{...}% tag on a topic (you do not need to register a form or edit a page to add the form to a topic)
    * supports all form field types of TWiki.TWikiForms (text, textarea, checkbox, checkbox+buttons , date, select, select+multi, radio, label) 
    * supports 3 modes (=mode= option): create (default), edit, view (default if a topic exists)
    * mode switching: edit to view and view to edit 
@@ -25,14 +26,14 @@ Features:
 | *Name* | *Type* | *Size* | *Values* | *Tooltip message* | *Attributes* |
      </verbatim>
    1 Add some new rows to your TWiki.TWikiForms definition by editing the definition table.
-   1 Create a new topic (e.g. Sandbox.TestTopic) and put the following to this new topic:
+   1 Create a new topic (e.g. Sandbox.MyTestTopic) and put the following to this new topic:
      <verbatim>
-%RENDERFORM{"TestForm")%
+%RENDERFORM{"MyTestForm")%
 
-%SEARCH{search="TestTopic\d+" scope="topic" type="regex"}%
+%SEARCH{search="MyTestTopic\d+" scope="topic" type="regex"}%
      </verbatim>
-   1 Have fun by creating new topics with forms (e.g. topic names: Sandbox.TestTopic0, Sandbox.TestTopic1, ...). :-)
----++ Examples
+   1 Have fun by creating new topics with forms (e.g. topic names: Sandbox.MyTestTopic0, Sandbox.MyTestTopic1, ...). :-)
+---++ Usage Examples
 ---+++ Simple Help Desk
    * Sandbox.SimpleHelpDeskForm topic:
      <verbatim>
@@ -108,7 +109,11 @@ Details:
 | =topic= | an existing topic for edit and view mode or a topic template name for a new topic (create mode) (e.g. <nop>TestFormDataXXXXXXXXXX) | topic="%<nop>TOPIC%XXXXXXXXXX" / topic="TestFormData%<nop>SERVERTIME{$epoch}%" |
 | =topicparent= | a topic parent; useful for the create mode; if undefined the form topic will be used | undefined / topicparent="MyHelpDesk" |
 
+---++ Examples
 
+%INCLUDE{"RenderFormPluginExampleForm"}%
+
+%RENDERFORM{"RenderFormPluginExampleForm"}%
 
 ---++ Plugin Settings
 
@@ -131,6 +136,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
       | *File:* | *Description:* |
       | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
       | ==data/TWiki/VarRENDERFORM.txt== | Plugin Variables topic  |
+      | ==data/TWiki/%TOPIC%ExampleForm.txt== | Example form  |
       | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
       | ==lib/TWiki/Plugins/%TOPIC%/Core.pm== | Plugin Perl module |
    * Configure the Plugin: 
@@ -157,7 +163,4 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
-
-
--- Main.DanielRohde - 04 Oct 2008
+-- TWiki:Main.DanielRohde - 04 Oct 2008

@@ -319,10 +319,11 @@ sub _renderFormField {
 				$td = $$def{value};
 			} else {
 				my $dateformat = defined $options{dateformat} ? $options{dateformat} : TWiki::Func::getPreferencesValue('JSCALENDARDATEFORMAT');
+				$dateformat="%m/%d/%Y" unless defined $dateformat;
 				my $id=$formName.$$def{name}; 
 				$td = $cgi->textfield({-id=>$id,-name=>$$def{name},-default=>$$def{value},-size=>$$def{size},-readonly=>'readonly'})
 					.$cgi->image_button(-name=>'calendar', -src=>'%PUBURLPATH%/TWiki/JSCalendarContrib/img.gif', 
-							-alt=>'Calendar', -title=>'Calendar', -onClick=>qq@return showCalendar('$id','$dateformat')@);
+							-alt=>'Calendar', -title=>'Calendar', -onClick=>qq@javascript: return showCalendar('$id','$dateformat')@);
 			}
 		}
 		else { 
@@ -491,8 +492,7 @@ sub _readTWikiFormsDef {
 	my @mand = ();
 
 
-	my $data = TWiki::Func::expandCommonVariables(_readTopicText($web,$topic), $topic, $web);
-
+	my $data = _readTopicText($web,$topic);
 
 	foreach my $line (split(/[\r\n]+/, $data)) {
 		my @cols = split(/\s*\|\s*/,$line);
@@ -501,7 +501,7 @@ sub _readTWikiFormsDef {
 		next if $cols[1] =~ /\*[^\*]*\*/; ## ignore header
 
 		my @values = ( );
-		my $value = $cols[4];
+		my $value = TWiki::Func::expandCommonVariables($cols[4], $topic, $web);
 
 		if ( !defined $value || $value =~ /^\s*$/ ) {
 			@values = @ { _getFormFieldValues($cols[1], $web) } ;
