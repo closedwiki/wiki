@@ -119,10 +119,17 @@ sub _readPasswd {
       throw Error::Simple( $TWiki::cfg{Htpasswd}{FileName}.' open failed: '.$! );
     my $line = '';
     while (defined ($line =<IN_FILE>) ) {
-        if( $line =~ /^(.*?):(.*?)(?::(.*))?$/ ) {      
-            $data->{$1}->{pass} = $2;
-            $data->{$1}->{emails} = $3 || '';
-        }
+	if ( $TWiki::cfg{Htpasswd}{Encoding} eq 'md5' ) { # htdigest format
+          if( $line =~ /^(.*?):(.*?):(.*?)(?::(.*))?$/ ) {
+              $data->{$1}->{pass} = $3;
+              $data->{$1}->{emails} = $4 || '';
+          }
+	} else { # htpasswd format
+          if( $line =~ /^(.*?):(.*?)(?::(.*))?$/ ) {
+              $data->{$1}->{pass} = $2;
+              $data->{$1}->{emails} = $3 || '';
+          }
+	}
     }
     close( IN_FILE );
     $this->{passworddata} = $data;
@@ -133,7 +140,11 @@ sub _dumpPasswd {
     my $db = shift;
     my $s = '';
     foreach ( sort keys %$db ) {
-        $s .= $_.':'.$db->{$_}->{pass}.':'.$db->{$_}->{emails}."\n";
+	if ( $TWiki::cfg{Htpasswd}{Encoding} eq 'md5' ) { # htdigest format
+          $s .= $_.':'.$TWiki::cfg{AuthRealm}.':'.$db->{$_}->{pass}.':'.$db->{$_}->{emails}."\n";
+	} else { # htpasswd format
+          $s .= $_.':'.$db->{$_}->{pass}.':'.$db->{$_}->{emails}."\n";
+	}
     }
     return $s;
 }

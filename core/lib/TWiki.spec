@@ -454,7 +454,7 @@ $TWiki::cfg{Htpasswd}{FileName} = '$TWiki::cfg{DataDir}/.htpasswd';
 # <dl>
 # <dt>crypt</dt><dd>is the default, and should be used on Linux/Unix.</dd>
 # <dt>sha1</dt><dd> is recommended for use on Windows.</dd>
-# <dt>md5</dt><dd> may be useful on sites where password files are required
+# <dt>md5</dt><dd> htdigest format - useful on sites where password files are required
 # to be portable. In this case, the {AuthRealm} is used with the username
 # and password to generate the encrypted form of the password, thus:
 # <tt>user:{AuthRealm}:password</tt>. Take note of this, because it means that
