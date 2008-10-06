@@ -1,6 +1,7 @@
 package TWiki::Plugins::RenderFormPlugin::Core;
 
 ### todo:
+# + simple layout taken from a topic (STARTRENDERFORMLAYOUT/STOPRENDERFORMLAYOUT); layouttopic=,, layoutname=...
 # + additional form field definitions that can be used with URLPARAM in the topictemplate
 # + automatic form detection
 
@@ -408,7 +409,6 @@ sub _readTopicFormData {
 		}
 
 	}
-	_dump($attr);
 
 }
 # =========================

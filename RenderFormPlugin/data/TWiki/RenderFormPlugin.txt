@@ -93,7 +93,7 @@ Details:
 ---++ Attributes
 
 | *Attribute* | *Description* | *Default / Example* |
-| =dateformat= | overwrites the JSCALENDARDATEFORMAT preference for date fields | undefined / dateformat="%m/%d/%Y" |
+| =dateformat= | overwrites the JSCALENDARDATEFORMAT preference for date fields | dateformat="%d %b %Y" |
 | =donotnotify= | disables notifications | undefined / donotnotify="on" |
 | =form= | (required attribute) a name of a topic with a TWiki.TWikiForms definition | undefined / form="MyTestForm" |
 | =hidden= | a comma separated list of form field names to hide in all modes | undefined / hidden="Field1,Field2" |
@@ -101,13 +101,13 @@ Details:
 | =mode= | render mode of the form, allowed values: create (default), edit, view (default if =topic= exists) | mode="create" |
 | =onlynewtopic= | disables overwrite of existing topics | onlynewtopic="on" |
 | =onlywikiname= | disallows the usage of non-[[TWiki.WikiWords]] for topic names | onlywikiname="on" |
-| =order= | changes the display order of form fields; order gets a comma separated list of field names; if the order list is incomplete all missing and unhidden form fields will be added; there are special values for order: [:alpha:], [:dalpha:], [:num:] and [:dnum:], e.g. order="[:alpha:]" to sort all fields alphanumerical | undefined / order="Field1, Field2" |
+| =order= | changes the display order of form fields; order value is a comma separated list of field names; if the order list is incomplete all missing and unhidden form fields will be added; there are special values for order: [:alpha:], [:dalpha:], [:num:] and [:dnum:], e.g. order="[:alpha:]" to sort all fields alphanumerical | undefined / order="Field1, Field2" |
 | =script= | changes the behavior of update/create modes; allowed values: save - saves the form data; edit - edit the resulting topic | script="save" | 
 | =template= | a template name for predefined attributes | undefined / template="helpdesk" |
 | =templatetopic= | a template topic; useful for the create mode | undefined / templatetopic="MyHelpDeskTopicTemplate" |
 | =text= | the topic text;  text will be ignored if a templatetopic is defined | undefined / text="my small topic text" |
 | =topic= | an existing topic for edit and view mode or a topic template name for a new topic (create mode) (e.g. <nop>TestFormDataXXXXXXXXXX) | topic="%<nop>TOPIC%XXXXXXXXXX" / topic="TestFormData%<nop>SERVERTIME{$epoch}%" |
-| =topicparent= | a topic parent; useful for the create mode; if undefined the form topic will be used | undefined / topicparent="MyHelpDesk" |
+| =topicparent= | a topic parent; useful for the create mode; if undefined the form topic will be used | topicparent="%<nop>WEB%.%<nop>TOPIC%" / topicparent="MyHelpDesk" |
 
 ---++ Examples
 
@@ -154,9 +154,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2008, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | V1.001 (BETA) |
+|  Plugin Version: | V1.001 (05 Oct 2008) |
 |  Change History: | <!-- versions below in reverse order --> |
-|  V1.001 (BETA): | TWiki:Main:DanielRohde: changed topicparent default; added and fixed docs; fixed date field bug; fixed non-word character in field names bug; |
+|  V1.001 (05 Oct 2008): | TWiki:Main:DanielRohde: changed topicparent default; added and fixed docs; fixed date field bug; fixed non-word character in field names bug; |
 |  V1.000 (04 Oct 2008): | TWiki:Main:DanielRohde: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |

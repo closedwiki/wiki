@@ -4,7 +4,7 @@ use strict;
 
 use vars qw( $VERSION $RELEASE $REVISION $debug $pluginName );
 
-$VERSION = '$Rev$';
+$VERSION = '$Rev: 17581 (05 Oct 2008) $';
 
 $RELEASE = 'Dakar';
 
@@ -33,11 +33,11 @@ sub commonTagsHandler {
 
     TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
 
-    use TWiki::Plugins::RenderFormPlugin::Core;
-
     eval {
-        $_[0] =~ s@\%RENDERFORM{(.*)}\%@'%INCLUDE{"%TWIKIWEB%/JSCalendarContribInline"}%'.TWiki::Plugins::RenderFormPlugin::Core::render($1,$_[1],$_[2])@ge;
-	$_[0] =~ s/\%(START|STOP)RENDERFORMDEF({[^}]*})?\%//sg;
+	use TWiki::Plugins::RenderFormPlugin::Core;
+	$_[0] =~ s@\%RENDERFORM{(.*)}\%@TWiki::Plugins::RenderFormPlugin::Core::render($1,$_[1],$_[2])@ge;
+
+	$_[0] =~ s/<\/body>/%INCLUDE{"%TWIKIWEB%\/JSCalendarContribInline"}%<\/body>/i if ($_[0] !~ /JSCalendarContrib\twiki.js/);
     };
     TWiki::Func::writeWarning($@) if $@;
 }
