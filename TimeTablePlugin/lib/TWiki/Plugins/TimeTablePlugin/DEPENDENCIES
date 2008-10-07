@@ -1,1 +1,2 @@
-,Date::Calc,perl,Required
+Date::Calc,,cpan,Required
+POSIX,,cpan,Required

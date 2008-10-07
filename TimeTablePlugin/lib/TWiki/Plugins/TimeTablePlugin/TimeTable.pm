@@ -166,7 +166,7 @@ sub _initDefaults {
 		weekendfgcolor => 'black',	#
 		tablebgcolor => 'white',	# table background color
 		timeformat => '24', 		# timeformat 12 or 24
-		unknownparamsmsg => '%RED% Sorry, some parameters are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR% <br/> Allowed parameters are (see TWiki.$pluginName topic for more details): %KNOWNPARAMSLIST%',
+		unknownparamsmsg => '%RED% Sorry, some parameters are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR% <br/> Allowed parameters are (see TWiki.'.$pluginName.' topic for more details): %KNOWNPARAMSLIST%',
 		displaytime => 0,		# display time in description
 		workingstarttime => '9:00',	# 
 		workingendtime => '17:00',
@@ -728,6 +728,8 @@ sub _renderRotatedTable {
 
 	$text .= $cgi->end_table();
 	$text .= $tooltips;
+
+	$text = $cgi->div({-class=>'timeTablePluginDiv', -style=>'overflow:auto;'}, $text);
 	return $text;
 
 }
@@ -972,7 +974,7 @@ sub _render {
 
 	$text .= $cgi->end_table();
 	$text .= $tooltips;
-	$text =$cgi->div({-class=>'timeTablePluginTable', -style=>"font-size:$options{'fontsize'};"}, $text);
+	$text =$cgi->div({-class=>'timeTablePluginTable', -style=>"font-size:$options{'fontsize'};overflow:auto;"}, $text);
 
 
 	return $text;
