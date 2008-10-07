@@ -10,8 +10,6 @@ http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/HolidaylistPlugin
 
 ---+!! <nop>HolidaylistPlugin</nop>
 
-%TOC%
-
 The !HolidaylistPlugin handles the tag %<nop>HOLIDAYLIST</nop>% that inserts a vacation list on the current page. Smilies are used to indicate if a person is in work or on holiday. 
 
 The plugin creates a table filled with Smilies and today's date will be the first column. There is a row in the table for each person and each day is flagged as either: :mad: (in work), :ok: (a day off) or 8-) (absent for some time), :-I (not at work; used if you type a location). You can also use other smilies (like :skull:).
@@ -19,6 +17,8 @@ The plugin creates a table filled with Smilies and today's date will be the firs
 *Example (image):*
 
 <img src="%ATTACHURLPATH%/example.gif" alt="Example" title="Example" width="779" height="172"  />
+
+%TOC%
 
 ---++ Usage Examples
 
@@ -119,6 +119,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | navdays | defines the days to navigate to (default: value of the =days= attribute) | navdays="30" |
 | removeatwork | set to "1" to remove persons without calendar entries from table | removeatwork="0" |
 | showmonthheader | set to "1" to show a additional month header | showmonthheader="0" |
+| showoptions | shows a navigation form | showoptions="0" |
 | showpubholidays | show public holidays as separate lines (rows) in table (related: enablepubholidays, pubholidayicon) | showpubholidays="0" |
 | showstatcol | enables/disables statistics column(s) | showsumcol="off" | 
 | showstatrow | enables/disables statistics row(s) | showsumrow="off" | 
@@ -158,6 +159,8 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | navprevhalftitle | title text (tooltip text) for the navigation button to the previous =navdays/2= days (%n will be replaced with the half number of days to show) | navprevtitle="Previous %n day(s)" |
 | navprevtitle | title text (tooltip text) for the navigation button to the previous =navdays= days (%n will be replaced with the number of days to show) | navprevtitle="Previous %n day(s)" |
 | nwidth | cell width of the first column | nwidth="120px" |
+| optionspos | position of the navigation form; allowed values: top, bottom, both | optionspos='bottom' |
+| optionsformat | defines the output format of the navigation form; some variables are available: =%(WEEK&#124;MONTH&#124;YEAR)SEL(&lt;range&gt;)= - a week&#124;month&#124;year popup menu; =%(STARTDATE&#124;WEEK&#124;MONTH&#124;YEAR)OFFS(&lt;range&gt;)= - a day&#124;week&#124;month&#124;year offset popup menu; =%(STARTDATE&#124;WEEK&#124;MONTH&#124;YEAR)(&lt;default value&gt;)= - a startdate&#124;week&#124;month&#124;year input field; =%BUTTON(&lt;submit button text&gt;)= - a submit button; =ranges= are optional (range syntax: =&lt;start value&gt;(:&lt;end value&gt;(:&lt;steps&gt;)?)?=, e.g. =%YEARSEL(2002:2010:1)= | optionsformat="%MONTHSEL/%YEARSEL %BUTTON(Change)" | 
 | tablebgcolor | table background color | tablebgcolor="white" |
 | tablecaption | table caption | tablecaption="&amp;nbsp;" |
 | tablecaptionalign | table caption alignment (top, bottom, left, right) | tablecaptionalign="top" |
@@ -189,6 +192,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 *Hints:* 
 	* You can use TWiki.TextFormattingRules for some attribute values: tablecaption, name, holidayicon, adayofficon, workicon, notatworkicon, compatmodeicon, pubholidayicon
 	* Every attribute of %<nop>HOLIDAYLIST% can also be used as plugin setting. You only have to use capital letters.
+	* Every attribute can be overwritten by URI query parameters: =hlp_&lt;attribute&gt;= e.g. %SCRIPTURL%/view/%WEB%.%TOPIC%?hlp_startdate=+10#HolidaylistPluginExample
 
 #StatisticsColumnFormat
 ---+++ Statistics Column/Row Format/Title
@@ -239,7 +243,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | %{pd}, %{pdd},<br/> %{ppd}, %{ppdd} | public holidays-to-days percentage with ('p'/'d') or without weekends ('pp'/'dd') |
 | %{wd}, %{wdd},<br/> %{wwd}, %{wwdd} | working days-to-days percentage with ('w'/'d') or without weekends ('ww'/'dd') |
 
-
+#HolidaylistPluginExample
 ---++ Example
 
 %HOLIDAYLIST{startdate="1 Jun 2005"}%
@@ -307,8 +311,9 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterJones, TWiki:Main.DanielRohde |
-|  Plugin Version: | v1.024 (29 Jul 2008) |
+|  Plugin Version: | v1.025 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  v1.025 (BETA) | TWiki:Main.DanielRohde: added div tag with style overflow:auto requested by Matthew Thomson; added query parameters feature (hlp_&lt;attribute&gt; in URIs); added option form feature (new attributes: showoptions, optionspos, optionsformat) requested by Matthew Thomson |
 |  v1.024 (29 Jul 2008) | TWiki:Main.DanielRohde: added statistics feature requested by TWiki:Main.GarySprague |
 |  v1.023 (19 Jan 2008) | TWiki:Main.KennethLavrsen: fixed Item5190 - does not like whitespace after the smiley. This makes the plugin work with TWiki 4.2.0 and Wysiwyg |
 |  v1.022 (18 Jun 2007) | TWiki:Main.DanielRohde: added documentation requested by TWiki:Main.PeterThoeny; fixed type (on=off bug) |

@@ -88,7 +88,7 @@ $VERSION = '$Rev$';
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
 
-$REVISION = '1.0.25'; #dro# added div tag with style overflow:auto
+$REVISION = '1.0.25'; #dro# added div tag with style overflow:auto requested by Matthew Thomson; added query parameters feature (hlp_&lt;attribute&gt; in URIs); added option form feature (new attributes: showoptions, optionspos, optionsformat) requested by Matthew Thomson
 #$REVISION = '1.0.24'; #dro# added statistics feature requested by TWiki:Main.GarySprague
 #$REVISION = '1.0.23'; #kjl# fixed Item5190 - does not like whitespace after the smiley. This makes the plugin work with TWiki 4.2.0 and Wysiwyg
 #$REVISION = '1.0.22'; #dro# added documentation requested by TWiki:Main.PeterThoeny; fixed typo (on=off bug)
@@ -231,6 +231,9 @@ sub initDefaults() {
 		showstatsum => 1,
 		statformat_perc => '%3.1f%%',
 		statformat_unknown => 'unknown',
+		optionsformat => '%MONTHSEL/%YEARSEL %BUTTON(Change)',
+		showoptions => 0,
+		optionspos=> 'bottom',
 	);
 
 	# reminder: don't forget change documentation (HolidaylistPlugin topic) if you add a new rendered option
@@ -238,7 +241,7 @@ sub initDefaults() {
 
 	# options to turn or switch things on (1) or off (0)
 	# this special handling allows 'on'/'yes';'off'/'no' values additionally to '1'/'0'
-	@flagOptions = ( 'showweekends', 'removeatwork', 'compatmode', 'enablepubholidays', 'showpubholidays', 'navenable','showmonthheader','showstatcol', 'showstatrow','showstatsum');
+	@flagOptions = ( 'showweekends', 'removeatwork', 'compatmode', 'enablepubholidays', 'showpubholidays', 'navenable','showmonthheader','showstatcol', 'showstatrow','showstatsum','showoptions');
 
 	%months = ( Jan=>1, Feb=>2, Mar=>3, Apr=>4, May=>5, Jun=>6, 
 	            Jul=>7, Aug=>8, Sep=>9, Oct=>10, Nov=>11, Dec=>12 );
@@ -281,10 +284,14 @@ sub initOptions() {
 	}
 	return 0 if $#unknownParams != -1; 
 
+	my $cgi = TWiki::Func::getCgiQuery();
+
 	# Setup options (attributes>plugin preferences>defaults):
 	%options= ();
 	foreach my $option (@allOptions) {
-		my $v = $params{$option};
+		my $v = $cgi->param("hlp_${option}_$hlid") ;
+		if (!defined $v) { $v = (!defined $cgi->param("hlp_id")) || ($cgi->param("hlp_id") eq $hlid) ? $cgi->param("hlp_${option}") : undef; }
+		$v = $params{$option} unless defined $v;
 		if (defined $v) {
 			if (grep /^\Q$option\E$/, @flagOptions) {
 				$options{$option} = ($v!~/^(0|false|no|off)$/i);
@@ -896,8 +903,12 @@ sub renderHolidaylist() {
 	my ($ty,$tm,$td) = Today();
 	my $today = Date_to_Days($ty,$tm,$td);
 
+
+	my $optionrow = $options{showoptions}?renderOptions() : '';
+
 	# create table header:
 	
+	$text .=  $optionrow if ($options{optionspos}=~/^(top|both)$/i);
 	$text .= '<noautolink><a name="hlpid'.$hlid.'"></a><table'
 	       . ' class="holidaylistPluginTable"'
 	       . ' border="'.$options{border}.'"'
@@ -1133,9 +1144,11 @@ sub renderHolidaylist() {
 	}
 	$text .= renderStatisticsRow(\%rowstatistics, \%sumstatistics) if ($options{showstatrow});
 	$text .= renderStatisticsSumRow(\%sumstatistics) if ($options{showstatcol}&&(!$options{showstatrow})&&($options{showstatsum}));
-	$text .= '</table></noautolink>';
+	$text .= '</table>';
+	$text .=  $optionrow if ($options{optionspos}=~/^(bottom|both)$/i);
+	$text .= '</noautolink>';
 
-	$text = CGI::div({-style=>'overflow:auto'},$text);
+	$text = CGI::div({-class=>'holidayListPluginDiv',-style=>'overflow:auto;'},$text);
 
 	return $text;
 }
@@ -1540,6 +1553,70 @@ sub expandIncludedEvents
 	## $text = TWiki::Func::expandCommonVariables($text, $theTopic, $theWeb);
 
 	return $text;
+}
+# =========================
+sub renderOptions {
+	my $text = $options{optionsformat};
+	my $navdays = $options{navdays};
+	$navdays = $options{days} unless defined $navdays;
+
+	my ($dd,$mm,$yy) = getStartDate();
+	my $week = Week_of_Year($yy,$mm,$dd);
+	my $wiy = Weeks_in_Year($yy);
+	
+	while ($text=~/\%(STARTDATE|WEEK|MONTH|YEAR)OFFS(\(([^\)]*)\))?/) {
+		my $what=$1;
+		my ($a,$b,$s) = _getOptionRange($3,'-3:+3');
+		my @vals = ('');
+		for (my $offs=$a; $offs!=$b+$s; $offs+=$s) {
+			push @vals,($offs>=0?'+':'').$offs;
+		}
+		$text =~ s/\%\Q$what\EOFFS(\([^\)]*\))?/CGI::popup_menu(-title=>"\L$what\E offset",-name=>"hlp_\L$what\E_$hlid",-values=>\@vals, -default=>$options{lc($what)})/e;
+	}
+	while ($text=~/\%(WEEK|MONTH|YEAR)SEL(\(([^\)]*)\))?/) {
+		my ($what,$range)=($1,$3);
+		my $default ="";
+		$default = ($yy-3).':'.($yy+3) if $what eq 'YEAR';
+		$default = '1:12' if $what eq 'MONTH';
+		$default = "1:$wiy" if $what eq 'WEEK';
+		my ($a,$b,$s) = _getOptionRange($range,$default);
+
+		my @vals = ('');
+		for (my $offs=$a; $offs!=$b+$s; $offs+=$s) {
+			push @vals, $offs;
+		}
+
+		$text =~ s/\%\Q$what\ESEL(\([^\)]*\))?/CGI::popup_menu(-title=>"\L$what\E",-name=>"hlp_\L$what\E_$hlid",-values=>\@vals, -default=>$options{lc($what)})/e;
+	}
+	while ($text=~/\%(STARTDATE|WEEK|MONTH|YEAR)(\(([^\)]*)\))?/) {
+		my ($what,$default)=($1,$3);
+		$default = $options{lc($what)} unless defined $default;
+		$text =~ s/\%\Q$what\E(\([^\)]*\))?/CGI::textfield(-title=>"\L$what\E",-name=>"hlp_\L$what\E_$hlid",-default=>$default)/e;
+	}
+
+
+	$text=~s/%BUTTON(\(([^\)]*)\))?/CGI::submit(-name=>'hlp_change_'.$hlid,-value=>(defined $2?$2:'Change'))/eg;
+	
+	$text = CGI::start_form(-method=>'get'). $text . CGI::end_form();
+	return $text;
+}
+sub _getOptionRange {
+	my ($range,$default) = @_;
+	$range=$default if !defined $range;
+	my ($a,$b,$s) = split(/:/,$range);
+	$s=1 unless defined $s;
+	$b=$a unless defined $b;
+
+	# avoid endless loops:
+	$s=1 if (abs($a-$b) % abs($s)) != 0;
+	
+	# change sign of steps:
+	$s=$a>$b?-abs($s):abs($s);
+
+	# avoid large ranges:
+	$b=$a+(100*$s) if (abs($a-$b)/abs($s))>100;
+	
+	return ($a,$b,$s);
 }
 
 1;
