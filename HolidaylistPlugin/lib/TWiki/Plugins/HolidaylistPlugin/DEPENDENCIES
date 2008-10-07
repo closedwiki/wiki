@@ -1,1 +1,2 @@
-TWiki::Plugins::SmiliesPlugin,Date::Calc,perl,Required
+TWiki::Plugins::SmiliesPlugin,,perl,Required
+Date::Calc,,cpan,Required

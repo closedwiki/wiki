@@ -88,7 +88,8 @@ $VERSION = '$Rev$';
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
 
-$REVISION = '1.0.24'; #dro# added statistics feature requested by TWiki:Main.GarySprague
+$REVISION = '1.0.25'; #dro# added div tag with style overflow:auto
+#$REVISION = '1.0.24'; #dro# added statistics feature requested by TWiki:Main.GarySprague
 #$REVISION = '1.0.23'; #kjl# fixed Item5190 - does not like whitespace after the smiley. This makes the plugin work with TWiki 4.2.0 and Wysiwyg
 #$REVISION = '1.0.22'; #dro# added documentation requested by TWiki:Main.PeterThoeny; fixed typo (on=off bug)
 #$REVISION = '1.021'; #dro# fixed minor HTML bug reported by TWiki:Main.JfMacaud; added month header feature (showmonthheader attribute) requested by Rikard Johansson; fixed some minor bugs (documentation, preferences handling);
@@ -1134,6 +1135,8 @@ sub renderHolidaylist() {
 	$text .= renderStatisticsSumRow(\%sumstatistics) if ($options{showstatcol}&&(!$options{showstatrow})&&($options{showstatsum}));
 	$text .= '</table></noautolink>';
 
+	$text = CGI::div({-style=>'overflow:auto'},$text);
+
 	return $text;
 }
 # =========================
@@ -1307,8 +1310,6 @@ sub renderStatisticsRow {
 	my $statrowformat = getStatOption('statformat','statrowformat');
 	my $statrowtitle  = getStatOption('stattitle', 'statrowtitle');
 	my $statrowheader = getStatOption('statheader','statrowheader');
-
-	TWiki::Func::writeWarning("statrowformat=$statrowformat");
 
 	my @rowformats = split(/\|/, $statrowformat);
 	my @rowheaders = split(/\|/, $statrowheader);
