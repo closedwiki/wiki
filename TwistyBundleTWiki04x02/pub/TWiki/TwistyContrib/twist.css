@@ -3,7 +3,7 @@
 .twistyMakeVisible { display:none; }
 
 .twistyTrigger {}
-span.twistyContent {}
+.twistyContent {}
 .twistyPlaceholder { /* color to be implemented by skin */ }
 .twistyRememberSetting { /* behavior class */ }
 .twistyForgetSetting { /* behavior class */ }

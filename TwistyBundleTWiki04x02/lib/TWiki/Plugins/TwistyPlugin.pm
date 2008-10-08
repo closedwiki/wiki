@@ -44,7 +44,7 @@ $VERSION = '$Rev: 15653 (19 Nov 2007) $';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.4.9';
+$RELEASE = '1.4.11';
 
 $pluginName = 'TwistyPlugin';
 
@@ -159,21 +159,28 @@ sub _TWISTY {
 
     _addHeader();
     $twistyCount++;
-    my $id = $params->{'id'};
-    if ( !defined $id || $id eq '' ) {
-        $params->{'id'} = 'twistyId' . $theWeb . $theTopic . $twistyCount;
-    }
+    $params->{'id'} = _createId( $params->{'id'}, $theTopic, $theWeb );
     return _TWISTYBUTTON(@_) . ' ' . _TWISTYTOGGLE(@_);
+}
+
+sub _createId {
+    my ( $rawId, $theTopic, $theWeb ) = @_;
+    
+    if ( !defined $rawId || $rawId eq '' ) {
+        return 'twistyId' . $theWeb . $theTopic . $twistyCount;
+    }
+    return "twistyId$rawId";
 }
 
 sub _TWISTYTOGGLE {
     my ( $session, $params, $theTopic, $theWeb ) = @_;
-    my $id = $params->{'id'};
-    if ( !defined $id || $id eq '' ) {
+    my $paramId = $params->{'id'};
+    if ( !defined $paramId || $paramId eq '' ) {
         return '';
     }
+    my $id = _createId( $paramId, $theTopic, $theWeb );
     my $idTag = $id . 'toggle';
-    my $mode  = 'div';            #$params->{'mode'} || $prefMode;
+    my $mode  = $params->{'mode'} || $prefMode;
     unshift @modes, $mode;
 
     my $isTrigger = 0;
@@ -202,10 +209,11 @@ sub _twistyBtn {
     #my $triangle_right = '&#9658;';
     #my $triangle_down = '&#9660;';
 
-    my $id = $params->{'id'};
-    if ( !defined $id || $id eq '' ) {
+    my $paramId = $params->{'id'};
+    if ( !defined $paramId || $paramId eq '' ) {
         return '';
     }
+    my $id = _createId( $paramId, $theTopic, $theWeb );
     my $idTag = $id . $twistyControlState if ($twistyControlState) || '';
 
     my $defaultLink =

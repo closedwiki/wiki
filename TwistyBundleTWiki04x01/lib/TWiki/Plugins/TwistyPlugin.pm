@@ -44,7 +44,7 @@ $VERSION = '$Rev: 15653 (19 Nov 2007) $';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.4.9';
+$RELEASE = '1.4.11';
 
 $pluginName = 'TwistyPlugin';
 
@@ -173,7 +173,7 @@ sub _TWISTYTOGGLE {
         return '';
     }
     my $idTag = $id . 'toggle';
-    my $mode  = 'div';            #$params->{'mode'} || $prefMode;
+    my $mode  = $params->{'mode'} || $prefMode;
     unshift @modes, $mode;
 
     my $isTrigger = 0;

@@ -190,7 +190,7 @@ Likewise use =start="hide"= to start with hidden content.
 <verbatim>
 %TWISTY{
 showlink="Show..."
-hidelink="Hide
+hidelink="Hide"
 start="hide"
 }%
 my twisty content
@@ -199,7 +199,7 @@ my twisty content
 
 %TWISTY{
 showlink="Show..."
-hidelink="Hide
+hidelink="Hide"
 start="hide"
 }%
 %GREEN% my twisty content %ENDCOLOR%
@@ -422,7 +422,7 @@ Usage: =%<nop>TWISTY{ ... }% Toggable contents %<nop>ENDTWISTY%=
     | =link=         | Link label | Link label for both show and hide links  | optional |
     | =hidelink=     | Link label | Hide link label  | optional |
     | =showlink=     | Link label | Show link label  | optional |
-    | =mode=         | ="div"= or ="span"= | Specify if the Twisty Toggle section will use a =&lt;div&gt;= or a =&lt;span&gt;= tag.  | optional, defaults to =&lt;span&gt;= |
+    | =mode=         | ="div"= or ="span"= | Specify if the Twisty Toggle section will use a =&lt;div&gt;= or a =&lt;span&gt;= tag. Note that if the contents contains block elements such as =div=, =mode= should be =div= as well to create valid HTML markup.  | optional, defaults to =&lt;span&gt;= |
 	| =showimgleft=  | Image url | Specify the url of an image that will be displayed with the show link at the left side of the link. <br />You may use [[%TWIKIWEB%.TWikiVariables#VarICONURLPATH][ICONURLPATH]] to display one of the %TWIKIWEB%.TWikiDocGraphics icons. Alternatively use an image attached to the topic. | optional, defaults to no image |
 	| =hideimgleft=  | Image url | Specify the url of an image that will be displayed with the hide link at the left side of the link. <br />You may use [[%TWIKIWEB%.TWikiVariables#VarICONURLPATH][ICONURLPATH]] to display one of the %TWIKIWEB%.TWikiDocGraphics icons. Alternatively use an image attached to the topic. | optional, defaults to no image |
 	| =showimgright= | Image url | Specify the url of an image that will be displayed with the show link at the right side of the link. <br />You may use [[%TWIKIWEB%.TWikiVariables#VarICONURLPATH][ICONURLPATH]] to display one of the %TWIKIWEB%.TWikiDocGraphics icons. Alternatively use an image attached to the topic. | optional, defaults to no image |
@@ -464,7 +464,7 @@ This is useful if both the show and the hide button take the same arguments.
    * Syntax: =%<nop>TWISTYBUTTON{id="myid" ... }%=
    * Supported parameters:
     | *Parameter* | *Value* | *Description* | *Remark* |
-    | =mode= | ="div"= or ="span"= | Specify if the *Twisty button* will use a =&lt;div&gt;= or a =&lt;span&gt;= tag  | optional, defaults to =&lt;span&gt;= |
+    | =mode= | ="div"= or ="span"= | Specify if the *Twisty button* will use a =&lt;div&gt;= or a =&lt;span&gt;= tag. Note that if the contents contains block elements such as =div=, =mode= should be =div= as well to create valid HTML markup. | optional, defaults to =&lt;span&gt;= |
    * Related: [[#VarTWISTYSHOW][TWISTYSHOW]] and [[#VarTWISTYHIDE][TWISTYHIDE]]
 
 #VarTWISTYSHOW
@@ -475,7 +475,7 @@ This is useful if both the show and the hide button take the same arguments.
     | *Parameter* | *Value* | *Description* | *Remark* |
     | =id= | Unique identifier | Used to link [[#VarTWISTYSHOW][TWISTYSHOW]], [[#VarTWISTYHIDE ][TWISTYHIDE ]] and [[#VarTWISTYTOGGLE][TWISTYTOGGLE]] | required  |
     | =link= | Link label | Show link label  | optional |
-    | =mode= | ="div"= or ="span"= | Specify if the Twisty Show link will use a =&lt;div&gt;= or a =&lt;span&gt;= tag  | optional, defaults to =&lt;span&gt;= |
+    | =mode= | ="div"= or ="span"= | Specify if the Twisty Show link will use a =&lt;div&gt;= or a =&lt;span&gt;= tag. Note that if the contents contains block elements such as =div=, =mode= should be =div= as well to create valid HTML markup. | optional, defaults to =&lt;span&gt;= |
     | =img= | Image url | Specify the url of an image that will be displayed at the *right side* of the link. <br />You may use [[%TWIKIWEB%.TWikiVariables#VarICONURLPATH][ICONURLPATH]] to display one of the %TWIKIWEB%.TWikiDocGraphics icons. Alternatively use an image attached to the topic. | optional, defaults to no image |
     | =imgleft=| Image url | Specify the url of an image that will be displayed at the left side of the link. <br />You may use [[%TWIKIWEB%.TWikiVariables#VarICONURLPATH][ICONURLPATH]] to display one of the %TWIKIWEB%.TWikiDocGraphics icons. Alternatively use an image attached to the topic. | optional, defaults to no image |
     | =imgright= | Image url | Specify the url of an image that will be displayed at the right side of the link. <br />You may use [[%TWIKIWEB%.TWikiVariables#VarICONURLPATH][ICONURLPATH]] to display one of the %TWIKIWEB%.TWikiDocGraphics icons. Alternatively use an image attached to the topic. | optional, defaults to no image |
@@ -493,7 +493,7 @@ This is useful if both the show and the hide button take the same arguments.
     | *Parameter* | *Value* | *Description* | *Remark* |
     | =id= | Unique identifier | Used to link [[#VarTWISTYSHOW][TWISTYSHOW]], [[#VarTWISTYHIDE ][TWISTYHIDE ]] and [[#VarTWISTYTOGGLE][TWISTYTOGGLE]] | required  |
     | =link= | Link label | Hide link label | optional |
-    | =mode= | ="div"= or ="span"= | Specify if the Twisty Hide link will use a =&lt;div&gt;= or a =&lt;span&gt;= tag  | optional, defaults to =&lt;span&gt;= |
+    | =mode= | ="div"= or ="span"= | Specify if the Twisty Hide link will use a =&lt;div&gt;= or a =&lt;span&gt;= tag. Note that if the contents contains block elements such as =div=, =mode= should be =div= as well to create valid HTML markup. | optional, defaults to =&lt;span&gt;= |
     | =img= | Image url | Specify the url of an image that will be displayed at the *right side* of the link. <br />You may use [[%TWIKIWEB%.TWikiVariables#VarICONURLPATH][ICONURLPATH]] to display one of the %TWIKIWEB%.TWikiDocGraphics icons. Alternatively use an image attached to the topic. | optional, defaults to no image |
     | =remember= | ="on"=, ="off"= | If ="on"=, the Twisty state is remembered the next time the page is shown. If ="off"=, the stored setting will be cleared.<br /> *Note:* when used, think carefully about a unique name (id) for the Twisty, otherwise the cookie that is set might affect other Twisties with the same name. Also note that only interaction is stored, not the state of the Twisty when left unclicked. | optional, no default |
     | =start= | ="hide"= or ="show"= | Initial state of the Twisty; this will override any setting stored in a cookie (see =remember=).  | optional, default no initial state |
@@ -508,7 +508,7 @@ This is useful if both the show and the hide button take the same arguments.
    * Supported parameters:
     | *Parameter* | *Value* | *Description* | *Remark* |
     | =id= | Unique identifier | Used to link [[#VarTWISTYSHOW][TWISTYSHOW]], [[#VarTWISTYHIDE ][TWISTYHIDE ]] and [[#VarTWISTYTOGGLE][TWISTYTOGGLE]].  | required  |
-    | =mode= | ="div"= or ="span"= | Specify if the Twisty Toggle section will use a =&lt;div&gt;= or a =&lt;span&gt;= tag.  | optional, defaults to =&lt;span&gt;= |
+    | =mode= | ="div"= or ="span"= | Specify if the Twisty Toggle section will use a =&lt;div&gt;= or a =&lt;span&gt;= tag. Note that if the contents contains block elements such as =div=, =mode= should be =div= as well to create valid HTML markup. | optional, defaults to =&lt;span&gt;= |
     | =class= | CSS class name | Class for content div or span | optional, default none |
     | =remember= | ="on"=, ="off"= | If ="on"=, the Twisty state is remembered the next time the page is shown. If ="off"=, the stored setting will be cleared.<br /> *Note:* when used, think carefully about a unique name (id) for the Twisty, otherwise the cookie that is set might affect other Twisties with the same name. Also note that only interaction is stored, not the state of the Twisty when left unclicked. | optional, no default |
     | =start= | ="hide"= or ="show"= | Initial state of the Twisty; this will override any setting stored in a cookie (see =remember=).  | optional, default no initial state |
@@ -594,23 +594,26 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 
 ---++ Plugin Info
 
-| Authors: | TWiki:Main.RafaelAlvarez, TWiki:Main.ArthurClemens |
-| Copyright &copy;: | 2005 Rafael Alvarez; 2006, 2007 Arthur Clemens |
-| License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
-| Dependencies: | None |
-| Plugin&nbsp;Version: | 24 Nov 2007 (version 1.4.8)  |
-| Change&nbsp;History: | <!-- versions below in reverse order -->&nbsp; |
-| 24 Nov 2007 | 1.4.6 - 1.4.8 Arthur Clemens - Added format tokens. |
-| 07 Oct 2007 | 1.4.5 Arthur Clemens - Fix html tag with show/hide controls. |
-| 25 Sep 2007 | 1.4.4 Arthur Clemens - Fix rendering of headers when =prefix= is used. |
-| 11 Jul 2007 | 1.4.3 Arthur Clemens - Fix invalid html when =prefix= and =suffix= is used. |
-| 23 Jun 2007 | 1.4.2 Arthur Clemens - Fixed bugs with parameters =firststart= and =noscript= (since version 1.4). |
-| 20 Jun 2007 | 1.4 Arthur Clemens - Updated to work without ugly inserted javascript 'init' calls. This will change nothing to the functionality, but it will produce cleaner HTML, while at the same time the twisty is still set immediately (not at page onload) and graceful fallback in case of no javascript is maintained. |
-| 19 Jun 2006 | 1.3 Arthur Clemens - Updated with TWiki 4 !JavaScript files. |
-| 25 Oct 2006 | 1.2 New variables to set default values: =TWISTYSHOWLINK=, =TWISTYHIDELINK=, =TWISTYMODE=, =TWISTYREMEMBER=; property =id= is no longer required as this is automatically set (still recommended in some cases with =remember="on"=); property value =remember="off"= will clear a previously stored cookie; new properties =prefix= and =suffix=; !JavaScript to collapse or expand all Twisties on the page.  |
-| 27 Sep 2006 | 1.101 Fixes !JavaScript handling when !AllowInlineScript in configure is not set |
-| 11 June 2006 | 1.100 Added parameters =start=, =firststart=, =noscript= and =class=; complete !JavaScript rewrite for speed |
-| 12 Sep 2005 | 1.000 First Version |
-| Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
-| Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
-| Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+|  Authors: | TWiki:Main.RafaelAlvarez, TWiki:Main.ArthurClemens |
+|  Copyright &copy;: | 2005 Rafael Alvarez; 2006-2008 Arthur Clemens |
+|  License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
+|  Dependencies: | None |
+|  Plugin&nbsp;Version: | 08 Oct 2008 (version 1.4.11) |
+|  Change&nbsp;History: | <!-- versions below in reverse order -->&nbsp; |
+|  08 Oct 2008 | 1.4.11 It is now possible to have a twisty on the same line without a linebreak. |
+|  03 Aug 2008 | 1.4.10 TWiki 4.2.1 release version |
+|  13 Dec 2007 | 1.4.9 fix to the loading order of javascript files in head |
+|  24 Nov 2007 | 1.4.6 - 1.4.8 Arthur Clemens - Added format tokens. |
+|  07 Oct 2007 | 1.4.5 Arthur Clemens - Fix html tag with show/hide controls. |
+|  25 Sep 2007 | 1.4.4 Arthur Clemens - Fix rendering of headers when =prefix= is used. |
+|  11 Jul 2007 | 1.4.3 Arthur Clemens - Fix invalid html when =prefix= and =suffix= is used. |
+|  23 Jun 2007 | 1.4.2 Arthur Clemens - Fixed bugs with parameters =firststart= and =noscript= (since version 1.4). |
+|  20 Jun 2007 | 1.4 Arthur Clemens - Updated to work without ugly inserted javascript 'init' calls. This will change nothing to the functionality, but it will produce cleaner HTML, while at the same time the twisty is still set immediately (not at page onload) and graceful fallback in case of no javascript is maintained. |
+|  19 Jun 2006 | 1.3 Arthur Clemens - Updated with TWiki 4 !JavaScript files. |
+|  25 Oct 2006 | 1.2 New variables to set default values: =TWISTYSHOWLINK=, =TWISTYHIDELINK=, =TWISTYMODE=, =TWISTYREMEMBER=; property =id= is no longer required as this is automatically set (still recommended in some cases with =remember="on"=); property value =remember="off"= will clear a previously stored cookie; new properties =prefix= and =suffix=; !JavaScript to collapse or expand all Twisties on the page.  |
+|  27 Sep 2006 | 1.101 Fixes !JavaScript handling when !AllowInlineScript in configure is not set |
+|  11 June 2006 | 1.100 Added parameters =start=, =firststart=, =noscript= and =class=; complete !JavaScript rewrite for speed |
+|  12 Sep 2005 | 1.000 First Version |
+|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
