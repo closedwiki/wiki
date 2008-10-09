@@ -2,6 +2,7 @@ Document: twiki
 Title: Debian twiki Manual
 Author: TWiki Contributors <twiki-dev@lists.sourceforge.net>
 Abstract: This manual describes the TWiki web-based collaboration system.
+Section: Web Development
 
 Format: HTML
 Index: /usr/share/doc/twiki/index.html
