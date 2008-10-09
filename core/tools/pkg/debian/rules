@@ -124,7 +124,7 @@ install: build
 	#mv debian/twiki/usr/share/perl5/TWiki.cfg debian/twiki/etc/twiki/TWiki.cfg
  
 	perl -pi~ -e 's|^(.twikiLibPath).*|\1 = \"/etc/twiki\";|;' debian/twiki/usr/lib/cgi-bin/twiki/LocalLib.cfg
-	#perl -pi~ -e 's|^# (.localPerlLibPath).*|\1 = \"/var/lib/twiki/plugins_lib\";|;' debian/twiki/usr/lib/cgi-bin/twiki/LocalLib.cfg
+	perl -pi~ -e 's|^# (.localPerlLibPath).*|\1 = \"/var/lib/twiki/lib\";|;' debian/twiki/usr/lib/cgi-bin/twiki/LocalLib.cfg
 	rm debian/twiki/usr/lib/cgi-bin/twiki/LocalLib.cfg~
 
 	chmod -R 644 debian/twiki/etc/twiki/*
