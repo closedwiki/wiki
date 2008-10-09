@@ -1,6 +1,6 @@
-twiki (1:4.2.2-1) unstable; urgency=high
+twiki (1:4.2.3-1) unstable; urgency=high
 
-  * update to 4.2.2 release (Closes: #462560)
+  * update to 4.2.3 release (Closes: #462560)
   * add enabling of apache modules (Closes: #439680)
   * mention the cronjobs in the README.Debian (Closes: #426394)
   * change redirects so they are relative paths, not localhost

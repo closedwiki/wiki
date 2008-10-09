@@ -1,33 +1,6 @@
 Bugs specific to the debian packaging [pre-upload]:
 
-* document the rest too
-* need to enable authentication somehow (what is openafs doing for htaccess?)
-	* so, using TWikiRegistrationPub gives you a different screen, but that
-	  just changes what questions you get asked
-	* login only happens as an oops-side-effect, so something has to actually
-	  *fail* to trigger it; 
-	* also, <directory> has the override semantics that <location> doesn't
-* office location stuff still in by default (what did openafs do?)
-* make debconf-editted files not conffiles (but open discussion on them too)
-
-Done:
-* config debconf stuff may need to move to postinst [fixed based on debian-devel(8)]
-* improve uid-clearing line (fail if www-data) [don't]
-* document use of statoverride in readme [done]
-* .lock files remain around? (may not be a bug) [not a bug, edit lock box]
-* how much of data/ should be conffiles? all of it?
-	** perhaps data should be an initial set that gets installed from postinst[done]
-* is www-data right for ownership, or should we have a new user id?[done]
-	** no, use twikidat [done]
-	** don't need it at build time, but must create it [done]...
-* [done] data is (allegedly) rcs-locked by nobody; fix this in release version?
-* [done] .ex files still exist
-* [removed in rules] /var/www/twiki/data/.htpasswd has entries
-* [not removed in rules] debug.txt ships in data -- referenced in .config, keep it?
-* [moved to /var/lib per fsh] twiki/data, twiki/templates should not be browsable [so not under /var/www?]
-* get topurl from debconf
-* webmaster defaults to webmaster@your.company
-	** use debconf? set from mailname, or apache?
-	** apache just uses apacheconfig which egreps ServerAdmin from httpd.conf
-
-* doesn't need fileutils, grep dependency, it is Essential
+1. This 4.2.x version still has not had all the updates that were applied to the 4.1.2 version in debian experimental.
+2. Once that is merged, the admin user&password setting will also set the configure saving password.
+3. Now that the TWiki web _should_ be able to be read only, it, and the other non-changeable web data should become a twiki-topics debian package - or a part of the twiki package - so that the topics get auto upgraded too.
+4. replace the configure plugin installer (from t.o) with advice to use the fosiki twiki-debian repository

@@ -4,21 +4,21 @@ if [ -e /tmp/build_deb ]; then
 	echo '/tmp/build_deb already exists, please move aside'
 	exit -1;
 fi
-if [ ! -e TWiki-4.2.2.tgz ]; then
-	echo 'need TWiki-4.2.2.tgz file to build'
+if [ ! -e TWiki-4.2.3.tgz ]; then
+	echo 'need TWiki-4.2.3.tgz file to build'
 	exit -1;
 fi
 
 mkdir /tmp/build_deb
-cp TWiki-4.2.2.tgz /tmp/build_deb/twiki_4.2.2.orig.tar.gz
+cp TWiki-4.2.3.tgz /tmp/build_deb/twiki_4.2.3.orig.tar.gz
 
-mkdir /tmp/build_deb/twiki-4.2.2 
+mkdir /tmp/build_deb/twiki-4.2.3 
 
-cp -r debian /tmp/build_deb/twiki-4.2.2
-cd /tmp/build_deb/twiki-4.2.2
+cp -r debian /tmp/build_deb/twiki-4.2.3
+cd /tmp/build_deb/twiki-4.2.3
 find . -name .svn -exec rm -rf '{}' \;
 
-tar zxvf /tmp/build_deb/twiki_4.2.2.orig.tar.gz
+tar zxvf /tmp/build_deb/twiki_4.2.3.orig.tar.gz
 
 #patch it
 #fakeroot debian/rules patch
