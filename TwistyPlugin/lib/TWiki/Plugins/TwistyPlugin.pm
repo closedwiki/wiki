@@ -44,7 +44,7 @@ $VERSION = '$Rev: 15653 (19 Nov 2007) $';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.4.11';
+$RELEASE = '1.4.12';
 
 $pluginName = 'TwistyPlugin';
 
@@ -159,26 +159,19 @@ sub _TWISTY {
 
     _addHeader();
     $twistyCount++;
-    $params->{'id'} = _createId( $params->{'id'}, $theTopic, $theWeb );
-    return _TWISTYBUTTON(@_) . ' ' . _TWISTYTOGGLE(@_);
-}
-
-sub _createId {
-    my ( $rawId, $theTopic, $theWeb ) = @_;
-    
-    if ( !defined $rawId || $rawId eq '' ) {
-        return 'twistyId' . $theWeb . $theTopic . $twistyCount;
+    my $id = $params->{'id'};
+    if ( !defined $id || $id eq '' ) {
+        $params->{'id'} = _createId( $params->{'id'}, $theWeb, $theTopic );
     }
-    return "twistyId$rawId";
+    return _TWISTYBUTTON(@_) . ' ' . _TWISTYTOGGLE(@_);
 }
 
 sub _TWISTYTOGGLE {
     my ( $session, $params, $theTopic, $theWeb ) = @_;
-    my $paramId = $params->{'id'};
-    if ( !defined $paramId || $paramId eq '' ) {
+    my $id = $params->{'id'};
+    if ( !defined $id || $id eq '' ) {
         return '';
     }
-    my $id = _createId( $paramId, $theTopic, $theWeb );
     my $idTag = $id . 'toggle';
     my $mode  = $params->{'mode'} || $prefMode;
     unshift @modes, $mode;
@@ -190,14 +183,23 @@ sub _TWISTYTOGGLE {
         $cookieState );
     my $props = @propList ? " " . join( " ", @propList ) : '';
     my $modeTag = '<' . $mode . $props . '>';
-    return _decodeFormatTokens( _wrapInContentHtmlOpen() . $modeTag );
+    return _decodeFormatTokens( _wrapInContentHtmlOpen( $mode ) . $modeTag );
 }
 
 sub _ENDTWISTYTOGGLE {
     my ( $session, $params, $theTopic, $theWeb ) = @_;
     my $mode = shift @modes;
     my $modeTag = ($mode) ? '</' . $mode . '>' : '';
-    return $modeTag . _wrapInContentHtmlClose();
+    return $modeTag . _wrapInContentHtmlClose( $mode );
+}
+
+sub _createId {
+    my ( $rawId, $theWeb, $theTopic ) = @_;
+    
+    if ( !defined $rawId || $rawId eq '' ) {
+        return 'twistyId' . $theWeb . $theTopic . $twistyCount;
+    }
+    return "twistyId$rawId";
 }
 
 sub _twistyBtn {
@@ -209,11 +211,10 @@ sub _twistyBtn {
     #my $triangle_right = '&#9658;';
     #my $triangle_down = '&#9660;';
 
-    my $paramId = $params->{'id'};
-    if ( !defined $paramId || $paramId eq '' ) {
+    my $id = $params->{'id'};
+    if ( !defined $id || $id eq '' ) {
         return '';
     }
-    my $id = _createId( $paramId, $theTopic, $theWeb );
     my $idTag = $id . $twistyControlState if ($twistyControlState) || '';
 
     my $defaultLink =
@@ -414,11 +415,13 @@ sub _wrapInButtonHtml {
 }
 
 sub _wrapInContentHtmlOpen {
-    return '<div style="display:inline;" class="twistyPlugin">';
+    my ($mode) = shift;
+    return "<$mode class=\"twistyPlugin\">";
 }
 
 sub _wrapInContentHtmlClose {
-    return '</div><!--/twistyPlugin-->';
+    my ($mode) = shift;
+    return "</$mode>\n<!--/twistyPlugin-->";
 }
 
 sub _wrapInContainerHideIfNoJavascripOpen {

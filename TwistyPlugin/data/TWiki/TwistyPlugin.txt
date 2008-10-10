@@ -325,6 +325,7 @@ Will create:
 
 %TWISTY{
 prefix="<h4>!!"
+mode="div"
 link="Header"
 showimgleft="%ICONURLPATH{toggleopen}%"
 hideimgleft="%ICONURLPATH{toggleclose}%"
@@ -465,6 +466,7 @@ This is useful if both the show and the hide button take the same arguments.
    * Supported parameters:
     | *Parameter* | *Value* | *Description* | *Remark* |
     | =mode= | ="div"= or ="span"= | Specify if the *Twisty button* will use a =&lt;div&gt;= or a =&lt;span&gt;= tag. Note that if the contents contains block elements such as =div=, =mode= should be =div= as well to create valid HTML markup. | optional, defaults to =&lt;span&gt;= |
+   * Example: =%<nop>TWISTYBUTTON{id="myid" link="more"}%%<nop>TWISTYTOGGLE{id="myid"}%content%<nop>ENDTWISTYTOGGLE%=
    * Related: [[#VarTWISTYSHOW][TWISTYSHOW]] and [[#VarTWISTYHIDE][TWISTYHIDE]]
 
 #VarTWISTYSHOW
@@ -598,9 +600,9 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 |  Copyright &copy;: | 2005 Rafael Alvarez; 2006-2008 Arthur Clemens |
 |  License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 |  Dependencies: | None |
-|  Plugin&nbsp;Version: | 08 Oct 2008 (version 1.4.11) |
+|  Plugin&nbsp;Version: | 10 Oct 2008 (version 1.4.12) |
 |  Change&nbsp;History: | <!-- versions below in reverse order -->&nbsp; |
-|  08 Oct 2008 | 1.4.11 It is now possible to have a twisty on the same line without a linebreak. |
+|  08 Oct 2008 | 1.4.11, 1.4.12 It is now possible to have a twisty on the same line without a linebreak. |
 |  03 Aug 2008 | 1.4.10 TWiki 4.2.1 release version |
 |  13 Dec 2007 | 1.4.9 fix to the loading order of javascript files in head |
 |  24 Nov 2007 | 1.4.6 - 1.4.8 Arthur Clemens - Added format tokens. |
