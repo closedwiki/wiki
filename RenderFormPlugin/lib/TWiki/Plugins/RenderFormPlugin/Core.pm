@@ -431,6 +431,7 @@ sub _renderFormField {
 		case 'date' { 
 			if ($options{mode} eq 'view') {
 				$td = $$def{value};
+				$td = '&nbsp;' if $$def{value} eq "";
 			} else {
 				my $dateformat = defined $options{dateformat} ? $options{dateformat} : TWiki::Func::getPreferencesValue('JSCALENDARDATEFORMAT');
 				$dateformat="%d %b %Y" unless defined $dateformat;
