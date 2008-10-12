@@ -39,11 +39,11 @@ sub ui {
 
     TWiki::Configure::TWikiCfg::save($root, $valuer, $this);
 
-    if( $this->{log} &&
-          defined( $TWiki::cfg{ConfigurationLogName} ) &&
-            open(F, '>>'.$TWiki::cfg{ConfigurationLogName} )) {
-        print F $this->{log};
-        close(F);
+    if( $this->{log} && defined( $TWiki::cfg{ConfigurationLogName} )) {
+        if (open(F, '>>', $TWiki::cfg{ConfigurationLogName} )) {
+            print F $this->{log};
+            close(F);
+        }
     }
 
     # Put in a link to the front page of the TWiki

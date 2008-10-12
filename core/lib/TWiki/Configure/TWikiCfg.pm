@@ -322,8 +322,10 @@ sub startVisit {
         my $keys = $visitee->getKeys();
         my $warble = $this->{valuer}->currentValue($visitee);
         return 1 unless defined $warble;
-        my $txt = Data::Dumper->Dump([$warble],
-                                     ['$TWiki::cfg'.$keys]);
+        # For some reason Data::Dumper ignores the second parameter sometimes
+        # when -T is enabled, so have to do a substitution
+        my $txt = Data::Dumper->Dump([$warble]);
+        $txt =~ s/VAR1/TWiki::cfg$keys/;
         if ($this->{logger}) {
             $this->{logger}->logChange($visitee->getKeys(), $txt);
         }

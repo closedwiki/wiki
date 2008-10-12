@@ -37,7 +37,7 @@ sub check {
     my $this = shift;
 
     unless( $TWiki::cfg{SafeEnvPath} ) {
-        return $this->WARN("You should set a value for this path if there is any risk at all of your site being hacked.");
+        return $this->WARN("You should set a value for this path.");
     }
 
     my $check = '';

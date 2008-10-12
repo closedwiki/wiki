@@ -120,14 +120,19 @@ HERE
         $TWiki::cfg{$var} ||= 'NOT SET';
     }
 
-    # Make %ENV safer for CGI (should reflect TWiki.pm)
+    # Make %ENV safer for CGI
     $TWiki::cfg{DETECTED}{originalPath} = $ENV{PATH} || '';
-    if( $TWiki::cfg{SafeEnvPath} ) {
-        # SMELL: this untaint probably isn't needed
-        my $ut = $TWiki::cfg{SafeEnvPath};
-        $ut =~ /^(.*)$/;
-        $ENV{PATH} = $1;
+    unless( $TWiki::cfg{SafeEnvPath} ) {
+        # Grab the current path
+        if( defined( $ENV{PATH} )) {
+            $ENV{PATH} =~ /(.*)/;
+            $TWiki::cfg{SafeEnvPath} = $1;
+        } else {
+            # Can't guess
+            $TWiki::cfg{SafeEnvPath} = '';
+        }
     }
+    $ENV{PATH} = $TWiki::cfg{SafeEnvPath};
     delete @ENV{ qw( IFS CDPATH ENV BASH_ENV ) };
 
     return ($result, $badLSC);

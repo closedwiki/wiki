@@ -166,11 +166,11 @@ $TWiki::cfg{ScriptSuffix} = '';
 $TWiki::cfg{Password} = '';
 
 #---++ Paths
-# **PATH**
-# Path control. If set, overrides the default PATH setting to control
-# where TWiki looks for programs. By restricting this path to just a few key
-# directories, you increase the security of your TWiki. If security is not
-# an issue, leave the setting blank.
+# **PATH M**
+# Path control. Overrides the default PATH setting to control
+# where TWiki looks for external programs, such as grep and rcs.
+# By restricting this path to just a few key
+# directories, you increase the security of your TWiki.
 # <ol>
 # <li>Unix or Linux
 #  <ul>

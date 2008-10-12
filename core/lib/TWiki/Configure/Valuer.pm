@@ -85,8 +85,9 @@ sub loadCGIParams {
         my $keys = $1;
         # The value of TYPEOF: is the type name
         my $typename = $query->param( $param );
+        $typename =~ /(\w+)/; $typename = $1; # check and untaint
         my $type = TWiki::Configure::Type::load($typename);
-        my $newval = $type->string2value($query->param( $keys ));
+        my $newval = $type->string2value( $query->param( $keys ));
         my $xpr = '$this->{values}->'.$keys;
         my $curval = eval $xpr;
         if (!$type->equals($newval, $curval)) {
