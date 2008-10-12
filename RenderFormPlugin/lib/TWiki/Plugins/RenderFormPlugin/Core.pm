@@ -504,12 +504,13 @@ sub _readTopicFormData {
 
 	my $foundForm=0;
 	foreach my $line (split(/[\r\n]/,$data)) {
-		if ($line=~/%META:FORM{/) {
-			$foundForm = ($line=~/%META:FORM{name="$options{form}"}%/); 
+		if ($line=~/\%META:FORM{(.*?)}\%/) {
+			my %params = TWiki::Func::extractParameters($1);
+			$foundForm = ($params{name} eq $options{form}) || ($params{name} eq "$theWeb.$options{form}");
+			next;
 		}
-		next unless $foundForm;
 
-		if ($line=~/%META:FIELD{([^\}]+)}%/) {
+		if ($foundForm &&($line=~/\%META:FIELD{(.*?)}\%/)) {
 			my %params = TWiki::Func::extractParameters($1);
 
 			if (defined $$attr{$params{name}} && $$attr{$params{name}}{type} =~ /^(text|textarea|label|date)$/) {
@@ -695,12 +696,12 @@ sub _readTopicText
                 $text = &TWiki::Func::readTopic( $theWeb, $theTopic );
         }
 
-	if ((!defined $dontExpand) || (!$dontExpand)) {
+	#if ((!defined $dontExpand) || (!$dontExpand)) {
 		$text =~ s/(\%RENDERFORM{.*?}%)/<verbatim>\n$1<\/verbatim>/g;
 		$text =~ s/(\%STARTRENDERFORMLAYOUT.*?STOPRENDERFORMLAYOUT\%)/<verbatim>\n$1\n<\/verbatim>/sg;
 
 		$text = TWiki::Func::expandCommonVariables($text, $theTopic, $theWeb);
-	}
+	#}
         # return raw topic text, including meta data
         return $text;
 }
