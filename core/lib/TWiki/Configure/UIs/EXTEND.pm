@@ -28,6 +28,9 @@ sub ui {
     my $query = $TWiki::query;
     my $ar;
     my $extension = $query->param('extension');
+    $extension =~ /(\w+)/; # filter-in and untaint
+    $extension = $1;
+    die "Bad extension name" unless $extension;
     my $ext = '.tgz';
 
     $this->findRepositories();
@@ -199,7 +202,7 @@ HERE
 }
 
 # Find the installation target of a single file. This involves remapping
-# through the settings in LocalSIte.cfg. If the target is not remapped, then
+# through the settings in LocalSite.cfg. If the target is not remapped, then
 # the file is installed relative to the root, which is the directory
 # immediately above bin.
 sub _findTarget {
@@ -218,8 +221,7 @@ sub _findTarget {
     } else {
         $file = File::Spec->catfile($this->{root}, $file);
     }
-    $file =~ /^(.*)$/;
-    return $1;
+    return $file;
 }
 
 # Recursively list a directory
@@ -229,8 +231,13 @@ sub _listDir {
     $dir .= '/' unless $dir =~ /\/$/;
     my $d;
     my @names = ();
-    if (opendir($d, "$dir/$path")) {
+    if (opendir($d, "$dir$path")) {
         foreach my $f ( grep { !/^\.*$/ } readdir $d ) {
+            # Someone might upload a package to twiki.org that contains
+            # a filename which, when passed to File::Copy, does something
+            # evil. Check and untaint the filenames here.
+            # SMELL: potential problem with unicode chars in file names?
+            $f =~ /([\w.]+)/; $f = $1;
             if (-d "$dir$path/$f") {
                 push(@names, "$path$f/");
                 push(@names, _listDir($dir, "$path$f/"));
@@ -257,13 +264,14 @@ sub _unpackArchive {
 
     $dir ||= File::Temp::tempdir(CLEANUP=>1);
     my $here = Cwd::getcwd();
+    $here =~ /(.*)/; $here = $1; # untaint current dir name
     chdir( $dir );
     unless( $name =~ /\.zip/i && _unzip( $name ) ||
               $name =~ /(\.tar\.gz|\.tgz|\.tar)/ && _untar( $name )) {
         $dir = undef;
         print "Failed to unpack archive $name<br />\n";
     }
-    chdir( $here );
+    chdir( $1 );
 
     return $dir;
 }

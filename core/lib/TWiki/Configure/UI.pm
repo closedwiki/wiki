@@ -39,7 +39,8 @@ sub new {
     my $this = bless( { item => $item }, $class);
     $this->{item} = $item;
 
-    $this->{bin} = $FindBin::Bin;
+    $FindBin::Bin =~ /(.*)/;
+    $this->{bin} = $1;
     my @root = File::Spec->splitdir($this->{bin});
     pop(@root);
     $this->{root} = File::Spec->catfile(@root, '');
