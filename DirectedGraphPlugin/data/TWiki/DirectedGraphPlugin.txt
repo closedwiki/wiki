@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="BaseUserMapping_333" date="1219629245" format="1.1" reprev="1.3" version="1.3"}%
+%META:TOPICINFO{author="BaseUserMapping_333" date="1223783632" format="1.1" version="1.7"}%
 ---+!! Directed Graph Plugin
 %TABLE{databg="#AAAAFF"}%
 | To avoid topic corruption, please do not edit with WYSIWYG Editor |
@@ -326,12 +326,12 @@ digraph G { size="2,3!"; dpi="100";
     edge [arrowhead=none color=blue];
     node [fontcolor=blue color=white];
 
-    Workstation [shapefile="Sun_Workstation.png"];
-    Printer [shapefile="Printer.png"];
-    Internet [shapefile="Cloud-Filled.png"];
-    Router [shapefile="Wireless_Router.png"];
-    Switch [shapefile="Workgroup_Switch.png"];
-    Laptop [shapefile="Laptop.png"];
+    Workstation [shapefile="Sun_Workstation.jpg"];
+    Printer [shapefile="Printer.jpg"];
+    Internet [shapefile="Cloud-Filled.jpg"];
+    Router [shapefile="Wireless_Router.jpg"];
+    Switch [shapefile="Workgroup_Switch.jpg"];
+    Laptop [shapefile="Laptop.jpg"];
 
     Workstation -> Switch;
     Printer -> Switch;
@@ -412,6 +412,11 @@ __Note:__ The following instructions are for the administrator who installs the 
       * =$TWiki::cfg{DirectedGraphPlugin}{attachPath} = '';=   [optional]
       * =$TWiki::cfg{DirectedGraphPlugin}{attachUrlPath} = '';= [optional]
 
+   * Verify your installation
+      * Ensure that the =dot= command can manually generate a png file.  
+      * If using the antialias option, ensure that ImageMagic =convert= command can convert from a .ps to .png format.
+
+
 Plugin zip content:
 | *File:* | *Description:* |
 | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
@@ -424,10 +429,11 @@ Plugin zip content:
 
 Dependencies:
 | *Package:* | *Description:* |
-| Graphviz dot | Preprocessor for drawing directed graphs |
-| cairo | cairo graphics processor for native !GraphViz antialiasing (optional) |
-| graphviz-cairo plugin | cairo rendering plugin for !Graphviz (optional - not needed in latest versions of !GraphViz) |
-| <nop>ImageMagick | Postprocessor for antialiasing rendered graphs (optional) |
+| Graphviz dot | Preprocessor for drawing directed graphs | http://graphviz.org/ |
+| cairo | cairo graphics processor for native !GraphViz antialiasing (optional) | |
+| graphviz-cairo plugin | cairo rendering plugin for !Graphviz (optional - not needed in latest versions of !GraphViz) | |
+| <nop>ImageMagick | Postprocessor for antialiasing rendered graphs (optional) | http://imagemagick.org/ |
+| <nop>GhostScript | Postprocessor required by !ImageMagick for antialiasing to convert from .ps back to .png | http://ghostscript.com/awki |
 | Digest::MD5, Storable, File::Copy, File::Path, File::Spec, File::Temp | Perl modules |
 | Web fonts | Fonts required for dot's png creations |
 
@@ -435,9 +441,10 @@ To install the web fonts, download this [[http://biostat.mc.vanderbilt.edu/twiki
 
 ---+++ Notes on antialiasing
 
-There are two ways to accomplish antialiased output. The older method is to:
+There are two ways to accomplish antialiased output. The older method, enabled by the ==antialias="on"== parameter::
    * generate the graph output in postscript format (.ps)
    * convert to png format using <nop>ImageMagick (convert) command
+   * <nop>ImageMagick uses <nop>GhostScript internally to from postscript.
 
 This method is not compatible with client side image maps unless the imagesize rendered by graphviz is the same as the final output from ImageMagick. For example, the following parameters will result in compatible maps.
 
@@ -446,13 +453,11 @@ This method is not compatible with client side image maps unless the imagesize r
    $ graph parameters used by =dot=: digraph G { size="2,3!"; dpi="100"; 
       * Size is the image size in inches, ! = scale to fill one dimension.
 
-(The graphviz site suggests using ghostscript to do the antialiasing however <nop>ImageMagick also does this by default and is more widely installed. <nop>ImageMagick is used by this plugin, not ghostscript.)
-
 The other method is to directly render the graph with graphviz using the cairo backend, "which has antialiased, path-based graphics".
 
 As documented on the [[http://www.graphviz.org/doc/FAQ.html#Q8][graphviz FAQ]] on the "Linux bleeding edge", install the cairo graphics backend library, along with the graphviz-cairo plugin. (It appears that the current graphviz includes cairo support without the plugin.)
 
-You can determine what rendering engine is used for any specified file type by running the =dot= command from the command shell. If the rendering is done with cairo, you already have antialiased output.
+You can determine what rendering engine is used for any specified file type by running the =dot= command from the command shell. *If the rendering is done with cairo, you already have antialiased output and should not need to use the =antialias="on"= parameter.*
 
 <pre>
 dot -v -Tpng -V 
@@ -473,6 +478,7 @@ Details on how to install cairo, graphviz and imagemagick are beyond the scope o
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order --> |
+|  11 Oct 2008: | TWikibug:Item6058: Incompatibilities with Windows  --TWiki:Main.GeorgeClark | 
 |  31 Aug 2008: | TWikibug:Item5954: DirectedGraphPlugin should permit direct file I/O --TWiki:Main.GeorgeClark | 
 |  26 Jul 2008: | TWikibug:Item5332 - Attachment handing needs improvements.  Remove old attachments, Add support for inline .jpg files, Use single workarea file per topic.<br />  TWikibug:Item5349 - DirectedGraphPlugin uses too many global variables  -- TWiki:Main.GeorgeClark |
 |  10 Apr 2008: | TWikibug:Item5508 - Wiki Words in graph label text results in corrupted image maps. |
@@ -513,3 +519,9 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 %META:FILEATTACHMENT{name="Wireless_Router.png" attr="h" autoattached="1" comment="Cisco library icon for sample graph" date="1172906345" path="Wireless_Router.png" size="7771" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="usecase_sample.png" attr="h" autoattached="1" comment="DOT usecase sample" date="1172906345" path="usecase_sample.png" size="109307" user="Main.TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="sample_simple_lan_setup.png" attr="h" autoattached="1" comment="Sample DOT graph" date="1172906345" path="sample_simple_lan_setup.png" size="28102" user="Main.TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="Cloud-Filled.jpg" attachment="Cloud-Filled.jpg" attr="h" comment="jpg format for antialiased diagram" date="1223776982" path="Cloud-Filled.jpg" size="4986" stream="IO::File=GLOB(0x8bded24)" tmpFilename="/usr/tmp/CGItemp11791" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="Laptop.jpg" attachment="Laptop.jpg" attr="h" comment="jpg format for antialiased diagram" date="1223777001" path="Laptop.jpg" size="4583" stream="IO::File=GLOB(0x8be0c84)" tmpFilename="/usr/tmp/CGItemp11788" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="Printer.jpg" attachment="Printer.jpg" attr="h" comment="jpg format for antialiased diagram" date="1223777024" path="Printer.jpg" size="4349" stream="IO::File=GLOB(0x8be0ca4)" tmpFilename="/usr/tmp/CGItemp11908" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="Sun_Workstation.jpg" attachment="Sun_Workstation.jpg" attr="h" comment="jpg format for antialiased diagram" date="1223777052" path="Sun_Workstation.jpg" size="4481" stream="IO::File=GLOB(0x8be103c)" tmpFilename="/usr/tmp/CGItemp11800" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="Wireless_Router.jpg" attachment="Wireless_Router.jpg" attr="h" comment="jpg format for antialiased diagram" date="1223777069" path="Wireless_Router.jpg" size="5046" stream="IO::File=GLOB(0x8be1434)" tmpFilename="/usr/tmp/CGItemp11852" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="Workgroup_Switch.jpg" attachment="Workgroup_Switch.jpg" attr="h" comment="jpg format for antialiased diagram" date="1223777089" path="Workgroup_Switch.jpg" size="4483" stream="IO::File=GLOB(0x8be155c)" tmpFilename="/usr/tmp/CGItemp11850" user="TWikiContributor" version="1"}%

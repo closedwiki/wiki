@@ -67,8 +67,20 @@ $pluginName = 'DirectedGraphPlugin';
 
 $HASH_CODE_LENGTH    = 32;
 
+#
+# Documentation on the sandbox command options taken from TWiki/Sandbox.pm
+#
+# '%VAR%' can optionally take the form '%VAR|FLAG%', where FLAG is a
+# single character flag.  Permitted flags are
+#   * U untaint without further checks -- dangerous,
+#   * F normalize as file name,
+#   * N generalized number,
+#   * S simple, short string,
+#   * D rcs format date
+
+
 $dotHelper = "DirectedGraphPlugin.pl";
-$engineCmd = " %HELPERSCRIPT|F% %DOT|F% %WORKDIR|F% %INFILE|F% %IOSTRING|U% %ERRFILE|F% ";
+$engineCmd = " %HELPERSCRIPT|F% %DOT|F% %WORKDIR|F% %INFILE|F% %IOSTRING|U% %ERRFILE|F% %DEBUGFILE|F%";
 $antialiasCmd = "convert -density %DENSITY|N% -geometry %GEOMETRY|S% %INFILE|F% %OUTFILE|F%";
 
 # The session variables are used to store the file names and md5hash of the input to the dot command
@@ -222,6 +234,7 @@ sub _handleDot
     } 
 
     my $tempdir = "";
+
     if ( defined $TWiki::cfg{TempfileDir} ) {
         $tempdir = $TWiki::cfg{TempfileDir};
     } else {
@@ -430,6 +443,14 @@ sub _handleDot
                          SUFFIX => '.dot');
         TWiki::Func::saveFile( "$dotFile", $desc);
 
+        my $debugFile = "";
+        if ($debugDefault) {
+            $debugFile = new File::Temp(TEMPLATE => 'DiGraphPluginRunXXXXXXXXXX',
+                         DIR => $tempdir,
+                         UNLINK => 0, # Manually unlink later if debug not specified
+                         SUFFIX => '.log');
+        }                 
+
         #  Execute dot - generating all output into the TWiki temp directory
         my ( $output, $status ) = $sandbox->sysCommand(
                 $perlCmd . $engineCmd,
@@ -438,13 +459,16 @@ sub _handleDot
                 WORKDIR      => $workingDir,
                 INFILE       => "$dotFile",
                 IOSTRING      => $outString,
-                ERRFILE      => "$dotFile" . ".err"
+                ERRFILE      => "$dotFile" . ".err",
+                DEBUGFILE    => "$debugFile"
             );
 	
 	if ($status) {
+             $dotFile =~ tr!\\!/!;      
 	     unlink $dotFile          unless $debugDefault;
               return _showError( $status, $output, $desc, $dotFile.".err" );
 	     } ### if ($status)
+        $dotFile =~ tr!\\!/!;
 	unlink "$dotFile.err" unless $debugDefault;     
         unlink $dotFile unless $debugDefault;
 
@@ -492,6 +516,7 @@ sub _handleDot
                     }
                 );
             } # else if ($attachPath)
+            $tempFile{$key} =~ tr!\\!/!;
             unlink $tempFile{$key} unless $debugDefault ;
         } ### foreach my $key (keys....
 
@@ -558,6 +583,7 @@ sub _showError
         open (ERRFILE, $errFile);
         my @errLines = <ERRFILE>;
         $text = "*DirectedGraphPlugin error:* <verbatim>" . join("", @errLines) . "</verbatim>";
+        $errFile =~ tr!\\!/!;
         unlink $errFile unless $debugDefault;
     }
 
@@ -655,6 +681,7 @@ sub _loadHashCodes {
 
     my ($met, $tex) =  TWiki::Func::readTopic( $web, $topic );
     my @attachments = $met->find( 'FILEATTACHMENT' );
+        &_writeDebug(" converting old filehash  ");
         foreach my $a (@attachments) {
 	    my $aname = $a->{name};
             my ($n, $t) = $aname =~ m/^(.*)\.(.*)$/; # Split file name and type
@@ -670,11 +697,14 @@ sub _loadHashCodes {
     # Read in all of the hash files for the generated attachments
     # and build a new format hash table.  
 
-    my @wfiles  = grep { /^${usWeb}_${topic}_/ } readdir(DIR);
+    my $fPrefix = $usWeb."_".$topic."_";
+    my @wfiles  = grep { /^$fPrefix/ } readdir(DIR);
+        &_writeDebug(" unlinking old hash files for $fPrefix");
         foreach my $f (@wfiles) {
             my $key = TWiki::readFile("$workAreaDir/$f");
             $f = TWiki::Sandbox::untaintUnchecked($f);
 	    unlink "$workAreaDir/$f";              # delete the old style hash file
+            &_writeDebug(" unlinking old filehash $workAreaDir/$f  ");
             $f =~ s/^${usWeb}_${topic}_(.*)/$1/g;    # recover the original attachment filename
             $tempHash{FORMATS}{$f} = $typeHash{$f};   # insert hash of types found in attachment table
 	    $tempHash{MD5HASH}{$f} = $key;            # insert hash indexed by filename

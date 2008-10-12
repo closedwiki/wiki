@@ -2,11 +2,17 @@ data/TWiki/DirectedGraphPlugin.txt 0644
 data/TWiki/HowtoDirectedGraphs.txt 0644
 lib/TWiki/Plugins/DirectedGraphPlugin.pm 0644
 lib/TWiki/Plugins/DirectedGraphPlugin/Config.spec 0644
+pub/TWiki/DirectedGraphPlugin/Cloud-Filled.jpg 0644
 pub/TWiki/DirectedGraphPlugin/Cloud-Filled.png 0644
+pub/TWiki/DirectedGraphPlugin/Laptop.jpg 0644
 pub/TWiki/DirectedGraphPlugin/Laptop.png 0644
+pub/TWiki/DirectedGraphPlugin/Printer.jpg 0644
 pub/TWiki/DirectedGraphPlugin/Printer.png 0644
+pub/TWiki/DirectedGraphPlugin/Sun_Workstation.jpg 0644
 pub/TWiki/DirectedGraphPlugin/Sun_Workstation.png 0644
+pub/TWiki/DirectedGraphPlugin/Wireless_Router.jpg 0644
 pub/TWiki/DirectedGraphPlugin/Wireless_Router.png 0644
+pub/TWiki/DirectedGraphPlugin/Workgroup_Switch.jpg 0644
 pub/TWiki/DirectedGraphPlugin/Workgroup_Switch.png 0644
 pub/TWiki/DirectedGraphPlugin/graphsample.png 0644
 pub/TWiki/DirectedGraphPlugin/graphsample2.png 0644
