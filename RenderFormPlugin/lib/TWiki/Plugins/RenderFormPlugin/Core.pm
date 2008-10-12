@@ -250,6 +250,9 @@ sub _renderUserLayout {
 	my $switch = _getSwitchButton($topic,$web);
 	$text=~s/\Q$options{fieldmarker}SWITCH$options{fieldmarker}\E/$switch/g;
 
+	$text=~s/\Q$options{fieldmarker}\EOPTION[\(\[\{]([^\)\}\]\Q$options{fieldmarker}\E]+)[\)\}\]]\Q$options{fieldmarker}\E/$options{$1}/sg;
+	$text=~s/\Q$options{fieldmarker}OPTION$options{fieldmarker}\E/join(", ",sort keys %options)/eg;
+
 	my $hidden="";
 	foreach my $name (keys %{$a}) {
 		my $def = $$a{$name};
@@ -281,7 +284,16 @@ sub _readUserLayout {
 	while ((!defined $layout)&&($text=~s/\%STARTRENDERFORMLAYOUT\{(.*?)\}\%(.*?)\%STOPRENDERFORMLAYOUT\%//s)) {
 		my ($p,$l) = ($1,$2);
 		my %params = TWiki::Func::extractParameters($p);
-		$layout = $l if defined $name && ( ($params{_DEFAULT} eq $name) || ($params{name} eq $name) );
+		if (defined $name && ( ($params{_DEFAULT} eq $name) || ($params{name} eq $name) ) && ((!defined $params{mode}) || ($params{mode} eq $options{mode}))) { 
+			$layout = $l ;
+		} elsif (!defined $name) {
+			if ((defined $params{mode}) && ($params{mode} eq $options{mode})) {
+				$layout = $l ;
+			} elsif ((defined $params{_DEFAULT})&&($params{_DEFAULT} eq $options{mode})) {
+				$layout = $l ;
+			}
+		}
+
 		$firstlayout = $l unless defined $firstlayout;
 	}
 
