@@ -32,7 +32,7 @@ sub string2value {
     my ($this, $val) = @_;
     $val ||= 0;
     $val = '0'.$val unless $val =~ /^0/;
-    $val =~ s/[^\d]//g; # protect the eval, just in case
+    $val =~ /(\d+)/; $val = $1; # protect the eval, just in case
     # Use eval to force octal-decimal conversion (Item3529)
     eval "\$val = $val";
     return $val;

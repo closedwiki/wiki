@@ -74,7 +74,8 @@ sub string2value {
         # Parse failed, return as a string.
         die "Parse of structured value failed at: $s\nPlease go back and check it.";
     }
-    return eval $val;
+    $val =~ /(.*)/; # parsed, so safe to untaint
+    return eval $1;
 }
 
 sub deep_equals {
