@@ -306,7 +306,7 @@ sub _readUserLayout {
 		$pname = $params{_DEFAULT} unless defined $pname;
 		if ((defined $name) && (defined $pname) && ($pname eq $name) && ((!defined $params{mode}) || ($params{mode} eq $options{mode}))) { 
 			$layout = $l ;
-		} elsif (!defined $name) {
+		} elsif ((!defined $name)&&(!defined $pname)) {
 			if ((defined $params{mode}) && ($params{mode} eq $options{mode})) {
 				$layout = $l ;
 			} elsif ((defined $params{_DEFAULT})&&($params{_DEFAULT} eq $options{mode})) {
@@ -500,7 +500,7 @@ sub _readTopicFormData {
 	
 	my ($w,$t) = _getWebAndTopic($topic,$theWeb);
 
-	my $data = _readTopicText($w,$t);
+	my $data = _readTopicText($w,$t,0);
 
 	my $foundForm=0;
 	foreach my $line (split(/[\r\n]/,$data)) {
