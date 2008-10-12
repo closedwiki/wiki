@@ -171,15 +171,16 @@ sub render {
 
 	my $topic = defined $options{topic} ? $options{topic} : $theTopic.'XXXXXXXXXX';
 
-	my ($d,$a,$m)  = _readTWikiFormsDef($theWeb);
+	my ($defsRef,$attrRef,$mandRef,$titlRef)  = _readTWikiFormsDef($theWeb);
 
-	_readTopicFormData($a, $topic, $theWeb) if $options{mode} ne 'create';
+	_readTopicFormData($attrRef, $topic, $theWeb) if $options{mode} ne 'create';
 
-	$d = _reorderDefs($d,$a) if defined $options{order};
+	$defsRef = _reorderDefs($defsRef,$titlRef) if defined $options{order};
 
-	my @defs = @{$d};
-	my %attr = %{$a};
-	my @mand = @{$m};
+	my @defs = @{$defsRef};
+	my %attr = %{$attrRef};
+	my @mand = @{$mandRef};
+	my %titl = %{$titlRef};
 
 	my $text = "";
 	my $cgi = TWiki::Func::getCgiQuery();
@@ -209,19 +210,15 @@ sub render {
 
 
 	if (defined $options{layout} && _layoutTopicExists($theWeb)) {
-		$text .= _renderUserLayout($topic,$theWeb,$a);
+		$text .= _renderUserLayout($topic,$theWeb,$titlRef);
 	} else {
 		my @hidden = (defined $options{hidden} && $options{hidden}!~/^\s*$/) ? split(/[,\|\;]/, $options{hidden}) :  ( );
 		my $hiddenText = "";
 		$text .= "\n";
 
-		###$text .= $cgi->start_table(-cellspacing=>0, -cellpadding=>2, -class=>"twikiTable", -border=>1);
-	
 		my $button= _getSwitchButton($theTopic,$theWeb);
 		$text .= "|  * ".($options{mode} eq 'create'?"<nop>":"")."$topic$button / $options{form} * ||\n" unless $options{hideheader};
 	
-		###$text .= $cgi->Tr($cgi->th({-class=>'twikiFirstCol', -bgcolor=>'%WEBBGCOLOR%', -align=>'right',-colspan=>2}, $cgi->strong(" ".($options{mode} eq 'create'?"<nop>":"")."$theWeb.$topic / $options{form} ")));
-
 		foreach my $def (@defs) {
 			if (grep(/^\Q$$def{name}\E$/,@hidden)) {
 				$hiddenText .= $cgi->hidden(-name=>$$def{name}, -default=>$$def{values}[0]{name});
@@ -229,10 +226,8 @@ sub render {
 			}
 			my ($td,$tadd) = _renderFormField($cgi,$def,$formName);
 			$text .= '|  *'.$cgi->span({title=>$$def{tooltip}}, " ".$$def{title} . ($$def{attr}=~/M/ ?" %RED%*%ENDCOLOR%":" ") . $tadd  ) . '*|'.$td.'|';
-			###$text .= $cgi->Tr($cgi->th({-bgcolor=>'%WEBBGCOLOR%', -class=>'twikiFirstCol', -align=>'right'}," *".$cgi->span({title=>$$def{tooltip}}, " ".$$def{name} . ($$def{attr}=~/M/ ?" *":" ") . $tadd  ) . '* ') .$cgi->td($td));
 			$text .= "\n";
 		}
-		###$text .= $cgi->end_table();
 		$text .= "||  %RED%*%ENDCOLOR% indicates mandatory fields|\n" if $#mand != -1;
 		$text .= $cgi->submit(-name=>'Save', -value=>$options{$options{mode}.'button'}) unless $options{mode}  eq 'view';
 		$text .= $hiddenText;
@@ -606,6 +601,7 @@ sub _readTWikiFormsDef {
 	my @defs = ();
 	my %attr = ();
 	my @mand = ();
+	my %titl =  ();
 
 
 	my $data = _readTopicText($web,$topic);
@@ -632,11 +628,12 @@ sub _readTWikiFormsDef {
 
 		push @defs, { name=>$name, title=>$cols[1],  type=>_get($cols[2],'text'), size=>_get($cols[3],80), value=>_get($value,""), values=>\@values, tooltip=>_get($cols[5],$cols[1]), attr=>_get($cols[6],"") };
 		$attr{$name}=$defs[$#defs];
+		$titl{$cols[1]}=$defs[$#defs];
 
 		push @mand, $name if $defs[$#defs]{attr}=~/M/i;
 		
 	}
-	return (\@defs,\%attr,\@mand);
+	return (\@defs,\%attr,\@mand,\%titl);
 }
 # =========================
 sub _getFormFieldValues {
