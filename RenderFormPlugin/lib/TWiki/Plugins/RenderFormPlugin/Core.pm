@@ -1,8 +1,8 @@
 package TWiki::Plugins::RenderFormPlugin::Core;
 
 ### todo:
-# + additional form field definitions that can be used with URLPARAM in the topictemplate
-# + automatic form detection
+# + additional form field definitions that can be used with URLPARAM in the templatetopic
+# + AJAX form data submit
 
 use strict;
 
@@ -121,23 +121,41 @@ sub _initOptions {
 
 	# automatic mode change:
 	my ($w,$t) = _getWebAndTopic($options{topic},$web);
-	$options{mode}='view' if (($options{mode} eq $defaults{mode})&&($options{topic} ne $topic.'XXXXXXXXXX')&& TWiki::Func::topicExists($w,$t));
+	my $topicExists = TWiki::Func::topicExists($w,$t);
+	$options{mode}='view' if (($options{mode} eq $defaults{mode}) && ($options{topic} ne $topic.'XXXXXXXXXX') && $topicExists);
+
+	# automatic form detection:
+	$options{form} = _detectForm($web) if (!defined $options{form}) && (defined $options{topic}) && $topicExists;
 
 	# check required options:
 	@missingParams= ( );
 	foreach my $option (@requiredOptions) {
-		push (@missingParams, $option) unless defined $params{$option};
+		push (@missingParams, $option) unless defined $options{$option};
 	}
 	return 0 if $#missingParams != -1;
 
 	# validate options:
 	@invalidParams = ( );
 	foreach my $option (keys %validOptions) {
-		push (@invalidParams,$option) if (defined $params{$option}) && (!grep(/^\Q$params{$option}\E$/i,@{$validOptions{$option}}));
+		push (@invalidParams,$option) if (defined $options{$option}) && (!grep(/^\Q$options{$option}\E$/i,@{$validOptions{$option}}));
 	}
 	return 0 if $#invalidParams != -1;
 
 	return 1;
+}
+# =========================
+sub _detectForm {
+	my ($theWeb) = @_;
+	my ($web,$topic) = _getWebAndTopic($options{topic},$theWeb);
+	my $text = _readTopicText($web,$topic,0);
+	my $formTopic = undef;
+
+	if ($text =~ /\%META:FORM{(.*?)}\%/s) {
+		my %params = TWiki::Func::extractParameters($1);
+		my ($w,$t) = _getWebAndTopic($params{name}, $web);
+		$formTopic = "$w.$t" if TWiki::Func::topicExists($w,$t);
+	}
+	return $formTopic;
 }
 # =========================
 sub render {
@@ -259,7 +277,7 @@ sub _renderUserLayout {
 		my $title = $$def{title};
 
 		if ($text=~s/(\Q$options{fieldmarker}$title$options{fieldmarker}\E)/join(" ",_renderFormField($cgi,$def,$formName))/eg) {
-			TWiki::Func::writeWarning("$1 substituted") if $TWiki::Plugins::RenderFormPlugin::debug;
+			TWiki::Func::writeDebug("$1 substituted") if $TWiki::Plugins::RenderFormPlugin::debug;
 		} else {
 			$hidden .= $cgi->hidden(-name=>$name, -default=>$$def{values}[0]{name});
 		}
@@ -284,7 +302,9 @@ sub _readUserLayout {
 	while ((!defined $layout)&&($text=~s/\%STARTRENDERFORMLAYOUT\{(.*?)\}\%(.*?)\%STOPRENDERFORMLAYOUT\%//s)) {
 		my ($p,$l) = ($1,$2);
 		my %params = TWiki::Func::extractParameters($p);
-		if (defined $name && ( ($params{_DEFAULT} eq $name) || ($params{name} eq $name) ) && ((!defined $params{mode}) || ($params{mode} eq $options{mode}))) { 
+		my $pname = $params{name};
+		$pname = $params{_DEFAULT} unless defined $pname;
+		if ((defined $name) && (defined $pname) && ($pname eq $name) && ((!defined $params{mode}) || ($params{mode} eq $options{mode}))) { 
 			$layout = $l ;
 		} elsif (!defined $name) {
 			if ((defined $params{mode}) && ($params{mode} eq $options{mode})) {
@@ -338,7 +358,6 @@ sub _reorderDefs {
 	my @newdefs = ( );
 	if ($options{order} =~ /\[\:(alpha|dalpha|ralpha|num|dnum|rnum)\:\]/i) {
 		my $sfvar = lc($1);
-		TWiki::Func::writeWarning("_reorderDefs: $sfvar");
 		my @sattr ;
 		@sattr = sort { $a cmp $b } keys %{$attr} if ($sfvar eq 'alpha'); 
 		@sattr = sort { $b cmp $a } keys %{$attr} if ($sfvar eq 'dalpha') || ($sfvar eq 'ralpha');
@@ -668,7 +687,7 @@ sub _createInvalidParamsMessage {
 # =========================
 sub _readTopicText
 {
-        my( $theWeb, $theTopic ) = @_;
+        my( $theWeb, $theTopic, $dontExpand ) = @_;
         my $text = '';
         if( $TWiki::Plugins::VERSION >= 1.010 ) {
                 $text = &TWiki::Func::readTopicText( $theWeb, $theTopic, '', 1 );
@@ -676,12 +695,12 @@ sub _readTopicText
                 $text = &TWiki::Func::readTopic( $theWeb, $theTopic );
         }
 
-	$text =~ s/(\%RENDERFORM{.*?}%)/<verbatim>\n$1<\/verbatim>/g;
+	if ((!defined $dontExpand) || (!$dontExpand)) {
+		$text =~ s/(\%RENDERFORM{.*?}%)/<verbatim>\n$1<\/verbatim>/g;
+		$text =~ s/(\%STARTRENDERFORMLAYOUT.*?STOPRENDERFORMLAYOUT\%)/<verbatim>\n$1\n<\/verbatim>/sg;
 
-	$text =~ s/\%STARTRENDERFORMLAYOUT/<verbatim>\n%STARTRENDERFORMLAYOUT/g;
-	$text =~ s/(\%STARTRENDERFORMLAYOUT.*?STOPRENDERFORMLAYOUT\%)/<verbatim>\n$1\n<\/verbatim>/sg;
-
-	$text = TWiki::Func::expandCommonVariables($text, $theTopic, $theWeb);
+		$text = TWiki::Func::expandCommonVariables($text, $theTopic, $theWeb);
+	}
         # return raw topic text, including meta data
         return $text;
 }
