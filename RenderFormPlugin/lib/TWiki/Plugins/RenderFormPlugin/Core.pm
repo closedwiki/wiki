@@ -40,8 +40,8 @@ sub _initDefaults {
 			missingparamsmsg => '%RED% Sorry, missing required parameters: %MISSINGPARAMSLIST% %ENDCOLOR% <br/> Required parameters are %REQUIREDPARAMSLIST%',
 			unknownparamsmsg => '%RED% Sorry, some parameters are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR% <br/> Allowed parameters are (see TWiki.RenderFormPlugin topic for more details): %KNOWNPARAMSLIST%',
 			invalidparamsmsg => '%RED% Sorry, some parameters are invalid for: %INVALIDPARAMSLIST% %ENDCOLOR% <br/> Valid parameters are (see TWiki.RenderFormPlugin topic for more details): %VALIDPARAMSLIST%',
-			
-
+			layout => undef,
+			fieldmarker => '@',
 		);
 
 	@requiredOptions = ( 'form' );
@@ -188,34 +188,96 @@ sub render {
 	$text .= _createJavaScript(\@mand, $formName) unless $options{mode} eq 'view';
 
 
-	my @hidden = (defined $options{hidden} && $options{hidden}!~/^\s*$/) ? split(/[,\|\;]/, $options{hidden}) :  ( );
-	my $hiddenText = "";
-	$text .= "\n";
-
-	###$text .= $cgi->start_table(-cellspacing=>0, -cellpadding=>2, -class=>"twikiTable", -border=>1);
-	
-	my $button= _getSwitchButton($theTopic,$theWeb);
-	$text .= "|  * ".($options{mode} eq 'create'?"<nop>":"")."$topic$button / $options{form} * ||\n" unless $options{hideheader};
-	
-	###$text .= $cgi->Tr($cgi->th({-class=>'twikiFirstCol', -bgcolor=>'%WEBBGCOLOR%', -align=>'right',-colspan=>2}, $cgi->strong(" ".($options{mode} eq 'create'?"<nop>":"")."$theWeb.$topic / $options{form} ")));
-
-	foreach my $def (@defs) {
-		if (grep(/^\Q$$def{name}\E$/,@hidden)) {
-			$hiddenText .= $cgi->hidden(-name=>$$def{name}, -default=>$$def{values}[0]{name});
-			next;
-		}
-		my ($td,$tadd) = _renderFormField($cgi,$def,$formName);
-		$text .= '|  *'.$cgi->span({title=>$$def{tooltip}}, " ".$$def{title} . ($$def{attr}=~/M/ ?" %RED%*%ENDCOLOR%":" ") . $tadd  ) . '*|'.$td.'|';
-		###$text .= $cgi->Tr($cgi->th({-bgcolor=>'%WEBBGCOLOR%', -class=>'twikiFirstCol', -align=>'right'}," *".$cgi->span({title=>$$def{tooltip}}, " ".$$def{name} . ($$def{attr}=~/M/ ?" *":" ") . $tadd  ) . '* ') .$cgi->td($td));
+	if (defined $options{layout}) {
+		$text .= _renderUserLayout($topic,$theWeb,$a);
+	} else {
+		my @hidden = (defined $options{hidden} && $options{hidden}!~/^\s*$/) ? split(/[,\|\;]/, $options{hidden}) :  ( );
+		my $hiddenText = "";
 		$text .= "\n";
+
+		###$text .= $cgi->start_table(-cellspacing=>0, -cellpadding=>2, -class=>"twikiTable", -border=>1);
+	
+		my $button= _getSwitchButton($theTopic,$theWeb);
+		$text .= "|  * ".($options{mode} eq 'create'?"<nop>":"")."$topic$button / $options{form} * ||\n" unless $options{hideheader};
+	
+		###$text .= $cgi->Tr($cgi->th({-class=>'twikiFirstCol', -bgcolor=>'%WEBBGCOLOR%', -align=>'right',-colspan=>2}, $cgi->strong(" ".($options{mode} eq 'create'?"<nop>":"")."$theWeb.$topic / $options{form} ")));
+
+		foreach my $def (@defs) {
+			if (grep(/^\Q$$def{name}\E$/,@hidden)) {
+				$hiddenText .= $cgi->hidden(-name=>$$def{name}, -default=>$$def{values}[0]{name});
+				next;
+			}
+			my ($td,$tadd) = _renderFormField($cgi,$def,$formName);
+			$text .= '|  *'.$cgi->span({title=>$$def{tooltip}}, " ".$$def{title} . ($$def{attr}=~/M/ ?" %RED%*%ENDCOLOR%":" ") . $tadd  ) . '*|'.$td.'|';
+			###$text .= $cgi->Tr($cgi->th({-bgcolor=>'%WEBBGCOLOR%', -class=>'twikiFirstCol', -align=>'right'}," *".$cgi->span({title=>$$def{tooltip}}, " ".$$def{name} . ($$def{attr}=~/M/ ?" *":" ") . $tadd  ) . '* ') .$cgi->td($td));
+			$text .= "\n";
+		}
+		###$text .= $cgi->end_table();
+		$text .= "||  %RED%*%ENDCOLOR% indicates mandatory fields|\n" if $#mand != -1;
+		$text .= $cgi->submit(-name=>'Save', -value=>$options{$options{mode}.'button'}) unless $options{mode}  eq 'view';
+		$text .= $hiddenText;
 	}
-	###$text .= $cgi->end_table();
-	$text .= "||  %RED%*%ENDCOLOR% indicates mandatory fields|\n" if $#mand != -1;
-	$text .= $cgi->submit(-name=>'Save', -value=>$options{$options{mode}.'button'}) unless $options{mode}  eq 'view';
-	$text .= $hiddenText;
 	$text .= $cgi->end_form();
 	$text .= "\n";
 	return $text;
+}
+# =========================
+sub _renderUserLayout {
+	my ($topic,$web,$a) = @_;
+
+	my $cgi = TWiki::Func::getCgiQuery();
+	my $formName = $options{formName};
+
+	my $text = _readUserLayout($web);
+
+	$text=~s/\Q$options{fieldmarker}FORMTOPIC$options{fieldmarker}\E/$options{form}/g;
+
+	$text=~s/\Q$options{fieldmarker}TOPIC$options{fieldmarker}\E/$topic/g;
+
+	my $button = $options{mode} ne 'view' ? $cgi->submit(-name=>'Save', -value=>$options{$options{mode}.'button'}) : "";
+	$text=~s/\Q$options{fieldmarker}SUBMIT$options{fieldmarker}\E/$button/g;
+
+	my $switch = _getSwitchButton($topic,$web);
+	$text=~s/\Q$options{fieldmarker}SWITCH$options{fieldmarker}\E/$switch/g;
+
+	my $hidden="";
+	foreach my $name (keys %{$a}) {
+		my $def = $$a{$name};
+		my $title = $$def{title};
+
+		if ($text=~s/(\Q$options{fieldmarker}$title$options{fieldmarker}\E)/join(" ",_renderFormField($cgi,$def,$formName))/eg) {
+			TWiki::Func::writeWarning("$1 substituted") if $TWiki::Plugins::RenderFormPlugin::debug;
+		} else {
+			$hidden .= $cgi->hidden(-name=>$name, -default=>$$def{values}[0]{name});
+		}
+	}
+	$text.="\n$hidden";
+
+	return $text;
+}
+# =========================
+sub _readUserLayout {
+	my ($web) = @_;
+
+	my $layout = undef;
+
+	my ($lt,$name) = split(/\#/,$options{layout});
+	
+	my ($w,$t) = _getWebAndTopic($lt,$web);
+	my $text = _readTopicText($w,$t);
+
+	$text=~s/\%STARTRENDERFORMLAYOUT\%(.*?)\%STOPRENDERFORMLAYOUT\%//s;
+	my $default = $1;
+
+	while ((defined $name)&&(!defined $layout)&&($text=~s/\%STARTRENDERFORMLAYOUT{(.*?)}\%(.*?)\%STOPRENDERFORMLAYOUT\%//s)) {
+		my ($p,$l) = ($1,$2);
+		my %params = TWiki::Func::extractParameters($p);
+		$layout = $l if ($params{_DEFAULT} eq $name) || ($params{name} eq $name);
+	}
+
+	$layout = $default unless defined $layout;
+
+	return $layout;
 }
 # =========================
 sub _getSwitchButton {
@@ -503,7 +565,8 @@ sub _readTWikiFormsDef {
 		next if $cols[1] =~ /\*[^\*]*\*/; ## ignore header
 
 		my @values = ( );
-		my $value = TWiki::Func::expandCommonVariables($cols[4], $topic, $web);
+		#my $value = TWiki::Func::expandCommonVariables($cols[4], $topic, $web);
+		my $value = $cols[4];
 
 		if ( !defined $value || $value =~ /^\s*$/ ) {
 			@values = @ { _getFormFieldValues($cols[1], $web) } ;
@@ -582,6 +645,9 @@ sub _readTopicText
         } else {
                 $text = &TWiki::Func::readTopic( $theWeb, $theTopic );
         }
+
+	$text =~ s/\%RENDERFORM[^\%]*\%//g;
+	$text = TWiki::Func::expandCommonVariables($text, $theTopic, $theWeb);
         # return raw topic text, including meta data
         return $text;
 }

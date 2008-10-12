@@ -9,7 +9,8 @@ $VERSION = '$Rev: 17581 (05 Oct 2008) $';
 $RELEASE = 'Dakar';
 
 
-$REVISION = '1.001'; #dro# changed topicparent default; added and fixed docs; fixed date field bug; fixed non-word character in field names bug;
+$REVISION = '1.002'; #dro# added layout feature; fixed date field bug; added missing docs;
+#$REVISION = '1.001'; #dro# changed topicparent default; added and fixed docs; fixed date field bug; fixed non-word character in field names bug;
 #$REVISION = '1.000'; #dro# initial version
 
 $pluginName = 'RenderFormPlugin';
@@ -33,11 +34,16 @@ sub commonTagsHandler {
 
     TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
 
+    ## !! does not work: deep recursion bug:
+    ## use TWiki::Contrib::JSCalendarContrib;
+    ## TWiki::Contrib::JSCalendarContrib::addHEAD( 'twiki' );
+
     eval {
 	use TWiki::Plugins::RenderFormPlugin::Core;
-	$_[0] =~ s@\%RENDERFORM{(.*)}\%@TWiki::Plugins::RenderFormPlugin::Core::render($1,$_[1],$_[2])@ge;
-
-	$_[0] =~ s/<\/body>/%INCLUDE{"%TWIKIWEB%\/JSCalendarContribInline"}%<\/body>/i if ($_[0] !~ /JSCalendarContrib\twiki.js/);
+	$_[0] =~ s/\%RENDERFORM{(.*)}\%/TWiki::Plugins::RenderFormPlugin::Core::render($1,$_[1],$_[2])/ge;
+	$_[0] =~ s/\%STARTRENDERFORM(.*)STOPRENDERFORM\%//g;
+	### workaround for date fields:
+	$_[0] =~ s/<\/body>/%INCLUDE{"%TWIKIWEB%\/JSCalendarContribInline"}%<\/body>/i if ($TWiki::Plugins::Version >= 1.1) && ($_[0] !~ /JSCalendarContrib\twiki.js/);
     };
     TWiki::Func::writeWarning($@) if $@;
 }

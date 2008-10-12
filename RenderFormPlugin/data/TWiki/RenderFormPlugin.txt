@@ -11,6 +11,7 @@ Features:
    * hide some form fields (=hidden= option)
    * change display order of form fields (=order= option)
    * use URL parameters to overwrite attributes (query parameter names: =rfp_&lt;attribute&gt;=)
+   * define your own form layout (=layout= attribute)
 
 %TOC%
 
@@ -98,6 +99,7 @@ Details:
 | =form= | (required attribute) a name of a topic with a TWiki.TWikiForms definition | undefined / form="MyTestForm" |
 | =hidden= | a comma separated list of form field names to hide in all modes | undefined / hidden="Field1,Field2" |
 | =hideheader= | if set, disables the form header | hideheader="no" |
+| =layout= | a topic with a layout (see [[#RenderFormPluginFormLayout][Form Layout]] section); syntax: layout="&lt;topic&gt;#&lt;layout name&gt;"; if layout name is omitted a default layout will be taken | undefined / layout="TestFormLayout#test1" |
 | =mode= | render mode of the form, allowed values: create (default), edit, view (default if =topic= exists) | mode="create" |
 | =onlynewtopic= | disables overwrite of existing topics | onlynewtopic="on" |
 | =onlywikiname= | disallows the usage of non-[[TWiki.WikiWords]] for topic names | onlywikiname="on" |
@@ -108,6 +110,48 @@ Details:
 | =text= | the topic text;  text will be ignored if a templatetopic is defined | undefined / text="my small topic text" |
 | =topic= | an existing topic for edit and view mode or a topic template name for a new topic (create mode) (e.g. <nop>TestFormDataXXXXXXXXXX) | topic="%<nop>TOPIC%XXXXXXXXXX" / topic="TestFormData%<nop>SERVERTIME{$epoch}%" |
 | =topicparent= | a topic parent; useful for the create mode; if undefined the form topic will be used | topicparent="%<nop>WEB%.%<nop>TOPIC%" / topicparent="MyHelpDesk" |
+
+#RenderFormPluginFormLayout
+---++ Form Layout
+
+Usage: =%<nop>RENDERFORM{layout="<layout topic>"}%= -or- =%<nop>RENDERFORM{layout="<layout topic>#<layout name>"}%=
+
+   * a form layout is surrounded with tags =%<nop>STARTRENDERFORMLAYOUT%= and =%<nop>STOPRENDERFORMLAYOUT%=, e.g:
+      <verbatim>
+   -- a default layout: --
+%STARTRENDERFORMLAYOUT%
+< your layout >
+%STOPRENDERFORMLAYOUT%
+
+   -- OR a named layout --
+%STARTRENDERFORMLAYOUT{< layout name >}% 
+< your layout >
+%<nop>STOPRENDERFORMLAYOUT%=
+     </verbatim>
+   * the layout name is optional
+   * you can use form data values or form fields by typing a tag like =@&lt; form field  name &gt;@=, e.g. =@Question@=
+
+| *Following tags are reserved and replaced by ...* ||
+| *Tag* | *Replaced by* |
+| @FORMTOPIC@ |the form topic name |
+| @SUBMIT@ | a submit button or empty string in view mode (hint: change the button text with the =createbutton= or =editbutton= attributes) |
+| @SWITCH@ | a link to switch between edit or view |
+| @TOPIC@ | the (target) topic name of the topic with a form |
+
+*Hints:* 
+   * The default field marker '@' can be changed with the =fieldmarker= attribute.
+   * Put the complete layout definition between =&lt;verbatim&gt;...&lt;/verbatim&gt;= tags to make the definition visible in the topic view.
+
+*Form Layout Example:*
+<verbatim>
+%STARTRENDERFORMLAYOUT% 
+|  *@TOPIC@@SWITCH@ / @FORM@*||
+|  Question%RED%*%ENDCOLOR% | @Question@ |
+|  Details | @Details@ |
+|  %RED%*%ENDCOLOR% indicates mandatory fields||
+@SUBMIT@ 
+%STOPRENDERFORMLAYOUT% 
+</verbatim>
 
 ---++ Examples
 
@@ -154,8 +198,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2008, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | V1.001 (05 Oct 2008) |
+|  Plugin Version: | V1.002 (BETA) |
 |  Change History: | <!-- versions below in reverse order --> |
+|  V1.002 (BETA): | TWiki:Main:DanielRohde: added layout feature; fixed date field bug; added missing docs; |
 |  V1.001 (05 Oct 2008): | TWiki:Main:DanielRohde: changed topicparent default; added and fixed docs; fixed date field bug; fixed non-word character in field names bug; |
 |  V1.000 (04 Oct 2008): | TWiki:Main:DanielRohde: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
