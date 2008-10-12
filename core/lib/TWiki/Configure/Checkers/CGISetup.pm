@@ -23,6 +23,15 @@ use base 'TWiki::Configure::Checker';
 
 use File::Spec;
 
+sub untaintUnchecked {
+    my ( $string ) = @_;
+
+    if ( defined( $string) && $string =~ /^(.*)$/ ) {
+        return $1;
+    }
+    return $string;            # Can't happen.
+}
+
 sub ui {
     my $this = shift;
     my $block = '';
@@ -295,9 +304,11 @@ sub _loadDEPENDENCIES {
         next unless (scalar(@row) == 4 && $row[2] eq 'cpan');
         my $ver = $row[1];
         $ver =~ s/[<>=]//g;
+        $row[0] =~ /([\w:]+)/; # check and untaint
+        my $modname = $1;
         my ($dispo,$usage) = $row[3] =~ /^\s*(\w+).?(.*)$/;
         push(@perlModules, {
-            name => $row[0],
+            name => $modname,
             usage => $usage,
             minimumVersion => $ver,
             disposition => lc($dispo)
