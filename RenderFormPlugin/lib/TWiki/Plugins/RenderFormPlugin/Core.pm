@@ -146,6 +146,9 @@ sub render {
 
 	_initDefaults() unless $defaultsInitialized;
 
+	## prevent possible mod_perl problems:
+	local(%options, @unknownParams, @missingParams, @invalidParams);
+
 	_initOptions($attributes, $theTopic, $theWeb) 
 		|| return ($#unknownParams != -1  ? _createUnknownParamsMessage() : ($#missingParams != -1 ? _createMissingParamsMessage() : _createInvalidParamsMessage()));
 
@@ -188,7 +191,7 @@ sub render {
 	$text .= _createJavaScript(\@mand, $formName) unless $options{mode} eq 'view';
 
 
-	if (defined $options{layout}) {
+	if (defined $options{layout} && _layoutTopicExists($theWeb)) {
 		$text .= _renderUserLayout($topic,$theWeb,$a);
 	} else {
 		my @hidden = (defined $options{hidden} && $options{hidden}!~/^\s*$/) ? split(/[,\|\;]/, $options{hidden}) :  ( );
@@ -220,6 +223,14 @@ sub render {
 	$text .= $cgi->end_form();
 	$text .= "\n";
 	return $text;
+}
+# =========================
+sub _layoutTopicExists {
+	my ($theWeb) = @_;
+	my ($topic,$web);
+	($topic) = split(/\#/,$options{layout});
+	($web,$topic) =  _getWebAndTopic($topic,$theWeb);
+	return TWiki::Func::topicExists($web,$topic);
 }
 # =========================
 sub _renderUserLayout {
@@ -266,16 +277,20 @@ sub _readUserLayout {
 	my ($w,$t) = _getWebAndTopic($lt,$web);
 	my $text = _readTopicText($w,$t);
 
-	$text=~s/\%STARTRENDERFORMLAYOUT\%(.*?)\%STOPRENDERFORMLAYOUT\%//s;
-	my $default = $1;
+	my $firstlayout = undef;
 
-	while ((defined $name)&&(!defined $layout)&&($text=~s/\%STARTRENDERFORMLAYOUT{(.*?)}\%(.*?)\%STOPRENDERFORMLAYOUT\%//s)) {
+	while ((!defined $layout)&&($text=~s/\%STARTRENDERFORMLAYOUT\{(.*?)\}\%(.*?)\%STOPRENDERFORMLAYOUT\%//s)) {
 		my ($p,$l) = ($1,$2);
 		my %params = TWiki::Func::extractParameters($p);
-		$layout = $l if ($params{_DEFAULT} eq $name) || ($params{name} eq $name);
+		$layout = $l if defined $name && ( ($params{_DEFAULT} eq $name) || ($params{name} eq $name) );
+		$firstlayout = $l unless defined $firstlayout;
 	}
 
-	$layout = $default unless defined $layout;
+	if ((!defined $layout) && ($text=~s/\%STARTRENDERFORMLAYOUT\%(.*?)\%STOPRENDERFORMLAYOUT\%//s)) {
+		$layout = $1;
+	}
+
+	$layout = $firstlayout unless defined $layout;
 
 	return $layout;
 }
@@ -646,7 +661,11 @@ sub _readTopicText
                 $text = &TWiki::Func::readTopic( $theWeb, $theTopic );
         }
 
-	$text =~ s/\%RENDERFORM[^\%]*\%//g;
+	$text =~ s/(\%RENDERFORM{.*?}%)/<verbatim>\n$1<\/verbatim>/g;
+
+	$text =~ s/\%STARTRENDERFORMLAYOUT/<verbatim>\n%STARTRENDERFORMLAYOUT/g;
+	$text =~ s/\%STOPRENDERFORMLAYOUT\%/\%STOPRENDERFORMLAYOUT\%\n<\/verbatim>/g;
+
 	$text = TWiki::Func::expandCommonVariables($text, $theTopic, $theWeb);
         # return raw topic text, including meta data
         return $text;

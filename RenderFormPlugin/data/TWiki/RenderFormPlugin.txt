@@ -10,8 +10,8 @@ Features:
    * simple !JavaScript based form field validator for mandatory fields
    * hide some form fields (=hidden= option)
    * change display order of form fields (=order= option)
-   * use URL parameters to overwrite attributes (query parameter names: =rfp_&lt;attribute&gt;=)
-   * define your own form layout (=layout= attribute)
+   * use URL parameters to overwrite options (query parameter names: =rfp_&lt;attribute&gt;=)
+   * define your own form layout (=layout= option)
 
 %TOC%
 
@@ -114,11 +114,11 @@ Details:
 #RenderFormPluginFormLayout
 ---++ Form Layout
 
-Usage: =%<nop>RENDERFORM{layout="<layout topic>"}%= -or- =%<nop>RENDERFORM{layout="<layout topic>#<layout name>"}%=
+Usage: =%<nop>RENDERFORM{"&lt;form definition&gt;" ... layout="&lt;layout topic&gt;"}%= %BR% -or- =%<nop>RENDERFORM{"&lt;form definition&gt;" ... layout="&lt;layout topic&gt;#&lt;layout name&gt;"}%=
 
-   * a form layout is surrounded with tags =%<nop>STARTRENDERFORMLAYOUT%= and =%<nop>STOPRENDERFORMLAYOUT%=, e.g:
+   * a form layout is surrounded with the tags =%<nop>STARTRENDERFORMLAYOUT%= and =%<nop>STOPRENDERFORMLAYOUT%=, e.g:
       <verbatim>
-   -- a default layout: --
+   -- a default layout --
 %STARTRENDERFORMLAYOUT%
 < your layout >
 %STOPRENDERFORMLAYOUT%
@@ -128,21 +128,22 @@ Usage: =%<nop>RENDERFORM{layout="<layout topic>"}%= -or- =%<nop>RENDERFORM{layou
 < your layout >
 %<nop>STOPRENDERFORMLAYOUT%=
      </verbatim>
-   * the layout name is optional
-   * you can use form data values or form fields by typing a tag like =@&lt; form field  name &gt;@=, e.g. =@Question@=
+   * the layout name is optional, in this case the first unnamed (default) layout definition will be used;
+   * you can use form data values (view mode) or form fields (create/change mode) by typing a tag like =@&lt; form field  name &gt;@=, e.g. =@Question@=
 
 | *Following tags are reserved and replaced by ...* ||
 | *Tag* | *Replaced by* |
 | @FORMTOPIC@ |the form topic name |
 | @SUBMIT@ | a submit button or empty string in view mode (hint: change the button text with the =createbutton= or =editbutton= attributes) |
-| @SWITCH@ | a link to switch between edit or view |
+| @SWITCH@ | a link to switch between edit and view mode |
 | @TOPIC@ | the (target) topic name of the topic with a form |
 
 *Hints:* 
    * The default field marker '@' can be changed with the =fieldmarker= attribute.
    * Put the complete layout definition between =&lt;verbatim&gt;...&lt;/verbatim&gt;= tags to make the definition visible in the topic view.
 
-*Form Layout Example:*
+*Form Layout Example:* 
+%BR% =&lt;verbatim&gt;=
 <verbatim>
 %STARTRENDERFORMLAYOUT% 
 |  *@TOPIC@@SWITCH@ / @FORM@*||
@@ -152,6 +153,7 @@ Usage: =%<nop>RENDERFORM{layout="<layout topic>"}%= -or- =%<nop>RENDERFORM{layou
 @SUBMIT@ 
 %STOPRENDERFORMLAYOUT% 
 </verbatim>
+=&lt;/verbatim&gt;=
 
 ---++ Examples
 
