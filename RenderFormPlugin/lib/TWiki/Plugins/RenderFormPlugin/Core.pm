@@ -584,7 +584,6 @@ sub _readTWikiFormsDef {
 		next if $cols[1] =~ /\*[^\*]*\*/; ## ignore header
 
 		my @values = ( );
-		#my $value = TWiki::Func::expandCommonVariables($cols[4], $topic, $web);
 		my $value = $cols[4];
 
 		if ( !defined $value || $value =~ /^\s*$/ ) {
@@ -668,7 +667,7 @@ sub _readTopicText
 	$text =~ s/(\%RENDERFORM{.*?}%)/<verbatim>\n$1<\/verbatim>/g;
 
 	$text =~ s/\%STARTRENDERFORMLAYOUT/<verbatim>\n%STARTRENDERFORMLAYOUT/g;
-	$text =~ s/\%STOPRENDERFORMLAYOUT\%/\%STOPRENDERFORMLAYOUT\%\n<\/verbatim>/g;
+	$text =~ s/(\%STARTRENDERFORMLAYOUT.*?STOPRENDERFORMLAYOUT\%)/<verbatim>\n$1\n<\/verbatim>/sg;
 
 	$text = TWiki::Func::expandCommonVariables($text, $theTopic, $theWeb);
         # return raw topic text, including meta data
