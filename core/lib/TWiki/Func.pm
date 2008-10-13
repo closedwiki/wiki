@@ -331,7 +331,7 @@ the standard scripts in the 'bin' directory each has a context
 identifier - the view script has 'view', the edit script has 'edit'
 etc. So you can easily tell what 'type' of script your Plugin is
 being called within. The core context identifiers are listed
-in the %SYSTEMWEB%.TWikiTemplates topic. Please be careful not to
+in the %SYSTEMWEB%.IfStatements topic. Please be careful not to
 overwrite any of these identifiers!
 
 Context identifiers can be used to communicate between Plugins, and between
