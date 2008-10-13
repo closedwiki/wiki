@@ -55,6 +55,12 @@ sub _getListOfExtensions {
             } else {
                 push(@{$this->{errors}},
                      "Error accessing $place->{name}: ".$response->message());
+                #see if its because LWP isn't installed..
+                eval "require LWP";
+                if ($@) {
+                    push(@{$this->{errors}},
+                         "This is most likely because the LWP CPAN module isn't installed.");
+                }
             }
         }
     }
