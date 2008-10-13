@@ -1117,17 +1117,8 @@ sub renderHolidaylist() {
 					if (defined $location) {
 						$location =~ s/\@all//ig if $options{enablepubholidays}; # remove @all
 
-						$location=~s/<!--.*?-->//g; # remove HTML comments
-						$location=~ s/ - <img[^>]+>//ig; # throw image address away
-					
+						$location=substTitle($location);
 						$location=&HTML::Entities::encode_entities($location); # quote special characters like "<>
-
-						$location=~s/\[\[[^\]]+\]\[([^\]]+)\]\]/$1/g; # replace forced link with comment
-						$location=~s/\[\[([^\]]+)\]\]/$1/g; # replace forced link with comment
-						$location=~s/\[\[/!\[\[/g; # quote forced links - !!!unused
-						$location=~s/[A-Z][a-z0-9]+[\.\/]([A-Z])/$1/g; # delete Web names
-						$location=~s/([A-Z][a-z]+\w*[A-Z][a-z0-9]+)/!$1/g; # quote WikiNames
-						$location=~s/\%\w+(\{[^\}\%]*\})?\%//g; # delete Vars
 
 						$icon=~s/<img /<img alt="$location" /is unless $icon=~s/(<img[^>]+alt=")[^">]+("[^>]*>)/$1$location$2/is;
 						$icon=~s/<img /<img title="$location" /is unless $icon=~s/(<img[^>]+title=")[^">]+("[^>]*>)/$1$location$2/is;
@@ -1153,12 +1144,26 @@ sub renderHolidaylist() {
 	return $text;
 }
 # =========================
+sub substTitle {
+	my ($title) =  @_;
+
+	$title =~ s/<!--.*?-->//g; # remove HTML comments
+	$title =~ s/ - <img[^>]+>//ig; # throw image address away
+	$title =~ s/<\/?\S+[^>]*>//g;
+
+	$title =~ s/%[^%]+%//g;
+	#$title =~ s/\%\w+(\{[^\}\%]*\})?\%//g; # delete Vars
+	$title =~ s/\[\[[^\]]+\]\[([^\]]+)\]\]/$1/g; # replace forced link with comment
+	$title =~ s/\[\[([^\]]+)\]\]/$1/g; # replace forced link with comment
+	$title =~ s/\[\[/!\[\[/g; # quote forced links - !!!unused
+	$title =~ s/[A-Z][a-z0-9]+[\.\/]([A-Z])/$1/g; # delete Web names
+	$title =~ s/([A-Z][a-z]+\w*[A-Z][a-z0-9]+)/!$1/g; # quote WikiNames
+	return $title;
+}
+# =========================
 sub substStatisticsVars {
-
 	my ($textformat, $titleformat, $statisticsref ) = @_;
-
-	return (_substStatisticsVars($textformat, $statisticsref), _substStatisticsVars($titleformat,$statisticsref));
-
+	return (_substStatisticsVars($textformat, $statisticsref), substTitle(_substStatisticsVars($titleformat,$statisticsref)));
 }
 
 # =========================
@@ -1504,6 +1509,8 @@ sub getTopicText() {
 	}
 
 	$text =~ s/%INCLUDE{(.*?)}%/&expandIncludedEvents($1, \@processedTopics)/geo;
+	$text =~s/\%HOLIDAYLIST({(.*?)})?%//sg;
+	$text = TWiki::Func::expandCommonVariables($text,$web,$topic);
 	
 	return $text;
 	
