@@ -463,8 +463,10 @@ sub getVotesFile {
     my ($web, $topic, $id, $global) = @_;
 
     my $path = TWiki::Func::getWorkArea('VotePlugin');
+    my $flatweb = $web;
+    $flatweb =~ s/\//./g;
     my $votesFile = $path.'/'.
-      ($global ? '' : "${web}_${topic}_").
+      ($global ? '' : "${flatweb}_${topic}_").
         ($id ? "_$id" : '');
     $votesFile = normalizeFileName($votesFile);
 
