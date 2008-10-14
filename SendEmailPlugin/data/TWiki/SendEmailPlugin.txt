@@ -78,7 +78,6 @@ Subject: %SUBJECT%
 </div>
 <div class="twikiFormStep">
 <input type="submit" class="twikiSubmit" value="Send" />
-<input type="button" class="twikiButtonCancel" value="Cancel" onclick="window.location.href='%SCRIPTURL{view}%/%WEB%/%TOPIC%';" />
 </div>
 </div>
 </fieldset>
@@ -98,7 +97,7 @@ Subject: %SUBJECT%
 
 <form enctype="application/x-www-form-urlencoded" name="mailform" action="%SCRIPTURL{sendemail}%/%WEB%/%TOPIC%" method="POST">
 <input type="hidden" name="successsection" value="thanks" />
-<fieldset>
+<fieldset style="border:1px solid #ddd; padding:1em">
 <legend><b>Send Email</b></legend>
 <div class="twikiFormSteps">
 <div class="twikiFormStep">
@@ -119,7 +118,6 @@ Subject: %SUBJECT%
 </div>
 <div class="twikiFormStep">
 <input type="submit" class="twikiSubmit" value="Send" />
-<input type="button" class="twikiButtonCancel" value="Cancel" onclick="window.location.href='%SCRIPTURL{view}%/%WEB%/%TOPIC%';" />
 </div>
 </div>
 </fieldset>
@@ -134,6 +132,20 @@ Subject: %SUBJECT%
 %ENDSECTION{"thanks"}%
 -->
 
+---++ FAQ
+---+++ How do I send form fields?
+If you have a form with the fields =Title= and =Summary= and want to post the values of these fields in the body of the e-mail, eiter:
+   * put them in a hidden field:
+   <verbatim>
+<input type="hidden" name="body" value="Title: %FORMFIELD{"Title"}%, Summary: %FORMFIELD{"Summary"}%" />
+</verbatim>
+   * preserve linebreaks by putting them in a textarea:
+   <verbatim>
+<textarea name="body" class="twikiHidden" cols="80" rows="6">
+Title: %FORMFIELD{"Title"}%
+Summary: %FORMFIELD{"Summary"}%
+</textarea>
+</verbatim>
 
 #PluginTest
 ---++ Plugin Tests
@@ -184,9 +196,9 @@ plugin on the server where TWiki is running.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ArthurClemens |
-|  Copyright: | &copy; 2006 Meredith Lesly, Kenneth Lavrse |
+|  Copyright: | &copy; 2007 Arthur Clemens; 2008 Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 26 Jun 2008  |
+|  Plugin Version: | 14 Oct 2008  |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  26 Jun 2008 | 1.2.0 TWiki:Main/MichaelDaum: \
                  added ALLOW/DENY preference settings to prevent this plugin from being used as an open spam relay; \
