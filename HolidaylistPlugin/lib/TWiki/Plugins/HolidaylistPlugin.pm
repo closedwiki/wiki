@@ -215,11 +215,11 @@ sub initDefaults() {
 		showstatcol => 0,
 		statcolheader => '#',
 		statcolformat => '%{hh}',
-		statcoltitle => ' %{ll}',
+		statcoltitle => '%{ll}',
 		showstatrow => 0,
-		statrowformat => ' %{hh} ',
+		statrowformat => '%{hh}',
 		statrowheader => '#',
-		statrowtitle => ' %{ll}',
+		statrowtitle => '%{ll}',
 		statformat_ll => '%{ll:%LOCATION} x %LOCATION; ',
 		statformat_l => '%{l:%LOCATION} x %LOCATION; ',
 		statformat_ii => '%{ii:%ICON} x %ICON ; ',
@@ -231,7 +231,7 @@ sub initDefaults() {
 		showstatsum => 1,
 		statformat_perc => '%3.1f%%',
 		statformat_unknown => 'unknown',
-		optionsformat => '%MONTHSEL/%YEARSEL %BUTTON(Change)',
+		optionsformat => 'Month: %MONTHSEL, Year: %YEARSEL %BUTTON(Change)',
 		showoptions => 0,
 		optionspos=> 'bottom',
 	);
@@ -348,6 +348,14 @@ sub initOptions() {
 				$months{$mn[$i-1]} = $i;
 			}	
 		}
+	}
+
+	# Setup statcol(format|title) and statrow(format|title) defaults
+	if ($options{showweekends}) {
+		$options{statcolformat}='%{h}' if $options{statcolformat} eq $defaults{statcolformat};
+		$options{statcoltitle}='%{l}' if $options{statcoltitle} eq $defaults{statcoltitle};
+		$options{statrowformat}='%{h}' if $options{statrowformat} eq $defaults{statrowformat};
+		$options{statrowtitle}='%{l}' if $options{statrowtitle} eq $defaults{statrowtitle};
 	}
 
 	@processedTopics = ( );

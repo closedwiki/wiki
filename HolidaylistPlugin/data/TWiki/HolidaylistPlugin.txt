@@ -16,7 +16,7 @@ The plugin creates a table filled with Smilies and today's date will be the firs
 
 *Example (image):*
 
-<img src="%ATTACHURLPATH%/example.gif" alt="Example" title="Example" width="779" height="172"  />
+<img src="%ATTACHURLPATH%/example.gif" alt="Example" title="Example"  />
 
 %TOC%
 
@@ -109,84 +109,84 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 
 | *Attribute* | *Comment* | *Default / Example* |
 |  *Behavior*  |||
-| compatmode  | if set to "1" all TWiki:Plugins.CalendarPlugin event types are supported (related: compatmodeicon) | compatmode="0" |
-| daynames | custom daynames (a list separated by a '&brvbar;' and starting on Monday; overwrites lang attribute) | daynames="M&brvbar;T&brvbar;W&brvbar;T&brvbar;F&brvbar;S&brvbar;S" |
-| days | number of days to show |days="30" |
-| enablepubholidays | enables/disables public holidays (bullet list entries with a @all in a person field; related: showpubholidays, pubholidayicon) | enablepubholidays="1" |
-| lang | language (related: daynames, monthnames) | lang="English" |
-| month | set a month (e.g. Jan, Feb ... or 01, 02, ... 12 ) or a month offset (e.g. +0, +1, -2,...) *Note:* If you use this month attribute the days attribute will be ignored (days will be set to the duration of the month). | month="+1" |
-| monthnames | custom month names (a list separated by '&brvbar;' and starting on January; overwrites lang attribute) | monthnames="J&brvbar;F&brvbar;M&brvbar;A&brvbar;M&brvbar;J&brvbar;J&brvbar;A&brvbar;S&brvbar;O&brvbar;N&brvbar;D" |
-| navdays | defines the days to navigate to (default: value of the =days= attribute) | navdays="30" |
-| removeatwork | set to "1" to remove persons without calendar entries from table | removeatwork="0" |
-| showmonthheader | set to "1" to show a additional month header | showmonthheader="0" |
-| showoptions | shows a navigation form | showoptions="0" |
-| showpubholidays | show public holidays as separate lines (rows) in table (related: enablepubholidays, pubholidayicon) | showpubholidays="0" |
-| showstatcol | enables/disables statistics column(s) | showsumcol="off" | 
-| showstatrow | enables/disables statistics row(s) | showsumrow="off" | 
-| showstatsum | enables/disables statistics summary below/behind the statistics columns/rows; works only in conjunction with showstatcol and/or showstatrow | showstatsum="on" | 
-| showweekends | show weekends if set to 1 | showweekends="0" |
-| startdate | a start date (e.g. '1 Oct 2005') or a day offset (e.g. '10', '+30' or '-30') | startdate="+0" |
-| topic | a comma separated list of source topics | topic="%<nop>TOPIC%" |
-| week | set a week (1..52) or a week offset (-1, +0, +1, +2, ...) | week="+0" |
-| year | set a year (e.g. 2005, 2006 ...) or a year offset (e.g. +0, +1, -1, ...) | year="0" |
+| compatmode  | if set to "1" all TWiki:Plugins.CalendarPlugin event types are supported (related: compatmodeicon) | =compatmode="0"= |
+| daynames | custom daynames (a list separated by a '&brvbar;' and starting on Monday; overwrites lang attribute) | =daynames="M&brvbar;T&brvbar;W&brvbar;T&brvbar;F&brvbar;S&brvbar;S"= |
+| days | number of days to show |=days="30"= |
+| enablepubholidays | enables/disables public holidays (bullet list entries with a @all in a person field; related: showpubholidays, pubholidayicon) | =enablepubholidays="1"= |
+| lang | language (related: daynames, monthnames) | =lang="English"= |
+| month | set a month (e.g. Jan, Feb ... or 01, 02, ... 12 ) or a month offset (e.g. +0, +1, -2,...) *Note:* If you use this month attribute the days attribute will be ignored (days will be set to the duration of the month). | =month="+1"= |
+| monthnames | custom month names (a list separated by '&brvbar;' and starting on January; overwrites lang attribute) | =monthnames="J&brvbar;F&brvbar;M&brvbar;A&brvbar;M&brvbar;J&brvbar;J&brvbar;A&brvbar;S&brvbar;O&brvbar;N&brvbar;D"= |
+| navdays | defines the days to navigate to (default: value of the =days= attribute) | =navdays="30"= |
+| removeatwork | set to "1" to remove persons without calendar entries from table | =removeatwork="0"= |
+| showmonthheader | set to "1" to show a additional month header | =showmonthheader="0"= |
+| showoptions | shows a navigation form | =showoptions="0"= |
+| showpubholidays | show public holidays as separate lines (rows) in table (related: enablepubholidays, pubholidayicon) | =showpubholidays="0"= |
+| showstatcol | enables/disables statistics column(s) | =showsumcol="off"= | 
+| showstatrow | enables/disables statistics row(s) | =showsumrow="off"= | 
+| showstatsum | enables/disables statistics summary below/behind the statistics columns/rows; works only in conjunction with showstatcol and/or showstatrow | =showstatsum="on"= | 
+| showweekends | show weekends if set to 1 | =showweekends="0"= |
+| startdate | a start date (e.g. '1 Oct 2005') or a day offset (e.g. '10', '+30' or '-30') | =startdate="+0"= |
+| topic | a comma separated list of source topics | =topic="%<nop>TOPIC%"= |
+| week | set a week (1..52) or a week offset (-1, +0, +1, +2, ...) | =week="+0"= |
+| year | set a year (e.g. 2005, 2006 ...) or a year offset (e.g. +0, +1, -1, ...) | =year="0"= |
 |  *Icons*  |||
-| adayofficon |a day off icon | adayofficon=":ok:" |
-| compatmodeicon | icon used for TWiki:Plugins.CalendarPlugin event types (only used if compatmode is enabled) | compatmodeicon="8-)" |
-| holidayicon | holiday icon | holidayicon="8-)" |
-| notatworkicon | not at work icon (only used if you type a location) | notatworkicon=":-I" |
-| pubholidayicon | public holiday icon (related: enablepubholidays, showpubholidays)| pubholidayicon=":-)" |
-| workicon | in work icon | workicon="&amp;nbsp;" |
+| adayofficon |a day off icon | =adayofficon=":ok:"= |
+| compatmodeicon | icon used for TWiki:Plugins.CalendarPlugin event types (only used if compatmode is enabled) | =compatmodeicon="8-)"= |
+| holidayicon | holiday icon | =holidayicon="8-)"= |
+| notatworkicon | not at work icon (only used if you type a location) | =notatworkicon=":-I"= |
+| pubholidayicon | public holiday icon (related: enablepubholidays, showpubholidays)| =pubholidayicon=":-)"= |
+| workicon | in work icon | =workicon="&amp;nbsp;"= |
 |  *Table Formatting*  |||
-| border | table border | border="1" |
-| cellpadding | table cell padding | cellpadding="1" |
-| cellspacing | tabel cell spacing | cellspacing="0" |
-| daynames | custom daynames (a list separated by a '&brvbar;' and starting on Monday; overwrites lang attribute) | daynames="M&brvbar;T&brvbar;W&brvbar;T&brvbar;F&brvbar;S&brvbar;S" |
-| headerformat | table header format of a day; a subset of strftime conversion specifiers is supported (only date not time specificiers; see manual page or TWiki:Codev.ConvergeDateTimeFormattingModels) | headerformat="&lt;font&nbsp;size=\"-2\">%b&lt;br/&gt;%a&lt;br/&gt;%e&lt;/font&gt;" |
-| lang | language (related: daynames, monthnames) | lang="English" |
-| monthheaderformat | month header format (related: showmonthheader) | monthheaderformat="%B" |
-| monthnames | custom month names (a list separated by '&brvbar;' and starting on January; overwrites lang attribute) | monthnames="J&brvbar;F&brvbar;M&brvbar;A&brvbar;M&brvbar;J&brvbar;J&brvbar;A&brvbar;S&brvbar;O&brvbar;N&brvbar;D" |
-| name | header content of the first cell header |name="Name" |
-| navdays | defines the days to navigate to (default: value of the =days= attribute) | navdays="30" |
-| navenable | enable/disable navigation (1 - enabled; 0 - disabled) | navenable="1" |
-| navhome | navigation button to the start date (%d will be replaced with page x days) | navhome="%d" |
-| navhometitle | title text (tooltip text) for the navigation button to the start date | navhometitle="Go to the start date" |
-| navnext | navigation button to the next =navdays= days| navnext="&amp;gt;&brvbar;" |
-| navnexthalf | navigation button to the next =navdays/2= days | navnexthalf="&amp;gt;" |
-| navnexthalftitle | title text (tooltip text) for the navigation button to the next =navdays/2= days (%n will be replaced with the half number of days to show)| navnexttitle="Next %n day(s)" |
-| navnexttitle | title text (tooltip text) for the navigation button to the next navdays days (%n will be replaced with the number of days to show)| navnexttitle="Next %n day(s)" |
-| navprev | navigation button to the previous =navdays= days | navprev="&lt;br/&gt;&brvbar;&amp;lt;" |
-| navprevhalf | navigation button to the previous =navdays/2= days | navprevhalf="&amp;lt;" |
-| navprevhalftitle | title text (tooltip text) for the navigation button to the previous =navdays/2= days (%n will be replaced with the half number of days to show) | navprevtitle="Previous %n day(s)" |
-| navprevtitle | title text (tooltip text) for the navigation button to the previous =navdays= days (%n will be replaced with the number of days to show) | navprevtitle="Previous %n day(s)" |
-| nwidth | cell width of the first column | nwidth="120px" |
-| optionspos | position of the navigation form; allowed values: top, bottom, both | optionspos='bottom' |
-| optionsformat | defines the output format of the navigation form; some variables are available: =%(WEEK&#124;MONTH&#124;YEAR)SEL(&lt;range&gt;)= - a week&#124;month&#124;year popup menu; =%(STARTDATE&#124;WEEK&#124;MONTH&#124;YEAR)OFFS(&lt;range&gt;)= - a day&#124;week&#124;month&#124;year offset popup menu; =%(STARTDATE&#124;WEEK&#124;MONTH&#124;YEAR)(&lt;default value&gt;)= - a startdate&#124;week&#124;month&#124;year input field; =%BUTTON(&lt;submit button text&gt;)= - a submit button; =ranges= are optional (range syntax: =&lt;start value&gt;(:&lt;end value&gt;(:&lt;steps&gt;)?)?=, e.g. =%YEARSEL(2002:2010:1)= | optionsformat="%MONTHSEL/%YEARSEL %BUTTON(Change)" | 
-| tablebgcolor | table background color | tablebgcolor="white" |
-| tablecaption | table caption | tablecaption="&amp;nbsp;" |
-| tablecaptionalign | table caption alignment (top, bottom, left, right) | tablecaptionalign="top" |
-| tableheadercolor | color of the table header | tableheadercolor="%<nop>WEBBGCOLOR%" |
-| tcwidth | width of the icon table cells | tcwidth="33px" |
-| todaybgcolor | background color for today cells (usefull if you use startdate attribute) | todaybgcolor="white" |
-| todayfgcolor | foreground color for today cells (usefull for a dark todaybgcolor) | todayfgcolor="black" |
-| weekendbgcolor | background color of weekend header and data table cells | weekendbgcolor="%<nop>WEBBGCOLOR%" |
-| width | width of table in pixels or percent | width="100%" |
+| border | table border | =border="1"= |
+| cellpadding | table cell padding | =cellpadding="1"= |
+| cellspacing | tabel cell spacing | =cellspacing="0"= |
+| daynames | custom daynames (a list separated by a '&brvbar;' and starting on Monday; overwrites lang attribute) | =daynames="M&brvbar;T&brvbar;W&brvbar;T&brvbar;F&brvbar;S&brvbar;S"= |
+| headerformat | table header format of a day; a subset of strftime conversion specifiers is supported (only date not time specificiers; see manual page or TWiki:Codev.ConvergeDateTimeFormattingModels) | =headerformat="&lt;font&nbsp;size=\"-2\">%b&lt;br/&gt;%a&lt;br/&gt;%e&lt;/font&gt;"= |
+| lang | language (related: daynames, monthnames) | =lang="English"= |
+| monthheaderformat | month header format (related: showmonthheader) | =monthheaderformat="%B"= |
+| monthnames | custom month names (a list separated by '&brvbar;' and starting on January; overwrites lang attribute) | =monthnames="J&brvbar;F&brvbar;M&brvbar;A&brvbar;M&brvbar;J&brvbar;J&brvbar;A&brvbar;S&brvbar;O&brvbar;N&brvbar;D"= |
+| name | header content of the first cell header |=name="Name"= |
+| navdays | defines the days to navigate to (default: value of the =days= attribute) | =navdays="30"= |
+| navenable | enable/disable navigation (1 - enabled; 0 - disabled) | =navenable="1"= |
+| navhome | navigation button to the start date (%d will be replaced with page x days) | =navhome="%d"= |
+| navhometitle | title text (tooltip text) for the navigation button to the start date | =navhometitle="Go to the start date"= |
+| navnext | navigation button to the next =navdays= days| =navnext="&amp;gt;&brvbar;"= |
+| navnexthalf | navigation button to the next =navdays/2= days | =navnexthalf="&amp;gt;"= |
+| navnexthalftitle | title text (tooltip text) for the navigation button to the next =navdays/2= days (%n will be replaced with the half number of days to show)| =navnexttitle="Next %n day(s)"= |
+| navnexttitle | title text (tooltip text) for the navigation button to the next navdays days (%n will be replaced with the number of days to show)| =navnexttitle="Next %n day(s)"= |
+| navprev | navigation button to the previous =navdays= days | =navprev="&lt;br/&gt;&brvbar;&amp;lt;"= |
+| navprevhalf | navigation button to the previous =navdays/2= days | =navprevhalf="&amp;lt;"= |
+| navprevhalftitle | title text (tooltip text) for the navigation button to the previous =navdays/2= days (%n will be replaced with the half number of days to show) | =navprevtitle="Previous %n day(s)"= |
+| navprevtitle | title text (tooltip text) for the navigation button to the previous =navdays= days (%n will be replaced with the number of days to show) | =navprevtitle="Previous %n day(s)"= |
+| nwidth | cell width of the first column | =nwidth="120px"= |
+| optionspos | position of the navigation form; allowed values: top, bottom, both | =optionspos="bottom"= |
+| optionsformat | defines the output format of the navigation form; some variables are available: =%(WEEK&#124;MONTH&#124;YEAR)SEL(&lt;range&gt;)= - a week&#124;month&#124;year popup menu; =%(STARTDATE&#124;WEEK&#124;MONTH&#124;YEAR)OFFS(&lt;range&gt;)= - a day&#124;week&#124;month&#124;year offset popup menu; =%(STARTDATE&#124;WEEK&#124;MONTH&#124;YEAR)(&lt;default value&gt;)= - a startdate&#124;week&#124;month&#124;year input field; =%BUTTON(&lt;submit button text&gt;)= - a submit button; =ranges= are optional (range syntax: =&lt;start value&gt;(:&lt;end value&gt;(:&lt;steps&gt;)?)?=, e.g. =%YEARSEL(2002:2010:1)= | =optionsformat="Month: %MONTHSEL, Year: %YEARSEL %BUTTON(Change)"= | 
+| tablebgcolor | table background color | =tablebgcolor="white"= |
+| tablecaption | table caption | =tablecaption="&amp;nbsp;"= |
+| tablecaptionalign | table caption alignment (top, bottom, left, right) | =tablecaptionalign="top"= |
+| tableheadercolor | color of the table header | =tableheadercolor="%<nop>WEBBGCOLOR%"= |
+| tcwidth | width of the icon table cells | =tcwidth="33px"= |
+| todaybgcolor | background color for today cells (usefull if you use startdate attribute) | =todaybgcolor="white"= |
+| todayfgcolor | foreground color for today cells (usefull for a dark todaybgcolor) | =todayfgcolor="black"= |
+| weekendbgcolor | background color of weekend header and data table cells | =weekendbgcolor="%<nop>WEBBGCOLOR%"= |
+| width | width of table in pixels or percent | =width="100%"= |
 |  *Table Formatting - Statistics<br/>(%X% showstatcol or showstatrow should be enabled)*  |||
-| statcolformat | statistics column format (related: showstatcol, statcolheader, statcoltitle); see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statcolformat="%{hh}" |
-| statcolheader | statistics header (related: showstatcol, statcolformat, statcoltitle); use '&#124;' to separate multiple column headers | statcolheader="#" |
-| statcoltitle | statistics tooltip (related: showstatcol, statcolformat, statcolheader); see  [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statcoltitle="%{ll}" |
-| statformat | statistics format; overwrites statcolformat and statrowformat | undefined / statformat="%{hh}" |
-| statformat_0 | defines the string for the zero value of all statistics variables; [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statformat_0="0" |
-| statformat_i | format for a single %{i} variable value; %ICON will be substituted by the icon; see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statformat_i="%{i:%ICON} x %ICON ;" |
-| statformat_ii | format for a single %{ii} variable value; %ICON will be substituted by the icon; see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statformat_ii="%{ii:%ICON} x %ICON ;" |
-| statformat_l | format for a single %{l} variable value; %LOCATION will be substituted by the location; see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statformat_l="%{l:%LOCATION} x %LOCATION;" |
-| statformat_ll | format for a single %{ll} variable value; %LOCATION will be substituted by the location; see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statformat_ll="%{ll:%LOCATION} x %LOCATION;" |
-| statformat_perc | percentage format | statformat_perc="%3.1f%%" |
-| statformat_unknown | will be used for unknown locations or icons if one of the statistics variables %{l}, %{ll}, %{i} or %{ii}) is  replaced | statformat_unknown="unknown" |
-| statheader | statistics header; overwrites statcolheader and statrowheader | undefined / statheader="#" | 
-| statrowformat | statistics row format (related: showstatrow, statrowheader, statrowtitle); see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statrowformat="%{hh}" |
-| statrowheader | statistics header (related: showstatrow, statrowformat, statrowtitle); use '&#124;' to separate multiple row headers | statrowheader="#" |
-| statrowtitle | statistics tooltip (related: showstatrow, statrowformat, statrowheader); see  [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | statrowtitle="%{ll}" |
-| stattitle | statistics tooltip; overwrites statrowtitle and statcoltitle | undefined / stattitle="%{ll}" |
+| statcolformat | statistics column format (related: showstatcol, statcolheader, statcoltitle); see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | =statcolformat="%{hh}"= -or- =statcolofrmat="%{h}"= (if =showweekends= set to ="on"=) |
+| statcolheader | statistics header (related: showstatcol, statcolformat, statcoltitle); use '&#124;' to separate multiple column headers | =statcolheader="#"= |
+| statcoltitle | statistics tooltip (related: showstatcol, statcolformat, statcolheader); see  [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | =statcoltitle="%{ll}"= -or- =statcoltitle="%{l}"= (if =showweekends= set to ="on"=) |
+| statformat | statistics format; overwrites statcolformat and statrowformat | undefined / =statformat="%{hh}"= |
+| statformat_0 | defines the string for the zero value of all statistics variables; [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | =statformat_0="0"= |
+| statformat_i | format for a single %{i} variable value; %ICON will be substituted by the icon; see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | =statformat_i="%{i:%ICON} x %ICON ;"= |
+| statformat_ii | format for a single %{ii} variable value; %ICON will be substituted by the icon; see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | =statformat_ii="%{ii:%ICON} x %ICON ;"= |
+| statformat_l | format for a single %{l} variable value; %LOCATION will be substituted by the location; see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | =statformat_l="%{l:%LOCATION} x %LOCATION;"= |
+| statformat_ll | format for a single %{ll} variable value; %LOCATION will be substituted by the location; see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | =statformat_ll="%{ll:%LOCATION} x %LOCATION;"= |
+| statformat_perc | percentage format | =statformat_perc="%3.1f%%"= |
+| statformat_unknown | will be used for unknown locations or icons if one of the statistics variables %{l}, %{ll}, %{i} or %{ii}) is replaced | =statformat_unknown="unknown"= |
+| statheader | statistics header; overwrites statcolheader and statrowheader | undefined / =statheader="#"= | 
+| statrowformat | statistics row format (related: showstatrow, statrowheader, statrowtitle); see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | =statrowformat="%{hh}"= -or- =statrowformat="%{h}"= (if =showweekends= set to ="on"=) |
+| statrowheader | statistics header (related: showstatrow, statrowformat, statrowtitle); use '&#124;' to separate multiple row headers | =statrowheader="#"= |
+| statrowtitle | statistics tooltip (related: showstatrow, statrowformat, statrowheader); see  [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | =statrowtitle="%{ll}"= -or- =statrowtitle="%{l}"= (if =showweekends= set to ="on"=) |
+| stattitle | statistics tooltip; overwrites statrowtitle and statcoltitle | undefined / =stattitle="%{ll}"= |
 
 
 *Hints:* 
@@ -246,7 +246,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 #HolidaylistPluginExample
 ---++ Example
 
-%HOLIDAYLIST{startdate="1 Jun 2005"}%
+%HOLIDAYLIST{startdate="1 Jun 2005" showstatrow="on" showstatcol="on" days="70" showoptions="on"}%
 
 	* 02 Jan 2005 - 28 Feb 2005 - Bill
 	* 27 Mar 2005 - 20 Apr 2005 - Bob
