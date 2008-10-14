@@ -38,12 +38,12 @@ sub commonTagsHandler {
     ## use TWiki::Contrib::JSCalendarContrib;
     ## TWiki::Contrib::JSCalendarContrib::addHEAD( 'twiki' );
 
-    eval {
+    ## eval {
 	use TWiki::Plugins::RenderFormPlugin::Core;
 	$_[0] =~ s/\%RENDERFORM{(.*?)}\%/TWiki::Plugins::RenderFormPlugin::Core::render($1,$_[1],$_[2])/ge;
 	$_[0] =~ s/\%STARTRENDERFORMLAYOUT(.*?)STOPRENDERFORMLAYOUT\%//sg;
 	### workaround for date fields:
-	$_[0] =~ s/<\/body>/%INCLUDE{"%TWIKIWEB%\/JSCalendarContribInline"}%<\/body>/i if ($TWiki::Plugins::VERSION >= 1.1) && ($_[0] !~ /JSCalendarContrib\twiki.js/);
-    };
-    TWiki::Func::writeWarning($@) if $@;
+	$_[0] =~ s/<\/body>/%INCLUDE{"%TWIKIWEB%\/JSCalendarContribInline"}%<\/body>/i if ($TWiki::Plugins::VERSION > 1.1) && ($_[0] !~ /JSCalendarContrib\twiki.js/);
+    ##};
+    ##TWiki::Func::writeWarning($@) if $@;
 }

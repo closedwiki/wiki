@@ -13,6 +13,10 @@ Features:
    * use URL parameters to overwrite options (query parameter names: =rfp_&lt;attribute&gt;=)
    * define your own (mode dependent) form layout (=layout= option)
 
+*Example (image):*
+
+<img src="%ATTACHURLPATH%/example.gif" alt="Example" title="Example"/>
+
 %TOC%
 
 ---++ Syntax Rules
@@ -194,6 +198,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
       | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
       | ==data/TWiki/VarRENDERFORM.txt== | Plugin Variables topic  |
       | ==data/TWiki/%TOPIC%ExampleForm.txt== | Example form  |
+      | ==pub/TWiki/%TOPIC%/example.gif== | Example image |
       | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
       | ==lib/TWiki/Plugins/%TOPIC%/Core.pm== | Plugin Perl module |
    * Configure the Plugin: 
@@ -207,9 +212,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2008, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | V1.002 (BETA) |
+|  Plugin Version: | V1.002 (14 Oct 2008) |
 |  Change History: | <!-- versions below in reverse order --> |
-|  V1.002 (BETA): | TWiki:Main:DanielRohde: added layout feature; fixed date field bug; added missing docs; |
+|  V1.002 (14 Oct 2008): | TWiki:Main:DanielRohde: added layout feature; fixed date field bug; added missing docs; |
 |  V1.001 (05 Oct 2008): | TWiki:Main:DanielRohde: changed topicparent default; added and fixed docs; fixed date field bug; fixed non-word character in field names bug; |
 |  V1.000 (04 Oct 2008): | TWiki:Main:DanielRohde: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
