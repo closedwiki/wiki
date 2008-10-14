@@ -60,7 +60,7 @@ sub new {
         $user = $session->{users}->findUser( $author, undef, 1 );
         $this->{AUTHOR} = $user ? $user->wikiName() : $author;
     } else {
-        $this->{AUTHOR} = $session->{users}->getWikiName($author);
+        $this->{AUTHOR} = TWiki::Func::getWikiName($author);
     }
     $this->{TIME} = $time;
     ASSERT($rev) if DEBUG;
