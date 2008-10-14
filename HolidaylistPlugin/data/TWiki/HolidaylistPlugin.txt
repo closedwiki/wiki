@@ -15,8 +15,9 @@ The !HolidaylistPlugin handles the tag %<nop>HOLIDAYLIST</nop>% that inserts a v
 The plugin creates a table filled with Smilies and today's date will be the first column. There is a row in the table for each person and each day is flagged as either: :mad: (in work), :ok: (a day off) or 8-) (absent for some time), :-I (not at work; used if you type a location). You can also use other smilies (like :skull:).
 
 *Example (image):*
-
+<div style="overflow:auto">
 <img src="%ATTACHURLPATH%/example.gif" alt="Example" title="Example"  />
+</div>
 
 %TOC%
 
