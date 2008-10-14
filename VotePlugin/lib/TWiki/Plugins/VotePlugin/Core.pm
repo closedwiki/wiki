@@ -398,13 +398,14 @@ sub saveVotesData {
     my ($web, $topic, $id, $isGlobal, $saveto, $voteData) = @_;
     if ($saveto) {
         my $text = '';
+	my $meta = '';
         $saveto =~ /(.*)/;
         my ($vw, $vt) = TWiki::Func::normalizeWebTopicName($web, $1);
         if (TWiki::Func::topicExists($vw, $vt)) {
-            $text = TWiki::Func::readTopicText( $vw, $vt );
+            ( $meta, $text ) = TWiki::Func::readTopic( $vw, $vt );
         }
-        $text .= $voteData;
-        TWiki::Func::saveTopicText($vw, $vt, $text, 1, 1);
+	$text .= $voteData;
+        TWiki::Func::saveTopic($vw, $vt, $meta, $text, { minor => 1} );
     } else {
         my $votesFile = getVotesFile($web, $topic, $id, $isGlobal);
         # open and lock the votes
@@ -423,13 +424,14 @@ sub clearVotesData {
     my ($web, $topic, $id, $isGlobal, $saveto) = @_;
     if ($saveto) {
         my $text = '';
+	my $meta = '';
         $saveto =~ /(.*)/;
         my ($vw, $vt) = TWiki::Func::normalizeWebTopicName($web, $1);
         if (TWiki::Func::topicExists($vw, $vt)) {
-            $text = TWiki::Func::readTopicText( $vw, $vt );
+            ( $meta, $text ) = TWiki::Func::readTopic( $vw, $vt );
         }
         $text =~ s/(^|\n)((\|.*\||\s+)\n+)*$/$1/s;
-        TWiki::Func::saveTopicText($vw, $vt, $text, 1, 1);
+        TWiki::Func::saveTopicText($vw, $vt, $meta, $text, { minor => 1} );
     } else {
         my $votesFile = getVotesFile($web, $topic, $id, $isGlobal);
         unlink($votesFile) || die "cannot remove $votesFile: $!";
