@@ -164,7 +164,7 @@ Many thanks to the following sponsors for supporting this work:
 |  Author: | TWiki:Main/CrawfordCurrie (http://c-dot.co.uk) |
 |  Copyright &copy;: | 2004, Wind River Systems; 2006, http://WikiRing.com |
 |  License: | GPL |
-|  Version: | 03 Aug 2008 |
+|  Version: | %$VERSION% |
 |  Change History: | |
 |  14 Oct 2008 | TWikibug:Item6066: fixed issue for user mappings where cuid != login |
 |  27 Aug 2008 | TWikibug:Item5949: fixed problem with unsubscribe that should result in an empty subscription |
