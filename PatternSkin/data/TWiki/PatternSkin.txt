@@ -130,35 +130,3 @@ Other skins:
 
 Leave remarks, suggestions and other feedback in TWiki:Plugins.PatternSkinDev.
 
-%META:FILEATTACHMENT{name="TWiki_header.gif" attr="" autoattached="1" comment="" date="1182955036" path="TWiki_header.gif" size="18053" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="background_submit.gif" attr="" autoattached="1" comment="" date="1182955036" path="background_submit.gif" size="158" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="border_sidebar_personal.gif" attr="" autoattached="1" comment="" date="1183837372" path="border_sidebar_personal.gif" size="47" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="background_button.gif" attr="" autoattached="1" comment="" date="1182955036" path="background_button.gif" size="104" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="patternskin_screenshot.jpg" attr="" autoattached="1" comment="" date="1184362908" path="patternskin_screenshot.jpg" size="54937" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="bg_button_gradient.gif" attr="" autoattached="1" comment="" date="1183811042" path="bg_button_gradient.gif" size="1473" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="print.css" attr="" autoattached="1" comment="" date="1182955036" path="print.css" size="3033" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="bg_button_small_gradient.gif" attr="" autoattached="1" comment="" date="1183811027" path="bg_button_small_gradient.gif" size="1337" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="bullet-toc.gif" attr="" autoattached="1" comment="" date="1182955036" path="bullet-toc.gif" size="54" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="striped_blue.gif" attr="" autoattached="1" comment="" date="1182955036" path="striped_blue.gif" size="238" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="bg_submit_gradient.gif" attr="" autoattached="1" comment="" date="1183665090" path="bg_submit_gradient.gif" size="1476" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="background_action.gif" attr="" autoattached="1" comment="" date="1182955036" path="background_action.gif" size="229" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="background_form_element.gif" attr="" autoattached="1" comment="" date="1182955036" path="background_form_element.gif" size="70" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="bullet-down.gif" attr="" autoattached="1" comment="" date="1183989197" path="bullet-down.gif" size="59" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="bg_outer_gradient.gif" attr="" autoattached="1" comment="" date="1184332033" path="bg_outer_gradient.gif" size="433" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="striped_white.gif" attr="" autoattached="1" comment="" date="1182955036" path="striped_white.gif" size="234" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="background_input.gif" attr="" autoattached="1" comment="" date="1182955036" path="background_input.gif" size="55" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="button_font_selector.gif" attr="" autoattached="1" comment="" date="1184105853" path="button_font_selector.gif" size="831" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="layout.css" attr="" autoattached="1" comment="" date="1184279679" path="layout.css" size="4322" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="bullet-lock.gif" attr="" autoattached="1" comment="" date="1183989167" path="bullet-lock.gif" size="64" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="form_gradient.gif" attr="" autoattached="1" comment="" date="1182955036" path="form_gradient.gif" size="173" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="bg_action_gradient.gif" attr="" autoattached="1" comment="" date="1184355082" path="bg_action_gradient.gif" size="355" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="patternskin_screenshot_full.png" attr="" autoattached="1" comment="" date="1184362710" path="patternskin_screenshot_full.png" size="131008" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="striped_pageshadow.gif" attr="" autoattached="1" comment="" date="1182955036" path="striped_pageshadow.gif" size="234" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="bg_buttoncancel_gradient.gif" attr="" autoattached="1" comment="" date="1184016448" path="bg_buttoncancel_gradient.gif" size="1544" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="style.css" attr="" autoattached="1" comment="" date="1184361490" path="style.css" size="19292" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="striped_gray.gif" attr="" autoattached="1" comment="" date="1182955036" path="striped_gray.gif" size="238" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="striped_yellow.gif" attr="" autoattached="1" comment="" date="1182955036" path="striped_yellow.gif" size="238" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="pattern.js" attr="" autoattached="1" comment="" date="1184192338" path="pattern.js" size="3526" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="colors.css" attr="" autoattached="1" comment="" date="1184360679" path="colors.css" size="16740" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="button_arrow.gif" attr="" autoattached="1" comment="" date="1184105722" path="button_arrow.gif" size="1297" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="bullet-personal_sidebar.gif" attr="" autoattached="1" comment="" date="1183989183" path="bullet-personal_sidebar.gif" size="60" user="TWikiContributor" version=""}%
