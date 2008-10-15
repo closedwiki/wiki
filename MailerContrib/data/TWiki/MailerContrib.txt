@@ -162,11 +162,12 @@ Many thanks to the following sponsors for supporting this work:
    * [[http://wikigardens.com][WikiGardens]]
 
 |  Author: | TWiki:Main/CrawfordCurrie (http://c-dot.co.uk) |
-|  Copyright &copy;: | 2004, Wind River Systems; 2006, http://WikiRing.com |
+|  Copyright &copy;: | 2004, Wind River Systems; 2008, http://WikiRing.com |
 |  License: | GPL |
 |  Version: | %$VERSION% |
 |  Change History: | |
-|  14 Oct 2008 | TWikibug:Item6066: fixed issue for user mappings where cuid != login |
+|  15 Oct 2008 | TWikibug:Item: generalised code to enable TWiki:Codev.SubscribePlugin to delegate parsing to %TOPIC% - TWiki:Main.SvenDowideit |
+|  14 Oct 2008 | TWikibug:Item6066: fixed issue for user mappings where cuid != login  - TWiki:Main.SvenDowideit |
 |  27 Aug 2008 | TWikibug:Item5949: fixed problem with unsubscribe that should result in an empty subscription |
 |  03 Aug 2008 | TWiki 4.2.1 release version |
 |  27 Jul 2008 | TWikibug:Item5776: TWiki:Main.KennethLavrsen added note to warn against running multiple instances of mailnotify at the same time. |

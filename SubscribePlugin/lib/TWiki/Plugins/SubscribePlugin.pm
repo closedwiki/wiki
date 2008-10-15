@@ -43,7 +43,11 @@ sub _SUBSCRIBE {
 
     my $cur_user = TWiki::Func::getWikiName();
 
+#SMELL: this means that subscription changes can only happen from a url to a topic
+#that contains a %SUBCRIBE% tag, rather than the url params meaning something
+#it also leads to incorrect display to the user if subscription data is rendered prior to the processing (like subing while displaying the webNotify topic)
     if ($suid && $suid == $uid) {
+	$query->delete( 'subscribe_uid');	#make sure we're not doing this twice..
         # We have been asked to subscribe
         my $topics = $query->param('subscribe_topic');
         $topics =~ /^(.*)$/;
@@ -58,25 +62,16 @@ sub _SUBSCRIBE {
         }
     }
 
-	my $who = $params->{who} || TWiki::Func::getWikiName();
+    my $who = $params->{who} || TWiki::Func::getWikiName();
     if ($who eq $TWiki::cfg{DefaultUserWikiName}) {
         $form = '';
     } else {
         my $topics = $params->{topic} || $topic;
-
-        # checking if the has subscribed for that topic already
-		require TWiki::Contrib::MailerContrib::WebNotify;
-		my ($sweb, $stopics) = TWiki::Func::normalizeWebTopicName($web, $topics);
-		my $wn = new TWiki::Contrib::MailerContrib::WebNotify( $TWiki::Plugins::SESSION, $sweb, $TWiki::cfg{NotifyTopicName} );
-        my $subscriber = $wn->getSubscriber($who);
         my $unsubscribe = 0;
-        # user has already subscribed.. so if he clicks again, he wants
-        # to delete that subsciprtion
-        require TWiki::Contrib::MailerContrib::UpData;
-        my $db = new TWiki::Contrib::MailerContrib::UpData( $session, $web );
-        if ( $subscriber->isSubscribedTo($stopics, $db) ) {
-        	$unsubscribe = 'yes';
-        }	
+	require TWiki::Contrib::MailerContrib;
+	if (TWiki::Contrib::MailerContrib::isSubscribedTo($web, $who, $topics)) {
+	    $unsubscribe = 'yes';
+	}
 
         my $url;
         if( $TWiki::Plugins::VERSION < 1.2) {
@@ -121,8 +116,7 @@ sub _alert {
 # Handle a (un)subscription request
 sub _subscribe {
     my( $web, $topics, $subscriber, $cur_user, $unsubscribe ) = @_;
-
-    require TWiki::Contrib::MailerContrib::WebNotify;
+#print STDERR "_subscribe($web, $topics, $subscriber, $cur_user, $unsubscribe);\n";
 
     return _alert("bad subscriber '$subscriber'") if
       !(($TWiki::cfg{LoginNameFilterIn} &&
@@ -132,29 +126,14 @@ sub _subscribe {
                  $subscriber eq $TWiki::cfg{DefaultUserWikiName};
     $subscriber = $1; # untaint
 
-    # replace wildcards for checking - we want them
-    ($web, $topics) = TWiki::Func::normalizeWebTopicName($web, $topics);
-    return _alert("bad web '$web'") if
-      $web =~ m/$TWiki::cfg{NameFilter}/o;
-    my $checktopic = $topics;
-    $checktopic =~ s/\*/STARSTARSTAR/g;
-    return _alert("bad topic '$topics'") if
-      $checktopic =~ m/$TWiki::cfg{NameFilter}/o;
-
-	## Make sure to not expand groups in $wn
-    my $wn = new TWiki::Contrib::MailerContrib::WebNotify(
-        $TWiki::Plugins::SESSION, $web, $TWiki::cfg{NotifyTopicName}, 1 );
-
-    my $mess;
     if ($unsubscribe && $unsubscribe =~ /^(on|true|yes)$/i) {
-        $wn->unsubscribe( $subscriber, $topics );
-        $mess = 'unsubscribed from';
+        $unsubscribe = '-';
+        #$mess = 'unsubscribed from';
     } else {
-        $wn->subscribe( $subscriber, $topics );
-        $mess = 'subscribed to';
+	undef $unsubscribe;
     }
-
-    $wn->writeWebNotify();
+    require TWiki::Contrib::MailerContrib;
+    TWiki::Contrib::MailerContrib::changeSubscription($web, $subscriber, $topics, $unsubscribe);
 
     #return _alert("$subscriber has been $mess <nop>$web.<nop>$topics");
     return "";
