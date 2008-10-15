@@ -2,7 +2,7 @@
 
 ---+!! %TWIKIWEB%.PatternSkin Customization
 
-*Questions and answers on configuring page elements.* For styling your TWiki, see PatternSkinCssCookbook.
+*Guidelines how to create and customize page templates.* For styling your TWiki using stylesheets, see PatternSkinCssCookbook.
 
 %TOC%
 
@@ -33,7 +33,7 @@ Let's say you want to simplify the bottom toolbar and remove all links except fo
    1 In =view.myskin.tmpl= you write:
    <blockquote><verbatim>
    %TMPL:INCLUDE{"view"}%
-   %TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"activatable_more"}%%TMPL:END%</verbatim></blockquote>
+   %TMPL:DEF{"top:toolbarbuttons"}%%TMPL:P{"more_link"}%%TMPL:END%</verbatim></blockquote>
    1 For testing, view any topic and append to the topic name: =?cover=myskin=. You should see an effect now.
    1 To make the changes visible on all pages, go to [[Main.TWikiPreferences]] (to keep %WIKIPREFSTOPIC% intact) and write:
 <blockquote><pre>
@@ -69,7 +69,7 @@ We can use the same example as above. In a topic write:
 <blockquote>
 <verbatim>
 %TMPL:INCLUDE{"view"}%
-%TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"activatable_more"}%%TMPL:END%
+%TMPL:DEF{"top:toolbarbuttons"}%%TMPL:P{"more_link"}%%TMPL:END%
 </verbatim>
 </blockquote>
 
@@ -77,22 +77,18 @@ You can also test this by appending =?template=PersonalInfoView= to the url.
 
 ---++ Reference: pattern skin template INCLUDE tree
 
+The =view= script invokes the =view= template:
 <verbatim>
 view
-    page
-        constants
-        javascript
-        styles
-            stylesdynamic
-        body
-            viewtopbar
-                %TWIKIWEB%.WebTopBar
-            viewtoolbar
-            viewleftbar
-                %WEB%.WebLeftBar
-            viewtopicactionbuttons
-            viewbottombar
-                %TWIKIWEB%.WebBottomBar
+    twiki
+        css
+        viewtopbar
+            %TWIKIWEB%.WebTopBar
+        viewleftbar
+            %WEB%.WebLeftBar
+        viewtopicactionbuttons
+        viewbottombar
+            %TWIKIWEB%.WebBottomBar
 </verbatim>
 
 ---++ Logo
@@ -242,11 +238,11 @@ The view template is populated with page elements using template inclusions:
 Each included template draws a part of the screen.%BR%
 Omit =%<nop>TMPL:INCLUDE{"viewtopbar"}%= to hide the top bar.
 
-Another approach is to clear the contents of module =topbar=. Using either a template or a topic template, write in your custom template:
+Another approach is to clear the contents of module =topbar= with an empty definition. Using either a template or a topic template, write in your custom template:
 
 <blockquote><verbatim>
 %TMPL:INCLUDE{"view"}%
-%TMPL:INCLUDE{"topbar"}%%TMPL:END%
+%TMPL:DEF{"topbar"}%%TMPL:END%
 </verbatim>
 
 and add:
@@ -271,7 +267,8 @@ See PatternSkinCssCookbookNoTopBar
 *Using templates:* %BR%
 Omit =%<nop>TMPL:INCLUDE{"viewleftbar"}%= to hide the left bar, or in a custom template clear it using
 <blockquote><verbatim>
-%TMPL:DEF{"viewleftbar"}%%TMPL:END%
+%TMPL:DEF{"leftbar"}%%TMPL:END%
+%TMPL:DEF{"leftbardimensions"}%%TMPL:END%
 </verbatim></blockquote>
 
 *Using style sheets:* %BR%
@@ -307,11 +304,11 @@ And change the number from 12em to a different value (3 occurrences).
 
 It may defy the wiki-ness of your TWiki installation, but in certain circumstances it could be useful to hide the edit buttons from users that are not logged in, for instance for clients that have gotten viewing rights only.
 
-Using either a template or a topic template, 'empty' =topicaction= and =toolbar= by writing:
+Using either a template or a topic template, 'empty' =top:toolbarbuttons= and =topicaction= by writing:
 <blockquote><pre>
 %<nop>TMPL:INCLUDE{"view"}%
+%<nop>TMPL:DEF{"top:toolbarbuttons"}%%TMPL:END%
 %<nop>TMPL:DEF{"topicaction"}%%TMPL:END%
-%<nop>TMPL:DEF{"toolbar"}%%TMPL:END%
 </pre></blockquote>
 
 In the user page of %MAINWEB%.TWikiGuest, set the cover to
@@ -323,54 +320,25 @@ By default this topic is editable only by TWiki admins.
 
 ---+++ I want to remove the History button from the bottom
 
-All action buttons are defined in =viewtopicactionbuttons.pattern.tmpl=. The history buttons or in module =revisions=:
-<blockquote><code style="white-space:pre">
-%<nop>TMPL:DEF{"topicactionbuttons"}%%<nop>TMPL:P{"activatable_raw_edit"}%%<nop>TMPL:P{"sep"}%
-%<nop>TMPL:P{context="WysiwygPluginEnabled" then="activatable_edit_wysiwyg"}%
-%<nop>TMPL:P{context="WysiwygPluginEnabled" then="sep"}%
-%<nop>TMPL:P{"activatable_attach"}%%<nop>TMPL:P{"sep"}%
-%<nop>TMPL:P{"printable"}%%<nop>TMPL:P{"sep"}%
-%<nop>TMPL:P{"raw"}%%<nop>TMPL:P{"sep"}%
-%<nop>TMPL:P{"backlinks"}%%<nop>TMPL:P{"sep"}%
-%<nop>TMPL:P{"revisions"}%%<nop>TMPL:P{"sep"}% <span style="color:red">&lt; HERE</span>
-%<nop>TMPL:P{"activatable_more"}%%<nop>TMPL:END%
-</code>
-</blockquote>
+All action links and buttons are defined in =viewtopicactionbuttons.tmpl=. The bottom history link is defined in DEF =action_revisions=
+<blockquote><verbatim>
+%TMPL:DEF{"topicactionbuttons"}%
+%TMPL:P{"action_activatable_edit_or_create"}%
+%TMPL:P{"action_activatable_attach"}%
+%TMPL:P{"action_printable"}%
+%TMPL:P{"action_revisions"}%
+%TMPL:P{"action_backlinks_simple"}%
+%TMPL:P{"action_raw_or_view"}%
+%TMPL:P{"action_activatable_raw_edit"}%
+%TMPL:P{"activatable_more"}%
+%TMPL:END%
+</verbatim></blockquote>
 
-If we emptied module =revisions= we would end up with 2 separators, so we need to remove the line altogether. We do this by copying the block and omitting the line. %BR%
-Using either a template or a topic template, to remove the history buttons write in your custom template:
-
+To hide that link, In a custom skin view template =view.myskin.tmpl= empty =action_revisions= by replacing it with an empty string:
 <blockquote><verbatim>
 %TMPL:INCLUDE{"view"}%
-
-%TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"activatable_raw_edit"}%%TMPL:P{"sep"}%
-%TMPL:P{context="WysiwygPluginEnabled" then="activatable_edit_wysiwyg"}%
-%TMPL:P{context="WysiwygPluginEnabled" then="sep"}%
-%TMPL:P{"activatable_attach"}%%TMPL:P{"sep"}%
-%TMPL:P{"printable"}%%TMPL:P{"sep"}%
-%TMPL:P{"raw"}%%TMPL:P{"sep"}%
-%TMPL:P{"backlinks"}%%TMPL:P{"sep"}%
-%TMPL:P{"activatable_more"}%%TMPL:END%
-</verbatim>
-
-Remove all newlines if you copy-paste above text.
-</blockquote>
-
-
----+++ I only want to show the WYSIWYG button on explicit pages
-In [[Main.TWikiPreferences]], set =COMPOSER= to a blank value:
-<blockquote>
-<verbatim>
-   * Set COMPOSER =
-</verbatim>
-</blockquote>
-   
-In the topic, set the =COMPOSER= variable to =kupu=:
-<blockquote>
-<verbatim>
-   * Set COMPOSER = kupu
-</verbatim>
-</blockquote>
+%TMPL:DEF{"action_revisions"}%%TMPL:END%
+</verbatim></blockquote>
 
 
 ---+++ I want to put the bottom links as buttons at the top
@@ -382,17 +350,17 @@ The default definition in =view.pattern.tmpl= is:
 
 Create a new skin by creating a file =view.myskin.tmpl= in the =templates= directory. Write in it:
 
-<verbatim>
+<blockquote><verbatim>
 %TMPL:INCLUDE{"view"}%
 %TMPL:DEF{"top:toolbarbuttons"}%%TMPL:P{"history_history_link"}%%TMPL:END%
-</verbatim>
+</verbatim></blockquote>
 
 View any topic with =?skin=myskin,pattern=, or set the =SKIN= variable to =myskin,pattern=.
 
 This will remove the Edit and Attach buttons, and place a History button at the top.
 
 You will probably not just want to have the History button there. Other button include names are:
-<verbatim>
+<blockquote><verbatim>
 create_topic_link
 raw_edit_link
 view_topic_link
@@ -406,40 +374,40 @@ backlinks_link
 history_rdiff_link
 history_history_link
 raw_link
-</verbatim>
+</verbatim></blockquote>
 
 
 ---++ Other page parts
 
 ---+++ I want to insert text outside of the topic content
 
-!PatternSkin has 2 'buckets' to write additional content to: =beforetextcontents= and =aftertextcontents=, both defined in =view.pattern.tmpl=. These containers can contain text or html and are placed directly before and after the topic text.
+!PatternSkin has 2 'buckets' to write additional content to: =contentheader= and =contentfooter=, both defined in =view.pattern.tmpl=. These containers can contain text or html and are placed directly before and after the topic text.
 
 Both modules are wrapped in CSS containers:
-   * =beforetextcontents= - wrapped in =div= of class =twikiBeforeText=
-   * =aftertextcontents= - wrapped in =div= of class =twikiAfterText=
+   * =contentheader= - wrapped in =div= of class =twikiContentHeader=
+   * =contentfooter= - wrapped in =div= of class =twikiContentFooter=
    
 To put contents *before* the main text, use the custom skin approach as described above.%BR%
 So our custom template contains:
 <blockquote><verbatim>
 %TMPL:INCLUDE{"view"}%
-%TMPL:DEF{"beforetextcontents"}%This is the text before%TMPL:END%
+%TMPL:DEF{"contentheader"}%This is the text before%TMPL:END%
 </verbatim></blockquote>
 
 Use the same procedure for contents to be put *after* the topic text:
 <blockquote><verbatim>
 %TMPL:INCLUDE{"view"}%
-%TMPL:DEF{"aftertextcontents"}%This is the text after%TMPL:END%
+%TMPL:DEF{"contentfooter"}%This is the text after%TMPL:END%
 </verbatim></blockquote>
 
 ---+++ I want to place the form at the top
 
-Pattern skin has 2 buckets for the form: =formattop= (form-at-the-top) and =formatbottom= (form-at-the-bottom):
+Pattern skin has 2 buckets for the form: =formtop= (form at the top) and =formbottom= (form at the bottom). The default definition is:
 
 <blockquote>
 <verbatim>
-%TMPL:DEF{"formattop"}%%TMPL:END%
-%TMPL:DEF{"formatbottom"}%%TMPL:P{"form"}%%TMPL:END%
+%TMPL:DEF{"formtop"}%%TMPL:END%
+%TMPL:DEF{"formbottom"}%%TMPL:P{"form"}%%TMPL:END%
 </verbatim>
 </blockquote>
 
@@ -448,8 +416,8 @@ You simply swap the bucket contents. Using either a template or a topic template
 <blockquote>
 <verbatim>
 %TMPL:INCLUDE{"view"}%
-%TMPL:DEF{"formattop"}%%TMPL:P{"form"}%%TMPL:END%
-%TMPL:DEF{"formatbottom"}%%TMPL:END%
+%TMPL:DEF{"formtop"}%%TMPL:P{"form"}%%TMPL:END%
+%TMPL:DEF{"formbottom"}%%TMPL:END%
 </verbatim>
 </blockquote>
 
