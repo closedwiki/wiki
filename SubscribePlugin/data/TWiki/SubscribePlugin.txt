@@ -26,11 +26,15 @@ You don't need =VIEW= access to the WebNotify topic in order to subscribe to cha
 Another great TWiki extension from the <a style="text-decoration:none" href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiringlogo20x20.png" alt="" /> *WikiRing* </a> - working together to improve your wiki experience!
 
 |  Plugin Author: | TWiki:Main.CrawfordCurrie |
-|  Copyright: | &copy; 2007, Crawford Currie http://c-dot.co.uk |
+|  Copyright: | &copy; 2008, Crawford Currie http://c-dot.co.uk |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Change&nbsp;History: | <!-- versions below in reverse order -->&nbsp; |
+|  15 Oct 2008 | TWikibug:Item4115: enable subscriptions with (child), \
+                    TWikibug:Item5950: fix cross web SUBSCRIPTION indication (requires updated MailerContrib) \
+                    can now get feedback to %<nop>SUBSCRIBE{topic="*"}% \
+                    - TWiki:Main.SvenDowideit |
 |  25 May 2008 | TWikibug:Item5488: merged TWiki:Main.DavidPatterson's patch to fix deep subscription |
 |  25 Jan 2008 | TWikibug:Item4812: added TWiki:Main.BobGoldstein's noexpand patch for groups |
 |  9 Sep 2007 | TWikibug:Item4175 added MAKETEXT in case the string is available |
