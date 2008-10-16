@@ -694,7 +694,7 @@ sub handleCalendarEvents {
 			if (($m==$mm1)&&($d==$dd1)) {
 				$$ptableref[$i] = 5;
 				$$ltableref[$i]{descr} = $descr;
-				$$ltableref[$i]{location} = $descr;
+				$$ltableref[$i]{location} = $location;
 				$$itableref[$i] = $icon;
 			}
 		}
@@ -730,7 +730,7 @@ sub handleCalendarEvents {
 
 				if (($dd2)&&($dd2==$d)) {
 					$$ptableref[$i] = 5;
-					$$ltableref[$i]{desc} = $descr;
+					$$ltableref[$i]{descr} = $descr;
 					$$ltableref[$i]{location} = $location;
 					$$itableref[$i] = $icon;
 				}
