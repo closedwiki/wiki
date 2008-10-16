@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1185661859" format="1.1" version="1.3"}%
+%META:TOPICINFO{author="PeterThoeny" date="1207960706" format="1.1" version="1.4"}%
 ---+ Discussion Forums
 %STARTINCLUDE%
 %TABLE{ sort="off" }%
@@ -10,4 +10,4 @@
 | *Topic* | *Last post* |
 %SEARCH{ "META:FORM.*[D]iscussionTopicForm" type="regex" excludetopic="DiscussionTopicTemplate" order="modified" reverse="on" limit="16" nonoise="on" format="| %ICONURL{bubble}% <a href=\"%SCRIPTURL{view}%/$web/$topic\" title=\"$summary\">$formfield(Title)</a> <span style=\"font-size: 70%; color: #808080\"> in $percntCALC{$SUBSTITUTE($formfield(Forum), Forum, )}$percnt  by <nop>$createwikiname </span> | $date by $wikiusername |" }%
 
-__Note:__ This Discussion Forum TWiki Application is &copy; 2007 [[http://www.twiki.net][TWIKI.NET]]
+__Note:__ This Discussion Forum TWiki Application is &copy; 2007-%SERVERTIME{$year}% [[http://www.twiki.net/][TWIKI.NET]]

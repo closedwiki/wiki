@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1185647989" format="1.1" version="1.15"}%
+%META:TOPICINFO{author="PeterThoeny" date="1204148785" format="1.1" version="1.16"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+!! <nop>%WEB% Web Preferences
 
@@ -20,16 +20,10 @@ These settings override the defaults for this web only. See [[%TWIKIWEB%.TWikiPr
       * Set WEBBGCOLOR = #FFFF66
       * __Note:__ This setting is automatically configured when you create a web
 
-   * Image, URL and alternate tooltip text of web's logo.%BR%
-     __Note:__ Don't add your own local logos to the %TWIKIWEB%.TWikiLogos topic; create your own logos topic instead.
-      * #Set WEBLOGOIMG = %WEBLOGOIMG%
-      * #Set WEBLOGOURL = %WEBLOGOURL%
-      * #Set WEBLOGOALT = %WEBLOGOALT%
-
    * List this web in the %TWIKIWEB%.SiteMap. If you want the web listed, then set SITEMAPLIST to =on=, do not set NOSEARCHALL, and add the "what" and "use to..." description for the site map. Use links that include the name of the web, i.e. <nop>%WEB%.Topic links.%BR%
       __Note:__ Unlike other variables, the setting of SITEMAPLIST is *not* inherited from parent webs. It has to be set in *every* web that is to be listed in the %TWIKIWEB%.SiteMap %BR%
       * Set SITEMAPLIST = on
-      * Set SITEMAPWHAT = Discussion forums
+      * Set SITEMAPWHAT = Discussion forums (TWiki application)
       * Set SITEMAPUSETO = ...discuss various topics
       * __Note:__ Above settings are automatically configured when you create a web
 

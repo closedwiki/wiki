@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1185698106" format="1.1" version="1.3"}%
+%META:TOPICINFO{author="PeterThoeny" date="1207960765" format="1.1" version="1.5"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+ Discussion Forum Administration
 
@@ -16,7 +16,7 @@ return 'Forum' + sOut.substring(0,3);
 |  Forum name: | <input type="text" name="Name" size="20" value="" onblur="form.topic.value=fixString(this.value);" /> (short name shown in breadcrumb; may contain spaces) |
 |  Topic name: | <input type="text" name="topic" size="20" value="" /> (short; in URL; no spaces; format: =ForumABC=) |
 |  Description: | <input type="text" name="Description" size="72" value="" /> |
-| &nbsp; | <input type="submit" value=" Create "/ > |
+| &nbsp; | <input type="submit" class="twikiSubmit" value=" Create "/ > |
 <input type="hidden" name="onlywikiname" value="on" />
 <input type="hidden" name="onlynewtopic" value="on" />
 <input type="hidden" name="templatetopic" value="DiscussionForumTemplate" />
@@ -33,6 +33,7 @@ return 'Forum' + sOut.substring(0,3);
       * DiscussionTopicForm
       * DiscussionTopicTemplate
       * DiscussionTopicHeader
+   * %TWIKIWEB%.TWikiDotNetForumAppAddOn documentation
 
 ---++ Access Control
 
