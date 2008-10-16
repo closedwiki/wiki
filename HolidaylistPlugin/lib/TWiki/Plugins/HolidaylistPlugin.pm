@@ -77,6 +77,7 @@ use vars qw(
 	$startDays
 	@processedTopics
 	$hlid 
+	%rendererCache
     );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -312,7 +313,7 @@ sub initOptions() {
 	# Render some options:
 	foreach my $option (@renderedOptions) {
 		if ($options{$option} !~ /^(\s|\&nbsp\;)*$/) {
-		 	$options{$option}=&TWiki::Func::renderText($options{$option}, $web);
+		 	$options{$option}=_renderText($options{$option}, $web);
 		}
 	}
 
@@ -1029,7 +1030,7 @@ sub renderHolidaylist() {
 		my %statistics;
 
 		$person =~ s/\@all//ig if $options{enablepubholidays};
-		$text .= '<tr><th align="left"><noautolink>'.TWiki::Func::renderText($person,$web).'</noautolink></th>';
+		$text .= '<tr><th align="left"><noautolink>'._renderText($person,$web).'</noautolink></th>';
 		for (my $i=0; $i<$options{days}; $i++) {
 			my ($yy1, $mm1, $dd1) = Add_Delta_Days($yy, $mm, $dd, $i);
 			my $dow = Day_of_Week($yy1, $mm1, $dd1);
@@ -1115,7 +1116,7 @@ sub renderHolidaylist() {
 
 				if (defined $$itableref[$i]) {
 					$icon = $$itableref[$i];
-					$icon = TWiki::Func::renderText($icon, $web) if $icon !~ /^(\s|\&nbsp\;)*$/;
+					$icon = _renderText($icon, $web) if $icon !~ /^(\s|\&nbsp\;)*$/;
 				}
 
 				# could fail if HTML::Entities is not installed:
@@ -1159,6 +1160,7 @@ sub substTitle {
 	$title =~ s/ - <img[^>]+>//ig; # throw image address away
 	$title =~ s/<\/?\S+[^>]*>//g;
 
+	$title =~s /&nbsp;/ /g;
 	$title =~ s/%[^%]+%//g;
 	#$title =~ s/\%\w+(\{[^\}\%]*\})?\%//g; # delete Vars
 	$title =~ s/\[\[[^\]]+\]\[([^\]]+)\]\]/$1/g; # replace forced link with comment
@@ -1565,8 +1567,6 @@ sub expandIncludedEvents
 	# recursively expand includes
 	$text =~ s/%INCLUDE{(.*?)}%/&expandIncludedEvents( $1, $theProcessedTopicsRef )/geo;
 
-	## $text = TWiki::Func::expandCommonVariables($text, $theTopic, $theWeb);
-
 	return $text;
 }
 # =========================
@@ -1632,6 +1632,17 @@ sub _getOptionRange {
 	$b=$a+(100*$s) if (abs($a-$b)/abs($s))>100;
 	
 	return ($a,$b,$s);
+}
+sub _renderText {
+	my ($text, $web) = @_;
+	my $ret = $text;
+	if (defined $rendererCache{$web}{$text}) {
+		$ret = $rendererCache{$web}{$text};
+	} else {
+		$ret = TWiki::Func::renderText($text, $web);
+		$rendererCache{$web}{$text}=$ret;
+	}
+	return $ret;
 }
 
 1;
