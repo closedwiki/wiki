@@ -1,0 +1,11 @@
+%META:TOPICINFO{author="PeterThoeny" date="1185647854" format="1.1" version="1.2"}%
+%INCLUDE{DiscussionForumBody}%
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+-->
+
+-- TWiki:Main.PeterThoeny - 28 Jul 2007
+
+%META:FORM{name="DiscussionForumForm"}%
+%META:FIELD{name="Name" attributes="" title="Name" value="Sandbox forum"}%
+%META:FIELD{name="Description" attributes="" title="Description" value="Sandbox to try out this discussion forum"}%

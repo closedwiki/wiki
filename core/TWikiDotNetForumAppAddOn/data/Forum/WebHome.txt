@@ -1,0 +1,14 @@
+%META:TOPICINFO{author="PeterThoeny" date="1185608920" format="1.1" reprev="1.7" version="1.7"}%
+---+!! %MAKETEXT{"Welcome to the [_1] web" args="<nop>%WEB%"}%
+
+%INCLUDE{DiscussionForum}%
+ 
+---++ <nop>%WEB% Web Utilities
+   * WebSearch - [[WebSearchAdvanced][%MAKETEXT{"advanced search"}%]]
+   * WebTopicList - all topics in alphabetical order
+   * WebChanges - recent topic changes in this web
+   * WebNotify - subscribe to an e-mail alert sent when topics change
+   * WebRss, WebAtom - RSS and ATOM news feeds of topic changes
+   * WebStatistics - listing popular topics and top contributors
+   * WebPreferences - preferences of this web
+   * DiscussionForumAdministration
