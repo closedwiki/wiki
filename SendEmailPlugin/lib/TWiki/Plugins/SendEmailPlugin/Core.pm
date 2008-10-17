@@ -23,6 +23,7 @@ package TWiki::Plugins::SendEmailPlugin::Core;
 # Always use strict to enforce variable scoping
 use strict;
 use TWiki::Func;
+use TWiki::Plugins;
 
 use vars qw( $debug $emailRE );
 
@@ -64,6 +65,8 @@ some init steps
 =cut
 
 sub init {
+  my $session = shift;
+  $TWiki::Plugins::SESSION ||= $session;
   $debug = TWiki::Func::getPreferencesFlag("SENDEMAILPLUGIN_DEBUG");
   $emailRE = TWiki::Func::getRegularExpression('emailAddrRegex');
 }
@@ -79,7 +82,7 @@ sub sendEmail {
     my $session = shift;
 
     writeDebug("called sendEmail()");
-    init();
+    init($session);
 
     my $query = TWiki::Func::getCgiQuery();
     my $errorMessage = '';
@@ -102,7 +105,8 @@ sub sendEmail {
         $addrs = $thisTo;
       } else {
         # get from user info
-        my @addrs = TWiki::Func::wikinameToEmails($thisTo);
+        my $wikiName = TWiki::Func::getWikiName($thisTo);
+        my @addrs = TWiki::Func::wikinameToEmails($wikiName);
         $addrs = $addrs[0] if @addrs;
 
         unless ($addrs) { 
@@ -136,7 +140,8 @@ sub sendEmail {
 
     unless ($from) {
       # get from user settings
-      my @emails = TWiki::Func::wikinameToEmails();
+      my $emails = TWiki::Func::wikiToEmail();
+      my @emails = split(/\s*,*\s/, $emails);
       $from = shift @emails if @emails;
     }
 

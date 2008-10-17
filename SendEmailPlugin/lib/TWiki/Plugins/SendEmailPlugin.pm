@@ -26,7 +26,7 @@ use TWiki::Func;
 use vars qw( $VERSION $RELEASE );
 
 $VERSION = '$Rev: 11069$';
-$RELEASE = '1.2.0';
+$RELEASE = '1.2.1';
 
 sub initPlugin {
 
@@ -47,5 +47,6 @@ sub handleSendEmailTag {
   require TWiki::Plugins::SendEmailPlugin::Core;
   TWiki::Plugins::SendEmailPlugin::Core::handleSendEmailTag(@_);
 }
+
 
 1;

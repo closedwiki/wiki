@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="micha" date="1214322287" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1214322287" format="1.1" version="$Rev$"}%
 ---+!! Send Email Plugin
 
 *Allows to send e-mail through an e-mail form.*
@@ -193,13 +193,19 @@ plugin on the server where TWiki is running.
      | *File:* | *Description:* |
 %$MANIFEST%
 
+   * If you install this plugin on a TWiki-5 engine you will need to add the following lines
+     to your =LocalSite.cfg=:
+     <verbatim>$TWiki::cfg{SwitchBoard}{sendemail} = ['TWiki::Plugins::SendEmailPlugin::Core', 'sendEmail', {sendemail => 1}];</verbatim>
+     and redirect all calls to =sendemail= to =sendemail-5= in your apache configuration.
+
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ArthurClemens |
 |  Copyright: | &copy; 2007 Arthur Clemens; 2008 Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 14 Oct 2008  |
+|  Plugin Version: | 17 Oct 2008  |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  17 Oct 2008 | 1.2.1 TWiki:Main/MichaelDaum: added support for TWiki-5; fixed sending emails to login names |
 |  26 Jun 2008 | 1.2.0 TWiki:Main/MichaelDaum: \
                  added ALLOW/DENY preference settings to prevent this plugin from being used as an open spam relay; \
                  added =template= option allowing more control over email header etc; \
