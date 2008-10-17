@@ -366,7 +366,7 @@ plugin on the server where TWiki is running.
 |  Plugin Author: | TWiki:Main.ArthurClemens |
 |  Copyright: | &copy; 2007 Arthur Clemens; 2008 Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 17 Oct 2008  |
+|  Plugin Version: | 1.2.2, 17 Oct 2008  |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  17 Oct 2008 | 1.2.1 TWiki:Main/MichaelDaum: added support for TWiki-5; fixed sending emails to login names |
 |  26 Jun 2008 | 1.2.0 TWiki:Main/MichaelDaum: \
