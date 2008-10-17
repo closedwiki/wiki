@@ -133,14 +133,19 @@ Subject: %SUBJECT%
 -->
 
 ---+++ Example with <nop>FormPlugin
-Here's another example. This form asks for user information and validates that the password confirmation matches the password.
+This form asks for user information and validates that the password confirmation matches the password.
 
+%TWISTY{showlink=" Show code" hidelink=" Hide code" showimgleft="%ICONURLPATH{toggleopen}%" hideimgleft="%ICONURLPATH{toggleclose}%" mode="div"}%
+<verbatim>
 %STARTFORM{
 name="mailForm"
 action="%SCRIPTURL{sendemail}%/%WEB%/%TOPIC%"
 method="POST"
-onSubmit="return checkPasswords()"
+onSubmit="return checkPasswords(this)"
 }%
+<fieldset style="border:1px solid #ddd; padding:1em">
+<legend><b>Send Email</b></legend>
+%RED%*%ENDCOLOR% All fields are required.
 %FORMELEMENT{
 name="To"
 type="hidden"
@@ -166,22 +171,16 @@ validate="email"
 title="E-mail Address:"
 }%
 %FORMELEMENT{
-name="Company"
-type="text"
-mandatory="on"
-title="Company:"
-}%
-%FORMELEMENT{
 name="Password"
 type="password"
 mandatory="on"
-title="Password (Capitalization is significant!):"
+title="Password (caps sensitive):"
 }%
 %FORMELEMENT{
 name="Confirm"
 type="password"
 mandatory="on"
-title="Retype Password (confirm):"
+title="Confirm your password:"
 }%
 %FORMELEMENT{
 name="body"
@@ -197,16 +196,17 @@ $Confirm"
 }%
 %FORMELEMENT{
 type="submit"
-buttonlabel="Submit"
+buttonlabel="Send"
 }%
+</fieldset>
 %ENDFORM%
 
 %SENDEMAIL{feedbackSuccess="Request sent, we'll contact you shortly." feedbackError="Could not send your message, please contact us." }%
 
 <script type="text/javascript">
 //<![CDATA[
-function checkPasswords() {
-	if(document.mailForm.Password.value != document.mailForm.Confirm.value) {
+function checkPasswords(inForm) {
+	if(inForm.Password.value != inForm.Confirm.value) {
 		alert('Your passwords do not match. Please try again.');
 		return false;
 	}
@@ -214,8 +214,86 @@ function checkPasswords() {
 }
 //]]>
 </script>
+</verbatim>
+%ENDTWISTY%
 
+%STARTFORM{
+name="mailForm"
+action="%SCRIPTURL{sendemail}%/%WEB%/%TOPIC%"
+method="POST"
+onSubmit="return checkPasswords(this)"
+}%
+<fieldset style="border:1px solid #ddd; padding:1em">
+<legend><b>Send Email</b></legend>
 %RED%*%ENDCOLOR% All fields are required.
+%FORMELEMENT{
+name="To"
+type="hidden"
+title="To:"
+default="me@myurl.com"
+}%
+%FORMELEMENT{
+name="Subject"
+type="hidden"
+default="Account Request"
+}%
+%FORMELEMENT{
+name="Name"
+type="text"
+mandatory="on"
+title="Name (First and Last):"
+}%
+%FORMELEMENT{
+name="Email"
+type="text"
+mandatory="on"
+validate="email"
+title="E-mail Address:"
+}%
+%FORMELEMENT{
+name="Password"
+type="password"
+mandatory="on"
+title="Password (caps sensitive):"
+}%
+%FORMELEMENT{
+name="Confirm"
+type="password"
+mandatory="on"
+title="Confirm your password:"
+}%
+%FORMELEMENT{
+name="body"
+type="textarea"
+rows="10"
+cols="80"
+cssclass="twikiHidden"
+default="$Name
+$Email
+$Company
+$Password
+$Confirm"
+}%
+%FORMELEMENT{
+type="submit"
+buttonlabel="Send"
+}%
+</fieldset>
+%ENDFORM%
+
+%SENDEMAIL{feedbackSuccess="Request sent, we'll contact you shortly." feedbackError="Could not send your message, please contact us." }%
+
+<script type="text/javascript">
+//<![CDATA[
+function checkPasswords(inForm) {
+	if(inForm.Password.value != inForm.Confirm.value) {
+		alert('Your passwords do not match. Please try again.');
+		return false;
+	}
+	return true;
+}
+//]]>
+</script>
 
 ---++ FAQ
 ---+++ How do I send form fields?
@@ -314,5 +392,3 @@ plugin on the server where TWiki is running.
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
-

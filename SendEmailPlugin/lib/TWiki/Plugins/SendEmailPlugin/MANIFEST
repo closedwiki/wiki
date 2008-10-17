@@ -1,4 +1,5 @@
-bin/sendemail 0755 CGI script
+bin/sendemail 0755 CGI script for TWiki 4
+bin/sendemail-5 0755 CGI script for TWiki 5
 templates/sendemail.tmpl 0644 Email template
 data/TWiki/SendEmailPlugin.txt 0644 Documentation
 lib/TWiki/Plugins/SendEmailPlugin.pm 0644 Plugin stub
