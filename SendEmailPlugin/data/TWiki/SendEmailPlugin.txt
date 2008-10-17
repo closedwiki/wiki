@@ -101,19 +101,19 @@ Subject: %SUBJECT%
 <legend><b>Send Email</b></legend>
 <div class="twikiFormSteps">
 <div class="twikiFormStep">
-<h3>To:</h3>
+---+++!! To:
 <input class="twikiInputField" id="to" name="to" size="30" type="text" value="%URLPARAM{"to"}%" />
 </div>
 <div class="twikiFormStep">
-<h3>CC:</h3>
+---+++!! CC:
 <input type="text" class="twikiInputField" id="cc" name="cc" size="30"  value="%URLPARAM{"cc"}%" />
 </div>
 <div class="twikiFormStep">
-<h3>Subject:</h3>
+---+++!! Subject:
 <input type="text" class="twikiInputField" id="subject" name="subject" size="70" value="%URLPARAM{"subject"}%" />
 </div>
 <div class="twikiFormStep">
-<h3>Message:</h3>
+---+++!! Message:
 <textarea class="twikiInputField" cols="70" name="body" rows="6" style="width:100%">%URLPARAM{"body"}%</textarea>
 </div>
 <div class="twikiFormStep">
@@ -131,6 +131,91 @@ Subject: %SUBJECT%
 <input type="button" value="Ok" class="twikiButton" onclick="window.location.href='%URLPARAM{"origurl" default="%SCRIPTURLPATH{view}%/%BASEWEB%/%BASETOPIC%"}%'" />
 %ENDSECTION{"thanks"}%
 -->
+
+---+++ Example with <nop>FormPlugin
+Here's another example. This form asks for user information and validates that the password confirmation matches the password.
+
+%STARTFORM{
+name="mailForm"
+action="%SCRIPTURL{sendemail}%/%WEB%/%TOPIC%"
+method="POST"
+onSubmit="return checkPasswords()"
+}%
+%FORMELEMENT{
+name="To"
+type="hidden"
+title="To:"
+default="me@myurl.com"
+}%
+%FORMELEMENT{
+name="Subject"
+type="hidden"
+default="Account Request"
+}%
+%FORMELEMENT{
+name="Name"
+type="text"
+mandatory="on"
+title="Name (First and Last):"
+}%
+%FORMELEMENT{
+name="Email"
+type="text"
+mandatory="on"
+validate="email"
+title="E-mail Address:"
+}%
+%FORMELEMENT{
+name="Company"
+type="text"
+mandatory="on"
+title="Company:"
+}%
+%FORMELEMENT{
+name="Password"
+type="password"
+mandatory="on"
+title="Password (Capitalization is significant!):"
+}%
+%FORMELEMENT{
+name="Confirm"
+type="password"
+mandatory="on"
+title="Retype Password (confirm):"
+}%
+%FORMELEMENT{
+name="body"
+type="textarea"
+rows="10"
+cols="80"
+cssclass="twikiHidden"
+default="$Name
+$Email
+$Company
+$Password
+$Confirm"
+}%
+%FORMELEMENT{
+type="submit"
+buttonlabel="Submit"
+}%
+%ENDFORM%
+
+%SENDEMAIL{feedbackSuccess="Request sent, we'll contact you shortly." feedbackError="Could not send your message, please contact us." }%
+
+<script type="text/javascript">
+//<![CDATA[
+function checkPasswords() {
+	if(document.mailForm.Password.value != document.mailForm.Confirm.value) {
+		alert('Your passwords do not match. Please try again.');
+		return false;
+	}
+	return true;
+}
+//]]>
+</script>
+
+%RED%*%ENDCOLOR% All fields are required.
 
 ---++ FAQ
 ---+++ How do I send form fields?
