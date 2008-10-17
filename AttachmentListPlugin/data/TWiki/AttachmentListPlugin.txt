@@ -131,16 +131,18 @@ footer="Number of images: $fileCount"
 
 ---+++ Regular expression filter
 
-List all files starting with an 'a' or 'A'. Note this uses prefix =(?i)= for case insensitivity.
+List all files since 01 Jan 2007, starting with a letter 'a' or 'A'. Note the use of the prefix =(?i)= for case insensitivity.
 
 <verbatim>
 %ATTACHMENTLIST{
 web="%TWIKIWEB%"
 topic="*"
-header="Files starting with A:"
+header="Files starting with A or a:"
 footer="Number of files: $fileCount"
 format="   * $percntICON{$fileExtension}$percnt [[$fileUrl][$fileName]] $fileComment"
 includefilepattern="(?i)^[A]"
+fromdate="2007/01/01"
+sort="$fileName"
 }%
 </verbatim>
 
@@ -149,10 +151,11 @@ Output (if installed):
 %ATTACHMENTLIST{
 web="%TWIKIWEB%"
 topic="*"
-header="Files starting with A:"
+header="Files starting with A or a:"
 footer="Number of files: $fileCount"
 format="   * $percntICON{$fileExtension}$percnt [[$fileUrl][$fileName]] $fileComment"
 includefilepattern="(?i)^[A]"
+fromdate="2007/01/01"
 sort="$fileName"
 }%
 
@@ -191,8 +194,9 @@ sort="$fileName"
 | Copyright &copy;: | TWiki:Main.VinodKulkarni, TWiki:Main.SopanShewale (2006), TWiki:Main.ArthurClemens (2006, 2007, 2008) |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
-|  Plugin Version: | 28 Jul 2008 (V1.2.6)  |
+|  Plugin Version: | 17 Oct 2008 (V1.2.7)  |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+| 17 Oct 2008 - 1.2.7  | Fixed bug with undefined =todate=. |
 | 20 Feb 2008 - v.1.2.1 - 1.2.3   | Arthur Clemens: Fixed error with format tokens on TWiki older than 4.2; by default sort files by name. |
 | 20 Feb 2008 - v.1.2   | Arthur Clemens: Added parameter =includefilepattern= and formatting parameter =$fileExtension=. When using parameter =sort= the files are now secondary sorted on filename. Added decoding of format tokens. |
 | 19 Feb 2008 - v.1.1.5   | Arthur Clemens: Fix display of header. |

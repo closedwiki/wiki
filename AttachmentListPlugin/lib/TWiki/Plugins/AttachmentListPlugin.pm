@@ -28,7 +28,7 @@ $VERSION = '$Rev: 14207 $';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.2.6';
+$RELEASE = '1.2.7';
 
 $pluginName = 'AttachmentListPlugin';    # Name of this Plugin
 
@@ -436,8 +436,10 @@ sub sortFileData {
         my $fromDate = $inFromDate;
         my $toDate   = $inToDate;
 
-        my $epochFromSecs = TWiki::Time::parseTime( $fromDate . " 00.00.00" );
-        my $epochToSecs   = TWiki::Time::parseTime( $toDate . " 23.59.59" );
+        my $epochFromSecs =
+          $inFromDate ? TWiki::Time::parseTime( $fromDate . " 00.00.00" ) : 0;
+        my $epochToSecs =
+          $inToDate ? TWiki::Time::parseTime( $toDate . " 23.59.59" ) : 2**31;
 
         my $fileDataByDate =
           getFileDataByDate( \@fileData, $epochFromSecs, $epochToSecs );
