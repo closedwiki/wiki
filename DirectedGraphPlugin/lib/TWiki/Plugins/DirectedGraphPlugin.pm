@@ -466,7 +466,7 @@ sub _handleDot
 	if ($status) {
              $dotFile =~ tr!\\!/!;      
 	     unlink $dotFile          unless $debugDefault;
-              return _showError( $status, $output, $desc, $dotFile.".err" );
+              return _showError( $status, $output, "Processing $toolsPath$dotHelper - $enginePath$engine: <br />".$desc, $dotFile.".err" );
 	     } ### if ($status)
         $dotFile =~ tr!\\!/!;
 	unlink "$dotFile.err" unless $debugDefault;     
@@ -486,7 +486,7 @@ sub _handleDot
             );
             &_writeDebug("dgp-antialias: output: $output \n status: $status");
             if ($status) {
-              return &_showError( $status, $output, $desc );
+              return &_showError( $status, $output, "Processing $magickPath.$antialiasCmd <br />". $desc );
             } ### if ($status)
         } ### if ($antialias)
 

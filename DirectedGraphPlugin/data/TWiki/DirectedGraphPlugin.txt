@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="BaseUserMapping_333" date="1223783632" format="1.1" version="1.7"}%
+%META:TOPICINFO{author="BaseUserMapping_333" date="1224123278" format="1.1" reprev="1.7" version="1.7"}%
 ---+!! Directed Graph Plugin
 %TABLE{databg="#AAAAFF"}%
 | To avoid topic corruption, please do not edit with WYSIWYG Editor |
@@ -416,6 +416,14 @@ __Note:__ The following instructions are for the administrator who installs the 
       * Ensure that the =dot= command can manually generate a png file.  
       * If using the antialias option, ensure that ImageMagic =convert= command can convert from a .ps to .png format.
 
+   * Errors returned by the plugin:
+| *Error* | *Description* |
+| ==DirectedGraph Error (1):== on all examples. | Verify the value of =perlCmd= in lib/LocalSite.cfg |
+| ==DirectedGraph Error (2):== on all examples | Verify the value of =toolsPath= in lib/LocalSite.cfg |
+| ==DirectedGraph Error (9): <br /> The system cannot find the path specified.== on all examples | Verify the value of =enginePath= in lib/LocalSite.cfg | 
+| ==DirectedGraph Error (9): <br /> !DirectedGraphPlugin error:Format: "png" not recognized.==  Format might be any of =png=, =ps=, or =cmapx= | !GraphViz was not configured or built correctly.  Try running ==dot -c -vV== to reconfigure and show the file formats supported by the installation |
+| ==DirectedGraph Error (1):==  on the antialias examples | Verify the =magickPath= in lib/LocalSite.cfg |
+| ==DirectedGraph Error (1):==  on the antialias examples | Verify that !GhostScript is installed correctly.  From a command prompt attempt to convert a .ps file to .gif format.   If !ImageMagick reports =="Postscript delegate failed:"== error, then the problem is probably with !GhostScript |
 
 Plugin zip content:
 | *File:* | *Description:* |
@@ -435,9 +443,9 @@ Dependencies:
 | <nop>ImageMagick | Postprocessor for antialiasing rendered graphs (optional) | http://imagemagick.org/ |
 | <nop>GhostScript | Postprocessor required by !ImageMagick for antialiasing to convert from .ps back to .png | http://ghostscript.com/awki |
 | Digest::MD5, Storable, File::Copy, File::Path, File::Spec, File::Temp | Perl modules |
-| Web fonts | Fonts required for dot's png creations |
+| Web fonts | Fonts required for dot's png creations on non-Windows servers. |
 
-To install the web fonts, download this [[http://biostat.mc.vanderbilt.edu/twiki/pub/TWiki/DirectedGraphPlugin/webfonts-1.0-5.noarch.rpm][rpm]] and run the command *rpm --install webfonts-1.0-5.noarch.rpm* (Red Hat only).
+The webfonts package installs the Microsoft =andalemo=, =arial=, =comic=, =courier=, =georgia=, =impact=, =times=, =trebuc=, =veranda= and =webdings= Truetype fonts on non-Windows systems.   To install the web fonts, download this [[http://biostat.mc.vanderbilt.edu/twiki/pub/TWiki/DirectedGraphPlugin/webfonts-1.0-5.noarch.rpm][rpm]] and run the command *rpm --install webfonts-1.0-5.noarch.rpm*   See http://en.wikipedia.org/wiki/Core_fonts_for_the_Web for more information on the webfonts.
 
 ---+++ Notes on antialiasing
 
@@ -478,7 +486,7 @@ Details on how to install cairo, graphviz and imagemagick are beyond the scope o
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order --> |
-|  11 Oct 2008: | TWikibug:Item6058: Incompatibilities with Windows  --TWiki:Main.GeorgeClark | 
+|  11 Oct 2008: | TWikibug:Item6058: Incompatibilities with Windows, improved some error messages. --TWiki:Main.GeorgeClark | 
 |  31 Aug 2008: | TWikibug:Item5954: DirectedGraphPlugin should permit direct file I/O --TWiki:Main.GeorgeClark | 
 |  26 Jul 2008: | TWikibug:Item5332 - Attachment handing needs improvements.  Remove old attachments, Add support for inline .jpg files, Use single workarea file per topic.<br />  TWikibug:Item5349 - DirectedGraphPlugin uses too many global variables  -- TWiki:Main.GeorgeClark |
 |  10 Apr 2008: | TWikibug:Item5508 - Wiki Words in graph label text results in corrupted image maps. |
