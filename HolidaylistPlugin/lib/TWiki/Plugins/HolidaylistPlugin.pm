@@ -89,7 +89,9 @@ $VERSION = '$Rev$';
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
 
-$REVISION = '1.0.25'; #dro# added div tag with style overflow:auto requested by Matthew Thomson; added query parameters feature (hlp_&lt;attribute&gt; in URIs); added option form feature (new attributes: showoptions, optionspos, optionsformat) requested by Matthew Thomson; improved performance; fixed minor icon related bugs;
+
+$REVISION = '1.0.26'; #dro# added missing anchor in showoptions form action
+#$REVISION = '1.0.25'; #dro# added div tag with style overflow:auto requested by Matthew Thomson; added query parameters feature (hlp_&lt;attribute&gt; in URIs); added option form feature (new attributes: showoptions, optionspos, optionsformat) requested by Matthew Thomson; improved performance; fixed minor icon related bugs;
 #$REVISION = '1.0.24'; #dro# added statistics feature requested by TWiki:Main.GarySprague
 #$REVISION = '1.0.23'; #kjl# fixed Item5190 - does not like whitespace after the smiley. This makes the plugin work with TWiki 4.2.0 and Wysiwyg
 #$REVISION = '1.0.22'; #dro# added documentation requested by TWiki:Main.PeterThoeny; fixed typo (on=off bug)
@@ -1612,7 +1614,7 @@ sub renderOptions {
 
 	$text=~s/%BUTTON(\(([^\)]*)\))?/CGI::submit(-name=>'hlp_change_'.$hlid,-value=>(defined $2?$2:'Change'))/eg;
 	
-	$text = CGI::start_form(-method=>'get'). $text . CGI::end_form();
+	$text = CGI::start_form(-action=>"#hlpid$hlid",-method=>'get'). $text . CGI::end_form();
 	return $text;
 }
 sub _getOptionRange {
