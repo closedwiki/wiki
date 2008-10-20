@@ -1,6 +1,13 @@
 %META:TOPICINFO{author="TWikiGuest" date="1160739585" format="1.1" reprev="1.14" version="1.14"}%
 %META:TOPICPARENT{name="TWikiPlugins"}%
----+ The Object Plugin
+
+---+!! The Object Plugin
+<!--
+One line description, required for extensions repository catalog.
+   * Set SHORTDESCRIPTION = Embed Multi-Media Objects into TWiki topics (replaces EmbedPlugin)
+-->
+%SHORTDESCRIPTION%
+
 <noautolink>
 <!-- note well that I've turned off wikiwords between here and the "plugin info" section. I don't like 'em, and they play merry hell with all the "QuickTimes" -->
 
@@ -93,35 +100,27 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
    * Set PLAY = TRUE
    * Set USEEMBED = TRUE
 
----++ Plugin Installation Instructions
+---++ Installation Instructions
 
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-     | *File:* | *Description:* |
-     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-   * Test if the plugin is correctly installed:
+%$INSTALL_INSTRUCTIONS%
    * You should see something below: <br>  %OBJECT{"http://support.microsoft.com/support/mediaplayer/wmptest/samples/new/mediaexample.wmv" height="240" width="320"}%   %OBJECT{"%ATTACHURL%/sample.mov" height="180" width="320"}% <br> %OBJECT{"%ATTACHURL%/Sample.swf" height="180" width="320"}%  %OBJECT{"%ATTACHURL%/sample.html" arbitrary="plplpl"}%
-</noautolink>
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.PiersGoodhew |
-|  Plugin Version: | 0.001 |
-|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  Plugin Author(s): | TWiki:Main.PiersGoodhew |
+|  Copyright: | &copy; |
+|  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
+|  Plugin Version: | %$VERSION% |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  Dependencies: | %$DEPENDENCIES% |
+|  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/ObjectPlugin |
+|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/ObjectPluginDev |
+|  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/ObjectPluginAppraisal |
 
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the feedback topic on twiki.org instead. -->
 
-
-
-
-
-
-
--- Main.TWikiGuest - 29 Sep 2006
 
 %META:FILEATTACHMENT{name="sample.html" attr="" autoattached="1" comment="sample html file" date="1160707557" path="sample.html" size="110" user="Main.TWikiGuest" version="2"}%
 %META:FILEATTACHMENT{name="sample.mov" attr="" autoattached="1" comment="sample QT movie" date="1160739512" path="sample.mov" size="21681" user="Main.TWikiGuest" version="1"}%
