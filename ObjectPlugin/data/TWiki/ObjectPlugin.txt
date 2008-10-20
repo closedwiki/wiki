@@ -11,15 +11,22 @@ One line description, required for extensions repository catalog.
 <noautolink>
 <!-- note well that I've turned off wikiwords between here and the "plugin info" section. I don't like 'em, and they play merry hell with all the "QuickTimes" -->
 
-%ICON{"wip"}% This plugin is in beta!
+Uses the =OBJECT= html tag to embed arbitrary content into a wiki page, with a particular bent towards media:
+common media formats are detected and some "agnostic best-guess" html is used (derived from that recommended by
+the plugin providers).
+However, any content at all can be embedded using the object tag: java, pdf, other html, svg,
+even images (although there is of course no reason to do so).
+The plugin uses generic syntax when it cannot detect the type of file being embedded.
 
-placeholder doco for Object Plugin ...
-
-Uses the =OBJECT= html tag to embed arbitrary content into a wiki page, with a particular bent towards media: common media formats are detected and some "agnostic best-guess" html is used (derived from that recommended by the plugin providers). However, any content at all can be embedded using the object tag: java, pdf, other html, svg, even images (although there is of course no reason to do so). The plugin uses generic syntax when it cannot detect the type of file being embedded.
-
-The plugin stores a range of default values (defined here on this page) which allow you to specify a bare minimum of info in your markup and still get acceptable results (see [[#Basic_Usage][Basic Usage]] below). These defaults can of course be overridden on a use-by-use basis.
+The plugin stores a range of default values (defined here on this page)
+which allow you to specify a bare minimum of info in your markup and still
+get acceptable results (see [[#Basic_Usage][Basic Usage]] below).
+These defaults can of course be overridden on a use-by-use basis.
 
 A =USEEMBED= flag should be left to "true" - I thought I could be clever before I fully understood the minefield that is browser plugin syntax.
+
+It also supports TWiki:Plugins.EmbedPlugin's =EMBED= syntax to enable it to superceed that plugin:
+   * %<nop>EMBED{filename="string" width="number" height="number"}%
 
 ---++Basic Usage
 

@@ -76,6 +76,7 @@ sub initPlugin {
 
     # register the OBJECT function to handle %OBJECT{...}%
     TWiki::Func::registerTagHandler( 'OBJECT', \&_OBJECT );
+    TWiki::Func::registerTagHandler( 'EMBED', \&_OBJECT );
 
 # Some "consts"
 #$kQTControllerHeight = 16;
@@ -106,8 +107,9 @@ sub _OBJECT {
 #These three values are passed inside the <OBJECT> tag and not as <PARAM>s later ...
     my $height = $params->{height};
     my $width  = $params->{width};
-    $params->{src} ||= $params
-      ->{_DEFAULT}; #"src" is optional so we try the default param if "src" is ND
+    $params->{src} ||= $params->{_DEFAULT} || $params->{filename};
+    #"src" is optional so we try the default param if "src" is ND
+    #and if neither src, nor _DEFAULT are defined, try the EmbedPlugin filename=''
 
     #fall special values back to default if nd
     $height ||= $objectPluginDefHeight;
