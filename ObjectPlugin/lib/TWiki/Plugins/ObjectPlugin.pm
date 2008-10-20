@@ -132,13 +132,13 @@ sub _OBJECT {
 
 #We have a media-y file, fill out our various param synonyms from params/defaults
         $localParams{controller} ||= $objectPluginDefController;
-        $localParams{ShowController} =
+        $localParams{showcontroller} =
           ( $localParams{controller} eq "TRUE" ) * 1;
         $localParams{autoplay} ||= $localParams{play} ||= $objectPluginDefPlay;
-        $localParams{AutoStart} =
+        $localParams{autostart} =
           ( $localParams{play} eq "TRUE" ) *
           1;    #the * 1 is to convert perl bool to number
-        $localParams{Movie} = $localParams{FileName} = $localParams{src};
+        $localParams{movie} = $localParams{fileName} = $localParams{src};
         if ( $fileExt eq "mov" ) {
 
             #we handle as a QuickTime ...

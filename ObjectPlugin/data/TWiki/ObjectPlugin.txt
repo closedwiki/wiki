@@ -2,14 +2,8 @@
 %META:TOPICPARENT{name="TWikiPlugins"}%
 
 ---+!! The Object Plugin
-<!--
-One line description, required for extensions repository catalog.
-   * Set SHORTDESCRIPTION = Embed Multi-Media Objects into TWiki topics (replaces EmbedPlugin)
--->
-%SHORTDESCRIPTION%
 
-<noautolink>
-<!-- note well that I've turned off wikiwords between here and the "plugin info" section. I don't like 'em, and they play merry hell with all the "QuickTimes" -->
+%SHORTDESCRIPTION%
 
 Uses the =OBJECT= html tag to embed arbitrary content into a wiki page, with a particular bent towards media:
 common media formats are detected and some "agnostic best-guess" html is used (derived from that recommended by
@@ -98,7 +92,7 @@ Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
    * One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
-   * Set SHORTDESCRIPTION = Embed arbitrary content into twiki pages with not much work ...
+   * Set SHORTDESCRIPTION = Embed Multi-Media Objects into TWiki topics (replaces EmbedPlugin)
 
    * Default parameters for plugin. These *must* be defined. (For booleans use "TRUE" for true, anything else for false)
    * Set WIDTH = 320
