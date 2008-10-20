@@ -103,14 +103,26 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 ---++ Installation Instructions
 
 %$INSTALL_INSTRUCTIONS%
-   * You should see something below: <br>  %OBJECT{"http://support.microsoft.com/support/mediaplayer/wmptest/samples/new/mediaexample.wmv" height="240" width="320"}%   %OBJECT{"%ATTACHURL%/sample.mov" height="180" width="320"}% <br> %OBJECT{"%ATTACHURL%/Sample.swf" height="180" width="320"}%  %OBJECT{"%ATTACHURL%/sample.html" arbitrary="plplpl"}%
+
+---+++ Validation:
+You should see something below:
+---++++ wmv
+%OBJECT{"http://support.microsoft.com/support/mediaplayer/wmptest/samples/new/mediaexample.wmv" height="240" width="320"}%
+---++++ mov
+%OBJECT{"%ATTACHURL%/sample.mov" height="180" width="320"}%
+---++++ swf
+%OBJECT{"%ATTACHURL%/Sample.swf" height="180" width="320"}%
+---++++ html
+%OBJECT{"%ATTACHURL%/sample.html" arbitrary="plplpl"}%
 
 ---++ Plugin Info
 
 |  Plugin Author(s): | TWiki:Main.PiersGoodhew |
-|  Copyright: | &copy; |
+|  Copyright: | &copy; 2006 TWiki:Main.PiersGoodhew |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
+|  20 Oct 2008 | modernise with TWiki:Plugins.BuildContrib, add EMBED Tag, remove WikiWord issues - TWiki:Main.SvenDowideit |
+|  16 Oct 2006 | initial version |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/ObjectPlugin |
