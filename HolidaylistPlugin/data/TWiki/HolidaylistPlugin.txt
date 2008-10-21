@@ -147,6 +147,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | monthheaderformat | month header format (related: showmonthheader) | =monthheaderformat="%B"= |
 | monthnames | custom month names (a list separated by '&brvbar;' and starting on January; overwrites lang attribute) | =monthnames="J&brvbar;F&brvbar;M&brvbar;A&brvbar;M&brvbar;J&brvbar;J&brvbar;A&brvbar;S&brvbar;O&brvbar;N&brvbar;D"= |
 | name | header content of the first cell header |=name="Name"= |
+| namecolors | a comma separated list of names with own colors, e.g. namecolors="Mary:red,Bob:lightblue" | undefined / =namecolors="Bill:yellow"= |
 | navdays | defines the days to navigate to (default: value of the =days= attribute) | =navdays="30"= |
 | navenable | enable/disable navigation (1 - enabled; 0 - disabled) | =navenable="1"= |
 | navhome | navigation button to the start date (%d will be replaced with page x days) | =navhome="%d"= |
@@ -162,6 +163,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | nwidth | cell width of the first column | =nwidth="120px"= |
 | optionspos | position of the navigation form; allowed values: top, bottom, both | =optionspos="bottom"= |
 | optionsformat | defines the output format of the navigation form; some variables are available: =%(WEEK&#124;MONTH&#124;YEAR)SEL(&lt;range&gt;)= - a week&#124;month&#124;year popup menu; =%(STARTDATE&#124;WEEK&#124;MONTH&#124;YEAR)OFFS(&lt;range&gt;)= - a day&#124;week&#124;month&#124;year offset popup menu; =%(STARTDATE&#124;WEEK&#124;MONTH&#124;YEAR)(&lt;default value&gt;)= - a startdate&#124;week&#124;month&#124;year input field; =%BUTTON(&lt;submit button text&gt;)= - a submit button; =ranges= are optional (range syntax: =&lt;start value&gt;(:&lt;end value&gt;(:&lt;steps&gt;)?)?=, e.g. =%YEARSEL(2002:2010:1)= | =optionsformat="Month: %MONTHSEL, Year: %YEARSEL %BUTTON(Change)"= | 
+| rowcolors | a comma separated list of background colors used for entries; the color count is not limited | =rowcolors="#ffffff,#f0f0f0"= |
 | tablebgcolor | table background color | =tablebgcolor="white"= |
 | tablecaption | table caption | =tablecaption="&amp;nbsp;"= |
 | tablecaptionalign | table caption alignment (top, bottom, left, right) | =tablecaptionalign="top"= |
@@ -314,7 +316,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 |  Plugin Author: | TWiki:Main.PeterJones, TWiki:Main.DanielRohde |
 |  Plugin Version: | v1.026 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  v1.026 (BETA) | TWiki:Main.DanielRohde: added missing anchor in showoptions form action |
+|  v1.026 (BETA) | TWiki:Main.DanielRohde: added missing anchor in showoptions form action; added row color feature (new attributes: namecolors, rowcolors) |
 |  v1.025 (17 Oct 2008) | TWiki:Main.DanielRohde: added div tag with style overflow:auto requested by Matthew Thomson; added query parameters feature (hlp_&lt;attribute&gt; in URIs); added option form feature (new attributes: showoptions, optionspos, optionsformat) requested by Matthew Thomson; improved performance; fixed minor icon related bugs |
 |  v1.024 (29 Jul 2008) | TWiki:Main.DanielRohde: added statistics feature requested by TWiki:Main.GarySprague |
 |  v1.023 (19 Jan 2008) | TWiki:Main.KennethLavrsen: fixed Item5190 - does not like whitespace after the smiley. This makes the plugin work with TWiki 4.2.0 and Wysiwyg |

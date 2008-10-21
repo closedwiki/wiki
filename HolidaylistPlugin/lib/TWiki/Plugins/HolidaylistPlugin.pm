@@ -90,7 +90,7 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 
 
-$REVISION = '1.0.26'; #dro# added missing anchor in showoptions form action
+$REVISION = '1.0.26'; #dro# added missing anchor in showoptions form action; added row color feature (new attributes: namecolors, rowcolors)
 #$REVISION = '1.0.25'; #dro# added div tag with style overflow:auto requested by Matthew Thomson; added query parameters feature (hlp_&lt;attribute&gt; in URIs); added option form feature (new attributes: showoptions, optionspos, optionsformat) requested by Matthew Thomson; improved performance; fixed minor icon related bugs;
 #$REVISION = '1.0.24'; #dro# added statistics feature requested by TWiki:Main.GarySprague
 #$REVISION = '1.0.23'; #kjl# fixed Item5190 - does not like whitespace after the smiley. This makes the plugin work with TWiki 4.2.0 and Wysiwyg
@@ -237,6 +237,8 @@ sub initDefaults() {
 		optionsformat => 'Month: %MONTHSEL, Year: %YEARSEL %BUTTON(Change)',
 		showoptions => 0,
 		optionspos=> 'bottom',
+		rowcolors => '#ffffff,#f0f0f0',
+		namecolors => undef,
 	);
 
 	# reminder: don't forget change documentation (HolidaylistPlugin topic) if you add a new rendered option
@@ -1008,6 +1010,8 @@ sub renderHolidaylist() {
 			   6 => $options{pubholidayicon}
 			);
 
+	my @rowcolors = defined $options{rowcolors} ? split(/[\,\|\;\:]/, $options{rowcolors}) : ( $options{tablebgcolor} );
+	my %namecolors = %{ _getNameColors() };
 
 	my %sumstatistics;
 	my %rowstatistics;
@@ -1031,13 +1035,17 @@ sub renderHolidaylist() {
 
 		my %statistics;
 
+		my $rowcolor = shift @rowcolors;
+		push @rowcolors, $rowcolor;
+		$rowcolor = $namecolors{$person} if defined $namecolors{$person};
+
 		$person =~ s/\@all//ig if $options{enablepubholidays};
-		$text .= '<tr><th align="left"><noautolink>'._renderText($person,$web).'</noautolink></th>';
+		$text .= '<tr bgcolor="'.$rowcolor.'">'.CGI::th({-align=>'left'},'<noautolink>'._renderText($person,$web).'</noautolink>');
 		for (my $i=0; $i<$options{days}; $i++) {
 			my ($yy1, $mm1, $dd1) = Add_Delta_Days($yy, $mm, $dd, $i);
 			my $dow = Day_of_Week($yy1, $mm1, $dd1);
 
-			my $bgcolor = $options{tablebgcolor};
+			my $bgcolor = $rowcolor;
 			$bgcolor = $options{weekendbgcolor} unless $dow < 6;
 			$bgcolor = $options{todaybgcolor} if (defined $options{todaybgcolor}) && ($today == Date_to_Days($yy1, $mm1, $dd1));
 
@@ -1153,6 +1161,16 @@ sub renderHolidaylist() {
 	$text = CGI::div({-class=>'holidayListPluginDiv',-style=>'overflow:auto;'},$text);
 
 	return $text;
+}
+# =========================
+sub _getNameColors {
+	my %colors =  ( );
+	return \%colors unless defined $options{namecolors};
+	foreach my $entry (split(/\s*[\,\|\;]\s*/, $options{namecolors})) {
+		my ($name,$color) = split(/\:/,$entry);
+		$colors{$name}=$color;
+	}
+	return \%colors;
 }
 # =========================
 sub substTitle {
