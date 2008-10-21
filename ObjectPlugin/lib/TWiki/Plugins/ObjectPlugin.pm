@@ -18,13 +18,8 @@ use strict;
 # *must* exist in this package
 use vars qw( $VERSION $RELEASE $debug $pluginName $objectPluginDefHeight
   $objectPluginDefWidth $objectPluginDefUseEMBED $objectPluginDefController
-  $objectPluginDefPlay $kMediaFileExtsPattern);
+  $objectPluginDefPlay $kMediaFileExtsPattern $htmlId);
 
-use constant {
-    kQTControllerHeight  => 16,
-    kWMVControllerHeight => 46,
-    kMediaFileExts       => qw (mov mpg m2v swf rm wmv mp4 mp3 avi),
-};
 
 # This should always be $Rev: 9813$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -76,16 +71,16 @@ sub initPlugin {
 
     # register the OBJECT function to handle %OBJECT{...}%
     TWiki::Func::registerTagHandler( 'OBJECT', \&_OBJECT );
-    TWiki::Func::registerTagHandler( 'EMBED', \&_OBJECT );
-
-# Some "consts"
-#$kQTControllerHeight = 16;
-#$kWMVControllerHeight = 46;
-#$kMediaFileExts = ("mov", "wmv", "swf", "mpg", "mpeg", "mp3", "rm", "mp4", "3gpp")
-    $kMediaFileExtsPattern = join( "|", kMediaFileExts );
+    TWiki::Func::registerTagHandler( 'EMBED',  \&_EMBED );
 
     # Plugin correctly initialized
     return 1;
+}
+
+sub _EMBED {
+    my ( $session, $params, $theTopic, $theWeb ) = @_;
+    $params->{_EMBED} = 1; #signal that this should use MediaPlayer
+    return _OBJECT( $session, $params, $theTopic, $theWeb );
 }
 
 # Our actual function
@@ -94,7 +89,7 @@ sub _OBJECT {
     my $objectParams = " ";
     my $embedTags    = " ";
     if ($objectPluginDefUseEMBED) {
-        $embedTags = "<EMBED "
+        $embedTags = "\t<EMBED "
           ; #you want a trailing space on pretty much everything that isn't an end tag
     }
     my $objectHeader = "<OBJECT ";
@@ -108,8 +103,9 @@ sub _OBJECT {
     my $height = $params->{height};
     my $width  = $params->{width};
     $params->{src} ||= $params->{_DEFAULT} || $params->{filename};
-    #"src" is optional so we try the default param if "src" is ND
-    #and if neither src, nor _DEFAULT are defined, try the EmbedPlugin filename=''
+
+  #"src" is optional so we try the default param if "src" is ND
+  #and if neither src, nor _DEFAULT are defined, try the EmbedPlugin filename=''
 
     #fall special values back to default if nd
     $height ||= $objectPluginDefHeight;
@@ -126,77 +122,48 @@ sub _OBJECT {
 
     #detect file type ... this should be inside an if (don't be generic) block
     my ( $fileHeader, $fileExt ) = ( $localParams{src} =~ /(.*)\.+(.*$)/ );
-
-    #	if ($fileExt =~ m/$kMediaFileExtsPattern/) {
-    if (1) {
+    
+    if ($params->{_EMBED} == 1) {
+        $fileExt = 'wmv';
+        delete $params->{_EMBED};
+    }
 
 #We have a media-y file, fill out our various param synonyms from params/defaults
-        $localParams{controller} ||= $objectPluginDefController;
-        $localParams{showcontroller} =
-          ( $localParams{controller} eq "TRUE" ) * 1;
-        $localParams{autoplay} ||= $localParams{play} ||= $objectPluginDefPlay;
-        $localParams{autostart} =
-          ( $localParams{play} eq "TRUE" ) *
-          1;    #the * 1 is to convert perl bool to number
-        $localParams{movie} = $localParams{fileName} = $localParams{src};
-        if ( $fileExt eq "mov" ) {
-
-            #we handle as a QuickTime ...
-            $objectHeader .=
-"CLASSID=\"clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B\" CODEBASE=\"http://www.apple.com/qtactivex/qtplugin.cab\" ";
-            if ( $localParams{controller} ) {
-                $height += kQTControllerHeight;
-            }
-            if ($objectPluginDefUseEMBED) {
-                $embedTags .=
-"TYPE=\"video/quicktime\" PLUGINSPAGE=\"http://www.apple.com/quicktime/download/\" ";
-            }
+    $localParams{controller} ||= $objectPluginDefController;
+    $localParams{showcontroller} =
+      ( uc( $localParams{controller} ) eq "TRUE" ) ? 1 : 0;
+    $localParams{autoplay} ||= $localParams{play} ||= $objectPluginDefPlay;
+    $localParams{autostart} = ( uc( $localParams{play} ) eq "TRUE" ) ? 1 : 0;
+    $localParams{movie} = $localParams{filename} = $localParams{src};
+    
+    #TODO: can I replace these with one tmpl file per format?
+    # eg objectplugin_mov.tmpl? that way a skin could over-ride it with objectplugin_mov.jquery.tmpl
+    # and thus we can
+    TWiki::Func::loadTemplate ( 'objectplugin_'.$fileExt );
+    my $format_objectHeader = TWiki::Func::expandTemplate('objectHeader_'.$fileExt);
+    if ($format_objectHeader eq '') { #use generic
+        TWiki::Func::loadTemplate ( 'objectplugin' );
+        $objectHeader .= TWiki::Func::expandTemplate('objectHeader');
+        $embedTags .= TWiki::Func::expandTemplate ( 'embedTag' );
+        $localParams{data} = $localParams{src};
+        $objectHeader .=  'data="'.$localParams{data}.'"';
+        delete $localParams{src};
+        delete $localParams{movie};
+        delete $localParams{filename};
+    } else {
+        $objectHeader .= $format_objectHeader;
+        if ($objectPluginDefUseEMBED) {
+            $embedTags .= TWiki::Func::expandTemplate ( 'embedTag_'.$fileExt );
         }
-        elsif ( $fileExt eq "wmv" ) {
-
-            #we handle as Windows Media ...
-            $objectHeader .=
-"ID=\"MediaPlayer\" classid=\"CLSID:22D6F312-B0F6-11D0-94AB-0080C74C7E95\""
-              . "codebase=\"http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=6,4,7,1112\""
-              . "standby=\"Loading Microsoft Windows Media Player components...\" type=\"application/x-oleobject\" ";
-            if ( $localParams{controller} ) {
-                $height += kWMVControllerHeight;
-            }
-            if ($objectPluginDefUseEMBED) {
-                $embedTags .=
-"type=\"application/x-mplayer2\" pluginspage=\"http://www.microsoft.com/windows/windowsmedia/download/AllDownloads.aspx/\""
-                  . "Name=MediaPlayer";
-            }
-
-        }
-        elsif ( $fileExt eq "swf" ) {
-
-            #we handle as Flash ...
-            $objectHeader .=
-                "classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\""
-              . "codebase=\"http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0\""
-              . "id=\"myMovieName\"";
-            if ( $localParams{controller} ) {
-                $height += kWMVControllerHeight;
-            }
-            if ($objectPluginDefUseEMBED) {
-                $embedTags .=
-"type=\"application/x-shockwave-flash\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\""
-                  . "Name=myMovieName";
-            }
-        }
-        else {
-
-#Generic case - use the OBJECT tag with a "data" value and whatever params were expolicitly passed
-            $objectHeader .= "data=\"$localParams{src}\"";
-            delete $localParams{src};
+        if ( $localParams{controller} ) {
+            $height += TWiki::Func::expandTemplate('controlerHeight_'.$fileExt);
         }
     }
 
  #We can now parse the params out into the OBJECT and (maybe) the EMBED tags ...
     while ( ( $key, $value ) = each %localParams ) {
         $objectParams .=
-          ( "<PARAM name=\"" . $key . "\" value=\"" . $value . "\"> " );
+          ( "\t<PARAM name=\"" . $key . "\" value=\"" . $value . "\" > \n" );
         if ($objectPluginDefUseEMBED) {
             $embedTags .= ( $key . "=\"" . $value . "\" " );
         }
@@ -204,9 +171,9 @@ sub _OBJECT {
 
     #complete the OBJECT and (maybe) EMBED tags with the size param
     if ($objectPluginDefUseEMBED) {
-        $embedTags .= "height=\"$height\" width=\"$width\"></embed>";
+        $embedTags .= "height=\"$height\" width=\"$width \"></embed>\n";
     }
-    $objectHeader .= "height=\"$height\" width=\"$width\">";
+    $objectHeader .= "height=\"$height\" width=\"$width id=\"ObjectPlugin".$htmlId++."\" \">\n";
 
     return $objectHeader . $objectParams . $embedTags . $objectFooter;
 }

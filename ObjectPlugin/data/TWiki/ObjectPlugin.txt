@@ -52,19 +52,31 @@ A few parameters are defined and get handled a little differently (they may be "
 |src|URI|the content to embed ("src=" is optional)||
 |width|std web measure (px, %, em)|with of box holding content||
 |height|std web measure (px, %, em)|height of box holding content||
-|controller|text boolean ("TRUE" or "FALSE")|whether to display controls|automatically added for QT|
+|controller|text boolean ("TRUE" or "FALSE")|whether to display controls|automatically added|
 |play|text boolean|whether to auto-play the content| automatically added for QT and Flash|
 |useembed| text boolean|whether to include a non-standard (but widely recommended) =EMBED= tag||
 
 ---++Detection of media type/Recommended plugin syntax
 
-The plugin detects most media types and uses a hybrid of the html markup recommended by the browser plugin makers - in the hope of providing maximum compatibility. This is done simply by checking the extension of the filename.
+The plugin detects most media types and uses a hybrid of the html markup
+recommended by the browser plugin makers -
+in the hope of providing maximum compatibility.
+This is done simply by checking the extension of the filename.
 
-Originally, the plugin used (almost) the exact recommended HTML on a type-by-type basis, but I've abandoned this in favour of "one markup fits all" because you don't know which plugin will be handling what - the various ISO formats (MPEG1,2,4, MP3) will be taken by whatever plugin was installed last, and QuickTime now handles Windows Media on Macintosh systems (at Microsoft's recommendation!).
+Originally, the plugin used (almost) the exact recommended HTML on a type-by-type basis,
+but I've abandoned this in favour of "one markup fits all" because you don't
+know which plugin will be handling what - the various ISO formats (MPEG1,2,4, MP3)
+will be taken by whatever plugin was installed last, and QuickTime now handles
+Windows Media on Macintosh systems (at Microsoft's recommendation!).
 
-While most of the HTML is as generic as possible, the =CLASSID= value and some other mime-type information is unique to a particular file-type, and for Flash, QuickTime and Windows Media the  Microsoft-sanctioned values are sent. I understand MSIE has to have this info or it totally burns ...
+While most of the HTML is as generic as possible, the =CLASSID= value and some
+other mime-type information is unique to a particular file-type, and for Flash,
+QuickTime and Windows Media the  Microsoft-sanctioned values are sent.
+I understand MSIE has to have this info or it totally burns ...
 
-I haven't bothered with Real. If there's huge demand, it wouldn't be hard to add - but it may also be handled quite well by the generic media syntax already.
+I haven't bothered with Real.
+If there's huge demand, it wouldn't be hard to add -
+but it may also be handled quite well by the generic media syntax already.
 
 The sytax recommendations are found:
 
@@ -72,11 +84,16 @@ The sytax recommendations are found:
    * [[http://support.microsoft.com/default.aspx?scid=kb;en-us;Q285154][Windows Media]] (is it just me or is there almost no doco from Microsoft on this?)
    * [[http://www.adobe.com/cfusion/knowledgebase/index.cfm?id=tn_4150][Flash]]
 
-From those startpoints, basically everything gets merged: all synonymous parameters get sent (e.g. QT's "AutoPlay", Flash's "Play" and WMV's "AutoStart") together, set to the same value.
+From those startpoints, basically everything gets merged:
+all synonymous parameters get sent (e.g. QT's "AutoPlay",
+Flash's "Play" and WMV's "AutoStart") together, set to the same value.
 
-Then everything is smoodged onto one line, TWiki doesn't like tags over line breaks, but I also noticed tables and Lists getting broken from line breaks added by the plugin, so one line for everything. 
+Then everything is smoodged onto one line, TWiki doesn't like html tags over line
+breaks, but I also noticed tables and Lists getting broken from line breaks
+added by the plugin, so one line for everything. 
 
-And (to keep the plugin reasonably simple) _all_ information passed inside =PARAM= tags is also put in the =EMBED= tag (and any special =EMBED= only parameters go first). 
+And (to keep the plugin reasonably simple) _all_ information passed inside
+=PARAM= tags is also put in the =EMBED= tag (and any special =EMBED= only parameters go first). 
 
 In other words, all parameters recommended by the plugin maker are sent, plus more, and in any old order.
 
@@ -84,7 +101,18 @@ This is an interesting article on getting "pure" OBJECT tags to both a) validate
 
 http://alistapart.com/articles/byebyeembed 
 
-This is sort-of what I was aiming for with =USEEMBED=. I assumed that you could just leave =EMBED= out, but that will break on everything but IE, as the other browsers (a little churlishly) ingore the entire tag if it has MS's custom params in it.
+This is sort-of what I was aiming for with =USEEMBED=. I assumed that you could just leave =EMBED= out,
+but that will break on everything but IE, as the other browsers (a little churlishly) ingore the entire tag if it has MS's custom params in it.
+
+---++ additional file formats
+The output of this plugin is paritally goverend by TWiki templates. the mov file output is defined in =templates/objectplugin_mov.tmpl=,
+which contains the classid's, codebase etc.
+<verbatim>
+%TMPL:DEF{objectHeader_mov}%classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" codebase="http://www.apple.com/qtactivex/qtplugin.cab" %TMPL:END%
+%TMPL:DEF{embedTag_mov}%TYPE="video/quicktime" PLUGINSPAGE="http://www.apple.com/quicktime/download/" %TMPL:END%
+%TMPL:DEF{controlerHeight_mov}%16%TMPL:END%
+</verbatim>
+To add other types add your own template using the same naming scheme (=objectplugin_ext.tmpl=).
 
 ---++ <nop>%TOPIC% Global Settings
 
@@ -118,11 +146,11 @@ You should see something below:
 
 ---++ Plugin Info
 
-|  Plugin Author(s): | TWiki:Main.PiersGoodhew |
-|  Copyright: | &copy; 2006 TWiki:Main.PiersGoodhew |
+|  Plugin Author(s): | TWiki:Main.PiersGoodhew, TWiki:Main.SvenDowideit |
+|  Copyright: | &copy; 2006 TWiki:Main.PiersGoodhew, 2008 TWiki:Main.SvenDowideit |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
-|  20 Oct 2008 | modernise with TWiki:Plugins.BuildContrib, add EMBED Tag, remove WikiWord issues - TWiki:Main.SvenDowideit |
+|  20 Oct 2008 | modernise with TWiki:Plugins.BuildContrib, add EMBED Tag, remove WikiWord issues, templatise html output - TWiki:Main.SvenDowideit |
 |  16 Oct 2006 | initial version |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  Dependencies: | %$DEPENDENCIES% |
