@@ -62,6 +62,7 @@ The plugin detects most media types and uses a hybrid of the html markup
 recommended by the browser plugin makers -
 in the hope of providing maximum compatibility.
 This is done simply by checking the extension of the filename.
+*Or, if the filename contains =youtube.com= it will automatically use flash*
 
 Originally, the plugin used (almost) the exact recommended HTML on a type-by-type basis,
 but I've abandoned this in favour of "one markup fits all" because you don't
@@ -104,7 +105,7 @@ http://alistapart.com/articles/byebyeembed
 This is sort-of what I was aiming for with =USEEMBED=. I assumed that you could just leave =EMBED= out,
 but that will break on everything but IE, as the other browsers (a little churlishly) ingore the entire tag if it has MS's custom params in it.
 
----++ additional file formats
+---++ defining additional file formats
 The output of this plugin is paritally goverend by TWiki templates. the mov file output is defined in =templates/objectplugin_mov.tmpl=,
 which contains the classid's, codebase etc.
 <verbatim>
@@ -141,16 +142,18 @@ You should see something below:
 %OBJECT{"%ATTACHURL%/sample.mov" height="180" width="320"}%
 ---++++ swf
 %OBJECT{"%ATTACHURL%/Sample.swf" height="180" width="320"}%
+---++++ you-tube
+%OBJECT{"http://www.youtube.com/v/-dnL00TdmLY&hl=en&fs=1" width="425" height="344"}%
 ---++++ html
 %OBJECT{"%ATTACHURL%/sample.html" arbitrary="plplpl"}%
 
 ---++ Plugin Info
 
-|  Plugin Author(s): | TWiki:Main.PiersGoodhew, TWiki:Main.SvenDowideit |
+|  Plugin Authors: | TWiki:Main.PiersGoodhew, TWiki:Main.SvenDowideit |
 |  Copyright: | &copy; 2006 TWiki:Main.PiersGoodhew, 2008 TWiki:Main.SvenDowideit |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
-|  20 Oct 2008 | modernise with TWiki:Plugins.BuildContrib, add EMBED Tag, remove WikiWord issues, templatise html output - TWiki:Main.SvenDowideit |
+|  20 Oct 2008 | modernise with TWiki:Plugins.BuildContrib, add EMBED Tag, remove WikiWord issues, templatise html output, add youtube supprt - TWiki:Main.SvenDowideit |
 |  16 Oct 2006 | initial version |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  Dependencies: | %$DEPENDENCIES% |

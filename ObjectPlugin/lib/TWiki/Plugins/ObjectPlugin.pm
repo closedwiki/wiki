@@ -123,9 +123,14 @@ sub _OBJECT {
     #detect file type ... this should be inside an if (don't be generic) block
     my ( $fileHeader, $fileExt ) = ( $localParams{src} =~ /(.*)\.+(.*$)/ );
     
+    #EmbedPlugin hardcoded to MediaPlayer
     if ($params->{_EMBED} == 1) {
         $fileExt = 'wmv';
         delete $params->{_EMBED};
+    }
+    #assume youtube uses swf
+    if ($localParams{src} =~ /youtube.com/) {
+        $fileExt = 'swf';
     }
 
 #We have a media-y file, fill out our various param synonyms from params/defaults
@@ -173,7 +178,7 @@ sub _OBJECT {
     if ($objectPluginDefUseEMBED) {
         $embedTags .= "height=\"$height\" width=\"$width \"></embed>\n";
     }
-    $objectHeader .= "height=\"$height\" width=\"$width id=\"ObjectPlugin".$htmlId++."\" \">\n";
+    $objectHeader .= "height=\"$height\" width=\"$width\" id=\"ObjectPlugin".$htmlId++."\" \">\n";
 
     return $objectHeader . $objectParams . $embedTags . $objectFooter;
 }
