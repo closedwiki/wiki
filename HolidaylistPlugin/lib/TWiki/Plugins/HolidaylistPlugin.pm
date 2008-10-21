@@ -1181,8 +1181,7 @@ sub substTitle {
 	$title =~ s/<\/?\S+[^>]*>//g;
 
 	$title =~s /&nbsp;/ /g;
-	$title =~ s/%[^%]+%//g;
-	#$title =~ s/\%\w+(\{[^\}\%]*\})?\%//g; # delete Vars
+	$title =~ s/\%(\w+[^\%]+?)\%//g; # delete Vars
 	$title =~ s/\[\[[^\]]+\]\[([^\]]+)\]\]/$1/g; # replace forced link with comment
 	$title =~ s/\[\[([^\]]+)\]\]/$1/g; # replace forced link with comment
 	$title =~ s/\[\[/!\[\[/g; # quote forced links - !!!unused
