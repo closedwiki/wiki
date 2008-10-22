@@ -92,9 +92,6 @@ sub convert {
 
     return '' unless $content;
 
-    $content =~ s/\\\n/ /g;
-    $content =~ s/\t/   /g;
-
     $content =~ s/[$TT0$TT1$TT2]/?/go;	
 
     # Render TML constructs to tagged HTML
@@ -233,6 +230,9 @@ sub _getRenderedVersion {
     $text = $this->_takeOutBlocks( $text, 'literal' );
 
     $text = $this->_takeOutSets( $text );
+
+    $text =~ s/\\\n/ /g;
+    $text =~ s/\t/   /g;
 
     # Remove PRE to prevent TML interpretation of text inside it
     $text = $this->_takeOutBlocks( $text, 'pre' );

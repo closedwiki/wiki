@@ -61,6 +61,7 @@ sub new {
 
     $this->{context} = $context;
     $this->{tag} = $tag;
+    $this->{nodeType} = 2;
     $this->{attrs} = {};
     if( $attrs ) {
         foreach my $attr ( keys %$attrs ) {
@@ -857,6 +858,7 @@ sub _emphasis {
     my( $this, $options, $ch ) = @_;
     my( $flags, $contents ) = $this->_flatten( $options | $WC::NO_BLOCK_TML );
     return ( 0, undef ) if( !defined( $contents ) || ( $flags & $WC::BLOCK_TML ));
+
     # Remove whitespace from either side of the contents, retaining the
     # whitespace
     $contents =~ s/&nbsp;/$WC::NBSP/go;
@@ -877,7 +879,80 @@ sub _emphasis {
         return (0, undef);
     }
 
+    my $be = $this->_checkBeforeEmphasis();
+    my $ae = $this->_checkAfterEmphasis();
+    return ( 0, undef ) unless $ae && $be;
+
     return ( $flags, $pre.$WC::CHECKw.$ch.$contents.$ch.$WC::CHECK2.$post );
+}
+
+sub isBlockNode {
+    my $node = shift;
+    return ($node->{tag} && $node->{tag} =~ /^(ADDRESS|BLOCKQUOTE|CENTER|DIR|DIV|DL|FIELDSET|FORM|H\d|HR|ISINDEX|MENU|NOFRAMES|NOSCRIPT|OL|P|PRE|TABLE|UL)$/i);
+}
+
+sub previousLeaf {
+    my $node = shift;
+    if (!$node) {
+        return undef;
+    }
+    do {
+        while (!$node->{prev}) {
+            if (!$node->{parent}) {
+                return undef; # can't go any further back
+            }
+            $node = $node->{parent};
+        }
+        $node = $node->{prev};
+        while (!$node->isTextNode()) {
+            $node = $node->{tail};
+        }
+    } while (!$node->isTextNode());
+    return $node;
+}
+
+# Test for /^|(?<=[\s\(])/ at the end of the leaf node before.
+sub _checkBeforeEmphasis {
+    my ($this) = @_;
+    my $tb = $this->previousLeaf();
+    return 1 unless $tb;
+    return 1 if ($tb->isBlockNode());
+    return 1 if ($tb->{nodeType} == 3 && $tb->{text} =~ /[\s(*_=]$/);
+    return 0;
+}
+
+sub nextLeaf {
+    my $node = shift;
+    if (!$node) {
+        return undef;
+    }
+    do {
+        while (!$node->{next}) {
+            if (!$node->{parent}) {
+                return; # end of the road
+            }
+            $node = $node->{parent};
+            if ($node->isBlockNode()) {
+                # leaving this $node
+                return $node;
+            }
+        }
+        $node = $node->{next};
+        while (!$node->isTextNode()) {
+            $node = $node->{head};
+        }
+    } while (!$node->isTextNode());
+    return $node;
+}
+
+# Test for /$|(?=[\s,.;:!?)])/ at the start of the leaf node after.
+sub _checkAfterEmphasis {
+    my ($this) = @_;
+    my $tb = $this->nextLeaf();
+    return 1 unless $tb;
+    return 1 if ($tb->isBlockNode());
+    return 1 if ($tb->{nodeType} == 3 && $tb->{text} =~ /^[\s,.;:!?)*_=]/);
+    return 0;
 }
 
 # generate verbatim for P, SPAN or PRE

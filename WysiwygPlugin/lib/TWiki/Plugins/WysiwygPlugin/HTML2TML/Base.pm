@@ -3,6 +3,20 @@ package TWiki::Plugins::WysiwygPlugin::HTML2TML::Base;
 
 use Assert;
 
+sub isLeafNode {
+    my $node = shift;
+    return ($node->{nodeType} == 3 || !$node->{head});
+}
+
+sub isBlockNode {
+    return 0;
+}
+
+sub isTextNode {
+    my $node = shift;
+    return (isLeafNode($node) || isBlockNode($node));
+}
+
 # pure virtual
 sub generate {
     ASSERT(0);

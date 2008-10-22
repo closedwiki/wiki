@@ -1302,8 +1302,12 @@ X
           exec => $HTML2TML,
           name => 'Item4588',
           tml => <<XYZ,
-A __here__ A B __here__ B C __here__ C D __here__ D E __here__ E F __here__ F
+A <i> *here* </i>A B <b> _here_ </b>B C __here__ C D <b> <i>here</i></b>D E <b><i>here</i></b>E F <i> <b>here</b></i>F
 XYZ
+# This was:
+# A __here__ A B __here__ B C __here__ C D __here__ D E __here__ E F __here__ F
+# before the fix for Item5961, but that's clearly wrong; the spaces should
+# break the emphasis.
           html => <<XWYZ,
 A <i><b>here</b> </i>A
 B <b><i>here</i> </b>B
@@ -1312,6 +1316,8 @@ D <b> <i>here</i></b>D
 E  <b><i>here</i></b>E
 F <i> <b>here</b></i>F
 XWYZ
+          final_tml => <<ZYX,
+ZYX
       },
       {
           exec => $ROUNDTRIP,
@@ -1625,6 +1631,28 @@ HERE
    * A
 B
 HERE
+      },
+      {
+          name => "Item5961",
+          exec => $HTML2TML | $ROUNDTRIP,
+          html => 'o<strong>n</strong>e',
+          html => ' <strong>zero</strong> <strong>on</strong>e t<strong>w</strong>o t<strong>re</strong>',
+          tml => '*zero* <strong>on</strong>e t<strong>w</strong>o t<strong>re</strong>',
+      },
+      {
+          name => "Item6089",
+          exec => $TML2HTML,
+          tml => <<'ZIS',
+<verbatim>
+line1\
+line2
+</verbatim>
+ZIS
+          html => <<'ZAT',
+<p>
+<pre class="TMLverbatim"><br />line1\<br />line2<br /></pre>
+</p>
+ZAT
       },
      ];
 

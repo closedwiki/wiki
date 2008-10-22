@@ -38,6 +38,7 @@ sub new {
     my $this = {};
 
     $this->{tag} = '';
+    $this->{nodeType} = 3;
     $this->{text} = $text;
     return bless( $this, $class );
 }
