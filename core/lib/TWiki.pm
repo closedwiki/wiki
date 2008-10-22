@@ -471,13 +471,21 @@ BEGIN {
     getTWikiLibDir();
 
     # initialize the runtime engine
-    if (defined $TWiki::cfg{Engine}) {
-        $engine = eval qq(use $TWiki::cfg{Engine}; $TWiki::cfg{Engine}->new);
-        die $@ if $@;
+    if (!defined $TWiki::cfg{Engine}) {
+        # Caller did not define an engine; try and work it out (mainly for
+        # the benefit of pre-5.0 CGI scripts)
+        if ( defined $ENV{GATEWAY_INTERFACE} ) {
+            $TWiki::cfg{Engine} = 'TWiki::Engine::CGI';
+            use CGI::Carp qw(fatalsToBrowser);
+            $SIG{__DIE__} = \&CGI::Carp::confess;
+        } else {
+            $TWiki::cfg{Engine} = 'TWiki::Engine::CLI';
+            require Carp;
+            $SIG{__DIE__} = \&Carp::confess;
+        }
     }
-    else {
-        $engine = undef;
-    }
+    $engine = eval qq(use $TWiki::cfg{Engine}; $TWiki::cfg{Engine}->new);
+    die $@ if $@;
 
     Monitor::MARK('Static configuration loaded');
 };

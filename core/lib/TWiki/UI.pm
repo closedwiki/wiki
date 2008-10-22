@@ -40,29 +40,49 @@ package TWiki::UI;
 use strict;
 
 BEGIN {
-    $TWiki::cfg{SwitchBoard} = {
-        'attach'      => [ 'TWiki::UI::Upload',     'attach',        { attach      => 1 } ],
-        'changes'     => [ 'TWiki::UI::Changes',    'changes',       { changes     => 1 } ],
-        'edit'        => [ 'TWiki::UI::Edit',       'edit',          { edit        => 1 } ],
-        'login'       => [ undef,                   'logon',         { (login=>1, logon=>1) } ],
-        'logon'       => [ undef,                   'logon',         { (login=>1, logon=>1) } ],
-        'manage'      => [ 'TWiki::UI::Manage',     'manage',        { manage      => 1 } ],
-        'oops'        => [ 'TWiki::UI::Oops',       'oops_cgi',      { oops        => 1 } ],
-        'preview'     => [ 'TWiki::UI::Preview',    'preview',       { preview     => 1 } ],
-        'rdiffauth'   => [ 'TWiki::UI::RDiff',      'diff',          { diff        => 1 } ],
-        'rdiff'       => [ 'TWiki::UI::RDiff',      'diff',          { diff        => 1 } ],
-        'register'    => [ 'TWiki::UI::Register',   'register_cgi',  { register    => 1 } ],
-        'rename'      => [ 'TWiki::UI::Manage',     'rename',        { rename      => 1 } ],
-        'resetpasswd' => [ 'TWiki::UI::Register',   'resetPassword', { resetpasswd => 1 } ],
-        'rest'        => [ 'TWiki::UI::Rest',       'rest',          { rest        => 1 } ],
-        'save'        => [ 'TWiki::UI::Save',       'save',          { save        => 1 } ],
-        'search'      => [ 'TWiki::UI::Search',     'search',        { search      => 1 } ],
-        'statistics'  => [ 'TWiki::UI::Statistics', 'statistics',    { statistics  => 1 } ],
-        'upload'      => [ 'TWiki::UI::Upload',     'upload',        { upload      => 1 } ],
-        'viewauth'    => [ 'TWiki::UI::View',       'view',          { view        => 1 } ],
-        'viewfile'    => [ 'TWiki::UI::View',       'viewfile',      { viewfile    => 1 } ],
-        'view'        => [ 'TWiki::UI::View',       'view',          { view        => 1 } ],
-    };
+    $TWiki::cfg{SwitchBoard} ||= {};
+    $TWiki::cfg{SwitchBoard}{attach} =
+      [ 'TWiki::UI::Upload',     'attach',        { attach      => 1 } ];
+    $TWiki::cfg{SwitchBoard}{changes} =
+      [ 'TWiki::UI::Changes',    'changes',       { changes     => 1 } ];
+    $TWiki::cfg{SwitchBoard}{edit} =
+      [ 'TWiki::UI::Edit',       'edit',          { edit        => 1 } ];
+    $TWiki::cfg{SwitchBoard}{login} =
+      [ undef,                   'logon',         { (login=>1, logon=>1) } ];
+    $TWiki::cfg{SwitchBoard}{logon} =
+      [ undef,                   'logon',         { (login=>1, logon=>1) } ];
+    $TWiki::cfg{SwitchBoard}{manage} =
+      [ 'TWiki::UI::Manage',     'manage',        { manage      => 1 } ];
+    $TWiki::cfg{SwitchBoard}{oops} =
+      [ 'TWiki::UI::Oops',       'oops_cgi',      { oops        => 1 } ];
+    $TWiki::cfg{SwitchBoard}{preview} =
+      [ 'TWiki::UI::Preview',    'preview',       { preview     => 1 } ];
+    $TWiki::cfg{SwitchBoard}{rdiffauth} =
+      [ 'TWiki::UI::RDiff',      'diff',          { diff        => 1 } ];
+    $TWiki::cfg{SwitchBoard}{rdiff} =
+      [ 'TWiki::UI::RDiff',      'diff',          { diff        => 1 } ];
+    $TWiki::cfg{SwitchBoard}{register} =
+      [ 'TWiki::UI::Register',   'register_cgi',  { register    => 1 } ];
+    $TWiki::cfg{SwitchBoard}{rename} =
+      [ 'TWiki::UI::Manage',     'rename',        { rename      => 1 } ];
+    $TWiki::cfg{SwitchBoard}{resetpasswd} =
+      [ 'TWiki::UI::Register',   'resetPassword', { resetpasswd => 1 } ];
+    $TWiki::cfg{SwitchBoard}{rest} =
+      [ 'TWiki::UI::Rest',       'rest',          { rest        => 1 } ];
+    $TWiki::cfg{SwitchBoard}{save} =
+      [ 'TWiki::UI::Save',       'save',          { save        => 1 } ];
+    $TWiki::cfg{SwitchBoard}{search} =
+      [ 'TWiki::UI::Search',     'search',        { search      => 1 } ];
+    $TWiki::cfg{SwitchBoard}{statistics} =
+      [ 'TWiki::UI::Statistics', 'statistics',    { statistics  => 1 } ];
+    $TWiki::cfg{SwitchBoard}{upload} =
+      [ 'TWiki::UI::Upload',     'upload',        { upload      => 1 } ];
+    $TWiki::cfg{SwitchBoard}{viewauth} =
+      [ 'TWiki::UI::View',       'view',          { view        => 1 } ];
+    $TWiki::cfg{SwitchBoard}{viewfile} =
+      [ 'TWiki::UI::View',       'viewfile',      { viewfile    => 1 } ];
+    $TWiki::cfg{SwitchBoard}{view} =
+      [ 'TWiki::UI::View',       'view',          { view        => 1 } ];
 }
 
 use Error qw(:try);
@@ -378,6 +398,24 @@ sub readTemplateTopic {
     }
     return $session->{store}->readTopic(
         $session->{user}, $web, $theTopicName, undef );
+}
+
+=pod
+
+---++ StaticMethod run( $method )
+
+Supported for bin scripts that were written for TWiki < 5.0. The
+parameter is a function reference to the UI method to call, and is ignored
+in TWiki >= 5.0, where it should be replaced by a Config.spec entry such as:
+
+# **PERL H**
+# Bin script registration - do not modify
+$TWiki::cfg{SwitchBoard}{publish} = [ "TWiki::Contrib::Publish", "publish", { publishing => 1 } ];
+
+=cut
+
+sub run {
+    $TWiki::engine->run();
 }
 
 1;

@@ -110,17 +110,28 @@ sub preparePath {
         $res->body($html);
         throw TWiki::EngineException(500, $reason, $res);
     }
-    my $cgiScriptName = $ENV{SCRIPT_NAME};
-    $pathInfo =~ s{$cgiScriptName/}{/}i;
-    
+    my $cgiScriptPath = $ENV{SCRIPT_NAME};
+    $pathInfo =~ s{$cgiScriptPath/}{/}i;
+    my $cgiScriptName = $cgiScriptPath;
+    $cgiScriptName =~ s/.*?(\w+)(\.\w+)?$/$1/;
+
     my $action;
-    if ( exists $ENV{TWIKI_ACTION} ) {
+    if( exists $ENV{TWIKI_ACTION} ) {
+        # This handles scripts that have set $TWIKI_ACTION
         $action = $ENV{TWIKI_ACTION};
     }
-    elsif ( length $pathInfo > 0 ) {
+    elsif( exists $TWiki::cfg{SwitchBoard}{$cgiScriptName} ) {
+        # This handles other named CGI scripts that have a switchboard entry
+        # but haven't set $TWIKI_ACTION (old-style run scripts)
+        $action = $cgiScriptName;
+    }
+    elsif( length $pathInfo > 1 ) {
+        # This handles twiki_cgi; use the first path el after the script
+        # name as the function
         $pathInfo =~ m{^/([^/]+)(.*)};
         my $first = $1 || '';
-        if ( exists $TWiki::cfg{SwitchBoard}{$first} ) {
+        if( exists $TWiki::cfg{SwitchBoard}{$first} ) {
+            # The path is of the form script/function/...
             $action   = $first;
             $pathInfo = $2 || '';
         }

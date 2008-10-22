@@ -274,8 +274,7 @@ HERE
     foreach my $script (grep { -f "$dir/$_" && /^\w+(\.\w+)?$/ } readdir D) {
         next if( $ext && $script !~ /\.$ext$/ );
         if( $TWiki::cfg{OS} !~ /^Windows$/i &&
-              $script !~ /\.cfg$/ &&
-                !-x "$dir/$script" ) {
+              $script !~ /\.cfg$/ && !-x "$dir/$script" ) {
             $errs .= $this->WARN(<<HERE);
 $script might not be an executable script - please check it (and its
 permissions) manually.

@@ -107,6 +107,7 @@ sub _loadSpecsFrom {
     return unless opendir(D, $dir);
     foreach my $extension ( grep { !/^\./ } readdir D) {
         next if $read->{$extension};
+        $extension =~ /(.*)/; $extension = $1; # untaint
         my $file = "$dir/$extension/Config.spec";
         next unless -e $file;
         _parse($file, $root, 1);
@@ -205,8 +206,9 @@ sub _parse {
             $open = new TWiki::Configure::Value(typename=>$1, opts=>$2);
         }
 
-        elsif ($l =~ /^#?\s*\$(TWiki::)?cfg([^=\s]*)\s*=/) {
+        elsif ($l =~ /^#?\s*\$(TWiki::)?cfg([^=\s]*)\s*=(.*)$/) {
             my $keys = $2;
+            my $tentativeVal = $3;
             if ($open && $open->isa('SectionMarker')) {
                 pusht(\@settings, $open);
                 $open = undef;

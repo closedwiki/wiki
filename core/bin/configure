@@ -408,6 +408,7 @@ HERE
 print CGI::img({src=>$scriptName.'?action=image;image=T-logo-140x40-t.gif;type=image/gif', class=>'logo', alt=>'TWiki', width=>'140', height=>'40'});
 
 my $stub = new TWiki::Configure::Item();
+# This call will define $TWiki::defaultCfg by loading .spec files
 my $sanityUI = TWiki::Configure::UI::loadChecker('BasicSanity', $stub);
 my ($sanityStatement, $badLSC) = $sanityUI->ui();
 
@@ -554,7 +555,6 @@ sub _actionConfigure {
     my $root = new TWiki::Configure::Root();
     my $valuer = new TWiki::Configure::Valuer(
         $TWiki::defaultCfg, \%TWiki::cfg);
-
     # Load the config structures.
     TWiki::Configure::TWikiCfg::load($root, !$badLSC);
 

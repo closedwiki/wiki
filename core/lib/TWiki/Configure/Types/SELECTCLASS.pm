@@ -56,14 +56,14 @@ sub findClasses {
 
     while (scalar(@path) > 1 && @$places) {
         my $pathel = shift(@path);
-        eval "\$pathel = qr/^$pathel\$/";
+        eval "\$pathel = qr/^($pathel)\$/"; # () to untaint
         my @newplaces;
 
         foreach my $place (@$places) {
             if( opendir( DIR, $place ) ) {
                 foreach my $subplace ( readdir DIR ) {
                     next unless $subplace =~ $pathel;
-                    push(@newplaces, $place.'/'.$subplace);
+                    push(@newplaces, $place.'/'.$1);
                 }
             }
         }

@@ -265,6 +265,7 @@ sub copytree {
         my $d;
         return "Failed to copy $from: $!<br />" unless opendir($d, $from);
         foreach my $f ( grep { !/^\./ } readdir $d ) {
+            $f =~ /(.*)/; $f = $1; # untaint
             $e .= $this->copytree( "$from/$f", "$to/$f" );
         }
         closedir($d);

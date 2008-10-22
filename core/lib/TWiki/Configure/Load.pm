@@ -170,6 +170,7 @@ sub _loadDefaultsFrom {
 
     return unless opendir(D, $dir);
     foreach my $extension ( grep { !/^\./ } readdir D) {
+        $extension =~ /(.*)/; $extension = $1; # untaint
         next if $read->{$extension};
         my $file = "$dir/$extension/Config.spec";
         next unless -e $file;
