@@ -1,12 +1,34 @@
 // --- tooltips (derived from http://www.texsoft.it/index.php?c=software&m=sw.js.htmltooltip&l=it) ---
+
+var ttpMousePos;
+function ttpGetMousePos(evt) {
+	ttpMousePos = evt;
+}
+document.onmousemove = ttpGetMousePos;
+document.onmouseover = ttpGetMousePos;
 function ttpTooltipFindPos(obj) {
+	var x,y;
+	var pos = ttpTooltipFindPosForElement(obj);
+	x = pos[0];
+	y = pos[1];
+	if (window.event) {
+		x = window.event.screenX;
+		if (window.event.clientX) x = window.event.clientX;
+	} else if (ttpMousePos) {
+		x = ttpMousePos.screenX;
+	}
+	return [x,y];
+}
+	
+
+function ttpTooltipFindPosForElement(obj) {
 	var curleft;
 	var curtop;
 	curleft = 0; curtop = 0;
 
 	if (obj.offsetParent) {
-		curleft = obj.offsetLeft;
-		curtop = obj.offsetTop;
+		curleft = obj.offsetLeft || 0;
+		curtop = obj.offsetTop || 0;
 		while ((obj = obj.offsetParent)) {
 			if (obj.offsetLeft) curleft += obj.offsetLeft;
 			if (obj.offsetTop) curtop += obj.offsetTop;
@@ -15,6 +37,7 @@ function ttpTooltipFindPos(obj) {
 		curleft = obj.x;
 		curtop = obj.y;
 	}
+
 	return [curleft,curtop];
 }
 var ttpTooltipLastVisibleId = new Array();
