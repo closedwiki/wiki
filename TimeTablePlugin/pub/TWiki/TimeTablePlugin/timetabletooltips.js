@@ -12,10 +12,9 @@ function ttpTooltipFindPos(obj) {
 	x = pos[0];
 	y = pos[1];
 	if (window.event) {
-		x = window.event.screenX;
-		if (window.event.clientX) x = window.event.clientX;
+		x = window.event.pageX ? window.event.pageX : window.event.clientX;
 	} else if (ttpMousePos) {
-		x = ttpMousePos.screenX;
+		x = ttpMousePos.clientX ? ttpMousePos.clientX :  ttpMousePos.screenX;
 	}
 	return [x,y];
 }
