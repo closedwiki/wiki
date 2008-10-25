@@ -14,10 +14,20 @@
 package TWiki::Plugins::AttachmentListPlugin;
 
 use strict;
+use TWiki::Func;
 use TWiki::Plugins::AttachmentListPlugin::FileData;
+use TWiki::Plugins::TopicDataHelperPlugin;
 
-use vars qw($VERSION $RELEASE $web $topic $user $installWeb $pluginName
-  $debug $renderingWeb $defaultFormat $imageFormat %listedExtensions
+use vars qw($VERSION $RELEASE $pluginName
+  $debug $defaultFormat $imageFormat
+);
+
+my %sortInputTable = (
+    'none' => $TWiki::Plugins::TopicDataHelperPlugin::sortDirections{'NONE'},
+    'ascending' =>
+      $TWiki::Plugins::TopicDataHelperPlugin::sortDirections{'ASCENDING'},
+    'descending' =>
+      $TWiki::Plugins::TopicDataHelperPlugin::sortDirections{'DESCENDING'},
 );
 
 # This should always be $Rev: 14207 $ so that TWiki can determine the checked-in
@@ -28,16 +38,16 @@ $VERSION = '$Rev: 14207 $';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.2.7';
+$RELEASE = '1.3';
 
-$pluginName = 'AttachmentListPlugin';    # Name of this Plugin
+$pluginName = 'AttachmentListPlugin';
 
-BEGIN {
-    %listedExtensions = ();
-}
+=pod
+
+=cut
 
 sub initPlugin {
-    ( $topic, $web, $user, $installWeb ) = @_;
+    my ( $inTopic, $inWeb, $user, $installWeb ) = @_;
 
     # check for Plugins.pm versions
     if ( $TWiki::Plugins::VERSION < 1.026 ) {
@@ -69,519 +79,420 @@ sub initPlugin {
     # Get plugin debug flag
     $debug = TWiki::Func::getPluginPreferencesFlag("DEBUG");
 
-    TWiki::Func::registerTagHandler( 'FILELIST', \&handleFileList ); #deprecated
-    TWiki::Func::registerTagHandler( 'ATTACHMENTLIST', \&handleFileList );
+    TWiki::Func::registerTagHandler( 'FILELIST', \&_handleFileList )
+      ;                               #deprecated
+    TWiki::Func::registerTagHandler( 'ATTACHMENTLIST', \&_handleFileList );
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug(
-        "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK")
+        "- TWiki::Plugins::${pluginName}::initPlugin( $inWeb.$inTopic ) is OK")
       if $debug;
 
     return 1;
 }
 
-sub handleFileList {
-    my ( $session, $params, $theTopic, $theWeb ) = @_;
+=pod
 
-    my $web   = $params->{'web'}   || $theWeb   || '';
-    my $topic = $params->{'topic'} || $theTopic || '';
+=cut
 
-    # check if the user has permissions to view the topic
+sub _handleFileList {
+    my ( $inSession, $inParams, $inTopic, $inWeb ) = @_;
+
+    my $webs   = $inParams->{'web'}   || $inWeb   || '';
+    my $topics = $inParams->{'topic'} || $inTopic || '';
+    my $excludeTopics = $inParams->{'excludetopic'} || '';
+    my $excludeWebs   = $inParams->{'excludeweb'}   || '';
+
+    # find all attachments except for excluded topics
+    my $topicData =
+      TWiki::Plugins::TopicDataHelperPlugin::createTopicData( $webs,
+        $excludeWebs, $topics, $excludeTopics );
+
+    # populate with attachment data
+    TWiki::Plugins::TopicDataHelperPlugin::insertObjectData( $topicData,
+        \&_createFileData );
+
+    _filterTopicData( $topicData, $inParams );
+
+    my $files =
+      TWiki::Plugins::TopicDataHelperPlugin::getListOfObjectData($topicData);
+
+    # sort
+    $files = _sortFiles( $files, $inParams ) if defined $inParams->{'sort'};
+
+    # limit files if param limit is defined
+    splice @$files, $inParams->{'limit'}
+      if defined $inParams->{'limit'};
+
+    # format
+    my $formatted = _formatFileData( $inSession, $files, $inParams );
+
+    return $formatted;
+}
+
+=pod
+
+Goes through the webs and topics in $inTopicData, finds the listed attachments for each topic and creates a FileData object.
+Removes the topics keys in $inTopicData if the topic does not have META:FILEATTACHMENT data.
+Assigns FileData objects to the $inTopicData hash using this structure:
+
+%topicData = (
+	Web1 => {
+		Topic1 => {
+			picture.jpg => FileData object 1,
+			me.PNG => FileData object 2,		
+			...
+		},
+	},
+)
+
+=pod
+
+=cut
+
+sub _createFileData {
+    my ( $inTopicHash, $inWeb, $inTopic ) = @_;
+
+    # define value for topic key only if topic
+    # has META:FILEATTACHMENT data
+    my $attachments = _getAttachmentsInTopic( $inWeb, $inTopic );
+
+    if ( scalar @$attachments ) {
+        $inTopicHash->{$inTopic} = ();
+
+        foreach my $attachment (@$attachments) {
+            my $fd =
+              TWiki::Plugins::AttachmentListPlugin::FileData->new( $inWeb,
+                $inTopic, $attachment );
+            my $fileName = $fd->{name};
+            $inTopicHash->{$inTopic}{$fileName} = \$fd;
+        }
+    }
+    else {
+
+        # no META:FILEATTACHMENT, so remove from hash
+        delete $inTopicHash->{$inTopic};
+    }
+}
+
+=pod
+
+Filters topic data references in the $inTopicData hash.
+Called function remove topic data references in the hash.
+
+=cut
+
+sub _filterTopicData {
+    my ( $inTopicData, $inParams ) = @_;
+    my %topicData = %$inTopicData;
+
+    # ----------------------------------------------------
+    # filter topics by view permission
     my $user = TWiki::Func::getWikiName();
     my $wikiUserName = TWiki::Func::userToWikiName( $user, 1 );
-    if (
-        !TWiki::Func::checkAccessPermission(
-            'VIEW', $wikiUserName, undef, $topic, $web
-        )
-      )
+    TWiki::Plugins::TopicDataHelperPlugin::filterTopicDataByViewPermission(
+        \%topicData, $wikiUserName );
+
+    # ----------------------------------------------------
+    # filter hidden attachments
+    my $hideHidden = TWiki::Func::isTrue( $inParams->{'hide'} );
+    if ($hideHidden) {
+        TWiki::Plugins::TopicDataHelperPlugin::filterTopicDataByProperty(
+            \%topicData, 'hidden', 1, undef, 'hidden' );
+    }
+
+    # ----------------------------------------------------
+    # filter attachments by user
+    if ( defined $inParams->{'user'} || defined $inParams->{'excludeuser'} ) {
+        TWiki::Plugins::TopicDataHelperPlugin::filterTopicDataByProperty(
+            \%topicData, 'user', 1, $inParams->{'user'},
+            $inParams->{'excludeuser'} );
+    }
+
+    # ----------------------------------------------------
+    # filter attachments by date range
+    if ( defined $inParams->{'fromdate'} || defined $inParams->{'todate'} ) {
+        TWiki::Plugins::TopicDataHelperPlugin::filterTopicDataByDateRange(
+            \%topicData, $inParams->{'fromdate'},
+            $inParams->{'todate'} );
+    }
+
+    # ----------------------------------------------------
+    # filter included/excluded filenames
+    if (   defined $inParams->{'file'}
+        || defined $inParams->{'excludefile'} )
     {
-        return '';
+        TWiki::Plugins::TopicDataHelperPlugin::filterTopicDataByProperty(
+            \%topicData, 'name', 1, $inParams->{'file'},
+            $inParams->{'excludefile'} );
+    }
+    
+    # filter filenames by regular expression
+    if (   defined $inParams->{'includefilepattern'}
+        || defined $inParams->{'excludefilepattern'} )
+    {
+        TWiki::Plugins::TopicDataHelperPlugin::filterTopicDataByRegexMatch(
+            \%topicData, 'name',
+            $inParams->{'includefilepattern'},
+            $inParams->{'excludefilepattern'}
+        );
     }
 
-    my $outtext = "";
-
-    my $format    = $params->{'format'}    || $defaultFormat;
-    my $header    = $params->{'header'}    || '';
-    my $footer    = $params->{'footer'}    || '';
-    my $alttext   = $params->{'alt'}       || '';
-    my $fileCount = $params->{'fileCount'} || '';
-    my $separator = $params->{'separator'} || "\n";
-
-    # filters
-    my $limit                  = $params->{'limit'};
-    my $excludeTopics          = $params->{'excludetopic'} || '';
-    my $excludeWebs            = $params->{'excludeweb'} || '';
-    my $excludeFiles           = $params->{'excludefile'} || '';
-    my $includeFilePattern     = $params->{'includefilepattern'} || undef;
-    my $excludeFilePattern     = $params->{'excludefilepattern'} || undef;
-    my $excludeExtensionsParam = $params->{'excludeextension'} || '';
-    my $extensionsParam        = $params->{"extension"}
-      || $params->{"filter"};  # "abc, def" syntax. Substring match will be used
-                               # param filter is deprecated
-    my %extensions        = makeHashFromString( lc $extensionsParam );
-    my %excludeExtensions = makeHashFromString( lc $excludeExtensionsParam );
-    my $usersParam        = $params->{"user"};
-    my %users             = makeHashFromString($usersParam);
-    my $excludeUsersParam = $params->{"excludeuser"};
-    my %excludeUsers      = makeHashFromString($excludeUsersParam);
-
-    # sort options
-    my $sort      = $params->{'sort'}      || '$fileName';
-    my $sortOrder = $params->{'sortorder'} || '';
-    my $fromDate  = $params->{'fromdate'};
-    my $toDate    = $params->{'todate'};
-
-    my $hideHidden = '';
-    if ( defined $params->{"hide"} ) {
-        $hideHidden =
-          ( grep { $_ eq $params->{"hide"} } ( 'on', 'yes', '1' ) )
-          ? 1
-          : 0;    # don't hide by default
+    # ----------------------------------------------------
+    # filter by extension
+    my $extensions =
+         $inParams->{'extension'}
+      || $inParams->{'filter'}
+      || undef;    # "abc, def" syntax. Substring match will be used
+                   # param 'filter' is deprecated
+    my $excludeExtensions = $inParams->{'excludeextension'} || undef;
+    if ( defined $extensions || defined $excludeExtensions ) {
+        TWiki::Plugins::TopicDataHelperPlugin::filterTopicDataByProperty(
+            \%topicData, 'extension', 0, $extensions, $excludeExtensions );
     }
 
-    my %excludedFiles = makeHashFromString($excludeFiles);
+}
+
+=pod
+
+=cut
+
+sub _sortFiles {
+    my ( $inFiles, $inParams ) = @_;
+
+    my $files = $inFiles;
+
+    # get the sort key for the $inSortMode
+    my $sortKey =
+      &TWiki::Plugins::AttachmentListPlugin::FileData::getSortKey(
+        $inParams->{'sort'} );
+    my $compareMode =
+      &TWiki::Plugins::AttachmentListPlugin::FileData::getCompareMode(
+        $inParams->{'sort'} );
+
+    # translate input to sort parameters
+    my $sortOrderParam = $inParams->{'sortorder'} || 'none';
+    my $sortOrder = $sortInputTable{$sortOrderParam}
+      || $TWiki::Plugins::TopicDataHelperPlugin::sortDirections{'NONE'};
+
+    # set default sort order for sort modes
+    if ( $sortOrder ==
+        $TWiki::Plugins::TopicDataHelperPlugin::sortDirections{'NONE'} )
+    {
+        if ( defined $sortKey && $sortKey eq 'date' ) {
+
+            # exception for dates: newest on top
+            $sortOrder = $TWiki::Plugins::TopicDataHelperPlugin::sortDirections{
+                'DESCENDING'};
+        }
+        else {
+
+            # otherwise sort by default ascending
+            $sortOrder = $TWiki::Plugins::TopicDataHelperPlugin::sortDirections{
+                'ASCENDING'};
+        }
+    }
+    $sortOrder = -$sortOrder
+      if ( $sortOrderParam eq 'reverse' );
+
+    $files =
+      TWiki::Plugins::TopicDataHelperPlugin::sortObjectData( $files, $sortOrder,
+        $sortKey, $compareMode, 'name' )
+      if defined $sortKey;
+
+    return $files;
+}
+
+=pod
+
+Returns an array of FILEATTACHMENT objects.
+
+=cut
+
+sub _getAttachmentsInTopic {
+    my ( $inWeb, $inTopic ) = @_;
+
+    my ( $meta, $text ) = TWiki::Func::readTopic( $inWeb, $inTopic );
+    my @fileAttachmentData = $meta->find("FILEATTACHMENT");
+    return \@fileAttachmentData;
+}
+
+=pod
+
+=cut
+
+sub _formatFileData {
+    my ( $inSession, $inFiles, $inParams ) = @_;
+
+    my @files = @$inFiles;
+
+    # formatting parameters
+    my $format    = $inParams->{'format'}    || $defaultFormat;
+    my $header    = $inParams->{'header'}    || '';
+    my $footer    = $inParams->{'footer'}    || '';
+    my $alttext   = $inParams->{'alt'}       || '';
+    my $separator = $inParams->{'separator'} || "\n";
 
     # store once for re-use in loop
     my $pubUrl = TWiki::Func::getUrlHost() . TWiki::Func::getPubUrlPath();
 
-    my @files =
-      createAttachmentList( $topic, $web, $excludeTopics, $excludeWebs );
+    my %listedExtensions =
+      ();    # store list of extensions to be used for format substitution
 
-    my $sortedFiles =
-      sortFileData( \@files, $sort, $sortOrder, $fromDate, $toDate );
-    my @sortedFiles = @$sortedFiles;
+    my @formattedData = ();
 
-    my $count = 0;
-    foreach my $fileData (@sortedFiles) {
+    foreach my $fileData (@files) {
 
-        last if ( defined $limit && $count >= $limit );
+        my $attrComment = $fileData->{attachment}->{comment} || '';
+        my $attrAttr = $fileData->{attachment}->{attr};
 
-        my $attachmentTopic    = $fileData->{'topic'};
-        my $attachmentTopicWeb = $fileData->{'web'};
-        my $attachment         = $fileData->{'attachment'};
+        # keep track of listed file extensions
+        my $fileExtension = $fileData->{extension};
+        $fileExtension = ''
+          if $fileExtension eq
+              'none';    # do not use the extension placeholder for formatting
+        $listedExtensions{$fileExtension} = 1
+          if ($fileExtension)
+          ;   # add current attachment extension for display for $fileExtensions
 
-        # do not show file if user has no permission to view this topic
-        next
-          if (
-            !TWiki::Func::checkAccessPermission(
-                'VIEW', $wikiUserName,
-                undef,  $attachmentTopic,
-                $attachmentTopicWeb
-            )
-          );
-
-        my $filename = $attachment->{name};
-
-        # filter on extension
-        my $fileExtension = $attachment->{_AttachmentListPlugin_extension};
-
-        if (   ( keys %extensions && !$extensions{$fileExtension} )
-            || ( $excludeExtensions{$fileExtension} ) )
-        {
-            next;
-        }
-
-        # filter excluded files
-        next if ( $excludedFiles{$filename} );
-
-        # filter excluded files by regex pattern
-        if ( defined $includeFilePattern ) {
-            next unless ( $filename =~ /$includeFilePattern/ );
-        }
-        if ( defined $excludeFilePattern ) {
-            next if ( $filename =~ /$excludeFilePattern/ );
-        }
-
-        my $attrSize    = $attachment->{size};
-        my $attrUser    = $attachment->{user} || 'UnknownUser';
-        my $attrComment = $attachment->{comment};
-        my $attrAttr    = $attachment->{attr};
-
-        # filter on hidden attachments
-        next if ( $hideHidden && $attrAttr =~ /h/i );
-
-        # filter on user
-        if ( $usersParam || $excludeUsersParam ) {
-            my $userName = 'none';
-            if ( $TWiki::Plugins::VERSION < 1.2 ) {
-                $userName = $attrUser;
-                $userName =~ s/^(.*?\.)*(.*?)$/$2/; # remove Main. from username
-            }
-            else {
-                $userName = TWiki::Func::getWikiName($attrUser)
-                  if ( $attrUser ne '' )
-                  ;    # else getWikiName defaults to the current logged in user
-            }
-            if (   ( keys %users && !$users{$userName} )
-                || ( $excludeUsers{$userName} ) )
-            {
-                next;
-            }
-        }
-
-        # ------- END OF FILTERS -------
-
-        $listedExtensions{$fileExtension} = 1 if ( $fileExtension ne '' );
-
-     # I18N: To support attachments via UTF-8 URLs to attachment
-     # directories/files that use non-UTF-8 character sets, go through viewfile.
-     # If using %PUBURL%, must URL-encode explicitly to site character set.
+        my $s = "$format";
 
         # Go direct to file where possible, for efficiency
         # TODO: more flexible size formatting
         # also take MB into account
-        my $attrSizeStr;
-        $attrSizeStr = $attrSize . 'b' if ( $attrSize && $attrSize < 100 );
-        $attrSizeStr = sprintf( "%1.1fK", $attrSize / 1024 )
-          if ( $attrSize && $attrSize >= 100 );
-        $attrComment = $attrComment || "";
-        my $s = "$format";
+        my $attrSizeStr = '';
+        $attrSizeStr = $fileData->{size};
+        $attrSizeStr .= 'b'
+          if ( $fileData->{size} > 0 && $fileData->{size} < 100 );
+        $attrSizeStr = sprintf( "%1.1fK", $fileData->{size} / 1024 )
+          if ( $fileData->{size} && $fileData->{size} >= 100 );
 
-        if ( $s =~ /imgTag/ ) {
-            $s =~ s/\$imgTag/$imageFormat/;
+        $s =~ s/\$imgTag/$imageFormat/;    # imageFormat is a preference value
+
+        if ( $s =~ m/imgHeight/ || $s =~ m/imgWidth/ ) {
+
+            my ( $imgWidth, $imgHeight ) =
+              _retrieveImageSize( $inSession, $fileData );
+            $s =~ s/\$imgWidth/$imgWidth/g   if defined $imgWidth;
+            $s =~ s/\$imgHeight/$imgHeight/g if defined $imgHeight;
         }
 
-        if ( $s =~ /imgHeight/ || $s =~ /imgWidth/ ) {
-
-            # try to read image size
-            my $store = $session->{store};
-
-            my $attachmentExists =
-              $store->attachmentExists( $attachmentTopicWeb, $attachmentTopic,
-                $filename );
-            my ( $nx, $ny ) = ( '', '' );
-            if ($attachmentExists) {
-                my $stream =
-                  $store->getAttachmentStream( $wikiUserName,
-                    $attachmentTopicWeb, $attachmentTopic, $filename );
-                if ($stream) {
-                    ( $nx, $ny ) = &_imgsize( $stream, $filename );
-                }
-            }
-            $s =~ s/\$imgWidth/$nx/g;
-            $s =~ s/\$imgHeight/$ny/g;
-        }
-
-        $s =~ s/\$fileName/$filename/g;
-
-        if ( $s =~ /fileIcon/ ) {
-            my $fileIcon = '%ICON{"' . $fileExtension . '"}%';
-            $s =~ s/\$fileIcon/$fileIcon/g;
-        }
+        $s =~ s/\$fileName/$fileData->{name}/g;
+        $s =~ s/\$fileIcon/%ICON{"$fileExtension"}%/g;
         $s =~ s/\$fileSize/$attrSizeStr/g;
         $s =~ s/\$fileComment/$attrComment/g;
         $s =~ s/\$fileExtension/$fileExtension/g;
+        $s =~ s/\$fileDate/_formatDate($fileData->{date})/ge;
+        $s =~ s/\$fileUser/$fileData->{user}/g;
 
-        if ( $s =~ /fileDate/ ) {
-            my $attrDate = TWiki::Time::formatTime( $attachment->{"date"} );
-            $s =~ s/\$fileDate/$attrDate/g;
-        }
-        $s =~ s/\$fileUser/$attrUser/g;
-
-        #replace stubs
-        $s =~ s/\$n/\n/g;
-        $s =~ s/\$br/\<br \/\>/g;
-
-        if ( $s =~ /fileActionUrl/ ) {
+        if ( $s =~ m/\$fileActionUrl/ ) {
             my $fileActionUrl =
-              TWiki::Func::getScriptUrl( $attachmentTopicWeb, $attachmentTopic,
+              TWiki::Func::getScriptUrl( $fileData->{web}, $fileData->{topic},
                 "attach" )
-              . "?filename=$filename&revInfo=1";
+              . "?filename=$fileData->{name}&revInfo=1";
             $s =~ s/\$fileActionUrl/$fileActionUrl/g;
         }
 
-        if ( $s =~ /viewfileUrl/ ) {
-            my $attrVersion = $attachment->{Version};
+        if ( $s =~ m/\$viewfileUrl/ ) {
+            my $attrVersion = $fileData->{attachment}->{Version} || '';
             my $viewfileUrl =
-              TWiki::Func::getScriptUrl( $attachmentTopicWeb, $attachmentTopic,
+              TWiki::Func::getScriptUrl( $fileData->{web}, $fileData->{topic},
                 "viewfile" )
-              . "?rev=$attrVersion&filename=$filename";
+              . "?rev=$attrVersion&filename=$fileData->{name}";
             $s =~ s/\$viewfileUrl/$viewfileUrl/g;
         }
 
-        if ( $s =~ /\$hidden/ ) {
-            my $hidden = ( $attrAttr =~ /h/i ) ? 'hidden' : '';
-            $s =~ s/\$hidden/$hidden/g;
+        if ( $s =~ m/\$hidden/ ) {
+            my $hiddenStr = $fileData->{hidden} ? 'hidden' : '';
+            $s =~ s/\$hidden/$hiddenStr/g;
         }
 
-        my $webEnc = $attachmentTopicWeb;
+        my $webEnc = $fileData->{web};
         $webEnc =~ s/([^-_.a-zA-Z0-9])/sprintf("%%%02x",ord($1))/eg;
-        my $topicEnc = $attachmentTopic;
+        my $topicEnc = $fileData->{topic};
         $topicEnc =~ s/([^-_.a-zA-Z0-9])/sprintf("%%%02x",ord($1))/eg;
-        my $fileEnc = $filename;
+        my $fileEnc = $fileData->{name};
         $fileEnc =~ s/([^-_.a-zA-Z0-9])/sprintf("%%%02x",ord($1))/eg;
         my $fileUrl = "$pubUrl/$webEnc/$topicEnc/$fileEnc";
 
         $s =~ s/\$fileUrl/$fileUrl/g;
-        $s =~ s/\$fileTopic/$attachmentTopic/g;
-        $s =~ s/\$fileWeb/$attachmentTopicWeb/g;
+        $s =~ s/\$fileTopic/$fileData->{topic}/g;
+        $s =~ s/\$fileWeb/$fileData->{web}/g;
 
-        $outtext .= $s . $separator;
-
-        $count++;
+        push @formattedData, $s;
     }
 
-    # remove last separator
-    $outtext =~ s/$separator$//g;
+    my $outText = join $separator, @formattedData;
 
-    if ( $outtext eq "" ) {
-        $outtext = $alttext;
+    if ( $outText eq '' ) {
+        $outText = $alttext;
     }
     else {
-        $header .= "\n" if ( $header ne '' );
-        $footer = "\n" . $footer if ( $footer ne '' );
-        $outtext = $header . $outtext . $footer;
+        $header =~ s/(.+)/$1\n/;    # add newline if text
+        $footer =~ s/(.+)/\n$1/;    # add newline if text
+                                    # fileCount format param
+        my $count = scalar @files;
+        $header =~ s/\$fileCount/$count/g;
+        $footer =~ s/\$fileCount/$count/g;
+
+        # fileExtensions format param
+        my @extensionsList = sort ( keys %listedExtensions );
+        my $listedExtensions = join( ',', @extensionsList );
+        $header =~ s/\$fileExtensions/$listedExtensions/g;
+        $footer =~ s/\$fileExtensions/$listedExtensions/g;
+
+        $outText = "$header$outText$footer";
     }
-
-    # format parameters
-
-    # fileCount format param
-    $outtext =~ s/\$fileCount/$count/g;
-
-    # fileExtensions format param
-    my @extensionsList = sort ( keys %listedExtensions );
-    my $listedExtensions = join( ',', @extensionsList );
-    $outtext =~ s/\$fileExtensions/$listedExtensions/g;
-
-    $outtext = _decodeFormatTokens($outtext);
-
-    return $outtext;
+    $outText = _decodeFormatTokens($outText);
+    $outText =~ s/\$br/\<br \/\>/g;
+    return $outText;
 }
 
 =pod
 
-Goes through the topics in $topicString, f.e. '%TOPIC%, WebHome'
-or all topics in case of a wildcard '*'.
-
-Returns a list of FileData objects.
+Formats $epoch seconds to the date-time format specified in configure.
 
 =cut
 
-sub createAttachmentList {
-    my ( $topicString, $webString, $excludeTopicsString, $excludeWebssString ) =
-      @_;
+sub _formatDate {
+    my ($inEpoch) = @_;
 
-    my @files         = ();
-    my %excludeTopics = makeHashFromString($excludeTopicsString);
-    my %excludeWebs   = makeHashFromString($excludeWebssString);
-
-    my @webs   = ();
-    my @topics = ();
-    if ( $webString eq '*' ) {
-        @webs = TWiki::Func::getListOfWebs();
-    }
-    else {
-        @webs = split( /[\s,]+/, $webString );
-    }
-    foreach my $web (@webs) {
-        next if ( $excludeWebs{$web} );
-        my @topics = ();
-        if ( $topicString eq '*' ) {
-            @topics = TWiki::Func::getTopicList($web);
-        }
-        else {
-            @topics = split( /[\s,]+/, $topicString );
-        }
-
-        foreach my $attachmentTopic (@topics) {
-            next if ( $excludeTopics{$attachmentTopic} );
-            my @topicFiles =
-              createAttachmentListForTopic( $attachmentTopic, $web );
-            foreach my $attachment (@topicFiles) {
-                my $fd = TWiki::Plugins::AttachmentListPlugin::FileData->new(
-                    $attachmentTopic, $web, $attachment );
-                push @files, $fd;
-            }
-        }
-    }
-    return @files;
-}
-
-sub createAttachmentListForTopic {
-    my ( $topic, $web ) = @_;
-
-    my ( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
-    return $meta->find("FILEATTACHMENT");
-}
-
-sub makeHashFromString {
-    my ($text) = @_;
-
-    my %hash = ();
-
-    return %hash if !defined $text || !$text;
-
-    my $re = '\b[\w\._\-\+\s]*\b';
-    my @elems = split( /\s*($re)\s*/, $text );
-    foreach (@elems) {
-        $hash{$_} = 1;
-    }
-    return %hash;
+    return TWiki::Func::formatTime(
+        $inEpoch,
+        $TWiki::cfg{DefaultDateFormat},
+        $TWiki::cfg{DisplayTimeValues}
+    );
 }
 
 =pod
 
-Sorting options by Rohan Moitra, updated by Arthur Clemens.
-
 =cut
 
-sub sortFileData {
+sub _retrieveImageSize {
+    my ( $inSession, $inFileData ) = @_;
 
-    my ( $inFileData, $inSort, $inSortOrder, $inFromDate, $inToDate ) = @_;
-    my @fileData = @$inFileData;
-    my @sortedFiles;
+    my $imgWidth  = undef;
+    my $imgHeight = undef;
 
-    if ( defined $inFromDate || defined $inToDate ) {
+    # try to read image size
+    my $store = $inSession->{store};
 
-        my $fromDate = $inFromDate;
-        my $toDate   = $inToDate;
-
-        my $epochFromSecs =
-          $inFromDate ? TWiki::Time::parseTime( $fromDate . " 00.00.00" ) : 0;
-        my $epochToSecs =
-          $inToDate ? TWiki::Time::parseTime( $toDate . " 23.59.59" ) : 2**31;
-
-        my $fileDataByDate =
-          getFileDataByDate( \@fileData, $epochFromSecs, $epochToSecs );
-        my @fileDataByDate = @$fileDataByDate;
-        @fileData = @fileDataByDate;
-    }
-
-    if ( $inSort eq '$fileName' ) {
-
-        my $sortedFiles = sortFilesByType( \@fileData, $inSortOrder, 'name' );
-        @sortedFiles = @$sortedFiles;
-    }
-
-    my $sortOrder = $inSortOrder;
-    if ( !$sortOrder ) {
-        $sortOrder = 'ascending';    # default sort order
-        $sortOrder = 'descending'
-          if ( $inSort eq '$fileDate' )
-          ;                          # default sort order when sorting on dates
-    }
-
-    if ( $inSort eq '$fileDate' ) {
-        if ( $sortOrder eq 'ascending' ) {
-            @sortedFiles =
-              sort {
-                lc( $a->{'attachment'}->{'date'} ) cmp
-                  lc( $b->{'attachment'}->{'date'} )
-              } @fileData;
-        }
-        if ( $sortOrder eq 'descending' ) {
-            @sortedFiles =
-              sort {
-                lc( $b->{'attachment'}->{'date'} ) cmp
-                  lc( $a->{'attachment'}->{'date'} )
-              } @fileData;
+    my $attachmentExists =
+      $store->attachmentExists( $inFileData->{web}, $inFileData->{topic},
+        $inFileData->{name} );
+    if ($attachmentExists) {
+        my $user         = TWiki::Func::getWikiName();
+        my $wikiUserName = TWiki::Func::userToWikiName( $user, 1 );
+        my $stream       = $store->getAttachmentStream(
+            $wikiUserName,        $inFileData->{web},
+            $inFileData->{topic}, $inFileData->{name}
+        );
+        if ($stream) {
+            ( $imgWidth, $imgHeight ) =
+              &_imgsize( $stream, $inFileData->{name} );
         }
     }
-    if ( $inSort eq '$fileSize' ) {
-        if ( $sortOrder eq 'ascending' ) {
-            @sortedFiles =
-              sort {
-                lc( $a->{'attachment'}->{'size'} ) <=>
-                  lc( $b->{'attachment'}->{'size'} )
-              } @fileData;
-        }
-        if ( $sortOrder eq 'descending' ) {
-            @sortedFiles =
-              sort {
-                lc( $b->{'attachment'}->{'size'} ) <=>
-                  lc( $a->{'attachment'}->{'size'} )
-              } @fileData;
-        }
-    }
-    if ( $inSort eq '$fileUser' ) {
-
-        my $sortedFiles = sortFilesByType( \@fileData, $sortOrder, 'user' );
-        @sortedFiles = @$sortedFiles;
-    }
-    if ( $inSort eq '$fileExtension' ) {
-
-        my $sortedFiles = sortFilesByType( \@fileData, $sortOrder,
-            '_AttachmentListPlugin_extension' );
-        @sortedFiles = @$sortedFiles;
-    }
-
-    return \@sortedFiles;
-}
-
-=pod
-
-Sort files by type (primary key) and by name (secondary key).
-
-=cut
-
-sub sortFilesByType {
-
-    my ( $fileData, $inSortOrder, $inType ) = @_;
-    my @fileData = @$fileData;
-    my @sortedFiles;
-    my $order = $inSortOrder;
-
-    if ( $order eq 'descending' ) {
-        @sortedFiles =
-          sort {
-            lc( $b->{'attachment'}->{$inType} ) cmp
-              lc( $a->{'attachment'}->{$inType} )
-              or lc( $b->{'attachment'}->{'name'} ) cmp
-              lc( $a->{'attachment'}->{'name'} )
-          } @fileData;
-        return \@sortedFiles;
-    }
-
-    # else: all other orders default to ascending
-    @sortedFiles =
-      sort {
-        lc( $a->{'attachment'}->{$inType} ) cmp
-          lc( $b->{'attachment'}->{$inType} )
-          or lc( $a->{'attachment'}->{'name'} ) cmp
-          lc( $b->{'attachment'}->{'name'} )
-      } @fileData;
-    return \@sortedFiles;
-}
-
-sub getFileDataByDate {
-
-    my ( $inFileData, $inEpochFromSecs, $inEpochToSecs ) = @_;
-
-    my @fileData = @$inFileData;
-    my @outFileData;
-    if ( defined $inEpochFromSecs && defined $inEpochToSecs ) {
-        foreach (@fileData) {
-            my $attachment = $_->{'attachment'};
-            my $date = $attachment->{'date'} || 0;
-            if (   ( $date > $inEpochFromSecs )
-                && ( $date < $inEpochToSecs ) )
-            {
-                push( @outFileData, $_ );
-            }
-        }
-    }
-    elsif ( defined $inEpochFromSecs ) {
-        foreach (@fileData) {
-            my $attachment = $_->{'attachment'};
-            my $date = $attachment->{'date'} || 0;
-            if ( $date > $inEpochFromSecs ) {
-                push( @outFileData, $_ );
-            }
-        }
-    }
-    elsif ( defined $inEpochToSecs ) {
-        foreach (@fileData) {
-            my $attachment = $_->{'attachment'};
-            my $date = $attachment->{'date'} || 0;
-            if ( $date < $inEpochToSecs ) {
-                push( @outFileData, $_ );
-            }
-        }
-    }
-    else {
-        @outFileData = @fileData;
-    }
-    return \@outFileData;
+    return ( $imgWidth, $imgHeight );
 }
 
 =pod
@@ -837,6 +748,10 @@ sub _pngsize {
     }
     return ( 0, 0 );
 }
+
+=pod
+
+=cut
 
 sub _decodeFormatTokens {
     my $text = shift;

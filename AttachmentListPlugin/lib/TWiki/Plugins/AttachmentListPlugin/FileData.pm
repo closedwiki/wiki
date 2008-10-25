@@ -14,43 +14,87 @@
 package TWiki::Plugins::AttachmentListPlugin::FileData;
 
 use strict;
+use overload ( '""' => \&as_string );
 
-use vars qw(
-  $topic $web $attachment
+my %sortKeys = (
+    '$fileDate'      => [ 'date',      'integer' ],
+    '$fileSize'      => [ 'size',      'integer' ],
+    '$fileUser'      => [ 'user',      'string' ],
+    '$fileExtension' => [ 'extension', 'string' ],
+    '$fileName'      => [ 'name',      'string' ],
+    '$fileTopic'     => [ 'topic',     'string' ]
 );
+
+my $defaultPlaceholderNoExtension =
+  'NONE';    # placeholder extension if file does not have an extension
 
 =pod
 
 =cut
 
 sub new {
-    my ( $class, $topic, $web, $attachment ) = @_;
+    my ( $class, $web, $topic, $attachment ) = @_;
     my $this = {};
     $this->{'topic'}      = $topic;
     $this->{'web'}        = $web;
     $this->{'attachment'} = $attachment;
-    $this->{'attachment'}->{'_AttachmentListPlugin_extension'} =
-      _getExtension( $this->{'attachment'}->{name} );
+
+    # only copy sort keys to FileData attributes
+    $this->{'date'} = $attachment->{'date'} || 0;
+    $this->{'size'} = $attachment->{'size'} || 0;
+
+    my $userName = $attachment->{'user'} || 'UnknownUser';
+    if ( $TWiki::Plugins::VERSION < 1.2 ) {
+        $userName =~ s/^(.*?\.)*(.*?)$/$2/;    # remove Main. from username
+    }
+    else {
+        $userName = TWiki::Func::getWikiName($userName);
+    }
+    $this->{'user'}      = $userName;
+    $this->{'name'}      = $attachment->{'name'} || '';
+    $this->{'extension'} = _getExtension( $this->{'attachment'}->{name} );
+    my $hiddenAttr = $attachment->{'attr'} || '';
+    $hiddenAttr =~ s/h/hidden/;
+    $this->{'hidden'} = $hiddenAttr;
+
     bless $this, $class;
 }
+
+sub getSortKey {
+    my ($inRawKey) = @_;
+    return $sortKeys{$inRawKey}[0];
+}
+
+sub getCompareMode {
+    my ($inRawKey) = @_;
+    return $sortKeys{$inRawKey}[1];
+}
+
+=pod
+
+Returns the file extension of a filename.
+
+=cut
 
 sub _getExtension {
     my ($fileName) = @_;
 
-    my @bits = ( split( /\./, $fileName ) );
+    my @nameParts = ( split( /\./, $fileName ) );
     my $extension = '';
-    $extension = lc $bits[$#bits] if ( scalar @bits > 1 );
-    return lc $extension;
+    $extension = lc $nameParts[$#nameParts] if ( scalar @nameParts > 1 );
+    $extension ||= lc $defaultPlaceholderNoExtension;
+    return $extension;
 }
 
-sub toString {
-    my ($this) = @_;
+sub as_string {
+    my $self = shift;
 
-    return "FileData: topic="
-      . $this->{'topic'}
+    return
+        "FileData: topic="
+      . $self->{'topic'}
       . "; web="
-      . $this->{'web'}
-      . "; attachment.name="
-      . $this->{'attachment'}->{name};
+      . $self->{'web'}
+      . "; name="
+      . $self->{name};
 }
 1;
