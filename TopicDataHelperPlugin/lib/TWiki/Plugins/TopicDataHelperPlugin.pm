@@ -1,4 +1,5 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
+# Copyright (C) 2008 Arthur Clemens, arthur@visiblearea.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,10 +20,10 @@ use TWiki::Func;
 use vars qw($VERSION $RELEASE $pluginName $debug
 );
 
-# This should always be $Rev: 14207 $ so that TWiki can determine the checked-in
+# This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
-$VERSION = '$Rev: 14207 $';
+$VERSION = '$Rev$';
 
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
