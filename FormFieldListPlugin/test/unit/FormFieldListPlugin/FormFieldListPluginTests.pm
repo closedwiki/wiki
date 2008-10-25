@@ -1,23 +1,3 @@
-
-=pod
-
-TODO:
-sort on $fieldDate
-
-	TEST 1
-	update topic 1: field 1
-	sort: topic 1 should be at top
-	
-	TEST 2
-	update topic 1: field 1
-	update topic 2: topic text only
-	sort: topic 1 should be at top
-	
-
-substitution of $fieldDate
-
-=cut
-
 use strict;
 
 package FormFieldListPluginTests;
@@ -586,17 +566,46 @@ Remarks=';
 
 =pod
 
-Test param excludeemptyvalue.
+Test param excludeemptyvalue_off.
 
 =cut
 
-sub test_param_excludeemptyvalue {
+sub test_param_excludeemptyvalue_on {
     my $this = shift;
 
     my $testTopic = $testForms{topic1}{name};
 
     my $source =
-"%FORMFIELDLIST{\"$allFields\" topic=\"$allTopics\" excludeemptyvalue=\"on\" format=\"\$title=\$value\"}%";
+"%FORMFIELDLIST{\"$allFields\" topic=\"$allTopics\" excludeemptyvalue=\"on\" format=\"\$topicName: \$title=\$value\"}%";
+
+    my $expected = 'FormFieldListTestTopic1: Author=MaryJones
+FormFieldListTestTopic1: Status=being revised
+FormFieldListTestTopic1: Remarks=The proposal does not reveal the current complexity well enough.
+FormFieldListTestTopic2: Author=ChevyChase
+FormFieldListTestTopic2: Status=completed
+FormFieldListTestTopic2: Remarks=Well done!
+FormFieldListTestTopic3: Author=CoolAide
+FormFieldListTestTopic3: Status=new
+FormFieldListTestTopic3: Remarks=TBD...
+FormFieldListTestTopic4: Author=JohnDoe
+FormFieldListTestTopic4: Status=outdated';
+
+    $this->do_test( $testTopic, $expected, $source );
+}
+
+=pod
+
+Test param includemissingfields.
+
+=cut
+
+sub test_param_includemissingfields {
+    my $this = shift;
+
+    my $testTopic = $testForms{topic1}{name};
+
+    my $source =
+"%FORMFIELDLIST{\"$allFields\" topic=\"$allTopics\" includemissingfields=\"on\" format=\"\$title=\$value\"}%";
 
     my $expected = 'Author=MaryJones
 Status=being revised
@@ -608,31 +617,13 @@ Author=CoolAide
 Status=new
 Remarks=TBD...
 Author=JohnDoe
-Status=outdated';
+Status=outdated
+Remarks=
+Author=';
 
     $this->do_test( $testTopic, $expected, $source );
 }
 
-=pod
-
-Test param comparedatemode with value "fieldupdated".
-
-=cut
-
-=pod
-sub test_param_comparedatemode_fieldupdated {
-    my $this = shift;
-
-    my $testTopic = $testForms{topic1}{name};
-
-    my $source =
-"%FORMFIELDLIST{\"$allFields\" datemode=\"fieldupdated\" sort=\"\$fieldChanged\" format=\"\$title=\$value\"}%";
-
-    my $expected = 'XXX';
-
-    $this->do_test( $testTopic, $expected, $source );
-}
-=cut
 
 =pod
 
@@ -786,24 +777,24 @@ sub test_param_topic_header {
     my $testTopic = $testForms{topic1}{name};
 
     my $source =
-"%FORMFIELDLIST{topic=\"$allTopics\" \"Author, Status, Remarks\" format=\"   * \$value\" topicheader=\"---\" sort=\"\$topicName\"}%";
+"%FORMFIELDLIST{topic=\"*\" \"$allFields\" format=\"   * \$topicName: \$value\" topicheader=\"---\"}%";
 
     my $expected = '---
-   * MaryJones
-   * being revised
-   * The proposal does not reveal the current complexity well enough.
+   * FormFieldListTestTopic1: MaryJones
+   * FormFieldListTestTopic1: being revised
+   * FormFieldListTestTopic1: The proposal does not reveal the current complexity well enough.
 ---
-   * ChevyChase
-   * completed
-   * Well done!
+   * FormFieldListTestTopic2: ChevyChase
+   * FormFieldListTestTopic2: completed
+   * FormFieldListTestTopic2: Well done!
 ---
-   * CoolAide
-   * new
-   * TBD...
+   * FormFieldListTestTopic3: CoolAide
+   * FormFieldListTestTopic3: new
+   * FormFieldListTestTopic3: TBD...
 ---
-   * JohnDoe
-   * outdated
-   * ';
+   * FormFieldListTestTopic4: JohnDoe
+   * FormFieldListTestTopic4: outdated
+   * FormFieldListTestTopic4: ';
 
     $this->do_test( $testTopic, $expected, $source );
 }
@@ -833,7 +824,7 @@ TBD...
 =pod
 
 Test param alttext, current topic.
-
+Must be used with includemissingfields="on".
 =cut
 
 sub test_param_alttext_current_topic {
@@ -842,7 +833,7 @@ sub test_param_alttext_current_topic {
     my $testTopic = $testForms{topic1}{name};
 
     my $source =
-      "%FORMFIELDLIST{\"DoesNotExist\" alttext=\"--field not found--\"}%";
+      "%FORMFIELDLIST{\"DoesNotExist\" alttext=\"--field not found--\" includemissingfields=\"on\"}%";
 
     my $expected = '--field not found--';
     $this->do_test( $testTopic, $expected, $source );
@@ -851,6 +842,7 @@ sub test_param_alttext_current_topic {
 =pod
 
 Test param alttext, all topics.
+Must be used with includemissingfields="on".
 
 =cut
 
@@ -860,7 +852,7 @@ sub test_param_alttext_all_topics {
     my $testTopic = $testForms{topic1}{name};
 
     my $source =
-"%FORMFIELDLIST{\"DoesNotExist\" topic=\"*\" alttext=\"--field not found--\"}%";
+"%FORMFIELDLIST{\"DoesNotExist\" topic=\"*\" alttext=\"--field not found--\" includemissingfields=\"on\"}%";
 
     my $expected = '--field not found--
 --field not found--
@@ -952,6 +944,7 @@ sub test_param_format_title {
 =pod
 
 Test format param $title in $alttext.
+Must be used with includemissingfields="on"
 
 =cut
 
@@ -961,7 +954,7 @@ sub test_param_format_title_in_alttext {
     my $testTopic = $testForms{topic1}{name};
 
     my $source =
-      "%FORMFIELDLIST{\"DoesNotExist\" alttext=\"_\$title_ field not found\"}%";
+      "%FORMFIELDLIST{\"DoesNotExist\" alttext=\"_\$title_ field not found\" includemissingfields=\"on\"}%";
 
     my $expected = '_DoesNotExist_ field not found';
 
@@ -1327,6 +1320,34 @@ completed';
 
 =pod
 
+Test param limit with sort
+
+=cut
+
+sub test_param_limit_with_sort {
+    my $this = shift;
+
+    my $testTopic = $testForms{topic1}{name};
+
+    my $source =
+      "%FORMFIELDLIST{\"$allFields\" topic=\"$allTopics\" limit=\"10\" sort=\"\$date\" format=\"\$value\"}%";
+
+    my $expected = 'being revised
+The proposal does not reveal the current complexity well enough.
+MaryJones
+outdated
+
+JohnDoe
+new
+TBD...
+CoolAide
+completed';
+
+    $this->do_test( $testTopic, $expected, $source );
+}
+
+=pod
+
 Test param sort on $name.
 
 =cut
@@ -1438,31 +1459,45 @@ sub test_param_sort_topicName {
     my $testTopic = $testForms{topic1}{name};
 
     my $source =
-"%FORMFIELDLIST{topic=\"$allTopics\" sort=\"\$topicName\" format=\"topic=\$topicName\"}%";
+"%FORMFIELDLIST{field=\"$allFields\" topic=\"$allTopics\" sort=\"\$topicName\" format=\"topic=\$topicName, field=\$name, value=\$value\"}%";
 
-    my $expected = 'topic=FormFieldListTestTopic1
-topic=FormFieldListTestTopic1
-topic=FormFieldListTestTopic1
-topic=FormFieldListTestTopic2
-topic=FormFieldListTestTopic2
-topic=FormFieldListTestTopic2
-topic=FormFieldListTestTopic3
-topic=FormFieldListTestTopic3
-topic=FormFieldListTestTopic3
-topic=FormFieldListTestTopic4
-topic=FormFieldListTestTopic4
-topic=FormFieldListTestTopic4';
+    my $expected = 'topic=FormFieldListTestTopic1, field=Author, value=MaryJones
+topic=FormFieldListTestTopic1, field=Status, value=being revised
+topic=FormFieldListTestTopic1, field=Remarks, value=The proposal does not reveal the current complexity well enough.
+topic=FormFieldListTestTopic2, field=Author, value=ChevyChase
+topic=FormFieldListTestTopic2, field=Status, value=completed
+topic=FormFieldListTestTopic2, field=Remarks, value=Well done!
+topic=FormFieldListTestTopic3, field=Author, value=CoolAide
+topic=FormFieldListTestTopic3, field=Status, value=new
+topic=FormFieldListTestTopic3, field=Remarks, value=TBD...
+topic=FormFieldListTestTopic4, field=Author, value=JohnDoe
+topic=FormFieldListTestTopic4, field=Status, value=outdated
+topic=FormFieldListTestTopic4, field=Remarks, value=';
 
     $this->do_test( $testTopic, $expected, $source );
 }
 
 =pod
 
-TODO
 Test param sort on $topicDate.
-Cannot be tested now.
 
 =cut
+
+sub test_param_sort_topicDate {
+    my $this = shift;
+
+    my $testTopic = $testForms{topic1}{name};
+
+    my $source =
+"%FORMFIELDLIST{field=\"Author\" topic=\"$allTopics\" sort=\"\$topicDate\" format=\"topic=\$topicName, field=\$name, value=\$value\"}%";
+
+    my $expected = 'topic=FormFieldListTestTopic4, field=Author, value=JohnDoe
+topic=FormFieldListTestTopic3, field=Author, value=CoolAide
+topic=FormFieldListTestTopic2, field=Author, value=ChevyChase
+topic=FormFieldListTestTopic1, field=Author, value=MaryJones';
+
+    $this->do_test( $testTopic, $expected, $source );
+}
 
 =pod
 

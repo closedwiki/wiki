@@ -46,7 +46,8 @@ This plugin uses TWiki:Plugins/TopicDataHelperPlugin
 | =excludefieldpattern= | Regular expression pattern to match field names to hide.  | none | =excludefieldpattern="^(?i)[B]"= |
 | =includevaluepattern= | Regular expression pattern to match field values to show. For example: the pattern =^[A-Z]= will match fields which values start with an uppercase letter; pattern =[0-9]= will find values that have a number. Use prefix =(?i)= for case insensitivity. | none | =includevaluepattern="^(?i)[A]"= |
 | =excludevaluepattern= | Regular expression pattern to match field valus to hide.  | none | =excludevaluepattern="^(?i)[B]"= |
-| =excludeemptyvalue= | Set to =on= to skip fields that have no value set. | none | =excludeemptyvalue="on"= |
+| =excludeemptyvalue= | Set to =on= to skip fields that have no value set. Listed fields do exist. To add missing fields to your listing, use =includemissingfields=. | =off= | =excludeemptyvalue="on"= |
+| =includemissingfields= | Set to =on= to add missing fields from topics. These will have an empty value, and may be substituted by param =alttext=. This is primarily useful if you want to achieve an even list of results. | =off= | =includemissingfields="on"= |
 | =limit=     | The maximum number of fields to display. Note that you should pass a multiple of the fields you are requesting: if you are requesting 2 form fields, the limit should be 2 or 4 or 6 and so on, otherwise the resulting text may be hard to understand. | no limit | =limit="10"= |
 
 
@@ -73,7 +74,9 @@ The sort order can be specified with parameter =sortorder=. | =$topicName= | =so
 | =topicheader=    | String to separate grouped formatted results per topic.  | none | =topicheader="--- <nop>$topicName"= |
 | =header=    | A header text in case of hits. | no header | =header="All fields:"= |
 | =footer=    | A footer text in case of hits. | no footer | =footer="Number of fields: $fieldCount"= |
-| =alt=       | Alternative text if nothing is found. | none | =alt="No fields found"= |
+| =alttext=       | Alternative text if no field is found in the topic form. Can only be used with =includemissingfields="on"=. | none | =alttext="--field not found--"= |
+| =default=       | Alternative text if no field value is set. | none | =default="(Field $name not set)"= |
+| =alt=       | Alternative text for the entire listing if nothing is found. | none | =alt="No fields found"= |
 
 ---+++ Formatting variables
 These variables can be used in the =format= tag:
@@ -183,9 +186,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 |  Authors: | TWiki:Main/BerndRaichle (2004), TWiki::Main/ArthurClemens (2008) |
 |  Copyright &copy;: | TWiki:Main/BerndRaichle (2004), TWiki::Main/ArthurClemens (2008) |
-|  Plugin Version: | 24 Oct 2008 (V2.000) |
+|  Plugin Version: | 25 Oct 2008 (v2.010) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  24 Oct 2008: | Arthur Clemens: Major code refactoring with the addition of numerous parameters. Created unit tests.  |
+| 25 Oct 2008:  | v.2.010 Arthur Clemens: Added param =includemissingfields= to explicitly generate field substitutes. |
+|  24 Oct 2008: | v.2.000 Arthur Clemens: Major code refactoring with the addition of numerous parameters. Created unit tests.  |
 |  01 Oct 2004: | Bernd Raichle: Initial version. |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Perl Version: | 5.005 |
@@ -193,4 +197,4 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topics:__ [[%TWIKIWEB%.TWikiDocumentation#FORMFIELD][Predefined variable FORMFIELD]] %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+__Related Topics:__ [[%TWIKIWEB%.TWikiDocumentation#FORMFIELD][TWiki Variable FORMFIELD]], %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins

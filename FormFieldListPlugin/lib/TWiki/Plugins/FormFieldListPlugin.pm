@@ -35,7 +35,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.1';
+$RELEASE = '2.010';
 
 $STORE_FILENAME = 'field_data.txt';
 
@@ -102,16 +102,24 @@ sub _handleFormFieldList {
       TWiki::Plugins::TopicDataHelperPlugin::createTopicData( $webs,
         $excludeWebs, $topics, $excludeTopics );
 
-    my $properties = undef;
+    my $excludeEmptyValues = $inParams->{'excludeemptyvalue'} || 'off';
+    $inParams->{'doExcludeEmptyValues'} =
+      TWiki::Func::isTrue($excludeEmptyValues) ? 1 : 0;
+    my $includeMissingFields = $inParams->{'includemissingfields'} || 'off';
+    $inParams->{'doIncludeMissingFields'} =
+      TWiki::Func::isTrue($includeMissingFields) ? 1 : 0;
+
+    my $formFields = $inParams->{'field'} || $inParams->{_DEFAULT};
 
     # pass on the order of the form fields; the order will define how the fields
     # will be sorted and displayed
     # only if more fields are specified
-    my $formFields = $inParams->{'field'} || $inParams->{_DEFAULT};
     my $formFieldsHash =
       TWiki::Plugins::TopicDataHelperPlugin::makeHashFromString( $formFields,
         1 );
-    $properties = $formFieldsHash;
+    my $properties = {};
+    $properties->{includeMissingFields} = $inParams->{'doIncludeMissingFields'},
+      $properties->{formFields}         = $formFieldsHash;
 
     TWiki::Plugins::TopicDataHelperPlugin::insertObjectData( $topicData,
         \&_createFormFieldData, $properties );
@@ -137,6 +145,7 @@ sub _handleFormFieldList {
 =pod
 
 Called from TWiki::Plugins::TopicDataHelperPlugin::insertObjectData.
+Called with every topic.
 Creates a data object for each topic:
 
 topic => {
@@ -150,17 +159,19 @@ topic => {
 sub _createFormFieldData {
     my ( $inTopicHash, $inWeb, $inTopic, $inProperties ) = @_;
 
+    my $formFieldsHash       = $inProperties->{formFields};
+    my $includeMissingFields = $inProperties->{includeMissingFields};
+
     # define value for topic key only if topic
     # has META:FIELD data
     my ( $fields, $meta ) = _getFormFieldsInTopic( $inWeb, $inTopic );
-
     if ( scalar @$fields ) {
         $inTopicHash->{$inTopic} = ();
 
         foreach my $field (@$fields) {
             my $fd =
               _createFormFieldDataObject( $inWeb, $inTopic, $field,
-                $field->{name}, $inProperties, $meta );
+                $field->{name}, $formFieldsHash, $meta );
             $inTopicHash->{$inTopic}{ $field->{name} } = $fd;
         }
     }
@@ -170,17 +181,21 @@ sub _createFormFieldData {
         delete $inTopicHash->{$inTopic};
     }
 
-    # check if expected fields are missing
-    # if so, create fields and mark as 'notfound'
-    while ( ( my $expectedFieldName, my $expectedOrder ) = each %$inProperties )
-    {
-        my $currentFd = $inTopicHash->{$inTopic}{$expectedFieldName};
-        if ( !defined $currentFd ) {
-            my $fd = _createFormFieldDataObject( $inWeb, $inTopic, undef,
-                $expectedFieldName, $inProperties, $meta );
-            $$fd->{notfound}                             = 1;
-            $inTopicHash->{$inTopic}                     = ();
-            $inTopicHash->{$inTopic}{$expectedFieldName} = $fd;
+    if ($includeMissingFields) {
+
+        # list empty values, even if they are not in the listed FIELDs
+        # if so, create fields and mark as 'notfound'
+        while ( ( my $expectedFieldName, my $expectedOrder ) =
+            each %$formFieldsHash )
+        {
+            my $currentFd = $inTopicHash->{$inTopic}{$expectedFieldName};
+            if ( !defined $currentFd ) {
+                my $fd = _createFormFieldDataObject( $inWeb, $inTopic, undef,
+                    $expectedFieldName, $inProperties, $meta );
+                $$fd->{notfound}                             = 1;
+                $inTopicHash->{$inTopic}                     = ();
+                $inTopicHash->{$inTopic}{$expectedFieldName} = $fd;
+            }
         }
     }
 }
@@ -192,13 +207,13 @@ Returns a reference to a new FormFieldData object.
 =cut
 
 sub _createFormFieldDataObject {
-    my ( $inWeb, $inTopic, $inField, $inName, $inProperties, $inMeta ) = @_;
+    my ( $inWeb, $inTopic, $inField, $inName, $inFormFieldsHash, $inMeta ) = @_;
 
     my $fd =
       TWiki::Plugins::FormFieldListPlugin::FormFieldData->new( $inWeb, $inTopic,
         $inField, $inName );
 
-    my $order = $$inProperties{$inName} || 0;
+    my $order = $$inFormFieldsHash{$inName} || 0;
     $fd->{order} = $order;
 
     my ( $revDate, $author, $rev, $comment ) = $inMeta->getRevisionInfo();
@@ -225,23 +240,22 @@ sub _filterTopicData {
     # ----------------------------------------------------
     # filter included/excluded field names
     my $fields = $inParams->{'field'} || $inParams->{_DEFAULT} || undef;
-    my $excludeFields = $inParams->{'excludefield'} || undef;
-    if ( defined $fields || defined $excludeFields ) {
+    if ( defined $fields || defined $inParams->{'excludefield'} ) {
         TWiki::Plugins::TopicDataHelperPlugin::filterTopicDataByProperty(
-            \%topicData, 'name', 1, $fields, $excludeFields );
+            \%topicData, 'name', 1, $fields, $inParams->{'excludefield'} );
     }
-    my $includeFieldPattern = $inParams->{'includefieldpattern'} || undef;
-    my $excludeFieldPattern = $inParams->{'excludefieldpattern'} || undef;
-    if (   defined $includeFieldPattern
-        || defined $excludeFieldPattern )
+    if (   defined $inParams->{'includefieldpattern'}
+        || defined $inParams->{'excludefieldpattern'} )
     {
         TWiki::Plugins::TopicDataHelperPlugin::filterTopicDataByRegexMatch(
-            \%topicData, 'name', $includeFieldPattern, $excludeFieldPattern );
+            \%topicData, 'name',
+            $inParams->{'includefieldpattern'},
+            $inParams->{'excludefieldpattern'}
+        );
     }
 
     # exclude fields with no value
-    my $excludeEmptyValues = $inParams->{'excludeemptyvalue'} || undef;
-    if ( TWiki::Func::isTrue($excludeEmptyValues) ) {
+    if ( $inParams->{'doExcludeEmptyValues'} ) {
         TWiki::Plugins::TopicDataHelperPlugin::filterTopicDataByProperty(
             \%topicData,
             'value',
@@ -253,28 +267,31 @@ sub _filterTopicData {
 
     # ----------------------------------------------------
     # filter included/excluded field VALUES
-    my $values        = $inParams->{'includevalue'} || undef;
-    my $excludeValues = $inParams->{'excludevalue'} || undef;
-    if ( defined $values || defined $excludeValues ) {
+    if (   defined $inParams->{'includevalue'}
+        || defined $inParams->{'excludevalue'} )
+    {
         TWiki::Plugins::TopicDataHelperPlugin::filterTopicDataByProperty(
-            \%topicData, 'value', 1, $values, $excludeValues );
+            \%topicData, 'value', 1,
+            $inParams->{'includevalue'},
+            $inParams->{'excludevalue'}
+        );
     }
-    my $includeValuePattern = $inParams->{'includevaluepattern'} || undef;
-    my $excludeValuePattern = $inParams->{'excludevaluepattern'} || undef;
-    if (   defined $includeValuePattern
-        || defined $excludeValuePattern )
+    if (   defined $inParams->{'includevaluepattern'}
+        || defined $inParams->{'excludevaluepattern'} )
     {
         TWiki::Plugins::TopicDataHelperPlugin::filterTopicDataByRegexMatch(
-            \%topicData, 'value', $includeValuePattern, $excludeValuePattern );
+            \%topicData, 'value',
+            $inParams->{'includevaluepattern'},
+            $inParams->{'excludevaluepattern'}
+        );
     }
 
     # ----------------------------------------------------
     # filter fields by user
-    my $usersParam        = $inParams->{'user'}        || undef;
-    my $excludeUsersParam = $inParams->{'excludeuser'} || undef;
-    if ( defined $usersParam || defined $excludeUsersParam ) {
+    if ( defined $inParams->{'user'} || defined $inParams->{'excludeuser'} ) {
         TWiki::Plugins::TopicDataHelperPlugin::filterTopicDataByProperty(
-            \%topicData, 'user', 1, $usersParam, $excludeUsersParam );
+            \%topicData, 'user', 1, $inParams->{'user'},
+            $inParams->{'excludeuser'} );
     }
 
     # ----------------------------------------------------
@@ -505,9 +522,6 @@ s/$TWiki::Plugins::FormFieldListPlugin::FormFieldData::EMPTY_VALUE_PLACEHOLDER/$
             if ($alttext) {
                 $value = '$alttext';
             }
-            else {
-                next;
-            }
         }
         $s =~ s/\$value/$value/g;
         $s =~ s/\$alttext/$alttext/g;
@@ -515,6 +529,8 @@ s/$TWiki::Plugins::FormFieldListPlugin::FormFieldData::EMPTY_VALUE_PLACEHOLDER/$
         # substitution variables
         _substituteFormattingVariables( $field, $s );
 
+        # topicHeader
+        # add topic header if we are moving to a different topic
         if ( defined $topicHeader && $topic ne $field->{topic} ) {
             my $sep = $topicHeader;
             _substituteFormattingVariables( $field, $sep );
