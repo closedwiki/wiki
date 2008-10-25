@@ -54,10 +54,9 @@ Instructions for TWiki plugin authors:
 |  Add-on Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2006, TWiki:Main.PeterThoeny |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Add-on Version: | 25 Oct 2008 (v1.020) |
+|  Add-on Version: | 25 Oct 2008 (v1.021) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  25 Oct 2008: | v.1.020 Arthur Clemens: Updated documentation. |
-|  25 Oct 2008: | v.1.010 Arthur Clemens: Changed hardcoded path to =bin= to ={ScriptUrlPath}=. Changed call from =geturl= to =geturl.pl=.  |
+|  25 Oct 2008: | v.1.021 Arthur Clemens: Changed hardcoded paths to variables read from =lib/LocalSite.cfg=. Changed call from =geturl= to =geturl.pl=. Updated documentation.  |
 |  11 Nov 2004: | Better accuracy, more flexible configuration |
 |  10 Nov 2004: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 (TWiki 4.0) |

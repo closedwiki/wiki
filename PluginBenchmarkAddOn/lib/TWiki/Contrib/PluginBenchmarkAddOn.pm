@@ -3,7 +3,7 @@ use strict;
 package TWiki::Contrib::BenchmarkContrib;
 use vars qw( $VERSION );
 $VERSION = '$Rev$';
-$RELEASE = '1.020';
+$RELEASE = '1.021';
 
 # -------- Constants (don't use Constant, though - see PBP why)
 #          (perhaps to be replaced by config vars some day)
