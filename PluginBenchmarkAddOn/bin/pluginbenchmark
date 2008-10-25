@@ -21,7 +21,7 @@
 # -------------
 
 # Command to fetch a TWiki topic. %WEBTOPIC% indicates the Web/TopicName, %PARAMS% the parameters:
-my $cmd   = "./geturl localhost '/cgi-bin/view/%WEBTOPIC%?%PARAMS%'";
+my $cmd   = "../tools/geturl.pl localhost '$TWiki::cfg{ScriptUrlPath}/view/%WEBTOPIC%?%PARAMS%'";
 
 # Debug:
 my $debug = 0;
@@ -60,7 +60,7 @@ if( @topics && $topics[0] =~ /Plugin$/ ) {
   print "           - Run utility on web server.\n";
   print "           - Measure when there is no load on the server.\n";
   print "           - All Plugins are automatically disabled except for the DefaultPlugin\n";
-  print "             and the specified Plugin. The classic TWiki skin is enabled.\n\n";
+  print "             and the specified Plugin. The 'classic' TWiki skin is enabled.\n\n";
   print "Configure: - Edit the pluginbenchmark utility to configure before use.\n";
   print "           - TWiki's geturl utility is assumed to exist in the current directory.\n";
   print "           - Apply the Codev.DebugEnablePlugins patch before use.\n";
