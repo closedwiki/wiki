@@ -508,8 +508,8 @@ None. See the plugin documentation in the =.pm= file on detailed usage instructi
 
 ---++ Plugin Settings
 
-</verbatim>
    * Set SHORTDESCRIPTION = Helper plugin for collecting, filtering and sorting data objects.
+   
    * Set DEBUG = 0
    
 
