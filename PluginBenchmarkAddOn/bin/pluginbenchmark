@@ -22,6 +22,15 @@
 
 # reads settings from LocalSite.cfg (managed by bin/configure)
 
+# Debug:
+my $debug = 0;
+
+# initialization
+# --------------
+my $VERSION = 1.030;
+my $version = "26 Oct 2008";
+
+
 my $libPath = '';
 open( LOCALLIB, "LocalLib.cfg" ) || die "couldn't open LocalLib.cfg!";
 while ( $line = <LOCALLIB> ) {
@@ -60,13 +69,6 @@ close(LOCALSITE);
 my $cmd =
   "../tools/geturl.pl $DefaultUrlHost $ScriptUrlPath/view/%WEBTOPIC%?%PARAMS%";
 
-# Debug:
-my $debug = 0;
-
-# initialization
-# --------------
-my $VERSION = 1.021;
-my $version = "25 Oct 2008";
 my $highres = 0;
 eval {
 
@@ -106,7 +108,7 @@ else {
     print
 "           - All Plugins are automatically disabled except for the DefaultPlugin\n";
     print
-"             and the specified Plugin. The 'classic' TWiki skin is enabled.\n\n";
+"             and the specified Plugin. The 'default' TWiki skin is enabled.\n\n";
     print
 "Configure: - Edit the pluginbenchmark utility to configure before use.\n";
     print
@@ -141,7 +143,7 @@ sub timeTopic {
     $thePlugins  =~ s/[\, ]+/\+/g;
     my $tcmd = $cmd;
     $tcmd =~ s/%WEBTOPIC%/$theWebTopic/;
-    $tcmd =~ s/%PARAMS%/skin=classic\&debugenableplugins=$thePlugins/;
+    $tcmd =~ s/%PARAMS%/skin=default\&debugenableplugins=$thePlugins/;
     my $t1 = 0;
     my $t2 = 0;
     if ($highres) {

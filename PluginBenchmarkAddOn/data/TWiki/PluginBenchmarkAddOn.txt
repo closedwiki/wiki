@@ -11,10 +11,11 @@ This is a small script to measure the performance of a Plugin. Plugin authors ca
 	* Before running the benchmarks, disable mod_perl or <nop>SpeedyCGI in case used
 	* Run the script on the web server's shell where TWiki is installed
 	* Measure when there is no load on the server
-	* All Plugins are automatically disabled except for the <nop>DefaultPlugin and the specified Plugin. The 'classic' TWiki skin is enabled.
+	* All Plugins are automatically disabled except for the <nop>DefaultPlugin and the specified Plugin. The 'default' TWiki skin is enabled.
 
 *Running the script:*
-	* Go to your =bin= directory and call:
+	* Choose a topic that renders your plugin variables. That may be the plugin topic, or an example topic.
+	* Go to your =bin= directory and call (for instance):
 	* =% ./pluginbenchmark <nop>TablePlugin <nop>GoodStyle <nop>FormattedSearch <nop>Main.TWikiUsers=
 	
 ---++ Example output
@@ -54,8 +55,9 @@ Instructions for TWiki plugin authors:
 |  Add-on Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2006, TWiki:Main.PeterThoeny |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Add-on Version: | 25 Oct 2008 (v1.021) |
+|  Add-on Version: | 25 Oct 2008 (v1.030) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  26 Oct 2008: | v.1.030 Arthur Clemens: Now uses default skin instead of classic. |
 |  25 Oct 2008: | v.1.021 Arthur Clemens: Changed hardcoded paths to variables read from =lib/LocalSite.cfg=. Changed call from =geturl= to =geturl.pl=. Updated documentation.  |
 |  11 Nov 2004: | Better accuracy, more flexible configuration |
 |  10 Nov 2004: | Initial version |
