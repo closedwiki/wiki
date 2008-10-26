@@ -529,10 +529,14 @@ None. See the plugin documentation in the =.pm= file on detailed usage instructi
 | Authors: | TWiki:Main.ArthurClemens |
 | Copyright &copy;: | TWiki:Main.ArthurClemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
-| Dependencies: | %$DEPENDENCIES% |
 |  Plugin Version: | 24 Oct 2008 (V1.0)  |
-|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  Change History: | <!-- versions below in reverse order --> |
 | 24 Oct 2008 - V.1.0 | Initial version |
+|  TWiki Dependency: | %$DEPENDENCIES% |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
 | Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 | Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 | Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
