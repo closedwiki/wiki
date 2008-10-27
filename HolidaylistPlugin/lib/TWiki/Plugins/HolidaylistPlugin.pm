@@ -90,7 +90,7 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 
 
-$REVISION = '1.0.26'; #dro# added missing anchor in showoptions form action; added row color feature (new attributes: namecolors, rowcolors)
+$REVISION = '1.0.26'; #dro# added missing anchor in showoptions form action; added row color feature (new attributes: namecolors, rowcolors); added order feature (new attribute: order)
 #$REVISION = '1.0.25'; #dro# added div tag with style overflow:auto requested by Matthew Thomson; added query parameters feature (hlp_&lt;attribute&gt; in URIs); added option form feature (new attributes: showoptions, optionspos, optionsformat) requested by Matthew Thomson; improved performance; fixed minor icon related bugs;
 #$REVISION = '1.0.24'; #dro# added statistics feature requested by TWiki:Main.GarySprague
 #$REVISION = '1.0.23'; #kjl# fixed Item5190 - does not like whitespace after the smiley. This makes the plugin work with TWiki 4.2.0 and Wysiwyg
@@ -239,6 +239,7 @@ sub initDefaults() {
 		optionspos=> 'bottom',
 		rowcolors => '#ffffff,#f0f0f0',
 		namecolors => undef,
+		order => undef,
 	);
 
 	# reminder: don't forget change documentation (HolidaylistPlugin topic) if you add a new rendered option
@@ -372,6 +373,7 @@ sub handleHolidaylist() {
 	($attributes, $refText, $theTopic, $theWeb) = @_;
 
 	local(%options, @unknownParams);
+	local(%table, %locationtable, %icontable);
 
 	# order of &init... calls is important
 
@@ -1015,7 +1017,7 @@ sub renderHolidaylist() {
 
 	my %sumstatistics;
 	my %rowstatistics;
-	foreach my $person (sort keys %{$tableRef}) {
+	foreach my $person ( @{_reorderPersons($tableRef)} ) {
 		my $ptableref=$$tableRef{$person};
 		my $ltableref=$$locationTableRef{$person};
 		my $itableref=$$iconTableRef{$person};
@@ -1161,6 +1163,41 @@ sub renderHolidaylist() {
 	$text = CGI::div({-class=>'holidayListPluginDiv',-style=>'overflow:auto;'},$text);
 
 	return $text;
+}
+# =========================
+sub _int {
+	return $_[0]=~/(\d+)/ ? $1 : 0;
+}
+# =========================
+sub _reorderPersons {
+	my ($tableRef) = @_;
+	my @persons = ();
+	if (defined $options{order}) {
+		if ($options{order} =~ /\[:nextfirst:\]/i) {
+			@persons = sort { join('', map( $_ || 0, @{$$tableRef{$b}})) cmp join('',map($_ || 0, @{$$tableRef{$a}})) }  keys %{$tableRef};
+		} elsif ($options{order} =~/\[:ralpha:\]/) {
+			@persons = sort { $b cmp $a } keys %{$tableRef};
+		} elsif ($options{order} =~/\[:num:\]/) {
+			@persons = sort { _int($a) <=> _int($b) }  keys %{$tableRef};
+		} elsif ($options{order} =~/\[:rnum:\]/) {
+			@persons = sort { _int($b) <=> _int($a) }  keys %{$tableRef};
+		} else {
+			@persons = split(/\s*[\,\;\|]\s*/, $options{order}); 
+			if ($options{order}=~/\[:rest:\]/i) {
+				my @rest = ();
+				foreach my $p (sort keys %{$tableRef}) {
+					push @rest, $p unless grep(/^\Q$p\E$/,@persons);
+				}
+				my $order = $options{order};
+				$order =~ s/\[:rest:\]/join(',', @rest)/eig;
+				@persons = split(/\s*[\,\;\|]\s*/, $order); 
+			}
+		}
+	} else {
+		@persons = sort keys %{$tableRef};
+	}
+	return \@persons;
+
 }
 # =========================
 sub _getNameColors {
