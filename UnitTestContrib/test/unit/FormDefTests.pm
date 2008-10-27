@@ -147,4 +147,32 @@ FORM
         join(',', sort @{$f->getOptions()}));
 }
 
+sub test_Item6082 {
+    my $this = shift;
+    # Form definition that requires the form definition to be loaded before
+    # it can be loaded.
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $this->{test_web}, 'TestForm', <<'FORM');
+| *Name*         | *Type* | *Size* | *Value*   | *Tooltip message* | *Attributes* |
+| Why | text | 32 | | Mandatory field | M |
+| Ecks | select | 1 | %SEARCH{"TestForm.Ecks~'Blah*'" type="query" order="topic" separator="," format="$topic;$formfield(Ecks)" nonoise="on"}% | | |
+FORM
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $this->{test_web}, 'SplodgeOne', <<FORM);
+%META:FORM{name="TestForm"}%
+%META:FIELD{name="Ecks" attributes="" title="X" value="Blah"}%
+FORM
+
+    my $def = new TWiki::Form($this->{twiki}, $this->{test_web}, 'TestForm');
+
+    my $f = $def->getField('Ecks');
+    $this->assert_str_equals(
+        'SplodgeOne;Blah',
+        join(',', sort @{$f->getOptions()}));
+
+    my ($meta, $text) =
+      $this->{twiki}->{store}->readTopic(undef, $this->{test_web}, 'TestForm');
+    $meta->renderFormForDisplay();
+}
+
 1;
