@@ -1006,10 +1006,16 @@ sub _buildConfirmationEmail {
     $templateText =~ s/%WIKINAME%/$data->{WikiName}/go;
     $templateText =~ s/%EMAILADDRESS%/$data->{Email}/go;
     
+    $templateText = $session->handleCommonTags(
+        $templateText, $TWiki::cfg{UsersWebName}, $data->{WikiName} );
+
     #add LoginName to make it clear to new users
     my $loginName = $b1.' LoginName: '.$data->{LoginName}."\n";
 
+    #SMELL: this means we fail hard if there are 2 FORMDATA vars -
+    #       like in multi-part mime - txt & html
     my ( $before, $after ) = split( /%FORMDATA%/, $templateText );
+    $before .= $loginName;
     foreach my $fd ( @{ $data->{form} } ) {
         my $name  = $fd->{name};
         my $value = $fd->{value};
@@ -1023,10 +1029,7 @@ sub _buildConfirmationEmail {
             $loginName = '';
         }
     }
-    $before .= $loginName;
     $templateText = $before.($after||'');
-    $templateText = $session->handleCommonTags(
-        $templateText, $TWiki::cfg{UsersWebName}, $data->{WikiName} );
     $templateText =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
     # remove <nop> and <noautolink> tags
 

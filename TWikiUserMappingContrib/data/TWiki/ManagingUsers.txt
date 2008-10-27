@@ -107,8 +107,8 @@ then add =myskin= to the beginning of the =SKIN= setting in %MAINWEB%.TWikiPrefe
 
 From this point on, your myskin templates will be used for the registration emails.
 
-To make it possible for TWikiUsers to modify the email contents, you could use an =%<nop>INCLUDE%=
-statement in your customized version. (remember to secure the topic appropriately to prevent attackers from getting emailed sensitive passwords.) eg:
+To make it possible for TWikiUsers to modify the email contents, you could use a parameterized =%<nop>INCLUDE%=
+statement in your customized version. eg:
 
 <verbatim>
 From: %WIKIWEBMASTERNAME% <%WIKIWEBMASTER%>
@@ -118,8 +118,38 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=%CHARSET%
 Content-Transfer-Encoding: 8bit
 
-%INCLUDE{"%MAINWEB%.RegisterNotifyEmail"}%
+%INCLUDE{
+    "Main.RegistrationNotification"
+    WIKINAME="%WIKINAME%"
+    FIRSTLASTNAME="%FIRSTLASTNAME%"
+    EMAILADDRESS="%EMAILADDRESS%"
+}%
 </verbatim>
+   * __note the use of %<nop>WIKINAME%, %<nop>FIRSTLASTNAME%, %<nop>EMAILADDRESS% passed in from the INCLUDE so that the topic below is similar to the original template__
 
+and then create a topic %NOP%%MAINWEB%.RegisterNotifyEmail:
+<verbatim>
+Welcome to %WIKITOOLNAME%.
+
+%MAKETEXT{"Your personal [_1] topic is located at [_2]. You can customize it as you like:" args="%WIKITOOLNAME%, %SCRIPTURL{"view"}%/%USERSWEB%/%WIKINAME%"}%
+
+   * %MAKETEXT{"Some people turn it into a personal portal with favorite links, what they work on, what help they'd like, etc."}%
+   * %MAKETEXT{"Some add schedule information and vacation notice."}%
+
+Regards
+%WIKIWEBMASTERNAME%
+Your TWiki Admin
+
+
+%MAKETEXT{"Note:"}%
+   2 %MAKETEXT{"You can change your password at via [_1]" args="%SCRIPTURL{"view"}%/%SYSTEMWEB%/ChangePassword"}%
+   3 %MAKETEXT{"If you haven't set a password yet or you want to reset it, go to: [_1]" args="%SCRIPTURL{"view"}%/%SYSTEMWEB%/ResetPassword"}%
+
+%MAKETEXT{"Submitted content:"}%
+%FORMDATA%
+
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="Main.TWikiAdminGroup"}%
+</verbatim>
+   * __remember to secure the topic appropriately to prevent attackers from getting emailed sensitive passwords.__
 
 __Related Topics:__ AdminDocumentationCategory
