@@ -184,13 +184,61 @@ padding:.5em;
   </td>
 </tr>
 <tr>
+  <th colspan="3" style="background-color:gold">Web options</th>
+</tr>
+<tr>
+ <td style="background-color:gold"> Web options are only relevant for web output formats (<tt>file</tt> and <tt>ftp</tt>)
+ The web formats generate a sitemap.xml, and can also generate
+ default.htm, index.html and google site verification files.
+ </td>
+ <td colspan=2>
+  <table class="twikiTable" width="100%">
+   <tr>
+    <td>
+     Google file
+    </td>
+    <td>
+     <input type="text" size="40" name="googlefile" value="" /><br />
+     generates the =HTML verification file= needed to verify your site claim.
+     see <a href="http://www.google.com/webmasters/sitemaps/">Google webmaster tools</a> 
+    </td>
+    <td>
+     =googlefile=
+    </td>
+   </tr>
+   <tr>
+    <td>
+     Default topic:
+    </td>
+    <td>
+     <input type="text" size="40" name="defaultpage" value="WebHome" /><br />
+     Name of topic to used to generate default.htm, index.html
+    </td>
+    <td>
+     =defaultpage=
+    </td>
+   </tr>
+   <tr>
+    <td>
+     Relative URL used in sitemap
+    </td>
+    <td>
+     <input type="text" size="40" name="relativeurl" value="/" /><br />
+     the base URL that your published TWiki topics will reside at (if you are publishing to the root of your site, =/= is correct)
+     see <a href="http://www.google.com/webmasters/sitemaps/">Google webmaster tools</a> 
+    </td>
+    <td>
+     =relativeurl=
+    </td>
+   </tr>
+   </table>
+  </td>
+</tr>
+<tr>
   <th colspan="3" style="background-color:gold">FTP options</th>
 </tr>
 <tr>
- <td> FTP options are only relevant if Output format is =ftp=
-
-The FTP output format generates a sitemap.xml, and can also generate
-default.htm, index.html and google site verification files.
+ <td style="background-color:gold"> FTP options are only relevant if Output format is =ftp=
 
 The FTP output generator was written by TWiki:Main.SvenDowideit.
 </td>
@@ -243,53 +291,15 @@ The FTP output generator was written by TWiki:Main.SvenDowideit.
     </td>
    </tr>
    <tr>
-    <td>
-     Google file
-    </td>
-    <td>
-     <input type="text" size="40" name="googlefile" value="" /><br />
-     generates the =HTML verification file= needed to verify your site claim.
-     see <a href="http://www.google.com/webmasters/sitemaps/">Google webmaster tools</a> 
-    </td>
-    <td>
-     =googlefile=
-    </td>
-   </tr>
-   <tr>
-    <td>
-     Default topic:
-    </td>
-    <td>
-     <input type="text" size="40" name="defaultpage" value="WebHome" /><br />
-     Name of topic to used to generate default.htm, index.html
-    </td>
-    <td>
-     =defaultpage=
-    </td>
-   </tr>
-   <tr>
-    <td>
-     Relative URL used in sitemap
-    </td>
-    <td>
-     <input type="text" size="40" name="relativeurl" value="/" /><br />
-     the base URL that your published TWiki topics will reside at (if you are publishing to the root of your site, =/= is correct)
-     see <a href="http://www.google.com/webmasters/sitemaps/">Google webmaster tools</a> 
-    </td>
-    <td>
-     =relativeurl=
-    </td>
-   </tr>
-    <tr>
      <td valign="top">Fast publish</td>
      <td> <input type="checkbox" name="fastupload" value="1" /> <br />
      Speed up the ftp publishing by only uploading modified files. This will
      store a (tiny) checksum (.md5) file on the server alongside each uploaded
      file which will be used to optimise future uploads. Recommended.
      </td>
-    <td>
+     <td>
       =fastupload=
-    </td>
+     </td>
     </tr>   
   </table>
  </td>

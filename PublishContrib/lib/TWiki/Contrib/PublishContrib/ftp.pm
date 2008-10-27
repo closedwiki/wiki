@@ -29,11 +29,11 @@ use File::Spec;
 
 sub new {
     my( $class, $path, $web, $genopt, $logger, $query ) = @_;
-    my $this = $class->SUPER::new($path, $web, $genopt, $logger);
+    my $this = $class->SUPER::new($path, $web, $genopt, $logger, $query);
 
-    foreach my $param qw(defaultpage googlefile destinationftpserver
+    foreach my $param qw(destinationftpserver
                          destinationftppath destinationftpusername
-                         destinationftppassword fastupload relativeurl) {
+                         destinationftppassword fastupload) {
         my $p = $query->param($param);
         $p =~ /^(.*)$/;
         $this->{$param} = $1;
@@ -62,17 +62,6 @@ sub addString {
 
     $this->SUPER::addString( $string, $file );
     $this->_upload($file);
-
-    if( $file =~ /(.*)\.html?$/ ) {
-        my $topic = $1;
-        push( @{$this->{urls}}, "$file" );
-        # write link from index.html to actual topic
-        if ($this->{defaultpage} && $topic eq $this->{defaultpage}) {
-            $this->addString( $string, 'default.htm' );
-            $this->addString( $string, 'index.html' );
-            print '(default.htm, index.html)';
-        }
-    }
 }
 
 sub addFile {
@@ -185,22 +174,6 @@ sub _ftpConnect {
 sub close {
     my $this = shift;
 
-    # write sitemap.xml
-    my $sitemap = $this->_createSitemap( \@{$this->{urls}} );
-    $this->addString($sitemap, 'sitemap.xml');
-    print 'Published sitemap.xml<br />';
-
-    # write google verification files (comma seperated list)
-    if ($this->{googlefile}) {
-        my @files = split(/[,\s]+/, $this->{googlefile});
-        for my $file (@files) {
-            my $simplehtml = '<html><title>'.$file
-              .'</title><body>just for google</body></html>';
-            $this->addString($simplehtml, $file);
-            print 'Published googlefile : '.$file.'<br />';
-        }
-    }
-
     my $landed = $this->SUPER::close();
 
     if ($this->{destinationftpserver}) {
@@ -210,32 +183,6 @@ sub close {
     }
 
     return $landed;
-}
-
-sub _createSitemap {
-    my $this = shift;
-    my $filesRef = shift;    #( \@{$this->{files}} )
-    my $map = << 'HERE';
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.google.com/schemas/sitemap/0.84">
-%URLS%
-</urlset>
-HERE
-
-    my $topicTemplatePre = "<url>\n<loc>";
-    my $topicTemplatePost = "</loc>\n</url>";
-
-    die "relativeurl param not defined" unless (defined($this->{relativeurl}));
-
-    my $urls = join("\n",
-        map {
-            "$topicTemplatePre$this->{relativeurl}".
-              "$_$topicTemplatePost\n"
-          }  @$filesRef );
-
-    $map =~ s/%URLS%/$urls/;
-
-    return $map;
 }
 
 1;

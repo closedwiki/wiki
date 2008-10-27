@@ -23,8 +23,8 @@ use base 'TWiki::Contrib::PublishContrib::file';
 use File::Path;
 
 sub new {
-    my( $class, $path, $web, $genopt, $logger ) = @_;
-    return $class->SUPER::new( $path, "${web}_$$", $genopt, $logger );
+    my( $class, $path, $web, $genopt, $logger, $query ) = @_;
+    return $class->SUPER::new( $path, "${web}_$$", $genopt, $logger, $query );
 }
 
 sub close {
