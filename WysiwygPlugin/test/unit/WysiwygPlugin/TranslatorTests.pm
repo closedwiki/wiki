@@ -29,9 +29,6 @@ use base qw(TWikiTestCase);
 
 use strict;
 
-use Unit::Request;
-use Unit::Response;
-
 require TWiki::Plugins::WysiwygPlugin;
 require TWiki::Plugins::WysiwygPlugin::TML2HTML;
 require TWiki::Plugins::WysiwygPlugin::HTML2TML;
@@ -1716,7 +1713,15 @@ sub set_up {
     $this->SUPER::set_up(@_);
     $TWiki::cfg{Plugins}{WysiwygPlugin}{Enabled} = 1;
 
-    my $query = new Unit::Request("");
+    my $query;
+    eval {
+        require Unit::Request;
+        require Unit::Response;
+        $query = new Unit::Request("");
+    };
+    if ($@) {
+        $query = new CGI("");
+    }
     $query->path_info("/Current/TestTopic");
     $this->{twiki} = new TWiki(undef, $query);
     $TWiki::Plugins::SESSION = $this->{twiki};
