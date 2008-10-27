@@ -18,11 +18,14 @@ __%T% Tip:__ TWiki:TWiki.TWikiTemplatesSupplement on TWiki.org has supplemental 
 
 #HtmlTemplates
 ---++ Master Templates
-TWiki uses master templates when composing the output from all actions, like topic view, edit, and preview. This allows you to change the look and feel of all pages by editing just a few template files.
+TWiki uses master templates when composing the output from all actions, like topic view, edit, and preview.
+This allows you to change the look and feel of all pages by editing just a few template files.
 
 Master templates are also used in the definition of TWikiSkins.
 
-Master templates are stored as text files with the extension =.tmpl=. They are usually HTML with embedded _template directives_. The directives are expanded when TWiki wants to generate a user interface screen.
+Master templates are stored as text files with the extension =.tmpl=.
+They are usually HTML with embedded _template directives_.
+The directives are expanded when TWiki wants to generate a user interface screen.
 
 #TemplateVariables
 ---+++ How Template Directives Work
@@ -43,9 +46,11 @@ TMPL:P also supports simple parameters. For example, given the definition
 
 Note that parameters can simply be ignored; for example, =%<nop>TMPL:P{"x"}%= will expand to x%<nop>P%z.
 
-Any alphanumeric characters can be used in parameter names. You are highly recommended to use parameter names that cannot be confused with TWikiVariables.
+Any alphanumeric characters can be used in parameter names.
+You are highly recommended to use parameter names that cannot be confused with TWikiVariables.
 
-Note that three parameter names, =context=, =then= and =else= are *reserved*. They are used to support a limited form of "if" condition that you can use to select which of two templates to use, based on a _context identifier_:
+Note that three parameter names, =context=, =then= and =else= are *reserved*.
+They are used to support a limited form of "if" condition that you can use to select which of two templates to use, based on a _context identifier_:
 <verbatim>
 %TMPL:DEF{"link_inactive"}%<input type="button" disabled value="Link>%TMPL:END%
 %TMPL:DEF{"link_active"}%<input type="button" onclick="link()" value="Link" />%TMPL:END%
@@ -56,15 +61,20 @@ See IfStatements for details of supported context identifiers.
 
 ---+++ Finding Templates
 
-The master templates shipped with a twiki release are stored in the twiki/templates directory. As an example, ==twiki/templates/view.tmpl== is the default template file for the ==twiki/bin/view== script. 
+The master templates shipped with a twiki release are stored in the twiki/templates directory.
+As an example, ==twiki/templates/view.tmpl== is the default template file for the ==twiki/bin/view== script. 
 
-You can save templates in other directories as long as they are listed in the ={TemplatePath}= configuration setting. The ={TemplatePath}= is defined in the Miscellaneous section of the [[%SCRIPTURLPATH{configure}%][configure]] page.
+You can save templates in other directories as long as they are listed in the ={TemplatePath}= configuration setting.
+The ={TemplatePath}= is defined in the Miscellaneous section of the [[%SCRIPTURLPATH{configure}%][configure]] page.
 
-You can also save templates in user topics. The ={TemplatePath}= configuration setting defines which topics will be accepted as templates.
+You can also save templates in user topics (_IF_ there is no possible template match in the =templates= directory).
+The ={TemplatePath}= configuration setting defines which topics will be accepted as templates.
 
-Templates that are included with an explicit ='.tmpl'= extension  are looked for only in the =templates/= directory. For instance =%TMPL:INCLUDE{"example.tmpl"}%= will only return =templates/example.tmpl=, regardless of ={TemplatePath}= and SKIN settings.
+Templates that are included with an explicit ='.tmpl'= extension are looked for only in the =templates/= directory.
+For instance =%TMPL:INCLUDE{"example.tmpl"}%= will only return =templates/example.tmpl=, regardless of ={TemplatePath}= and SKIN settings.
 
-The out-of-the-box setting of ={TemplatePath}= supports the following search order to determine which template file or topic to use for a particular script or =%TMPL:INCLUDE{"script"}%= statement. The _skin path_ is set as described in TWikiSkins.
+The out-of-the-box setting of ={TemplatePath}= supports the following search order to determine which template file or topic to use for a particular script or =%TMPL:INCLUDE{"script"}%= statement.
+The _skin path_ is set as described in TWikiSkins.
 
    1 templates/%RED%web%ENDCOLOR%/%RED%script%ENDCOLOR%.%RED%skin%ENDCOLOR%.tmpl for each %RED%skin%ENDCOLOR% on the skin path
       * %X% this usage is supported *for compatibility only* and is *deprecated*. Store web-specific templates in TWiki topics instead.

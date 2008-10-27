@@ -83,4 +83,41 @@ To remove a user account (<nop>FredQuimby, who logs in as "fred"):
 
 __Note:__ Consider leaving the user topic file in place so their past signatures and revision author entries don't end up looking like AnUncreatedTopic. If you want to make it clear the user is no longer around, replace the topic content with a note to that effect. The existance of the <nop>UserName topic should also prevent that user name from being re-used, sealing the potential security hole regarding inherited permissions..
 
+---++ Customising registration Emails.
+TWiki's Registration can send 3 emails who's output is governed by templates:
+   1 User registration confirmation - =templates/registerconfirm.tmpl=
+   2 User registration notification - =templates/registernotify.tmpl=
+   3 Email to notify the TWiki admin of registration - =templates/registernotifyadmin.tmpl=
+
+As these are TWikiTemplates, they can be customised and selected using the SKIN path setting.
+Because there are default tmpl files in the =templates= dir, this cannot use Template topics.
+
+These template files have a specific format that matches the raw format of emails sent via SMTP,
+so be careful and test your changes. It is easiest to start by copying the default templates:
+
+<verbatim>
+cd twiki/templates
+cp registernotify.tmpl registernotify.myskin.tmpl
+cp registerconfirm.tmpl registerconfirm.myskin.tmpl
+cp registernotifyadmin.tmpl registernotifyadmin.myskin.tmpl
+</verbatim>
+then add =myskin= to the begining of the =SKIN= setting in %MAINWEB%.TWikiPreferences.
+
+From this point on, your myskin templates will be used for the registration emails.
+
+To make it possibe for TWikiUsers to modify the email contents, you could use an =%<nop>INCLUDE%=
+statement in your customised version. eg:
+
+<verbatim>
+From: %WIKIWEBMASTERNAME% <%WIKIWEBMASTER%>
+To: %FIRSTLASTNAME% <%EMAILADDRESS%>
+Subject: %MAKETEXT{"[_1] - Registration for [_2] ([_3])" args="%WIKITOOLNAME%, %WIKINAME%, %EMAILADDRESS%"}%
+MIME-Version: 1.0
+Content-Type: text/plain; charset=%CHARSET%
+Content-Transfer-Encoding: 8bit
+
+%INCLUDE{"%MAINWEB%.RegisterNotifyEmail"}%
+</verbatim>
+
+
 __Related Topics:__ AdminDocumentationCategory
