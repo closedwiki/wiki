@@ -6,23 +6,25 @@ To use it, take a copy of the raw text of this topic, and paste it into a new to
 
 ---+ Publish topics from the %WEB% web
    * Name of the URL and folder space inside =$TWiki::cfg{PublishContrib}{Dir}= and =$TWiki::cfg{PublishContrib}{URL}=. e.g. =test=, =prod=. Defaults to =''=, so publishes to the top of those.
-      * Set INSTANCE =
+      * Set PUBLISH_INSTANCE =
+   * Name of a topic that contains a table that maps topic names to version numbers. This topic can be used to publish specific versions of listed topics.
+      * Set PUBLISH_VERSIONS =    
    * Comma-separated list of [[PublishContrib#WildcardPattern][wildcard patterns]] that match the names of topics to *include* 
-      * Set INCLUSIONS = *
+      * Set PUBLISH_INCLUSIONS = *
    * Comma-separated list of [[PublishContrib#WildcardPattern][wildcard patterns]] that match the names of topics to *exclude*
-      * Set EXCLUSIONS = Web*,Publish*
+      * Set PUBLISH_EXCLUSIONS = Web*,Publish*
    * A [[#RegularExpression][regular expression]] that will cause a topic to be *excluded* if the RE matches the topic content
-      * Set FILTER =
+      * Set PUBLISH_FILTER =
    * Skin for published HTML
-      * Set PUBLISHSKIN = text
-   * Comma-separated list of templates to use (defaults to view). Output will be generated for each template in this list (e.g. =view,print=)
-      * Set TEMPLATES = view
+      * Set PUBLISH_SKIN = text
+   * Comma-separated list of templates to use (defaults to view). Output will be generated for each template in this list (e.g. =view,print=). Note that =VIEW_TEMPLATE= will still override the template if it is set in specific topics (See %SYSTEMWEB%.TWikiTemplates).
+      * Set PUBLISH_TEMPLATES = view
    * Format to publish in (=file=, =pdf=, =tgz=, =zip=)
-      * Set FORMAT = file
+      * Set PUBLISH_FORMAT = file
    * If set, additional options that will be passed to the output generator
-      * Set EXTRAS =
+      * Set PUBLISH_EXTRAS =
    * Name of the publish history topic to us. Default is PublishContribHistory
-      * Set HISTORY =
+      * Set PUBLISH_HISTORY =
 <form method="POST" name="rename" action="%SCRIPTURLPATH%/publish%SCRIPTSUFFIX%/%WEB%">
 <input type="hidden" name="configtopic" value="%TOPIC%" />
 <input type="hidden" name="ping" value="%SERVERTIME%" />

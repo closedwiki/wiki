@@ -1,4 +1,7 @@
 #---+ Publish Contrib
+# **PERL H**
+# Bin script registration - do not modify
+$TWiki::cfg{SwitchBoard}{publish} = [ "TWiki::Contrib::Publish", "publish", { } ];
 # **PATH**
 # File path to the directory where published files will be generated.
 # you will normally want this to be visible via a URL, so a subdirectory
