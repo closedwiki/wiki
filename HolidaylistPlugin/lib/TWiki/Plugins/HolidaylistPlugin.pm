@@ -1134,7 +1134,7 @@ sub renderHolidaylist() {
 			} else {
 				$td.= '&nbsp;';
 			}
-			$tr .= CGI::td({-align=>'center', -bgcolor=>$bgcolor, -title=>substTitle($person).' / '.Date_to_Text_Long($yy1,$mm1,$dd1)}, "<noautolink>$td</noautolink>");
+			$tr .= CGI::td({-align=>'center', -bgcolor=>$bgcolor, -title=>substTitle($person .' / '.Date_to_Text_Long($yy1,$mm1,$dd1)) }, $td);
 		}
 		$tr .= renderStatisticsCol(\%statistics) if ($options{showstatcol});
 		$tr .= $pcell if $options{namepos}=~/^(right|both)$/i;
@@ -1209,7 +1209,7 @@ sub substTitle {
 	$title =~ s/\[\[([^\]]+)\]\]/$1/g; # replace forced link with comment
 	$title =~ s/\[\[/!\[\[/g; # quote forced links - !!!unused
 	$title =~ s/[A-Z][a-z0-9]+[\.\/]([A-Z])/$1/g; # delete Web names
-	$title =~ s/([A-Z][a-z]+\w*[A-Z][a-z0-9]+)/!$1/g; # quote WikiNames
+	##$title =~ s/([A-Z][a-z]+\w*[A-Z][a-z0-9]+)/$1/g; # quote WikiNames
 	return $title;
 }
 # =========================
