@@ -1134,7 +1134,7 @@ sub renderHolidaylist() {
 			} else {
 				$td.= '&nbsp;';
 			}
-			$tr .= CGI::td({-align=>'center', -bgcolor=>$bgcolor, -title=>""}, "<noautolink>$td</noautolink>");
+			$tr .= CGI::td({-align=>'center', -bgcolor=>$bgcolor, -title=>substTitle($person).' / '.Date_to_Text_Long($yy1,$mm1,$dd1)}, "<noautolink>$td</noautolink>");
 		}
 		$tr .= renderStatisticsCol(\%statistics) if ($options{showstatcol});
 		$tr .= $pcell if $options{namepos}=~/^(right|both)$/i;

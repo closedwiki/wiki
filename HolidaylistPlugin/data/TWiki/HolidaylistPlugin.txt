@@ -123,11 +123,11 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | removeatwork | set to "1" to remove persons without calendar entries from table | =removeatwork="0"= |
 | showmonthheader | set to "1" to show a additional month header | =showmonthheader="0"= |
 | showoptions | shows a navigation form | =showoptions="0"= |
-| showpubholidays | show public holidays as separate lines (rows) in table (related: enablepubholidays, pubholidayicon) | =showpubholidays="0"= |
+| showpubholidays | shows public holidays as separate lines (rows) in table (related: enablepubholidays, pubholidayicon) | =showpubholidays="0"= |
 | showstatcol | enables/disables statistics column(s) | =showstatcol="off"= | 
 | showstatrow | enables/disables statistics row(s) | =showstatrow="off"= | 
 | showstatsum | enables/disables statistics summary below/behind the statistics columns/rows; works only in conjunction with showstatcol and/or showstatrow | =showstatsum="on"= | 
-| showweekends | show weekends if set to 1 | =showweekends="0"= |
+| showweekends | shows weekends if set to 1 | =showweekends="0"= |
 | startdate | a start date (e.g. '1 Oct 2005') or a day offset (e.g. '10', '+30' or '-30') | =startdate="+0"= |
 | topic | a comma separated list of source topics | =topic="%<nop>TOPIC%"= |
 | week | set a week (1..52) or a week offset (-1, +0, +1, +2, ...) | =week="+0"= |
@@ -151,7 +151,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | name | header content of the first cell header |=name="Name"= |
 | namecolors | a comma separated list of names with own colors, e.g. namecolors="Mary:red,Bob:lightblue" | undefined / =namecolors="Bill:yellow"= |
 | navdays | defines the days to navigate to (default: value of the =days= attribute) | =navdays="30"= |
-| navenable | enable/disable navigation (1 - enabled; 0 - disabled) | =navenable="1"= |
+| navenable | enables/disables navigation (1 - enabled; 0 - disabled) | =navenable="1"= |
 | navhome | navigation button to the start date (%d will be replaced with page x days) | =navhome="%d"= |
 | navhometitle | title text (tooltip text) for the navigation button to the start date | =navhometitle="Go to the start date"= |
 | navnext | navigation button to the next =navdays= days| =navnext="&amp;gt;&brvbar;"= |
