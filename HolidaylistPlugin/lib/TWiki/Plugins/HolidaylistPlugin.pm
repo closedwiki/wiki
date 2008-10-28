@@ -90,7 +90,7 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 
 
-$REVISION = '1.0.26'; #dro# added missing anchor in showoptions form action; added row color feature (new attributes: namecolors, rowcolors); added order feature (new attribute: order)
+$REVISION = '1.0.26'; #dro# added missing anchor in showoptions form action; added row color feature (new attributes: namecolors, rowcolors); added order feature (new attribute: order); added namepos attribute (place names left and/or right of a row)
 #$REVISION = '1.0.25'; #dro# added div tag with style overflow:auto requested by Matthew Thomson; added query parameters feature (hlp_&lt;attribute&gt; in URIs); added option form feature (new attributes: showoptions, optionspos, optionsformat) requested by Matthew Thomson; improved performance; fixed minor icon related bugs;
 #$REVISION = '1.0.24'; #dro# added statistics feature requested by TWiki:Main.GarySprague
 #$REVISION = '1.0.23'; #kjl# fixed Item5190 - does not like whitespace after the smiley. This makes the plugin work with TWiki 4.2.0 and Wysiwyg
@@ -240,6 +240,7 @@ sub initDefaults() {
 		rowcolors => '#ffffff,#f0f0f0',
 		namecolors => undef,
 		order => undef,
+		namepos => 'left',
 	);
 
 	# reminder: don't forget change documentation (HolidaylistPlugin topic) if you add a new rendered option
@@ -924,48 +925,36 @@ sub renderHolidaylist() {
 	# create table header:
 	
 	$text .=  $optionrow if ($options{optionspos}=~/^(top|both)$/i);
-	$text .= '<noautolink><a name="hlpid'.$hlid.'"></a><table'
-	       . ' class="holidaylistPluginTable"'
-	       . ' border="'.$options{border}.'"'
-               . ' cellpadding="'.$options{cellpadding}.'"'
-               . ' cellspacing="'.$options{cellspacing}.'"'
-	       . ' bgcolor="'.$options{tablebgcolor}.'"'
-	       . ((defined $options{width})?(' width="'.$options{width}.'"'):'')
-	       .  '>' 
-	       . "\n" ;
+	$text .= '<noautolink>'.CGI::a({-name=>'hlpid'.$hlid},"");
+	$text .= CGI::start_table({-class=>'holidaylistPluginTable', -border=>$options{border}, -cellpadding=>$options{cellpadding},
+					-cellspacing=>$options{cellspacing}, -bgcolor=>$options{tablebgcolor}, -width=>$options{width}});
 
-	$text .= '<caption align="'.$options{tablecaptionalign}.'"><noautolink>'.$options{tablecaption}.'</noautolink></caption>'."\n";
+	$text .= CGI::caption({-align=>$options{tablecaptionalign}}, $options{tablecaption});
 
-	$text .= '<tr bgcolor="'.$options{tableheadercolor}.'">';
-	$text .= '<th align="left"'
-			.(defined $options{nwidth}?' width="'.$options{nwidth}.'"':'')
-			.($options{showmonthheader}?' rowspan="2"':'').'>'
-			.'<noautolink>'
-			.$options{name}
-			.($options{'navenable'}?&renderNav(-1).&renderNav(0).&renderNav(1):'')
-			.'</noautolink>'
-			.'</th>';
+	my $header = "";
+	my $namecell = "";
+	$namecell .= CGI::th({-align=>'left',-width=>$options{nwidth}, -rowspan=>($options{showmonthheader}?2:1) },
+			$options{name}.($options{'navenable'}?&renderNav(-1).&renderNav(0).&renderNav(1):''));
 
 	my ($dd,$mm,$yy) = getStartDate();
 	
+	# render month header:
+	my $monthheader = "";
 	if ($options{showmonthheader}) {
 		my $restdays = $options{days};
 		my ($yy1,$mm1,$dd1) = ($yy, $mm, $dd);
 		while ($restdays > 0) {
 			my $daysdiff = Days_in_Month($yy1,$mm1) - $dd1 + 1;
 			$daysdiff = $restdays if ($restdays-$daysdiff<0);
-			$text .= '<th colspan="'.$daysdiff.'" title="'. Month_to_Text($mm1).' '.$yy1.'">' 
-				. &mystrftime($yy1,$mm1,$dd1,$options{monthheaderformat})
-				. '</th>';
+			$monthheader .= CGI::th({-colspan=>$daysdiff, -title=> Month_to_Text($mm1).' '.$yy1}, &mystrftime($yy1,$mm1,$dd1,$options{monthheaderformat}));
 			($yy1,$mm1,$dd1) = Add_Delta_Days($yy1,$mm1,$dd1, $daysdiff);
 			$restdays -= $daysdiff;
 		}
 		if ($options{showstatcol}) {
 			foreach my $h (split(/\|/,getStatOption('statheader','statcolheader'))) {
-				$text.='<th valign="bottom" align="center" rowspan="2" bgcolor="'.$options{tableheadercolor}.'">'.$h.'</th>';
+				$monthheader .= CGI::th({-valign=>'bottom', -align=>'center', rowspan=>2, -bgcolor=>$options{tableheadercolor}}, $h);
 			}
 		}
-		$text .= '</tr><tr>';
 	}
 
 	# render header:
@@ -979,27 +968,19 @@ sub renderHolidaylist() {
 		$bgcolor=$options{weekendbgcolor} unless $dow < 6;
 		$bgcolor=$options{todaybgcolor} if (defined $options{todaybgcolor})&&($today == $date);
 		
-		$text.='<th align="center" bgcolor="'.$bgcolor.'"'
-			.' title="'.Date_to_Text_Long($yy1,$mm1,$dd1).'"'
-			. (((defined $options{tcwidth})&&(($dow<6)||$options{showweekends}))?' width="'.$options{tcwidth}.'"':'')
-		        .((($today==$date)&&(defined $options{todayfgcolor}))?' style="color:' . $options{todayfgcolor} . '"' : '') .'>';
-		$text.='<noautolink>';
-		if (($dow < 6)|| $options{showweekends}) { 
-			$text .= &mystrftime($yy1,$mm1,$dd1);
-		} else {
-			$text .= '&nbsp;';
-		}
-		$text.='</noautolink>';
-		$text.='</th>';
+		my %params = ( -align=>'center', -bgcolor=>$bgcolor, -title=>Date_to_Text_Long($yy1,$mm1,$dd1) );
+		$params{-width}=$options{tcwidth} if ((defined $options{tcwidth})&&(($dow<6)||$options{showweekends}));
+		$params{-style}='color:'.$options{todayfgcolor} if ($today==$date)&&(defined $options{todayfgcolor});
+		$header .= CGI::th(\%params, (($dow < 6)|| $options{showweekends}) ? &mystrftime($yy1,$mm1,$dd1) : '&nbsp;');
 	}
 	if ((!$options{showmonthheader}) && $options{showstatcol}) {
 		foreach my $h (split(/\|/,getStatOption('statheader','statcolheader'))) {
-			$text.='<th valign="bottom" align="center" bgcolor="'.$options{tableheadercolor}.'">'.$h.'</th>';
+			$header.=CGI::th({-valign=>'bottom',-align=>'center',-bgcolor=>$options{tableheadercolor}}, $h);
 		}
 	
 	}
-
-	$text .= "</tr>\n";
+	$text .= CGI::Tr({-bgcolor=>$options{tableheadercolor}}, ($options{namepos}=~/^(left|both)$/i?$namecell:'').$monthheader.($options{namepos}=~/^(right|both)$/i?$namecell:'')).CGI::Tr($header) if $options{showmonthheader};
+	$text .= CGI::Tr({-bgcolor=>$options{tableheadercolor}}, ($options{namepos}=~/^(left|both)$/i?$namecell:'').$header.($options{namepos}=~/^(right|both)$/i?$namecell:'')) unless $options{showmonthheader};
 
 	# create table with names and dates:
 
@@ -1031,7 +1012,7 @@ sub renderHolidaylist() {
 		next if $options{enablepubholidays} && (!$options{showpubholidays}) && ($person =~ /\@all/i);
 		next if $person eq '!!__@ALL__!!';
 
-		# ignore table rows without a entry if removeatwork == 1
+		# ignore table rows without an entry if removeatwork == 1
 		next if $options{removeatwork} && !grep(/[^0]+/, join('', map( $_ || 0, @{$ptableref})));
 
 
@@ -1042,7 +1023,11 @@ sub renderHolidaylist() {
 		$rowcolor = $namecolors{$person} if defined $namecolors{$person};
 
 		$person =~ s/\@all//ig if $options{enablepubholidays};
-		$text .= '<tr bgcolor="'.$rowcolor.'">'.CGI::th({-align=>'left'},'<noautolink>'._renderText($person,$web).'</noautolink>');
+
+		my $tr = "";
+		my $pcell = CGI::th({-align=>'left'},'<noautolink>'._renderText($person,$web).'</noautolink>');
+		$tr .= $pcell if $options{namepos}=~/^(left|both)$/i;
+
 		for (my $i=0; $i<$options{days}; $i++) {
 			my ($yy1, $mm1, $dd1) = Add_Delta_Days($yy, $mm, $dd, $i);
 			my $dow = Day_of_Week($yy1, $mm1, $dd1);
@@ -1051,7 +1036,7 @@ sub renderHolidaylist() {
 			$bgcolor = $options{weekendbgcolor} unless $dow < 6;
 			$bgcolor = $options{todaybgcolor} if (defined $options{todaybgcolor}) && ($today == Date_to_Days($yy1, $mm1, $dd1));
 
-			$text.= '<td align="center" bgcolor="'.$bgcolor.'"><noautolink>';
+			my $td = "";
 
 			if ($options{enablepubholidays} && defined $$aptableref[$i] && $$aptableref[$i]>0) {
 				$statistics{pubholidays}++;
@@ -1145,18 +1130,19 @@ sub renderHolidaylist() {
 						$icon=~s/<img /<img title="$location" /is unless $icon=~s/(<img[^>]+title=")[^">]+("[^>]*>)/$1$location$2/is;
 					}
 				};
-				$text.= $icon;
+				$td.= $icon;
 			} else {
-				$text.= '&nbsp;';
+				$td.= '&nbsp;';
 			}
-                        $text.= '</noautolink></td>';
+			$tr .= CGI::td({-align=>'center', -bgcolor=>$bgcolor, -title=>""}, "<noautolink>$td</noautolink>");
 		}
-		$text .= renderStatisticsCol(\%statistics) if ($options{showstatcol});
-		$text .= "</tr>\n";
+		$tr .= renderStatisticsCol(\%statistics) if ($options{showstatcol});
+		$tr .= $pcell if $options{namepos}=~/^(right|both)$/i;
+		$text .= CGI::Tr({-bgcolor=>$rowcolor}, $tr);
 	}
 	$text .= renderStatisticsRow(\%rowstatistics, \%sumstatistics) if ($options{showstatrow});
 	$text .= renderStatisticsSumRow(\%sumstatistics) if ($options{showstatcol}&&(!$options{showstatrow})&&($options{showstatsum}));
-	$text .= '</table>';
+	$text .= CGI::end_table();
 	$text .=  $optionrow if ($options{optionspos}=~/^(bottom|both)$/i);
 	$text .= '</noautolink>';
 
@@ -1376,8 +1362,10 @@ sub renderStatisticsSumRow {
 		my ($txt,$t) = substStatisticsVars($statcol, $stattitle, $sumstatisticsref);
 		$row.=$cgi->th({-valign=>"top", -title=>$t}, $txt);
 	}
-	
-	$text.= $cgi->Tr({-bgcolor=>$options{tableheadercolor}},$cgi->th({-colspan=>$options{days}+1,-align=>'right'},'&nbsp;').$row);
+	$row.=$cgi->th('&nbsp;') if $options{namepos}=~/^(right|both)$/i;
+	my $colspan=$options{days};
+	$colspan++ if $options{namepos}=~/^(left|both)$/i;
+	$text.= $cgi->Tr({-bgcolor=>$options{tableheadercolor}},$cgi->th({-colspan=>$colspan,-align=>'right'},'&nbsp;').$row);
 
 	return $text;
 }
@@ -1434,13 +1422,16 @@ sub renderStatisticsRow {
 					$row.=$cgi->th({-valign=>"top", -rowspan=>$rowspan, -title=>$t}, $txt);
 				}
 			} else {
-				my @colspanf = split(/|/,getStatOption('statformat','statcolformat'));
+				my @colspanf = split(/\|/,getStatOption('statformat','statcolformat'));
 				my $colspan = $#colspanf + 1;
 				$row.=$cgi->th({-rowspan=>$rowspan, -colspan=>$colspan},'&nbsp;');
 			}
 		}
 		
-		$text.=$cgi->Tr({-bgcolor=>$options{tableheadercolor}}, $cgi->th({-align=>"right"},$rowheader).$row);
+		$text.=$cgi->Tr({-bgcolor=>$options{tableheadercolor}}, 
+				 ( $options{namepos}=~/^(left|both)$/i ? $cgi->th({-align=>"right"},$rowheader) : '')
+				.$row
+				.( $options{namepos}=~/^(right|both)$/i ? $cgi->th({-align=>'left'},$rowheader) : ''));
 	}
 
 	return $text;
