@@ -121,7 +121,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | navdays | defines the days to navigate to (default: value of the =days= attribute) | =navdays="30"= |
 | order | changes the sorting order of entries and contains a comma separated list of names or special tags (default: alphanumerical order); hint: order attribute can also be used as a filter: show only listed persons (e.g. =order="Bob,Bill"=); specials: =[:ralpha:]= - sort persons reverse alphanumerical; =[:nextfirst:]= - next person with an entry will be shown first; =[:rest:]= - will be replaced by missing persons if =order= contains an uncomplete person list (e.g. =order="Bob,Bill,[:rest:]"=); =[:num:] ([:rnum])= - (reverse) numerical order | undefined / =order="Bob,Bill,Alice,Jane,[:rest:]"= |
 | removeatwork | set to "1" to remove persons without calendar entries from table | =removeatwork="0"= |
-| showmonthheader | set to "1" to show a additional month header | =showmonthheader="0"= |
+| showmonthheader | enabes/disables month header | =showmonthheader="1"= |
 | showoptions | shows a navigation form | =showoptions="0"= |
 | showpubholidays | shows public holidays as separate lines (rows) in table (related: enablepubholidays, pubholidayicon) | =showpubholidays="0"= |
 | showstatcol | enables/disables statistics column(s) | =showstatcol="off"= | 
@@ -144,9 +144,9 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | cellpadding | table cell padding | =cellpadding="1"= |
 | cellspacing | tabel cell spacing | =cellspacing="0"= |
 | daynames | custom daynames (a list separated by a '&brvbar;' and starting on Monday; overwrites lang attribute) | =daynames="M&brvbar;T&brvbar;W&brvbar;T&brvbar;F&brvbar;S&brvbar;S"= |
-| headerformat | table header format of a day; a subset of strftime conversion specifiers is supported (only date not time specificiers; see manual page or TWiki:Codev.ConvergeDateTimeFormattingModels) | =headerformat="&lt;font&nbsp;size=\"-2\">%b&lt;br/&gt;%a&lt;br/&gt;%e&lt;/font&gt;"= |
+| headerformat | table header format of a day; a subset of strftime conversion specifiers is supported (only date not time specificiers; see manual page or TWiki:Codev.ConvergeDateTimeFormattingModels) | =headerformat="&lt;font&nbsp;size=\"-2\">%a&lt;br/&gt;%e&lt;/font&gt;"= |
 | lang | language (related: daynames, monthnames) | =lang="English"= |
-| monthheaderformat | month header format (related: showmonthheader) | =monthheaderformat="%B"= |
+| monthheaderformat | month header format (related: showmonthheader) | =monthheaderformat="%b"= |
 | monthnames | custom month names (a list separated by '&brvbar;' and starting on January; overwrites lang attribute) | =monthnames="J&brvbar;F&brvbar;M&brvbar;A&brvbar;M&brvbar;J&brvbar;J&brvbar;A&brvbar;S&brvbar;O&brvbar;N&brvbar;D"= |
 | name | header content of the first cell header |=name="Name"= |
 | namecolors | a comma separated list of names with own colors, e.g. namecolors="Mary:red,Bob:lightblue" | undefined / =namecolors="Bill:yellow"= |
@@ -251,7 +251,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 #HolidaylistPluginExample
 ---++ Example
 
-%HOLIDAYLIST{startdate="1 Jun 2005" showstatrow="on" showstatcol="on" days="70" showoptions="on" namecolors="Bill:lightblue,Alice:#ffaaaa"}%
+%HOLIDAYLIST{startdate="1 Jun 2005" showstatrow="on" showstatcol="on" days="70" showoptions="on" namecolors="Bill:lightblue,Alice:#ffaaaa" showmonthheader="on" namepos="both"}%
 
 	* 02 Jan 2005 - 28 Feb 2005 - Bill
 	* 27 Mar 2005 - 20 Apr 2005 - Bob
@@ -316,8 +316,9 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterJones, TWiki:Main.DanielRohde |
-|  Plugin Version: | v1.026 (28 Oct 2008) |
+|  Plugin Version: | v1.027 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  v1.027 (BETA) | TWiki:Main.DanielRohde: changed some defaults (showmonthheader, monthheaderformat, headerformat); fixed alignments (statistics, monthheader) |
 |  v1.026 (28 Oct 2008) | TWiki:Main.DanielRohde: added missing anchor in showoptions form action; added row color feature (new attributes: namecolors, rowcolors); added order feature (new attribute: order); added namepos attribute (place names left and/or right of a row) |
 |  v1.025 (17 Oct 2008) | TWiki:Main.DanielRohde: added div tag with style overflow:auto requested by Matthew Thomson; added query parameters feature (hlp_&lt;attribute&gt; in URIs); added option form feature (new attributes: showoptions, optionspos, optionsformat) requested by Matthew Thomson; improved performance; fixed minor icon related bugs |
 |  v1.024 (29 Jul 2008) | TWiki:Main.DanielRohde: added statistics feature requested by TWiki:Main.GarySprague |

@@ -190,7 +190,7 @@ sub initDefaults() {
 		nwidth		=> undef,	# width of the first column
 		removeatwork	=> 0,		# removes names without calendar entries from table if set to "1"
 		tablecaptionalign=> 'top',	# table caption alignment (top|bottom|left|right)
-		headerformat	=> '<font size="-2">%b<br/>%a<br/>%e</font>',	# format of the header
+		headerformat	=> '<font size="-2">%a<br/>%e</font>',	# format of the header
 		compatmode	=> 0,		# compatibility mode (allows all CalendarPlugin event types)
 		compatmodeicon	=> ':-)', 	# compatibility mode icon
 		daynames	=> undef,	# day names (overwrites lang attribute)
@@ -213,8 +213,8 @@ sub initDefaults() {
 		navenable => 1,
 		navdays => undef,
 		week => undef,
-		showmonthheader => undef,
-		monthheaderformat => '%B',
+		showmonthheader => 1,
+		monthheaderformat => '%b',
 		showstatcol => 0,
 		statcolheader => '#',
 		statcolformat => '%{hh}',
@@ -946,7 +946,7 @@ sub renderHolidaylist() {
 		while ($restdays > 0) {
 			my $daysdiff = Days_in_Month($yy1,$mm1) - $dd1 + 1;
 			$daysdiff = $restdays if ($restdays-$daysdiff<0);
-			$monthheader .= CGI::th({-colspan=>$daysdiff, -title=> Month_to_Text($mm1).' '.$yy1}, &mystrftime($yy1,$mm1,$dd1,$options{monthheaderformat}));
+			$monthheader .= CGI::th({-colspan=>$daysdiff, -align=>'center', -title=> Month_to_Text($mm1).' '.$yy1}, &mystrftime($yy1,$mm1,$dd1,$options{monthheaderformat}));
 			($yy1,$mm1,$dd1) = Add_Delta_Days($yy1,$mm1,$dd1, $daysdiff);
 			$restdays -= $daysdiff;
 		}
@@ -1403,7 +1403,7 @@ sub renderStatisticsRow {
 			$style.="color:$options{todayfgcolor};" if (defined $options{todayfgcolor}) && ($date == $today);
 			$style.="background-color:$options{todaybgcolor};" if (defined $options{todaybgcolor}) && ($date == $today);
 			if (($dow<6)||($options{showweekends})) {
-				$row.=$cgi->th({-style=>$style,-title=>$title},$text);
+				$row.=$cgi->th({-style=>$style,-title=>$title, -align=>'center'},$text);
 			} else {
 				$row.=$cgi->th({-style=>$style,-title=>$title},'&nbsp;');
 			}
@@ -1447,7 +1447,7 @@ sub renderStatisticsCol {
 		my $statcoltitle = shift(@statcoltitles);
 		$statcoltitle=getStatOption('stattitle','statcoltitle') unless defined $statcoltitle;
 		($statcol,$statcoltitle)=substStatisticsVars($statcol,$statcoltitle,$statisticsref);
-		$text.=$cgi->th({-bgcolor=>$options{tableheadercolor}, -class=>"hlpStatisticsColumn", -title=>$statcoltitle}, $statcol);
+		$text.=$cgi->th({-bgcolor=>$options{tableheadercolor}, -class=>"hlpStatisticsColumn", -title=>$statcoltitle, -align=>'right'}, $statcol);
 	}
 	return $text;
 }
