@@ -1,6 +1,12 @@
 #package TWiki::Plugins::WysiwygPlugin::Constants;
 # Use s simpler-named namespace for constants to improve code readability
-package WC;
+#package WC;
+#This is corrected to following on 21/Oct/2008
+#The package name should be fully qualified name
+#suggestion was taken from Chris - rpm build was generating error while installing the package as rpm
+# code corrected - Sopan Shewale
+
+package TWiki::Plugins::WysiwygPlugin::Constants;
 
 use strict;
 

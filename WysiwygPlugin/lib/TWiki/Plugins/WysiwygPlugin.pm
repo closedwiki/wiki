@@ -620,7 +620,7 @@ sub RESTParameter2SiteCharSet {
 
     $text = Encode::decode_utf8($text, Encode::FB_PERLQQ);
 
-    WC::mapUnicode2HighBit($text);
+    TWiki::Plugins::WysiwygPlugin::Constants::mapUnicode2HighBit($text);
 
     if ($TWiki::cfg{Site}{CharSet}) {
         $text = Encode::encode(
@@ -643,7 +643,7 @@ sub returnRESTResult {
             $TWiki::cfg{Site}{CharSet}, $text, Encode::FB_PERLQQ);
     }
 
-    WC::mapHighBit2Unicode($text);
+    TWiki::Plugins::WysiwygPlugin::Constants::mapHighBit2Unicode($text);
 
     $text = Encode::encode_utf8($text);
 
