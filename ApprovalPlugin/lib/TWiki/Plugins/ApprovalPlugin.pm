@@ -300,9 +300,11 @@ sub beforeCommonTagsHandler {
     return if( $globObj_approval->state->reviewedBy && _userInList( $globObj_approval->state->reviewedBy ) );
     
     # user not allowed to change state
-    return if ( $globObj_approval->transitionByAction( $qAction )->allowedUsers &&
-        ! _userInArray( $globObj_approval->transitionByAction( $qAction )->allowedUsers ) );
-    
+    if( $globObj_approval->transitionByAction( $qAction )->allowedUsers ){
+        return unless ( scalar @{ $globObj_approval->transitionByAction( $qAction )->allowedUsers } == 0 ||
+            _userInArray( $globObj_approval->transitionByAction( $qAction )->allowedUsers ) );
+    }
+
     _changeState( $qAction, $qState, $_[2], $_[1] );
 
     return;
