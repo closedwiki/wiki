@@ -135,6 +135,7 @@ __Note__ The examples will only work if the plugin is installed and enabled.
 |  Copyright: | &copy; 2007 - 2008 TWiki:Main.AndrewRJones |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  30 Oct 2008 | Bugs:Item6113 - Small improvements, better code |
 |  12 Sep 2008 | Bugs:Item4422 - Initial version |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/ApprovalPlugin |

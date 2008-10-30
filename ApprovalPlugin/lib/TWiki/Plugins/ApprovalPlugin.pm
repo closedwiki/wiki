@@ -19,6 +19,11 @@
 
 package TWiki::Plugins::ApprovalPlugin;
 
+## These are required conditionally (i.e. when the plugin needs to do something)
+#use TWiki::Plugins::ApprovalPlugin::Approval;
+#use TWiki::Plugins::ApprovalPlugin::State;
+#use TWiki::Plugins::ApprovalPlugin::Transition;
+
 use strict;
 
 use vars qw( $VERSION
@@ -27,14 +32,9 @@ use vars qw( $VERSION
              $debug 
              $pluginName 
              $NO_PREFS_IN_TOPIC
-             $defWeb
-             $defTopic
              $CalledByMyself
              $globControlled
-             $globCurrentState
-             $globPrefs
-             $globHistory
-             $globTransition );
+             $globObj_approval);
 
 $VERSION = '$Rev: 0 (08 Jul 2007) $';
 $RELEASE = 'TWiki-4.2';
@@ -66,32 +66,52 @@ sub initPlugin {
         return 1;
     }
 
-    ($defWeb, $defTopic) = 
+    my ($defWeb, $defTopic) = 
         TWiki::Func::normalizeWebTopicName( $web, $prefApproval );
 
     unless ( TWiki::Func::topicExists( $defWeb, $defTopic ) ){
         _Warn("$defWeb.$defTopic does not exist. Called by $web.$topic");
         return 1;
     }
-
-    # get current state from topic
-    _getMeta($web, $topic);
-
+    
+    # Now we have something to do, we require our modules
+    _doRequire();
+    
+    # Set up objects
+    $globObj_approval = TWiki::Plugins::ApprovalPlugin::Approval->create();
+    $globObj_approval->currentWeb( $web );
+    $globObj_approval->currentTopic( $topic );
+    $globObj_approval->definitionWeb( $defWeb );
+    $globObj_approval->definitionTopic( $defTopic );
+    
     # parse the approval definition topic
-    _parseApprovalDef($defWeb, $defTopic);
+    _parseApprovalDef();
     
     return 1;
 }
 
 sub _parseApprovalDef {
-    my ($web, $topic) = @_;
+    
+    # reset the objects when we are parsed after state change
+    $globObj_approval->resetObj();
 
-    $globTransition = undef;
-
-    my( undef, $text ) = TWiki::Func::readTopic( $web, $topic );
+    # get current state from topic
+    my( $meta, undef ) = TWiki::Func::readTopic( $globObj_approval->currentWeb, $globObj_approval->currentTopic );
+    
+    my $approval = $meta->get('APPROVAL');
+    $globObj_approval->state->currentState( $approval->{name} ) if $approval->{name};
+    $globObj_approval->state->reviewedBy( $approval->{reviewedBy} ) if $approval->{reviewedBy};
+    $globObj_approval->state->signoff( $approval->{signoff} ) if $approval->{signoff};
+    
+    my $history = $meta->get('APPROVALHISTORY') || '';
+    $history = $history->{value} if $history;
+    $globObj_approval->history( $history );
+    
+    # definition topic
+    my( undef, $text ) = TWiki::Func::readTopic( $globObj_approval->definitionWeb, $globObj_approval->definitionTopic );
 
     my $inBlock = 0;
-    my $defaultState;
+    
     foreach( split( /\n/, $text ) ){
         if( /^\s*\|.*State[^|]*\|.*Action[^|]*\|.*Next State[^|]*\|.*Allowed[^|]*\|/ ){
             # in the TRANSITION table
@@ -102,49 +122,61 @@ sub _parseApprovalDef {
             
         } elsif ( /^(\s*\* Set )([A-Za-z]+)( \= *)(.*)$/ ) {
             # preference
-            my $expandedPref = _expandVars( $4 );
-            $globPrefs->{$2} = $expandedPref;
-
+            $globObj_approval->preferenceByKey( $2, _expandVars( $4 ) );
+            
         } elsif( ($inBlock == 1) && s/^\s*\|//o ) {
             # read row in TRANSITION table
             my( $state, $action, $next, $allowed, $notify, $signoff ) = split( /\s*\|\s*/ );
             $state = _cleanField($state);
-
-            if( $state eq $globCurrentState->{name} ){
+            
+            if( $state eq $globObj_approval->state->currentState ){
+                # Only care about current state
                 $allowed = _expandVars($allowed);
-                if( $notify =~ /yes|on/i ){
+                if( $notify =~ /yes|on|1/i ){
                     $notify = 1;
                 } else {
                     $notify = 0;
                 }
                 $signoff =~ s/%//;
-                # Counts the amount of state reviewers for use in signoffs
-		my @allowedUsers = split( /\s*,\s*/, $allowed );
-                my $totalAllowed = scalar( @allowedUsers );
-
-                $globTransition->{$action} = {
-                    'next' => $next,
-                    'allowed' => $allowed,
-                    'notify' => $notify,
-                    'signoff' => $signoff,
-                    'totalallowed' => $totalAllowed
-                };
+                
+                my @allowedUsers;
+                foreach( split( /\s*,\s*/, $allowed ) ){
+                    my $allowedUser = TWiki::Func::getWikiUserName( $_ );
+                    
+                    next unless _userExists( $allowedUser );
+                    
+                    # is user already listed?
+                    next if( grep(/$allowedUser/, @allowedUsers) );
+                    
+                    push( @allowedUsers, $allowedUser );
+                }
+                
+                my $obj_transition = TWiki::Plugins::ApprovalPlugin::Transition->new(
+                    $action,
+                    \@allowedUsers,
+                    $next,
+                    $notify,
+                    $signoff
+                    );
+                $globObj_approval->transitionByAction( $action, $obj_transition );
+                
             }
         } elsif( ($inBlock == 2) && s/^\s*\|//o ){
             # read row in STATE table
             my( $state, $allowedit, $message ) = split( /\s*\|\s*/ );
             $state = _cleanField($state);
-
-            if (!defined($defaultState)) {
-                $defaultState = $state;
-                $globCurrentState->{name} = $state unless defined($globCurrentState->{name});
+            
+            if (!$globObj_approval->state->defaultState) {
+                $globObj_approval->state->defaultState( $state );
+                $globObj_approval->state->currentState( $state ) unless $globObj_approval->state->currentState;
             }
-
-            if( $state eq $globCurrentState->{name} ){
+            
+            if( $state eq $globObj_approval->state->currentState ){
                 $allowedit = _expandVars($allowedit);
-                $globCurrentState->{allowedit} = $allowedit;
-                $globCurrentState->{message} = $message;
+                $globObj_approval->state->allowedEdit( $allowedit );
+                $globObj_approval->state->message( $message );
             }
+            
         } else {
             $inBlock = 0;
         }
@@ -159,13 +191,13 @@ sub _handleTag {
     my $action = $_[1]->{action} || $_[1]->{_DEFAULT};
 
     for( $action ){
-        /pref/i and return $globPrefs->{ $_[1]->{name} } || 
-            _Return("Preference '$_[1]->{name}' not found in definition topic.", 1), last;
-        /message/i and return $globCurrentState->{message} ||
+        /pref/i and return $globObj_approval->preferenceByKey( $_[1]->{name} ) || 
+            _Return("Preference '" . $_[1]->{name} . "' not found in definition topic.", 1), last;
+        /message/i and return $globObj_approval->state->message ||
             'No message found for current state.', last;
-        /reviewed/i and return $globCurrentState->{reviewedby} ||
+        /reviewed/i and return $globObj_approval->state->reviewedBy ||
             'No one has reviewed the current state.', last;
-        /history/i and return $globHistory || '', last;
+        /history/i and return $globObj_approval->history || '', last;
         /transition/i and return &_createTransitionForm( $_[3], $_[2] ), last;
         return _Return('No valid action was found in this tag.', 1);
     }
@@ -173,9 +205,9 @@ sub _handleTag {
 
 # creates the form to change state
 sub _createTransitionForm {
-
+    
     return _Return('You have already reviewed this state.')
-        if( $globCurrentState->{reviewedby} && _userInList( $globCurrentState->{reviewedby} ) );
+        if( $globObj_approval->state->reviewedBy && _userInList( $globObj_approval->state->reviewedBy ) );
 
     my( $web, $topic ) = @_;
     my $user = TWiki::Func::getWikiName();
@@ -188,42 +220,37 @@ sub _createTransitionForm {
                                                  $web,
                                                  undef ) );
 
-    my @actions;
-    while( my ($action, $params) = each(%$globTransition) ) {
-        if( _userInList( $params->{allowed} ) ){
-            push( @actions, $action );
-        } else {
-            # not permitted to change state
-            my $logIn = '';
-            my $guest = $TWiki::cfg{DefaultUserWikiName} || 'TWikiGuest';
-            #if( TWiki::Func::isGuest() ){
-            if( $user eq $guest ){
-                my $url = TWiki::Func::getScriptUrl( $web, $topic, 'login' );
-                $logIn = "You may need to <a href='$url'>log in</a>.";
+    my @transitions; # array of transition objects
+    my $noactions = 0; # true if there are any actions in the transition object
+    
+    if( $globObj_approval->transitions ){
+        while( my ($action, $transition) = each(%{ $globObj_approval->transitions }) ) {
+            $noactions = 1;
+            if( scalar @{ $transition->allowedUsers } == 0 || # no users in allowed column, all can approve
+                _userInArray( $transition->allowedUsers ) ){ # user is in allowed column
+                push( @transitions, $transition );
             }
-            return _Return('You are not permitted to change the state on this topic.' . $logIn);
         }
     }
     
-    my $numberOfActions = scalar(@actions);
+    my $numberOfActions = scalar(@transitions);
 
     if ($numberOfActions > 0) {
         # create most the form
         my $url = TWiki::Func::getViewUrl( $web, $topic );
 
         my $form = "<form id='ApprovalTransition' action='$url' method='post'>"
-                 . "<input type='hidden' name='APPROVALSTATE' value='$globCurrentState->{name}' />";
-
+                 . "<input type='hidden' name='APPROVALSTATE' value='".$globObj_approval->state->currentState."' />";
         if ($numberOfActions == 1) {
             # create just a button
-            $form .= "<input type='hidden' name='APPROVALACTION' value='$actions[0]' />"
-                   . "<input type='submit' value='$actions[0]' class='twikiSubmit' />";
+            $form .= "<input type='hidden' name='APPROVALACTION' value='".$transitions[0]->action."' />"
+                   . "<input type='submit' value='".$transitions[0]->action."' class='twikiSubmit' />";
         } else {
             # create drop down box and button
             my $select;
-            @actions = sort( @actions );    
-            foreach my $action ( @actions ) {
-                $select .= "<option value='$action'> $action </option>";
+            @transitions = sort( @transitions );    
+            foreach my $obj_transition ( @transitions ) {
+                $select .= "<option value='".$obj_transition->action."'> ".$obj_transition->action." </option>";
             }
 
             $form .= "<select name='APPROVALACTION'>$select</select> "
@@ -231,14 +258,26 @@ sub _createTransitionForm {
         }
         $form .= '</form>';
         return $form;
+    } 
+    if( $noactions ){
+        # not permitted to change state
+        my $logIn = '';
+        my $guest = $TWiki::cfg{DefaultUserWikiName} || 'TWikiGuest';
+        #if( TWiki::Func::isGuest() ){
+        if( $user eq $guest ){
+            my $url = TWiki::Func::getScriptUrl( $web, $topic, 'login' );
+            $logIn = "You may need to <a href='$url'>log in</a>.";
+        }
+        return _Return('You are not permitted to change the state on this topic.' . $logIn);
     }
     
-    # no actions
     return _Return('No actions can be carried out on this topic.');
 }
 
 # =========================
 sub beforeCommonTagsHandler {
+    
+    _Debug("beforeCommonTagsHandler");
 
     return unless $globControlled;
 
@@ -254,14 +293,16 @@ sub beforeCommonTagsHandler {
     # so we only do this once
     $query->{ 'APPROVALSTATE' } = undef;
     $query->{ 'APPROVALACTION' } = undef;
-
-    return unless( $globCurrentState->{name} eq $qState );
+    
+    return unless( $globObj_approval->state->currentState eq $qState );
 
     # user has already reviewed this state
-    return if( $globCurrentState->{reviewedby} && _userInList( $globCurrentState->{reviewedby} ) );
+    return if( $globObj_approval->state->reviewedBy && _userInList( $globObj_approval->state->reviewedBy ) );
+    
     # user not allowed to change state
-    return if ( ! _userInList( $globTransition->{$qAction}->{allowed} ) );
-
+    return if ( $globObj_approval->transitionByAction( $qAction )->allowedUsers &&
+        ! _userInArray( $globObj_approval->transitionByAction( $qAction )->allowedUsers ) );
+    
     _changeState( $qAction, $qState, $_[2], $_[1] );
 
     return;
@@ -269,6 +310,8 @@ sub beforeCommonTagsHandler {
 
 # change the state
 sub _changeState {
+    
+    _Debug('Changing state');
 
     my( $qAction, $qState, $web, $topic ) = @_;
 
@@ -276,31 +319,33 @@ sub _changeState {
     my $user = TWiki::Func::getWikiUserName();
     my $changedState = 0;
     
-    my $notify = $globTransition->{$qAction}->{notify};
+    my $notify = $globObj_approval->transitionByAction($qAction)->notify;
     $notify = 0 if
         $TWiki::cfg{Plugins}{$pluginName}{DisableNotify};
     my $notifyCc;
 
     # state
-    my $minSignoff = $globTransition->{$qAction}->{signoff} / 100 * $globTransition->{$qAction}->{totalallowed}
-        if $globTransition->{$qAction}->{signoff};
-    $globCurrentState->{signoff} ++;
-
-    if( $minSignoff && $globCurrentState->{signoff} < $minSignoff ){
+    my $minSignoff = $globObj_approval->transitionByAction($qAction)->signoff / 100 * $globObj_approval->transitionByAction($qAction)->getTotalAllowed
+        if $globObj_approval->transitionByAction($qAction)->signoff;
+    
+    $globObj_approval->state->anotherSignoffInState();
+    
+    if( $minSignoff && $globObj_approval->state->signoff < $minSignoff ){
         # dont change state, just signoff
-        _Debug("Concurrent Review - Minimum required to signoff: $minSignoff | Signoff's so far: ".$globCurrentState->{signoff});
-
-        $globCurrentState->{reviewedby}
-            ? $globCurrentState->{reviewedby} .= ', ' . $user
-            : $globCurrentState->{reviewedby} = $user;
+        _Debug("Concurrent Review - Minimum required to signoff: $minSignoff | Signoff's so far: ".$globObj_approval->state->signoff);
+        
+        $globObj_approval->state->reviewedBy
+            ? $globObj_approval->state->reviewedByConcat( ', ' . $user )
+            : $globObj_approval->state->reviewedBy( $user );
     } else {
         # change state, delete signoff
         $changedState = 1;
-        $globCurrentState->{name} = $globTransition->{$qAction}->{next};
-
+        $globObj_approval->state->currentState( $globObj_approval->transitionByAction($qAction)->nextState );
+        
+        # FIXME
         if( $notify ){
-            if( $globCurrentState->{reviewedby} ){
-                foreach ( split( /,/, $globCurrentState->{reviewedby} ) ) {
+            if( $globObj_approval->state->reviewedBy ){
+                foreach ( split( /,/, $globObj_approval->state->reviewedBy ) ) {
                     $notifyCc .= TWiki::Func::wikiToEmail( $_ ) . ', ';
                 }
                 $notifyCc .= TWiki::Func::wikiToEmail( $user );
@@ -308,18 +353,18 @@ sub _changeState {
                 $notifyCc = TWiki::Func::wikiToEmail( $user );
             }
         }
-
-        delete( $globCurrentState->{reviewedby} );
-        delete( $globCurrentState->{signoff} );
+        
+        $globObj_approval->state->reviewedBy( '' );
+        $globObj_approval->state->signoff( '' );
     }
-
-    # save meta data, but not allowedit or message 
-    my $savedState = $globCurrentState;
-    delete( $savedState->{allowedit} );
-    delete( $savedState->{message} );
+    
+    my $saveApproval = {};
+    $saveApproval->{ 'name' } = $globObj_approval->state->currentState;
+    $saveApproval->{ 'reviewedBy' } = $globObj_approval->state->reviewedBy if $globObj_approval->state->reviewedBy;
+    $saveApproval->{ 'signoff' } = $globObj_approval->state->signoff if $globObj_approval->state->signoff;
     $meta->remove( 'APPROVAL' );
-    $meta->put( 'APPROVAL', $savedState );
-
+    $meta->put( 'APPROVAL', $saveApproval );
+    
     # history
     my $date = TWiki::Func::formatTime( time(), undef, 'servertime' );
     my $mixedAlpha = $TWiki::regex{mixedAlpha};
@@ -329,13 +374,14 @@ sub _changeState {
     $fmt =~ s!\$n!<br />!go;
     $fmt =~ s!\$n\(\)!<br />!go;
     $fmt =~ s/\$n([^$mixedAlpha]|$)/\n$1/gos;
-    $fmt =~ s/\$state/$globTransition->{$qAction}->{next}/go;
+    my $ns = $globObj_approval->transitionByAction($qAction)->nextState;
+    $fmt =~ s/\$state/$ns/go;
     $fmt =~ s/\$wikiusername/$user/geo;
     $fmt =~ s/\$date/$date/geo;
-    $globHistory .= "\r\n" if $globHistory;
-    $globHistory .= $fmt;
+    $globObj_approval->historyConcat( "\r\n" ) if $globObj_approval->history;
+    $globObj_approval->historyConcat( $fmt );
     $meta->remove( "APPROVALHISTORY" );
-    $meta->put( 'APPROVALHISTORY', { name => 'APPROVALHISTORY', value => $globHistory } );
+    $meta->put( 'APPROVALHISTORY', { name => 'APPROVALHISTORY', value => $globObj_approval->history } );
 
     # save
     $CalledByMyself = 1;
@@ -351,9 +397,9 @@ sub _changeState {
     # who needs to be notified in the next state.
     # would need to parse the approval again anyway, as the state has
     # changed and so might the permissions and actions of the current user
-    _parseApprovalDef($defWeb, $defTopic);
-
-    if( $notify && $changedState && $globTransition ){
+    _parseApprovalDef();
+    
+    if( $notify && $changedState && $globObj_approval->transitions ){
         # load template
         my $emailOut = TWiki::Func::readTemplate( 'approvalnotify' ) || <<'HERE';
 From: %EMAILFROM%
@@ -373,30 +419,33 @@ HERE
 
         my $notifyTo;
         my $nextApprovers;
-        while( my ($action, $params) = each(%$globTransition) ) {
-            my $allowedUser = $params->{allowed};
-            my $mainweb = TWiki::Func::getMainWebname();
-            $allowedUser =~ s/$mainweb\.//g;
-            # names of users who can approve the next state
-            $nextApprovers 
-                ? $nextApprovers .= ', ' . $allowedUser
-                : $nextApprovers = $allowedUser;
+        while( my ($action, $transition) = each(%{ $globObj_approval->transitions }) ) {
+            for( @{ $globObj_approval->transitionByAction($action)->allowedUsers } ){
+                my $allowedUser = $_;
+                my $mainweb = TWiki::Func::getMainWebname();
+                $allowedUser =~ s/$mainweb\.//g;
+                # names of users who can approve the next state
+                $nextApprovers 
+                    ? $nextApprovers .= ', ' . $allowedUser
+                    : $nextApprovers = $allowedUser;
+            }
 
             # email addresses of users who can approve the next state
-            foreach ( split( /,/, $params->{allowed} ) ) {
+            for ( @{ $globObj_approval->transitionByAction($action)->allowedUsers } ) {
                 my $email = TWiki::Func::wikiToEmail( $_ );
                 $notifyTo .= $email . ', '
                     unless $notifyTo =~ m/$email/;
             }
         }
-        if( $globPrefs->{ADDITIONALNOTIFY} ){
+        if( $globObj_approval->preferenceByKey( 'ADDITIONALNOTIFY' ) ){
             # additional users to be notified on state change
             # for example: line managers, project managers, stakeholders, etc
-            foreach ( split( /,/, $globPrefs->{ADDITIONALNOTIFY} ) ){
+            foreach ( split( /,/, $globObj_approval->preferenceByKey( 'ADDITIONALNOTIFY' ) ) ){
                 my $email = TWiki::Func::wikiToEmail( $_ );
+                # dont email out twice
                 $notifyCc .=  ', ' . $email
                     unless $notifyCc =~ m/$email/
-                        || $notifyTo =~ m/$email/;
+                        || $notifyTo =~ m/$email/; # FIXME - seems to add to Cc even though in To, but why...
             }
         }
         $emailOut =~ s/%EMAILTO%/$notifyTo/go;
@@ -409,15 +458,17 @@ HERE
         $emailOut =~ s/%TOPIC%/$topic/go;
 
         $emailOut =~ s/%PREVSTATE%/$qState/go;
-        $emailOut =~ s/%NEXTSTATE%/$globCurrentState->{name}/go;
+        my $cs = $globObj_approval->state->currentState;
+        $emailOut =~ s/%NEXTSTATE%/$cs/go;
 
         $emailOut =~ s/%NEXTSTATEAPPROVERS%/$nextApprovers/go;
-        $emailOut =~ s/%NEXTSTATEMESSAGE%/'$globCurrentState->{message}'/go;
+        my $m = $globObj_approval->state->message;
+        $emailOut =~ s/%NEXTSTATEMESSAGE%/$m/go;
 
         my $url = TWiki::Func::getScriptUrl( $web, $topic, 'view' );
         $emailOut =~ s/%TOPICLINK%/$url/go;
 
-        $emailOut = TWiki::Func::expandCommonVariables( $emailOut );
+        $emailOut = _expandVars( $emailOut );
 
         if( $TWiki::cfg{Plugins}{$pluginName}{DebugNotify} ){
             # dont send email, just output in debug
@@ -425,7 +476,7 @@ HERE
             _Debug('--- Email Notification ---' . "\n" . $emailOut );
         } else {
             my $mailError = TWiki::Func::sendEmail( $emailOut );
-            if( $mailError ){ 
+            if( $mailError ){
                 _Warn( $mailError );
             }
         }
@@ -433,48 +484,41 @@ HERE
 
     # log
     $changedState
-        ? _Log("State changed from $qState to $globCurrentState->{name} by $user", $web, $topic)
+        ? _Log("State changed from $qState to " . $globObj_approval->state->currentState . " by $user", $web, $topic)
         : _Log("$user has reviewed the state '$qState'", $web, $topic);
 }
 
 # =========================
 # Check edit permissions for topics under control
 sub beforeEditHandler {
+    _Debug('beforeEditHandler');
     _checkEdit();
 }
 
 sub beforeSaveHandler {
     return 1 if $CalledByMyself;
+    _Debug('beforeSaveHandler');
     _checkEdit();
 }
 
 sub beforeAttachmentSaveHandler {
+    _Debug('beforeAttachmentSaveHandler');
     _checkEdit();
 }
 
+# checks user is in 'allow edit' column
 sub _checkEdit {
 
     return unless $globControlled;
-
-    if( ! _userInList( $globCurrentState->{allowedit}, 1 ) ){
+    _Debug('topic is under control');
+    
+    if( ! _userInList( $globObj_approval->state->{allowedEdit}, 1 ) ){
         throw TWiki::OopsException( 'accessdenied',
                                     def => 'topic_access',
                                     web => $_[2],
                                     topic => $_[1],
                                     params => [ 'Edit topic', 'The %TWIKIWEB%.ApprovalPlugin controls this topic. You are not permitted to edit this topic' ] );
     }
-}
-
-# =========================
-sub _getMeta {
-    my ($web, $topic) = @_;
-
-    my( $meta, undef ) = TWiki::Func::readTopic( $web, $topic );
-    $globCurrentState = $meta->get('APPROVAL');
-    $globHistory = $meta->get('APPROVALHISTORY') || '';
-    $globHistory = $globHistory->{value} if $globHistory;
-
-    return;
 }
 
 # =========================
@@ -487,12 +531,19 @@ sub _cleanField {
     return $text;
 }
 
+# Expands common variables on the text, if there is any text
 sub _expandVars {
     my( $text ) = @_;
     $text =~ m/%.*%/
         ? return TWiki::Func::expandCommonVariables( $text )
         : return $text;
+}
 
+# Pulls in the modules we require. Done conditionally to avoid unnecessary compilation
+sub _doRequire {
+    require TWiki::Plugins::ApprovalPlugin::Approval;
+    require TWiki::Plugins::ApprovalPlugin::State;
+    require TWiki::Plugins::ApprovalPlugin::Transition;
 }
 # =========================
 # is user admin?
@@ -506,25 +557,26 @@ sub _isAdmin {
     }
 }
 
-# checks if user is in list
+# checks if current user is in list
 sub _userInList {
     my( $list, $allowAdmin ) = @_;
-
+    
     return 1 unless $list;
 
     if( $allowAdmin ){
         return 1 if _isAdmin();
     }
+    
 
     if ( $TWiki::Plugins::VERSION > 1.11 ) {
         # loop though list, check if group or user, if group find out if allowed. if user, check if its signed in user. else return 0
-        foreach ( split( /,/, $list ) ) {
+        for ( split( /,/, $list ) ) {
             if ( TWiki::Func::isGroup( $_ ) ) {
                 $_ =~ s/ //;
                 return 1 if TWiki::Func::isGroupMember( $_ );
             } else {
                 my $user = TWiki::Func::getWikiName();
-                return 1 if (  $_ =~ m/$user/ );
+                return 1 if (  $_ =~ m/$user$/ );
             }
         }
         return 0;
@@ -534,7 +586,40 @@ sub _userInList {
     }
 }
 
+# checks if current user is in array
+sub _userInArray {
+    my( $array, $allowAdmin ) = @_;
+    
+    return 1 unless $array;
+
+    if( $allowAdmin ){
+        return 1 if _isAdmin();
+    }
+    
+    for ( @{ $array } ) {
+        if ( TWiki::Func::isGroup( $_ ) ) {
+            $_ =~ s/ //;
+            return 1 if TWiki::Func::isGroupMember( $_ );
+        } else {
+            my $user = TWiki::Func::getWikiUserName();
+            return 1 if (  $_ =~ m/$user$/ );
+            #return 1 if (  $_ eq $user );
+        }
+    }
+    return 0;
+}
+
+# Checks the user exists
+sub _userExists {
+    my $user = shift;
+    
+    # SMELL: Not very good way to check...
+    # could iterate over list of users? - might take a long time...
+    return TWiki::Func::topicExists( undef, $user );
+}
+
 # =========================
+# HTML returned message
 sub _Return {
     my( $text, $error ) = @_;
 
@@ -547,12 +632,14 @@ sub _Return {
     return $out;
 }
 
+# write to debug.txt
 sub _Debug {
     my $text = shift;
     my $debug = $TWiki::cfg{Plugins}{$pluginName}{Debug} || 0;
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}: $text" ) if $debug;
 }
 
+# write warning
 sub _Warn {
     my $text = shift;
     TWiki::Func::writeWarning( "- TWiki::Plugins::${pluginName}: $text" );
@@ -564,9 +651,9 @@ sub _Log {
 
     _Debug($text);
 
-    return; # As this uses an internal twiki function, it is unreliable and therefore disabled
+    return; # SMELL: As this uses an internal twiki function, it is unreliable and therefore disabled
 
-    my $logAction = $TWiki::cfg{Plugins}{$pluginName}{Log} || 1;
+    my $logAction = $TWiki::cfg{Plugins}{$pluginName}{Log} || 0;
 
     if ($logAction) {
         $TWiki::Plugins::SESSION
