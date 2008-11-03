@@ -1,0 +1,52 @@
+%TMPL:DEF{"skills:userview:head"}%
+<a href='%SCRIPTURL{view}%/%MAINWEB%/%WIKINAME%'>%WIKINAME%'s Skills</a>
+%TMPL:END%
+
+%TMPL:DEF{"skills:userview:repeated:category"}%
+<tr class='skillsContent'><th colspan='6'>%SKILLTWISTY% %CATEGORY%</th></tr>
+%TMPL:END%
+
+%TMPL:DEF{"skills:userview:repeated:skillcontainerstart"}%
+<tbody %SKILLCONTDEF%>
+%TMPL:END%
+
+%TMPL:DEF{"skills:userview:repeated:skillstart"}%
+<tr>
+%TMPL:END%
+
+%TMPL:DEF{"skills:userview:repeated:skill"}%
+<td>%SKILLICON% %SKILL%</td>
+%TMPL:END%
+
+%TMPL:DEF{"skills:userview:repeated:rating"}%
+<td %RATINGDEF%>%RATING%</td>
+%TMPL:END%
+
+%TMPL:DEF{"skills:userview:repeated:commentlink"}%
+%COMMENTLINK%
+%TMPL:END%
+%TMPL:DEF{"skills:userview:repeated:commentout"}%
+%COMMENTOUT%
+%TMPL:END%
+
+%TMPL:DEF{"skills:userview:repeated:comment"}%
+<td>%TMPL:P{"skills:userview:repeated:commentlink"}%</td>
+%TMPL:END%
+
+%TMPL:DEF{"skills:userview:repeated:skillend"}%
+</tr>
+%TMPL:END%
+
+%TMPL:DEF{"skills:userview:repeated:skillcontainerend"}%
+</tbody>
+%TMPL:END%
+
+%TMPL:DEF{"skills:userview:repeated"}%
+%SPLIT%%TMPL:P{"skills:userview:repeated:category"}%%SPLIT%%TMPL:P{"skills:userview:repeated:skillcontainerstart"}%%SPLIT%%TMPL:P{"skills:userview:repeated:skillstart"}%%SPLIT%%TMPL:P{"skills:userview:repeated:skill"}%%SPLIT%%TMPL:P{"skills:userview:repeated:rating"}%%SPLIT%%TMPL:P{"skills:userview:repeated:comment"}%%SPLIT%%TMPL:P{"skills:userview:repeated:skillend"}%%SPLIT%%TMPL:P{"skills:userview:repeated:skillcontainerend"}%%SPLIT%
+%TMPL:END%
+
+%TMPL:DEF{"skills:userview:footer"}%
+[[%TWIKIWEB%.SkillsBrowseAll][Browse Skills]] | [[%TWIKIWEB%.SkillsEditMySkills][Edit Your Skills]] | [[%TWIKIWEB%.SkillsSearch][SearchSkills]]
+%TMPL:END%
+
+%TMPL:P{"skills:userview:repeated"}%

@@ -1,0 +1,37 @@
+%TMPL:INCLUDE{"skills"}%
+
+%TMPL:DEF{"skills:addedit:formstart"}%
+<form %FORMDEFINITION% ><table class="skillsForm">
+%TMPL:END%
+
+%TMPL:DEF{"skills:addedit:head"}%
+<tr><th colspan="6"><a href="%SCRIPTURL{view}%/%TWIKIWEB%/SkillsPlugin">Edit Your Skills (%WIKINAME%)</a></th></tr>
+%TMPL:END%
+
+%TMPL:DEF{"skills:addedit:formend"}%
+</table></form>
+%TMPL:END%
+
+<!-- SKILLSPLUGIN - EDIT SKILLS -->
+%TMPL:P{"skills:addedit:formstart"}%
+%TMPL:P{"skills:addedit:head"}%
+<tr><td><strong>Category</strong></td>
+<td colspan="5">%CATEGORYSELECT%</td>
+</tr>
+<tr><td><strong>Skill</strong></td>
+<td colspan="5">%SKILLSELECT%</td></tr>
+<tr><td><strong>Rating</strong></td>
+<td class="skillsFormRating">%TMPL:P{"skills:ratinghead1"}%</td><td class="skillsFormRating">%TMPL:P{"skills:ratinghead2"}%</td><td class="skillsFormRating">%TMPL:P{"skills:ratinghead3"}%</td><td class="skillsFormRating">%TMPL:P{"skills:ratinghead4"}%</td><td class="skillsFormRating">%TMPL:P{"skills:ratinghead0"}%</td></tr>
+<tr><td></td>
+<td class="skillsFormRating">%TMPL:P{"skills:ratingselect1"}%</td>
+<td class="skillsFormRating">%TMPL:P{"skills:ratingselect2"}%</td>
+<td class="skillsFormRating">%TMPL:P{"skills:ratingselect3"}%</td>
+<td class="skillsFormRating">%TMPL:P{"skills:ratingselect4"}%</td>
+<td class="skillsFormRating">%TMPL:P{"skills:ratingselect0"}%</td>
+</tr>
+<tr><td><strong>Comment</strong></td>
+<td colspan="5"><input size="35" %SKILLCOMMENTDEF% />&nbsp;&nbsp;%SKILLCOMMENTCLEAR%&nbsp;&nbsp;<em>Optional</em></td>
+</tr>
+<tr><td colspan="6" class="skillsFormRating">%SKILLSUBMIT%</td></tr>
+<tr><td colspan='6'><span %SKILLMESSAGECONTAINERDEF% >%SKILLMESSAGE%</span></td></tr>
+%TMPL:P{"skills:addedit:formend"}%

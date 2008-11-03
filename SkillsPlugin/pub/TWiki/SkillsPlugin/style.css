@@ -36,6 +36,13 @@ table.skillsTable th.skillsHeading a:hover {
 	border-color:#06c;
 	background-color:transparent;
 }
+table.skillsTable th span.active {
+    color:#06c;
+}
+table.skillsTable th span.active:hover {
+    color:#06c;
+    cursor: pointer;
+}
 table.skillsTable th.skillsHeading {
 	padding:3px 6px;
 	height:2.5em;
@@ -69,6 +76,10 @@ table.skillsTable td.skillsRatingHeader {
 
 table.skillsTable td.skillsRating {
 	text-align:center;
+}
+
+.SkillsPlugins-comment-img:hover {
+    cursor: pointer;
 }
 
 table.skillsTable td.skillsFooter {
@@ -151,3 +162,22 @@ div.skillNotification {
 	padding:.5em 20px; /* side padding same as twikiFormStep (assuming PatternSkin) */
 	margin:1em 0;
 }
+
+#skill-comment-clear {
+    cursor: pointer;
+}
+
+
+.yui-overlay { border:1px dotted black;padding:5px;margin:10px; }
+.yui-overlay .hd { border:1px solid black;padding:5px; }
+.yui-overlay .bd { border:1px solid black;padding:5px; font-size:larger; font-weight:bold; }
+.yui-overlay .ft { border:1px solid black;padding:5px; }
+.SkillsPlugin-close-comment-link{
+color:#06c;
+}
+.SkillsPlugin-close-comment-link:hover {
+    cursor: pointer;
+}
+
+#foo_Overlay { background:orange;width:100px;height:25px; }
+

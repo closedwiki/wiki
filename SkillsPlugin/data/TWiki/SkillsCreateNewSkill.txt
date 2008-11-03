@@ -26,15 +26,16 @@
 </table>
 %STARTSECTION{"createskill"}%
 
-%IF{ "{Plugins}{SkillsPlugin}{Enabled}" then="%ADDSKILLSMESSAGE%" else="<table border='0' cellpadding='3' cellspacing='0' width='100%'><tr><td bgcolor='yellow'><font color='red'><strong>The Skills Plugin is not enabled on this site. The forms below are disabled.</strong></font></td></tr></table>" }%
+%IF{ "{Plugins}{SkillsPlugin}{Enabled}" then="%URLPARAM{"skillsmessage"}%" else="<table border='0' cellpadding='3' cellspacing='0' width='100%'><tr><td bgcolor='yellow'><font color='red'><strong>The Skills Plugin is not enabled on this site. The forms below are disabled.</strong></font></td></tr></table>" }%
 
 Create a new skill.
 
-<form name="createskill" action="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%" method="post">
+<form name="createskill" action="%SCRIPTURL{rest}%/SkillsPlugin/addNewSkill" method="post">
 <div class="twikiFormSteps">
 <div class="twikiFormStep">
 Name of new skill: %BR%
-<input name="newskill" type="text" class="twikiInputField" size="20" value="%URLPARAM{"createskill"}%" /> (use only alphanumeric characters and underscore)
+<input name="newskill" type="text" class="twikiInputField" size="20" value="%URLPARAM{"createskill"}%" />
+<input type="hidden" name="topic" value="%WEB%.%TOPIC%" />
 </div>
 <div class="twikiFormStep">
 In category: %BR%

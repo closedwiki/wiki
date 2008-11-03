@@ -1,0 +1,25 @@
+%TMPL:INCLUDE{"skills"}%
+
+%TMPL:DEF{"skills:userview:head"}%
+<a href='%SCRIPTURL{view}%/%MAINWEB%/%SKILLUSER%'>%SKILLUSER%'s Skills</a>
+%TMPL:END%
+
+%TMPL:DEF{"skills:userview:footer"}%
+[[%TWIKIWEB%.SkillsBrowseAll][Browse Skills]] | [[%TWIKIWEB%.SkillsEditMySkills][Edit Your Skills]] | [[%TWIKIWEB%.SkillsSearch][SearchSkills]]
+%TMPL:END%
+
+<!-- SKILLSPLUGIN - USER SKILLS TABLE -->
+<table id='skillsTable' class='skillsTable' cellpadding="2px" syle="margin:7px 0;">
+<tr>
+<th class='skillsHeading' colspan='6'>%TMPL:P{"skills:userview:head"}%</th>
+</tr><tr>
+<td style="padding-left:120px;"></td><td class='skillsRatingHeader'>%TMPL:P{"skills:ratinghead1"}%</td><td class='skillsRatingHeader'>%TMPL:P{"skills:ratinghead2"}%</td><td class='skillsRatingHeader'>%TMPL:P{"skills:ratinghead3"}%</td><td class='skillsRatingHeader'>%TMPL:P{"skills:ratinghead4"}%</td><td>&nbsp;</td>
+</tr>
+<noautolink>
+%REPEAT%
+</noautolink>
+<tr><td colspan='6' class='skillsFooter'><span style='float:left;'>%TMPL:P{"skills:userview:footer"}%</span>
+<!-- TODO: expand/collapse all links -->
+<!--<span style='float:right;'><a href="javascript:hideShowAll('collapse')">Collapse</a> | <a href="javascript:hideShowAll('expand');">Expand</a></span>-->
+</td></tr>
+</table>
