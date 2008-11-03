@@ -92,9 +92,6 @@ sub convert {
 
     return '' unless $content;
 
-    $content =~ s/\\\n/ /g;
-    $content =~ s/\t/   /g;
-
     $content =~ s/[$TT0$TT1$TT2]/?/go;	
 
     # Render TML constructs to tagged HTML
@@ -234,6 +231,9 @@ sub _getRenderedVersion {
 
     $text = $this->_takeOutSets( $text );
 
+    $text =~ s/\\\n/ /g;
+    $text =~ s/\t/   /g;
+
     # Remove PRE to prevent TML interpretation of text inside it
     $text = $this->_takeOutBlocks( $text, 'pre' );
 
@@ -245,7 +245,7 @@ sub _getRenderedVersion {
     $text =~ s/<\/img>//gi;
 
     # Handle colour tags specially (hack, hack, hackity-HACK!)
-    my $colourMatch = join('|',grep(/^[A-Z]/, keys %TWiki::Plugins::WysiwygPlugin::Constants::KNOWN_COLOUR));
+    my $colourMatch = join('|',grep(/^[A-Z]/, keys %WC::KNOWN_COLOUR));
     while ($text =~ s#%($colourMatch)%(.*?)%ENDCOLOR%#<font color="\L$1\E">$2</font>#og) {};
 
     # Convert TWiki tags to spans outside protected text
@@ -413,16 +413,16 @@ sub _getRenderedVersion {
     $text =~ s#^(\s*<p>\s*</p>)+##s;
     $text =~ s#(<p>\s*</p>\s*)+$##s;
 
-    $text =~ s(${TWiki::Plugins::WysiwygPlugin::Constants::STARTWW}==([^\s]+?|[^\s].*?[^\s])==$TWiki::Plugins::WysiwygPlugin::Constants::ENDWW)
+    $text =~ s(${WC::STARTWW}==([^\s]+?|[^\s].*?[^\s])==$WC::ENDWW)
       (CGI::b(CGI::span({class => 'WYSIWYG_TT'}, $1)))gem;
-    $text =~ s(${TWiki::Plugins::WysiwygPlugin::Constants::STARTWW}__([^\s]+?|[^\s].*?[^\s])__$TWiki::Plugins::WysiwygPlugin::Constants::ENDWW)
+    $text =~ s(${WC::STARTWW}__([^\s]+?|[^\s].*?[^\s])__$WC::ENDWW)
       (CGI::b(CGI::i($1)))gem;
-    $text =~ s(${TWiki::Plugins::WysiwygPlugin::Constants::STARTWW}\*([^\s]+?|[^\s].*?[^\s])\*$TWiki::Plugins::WysiwygPlugin::Constants::ENDWW)
+    $text =~ s(${WC::STARTWW}\*([^\s]+?|[^\s].*?[^\s])\*$WC::ENDWW)
       (CGI::b($1))gem;
 
-    $text =~ s(${TWiki::Plugins::WysiwygPlugin::Constants::STARTWW}\_([^\s]+?|[^\s].*?[^\s])\_$TWiki::Plugins::WysiwygPlugin::Constants::ENDWW)
+    $text =~ s(${WC::STARTWW}\_([^\s]+?|[^\s].*?[^\s])\_$WC::ENDWW)
       (CGI::i($1))gem;
-    $text =~ s(${TWiki::Plugins::WysiwygPlugin::Constants::STARTWW}\=([^\s]+?|[^\s].*?[^\s])\=$TWiki::Plugins::WysiwygPlugin::Constants::ENDWW)
+    $text =~ s(${WC::STARTWW}\=([^\s]+?|[^\s].*?[^\s])\=$WC::ENDWW)
       (CGI::span({class => 'WYSIWYG_TT'}, $1))gem;
 
     # Handle [[][] and [[]] links
@@ -432,7 +432,7 @@ sub _getRenderedVersion {
     # [[][]]
     $text =~ s/(\[\[[^\]]*\](\[[^\]]*\])?\])/$this->_liftOut($1, 'LINK')/ge;
 
-    $text =~ s/$TWiki::Plugins::WysiwygPlugin::Constants::STARTWW(($TWiki::regex{webNameRegex}\.)?$TWiki::regex{wikiWordRegex}($TWiki::regex{anchorRegex})?)/$this->_liftOut($1, 'LINK')/geom;
+    $text =~ s/$WC::STARTWW(($TWiki::regex{webNameRegex}\.)?$TWiki::regex{wikiWordRegex}($TWiki::regex{anchorRegex})?)/$this->_liftOut($1, 'LINK')/geom;
 
     while (my ($placeholder, $val) = each %{$this->{removed}} ) {
         if( $placeholder =~ /^verbatim/i ) {
@@ -595,7 +595,7 @@ sub _putBackBlocks {
             my $val = $val->{text};
             $val = &$callback( $val ) if ( defined( $callback ));
             # Use div instead of span if the block contains block HTML
-            if ($newtag eq 'span' && $val =~ m#</?($TWiki::Plugins::WysiwygPlugin::Constants::ALWAYS_BLOCK_S)\b#io) {
+            if ($newtag eq 'span' && $val =~ m#</?($WC::ALWAYS_BLOCK_S)\b#io) {
                 $fn = 'CGI::div';
             } else {
                 $fn = 'CGI::'.$newtag;

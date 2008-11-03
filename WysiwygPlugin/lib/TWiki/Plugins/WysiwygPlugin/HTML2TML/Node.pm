@@ -61,6 +61,7 @@ sub new {
 
     $this->{context} = $context;
     $this->{tag} = $tag;
+    $this->{nodeType} = 2;
     $this->{attrs} = {};
     if( $attrs ) {
         foreach my $attr ( keys %$attrs ) {
@@ -130,8 +131,8 @@ sub _trim {
 
     # Item5076: removed CHECKn from the following exprs, because loss of it
     # breaks line-sensitive TML content inside flattened content.
-    $s =~ s/^[ \t\n$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKw$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKs]+/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKw/o;
-    $s =~ s/[ \t\n$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKw]+$/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKw/o;
+    $s =~ s/^[ \t\n$WC::CHECKw$WC::CHECKs]+/$WC::CHECKw/o;
+    $s =~ s/[ \t\n$WC::CHECKw]+$/$WC::CHECKw/o;
     return $s;
 }
 
@@ -231,47 +232,46 @@ sub rootGenerate {
 
     # Move leading \n out of protected region. Delicate hack fix required to
     # maintain TWiki variables at the start of lines.
-    $text =~ s/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::PON$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKn$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::PON/g;
+    $text =~ s/$WC::PON$WC::NBBR/$WC::CHECKn$WC::PON/g;
 
     # isolate whitespace checks and convert to $NBSP
-    $text =~ s/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKw$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKw+/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKw/go;
-    $text =~ s/([$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKn$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKs$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::TAB$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR]($TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::PON|$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::POFF)?)$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKw/$1/go;
-    $text =~ s/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKw(($TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::PON|$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::POFF)?[$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKn$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKs$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR])/$1/go;
-    $text =~ s/^($TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKw)+//gos;
-    $text =~ s/($TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKw)+$//gos;
-    $text =~ s/($TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKw)+/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP/go;
+    $text =~ s/$WC::CHECKw$WC::CHECKw+/$WC::CHECKw/go;
+    $text =~ s/([$WC::CHECKn$WC::CHECKs$WC::NBSP $WC::TAB$WC::NBBR]($WC::PON|$WC::POFF)?)$WC::CHECKw/$1/go;
+    $text =~ s/$WC::CHECKw(($WC::PON|$WC::POFF)?[$WC::CHECKn$WC::CHECKs$WC::NBSP $WC::NBBR])/$1/go;
+    $text =~ s/^($WC::CHECKw)+//gos;
+    $text =~ s/($WC::CHECKw)+$//gos;
+    $text =~ s/($WC::CHECKw)+/$WC::NBSP/go;
 
     # isolate $CHECKs and convert to $NBSP
-    $text =~ s/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKs$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKs+/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKs/go;
-    $text =~ s/([ $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::TAB])$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKs/$1/go;
-    $text =~ s/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKs( |$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP)/$1/go;
-    $text =~ s/($TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKs)+/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP/go;
+    $text =~ s/$WC::CHECKs$WC::CHECKs+/$WC::CHECKs/go;
+    $text =~ s/([ $WC::NBSP$WC::TAB])$WC::CHECKs/$1/go;
+    $text =~ s/$WC::CHECKs( |$WC::NBSP)/$1/go;
+    $text =~ s/($WC::CHECKs)+/$WC::NBSP/go;
 
-    $text =~ s/<br( \/)?>$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR/g; # Remove BR before P
+    $text =~ s/<br( \/)?>$WC::NBBR/$WC::NBBR/g; # Remove BR before P
 
     #die "Converted ",WC::debugEncode($text),"\n";
 
-    my @regions = split(/([$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::PON$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::POFF])/o, $text);
+    my @regions = split(/([$WC::PON$WC::POFF])/o, $text);
     my $protect = 0;
     $text = '';
-
     foreach my $tml (@regions) {
-        if ($tml eq $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::PON) {
+        if ($tml eq $WC::PON) {
             $protect++;
             next;
-        } elsif ($tml eq $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::POFF) {
+        } elsif ($tml eq $WC::POFF) {
             $protect--;
             next;
         }
 
         # isolate $NBBR and convert to \n.
         unless ($protect) {
-            $tml =~ s/\n$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR/go;
-            $tml =~ s/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR\n/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR/go;
-            $tml =~ s/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR( |$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP)+$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR/go;
-            $tml =~ s/ +$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR/go;
-            $tml =~ s/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR +/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR/go;
-            $tml =~ s/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR+/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR/go;
+            $tml =~ s/\n$WC::NBBR/$WC::NBBR$WC::NBBR/go;
+            $tml =~ s/$WC::NBBR\n/$WC::NBBR$WC::NBBR/go;
+            $tml =~ s/$WC::NBBR( |$WC::NBSP)+$WC::NBBR/$WC::NBBR$WC::NBBR/go;
+            $tml =~ s/ +$WC::NBBR/$WC::NBBR/go;
+            $tml =~ s/$WC::NBBR +/$WC::NBBR/go;
+            $tml =~ s/$WC::NBBR$WC::NBBR+/$WC::NBBR$WC::NBBR/go;
 
             # Now convert adjacent NBBRs to recreate empty lines
             # 1 NBBR  -> 1 newline
@@ -282,41 +282,41 @@ sub rootGenerate {
             # 6 NBBRs -> <p /><p /><p /> - 3 blank lines - 4 newlines
             # 7 NBBRs -> 5 newlines
             # 8 NBBRs -> <p /><p /><p /><p /> - 4 blank lines - 5 newlines
-            $tml =~ s.($TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR+).
+            $tml =~ s.($WC::NBBR$WC::NBBR$WC::NBBR$WC::NBBR+).
               "\n" x ((length($1) + 1) / 2 + 1)
                 .geo;
         }
         # isolate $CHECKn and convert to $NBBR
-        $tml =~ s/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKn([$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::TAB])*$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKn/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKn/go;
-        $tml =~ s/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKn$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKn+/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKn/go;
-        $tml =~ s/(?<=$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR)$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKn//gom;
-        $tml =~ s/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKn(?=$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR)//gom;
-        $tml =~ s/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKn+/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR/gos;
+        $tml =~ s/$WC::CHECKn([$WC::NBSP $WC::TAB])*$WC::CHECKn/$WC::CHECKn/go;
+        $tml =~ s/$WC::CHECKn$WC::CHECKn+/$WC::CHECKn/go;
+        $tml =~ s/(?<=$WC::NBBR)$WC::CHECKn//gom;
+        $tml =~ s/$WC::CHECKn(?=$WC::NBBR)//gom;
+        $tml =~ s/$WC::CHECKn+/$WC::NBBR/gos;
 
-        $tml =~ s/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR/\n/gos;
+        $tml =~ s/$WC::NBBR/\n/gos;
 
         # Convert tabs to NBSP
-        $tml =~ s/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::TAB/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP/go;
+        $tml =~ s/$WC::TAB/$WC::NBSP$WC::NBSP$WC::NBSP/go;
 
         # isolate $NBSP and convert to space
         unless ($protect) {
-            $tml =~ s/ +$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP/go;
-            $tml =~ s/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP +/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP/go;
+            $tml =~ s/ +$WC::NBSP/$WC::NBSP/go;
+            $tml =~ s/$WC::NBSP +/$WC::NBSP/go;
         }
-        $tml =~ s/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP/ /go;
+        $tml =~ s/$WC::NBSP/ /go;
 
-        $tml =~ s/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECK1$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECK1+/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECK1/go;
-        $tml =~ s/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECK2$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECK2+/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECK2/go;
-        $tml =~ s/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECK2$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECK1/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECK2/go;
+        $tml =~ s/$WC::CHECK1$WC::CHECK1+/$WC::CHECK1/go;
+        $tml =~ s/$WC::CHECK2$WC::CHECK2+/$WC::CHECK2/go;
+        $tml =~ s/$WC::CHECK2$WC::CHECK1/$WC::CHECK2/go;
 
-        $tml =~ s/(^|[\s\(])$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECK1/$1/gso;
-        $tml =~ s/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECK2($|[\s\,\.\;\:\!\?\)\*])/$1/gso;
+        $tml =~ s/(^|[\s\(])$WC::CHECK1/$1/gso;
+        $tml =~ s/$WC::CHECK2($|[\s\,\.\;\:\!\?\)\*])/$1/gso;
 
-        $tml =~ s/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECK1(\s|$)/$1/gso;
-        $tml =~ s/(^|\s)$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECK2/$1/gso;
+        $tml =~ s/$WC::CHECK1(\s|$)/$1/gso;
+        $tml =~ s/(^|\s)$WC::CHECK2/$1/gso;
 
-        $tml =~ s/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECK1/ /go;
-        $tml =~ s/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECK2/ /go;
+        $tml =~ s/$WC::CHECK1/ /go;
+        $tml =~ s/$WC::CHECK2/ /go;
         #print STDERR WC::debugEncode($before);
         #print STDERR " -> '",WC::debugEncode($tml),"'\n";
         $text .= $tml;
@@ -362,7 +362,7 @@ sub _collapse {
                     $meal->_remove();
                     if ($meal->{tag}) {
                         require TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf;
-                        $node->addChild(new TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf($TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR));
+                        $node->addChild(new TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf($WC::NBBR));
                         $node->_eat($meal);
                     }
                 }
@@ -382,12 +382,12 @@ sub _collapse {
         # If this is an emphasis (b, i, code, tt, strong) then
         # flatten out any child nodes that express the same emphasis.
         # This has to be done because TWiki emphases are single level.
-        if ($TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::EMPHTAG{$node->{tag}}) {
+        if ($WC::EMPHTAG{$node->{tag}}) {
             my $kid = $node->{head};
             while ($kid) {
-                if ($TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::EMPHTAG{$kid->{tag}} &&
-                      $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::EMPHTAG{$kid->{tag}} eq
-                        $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::EMPHTAG{$node->{tag}}) {
+                if ($WC::EMPHTAG{$kid->{tag}} &&
+                      $WC::EMPHTAG{$kid->{tag}} eq
+                        $WC::EMPHTAG{$node->{tag}}) {
                     $kid = $kid->_inline();
                 } else {
                     $kid = $kid->{next};
@@ -432,13 +432,13 @@ sub generate {
         return ( 0, '<literal>'.$text.'</literal>' );
     }
 
-    if( $options & $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NO_HTML ) {
+    if( $options & $WC::NO_HTML ) {
         # NO_HTML implies NO_TML
         my $brats = $this->_flatten( $options );
         return ( 0, $brats );
     }
 
-    if( $options & $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NO_TML ) {
+    if( $options & $WC::NO_TML ) {
         return ( 0, $this->stringify() );
     }
 
@@ -472,20 +472,20 @@ sub _flatten {
     my $text = '';
     my $flags = 0;
 
-    my $protected = ($options & $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::PROTECTED) ||
+    my $protected = ($options & $WC::PROTECTED) ||
       $this->hasClass('WYSIWYG_PROTECTED') ||
         $this->hasClass('WYSIWYG_STICKY') || 0;
 
     if ($protected) {
         # Expand brs, which are used in the protected encoding in place of
         # newlines, and protect whitespace
-        $options |= $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::BR2NL | $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::KEEP_WS;
+        $options |= $WC::BR2NL | $WC::KEEP_WS;
     }
 
     my $kid = $this->{head};
     while ($kid) {
         my( $f, $t ) = $kid->generate( $options );
-        if (!($options & $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::KEEP_WS)
+        if (!($options & $WC::KEEP_WS)
               && $text && $text =~ /\w$/ && $t =~ /^\w/) {
             # if the last child ends in a \w and this child
             # starts in a \w, we need to insert a space
@@ -496,20 +496,20 @@ sub _flatten {
         $kid = $kid->{next};
     }
     if ($protected) {
-        $text =~ s/[$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::PON$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::POFF]//g;
+        $text =~ s/[$WC::PON$WC::POFF]//g;
 
-        unless ($options & $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::KEEP_ENTITIES) {
+        unless ($options & $WC::KEEP_ENTITIES) {
             require HTML::Entities;
             $text = HTML::Entities::decode_entities($text);
             # &nbsp; decodes to \240, which we want to make a space.
-            $text =~ s/\240/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP/g;
+            $text =~ s/\240/$WC::NBSP/g;
         }
-        $text =~ s/ /$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP/g;
-        $text =~ s/\n/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR/g;
-        $text = $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::PON.$text.$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::POFF;
+        $text =~ s/ /$WC::NBSP/g;
+        $text =~ s/\n/$WC::NBBR/g;
+        $text = $WC::PON.$text.$WC::POFF;
     }
 
-    $text = _trim($text) unless ($options & $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::KEEP_WS);
+    $text = _trim($text) unless ($options & $WC::KEEP_WS);
 
     return ( $flags, $text );
 }
@@ -523,7 +523,7 @@ sub _htmlParams {
         next unless $k;
         if( $k eq 'class' ) {
             # if cleaning aggressively, remove class attributes completely
-            next if ($options & $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::VERY_CLEAN);
+            next if ($options & $WC::VERY_CLEAN);
             foreach my $c qw(WYSIWYG_PROTECTED WYSIWYG_STICKY TMLverbatim WYSIWYG_LINK) {
                 $v =~ s/\b$c\b//;
             }
@@ -546,7 +546,7 @@ sub _defaultTag {
     my $tag = $this->{tag};
     my $p = _htmlParams( $this->{attrs}, $options );
 
-    if( $text =~ /^\s*$/ && $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::SELFCLOSING{$tag}) {
+    if( $text =~ /^\s*$/ && $WC::SELFCLOSING{$tag}) {
         return ( $flags, '<'.$tag.$p.' />' );
     } else {
         return ( $flags, '<'.$tag.$p.'>'.$text.'</'.$tag.'>' );
@@ -589,7 +589,7 @@ sub _convertList {
     while ($kid) {
         # be tolerant of dl, ol and ul with no li
         if( $kid->{tag} =~ m/^[dou]l$/i ) {
-            $text .= $kid->_convertList( $indent.$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::TAB );
+            $text .= $kid->_convertList( $indent.$WC::TAB );
             $kid = $kid->{next};
             next;
         }
@@ -599,10 +599,10 @@ sub _convertList {
         }
         if( $isdl && ( $kid->{tag} eq 'dt' )) {
             # DT, set the bullet type for subsequent DT
-            $basebullet = $kid->_flatten( $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NO_BLOCK_TML );
-            $basebullet =~ s/[\s$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKw$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKs]+$//;
+            $basebullet = $kid->_flatten( $WC::NO_BLOCK_TML );
+            $basebullet =~ s/[\s$WC::CHECKw$WC::CHECKs]+$//;
             $basebullet .= ':';
-            $basebullet =~ s/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKn/ /g;
+            $basebullet =~ s/$WC::CHECKn/ /g;
             $basebullet =~ s/^\s+//;
             $basebullet = '$ '.$basebullet;
             $pendingDT = 1; # remember in case there is no DD
@@ -626,10 +626,10 @@ sub _convertList {
         while ($grandkid) {
             if( $grandkid->{tag} =~ /^[dou]l$/i ) {
                 #$spawn = _trim( $spawn );
-                $t = $grandkid->_convertList( $indent.$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::TAB );
+                $t = $grandkid->_convertList( $indent.$WC::TAB );
             } else {
-                ( $f, $t ) = $grandkid->generate( $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NO_BLOCK_TML );
-                $t =~ s/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKn/ /g;
+                ( $f, $t ) = $grandkid->generate( $WC::NO_BLOCK_TML );
+                $t =~ s/$WC::CHECKn/ /g;
                 # Item5257: If this is the last child of the LI, trim
                 # trailing spaces. Otherwise spaces generated by the
                 # editor before the </li> will be appended to the line.
@@ -643,14 +643,14 @@ sub _convertList {
             $grandkid = $grandkid->{next};
         }
         #$spawn = _trim($spawn);
-        $text .= $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKn.$indent.$bullet.$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKs.$spawn.$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKn;
+        $text .= $WC::CHECKn.$indent.$bullet.$WC::CHECKs.$spawn.$WC::CHECKn;
         $pendingDT = 0;
         $basebullet = '' if $isdl;
         $kid = $kid->{next};
     }
     if( $pendingDT ) {
         # DT with no corresponding DD
-        $text .= $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKn.$indent.$basebullet.$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKn;
+        $text .= $WC::CHECKn.$indent.$basebullet.$WC::CHECKn;
     }
     return $text;
 }
@@ -701,7 +701,7 @@ sub _isConvertableListItem {
             }
         } else {
             ( $flags, $text ) = $kid->generate( $options );
-            if( $flags & $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::BLOCK_TML ) {
+            if( $flags & $WC::BLOCK_TML ) {
                 return 0;
             }
         }
@@ -744,8 +744,8 @@ sub _isConvertableTable {
 # BRs, as added by some table editors.
 sub _TDtrim {
     my $td = shift;
-    $td =~ s/^($TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP|$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR|$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKn|$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKs|$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKw|$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECK1|$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECK2|$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::TAB|\s)+//so;
-    $td =~ s/(<br \/>|<br>|$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP|$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR|$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKn|$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKs|$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKw|$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECK1|$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECK2|$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::TAB|\s)+$//so;
+    $td =~ s/^($WC::NBSP|$WC::NBBR|$WC::CHECKn|$WC::CHECKs|$WC::CHECKw|$WC::CHECK1|$WC::CHECK2|$WC::TAB|\s)+//so;
+    $td =~ s/(<br \/>|<br>|$WC::NBSP|$WC::NBBR|$WC::CHECKn|$WC::CHECKs|$WC::CHECKw|$WC::CHECK1|$WC::CHECK2|$WC::TAB|\s)+$//so;
     return $td;
 }
 
@@ -775,30 +775,30 @@ sub _isConvertableTableRow {
             # some other sort of (unexpected) tag
             return 0;
         }
-        return 0 if( $flags & $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::BLOCK_TML );
+        return 0 if( $flags & $WC::BLOCK_TML );
 
         if( $kid->{attrs} ) {
             my $a = _deduceAlignment( $kid );
             if( $text && $a eq 'right' ) {
-                $text = $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP.$text;
+                $text = $WC::NBSP.$text;
             } elsif( $text && $a eq 'center' ) {
-                $text = $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP.$text.$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP;
+                $text = $WC::NBSP.$text.$WC::NBSP;
             } elsif( $text && $a eq 'left' ) {
-                $text .= $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP;
+                $text .= $WC::NBSP;
             }
             if( $kid->{attrs}->{rowspan} && $kid->{attrs}->{rowspan} > 1 ) {
                 return 0;
             }
         }
-        $text =~ s/&nbsp;/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP/g;
+        $text =~ s/&nbsp;/$WC::NBSP/g;
         #if (--$ignoreCols > 0) {
         #    # colspanned
         #    $text = '';
         #} els
-        if ($text =~ /^$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP*$/) {
-            $text = $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP;
+        if ($text =~ /^$WC::NBSP*$/) {
+            $text = $WC::NBSP;
         } else {
-            $text = $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP.$text.$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP;
+            $text = $WC::NBSP.$text.$WC::NBSP;
         }
         if( $kid->{attrs} && $kid->{attrs}->{colspan} &&
               $kid->{attrs}->{colspan} > 1 ) {
@@ -837,7 +837,7 @@ sub _deduceAlignment {
 sub _H {
     my( $this, $options, $depth ) = @_;
     my( $flags, $contents ) = $this->_flatten( $options );
-    return ( 0, undef ) if( $flags & $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::BLOCK_TML );
+    return ( 0, undef ) if( $flags & $WC::BLOCK_TML );
     my $notoc = '';
     if( $this->hasClass( 'notoc' )) {
         $notoc = '!!';
@@ -848,20 +848,21 @@ sub _H {
     }
     $contents =~ s/^\s+/ /;
     $contents =~ s/\s+$//;
-    my $res = $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKn.'---'.($indicator x $depth).$notoc.
-      $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKs.$contents.$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKn;
-    return ( $flags | $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::BLOCK_TML, $res );
+    my $res = $WC::CHECKn.'---'.($indicator x $depth).$notoc.
+      $WC::CHECKs.$contents.$WC::CHECKn;
+    return ( $flags | $WC::BLOCK_TML, $res );
 }
 
 # generate an emphasis
 sub _emphasis {
     my( $this, $options, $ch ) = @_;
-    my( $flags, $contents ) = $this->_flatten( $options | $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NO_BLOCK_TML );
-    return ( 0, undef ) if( !defined( $contents ) || ( $flags & $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::BLOCK_TML ));
+    my( $flags, $contents ) = $this->_flatten( $options | $WC::NO_BLOCK_TML );
+    return ( 0, undef ) if( !defined( $contents ) || ( $flags & $WC::BLOCK_TML ));
+
     # Remove whitespace from either side of the contents, retaining the
     # whitespace
-    $contents =~ s/&nbsp;/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP/go;
-    $contents =~ /^($TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::WS)(.*?)($TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::WS)$/;
+    $contents =~ s/&nbsp;/$WC::NBSP/go;
+    $contents =~ /^($WC::WS)(.*?)($WC::WS)$/;
     my ($pre, $post) = ($1, $3);
     $contents = $2;
     return (0, undef) if( $contents =~ /^</ || $contents =~ />$/ );
@@ -878,20 +879,93 @@ sub _emphasis {
         return (0, undef);
     }
 
-    return ( $flags, $pre.$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKw.$ch.$contents.$ch.$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECK2.$post );
+    my $be = $this->_checkBeforeEmphasis();
+    my $ae = $this->_checkAfterEmphasis();
+    return ( 0, undef ) unless $ae && $be;
+
+    return ( $flags, $pre.$WC::CHECKw.$ch.$contents.$ch.$WC::CHECK2.$post );
+}
+
+sub isBlockNode {
+    my $node = shift;
+    return ($node->{tag} && $node->{tag} =~ /^(ADDRESS|BLOCKQUOTE|CENTER|DIR|DIV|DL|FIELDSET|FORM|H\d|HR|ISINDEX|MENU|NOFRAMES|NOSCRIPT|OL|P|PRE|TABLE|UL)$/i);
+}
+
+sub previousLeaf {
+    my $node = shift;
+    if (!$node) {
+        return undef;
+    }
+    do {
+        while (!$node->{prev}) {
+            if (!$node->{parent}) {
+                return undef; # can't go any further back
+            }
+            $node = $node->{parent};
+        }
+        $node = $node->{prev};
+        while (!$node->isTextNode()) {
+            $node = $node->{tail};
+        }
+    } while (!$node->isTextNode());
+    return $node;
+}
+
+# Test for /^|(?<=[\s\(])/ at the end of the leaf node before.
+sub _checkBeforeEmphasis {
+    my ($this) = @_;
+    my $tb = $this->previousLeaf();
+    return 1 unless $tb;
+    return 1 if ($tb->isBlockNode());
+    return 1 if ($tb->{nodeType} == 3 && $tb->{text} =~ /[\s(*_=]$/);
+    return 0;
+}
+
+sub nextLeaf {
+    my $node = shift;
+    if (!$node) {
+        return undef;
+    }
+    do {
+        while (!$node->{next}) {
+            if (!$node->{parent}) {
+                return; # end of the road
+            }
+            $node = $node->{parent};
+            if ($node->isBlockNode()) {
+                # leaving this $node
+                return $node;
+            }
+        }
+        $node = $node->{next};
+        while (!$node->isTextNode()) {
+            $node = $node->{head};
+        }
+    } while (!$node->isTextNode());
+    return $node;
+}
+
+# Test for /$|(?=[\s,.;:!?)])/ at the start of the leaf node after.
+sub _checkAfterEmphasis {
+    my ($this) = @_;
+    my $tb = $this->nextLeaf();
+    return 1 unless $tb;
+    return 1 if ($tb->isBlockNode());
+    return 1 if ($tb->{nodeType} == 3 && $tb->{text} =~ /^[\s,.;:!?)*_=]/);
+    return 0;
 }
 
 # generate verbatim for P, SPAN or PRE
 sub _verbatim {
     my ($this, $tag, $options) = @_;
 
-    $options |= $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::PROTECTED|$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::KEEP_ENTITIES|$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::BR2NL | $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::KEEP_WS;
+    $options |= $WC::PROTECTED|$WC::KEEP_ENTITIES|$WC::BR2NL | $WC::KEEP_WS;
     my( $flags, $text ) = $this->_flatten($options);
     # decode once, and once only
     require HTML::Entities;
     $text = HTML::Entities::decode_entities($text);
     # &nbsp; decodes to \240, which we want to make a space.
-    $text =~ s/\240/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP/g;
+    $text =~ s/\240/$WC::NBSP/g;
     my $p = _htmlParams($this->{attrs}, $options);
     return ($flags, "<$tag$p>$text</$tag>");
 }
@@ -915,18 +989,18 @@ sub _handleDOCTYPE { return ( 0, '' ); }
 
 sub _LIST {
     my( $this, $options ) = @_;
-    if( ( $options & $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NO_BLOCK_TML ) ||
-        !$this->_isConvertableList( $options | $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NO_BLOCK_TML )) {
+    if( ( $options & $WC::NO_BLOCK_TML ) ||
+        !$this->_isConvertableList( $options | $WC::NO_BLOCK_TML )) {
         return ( 0, undef );
     }
-    return ( $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::BLOCK_TML, $this->_convertList( $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::TAB ));
+    return ( $WC::BLOCK_TML, $this->_convertList( $WC::TAB ));
 }
 
 # Performs initial cleanup of the parse tree before generation. Walks the
 # tree, making parent links and removing attributes that don't add value.
 # This simplifies determining whether a node is to be kept, or flattened
 # out.
-# $opts may include $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::VERY_CLEAN
+# $opts may include $WC::VERY_CLEAN
 sub cleanNode {
     my( $this, $opts ) = @_;
     my $a;
@@ -967,7 +1041,7 @@ sub cleanNode {
 sub _handleA {
     my( $this, $options ) = @_;
 
-    my( $flags, $text ) = $this->_flatten( $options | $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NO_BLOCK_TML );
+    my( $flags, $text ) = $this->_flatten( $options | $WC::NO_BLOCK_TML );
     if( $text && $text =~ /\S/ && $this->{attrs}->{href}) {
         # there's text and an href
         my $href = $this->{attrs}->{href};
@@ -979,7 +1053,7 @@ sub _handleA {
         }
         $reww = TWiki::Func::getRegularExpression('wikiWordRegex')
           unless $reww;
-        my $nop = ($options & $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NOP_ALL) ? '<nop>' : '';
+        my $nop = ($options & $WC::NOP_ALL) ? '<nop>' : '';
         if( $href =~ /^(\w+\.)?($reww)(#\w+)?$/ ) {
             my $web = $1 || '';
             my $topic = $2;
@@ -990,17 +1064,17 @@ sub _handleA {
 
             # if the clean text is the known topic we can ignore it
             if( ($cleantext eq $href || $href =~ /\.$cleantext$/)) {
-                return (0, $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECK1.$nop.$web.$topic.$anchor.$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECK2);
+                return (0, $WC::CHECK1.$nop.$web.$topic.$anchor.$WC::CHECK2);
             }
         }
 
-        if( $href =~ /${TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::PROTOCOL}[^?]*$/ && $text eq $href ) {
-            return (0, $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECK1.$nop.$text.$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECK2);
+        if( $href =~ /${WC::PROTOCOL}[^?]*$/ && $text eq $href ) {
+            return (0, $WC::CHECK1.$nop.$text.$WC::CHECK2);
         }
         if( $text eq $href ) {
-            return (0, $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKw.'['.$nop.'['.$href.']]' );
+            return (0, $WC::CHECKw.'['.$nop.'['.$href.']]' );
         }
-        return (0, $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKw.'['.$nop.'['.$href.']['.$text.
+        return (0, $WC::CHECKw.'['.$nop.'['.$href.']['.$text.
                   ']]' );
     } elsif( $this->{attrs}->{name} ) {
         # allow anchors to be expanded normally. This won't generate
@@ -1035,15 +1109,15 @@ sub _handleBR {
     # 3. The previous node is an inline element node or text node
     # 4. The next node is an inline element or text node
     my $sep = "\n";
-    if ($options & $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::BR2NL) {
-    } elsif ($options & $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NO_BLOCK_TML) {
+    if ($options & $WC::BR2NL) {
+    } elsif ($options & $WC::NO_BLOCK_TML) {
         $sep = '<br />';
     } elsif ($this->prevIsInline()) {
         if ($this->isInline()) {
             # Both <br> and </br> cause a NL
             # if this is empty, look at next
             if ($kids !~ /^[\000-\037]*$/ &&
-                  $kids !~ /^[\000-\037]*$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR/ ||
+                  $kids !~ /^[\000-\037]*$WC::NBBR/ ||
                     $this->nextIsInline()) {
                 $sep = '<br />';
             }
@@ -1101,7 +1175,7 @@ sub _handleFONT {
         }
     }
     # OK, just the colour
-    $colour = $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::KNOWN_COLOUR{uc($colour)};
+    $colour = $WC::KNOWN_COLOUR{uc($colour)};
     if (!$colour) {
         # Not a recognised colour
         return ( 0, undef );
@@ -1119,8 +1193,8 @@ sub _handleHR {
     my( $this, $options ) = @_;
 
     my( $f, $kids ) = $this->_flatten( $options );
-    return ($f, '<hr />'.$kids) if( $options & $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NO_BLOCK_TML );
-    return ( $f | $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::BLOCK_TML, $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKn.'---'.$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKn.$kids);
+    return ($f, '<hr />'.$kids) if( $options & $WC::NO_BLOCK_TML );
+    return ( $f | $WC::BLOCK_TML, $WC::CHECKn.'---'.$WC::CHECKn.$kids);
 }
 
 sub _handleHTML   { return _flatten( @_ ); }
@@ -1186,12 +1260,12 @@ sub _handleP {
     }
 
     my( $f, $kids ) = $this->_flatten( $options );
-    return ($f, '<p>'.$kids.'</p>') if( $options & $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NO_BLOCK_TML );
+    return ($f, '<p>'.$kids.'</p>') if( $options & $WC::NO_BLOCK_TML );
     my $pre = '';
     if ($this->prevIsInline()) {
-        $pre = $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR;
+        $pre = $WC::NBBR;
     }
-    return ($f | $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::BLOCK_TML, $pre.$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR.$kids.$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBBR);
+    return ($f | $WC::BLOCK_TML, $pre.$WC::NBBR.$kids.$WC::NBBR);
 }
 
 # PARAM
@@ -1206,11 +1280,11 @@ sub _handlePRE {
     if ($this->hasClass('WYSIWYG_STICKY')) {
         return $this->_verbatim('sticky', $options);
     }
-    unless( $options & $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NO_BLOCK_TML ) {
+    unless( $options & $WC::NO_BLOCK_TML ) {
         my( $flags, $text ) = $this->_flatten(
-            $options | $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NO_BLOCK_TML | $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::BR2NL | $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::KEEP_WS );
+            $options | $WC::NO_BLOCK_TML | $WC::BR2NL | $WC::KEEP_WS );
         my $p = _htmlParams( $this->{attrs}, $options);
-        return ($TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::BLOCK_TML, "<$tag$p>$text</$tag>");
+        return ($WC::BLOCK_TML, "<$tag$p>$text</$tag>");
     }
     return ( 0, undef );
 }
@@ -1234,7 +1308,7 @@ sub _handleSPAN {
     }
 
     if( _removeClass(\%atts, 'WYSIWYG_LINK')) {
-        $options |= $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NO_BLOCK_TML;
+        $options |= $WC::NO_BLOCK_TML;
     }
 
     if( _removeClass(\%atts, 'WYSIWYG_TT')) {
@@ -1244,7 +1318,7 @@ sub _handleSPAN {
     # Remove all other classes
     delete $atts{class};
 
-    if( $options & $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::VERY_CLEAN ) {
+    if( $options & $WC::VERY_CLEAN ) {
         # remove style attribute if cleaning aggressively. Have to do this
         # because TWiki generates these.
         delete $atts{style} if defined $atts{style}
@@ -1269,15 +1343,15 @@ sub _handleSTYLE { return ( 0, '' ); }
 
 sub _handleTABLE {
     my( $this, $options ) = @_;
-    return ( 0, undef) if( $options & $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NO_BLOCK_TML );
+    return ( 0, undef) if( $options & $WC::NO_BLOCK_TML );
 
     # Should really look at the table attrs, but to heck with it
 
-    return ( 0, undef ) if( $options & $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NO_BLOCK_TML );
+    return ( 0, undef ) if( $options & $WC::NO_BLOCK_TML );
 
     my @table;
     return ( 0, undef ) unless
-      $this->_isConvertableTable( $options | $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NO_BLOCK_TML, \@table );
+      $this->_isConvertableTable( $options | $WC::NO_BLOCK_TML, \@table );
 
     my $maxrow = 0;
     my $row;
@@ -1290,13 +1364,13 @@ sub _handleTABLE {
             push( @$row, '' );
         }
     }
-    my $text = $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKn;
+    my $text = $WC::CHECKn;
     foreach $row ( @table ) {
         # isConvertableTableRow has already formatted the cell
-        $text .= $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKn.'|'.join('|', @$row).'|'.$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKn;
+        $text .= $WC::CHECKn.'|'.join('|', @$row).'|'.$WC::CHECKn;
     }
 
-    return ( $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::BLOCK_TML, $text );
+    return ( $WC::BLOCK_TML, $text );
 }
 
 # TBODY

@@ -38,6 +38,7 @@ sub new {
     my $this = {};
 
     $this->{tag} = '';
+    $this->{nodeType} = 3;
     $this->{text} = $text;
     return bless( $this, $class );
 }
@@ -54,20 +55,20 @@ sub generate {
     my( $this, $options ) = @_;
     my $t = $this->{text};
 
-    if (!($options & $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::KEEP_WS)) {
+    if (!($options & $WC::KEEP_WS)) {
         $t =~ s/\t/   /g;
-        $t =~ s/\n/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::CHECKw/g;
+        $t =~ s/\n/$WC::CHECKw/g;
         $t =~ s/  +/ /g;
     }
-    if( $options & $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NOP_ALL ) {
+    if( $options & $WC::NOP_ALL ) {
         # escape all embedded wikiwords
-        $t =~ s/$TWiki::Plugins::WysiwygPlugin::Constants::STARTWW($TWiki::regex{wikiWordRegex})/<nop>$1/go;
-        $t =~ s/$TWiki::Plugins::WysiwygPlugin::Constants::STARTWW($TWiki::regex{abbrevRegex})/<nop>$1/go;
+        $t =~ s/$WC::STARTWW($TWiki::regex{wikiWordRegex})/<nop>$1/go;
+        $t =~ s/$WC::STARTWW($TWiki::regex{abbrevRegex})/<nop>$1/go;
         $t =~ s/\[/<nop>[/g;
     }
-    unless ($options & $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::KEEP_ENTITIES) {
+    unless ($options & $WC::KEEP_ENTITIES) {
         $t =~ s/&($text_entities_re);/chr($text_entities{$1})/ego;
-        $t =~ s/&nbsp;/$TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::NBSP/g;
+        $t =~ s/&nbsp;/$WC::NBSP/g;
     }
     return (0, $t);
 }

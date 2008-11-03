@@ -104,12 +104,12 @@ sub convert {
     $this->{opts} = $options;
 
     my $opts = 0;
-    $opts = $TWiki::Plugins::WysiwygPlugin::HTML2TML::WC::VERY_CLEAN
+    $opts = $WC::VERY_CLEAN
       if ( $options->{very_clean} );
 
     # If the text is UTF8-encoded we have to decode it first, otherwise
     # the HTML parser will barf.
-    if (TWiki::Plugins::WysiwygPlugin::Constants::encoding() =~ /^utf-?8/) {
+    if (WC::encoding() =~ /^utf-?8/) {
         $text = Encode::decode_utf8($text);
     }
 
@@ -126,7 +126,7 @@ sub convert {
     $text = $this->{stackTop}->rootGenerate( $opts );
 
     # If the site charset is UTF8, we need to recode
-    if (TWiki::Plugins::WysiwygPlugin::Constants::encoding() =~ /^utf-?8/) {
+    if (WC::encoding() =~ /^utf-?8/) {
         $text = Encode::encode_utf8($text);
     }
 
@@ -134,11 +134,11 @@ sub convert {
     # site charset. Numeric entities are mapped straight to the
     # corresponding code point unless their value overflow.
     require HTML::Entities;
-    HTML::Entities::_decode_entities($text,  TWiki::Plugins::WysiwygPlugin::Constants::safeEntities());
+    HTML::Entities::_decode_entities($text,  WC::safeEntities());
 
     # After decoding entities, we have to map unicode characters
     # back to high bit
-    TWiki::Plugins::WysiwygPlugin::Constants::mapUnicode2HighBit($text);
+    WC::mapUnicode2HighBit($text);
 
     return $text;
 }
