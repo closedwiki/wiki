@@ -1,0 +1,786 @@
+#!/usr/bin/perl
+######################################################################
+# WikiCrawler v0.1.2
+#######################################################################
+
+use strict;
+use warnings;
+
+use Getopt::Long;
+use Pod::Usage;
+use Net::CIDR ':all'; 
+use Net::CIDR::Lite;
+use IO::Socket;
+use LWP 5.64;
+use Net::Ping 2.35;
+use AppConfig qw/:argcount/;
+
+
+use vars qw( $VERSION );
+$VERSION = "1.0";
+
+my @WIKIS = ( 
+              'TWiki', 
+              'MediaWiki', 
+              'Confluence', 
+              'MoinMoin',
+              'tikiwiki',
+              'PMWiki',
+              'DokuWiki',
+              'PhpWiki',
+              'XWiki',
+              'Jive-Clearspace',
+              'Jive-Clearspace-Community',
+              );
+
+my $datetime = get_datetime();
+
+#port scan start time
+my $startTime = get_time();
+
+#wiki crawl start time
+my $wikiStartTime = "0";
+
+my $DEBUG    = 0;           #less verbose
+my $protocol = "http://";
+my $port;
+my $timeOut = 1;            #1 sec.
+my $subnets;
+my $useFork = 1;            # default: use fork
+my $configfile;             # default will be set to wiki.conf
+
+# Allow cuddling the paths with the -I
+@ARGV = map { /^(-I)(.+)/ ? ( $1, $2 ) : $_ } @ARGV;
+
+Getopt::Long::Configure("no_ignore_case");
+Getopt::Long::Configure("bundling");
+
+#Auto-flush.
+$| = 1;
+
+#----------------------
+
+#Parent thread has no parent.
+my $parent = 0;
+
+#We need a place to store child PIDs.
+my @children = ();
+
+#Parent thread has no parent.
+my $parent1 = 0;
+
+#We need a place to store child PIDs.
+my @children1 = ();
+
+#This is required - while i am doing traversing of the wikis.
+my $line;
+my $wikikey;
+
+# Define an array of URLs for which wikis are found ...for output
+my @wikiSites = ();
+
+# Define an array of URLs for which wikis are found ...for input
+my @ips = ();
+
+# Creating 'out' directory for Wikis and Webserver reports
+if ( !-d "out" ) {
+    mkdir( "out", 0777 ) || print $!;
+}
+
+my $outputFileName = "./out/Wikis-Found-Report-" . $datetime . ".txt";
+my $outputWebServerReport =
+  "./out/WebServers-Found-Report-" . $datetime . ".txt";
+
+#--------------
+
+if ( @ARGV == 0 ) {
+    $subnets    = with_noarguments();
+    $port       = '80';
+    $configfile = 'wiki.conf';
+}
+else { getArgs(@ARGV); }
+
+my $config = load_config($configfile);    ## This has config loaded...
+
+# Creating initial reports/place holder for reports
+#-----------
+&createInitialReport;
+
+#-----------
+
+# process target subnet.
+my $cidr_address = $subnets;
+my $cidr         = Net::CIDR::Lite->new;
+$cidr->add($cidr_address);
+my @targetHost = $cidr->list_range;
+
+#--------------
+
+# check if it's an IP range
+if ( $targetHost[0] =~ /^(\d+\.\d+\.\d+\.\d+)-(\d+\.\d+\.\d+\.\d+)$/ ) {
+
+    # save start and end of range as decimal
+    my $startIp = &ip2dec($1);
+    my $endIp   = &ip2dec($2);
+
+    # sanity check the range
+    if ( $startIp > $endIp ) {
+        print "$0: startIp is greater than endIp ";
+        die;
+    }
+
+    # iterate each IP address in the range
+    my $dec;
+  FORK: for ( $dec = $startIp ; $dec <= $endIp ; $dec++ ) {
+
+        #Fork.
+        my $oldpid = $$;
+        my $pid    = fork;
+
+        #If fork failed...
+        if ( not defined $pid ) {
+
+            #If resource is not available...
+            if ( $! =~ /Resource temporarily unavailable/ ) {
+
+                #Reap children.
+                &doReap;
+
+                #Retry this IP.
+                $dec--;
+            }
+            else {
+
+                #Otherwise, show the error.
+                die "Can't fork: $!\n";
+            }
+        }
+        elsif ( $pid == 0 ) {
+
+            #This is the child. Save parent.
+            $parent = $oldpid;
+
+            #Clearup kids table.
+            @children = ();
+
+            #We don't want this thread to fork any more.
+            last FORK;
+        }
+        else {
+
+            #This is the parent. Store child pid to wait on it later.
+            push @children, $pid;
+        }
+    }
+
+    #If this is a child (i.e. it has a parent)...
+    if ($parent) {
+
+        #Attempt to connect to $host on $port.
+        my $ip1 = &dec2ip($dec);
+        &scanPort( $ip1, $port );
+
+        #Exit.
+        exit 0;
+    }
+    else {
+
+        #If we're not the kid, we're the parent. Do a reap.
+        &doReap;
+    }
+}
+
+if ( scalar(@ips) < 1 ) {
+
+#print "\nNo open IPs found.\nTry again with changing a different port like: 80, 443, 8080, etc.!!\n";
+    exit 1;
+}
+
+
+thanks_message();
+print "The wiki-report can be found at: out/";
+
+# the end, only funtions from here on
+exit;
+####end####
+
+######################################################################
+# Check and set options from command line args
+######################################################################
+sub getArgs {
+    my $optVerbose;
+    my $optHelp;
+    my $optPorts;
+    my $optTargets;
+    my $optTimeout;
+    my $optWithOutFork;
+    my $optConfigfile;
+
+    GetOptions(
+        'h|help|?' => sub { pod2usage( { -verbose => 1 } ); exit },
+        'H|man'    => sub { pod2usage( { -verbose => 2 } ); exit },
+        "p|port=i" => \$optPorts,
+        "t|targets=s"   => \$optTargets,
+        "s|seconds=i"   => \$optTimeout,
+        "v|verbose"     => \$optVerbose,
+        "w|withOutFork" => \$optWithOutFork,
+        'V|version'     => sub { print_version(); exit; },
+        'c|config=s'    => \$optConfigfile
+        ,    # If this option is not provide, 'wiki.conf' will be set
+
+    );
+
+    if ($optVerbose) {
+        $DEBUG = 1;    # print debug messages.
+    }
+    else {
+        $DEBUG = 0;    #default, not verbose.
+    }
+
+    if ($optWithOutFork)
+    {                  #whether to use forking in second step, while crawlWikis
+        $useFork = 0;    # don't use fork
+    }
+    else {
+        $useFork = 1;    # default: use fork
+    }
+
+    if ($optTimeout) { # ping timeout (in seconds) as positive decimal, optional
+        if ( $optTimeout <= 0 ) {
+            warn(
+"\nInvalid timeout value for ping, Please enter a positive timeout in seconds"
+            );
+            pod2usage(1);
+        }
+        else {
+            $timeOut = $optTimeout;
+        }
+    }
+    else {
+        $timeOut = 1;
+    }
+
+    if ($optPorts) {    # ports to scan through
+
+        if ( ( $optPorts < 0 ) || ( $optPorts > 65535 ) ) {
+
+            warn(
+"\nInvalid port number, Please enter a number between 0 to 65535"
+            );
+            pod2usage(1);
+
+        }
+        else {
+            $port = $optPorts;
+        }
+    }
+    else {
+        warn("\nInvalid port number, Please enter a number between 0 to 65535");
+        pod2usage(1);
+
+    }
+
+    if ($optTargets) {    # target hosts to scan through proxy
+        $subnets = $optTargets;
+
+
+    }
+
+    else {
+
+        warn("\nInvalid network, Please enter the valid network address");
+        pod2usage(1);
+
+    }
+
+    if   ( defined $optConfigfile ) { $configfile = $optConfigfile; }
+    else                            { $configfile = 'wiki.conf'; }
+
+}
+
+#input - provide the configuration file name
+#returns the config - AppConfig object 
+
+sub load_config {
+    my $file = shift;
+
+    if ( !-f $file ) {
+        die "ERROR: Please provide me the valid configuration file: $file $!\n";
+    }
+
+    my $config = AppConfig->new( { CASE => 1 }, );
+    $config->define(
+        TWiki      => { ARGCOUNT => ARGCOUNT_LIST, },
+        MediaWiki  => { ARGCOUNT => ARGCOUNT_LIST, },
+        Confluence => { ARGCOUNT => ARGCOUNT_LIST, },
+        MoinMoin   => { ARGCOUNT => ARGCOUNT_LIST, },
+        tikiwiki   => { ARGCOUNT => ARGCOUNT_LIST, },
+        PMWiki   => { ARGCOUNT => ARGCOUNT_LIST, },
+        DokuWiki  => { ARGCOUNT => ARGCOUNT_LIST, },
+        PhpWiki  => { ARGCOUNT => ARGCOUNT_LIST, },
+        XWiki  => { ARGCOUNT => ARGCOUNT_LIST, },
+        'Jive-Clearspace'  => { ARGCOUNT => ARGCOUNT_LIST, },
+        'Jive-Clearspace-Community'  => { ARGCOUNT => ARGCOUNT_LIST, },
+    );
+
+    $config->file($file);
+    return $config;
+
+}
+
+
+# calculates the CIDR format local LAN address and returns it.
+# mainly depends on the output of /sbin/ifconfig output
+# TODO - this may break when the OS is different - need to add the switch which will help to work 
+# on maximum number of OS's
+
+sub get_local_lan {
+
+    #TODO - add switches to get the LAN for other OS
+    # This one is tested on centos
+    my $interface = `/sbin/ifconfig eth0`;
+    my @info = split /\n/, $interface;
+    my ( $addr, $Bcast, $Mask );
+    my $ipa = qr /\d+\.\d+\.\d+\.\d+/;
+
+    foreach (@info) {
+        if (/^\s+inet addr:($ipa)\s+Bcast:($ipa)\s+Mask:($ipa).*$/) {
+            ( $addr, $Bcast, $Mask ) = ( $1, $2, $3 );
+        }
+    }
+
+    # print "$addr, $Bcast, $Mask\n";
+    my $str = Net::CIDR::addrandmask2cidr( $addr, $Mask );
+    return $str;
+
+}
+
+######################################################################
+# Convert IP addresses to decimal for use with ranges
+######################################################################
+sub ip2dec() {
+    my $hex;
+    my $ip = shift || return;
+
+    # Sanity check arguments and example regex of an IP address, almost.
+    if ( $ip !~ /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/ ) {
+        die "$0: Invalid IP address given to ip2dec - $ip\n";
+    }
+
+    # Convert to Hex
+    foreach my $octet ( split( /\./, $ip, 4 ) ) {
+        die "Invalid IP address given\n"
+          if ( $octet < 0 || $octet > 255 );
+        $hex .= sprintf( "%02x", $octet );
+    }
+
+    # Convert to decimal and return
+    return hex($hex);
+}
+
+# Convert Decimal to IP address
+######################################################################
+sub dec2ip {
+    my $dec = shift || return;
+
+    # Sanity check arguments
+    if ( $dec !~ /^\d+$/ ) {
+        die "$0: Invalid decimal IP given to dec2ip - $dec\n";
+    }
+    my $hexagain = sprintf( "%08x", $dec );
+    my $octet1 = substr( $hexagain, 0, 2 );
+    my $octet2 = substr( $hexagain, 2, 2 );
+    my $octet3 = substr( $hexagain, 4, 2 );
+    my $octet4 = substr( $hexagain, 6, 2 );
+    my $dec1   = hex($octet1);
+    my $dec2   = hex($octet2);
+    my $dec3   = hex($octet3);
+    my $dec4   = hex($octet4);
+    return "$dec1.$dec2.$dec3.$dec4";
+}
+
+# Returns the LAN address 
+# handles - if no arguments are provided with the script
+sub with_noarguments {
+    print_version();
+
+    my $lan = get_local_lan();
+    print
+"I am about to run WikiCrawler for Local LAN ($lan) -Do you want to Continue? [Y/N] : ";
+    my $option = <STDIN>;
+    chomp($option);
+
+    while ( $option ne "Y" ) {
+        if ( $option eq "N" ) { thanks_message(); exit; }
+        print "Your option should be [Y/N]";
+        $option = <STDIN>;
+        chomp($option);
+    }
+    return $lan;
+}
+
+######################################################################
+# Scan for a target and port using Net::Ping
+######################################################################
+sub scanPort() {
+
+    my $target = shift || die "$0: no target passed to scanPort()\n";
+    my $port   = shift || die "$0: no port passed to scanPort()\n";
+    if ( $target && $port ) {
+
+        my $ping = Net::Ping->new( "tcp", $timeOut );
+        $ping->service_check(1);
+        $ping->port_number($port);
+        if ( $ping->ping($target) ) {
+            print "** target = $target|| port = $port =====> Active ****\n"
+              ;    #if($DEBUG>=1);
+            push( @ips, $target );
+            &webServerReport($target);
+            if ( $useFork == 1 ) {    # default: use fork
+                &crawlWikis($target);
+            }
+
+            else {
+                &crawlWikisWithOutFork($target);
+            }
+        }
+        else {
+            print "--target = $target|| port = $port =====> Inactive---\n"
+              if ( $DEBUG >= 1 );
+        }
+        $ping->close();
+
+    }
+    else {
+        die "$0: you must specify at least on host and one port\n";
+    }
+}
+
+# Just says Thanks and provides the Copyright information
+sub thanks_message {
+
+    print "\nThank you for using WikiCrawler from TWIKI.Inc.\n";
+    print
+"To find out more options with $0, please use $0 --help command line option\n";
+
+    print_copyright();
+
+}
+
+sub print_version {
+    printf( "wikicrawler v%s, and Perl v%vd\n", $VERSION, $^V );
+    print_copyright();
+
+}
+
+######################################################################
+# create Initial Report
+######################################################################
+sub createInitialReport() {
+    ###
+    eval {
+        open( my $fh2, '>>' . $outputFileName );
+        print $fh2
+          "** FOLLOWING WIKIS FOUND ON, $subnets WITH PORT: $port.** \n\n";
+        close $fh2 or my $error = "true";
+       print "The Wikis reports would be found at: $outputFileName\n";
+    };
+    eval {
+        open( my $fh3, '>>' . $outputWebServerReport );
+        print $fh3
+          "**OPEN WEBSERVERS FOUND ON PORT: $port SUBNETs: $subnets **\n\n";
+        close $fh3 or my $error = "true";
+       print "The webserver reports would be found at: $outputWebServerReport\n";
+    };
+}
+
+sub print_copyright {
+
+    print <<COPYRIGHT;
+
+Copyright 2007-2009, 
+
+   TWIKI.NET Inc, 
+   440 North Wolfe Road Sunnyvale, i
+   CA 94085 i
+   USA 
+   Email: sales\@twiki.net 
+
+wikicrawler may be copied only under the terms of either the Artistic License or
+the GNU General Public License, which may be found in the Perl 5 source kit.
+
+Complete information about wikicrawler and products from TWIKI.NET Inc. 
+can be found at http://www.twiki.net website.
+
+
+COPYRIGHT
+
+}
+
+######################################################################
+# Generate Webserver Report
+######################################################################
+sub webServerReport() {
+
+    #Write Open Webservers found report to the output file.
+    my $openIP = shift || return;
+    eval {
+        open( my $fh, '>>' . $outputWebServerReport );
+        print $fh $openIP . "\n";
+        close $fh or my $error = "true";
+    };
+}
+
+######################################################################
+# Generate Wikis found Report
+######################################################################
+sub wikisFoundReport() {
+
+    #Write Wikis found report to the output file.
+    my $wikiSite = shift || return;
+    eval {
+        open( my $fh1, '>>' . $outputFileName );
+        print $fh1 $wikiSite . "\n";
+        close $fh1 or my $error = "true";
+    };
+}
+
+######################################################################
+#This sub is the reaper for scanport.
+######################################################################
+sub doReap {
+    while ( my $child = shift @children ) {
+        waitpid $child, 0;
+    }
+}
+######################################################################
+#This sub is the reaper for crawlwikis.
+######################################################################
+sub doReaper {
+    while ( my $child = shift @children1 ) {
+        waitpid $child, 0;
+    }
+}
+
+sub get_datetime {
+    my ( $sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst ) =
+      localtime;
+    $year += 1900;
+    $mon  += 1;
+    my $datetime = sprintf "%04dx%02dx%02d-%02d_%02d", $year, $mon, $mday,
+      $hour,
+      $min;
+    return $datetime;
+}
+
+sub get_time {
+
+    my ( $sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst ) =
+      localtime;
+    $year += 1900;
+    $mon  += 1;
+
+    my $startTime = sprintf "%04dx%02dx%02d-%02d_%02d_%02d", $year, $mon, $mday,
+      $hour, $min, $sec;
+
+    return $startTime;
+}
+######################################################################
+# Crawl Wikis found
+######################################################################
+sub crawlWikis() {
+
+    my $openIP = shift || return;
+
+    my $url;
+    my $browser = LWP::UserAgent->new;
+    my $response;
+    my @file = ();
+    my $totalWikis;
+
+    my $line;
+    my $key;
+
+    #Handling port 443, protocol will be https
+    if ( $port == 443 ) {
+        $protocol = "https://";
+    }
+
+    $wikiStartTime = get_time();
+
+    #Crawling header info for each site url variants
+  FORKCRAWL: foreach my $k (@WIKIS) {
+        $wikikey = $k;
+        my $list = $config->$k();
+        foreach my $l (@$list) {
+            $line = $l;
+
+            #Fork.
+            my $oldpid1 = $$;
+            my $pid1    = fork;
+
+            #If fork failed...
+            if ( not defined $pid1 ) {
+
+                #If resource is not available...
+                if ( $! =~ /Resource temporarily unavailable/ ) {
+
+                    #Reap children.
+                    &doReaper;
+
+                    #Retry this port.
+                    #$fline --;
+                }
+                else {
+
+                    #Otherwise, show the error.
+                    die "Can't fork: $!\n";
+                }
+            }
+            elsif ( $pid1 == 0 ) {
+
+                #This is the child. Save parent.
+                $parent1 = $oldpid1;
+
+                #Clearup kids table.
+                @children1 = ();
+
+                #We don't want this thread to fork any more.
+                last FORKCRAWL;
+            }
+            else {
+
+                #This is the parent. Store child pid to wait on it later.
+                push @children1, $pid1;
+            }
+
+        }
+
+    }    #for
+
+    #If this is a child (i.e. it has a parent)...
+    if ($parent1) {
+
+        #my ( $key, $value ) = split( /=/, $tmpvar, 2 );
+        my $value = $line;
+
+        #print "<IP:------- $ip >\n" if($DEBUG>=1);
+       if (($port != '80')|| ($port != '443')) {
+        $url = $protocol . $openIP .":".$port. $value;
+        } else { $url = $protocol . $openIP .  $value; }
+    
+        $url =~ s/\s+$//;
+
+        print "\n[Crawling $wikikey: $url]" if ( $DEBUG >= 1 );
+
+        eval {
+
+            $response = $browser->head($url);
+
+            my $content_length = $response->header('Content-Length') || 0;
+            my $www_auth       = $response->header('WWW-Authenticate');
+            my $response_code  = $response->code();
+
+            my $keyurl = '';
+
+            #print "\n".$response_code if($DEBUG>=1);
+            #print "\n  cont-length = ".$content_length if($DEBUG>=1);
+
+            my $authwwwStr = "";
+            if ( $response_code == 401 ) {
+                $authwwwStr = "||[WWW-Authenticate: $www_auth]";
+                $keyurl     = $wikikey . "=" . "$url$authwwwStr";
+
+                #push(@wikiSites, $key."="."$url $authwwwStr");
+                print "\n[Crawling $wikikey: $url]||**" . $wikikey . "="
+                  . "$url $authwwwStr **";    # if($DEBUG>=1);
+                &wikisFoundReport($keyurl);
+            }
+
+            # if ( ( $response_code == 200 ) && ( $content_length > 0 ) ) {
+            if (   ( $response->content_type eq "text/html" )
+                && ( $response->is_success ) )
+            {
+
+                #push(@wikiSites, $key."="."$url");
+                $keyurl = $wikikey . "=" . "$url";
+                print "\n[Crawling $wikikey: $url]**" . $wikikey . "="
+                  . "$url **";                # if($DEBUG>=1);
+                &wikisFoundReport($keyurl);
+            }
+            if ( $response_code == 404 ) {
+                print
+                  "\n[Crawling $wikikey: $url] --  $response_code not found "
+                  if ( $DEBUG >= 1 );
+            }
+        };
+        if ($@) {
+            print $@;
+        }
+
+        #Exit.
+        exit 0;
+    }
+    else {
+
+        #If we're not the kid, we're the parent. Do a reap.
+        &doReaper;
+    }
+
+}
+
+__END__
+
+=head1 NAME
+
+wikicrawler -- A command-line tool crawling wiki's in the network and finding the footprints of varios wikis present
+               in the network. 
+
+=head1 SYNOPSIS
+
+
+wikicrawler [options] 
+
+
+Options:
+
+	-h, --help		Display this help
+	-v, --verbose		Display more verbose output while crawling the Wiki's
+	-p, --port		Port number to scan, Example: 80, 8080, 8090, 443, 23, 22
+				The number must be between 0 to 65535
+	-s, --seconds		Timeout to wait in seconds (must be postive integer), 
+				This is an optional parameter.  Default timeout is 1 sec
+	-t, --targets		Target ip subnets to scan. Target subnets should be mentioned 
+				in CIDR format. Default target is local LAN of server. 
+				Example: 69.69.69.0/24 or 198.168.0.0/28.  
+	-w, --withOutFork	Whether to use forking in second step, while 
+				crawlWikis, Default is Use Forking, if -w is used then it will
+			 	be without Forking. 
+
+	-c, 			Mention the configuration file, by default, it is wiki.conf 
+Examples: wikicrawler -p 80 -t 198.168.1.0/24 -s 3
+          wikicrawler -p 80 -t 198.168.1.0/24 -s 3 -c wiki.conf
+
+
+
+
+=head1 OVERVIEW
+
+F<wikicrawler> is a command-line interface to crawl the wiki's present in the network. The utility is developed by C<TWIKI.NET Inc>. With no arguments, it will crawl for Wiki's present in the LAN of server/machine where tool is executed. 
+
+
+=head1 AUTHORS
+
+Sopan Shewale C<< <sopan@twiki.net> >>
+Arvind Gupta C<<arvind@newput.com> >> - the initial version
+
+=head1 COPYRIGHT
+
+Copyright 2008 by TWIKI.NET Inc. C<< <sales@twiki.net> >>.
+
+This program is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.
+
+See L<http://www.perl.com/perl/misc/Artistic.html>.
+
+=cut
