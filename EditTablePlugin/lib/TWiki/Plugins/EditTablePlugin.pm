@@ -1,5 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
+# Copyright (C) 2008 Arthur Clemens, arthur@visiblearea.com
 # Copyright (C) 2002-2007 Peter Thoeny, peter@thoeny.org and TWiki
 # Contributors.
 #
@@ -35,7 +36,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '4.8.7';
+$RELEASE = '4.9';
 
 $encodeStart = '--EditTableEncodeStart--';
 $encodeEnd   = '--EditTableEncodeEnd--';
@@ -77,7 +78,7 @@ sub initPlugin {
 sub beforeCommonTagsHandler {
     return unless $_[0] =~ /%EDIT(TABLE|CELL){(.*)}%/os;
     require TWiki::Plugins::EditTablePlugin::Core;
-    TWiki::Plugins::EditTablePlugin::Core::preProcessSpreadsheetPluginTags(
+    TWiki::Plugins::EditTablePlugin::Core::protectVariables(
         $_[0] );
 }
 
