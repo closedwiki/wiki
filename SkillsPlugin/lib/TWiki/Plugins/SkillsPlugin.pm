@@ -21,6 +21,8 @@ require TWiki::Plugins::SkillsPlugin::Category;
 require TWiki::Plugins::SkillsPlugin::Skill;
 require TWiki::Plugins::SkillsPlugin::UserSkill;
 
+require TWiki::Plugins::SkillsPlugin::SkillsStore;
+
 use strict;
 use vars qw(    $VERSION
                 $RELEASE
@@ -295,132 +297,7 @@ sub _tagUserSkills {
 }
 
 sub _tagBrowseSkills {
-    # parameteres:
-    #category="Cat1, Cat2"
-    #skill="Skill1, Skill2"
-    #twisty="open"
     
-    my $params = shift;
-    my @pCat = split( ',' , $params->{category});
-    my @pSkill = split( ',' , $params->{skill});
-    my $twisty = $params->{twisty} || 'closed';
-    
-    my $allSkills = _getAllSkills();
-    
-    my $out = TWiki::Func::readTemplate( 'skillsbrowseview' );
-    my $tmplRepeat = TWiki::Func::readTemplate( 'skillsbrowseviewrepeated' );
-    
-    my( undef, $tmplCat, $tmplSkillContStart, $tmplSkillStart, $tmplSkill, $tmplRating, $tmplComment, $tmplSkillEnd, $tmplSkillContEnd ) = split( /%SPLIT%/, $tmplRepeat );
-    my $foo;
-    
-    # get image paths
-    my $ratingPic = _getImages( 'star' );
-    my $skillPic = _getImages( 'open' );
-    my $commentPic = _getImages( 'comment' );
-    my $twistyCloseImg = _getImages( 'twistyclose' );
-    
-    my $jsVars = "if( !SkillsPlugin ) var SkillsPlugin = {}; SkillsPlugin.vars = {}; "; # create namespace in JS
-    
-    my $repeatedLine;
-    for my $cat ( @{ $allSkills } ){
-        my $catDone = 0;
-        my $skillOut = 0;
-        
-        # check if cat is wanted or if all are
-        if( @pCat ){
-            next unless _isInArray( $cat->name, \@pCat );
-        }
-        
-        # print cat line
-        $foo .= $cat->name;
-        
-        for my $skill ( @{ $cat->getSkills(); } ){
-            # check if cat and skill is wanted or all are
-            if( @pCat && @pSkill ){
-                next unless _isInArray( $skill, \@pSkill );
-            }
-            
-            # need to get all users that have this skill
-            
-            # produce output line
-            # add to array/string which will be output in %REPEAT%
-            my $lineOut;
-            
-            $skillOut = 1;
-            
-            # category
-            unless( $catDone == 1 ){ 
-                $lineOut .= $tmplCat;
-                $lineOut .= $tmplSkillContStart
-            }
-            
-            $lineOut .= $tmplSkillStart;
-            
-            # skill
-            $lineOut .= $tmplSkill;
-            
-            # rating
-            my $i = 1;
-            while( $i < $obj_userSkill->rating ){
-                my $ratingOut = $tmplRating;
-                $ratingOut =~ s/%RATING%/&nbsp;/g;
-                $ratingOut =~ s/%RATINGDEF%//g;
-                $lineOut .= $ratingOut;
-                $i ++;
-            }
-            my $ratingOut = $tmplRating;
-            $ratingOut =~ s/%RATING%/$ratingPic/g;
-            $ratingOut =~ s/%RATINGDEF%/class='skillsRating'/g;
-            $lineOut .= $ratingOut;
-            $i ++;
-            while( $i <= 4 ){
-                my $ratingOut = $tmplRating;
-                $ratingOut =~ s/%RATING%/&nbsp;/g;
-                $ratingOut =~ s/%RATINGDEF%//g;
-                $lineOut .= $ratingOut;
-                $i ++;
-            }
-            
-            # comment
-            $lineOut .= $tmplComment;
-            
-            $lineOut .= $tmplSkillEnd;
-            
-            # subsitutions
-            #$lineOut =~ s!%SKILLTWISTY%!<span id="%CATEGORY%_twisty"></span>!g;
-            #$lineOut =~ s/%CATEGORY%/$cat->name/ge;
-            $lineOut =~ s/%SKILL%/$skill/g;
-            $lineOut =~ s/%SKILLICON%/$skillPic/g;
-            if( $obj_userSkill->comment ){
-                my $commentLink = "<span id='comment|" . $cat->name . "|$skill' title='" . $obj_userSkill->comment . "' class='SkillsPluginComments' >$commentPic</span>";
-                $lineOut =~ s/%COMMENTLINK%/$commentLink/g;
-                $lineOut =~ s/%COMMENTOUT%/$obj_userSkill->comment/ge;
-            } else {
-                $lineOut =~ s/%COMMENTLINK%//g;
-                $lineOut =~ s/%COMMENTOUT%//g;
-            }
-            
-            $repeatedLine .= $lineOut;
-            
-            # print skill line
-            $foo .= $skill;
-        }
-        # subsitutions
-        my $catTwist = '<span id="' . $cat->name . '_twistyImage" class="SkillsPlugin-twisty-link"> ' . $twistyCloseImg . '</span>';
-        $repeatedLine =~ s!%SKILLTWISTY%!$catTwist!g;
-        my $catLink = '<span id="' . $cat->name . '_twistyLink" class="SkillsPlugin-twisty-link">' . $cat->name . '</span>';
-        $repeatedLine =~ s/%CATEGORY%/$catLink/g;
-        my $skillContDef = 'id="' . $cat->name . '_twist"';
-        $repeatedLine =~ s/%SKILLCONTDEF%/$skillContDef/g;
-        
-        $repeatedLine .= $tmplSkillContEnd unless( $skillOut == 0 );
-    }
-    
-    _addYUI();
-    TWiki::Func::addToHEAD('SKILLSPLUGIN_CSS','<style type="text/css" media="all">@import url("/twiki/pub/TWiki/SkillsPlugin/style.css");</style>');
-    TWiki::Func::addToHEAD('SKILLSPLUGIN_JS','<script src="/twiki/pub/TWiki/SkillsPlugin/main.js" language="javascript" type="text/javascript"></script>');
-    
-    return $out;
 }
 
 # ========================= REST
@@ -466,9 +343,8 @@ sub _restAddNewSkill {
     my $newSkill = TWiki::Func::getCgiQuery()->param('newskill');
     my $cat = TWiki::Func::getCgiQuery()->param('incategory');
     
-    #_Debug("$cat: $newSkill");
-    
-    my $error = _addNewSkill( $newSkill, $cat );
+    #my $error = _addNewSkill( $newSkill, $cat );
+    my $error = TWiki::Plugins::SkillsPlugin::SkillsStore->new()->addNewSkill( $newSkill, $cat );
     
     my $message;
     if( $error ){
@@ -479,7 +355,7 @@ sub _restAddNewSkill {
     
     $message = _urlEncode( $message );
     
-    my ($web, $topic) = TWiki::Func::normalizeWebTopicName( undef, TWiki::Func::getCgiQuery()->param('topic') );
+    my( $web, $topic ) = TWiki::Func::normalizeWebTopicName( undef, TWiki::Func::getCgiQuery()->param('topic') );
     my $url = TWiki::Func::getScriptUrl($web, $topic, 'view')
             . '?skillsmessage=' . $message;
     TWiki::Func::redirectCgiQuery( undef, $url );
@@ -613,6 +489,7 @@ sub _addNewSkill {
     return undef;
 }
 
+# returns all the categories in the defined format
 sub _showCategories {
     my ( $format, $separator ) = @_;
     
@@ -629,20 +506,14 @@ sub _showCategories {
     my $text = '';
     my $line = '';
     
-    my $allSkills = _getAllSkills();
-    
-    my @cats;
-    foreach my $cat ( @{ $allSkills } ){
-        push @cats, $cat->name;
-    }
-    
+    my $cats = TWiki::Plugins::SkillsPlugin::SkillsStore->new()->getCategoryNames();
     $text = join(
         $separator,
             map {
                 $line = $format;
                 $line =~ s/\$category/$_/go;
                 $line;
-        } @cats
+            } @{ $cats }
     );
 
     return $text;
@@ -650,7 +521,7 @@ sub _showCategories {
 
 # allows the user to print all skills in format of their choice
 # this can be from a specific category, or all categories
-# TODO: specify multiple categories? needed?
+# TODO: specify multiple categories? needed? should be fairly simple...
 sub _showSkills {
     #my $qCatSeparator = $params->{categoryseparator};
     my( $cat, $format, $separator, $prefix, $suffix, $catSeparator ) = @_;
@@ -667,18 +538,16 @@ sub _showSkills {
 
     $prefix =~ s/\$n/\n/go;
     $suffix =~ s/\$n/\n/go;
-
-
+    
     my $text = '';
     my $line = '';
     
     # get all skills
     # if category is specified, only show skills in that category
     # else, show them all
+    my $allSkills = TWiki::Plugins::SkillsPlugin::SkillsStore->new()->getAll();
     
-    my $allSkills = _getAllSkills();
-    
-    if ($cat){
+    if ($cat){ # category specified
         
         my $skills;
         
