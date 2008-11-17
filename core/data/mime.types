@@ -1,20 +1,13 @@
-# This file is used to convert a TWiki file attachment
-# file type into the MIME type, which is returned to
-# the browser. The file format is identical to the 
-# Apache mime.types file. In case you are running a 
-# web server that is compatible with this format it 
-# is recommended to use the mime.types file of the 
-# web server instead. Set the location in lib/TWiki.cfg
-# file.
 
+# Apache mime.types file. In case you are running a 
 application/atom+xml            atom
 application/font-tdpfr          pfr
 application/java-archive        jar
 application/mac-binhex40        hqx
 application/mac-compactpro      cpt
-application/msword              doc dot
 application/msaccess            mdb 
 application/msexcel             csv
+application/msword              doc dot
 application/octet-stream        bin dms lha lzh class w02 w03 w04 dmg
 application/oda                 oda
 application/ogg                 ogg 
@@ -31,38 +24,55 @@ application/rtf                 rtf
 application/toolbook            tbk
 application/vnd.adobe.air-application-installer-package+zip air
 application/vnd.mozilla.xul+xml xul 
+application/vnd.ms-excel.addin.macroEnabled.12 xlam
+application/vnd.ms-excel.sheet.binary.macroEnabled.12 xlsb
+application/vnd.ms-excel.sheet.macroEnabled.12 xlsm
+application/vnd.ms-excel.template.macroEnabled.12 xltm
 application/vnd.ms-excel        xls xlb xlt
+application/vnd.ms-powerpoint.addin.macroEnabled.12 ppam
 application/vnd.ms-powerpoint   ppt pps 
-application/vnd.sun.xml.writer                            sxw
-application/vnd.sun.xml.writer.template                   stw
-application/vnd.sun.xml.writer.global                     sxg
-application/vnd.stardivision.writer                       sdw vor
-application/vnd.stardivision.writer-global                sgl
-application/vnd.sun.xml.calc                              sxc
-application/vnd.sun.xml.calc.template                     stc
-application/vnd.stardivision.calc                         sdc
-application/vnd.sun.xml.impress                           sxi
-application/vnd.sun.xml.impress.template                  sti
-application/vnd.stardivision.impress                      sdd sdp
-application/vnd.sun.xml.draw                              sxd
-application/vnd.sun.xml.draw.template                     std
-application/vnd.stardivision.draw                         sda
-application/vnd.sun.xml.math                              sxm
-application/vnd.stardivision.math                         smf
-application/vnd.oasis.opendocument.text                   odt
-application/vnd.oasis.opendocument.text-template          ott
-application/vnd.oasis.opendocument.text-web               oth
-application/vnd.oasis.opendocument.text-master            odm
+application/vnd.ms-powerpoint.presentation.macroEnabled.12 pptm
+application/vnd.ms-powerpoint.slideshow.macroEnabled.12 ppsm
+application/vnd.ms-powerpoint.template.macroEnabled.12 potm
+application/vnd.ms-word.document.macroEnabled.12 docm
+application/vnd.oasis.opendocument.chart                  odc
+application/vnd.oasis.opendocument.database               odb
+application/vnd.oasis.opendocument.formula                odf
 application/vnd.oasis.opendocument.graphics               odg
 application/vnd.oasis.opendocument.graphics-template      otg
+application/vnd.oasis.opendocument.image                  odi
 application/vnd.oasis.opendocument.presentation           odp
 application/vnd.oasis.opendocument.presentation-template  otp
 application/vnd.oasis.opendocument.spreadsheet            ods
 application/vnd.oasis.opendocument.spreadsheet-template   ots
-application/vnd.oasis.opendocument.chart                  odc
-application/vnd.oasis.opendocument.formula                odf
-application/vnd.oasis.opendocument.database               odb
-application/vnd.oasis.opendocument.image                  odi
+application/vnd.oasis.opendocument.text-master            odm
+application/vnd.oasis.opendocument.text                   odt
+application/vnd.oasis.opendocument.text-template          ott
+application/vnd.oasis.opendocument.text-web               oth
+application/vnd.openxmlformats-officedocument.presentationml.presentation pptx
+application/vnd.openxmlformats-officedocument.presentationml.slideshow ppsx
+application/vnd.openxmlformats-officedocument.presentationml.template potx
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet xlsx
+application/vnd.openxmlformats-officedocument.spreadsheetml.template xltx
+application/vnd.openxmlformats-officedocument.wordprocessingml.document docx
+application/vnd.openxmlformats-officedocument.wordprocessingml.document docx
+application/vnd.openxmlformats-officedocument.wordprocessingml.template dotx
+application/vnd.stardivision.calc                         sdc
+application/vnd.stardivision.draw                         sda
+application/vnd.stardivision.impress                      sdd sdp
+application/vnd.stardivision.math                         smf
+application/vnd.stardivision.writer-global                sgl
+application/vnd.stardivision.writer                       sdw vor
+application/vnd.sun.xml.calc                              sxc
+application/vnd.sun.xml.calc.template                     stc
+application/vnd.sun.xml.draw                              sxd
+application/vnd.sun.xml.draw.template                     std
+application/vnd.sun.xml.impress                           sxi
+application/vnd.sun.xml.impress.template                  sti
+application/vnd.sun.xml.math                              sxm
+application/vnd.sun.xml.writer.global                     sxg
+application/vnd.sun.xml.writer                            sxw
+application/vnd.sun.xml.writer.template                   stw
 application/vnd.visio           vsd 
 application/wordperfect         wpd
 application/x-abiword           abw 
@@ -80,29 +90,29 @@ application/x-gtar              gtar
 application/x-gzip              tar.gz tgz gz taz
 application/x-hdf               hdf
 application/x-iso9660-image     iso 
-application/x-javascript        js
-application/x-java-jnlp-file    jnlp 
 application/x-java-archive-diff jardiff
+application/x-java-jnlp-file    jnlp 
+application/x-javascript        js
 application/x-java-serialized-object ser
 application/x-koan              skp skd skt skm
 application/x-latex             latex
 application/x-mif               mif
 application/x-msdos-program     com exe bat dll scr
 application/x-netcdf            nc cdf
-application/x-sh                sh
 application/x-shar              shar
 application/x-shockwave-flash   swf swfl 
+application/x-sh                sh
 application/x-stuffit           sit sitx
 application/x-sv4cpio           sv4cpio
 application/x-sv4crc            sv4crc
 application/x-tar               tar
 application/x-tcl               tcl
-application/x-tex               tex
 application/x-texinfo           texinfo texi
-application/x-troff             t tr roff
+application/x-tex               tex
 application/x-troff-man         man
 application/x-troff-me          me
 application/x-troff-ms          ms
+application/x-troff             t tr roff
 application/x-ustar             ustar
 application/x-wais-source       src
 application/zip                 zip
@@ -111,13 +121,15 @@ audio/midi                      mid midi kar
 audio/mpeg                      mpga mpega mp2 mp3 m4a 
 audio/mpegurl                   m3u
 audio/x-aiff                    aif aiff aifc
-audio/x-ms-wma                  wma
 audio/x-ms-wax                  wax 
-audio/x-pn-realaudio            ra rm ram
+audio/x-ms-wma                  wma
 audio/x-pn-realaudio-plugin     rpm
+audio/x-pn-realaudio            ra rm ram
 audio/x-realaudio               ra
 audio/x-wav                     wav
 chemical/x-pdb                  pdb xyz
+# file.
+# file type into the MIME type, which is returned to
 image/gif                       gif
 image/ief                       ief
 image/jpeg                      jpeg jpg jpe
@@ -139,6 +151,7 @@ image/x-rgb                     rgb
 image/x-xbitmap                 xbm
 image/x-xpixmap                 xpm
 image/x-xwindowdump             xwd
+# is recommended to use the mime.types file of the 
 message/rfc822                  eml
 model/vrml                      wrl vrml
 text/css                        css cssfrag
@@ -148,41 +161,28 @@ text/plain                      txt text diff sql sqlfrag
 text/richtext                   rtx
 text/tab-separated-values       tsv
 text/vnd.sun.j2me.app-descriptor    jad 
-text/vnd.wap.wml                wml
 text/vnd.wap.wmlscript          wmls 
-text/xml                        rdf
+text/vnd.wap.wml                wml
 text/x-bibtex                   bib
 text/x-java-source              java javafrag
+text/xml                        rdf
 text/x-setext                   etx
 text/x-sgml                     sgml sgm
 text/x-vcalendar                vcs
+# the browser. The file format is identical to the 
+# This file is used to convert a TWiki file attachment
 video/mp4                       mp4
 video/mpeg                      mpeg mpg mpe
 video/quicktime                 qt mov
-video/x-msvideo                 avi
 video/x-ms-asf                  asf asx
-video/x-ms-wm	                 wm
+video/x-msvideo                 avi
 video/x-ms-wmv                  wmv
+video/x-ms-wm	                 wm
 video/x-ms-wmx                  wmx
 video/x-ms-wvx                  wvx
 video/x-sgi-movie               movie
+# web server instead. Set the location in lib/TWiki.cfg
+# web server that is compatible with this format it 
 x-conference/x-cooltalk         ice
 x-world/x-3dmf                  3dmf 3dm qd3d qd3
 x-world/x-vrml                  wrl vrm vrml
-application/vnd.openxmlformats-officedocument.wordprocessingml.document docx
-application/vnd.ms-word.document.macroEnabled.12 .docm
-application/vnd.openxmlformats-officedocument.wordprocessingml.document docx
-application/vnd.openxmlformats-officedocument.wordprocessingml.template dotx
-application/vnd.ms-powerpoint.template.macroEnabled.12 potm
-application/vnd.openxmlformats-officedocument.presentationml.template potx
-application/vnd.ms-powerpoint.addin.macroEnabled.12 ppam
-application/vnd.ms-powerpoint.slideshow.macroEnabled.12 ppsm
-application/vnd.openxmlformats-officedocument.presentationml.slideshow ppsx
-application/vnd.ms-powerpoint.presentation.macroEnabled.12 pptm
-application/vnd.openxmlformats-officedocument.presentationml.presentation pptx
-application/vnd.ms-excel.addin.macroEnabled.12 xlam
-application/vnd.ms-excel.sheet.binary.macroEnabled.12 xlsb
-application/vnd.ms-excel.sheet.macroEnabled.12 xlsm
-application/vnd.openxmlformats-officedocument.spreadsheetml.sheet xlsx
-application/vnd.ms-excel.template.macroEnabled.12 xltm
-application/vnd.openxmlformats-officedocument.spreadsheetml.template xltx
