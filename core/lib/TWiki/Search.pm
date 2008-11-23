@@ -1193,6 +1193,30 @@ sub displayFormField {
         $breakArgs = $params[1] || 1;
     }
 
+   # Following Section added to fix - Item6082
+   my $form =  $meta->get('FORM');
+   my $fields;
+
+   if ($form) {
+       $fields = $meta->get('FIELD', $name);
+
+   }
+
+   if (ref($fields) eq 'HASH'){
+         return $fields->{value};
+   }
+
+   foreach my $fld (@$fields) {
+        if ( $fld->{'name'} eq $name ) {
+
+            return  $fld->{'value'};
+        }
+
+   }
+   # End of fix - Item6082, a few more lines can be removed from this 
+   # subroutine, we can handle that in next patch-release.
+
+
     return $meta->renderFormFieldForDisplay(
         $name, '$value', 
 	{ break => $breakArgs, protectdollar => 1, showhidden => 1} );
