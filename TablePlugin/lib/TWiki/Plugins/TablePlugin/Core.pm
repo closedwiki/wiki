@@ -1663,10 +1663,15 @@ sub emitTable {
         $rowCount++;
     }    # foreach my $row ( @curTable )
 
+
+# Removing thead and tbody from following to fix Item5865
+# In future - we need to work on better mechanism to apply 
+# better thead/tbody to the tables, just removed thead/tbody words
+# fix - starts
     my $thead =
-        "$singleIndent<thead>"
+        "$singleIndent"
       . join( "", @headerRowList )
-      . "$singleIndent</thead>";
+      . "$singleIndent";
     $text .= $currTablePre . $thead if scalar @headerRowList;
 
     my $tfoot =
@@ -1676,9 +1681,11 @@ sub emitTable {
     $text .= $currTablePre . $tfoot if scalar @footerRowList;
 
     my $tbody =
-      "$singleIndent<tbody>" . join( "", @bodyRowList ) . "$singleIndent</tbody>";
+      "$singleIndent" . join( "", @bodyRowList ) . "$singleIndent";
     $text .= $currTablePre . $tbody if scalar @bodyRowList;
 
+# fix ends for Item5865
+#
     $text .= $currTablePre . CGI::end_table() . "\n";
     _setDefaults();
     return $text;
