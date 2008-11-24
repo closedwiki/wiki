@@ -126,12 +126,17 @@ sub REDIRECT {
             $queryString = $1;
         }
         
-        $queryString = "?" . $queryString if $queryString;
+	# AndrewRJones: allow us to use %<nop>URLPARAM{redirectfrom}%
+	# in destination topic to display Wikipedia like "Redirected
+	# from ..." text
+
+	my $q = "?redirectedfrom=$web.$topic";
+	$q .= "&" . $queryString if $queryString;
 
         # topic exists
         TWiki::Func::redirectCgiQuery( $query,
             TWiki::Func::getViewUrl( $newWeb, $newTopic ) . $anchor
-              . $queryString );
+            . $q );
 
     }
 
