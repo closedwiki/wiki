@@ -427,8 +427,37 @@ sub viewfile {
     if( defined( $query->param( 'filename' ))) {
         $fileName = $query->param( 'filename' );
     } else {
-        $fileName = pop( @path );
+
+         # Ok file name is not comming from explicit query parameter
+         # Let us cook from @path
+
+         $fileName = pop( @path );
+
+         #Let us redefine web/topic - fix of Item5967
+
+        if( $fileName =~ /\.([^.]+)$/ ) {  #file has extension
+            my $suffix = $1;
+            my $presuffix = $fileName;
+            $presuffix  =~ s/\.$suffix$//;
+            $webName =~ s/$presuffix$//o;  #let us drop filename part from webName
+            $webName =~ s/\/$//o;
+            if ($webName =~ /\/([^\/]+)$/) {$topic = $1;} #topic name defined here
+            $webName =~ s/$topic$//o;
+            $webName =~ s/\/$//o;
+
+         } else {    #file does not have extension
+            $webName =~ s/$fileName$//o;  #let us drop the filename from webName
+            $webName =~ s/\/$//o;
+            if ($webName =~ /\/([^\/]+)$/) {$topic = $1;}  #topic name redefined here
+            $webName =~ s/$topic$//o;
+            $webName =~ s/\/$//o;
+
+        }
+
+
     }
+
+
     if (!$fileName) {
         throw TWiki::OopsException( 'attention',
                                     def => 'no_such_attachment',
