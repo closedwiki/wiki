@@ -431,13 +431,16 @@ sub parseInterval{
         $ends[$i] =~ s/S/\*1\+/gi;
         #   possibly append '0' and evaluate numerically the string.  
         $ends[$i] =~ s/\+$/+0/;
-        my $duration = eval($ends[$i]);
+        $ends[$i] =~ s#[^-\d+*/]##g;
+        my $duration = eval( $ends[$i] );
         #   the value computed, if it specifies the starting point
         #   in time, must be subtracted from the previously
         #   computed ending point.  if it specifies the ending
         #   point, it must be added to the previously computed
         #   starting point.
-        $ends[$i] = eval($ends[1-$i].$oper[$i].$ends[$i]);
+        my $expr = "$ends[1-$i]$oper[$i]($ends[$i])";
+        $expr =~ s#[^-\d+*/()]##g;
+        $ends[$i] = eval( $expr );
         # SMELL: if the user specified both start and end as a
         # time duration, some kind of error must be reported.
     }
