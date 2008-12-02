@@ -189,7 +189,7 @@ Find Topics:
 <input type="text" name="q" size="32" value="%URLPARAM{"q" encode="entity"}%" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" />
 </form>
 Result:
-%SEARCH{ search="%URLPARAM{"q" encode="quote"}%" format="   * $web.$topic: %BR% $summary" nosearch="on" }%
+%SEARCH{ search="%URLPARAM{"q" encode="quote"}%" type="keyword" format="   * $web.$topic: %BR% $summary" nosearch="on" }%
 </verbatim>
 
 *To get this:*
@@ -199,7 +199,7 @@ Find Topics:
 <input type="text" name="q" size="32" value="%URLPARAM{"q" encode="entity"}%" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" />
 </form>
 Result:
-%SEARCH{ search="%URLPARAM{"q" encode="quote"}%" format="   * $web.$topic: %BR% $summary" nosearch="on" }%
+%SEARCH{ search="%URLPARAM{"q" encode="quote"}%" type="keyword" format="   * $web.$topic: %BR% $summary" nosearch="on" }%
 
 __Related Topics:__ UserDocumentationCategory, SearchHelp, TWikiVariables#VarSEARCH, SearchPatternCookbook, RegularExpression
 
