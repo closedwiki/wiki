@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1168735492" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1228163901" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %STARTINCLUDE%
 ---+ TWiki Formatted Search
@@ -186,20 +186,20 @@ Use an HTML form and an embedded formatted search on the same topic. You can lin
 <verbatim>
 <form action="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">
 Find Topics: 
-<input type="text" name="q" size="32" value="%URLPARAM{"q"}%" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" />
+<input type="text" name="q" size="32" value="%URLPARAM{"q" encode="entity"}%" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" />
 </form>
 Result:
-%SEARCH{ search="%URLPARAM{"q"}%" format="   * $web.$topic: %BR% $summary" nosearch="on" }%
+%SEARCH{ search="%URLPARAM{"q" encode="quote"}%" format="   * $web.$topic: %BR% $summary" nosearch="on" }%
 </verbatim>
 
 *To get this:*
 
 <form action="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">
 Find Topics: 
-<input type="text" name="q" size="32" value="%URLPARAM{"q"}%" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" />
+<input type="text" name="q" size="32" value="%URLPARAM{"q" encode="entity"}%" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" />
 </form>
 Result:
-%SEARCH{ search="%URLPARAM{"q"}%" format="   * $web.$topic: %BR% $summary" nosearch="on" }%
+%SEARCH{ search="%URLPARAM{"q" encode="quote"}%" format="   * $web.$topic: %BR% $summary" nosearch="on" }%
 
 __Related Topics:__ UserDocumentationCategory, SearchHelp, TWikiVariables#VarSEARCH, SearchPatternCookbook, RegularExpression
 
