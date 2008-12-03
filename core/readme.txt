@@ -1,28 +1,34 @@
-TWiki (TM) - A Web Based Collaboration Platform
+TWiki (R) - the Open Source Enterprise Wiki and Web 2.0 Application Platform
 ===============================================
 
 What is TWiki?
 --------------
 
-TWiki is a flexible and powerful web-based collaboration 
-platform that allows you to run a dynamic intranet site, a 
-project development space, a document management system, a 
-knowledge base, an issue tracking system and many other 
-groupware application. TWiki looks and feels like a normal 
-intranet or Web site. Users can freely change or create 
-content from any Web browser, without requiring special 
-browser plugins. 
+Welcome to TWiki, a flexible, powerful, and easy to use 
+enterprise wiki, enterprise collaboration platform and 
+knowledge management system. It is a Structured Wiki, 
+typically used to run a project development space, a 
+document management system, a knowledge base, or any 
+other groupware tool, on an intranet or on the internet. 
+Web content can be created collaboratively by using 
+just a browser. Users without programming skills can create 
+web applications. Developers can extend the functionality 
+of TWiki with Plugins. TWiki fosters information flow 
+within an organization; lets distributed teams work together
+seamlessly and productively; and eliminates the 
+one-webmaster syndrome of outdated intranet content.
 
 Major companies like British Telecom, Sun Microsystems, 
-Motorola and SAP depend on the TWiki platform to increase 
+Motorola, Yahoo and SAP depend on the TWiki platform to increase 
 the productivity of their engineering teams. 
 
 Features include automatic link generation, full text 
 search, authorization based on groups, Web form handling, 
 email notification of changes, file attachments to Web 
 pages, revision control of pages and attachments, and 
-more. The server-side TWiki Plugins API provides developers 
-with a simple way to build new groupware applications. 
+more. A developers with begining level programming skills 
+can develop Web2.0 Applications using server-side TWiki Plugin API. 
+
 
 The GPLed TWiki software and over hundreds of Plugins can be 
 downloaded from the TWiki.org web site, http://TWiki.org/.
