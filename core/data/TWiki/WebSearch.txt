@@ -1,15 +1,15 @@
-%META:TOPICINFO{author="BaseUserMapping_333" date="1228138146" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1228358828" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+ %MAKETEXT{"Web Search"}%
 
-%IF{"defined search" then='%ICON{feed}% <a href="%SCRIPTURL{"view"}%/%BASEWEB%/WebRss?search=%URLPARAM{"search" encode="url"}%;type=%IF{"'%URLPARAM{"regex"}%'='on' OR '%URLPARAM{"type"}%'='regex'" then="regex" else="word"}%;excludetopic=%BASETOPIC%,WebHome,WebStatistics;web=%URLPARAM{"web" default="%BASEWEB%"}%;limit=%URLPARAM{"limit" default="all"}%;scope=%URLPARAM{"scope" default="text"}%;casesensitive=%URLPARAM{"casesensitive" default="off"}%">%MAKETEXT{"Get notified on changes on this search"}%</a>'}%
+%IF{"defined search" then='%ICON{feed}% <a href="%SCRIPTURL{"view"}%/%BASEWEB%/WebRss?search=%URLPARAM{"search" encode="url"}%;type=%IF{"'%URLPARAM{"regex" encode="url"}%'='on' OR '%URLPARAM{"type" encode="url"}%'='regex'" then="regex" else="word"}%;excludetopic=%BASETOPIC%,WebHome,WebStatistics;web=%URLPARAM{"web" encode="url" default="%BASEWEB%"}%;limit=%URLPARAM{"limit" encode="url" default="all"}%;scope=%URLPARAM{"scope" encode="url" default="text"}%;casesensitive=%URLPARAM{"casesensitive" encode="url" default="off"}%">%MAKETEXT{"Get notified on changes on this search"}%</a>'}%
 
 %SEARCH{ 
 "%URLPARAM{"search" encode="quote"}%" 
-type="%URLPARAM{"type" default="word"}%" 
-scope="%URLPARAM{"scope"}%" 
-web="%URLPARAM{web}%" 
-nosearch="%URLPARAM{nosearch}%" 
+type="%URLPARAM{"type" encode="quote" default="word"}%" 
+scope="%URLPARAM{"scope" encode="quote"}%" 
+web="%URLPARAM{"web" encode="quote"}%" 
+nosearch="%URLPARAM{"nosearch" encode="quote"}%" 
 zeroresults="%IF{ "defined search" then="on" else="off" }%"
 }%
 
@@ -21,16 +21,16 @@ zeroresults="%IF{ "defined search" then="on" else="off" }%"
 <tr>
 <td colspan="2" class="twikiFirstRow">
   <input type="text" class="twikiInputField" name="search" value="%URLPARAM{ "search" encode="entity" }%" size="40" /> 
-  <input type="submit" class="twikiSubmit" value='%MAKETEXT{"Search"}%' /><span class="twikiSmall">&nbsp;&nbsp;<a href='%SCRIPTURL{view}%/%INCLUDINGWEB%/WebSearchAdvanced?search=%URLPARAM{"search" encode="url"}%;type=%URLPARAM{"type" default="word"}%;scope=%URLPARAM{scope}%;web=%URLPARAM{web}%;nosearch=%URLPARAM{nosearch}%'>%MAKETEXT{"Advanced search"}%</a> | [[%SYSTEMWEB%.SearchHelp][%MAKETEXT{"Help"}%]]</span>
+  <input type="submit" class="twikiSubmit" value='%MAKETEXT{"Search"}%' /><span class="twikiSmall">&nbsp;&nbsp;<a href='%SCRIPTURL{view}%/%INCLUDINGWEB%/WebSearchAdvanced?search=%URLPARAM{"search" encode="url"}%;type=%URLPARAM{"type" encode="url" default="word"}%;scope=%URLPARAM{"scope" encode="url"}%;web=%URLPARAM{"web" encode="url"}%;nosearch=%URLPARAM{"nosearch" encode="url"}%'>%MAKETEXT{"Advanced search"}%</a> | [[%SYSTEMWEB%.SearchHelp][%MAKETEXT{"Help"}%]]</span>
 <div class="twikiSmall" style="padding:1em 0 0 0;">%MAKETEXT{"TIP: to search for all topics that contain =\"SOAP\"=, =\"WSDL\"=, a literal =\"web service\"=, but not =\"shampoo\"=, write:"}% <code>soap wsdl "web service" -shampoo</code></div>
 </td>
 </tr>
 <tr>
 <th class="twikiLast">%MAKETEXT{"Search where:"}%</th>
 <td class="twikiLast">
-<input type="radio" class="twikiRadioButton" id="textbody" name="scope" value="text" %IF{" '%URLPARAM{scope}%' = 'text' " then="checked=\"checked\"" else=""}% /><label for="textbody"> %MAKETEXT{"Text body"}%</label>&nbsp;&nbsp;&nbsp;<input type="radio" class="twikiRadioButton" id="topictitle" name="scope" value="topic" %IF{" '%URLPARAM{scope}%' = 'topic' " then="checked=\"checked\"" else=""}% /><label for="topictitle"> %MAKETEXT{"Topic title"}%</label>&nbsp;&nbsp;&nbsp;<input type="radio" class="twikiRadioButton" id="both" name="scope" value="all" %IF{" '%URLPARAM{"scope" default="all"}%' = 'all' " then="checked=\"checked\"" else=""}% /><label for="both"> %MAKETEXT{"Both body and title"}%</label>
+<input type="radio" class="twikiRadioButton" id="textbody" name="scope" value="text" %IF{" '%URLPARAM{"scope" encode="entity"}%' = 'text' " then="checked=\"checked\"" else=""}% /><label for="textbody"> %MAKETEXT{"Text body"}%</label>&nbsp;&nbsp;&nbsp;<input type="radio" class="twikiRadioButton" id="topictitle" name="scope" value="topic" %IF{" '%URLPARAM{"scope" encode="entity"}%' = 'topic' " then="checked=\"checked\"" else=""}% /><label for="topictitle"> %MAKETEXT{"Topic title"}%</label>&nbsp;&nbsp;&nbsp;<input type="radio" class="twikiRadioButton" id="both" name="scope" value="all" %IF{" '%URLPARAM{"scope" encode="entity" default="all"}%' = 'all' " then="checked=\"checked\"" else=""}% /><label for="both"> %MAKETEXT{"Both body and title"}%</label>
 <hr />
-<input type="checkbox" class="twikiCheckbox" id="web" name="web" value="all" %IF{" '%URLPARAM{web}%' = 'all'" then="checked=\"checked\"" else=""}% /><label for="web"> %MAKETEXT{"All public webs"}%</label> <span class="twikiSmall">%MAKETEXT{"(otherwise search [_1] Web only)" args="<nop>%INCLUDINGWEB%"}%</span>
+<input type="checkbox" class="twikiCheckbox" id="web" name="web" value="all" %IF{" '%URLPARAM{"web" encode="entity"}%' = 'all'" then="checked=\"checked\"" else=""}% /><label for="web"> %MAKETEXT{"All public webs"}%</label> <span class="twikiSmall">%MAKETEXT{"(otherwise search [_1] Web only)" args="<nop>%INCLUDINGWEB%"}%</span>
 </td>
 </tr>
 </table>
