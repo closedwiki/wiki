@@ -28,8 +28,8 @@
 </table>
 %STARTSECTION{"deletecategory"}%
 
-%IF{ "{Plugins}{SkillsPlugin}{Enabled}" then="%MANAGESKILLSMESSAGE%" else="<table border='0' cellpadding='3' cellspacing='0' width='100%'><tr><td bgcolor='yellow'><font color='red'><strong>The Skills Plugin is not enabled on this site. The forms below are disabled.</strong></font></td></tr></table>" }%
-<form name="renamecategory" action="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%" method="post" onsubmit="return confirmDelete(this.oldcategory.value);">
+%IF{ "{Plugins}{SkillsPlugin}{Enabled}" then="%URLPARAM{"skillsmessage"}%" else="<table border='0' cellpadding='3' cellspacing='0' width='100%'><tr><td bgcolor='yellow'><font color='red'><strong>The Skills Plugin is not enabled on this site. The forms below are disabled.</strong></font></td></tr></table>" }%
+<form name="renamecategory" action="%SCRIPTURL{rest}%/SkillsPlugin/deleteCategory" method="post" onsubmit="return confirmDelete(this.oldcategory.value);>
 
 Delete an existing category. %BR%
 %ICON{"warning"}% This will also delete all the skills in this category. It can not be undone.
@@ -43,6 +43,7 @@ Category to delete: %BR%
 </select>
 </div>
 <div class="twikiFormStep twikiLast">
+<input type="hidden" name="topic" value="%WEB%.%TOPIC%" />
 <input name="deletecategory" type="submit" class="twikiSubmit" value="%MAKETEXT{"Delete"}%" /> _Note: May take a while, as it searches though all users. Do not cancel._
 </div>
 </div>

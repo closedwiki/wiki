@@ -28,8 +28,8 @@
 </table>
 %STARTSECTION{"deleteskill"}%
 
-%IF{ "{Plugins}{SkillsPlugin}{Enabled}" then="%MANAGESKILLSMESSAGE%" else="<table border='0' cellpadding='3' cellspacing='0' width='100%'><tr><td bgcolor='yellow'><font color='red'><strong>The Skills Plugin is not enabled on this site. The forms below are disabled.</strong></font></td></tr></table>" }%
-<form name="deleteskill" action="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%" method="post" onsubmit="return confirmDelete(this.oldskill.value);">
+%IF{ "{Plugins}{SkillsPlugin}{Enabled}" then="%URLPARAM{"skillsmessage"}%" else="<table border='0' cellpadding='3' cellspacing='0' width='100%'><tr><td bgcolor='yellow'><font color='red'><strong>The Skills Plugin is not enabled on this site. The forms below are disabled.</strong></font></td></tr></table>" }%
+<form name="deleteskill" action="%SCRIPTURL{rest}%/SkillsPlugin/deleteSkill" method="post" onsubmit="return confirmDelete(this.oldskill.value);">
 
 Delete an existing skill.
 
@@ -42,6 +42,7 @@ Skill to delete: %BR%
 </select>
 </div>
 <div class="twikiFormStep twikiLast">
+<input type="hidden" name="topic" value="%WEB%.%TOPIC%" />
 <input name="deleteskill" type="submit" class="twikiSubmit" value="%MAKETEXT{"Delete"}%" /> _Note: May take a while, as it searches though all users. Do not cancel._
 </div>
 </div>

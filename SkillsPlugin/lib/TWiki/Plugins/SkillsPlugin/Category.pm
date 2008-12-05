@@ -48,15 +48,25 @@ sub name {
     return $self->{NAME};
 }
 
-# return SKILLS array, sorted
-sub getSkills {
+# return SKILLS array
+sub getSkillNames {
     my $self = shift;
     my @skillNames;
-    foreach my $obj_skill ( @{ $self->{SKILLS} } ){
+    
+    my $it = $self->eachSkill;
+    while( $it->hasNext() ){
+        my $obj_skill = $it->next();
         push @skillNames, $obj_skill->name;
     }
-    @skillNames = sort @skillNames;
     return \@skillNames;
+}
+
+# returns an iterator over each skill
+sub eachSkill {
+    my $self = shift;
+    
+    require TWiki::ListIterator;
+    return new TWiki::ListIterator( $self->{SKILLS} );
 }
 
 # populate SKILLS array
@@ -64,7 +74,7 @@ sub populateSkills {
     my ( $self, $skills) = @_;
     
     if ($skills) {
-        foreach my $skill ( @$skills ){
+        for my $skill ( sort @$skills ){
             my $obj_skill = TWiki::Plugins::SkillsPlugin::Skill->new($skill);
             #$obj_skill->name( $skill );
             push @{ $self->{SKILLS} }, $obj_skill;
@@ -77,6 +87,44 @@ sub addSkill {
     my ( $self, $skill) = @_;
     my $obj_skill = TWiki::Plugins::SkillsPlugin::Skill->new($skill);
     push @{ $self->{SKILLS} }, $obj_skill;
+}
+
+sub renameSkill {
+    my( $self, $oldSkill, $newSkill ) = @_;
+    
+    return "Skill '$newSkill' already exists in category '" . $self->name . "'." if( $self->skillExists( $newSkill ) );
+    
+    my $skills = $self->eachSkill;
+    while( $skills->hasNext() ){
+        my $obj_skill = $skills->next();
+        
+        if( $oldSkill eq $obj_skill->name ){
+            $obj_skill->name( $newSkill );
+            last;
+        }
+    }
+    
+    return undef;
+}
+
+sub deleteSkill {
+    my ( $self, $skill) = @_;
+    
+    my @newSkills;
+    
+    my $skills = $self->eachSkill;
+    while( $skills->hasNext() ){
+        my $obj_skill = $skills->next();
+        
+        next if $skill eq $obj_skill->name;
+        
+        push @newSkills, $obj_skill;
+    }
+    
+    # replace skills
+    $self->{SKILLS} = \@newSkills;
+    
+    return undef;
 }
 
 sub skillExists {
@@ -93,7 +141,7 @@ sub getSkillByName {
     my ( $self, $skill) = @_;
     
     foreach my $obj_skill( @{ $self->{SKILLS} } ){
-        if( lc$obj_skill->name eq lc$skill ){
+        if( $obj_skill->name eq $skill ){
             return $obj_skill;
         }
     }

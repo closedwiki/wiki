@@ -74,44 +74,55 @@ sub _load {
 
 # gets all the categories and skills
 # could get from memory if we already have it
+# SMELL: do we need? not used anywhere and a bit exposing
 sub getAll {
     my $self = shift;
     
     $self->_load unless $_loaded;
     
     return \@_categories;
-    
-    # return in a way that we can display
-    # could be sorted
 }
 
-# returns a list of all categories
+# returns an array of all category names
 sub getCategoryNames {
     my $self = shift;
     
     $self->_load unless $_loaded;
     
-    my @cats;
+    my @catNames;
     
-    for my $obj_cat ( @_categories ){
-        push @cats, $obj_cat->name;
+    my $it = $self->eachCat;
+    while( $it->hasNext() ){
+        my $obj_cat = $it->next();
+        push @catNames, $obj_cat->name;
     }
-    return \@cats;
+    return \@catNames;
 }
 
+# sorted iterator of category objects
 sub eachCat {
     my $self = shift;
-    # iterator of category objects (sorted?)
+    
+    $self->_load unless $_loaded;
+    
+    my @sorted = sort { $a->name cmp $b->name } @_categories;
+    
+    require TWiki::ListIterator;
+    return new TWiki::ListIterator( \@sorted );
 }
 
 # saves the skills to file
 sub save {
     my $self = shift;
     
-    my $out = "# This file is generated. Do NOT edit!\n";
-
-    foreach my $obj_cat ( @_categories ){
-        $out .= $obj_cat->name . ':' . join(',', @{ $obj_cat->getSkills } ) . "\n";
+    _Debug('Saving skills.txt');
+    
+    my $out = "# This file is generated. Do NOT edit unless you are sure what your doing!\n";
+    
+    my $it = $self->eachCat;
+    while( $it->hasNext() ){
+        my $obj_cat = $it->next();
+        $out .= $obj_cat->name . ':' . join(',', @{ $obj_cat->getSkillNames } ) . "\n";
     }
 
     my $workArea =  TWiki::Func::getWorkArea( 'SkillsPlugin' );
@@ -129,11 +140,11 @@ sub addNewSkill {
     
     my $obj_cat = $self->getCategoryByName( $pCat );
     
-    # check cat exists and skill does not already exist
+    # check category exists and skill does not already exist
     return 'Could not find category/category does not exist.' unless $obj_cat;
     return 'Skill already exists.' if( $obj_cat->skillExists( $pSkill ) );
     
-    # replace category
+    # add skill to category
     $obj_cat->addSkill( $pSkill );
     
     # save
@@ -144,26 +155,120 @@ sub addNewSkill {
 
 sub renameSkill {
     my $self = shift;
+    
+    my( $cat, $oldSkill, $newSkill ) = @_;
+    
+    my $obj_cat = $self->getCategoryByName( $cat );
+    return "Could not find category/category does not exist - '$cat'." unless $obj_cat;
+    
+    my $er = $obj_cat->renameSkill( $oldSkill, $newSkill );
+    return $er if $er;
+    
+    $self->save() || return 'Error saving';
+    
+    return undef;
 }
 
 sub moveSkill {
     my $self = shift;
+    
+    my( $skill, $oldCat, $newCat ) = @_;
+    
+    my $obj_oldCat = $self->getCategoryByName( $oldCat );
+    return "Could not find category/category does not exist - '$oldCat'." unless $obj_oldCat;
+    my $obj_newCat = $self->getCategoryByName( $newCat );
+    return "Could not find category/category does not exist - '$newCat'." unless $obj_newCat;
+    
+    return "Skill '$skill' already exists in category '$newCat'" if $obj_newCat->skillExists( $skill );
+    
+    my $err;
+    # add skill to new category
+    $obj_newCat->addSkill( $skill );
+    # delete skill from old category
+    $obj_oldCat->deleteSkill( $skill );
+    
+    $self->save() || return 'Error saving';
+    
+    return undef;
 }
 
 sub deleteSkill {
     my $self = shift;
+    
+    my( $cat, $skill ) = @_;
+    
+    my $obj_cat = $self->getCategoryByName( $cat );
+    return "Could not find category/category does not exist - '$cat'." unless $obj_cat;
+    
+    my $er = $obj_cat->deleteSkill( $skill );
+    return $er if $er;
+    
+    $self->save() || return 'Error saving';
+    
+    return undef;
 }
 
 sub addNewCategory {
     my $self = shift;
+    
+    # TODO: Permissions
+    my( $newCat ) = @_;
+    
+    # check category does not already exist
+    return "Category '$newCat' already exists." if( $self->categoryExists( $newCat ) );
+    
+    # create new object and add to array
+    my $new_obj_cat = TWiki::Plugins::SkillsPlugin::Category->new( $newCat );
+    push @_categories, $new_obj_cat;
+    
+    # save
+    $self->save() || return 'Error saving';
+    
+    return undef; # no error
 }
 
-sub renameSkill {
+sub renameCategory {
     my $self = shift;
+    
+    my( $oldCat, $newCat ) = @_;
+    
+    # check category does not already exist
+    return "Category '$newCat' already exists" if( $self->categoryExists( $newCat ) );
+    
+    my $obj_cat = $self->getCategoryByName( $oldCat );
+    return "Could not find category/category does not exist - '$oldCat'." unless $obj_cat;
+    
+    # change the name
+    $obj_cat->name( $newCat );
+    
+    # save
+    $self->save() || return 'Error saving';
+    
+    return undef;
 }
 
-sub deleteSkill {
+sub deleteCategory {
     my $self = shift;
+    
+    my( $cat ) = @_;
+    
+    return "$cat does not exist" unless $self->categoryExists( $cat );
+    
+    my @newCategories;
+    
+    my $it = $self->eachCat;
+    while( $it->hasNext() ){
+        my $obj_cat = $it->next();
+        next if $obj_cat->name eq $cat; # skip if it is cat to delete
+        push( @newCategories, $obj_cat );
+    }
+    
+    # replace the categories with the ones we want to keep
+    @_categories = @newCategories;
+    
+    $self->save() || return 'Error saving';
+    
+    return undef;
 }
 
 sub categoryExists {
@@ -185,15 +290,17 @@ sub getCategoryByName {
     # ensure loaded
     $self->_load unless $_loaded;
     
-    foreach my $obj_cat( @_categories ){
-        if( lc$obj_cat->name eq lc$cat ){
+    my $it = $self->eachCat;
+    while( $it->hasNext() ){
+        my $obj_cat = $it->next();
+        if( $obj_cat->name eq $cat ){
             return $obj_cat;
         }
     }
     return undef;
 }
 
-# replaces the category object for the specified category
+# replaces the category object for the specified category - why??
 sub replaceCategory {
     my $self = shift;
     

@@ -28,8 +28,8 @@
 </table>
 %STARTSECTION{"renamecategory"}%
 
-%IF{ "{Plugins}{SkillsPlugin}{Enabled}" then="%MANAGESKILLSMESSAGE%" else="<table border='0' cellpadding='3' cellspacing='0' width='100%'><tr><td bgcolor='yellow'><font color='red'><strong>The Skills Plugin is not enabled on this site. The forms below are disabled.</strong></font></td></tr></table>" }%
-<form name="renamecategory" action="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%" method="post">
+%IF{ "{Plugins}{SkillsPlugin}{Enabled}" then="%URLPARAM{"skillsmessage"}%" else="<table border='0' cellpadding='3' cellspacing='0' width='100%'><tr><td bgcolor='yellow'><font color='red'><strong>The Skills Plugin is not enabled on this site. The forms below are disabled.</strong></font></td></tr></table>" }%
+<form name="renamecategory" action="%SCRIPTURL{rest}%/SkillsPlugin/renameCategory" method="post">
 
 Rename an existing category.
 
@@ -43,9 +43,10 @@ Category to rename: %BR%
 </div>
 <div class="twikiFormStep">
 New name for this category: %BR%
-<input type="text" value="%URLPARAM{"renamecategoryto" default="%URLPARAM{renamecategoryfrom}%"}%" name="newcategory" class="twikiInputField" size="20" /> (use only alphanumeric characters and underscore)
+<input type="text" value="%URLPARAM{"renamecategoryto"}%" name="newcategory" class="twikiInputField" size="20" />
 </div>
 <div class="twikiFormStep twikiLast">
+<input type="hidden" name="topic" value="%WEB%.%TOPIC%" />
 <input name="renamecategory" type="submit" class="twikiSubmit" value="%MAKETEXT{"Rename"}%" /> _Note: May take a while, as it searches though all users. Do not cancel._
 </div>
 </div>

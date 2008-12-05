@@ -21,6 +21,7 @@ require TWiki::Plugins::SkillsPlugin::Category;
 require TWiki::Plugins::SkillsPlugin::Skill;
 require TWiki::Plugins::SkillsPlugin::UserSkill;
 
+require TWiki::Plugins::SkillsPlugin::UserSkills;
 require TWiki::Plugins::SkillsPlugin::SkillsStore;
 
 use strict;
@@ -58,10 +59,13 @@ sub initPlugin {
     TWiki::Func::registerRESTHandler('renameCategory', \&_restRenameCategory );
     TWiki::Func::registerRESTHandler('deleteCategory', \&_restDeleteCategory );
     TWiki::Func::registerRESTHandler('addNewSkill', \&_restAddNewSkill );
+    TWiki::Func::registerRESTHandler('renameSkill', \&_restRenameSkill );
+    TWiki::Func::registerRESTHandler('moveSkill', \&_restMoveSkill );
+    TWiki::Func::registerRESTHandler('deleteSkill', \&_restDeleteSkill );
+    #}
     
     TWiki::Func::registerRESTHandler('getCategories', \&_restGetCategories );
     TWiki::Func::registerRESTHandler('getSkills', \&_restGetSkills );
-    #}
     TWiki::Func::registerRESTHandler('getSkillDetails', \&_restGetSkillDetails );
     TWiki::Func::registerRESTHandler('addEditSkill', \&_restAddEditSkill );
     
@@ -100,7 +104,7 @@ sub _handleTag {
 }
 
 # allows the user to print all categories in format of their choice
-sub _tagShowCategories {
+sub _tagShowCategories { # done
     
     my $params = shift;
     
@@ -110,7 +114,7 @@ sub _tagShowCategories {
         );
 }
 
-sub _tagShowSkills {
+sub _tagShowSkills { # done
     my $params = shift;
     
     return _showSkills(
@@ -123,7 +127,7 @@ sub _tagShowSkills {
 }
 
 # creates a form allowing users to edit their skills
-sub _tagEditSkills {
+sub _tagEditSkills { # done, except UI
     
     # SMELL:
     # CSS (where is best? needs to be defineable and overrideable)
@@ -169,12 +173,13 @@ sub _tagEditSkills {
     # add CSS to head
     _addYUI();
     TWiki::Func::addToHEAD('SKILLSPLUGIN_EDITSKILLS_CSS','<style type="text/css" media="all">@import url("/twiki/pub/TWiki/SkillsPlugin/style.css");</style>');
-    TWiki::Func::addToHEAD('SKILLSPLUGIN_EDITSKILLS_JS','<script src="/twiki/pub/TWiki/SkillsPlugin/main.js" language="javascript" type="text/javascript"></script>');
+    my $jsVars = 'SkillsPlugin.vars.restUrl = "%SCRIPTURL{"rest"}%";';
+    _addJS( $jsVars );
     
     return $out;
 }
 
-sub _tagUserSkills {
+sub _tagUserSkills { # done, but needs better images + js includes; also want oops instead of panel
     
     my $params = shift;
     
@@ -186,8 +191,8 @@ sub _tagUserSkills {
     
     my( undef, $tmplCat, $tmplSkillContStart, $tmplSkillStart, $tmplSkill, $tmplRating, $tmplComment, $tmplSkillEnd, $tmplSkillContEnd ) = split( /%SPLIT%/, $tmplRepeat );
     
-    my $userSkills = _getUserSkills( $user );
-    my $allSkills = _getAllSkills();
+    my $skills = TWiki::Plugins::SkillsPlugin::SkillsStore->new();
+    my $userSkills = TWiki::Plugins::SkillsPlugin::UserSkills->new();
     
     # get image paths
     my $ratingPic = _getImages( 'star' );
@@ -198,12 +203,20 @@ sub _tagUserSkills {
     my $jsVars = "if( !SkillsPlugin ) var SkillsPlugin = {}; SkillsPlugin.vars = {}; "; # create namespace in JS
     
     my $repeatedLine;
-    foreach my $cat ( @{ $allSkills } ){
+    
+    my $itCategories = $skills->eachCat;
+    while( $itCategories->hasNext() ){
+        my $cat = $itCategories->next();
+        
         my $catDone = 0;
         my $skillOut = 0;
         
-        foreach my $skill ( @{ $cat->getSkills(); } ){
-            if( my $obj_userSkill = _getUserSkill( $user, $skill, $cat->name, $userSkills ) ){
+        # iterator over skills?
+        my $itSkills = $cat->eachSkill;
+        while( $itSkills->hasNext() ){
+            my $skill = $itSkills->next();
+            # does user have this skill?
+            if( my $obj_userSkill = $userSkills->getSkillForUser( $user, $skill->name, $cat->name ) ){
                 # produce output line
                 # add to array/string which will be output in %REPEAT%
                 my $lineOut;
@@ -252,10 +265,19 @@ sub _tagUserSkills {
                 # subsitutions
                 #$lineOut =~ s!%SKILLTWISTY%!<span id="%CATEGORY%_twisty"></span>!g;
                 #$lineOut =~ s/%CATEGORY%/$cat->name/ge;
-                $lineOut =~ s/%SKILL%/$skill/g;
+                my $skillName = $skill->name;
+                $lineOut =~ s/%SKILL%/$skillName/g;
                 $lineOut =~ s/%SKILLICON%/$skillPic/g;
                 if( $obj_userSkill->comment ){
-                    my $commentLink = "<span id='comment|" . $cat->name . "|$skill' title='" . $obj_userSkill->comment . "' class='SkillsPluginComments' >$commentPic</span>";
+                    my $url = TWiki::Func::getScriptUrl('Main', 'WebHome', 'oops',
+                        template => 'oopsgeneric',
+                        param1 => 'Skills Plugin Comment',
+                        param2 => "---++++ Comment for skill '" . $skill->name . "' by $user",
+                        param3 => "$user has logged the following comment next to skill '" . $skill->name . "'.",
+                        param4 => "<blockquote>" . $obj_userSkill->comment . "</blockquote>"
+                    );
+                    $url .= ';cover=skills';
+                    my $commentLink = "<a id='comment|" . $cat->name . "|" . $skill->name . "' class='SkillsPluginComments' href=\"$url\" target='_blank' >$commentPic</a>";
                     $lineOut =~ s/%COMMENTLINK%/$commentLink/g;
                     $lineOut =~ s/%COMMENTOUT%/$obj_userSkill->comment/ge;
                 } else {
@@ -289,112 +311,169 @@ sub _tagUserSkills {
     
     _addYUI();
     TWiki::Func::addToHEAD('SKILLSPLUGIN_CSS','<style type="text/css" media="all">@import url("/twiki/pub/TWiki/SkillsPlugin/style.css");</style>');
-    TWiki::Func::addToHEAD('SKILLSPLUGIN_JS','<script src="/twiki/pub/TWiki/SkillsPlugin/main.js" language="javascript" type="text/javascript"></script>');
     
-    TWiki::Func::addToHEAD('SKILLSPLUGIN_JSVARS',"<script language='javascript' type='text/javascript'>$jsVars</script>");
+    _addJS( $jsVars );
     
     return $out;
 }
 
-sub _tagBrowseSkills {
+sub _tagBrowseSkills { # TODO
     
 }
 
 # ========================= REST
-sub _restAddNewCategory {
+sub _restAddNewCategory { # done
     
     my ($session, $plugin, $verb, $response) = @_;
     
     _Debug( 'REST handler: addNewCategory' );
+    
+    my ($web, $topic) = TWiki::Func::normalizeWebTopicName( undef, TWiki::Func::getCgiQuery()->param('topic') );
     
     my $newCat = TWiki::Func::getCgiQuery()->param('newcategory');
     
-    my $error = _addNewCategory( $newCat );
+    my $error = TWiki::Plugins::SkillsPlugin::SkillsStore->new()->addNewCategory( $newCat );
+    return _returnFromRest( $web, $topic, "Error adding category '$newCat' - $error" ) if $error;
     
-    my $message;
-    if( $error ){
-        $message = "Error adding category '$newCat' - $error";
-    } else {
-        $message = "New category '$newCat' added.";
-    }
-    
-    $message = _urlEncode( $message );
-    
-    my ($web, $topic) = TWiki::Func::normalizeWebTopicName( undef, TWiki::Func::getCgiQuery()->param('topic') );
-    my $url = TWiki::Func::getScriptUrl($web, $topic, 'view')
-            . '?skillsmessage=' . $message;
-    TWiki::Func::redirectCgiQuery( undef, $url );
+    # success
+    return _returnFromRest( $web, $topic, "New category '$newCat' added." );
 }
 
-sub _restRenameCategory {
+sub _restRenameCategory { # done
     
+    _Debug( 'REST handler: renameCategory' );
+    
+    my( $web, $topic ) = TWiki::Func::normalizeWebTopicName( undef, TWiki::Func::getCgiQuery()->param('topic') );
+    
+    my $oldCat = TWiki::Func::getCgiQuery()->param('oldcategory') || return _returnFromRest( $web, $topic, "'oldcategory' parameter is required'" );
+    my $newCat = TWiki::Func::getCgiQuery()->param('newcategory') || return _returnFromRest( $web, $topic, "'newcategory' parameter is required'" );
+    
+    # rename in skills.txt
+    my $renameSkillsError = TWiki::Plugins::SkillsPlugin::SkillsStore->new()->renameCategory( $oldCat, $newCat );
+    return _returnFromRest( $web, $topic, "Error renaming category '$oldCat' to '$newCat' - $renameSkillsError" ) if $renameSkillsError;
+    
+    # rename in users
+    my $renameUserError =  TWiki::Plugins::SkillsPlugin::UserSkills->new()->renameCategory( $oldCat, $newCat );
+    return _returnFromRest( $web, $topic, "Error renaming category '$oldCat' to '$newCat' - $renameUserError" ) if $renameUserError;
+    
+    # success
+    return _returnFromRest( $web, $topic, "Category '$oldCat' has been renamed to '$newCat'." );
 }
 
-sub _restDeleteCategory {
+sub _restDeleteCategory { # done
+    _Debug( 'REST handler: deleteCategory' );
     
+    my $cat = TWiki::Func::getCgiQuery()->param('oldcategory');
+    
+    my( $web, $topic ) = TWiki::Func::normalizeWebTopicName( undef, TWiki::Func::getCgiQuery()->param('topic') );
+    
+    # delete in skills.txt
+    my $deleteStoreError = TWiki::Plugins::SkillsPlugin::SkillsStore->new()->deleteCategory( $cat );
+    return _returnFromRest( $web, $topic, "Error deleting category '$cat' - $deleteStoreError" ) if $deleteStoreError;
+    
+    # rename in users
+    my $deleteUserError =  TWiki::Plugins::SkillsPlugin::UserSkills->new()->deleteCategory( $cat );
+    return _returnFromRest( $web, $topic, "Error deleting category '$cat' - $deleteUserError" ) if $deleteUserError;
+    
+    # success
+    return _returnFromRest( $web, $topic, "Category '$cat' has been deleted, along with its skills." );
 }
 
-sub _restAddNewSkill {
-    
-    my ($session, $plugin, $verb, $response) = @_;
+sub _restAddNewSkill { # done
     
     _Debug( 'REST handler: addNewCategory' );
+    
+    my( $web, $topic ) = TWiki::Func::normalizeWebTopicName( undef, TWiki::Func::getCgiQuery()->param('topic') );
     
     my $newSkill = TWiki::Func::getCgiQuery()->param('newskill');
     my $cat = TWiki::Func::getCgiQuery()->param('incategory');
     
-    #my $error = _addNewSkill( $newSkill, $cat );
     my $error = TWiki::Plugins::SkillsPlugin::SkillsStore->new()->addNewSkill( $newSkill, $cat );
+    return _returnFromRest( $web, $topic, "Error adding skill '$newSkill' to category '$cat' - $error" ) if $error;
     
-    my $message;
-    if( $error ){
-        $message = "Error adding skill '$newSkill' to category '$cat' - $error";
-    } else {
-        $message = "New category '$newSkill' added.";
-    }
-    
-    $message = _urlEncode( $message );
+    # success
+    return _returnFromRest( $web, $topic, "New skill '$newSkill' added." );
+}
+
+sub _restRenameSkill { # done
+    _Debug( 'REST handler: renameSkill' );
     
     my( $web, $topic ) = TWiki::Func::normalizeWebTopicName( undef, TWiki::Func::getCgiQuery()->param('topic') );
-    my $url = TWiki::Func::getScriptUrl($web, $topic, 'view')
-            . '?skillsmessage=' . $message;
-    TWiki::Func::redirectCgiQuery( undef, $url );
-}
-
-sub _restRenameSkill {
-    # rename the skill
-    # need to change the skill file,
-    # and the users
-}
-
-sub _restMoveSkill {
     
-}
-
-sub _restDeleteSkill {
+    my( $category, $oldSkill ) = split( /\|/, TWiki::Func::getCgiQuery()->param('oldskill') ); # oldskill looks like Category|Skill
+    my $newSkill = TWiki::Func::getCgiQuery()->param('newskill');
     
+    # rename in skills.txt
+    my $renameStoreError = TWiki::Plugins::SkillsPlugin::SkillsStore->new()->renameSkill( $category, $oldSkill, $newSkill );
+    return _returnFromRest( $web, $topic, "Error renaming skill '$oldSkill' to '$newSkill' in category '$category' - $renameStoreError" ) if $renameStoreError;
+    
+    # rename in users
+    my $renameUserError =  TWiki::Plugins::SkillsPlugin::UserSkills->new()->renameSkill( $category, $oldSkill, $newSkill );
+    return _returnFromRest( $web, $topic, "Error renaming skill '$oldSkill' to '$newSkill' in category '$category' - $renameUserError" ) if $renameUserError;
+    
+    # success
+    return _returnFromRest( $web, $topic, "Skill '$oldSkill' has been renamed to '$newSkill'." );
 }
 
-sub _restGetCategories {
+sub _restMoveSkill { # done
+    _Debug( 'REST handler: moveSkill' );
+    
+    my( $web, $topic ) = TWiki::Func::normalizeWebTopicName( undef, TWiki::Func::getCgiQuery()->param('topic') );
+    
+    my( $oldCat, $skill ) = split( /\|/, TWiki::Func::getCgiQuery()->param('movefrom') ); # movefrom looks like Category|Skill
+    my $newCat = TWiki::Func::getCgiQuery()->param('moveto');
+    
+    _Debug("$skill, $oldCat, $newCat");
+    
+    # rename in skills.txt
+    my $moveStoreError = TWiki::Plugins::SkillsPlugin::SkillsStore->new()->moveSkill( $skill, $oldCat, $newCat );
+    return _returnFromRest( $web, $topic, "Error moving skill '$skill' from '$oldCat' to '$newCat' - $moveStoreError" ) if $moveStoreError;
+    
+    # rename in users
+    my $moveUserError =  TWiki::Plugins::SkillsPlugin::UserSkills->new()->moveSkill( $skill, $oldCat, $newCat );
+    return _returnFromRest( $web, $topic, "Error moving skill '$skill' from '$oldCat' to '$newCat' - $moveUserError" ) if $moveUserError;
+    
+    # success
+    return _returnFromRest( $web, $topic, "Skill '$skill' has been move from '$oldCat' to '$newCat'." );
+}
+
+sub _restDeleteSkill { # done
+    _Debug( 'REST handler: deleteSkill' );
+    
+    my( $web, $topic ) = TWiki::Func::normalizeWebTopicName( undef, TWiki::Func::getCgiQuery()->param('topic') );
+    
+    my( $cat, $oldSkill ) = split( /\|/, TWiki::Func::getCgiQuery()->param('oldskill') ); # oldskill looks like Category|Skill
+    
+     # delete in skills.txt
+    my $deleteStoreError = TWiki::Plugins::SkillsPlugin::SkillsStore->new()->deleteSkill( $cat, $oldSkill );
+    return _returnFromRest( $web, $topic, "Error deleting skill '$oldSkill' - $deleteStoreError" ) if $deleteStoreError;
+    
+    # rename in users
+    my $deleteUserError =  TWiki::Plugins::SkillsPlugin::UserSkills->new()->deleteSkill( $cat, $oldSkill );
+    return _returnFromRest( $web, $topic, "Error deleting skill '$oldSkill' - $deleteUserError" ) if $deleteUserError;
+    
+    # success
+    return _returnFromRest( $web, $topic, "Skill '$oldSkill' has been deleted from category '$cat'." );
+}
+
+sub _restGetCategories { # done
     my ($session, $plugin, $verb, $response) = @_;
     
     _Debug( 'REST handler: getCategories' );
     
-    my $out = _tagShowCategories( { format => '$category', separator => '|' } );
-    return $out;
+    return _tagShowCategories( { format => '$category', separator => '|' } );
 }
 
-sub _restGetSkills {
+sub _restGetSkills { # done
     my ($session, $plugin, $verb, $response) = @_;
     
     _Debug( 'REST handler: getSkills' );
     
     my $cat = TWiki::Func::getCgiQuery()->param('category');
-    my $out = _tagShowSkills( { category => $cat, format => '$skill', separator => '|' } );
-    return $out;
+    return _tagShowSkills( { category => $cat, format => '$skill', separator => '|' } );
 }
 
-sub _restGetSkillDetails {
+sub _restGetSkillDetails { # done
     my ($session, $plugin, $verb, $response) = @_;
     
     _Debug( 'REST handler: getSkillDetails' );
@@ -404,26 +483,24 @@ sub _restGetSkillDetails {
     
     my $user = TWiki::Func::getWikiName();
     
-    _Debug( $user . $cat . $skill );
+    my $obj_userSkill = TWiki::Plugins::SkillsPlugin::UserSkills->new()->getSkillForUser( $user, $skill, $cat );
     
-    my $obj_user = _getUserSkill($user, $skill, $cat);
-    
-    unless( $obj_user ){
+    unless( $obj_userSkill ){
         return '';
     }
     
     my $out = '{';
     $out .= _createJSON( {
-            skill => $obj_user->name,
-            category => $obj_user->category,
-            rating => $obj_user->rating,
-            comment => $obj_user->comment
+            skill => $obj_userSkill->name,
+            category => $obj_userSkill->category,
+            rating => $obj_userSkill->rating,
+            comment => $obj_userSkill->comment
     } );
     $out .= '}';
     return $out;
 }
 
-sub _restAddEditSkill {
+sub _restAddEditSkill { # done
     my ($session, $plugin, $verb, $response) = @_;
     
     _Debug( 'REST handler: getSkillDetails' );
@@ -435,7 +512,7 @@ sub _restAddEditSkill {
     
     my $user = TWiki::Func::getWikiName();
     
-    my $error = _addEditUserSkill( $user, $cat, $skill, $rating, $comment );
+    my $error = TWiki::Plugins::SkillsPlugin::UserSkills->new()->addEditUserSkill( $user, $cat, $skill, $rating, $comment );
     
     my $message;
     if( $error ){
@@ -448,49 +525,9 @@ sub _restAddEditSkill {
 }
 
 # ========================= FUNCTIONS
-# adds a new category
-sub _addNewCategory {
-    # TODO: Permissions
-    my( $newCat ) = @_;
-    
-    return 'Category not specified' unless( $newCat );
-    
-    my $allSkills = _getAllSkills();
-    return 'Category already exists' if( _categoryExists( $newCat, $allSkills ) );
-    
-    my $new_obj_cat = TWiki::Plugins::SkillsPlugin::Category->new( $newCat );
-    push @{ $allSkills }, $new_obj_cat;
-    
-    _saveSkills($allSkills);
-    
-    return undef; # no error
-}
-
-sub _addNewSkill {
-    # TODO: Permissions
-    my( $newSkill, $cat ) = @_;
-    
-    my $allSkills = _getAllSkills();
-    my $obj_cat = _getCategoryByName( $cat, $allSkills );
-    
-    return 'Could not find category/category does not exist.' unless $obj_cat;
-    
-    my $skills = $obj_cat->getSkills;
-    
-    return 'Skill already exists.' if( $obj_cat->skillExists( $newSkill ) );
-    
-    $obj_cat->addSkill( $newSkill );
-    
-    my $obj_cat2 = _getCategoryByName( $cat, $allSkills );
-    
-    # Save to file
-    _saveSkills($allSkills);
-    
-    return undef;
-}
 
 # returns all the categories in the defined format
-sub _showCategories {
+sub _showCategories { # done
     my ( $format, $separator ) = @_;
     
     my $hasSeparator = $separator ne '';
@@ -521,9 +558,8 @@ sub _showCategories {
 
 # allows the user to print all skills in format of their choice
 # this can be from a specific category, or all categories
-# TODO: specify multiple categories? needed? should be fairly simple...
-sub _showSkills {
-    #my $qCatSeparator = $params->{categoryseparator};
+sub _showSkills { # done
+    
     my( $cat, $format, $separator, $prefix, $suffix, $catSeparator ) = @_;
 
     my $hasSeparator = $separator ne '';
@@ -545,15 +581,18 @@ sub _showSkills {
     # get all skills
     # if category is specified, only show skills in that category
     # else, show them all
-    my $allSkills = TWiki::Plugins::SkillsPlugin::SkillsStore->new()->getAll();
+    
+    # iterator of all categories
+    my $categories = TWiki::Plugins::SkillsPlugin::SkillsStore->new()->eachCat;
     
     if ($cat){ # category specified
         
         my $skills;
         
-        foreach my $obj_cat ( @{ $allSkills } ){
+        while( $categories->hasNext() ){
+            my $obj_cat = $categories->next();
             if( $cat eq $obj_cat->name ){
-                $skills = $obj_cat->getSkills;
+                $skills = $obj_cat->getSkillNames;
                 last;
             }
         }
@@ -574,7 +613,8 @@ sub _showSkills {
     else {
         $catSeparator = "\n" unless ( $catSeparator ne '' );
         
-        foreach my $obj_cat ( @{ $allSkills } ){
+        while( $categories->hasNext() ){
+            my $obj_cat = $categories->next();
             my $prefixLine = $prefix;
             $prefixLine =~ s/\$category/$obj_cat->name/goe;
             $prefixLine =~ s/\$n/\n/go;
@@ -587,7 +627,7 @@ sub _showSkills {
                     $line =~ s/\$category/$obj_cat->name/goe;
                     $line =~ s/\$skill/$_/go;
                     $line;
-                } @{ $obj_cat->getSkills }
+                } @{ $obj_cat->getSkillNames }
             );
             
             my $suffixLine = $suffix;
@@ -604,165 +644,6 @@ sub _showSkills {
 }
 
 # =========================
-# gets all skills from file
-# returns array of category objects
-sub _getAllSkills {
-    # TODO: could store in session to prevent multiple file reads?
-    # TODO: could store using Storable? Or maybe in tmp?
-    _Debug( 'reading skills.txt' );
-    my $workArea =  TWiki::Func::getWorkArea( $pluginName );
-    my $file;
-    unless ( $file = TWiki::Func::readFile( $workArea . '/skills.txt' ) ){
-        # no existing skills
-        _Debug('skills.txt not found. No skills loaded.');
-        return;
-    }
-    
-    my @allSkills;
-    
-    my @text = grep { !/^\#.*/ } split('\n', $file);
-    foreach my $line (@text){
-        $line =~ s/(.*)://g;
-        my $cat = $1;
-        my @skills = split(',', $line);
-        my $obj_cat = TWiki::Plugins::SkillsPlugin::Category->new($cat, \@skills);
-        #push @{ $allSkills{$cat} }, @skills;
-        push @allSkills, $obj_cat;
-    }
-    
-    #@allSkills = sort @allSkills;
-    # TODO: need to sort by cat->name...
-    
-    return \@allSkills;
-    
-}
-
-sub _categoryExists {
-
-    if( _getCategoryByName( @_ ) ){
-        return 1;
-    } else {
-        return undef;
-    }
-}
-
-sub _getCategoryByName {
-    my( $cat, $allSkills ) = @_;
-    
-    foreach my $obj_cat( @{ $allSkills } ){
-        if( lc$obj_cat->name eq lc$cat ){
-            return $obj_cat;
-        }
-    }
-    return undef;
-}
-
-# Saves all the available categories and skills
-sub _saveSkills {
-    my $allSkills = shift;
-    my $out = "# This file is generated. Do NOT edit!\n";
-
-    foreach my $obj_cat ( @{ $allSkills } ){
-        $out .= $obj_cat->name . ':' . join(',', @{ $obj_cat->getSkills } ) . "\n";
-    }
-
-    my $workArea =  TWiki::Func::getWorkArea( $pluginName );
-
-    TWiki::Func::saveFile( $workArea . '/skills.txt', $out );
-}
-
-sub _getUserSkill {
-    my( $user, $skill, $cat, $userSkills ) = @_;
-    
-    unless( $userSkills ){
-        $userSkills = _getUserSkills( $user );
-    }
-    
-    foreach my $obj_userSkill ( @{ $userSkills } ){
-        if( $cat eq $obj_userSkill->category && $skill eq $obj_userSkill->name ){
-            return $obj_userSkill;
-        }
-    }
-    return undef;
-}
-
-sub _getUserSkills {
-    my $userTopic = shift;
-
-    my $mainWeb = TWiki::Func::getMainWebname();
-
-    my( $meta, undef ) = TWiki::Func::readTopic( $mainWeb, $userTopic );
-    my @skillsMeta = $meta->find('SKILLS');
-    
-    my @userSkills;
-    foreach my $skillMeta ( @skillsMeta ){
-        my $obj_userSkill = TWiki::Plugins::SkillsPlugin::UserSkill->new(
-            $skillMeta->{name},
-            $skillMeta->{category},
-            $skillMeta->{rating},
-            $skillMeta->{comment}
-            );
-        push @userSkills, $obj_userSkill;
-    }
-    
-    return (\@userSkills);
-}
-
-sub _getAllUserSkills {
-    
-}
-
-sub _addEditUserSkill {
-    my ($user, $cat, $skill, $rating, $comment ) = @_;
-    
-    my $userSkills = _getUserSkills( $user );
-    
-    my $edited;
-    foreach my $obj_userSkill ( @{ $userSkills } ){
-        if( $cat eq $obj_userSkill->category && $skill eq $obj_userSkill->name ){
-            $obj_userSkill->rating( $rating );
-            $obj_userSkill->comment( $comment );
-            $edited = 1;
-            last;
-        }
-    }
-    
-    unless( $edited ){
-        my $obj_newUserSkill = TWiki::Plugins::SkillsPlugin::UserSkill->new(
-            $skill,
-            $cat,
-            $rating,
-            $comment
-            );
-        push @{ $userSkills }, $obj_newUserSkill;
-    }
-    # save skills
-    my $error = _saveUserSkills( $user, $userSkills );
-    
-    return $error;
-}
-
-sub _saveUserSkills {
-    my( $user, $userSkills ) = @_;
-    my $mainWeb = TWiki::Func::getMainWebname();
-
-    my( $meta, $text ) = TWiki::Func::readTopic( $mainWeb, $user );
-
-    $meta->remove('SKILLS');
-    foreach my $obj_userSkill ( @{ $userSkills } ){
-        $meta->putKeyed('SKILLS', {
-                name => $obj_userSkill->name,
-                category => $obj_userSkill->category,
-                rating => $obj_userSkill->rating,
-                comment => $obj_userSkill->comment
-        }); 
-    }
-    my $error = TWiki::Func::saveTopic( $mainWeb, $user, $meta, $text, { dontlog => 1, comment=> 'SkillsPlugin', minor => 1 });
-    if ($error){
-        TWiki::Plugins::SkillsPlugin::_Warn("saveUserSkills error - $error");
-    }
-    return $error;
-}
 
 # adds the YUI Javascript files from header
 # these are from the YahooUserInterfaceContrib, if installed
@@ -773,7 +654,7 @@ sub _addYUI {
     $doneYui = 1;
 
     my $yui;
-    #TODO
+    #TODO clean up
     eval 'use TWiki::Contrib::YahooUserInterfaceContrib';
     if (! $@ ) {
         _Debug( 'YahooUserInterfaceContrib is installed, using local files' );
@@ -800,24 +681,27 @@ sub _addYUI {
     TWiki::Func::addToHEAD($pluginName . '_yui', $yui);
 }
 
+sub _addJS {
+    #my $vars = shift;
+    my $jsVars;
+    if( my $vars = shift ){
+        $jsVars = 'if( !SkillsPlugin ) var SkillsPlugin = {}; SkillsPlugin.vars = {}; '; # create namespace in JS
+        $jsVars .= $vars;
+    }
+    if( TWiki::Func::isGuest() ){
+        $jsVars .= 'SkillsPlugin.vars.loggedIn = 0;';
+    } else {
+        $jsVars .= 'SkillsPlugin.vars.loggedIn = 1;';
+    }
+    TWiki::Func::addToHEAD('SKILLSPLUGIN_JS',"<script language='javascript' type='text/javascript'>$jsVars</script><script src='/twiki/pub/TWiki/SkillsPlugin/main.js' language='javascript' type='text/javascript'></script>");
+}
+
 # ========================= UTILITIES
 # Taken from TagMePlugin (http://twiki.org/cgi-bin/view/Plugins/TagMePlugin)
 sub _urlEncode {
     my $text = shift;
     $text =~ s/([^0-9a-zA-Z-_.:~!*'()\/%])/'%'.sprintf('%02x',ord($1))/ge;
     return $text;
-}
-
-# because skills might be 'C++', a grep does not seem to be the best way to check a value is in an array
-# therefore we loop array and use eq
-# better way to this? please let me know! (andrewjones86@gmail.com)
-sub _isInArray {
-    my( $match, $array ) = @_;
-    
-    for( @{ $array } ){
-        return 1 if( lc( $_ ) eq lc( $match ) );
-    }
-    return 0;
 }
 
 sub _createJSON {
@@ -870,6 +754,16 @@ sub _getDocPath {
     return TWiki::Func::getPubUrlPath() . '/' . # /pub/
            TWiki::Func::getTwikiWebname() . '/' . # TWiki/
            'TWikiDocGraphics'; # doc topic
+}
+
+sub _returnFromRest {
+    my( $web, $topic, $message ) = @_;
+    
+    $message = _urlEncode( $message );
+    
+    my $url = TWiki::Func::getScriptUrl($web, $topic, 'view')
+            . '?skillsmessage=' . $message;
+    TWiki::Func::redirectCgiQuery( undef, $url );
 }
 
 sub _Debug {

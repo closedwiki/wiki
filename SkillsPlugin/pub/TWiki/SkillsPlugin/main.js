@@ -7,7 +7,7 @@ SkillsPlugin.main = function() {
     return {
         
         init: function() {
-            // create hash of meta?
+
         },
         
         twist: function( twistEl, imageEl ) {
@@ -43,7 +43,7 @@ SkillsPlugin.viewUserSkills = function () {
     return {
         
         init: function(){
-            YAHOO.util.Event.onDOMReady(this.addCommentOverlays, this, true);
+            //YAHOO.util.Event.onDOMReady(this.addCommentOverlays, this, true);
             YAHOO.util.Event.onDOMReady(this.initTwisty, this, true);
             //this.initTwisty();
             //YAHOO.util.Event.addListener(window, "load", this.addCommentOverlays, this, true);
@@ -91,6 +91,7 @@ SkillsPlugin.viewUserSkills = function () {
             
         },
         
+        // TODO: Get rid of this and use the oops template again
         addCommentOverlays: function(){
             // sets up the overlays for the comments and registers listeners
             var yuiEl = new YAHOO.util.Element(); 
@@ -117,7 +118,7 @@ SkillsPlugin.viewUserSkills = function () {
                 var foot = "<span id='" + arCommentElements[i].id + "_OverlayClose' class='SkillsPlugin-close-comment-link'>[close]</span>";
                 objOverlay.setFooter( foot );
                 
-                objOverlay.render(document.body);
+                objOverlay.render( document.body );
                 
                 var fnCallback = function(){
                     if( this.cfg.getProperty("visible") == true ){
@@ -155,8 +156,9 @@ SkillsPlugin.addEditSkills = function () {
         alert("Connection failure '" + o.statusText + "'. Please notify your administrator, giving the reason for this failure and as much information about the problem as possible.");
     }
     
+    // gets the categories from the server
     var _getCategories = function( fnCallback ){
-        var url = "http://cam-vm-50/twiki/bin/rest/SkillsPlugin/getCategories"; // TODO: get from META http://wikiring.com/Blog/BlogEntry22
+        var url = SkillsPlugin.vars.restUrl + "/SkillsPlugin/getCategories";
         
         var obCallbacks = {
 			success: function(o){
@@ -164,6 +166,7 @@ SkillsPlugin.addEditSkills = function () {
                 _disableRatingSelect();
                 _disableCommentInput();
                 _resetSkillDetails();
+                
                 var arCats = o.responseText.split( "|" ); // JSON?
                 arCats.sort();
                 fnCallback( arCats );
@@ -174,8 +177,9 @@ SkillsPlugin.addEditSkills = function () {
 		var request = YAHOO.util.Connect.asyncRequest('GET', url, obCallbacks); 
     }
     
+    // gets the skills from the server
     var _getSkills = function( category, fnCallback ){
-        var url = "http://cam-vm-50/twiki/bin/rest/SkillsPlugin/getSkills"; // TODO: get from META http://wikiring.com/Blog/BlogEntry22
+        var url = SkillsPlugin.vars.restUrl + "/SkillsPlugin/getSkills";
         url += "?category=" + encodeURIComponent(category);
         
         var obCallbacks = {
@@ -184,7 +188,7 @@ SkillsPlugin.addEditSkills = function () {
                 _disableRatingSelect();
                 _disableCommentInput();
                 _resetSkillDetails();
-                //alert(o.responseText);
+                
                 // TODO: need to check there are some skills!!
                 var arSkills = o.responseText.split( "|" ); // JSON?
                 arSkills.sort();
@@ -196,8 +200,9 @@ SkillsPlugin.addEditSkills = function () {
 		var request = YAHOO.util.Connect.asyncRequest('GET', url, obCallbacks);
     }
     
+    // gets the rating and the comment for a particular skill from the server
     var _getSkillDetails = function( category, skill, fnCallback ){
-        var url = "http://cam-vm-50/twiki/bin/rest/SkillsPlugin/getSkillDetails"; // TODO: get from META http://wikiring.com/Blog/BlogEntry22
+        var url = SkillsPlugin.vars.restUrl + "/SkillsPlugin/getSkillDetails";
         url += "?category=" + encodeURIComponent(category);
         url += "&skill=" + encodeURIComponent(skill);
         
@@ -223,16 +228,19 @@ SkillsPlugin.addEditSkills = function () {
 		var request = YAHOO.util.Connect.asyncRequest('GET', url, obCallbacks);
     }
     
+    // hides the 'clear comment' button
     var _hideClearComment = function(){
         var el = document.getElementById(_idClearComment);
         el.style.display='none';
     }
-        
+    
+    // shows the 'clear comment' button
     var _showClearComment = function(){
         var el = document.getElementById(_idClearComment);
         el.style.display='';
     }
     
+    // clears the rating and the comment
     var _resetSkillDetails = function(){
         // reset details
         for( var i=0; i < document[_idForm][_idRating].length; i++ ){
@@ -245,41 +253,47 @@ SkillsPlugin.addEditSkills = function () {
         _hideClearComment();
     }
     
+    // clears the skill drop down menu
     var _resetSkillSelect = function(){
         var elSkillSelect = document.getElementById(_idSelSkill);
         elSkillSelect.options.length = 0;
     }
     
+    // resets the entire form to its initial state
     var _resetForm = function(){
         _resetSkillSelect();
         _resetSkillDetails();
         SkillsPlugin.addEditSkills.populateCategories();
     }
     
+    // disable the rating option boxes
     var _disableRatingSelect = function(){
         for( var i=0; i < document[_idForm][_idRating].length; i++ ){
             document[_idForm][_idRating][i].disabled = true;
         }
     }
     
-    var _disableCommentInput = function(){
-        var elComment = document.getElementById(_idComment);
-        elComment.disabled = true;
-    }
-    
-    var _enableCommentInput = function(){
-        var elComment = document.getElementById(_idComment);
-        elComment.disabled = false;
-    }
-    
+    // enables the rating options
     var _enableRatingSelect = function(){
         for( var i=0; i < document[_idForm][_idRating].length; i++ ){
             document[_idForm][_idRating][i].disabled = false;
         }
     }
     
+    // disables the comment text box
+    var _disableCommentInput = function(){
+        var elComment = document.getElementById(_idComment);
+        elComment.disabled = true;
+    }
+    
+    // enables the comment text box
+    var _enableCommentInput = function(){
+        var elComment = document.getElementById(_idComment);
+        elComment.disabled = false;
+    }
+    
+    // lock form when AJAX in progress
     var _lock = function(){
-        // lock form when AJAX in progress
         if( _locked == 1 ){
             return;
         }
@@ -291,8 +305,11 @@ SkillsPlugin.addEditSkills = function () {
         elSelSkill.disabled = true;
         _disableRatingSelect();
         _disableCommentInput();
+        var elSubmit = document.getElementById(_idSubmit);
+        elSubmit.disabled = true;
     }
     
+    // unlocks the form
     var _unlock = function(){
         if( _locked == 0 ){
             return;
@@ -305,8 +322,11 @@ SkillsPlugin.addEditSkills = function () {
         elSelSkill.disabled = false;
         _enableRatingSelect();
         _enableCommentInput();
+        var elSubmit = document.getElementById(_idSubmit);
+        elSubmit.disabled = false;
     }
     
+    // displays a notification recieved from the server
     var _displayMessage = function(message){
 		
         var elMessage = document.getElementById(_idMessage);
@@ -315,6 +335,7 @@ SkillsPlugin.addEditSkills = function () {
 		_showMessage( elMessage );
 	}
 	
+    // shows the message
 	var _showMessage = function(){
         var elMessageContainer = document.getElementById(_idMessageContainer);
         elMessageContainer.style.display = '';
@@ -332,6 +353,7 @@ SkillsPlugin.addEditSkills = function () {
     return {
         
         init: function(){
+            // register events
             YAHOO.util.Event.onAvailable(_idSelCategory, this.populateCategories, this, true);
             
             YAHOO.util.Event.addListener(_idSelCategory, "change", this.populateSkills, this, true);
@@ -343,9 +365,16 @@ SkillsPlugin.addEditSkills = function () {
             YAHOO.util.Event.addListener(_idSubmit, "click", this.submit, this, true);
         },
         
+        // populates the category select menu
         populateCategories: function(){
             var elCatSelect = document.getElementById(_idSelCategory);
             elCatSelect.options.length = 0;
+            
+            if( SkillsPlugin.vars.loggedIn == 0 ){
+                elCatSelect.options[0] = new Option("Please log in...", "0", true);
+                _lock();
+                return;
+            }
             elCatSelect.options[0] = new Option("Loading...", "0", true);
             
             var fnCallback = function( arCats ){
@@ -363,6 +392,7 @@ SkillsPlugin.addEditSkills = function () {
             elSkillSelect.options[0] = new Option("Select a category above...", "0", true);
         },
         
+        // populates the skill select menu
         populateSkills: function(){
             var elSkillSelect = document.getElementById(_idSelSkill);
             
@@ -396,6 +426,7 @@ SkillsPlugin.addEditSkills = function () {
             _getSkills( cat, fnCallback );
         },
         
+        // populates the rating and the comment for a skill
         populateSkillDetails: function(){
             _resetSkillDetails();
             
@@ -430,8 +461,9 @@ SkillsPlugin.addEditSkills = function () {
             _getSkillDetails( cat, skill, fnCallback );
         },
         
+        // submits the form
         submit: function(){
-            var url = "http://cam-vm-50/twiki/bin/rest/SkillsPlugin/addEditSkill"; // TODO: get from META http://wikiring.com/Blog/BlogEntry22
+            var url = SkillsPlugin.vars.restUrl + "/SkillsPlugin/addEditSkill";
             
             var obCallbacks = {
                 success: function(o){
@@ -447,12 +479,14 @@ SkillsPlugin.addEditSkills = function () {
             YAHOO.util.Connect.asyncRequest('POST', url, obCallbacks);
         },
         
+        // clears the comment text field
         clearComment: function(){
             var elComment = document.getElementById(_idComment);
             elComment.value = '';
             _hideClearComment();
         },
         
+        // react to a key press in the comment text box
         commentKeyPress: function(e){
             var el = YAHOO.util.Event.getTarget(e);
             if( el.value.length == 0 ){
