@@ -1669,9 +1669,9 @@ sub emitTable {
 # better thead/tbody to the tables, just removed thead/tbody words
 # fix - starts
     my $thead =
-        "$singleIndent"
+        ""
       . join( "", @headerRowList )
-      . "$singleIndent";
+      . "";
     $text .= $currTablePre . $thead if scalar @headerRowList;
 
     my $tfoot =
@@ -1681,7 +1681,7 @@ sub emitTable {
     $text .= $currTablePre . $tfoot if scalar @footerRowList;
 
     my $tbody =
-      "$singleIndent" . join( "", @bodyRowList ) . "$singleIndent";
+      "" . join( "", @bodyRowList ) . "";
     $text .= $currTablePre . $tbody if scalar @bodyRowList;
 
 # fix ends for Item5865

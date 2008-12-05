@@ -47,7 +47,6 @@ sub test_simpleTableusing {
 <nop>
 <nop>
 <table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="rows" border="1">
-<p />
 		<tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
 			<td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> a </td>
 			<td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> b </td>
@@ -82,13 +81,10 @@ sub test_simpleTheadTableUsingTablePlugin {
 <nop>
 <nop>
 <table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="rows" border="1">
-<p />
                 <tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
                         <th bgcolor="#687684" valign="top" class="twikiTableCol0 twikiFirstCol"> <a rel="nofollow" href="$url/$TEST_WEB_NAME/TestTopicTableFormatting?sortcol=0;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">a</font></a> </th>
                         <th bgcolor="#687684" valign="top" class="twikiTableCol1 twikiLastCol"> <a rel="nofollow" href="$url/$TEST_WEB_NAME/TestTopicTableFormatting?sortcol=1;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">b</font></a> </th>
                 </tr>
-<p />
-<p />
                 <tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
                         <td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> 2 </td>
                         <td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> 3 </td>
@@ -122,7 +118,6 @@ sub test_simpleTfootTableusingTablePlugin {
                         <th bgcolor="#687684" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> <font color="#ffffff">bad</font> </th>
                 </tr>
         </tfoot>
-<p />
                 <tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
                         <td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> a </td>
                         <td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> b </td>
@@ -155,7 +150,6 @@ sub test_doubleTheadTableUsingTablePlugin {
 <nop>
 <nop>
 <table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="rows" border="1">
-<p />
                 <tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
                         <th bgcolor="#687684" valign="top" class="twikiTableCol0 twikiFirstCol"> <a rel="nofollow" href="$url/$TEST_WEB_NAME/TestTopicTableFormatting?sortcol=0;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">a</font></a> </th>
                         <th bgcolor="#687684" valign="top" class="twikiTableCol1 twikiLastCol"> <a rel="nofollow" href="$url/$TEST_WEB_NAME/TestTopicTableFormatting?sortcol=1;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">b</font></a> </th>
@@ -164,8 +158,6 @@ sub test_doubleTheadTableUsingTablePlugin {
                         <th bgcolor="#687684" valign="top" class="twikiTableCol0 twikiFirstCol"> <font color="#ffffff">c</font> </th>
                         <th bgcolor="#687684" valign="top" class="twikiTableCol1 twikiLastCol"> <font color="#ffffff">c</font> </th>
                 </tr>
-<p />
-<p />
                 <tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
                         <td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> 2 </td>
                         <td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> 3 </td>
@@ -198,7 +190,6 @@ sub test_doubleTheadandTfootTableusingTablePlugin {
 <nop>
 <nop>
 <table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="rows" border="1">
-<p />
                 <tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
                                 <th bgcolor="#687684" valign="top" class="twikiTableCol0 twikiFirstCol"> <font color="#ffffff">a</font> </th>
                                 <th bgcolor="#687684" valign="top" class="twikiTableCol1 twikiLastCol"> <font color="#ffffff">b</font> </th>
@@ -207,14 +198,12 @@ sub test_doubleTheadandTfootTableusingTablePlugin {
                                 <th bgcolor="#687684" valign="top" class="twikiTableCol0 twikiFirstCol"> <a rel="nofollow" href="$url/$TEST_WEB_NAME/TestTopicTableFormatting?sortcol=0;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">c</font></a> </th>
                                 <th bgcolor="#687684" valign="top" class="twikiTableCol1 twikiLastCol"> <a rel="nofollow" href="$url/$TEST_WEB_NAME/TestTopicTableFormatting?sortcol=1;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">c</font></a> </th>
                 </tr>
-<p />
         <tfoot>
                 <tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
                                 <th bgcolor="#687684" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> <font color="#ffffff">ok</font> </th>
                                 <th bgcolor="#687684" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> <font color="#ffffff">bad</font> </th>
                 </tr>
         </tfoot>
-<p />
                 <tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
                                 <td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> 2 </td>
                                 <td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> 3 </td>
@@ -265,15 +254,12 @@ ACTUAL
 <nop>
 <nop>
 <table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="rows" border="1">
-<p />
                 <tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
                         <th bgcolor="#687684" valign="top" class="twikiTableCol0 twikiFirstCol"> <a rel="nofollow" href="$url/$TEST_WEB_NAME/TestTopicTableFormatting?sortcol=0;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">Title</font></a> </th>
                         <th bgcolor="#687684" valign="top" class="twikiTableCol1"> <a rel="nofollow" href="$url/$TEST_WEB_NAME/TestTopicTableFormatting?sortcol=1;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">Date</font></a> </th>
                         <th bgcolor="#334455" valign="top" class="twikiTableCol2 twikiSortedDescendingCol twikiSortedCol"> <a rel="nofollow" href="$url/$TEST_WEB_NAME/TestTopicTableFormatting?sortcol=2;table=1;up=2#sorted_table" title="Sort by this column"><font color="#ffffff">Size</font></a><span class="tableSortIcon tableSortDown"><img width="11" alt="Sorted descending" src="$pubUrlTWikiWeb/TWikiDocGraphics/tablesortdown.gif" title="Sorted descending" height="13" border="0" /></span> </th>
                         <th bgcolor="#687684" valign="top" class="twikiTableCol3 twikiLastCol"> <a rel="nofollow" href="$url/$TEST_WEB_NAME/TestTopicTableFormatting?sortcol=3;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">Span date</font></a> </th>
                 </tr>
-<p />
-<p />
                 <tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
                         <td bgcolor="#ffffff" rowspan="1" valign="top" class="twikiTableCol0 twikiFirstCol"> jkl </td>
                         <td bgcolor="#ffffff" rowspan="1" valign="top" class="twikiTableCol1"> 16 Sep 2008 - 09:48 </td>
@@ -342,15 +328,12 @@ ACTUAL
 <nop>
 <nop>
 <table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="rows" border="1">
-<p />
                 <tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
                         <th bgcolor="#687684" valign="top" class="twikiTableCol0 twikiFirstCol"> <a rel="nofollow" href="$url/$TEST_WEB_NAME/TestTopicTableFormatting?sortcol=0;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">Title</font></a> </th>
                         <th bgcolor="#687684" valign="top" class="twikiTableCol1"> <a rel="nofollow" href="$url/$TEST_WEB_NAME/TestTopicTableFormatting?sortcol=1;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">Date</font></a> </th>
                         <th bgcolor="#687684" valign="top" class="twikiTableCol2"> <a rel="nofollow" href="$url/$TEST_WEB_NAME/TestTopicTableFormatting?sortcol=2;table=1;up=0#sorted_table" title="Sort by this column"><font color="#ffffff">Size</font></a> </th>
                         <th bgcolor="#334455" valign="top" class="twikiTableCol3 twikiSortedDescendingCol twikiSortedCol twikiLastCol"> <a rel="nofollow" href="$url/$TEST_WEB_NAME/TestTopicTableFormatting?sortcol=3;table=1;up=2#sorted_table" title="Sort by this column"><font color="#ffffff">Span date</font></a><span class="tableSortIcon tableSortDown"><img width="11" alt="Sorted descending" src="$pubUrlTWikiWeb/TWikiDocGraphics/tablesortdown.gif" title="Sorted descending" height="13" border="0" /></span> </th>
                 </tr>
-<p />
-<p />
                 <tr class="twikiTableEven twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
                         <td bgcolor="#ffffff" rowspan="1" valign="top" class="twikiTableCol0 twikiFirstCol"> jkl </td>
 
@@ -390,6 +373,49 @@ ACTUAL
         </table>
 EXPECTED
 
+    $this->do_test($expected, $actual);
+}
+
+sub test_TableUnderbulletedListWithSpace {
+    my $this = shift;
+    my $expected = <<EXPECTED;
+ <ul>
+<li> This is Bullet for space below    <nop>  <nop>  <table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="rows" border="1">             <tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">                      <td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> a </td>                        <td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> b </td>         </tr>           <tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">                     <td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> 2 </td>                      <td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> 3 </td>               </tr>  </table>
+</li></ul> 
+
+EXPECTED
+    my $actual = <<ACTUAL;
+   * This is Bullet for space below
+   | a | b |
+  | 2 | 3 |
+ACTUAL
+    $this->do_test($expected, $actual);
+}
+
+
+sub test_TableUnderbulletedListWithoutSpace {
+    my $this = shift;
+    my $expected = <<EXPECTED;
+ <ul>
+<li> This is Bullet for no space below
+</li></ul>
+<nop>
+<nop>
+<table cellspacing="0" id="table1" cellpadding="0" class="twikiTable" rules="rows" border="1">
+                <tr class="twikiTableOdd twikiTableRowdataBgSorted0 twikiTableRowdataBg0">
+                        <td bgcolor="#ffffff" valign="top" class="twikiTableCol0 twikiFirstCol"> a </td>
+                        <td bgcolor="#ffffff" valign="top" class="twikiTableCol1 twikiLastCol"> b </td>
+                </tr>
+                <tr class="twikiTableEven twikiTableRowdataBgSorted1 twikiTableRowdataBg1">
+                        <td bgcolor="#edf4f9" valign="top" class="twikiTableCol0 twikiFirstCol twikiLast"> 2 </td>
+                        <td bgcolor="#edf4f9" valign="top" class="twikiTableCol1 twikiLastCol twikiLast"> 3 </td>
+                </tr></table>
+EXPECTED
+    my $actual = <<ACTUAL;
+   * This is Bullet for no space below
+| a | b |
+| 2 | 3 |
+ACTUAL
     $this->do_test($expected, $actual);
 }
 
