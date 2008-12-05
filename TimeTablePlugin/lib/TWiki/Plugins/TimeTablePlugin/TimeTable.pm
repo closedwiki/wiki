@@ -108,7 +108,7 @@ sub inflate {
 	$fgcolor='' unless defined $fgcolor;
 	$bgcolor='' unless defined $bgcolor;
 
-	return $cgi->span(
+	return $options{hidettcm}?"": $cgi->span(
 			{
 				-style=>(($fgcolor ne '')?"color:$fgcolor;":'').(($bgcolor ne '')?"background-color:$bgcolor":''),
 				-title=>$title
@@ -211,10 +211,11 @@ sub _initDefaults {
 		tablecellspacing => 1,
 		textwrapper => 'browser',
 		rotatetable => 0,
+		hidettcm => 0,
 	);
 
 	@renderedOptions = ('tablecaption', 'name' , 'navprev', 'navnext', 'wholetimerowtext');
-	@flagOptions = ('compatmode','showweekend','displaytime','forcestartdate','wholetimerow','showmonthheader','clicktooltip','rotatetable');
+	@flagOptions = ('compatmode','showweekend','displaytime','forcestartdate','wholetimerow','showmonthheader','clicktooltip','rotatetable','hidettcm');
 
 
         %months = ( Jan=>1, Feb=>2, Mar=>3, Apr=>4, May=>5, Jun=>6, 
