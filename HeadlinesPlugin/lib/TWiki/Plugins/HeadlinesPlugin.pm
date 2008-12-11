@@ -30,7 +30,7 @@ use strict;
 use vars qw($VERSION $RELEASE $isInitialized $doneHeader);
 
 $VERSION = '$Rev$';
-$RELEASE = '2.12';
+$RELEASE = '2.13';
 
 # =========================
 sub initPlugin {

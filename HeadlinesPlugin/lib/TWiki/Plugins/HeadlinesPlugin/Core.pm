@@ -916,6 +916,8 @@ sub getUrlLWP {
 
     my $proxyHost = TWiki::Func::getPreferencesValue('PROXYHOST') || '';
     my $proxyPort = TWiki::Func::getPreferencesValue('PROXYPORT') || '';
+    $proxyHost ||= $TWiki::cfg{PROXY}{HOST};
+    $proxyPort ||= $TWiki::cfg{PROXY}{PORT};
 
     $userAgent = LWP::UserAgent->new();
     $userAgent->agent('TWiki HeadlinesPlugin'); 
