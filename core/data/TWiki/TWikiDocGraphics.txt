@@ -154,6 +154,7 @@ Other usage: [[%TOPIC%#Usage_extended][see below]].
 | <img src="%ATTACHURLPATH%/updated.gif" alt="UPDATED" title="UPDATED" />  | =updated.gif= | UPDATED, 55x16 | =%<nop>U%=, =&lt;img src="%<nop>ICONURL{updated}%" width="55" height="16" alt="UPDATED" border="0" /&gt;= |
 | <img src="%ATTACHURLPATH%/done.gif" alt="DONE" title="DONE" />  | =done.gif= | DONE, 37x16 | =&lt;img src="%<nop>ICONURL{done}%" width="37" height="16" alt="Done" border="0" /&gt;= |
 | <img src="%ATTACHURLPATH%/closed.gif" alt="CLOSED" title="CLOSED" />  | =closed.gif= | CLOSED, 48x16 | =&lt;img src="%<nop>ICONURL{closed}%" width="48" height="16" alt="Closed" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/processing.gif" alt="Processing" title="Processing" />  | =processing.gif= | Processing | =%<nop>ICON{processing}%= |
 | <img src="%ATTACHURLPATH%/minus.gif" alt="Minus" title="Minus" />  | =minus.gif= | Minus | =%<nop>ICON{minus}%= |
 | <img src="%ATTACHURLPATH%/plus.gif" alt="Plus" title="Plus" />  | =plus.gif= | Plus | =%<nop>ICON{plus}%= |
 | <img src="%ATTACHURLPATH%/choice-cancel.gif" alt="Cancel" title="Cancel" />  | =choice-cancel.gif= | Cancel | =%<nop>ICON{choice-cancel}%= |
@@ -536,6 +537,7 @@ __Contributors:__ Most icons on this page were originally designed by TWiki:Main
 %META:FILEATTACHMENT{name="ppt.gif" attr="" comment="" date="1169565034" path="ppt.gif" size="373" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="presentation.gif" attr="" comment="" date="1196729838" path="presentation.gif" size="892" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="printtopic.gif" attr="" comment="" date="1169565034" path="printtopic.gif" size="221" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="processing.gif" attr="" comment="" date="1229216814" path="processing.gif" size="2537" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="proportional.gif" attr="" comment="" date="1169565034" path="proportional.gif" size="137" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="ps.gif" attr="" comment="" date="1169565034" path="ps.gif" size="362" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="psd.gif" attr="" comment="" date="1169565034" path="psd.gif" size="369" user="TWikiContributor" version=""}%
