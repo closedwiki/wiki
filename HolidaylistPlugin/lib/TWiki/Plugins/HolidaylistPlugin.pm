@@ -1027,7 +1027,7 @@ sub renderHolidaylist() {
 		$person =~ s/\@all//ig if $options{enablepubholidays};
 
 		my $tr = "";
-		my $pcell = CGI::th({-align=>'left'},'<noautolink>'._renderText($person,$web).'</noautolink>');
+		my $pcell = CGI::th({-align=>'left',-style=>'white-space:nowrap;text-wrap:none;'},'<noautolink>'._renderText($person,$web).'</noautolink>');
 		$tr .= $pcell if $options{namepos}=~/^(left|both)$/i;
 
 		for (my $i=0; $i<$options{days}; $i++) {
