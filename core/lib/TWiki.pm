@@ -400,7 +400,7 @@ BEGIN {
 
     # Simplistic email regex, e.g. for WebNotify processing - no i18n
     # characters allowed
-    $regex{emailAddrRegex} = qr/([A-Za-z0-9\.\+\-\_]+\@[A-Za-z0-9\.\-]+)/;
+    $regex{emailAddrRegex} = qr/([A-Za-z0-9\.\+\-\_\']+\@[A-Za-z0-9\.\-]+)/;
 
     # Filename regex to used to match invalid characters in attachments - allow
     # alphanumeric characters, spaces, underscores, etc.
