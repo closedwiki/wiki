@@ -1176,7 +1176,7 @@ sub getRenderedVersion {
     # Email addresses must always be 7-bit, even within I18N sites
 
     # Normal mailto:foo@example.com ('mailto:' part optional)
-    $text =~ s/$STARTWW((mailto\:)?[a-zA-Z0-9-_.+]+@[a-zA-Z0-9-_.]+\.[a-zA-Z0-9-_]+)$ENDWW/_mailLink( $this, $1 )/gem;
+    $text =~ s/$STARTWW((mailto\:)?$TWiki::regex{emailAddrRegex})$ENDWW/_mailLink( $this, $1 )/gem;
 
     # Handle [[][] and [[]] links
     # Escape rendering: Change ' ![[...' to ' [<nop>[...', for final unrendered ' [[...' output
