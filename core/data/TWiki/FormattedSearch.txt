@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1228163901" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="BaseUserMapping_333" date="1233170894" format="1.1" version="1.4"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %STARTINCLUDE%
 ---+ TWiki Formatted Search
@@ -23,7 +23,18 @@ Variables that can be used in the header string:
 | =$web= | Name of the web |
 %INCLUDE{FormatTokens}%
 
----+++ 2. =format="..."= parameter
+---+++ 2. =footer="..."= parameter
+
+Use the footer parameter to specify the footer of a search result. It should correspond to the format of the format parameter. This parameter is optional. <br /> Example: =footer="| <nop>*Topic:*<nop> | <nop>*Summary:*<nop> |"=
+
+Variables that can be used in the footer string:
+
+| *Name:* | *Expands To:* |
+| =$web= | Name of the web |
+%INCLUDE{FormatTokens}%
+
+
+---+++ 3. =format="..."= parameter
 
 Use the format parameter to specify the format of one search hit.
 <br /> Example: =format="| $topic | $summary |"=
@@ -74,11 +85,11 @@ Here are some samples of formatted searches. The SearchPatternCookbook has other
 
 *Write this:*
 
-=%<nop>SEARCH{ "FAQ" scope="topic" nosearch="on" nototal="on" header="   * <nop>*Topic: Summary:*" format="   * [<nop>[$topic]]: $summary" }%=
+=%<nop>SEARCH{ "FAQ" scope="topic" nosearch="on" nototal="on" header="   * <nop>*Topic: Summary:*" footer="   * <nop>*Topic: Summary:*" format="   * [<nop>[$topic]]: $summary" }%=
 
 *To get this:*
 
-%SEARCH{ "FAQ" scope="topic" nosearch="on" nototal="on" header="   * *Topic: Summary:*" format="   * [[$topic]]: $summary" }%
+%SEARCH{ "FAQ" scope="topic" nosearch="on" nototal="on" header="   * *Topic: Summary:*"  footer="   * *Topic: Summary:*"  format="   * [[$topic]]: $summary" }%
 
 
 ---+++ Table showing form field values of topics with a form
@@ -203,4 +214,4 @@ Result:
 
 __Related Topics:__ UserDocumentationCategory, SearchHelp, TWikiVariables#VarSEARCH, SearchPatternCookbook, RegularExpression
 
--- __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.CrawfordCurrie
+-- __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.CrawfordCurrie, TWiki:Main.SopanShewale

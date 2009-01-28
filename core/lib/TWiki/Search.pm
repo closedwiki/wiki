@@ -351,6 +351,7 @@ sub searchWeb {
     my $doExpandVars  = TWiki::isTrue( $params{expandvariables} );
     my $format        = $params{format} || '';
     my $header        = $params{header};
+    my $footer        = $params{footer};
     my $inline        = $params{inline};
     my $limit         = $params{limit} || '';
     my $doMultiple    = TWiki::isTrue( $params{multiple} );
@@ -364,6 +365,15 @@ sub searchWeb {
 
       # Note: This is done for Cairo compatibility
       || ( !$header && $format && $inline );
+
+   # Note: a defined footer overrides nofooter
+    my $noFooter =
+      !defined($footer)
+      && TWiki::isTrue( $params{nofooter}, $nonoise )
+
+      # Note: This is done for Cairo compatibility
+      || ( !$footer && $format && $inline );
+
 
     my $noSearch  = TWiki::isTrue( $params{nosearch},  $nonoise );
     my $noSummary = TWiki::isTrue( $params{nosummary}, $nonoise );
@@ -735,6 +745,12 @@ sub searchWeb {
                 $beforeText =~
                   s/([^\n])$/$1\n/os;           # add new line at end if needed
             }
+        }
+
+
+       if ( defined $footer ) {
+            $afterText = TWiki::expandStandardEscapes($footer);
+            $afterText =~ s/\$web/$web/gos;    # expand name of web
         }
 
         # output the list of topics in $web
