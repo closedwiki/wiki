@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1233170894" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1233147054" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %STARTINCLUDE%
 ---+ TWiki Formatted Search
@@ -25,7 +25,7 @@ Variables that can be used in the header string:
 
 ---+++ 2. =footer="..."= parameter
 
-Use the footer parameter to specify the footer of a search result. It should correspond to the format of the format parameter. This parameter is optional. <br /> Example: =footer="| <nop>*Topic:*<nop> | <nop>*Summary:*<nop> |"=
+Use the footer parameter to specify the footer of a search result. It should correspond to the format of the format parameter. This parameter is optional. <br /> Example: =footer="| <nop>*Topic*<nop> | <nop>*Summary*<nop> |"=
 
 Variables that can be used in the footer string:
 
@@ -85,11 +85,11 @@ Here are some samples of formatted searches. The SearchPatternCookbook has other
 
 *Write this:*
 
-=%<nop>SEARCH{ "FAQ" scope="topic" nosearch="on" nototal="on" header="   * <nop>*Topic: Summary:*" footer="   * <nop>*Topic: Summary:*" format="   * [<nop>[$topic]]: $summary" }%=
+=%<nop>SEARCH{ "FAQ" scope="topic" nosearch="on" nototal="on" header="   * <nop>*Topic: Summary:*" format="   * [<nop>[$topic]]: $summary"  footer="   * <nop>*Topic: Summary*"  }%=
 
 *To get this:*
 
-%SEARCH{ "FAQ" scope="topic" nosearch="on" nototal="on" header="   * *Topic: Summary:*"  footer="   * *Topic: Summary:*"  format="   * [[$topic]]: $summary" }%
+%SEARCH{ "FAQ" scope="topic" nosearch="on" nototal="on" header="   * *Topic: Summary:*" format="   * [[$topic]]: $summary"  footer="   * *Topic: Summary*" }%
 
 
 ---+++ Table showing form field values of topics with a form
