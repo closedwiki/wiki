@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1210999363" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1233237220" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Templates
 
@@ -155,7 +155,9 @@ When you create a new topic using the =edit= script, TWiki locates a topic to us
    1 <nop>WebTopicEditTemplate in the %SYSTEMWEB% web
 
 #TemplateTopicsVars
----+++ Variable Expansion
+---+++ Control over Variable Expansion
+
+---++++ List of default variables eligible for Expansion 
 
 When the following variables are used in a template topic, they automatically get expanded when new topic is created based on it:
 
@@ -183,7 +185,42 @@ This will restrict who can edit the template topic, but will get removed when a 
 
 =%<nop>NOP%= can be used to prevent expansion of TWiki variables that would otherwise be expanded during topic creation e.g.i escape =%<nop>SERVERTIME%= with =%<nop>SER%<nop>NOP%VERTIME%=.
 
-All other variables are unchanged, e.g. are carried over "as is" into the new topic.
+---++++ Forcefully expanding variables
+
+You can forcefully expand variables from section of template content into the topics using syntax similar to 
+<verbatim>
+%STARTSECTION{ type="expandvariables" }% ... %ENDSECTION{ type="expandvariables" }% 
+</verbatim>
+
+Example:
+
+If you add following content in template for topic creation
+<verbatim>
+
+%STARTSECTION{ type="expandvariables" }%
+   * %TWIKIWEB%.ATasteOfTWiki - view a short introductory presentation on TWiki for beginners
+   * %TWIKIWEB%.WelcomeGuest - starting points on TWiki
+   * %TWIKIWEB%.TWikiUsersGuide - complete TWiki documentation, Quick Start to Reference
+   * Sandbox.%HOMETOPIC% - try out TWiki on your own
+   * Sandbox.%TOPIC%Sandbox - just for me
+%ENDSECTION{ type="expandvariables" }%
+
+</verbatim>
+
+this can get expanded to  
+
+<verbatim>
+   * TWiki.ATasteOfTWiki - view a short introductory presentation on TWiki for beginners
+   * TWiki.WelcomeGuest - starting points on TWiki
+   * TWiki.TWikiUsersGuide - complete TWiki documentation, Quick Start to Reference
+   * Sandbox.WebHome - try out TWiki on your own
+   * Sandbox.JimmyNewtronSandbox - just for me
+
+</verbatim>
+
+in the topic. 
+
+Any variables which is not added into section similar to above or the variable is not from the default list (eligible for expansion) is never expanded in the topic content. 
 
 ---+++ Specifying a Form
 When you create a new topic based on a template, you often want the new topic to have a form attached to it. You can attach a form to the template topic, in which case it will be copied into the new topic.
@@ -246,4 +283,5 @@ When you use TWikiVariables such as %<nop>PUBURL% and %<nop>PUBURLPATH% in templ
 __Related Topics:__ TWikiSkins, DeveloperDocumentationCategory, AdminDocumentationCategory
 
 %STOPINCLUDE%
--- __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.MikeMannix, TWiki:Main.DavidLeBlanc, TWiki:Main.CrawfordCurrie
+-- __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.MikeMannix, TWiki:Main.DavidLeBlanc, TWiki:Main.CrawfordCurrie, TWiki:Main.SopanShewale
+
