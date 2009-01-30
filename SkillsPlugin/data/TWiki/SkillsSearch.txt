@@ -22,6 +22,8 @@ Search for users with a specific skill.
 <div class="twikiFormSteps">
 <div class="twikiFormStep">
 %SKILLS{action="search"}%
+%BR%
+%SKILLS{action="searchresults"}%
 </div>
 </div>
 %ENDSECTION{"searchskills"}%

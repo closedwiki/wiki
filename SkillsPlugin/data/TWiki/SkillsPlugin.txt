@@ -27,10 +27,6 @@ The user interface for general users can be found at the following places:
 
 To create, modify or delete categories/skills, follow the instructions at SkillsAdminIntroduction.
 
----+++ Advanced Search
-
-You can create a more advanced search, by creating the form yourself and using an extra input field. This can allow searching for users in a particular office/location. This is described in detail at SkillsAdvancedSearch.
-
 ---++ Syntax Rules
 
 The Plugin handles a =%<nop>SKILLS{}%= variable that performs different actions. The =action=""= is a required parameter.

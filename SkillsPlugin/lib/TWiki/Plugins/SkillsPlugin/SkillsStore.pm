@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2008 Andrew Jones, andrewjones86@googlemail.com
+# Copyright (C) 2008 - 2009 Andrew Jones, andrewjones86@googlemail.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -16,14 +16,9 @@
 
 package TWiki::Plugins::SkillsPlugin::SkillsStore;
 
-#use fields qw(CATS LOADED);
-
 use strict;
 
-# IDEAS:
-# - don't always have to read from file; could get from memory if we already have it
-# - provide an iterator? could use TWiki::ListIterator and TWiki::LineIterator...
-# - sort categories
+require TWiki::Plugins::SkillsPlugin::Category;
 
 my @_categories;
 my $_loaded = 0;
@@ -70,17 +65,6 @@ sub _load {
     $_loaded = 1;
     
     return 1;
-}
-
-# gets all the categories and skills
-# could get from memory if we already have it
-# SMELL: do we need? not used anywhere and a bit exposing
-sub getAll {
-    my $self = shift;
-    
-    $self->_load unless $_loaded;
-    
-    return \@_categories;
 }
 
 # returns an array of all category names
@@ -135,8 +119,6 @@ sub addNewSkill {
     my $self = shift;
     
     my( $pSkill, $pCat ) = @_;
-    
-    # TODO: Permissions
     
     my $obj_cat = $self->getCategoryByName( $pCat );
     
@@ -211,7 +193,6 @@ sub deleteSkill {
 sub addNewCategory {
     my $self = shift;
     
-    # TODO: Permissions
     my( $newCat ) = @_;
     
     # check category does not already exist
@@ -298,15 +279,6 @@ sub getCategoryByName {
         }
     }
     return undef;
-}
-
-# replaces the category object for the specified category - why??
-sub replaceCategory {
-    my $self = shift;
-    
-    #my $obj_cat = shift || return 0;
-    
-    
 }
 
 sub _Debug {

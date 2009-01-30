@@ -1,0 +1,39 @@
+%TMPL:INCLUDE{"skills"}%
+
+%TMPL:DEF{"skills:searchform:formstart"}%
+<form %FORMDEFINITION% ><table class="skillsForm">
+%TMPL:END%
+
+%TMPL:DEF{"skills:searchform:head"}%
+<tr><th colspan="4"><a href="%SCRIPTURL{view}%/%TWIKIWEB%/SkillsPlugin">Search Skills</a></th></tr>
+%TMPL:END%
+
+%TMPL:DEF{"skills:searchform:formend"}%
+</table></form>
+%TMPL:END%
+
+%TMPL:DEF{"skills:searchform:ratingfromoptions"}%
+<select name="ratingFrom">
+<option value="1">%TMPL:P{"skills:rating1"}%</option>
+<option selected="selected" value="2">%TMPL:P{"skills:rating2"}%</option>
+<option value="3">%TMPL:P{"skills:rating3"}%</option>
+<option value="4">%TMPL:P{"skills:rating4"}%</option>
+</select>
+%TMPL:END%
+
+%TMPL:DEF{"skills:searchform:ratingtooptions"}%
+<select name="ratingTo">
+<option value="1">%TMPL:P{"skills:rating1"}%</option>
+<option value="2">%TMPL:P{"skills:rating2"}%</option>
+<option value="3">%TMPL:P{"skills:rating3"}%</option>
+<option selected="selected" value="4">%TMPL:P{"skills:rating4"}%</option>
+</select>
+%TMPL:END%
+
+<!-- SKILLSPLUGIN - SEARCH SKILLS -->
+%TMPL:P{"skills:searchform:formstart"}%
+%TMPL:P{"skills:searchform:head"}%
+<tr><td><strong>Category</strong></td><td>%CATEGORYSELECT%</td><td><strong>Skill</strong></td><td>%SKILLSELECT%</td></tr>
+<tr><td><strong>Rating</strong></td><td colspan="3">Between %TMPL:P{"skills:searchform:ratingfromoptions"}% and %TMPL:P{"skills:searchform:ratingtooptions"}%</td></tr>
+<tr><td colspan="6" class="skillsFormRating">%SKILLSUBMIT%</td></tr>
+%TMPL:P{"skills:searchform:formend"}%

@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2008 Andrew Jones, andrewjones86@googlemail.com
+# Copyright (C) 2008 - 2009 Andrew Jones, andrewjones86@googlemail.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -15,6 +15,10 @@
 # For licensing info read LICENSE file in the TWiki root.
 
 package TWiki::Plugins::SkillsPlugin::UserSkills;
+
+use strict;
+
+require TWiki::Plugins::SkillsPlugin::UserSkill;
 
 my %_userSkills; # contains an array of UserSkill objects keyed by user
 
@@ -31,6 +35,7 @@ sub new {
 }
 
 # loads the skills for a particular user
+# gets it from the meta of the topic and stores in global hash
 sub _loadUserSkills {
     my $self = shift;
     
@@ -57,15 +62,6 @@ sub _loadUserSkills {
     $_userSkills{ $user } = \@userSkills;
 }
 
-# gets all the users skills from the topics into memory ready to be repeatably queried
-# could this be transparent? I.e, we load when there is a query and save it, then next time we check if its loaded
-sub loadAllUsersSkills {
-    my $self = shift;
-    
-    # loop over every user
-    # then _loadUserSkill for each one
-}
-
 # gets the particular skill for a particular user. Returns undef if skill not set
 sub getSkillForUser {
     my $self = shift;
@@ -78,14 +74,21 @@ sub getSkillForUser {
     return undef unless $it;
     while( $it->hasNext() ){
         my $obj_userSkill = $it->next();
-        if( $cat eq $obj_userSkill->category && $skill eq $obj_userSkill->name ){
+        if( 
+            $cat &&
+            $obj_userSkill->category &&
+            $cat eq $obj_userSkill->category &&
+            $skill &&
+            $obj_userSkill->name &&
+            $skill eq $obj_userSkill->name
+            ){
             return $obj_userSkill;
         }
     }
     return undef;
 }
 
-# returns all the users skills in array
+# returns all the users skills in array of UserSkill objects
 sub getUserSkills {
     my $self = shift;
     
@@ -107,6 +110,27 @@ sub eachUserSkill {
     
     require TWiki::ListIterator;
     return new TWiki::ListIterator( $_userSkills{ $user } );
+}
+
+# gets each user that has skills
+# returns a hash keyed by user name that has an array of thier UserSkill objects
+# i.e. {username}->[ UserSkill-1, UserSkill-2, UserSkill-3 ]
+sub allUsers {
+    my $self = shift;
+    
+    my %allUsers = {}; # hash of user skill objects keyed by user name
+    
+    my $users = TWiki::Func::eachUser();
+    while ($users->hasNext()) {
+        my $user = $users->next();
+        
+        my $userSkills = $self->getUserSkills( $user );
+        if( $userSkills ){
+            $allUsers{ $user } = $userSkills;
+        }
+    }
+    
+    return \%allUsers;
 }
 
 sub addEditUserSkill {
@@ -311,10 +335,51 @@ sub moveSkill {
 }
 
 # returns all the users with the particular skill
-# could this be an object? would need to know user, rating, comment...
-# dont do object overkill!!
 sub getUsersForSkill {
     my $self = shift;
+    
+    my( $skill, $cat ) = @_;
+    
+    my %usersWithSkill;
+    
+    my $users = TWiki::Func::eachUser();
+    while ($users->hasNext()) {
+        my $user = $users->next();
+        
+        if( my $obj_userSkill = $self->userHasSkill( $user, $skill, $cat ) ){
+            $usersWithSkill{ $user } = $obj_userSkill;
+        }
+    }
+    
+    return \%usersWithSkill;
+}
+
+# returns the user skill obj if user has the skill
+# undef if not
+sub userHasSkill {
+    my $self = shift;
+    
+    my( $user, $skill, $cat ) = @_;
+    
+    # all skills for this user
+    my $userSkills = $self->eachUserSkill( $user );
+    while ($userSkills->hasNext()) {
+        my $obj_userSkill = $userSkills->next();
+        
+        # trying to stop the 'Use of uninitialized value in string' warnings in Apache log file
+        if( 
+            $cat &&
+            $obj_userSkill->category &&
+            $cat eq $obj_userSkill->category &&
+            $skill &&
+            $obj_userSkill->name &&
+            $skill eq $obj_userSkill->name 
+            ){
+            return $obj_userSkill;
+        }
+    }
+    
+    return undef;
 }
 
 # saves the skills for the particular user

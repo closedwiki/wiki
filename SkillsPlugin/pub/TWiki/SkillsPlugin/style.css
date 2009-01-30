@@ -36,10 +36,13 @@ table.skillsTable th.skillsHeading a:hover {
 	border-color:#06c;
 	background-color:transparent;
 }
-table.skillsTable th span.active {
+table.skillsTable th span.active,
+table.skillsTable td span.active {
     color:#06c;
+    font-weight: bold;
 }
-table.skillsTable th span.active:hover {
+table.skillsTable th span.active:hover,
+table.skillsTable td span.active:hover{
     color:#06c;
     cursor: pointer;
 }

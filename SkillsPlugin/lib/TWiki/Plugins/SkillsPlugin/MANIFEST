@@ -1,7 +1,6 @@
 # Release manifest for SkillsPlugin
 data/TWiki/SkillsAdminIntroduction.txt 0664 UI Topic
 data/TWiki/SkillsPlugin.txt 0664 Plugin Topic
-data/TWiki/SkillsAdvancedSearch.txt 0664 Supplemental Documentation
 data/TWiki/SkillsBrowseAll.txt 0664 UI Topic
 data/TWiki/SkillsCreateNewCategory.txt 0664 UI Topic
 data/TWiki/SkillsCreateNewSkill.txt 0664 UI Topic
@@ -16,18 +15,22 @@ data/TWiki/SkillsSearch.txt 0664 UI Topic
 lib/TWiki/Plugins/SkillsPlugin.pm 0644 Plugin Module
 lib/TWiki/Plugins/SkillsPlugin/Category.pm 0644 Plugin Module
 lib/TWiki/Plugins/SkillsPlugin/Skill.pm 0644 Plugin Module
-lib/TWiki/Plugins/SkillsPlugin/UserSkill.pm 0644 Plugin Module
 lib/TWiki/Plugins/SkillsPlugin/SkillsStore.pm 0644 Plugin Module
-lib/TWiki/Plugins/SkillsPlugin/UserSkills.pm  0644 Plugin Module
+lib/TWiki/Plugins/SkillsPlugin/UserSkill.pm 0644 Plugin Module
+lib/TWiki/Plugins/SkillsPlugin/UserSkills.pm 0644 Plugin Module
 pub/TWiki/SkillsPlugin/skills_screenshot_full.png 0644 Screenshot
 pub/TWiki/SkillsPlugin/skills_screenshot_search.png 0644 Screenshot
 pub/TWiki/SkillsPlugin/skills_screenshot_thumb.png 0644 Screenshot
 pub/TWiki/SkillsPlugin/style.css 0644 Default Style Sheet
 pub/TWiki/SkillsPlugin/main.js 0644 JS File
 templates/skillsedit.tmpl 0644 Add/Edit form template
+templates/skillssearchform.tmpl 0644 Search form template
 templates/skills.tmpl 0644 Base template
 templates/skillsuserview.tmpl 0644 User Skills template
 templates/skillsuserviewrepeated.tmpl 0644 User Skills Repeated template
+templates/skillssearchresults.tmpl 0644 Search results template
+templates/skillssearchresultsrepeated.tmpl 0644 Search Results Repeated template
 templates/skillsbrowseview.tmpl 0644 Browse Skills template
 templates/skillsbrowseviewrepeated.tmpl 0644 Browse Skills Repeated template
-templates/oopsgeneric.skills.tmpl 0644 
+templates/oopsgeneric.skills.tmpl 0644 Skills Comment template
+

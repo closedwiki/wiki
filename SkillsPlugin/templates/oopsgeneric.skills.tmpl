@@ -6,3 +6,12 @@
 %TMPL:DEF{"webaction"}%%TMPL:END%
 
 %TMPL:DEF{"topicactionbuttons""}% <a href="javascript:window.close();">Close</a> %TMPL:END%
+
+%TMPL:DEF{"message"}%
+---++++!! %MAKETEXT{ "[_1]" args="%PARAM2%" }%
+
+%MAKETEXT{ "[_1]" args="%PARAM3%" }%
+
+<blockquote>%MAKETEXT{ "[_1]" args="%PARAM4%" }%</blockquote>
+%TMPL:END%
+

@@ -3,11 +3,11 @@
 %TMPL:END%
 
 %TMPL:DEF{"skills:browseview:repeated:category"}%
-<tr class='skillsContent'><th colspan='6'>%SKILLTWISTY% %CATEGORY%</th></tr>
+<tr class='skillsContent'><th colspan='6'>%CATEGORYICON% %CATEGORY%</th></tr>
 %TMPL:END%
 
-%TMPL:DEF{"skills:browseview:repeated:skillcontainerstart"}%
-<tbody %SKILLCONTDEF%>
+%TMPL:DEF{"skills:browseview:repeated:categorycontainerstart"}%
+<tbody %CATEGORYCONTDEF%>
 %TMPL:END%
 
 %TMPL:DEF{"skills:browseview:repeated:skillstart"}%
@@ -15,7 +15,19 @@
 %TMPL:END%
 
 %TMPL:DEF{"skills:browseview:repeated:skill"}%
-<td>%SKILLICON% %SKILL%</td>
+<td class="head2" colspan="6">%SKILLICON% %SKILL%</td>
+%TMPL:END%
+
+%TMPL:DEF{"skills:browseview:repeated:skillend"}%
+</tr>
+%TMPL:END%
+
+%TMPL:DEF{"skills:browseview:repeated:userstart"}%
+<tr %SKILLTWISTDEF%>
+%TMPL:END%
+
+%TMPL:DEF{"skills:browseview:repeated:user"}%
+<td %USERROWDEF%>%USERICON% %SKILLUSER%</td>
 %TMPL:END%
 
 %TMPL:DEF{"skills:browseview:repeated:rating"}%
@@ -33,16 +45,17 @@
 <td>%TMPL:P{"skills:browseview:repeated:commentlink"}%</td>
 %TMPL:END%
 
-%TMPL:DEF{"skills:browseview:repeated:skillend"}%
+%TMPL:DEF{"skills:browseview:repeated:userend"}%
 </tr>
 %TMPL:END%
 
-%TMPL:DEF{"skills:browseview:repeated:skillcontainerend"}%
+%TMPL:DEF{"skills:browseview:repeated:categorycontainerend"}%
 </tbody>
 %TMPL:END%
 
+
 %TMPL:DEF{"skills:browseview:repeated"}%
-%SPLIT%%TMPL:P{"skills:userview:repeated:category"}%%SPLIT%%TMPL:P{"skills:userview:repeated:skillcontainerstart"}%%SPLIT%%TMPL:P{"skills:userview:repeated:skillstart"}%%SPLIT%%TMPL:P{"skills:userview:repeated:skill"}%%SPLIT%%TMPL:P{"skills:userview:repeated:rating"}%%SPLIT%%TMPL:P{"skills:userview:repeated:comment"}%%SPLIT%%TMPL:P{"skills:userview:repeated:skillend"}%%SPLIT%%TMPL:P{"skills:userview:repeated:skillcontainerend"}%%SPLIT%
+%SPLIT%%TMPL:P{"skills:browseview:repeated:category"}%%SPLIT%%TMPL:P{"skills:browseview:repeated:categorycontainerstart"}%%SPLIT%%TMPL:P{"skills:browseview:repeated:skillstart"}%%SPLIT%%TMPL:P{"skills:browseview:repeated:skill"}%%SPLIT%%TMPL:P{"skills:browseview:repeated:skillend"}%%SPLIT%%TMPL:P{"skills:browseview:repeated:userstart"}%%SPLIT%%TMPL:P{"skills:browseview:repeated:user"}%%SPLIT%%TMPL:P{"skills:browseview:repeated:rating"}%%SPLIT%%TMPL:P{"skills:browseview:repeated:comment"}%%SPLIT%%TMPL:P{"skills:browseview:repeated:userend"}%%SPLIT%%TMPL:P{"skills:browseview:repeated:categorycontainerend"}%%SPLIT%
 %TMPL:END%
 
 %TMPL:P{"skills:browseview:repeated"}%
