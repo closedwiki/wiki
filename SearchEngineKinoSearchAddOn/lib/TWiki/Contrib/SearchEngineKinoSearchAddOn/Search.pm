@@ -22,6 +22,9 @@ use KinoSearch::Searcher;
 use KinoSearch::Analysis::PolyAnalyzer;
 use KinoSearch::QueryParser::QueryParser;
 
+use TWiki::OopsException;
+
+
 # New instance to search the index
 # QS
 sub newSearch {
@@ -58,6 +61,19 @@ sub search {
     my $limit   = $self->limit($query);
 
     $remoteUser = TWiki::Func::userToWikiName($remoteUser);
+
+    if (isIndexEmpty()) {
+
+    my $exception = new TWiki::OopsException(
+               'kinosearchindexempty',
+                web => $webName, topic => $topicName,
+                def => 'kinosearch_index_empty',
+                params => [ 'kinosearchindex', 'The Indexing Needs to be run Manually, TWiki Admins' ] );
+
+    $exception->redirect( $session );
+
+     }
+
 
     # getting some params - all params should be documented in KinoSearch topic
     my $search        = $query->param( "search" )    || "";
@@ -589,5 +605,27 @@ sub topicAllowed {
     }
     return 1;
 }
+
+# Following routine makes sure the indexing is not empty..
+# retrun 1 if empty else 0
+sub isIndexEmpty {
+     my $idx = $TWiki::cfg{KinoSearchIndexDir};
+     if (!-d $idx) {
+           return 1;
+       }
+
+     my @index_files = ();
+     eval {
+        opendir (IDX, $idx) or die "Error: Not able to open $idx for reading";
+        @index_files = readdir(IDX);
+        close (IDX);
+     };
+     if ($@) { return 1; }
+     my $len = scalar @index_files;
+     if ($len <3 ) { return 1; }
+     return 0;
+}
+
+
 
 1;

@@ -25,6 +25,11 @@ use TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier;
 use strict;
 
 use TWiki::Form;
+use TWiki::Func;
+use Error qw( :try );
+use vars qw ($workAreaDir $AddOnName);
+$AddOnName = 'SearchEngineKinoSearchAddOn';
+
 
 # New instance to create the index
 # QS
@@ -514,6 +519,7 @@ sub indexTopic {
     my %indexextensions = $self->indexExtensions();
     my %skipattachments = $self->skipAttachments();
 
+
     if (@attachments) {
         $self->log("Attachments available for: $web, $topic");
 
@@ -529,7 +535,7 @@ sub indexTopic {
                 && ( !$skipattachments{"$web.$topic.$name"} ) )
             {
 
-                #print "Indexing attachment $web.$topic.$name\n";
+                print "Indexing attachment $web.$topic.$name\n";
 
                 $self->indexAttachment( $invindexer, $web, $topic,
                     $attachment );
@@ -563,10 +569,19 @@ sub indexAttachment {
     #untaint..
     $filename =~ /(.*)/;
     $filename = $1;
-    my $attText =
-      TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier->stringFor(
-        $filename);
-        
+
+#Place to catch the exception and add the file in skip list
+
+   my $attText;
+
+    try {
+         $attText = TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier->stringFor( $filename);
+       } catch Error::Simple with {
+
+     _writeSkipFileInfo($web, $topic, $name);
+     $self->log("Error in $filename, Added into skipping area");
+      } ;
+
     return if (!defined($attText)); #attachment may not be there.
 
     # new Kino document for the current topic
@@ -744,4 +759,17 @@ sub readChanges {
     return '';
 }
 
+
+
+sub _writeSkipFileInfo {
+       my ($web, $topic, $attachment) = @_;
+       my $workAreaDir = TWiki::Func::getWorkArea($AddOnName); 
+       my $file = "$workAreaDir/_skip_.$web.$topic.txt"; 
+       my $text = TWiki::Func::readFile("$file"); 
+       $text = $text.$attachment."\n";
+      
+       TWiki::Func::saveFile( $file, $text ); 
+
+
+}
 1;

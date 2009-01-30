@@ -29,6 +29,12 @@ use KinoSearch::Analysis::PolyAnalyzer;
 #use TWiki::Contrib::SearchEngineKinoSearchAddOn::Stringifier;
 use strict;
 
+# =========
+# A few constants..
+use vars qw ($workAreaDir $AddOnName);
+$AddOnName = 'SearchEngineKinoSearchAddOn';
+
+
 # Create a new instance of self.
 # parameter: Type may be "index", "update" or "search"
 # QS
@@ -128,12 +134,35 @@ sub skipWebs {
 # List of attachments to be skipped.
 # QS
 sub skipAttachments {
+
+#This section should be removed later..
     my $to_skip = TWiki::Func::getPreferencesValue( "KINOSEARCHINDEXSKIPATTACHMENTS" ) || "";
     my %skipattachments;
 
     foreach my $tmpattachment ( split( /\,\s+/, $to_skip ) ) {
 	$skipattachments{$tmpattachment} = 1;
     }
+
+#New architecture to store the list of skip attachments..
+     $workAreaDir = TWiki::Func::getWorkArea($AddOnName);
+     my @list = ();
+     if ( opendir( DIR, "$workAreaDir" ) ) {
+        my @files = grep { /^_skip_.*\.txt$/ } readdir(DIR);
+        closedir DIR;
+        @list = map { s/^_skip_\.(.*)\.txt$/$1/; $_ } @files;
+    }
+ 
+ 
+# @list has list of files with information about which files should be skipped
+   foreach my $twfpath (@list) {
+            my ($w, $t) = split (/\./, $twfpath);
+            my $text = TWiki::Func::readFile("$workAreaDir/_skip_.$twfpath.txt");
+            foreach (split/\n/, $text) {
+                $skipattachments{$w.'.'.$t.'.'.$_} = 1;
+              }
+   }
+
+#End of New Architecture section
     
     return %skipattachments;
 }

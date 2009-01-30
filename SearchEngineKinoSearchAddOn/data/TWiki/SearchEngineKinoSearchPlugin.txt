@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="BaseUserMapping_333" date="1207714807" format="1.1" version="1.3"}%
+%META:TOPICINFO{author="TWikiContributor" date="1230046948" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 
 _A plugin wrapper around the SearchEngineKinoSearchAddOn_
@@ -39,6 +39,27 @@ __TODO:__ while search works, the template it uses isn't useable as its tuned fo
 <form action="%SCRIPTURL{rest}%/SearchEngineKinoSearchPlugin/search/%INTURLENCODE{"%INCLUDINGWEB%"}%/">
    <input type="text" name="search" size="32" /> <input type="submit" value="Search text" /> | [[%TWIKIWEB%.KinoSearch][Help]]
 </form>
+
+
+---++ Monitoring the Indexing log
+
+To monitor the log  - following variables can be used to display the lines from  indexing or update indexing log files.
+
+   * %<nop>KINOSEARCH_INDEXLOGFILE% - display the last 10 lines from most recent  log file of ==kinoindex== script
+   * %<nop>KINOSEARCH_UPDATELOGFILE% - display the last 10 lines from most recent log file of ==kinoupdate== script 
+
+If installed correctly, please see the log files below
+
+*Indexing Log File lines* 
+
+%KINOSEARCH_INDEXLOGFILE%
+
+*Update log File lines*
+
+%KINOSEARCH_UPDATELOGFILE%
+
+
+
 
 ---++ Plugin Settings
 

@@ -3,6 +3,9 @@ package TWiki::Plugins::SearchEngineKinoSearchPlugin;
 use TWiki::Contrib::SearchEngineKinoSearchAddOn::Search;
 use TWiki::Contrib::SearchEngineKinoSearchAddOn::Index;
 
+use File::Tail;  # Added for displaying the indexing logs on 
+                 # Browser
+
 # =========================
 use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE $debug
@@ -11,7 +14,7 @@ use vars qw(
 
 $VERSION = '$Rev: 8749 $';
 $RELEASE = '0.5';
-$SHORTDESCRIPTION = 'Kino Search Plugin (mmm not sure if this will work)';
+$SHORTDESCRIPTION = 'Kino Search Plugin';
 $NO_PREFS_IN_TOPIC = 1;
 $pluginName = 'SearchEngineKinoSearchPlugin';
 
@@ -50,7 +53,7 @@ sub _index {
     use TWiki::Contrib::SearchEngineKinoSearchAddOn::Index;
     
     my $indexer = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newCreateIndex();
-    return $indexer->createIndex($debug, 1);
+    return $indexer->createIndex(1, 1); # removed $debug to support indexing from browser REST API
 }
 sub _update {
     my $session = shift;
@@ -58,7 +61,7 @@ sub _update {
     use TWiki::Contrib::SearchEngineKinoSearchAddOn::Index;
     
     my $indexer = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newUpdateIndex();
-    return $indexer->updateIndex($debug);
+    return $indexer->updateIndex(1);  #removed $debug to support indexing from browser REST API
 }
 
 sub _KINOSEARCH {
@@ -133,5 +136,68 @@ sub afterAttachmentSaveHandler {
     $indexer->removeTopics($web, @topicsToUpdate);
     $indexer->addTopics($web, @topicsToUpdate);
 }
+sub commonTagsHandler
+{
+    $_[0] =~ s/%KINOSEARCH_INDEXLOGFILE%/&handleindexLogfile()/geo;
+    $_[0] =~ s/%KINOSEARCH_UPDATELOGFILE%/&handleupdateLogfile()/geo;
+}
+
+sub handleindexLogfile {
+    my $logdir = $TWiki::cfg{KinoSearchLogDir};
+
+    my @list = ();
+    opendir (DIR, "$logdir");
+    foreach (readdir(DIR)) {
+           if (/^\.$/) {next;}
+           if (/^\.\.$/) {next;}
+           if (/^update/) {next;}
+           push @list, $_;
+   }
+   if (scalar @list <1) { return '<verbatim>Error: The kinoindex is never run on this TWiki Implementation</verbatim>';}
+   @list = sort @list;
+   my $index_logfile = pop @list;
+   my $file = File::Tail->new (name=>$logdir."/".$index_logfile,tail=>10);
+   my $line;
+   my $lines; 
+   my $number = 0;
+   while (defined($line=$file->read) && $number <10) {
+      $lines .= $line; 
+      $number++;
+      if ($number==10) { last;}
+  }
+   return "<verbatim>$lines</verbatim>";
+
+}
+
+sub handleupdateLogfile {
+    my $logdir = $TWiki::cfg{KinoSearchLogDir};
+
+    my @list = ();
+    opendir (DIR, "$logdir");
+    foreach (readdir(DIR)) {
+           if (/^\.$/) {next;}
+           if (/^\.\.$/) {next;}
+           if (/^index/) {next;}
+           push @list, $_;
+   }
+   if (scalar @list <1) { return '<verbatim>Error: The kinoupdate is never run on this TWiki Implementation</verbatim>';}
+
+   @list = sort @list;
+   my $update_logfile = pop @list;
+   my $file = File::Tail->new (name=>$logdir."/".$update_logfile,tail=>10);
+   my $line;
+   my $lines;
+   my $number = 0;
+   while (defined($line=$file->read) && $number <10) {
+      $lines .= $line;
+      $number++;
+      if ($number==10) { last;}
+   }
+
+   return "<verbatim>$lines</verbatim>";
+
+}
+
 
 1;
+
