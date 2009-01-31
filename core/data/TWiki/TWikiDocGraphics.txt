@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1222844046" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1233298661" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and Filetype icons
 
 This is the TWiki icon library. The graphics can be used in topics and by web applications. 
@@ -26,14 +26,17 @@ Other usage: [[%TOPIC%#Usage_extended][see below]].
 | <img src="%ATTACHURLPATH%/blank.gif" alt="Blank" title="Blank" />  | =blank.gif= | Blank box | =%<nop>ICON{blank}%= |
 | <img src="%ATTACHURLPATH%/blank-bg.gif" alt="Blank" title="Blank" />  | =blank-bg.gif= | Blank box, transparent | =%<nop>ICON{blank-bg}%= |
 | <img src="%ATTACHURLPATH%/bubble.gif" alt="Speech bubble" title="Speech bubble" />  | =bubble.gif= | Speech bubble | =%<nop>ICON{bubble}%= |
+| <img src="%ATTACHURLPATH%/bug.gif" alt="Bug" title="Bug" />  | =bug.gif= | Bug | =%<nop>ICON{bug}%= |
 | <img src="%ATTACHURLPATH%/days.gif" alt="Days / Calendar" title="Days / Calendar" />  | =days.gif= | Days, Calendar | =%<nop>ICON{days}%= |
 | <img src="%ATTACHURLPATH%/download.gif" alt="Download" title="Download" />  | =download.gif= | Download | =%<nop>ICON{download}%= |
 | <img src="%ATTACHURLPATH%/fax.gif" alt="Fax" title="Fax" />  | =fax.gif= | Fax | =%<nop>ICON{fax}%= |
 | <img src="%ATTACHURLPATH%/filter.gif" alt="Filter" title="Filter" />  | =filter.gif= | Filter | =%<nop>ICON{filter}%= |
 | <img src="%ATTACHURLPATH%/gear.gif" alt="Gear" title="Gear" />  | =gear.gif= | Gear | =%<nop>ICON{gear}%= |
 | <img src="%ATTACHURLPATH%/globe.gif" alt="Globe" title="Globe" />  | =globe.gif= | Globe | =%<nop>ICON{globe}%= |
+| <img src="%ATTACHURLPATH%/graduation.gif" alt="Graduation" title="Graduation" />  | =graduation.gif= | Graduation | =%<nop>ICON{graduation}%= |
 | <img src="%ATTACHURLPATH%/map.gif" alt="Map" title="Map" />  | =map.gif= | Map | =%<nop>ICON{map}%= |
 | <img src="%ATTACHURLPATH%/hand.gif" alt="Pointing hand" title="Pointing hand" />  | =hand.gif= | Pointing hand | =%<nop>ICON{hand}%= |
+| <img src="%ATTACHURLPATH%/heart.gif" alt="Heart" title="Heart" />  | =heart.gif= | Heart | =%<nop>ICON{heart}%= |
 | <img src="%ATTACHURLPATH%/help.gif" alt="Help" title="Help" />  | =help.gif= | Help | =%<nop>H%=, =%<nop>ICON{help}%= |
 | <img src="%ATTACHURLPATH%/info.gif" alt="Information" title="Information" />  | =info.gif= | Info | =%<nop>ICON{info}%= |
 | <img src="%ATTACHURLPATH%/hourglass.gif" alt="Hour glass (clock)" title="Hour glass (clock)" />  | =hourglass.gif= | Hour glass (clock) | =%<nop>ICON{hourglass}%= |
@@ -398,6 +401,7 @@ __Contributors:__ Most icons on this page were originally designed by TWiki:Main
 %META:FILEATTACHMENT{name="bmp.gif" attr="" comment="" date="1169565034" path="bmp.gif" size="378" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="book.gif" attr="" comment="" date="1169565034" path="book.gif" size="361" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="bubble.gif" attr="" comment="" date="1169565034" path="bubble.gif" size="342" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="bug.gif" attr="" comment="" date="1233298661" path="bug.gif" size="979" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="building.gif" attr="" comment="" date="1169565034" path="building.gif" size="133" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="buildings.gif" attr="" comment="" date="1169565034" path="buildings.gif" size="167" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="c.gif" attr="" comment="" date="1169565034" path="c.gif" size="372" user="TWikiContributor" version=""}%
@@ -454,9 +458,11 @@ __Contributors:__ Most icons on this page were originally designed by TWiki:Main
 %META:FILEATTACHMENT{name="go_ff.gif" attr="" comment="" date="1169565034" path="go_ff.gif" size="242" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="go_forward.gif" attr="" comment="" date="1169565034" path="go_forward.gif" size="234" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="go_start.gif" attr="" comment="" date="1169565034" path="go_start.gif" size="236" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="graduation.gif" attr="" comment="" date="1233298661" path="graduation.gif" size="967" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="group.gif" attr="" comment="" date="1169565034" path="group.gif" size="182" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="h.gif" attr="" comment="" date="1169565034" path="h.gif" size="375" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="hand.gif" attr="" comment="" date="1169565034" path="hand.gif" size="344" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="heart.gif" attr="" comment="" date="1233298661" path="heart.gif" size="1024" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="help.gif" attr="" comment="" date="1169565034" path="help.gif" size="212" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="hlp.gif" attr="" comment="" date="1169565034" path="hlp.gif" size="370" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="home.gif" attr="" comment="" date="1169565034" path="home.gif" size="342" user="TWikiContributor" version=""}%
