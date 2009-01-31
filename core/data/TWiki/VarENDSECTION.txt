@@ -4,6 +4,7 @@
 ---+++ ENDSECTION{"name"} -- marks the end of a named section within a topic
    * Syntax: =%<nop>ENDSECTION{"name"}%=
    * Syntax: =%<nop>ENDSECTION{type="include"}%=
+   * Syntax: =%<nop>ENDSECTION{type="templateonly"}%=
    * Syntax: =%<nop>ENDSECTION{type="expandvariables"}%=
    * Supported parameter:
      | *Parameter:* | *Description:* |

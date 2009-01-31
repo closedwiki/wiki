@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1233237220" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1233375670" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Templates
 
@@ -155,11 +155,14 @@ When you create a new topic using the =edit= script, TWiki locates a topic to us
    1 <nop>WebTopicEditTemplate in the %SYSTEMWEB% web
 
 #TemplateTopicsVars
----+++ Control over Variable Expansion
+---+++ Variable Expansion
 
----++++ List of default variables eligible for Expansion 
+TWikiVariables located in template topics get expanded as follows when a new topic is created.
 
-When the following variables are used in a template topic, they automatically get expanded when new topic is created based on it:
+#DefaultVariableExpansion
+---++++ 1. Default variable expansion
+
+The following variables used in a template topic automatically get expanded when new topic is created based on it:
 
 | *Variable:* | *Description:* |
 | =%<nop>DATE%= | Signature format date. See VarDATE |
@@ -170,59 +173,58 @@ When the following variables are used in a template topic, they automatically ge
 | =%<nop>SERVERTIME%= | Date/time. See VarSERVERTIME |
 | =%<nop>SERVERTIME{...}%= | Formatted date/time. See VarSERVERTIME2 |
 | =%<nop>USERNAME%= | Login name of user who is instantiating the new topic, e.g. %USERNAME% |
-| =%<nop>URLPARAM{"name"}%= | Value of a named URL parameter |
+| =%<nop>URLPARAM{"name"}%= | Value of a named URL parameter. See VarURLPARAM. |
 | =%<nop>WIKINAME%= | WikiName of user who is instantiating the new topic, e.g. <nop>%WIKINAME% |
 | =%<nop>WIKIUSERNAME%= | User name of user who is instantiating the new tpoic, e.g. <nop>%WIKIUSERNAME% |
 
-=%<nop>STARTSECTION{type="templateonly"}%%BR%...%BR%%<nop>ENDSECTION{type="templateonly"}%= markers are used to embed text that you _do not_ want expanded when a new topic based on the template topic is created. For example, you might want to write in the template topic:
+#PreventingVariableExpansion
+---++++ 2. Preventing variable expansion
+
+In a template topic, embed text that you _do not_ want expanded inside a =%<nop>STARTSECTION{type="templateonly"}% ... %<nop>ENDSECTION{type="templateonly"}%= section. For example, you might want to write this in the template topic:
 <pre>
 %<nop>STARTSECTION{type="templateonly"}%
 This template can only be changed by:
    * Set <nop>ALLOWTOPICCHANGE = <nop>%USERSWEB%.TWikiAdminGroup
 %<nop>ENDSECTION{type="templateonly"}%
 </pre>
-This will restrict who can edit the template topic, but will get removed when a new topic based on that template topic is created.
+This will restrict who can edit the template topic, but will be removed when a new topic based on that template topic is created.
 
-=%<nop>NOP%= can be used to prevent expansion of TWiki variables that would otherwise be expanded during topic creation e.g.i escape =%<nop>SERVERTIME%= with =%<nop>SER%<nop>NOP%VERTIME%=.
+=%<nop>NOP%= can be used to prevent expansion of TWiki variables that would otherwise be expanded during topic creation. For example, escape =%<nop>SERVERTIME%= with =%<nop>SER%<nop>NOP%VERTIME%=.
 
----++++ Forcefully expanding variables
+#ControlOverVariableExpansion
+---++++ 3. Control over variable expansion
 
-You can forcefully expand variables from section of template content into the topics using syntax similar to 
+You can forcefully expand TWikiVariables by placing them inside a =type="expandvariables"= section in the template topic, such as:
 <verbatim>
 %STARTSECTION{ type="expandvariables" }% ... %ENDSECTION{ type="expandvariables" }% 
 </verbatim>
 
 Example:
 
-If you add following content in template for topic creation
+If you have the following content in a template topic:
 <verbatim>
-
 %STARTSECTION{ type="expandvariables" }%
    * %TWIKIWEB%.ATasteOfTWiki - view a short introductory presentation on TWiki for beginners
    * %TWIKIWEB%.WelcomeGuest - starting points on TWiki
-   * %TWIKIWEB%.TWikiUsersGuide - complete TWiki documentation, Quick Start to Reference
+   * %TWIKIWEB%.TWikiUsersGuide - complete TWiki documentation
    * Sandbox.%HOMETOPIC% - try out TWiki on your own
    * Sandbox.%TOPIC%Sandbox - just for me
 %ENDSECTION{ type="expandvariables" }%
-
 </verbatim>
 
-this can get expanded to  
+you will get this raw text in new topics based on that template topic:
 
-<verbatim>
-   * TWiki.ATasteOfTWiki - view a short introductory presentation on TWiki for beginners
-   * TWiki.WelcomeGuest - starting points on TWiki
-   * TWiki.TWikiUsersGuide - complete TWiki documentation, Quick Start to Reference
-   * Sandbox.WebHome - try out TWiki on your own
-   * Sandbox.JimmyNewtronSandbox - just for me
+<pre>
+   * %TWIKIWEB%.ATasteOfTWiki - view a short introductory presentation on TWiki for beginners
+   * %TWIKIWEB%.WelcomeGuest - starting points on TWiki
+   * %TWIKIWEB%.TWikiUsersGuide - complete TWiki documentation
+   * Sandbox.%HOMETOPIC% - try out TWiki on your own
+   * Sandbox.JimmyNeutronSandbox - just for me
+</pre>
 
-</verbatim>
-
-in the topic. 
-
-Any variables which is not added into section similar to above or the variable is not from the default list (eligible for expansion) is never expanded in the topic content. 
-
+#SpecifyingForm
 ---+++ Specifying a Form
+
 When you create a new topic based on a template, you often want the new topic to have a form attached to it. You can attach a form to the template topic, in which case it will be copied into the new topic.
 
 Sometimes this isn't quite what you want, as it copies all the existing data from the template topic into the new topic. To avoid this and use the default values specified in the form definition instead, you can use the =formtemplate= CGI parameter to the =edit= script to specify the name of a form to attach.
@@ -284,4 +286,3 @@ __Related Topics:__ TWikiSkins, DeveloperDocumentationCategory, AdminDocumentati
 
 %STOPINCLUDE%
 -- __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.MikeMannix, TWiki:Main.DavidLeBlanc, TWiki:Main.CrawfordCurrie, TWiki:Main.SopanShewale
-
