@@ -266,7 +266,7 @@ sub _collectLogData {
         next if( $opName && $opName =~ /(changepasswd)/ );
 
         # .+ is used because topics name can contain stuff like !, (, ), =, -, _ and they should have stats anyway
-        if( $opName && $webTopic =~ /(^$TWiki::regex{webNameRegex})\.($TWiki::regex{wikiWordRegex}$|$TWiki::regex{abbrevRegex}|.+)/ ) {
+        if( $opName && $webTopic =~ /(^$TWiki::regex{webNameRegex})\.(.+)/ ) {
             my $webName = $1;
             my $topicName = $2;
 
