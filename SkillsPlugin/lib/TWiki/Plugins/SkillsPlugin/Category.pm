@@ -23,21 +23,21 @@ require TWiki::Plugins::SkillsPlugin::Skill;
 my $totalCategories;
 
 sub new {
-    my ($class, $name, $skills) = @_;
-    
+    my ( $class, $name, $skills ) = @_;
+
     my $self = {};
-    
+
     #$self->{NAME} = undef;
     #$self->{SKILLS} = [];
     $self->{"_TOTAL"} = \$totalCategories;
-    
-    bless ( $self, $class);
-    
-    $self->name( $name );
-    $self->populateSkills( $skills );
-    
-    ++ ${ $self->{"_TOTAL"} };
-    
+
+    bless( $self, $class );
+
+    $self->name($name);
+    $self->populateSkills($skills);
+
+    ++${ $self->{"_TOTAL"} };
+
     return $self;
 }
 
@@ -52,9 +52,9 @@ sub name {
 sub getSkillNames {
     my $self = shift;
     my @skillNames;
-    
+
     my $it = $self->eachSkill;
-    while( $it->hasNext() ){
+    while ( $it->hasNext() ) {
         my $obj_skill = $it->next();
         push @skillNames, $obj_skill->name;
     }
@@ -64,18 +64,19 @@ sub getSkillNames {
 # returns an iterator over each skill
 sub eachSkill {
     my $self = shift;
-    
+
     require TWiki::ListIterator;
     return new TWiki::ListIterator( $self->{SKILLS} );
 }
 
 # populate SKILLS array
 sub populateSkills {
-    my ( $self, $skills) = @_;
-    
+    my ( $self, $skills ) = @_;
+
     if ($skills) {
-        for my $skill ( sort @$skills ){
+        for my $skill ( sort @$skills ) {
             my $obj_skill = TWiki::Plugins::SkillsPlugin::Skill->new($skill);
+
             #$obj_skill->name( $skill );
             push @{ $self->{SKILLS} }, $obj_skill;
         }
@@ -84,64 +85,66 @@ sub populateSkills {
 
 # append skill to SKILLS array
 sub addSkill {
-    my ( $self, $skill) = @_;
+    my ( $self, $skill ) = @_;
     my $obj_skill = TWiki::Plugins::SkillsPlugin::Skill->new($skill);
     push @{ $self->{SKILLS} }, $obj_skill;
 }
 
 sub renameSkill {
-    my( $self, $oldSkill, $newSkill ) = @_;
-    
-    return "Skill '$newSkill' already exists in category '" . $self->name . "'." if( $self->skillExists( $newSkill ) );
-    
+    my ( $self, $oldSkill, $newSkill ) = @_;
+
+    return "Skill '$newSkill' already exists in category '" . $self->name . "'."
+      if ( $self->skillExists($newSkill) );
+
     my $skills = $self->eachSkill;
-    while( $skills->hasNext() ){
+    while ( $skills->hasNext() ) {
         my $obj_skill = $skills->next();
-        
-        if( $oldSkill eq $obj_skill->name ){
-            $obj_skill->name( $newSkill );
+
+        if ( $oldSkill eq $obj_skill->name ) {
+            $obj_skill->name($newSkill);
             last;
         }
     }
-    
+
     return undef;
 }
 
 sub deleteSkill {
-    my ( $self, $skill) = @_;
-    
+    my ( $self, $skill ) = @_;
+
     my @newSkills;
-    
+
     my $skills = $self->eachSkill;
-    while( $skills->hasNext() ){
+    while ( $skills->hasNext() ) {
         my $obj_skill = $skills->next();
-        
+
         next if $skill eq $obj_skill->name;
-        
+
         push @newSkills, $obj_skill;
     }
-    
+
     # replace skills
     $self->{SKILLS} = \@newSkills;
-    
+
     return undef;
 }
 
 sub skillExists {
-    my ( $self, $skill) = @_;
-    
-    if( getSkillByName( $self, $skill ) ){
+    my ( $self, $skill ) = @_;
+
+    if ( getSkillByName( $self, $skill ) ) {
         return 1;
-    } else {
+    }
+    else {
         return undef;
     }
 }
 
 sub getSkillByName {
-    my ( $self, $skill) = @_;
-    
-    foreach my $obj_skill( @{ $self->{SKILLS} } ){
-        if( $obj_skill->name eq $skill ){
+    my ( $self, $skill ) = @_;
+
+    foreach my $obj_skill ( @{ $self->{SKILLS} } ) {
+        if ( $obj_skill->name eq $skill ) {
             return $obj_skill;
         }
     }

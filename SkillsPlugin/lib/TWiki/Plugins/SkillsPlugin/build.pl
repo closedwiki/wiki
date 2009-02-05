@@ -13,13 +13,16 @@ $build = new TWiki::Contrib::Build('SkillsPlugin');
 
 # name of web to upload to
 $build->{UPLOADTARGETWEB} = 'Plugins';
+
 # Full URL of pub directory
 $build->{UPLOADTARGETPUB} = 'http://twiki.org/p/pub';
+
 # Full URL of bin directory
 $build->{UPLOADTARGETSCRIPT} = 'http://twiki.org/cgi-bin';
+
 # Script extension
 $build->{UPLOADTARGETSUFFIX} = '';
 
 # Build the target on the command line, or the default target
-$build->build($build->{target});
+$build->build( $build->{target} );
 

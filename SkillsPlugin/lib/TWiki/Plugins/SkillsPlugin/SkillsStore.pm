@@ -26,57 +26,58 @@ my $_loaded = 0;
 # Object that handles interaction with the skills data (currently stored in a plain text file in the work area)
 sub new {
     my $class = shift;
-    
+
     my $self = {};
-    
-    return bless ( $self, $class);
+
+    return bless( $self, $class );
 }
 
 # loads the categories and skills from the file
 sub _load {
     my $self = shift;
-    
-    _Debug( 'reading skills.txt' );
-    
-    my $file = TWiki::Func::getWorkArea( 'SkillsPlugin' ) . '/skills.txt';
-    return 1 unless( -r $file ); # check file exists
-    
+
+    _Debug('reading skills.txt');
+
+    my $file = TWiki::Func::getWorkArea('SkillsPlugin') . '/skills.txt';
+    return 1 unless ( -r $file );    # check file exists
+
     require TWiki::LineIterator;
-    my $it = new TWiki::LineIterator( $file );
-    
-    unless( $it->hasNext() ){
-        _Debug( 'skills.txt is empty' );
+    my $it = new TWiki::LineIterator($file);
+
+    unless ( $it->hasNext() ) {
+        _Debug('skills.txt is empty');
         return 1;
     }
-    
+
     # we have elements in iterator
-    while( $it->hasNext() ){
+    while ( $it->hasNext() ) {
         my $line = $it->next();
-        next if $line =~ /^\#.*/; # skip any comments
-        
+        next if $line =~ /^\#.*/;    # skip any comments
+
         $line =~ s/(.*)://g;
         my $cat = $1;
-        my @skills = split(',', $line);
-        
-        my $obj_cat = TWiki::Plugins::SkillsPlugin::Category->new($cat, \@skills);
+        my @skills = split( ',', $line );
+
+        my $obj_cat =
+          TWiki::Plugins::SkillsPlugin::Category->new( $cat, \@skills );
         push @_categories, $obj_cat;
     }
-    
+
     $_loaded = 1;
-    
+
     return 1;
 }
 
 # returns an array of all category names
 sub getCategoryNames {
     my $self = shift;
-    
+
     $self->_load unless $_loaded;
-    
+
     my @catNames;
-    
+
     my $it = $self->eachCat;
-    while( $it->hasNext() ){
+    while ( $it->hasNext() ) {
         my $obj_cat = $it->next();
         push @catNames, $obj_cat->name;
     }
@@ -86,11 +87,11 @@ sub getCategoryNames {
 # sorted iterator of category objects
 sub eachCat {
     my $self = shift;
-    
+
     $self->_load unless $_loaded;
-    
+
     my @sorted = sort { $a->name cmp $b->name } @_categories;
-    
+
     require TWiki::ListIterator;
     return new TWiki::ListIterator( \@sorted );
 }
@@ -98,18 +99,20 @@ sub eachCat {
 # saves the skills to file
 sub save {
     my $self = shift;
-    
+
     _Debug('Saving skills.txt');
-    
-    my $out = "# This file is generated. Do NOT edit unless you are sure what your doing!\n";
-    
+
+    my $out =
+"# This file is generated. Do NOT edit unless you are sure what your doing!\n";
+
     my $it = $self->eachCat;
-    while( $it->hasNext() ){
+    while ( $it->hasNext() ) {
         my $obj_cat = $it->next();
-        $out .= $obj_cat->name . ':' . join(',', @{ $obj_cat->getSkillNames } ) . "\n";
+        $out .= $obj_cat->name . ':'
+          . join( ',', @{ $obj_cat->getSkillNames } ) . "\n";
     }
 
-    my $workArea =  TWiki::Func::getWorkArea( 'SkillsPlugin' );
+    my $workArea = TWiki::Func::getWorkArea('SkillsPlugin');
 
     TWiki::Func::saveFile( $workArea . '/skills.txt', $out );
 }
@@ -117,147 +120,158 @@ sub save {
 # adds new skill to category
 sub addNewSkill {
     my $self = shift;
-    
-    my( $pSkill, $pCat ) = @_;
-    
-    my $obj_cat = $self->getCategoryByName( $pCat );
-    
+
+    my ( $pSkill, $pCat ) = @_;
+
+    my $obj_cat = $self->getCategoryByName($pCat);
+
     # check category exists and skill does not already exist
     return 'Could not find category/category does not exist.' unless $obj_cat;
-    return 'Skill already exists.' if( $obj_cat->skillExists( $pSkill ) );
-    
+    return 'Skill already exists.' if ( $obj_cat->skillExists($pSkill) );
+
     # add skill to category
-    $obj_cat->addSkill( $pSkill );
-    
+    $obj_cat->addSkill($pSkill);
+
     # save
     $self->save() || return 'Error saving';
-    
-    return undef; # no error
+
+    return undef;    # no error
 }
 
 sub renameSkill {
     my $self = shift;
-    
-    my( $cat, $oldSkill, $newSkill ) = @_;
-    
-    my $obj_cat = $self->getCategoryByName( $cat );
-    return "Could not find category/category does not exist - '$cat'." unless $obj_cat;
-    
+
+    my ( $cat, $oldSkill, $newSkill ) = @_;
+
+    my $obj_cat = $self->getCategoryByName($cat);
+    return "Could not find category/category does not exist - '$cat'."
+      unless $obj_cat;
+
     my $er = $obj_cat->renameSkill( $oldSkill, $newSkill );
     return $er if $er;
-    
+
     $self->save() || return 'Error saving';
-    
+
     return undef;
 }
 
 sub moveSkill {
     my $self = shift;
-    
-    my( $skill, $oldCat, $newCat ) = @_;
-    
-    my $obj_oldCat = $self->getCategoryByName( $oldCat );
-    return "Could not find category/category does not exist - '$oldCat'." unless $obj_oldCat;
-    my $obj_newCat = $self->getCategoryByName( $newCat );
-    return "Could not find category/category does not exist - '$newCat'." unless $obj_newCat;
-    
-    return "Skill '$skill' already exists in category '$newCat'" if $obj_newCat->skillExists( $skill );
-    
+
+    my ( $skill, $oldCat, $newCat ) = @_;
+
+    my $obj_oldCat = $self->getCategoryByName($oldCat);
+    return "Could not find category/category does not exist - '$oldCat'."
+      unless $obj_oldCat;
+    my $obj_newCat = $self->getCategoryByName($newCat);
+    return "Could not find category/category does not exist - '$newCat'."
+      unless $obj_newCat;
+
+    return "Skill '$skill' already exists in category '$newCat'"
+      if $obj_newCat->skillExists($skill);
+
     my $err;
+
     # add skill to new category
-    $obj_newCat->addSkill( $skill );
+    $obj_newCat->addSkill($skill);
+
     # delete skill from old category
-    $obj_oldCat->deleteSkill( $skill );
-    
+    $obj_oldCat->deleteSkill($skill);
+
     $self->save() || return 'Error saving';
-    
+
     return undef;
 }
 
 sub deleteSkill {
     my $self = shift;
-    
-    my( $cat, $skill ) = @_;
-    
-    my $obj_cat = $self->getCategoryByName( $cat );
-    return "Could not find category/category does not exist - '$cat'." unless $obj_cat;
-    
-    my $er = $obj_cat->deleteSkill( $skill );
+
+    my ( $cat, $skill ) = @_;
+
+    my $obj_cat = $self->getCategoryByName($cat);
+    return "Could not find category/category does not exist - '$cat'."
+      unless $obj_cat;
+
+    my $er = $obj_cat->deleteSkill($skill);
     return $er if $er;
-    
+
     $self->save() || return 'Error saving';
-    
+
     return undef;
 }
 
 sub addNewCategory {
     my $self = shift;
-    
-    my( $newCat ) = @_;
-    
+
+    my ($newCat) = @_;
+
     # check category does not already exist
-    return "Category '$newCat' already exists." if( $self->categoryExists( $newCat ) );
-    
+    return "Category '$newCat' already exists."
+      if ( $self->categoryExists($newCat) );
+
     # create new object and add to array
-    my $new_obj_cat = TWiki::Plugins::SkillsPlugin::Category->new( $newCat );
+    my $new_obj_cat = TWiki::Plugins::SkillsPlugin::Category->new($newCat);
     push @_categories, $new_obj_cat;
-    
+
     # save
     $self->save() || return 'Error saving';
-    
-    return undef; # no error
+
+    return undef;    # no error
 }
 
 sub renameCategory {
     my $self = shift;
-    
-    my( $oldCat, $newCat ) = @_;
-    
+
+    my ( $oldCat, $newCat ) = @_;
+
     # check category does not already exist
-    return "Category '$newCat' already exists" if( $self->categoryExists( $newCat ) );
-    
-    my $obj_cat = $self->getCategoryByName( $oldCat );
-    return "Could not find category/category does not exist - '$oldCat'." unless $obj_cat;
-    
+    return "Category '$newCat' already exists"
+      if ( $self->categoryExists($newCat) );
+
+    my $obj_cat = $self->getCategoryByName($oldCat);
+    return "Could not find category/category does not exist - '$oldCat'."
+      unless $obj_cat;
+
     # change the name
-    $obj_cat->name( $newCat );
-    
+    $obj_cat->name($newCat);
+
     # save
     $self->save() || return 'Error saving';
-    
+
     return undef;
 }
 
 sub deleteCategory {
     my $self = shift;
-    
-    my( $cat ) = @_;
-    
-    return "$cat does not exist" unless $self->categoryExists( $cat );
-    
+
+    my ($cat) = @_;
+
+    return "$cat does not exist" unless $self->categoryExists($cat);
+
     my @newCategories;
-    
+
     my $it = $self->eachCat;
-    while( $it->hasNext() ){
+    while ( $it->hasNext() ) {
         my $obj_cat = $it->next();
-        next if $obj_cat->name eq $cat; # skip if it is cat to delete
+        next if $obj_cat->name eq $cat;    # skip if it is cat to delete
         push( @newCategories, $obj_cat );
     }
-    
+
     # replace the categories with the ones we want to keep
     @_categories = @newCategories;
-    
+
     $self->save() || return 'Error saving';
-    
+
     return undef;
 }
 
 sub categoryExists {
     my $self = shift;
-    
-    if( $self->getCategoryByName( shift ) ){
+
+    if ( $self->getCategoryByName(shift) ) {
         return 1;
-    } else {
+    }
+    else {
         return undef;
     }
 }
@@ -265,16 +279,16 @@ sub categoryExists {
 # returns the category obj for the particular category
 sub getCategoryByName {
     my $self = shift;
-    
+
     my $cat = shift || return undef;
-    
+
     # ensure loaded
     $self->_load unless $_loaded;
-    
+
     my $it = $self->eachCat;
-    while( $it->hasNext() ){
+    while ( $it->hasNext() ) {
         my $obj_cat = $it->next();
-        if( $obj_cat->name eq $cat ){
+        if ( $obj_cat->name eq $cat ) {
             return $obj_cat;
         }
     }
@@ -284,12 +298,15 @@ sub getCategoryByName {
 sub _Debug {
     my $text = shift;
     my $debug = $TWiki::cfg{Plugins}{SkillsPlugin}{Debug} || 0;
-    TWiki::Func::writeDebug( "- TWiki::Plugins::SkillsPlugin::SkillsStore: $text" ) if $debug;
+    TWiki::Func::writeDebug(
+        "- TWiki::Plugins::SkillsPlugin::SkillsStore: $text")
+      if $debug;
 }
 
 sub _Warn {
     my $text = shift;
-    TWiki::Func::writeWarning( "- TWiki::Plugins::SkillsPlugin::SkillsStore: $text" );
+    TWiki::Func::writeWarning(
+        "- TWiki::Plugins::SkillsPlugin::SkillsStore: $text");
 }
 
 1;

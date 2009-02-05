@@ -188,7 +188,10 @@ SkillsPlugin.addEditSkills = function () {
         var obCallbacks = {
 			success: function(o){
                 _unlock();
-                if( o.responseText == '' ){
+                obSkillDetails = YAHOO.lang.JSON.parse(o.responseText);
+                if( obSkillDetails.rating ){
+                    fnCallback( obSkillDetails.rating, obSkillDetails.comment );
+                } else {
                     // skill not found (new skill)
                     // set 'None' on skill rating
                     for( var i=0; i < document[_idForm][_idRating].length; i++ ){
@@ -196,13 +199,10 @@ SkillsPlugin.addEditSkills = function () {
                             document[_idForm][_idRating][i].checked = true;
                         }
                     }
-                } else {
-                    obSkillDetails = YAHOO.lang.JSON.parse(o.responseText);
-                    fnCallback( obSkillDetails.rating, obSkillDetails.comment );
                 }
-			},
-			failure: function(o){_connectionFailure(o)}
-		}
+            },
+            failure: function(o){_connectionFailure(o)}
+        }
         _lock();
 		var request = YAHOO.util.Connect.asyncRequest('GET', url, obCallbacks);
     }

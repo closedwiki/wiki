@@ -19,15 +19,14 @@ package TWiki::Plugins::SkillsPlugin::Skill;
 use strict;
 
 sub new {
-    my ($class, $name) = @_;
-    
-    my $self = bless ( {}, $class);
-    
+    my ( $class, $name ) = @_;
+
+    my $self = bless( {}, $class );
+
     $self->name($name);
-    
+
     return $self;
 }
-
 
 sub name {
     my $self = shift;

@@ -20,16 +20,16 @@ use strict;
 
 # Object to represent the skill as stored in users meta data
 sub new {
-    
-    my ($class, $name, $cat, $rating, $comment) = @_;
-    
-    my $self = bless ( {}, $class);
-    
+
+    my ( $class, $name, $cat, $rating, $comment ) = @_;
+
+    my $self = bless( {}, $class );
+
     $self->name($name);
     $self->category($cat);
     $self->rating($rating);
     $self->comment($comment);
-    
+
     return $self;
 }
 

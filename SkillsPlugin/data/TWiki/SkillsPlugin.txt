@@ -1,4 +1,3 @@
-%META:TOPICINFO{author="TWikiContributor" date="1177340575" format="1.1" version="0"}%
 ---+!! <nop>%TOPIC%
 
 This plugin allows users to specify what skills they have and their level of proficiency. The user can then display their skills on their home page, and view other users skills by browsing through specific categories/skills.
@@ -11,7 +10,7 @@ Below is a screenshot of the users skill being displayed on their homepage. Clic
 
 <a href="%ATTACHURLPATH%/skills_screenshot_full.png"><img src="%ATTACHURLPATH%/skills_screenshot_thumb.png" alt="skills_screenshot_thumb.png" /></a>
 
-To get the skills displayed on the users home page, as in this example, look at SkillsDisplayOnHomePage.
+To get the skills displayed on the users home page, as in this example, see SkillsDisplayOnHomePage.
 
 ---++ User Interface
 
@@ -72,10 +71,6 @@ Plugin settings are stored as preferences variables in %LOCALSITEPREFS%.
    * By default, the styles using in the plugins forms are found in the =style.css=, attached to this topic. To define your own style sheet, add the following to %LOCALSITEPREFS%:
       * Set STYLEURL = %PUBURL%/%TWIKIWEB%/SkillsPlugin/style.css
 
-   * Log add/create actions
-      * By default, any skills or categories that are created/deleted/renamed are logged in the standard TWiki logs (defined at =$TWiki::cfg{LogFileName}=). To disable this, add the following to =LocalSite.cfg=:
-         * =$TWiki::cfg{Plugins}{SkillsPlugin}{Log} = 0=
-
    * Debug plugin
       * To see the output in =data/debug.txt=, add the following to =LocalSite.cfg=:
          * =$TWiki::cfg{Plugins}{SkillsPlugin}{Debug} = 1=
@@ -105,10 +100,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.AndrewRJones |
-|  Copyright: | &copy; 2007, TWiki:Main.AndrewRJones |
+|  Copyright: | &copy; 2007 - 2009, TWiki:Main.AndrewRJones |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  05 Feb 2009 | Complete rewrite; more scaleable; better performace; can use special characters in skill names; can use templates to change output |
 |  14032 | Bugs:Item4209 - Initial release |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
