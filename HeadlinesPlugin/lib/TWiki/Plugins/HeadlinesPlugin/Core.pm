@@ -33,7 +33,7 @@ use vars qw(
         $web $topic $debug
         $defaultRefresh $defaultLimit $defaultHeader $defaultFormat
 	$useLWPUserAgent $isInitialized %entityHash
-	$userAgent $userAgentTimeout $doneHeader
+	$userAgent $userAgentTimeout $userAgentName $doneHeader
    );
 
 
@@ -293,7 +293,7 @@ $debug = 0; # toggle me
 
 # =========================
 sub writeDebug {
-  #&TWiki::Func::writeDebug('HeadlinesPlugin - ' . $_[0]) if $debug;
+  TWiki::Func::writeDebug('HeadlinesPlugin - ' . $_[0]) if $debug;
   print STDERR 'HeadlinesPlugin - ' . $_[0] . "\n" if $debug;
 }
 
@@ -314,6 +314,8 @@ sub doInit {
     || 'on';
   $userAgentTimeout = TWiki::Func::getPreferencesValue("HEADLINESPLUGIN_USERAGENTTIMEOUT")
     || 20;
+  $userAgentName = TWiki::Func::getPreferencesValue("HEADLINESPLUGIN_USERAGENTNAME") ||
+    'TWikiHeadlinesPlugin/' . $TWiki::Plugins::HeadlinesPlugin::RELEASE;
 
   $useLWPUserAgent =~ s/^\s*(.*?)\s*$/$1/go;
   $useLWPUserAgent = ($useLWPUserAgent =~ /on|yes|1/)?1:0;
@@ -918,14 +920,20 @@ sub getUrlLWP {
     my $proxyPort = TWiki::Func::getPreferencesValue('PROXYPORT') || '';
     $proxyHost ||= $TWiki::cfg{PROXY}{HOST};
     $proxyPort ||= $TWiki::cfg{PROXY}{PORT};
+    my $proxySkip = $TWiki::cfg{PROXY}{SkipProxyForDomains} || '';
 
     $userAgent = LWP::UserAgent->new();
-    $userAgent->agent('TWiki HeadlinesPlugin'); 
+    $userAgent->agent( $userAgentName ); 
       # don't leave the LWP default string there as
       # this is blocked by some sites, e.g. google news
-    $userAgent->timeout($userAgentTimeout);
-    $userAgent->proxy("http", "$proxyHost:$proxyPort/")
-      if $proxyHost && $proxyPort;
+    $userAgent->timeout( $userAgentTimeout );
+    if( $proxyHost && $proxyPort ) {
+      my $proxyURL = "$proxyHost:$proxyPort/";
+      $proxyURL = 'http://' . $proxyURL unless( $proxyURL =~ /^https?\/\// );
+      $userAgent->proxy( "http", $proxyURL );
+      my @skipDomains = split( /[\,\s]+/, $proxySkip );
+      $userAgent->no_proxy( @skipDomains );
+    }
   }
 
   my $request = HTTP::Request->new('GET', $theUrl);
