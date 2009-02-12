@@ -929,7 +929,7 @@ sub getUrlLWP {
     $userAgent->timeout( $userAgentTimeout );
     if( $proxyHost && $proxyPort ) {
       my $proxyURL = "$proxyHost:$proxyPort/";
-      $proxyURL = 'http://' . $proxyURL unless( $proxyURL =~ /^https?\/\// );
+      $proxyURL = 'http://' . $proxyURL unless( $proxyURL =~ /^https?:\/\// );
       $userAgent->proxy( "http", $proxyURL );
       my @skipDomains = split( /[\,\s]+/, $proxySkip );
       $userAgent->no_proxy( @skipDomains );
