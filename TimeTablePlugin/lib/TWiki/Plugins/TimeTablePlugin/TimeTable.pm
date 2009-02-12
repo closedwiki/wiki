@@ -719,7 +719,7 @@ sub _renderRotatedTable {
 		}
 	}
 	foreach my $entry (sort keys %entryKeys) {
-		$text.=$cgi->Tr($cgi->th({-align=>'left', -valign=>'top', -rowspan=>$#{$conflictitems{$entry}} + 2 }, $entry).$entryRows{$entry});
+		$text.=$cgi->Tr($cgi->th({-align=>'left', -valign=>'top', -style=>'white-space:nowrap;text-wrap:none;', -rowspan=>$#{$conflictitems{$entry}} + 2 }, $entry).$entryRows{$entry});
 		for (my $i=0; $i<=$#{$conflictitems{$entry}}; $i++) {
 			$text.=$cgi->Tr($conflictitems{$entry}[$i]);
 		}

@@ -38,7 +38,7 @@ $VERSION = '$Rev: 8670$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
  
-$REVISION = '1.017'; #dro# added hidettcm attribute requested by TWiki:Main.StevenCorfman
+$REVISION = '1.017'; #dro# added hidettcm attribute requested by TWiki:Main.StevenCorfman; fixed line breakes in rotated tables;
 #$REVISION = '1.016'; #dro# added overflow:auto style; fixed unknownparamsmsg bug;
 #$REVISION = '1.015'; #dro# fixed rotated table bugs (tooltips, showweekend="off")
 #$REVISION = '1.014'; #dro# added documentation requested by TWiki:Main.PeterThoeny; added rotated table feature requested by TWiki:Main.VickiBrown; fixed doc bug reported by TWiki:Main.JoeGainey 
