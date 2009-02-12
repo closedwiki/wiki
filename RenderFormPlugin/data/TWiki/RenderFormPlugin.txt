@@ -214,6 +214,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | V1.002 (14 Oct 2008) |
 |  Change History: | <!-- versions below in reverse order --> |
+|  V1.003 (BETA) | TWiki:Main:Daniel.Rohde: fixed performance problem (see Benchmarks - Switch module removed) |
 |  V1.002 (14 Oct 2008): | TWiki:Main:DanielRohde: added layout feature; fixed date field bug; added missing docs; |
 |  V1.001 (05 Oct 2008): | TWiki:Main:DanielRohde: changed topicparent default; added and fixed docs; fixed date field bug; fixed non-word character in field names bug; |
 |  V1.000 (04 Oct 2008): | TWiki:Main:DanielRohde: Initial version |
@@ -221,7 +222,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle 61%, %TWIKIWEB%.FormattedSearch 87%, %TOPIC% 70% |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle 95%, %TWIKIWEB%.FormattedSearch 98%, %TOPIC% 91% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
