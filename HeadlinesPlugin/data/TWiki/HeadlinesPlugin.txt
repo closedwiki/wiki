@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1233958090" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1234497345" format="1.1" version="$Rev$"}%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page
    at http://twiki.org/cgi-bin/view/Plugins/HeadlinesPlugin or provide feedback
@@ -116,7 +116,7 @@ to get the latest postings on the "Business Opportunities" weblog:
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>HEADLINESPLUGIN_SHORTDESCRIPTION%==. *Note:* Don't modify the settings here; copy and customize the settings in [[%LOCALSITEPREFS%]]. For example, to customize the USERAGENTNAME setting, create a HEADLINESPLUGIN_USERAGENTNAME setting in <nop>%LOCALSITEPREFS%.
 
    * One line description, shown in the TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Show headline news in TWiki pages based on RSS news feeds from news sites
+      * Set SHORTDESCRIPTION = Show headline news in TWiki pages based on RSS and ATOM news feeds from external sites
 
    * Refresh rate in minutes for cached feeds. Disable caching: =0=, default: =60=
       * Set REFRESH = 60
@@ -130,9 +130,9 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
    * Timeout fetching a feed using the LWP::UserAgent. Default: =20=
       * Set USERAGENTTIMEOUT = 20
 
-   * Name of user agent. Default: =TWikiHeadlinesPlugin/2.2=
+   * Name of user agent. Default: =TWikiHeadlinesPlugin/2.21=
 <verbatim>
-      * Set USERAGENTNAME = TWikiHeadlinesPlugin/2.2
+      * Set USERAGENTNAME = TWikiHeadlinesPlugin/2.21
 </verbatim>
 
    * Default header: (variables are explained in the syntax rules)
@@ -146,9 +146,9 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 </verbatim>
 
    * Values taken from configure: (only supported if CPAN:LWP is installed)
-      * =$TWiki::cfg{PROXY}{HOST}= - proxy host, such as "proxy.example.com"
-      * =$TWiki::cfg{PROXY}{PORT}= - proxy port, such as "8080"
-      * =$TWiki::cfg{PROXY}{SkipProxyForDomains}= - domains excluded from proxy, such as "intra.example.com, bugs.example.com"
+      * =$TWiki::cfg{PROXY}{HOST}= - proxy host, such as ="proxy.example.com";=
+      * =$TWiki::cfg{PROXY}{PORT}= - proxy port, such as ="8080";=
+      * =$TWiki::cfg{PROXY}{SkipProxyForDomains}= - domains excluded from proxy, such as ="intra.example.com, bugs.example.com";=
 
 
 ---++ Style sheets
@@ -192,8 +192,9 @@ defining the default CSS properties  (indentation illustrates enclosure).
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.MichaelDaum |
 |  Copyright: | &copy; 2002-2009, Peter Thoeny, [[http://www.twiki.net/][TWIKI.NET]]; 2005-2007, Michael Daum http://wikiring.de |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v2.2 - 06 Feb 2009 |
+|  Plugin Version: | v2.21 - 12 Feb 2009 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  12 Feb 2009: | {PROXY}{HOST} supports domain with and without protocol -- Peter Thoeny |
 |  06 Feb 2009: | added {PROXY}{SkipProxyForDomains} configure setting, added USERAGENTNAME plugin setting -- Peter Thoeny |
 |  11 Dec 2008: | added {PROXY}{HOST} and {PROXY}{PORT} configure settings -- Peter Thoeny |
 |  13 Sep 2007: | fixed parsing of content:encoded |
@@ -228,6 +229,6 @@ defining the default CSS properties  (indentation illustrates enclosure).
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.PeterThoeny - 06 Jan 2009 %BR%
+-- TWiki:Main.PeterThoeny - 12 Jan 2009 %BR%
 -- TWiki:Main.MichaelDaum - 13 Sep 2007
 
