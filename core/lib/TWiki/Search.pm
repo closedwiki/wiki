@@ -740,17 +740,19 @@ sub searchWeb {
             $beforeText =~ s/\$web/$web/gos;    # expand name of web
             if ( defined($separator) ) {
                 $beforeText .= $separator;
-            }
-            else {
-                $beforeText =~
-                  s/([^\n])$/$1\n/os;           # add new line at end if needed
+            } else {
+                $beforeText =~ s/([^\n])$/$1\n/os; # add new line at end if needed
             }
         }
 
-
-       if ( defined $footer ) {
+        if ( defined $footer ) {
             $afterText = TWiki::expandStandardEscapes($footer);
             $afterText =~ s/\$web/$web/gos;    # expand name of web
+            if ( defined($separator) ) {
+                $afterText .= $separator;
+            } else {
+                $afterText =~ s/([^\n])$/$1\n/os; # add new line at end if needed
+            }
         }
 
         # output the list of topics in $web
@@ -1013,10 +1015,7 @@ s/\$pattern\((.*?\s*\.\*)\)/getTextPattern( $text, $1 )/ges;
 
             # output footer of $web
             $afterText =
-              $session->handleCommonTags( $afterText, $web, $homeTopic );
-            if ( $inline || $format ) {
-                $afterText =~ s/\n$//os;    # remove trailing new line
-            }
+            $session->handleCommonTags( $afterText, $web, $homeTopic );
 
             if ( defined $callback ) {
                 $afterText =
