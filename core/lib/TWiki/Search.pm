@@ -756,7 +756,8 @@ sub searchWeb {
         }
 
         # output the list of topics in $web
-        my $ntopics    = 0;
+        my $ntopics    = 0; # number of topics in current web
+        my $nhits      = 0; # number of hits (if multiple=on) in current web
         my $headerDone = $noHeader;
         foreach my $topic (@topicList) {
             my $forceRendering = 0;
@@ -821,13 +822,12 @@ sub searchWeb {
                 }
             }
 
-            # SMELL: this loop is a rather hairy; why not do it thus:
-            # while(scalar(@multipleHitLines))?
-            # presumably you are relying on the fact that text will be set
-            # when doMultiple is off, even though @multipleHitLines will
-            # be empty? I can't work it out.
+            $ntopics += 1;
+            $ttopics += 1;
+
             do {    # multiple=on loop
 
+                $nhits += 1;
                 my $out = '';
 
                 $text = pop(@multipleHitLines) if ( scalar(@multipleHitLines) );
@@ -846,6 +846,8 @@ sub searchWeb {
                     $out =~ s/\$isodate/$isoDate/gs;
                     $out =~ s/\$rev/$revNum/gs;
                     $out =~ s/\$wikiusername/$wikiusername/ges;
+                    $out =~ s/\$ntopics/$ntopics/gs;
+                    $out =~ s/\$nhits/$nhits/gs;
 
                     my $wikiname = $users->getWikiName($cUID);
                     $wikiname = 'UnknownUser' unless defined $wikiname;
@@ -971,6 +973,8 @@ s/\$pattern\((.*?\s*\.\*)\)/getTextPattern( $text, $1 )/ges;
                       || '\#FF00FF';
                     $beforeText =~ s/%WEBBGCOLOR%/$thisWebBGColor/go;
                     $beforeText =~ s/%WEB%/$web/go;
+                    $beforeText =~ s/\$ntopics/0/gs;
+                    $beforeText =~ s/\$nhits/0/gs;
                     $beforeText =
                       $session->handleCommonTags( $beforeText, $web, $topic );
                     if ( defined $callback ) {
@@ -1001,9 +1005,6 @@ s/\$pattern\((.*?\s*\.\*)\)/getTextPattern( $text, $1 )/ges;
 
             } while (@multipleHitLines);    # multiple=on loop
 
-            $ntopics += 1;
-            $ttopics += 1;
-
             # delete topic info to clear any cached data
             undef $topicInfo->{$topic};
 
@@ -1014,6 +1015,8 @@ s/\$pattern\((.*?\s*\.\*)\)/getTextPattern( $text, $1 )/ges;
         if ($ntopics) {
 
             # output footer of $web
+            $afterText =~ s/\$ntopics/$ntopics/gs;
+            $afterText =~ s/\$nhits/$nhits/gs;
             $afterText =
             $session->handleCommonTags( $afterText, $web, $homeTopic );
 
@@ -1218,6 +1221,9 @@ sub displayFormField {
    }
 
    if (ref($fields) eq 'HASH'){
+         # fix for Item6167, this line was not added for fixing Item6082
+         $fields->{value} =~ s/\$(n|nop|quot|percnt|dollar)/\$<nop>$1/g;
+
          return $fields->{value};
    }
 
