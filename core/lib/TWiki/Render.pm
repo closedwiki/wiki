@@ -2166,11 +2166,14 @@ sub protectFormFieldValue {
     }
 
     # change newlines
-    my $newline = '<br />';
+    my $newline;
     if( $attrs && defined $attrs->{newline} ) {
         $newline = $attrs->{newline};
         $newline =~ s/\$n/\n/gs;
     }
+$newline = '<br />
+' unless defined $newline;
+
     $value =~ s/\r?\n/$newline/gs;
 
     # change vbars
