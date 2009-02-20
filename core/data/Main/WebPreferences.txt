@@ -28,7 +28,7 @@ These settings override the defaults for this web only. See [[%SYSTEMWEB%.TWikiP
       * Set DENYWEBVIEW = 
       * Set ALLOWWEBVIEW = 
       * Set DENYWEBCHANGE = 
-      * Set ALLOWWEBCHANGE = TWikiRegistrationAgent,
+      * Set ALLOWWEBCHANGE = 
       * Set DENYWEBRENAME = 
       * Set ALLOWWEBRENAME = 
 
