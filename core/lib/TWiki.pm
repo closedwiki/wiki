@@ -3569,6 +3569,13 @@ sub _encode {
     } elsif ($type =~ /^url$/i) {
         $text =~ s/\r*\n\r*/<br \/>/; # Legacy.
         return urlEncode( $text );
+    } elsif ( $type =~ /^(off|none)$/i ) {
+        # no encoding
+        return $text;
+    } else { # safe or default
+        # entity encode ' " < > and %
+        $text =~ s/([<>%'"])/'&#'.ord($1).';'/ge;
+        return $text;
     }
 }
 
@@ -3731,7 +3738,7 @@ sub URLPARAM {
     my( $this, $params ) = @_;
     my $param     = $params->{_DEFAULT} || '';
     my $newLine   = $params->{newline};
-    my $encode    = $params->{encode};
+    my $encode    = $params->{encode} || 'safe';
     my $multiple  = $params->{multiple};
     my $separator = $params->{separator};
     $separator="\n" unless (defined $separator);
@@ -3759,16 +3766,7 @@ sub URLPARAM {
     }
     if( defined $value ) {
         $value =~ s/\r?\n/$newLine/go if( defined $newLine );
-        if ( $encode ) {
-            if ( $encode =~ /^entit(y|ies)$/i ) {
-                $value = entityEncode( $value );
-            } elsif ( $encode =~ /^quotes?$/i ) {
-                $value =~ s/\"/\\"/go;    # escape quotes with backslash (Bugs:Item3383 fix)
-            } else {
-                $value =~ s/\r*\n\r*/<br \/>/; # Legacy
-                $value = urlEncode( $value );
-            }
-        }
+        $value = _encode( $encode, $value );
     }
     unless( defined $value ) {
         $value = $params->{default};
