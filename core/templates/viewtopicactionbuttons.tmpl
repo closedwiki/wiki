@@ -18,7 +18,7 @@
 
 %TMPL:DEF{"action_printable"}%%TMPL:P{"printable"}%%TMPL:P{"sep"}%%TMPL:END%
 
-%TMPL:DEF{"printable"}%<span><a href='%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?cover=print%QUERYPARAMSTRING{ encoding="url" }%%REVARG%' rel='nofollow' %MAKETEXT{"title='Printable version of this topic' accesskey='p'>&Print version"}%</a></span>%TMPL:END%
+%TMPL:DEF{"printable"}%<span><a href='%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?cover=print%ENCODE{%QUERYPARAMSTRING%}%%REVARG%' rel='nofollow' %MAKETEXT{"title='Printable version of this topic' accesskey='p'>&Print version"}%</a></span>%TMPL:END%
 
 %TMPL:DEF{"activatable_printable"}%%TMPL:P{"printable"}%%TMPL:END%
 
