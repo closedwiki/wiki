@@ -88,9 +88,9 @@ sub _newLinkFormat {
     unless( $this->{NEWLINKFORMAT} ) {
         $this->{NEWLINKFORMAT} =
           $this->{session}->{prefs}->getPreferencesValue('NEWLINKFORMAT')
-            || '<span class="twikiNewLink">$text<a href="%SCRIPTURLPATH{edit}%/$web/$topic?topicparent=%WEB%.%TOPIC%" '.
+            || '<span class="twikiNewLink"><a href="%SCRIPTURLPATH{edit}%/$web/$topic?topicparent=%WEB%.%TOPIC%" '.
               'rel="nofollow" title="%MAKETEXT{"Create this topic"}%">'.
-                '?</a></span>';
+                '$text</a></span>';
     }
     return $this->{NEWLINKFORMAT};
 }

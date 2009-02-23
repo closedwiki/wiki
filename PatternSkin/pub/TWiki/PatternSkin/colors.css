@@ -72,13 +72,23 @@ h3, h4, h5, h6 {
    color:#777;
    border-color:#ddd;
 }
+
+.twikiNewLink a {
+  color:#B7351E;
+
+}
 .twikiNewLink a:hover sup {
    background-color:#ce000f;
    color:#fff;
    border-color:#ce000f;
+   border-style:none none dotted;
 }
 .twikiNewLink {
-   border-color:#ddd;
+   border-color:#B7351E;
+   border-style:none none dotted;
+   border-width:1px;
+   color:#B7351E;
+   text-decoration:none;
 }
 :link:focus,
 :visited:focus,

@@ -96,6 +96,10 @@ blockquote {
 	color:#666;
 	border-color:#ccc;
 }
+.twikiNewLink a {
+   color:#B7351E;
+   border-style:none none dotted;
+}
 .twikiNewLink a:hover sup {
 	background-color:#D6000F;
 	color:#FBF7E8;
@@ -103,8 +107,13 @@ blockquote {
 }
 
 .twikiNewLink {
-	border-color:#ccc;
+   border-color:#B7351E;
+   border-style:none none dotted;
+   border-width:1px;
+   color:#B7351E;
+
 }
+
 :link:focus,
 :visited:focus,
 :link,
@@ -320,10 +329,15 @@ tr.twikiDiffDebug .twikiDiffUnchangedText {
 .twikiNewLink {
 	border-width:0 0 1px 0;
 	border-style:solid;
+        border-style:none none dotted;
 }
 .twikiNewLink a {
-	text-decoration:none;
 	margin-left:1px;
+        border-color:#B7351E;
+        border-style:none none dotted;
+        border-width:1px;
+        color:#B7351E;
+        text-decoration:none;
 }
 .twikiNewLink a sup {
 	text-align:center;
