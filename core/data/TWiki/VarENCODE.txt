@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1167874036" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1235369572" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarENCODE
 ---+++ ENCODE{"string"} -- encodes a string to HTML entities
@@ -10,13 +10,15 @@
    * Supported parameters:
      | *Parameter:* | *Description:* | *Default:* |
      | ="string"= | String to encode | required (can be empty) |
+     | =type="safe"= | Encode special characters into HTML entities to avoid XSS exploits: ="<"=, =">"=, ="%"=, single quote (='=) and double quote (="=) | =type="url"= |
      | =type="entity"= | Encode special characters into HTML entities, like a double quote into =&amp;#034;=. Does *not* encode =\n= or =\r=. | =type="url"= |
      | =type="html"= | As =type="entity"= except it also encodes =\n= and =\r= | =type="url"= |
      | =type="quotes"= | Escape double quotes with backslashes (=\"=), does not change other characters | =type="url"= |
      | =type="url"= | Encode special characters for URL parameter use, like a double quote into =%22= | (this is the default) |
    * Example: =%<nop>ENCODE{"spaced name"}%= expands to =%ENCODE{"spaced name"}%=
-   * __%X% Note:__ Values of HTML input fields must be entity encoded.%BR% Example: =&lt;input type="text" name="address" value="%<nop>ENCODE{ "any text" type="entity" }%" /&gt;=
-   * __%X% Note:__ Double quotes in strings must be escaped when passed into other TWiki variables.%BR% Example: =%<nop>SEARCH{ "%<nop>ENCODE{ "string with "quotes"" type="quotes" }%" noheader="on" }%=
+   * __%X% Notes:__
+      * Values of HTML input fields must be entity encoded.%BR% Example: =&lt;input type="text" name="address" value="%<nop>ENCODE{ "any text" type="entity" }%" /&gt;=
+      * Double quotes in strings must be escaped when passed into other TWiki variables.%BR% Example: =%<nop>SEARCH{ "%<nop>ENCODE{ "string with "quotes"" type="quotes" }%" noheader="on" }%=
+      * Use =type="entity"= or =type="safe"= to protect user input from URL parameters and external sources against cross-site scripting (XSS). =type="entity"= is more aggressive, but some TWiki applications might not work. =type="safe"= provides a safe middle ground.
 
    * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarURLPARAM][URLPARAM]]
-
