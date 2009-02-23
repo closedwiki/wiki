@@ -184,6 +184,14 @@ sub new {
     useSASL=>$TWiki::cfg{Ldap}{UseSASL} || 0,
     saslMechanism=>$TWiki::cfg{Ldap}{SASLMechanism} || 'PLAIN CRAM-MD4 EXTERNAL ANONYMOUS',
 
+    useTLS=>$TWiki::cfg{Ldap}{UseTLS} || 0,
+    tlsVerify=>$TWiki::cfg{Ldap}{TLSVerify} || 'require',
+    tlsSSLVersion=>$TWiki::cfg{Ldap}{TLSSSLVersion} || 'tlsv1',
+    tlsCAFile=>$TWiki::cfg{Ldap}{TLSCAFile} || '',
+    tlsCAPath=>$TWiki::cfg{Ldap}{TLSCAPath} || '',
+    tlsClientCert=>$TWiki::cfg{Ldap}{TLSClientCert} || '',
+    tlsClientKey=>$TWiki::cfg{Ldap}{TLSClientKey} || '',
+
     secondaryPasswordManager=>$TWiki::cfg{Ldap}{SecondaryPasswordManager} || '',
     @_
   };
@@ -290,6 +298,20 @@ sub connect {
     $this->{error} = "failed to connect to $this->{host}";
     $this->{error} .= ": $@" if $@;
     return 0;
+  }
+
+  # TLS bind (contributed by TWiki:Main.WolfgangKarall)
+  if ($this->{useTLS}) {
+    $this->writeDebug("using TLS");
+    my %args = (
+      verify => $this->{tlsVerify},
+      cafile => $this->{tlsCAFile},
+      capath => $this->{tlsCAPath},
+    );
+    $args{"clientcert"} = $this->{tlsClientCert} if $this->{tlsClientCert};
+    $args{"clientkey"} = $this->{tlsClientKey} if $this->{tlsClientKey};
+    $args{"sslversion"} = $this->{tlsSSLVersion} if $this->{tlsSSLVersion};
+    $this->{ldap}->start_tls(%args);
   }
 
   # authenticated bind

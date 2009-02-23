@@ -429,7 +429,7 @@ that the <nop>LdapContrib will force an update of the cache data.
 
 ---++ Contrib Info
 <!--
-   * Set SHORTDESCRIPTION = LDAP services for TWiki
+   * Set SHORTDESCRIPTION = LDAP authentication services for TWiki
 -->
 
 |  Author: | TWiki:Main/MichaelDaum |
@@ -437,8 +437,9 @@ that the <nop>LdapContrib will force an update of the cache data.
    This work was partly funded by [[http://www.spanlink.com][Spanlink Communications]] and \
    [[http://www.trivadis.com][Trivadis]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v2.99.5 |
+|  Version: | v2.99.6 |
 |  Change History: | |
+|  18 Dec 2008: | added support TLS encryption (by TWiki:Main/WolfgangKarall) | 
 |  25 May 2008: | added alias feature, \
                   fixed normalization error, \
                   fixed cache update issue\

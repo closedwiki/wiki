@@ -48,6 +48,40 @@ $TWiki::cfg{Ldap}{UseSASL} = 0;
 $TWiki::cfg{Ldap}{SASLMechanism} = 'PLAIN CRAM-MD5 EXTERNAL ANONYMOUS';
 
 # **BOOLEAN**
+# Use Transort Layer Security (TLS) to encrypt the connection to the LDAP server.
+# You will need to specify the servers CA File using the TLSCAFile option
+$TWiki::cfg{Ldap}{UseTLS} = 0;
+
+# **STRING**
+# This defines the version of the SSL/TLS protocol to use. Possible values are:
+# 'sslv2', 'sslv3',  'sslv2/3' or 'tlsv1'
+$TWiki::cfg{Ldap}{TLSSSLVersion} = 'tlsv1';
+
+# **STRING**
+# Specify how to verify the servers certificate. Possible values are: 'require', 'optional'
+$TWiki::cfg{Ldap}{TLSVerify} = 'require';
+
+# **STRING**
+# Pathname of the directory containing CA certificates
+$TWiki::cfg{Ldap}{TLSCAPath} = '';
+
+# **STRING**
+# Filename containing the certificate of the CA which signed the server's certificate.
+$TWiki::cfg{Ldap}{TLSCAFile} = '';
+
+# **STRING**
+# Client side certificate file
+$TWiki::cfg{Ldap}{TLSClientCert} = '';
+
+# **STRING**
+# Client side private key file
+$TWiki::cfg{Ldap}{TLSClientKey} = '';
+
+# **STRING**
+# Path to CA file
+$TWiki::cfg{Ldap}{TLSCaFile} = '';
+
+# **BOOLEAN**
 # Enable/disable debug output to STDERR. This will end up in your web server's log files.
 # But you are adviced to redirect STDERR of TWiki to a separate file. This can be done by
 # commenting out the prepaired command in the <code>lib/TWiki/UI.pm</code> file. See the 
