@@ -1,24 +1,12 @@
 %META:TOPICINFO{author="TWikiContributor" date="1195737941" format="1.1" reprev="1.1" version="$Rev$"}%
 ---+!! %TOPIC%
 <!--
-
-   PLEASE DO NOT EDIT THIS TOPIC
-
-   It is automatically generated from the subversion repository, and any changes
-   you make will simply be overwritten the next time a release is generated.
-
-   Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
+   contributions to this plugin are appreciated. Please update the plugin page
+   at http://twiki.org/cgi-bin/view/Plugins/LdapContrib or provide feedback
+   at http://twiki.org/cgi-bin/view/Plugins/LdapContribDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
 %TOC{title="On this page"}%
-<table style="float:right">
-<tr>
-  <td><img src="%ATTACHURLPATH%/wikiringlogo40x40.png"></td>
-  <td><a href="http://wikiring.de" title="Make your Wiki ring!" style="text-decoration:none">
-      Powered by <br /> <nop>WikiRing Consultants </a>
-  </td>
-</tr>
-</table>
-<br clear="both" />
 This package offers basic LDAP services for TWiki and offers authentication of
 TWiki users by binding to an LDAP server as well as incorporate LDAP user
 groups into TWiki's access control. Note, however that you need at least
@@ -422,10 +410,6 @@ that the <nop>LdapContrib will force an update of the cache data.
      %$DEPENDENCIES%
    * Read the the above documentation, i.e. the [[#Configuration][Configuration]] section.
    * Use <a href="%SCRIPTURLPATH{"configure"}%">configure</a> to set the LDAP settings.
-   * There's [[%ATTACHURL%/TWikiDotPm-4.1.2.patch][a patch for TWiki-4.1.2]] 
-     that backports the fixes to the =%<nop>GROUPS%= tag to
-     suppress "new topic links" in the produced table. Apply it using 
-     <verbatim>cd <twiki-root>/lib; patch < ../pub/TWiki/LdapContrib/TWikiDotPm-4.1.2.patch</verbatim>
 
 ---++ Contrib Info
 <!--
@@ -503,6 +487,3 @@ that the <nop>LdapContrib will force an update of the cache data.
 
 
 -- TWiki:Main/MichaelDaum - 25 May 2008
-
-%META:FILEATTACHMENT{name="TWikiDotPm-4.1.2.patch" attr="" autoattached="0" comment="" date="1191603621" path="TWikiDotPm-4.1.2.patch" size="1538" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="wikiringlogo40x40.png" attr="h" autoattached="0" comment="" date="1190996093" path="wikiringlogo40x40.png" size="2571" user="TWikiContributor" version="1"}%
