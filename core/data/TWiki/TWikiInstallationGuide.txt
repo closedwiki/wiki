@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1187845362" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1236032572" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Installation Guide
 
@@ -48,7 +48,7 @@ If you need help, ask a question in the TWiki:Support web or on TWiki:Codev.TWik
       * Some systems require a special extension on perl scripts (e.g. =.cgi= or =.pl=). This is normally only needed under Windows and only where perl scripts are only recognized by file extension. Linux and Unix users should normally never need to do this. If necessary, rename all files in =twiki/bin=  (i.e. rename =view= to =view.pl= etc). If you do this, make sure you set the =ScriptSuffix= option in =configure= (Step 6).
    1 *Create the file !LocalLib.cfg* located as =twiki/bin/LocalLib.cfg=
       * There is a template for this file in =twiki/bin/LocalLib.cfg.txt=. Simply copy LocalLib.cfg.txt to LocalLib.cfg. Make sure the ownership and access rights of the copy are the same as LocalLib.cfg.txt
-      * The file =twiki/bin/LocalLib.cfg= must contain a setting for =$twikiLibPath=, which must point to the absolute file path of your =twiki/lib= e.g. =/var/www/twiki/lib=.<br />
+      * The file =twiki/bin/LocalLib.cfg= must contain a setting for =$twikiLibPath=, which must point to the absolute file path of your =twiki/lib= e.g. =/var/www/twiki/lib=.
       * If you need to install additional [[http://cpan.perl.org/][CPAN]] modules, but can't update the main Perl installation files on the server, you can set =$CPANBASE= to point to your personal [[http://cpan.perl.org/][CPAN]] install. Don't forget that the webserver user has to be able to read those files as well.
    1 *Choose best configuration method* for your webserver. There are two ways to configure Apache: config file included from httpd.conf or .htaccess files
       * Apache config file: The recommended method is using a config file. With a config file you can put the entire TWiki configuration in ONE file (typically named =twiki.conf=). Performance is much better with a config file, and one file gives the best overview and ensures that you get a safe installation . However using a config file requires that you can restart Apache which again means that you need root or sudo access to stop and start Apache. The TWiki apache config file is included from the main Apache config file http.conf. Most distributions have a directory from which any file that ends with =.conf= gets included when you restart Apache (Example !RedHat/Fedora/Centos: /etc/httpd/conf.d). If you use a virtual host setup in Apache you should include the twiki.conf file from inside the desired virtual host config in your Apache configuration.
@@ -67,7 +67,8 @@ If you need help, ask a question in the TWiki:Support web or on TWiki:Codev.TWik
       * Resolve any errors or warnings it tells you about.
       * *Note!* When you run =configure= for the first time, you can only edit the section =General Path Settings=. Save these settings, and then return to =configure= to continue configuration.
       * If your webserver can be accessed by more than one domain name make sure to add the additional alternative URLs to ={PermittedRedirectHostUrls}=
-      * When you return to configure you now need to setup _Mail and Proxies_. Especially the ={WebMasterEmail}=, and ={SMTP}{MAILHOST}= must be defined to enable TWiki to send registration emails. Many ISPs have introduced authentication when sending emails to fight spam so you may also have to set ={SMTP}{Username}= and ={SMTP}{Password}=. If you do not want to enable mailing or want to enable it later you can uncheck ={EnableEmail}=.
+      * When you return to configure you now need to setup _Mail and Proxies_. Especially the ={WebMasterEmail}=, and ={SMTP}{MAILHOST}= must be defined to enable TWiki to send administrative emails, such as for registration and notification of topic changes. Many ISPs have introduced authentication when sending emails to fight spam so you may also have to set ={SMTP}{Username}= and ={SMTP}{Password}=. If you do not want to enable mailing or want to enable it later you can uncheck ={EnableEmail}=.
+      * If you want administrative e-mails to be signed, see [[#SmimeSetup][S/MIME setup instructions below]].
 
 You now have a basic, unauthenticated installation running. At this point you can just point your Web browser at =http://yourdomain.com/twiki/bin/view= and start TWiki-ing away!
 
@@ -134,6 +135,25 @@ Each TWiki web has an automatic email notification service that sends you an ema
    1 Confirm the Mail and Proxies settings in the Configure interface.
    1 Setup a cron job (or equivalent) to call the =tools/mailnotify= script as described in the =TWiki.MailerContrib= topic.
 
+#SmimeSetup
+---++ Enable Signed Email Notification
+
+TWiki administrative e-mails are an attractive target for SPAM generators and phishing attacks. One good way to protect against this possibility to enable S/MIME signatures on all administrative e-mails. To do this, you need an an X.509 certificate and private key for the the ={WebMasterEmail}= email account. Obtain these as you would for any other S/MIME e-mail user.
+
+To enable TWiki to sign administrative e-mails:
+   1 Enable e-mail as described above
+   1 If necessary, convert your certificate and key files to *PEM* format ( _openssl_ has all the necessary utilities)
+   1 Place the certificate anyplace convenient that the webserver can read. It should be protected against write. The conventional place under linux is =/etc/pki/tls/certs=
+   1 Place the key file in a secure location that *only* the webserver can read. It *must not* be readable by anyone else, and *must not* be served by the webserver.
+   1 Using the =configure= script, change the following settings under *Mail and Proxies*: 
+      1 Follow the directions under ={MailProgram}= to enable an external mail program such as _sendmail_. Net::SMTP is not supported.
+      1 Enter the full path to the certificate file in the ={SmimeCertificateFile}= configuration variable
+      1 Enter the full path to the private key file in the ={SmimeKeyFile}= configuration variable
+      1 Save the configuration
+   1 Re-run the =configure= script an resolve any errors that it identifies
+
+All out-going administrative e-mails will now be signed.
+
 ---++ Enable !WebStatistics
 
 You can generate a listing manually, or on an automated schedule, of visits to individual pages, on a per web basis. For information on setting up this feature, see the =TWiki.TWikiSiteTools= topic.
@@ -187,7 +207,7 @@ However you may prefer to have the same user interface as in TWiki 4.1 where _Ed
    
 ---++ Copyright, License and Classification Statements
 
-In the bottom of each topic you will find a default copyright messages saying "Copyright &&copy; by the contributing authors. All material on this collaboration platform is the property of the contributing authors." It is a setting WEBCOPYRIGHT that defines this. This is often not adequate.
+In the bottom of each topic you will find a default copyright messages saying "Copyright &copy; by the contributing authors. All material on this collaboration platform is the property of the contributing authors." It is a setting WEBCOPYRIGHT that defines this. This is often not adequate.
 
    * If your TWiki is used in a commercial application without public access you should replace this by your normal copyright notice. You should also consider adding classifications (e.g. For Internal Use Only) so people do not have to add this manually to every new topic.
    * If your TWiki is public with public access you need to decide which copyright and license the contributions should be covered by. For open source type applications licenses such as <a href="http://www.gnu.org/licenses/fdl.html">the GNU Free Documentation License</a>, <a href="http://www.freebsd.org/copyright/freebsd-doc-license.html">FreeBSD Documentation License</a>, and <a href="http://creativecommons.org/licenses/">Creative Commons license</a> are possible licenses to consider. Remember that once people have started contributing it is difficult and not correct to change or impose licenses on existing contributions.
@@ -268,6 +288,7 @@ See <a href="http://twiki.org/cgi-bin/view/TWiki/HowToInstallCpanModules" title=
 | Archive::Tar | &nbsp; | May be required by the Extensions Installer in configure if command line tar or unzip is not available |
 | CGI::Cookie | &gt;=1.24 | Used for session support |
 | CGI::Session | &gt;=3.95 | Highly recommended! Used for session support |
+| Crypt::SMIME | &gt;=0.09 | Required if S/MIME-signed administrative e-mail is enabled. |
 | Digest::base | &nbsp; | &nbsp; |
 | Digest::SHA1 | &nbsp; | &nbsp; |
 | Jcode | &nbsp; | Used for !I18N support with perl 5.6 |
@@ -354,4 +375,3 @@ The manual steps you have to take are:
 %STOPINCLUDE%
 
 __Related Topics:__ AdminDocumentationCategory, TWiki:TWiki.InstallingTWiki
-
