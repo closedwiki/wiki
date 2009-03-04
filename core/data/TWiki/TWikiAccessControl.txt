@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1183870141" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1236112853" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Access Control
 
@@ -34,10 +34,12 @@ __Note:__ Above table comes from SitePermissions
 
 *Access control:* Restrict access to content based on users and groups once a user is identified.
 
+#UsersAndGroups
 ---++ Users and Groups
 
 Access control is based on the familiar concept of Users and Groups. Users are defined by their WikiNames. They can then be organized in unlimited combinations by inclusion in one or more user Groups. For convenience, Groups can also be included in other Groups. 
 
+#ManagingUsers
 ---+++ Managing Users
 
 A user can create an account in TWikiRegistration. The following actions are performed:
@@ -74,6 +76,7 @@ You can create new administrators simply by adding them to the %USERSWEB%.TWikiA
    * ==Set <nop>GROUP = <nop>%USERSWEB%.ElizabethWindsor, <nop>%USERSWEB%.TonyBlair==
 A member of the Super Admin Group has unrestricted access throughout the TWiki, so only trusted staff should be added to this group.
 
+#RestrictingAccess
 ---++ Restricting Access
 
 You can define who is allowed to read or write to a web or a topic. Note that some plugins may not respect access permissions.
@@ -84,6 +87,7 @@ You can define who is allowed to read or write to a web or a topic. Note that so
    
 Note that there is an important distinction between CHANGE access and RENAME access. A user can CHANGE a topic, but thanks to version control their changes cannot be lost (the history of the topic before the change is recorded). However if a topic or web is renamed, that history may be lost. Typically a site will only give RENAME access to administrators and content owners.
 
+#ControllingWeb
 ---+++ Controlling access to a Web
 
 You can define restrictions on who is allowed to view a <nop>%WIKITOOLNAME% web. You can restrict access to certain webs to selected Users and Groups, by:
@@ -108,6 +112,7 @@ __Note:__  If you restrict access to the %USERSWEB%, make sure to add the =TWiki
 
 __Note:__  For Web level access rights Setting any of these settings to an empty value has the same effect as not setting them at all. Please note that the documentation of TWiki 4.0 and earlier versions of TWiki 4.1 did not reflect the actual implementation, e.g. an empty ALLOWWEBVIEW does _not_ prevent anyone from viewing the web, and an an empty DENYWEBVIEW does _not_ allow all to view the web.
 
+#ControllingTopic
 ---+++ Controlling access to a Topic
 
    * You can define these settings in any topic, preferable towards the end of the topic:
@@ -134,6 +139,7 @@ The same rules apply to ALLOWTOPICCHANGE/DENYTOPICCHANGE and APPLYTOPICRENAME/DE
 
 See "How TWiki evaluates ALLOW/DENY settings" below for more on how ALLOW and DENY interacts.
 
+#ControllingAttachments
 ---+++ Controlling access to Attachments
 
 Attachments are referred to directly, and are not normally indirected via TWiki scripts. This means that the above instructions for access control will _not_ apply to attachments. It is possible that someone may inadvertently publicise a URL that they expected to be access-controlled.
@@ -162,6 +168,7 @@ Top level webs are a special case, because they don't have a parent web with a %
       * ==Set <nop>ALLOWROOTCHANGE = &lt; comma-delimited list of Users and Groups &gt;==
 Note that you do *not* require =ROOTCHANGE= access to rename an existing top-level web. You just need =WEBCHANGE= in the web itself.
 
+#EvaluatingAllowDeny
 ---+++ How TWiki evaluates ALLOW/DENY settings
 
 When deciding whether to grant access, TWiki evaluates the following rules in order (read from the top of the list; if the logic arrives at *PERMITTED* or *DENIED* that applies immediately and no more rules are applied). You need to read the rules bearing in mind that VIEW, CHANGE and RENAME access may be granted/denied separately.
@@ -192,6 +199,7 @@ Examples: Topic A includes topic B
    * If the included topic B has ALLOWTOPICCHANGE set to block editing for a user, it does not prevent editing the including topic A.
    * If the included topic B has ALLOWTOPICVIEW set to block view for a user, the user can still view topic A but he cannot see the included topic B. He will see a message _No permission to view B_ 
 
+#QuickRecipes
 ---++ Access Control quick recipes
 
 ---+++ Obfuscating Webs
