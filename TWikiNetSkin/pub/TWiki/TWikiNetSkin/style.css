@@ -97,9 +97,13 @@ h2.patternTemplateTitle {
 	border-width:0 0 1px 0;
 	border-style:solid;
 }
-.twikiNewLink a {
-	text-decoration:none;
-	margin-left:1px;
+.twikiNewLink a:link {
+       text-decoration:none;
+       border-color:#4571d0; 
+       border-style:none none dotted none; 
+       border-width:1px;
+       color:#4571d0;
+
 }
 .twikiNewLink a sup {
 	text-align:center;

@@ -616,6 +616,68 @@ tr.twikiDiffDebug .twikiDiffUnchangedText {
 	margin-left:-11px;
 	background:url(bg_header.gif) top left no-repeat;
 }
+
+
+.patternTopic a:link {
+  text-decoration:none;
+  border-color:#4571d0; border-style:none none dotted none; border-width:1px;
+  color:#4571d0;
+}
+
+.patternTopic a:visited {
+ text-decoration:none;
+  border-color:#58438b; border-style:none none dotted none; border-width:1px;
+  color:#58438b;
+}
+
+.patternTopic a:active {
+  text-decoration:none;
+  border-color:#4571d0; border-style:none none dotted none; border-width:1px;
+  color:#4571d0;
+}
+.patternTopic a:hover {
+  text-decoration:none;
+  border-color:#4571d0; border-style:none none solid none; border-width:1px;
+  color:#4571d0;
+  background-color:#d5e2ff;
+}
+.patternTopic a:visited:hover {
+  text-decoration:none;
+  border-color:#58438b; border-style:none none solid none; border-width:1px;
+  color:#58438b;
+  background-color:#e6dbff;
+}
+
+.twikiNewLink a:link {
+  text-decoration:none;
+  border-color:#b7351e;
+  border-style:none none dotted none;
+  border-width:1px;
+  color:#b7351e;
+}
+.twikiNewLink a:visited {
+  text-decoration:none;
+  border-color:#b7351e;
+  border-style:none none dotted none;
+  border-width:1px;
+  color:#b7351e;
+}
+.twikiNewLink a:active {
+  text-decoration:none;
+  border-color:#b7351e;
+  border-style:none none dotted none;
+  border-width:1px;
+  color:#b7351e;
+}
+.twikiNewLink a:hover {
+  text-decoration:none;
+  border-color:#b7351e;
+  border-style:none none solid none;
+  border-width:1px;
+  color:#b7351e;
+  background-color:#ffded8;
+}
+
 .patternTopic .twikiFormSteps h2.twikinetRoundedAttachments,
 .patternTopic .twikiFormSteps h2.twikinetRoundedAttachments .twikinetHeader,
 .patternTopic blockquote h2.twikinetRoundedAttachments,
