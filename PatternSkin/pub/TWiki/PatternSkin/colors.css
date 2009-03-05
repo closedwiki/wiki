@@ -64,6 +64,8 @@ h3, h4, h5, h6 {
    border-color:#e2e2e2;
 }
 /* to override old Render.pm coded font color style */
+
+/*
 .twikiNewLink font {
    color:inherit;
 }
@@ -72,24 +74,17 @@ h3, h4, h5, h6 {
    color:#777;
    border-color:#ddd;
 }
-
-.twikiNewLink a {
-  color:#B7351E;
-
-}
 .twikiNewLink a:hover sup {
    background-color:#ce000f;
    color:#fff;
    border-color:#ce000f;
-   border-style:none none dotted;
 }
 .twikiNewLink {
-   border-color:#B7351E;
-   border-style:none none dotted;
-   border-width:1px;
-   color:#B7351E;
-   text-decoration:none;
+   border-color:#ddd;
 }
+
+*/
+
 :link:focus,
 :visited:focus,
 :link,
@@ -109,12 +104,67 @@ h3, h4, h5, h6 {
 :visited:hover img {
    background-color:transparent;
 }
+
+.patternTopic a:link {
+  text-decoration:none;
+  border-color:#4571d0; border-style:none none dotted none; border-width:1px;
+  color:#4571d0;
+}
+
 .patternTopic a:visited {
-   color:#666;
+ text-decoration:none;
+  border-color:#58438b; border-style:none none dotted none; border-width:1px;
+  color:#58438b;
+}
+
+.patternTopic a:active {
+  text-decoration:none;
+  border-color:#4571d0; border-style:none none dotted none; border-width:1px;
+  color:#4571d0;
 }
 .patternTopic a:hover {
-   color:#fff;
+  text-decoration:none;
+  border-color:#4571d0; border-style:none none solid none; border-width:1px;
+  color:#4571d0;
+  background-color:#d5e2ff;
 }
+.patternTopic a:visited:hover {
+  text-decoration:none;
+  border-color:#58438b; border-style:none none solid none; border-width:1px;
+  color:#58438b;
+  background-color:#e6dbff;
+}
+
+.twikiNewLink a:link {
+  text-decoration:none;
+  border-color:#b7351e; 
+  border-style:none none dotted none; 
+  border-width:1px;
+  color:#b7351e;
+}
+.twikiNewLink a:visited {
+  text-decoration:none;
+  border-color:#b7351e; 
+  border-style:none none dotted none; 
+  border-width:1px;
+  color:#b7351e;
+}
+.twikiNewLink a:active {
+  text-decoration:none;
+  border-color:#b7351e; 
+  border-style:none none dotted none; 
+  border-width:1px;
+  color:#b7351e;
+}
+.twikiNewLink a:hover {
+  text-decoration:none;
+  border-color:#b7351e; 
+  border-style:none none solid none; 
+  border-width:1px;
+  color:#b7351e;
+  background-color:#ffded8;
+}
+
 #patternMainContents h1 a:link, #patternMainContents h1 a:visited,
 #patternMainContents h2 a:link, #patternMainContents h2 a:visited,
 #patternMainContents h3 a:link, #patternMainContents h3 a:visited,

@@ -107,6 +107,7 @@ h2.patternTemplateTitle {
 }
 /* Links */
 /* somehow the twikiNewLink style have to be before the general link styles */
+/*
 .twikiNewLink {
 	border-width:0 0 1px 0;
 	border-style:solid;
@@ -131,6 +132,8 @@ h2.patternTemplateTitle {
 .twikiNewLink a:hover sup {
 	text-decoration:none;
 }
+
+*/
 
 :link:focus,
 :visited:focus,
@@ -747,10 +750,23 @@ html>body #patternLeftBarContents li { /* Mozilla */
 	padding:0 .5em;
 }
 .patternHomePath a:link,
-.patternHomePath a:visited {
-	text-decoration:none;
-	border-style:none none solid none;
-	border-width:1px;
+.patternRevInfo a:link {
+  text-decoration:none;
+  border-color:#4571d0; 
+  border-style:none none dotted none; 
+  border-width:1px;
+  color:#4571d0;
+
+}
+
+.patternHomePath a:visited, 
+.patternRevInfo a:visited {
+  text-decoration:none;
+  border-color:#58438b; 
+  border-style:none none dotted none; 
+  border-width:1px;
+  color:#58438b;
+
 }
 
 .patternToolBar {
