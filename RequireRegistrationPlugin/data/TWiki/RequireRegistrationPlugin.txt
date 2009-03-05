@@ -1,15 +1,17 @@
-%META:TOPICINFO{author="ByronIgoe" date="1185577106" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1236214210" format="1.1" version="$Rev: 17818 $"}%
 ---+!! <nop>%TOPIC%
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page
+   at http://twiki.org/cgi-bin/view/Plugins/RequireRegistrationPlugin or provide feedback
+   at http://twiki.org/cgi-bin/view/Plugins/RequireRegistrationPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
 
-This plugin will redirect a user to the %TWIKIWEB%.TWikiRegistration
-topic if their login name is not a WikiWord.
+This plugin will redirect a user to the %SYSTEMWEB%.TWikiRegistration topic if their login name is not a WikiWord.
 
-Use this if you have setup single sign-on (SSO) and want to force 
-externally authenticated users to register their WikiName before 
-accessing any wiki content.
+Use this if you have setup single sign-on (SSO) and want to force externally authenticated users to register their WikiName before accessing any wiki content.
 
-The condition for when to redirect can very easily be enhanced to 
-only force users to register when they try to:
+The condition for when to redirect can very easily be enhanced to only force users to register when they try to:
    * access a protected web
    * edit a page
 
@@ -27,15 +29,18 @@ only force users to register when they try to:
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>NEWPLUGIN_SHORTDESCRIPTION%==
 
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Force externally authenticated users to register a WikiName
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Force externally authenticated users to register a <nop>WikiName
+
+   * Refresh time in seconds to do a meta refresh redirect to the registration page. Specify -1 to use an immediate redirect CGI queryi:
+      * Set REFRESH = -1
 
    * Debug plugin: (See output in =data/debug.txt=)
       * Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
 
-__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
 
    * Download the ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
@@ -47,27 +52,28 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
       * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
       * Change the Plugin settings as needed
    * Test if the installation was successful:
-      * log in as a user without a WikiName
+      * Log in as a user without a %SYSTEMWEB%.WikiName
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ByronIgoe |
-|  Copyright: | &copy; 2007, TWiki:Main.ByronIgoe |
+|  Copyright: | &copy; 2007 TWiki:Main.ByronIgoe, 2009 TWiki:Main/PeterThoeny |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 27 Jul 2007 (V1.000) |
+|  Plugin Version: | 04 Mar 2008 (v1.100) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  04 Mar 2008: | Fix bug in addToHEAD, made redirect method and refresh time configurable -- Peter Thoeny |
 |  27 Jul 2007: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
 
-
--- TWiki:Main.ByronIgoe - 27 Jul 2007
+-- TWiki:Main/ByronIgoe - 27 Jul 2007 %BR%
+-- TWiki:Main/PeterThoeny -- 04 Mar 2008
 

@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001-2006 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2001-2009 Peter Thoeny, peter@thoeny.org
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -41,10 +41,10 @@ only force users to register when they try to:
 package TWiki::Plugins::RequireRegistrationPlugin;
 
 use strict;
-use vars qw( $VERSION $RELEASE $debug $pluginName );
+use vars qw( $VERSION $RELEASE $refresh $debug $pluginName );
 
-$VERSION = '$Rev: 9813$';
-$RELEASE = 'Dakar';
+$VERSION = '$Rev: 17818 $';
+$RELEASE = '1.1';
 
 $pluginName = 'RequireRegistrationPlugin';
 
@@ -61,22 +61,28 @@ sub initPlugin {
     my $query = &TWiki::Func::getCgiQuery();
     return 0 unless $query;
 
-    # Get plugin debug flag
-    $debug = &TWiki::Func::getPreferencesFlag("\U$pluginName\E_DEBUG");
+    # Get refresh
+    $refresh = int( &TWiki::Func::getPreferencesValue("\U$pluginName\E_REFRESH") ) || 0;
 
+    # Get plugin debug flag
+    $debug = &TWiki::Func::getPreferencesFlag("\U$pluginName\E_DEBUG") || 0;
 
     my $regPage = 'TWikiRegistration';
     my $twikiWeb = TWiki::Func::getTwikiWebname( );
     my $url = TWiki::Func::getViewUrl( $twikiWeb, $regPage );
 
-    &TWiki::Func::writeDebug( "- TWiki::Plugins::$pluginName Sending $user to $url" )
-      if $debug;
-
     if (($web ne $twikiWeb || $topic ne $regPage) && (! TWiki::Func::isValidWikiWord( TWiki::Func::getWikiName( ) ))) {
-    	# The first option here is very strict in that the user never sees the destination page
+
+      &TWiki::Func::writeDebug( "- TWiki::Plugins::$pluginName Sending $user to $url with refresh $refresh" )
+        if $debug;
+
+      if( $refresh < 0 ) {
+    	# This option here is very strict in that the user never sees the destination page
     	TWiki::Func::redirectCgiQuery( $query, $url );
-    	# This second option is more lenient by giving them a 2 second preview before redirecting them to registration
-        # TWiki::Func::addToHEAD('REQUIREREGISTRATION','<META HTTP-EQUIV=Refresh CONTENT="2;URL=$url">');
+      } else {
+    	# This option is configurable, gives user some time to preview before redirecting to registration
+        TWiki::Func::addToHEAD( 'REQUIREREGISTRATION', "<meta http-equiv='refresh' content='$refresh;url=$url' />" );
+      }
     }
     return 1;
 }
