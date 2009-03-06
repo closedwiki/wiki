@@ -43,7 +43,7 @@ Example3: To list that Jill will be in Paris from 10-Sep - 11-Sep 2005 and in To
 </verbatim>
 Example4: To list that Eve will be ill from 12-Sep - 20-Sep 2005  with her own 'smily'
 <verbatim>
-	* 12 Sep 2005 - 20 Sep 2005 - Eve - is ill - :skull:
+	* 12 Sep 2005 - 20 Sep 2005 - Eve - is ill - :skull: 
 </verbatim>
 Example5: To list that Lisa will by not at work from April to June and the complete December 2005:
 <verbatim>
@@ -90,7 +90,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 	* If you change the default language ('lang' attribute; see [[#AttriButes][Attributes]]) you can use your language specific month and day names or the abbreviations for any entry type (including TWiki:Plugins.CalendarPlugin event types).
 	* If you change the month names or day names ('monthnames' and 'daynames' attributes; see [[#AttriButes][Attributes]]) you can use it for your entries (including TWiki:Plugins.CalendarPlugin event types).
 	* You can hide all calendar entries if you put them into HTML comments, e.g:
-	* You can define a background color in a icon field or icon attribute (workicon, ...) if you write =color(&lt;MYCOLOR&gt;)=, e.g. =&nbsp;&nbsp;&nbsp;* 5 Mar 2009 - Green Entry - anywhere - color(green)=. It is also possible to combine icon and background color.
+	* You can define a background color in a icon field or icon attribute (workicon, ...) if you write =color(&lt;MYCOLOR&gt;)=, e.g. =&nbsp;&nbsp;&nbsp;* 5 Mar 2009 - Green Entry - anywhere - color(green)=. It is also possible to combine icon and background color, e.g. =&nbsp;&nbsp;&nbsp;* 6 Mar 2009 - Red Entry - somewhere - color(red) :skull:=.
 <verbatim>
 		%HOLIDAYLIST%
 		<!--
@@ -262,7 +262,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 	* 08 Jun 2005 - Bill
 	* 10 Jun 2005 - 15 Jun 2005 - Bob
 	* 12 Jun 2005 - 14 Jun 2005 - Alice - Paris
-	* 17 Jun 2005 - Bob - is ill - :skull:
+	* 17 Jun 2005 - Bob - is ill - :skull: 
 	* 10 Jul 2005 - Mary
 	* 20 Jul 2005 - 02 Sep 2005 - Bob
 	* 15 Sep 2005 - 15 Oct 2005 - Mary
@@ -304,7 +304,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 
 ---++ Plugin Installation Instructions
 
-	* Install required CPAN modules (e.g. =perl -MCPAN -e "install Date::Calc"= and =perl -MCPAN -e "install HTML::Entities"=)
+	* Install required CPAN modules (e.g. =perl -MCPAN -e "install Date::Calc"= )
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 | *File:* | *Description:* |
@@ -348,7 +348,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 |  v1.002 (13 Jun 2005): | TWiki:Main.DanielRohde: renders some options; fixes some documentation bugs and a white space bug |
 |  v1.001 (10 Jun 2005): | TWiki:Main.DanielRohde: A complete reimplementation with many bug fixes and some new features. |
 |  v1.021 (01 Jun 2005): | TWiki:Main.PeterJones: Initial version |
-|  CPAN Dependencies: | *required:* CPAN:Date::Calc  CPAN:HTML::Entities |
+|  CPAN Dependencies: | *required:* CPAN:Date::Calc |
 |  Other Dependencies: | %TWIKIWEB%.SmiliesPlugin |
 |  Perl Version: | 5.0 and up|
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 94%, %TWIKIWEB%.FormattedSearch 98%, %TOPIC% 86% |

@@ -59,7 +59,6 @@ package TWiki::Plugins::HolidaylistPlugin;
 use strict;
 ### use warnings;
 
-use HTML::Entities;
 use Date::Calc qw(:all);
 use CGI;
 
@@ -1124,21 +1123,20 @@ sub renderHolidaylist() {
 
 				my $location = $$ltableref[$i]{descr} if defined $ltableref;
 				if (defined $location) {
-					$location =~ s/\@all//ig if $options{enablepubholidays}; # remove @all
-
+					$location =~ s/\s*(\@all|(fg)?color\([^\)]+\))//ig if $options{enablepubholidays}; # remove @all
 					$location=substTitle($location);
-					$location=&HTML::Entities::encode_entities($location); # quote special characters like "<>
+					$location=CGI::escapeHTML($location);
 
 					$icon=~s/<img /<img alt="$location" /is unless $icon=~s/(<img[^>]+alt=")[^">]+("[^>]*>)/$1$location$2/is;
 					$icon=~s/<img /<img title="$location" /is unless $icon=~s/(<img[^>]+title=")[^">]+("[^>]*>)/$1$location$2/is;
+					$title=$location if defined $location;
 				}
-				if ($icon=~s/fgcolor\(([^\)]+)\)//) {
+				if ($icon=~s/fgcolor\(([^\)]+)\)//g) {
 					$fgcolor = $1;
 				}
-				if ($icon=~s/color\(([^\)]+)\)//) {
+				if ($icon=~s/color\(([^\)]+)\)//g) {
 					$bgcolor=$1;
 					$td.= ($icon!~/^\s*$/)?$icon:'&nbsp;';
-					$title=$$ltableref[$i]{descr} if defined $$ltableref[$i]{descr};
 				} else {
 					$td.= $icon;
 				}
@@ -1694,7 +1692,7 @@ sub _getOptionRange {
 sub _renderText {
 	my ($text, $web) = @_;
 	my $ret = $text;
-	if (defined $rendererCache{$web}{$text}) {
+	if (defined $rendererCache{$web} && defined $rendererCache{$web}{$text}) {
 		$ret = $rendererCache{$web}{$text};
 	} else {
 		$ret = TWiki::Func::renderText($text, $web);
