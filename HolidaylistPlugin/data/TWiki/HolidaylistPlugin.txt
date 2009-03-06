@@ -319,7 +319,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterJones, TWiki:Main.DanielRohde |
-|  Plugin Version: | v1.027 (6 Mar 2009) |
+|  Plugin Version: | v1.029 (6 Mar 2009) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  v1.029 (6 Mar 2009) | TWiki:Main.DanielRohde: changed some defaults (showmonthheader, monthheaderformat, headerformat); fixed alignments (statistics, monthheader); added maxheight attribute; allowed color definitions in icon fields |
 |  v1.026 (28 Oct 2008) | TWiki:Main.DanielRohde: added missing anchor in showoptions form action; added row color feature (new attributes: namecolors, rowcolors); added order feature (new attribute: order); added namepos attribute (place names left and/or right of a row) |
