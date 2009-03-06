@@ -262,7 +262,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 	* 08 Jun 2005 - Bill
 	* 10 Jun 2005 - 15 Jun 2005 - Bob
 	* 12 Jun 2005 - 14 Jun 2005 - Alice - Paris
-	* 17 Jun 2005 - Bob - is ill - :skull: 
+	* 17 Jun 2005 - Bob - is ill - :skull: color(red)
 	* 10 Jul 2005 - Mary
 	* 20 Jul 2005 - 02 Sep 2005 - Bob
 	* 15 Sep 2005 - 15 Oct 2005 - Mary
@@ -270,6 +270,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 	* 19 Nov 2005 - Bob
 	* 29 Nov 2005 - 20 Dec 2005 - Bill
 	* 25 Dec 2005 - Bob
+	* 6 Jun 2005 - 15 Jun 2005 - Kelly - Berlin - :-| color(red) fgcolor(white)
 
 ---++ Plugin Settings
 
