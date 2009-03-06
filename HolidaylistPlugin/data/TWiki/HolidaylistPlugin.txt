@@ -90,6 +90,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 	* If you change the default language ('lang' attribute; see [[#AttriButes][Attributes]]) you can use your language specific month and day names or the abbreviations for any entry type (including TWiki:Plugins.CalendarPlugin event types).
 	* If you change the month names or day names ('monthnames' and 'daynames' attributes; see [[#AttriButes][Attributes]]) you can use it for your entries (including TWiki:Plugins.CalendarPlugin event types).
 	* You can hide all calendar entries if you put them into HTML comments, e.g:
+	* You can define a background color in a icon field or icon attribute (workicon, ...) if you write =color(&lt;MYCOLOR&gt;)=, e.g. =&nbsp;&nbsp;&nbsp;* 5 Mar 2009 - Green Entry - anywhere - color(green)=. It is also possible to combine icon and background color.
 <verbatim>
 		%HOLIDAYLIST%
 		<!--
@@ -319,7 +320,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 |  Plugin Author: | TWiki:Main.PeterJones, TWiki:Main.DanielRohde |
 |  Plugin Version: | v1.027 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  v1.027 (BETA) | TWiki:Main.DanielRohde: changed some defaults (showmonthheader, monthheaderformat, headerformat); fixed alignments (statistics, monthheader); added maxheight attribute |
+|  v1.027 (BETA) | TWiki:Main.DanielRohde: changed some defaults (showmonthheader, monthheaderformat, headerformat); fixed alignments (statistics, monthheader); added maxheight attribute; allowed color definitions in icon fields |
 |  v1.026 (28 Oct 2008) | TWiki:Main.DanielRohde: added missing anchor in showoptions form action; added row color feature (new attributes: namecolors, rowcolors); added order feature (new attribute: order); added namepos attribute (place names left and/or right of a row) |
 |  v1.025 (17 Oct 2008) | TWiki:Main.DanielRohde: added div tag with style overflow:auto requested by Matthew Thomson; added query parameters feature (hlp_&lt;attribute&gt; in URIs); added option form feature (new attributes: showoptions, optionspos, optionsformat) requested by Matthew Thomson; improved performance; fixed minor icon related bugs |
 |  v1.024 (29 Jul 2008) | TWiki:Main.DanielRohde: added statistics feature requested by TWiki:Main.GarySprague |
@@ -347,7 +348,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 |  v1.002 (13 Jun 2005): | TWiki:Main.DanielRohde: renders some options; fixes some documentation bugs and a white space bug |
 |  v1.001 (10 Jun 2005): | TWiki:Main.DanielRohde: A complete reimplementation with many bug fixes and some new features. |
 |  v1.021 (01 Jun 2005): | TWiki:Main.PeterJones: Initial version |
-|  CPAN Dependencies: | *required:* CPAN:Date::Calc %BR% optional: CPAN:HTML::Entities |
+|  CPAN Dependencies: | *required:* CPAN:Date::Calc  CPAN:HTML::Entities |
 |  Other Dependencies: | %TWIKIWEB%.SmiliesPlugin |
 |  Perl Version: | 5.0 and up|
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 94%, %TWIKIWEB%.FormattedSearch 98%, %TOPIC% 86% |

@@ -59,6 +59,7 @@ package TWiki::Plugins::HolidaylistPlugin;
 use strict;
 ### use warnings;
 
+use HTML::Entities;
 use Date::Calc qw(:all);
 use CGI;
 
@@ -90,7 +91,7 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 
 
-$REVISION = '1.0.27'; #dro# changed some defaults (showmonthheader, monthheaderformat, headerformat); fixed alignments (statistics, monthheader); added maxheight attribute
+$REVISION = '1.0.27'; #dro# changed some defaults (showmonthheader, monthheaderformat, headerformat); fixed alignments (statistics, monthheader); added maxheight attribute; allowed color definitions in icon fields
 #$REVISION = '1.0.26'; #dro# added missing anchor in showoptions form action; added row color feature (new attributes: namecolors, rowcolors); added order feature (new attribute: order); added namepos attribute (place names left and/or right of a row)
 #$REVISION = '1.0.25'; #dro# added div tag with style overflow:auto requested by Matthew Thomson; added query parameters feature (hlp_&lt;attribute&gt; in URIs); added option form feature (new attributes: showoptions, optionspos, optionsformat) requested by Matthew Thomson; improved performance; fixed minor icon related bugs;
 #$REVISION = '1.0.24'; #dro# added statistics feature requested by TWiki:Main.GarySprague
@@ -1075,6 +1076,9 @@ sub renderHolidaylist() {
 			$sumstatistics{days}++;
 			$sumstatistics{'days-w'}++ if $dow < 6;
 
+		
+			my $title = substTitle($person .' / '.Date_to_Text_Long($yy1,$mm1,$dd1));
+			my $fgcolor = undef;
 
                         if (($dow < 6)||$options{showweekends}) { 
 				my $icon= $iconstates{ defined $$ptableref[$i]?$$ptableref[$i]:0};
@@ -1118,25 +1122,30 @@ sub renderHolidaylist() {
 					$icon = _renderText($icon, $web) if $icon !~ /^(\s|\&nbsp\;)*$/;
 				}
 
-				# could fail if HTML::Entities is not installed:
-				eval { 
-					require HTML::Entities;
-					my $location = $$ltableref[$i]{descr} if defined $ltableref;
-					if (defined $location) {
-						$location =~ s/\@all//ig if $options{enablepubholidays}; # remove @all
+				my $location = $$ltableref[$i]{descr} if defined $ltableref;
+				if (defined $location) {
+					$location =~ s/\@all//ig if $options{enablepubholidays}; # remove @all
 
-						$location=substTitle($location);
-						$location=&HTML::Entities::encode_entities($location); # quote special characters like "<>
+					$location=substTitle($location);
+					$location=&HTML::Entities::encode_entities($location); # quote special characters like "<>
 
-						$icon=~s/<img /<img alt="$location" /is unless $icon=~s/(<img[^>]+alt=")[^">]+("[^>]*>)/$1$location$2/is;
-						$icon=~s/<img /<img title="$location" /is unless $icon=~s/(<img[^>]+title=")[^">]+("[^>]*>)/$1$location$2/is;
-					}
-				};
-				$td.= $icon;
+					$icon=~s/<img /<img alt="$location" /is unless $icon=~s/(<img[^>]+alt=")[^">]+("[^>]*>)/$1$location$2/is;
+					$icon=~s/<img /<img title="$location" /is unless $icon=~s/(<img[^>]+title=")[^">]+("[^>]*>)/$1$location$2/is;
+				}
+				if ($icon=~s/fgcolor\(([^\)]+)\)//) {
+					$fgcolor = $1;
+				}
+				if ($icon=~s/color\(([^\)]+)\)//) {
+					$bgcolor=$1;
+					$td.= ($icon!~/^\s*$/)?$icon:'&nbsp;';
+					$title=$$ltableref[$i]{descr} if defined $$ltableref[$i]{descr};
+				} else {
+					$td.= $icon;
+				}
 			} else {
 				$td.= '&nbsp;';
 			}
-			$tr .= CGI::td({-align=>'center', -bgcolor=>$bgcolor, -title=>substTitle($person .' / '.Date_to_Text_Long($yy1,$mm1,$dd1)) }, $td);
+			$tr .= CGI::td({-align=>'center', -style=>(defined $fgcolor?"color:$fgcolor;":"")."background-color:$bgcolor;", -title=>$title }, $td);
 		}
 		$tr .= renderStatisticsCol(\%statistics) if ($options{showstatcol});
 		$tr .= $pcell if $options{namepos}=~/^(right|both)$/i;
