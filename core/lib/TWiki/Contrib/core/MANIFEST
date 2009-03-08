@@ -684,6 +684,7 @@ pub/TWiki/TWikiDocGraphics/TWikiDocGraphics_Text_updated.psd 0644
 pub/TWiki/TWikiDocGraphics/_filetypes.txt 0644
 pub/TWiki/TWikiDocGraphics/addon.gif 0644
 pub/TWiki/TWikiDocGraphics/air.gif 0644
+pub/TWiki/TWikiDocGraphics/airplane.gif 0644
 pub/TWiki/TWikiDocGraphics/application.gif 0644
 pub/TWiki/TWikiDocGraphics/arrowbdown.gif 0644
 pub/TWiki/TWikiDocGraphics/arrowbleft.gif 0644
@@ -697,9 +698,11 @@ pub/TWiki/TWikiDocGraphics/arrowright.gif 0644
 pub/TWiki/TWikiDocGraphics/arrowup.gif 0644
 pub/TWiki/TWikiDocGraphics/as.gif 0644
 pub/TWiki/TWikiDocGraphics/attachfile.gif 0644
+pub/TWiki/TWikiDocGraphics/award.gif 0644
 pub/TWiki/TWikiDocGraphics/bat.gif 0644
-pub/TWiki/TWikiDocGraphics/blank.gif 0644
+pub/TWiki/TWikiDocGraphics/bed.gif 0644
 pub/TWiki/TWikiDocGraphics/blank-bg.gif 0644
+pub/TWiki/TWikiDocGraphics/blank.gif 0644
 pub/TWiki/TWikiDocGraphics/bmp.gif 0644
 pub/TWiki/TWikiDocGraphics/book.gif 0644
 pub/TWiki/TWikiDocGraphics/bubble.gif 0644
@@ -751,6 +754,7 @@ pub/TWiki/TWikiDocGraphics/flag-gray.gif 0644
 pub/TWiki/TWikiDocGraphics/flag.gif 0644
 pub/TWiki/TWikiDocGraphics/folder.gif 0644
 pub/TWiki/TWikiDocGraphics/fon.gif 0644
+pub/TWiki/TWikiDocGraphics/food.gif 0644
 pub/TWiki/TWikiDocGraphics/gear.gif 0644
 pub/TWiki/TWikiDocGraphics/gif.gif 0644
 pub/TWiki/TWikiDocGraphics/globe.gif 0644
@@ -812,6 +816,7 @@ pub/TWiki/TWikiDocGraphics/lockfoldergray.gif 0644
 pub/TWiki/TWikiDocGraphics/locktopic.gif 0644
 pub/TWiki/TWikiDocGraphics/locktopicgray.gif 0644
 pub/TWiki/TWikiDocGraphics/logout.gif 0644
+pub/TWiki/TWikiDocGraphics/luggage.gif 0644
 pub/TWiki/TWikiDocGraphics/mail.gif 0644
 pub/TWiki/TWikiDocGraphics/map.gif 0644
 pub/TWiki/TWikiDocGraphics/mdb.gif 0644
@@ -843,8 +848,8 @@ pub/TWiki/TWikiDocGraphics/plugin.gif 0644
 pub/TWiki/TWikiDocGraphics/plus.gif 0644
 pub/TWiki/TWikiDocGraphics/png.gif 0644
 pub/TWiki/TWikiDocGraphics/ppt.gif 0644
-pub/TWiki/TWikiDocGraphics/printtopic.gif 0644
 pub/TWiki/TWikiDocGraphics/presentation.gif 0644
+pub/TWiki/TWikiDocGraphics/printtopic.gif 0644
 pub/TWiki/TWikiDocGraphics/proportional.gif 0644
 pub/TWiki/TWikiDocGraphics/ps.gif 0644
 pub/TWiki/TWikiDocGraphics/psd.gif 0644
@@ -891,12 +896,12 @@ pub/TWiki/TWikiDocGraphics/tag-purple.gif 0644
 pub/TWiki/TWikiDocGraphics/tag-red.gif 0644
 pub/TWiki/TWikiDocGraphics/tag-yellow.gif 0644
 pub/TWiki/TWikiDocGraphics/tag.gif 0644
-pub/TWiki/TWikiDocGraphics/target.gif 0644
 pub/TWiki/TWikiDocGraphics/target-blue.gif 0644
 pub/TWiki/TWikiDocGraphics/target-gray.gif 0644
 pub/TWiki/TWikiDocGraphics/target-green.gif 0644
 pub/TWiki/TWikiDocGraphics/target-orange.gif 0644
 pub/TWiki/TWikiDocGraphics/target-red.gif 0644
+pub/TWiki/TWikiDocGraphics/target.gif 0644
 pub/TWiki/TWikiDocGraphics/tip.gif 0644
 pub/TWiki/TWikiDocGraphics/todo.gif 0644
 pub/TWiki/TWikiDocGraphics/toggleclose-mini.gif 0644
@@ -915,10 +920,10 @@ pub/TWiki/TWikiDocGraphics/ttf.gif 0644
 pub/TWiki/TWikiDocGraphics/twiki.gif 0644
 pub/TWiki/TWikiDocGraphics/txt.gif 0644
 pub/TWiki/TWikiDocGraphics/unchecked.gif 0644
-pub/TWiki/TWikiDocGraphics/useractive.gif 0644
-pub/TWiki/TWikiDocGraphics/userinactive.gif 0644
 pub/TWiki/TWikiDocGraphics/up.gif 0644
 pub/TWiki/TWikiDocGraphics/updated.gif 0644
+pub/TWiki/TWikiDocGraphics/useractive.gif 0644
+pub/TWiki/TWikiDocGraphics/userinactive.gif 0644
 pub/TWiki/TWikiDocGraphics/uweb-bo.gif 0644
 pub/TWiki/TWikiDocGraphics/uweb-bo12.gif 0644
 pub/TWiki/TWikiDocGraphics/uweb-g.gif 0644
