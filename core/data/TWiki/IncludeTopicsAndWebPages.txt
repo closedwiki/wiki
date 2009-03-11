@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1236757609" format="1.1" version="$Rev$"}%
 ---+!! Include Topics and Web Pages Using =%<nop>INCLUDE{...}%= Variable
 
 Use the =%<nop>INCLUDE{...}%= variable to embed the content of another topic or web page inside a TWiki topic. The whole content or only parts of a page can be included. If needed, set a proxy server in %WIKIPREFSTOPIC%.
@@ -56,5 +56,33 @@ The result would be
 
    * I like apples better than oranges.
 
-__Related Topics:__ VarINCLUDE, UserDocumentationCategory
+---+++ 5. Alert Box using Parameterized Include
 
+Create a topic called !AlertBox with the following content:
+
+<verbatim>
+-----
+%STARTINCLUDE%
+<div style="border-color:#FF9933; border-style:solid; border-width:thin; width:85%;  margin: 0 auto">
+<table cellpadding="5" width="100%" cellspacing="0" cellpadding="12" border="0">
+<tr bgcolor="#FFBB55">
+<td valign="top" width="16"><img src="%ICONURL{warning}%" width="16" height="16" align="absmiddle" alt="" border="0"></td>
+<td><b> %TITLE% </b></td>
+</tr>
+<tr bgcolor="#FFCC66">
+<td>&nbsp;</td>
+<td> %MESSAGE% </td>
+</tr>
+</table>
+</div>
+%STOPINCLUDE%
+-----
+</verbatim>
+
+Now you can write =%<nop>INCLUDE{ "AlertBox" TITLE="Alert" MESSAGE="This a test message" }%= to get this:
+
+%INCLUDE{ "%TOPIC%" TITLE="Alert" MESSAGE="This a test message" }%
+
+The =TITLE=""= and =MESSAGE=""= parameters are passed into the include. Using this approach, you can create a library of boxes in the %USERSWEB% web, such as <nop>%USERSWEB%.NoteBox, <nop>%USERSWEB%.InfoBox.
+
+__Related Topics:__ VarINCLUDE, UserDocumentationCategory
