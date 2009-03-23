@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1237752643" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebSearch"}%
 ---+!! Search Help
 
@@ -36,8 +36,8 @@ You can embed a nicely [[FormattedSearch][formatted search]] in a topic by using
 
 TWikiPreferences defines these search preferences:
 
-   * =SEARCHDEFAULTTTYPE=: Default search type for search forms which calls the =search= script
-      * Currently =%SEARCHDEFAULTTTYPE%=
+   * =SEARCHDEFAULTTYPE=: Default search type for search forms which calls the =search= script
+      * Currently =%SEARCHDEFAULTTYPE%=
    * =SEARCHVARDEFAULTTYPE=: Default search type for =%<nop>SEARCH{}= variable 
       * Currenty =%SEARCHVARDEFAULTTYPE%=
    * =SEARCHSTOPWORDS=: List of stop words (common words and characters to exclude from a keyword search)

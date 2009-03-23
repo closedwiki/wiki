@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1176595196" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1237752643" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WIKITOOLNAME% Site-Level Preferences
 
 This topic defines __site-level__ settings that apply to all users and webs on this TWikiSite.
@@ -143,7 +143,7 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
 ---+++ Search Settings
 
    * Default type for search, one of: keyword (for search engine like syntax), regex (for RegularExpression search), or literal (for verbatim search)
-      * Set SEARCHDEFAULTTTYPE = keyword
+      * Set SEARCHDEFAULTTYPE = keyword
    * Default for =%<nop>SEARCH{}%= variable, one of: keyword, regex, or literal
       * Set SEARCHVARDEFAULTTYPE = literal
    * Stop words, e.g., common words and characters to exclude from a keyword search:

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1228358859" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1237752643" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebSearch"}%
 ---+ %MAKETEXT{"Advanced Search"}%
 
@@ -6,7 +6,7 @@
 
 %SEARCH{
 "%URLPARAM{"search" encode="quote"}%"
-type="%IF{" '%URLPARAM{"regex" encode="entity"}%' = 'on' or '%URLPARAM{"type" encode="entity"}%' = 'regex'" then="regex" else="word"}%"
+type="%IF{" '%URLPARAM{"regex" encode="entity"}%' = 'on' or '%URLPARAM{"type" encode="entity"}%' = 'regex'" then="regex" else="%SEARCHDEFAULTTYPE%"}%"
 scope="%URLPARAM{"scope" encode="quote"}%"
 web="%URLPARAM{"web" encode="quote"}%"
 nosearch="%URLPARAM{"nosearch" encode="quote"}%"

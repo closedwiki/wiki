@@ -128,7 +128,7 @@ sub search {
         'scope'         => scalar $query->param( 'scope' ),
         'order'         => scalar $query->param( 'order' ),
         'type'          => scalar $query->param( 'type' ) ||
-          $session->{prefs}->getPreferencesValue( 'SEARCHDEFAULTTTYPE' ),
+          $session->{prefs}->getPreferencesValue( 'SEARCHDEFAULTTYPE' ),
         'regex'         => scalar $query->param( 'regex' ),
         'limit'         => scalar $query->param( 'limit' ),
         'reverse'       => scalar $query->param( 'reverse' ),

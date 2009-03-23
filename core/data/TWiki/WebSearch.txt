@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1228358828" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1237752643" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+ %MAKETEXT{"Web Search"}%
 
@@ -6,7 +6,7 @@
 
 %SEARCH{ 
 "%URLPARAM{"search" encode="quote"}%" 
-type="%URLPARAM{"type" encode="quote" default="word"}%" 
+type="%URLPARAM{"type" encode="quote" default="%SEARCHDEFAULTTYPE%"}%" 
 scope="%URLPARAM{"scope" encode="quote"}%" 
 web="%URLPARAM{"web" encode="quote"}%" 
 nosearch="%URLPARAM{"nosearch" encode="quote"}%" 
