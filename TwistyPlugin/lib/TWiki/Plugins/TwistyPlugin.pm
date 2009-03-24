@@ -410,7 +410,7 @@ sub _readCookie {
 
 sub _wrapInButtonHtml {
     my ( $text, $mode ) = @_;
-    return _wrapInContainerHideIfNoJavascripOpen($mode) . "\n" . $text
+    return _wrapInContainerHideIfNoJavascripOpen($mode) . " " . $text
       . _wrapInContainerDivIfNoJavascripClose($mode);
 }
 
@@ -421,7 +421,7 @@ sub _wrapInContentHtmlOpen {
 
 sub _wrapInContentHtmlClose {
     my ($mode) = shift;
-    return "</$mode>\n<!--/twistyPlugin-->";
+    return "</$mode> <!--/twistyPlugin-->";
 }
 
 sub _wrapInContainerHideIfNoJavascripOpen {
