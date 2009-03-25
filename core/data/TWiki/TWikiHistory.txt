@@ -1,13 +1,82 @@
-%META:TOPICINFO{author="TWikiContributor" date="1200423469" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1237959283" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ Appendix A: TWiki Development Time-line
 
 %TOC%
 
-#FreetownRelease
----++ TWiki Release 4.2.1 (Freetown) released %$DATE%
+#GeorgetownRelease
+---++ TWiki Release 4.3 (Georgetown) released %$DATE%
 
-Patch release following the 4.2.0 released 22 Jan 2008
+__New Features and Enhancements of TWiki Release 4.3__
+
+   * *Security Enhancements*
+      * Reduced risk of XSS ([[http://en.wikipedia.org/wiki/Cross-site_scripting][cross-site scripting]])
+      * S/MIME support to sign administrative e-mails
+
+   * *Usability Enhancements*
+      * Red-links instead of question mark links to link to non-existing topics
+
+   * *Enterprise Collaboration Enhancements*
+      * Pre-installed HeadlinesPlugin to show headline newsfeeds in TWiki topics
+      * Pre-installed TWikiNetSkin, TWikiNetSkinPlugin for corporate look and feel
+
+   * *Search Enhancements*
+      * Add footer parameter to Formatted Search
+      * Add number of topics to Formatted Search
+
+   * *Miscellaneous Feature Enhancements*
+      * Control over variable expansion at topic creation time
+      * Many new TWikiDocGraphics images
+      * Support list of domains that should be excluded from proxy
+
+   * *Plugin Enhancements*
+      * SpreadSheetPlugin: New functions
+
+   * *Bug Fixes*
+      * More than 20 bug fixes since 4.2.4
+
+#GeorgetownHallOfFame
+__Hall of Fame of TWiki Release 4.3__
+
+Many people have been involved in creating TWiki 4.3. Special thanks go to the most active contributors in the following areas:
+
+   * *Sponsor and facilitator:* TWiki:Main.PeterThoeny
+   * *Testing and bug fixing:* TWiki:Main.SopanShewale, TWiki:Main.PeterThoeny, TWiki:Main.FengZhaolin, TWiki:Main.TimotheLitt, TWiki:Main.SteveMilner
+   * *Spec and code:* TWiki:Main.PeterThoeny, TWiki:Main.SopanShewale, TWiki:Main.TimotheLitt
+   * *Documentation:* TWiki:Main.PeterThoeny, TWiki:Main.SopanShewale, TWiki:Main.TimotheLitt, TWiki:Main.StephenHallett, TWiki:Main.JefferyMartin, TWiki:Main.ThomasErskine
+   * *Release package builds:* TWiki:Main.SopanShewale
+   * *Usability:* TWiki:Main.PeterThoeny
+   * *Translations:* Coordinated by TWiki:Main.SteffenPoulsen
+      * Bulgarian: TWiki:Main.KrassimirBerov
+      * Chinese (simplified and traditional): TWiki:Main.CheDong
+      * Czech: TWiki:Main.IvanKuncl
+      * Danish: TWiki:Main.SteffenPoulsen
+      * Dutch: TWiki:Main.WoutMertens
+      * Finnish: TWiki:Main.HeikkiToivonen
+      * French: TWiki:Main.BenVoui
+      * German: TWiki:Main.MartinRaabe
+      * Italian: TWiki:Main.MassimoMancini
+      * Japanese: TWiki:Main.KenYuminaga
+      * Korean: TWiki:Main.JustinKim
+      * Polish: TWiki:Main.ZbigniewKulesza
+      * Portuguese: TWiki:Main.CarlinhosCecconi
+      * Russian: TWiki:Main.AndreyTkachenko, TWiki:Main.SergejZnamenskij, TWiki:Main.SergeyJSinx, TWiki:Main.AlexTananaev
+      * Spanish: TWiki:Main.SebastianKlus, TWiki:Main.MiguelABayona
+      * Swedish: TWiki:Main.ErikAman
+      * Ukrainian: TWiki:Main.SerhijDubyk
+   * *Marketing:* TWiki:Main.PeterThoeny, TWiki:Main.WillThomas, TWiki:Main.VickiBrown
+   * *Public relations:* TWiki:Main.PeterThoeny, TWiki:Main.WillThomas
+   * *Meetups:* TWiki:Main.PeterThoeny
+   * *TWiki.org wiki champions:* TWiki:Main.SopanShewale, TWiki:Main.PeterThoeny, TWiki:Main.FengZhaolin, TWiki:Main.AndrewRJones, TWiki:Main.DanielRohde <!-- Blog, Codev, Main, Plugins, TWiki webs -->
+   * *Customer support:* TWiki:Main.PeterThoeny, TWiki:Main.SeanCMorgan, TWiki:Main.EnriqueCadalso, TWiki:Main.ScottFreeman, TWiki:Main.SopanShewale <!-- Support web -->
+   * *System administration:* TWiki:Main.ChrisLahti, TWiki:Main.PeterThoeny, TWiki:Main.SopanShewale
+
+If you find an omission please fix it at TWiki:TWiki.TWikiHistory. For the full list of contributors see TWikiContributor. 
+
+See more details on the TWiki 4.3 release at TWikiReleaseNotes04x03.
+
+#FreetownRelease
+---++ TWiki Release 4.2 (Freetown), 2008-01-22
 
 __New Features and Enhancements of TWiki Release 4.2__
 
@@ -89,7 +158,7 @@ __Note:__ Order of contributors under "Spec and code", "Templates and skins" and
 See more details on the TWiki 4.2 release at TWikiReleaseNotes04x02.
 
 #EdinburghRelease
----++ TWiki Release 4.1 (Edinburgh), 16 Jan 2007
+---++ TWiki Release 4.1 (Edinburgh), 2007-01-16
 
 __New Features and Enhancements of TWiki Release 4.1__
 
@@ -189,7 +258,7 @@ See more details on the TWiki 4.1 release at TWikiReleaseNotes04x01.
 
 
 #DakarRelease
----++ TWiki Release 4.0.0 (Dakar), 01 Feb 2006
+---++ TWiki Release 4.0 (Dakar), 2006-02-01
 
 __Major New Features__
    * Much simpler install and configuration
