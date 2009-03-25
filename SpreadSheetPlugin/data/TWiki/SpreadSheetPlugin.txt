@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1237946971" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1237964998" format="1.1" version="$Rev$"}%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page
    at http://twiki.org/cgi-bin/view/Plugins/SpreadSheetPlugin or provide feedback
@@ -178,7 +178,7 @@ Conventions for Syntax:
    * Example: ==%<nop>CALC{"$FIND(f, fluffy)"}%== returns ==1==
    * Example: ==%<nop>CALC{"$FIND(f, fluffy, 2)"}%== returns ==4==
    * Example: ==%<nop>CALC{"$FIND(@, fluffy, 1)"}%== returns ==0==
-   * Related: =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncSEARCH][$SEARCH()]]=
+   * Related: =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncSEARCH][$SEARCH()]]=
 
 #FuncFORMAT
 ---+++ FORMAT( type, precision, number ) -- format a number to a certain type and precision
@@ -474,7 +474,7 @@ Conventions for Syntax:
    * Replace =num= number of characters of text string =text=, starting at =start=, with new text =new=. Starting position is 1; use a negative =start= to count from the end of the text
    * Syntax: ==$REPLACE( text, start, num, new )==
    * Example: ==%<nop>CALC{"$REPLACE(abcdefghijk,6,5,*)"}%== returns ==abcde*k==
-   * Related: =[[#FuncFIND][$FIND()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
+   * Related: =[[#FuncFIND][$FIND()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
 
 #FuncRIGHT
 ---+++ RIGHT( ) -- address range of cells to the right of the current cell
@@ -506,7 +506,7 @@ Conventions for Syntax:
    * Example: ==%<nop>CALC{"$SEARCH([uy], fluffy)"}%== returns ==3==
    * Example: ==%<nop>CALC{"$SEARCH([uy], fluffy, 3)"}%== returns ==6==
    * Example: ==%<nop>CALC{"$SEARCH([abc], fluffy,)"}%== returns ==0==
-   * Related: =[[#FuncFIND][$FIND()]]=, =[[#FuncREPLACE][$REPLACE()]]=
+   * Related: =[[#FuncFIND][$FIND()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=
 
 #FuncSET
 ---+++ SET( name, value ) -- set a variable for later use
@@ -541,6 +541,13 @@ Conventions for Syntax:
    * Syntax: ==$SQRT( num )==
    * Example: ==%<nop>CALC{"$SQRT(16)"}%== returns ==4==
 
+#FuncSUBSTRING
+---+++ SUBSTRING( text, start, num ) -- extract a substring out of a text string
+   * Extract =num= number of characters of text string =text=, starting at =start=. Starting position is 1; use a negative =start= to count from the end of the text
+   * Syntax: ==$SUBSTRING( text, start, num )==
+   * Example: ==%<nop>CALC{"$SUBSTRING(abcdefghijk,3,5)"}%== returns ==cdefg==
+   * Related: =[[#FuncFIND][$FIND()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
+
 #FuncSUBSTITUTE
 ---+++ SUBSTITUTE( text, old, new, instance, option ) -- substitute text
    * Substitutes =new= text for =old= text in a =text= string. =instance= specifies which occurance of =old= you want to replace. If you specify =instance=, only that instance is replaced. Otherwise, every occurance is changed to the new text. A literal search is performed by default; a %SYSTEMWEB%.RegularExpression search if the =option= is set to ==r==
@@ -549,7 +556,7 @@ Conventions for Syntax:
    * Example: ==%<nop>CALC{"$SUBSTITUTE(Q2-2002,2,3)"}%== returns ==Q3-3003==
    * Example: ==%<nop>CALC{"$SUBSTITUTE(Q2-2002,2,3,3)"}%== returns ==Q2-2003==
    * Example: ==%<nop>CALC{"$SUBSTITUTE(abc123def,[0-9],9,,r)"}%== returns ==abc999def==
-   * Related: =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
+   * Related: =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
 
 #FuncSUM
 ---+++ SUM( list ) -- sum of a list or range of cells
@@ -582,7 +589,7 @@ Conventions for Syntax:
    * Syntax: ==$TRANSLATE( text, from, to )==
    * Example: ==%<nop>CALC{"$TRANSLATE(boom,bm,cl)"}%== returns ==cool==
    * Example: ==%<nop>CALC{"$TRANSLATE(one, two,$comma,;)"}%== returns ==one; two==
-   * Related: =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=
+   * Related: =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=
 
 #FuncTIME
 ---+++ TIME( text ) -- convert a date string into a serialized date number
@@ -726,8 +733,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2001-2009, Peter Thoeny, [[http://www.twiki.net/][TWIKI.NET]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 24 Mar 2009 (17898) |
+|  Plugin Version: | 25 Mar 2009 (17900) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  25 Mar 2009: | Added $SUBSTRING() |
 |  24 Mar 2009: | Fixed bug in $REPLACE() if to-be-replaced string is "0"; fixed bug in $SUBSTITUTE() if replace string is empty; improved docs |
 |  13 Oct 2007: | Added $FORMATTIMEDIFF() |
 |  09 Sep 2007: | Enhanced documentation for $EVAL() and $INT() |
@@ -779,4 +787,4 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.VarCALC
 
--- TWiki:Main/PeterThoeny - 24 Mar 2009
+-- TWiki:Main/PeterThoeny - 25 Mar 2009

@@ -651,6 +651,15 @@ sub doFunc
             }
         }
 
+    } elsif( $theFunc eq "SUBSTRING" ) {
+        my( $string, $start, $num ) = split ( /,\s*/, $theAttr, 3 );
+        if( $start && $num ) {
+            $start-- unless ($start < 1);
+            eval '$result = substr( $string, $start, $num )';
+        } else {
+            $result = '';
+        }
+
     } elsif( $theFunc eq "TRANSLATE" ) {
         $result = $theAttr;
         # greedy match for comma separated parameters (in case first parameter has embedded commas)
