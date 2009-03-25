@@ -726,9 +726,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2001-2009, Peter Thoeny, [[http://www.twiki.net/][TWIKI.NET]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 24 Mar 2009 (17894) |
+|  Plugin Version: | 24 Mar 2009 (17898) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  24 Mar 2009: | Fixed bug in $REPLACE() if to-be-replaced string is "0"; improved docs |
+|  24 Mar 2009: | Fixed bug in $REPLACE() if to-be-replaced string is "0"; fixed bug in $SUBSTITUTE() if replace string is empty; improved docs |
 |  13 Oct 2007: | Added $FORMATTIMEDIFF() |
 |  09 Sep 2007: | Enhanced documentation for $EVAL() and $INT() |
 |  02 Jun 2007: | Added %TWIKIWEB%.VarCALC to have =%<nop>CALC{}%= listed in %TWIKIWEB%.TWikiVariables |

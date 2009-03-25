@@ -646,7 +646,7 @@ sub doFunc
             }
         } else {
             # global replace
-            if( eval '$string =~ s/$from/$to/g' && $string ) {
+            if( eval '$string =~ s/$from/$to/g' ) {
                 $result = $string;
             }
         }
