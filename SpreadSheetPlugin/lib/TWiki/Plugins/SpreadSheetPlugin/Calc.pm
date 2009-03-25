@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2001-2007 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2001-2009 Peter Thoeny, peter@thoeny.org
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -630,9 +630,8 @@ sub doFunc
         $start-- unless ($start < 1);
         $num = 0 unless( $num );
         $replace = "" unless( defined $replace );
-        if( eval 'substr( $string, $start, $num, $replace )' && $string ) {
-            $result = $string;
-        }
+        eval 'substr( $string, $start, $num, $replace )';
+        $result = $string;
 
     } elsif( $theFunc eq "SUBSTITUTE" ) {
         my( $string, $from, $to, $inst, $options ) = split( /,\s*/, $theAttr );
