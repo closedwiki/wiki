@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1237964998" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1238029428" format="1.1" version="$Rev$"}%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page
    at http://twiki.org/cgi-bin/view/Plugins/SpreadSheetPlugin or provide feedback
@@ -126,6 +126,15 @@ Conventions for Syntax:
    * Example: ==%<nop>CALC{"$DEF(R1:C1..R1:C3)"}%==
    * Related: =[[#FuncCOUNTSTR][$COUNTSTR()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncLIST][$LIST()]]=
 
+#FuncEMPTY
+---+++ EMPTY( text ) -- test for empty text
+   * Returns ==1== if =text= is empty, or ==0== if not
+   * Syntax: ==$EMPTY( _text_ )==
+   * Example: ==%<nop>CALC{"$EMPTY(foo)"}%== returns ==0==
+   * Example: ==%<nop>CALC{"$EMPTY()"}%== returns ==1==
+   * Example: ==%<nop>CALC{"$EMPTY($TRIM( ))"}%== returns ==1==
+   * Related: =[[#FuncEXACT][$EXACT()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncTRIM][$TRIM()]]=
+
 #FuncEVAL
 ---+++ EVAL( formula ) -- evaluate a simple mathematical formula
    * Addition, substraction, multiplication, division and modulus of numbers are supported. Any nesting is permitted
@@ -146,7 +155,7 @@ Conventions for Syntax:
    * Syntax: ==$EXACT( text1, _text2_ )==
    * Example: ==%<nop>CALC{"$EXACT(foo, Foo)"}%== returns ==0==
    * Example: ==%<nop>CALC{"$EXACT(foo, $LOWER(Foo))"}%== returns ==1==
-   * Related: =[[#FuncIF][$IF()]]=, =[[#FuncTRIM][$TRIM()]]=
+   * Related: =[[#FuncEMPTY][$EMPTY()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncTRIM][$TRIM()]]=
 
 #FuncEXEC
 ---+++ EXEC( formula ) -- execute a spreadsheet formula
@@ -163,6 +172,7 @@ Conventions for Syntax:
    * Syntax: ==$EXISTS( topic )==
    * Example: ==%<nop>CALC{"$EXISTS(<nop>%HOMETOPIC%)"}%== returns ==1==
    * Example: ==%<nop>CALC{"$EXISTS(<nop>ThisDoesNotExist)"}%== returns ==0==
+   * Related: =[[#FuncEXACT][$EXACT()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncTRIM][$TRIM()]]=
 
 #FuncEXP
 ---+++ EXP( num ) -- exponent (e) raised to the power of a number
@@ -178,7 +188,7 @@ Conventions for Syntax:
    * Example: ==%<nop>CALC{"$FIND(f, fluffy)"}%== returns ==1==
    * Example: ==%<nop>CALC{"$FIND(f, fluffy, 2)"}%== returns ==4==
    * Example: ==%<nop>CALC{"$FIND(@, fluffy, 1)"}%== returns ==0==
-   * Related: =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncSEARCH][$SEARCH()]]=
+   * Related: =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncSEARCH][$SEARCH()]]=
 
 #FuncFORMAT
 ---+++ FORMAT( type, precision, number ) -- format a number to a certain type and precision
@@ -243,7 +253,7 @@ Conventions for Syntax:
    * Example: ==%<nop>CALC{"$IF($T(R1:C5) > 1000, Over Budget, OK)"}%== returns ==Over Budget== if value in R1:C5 is over 1000, ==OK== if not
    * Example: ==%<nop>CALC{"$IF($EXACT($T(R1:C2),), empty, $T(R1:C2))"}%== returns the content of R1:C2 or ==empty== if empty
    * Example: ==%<nop>CALC{"$SET(val, $IF($T(R1:C2) == 0, zero, $T(R1:C2)))"}%== sets a variable conditionally
-   * Related: =[[#FuncAND][$AND()]]=, =[[#FuncEXACT][$EXACT()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncNOT][$NOT()]]=, =[[#FuncOR][$OR()]]=
+   * Related: =[[#FuncAND][$AND()]]=, =[[#FuncEMPTY][$EMPTY()]]=, =[[#FuncEXACT][$EXACT()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncNOT][$NOT()]]=, =[[#FuncOR][$OR()]]=
 
 #FuncINT
 ---+++ INT( formula ) -- evaluate formula and round down to nearest integer
@@ -260,6 +270,14 @@ Conventions for Syntax:
    * Syntax: ==$LEFT( )==
    * Example: ==%<nop>CALC{"$SUM($LEFT())"}%== returns the sum of cells to the left of the current cell
    * Related: =[[#FuncABOVE][$ABOVE()]]=, =[[#FuncRIGHT][$RIGHT()]]=
+
+#FuncLEFTSTRING
+---+++ LEFTSTRING( text, num ) -- extract characters at the beginning of a text string
+   * Retrieve the =num= of characters from the left end of =text=; the leftmost character is returned if =num= is missing
+   * Syntax: ==$LEFTSTRING( text, _num_ )==
+   * Example: ==%<nop>CALC{"$LEFTSTRING(abcdefg)"}%== returns ==a==
+   * Example: ==%<nop>CALC{"$LEFTSTRING(abcdefg, 5)"}%== returns ==abcde==
+   * Related: =[[#FuncFIND][$FIND()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
 
 #FuncLENGTH
 ---+++ LENGTH( text ) -- length of text in bytes
@@ -281,7 +299,7 @@ Conventions for Syntax:
    * Example: ==%<nop>CALC{"$LISTIF($item > 12, 14, 7, 25)"}%== returns ==14, 25==
    * Example: ==%<nop>CALC{"$LISTIF($NOT($EXACT($item,)), A, B, , E)"}%== returns non-empty elements ==A, B, E==
    * Example: ==%<nop>CALC{"$LISTIF($index > 2, A, B, C, D)"}%== returns ==C, D==
-   * Related: =[[#FuncIF][$IF()]]=, =[[#FuncLIST][$LIST()]]=, =[[#FuncLISTITEM][$LISTITEM()]]=, =[[#FuncLISTMAP][$LISTMAP()]]=, =[[#FuncLISTREVERSE][$LISTREVERSE()]]=, =[[#FuncLISTSIZE][$LISTSIZE()]]=, =[[#FuncLISTSORT][$LISTSORT()]]=, =[[#FuncLISTUNIQUE][$LISTUNIQUE()]]=, =[[#FuncSUM][$SUM()]]=
+   * Related: =[[#FuncEMPTY][$EMPTY()]]=, =[[#FuncEXACT][$EXACT()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncLIST][$LIST()]]=, =[[#FuncLISTITEM][$LISTITEM()]]=, =[[#FuncLISTMAP][$LISTMAP()]]=, =[[#FuncLISTREVERSE][$LISTREVERSE()]]=, =[[#FuncLISTSIZE][$LISTSIZE()]]=, =[[#FuncLISTSORT][$LISTSORT()]]=, =[[#FuncLISTUNIQUE][$LISTUNIQUE()]]=, =[[#FuncSUM][$SUM()]]=
 
 #FuncLISTITEM
 ---+++ LISTITEM( index, list ) -- get one element of a list
@@ -411,7 +429,7 @@ Conventions for Syntax:
    * Returns 0 if ==num== is not zero, 1 if zero
    * Syntax: ==$NOT( num )==
    * Example: ==%<nop>CALC{"$NOT(0)"}%== returns ==1==
-   * Related: =[[#FuncAND][$AND()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncOR][$OR()]]=
+   * Related: =[[#FuncAND][$AND()]]=, =[[#FuncEMPTY][$EMPTY()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncOR][$OR()]]=
 
 #FuncODD
 ---+++ ODD( num ) -- test for odd number
@@ -474,13 +492,21 @@ Conventions for Syntax:
    * Replace =num= number of characters of text string =text=, starting at =start=, with new text =new=. Starting position is 1; use a negative =start= to count from the end of the text
    * Syntax: ==$REPLACE( text, start, num, new )==
    * Example: ==%<nop>CALC{"$REPLACE(abcdefghijk,6,5,*)"}%== returns ==abcde*k==
-   * Related: =[[#FuncFIND][$FIND()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
+   * Related: =[[#FuncFIND][$FIND()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
 
 #FuncRIGHT
 ---+++ RIGHT( ) -- address range of cells to the right of the current cell
    * Syntax: ==$RIGHT( )==
    * Example: ==%<nop>CALC{"$SUM($RIGHT())"}%== returns the sum of cells to the right of the current cell
    * Related: =[[#FuncABOVE][$ABOVE()]]=, =[[#FuncLEFT][$LEFT()]]=
+
+#FuncRIGHTSTRING
+---+++ RIGHTSTRING( text, num ) -- extract characters at the end of a text string
+   * Retrieve the =num= of characters from the right end of =text=; the rightmost character is returned if =num= is missing
+   * Syntax: ==$RIGHTSTRING( text, _num_ )==
+   * Example: ==%<nop>CALC{"$RIGHTSTRING(abcdefg)"}%== returns ==g==
+   * Example: ==%<nop>CALC{"$RIGHTSTRING(abcdefg, 5)"}%== returns ==cdefg==
+   * Related: =[[#FuncFIND][$FIND()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
 
 #FuncROUND
 ---+++ ROUND( formula, digits ) -- round a number
@@ -506,7 +532,7 @@ Conventions for Syntax:
    * Example: ==%<nop>CALC{"$SEARCH([uy], fluffy)"}%== returns ==3==
    * Example: ==%<nop>CALC{"$SEARCH([uy], fluffy, 3)"}%== returns ==6==
    * Example: ==%<nop>CALC{"$SEARCH([abc], fluffy,)"}%== returns ==0==
-   * Related: =[[#FuncFIND][$FIND()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=
+   * Related: =[[#FuncFIND][$FIND()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=
 
 #FuncSET
 ---+++ SET( name, value ) -- set a variable for later use
@@ -546,7 +572,7 @@ Conventions for Syntax:
    * Extract =num= number of characters of text string =text=, starting at =start=. Starting position is 1; use a negative =start= to count from the end of the text
    * Syntax: ==$SUBSTRING( text, start, num )==
    * Example: ==%<nop>CALC{"$SUBSTRING(abcdefghijk,3,5)"}%== returns ==cdefg==
-   * Related: =[[#FuncFIND][$FIND()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
+   * Related: =[[#FuncFIND][$FIND()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
 
 #FuncSUBSTITUTE
 ---+++ SUBSTITUTE( text, old, new, instance, option ) -- substitute text
@@ -556,7 +582,7 @@ Conventions for Syntax:
    * Example: ==%<nop>CALC{"$SUBSTITUTE(Q2-2002,2,3)"}%== returns ==Q3-3003==
    * Example: ==%<nop>CALC{"$SUBSTITUTE(Q2-2002,2,3,3)"}%== returns ==Q2-2003==
    * Example: ==%<nop>CALC{"$SUBSTITUTE(abc123def,[0-9],9,,r)"}%== returns ==abc999def==
-   * Related: =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
+   * Related: =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
 
 #FuncSUM
 ---+++ SUM( list ) -- sum of a list or range of cells
@@ -589,7 +615,7 @@ Conventions for Syntax:
    * Syntax: ==$TRANSLATE( text, from, to )==
    * Example: ==%<nop>CALC{"$TRANSLATE(boom,bm,cl)"}%== returns ==cool==
    * Example: ==%<nop>CALC{"$TRANSLATE(one, two,$comma,;)"}%== returns ==one; two==
-   * Related: =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=
+   * Related: =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=
 
 #FuncTIME
 ---+++ TIME( text ) -- convert a date string into a serialized date number
@@ -624,7 +650,7 @@ Conventions for Syntax:
    * Removes all spaces from text except for single spaces between words
    * Syntax: ==$TRIM( text )==
    * Example: ==%<nop>CALC{"$TRIM( eat  spaces  )"}%== returns ==eat spaces==
-   * Related: =[[#FuncEXACT][$EXACT()]]=, =[[#FuncPROPERSPACE][$PROPERSPACE()]]=
+   * Related: =[[#FuncEMPTY][$EMPTY()]]=, =[[#FuncEXACT][$EXACT()]]=, =[[#FuncPROPERSPACE][$PROPERSPACE()]]=
 
 #FuncUPPER
 ---+++ UPPER( text ) -- upper case string of a text
@@ -733,9 +759,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2001-2009, Peter Thoeny, [[http://www.twiki.net/][TWIKI.NET]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 25 Mar 2009 (17900) |
+|  Plugin Version: | 25 Mar 2009 (17904) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  25 Mar 2009: | Added $SUBSTRING() |
+|  25 Mar 2009: | Added $EMPTY(), $LEFTSTRING(), $RIGHTSTRING(), $SUBSTRING() |
 |  24 Mar 2009: | Fixed bug in $REPLACE() if to-be-replaced string is "0"; fixed bug in $SUBSTITUTE() if replace string is empty; improved docs |
 |  13 Oct 2007: | Added $FORMATTIMEDIFF() |
 |  09 Sep 2007: | Enhanced documentation for $EVAL() and $INT() |

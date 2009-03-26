@@ -254,6 +254,10 @@ sub doFunc
             $result = $value;
         }
 
+    } elsif( $theFunc eq "EMPTY" ) {
+        $result = 1;
+        $result = 0 if( length( $theAttr ) > 0 );
+
     } elsif( $theFunc eq "EXACT" ) {
         $result = 0;
         my( $str1, $str2 ) = split( /,\s*/, $theAttr, 2 );
@@ -651,14 +655,20 @@ sub doFunc
             }
         }
 
-    } elsif( $theFunc eq "SUBSTRING" ) {
+    } elsif( $theFunc =~ /^(MIDSTRING|SUBSTRING)$/ ) {
         my( $string, $start, $num ) = split ( /,\s*/, $theAttr, 3 );
+        $result = '';
         if( $start && $num ) {
             $start-- unless ($start < 1);
             eval '$result = substr( $string, $start, $num )';
-        } else {
-            $result = '';
         }
+
+    } elsif( $theFunc =~ /^(LEFTSTRING|RIGHTSTRING)$/ ) {
+        my( $string, $num ) = split ( /,\s*/, $theAttr, 2 );
+        $num = 1 unless( $num );
+        my $start = 0;
+        $start = length( $string ) - $num if( $theFunc eq "RIGHTSTRING" );
+        eval '$result = substr( $string, $start, $num )';
 
     } elsif( $theFunc eq "TRANSLATE" ) {
         $result = $theAttr;
