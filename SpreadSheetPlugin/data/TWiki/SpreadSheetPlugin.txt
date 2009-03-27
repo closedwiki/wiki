@@ -257,9 +257,9 @@ Conventions for Syntax:
 
 #FuncINSERTSTRING
 ---+++ INSERTSTRING( text, start, new ) -- insert a string into a text string
-   * Insert =new= string into text string =text= at position =start=. Position starts at 1; use a negative =start= to count from the end of the text
+   * Insert =new= string into text string =text= to the right of =start= position. Position starts at 1; use a negative =start= to count from the end of the text
    * Syntax: ==$INSERTSTRING( text, start, new )==
-   * Example: ==%<nop>CALC{"$INSERTSTRING(abcdefg, 2, XYZ)"}%== returns ==aXYZbcdefg==
+   * Example: ==%<nop>CALC{"$INSERTSTRING(abcdefg, 2, XYZ)"}%== returns ==abXYZcdefg==
    * Example: ==%<nop>CALC{"$INSERTSTRING(abcdefg, -2, XYZ)"}%== returns ==abcdeXYZfg==
    * Related: =[[#FuncFIND][$FIND()]]=, =[[#FuncLEFTSTRING][$LEFTSTRING()]]=, =[[#FuncREPLACE][$REPLACE()]]=, =[[#FuncRIGHTSTRING][$RIGHTSTRING()]]=, =[[#FuncSEARCH][$SEARCH()]]=, =[[#FuncSUBSTITUTE][$SUBSTITUTE()]]=, =[[#FuncSUBSTRING][$SUBSTRING()]]=, =[[#FuncTRANSLATE][$TRANSLATE()]]=
 
@@ -767,7 +767,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2001-2009, Peter Thoeny, [[http://www.twiki.net/][TWIKI.NET]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 26 Mar 2009 (17908) |
+|  Plugin Version: | 26 Mar 2009 (17910) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
 |  26 Mar 2009: | Added $INSERTSTRING() |
 |  25 Mar 2009: | Added $EMPTY(), $LEFTSTRING(), $RIGHTSTRING(), $SUBSTRING() |

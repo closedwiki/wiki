@@ -673,7 +673,6 @@ sub doFunc
     } elsif( $theFunc eq "INSERTSTRING" ) {
         my( $string, $start, $new ) = split ( /,\s*/, $theAttr, 3 );
         $start = _getNumber( $start );
-        $start-- unless ($start < 1);
         eval 'substr( $string, $start, 0, $new )';
         $result = $string;
 
