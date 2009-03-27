@@ -670,6 +670,13 @@ sub doFunc
         $start = length( $string ) - $num if( $theFunc eq "RIGHTSTRING" );
         eval '$result = substr( $string, $start, $num )';
 
+    } elsif( $theFunc eq "INSERTSTRING" ) {
+        my( $string, $start, $new ) = split ( /,\s*/, $theAttr, 3 );
+        $start = _getNumber( $start );
+        $start-- unless ($start < 1);
+        eval 'substr( $string, $start, 0, $new )';
+        $result = $string;
+
     } elsif( $theFunc eq "TRANSLATE" ) {
         $result = $theAttr;
         # greedy match for comma separated parameters (in case first parameter has embedded commas)
