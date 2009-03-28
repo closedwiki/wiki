@@ -808,6 +808,8 @@ sub _externalLink {
         $opt = ' target="_top"';
     }
     $text ||= $url;
+    $text =~ s/ ([^ ])/ <xxxxx\/>$1/g; #Fix for Item6165: Broken link if link text contains e-mail address
+ 
     $url =~ s/ /%20/g;  #Item5787: if a url has spaces, escape them so the url has less chance of being broken by later parsing.
     # SMELL: Can't use CGI::a here, because it encodes ampersands in
     # the link, and those have already been encoded once in the
@@ -1172,11 +1174,7 @@ sub getRenderedVersion {
     $text =~ s/${STARTWW}\_(\S+?|\S[^\n]*?\S)\_$ENDWW/<em>$1<\/em>/gm;
     $text =~ s/${STARTWW}\=(\S+?|\S[^\n]*?\S)\=$ENDWW/_fixedFontText($1,0)/gem;
 
-    # Mailto
-    # Email addresses must always be 7-bit, even within I18N sites
-
-    # Normal mailto:foo@example.com ('mailto:' part optional)
-    $text =~ s/$STARTWW((mailto\:)?$TWiki::regex{emailAddrRegex})$ENDWW/_mailLink( $this, $1 )/gem;
+    # Fix for Item6165: Moved mailto rendering to below [[][]] rendering (broken link if link text has e-mail address)
 
     # Handle [[][] and [[]] links
     # Escape rendering: Change ' ![[...' to ' [<nop>[...', for final unrendered ' [[...' output
@@ -1184,6 +1182,10 @@ sub getRenderedVersion {
     # Spaced-out Wiki words with alternative link text
     # i.e. [[$1][$3]]
     $text =~ s/\[\[([^\]\[\n]+)\](\[([^\]\n]+)\])?\]/_handleSquareBracketedLink( $this,$theWeb,$theTopic,$1,$3)/ge;
+
+    # Mailto e-mail addresses must always be 7-bit, even within I18N sites
+    # Normal mailto:foo@example.com ('mailto:' part optional)
+    $text =~ s/$STARTWW((mailto\:)?$TWiki::regex{emailAddrRegex})$ENDWW/_mailLink( $this, $1 )/gem;
 
     unless( TWiki::isTrue( $prefs->getPreferencesValue('NOAUTOLINK')) ) {
         # Handle WikiWords
