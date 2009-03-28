@@ -808,7 +808,6 @@ sub _externalLink {
         $opt = ' target="_top"';
     }
     $text ||= $url;
-    $text =~ s/ ([^ ])/ <xxxxx\/>$1/g; #Fix for Item6165: Broken link if link text contains e-mail address
  
     $url =~ s/ /%20/g;  #Item5787: if a url has spaces, escape them so the url has less chance of being broken by later parsing.
     # SMELL: Can't use CGI::a here, because it encodes ampersands in
