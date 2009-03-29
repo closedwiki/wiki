@@ -312,16 +312,17 @@ sub _buildNewTopic {
         } else {
             if ( $location ) {
                 if ( $position eq 'BEFORE' ) {
-                    $text =~ s/(?<!location\=\")($location)/$output$1/m;
+                   $text .= $output unless( $text =~ s/(?<!location\=\")($location)/$output$1/m );
                 } else { # AFTER
-                    $text =~ s/(?<!location\=\")($location)/$1$output/m;
+                   $text .= $output unless( $text =~ s/(?<!location\=\")($location)/$1$output/m );
                 }
+               $text .= "\n" unless $text =~ m/\n$/s;
             } elsif ( $anchor ) {
                 # position relative to anchor
                 if ( $position eq 'BEFORE' ) {
-                    $text =~ s/^($anchor\s)/$output$1/m;
+                   $text .= $output unless( $text =~ s/^($anchor\s)/$output$1/m );
                 } else { # AFTER
-                    $text =~ s/^($anchor\s)/$1$output/m;
+                   $text .= $output unless( $text =~ s/^($anchor\s)/$1$output/m );
                 }
             } else {
                 # Position relative to index'th comment
