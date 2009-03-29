@@ -169,6 +169,7 @@ data/TWiki/TWikiReferenceManual.txt 0644
 data/TWiki/TWikiReleaseNotes04x00.txt 0644
 data/TWiki/TWikiReleaseNotes04x01.txt 0644
 data/TWiki/TWikiReleaseNotes04x02.txt 0644
+data/TWiki/TWikiReleaseNotes04x03.txt 0644
 data/TWiki/TWikiRenderingShortcut.txt 0644
 data/TWiki/TWikiScripts.txt 0644
 data/TWiki/TWikiShorthand.txt 0644
@@ -631,6 +632,7 @@ locale/fi.po 0444
 locale/fr.po 0444
 locale/it.po 0444
 locale/ja.po 0444
+locale/ko.po 0444
 locale/nl.po 0444
 locale/pl.po 0444
 locale/pt.po 0444
