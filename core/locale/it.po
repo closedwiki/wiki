@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2009-03-26 19:08+0100\n"
+"PO-Revision-Date: 2009-03-29 06:20+0200\n"
 "Last-Translator: max\n"
 "Language-Team:  <it@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -399,7 +399,7 @@ msgstr ""
 "*Importante:* le informazioni contenute in questo form saranno memorizzate "
 "in un database sul server TWiki. Questo database è accessibile a chiunque ha "
 "accesso al server via web (sebbene le  passwords verranno criptate e gli "
-"indirizzi e-mail bascosti per prevenire lo spamming). La tua nazione, o la "
+"indirizzi e-mail nascosti per prevenire lo spamming). La tua nazione, o la "
 "nazione dove è collocato il server può avere leggi per la protezione dei "
 "dati che regolano la manutenzione di tale database. In caso di dubbio "
 "contatta %1 per i dettagli circa la politica di protezione dei dati in "
@@ -520,7 +520,7 @@ msgid ""
 "A color starts with a # sign, followed by 6 hexadecimal numbers, e.g. "
 "=#FFFF00=."
 msgstr ""
-"Un codice colore inizia con un # , seguito da 6 cifre esadecimalirs, es."
+"Un codice colore inizia con un # , seguito da 6 cifre esadecimali, es."
 "=#FFFF00=."
 
 #. ($data->{Email})
@@ -838,7 +838,7 @@ msgstr "Non posso creare il web %1 perchè esistente"
 
 #: templates/messages.tmpl:75 templates/messages.tmpl:81
 msgid "Cannot rename %1 to %2 because it already exists."
-msgstr "Non posso rinominare %1 , %2 perchè esistente."
+msgstr "Non posso rinominare %1 , %2 perché esistente."
 
 #: data/TWiki/WebSearchAdvanced.txt:57
 msgid "Case sensitive"
@@ -1338,11 +1338,11 @@ msgstr ""
 
 #: templates/messages.tmpl:233
 msgid "Error registering new user"
-msgstr "Errore durante la refistrazione del nuovo utente"
+msgstr "Errore durante la registrazione del nuovo utente"
 
 #: templates/messages.tmpl:224
 msgid "Error registering user %1"
-msgstr "Errore durante la refistrazione dell'utente %1"
+msgstr "Errore durante la registrazione dell'utente %1"
 
 #: templates/messages.tmpl:370
 msgid "Error saving topic"
@@ -1510,7 +1510,7 @@ msgstr "Come puoi attivare  la tua %1 registrazione"
 msgid ""
 "However, the filename has been changed from %1 to %2. Please make a note of "
 "it."
-msgstr "Comunque il nome del file è stato camiato da %1 a %2. Ricordatelo."
+msgstr "Comunque il nome del file è stato cambiato da %1 a %2. Ricordatelo."
 
 #: templates/login.tmpl:63
 msgid "I forgot my password"
@@ -2241,7 +2241,7 @@ msgid ""
 "Remember to update your user topic if you want your e-mail change to be "
 "reflected there as well."
 msgstr ""
-"Ricordati di agggiornare la tua pagina personale se vuoi che la variazione "
+"Ricordati di aggiornare la tua pagina personale se vuoi che la variazione "
 "dell'indirizzo e-mail venga riportata anche qui"
 
 #: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:5
@@ -2464,7 +2464,7 @@ msgstr "Seleziona"
 
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:20
 msgid "Select a new local file to update attachment"
-msgstr "Selezina un nuovo file locale per aggiornare l'allegato"
+msgstr "Seleziona un nuovo file locale per aggiornare l'allegato"
 
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:33
 msgid "Select all"
@@ -2536,10 +2536,10 @@ msgid ""
 msgstr ""
 "Le preferenze di livello sito si trovano in %1, comunque la pagina di "
 "preferenze %2 possiede una priorità maggiore e dovrebbe essere usata per le "
-"personalizzazioni locali. Questo permette aggiornamenti più semplici perchè "
+"personalizzazioni locali. Questo permette aggiornamenti più semplici perché "
 "non ci si dovrà preoccupare che i settaggi di default sovrascrivano quelli "
 "personali. Sarà più semplice mantenerle se verranno copiate solo le "
-"preferene che si intendono modificare."
+"preferenze che si intendono modificare."
 
 #: templates/attachtables.tmpl:4
 msgid "Size"
@@ -2651,7 +2651,7 @@ msgid ""
 "\"Change language\". Otherwise, follow the \"Cancel\" link on the bottom of "
 "the page to return to the previous topic."
 msgstr ""
-"L'interfaccai utente TWiki è disponibile in diverse lingue. Se vuoi cambiare "
+"L'Interfaccia utente TWiki è disponibile in diverse lingue. Se vuoi cambiare "
 "la lingua per questa sessione scegli una delle seguenti e premi \"Cambia "
 "lingua\". Altrimenti il link \"Rinuncia\" in fondo alla pagina per ritornare "
 "alla pagina precedente."
@@ -2888,8 +2888,8 @@ msgid ""
 msgstr ""
 "Questo è un servizio volontario per essere automaticamente avvertiti via e-"
 "mail ogni volta le pagine del web %1 cambiano. Trattasi di una comodità così "
-"che non si abbia bisogno di controllae personalmente se qualcosa è cambiato. "
-"Per sottoscrivere il servizio, aggiungi a questa lista un bullet con il tuo %"
+"che non si abbia bisogno di controllare personalmente se qualcosa è cambiato. "
+"Per sottoscrivere il servizio, aggiungi a questa lista un pallino con il tuo %"
 "2 in ordine alfabetico: "
 
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:7
@@ -2915,12 +2915,12 @@ msgid ""
 "This name has been chosen so it doesn't conflict with any other topics "
 "already in the %1 web."
 msgstr ""
-"Questo nome è stato sclto in modo da non confliggere con quello delle altre "
+"Questo nome è stato scelto in modo da non confliggere con quello delle altre "
 "pagine nel web %1."
 
 #: templates/messages.tmpl:337
 msgid "This requires the form definition to be present."
-msgstr "Ciò richiede la presenza del form di refinizione."
+msgstr "Ciò richiede la presenza del form di definizione."
 
 #: templates/messages.tmpl:281
 msgid "This site requires at least %1 character passwords"
@@ -2935,7 +2935,7 @@ msgid ""
 "This topic name is not recommended because it will not be linked "
 "automatically. See %1 for details"
 msgstr ""
-"Questo nome di pagina non è consigliato perchè non sarebbe automaticamente "
+"Questo nome di pagina non è consigliato perché non sarebbe automaticamente "
 "collegato. Vedi %1 per i dettagli"
 
 #: templates/viewprint.tmpl:13
@@ -3384,7 +3384,7 @@ msgid ""
 "You may be able to get your TWiki administrator to change the settings if "
 "they are inappropriate for your environment."
 msgstr ""
-"Puoi chiedere all'amministratore TWiki dicambiare il valore dei parametri "
+"Puoi chiedere all'amministratore TWiki di cambiare il valore dei parametri "
 "relativi se pensi che siano inappropriati per il tuo ambiente."
 
 #: templates/messages.tmpl:520
@@ -3398,7 +3398,7 @@ msgstr ""
 #: templates/messages.tmpl:170
 msgid "You may need to close your browser to make this change take effect."
 msgstr ""
-"Potrebbe essere necessario chiudere il browser affinchè questo cambiamento "
+"Potrebbe essere necessario chiudere il browser affinché questo cambiamento "
 "abbia effetto."
 
 #: templates/registerconfirm.tmpl:11
@@ -3444,7 +3444,7 @@ msgid ""
 msgstr ""
 "Il codice di attivazione a te riservato è stato inviato a %1. Puoi cliccare "
 "sul link nella mail ricevuta o inserire il codice nel box qui sotto per "
-"attivare líscrizione. (Il codice ha il seguente formato \"TuoNome.xxxxxxxxxx"
+"attivare l'iscrizione. (Il codice ha il seguente formato \"TuoNome.xxxxxxxxxx"
 "\")"
 
 #: templates/oopslanguagechanged.tmpl:16
@@ -3562,7 +3562,7 @@ msgstr "modifica,aggiorna, revisione precedente, sposta, cancella..."
 
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:33
 msgid "checkboxes of referenced topics"
-msgstr "marcature delle pagine refenziate"
+msgstr "marcature delle pagine referenziate"
 
 #: templates/messages.tmpl:406
 msgid "don't forget to check your Topic Settings"
@@ -3726,7 +3726,7 @@ msgstr "value='Rinuncia' accesskey='c'"
 
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:12
 msgid "value='Discard' accesskey='d'"
-msgstr "value='Annulla i cambiamenti' accesskey='d'"
+msgstr "value='Annulla i cambiamenti accesskey='d'"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
 msgid "value='Preview' accesskey='p'"
