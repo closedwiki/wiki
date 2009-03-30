@@ -27,7 +27,8 @@ __New Features and Enhancements of TWiki Release 4.3__
    * *Miscellaneous Feature Enhancements*
       * Control over variable expansion at topic creation time
       * 17 new TWikiDocGraphics images
-      * Include URL supporting list of domains to exclude from proxy
+      * Include URL supports list of domains to exclude from proxy
+      * Adding Korean language
 
    * *Plugin Enhancements*
       * SpreadSheetPlugin: 5 new functions
