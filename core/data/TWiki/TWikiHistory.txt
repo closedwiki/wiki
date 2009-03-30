@@ -5,7 +5,7 @@
 %TOC%
 
 #GeorgetownRelease
----++ TWiki Release 4.3 (Georgetown) released %$DATE%
+---++ TWiki Release 4.3 (Georgetown) released 2009-03-30
 
 __New Features and Enhancements of TWiki Release 4.3__
 
@@ -14,7 +14,7 @@ __New Features and Enhancements of TWiki Release 4.3__
       * S/MIME support to sign administrative e-mails
 
    * *Usability Enhancements*
-      * Red-links instead of question mark links to link to non-existing topics
+      * Replace question mark links with red-links to point to non-existing topics
 
    * *Enterprise Collaboration Enhancements*
       * Pre-installed HeadlinesPlugin to show headline newsfeeds in TWiki topics
