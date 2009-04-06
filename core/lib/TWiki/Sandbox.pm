@@ -389,7 +389,7 @@ sub sysCommand {
             close $handle;
             $exit = ( $? >> 8 );
             if ( $exit == $key && $data =~ /$key: (.*)/ ) {
-                throw Error::Simple( 'exec failed: '. $1 );
+                throw Error::Simple( 'exec failed: '. $1 .' '.$path );
             }
         } else {
             # Child - run the command
@@ -426,7 +426,7 @@ sub sysCommand {
             $pid = wait; # wait for child process so we can get exit status
             $exit = ( $? >> 8 );
             if ( $exit == $key && $data =~ /$key: (.*)/ ) {
-                throw Error::Simple( 'exec failed: '. $1 );
+                throw Error::Simple( 'exec failed: '. $1 .' '.$path );
             }
 
         } else {
