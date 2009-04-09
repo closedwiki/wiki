@@ -3552,7 +3552,8 @@ sub REVARG {
 sub ENCODE {
     my( $this, $params ) = @_;
     my $type = $params->{type} || 'url';
-    my $text = $params->{_DEFAULT} || '';
+    my $text = $params->{_DEFAULT};
+    $text = '' unless( defined $text && $text ne '' );
     return _encode($type, $text);
 }
 
