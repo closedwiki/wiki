@@ -3769,7 +3769,7 @@ sub URLPARAM {
         $value =~ s/\r?\n/$newLine/go if( defined $newLine );
         $value = _encode( $encode, $value );
     }
-    unless( defined $value ) {
+    unless( defined $value && $value ne '' ) {
         $value = $params->{default};
         $value = '' unless defined $value;
     }
