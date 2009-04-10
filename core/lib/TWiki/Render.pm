@@ -2160,9 +2160,15 @@ sub protectFormFieldValue {
         $value = breakName( $value, $attrs->{break} );
     }
 
+        
     # Item3489, Item2837. Prevent $vars in formfields from
     # being expanded in formatted searches.
-    if( $attrs && $attrs->{protectdollar}) {
+    # Fix-Item6167 Removing $attrs->{protectdollar} from
+    # if( $attrs && $attrs->{protectdollar}) line to fix Item6167
+    # the $attrs->{protectdollar} is mostly set to 1 in Search, but never reached up
+    # this point.
+
+    if( $attrs ) {
         $value =~ s/\$(n|nop|quot|percnt|dollar)/\$<nop>$1/g;
     }
 
