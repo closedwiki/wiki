@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1239424952" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1239428509" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Upgrade Guide
 
@@ -36,6 +36,8 @@ The main steps are:
    1 Copy the users from old installation to the new incl all their topics from Main
    1 Apply tailorings to your Skin (logos, menu bars etc)
    1 Apply preferences from old installation
+
+%T% After the extensions are installed (or upgraded) in step 2, take a "golden" backup. That will come in handy for your next patch or upgrade: By checking the differences between the golden copy and your production copy, you will be able to identify all the modifications that you have applied to the core or extensions.
    
 ---+++ Installation
 
