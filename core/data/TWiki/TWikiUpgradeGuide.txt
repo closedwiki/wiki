@@ -1,27 +1,26 @@
-%META:TOPICINFO{author="TWikiContributor" date="1200013119" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1239424952" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Upgrade Guide
 
-_This guide covers upgrading from a previous version of TWiki (such as Cairo or TWiki4.0) to TWiki 4.2_
+_This guide covers upgrading from a previous version of TWiki (such as Cairo or TWiki-4.0) to TWiki-4.3_
 
 %TOC%
 
 ---++ Overview
 
-TWiki-4.0.0 was a major new release. TWiki-4.1.0 was a minor release without dramatic changes since 4.0.0. TWiki-4.2.0 is also a minor release containing a few new features that can be seen by the end user, a large number of bug fixes, and a face lift for the skin. It also contains some important updates under the hood to the way users are handled which enables new types of authentication and integration with other systems. The most important new feature is the QuerySearch feature.
+TWiki-4.0.0 was a major new release. TWiki-4.1.x, TWiki-4.2.x, TWiki-4.3.x minor releases containing new features that can be seen by the end user, a large number of bug fixes. Use the TWikiInstallationGuide if you do not have data to carry forward.
 
 ---++ Upgrade Requirements
 
    * Please review the AdminSkillsAssumptions before you upgrade TWiki
-   * Review TWiki:TWiki.TWikiUpgradeTo04x02 for latest information and experience notes.
+   * Review TWiki:TWiki.TWikiUpgradeTo04x03 for latest information and experience notes.
    * To upgrade from a release prior to TWiki Release 01-Sep-2004, start with TWiki:TWiki.UpgradingTWiki on TWiki.org
-   * To upgrade from a standard TWiki Release 01-Sep-2004 to the latest TWiki-4.X Production Release, follow the instructions below
+   * To upgrade from a standard TWiki Release 01-Sep-2004 to the latest TWiki-4.3 Production Release, follow the instructions below
    * Once the upgrade has been applied, an existing earlier installation will still be able to read all the topics, but should not be used to write. Make sure you take a backup!
-   * Not all Plugins written for TWiki Release 01-Sep-2004 are fully supported with 4.X. Make sure the Plugins you use can be upgraded as well!
 
----++ Major Changes Compared to TWiki Release 01-Sep-2004 and TWiki Release 4.0.0
+---++ Major Changes Compared to Earlier TWiki Releases
 
-See TWikiReleaseNotes04x00, TWikiReleaseNotes04x01 and TWikiReleaseNotes04x02
+See TWikiReleaseNotes04x00, TWikiReleaseNotes04x01, TWikiReleaseNotes04x02 and TWikiReleaseNotes04x03
 
 
 #ManualUpgradeProcedure
@@ -56,7 +55,7 @@ The main steps are:
 
 ---+++ Install Extensions
 
-   * Note that not all extensions that worked in Cairo have been updated to work with TWiki4.X. Many Cairo plugins work fine. Some do not. Many plugins have been upgraded to work with TWiki4.0 and later.
+   * Note that not all extensions that worked in Cairo have been updated to work with TWiki-4.0. Many Cairo plugins work fine. Some do not. Many plugins have been upgraded to work with TWiki-4.0 and later.
    * From TWiki-4.1.0 the [[%SCRIPTURLPATH{"configure"}%][configure]] script which you ran during installation supports installation of additional plugins.
    * Manual installation is possible. Follow the instruction on the Plugin page at twiki.org.
    * Check the plugin topics from your old TWiki installation. There may be plugin settings that you want to transfer to the new TWiki installation.
@@ -84,7 +83,7 @@ The main steps are:
 ---+++ Copy Users And Their Topics From Main Web
 
    * Copy all the topics from the Main web and corresponding pub/Main directories from the old TWiki to the new TWiki but do not overwrite any of the new topics already inside the new Main directory!
-   * Manually merge all the users from the old =Main.TWikiUsers= topic to the new TWiki. If you upgrade from Cairo you can simply use the old file and add the missing new system users to the list of users. If you upgrade from TWiki-4.0.X simply use the old topic. Starting from 4.2.0 TWiki no longer ships with a =Main.TWikiUsers= topic. When you register the first user TWiki now checks for an existing =Main.TWikiUsers= and if it does not exist it gets created.
+   * Manually merge all the users from the old =Main.TWikiUsers= topic to the new TWiki. If you upgrade from Cairo you can simply use the old file and add the missing new system users to the list of users. If you upgrade from TWiki-4.0.x simply use the old topic. Starting from 4.2.0 TWiki no longer ships with a =Main.TWikiUsers= topic. When you register the first user TWiki now checks for an existing =Main.TWikiUsers= and if it does not exist it gets created.
    * If you use =data/.htpasswd= for authentication copy this file from the old TWiki to the new.
       * If you upgrade from Cairo and you are using the Htpasswd login manager, then note that email addresses for users have moved out of user topics and into the password file. There is a script that performs this extra upgrade step for you - see =tools/upgrade_emails.pl=.
    * The old sandbox web may have a lot of useful topic and users may use it actively for drafts. Manually select the topics (remember the corresponding pub directories) from the old Sandbox web and copy them to the new TWiki. Decide if you want to overwrite the sandbox homepage and left menu bar or keep the new.
@@ -94,7 +93,7 @@ The main steps are:
 
 ---+++ Apply Customizations To The Skin
 
-   * Not many of the old Cairo skins work well with TWiki4.X.
+   * Not many of the old Cairo skins work well with TWiki-4.0 and later.
    * Add Logos, update top bar and left bar as required.
    * Apply any desired changes to style sheets and templates. The default PatternSkin has been totally rewritten since Cairo and once more in 4.0.2. Since then changes to PatternSkin have been minor and you may be able to carry over most simpler tailorings directly from 4.0.2-4.0.5.
    * Additional resources:
@@ -117,13 +116,13 @@ Some pages in the TWiki web are meant to be customized after choice of authentic
    * =TWiki.ResetPassword=
    * =TWiki.ChangeEmailAddress=
 
----++ Upgrading from Cairo to TWiki4 (additional advice)
+---++ Upgrading from Cairo to TWiki-4 (additional advice)
 
 ---+++ Favicon
 
-TWiki4's PatternSkin introduces the use of the favicon feature which most browsers use to show a small icon in front of the URL and for bookmarks.
+TWiki-4's PatternSkin introduces the use of the favicon feature which most browsers use to show a small icon in front of the URL and for bookmarks.
 
-In TWiki4 it is assumed that each web has a favicon.ico file attached to the !WebPreferences topic. When you upgrade from Cairo to TWiki4 you do not have this file and you will get flooded with errors the error log of your web server. There are two solutions to this.
+In TWiki-4 it is assumed that each web has a favicon.ico file attached to the !WebPreferences topic. When you upgrade from Cairo to TWiki-4 you do not have this file and you will get flooded with errors the error log of your web server. There are two solutions to this.
 
    * Attach a favicon.ico file to !WebPreferences in each web.
    * Preferred: Change the setting of the location of favicon.ico in !TWikiPreferences so all webs use the favicon.ico from the TWiki web. This is the fastest and easiest solution.
@@ -136,7 +135,7 @@ To change the location of favicon.ico in !TWikiPreferences to the TWiki web add 
 
 ---+++ !TWikiUsers topic in Main web
 
-Your Cairo [[Main.TWikiUsers][Main.TWikiUsers]] topic will work in TWiki4 but you will need to ensure that these 4 users from the default TWiki4 version of !TWikiUsers are copied to the existing !TWikiUsers topic. !TWikiGuest is probably already there but the others are new
+Your Cairo [[Main.TWikiUsers][Main.TWikiUsers]] topic will work in TWiki-4 but you will need to ensure that these 4 users from the default TWiki-4 version of !TWikiUsers are copied to the existing !TWikiUsers topic. !TWikiGuest is probably already there but the others are new
    * *TWikiContributor* - placeholder for a TWiki developer, and is used in TWiki documentation
    * *TWikiGuest* - guest user, used as a fallback if the user can't be identified
    * *TWikiRegistrationAgent* - special user used during the new user registration process
@@ -235,7 +234,7 @@ From 4.2.0 this file is no longer included in the TWiki distribution. When you r
 
 A new directory =working= which per default is located in the twiki root, has been introduced which contains:
 
-   * registration_approvals - with 4.2.0 it is moved to here from the data directory)
+   * registration_approvals - with 4.2.0 it is moved to here from the data directory.
    * tmp - so we now avoid having to fight with special access rights and /tmp directory that gets cleaned out when booting.
    * work_areas - with 4.2.0 it is moved to here from the pub directory. Configure automatically moved the directory when you upgrade.
 
@@ -244,7 +243,7 @@ Note: Remember to restrict access to this new directory when you upgrade.
 The configuration setting ={WorkingDir}= defines the container directory for temporary files, extensions' work areas, and intermediate registration data.  The default is =working= under your installation root.
 
 Take care for that change if you run your own routine to delete obsolete session files, which will now be found under =working/tmp/cgisess*=.
-   
+
 ---+++ New Internal Admin Login
 
 TWiki 4.2 introduces a new _Internal Admin Login_ feature which uses "admin" (configurable) as username and the password used for configure to become temporary administrator. When you do a new installation you need to use this feature as !Main.TWikiAdminGroup is now access restricted by default to avoid security attacks during the hours an installation may take. From configure there is a link to the !TWikiAdminGroup topic and on !TWikiAdminGroup the step by step instructions are written in a yellow box. Our advice is not to remove this help text in case you need it later.
@@ -252,3 +251,5 @@ TWiki 4.2 introduces a new _Internal Admin Login_ feature which uses "admin" (co
 %STOPINCLUDE%
 
 __Related Topics:__ AdminDocumentationCategory, TWiki:TWiki.UpgradingTWiki, TWiki:TWiki.UpgradingTWiki04x00PatchReleases, TWiki:TWiki.InstallingTWiki#OtherPlatforms, TWiki:TWiki.ApacheConfigGenerator, TWiki:TWiki.SettingFileAccessRightsLinuxUnix
+
+__Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.KennethLavrsen, TWiki:Main.CrawfordCurrie, TWiki:Main.HaraldJoerg, TWiki:Main.BobBagwill
