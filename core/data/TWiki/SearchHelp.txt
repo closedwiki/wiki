@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1237752643" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1239664354" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebSearch"}%
 ---+!! Search Help
 
@@ -30,7 +30,13 @@ Regular expression search searches for a set of regular expression patterns:
 
 ---++ Formatted Searches
 
-You can embed a nicely [[FormattedSearch][formatted search]] in a topic by using the =%<nop>SEARCH{}%= variable described in VarSEARCH.
+You can embed a nicely [[FormattedSearch][formatted search]] in a topic by using the =%<nop>SEARCH{}%= variable described in VarSEARCH. Searches can be of different types; among others, TWiki offers keyword search, [[RegularExpression][regular expression search]] and a flexible [[QuerySearch][SQL-like query language]].
+
+---++ Search TWiki Variables
+
+[[TWikiVariables][TWiki Variables]] are text strings - =%<nop>VARIABLE%= or =%<nop>VARIABLE{ parameter="value" }%= - that expand into content whenever a topic is rendered for viewing. TWiki Variables are useful to create TWiki applications and workflows, but there are also variables for content creation such as =%<nop>TOC%= to show a table of content and =%<nop>INCLUDE{}%= to include another page.
+
+You can [[TWikiVariablesSearch][search TWiki Variables]].
 
 ---++ Search Preferences
 
@@ -43,4 +49,4 @@ TWikiPreferences defines these search preferences:
    * =SEARCHSTOPWORDS=: List of stop words (common words and characters to exclude from a keyword search)
       * Currently =%SEARCHSTOPWORDS%=
 
-__Related Topics:__ UserDocumentationCategory
+__Related Topics:__ UserDocumentationCategory, WebSearch, WebSearchAdvanced, FormattedSearch, RegularExpression, QuerySearch, TWikiVariablesSearch

@@ -1,5 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="1167863098" format="1.1" version="$Rev$"}%
----++ TWiki Variables Quickstart
+%META:TOPICINFO{author="TWikiContributor" date="1239665315" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+---+ TWiki Variables Quickstart
 
 %STARTINCLUDE%
 
@@ -17,3 +18,5 @@ TWiki Variables are fully expanded _before_ any of the TWiki text formatting rul
 
 %ICON{"tip"}% To "escape" a variable, prefix it with an exclamation mark. Write: =!%<nop>SOMEVARIABLE%= to get: !%SOMEVARIABLE%.
 %STOPINCLUDE%
+
+__Related Topics:__ UserDocumentationCategory, TWikiVariables, TWikiVariablesSearch, TextFormattingRules
