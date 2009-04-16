@@ -24,7 +24,7 @@
 The User mapping is the process by which TWiki maps from a username (a login name)
 to a wikiname and back. It is also where groups are defined.
 
-By default TWiki maintains user topics and group topics in the %MAINWEB% that
+By default TWiki maintains user topics and group topics in the %USERSWEB% that
 define users and group. These topics are
    * !TWikiUsers - stores a mapping from usernames to TWiki names
    * !WikiName - for each user, stores info about the user
@@ -66,6 +66,7 @@ our $TWIKI_USER_MAPPING_ID = '';
 sub new {
     my( $class, $session ) = @_;
 
+    # The null mapping name is reserved for TWiki for backward-compatibility
     my $this = $class->SUPER::new( $session, $TWIKI_USER_MAPPING_ID );
 
     my $implPasswordManager = $TWiki::cfg{PasswordManager};
@@ -78,7 +79,7 @@ sub new {
     #if password manager says sorry, we're read only today
     #'none' is a special case, as it means we're not actually using the password manager for
     # registration.
-    if ($this->{passwords}->readOnly() && ($TWiki::cfg{PasswordManager} ne 'none')) {
+    if ($this->{passwords}->readOnly() && ($TWiki::cfg{PasswordManager} !~ /^(none|TWiki::Users::LdapUser)$/)) {         
         $session->writeWarning( 'TWikiUserMapping has TURNED OFF EnableNewUserRegistration, because the password file is read only.' );
         $TWiki::cfg{Register}{EnableNewUserRegistration} = 0;
     }
@@ -288,8 +289,8 @@ sub addUser {
                 'New password did not match existing password for this user');
         }
         # User exists, and the password was good.
-    } else {
-        # add a new user
+    } elsif( $TWiki::cfg{PasswordManager} ne 'TWiki::Users::LdapUser' ) {         
+       # add a new user
 
         unless( defined( $password )) {
             require TWiki::Users;
@@ -374,6 +375,7 @@ sub addUser {
         # brand new file - add to end
         $result .= "$entry$today\n";
     }
+
     try {
         $store->saveTopic(
             # SMELL: why is this Admin and not the RegoAgent??
@@ -541,6 +543,7 @@ sub eachGroupMember {
     my $users = $this->{session}->{users};
 
     my $members = [];
+
     if( !$expanding{$group} &&
           $store->topicExists( $TWiki::cfg{UsersWebName}, $group )) {
         $expanding{$group} = 1;
@@ -1048,7 +1051,7 @@ sub _expandUserList {
 
     $names ||= '';
     # comma delimited list of users or groups
-    # i.e.: "%MAINWEB%.UserA, UserB, Main.UserC # something else"
+    # i.e.: "%USERSWEB%.UserA, UserB, Main.UserC # something else"
     $names =~ s/(<[^>]*>)//go;     # Remove HTML tags
 
     my @l;
