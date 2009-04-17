@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1239749219" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1240003685" format="1.1" version="$Rev$"}%
 ---++ My Links
 
 %STARTSECTION{ type="expandvariables" }%
@@ -16,8 +16,7 @@
    * Show tool-tip topic info on mouse-over of [[%SYSTEMWEB%.WikiWord][WikiWord]] links, on or off:
       * Set LINKTOOLTIPINFO = off
 
-__Note:__ TWiki has system wide preferences settings defined in [[%SYSTEMWEB%.%WIKIPREFSTOPIC%][%WIKIPREFSTOPIC%]]. You can customize preferences settings to your needs: To overload a system setting, (1) do a "raw view" on [[%SYSTEMWEB%.%WIKIPREFSTOPIC%][%WIKIPREFSTOPIC%]], (2) copy a =Set VARIABLE = value= bullet, (3) do a "raw edit" of this home page, (4) add the bullet to the bullet list below, and (5) customize the value as needed. Make sure the settings render as real bullets (in "raw edit", a bullet requires 3 or 6 spaces before the asterisk).
-
+%INCLUDE{%SYSTEMWEB%.PersonalPreferencesHelp}%
 
 ---++ Related Topics
 
@@ -69,7 +68,7 @@ Text for multilingual wiki community, copy from here to %<nop>ENDSECTION{type="t
    * %MAKETEXT{"Show tool-tip topic info on mouse-over of [_1] links, on or off:" args="[[%SYSTEMWEB%.WikiWord][WikiWord]]"}%
       * Set LINKTOOLTIPINFO = off
 
-__Note:__ TWiki has system wide preferences settings defined in [[%SYSTEMWEB%.%WIKIPREFSTOPIC%][%WIKIPREFSTOPIC%]]. You can customize preferences settings to your needs: To overload a system setting, (1) do a "raw view" on [[%SYSTEMWEB%.%WIKIPREFSTOPIC%][%WIKIPREFSTOPIC%]], (2) copy a =Set VARIABLE = value= bullet, (3) do a "raw edit" of this home page, (4) add the bullet to the bullet list below, and (5) customize the value as needed. Make sure the settings render as real bullets (in "raw edit", a bullet requires 3 or 6 spaces before the asterisk).
+%INCLUDE{%SYSTEMWEB%.PersonalPreferencesHelp}%
 
 ---++ %MAKETEXT{"Related Topics"}%
 
