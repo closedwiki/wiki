@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1168672578" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1240009881" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki CGI and Command Line Scripts
 
@@ -264,6 +264,13 @@ The parameters are interpreted in according to the following rules.
 Merging is only enabled if the topic text comes from =text= and =originalrev= is &gt; 0 and is not the same as the revision number of the most recent revision. If merging is enabled both the topic and the meta-data are merged.
 
 Form field values are passed in parameters named 'field' - for example, if I have a field =Status= the parameter name is =Status=.
+
+__%X% Note:__ The =save= script should only be called via http POST method, not GET. Make sure to specify the ="post"= method if you call the =save= script via a form action. Example:
+<pre>
+&lt;form name="new" action="%<nop>SCRIPTURLPATH{save}%/Sandbox/" method="post"&gt;
+    ...
+&lt;/form&gt;
+</pre>
 
 ---+++ =search=
 CGI gateway to the =%<nop>SEARCH%= functionality driven by the following CGI parameters:

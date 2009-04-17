@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1233375670" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1240009352" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Templates
 
@@ -273,7 +273,14 @@ The above form asks for a topic name. A hidden input tag named ==templatetopic==
 &lt;/form&gt;
 </pre>
 
-See TWikiScripts#edit for details of the parameters that the =edit= script understands.
+__%X% Note:__ You can create a topic in one step, without going through the edit screen. To do that, specify the =save= script instead of the =edit= script in the form action. When you specify the save script you __have__ to use the "post" method. Example:
+<pre>
+&lt;form name="new" action="%<nop>SCRIPTURLPATH{save}%/Sandbox/" method="post"&gt;
+    ...
+&lt;/form&gt;
+</pre>
+
+%H% The =edit= and =save= scripts understand many more parameters, see TWikiScripts#edit and TWikiScripts#save for details.
 
 %T% *TIP:* You can use the =%<nop>WIKIUSERNAME%= and =%<nop>DATE%= variables in your topic templates to include the signature of the person creating a new topic. The variables are expanded into fixed text when a new topic is created. The standard signature is: <br />
 ==-- %<nop>WIKIUSERNAME% - %<nop>DATE%==
@@ -282,7 +289,7 @@ See TWikiScripts#edit for details of the parameters that the =edit= script under
 
 When you use TWikiVariables such as %<nop>PUBURL% and %<nop>PUBURLPATH% in templates you should be aware that using %<nop>PUBURL% instead of %<nop>PUBURLPATH% puts absolute URLs in the produced HTML. This means that when a user saves a TWiki page in HTML and emails the file to someone outside a company firewall, the receiver has a severe problem viewing it. It is therefore recommended always to use the %<nop>PUBURLPATH% to refer to images, CSS, Javascript files etc so links become relative. This way browsers just give up right away and show a usable html file.
 
-__Related Topics:__ TWikiSkins, DeveloperDocumentationCategory, AdminDocumentationCategory
+__Related Topics:__ TWikiSkins, TWikiForms, TWikiScripts, DeveloperDocumentationCategory, AdminDocumentationCategory
 
 %STOPINCLUDE%
 -- __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.MikeMannix, TWiki:Main.DavidLeBlanc, TWiki:Main.CrawfordCurrie, TWiki:Main.SopanShewale

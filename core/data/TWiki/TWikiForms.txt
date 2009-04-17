@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1177881299" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1240009323" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Forms
 
@@ -100,6 +100,14 @@ Forms have to be enabled for each individual web. The ==WEBFORMS== variable in W
        <input type="submit" class="twikiSubmit" value="Create" />
     </form>
        </verbatim>
+   * __%X% Note:__ You can create a topic in one step, without going through the edit screen. To do that, specify the =save= script instead of the =edit= script in the form action. When you specify the =save= script you __have__ to use the "post" method. Example:
+       <verbatim>
+    <form name="newtopic" action="%SCRIPTURLPATH{"save"}%/%WEB%/" method="post">
+       .....
+    </form>
+       </verbatim>
+   * %H% The =edit= and =save= scripts understand many more parameters, see TWikiScripts#edit and TWikiScripts#save for details.
+
    * __%T% Tip:__ For TWiki applications you can [[TWikiTemplates#AutomaticallyGeneratedTopicname][automatically generate unique topicnames]].
 
    * __%X% Note:__ Initial values will *not* be set in the form of a new topic if you _only_ use the formtemplate parameter.
@@ -223,4 +231,4 @@ Searching forms this way is obviously pretty inefficient, but it's easy to do. I
 
 %STOPINCLUDE%
 
-__Related Topics:__ UserDocumentationCategory, TWikiTemplates
+__Related Topics:__ TWikiTemplates, TWikiScripts, UserDocumentationCategory
