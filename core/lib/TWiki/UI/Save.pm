@@ -51,6 +51,17 @@ sub buildNewTopic {
     my $topic = $session->{topicName};
     my $store = $session->{store};
     my $revision = $query->param( 'rev' ) || undef;
+    my $reqmethod = $query->request_method();
+
+    if( $reqmethod !~ /^POST$/i ) {
+        # save can only be called via POST method
+        throw TWiki::OopsException(
+            'attention',
+            def => 'post_method_only',
+            web => $session->{webName},
+            topic => $session->{topicName},
+            params => [ $script ]);
+    }
 
     unless( scalar($query->param()) ) {
         # insufficient parameters to save
