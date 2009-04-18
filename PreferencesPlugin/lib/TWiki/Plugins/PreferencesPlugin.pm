@@ -122,10 +122,13 @@ sub beforeCommonTagsHandler {
 
     } elsif( $action eq 'save' ) {
 
-        my( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
-        $text =~ s(^((?:\t|   )+\*\sSet\s)(\w+)\s\=\s(.*)$)
-          ($1._saveSet($query, $web, $topic, $2, $3, $formDef))mgeo;
-        TWiki::Func::saveTopic( $web, $topic, $meta, $text );
+        # save can only be used with POST method, not GET
+        unless( $query && $query->method() !~ /^POST$/i ) {
+            my( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
+            $text =~ s(^((?:\t|   )+\*\sSet\s)(\w+)\s\=\s(.*)$)
+              ($1._saveSet($query, $web, $topic, $2, $3, $formDef))mgeo;
+            TWiki::Func::saveTopic( $web, $topic, $meta, $text );
+        }
         TWiki::Func::setTopicEditLock( $web, $topic, 0 );
         # Finish with a redirect so that the *new* values are seen
         my $viewUrl = TWiki::Func::getScriptUrl( $web, $topic, 'view' );
