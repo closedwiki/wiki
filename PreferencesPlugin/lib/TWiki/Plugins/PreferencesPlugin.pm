@@ -123,7 +123,7 @@ sub beforeCommonTagsHandler {
     } elsif( $action eq 'save' ) {
 
         # save can only be used with POST method, not GET
-        unless( $query && $query->method() !~ /^POST$/i ) {
+        unless( $query && $query->request_method() !~ /^POST$/i ) {
             my( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
             $text =~ s(^((?:\t|   )+\*\sSet\s)(\w+)\s\=\s(.*)$)
               ($1._saveSet($query, $web, $topic, $2, $3, $formDef))mgeo;
