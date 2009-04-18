@@ -378,6 +378,8 @@ sub rename {
         return;
     }
 
+    return undef unless (!$query || $query->request_method() =~ /^POST$/i );
+
     # Update references in referring pages - not applicable to attachments.
     my $refs;
     unless( $attachment ) {
@@ -682,6 +684,8 @@ sub _renameweb {
             return;
         }
     }
+
+    return undef unless (!$query || $query->request_method() =~ /^POST$/i );
 
     # Update references in referring pages 
     my $refs = _getReferringTopicsListFromURL(
