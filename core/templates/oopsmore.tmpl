@@ -45,7 +45,8 @@
 
 %TMPL:DEF{"setparent"}%#SetParent
 ---++ %MAKETEXT{"Set new topic parent"}%
-<form name="main" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%?action_save=1">
+<form name="main" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%" method="post">
+<input type='hidden' name='action_save' value='1' />
 <div class="twikiFormSteps">
 <div class="twikiFormStep">
 ---++!! %MAKETEXT{"Current parent:"}% %IF{"'NONE%SEARCH{ "^%TOPIC%$" scope="topic" regex="on" nosearch="on" nototal="on" format="$parent" }%'='NONE'" then="(none)" else='%SEARCH{ "^%TOPIC%$" scope="topic" regex="on" nosearch="on" nototal="on" format="[[$web.$parent][$parent]]" }%' }%
