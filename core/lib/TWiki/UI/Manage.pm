@@ -89,6 +89,16 @@ sub _removeUser {
     my $query = $session->{request};
     my $cUID = $session->{user};
 
+    if( $query->request_method() !~ /^POST$/i ) {
+        # manage script to delete user can only be called with POST method
+        throw TWiki::OopsException(
+            'attention',
+            def => 'post_method_only',
+            web => $webName,
+            topic => $topic,
+            params => [ 'manage' ]);
+    }
+
     my $password = $query->param( 'password' );
 
     # check if user entry exists
@@ -151,6 +161,16 @@ sub _createWeb {
     my $webName = $session->{webName};
     my $query = $session->{request};
     my $cUID = $session->{user};
+
+    if( $query->request_method() !~ /^POST$/i ) {
+        # manage script to create web can only be called with POST method
+        throw TWiki::OopsException(
+            'attention',
+            def => 'post_method_only',
+            web => $webName,
+            topic => $topicName,
+            params => [ 'manage' ]);
+    }
 
     my $newWeb = $query->param( 'newweb' ) || '';
     unless( $newWeb ) {
