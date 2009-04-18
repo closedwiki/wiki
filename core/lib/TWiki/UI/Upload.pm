@@ -175,6 +175,16 @@ sub upload {
     $fileName =~ s/\s*$//o;
     $filePath =~ s/\s*$//o;
 
+    if( $query->request_method() !~ /^POST$/i ) {
+        # upload script can only be called via POST method
+        throw TWiki::OopsException(
+            'attention',
+            def => 'post_method_only',
+            web => $webName,
+            topic => $topic,
+            params => [ 'upload' ]);
+    }
+
     TWiki::UI::checkWebExists( $session, $webName, $topic, 'attach files to' );
     TWiki::UI::checkTopicExists( $session, $webName, $topic, 'attach files to' );
     TWiki::UI::checkMirror( $session, $webName, $topic );
