@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1115527529" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1240032470" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 
-Allows editing of preferences using fields predefined in a %TWIKIWEB%.TWikiForms. However, the edit fields are inlined in the text, similar to how tables are edited in TWiki:Plugins/EditTablePlugin.
+Allows editing of preferences using fields predefined in a %SYSTEMWEB%.TWikiForms. However, the edit fields are inlined in the text, similar to how tables are edited in TWiki:Plugins/EditTablePlugin.
 
 %TOC%
 
@@ -11,23 +11,23 @@ In edit mode, the edit button is replaced by Save and Cancel buttons, with their
 
 ---++ Syntax Rules
 
-	* =%<nop>EDITPREFERENCES{ "= _topic_ =" }%=
-		* _topic_ references a [[%TWIKIWEB%.TWikiForms][TWikiForm]] defining the format of the edit fields for preferences. It may be prefixed by a web.
-		* If a preference setting is not mentioned in the form referenced by _topic_, a text input box of the specified length is provided.
-		* Otherwise, the input can be through textareas, select, radio, checkbox, date, or text, as provided by %TWIKIWEB%.TWikiForms.
+   * =%<nop>EDITPREFERENCES{ "= _topic_ =" }%=
+      * _topic_ references a [[%SYSTEMWEB%.TWikiForms][TWikiForm]] defining the format of the edit fields for preferences. It may be prefixed by a web.
+      * If a preference setting is not mentioned in the form referenced by _topic_, a text input box of the specified length is provided.
+      * Otherwise, the input can be through textareas, select, radio, checkbox, date, or text, as provided by %SYSTEMWEB%.TWikiForms.
    * =%<nop>EDITPREFERENCES%=
       * Edit existing preferences in the topic using a simple text field.
 ---++ Examples
-	* =%<nop>EDITPREFERENCES%= 
-	* =%<nop>EDITPREFERENCES{ "%<nop>TWIKIWEB%.TWikiPreferencesForm" }%= 
+   * =%<nop>EDITPREFERENCES%= 
+   * =%<nop>EDITPREFERENCES{ "%<nop>SYSTEMWEB%.TWikiPreferencesForm" }%= 
 
 ---++ Plugin Settings
-	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Allows editing of preferences using fields predefined in a form
+   * One line description, shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Allows editing of preferences using fields predefined in a form
 
 ---++ Plugin Installation Instructions
 %$INSTALL_INSTRUCTIONS%
-	* If the installation was successful, an edit button should appear below:
+   * If the installation was successful, an edit button should appear below:
 %EDITPREFERENCES%
 
 ---++ Plugin Info
@@ -35,6 +35,7 @@ In edit mode, the edit button is replaced by Save and Cancel buttons, with their
 |  Plugin Author: | TWiki:Main.ThomasWeigert |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  17 Apr 2009: | Peter Thoeny: Save of preferences can only be done with http POST method, not GET |
 |  05 Nov 2007: | Kenneth Lavrsen fixed problem when settings are hidden in html comments. These settings are now ignored. |
 |  23 Jun 2007: | Crawford Currie added testcases, recoded to work without a form definition, fixed for TWiki 4.2 |
 |  08 Feb 2007: | Arthur Clemens added access keys for Save and Cancel, bold style for editable preference names, and a descriptive Save button label. |
@@ -47,11 +48,9 @@ In edit mode, the edit button is replaced by Save and Cancel buttons, with their
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiForms
-
-
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiForms

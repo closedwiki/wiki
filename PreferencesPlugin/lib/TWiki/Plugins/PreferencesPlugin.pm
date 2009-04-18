@@ -38,7 +38,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'TWiki-4.2';
+$RELEASE = 'TWiki-4.3';
 
 my $MARKER = "\007";
 
