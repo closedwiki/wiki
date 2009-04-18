@@ -38,7 +38,7 @@ Fields:
    * =cookies= hashref whose keys are cookie names and values
                are CGI::Cookie objects
    * =headers= hashref whose keys are header name
-   * =method= request method (GET, HEAD, POST)
+   * =request_method= request method (GET, HEAD, POST)
    * =param= hashref of parameters, both query and body ones
    * =param_list= arrayref with parameter names in received order
    * =path_info= path_info of request (eg. /WebName/TopciName)
@@ -84,7 +84,7 @@ sub new {
         action         => '',
         cookies        => {},
         headers        => {},
-        method         => undef,
+        request_method => undef,
         param          => {},
         param_list     => [],
         path_info      => '',
@@ -130,12 +130,24 @@ sub action {
 
 ---++ ObjectMethod method( [ $method ] ) -> $method
 
-Sets/Gets request method (GET, HEAD, POST).
+DEPRECATED. Sets/Gets request method (GET, HEAD, POST). Same as request_method() method.
 
 =cut
 
 sub method {
-    return @_ == 1 ? $_[0]->{method} : ( $_[0]->{method} = $_[1] );
+    return @_ == 1 ? $_[0]->{request_method} : ( $_[0]->{request_method} = $_[1] );
+}
+
+=begin twiki
+
+---++ ObjectMethod request_method( [ $method ] ) -> $method
+
+Sets/Gets request method (GET, HEAD, POST).
+
+=cut
+
+sub request_method {
+    return @_ == 1 ? $_[0]->{request_method} : ( $_[0]->{request_method} = $_[1] );
 }
 
 =begin twiki
@@ -343,7 +355,7 @@ future, so it could be possible to get query and body parameters independently.
 
 sub queryParam {
     my $this = shift;
-    return undef if $this->method && $this->method eq 'POST';
+    return undef if $this->request_method && $this->request_method eq 'POST';
     return $this->param(@_);
 }
 
