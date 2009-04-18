@@ -16,7 +16,9 @@
    * Show tool-tip topic info on mouse-over of [[%SYSTEMWEB%.WikiWord][WikiWord]] links, on or off:
       * Set LINKTOOLTIPINFO = off
 
+%ENDSECTION{ type="expandvariables" }%
 %INCLUDE{%SYSTEMWEB%.PersonalPreferencesHelp}%
+%STARTSECTION{ type="expandvariables" }%
 
 ---++ Related Topics
 
