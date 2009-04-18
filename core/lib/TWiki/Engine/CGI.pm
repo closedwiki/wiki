@@ -29,7 +29,7 @@
 
 Class that implements default CGI behavior.
 
-Refer to TWiki::Engine documentation for explanation about methos below.
+Refer to TWiki::Engine documentation for explanation about methods below.
 
 =cut
 
@@ -55,7 +55,7 @@ sub prepareConnection {
     my ( $this, $req ) = @_;
 
     $req->remoteAddress( $ENV{REMOTE_ADDR} );
-    $req->method( $ENV{REQUEST_METHOD} );
+    $req->request_method( $ENV{REQUEST_METHOD} );
 
     if ( $ENV{HTTPS} && uc( $ENV{HTTPS} ) eq 'ON' ) {
         $req->secure(1);

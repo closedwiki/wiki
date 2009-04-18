@@ -816,12 +816,12 @@ sub redirect {
         $url = $redir if ($redir);
     }
 
-    if ( $passthru && defined $query->method() ) {
+    if ( $passthru && defined $query->request_method() ) {
         my $existing = '';
         if ($url =~ s/\?(.*)$//) {
             $existing = $1;
         }
-        if ($query->method() eq 'POST') {
+        if ($query->request_method() eq 'POST') {
             # Redirecting from a post to a get
             my $cache = $this->cacheQuery();
             if ($cache) {
@@ -3591,7 +3591,7 @@ sub ENV {
         $val = $this->{request}->header($1);
     }
     elsif ( $key eq 'REQUEST_METHOD' ) {
-        $val = $this->{request}->method;
+        $val = $this->{request}->request_method;
     }
     elsif ( $key eq 'REMOTE_USER' ) {
         $val = $this->{request}->remoteUser;
