@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2008 Arthur Clemens, arthur@visiblearea.com
-# Copyright (C) 2002-2007 Peter Thoeny, peter@thoeny.org and
+# Copyright (C) 2002-2009 Peter Thoeny, peter@thoeny.org and
 # TWiki Contributors.
 #
 # This program is free software; you can redistribute it and/or
@@ -584,10 +584,13 @@ s/^(\s*)\|(.*)/handleTableRow( $1, $2, $tableNr, $isNewRow, $rowNr, $doEdit, $do
     }    # foreach my $tableText (@tableTexts) {
 
     if ($doSave) {
-        my $error =
-          TWiki::Func::saveTopic( $theWeb, $theTopic, $meta,
-            $tablesTakenOutText, { dontlog => $doSaveQuiet } );
-
+        my $error = '';
+        if( $query && $query->request_method() !~ /^POST$/i ) {
+            $error = 'Table can only be saved with http POST method.';
+        } else {
+            $error = TWiki::Func::saveTopic( $theWeb, $theTopic, $meta,
+              $tablesTakenOutText, { dontlog => $doSaveQuiet } );
+        }
         TWiki::Func::setTopicEditLock( $theWeb, $theTopic, 0 );   # unlock Topic
         my $url = TWiki::Func::getViewUrl( $theWeb, $theTopic );
         if ($error) {
