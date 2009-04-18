@@ -79,7 +79,19 @@ sub register_cgi {
 
     # NB. bulkRegister invoked from ManageCgiScript.
 
-    my $action = $session->{request}->param('action') || '';
+    my $query = $session->{request};
+
+    if( $query->request_method() !~ /^POST$/i ) {
+        # register script can only be called with POST method
+        throw TWiki::OopsException(
+            'attention',
+            def => 'post_method_only',
+            web => $session->{webName},
+            topic => $session->{topicName},
+            params => [ 'register' ]);
+    }
+
+    my $action = $query->param('action') || '';
 
     if ($action eq 'register') {
       if (!$session->inContext('registration_supported')) {
@@ -451,6 +463,16 @@ sub resetPassword {
     my $topic = $session->{topicName};
     my $web = $session->{webName};
     my $user = $session->{user};
+
+    if( $query->request_method() !~ /^POST$/i ) {
+        # resetpasswd script can only be called with POST method
+        throw TWiki::OopsException(
+            'attention',
+            def => 'post_method_only',
+            web => $web,
+            topic => $topic,
+            params => [ 'resetpasswd' ]);
+    }
 
     unless( $TWiki::cfg{EnableEmail} ) {
         my $err=$session->i18n->maketext(
