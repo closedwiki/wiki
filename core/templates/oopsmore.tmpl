@@ -99,7 +99,7 @@ table.twikiDiffOptions img {
      <input type="submit" class="twikiButton" value='%MAKETEXT{"View difference"}%' />
 </form>
 ---+++ %MAKETEXT{"Restore topic"}%
-<form name="main" action="%SCRIPTURLPATH{"manage"}%/%WEB%/%TOPIC%">
+<form name="main" action="%SCRIPTURLPATH{"manage"}%/%WEB%/%TOPIC%" method="post">
 	* %MAKETEXT{"Restore topic to revision:"}% <input class="twikiInputField" type="text" name="rev" size="6" value="%PARAM2%" />
 	<input type="hidden" name="action" value="restoreRevision" />
 	<input type="hidden" name="nowysiwyg" value="1" />
