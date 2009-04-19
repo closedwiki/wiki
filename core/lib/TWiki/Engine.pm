@@ -340,7 +340,7 @@ Should call finalizeCookies and then send $res' headers to client.
 sub finalizeHeaders {
     my ( $this, $res, $req ) = @_;
     $this->finalizeCookies($res);
-    if ( $req && $req->request_method() eq 'HEAD' ) {
+    if ( $req && $req->request_method() =~ /^HEAD$/i ) {
         $res->body('');
         $res->deleteHeader('Content-Length');
     }
