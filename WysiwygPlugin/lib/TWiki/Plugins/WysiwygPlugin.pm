@@ -56,7 +56,7 @@ $SHORTDESCRIPTION = 'Translator framework for Wysiwyg editors';
 $NO_PREFS_IN_TOPIC = 1;
 $VERSION = '$Rev$';
 
-$RELEASE = '03 Aug 2008';
+$RELEASE = '18 Apr 2009';
 
 $SECRET_ID = 'WYSIWYG content - do not remove this comment, and never use this identical text in your topics';
 
@@ -743,6 +743,12 @@ sub _restHTML2TML {
 sub _restUpload {
     my ($session, $plugin, $verb, $response) = @_;
     my $query = TWiki::Func::getCgiQuery();
+
+    if( $query && $query->method() !~ /^POST$/i ) { 
+        returnRESTResult( $response, 405, 'REST upload requires http POST method' ); 
+        return undef; 
+    }
+
     my $topic = $query->param('topic');
     $topic =~ /^(.*)\.([^.]*)$/;
     my $web = $1;

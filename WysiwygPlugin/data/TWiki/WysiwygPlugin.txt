@@ -1,27 +1,33 @@
+%META:TOPICINFO{author="TWikiContributor" date="1240096942" format="1.1" version="$Rev$"}%
 ---+!! Wysiwyg Plugin
 <!--
    * Set SHORTDESCRIPTION = Translator framework for Wysiwyg editors
 -->
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
 %SHORTDESCRIPTION%
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page
+   at http://twiki.org/cgi-bin/view/Plugins/WysiwygPlugin or provide feedback
+   at http://twiki.org/cgi-bin/view/Plugins/WysiwygPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
 
-Support for the integration of WYSIWYG (What-You-See-Is-What-You-Get) editors. On its own, the only thing this plugin gives you is a stand-alone HTML to TWiki translator script. For WYSIWYG editing in TWiki, you will also need to install a specific editor package such as TWiki:Plugins.TinyMCEPlugin.
+Support for the integration of WYSIWYG (What-You-See-Is-What-You-Get) editors. On its own, the only thing this plugin gives you is a stand-alone HTML to TWiki translator script. For WYSIWYG editing in TWiki, you will also need to install a specific editor package such as TWiki:Plugins.KupuEditorContrib or TWiki:Plugins.WikiwygContrib.
 
 This plugin provides a generic framework that supports editing of TWiki topics using any browser-based HTML editor. It works by transforming TML (TWiki Meta Language) into HTML for the editor, and then transforming HTML back into TML on save.
 
 %TOC%
 
 ---++ Features
-	* Supports the input of malformed HTML
-	* Full round-trip (TML -> XHTML -> TWiki syntax)
-	* Framework is editor-agnostic
+   * Supports the input of malformed HTML
+   * Full round-trip (TML -> XHTML -> TWiki syntax)
+   * Framework is editor-agnostic
 
 ---++ Details
 ---+++ What's in the package
 The package includes the following pieces:
-	* TML (TWiki syntax) to HTML translator
-	* HTML to TML translator (with stand-alone script)
-	* Generic TWiki plugin for automating the translation during editing
+   * TML (TWiki syntax) to HTML translator
+   * HTML to TML translator (with stand-alone script)
+   * Generic TWiki plugin for automating the translation during editing
 
 ---+++ How it works
 The plugin works by translating the topic text into HTML when someone edits a topic. The HTML is then fed to the WYSIWYG editor. On save, the edited HTML is run through the reverse translation before saving to the topic. TWiki syntax is used in preference to HTML in the stored topic wherever possible, though HTML may be used if the translator can't find a suitable TML equivalent..
@@ -74,7 +80,7 @@ The flow of control is as follows:
    1 The =afterEditHandler= in the !WyswiygPlugin sees that =wysiwyg_edit= is set, which triggers the conversion back to TML.
 
    * The HTML form in the edit template *must* include an =&lt;input= called =wysiwyg_edit= and set it to 1, to trigger the conversion from HTML back to TML.
-   * =WYSIWYGPLUGIN_WYSIWYGSKIN= must be set to the name of the skin used for WYSIWYG editing. This is often the name of the editor e.g. =xinha=.
+   * =WYSIWYGPLUGIN_WYSIWYGSKIN= must be set to the name of the skin used for WYSIWYG editing. This is usually the name of the editor e.g. =kupu=.
 
 ---++++ Fetching content from a URL
 In this scenario, the edit template is generated *without* the content-to-be-edited. The content is retrieved from the server using a URL e.g. from an =IFRAME=.
@@ -94,7 +100,7 @@ The flow of control is as follows:
 
 ---+++ Other techniques
 ---++++ Asynchronous saves
-Editors can use =XmlHttpRequest= to perform saves, by POSTing to the TWiki =save= script with the =wysiwyg_edit= parameter set to =1=. This parameter tells the =beforeSaveHandler= in the !WysiwygPlugin to convert the content back to TML. See %TWIKIWEB%.TWikiScripts for details of the other parameters to the =save= script.
+Editors can use =XmlHttpRequest= to perform saves, by POSTing to the TWiki =save= script with the =wysiwyg_edit= parameter set to =1=. This parameter tells the =beforeSaveHandler= in the !WysiwygPlugin to convert the content back to TML. See %SYSTEMWEB%.TWikiScripts for details of the other parameters to the =save= script.
 
 Once the save script has completed it responds with a redirect, either to an Oops page if the save failed, or to the appropriate post-save URL (usually a =view=). The editor must be ready to handle this redirect.
 
@@ -125,7 +131,7 @@ Converts the TML text to HTML. =topic= *must* be specified. The response is a =t
 ---++ Plugin Configuration Settings
 
 ---+++ Translator control
-%INCLUDE{"%TWIKIWEB%.WysiwygPluginSettings"}%
+%INCLUDE{"%SYSTEMWEB%.WysiwygPluginSettings"}%
 
 *Implementors note* if you are using your own before/after edit handlers, you can call =TWiki::Plugins::WysiwygPlugin::isWysiwygEditable()= to check these controls.
 
@@ -161,10 +167,11 @@ Many thanks to the following sponsors for supporting this work:
    * [[http://twiki.net][TWIKI.NET]]
 
 |  Plugin Author(s): | TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk |
-|  Copyright | &copy; ILOG 2005 http://www.ilog.fr |
+|  Copyright | &copy; ILOG 2005 http://www.ilog.fr, 2007 [[http://www.twiki.net/][TWIKI.NET]] |
 |  License | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
+|  18 Apr 2009 | Fixed TWikibug:Item6251 (require http post for REST upload) |
 |  22 Oct 2008 | Fixed TWikibug:Item5961 (emphasis), TWikibug:Item6089 (backslash in verbatim) |
 |  7 Aug 2008 | Fixed TWikibug:Item5707 (mod_perl) |
 |  3 Aug 2008 | TWiki 4.2.1 release version |
@@ -191,8 +198,6 @@ Many thanks to the following sponsors for supporting this work:
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
 %META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="" version="1"}%
