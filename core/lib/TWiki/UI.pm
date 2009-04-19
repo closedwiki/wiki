@@ -138,26 +138,6 @@ sub handleRequest {
     $sub  = $package.'::' if $package;
     $sub .= $function;
 
-    if ( UNIVERSAL::isa($TWiki::engine, 'TWiki::Engine::CLI') ) {
-        $context->{command_line} = 1;
-    }
-
-    $res = execute($req, \&$sub, %$context );
-    return $res;
-}
-
-=begin twiki
-
----++ StaticMethod execute($req, $sub, %initialContext) -> $res
-
-Creates a TWiki session object with %initalContext and calls
-$sub method. Returns the TWiki::Response object generated
-
-=cut
-
-sub execute {
-    my ($req, $sub, %initialContext ) = @_;
-
     my $cache = $req->param('twiki_redirect_cache');
     # Never trust input data from a query. We will only accept an MD5 32 character string
     if ( $cache && $cache =~ /^([a-f0-9]{32})$/ ) {
@@ -180,12 +160,33 @@ sub execute {
             $req->delete('twiki_redirect_cache');
             print STDERR "Passthru: Loaded and unlinked $passthruFilename\n"
               if TRACE_PASSTHRU;
+            $req->method('POST');
         }
         else {
             print STDERR "Passthru: Could not find $passthruFilename\n"
               if TRACE_PASSTHRU;
         }
     }
+
+    if ( UNIVERSAL::isa($TWiki::engine, 'TWiki::Engine::CLI') ) {
+        $context->{command_line} = 1;
+    }
+
+    $res = execute($req, \&$sub, %$context );
+    return $res;
+}
+
+=begin twiki
+
+---++ StaticMethod execute($req, $sub, %initialContext) -> $res
+
+Creates a TWiki session object with %initalContext and calls
+$sub method. Returns the TWiki::Response object generated
+
+=cut
+
+sub execute {
+    my ($req, $sub, %initialContext ) = @_;
 
     my $session = new TWiki( $req->remoteUser, $req, \%initialContext );
     my $res = $session->{response};
