@@ -355,7 +355,7 @@ future, so it could be possible to get query and body parameters independently.
 
 sub queryParam {
     my $this = shift;
-    return undef if $this->request_method && $this->request_method eq 'POST';
+    return undef if( $this->request_method && $this->request_method =~ /^POST$/i );
     return $this->param(@_);
 }
 
