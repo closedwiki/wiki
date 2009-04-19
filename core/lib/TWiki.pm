@@ -821,7 +821,7 @@ sub redirect {
         if ($url =~ s/\?(.*)$//) {
             $existing = $1;
         }
-        if ($query->request_method() eq 'POST') {
+        if ( $query->request_method() =~ /^POST$/i ) {
             # Redirecting from a post to a get
             my $cache = $this->cacheQuery();
             if ($cache) {
