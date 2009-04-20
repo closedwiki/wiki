@@ -52,6 +52,7 @@ sub set_up {
     $TWiki::cfg{MinPasswordLength} = 0;
     $TWiki::cfg{UsersWebName} = $this->{users_web};
     my $query = new Unit::Request("");
+     $query->method('POST');
     $query->path_info("/$this->{test_web}/$this->{test_topic}");
 
     $this->{twiki}    = new TWiki( undef, $query );
@@ -111,6 +112,7 @@ sub registerUser {
                           'action' => [ 'register' ]
                          });
 
+     $query->method('POST');
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
 
     my $twiki = new TWiki(undef, $query);
