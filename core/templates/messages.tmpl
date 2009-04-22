@@ -195,8 +195,8 @@
 
 <form action="%SCRIPTURLPATH{"register"}%" method="post">
 <input type="hidden" name="action" value="verify" size="20" />
-<input type="text" name="code" size="20" />
-<input type="submit" class="twikiSubmit" value=' %MAKETEXT{"Submit"}% ' />
+<input type="text" name="code" value="%URLPARAM{ "code" encode="entity" }%" size="20" />
+<input type="submit" class="twikiSubmit" value=' %MAKETEXT{"Confirm registration"}% ' />
 </form>
 
 %TMPL:END%
