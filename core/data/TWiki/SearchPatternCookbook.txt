@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1168735119" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1240609516" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="FormattedSearch"}%
 ---+!! Search Pattern Cookbook
 
@@ -368,7 +368,7 @@ So a search for a form field could look like:
 %<nop>SEARCH{ "[O]peratingSystem.*value\=.*[O]sWin" type="regex" ... }%
 </pre>
    * Using square brackets is a trick to avoid a hit on the topic doing the search.
-   * The =.*= indicate that there can be any number of any character between =OperatingSystem= and =value= in the (whole) file
+   * The =.*= indicate that there can be any number of characters between =OperatingSystem= and =value= in the (whole) file
 
 Now the original file format of the category table (the predecessor of the TWiki forms) looks like this:
 <verbatim>
