@@ -8,7 +8,7 @@
 %MAKETEXT{"By default, viewing the Trash web is restricted to [_1]. If you would like to allow all users to view the Trash web, remove the =ALLOWWEBVIEW= restriction in WebPreferences." args="%USERSWEB%.TWikiAdminGroup"}%
 
 ---++ %MAKETEXT{"Recently Deleted Topics"}%
-%SEARCH{".*" web="%INCLUDINGWEB%" type="regex" nototal="on" nosearch="on" order="modified" limit="15"}%
+%SEARCH{ ".*" web="%INCLUDINGWEB%" type="regex" excludetopic="WebHome, WebStatistics, TrashAttachment" nototal="on" nosearch="on" order="modified" limit="20" reverse="on" }%
 [[WebChanges][%MAKETEXT{"more..."}%]]
 
 ---++ <nop>%WEB% Web Utilities
