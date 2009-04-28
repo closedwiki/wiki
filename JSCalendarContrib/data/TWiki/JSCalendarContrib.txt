@@ -1,72 +1,66 @@
----+!! %TOPIC%
-<img src="%ATTACHURL%/screenshot.gif" style="float:right"/>
-
-%SHORTDESCRIPTION%
-
+%META:TOPICINFO{author="TWikiContributor" date="1240889627" format="1.1" version="$Rev$"}%
 <!--
-
-   PLEASE DO NOT EDIT THIS TOPIC
-
-   It is automatically generated from the subversion repository, and any changes
-   you make will simply be overwritten the next time a release is generated.
-
-   Instead, you could check your fix in, raise a bug in the Bugs web, or mail thge author.
+   Contributions to this contrib package are appreciated. Please update this page
+   at http://twiki.org/cgi-bin/view/Plugins/JSCalendarContrib or provide feedback
+   at http://twiki.org/cgi-bin/view/Plugins/JSCalendarContribDev.
+   If you are a TWiki contributor please update the extension in the SVN repository.
 -->
+---+!! JS Calendar Contrib
+<img src="%ATTACHURL%/screenshot.gif" style="float:right"/>
+This module packages the [[http://www.dynarch.com/projects/calendar/][Mishoo JSCalendar]], a DHTML pop-up calendar in a form suitable for use in TWiki forms and TWiki applications.
 
 %TOC%
 
----++ Summary of Contents
-This module packages the [[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCalendar]] Javascript in a form suitable for use with TWiki.
+---++ Using the Calendar in user forms
 
----++ Detailed Documentation
-%$POD%
-
----+++ Using the Calendar in user forms
 You can also use the calendar directly in your own hand-built forms, without
 having to write any code. Just add this inline in the topic text:
 <verbatim>
-%INCLUDE{"%TWIKIWEB%/JSCalendarContribInline"}%
+%INCLUDE{"%SYSTEMWEB%.JSCalendarContribInline"}%
 </verbatim>
 Then, to display a calendar icon next to a text input field:
 <verbatim>
 <input type="text" id="cal_val_here" />
-<input type="image" src="%PUBURL%/%TWIKIWEB%/JSCalendarContrib/img.gif" onclick="javascript: return showCalendar('cal_val_here','%e %B %Y')" />
+<input type="image" src="%PUBURL%/%SYSTEMWEB%/JSCalendarContrib/img.gif" onclick="javascript: return showCalendar('cal_val_here','%Y-%m-%d')" />
 </verbatim>
 If the contrib is installed, you will see such a field here:
-%INCLUDE{"%TWIKIWEB%/JSCalendarContribInline"}%
+%INCLUDE{"%SYSTEMWEB%.JSCalendarContribInline"}%
 <input type="text" id="cal_val_here" />
-<input type="image" src="%PUBURL%/%TWIKIWEB%/JSCalendarContrib/img.gif" onclick="javascript: return showCalendar('cal_val_here','%e %B %Y')" />
+<input type="image" src="%PUBURL%/%SYSTEMWEB%/JSCalendarContrib/img.gif" onclick="javascript: return showCalendar('cal_val_here','%Y-%m-%d')" />
 
-<!--
-   * Set SHORTDESCRIPTION = [[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCalendar]], packaged for use by plugins, skins and add-ons.
--->
+---++ Detailed Documentation
 
----+++ Installation Instructions
+%$POD%
+
+---++ Installation Instructions
+
 %$INSTALL_INSTRUCTIONS%
-	* An administrator can customize the appearance of the calendar by setting the following in =<nop>LocalSite.cfg=
+
+   * An administrator can customize the appearance of the calendar by modifying ={JSCalendarContrib}= settings in the "JSCalendarContrib Settings" section of the configure:
      | *Setting* | *Default* |
-     | =$TWiki::cfg{JSCalendarContrib}{style}= | ='blue'= |
+     | =$TWiki::cfg{JSCalendarContrib}{format}= | ='%Y-%m-%d'= |
      | =$TWiki::cfg{JSCalendarContrib}{lang}= | ='en'= |
-     | =$TWiki::cfg{JSCalendarContrib}{format}= | ='%e %b %Y'= |
+     | =$TWiki::cfg{JSCalendarContrib}{style}= | ='blue'= |
 
----+++ Contrib Info
+---++ Contrib Info
 
-Another great TWiki extension from the <a style="text-decoration:none" href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiringlogo20x20.png" alt="" /> *WikiRing* </a> - working together to improve your wiki experience!
+   * Set SHORTDESCRIPTION = Mishoo JSCalendar: A pop-up calendar for use in TWiki forms and TWiki applications
 
 |  Author: | TWiki:Main/CrawfordCurrie http://c-dot.co.uk |
 |  Version: | %$VERSION% of the Mishoo calendar |
 |  Copyright &copy;: | See [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dependencies: | %$DEPENDENCIES% |
-| Change History: | |
-|  10 Sep 2008 | Bugs:Item5991 Applied patch to fix rendering on IE7 .|
-|  06 Sep 2007 | Bugs:Item4030 Added doc for using the calendar in user forms |
-|  13603 | Bugs:Item2982 cleaned up the interface to the contrib, re-added a date rendering function with a more generic interface |
+| Change History: | &nbsp; |
+|  2009-04-27 | TWikibug:Item6254 Adding "JSCalendarContrib Settings" section to configure; changing default to ISO date format; improved documentation (TWiki:Main/PeterThoeny) |
+|  2008-09-10 | TWikibug:Item5991 Applied patch to fix rendering on IE7 |
+|  2007-09-06 | TWikibug:Item4030 Added doc for using the calendar in user forms |
+|  13603 | TWikibug:Item2982 cleaned up the interface to the contrib, re-added a date rendering function with a more generic interface |
 |  11594 | Allow format to be configured. |
 |  11415 | Add a =renderFormFieldForEditHandler= so other plugins can forward to this handler to add the date field to the TWikiForms. (TWiki:Main.ThomasWeigert) |
-|  10247 | Bugs:Item2054 put the calendar at z-index 2000, way above pattern skin divs. |
-|  6634 | Bugs:Item453  removed EditTablePlugins private copy of the Mishoo JS calendar, and made sure it works with JSCalendarContrib. Improved the documentation of the JSCalendar while I was there. |
-|  6626 | Bugs:Item468  updated docs for Dakar release |
+|  10247 | TWikibug:Item2054 put the calendar at z-index 2000, way above pattern skin divs. |
+|  6634 | TWikibug:Item453  removed EditTablePlugins private copy of the Mishoo JS calendar, and made sure it works with JSCalendarContrib. Improved the documentation of the JSCalendar while I was there. |
+|  6626 | TWikibug:Item468  updated docs for Dakar release |
 |  5048 | Cairo readiness |
 |  5039 | Split from !SharedCode |
 |  27 Dec 2005 | updated to calendar version 1.0; set style for Safari to win2k-1|
@@ -75,7 +69,6 @@ Another great TWiki extension from the <a style="text-decoration:none" href="htt
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiForms
 
 %META:FILEATTACHMENT{name="screenshot.gif" attr="h" comment="" version="1"}%
-%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="" version="1"}%
