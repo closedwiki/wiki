@@ -718,7 +718,7 @@ $TWiki::cfg{DisplayTimeValues} = 'gmtime';
 # (2007-12-31) is recommended for non English language TWikis. Note that $mo
 # is the month as a two digit number. $month is the three first letters of
 # English name of the month
-$TWiki::cfg{DefaultDateFormat} = '$day $month $year';
+$TWiki::cfg{DefaultDateFormat} = '$year-$mo-$day';
 
 # **BOOLEAN**
 # Locale - set to enable operating system level locales and
