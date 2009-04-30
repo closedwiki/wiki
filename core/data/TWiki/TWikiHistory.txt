@@ -1,10 +1,19 @@
-%META:TOPICINFO{author="TWikiContributor" date="1237959283" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1241028994" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ Appendix A: TWiki Development Time-line
 
 %TOC%
 
 #GeorgetownRelease
+---++ TWiki Release 4.3.1 (Georgetown) released on 2009-04-29
+
+__New Features and Enhancements of TWiki Release 4.3.1__
+
+   * *Security Enhancements*
+      * Reduced risk of CSRF ([[http://en.wikipedia.org/wiki/Cross-site_request_forgery][cross-site request forgery]]) - TWiki:Codev/SecurityAlert-CVE-2009-1339
+   * *Usability Enhancements* 
+      * Use ISO date format by default 
+
 ---++ TWiki Release 4.3 (Georgetown) released 2009-03-30
 
 __New Features and Enhancements of TWiki Release 4.3__

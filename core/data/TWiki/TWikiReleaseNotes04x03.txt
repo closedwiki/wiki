@@ -1,31 +1,35 @@
-%META:TOPICINFO{author="TWikiContributor" date="1236440784" format="1.1" version="$Rev$"}%
----+!! TWiki Release 4.3 (Georgetown), 2009-03-30
+%META:TOPICINFO{author="TWikiContributor" date="1241048971" format="1.1" version="$Rev$"}%
+---+!! TWiki Release 4.3.1 (Georgetown), 2009-04-29
 
 %TOC%
 
 ---++ Introduction
 
-TWiki 4.3.0 released on 30 Mar 2009 introduces security enhancements, usability enhancements, feature enhancements, and adds extensions to strengthen TWiki as an enterprise collaboration platform.
+TWiki-4.3.0 released on 2009-03-30 introduces security enhancements, usability enhancements, feature enhancements, and adds extensions to strengthen TWiki as an enterprise collaboration platform.
 
-It is highly recommended to upgrade to TWiki 4.3.0. Users will find this release much more stable and secure in daily use.
+TWiki-4.3.1 released on 2009-04-29 introduces security enhancements. This release also introduces use of ISO date format by default.
+
+It is highly recommended to upgrade to TWiki-4.3.1. Users will find this release much more stable and secure in daily use.
 
 ---++ Pre-installed Extensions
 
-TWiki 4.3 is ships with:
+TWiki-4.3.1 ships with:
 
    * *Plugins:* !CommentPlugin, !EditTablePlugin, !EmptyPlugin, !HeadlinesPlugin, !InterwikiPlugin, !PreferencesPlugin, !RenderListPlugin, !SlideShowPlugin, !SmiliesPlugin, !SpreadSheetPlugin, !TablePlugin, !TinyMCEPlugin, !TWikiNetSkinPlugin, !TwistyPlugin, !WysiwygPlugin
    * *Contribs:* !BehaviourContrib, !JSCalendarContrib, !MailerContrib, !TipsContrib, !TWikiUserMappingContrib, !TwistyContrib
    * *Skins:* !ClassicSkin, !PatternSkin, !TWikiNetSkin,
 
-__Note:__ !HeadlinesPlugin, !TWikiNetSkin and !TWikiNetSkinPlugin are new in TWiki 4.3.
+__Note:__ !HeadlinesPlugin, !TWikiNetSkin and !TWikiNetSkinPlugin are new in TWiki-4.3.0.
 
 ---++ New Features Highlights
 
    * *Security Enhancements*
       * Reduced risk of XSS ([[http://en.wikipedia.org/wiki/Cross-site_scripting][cross-site scripting]])
+      * Reduced risk CSRF ([[http://en.wikipedia.org/wiki/Cross-site_request_forgery][cross-site request forgery]]) - added in TWiki-4.3.1
       * S/MIME support to sign administrative e-mails
    * *Usability Enhancements*
       * Replace question mark links with red-links to point to non-existing topics
+      * Use ISO date format by default - added in TWiki-4.3.1
    * *Enterprise Collaboration Enhancements*
       * Pre-installed !HeadlinesPlugin to show headline newsfeeds in TWiki topics
       * Pre-installed !TWikiNetSkin, !TWikiNetSkinPlugin for corporate look and feel
@@ -40,9 +44,19 @@ __Note:__ !HeadlinesPlugin, !TWikiNetSkin and !TWikiNetSkinPlugin are new in TWi
    * *Plugin Enhancements*
       * !SpreadSheetPlugin: 5 new functions
 
----++ Important Changes in 4.3.0
+See the full list of bug fixes at the bottom of this topic.
 
----+++ Highlights of bug fixes in 4.3.0
+---++ Deprecation Notices
+
+The %<nop>MAINWEB% and %<nop>TWIKIWEB% variables have been deprecated. For compatibility reasons they are unlikely to ever be removed completely, but you should use the %<nop>USERSWEB% and %<nop>SYSTEMWEB% variables instead.
+
+In Func getOopsUrl and permissionsSet have been declared deprecated. There is no plan to remove them yet.
+
+---++  TWiki-4.3.0 Minor Release - Details
+
+TWiki-4.3.0 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x03 revision 17948 (2009-03-30)
+
+---+++ Highlights
 
 <noautolink>
    * Security:
@@ -68,21 +82,7 @@ __Note:__ !HeadlinesPlugin, !TWikiNetSkin and !TWikiNetSkinPlugin are new in TWi
       * Statistics script does not handle properly topics with special characters
 </noautolink>
 
-See the full list of bug fixes at the bottom of this topic.
-
----++ Important Changes in Recent Releases
-
----++ Deprecation Notices
-
-The %<nop>MAINWEB% and %<nop>TWIKIWEB% variables have been deprecated. For compatibility reasons they are unlikely to ever be removed completely, but you should use the %<nop>USERSWEB% and %<nop>SYSTEMWEB% variables instead.
-
-In Func getOopsUrl and permissionsSet have been declared deprecated. There is no plan to remove them yet.
-
----++  TWiki 4.3.0 Minor Release - Details
-
-The 4.3.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x03 revision 17948 (30 Mar 2009)
-
----++ Enhancements in TWiki 4.3.0
+---+++ Enhancements
 
 <noautolink>
 | [[%BUGS%/Item3647][Item3647]] | Usability: Control over variable expansion in topic templates |
@@ -100,7 +100,7 @@ The 4.3.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 | [[%BUGS%/Item6228][Item6228]] | Security: Option to send signed e-mail with S/MIME |
 </noautolink>
 
----++ Fixes in TWiki 4.3.0
+---+++ Fixes
 
 <noautolink>
 | [[%BUGS%/Item1607][Item1607]] | %<nop>TOC% does not distinguish two headlines that have the same text |
@@ -138,7 +138,37 @@ The 4.3.0 release was built from SVN http://svn.twiki.org/svn/twiki/branches/TWi
 | [[%BUGS%/Item6223][Item6223]] | Users can't edit content in Main web |
 </noautolink>
 
+---++  TWiki 4.3.1 Patch Release - Details
+
+TWiki-4.3.1 was built from SVN http://svn.twiki.org/svn/twiki/branches/TWikiRelease04x03 revision 18054 (2009-04-29)
+
+---+++ Highlights
+
+   * Security:
+      * TWiki:Codev/SecurityAlert-CVE-2009-1339:  A remote user may gain TWiki admin privileges with a specially crafted image tag. This cross-site request forgery vulnerability existed because TWiki allowed HTTP GET to save content.
+   * Usability:
+      * Use of ISO format date promoted in this release
+   * Handling URLPARAM:
+      * The handling of URLPARAM for empty or missing was corrected in this release. 
+
+---+++ Enhancements
+
+<noautolink>
+| [[%BUGS%/Item6239][Item6239]] | Fix TWIKIWEB to SYSTEMWEB, MAINWEB to USERSWEB |
+| [[%BUGS%/Item6254][Item6254]] | Feature: Use ISO Date Format by Default |
+</noautolink>
+
+---+++ Fixes
+
+<noautolink>
+| [[%BUGS%/Item5453][Item5453]] | Value of "0" improperly handled in ENCODE variable |
+| [[%BUGS%/Item6232][Item6232]] | Use of uninitialized value $1 in concatenation (.) or string at lib/TWiki.pm |
+| [[%BUGS%/Item6240][Item6240]] | unhelpful error message when sysCommand fails |
+| [[%BUGS%/Item6243][Item6243]] | URLPARAM "empty or missing" |
+| [[%BUGS%/Item6251][Item6251]] | CSRF vulnerability CVE-2009-1339: Possible to gain TWiki admin privileges with a specially crafted image tag |
+</noautolink>
+
 <!-- Note: Do not use TWikibug: interwiki links because interwiki rule might not be defined
    * Set BUGS = http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs
 -->
-__Related Topic:__ TWikiHistory
+__Related Topic:__ TWikiHistory, TWikiInstallationGuide, TWikiUpgradeGuide
