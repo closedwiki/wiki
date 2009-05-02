@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1241291641" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1241294056" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ Managing Webs
 
@@ -91,6 +91,8 @@ If anyone is editing a topic which requires updating, or which lives in the web 
 ---+++ Renaming the %SYSTEMWEB% or %USERSWEB% webs
 
 Although technically possible, it is strongly advised __not__ to rename the %SYSTEMWEB% and %USERSWEB% webs. It complicates upgrades, and some extensions may make assumptions on the names of those system webs. For this reason, the rename web link is disabled in the <nop>%WEBPREFSTOPIC% topic in those webs.
+
+__%H% Suggestion:__ Create a web that is the entry point for your TWiki, and change the link of the upper left site logo to that web. Do that with a WIKILOGOURL setting in [[%LOCALSITEPREFS%]].
 
 If you want to rename the %SYSTEMWEB% or %USERSWEB% webs anyway:
    * Physically move the webs below =twiki/data= and =twiki/pub= on the shell level.
