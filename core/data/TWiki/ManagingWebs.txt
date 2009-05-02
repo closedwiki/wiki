@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1228163901" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1241291641" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ Managing Webs
 
@@ -72,7 +72,7 @@ The Pattern skin (default) indicates Subwebs by indenting them in the sidebar re
 #RenameWeb
 ---++ Renaming or Deleting a Web
 
-Rename a web via the Tools section in each %WEBPREFSTOPIC% topic.  You may delete a web by moving it into a Trash web.  
+Rename a web via the Tools section in each web's %WEBPREFSTOPIC% topic. You may delete a web by moving it into a Trash web.  
 
 ---+++ Permissions
 
@@ -88,14 +88,12 @@ When you rename a web TWiki will try and update all links that refer to the old 
 
 If anyone is editing a topic which requires updating, or which lives in the web being renamed, a second confirmation screen will come up which will indicate which topics are still locked for edit.  You may continue to hit the refresh button until an edit lease is obtained for each topic which requires updating (the "Refresh" button will change to "Submit"), or hit "Cancel", which will cancel your edit lease on all affected topics.
 
----+++ Renaming the webs in the distribution
+---+++ Renaming the %SYSTEMWEB% or %USERSWEB% webs
 
-It is possible, though not recommended, to change the names of the webs in the distribution.
+Although technically possible, it is strongly advised __not__ to rename the %SYSTEMWEB% and %USERSWEB% webs. It complicates upgrades, and some extensions may make assumptions on the names of those system webs. For this reason, the rename web link is disabled in the <nop>%WEBPREFSTOPIC% topic in those webs.
 
-If you plan to rename the %USERSWEB% web, remember that TWiki stores user topics in this web. That means that every WikiName signature - =%USERSWEB%.<nop>SomeUserName= - points to it and would need updating (unless the variable, =%<nop>USERSWEB%.<nop>SomeUserName=, is used throughout). This potentially large change can be performed automatically if you rename the web from the Tools section of %WEBPREFSTOPIC%, as described above.
-
-%X% If you want to rename the %SYSTEMWEB% or %USERSWEB% webs, remember they are referred to in the TWiki configuration. You will need to change the ={SystemWebName}=, ={UsersWebName}= and/or ={LocalSitePreferences}= settings in the configuration using the [[%SCRIPTURL{configure}%][configure]] interface.
-
-%X% Renaming the webs in the distribution is not recommended because it makes upgrades much more complicated.
+If you want to rename the %SYSTEMWEB% or %USERSWEB% webs anyway:
+   * Physically move the webs below =twiki/data= and =twiki/pub= on the shell level.
+   * Change the ={SystemWebName}=, ={UsersWebName}= and/or ={LocalSitePreferences}= settings in the configuration using the [[%SCRIPTURL{configure}%][configure]] interface.
 
 __Related Topics:__ AdminDocumentationCategory, AdminToolsCategory
