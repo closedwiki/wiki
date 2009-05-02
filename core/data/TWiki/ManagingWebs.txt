@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1241294056" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1241296650" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ Managing Webs
 
@@ -24,7 +24,7 @@ In either case you will want to be sure to verify that your new web has all the 
 
 <form name="admin" action="%SCRIPTURLPATH{manage}%/%WEB%/%TOPIC%" method="post">
 Create a new web by filling out this form.%BR%
-__%X% Note:__ *Keep the number of webs to a minimum!* Don't create a new web for each little project. Cross-linking topics is easier, and searches are faster, if there are only a few larger webs.
+__%X% Note:__ *Keep the number of webs to a minimum!* Don't create a new web for each little project. Cross-linking topics is easier, and searches are faster, if there are only a few larger webs. You can organize content within a web using categories, TWikiForms and FormattedSearch.
 |  *Name of new web:* | <input name="newweb" class="twikiInputField" type="text" value="%URLPARAM{"newweb" encode="entity"}%" size="16" /> | The name must start with an upper case letter, followed by upper or lower case letters or numbers. Specify a short name to avoid long URLs. |
 |  *Based on web:* | <select name="baseweb" class="twikiSelect"> %WEBLIST{ "<option $marker>$name</option>" webs="webtemplate,public" selection="_default" separator=" "}% </select> | Select a TemplateWeb |
 |  *Web color:* | <input name="WEBBGCOLOR" class="twikiInputField" type="text" value="#D0D0D0" size="16" /> | Enter a StandardColors code for the web |
@@ -99,3 +99,5 @@ If you want to rename the %SYSTEMWEB% or %USERSWEB% webs anyway:
    * Change the ={SystemWebName}=, ={UsersWebName}= and/or ={LocalSitePreferences}= settings in the configuration using the [[%SCRIPTURL{configure}%][configure]] interface.
 
 __Related Topics:__ AdminDocumentationCategory, AdminToolsCategory
+
+-- __Contributors:__ TWiki:Main/MikeMannix, TWiki:Main/PeterThoeny, TWiki:Main/GrantBow
