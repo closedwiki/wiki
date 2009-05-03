@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1092626473" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1241334038" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+!! <nop>%WEB% Web Preferences
 
@@ -15,6 +15,8 @@ These settings override the defaults for this web only. See [[%SYSTEMWEB%.TWikiP
    * Set SITEMAPUSETO = ...get rid of unused stuff.
    * Set NOSEARCHALL = on
 
+   * Set BROADCASTMESSAGE = %META{"moved"}%
+
    * Restricted to adminsso that deleted topics can't be viewed by spies.
       * Set ALLOWWEBVIEW = %USERSWEB%.TWikiAdminGroup
       * Set ALLOWTOPICCHANGE = %USERSWEB%.TWikiAdminGroup
@@ -24,4 +26,3 @@ These settings override the defaults for this web only. See [[%SYSTEMWEB%.TWikiP
       * Set FINALPREFERENCES = NOSEARCHALL, ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME
 
 %INCLUDE{%SYSTEMWEB%.WebPreferencesHelp}%
-
