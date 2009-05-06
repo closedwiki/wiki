@@ -484,7 +484,7 @@ sub _printMsg {
         }
         $msg =~ s/==([A-Z]*)==/'=='.CGI::span( { class=>'twikiAlert' }, $1 ).'=='/ge;
     }
-    $session->{response}->body( $session->{response}->body . $msg . "\n" );
+    $session->{response}->body( ($session->{response}->body || '') . $msg . "\n" );
 }
 
 1;
