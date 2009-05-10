@@ -1302,27 +1302,28 @@ sub _workingDays
 {
     my ( $start, $end ) = @_;
 
-    # Contributed by CrawfordCurrie - 17 Jul 2004
+    # Rewritten by PeterThoeny - 2009-05-03 (previous implementation was buggy)
     # Calculate working days between two times. Times are standard system times (secs since 1970). 
     # Working days are Monday through Friday (sorry, Israel!)
-
-    use integer;
-    my $elapsed_days = ( $end - $start ) / ( 60 * 60 * 24 );
-    # total number of elapsed 7-day weeks
-    my $whole_weeks = $elapsed_days / 7;
-    my $extra_days = $elapsed_days - ( $whole_weeks * 7 );
-    if( $extra_days > 0 ) {
-      my @lt = gmtime( $start );
-      my $wday = $lt[6]; # weekday, 0 is sunday
-
+    # A day has 60 * 60 * 24 sec
+    # Adding 3601 sec to account for daylight saving change in March in Northern Hemisphere
+    my $days = int( ( abs( $end - $start ) + 3601 ) / 86400 );
+    my $weeks = int( $days / 7 );
+    my $fullWeekWorkingDays = 5 * $weeks;
+    my $extra = $days % 7;
+    if( $extra > 0 ) {
+      $start = $end if( $start > $end );
+      my @tm = gmtime( $start );
+      my $wday = $tm[6]; # 0 is Sun, 6 is Sat
       if( $wday == 0 ) {
-        $extra_days-- if( $extra_days > 0 );
+        $extra--;
       } else {
-        $extra_days-- if( $extra_days > ( 6 - $wday ) );
-        $extra_days-- if( $extra_days > ( 6 - $wday ) );
+        my $sum = $wday + $extra;
+        $extra-- if( $sum > 6 );
+        $extra-- if( $sum > 7 );
       }
     }
-    return $whole_weeks * 5 + $extra_days;
+    return $fullWeekWorkingDays + $extra;
 }
 
 # =========================

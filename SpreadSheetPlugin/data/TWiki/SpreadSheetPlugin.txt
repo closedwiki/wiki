@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1238130865" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1241923164" format="1.1" version="$Rev$"}%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page
    at http://twiki.org/cgi-bin/view/Plugins/SpreadSheetPlugin or provide feedback
@@ -641,9 +641,11 @@ Conventions for Syntax:
 
 #FuncTIMEDIFF
 ---+++ TIMEDIFF( serial_1, serial_2, unit ) -- time difference between two serialized dates
-   * The =unit= is seconds if not specified; unit can be specified as in =$TIMEADD()=. Note: An approximation is used for month and year calculations. Use =$FORMAT()=, =$FORMATTIMEDIFF()= or =$INT()= to format real numbers
+   * The =unit= is seconds if not specified; unit can be specified as in =$TIMEADD()=.
+   * Notes: An approximation is used for month and year calculations. Use =$ROUND()= to round =day= unit to account for daylight savings time change. Use =$FORMAT()=, =$FORMATTIMEDIFF()= or =$INT()= to format real numbers
    * Syntax: ==$TIMEDIFF( serial_1, serial_2, _unit_ )==
    * Example: ==%<nop>CALC{"$TIMEDIFF($TIME(), $EVAL($TIME()+90), minute)"}%== returns ==1.5==
+   * Example: ==%<nop>CALC{"$ROUND($TIMEDIFF($TIME(2009/03/06),$TIME(2009/03/13), day))"}%== returns ==7== (or ==6.95833333333333== without the =$ROUND()=)
    * Related: =[[#FuncFORMAT][$FORMAT()]]=, =[[#FuncFORMATGMTIME][$FORMATGMTIME()]]=, =[[#FuncFORMATTIME][$FORMATTIME()]]=, =[[#FuncFORMATTIMEDIFF][$FORMATTIMEDIFF()]]=, =[[#FuncINT][$INT()]]=, =[[#FuncTIME][$TIME()]]=, =[[#FuncTIMEADD][$TIMEADD()]]=, =[[#FuncTODAY][$TODAY()]]=, =[[#FuncWORKINGDAYS][$WORKINGDAYS()]]=
 
 #FuncTODAY
@@ -767,8 +769,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2001-2009, Peter Thoeny, [[http://www.twiki.net/][TWIKI.NET]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 26 Mar 2009 (17910) |
+|  Plugin Version: | 09 May 2009 (18078) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  09 May 2009: | Fixed bug in $WORKINGDAYS(): Incorrect number of days if daylight savings time change happens between start date and end date |
 |  26 Mar 2009: | Added $INSERTSTRING() |
 |  25 Mar 2009: | Added $EMPTY(), $LEFTSTRING(), $RIGHTSTRING(), $SUBSTRING() |
 |  24 Mar 2009: | Fixed bug in $REPLACE() if to-be-replaced string is "0"; fixed bug in $SUBSTITUTE() if replace string is empty; improved docs |
