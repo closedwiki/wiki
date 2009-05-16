@@ -853,6 +853,7 @@ sub renderFORMFIELD {
         # Otherwise default to value
         $format = '$value';
     }
+    $format =~ s/\$title/X-Title-Place-Holder/go; # Item6267: Use place holder (see below)
 
     my $formWeb;
     if ( $formTopic ) {
@@ -912,7 +913,8 @@ sub renderFORMFIELD {
         $text = $altText || '';
     }
 
-    $text =~ s/\$title/$title/go;
+    # Item6267: Can't use \$title since "$title" might exist in form field value
+    $text =~ s/X-Title-Place-Holder/$title/go;
 
     return $text;
 }
