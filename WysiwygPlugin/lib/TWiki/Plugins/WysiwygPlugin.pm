@@ -744,7 +744,7 @@ sub _restUpload {
     my ($session, $plugin, $verb, $response) = @_;
     my $query = TWiki::Func::getCgiQuery();
 
-    if( $query && $query->method() !~ /^POST$/i ) { 
+    if( $query && $query->request_method() !~ /^POST$/i ) { 
         returnRESTResult( $response, 405, 'REST upload requires http POST method' ); 
         return undef; 
     }
