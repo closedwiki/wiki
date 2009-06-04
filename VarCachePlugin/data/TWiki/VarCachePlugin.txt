@@ -23,11 +23,11 @@ The rendering of TWiki markup to HTML is not cached. That is, user specific HTML
 		* removed if caching is not active, e.g. when the topic gets rendered dynamically
 	* The cache gets updated on topic view if:
 		* the cache does not exist (e.g. after adding the =%<nop>VARCACHE{}%= variable)
-		* the cache is older then the cache refresh period (unless refresh if set to 0)
-		* the cache is older then the topic (e.g. the topic has been updated)
+		* the cache is older than the cache refresh period (unless refresh if set to 0)
+		* the cache is older than the topic (e.g. the topic has been updated)
 		* the topic is accessed with a =?varcache=refresh= URL parameter (usually by following the <u>refresh</u> link in the cache message)
 	* The topic is rendered dynamically without caching when:
-		* the topic has URL parameters other then =varcache= (e.g. to show dynamic content properly, such as table sorting, filtering, searching)
+		* the topic has URL parameters other than =varcache= (e.g. to show dynamic content properly, such as table sorting, filtering, searching)
 		* the topic is previewed after editing
 	* Limitations:
 		* The cache is not user specific. For example, all users see the expanded =%<nop>WIKIUSERNAME%= of the person who refreshed the cache (on demand or by looking at a topic with an exired cache)
