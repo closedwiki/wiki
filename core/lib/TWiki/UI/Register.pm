@@ -513,6 +513,11 @@ sub resetPassword {
     foreach my $userName (@userNames) {
         $good = $good &&
           _resetUsersPassword( $session, $userName, $introduction, \$message );
+
+         if ($good) {
+               $session->writeLog('resetpasswd', $userName);
+              }
+
     }
 
     my $action = '';
