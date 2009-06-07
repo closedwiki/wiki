@@ -23,6 +23,7 @@ use Apache::Htpasswd;
 use Assert;
 use strict;
 use TWiki::Users::Password;
+use TWiki::ListIterator;
 use Error qw( :try );
 
 =pod
@@ -92,7 +93,7 @@ sub canFetchUsers {
 sub fetchUsers {
     my $this = shift;
     my @users = $this->{apache}->fetchUsers();
-    return new ListIterator(\@users);
+    return new TWiki::ListIterator(\@users);
 }
 
 sub fetchPass {
