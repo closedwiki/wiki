@@ -245,7 +245,7 @@ sub _userReallyExists {
      } else {
         # passwd==none case generally assumes any login given exists...
          # (not positive if that makes sense for rego..)
-        return 1;
+        return 0;
      }
 
     return 0;
