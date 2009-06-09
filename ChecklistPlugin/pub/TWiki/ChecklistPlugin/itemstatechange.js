@@ -107,6 +107,14 @@ function clpHandleTextResponse(self, responseText) {
 				}
 			}
 
+			els = document.getElementById("CLP_HIDE_ID_"+id);
+			if (els) {
+				var spanExpr = new RegExp("<span id=\"CLP_HIDE_ID_"+id+"\"[^>]*>","i");
+				var span = spanExpr.exec(responseText);
+				span[0].match(/class="([^"]+)"/);
+				els.className=RegExp.$1;
+			}
+
 			var divExpr = new RegExp("<div[^>]+id=\"CLP_TT_"+id+"\"[^>]*>(.*?)</div>");
 			divExpr.exec(responseText);
 			var divTxt = RegExp.$1;
@@ -266,5 +274,40 @@ function clpTooltipShow(tooltipId, parentId, posX, posY,closeAll) {
 function clpTooltipHide(id) {
 	var it = document.getElementById(id); 
 	if (it) it.style.visibility = 'hidden'; 
+}
+var clpHideShowToggleStates = new Object();
+function clpHideShowToggle(name,state) {
+	var chn = document.getElementsByName("CLP_HIDE_NAME_"+name);
+	if (!clpHideShowToggleStates[name]) {
+		clpHideShowToggleStates[name] = new Object();
+		clpHideShowToggleStates[name][state] = "list-item";
+	}
+	if (state != "" && clpHideShowToggleStates[name][""]) {
+		clpHideShowToggleStates[name][state] = clpHideShowToggleStates[name][""];
+		delete clpHideShowToggleStates[name][""];
+	}
+	clpHideShowToggleStates[name][state] = (clpHideShowToggleStates[name][state] == "none") ? "list-item" : "none";
+
+	if  (chn && chn.length) {
+		for (var j=0; j<chn.length; ++j) {
+			if (state == "" || chn[j].className == "clp_hide_"+name+"_"+state) {
+
+				chn[j].style.display= clpHideShowToggleStates[name][state];
+			}
+		}
+	}
+}
+function clpUpdateHideShowToggle() {
+	for (var name in clpHideShowToggleStates) {
+		var chn = document.getElementsByName("CLP_HIDE_NAME_"+name);
+		if (chn && chn.length) {
+			for (var state in clpHideShowToggleStates[name]) {
+				for (var j=0; j<chn.length; ++j) {
+					if (chn[j].className =="clp_hide_"+name+"_"+state) chn[j].style.display = clpHideShowToggleState[name][state];
+					
+				}
+			}
+		}
+	}
 }
 

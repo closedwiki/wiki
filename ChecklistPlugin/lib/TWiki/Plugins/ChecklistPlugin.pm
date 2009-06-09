@@ -63,6 +63,7 @@ use vars qw(
     	$resetDone $stateChangeDone $saveDone
 	$initText %itemsCollected $dryrun
         $web $topic $user
+	$idOffset
     );
 
 use strict;
@@ -80,7 +81,9 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Cairo, Dakar, Edinburgh, ...';
 
-$REVISION = '1.024'; #dro# fixed missing ')' in generated JavaScript commands
+
+$REVISION = '1.025'; #dro# added documentation requested by TWiki:Main.PeterThoeny; added hide entries feature requested by Christian Holzmann
+#$REVISION = '1.024'; #dro# fixed missing ')' in generated JavaScript commands
 #$REVISION = '1.023'; #dro# fixed minor anchor link bug reported by TWiki:Main.KeithHelfrich; fixed tooltip position bug
 #$REVISION = '1.022'; #dro# improved AJAX performance; added new feature (state selection for reset button); fixed %TOC% bug reported by TWiki:Main.HelenJohnstone; fixed some minor and major bugs (mod_perl, description stripping, static feature, 'text' icons);  removed useforms feature
 #$REVISION = '1.021'; #dro# fixed some major bug (mod_perl, plugin preferences); improved performance (AJAX); fixed minor IE caching bug (AJAX related); added new attributes (tooltip, descr, template, statesel) requested by TWiki:Main.KeithHelfrich; fixed installation instructions bug reported by TWiki:Main.KeithHelfrich
@@ -170,11 +173,20 @@ sub commonTagsHandler
 sub handleAllTags {
 
 	### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+	#### incompatible changes:
+	##$_[0] =~ s/%CHECKLISTSTART%(.*?)%CHECKLISTEND%/&handleAutoChecklist("",$1,$_[0])/sge;
+	##$_[0] =~ s/%CHECKLISTSTART{(.*?)}%(.*?)%CHECKLISTEND%/&handleAutoChecklist($1,$2,$_[0])/sge;
+	$_[0] =~ s/%CHECKLIST%/&handleChecklist("",$_[0])/ge;
+	$_[0] =~ s/%CHECKLIST{(.*?)}%/&handleChecklist($1,$_[0])/sge;
+	$_[0] =~ s/%CLI({(.*?)})?%/&handleChecklistItem($2,$_[0],$-[0],$+[0])/sge;
+
+	## incompatible changes:
 	$_[0] =~ s/%CHECKLISTSTART%(.*?)%CHECKLISTEND%/&handleAutoChecklist("",$1,$_[0])/sge;
 	$_[0] =~ s/%CHECKLISTSTART{(.*?)}%(.*?)%CHECKLISTEND%/&handleAutoChecklist($1,$2,$_[0])/sge;
 	$_[0] =~ s/%CHECKLIST%/&handleChecklist("",$_[0])/ge;
 	$_[0] =~ s/%CHECKLIST{(.*?)}%/&handleChecklist($1,$_[0])/sge;
 	$_[0] =~ s/%CLI({(.*?)})?%/&handleChecklistItem($2,$_[0],$-[0],$+[0])/sge;
+
 	##$_[0] =~ s/([^\n\%]*)%CLI({(.*?)})?%([^\n\%]*)/$1.&handleChecklistItem($3,$_[0],$1,$4).$4/sge;
 }
 
@@ -210,16 +222,17 @@ sub initDefaults {
 		'statesel' => 0,
 		'tooltipfixleft' => '-163',
 		'tooltipfixtop' => '0',
+		'hide'=> undef,
 	);
 
 	@listOptions = ('states','stateicons');
-	@renderedOptions = ( 'text', 'stateicons', 'reset' );
+	@renderedOptions = ( 'text', 'stateicons', 'reset', 'hide' );
 
 	@filteredOptions = ( 'id', 'name', 'states');
 
 	@flagOptions = ('showlegend', 'anchors', 'notify', 'static' , 'useajax', 'statesel');
 
-	@ignoreNamedDefaults = ('showlegend','reset');
+	@ignoreNamedDefaults = ('showlegend','reset','hide');
 }
 
 # =========================
@@ -439,6 +452,12 @@ sub handleChecklist {
 	} else {
 		$text.=$legend; 
 	}
+	if (defined $options{hide}) {
+		my $state="";
+		$state = $1 if ($options{hide}=~s/\@(\S+)//g);
+		$state = "" if $state eq $options{hide};
+		$text .= $query->a({href=>"javascript:  clpHideShowToggle('$options{name}','$state')"}, $options{hide});
+	}
 
 	return $text;
 }
@@ -501,13 +520,24 @@ sub substItemLine {
 	if ($l=~s/(\s+)\#(\S+)/$1/) {
 		$attribs.=" id=\"$2\"";
 	}
+
+	$idOffset++;
+
+	my $id = "CLP_HIDE_ID_".$options{name}.($namedIds{$options{name}} + $idOffset);
+	my $name = "CLP_HIDE_NAME_".$options{name};
+	my $class = "clp_hide_".$options{name}."_".$$idMapRef{$options{name}}{$namedIds{$options{name}}+$idOffset}{state};
+
 	if ($l=~/\%CLI{.*?}\%/) {
 		$l=~s/\%CLI{(.*?)}\%/\%CLI{$1 $attribs}\%/g;
+		$l=~s/^/<span id="$id" name="$name" class="$class">/;
+		$l=~s/$/<\/span>/;
 	} else {
 		if (lc($options{'clipos'}) eq 'left') {
-			$l=~s/^(\s+[\d\*]+)/"$1 \%CLI{$attribs}% "/e;
+			###$l=~s/^(\s+[\d\*]+)/"$1 \%CLI{$attribs}% "/e;
+			$l=~s/^(\s+[\d\*]+)(.*)$/"$1 <span id=\"$id\" name=\"$name\" class=\"$class\">\%CLI{$attribs}\% $2<\/span>"/e;
 		} else {
-			$l=~s/^(\s+[\d\*]+.*?)$/"$1 \%CLI{$attribs}%"/e;
+			###$l=~s/^(\s+[\d\*]+.*?)$/"$1 \%CLI{$attribs}%"/e;
+			$l=~s/^(\s+[\d\*]+)(.*?)$/"$1 <span id=\"$id\" name=\"$name\" class=\"$class\">$2 \%CLI{$attribs}\%<\/span>"/e;
 		}
 	}
 	
@@ -521,6 +551,10 @@ sub handleAutoChecklist {
 
 	local(%options);
 	return &createUnknownParamsMessage() unless &initOptions($attributes);
+
+	initStates(TWiki::Func::getCgiQuery());
+	local($idOffset);
+
 
 	$text=~s/\%CLI(\{([^\}]*)\})?\%/&substAttributes($attributes, $2)/meg;
 	$text=~s/^(\s+[\d\*]+.*?)$/&substItemLine($1,$attributes)/meg;
