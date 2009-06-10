@@ -277,7 +277,7 @@ function clpTooltipHide(id) {
 	var it = document.getElementById(id); 
 	if (it) it.style.visibility = 'hidden'; 
 }
-var clpHideShowToggleStates = new Object();
+var clpHideShowToggleStates;
 function clpHideShowToggle(name,state) {
 	var chn = document.getElementsByName("CLP_HIDE_NAME_"+name);
 	if (!clpHideShowToggleStates[name]) {
@@ -285,10 +285,10 @@ function clpHideShowToggle(name,state) {
 		clpHideShowToggleStates[name][state] = "list-item";
 	}
 	if (state != "" && clpHideShowToggleStates[name][""]) {
-		clpHideShowToggleStates[name][state] = clpHideShowToggleStates[name][""];
-		delete clpHideShowToggleStates[name][""];
+		clpSaveHideShowToggleStates(name, state, clpHideShowToggleStates[name][""]);
+		clpDeleteHideShowToggleStates(name,"");
 	}
-	clpHideShowToggleStates[name][state] = (clpHideShowToggleStates[name][state] == "none") ? "list-item" : "none";
+	clpSaveHideShowToggleStates(name, state, (clpHideShowToggleStates[name][state] == "none") ? "list-item" : "none");
 
 	if  (chn && chn.length) {
 		for (var j=0; j<chn.length; ++j) {
@@ -298,6 +298,25 @@ function clpHideShowToggle(name,state) {
 			}
 		}
 	}
+}
+function clpGetCookiePath() {
+	var path = '/';
+
+	if (document.URL) {
+		if (document.URL.match(/^http:\/\/[^\/]+(\/.*)$/)) path = RegExp.$1; else if (document.URL.match(/^https:\/\/[^\/]+(\/.*)$/)) path = RegExp.$1;
+	}
+	return path;
+}
+function clpDeleteHideShowToggleStates(name,state) {
+	delete clpHideShowToggleStates[name][""];
+	
+	document.cookie = 'clpHide-'+name+'-'+state+'=; expires=Thu, 01-Jan-70 00:00:01 GMT; path='+clpGetCookiePath();
+}
+function clpSaveHideShowToggleStates(name,state,stateValue) {
+	clpHideShowToggleStates[name][state]=stateValue;
+	var a = new Date();
+	a = new Date(a.getTime() +1000*60*60*24*365);
+	document.cookie = 'clpHide-'+name+'-'+state+'='+stateValue+'; expires='+a.toGMTString()+'; path='+clpGetCookiePath(); 
 }
 function clpUpdateHideShowToggle() {
 	for (var name in clpHideShowToggleStates) {
@@ -312,4 +331,28 @@ function clpUpdateHideShowToggle() {
 		}
 	}
 }
+function clpLoadHideShowToggleStates() {
+	if (!clpHideShowToggleStates) clpHideShowToggleStates=new Object();
 
+	if (document.cookie) {
+		var cookies = document.cookie.split(";");
+		for (var j=0; j<cookies.length; ++j) {
+			if (cookies[j].indexOf("clpHide-")>=0) {
+				var cookie = cookies[j].split("=");
+				var name = cookie[0];
+				var value = cookie[1];
+
+				var nameparts = name.split("-");
+
+				if (nameparts.length==3) {
+					if (!clpHideShowToggleStates[nameparts[1]]) clpHideShowToggleStates[nameparts[1]] = new Object();
+					clpHideShowToggleStates[nameparts[1]][nameparts[2]] = value;
+				}
+
+			}
+		}
+	}
+	window.setTimeout("clpUpdateHideShowToggle()",2500);
+}
+
+clpLoadHideShowToggleStates();
