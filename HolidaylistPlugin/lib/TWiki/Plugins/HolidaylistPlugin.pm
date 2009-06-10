@@ -57,7 +57,8 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 
 
-$REVISION = '1.0.29'; #dro# changed some defaults (showmonthheader, monthheaderformat, headerformat); fixed alignments (statistics, monthheader); added maxheight attribute; allowed color definitions in icon fields
+$REVISION = '1.0.30'; #dro# improved INCLUDE support requested by Foswiki:Main.IngoKappler
+#$REVISION = '1.0.29'; #dro# changed some defaults (showmonthheader, monthheaderformat, headerformat); fixed alignments (statistics, monthheader); added maxheight attribute; allowed color definitions in icon fields
 #$REVISION = '1.0.26'; #dro# added missing anchor in showoptions form action; added row color feature (new attributes: namecolors, rowcolors); added order feature (new attribute: order); added namepos attribute (place names left and/or right of a row)
 #$REVISION = '1.0.25'; #dro# added div tag with style overflow:auto requested by Matthew Thomson; added query parameters feature (hlp_&lt;attribute&gt; in URIs); added option form feature (new attributes: showoptions, optionspos, optionsformat) requested by Matthew Thomson; improved performance; fixed minor icon related bugs;
 #$REVISION = '1.0.24'; #dro# added statistics feature requested by TWiki:Main.GarySprague
@@ -161,8 +162,8 @@ sub initDefaults() {
 		headerformat	=> '<font size="-2">%a<br/>%e</font>',	# format of the header
 		compatmode	=> 0,		# compatibility mode (allows all CalendarPlugin event types)
 		compatmodeicon	=> ':-)', 	# compatibility mode icon
-		daynames	=> undef,	# day names (overwrites lang attribute)
-		monthnames	=> undef,	# month names (overwrites lang attribute)
+		daynames	=> undef,	# day names (overrides lang attribute)
+		monthnames	=> undef,	# month names (overrides lang attribute)
 		width		=> undef,	# table width
 		unknownparamsmsg=> '%RED% Sorry, some parameters are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR% <br/> Allowed parameters are (see TWiki.HolidaylistPlugin topic for more details): %KNOWNPARAMSLIST%',
 		enablepubholidays	=> 1,		# enable public holidays
@@ -1336,7 +1337,7 @@ sub renderStatisticsSumRow {
 		my $stattitle = shift @stattitles;
 		$stattitle = getStatOption('stattitle','statcoltitle') unless defined $stattitle;
 		my ($txt,$t) = substStatisticsVars($statcol, $stattitle, $sumstatisticsref);
-		$row.=$cgi->th({-valign=>"top", -title=>$t}, $txt);
+		$row.=$cgi->th({-valign=>'top', -title=>$t}, $txt);
 	}
 	$row.=$cgi->th('&nbsp;') if $options{namepos}=~/^(right|both)$/i;
 	my $colspan=$options{days};
@@ -1379,7 +1380,7 @@ sub renderStatisticsRow {
 			$style.="color:$options{todayfgcolor};" if (defined $options{todayfgcolor}) && ($date == $today);
 			$style.="background-color:$options{todaybgcolor};" if (defined $options{todaybgcolor}) && ($date == $today);
 			if (($dow<6)||($options{showweekends})) {
-				$row.=$cgi->th({-style=>$style,-title=>$title, -align=>'center'},$text);
+				$row.=$cgi->th({-style=>$style,-title=>$title, -valign=>'top', -align=>'center'},$text);
 			} else {
 				$row.=$cgi->th({-style=>$style,-title=>$title},'&nbsp;');
 			}
@@ -1405,9 +1406,9 @@ sub renderStatisticsRow {
 		}
 		
 		$text.=$cgi->Tr({-bgcolor=>$options{tableheadercolor}}, 
-				 ( $options{namepos}=~/^(left|both)$/i ? $cgi->th({-align=>"right"},$rowheader) : '')
+				 ( $options{namepos}=~/^(left|both)$/i ? $cgi->th({-align=>'right', -valign=>'top'},$rowheader) : '')
 				.$row
-				.( $options{namepos}=~/^(right|both)$/i ? $cgi->th({-align=>'left'},$rowheader) : ''));
+				.( $options{namepos}=~/^(right|both)$/i ? $cgi->th({-align=>'left', -valign=>'top'},$rowheader) : ''));
 	}
 
 	return $text;
@@ -1569,7 +1570,11 @@ sub expandIncludedEvents
 
 	my ($theWeb, $theTopic) = ($web, $topic);
 
-	my $webTopic = &TWiki::Func::extractNameValuePair( $theAttributes );
+	my $webTopic = TWiki::Func::expandCommonVariables( TWiki::Func::extractNameValuePair( $theAttributes ) );
+	my $section = TWiki::Func::expandCommonVariables( TWiki::Func::extractNameValuePair( $theAttributes, 'section') );
+	my $pattern = TWiki::Func::expandCommonVariables( TWiki::Func::extractNameValuePair( $theAttributes, 'pattern') );
+
+	
 	if( $webTopic =~ /^([^\.]+)[\.\/](.*)$/ ) {
 		$theWeb = $1;
 		$theTopic = $2;
@@ -1577,20 +1582,45 @@ sub expandIncludedEvents
 		$theTopic = $webTopic;
 	}
 
-	# prevent recursive loop
+	# prevent recursive loop:
 	grep (/^\Q$theWeb.$theTopic\E$/, @{$theProcessedTopicsRef}) and return "";
 
 	push( @{$theProcessedTopicsRef}, "$theWeb.$theTopic" );
 
 	my $text = &readTopicText( $theWeb, $theTopic );
 
-	$text =~ s/.*?%STARTINCLUDE%//s;
-	$text =~ s/%STOPINCLUDE%.*//s;
+	$text = getTopicSectionText($text, $section) if (defined $section && $section ne "");
+	$text = getTopicPatternText($text, $pattern) if (defined $pattern && $pattern ne "");
 
-	# recursively expand includes
+
+	$text = getTopicIncludeText($text);
+
+	# recursively expand includes:
 	$text =~ s/%INCLUDE{(.*?)}%/&expandIncludedEvents( $1, $theProcessedTopicsRef )/geo;
 
+	# expand common variables (search and so on):
+	$text = TWiki::Func::expandCommonVariables($text, $theWeb, $theTopic);
+
 	return $text;
+}
+# =========================
+sub getTopicIncludeText {
+	my ($text) = @_;
+	return ($text =~ /\%STARTINCLUDE\%(.*?)\%STOPINCLUDE\%/s) ? $1 : $text;
+}
+# =========================
+sub getTopicPatternText {
+	my ($text, $pattern) = @_;
+	return $text =~ /($pattern)/s ? $1 : $text;
+}
+# =========================
+sub getTopicSectionText {
+	my ($text, $section) = @_;
+	return $text if $text !~ /%STARTSECTION{([^}]*)}(.*?)%ENDSECTION{[^}]*}/s;
+	$text =~ s/%STARTSECTION\{([^\}]*)\}(.*?)%ENDSECTION\{[^\}]*\}//s;
+	my ($sectionAttr,$sectionText) = ($1,$2);
+	my $sectionName = TWiki::Func::extractNameValuePair($sectionAttr);
+	return ($section eq $sectionName) ? $sectionText : getTopicSectionText($text, $section);
 }
 # =========================
 sub renderOptions {

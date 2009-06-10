@@ -89,8 +89,8 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 	* If you enable the compatmode (see [[#AttriButes][Attributes]]) you can use all event types of the TWiki:Plugins.CalendarPlugin
 	* If you change the default language ('lang' attribute; see [[#AttriButes][Attributes]]) you can use your language specific month and day names or the abbreviations for any entry type (including TWiki:Plugins.CalendarPlugin event types).
 	* If you change the month names or day names ('monthnames' and 'daynames' attributes; see [[#AttriButes][Attributes]]) you can use it for your entries (including TWiki:Plugins.CalendarPlugin event types).
-	* You can hide all calendar entries if you put them into HTML comments, e.g:
 	* You can define a background color in a icon field or icon attribute (workicon, ...) if you write =color(&lt;MYCOLOR&gt;)=, e.g. =&nbsp;&nbsp;&nbsp;* 5 Mar 2009 - Green Entry - anywhere - color(green)=. It is also possible to combine icon and background color, e.g. =&nbsp;&nbsp;&nbsp;* 6 Mar 2009 - Red Entry - somewhere - color(red) :skull:=.
+	* You can hide all calendar entries if you put them into HTML comments, e.g:
 <verbatim>
 		%HOLIDAYLIST%
 		<!--
@@ -112,12 +112,12 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | *Attribute* | *Comment* | *Default / Example* |
 |  *Behavior*  |||
 | compatmode  | if set to "1" all TWiki:Plugins.CalendarPlugin event types are supported (related: compatmodeicon) | =compatmode="0"= |
-| daynames | custom daynames (a list separated by a '&brvbar;' and starting on Monday; overwrites lang attribute) | =daynames="M&brvbar;T&brvbar;W&brvbar;T&brvbar;F&brvbar;S&brvbar;S"= |
+| daynames | custom daynames (a list separated by a '&brvbar;' and starting on Monday; overrides lang attribute) | =daynames="M&brvbar;T&brvbar;W&brvbar;T&brvbar;F&brvbar;S&brvbar;S"= |
 | days | number of days to show |=days="30"= |
 | enablepubholidays | enables/disables public holidays (bullet list entries with a @all in a person field; related: showpubholidays, pubholidayicon) | =enablepubholidays="1"= |
 | lang | language (related: daynames, monthnames) | =lang="English"= |
 | month | set a month (e.g. Jan, Feb ... or 01, 02, ... 12 ) or a month offset (e.g. +0, +1, -2,...) *Note:* If you use this month attribute the days attribute will be ignored (days will be set to the duration of the month). | =month="+1"= |
-| monthnames | custom month names (a list separated by '&brvbar;' and starting on January; overwrites lang attribute) | =monthnames="J&brvbar;F&brvbar;M&brvbar;A&brvbar;M&brvbar;J&brvbar;J&brvbar;A&brvbar;S&brvbar;O&brvbar;N&brvbar;D"= |
+| monthnames | custom month names (a list separated by '&brvbar;' and starting on January; overrides lang attribute) | =monthnames="J&brvbar;F&brvbar;M&brvbar;A&brvbar;M&brvbar;J&brvbar;J&brvbar;A&brvbar;S&brvbar;O&brvbar;N&brvbar;D"= |
 | namepos | allows you to change the position of the names; allowed values: left, right, both | =namepos="left"= |
 | navdays | defines the days to navigate to (default: value of the =days= attribute) | =navdays="30"= |
 | order | changes the sorting order of entries and contains a comma separated list of names or special tags (default: alphanumerical order); hint: order attribute can also be used as a filter: show only listed persons (e.g. =order="Bob,Bill"=); specials: =[:ralpha:]= - sort persons reverse alphanumerical; =[:nextfirst:]= - next person with an entry will be shown first; =[:rest:]= - will be replaced by missing persons if =order= contains an uncomplete person list (e.g. =order="Bob,Bill,[:rest:]"=); =[:num:] ([:rnum])= - (reverse) numerical order | undefined / =order="Bob,Bill,Alice,Jane,[:rest:]"= |
@@ -144,12 +144,12 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | border | table border | =border="1"= |
 | cellpadding | table cell padding | =cellpadding="1"= |
 | cellspacing | tabel cell spacing | =cellspacing="0"= |
-| daynames | custom daynames (a list separated by a '&brvbar;' and starting on Monday; overwrites lang attribute) | =daynames="M&brvbar;T&brvbar;W&brvbar;T&brvbar;F&brvbar;S&brvbar;S"= |
+| daynames | custom daynames (a list separated by a '&brvbar;' and starting on Monday; overrides lang attribute) | =daynames="M&brvbar;T&brvbar;W&brvbar;T&brvbar;F&brvbar;S&brvbar;S"= |
 | headerformat | table header format of a day; a subset of strftime conversion specifiers is supported (only date not time specificiers; see manual page or TWiki:Codev.ConvergeDateTimeFormattingModels) | =headerformat="&lt;font&nbsp;size=\"-2\">%a&lt;br/&gt;%e&lt;/font&gt;"= |
 | lang | language (related: daynames, monthnames) | =lang="English"= |
 | maxheight | maximum table height | undefined / =maxheight="200px"= |
 | monthheaderformat | month header format (related: showmonthheader) | =monthheaderformat="%b"= |
-| monthnames | custom month names (a list separated by '&brvbar;' and starting on January; overwrites lang attribute) | =monthnames="J&brvbar;F&brvbar;M&brvbar;A&brvbar;M&brvbar;J&brvbar;J&brvbar;A&brvbar;S&brvbar;O&brvbar;N&brvbar;D"= |
+| monthnames | custom month names (a list separated by '&brvbar;' and starting on January; overrides lang attribute) | =monthnames="J&brvbar;F&brvbar;M&brvbar;A&brvbar;M&brvbar;J&brvbar;J&brvbar;A&brvbar;S&brvbar;O&brvbar;N&brvbar;D"= |
 | name | header content of the first cell header |=name="Name"= |
 | namecolors | a comma separated list of names with own colors, e.g. namecolors="Mary:red,Bob:lightblue" | undefined / =namecolors="Bill:yellow"= |
 | navdays | defines the days to navigate to (default: value of the =days= attribute) | =navdays="30"= |
@@ -181,7 +181,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | statcolformat | statistics column format (related: showstatcol, statcolheader, statcoltitle); see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | =statcolformat="%{hh}"= -or- =statcolofrmat="%{h}"= (if =showweekends= set to ="on"=) |
 | statcolheader | statistics header (related: showstatcol, statcolformat, statcoltitle); use '&#124;' to separate multiple column headers | =statcolheader="#"= |
 | statcoltitle | statistics tooltip (related: showstatcol, statcolformat, statcolheader); see  [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | =statcoltitle="%{ll}"= -or- =statcoltitle="%{l}"= (if =showweekends= set to ="on"=) |
-| statformat | statistics format; overwrites statcolformat and statrowformat | undefined / =statformat="%{hh}"= |
+| statformat | statistics format; overrides statcolformat and statrowformat | undefined / =statformat="%{hh}"= |
 | statformat_0 | defines the string for the zero value of all statistics variables; [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | =statformat_0="0"= |
 | statformat_i | format for a single %{i} variable value; %ICON will be substituted by the icon; see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | =statformat_i="%{i:%ICON} x %ICON ;"= |
 | statformat_ii | format for a single %{ii} variable value; %ICON will be substituted by the icon; see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | =statformat_ii="%{ii:%ICON} x %ICON ;"= |
@@ -189,11 +189,11 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | statformat_ll | format for a single %{ll} variable value; %LOCATION will be substituted by the location; see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | =statformat_ll="%{ll:%LOCATION} x %LOCATION;"= |
 | statformat_perc | percentage format | =statformat_perc="%3.1f%%"= |
 | statformat_unknown | will be used for unknown locations or icons if one of the statistics variables %{l}, %{ll}, %{i} or %{ii}) is replaced | =statformat_unknown="unknown"= |
-| statheader | statistics header; overwrites statcolheader and statrowheader | undefined / =statheader="#"= | 
+| statheader | statistics header; overrides statcolheader and statrowheader | undefined / =statheader="#"= | 
 | statrowformat | statistics row format (related: showstatrow, statrowheader, statrowtitle); see [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | =statrowformat="%{hh}"= -or- =statrowformat="%{h}"= (if =showweekends= set to ="on"=) |
 | statrowheader | statistics header (related: showstatrow, statrowformat, statrowtitle); use '&#124;' to separate multiple row headers | =statrowheader="#"= |
 | statrowtitle | statistics tooltip (related: showstatrow, statrowformat, statrowheader); see  [[#StatisticsColumnFormat][Statistics Column/Row Format/Title section]] | =statrowtitle="%{ll}"= -or- =statrowtitle="%{l}"= (if =showweekends= set to ="on"=) |
-| stattitle | statistics tooltip; overwrites statrowtitle and statcoltitle | undefined / =stattitle="%{ll}"= |
+| stattitle | statistics tooltip; overrides statrowtitle and statcoltitle | undefined / =stattitle="%{ll}"= |
 
 
 *Hints:* 
@@ -319,8 +319,9 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterJones, TWiki:Main.DanielRohde |
-|  Plugin Version: | v1.029 (6 Mar 2009) |
+|  Plugin Version: | v1.030 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  v1.030 (BETA) | TWiki:Main.DanielRohde: improved INCLUDE support requested by Foswiki:Main.IngoKappler |
 |  v1.029 (6 Mar 2009) | TWiki:Main.DanielRohde: changed some defaults (showmonthheader, monthheaderformat, headerformat); fixed alignments (statistics, monthheader); added maxheight attribute; allowed color definitions in icon fields |
 |  v1.026 (28 Oct 2008) | TWiki:Main.DanielRohde: added missing anchor in showoptions form action; added row color feature (new attributes: namecolors, rowcolors); added order feature (new attribute: order); added namepos attribute (place names left and/or right of a row) |
 |  v1.025 (17 Oct 2008) | TWiki:Main.DanielRohde: added div tag with style overflow:auto requested by Matthew Thomson; added query parameters feature (hlp_&lt;attribute&gt; in URIs); added option form feature (new attributes: showoptions, optionspos, optionsformat) requested by Matthew Thomson; improved performance; fixed minor icon related bugs |
