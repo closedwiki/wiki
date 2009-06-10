@@ -113,7 +113,9 @@ function clpHandleTextResponse(self, responseText) {
 				var span = spanExpr.exec(responseText);
 				span[0].match(/class="([^"]+)"/);
 				els.className=RegExp.$1;
+				clpUpdateHideShowToggle();
 			}
+
 
 			var divExpr = new RegExp("<div[^>]+id=\"CLP_TT_"+id+"\"[^>]*>(.*?)</div>");
 			divExpr.exec(responseText);
@@ -303,7 +305,7 @@ function clpUpdateHideShowToggle() {
 		if (chn && chn.length) {
 			for (var state in clpHideShowToggleStates[name]) {
 				for (var j=0; j<chn.length; ++j) {
-					if (chn[j].className =="clp_hide_"+name+"_"+state) chn[j].style.display = clpHideShowToggleState[name][state];
+					if (chn[j].className =="clp_hide_"+name+"_"+state) chn[j].style.display = clpHideShowToggleStates[name][state];
 					
 				}
 			}

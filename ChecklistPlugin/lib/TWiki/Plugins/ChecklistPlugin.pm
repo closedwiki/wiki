@@ -173,14 +173,9 @@ sub commonTagsHandler
 sub handleAllTags {
 
 	### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-	#### incompatible changes:
-	##$_[0] =~ s/%CHECKLISTSTART%(.*?)%CHECKLISTEND%/&handleAutoChecklist("",$1,$_[0])/sge;
-	##$_[0] =~ s/%CHECKLISTSTART{(.*?)}%(.*?)%CHECKLISTEND%/&handleAutoChecklist($1,$2,$_[0])/sge;
-	$_[0] =~ s/%CHECKLIST%/&handleChecklist("",$_[0])/ge;
-	$_[0] =~ s/%CHECKLIST{(.*?)}%/&handleChecklist($1,$_[0])/sge;
-	$_[0] =~ s/%CLI({(.*?)})?%/&handleChecklistItem($2,$_[0],$-[0],$+[0])/sge;
-
-	## incompatible changes:
+	#
+	
+	
 	$_[0] =~ s/%CHECKLISTSTART%(.*?)%CHECKLISTEND%/&handleAutoChecklist("",$1,$_[0])/sge;
 	$_[0] =~ s/%CHECKLISTSTART{(.*?)}%(.*?)%CHECKLISTEND%/&handleAutoChecklist($1,$2,$_[0])/sge;
 	$_[0] =~ s/%CHECKLIST%/&handleChecklist("",$_[0])/ge;
@@ -549,11 +544,14 @@ sub handleAutoChecklist {
 
 	TWiki::Func::writeDebug("- ${pluginName}::handleAutoChecklist($attributes,...text...)") if $debug;
 
-	local(%options);
+	&initNamedDefaults($attributes);
+
+	local(%options); local($idOffset);
 	return &createUnknownParamsMessage() unless &initOptions($attributes);
 
 	initStates(TWiki::Func::getCgiQuery());
-	local($idOffset);
+
+	handleStateChanges();
 
 
 	$text=~s/\%CLI(\{([^\}]*)\})?\%/&substAttributes($attributes, $2)/meg;
@@ -1061,4 +1059,27 @@ sub postRenderingHandler  {
 sub endRenderingHandler  {
 	return postRenderingHandler( @_ );
 }
+# =========================
+sub handleStateChanges {
+
+	my ($text) = @_;
+	my $query = &TWiki::Func::getCgiQuery();
+	if ((defined $query->param('clpsc'))&&(!$stateChangeDone)) {
+		my ($id,$name,$lastState,$nextstate) = ($query->param('clpsc'),$query->param('clpscn'),$query->param('clpscls'),$query->param('clpscns'));
+		if ($options{'name'} eq $name) {
+			&doChecklistItemStateChange($id, $name, $lastState, $text, $nextstate) ;
+			$stateChangeDone=1;
+		}
+	}
+	my @states = split /\|/, $options{'states'};
+	if ((defined $query->param('clreset'))&&(!$resetDone)) {
+		my $n=$query->param('clreset');
+		my $s=(defined $query->param('clresetst'))?$query->param('clresetst'):$states[0];
+		if (($options{'name'} eq $n)&&(grep(/^\Q$s\E$/s, @states))) {
+			&doChecklistItemStateReset($n,$s,$text);
+			$resetDone=1;
+		}
+	}
+}
 1;
+
