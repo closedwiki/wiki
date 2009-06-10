@@ -1598,7 +1598,8 @@ sub expandIncludedEvents
 	# recursively expand includes:
 	$text =~ s/%INCLUDE{(.*?)}%/&expandIncludedEvents( $1, $theProcessedTopicsRef )/geo;
 
-	# expand common variables (search and so on):
+	# expand common variables:
+	$text =~ s/%HOLIDAYLIST({[^}]*})?%//sg; ## prevent an endless recursion
 	$text = TWiki::Func::expandCommonVariables($text, $theWeb, $theTopic);
 
 	return $text;
