@@ -1542,7 +1542,7 @@ sub getTopicText() {
 		}
 	}
 
-	$text =~ s/%INCLUDE{(.*?)}%/&expandIncludedEvents($1, \@processedTopics)/geo;
+	$text =~ s/%INCLUDE{(.*?)}%/&expandIncludedEvents($1, \@processedTopics, $web, $topic)/geo;
 	$text =~s/\%HOLIDAYLIST({(.*?)})?%//sg;
 	$text = TWiki::Func::expandCommonVariables($text,$web,$topic);
 	
@@ -1566,13 +1566,11 @@ sub readTopicText
 # =========================
 sub expandIncludedEvents
 {
-	my( $theAttributes, $theProcessedTopicsRef ) = @_;
+	my( $theAttributes, $theProcessedTopicsRef, $theWeb, $theTopic ) = @_;
 
-	my ($theWeb, $theTopic) = ($web, $topic);
-
-	my $webTopic = TWiki::Func::expandCommonVariables( TWiki::Func::extractNameValuePair( $theAttributes ) );
-	my $section = TWiki::Func::expandCommonVariables( TWiki::Func::extractNameValuePair( $theAttributes, 'section') );
-	my $pattern = TWiki::Func::expandCommonVariables( TWiki::Func::extractNameValuePair( $theAttributes, 'pattern') );
+	my $webTopic = TWiki::Func::expandCommonVariables( TWiki::Func::extractNameValuePair( $theAttributes ), $theTopic, $theWeb );
+	my $section = TWiki::Func::expandCommonVariables( TWiki::Func::extractNameValuePair( $theAttributes, 'section'), $theTopic, $theWeb );
+	my $pattern = TWiki::Func::expandCommonVariables( TWiki::Func::extractNameValuePair( $theAttributes, 'pattern'), $theTopic, $theWeb );
 
 	
 	if( $webTopic =~ /^([^\.]+)[\.\/](.*)$/ ) {
@@ -1596,7 +1594,7 @@ sub expandIncludedEvents
 	$text = getTopicIncludeText($text);
 
 	# recursively expand includes:
-	$text =~ s/%INCLUDE{(.*?)}%/&expandIncludedEvents( $1, $theProcessedTopicsRef )/geo;
+	$text =~ s/%INCLUDE{(.*?)}%/&expandIncludedEvents( $1, $theProcessedTopicsRef, $theWeb, $theTopic )/geo;
 
 	# expand common variables:
 	$text =~ s/%HOLIDAYLIST({[^}]*})?%//sg; ## prevent an endless recursion
