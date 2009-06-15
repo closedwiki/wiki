@@ -1542,9 +1542,12 @@ sub getTopicText() {
 		}
 	}
 
+	$text =~ s/%BASETOPIC%/${theTopic}/sg;
+	$text =~ s/%BASEWEB%/${theWeb}/sg;
 	$text =~ s/%INCLUDE{(.*?)}%/&expandIncludedEvents($1, \@processedTopics, $web, $topic)/geo;
 	$text =~s/\%HOLIDAYLIST({(.*?)})?%//sg;
 	$text = TWiki::Func::expandCommonVariables($text,$web,$topic);
+
 	
 	return $text;
 	
@@ -1566,26 +1569,26 @@ sub readTopicText
 # =========================
 sub expandIncludedEvents
 {
-	my( $theAttributes, $theProcessedTopicsRef, $theWeb, $theTopic ) = @_;
+	my( $theAttributes, $theProcessedTopicsRef, $web, $topic ) = @_;
 
-	my $webTopic = TWiki::Func::expandCommonVariables( TWiki::Func::extractNameValuePair( $theAttributes ), $theTopic, $theWeb );
-	my $section = TWiki::Func::expandCommonVariables( TWiki::Func::extractNameValuePair( $theAttributes, 'section'), $theTopic, $theWeb );
-	my $pattern = TWiki::Func::expandCommonVariables( TWiki::Func::extractNameValuePair( $theAttributes, 'pattern'), $theTopic, $theWeb );
+	my $webTopic = TWiki::Func::expandCommonVariables( TWiki::Func::extractNameValuePair( $theAttributes ), $topic, $web );
+	my $section = TWiki::Func::expandCommonVariables( TWiki::Func::extractNameValuePair( $theAttributes, 'section'), $topic, $web );
+	my $pattern = TWiki::Func::expandCommonVariables( TWiki::Func::extractNameValuePair( $theAttributes, 'pattern'), $topic, $web );
 
 	
 	if( $webTopic =~ /^([^\.]+)[\.\/](.*)$/ ) {
-		$theWeb = $1;
-		$theTopic = $2;
+		$web = $1;
+		$topic = $2;
 	} else {
-		$theTopic = $webTopic;
+		$topic = $webTopic;
 	}
 
 	# prevent recursive loop:
-	grep (/^\Q$theWeb.$theTopic\E$/, @{$theProcessedTopicsRef}) and return "";
+	grep (/^\Q$web.$topic\E$/, @{$theProcessedTopicsRef}) and return "";
 
-	push( @{$theProcessedTopicsRef}, "$theWeb.$theTopic" );
+	push( @{$theProcessedTopicsRef}, "$web.$topic" );
 
-	my $text = &readTopicText( $theWeb, $theTopic );
+	my $text = &readTopicText( $web, $topic );
 
 	$text = getTopicSectionText($text, $section) if (defined $section && $section ne "");
 	$text = getTopicPatternText($text, $pattern) if (defined $pattern && $pattern ne "");
@@ -1593,8 +1596,12 @@ sub expandIncludedEvents
 
 	$text = getTopicIncludeText($text);
 
+	# fix base topic:
+	$text =~ s/%BASETOPIC%/${theTopic}/sg;
+	$text =~ s/%BASEWEB%/${theWeb}/sg;
+
 	# recursively expand includes:
-	$text =~ s/%INCLUDE{(.*?)}%/&expandIncludedEvents( $1, $theProcessedTopicsRef, $theWeb, $theTopic )/geo;
+	$text =~ s/%INCLUDE{(.*?)}%/&expandIncludedEvents( $1, $theProcessedTopicsRef, $web, $topic )/geo;
 
 	# expand common variables:
 	$text =~ s/%HOLIDAYLIST({[^}]*})?%//sg; ## prevent an endless recursion
