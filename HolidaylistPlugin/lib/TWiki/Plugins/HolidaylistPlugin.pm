@@ -57,7 +57,7 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 
 
-$REVISION = '1.0.30'; #dro# improved INCLUDE support requested by Foswiki:Main.IngoKappler
+$REVISION = '1.0.30'; #dro# improved INCLUDE support requested by Foswiki:Main.IngoKappler; added multi language support for entry definitions; fixed unknown language bug
 #$REVISION = '1.0.29'; #dro# changed some defaults (showmonthheader, monthheaderformat, headerformat); fixed alignments (statistics, monthheader); added maxheight attribute; allowed color definitions in icon fields
 #$REVISION = '1.0.26'; #dro# added missing anchor in showoptions form action; added row color feature (new attributes: namecolors, rowcolors); added order feature (new attribute: order); added namepos attribute (place names left and/or right of a row)
 #$REVISION = '1.0.25'; #dro# added div tag with style overflow:auto requested by Matthew Thomson; added query parameters feature (hlp_&lt;attribute&gt; in URIs); added option form feature (new attributes: showoptions, optionspos, optionsformat) requested by Matthew Thomson; improved performance; fixed minor icon related bugs;
@@ -294,20 +294,27 @@ sub initOptions() {
 		}
 	}
 
-	Date::Calc::Language(Date::Calc::Decode_Language($options{lang}));
+	my $defaultlang=undef;
+	foreach my $lang (split /\s*,\s*/, $options{lang}) {
+		chomp $lang;
+		eval { Date::Calc::Language(Date::Calc::Decode_Language($lang)); };
 
-	# Setup language specific month and day names:
-	for (my $i=1; $i < 13; $i++) {
-		if ($i < 8) {
-			my $dt = Day_of_Week_to_Text($i);
-			$daysofweek{$dt} = $i;
-			$daysofweek{Day_of_Week_Abbreviation($i)} = $i;
-			$daysofweek{substr($dt, 0, 2)} = $i;
+		$defaultlang=$lang unless defined $defaultlang;
+
+		# Setup language specific month and day names:
+		for (my $i=1; $i < 13; $i++) {
+			if ($i < 8) {
+				my $dt = Day_of_Week_to_Text($i);
+				$daysofweek{$dt} = $i;
+				$daysofweek{Day_of_Week_Abbreviation($i)} = $i;
+				$daysofweek{substr($dt, 0, 2)} = $i;
+			}
+			my $mt = Month_to_Text($i);
+			$months{$mt} = $i;
+			$months{substr($mt,0,3)} = $i;
 		}
-		my $mt = Month_to_Text($i);
-		$months{$mt} = $i;
-		$months{substr($mt,0,3)} = $i;
 	}
+	eval { Date::Calc::Language(Date::Calc::Decode_Language($defaultlang)); };
 
 	# Setup user defined daynames:
 	if ((defined $options{daynames}) && (defined $defaults{daynames}) && ($options{daynames} ne $defaults{daynames})) {

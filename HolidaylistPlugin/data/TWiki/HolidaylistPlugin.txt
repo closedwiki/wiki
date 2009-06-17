@@ -116,7 +116,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | daynames | custom daynames (a list separated by a '&brvbar;' and starting on Monday; overrides lang attribute) | =daynames="M&brvbar;T&brvbar;W&brvbar;T&brvbar;F&brvbar;S&brvbar;S"= |
 | days | number of days to show |=days="30"= |
 | enablepubholidays | enables/disables public holidays (bullet list entries with a @all in a person field; related: showpubholidays, pubholidayicon) | =enablepubholidays="1"= |
-| lang | language (related: daynames, monthnames) | =lang="English"= |
+| lang | language (related: daynames, monthnames); allows a comma separted list of languages and the first is the default, e.g. =lang="English,Deutsch"= allows entry definitions like =&nbsp;&nbsp;&nbsp;* 17 June 2009 - Test-en=  and =&nbsp;&nbsp;&nbsp;* 17. Juni 2009 - Test-de=  | =lang="English"= |
 | month | set a month (e.g. Jan, Feb ... or 01, 02, ... 12 ) or a month offset (e.g. +0, +1, -2,...) *Note:* If you use this month attribute the days attribute will be ignored (days will be set to the duration of the month). | =month="+1"= |
 | monthnames | custom month names (a list separated by '&brvbar;' and starting on January; overrides lang attribute) | =monthnames="J&brvbar;F&brvbar;M&brvbar;A&brvbar;M&brvbar;J&brvbar;J&brvbar;A&brvbar;S&brvbar;O&brvbar;N&brvbar;D"= |
 | namepos | allows you to change the position of the names; allowed values: left, right, both | =namepos="left"= |
@@ -147,7 +147,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | cellspacing | tabel cell spacing | =cellspacing="0"= |
 | daynames | custom daynames (a list separated by a '&brvbar;' and starting on Monday; overrides lang attribute) | =daynames="M&brvbar;T&brvbar;W&brvbar;T&brvbar;F&brvbar;S&brvbar;S"= |
 | headerformat | table header format of a day; a subset of strftime conversion specifiers is supported (only date not time specificiers; see manual page or TWiki:Codev.ConvergeDateTimeFormattingModels) | =headerformat="&lt;font&nbsp;size=\"-2\">%a&lt;br/&gt;%e&lt;/font&gt;"= |
-| lang | language (related: daynames, monthnames) | =lang="English"= |
+| lang | language (related: daynames, monthnames); allows a comma separted list of languages and the first is the default, e.g. =lang="English,Deutsch"= allows entry definitions like =&nbsp;&nbsp;&nbsp;* 17 June 2009 - Test-en=  and =&nbsp;&nbsp;&nbsp;* 17. Juni 2009 - Test-de=  | =lang="English"= |
 | maxheight | maximum table height | undefined / =maxheight="200px"= |
 | monthheaderformat | month header format (related: showmonthheader) | =monthheaderformat="%b"= |
 | monthnames | custom month names (a list separated by '&brvbar;' and starting on January; overrides lang attribute) | =monthnames="J&brvbar;F&brvbar;M&brvbar;A&brvbar;M&brvbar;J&brvbar;J&brvbar;A&brvbar;S&brvbar;O&brvbar;N&brvbar;D"= |
@@ -322,7 +322,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 |  Plugin Author: | TWiki:Main.PeterJones, TWiki:Main.DanielRohde |
 |  Plugin Version: | v1.030 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  v1.030 (BETA) | TWiki:Main.DanielRohde: improved INCLUDE support requested by Foswiki:Main.IngoKappler |
+|  v1.030 (BETA) | TWiki:Main.DanielRohde: improved INCLUDE support requested by Foswiki:Main.IngoKappler; added multi language support for entry definitions; fixed unknown language bug | 
 |  v1.029 (6 Mar 2009) | TWiki:Main.DanielRohde: changed some defaults (showmonthheader, monthheaderformat, headerformat); fixed alignments (statistics, monthheader); added maxheight attribute; allowed color definitions in icon fields |
 |  v1.026 (28 Oct 2008) | TWiki:Main.DanielRohde: added missing anchor in showoptions form action; added row color feature (new attributes: namecolors, rowcolors); added order feature (new attribute: order); added namepos attribute (place names left and/or right of a row) |
 |  v1.025 (17 Oct 2008) | TWiki:Main.DanielRohde: added div tag with style overflow:auto requested by Matthew Thomson; added query parameters feature (hlp_&lt;attribute&gt; in URIs); added option form feature (new attributes: showoptions, optionspos, optionsformat) requested by Matthew Thomson; improved performance; fixed minor icon related bugs |
