@@ -111,6 +111,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 
 | *Attribute* | *Comment* | *Default / Example* |
 |  *Behavior*  |||
+| allowvarsininclude | allows you to use TWiki variables within INCLUDE statement parameters of your source topics (disabled by default for a fast INCLUDE handling) | =allowvarsininclude="off"= |
 | compatmode  | if set to "1" all TWiki:Plugins.CalendarPlugin event types are supported (related: compatmodeicon) | =compatmode="0"= |
 | daynames | custom daynames (a list separated by a '&brvbar;' and starting on Monday; overrides lang attribute) | =daynames="M&brvbar;T&brvbar;W&brvbar;T&brvbar;F&brvbar;S&brvbar;S"= |
 | days | number of days to show |=days="30"= |
