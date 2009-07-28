@@ -20,7 +20,7 @@ package TWiki::Plugins::LDAPPasswordChangerPlugin;
 # =========================
 use vars qw(
 	    $web $topic $user $installWeb $VERSION $RELEASE $pluginName
-	    $debug $ldap_server $base_dn $filter
+	    $debug $ldap_server $base_dn $filter $bind_dn
 	   );
 
 # Forward declaration for subs;
@@ -60,6 +60,8 @@ sub initPlugin{
   $base_dn = &TWiki::Func::getPreferencesValue( "\U$pluginName\E_LDAP_BASE_DN" );
   # $filter = sprintf( &TWiki::Func::getPreferencesValue( "\U$pluginName\E_LDAP_FILTER" ), TWiki::Func::wikiToUserName( TWiki::Func::getWikiName( ) ) );
   $filter = TWiki::Func::expandCommonVariables( TWiki::Func::getPreferencesValue( "\U$pluginName\E_LDAP_FILTER" ), $topic, $web );
+  
+  $bind_dn = TWiki::Func::expandCommonVariables( TWiki::Func::getPreferencesValue( "\U$pluginName\E_LDAP_BIND_DN" ), $topic, $web );
 
   # Plugin correctly initialized
   TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
@@ -91,7 +93,7 @@ sub pwChanger{
 	# Got new password repeat.
 	if( $new == $repeat ){
 	  # Same password entered twice: I can safely change.
-	  $message = talkToLDAP( $old, $new )
+	  $message = talkToLDAP( $old, $new, $bind_dn )
 	}else{
 	  # User can't repeat new password: there is something wrong.
 	  $message = q"%X% %RED%'New Password' and 'Repeat New Password' fields doesn't match.%ENDCOLOR%";
@@ -109,16 +111,27 @@ sub pwChanger{
     $message = q{%X% %RED%Please fill in your old password.%ENDCOLOR%};
   }
 
-  return genDialog( $change? $message : '&nbsp;' );
+  return genDialog( $change? $message : '' );
 }
 
 # =========================
-sub talkToLDAP{
+sub talkToLDAP
+{
   use Net::LDAP;
-  my( $old, $new, $ldap, $dn ) = ( shift, shift, new Net::LDAP( $ldap_server ), undef );
-  return q"%X% %RED%Can't contact LDAP Server. Please review %MAINWEB%.LDAPPasswordChangerPlugin configuration.%ENDCOLOR%" unless $ldap;
+  my( $old, $new, $ldap, $bind_dn ) = ( shift, shift, new Net::LDAP( $ldap_server ), shift );
+  return q"%X% %RED%Can't contact LDAP Server. Please review %MAINWEB%.LDAPPasswordChangerPlugin configuration.%ENDCOLOR%"
+  	unless $ldap;
   my $msg;
-  $msg = $ldap->bind;
+
+  if ( $bind_dn ){
+      TWiki::Func::writeDebug( "calling ldap::bind( '$bind_dn', password => ****** )" )
+          if $debug;
+      $msg = $ldap->bind( $bind_dn , password => $old );
+  }else{
+      TWiki::Func::writeDebug( "calling ldap::bind()" ) if $debug;
+      $msg = $ldap->bind();
+  }
+
   return q{%X% %RED%LDAP Error:}.$msg->error.q{%ENDCOLOR%}
     if $msg->is_error;
 
@@ -131,11 +144,14 @@ sub talkToLDAP{
   $msg = $ldap->bind( $dn, password => $old );
   return q{%X% %RED%LDAP Error:}.$msg->error.q{%ENDCOLOR%}
     if $msg->is_error;
-  $msg = $ldap->modify( $dn, replace => { userPassword => $new } );
+
+  require Net::LDAP::Extension::SetPassword;
+
+  $msg = $ldap->set_password( 'oldpasswd' => $old, 'newpasswd' => $new );
   return q{%X% %RED%LDAP Error:}.$msg->error.q{%ENDCOLOR%}
     if $msg->is_error;
   $ldap->unbind;
-  return q{%Y% %GREEN%Password changed sucessfully%ENDCOLOR%};
+  return q{%Y% %GREEN%%MAKETEXT{"Changed"}%%ENDCOLOR%};
 }
 
 # =========================
@@ -146,7 +162,7 @@ sub genDialog{
   <table bgcolor="%WEBBGCOLOR%" align="center" border="0" cellpadding="1" cellspacing="1">
     <tr>
       <td height="25" colspan="2" valign="middle" align="center">
-        <b> Change Password for }.TWiki::Func::userToWikiName( $user, 0 ).q{</b>
+        <b> %MAKETEXT{"Change Password"}% }.TWiki::Func::userToWikiName( $user, 0 ).q{</b>
       </td>
     </tr>
     <tr>
@@ -156,15 +172,15 @@ sub genDialog{
             <td align="center" colspan="2"> $message </td>
           </tr> } : '' ) .q{
           <tr>
-            <td align="right"> Old Password: </td>
+            <td align="right"> %MAKETEXT{"Current password"}%: </td>
             <td> <input type="password" name="oldpwd"> </td>
           </tr>
           <tr>
-            <td align="right"> New Password: </td>
+            <td align="right"> %MAKETEXT{"New password"}%: </td>
             <td> <input type="password" name="newpwd1"> </td>
           </tr>
           <tr>
-            <td align="right"> New Password Again: </td>
+            <td align="right"> %MAKETEXT{"Retype new password"}%: </td>
             <td> <input type="password" name="newpwd2"> </td>
           </tr>
         </table>
@@ -172,7 +188,7 @@ sub genDialog{
     </tr>
     <tr>
       <td height="30" colspan="2" valign="middle" align="center">
-        <input type="submit" name="change" value="                   Change Password                   ">
+        <input type="submit" name="change" value="%MAKETEXT{"Change password"}%">
       </td>
     </tr>
   </table>
