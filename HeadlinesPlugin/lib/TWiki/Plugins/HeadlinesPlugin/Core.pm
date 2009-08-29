@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2002-2006 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2002-2009 Peter Thoeny, peter@thoeny.org
 # Copyright (C) 2005-2006 Michael Daum <micha@nats.informatik.uni-hamburg.de>
 # Copyright (C) 2005 TWiki Contributors
 #
@@ -343,6 +343,7 @@ sub readRssFeed
 
   my $cacheDir = '';
   my $cacheFile = '';
+  my $updated = 0;
   if ($theRefresh) {
     if (defined &TWiki::Func::getWorkArea) {
       $cacheDir = TWiki::Func::getWorkArea('HeadlinesPlugin');
@@ -356,7 +357,7 @@ sub readRssFeed
     $cacheFile =~ /(.*)/;  $cacheFile = $1; # untaint
     if ((-e $cacheFile) && ((time() - (stat(_))[9]) <= ($theRefresh * 60))) {
       # return cached version if it exists and isn't too old. 1440 = 24h * 60min
-      return TWiki::Func::readFile($cacheFile);
+      return ( TWiki::Func::readFile($cacheFile), undef, $updated );
     }
   }
 
@@ -370,7 +371,7 @@ sub readRssFeed
   #writeDebug("url=$theUrl");
 
   my ($text, $errorMsg) = $useLWPUserAgent?&getUrlLWP($theUrl):&getUrl($theUrl);
-  return (undef, "ERROR: $errorMsg") if $errorMsg;
+  return ( undef, "ERROR: $errorMsg", $updated ) if $errorMsg;
 
   if ($theRefresh) {    
     unless(-e $cacheDir) {
@@ -378,11 +379,15 @@ sub readRssFeed
       umask(002);
       mkdir($cacheDir, 0775);
     }
+
+    # compare with existing cache file (if any) if feed has been updated
+    $updated = 1 unless( $text eq TWiki::Func::readFile( $cacheFile ));
+
     # save text in cache file before returning it
-    TWiki::Func::saveFile($cacheFile, $text);
+    TWiki::Func::saveFile( $cacheFile, $text );
   }
 
-  return ($text, undef);
+  return ($text, undef, $updated);
 }
 
 # =========================
@@ -398,6 +403,7 @@ sub handleHeadlinesTag {
   my $limit   = TWiki::Func::extractNameValuePair($theArgs, 'limit')   || $defaultLimit;
   my $header  = TWiki::Func::extractNameValuePair($theArgs, 'header')  || $defaultHeader;
   my $format  = TWiki::Func::extractNameValuePair($theArgs, 'format')  || $defaultFormat;
+  my $touch   = TWiki::Func::extractNameValuePair($theArgs, 'touch') || '';
 
   $header =~ s/\$n([^a-zA-Z])/\n$1/gos; # expand "$n" to new line
   $header =~ s/([^\n])$/$1\n/os;        # append new line if needed
@@ -411,8 +417,25 @@ sub handleHeadlinesTag {
     return errorMsg($thePre, "href parameter (news source) is missing");
   }
 
-  my ($raw, $msg) = readRssFeed($href, $refresh);
+  my ($raw, $msg, $updated) = readRssFeed($href, $refresh);
   return errorMsg($thePre, $msg) if $msg;
+
+  if( $touch && $updated ) {
+    # touch pages specified by touch parameter (useful to send conditional updates in newsletters)
+    foreach( split( /,\s*/, $touch ) ) {
+      my( $tweb, $ttopic ) = TWiki::Func::normalizeWebTopicName( $web, $_ );
+      if( TWiki::Func::topicExists( $tweb, $ttopic ) ) {
+        # read topic and save without changes to bump up revision
+        my( $tmeta, $ttext ) = TWiki::Func::readTopic( $tweb, $ttopic );
+        TWiki::Func::saveTopic( $tweb, $ttopic, $tmeta, $ttext,
+          {
+            forcenewrevision => '1',
+            comment => 'Touch update by HeadlinesPlugin'
+          }
+        );
+      }
+    }
+  }
 
   my $text = $thePre."<div class=\"headlinesRss\"><noautolink>\n";
 

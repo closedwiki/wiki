@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2002-2006 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2002-2009 Peter Thoeny, peter@thoeny.org
 # Copyright (C) 2005-2006 Michael Daum <micha@nats.informatik.uni-hamburg.de>
 # Copyright (C) 2005 TWiki Contributors
 #
@@ -30,7 +30,7 @@ use strict;
 use vars qw($VERSION $RELEASE $isInitialized $doneHeader);
 
 $VERSION = '$Rev$';
-$RELEASE = '2.21';
+$RELEASE = '2.3';
 
 # =========================
 sub initPlugin {
