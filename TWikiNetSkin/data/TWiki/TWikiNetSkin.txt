@@ -61,7 +61,7 @@ This skin is based on PatternSkin, and the same rules for customization apply.
 |  Base Name: | twikinet,pattern |
 |  Skin Version: | 01 Sep 2009 (v1.100) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  01 Sep 2009: | TWIKI, Inc. rebranding (v1.100) |
+|  01 Sep 2009: | Twiki, Inc. rebranding (v1.100) |
 |  16 Mar 2008: | Public release (v1.000) |
 |  Dependencies: | TWiki 4.2; TWiki:Plugins/PatternSkin (automatically provided by TWiki); TWiki:Plugins/TWikiNetSkinPlugin |
 |  Skin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
