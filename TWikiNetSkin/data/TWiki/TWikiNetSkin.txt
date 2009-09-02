@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1173120078" format="1.1" reprev="1.10" version="1.10"}%
+%META:TOPICINFO{author="TWikiContributor" date="1251846766" format="1.1" version="$Rev$"}%
 ---+!! !TWikiNetSkin
 
-This is the default skin provided with [[http://www.twiki.net/][Certified TWiki]], designed by [[http://www.linkedin.com/in/paulvanberkel][Paul van Berkel]].
+The !TWikiNetSkin is functional and clean and has corporate appeal. It is the default skin provided with [[http://www.twiki.net/][Twiki, Inc.]] products, designed by [[http://www.linkedin.com/in/paulvanberkel][Paul van Berkel]].
 
 %TOC%
 
@@ -19,8 +19,10 @@ This skin needs TWiki 4.2 or newer.
 
    * Download the ZIP file from the Skin Home page (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory
+   * Install also TWiki:Plugins/TWikiNetSkinPlugin, recommended for rounded tables and h2 headers
 
 ---+++ Additional installation steps
+
    * Modify TablePlugin settings: copy the =TABLEATTRIBUTES= below to !Main.TWikiPreferences: %BR%
    <verbatim>
    * TWikiNetSkin table attributes:
@@ -29,12 +31,11 @@ This skin needs TWiki 4.2 or newer.
    * In !TWiki.TWikiPreferences, remove the =&lt;div class="twikiBroadcastMessage"&gt;&lt;/div&gt;= tags (if any) from =BROADCASTMESSAGE=
 
    * To turn on the skin, write in !Main.TWikiPreferences: %BR%
-   <verbatim>
-      * Set SKIN = twikinet,pattern
-</verbatim>
+     =* Set SKIN = twikinet,pattern=
    * [[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?skin=twikinet,pattern][Test if installed]]
 
 ---+++ Enhanced look
+
 Part of the design is done by TWiki:Plugins/TWikiNetSkinPlugin. Install this plugin for rounded tables and h2 headers.
 
 Example when installed:
@@ -44,22 +45,23 @@ Example when installed:
 
 ---++ Creating your own look
 
-This skin is based on TWiki:Plugins/PatternSkin, and the same rules for customization apply.
-
+This skin is based on PatternSkin, and the same rules for customization apply.
 
 ---++ Skin Info
+
    * Set SHORTDESCRIPTION = Certified TWiki skin
 
 <!-- Note on Screenshot: Please attach a 600x130 pixel screenshot and a full screen shot to the Skin topic, then update the href and img src to reflect the names -->
-|  Skin Author: | TWiki:Main/ArthurClemens |
-|  Copyright: | &copy; 2007, 2008, [[http://twiki.net][TWIKI.NET]]; &copy; design 2007: [[http://www.linkedin.com/in/paulvanberkel][Paul van Berkel]] |
+|  Skin Author: | Implemented by TWiki:Main/ArthurClemens, design by [[http://www.linkedin.com/in/paulvanberkel][Paul van Berkel]] |
+|  Copyright: | &copy; 2007-2009, [[http://twiki.net][Twiki, Inc.]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Description: | Certified TWiki skin |
 |  Screenshot: | <a href="%ATTACHURL%/fullscreen.png"><img src="%ATTACHURL%/screenshot.png" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=twikinet,pattern][Preview with this topic]] |
 |  Base Name: | twikinet,pattern |
-|  Skin Version: | 16 Mar 2008 (v1.0.1) |
+|  Skin Version: | 01 Sep 2009 (v1.100) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  01 Sep 2009: | TWIKI, Inc. rebranding (v1.100) |
 |  16 Mar 2008: | Public release (v1.000) |
 |  Dependencies: | TWiki 4.2; TWiki:Plugins/PatternSkin (automatically provided by TWiki); TWiki:Plugins/TWikiNetSkinPlugin |
 |  Skin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
@@ -68,7 +70,3 @@ This skin is based on TWiki:Plugins/PatternSkin, and the same rules for customiz
 
 
 __Related topic:__ %TWIKIWEB%.TWikiSkins, %TWIKIWEB%.TWikiSkinBrowser, %TWIKIWEB%.UserDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory
-
-
-
-
