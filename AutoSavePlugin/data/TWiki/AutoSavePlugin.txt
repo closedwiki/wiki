@@ -1,0 +1,25 @@
+%META:TOPICINFO{author="PeterThoeny" date="1253828200" format="1.1" reprev="1.2" version="1.2"}%
+---+ !AutoSavePlugin
+
+---++ Settings
+
+   * Set SHORTDESCRIPTION = Auto-save a topic automatically
+
+While in edit mode, topics can be saved every 10 sec, 15 sec, 30 sec, 1 min, 2 min or 5 min. WARNING! Don't use it in combination with the TWiki:Plugins/EditChapterPlugin!
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.ThomasZobel |
+|  Copyright: | 2009, Thomas Zobel |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 0.8 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  16 Feb 2009: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | none |
+|  Dependencies: | <table border="1"><tr><th>Name</th><th>Version</th><th>Description</th></tr><tr><td align="left"> TWiki:Plugins/JQueryPlugin </td><td align="left">&gt;=0.4</td><td align="left">Required.</td></tr></table> |
+|  Perl Version: | 5.006 |
+|  Plugin Home: | http://twiki.org/Extensions/%TOPIC% |
+|  Feedback: | http://twiki.org/Extensions/%TOPIC%Dev |
+
+__Related Topics:__ [[%SYSTEMWEB%.Plugins][Plugins]]

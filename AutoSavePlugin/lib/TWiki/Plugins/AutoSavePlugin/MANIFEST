@@ -1,0 +1,3 @@
+data/TWiki/AutoSavePlugin.txt 0644
+lib/TWiki/Plugins/AutoSavePlugin.pm 0444
+pub/TWiki/AutoSavePlugin/autosave.js 0444
