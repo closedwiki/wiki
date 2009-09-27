@@ -172,6 +172,25 @@ sub _createWeb {
             params => [ 'manage' ]);
     }
 
+    #$action in this block/subroutine is used only for verification
+    #of crypttoken
+    my $cryptaction = 'createweb';
+    my %secureActions;
+    map { $secureActions{ lc($_) } = 1; }
+      split( /[\s,]+/, $TWiki::cfg{CryptToken}{SecureActions} );
+
+
+    #If Crypt Token is requred for save action, one should not be able
+    #go beyond following step without valid crypttokens.
+
+    if (   $TWiki::cfg{CryptToken}{Enable}
+        && $secureActions{ lc($cryptaction) } )
+    {
+
+        TWiki::UI::verifyCryptToken( $session, $query->param('crypttoken') );
+    }
+
+
     my $newWeb = $query->param( 'newweb' ) || '';
     unless( $newWeb ) {
         throw TWiki::OopsException( 'attention', def => 'web_missing' );

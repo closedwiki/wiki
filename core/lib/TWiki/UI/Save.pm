@@ -63,6 +63,25 @@ sub buildNewTopic {
             params => [ $script ]);
     }
 
+    #$action in this block/subroutine is used only for verification
+    #of crypttoken
+    my $cryptaction = 'save';
+    my %secureActions;
+    map { $secureActions{ lc($_) } = 1; }
+      split( /[\s,]+/, $TWiki::cfg{CryptToken}{SecureActions} );
+
+
+    #If Crypt Token is requred for save action, one should not be able
+    #go beyond following step without valid crypttokens.
+
+    if (   $TWiki::cfg{CryptToken}{Enable}
+        && $secureActions{ lc($cryptaction) } )
+    {
+
+        TWiki::UI::verifyCryptToken( $session, $query->param('crypttoken') );
+    }
+
+    
     unless( scalar($query->param()) ) {
         # insufficient parameters to save
         throw TWiki::OopsException(

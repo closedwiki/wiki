@@ -1114,4 +1114,120 @@ sub _skinSelect {
     return CGI::Select( { name => 'stickskin' }, $options );
 }
 
+
+=pod
+
+sub createCryptToken ( $session )-> $token
+Takes the input as session and returns the MD5 hash string.
+This subroutine is responsible for updating the token database
+
+The tokens solve the CSRF issue
+
+
+=cut
+
+sub createCryptToken {
+    my $this = shift;
+
+    #Every request with %CRYPTOKEN% present creates the new token
+
+    #Open the session database file for updating token
+    my $cgisess = $this->{_cgisession};
+    my $id      = $cgisess->id();
+    my $session =
+      CGI::Session->new( undef, $id,
+        { Directory => "$TWiki::cfg{WorkingDir}/tmp" } );
+
+    #Token is just MD5 hash of current time, so every request
+    #creates the new random token
+    use Digest::MD5;
+    my $md5 = new Digest::MD5();
+    my $now = time();
+    my $random = rand(10000);
+    $md5->add($random);
+    my $cryptid = $md5->hexdigest();
+
+    #Tokens are stored as hash - with time as key and token as value.
+    #The are stored in Session database as array of Token hashes.
+
+    my $currentCrypt = $session->param('CryptToken');
+    if ( defined $currentCrypt ) { push @$currentCrypt, { $now => $cryptid }; }
+    else                         { $currentCrypt = [ { $now => $cryptid } ]; }
+
+    $session->param( 'CryptToken', $currentCrypt );
+
+    return $cryptid;
+
+}
+
+=pod
+
+sub cleanCryptTokens($session, $token)
+
+This subroutine takes care of cleaning used tokens
+Usually called from token verification subroutines.
+
+
+
+=cut
+
+sub cleanCryptToken {
+    my ( $this, $crypttoken ) = @_;
+    my $cgisess = $this->{_cgisession};
+    my $id      = $cgisess->id();
+
+
+
+
+ #Open the session database for updating Tokens database
+    my $session =
+      CGI::Session->new( undef, $id,
+        { Directory => "$TWiki::cfg{WorkingDir}/tmp" } );
+
+    my $crypttokens = $session->param('CryptToken');
+
+    #Assuming $token is present in this array for sure.
+    my $NewTokens = undef;
+    foreach my $token (@$crypttokens) {
+        foreach ( keys %$token ) {
+            if ( $token->{$_} ne $crypttoken ) {
+                push @$NewTokens, { $_ => $token->{$_} };
+          }
+
+        }
+    }
+   $session->param( 'CryptToken', $NewTokens ) if defined $NewTokens;
+
+
+}
+
+=pod
+
+sub addCryptTokeninForm ( )-> returns the form with "crypttoken" html
+                              input hidden field
+
+If TWiki Application developer has added "crypttoken" then the current subroutine
+returns the form without performing any parsing.
+If the form with method - POST do not have any "crypttoken", this subroutine
+adds the token.
+
+=cut
+
+sub addCryptTokeninForm {
+    my ( $this, $htmlform ) = @_;
+    if ( $htmlform =~ /crypttoken/s ) {
+        return $htmlform;
+    }
+    else {
+        my $cryptstring = createCryptToken($this);
+        $htmlform =~
+s/(<form[^>]*?method=['"]?POST(?=['" >])[^>]*>)/$1.'<input type="hidden" name="crypttoken" value="'.$cryptstring.'" \/>'/gieos;
+        return $htmlform;
+
+    }
+}
+
+
+
+
 1;

@@ -180,6 +180,7 @@ BEGIN {
         ALLVARIABLES      => \&ALLVARIABLES,
         ATTACHURL         => \&ATTACHURL,
         ATTACHURLPATH     => \&ATTACHURLPATH,
+        CRYPTTOKEN        => \&CRYPTTOKEN,
         DATE              => \&DATE,
         DISPLAYTIME       => \&DISPLAYTIME,
         ENCODE            => \&ENCODE,
@@ -602,6 +603,14 @@ sub writeCompletePage {
         # Remove <nop> and <noautolink> tags
         $text =~ s/([\t ]?)[ \t]*<\/?(nop|noautolink)\/?>/$1/gis;
         $text .= "\n" unless $text =~ /\n$/s;
+
+    #If TWiki is enabled for CryptToken for CSRF kind of 
+    #security issues, send all forms for adding token before
+    #presenting to the browser
+    if ($TWiki::cfg{CryptToken}{Enable}) {
+        $text =~  s/(<form.*?<\/form>)/$this->{users}->{loginManager}->addCryptTokeninForm($1)/geos; 
+      }
+
 
         my $htmlHeader = join(
             "\n",
@@ -4146,6 +4155,13 @@ sub GROUPS {
 
     return '| *Group* | *Members* |'."\n".join("\n", sort @table);
 }
+
+sub CRYPTTOKEN {
+    my ($this ) = @_;
+    return $this->{users}->{loginManager}->createCryptToken();
+}
+
+
 
 1;
 __DATA__

@@ -415,6 +415,61 @@ $TWiki::cfg{SwitchBoard}{publish} = [ "TWiki::Contrib::Publish", "publish", { pu
 
 =cut
 
+
+
+=pod
+
+---++ StaticMethod verifyCryptToken( $session, $crypt_token )
+
+
+=cut
+
+
+
+sub verifyCryptToken {
+    my ($session, $crypt_token) = @_;
+    my $cgi = $session->{users}->{loginManager}->{_cgisession};
+    my $id = $cgi->id();
+    my $webName = $session->{webName};
+    my $topicName = $session->{topicName};
+    use CGI::Session;
+    my $cgisess =
+      CGI::Session->new( undef, $id,
+        { Directory => "$TWiki::cfg{WorkingDir}/tmp" } );
+    my $crypttokens = $cgisess->param('CryptToken');
+
+
+
+    my $success = 0;
+    foreach my $token (@$crypttokens) {
+                foreach (keys %$token) {
+                        if ($token->{$_}  eq $crypt_token) {
+                            $success = 1;
+    # cleanup of token from session data-once used token should bre
+    # removed from users session
+                $cgisess->close();
+                $session->{users}->{loginManager}->cleanCryptToken($crypt_token);
+                            last;
+                        }
+        }
+    }
+
+ if (!$success) {
+
+        throw
+          TWiki::OopsException( 'invalidtoken',
+                                def => 'invalid_token',
+                                web => $webName,
+                                topic => $topicName,
+                                params => [] );
+    }
+
+   return $success;
+
+}
+
+
+
 sub run {
     $TWiki::engine->run();
 }

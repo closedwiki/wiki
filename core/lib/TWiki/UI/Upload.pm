@@ -185,6 +185,28 @@ sub upload {
             params => [ 'upload' ]);
     }
 
+
+
+
+    #$action in this block/subroutine is used only for verification
+    #of crypttoken
+    my $cryptaction = 'upload';
+    my %secureActions;
+    map { $secureActions{ lc($_) } = 1; }
+      split( /[\s,]+/, $TWiki::cfg{CryptToken}{SecureActions} );
+
+
+    #If Crypt Token is requred for save action, one should not be able
+    #go beyond following step without valid crypttokens.
+
+    if (   $TWiki::cfg{CryptToken}{Enable}
+        && $secureActions{ lc($cryptaction) } )
+    {
+
+    TWiki::UI::verifyCryptToken( $session, $query->param('crypttoken') );
+    }
+
+
     TWiki::UI::checkWebExists( $session, $webName, $topic, 'attach files to' );
     TWiki::UI::checkTopicExists( $session, $webName, $topic, 'attach files to' );
     TWiki::UI::checkMirror( $session, $webName, $topic );

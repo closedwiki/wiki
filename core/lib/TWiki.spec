@@ -465,6 +465,27 @@ $TWiki::cfg{Htpasswd}{FileName} = '$TWiki::cfg{DataDir}/.htpasswd';
 # </dl>
 $TWiki::cfg{Htpasswd}{Encoding} = 'crypt';
 
+#---++ Crypt Token for CSRF/XSS Protection
+
+# **BOOLEAN**
+# TWiki can protects content updates with a one-time-use crypt token
+# to guard against CSRF (cross-site request forgery) exploits.
+# If enabled, a user can no longer to hit the browser back button to
+# fix a typo; an "invalid crypt token" error message is shown if
+# the user tries to save again.<p />
+# There is a balance between security and user convenience. For
+# mission critical public TWiki sites it is recommended to enable
+# the crypt token; for firewalled TWiki sites it is usually OK to
+# disable it.<p />
+# Enable crypt tokens to guard against CSRF exploits.
+$TWiki::cfg{CryptToken}{Enable} = 1;
+
+# **STRING 50 EXPERT**
+# TWiki transparently generates a crypt token in HTML forms, and verifies
+# if the token is valid on content updates. Specify a comma separated
+# list of content update actions.
+$TWiki::cfg{CryptToken}{SecureActions} = 'register,save,comment,createweb,upload';
+
 #---++ Miscellaneous
 
 # **STRING 20 EXPERT**
