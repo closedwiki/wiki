@@ -381,7 +381,14 @@ sub readRssFeed
     }
 
     # compare with existing cache file (if any) if feed has been updated
-    $updated = 1 unless( $text eq TWiki::Func::readFile( $cacheFile ));
+    my $oldFeed = TWiki::Func::readFile( $cacheFile );
+    my $newFeed = $text;
+    # workaround for feed bug with incorrect <lastBuildDate> and <pubDate>
+    $oldFeed =~ s/<lastBuildDate>.*?<\/lastBuildDate>//gos;
+    $oldFeed =~ s/<pubDate>.*?<\/pubDate>//gos;
+    $newFeed =~ s/<lastBuildDate>.*?<\/lastBuildDate>//gos;
+    $newFeed =~ s/<pubDate>.*?<\/pubDate>//gos;
+    $updated = 1 unless( $newFeed eq $oldFeed );
 
     # save text in cache file before returning it
     TWiki::Func::saveFile( $cacheFile, $text );
