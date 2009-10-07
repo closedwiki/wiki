@@ -39,6 +39,7 @@ public class TWikiFrame extends DrawFrame {
     static private String GIFPATH_PARAMETER    = "gifpath";
     static private String SVGPATH_PARAMETER    = "svgpath";
     static private String SAVEPATH_PARAMETER   = "savepath";
+    static private String CRYPTTOKEN_PARAMETER   = "crypttoken";
     static private String HELPPATH_PARAMETER   = "helppath";
     static private String BORDERSIZE_PARAMETER = "bordersize";
     
@@ -386,6 +387,11 @@ public class TWikiFrame extends DrawFrame {
             String savePath = app.getParameter(SAVEPATH_PARAMETER);
             if (savePath == null)
                 savePath = "";
+      
+            // gets crypttoken of the drawing
+            String cryptToken = app.getParameter(CRYPTTOKEN_PARAMETER);
+            if (cryptToken == null)
+                cryptToken = "undef";
             
             // submit POST command to the server three times:
             // *.draw, *.map and *.gif
@@ -393,7 +399,7 @@ public class TWikiFrame extends DrawFrame {
             showStatus("Saving .draw file " + drawingPath);
             if (bPostEnabled)
                 savedDraw = app.post(
-                                     savePath, "", "text/plain", drawingPath,
+                                     savePath, "", "cryptToken", "text/plain", drawingPath,
                                      out.toString(), "TWiki Draw draw file");
             
             // calculate the minimum size of the gif image
@@ -452,12 +458,12 @@ public class TWikiFrame extends DrawFrame {
                     
                     "</map>";
                 savedMap = app.post(
-                                    savePath, "", "text/plain", mapPath,
+                                    savePath, "", cryptToken, "text/plain", mapPath,
                                     map, "TWiki Draw map file");
             } else {
                 // erase any previous map file
                 String mapPath = drawingPath.substring(0, drawingPath.length() - 5);
-                savedMap = app.post( savePath, "", "text/plain", mapPath + ".map", "", "" );
+                savedMap = app.post( savePath, "", cryptToken, "text/plain", mapPath + ".map", "", "" );
             }
             
             // get pathname of the SVG file
@@ -469,7 +475,7 @@ public class TWikiFrame extends DrawFrame {
               String outsvg = SvgSaver.convertSVG(out.toString());
               // now upload *.svg file
               if (bPostEnabled)
-              savedSvg = app.post(savePath, "", "image/svg", svgPath,
+              savedSvg = app.post(savePath, "", cryptToken, "image/svg", svgPath,
               outsvg, "SVG file");
               }
             */
@@ -492,7 +498,7 @@ public class TWikiFrame extends DrawFrame {
             // upload *.gif file
             if (bPostEnabled)
                 savedGif = app.post(
-                                    savePath, "", "image/gif",
+                                    savePath, "",  cryptToken,  "image/gif",
                                     gifPath, String.valueOf(aChar, 0, aChar.length),
                                     "TWiki Draw GIF file");
         } catch (MalformedURLException e) {

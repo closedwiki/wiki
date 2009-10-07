@@ -22,6 +22,7 @@ public interface Application {
     void exit();
     boolean post(String url,
                  String fileName,
+                 String cryptToken,
                  String type,
                  String path,
                  String content,

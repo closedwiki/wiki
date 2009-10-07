@@ -41,6 +41,7 @@ public  class TWikiDraw extends LightweightDrawApplet {
     public boolean post(
                         String url,
                         String fileName,
+                        String cryptToken,
                         String type,
                         String path,
                         String content,
@@ -51,7 +52,7 @@ public  class TWikiDraw extends LightweightDrawApplet {
         while (content.indexOf(sep) != -1)
             sep += "x";
         
-        String message = makeMimeForm(fileName, type,
+        String message = makeMimeForm(fileName, cryptToken, type,
                                       path, content, comment, sep);
         
         // for test
@@ -146,6 +147,7 @@ public  class TWikiDraw extends LightweightDrawApplet {
     /** Post the given message */
     private String makeMimeForm(
                                 String fileName,
+                                String cryptToken,
                                 String type,
                                 String path,
                                 String content,
@@ -163,6 +165,9 @@ public  class TWikiDraw extends LightweightDrawApplet {
             "--" + sep + "\r\n" 
             + "Content-Disposition: form-data; name=\"filename\"" + NLNL
             + fileName
+            + mime_sep
+            + "Content-Disposition: form-data; name=\"crypttoken\"" + NLNL
+            + cryptToken 
             + mime_sep
             + "Content-Disposition: form-data; name=\"noredirect\"" + NLNL
             + 1

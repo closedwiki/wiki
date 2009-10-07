@@ -60,12 +60,14 @@ public class StandAlone implements Application {
 
     public boolean post(String url,
                         String fileName,
+                        String cryptToken,
                         String type,
                         String path,
                         String content,
                         String comment) {
         System.out.println("Post URL " + url +
                            " fileName " + fileName +
+                           " crypttoken " + cryptToken +
                            " type " + type +
                            " path " + path +
                            " content " + content +
