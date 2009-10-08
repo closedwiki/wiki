@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1230046948" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1255012449" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 
 _A plugin wrapper around the SearchEngineKinoSearchAddOn_
@@ -40,7 +40,6 @@ __TODO:__ while search works, the template it uses isn't useable as its tuned fo
    <input type="text" name="search" size="32" /> <input type="submit" value="Search text" /> | [[%TWIKIWEB%.KinoSearch][Help]]
 </form>
 
-
 ---++ Monitoring the Indexing log
 
 To monitor the log  - following variables can be used to display the lines from  indexing or update indexing log files.
@@ -59,8 +58,6 @@ If installed correctly, please see the log files below
 %KINOSEARCH_UPDATELOGFILE%
 
 
-
-
 ---++ Plugin Settings
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>NEWPLUGIN_SHORTDESCRIPTION%==
@@ -76,6 +73,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
 
    * Download the ZIP file from the Plugin Home (see below)
+   * Install CPAN Perl module  CPAN:File::Tail 
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
@@ -86,17 +84,19 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.DavidGuest and TWiki:Main.SvenDowideit|
-|  Copyright: | &copy; 2007, TWiki:Main.DavidGuest |
+|  Plugin Author: | TWiki:Main.DavidGuest, TWiki:Main.SvenDowideit and TWiki:Main.SopanShewale ([[http://www.twiki.net][Twiki, Inc]])|
+|  Copyright: | &copy; 2009, TWiki:Main.DavidGuest and [[http://www.twiki.net][Twiki, Inc]] |
+|  Additional Copyright: | &copy; 2007, TWiki:Main.DavidGuest |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 20 Aug 2008 (V1.200) |
+|  Plugin Version: | 08 Oct 2009 (V1.300) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+| 08 Oct 2009: | Version 1.3 Added Index/Update Indexing Log feature to the plugin|
 |  20 Aug 2008: | Version 1.2, brought Plugin into SearchEngineKinoSearchAddOn package, and svn, and added restHandlers for indexing & searching - TWiki:Main.SvenDowideit |
 |  09 Apr 2008: | Version 1.1, Added auto index updater code |
 |  07 Apr 2008: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
-|  Other Dependencies: | %TWIKIWEB%.SearchEngineKinoSearchAddOn |
+|  Other Dependencies: | %TWIKIWEB%.SearchEngineKinoSearchAddOn, CPAN:File::Tail|
 |  Perl Version: | 5.005 |
 |  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
