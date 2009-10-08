@@ -98,11 +98,35 @@ sub _KINOSEARCH {
 }
 
 sub afterSaveHandler {
+
+     my ( $text, $topic, $web, $error, $meta ) = @_;
+     my $changefile = TWiki::Func::getDataDir()."/".$web."/".".changesforkinoupdate";
+
+
+     #Need to save the file in following format.
+     # <topic> <user> <change_time>      
+     # Note - rev is not included in this  
+    
+     my @changes = (); 
+     if (-e $changefile ) {
+       @changes =   map {
+          my @row = split(/\t/, $_, 5);
+          \@row }
+        split( /[\r\n]+/, TWiki::Func::readFile($changefile )); 
+      }
+   
+    ## Add new change to the end of the file
+    push (@changes, [$topic, $user, time()]);
+    my $changetext = join ("\n", map { join("\t", @$_);}  @changes);
+   
+    TWiki::Func::saveFile($changefile, $changetext);
+
+
     return if ($enableOnSaveUpdates != 1);  #disabled - they can make save's take too long
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $text, $topic, $web, $error, $meta ) = @_;
-    my $web = $_[2];
-    my $topic = $_[1];
+    #my $web = $_[2];
+    #my $topic = $_[1];
     my $indexer = TWiki::Contrib::SearchEngineKinoSearchAddOn::Index->newUpdateIndex();
     my @topicsToUpdate = ($topic);
     $indexer->removeTopics($web, @topicsToUpdate);
