@@ -745,9 +745,13 @@ sub readUpdateMarker {
 # QS
 sub readChanges {
     my ( $self, $web ) = @_;
-
-    my $changes_file = $TWiki::cfg{DataDir} . "/$web/.changes";
-
+   
+   my $changes_file;
+   if (-e $TWiki::cfg{DataDir} . "/$web/.changesforkinoupdate") {
+         $changes_file = $TWiki::cfg{DataDir} . "/$web/.changesforkinoupdate";
+  } else {
+     $changes_file = $TWiki::cfg{DataDir} . "/$web/.changes";
+  }
     if ( -e $changes_file ) {
         my $FILE;
         if (open( $FILE, "<$changes_file" )) {

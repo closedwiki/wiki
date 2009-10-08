@@ -12,7 +12,7 @@
 
 ##########################################################################
 #
-# This work was created  by TWIKI.NET (http://www.twiki.net)
+# This work was created  by Twiki, Inc. (http://www.twiki.net)
 # Contact sales@twiki.net for any information
 #
 ##########################################################################
