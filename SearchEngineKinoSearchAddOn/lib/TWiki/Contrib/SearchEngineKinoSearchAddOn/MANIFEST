@@ -13,11 +13,14 @@ lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifyBase.pm
 lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/DOC_antiword.pm
 lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/DOC_abiword.pm
 lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/DOC_wv.pm
+lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/DOCX.pm
 lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/HTML.pm
 lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/PDF.pm
 lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/Text.pm
 lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/XLS.pm
+lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/XLSX.pm
 lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/PPT.pm
+lib/TWiki/Contrib/SearchEngineKinoSearchAddOn/StringifierPlugins/PPTX.pm
 templates/kinosearch.pattern.tmpl
 templates/kinosearchrss.tmpl
 kinosearch/bin/kinoindex 0544
