@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1255032829" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1255083152" format="1.1" version="$Rev$"}%
 <!--
 This topic is part of the documentation for SearchEngineKinoSearchAddOn and is
 automatically generated from Subversion. Do not edit it! Your edits
@@ -11,8 +11,7 @@ http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/SearchEngineKinoSearchAddOn
 ---+ Kino Search Engine Add-On
 %TOC%
 
-[[http://www.rectangular.com/kinosearch/][KinoSearch]] is a Perl implementation of Lucene search engine (implemented
-in Java). This is the base of this indexed search engine for TWiki. With <nop>KinoSearch you create an index over all webs including attachments like Word, Excel and PDF. Based on that you get a really fast search over all topics and the attachments. You need this add-on
+[[http://www.rectangular.com/kinosearch/][KinoSearch]], A Perl search library,  implementation of Lucene (Java implementation) search engine. This is the base of this indexed search engine for TWiki. With <nop>KinoSearch you create an index over all webs including attachments like Word, Excel and PDF. Based on that you get a really fast search over all topics and the attachments. You need this add-on
    * if your TWiki has grown so big, that normal search is too slow or
    * if you want to do search not only on the topics but also the attachments.
 
@@ -124,7 +123,7 @@ You can also optionally use SearchEngineKinoSearchPlugin's updateHandlers to aut
 All the PDF, HTML, DOC, XLS and text attachments are indexed by default. If you want to override this setting you can use a TWiki preference ==KINOSEARCHINDEXEXTENSIONS==. You can copy & paste the next lines in your [[%MAINWEB%.TWikiPreferences]] topic
 <verbatim>
    * KinoSearch settings
-      * Set KINOSEARCHINDEXEXTENSIONS = .pdf, .html, .txt, .doc, .xls
+      * Set KINOSEARCHINDEXEXTENSIONS = .pdf, .html, .txt, .doc, .xls, .docx, .pptx, .xlsx,
 </verbatim>
 or whatever extensions you want. If you add other file extensions, they are treated as ASCII files. If needed, you can add more specialised stringifiers for further document types ( see [[SearchEngineKinoSearchAddOn#Indexing_further_document_types][Indexing further document types]]).
 
@@ -199,6 +198,10 @@ Install xpdf and ppthtml, if you want to index attached PDF and PPT files:
    * If you do not install =xpdf=, you should remove =.pdf= from the =KINOSEARCHINDEXEXTENSIONS= variable.
    * If you do not install =ppthtml=, you should remove =.ppt= from the =KINOSEARCHINDEXEXTENSIONS= variable.
 
+---+++ Backends for DOCX, PPTX
+
+Install ==docx2txt.pl== (http://docx2txt.sourceforge.net/) and  ==pptx2txt.pl (http://pptx2txt.sourceforge.net) at appropriate paths.  By default, in most of linux/unix system, the tool can go into ==/usr/bin== directory.
+
 ---+++ Installation of additional CPAN modules
 
 You need to install the following modules: <nop>KinoSearch,
@@ -215,6 +218,9 @@ perl -MCPAN -e "install HTML::TreeBuilder"
 perl -MCPAN -e "install Spreadsheet::ParseExcel"
 perl -MCPAN -e "install CharsetDetector"
 perl -MCPAN -e "install Encode"
+perl -MCPAN -e "Spreadsheet::XLSX"
+perl -MCPAN -e "Text::Iconv"
+
 </verbatim>
 </noautolink>
 
@@ -299,10 +305,9 @@ Remember to edit the file ==kinosearch/bin/LocalLib.cfg== and modify ==twikiLibP
 
 ---+++ Skipping of Attachments with problems in stringifying
 
-A few times its impossible to stringify the attachments. In this case best way to skip these attachments from indexing. In case our stringy libraries fail to stringy, they add details of the attachment in TWiki's  work area under ==SearchEngineKinoSearchAddOn== directory (e.g. ==/var/www/twiki/working/work_areas/SearchEngineKinoSearchAddOn== directory if your TWIKI_ROOT is ==/var/www/twiki== and ==$TWiki::cfg{WorkingDir} = /var/www/twiki/working== )
+A few times its impossible to stringify the attachments. In this case best way would be to skip the attachments from indexing. In case our stringy libraries fail to stringy, they add details of the attachment in TWiki's  work area under ==SearchEngineKinoSearchAddOn== directory (e.g. ==/var/www/twiki/working/work_areas/SearchEngineKinoSearchAddOn== directory if your TWIKI_ROOT is ==/var/www/twiki== and ==$TWiki::cfg{WorkingDir} = /var/www/twiki/working== )
 
 These attachments are skipped during next time indexing. 
-
 
 
 ---+++ Test of the installation
