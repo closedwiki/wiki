@@ -271,6 +271,7 @@ Examples:
 | log | %<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | enables/disables logging | =log="off"= |
 | logformat | %<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | format of a log entry | =logformat="   * %<nop>SERVERTIME% - %<nop>WIKIUSERNAME% - Item %<nop>CLIID%: from %<nop>STATE% to %<nop>NEXTSTATE%"= |
 | logtopic | %<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | log topic | =logtopic="%<nop>TOPIC%ChecklistLog"= |
+| logpos | %<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | log entry position; allowed values: append, prepend | =logpos="append"= |
 | name | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | a naming context (default: =_default=) - useful and recommended if you define more than one checklist on a topic (%X% if you use it in =%<nop>CHECKLIST%= you must use it in all related =%<nop>CLI%= tags too) | =name="mychecklist1"= |
 | notify | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | enables/disables mail notification if a item state was changed | =notify="off"= |
 | pos | %<nop>CHECKLISTSTART% | defines the reset button and legend position (default: =bottom=); if you use another value than ="top"= the button position falls back to default | =pos="bottom"= |

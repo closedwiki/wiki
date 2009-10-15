@@ -221,6 +221,7 @@ sub initDefaults {
 		'log'=> 0,
 		'logformat'=>"   * %SERVERTIME% - %WIKIUSERNAME% - Item %CLIID%: from %STATE% to %NEXTSTATE% \n",
 		'logtopic'=>$topic.'ChecklistLog',
+		'logpos' => 'append',
 	);
 
 	@listOptions = ('states','stateicons');
@@ -1002,9 +1003,15 @@ sub saveLog {
 	$logentry =~ s/%STATE%/$laststate/g;
 	$logentry =~ s/%NEXTSTATE%/$nextstate/g;
 
-	$logtopictext .= $logentry;
+	
+	my $meta = "";
+	while ($logtopictext =~s /(%META(:[^{]+){[^}]+}%)//s) {
+		$meta.=$1;
+	}
+	$logtopictext .= $logentry if $options{logpos} !~ /prepend/i;
+	$logtopictext = $logentry . $logtopictext if $options{logpos} =~ /prepend/i;
 
-	TWiki::Func::saveTopicText($web, $options{logtopic}, $logtopictext, 1, !$options{'notify'});
+	TWiki::Func::saveTopicText($web, $options{logtopic}, "$meta\n$logtopictext", 1, !$options{'notify'});
 	TWiki::Func::setTopicEditLock($web, $options{logtopic}, 0);
 
 
