@@ -82,7 +82,7 @@ $VERSION = '$Rev$';
 $RELEASE = 'Cairo, Dakar, Edinburgh, ...';
 
 
-$REVISION = '1.025'; #dro# added documentation requested by TWiki:Main.PeterThoeny; added hide entries feature requested by Christian Holzmann
+$REVISION = '1.025'; #dro# added documentation requested by TWiki:Main.PeterThoeny; added hide entries feature requested by Christian Holzmann; added log feature requested by TWiki:Main.VickiBrown
 #$REVISION = '1.024'; #dro# fixed missing ')' in generated JavaScript commands
 #$REVISION = '1.023'; #dro# fixed minor anchor link bug reported by TWiki:Main.KeithHelfrich; fixed tooltip position bug
 #$REVISION = '1.022'; #dro# improved AJAX performance; added new feature (state selection for reset button); fixed %TOC% bug reported by TWiki:Main.HelenJohnstone; fixed some minor and major bugs (mod_perl, description stripping, static feature, 'text' icons);  removed useforms feature
@@ -218,6 +218,9 @@ sub initDefaults {
 		'tooltipfixleft' => '-163',
 		'tooltipfixtop' => '0',
 		'hide'=> undef,
+		'log'=> 0,
+		'logformat'=>"   * %SERVERTIME% - %WIKIUSERNAME% - Item %CLIID%: from %STATE% to %NEXTSTATE% \n",
+		'logtopic'=>$topic.'ChecklistLog',
 	);
 
 	@listOptions = ('states','stateicons');
@@ -225,7 +228,7 @@ sub initDefaults {
 
 	@filteredOptions = ( 'id', 'name', 'states');
 
-	@flagOptions = ('showlegend', 'anchors', 'notify', 'static' , 'useajax', 'statesel');
+	@flagOptions = ('showlegend', 'anchors', 'notify', 'static' , 'useajax', 'statesel', 'log');
 
 	@ignoreNamedDefaults = ('showlegend','reset','hide');
 }
@@ -727,6 +730,7 @@ sub doChecklistItemStateReset {
 	foreach my $id (keys %{$$idMapRef{$n}}) {
 		$$idMapRef{$n}{$id}{'state'}=$state;
 	}
+	saveLog('reset', $n, 'any', $state) if $options{log} && !$saveDone;
 	&saveChecklistItemStateTopic($n,&extractPerms($text)) if (!$saveDone) && (($saveDone=!$saveDone));
 }
 # =========================
@@ -740,8 +744,11 @@ sub doChecklistItemStateChange {
 	# reload?
 	return if ((defined $$idMapRef{$n}{$id}{'state'})&&($$idMapRef{$n}{$id}{'state'} ne $lastState));
 
-	$$idMapRef{$n}{$id}{'state'}=(defined $nextstate?$nextstate:(&getNextState($n, $$idMapRef{$n}{$id}{'state'}))[0]);
+	my $rns = (defined $nextstate?$nextstate:(&getNextState($n, $$idMapRef{$n}{$id}{'state'}))[0]);
 
+	$$idMapRef{$n}{$id}{'state'}=$rns;
+
+	&saveLog($id, $n, $lastState, $rns) if $options{log} && !$saveDone;
 	&saveChecklistItemStateTopic($n,&extractPerms($text)) if (!$saveDone) && (($saveDone=!$saveDone));
 }
 # =========================
@@ -970,6 +977,37 @@ sub getName {
 	my $name=&substIllegalChars($$paramsRef{'name'}) if defined $$paramsRef{'name'};
 	$name=$globalDefaults{'name'} unless defined $name;
 	return $name;
+}
+# =========================
+sub saveLog {
+	my ($id, $n, $laststate, $nextstate) = @_;
+
+	my $oopsUrl = &TWiki::Func::setTopicEditLock($web, $options{logtopic}, 1);
+	if ($oopsUrl) {
+		&TWiki::Func::redirectCgiQuery(TWiki::Func::getCgiQuery(), $oopsUrl);
+		return;
+	}
+	
+	my $logtopictext = TWiki::Func::readTopicText($web, $options{logtopic});
+	if ($logtopictext =~ /^http.*?\/oops/) {
+		TWiki::Func::redirectCgiQuery(TWiki::Func::getCgiQuery(), $logtopictext);
+		return;
+	}
+	checkChangeAccessPermission($options{logtopic}, $logtopictext) || return;
+
+	my $logentry = TWiki::Func::expandCommonVariables($options{logformat}, $options{logtopic}, $web);
+
+
+	$logentry =~ s/%CLIID%/$id/g;
+	$logentry =~ s/%STATE%/$laststate/g;
+	$logentry =~ s/%NEXTSTATE%/$nextstate/g;
+
+	$logtopictext .= $logentry;
+
+	TWiki::Func::saveTopicText($web, $options{logtopic}, $logtopictext, 1, !$options{'notify'});
+	TWiki::Func::setTopicEditLock($web, $options{logtopic}, 0);
+
+
 }
 # =========================
 sub saveChecklistItemStateTopic {
