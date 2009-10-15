@@ -1,3 +1,7 @@
 data/TWiki/ChecklistPlugin.txt NEW
 lib/TWiki/Plugins/ChecklistPlugin.pm NEW
 pub/TWiki/ChecklistPlugin/itemstatechange.js NEW
+data/TWiki/VarCHECKLIST.txt NEW
+data/TWiki/VarCHECKLISTEND.txt NEW
+data/TWiki/VarCHECKLISTSTART.txt NEW
+data/TWiki/VarCLI.txt NEW
