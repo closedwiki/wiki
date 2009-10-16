@@ -82,7 +82,8 @@ $VERSION = '$Rev$';
 $RELEASE = 'Cairo, Dakar, Edinburgh, ...';
 
 
-$REVISION = '1.025'; #dro# added documentation requested by TWiki:Main.PeterThoeny; added hide entries feature requested by Christian Holzmann; added log feature requested by TWiki:Main.VickiBrown
+$REVISION = '1.026'; #dro# added timestamp feature requested by TWiki:Main.VickiBrown; fixed uninitialized value bugs;
+#$REVISION = '1.025'; #dro# added documentation requested by TWiki:Main.PeterThoeny; added hide entries feature requested by Christian Holzmann; added log feature requested by TWiki:Main.VickiBrown
 #$REVISION = '1.024'; #dro# fixed missing ')' in generated JavaScript commands
 #$REVISION = '1.023'; #dro# fixed minor anchor link bug reported by TWiki:Main.KeithHelfrich; fixed tooltip position bug
 #$REVISION = '1.022'; #dro# improved AJAX performance; added new feature (state selection for reset button); fixed %TOC% bug reported by TWiki:Main.HelenJohnstone; fixed some minor and major bugs (mod_perl, description stripping, static feature, 'text' icons);  removed useforms feature
@@ -222,6 +223,7 @@ sub initDefaults {
 		'logformat'=>"   * %SERVERTIME% - %WIKIUSERNAME% - Item %CLIID%: from %STATE% to %NEXTSTATE% \n",
 		'logtopic'=>$topic.'ChecklistLog',
 		'logpos' => 'append',
+		'timestampformat' => '%SERVERTIME% - %WIKIUSERNAME%, last state: %STATE%',
 	);
 
 	@listOptions = ('states','stateicons');
@@ -522,9 +524,14 @@ sub substItemLine {
 
 	$idOffset++;
 
+	$namedIds{$options{name}} = 0 unless defined $namedIds{$options{name}};
+	
 	my $id = "CLP_HIDE_ID_".$options{name}.($namedIds{$options{name}} + $idOffset);
 	my $name = "CLP_HIDE_NAME_".$options{name};
-	my $class = "clp_hide_".$options{name}."_".$$idMapRef{$options{name}}{$namedIds{$options{name}}+$idOffset}{state};
+	my @states = split /\|/, $options{'states'};
+	my $state = $$idMapRef{$options{name}}{$namedIds{$options{name}}+$idOffset}{state};
+	$state = $states[0] unless defined $state;
+	my $class = "clp_hide_".$options{name}."_".$state;
 
 	if ($l=~/\%CLI{.*?}\%/) {
 		$l=~s/\%CLI{(.*?)}\%/\%CLI{$1 $attribs}\%/g;
@@ -588,6 +595,10 @@ sub handleChecklistItem {
 	
 	&handleDescription($text, $startOffset, $endOffset);
 
+	my $name = $options{'name'};
+	my $id = $options{'id'}?$options{'id'}:$namedIds{$name};
+	my $last = $$idMapRef{$name}{$id}{'state'};
+
 	if ((defined $query->param('clpsc'))&&(!$stateChangeDone)) {
 		my ($id,$name,$lastState,$nextstate) = ($query->param('clpsc'),$query->param('clpscn'),$query->param('clpscls'),$query->param('clpscns'));
 		if ($options{'name'} eq $name) {
@@ -596,12 +607,12 @@ sub handleChecklistItem {
 		}
 	}
 
-	my $name = $options{'name'};
-	my $id = $options{'id'}?$options{'id'}:$namedIds{$name};
 	my $state = (defined $$idMapRef{$name}{$id}{'state'}) ? $$idMapRef{$name}{$id}{'state'} : (split(/\|/, $options{'states'}))[0];
+	my $timestamp = (defined $$idMapRef{$name}{$id}{'timestamp'}) ? $$idMapRef{$name}{$id}{'timestamp'} : getLogEntry($options{timestampformat},$id,$name,$last, $state);
 
 	$$idMapRef{$name}{$id}{'state'}=$state unless defined $$idMapRef{$name}{$id}{'state'};
 	$$idMapRef{$name}{$id}{'descr'}=$options{'descr'} if defined $options{'descr'};
+	$$idMapRef{$name}{$id}{'timestamp'}=$timestamp;
 
 	push(@{$$idOrderRef{$name}}, $id) unless grep(/^\Q$id\E$/,@{$$idOrderRef{$name}});
 
@@ -712,6 +723,7 @@ sub extractPerms {
 	my ($text) = @_;
 	my $perms;
 
+	$text="" unless defined $text;
 	$perms=join("\n",grep /^\s+\*\s*Set (ALLOW|DENY).+/i,split(/\n/,$text));
 
 	return $perms;
@@ -729,6 +741,7 @@ sub doChecklistItemStateReset {
 		$state=$states[0];
 	}
 	foreach my $id (keys %{$$idMapRef{$n}}) {
+		$$idMapRef{$n}{$id}{'timestamp'}=getLogEntry($options{timestampformat},$id,$n,$$idMapRef{$n}{$id}{'state'}, $state);
 		$$idMapRef{$n}{$id}{'state'}=$state;
 	}
 	saveLog('reset', $n, 'any', $state) if $options{log} && !$saveDone;
@@ -748,6 +761,7 @@ sub doChecklistItemStateChange {
 	my $rns = (defined $nextstate?$nextstate:(&getNextState($n, $$idMapRef{$n}{$id}{'state'}))[0]);
 
 	$$idMapRef{$n}{$id}{'state'}=$rns;
+	$$idMapRef{$n}{$id}{'timestamp'}=getLogEntry($options{timestampformat},$id, $n, $lastState, $nextstate);
 
 	&saveLog($id, $n, $lastState, $rns) if $options{log} && !$saveDone;
 	&saveChecklistItemStateTopic($n,&extractPerms($text)) if (!$saveDone) && (($saveDone=!$saveDone));
@@ -781,18 +795,19 @@ sub createAction {
 }
 # =========================
 sub createTitle {
-	my ($name,$state,$icon,$statesRef, $nextstate, $nextstateicon) = @_;
+	my ($name,$state,$icon,$statesRef, $nextstate, $nextstateicon, $tId, $timestamp) = @_;
 	($nextstate, $nextstateicon) = &getNextState($name,$state) unless defined $nextstate;
 	my $query = &TWiki::Func::getCgiQuery();
 	my $title = $options{'tooltip'};
 	$title = $state unless defined $title;
-	$title=~s /\%STATE\%/$state/sg;
-	$title=~s /\%NEXTSTATE\%/$nextstate/esg;
-	$title=~s /\%STATECOUNT\%/($#$statesRef+1)/esg;
-	$title=~s /\%STATES\%/join(", ",@{$statesRef})/esg;
-	$title=~s /\%LEGEND\%/&renderLegend()/esg;
-	$title=~s /\%STATEICON\%/$query->img({alt=>$state,src=>(&getImageSrc($icon))[0]})/esg;
-	$title=~s /\%NEXTSTATEICON\%/$query->img({alt=>$nextstate,src=>(&getImageSrc($nextstateicon))[0]})/esg;
+	$title =~ s/\%STATE\%/$state/sg;
+	$title =~ s/\%NEXTSTATE\%/$nextstate/esg;
+	$title =~ s/\%STATECOUNT\%/($#$statesRef+1)/esg;
+	$title =~ s/\%STATES\%/join(", ",@{$statesRef})/esg;
+	$title =~ s/\%LEGEND\%/&renderLegend()/esg;
+	$title =~ s/\%STATEICON\%/$query->img({alt=>$state,src=>(&getImageSrc($icon))[0]})/esg;
+	$title =~ s/\%NEXTSTATEICON\%/$query->img({alt=>$nextstate,src=>(&getImageSrc($nextstateicon))[0]})/esg;
+	$title =~ s/\%TIMESTAMP\%/$timestamp/esg;
 	return $title;
 }
 # =========================
@@ -806,6 +821,9 @@ sub renderChecklistItem {
 	my @icons = split /\|/, $options{'stateicons'};
 
 	my $tId = $options{'id'}?$options{'id'}:$namedIds{$name};
+
+	my $timestamp = $$idMapRef{$name}{$tId}{'timestamp'};
+	$timestamp = "" unless defined $timestamp;
 
 	my $state = (defined $$idMapRef{$name}{$tId}{'state'}) ? $$idMapRef{$name}{$tId}{'state'} : $states[0];
 	my $icon = $icons[0];
@@ -840,7 +858,7 @@ sub renderChecklistItem {
 		$linktext.=$options{'text'}.' ' unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
 	}
 
-	my $title = &createTitle($name, $state, $icon, \@states);
+	my $title = &createTitle($name, $state, $icon, \@states, undef,undef,$tId, $timestamp);
 
 	$linktext.=qq@$textBef@ if $textBef;
 	my $imgalt = (!defined $iconsrc)?$state:"";
@@ -858,7 +876,7 @@ sub renderChecklistItem {
 	$text .= $query->div({-id=>"CLP_TT_$name$uetId",-style=>"visibility:hidden;position:absolute;top:0;left:0;z-index:2;font: normal 8pt sans-serif;padding: 3px; border: solid 1px; background-color: $options{'tooltipbgcolor'};"},$title);
 	if ($options{'statesel'} && (!$options{'static'})) {
 		$action="javascript:clpTooltipShow('CLP_SM_DIV_$name$uetId','CLP_A_$name$uetId',".(10+int($options{'tooltipfixleft'})).",".(10+int($options{'tooltipfixtop'})).",true);";
-		$text .= &createHiddenDirectSelectionDiv($uetId, $name, $state, $icon, \@states, \@icons);
+		$text .= &createHiddenDirectSelectionDiv($uetId, $name, $state, $icon, \@states, \@icons, $tId, $timestamp);
 	}
 	$action = "javascript:;" if $options{'static'};
 	$text .= $query->a({-onmouseover=>$onmouseover,-onmouseout=>$onmouseout,-id=>"CLP_A_$name$uetId",-name=>"CLP_A_$name$uetId",-href=>$action}, $linktext);
@@ -869,7 +887,7 @@ sub renderChecklistItem {
 }
 # =========================
 sub createHiddenDirectSelectionDiv {
-	my ($id, $name, $state, $icon, $statesRef, $iconsRef) =  @_;
+	my ($id, $name, $state, $icon, $statesRef, $iconsRef, $tId, $timestamp) =  @_;
 	my $text ="";
 	
 	my $query = &TWiki::Func::getCgiQuery();
@@ -878,7 +896,7 @@ sub createHiddenDirectSelectionDiv {
 	for (my $i=0; $i<=$#$statesRef; $i++) {
 		my ($s, $ic) = ($$statesRef[$i], $$iconsRef[$i]);
 		my $action = &createAction($id, $name, $state, $s);
-		my $title = &createTitle($name,$state,$icon,$statesRef, $s, $ic);
+		my $title = &createTitle($name,$state,$icon,$statesRef, $s, $ic, $tId, $timestamp);
 		my $submitAction = "";
 		if ($options{'useajax'}) {
 			$submitAction = "submitItemStateChange('$action');clpTooltipHide('CLP_SM_DIV_$name$id');";
@@ -959,10 +977,11 @@ sub readChecklistItemStateTopic {
 	}
 
 	foreach my $line (split /[\r\n]+/, $clisTopic) {
-		if ($line =~ /^\s*\|\s*([^\|\*\s]*)\s*\|\s*([^\|\*\s]*)\s*\|\s*([^\|\s]*)\s*\|(\s*([^\|]+)\s*\|)?\s*$/) {
-			my ($name,$id,$state,$descr) = ($1,$2,$3,$5);
+		if ($line =~ /^\s*\|\s*([^\|\*\s]*)\s*\|\s*([^\|\*\s]*)\s*\|\s*([^\|\s]*)\s*\|(\s*([^\|]+)\s*\|)?(\s*([^\|]+)\s*\|)?\s*$/) {
+			my ($name,$id,$state,$descr,$timestamp) = ($1,$2,$3,$5,$7);
 			$$idMapRef{$name}{$id}{'state'}=$state;
 			$$idMapRef{$name}{$id}{'descr'}=$descr;
+			$$idMapRef{$name}{$id}{'timestamp'}=$timestamp;
 			push(@{$$idOrderRef{$name}}, $id) unless grep(/^\Q$id\E$/,@{$$idOrderRef{$name}});
 		}
 	}
@@ -978,6 +997,18 @@ sub getName {
 	my $name=&substIllegalChars($$paramsRef{'name'}) if defined $$paramsRef{'name'};
 	$name=$globalDefaults{'name'} unless defined $name;
 	return $name;
+}
+# =========================
+sub getLogEntry {
+	my ($format, $id, $n, $laststate, $nextstate) = @_;
+	my $logentry = TWiki::Func::expandCommonVariables($format, $options{logtopic}, $web);
+
+	my @states = split /\|/, $options{'states'};
+	$logentry =~ s/%CLIID%/$id/g;
+	$logentry =~ s/%STATE%/(defined $laststate?$laststate:$states[0])/eg;
+	$logentry =~ s/%NEXTSTATE%/$nextstate/g;
+
+	return $logentry;
 }
 # =========================
 sub saveLog {
@@ -996,13 +1027,8 @@ sub saveLog {
 	}
 	checkChangeAccessPermission($options{logtopic}, $logtopictext) || return;
 
-	my $logentry = TWiki::Func::expandCommonVariables($options{logformat}, $options{logtopic}, $web);
 
-
-	$logentry =~ s/%CLIID%/$id/g;
-	$logentry =~ s/%STATE%/$laststate/g;
-	$logentry =~ s/%NEXTSTATE%/$nextstate/g;
-
+	my $logentry = getLogEntry($options{logformat}, $id, $n, $laststate, $nextstate);
 	
 	my $meta = "";
 	while ($logtopictext =~s /(%META(:[^{]+){[^}]+}%)//s) {
@@ -1044,15 +1070,18 @@ sub saveChecklistItemStateTopic {
 		$topicText.="\n";
 		$topicText.=qq@%EDITTABLE{format="|text,20,$n|text,10,|select,1,$statesel|textarea,2,|"}%\n@;
 		$topicText.=qq@%TABLE{footerrows="1"}%\n@;
-		$topicText.="|*context*|*id*|*state*|*description*|\n";
+		$topicText.="|*context*|*id*|*state*|*description*|*timestamp*|\n";
 		
 		###foreach my $id (sort keys %{ $$idMapRef{$n}}) {
 		###foreach my $id (@{ $$idOrderRef{$n}}) {
 		my @arr = $#{$$idOrderRef{$n}}!=-1 ? @{$$idOrderRef{$n}} : sort(keys(%{$$idMapRef{$n}}));
 		foreach my $id (@arr) {
-			$topicText.="|$n|".&htmlEncode($id)."|".&htmlEncode($$idMapRef{$n}{$id}{'state'})."| ".&htmlEncode($$idMapRef{$n}{$id}{'descr'})." |\n";
+			$topicText.="|$n|".&htmlEncode($id)."|".&htmlEncode($$idMapRef{$n}{$id}{'state'})
+					.'| '.&htmlEncode($$idMapRef{$n}{$id}{'descr'})
+					.'| '.&htmlEncode($$idMapRef{$n}{$id}{'timestamp'})
+					." |\n";
 		}
-		$topicText.=qq@| *$n* | *statistics:* | *%CALC{"\$COUNTITEMS(R2:C\$COLUMN()..R\$ROW(-1):C\$COLUMN())"}%* | *entries: %CALC{"\$ROW(-2)"}%* |\n@;
+		$topicText.=qq@| *$n* | *statistics:* | *%CALC{"\$COUNTITEMS(R2:C\$COLUMN()..R\$ROW(-1):C\$COLUMN())"}%* | *entries: %CALC{"\$ROW(-2)"}%*  ||\n@;
 	}
 	if ($perm) {
 		$topicText.="\nAccess rights inherited from $web.$topic:\n\n";
