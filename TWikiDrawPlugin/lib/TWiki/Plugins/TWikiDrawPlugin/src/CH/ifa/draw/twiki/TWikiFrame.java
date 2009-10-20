@@ -39,7 +39,10 @@ public class TWikiFrame extends DrawFrame {
     static private String GIFPATH_PARAMETER    = "gifpath";
     static private String SVGPATH_PARAMETER    = "svgpath";
     static private String SAVEPATH_PARAMETER   = "savepath";
-    static private String CRYPTTOKEN_PARAMETER   = "crypttoken";
+    static private String CRYPTTOKEN_DRAW_PARAMETER   = "crypttoken_draw";
+    static private String CRYPTTOKEN_MAP_PARAMETER   = "crypttoken_map";
+    static private String CRYPTTOKEN_GIF_PARAMETER   = "crypttoken_gif";
+    static private String CRYPTTOKEN_SVG_PARAMETER   = "crypttoken_svg";
     static private String HELPPATH_PARAMETER   = "helppath";
     static private String BORDERSIZE_PARAMETER = "bordersize";
     
@@ -389,9 +392,31 @@ public class TWikiFrame extends DrawFrame {
                 savePath = "";
       
             // gets crypttoken of the drawing
-            String cryptToken = app.getParameter(CRYPTTOKEN_PARAMETER);
-            if (cryptToken == null)
-                cryptToken = "undef";
+            //String cryptToken = app.getParameter(CRYPTTOKEN_PARAMETER);
+            //if (cryptToken == null)
+            //   cryptToken = "undef";
+            
+            // gets crypttoken of the drawing
+            String cryptTokenDraw = app.getParameter(CRYPTTOKEN_DRAW_PARAMETER);
+            if (cryptTokenDraw == null)
+                cryptTokenDraw = "undef";
+            
+            // gets crypttoken of the drawing
+            String cryptTokenMap = app.getParameter(CRYPTTOKEN_MAP_PARAMETER);
+            if (cryptTokenMap == null)
+                cryptTokenMap = "undef";
+            
+            // gets crypttoken of the drawing
+            String cryptTokenGif = app.getParameter(CRYPTTOKEN_GIF_PARAMETER);
+            if (cryptTokenGif == null)
+                cryptTokenGif = "undef";
+            
+            // gets crypttoken of the drawing
+            String cryptTokenSvg = app.getParameter(CRYPTTOKEN_SVG_PARAMETER);
+            if (cryptTokenSvg == null)
+                cryptTokenSvg = "undef";
+            
+            
             
             // submit POST command to the server three times:
             // *.draw, *.map and *.gif
@@ -399,7 +424,7 @@ public class TWikiFrame extends DrawFrame {
             showStatus("Saving .draw file " + drawingPath);
             if (bPostEnabled)
                 savedDraw = app.post(
-                                     savePath, "", "cryptToken", "text/plain", drawingPath,
+                                     savePath, "", cryptTokenDraw, "text/plain", drawingPath,
                                      out.toString(), "TWiki Draw draw file");
             
             // calculate the minimum size of the gif image
@@ -458,12 +483,12 @@ public class TWikiFrame extends DrawFrame {
                     
                     "</map>";
                 savedMap = app.post(
-                                    savePath, "", cryptToken, "text/plain", mapPath,
+                                    savePath, "", cryptTokenMap, "text/plain", mapPath,
                                     map, "TWiki Draw map file");
             } else {
                 // erase any previous map file
                 String mapPath = drawingPath.substring(0, drawingPath.length() - 5);
-                savedMap = app.post( savePath, "", cryptToken, "text/plain", mapPath + ".map", "", "" );
+                savedMap = app.post( savePath, "", cryptTokenMap, "text/plain", mapPath + ".map", "", "" );
             }
             
             // get pathname of the SVG file
@@ -475,7 +500,7 @@ public class TWikiFrame extends DrawFrame {
               String outsvg = SvgSaver.convertSVG(out.toString());
               // now upload *.svg file
               if (bPostEnabled)
-              savedSvg = app.post(savePath, "", cryptToken, "image/svg", svgPath,
+              savedSvg = app.post(savePath, "", cryptTokenSvg, "image/svg", svgPath,
               outsvg, "SVG file");
               }
             */
@@ -498,7 +523,7 @@ public class TWikiFrame extends DrawFrame {
             // upload *.gif file
             if (bPostEnabled)
                 savedGif = app.post(
-                                    savePath, "",  cryptToken,  "image/gif",
+                                    savePath, "",  cryptTokenGif,  "image/gif",
                                     gifPath, String.valueOf(aChar, 0, aChar.length),
                                     "TWiki Draw GIF file");
         } catch (MalformedURLException e) {
