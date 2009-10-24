@@ -1,6 +1,6 @@
 # ChartPlugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2004-2006 Peter Thoeny, Peter@Thoeny.org
+# Copyright (C) 2004-2009 Peter Thoeny, Peter@Thoeny.org
 # Plugin written by http://TWiki.org/cgi-bin/view/Main/TaitCyrus
 #
 # For licensing info read LICENSE file in the TWiki root.
@@ -50,7 +50,7 @@ use vars qw(
 
 $VERSION = '$Rev$';
 
-$RELEASE = 'Dakar';
+$RELEASE = 'any TWiki';
 
 $pluginInitialized = 0;
 $initError = '';
@@ -358,16 +358,17 @@ sub _makeChart {
     $chart->setYaxis($yAxis);
 
     # See if the parameter 'ytic' is available.
-    my $yTic = $this->_Parameters->getParameter( "ytics", -1);
+    my $yTic = int( $this->_Parameters->getParameter( "ytics", -1) );
     $chart->setNumYTics($yTic);
 
     # See if the parameter 'xaxisangle' is available.
-    my $xaxisangle = $this->_Parameters->getParameter( "xaxisangle", 0);
+    my $xaxisangle = _getNum( $this->_Parameters->getParameter( "xaxisangle", 0) );
     $chart->setXaxisAngle($xaxisangle);
 
     # See if the parameter 'ymin' is available.
     my $yMin = $this->_Parameters->getParameter( "ymin", undef);
     if (defined $yMin) {
+        $yMin = _getNum( $yMin );
         if ($scale eq "semilog" && $yMin <= 0) {
             return _make_error("user set ymin=$yMin is &lt;= 0 which is not valid when scale=semilog");
         }
@@ -377,6 +378,7 @@ sub _makeChart {
     # See if the parameter 'ymax' is available.
     my $yMax = $this->_Parameters->getParameter( "ymax", undef);
     if (defined $yMax) {
+        $yMax = _getNum( $yMax );
         if ($scale eq "semilog" && $yMax <= 0) {
             return _make_error("user set ymax=$yMax is &lt;= 0 which is not valid when scale=semilog");
         }
@@ -384,10 +386,10 @@ sub _makeChart {
     $chart->setYmax( $yMax );
 
     # See if the parameter 'numygrids' is available.
-    $chart->setNumYGrids( $this->_Parameters->getParameter( "numygrids", $defaultNumYGrids) );
+    $chart->setNumYGrids( _max( 1, int( $this->_Parameters->getParameter( "numygrids", $defaultNumYGrids) ) ) );
 
     # See if the parameter 'numxgrids' is available.
-    my $numxgrids = $this->_Parameters->getParameter( "numxgrids", 10);
+    my $numxgrids = _max( 10, int( $this->_Parameters->getParameter( "numxgrids", 10) ) );
     $chart->setNumXGrids($numxgrids);
 
     # See if the parameter 'xgrid' is available.
@@ -406,8 +408,8 @@ sub _makeChart {
     my $legend = $this->_Parameters->getParameter( "legend", undef);
 
     # Get the chart width and height
-    $chart->setImageWidth( $this->_Parameters->getParameter( "width", $defaultWidth) );
-    $chart->setImageHeight( $this->_Parameters->getParameter( "height", $defaultHeight) );
+    $chart->setImageWidth(  _max( 10, int( $this->_Parameters->getParameter( "width", $defaultWidth) ) ) );
+    $chart->setImageHeight( _max( 10, int( $this->_Parameters->getParameter( "height", $defaultHeight) ) ) );
 
     # Get the chart IMG 'alt' text.
     my $alt = $this->_Parameters->getParameter( "alt", "");
@@ -517,10 +519,10 @@ sub _makeChart {
     }
 
     # Set the default point size
-    $chart->setPointSize( $this->_Parameters->getParameter( "pointsize", $defaultPointSize ) );
+    $chart->setPointSize( _max( 1, int( $this->_Parameters->getParameter( "pointsize", $defaultPointSize ) ) ) );
 
     # Set the default line width
-    $chart->setLineWidth( $this->_Parameters->getParameter( "linewidth", $defaultLineWidth ) );
+    $chart->setLineWidth( _max( 1, int( $this->_Parameters->getParameter( "linewidth", $defaultLineWidth ) ) ) );
 
     # Set default bar graph values
     $chart->setBarLeadingSpace($defaultBarLeadingSpace);
@@ -573,6 +575,27 @@ sub _timeit {
         }
     }
     return "To make $loops charts it (roughly) took $diff seconds.<BR>";
+}
+
+
+# =========================
+sub _getNum
+{
+    my( $theText ) = @_;
+    return 0 unless( $theText );
+    $theText =~ s/([0-9])\,(?=[0-9]{3})/$1/go;          # "1,234,567" ==> "1234567"
+    if( $theText =~ /[0-9]e/i ) {                       # "1.5e-3"    ==> "0.0015"
+        $theText = sprintf "%.20f", $theText;
+        $theText =~ s/0+$//;
+    }
+    unless( $theText =~ s/^.*?(\-?[0-9\.]+).*$/$1/o ) { # "xy-1.23zz" ==> "-1.23"
+        $theText = 0;
+    }
+    $theText =~ s/^(\-?)0+([0-9])/$1$2/o;               # "-0009.12"  ==> "-9.12"
+    $theText =~ s/^(\-?)\./${1}0\./o;                   # "-.25"      ==> "-0.25"
+    $theText =~ s/^\-0$/0/o;                            # "-0"        ==> "0"
+    $theText =~ s/\.$//o;                               # "123."      ==> "123"
+    return $theText;
 }
 
 # =========================

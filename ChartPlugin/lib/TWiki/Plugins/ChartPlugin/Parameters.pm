@@ -1,6 +1,6 @@
 # ChartPlugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2004-2006 Peter Thoeny, Peter@Thoeny.org
+# Copyright (C) 2004-2009 Peter Thoeny, Peter@Thoeny.org
 # Plugin written by http://TWiki.org/cgi-bin/view/Main/TaitCyrus
 #
 # For licensing info read LICENSE file in the TWiki root.

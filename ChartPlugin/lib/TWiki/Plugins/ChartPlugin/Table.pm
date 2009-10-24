@@ -1,6 +1,6 @@
 # ChartPlugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2004-2006 Peter Thoeny, Peter@Thoeny.org
+# Copyright (C) 2004-2009 Peter Thoeny, Peter@Thoeny.org
 # Plugin written by http://TWiki.org/cgi-bin/view/Main/TaitCyrus
 #
 # For licensing info read LICENSE file in the TWiki root.
@@ -154,6 +154,7 @@ sub _parseOutTables {
 
     $topic =~ s/\r//go;
     $topic =~ s/\\\n//go;  # Join lines ending in "\"
+    $topic .= "\n-\n";     # Item6355: Add newline at end to support table at very end of topic
     foreach( split( /\n/, $topic ) ) {
 
         # change state:

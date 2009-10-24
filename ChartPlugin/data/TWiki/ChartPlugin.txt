@@ -1,8 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1100674597" format="1.0" version="1.0"}%
-<!--
-    * Set SHORTDESCRIPTION = Create PNG or GIF charts to visualize TWiki tables
--->
-
+%META:TOPICINFO{author="TWikiContributor" date="1256366943" format="1.1" version="$Rev$"}%
 ---+!! Chart Plugin
 %SHORTDESCRIPTION%
 
@@ -24,52 +20,56 @@ The =%<nop>CHART{...}%= variable gets expanded to an image representing the char
 
 ---++ <nop>%TOPIC% Global Settings
 
-Plugin settings are stored as preferences variables. To reference
-a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>CHARTPLUGIN_TYPE%==
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>CHARTPLUGIN_TYPE%==
 
-	* Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
-		* Set DEBUG = 0
+__NOTE:__ Do not change the settings here, overload them in the [[%LOCALSITEPREFS%]]. Prefix a setting with ==CHARTPLUGIN_==, e.g. to overload ==AREA_COLORS== define a ==CHARTPLUGIN_AREA_COLORS== setting in the <nop>%LOCALSITEPREFS%.
 
-	* Default chart used: =area=, =line=, =bar=, =scatter= or =combo=. Default: =line=
-		* Set TYPE = line
+   * Short description:
+      * Set SHORTDESCRIPTION = Create PNG or GIF charts to visualize TWiki tables
 
-	* Default dimensions, scale and colors for a chart. See details in the syntax rules.
-		* Set WIDTH = 400
-		* Set HEIGHT = 250
-		* Set AREA_COLORS = #FF3333, #FFFF33, #33FF33, #CC66FF, #99FFFF, #FFCC00, #008000, #FF8080, #3366CC, #800080
-		* Set LINE_COLORS = #FF0000, #FFCC00, #00CC00, #FF00FF, #33CCCC, #FF8000, #009900, #FF6666, #3333FF, #800080
-		* Set BGCOLOR = #FFFFFF, #FFFFFF
+   * Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
+      * Set DEBUG = 0
 
-	* Define the grid color.  When xgrid/ygrid = "on", then just use the first color when drawing grid lines.  When their value is "dot", then use the full specification for drawing the grid lines ("transparent" can be used to introduce holes in the line).
-		* Set GRIDCOLOR = #808080, #808080, #808080, transparent, transparent, transparent
-		* Set NUMYGRIDS = 9
+   * Default chart used: =area=, =line=, =bar=, =scatter= or =combo=. Default: =line=
+      * Set TYPE = line
 
-	* Define what to do when an empty table cell is found.  "none" means assume no default value.  A value of "10" would mean empty cells would be assumed to have a value of 10
-		* Set DEFAULTDATA = none
+   * Default dimensions, scale and colors for a chart. See details in the syntax rules.
+      * Set WIDTH = 400
+      * Set HEIGHT = 250
+      * Set AREA_COLORS = #FF3333, #FFFF33, #33FF33, #CC66FF, #99FFFF, #FFCC00, #008000, #FF8080, #3366CC, #800080
+      * Set LINE_COLORS = #FF0000, #FFCC00, #00CC00, #FF00FF, #33CCCC, #FF8000, #009900, #FF6666, #3333FF, #800080
+      * Set BGCOLOR = #FFFFFF, #FFFFFF
 
-	* Define the default scale: linear or semilog
-		* Set SCALE = linear
+   * Define the number of grids and grid color.  When xgrid/ygrid = "on", then just use the first color when drawing grid lines.  When their value is "dot", then use the full specification for drawing the grid lines ("transparent" can be used to introduce holes in the line).
+      * Set GRIDCOLOR = #808080, #808080, #808080, transparent, transparent, transparent
+      * Set NUMYGRIDS = 9
 
-	* Define the number of pixels wide lines are drawn with
-		* Set LINEWIDTH = 3
+   * Define what to do when an empty table cell is found.  "none" means assume no default value.  A value of "10" would mean empty cells would be assumed to have a value of 10
+      * Set DEFAULTDATA = none
 
-	* Define the number of pixels (in both the X and Y directions) to use when drawing a point
-		* Set POINTSIZE = 5
+   * Define the default scale: linear or semilog
+      * Set SCALE = linear
 
-	* Define bar chart specific parameters.  BARSPACE defines the space (in pixels) between bars.  BARLEADINGSPACE defines the leading space (in pixels) before the first bar.  BARTRAILINGSPACE defines the trailing space (in pixels) after the last bar
-		* Set BARLEADINGSPACE = 6
-		* Set BARTRAILINGSPACE = 6
-		* Set BARSPACE = 5
+   * Define the number of pixels wide lines are drawn with
+      * Set LINEWIDTH = 3
+
+   * Define the number of pixels (in both the X and Y directions) to use when drawing a point
+      * Set POINTSIZE = 5
+
+   * Define bar chart specific parameters.  BARSPACE defines the space (in pixels) between bars.  BARLEADINGSPACE defines the leading space (in pixels) before the first bar.  BARTRAILINGSPACE defines the trailing space (in pixels) after the last bar
+      * Set BARLEADINGSPACE = 6
+      * Set BARTRAILINGSPACE = 6
+      * Set BARSPACE = 5
 
 ---++ Syntax Rules
 
 The =%<nop>CHART{...}%= variable gets expanded to an image representing the chart. 
 
-	* Some parameters expect a range of table cells, using *extended* SpreadSheetPlugin syntax:
-		* A single table cell can be addressed as ==R1:C1==. Cell addresses:
-		  | ==R1:C1== | ==R1:C2== | ==R1:C3== | ==R1:C4== |
-		  | ==R2:C1== | ==R2:C2== | ==R2:C3== | ==R2:C4== |
-	* A range of table cells is defined by two cell addresses separated by ==".."==. For example, "row 1-20, column 3" is: ==R1:C3..R20:C3== and "row 15-5, column 2" is: ==R15:C2..R5:C2==
+   * Some parameters expect a range of table cells, using *extended* SpreadSheetPlugin syntax:
+      * A single table cell can be addressed as ==R1:C1==. Cell addresses:
+        | ==R1:C1== | ==R1:C2== | ==R1:C3== | ==R1:C4== |
+        | ==R2:C1== | ==R2:C2== | ==R2:C3== | ==R2:C4== |
+   * A range of table cells is defined by two cell addresses separated by ==".."==. For example, "row 1-20, column 3" is: ==R1:C3..R20:C3== and "row 15-5, column 2" is: ==R15:C2..R5:C2==
    * Ranges can be discontinuous. Discontinous ranges are joined using =="+"==. For example: ==R4:C1..R5:C2+R9:C1..R15:C2==.
    * When you are specifying datasets, you specify the range so that you have one data set per row (column). You can also specify multiple data sets using discontinuous blocks of cells; for example, ==R4:C1..R5:C2,R9:C1..R10:C2== specifies *4* data sets: R4:C1..R4:C2, R5:C1..R5:C2, R9:C1..R9:C15 and R10:C1..R10:C2
    * ==+== has higher precedence than ==,==
@@ -165,8 +165,8 @@ The "if installed" column shows images instead of variables in case the plugin i
 
 ---++ Output
 
-	* A graphics file in PNG or GIF format is created containing the chart results.  The file is placed in =%<nop>PUBURLPATH%/%<nop>WEB%/%<nop>TOPIC%/_ChartPlugin_&lt;type&gt;_&lt;name&gt;.png= or =.gif= (GIF for GD version 1.19 or older)
-	* =%<nop>CHART{...}%= gets expanded to an =&lt;img ... /&gt;= image tag.
+   * A graphics file in PNG or GIF format is created containing the chart results.  The file is placed in =%<nop>PUBURLPATH%/%<nop>WEB%/%<nop>TOPIC%/_ChartPlugin_&lt;type&gt;_&lt;name&gt;.png= or =.gif= (GIF for GD version 1.19 or older)
+   * =%<nop>CHART{...}%= gets expanded to an =&lt;img ... /&gt;= image tag.
 
 ---++ Error Handling
 
@@ -180,16 +180,17 @@ If the required parameters are not defined, then an error message is returned or
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.TaitCyrus |
-|  Plugin Version: | %$VERSION% |
+|  Plugin Version: | 23 Oct 2009 (v%$VERSION%) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|   23 Oct 2009: | Item6355: Fixed bug where chart not drawn if table at end of topic; Item6329: Added input validation for all parameters expected to be integers or real numbers - TWiki:Main.PeterThoeny |
 |   18 May 2007: | Added discontinuous ranges - TWiki:Main.CrawfordCurrie |
-|	16 Nov 2004: | V1.401 - Added benchmarks (no code changes) |
-|	30 Aug 2004: | V1.400 - Added support for =subtype="bar"= (includes various global bar settings), updated =gridcolor= to not only define the grid color but allowing the user to define the line style (for drawing user defined dotted lines), add a global for how wide lines are drawn instead of a hard coded value, change the order of how things are drawn so now the order is: areas, grid lines and X/Y axis labels, bars, lines/points/plines, rectangle around chart, data point labels, chart title/X/Y labels, and finally the legends. |
-|	13 May 2004: | V1.300 - Added support for =type="scatter"=; renamed =type="arealine"= to ="combo"= (arealine is undocumented); renamed =datatype= to =subtype= (datatype is undocumented); added =subtype= options ="point"= and ="pline"=, added new settings =GRIDCOLOR=, =DEFAULTDATA=, =POINTSIZE=; fixed bug with how the number of grids were drawn |
-|	17 Oct 2003: | V1.201 - Fix boundary cases with =semilog= scale |
-|	16 Oct 2003: | V1.200 - Add new options of _scale_ and _ytics_. |
-|	16 Jun 2003: | V1.100 - Add support for reversed tables (R999..R1), add new options of _xaxisangle_, _numxgrids_, and _defaultdata_, and allow sparse data. |
-|	7 Oct 2002: | V1.003 - Improved performance, fixed bugs with color allocation, auto-legend placement and parsing of numbers in tables.  Also bumped the upper value when numbers switch from decimal format to engineering format |
+|   16 Nov 2004: | V1.401 - Added benchmarks (no code changes) |
+|   30 Aug 2004: | V1.400 - Added support for =subtype="bar"= (includes various global bar settings), updated =gridcolor= to not only define the grid color but allowing the user to define the line style (for drawing user defined dotted lines), add a global for how wide lines are drawn instead of a hard coded value, change the order of how things are drawn so now the order is: areas, grid lines and X/Y axis labels, bars, lines/points/plines, rectangle around chart, data point labels, chart title/X/Y labels, and finally the legends. |
+|   13 May 2004: | V1.300 - Added support for =type="scatter"=; renamed =type="arealine"= to ="combo"= (arealine is undocumented); renamed =datatype= to =subtype= (datatype is undocumented); added =subtype= options ="point"= and ="pline"=, added new settings =GRIDCOLOR=, =DEFAULTDATA=, =POINTSIZE=; fixed bug with how the number of grids were drawn |
+|   17 Oct 2003: | V1.201 - Fix boundary cases with =semilog= scale |
+|   16 Oct 2003: | V1.200 - Add new options of _scale_ and _ytics_. |
+|   16 Jun 2003: | V1.100 - Add support for reversed tables (R999..R1), add new options of _xaxisangle_, _numxgrids_, and _defaultdata_, and allow sparse data. |
+|   7 Oct 2002: | V1.003 - Improved performance, fixed bugs with color allocation, auto-legend placement and parsing of numbers in tables.  Also bumped the upper value when numbers switch from decimal format to engineering format |
 |  13 Sept 2002: | V1.002 - Add support for better placement of legends so they don't overlap, add auto ymin/ymax determination if not specified, add =bgcolor= and =numygrids= options |
 |  27 Jun 2002: | V1.001 - Data range specified is clipped to actual table size; more forgiving data parsing by extracting first numeral from a table cell, e.g. extract =25= from =&lt;u&gt;25%&lt;/u&gt;= |
 |  20 Jun 2002: | Initial version (V1.000) |
@@ -202,7 +203,7 @@ If the required parameters are not defined, then an error message is returned or
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 -- TWiki:Main.TaitCyrus - 3 June 2004 <br />
--- TWiki:Main.PeterThoeny - 16 Nov 2004
+-- TWiki:Main.PeterThoeny - 23 Oct 2009
 
 %META:FILEATTACHMENT{name="line1.png" attr="h" comment="" date="1093917753" path="line1.png" size="1220" user="PeterThoeny" version="1.4"}%
 %META:FILEATTACHMENT{name="line2.png" attr="h" comment="" date="1093917765" path="line2.png" size="1993" user="PeterThoeny" version="1.4"}%
