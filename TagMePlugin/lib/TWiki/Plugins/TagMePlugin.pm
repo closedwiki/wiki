@@ -34,7 +34,7 @@ use vars qw(
   $topicsRegex $action $style $label $header $footer $button
 );
 
-$VERSION    = '1.049';
+$VERSION    = '1.050';
 $RELEASE    = 'TWiki 4';
 $pluginName = 'TagMePlugin';    # Name of this Plugin
 
@@ -832,13 +832,6 @@ sub _queryTag {
         }
     }
 
-    # SMELL: Commented out by CC. This code does nothing useful.
-    #if ($normalizeTagInput) {
-    #    @tags = sort keys(%allTags);
-    #}
-    #else {
-    #    @tags = sort { lc $a cmp lc $b } keys(%allTags);
-    #}
     my @topics = ();
     if ( $sort eq 'tagcount' ) {
 
@@ -1014,9 +1007,9 @@ sub _newTag {
     my $note = TWiki::Func::extractNameValuePair( $attr, 'note' ) || '';
     my $silent = TWiki::Func::extractNameValuePair( $attr, 'silent' );
 
-    return _wrapHtmlErrorFeedbackMessage( "<nop>$user cannot add new tags",
-        $note )
-      if ( $user =~ /^(TWikiGuest|guest)$/ );
+    if ( $user =~ /^(TWikiGuest|guest)$/ ) {
+        return _wrapHtmlErrorFeedbackMessage( "<nop>$user cannot add new tags", $note );
+    }
 
     $tag = _makeSafeTag($tag);
 
@@ -1033,9 +1026,9 @@ sub _newTag {
         my $query = TWiki::Func::getCgiQuery();
         my $from  = $query->param('from');
         if ($from) {
-            $note =
-'<a href="%SCRIPTURL{viewauth}%/%URLPARAM{"from"}%?tpaction=add;tag=%URLPARAM{newtag}%">Add tag "%URLPARAM{newtag}%" to %URLPARAM{"from"}%</a>%BR%'
-              . $note;
+            $note = '<a href="%SCRIPTURL{viewauth}%/%URLPARAM{"from"}%?tpaction=add;tag=%URLPARAM{newtag}%">'
+                  . 'Add tag "%URLPARAM{newtag}%" to %URLPARAM{"from"}%</a>%BR%'
+                  . $note;
         }
         return _wrapHtmlFeedbackMessage( "Tag \"$tag\" is successfully added",
             $note );
@@ -1073,12 +1066,17 @@ sub _addTag {
 
     my $webTopic = "$web.$topic";
     my @tagInfo  = _readTagInfo($webTopic);
+
     my $text     = '';
     my $tag      = '';
     my $num      = '';
     my $users    = '';
     my @result   = ();
-    if ( TWiki::Func::topicExists( $web, $topic ) ) {
+    my $tagExists = scalar( grep{ /^\Q$addTag\E$/ } _readAllTags() );
+    if ( !$tagExists ) {
+        $text .= _wrapHtmlFeedbackErrorInline("tag not added, it needs to be created first");
+
+    } elsif ( TWiki::Func::topicExists( $web, $topic ) ) {
         foreach my $line (@tagInfo) {
             if ( $line =~ /$lineRegex/ ) {
                 $num   = $1;
@@ -1116,10 +1114,9 @@ sub _addTag {
         }
         @tagInfo = reverse sort(@result);
         _writeTagInfo( $webTopic, @tagInfo );
-    }
-    else {
-        $text .=
-          _wrapHtmlFeedbackErrorInline("tag not added, topic does not exist");
+
+    } else {
+        $text .= _wrapHtmlFeedbackErrorInline("tag not added, topic does not exist");
     }
 
     # Suppress status? FWM, 03-Oct-2006
@@ -1209,7 +1206,7 @@ sub _removeTag {
 }
 
 # =========================
-# Force remove tag  from topic (clear all users votes)
+# Force remove tag from topic (clear all users votes)
 sub _removeAllTag {
     my ( $attr ) = @_;
 

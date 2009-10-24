@@ -1,11 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1163536597" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1256357655" format="1.1" version="$Rev$"}%
 ---+!! Tag-me Plugin
 
 Plugin to tag wiki content collectively in order to find content by tags and to get a meaningful page ranking.
-
-<div class="twikiNotification" style="padding:.5em 20px; margin:1em 0; background-color:#ffc;">
-__Note__: (TWiki 4.2) If you have upgraded !TagMePlugin and appear to have lost all your old tags: copy all your tag files from =pub/TWiki/TagMePlugin/= files to =working/work_areas/TagMePlugin/= and they should magically re-appear.
-</div>
 
 %TOC%
 
@@ -13,29 +9,29 @@ __Note__: (TWiki 4.2) If you have upgraded !TagMePlugin and appear to have lost 
 
 The larger a wiki gets, the harder it is to find content. This wiki tagging plugin attempts to solve the issue based on these assumptions:
 
-	* Assertion 1: Intranet search does not work well due to inadequate ranking of search engines on intranets. This is because there are typically not many cross-links between pages.
-	* Assertion 2: Let the individuals build their own taxonomy to find content quickly
-	* Assertion 3: Let the users do the ranking to get an "human intelligence" ranking of important content
+   * Assertion 1: Intranet search does not work well due to inadequate ranking of search engines on intranets. This is because there are typically not many cross-links between pages.
+   * Assertion 2: Let the individuals build their own taxonomy to find content quickly
+   * Assertion 3: Let the users do the ranking to get an "human intelligence" ranking of important content
 
 There are clear benefits in tagging content in a large TWiki (10K or more topics):
 
-	* Find relevant content in a large system quickly,
-		* by quickly accessing related topics via the tags on a topic
-		* by quickly accessing related topics via related tags listed in a specific tag view
-		* by quickly identifying important tags in the tag cloud
-	* Access my favorite topics quickly (assuming I tag topics of interest)
-	* Solve the search ranking issue of wiki content indexed by a search engine
-	* Help solve stale content issue (old topics do not get tagged)
+   * Find relevant content in a large system quickly,
+      * by quickly accessing related topics via the tags on a topic
+      * by quickly accessing related topics via related tags listed in a specific tag view
+      * by quickly identifying important tags in the tag cloud
+   * Access my favorite topics quickly (assuming I tag topics of interest)
+   * Solve the search ranking issue of wiki content indexed by a search engine
+   * Help solve stale content issue (old topics do not get tagged)
 
 The design goals of the <nop>%TOPIC% were as follows:
 
-	* Any topic can be tagged by individuals =->= create taxonomy for individuals
-	* Show tag statistics of all users on each topic =->= show popularity
-	* Encourage users to reuse the same tag on a topic =->= get a "collective ranking", or "vote for a tag", or "tag count"
-	* Make it as easy as possible to increase the tag count
-	* Make it as easy as possible to add a new tag to a topic
-	* Encourage users to create new tags, but try to avoid use of similar tags for the same subject
-	* Search for topic by tag, sorted by tag popularity
+   * Any topic can be tagged by individuals =->= create taxonomy for individuals
+   * Show tag statistics of all users on each topic =->= show popularity
+   * Encourage users to reuse the same tag on a topic =->= get a "collective ranking", or "vote for a tag", or "tag count"
+   * Make it as easy as possible to increase the tag count
+   * Make it as easy as possible to add a new tag to a topic
+   * Encourage users to create new tags, but try to avoid use of similar tags for the same subject
+   * Search for topic by tag, sorted by tag popularity
 
 ---++ User Interface
 
@@ -48,10 +44,10 @@ Screenshot of tags shown on a topic:
 <div class="twikiImage"><img src="%ATTACHURLPATH%/topictags.gif" alt="Screenshot of tags on a topic"  width="451" height="26" /></div>
 
 You see:
-	* a list of tags with vote count and add/remove vote buttons,
-	* an add tag selector
-	* a link to create a new tag 
-	* a link to the all tags view
+   * a list of tags with vote count and add/remove vote buttons,
+   * an add tag selector
+   * a link to create a new tag 
+   * a link to the all tags view
 
 ---++++ "blog" style
 But the same control can have a different look and feel if we specify 
@@ -68,7 +64,7 @@ will see:
 ---+++ Create, Rename, Delete tags
 
 ---++++ Create New Tags
-Go to [[TagMeCreateNewTag]] to create new tags. %BR%
+Go to [[%SYSTEMWEB%.TagMeCreateNewTag]] to create new tags. %BR%
 Anyone is allowed to create new tags.
 
 <blockquote>
@@ -80,7 +76,7 @@ Use the url parameter =createtag=my+tag+name= to pass a new tag name to the form
 Once a new tag is created, it can be added in the tag list of the topic.
 
 ---++++ Rename Tags
-Go to [[TagMeRenameTag]] to rename existing tags. %BR%
+Go to [[%SYSTEMWEB%.TagMeRenameTag]] to rename existing tags. %BR%
 Rename permissions are controlled with =ALLOW_TAG_CHANGE= (see [[#PluginSettings][Plugin Settings]] below).
 
 <blockquote>
@@ -89,7 +85,7 @@ Use the url parameters =renametagfrom=my+old+tag+name= and =renametagto=my+new+t
 </blockquote>
 
 ---++++ Delete Tags
-Go to [[TagMeDeleteTag]] to delete existing tags. %BR%
+Go to [[%SYSTEMWEB%.TagMeDeleteTag]] to delete existing tags. %BR%
 Delete permissions are controlled with =ALLOW_TAG_CHANGE= (see [[#PluginSettings][Plugin Settings]] below).
 
 <blockquote>
@@ -100,7 +96,7 @@ Use the url parameter =deletetag=my+tag+name= to pass the to-be-deleted tag name
 
 ---+++ List All Tags
 
-%TWIKIWEB%.TagMeViewAllTags shows all tags used in the system. The font size indicates the overall tag count of a tag.
+[[%SYSTEMWEB%.TagMeViewAllTags]] shows all tags used in the system. The font size indicates the overall tag count of a tag.
 
 Screenshot of tag cloud in the list all tags view:
 <div class="twikiImage">
@@ -110,81 +106,81 @@ Screenshot of tag cloud in the list all tags view:
 __%T% Tip:__ In a <nop>%HOMETOPIC% of a web you can show a tag cloud of all tagged topics in that web with this variable:
 <verbatim>
 <div class="tagmeTagCloud" style="line-height:2em;">
-%TAGME{ tpaction="showalltags" format="<a href=\"%SCRIPTURL{view}%/%WEB%/TagMeSearch?tag=$tag\" style=\"font-size:$size%\">$tag</a>" separator="&nbsp; " minsize="94" maxsize="220"}%
+%TAGME{ tpaction="showalltags" format="<a href=\"%SCRIPTURL{view}%/%SYSTEMWEB%/TagMeSearch?tag=$tag\" style=\"font-size:$size%\">$tag</a>" separator="&nbsp; " minsize="94" maxsize="220"}%
 </div>
 </verbatim>
 
 
 ---+++ List My Tags
 
-%TWIKIWEB%.TagMeViewMyTags shows all tags used by logged-in user. The font size indicates the overall tag count of a tag.
+[[%SYSTEMWEB%.TagMeViewMyTags]] shows all tags used by logged-in user. The font size indicates the overall tag count of a tag.
 
 ---+++ Tag Search
 
-%TWIKIWEB%.TagMeSearch shows a list of topics that are tagged with all of the selected tags, sorted by relevance. Topics with a high tag count are shown first.
+[[%SYSTEMWEB%.TagMeSearch]] shows a list of topics that are tagged with all of the selected tags, sorted by relevance. Topics with a high tag count are shown first.
 
 ---+++ Plugin Variable
 
 The Plugin handles a =%<nop>TAGME{}%= variable that performs different actions. The =tpaction=""= is a required parameter.
 
-	* =%<nop>TAGME{ tpaction="show" ...}%= - shows the tag list on topic
-	  | *Parameter* | *Comment* | *Default* |
-	  | =style="blog"= | will expand into a "tag edit" frame that allows tag management as commonly found in blogs or tag systems like delicious, but only if tpaction is actually present. If =tpaction= is omitted, but the style is ="blog"=, will show nothing. Thus a button to make the edit tags frame appear can be put as: <br /> =&lt;a href="%<nop>SCRIPTURL{viewauth}%/%<nop>WEB%/%<nop>TOPIC%?tpaction=show"&gt;Edit tags&lt;/a&gt;= | "twiki" | 
-	  | =label=", "= | (for style=blog) link label (text) to open the edit tags form | =""= |
-	  | =button=", "= | (for style=blog) the complete button, link or html construct that will be shown when not in edit tag mode. Should open the Edit tag form when clicked by redirection to this same topic with a =tpaction=show= added. Overrides =label=. | =""= |
-	  | =header="..."= | (for style=blog) Printed before the edit tags form if it is not empty, =$n= can be used for newlines. e.g: =header="Manage your tags: &lt;i&gt;"= | =""= |
-	  | =footer="..."= | (for style=blog) Printed after the edit tags form  if it is not empty, =$n= can be used for newlines. e.g: =footer="&lt;/i&gt;"= | =""= |
+   * =%<nop>TAGME{ tpaction="show" ...}%= - shows the tag list on topic
+     | *Parameter* | *Comment* | *Default* |
+     | =style="blog"= | will expand into a "tag edit" frame that allows tag management as commonly found in blogs or tag systems like delicious, but only if tpaction is actually present. If =tpaction= is omitted, but the style is ="blog"=, will show nothing. Thus a button to make the edit tags frame appear can be put as: <br /> =&lt;a href="%<nop>SCRIPTURL{viewauth}%/%<nop>SYSTEMWEB%/%<nop>TOPIC%?tpaction=show"&gt;Edit tags&lt;/a&gt;= | "twiki" | 
+     | =label=", "= | (for style=blog) link label (text) to open the edit tags form | =""= |
+     | =button=", "= | (for style=blog) the complete button, link or html construct that will be shown when not in edit tag mode. Should open the Edit tag form when clicked by redirection to this same topic with a =tpaction=show= added. Overrides =label=. | =""= |
+     | =header="..."= | (for style=blog) Printed before the edit tags form if it is not empty, =$n= can be used for newlines. e.g: =header="Manage your tags: &lt;i&gt;"= | =""= |
+     | =footer="..."= | (for style=blog) Printed after the edit tags form  if it is not empty, =$n= can be used for newlines. e.g: =footer="&lt;/i&gt;"= | =""= |
 
-	* =%<nop>TAGME{ tpaction="showalltags" ... }%= - view all tags or my tags as a tag cloud
-	  | *Parameter* | *Comment* | *Default* |
-	  | =by="me"= | My own tags only; can also be a USERNAME | all tags |
-	  | =web="%<nop>WEB%"= | Limit query to a web | current web |
-	  | =topic="*Plugin"= | Limit query to a topic, or a comma-space delimited list of topics with optional asterisk wildcards | all topics |
-	  | =exclude="fixme"= | Exclude tags; specify a tag, or a comma-space delimited list of tags with optional asterisk wildcards  | all tags |
-	  | =mincount="2"= | Exclude tags below the threshold of =mincount= votes | all tags | 
-	  | =minsize="90"= | Minimum size of tag =$size= (typically percent font size) | ="90"= |
-	  | =maxsize="180"= | Maximum size of tag =$size= | ="180"= |
-	  | =format="..."= | Format of a tag, tokens =$tag=, =$size=, =$marker= (adds selected="selected" for use in html options), =$count=, =$order= | ="$tag"= |
-	  | =header="..."= | Printed before the list of tags if it is not empty, =$n= can be used for newlines. e.g: =header="Tags: &lt;i&gt;"= | =""= |
-	  | =separator=", "= | Separator between tags | =", "=, unless =format= has been specified |
-	  | =footer="..."= | Printed after the list of tags if it is not empty, =$n= can be used for newlines. e.g: =footer="&lt;/i&gt;"= | =""= |
+   * =%<nop>TAGME{ tpaction="showalltags" ... }%= - view all tags or my tags as a tag cloud
+     | *Parameter* | *Comment* | *Default* |
+     | =by="me"= | My own tags only; can also be a USERNAME | all tags |
+     | =web="%<nop>WEB%"= | Limit query to a web | current web |
+     | =topic="*Plugin"= | Limit query to a topic, or a comma-space delimited list of topics with optional asterisk wildcards | all topics |
+     | =exclude="fixme"= | Exclude tags; specify a tag, or a comma-space delimited list of tags with optional asterisk wildcards  | all tags |
+     | =mincount="2"= | Exclude tags below the threshold of =mincount= votes | all tags | 
+     | =minsize="90"= | Minimum size of tag =$size= (typically percent font size) | ="90"= |
+     | =maxsize="180"= | Maximum size of tag =$size= | ="180"= |
+     | =format="..."= | Format of a tag, tokens =$tag=, =$size=, =$marker= (adds selected="selected" for use in html options), =$count=, =$order= | ="$tag"= |
+     | =header="..."= | Printed before the list of tags if it is not empty, =$n= can be used for newlines. e.g: =header="Tags: &lt;i&gt;"= | =""= |
+     | =separator=", "= | Separator between tags | =", "=, unless =format= has been specified |
+     | =footer="..."= | Printed after the list of tags if it is not empty, =$n= can be used for newlines. e.g: =footer="&lt;/i&gt;"= | =""= |
 
-	* =%<nop>TAGME{ tpaction="query" ... }%= - tag search
-	  | *Parameter* | *Comment* | *Default* |
-	  | =by="me"= | My tagged topics only; can also be a USERNAME | all tagged topics |
-	  | =web="%<nop>WEB%"= | Limit query to a web | current web |
-	  | =topic="*Plugin"= | Limit query to a topic, or a comma-space delimited list of topics with optional asterisk wildcards | all topics |
-	  | =tag="..."= | Name of tag | (required) |
-	  | =sort="web"= | Sorting of tagged topics: ="tagcount"= by tag count (relevance), ="web"= by web then topic name, ="topic"= by topic name | ="tagcount"= |
-	  | =norelated="on"= | Do not show the list of "related tags" | (show related tags) |
-	  | =nototal="on"= | Do not show total number of topics found | (show total) |
-	  | =minsize="90"= | Minimum size of topic =$size= (typically percent font size) | ="90"= |
-	  | =maxsize="180"= | Maximum size of topic =$size= | ="180"= |
-	  | =format="..."= | Format of a topic, any token of %TWIKIWEB%.FormattedSearch can be used, such as =$web=, =$topic=, =$summary=, =$rev=, =$n=. In addition, =$votecount= expands to the number of tag votes, =$size= to the suggested font size, and =$taglist= to the tag list of the topic.  | (nice formatting) |
-	  | =separator=", "= | Separator between tags, =$n= or =$n()= can be used for newlines | ="$n"= |
-	  | =limit=""= | limit number of results if =sort="web"= | |
-	  | =header=""= | if =sort="web"=, add this header once per web with results (only =$web= is interpreted) | =---+++ $web= |
-	  | =footer=""= | if =sort="web"=, add this footer once per web with results (only =$web= and =$count= and $showmore are interpreted) |=showing $limit out of $count results $showmore= |
+   * =%<nop>TAGME{ tpaction="query" ... }%= - tag search
+     | *Parameter* | *Comment* | *Default* |
+     | =by="me"= | My tagged topics only; can also be a USERNAME | all tagged topics |
+     | =web="%<nop>WEB%"= | Limit query to a web | current web |
+     | =topic="*Plugin"= | Limit query to a topic, or a comma-space delimited list of topics with optional asterisk wildcards | all topics |
+     | =tag="..."= | Name of tag | (required) |
+     | =sort="web"= | Sorting of tagged topics: ="tagcount"= by tag count (relevance), ="web"= by web then topic name, ="topic"= by topic name | ="tagcount"= |
+     | =norelated="on"= | Do not show the list of "related tags" | (show related tags) |
+     | =nototal="on"= | Do not show total number of topics found | (show total) |
+     | =minsize="90"= | Minimum size of topic =$size= (typically percent font size) | ="90"= |
+     | =maxsize="180"= | Maximum size of topic =$size= | ="180"= |
+     | =format="..."= | Format of a topic, any token of [[%SYSTEMWEB%.FormattedSearch]] can be used, such as =$web=, =$topic=, =$summary=, =$rev=, =$n=. In addition, =$votecount= expands to the number of tag votes, =$size= to the suggested font size, and =$taglist= to the tag list of the topic.  | (nice formatting) |
+     | =separator=", "= | Separator between tags, =$n= or =$n()= can be used for newlines | ="$n"= |
+     | =limit=""= | limit number of results if =sort="web"= | |
+     | =header=""= | if =sort="web"=, add this header once per web with results (only =$web= is interpreted) | =---+++ $web= |
+     | =footer=""= | if =sort="web"=, add this footer once per web with results (only =$web= and =$count= and $showmore are interpreted) |=showing $limit out of $count results $showmore= |
       | =refine= | Normally related tags are shown that when clicked on will search for the related tag. If =refine= is set to 1, then the link instead will *add* the clicked tag to the set of tags being searched for, allowing you to incrementally refine search results. If not set the value of =ALWAYS_REFINE= is used. |
   
-	* =%<nop>TAGME{ tpaction="newtag" ... }%= - create new tag
-	  | *Parameter* | *Comment* | *Default* |
-	  | =tag="..."= | Name of tag. Accepts alphanumeric and underscore characters only (unless =NORMALIZE_TAG_INPUT= is set to 0 to allow any user input) | (required) |
+   * =%<nop>TAGME{ tpaction="newtag" ... }%= - create new tag
+     | *Parameter* | *Comment* | *Default* |
+     | =tag="..."= | Name of tag. Accepts alphanumeric and underscore characters only (unless =NORMALIZE_TAG_INPUT= is set to 0 to allow any user input) | (required) |
 
-	* =%<nop>TAGME{ tpaction="add" ... }%= - add tag to topic, or add vote to existing tag
-	  | *Parameter* | *Comment* | *Default* |
-	  | =tag="..."= | Name of tag | (required) |
-	  | =nostatus="on"= | Turn off status text shown when a tag is added or voted on | (show status text) |
+   * =%<nop>TAGME{ tpaction="add" ... }%= - add tag to topic, or add vote to existing tag
+     | *Parameter* | *Comment* | *Default* |
+     | =tag="..."= | Name of tag | (required) |
+     | =nostatus="on"= | Turn off status text shown when a tag is added or voted on | (show status text) |
 
-	* =%<nop>TAGME{ tpaction="newtagandadd" ... }%= - create new tag and add tag to topic
-	  | *Parameter* | *Comment* | *Default* |
-	  | =tag="..."= | Name of tag. Accepts alphanumeric and underscore characters only (unless =NORMALIZE_TAG_INPUT= is set to 0 to allow any user input) | (required) |
+   * =%<nop>TAGME{ tpaction="newtagandadd" ... }%= - create new tag and add tag to topic
+     | *Parameter* | *Comment* | *Default* |
+     | =tag="..."= | Name of tag. Accepts alphanumeric and underscore characters only (unless =NORMALIZE_TAG_INPUT= is set to 0 to allow any user input) | (required) |
 
 
-	* =%<nop>TAGME{ tpaction="remove" ... }%= - remove my tag vote on existing tag
-	  | *Parameter* | *Comment* | *Default* |
-	  | =tag="..."= | Name of tag | (required) |
-	  | =nostatus="on"= | Turn off status text shown when a tag is removed or voted on | (show status text) |
+   * =%<nop>TAGME{ tpaction="remove" ... }%= - remove my tag vote on existing tag
+     | *Parameter* | *Comment* | *Default* |
+     | =tag="..."= | Name of tag | (required) |
+     | =nostatus="on"= | Turn off status text shown when a tag is removed or voted on | (show status text) |
 
 
 #TagsOnPage
@@ -192,7 +188,7 @@ The Plugin handles a =%<nop>TAGME{}%= variable that performs different actions. 
 
 To show the tag interface at the top of the page directly below the breadcrumb (like on twiki.org), use the default template =view.tagme.tmpl= in the templates directory.
 
-This template is in fact a 'skin' template. To enable it, write in [[%MAINWEB%.TWikiPreferences]]:
+This template is in fact a 'skin' template. To enable it, write in [[%LOCALSITEPREFS%]]:
 <pre>
    * Set S<nop>KIN = tagme,pattern
 </pre>
@@ -218,33 +214,33 @@ Attach ones, in the same style, on the upper right:
 </div>
 
 ---+++ Customizing the appearance
-If you customize your site you probably want to change overall appearance. You can find instructions how to do that - at least for default pattern skin - in [[%TWIKIWEB%.PatternSkinCssCookbook]]. %BR%
+If you customize your site you probably want to change overall appearance. You can find instructions how to do that - at least for default pattern skin - in [[%SYSTEMWEB%.PatternSkinCssCookbook]]. %BR%
 The short summary is:
    * Create an empty CSS file, for instance =sitestyle.css=
    * Copy the CSS styles for =tagmetags= (see below at [[%TOPIC%#ExampleStyle][Example styles used on twiki.org]]) into the file
-   * Attach the file to [[%MAINWEB%.TWikiPreferences]]
-   * In [[%MAINWEB%.TWikiPreferences]], write: 
+   * Attach the file to [[%LOCALSITEPREFS%]]
+   * In [[%LOCALSITEPREFS%]], write: 
    <verbatim>
-   * Set USERSTYLEURL = %PUBURL%/%MAINWEB%/TWikiPreferences/sitestyle.css
+   * Set USERSTYLEURL = %PUBURL%/%USERSWEB%/TWikiPreferences/sitestyle.css
    </verbatim>
 
 ---+++ Other places for the tag interface
-To show the tags in the top bar, edit [[%TWIKIWEB%.WebTopBar]] and copy:
+To show the tags in the top bar, edit [[%SYSTEMWEB%.WebTopBar]] and copy:
 <verbatim>
 <div class="tagmetags">
-Tags: %TAGME{ tpaction="%URLPARAM{tpaction}%" web="%WEB%" tag="%URLPARAM{tag}%" }%, [[TWiki.TagMeViewAllTags][view all tags]]
+Tags: %TAGME{ tpaction="%URLPARAM{tpaction}%" web="%WEB%" tag="%URLPARAM{tag}%" }%, [[%SYSTEMWEB%.TagMeViewAllTags][view all tags]]
 </div>
 </verbatim>
 
-To show the tags at the bottom of every page, write in [[%MAINWEB%.TWikiPreferences]]:
+To show the tags at the bottom of every page, write in [[%LOCALSITEPREFS%]]:
 <verbatim>
- * Set WEBCOPYRIGHT = Tags: %TAGME{ tpaction="%URLPARAM{tpaction}%" web="%WEB%" tag="%URLPARAM{tag}%" }%, [[TWiki.TagMeViewAllTags][view all tags]] %BR% Copyright &copy; 1999-%GMTIME{"$year"}% by... etc
+ * Set WEBCOPYRIGHT = Tags: %TAGME{ tpaction="%URLPARAM{tpaction}%" web="%WEB%" tag="%URLPARAM{tag}%" }%, [[%TWIKIWEB%.TagMeViewAllTags][view all tags]] %BR% Copyright &copy; 1999-%GMTIME{"$year"}% by... etc
 </verbatim>
 
 ---+++ How to show the tags without vote buttons
 To just show the tags for a topic, without buttons or "Create new tag" link, use a =showalltags= search:
 <verbatim>
-Tags: %TAGME{ tpaction="showalltags" web="%WEB%" topic="%TOPIC%" format="<a href=\"%SCRIPTURL{view}%/%TWIKIWEB%/TagMeSearch?tag=$tag\">$tag</a> " }%
+Tags: %TAGME{ tpaction="showalltags" web="%WEB%" topic="%TOPIC%" format="<a href=\"%SCRIPTURL{view}%/%SYSTEMWEB%/TagMeSearch?tag=$tag\">$tag</a> " }%
 </verbatim>
 
 ---++ Tag styles
@@ -281,7 +277,7 @@ If users are allowed to use spaces in their tag names (when =NORMALIZE_TAG_INPUT
 This CSS style is included in =tagme.css=:
 <verbatim>
 .tagmeTagCloud a {
-	white-space:nowrap;
+   white-space:nowrap;
 }
 </verbatim>
 
@@ -291,7 +287,7 @@ To show the 'tags shown on a topic':
 
 <verbatim>
 <div class="tagmetags">
-Tags: %TAGME{ tpaction="%URLPARAM{tpaction}%" web="%WEB%" tag="%URLPARAM{tag}%" }%, [[TWiki.TagMeViewAllTags][view all tags]]
+Tags: %TAGME{ tpaction="%URLPARAM{tpaction}%" web="%WEB%" tag="%URLPARAM{tag}%" }%, [[%SYSTEMWEB%.TagMeViewAllTags][view all tags]]
 </div>
 </verbatim>
 
@@ -308,14 +304,14 @@ CSS styles:
 }
 .tagmetags a:link,
 .tagmetags a:visited {
-	color:#8E9195; /* all links are gray; for blue links use: #06c */
-	text-decoration:none;
+   color:#8E9195; /* all links are gray; for blue links use: #06c */
+   text-decoration:none;
 }
 .tagmetags a:hover {
-	color:#FBF7E8; 
+   color:#FBF7E8; 
 }
 .tagMeControl {
-	color:#8E9195; /* gray for non-links */
+   color:#8E9195; /* gray for non-links */
 }
 </verbatim>
 
@@ -323,77 +319,82 @@ CSS styles:
 #PluginSettings
 ---++ Plugin Settings
 
-Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, e.g., ==%<nop>TAGMEPLUGIN_SHORTDESCRIPTION%==
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, e.g., ==%<nop>TAGMEPLUGIN_SHORTDESCRIPTION%==.
 
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Tag wiki content collectively to find content by keywords
+__NOTE:__ Do not change the settings here, overload them in the [[%LOCALSITEPREFS%]]. Prefix a setting with ==TAGMEPLUGIN_==, e.g. to overload ==NORMALIZE_TAG_INPUT== define a ==TAGMEPLUGIN_NORMALIZE_TAG_INPUT== setting in the <nop>%LOCALSITEPREFS%.
 
-	* Log add/create actions:
-		* Set LOGACTION = 1
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Tag wiki content collectively to find content by keywords
 
-	* Optionally normalize tag names. Set to 1 to translate international characters to their latin match (&uuml; to ue, &aring; to aa, etcetera), and to convert spaces to underscores. %BR%
-	Set to 0 to allow any user input, except for the reserved characters =,#'"|*=. %BR%
-	Setting to 0 also sorts tags case insensitive: 'U' comes after 't'.
-		* Set NORMALIZE_TAG_INPUT = 0
+   * Log add/create actions:
+      * Set LOGACTION = 1
 
-	* If 1, then the =refine= parameter is always added to TAGME queries.
-		* Set ALWAYS_REFINE = 1
+   * Optionally normalize tag names. Set to 1 to translate international characters to their latin match (&uuml; to ue, &aring; to aa, etcetera), and to convert spaces to underscores. %BR%
+   Set to 0 to allow any user input, except for the reserved characters =,#'"|*=. %BR%
+   Setting to 0 also sorts tags case insensitive: 'U' comes after 't'.
+      * Set NORMALIZE_TAG_INPUT = 0
 
-	* List of users and groups that are allowed to change (rename and delete) tags (names separated by commas). %BR%
-	Users that are not allowed to change post their change requests to TagMeChangeRequests. %BR%
-	If not set anyone can change tags.
-		* Set ALLOW_TAG_CHANGE = Main.TWikiAdminGroup
+   * If 1, then the =refine= parameter is always added to TAGME queries.
+      * Set ALWAYS_REFINE = 1
 
-	* Bundles are groups of tags that are presented as menus for
-	  convenience. It is a list of space-separated (or comma-separated
-	  if your tags may contain spaces) prefixed by bundle labels
-	  terminated by colon (":"). e.g:
-		* Set BUNDLES =
-		* #Set BUNDLES = Rating: * ** ** Todo: to_blog to_read
-		* #Set BUNDLES = Rating:, *, **, **, Todo:, to_blog, to_read
-		
-	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 0
+   * List of users and groups that are allowed to change (rename and delete) tags (names separated by commas). %BR%
+   Users that are not allowed to change post their change requests to TagMeChangeRequests. %BR%
+   If not set anyone can change tags.
+      * Set ALLOW_TAG_CHANGE = %USERSWEB%.TWikiAdminGroup
+
+   * Bundles are groups of tags that are presented as menus for
+     convenience. It is a list of space-separated (or comma-separated
+     if your tags may contain spaces) prefixed by bundle labels
+     terminated by colon (":"). e.g:
+      * Set BUNDLES =
+      * #Set BUNDLES = Rating: * ** ** Todo: to_blog to_read
+      * #Set BUNDLES = Rating:, *, **, **, Todo:, to_blog, to_read
+      
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the Plugin on the TWiki server. 
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/TagMeViewAllTags.txt== | Supporting topic to view all tags |
-	  | ==data/TWiki/TagMeViewMyTags.txt== | Supporting topic to view my tags |
-	  | ==data/TWiki/TagMeSearch.txt== | Supporting topic to search for tagged topics |
-	  | ==data/TWiki/TagMeManage.txt== | Supporting topic to create new tags |
-	  | ==data/TWiki/TagMeDebug*.txt== | Supporting topics for debug |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	  | ==pub/TWiki/%TOPIC%/*.gif== | Icon files |
-	  | ==templates/view.tagme.tmpl== | Template containing GUI components |
-	* Configure and enable the Plugin:
-		* TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
-		* Change the Plugin settings as needed:
-			* Determine who will be allowed to rename and delete tags.
-			* For international character support: set =NORMALIZE_TAG_INPUT= to 0.
-			* To allow any user input as tag name also set =NORMALIZE_TAG_INPUT= to 0.
-		* To put the tags interface on every page, see the instructions above at [[%TOPIC%#TagsOnPage][How to put tags on every page]]
-	* Test if the installation was successful:
-		* Go to [[TagMeCreateNewTag]] and add a tag
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==data/TWiki/TagMeViewAllTags.txt== | Supporting topic to view all tags |
+     | ==data/TWiki/TagMeViewMyTags.txt== | Supporting topic to view my tags |
+     | ==data/TWiki/TagMeSearch.txt== | Supporting topic to search for tagged topics |
+     | ==data/TWiki/TagMeManage.txt== | Supporting topic to create new tags |
+     | ==data/TWiki/TagMeDebug*.txt== | Supporting topics for debug |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+     | ==pub/TWiki/%TOPIC%/*.gif== | Icon files |
+     | ==templates/view.tagme.tmpl== | Template containing GUI components |
+   * Configure and enable the Plugin:
+      * Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
+      * Overload the Plugin settings as needed in the [[%LOCALSITEPREFS%]]:
+         * Determine who will be allowed to rename and delete tags.
+         * For international character support: set =NORMALIZE_TAG_INPUT= to 0.
+         * To allow any user input as tag name also set =NORMALIZE_TAG_INPUT= to 0.
+      * To put the tags interface on every page, see the instructions above at [[%TOPIC%#TagsOnPage][How to put tags on every page]]
+   * Test if the installation was successful:
+      * Go to [[TagMeCreateNewTag]] and add a tag
+   * <div class="twikiNotification" style="padding:.5em 20px; margin:1em 0; background-color:#ffc;">
+     __Note__: If you have upgraded !TagMePlugin to TWiki 4.2 or later and appear to have lost all your old tags: Copy all your tag files from =pub/TWiki/TagMePlugin/= files to =working/work_areas/TagMePlugin/= and they should magically re-appear.
+     </div>
 
 ---++ Limitations
 
-	* TWiki 04-Sep-2005 and older: Tags are lost if a topic is renamed or moved.
+   * TWiki 04-Sep-2005 and older: Tags are lost if a topic is renamed or moved.
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny, TWiki:Main/ArthurClemens |
-|  Copyright: | &copy; 2006-2007, Peter Thoeny, [[http://www.twiki.net/][TWIKI.NET]] |
+|  Copyright: | &copy; 2006-2009, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 30 Aug 2008 (V1.049) |
+|  Plugin Version: | 23 Oct 2009 (v1.050) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  30 Aug 2008: | Colas Nahaboo: enhancements to the "blog" style: Bundles,
-count of known tags, option to delete tags |
+|  23 Oct 2009: | Peter Thoeny: Validate tag against known tags when adding a tag; improved docs  |
+|  30 Aug 2008: | Colas Nahaboo: enhancements to the "blog" style: Bundles, count of known tags, option to delete tags |
 |  28 Aug 2008: | Colas Nahaboo: prefix & suffix options renamed as header & footer. New parameter style to TAGME to be able to define different UI style for the default "show" action of TAGME. Implemented a first one, "blog" for the simpler case of authors managing the same tags |
 |  26 Aug 2008: | Colas Nahaboo: prefix & suffix options to TAGME |
 |  16 Oct 2007: | Arthur Clemens: added backward compatible example template. |
@@ -430,14 +431,14 @@ count of known tags, option to delete tags |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle 100%, %TWIKIWEB%.FormattedSearch 100%, %TOPIC% 99% |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %SYSTEMWEB%.GoodStyle 100%, %SYSTEMWEB%.FormattedSearch 100%, %TOPIC% 99% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TagMeViewAllTags, %TWIKIWEB%.TagMeViewMyTags, %TWIKIWEB%.TagMeSearch, %TWIKIWEB%.TagMeDebugViewTags, %TWIKIWEB%.TagMeDebugSearch, %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+__Related Topics:__ %SYSTEMWEB%.TagMeViewAllTags, %SYSTEMWEB%.TagMeViewMyTags, %SYSTEMWEB%.TagMeSearch, %SYSTEMWEB%.TagMeDebugViewTags, %SYSTEMWEB%.TagMeDebugSearch, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
 
--- TWiki:Main.PeterThoeny - 16 Oct 2007
+-- TWiki:Main.PeterThoeny - 23 Oct 2009
 
 %META:FILEATTACHMENT{name="tag_add.gif" attr="h" comment="Button: add tag" date="1141691885" path="tag_add.gif" size="857" user="TWikiContributor" version="1.1"}%
 %META:FILEATTACHMENT{name="tag_remove.gif" attr="h" comment="Button: remove tag" date="1141697484" path="tag_remove.gif" size="862" user="TWikiContributor" version="1.1"}%
