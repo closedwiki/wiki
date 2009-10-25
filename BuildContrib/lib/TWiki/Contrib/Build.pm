@@ -1468,16 +1468,6 @@ sub _uploadTopic {
     my ( $this, $userAgent, $user, $pass, $topic, $form ) = @_;
     my $url =
 "$this->{UPLOADTARGETSCRIPT}/save$this->{UPLOADTARGETSUFFIX}/$this->{UPLOADTARGETWEB}/$topic";
-    $form->{text} = <<EXTRA. $form->{text};
-<!--
-This topic is part of the documentation for $this->{project} and is
-automatically generated from Subversion. Do not edit it! Your edits
-will be lost the next time the topic is uploaded!
-
-If you want to report an error in the topic, please raise a report at
-http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/$this->{project}
--->
-EXTRA
     print "Saving $topic\n";
     $this->_postForm( $userAgent, $user, $pass, $url, $form );
 }
