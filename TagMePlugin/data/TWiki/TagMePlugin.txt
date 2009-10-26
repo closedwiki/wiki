@@ -240,7 +240,7 @@ Tags: %TAGME{ tpaction="%URLPARAM{tpaction}%" web="%WEB%" tag="%URLPARAM{tag}%" 
 
 To show the tags at the bottom of every page, write in [[%LOCALSITEPREFS%]]:
 <verbatim>
- * Set WEBCOPYRIGHT = Tags: %TAGME{ tpaction="%URLPARAM{tpaction}%" web="%WEB%" tag="%URLPARAM{tag}%" }%, [[%TWIKIWEB%.TagMeViewAllTags][view all tags]] %BR% Copyright &copy; 1999-%GMTIME{"$year"}% by... etc
+ * Set WEBCOPYRIGHT = Tags: %TAGME{ tpaction="%URLPARAM{tpaction}%" web="%WEB%" tag="%URLPARAM{tag}%" }%, [[%SYSTEMWEB%.TagMeViewAllTags][view all tags]] %BR% Copyright &copy; 1999-%GMTIME{"$year"}% by... etc
 </verbatim>
 
 ---+++ How to show the tags without vote buttons

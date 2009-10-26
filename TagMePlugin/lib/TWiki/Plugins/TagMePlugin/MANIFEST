@@ -15,5 +15,7 @@ pub/TWiki/TagMePlugin/tag_addnew.gif 0644
 pub/TWiki/TagMePlugin/tag_remove.gif 0644
 pub/TWiki/TagMePlugin/tagme.css 0644
 pub/TWiki/TagMePlugin/topictags.gif 0644
+pub/TWiki/TagMePlugin/topictags_styleblog.gif 0644
+pub/TWiki/TagMePlugin/topictags_styleblog_open.gif 0644
 templates/view.tagme.tmpl 0444
 templates/view.tagme04x01.tmpl 0444
