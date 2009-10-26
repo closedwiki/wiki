@@ -1,5 +1,11 @@
 %META:TOPICINFO{author="TWikiContributor" date="1256463078" format="1.1" version="$Rev$}%
 ---+!! Topic Create Plugin 
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page
+   at http://twiki.org/cgi-bin/view/TopicCreatePlugins/Plugin or provide feedback
+   at http://twiki.org/cgi-bin/view/TopicCreatePlugins/PluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
 
 This Plugin allows you to automatically create topics or attach files at topic save time. This is typically used by TWiki applications to create a set of template based topics.
 
