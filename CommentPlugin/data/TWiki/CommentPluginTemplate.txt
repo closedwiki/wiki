@@ -1,6 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1166310108" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1256568213" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="CommentPlugin"}%
-
 ---+!! Templates for CommentPlugin
 
 See [[%TWIKIWEB%.CommentPlugin#Customisation][CommentPlugin: Customisation]] for help.
@@ -8,6 +7,9 @@ See [[%TWIKIWEB%.CommentPlugin#Customisation][CommentPlugin: Customisation]] for
 While this topic can be viewed as a TWiki topic, it is used by the CommentPlugin as a template file - see TWikiTemplates. The important content in here is in the verbatim blocks. The rest of the topic is just comments.
 
 %ICON{"hand"}% See CommentPluginExamples to view rendered templates
+
+%ICON{"hand"}% A few definitions of Comment Types (defined in this Template) are dependent on arguments passed to the ==%<nop>COMMENT%==  macro, TWiki Variable. To avoid Cross Site Scripting kind of vulnerabilities, we are passing these parameters through ==%<nop>URLPARAM%== TWiki Variable. It is good idea to pass ==encode="off"== as parameter where ever possible. 
+
 
 <div class="twikiBroadcastMessage" style="background-color:#ffc;">WARNING: THIS FILE WILL BE OVERWRITTEN WHEN YOU UPGRADE THE COMMENT PLUGIN</div>
 
@@ -23,7 +25,7 @@ Generic prompt box used by other templates
 </verbatim>
 Short comment, signed and dated
 <verbatim>
-%TMPL:DEF{outputoneliner}%   * %URLPARAM{"comment"}% -- %WIKIUSERNAME% - %GMTIME{"$day $month $year"}%%TMPL:END%
+%TMPL:DEF{outputoneliner}%   * %URLPARAM{"comment" encode="off"}% -- %WIKIUSERNAME% - %GMTIME{"$day $month $year"}%%TMPL:END%
 </verbatim>
 
 %ICON{"hand"}% See rendered template [[CommentPluginExamples#Default][Default]]
@@ -86,7 +88,7 @@ Bullet item added immediately before anchor. The input field width is passed wit
 %TMPL:DEF{PROMPT:bulletabove}%<input class="twikiInputField" name="bullet_above_item" id="bullet_above_item" type="text" size="%inputsize|40%" value="%URLPARAM{"bullet_above_item"}%" />&nbsp;<input %DISABLED% type="submit" value="%button|Add item%" class="twikiButton" />%TMPL:END%
 </verbatim>
 <verbatim>
-%TMPL:DEF{OUTPUT:bulletabove}%   * %URLPARAM{"bullet_above_item"}%%POS:BEFORE%
+%TMPL:DEF{OUTPUT:bulletabove}%   * %URLPARAM{"bullet_above_item" encode="off"}%%POS:BEFORE%
 %TMPL:END%
 </verbatim>
 
@@ -156,7 +158,7 @@ anchor/location/COMMENT
 %TMPL:DEF{PROMPT:tableprepend}%%TMPL:P{promptbox}%%TMPL:END%
 </verbatim>
 <verbatim>
-%TMPL:DEF{OUTPUT:tableprepend}%%POS:AFTER%| %URLPARAM{"comment" newline="<br />"}% | %WIKIUSERNAME% | %SERVERTIME% |
+%TMPL:DEF{OUTPUT:tableprepend}%%POS:AFTER%| %URLPARAM{"comment" newline="<br />" encode="off"}% | %WIKIUSERNAME% | %SERVERTIME% |
 %TMPL:END%
 </verbatim>
 
@@ -171,7 +173,7 @@ Comments, signed and dated, added at end of table above the anchor/location/COMM
 %TMPL:DEF{PROMPT:tableappend}%%TMPL:P{promptbox}%%TMPL:END%
 </verbatim>
 <verbatim>
-%TMPL:DEF{OUTPUT:tableappend}%%POS:BEFORE%| %URLPARAM{"comment" newline="<br />"}% | %WIKIUSERNAME% | %SERVERTIME% |
+%TMPL:DEF{OUTPUT:tableappend}%%POS:BEFORE%| %URLPARAM{"comment" newline="<br />" encode="off"}% | %WIKIUSERNAME% | %SERVERTIME% |
 %TMPL:END%
 </verbatim>
 
@@ -228,7 +230,7 @@ Tablerows adding on end - TWiki:Main/FranzJosefSilli
 %TMPL:END%
 </verbatim>
 <verbatim>
-%TMPL:DEF{OUTPUT:table}%%POS:BEFORE%| %URLPARAM{"comment_date"}% | %WIKIUSERNAME% | %URLPARAM{"comment_city" }% |
+%TMPL:DEF{OUTPUT:table}%%POS:BEFORE%| %URLPARAM{"comment_date"}%  encode="off"| %WIKIUSERNAME% | %URLPARAM{"comment_city"  encode="off"}% |
 %TMPL:END%
 </verbatim>
 
