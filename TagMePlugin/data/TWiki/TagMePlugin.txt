@@ -1,5 +1,11 @@
 %META:TOPICINFO{author="TWikiContributor" date="1256357655" format="1.1" version="$Rev$"}%
 ---+!! Tag-me Plugin
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page
+   at http://twiki.org/cgi-bin/view/Plugins/TagMePlugin or provide feedback
+   at http://twiki.org/cgi-bin/view/Plugins/TagMePluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
 
 Plugin to tag wiki content collectively in order to find content by tags and to get a meaningful page ranking.
 
