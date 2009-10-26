@@ -5,21 +5,18 @@
 # include "/home/httpd/twiki/twiki_httpd.conf"
 # to the end of your main httpd.conf file.
 #
-# See also http://twiki.org/cgi-bin/view/TWiki.ApacheConfigGenerator
+# See also http://twiki.org/cgi-bin/view/TWiki/ApacheConfigGenerator
 # that helps you configure Apache
 
 # The first parameter will be part of the URL to your installation e.g.
 # http://example.com/twiki/bin/view/...
 # The second parameter must point to the physical path on your disk. Be
 # careful not to lose any trailing /'s.
-
 #### Change the _second_ path to match your local installation
 ScriptAlias /twiki/bin/ "/home/httpd/twiki/bin/"
 
-# This defines a url that points to the root of the twiki installation. It is
-# used to access files in the pub directory (attachments etc)
-# It must come _after_ the ScriptAlias.
-
+# This defines a url that points to the twiki pub directory, which contains
+# attachments and other files like CSS stylesheets and icons. 
 #### Change the path to match your local installation
 Alias /twiki/ "/home/httpd/twiki/"
 
@@ -61,7 +58,7 @@ BrowserMatchNoCase ^$ blockAccess
 
 	# Password file for TWiki users
 	AuthUserFile /home/httpd/twiki/data/.htpasswd
-	AuthName 'Enter your WikiName: (First name and last name, no space, no dots, capitalized, e.g. JohnSmith). Cancel to register if you do not have one.'
+	AuthName 'Enter your WikiName: (First name and last name, no space, no dots, capitalized, e.g. JohnSmith)'
 	AuthType Basic
 	
 	# File to return on access control error (e.g. wrong password)
@@ -130,32 +127,4 @@ BrowserMatchNoCase ^$ blockAccess
 
 	# This line will redefine the mime type for the most common types of scripts
 	AddType text/plain .shtml .php .php3 .phtml .phtm .pl .py .cgi
-</Directory>
-
-# Security note: All other directories should be set so
-# that they are *not* visible as URLs, so we set them as =deny from all=.
-
-#### Change the paths to match your local installation
-<Directory "/home/httpd/twiki/data">
-	deny from all
-</Directory>
-
-<Directory "/home/httpd/twiki/templates">
-	deny from all
-</Directory>
-
-<Directory "/home/httpd/twiki/lib">
-	deny from all
-</Directory>
-
-<Directory "/home/httpd/twiki/tools">
-	deny from all
-</Directory>
-
-<Directory "/home/httpd/twiki/locale">
-	deny from all
-</Directory>
-
-<Directory "/home/httpd/twiki/working">
-	deny from all
 </Directory>
