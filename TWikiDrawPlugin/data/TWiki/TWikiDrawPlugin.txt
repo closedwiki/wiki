@@ -87,10 +87,11 @@ __NOTE:__ Do not change the settings here, overload them in the [[%LOCALSITEPREF
    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
    * To test if the plugin is correctly installed, view this topic in the installation and you should see a placeholder box below. Click on it.<br />
    %DRAWING{empty}%
-   * Here's an example using an image map. Move the mouse over the image and watch the status bar.
+   * Here's an example using an image map. Move the mouse over the image and watch the status bar.<br />
    %DRAWING{example}%
 
 ---+++ Known Problems
+
 If you add a map to a drawing by setting a URL on any of the figures a map file is created. If you subsequently remove all the URLs from figures in the drawing the map still exists, but is now empty. There is no way to remove the map other than by manually moving the attachment.
 
 ---+++ Plugin Info
@@ -127,7 +128,7 @@ If you add a map to a drawing by setting a URL on any of the figures a map file 
 |  20 Feb 2002 | Merged TWiki:Main/RobWalker's fixes for text attached to figures |
 |  01 Oct 2001 | Updated this text |
 |  23 Sep 2001 | Initial version |
-|  Dependencies: | Java 1.1 enabled browser<br />%$DEPENDENCIES% |
+|  Dependencies: | Java 1.1 enabled browser |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
