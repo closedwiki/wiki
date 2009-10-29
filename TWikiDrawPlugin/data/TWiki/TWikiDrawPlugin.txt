@@ -1,15 +1,11 @@
 %META:TOPICINFO{author="TWikiContributor" date="1256829856" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
-
-   PLEASE DO NOT EDIT THIS TOPIC
-
-   It is automatically generated from the subversion repository, and any changes
-   you make will simply be overwritten the next time a release is generated.
-
-   Instead, you could check your fix in, raise a bug in the Bugs web, or mail thge author.
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/TWikiDrawPlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/TWikiDrawPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
-
 %TOC%
 
 This plugin encapsulates the <nop>TWikiDraw Java Applet first developed by TWiki:Main/PeterThoeny from the original <nop>JHotDraw.
@@ -65,15 +61,22 @@ The standard commands that are provided include cut, copy, paste, duplicate, del
 
 Attributes, such as fill color, text color or arrow tip, can be changed through the attributes menus.
 
+#PluginsSettings
 ---++ <nop>%TOPIC% Settings
+   
+__NOTE:__ Do not change the settings here, overload them in the [[%LOCALSITEPREFS%]]. Prefix a setting with ==TWIKIDRAWPLUGIN_==, e.g. to overload ==EXTRA_COLORS== define a ==TWIKIDRAWPLUGIN_EXTRA_COLORS== setting in the <nop>%LOCALSITEPREFS%.
 
-   * Set SHORTDESCRIPTION = Java Applet based drawing editor
-Extra colors to be added to the menu of colors in the applet, as a comma-separated list with colors in HTML format (see TWiki.StandardColors)
-   * Set EXTRA_COLORS = Aquamarine=#70DB93,New Tan=#EBC79E,Sea Green=#238E68,Motorola Blue=#3ff
-Set to 1 if an "Edit" button is to be generated attached to the image. You will still be able to edit it by clicking on the boundary of the image.
-   * Set EDIT_BUTTON = 1
-Edit text defined here so you can change it for local languages. Text is shown when you hover over the image, and for the edit button. %<nop>F% will be replaced by the drawing name.
-   * Set EDIT_TEXT = Edit drawing '%F%' (requires a Java 1.1 enabled browser)
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules
+      * Set SHORTDESCRIPTION = Java Applet based drawing editor
+
+   * Extra colors to be added to the menu of colors in the applet, as a comma-separated list with colors in HTML format (see %SYSTEMWEB%.StandardColors)
+      * Set EXTRA_COLORS = Aquamarine=#70DB93,New Tan=#EBC79E,Sea Green=#238E68,Motorola Blue=#3ff
+
+   * Set to 1 if an "Edit" button is to be generated attached to the image. You will still be able to edit it by clicking on the boundary of the image.
+      * Set EDIT_BUTTON = 1
+
+   * Edit text defined here so you can change it for local languages. Text is shown when you hover over the image, and for the edit button. %<nop>F% will be replaced by the drawing name.
+      * Set EDIT_TEXT = Edit drawing '%F%' (requires a Java 1.1 enabled browser)
 
 ---+++ Plugin Installation Instructions
 
@@ -92,16 +95,18 @@ If you add a map to a drawing by setting a URL on any of the figures a map file 
 
 ---+++ Plugin Info
 
-|  Plugin Author: | TWiki:Main/CrawfordCurrie http://www.c-dot.co.uk, TWiki:Main/SopanShewale  http://www.twiki.net |
+|  Plugin Author: | TWiki:Main/PeterThoeny, TWiki:Main/CrawfordCurrie http://www.c-dot.co.uk, TWiki:Main/SopanShewale http://www.twiki.net |
+|  Copyright: | &copy; 2000-2009, Peter Thoeny [[http://www.twiki.net/][Twiki, Inc]]; see additional copyrights below |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
-|  Change History: | |
-| 18181| TWikibug:Item 6333 - TWikiDrawPlugin does not work in TWiki-4.3.2 if {CryptToken}{Enable} is set|
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2009-10-29 | TWikibug:Item6333 - !TWikiDrawPlugin does not work in TWiki-4.3.2 if {CryptToken}{Enable} is set -- Sopan Shewale |
 |  8570 | TWikibug:Item1528 - Minor pattern skin template update for TWikiDrawPlugin |
 |  8569 | TWikibug:Item1528 - Adding pattern skin template to TWikiDrawPlugin |
 |  7926 | TWikibug:Item1206 - minor formatting fix |
 |  7907 | TWikibug:Item1206 - merged minor documentation fixes that were causing confusion about latest version of the plugin. |
 |  7761 | TWikibug:Item1124 - checked in jar file, even though it is built, because most people don't have ANT and it's a source of error for people using SVN checkouts. |
-|  6340 | TWikibug:Item196 - added screenshot to TWikiDrawPlugin |
+|  6340 | TWikibug:Item196 - added screenshot to !TWikiDrawPlugin |
 |  5245 | Added anchor support to wikilinks |
 |  5243 | Added support for web.topic wiki links, and remove url encoding, which was breaking |
 |  5223 | Documentation fixes, adding gifs. |
@@ -127,7 +132,7 @@ If you add a map to a drawing by setting a URL on any of the figures a map file 
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
    * %TOPIC% is based on Erich Gamma's <nop>JHotDraw 5.1. (<nop>JHotDraw is copyright 1996, 1997 by <a href="http://www.ifa.ch/">IFA Informatik</a> and Erich Gamma, erich_gamma@acm.org . _It is hereby granted that this software can be used, copied, modified, and distributed without fee provided that this copyright notice appears in all copies._ )
    * %TOPIC% uses <a href="http://www.acme.com/java/">ACME Labs</a>' <nop>GifEncoder to convert a drawing into a GIF file format. (<nop>GifEncoder is Copyright &copy;1996,1998 by Jef Poskanzer, jef@acme.com . All rights reserved. _<font size="-6"> THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. )</font>_
@@ -136,5 +141,4 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
    * Modifications Copyright &copy; 2001 Motorola. All Rights Reserved.
    * Modifications &copy; 2003-2004 Copyright Crawford Currie http://www.c-dot.co.uk
  
--- TWiki:Main/CrawfordCurrie - %$DATE%
-
+-- TWiki:Main/SopanShewale - %$DATE%
