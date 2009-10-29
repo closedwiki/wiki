@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1144799477" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1256829856" format="1.1" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 <!--
 
@@ -26,7 +26,7 @@ Browser support for Java 1.1 or later required.
 
 ---++ Syntax Rules
 
-	* Write the command =%<nop>DRAWING{name}%= anywhere in a TWiki topic. You can name the drawing anything you like, allowed characters are =A-Z a-z 0-9 _ - .= . If you have only one drawing in the topic you can simply write =%<nop>DRAWING%= .
+   * Write the command =%<nop>DRAWING{name}%= anywhere in a TWiki topic. You can name the drawing anything you like, allowed characters are =A-Z a-z 0-9 _ - .= . If you have only one drawing in the topic you can simply write =%<nop>DRAWING%= .
 
 ---+++ Tools
 
@@ -48,11 +48,11 @@ The tools on the left create or manipulate figures.
 ---+++ Handles
 
 When selected, figures provide different handles to manipulate them.
-	* the white squares let you to manipulate the shape of a figure
-	* the green squares on connections let you to reconnect them with another figure.
-	* the yellow circles on polygon figures let you change the size and rotation of the figure
-	* yellow circles on rounded rectangles let you change the radius of the corners
-	* the yellow circles on connections let you manipulate the position of connection segments.
+   * the white squares let you to manipulate the shape of a figure
+   * the green squares on connections let you to reconnect them with another figure.
+   * the yellow circles on polygon figures let you change the size and rotation of the figure
+   * yellow circles on rounded rectangles let you change the radius of the corners
+   * the yellow circles on connections let you manipulate the position of connection segments.
 
 ---+++ Commands
 
@@ -67,34 +67,35 @@ Attributes, such as fill color, text color or arrow tip, can be changed through 
 
 ---++ <nop>%TOPIC% Settings
 
-	* Set SHORTDESCRIPTION = Java Applet based drawing editor
+   * Set SHORTDESCRIPTION = Java Applet based drawing editor
 Extra colors to be added to the menu of colors in the applet, as a comma-separated list with colors in HTML format (see TWiki.StandardColors)
-	* Set EXTRA_COLORS = Aquamarine=#70DB93,New Tan=#EBC79E,Sea Green=#238E68,Motorola Blue=#3ff
+   * Set EXTRA_COLORS = Aquamarine=#70DB93,New Tan=#EBC79E,Sea Green=#238E68,Motorola Blue=#3ff
 Set to 1 if an "Edit" button is to be generated attached to the image. You will still be able to edit it by clicking on the boundary of the image.
-	* Set EDIT_BUTTON = 1
+   * Set EDIT_BUTTON = 1
 Edit text defined here so you can change it for local languages. Text is shown when you hover over the image, and for the edit button. %<nop>F% will be replaced by the drawing name.
-	* Set EDIT_TEXT = Edit drawing '%F%' (requires a Java 1.1 enabled browser)
+   * Set EDIT_TEXT = Edit drawing '%F%' (requires a Java 1.1 enabled browser)
 
 ---+++ Plugin Installation Instructions
 
-	* Download the ZIP file from the Plugin web (see below). Contents:
-	| *File:* | *Description:* |
+   * Download the ZIP file from the Plugin web (see below). Contents:
+   | *File:* | *Description:* |
 %$MANIFEST%
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-	* To test if the plugin is correctly installed, view this topic in the installation and you should see a placeholder box below. Click on it.<br />
-	%DRAWING{empty}%
-	* Here's an example using an image map. Move the mouse over the image and watch the status bar.
-	%DRAWING{example}%
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory.
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * To test if the plugin is correctly installed, view this topic in the installation and you should see a placeholder box below. Click on it.<br />
+   %DRAWING{empty}%
+   * Here's an example using an image map. Move the mouse over the image and watch the status bar.
+   %DRAWING{example}%
 
 ---+++ Known Problems
 If you add a map to a drawing by setting a URL on any of the figures a map file is created. If you subsequently remove all the URLs from figures in the drawing the map still exists, but is now empty. There is no way to remove the map other than by manually moving the attachment.
 
 ---+++ Plugin Info
 
-|  Plugin Author: | TWiki:Main/CrawfordCurrie http://www.c-dot.co.uk |
+|  Plugin Author: | TWiki:Main/CrawfordCurrie http://www.c-dot.co.uk, TWiki:Main/SopanShewale  http://www.twiki.net |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
+| 18181| TWikibug:Item 6333 - TWikiDrawPlugin does not work in TWiki-4.3.2 if {CryptToken}{Enable} is set|
 |  8570 | TWikibug:Item1528 - Minor pattern skin template update for TWikiDrawPlugin |
 |  8569 | TWikibug:Item1528 - Adding pattern skin template to TWikiDrawPlugin |
 |  7926 | TWikibug:Item1206 - minor formatting fix |
@@ -128,12 +129,12 @@ If you add a map to a drawing by setting a URL on any of the figures a map file 
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
-	* %TOPIC% is based on Erich Gamma's <nop>JHotDraw 5.1. (<nop>JHotDraw is copyright 1996, 1997 by <a href="http://www.ifa.ch/">IFA Informatik</a> and Erich Gamma, erich_gamma@acm.org . _It is hereby granted that this software can be used, copied, modified, and distributed without fee provided that this copyright notice appears in all copies._ )
-	* %TOPIC% uses <a href="http://www.acme.com/java/">ACME Labs</a>' <nop>GifEncoder to convert a drawing into a GIF file format. (<nop>GifEncoder is Copyright &copy;1996,1998 by Jef Poskanzer, jef@acme.com . All rights reserved. _<font size="-6"> THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. )</font>_
-	* %TOPIC% uses some ideas of <a href="http://www.eng.untech.com/serg/bin/KmWiki?Load=FrontPage">KmWiki</a> drawing applet.
-	* Copyright 2000 by Peter Thoeny, Peter@Thoeny.com. It is hereby granted that this software can be used, copied, modified, and distributed without fee provided that this copyright notice appears in all copies.
-	* Modifications Copyright &copy; 2001 Motorola. All Rights Reserved.
-	* Modifications &copy; 2003-2004 Copyright Crawford Currie http://www.c-dot.co.uk
+   * %TOPIC% is based on Erich Gamma's <nop>JHotDraw 5.1. (<nop>JHotDraw is copyright 1996, 1997 by <a href="http://www.ifa.ch/">IFA Informatik</a> and Erich Gamma, erich_gamma@acm.org . _It is hereby granted that this software can be used, copied, modified, and distributed without fee provided that this copyright notice appears in all copies._ )
+   * %TOPIC% uses <a href="http://www.acme.com/java/">ACME Labs</a>' <nop>GifEncoder to convert a drawing into a GIF file format. (<nop>GifEncoder is Copyright &copy;1996,1998 by Jef Poskanzer, jef@acme.com . All rights reserved. _<font size="-6"> THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. )</font>_
+   * %TOPIC% uses some ideas of <a href="http://www.eng.untech.com/serg/bin/KmWiki?Load=FrontPage">KmWiki</a> drawing applet.
+   * Copyright 2000 by Peter Thoeny, Peter@Thoeny.com. It is hereby granted that this software can be used, copied, modified, and distributed without fee provided that this copyright notice appears in all copies.
+   * Modifications Copyright &copy; 2001 Motorola. All Rights Reserved.
+   * Modifications &copy; 2003-2004 Copyright Crawford Currie http://www.c-dot.co.uk
  
 -- TWiki:Main/CrawfordCurrie - %$DATE%
 
