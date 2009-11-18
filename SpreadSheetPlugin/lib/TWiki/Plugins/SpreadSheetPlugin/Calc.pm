@@ -756,7 +756,7 @@ sub doFunc
             $val1 = $unit[$i];
             $val2 = $unit[$i+1] = int($val1 / $factor[$i+1]);
             $val1 = $unit[$i] = $val1 - int($val2 * $factor[$i+1]);
-            
+
             push( @arr, "$val1 $singular[$i]" ) if( $val1 == 1 );
             push( @arr, "$val1 $plural[$i]" )   if( $val1 > 1 );
         }
@@ -981,7 +981,8 @@ sub doFunc
     } elsif ( $theFunc eq "NOP" ) {
         # pass everything through, this will allow plugins to defy plugin order
         # for example the %SEARCH{}% variable
-        $theAttr =~ s/\$per/%/g;
+        $theAttr =~ s/\$per(cnt)?/%/g;
+        $theAttr =~ s/\$quot/"/g;
         $result = $theAttr;
 
     } elsif ( $theFunc eq "EXISTS" ) {
@@ -1303,7 +1304,7 @@ sub _workingDays
     my ( $start, $end ) = @_;
 
     # Rewritten by PeterThoeny - 2009-05-03 (previous implementation was buggy)
-    # Calculate working days between two times. Times are standard system times (secs since 1970). 
+    # Calculate working days between two times. Times are standard system times (secs since 1970).
     # Working days are Monday through Friday (sorry, Israel!)
     # A day has 60 * 60 * 24 sec
     # Adding 3601 sec to account for daylight saving change in March in Northern Hemisphere
