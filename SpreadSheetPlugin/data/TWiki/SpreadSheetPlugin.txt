@@ -429,7 +429,7 @@ Conventions for Syntax:
 
 #FuncNOP
 ---+++ NOP( text ) -- no-operation
-   * Useful to change the order of plugin execution. For example, it allows preprossing to be done before =%<nop>SEARCH{}%= is evaluated. The percent character '%' can be escaped with =$per=
+   * Useful to change the order of plugin execution. For example, it allows preprocessing to be done before =%<nop>SEARCH{}%= is evaluated. The percent character '%' can be escaped with =$percnt=. The quote character '"' can be escaped with =$quot=. Old escape syntax still works but it is no longer documented.
    * Syntax: ==$NOP( text )==
 
 #FuncNOT
@@ -769,8 +769,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2001-2009, Peter Thoeny, [[http://www.twiki.net/][TWIKI.NET]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 09 May 2009 (18078) |
+|  Plugin Version: | 18 Nov 2009 (18206) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  18 Nov 2009: | Enhanced $NOP(): Added $quot replacement for quote character, contributed by TWiki:Main/HorstEsser |
 |  09 May 2009: | Fixed bug in $WORKINGDAYS(): Incorrect number of days if daylight savings time change happens between start date and end date |
 |  26 Mar 2009: | Added $INSERTSTRING() |
 |  25 Mar 2009: | Added $EMPTY(), $LEFTSTRING(), $RIGHTSTRING(), $SUBSTRING() |
