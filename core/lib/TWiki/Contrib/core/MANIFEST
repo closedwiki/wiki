@@ -703,6 +703,7 @@ pub/TWiki/TWikiDocGraphics/as.gif 0644
 pub/TWiki/TWikiDocGraphics/attachfile.gif 0644
 pub/TWiki/TWikiDocGraphics/award.gif 0644
 pub/TWiki/TWikiDocGraphics/bat.gif 0644
+pub/TWiki/TWikiDocGraphics/barcode.gif 0644
 pub/TWiki/TWikiDocGraphics/bed.gif 0644
 pub/TWiki/TWikiDocGraphics/blank-bg.gif 0644
 pub/TWiki/TWikiDocGraphics/blank.gif 0644
@@ -722,6 +723,7 @@ pub/TWiki/TWikiDocGraphics/choice-no.gif 0644
 pub/TWiki/TWikiDocGraphics/choice-yes.gif 0644
 pub/TWiki/TWikiDocGraphics/closed.gif 0644
 pub/TWiki/TWikiDocGraphics/code.gif 0644
+pub/TWiki/TWikiDocGraphics/comments.gif 0644
 pub/TWiki/TWikiDocGraphics/connections.gif 0644
 pub/TWiki/TWikiDocGraphics/css.gif 0644
 pub/TWiki/TWikiDocGraphics/database.gif 0644
@@ -750,6 +752,7 @@ pub/TWiki/TWikiDocGraphics/eml.gif 0644
 pub/TWiki/TWikiDocGraphics/empty.gif 0644
 pub/TWiki/TWikiDocGraphics/exe.gif 0644
 pub/TWiki/TWikiDocGraphics/external.gif 0644
+pub/TWiki/TWikiDocGraphics/facebook.gif 0644
 pub/TWiki/TWikiDocGraphics/fax.gif 0644
 pub/TWiki/TWikiDocGraphics/feed.gif 0644
 pub/TWiki/TWikiDocGraphics/filter.gif 0644
@@ -855,10 +858,12 @@ pub/TWiki/TWikiDocGraphics/png.gif 0644
 pub/TWiki/TWikiDocGraphics/ppt.gif 0644
 pub/TWiki/TWikiDocGraphics/presentation.gif 0644
 pub/TWiki/TWikiDocGraphics/printtopic.gif 0644
+pub/TWiki/TWikiDocGraphics/process.gif 0644
 pub/TWiki/TWikiDocGraphics/processing.gif 0644
 pub/TWiki/TWikiDocGraphics/processing-bg.gif 0644
 pub/TWiki/TWikiDocGraphics/processing-32.gif 0644
 pub/TWiki/TWikiDocGraphics/processing-32-bg.gif 0644
+pub/TWiki/TWikiDocGraphics/profile.gif 0644
 pub/TWiki/TWikiDocGraphics/proportional.gif 0644
 pub/TWiki/TWikiDocGraphics/ps.gif 0644
 pub/TWiki/TWikiDocGraphics/psd.gif 0644
@@ -928,6 +933,7 @@ pub/TWiki/TWikiDocGraphics/topicdiffs.gif 0644
 pub/TWiki/TWikiDocGraphics/trash.gif 0644
 pub/TWiki/TWikiDocGraphics/ttf.gif 0644
 pub/TWiki/TWikiDocGraphics/twiki.gif 0644
+pub/TWiki/TWikiDocGraphics/twiki-alert.gif 0644
 pub/TWiki/TWikiDocGraphics/twiki-irc.gif 0644
 pub/TWiki/TWikiDocGraphics/twitter.gif 0644
 pub/TWiki/TWikiDocGraphics/txt.gif 0644
