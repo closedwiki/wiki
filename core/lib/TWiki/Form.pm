@@ -170,6 +170,11 @@ sub _parseFormDefinition {
             $type = 'text' if( ! $type );
 
             $size ||= '';
+            $size = $this->{session}->handleCommonTags(
+                $size, $this->{web}, $this->{topic}, $meta);
+            $size =~ s/<\/?(nop|noautolink)\/?>//go;
+            $size =~ s/^\s+//g;
+            $size =~ s/\s+$//g;
 
             $vals ||= '';
             $vals = $this->{session}->handleCommonTags(
