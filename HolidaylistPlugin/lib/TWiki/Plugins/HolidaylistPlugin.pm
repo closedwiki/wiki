@@ -118,6 +118,8 @@ sub commonTagsHandler
 
     TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
 
+    return if TWiki::Func::getContext()->{'save'};
+
     # This is the place to define customized tags and variables
     # Called by TWiki::handleCommonTags, after %INCLUDE:"..."%
 
