@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1176595977" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1259170824" format="1.1" version="$Rev$"}%
 ---++ TWiki Editing Shorthand
 
 %STARTINCLUDE%
@@ -139,7 +139,7 @@ _this does not _
 </tr>
 <tr valign="top">
 <td>
- *Verbatim Text:* %BR%
+ *Verbatim (Literal) Text:* %BR%
  Surround code excerpts and other formatted text with =&lt;verbatim&gt;= and =&lt;/verbatim&gt;= tags.%BR%
 %T% =verbatim= tags disable HTML code. Use =&lt;pre&gt;= and =&lt;/pre&gt;= tags instead if you want the HTML code within the tags to be interpreted.%BR%
 __%X% NOTE:__ Preferences variables (* Set NAME = value) are set within verbatim tags.
@@ -485,13 +485,13 @@ a@b.com
  is HTML that WYSIWYG would normally filter out or modify). Protected
  content appears as plain text in the WYSIWYG editor.
 </td><td>
-=&lt;sticky&gt;=
-<verbatim>
-<div>
+<pre>
+&lt;sticky&gt;
+&lt;div&gt;
 This div is required
-</div>
-</verbatim>
-=&lt;sticky&gt;=
+&lt;/div&gt;
+&lt;/sticky&gt;
+</pre>
 </td>
 <td>
 <sticky>
