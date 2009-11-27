@@ -1,6 +1,7 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2008-2009 Peter Thoeny, peter@twiki.net
+# Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
+# Copyright (C) 2001-2009 Peter Thoeny, peter@twiki.net
 #               2008-2009 Sopan Shewale sopan.shewale@gmail.com
 #
 # This program is free software; you can redistribute it and/or
@@ -67,7 +68,8 @@ sub initPlugin {
     $debug = TWiki::Func::getPreferencesFlag("\U$pluginName\E_DEBUG") || 0;
     $sender = TWiki::Func::getPreferencesValue("\U$pluginName\E_SENDER")
       || "TWiki NotificationPlugin";
-
+    $sender = TWiki::Func::expandCommonVariables($sender);
+ 
     # Plugin correctly initialized
     TWiki::Func::writeDebug(
         "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK")
@@ -205,18 +207,18 @@ sub getNotificationsOfUser {
 sub notifyUsers {
     my ( $notifyUsers, $subject, $body ) = @_;
 
-    foreach my $tmp ( @{$notifyUsers} ) {
+    foreach my $usr ( @{$notifyUsers} ) {
 
         my $email .= "From: $sender\n";
-        $email    .= "To: " . getUserEmail($tmp) . "\n";
+        $email    .= "To: " . getUserEmail($usr) . "\n";
         $email    .= "CC: \n";
         $email    .= "Subject: $subject\n\n";
         $email    .= "$body\n";
 
-        #&TWiki::Func::writeDebug( "Sending mail to $tmp ..." );
+        TWiki::Func::writeDebug( "Sending mail to $usr ..." ) if $debug;
         my $error = TWiki::Func::sendEmail($email);
         if ($error) {
-            TWiki::Func::writeDebug("ERROR WHILE SENDING MAIL - $error");
+            TWiki::Func::writeWarning("ERROR: while sending email through $pluginName - $error");
         }
     }
 }
@@ -226,7 +228,6 @@ sub getUserEmail {
     my @emails = TWiki::Func::wikiToEmail($who);
     return "" if ( $#emails < 0 );
 
-    #&TWiki::Func::writeDebug( "USER: $user, EMAIL $emails[0]" );
     return $emails[0];
 }
 
