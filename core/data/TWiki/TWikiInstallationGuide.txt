@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1239427883" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1259692960" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Installation Guide
 
@@ -47,7 +47,7 @@ If you need help, ask a question in the TWiki:Support web or on TWiki:Codev.TWik
       * The default location of Perl is =/usr/bin/perl=. *If it's somewhere else*, change the path to Perl in the first line of each script in the =twiki/bin= directory.
       * Some systems require a special extension on perl scripts (e.g. =.cgi= or =.pl=). This is normally only needed under Windows and only where perl scripts are only recognized by file extension. Linux and Unix users should normally never need to do this. If necessary, rename all files in =twiki/bin=  (i.e. rename =view= to =view.pl= etc). If you do this, make sure you set the =ScriptSuffix= option in =configure= (Step 6).
    1 *Create the file !LocalLib.cfg* located as =twiki/bin/LocalLib.cfg=
-      * There is a template for this file in =twiki/bin/LocalLib.cfg.txt=. Simply copy LocalLib.cfg.txt to LocalLib.cfg. Make sure the ownership and access rights of the copy are the same as LocalLib.cfg.txt
+      * There is a template for this file in =twiki/bin/LocalLib.cfg.txt=. Simply copy !LocalLib.cfg.txt to !LocalLib.cfg. Make sure the ownership and access rights of the copy are the same as !LocalLib.cfg.txt
       * The file =twiki/bin/LocalLib.cfg= must contain a setting for =$twikiLibPath=, which must point to the absolute file path of your =twiki/lib= e.g. =/var/www/twiki/lib=.
       * If you need to install additional [[http://cpan.perl.org/][CPAN]] modules, but can't update the main Perl installation files on the server, you can set =$CPANBASE= to point to your personal [[http://cpan.perl.org/][CPAN]] install. Don't forget that the webserver user has to be able to read those files as well.
    1 *Choose best configuration method* for your webserver. There are two ways to configure Apache: config file included from httpd.conf or .htaccess files
@@ -247,7 +247,7 @@ TWiki is written in Perl 5, uses a number of shell commands, and requires <a hre
 | *Resource* | *Required Server Environment* |
 | Perl | 5.8.4 or higher is recommended. TWiki will run in perl 5.6.1 but only with Wysiwyg editor disabled. Wysiwyg requires unicode support which is provided by perl 5.8.1 and forward. |
 | RCS | 5.7 or higher (including GNU =diff=) <br /> Optional, TWiki includes a pure perl implementation of RCS that can be used instead (although it's slower) |
-| GNU =diff= | GNU =diff= 2.7 or higher is required when not using the all-Perl RcsLite.  <br /> Install on PATH if not included with RCS (check version with =diff -v=)  <br /> Must be the version used by RCS, to avoid problems with binary attachments - RCS may have hard-coded path to =diff= |
+| GNU =diff= | GNU =diff= 2.7 or higher is required when not using the all-Perl <nop>RcsLite.  <br /> Install on PATH if not included with RCS (check version with =diff -v=)  <br /> Must be the version used by RCS, to avoid problems with binary attachments - RCS may have hard-coded path to =diff= |
 | Other external programs | =fgrep, egrep= |
 | Cron/scheduler | &#8226; Unix: =cron= <br />&#8226; Windows: =cron= equivalents <!-- SMELL: Macintosh version? --> |
 | Web server | Apache is well supported; for information on other servers, see <a href="http://twiki.org/cgi-bin/view/TWiki.InstallingTWiki#OtherWebServers" title="'TWiki.InstallingTWiki#OtherWebServers' on TWiki.org">TWiki:TWiki.InstallingTWiki#OtherWebServers</a>. |
