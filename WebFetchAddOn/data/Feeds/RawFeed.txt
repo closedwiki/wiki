@@ -1,0 +1,4 @@
+%META:TOPICINFO{author="IanKluft" date="1253731628" format="1.1" version="1.2"}%
+%META:TOPICPARENT{name="WebHome"}%
+---+ Raw Feed
+%SEARCH{"META\:FORM.*Form" excludetopic="Web.*" type="regex" nosearch="on" noheader="on" order="modified" limit="%URLPARAM{"limit" default="300"}%" reverse="on" header="| *Pri* | *Topic* | *Title* | *Date* |" format="| $percntPRIICON$formfield(priority)$percnt |[[$topic]]|$formfield(IndexTitle)|<span style='white-space:nowrap'>$date</span>|"}%

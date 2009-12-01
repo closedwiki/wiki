@@ -1,0 +1,10 @@
+%META:TOPICINFO{author="IanKluft" date="1253495912" format="1.1" version="1.5"}%
+%META:TOPICPARENT{name="WebFetchConfig"}%
+| *Name* | *Type* | *Size* | *Values* | *Tooltip message* |
+| IndexTitle | text | 70 | | Title for TWiki indexes |
+| priority | select | 10 | Unknown, Urgent, High, Medium, Low, Rejected, Canceled | Priority assigned to this item |
+| pubDate | text | 30 | | Publication date |
+| title | text | 200 | | Title |
+| link | text | 250 | | Link URL |
+| category | text | 120 | | Category |
+| description | text | 1024 | | Description |

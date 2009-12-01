@@ -1,0 +1,45 @@
+---+ !WebFetch Add-On
+
+The <a href="http://search.cpan.org/search?query=webfetch" title="WebFetch perl module">WebFetch perl module</a> available on CPAN is now supports direct RSS/Atom/etc feeds into TWiki pages. The !WebFetch Add-on can store the configuration of !WebFetch's feeds in a TWiki page. This add-on runs from cron periodically.
+
+---++ Usage
+
+The script runs from cron.  Configuration information is stored and editable via a TWiki page.
+
+---++ Add-On Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this add-on. The following instructions are for the administrator who installs the add-on on the server where TWiki is running.
+
+   * Download the ZIP file from the Add-on Home (see below)
+   * Install <a href="http://search.cpan.org/search?query=webfetch" title="WebFetch perl module">WebFetch</a> from CPAN
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+| *File:* | *Description:* |
+| ==data/TWiki/%TOPIC%.txt== | Add-on topic |
+| ==data/TWiki/%TOPIC%.txt,v== | Add-on topic repository |
+| ==bin/webfetch-twiki.pl== | Add-on script |
+   * set crontab to run webfetch-twiki.pl with command-line options to set TWiki root directory, web name and topic name for the configuration page
+      * The web defaults to Feeds (a web created by unpacking the zip file or subversion subtree) and the topic defaults to !WebFetchConfig
+   * edit the WebFetchAddOn configuration page to control !WebFetch feeds
+
+---++ Add-On Info
+
+   * Set SHORTDESCRIPTION = Control !WebFetch news feeds from a TWiki page
+
+|  Add-on Author: | TWiki:Main.IanKluft |
+|  Copyright: | © 2009 TWiki:Main.IanKluft |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Add-on Version: | 2009-12-01 (V1.000) |
+|  Change History: | <!-- versions below in reverse order --> |
+|  2009-12-01: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 (TWiki 4.0) |
+|  CPAN Dependencies: | <a href="http://search.cpan.org/search?query=webfetch" title="WebFetch perl module">WebFetch</a> |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topic:__ %TWIKIWEB%.TWikiAddOns
+
+-- TWiki:Main/IanKluft - 2009-12-01
+

@@ -1,0 +1,10 @@
+%META:TOPICINFO{author="PeterThoeny" date="1253684593" format="1.1" version="1.11"}%
+%META:TOPICPARENT{name="WebMaintenance"}%
+---+ !WebFetch Configuration
+
+The following table is used by !WebFetch to configure news feeds
+
+%STARTINCLUDE%
+| *Key* | *Web* | *Parent* | *Prefix* | *Template* | *Form* | *Options* | *Module* | *Source* |
+| tweet-twiki | Feeds | TweetTwikiReport | TweetTwiki |  AtomFeedTemplate | AtomFeedForm | separate_topics | Atom | http://search.twitter.com/search.atom?q=%23twiki |
+%STOPINCLUDE%

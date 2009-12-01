@@ -1,0 +1,11 @@
+%META:TOPICINFO{author="IanKluft" date="1253247529" format="1.1" reprev="1.2" version="1.2"}%
+---+ <nop>%INCLUDINGTOPIC% %FORMFIELD{"IndexTitle" topic="%INCLUDINGTOPIC%" format=""}%
+
+*Title:* %FORMFIELD{"title" topic="%INCLUDINGTOPIC%" format="$value"}%
+
+| *Priority* | %SEARCH{".*" topic="%INCLUDINGTOPIC%" web="Feeds" type="regex" nonoise="on" format="$percntPRIICON$formfield(priority)$percnt"}% %FORMFIELD{"priority" topic="%INCLUDINGTOPIC%" format="<nop>$value"}% |
+| *Author* | %FORMFIELD{"author" topic="%INCLUDINGTOPIC%" format="<nop>$value"}% |
+| *Link* | %FORMFIELD{"link" topic="%INCLUDINGTOPIC%" format="$value"}% |
+| *ID* | %FORMFIELD{"id" topic="%INCLUDINGTOPIC%" format="<nop>$value"}% |
+| *Updated* | %FORMFIELD{"updated" topic="%INCLUDINGTOPIC%" format="$value"}% |
+

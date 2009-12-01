@@ -1,0 +1,10 @@
+%META:TOPICINFO{author="IanKluft" date="1253495934" format="1.1" version="1.5"}%
+%META:TOPICPARENT{name="WebFetchConfig"}%
+| *Name* | *Type* | *Size* | *Values* | *Tooltip message* |
+| IndexTitle | text | 70 | | Title for TWiki tables and headings |
+| priority | select | 10 | Unknown, Urgent, High, Medium, Low, Rejected, Canceled | Priority assigned to this item |
+| id | text | 120 | | Unique identifier for this entry |
+| updated | text | 30 | | Date and time updated |
+| title | text | 250 | | Entry title |
+| author | text | 120 | | Author |
+| link | text | 512 | | Link URL |

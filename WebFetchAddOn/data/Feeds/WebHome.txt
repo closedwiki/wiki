@@ -1,0 +1,9 @@
+%META:TOPICINFO{author="PeterThoeny" date="1253687278" format="1.1" reprev="1.17" version="1.17"}%
+---+!! Feeds
+
+   * Feeds:
+      * TweetTwikiReport - Twitter feed on #twiki
+      * add links to your feeds here
+   * [[RawFeed][Raw feed]] - recent changes of all feeds
+   * WebFetchConfig - configure the [[http://webfetch.org/][WebFetch]] feed reader
+

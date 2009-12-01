@@ -1,0 +1,4 @@
+%META:TOPICINFO{author="PeterThoeny" date="1253771795" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="WebHome"}%
+---+ Twitter #twiki Feed
+%SEARCH{"META\:FORM.*Form" topic="TweetTwiki*" web="Feeds" scope="title" type="regex" nonoise="on" order="topic" limit="%URLPARAM{"limit" default="100"}%" reverse="on" format="| $percntPRIICON$formfield(priority)$percnt | [[Feeds.$topic][$formfield(IndexTitle)]], $formfield(updated) |"}%
