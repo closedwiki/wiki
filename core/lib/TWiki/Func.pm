@@ -1086,7 +1086,7 @@ earlier TWiki releases.
 
 *Tip* if you want, you can use this method to check your own access control types. For example, if you:
    * Set ALLOWTOPICSPIN = IncyWincy
-in =ThatWeb.ThisTopic=, then a call to =checkAccessPermissions('SPIN', 'IncyWincy', undef, 'ThisTopic', 'ThatWeb', undef)= will return =true=.
+in =ThatWeb.ThisTopic=, then a call to =checkAccessPermission('SPIN', 'IncyWincy', undef, 'ThisTopic', 'ThatWeb', undef)= will return =true=.
 
 *Since:* TWiki::Plugins::VERSION 1.000 (27 Feb 2001)
 
@@ -1629,7 +1629,7 @@ fully documented in the source code documentation shipped with the
 release, or can be inspected in the =lib/TWiki/Meta.pm= file.
 
 This method *ignores* topic access permissions. You should be careful to use
-=checkAccessPermissions= to ensure the current user has read access to the
+=checkAccessPermission= to ensure the current user has read access to the
 topic.
 
 *Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
