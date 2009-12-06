@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1258790911" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1260079356" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and Filetype icons
 
 This is the TWiki icon library. The graphics can be used in topics and by web applications. 
@@ -48,6 +48,7 @@ Other usage: [[%TOPIC%#Usage_extended][see below]].
 | <img src="%ATTACHURLPATH%/help.gif" alt="Help" title="Help" />  | =help.gif= | Help | =%<nop>H%=, =%<nop>ICON{help}%= |
 | <img src="%ATTACHURLPATH%/hourglass.gif" alt="Hour glass (clock)" title="Hour glass (clock)" />  | =hourglass.gif= | Hour glass (clock) | =%<nop>ICON{hourglass}%= |
 | <img src="%ATTACHURLPATH%/info.gif" alt="Information" title="Information" /> | =info.gif= | Info | =%<nop>ICON{info}%= |
+| <img src="%ATTACHURLPATH%/linkedin.gif" alt="LinkedIn" title="LinkedIn" /> | =linkedin.gif= | !LinkedIn | =%<nop>ICON{linkedin}%= |
 | <img src="%ATTACHURLPATH%/luggage.gif" alt="Luggage" title="Luggage" />  | =luggage.gif= | Luggage | =%<nop>ICON{luggage}%= |
 | <img src="%ATTACHURLPATH%/map.gif" alt="Map" title="Map" />  | =map.gif= | Map | =%<nop>ICON{map}%= |
 | <img src="%ATTACHURLPATH%/megaphone.gif" alt="Megaphone" title="Megaphone" />  | =megaphone.gif= | Megaphone | =%<nop>ICON{megaphone}%= |
@@ -154,9 +155,10 @@ Other usage: [[%TOPIC%#Usage_extended][see below]].
 | <img src="%ATTACHURLPATH%/recentchanges.gif" alt="Recent changes" title="Recent changes" />  | =recentchanges.gif= | Recent changes | =%<nop>ICON{recentchanges}%= |
 | <img src="%ATTACHURLPATH%/mail.gif" alt="Mail" title="Mail" />  | =mail.gif= | Mail | =%<nop>ICON{mail}%= |
 | <img src="%ATTACHURLPATH%/notify.gif" alt="Notify" title="Notify" />  | =notify.gif= | Notify | =%<nop>ICON{notify}%= |
-| <img src="%ATTACHURLPATH%/feed.gif" alt="Feed" title="Feed" />  | =feed.gif= | Feed | =%<nop>ICON{feed}%= |
+| <img src="%ATTACHURLPATH%/feed.gif" alt="Feed" title="Feed" />  | =feed.gif= | RSS feed, rounded corners | =%<nop>ICON{feed}%= |
+| <img src="%ATTACHURLPATH%/rss.gif" alt="RSS" title="RSS" />  | =rss.gif= | RSS feed, gray box | =%<nop>ICON{rss}%= |
 | <img src="%ATTACHURLPATH%/rss-feed.gif" alt="RSS feed" title="RSS feed" />  | =rss-feed.gif= | RSS feed, 36x14 | =&lt;img src="%<nop>ICONURL{rss-feed}%" width="36" height="14" alt="RSS feed" border="0" /&gt;= |
-| <img src="%ATTACHURLPATH%/rss-small.gif" alt="RSS feed" title="RSS feed" />  | =rss-small.gif= | RSS feed | =%<nop>ICON{rss-small}%= |
+| <img src="%ATTACHURLPATH%/rss-small.gif" alt="RSS feed" title="RSS feed" />  | =rss-small.gif= | RSS feed, text | =%<nop>ICON{rss-small}%= |
 | <img src="%ATTACHURLPATH%/xml-feed.gif" alt="XML feed" title="XML feed" />  | =xml-feed.gif= | XML feed, 36x14 | =&lt;img src="%<nop>ICONURL{xml-feed}%" width="36" height="13" alt="XML feed" border="0" /&gt;= |
 | <img src="%ATTACHURLPATH%/xml-small.gif" alt="XML feed" title="XML feed" />  | =xml-small.gif= | XML feed | =%<nop>ICON{xml-small}%= |
 
@@ -533,6 +535,7 @@ __Contributors:__ Most icons on this page were originally designed by TWiki:Main
 %META:FILEATTACHMENT{name="line_ulr.gif" attr="" comment="" date="1169565034" path="line_ulr.gif" size="112" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="line_ur_gray.gif" attr="" comment="" date="1169565034" path="line_ur_gray.gif" size="383" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="line_ur.gif" attr="" comment="" date="1169565034" path="line_ur.gif" size="111" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="linkedin.gif" attr="" comment="" date="1260079118" path="linkedin.gif" size="372" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="lock.gif" attr="" comment="" date="1169565034" path="lock.gif" size="221" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="lockfolder.gif" attr="" comment="" date="1169565034" path="lockfolder.gif" size="213" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="lockfoldergray.gif" attr="" comment="" date="1169565034" path="lockfoldergray.gif" size="156" user="TWikiContributor" version=""}%
@@ -592,6 +595,7 @@ __Contributors:__ Most icons on this page were originally designed by TWiki:Main
 %META:FILEATTACHMENT{name="reg.gif" attr="" comment="" date="1169565034" path="reg.gif" size="377" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="rfc.gif" attr="" comment="" date="1169565034" path="rfc.gif" size="369" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="right.gif" attr="" comment="" date="1169565034" path="right.gif" size="194" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="rss.gif" attr="" comment="" date="1260079118" path="rss.gif" size="394" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="rss-feed.gif" attr="" comment="" date="1169565034" path="rss-feed.gif" size="227" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="rss-small.gif" attr="" comment="" date="1169565034" path="rss-small.gif" size="122" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="save.gif" attr="" comment="" date="1169565034" path="save.gif" size="222" user="TWikiContributor" version=""}%
