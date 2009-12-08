@@ -29,8 +29,8 @@ Welcome to <nop>%WIKITOOLNAME%! This is a TWikiSite (pronounced _twee-kee site_)
 
 ---+++ Editing a page
 
-   * click ==Edit== at the bottom of any topic and make your changes
-   * click ==[&nbsp;Save&nbsp;Changes&nbsp;]== You've now edited the topic!
+   * Click ==Edit== at the top or bottom of any topic and make your changes
+   * Click ==Save== - you've now updated the topic!
 
 ---+++ Creating a page
 
