@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1212529094" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1260299681" format="1.1" version="$Rev$"}%
 ---+!! Welcome, %WIKIUSERNAME%!
 
 Welcome to <nop>%WIKITOOLNAME%! This is a TWikiSite (pronounced _twee-kee site_), a meeting place to work on common interests. Anyone can contribute using any web browser. <nop>%WIKITOOLNAME% looks like a normal web site... except that it encourages contribution and *editing* of pages, questions, answers, comments and updates.
@@ -10,32 +10,31 @@ Welcome to <nop>%WIKITOOLNAME%! This is a TWikiSite (pronounced _twee-kee site_)
 ---++ What's in a TWiki?
 
    * *Webs:* A TWikiSite is divided into webs, each one represents an area for collaboration. This site has the following webs: %WEBLIST{ format="[[$name.%HOMETOPIC%][$name]]" separator=", " }%
-   * *Topics:* Each web is made up of hyperlinked [[TWikiTopics][topics]] that appear in your browser.
+   * *Topics:* Each web is made up of hyperlinked [[TWikiTopics][topics]] (wiki pages) that appear in your browser.
 
 ---++ Some things to do
 
    * *Browse.* This is a site like other sites. Read and follow interesting links.
-   * *Write.* Speak your mind! From your browser you can change or add to anything you see in a TWiki topic. Use regular text or TWikiShorthand.
+   * *Write.* Speak your mind! From your browser you can change or add to anything you see in a TWiki topic. Modify content with an easy to use WYSIWYG editor.
    * *Experiment.*  Edit your personal page or visit the Sandbox.%HOMETOPIC% web.
    * *Organize.* You can learn to use TWikiForms and [[FormattedSearch]]es to include topic information - for example, classify pages by subject, status, or date.
    * *Learn more.* Some good places to start:
       * TWikiTutorial is a 20-minute tour of TWiki essentials. 
       * ATasteOfTWiki is a short introduction training course for beginners. 
       * WikiReferences links to selected articles and books about wiki technology and online collaboration.
-      * WikiSyntax - simple syntax for edits
+      * WikiSyntax - simple wiki syntax for those using raw edit instead of WYSIWYG
       * GoodStyle - recommendations for edits
-
  
 ---++ Some basics
 
----+++ Editing a page:
+---+++ Editing a page
+
    * click ==Edit== at the bottom of any topic and make your changes
-   * click ==[&nbsp;Preview&nbsp;Changes&nbsp;]== at the bottom to verify the topic (use your brower's ==Back== button if necessary)
    * click ==[&nbsp;Save&nbsp;Changes&nbsp;]== You've now edited the topic!
 
 ---+++ Creating a page
 
-See a question mark link "<u>?</u>" behind a !WikiWord? That means that there's no topic yet for that Sandbox.NewWikiWord%CALC{$INT($RAND(100000))}%. If you want to create a topic for that !WikiWord, just click on the question mark. The topic will be created and you will be in the editor window.
+See a red-colored WikiWord? That means that there's no topic yet for that Sandbox.NewWikiWord%CALC{$INT($RAND(100000))}%. If you want to create a page with that name, just click on the red-link. You will be in the editor window of that topic, and the topic will be created when you save your changes.
  
 ---+++ Viewing the history of a topic
 
@@ -44,4 +43,3 @@ Click ==History== at the bottom of a topic
 ---+++ Attaching files
 
 Click ==Attach== to upload and attach any type of file.
-
