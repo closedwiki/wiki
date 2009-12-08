@@ -42,8 +42,8 @@ use Assert;
 
 use vars qw( $reww );
 
-require TWiki::Plugins::WysiwygPlugin::Constants;
-require TWiki::Plugins::WysiwygPlugin::HTML2TML::WC;
+use TWiki::Plugins::WysiwygPlugin::Constants;
+use TWiki::Plugins::WysiwygPlugin::HTML2TML::WC;
 
 =pod
 

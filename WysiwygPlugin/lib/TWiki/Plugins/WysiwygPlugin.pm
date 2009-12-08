@@ -44,9 +44,9 @@ use strict;
 use Assert;
 use Encode;
 
-require TWiki::Func;    # The plugins API
-require TWiki::Plugins; # For the API version
-require TWiki::Plugins::WysiwygPlugin::Constants;
+use TWiki::Func;    # The plugins API
+use TWiki::Plugins; # For the API version
+use TWiki::Plugins::WysiwygPlugin::Constants;
 
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $SECRET_ID $NO_PREFS_IN_TOPIC );
 use vars qw( $html2tml $tml2html $recursionBlock $imgMap );

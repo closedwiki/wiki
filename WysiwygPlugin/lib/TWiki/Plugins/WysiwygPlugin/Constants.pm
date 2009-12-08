@@ -1,6 +1,4 @@
-#package TWiki::Plugins::WysiwygPlugin::Constants;
-# Use s simpler-named namespace for constants to improve code readability
-package WC;
+package TWiki::Plugins::WysiwygPlugin::Constants;
 
 use strict;
 
@@ -19,12 +17,11 @@ $STARTWW  = qr/^|(?<=[ \t\n\(\!])/om;
 $ENDWW    = qr/$|(?=[ \t\n\,\.\;\:\!\?\)])/om;
 $PROTOCOL = qr/^(file|ftp|gopher|https?|irc|news|nntp|telnet|mailto):/;
 
-our (%KNOWN_COLOUR);
 
 # Colours with colour settings in TWikiPreferences. WTF does TWiki see
 # fit to *redefine* the standard colors? e.g. ORANGE below is *not* orange.
 # For goodness sakes!
-%KNOWN_COLOUR = (
+our %KNOWN_COLOUR = (
     BLACK => 'BLACK',
     '#000000' => 'BLACK',
     MAROON => 'MAROON',
@@ -300,5 +297,10 @@ sub chCodes {
     }
     return $s;
 }
+
+# Use s simpler-named namespace for constants to improve code readability
+no strict 'refs';
+*{'WC::'} = \*{'TWiki::Plugins::WysiwygPlugin::Constants::'};
+
 
 1;
