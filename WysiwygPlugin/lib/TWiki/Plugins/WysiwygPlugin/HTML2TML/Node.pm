@@ -404,6 +404,7 @@ sub _collapse {
     }
 }
 
+
 # the actual generate function. rootGenerate is only applied to the root node.
 sub generate {
     my( $this, $options ) = @_;
@@ -445,6 +446,10 @@ sub generate {
     # make the names of the function versions
     $tag =~ s/!//; # DOCTYPE
     my $tmlFn = '_handle'.uc($tag);
+
+    $this->_moveClassToSpan('WYSIWYG_TT');
+    $this->_moveClassToSpan('WYSIWYG_COLOR') if lc( $this->{tag} ) ne 'font';
+
 
     # See if we have a TML translation function for this tag
     # the translation functions will work out the rendering
@@ -1322,6 +1327,25 @@ sub _handleSPAN {
         return _emphasis( @_, '=' );
     }
 
+  # If we have WYSIWYG_COLOR and the colour can be mapped, then convert
+    # to a macro.
+    if ( _removeClass( \%atts, 'WYSIWYG_COLOR' ) ) {
+        my $colour;
+        if ( $atts{style} ) {
+            my $style = $atts{style};
+            if ( $style =~ s/(^|\s|;)color\s*:\s*(#?\w+)\s*(;|$)// ) {
+                $colour = $2;
+            }
+        }
+        my $percentColour = $WC::KNOWN_COLOUR{ uc($colour) };
+
+        if ( defined $percentColour ) {
+            my ( $f, $kids ) = $this->_flatten($options);
+            return ( $f, '%' . $percentColour . '%' . $kids . '%ENDCOLOR%' );
+        }
+    }
+
+
     # Remove all other classes
     delete $atts{class};
 
@@ -1339,6 +1363,34 @@ sub _handleSPAN {
     # otherwise use the default generator.
     return (0, undef);
 }
+
+# The class in node, insert a new "span" node with that class between this node and all of this node's children.
+# helps with class like WYSIWYG_CLASS 
+
+sub _moveClassToSpan {
+    my $this  = shift;
+    my $class = shift;
+
+    if (    $this->{tag}
+        and lc( $this->{tag} ) ne 'span'
+        and $this->_removeClass($class) )
+    {
+
+        my %new_attrs = ( class => $class );
+        $new_attrs{style} = $this->{attrs}->{style}
+          if exists $this->{attrs}->{style};
+        my $newspan =
+          new TWiki::Plugins::WysiwygPlugin::HTML2TML::Node( $this->{context},
+            'span', \%new_attrs );
+        my $kid = $this->{head};
+        while ($kid) {
+            $newspan->addChild($kid);
+            $kid = $kid->{next};
+        }
+        $this->{head} = $this->{tail} = $newspan;
+    }
+}
+
 
 # STRIKE
 
