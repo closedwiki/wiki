@@ -66,10 +66,6 @@
 use strict;
 use warnings;
 
-BEGIN {
-unshift @INC, '/var/www/trunk/core/lib';
-unshift @INC, '/var/www/trunk/core/lib/CPAN/lib';
-}
 # This is absolutely essential for error reporting. We load it using
 # an eval so we can report the problem.
 eval "use CGI::Carp qw(fatalsToBrowser)";

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="BaseUserMapping_333" date="1259066708" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1244160963" format="1.1" version="$Rev$"}%
 ---+ IF Statements
 
 The =%<nop>IF%= construct gives TWiki the power to include content in topics based on the value of simple expressions.
@@ -68,7 +68,7 @@ You %IF{"'Sandbox' allows 'change'" then="can" else="cannot"}% change Sandbox we
 </verbatim>
 expands to: %BR%
 You %IF{"'%TOPIC%' allows 'change'" then="can" else="cannot"}% change this topic.
-You %IF{"'Sandbox.TestTopicInSandbox' allows 'change'" then="can" else="cannot"}% change Sandbox.TestTopicInSandbox.
+You %IF{"'Sandbox.TestTopic' allows 'change'" then="can" else="cannot"}% change Sandbox.TestTopic.
 You %IF{"'Sandbox' allows 'change'" then="can" else="cannot"}% change Sandbox web
 
 9. Check topic existance
@@ -77,8 +77,8 @@ Topic Sandbox.TestTopic %IF{"istopic 'Sandbox.TestTopic'" then="exists" else="do
 Web Sandbox.TestTopic %IF{"isweb 'Sandbox'" then="exists" else="does not exist"}%
 </verbatim>
 expands to: %BR%
-Topic Sandbox.TestTopicInSandbox %IF{"istopic 'Sandbox.TestTopicInSandbox'" then="exists" else="does not exist"}%
-Web Sandbox.TestTopicInSandbox %IF{"isweb 'Sandbox'" then="exists" else="does not exist"}%
+Topic Sandbox.TestTopic %IF{"istopic 'Sandbox.TestTopic'" then="exists" else="does not exist"}%
+Web Sandbox.TestTopic %IF{"isweb 'Sandbox'" then="exists" else="does not exist"}%
 
 10. Group membership
 <verbatim>
