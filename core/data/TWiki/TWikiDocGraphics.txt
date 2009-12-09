@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1260079356" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1260336202" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and Filetype icons
 
 This is the TWiki icon library. The graphics can be used in topics and by web applications. 
@@ -31,6 +31,8 @@ Other usage: [[%TOPIC%#Usage_extended][see below]].
 | <img src="%ATTACHURLPATH%/book.gif" alt="Book" title="Book" />  | =book.gif= | Book | =%<nop>ICON{book}%= |
 | <img src="%ATTACHURLPATH%/bubble.gif" alt="Speech bubble" title="Speech bubble" />  | =bubble.gif= | Speech bubble | =%<nop>ICON{bubble}%= |
 | <img src="%ATTACHURLPATH%/bug.gif" alt="Bug" title="Bug" />  | =bug.gif= | Bug | =%<nop>ICON{bug}%= |
+| <img src="%ATTACHURLPATH%/chart-bar.gif" alt="Bar chart" title="Bar chart" />  | =chart-bar.gif= | Bar chart | =%<nop>ICON{chart-bar}%= |
+| <img src="%ATTACHURLPATH%/chart-pie.gif" alt="Pie chart" title="Pie chart" />  | =chart-pie.gif= | Pie chart | =%<nop>ICON{chart-pie}%= |
 | <img src="%ATTACHURLPATH%/comments.gif" alt="Comments" title="Comments" />  | =comments.gif= | Comments | =%<nop>ICON{comments}%= |
 | <img src="%ATTACHURLPATH%/connections.gif" alt="Connections" title="Connections" />  | =connections.gif= | Connections | =%<nop>ICON{connections}%= |
 | <img src="%ATTACHURLPATH%/database.gif" alt="Database" title="Database" />  | =database.gif= | Database | =%<nop>ICON{database}%= |
@@ -48,9 +50,11 @@ Other usage: [[%TOPIC%#Usage_extended][see below]].
 | <img src="%ATTACHURLPATH%/help.gif" alt="Help" title="Help" />  | =help.gif= | Help | =%<nop>H%=, =%<nop>ICON{help}%= |
 | <img src="%ATTACHURLPATH%/hourglass.gif" alt="Hour glass (clock)" title="Hour glass (clock)" />  | =hourglass.gif= | Hour glass (clock) | =%<nop>ICON{hourglass}%= |
 | <img src="%ATTACHURLPATH%/info.gif" alt="Information" title="Information" /> | =info.gif= | Info | =%<nop>ICON{info}%= |
+| <img src="%ATTACHURLPATH%/legal.gif" alt="Legal" title="Legal" />  | =legal.gif= | Legal | =%<nop>ICON{legal}%= |
 | <img src="%ATTACHURLPATH%/linkedin.gif" alt="LinkedIn" title="LinkedIn" /> | =linkedin.gif= | !LinkedIn | =%<nop>ICON{linkedin}%= |
 | <img src="%ATTACHURLPATH%/luggage.gif" alt="Luggage" title="Luggage" />  | =luggage.gif= | Luggage | =%<nop>ICON{luggage}%= |
 | <img src="%ATTACHURLPATH%/map.gif" alt="Map" title="Map" />  | =map.gif= | Map | =%<nop>ICON{map}%= |
+| <img src="%ATTACHURLPATH%/mechanics.gif" alt="Mechanics" title="Mechanics" />  | =mechanics.gif= | Mechanics | =%<nop>ICON{mechanics}%= |
 | <img src="%ATTACHURLPATH%/megaphone.gif" alt="Megaphone" title="Megaphone" />  | =megaphone.gif= | Megaphone | =%<nop>ICON{megaphone}%= |
 | <img src="%ATTACHURLPATH%/mobile.gif" alt="Mobile" title="Mobile" />  | =mobile.gif= | Mobile | =%<nop>ICON{mobile}%= |
 | <img src="%ATTACHURLPATH%/more.gif" alt="Read more" title="Read more" />  | =more.gif= | Read more | =%<nop>ICON{more}%= |
@@ -75,7 +79,9 @@ Other usage: [[%TOPIC%#Usage_extended][see below]].
 | <img src="%ATTACHURLPATH%/sort.gif" alt="Sort" title="Sort" />  | =sort.gif= | Sort | =%<nop>ICON{sort}%= |
 | <img src="%ATTACHURLPATH%/stargold.gif" alt="Gold star, favorites" title="Gold star, favorites" />  | =stargold.gif= | Gold star, favorites | =%<nop>ICON{stargold}%= |
 | <img src="%ATTACHURLPATH%/starred.gif" alt="Red star, highlight" title="Red star, highlight" />  | =starred.gif= | Red star, highlight | =%<nop>S%=, =%<nop>ICON{starred}%= |
+| <img src="%ATTACHURLPATH%/statistics.gif" alt="Statistics" title="Statistics" />  | =statistics.gif= | Statistics | =%<nop>ICON{statistics}%= |
 | <img src="%ATTACHURLPATH%/stop.gif" alt="Stop" title="Stop" />  | =stop.gif= | Stop | =%<nop>ICON{stop}%= |
+| <img src="%ATTACHURLPATH%/support.gif" alt="Support" title="Support" />  | =support.gif= | Support | =%<nop>ICON{support}%= |
 | <img src="%ATTACHURLPATH%/target.gif" alt="Target" title="Target" />  | =target.gif= | Target | =%<nop>ICON{target}%= |
 | <img src="%ATTACHURLPATH%/target-blue.gif" alt="Target - blue" title="Target - blue" />  | =target-blue.gif= | Target - blue | =%<nop>ICON{target-blue}%= |
 | <img src="%ATTACHURLPATH%/target-gray.gif" alt="Target - gray" title="Target - gray" />  | =target-gray.gif= | Target - gray | =%<nop>ICON{target-gray}%= |
@@ -400,7 +406,8 @@ and that will get rendered as: %ICONURL{"toggleopen"}%
 
 __Related Topics:__ TWikiSkins, DeveloperDocumentationCategory, AdminDocumentationCategory
 
-__Contributors:__ Most icons on this page were originally designed by TWiki:Main.PeterThoeny. Many icons were recreated by TWiki:Main.ArthurClemens.
+__Contributors:__ Most icons on this page are designed by TWiki:Main.PeterThoeny. Many icons were recreated by TWiki:Main.ArthurClemens.
+
 
 %META:FILEATTACHMENT{name="addon.gif" attr="" comment="" date="1169565034" path="addon.gif" size="370" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="air.gif" attr="" comment="" date="1169565034" path="air.gif" size="356" user="TWikiContributor" version=""}%
@@ -427,13 +434,15 @@ __Contributors:__ Most icons on this page were originally designed by TWiki:Main
 %META:FILEATTACHMENT{name="bmp.gif" attr="" comment="" date="1169565034" path="bmp.gif" size="378" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="book.gif" attr="" comment="" date="1169565034" path="book.gif" size="361" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="bubble.gif" attr="" comment="" date="1169565034" path="bubble.gif" size="342" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="bug.gif" attr="" comment="" date="1233298661" path="bug.gif" size="979" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="bug.gif" attr="" comment="" date="1260335693" path="bug.gif" size="966" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="building.gif" attr="" comment="" date="1169565034" path="building.gif" size="133" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="buildings.gif" attr="" comment="" date="1169565034" path="buildings.gif" size="167" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="c.gif" attr="" comment="" date="1169565034" path="c.gif" size="372" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="cachetopic.gif" attr="" comment="" date="1169565034" path="cachetopic.gif" size="163" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="changes-small.gif" attr="" comment="" date="1169565034" path="changes-small.gif" size="86" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="changes.gif" attr="" comment="" date="1169565034" path="changes.gif" size="118" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="chart-bar.gif" attr="" comment="" date="1260335693" path="chart-bar.gif" size="970" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="chart-pie.gif" attr="" comment="" date="1260335693" path="chart-pie.gif" size="963" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="checked.gif" attr="" comment="" date="1169565034" path="checked.gif" size="118" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="choice-cancel.gif" attr="" comment="" date="1169565034" path="choice-cancel.gif" size="347" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="choice-no.gif" attr="" comment="" date="1169565034" path="choice-no.gif" size="166" user="TWikiContributor" version=""}%
@@ -523,6 +532,7 @@ __Contributors:__ Most icons on this page were originally designed by TWiki:Main
 %META:FILEATTACHMENT{name="led-red.gif" attr="" comment="" date="1169565034" path="led-red.gif" size="943" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="led-yellow.gif" attr="" comment="" date="1169565034" path="led-yellow.gif" size="944" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="left.gif" attr="" comment="" date="1169565034" path="left.gif" size="195" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="legal.gif" attr="" comment="" date="1260335693" path="legal.gif" size="1025" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="line_ld.gif" attr="" comment="" date="1169565034" path="line_ld.gif" size="106" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="line_lr.gif" attr="" comment="" date="1169565034" path="line_lr.gif" size="105" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="line_lrd.gif" attr="" comment="" date="1169565034" path="line_lrd.gif" size="111" user="TWikiContributor" version=""}%
@@ -546,6 +556,7 @@ __Contributors:__ Most icons on this page were originally designed by TWiki:Main
 %META:FILEATTACHMENT{name="mail.gif" attr="" comment="" date="1169565034" path="mail.gif" size="224" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="map.gif" attr="" comment="" date="1181928995" path="map.gif" size="932" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="mdb.gif" attr="" comment="" date="1169565034" path="mdb.gif" size="385" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="mechanics.gif" attr="" comment="" date="1260335693" path="mechanics.gif" size="970" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="megaphone.gif" attr="" comment="" date="1196729838" path="megaphone.gif" size="995" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="minus.gif" attr="" comment="" date="1169565034" path="minus.gif" size="83" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="mobile.gif" attr="" comment="" date="1193349525" path="mobile.gif" size="333" user="TWikiContributor" version=""}%
@@ -614,6 +625,7 @@ __Contributors:__ Most icons on this page were originally designed by TWiki:Main
 %META:FILEATTACHMENT{name="starred.gif" attr="" comment="" date="1169565034" path="starred.gif" size="226" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="statistics.gif" attr="" comment="" date="1169565034" path="statistics.gif" size="118" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="stop.gif" attr="" comment="" date="1169565034" path="stop.gif" size="159" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="support.gif" attr="" comment="" date="1260335693" path="support.gif" size="1035" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="svg.gif" attr="" comment="" date="1239336511" path="svg.gif" size="406" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="swf.gif" attr="" comment="" date="1169565034" path="swf.gif" size="380" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="table.gif" attr="" comment="" date="1193349525" path="table.gif" size="136" user="TWikiContributor" version=""}%
