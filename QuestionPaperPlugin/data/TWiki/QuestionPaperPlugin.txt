@@ -1,0 +1,72 @@
+%META:TOPICINFO{author="TWikiContributor" date="1260333523" format="1.1" version="$Rev$"}%
+---++!! <nop>QuestionPaperPlugin
+
+This plugin can be useful for school teachers or parents. One can print the question paper/assignments using this plugin. 
+I have developed this plugin while helping my kids with home work/school assignments
+
+---++ Syntax 
+
+%<nop>QUESTIONPAPER{type="multiplechoice" question="In water, hydrogen and oxygen are present in the ratio of " 1="1:8" 2="2:1" 3="2:3" 4="1:2" questiontag="Question 1."}%
+
+%<nop>QUESTIONPAPER{type="multiplechoice" question="Mumbai is city in USA" 1="TRUE" 2="FALSE" }%
+
+%<nop>QUESTIONPAPER{type="multiplechoice" question="Which of following are means of communication?" 1="Telephone" 2="Television" 3="Email" 4="Internet" 5="Pizza"}%
+
+%<nop>QUESTIONPAPER{type="matching" question="Match the following:" A_1="One" A_2="Two" A_3="Three" B_1="2" B_2="3" B_3="1"}%
+
+*Q.* Fill in the Blanks
+   * %<nop>QUESTIONPAPER{type="fillblanks" question="My favourite movie is $blank because $blank" width="3"}%
+   * %<nop>QUESTIONPAPER{type="fillblanks" question="I like the food at <nop>McDonald because $blank " width="5"}%
+
+%<nop>QUESTIONPAPER{type="short" question="Write about your favourite game" lines="8" questiontag="Problem 4." answertag="Answer. "}%
+
+
+
+---++ Plugin Settings
+
+Plugin settings are generally stored as preferences variables but the current Plugin do not have any preference variable which affect the functionality.
+
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Define and print question paper/assignments, helpful for school teachers and parents
+
+   * Debug plugin
+      * Set DEBUG = 0
+
+
+---++ Plugin Installation Instructions
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server.
+
+   * Download the ZIP file from the Plugin Home (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+| *File:* | *Description:* |
+| ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+| ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * Configure the Plugin: 
+      * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
+      * Change the Plugin settings as needed
+
+
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.SopanShewale |
+|  Copyright: | © 2009-2010, TWiki:Main.SopanShewale |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2009-12-07 (V1.000) |
+|  Change History: | <!-- versions below in reverse order --> |
+|  2009-12-07: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+
