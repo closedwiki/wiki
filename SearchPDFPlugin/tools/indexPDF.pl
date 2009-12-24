@@ -28,131 +28,143 @@ use strict;
 
 BEGIN {
     require 'setlib.cfg';
-};
-
+}
 
 use TWiki;
 
 my $twiki = new TWiki();
 
 # check to see if SearchPDFPlugin is enabled before running
-die if (!$TWiki::cfg{Plugins}{SearchPDFPlugin}{Enabled});
+die if ( !$TWiki::cfg{Plugins}{SearchPDFPlugin}{Enabled} );
 
-my ($web, $topic, $path, $file, $text, $meta, $attachtext, $exit);
+my ( $web, $topic, $path, $file, $text, $meta, $attachtext, $exit );
 
-my $adminuser = $twiki->{users}->findUser( $twiki->{prefs}->getPreferencesValue("SEARCHPDFUSER"), 
-	$twiki->{prefs}->getPreferencesValue("SEARCHPDFUSERWEB"), 1 );
+my $adminuser =
+  $twiki->{users}
+  ->findUser( $twiki->{prefs}->getPreferencesValue("SEARCHPDFUSER"),
+    $twiki->{prefs}->getPreferencesValue("SEARCHPDFUSERWEB"), 1 );
 
-my $program = $TWiki::cfg{Plugins}{SearchPDFPlugin}{XPDFLocation} . ' %PDFFILE% %OUTPUT% '  || 'c:/TWiki/xpdf-3.02-win32/pdftotext.exe %PDFFILE% %OUTPUT% ';
+my $program =
+  $TWiki::cfg{Plugins}{SearchPDFPlugin}{XPDFLocation} . ' %PDFFILE% %OUTPUT% '
+  || 'c:/TWiki/xpdf-3.02-win32/pdftotext.exe %PDFFILE% %OUTPUT% ';
 
 $program =~ tr/"//;
 
-my $name = $twiki->{store}->getWorkArea("SearchPDFPlugin") . "/SearchPDF.txt";
-my $data = '';
+my $name  = $twiki->{store}->getWorkArea("SearchPDFPlugin") . "/SearchPDF.txt";
+my $data  = '';
 my $lease = '';
 open( IN_FILE, "<$name" ) || return '';
-local $/ = undef; # set to read to EOF
+local $/ = undef;    # set to read to EOF
 $data = <IN_FILE>;
-close( IN_FILE );
-$data = '' unless $data; # no undefined
-my @data = split( /\n/, $data);
-my $redodata = ''; #if there are problems adding text then add to redo file
-
+close(IN_FILE);
+$data = '' unless $data;    # no undefined
+my @data = split( /\n/, $data );
+my $redodata = '';    #if there are problems adding text then add to redo file
 
 foreach (@data) {
 
-	if (uc($_) eq "ALL" ) {
-	
-		# check for PDF in every web
+    if ( uc($_) eq "ALL" ) {
 
-		my $store = $twiki->{store};
-		foreach my $aweb ( $store->getListOfWebs()) {
-    			foreach my $atopic ( $store->getTopicNames( $aweb )) {
+        # check for PDF in every web
 
-				foreach my $topattach ( $store->getAttachmentList( $aweb, $atopic ) ) {
+        my $store = $twiki->{store};
+        foreach my $aweb ( $store->getListOfWebs() ) {
+            foreach my $atopic ( $store->getTopicNames($aweb) ) {
 
-					if ( $topattach =~ m\pdf$\ ) {
+                foreach
+                  my $topattach ( $store->getAttachmentList( $aweb, $atopic ) )
+                {
 
-						push( @data, "$aweb,,,$atopic,,,$topattach");
+                    if ( $topattach =~ m\pdf$\ ) {
 
-					}
-				}
-			
-			}
-		}
+                        push( @data, "$aweb,,,$atopic,,,$topattach" );
 
+                    }
+                }
 
-	} else {
-	
-		( $web, $topic, $file) = split( /,,,/, $_);
+            }
+        }
 
-		# build path to pub directory that contains pdf
+    }
+    else {
 
-		# call pdftotext function
+        ( $web, $topic, $file ) = split( /,,,/, $_ );
 
-		# read meta tags from topic in data directory
+        # build path to pub directory that contains pdf
 
-		# add ATTACH meta tag
+        # call pdftotext function
 
-		# save meta tags to topic in data directory
-	
-		# print( "IndexPDF( $web $topic $file) \n" );
+        # read meta tags from topic in data directory
 
-		# look for attach text in meta data
+        # add ATTACH meta tag
 
-		($meta, $text) = $twiki->{store}->readTopic(      undef, $web, $topic );
+        # save meta tags to topic in data directory
 
-		$attachtext = $meta->get( 'ATTACH', $file ) || '';
+        # print( "IndexPDF( $web $topic $file) \n" );
 
-		# check to see if the file is being editted
-		$lease = '';
-		$lease = $twiki->{store}->getLease( $web, $topic );
+        # look for attach text in meta data
 
-		if ( $lease) { # file is being editted do not process
-			$redodata .= "$web,,,$topic,,,$file\n";
-		} else {
-		 if ( $attachtext eq '' ) { 		# if no attachtext then generate it
+        ( $meta, $text ) = $twiki->{store}->readTopic( undef, $web, $topic );
 
-			# run pdftotext program
+        $attachtext = $meta->get( 'ATTACH', $file ) || '';
 
-			$path = $TWiki::cfg{PubDir} . "/$web/$topic/";
-			($attachtext, $exit ) = $twiki->{sandbox}->sysCommand( $program, PDFFILE => $path . $file, OUTPUT => "-" );
-			#sleep(15);
+        # check to see if the file is being editted
+        $lease = '';
+        $lease = $twiki->{store}->getLease( $web, $topic );
 
-			# clean up text (remove spaces and change to lowercase letters and numbers only)
+        if ($lease) {    # file is being editted do not process
+            $redodata .= "$web,,,$topic,,,$file\n";
+        }
+        else {
+            if ( $attachtext eq '' ) {    # if no attachtext then generate it
 
-			# use s/// operator to replace bad characters with spaces and then multiple spaces with a single space
+                # run pdftotext program
 
-			$attachtext = lc($attachtext);
-			
-			$attachtext =~ tr/\n/ /;
+                $path = $TWiki::cfg{PubDir} . "/$web/$topic/";
+                ( $attachtext, $exit ) = $twiki->{sandbox}->sysCommand(
+                    $program,
+                    PDFFILE => $path . $file,
+                    OUTPUT  => "-"
+                );
 
-			$attachtext =~ s/[^\w]/ /g;
+                #sleep(15);
 
-         		# replace white space by space
-         		$attachtext =~ s/\s+/ /g;
+# clean up text (remove spaces and change to lowercase letters and numbers only)
 
-			# remove non-word characters
-         		#$attachtext =~ tr/a-zA-Z0-9_ //cd;
-			
-			#print $attachtext;
+# use s/// operator to replace bad characters with spaces and then multiple spaces with a single space
 
-			# write meta data to topic file
+                $attachtext = lc($attachtext);
 
-			$meta->putKeyed( 'ATTACH',
-				{
-				name    => $file,
-				value    => $attachtext
-				});
+                $attachtext =~ tr/\n/ /;
 
-			$twiki->{store}->saveTopic($adminuser, $web, $topic, $text, $meta, { } );
+                $attachtext =~ s/[^\w]/ /g;
 
-		 }
+                # replace white space by space
+                $attachtext =~ s/\s+/ /g;
 
-		}
-		
+                # remove non-word characters
+                #$attachtext =~ tr/a-zA-Z0-9_ //cd;
 
-	}
+                #print $attachtext;
+
+                # write meta data to topic file
+
+                $meta->putKeyed(
+                    'ATTACH',
+                    {
+                        name  => $file,
+                        value => $attachtext
+                    }
+                );
+
+                $twiki->{store}
+                  ->saveTopic( $adminuser, $web, $topic, $text, $meta, {} );
+
+            }
+
+        }
+
+    }
 
 }
 
@@ -161,28 +173,25 @@ foreach (@data) {
 
 my $data2 = '';
 open( IN_FILE, "<$name" ) || return '';
-local $/ = undef; # set to read to EOF
+local $/ = undef;    # set to read to EOF
 $data2 = <IN_FILE>;
-close( IN_FILE );
-$data2 = '' unless $data2; # no undefined
+close(IN_FILE);
+$data2 = '' unless $data2;    # no undefined
 
-
-
-my @data2 = split( /\n/, $data2);
+my @data2 = split( /\n/, $data2 );
 
 open( OUT_FILE, ">$name" ) || return '';
 
 foreach (@data2) {
-	if (!$data=~/$_/) { # we haven't done that file
-		print OUT_FILE "$_\n"; # save record to work space file
-	}
+    if ( !$data =~ /$_/ ) {    # we haven't done that file
+        print OUT_FILE "$_\n";    # save record to work space file
+    }
 }
 
 # add any files that weren't processed due to lease issues
 if ($redodata) {
-print OUT_FILE $redodata;
+    print OUT_FILE $redodata;
 }
 
-close( OUT_FILE );
-
+close(OUT_FILE);
 

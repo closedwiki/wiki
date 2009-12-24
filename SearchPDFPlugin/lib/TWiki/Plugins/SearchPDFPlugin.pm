@@ -66,7 +66,8 @@ use strict;
 
 # $VERSION is referred to by TWiki, and is the only global variable that
 # *must* exist in this package.
-use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $suser $sweb $pluginName $NO_PREFS_IN_TOPIC );
+use vars
+  qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $suser $sweb $pluginName $NO_PREFS_IN_TOPIC );
 
 # This should always be $Rev: 12445$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -127,11 +128,12 @@ FOOBARSOMETHING. This avoids namespace issues.
 =cut
 
 sub initPlugin {
-    my( $topic, $web, $user, $installWeb ) = @_;
+    my ( $topic, $web, $user, $installWeb ) = @_;
 
     # check for Plugins.pm versions
-    if( $TWiki::Plugins::VERSION < 1.026 ) {
-        TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
+    if ( $TWiki::Plugins::VERSION < 1.026 ) {
+        TWiki::Func::writeWarning(
+            "Version mismatch between $pluginName and Plugins.pm");
         return 0;
     }
 
@@ -142,10 +144,12 @@ sub initPlugin {
     # $TWiki::cfg{Plugins}{EmptyPlugin}{ExampleSetting} = 1;
     # Then recover it like this. Always provide a default in case the
     # setting is not defined in LocalSite.cfg
-    my $pdftotextprogram = $TWiki::cfg{Plugins}{SearchPDFPlugin}{PDFtoTextProgram} || 'c:/xpdf/pdftotext.exe %PDFFILE% -';
+    my $pdftotextprogram =
+      $TWiki::cfg{Plugins}{SearchPDFPlugin}{PDFtoTextProgram}
+      || 'c:/xpdf/pdftotext.exe %PDFFILE% -';
 
     $debug = $TWiki::cfg{Plugins}{SearchPDFPlugin}{Debug} || 0;
-	
+
     $suser = $user;
 
     $sweb = $web;
@@ -172,33 +176,36 @@ __Since:__ TWiki::Plugins::VERSION = '1.110'
 =cut
 
 sub afterRenameHandler {
+
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $oldWeb, $oldTopic, $oldAttachment, $newWeb, $newTopic, $newAttachment ) = @_;
 
-    TWiki::Func::writeDebug( "- ${pluginName}::afterRenameHandler( " .
-                             "$_[0].$_[1] $_[2] -> $_[3].$_[4] $_[5] )" ) if $debug;
+    TWiki::Func::writeDebug( "- ${pluginName}::afterRenameHandler( "
+          . "$_[0].$_[1] $_[2] -> $_[3].$_[4] $_[5] )" )
+      if $debug;
 
-	my ( $oldWeb, $oldTopic, $oldAttachment, $newWeb, $newTopic, $newAttachment ) = @_;
+    my ( $oldWeb, $oldTopic, $oldAttachment, $newWeb, $newTopic,
+        $newAttachment ) = @_;
 
-	# Check to see if attachment was a PDF, variable is blank if no attachment changes
+# Check to see if attachment was a PDF, variable is blank if no attachment changes
 
-	if ( $oldAttachment =~ m\pdf$\ ) {
+    if ( $oldAttachment =~ m\pdf$\ ) {
 
-		# remove META tag from topic
+        # remove META tag from topic
 
-		$oldWeb = $sweb;
+        $oldWeb = $sweb;
 
-    		my ( $meta, $text ) = &TWiki::Func::readTopic( $oldWeb, $oldTopic );			
+        my ( $meta, $text ) = &TWiki::Func::readTopic( $oldWeb, $oldTopic );
 
-		# Remove file attachment data from old topic
+        # Remove file attachment data from old topic
 
-     		my $fileAttachment = $meta->get( 'ATTACH', $oldAttachment );
+        my $fileAttachment = $meta->get( 'ATTACH', $oldAttachment );
 
-     		$meta->remove( 'ATTACH', $oldAttachment );
-        		
-		TWiki::Func::saveTopic( $oldWeb, $oldTopic, $meta, $text );
+        $meta->remove( 'ATTACH', $oldAttachment );
 
-	}
+        TWiki::Func::saveTopic( $oldWeb, $oldTopic, $meta, $text );
+
+    }
 
 }
 
@@ -220,24 +227,34 @@ __Since:__ TWiki::Plugins::VERSION = '1.023'
 =cut
 
 sub afterAttachmentSaveHandler {
+
     # do not uncomment, use $_[0], $_[1]... instead
     ###   my( $attrHashRef, $topic, $web ) = @_;
-    TWiki::Func::writeDebug( "- ${pluginName}::afterAttachmentSaveHandler( $_[2].$_[1] )" ) if $debug;
+    TWiki::Func::writeDebug(
+        "- ${pluginName}::afterAttachmentSaveHandler( $_[2].$_[1] )")
+      if $debug;
 
-	my $Attachment = $_[0]->{attachment};
+    my $Attachment = $_[0]->{attachment};
 
-	if ( $Attachment =~ m\pdf$\ ) {
+    if ( $Attachment =~ m\pdf$\ ) {
 
-		# write update line to workarea file
-		my $filetext = TWiki::Func::readFile( TWiki::Func::getWorkArea(${pluginName}) . "/SearchPDF.txt" );
-		
-		TWiki::Func::writeDebug( "- ${pluginName}::afterAttachmentSaveHandler( " . TWiki::Func::getWorkArea(${pluginName}) . "/SearchPDF.txt )" ) if $debug;
-		
-		$filetext .= "$_[2],,,$_[1],,,$Attachment\n";
+        # write update line to workarea file
+        my $filetext =
+          TWiki::Func::readFile(
+            TWiki::Func::getWorkArea( ${pluginName} ) . "/SearchPDF.txt" );
 
-		TWiki::Func::saveFile( TWiki::Func::getWorkArea(${pluginName}) . "/SearchPDF.txt", $filetext );
+        TWiki::Func::writeDebug( "- ${pluginName}::afterAttachmentSaveHandler( "
+              . TWiki::Func::getWorkArea( ${pluginName} )
+              . "/SearchPDF.txt )" )
+          if $debug;
 
-	}
+        $filetext .= "$_[2],,,$_[1],,,$Attachment\n";
+
+        TWiki::Func::saveFile(
+            TWiki::Func::getWorkArea( ${pluginName} ) . "/SearchPDF.txt",
+            $filetext );
+
+    }
 }
 
 =pod
@@ -261,71 +278,70 @@ __Since:__ TWiki::Plugins::VERSION = '1.020'
 =cut
 
 sub IndexPDF {
+
     # no input variables
 
-    TWiki::Func::writeDebug( "- ${pluginName}::IndexPDF" ) if $debug;
+    TWiki::Func::writeDebug("- ${pluginName}::IndexPDF") if $debug;
 
-	my $filetext = TWiki::Func::readFile( TWiki::Func::getWorkArea(${pluginName}) . "/SearchPDF.txt" );
+    my $filetext =
+      TWiki::Func::readFile(
+        TWiki::Func::getWorkArea( ${pluginName} ) . "/SearchPDF.txt" );
 
-	foreach (split( /\n/, $filetext)) {
-		my( $web, $topic, $file) = split( /,,,/, $_);
+    foreach ( split( /\n/, $filetext ) ) {
+        my ( $web, $topic, $file ) = split( /,,,/, $_ );
 
-		TWiki::Func::writeDebug( "- ${pluginName}::IndexPDF( $web $topic $file) " ) if $debug;
+        TWiki::Func::writeDebug(
+            "- ${pluginName}::IndexPDF( $web $topic $file) ")
+          if $debug;
 
+    }
 
-	}
+    #	my $meta = $_[4];
 
+    #	my $changed = 0;
 
+    #	my @Attachments = $meta->find( 'FILEATTACHMENT' );
 
-#	my $meta = $_[4];
+    #	my $Attachment;
 
-#	my $changed = 0;
+    #	foreach $Attachment(@Attachments) {
 
-#	my @Attachments = $meta->find( 'FILEATTACHMENT' );
+    # Was attachment an PDF?
 
-#	my $Attachment;
+    #		my $Attachfile = $Attachment->{attachment};
 
-#	foreach $Attachment(@Attachments) {
+    #		if ( $Attachfile =~ m\pdf$\ ) {
 
-		# Was attachment an PDF?
-	
-#		my $Attachfile = $Attachment->{attachment};
-    		
-#		if ( $Attachfile =~ m\pdf$\ ) {
+    # look for attach text in meta data
 
-			# look for attach text in meta data
+    #			my $attachtext = $meta->get( 'ATTACH', $Attachfile ) || '';
 
-#			my $attachtext = $meta->get( 'ATTACH', $Attachfile ) || '';
+    # if no attachtext then generate it
 
-			# if no attachtext then generate it
+    #			if ( $attachtext eq '' ) {
 
-#			if ( $attachtext eq '' ) {
+    # run pdftotext program
+    #				$attachtext = 'Test text';
 
-				# run pdftotext program
-#				$attachtext = 'Test text';
+# clean up text (remove spaces and change to lowercase letters and numbers only)
 
+    # write meta data to topic file
 
-				# clean up text (remove spaces and change to lowercase letters and numbers only)
-
-
-				# write meta data to topic file
-
-
- #               		$meta->putKeyed( 'ATTACH',
-  #                          {
-   #                          name    => $Attachfile,
+    #               		$meta->putKeyed( 'ATTACH',
+    #                          {
+    #                          name    => $Attachfile,
     #                         value    => $attachtext
-     #                       });
+    #                       });
 
-#				$changed = 1;
+    #				$changed = 1;
 
-#			}
-		
-#		}
+    #			}
 
-#	}
+    #		}
 
-#	Twiki::Func::SaveTopic( $_[2], $_[1], $meta, $_[0] ) 	if ($changed == 1);
+    #	}
+
+    #	Twiki::Func::SaveTopic( $_[2], $_[1], $meta, $_[0] ) 	if ($changed == 1);
 
 }
 
