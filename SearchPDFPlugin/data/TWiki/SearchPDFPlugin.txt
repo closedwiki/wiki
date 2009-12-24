@@ -1,0 +1,68 @@
+%META:TOPICINFO{author="AndyBeardsall" date="1189025284" format="1.1" reprev="1.9" version="1.9"}%
+%META:TOPICPARENT{name="InstalledPlugins"}%
+---+!! <nop>%TOPIC%
+
+_<nop>SearchPDFPlugin allows the contents of attached PDF files to be included in searches.  This functionality is covered in other plugins (<nop>SearchEngineSwishEAddOn & <nop>SearchEnginePluceneAddOn) but these plugins depended on CPAN modules or programs that did not run on a windows server._
+
+%TOC%
+
+---++ How does it work? 
+
+This plugin requires an external program to extract text from PDF files and then stores the results in a META tag within the topic.&nbsp; There are three main components of this process: 
+
+*SearchPDFPlugin:* Handles the events&nbsp;related to attachments&nbsp;being added to&nbsp;or removed&nbsp;from topics.&nbsp; Checks to see if the attachment is a PDF and if the attachment is being removed it removes any META data associated with the attachment.&nbsp; If the attachment is being added then it writes an entry into the <nop>SearchPDF.txt file in the work area. 
+
+*SearchPDF.txt*: Tracks when new attachments have been added and need to be indexed.&nbsp; 
+   * If this file contains the word =ALL= on a single line then all topics are checked for PDF attachments.
+
+*indexPDF.pl*: Process the <nop>SearchPDF.txt file in the work area by calling the text extraction program to generate META data and saves the data in the appropriate topic. 
+
+---++ Plugin Installation Instructions 
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your root ($TWIKI_ROOT) directory. Content:  
+| *File:*|*Description:*|
+|==data/TWiki/SearchPDFPlugin.txt==|This page.|
+|==lib/TWiki/Plugins/SearchPDFPlugin.pm==|The plugin code.|
+|==pub/_work_areas/SearchPDFPlugin/SearchPDF.txt==|Work file that stores recently attached PDFs that need to be indexed (contains 'ALL' so the first time the script runs all topics with PDFs are indexed.|
+|==tools/indexPDF.pl==|Script that reads <nop>SearchPDF.txt file and adds META data to topics.|
+
+   * Create a new user <nop>TWikiSearchPDF that is a member of the <nop>TWikiAdminGroup (or edit the preferences below to select an account of your choice). 
+   * Download and install the XPDF program for extracting text from PDF files (http://www.foolabs.com/xpdf/download.html) 
+   * Edit the %MAINWEB%.TWikiPreferences for your site and add the following: 
+<verbatim>
+   * Search PDF plugin needs a user account in order to modify topics
+      * Set SEARCHPDFUSER = TWikiSearchPDF
+      * Set SEARCHPDFUSERWEB = Main  
+</verbatim>
+   * Add a line to !LocalSite.cfg that specifies the location and name of the XPDF program:
+      * $TWiki::cfg{Plugins}{SearchPDFPlugin}{XPDFLocation} = 'c:/Wiki/xpdf-3.02-win32/pdftotext.exe';
+   * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+
+---++ Plugin Info
+
+   * Set SHORTDESCRIPTION = Search attached PDF documents.
+
+|  Plugin Author: | TWiki:Main.AndyBeardsall |
+|  Copyright: | &copy; 2007, TWiki:Main.AndyBeardsall |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 5 Sept 2007 (V1.002) |
+|  Change History: | |
+|  08 Aug 2007: | Initial version |
+|  14 Aug 2007: | Moved xpdf location variable to !LocalSite.cfg, moved Plugin Prefs to Main.TWikiPreferences in Main|
+|  5 Sept 2007: | Added xpdf executable name to the location entry in !LocalSite.cfg and removed hard coded name from indexPDF.pl |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | [[http://www.foolabs.com/xpdf/download.html][xpdf]]|
+|  Perl Version: | 5.005 |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+
+-- TWiki:Main.AndyBeardsall - 08 Aug 2007
+
+
+
+%META:FILEATTACHMENT{name="SearchPDFPlugin.zip" attachment="SearchPDFPlugin.zip" attr="" comment="Plugin file package" date="1185547203" path="\\cbstemp\c$\twiki\SearchPDFPlugin.zip" size="9194" stream="\\cbstemp\c$\twiki\SearchPDFPlugin.zip" user="Main.AndyBeardsall" version="1"}%
