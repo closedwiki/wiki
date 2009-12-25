@@ -1,5 +1,4 @@
-#!c:/perl/bin/perl -w
-#
+#!/usr/bin/perl
 # TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2004 Wind River Systems Inc.
@@ -25,12 +24,15 @@
 # perl -I c:/twiki/bin c:/twiki/tools/indexPDF.pl
 
 use strict;
+use warnings;
 
 BEGIN {
     require 'setlib.cfg';
 }
 
 use TWiki;
+use TWiki::Func;
+use TWiki::Sandbox;
 
 my $twiki = new TWiki();
 
@@ -41,8 +43,8 @@ my ( $web, $topic, $path, $file, $text, $meta, $attachtext, $exit );
 
 my $adminuser =
   $twiki->{users}
-  ->findUser( $twiki->{prefs}->getPreferencesValue("SEARCHPDFUSER"),
-    $twiki->{prefs}->getPreferencesValue("SEARCHPDFUSERWEB"), 1 );
+  ->findUserByWikiName( $twiki->{prefs}->getPreferencesValue("SEARCHPDFUSER") )
+  || 'adminuser';
 
 my $program =
   $TWiki::cfg{Plugins}{SearchPDFPlugin}{XPDFLocation} . ' %PDFFILE% %OUTPUT% '
@@ -50,10 +52,11 @@ my $program =
 
 $program =~ tr/"//;
 
-my $name  = $twiki->{store}->getWorkArea("SearchPDFPlugin") . "/SearchPDF.txt";
+my $name  = TWiki::Func::getWorkArea("SearchPDFPlugin") . "/SearchPDF.txt";
 my $data  = '';
 my $lease = '';
-open( IN_FILE, "<$name" ) || return '';
+open( IN_FILE, "<$name" )
+  or die "Error: Not able to open $name in plugin working area\n";
 local $/ = undef;    # set to read to EOF
 $data = <IN_FILE>;
 close(IN_FILE);
@@ -68,8 +71,9 @@ foreach (@data) {
         # check for PDF in every web
 
         my $store = $twiki->{store};
-        foreach my $aweb ( $store->getListOfWebs() ) {
-            foreach my $atopic ( $store->getTopicNames($aweb) ) {
+
+        foreach my $aweb ( TWiki::Func::getListOfWebs('user') ) {
+            foreach my $atopic ( TWiki::Func::getTopicList($aweb) ) {
 
                 foreach
                   my $topattach ( $store->getAttachmentList( $aweb, $atopic ) )
@@ -100,7 +104,7 @@ foreach (@data) {
 
         # save meta tags to topic in data directory
 
-        # print( "IndexPDF( $web $topic $file) \n" );
+        print("IndexPDF( $web $topic $file) \n");
 
         # look for attach text in meta data
 
@@ -121,13 +125,14 @@ foreach (@data) {
                 # run pdftotext program
 
                 $path = $TWiki::cfg{PubDir} . "/$web/$topic/";
-                ( $attachtext, $exit ) = $twiki->{sandbox}->sysCommand(
+                ( $attachtext, $exit ) = $TWiki::sandbox->sysCommand(
                     $program,
                     PDFFILE => $path . $file,
                     OUTPUT  => "-"
                 );
 
-                #sleep(15);
+               # print $attachtext;
+               #sleep(15);
 
 # clean up text (remove spaces and change to lowercase letters and numbers only)
 
