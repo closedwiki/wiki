@@ -109,6 +109,7 @@ sub test_AUTOINC {
     });
     $query->path_info( '/' . $this->{test_web}.'.TestAutoAUTOINC00' );
     $this->{twiki}->finish();
+    $query->request_method('POST');
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     my %old;
     foreach my $t ($this->{twiki}->{store}->getTopicNames( $this->{test_web})) {
