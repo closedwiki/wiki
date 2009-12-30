@@ -117,7 +117,7 @@ HERE
     foreach my $var qw( DataDir DefaultUrlHost PubUrlPath
                         PubDir TemplateDir ScriptUrlPath LocalesDir ) {
         # NOT SET tells the checker to try and guess the value later on
-        $TWiki::cfg{$var} ||= 'NOT SET';
+        $TWiki::cfg{$var} = 'NOT SET' unless defined $TWiki::cfg{$var};
     }
 
     # Make %ENV safer for CGI
