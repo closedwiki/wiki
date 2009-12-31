@@ -385,7 +385,7 @@ Use any of the doc graphics defined in %CALC{$GET(icontopics)}%. The ICON variab
 
 | *Parameter:* | *Description:* | *Default:* |
 | ="name"= | Name of icon | required |
-| =format="..."= | Format of icon. Supported variables (with %ICON{person}% example): %BB% =$name= - name of icon (=person=) %BB% =$type= - type of icon (=gif=) %BB% =$filename= - icon filename (=person.gif=) %BB% =$web= - web where icon is defined (=TWiki=) %BB% =$topic= - topic where icon is defined (=TWikiDocGraphics=) %BB% =$description= - icon description (=Person=) %BB% =$width= - width of icon ('16') %BB% =$height= - height of icon ('16') %BB% =$img= - full img tag of icon (=&lt;img src="... /&gt;=) %BB% =$url= - URL of icon (=http://example.com/pub/TWiki/TWikiDocGraphics/person.gif=) %BB% =$urlpath= - URL path of icon (=/pub/TWiki/TWikiDocGraphics/person.gif=) | =format="$img"= |
+| =format="..."= | Format of icon. Supported variables (with %ICON{person}% =%<nop>ICON{"person"}%= example): %BB% =$name= - name of icon (=person=) %BB% =$type= - type of icon (=gif=) %BB% =$filename= - icon filename (=person.gif=) %BB% =$web= - web where icon is defined (=TWiki=) %BB% =$topic= - topic where icon is defined (=TWikiDocGraphics=) %BB% =$description= - icon description (=Person=) %BB% =$width= - width of icon ('16') %BB% =$height= - height of icon ('16') %BB% =$img= - full img tag of icon (=&lt;img src="... /&gt;=) %BB% =$url= - URL of icon (=http://example.com/pub/TWiki/TWikiDocGraphics/person.gif=) %BB% =$urlpath= - URL path of icon (=/pub/TWiki/TWikiDocGraphics/person.gif=) | =format="$img"= |
 | =default="else"= | Alternate icon if named icon is not defined | =default="$name"= |
 
 *Note:* For the icon name, only the file type portion is used if a full URL or file path is specified. For example, a pdf icon is shown for icon name =/home/sweet/home.pdf=.
@@ -431,9 +431,6 @@ To get rid of the underline under the space, write: %BR%
 Additional doc graphic images can be defined. Do not add them to this topic because the modifications will be lost on the next TWiki upgrade. Instead add them to %CALC{$IF($EXISTS(%USERSWEB%.SiteDocGraphics), $SET(usericontopic, [[%USERSWEB%.SiteDocGraphics]]), $SET(usericontopic, [[%SCRIPTURL{edit}%/%USERSWEB%/SiteDocGraphics?templatetopic=%SYSTEMWEB%.TWikiDocGraphicsTemplate;topicparent=none][%USERSWEB%.SiteDocGraphics]]))$GET(usericontopic)}%.
 
 __Note:__ Documentation graphics are defined in topics %CALC{$GET(icontopics)}%. This list is defined by the ICONTOPIC setting in [[%SYSTEMWEB%.TWikiPreferences]] and can be overloaded in [[%LOCALSITEPREFS%]].
-
-temp use:
-   * Set ICONTOPIC = TWiki.TWikiDocGraphics, %USERSWEB%.SiteDocGraphics, Main.ThirdIconTopic, Main.FourthIconTopic
 
 __Related Topics:__ VarICON, %CALC{$GET(icontopics)}%, TWikiDocGraphicsTemplate, TWikiSkins, DeveloperDocumentationCategory, AdminDocumentationCategory
 
