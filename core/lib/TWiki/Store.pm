@@ -897,6 +897,11 @@ sub saveTopic {
             $error?$error->{-text}:'', $meta );
     }
 
+    # FIXME: Better place/spec to call back TWiki internal after-save handlers:
+
+    # Remove icon cache if preferences changed on site level or web level
+    $this->{session}->cacheIconData( 'expire', $web, $topic );
+
     throw $error if $error;
 }
 

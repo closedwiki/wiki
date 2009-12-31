@@ -1182,53 +1182,214 @@ sub getPubUrl {
 
 =pod
 
----++ ObjectMethod getIconUrl( $absolute, $iconName ) -> $iconURL
+---++ ObjectMethod cacheIconData( $action )
 
-Map an icon name to a URL path.
+Cache icon data based on action:
+   * 'delete' - delete cache file
+   * 'read'   - read cache file
+   * 'expire' - expire (invalidate) cache if needed
+   * 'save'   - save cache file
 
 =cut
 
-sub getIconUrl {
-    my( $this, $absolute, $iconName ) = @_;
+sub cacheIconData {
+    my( $this, $action, $web, $topic ) = @_;
 
-    my $iconTopic = $this->{prefs}->getPreferencesValue( 'ICONTOPIC' );
-    my( $web, $topic) = $this->normalizeWebTopicName(
-        $this->{webName}, $iconTopic );
-    $iconName =~ s/^.*\.(.*?)$/$1/;
-    return $this->getPubUrl( $absolute, $web, $topic, $iconName.'.gif' );
+    my $cacheFile = $this->{store}->getWorkArea( 'VarICON' ) . '/icon_cache.txt';
+
+    if( $action eq 'save' ) {
+        if( open( FILE, ">$cacheFile" ) )  {
+            print FILE "# Cached icon data; do not edit. See TWiki.TWikiDocGraphics\n";
+            my %seen;
+            my %refs;
+            foreach my $icn (sort keys %{ $this->{_ICONDATA} } ) {
+                my $line = "$icn: ";
+                if( $seen{ $this->{_ICONDATA}{$icn}{name} } ) {
+                    $refs{$icn} = $seen{ $this->{_ICONDATA}{$icn}{name} };
+                } else {
+                    $seen{ $this->{_ICONDATA}{$icn}{name} } = $icn;
+                    $line .= "$this->{_ICONDATA}{$icn}{name}, "
+                           . "$this->{_ICONDATA}{$icn}{web}, "
+                           . "$this->{_ICONDATA}{$icn}{topic}, "
+                           . "$this->{_ICONDATA}{$icn}{type}, "
+                           . "$this->{_ICONDATA}{$icn}{width}, "
+                           . "$this->{_ICONDATA}{$icn}{height}, "
+                           . "$this->{_ICONDATA}{$icn}{description}";
+                    print FILE "$line\n";
+                }
+            }
+            # add hash aliases
+            foreach my $icn (sort keys %refs ) {
+                my $line = "$icn => $refs{$icn}";
+                print FILE "$line\n";
+            }
+            print FILE "# EOF\n";
+            close( FILE);
+        }
+
+    } elsif( $action eq 'read' ) {
+        if( -e $cacheFile && open( FILE, "<$cacheFile" ) ) {
+            local $_;
+            my $icn;
+            while( <FILE> ) {
+                if( /^([^\:]+)\: ([^,]+), ([^,]+), ([^,]+), ([^,]+), ([^,]+), ([^,]+), ([^\n\r]+)/ ) {
+                    # icon record as hash
+                    $icn->{$1} = {
+                        name => $2,
+                        web => $3,
+                        topic => $4,
+                        type => $5,
+                        width => $6,
+                        height => $7,
+                        description => $8
+                    };
+                } elsif( /^([^ ]+) \=> *([^\n\r]+)/ ) {
+                    # icon as alias
+                    $icn->{$1} = $icn->{$2};
+                }
+            }
+            close( FILE );
+            $this->{_ICONDATA} = $icn if( $icn );
+        }
+
+    } elsif( $action eq 'expire' ) {
+        # invoked by TWiki::Store::saveTopic after afterSaveHandler callback
+
+        if( $topic =~ /^(TWikiPreferences|WebPreferences)$/ ) {
+            # Remove icon cache if preferences changed on site level or web level
+            unlink( $cacheFile );
+
+        } else {
+            # Remove icon cache if any topic in the ICONTOPIC list changed
+            foreach my $iconTopic (split(/ *, */, $this->{prefs}->getPreferencesValue( 'ICONTOPIC' ))) {
+                my( $iWeb, $iTopic ) = $this->normalizeWebTopicName( $this->{webName}, $iconTopic );
+                if( ( $web eq $iWeb ) && ( $topic eq $iTopic ) ) {
+                    unlink( $cacheFile );
+                }
+            }
+        }
+
+    } elsif( $action eq 'delete' ) {
+        unlink( $cacheFile );
+
+    }
 }
 
 =pod
 
----++ ObjectMethod mapToIconFileName( $fileName, $default ) -> $fileName
+---++ ObjectMethod formatIcon( $iconName, $format, $default ) -> $icon
 
-Maps from a filename (or just the extension) to the name of the
-file that contains the image for that file type.
+Format an icon based on name and format parameter. The format parameter handles 
+these variables (with example):
+   * $name: Name of icon ('home')
+   * $type: Type of icon ('gif')
+   * $filename: Icon filename ('home.gif')
+   * $web: Web where icon is located ('TWiki')
+   * $topic: Topic where icon is located ('TWikiDocGraphics')
+   * $description: Icon description ('Home')
+   * $width: Width of icon ('16')
+   * $height: Height of icon ('16')
+   * $img: Full img tag of icon ('<img src="/pub/TWiki/TWikiDocGraphics/home.gif" ... />')
+   * $url: URL of icon ('http://example.com/pub/TWiki/TWikiDocGraphics/home.gif')
+   * $urlpath: URL path of icon ('/pub/TWiki/TWikiDocGraphics/home.gif')
+
+The optional default parameter specifies the icon name in case the icon is not defined. 
+Leave empty if you assume icon files exist in the default location.
 
 =cut
 
-sub mapToIconFileName {
-    my( $this, $fileName, $default ) = @_;
-	
-    my @bits = ( split( /\./, $fileName ) );
-    my $fileExt = lc $bits[$#bits];
+sub formatIcon {
+    my( $this, $iconName, $format, $default ) = @_;
 
-    unless( $this->{_ICONMAP} ) {
-        my $iconTopic = $this->{prefs}->getPreferencesValue( 'ICONTOPIC' );
-        my( $web, $topic) = $this->normalizeWebTopicName(
-            $this->{webName}, $iconTopic );
-        local $/ = undef;
-        try {
-            my $icons = $this->{store}->getAttachmentStream(
-                undef, $web, $topic, '_filetypes.txt' );
-            %{$this->{_ICONMAP}} = split( /\s+/, <$icons> );
-            close( $icons );
-        } catch Error::Simple with {
-            %{$this->{_ICONMAP}} = ();
-        };
+    unless( $this->{_ICONDATA} ) {
+        # try to read cache
+        $this->cacheIconData( 'read' );
     }
 
-    return $this->{_ICONMAP}->{$fileExt} || $default || 'else';
+    unless( $this->{_ICONDATA} ) {
+        # cache does not exist, so let's create it
+
+        # create one dummy entry in case icon info cannot be read
+        # to void repeated retries
+        $this->{_ICONDATA}->{_default} = {
+            name => '_default',
+            web => $TWiki::cfg{SystemWebName},
+            topic => 'TWikiDocGraphics',
+            description => 'Default',
+            type => 'gif',
+            width => '16',
+            height => '16',
+        };
+        # read icon info
+        my $i = 0;
+        foreach my $iconTopic (split(/ *, */, $this->{prefs}->getPreferencesValue( 'ICONTOPIC' ))) {
+            my( $web, $topic ) = $this->normalizeWebTopicName( $this->{webName}, $iconTopic );
+            my $text = $this->{store}->readTopicRaw( undef, $web, $topic );
+            if( $text ) {
+                foreach my $line (split(/[\n\r]+/, $text)) {
+                    # sample line:
+                    # | %ICON{help}% | =%<nop>ICON{help}%=, =%<nop>H%= | Help | gif | 16x16 | info |
+                    if( $line =~ / %ICON{[ "']*([^ "'}]+)[^\|]*\|[^\|]*\| *(.*?) *\| *(.*?) *\| *([0-9]+)x([0-9]+)([^\|]*\| *(.*?) *\|)?/ ) {
+                        my $name = $1;
+                        $this->{_ICONDATA}->{$name} = {
+                            name => $name,
+                            web => $web,
+                            topic => $topic,
+                            description => $2,
+                            type => $3,
+                            width => $4,
+                            height => $5,
+                        };
+                        my $aliases = $7;
+                        if( $aliases ) {
+                            foreach my $alias (split(/[ ,]+/, $aliases)) {
+                                $this->{_ICONDATA}->{$alias} = $this->{_ICONDATA}->{$name};
+                            }
+                        }
+                    }
+                }
+                if( $i++ < 2 ) {
+                    $this->{_ICONDATA}->{_default}{web} = $web;
+                    $this->{_ICONDATA}->{_default}{topic} = $topic;
+                }
+            }
+        }
+
+        # cache icon info
+        $this->cacheIconData( 'save' );
+    }
+
+    # cut file path, if any
+    $iconName =~ s/^.*\.(.*?)$/$1/; # cut file path if any
+    $default  =~ s/^.*\.(.*?)$/$1/;
+
+    # determine icon
+    my $icn = $this->{_ICONDATA}->{$iconName} || $this->{_ICONDATA}->{$default};
+    unless( $icn ) {
+        # assume default location (attached to second topic in ICONTOPIC list)
+        $icn = $this->{_ICONDATA}->{_default};
+        $icn->{name} = $iconName;
+        $icn->{description} = $iconName;
+        $icn->{description} =~ s/^(.)/uc($1)/eo;
+    }
+
+    # format icon tag/url
+    my $iconTag = '<img src="$urlpath" width="$width" height="$height" '
+                . 'alt="$description" title="$description" border="0" />';
+    $format = '$img' unless( $format );
+    $format =~ s/\$img\b/$iconTag/go;
+    $format =~ s/\$url\b/$this->getPubUrl( 1, $icn->{web}, $icn->{topic}, "$icn->{name}.$icn->{type}" )/geo;
+    $format =~ s/\$urlpath\b/$this->getPubUrl( 0, $icn->{web}, $icn->{topic}, "$icn->{name}.$icn->{type}" )/geo;
+    $format =~ s/\$name\b/$icn->{name}/go;
+    $format =~ s/\$type\b/$icn->{type}/go;
+    $format =~ s/\$filename\b/$icn->{name}.$icn->{type}/go;
+    $format =~ s/\$web\b/$icn->{web}/go;
+    $format =~ s/\$topic\b/$icn->{topic}/go;
+    $format =~ s/\$description\b/$icn->{description}/go;
+    $format =~ s/\$width\b/$icn->{width}/go;
+    $format =~ s/\$height\b/$icn->{height}/go;
+
+    return $format;
 }
 
 =pod
@@ -3821,27 +3982,27 @@ sub SPACEOUT {
 
 sub ICON {
     my( $this, $params ) = @_;
-    my $file = $params->{_DEFAULT} || '';
-    # Try to map the file name to see if there is a matching filetype image
-    # If no mapping could be found, use the file name that was passed
-    my $iconFileName = $this->mapToIconFileName( $file, $file );
-    return CGI::img( { src => $this->getIconUrl( 0, $iconFileName ),
-                       width => 16, height=>16,
-                       align => 'top', alt => $iconFileName, border => 0 });
+    my $iconName = $params->{_DEFAULT} || '';
+    my $format   = $params->{format} || '$img';
+    my $default  = $params->{default} || $iconName;
+
+    return $this->formatIcon( $iconName, $format, $default );
 }
 
 sub ICONURL {
     my( $this, $params ) = @_;
-    my $file = ( $params->{_DEFAULT} || '' );
+    my $iconName = ( $params->{_DEFAULT} || '' );
+    my $default  = $params->{default} || $iconName;
 
-    return $this->getIconUrl( 1, $file );
+    return $this->formatIcon( $iconName, '$url', $default );
 }
 
 sub ICONURLPATH {
     my( $this, $params ) = @_;
-    my $file = ( $params->{_DEFAULT} || '' );
+    my $iconName = ( $params->{_DEFAULT} || '' );
+    my $default  = $params->{default} || $iconName;
 
-    return $this->getIconUrl( 0, $file );
+    return $this->formatIcon( $iconName, '$urlpath', $default );
 }
 
 sub RELATIVETOPICPATH {
