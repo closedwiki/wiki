@@ -678,10 +678,10 @@ __Contributors:__ Most icons on this page are designed by TWiki:Main.PeterThoeny
 %META:FILEATTACHMENT{name="tag-yellow.gif" attr="h" comment="" date="1169565034" path="tag-yellow.gif" size="348" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="tag.gif" attr="h" comment="" date="1169565034" path="tag.gif" size="348" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="target.gif" attr="h" comment="" date="1169565034" path="target.gif" size="261" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="target-blue.gif" comment="" date="1222843427" path="target-blue.gif" size="972" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="target-gray.gif" comment="" date="1222843442" path="target-gray.gif" size="967" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="target-green.gif" comment="" date="1222843435" path="target-green.gif" size="978" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="target-orange.gif" comment="" date="1222843419" path="target-orange.gif" size="963" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="target-blue.gif" attr="h" comment="" date="1222843427" path="target-blue.gif" size="972" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="target-gray.gif" attr="h" comment="" date="1222843442" path="target-gray.gif" size="967" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="target-green.gif" attr="h" comment="" date="1222843435" path="target-green.gif" size="978" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="target-orange.gif" attr="h" comment="" date="1222843419" path="target-orange.gif" size="963" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="target-red.gif" attr="h" comment="" date="1169565034" path="target-red.gif" size="261" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="thumbs-down.gif" attr="h" comment="" date="1260656213" path="thumbs-down.gif" size="995" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="thumbs-up.gif" attr="h" comment="" date="1260656213" path="thumbs-up.gif" size="991" user="TWikiContributor" version=""}%
