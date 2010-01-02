@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1262417790" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1262421698" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and Filetype icons
 
 This is the TWiki icon library. The graphics can be used in topics and by web applications. Doc graphics are defined at %CALC{$SET(icontopics, $LISTIF($NOT($EXACT($item,)), $LISTMAP($IF($EXISTS($item), [[$item]], ), %ICONTOPIC%)))$GET(icontopics)}%.
@@ -13,6 +13,7 @@ This is the TWiki icon library. The graphics can be used in topics and by web ap
 | [[#ExtendedUsage][See extended usage below]] ||
 
 ---++ Graphics
+<noautolink>
 
 ---+++ %ICON{note}% Document icons
 
@@ -165,7 +166,7 @@ This is the TWiki icon library. The graphics can be used in topics and by web ap
 | %ICON{digg}% | =%<nop>ICON{digg}%= | Digg | gif | 16x16 |  |
 | %ICON{facebook}% | =%<nop>ICON{facebook}%= | Facebook | gif | 16x16 |  |
 | %ICON{google}% | =%<nop>ICON{google}%= | Google | gif | 16x16 |  |
-| %ICON{linkedin}% | =%<nop>ICON{linkedin}%= | !LinkedIn | gif | 16x16 |  |
+| %ICON{linkedin}% | =%<nop>ICON{linkedin}%= | LinkedIn | gif | 16x16 |  |
 | %ICON{reddit}% | =%<nop>ICON{reddit}%= | Reddit | gif | 16x16 |  |
 | %ICON{stumbleupon}% | =%<nop>ICON{stumbleupon}%= | Stumbleupon | gif | 16x16 |  |
 | %ICON{technorati}% | =%<nop>ICON{technorati}%= | Technorati | gif | 16x16 |  |
@@ -339,7 +340,7 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 
 %TABLE{headeralign="left" databg="#ffffff,#ffffff" databgsorted="#f5f5f5"}%
 | *&nbsp;* | *Variable* | *Description* | *Type* | *Size* | *Alias* |
-| %ICON{as}% | =%<nop>ICON{as}%= | !ActionScript | gif | 16x16 |  |
+| %ICON{as}% | =%<nop>ICON{as}%= | ActionScript | gif | 16x16 |  |
 | %ICON{air}% | =%<nop>ICON{air}%= | Adobe Air | gif | 16x16 |  |
 | %ICON{bat}% | =%<nop>ICON{bat}%= | MS-DOS batch file | gif | 16x16 | cmd |
 | %ICON{bmp}% | =%<nop>ICON{bmp}%= | Bitmap | gif | 16x16 | ico, xbm |
@@ -358,18 +359,18 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 | %ICON{html}% | =%<nop>ICON{html}%= | HTML | gif | 16x16 | htm, shtml |
 | %ICON{java}% | =%<nop>ICON{java}%= | Java source code file  | gif | 16x16 | class |
 | %ICON{jpg}% | =%<nop>ICON{jpg}%= | JPEG | gif | 16x16 | jfif, jpe, jpeg |
-| %ICON{js}% | =%<nop>ICON{js}%= | !JavaScript | gif | 16x16 | jse |
+| %ICON{js}% | =%<nop>ICON{js}%= | JavaScript | gif | 16x16 | jse |
 | %ICON{mdb}% | =%<nop>ICON{mdb}%= | Microsoft Access database File | gif | 16x16 | mda, mde |
-| %ICON{mov}% | =%<nop>ICON{mov}%= | !Quicktime movie | gif | 16x16 | avi, m1v, mp4, mpa, mpe, mpeg, mpegv, mpg, mpv, mpv2, vbs |
+| %ICON{mov}% | =%<nop>ICON{mov}%= | Quicktime movie | gif | 16x16 | avi, m1v, mp4, mpa, mpe, mpeg, mpegv, mpg, mpv, mpv2, vbs |
 | %ICON{mp3}% | =%<nop>ICON{mp3}%= | MP3 | gif | 16x16 |  |
 | %ICON{pdf}% | =%<nop>ICON{pdf}%= | PDF | gif | 16x16 |  |
 | %ICON{pl}% | =%<nop>ICON{pl}%= | Perl source code file | gif | 16x16 | perl, pm |
 | %ICON{png}% | =%<nop>ICON{png}%= | PNG | gif | 16x16 | tif, tiff |
-| %ICON{ppt}% | =%<nop>ICON{ppt}%= | !PowerPoint | gif | 16x16 | pot, ppa, pps, pwz |
+| %ICON{ppt}% | =%<nop>ICON{ppt}%= | PowerPoint | gif | 16x16 | pot, ppa, pps, pwz |
 | %ICON{ps}% | =%<nop>ICON{ps}%= | Postscript | gif | 16x16 |  |
 | %ICON{psd}% | =%<nop>ICON{psd}%= | Photoshop document | gif | 16x16 |  |
 | %ICON{py}% | =%<nop>ICON{py}%= | Python source code file  | gif | 16x16 |  |
-| %ICON{ram}% | =%<nop>ICON{ram}%= | !RealAudio | gif | 16x16 | ra, rm |
+| %ICON{ram}% | =%<nop>ICON{ram}%= | RealAudio | gif | 16x16 | ra, rm |
 | %ICON{reg}% | =%<nop>ICON{reg}%= | Registry file | gif | 16x16 |  |
 | %ICON{sh}% | =%<nop>ICON{sh}%= | Unix shell script | gif | 16x16 |  |
 | %ICON{sniff}% | =%<nop>ICON{sniff}%= | sniff | gif | 16x16 |  |
@@ -385,6 +386,7 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 | %ICON{xml}% | =%<nop>ICON{xml}%= | XML | gif | 16x16 |  |
 | %ICON{xsl}% | =%<nop>ICON{xsl}%= | XSL (XML style sheet) | gif | 16x16 |  |
 | %ICON{zip}% | =%<nop>ICON{zip}%= | Compressed Zip archive | gif | 16x16 | arc, arj, b64, bhx, cab, hqx, lzh, mim, tar, taz, tgz, tz, z |
+</noautolink>
 
 #ExtendedUsage
 ---++ Extended Usage

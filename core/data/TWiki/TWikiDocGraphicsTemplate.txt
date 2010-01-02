@@ -8,9 +8,11 @@ Site specific documentation graphics are defined in this topic. Add your own gra
 
 To add an image, create an image with a lower case name, attach it to this topic, and add a new line in the table below to let TWiki know about the image. It is also possible to overload (e.g. redefine) an image defined in !TWikiDocGraphics.
 
+<noautolink>
 %TABLE{headeralign="left" databg="#ffffff,#ffffff" databgsorted="#f5f5f5"}%
 | *<nop>* | *Variable* | *Description* | *Type* | *Size* | *Alias* |
 | %ICON{example}% | =%<nop>ICON{example}%= | Example (replace this row) | gif | 16x16 |  |
+</noautolink>
 
 Format of above table:
 <verbatim>
