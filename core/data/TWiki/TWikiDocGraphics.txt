@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1262415631" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1262417790" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and Filetype icons
 
 This is the TWiki icon library. The graphics can be used in topics and by web applications. Doc graphics are defined at %CALC{$SET(icontopics, $LISTIF($NOT($EXACT($item,)), $LISTMAP($IF($EXISTS($item), [[$item]], ), %ICONTOPIC%)))$GET(icontopics)}%.
@@ -35,7 +35,6 @@ This is the TWiki icon library. The graphics can be used in topics and by web ap
 | %ICON{database}% | =%<nop>ICON{database}%= | Database | gif | 16x16 |  |
 | %ICON{days}% | =%<nop>ICON{days}%= | Days, Calendar | gif | 16x16 |  |
 | %ICON{download}% | =%<nop>ICON{download}%= | Download | gif | 16x16 |  |
-| %ICON{facebook}% | =%<nop>ICON{facebook}%= | Facebook | gif | 16x16 |  |
 | %ICON{fax}% | =%<nop>ICON{fax}%= | Fax | gif | 16x16 |  |
 | %ICON{filter}% | =%<nop>ICON{filter}%= | Filter | gif | 16x16 |  |
 | %ICON{food}% | =%<nop>ICON{food}%= | Food | gif | 16x16 |  |
@@ -48,7 +47,6 @@ This is the TWiki icon library. The graphics can be used in topics and by web ap
 | %ICON{hourglass}% | =%<nop>ICON{hourglass}%= | Hour glass (clock) | gif | 16x16 |  |
 | %ICON{info}% | =%<nop>ICON{info}%= | Info | gif | 16x16 |  |
 | %ICON{legal}% | =%<nop>ICON{legal}%= | Legal | gif | 16x16 |  |
-| %ICON{linkedin}% | =%<nop>ICON{linkedin}%= | !LinkedIn | gif | 16x16 |  |
 | %ICON{luggage}% | =%<nop>ICON{luggage}%= | Luggage | gif | 16x16 |  |
 | %ICON{map}% | =%<nop>ICON{map}%= | Map | gif | 16x16 |  |
 | %ICON{mechanics}% | =%<nop>ICON{mechanics}%= | Mechanics | gif | 16x16 |  |
@@ -98,7 +96,6 @@ This is the TWiki icon library. The graphics can be used in topics and by web ap
 | %ICON{toolbox}% | =%<nop>ICON{toolbox}%= | Toolbox | gif | 16x16 |  |
 | %ICON{tooth}% | =%<nop>ICON{tooth}%= | Tooth | gif | 16x16 |  |
 | %ICON{traffic-light}% | =%<nop>ICON{traffic-light}%= | Traffic light | gif | 16x16 |  |
-| %ICON{twitter}% | =%<nop>ICON{twitter}%= | Twitter | gif | 16x16 |  |
 | %ICON{vcard}% | =%<nop>ICON{vcard}%= | VCard | gif | 16x16 |  |
 | %ICON{video}% | =%<nop>ICON{video}%= | Video | gif | 13x10 |  |
 | %ICON{warning}% | =%<nop>ICON{warning}%=, =%<nop>X%= | Warning, important | gif | 16x16 |  |
@@ -159,6 +156,21 @@ This is the TWiki icon library. The graphics can be used in topics and by web ap
 | %ICON{locktopicgray}% | =%<nop>ICON{locktopicgray}%= | Locked topic, gray | gif | 16x16 |  |
 | %ICON{lockfolder}% | =%<nop>ICON{lockfolder}%= | Locked folder | gif | 16x16 |  |
 | %ICON{lockfoldergray}% | =%<nop>ICON{lockfoldergray}%= | Locked folder, gray | gif | 16x16 |  |
+
+---+++ %ICON{facebook}% Social networking, %ICON{stumbleupon}% social bookmarks
+
+| %ICON{bitly}% | =%<nop>ICON{bitly}%= | Bit.ly | gif | 16x16 |  |
+| %ICON{blogger}% | =%<nop>ICON{blogger}%= | Blogger | gif | 16x16 |  |
+| %ICON{delicious}% | =%<nop>ICON{delicious}%= | Delicious | gif | 16x16 |  |
+| %ICON{digg}% | =%<nop>ICON{digg}%= | Digg | gif | 16x16 |  |
+| %ICON{facebook}% | =%<nop>ICON{facebook}%= | Facebook | gif | 16x16 |  |
+| %ICON{google}% | =%<nop>ICON{google}%= | Google | gif | 16x16 |  |
+| %ICON{linkedin}% | =%<nop>ICON{linkedin}%= | !LinkedIn | gif | 16x16 |  |
+| %ICON{reddit}% | =%<nop>ICON{reddit}%= | Reddit | gif | 16x16 |  |
+| %ICON{stumbleupon}% | =%<nop>ICON{stumbleupon}%= | Stumbleupon | gif | 16x16 |  |
+| %ICON{technorati}% | =%<nop>ICON{technorati}%= | Technorati | gif | 16x16 |  |
+| %ICON{twitter}% | =%<nop>ICON{twitter}%= | Twitter | gif | 16x16 |  |
+| %ICON{windows}% | =%<nop>ICON{windows}%= | Windows | gif | 16x16 |  |
 
 ---+++ %ICON{changes}% Changes, %ICON{notify}% notification icons
 
@@ -453,6 +465,7 @@ __Related Topics:__ VarICON, %CALC{$GET(icontopics)}%, TWikiDocGraphicsTemplate,
 
 __Contributors:__ Most icons on this page are designed by TWiki:Main.PeterThoeny. Many of the original icons were recreated by TWiki:Main.ArthurClemens.
 
+
 %META:FILEATTACHMENT{name="addon.gif" attr="h" comment="" date="1169565034" path="addon.gif" size="370" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="air.gif" attr="h" comment="" date="1169565034" path="air.gif" size="356" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="airplane.gif" attr="h" comment="" date="1236468594" path="airplane.gif" size="919" user="TWikiContributor" version=""}%
@@ -470,11 +483,13 @@ __Contributors:__ Most icons on this page are designed by TWiki:Main.PeterThoeny
 %META:FILEATTACHMENT{name="as.gif" attr="h" comment="" date="1169565034" path="as.gif" size="379" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="attachfile.gif" attr="h" comment="" date="1169565034" path="attachfile.gif" size="121" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="award.gif" attr="h" comment="" date="1236468594" path="award.gif" size="961" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="bat.gif" attr="h" comment="" date="1169565034" path="bat.gif" size="377" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="barcode.gif" attr="h" comment="" date="1258790911" path="barcode.gif" size="138" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="bat.gif" attr="h" comment="" date="1169565034" path="bat.gif" size="377" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="bed.gif" attr="h" comment="" date="1236468594" path="bed.gif" size="900" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="bitly.gif" attr="h" comment="" date="1262417730" path="bitly.gif" size="625" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="blank-bg.gif" attr="h" comment="" date="1193349525" path="blank-bg.gif" size="118" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="blank.gif" attr="h" comment="" date="1193349525" path="blank.gif" size="110" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="blogger.gif" attr="h" comment="" date="1262417730" path="blogger.gif" size="158" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="bmp.gif" attr="h" comment="" date="1169565034" path="bmp.gif" size="378" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="bomb.gif" attr="h" comment="" date="1260656213" path="bomb.gif" size="988" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="book.gif" attr="h" comment="" date="1169565034" path="book.gif" size="361" user="TWikiContributor" version=""}%
@@ -499,7 +514,9 @@ __Contributors:__ Most icons on this page are designed by TWiki:Main.PeterThoeny
 %META:FILEATTACHMENT{name="css.gif" attr="h" comment="" date="1169565035" path="css.gif" size="374" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="database.gif" attr="h" comment="" date="1258527559" path="database.gif" size="1030" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="days.gif" attr="h" comment="" date="1169565034" path="days.gif" size="161" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="delicious.gif" attr="h" comment="" date="1262417730" path="delicious.gif" size="91" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="detail.gif" attr="h" comment="" date="1169565034" path="detail.gif" size="118" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="digg.gif" attr="h" comment="" date="1262417730" path="digg.gif" size="139" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="dll.gif" attr="h" comment="" date="1169565034" path="dll.gif" size="376" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="doc.gif" attr="h" comment="" date="1169565034" path="doc.gif" size="381" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="done.gif" attr="h" comment="" date="1169565034" path="done.gif" size="313" user="TWikiContributor" version=""}%
@@ -543,6 +560,7 @@ __Contributors:__ Most icons on this page are designed by TWiki:Main.PeterThoeny
 %META:FILEATTACHMENT{name="go_ff.gif" attr="h" comment="" date="1169565034" path="go_ff.gif" size="242" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="go_forward.gif" attr="h" comment="" date="1169565034" path="go_forward.gif" size="234" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="go_start.gif" attr="h" comment="" date="1169565034" path="go_start.gif" size="236" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="google.gif" attr="h" comment="" date="1262417730" path="google.gif" size="617" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="graduation.gif" attr="h" comment="" date="1233298661" path="graduation.gif" size="967" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="group.gif" attr="h" comment="" date="1169565034" path="group.gif" size="182" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="h.gif" attr="h" comment="" date="1169565034" path="h.gif" size="375" user="TWikiContributor" version=""}%
@@ -649,6 +667,7 @@ __Contributors:__ Most icons on this page are designed by TWiki:Main.PeterThoeny
 %META:FILEATTACHMENT{name="radioactive.gif" attr="h" comment="" date="1260656213" path="radioactive.gif" size="1043" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="ram.gif" attr="h" comment="" date="1169565034" path="ram.gif" size="373" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="recentchanges.gif" attr="h" comment="" date="1169565035" path="recentchanges.gif" size="220" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="reddit.gif" attr="h" comment="" date="1262417730" path="reddit.gif" size="600" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="refreshtopic.gif" attr="h" comment="" date="1169565034" path="refreshtopic.gif" size="229" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="reg.gif" attr="h" comment="" date="1169565034" path="reg.gif" size="377" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="rfc.gif" attr="h" comment="" date="1169565034" path="rfc.gif" size="369" user="TWikiContributor" version=""}%
@@ -676,6 +695,7 @@ __Contributors:__ Most icons on this page are designed by TWiki:Main.PeterThoeny
 %META:FILEATTACHMENT{name="star-none.gif" attr="h" comment="" date="1260656213" path="star-none.gif" size="1003" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="statistics.gif" attr="h" comment="" date="1169565034" path="statistics.gif" size="118" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="stop.gif" attr="h" comment="" date="1169565034" path="stop.gif" size="159" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="stumbleupon.gif" attr="h" comment="" date="1262417730" path="stumbleupon.gif" size="380" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="support.gif" attr="h" comment="" date="1260335693" path="support.gif" size="1035" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="svg.gif" attr="h" comment="" date="1239336511" path="svg.gif" size="406" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="swf.gif" attr="h" comment="" date="1169565034" path="swf.gif" size="380" user="TWikiContributor" version=""}%
@@ -700,6 +720,7 @@ __Contributors:__ Most icons on this page are designed by TWiki:Main.PeterThoeny
 %META:FILEATTACHMENT{name="target-green.gif" attr="h" comment="" date="1222843435" path="target-green.gif" size="978" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="target-orange.gif" attr="h" comment="" date="1222843419" path="target-orange.gif" size="963" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="target-red.gif" attr="h" comment="" date="1169565034" path="target-red.gif" size="261" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="technorati.gif" attr="h" comment="" date="1262417730" path="technorati.gif" size="363" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="thumbs-down.gif" attr="h" comment="" date="1260656213" path="thumbs-down.gif" size="995" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="thumbs-up.gif" attr="h" comment="" date="1260656213" path="thumbs-up.gif" size="991" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="tip.gif" attr="h" comment="" date="1169565034" path="tip.gif" size="233" user="TWikiContributor" version=""}%
@@ -739,8 +760,8 @@ __Contributors:__ Most icons on this page are designed by TWiki:Main.PeterThoeny
 %META:FILEATTACHMENT{name="uweb-o12.gif" attr="h" comment="" date="1193349525" path="uweb-o12.gif" size="935" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="uweb-oo.gif" attr="h" comment="" date="1193349525" path="uweb-oo.gif" size="915" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="uweb-os.gif" attr="h" comment="" date="1193349525" path="uweb-o2.gif" size="985" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="vector.gif" attr="h" comment="" date="1239336511" path="vector.gif" size="365" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="vcard.gif" attr="h" comment="" date="1260656213" path="vcard.gif" size="973" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="vector.gif" attr="h" comment="" date="1239336511" path="vector.gif" size="365" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="video.gif" attr="h" comment="" date="1169565034" path="video.gif" size="329" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="viewtopic.gif" attr="h" comment="" date="1169565034" path="viewtopic.gif" size="118" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="vsd.gif" attr="h" comment="" date="1169565034" path="vsd.gif" size="373" user="TWikiContributor" version=""}%
@@ -749,6 +770,7 @@ __Contributors:__ Most icons on this page are designed by TWiki:Main.PeterThoeny
 %META:FILEATTACHMENT{name="wav.gif" attr="h" comment="" date="1169565034" path="wav.gif" size="377" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="web-bg-small.gif" attr="h" comment="" date="1169565034" path="web-bg-small.gif" size="77" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="web-bg.gif" attr="h" comment="" date="1169565034" path="web-bg.gif" size="85" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="windows.gif" attr="h" comment="" date="1262417730" path="windows.gif" size="1026" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="wip.gif" attr="h" comment="" date="1169565034" path="wip.gif" size="594" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="wrench.gif" attr="h" comment="" date="1169565034" path="wrench.gif" size="377" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="wri.gif" attr="h" comment="" date="1169565034" path="wri.gif" size="382" user="TWikiContributor" version=""}%

@@ -701,11 +701,13 @@ pub/TWiki/TWikiDocGraphics/arrowup.gif 0644
 pub/TWiki/TWikiDocGraphics/as.gif 0644
 pub/TWiki/TWikiDocGraphics/attachfile.gif 0644
 pub/TWiki/TWikiDocGraphics/award.gif 0644
-pub/TWiki/TWikiDocGraphics/bat.gif 0644
 pub/TWiki/TWikiDocGraphics/barcode.gif 0644
+pub/TWiki/TWikiDocGraphics/bat.gif 0644
 pub/TWiki/TWikiDocGraphics/bed.gif 0644
+pub/TWiki/TWikiDocGraphics/bitly.gif 0644
 pub/TWiki/TWikiDocGraphics/blank-bg.gif 0644
 pub/TWiki/TWikiDocGraphics/blank.gif 0644
+pub/TWiki/TWikiDocGraphics/blogger.gif 0644
 pub/TWiki/TWikiDocGraphics/bmp.gif 0644
 pub/TWiki/TWikiDocGraphics/bomb.gif 0644
 pub/TWiki/TWikiDocGraphics/book.gif 0644
@@ -730,7 +732,9 @@ pub/TWiki/TWikiDocGraphics/connections.gif 0644
 pub/TWiki/TWikiDocGraphics/css.gif 0644
 pub/TWiki/TWikiDocGraphics/database.gif 0644
 pub/TWiki/TWikiDocGraphics/days.gif 0644
+pub/TWiki/TWikiDocGraphics/delicious.gif 0644
 pub/TWiki/TWikiDocGraphics/detail.gif 0644
+pub/TWiki/TWikiDocGraphics/digg.gif 0644
 pub/TWiki/TWikiDocGraphics/dll.gif 0644
 pub/TWiki/TWikiDocGraphics/doc.gif 0644
 pub/TWiki/TWikiDocGraphics/done.gif 0644
@@ -774,6 +778,7 @@ pub/TWiki/TWikiDocGraphics/go_fb.gif 0644
 pub/TWiki/TWikiDocGraphics/go_ff.gif 0644
 pub/TWiki/TWikiDocGraphics/go_forward.gif 0644
 pub/TWiki/TWikiDocGraphics/go_start.gif 0644
+pub/TWiki/TWikiDocGraphics/google.gif 0644
 pub/TWiki/TWikiDocGraphics/graduation.gif 0644
 pub/TWiki/TWikiDocGraphics/group.gif 0644
 pub/TWiki/TWikiDocGraphics/h.gif 0644
@@ -880,6 +885,7 @@ pub/TWiki/TWikiDocGraphics/quiet.gif 0644
 pub/TWiki/TWikiDocGraphics/radioactive.gif 0644
 pub/TWiki/TWikiDocGraphics/ram.gif 0644
 pub/TWiki/TWikiDocGraphics/recentchanges.gif 0644
+pub/TWiki/TWikiDocGraphics/reddit.gif 0644
 pub/TWiki/TWikiDocGraphics/refreshtopic.gif 0644
 pub/TWiki/TWikiDocGraphics/reg.gif 0644
 pub/TWiki/TWikiDocGraphics/rfc.gif 0644
@@ -907,6 +913,7 @@ pub/TWiki/TWikiDocGraphics/star-half.gif 0644
 pub/TWiki/TWikiDocGraphics/star-none.gif 0644
 pub/TWiki/TWikiDocGraphics/statistics.gif 0644
 pub/TWiki/TWikiDocGraphics/stop.gif 0644
+pub/TWiki/TWikiDocGraphics/stumbleupon.gif 0644
 pub/TWiki/TWikiDocGraphics/support.gif 0644
 pub/TWiki/TWikiDocGraphics/svg.gif 0644
 pub/TWiki/TWikiDocGraphics/swf.gif 0644
@@ -931,6 +938,7 @@ pub/TWiki/TWikiDocGraphics/target-green.gif 0644
 pub/TWiki/TWikiDocGraphics/target-orange.gif 0644
 pub/TWiki/TWikiDocGraphics/target-red.gif 0644
 pub/TWiki/TWikiDocGraphics/target.gif 0644
+pub/TWiki/TWikiDocGraphics/technorati.gif 0644
 pub/TWiki/TWikiDocGraphics/thumbs-down.gif 0644
 pub/TWiki/TWikiDocGraphics/thumbs-up.gif 0644
 pub/TWiki/TWikiDocGraphics/tip.gif 0644
@@ -980,6 +988,7 @@ pub/TWiki/TWikiDocGraphics/watch.gif 0644
 pub/TWiki/TWikiDocGraphics/wav.gif 0644
 pub/TWiki/TWikiDocGraphics/web-bg-small.gif 0644
 pub/TWiki/TWikiDocGraphics/web-bg.gif 0644
+pub/TWiki/TWikiDocGraphics/windows.gif 0644
 pub/TWiki/TWikiDocGraphics/wip.gif 0644
 pub/TWiki/TWikiDocGraphics/wrench.gif 0644
 pub/TWiki/TWikiDocGraphics/wri.gif 0644
