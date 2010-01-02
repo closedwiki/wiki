@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1261619007" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="PeterThoeny" date="1262415631" format="1.1" reprev="1.12" version="1.12"}%
 ---+!! TWiki Documentation Graphics and Filetype icons
 
 This is the TWiki icon library. The graphics can be used in topics and by web applications. Doc graphics are defined at %CALC{$SET(icontopics, $LISTIF($NOT($EXACT($item,)), $LISTMAP($IF($EXISTS($item), [[$item]], ), %ICONTOPIC%)))$GET(icontopics)}%.
@@ -420,11 +420,28 @@ Now you can use the icon by writing =%<nop>H%=
 The [[SmiliesPlugin]] uses a different shorthand than =<nop>%VARIABLES%=. For example, =:-)= renders as :-)
 
 ---+++ Links with icons
+
 To create a link with an image, write:%BR%
 =[<nop>[%HOMETOPIC%][%<nop>ICON{home}% Home]]= to get: [[%HOMETOPIC%][%ICON{home}% Home]]
 
 To get rid of the underline under the space, write: %BR%
 =[<nop>[%HOMETOPIC%][%<nop>ICON{home}%]] [<nop>[%HOMETOPIC%][Home]]= to get: [[%HOMETOPIC%][%ICON{home}%]] [[%HOMETOPIC%][Home]]
+
+---+++ List all icons
+
+| *Format:* | *List all icons,%BR% including aliases:* | *List unique icons only:* | *Example:* |
+| Name list,%BR% comma-space delimited: | =%<nop>ICON{list:all-names}%= | =%<nop>ICON{list:unique-names}%= | addon, air, airplane, ... |
+| Icon list: | =%<nop>ICON{list:all-icons}%= | =%<nop>ICON{list:unique-icons}%= | %ICON{addon}% %ICON{air}% %ICON{airplane}%... |
+| Detailed list, table format: | =%<nop>ICON{list:all-table}%= | =%<nop>ICON{list:unique-table}%= | (similar to table format above) |
+
+%T% __Hint:__ The SpreadSheetPlugin $LIST... functions can be used to manipulate a name list. Example:
+<verbatim>
+%CALC{$LISTJOIN($sp, $LISTMAP($NOP(%)ICON{$item}$NOP(%), %ICON{list:unique-names}%))}%
+</verbatim>
+Is equivalent to:
+<verbatim>
+%ICON{list:unique-icons}%
+</verbatim>
 
 ---++ How to add doc graphic images
 

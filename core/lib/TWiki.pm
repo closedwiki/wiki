@@ -1363,6 +1363,36 @@ sub formatIcon {
     $iconName =~ s/^.*\.(.*?)$/$1/; # cut file path if any
     $default  =~ s/^.*\.(.*?)$/$1/;
 
+    if( $iconName =~ /^list:/ ) {
+        my @icons = ();
+        if( $iconName =~ /all/ ) {
+            @icons = sort grep { !/_default/ } keys %{ $this->{_ICONDATA} };
+        } else {
+            @icons = sort
+                     grep { !/_default/ }
+                     grep { /$this->{_ICONDATA}->{$_}->{name}/ }
+                     keys %{ $this->{_ICONDATA} };
+        }
+        if( $iconName =~ /names/ ) {
+            return join( ', ', @icons );
+        } elsif( $iconName =~ /icons/ ) {
+            return join( ', ', map { '%ICON{'.$_.'}%' } @icons );
+        } else { # /table/
+            my $text = '| *&nbsp;* | *Name* | *Description* | *Type* | *Size* | *Defined in* |' . "\n";
+            my $i = 0;
+            for my $icn ( @icons ) {
+                $i++;
+                $text .= "| \%ICON{$icn}\% | $icn ";
+                $text .= "=> $this->{_ICONDATA}->{$icn}->{name} " if( $this->{_ICONDATA}->{$icn}->{name} ne $icn );
+                $text .= "| $this->{_ICONDATA}->{$icn}->{description} | $this->{_ICONDATA}->{$icn}->{type} "
+                       . "| $this->{_ICONDATA}->{$icn}->{width}x$this->{_ICONDATA}->{$icn}->{height} "
+                       . "| [[$this->{_ICONDATA}->{$icn}->{web}.$this->{_ICONDATA}->{$icn}->{topic}]] |\n";
+            }
+            $text .= "| Total: | $i icons |||||\n";
+            return $text;
+        }
+    }
+
     # determine icon
     my $icn = $this->{_ICONDATA}->{$iconName} || $this->{_ICONDATA}->{$default};
     unless( $icn ) {
