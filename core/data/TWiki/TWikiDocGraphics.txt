@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1262474051" format="1.1" version="$Rev$"}%
----+!! TWiki Documentation Graphics and Filetype icons
+%META:TOPICINFO{author="TWikiContributor" date="1262552660" format="1.1" version="$Rev$"}%
+---+!! TWiki Documentation Graphics and File Type Icons
 
 This is the TWiki icon library. The graphics can be used in topics and by web applications. Doc graphics are defined at %CALC{$SET(icontopics, $LISTIF($NOT($EXACT($item,)), $LISTMAP($IF($EXISTS($item), [[$item]], ), %ICONTOPIC%)))$GET(icontopics)}%.
 
@@ -12,15 +12,17 @@ This is the TWiki icon library. The graphics can be used in topics and by web ap
 | =%<nop>ICON{ "tip" format="$url" }%= | %ICON{ "tip" format="$url" }% | =%ICON{ "tip" format="$url" }%= |
 | [[#ExtendedUsage][See extended usage below]] ||
 
----++ Graphics
-<noautolink>
-
----+++ All icons at a glance
+---++ All icons at a glance
 
 List of unique icons defined in %CALC{$GET(icontopics)}%. Hover over the icon to get icon information.
 
 %ICON{list:unique-info}%
 
+---++ Documentation graphics
+
+Documentation graphics defined in this topic are listed in the tables below. Each image is defined by a table row containing these cells: =%<nop>ICON{}%= variable; usage example of icon variable; description shown in image title; file type (gif or png); size (width x height); aliases (if any).
+
+<noautolink>
 ---+++ %ICON{note}% Document icons
 
 %TABLE{headeralign="left" databg="#ffffff,#ffffff" databgsorted="#f5f5f5"}%
@@ -468,7 +470,7 @@ Is equivalent to:
 
 Additional doc graphic images can be defined. Do not add them to this topic because the modifications will be lost on the next TWiki upgrade. Instead add them to %CALC{$IF($EXISTS(%USERSWEB%.SiteDocGraphics), $SET(usericontopic, [[%USERSWEB%.SiteDocGraphics]]), $SET(usericontopic, [[%SCRIPTURL{edit}%/%USERSWEB%/SiteDocGraphics?templatetopic=%SYSTEMWEB%.TWikiDocGraphicsTemplate;topicparent=none][%USERSWEB%.SiteDocGraphics]]))$GET(usericontopic)}%.
 
-__Note:__ Documentation graphics are defined in topics %CALC{$GET(icontopics)}%. This list is defined by the ICONTOPIC setting in [[%SYSTEMWEB%.TWikiPreferences]] and can be overloaded in [[%LOCALSITEPREFS%]].
+__Note:__ Documentation graphics are defined in %CALC{$GET(icontopics)}%. The list of topics is defined by the ICONTOPIC setting in [[%SYSTEMWEB%.TWikiPreferences]] and can be overloaded in [[%LOCALSITEPREFS%]].
 
 __Related Topics:__ VarICON, %CALC{$GET(icontopics)}%, TWikiDocGraphicsTemplate, TWikiSkins, DeveloperDocumentationCategory, AdminDocumentationCategory
 
