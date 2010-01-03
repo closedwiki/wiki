@@ -1367,7 +1367,7 @@ sub formatIcon {
         my @icons = ();
         if( $iconName =~ /all/ ) {
             @icons = sort grep { !/_default/ } keys %{ $this->{_ICONDATA} };
-        } else {
+        } else { # unique
             @icons = sort
                      grep { !/_default/ }
                      grep { /$this->{_ICONDATA}->{$_}->{name}/ }
@@ -1376,7 +1376,9 @@ sub formatIcon {
         if( $iconName =~ /names/ ) {
             return join( ', ', @icons );
         } elsif( $iconName =~ /icons/ ) {
-            return join( ', ', map { '%ICON{'.$_.'}%' } @icons );
+            return join( ' ', map { '%ICON{'.$_.'}%' } @icons );
+        } elsif( $iconName =~ /info/ ) {
+            return join( ' ', map { '%ICON{"'.$_.'" format="$info"}%' } @icons );
         } else { # /table/
             my $text = '| *&nbsp;* | *Name* | *Description* | *Type* | *Size* | *Defined in* |' . "\n";
             my $i = 0;
@@ -1404,10 +1406,14 @@ sub formatIcon {
     }
 
     # format icon tag/url
-    my $iconTag = '<img src="$urlpath" width="$width" height="$height" '
-                . 'alt="$description" title="$description" border="0" />';
+    my $iconTag  = '<img src="$urlpath" width="$width" height="$height" '
+                 . 'alt="$description" title="$description" border="0" />';
+    my $iconInfo = '<img src="$urlpath" width="$width" height="$height" '
+                 . 'alt="$name" title="%<nop>ICON{$name}% - <nop>$description, '
+                 . 'defined in <nop>$web.$topic" border="0" />';
     $format = '$img' unless( $format );
     $format =~ s/\$img\b/$iconTag/go;
+    $format =~ s/\$info\b/$iconInfo/go;
     $format =~ s/\$url\b/$this->getPubUrl( 1, $icn->{web}, $icn->{topic}, "$icn->{name}.$icn->{type}" )/geo;
     $format =~ s/\$urlpath\b/$this->getPubUrl( 0, $icn->{web}, $icn->{topic}, "$icn->{name}.$icn->{type}" )/geo;
     $format =~ s/\$name\b/$icn->{name}/go;
