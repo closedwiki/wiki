@@ -235,7 +235,7 @@ sub getWorkArea {
 
     unless( -d $dir ) {
         mkdir( $dir ) || throw Error::Simple(<<ERROR);
-Failed to create $key work area. Check your setting of {RCS}{WorkAreaDir}
+Failed to create $dir work area. Check your setting of {RCS}{WorkAreaDir}
 in =configure=.
 ERROR
     }
