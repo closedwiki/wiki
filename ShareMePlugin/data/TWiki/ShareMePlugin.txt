@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1263024004" format="1.1" reprev="1.6" version="1.6"}%
+%META:TOPICINFO{author="TWikiContributor" date="1263024356" format="1.1" version="$Rev$"}%
 ---+!! Share-Me Plugin
 
 Add a bar of icons to share a TWiki page on popular social media sites and bookmarking sites such as Digg, Facebook, !StumbleUpon, Twitter.
@@ -87,7 +87,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2010, TWiki:Main/PeterThoeny |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-01-09 (18272) |
+|  Plugin Version: | 2010-01-09 (18274) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  2010-01-09: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
