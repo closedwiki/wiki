@@ -1,9 +1,14 @@
-%META:TOPICINFO{author="TWikiContributor" date="1263024356" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1263025804" format="1.1" version="$Rev$"}%
 ---+!! Share-Me Plugin
 
 Add a bar of icons to share a TWiki page on popular social media sites and bookmarking sites such as Digg, Facebook, !StumbleUpon, Twitter.
 
+<table width="100%"><tr><td>
 %TOC%
+</td><td align="center" valign="top">
+This plugin is%BR% sponsored by:%BR%
+[[http://twiki.net/][<img src="%ATTACHURL%/twiki-logo-80x40-t.gif" width="80" height="40" border="0" alt="Twiki, Inc." title="Twiki, Inc." />]]
+</td></tr></table>
 
 ---++ Syntax Rules
 
@@ -84,10 +89,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main/PeterThoeny |
+|  Plugin Author: | TWiki:Main/PeterThoeny, [[http://twiki.net/][Twiki, Inc.]] |
 |  Copyright: | &copy; 2010, TWiki:Main/PeterThoeny |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-01-09 (18274) |
+|  Plugin Version: | 2010-01-09 (18275) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  2010-01-09: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
@@ -105,25 +110,26 @@ __Related Topics:__ VarSHAREME, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperD
 
 -- TWiki:Main/PeterThoeny - 2010-01-09
 
-%META:FILEATTACHMENT{name="delicious.png" attachment="delicious.png" attr="h" comment="" date="1262853889" path="delicious.png" size="103" stream="IO::File=GLOB(0x9790610)" tmpFilename="/usr/tmp/CGItemp28681" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="digg.png" attachment="digg.png" attr="h" comment="" date="1262853914" path="digg.png" size="223" stream="IO::File=GLOB(0xa5a208c)" tmpFilename="/usr/tmp/CGItemp28629" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="email.png" attachment="email.png" attr="h" comment="" date="1262855502" path="email.png" size="823" stream="IO::File=GLOB(0xa179b6c)" tmpFilename="/usr/tmp/CGItemp28723" user="PeterThoeny" version="2"}%
-%META:FILEATTACHMENT{name="facebook.png" attachment="facebook.png" attr="h" comment="" date="1262853956" path="facebook.png" size="149" stream="IO::File=GLOB(0xa1bd66c)" tmpFilename="/usr/tmp/CGItemp28590" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="linkedin.png" attachment="linkedin.png" attr="h" comment="" date="1262853978" path="linkedin.png" size="674" stream="IO::File=GLOB(0x9dfd564)" tmpFilename="/usr/tmp/CGItemp28666" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="reddit.png" attachment="reddit.png" attr="h" comment="" date="1262854005" path="reddit.png" size="645" stream="IO::File=GLOB(0x9771954)" tmpFilename="/usr/tmp/CGItemp28671" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="stumbleupon.png" attachment="stumbleupon.png" attr="h" comment="" date="1262854024" path="stumbleupon.png" size="907" stream="IO::File=GLOB(0x9aba2d4)" tmpFilename="/usr/tmp/CGItemp28646" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="technorati.png" attachment="technorati.png" attr="h" comment="" date="1262854043" path="technorati.png" size="283" stream="IO::File=GLOB(0xa1c086c)" tmpFilename="/usr/tmp/CGItemp28641" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="twitter.png" attachment="twitter.png" attr="h" comment="" date="1262854061" path="twitter.png" size="385" stream="IO::File=GLOB(0xa352f14)" tmpFilename="/usr/tmp/CGItemp28690" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="googlebookmark.png" attachment="googlebookmark.png" attr="h" comment="" date="1262854072" path="googlebookmark.png" size="758" stream="IO::File=GLOB(0x92f4be4)" tmpFilename="/usr/tmp/CGItemp28746" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="live.png" attachment="live.png" attr="h" comment="" date="1262931398" path="live.png" size="4574" stream="IO::File=GLOB(0x9741ce4)" tmpFilename="/usr/tmp/CGItemp28781" user="PeterThoeny" version="2"}%
-%META:FILEATTACHMENT{name="misterwong.png" attachment="misterwong.png" attr="h" comment="" date="1262854162" path="misterwong.png" size="668" stream="IO::File=GLOB(0xa2ac06c)" tmpFilename="/usr/tmp/CGItemp28747" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="ping.png" attachment="ping.png" attr="h" comment="" date="1262854181" path="ping.png" size="673" stream="IO::File=GLOB(0x931246c)" tmpFilename="/usr/tmp/CGItemp28645" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="rss.png" attachment="rss.png" attr="h" comment="" date="1262854201" path="rss.png" size="827" stream="IO::File=GLOB(0x986dad4)" tmpFilename="/usr/tmp/CGItemp28650" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="yahoomyweb.png" attachment="yahoomyweb.png" attr="h" comment="" date="1262854811" path="yahoomyweb.png" size="606" stream="IO::File=GLOB(0x9f9909c)" tmpFilename="/usr/tmp/CGItemp28626" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="posterous.png" attachment="posterous.png" attr="h" comment="" date="1262931540" path="posterous.png" size="1024" stream="IO::File=GLOB(0x9df30bc)" tmpFilename="/usr/tmp/CGItemp28663" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="friendfeed.png" attachment="friendfeed.png" attr="h" comment="" date="1262931703" path="friendfeed.png" size="816" stream="IO::File=GLOB(0x91e7f24)" tmpFilename="/usr/tmp/CGItemp28780" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="yahoobuzz.png" attachment="yahoobuzz.png" attr="h" comment="" date="1262931765" path="yahoobuzz.png" size="684" stream="IO::File=GLOB(0x9a530bc)" tmpFilename="/usr/tmp/CGItemp28786" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="newsvine.png" attachment="newsvine.png" attr="h" comment="" date="1262931805" path="newsvine.png" size="131" stream="IO::File=GLOB(0x8ba96bc)" tmpFilename="/usr/tmp/CGItemp28712" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="slashdot.png" attachment="slashdot.png" attr="h" comment="" date="1262932925" path="slashdot.png" size="111" stream="IO::File=GLOB(0x9b9fa6c)" tmpFilename="/usr/tmp/CGItemp28683" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="simpy.png" attachment="simpy.png" attr="h" comment="" date="1262933558" path="simpy.png" size="543" stream="IO::File=GLOB(0x96ec404)" tmpFilename="/usr/tmp/CGItemp28834" user="PeterThoeny" version="1"}%
-%META:FILEATTACHMENT{name="mixx.png" attachment="mixx.png" attr="h" comment="" date="1262935490" path="mixx.png" size="134" stream="IO::File=GLOB(0x91e1d44)" tmpFilename="/usr/tmp/CGItemp28721" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="delicious.png" attachment="delicious.png" attr="h" comment="" date="1262853889" path="delicious.png" size="103" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="digg.png" attachment="digg.png" attr="h" comment="" date="1262853914" path="digg.png" size="223" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="email.png" attachment="email.png" attr="h" comment="" date="1262855502" path="email.png" size="823" user="TWikiContributor" version="2"}%
+%META:FILEATTACHMENT{name="facebook.png" attachment="facebook.png" attr="h" comment="" date="1262853956" path="facebook.png" size="149" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="linkedin.png" attachment="linkedin.png" attr="h" comment="" date="1262853978" path="linkedin.png" size="674" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="reddit.png" attachment="reddit.png" attr="h" comment="" date="1262854005" path="reddit.png" size="645" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="stumbleupon.png" attachment="stumbleupon.png" attr="h" comment="" date="1262854024" path="stumbleupon.png"  user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="technorati.png" attachment="technorati.png" attr="h" comment="" date="1262854043" path="technorati.png" size="283" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="twitter.png" attachment="twitter.png" attr="h" comment="" date="1262854061" path="twitter.png" size="385" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="googlebookmark.png" attachment="googlebookmark.png" attr="h" comment="" date="1262854072" path="googlebookmark.png" size="758" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="live.png" attachment="live.png" attr="h" comment="" date="1262931398" path="live.png" size="4574" user="TWikiContributor" version="2"}%
+%META:FILEATTACHMENT{name="misterwong.png" attachment="misterwong.png" attr="h" comment="" date="1262854162" path="misterwong.png" size="668" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="ping.png" attachment="ping.png" attr="h" comment="" date="1262854181" path="ping.png" size="673" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="rss.png" attachment="rss.png" attr="h" comment="" date="1262854201" path="rss.png" size="827" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="yahoomyweb.png" attachment="yahoomyweb.png" attr="h" comment="" date="1262854811" path="yahoomyweb.png" size="606" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="posterous.png" attachment="posterous.png" attr="h" comment="" date="1262931540" path="posterous.png" size="1024" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="friendfeed.png" attachment="friendfeed.png" attr="h" comment="" date="1262931703" path="friendfeed.png" size="816" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="yahoobuzz.png" attachment="yahoobuzz.png" attr="h" comment="" date="1262931765" path="yahoobuzz.png" size="684" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="newsvine.png" attachment="newsvine.png" attr="h" comment="" date="1262931805" path="newsvine.png" size="131" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="slashdot.png" attachment="slashdot.png" attr="h" comment="" date="1262932925" path="slashdot.png" size="111" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="simpy.png" attachment="simpy.png" attr="h" comment="" date="1262933558" path="simpy.png" size="543" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="mixx.png" attachment="mixx.png" attr="h" comment="" date="1262935490" path="mixx.png" size="134" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="twiki-logo-80x40-t.gif" attachment="twiki-logo-80x40-t.gif" attr="h" comment="" date="1263025495" path="twiki-logo-80x40-t.gif" size="1999" user="TWikiContributor" version="1"}%
