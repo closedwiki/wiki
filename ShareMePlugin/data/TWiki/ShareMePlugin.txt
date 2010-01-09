@@ -1,0 +1,129 @@
+%META:TOPICINFO{author="PeterThoeny" date="1263024004" format="1.1" reprev="1.6" version="1.6"}%
+---+!! Share-Me Plugin
+
+Add a bar of icons to share a TWiki page on popular social media sites and bookmarking sites such as Digg, Facebook, !StumbleUpon, Twitter.
+
+%TOC%
+
+---++ Syntax Rules
+
+Add =%<nop>SHAREME%= anywhere in a TWiki page or preferably in a TWiki skin:
+<style type="text/css">
+ .example-hover { opacity: .4; -moz-opacity: .4; filter: alpha(opacity=40); }
+ .example-hover:hover { opacity: 1; -moz-opacity: 1; filter: alpha(opacity=100); }
+</style>
+
+| *Write this:* | *Renders as: (if installed)* | *Simulated example:* |
+| =%<nop>SHAREME%= | %SHAREME{Delicious,Facebook,StumbleUpon,Twitter}% | <a href="http://delicious.com/post?url=%SCRIPTURL{view}%/%WEB%/%TOPIC%&amp;title=%TOPIC%&amp;notes=Icon+bar+to+share+a+TWiki+page+on+popular+social+media+sites+such+as+Facebook,+StumbleUpon,+Twitter" target='_shareme' rel='nofollow' style='border-style: none;'><img src="%ATTACHURLPATH%/delicious.png" alt="Delicious" title="Delicious" width='16' height='16' border='0' class='example-hover' /></a> <a href="http://www.facebook.com/share.php?u=%SCRIPTURL{view}%/%WEB%/%TOPIC%&amp;t=%TOPIC%" target='_shareme' rel='nofollow' style='border-style: none;'><img src="%ATTACHURLPATH%/facebook.png" alt="Facebook" title="Facebook" width='16' height='16' border='0' class='example-hover' /></a> <a href="http://www.stumbleupon.com/submit?url=%SCRIPTURL{view}%/%WEB%/%TOPIC%&amp;title=%TOPIC%" target='_shareme' rel='nofollow' style='border-style: none;'><img src="%ATTACHURLPATH%/stumbleupon.png" alt="StumbleUpon" title="StumbleUpon" width='16' height='16' border='0' class='example-hover' /></a> <a href="http://twitter.com/home?status=%TOPIC%+-+%SCRIPTURL{view}%/%WEB%/%TOPIC%" target='_shareme' rel='nofollow' style='border-style: none;'><img src="%ATTACHURLPATH%/twitter.png" alt="Twitter" title="Twitter" width='16' height='16' border='0' class='example-hover' /></a> |
+
+Optionally, a list of social media sites (defined below) can be specified, such as:%BR% =%<nop>SHAREME{"Delicious, Facebook, !StumbleUpon, Twitter"}%=.
+
+---++ Social Media Sites
+
+This table defines the social media sites. The following variables can be used in the URL column:
+   * =$link=: Link of the TWiki topic
+   * =$title=: Spaced out topic name
+   * =$summary=: Topic summary
+   * =$site=: Site host name (%HTTP_HOST%)
+
+<noautolink>
+| *Name* | *Image* | *URL* |
+| Delicious | %ATTACHURL%/delicious.png | http://delicious.com/post?url=$link&amp;title=$title&amp;notes=$summary |
+| Digg | %ATTACHURL%/digg.png | http://digg.com/submit?phase=2&amp;url=$link&amp;title=$title&amp;bodytext=$summary |
+| E-mail | %ATTACHURL%/email.png | mailto:?subject=$title&amp;body=$link |
+| Facebook | %ATTACHURL%/facebook.png | http://www.facebook.com/share.php?u=$link&amp;t=$title |
+| FriendFeed | %ATTACHURL%/friendfeed.png | http://www.friendfeed.com/share?title=$title&amp;link=$link |
+| Google Bookmarks | %ATTACHURL%/googlebookmark.png | http://www.google.com/bookmarks/mark?op=edit&amp;bkmk=$link&amp;title=$title&amp;annotation=$summary |
+| LinkedIn | %ATTACHURL%/linkedin.png | http://www.linkedin.com/shareArticle?mini=true&amp;url=$link&amp;title=$title&amp;source=$site&amp;summary=$summary |
+| Live | %ATTACHURL%/live.png | https://favorites.live.com/quickadd.aspx?marklet=1&amp;url=$link&amp;title=$title |
+| MisterWong | %ATTACHURL%/misterwong.png | http://www.mister-wong.com/addurl/?bm_url=$link&amp;bm_description=$title&amp;plugin=soc |
+| Mixx | %ATTACHURL%/mixx.png | http://www.mixx.com/submit?page_url=$link&amp;title=$title |
+| NewsVine | %ATTACHURL%/newsvine.png | http://www.newsvine.com/_tools/seed&amp;save?u=$link&amp;h=$title |
+| Ping.fm | %ATTACHURL%/ping.png | http://ping.fm/ref/?link=$link&amp;title=$title&amp;body=$summary |
+| Posterous | %ATTACHURL%/posterous.png | http://posterous.com/share?linkto=$link&amp;title=$title&amp;selection=$summary |
+| Reddit | %ATTACHURL%/reddit.png | http://reddit.com/submit?url=$link&amp;title=$title |
+| RSS | %ATTACHURL%/rss.png | %SCRIPTURL{view}%/%BASEWEB%/WebRss |
+| Simpy | %ATTACHURL%/simpy.png | http://www.simpy.com/simpy/LinkAdd.do?href=$link&amp;title=$title |
+| Slashdot | %ATTACHURL%/slashdot.png | http://slashdot.org/bookmark.pl?title=$title&amp;url=$link |
+| StumbleUpon | %ATTACHURL%/stumbleupon.png | http://www.stumbleupon.com/submit?url=$link&amp;title=$title |
+| Technorati | %ATTACHURL%/technorati.png | http://technorati.com/faves?add=$link |
+| Twitter | %ATTACHURL%/twitter.png | http://twitter.com/home?status=$title%20-%20$link |
+| Yahoo! Bookmarks | %ATTACHURL%/yahoomyweb.png | http://bookmarks.yahoo.com/toolbar/savebm?u=$link&amp;t=$title&opener=bm&amp;ei=UTF-8&amp;d=$summary |
+| Yahoo! Buzz | %ATTACHURL%/yahoobuzz.png | http://buzz.yahoo.com/submit/?submitUrl=$link&amp;submitHeadline=$title&amp;submitSummary=$summary&amp;submitCategory=science&amp;submitAssetType=text |
+</noautolink>
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, such as ==%<nop>SHAREMEPLUGIN_SHORTDESCRIPTION%==
+
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Icon bar to share a TWiki page on popular social media sites such as Facebook, !StumbleUpon, Twitter
+
+   * Topic that defines the social media sites: (default: This topic)
+      * Set SITEDEFINITIONS = %SYSTEMWEB%.ShareMePlugin
+
+<noautolink>
+   * Default site icons shown in =%<nop>SHAREME%=, subset of the ones defined in the Social Media Sites section:
+      * Set DEFAULTSITES = Twitter, Delicious, Digg, Facebook, Google Bookmarks, LinkedIn, Reddit, StumbleUpon
+</noautolink>
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
+
+   * Download the ZIP file from the Plugin Home (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * Configure the Plugin:
+      * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
+      * Overload the plugin settings as needed. Do not change the plugin page, but create settings in the %USERSWEB%.TWikiPreferences page. For example, to overload the DEFAULTSITES setting, create a SHAREMEPLUGIN_DEFAULTSITES in the !TWikiPreferences page.
+   * Test if the installation was successful: %SHAREME%
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main/PeterThoeny |
+|  Copyright: | &copy; 2010, TWiki:Main/PeterThoeny |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2010-01-09 (18272) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-01-09: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.008 |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %SYSTEMWEB%.GoodStyle 99%, %SYSTEMWEB%.FormattedSearch 100%, %TOPIC% 100% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+This plugin is inspired by [[http://wordpress.org/extend/plugins/sociable/][Sociable plugin for !WordPress]]. Some GPLed icons have been taken from that plugin.
+
+__Related Topics:__ VarSHAREME, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
+
+-- TWiki:Main/PeterThoeny - 2010-01-09
+
+%META:FILEATTACHMENT{name="delicious.png" attachment="delicious.png" attr="h" comment="" date="1262853889" path="delicious.png" size="103" stream="IO::File=GLOB(0x9790610)" tmpFilename="/usr/tmp/CGItemp28681" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="digg.png" attachment="digg.png" attr="h" comment="" date="1262853914" path="digg.png" size="223" stream="IO::File=GLOB(0xa5a208c)" tmpFilename="/usr/tmp/CGItemp28629" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="email.png" attachment="email.png" attr="h" comment="" date="1262855502" path="email.png" size="823" stream="IO::File=GLOB(0xa179b6c)" tmpFilename="/usr/tmp/CGItemp28723" user="PeterThoeny" version="2"}%
+%META:FILEATTACHMENT{name="facebook.png" attachment="facebook.png" attr="h" comment="" date="1262853956" path="facebook.png" size="149" stream="IO::File=GLOB(0xa1bd66c)" tmpFilename="/usr/tmp/CGItemp28590" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="linkedin.png" attachment="linkedin.png" attr="h" comment="" date="1262853978" path="linkedin.png" size="674" stream="IO::File=GLOB(0x9dfd564)" tmpFilename="/usr/tmp/CGItemp28666" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="reddit.png" attachment="reddit.png" attr="h" comment="" date="1262854005" path="reddit.png" size="645" stream="IO::File=GLOB(0x9771954)" tmpFilename="/usr/tmp/CGItemp28671" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="stumbleupon.png" attachment="stumbleupon.png" attr="h" comment="" date="1262854024" path="stumbleupon.png" size="907" stream="IO::File=GLOB(0x9aba2d4)" tmpFilename="/usr/tmp/CGItemp28646" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="technorati.png" attachment="technorati.png" attr="h" comment="" date="1262854043" path="technorati.png" size="283" stream="IO::File=GLOB(0xa1c086c)" tmpFilename="/usr/tmp/CGItemp28641" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="twitter.png" attachment="twitter.png" attr="h" comment="" date="1262854061" path="twitter.png" size="385" stream="IO::File=GLOB(0xa352f14)" tmpFilename="/usr/tmp/CGItemp28690" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="googlebookmark.png" attachment="googlebookmark.png" attr="h" comment="" date="1262854072" path="googlebookmark.png" size="758" stream="IO::File=GLOB(0x92f4be4)" tmpFilename="/usr/tmp/CGItemp28746" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="live.png" attachment="live.png" attr="h" comment="" date="1262931398" path="live.png" size="4574" stream="IO::File=GLOB(0x9741ce4)" tmpFilename="/usr/tmp/CGItemp28781" user="PeterThoeny" version="2"}%
+%META:FILEATTACHMENT{name="misterwong.png" attachment="misterwong.png" attr="h" comment="" date="1262854162" path="misterwong.png" size="668" stream="IO::File=GLOB(0xa2ac06c)" tmpFilename="/usr/tmp/CGItemp28747" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="ping.png" attachment="ping.png" attr="h" comment="" date="1262854181" path="ping.png" size="673" stream="IO::File=GLOB(0x931246c)" tmpFilename="/usr/tmp/CGItemp28645" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="rss.png" attachment="rss.png" attr="h" comment="" date="1262854201" path="rss.png" size="827" stream="IO::File=GLOB(0x986dad4)" tmpFilename="/usr/tmp/CGItemp28650" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="yahoomyweb.png" attachment="yahoomyweb.png" attr="h" comment="" date="1262854811" path="yahoomyweb.png" size="606" stream="IO::File=GLOB(0x9f9909c)" tmpFilename="/usr/tmp/CGItemp28626" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="posterous.png" attachment="posterous.png" attr="h" comment="" date="1262931540" path="posterous.png" size="1024" stream="IO::File=GLOB(0x9df30bc)" tmpFilename="/usr/tmp/CGItemp28663" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="friendfeed.png" attachment="friendfeed.png" attr="h" comment="" date="1262931703" path="friendfeed.png" size="816" stream="IO::File=GLOB(0x91e7f24)" tmpFilename="/usr/tmp/CGItemp28780" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="yahoobuzz.png" attachment="yahoobuzz.png" attr="h" comment="" date="1262931765" path="yahoobuzz.png" size="684" stream="IO::File=GLOB(0x9a530bc)" tmpFilename="/usr/tmp/CGItemp28786" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="newsvine.png" attachment="newsvine.png" attr="h" comment="" date="1262931805" path="newsvine.png" size="131" stream="IO::File=GLOB(0x8ba96bc)" tmpFilename="/usr/tmp/CGItemp28712" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="slashdot.png" attachment="slashdot.png" attr="h" comment="" date="1262932925" path="slashdot.png" size="111" stream="IO::File=GLOB(0x9b9fa6c)" tmpFilename="/usr/tmp/CGItemp28683" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="simpy.png" attachment="simpy.png" attr="h" comment="" date="1262933558" path="simpy.png" size="543" stream="IO::File=GLOB(0x96ec404)" tmpFilename="/usr/tmp/CGItemp28834" user="PeterThoeny" version="1"}%
+%META:FILEATTACHMENT{name="mixx.png" attachment="mixx.png" attr="h" comment="" date="1262935490" path="mixx.png" size="134" stream="IO::File=GLOB(0x91e1d44)" tmpFilename="/usr/tmp/CGItemp28721" user="PeterThoeny" version="1"}%
