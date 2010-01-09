@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1263023639" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarSHAREME
----+++ SHAREME -- icon bar to share a topics on popular social media sites
+---+++ SHAREME -- icon bar to share topics on popular social media sites
    * The =%<nop>SHAREME{}%= variable is handled by the ShareMePlugin. Many social media sites are defined in the plugin topic.
    * Syntax: =%<nop>SHAREME%= or =%<nop>SHAREME{"site1, site2"}%=
    * Examples:
