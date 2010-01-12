@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1263025804" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1263277220" format="1.1" version="$Rev$"}%
 ---+!! Share-Me Plugin
 
 Add a bar of icons to share a TWiki page on popular social media sites and bookmarking sites such as Digg, Facebook, !StumbleUpon, Twitter.
@@ -62,7 +62,7 @@ This table defines the social media sites. The following variables can be used i
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, such as ==%<nop>SHAREMEPLUGIN_SHORTDESCRIPTION%==
 
    * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Icon bar to share a TWiki page on popular social media sites such as Facebook, !StumbleUpon, Twitter
+      * Set SHORTDESCRIPTION = Icon bar to share TWiki pages on popular social media sites such as Facebook, !StumbleUpon, Twitter
 
    * Topic that defines the social media sites: (default: This topic)
       * Set SITEDEFINITIONS = %SYSTEMWEB%.ShareMePlugin
@@ -82,6 +82,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
      | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+     | ==pub/TWiki/%TOPIC%/*.png== | 16x16 pixel icons of social networking sites |
    * Configure the Plugin:
       * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
       * Overload the plugin settings as needed. Do not change the plugin page, but create settings in the %USERSWEB%.TWikiPreferences page. For example, to overload the DEFAULTSITES setting, create a SHAREMEPLUGIN_DEFAULTSITES in the !TWikiPreferences page.
@@ -116,9 +117,9 @@ __Related Topics:__ VarSHAREME, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperD
 %META:FILEATTACHMENT{name="facebook.png" attachment="facebook.png" attr="h" comment="" date="1262853956" path="facebook.png" size="149" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="linkedin.png" attachment="linkedin.png" attr="h" comment="" date="1262853978" path="linkedin.png" size="674" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="reddit.png" attachment="reddit.png" attr="h" comment="" date="1262854005" path="reddit.png" size="645" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="stumbleupon.png" attachment="stumbleupon.png" attr="h" comment="" date="1262854024" path="stumbleupon.png"  user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="stumbleupon.png" attachment="stumbleupon.png" attr="h" comment="" date="1262854024" path="stumbleupon.png" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="technorati.png" attachment="technorati.png" attr="h" comment="" date="1262854043" path="technorati.png" size="283" user="TWikiContributor" version="1"}%
-%META:FILEATTACHMENT{name="twitter.png" attachment="twitter.png" attr="h" comment="" date="1262854061" path="twitter.png" size="385" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="twitter.png" attachment="twitter.png" attr="h" comment="" date="1263277220" path="twitter.png" size="503" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="googlebookmark.png" attachment="googlebookmark.png" attr="h" comment="" date="1262854072" path="googlebookmark.png" size="758" user="TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="live.png" attachment="live.png" attr="h" comment="" date="1262931398" path="live.png" size="4574" user="TWikiContributor" version="2"}%
 %META:FILEATTACHMENT{name="misterwong.png" attachment="misterwong.png" attr="h" comment="" date="1262854162" path="misterwong.png" size="668" user="TWikiContributor" version="1"}%
