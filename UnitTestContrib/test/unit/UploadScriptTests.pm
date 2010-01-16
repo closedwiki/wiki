@@ -42,6 +42,8 @@ sub do_upload {
     }
     my $query = new Unit::Request(\%args);
     $query->path_info( "/$this->{test_web}/$this->{test_topic}" );
+    $query->request_method('POST');
+    $TWiki::cfg{CryptToken}{Enable}=0;
     my $tmpfile = new CGITempFile(0);
     my $fh = Fh->new($fn, $tmpfile->as_string, 0);
     print $fh $data;
