@@ -122,9 +122,9 @@ sub registerAccount {
                ],
             'action' => [
                 'verify'
-               ]
+               ],
            });
-
+    $query->request_method('POST');
     try {
         TWiki::UI::Register::complete( $this->{twiki} );
     } catch TWiki::OopsException with {
@@ -439,8 +439,9 @@ sub registerVerifyOk {
                                             ],
                           'action' => [
                                        'register'
-                                      ]
+                                      ],
                          });
+   $query->request_method('POST');
 
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
@@ -472,8 +473,10 @@ sub registerVerifyOk {
                                  ],
                        'action' => [
                                     'verify'
-                                   ]
+                                   ],
+
                       });
+    $query->request_method('POST');
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin},$query);
@@ -538,6 +541,7 @@ sub verify_registerBadVerify {
                                        'register'
                                       ]
                          });
+    $query->request_method('POST');
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
@@ -570,6 +574,7 @@ sub verify_registerBadVerify {
             'verify'
            ]
     });
+    $query->request_method('POST');
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
@@ -633,7 +638,7 @@ sub verify_registerNoVerifyOk {
                                        'register'
                                       ]
                          });
-
+    $query->request_method('POST');
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
@@ -694,7 +699,7 @@ sub verify_rejectShortPassword {
                           'Twk1Confirm'   => ['12345'],
                           'action'        => ['register'],
                          });
-
+    $query->request_method('POST');
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
@@ -740,7 +745,7 @@ sub verify_shortPassword {
             'Twk1Confirm'   => ['12345'],
             'action'        => ['register'],
         });
-
+    $query->request_method('POST');
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
@@ -787,6 +792,7 @@ sub verify_duplicateActivation {
                           'Twk1LastName'  => [$this->{new_user_sname}],
                           'action'        => ['register'],
                       });
+    $query->request_method('POST');
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki} = TWiki->new($TWiki::cfg{DefaultUserName}, $query);
     $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
@@ -815,6 +821,7 @@ sub verify_duplicateActivation {
     $query = new Unit::Request ({'code'   => [$code],
                         'action' => ['verify'],
                     });
+    $query->request_method('POST');
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki} = TWiki->new($TWiki::cfg{DefaultUserName},$query);
     $this->{twiki}->net->setMailHandler(\&TWikiFnTestCase::sentMail);
@@ -840,6 +847,7 @@ sub verify_duplicateActivation {
                         'action' => ['verify'],
                     });
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
+    $query->request_method('POST');
     $this->{twiki} = TWiki->new($TWiki::cfg{DefaultUserName},$query);
     $this->{twiki}->net->setMailHandler(\&sentMail);
     try {
@@ -892,7 +900,7 @@ sub verify_resetPasswordOkay {
                                        'resetPassword'
                                       ]
                          });
-
+    $query->request_method('POST');
     $query->path_info( '/'.$this->{users_web}.'/WebHome' );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
@@ -940,7 +948,7 @@ sub verify_resetPasswordNoSuchUser {
                                        'resetPassword'
                                       ]
                          });
-
+    $query->request_method('POST');
     $query->path_info( '/.'.$this->{users_web}.'/WebHome' );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
@@ -982,7 +990,7 @@ sub verify_resetPasswordNeedPrivilegeForMultipleReset {
                                        'resetPassword'
                                       ]
                          });
-
+    $query->request_method('POST');
     $query->path_info( '/.'.$this->{users_web}.'/WebHome' );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
@@ -1027,7 +1035,7 @@ sub verify_resetPasswordNoPassword {
                                        'resetPassword'
                                       ]
                          });
-
+    $query->request_method('POST');
     $query->path_info( '/'.$this->{users_web}.'/WebHome' );
     unlink $TWiki::cfg{Htpasswd}{FileName};
 
@@ -1134,7 +1142,7 @@ EOM
                                                     '1'
                                                    ],
                          });
-
+    $query->request_method('POST');
     $query->path_info( "/$this->{test_web}/$regTopic" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{SuperAdminGroup}, $query);
@@ -1293,7 +1301,7 @@ sub verify_disabled_registration {
                                        'register'
                                       ]
                          });
-
+    $query->request_method('POST');
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
@@ -1355,7 +1363,7 @@ sub test_3951 {
                                        'register'
                                       ]
                          });
-
+    $query->request_method('POST');
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
@@ -1418,7 +1426,7 @@ sub test_4061 {
 
     # Make TWikiUsers read-only
     chmod(0444, "$TWiki::cfg{DataDir}/$this->{users_web}/TWikiUsers.txt");
-
+    $query->request_method('POST');
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
@@ -1566,7 +1574,7 @@ sub verify_resetPassword_NoTWikiUsersEntry {
                                        'resetPassword'
                                       ]
                          });
-
+    $query->request_method('POST');
     $query->path_info( '/'.$this->{users_web}.'/WebHome' );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $TWiki::cfg{DefaultUserLogin}, $query);
