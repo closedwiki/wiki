@@ -229,6 +229,8 @@ sub verify_releaselocksonsave {
                           'action' => [ 'save' ],
                           text => [ "Before\nBaseline\nText\nAfter\n" ],
                          });
+    $query->request_method('POST');
+    $TWiki::cfg{CryptToken}{Enable}=0;
     $query->path_info( "/$this->{test_web}/$topic" );
 
     $this->{twiki} = new TWiki( $testUser1, $query );
@@ -249,6 +251,7 @@ sub verify_releaselocksonsave {
                        text => [ "Before\nChanged\nLines\nAfter\n" ],
                        forcenewrevision => [ 1 ],
                       });
+    $query->request_method('POST');
     $query->path_info( "/$this->{test_web}/$topic" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $testUser1, $query );
@@ -269,7 +272,7 @@ sub verify_releaselocksonsave {
                        text => [ "Before\nSausage\nChips\nAfter\n" ],
                        forcenewrevision => [ 1 ],
                       });
-
+    $query->request_method('POST');
     $query->path_info( "/$this->{test_web}/$topic" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $testUser2, $query );
