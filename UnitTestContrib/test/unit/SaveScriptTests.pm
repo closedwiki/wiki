@@ -110,6 +110,7 @@ sub test_AUTOINC {
     $query->path_info( '/' . $this->{test_web}.'.TestAutoAUTOINC00' );
     $this->{twiki}->finish();
     $query->request_method('POST');
+    $TWiki::cfg{CryptToken}{Enable}=0;
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     my %old;
     foreach my $t ($this->{twiki}->{store}->getTopicNames( $this->{test_web})) {
@@ -148,6 +149,8 @@ sub test_XXXXXXXXXX {
         text => [ 'nowt' ],
     });
     $query->path_info( '/' . $this->{test_web}.'.TestTopicXXXXXXXXXX' );
+    $TWiki::cfg{CryptToken}{Enable}=0;
+    $query->request_method('POST');
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     my %old;
@@ -186,6 +189,8 @@ sub test_XXXXXXXXX {
         text => [ 'nowt' ],
     });
     $query->path_info("/$this->{test_web}/TestTopicXXXXXXXXX");
+    $TWiki::cfg{CryptToken}{Enable}=0;
+    $query->request_method('POST');
     $this->assert(
         !$this->{twiki}->{store}->topicExists($this->{test_web},'TestTopic0'));
     $this->{twiki}->finish();
@@ -215,6 +220,8 @@ sub test_XXXXXXXXXXX {
         text => [ 'nowt' ],
     });
     $query->path_info("/$this->{test_web}/TestTopicXXXXXXXXXXX");
+    $TWiki::cfg{CryptToken}{Enable}=0;
+    $query->request_method('POST');
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     my %old;
@@ -239,6 +246,8 @@ sub test_emptySave {
         action => [ 'save' ],
         topic => [ $this->{test_web}.'.EmptyTestSaveScriptTopic' ]
        });
+    $TWiki::cfg{CryptToken}{Enable}=0;
+    $query->request_method('POST');
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
@@ -255,6 +264,8 @@ sub test_simpleTextSave {
         action => [ 'save' ],
         topic => [ $this->{test_web}.'.DeleteTestSaveScriptTopic' ]
        });
+    $TWiki::cfg{CryptToken}{Enable}=0;
+    $query->request_method('POST');
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
@@ -271,6 +282,8 @@ sub test_templateTopicTextSave {
         action => [ 'save' ],
         topic => [ $this->{test_web}.'.TemplateTopic' ]
        });
+    $TWiki::cfg{CryptToken}{Enable}=0;
+    $query->request_method('POST');
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query);
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
@@ -279,6 +292,7 @@ sub test_templateTopicTextSave {
         action => [ 'save' ],
         topic => [ $this->{test_web}.'.TemplateTopic' ]
        });
+    $query->request_method('POST');
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
@@ -295,6 +309,8 @@ sub test_prevTopicTextSave {
                          action => [ 'save' ],
                          topic => [ $this->{test_web}.'.PrevTopicTextSave' ]
                         });
+    $TWiki::cfg{CryptToken}{Enable}=0;
+    $query->request_method('POST');
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query);
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
@@ -303,6 +319,7 @@ sub test_prevTopicTextSave {
                          action => [ 'save' ],
                          topic => [ $this->{test_web}.'.PrevTopicTextSave' ]
                         });
+    $query->request_method('POST');
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query);
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
@@ -319,6 +336,8 @@ sub test_prevTopicEmptyTextSave {
                          action => [ 'save' ],
                          topic => [ $this->{test_web}.'.PrevTopicEmptyTextSave' ]
                         });
+    $TWiki::cfg{CryptToken}{Enable}=0;
+    $query->request_method('POST');
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query);
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
@@ -326,6 +345,7 @@ sub test_prevTopicEmptyTextSave {
                          action => [ 'save' ],
                          topic => [ $this->{test_web}.'.PrevTopicEmptyTextSave' ]
                         });
+    $query->request_method('POST');
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query);
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
@@ -344,6 +364,8 @@ sub test_simpleFormSave {
                          [ 'Flintstone' ],
                          topic => [ $this->{test_web}.'.SimpleFormSave' ]
                         });
+    $TWiki::cfg{CryptToken}{Enable}=0;
+    $query->request_method('POST');
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query);
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
@@ -367,6 +389,8 @@ sub test_templateTopicFormSave {
                          action => [ 'save' ],
                          topic => [ $this->{test_web}.'.TemplateTopic' ]
                         });
+    $TWiki::cfg{CryptToken}{Enable}=0;
+    $query->request_method('POST');
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query);
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
@@ -377,6 +401,7 @@ sub test_templateTopicFormSave {
                          action => [ 'save' ],
                          topic => [ $this->{test_web}.'.TemplateTopicAgain' ]
                         });
+    $query->request_method('POST');
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query);
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
@@ -401,6 +426,8 @@ sub test_prevTopicFormSave {
                          action => [ 'save' ],
                          topic => [ $this->{test_web}.'.PrevTopicFormSave' ]
                         });
+    $TWiki::cfg{CryptToken}{Enable}=0;
+    $query->request_method('POST');
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query);
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
@@ -410,6 +437,7 @@ sub test_prevTopicFormSave {
                       [ 'Barney' ],
                       topic => [ $this->{test_web}.'.PrevTopicFormSave' ]
                      });
+    $query->request_method('POST');
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
@@ -433,6 +461,8 @@ sub test_simpleFormSave1 {
                          'Textfield' => [ 'Test' ],
 			 topic  => [ $this->{test_web}.'.SimpleFormTopic' ]
                         });
+    $TWiki::cfg{CryptToken}{Enable}=0;
+    $query->request_method('POST');
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query);
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
@@ -450,6 +480,7 @@ sub test_simpleFormSave2 {
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki();
 
+    $TWiki::cfg{CryptToken}{Enable}=0;
     my $oldmeta = new TWiki::Meta( $this->{twiki}, $this->{test_web}, 'SimpleFormSave2');
     my $oldtext = $testtext1;
     $this->{twiki}->{store}->extractMetaData( $oldmeta, $oldtext );
@@ -466,6 +497,7 @@ sub test_simpleFormSave2 {
                          'Textfield' => [ 'Test' ],
 			 topic  => [ $this->{test_web}.'.SimpleFormSave2' ]
                         });
+    $query->request_method('POST');
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query);
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
@@ -483,6 +515,7 @@ sub test_simpleFormSave3 {
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki();
 
+    $TWiki::cfg{CryptToken}{Enable}=0;
     my $oldmeta = new TWiki::Meta(
         $this->{twiki}, $this->{test_web}, 'SimpleFormSave3');
     my $oldtext = $testtext1;
@@ -502,6 +535,7 @@ sub test_simpleFormSave3 {
             'Textfield' => [ 'Test' ],
             topic  => [ $this->{test_web}.'.SimpleFormSave3' ]
            });
+    $query->request_method('POST');
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query);
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
@@ -524,6 +558,8 @@ sub test_templateTopicWithMeta {
             action => [ 'save' ],
             topic => [ $this->{test_web}.'.TemplateTopicWithMeta' ]
            });
+    $query->request_method('POST');
+    $TWiki::cfg{CryptToken}{Enable}=0;
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki} );
@@ -539,6 +575,7 @@ sub test_merge {
     my $this = shift;
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki();
+    $TWiki::cfg{CryptToken}{Enable}=0;
 
     # Set up the original topic that the two edits started on
     my $oldmeta = new TWiki::Meta(
@@ -577,6 +614,7 @@ Glaggie
 GUMP
             topic  => [ $this->{test_web}.'.MergeSave' ]
            });
+    $query1->request_method('POST');
     # Do the save
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query1);
@@ -606,6 +644,8 @@ GUMP
             topic  => [ $this->{test_web}.'.MergeSave' ]
            });
     # Do the save. This time we expect a merge exception
+    $query2->request_method('POST');
+    $TWiki::cfg{CryptToken}{Enable}=0;
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_2_login}, $query2);
     try {
@@ -660,6 +700,8 @@ sub test_restoreRevision {
         action => [ 'save' ],
         topic => [ $this->{test_web}.'.DeleteTestRestoreRevisionTopic' ]
        });
+    $query->request_method('POST');
+    $TWiki::cfg{CryptToken}{Enable}=0;
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
@@ -684,6 +726,7 @@ sub test_restoreRevision {
                          'Textfield' => [ 'Test' ],
 			 topic  => [ $this->{test_web}.'.DeleteTestRestoreRevisionTopic' ]
                         });
+    $query->request_method('POST');
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query);
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
@@ -701,6 +744,7 @@ sub test_restoreRevision {
         forcenewrevision => 1,
         topic => [ $this->{test_web}.'.DeleteTestRestoreRevisionTopic' ]
        });
+    $query->request_method('POST');
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
@@ -719,6 +763,7 @@ sub test_restoreRevision {
         forcenewrevision => 1,
         topic => [ $this->{test_web}.'.DeleteTestRestoreRevisionTopic' ]
        });
+    $query->request_method('POST');
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
@@ -747,6 +792,7 @@ sub test_1897 {
 
     # make sure we have time to complete the test
     $TWiki::cfg{ReplaceIfEditedAgainWithin} = 7200;
+    $TWiki::cfg{CryptToken}{Enable}=0;
 
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki($this->{test_user_login});
@@ -779,6 +825,7 @@ sub test_1897 {
             originalrev => $original,
             topic  => [ $this->{test_web}.'.MergeSave' ]
            });
+    $query->request_method('POST');
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query);
     $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
@@ -798,6 +845,7 @@ sub test_1897 {
             originalrev => $original,
             topic  => [ $this->{test_web}.'.MergeSave' ]
            });
+    $query->request_method('POST');
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_2_login}, $query);
     try {
@@ -824,6 +872,8 @@ sub test_missingTemplateTopic {
         action => [ 'save' ],
         topic => [ $this->{test_web}.'.FlibbleDeDib' ]
        });
+    $query->request_method('POST');
+    $TWiki::cfg{CryptToken}{Enable}=0;
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     try {
         $this->capture( \&TWiki::UI::Save::save, $this->{twiki});
