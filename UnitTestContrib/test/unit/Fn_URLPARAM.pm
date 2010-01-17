@@ -53,7 +53,7 @@ sub test_default {
     $this->{request}->param( -name=>'foo', -value=>'');
     $str = $this->{twiki}->handleCommonTags(
         '%URLPARAM{"foo" default="bar"}%', $this->{test_web}, $this->{test_topic});
-    $this->assert_str_equals('', "$str");
+    $this->assert_str_equals('bar', "$str");
 }
 
 sub test_encode {
