@@ -34,7 +34,7 @@ require TWiki::Plugins; # For the API version
 
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $installWeb $debug $defaultSites $pluginName $NO_PREFS_IN_TOPIC $siteDefs );
 
-$VERSION = '2010-01-09 (18275)';
+$VERSION = '2010-01-16 (18283)';
 
 $RELEASE = 'TWiki';
 
