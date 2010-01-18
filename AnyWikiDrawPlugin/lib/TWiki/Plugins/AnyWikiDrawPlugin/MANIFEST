@@ -1,7 +1,65 @@
 data/TWiki/AnyWikiDrawPlugin.txt 0644 Plugin doc page
 lib/TWiki/Plugins/AnyWikiDrawPlugin.pm 0444 Plugin Perl module
-bin/pack200 0555 Plugin Perl CGI
+lib/TWiki/Plugins/AnyWikiDrawPlugin/twikidraw-source.zip 0444
 templates/anywikidraw.tmpl 0444 Template
 templates/anywikidraw.pattern.tmpl 0444 Template
 pub/TWiki/AnyWikiDrawPlugin/AnyWikiDrawForTWiki.jar 0444 Java applet
-
+pub/TWiki/AnyWikiDrawPlugin/AnyWikiDrawForTWiki.jar.pack.gz 0444
+pub/TWiki/AnyWikiDrawPlugin/edit.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/example.draw 0664
+pub/TWiki/AnyWikiDrawPlugin/example.gif 0664
+pub/TWiki/AnyWikiDrawPlugin/example.map 0664
+pub/TWiki/AnyWikiDrawPlugin/Splash.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/ATEXT1.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/ATEXT2.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/ATEXT3.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/BORDDEC1.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/BORDDEC2.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/BORDDEC3.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/CONN1.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/CONN2.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/CONN3.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/DIAMOND2.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/DIAMOND3.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/ELLIPSE1.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/ELLIPSE2.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/ELLIPSE3.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/ERASER2.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/ERASER3.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/LINE1.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/LINE2.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/LINE3.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/OCONN1.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/OCONN2.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/OCONN3.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/PERT2.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/PERT3.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/POLYGON1.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/POLYGON2.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/POLYGON3.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/RECT1.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/RECT2.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/RECT3.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/RRECT1.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/RRECT2.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/RRECT3.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/screenshot.png 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/SCRIBBL1.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/SCRIBBL2.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/SCRIBBL3.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/SEL1.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/SEL2.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/SEL3.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/TEXT1.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/TEXT2.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/TEXT3.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/TOBACK2.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/TOBACK3.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/TOFRONT2.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/TOFRONT3.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/TRIANGLE2.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/TRIANGLE3.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/twikidraw.jar 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/URL1.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/URL2.gif 0444
+pub/TWiki/AnyWikiDrawPlugin/TWikiDraw/URL3.gif 0444

@@ -3,7 +3,7 @@
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001-2006 Peter Thoeny, peter@thoeny.org
 # Copyright (C) 2002-2006 Crawford Currie, cc@c-dot.co.uk
-# Copyright (C) 2007 Werner Randelshofer, werner.randelshofer@bluewin.ch
+# Copyright (C) 2007-2009 Werner Randelshofer, werner.randelshofer@bluewin.ch
 # Copyright (C) 2008 Stéphane Lenclud, stephane@lenclud.com
 
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
@@ -91,7 +91,7 @@ $VERSION = '$Rev: 15942 (22 Jan 2008) $';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '0.12';
+$RELEASE = '0.13.2';
 
 # Short description of this plugin
 # One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
@@ -230,7 +230,7 @@ sub _ANYWIKIDRAW
 		{
 		if ($query->param('editDrawing') eq $fileName)
 			{
-			return editAnyDrawing($fileName, $width, $height, $theTopic, $theWeb);
+			return editAnyDrawing($session, $fileName, $width, $height, $theTopic, $theWeb);
 			}
 		else
 			{
@@ -943,51 +943,56 @@ sub handleAnyDrawing {
   # should really use TWiki server-side include mechanism....
   my $mapFile = TWiki::Func::getPubDir() . "/$web/$topic/$nameVal.map";
   my $img = '';
-  if($nameVal =~ /\.svg$/) {
+  if($nameVal =~ /\.svg(z)?$/) {
   	$img = "src=\"%ATTACHURLPATH%/$nameVal.png\"";
   } else {
   	$img = "src=\"%ATTACHURLPATH%/$nameVal\"";
   }
-  my $editUrl = $ENV["REQUEST_URI"]."?editDrawing=$nameVal";
   my $imgText = "";
+  my $editUrl = "?editDrawing=$nameVal";
   my $edittext = $editmess;
-  $edittext =~ s/%F%/$nameVal/g;
+  my $imgFile = TWiki::Func::getPubDir() . "/$web/$topic/$nameVal";
   my $hover =
-    "onmouseover=\"window.status='$edittext';return true;\" ".
-      "onmouseout=\"window.status='';return true;\"";
-
-  if ( -e $mapFile ) {
-	my $mapname = $nameVal;
-	$mapname =~ s/^.*\/([^\/]+)$/$1/;
-	$img .= " usemap=\"#$mapname\"";
-	my $map = TWiki::Func::readFile($mapFile);
-    # Unashamed hack to handle Web.TopicName links
-    $map =~ s/href=\"((\w+)\.)?(\w+)(#\w+)?\"/&_processHref($2,$3,$4,$web)/ge;
-	$map = TWiki::Func::expandCommonVariables( $map, $topic );
-	$map =~ s/%MAPNAME%/$mapname/g;
-	$map =~ s/%ANYWIKIDRAW%/$editUrl/g;
-	$map =~ s/%EDITTEXT%/$edittext/g;
-	$map =~ s/%HOVER%/$hover/g;
-	$map =~ s/[\r\n]+//g;
-
-	# Add an edit link just above the image if required
-	if ($editButton eq 1) {
-		$imgText .= "$map<img $img>";
-		$imgText .= "<a href=\"$editUrl\" $hover>Edit</a>";
-	} else {
-		$imgText .= "<a href=\"$editUrl\" $hover>".
-			"<img $img $hover alt=\"$edittext\" title=\"$edittext\" />$map</a>";
-	}
+	"onmouseover=\"window.status='$edittext';return true;\" ".
+	  "onmouseout=\"window.status='';return true;\"";
+  if (-e $imgFile) {
+	  $edittext =~ s/%F%/$nameVal/g;
+	
+	  if ( -e $mapFile ) {
+		my $mapname = $nameVal;
+		$mapname =~ s/^.*\/([^\/]+)$/$1/;
+		$img .= " usemap=\"#$mapname\"";
+		my $map = TWiki::Func::readFile($mapFile);
+		# Unashamed hack to handle Web.TopicName links
+		$map =~ s/href=\"((\w+)\.)?(\w+)(#\w+)?\"/&_processHref($2,$3,$4,$web)/ge;
+		$map = TWiki::Func::expandCommonVariables( $map, $topic );
+		$map =~ s/%MAPNAME%/$mapname/g;
+		$map =~ s/%ANYWIKIDRAW%/$editUrl/g;
+		$map =~ s/%EDITTEXT%/$edittext/g;
+		$map =~ s/%HOVER%/$hover/g;
+		$map =~ s/[\r\n]+//g;
+	
+		# Add an edit link just above the image if required
+		if ($editButton eq 1) {
+			$imgText .= "$map<img $img>";
+			$imgText .= "<a href=\"$editUrl\" $hover>Edit</a>";
+		} else {
+			$imgText .= "<a href=\"$editUrl\" $hover>".
+				"<img $img $hover alt=\"$edittext\" title=\"$edittext\" />$map</a>";
+		}
+	  } else {
+		# insensitive drawing; the whole image gets a rather more
+		# decorative version of the edit URL
+		if ($editButton eq 1) {
+			$imgText .= "<img $img>";
+			$imgText .= "<a href=\"$editUrl\" $hover>Edit</a>";
+		} else {
+			$imgText .= "<a href=\"$editUrl\" $hover>".
+				"<img $img $hover alt=\"$edittext\" title=\"$edittext\" /></a>";
+		}
+	  }
   } else {
-	# insensitive drawing; the whole image gets a rather more
-	# decorative version of the edit URL
-	if ($editButton eq 1) {
-		$imgText .= "<img $img>";
-		$imgText .= "<a href=\"$editUrl\" $hover>Edit</a>";
-	} else {
-		$imgText .= "<a href=\"$editUrl\" $hover>".
-			"<img $img $hover alt=\"$edittext\" title=\"$edittext\" /></a>";
-	}
+		$imgText .= "<a href=\"$editUrl\" $hover>Create $nameVal</a>";
   }
   return $imgText;
 }
@@ -999,26 +1004,38 @@ Output HTML code for editing a drawing using the java applet.
 
 
 sub editAnyDrawing {
-	my( $fileName, $width, $height, $topic, $web ) = @_;
-  
+	my( $session, $fileName, $width, $height, $topic, $web ) = @_;
+
+    # Only authenticated users may edit a drawing.
+    $session->{users}->{loginManager}->forceAuthentication();
+
 	my $nameVal = $fileName;
-  
 	my $drawingFile = TWiki::Func::getPubDir() . "/$web/$topic/$nameVal";
 	my $downloadURL = "%ATTACHURLPATH%/$nameVal";
-	my $scriptURLPath = "%SCRIPTURLPATH%/pack200%SCRIPTSUFFIX%";
+	my $pluginPubPath = "%PUBURLPATH%/TWiki/AnyWikiDrawPlugin";
 	
-	my $output = '<a name="appletdrawing"></a>'.
+	my $output = '<a name="anywikidraw" id="anywikidraw"></a>'.
 			'<div style="z-index: 101;">'.
 			'<applet codebase="/" '.
-			' archive="'.$scriptURLPath.'/pub/TWiki/AnyWikiDrawPlugin/AnyWikiDrawForTWiki.jar"'. 
+			' archive="'.$pluginPubPath.'/AnyWikiDrawForTWiki.jar"'. 
 			' code="org.anywikidraw.twiki.TWikiDrawingApplet.class"'.
-			' width="'.(($width + 4 < 400) ? 400 : $width+4).'" height="'.(($height + 130 < 200) ? 200 : $height+130).'">'.
+			' width="'.(($width + 24 < 600) ? 600 : (($width + 24 > 800) ? 800 : $width+24)).'"'.
+            ' height="'.(($height + 160 < 480) ? 480 : (($height + 4 > 600) ? 600 : $height+160)).'">'.
 				'<param name="DrawingName" value="'.$nameVal.'">'.
 				'<param name="DrawingWidth" value="'.$width.'">'.
 				'<param name="DrawingHeight" value="'.$height.'">'.
 				((-e $drawingFile) ? '<param name="DrawingURL" value="'.$downloadURL.'">' : '').
 				'<param name="PageURL" value="'."%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%".'">'.
 				'<param name="UploadURL" value="'."%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%WEB%/%TOPIC%".'">'.
+
+                # BEGIN Parameters for Sun Java Plugin 
+                '<param name="codebase_lookup" value="false">'.
+                '<param name="classloader_cache" value="false">'.
+                '<param name="java_arguments" value="-Djnlp.packEnabled=true"/>'.
+                '<param name="image" value="'.$pluginPubPath.'/Splash.gif"/>'.
+                '<param name="boxborder" value="false"/>'.
+                '<param name="centerimage" value="true"/>'.
+                # END Parameters for Sun Java Plugin
 			'</applet>'.
 			'</div>';
 	return $output;
@@ -1034,7 +1051,4 @@ sub _processHref {
 }
 
 
-
-
 1;
-
