@@ -1,7 +1,7 @@
 LinkAtStart
 <!-- /actual -->
 <!-- expected expand LINKATSTART -->
-<span class="twikiNewLink">LinkAtStart<a href="%SCRIPTURLPATH{"edit"}%/TestCases/LinkAtStart?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow" title="Create this topic" >?</a></span>
+<span class="twikiNewLink"><a href=%SCRIPTURLPATH{"edit"}%/TestCases/LinkAtStart?topicparent=TestCases.TestCaseAutoFormatting;nowysiwyg=%IF{ "$ EDITMETHOD='wysiwyg'" then="0" else="1" }%  rel="nofollow" title="LinkAtStart (this topic does not yet exist; you can create it)" >LinkAtStart</a></span>
 <!-- /expected -->
 
 Description: Simple formatting, as described in TWiki.TextFormattingRules
