@@ -699,9 +699,9 @@ sub getWikiName {
     }
     return $TWiki::Plugins::SESSION->{users}->getWikiName( $cUID );
 }
- 
-=pod 
- 
+
+=pod
+
 ---+++ getWikiUserName( $user ) -> $wikiName
 
 return the userWeb.WikiName of the specified user
@@ -746,7 +746,7 @@ returns undef if the WikiName is not found.
 
 *Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
 
-=cut 
+=cut
 
 sub wikiToUserName {
     my( $wiki ) = @_;
@@ -1236,7 +1236,7 @@ sub moveWeb {
 
 Get an iterator over the list of all the changes in the given web between
 =$time= and now. $time is a time in seconds since 1st Jan 1970, and is not
-guaranteed to return any changes that occurred before (now - 
+guaranteed to return any changes that occurred before (now -
 {Store}{RememberChangesFor}). {Store}{RememberChangesFor}) is a
 setting in =configure=. Changes are returned in *most-recent-first*
 order.
@@ -1565,7 +1565,7 @@ sub moveTopic {
 
 =pod
 
----+++ getRevisionInfo($web, $topic, $rev, $attachment ) -> ( $date, $user, $rev, $comment ) 
+---+++ getRevisionInfo($web, $topic, $rev, $attachment ) -> ( $date, $user, $rev, $comment )
 
 Get revision info of a topic or attachment
    * =$web= - Web name, optional, e.g. ='Main'=
@@ -2008,7 +2008,7 @@ This is useful for Plugins that want to include some javascript custom css.
    * =$id= - Unique ID to prevent the same HTML from being duplicated. Plugins should use a prefix to prevent name clashes (e.g EDITTABLEPLUGIN_JSCALENDAR)
    * =$header= - the HTML to be added to the <head> section. The HTML must be valid in a HEAD tag - no checks are performed.
    * =requires= optional, comma-separated list of id's of other head blocks this one depends on.
-   
+
 All TWiki variables present in =$header= will be expanded before being inserted into the =<head>= section.
 
 Note that this is _not_ the same as the HTTP header, which is modified through the Plugins =modifyHeaderHandler=.
@@ -2280,7 +2280,7 @@ sub registerTagHandler {
 
 Should only be called from initPlugin.
 
-Adds a function to the dispatch table of the REST interface 
+Adds a function to the dispatch table of the REST interface
    * =$alias= - The name .
    * =\&fn= - Reference to the function.
 
@@ -2304,8 +2304,8 @@ The EmptyPlugin has the following call in the initPlugin handler:
    TWiki::Func::registerRESTHandler('example', \&restExample);
 </verbatim>
 
-This adds the =restExample= function to the REST dispatch table 
-for the EmptyPlugin under the 'example' alias, and allows it 
+This adds the =restExample= function to the REST dispatch table
+for the EmptyPlugin under the 'example' alias, and allows it
 to be invoked using the URL
 
 =http://server:port/bin/rest/EmptyPlugin/example=
@@ -2611,6 +2611,23 @@ file names to legal server names.
 sub sanitizeAttachmentName {
     require TWiki::Sandbox;
     return TWiki::Sandbox::sanitizeAttachmentName(@_);
+}
+
+=pod
+
+---+++ buildWikiWord( $text ) -> $text
+
+Converts arbitrary text to a WikiWord.
+   * =$pre=        - Arbitrary Text
+Return: =$text=
+
+*Since:* TWiki::Plugins::VERSION 1.3 (18 Jan 2010)
+
+=cut
+
+sub buildWikiWord {
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+    return $TWiki::Plugins::SESSION->{renderer}->buildWikiWord( @_ );
 }
 
 =pod

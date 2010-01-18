@@ -16,7 +16,7 @@ use Error qw(:try);
 require TWiki::Time;
 
 # Used to generate unique placeholders for when we lift blocks out of the
-# text during rendering. 
+# text during rendering.
 use vars qw( $placeholderMarker );
 $placeholderMarker = 0;
 
@@ -414,7 +414,7 @@ sub makeAnchorName {
     $anchorName =~ s/$TWiki::regex{headerPatternNoTOC}//o;
 
     # For most common alphabetic-only character encodings (i.e. iso-8859-*),
-    # remove non-alpha characters 
+    # remove non-alpha characters
     if( !defined($TWiki::cfg{Site}{CharSet}) ||
           $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?/i ) {
         $anchorName =~ s/[^$TWiki::regex{mixedAlphaNum}]+/_/g;
@@ -479,7 +479,7 @@ sub makeUniqueAnchorName {
 }
 
 
-# Returns =title='...'= tooltip info in case LINKTOOLTIPINFO perferences variable is set. 
+# Returns =title='...'= tooltip info in case LINKTOOLTIPINFO perferences variable is set.
 # Warning: Slower performance if enabled.
 sub _linkToolTipInfo {
     my( $this, $theWeb, $theTopic ) = @_;
@@ -523,7 +523,7 @@ sub _linkToolTipInfo {
 
 ---++ ObjectMethod internalLink ( $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink, $doKeepWeb, $hasExplicitLinkLabel ) -> $html
 
-Generate a link. 
+Generate a link.
 
 Note: Topic names may be spaced out. Spaced out names are converted to <nop>WikWords,
 for example, "spaced topic name" points to "SpacedTopicName".
@@ -533,11 +533,11 @@ for example, "spaced topic name" points to "SpacedTopicName".
    * =$theAnchor= - the link anchor, if any
    * =$doLinkToMissingPages= - boolean: false means suppress link for non-existing pages
    * =$doKeepWeb= - boolean: true to keep web prefix (for non existing Web.TOPIC)
-   * =$hasExplicitLinkLabel= - boolean: true in case of [[TopicName][explicit link label]] 
+   * =$hasExplicitLinkLabel= - boolean: true in case of [[TopicName][explicit link label]]
 
 Called by _handleWikiWord and _handleSquareBracketedLink and by Func::internalLink
 
-Calls _renderWikiWord, which in turn will use Plurals.pm to match fold plurals to equivalency with their singular form 
+Calls _renderWikiWord, which in turn will use Plurals.pm to match fold plurals to equivalency with their singular form
 
 SMELL: why is this available to Func?
 
@@ -555,11 +555,11 @@ sub internalLink {
     }
 
     #WebHome links to tother webs render as the WebName
-    if (($theLinkText eq $TWiki::cfg{HomeTopicName}) && 
+    if (($theLinkText eq $TWiki::cfg{HomeTopicName}) &&
         ($theWeb ne $this->{session}->{webName})) {
             $theLinkText = $theWeb;
     }
-    
+
     # Get rid of leading/trailing spaces in topic name
     $theTopic =~ s/^\s*//o;
     $theTopic =~ s/\s*$//o;
@@ -580,7 +580,7 @@ sub internalLink {
 
     # Add <nop> before WikiWord inside link text to prevent double links
     $theLinkText =~ s/(?<=[\s\(])([$TWiki::regex{upperAlpha}])/<nop>$1/go;
-    
+
     return _renderWikiWord($this, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLinkToMissingPages, $doKeepWeb);
 }
 
@@ -641,7 +641,7 @@ sub _renderExistingWikiWord {
     }
     my $tooltip = _linkToolTipInfo( $this, $web, $topic );
     push( @attrs, title => $tooltip ) if( $tooltip );
-    
+
     my $link = CGI::a( { @attrs }, $text );
     # When we pass the tooltip text to CGI::a it may contain
     # <nop>s, and CGI::a will convert the < to &lt;. This is a
@@ -662,7 +662,7 @@ sub _renderNonExistingWikiWord {
     return $ans;
 }
 
-# _handleWikiWord is called by the TWiki Render routine when it sees a 
+# _handleWikiWord is called by the TWiki Render routine when it sees a
 # wiki word that needs linking.
 # Handle the various link constructions. e.g.:
 # WikiWord
@@ -720,7 +720,7 @@ sub _handleWikiWord {
 # format: [[$link][$text]]
 sub _handleSquareBracketedLink {
     my( $this, $web, $topic, $link, $text ) = @_;
-   
+
     # Strip leading/trailing spaces
     $link =~ s/^\s+//;
     $link =~ s/\s+$//;
@@ -756,6 +756,20 @@ sub _handleSquareBracketedLink {
         $anchor = $1;
     }
 
+    $link = $this->buildWikiWord( $link );
+
+    $topic = $link if( $link );
+
+    # Topic defaults to the current topic
+    ($web, $topic) = $this->{session}->normalizeWebTopicName( $web, $topic );
+
+    return $this->internalLink( $web, $topic, $text, $anchor, 1, undef, $hasExplicitLinkLabel );
+}
+
+# Converts arbitrary text to a WikiWord
+sub buildWikiWord {
+    my( $this, $link ) = @_;
+
     # filter out &any; entities (legacy)
     $link =~ s/\&[a-z]+\;//gi;
     # filter out &#123; entities (legacy)
@@ -769,12 +783,7 @@ sub _handleSquareBracketedLink {
     # Get rid of remaining spaces, i.e. spaces in front of -'s and ('s
     $link =~ s/\s//go;
 
-    $topic = $link if( $link );
-
-    # Topic defaults to the current topic
-    ($web, $topic) = $this->{session}->normalizeWebTopicName( $web, $topic );
-
-    return $this->internalLink( $web, $topic, $text, $anchor, 1, undef, $hasExplicitLinkLabel );
+    return $link;
 }
 
 # Handle an external link typed directly into text. If it's an image
@@ -808,7 +817,7 @@ sub _externalLink {
         $opt = ' target="_top"';
     }
     $text ||= $url;
- 
+
     $url =~ s/ /%20/g;  #Item5787: if a url has spaces, escape them so the url has less chance of being broken by later parsing.
     # SMELL: Can't use CGI::a here, because it encodes ampersands in
     # the link, and those have already been encoded once in the
@@ -899,7 +908,7 @@ sub renderFORMFIELD {
                 my $value = $field->{value};
 
                 if (length $value) {
-                    $text = $format;   
+                    $text = $format;
                     $text =~ s/\$value/$value/go;
                 } elsif ( defined $default ) {
                     $text = $default;
@@ -937,7 +946,7 @@ sub getRenderedVersion {
     my $session = $this->{session};
     my $plugins = $session->{plugins};
     my $prefs = $session->{prefs};
-    
+
     @{$this->{LIST}} = ();
 
     %anchornames = ();
@@ -1258,7 +1267,7 @@ sub _filterScript {
 
 Clean up TWiki text for display as plain text without pushing it
 through the full rendering pipeline. Intended for generation of
-topic and change summaries. Adds nop tags to prevent TWiki 
+topic and change summaries. Adds nop tags to prevent TWiki
 subsequent rendering; nops get removed at the very end.
 
 Defuses TML.
@@ -1350,9 +1359,9 @@ sub protectPlainText {
     $text =~ s/([@%])/<nop>$1<nop>/g;    # email address, variable
 
     # Encode special chars into XML &#nnn; entities for use in RSS feeds
-    # - no encoding for HTML pages, to avoid breaking international 
+    # - no encoding for HTML pages, to avoid breaking international
     # characters. Only works for ISO-8859-1 sites, since the Unicode
-    # encoding (&#nnn;) is identical for first 256 characters. 
+    # encoding (&#nnn;) is identical for first 256 characters.
     # I18N TODO: Convert to Unicode from any site character set.
     if( $this->{session}->inContext( 'rss' ) &&
           defined( $TWiki::cfg{Site}{CharSet} ) &&
@@ -1381,7 +1390,7 @@ sub makeTopicSummary {
     $htext =~ s/\n+/ /g;
 
     # FIXME I18N: Avoid splitting within multi-byte characters (e.g. EUC-JP
-    # encoding) by encoding bytes as Perl UTF-8 characters in Perl 5.8+. 
+    # encoding) by encoding bytes as Perl UTF-8 characters in Perl 5.8+.
     # This avoids splitting within a Unicode codepoint (or a UTF-16
     # surrogate pair, which is encoded as a single Perl UTF-8 character),
     # but we ideally need to avoid splitting closely related Unicode codepoints.
@@ -1922,7 +1931,7 @@ sub getReferenceRE {
             } else {
                 # most general search for a reference to a topic or subweb
                 # note that replaceWebReferences() uses $1 from this regex
-                $re = $bow . $matchWeb . 
+                $re = $bow . $matchWeb .
                       "(([\/\.][$TWiki::regex{upperAlpha}][$TWiki::regex{mixedAlphaNum}_]*)*" .
                       "\.[$TWiki::regex{mixedAlphaNum}]+)" . $eow;
             }
@@ -2162,7 +2171,7 @@ sub protectFormFieldValue {
         $value = breakName( $value, $attrs->{break} );
     }
 
-        
+
     # Item3489, Item2837. Prevent $vars in formfields from
     # being expanded in formatted searches.
     # Fix-Item6167 Removing $attrs->{protectdollar} from

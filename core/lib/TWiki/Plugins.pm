@@ -98,7 +98,7 @@ as kernel methods may change between TWiki releases.
 
 =cut
 
-$VERSION = '1.2';
+$VERSION = '1.3';
 
 $inited = 0;
 
