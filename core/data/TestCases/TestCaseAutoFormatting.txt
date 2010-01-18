@@ -216,7 +216,7 @@ class CatAnimal {
 
 ---+++ Expected
 <!-- expected expand WIKIWORDAFTER -->
-<span class="twikiNewLink">WikiWordBeforeList<a href="%SCRIPTURLPATH{"edit"}%/TestCases/WikiWordBeforeList?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow" title="Create this topic">?</a></span>
+<span class="twikiNewLink"><a href=%SCRIPTURLPATH{"edit"}%/TestCases/WikiWordBeforeList?topicparent=TestCases.TestCaseAutoFormatting;nowysiwyg=%IF{ "$ EDITMETHOD='wysiwyg'" then="0" else="1" }% rel="nofollow" title="WikiWordBeforeList (this topic does not yet exist; you can create it)">WikiWordBeforeList</a></span>
 <ol>
 <li>Things</li>
 <li>Stuff
@@ -228,7 +228,7 @@ class CatAnimal {
 <li>Something</li>
 <li>Hello kitty</li>
 </ol>
-<span class="twikiNewLink">WikiWordAfterList<a href="%SCRIPTURLPATH{"edit"}%/TestCases/WikiWordAfterList?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow" title="Create this topic">?</a></span>
+<span class="twikiNewLink"><a href=%SCRIPTURLPATH{"edit"}%/TestCases/WikiWordAfterList?topicparent=TestCases.TestCaseAutoFormatting;nowysiwyg=%IF{ "$ EDITMETHOD='wysiwyg'" then="0" else="1" }% rel="nofollow" title="WikiWordAfterList (this topic does not yet exist; you can create it)">WikiWordAfterList</a></span>
 <!-- /expected -->
 ---+++ Actual
 <!-- actual -->
