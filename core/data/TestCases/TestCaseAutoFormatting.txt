@@ -353,9 +353,7 @@ a@b.com
 <!-- expected expand WIKIWORDS -->
 <a class="twikiLink" href="%SCRIPTURLPATH{"view"}%/TestCases/WebPreferences">WebPreferences</a>
 <p />
-<a class="twikiLink" href="%SCRIPTURLPATH{"view"}%/%USERSWEB%/TWikiUsers">TWikiUsers</a>
-<p />
-<span class="twikiNewLink">CompleteAndUtterNothing<a href="%SCRIPTURLPATH{"edit"}%/TestCases/CompleteAndUtterNothing?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow" title="Create this topic">?</a></span>
+<span class="twikiNewLink"><a href=%SCRIPTURLPATH{"edit"}%/TestCases/CompleteAndUtterNothing?topicparent=TestCases.TestCaseAutoFormatting;nowysiwyg=%IF{ "$ EDITMETHOD='wysiwyg'" then="0" else="1" }% rel="nofollow" title="CompleteAndUtterNothing (this topic does not yet exist; you can create it)">CompleteAndUtterNothing</a></span>
 <p />
 <a class="twikiLink" href="%SCRIPTURLPATH{"view"}%/TestCases/LinkBox">LinkBox</a>
 <a class="twikiLink" href="%SCRIPTURLPATH{"view"}%/TestCases/LinkBox">LinkBoxs</a>
@@ -367,8 +365,6 @@ a@b.com
 ---+++ Actual
 <!-- actual -->
 WebPreferences
-
-%USERSWEB%.TWikiUsers
 
 CompleteAndUtterNothing
 
@@ -383,22 +379,18 @@ LinkBoxes
 ---++ Square Brackets
 ---+++ Expected
 <!-- expected expand SQUABS -->
-<span class="twikiNewLink">wiki syntax<a href="%SCRIPTURLPATH{"edit"}%/TestCases/WikiSyntax?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"  title="Create this topic">?</a></span>
-<p />
-<a class="twikiLink" href="%SCRIPTURLPATH{"view"}%/%USERSWEB%/TWikiUsers">%USERSWEB%.TWiki users</a>
+<span class="twikiNewLink"><a href=%SCRIPTURLPATH{"edit"}%/TestCases/WikiSyntax?topicparent=TestCases.TestCaseAutoFormatting;nowysiwyg=%IF{ "$ EDITMETHOD='wysiwyg'" then="0" else="1" }% rel="nofollow"  title="wiki syntax (this topic does not yet exist; you can create it)">wiki syntax</a></span>
 <p />
 escaped:
 [<nop>[wiki syntax]]
 <p />
 <a href="/relative/URL" target="_top">relative url</a>
 <p />
-<span class="twikiNewLink">filter%rubbish;from'thelink<a href="%SCRIPTURLPATH{"edit"}%/TestCases/FilterRubbishFromThelink?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow" title="Create this topic">?</a></span>
+<span class="twikiNewLink"><a href=%SCRIPTURLPATH{"edit"}%/TestCases/FilterRubbishFromThelink?topicparent=TestCases.TestCaseAutoFormatting;nowysiwyg=%IF{ "$ EDITMETHOD='wysiwyg'" then="0" else="1" }% rel="nofollow" title="filter%rubbish;from'thelink (this topic does not yet exist; you can create it)">filter%rubbish;from'thelink </a></span>
 <!-- /expected -->
 ---+++ Actual
 <!-- actual -->
 [[wiki syntax]]
-
-[[%USERSWEB%.TWiki users]]
 
 escaped:
 ![[wiki syntax]]
@@ -411,7 +403,7 @@ escaped:
 ---++ Protocol Links
 ---+++ Expected
 <!-- expected expand PROTOCOL -->
-<span class="twikiNewLink">syntax<a href="%SCRIPTURLPATH{"edit"}%/TestCases/WikiSyntax?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow" title="Create this topic">?</a></span>
+<span class="twikiNewLink"><a href=%SCRIPTURLPATH{"edit"}%/TestCases/WikiSyntax?topicparent=TestCases.TestCaseAutoFormatting;nowysiwyg=%IF{ "$ EDITMETHOD='wyswyg'" then="0" else="1"}% rel="nofollow" title="syntax (this topic does not yet exist; you can create it)">syntax</a></span>
 <p />
 <a href="http://gnu.org" target="_top">GNU</a>
 <p />
