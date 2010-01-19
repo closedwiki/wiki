@@ -317,6 +317,9 @@ sub test_rename_oldwebnewtopic {
 
     $this->{twiki}->finish();
     # The topic in the path should not matter
+    $query->request_method('POST');
+    $TWiki::cfg{CryptToken}{Enable}=0;
+
     $query->path_info( "/$this->{test_web}/SanityCheck" );
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $TWiki::Plugins::SESSION = $this->{twiki};
@@ -436,6 +439,8 @@ sub test_rename_newweboldtopic {
                         });
 
     $query->path_info("/$this->{test_web}" );
+    $query->request_method('POST');
+    $TWiki::cfg{CryptToken}{Enable}=0;
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
     $TWiki::Plugins::SESSION = $this->{twiki};
@@ -443,7 +448,9 @@ sub test_rename_newweboldtopic {
 
     $this->assert( $this->{twiki}->{store}->topicExists(
         $this->{new_web}, 'OldTopic' ));
-    $this->assert(!$this->{twiki}->{store}->topicExists(
+
+
+$this->assert(!$this->{twiki}->{store}->topicExists(
         $this->{test_web}, 'OldTopic' ));
 
     $this->check($this->{new_web}, 'OldTopic', undef, <<THIS, 4);
@@ -568,6 +575,8 @@ THIS
         newtopic => 'upperCase',
         referring_topics => [ "$this->{test_web}.NewTopic" ],
     });
+    $query->request_method('POST');
+    $TWiki::cfg{CryptToken}{Enable}=0;
 
     $query->path_info("/$this->{test_web}" );
     $this->{twiki}->finish();
@@ -599,6 +608,8 @@ sub test_accessRenameRestrictedTopic {
                          newweb   => $this->{test_web},
                          newtopic => 'NewTopic',
                         });
+    $query->request_method('POST');
+    $TWiki::cfg{CryptToken}{Enable}=0;
 
     $query->path_info("/$this->{test_web}" );
     $this->{twiki}->finish();
@@ -627,6 +638,9 @@ sub test_accessRenameRestrictedWeb {
                          newtopic => 'NewTopic',
                         });
 
+    $query->request_method('POST');
+    $TWiki::cfg{CryptToken}{Enable}=0;
+
     $query->path_info("/$this->{test_web}" );
     $this->{twiki}->finish();
     $this->{twiki} = new TWiki( $this->{test_user_login}, $query );
@@ -653,6 +667,8 @@ sub test_leaseReleasemeLetMeGo {
                          newweb   => $this->{test_web},
                          newtopic => 'NewTopic',
                         });
+    $query->request_method('POST');
+    $TWiki::cfg{CryptToken}{Enable}=0;
 
     $query->path_info("/$this->{test_web}" );
     $this->{twiki}->finish();
