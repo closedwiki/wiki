@@ -465,7 +465,7 @@ nowt!%USERSWEB%
   <th><strong>A0 all rows</strong></th>
   <th><strong>B0</strong></th>
   <th><strong>C0 widen this col</strong></th>
-  <th><strong><span class="twikiNewLink">D0LinkInColHeader<a href="%SCRIPTURLPATH{"edit"}%/TestCases/D0LinkInColHeader?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow" title="Create this topic">?</a></span></strong></th>
+  <th><strong><span class="twikiNewLink"><a href=%SCRIPTURLPATH{"edit"}%/TestCases/D0LinkInColHeader?topicparent=TestCases.TestCaseAutoFormatting;nowysiwyg=%IF{ "$ EDITMETHOD='wysiwyg'" then="0" else="1"}% rel="nofollow" title="D0LinkInColHeader (this topic does not yet exist; you can create it)">D0LinkInColHeader</a></span></strong></th>
   <th><strong>E0 not a link this time</strong></th>
  </tr></thead>
 <tbody>
@@ -553,7 +553,7 @@ Note that when viewing this topic the table below may be formatted by <nop>Table
 ---++ Anchor links
 ---+++ Expected
 <!-- expected expand -->
-<span class="twikiNewLink">AnchorLink#AnchorName<a href="%SCRIPTURLPATH{"edit"}%/TestCases/AnchorLink?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow" title="Create this topic">?</a></span>
+<span class="twikiNewLink"><a href=%SCRIPTURLPATH{"edit"}%/TestCases/AnchorLink?topicparent=TestCases.TestCaseAutoFormatting;nowysiwyg=%IF{ "$ EDITMETHOD='wysiwyg'" then="0" else="1"}% rel="nofollow" title="AnchorLink#AnchorName (this topic does not yet exist; you can create it)">AnchorLink#AnchorName</a></span>
 <a class="twikiAnchorLink" href="%SCRIPTURLPATH{"view"}%/TWiki/TWikiVariables#VarWEBLIST">TWikiVariables#VarWEBLIST</a>
 <!-- /expected -->
 ---+++ Actual
@@ -565,7 +565,7 @@ TWiki.TWikiVariables#VarWEBLIST
 ---++ Link at end of topic
 ---+++ Expected
 <!-- expected expand LINKATEND -->
-<span class="twikiNewLink">LinkAtEnd<a href="%SCRIPTURLPATH{"edit"}%/TestCases/LinkAtEnd?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow" title="Create this topic">?</a></span>
+<span class="twikiNewLink"><a href=%SCRIPTURLPATH{"edit"}%/TestCases/LinkAtEnd?topicparent=TestCases.TestCaseAutoFormatting;nowysiwyg=%IF{ "$ EDITMETHOD='wysiwyg'" then="0" else="1"}% rel="nofollow" title="LinkAtEnd (this topic does not yet exist; you can create it)">LinkAtEnd</a></span>
 <!-- /expected -->
 ---+++ Actual
 <!-- actual -->
