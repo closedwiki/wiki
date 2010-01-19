@@ -33,7 +33,7 @@ sub test_basic {
     my $ui = $this->{twiki}->handleCommonTags(
         '%REVINFO%', $this->{test_web}, $this->{test_topic});
     my $guest = TWiki::Func::getWikiName();
-    unless ($ui =~ /^r1 - \d+ \w+ \d+ - \d+:\d+:\d+ - $this->{users_web}\.$guest$/) {
+    unless ($ui =~ /^r1 - \d+-\d+-\d+ - \d+:\d+:\d+ - $this->{users_web}\.$guest$/) {
         $this->assert(0, $ui);
     }
 }
@@ -43,7 +43,7 @@ sub test_basic2 {
 
     my $ui = $this->{twiki}->handleCommonTags(
         '%REVINFO%', $this->{test_web}, 'GlumDrop');
-    unless ($ui =~ /^r1 - \d+ \w+ \d+ - \d+:\d+:\d+ - $this->{users_web}\.$this->{test_user_wikiname}$/) {
+    unless ($ui =~ /^r1 - \d+-\d+-\d+ - \d+:\d+:\d+ - $this->{users_web}\.$this->{test_user_wikiname}$/) {
         $this->assert(0, $ui);
     }
 }
@@ -53,7 +53,7 @@ sub test_basic3 {
 
     my $ui = $this->{twiki}->handleCommonTags(
         '%REVINFO{topic="GlumDrop"}%', $this->{test_web}, 'GlumDrop');
-    unless ($ui =~ /^r1 - \d+ \w+ \d+ - \d+:\d+:\d+ - $this->{users_web}\.$this->{test_user_wikiname}$/) {
+    unless ($ui =~ /^r1 - \d+-\d+-\d+ - \d+:\d+:\d+ - $this->{users_web}\.$this->{test_user_wikiname}$/) {
         $this->assert(0, $ui);
     }
 }
@@ -62,7 +62,7 @@ sub test_thisWebVars {
 
     my $ui = $this->{twiki}->handleCommonTags(
         '%REVINFO{topic="%BASEWEB%.GlumDrop"}%', $this->{test_web}, 'GlumDrop');
-    unless ($ui =~ /^r1 - \d+ \w+ \d+ - \d+:\d+:\d+ - $this->{users_web}\.$this->{test_user_wikiname}$/) {
+    unless ($ui =~ /^r1 - \d+-\d+-\d+ - \d+:\d+:\d+ - $this->{users_web}\.$this->{test_user_wikiname}$/) {
         $this->assert(0, $ui);
     }
 }
@@ -94,7 +94,7 @@ sub test_otherWeb {
     my $ui = $this->{twiki}->handleCommonTags(
         '%REVINFO{topic="GropeGroup" web="'.$this->{users_web}.'"}%',
         $this->{test_web}, $this->{test_topic});
-    unless ($ui =~ /^r1 - \d+ \w+ \d+ - \d+:\d+:\d+ - $this->{users_web}\.$this->{test_user_wikiname}$/) {
+    unless ($ui =~ /^r1 - \d+-\d+-\d+ - \d+:\d+:\d+ - $this->{users_web}\.$this->{test_user_wikiname}$/) {
         $this->assert(0, $ui);
     }
 }
@@ -105,7 +105,7 @@ sub test_otherWeb2 {
     my $ui = $this->{twiki}->handleCommonTags(
         '%REVINFO{topic="'.$this->{users_web}.'.GropeGroup"}%',
         $this->{test_web}, $this->{test_topic});
-    unless ($ui =~ /^r1 - \d+ \w+ \d+ - \d+:\d+:\d+ - $this->{users_web}\.$this->{test_user_wikiname}$/) {
+    unless ($ui =~ /^r1 - \d+-\d+-\d+ - \d+:\d+:\d+ - $this->{users_web}\.$this->{test_user_wikiname}$/) {
         $this->assert(0, $ui);
     }
 }
