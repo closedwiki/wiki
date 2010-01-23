@@ -1,0 +1,122 @@
+%META:TOPICINFO{author="TWikiContributor" date="1264233115" format="1.1" version="$Rev$"}%
+---+!! Geo Lookup Plugin
+
+Lookup geolocation such as latitude/longitude, city, phone area code by IP address or domain name.
+
+<table width="100%"><tr><td>
+%TOC%
+</td><td align="center" valign="top">
+This plugin is%BR% sponsored by:%BR%
+[[http://twiki.net/][<img src="%ATTACHURL%/twiki-logo-80x40-t.gif" width="80" height="40" border="0" alt="Twiki, Inc." title="Twiki, Inc." />]]
+</td></tr></table>
+
+---++ Syntax Rules
+
+Add =%<nop>GEOLOOKUP{"host" format="..."}%= anywhere in a TWiki page or skin template.
+
+| *Write this:* | *Renders as: (if installed)* | *Simulated example:* |
+| =%<nop>GEOLOOKUP{"75.52.124.86"}%= | %GEOLOOKUP{"75.52.124.86"}% | Sunnyvale, CA, United States |
+
+Parameters:
+   * ="host"=: Host IP address (example: ="75.52.124.86"=) or host name (example: ="twiki.org"=)
+   * =format="..."=: Format of geolocation, optional. Default is ="$city, $region, $country_name"=. Supported variables:
+      * =$latitude=: Latitude
+      * =$longitude=: Longitude
+      * =$city=: City name
+      * =$region=: Region name
+      * =$country_name=: Country name
+      * =$country_code=: Two letter country code
+      * =$postal_code=: Postal code (USA only)
+      * =$metro_code=: [[http://code.google.com/apis/adwords/docs/developer/adwords_api_us_metros.html][Metropolitan code]] (USA only)
+      * =$area_code=: Telephone area code (USA only)
+
+Examples:
+   * =%<nop>GEOLOOKUP{"75.52.124.86"}%= shows default format =Sunnyvale, CA, United Stats=
+   * =%<nop>GEOLOOKUP{"75.52.124.86" format="$latitude, $longitude"}%= shows comma separated latitude and longitude
+
+---++ Usage Examples
+
+#WhereIs
+---+++ Form to get location information based on IP address or domain name
+
+Example: (works properly if plugin is installed and enabled)
+
+<form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%#WhereIs">
+| IP or domain: | <input type="text" name="ip" value="%URLPARAM{"ip" encode="entity" default="%REMOTE_ADDR%"}%" class="twikiInputField" /> <input type="submit" value="Lookup" class="twikiSubmit" /> |
+| Location: | %GEOLOOKUP{%URLPARAM{"ip" encode="quotes" default="%REMOTE_ADDR%"}%}% ([[http://maps.google.com/maps?z=12&ll=%ENCODE{%GEOLOOKUP{"%URLPARAM{"ip" encode="quotes" default="%REMOTE_ADDR%"}%" format="$latitude,$longitude"}%}%][map]]) |
+</form>
+
+---+++ Where are people who register in TWiki?
+
+As a TWiki administrator, you can get location information of people registering in TWiki. In =twiki/templates/registernotifyadmin.tmpl= write this:
+<verbatim>
+%WIKINAME% has been registered with %EMAILADDRESS%, %REMOTE_ADDR%, %GEOLOOKUP{%REMOTE_ADDR%}%
+</verbatim>
+
+---+++ Where am I connecting to the internet?
+
+Show visitors where they connect to the internet. For example, write this:
+<verbatim>
+http://maps.google.com/maps?z=12&ll=%ENCODE{%GEOLOOKUP{"%REMOTE_ADDR%" format="$latitude,$longitude"}%}%
+</verbatim>
+to get this link: (renders properly if plugin is installed and enabled)%BR%
+http://maps.google.com/maps?z=12&ll=%ENCODE{%GEOLOOKUP{"%REMOTE_ADDR%" format="$latitude,$longitude"}%}%
+
+Alternatively, in a similar way, show a map embedded in a TWiki page.
+
+
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, such as ==%<nop>GEOLOOKUPPLUGIN_SHORTDESCRIPTION%==
+
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Lookup geolocation by IP address or domain name
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
+
+   * Download the ZIP file from the Plugin Home (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==data/TWiki/VarGEOLOOKUP.txt== | Variable documentation |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+     | ==pub/TWiki/%TOPIC%/twiki-logo-80x40-t.gif== | Branding icon |
+   * Configure the Plugin:
+      * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
+   * Install [[http://www.maxmind.com/app/c][GeoIP C API]] and CPAN:Geo::IP (fast), or CPAN:Geo::IP::PurePerl (slower, no C API dependency)
+   * Download free !GeoIP database:<br />
+     =cd /usr/local/share/GeoIP= <br />
+     =wget <nop>http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz= <br />
+     =gunzip <nop>GeoLiteCity.dat.gz= <br />
+      * __Hint:__ Install a cron to refresh the geo database once a month on the second day of the month
+      * __Note:__ The !GeoIP database is assumed to be =/usr/local/share/GeoIP/GeoLiteCity.dat=. For non-standard location define a =$TWiki::cfg{GeoLookupPlugin}{GeoDataFile}= configure setting in =twiki/lib/LocalSite.cfg=
+   * Test if the installation was successful:
+      * =%<nop>GEOLOOKUP{"75.52.124.86"}%= returns: %GEOLOOKUP{"75.52.124.86"}%
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main/PeterThoeny, [[http://twiki.net/][Twiki, Inc.]] |
+|  Copyright: | &copy; 2010, TWiki:Main/PeterThoeny |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2010-01-23 (18294) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-01-23: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | CPAN:Geo::IP (fast), or<br /> CPAN:Geo::IP::PurePerl (no C API dependency) |
+|  Other Dependencies: | [[http://www.maxmind.com/app/c][GeoIP C API]] if Geo::IP is used |
+|  Perl Version: | 5.008 |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %SYSTEMWEB%.GoodStyle 99%, %SYSTEMWEB%.FormattedSearch 100%, %TOPIC% 100% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+This plugin refers to !GeoLite data created by !MaxMind, available from http://www.maxmind.com/.
+
+__Related Topics:__ VarGEOLOOKUP, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
+
+-- TWiki:Main/PeterThoeny - 2010-01-23
+
+%META:FILEATTACHMENT{name="twiki-logo-80x40-t.gif" attachment="twiki-logo-80x40-t.gif" attr="h" comment="" date="1264233115" path="twiki-logo-80x40-t.gif" size="1999" user="TWikiContributor" version="1"}%

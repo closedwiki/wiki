@@ -1,0 +1,3 @@
+Geo::IP,>=1.27,cpan,Optional. Available from CPAN:Geo::IP.
+Geo::IP::PurePerl,>=1.21,cpan,Optional. Available from CPAN:Geo::IP::PurePerl.
+TWiki::Plugins,>=1.1,perl,TWiki 4

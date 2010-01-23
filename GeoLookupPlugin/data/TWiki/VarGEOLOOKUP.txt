@@ -1,0 +1,21 @@
+%META:TOPICINFO{author="TWikiContributor" date="1264060722" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarGEOLOOKUP
+---+++ GEOLOOKUP -- lookup geo location by IP address or domain name
+   * The =%<nop>GEOLOOKUP{}%= variable is handled by the GeoLookupPlugin
+   * Syntax: =%<nop>GEOLOOKUP{"host" format="..."}%=
+   * Parameter ="host"=: Host IP address or host name
+   * Parameter =format="..."=: Format of geolocation, optional. Default is ="$city, $region, $country_name"=. Supported variables:
+      * =$latitude=: Latitude
+      * =$longitude=: Longitude
+      * =$city=: City name
+      * =$region=: Region name
+      * =$country_name=: Country name
+      * =$country_code=: Two letter country code
+      * =$postal_code=: Postal code (USA only)
+      * =$metro_code=: [[http://code.google.com/apis/adwords/docs/developer/adwords_api_us_metros.html][Metropolitan code]] (USA only)
+      * =$area_code=: Telephone area code (USA only)
+   * Examples:
+      * =%<nop>GEOLOOKUP{"75.52.124.86"}%= shows default format (city, region, country code)
+      * =%<nop>GEOLOOKUP{"75.52.124.86" format="$latitude, $longitude"}%= shows comma separated Latitude and Longitude
+   * Related: GeoLookupPlugin

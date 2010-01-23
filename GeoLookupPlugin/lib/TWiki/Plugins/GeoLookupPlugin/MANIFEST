@@ -1,0 +1,4 @@
+data/TWiki/GeoLookupPlugin.txt 0644
+data/TWiki/VarGEOLOOKUP.txt 0664
+lib/TWiki/Plugins/GeoLookupPlugin.pm 0444
+pub/TWiki/GeoLookupPlugin/twiki-logo-80x40-t.gif 0444
