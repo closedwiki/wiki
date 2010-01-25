@@ -1,0 +1,39 @@
+%{ This is login template used by OpenIDConsumerContrib, adapted from OpenIDUserContrib }%%TMPL:INCLUDE{"login"}%
+
+%TMPL:DEF{"title"}%---++ %MAKETEXT{"<nop>OpenID User Authentication"}%
+%TMPL:END%
+%TMPL:DEF{"topicaction"}% %TMPL:END%
+%TMPL:DEF{"LOGGED_IN_BANNER"}% %MAINWEB%.%WIKINAME% is currently logged in%TMPL:END%
+%TMPL:DEF{"NEW_USER_NOTE"}%%TMPL:END%
+%TMPL:DEF{"UNRECOGNISED_USER"}%Unrecognized user or URL%TMPL:END%
+
+
+%TMPL:DEF{"usernamefield"}%<input class="twikiInputField openid-identifier" type="text" size="60" name="username" value="https://" /><input type="hidden" name="origurl" value="%ORIGURL%" />%TMPL:END%
+
+
+%TMPL:DEF{"NONOusernamenote"}%%TMPL:P{"authrealm"}%%TMPL:END%
+
+
+%TMPL:DEF{"authrealm"}%<span class="twikiUnvisited">Enter your !OpenID URL, host name, or i-name to log in. (<a href="http://openid.net/help/no-password.html" target="_blank">Help</a>)</span>%TMPL:END%
+
+%TMPL:DEF{"passwordstep"}%%TMPL:END%
+
+
+%TMPL:DEF{"openidcss"}%
+<style type="text/css" media="all">
+input.openid-identifier {   background: url(%PUBURLPATH%/%SYSTEMWEB%/OpenIDConsumerContrib/openid-login-bg.png) no-repeat;   background-color: #fff;   background-position: 0 50%;   padding-left: 18px;}
+</style>
+%TMPL:END%
+
+%{ used by LoginManager to show url entry box on %LOGIN% (ie, left bar) }%
+%TMPL:DEF{"leftbarlogincss"}%
+<style>input.openid-identifier {width:120px;font-size:75%;}</style>
+%TMPL:END%
+%TMPL:DEF{"leftbarlogin"}%
+%MAKETEXT{"[[%SYSTEMWEB%.OpenIDConsumerContrib][OpenID]] login"}%: <form action="%LOGINURL%"  name="loginform" method="post">
+%TMPL:P{usernamefield}%
+</form>
+%TMPL:END%
+
+%{ add css to the end of the html }%
+%TMPL:P{"openidcss"}%
