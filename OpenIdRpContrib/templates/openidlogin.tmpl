@@ -1,4 +1,4 @@
-%{ This is login template used by OpenIDConsumerContrib, adapted from OpenIDUserContrib }%%TMPL:INCLUDE{"login"}%
+%{ This is login template used by OpenIdRpContrib, adapted from OpenIDUserContrib }%%TMPL:INCLUDE{"login"}%
 
 %TMPL:DEF{"title"}%---++ %MAKETEXT{"<nop>OpenID User Authentication"}%
 %TMPL:END%
@@ -21,7 +21,7 @@
 
 %TMPL:DEF{"openidcss"}%
 <style type="text/css" media="all">
-input.openid-identifier {   background: url(%PUBURLPATH%/%SYSTEMWEB%/OpenIDConsumerContrib/openid-login-bg.png) no-repeat;   background-color: #fff;   background-position: 0 50%;   padding-left: 18px;}
+input.openid-identifier {   background: url(%PUBURLPATH%/%SYSTEMWEB%/OpenIdRpContrib/openid-login-bg.png) no-repeat;   background-color: #fff;   background-position: 0 50%;   padding-left: 18px;}
 </style>
 %TMPL:END%
 
@@ -30,7 +30,7 @@ input.openid-identifier {   background: url(%PUBURLPATH%/%SYSTEMWEB%/OpenIDConsu
 <style>input.openid-identifier {width:120px;font-size:75%;}</style>
 %TMPL:END%
 %TMPL:DEF{"leftbarlogin"}%
-%MAKETEXT{"[[%SYSTEMWEB%.OpenIDConsumerContrib][OpenID]] login"}%: <form action="%LOGINURL%"  name="loginform" method="post">
+%MAKETEXT{"[[%SYSTEMWEB%.OpenIdRpContrib][OpenID]] login"}%: <form action="%LOGINURL%"  name="loginform" method="post">
 %TMPL:P{usernamefield}%
 </form>
 %TMPL:END%

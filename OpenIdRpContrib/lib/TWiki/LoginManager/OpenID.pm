@@ -171,7 +171,7 @@ sub login {
     my $nonce_pattern = $TWiki::cfg{OpenIDConsumer}{nonce_pattern}
     	or "GJvxv_%s";
     my $consumer_secret = sub { sprintf($nonce_pattern, shift^0xCAFEFEED )};
-    my $cache = Cache::FileCache->new({ namespace => 'OpenIDConsumerContrib' });
+    my $cache = Cache::FileCache->new({ namespace => 'OpenIdRpContrib' });
 
     # Note: the following conditions may be a little confusing
     # These sections are ordered by conditions checked, not chronologically.

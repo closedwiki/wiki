@@ -1,6 +1,6 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# part of OpenIDConsumerContrib by Ian Kluft
+# part of OpenIdRpContrib by Ian Kluft
 # Copyright (C) 2007-2010 TWiki Inc and TWiki Contributors.
 # All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
@@ -37,8 +37,8 @@ use base 'TWiki::Users::TWikiUserMapping';
 use Error qw( :try );		# included with Perl
 use Assert;			# included with TWiki
 use TWiki::Func;		# included with TWiki
-use DB_File::Lock;		# included with OpenIDConsumerContrib
-use TWiki::LoginManager::OpenID; # included with OpenIDConsumerContrib
+use DB_File::Lock;		# included with OpenIdRpContrib
+use TWiki::LoginManager::OpenID; # included with OpenIdRpContrib
 use Net::OpenID::Consumer;	# CPAN dependency
 
 #use Monitor;
