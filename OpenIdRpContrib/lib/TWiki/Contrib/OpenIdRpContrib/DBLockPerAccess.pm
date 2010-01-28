@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# TWiki::Contrib::DBLockPerAccess
+# TWiki::Contrib::OpenIdRpContrib::DBLockPerAccess
 # by Ian Kluft
 # Copyright (C) 2010 TWiki Inc
 #
@@ -15,7 +15,7 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
-package TWiki::Contrib::DBLockPerAccess;
+package TWiki::Contrib::OpenIdRpContrib::DBLockPerAccess;
 use strict;
 
 use Tie::Hash;							# included with Perl
@@ -74,17 +74,16 @@ sub initialize
 sub exception
 {
 	my $self = shift;
-	my $id = shift;
-	my $desc = shift;
-	debug "exception", $id, $desc;
+	my @params = @_;
+	debug "exception", @params;
 
 	# hopefully new() was provided with an exception callback...
 	if ( ref $self->{exception} eq "CODE" ) {
 		# throw the exception
-		$self->{exception}->( $id, $desc );
+		$self->{exception}->( @params );
 	} else {
 		# otherwise punt
-		die "$desc ($id)\n";
+		die join( "\n", @params )."\n";
 	}
 }
 
@@ -97,12 +96,12 @@ sub lock_tie
 
 	# determine read/write flags for tie
 	if ( !exists $self->{rwflags}{$rw}) {
-			$self->exception( "db_bad_rwflags",
+			$self->exception(
 				"attempt to open for '$rw' failed: mode does not exist" );
 	}
 	my $flags = $self->{rwflags}{$rw};
 	if ( !defined $flags ) {
-			$self->exception( "db_rw_flags",
+			$self->exception(
 				"attempt to open for '$rw' failed: mode note defined "
 					."(usually attempt to write after declaring read-only)" );
 	}
@@ -111,8 +110,7 @@ sub lock_tie
 	$self->{hash} = {};
 	$self->{hash_obj} = tie %{$self->{hash}}, 'DB_File::Lock',
 		$self->{filename}, $flags, $self->{mode}, $self->{db_type}, $rw
-		or $self->exception( "db_tie_failed",
-			"failed to open DB file for $rw" );
+		or $self->exception( "failed to open DB file for $rw" );
 
 	# if we're writing, set flag to prepare to mark it dirty afterward
 	if ( $rw eq "write" ) {
@@ -268,13 +266,13 @@ __END__
 
 =head1 NAME
 
-TWiki::Contrib::DBLockPerAccess - DB_File wrapper which locks the file only per-access
+TWiki::Contrib::OpenIdRpContrib::DBLockPerAccess - DB_File wrapper which locks the file only per-access
 
 =head1 SYNOPSIS
 
- use TWiki::Contrib::DBLockPerAccess;
+ use TWiki::Contrib::OpenIdRpContrib::DBLockPerAccess;
 
- [$X =] tie %hash, "TWiki::Contrib::DBLockPerAccess", $filename, $flags, $mode, $DB_HASH;
+ [$X =] tie %hash, "TWiki::Contrib::OpenIdRpContrib::DBLockPerAccess", $filename, $flags, $mode, $DB_HASH;
  [$X =] tie %hash,  'DB_File::Lock', $filename, $flags, $mode, $DB_BTREE, $locking;
 
  ...use the same way as DB_File for the rest of the interface...

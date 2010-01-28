@@ -34,12 +34,13 @@ package TWiki::Users::OpenIDMapping;
 use strict;
 
 use base 'TWiki::Users::TWikiUserMapping';
-use Error qw( :try );		# included with Perl
-use Assert;			# included with TWiki
-use TWiki::Func;		# included with TWiki
-use DB_File::Lock;		# included with OpenIdRpContrib
-use TWiki::LoginManager::OpenID; # included with OpenIdRpContrib
-use Net::OpenID::Consumer;	# CPAN dependency
+use Error qw( :try );					# included with Perl
+use DB_File;							# included with Perl
+use Assert;								# included with TWiki
+use TWiki::Func;						# included with TWiki
+use TWiki::Contrib::OpenIdRpContrib::DBLockPerAccess;	# included with OpenIdRpContrib
+use TWiki::LoginManager::OpenID;		# included with OpenIdRpContrib
+use Net::OpenID::Consumer;				# CPAN dependency
 
 #use Monitor;
 #Monitor::MonitorMethod('TWiki::Users::OpenIDMapping');
@@ -163,13 +164,16 @@ sub _initOpenIDMapping {
 
     # initialize DB tied hashes
     my $mode;
+	my $session = $this->{session};
+	my $exception = sub { throw TWiki::OopsException( 'generic',
+		web => $session->{web}, topic => $session->{topic},
+		params => [ @_ ]); };
     foreach $mode ( "L2U", "U2W", "W2U" ) {
     	    # derive DB file name
 	    my $db_filename = $TWiki::cfg{DataDir}."/OpenID-$mode.db";
 
 	    # open DB file
-	    #tie(%{$this->{$mode}}, 'DB_File::Lock', $db_filename,  O_RDONLY, 0600, $DB_HASH, 'read');
-	    tie(%{$this->{$mode}}, 'DB_File', $db_filename,  O_RDONLY, 0600, $DB_HASH, 'read');
+	    tie(%{$this->{$mode}}, 'TWiki::Contrib::OpenIdRpContrib::DBLockPerAccess', $db_filename,  O_RDWR|O_CREAT, 0600, $DB_HASH, $exception );
     }
 }
 

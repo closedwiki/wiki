@@ -84,12 +84,7 @@ Break circular references.
 sub finish {
     my $this = shift;
     $this->complete(); # call to flush the session if not already done
-    undef $this->{_cookies};
-    undef $this->{_authScripts};
-    undef $this->{_cgisession};
-    undef $this->{_haveCookie};
-    undef $this->{_MYSCRIPTURL};
-    undef $this->{twiki};
+	$this->SUPER::finish();
 }
 
 
@@ -121,7 +116,7 @@ sub _LOGIN {
     # add CSS to the HTML head section
     my $head =  $twiki->templates->expandTemplate('openidcss')
         .$twiki->templates->expandTemplate('leftbarlogincss');
-    $twiki->addToHEAD('OpenIDConsumer_openidcss', $head );
+    $twiki->addToHEAD('OpenIdRpContrib', $head );
 
     # return the text for the LOGIN tag 
     return $twiki->templates->expandTemplate('leftbarlogin');
@@ -159,17 +154,19 @@ sub login {
             if ( defined $val ) {
                 $openid_p{$p_suffix} = $val;
             }
-	}
+		}
     }
 
     # get OpenID configuration info
-    my $ua_class = $TWiki::cfg{OpenIDConsumer}{ua_class}
-    	or "LWP::UserAgent";
-    my $required_root = (( exists $TWiki::cfg{OpenIDConsumer}{required_root})
-		    ?  $TWiki::cfg{OpenIDConsumer}{required_root}
-		    : $TWiki::cfg{DefaultUrlHost}).'/',
-    my $nonce_pattern = $TWiki::cfg{OpenIDConsumer}{nonce_pattern}
-    	or "GJvxv_%s";
+    my $ua_class = ( exists $TWiki::cfg{OpenIdRpContrib}{ua_class})
+		? $TWiki::cfg{OpenIdRpContrib}{ua_class}
+    	: "LWP::UserAgent";
+    my $required_root = (( exists $TWiki::cfg{OpenIdRpContrib}{required_root})
+		?  $TWiki::cfg{OpenIdRpContrib}{required_root}
+		: $TWiki::cfg{DefaultUrlHost}).'/',
+    my $nonce_pattern = ( exists $TWiki::cfg{OpenIdRpContrib}{nonce_pattern})
+		? $TWiki::cfg{OpenIdRpContrib}{nonce_pattern}
+    	: "GJvxv_%s";
     my $consumer_secret = sub { sprintf($nonce_pattern, shift^0xCAFEFEED )};
     my $cache = Cache::FileCache->new({ namespace => 'OpenIdRpContrib' });
 
@@ -195,17 +192,17 @@ sub login {
 	if (my $setup_url = $csr->user_setup_url) {
 	    # the OpenID request failed, requiring the user to perform setup
 	    throw TWiki::OopsException(
-		'openid_setup_required',
-		web => $web,
-		topic => $topic,
+		'generic',
+		web => $twiki->{web},
+		topic => $twiki->{topic},
 		params => [ 'OpenID Provider <a href="'.$setup_url
 			.'">requires setup</a>' ]);
 	} elsif ($csr->user_cancel) {
 	    # the user or provider canceled the request
 	    throw TWiki::OopsException(
-		'openid_cancel',
-		web => $web,
-		topic => $topic,
+		'generic',
+		web => $twiki->{web},
+		topic => $twiki->{topic},
 		params => [ 'cancel received from OpenID Provider' ]);
 	} elsif (my $vident = $csr->verified_identity) {
 	    # success, redirect back as the logged-in user
@@ -215,9 +212,9 @@ sub login {
 	} else {
 	    # catch-all reporting for other errors
 	    throw TWiki::OopsException(
-		'openid_response_error',
-		web => $web,
-		topic => $topic,
+		'generic',
+		web => $twiki->{web},
+		topic => $twiki->{topic},
 		params => [ 'OpenID error: '.$csr->errcode() ]);
 	}
     } elsif ( defined $loginName ) {
@@ -247,9 +244,9 @@ sub login {
 	    TWiki::Func::redirectCgiQuery( $query, $check_url, 0 );
         } else {
 	    throw TWiki::OopsException(
-		'openid_claimed_identity_error',
-		web => $web,
-		topic => $topic,
+		'generic',
+		web => $twiki->{web},
+		topic => $twiki->{topic},
 		params => [ 'error in OpenID claimed identity: '
 			.$csr->errcode() ]);
         }
