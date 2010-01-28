@@ -447,6 +447,7 @@ sub readFieldNames {
 # QS
 sub indexTopic {
     my ( $self, $invindexer, $web, $topic, %fldNames ) = @_;
+    my $attachment_size_allowed =  TWiki::Func::getPreferencesValue( "KINOSEARCH_ATTACHMENT_INDEX_SIZELIMIT" )|| 1024;  # default is  1GB limit 
 
     my ( $meta, $text ) = TWiki::Func::readTopic( $web, $topic, undef );
 
@@ -534,11 +535,19 @@ sub indexTopic {
             if (   ( $indexextensions{".$extension"} )
                 && ( !$skipattachments{"$web.$topic.$name"} ) )
             {
+             
+ 
+              my $attachment_size =  -s '/var/www/twiki/pub/'.$web.'/'.$topic.'/'.$name; 
+              $attachment_size = $attachment_size /1048576;  #convert it into MB's
+              if ($attachment_size > $attachment_size_allowed) { 
+                      $self->log("Skipping attachment, size: $attachment_size   | $web.$topic | $name");
+                }else {
 
                 print "Indexing attachment $web.$topic.$name\n";
 
                 $self->indexAttachment( $invindexer, $web, $topic,
                     $attachment );
+              }
             }
             else {
                 $self->log("Skipping attachment | $web.$topic | $name");

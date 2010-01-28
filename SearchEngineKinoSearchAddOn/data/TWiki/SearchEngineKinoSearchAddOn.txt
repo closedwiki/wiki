@@ -292,6 +292,7 @@ This add-on uses several preferences which should be set at [[%MAINWEB%.TWikiPre
       * Set KINOSEARCHSUMMARYLENGTH = 300
       * Set KINOSEARCHDEBUG = 0
       * Set KINOSEARCHMAXLIMIT = 2000
+      * Set KINOSEARCH_ATTACHMENT_INDEX_SIZELIMIT = 2000
 </verbatim>
 
 You can also =configure= (The Extensions:SearchEngineKinoSearchAddOn section) where the index and log files are created. 
