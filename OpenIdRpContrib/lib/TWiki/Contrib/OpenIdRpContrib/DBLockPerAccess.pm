@@ -19,6 +19,7 @@ package TWiki::Contrib::OpenIdRpContrib::DBLockPerAccess;
 use strict;
 
 use Tie::Hash;							# included with Perl
+use DB_File;							# included with Perl
 use DB_File::Lock;						# CPAN dependency
 
 use base "Tie::Hash";
@@ -64,7 +65,7 @@ sub initialize
 	} else {
 		$self->{rwflags}{write} = $self->{flags};
 	}
-	
+
 	debug "init: filename=".$self->{filename}, "flags=".$self->{flags},
 		"mode=".$self->{mode}, "db_type=".$self->{db_type},
 		"exception=".$self->{exception}, "\n";
@@ -96,21 +97,37 @@ sub lock_tie
 
 	# determine read/write flags for tie
 	if ( !exists $self->{rwflags}{$rw}) {
-			$self->exception(
-				"attempt to open for '$rw' failed: mode does not exist" );
+			$self->exception( "storage error", 
+				"attempt to open for '$rw' failed", "mode does not exist" );
 	}
 	my $flags = $self->{rwflags}{$rw};
 	if ( !defined $flags ) {
-			$self->exception(
-				"attempt to open for '$rw' failed: mode note defined "
-					."(usually attempt to write after declaring read-only)" );
+			$self->exception( "storage error", 
+				"attempt to open for '$rw' failed: mode note defined",
+					"(possibly attempt to write after declaring read-only)" );
 	}
 
+	# special case: opened w/ O_RDWR|O_CREAT but file doesn't exist yet
+	# it may actually be opened for reading - would fail though should succeed
+	# so fake it and open it for writing/creation the first time
+	if (( ! -e $self->{filename}) # file doesn't exist
+		and (( $self->{flags} & O_ACCMODE ) == O_RDWR ) # read/write mode
+		and (( $self->{flags} & O_CREAT ) == O_CREAT ) # file creation mode
+		and ( $rw eq "read" )) # we're opening it for reading this time
+	{
+		$rw = "write";	# make an exception first time to create the file
+		$flags = $self->{flags}; # take r/w flags from max requested flags
+
+		# Note: if DBLockPerAccess was instatiated with O_RDONLY, then it is
+		# a failure as expected to open for reading the non-existent file
+	}
+	
 	# tie the DB
 	$self->{hash} = {};
 	$self->{hash_obj} = tie %{$self->{hash}}, 'DB_File::Lock',
 		$self->{filename}, $flags, $self->{mode}, $self->{db_type}, $rw
-		or $self->exception( "failed to open DB file for $rw" );
+		or $self->exception( "storage error",
+			"failed to open DB file for $rw", $!,$self->{filename} );
 
 	# if we're writing, set flag to prepare to mark it dirty afterward
 	if ( $rw eq "write" ) {

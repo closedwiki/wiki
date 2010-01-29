@@ -181,42 +181,71 @@ sub login {
     if ( exists $openid_p{mode}) {
         # found OpenID parameters so process response from OpenID provider
 
-	my $csr = Net::OpenID::Consumer->new (
-	    cache => $cache,
-	    consumer_secret => $consumer_secret,
-	    required_root => $required_root,
-	    args  => $query,
-	);
+		my $csr = Net::OpenID::Consumer->new (
+			cache => $cache,
+			consumer_secret => $consumer_secret,
+			required_root => $required_root,
+			args  => $query,
+		);
 
-	# handle responses
-	if (my $setup_url = $csr->user_setup_url) {
-	    # the OpenID request failed, requiring the user to perform setup
-	    throw TWiki::OopsException(
-		'generic',
-		web => $twiki->{web},
-		topic => $twiki->{topic},
-		params => [ 'OpenID Provider <a href="'.$setup_url
-			.'">requires setup</a>' ]);
-	} elsif ($csr->user_cancel) {
-	    # the user or provider canceled the request
-	    throw TWiki::OopsException(
-		'generic',
-		web => $twiki->{web},
-		topic => $twiki->{topic},
-		params => [ 'cancel received from OpenID Provider' ]);
-	} elsif (my $vident = $csr->verified_identity) {
-	    # success, redirect back as the logged-in user
-	    $this->userLoggedIn($vident->url);
-	    $query->delete( 'origurl', 'username', 'password', @openid_keys );
-	    $this->redirectCgiQuery($query, $query->self_url );
-	} else {
-	    # catch-all reporting for other errors
-	    throw TWiki::OopsException(
-		'generic',
-		web => $twiki->{web},
-		topic => $twiki->{topic},
-		params => [ 'OpenID error: '.$csr->errcode() ]);
-	}
+		# handle responses
+		if (my $setup_url = $csr->user_setup_url) {
+			# the OpenID request failed, requiring the user to perform setup
+			throw TWiki::OopsException(
+			'generic',
+			web => $twiki->{web},
+			topic => $twiki->{topic},
+			params => [ 'Error in OpenID Provider response",
+				"<a href="'.$setup_url.'">setup required</a> for this user',
+				"", "" ]);
+		} elsif ($csr->user_cancel) {
+			# the user or provider canceled the request
+			throw TWiki::OopsException(
+			'generic',
+			web => $twiki->{web},
+			topic => $twiki->{topic},
+			params => [ "OpenID request canceled",
+				'cancel received from OpenID Provider',
+				"", "" ]);
+		} elsif (my $vident = $csr->verified_identity) {
+			# success, determine WikiName and redirect back as logged-in user
+
+			# collect user info
+			my $sreg = $vident->extension_fields( 'http://openid.net/extensions/sreg/1.1' );
+			my $ax = $vident->extension_fields( 'http://openid.net/srv/ax/1.0' );
+			my $wikiname = $sreg->{fullname};
+			if ( ! defined $wikiname ) {
+				$wikiname =
+					(( exists $ax->{'value.firstname'} )
+						? $ax->{'value.firstname'} : "" )
+					.(( exists $ax->{'value.lastname'} )
+						? $ax->{'value.lastname'} : "" );
+			}
+			if ( $wikiname ) {
+				$wikiname =~ s/\s*//g;
+				$this->userLoggedIn( $wikiname );
+			} else {
+				require Data::Dumper;
+				throw TWiki::OopsException(
+				'generic',
+				web => $twiki->{web},
+				topic => $twiki->{topic},
+				params => [ 'OpenID error',
+					"OpenID Provider did not provide user's full name",
+					Data::Dumper::Dumper({$query->Vars()}),
+					"" ]);
+			}
+			$query->delete( 'origurl', 'username', 'password', @openid_keys );
+			$this->redirectCgiQuery($query, $query->self_url );
+		} else {
+			# catch-all reporting for other errors
+			throw TWiki::OopsException(
+				'generic',
+				web => $twiki->{web},
+				topic => $twiki->{topic},
+				params => [ 'OpenID error', $csr->errcode(), $csr->errtext(),
+					"" ]);
+		}
     } elsif ( defined $loginName ) {
     	# we don't have a response, so prepare a request for OpenID provider
 
@@ -225,30 +254,77 @@ sub login {
 	    consumer_secret => $consumer_secret,
 	    required_root => $required_root,
 	    args => $query,
-    	    ua => $ua_class->new,
+		ua => $ua_class->new,
         );
 
         # if no OpenID parameters but we have a login name, process OpenID
-	# claimed identity (not yet authenticated, just finding provider)
-	# and redirect to OpenID Provider
+		# claimed identity (not yet authenticated, just finding provider)
+		# and redirect to OpenID Provider
         my $claimed_id = $csr->claimed_identity($loginName);
         if ($claimed_id) {
+			my $version = $claimed_id->protocol_version;
+			if ( $version == 1 ) {
+				# OpenID version 1.1 and SREG (Simple Registration)
+				my @req_fields = ( exists $TWiki::cfg{OpenIdRpContrib}{req_fields1})
+					? ( required => $TWiki::cfg{OpenIdRpContrib}{req_fields1})
+					: (required =>  'fullname,email');
+				my @opt_fields = ( exists $TWiki::cfg{OpenIdRpContrib}{opt_fields1})
+					? ( optional => $TWiki::cfg{OpenIdRpContrib}{opt_fields1})
+					: (optional =>  'nickname,country,timezone');
+				my @policy_url = ( exists $TWiki::cfg{OpenIdRpContrib}{policy_url1})
+					? ( policy_url => $TWiki::cfg{OpenIdRpContrib}{policy_url1})
+					: ();
+				$claimed_id->set_extension_args(
+					'http://openid.net/extensions/sreg/1.1',
+					{
+						@req_fields,
+						@opt_fields,
+						@policy_url,
+					},
+				);
+			} else {
+				# OpenID 2.0+ and AX (Attribute Exchange)
+				my @req_fields = ( exists $TWiki::cfg{OpenIdRpContrib}{req_fields2})
+					? ( required => $TWiki::cfg{OpenIdRpContrib}{req_fields2})
+					: ( required =>  'firstname,lastname,email');
+				my @opt_fields = ( exists $TWiki::cfg{OpenIdRpContrib}{opt_fields2})
+					? ( if_available => $TWiki::cfg{OpenIdRpContrib}{opt_fields2})
+					: ( if_available =>  'nickname,country,timezone');
+				# TODO - get definitions of field names/URLs from table
+				$claimed_id->set_extension_args(
+					'http://openid.net/srv/ax/1.0',
+					{
+						"mode" => "fetch_request",
+						@req_fields,
+						@opt_fields,
+						"type.firstname" => "http://axschema.org/namePerson/first",
+						"type.lastname" => "http://axschema.org/namePerson/last",
+						"type.email" => "http://axschema.org/contact/email",
+						"type.nickname" => "http://axschema.org/namePerson/friendly",
+						"type.country" => "http://axschema.org/contact/country/home",
+						"type.timezone" => "http://axschema.org/pref/timezone",
+					}
+				);
+			}
             my $check_url = $claimed_id->check_url (
 	        # The place we go back to.
 	        return_to  => $query->self_url,
 	        # Having this simplifies the login process.
 	        trust_root => $TWiki::cfg{DefaultUrlHost}.'/',
+			# tell the OP that it has control
+			# (we're not doing Ajax here yet - subject to change in future)
+			delayed_return  => 1,
             );
 
             # Automatically redirect the user to the OpenID endpoint
-	    TWiki::Func::redirectCgiQuery( $query, $check_url, 0 );
+			$twiki->redirect( $check_url, 0 );
         } else {
-	    throw TWiki::OopsException(
-		'generic',
-		web => $twiki->{web},
-		topic => $twiki->{topic},
-		params => [ 'error in OpenID claimed identity: '
-			.$csr->errcode() ]);
+			throw TWiki::OopsException(
+			'generic',
+			web => $twiki->{web},
+			topic => $twiki->{topic},
+			params => [ 'error in OpenID claimed identity', $csr->errcode(),
+				"", "" ]);
         }
     }
 }

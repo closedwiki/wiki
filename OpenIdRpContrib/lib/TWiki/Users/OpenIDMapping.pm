@@ -37,7 +37,6 @@ use base 'TWiki::Users::TWikiUserMapping';
 use Error qw( :try );					# included with Perl
 use DB_File;							# included with Perl
 use Assert;								# included with TWiki
-use TWiki::Func;						# included with TWiki
 use TWiki::Contrib::OpenIdRpContrib::DBLockPerAccess;	# included with OpenIdRpContrib
 use TWiki::LoginManager::OpenID;		# included with OpenIdRpContrib
 use Net::OpenID::Consumer;				# CPAN dependency
@@ -152,11 +151,8 @@ sub handlesUser {
 
 # initialize the DB mapping data between OpenID and TWiki users
 # 
-# TODO: split out to something like TWiki::Users::Data::DB_File
-# For more scalability, we need finer-grained locking w/ DB access only
-# on a cache miss.  Consider upgrading to SQL database - SQLite is
-# appropriately lightweight for this operation.  But optionally allow
-# other SQL DBs via DBI.
+# TODO: Consider upgrading to SQL database - SQLite is appropriately
+# lightweight for this operation.  But optionally allow other SQL DBs via DBI.
 sub _initOpenIDMapping {
     my $this = shift;
     return if $this->{OpenID_init_done};
@@ -167,13 +163,13 @@ sub _initOpenIDMapping {
 	my $session = $this->{session};
 	my $exception = sub { throw TWiki::OopsException( 'generic',
 		web => $session->{web}, topic => $session->{topic},
-		params => [ @_ ]); };
+		params => [ @_, "", "", "" ]); };
     foreach $mode ( "L2U", "U2W", "W2U" ) {
-    	    # derive DB file name
-	    my $db_filename = $TWiki::cfg{DataDir}."/OpenID-$mode.db";
+		# derive DB file name
+	    my $db_filename = $TWiki::cfg{WorkingDir}."/OpenID-$mode.db";
 
 	    # open DB file
-	    tie(%{$this->{$mode}}, 'TWiki::Contrib::OpenIdRpContrib::DBLockPerAccess', $db_filename,  O_RDWR|O_CREAT, 0600, $DB_HASH, $exception );
+	    tie( %{$this->{$mode}}, 'TWiki::Contrib::OpenIdRpContrib::DBLockPerAccess', $db_filename,  O_RDWR|O_CREAT, 0660, $DB_HASH, $exception );
     }
 }
 
