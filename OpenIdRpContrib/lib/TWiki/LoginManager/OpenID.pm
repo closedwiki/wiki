@@ -235,8 +235,17 @@ sub login {
 					Data::Dumper::Dumper({$query->Vars()}),
 					"" ]);
 			}
+			if ( !$origurl or $origurl eq $query->url()
+				or $origurl =~ /%[A-Z0-9_]+%/ )
+			{
+				my $topic = $twiki->{topicName};
+				my $web   = $twiki->{webName};
+
+				$origurl = $twiki->getScriptUrl( 0, 'view', $web, $topic );
+			}
+			# security: don't pass through sensitive info
 			$query->delete( 'origurl', 'username', 'password', @openid_keys );
-			$this->redirectCgiQuery($query, $query->self_url );
+			$this->redirectCgiQuery($query, $origurl );
 		} else {
 			# catch-all reporting for other errors
 			throw TWiki::OopsException(
