@@ -39,14 +39,12 @@ non-OpenID documentation.
 package TWiki::LoginManager::OpenID;
 use base 'TWiki::LoginManager::TemplateLogin';
 use strict;
-use Assert;					# included with Perl
-use Error qw( :try );				# included with Perl
-use TWiki::LoginManager::TemplateLogin;		# included with TWiki
-use Cache::FileCache;				# CPAN dependency
+use Assert;								# included with Perl
+use Error qw( :try );					# included with Perl
+use TWiki::LoginManager::TemplateLogin;	# included with TWiki
+use TWiki::UI::Register;				# included with TWiki
+use Cache::FileCache;					# CPAN dependency
 use Net::OpenID::Consumer;      		# CPAN dependency
-
-# class data
-our $openid_pattern = '^(http:|https:|xri:)?[\w.:;,~/?#\[\]()*!&\'-]+$';
 
 =pod
 
@@ -122,11 +120,32 @@ sub _LOGIN {
     return $twiki->templates->expandTemplate('leftbarlogin');
 }
 
+=pod
+
+---++ ObjectMethod login( $query, $twiki )
+
+called by the login CGI script
+
+Usually TWiki login managers expect a login and password to be passed via
+the CGI query.  For OpenID, there is no password - that is handled at the
+OpenID Provider (OP).
+
+For OpenID, we use Net::OpenID::Consumer from CPAN.  CGI query parameters
+beginning with "openid" are checked for indications that this is a redirect
+back from an OP, and then handle login success or failure.
+
+If those are not found, then it assumes we have not yet initiated the OpenID
+login and must do so.  Information is collected on the "claimed identity"
+string which the user provided via their login info (which may delegate the
+identity handling from a user-controlled page to another OP.  This phase ends
+in redirecting the user to the OP.
+
+=cut
+
 sub login {
     my( $this, $query, $session ) = @_;
     my $twiki = $this->{twiki};
     my $users = $twiki->{users};
-    my ( $wikiName, $cUID, $login, $user, $email );
 
     # collect CGI parameters
     my $web = $session->{webName};
@@ -195,8 +214,8 @@ sub login {
 			'generic',
 			web => $twiki->{web},
 			topic => $twiki->{topic},
-			params => [ 'Error in OpenID Provider response",
-				"<a href="'.$setup_url.'">setup required</a> for this user',
+			params => [ "Error in OpenID Provider response",
+				'<a href="'.$setup_url.'">setup required</a> for this user',
 				"", "" ]);
 		} elsif ($csr->user_cancel) {
 			# the user or provider canceled the request
@@ -210,31 +229,17 @@ sub login {
 		} elsif (my $vident = $csr->verified_identity) {
 			# success, determine WikiName and redirect back as logged-in user
 
-			# collect user info
-			my $sreg = $vident->extension_fields( 'http://openid.net/extensions/sreg/1.1' );
-			my $ax = $vident->extension_fields( 'http://openid.net/srv/ax/1.0' );
-			my $wikiname = $sreg->{fullname};
-			if ( ! defined $wikiname ) {
-				$wikiname =
-					(( exists $ax->{'value.firstname'} )
-						? $ax->{'value.firstname'} : "" )
-					.(( exists $ax->{'value.lastname'} )
-						? $ax->{'value.lastname'} : "" );
-			}
-			if ( $wikiname ) {
-				$wikiname =~ s/\s*//g;
-				$this->userLoggedIn( $wikiname );
-			} else {
-				require Data::Dumper;
-				throw TWiki::OopsException(
-				'generic',
+			# we need the identity string, or all else fails
+			if ( ! exists $openid_p{identity}) {
+				throw TWiki::OopsException( 'generic',
 				web => $twiki->{web},
 				topic => $twiki->{topic},
 				params => [ 'OpenID error',
-					"OpenID Provider did not provide user's full name",
-					Data::Dumper::Dumper({$query->Vars()}),
-					"" ]);
+					"OpenID Provider did not provide user's identity string",
+					"", "" ]);
 			}
+
+			# check URL to redirect now-logged-in user to
 			if ( !$origurl or $origurl eq $query->url()
 				or $origurl =~ /%[A-Z0-9_]+%/ )
 			{
@@ -243,8 +248,122 @@ sub login {
 
 				$origurl = $twiki->getScriptUrl( 0, 'view', $web, $topic );
 			}
+
+			# check if we already know this identity - if so we're done
+			my $cUID = TWiki::Users::OpenIDMapping::_mapper_get( $twiki, "O2U", $openid_p{identity});
+			my $mapping = $twiki->{users}{mapping};
+			my $wikiname = ( defined $cUID )
+				? $mapping->getWikiName ( $cUID )
+				: undef;
+			print STDERR "debug: wn=$wikiname cUID=$cUID openid=".$openid_p{identity}."\n";
+			if ( defined $wikiname ) {
+				# log the user in
+				$this->userLoggedIn( $wikiname );
+
+				# security: don't pass through sensitive info
+				$query->delete( 'origurl', 'username', 'password',
+					@openid_keys );
+
+				# redirect now-logged-in user to destination page
+				$this->redirectCgiQuery($query, $origurl );
+				return;
+			}
+
+			# collect user info from OpenID Provider
+			my $sreg = $vident->extension_fields( 'http://openid.net/extensions/sreg/1.1' );
+			my $ax = $vident->extension_fields( 'http://openid.net/srv/ax/1.0' );
+			my ( $first_name, $last_name, $email );
+			if ( exists $ax->{"value.lastname"}) {
+				# OpenID 2.0 AX (attribute exchange)
+				$first_name = (( exists $ax->{'value.firstname'} )
+					? $ax->{'value.firstname'} : "" );
+				$last_name = (( exists $ax->{'value.lastname'} )
+					? $ax->{'value.lastname'} : "" );
+				$email = (( exists $ax->{'value.email'} )
+					? $ax->{'value.email'} : "" );
+				$wikiname = $first_name.$last_name;
+			} else {
+				# OpenID 1.1 SREG (simple registration)
+				$email = $sreg->{email};
+				if ( exists $sreg->{fullname}) {
+					$wikiname = $sreg->{fullname};
+					$wikiname =~ s/\s*//g;
+				}
+				( $first_name, $last_name )
+					= split ( " ", $sreg->{fullname}, 2 );
+			}
+
+			# check for WikiName collision, adjust wikiname if necessary
+			$cUID = TWiki::Users::OpenIDMapping::_mapper_get( $twiki, "W2U",
+				$wikiname );
+			if ( defined $cUID ) {
+				# append numbers to the wikiname until it isn't a collision
+				my $suffix = 2;
+				while ( 1 ) {
+					$cUID = TWiki::Users::OpenIDMapping::_mapper_get(
+						$twiki, "W2U", $wikiname.$suffix );
+					if ( ! defined $cUID ) {
+						# didn't find a cUID so the WikiName is available
+						$wikiname = $wikiname.$suffix;
+						last;
+					}
+					$suffix++;
+				}
+			}
+
+			# log the user in as the WikiName
+			if ( $wikiname ) {
+				$this->userLoggedIn( $wikiname );
+			} else {
+				throw TWiki::OopsException( 'generic',
+				web => $twiki->{web},
+				topic => $twiki->{topic},
+				params => [ 'OpenID error',
+					"OpenID Provider did not provide user's full name",
+					"", "" ]);
+			}
+
+			# save OpenID attributes in OpenID mapper
+			$openid_p{WikiName} = $wikiname;
+			$openid_p{FirstName} = $first_name;
+			$openid_p{LastName} = $last_name;
+			$openid_p{Email} = $email;
+			delete $openid_p{return_to}; # don't need to save temp URL
+			TWiki::Users::OpenIDMapping::save_openid_attrs( $twiki,
+				$wikiname, \%openid_p );
+
+			# auto-create user in TWiki if configured to do so
+			if ( $TWiki::cfg{OpenIdRpContrib}{AutoCreateUser}) {
+				if ( ! $twiki->{store}->topicExists(
+					$TWiki::cfg{UsersWebName}, $wikiname ))
+				{
+					my $doOverwriteTopics = ! $twiki->{store}->topicExists(
+						$TWiki::cfg{UsersWebName}, $TWiki::cfg{UsersTopicName});
+					TWiki::UI::Register::_registerSingleBulkUser(
+						$twiki,
+						[ qw( LoginName WikiName FirstName LastName Email
+							WebName ) ],
+						{
+							LoginName => $wikiname,
+							WikiName => $wikiname,
+							FirstName => $first_name,
+							LastName => $last_name,
+							Email => $email,
+							WebName => $TWiki::cfg{UsersWebName},
+						},
+						{
+							# misnamed setting: actually allows writing
+							# TWikiUsers, still needed if topic doesn't exist
+							doOverwriteTopics => $doOverwriteTopics,
+						}
+					);
+				}
+			}
+
 			# security: don't pass through sensitive info
 			$query->delete( 'origurl', 'username', 'password', @openid_keys );
+
+			# redirect now-logged-in user to destination page
 			$this->redirectCgiQuery($query, $origurl );
 		} else {
 			# catch-all reporting for other errors
@@ -266,10 +385,19 @@ sub login {
 		ua => $ua_class->new,
         );
 
+		# if login name is a known WikiName, convert it to OpenID identity
+		my @openids = TWiki::Users::OpenIDMapping::login2openid( $twiki,
+			$loginName );
+		if ( @openids ) {
+			# override login string with known OpenID identity
+			# we'll use the first one
+			$loginName = $openids[0];
+		}
+
         # if no OpenID parameters but we have a login name, process OpenID
 		# claimed identity (not yet authenticated, just finding provider)
 		# and redirect to OpenID Provider
-        my $claimed_id = $csr->claimed_identity($loginName);
+		my $claimed_id = $csr->claimed_identity($loginName);
         if ($claimed_id) {
 			my $version = $claimed_id->protocol_version;
 			if ( $version == 1 ) {
@@ -332,8 +460,10 @@ sub login {
 			'generic',
 			web => $twiki->{web},
 			topic => $twiki->{topic},
-			params => [ 'error in OpenID claimed identity', $csr->errcode(),
+			params => [ 'missing OpenID identity', "cannot initiate OpenID",
 				"", "" ]);
         }
     }
 }
+
+1;

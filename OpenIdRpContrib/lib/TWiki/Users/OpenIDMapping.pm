@@ -18,7 +18,7 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
-=begin twiki
+=pod
 
 ---+ package TWiki::Users::OpenIDMapping
 
@@ -46,11 +46,14 @@ use Net::OpenID::Consumer;				# CPAN dependency
 
 # configuration
 our $OPENID_MAPPING_ID = 'OpenIDMapping_';
+our $openid_attr_delim = "\0";
+our $openid_rec_delim = $openid_attr_delim x 3;
+our $openid_pattern = '^(http:|https:|xri:)?[\w.:;,~/?#\[\]()*!&\'-]+$';
 
 # globals
 my %expanding;
 
-=begin twiki
+=pod
 
 ---++ ClassMethod new ($session, $impl)
 
@@ -70,10 +73,11 @@ sub new {
     $this->_initOpenIDMapping();
     $this->{session} = $session;
     $this->{mapping_id} = $OPENID_MAPPING_ID;
+	$this->{CACHED} = 1; # block TWiki::Users::TWikiUserMapping::_loadMapping()
     return $this;
 }
 
-=begin twiki
+=pod
 
 ---++ ObjectMethod finish()
 Break circular references.
@@ -87,9 +91,11 @@ sub finish {
     my $this = shift;
 
     # close DB_File mappings from _initOpenIDMapping
-    untie $this->{L2U};
-    untie $this->{U2W};
-    untie $this->{W2U};
+    untie $this->{L2U};	# login to cUID
+    untie $this->{U2W}; # cUID to wiki name
+    untie $this->{W2U}; # wiki name to cUID
+    untie $this->{O2U}; # OpenID identity to cUID
+    untie $this->{U2A}; # cUID to OpenID attrs
 
     # clean-up data structures
     undef $this->{session};
@@ -97,7 +103,7 @@ sub finish {
     $this->SUPER::finish();
 }
 
-=begin twiki
+=pod
 
 ---++ ObjectMethod loginTemplateName () -> $templateFile
 
@@ -112,7 +118,7 @@ sub loginTemplateName {
     return 'openidlogin';
 }
 
-=begin twiki
+=pod
 
 ---++ ObjectMethod supportsRegistration ()
 return 0 to indicate we don't suport user registration with this module
@@ -123,30 +129,228 @@ sub supportsRegistration {
     return TWiki::Users::TWikiUserMapping::supportsRegistration();
 }
 
-=begin twiki
+=pod
 
 ---++ ObjectMethod handlesUser ( $cUID, $login, $wikiname) -> $boolean
 
 Called by the TWiki::Users object to determine which loaded mapping
 to use for a given user.
 
-If it doesn't look like OpenID, hands off to TWiki::Users::TWikiUserMapping.
+If it isn't in the OpenIdRpContrib DB file already, and doesn't look like
+an OpenID URL, hands off to TWiki::Users::TWikiUserMapping.
 
 =cut
 
 sub handlesUser {
     my ($this, $cUID, $login, $wikiname) = @_;
 	
-    # if login wasn't provided, we won't touch this with a 10-foot (3m) pole
-    ( defined $login ) or return 0;
+	# if user exists in the OpenIdRpContrib DB files, claim it
+	( defined $login )
+		and ( exists $this->{session}{users}{mapping}{L2U}{$login} )
+		and return 1;
+	( defined $cUID )
+		and ( exists $this->{session}{users}{mapping}{U2W}{$cUID} )
+		and return 1;
+	( defined $wikiname )
+		and ( exists $this->{session}{users}{mapping}{W2U}{$wikiname} )
+		and return 1;
 
-    # if it matches the OpenID LoginManager's patters, assume it's OpenID
-    if ( $login =~ $TWiki::LoginManager::OpenID::openid_pattern ) {
-	return 1;
+    # if it matches the OpenID LoginManager's pattern, assume it's OpenID
+    if (( defined $login ) and ( $login =~ $openid_pattern )) {
+		return 1;
     }
 
     # hand off to the superclass
     return $this->SUPER::handlesUser( $cUID, $login, $wikiname );
+}
+
+=pod
+
+---++ ObjectMethod getWikiName ($cUID) -> $wikiname
+
+Map a canonical user name to a wikiname. 
+
+=cut
+
+sub getWikiName {
+	my ($this, $cUID) = @_;
+
+	# required params
+	( defined $this ) or return undef;
+	( defined $cUID ) or return undef;
+
+	# look up in table
+	( exists $this->{U2W}{$cUID}) or return undef;
+	return $this->{U2W}{$cUID};
+}
+
+=pod
+
+---++ StaticMethod openid2cUID($openid) -> $cUID
+
+Convert an OpenID identity to the corresponding canonical user name.
+(undef on failure)
+
+=cut
+
+sub openid2cUID {
+    my( $session, $openid ) = @_;
+
+    return $session->{users}{mapping}{O2U}{$openid};
+}
+
+=pod
+
+---++ StaticMethod login2openid($login) -> $openid
+
+Convert a login (WikiName) to the corresponding OpenID identity.
+(undef on failure)
+
+=cut
+
+sub login2openid {
+    my( $session, $login ) = @_;
+
+	my $mapping = $session->{users}{mapping};
+	( exists $mapping->{W2U}{$login}) or return ();
+	my $cUID = $mapping->{W2U}{$login};
+    my $attr_recs = $mapping->{U2A}{$cUID};
+	my @recs = split ( $openid_rec_delim, $attr_recs );
+	my %openids;
+	foreach my $rec ( @recs ) {
+		my %attr = split ( $openid_attr_delim, $rec );
+		$openids{$attr{"identity"}} = 1;
+	}
+	return keys %openids;
+}
+
+=pod
+
+---++ StaticMethod mapper_getEmails($session, $user)
+
+This overrides TWiki::Users::TWikiUserMapping::mapper_getEmails in order
+to use the DB_File infrastructure of OpenIdRpContrib to access user OpenID
+attributes.
+
+=cut
+
+sub mapper_getEmails {
+    my( $session, $cUID ) = @_;
+
+	my $attr_recs = $session->{users}{mapping}{U2A}{$cUID};
+	( defined $attr_recs ) or return undef;
+	my @recs = split ( $openid_rec_delim, $attr_recs );
+	my %emails;
+	foreach my $rec ( @recs ) {
+		my %attr = split ( $openid_attr_delim, $rec );
+		$emails{$attr{Email}} = 1;
+	}
+	return keys %emails;
+}
+
+=pod
+
+---++ StaticMethod mapper_setEmails ($session, $user, @emails)
+
+This overrides TWiki::Users::TWikiUserMapping::mapper_getEmails in order
+to use the DB_File infrastructure of OpenIdRpContrib to access user OpenID
+attributes.
+
+=cut
+
+sub mapper_setEmails {
+    my $session = shift;
+    my $cUID = shift;
+	my $mails = join( ';', @_ );
+
+	my $attr = $session->{users}{mapping}{U2A}{$cUID};
+	my %attr = split $openid_attr_delim, $attr;
+	$attr{Email} = $mails;
+	$session->{users}{mapping}{U2A}{$cUID} = join( $openid_attr_delim, %attr );
+}
+
+=pod
+
+---++ StaticMethod _mapper_get ($session, $table, $key)
+
+looks up data in mapping tables
+
+=cut
+
+sub _mapper_get {
+    my $session = shift;
+    my $table = shift;
+	my $key = shift;
+
+	my $mapping = $session->{users}{mapping};
+	( $table =~ /^[LOUW]2[AUW]$/ ) or return undef; # no snooping elsewhere
+	( exists $mapping->{$table}) or return undef;	# exact table name exists
+	( exists $mapping->{$table}{$key}) or return undef;	# entry name exists
+	return $mapping->{$table}{$key};
+}
+
+=pod
+
+---++ StaticMethod save_openid_attrs ($session, $user, $attrs )
+
+Save the OpenID attributes of a new user we have not handled before.
+
+This overrides TWiki::Users::TWikiUserMapping::mapper_getEmails in order
+to use the DB_File infrastructure of OpenIdRpContrib to access user OpenID
+attributes.
+
+=cut
+
+sub save_openid_attrs {
+    my $session = shift;
+    my $wikiname = shift;
+	my $attrs = shift;
+
+	# generate cUID from wikiname/login
+	my $mapping = $session->{users}{mapping};
+	my $cUID = $mapping->login2cUID( $wikiname );
+	my $identity = $attrs->{identity};
+
+	# save TWiki mapping
+	$mapping->{U2W}{$cUID}     = $wikiname;
+	$mapping->{L2U}{$wikiname} = $cUID;
+	$mapping->{W2U}{$wikiname} = $cUID;
+	
+	# save OpenID mapping
+	$mapping->{O2U}{$identity} = $cUID;
+	$mapping->{U2A}{$cUID} = join( $openid_attr_delim, %$attrs );
+}
+
+=pod
+
+---++ StaticMethod add_openid_alias ($session, $cUID, $identity )
+
+Save an additional OpenID identity as an alias for the user
+
+This overrides TWiki::Users::TWikiUserMapping::mapper_getEmails in order
+to use the DB_File infrastructure of OpenIdRpContrib to access user OpenID
+attributes.
+
+=cut
+
+sub add_openid_alias {
+    my $session = shift;
+    my $cUID = shift;
+	my $attrs = shift;
+
+	# save OpenID mapping
+	my $identity = $attrs->{identity};
+	my $mapping = $session->{users}{mapping};
+	$mapping->{O2U}{$identity} = $cUID;
+
+	# append OpenID attrs to existing records
+	my $attr_recs = $session->{users}{mapping}{U2A}{$cUID};
+	if ( ! defined $attr_recs ) {
+		$attr_recs = "";
+	}
+	my @recs = split ( $openid_rec_delim, $attr_recs );
+	push @recs, join( $openid_attr_delim, %$attrs );
+	$mapping->{U2A}{$cUID} = join ( $openid_rec_delim, @recs );
 }
 
 # initialize the DB mapping data between OpenID and TWiki users
@@ -158,19 +362,38 @@ sub _initOpenIDMapping {
     return if $this->{OpenID_init_done};
     $this->{OpenID_init_done} = 1;
 
-    # initialize DB tied hashes
+    # initialize variables
     my $mode;
 	my $session = $this->{session};
 	my $exception = sub { throw TWiki::OopsException( 'generic',
 		web => $session->{web}, topic => $session->{topic},
 		params => [ @_, "", "", "" ]); };
-    foreach $mode ( "L2U", "U2W", "W2U" ) {
+
+	# make subdirectory if needed
+	if ( ! -d $TWiki::cfg{WorkingDir}."/openid" ) {
+		mkdir $TWiki::cfg{WorkingDir}."/openid", 0770
+			or throw TWiki::OopsException( 'generic',
+				web => $session->{web}, topic => $session->{topic},
+				params => [ "mkdir failed", "OpenID work dir", $!, "" ]);
+	}
+
+    # initialize DB tied hashes
+	# L = login, U = cUID, W = wikiname, O = OpenID identity, A = OpenID attrs
+	# so...
+	# L2U = login to cUID
+	# U2W = cUID to wiki name
+	# W2U = wiki name to cUID
+	# O2U = OpenID identity to cUID
+	# U2A = cUID to OpenID attribute data
+    foreach $mode ( "L2U", "U2W", "W2U", "O2U", "U2A" ) {
 		# derive DB file name
-	    my $db_filename = $TWiki::cfg{WorkingDir}."/OpenID-$mode.db";
+	    my $db_filename = $TWiki::cfg{WorkingDir}."/openid/OpenID-$mode.db";
 
 	    # open DB file
 	    tie( %{$this->{$mode}}, 'TWiki::Contrib::OpenIdRpContrib::DBLockPerAccess', $db_filename,  O_RDWR|O_CREAT, 0660, $DB_HASH, $exception );
     }
 }
+
+# 
 
 1;
