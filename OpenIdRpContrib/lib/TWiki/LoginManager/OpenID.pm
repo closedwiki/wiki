@@ -239,6 +239,48 @@ sub login {
 					"", "" ]);
 			}
 
+			# filter for identity providers if we have white or black lists
+			my $op_allow = 0;
+			my $op_deny = 0;
+			my $op_wl = exists $TWiki::cfg{OpenIdRpContrib}{OPHostWhitelist};
+			my $op_bl = exists $TWiki::cfg{OpenIdRpContrib}{OPHostBlacklist};
+			my $op_host = $openid_p{identity};
+			$op_host =~ s=^https{0,1}://==;
+			$op_host =~ s=/.*==;
+			if ( $op_wl ) {
+				my @whitelist = split( ',',
+					$TWiki::cfg{OpenIdRpContrib}{OPHostWhitelist});
+				foreach my $wl_host ( @whitelist ) {
+					if ( $wl_host eq $op_host ) {
+						$op_allow = 1;
+						last;
+					}
+				}
+				$op_deny = 1 if ! $op_allow;
+			} elsif ( $op_bl ) {
+				my @blacklist = split( ',',
+					$TWiki::cfg{OpenIdRpContrib}{OPHostBlacklist});
+				foreach my $bl_host ( @blacklist ) {
+					if ( $bl_host eq $op_host ) {
+						$op_deny = 1;
+						last;
+					}
+				}
+				$op_allow = 1 if ! $op_deny;
+			} else {
+				$op_allow = 1; # default to allowing OPs if no WL or BL
+			}
+
+			# check if we need to deny the OP based on whitelist/blacklist
+			if ( $op_deny and ! $op_allow ) {
+				throw TWiki::OopsException( 'generic',
+				web => $twiki->{web},
+				topic => $twiki->{topic},
+				params => [ 'OpenID error',
+					"OpenID Provider $op_host not allowed at this site",
+					"", "" ]);
+			}
+
 			# check URL to redirect now-logged-in user to
 			if ( !$origurl or $origurl eq $query->url()
 				or $origurl =~ /%[A-Z0-9_]+%/ )
