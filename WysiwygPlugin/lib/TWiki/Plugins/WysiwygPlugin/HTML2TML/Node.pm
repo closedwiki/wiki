@@ -1351,8 +1351,8 @@ sub _handleSPAN {
 
     if( $options & $WC::VERY_CLEAN ) {
         # remove style attribute if cleaning aggressively. Have to do this
-        # because TWiki generates these.
-        delete $atts{style} if defined $atts{style}
+        # because TWiki generates these. #Following commented - for Item6331
+        # delete $atts{style} if defined $atts{style}
     }
 
     # ignore the span tag if there are no other attrs
