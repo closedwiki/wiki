@@ -120,6 +120,43 @@ sub _LOGIN {
     return $twiki->templates->expandTemplate('leftbarlogin');
 }
 
+
+# internal function to filter host names based on white or black lists
+sub proc_wb_lists
+{
+	my $host = shift;
+	my $wl = shift;
+	my $bl = shift;
+
+	my $allow = 0;
+	my $deny = 0;
+	my $wl_exists = defined $wl;
+	my $bl_exists = defined $bl;
+	if ( $wl_exists ) {
+		my @whitelist = split( ',', $wl );
+		foreach my $wl_host ( @whitelist ) {
+			if (( $host eq $wl_host ) or ( $host =~ $wl_host )) {
+				$allow = 1;
+				last;
+			}
+		}
+		$deny = 1 if ! $allow;
+	} elsif ( $bl_exists ) {
+		my @blacklist = split( ',', $bl );
+		foreach my $bl_host ( @blacklist ) {
+			if (( $host eq $bl_host ) or ( $host =~ $bl_host )) {
+				$deny = 1;
+				last;
+			}
+		}
+		$allow = 1 if ! $deny;
+	} else {
+		$allow = 1; # default to allowing OPs if no WL or BL
+	}
+
+	return !( $deny and !$allow );
+}
+
 =pod
 
 ---++ ObjectMethod login( $query, $twiki )
@@ -240,39 +277,13 @@ sub login {
 			}
 
 			# filter for identity providers if we have white or black lists
-			my $op_allow = 0;
-			my $op_deny = 0;
-			my $op_wl = exists $TWiki::cfg{OpenIdRpContrib}{OPHostWhitelist};
-			my $op_bl = exists $TWiki::cfg{OpenIdRpContrib}{OPHostBlacklist};
 			my $op_host = $openid_p{identity};
 			$op_host =~ s=^https{0,1}://==;
 			$op_host =~ s=/.*==;
-			if ( $op_wl ) {
-				my @whitelist = split( ',',
-					$TWiki::cfg{OpenIdRpContrib}{OPHostWhitelist});
-				foreach my $wl_host ( @whitelist ) {
-					if ( $wl_host eq $op_host ) {
-						$op_allow = 1;
-						last;
-					}
-				}
-				$op_deny = 1 if ! $op_allow;
-			} elsif ( $op_bl ) {
-				my @blacklist = split( ',',
-					$TWiki::cfg{OpenIdRpContrib}{OPHostBlacklist});
-				foreach my $bl_host ( @blacklist ) {
-					if ( $bl_host eq $op_host ) {
-						$op_deny = 1;
-						last;
-					}
-				}
-				$op_allow = 1 if ! $op_deny;
-			} else {
-				$op_allow = 1; # default to allowing OPs if no WL or BL
-			}
-
-			# check if we need to deny the OP based on whitelist/blacklist
-			if ( $op_deny and ! $op_allow ) {
+			if ( ! proc_wb_lists( $op_host,
+				$TWiki::cfg{OpenIdRpContrib}{OPHostWhitelist},
+				$TWiki::cfg{OpenIdRpContrib}{OPHostBlacklist}))
+			{
 				throw TWiki::OopsException( 'generic',
 				web => $twiki->{web},
 				topic => $twiki->{topic},
@@ -335,6 +346,21 @@ sub login {
 					= split ( " ", $sreg->{fullname}, 2 );
 			}
 
+			# filter for email domains if we have white or black lists
+			my $email_dom = $email;
+			$email_dom =~ s=^.*@==;
+			if ( ! proc_wb_lists( $email_dom,
+				$TWiki::cfg{OpenIdRpContrib}{EmailDomWhitelist},
+				$TWiki::cfg{OpenIdRpContrib}{EmailDomBlacklist}))
+			{
+				throw TWiki::OopsException( 'generic',
+				web => $twiki->{web},
+				topic => $twiki->{topic},
+				params => [ 'OpenID error',
+					"New user request requires manual approval.",
+					"Contact the site administrator(s)", "" ]);
+			}
+
 			# check for WikiName collision, adjust wikiname if necessary
 			$cUID = TWiki::Users::OpenIDMapping::_mapper_get( $twiki, "W2U",
 				$wikiname );
@@ -386,7 +412,7 @@ sub login {
 						[ qw( LoginName WikiName FirstName LastName Email
 							WebName ) ],
 						{
-							LoginName => $wikiname,
+							LoginName => lc($wikiname),
 							WikiName => $wikiname,
 							FirstName => $first_name,
 							LastName => $last_name,
