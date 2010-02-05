@@ -1,39 +1,72 @@
-%{ This is login template used by OpenIdRpContrib, adapted from OpenIDUserContrib }%%TMPL:INCLUDE{"login"}%
+%{ This is the login template included with OpenIdRpContrib }%
+%TMPL:INCLUDE{"login"}%
 
-%TMPL:DEF{"title"}%---++ %MAKETEXT{"<nop>OpenID User Authentication"}%
+%TMPL:DEF{"title"}%---++ %MAKETEXT{"Select your !OpenID Provider to log in"}%
 %TMPL:END%
-%TMPL:DEF{"topicaction"}% %TMPL:END%
-%TMPL:DEF{"LOGGED_IN_BANNER"}% %MAINWEB%.%WIKINAME% is currently logged in%TMPL:END%
-%TMPL:DEF{"NEW_USER_NOTE"}%%TMPL:END%
-%TMPL:DEF{"UNRECOGNISED_USER"}%Unrecognized user or URL%TMPL:END%
 
+%TMPL:DEF{"openidstep"}%<div class="twikiFormStep">
+%OPENIDPROVIDERS%
+<div class="openid_login_note">
+For other !OpenID providers:
+<br/>
+enter your !OpenID identity URL as your username below and omit the password.
+</div>
+</div><!-- /twikiFormStep-->%TMPL:END%
 
-%TMPL:DEF{"usernamefield"}%<input class="twikiInputField openid-identifier" type="text" size="60" name="username" value="https://" /><input type="hidden" name="origurl" value="%ORIGURL%" />%TMPL:END%
+%TMPL:DEF{"orlogintitle"}%---++ %MAKETEXT{"Or enter your username and password"}%
+%TMPL:END%
 
-
-%TMPL:DEF{"NONOusernamenote"}%%TMPL:P{"authrealm"}%%TMPL:END%
-
-
-%TMPL:DEF{"authrealm"}%<span class="twikiUnvisited">Enter your !OpenID URL, host name, or i-name to log in. (<a href="http://openid.net/help/no-password.html" target="_blank">Help</a>)</span>%TMPL:END%
-
-%TMPL:DEF{"passwordstep"}%%TMPL:END%
-
+%TMPL:DEF{"orloginstep"}%<div class="twikiFormStep">
+%TMPL:P{"orlogintitle"}%
+</div><!-- /twikiFormStep-->%TMPL:END%
 
 %TMPL:DEF{"openidcss"}%
 <style type="text/css" media="all">
-input.openid-identifier {   background: url(%PUBURLPATH%/%SYSTEMWEB%/OpenIdRpContrib/openid-login-bg.png) no-repeat;   background-color: #fff;   background-position: 0 50%;   padding-left: 18px;}
+.OP_list { display: block; text-align: center; left-margin: auto; right-margin: auto; }
+.OP_entry { font-size: .9em; margin: 7px; display: inline-block; vertical-align: middle; }
+.OP_icon { padding: 5px; border: 0; vertical-align: middle; }
+.openid_login_note { font-size: .83em; font-style: italic; margin-left: auto;  margin-right: auto; text-align: center; }
 </style>
 %TMPL:END%
 
-%{ used by LoginManager to show url entry box on %LOGIN% (ie, left bar) }%
-%TMPL:DEF{"leftbarlogincss"}%
-<style>input.openid-identifier {width:120px;font-size:75%;}</style>
+%TMPL:DEF{"usernamefield"}%<input class="twikiInputField" type="text" size="60" name="username" value="" /><input type="hidden" name="origurl" value="%ORIGURL%" />%TMPL:END%
+
+%TMPL:DEF{"usernamestep"}%<div class="twikiFormStep">
+---+++ %MAKETEXT{"Username"}%
+
+%TMPL:P{"usernamefield"}% %TMPL:P{"usernamefieldhelp"}%
+
+</div><!-- /twikiFormStep-->%TMPL:END%
+
+%TMPL:DEF{"sidebarlogincss"}%
+<style type="text/css" media="all">
+.sidebar_OP_list { padding: 0px; border: 0; display: inline-block; }
+.sidebar_OP_entry { padding: 0px; border: 0; display: inline-block; }
+.sidebar_OP_icon { padding: 0px; border: 0; }
+</style>
 %TMPL:END%
-%TMPL:DEF{"leftbarlogin"}%
-%MAKETEXT{"[[%SYSTEMWEB%.OpenIdRpContrib][OpenID]] login"}%: <form action="%LOGINURL%"  name="loginform" method="post">
-%TMPL:P{usernamefield}%
+
+%TMPL:DEF{"sidebarlogin"}%
+%MAKETEXT{"Login via [[%SYSTEMWEB%.OpenIdRpContrib][OpenID]]"}%: <form action="%LOGINURL%"  name="loginform" method="post">
+%OPENIDPROVIDERS{ sidebar="1" }%
+%BR%
+or
+%BR%
+%MAKETEXT{"Username"}%:
+%TMPL:P{"usernamefield"}%
+<!--
+%MAKETEXT{"Password"}%:
+%TMPL:P{"passwordfield"}%
+-->
+%BR%
+%TMPL:P{"submit"}%
 </form>
 %TMPL:END%
 
-%{ add css to the end of the html }%
-%TMPL:P{"openidcss"}%
+%TMPL:DEF{"form"}%<div id="twikiLogin">
+<div class="twikiFormSteps">%TMPL:P{"formstart"}%%TMPL:P{"titlestep"}%
+%TMPL:P{"openidstep"}%%TMPL:P{"orloginstep"}%%TMPL:P{"usernamestep"}%%TMPL:P{"passwordstep"}%%TMPL:P{"submitstep"}%
+%TMPL:P{"formend"}%
+%TMPL:P{"seealsostep"}%
+</div><!-- /twikiFormSteps-->
+</div><!-- /twikiLogin-->%TMPL:END%

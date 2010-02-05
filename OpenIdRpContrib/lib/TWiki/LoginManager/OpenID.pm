@@ -43,6 +43,7 @@ use Assert;								# included with Perl
 use Error qw( :try );					# included with Perl
 use TWiki::LoginManager::TemplateLogin;	# included with TWiki
 use TWiki::UI::Register;				# included with TWiki
+use LWP::UserAgent;						# CPAN dependency
 use Cache::FileCache;					# CPAN dependency
 use Net::OpenID::Consumer;      		# CPAN dependency
 
@@ -66,6 +67,9 @@ sub new {
     # override TWiki::LoginManager's LOGIN tag handler with OpenID-specific one
     TWiki::registerTagHandler('LOGIN', \&_LOGIN);
 
+	# register tag handler for %OPENIDPROVIDERS% set of login buttons
+    TWiki::registerTagHandler('OPENIDPROVIDERS', \&_OPENIDPROVIDERS);
+
     return $this;
 }
 
@@ -85,10 +89,9 @@ sub finish {
 	$this->SUPER::finish();
 }
 
-
 =pod
 
----++ ObjectMethod _LOGIN ($thisl)
+---++ ObjectMethod _LOGIN ($twiki)
 
 The is the handler function for the LOGIN tag. It generates CSS and HTML for
 the login prompt.
@@ -113,11 +116,132 @@ sub _LOGIN {
 
     # add CSS to the HTML head section
     my $head =  $twiki->templates->expandTemplate('openidcss')
-        .$twiki->templates->expandTemplate('leftbarlogincss');
-    $twiki->addToHEAD('OpenIdRpContrib', $head );
+        .$twiki->templates->expandTemplate('sidebarlogincss');
+    $twiki->addToHEAD('OpenIdRpContrib-sidebar', $head );
 
     # return the text for the LOGIN tag 
-    return $twiki->templates->expandTemplate('leftbarlogin');
+    return $twiki->templates->expandTemplate('sidebarlogin');
+}
+
+# internal function to check OpenID Provider icons
+sub check_provider_icon
+{
+	my $twiki = shift;
+	my $op_name = shift;
+	my $op_url = shift;
+
+	# check if the icon file exists - if so, return
+	my $pub_path = $TWiki::cfg{PubDir}."/".$TWiki::cfg{SystemWebName}
+		."/OpenIdRpContrib/";
+	my $op_icon = $pub_path."/op-icon-$op_name.ico";
+	( -e $op_icon ) and return;
+	my $default_icon = $pub_path."/icon-globe.png";
+
+	# if it doesn't exist, get the provider's favicon
+	# for now assume everyone has a /favicon.ico, TODO: check HTML <head> links
+	my $host = $op_url;
+	$host =~ s=^https{0,1}://==;
+	$host =~ s=/.*==;
+	my @domain_name = split ( /\./, $host );
+	my @hosts;
+	my $ua = LWP::UserAgent->new;
+	while ( scalar @domain_name >= 2 ) {
+		push @hosts, (join ".", @domain_name);
+		shift @domain_name;
+	}
+	my $wwwhost = "www.".($hosts[$#hosts]);
+	push @hosts, $wwwhost;
+	foreach my $dhost ( @hosts ) {
+		print STDERR "debug: trying icon from $dhost\n";
+		my $response = $ua->get( "http://$dhost/favicon.ico" );
+		if ($response->is_success) {
+			my $content = $response->decoded_content;
+			( length $content ) or next;
+			( $content =~ /<!DOCTYPE/ ) and next;
+			if ( open ICO, ">$op_icon" ) {
+				# write the icon file and we're done
+				print ICO $content;
+				close ICO;
+			}
+			last;
+		}
+	}
+
+	# still looking for the icon?  Ask the top-level HTML page...
+	my $response = $ua->get( "http://$wwwhost/" );
+	if ($response->is_success) {
+		my $html = $response->decoded_content;
+		if ( $html =~ /<link rel="[^\"]*icon[^\"]*" href="([^\"])"/igs ) {
+			my $icon_uri = $1;
+			if ( substr( $icon_uri, 0, 4 ) ne "http" ) {
+				if ( substr( $icon_uri, 0, 1 ) ne "/" ) {
+					$icon_uri = "/".$icon_uri;
+				}
+				$icon_uri = "http://$wwwhost".$icon_uri;
+			}
+			my $response = $ua->get( $icon_uri );
+			if ($response->is_success) {
+				my $content = $response->decoded_content;
+				if (( length $content ) and ( open ICO, ">$op_icon" )) {
+					# write the icon file and we're done
+					print ICO $content;
+					close ICO;
+				}
+			}
+		}
+	}
+
+	# didn't find it? symlink the default icon so we won't try this every time
+	# if it doesn't work, fail silently - this is low priority
+	symlink $default_icon, $op_icon;
+
+	# done
+	return;
+}
+
+=pod
+
+---++ ObjectMethod _OPENIDPROVIDERS ($twiki)
+
+The is the handler function for the OPENIDPROVIDERS tag. It generates 
+OpenID login icons for providers this TWiki site chooses to support.
+
+=cut
+
+sub _OPENIDPROVIDERS {
+    #my( $twiki, $params, $topic, $web ) = @_;
+	my $twiki = shift;
+	my $params = shift;
+
+	# get the list of providers
+	my @op_list = ( exists $TWiki::cfg{OpenIdRpContrib}{OpenIDProviders})
+		? @{$TWiki::cfg{OpenIdRpContrib}{OpenIDProviders}}
+		: ();
+
+	# get parameters
+	my $sb = $params->get("sidebar") ? "sidebar_" : "";
+
+	# generate HTML list of providers
+	my $result = '<div class="'.$sb.'OP_list">';
+	while ( @op_list ) {
+		my $op_name = shift @op_list;
+		my $op_url = shift @op_list;
+		check_provider_icon ( $twiki, $op_name, $op_url );
+		
+		$result .= '<button class="'.$sb.'OP_entry" type="submit" '
+			.'name="openid.provider" value="'
+			.$op_name.'" title="<nop>'.$op_name.' login via <nop>OpenID">'
+			.'<img src="%PUBURL%/%SYSTEMWEB%/OpenIdRpContrib/op-icon-'
+			.$op_name.'.ico" alt="" class="'.$sb.'OP_icon">'
+			.($sb ? "" : "<nop>".$op_name )
+			.'</button>';
+	}
+	$result .= '</div>';
+
+	# insert CSS in header
+    my $head =  $twiki->templates->expandTemplate('openidcss');
+    $twiki->addToHEAD('OpenIdRpContrib-providers', $head );
+	return $result;
 }
 
 
@@ -161,7 +285,7 @@ sub proc_wb_lists
 
 ---++ ObjectMethod login( $query, $twiki )
 
-called by the login CGI script
+called by the login CGI or any CGI protected by $TWiki::cfg{AuthScripts}
 
 Usually TWiki login managers expect a login and password to be passed via
 the CGI query.  For OpenID, there is no password - that is handled at the
@@ -192,14 +316,6 @@ sub login {
     my $loginName = $params{'username'};
     my $loginPass = $params{'password'};
 
-    # if no login provided, fail
-    if ( ! defined $loginName ) {
-    	return 0;
-    # if login & password provided, use normal TWiki template login
-    } elsif (( defined $loginName ) and ( defined $loginPass )) {
-    	return $this->SUPER::login( $query, $session );
-    }
-
     # collect OpenID parameters
     my @openid_keys = grep ( /^openid\./, keys %params );
     my %openid_p;
@@ -211,6 +327,23 @@ sub login {
                 $openid_p{$p_suffix} = $val;
             }
 		}
+    }
+
+	# if an OpenID provider button was selected, fill in the login name
+	if ( exists $openid_p{provider} ) {
+		my %ops = @{$TWiki::cfg{OpenIdRpContrib}{OpenIDProviders}};
+		if ( exists $ops{$openid_p{provider}}) {
+			print STDERR "debug: provider button selected: $openid_p{provider} "
+				."= ".$ops{$openid_p{provider}}."\n";
+			$loginName = $ops{$openid_p{provider}};
+			undef $loginPass;
+		}
+
+    # if no login provided, or login & password, use parent class login
+    } elsif (( ! defined $loginName ) or
+		(( defined $loginName ) and ( defined $loginPass )))
+	{
+    	return $this->SUPER::login( $query, $session );
     }
 
     # get OpenID configuration info
@@ -325,7 +458,7 @@ sub login {
 			# collect user info from OpenID Provider
 			my $sreg = $vident->extension_fields( 'http://openid.net/extensions/sreg/1.1' );
 			my $ax = $vident->extension_fields( 'http://openid.net/srv/ax/1.0' );
-			my ( $first_name, $last_name, $email );
+			my ( $first_name, $last_name, $email, $country );
 			if ( exists $ax->{"value.lastname"}) {
 				# OpenID 2.0 AX (attribute exchange)
 				$first_name = (( exists $ax->{'value.firstname'} )
@@ -334,6 +467,8 @@ sub login {
 					? $ax->{'value.lastname'} : "" );
 				$email = (( exists $ax->{'value.email'} )
 					? $ax->{'value.email'} : "" );
+				$country = (( exists $ax->{'value.country'} )
+					? $ax->{'value.country'} : "" );
 				$wikiname = $first_name.$last_name;
 			} else {
 				# OpenID 1.1 SREG (simple registration)
@@ -400,13 +535,34 @@ sub login {
 			TWiki::Users::OpenIDMapping::save_openid_attrs( $twiki,
 				$wikiname, \%openid_p );
 
-			# auto-create user in TWiki if configured to do so
-			if ( $TWiki::cfg{OpenIdRpContrib}{AutoCreateUser}) {
+			# auto-register user in TWiki if configured to do so
+			if ( $TWiki::cfg{OpenIdRpContrib}{AutoRegisterUser}) {
 				if ( ! $twiki->{store}->topicExists(
 					$TWiki::cfg{UsersWebName}, $wikiname ))
 				{
-					my $doOverwriteTopics = ! $twiki->{store}->topicExists(
-						$TWiki::cfg{UsersWebName}, $TWiki::cfg{UsersTopicName});
+					# fill in parameters from OpenID
+					$query->param( "FirstName", $first_name );
+					$query->param( "WikiName", $wikiname );
+					$query->param( "LastName", $last_name );
+					$query->param( "LoginName", lc($wikiname));
+					$query->param( "Email", $email );
+					$query->param( "Country", $country ) if $country;
+					
+					# security: don't pass through sensitive info
+					$query->delete( 'username', 'password', @openid_keys );
+
+					# redirect now-logged-in user to destination page
+					my $regurl = $twiki->getScriptUrl( 0, 'view',
+						$TWiki::cfg{SystemWebName}, "TWikiRegistration" );
+					$this->redirectCgiQuery($query, $regurl );
+					return;
+				}
+
+			# auto-create user in TWiki if configured to do so
+			} elsif ( $TWiki::cfg{OpenIdRpContrib}{AutoCreateUser}) {
+				if ( ! $twiki->{store}->topicExists(
+					$TWiki::cfg{UsersWebName}, $wikiname ))
+				{
 					TWiki::UI::Register::_registerSingleBulkUser(
 						$twiki,
 						[ qw( LoginName WikiName FirstName LastName Email
@@ -422,7 +578,7 @@ sub login {
 						{
 							# misnamed setting: actually allows writing
 							# TWikiUsers, still needed if topic doesn't exist
-							doOverwriteTopics => $doOverwriteTopics,
+							doOverwriteTopics => 1,
 						}
 					);
 				}
@@ -433,6 +589,7 @@ sub login {
 
 			# redirect now-logged-in user to destination page
 			$this->redirectCgiQuery($query, $origurl );
+			return;
 		} else {
 			# catch-all reporting for other errors
 			throw TWiki::OopsException(
@@ -446,26 +603,41 @@ sub login {
     	# we don't have a response, so prepare a request for OpenID provider
 
         my $csr = Net::OpenID::Consumer->new(
-	    cache => $cache,
-	    consumer_secret => $consumer_secret,
-	    required_root => $required_root,
-	    args => $query,
-		ua => $ua_class->new,
+			cache => $cache,
+			consumer_secret => $consumer_secret,
+			required_root => $required_root,
+			args => $query,
+			ua => $ua_class->new,
         );
-
-		# if login name is a known WikiName, convert it to OpenID identity
-		my @openids = TWiki::Users::OpenIDMapping::login2openid( $twiki,
-			$loginName );
-		if ( @openids ) {
-			# override login string with known OpenID identity
-			# we'll use the first one
-			$loginName = $openids[0];
+		if ( ! $csr ) {
+			throw TWiki::OopsException(
+			'generic',
+			web => $twiki->{web},
+			topic => $twiki->{topic},
+			params => [ 'Unable to initialize !OpenID library',
+				$csr->err, "", "" ]);
 		}
 
-        # if no OpenID parameters but we have a login name, process OpenID
-		# claimed identity (not yet authenticated, just finding provider)
-		# and redirect to OpenID Provider
+		# if login name is a known WikiName, convert it to OpenID identity
+		if ( $loginName =~ /$TWiki::cfg{LoginNameFilterIn}/ ) {
+			my @openids = TWiki::Users::OpenIDMapping::login2openid( $twiki,
+				$loginName );
+			if ( @openids ) {
+				# override login string with known OpenID identity
+				# we'll use the first one that is non-empty
+				foreach my $id ( @openids ) {
+					( length $id ) or next;
+					$loginName = $id;
+				}
+			}
+		}
+
+        # use the login name to process an OpenID claimed identity
+		# (not yet authenticated, just finding the provider so far)
+		# and redirect to OpenID Provider.
+		# This is where HTML and Yadis discovery of the provider are done.
 		my $claimed_id = $csr->claimed_identity($loginName);
+		print STDERR "debug: login: $loginName claimed ID: $claimed_id\n";
         if ($claimed_id) {
 			my $version = $claimed_id->protocol_version;
 			if ( $version == 1 ) {
@@ -528,8 +700,9 @@ sub login {
 			'generic',
 			web => $twiki->{web},
 			topic => $twiki->{topic},
-			params => [ 'missing OpenID identity', "cannot initiate OpenID",
-				"", "" ]);
+			params => [ 'Error in !OpenID claimed identity',
+				"cannot initiate !OpenID",
+				$csr->err, "" ]);
         }
     }
 }
