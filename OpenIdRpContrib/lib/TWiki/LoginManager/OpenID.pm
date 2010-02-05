@@ -379,6 +379,10 @@ sub login {
 
 		# handle responses
 		if (my $setup_url = $csr->user_setup_url) {
+			# security: don't pass through sensitive info
+			$query->delete( 'origurl', 'username', 'password',
+				@openid_keys );
+
 			# the OpenID request failed, requiring the user to perform setup
 			throw TWiki::OopsException(
 			'generic',
@@ -388,6 +392,10 @@ sub login {
 				'<a href="'.$setup_url.'">setup required</a> for this user',
 				"", "" ]);
 		} elsif ($csr->user_cancel) {
+			# security: don't pass through sensitive info
+			$query->delete( 'origurl', 'username', 'password',
+				@openid_keys );
+
 			# the user or provider canceled the request
 			throw TWiki::OopsException(
 			'generic',
@@ -401,6 +409,10 @@ sub login {
 
 			# we need the identity string, or all else fails
 			if ( ! exists $openid_p{identity}) {
+				# security: don't pass through sensitive info
+				$query->delete( 'origurl', 'username', 'password',
+					@openid_keys );
+
 				throw TWiki::OopsException( 'generic',
 				web => $twiki->{web},
 				topic => $twiki->{topic},
@@ -417,6 +429,10 @@ sub login {
 				$TWiki::cfg{OpenIdRpContrib}{OPHostWhitelist},
 				$TWiki::cfg{OpenIdRpContrib}{OPHostBlacklist}))
 			{
+				# security: don't pass through sensitive info
+				$query->delete( 'origurl', 'username', 'password',
+					@openid_keys );
+
 				throw TWiki::OopsException( 'generic',
 				web => $twiki->{web},
 				topic => $twiki->{topic},
@@ -488,6 +504,10 @@ sub login {
 				$TWiki::cfg{OpenIdRpContrib}{EmailDomWhitelist},
 				$TWiki::cfg{OpenIdRpContrib}{EmailDomBlacklist}))
 			{
+				# security: don't pass through sensitive info
+				$query->delete( 'origurl', 'username', 'password',
+					@openid_keys );
+
 				throw TWiki::OopsException( 'generic',
 				web => $twiki->{web},
 				topic => $twiki->{topic},
@@ -518,6 +538,10 @@ sub login {
 			if ( $wikiname ) {
 				$this->userLoggedIn( $wikiname );
 			} else {
+				# security: don't pass through sensitive info
+				$query->delete( 'origurl', 'username', 'password',
+					@openid_keys );
+
 				throw TWiki::OopsException( 'generic',
 				web => $twiki->{web},
 				topic => $twiki->{topic},
@@ -591,6 +615,10 @@ sub login {
 			$this->redirectCgiQuery($query, $origurl );
 			return;
 		} else {
+			# security: don't pass through sensitive info
+			$query->delete( 'origurl', 'username', 'password',
+				@openid_keys );
+
 			# catch-all reporting for other errors
 			throw TWiki::OopsException(
 				'generic',
@@ -610,6 +638,10 @@ sub login {
 			ua => $ua_class->new,
         );
 		if ( ! $csr ) {
+			# security: don't pass through sensitive info
+			$query->delete( 'origurl', 'username', 'password',
+				@openid_keys );
+
 			throw TWiki::OopsException(
 			'generic',
 			web => $twiki->{web},
@@ -696,6 +728,10 @@ sub login {
             # Automatically redirect the user to the OpenID endpoint
 			$twiki->redirect( $check_url, 0 );
         } else {
+			# security: don't pass through sensitive info
+			$query->delete( 'origurl', 'username', 'password',
+				@openid_keys );
+
 			throw TWiki::OopsException(
 			'generic',
 			web => $twiki->{web},
