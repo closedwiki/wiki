@@ -64,6 +64,10 @@ sub new {
     # set state to enable login
     $session->enterContext('can_login');
 
+	# set class variables
+	$this->{debug} = ( exists $TWiki::cfg{OpenIdRpContrib}{Debug})
+		? $TWiki::cfg{OpenIdRpContrib}{Debug} : 0;
+
     # override TWiki::LoginManager's LOGIN tag handler with OpenID-specific one
     TWiki::registerTagHandler('LOGIN', \&_LOGIN);
 
@@ -87,6 +91,21 @@ sub finish {
     my $this = shift;
     $this->complete(); # call to flush the session if not already done
 	$this->SUPER::finish();
+}
+
+=begin twiki
+
+---++ StaticMethod debug()
+print debugging info when debug mode is enabled
+
+=cut
+
+# debugging output
+sub debug
+{
+	if ( $TWiki::cfg{OpenIdRpContrib}{Debug}) {
+		print STDERR "debug: ".join( ' ', @_ )."\n";
+	}
 }
 
 =pod
@@ -152,7 +171,7 @@ sub check_provider_icon
 	my $wwwhost = "www.".($hosts[$#hosts]);
 	push @hosts, $wwwhost;
 	foreach my $dhost ( @hosts ) {
-		print STDERR "debug: trying icon from $dhost\n";
+		debug "trying icon from", $dhost;
 		my $response = $ua->get( "http://$dhost/favicon.ico" );
 		if ($response->is_success) {
 			my $content = $response->decoded_content;
@@ -333,8 +352,8 @@ sub login {
 	if ( exists $openid_p{provider} ) {
 		my %ops = @{$TWiki::cfg{OpenIdRpContrib}{OpenIDProviders}};
 		if ( exists $ops{$openid_p{provider}}) {
-			print STDERR "debug: provider button selected: $openid_p{provider} "
-				."= ".$ops{$openid_p{provider}}."\n";
+			debug "provider button selected:", $openid_p{provider},
+				"=", $ops{$openid_p{provider}};
 			$loginName = $ops{$openid_p{provider}};
 			undef $loginPass;
 		}
@@ -375,6 +394,7 @@ sub login {
 			consumer_secret => $consumer_secret,
 			required_root => $required_root,
 			args  => $query,
+			debug => $this->{debug},
 		);
 
 		# handle responses
@@ -391,6 +411,7 @@ sub login {
 			params => [ "Error in OpenID Provider response",
 				'<a href="'.$setup_url.'">setup required</a> for this user',
 				"", "" ]);
+			return;
 		} elsif ($csr->user_cancel) {
 			# security: don't pass through sensitive info
 			$query->delete( 'origurl', 'username', 'password',
@@ -404,6 +425,7 @@ sub login {
 			params => [ "OpenID request canceled",
 				'cancel received from OpenID Provider',
 				"", "" ]);
+			return;
 		} elsif (my $vident = $csr->verified_identity) {
 			# success, determine WikiName and redirect back as logged-in user
 
@@ -419,6 +441,7 @@ sub login {
 				params => [ 'OpenID error',
 					"OpenID Provider did not provide user's identity string",
 					"", "" ]);
+				return;
 			}
 
 			# filter for identity providers if we have white or black lists
@@ -439,6 +462,7 @@ sub login {
 				params => [ 'OpenID error',
 					"OpenID Provider $op_host not allowed at this site",
 					"", "" ]);
+				return;
 			}
 
 			# check URL to redirect now-logged-in user to
@@ -457,7 +481,7 @@ sub login {
 			my $wikiname = ( defined $cUID )
 				? $mapping->getWikiName ( $cUID )
 				: undef;
-			print STDERR "debug: wn=$wikiname cUID=$cUID openid=".$openid_p{identity}."\n";
+			debug "wn=$wikiname cUID=$cUID openid=".$openid_p{identity};
 			if ( defined $wikiname ) {
 				# log the user in
 				$this->userLoggedIn( $wikiname );
@@ -514,6 +538,7 @@ sub login {
 				params => [ 'OpenID error',
 					"New user request requires manual approval.",
 					"Contact the site administrator(s)", "" ]);
+				return;
 			}
 
 			# check for WikiName collision, adjust wikiname if necessary
@@ -548,6 +573,7 @@ sub login {
 				params => [ 'OpenID error',
 					"OpenID Provider did not provide user's full name",
 					"", "" ]);
+				return;
 			}
 
 			# save OpenID attributes in OpenID mapper
@@ -636,6 +662,7 @@ sub login {
 			required_root => $required_root,
 			args => $query,
 			ua => $ua_class->new,
+			debug => $this->{debug},
         );
 		if ( ! $csr ) {
 			# security: don't pass through sensitive info
@@ -669,7 +696,7 @@ sub login {
 		# and redirect to OpenID Provider.
 		# This is where HTML and Yadis discovery of the provider are done.
 		my $claimed_id = $csr->claimed_identity($loginName);
-		print STDERR "debug: login: $loginName claimed ID: $claimed_id\n";
+		debug "login:", $loginName, "claimed ID:", $claimed_id;
         if ($claimed_id) {
 			my $version = $claimed_id->protocol_version;
 			if ( $version == 1 ) {

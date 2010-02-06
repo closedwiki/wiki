@@ -60,7 +60,7 @@ sub initialize
 	# determine flags for read and write operations
 	$self->{rwflags} = {};
 	$self->{rwflags}{read} = O_RDONLY;
-	if ( $self->{flags} & O_ACCMODE == O_RDONLY ) {
+	if (( $self->{flags} & O_ACCMODE ) == O_RDONLY ) {
 		$self->{rwflags}{write} = undef;
 	} else {
 		$self->{rwflags}{write} = $self->{flags};
