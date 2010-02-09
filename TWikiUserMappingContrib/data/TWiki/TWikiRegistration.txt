@@ -239,7 +239,7 @@ function capitalise(name)
   <option>Micronesia</option>
   <option>Moldova</option>
   <option>Monaco</option>
-  <option>Mongoila</option>
+  <option>Mongolia</option>
   <option>Montenegro</option>
   <option>Morocco</option>
   <option>Mozambique</option>
