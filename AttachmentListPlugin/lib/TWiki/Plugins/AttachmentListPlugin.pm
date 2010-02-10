@@ -414,6 +414,9 @@ sub _formatFileData {
         my $fileEnc = $fileData->{name};
         $fileEnc =~ s/([^-_.a-zA-Z0-9])/sprintf("%%%02x",ord($1))/eg;
         my $fileUrl = "$pubUrl/$webEnc/$topicEnc/$fileEnc";
+  
+       use URI::Escape;
+       $fileUrl = uri_unescape($fileUrl);
 
         $s =~ s/\$fileUrl/$fileUrl/g;
         $s =~ s/\$fileTopic/$fileData->{topic}/g;
