@@ -1,0 +1,11 @@
+%{ This is a default template }%%{ Templates for Kinosearch Indexing Empty }%
+%TMPL:INCLUDE{"oops"}%
+
+%TMPL:DEF{"titleaction"}%%MAKETEXT{"(Index Based Search: Index Empty)"}% %TMPL:END%
+%TMPL:DEF{"webaction"}% *%MAKETEXT{"Attention"}%* %TMPL:END%
+%TMPL:DEF{"heading"}%%MAKETEXT{"Kinosearch Indexing Empty"}%%TMPL:END%
+%TMPL:DEF{"topicactionbuttons"}% [[%WEB%.%TOPIC%][%MAKETEXT{"OK"}%]] %TMPL:END%
+
+%TMPL:DEF{"message"}%
+%INSTANTIATE%
+%TMPL:END%

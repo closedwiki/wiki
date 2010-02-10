@@ -44,10 +44,10 @@ sub search {
     my $mainWebname = TWiki::Func::getMainWebname();
     
     # write log entry - should be used throughout this script
-    $debug && TWiki::Func::writeDebug( "kinosearch starting..." );
+    $debug && TWiki::Func::writeagaDebug( "kinosearch starting..." );
     
     if (! defined $session) {
-	$query   = new CGI;    
+	$query   = new CGI;     
 	$session = new TWiki( undef, $query);
     } else {
 	$query   = $session->{cgiQuery};
@@ -59,6 +59,17 @@ sub search {
     my $remoteUser = $session->{user}||"TWikiGuest";
     my $websStr = $self->websStr($query);
     my $limit   = $self->limit($query);
+
+    if (! TWiki::Func::webExists($webName)){ 
+    my $exception = new TWiki::OopsException(
+               'kinosearchwebdoesnotexist',
+                web => $webName, topic => $topicName,
+                def => 'kinosearch_index_empty',
+                params => [ 'kinosearchindex', 'The web do not exist, kindly suggest you to try again' ] );
+
+    $exception->redirect( $session );
+  } 
+  
 
     $remoteUser = TWiki::Func::userToWikiName($remoteUser);
 

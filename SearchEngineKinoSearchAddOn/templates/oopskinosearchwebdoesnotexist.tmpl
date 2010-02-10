@@ -1,0 +1,11 @@
+%{ This is a default template }%%{ Templates for Kinosearch Web Do not exist}%
+%TMPL:INCLUDE{"oops"}%
+
+%TMPL:DEF{"titleaction"}%%MAKETEXT{"(Web: %WEB% do not Exist)"}% %TMPL:END%
+%TMPL:DEF{"webaction"}% *%MAKETEXT{"Attention"}%* %TMPL:END%
+%TMPL:DEF{"heading"}%%MAKETEXT{"Web: %WEB% do not Exist"}%%TMPL:END%
+%TMPL:DEF{"topicactionbuttons"}% [[%USERSWEB%.%HOMETOPIC%][%MAKETEXT{"OK"}%]] %TMPL:END%
+
+%TMPL:DEF{"message"}%
+%INSTANTIATE%
+%TMPL:END%
