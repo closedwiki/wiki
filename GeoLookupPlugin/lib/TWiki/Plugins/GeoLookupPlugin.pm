@@ -34,7 +34,7 @@ require TWiki::Plugins; # For the API version
 
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC $moduleEnum $geoIP $error );
 
-$VERSION = '2010-01-23 (18294)';
+$VERSION = '2010-02-10 (18329)';
 
 $RELEASE = 'TWiki';
 
@@ -99,7 +99,7 @@ sub _GEOLOOKUP {
 
     $text =~ s/\$country_code/$rec->{country_code}||''/geo;
     $text =~ s/\$country_code3/$rec->{country_code3}||''/geo;
-    $text =~ s/\$country_name/$rec->{country_name}||''/geo;
+    $text =~ s/\$country_name/_fixCountryName( $rec->{country_name} )/geo;
     $text =~ s/\$region/$rec->{region}||''/geo;
     $text =~ s/\$city/$rec->{city}||''/geo;
     $text =~ s/\$postal_code/$rec->{postal_code}||''/geo;
@@ -226,6 +226,19 @@ sub _domainToIP {
         $ip = inet_ntoa($packed_ip);
     }
     return $ip;
+}
+
+=pod
+
+---++ _fixCountryName()
+
+=cut
+
+sub _fixCountryName {
+    my( $name ) = @_;
+    $name = '' unless $name;
+    $name =~ s/United States/USA/;
+    return $name;
 }
 
 1;

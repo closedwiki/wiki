@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1264233115" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1265866462" format="1.1" version="$Rev$"}%
 ---+!! Geo Lookup Plugin
 
 Lookup geolocation such as latitude/longitude, city, phone area code by IP address or domain name.
@@ -15,7 +15,7 @@ This plugin is%BR% sponsored by:%BR%
 Add =%<nop>GEOLOOKUP{"host" format="..."}%= anywhere in a TWiki page or skin template.
 
 | *Write this:* | *Renders as: (if installed)* | *Simulated example:* |
-| =%<nop>GEOLOOKUP{"75.52.124.86"}%= | %GEOLOOKUP{"75.52.124.86"}% | Sunnyvale, CA, United States |
+| =%<nop>GEOLOOKUP{"75.52.124.86"}%= | %GEOLOOKUP{"75.52.124.86"}% | Sunnyvale, CA, USA |
 
 Parameters:
    * ="host"=: Host IP address (example: ="75.52.124.86"=) or host name (example: ="twiki.org"=)
@@ -31,7 +31,7 @@ Parameters:
       * =$area_code=: Telephone area code (USA only)
 
 Examples:
-   * =%<nop>GEOLOOKUP{"75.52.124.86"}%= shows default format =Sunnyvale, CA, United Stats=
+   * =%<nop>GEOLOOKUP{"75.52.124.86"}%= shows default format =Sunnyvale, CA, USA=
    * =%<nop>GEOLOOKUP{"75.52.124.86" format="$latitude, $longitude"}%= shows comma separated latitude and longitude
 
 ---++ Usage Examples
@@ -101,8 +101,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/PeterThoeny, [[http://twiki.net/][Twiki, Inc.]] |
 |  Copyright: | &copy; 2010, TWiki:Main/PeterThoeny |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-01-23 (18294) |
+|  Plugin Version: | 2010-02-10 (18329) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-02-10: | Change country name "United States" to "USA" |
 |  2010-01-23: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | CPAN:Geo::IP (fast), or<br /> CPAN:Geo::IP::PurePerl (no C API dependency) |
@@ -117,6 +118,6 @@ This plugin refers to !GeoLite data created by !MaxMind, available from http://w
 
 __Related Topics:__ VarGEOLOOKUP, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
 
--- TWiki:Main/PeterThoeny - 2010-01-23
+-- TWiki:Main/PeterThoeny - 2010-02-10
 
 %META:FILEATTACHMENT{name="twiki-logo-80x40-t.gif" attachment="twiki-logo-80x40-t.gif" attr="h" comment="" date="1264233115" path="twiki-logo-80x40-t.gif" size="1999" user="TWikiContributor" version="1"}%
