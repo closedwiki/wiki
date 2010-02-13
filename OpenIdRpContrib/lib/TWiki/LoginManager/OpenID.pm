@@ -244,14 +244,16 @@ sub _OPENIDPROVIDERS {
 	my $result = '<div class="'.$sb.'OP_list">';
 	while ( @op_list ) {
 		my $op_name = shift @op_list;
+		my $op_name_norm = $op_name;
+		$op_name_norm =~ s/\s+/_/g;
 		my $op_url = shift @op_list;
-		check_provider_icon ( $twiki, $op_name, $op_url );
+		check_provider_icon ( $twiki, $op_name_norm, $op_url );
 		
 		$result .= '<button class="'.$sb.'OP_entry" type="submit" '
 			.'name="openid.provider" value="'
 			.$op_name.'" title="<nop>'.$op_name.' login via <nop>OpenID">'
 			.'<img src="%PUBURL%/%SYSTEMWEB%/OpenIdRpContrib/op-icon-'
-			.$op_name.'.ico" alt="" class="'.$sb.'OP_icon">'
+			.$op_name_norm.'.ico" alt="" class="'.$sb.'OP_icon">'
 			.($sb ? "" : "<nop>".$op_name )
 			.'</button>';
 	}
@@ -611,20 +613,22 @@ sub login {
 				if ( ! $twiki->{store}->topicExists(
 					$TWiki::cfg{UsersWebName}, $wikiname ))
 				{
-					# fill in parameters from OpenID
-					$query->param( "FirstName", $first_name );
-					$query->param( "WikiName", $wikiname );
-					$query->param( "LastName", $last_name );
-					$query->param( "LoginName", lc($wikiname));
-					$query->param( "Email", $email );
-					$query->param( "Country", $country ) if $country;
+					# fill in registration form parameters from OpenID
+					my @params = (
+						"FirstName", $first_name,
+						"WikiName", $wikiname,
+						"LastName", $last_name,
+						"LoginName", lc($wikiname),
+						"Email", $email,
+						( $country ? ( "Country", $country ) : ()));
 					
 					# security: don't pass through sensitive info
 					$query->delete( 'username', 'password', @openid_keys );
 
 					# redirect now-logged-in user to destination page
 					my $regurl = $twiki->getScriptUrl( 0, 'view',
-						$TWiki::cfg{SystemWebName}, "TWikiRegistration" );
+						$TWiki::cfg{SystemWebName}, "TWikiRegistration",
+						@params );
 					$this->redirectCgiQuery($query, $regurl );
 					return;
 				}
