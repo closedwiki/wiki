@@ -476,7 +476,8 @@ sub login {
 			}
 
 			# check if we already know this identity - if so we're done
-			my $cUID = TWiki::Users::OpenIDMapping::_mapper_get( $twiki, "O2U", $openid_p{identity});
+			my $cUID = TWiki::Users::OpenIDMapping::openid2cUID( $twiki,
+				$openid_p{identity});
 			my $mapping = $twiki->{users}{mapping};
 			my $wikiname = ( defined $cUID )
 				? $mapping->getWikiName ( $cUID )
@@ -521,6 +522,34 @@ sub login {
 					= split ( " ", $sreg->{fullname}, 2 );
 			}
 
+			# check that we have required info
+			if ( !$first_name or ! $last_name ) {
+				# security: don't pass through sensitive info
+				$query->delete( 'origurl', 'username', 'password',
+					@openid_keys );
+
+				throw TWiki::OopsException( 'generic',
+				web => $twiki->{web},
+				topic => $twiki->{topic},
+				params => [ 'OpenID error',
+					"OpenID Provider did not provide user's full name",
+					"", "" ]);
+				return;
+			}
+			if ( !$email ) {
+				# security: don't pass through sensitive info
+				$query->delete( 'origurl', 'username', 'password',
+					@openid_keys );
+
+				throw TWiki::OopsException( 'generic',
+				web => $twiki->{web},
+				topic => $twiki->{topic},
+				params => [ 'OpenID error',
+					"OpenID Provider did not provide user's e-mail address",
+					"", "" ]);
+				return;
+			}
+
 			# filter for email domains if we have white or black lists
 			my $email_dom = $email;
 			$email_dom =~ s=^.*@==;
@@ -560,21 +589,7 @@ sub login {
 			}
 
 			# log the user in as the WikiName
-			if ( $wikiname ) {
-				$this->userLoggedIn( $wikiname );
-			} else {
-				# security: don't pass through sensitive info
-				$query->delete( 'origurl', 'username', 'password',
-					@openid_keys );
-
-				throw TWiki::OopsException( 'generic',
-				web => $twiki->{web},
-				topic => $twiki->{topic},
-				params => [ 'OpenID error',
-					"OpenID Provider did not provide user's full name",
-					"", "" ]);
-				return;
-			}
+			$this->userLoggedIn( $wikiname );
 
 			# save OpenID attributes in OpenID mapper
 			$openid_p{WikiName} = $wikiname;
