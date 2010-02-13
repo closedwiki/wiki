@@ -313,7 +313,7 @@ sub save_openid_attrs {
 
 	# generate cUID from wikiname/login
 	my $mapping = $session->{users}{mapping};
-	my $cUID = $mapping->login2cUID( $wikiname );
+	my $cUID = $mapping->login2cUID( $wikiname, 1 );
 	( defined $cUID ) or throw TWiki::OopsException( 'generic',
 				web => $session->{web}, topic => $session->{topic},
 				params => [ "Internal error",
