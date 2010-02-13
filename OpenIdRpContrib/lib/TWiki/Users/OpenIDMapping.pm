@@ -404,6 +404,13 @@ sub _initOpenIDMapping {
     }
 }
 
-# 
+# simpler version of TWiki::Users::TWikiUserMapping::_userReallyExists()
+sub _userReallyExists
+{
+	my $this = shift;
+	my $login = shift;
+
+	return exists $this->{L2U}->{$login};
+}
 
 1;

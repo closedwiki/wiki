@@ -359,8 +359,9 @@ sub login {
 		}
 
     # if no login provided, or login & password, use parent class login
-    } elsif (( ! defined $loginName ) or
-		(( defined $loginName ) and ( defined $loginPass )))
+    } elsif (( ! defined $loginName ) or ( ! $loginName )
+		or (( defined $loginName ) and length( $loginName)
+			and ( defined $loginPass ) and length( $loginPass)))
 	{
     	return $this->SUPER::login( $query, $session );
     }
@@ -479,11 +480,13 @@ sub login {
 			my $cUID = TWiki::Users::OpenIDMapping::openid2cUID( $twiki,
 				$openid_p{identity});
 			my $mapping = $twiki->{users}{mapping};
-			my $wikiname = ( defined $cUID )
+			my $wikiname = ( $cUID )
 				? $mapping->getWikiName ( $cUID )
 				: undef;
-			debug "wn=$wikiname cUID=$cUID openid=".$openid_p{identity};
-			if ( defined $wikiname ) {
+			debug "wn=".((defined $wikiname) ? $wikiname : "" )
+				." cUID=".((defined $cUID) ? $cUID : "" )
+				." openid=".$openid_p{identity};
+			if (( defined $wikiname ) and length( $wikiname )) {
 				# log the user in
 				$this->userLoggedIn( $wikiname );
 
@@ -668,7 +671,7 @@ sub login {
 				params => [ 'OpenID error', $csr->errcode(), $csr->errtext(),
 					"" ]);
 		}
-    } elsif ( defined $loginName ) {
+    } elsif (( defined $loginName ) and length( $loginName )) {
     	# we don't have a response, so prepare a request for OpenID provider
 
         my $csr = Net::OpenID::Consumer->new(
