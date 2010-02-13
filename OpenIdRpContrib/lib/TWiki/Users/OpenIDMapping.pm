@@ -314,6 +314,11 @@ sub save_openid_attrs {
 	# generate cUID from wikiname/login
 	my $mapping = $session->{users}{mapping};
 	my $cUID = $mapping->login2cUID( $wikiname );
+	( defined $cUID ) or throw TWiki::OopsException( 'generic',
+				web => $session->{web}, topic => $session->{topic},
+				params => [ "Internal error",
+				"save_openid_attrs w/ empty canonical ID",
+				"wikiname=$wikiname", "" ]);
 	my $identity = $attrs->{identity};
 
 	# save TWiki mapping
