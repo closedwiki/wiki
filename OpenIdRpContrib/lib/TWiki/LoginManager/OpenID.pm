@@ -483,9 +483,9 @@ sub login {
 			my $wikiname = ( $cUID )
 				? $mapping->getWikiName ( $cUID )
 				: undef;
-			debug "wn=".((defined $wikiname) ? $wikiname : "" )
-				." cUID=".((defined $cUID) ? $cUID : "" )
-				." openid=".$openid_p{identity};
+			debug "wn=".((defined $wikiname) ? $wikiname : "" ),
+				" cUID=".((defined $cUID) ? $cUID : "" ),
+				" openid=".$openid_p{identity};
 			if (( defined $wikiname ) and length( $wikiname )) {
 				# log the user in
 				$this->userLoggedIn( $wikiname );
@@ -600,6 +600,9 @@ sub login {
 			$openid_p{LastName} = $last_name;
 			$openid_p{Email} = $email;
 			delete $openid_p{return_to}; # don't need to save temp URL
+			debug "calling save_openid_attrs",
+				" wn=".((defined $wikiname) ? $wikiname : "" ),
+				" cUID=".((defined $cUID) ? $cUID : "" );
 			TWiki::Users::OpenIDMapping::save_openid_attrs( $twiki,
 				$wikiname, \%openid_p );
 
