@@ -196,7 +196,11 @@ Convert an OpenID identity to the corresponding canonical user name.
 sub openid2cUID {
     my( $session, $openid ) = @_;
 
-    return $session->{users}{mapping}{O2U}{$openid};
+	if ( exists $session->{users}{mapping}{O2U}{$openid}) {
+		return $session->{users}{mapping}{O2U}{$openid};
+	} else {
+		return undef;
+	}
 }
 
 =pod
@@ -237,6 +241,7 @@ attributes.
 sub mapper_getEmails {
     my( $session, $cUID ) = @_;
 
+	( exists $session->{users}{mapping}{U2A}{$cUID}) or return undef;
 	my $attr_recs = $session->{users}{mapping}{U2A}{$cUID};
 	( defined $attr_recs ) or return undef;
 	my @recs = split ( $openid_rec_delim, $attr_recs );
