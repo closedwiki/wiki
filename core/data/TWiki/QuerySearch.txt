@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1265675102" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1265790321" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %STARTINCLUDE%
 ---+ Query Search
@@ -13,6 +13,7 @@ Query searches are defined using a simple SQL-like query language. The language 
 %TOC%
 
 ---++ Field specifiers
+
 You use field specifiers to say what value from the topic you are interested
 in.
 
@@ -22,6 +23,7 @@ All meta-data in a topic is referenced according to a to a simple plan.
    * =web= - name of the web the topic is within
    * =text= - the body text of the topic
    * =META:FILEATTACHMENT=
+      * =arraysize=
       * _for each attachment_
          * =name=
          * =attr=
@@ -47,18 +49,20 @@ All meta-data in a topic is referenced according to a to a simple plan.
    * =META:FORM= - the main form of the topic
       * =name= (known as the _formname_)
    * =META:FIELD= - the fields in the form.
+      * =arraysize=
       * _for each field in the form_
          * =name=
          * =title=
          * =value=
    * =META:PREFERENCE=
+      * =arraysize=
       * _for each preference in the topic_
          * =name=
          * =value=
 
 See TWikiMetaData for details of what all these entries mean.
 
-Most things at the top level of the plan - =META:TOPICPARENT=, =META:TOPICINFO= etc - are _structures_ which are indexed by _keys_. For example, =META:TOPICINFO= has 4 entries, which are indexed by the keys =author=, =date=, =format= and =version=. =META:FILEATTACHMENT=, =META:FIELD= and =META:PREFERENCE= are all _arrays_, which means they can have any number of records under them. Arrays are indexed by _numbers_ - for example, the first entry in the =META:FIELD= array is entry 0.
+Most things at the top level of the plan - =META:TOPICPARENT=, =META:TOPICINFO= etc - are _structures_ which are indexed by _keys_. For example, =META:TOPICINFO= has 4 entries, which are indexed by the keys =author=, =date=, =format= and =version=. =META:FILEATTACHMENT=, =META:FIELD= and =META:PREFERENCE= are all _arrays_, which means they can have any number of records under them. Arrays are indexed by _numbers_ - for example, the first entry in the =META:FIELD= array is entry 0. The field specifier =arraysize= returns the number of items in an array, for example, =attachments.arraysize= returns the number of attachments.
 
 It's a bit clumsy having to type =META:FILEATTACHMENT= every time you want to refer to the array of attachments in a topic, so there are some predefined aliases that make it a bit less typing:
    * =attachments= means the same as =META:FILEATTACHMENT=
@@ -72,7 +76,7 @@ It's a bit clumsy having to type =META:FILEATTACHMENT= every time you want to re
 This plan is referenced using a simple syntax:
 | *Syntax* | *Means* | *Examples* |
 | =X= | refers to the field named =X=. | =info=, =META:TOPICMOVED=, =attachments=, =name=. |
-| =X.Y= | refers to the entry with the key =Y= in the structure named =X= | =info.date=, =moved.by=, =META:TOPICPARENT.name= |
+| =X.Y= | refers to the entry with the key =Y= in the structure named =X= | =info.date=, =moved.by=, =META:TOPICPARENT.name=, =attachments.arraysize= |
 | =X[<i>query</i>]= | refers to all the elements of the array =X= that match _query_. If <i>query</i> is of the form =name='Y'= then you can use the same =X.Y= syntax as is used for accessing structures. | =attachments[size>1024]=, =DocumentForm[name!='Summary' AND value~'top secret'].value=, =DocumentForm.Summary= | 
 | =X[N]= | where =X= is an array and =N= is an integer number >= 0, gets the Nth element of the array =X= | =attachments[3]= |
 | =X/Y= | accesses =Y= from the topic specified by the _value_ of =X=. =X= must evaluate to a topic name | =parent.name/(form.name='ExampleForm')= will evaluate to true if (1) the topic has a parent, (2) the parent topic has the main form type =ExampleForm=. |
@@ -86,7 +90,8 @@ There is a shortcut for accessing form fields. If you use the name of a field (f
 If =X= would conflict with the name of an entry or alias (e.g. it's =moved= or maybe =parent=), you can prepend the name of the form followed by a dot, as shown in the last example. 
 
 ---++ Constants
-You use constants for the values that you compare with fields. Constants are either strings, or numbers. Strings are always delimited by single-quotes (you can escape a quote using backslash). Numbers can be any integer or floating point number. 
+
+You use constants for the values that you compare with fields. Constants are either strings, or numbers. Strings are always delimited by single-quotes (you can escape a quote using backslash). Numbers can be any integer or floating point number. Constants can be supplied by TWikiVariables, such as ='%<nop>TOPIC%'= representing the current topic name.
 
 ---++ Operators
 
@@ -110,17 +115,21 @@ Field specifiers and constants are combined using _operators_ to create queries.
 %I% The same operators are supported for [[VarIF][%IF statements]].
 
 ---++ Putting it all together
+
 When a query is applied to a topic, the goal is to reduce to a TRUE or FALSE value that indicates whether the topic matches that query or not. If the query returns TRUE, then the topic is included in the search results.
 
 A query matches if the query returns one or more values when it is applied to the topic. So if I have a very simple query, such as ="attachments"=, then this will return TRUE for all topics that have one or more attachments. If I write ="attachments[size>1024 AND name ~ '*.gif']"= then it will return TRUE for all topics that have at least one attachment larger than 1024 bytes with a name ending in =.gif=.
 
 ---++ Gotcha
-   * Remember that in the query language, TWiki topic names are _constants_. You cannot write =Main.UserTopic/UserForm.firstName= because =Main.UserTopic= will be interpreted as a form field name. If you want to refer to topics you *must* enclose the topic name in quotes i.e. ='Main.UserTopic'/UserForm.firstName=
+
+   * Remember that in the query language, TWiki topic names are _constants_. You cannot write =Main.JohnSmith/UserForm.FirstName= because =Main.JohnSmith= will be interpreted as a form field name. If you want to refer to topics you *must* enclose the topic name in single quotes i.e. ='Main.JohnSmith'/UserForm.FirstName=
 
 ---++ Examples
 
 ---+++ Query examples
+
    * =attachments[name='purdey.gif']= - true if there is an attachment call =purdey.gif= on the topic
+   * =attachments[name~'*.gif'].arraysize > 3= - true if there are at least 4 =.gif= files attached to the topic
    * =(fields[name='Firstname'].value='Emma' OR fields[name='Firstname'].value='John') AND fields[name='Lastname'].value='Peel'= - true for 'Emma Peel' and 'John Peel' but *not* 'Robert Peel' or 'Emma Thompson'
    * =(Firstname='Emma' OR Firstname='John') AND Lastname='Peel'= - shortcut form of the previous query
    * =History<nop>Form[name='Age'].value>2= - true if the topic has a =HistoryForm=, and the form has a field called =Age= with a value > 2
@@ -129,6 +138,7 @@ A query matches if the query returns one or more values when it is applied to th
    * =Person/(Clothes<nop>Form[name='Headgear'].value ~ '*Bowler*' AND attachments[name~'*hat.gif' AND date < d2n('2007-01-01')])= - true if the form attached to the topic has a field called =Person= that has a value that is the name of a topic, and that topic contains the form =ClothesForm=, with a field called =Headgear=, and the value of that field contains the string ='Bowler'=, and the topic also has at least one attachment that has a name matching =*hat.gif= and a date before 1st Jan 2007. (Phew!)
 
 ---+++ Search examples
+
 Find all topics that are children of this topic in the current web
 <verbatim>
 %SEARCH{"parent.name = '%TOPIC%'" web="%WEB%" type="query"}%
@@ -150,4 +160,4 @@ Find all topics that have a field 'Threat' set to 'Amber' and 'cold virus' somew
 %SEARCH{"Threat='Amber' AND text ~ '*cold virus*'"}%
 </verbatim>
 
-__Related Topics:__ SearchHelp, VarSEARCH, FormattedSearch, TWiki:TWiki/QuerySearchPatternCookbook
+__Related Topics:__ IfStatements, SearchHelp, VarSEARCH, FormattedSearch, TWiki:TWiki/QuerySearchPatternCookbook
