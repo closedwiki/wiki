@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1244160963" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1265780322" format="1.1" version="$Rev$"}%
 ---+ IF Statements
 
 The =%<nop>IF%= construct gives TWiki the power to include content in topics based on the value of simple expressions.
@@ -131,3 +131,5 @@ In addition there is a context identifier for each enabled plugin; for example, 
 The =%<nop>IF%= statement is deliberately kept simple. In particular, note that there is no way to conditionally execute a Set statement. If you need more sophisticated control over formatting, then consider using the SpreadSheetPlugin.
 
 Note also that while the [[QuerySearch][query syntax]] can be used to access form fields, there are some contexts in which an IF statement may be used where there is no topic context, or the topic context is not what you expected.
+
+__Related Topics:__ QuerySearch, VarIF, VarSEARCH, FormattedSearch
