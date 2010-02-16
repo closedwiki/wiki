@@ -929,6 +929,7 @@ s/\$parent\(([^\)]*)\)/TWiki::Render::breakName( $meta->getParent(), $1 )/ges;
                     $out =~ s/\$formname/$meta->getFormName()/ges;
                     $out =~
                       s/\$count\((.*?\s*\.\*)\)/_countPattern( $text, $1 )/ges;
+                    $out =~ s/\$query\(\s*([^\)]*)\s*\)/formatQuery( $meta, $1 )/ges;
 
    # FIXME: Allow all regex characters but escape them
    # Note: The RE requires a .* at the end of a pattern to avoid false positives
@@ -1182,6 +1183,46 @@ sub _getTextAndMeta {
         $text =~ s/%TOPIC%/$topic/gos;
     }
     return ( $meta, $text );
+}
+
+=pod
+
+---++ StaticMethod formatQuery( $meta, $query ) -> $text
+
+=cut
+
+sub formatQuery {
+    my( $meta, $queryString ) = @_;
+
+    unless( defined( $queryParser )) {
+        require TWiki::Query::Parser;
+        $queryParser = new TWiki::Query::Parser();
+    }
+    my $error = '';
+    my $query;
+    try {
+        $query = $queryParser->parse( $queryString );
+    } catch TWiki::Infix::Error with {
+        return "\$query() format parse error " . shift->stringify();
+    };
+    return "\$query() format error $error" unless $query;
+
+    my $result = $query->evaluate( tom => $meta, data => $meta );
+    return _queryResultToString( $result );
+}
+
+sub _queryResultToString {
+    my( $a ) = @_; 
+    return 'undef' unless defined($a);
+    if (ref($a) eq 'ARRAY') {
+        return join(', ', map { _queryResultToString($_) } @$a);
+    } elsif (UNIVERSAL::isa($a, 'TWiki::Meta')) {
+        return $a->stringify();
+    } elsif (ref($a) eq 'HASH') {
+        return '{'.join(', ', map { "$_=>"._queryResultToString($a->{$_}) } keys %$a).'}'
+    } else {
+        return $a;
+    }
 }
 
 =pod
