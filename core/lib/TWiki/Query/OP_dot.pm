@@ -24,6 +24,12 @@ sub evaluate {
     my $lval = $a->evaluate( @_ );
     return undef unless( defined $lval );
     my $b = $node->{params}[1];
+
+    # Codev.QuerySyntaxWithArraySize:
+    if( $b->{params}[0] eq 'arraysize' ) {
+        return scalar(@$lval);
+    }
+
     my $res = $b->evaluate( data=>$lval, tom=>$domain{tom} );
     if (ref($res) eq 'ARRAY' && scalar(@$res) == 1) {
         return $res->[0];
