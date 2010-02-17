@@ -9,7 +9,7 @@
 <div class="openid_login_note">
 For other !OpenID providers:
 <br/>
-enter your !OpenID identity URL as your username below and omit the password.
+enter your !OpenID identity URL as your username and omit the password.
 </div>
 </div><!-- /twikiFormStep-->%TMPL:END%
 
@@ -22,6 +22,10 @@ enter your !OpenID identity URL as your username below and omit the password.
 
 %TMPL:DEF{"openidcss"}%
 <style type="text/css" media="all">
+#twikiLogin { width: 89em; margin: 0 auto; }
+.twikiFormStep { border-width:1px 0 0 1px; }
+.openidLoginBox { width: auto; display: block; }
+.openidLoginSide { width: 44em; display: inline-block; vertical-align: top; }
 .OP_list { display: block; text-align: center; left-margin: auto; right-margin: auto; }
 .OP_entry { font-size: .8em; margin: 4px; display: inline-block; vertical-align: middle; }
 .OP_icon { padding: 3px; border: 0; vertical-align: middle; }
@@ -64,9 +68,12 @@ or
 %TMPL:END%
 
 %TMPL:DEF{"form"}%<div id="twikiLogin">
-<div class="twikiFormSteps">%TMPL:P{"formstart"}%%TMPL:P{"titlestep"}%
-%TMPL:P{"openidstep"}%%TMPL:P{"orloginstep"}%%TMPL:P{"usernamestep"}%%TMPL:P{"passwordstep"}%%TMPL:P{"submitstep"}%
+<div class="twikiFormSteps openidLoginBox"><div class="openidLoginSide">
+%TMPL:P{"formstart"}%%TMPL:P{"titlestep"}%%TMPL:P{"openidstep"}%
+</div><!-- /openidLoginSide--><div class="openidLoginSide">
+%TMPL:P{"orloginstep"}%%TMPL:P{"usernamestep"}%%TMPL:P{"passwordstep"}%%TMPL:P{"submitstep"}%
 %TMPL:P{"formend"}%
 %TMPL:P{"seealsostep"}%
+</div><!-- /openidLoginSide-->
 </div><!-- /twikiFormSteps-->
 </div><!-- /twikiLogin-->%TMPL:END%
