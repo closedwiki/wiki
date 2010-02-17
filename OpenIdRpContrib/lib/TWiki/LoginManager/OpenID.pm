@@ -515,17 +515,26 @@ sub login {
 					? $ax->{'value.email'} : "" );
 				$country = (( exists $ax->{'value.country'} )
 					? $ax->{'value.country'} : "" );
-				$wikiname = $first_name.$last_name;
 			} else {
 				# OpenID 1.1 SREG (simple registration)
 				$email = $sreg->{email};
-				if ( exists $sreg->{fullname}) {
-					$wikiname = $sreg->{fullname};
-					$wikiname =~ s/\s*//g;
-				}
 				( $first_name, $last_name )
 					= split ( " ", $sreg->{fullname}, 2 );
 			}
+
+			# construct wikiname
+			my @wn_parts;
+			push @wn_parts, split( /\s+/, $first_name );
+			push @wn_parts, split( /\s+/, $last_name );
+			my $wnindex;
+			for ( $wnindex = 0; $wnindex < scalar @wn_parts; $wnindex++ ) {
+				$wn_parts[$wnindex] =~ s/[^\w]//g; # remove non-alphanumeric
+				if ( $wn_parts[$wnindex] !~ /^[A-Z][a-z]\w*[A-Z]/ ) {
+					# not already in CamelCase so only capitalize first letter
+					$wn_parts[$wnindex] = ucfirst(lc($wn_parts[$wnindex]));
+				}
+			}
+			$wikiname = join( '', @wn_parts );
 
 			# check that we have required info
 			if ( !$first_name or ! $last_name ) {
