@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1266652089" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1266707337" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 
 This is the TWiki icon library. The graphics can be used in topics and by web applications. Doc graphics are defined at %CALC{$SET(icontopics, $LISTIF($NOT($EXACT($item,)), $LISTMAP($IF($EXISTS($item), [[$item]], ), %ICONTOPIC%)))$GET(icontopics)}%.
@@ -409,7 +409,7 @@ Use any of the doc graphics defined in %CALC{$GET(icontopics)}%. The ICON variab
 
 | *Parameter:* | *Description:* | *Default:* |
 | ="name"= | Name of icon | required |
-| =format="..."= | Format of icon. Supported variables (with %ICON{person}% =%<nop>ICON{"person"}%= example): %BB% =$name= - name of icon (=person=) %BB% =$type= - type of icon (=gif=) %BB% =$filename= - icon filename (=person.gif=) %BB% =$web= - web where icon is defined (=TWiki=) %BB% =$topic= - topic where icon is defined (=TWikiDocGraphics=) %BB% =$description= - icon description (=Person=) %BB% =$width= - width of icon ('16') %BB% =$height= - height of icon ('16') %BB% =$img= - full img tag of icon (=&lt;img src="... /&gt;=) %BB% =$info= - icon tag with usage info in title %BB% =$url= - URL of icon (=http://example.com/pub/TWiki/TWikiDocGraphics/person.gif=) %BB% =$urlpath= - URL path of icon (=/pub/TWiki/TWikiDocGraphics/person.gif=) | =format="$img"= |
+| =format="..."= | Format of icon. Supported variables (using %ICON{person}% =%<nop>ICON{"person"}%= as example): %BB% =$name= - name of icon (=person=) %BB% =$type= - type of icon (=gif=) %BB% =$filename= - icon filename (=person.gif=) %BB% =$web= - web where icon is defined (=TWiki=) %BB% =$topic= - topic where icon is defined (=TWikiDocGraphics=) %BB% =$description= - icon description (=Person=) %BB% =$width= - width of icon (=16=) %BB% =$height= - height of icon (=16=) %BB% =$img= - full img tag of icon (=&lt;img src="... /&gt;=) %BB% =$info= - img tag with usage info in title (=&lt;img src="... /&gt;=) %BB% =$url= - URL of icon (=http://example.com/pub/TWiki/TWikiDocGraphics/person.gif=) %BB% =$urlpath= - URL path of icon (=/pub/TWiki/TWikiDocGraphics/person.gif=) | =format="$img"= |
 | =default="else"= | Alternate icon if named icon is not defined | =default="$name"= |
 
 *Note:* For the icon name, only the file type portion is used if a full URL or file path is specified. For example, a pdf icon is shown for icon name =/home/sweet/home.pdf=.
@@ -459,7 +459,7 @@ To get rid of the underline under the space, write: %BR%
 | *Info list*, %BR%icons with usage info: | =%<nop>ICON{list:all-info}%= | =%<nop>ICON{list:unique-info}%= | %ICON{"addon" format="$info"}% %ICON{"air" format="$info"}% %ICON{"airplane" format="$info"}%... |
 | *Detailed list*, %BR%table format: | =%<nop>ICON{list:all-table}%= | =%<nop>ICON{list:unique-table}%= | (similar to table format above) |
 
-%T% __Hint:__ The SpreadSheetPlugin $LIST... functions can be used to manipulate a name list. Example:
+%T% __Hint:__ The =$LIST...()= functions of the SpreadSheetPlugin can be used to manipulate a name list. Example:
 <verbatim>
 %CALC{$LISTJOIN($sp, $LISTMAP($NOP(%)ICON{$item}$NOP(%), %ICON{list:unique-names}%))}%
 </verbatim>
