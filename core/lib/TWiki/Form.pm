@@ -81,8 +81,8 @@ sub new {
             unless( $store->topicExists( $web, $form ) ) {
                 return undef;
             }
-            my( $meta, $text ) =
-              $store->readTopic( $session->{user}, $web, $form, undef );
+            # Item6398: Ignore view permission of form definition topic
+            my( $meta, $text ) = $store->readTopic( undef, $web, $form, undef );
 
             $this->{fields} = _parseFormDefinition( $this, $meta, $text );
 
@@ -552,7 +552,7 @@ __DATA__
 
 Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 
-Copyright (C) 2001-2007 Peter Thoeny, peter@thoeny.org
+Copyright (C) 2001-2010 Peter Thoeny, peter@thoeny.org
 and TWiki Contributors. All Rights Reserved. TWiki Contributors
 are listed in the AUTHORS file in the root of this distribution.
 NOTE: Please extend that file, not this notice.
