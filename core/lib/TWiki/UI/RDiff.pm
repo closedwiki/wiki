@@ -484,13 +484,11 @@ sub diff {
                 "Changes from r[_1] to r[_2]", $r2, $r1);
         } else {
             $rInfo = $session->renderer->renderRevisionInfo(
-                $webName, $topic, undef, $r1, '$date - $wikiusername' );
+                $webName, $topic, undef, $r1, '$date - [[$wikiusername][$wikiname]]' );
+            $rInfo = $session->renderer->getRenderedVersion( $rInfo, $webName, $topic );
             $rInfo2 = $session->renderer->renderRevisionInfo(
-                $webName, $topic, undef, $r1, '$rev ($date - $time) - $wikiusername' );
+                $webName, $topic, undef, $r1, '$rev ($date - $time) - <nop>$wikiname' );
         }
-        # eliminate white space to prevent wrap around in HR table:
-        $rInfo =~ s/\s+/&nbsp;/g;
-        $rInfo2 =~ s/\s+/&nbsp;/g;
         my $diffArrayRef = $session->{store}->getRevisionDiff(
             $session->{user}, $webName, $topic, $r2, $r1, $contextLines );
         $text = _renderRevisionDiff( $session, $webName, $topic,
