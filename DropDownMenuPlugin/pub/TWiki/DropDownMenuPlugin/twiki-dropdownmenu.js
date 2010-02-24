@@ -84,8 +84,8 @@ function displayOpts()
 	}
 
 	// find selected items
-	var i=0, sel=document.getElementsByTagName('select');
-	while(i < sel.length)
+	var i, sel=document.getElementsByTagName('select');
+	for ( i=0; i < sel.length; i++ )
 	{
 		// parent node should have the id of one of our menu divs
 		if ( ! sel[i].parentNode.hasAttribute( 'id' )) {
@@ -97,7 +97,7 @@ function displayOpts()
 		}
 
 		// add an onchange event to redo menu display status when changed
-		sel[i++].onchange=function()
+		sel[i].onchange=function()
 		{
 			// function which reacts to changing an item
 
