@@ -1,0 +1,108 @@
+%META:TOPICINFO{author="OpenIDMapping_IanKluft" date="1267001118" format="1.1" reprev="1.5" version="1.5"}%
+%META:TOPICPARENT{name="TWikiPreferences"}%
+---+!! <nop>%TOPIC%
+
+Display a hierarchical multi-level JavaScript drop-down menus from the contents of a TWiki topic.
+
+%TOC%
+
+---++ Syntax Rules
+
+Write =%<nop>DROPDOWNMENU{topic="<i>TopicName</i>" <i>[other optional attributes]</i>}%= anywhere in a TWiki topic or template.
+
+   * Displays a multi-level drop down menu built from a nested bullet list in another TWiki topic.
+   * More than one drop down menu may be used on the same topic.  However, a menu (or specific levels from a menu) defined by a specific topic may not be displayed more than once on the same topic - unpredictable things may happen if you try because that is not supported by the software architecture.
+
+|*Name*|*Description*|*Default*|
+|topic|topic from which to read the menu definition|_required_|
+|web|web from which to read the menu definition|current web|
+|key|string to use as the basis for naming of HTML form elements|derived from menu topic|
+|level|if specified, select a menu level (integer starting from 0) to display|all levels|
+|parse_keywords|flag: nonzero sets parsing mode where first word of menu line is return-value keyword, remainder is text to display|entire line used as both return value and display text|
+
+---++ Usage example
+
+This is a multi-level dropdown menu using data from DropDownMenuPluginExample.  It includes English-speaking countries and state/provincial and regional subdivisions (generally not including levels where municipalities are, though including independent cities), where applicable.  Not all have the same levels of depth, even within the same country. The varying depth is really the point of the demo.
+
+<table cellpadding=5>
+<tr><th>
+Country
+</th><th>
+State/Province/Subdivision
+</th><th>
+County/Region
+</th></tr>
+<tr><td>
+%DROPDOWNMENU{topic="DropDownMenuPluginExample" level="0"}%
+</td><td>
+%DROPDOWNMENU{topic="DropDownMenuPluginExample" level="1"}%
+</td><td>
+%DROPDOWNMENU{topic="DropDownMenuPluginExample" level="2"}%
+</td></tr>
+</table>
+
+This can be used within a form. It is from the following HTML and TML markup:
+
+<verbatim>
+<table cellpadding=5>
+<tr><th>
+Country
+</th><th>
+State/Province/Subdivision
+</th><th>
+County/Region
+</th></tr>
+<tr><td>
+%DROPDOWNMENU{topic="DropDownMenuPluginExample" level="0"}%
+</td><td>
+%DROPDOWNMENU{topic="DropDownMenuPluginExample" level="1"}%
+</td><td>
+%DROPDOWNMENU{topic="DropDownMenuPluginExample" level="2"}%
+</td></tr>
+</table>
+</verbatim>
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>NEWPLUGIN_SHORTDESCRIPTION%==
+
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = display hierarchical multi-level JavaScript drop-down menus from contents of a TWiki topic
+
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
+
+   * Download the ZIP file from the Plugin Home (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * Configure the Plugin:
+      * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
+      * Change the Plugin settings as needed
+   * Test if the installation was successful:
+      * _enter samples here_
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main/IanKluft |
+|  Copyright: | &copy; 2010, TWiki:Main/IanKluft |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2010-02-20 (V1.000) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-02-20: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences
