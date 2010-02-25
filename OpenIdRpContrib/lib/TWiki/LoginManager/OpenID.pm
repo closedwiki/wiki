@@ -110,6 +110,36 @@ sub debug
 
 =pod
 
+---++ ObjectMethod loadSession($defaultUser) -> $login
+
+Get the client session data, using the cookie and/or the request URL.
+Set up appropriate session variables in the twiki object and return
+the login name.
+
+$defaultUser is a username to use if one is not available from other
+sources. The username passed when you create a TWiki instance is
+passed in here.
+
+=cut
+
+sub loadSession {
+    my ($this, $defaultUser) = @_;
+    my $twiki = $this->{twiki};
+
+	# call superclass' loadSession()
+	my $login = $this->SUPER::loadSession( $defaultUser );
+
+	# intercept status regarding whether this login arrived by OpenID
+	my $logged_in_openid = $this->getSessionValue( "LOGGED_IN_OPENID" );
+	if (( defined $logged_in_openid ) and $logged_in_openid ) {
+		$twiki->enterContext('logged_in_openid');
+	}
+
+	# return login name
+	return $login;
+}
+=pod
+
 ---++ ObjectMethod _LOGIN ($twiki)
 
 The is the handler function for the LOGIN tag. It generates CSS and HTML for
@@ -264,7 +294,6 @@ sub _OPENIDPROVIDERS {
     $twiki->addToHEAD('OpenIdRpContrib-providers', $head );
 	return $result;
 }
-
 
 # internal function to filter host names based on white or black lists
 sub proc_wb_lists
@@ -491,6 +520,8 @@ sub login {
 			if (( defined $wikiname ) and length( $wikiname )) {
 				# log the user in
 				$this->userLoggedIn( $wikiname );
+				$this->setSessionValue( "LOGGED_IN_OPENID", "1" );
+				$twiki->enterContext('logged_in_openid');
 
 				# security: don't pass through sensitive info
 				$query->delete( 'origurl', 'username', 'password',
@@ -604,6 +635,8 @@ sub login {
 
 			# log the user in as the WikiName
 			$this->userLoggedIn( $wikiname );
+			$this->setSessionValue( "LOGGED_IN_OPENID", "1" );
+			$twiki->enterContext('logged_in_openid');
 
 			# save OpenID attributes in OpenID mapper
 			$openid_p{WikiName} = $wikiname;
