@@ -8,7 +8,7 @@ Display a hierarchical multi-level JavaScript drop-down menus from the contents 
 
 ---++ Syntax Rules
 
-Write =%<nop>DROPDOWNMENU{topic="<i>TopicName</i>" <i>[other optional attributes]</i>}%= anywhere in a TWiki topic or template.
+Write =%<nop>HIERARCHICALSELECT{topic="<i>TopicName</i>" <i>[other optional attributes]</i>}%= anywhere in a TWiki topic or template.
 
    * Displays a multi-level drop down menu built from a nested bullet list in another TWiki topic.
    * More than one drop down menu may be used on the same topic.  However, a menu (or specific levels from a menu) defined by a specific topic may not be displayed more than once on the same topic - unpredictable things may happen if you try because that is not supported by the software architecture.
@@ -22,7 +22,7 @@ Write =%<nop>DROPDOWNMENU{topic="<i>TopicName</i>" <i>[other optional attributes
 
 ---++ Usage example
 
-This is a multi-level dropdown menu using data from DropDownMenuPluginExample.  It includes English-speaking countries and state/provincial and regional subdivisions (generally not including levels where municipalities are, though including independent cities), where applicable.  Not all have the same levels of depth, even within the same country. The varying depth is really the point of the demo.
+This is a multi-level dropdown menu using data from HierarchicalSelectPluginExample.  It includes English-speaking countries and state/provincial and regional subdivisions (generally not including levels where municipalities are, though including independent cities), where applicable.  Not all have the same levels of depth, even within the same country. The varying depth is really the point of the demo.
 
 <table cellpadding=5>
 <tr><th>
@@ -33,11 +33,11 @@ State/Province/Subdivision
 County/Region
 </th></tr>
 <tr><td>
-%DROPDOWNMENU{topic="DropDownMenuPluginExample" level="0"}%
+%HIERARCHICALSELECT{topic="HierarchicalSelectPluginExample" level="0"}%
 </td><td>
-%DROPDOWNMENU{topic="DropDownMenuPluginExample" level="1"}%
+%HIERARCHICALSELECT{topic="HierarchicalSelectPluginExample" level="1"}%
 </td><td>
-%DROPDOWNMENU{topic="DropDownMenuPluginExample" level="2"}%
+%HIERARCHICALSELECT{topic="HierarchicalSelectPluginExample" level="2"}%
 </td></tr>
 </table>
 
@@ -53,11 +53,11 @@ State/Province/Subdivision
 County/Region
 </th></tr>
 <tr><td>
-%DROPDOWNMENU{topic="DropDownMenuPluginExample" level="0"}%
+%HIERARCHICALSELECT{topic="HierarchicalSelectPluginExample" level="0"}%
 </td><td>
-%DROPDOWNMENU{topic="DropDownMenuPluginExample" level="1"}%
+%HIERARCHICALSELECT{topic="HierarchicalSelectPluginExample" level="1"}%
 </td><td>
-%DROPDOWNMENU{topic="DropDownMenuPluginExample" level="2"}%
+%HIERARCHICALSELECT{topic="HierarchicalSelectPluginExample" level="2"}%
 </td></tr>
 </table>
 </verbatim>

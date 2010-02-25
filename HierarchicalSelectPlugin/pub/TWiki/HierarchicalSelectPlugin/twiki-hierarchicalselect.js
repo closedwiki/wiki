@@ -1,4 +1,4 @@
-// JavaScript for TWiki Drop-down Menu Plugin
+// JavaScript for TWiki HierarchicalSelectPlugin
 // by Ian Kluft
 // Copyright 2009-2010 TWiki Inc.
 // Released under the GNU General Public License (GPL)
@@ -6,7 +6,7 @@
 // globals
 var ddm = new Object();
 
-// collect dropdown menu data
+// collect hierarchical select data
 // scan the divs in the HTML and generate a data structure as follows:
 // ddm: top level object
 // * _toc: "table of contents", notes about each div/menu, lookup by id
@@ -21,7 +21,7 @@ function collectMenuData()
 		return;
 	}
 
-	// fill ddm object with IDs of divs of class twiki_dropdownmenu
+	// fill ddm object with IDs of divs of class twiki_hierarchicalselect
 	var divs = document.getElementsByTagName('div');
 
 	// sort through divs collecting data
@@ -33,8 +33,8 @@ function collectMenuData()
 		var c = classNames.split( /\s+/ ); // split classes
 		for(var j = 0; j < c.length; j++) { // Loop through classes
 
-			// is it a TWiki DropDownMenuPlugin marker?
-			if ( c[j] == 'twiki_dropdownmenu' ) {
+			// is it a TWiki HierarchicalSelectPlugin marker?
+			if ( c[j] == 'twiki_hierarchicalselect' ) {
 				isTWikiMenu = 1;
 				continue;
 			}
@@ -56,7 +56,7 @@ function collectMenuData()
 		// get id of div
 		var id = divs[i].getAttribute('id');
 
-		// process divs which are marked as TWiki dropdown menus
+		// process divs which are marked as TWiki hierarchicalselect
 		if ( isTWikiMenu ) {
 			ddm._toc[id] = menuData;
 			if ( ! ddm[menuData.menu] ) {
@@ -70,7 +70,7 @@ function collectMenuData()
 	}
 }
 
-// display dropdown forms
+// display hierarchicalselect forms
 function displayOpts()
 {
 	// collect data

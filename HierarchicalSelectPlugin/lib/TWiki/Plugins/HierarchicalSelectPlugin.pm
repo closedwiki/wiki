@@ -20,14 +20,14 @@
 
 =pod
 
----+ package DropDownMenuPlugin
+---+ package HierarchicalSelectPlugin
 
 This is the drop-down menu TWiki plugin. 
 
 =cut
 
 # change the package name and $pluginName!!!
-package TWiki::Plugins::DropDownMenuPlugin;
+package TWiki::Plugins::HierarchicalSelectPlugin;
 
 # Always use strict to enforce variable scoping
 use strict;
@@ -64,7 +64,7 @@ $SHORTDESCRIPTION = 'Drop-Down Menu Plugin for JavaScript multi-level drop-down 
 $NO_PREFS_IN_TOPIC = 1;
 
 # Name of this Plugin, only used in this module
-$pluginName = 'DropDownMenuPlugin';
+$pluginName = 'HierarchicalSelectPlugin';
 
 =pod
 
@@ -108,16 +108,16 @@ sub initPlugin {
     }
 
     # Set plugin preferences in LocalSite.cfg, like this:
-    # $TWiki::cfg{Plugins}{DropDownMenuPlugin}{ExampleSetting} = 1;
+    # $TWiki::cfg{Plugins}{HierarchicalSelectPlugin}{ExampleSetting} = 1;
     # Always provide a default in case the setting is not defined in
     # LocalSite.cfg. See TWiki.TWikiPlugins for help in adding your plugin
     # configuration to the =configure= interface.
-    $debug = $TWiki::cfg{Plugins}{DropDownMenuPlugin}{Debug} || 0;
+    $debug = $TWiki::cfg{Plugins}{HierarchicalSelectPlugin}{Debug} || 0;
 
-    # register the _DROPDOWNMENU function to handle %DROPDOWNMENU{...}%
-    # This will be called whenever %DROPDOWNMENU% or %DROPDOWNMENU{...}% is
+    # register the _HIERARCHICALSELECT function to handle %HIERARCHICALSELECT{...}%
+    # This will be called whenever %HIERARCHICALSELECT% or %HIERARCHICALSELECT{...}% is
     # seen in the topic text.
-    TWiki::Func::registerTagHandler( 'DROPDOWNMENU', \&_DROPDOWNMENU );
+    TWiki::Func::registerTagHandler( 'HIERARCHICALSELECT', \&_HIERARCHICALSELECT );
 
     # Plugin correctly initialized
     return 1;
@@ -153,7 +153,7 @@ sub _get_menu_tree
 	# get menu content
 	my $menu_content = TWiki::Func::readTopicText( $menu_web, $menu_topic );
 	if ( !$menu_content ) {
-		my $err = "DropDownMenuPlugin: Failed to read menu topic "
+		my $err = "HierarchicalSelectPlugin: Failed to read menu topic "
 				.$menu_web.".".$menu_topic;
 		TWiki::Func::writeWarning( $err );
 		return { error => $err };
@@ -283,7 +283,7 @@ sub _generate_menu
 		$result .= '<!-- TWiki '.$txt_key.' '
 			.( exists $tree->{keyword} ? $tree->{keyword} : 'root')
 			.' ('.sprintf("%05d", $tree->{serial}).') -->'
-			.'<div class="twiki_dropdownmenu menu_'
+			.'<div class="twiki_hierarchicalselect menu_'
 			.$txt_key.' level'.$tree->{depth}
 			.'" id="'.$id.'">'."\n";
 		if ( exists $tree->{data}{prefix}) {
@@ -318,9 +318,9 @@ sub _generate_menu
 	return $result;
 }
 
-# The function used to handle the %DROPDOWNMENU{...}% variable
+# The function used to handle the %HIERARCHICALSELECT{...}% variable
 # You would have one of these for each variable you want to process.
-sub _DROPDOWNMENU {
+sub _HIERARCHICALSELECT {
     my($session, $params, $theTopic, $theWeb) = @_;
     # $session  - a reference to the TWiki session object (if you don't know
     #             what this is, just ignore it)
@@ -333,17 +333,17 @@ sub _DROPDOWNMENU {
     # Return: the result of processing the variable
 
     # examples:
-	#   %DROPDOWNMENU{web="Menus" topic="Example"}%
-	#   %DROPDOWNMENU{web="Menus" topic="Example" level="1"}%
+	#   %HIERARCHICALSELECT{web="Menus" topic="Example"}%
+	#   %HIERARCHICALSELECT{web="Menus" topic="Example" level="1"}%
 
 	# get parameters
 	my $menu_web = ( exists $params->{web}) ? $params->{web} : $theWeb;
 	my $menu_topic = ( exists $params->{topic}) ? $params->{topic} : undef;
 	if ( !defined $menu_topic ) {
 		TWiki::Func::writeWarning(
-			"DropDownMenuPlugin: missing parameter topic in "
+			"HierarchicalSelectPlugin: missing parameter topic in "
 				.$menu_web.".".$menu_topic );
-		return "DropDownMenuPlugin: missing parameter topic in "
+		return "HierarchicalSelectPlugin: missing parameter topic in "
 				.$menu_web.".".$menu_topic;
 	}
 	my $menu_key = ( exists $params->{key}) ? $params->{key} : $menu_topic;
@@ -351,13 +351,13 @@ sub _DROPDOWNMENU {
 	my $menu_level = ( exists $params->{level}) ? $params->{level} : undef;
 
 	# add JavaScript code to TWiki header only on pages that use it
-    my $js_uri = $TWiki::cfg{Plugins}{DropDownMenuPlugin}{JavaScriptURI};
+    my $js_uri = $TWiki::cfg{Plugins}{HierarchicalSelectPlugin}{JavaScriptURI};
 	if ( !defined $js_uri ) {
 		$js_uri = TWiki::Func::getPubUrlPath()
 			."/".TWiki::Func::getTwikiWebname()
-			."/DropDownMenuPlugin/twiki-dropdownmenu.js";
+			."/HierarchicalSelectPlugin/twiki-hierarchicalselect.js";
 	}
-	TWiki::Func::addToHEAD( "DropDownMenuPlugin-JS",
+	TWiki::Func::addToHEAD( "HierarchicalSelectPlugin-JS",
 		"<script type=\"text/javascript\" src=\"$js_uri\"></script>\n" );
 
 	# get menu treee structure

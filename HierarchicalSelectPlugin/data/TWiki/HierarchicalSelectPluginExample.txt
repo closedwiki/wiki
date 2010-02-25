@@ -1,8 +1,8 @@
 %META:TOPICINFO{author="OpenIDMapping_IanKluft" date="1266998887" format="1.1" version="1.6"}%
-%META:TOPICPARENT{name="DropDownMenuPlugin"}%
+%META:TOPICPARENT{name="HierarchicalSelectPlugin"}%
 ---+ Drop Down Menu Plugin Example
 
-The following nested bullet list defines a multi-level drop down menu for DropDownMenuPlugin.
+The following nested bullet list defines a multi-level drop down menu for HierarchicalSelectPlugin.
 
 %STARTINCLUDE%
    * *default* Select a country
