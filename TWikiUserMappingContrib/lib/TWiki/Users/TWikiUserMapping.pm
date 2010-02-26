@@ -977,7 +977,9 @@ sub _collateGroups {
 # get a list of groups defined in this TWiki
 sub _getListOfGroups {
     my $this = shift;
-    ASSERT(ref($this) eq 'TWiki::Users::TWikiUserMapping') if DEBUG;
+    ASSERT(ref($this) eq 'TWiki::Users::TWikiUserMapping'
+		or ( ref($this) and $this->isa('TWiki::Users::TWikiUserMapping')))
+		if DEBUG;
 
     unless( $this->{groupsList} ) {
         my $users = $this->{session}->{users};
