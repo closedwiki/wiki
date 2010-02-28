@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2002-2009 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2002-2010 Peter Thoeny, peter@thoeny.org
 # Copyright (C) 2005-2006 Michael Daum <micha@nats.informatik.uni-hamburg.de>
 # Copyright (C) 2005 TWiki Contributors
 #
@@ -607,8 +607,8 @@ sub parseAtomFeed {
       $val = &recode($1);
       $header =~ s/\$(channel)?title/$val/gos;
     }
-    if ($sub =~ /<link[^>]*href="([^"]*)"[^>]*type="text\/html"[^>]*\/>/ || 
-        $sub =~ /<link[^>]*type="text\/html"[^>]*href="([^"]*)"[^>]*\/>/) {
+    if ($sub =~ /<link[^>]*href="([^"]*)"[^>]*type="text\/html"[^>]*>/ || 
+        $sub =~ /<link[^>]*type="text\/html"[^>]*href="([^"]*)"[^>]*>/) {
       $val = $1;
       $baseRef = $val;
       $baseRef =~ s/^(https?.\/\/.*?)\/.*$/$1/go;
@@ -662,8 +662,8 @@ sub parseAtomFeed {
 	$line =~ s/\$(item)?title/$val/gos;
 	$ok = 1;
       }
-      if (/<link[^>]*href="([^"]*)"[^>]*type="text\/html"[^>]*\/>/ || 
-	  /<link[^>]*type="text\/html"[^>]*href="([^"]*)"[^>]*\/>/) {
+      if (/<link[^>]*href="([^"]*)"[^>]*type="text\/html"[^>]*>/ || 
+	  /<link[^>]*type="text\/html"[^>]*href="([^"]*)"[^>]*>/) {
   	$val = $1;
 	$val =~ s/^http:\/\/.*\*(http:\/\/.*)$/$1/gos; # yahoo fix
 	$line =~ s/\$(item)?link/$val/gos;
