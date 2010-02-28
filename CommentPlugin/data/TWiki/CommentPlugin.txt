@@ -243,7 +243,7 @@ Note that if you want to use the =action= template then you must also:
 |  Plugin Author: | TWiki:Main/CrawfordCurrie http://www.c-dot.co.uk inspired by the work of TWiki:Main/DavidWeller and TWiki:Main/PeterMasiar |
 |  Copyright: | &copy; 2004, TWiki:Main/CrawfordCurrie; &copy; 2009 TWiki:Main/SopanShewale; &copy; 2004-2010 TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-02-27 (18363) |
+|  Plugin Version: | 2010-02-27 (18364) |
 |  Change History: | |
 |  2010-02-27 | TWikibug:Item6276 Cannot specify percentBRpercent for newline value -- TWiki:Main/SopanShewale |
 |  2009-01-21 | TWikibug:Item6163 Fix for Comment Plugin losing data if target anchor is missing -- TWiki:Main/TimotheLitt and TWiki:Main/SopanShewale  |

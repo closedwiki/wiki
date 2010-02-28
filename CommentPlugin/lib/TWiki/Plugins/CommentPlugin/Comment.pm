@@ -324,6 +324,7 @@ sub _buildNewTopic {
                 } else { # AFTER
                    $text .= $output unless( $text =~ s/^($anchor\s)/$1$output/m );
                 }
+                $text .= "\n" unless $text =~ m/\n$/s;
             } else {
                 # Position relative to index'th comment
                 my $idx = 0;
@@ -333,6 +334,7 @@ sub _buildNewTopic {
                     # add to the end of the topic
                     $text .= $output;
                 };
+               $text .= "\n" unless $text =~ m/\n$/s;
             }
         }
     }
