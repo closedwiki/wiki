@@ -1,9 +1,9 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2004 Crawford Currie
-# Copyright (C) 2001-2006 TWiki Contributors. All Rights Reserved.
-# TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
+# Copyright (C) 2001-2010 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution.
 # NOTE: Please extend that file, not this notice.
 #
 # This program is free software; you can redistribute it and/or
@@ -37,7 +37,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '03 Aug 2008';
+$RELEASE = '2010-02-27';
 
 $SHORTDESCRIPTION = 'Allows users to quickly post comments to a page without an edit/preview/save cycle';
 

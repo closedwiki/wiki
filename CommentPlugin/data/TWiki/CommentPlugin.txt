@@ -1,24 +1,16 @@
-%META:TOPICINFO{author="TWikiContributor" date="1170597947" format="1.0" version="$Rev$"}%
-
+%META:TOPICINFO{author="TWikiContributor" date="1267341818" format="1.1" version="$Rev"}%
 ---+!! Comment Plugin
-
 <!--
-
-   PLEASE DO NOT EDIT THIS TOPIC
-
-   It is automatically generated from the subversion repository, and any changes
-   you make will simply be overwritten the next time a release is generated.
-
-   Instead, you could check your fix in, raise a bug in the Bugs web, or mail thge author.
+   Contributions to this plugin are appreciated. Please update the plugin page
+   at http://twiki.org/cgi-bin/view/Plugins/CommentPlugin or provide feedback
+   at http://twiki.org/cgi-bin/view/Plugins/CommentPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
-
-*Comment Plugin lets users quickly post comments to a page without an edit/preview/save cycle.*
+*The Comment Plugin lets users quickly post comments to a page without an edit/preview/save cycle.*
 
 %TOC{title="On this page:"}%
 
 Related topics: CommentPluginTemplates, CommentPluginExamples
-
-<div class="twikiBroadcastMessage" style="background-color:#ffc;">WARNING: TWiki-4 only. If you want to use this plugin with an earlier version of TWiki, please use [[http://twiki.org/cgi-bin/attach/Plugins/CommentPlugin?filename=CommentPlugin.zip&revInfo=1][revision 31 of the zip]].</div>
 
 ---++ Features
 
@@ -89,8 +81,8 @@ Your local installation may add more template types as well - see [[#TemPlates][
 #TemPlates
 ---++ Customisation
 Customisation of the comment plugin requires
-	* familiarity with HTML forms
-	* some familiarity with the [[%TWIKIWEB%.TWikiTemplates][TWiki templating language]].
+   * familiarity with HTML forms
+   * some familiarity with the [[%TWIKIWEB%.TWikiTemplates][TWiki templating language]].
 
 To define a comment type, you have to provide two simple template definitions in the template file; one for the prompt box, and one for the generated output. If we have a template type "mytype", these are named =PROMPT:mytype= and =OUTPUT:mytype= respectively. See =comments.tmpl= in the templates directory for examples.
 
@@ -155,9 +147,9 @@ then the template will be expanded as
 
 ---++++ Special variables
 As well as support for all the usual TWiki variables in templates, the following special variables are supported in the =PROMPT= definition:
-	 | *Variable* | *Description* |
-	 | =%<nop>DISABLED%= | Set to 'disabled' when you cannot comment (e.g. in preview mode). |
-	 | =%<nop>MESSAGE%= | The text specified by =default=. This may be overridden by a helpful message when the prompt is DISABLED. |
+    | *Variable* | *Description* |
+    | =%<nop>DISABLED%= | Set to 'disabled' when you cannot comment (e.g. in preview mode). |
+    | =%<nop>MESSAGE%= | The text specified by =default=. This may be overridden by a helpful message when the prompt is DISABLED. |
 
 *EXPERT* Note that when a comment is saved, the TWiki =save= script is invoked on the target topic, with a number of parameters provided by the comment form. Normally the CommentPlugin will provide these fields in the form, but experts can also provide the fields themselves in order to get finer control over what is submitted, or you might want to define your own HTML forms that do comment submission. The parameters that the CommentPlugin recognises are as follows:
 | *CGI parameter* | *Description* |
@@ -206,23 +198,23 @@ The =OUTPUT= template defines the format for the text that actually gets embedde
 
 There are also four position tags that are used to indicate where the comment should be placed, relative to the =location= defined in the =%COMMENT= tag:
 
-	 | =%<nop>POS:TOP%= | If present, comments will be inserted *at the top of the topic* i.e. before any other text |
-	 | =%<nop>POS:BOTTOM%= | If present, comments will be inserted *at the end of the topic* i.e. after all existing text |
-	 | =%<nop>POS:BEFORE%= | If present, comments will be inserted <b>immediately before the =%<nop>COMMENT%= tag</b> |
-	 | =%<nop>POS:AFTER%= | If present, comments will be inserted <b>immediately after the =%<nop>COMMENT%= tag</b> |
+    | =%<nop>POS:TOP%= | If present, comments will be inserted *at the top of the topic* i.e. before any other text |
+    | =%<nop>POS:BOTTOM%= | If present, comments will be inserted *at the end of the topic* i.e. after all existing text |
+    | =%<nop>POS:BEFORE%= | If present, comments will be inserted <b>immediately before the =%<nop>COMMENT%= tag</b> |
+    | =%<nop>POS:AFTER%= | If present, comments will be inserted <b>immediately after the =%<nop>COMMENT%= tag</b> |
 Note that these position tags are obviously mutually exclusive. If you define more than one, the result is undefined. If none is present, the default is taken from the plugin setting =DEFAULT_TYPE=
 
-	 | =%<nop>COMMENTPROMPT%= | Use with a custom form. If present, the comment prompt will be positioned here. |
-	 
+    | =%<nop>COMMENTPROMPT%= | Use with a custom form. If present, the comment prompt will be positioned here. |
+    
 All the usual TWikiVariables that can be used in a topic template can also be used in an =OUTPUT= template. See %TWIKIWEB%.TWikiVariables for details.
 
 ---++ Settings
 <!-- required for compatibility
-		* Set SHORTDESCRIPTION = Allows users to quickly post comments to a page without an edit/preview/save cycle.
-	* Name of file in the 'templates' directory that contains the comment templates. The default 'comments.tmpl' automatically includes user templates from %TWIKIWEB%.CommentPluginTemplate
-		* Set TEMPLATES = comments
-	* Default template type (if not present, defaults to "below")
-		* Set DEFAULT_TYPE = above
+      * Set SHORTDESCRIPTION = Allows users to quickly post comments to a page without an edit/preview/save cycle.
+   * Name of file in the 'templates' directory that contains the comment templates. The default 'comments.tmpl' automatically includes user templates from %TWIKIWEB%.CommentPluginTemplate
+      * Set TEMPLATES = comments
+   * Default template type (if not present, defaults to "below")
+      * Set DEFAULT_TYPE = above
 -->
 Two TWiki Preference variables are recognised by the CommentPlugin:
 | *Preference* | *Default* | *Description* |
@@ -232,15 +224,15 @@ These can be set in !TWikiPreferences, in !WebPreferences or in individual topic
 
 #Installation
 ---++ Plugin Installation Instructions
-	* This plugin is pre-installed in most TWiki releases. However if you need to upgrade the plugin for any reason:
-	* Download the archive file from the Plugin web (see below)
-	* Unpack the archive in your twiki installation directory.
-		* You may need to correct file permissions
-	* Run ==%TOPIC%_installer== to automatically check and install other modules that this module depends on, and enable the plugin.
-	* Alternatively,
-		* Manually resolve the dependencies listed below.
-		%$DEPENDENCIES%
-	* Use =configure= to enable the plugin
+   * This plugin is pre-installed in most TWiki releases. However if you need to upgrade the plugin for any reason:
+   * Download the archive file from the Plugin web (see below)
+   * Unpack the archive in your twiki installation directory.
+      * You may need to correct file permissions
+   * Run ==%TOPIC%_installer== to automatically check and install other modules that this module depends on, and enable the plugin.
+   * Alternatively,
+      * Manually resolve the dependencies listed below.
+      %$DEPENDENCIES%
+   * Use =configure= to enable the plugin
 
 Note that if you want to use the =action= template then you must also:
    1 Install the TWiki:Plugins/ActionTrackerPlugin;
@@ -248,11 +240,13 @@ Note that if you want to use the =action= template then you must also:
 
 ---++ Plugin Info
 
-Another great TWiki extension from the <a style="text-decoration:none" href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiringlogo20x20.png" alt="" /> *WikiRing* </a> - working together to improve your wiki experience!
-
-|  Plugin Author: | TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk inspired by the work of TWiki:Main.DavidWeller and TWiki:Main.PeterMasiar |
-|  Plugin Version: | 03 Aug 2008 %$VERSION% |
+|  Plugin Author: | TWiki:Main/CrawfordCurrie http://www.c-dot.co.uk inspired by the work of TWiki:Main/DavidWeller and TWiki:Main/PeterMasiar |
+|  Copyright: | &copy; 2004, TWiki:Main/CrawfordCurrie; &copy; 2009 TWiki:Main/SopanShewale; &copy; 2004-2010 TWiki:TWiki/TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2010-02-27 (18363) |
 |  Change History: | |
+|  2010-02-27 | TWikibug:Item6276 Cannot specify percentBRpercent for newline value -- TWiki:Main/SopanShewale |
+|  2009-01-21 | TWikibug:Item6163 Fix for Comment Plugin losing data if target anchor is missing -- TWiki:Main/TimotheLitt and TWiki:Main/SopanShewale  |
 |  03 Aug 2008 | The TWiki 4.2.1 release version | 
 |  11 Apr 2008 | TWikibug:Item5518 corrected the template definition for bulletabove |
 |  5 Sep 2007 | TWikibug:Item3689 corrected =location= handling TWikibug:Item4181 added VarCOMMENT TWikibug:Item4402 corrected access check |
@@ -261,7 +255,7 @@ Another great TWiki extension from the <a style="text-decoration:none" href="htt
 |  13311 | Added option to define a comment template in any topic. Pass the topic location with =templatetopic= (either =topic= or =web.topic=). See an example in [[CommentPluginExamples#TemplateTopic][CommentPluginExamples:templatetopic]]. |
 |  12822 | TWikibug:Item3598 minor doc fixes |
 |  12750 | TWikibug:Item3510 added a note about the changed template spec in TWiki 4.1.0. Code remains unchanged |
-|  11358 | TWikibug:Item2802 moved SHORTDESCRIPTION to .pm. Coded up TWiki:main.PankajPant's suggestions as =nopost= and =remove=. Added default text for the %COMMENT as requested by TWiki:Main.AndyGlew |
+|  11358 | TWikibug:Item2802 moved SHORTDESCRIPTION to .pm. Coded up TWiki:Main/PankajPant's suggestions as =nopost= and =remove=. Added default text for the %COMMENT as requested by TWiki:Main.AndyGlew |
 |  11118 | TWikibug:Item2322 removed span tag around oneliner bullet output |
 |  8788 | TWikibug:Item1465  Item1577: reverted 8433 to fix inclusion of correct user templates |
 |  8787 | TWikibug:Item1573  renamed standard templates topic to avoid naming clash on Windows, where filenames are case-insensitive |
@@ -280,8 +274,6 @@ Another great TWiki extension from the <a style="text-decoration:none" href="htt
 |  4889 | Chopped down from !PeterMasiar version, removing several parameters, savecomment script, changing way templates are done. Major rewrite, atcherly. |
 |  4882 | Update from !PeterMasiar's 2.0 version, plus documentation and small code improvements. |
 |  4745 | 06 Mar 2002 initial commit |
-|  Copyright: | &copy; 2004, TWiki:Main.CrawfordCurrie<br />&copy; 2004-2007 TWiki:TWiki.TWikiContributor |
-|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
