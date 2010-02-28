@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1258936075" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1267326314" format="1.1" version="$Rev$"}%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page at
    http://twiki.org/cgi-bin/view/Plugins/SpreadSheetPlugin or provide feedback at
@@ -25,9 +25,8 @@ __Interactive example:__
 
 <form name="interactive" action="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="get">
 <noautolink>
-Formula: <code>%<nop>CALC{"</code><input type="text" name="formula" size="40" value="%URLPARAM{ "formula" default="$PROPERSPACE(%WIKINAME%)" encode="entity" }%" /><code>"}%</code> &nbsp; <input type="submit" value="Go" /><br />
+Formula: <code>%<nop>CALC{"</code><input type="text" name="formula" size="40" value="%URLPARAM{ "formula" default="$PROPERSPACE(%WIKINAME%)" encode="entity" }%" class="twikiInputField" /><code>"}%</code> &nbsp; <input type="submit" value="Go" class="twikiSubmit" /><br />
 Result: &nbsp; &nbsp; %CALC{%URLPARAM{ "formula" default="$PROPERSPACE(%WIKINAME%)" }%}%
-
 </noautolink>
 </form>
 </td></tr><tr><td colspan="3">
@@ -41,19 +40,19 @@ The formula next to "Total" is ==%<nop>CALC{"$SUM( $ABOVE() )"}%==. <br /> (you 
 The action of this plugin is triggered by the ==%<nop>CALC{"..."}%== variable, which gets rendered according to the built-in function(s) found between the quotes.
 
    * Built-in function are of format ==$FUNCNAME(parameter)==
-   * Functions may be nested, e.g. ==%<nop>CALC{"$SUM( R2:C$COLUMN(0)..R$ROW(-1):C$COLUMN(0) )"}%==
+   * Functions may be nested, such as ==%<nop>CALC{"$SUM( R2:C$COLUMN(0)..R$ROW(-1):C$COLUMN(0) )"}%==
    * Functions are evaluated from left to right, and from inside to outside if nested
    * The function parameter can be text; a mathematical formula; a cell address; or a range of cell addresses
-   * Multiple parameters form a list; they are separated by a comma, followed by optional space, e.g. ==%<nop>CALC{"$SUM( 3, 5, 7 )"}%==
+   * Multiple parameters form a list; they are separated by a comma, followed by optional space, such as ==%<nop>CALC{"$SUM( 3, 5, 7 )"}%==
    * A table cell can be addressed as ==R1:C1==. Table address matrix:
      | ==R1:C1== | ==R1:C2== | ==R1:C3== | ==R1:C4== |
      | ==R2:C1== | ==R2:C2== | ==R2:C3== | ==R2:C4== |
    * A table cell range is defined by two cell addresses separated by ==".."==, e.g. "row 1 through 20, column 3" is: ==R1:C3..R20:C3==
-   * Lists can refer to values and/or table cell ranges, e.g. ==%<nop>CALC{"$SUM( 3, 5, $T(R1:C7), R1:C11..R1:C15 )"}%==
+   * Lists can refer to values and/or table cell ranges, such as ==%<nop>CALC{"$SUM( 3, 5, $T(R1:C7), R1:C11..R1:C15 )"}%==
    * Formulae can only reference cells in the current or preceeding row of the current table; they may not reference cells below the current table row
    * Formulae can also be placed outside of tables; they can reference cells in the preceeding table
    * Formulae can be placed in a FormattedSearch, but the CALC needs to be escaped. Learn how to [[#CalcInFormattedSearch][use a CALC in a formatted search]]
-
+   * Plain text can be added, such as ==%<nop>CALC{"Total: $SUM($ABOVE()) kg"}%==
 
 ---++ Built-in Functions
 
@@ -697,7 +696,7 @@ You need to escape the CALC so that it executes once per search hit. This can be
 
 ---+++ How can I easily repeat a formula in a table?
 
-To repeat the same formula in all cells of a table row define the formula once in a preferences setting and use that in the CALC. The preferences setting can be hidden in HTML comments. Example:
+To repeat the same formula in all cells of a table row define the formula once in a preferences setting and use that in the CALC. The preferences setting can be defined at the site level, web level or topic level, and may be hidden in HTML comments. Example:
 
 <verbatim>
 <!--
@@ -729,7 +728,7 @@ The last row is defined as:
   |  Total: %CALC{"$SUM( R2:C$COLUMN()..R$ROW(-1):C$COLUMN() )"}% |
 </verbatim>
 
-Above table is created manually. Another plugin could build the table dynamically, e.g. by pulling data out of a bug tracking system. The Spreadsheet plugin can be used to display table data statistics.
+Above table is created manually. The table can be build dynamically with a [[FormattedSearch][formatted search]], or by a plugin that pulls data from an external source, such as a bug tracking system.
 
 ---++ Plugin Settings
 
@@ -737,7 +736,7 @@ Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>SPREADSHEETPLUGIN_SHORTDESCRIPTION%==
 
    * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Add spreadsheet calculation like ="$SUM( $ABOVE() )"= to TWiki tables and other topic text
+      * Set SHORTDESCRIPTION = Add spreadsheet calculation like ="$SUM( $ABOVE() )"= to TWiki tables or anywhere in topic text
 
    * Debug plugin: (See output in =data/debug.txt=)
       * Set DEBUG = 0
@@ -767,10 +766,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Copyright: | &copy; 2001-2009, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
+|  Copyright: | &copy; 2001-2010, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2009-11-22 (18211) |
+|  Plugin Version: | 2010-02-27 (18359) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-02-27: | Doc improvements |
 |  2009-11-22: | Enhanced $NOP(): Added $quot replacement for quote character, changed $per replacement with $percnt, contributed by TWiki:Main/HorstEsser |
 |  09 May 2009: | Fixed bug in $WORKINGDAYS(): Incorrect number of days if daylight savings time change happens between start date and end date |
 |  26 Mar 2009: | Added $INSERTSTRING() |
@@ -826,4 +826,4 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.VarCALC
 
--- TWiki:Main/PeterThoeny - 2009-11-22
+-- TWiki:Main/PeterThoeny - 2010-02-27

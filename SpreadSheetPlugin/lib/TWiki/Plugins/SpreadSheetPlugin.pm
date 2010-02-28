@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2001-2009 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2001-2010 Peter Thoeny, peter@thoeny.org
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ use vars qw(
     );
 
 # Plugin version
-$VERSION = '2009-11-22 (18211)';
+$VERSION = '2010-02-27 (18359)';
 
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
