@@ -1,0 +1,11 @@
+%META:TOPICINFO{author="PeterThoeny" date="1267477781" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarHIERARCHICALSELECT
+---+++ HIERARCHICALSELECT{ attributes } -- display hierarchical multi-level drop-down menus
+   * The =%<nop>HIERARCHICALSELECT{}%= variable is handled by the HierarchicalSelectPlugin.
+   * Syntax: =%<nop>HIERARCHICALSELECT{ topic="MenuDefinition" ... }%=
+   * Parameters:
+      * to be documented
+   * Examples:
+      * to be documented
+   * Related: HierarchicalSelectPlugin, HierarchicalSelectPluginExample, TWikiTemplates

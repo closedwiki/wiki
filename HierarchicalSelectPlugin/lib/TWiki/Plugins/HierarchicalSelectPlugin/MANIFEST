@@ -1,0 +1,5 @@
+data/TWiki/HierarchicalSelectPlugin.txt 0644
+data/TWiki/HierarchicalSelectPluginExample.txt 0644
+data/TWiki/VarHIERARCHICALSELECT.txt 0644
+lib/TWiki/Plugins/HierarchicalSelectPlugin.pm 0444
+pub/TWiki/HierarchicalSelectPlugin/twiki-hierarchicalselect.js 0444
