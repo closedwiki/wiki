@@ -24,8 +24,12 @@ Write =%<nop>HIERARCHICALSELECT{topic="<i>TopicName</i>" <i>[other optional attr
 
 This is a multi-level dropdown menu using data from HierarchicalSelectPluginExample.  It includes English-speaking countries and state/provincial and regional subdivisions (generally not including levels where municipalities are, though including independent cities), where applicable.  Not all have the same levels of depth, even within the same country. The varying depth is really the point of the demo.
 
+HierarchicalSelectPlugin %IF{"context HierarchicalSelectPluginEnabled" then="is" else="is not"}% enabled on this TWiki system%BR%
+<form>
 <table cellpadding=5>
 <tr><th>
+Field:
+</th><th>
 Country
 </th><th>
 State/Province/Subdivision
@@ -33,19 +37,45 @@ State/Province/Subdivision
 County/Region
 </th></tr>
 <tr><td>
-%HIERARCHICALSELECT{topic="HierarchicalSelectPluginExample" level="0"}%
+Entry:
 </td><td>
-%HIERARCHICALSELECT{topic="HierarchicalSelectPluginExample" level="1"}%
+%HIERARCHICALSELECT{web="TWiki" topic="HierarchicalSelectPluginExample" level="0" names="country,subdivision,region"}%
 </td><td>
-%HIERARCHICALSELECT{topic="HierarchicalSelectPluginExample" level="2"}%
+%HIERARCHICALSELECT{web="TWiki" topic="HierarchicalSelectPluginExample" level="1"}%
+</td><td>
+%HIERARCHICALSELECT{web="TWiki" topic="HierarchicalSelectPluginExample" level="2"}%
+</td></tr>
+<tr><td>
+Values by level name:
+</td><td>
+%URLPARAM{"country"}%
+</td><td>
+%URLPARAM{"subdivision"}%
+</td><td>
+%URLPARAM{"region"}%
+</td></tr>
+<tr><td>
+Values by menu name:
+</td><td>
+%URLPARAM{"root"}%
+</td><td>
+%URLPARAM{"%URLPARAM{"root"}%"}%
+</td><td>
+%URLPARAM{"%URLPARAM{"%URLPARAM{"root"}%"}%"}%
 </td></tr>
 </table>
+<input type="submit">
+</form>
 
-This can be used within a form. It is from the following HTML and TML markup:
+It is from the following HTML and TML markup:
 
 <verbatim>
+HierarchicalSelectPlugin %IF{"context HierarchicalSelectPluginEnabled" then="is" else="is not"}% enabled on this TWiki system%BR%
+<form>
 <table cellpadding=5>
 <tr><th>
+Field:
+</th><th>
 Country
 </th><th>
 State/Province/Subdivision
@@ -53,13 +83,35 @@ State/Province/Subdivision
 County/Region
 </th></tr>
 <tr><td>
-%HIERARCHICALSELECT{topic="HierarchicalSelectPluginExample" level="0"}%
+Entry:
 </td><td>
-%HIERARCHICALSELECT{topic="HierarchicalSelectPluginExample" level="1"}%
+%HIERARCHICALSELECT{web="TWiki" topic="HierarchicalSelectPluginExample" level="0" names="country,subdivision,region"}%
 </td><td>
-%HIERARCHICALSELECT{topic="HierarchicalSelectPluginExample" level="2"}%
+%HIERARCHICALSELECT{web="TWiki" topic="HierarchicalSelectPluginExample" level="1"}%
+</td><td>
+%HIERARCHICALSELECT{web="TWiki" topic="HierarchicalSelectPluginExample" level="2"}%
+</td></tr>
+<tr><td>
+Values by level name:
+</td><td>
+%URLPARAM{"country"}%
+</td><td>
+%URLPARAM{"subdivision"}%
+</td><td>
+%URLPARAM{"region"}%
+</td></tr>
+<tr><td>
+Values by menu name:
+</td><td>
+%URLPARAM{"root"}%
+</td><td>
+%URLPARAM{"%URLPARAM{"root"}%"}%
+</td><td>
+%URLPARAM{"%URLPARAM{"%URLPARAM{"root"}%"}%"}%
 </td></tr>
 </table>
+<input type="submit">
+</form>
 </verbatim>
 
 ---++ Plugin Settings

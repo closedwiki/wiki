@@ -142,6 +142,8 @@ sub _get_menu_tree
 	my $menu_web = ( exists $params->{web}) ? $params->{web} : $theWeb;
 	my $menu_topic = $params->{topic}; # already error-checked in parent
 	my $menu_key = ( exists $params->{key}) ? $params->{key} : $menu_topic;
+	$menu_key =~ s/[^\w]//g;
+	my $menu_names = ( exists $params->{names}) ? $params->{names} : $menu_topic;
 	my $parse_keywords = ( exists $params->{parse_keywords})
 		? $params->{parse_keywords} : 0;
 
@@ -168,7 +170,10 @@ sub _get_menu_tree
 		$menu_content = $1;
 	}
 
-	# initialize menu processing
+	# parse menu level names
+	my @level_names = ( defined $menu_names ) ? ( split /,\s*/, $menu_names ) : ();
+
+	# initialize tree root
 	my ( %tree, $ins_point, $prev, $serial );
 	$serial = 0;
 	$tree{parent} = undef;
@@ -177,6 +182,9 @@ sub _get_menu_tree
 	$tree{indent} = 0;
 	$tree{serial} = $serial++;
 	$ins_point = $prev = \%tree;
+	$tree{levelname} = ( exists $level_names[0]) ? $level_names[0] : "level0";
+	$tree{levelnames} = \@level_names;
+	$tree{maxdepth} = 0;
 
 	# process each line of the menu definition
 	foreach my $line ( split /[\r\n]+/, $menu_content ) {
@@ -244,6 +252,12 @@ sub _get_menu_tree
 
 		# add new node at insertion point
 		$node->{depth} = $ins_point->{depth} + 1;
+		if ( $node->{depth} > $tree{maxdepth}) {
+			$tree{maxdepth} = $node->{depth};
+		}
+		$node->{levelname} = ( exists $level_names[$node->{depth}])
+			? $level_names[$node->{depth}]
+			: "level".$node->{depth};
 		$node->{parent} = $ins_point;
 		if ( !exists $ins_point->{nodes}) {
 			$ins_point->{nodes} = [];
@@ -289,7 +303,9 @@ sub _generate_menu
 		if ( exists $tree->{data}{prefix}) {
 			$result .= join( "", @{$tree->{data}{prefix}})."\n";
 		}
-		$result .= "<select>\n";
+		$result .= '<select name="'
+			.( exists $tree->{keyword} ? $tree->{keyword} : 'root')
+			.'" levelname="'.$txt_key."_".$tree->{levelname}.'">\n';
 		if ( exists $tree->{data}{default}) {
 			$result .= '<option value="none">'
 				.join( "", @{$tree->{data}{default}}).'</option>'."\n";
@@ -348,6 +364,7 @@ sub _HIERARCHICALSELECT {
 	}
 	my $menu_key = ( exists $params->{key}) ? $params->{key} : $menu_topic;
 	$menu_key =~ s/[^\w]//g;
+	my $txt_key = lc(_unhtmlify( $menu_key ));
 	my $menu_level = ( exists $params->{level}) ? $params->{level} : undef;
 
 	# add JavaScript code to TWiki header only on pages that use it
@@ -363,16 +380,29 @@ sub _HIERARCHICALSELECT {
 	# get menu treee structure
 	my $tree = _get_menu_tree( $params, $theTopic, $theWeb );
 	if ( exists $tree->{error}) {
+        TWiki::Func::writeWarning($tree->{error});
 		return $tree->{error};
 	}
-
-	#require Data::Dumper;
-	#my $result = "<pre>".Data::Dumper::Dumper($tree)."</pre>";
 
 	# generate menus
 	my $result = _generate_menu( $tree, $menu_key, $menu_level );
 
-	# TODO finish
+	# make hidden input fields for each level's value
+	if ( !exists $tree->{inputsdone}) {
+		my $level;
+		for ( $level = 0; $level < $tree->{maxdepth}; $level++ ) {
+			my $levelname;
+			if ( exists $tree->{levelnames}[$level]) {
+				$levelname = $tree->{levelnames}[$level];
+			} else {
+				$levelname = "level$level";
+			}
+			$result .= '<input type="hidden" name="'.$levelname
+				.'" id="'.$txt_key."_".$levelname.'" value="">'."\n";
+		}
+			$tree->{inputsdone} = 1;
+	}
+
 	return $result;
 }
 

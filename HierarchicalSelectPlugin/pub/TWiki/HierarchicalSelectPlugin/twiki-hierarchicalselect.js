@@ -112,13 +112,19 @@ function displayOpts()
 				var option = this.options[si];
 				var submenu = option.getAttribute('submenu');
 				if ( submenu ) {
-					try {
-						var el = document.getElementById(submenu);
-						var sel = el.getElementsByTagName('select')[0];
-						sel.options[0].selected = 1;
-						el.style.display='';
+					var el = document.getElementById(submenu);
+					var sel2 = el.getElementsByTagName('select')[0];
+					sel2.options[0].selected = 1;
+					el.style.display='';
+				}
+
+				// record this change in the per-level hidden form input
+				var inputname = this.getAttribute('levelname');
+				if ( inputname ) {
+					var hid = document.getElementById(inputname);
+					if ( hid ) {
+						hid.value = option.value;
 					}
-					catch(e){} ; // in case submenu is not a valid element ID
 				}
 			}
 		}
