@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1163619832" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1267681783" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiFAQ"}%
 ---++ FAQ:
 How can I create a simple [[TWikiForms][TWiki Form]] based application?
@@ -20,7 +20,8 @@ The following is the code source of TWikiFAQ:
 <verbatim>
 <form action="%SCRIPTURLPATH{edit}%/%WEB%/">
 New FAQ topic: &nbsp; (Use a name in TWiki.WikiNotation) <br />
-<input type="text" name="topic" size="32" />&nbsp;<input type="submit" class="twikiSubmit" value="Create Topic" />
+<input type="text" name="topic" size="32" class="twikiInputField" />
+<input type="submit" value="Create Topic" class="twikiSubmit" />
 <input type="hidden" name="onlywikiname" value="on" />
 <input type="hidden" name="templatetopic" value="TWikiFaqTemplate" />
 <input type="hidden" name="topicparent" value="%TOPIC%" />
@@ -35,10 +36,8 @@ And the =SEARCH= function:
 %SEARCH{ "Back to\:__ TWikiFAQ" casesensitive="on" type="regex" nosearch="on" nototal="on"}%
 </verbatim>
 
-
-
 __Back to:__ TWikiFAQ
 
 __Related Topics:__ UserDocumentationCategory
 
--- __Contributors:__ TWiki:Main.MiyokoTakushima - 18 Oct 2004
+-- __Contributors:__ TWiki:Main.MiyokoTakushima - 2004-10-18
