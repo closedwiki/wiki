@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1163619832" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1267682735" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiTipsOfTheDayAdmin"}%
 ---+ Add New TWiki Tip Of The Day
 
@@ -10,7 +10,7 @@ Custom tips are located in the %MAINWEB% web. You can add custom tips that are s
 
 <form name="newlocal" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%MAINWEB%/">
 <!--
-| Last topic:	  | %CALC{$SET(ctopic, %SEARCH{ "TWikiCustomTip[0-9]" scope="topic" web="%MAINWEB%" type="regex" nosearch="on" nototal="on" reverse="on" limit="1" format="$topic" }%)$GET(ctopic)}% |
+| Last topic:     | %CALC{$SET(ctopic, %SEARCH{ "TWikiCustomTip[0-9]" scope="topic" web="%MAINWEB%" type="regex" nosearch="on" nototal="on" reverse="on" limit="1" format="$topic" }%)$GET(ctopic)}% |
 | Next available: | %CALC{$SET(cnext, $INT($VALUE($GET(ctopic)) + 1))$GET(cnext)}% |
 | Zero pad to 3:  | %CALC{$SET(cnext, $REPLACE(0000$GET(cnext),1,$INT(1 + $LENGTH($GET(cnext)))))$GET(cnext)}% |
 | New topic name: | %CALC{$SET(ctopic, TWikiCustomTip$GET(cnext))$GET(ctopic)}% |
@@ -18,7 +18,8 @@ Custom tips are located in the %MAINWEB% web. You can add custom tips that are s
 <input type="hidden" name="topic" value="%CALC{$GET(ctopic)}%" />
 <input type="hidden" name="onlynewtopic" value="on" />
 <input type="hidden" name="templatetopic" value="%TWIKIWEB%.TWikiTipsOfTheDayTemplate" />
-New Custom Tip: <nop>%CALC{$GET(ctopic)}% <input type="submit" value="Create" />
+New Custom Tip: <nop>%CALC{$GET(ctopic)}% 
+<input type="submit" value="Create" class="twikiSubmit" />
 </form>
 
 ---++ Add an Official TWiki Tip
@@ -26,7 +27,7 @@ New Custom Tip: <nop>%CALC{$GET(ctopic)}% <input type="submit" value="Create" />
 Official TWiki tips are located in the %TWIKIWEB% web. Please do not submit new tips on your local TWiki installation since they will get lost on a TWiki upgrade. Visit TWiki:TWiki.TWikiTipsOfTheDayAddNew to contribute official TWiki tips.
 <form name="new" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/">
 <!--
-| Last topic:	  | %CALC{$SET(ttopic, %SEARCH{ "TWikiTip[0-9]" scope="topic" type="regex" nosearch="on" nototal="on" reverse="on" limit="1" format="$topic" }%)$GET(ttopic)}% |
+| Last topic:     | %CALC{$SET(ttopic, %SEARCH{ "TWikiTip[0-9]" scope="topic" type="regex" nosearch="on" nototal="on" reverse="on" limit="1" format="$topic" }%)$GET(ttopic)}% |
 | Next available: | %CALC{$SET(tnext, $INT($VALUE($GET(ttopic)) + 1))$GET(tnext)}% |
 | Zero pad to 3:  | %CALC{$SET(tnext, $REPLACE(0000$GET(tnext),1,$INT(1 + $LENGTH($GET(tnext)))))$GET(tnext)}% |
 | New topic name: | %CALC{$SET(ttopic, TWikiTip$GET(tnext))$GET(ttopic)}% |
@@ -35,7 +36,8 @@ Official TWiki tips are located in the %TWIKIWEB% web. Please do not submit new 
 <input type="hidden" name="onlynewtopic" value="on" />
 <input type="hidden" name="topicparent" value="TWikiTipsOfTheDay" />
 <input type="hidden" name="templatetopic" value="TWikiTipsOfTheDayTemplate" />
-New Official TWiki Tip: <nop>%CALC{$GET(ttopic)}% <input type="%CALC{$IF($EXACT($LOWER(%HTTP_HOST%),twiki.org),submit,hidden)}%" value="Create" />
+New Official TWiki Tip: <nop>%CALC{$GET(ttopic)}%
+<input type="%CALC{$IF($EXACT($LOWER(%HTTP_HOST%),twiki.org),submit,hidden)}%" value="Create" class="twikiSubmit" />
 </form>
 
 ---++ Add a TWiki Tip for a Plugin
@@ -47,11 +49,10 @@ If you are a Plugin author you can ship your TWiki:Plugins.PluginPackage with on
 <input type="hidden" name="topicparent" value="TWikiTipsOfTheDay" />
 <input type="hidden" name="templatetopic" value="TWikiTipsOfTheDayTemplate" />
 New Plugin Tip: 
-<input type="text" name="topic" value="TWikiTipForMyOwnPlugin" size="30" />
-<input type="submit" value="Create" /> (replace =MyOwnPlugin= with the name of your Plugin)
+<input type="text" name="topic" value="TWikiTipForMyOwnPlugin" size="30" class="twikiInputField" />
+<input type="submit" value="Create" class="twikiSubmit" /> (replace =MyOwnPlugin= with the name of your Plugin)
 </form>
 
 __Related:__ TWikiTipsOfTheDay, TWikiTipsOfTheDayAdmin, TWikiTipsOfTheDayTemplate
 
--- TWiki:Main.PaulineCheung - 18 Jan 2005
-
+-- __Contributors:__ TWiki:Main/PaulineCheung, TWiki:Main/PeterThoeny - 2010-03-03
