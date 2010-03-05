@@ -73,7 +73,6 @@ sub new {
     $this->_initOpenIDMapping();
     $this->{session} = $session;
     $this->{mapping_id} = $OPENID_MAPPING_ID;
-	$this->{CACHED} = 1; # block TWiki::Users::TWikiUserMapping::_loadMapping()
 
 	# register tag handler for %OPENIDCONSOLE% user & admin console interface
     TWiki::registerTagHandler('OPENIDCONSOLE', \&_OPENIDCONSOLE);
@@ -151,6 +150,9 @@ sub handlesUser {
 	# if user exists in the OpenIdRpContrib DB files, claim it
 	( defined $login )
 		and ( exists $this->{session}{users}{mapping}{L2U}{$login} )
+		and return 1;
+	( defined $login )
+		and ( exists $this->{session}{users}{mapping}{W2U}{$login} )
 		and return 1;
 	( defined $cUID )
 		and ( exists $this->{session}{users}{mapping}{U2W}{$cUID} )
@@ -275,7 +277,7 @@ sub cUID2openid {
 	my %openids;
 	foreach my $rec ( @recs ) {
 		my %attr = split ( $openid_attr_delim, $rec );
-		$openids{$attr{"identity"}} = 1;
+		$openids{$attr{identity}} = 1;
 	}
 	return keys %openids;
 }
@@ -462,7 +464,10 @@ sub _userReallyExists
 	my $this = shift;
 	my $login = shift;
 
-	return exists $this->{L2U}->{$login};
+	return ( exists $this->{L2U}{$login})
+		or ( exists $this->{W2U}{$login})
+		or ( exists $this->{U2W}{$login})
+		or SUPER::_userReallyExists( $this, $login );
 }
 
 # internal function to handle administrator console interface
