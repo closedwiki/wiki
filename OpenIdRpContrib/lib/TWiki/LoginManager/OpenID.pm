@@ -130,9 +130,14 @@ sub loadSession {
 	my $login = $this->SUPER::loadSession( $defaultUser );
 
 	# intercept status regarding whether this login arrived by OpenID
-	my $logged_in_openid = $this->getSessionValue( "LOGGED_IN_OPENID" );
-	if (( defined $logged_in_openid ) and $logged_in_openid ) {
-		$twiki->enterContext('logged_in_openid');
+	if ( defined $login ) {
+		my $logged_in_openid = $this->getSessionValue( "LOGGED_IN_OPENID" );
+		if (( defined $logged_in_openid ) and $logged_in_openid ) {
+			$twiki->enterContext('logged_in_openid');
+		}
+	} else {
+		$this->clearSessionValue( "LOGGED_IN_OPENID" );
+		$twiki->leaveContext('logged_in_openid');
 	}
 
 	# return login name
