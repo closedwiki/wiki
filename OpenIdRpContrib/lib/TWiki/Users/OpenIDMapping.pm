@@ -495,26 +495,40 @@ sub _user_console
 
 	$twiki->{templates}->readTemplate('openid_ctrl_user');
 
-	my $result;
-	$result = "!OpenID user console for $wn (cUID: <nop>$user)%BR%\n";
+	my $result = '<div class="twiki_openid_con_user">'."\n";
+	$result .= '<div class="twiki_openid_con_heading">'."\n";
+	$result .= "%PUBURL%/TWiki/OpenIdRpContrib/logo_openid.png\n";
+	$result .= "<nop>OpenID user console for $wn (cUID: <nop>$user)\n";
+	$result .= "</div>\n";
 	my $mapping = $twiki->{users}{mapping};
     my $attr_recs = ( exists $mapping->{U2A}{$user})
 		? $mapping->{U2A}{$user} : "";
 	my @openids = cUID2openid( $twiki, $user );
 	my @recs = split ( $openid_rec_delim, $attr_recs );
+	my $row_count = 1;
 	if ( @recs ) {
-		$result .= "<blockquote>\n";
-		foreach my $rec ( @recs ) {
-			my %attr = split ( $openid_attr_delim, $rec );
-			foreach my $key ( sort keys %attr ) {
-				$result .= "<nop>$key: <nop>".$attr{$key}."%BR%\n";
+	$result .= '<div class="twiki_openid_con_rec">'."\n";
+	foreach my $rec ( @recs ) {
+		$result .= '<div class="twiki_openid_con_attrs">'."\n";
+		my %attr = split ( $openid_attr_delim, $rec );
+		my @vis_keys = sort grep( /^(sreg|ax|ext[0-9]+)\./, keys %attr );
+		foreach my $key ( "FirstName", "LastName", "WikiName", "Email",
+				"identity", @vis_keys )
+			{
+				exists $attr{$key} or next;
+				$result .= '<div class="twiki_openid_con_attr '
+					.($row_count++ % 1
+						? "twiki_openid_con_attr_odd"
+						: "twiki_openid_con_attr_even" )
+					.'"><nop>'.$key.': <nop>'.$attr{$key}."</div>\n";
 			}
-			$result .= "%BR%\n";
+			$result .= "</div>\n";
 		}
-		$result .= "</blockquote>\n";
+		$result .= "</div>\n";
 	} else {
-		$result .= "<blockquote>no !OpenIDs attached to this account</blockquote>\n";
+		$result .= '<div class="twiki_openid_con_err">no <nop>OpenIDs attached to this account</div>'."\n";
 	}
+	$result .= "</div>\n";
 	return $result;
 }
 
@@ -548,9 +562,9 @@ sub _OPENIDCONSOLE
 
 	# present user or admin interfaces
 	if ( $isAdmin ) {
-		_admin_console( $twiki, $params, @_ );
+		return _admin_console( $twiki, $params, @_ );
 	} else {
-		_user_console( $twiki, $params, @_ );
+		return _user_console( $twiki, $params, @_ );
 	}
 	
 }
