@@ -190,6 +190,31 @@ sub getWikiName {
 
 =pod
 
+---++ ObjectMethod login2cUID ($login, $dontcheck) -> $cUID
+
+Override TWiki::Users::TWikiUserMapping::login2cUID()
+
+make sure login name for OpenID users is based on WikiName but forced to
+lower case.
+(undef on failure)
+
+(if dontcheck is true, it returns a cUID for a nonexistant user
+for registration)
+
+=cut
+
+sub login2cUID {
+    my( $this, $login, $dontcheck ) = @_;
+
+    unless ($dontcheck) {
+        return undef unless (_userReallyExists($this, $login));
+    }
+
+    return $this->{mapping_id}.lc(TWiki::Users::mapLogin2cUID($login));
+}
+
+=pod
+
 ---++ StaticMethod openid2cUID($openid) -> $cUID
 
 Convert an OpenID identity to the corresponding canonical user name.
@@ -211,7 +236,7 @@ sub openid2cUID {
 
 ---++ StaticMethod login2openid($login) -> $openid
 
-Convert a login (WikiName) to the corresponding OpenID identity.
+Convert a login/WikiName to the corresponding OpenID identity.
 (undef on failure)
 
 =cut
@@ -220,9 +245,15 @@ sub login2openid {
     my( $session, $login ) = @_;
 
 	my $mapping = $session->{users}{mapping};
-	( exists $mapping->{W2U}{$login}) or return ();
-	my $cUID = $mapping->{W2U}{$login};
-	return cUID2openid( $cUID );
+	if ( exists $mapping->{L2U}{lc($login)}) {
+		my $cUID = $mapping->{L2U}{lc($login)};
+		return cUID2openid( $cUID );
+	}
+	if ( exists $mapping->{W2U}{$login}) {
+		my $cUID = $mapping->{W2U}{$login};
+		return cUID2openid( $cUID );
+	}
+	return undef;
 }
 
 =pod
