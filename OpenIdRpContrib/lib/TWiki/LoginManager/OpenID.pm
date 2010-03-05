@@ -186,8 +186,7 @@ sub check_provider_icon
 	( -e $op_icon ) and return;
 	my $default_icon = $pub_path."/icon-globe.png";
 
-	# if it doesn't exist, get the provider's favicon
-	# for now assume everyone has a /favicon.ico, TODO: check HTML <head> links
+	# if it doesn't exist, get the provider's /favicon.ico
 	my $host = $op_url;
 	$host =~ s=^https{0,1}://==;
 	$host =~ s=/.*==;
@@ -511,9 +510,7 @@ sub login {
 			my $cUID = TWiki::Users::OpenIDMapping::openid2cUID( $twiki,
 				$openid_p{identity});
 			my $mapping = $twiki->{users}{mapping};
-			my $wikiname = ( $cUID )
-				? $mapping->getWikiName ( $cUID )
-				: undef;
+			my $wikiname = ( $cUID ) ? $mapping->getWikiName ( $cUID ) : undef;
 			debug "wn=".((defined $wikiname) ? $wikiname : "" ),
 				" cUID=".((defined $cUID) ? $cUID : "" ),
 				" openid=".$openid_p{identity};

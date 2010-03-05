@@ -74,6 +74,10 @@ sub new {
     $this->{session} = $session;
     $this->{mapping_id} = $OPENID_MAPPING_ID;
 	$this->{CACHED} = 1; # block TWiki::Users::TWikiUserMapping::_loadMapping()
+
+	# register tag handler for %OPENIDCONSOLE% user & admin console interface
+    TWiki::registerTagHandler('OPENIDCONSOLE', \&_OPENIDCONSOLE);
+
     return $this;
 }
 
@@ -218,6 +222,23 @@ sub login2openid {
 	my $mapping = $session->{users}{mapping};
 	( exists $mapping->{W2U}{$login}) or return ();
 	my $cUID = $mapping->{W2U}{$login};
+	return cUID2openid( $cUID );
+}
+
+=pod
+
+---++ StaticMethod cUID2openid($login) -> $openid
+
+Convert a cUID to the corresponding OpenID identity.
+(undef on failure)
+
+=cut
+
+sub cUID2openid {
+    my( $session, $cUID ) = @_;
+
+	my $mapping = $session->{users}{mapping};
+	( exists $mapping->{U2A}{$cUID}) or return ();
     my $attr_recs = $mapping->{U2A}{$cUID};
 	my @recs = split ( $openid_rec_delim, $attr_recs );
 	my %openids;
@@ -323,7 +344,7 @@ sub save_openid_attrs {
 
 	# save TWiki mapping
 	$mapping->{U2W}{$cUID}     = $wikiname;
-	$mapping->{L2U}{$wikiname} = $cUID;
+	$mapping->{L2U}{lc($wikiname)} = $cUID;
 	$mapping->{W2U}{$wikiname} = $cUID;
 	
 	# save OpenID mapping
@@ -354,7 +375,7 @@ sub add_openid_alias {
 	$mapping->{O2U}{$identity} = $cUID;
 
 	# append OpenID attrs to existing records
-	my $attr_recs = $session->{users}{mapping}{U2A}{$cUID};
+	my $attr_recs = $mapping->{U2A}{$cUID};
 	if ( ! defined $attr_recs ) {
 		$attr_recs = "";
 	}
@@ -411,6 +432,91 @@ sub _userReallyExists
 	my $login = shift;
 
 	return exists $this->{L2U}->{$login};
+}
+
+# internal function to handle administrator console interface
+sub _admin_console
+{
+	my $twiki = shift;
+	my $params = shift;
+	my $topic = shift;
+	my $web = shift;
+
+	$twiki->{templates}->readTemplate('openid_ctrl_admin');
+	
+	return "admin console";
+}
+
+# internal function to handle user console interface
+sub _user_console
+{
+	my $twiki = shift;
+	my $params = shift;
+	my $topic = shift;
+	my $web = shift;
+	my $user = $twiki->{user};
+	my $wn = $twiki->{users}{mapping}->getWikiName( $user );
+
+	$twiki->{templates}->readTemplate('openid_ctrl_user');
+
+	my $result;
+	$result = "!OpenID user console for $wn (cUID: <nop>$user)%BR%\n";
+	my $mapping = $twiki->{users}{mapping};
+    my $attr_recs = ( exists $mapping->{U2A}{$user})
+		? $mapping->{U2A}{$user} : "";
+	my @openids = cUID2openid( $twiki, $user );
+	my @recs = split ( $openid_rec_delim, $attr_recs );
+	if ( @recs ) {
+		$result .= "<blockquote>\n";
+		foreach my $rec ( @recs ) {
+			my %attr = split ( $openid_attr_delim, $rec );
+			foreach my $key ( sort keys %attr ) {
+				$result .= "<nop>$key: <nop>".$attr{$key}."%BR%\n";
+			}
+			$result .= "%BR%\n";
+		}
+		$result .= "</blockquote>\n";
+	} else {
+		$result .= "<blockquote>no !OpenIDs attached to this account</blockquote>\n";
+	}
+	return $result;
+}
+
+=pod
+
+---++ ObjectMethod _OPENIDCONSOLE ($twiki, $params, $topic, $web)
+
+The is the handler function for the OPENIDCONSOLE tag. It generates
+HTML for the user and admin console interfaces.
+
+=cut
+
+sub _OPENIDCONSOLE
+{
+	my $twiki = shift;
+	my $params = shift;
+	my $logmgr = $twiki->{users}->{loginManager};
+
+	# make sure user is logged in
+	if ( !defined $twiki->{user}) {
+		return "not logged in";
+	}
+
+	# get parameters
+	my $disable_admin = (( exists $params->{disable_admin})
+		and $params->{disable_admin}) ? $params->{disable_admin} : 0;
+
+	# determine if user is an admin
+	my $isAdmin = $twiki->{users}->isAdmin( $logmgr->{user})
+		and !$disable_admin;
+
+	# present user or admin interfaces
+	if ( $isAdmin ) {
+		_admin_console( $twiki, $params, @_ );
+	} else {
+		_user_console( $twiki, $params, @_ );
+	}
+	
 }
 
 1;
