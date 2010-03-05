@@ -741,7 +741,7 @@ sub login {
 				$csr->err, "", "" ]);
 		}
 
-		# if login name is a known WikiName, convert it to OpenID identity
+		# if login name is a known login/WikiName, convert to OpenID identity
 		if ( $loginName =~ /$TWiki::cfg{LoginNameFilterIn}/ ) {
 			my @openids = TWiki::Users::OpenIDMapping::login2openid( $twiki,
 				$loginName );

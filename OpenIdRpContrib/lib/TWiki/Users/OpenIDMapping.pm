@@ -247,11 +247,11 @@ sub login2openid {
 	my $mapping = $session->{users}{mapping};
 	if ( exists $mapping->{L2U}{lc($login)}) {
 		my $cUID = $mapping->{L2U}{lc($login)};
-		return cUID2openid( $cUID );
+		return cUID2openid( $session, $cUID );
 	}
 	if ( exists $mapping->{W2U}{$login}) {
 		my $cUID = $mapping->{W2U}{$login};
-		return cUID2openid( $cUID );
+		return cUID2openid( $session, $cUID );
 	}
 	return undef;
 }
@@ -538,8 +538,8 @@ sub _OPENIDCONSOLE
 		and $params->{disable_admin}) ? $params->{disable_admin} : 0;
 
 	# determine if user is an admin
-	my $isAdmin = $twiki->{users}->isAdmin( $logmgr->{user})
-		and !$disable_admin;
+	my $isAdmin = ( $twiki->{users}->isAdmin( $logmgr->{user})
+		and !$disable_admin );
 
 	# present user or admin interfaces
 	if ( $isAdmin ) {
