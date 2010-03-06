@@ -493,43 +493,61 @@ sub _user_console
 	my $user = $twiki->{user};
 	my $wn = $twiki->{users}{mapping}->getWikiName( $user );
 
-	$twiki->{templates}->readTemplate('openid_ctrl_user');
+	# read template
+	$twiki->templates->readTemplate('openidlogin');
 
-	my $result = '<div class="twiki_openid_con_user">'."\n";
-	$result .= '<div class="twiki_openid_con_heading">'."\n";
-	$result .= "%PUBURL%/TWiki/OpenIdRpContrib/logo_openid.png\n";
-	$result .= "<nop>OpenID user console for $wn (cUID: <nop>$user)\n";
-	$result .= "</div>\n";
 	my $mapping = $twiki->{users}{mapping};
     my $attr_recs = ( exists $mapping->{U2A}{$user})
 		? $mapping->{U2A}{$user} : "";
 	my @openids = cUID2openid( $twiki, $user );
+	my @recs_str;
 	my @recs = split ( $openid_rec_delim, $attr_recs );
-	my $row_count = 1;
+	my $rec_count = 1;
+	my $attr_count = 1;
+	my $recs;
 	if ( @recs ) {
-	$result .= '<div class="twiki_openid_con_rec">'."\n";
-	foreach my $rec ( @recs ) {
-		$result .= '<div class="twiki_openid_con_attrs">'."\n";
-		my %attr = split ( $openid_attr_delim, $rec );
-		my @vis_keys = sort grep( /^(sreg|ax|ext[0-9]+)\./, keys %attr );
-		foreach my $key ( "FirstName", "LastName", "WikiName", "Email",
-				"identity", @vis_keys )
+		foreach my $rec ( @recs ) {
+			my %attr = split ( $openid_attr_delim, $rec );
+			my @vis_keys = sort grep( /^(sreg|ax|ext[0-9]+)\./, keys %attr );
+			my @attr_strs;
+			foreach my $key ( "FirstName", "LastName", "WikiName", "Email",
+					@vis_keys )
 			{
 				exists $attr{$key} or next;
-				$result .= '<div class="twiki_openid_con_attr '
-					.($row_count++ % 1
-						? "twiki_openid_con_attr_odd"
-						: "twiki_openid_con_attr_even" )
-					.'"><nop>'.$key.': <nop>'.$attr{$key}."</div>\n";
+				my $odd_even = ($attr_count++ % 2 ) ? "odd" : "even";
+				my $attr_str = $twiki->templates->expandTemplate('openid_ucon_attr');
+				$attr_str =~ s/%OPENID_ATTR_ODDEVEN%/$odd_even/g;
+				$attr_str =~ s/%OPENID_ATTR_KEY%/$key/g;
+				$attr_str =~ s/%OPENID_ATTR_VAL%/$attr{$key}/g;
+				push @attr_strs, $attr_str;
 			}
-			$result .= "</div>\n";
+			my $rec_str = $twiki->templates->expandTemplate('openid_ucon_rec');
+			my $attrs = join( "\n", @attr_strs );
+			$rec_str =~ s/%OPENID_USER_ID_COUNT%/$rec_count/g;
+			$rec_str =~ s/%OPENID_USER_ID%/$attr{identity}/g;
+			$rec_str =~ s/%OPENID_USER_ID_ATTRS%/$attrs/g;
+			$rec_count++;
+			push @recs_str, $rec_str;
 		}
-		$result .= "</div>\n";
+		my $recs_str = join( "\n", @recs_str );
+		$recs = $twiki->templates->expandTemplate('openid_ucon_recs');
+		$recs =~ s/%OPENID_USER_RECS%/$recs_str/g;
 	} else {
-		$result .= '<div class="twiki_openid_con_err">no <nop>OpenIDs attached to this account</div>'."\n";
+		$recs = $twiki->templates->expandTemplate('openid_ucon_recs_empty');
 	}
-	$result .= "</div>\n";
-	return $result;
+
+	# expand and fill in console
+
+	my $console = $twiki->templates->expandTemplate('openid_ucon');
+	$console =~ s/%OPENID_USER%/$wn/g;
+	$console =~ s/%OPENID_USER_INFO%/$recs/g;
+
+	# insert CSS in header
+    my $head =  $twiki->templates->expandTemplate('openidconsolecss');
+    $twiki->addToHEAD('OpenIdRpContrib-console', $head );
+
+	# return text
+	return $console;
 }
 
 =pod

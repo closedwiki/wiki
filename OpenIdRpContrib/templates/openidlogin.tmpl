@@ -78,3 +78,52 @@ or
 </div><!-- /openidLoginSide-->
 </div><!-- /twikiFormSteps-->
 </div><!-- /twikiLogin-->%TMPL:END%
+
+<!-- the following templates contain variables which must be substituted by the code that reads them - they are not valid TWiki variables -->
+
+<!-- OpenID user & admin console CSS -->
+%TMPL:DEF{"openidconsolecss"}%
+<style type="text/css" media="all">
+.twiki_openid_ucon { background-color: #fff7e7; }
+.twiki_openid_ucon_heading   { padding-left: 130px; background-image:url("/twiki/pub/TWiki/OpenIdRpContrib/logo_openid_trans.png"); background-repeat: no-repeat; font-weight: bold; font-size: 140%; line-height: 40px; }
+.twiki_openid_ucon_form { padding: 5px; vertical-align: top; display: inline-block; }
+.twiki_openid_ucon_form_heading { text-decoration: underline; }
+.twiki_openid_ucon_attrs { padding: 5px; border-left: 1px solid #efefef; vertical-align: top; display: inline-block; }
+.twiki_openid_ucon_attrs_heading { text-decoration: underline; }
+.twiki_openid_ucon_id   { padding: 3px; font-weight: bold; font-size: 1.17em; background-color: #efefef; }
+.twiki_openid_ucon_attr { }
+</style>
+%TMPL:END%
+
+<!-- openid_ucon - User console, params:%OPENID_USER%  -->
+%TMPL:DEF{"openid_ucon"}%<div class="twiki_openid_ucon">
+<div class="twiki_openid_ucon_heading">
+User console for %OPENID_USER%
+</div>
+%OPENID_USER_INFO%
+</div>%TMPL:END%
+
+<!--openid_ucon_recs - User OpenID list wrapper, params: %OPENID_USER_RECS%  -->
+%TMPL:DEF{"openid_ucon_recs"}%<div class="twiki_openid_ucon_rec">
+%OPENID_USER_RECS%
+</div>%TMPL:END%
+
+<!-- openid_ucon_rec - User OpenID list entry, params: %OPENID_USER_ID_COUNT% %OPENID_USER_ID% %OPENID_USER_ID_ATTRS% -->
+%TMPL:DEF{"openid_ucon_rec"}%<div class="twiki_openid_ucon_rec">
+<div class="twiki_openid_ucon_id"><nop>OpenID identity #%OPENID_USER_ID_COUNT%: <nop>%OPENID_USER_ID%</div>
+<div class="twiki_openid_ucon_form">
+<div class="twiki_openid_ucon_form_heading">Actions</div>
+form goes here
+</div>
+<div class="twiki_openid_ucon_attrs">
+<div class="twiki_openid_ucon_attrs_heading">Attributes</div>
+%OPENID_USER_ID_ATTRS%
+</div>
+</div>%TMPL:END%
+
+<!-- openid_ucon_attr - User OpenID attribute entry, params: %OPENID_ATTR_ODDEVEN% %OPENID_ATTR_KEY% %OPENID_ATTR_VAL% -->
+%TMPL:DEF{"openid_ucon_attr"}%<div class="twiki_openid_ucon_attr twiki_openid_ucon_attr_%OPENID_ATTR_ODDEVEN%"><nop>%OPENID_ATTR_KEY%: <nop>%OPENID_ATTR_VAL%</div>%TMPL:END%
+
+<!-- openid_ucon_recs_empty - string to explain no OpenID entries -->
+%TMPL:DEF{"openid_ucon_recs_empty"}%<div class="twiki_openid_ucon_err">no <nop>OpenID identities are attached to this account</div>
+%TMPL:END%
