@@ -272,7 +272,7 @@ sub _OPENIDPROVIDERS {
 		: ();
 
 	# get parameters
-	my $sb = $params->get("sidebar") ? "sidebar_" : "";
+	my $sb = ( defined $params->get("sidebar")) ? "sidebar_" : "";
 
 	# generate HTML list of providers
 	my $result = '<div class="'.$sb.'OP_list">';
