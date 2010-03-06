@@ -276,6 +276,8 @@ sub _OPENIDPROVIDERS {
 
 	# get parameters
 	my $sb = ( defined $params->get("sidebar")) ? "sidebar_" : "";
+	my $action = ( defined $params->get("action"))
+		? $params->get("action") : "login";
 
 	# generate HTML list of providers
 	my $result = '<div class="'.$sb.'OP_list">';
@@ -288,7 +290,8 @@ sub _OPENIDPROVIDERS {
 		
 		$result .= '<button class="'.$sb.'OP_entry" type="submit" '
 			.'name="openid.provider" value="'
-			.$op_name.'" title="<nop>'.$op_name.' login via <nop>OpenID">'
+			.$op_name.'" title="<nop>'.$op_name.' '
+			.$action.' via <nop>OpenID">'
 			.'<img src="%PUBURL%/%SYSTEMWEB%/OpenIdRpContrib/op-icon-'
 			.$op_name_norm.'.ico" alt="" class="'.$sb.'OP_icon">'
 			.($sb ? "" : "<nop>".$op_name )
@@ -883,10 +886,17 @@ sub _user_console
 		foreach my $rec ( @recs ) {
 			my %attr = split ( $openid_attr_delim, $rec );
 			my @vis_keys = sort grep( /^(sreg|ax|ext[0-9]+)\./, keys %attr );
-			my @attr_strs;
-			foreach my $key ( "FirstName", "LastName", "WikiName", "Email",
-					@vis_keys )
-			{
+			my ( @data_strs, @attr_strs );
+			foreach my $key ( "FirstName", "LastName", "WikiName", "Email" ) {
+				exists $attr{$key} or next;
+				my $odd_even = ($attr_count++ % 2 ) ? "odd" : "even";
+				my $data_str = $twiki->templates->expandTemplate('openid_ucon_attr');
+				$data_str =~ s/%OPENID_ATTR_ODDEVEN%/$odd_even/g;
+				$data_str =~ s/%OPENID_ATTR_KEY%/$key/g;
+				$data_str =~ s/%OPENID_ATTR_VAL%/$attr{$key}/g;
+				push @data_strs, $data_str;
+			}
+			foreach my $key ( @vis_keys ) {
 				exists $attr{$key} or next;
 				my $odd_even = ($attr_count++ % 2 ) ? "odd" : "even";
 				my $attr_str = $twiki->templates->expandTemplate('openid_ucon_attr');
@@ -896,9 +906,11 @@ sub _user_console
 				push @attr_strs, $attr_str;
 			}
 			my $rec_str = $twiki->templates->expandTemplate('openid_ucon_rec');
+			my $data = join( "\n", @data_strs );
 			my $attrs = join( "\n", @attr_strs );
 			$rec_str =~ s/%OPENID_USER_ID_COUNT%/$rec_count/g;
 			$rec_str =~ s/%OPENID_USER_ID%/$attr{identity}/g;
+			$rec_str =~ s/%OPENID_USER_DATA%/$data/g;
 			$rec_str =~ s/%OPENID_USER_ID_ATTRS%/$attrs/g;
 			$rec_count++;
 			push @recs_str, $rec_str;
