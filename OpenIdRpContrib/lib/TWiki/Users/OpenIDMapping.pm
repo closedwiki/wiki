@@ -38,7 +38,6 @@ use Error qw( :try );					# included with Perl
 use DB_File;							# included with Perl
 use Assert;								# included with TWiki
 use TWiki::Contrib::OpenIdRpContrib::DBLockPerAccess;	# included with OpenIdRpContrib
-use TWiki::LoginManager::OpenID;		# included with OpenIdRpContrib
 use Net::OpenID::Consumer;				# CPAN dependency
 
 #use Monitor;
@@ -538,12 +537,18 @@ sub _user_console
 
 	# expand and fill in console
 
+	my $add_form = "";
+	if ( 1 ) { #TODO: add config variable after move to LoginManager code
+		$add_form = $twiki->templates->expandTemplate('openid_ucon_add');
+	}
 	my $console = $twiki->templates->expandTemplate('openid_ucon');
 	$console =~ s/%OPENID_USER%/$wn/g;
 	$console =~ s/%OPENID_USER_INFO%/$recs/g;
+	$console =~ s/%OPENID_USER_ID_ADD%/$add_form/g;
 
 	# insert CSS in header
-    my $head =  $twiki->templates->expandTemplate('openidconsolecss');
+    my $head = $twiki->templates->expandTemplate('openidcss')
+		.$twiki->templates->expandTemplate('openidconsolecss');
     $twiki->addToHEAD('OpenIdRpContrib-console', $head );
 
 	# return text

@@ -84,39 +84,73 @@ or
 <!-- OpenID user & admin console CSS -->
 %TMPL:DEF{"openidconsolecss"}%
 <style type="text/css" media="all">
-.twiki_openid_ucon { background-color: #fff7e7; }
+.twiki_openid_ucon { background-color: #ffffcf; }
 .twiki_openid_ucon_heading   { padding-left: 130px; background-image:url("/twiki/pub/TWiki/OpenIdRpContrib/logo_openid_trans.png"); background-repeat: no-repeat; font-weight: bold; font-size: 140%; line-height: 40px; }
 .twiki_openid_ucon_form { padding: 5px; vertical-align: top; display: inline-block; }
 .twiki_openid_ucon_form_heading { text-decoration: underline; }
+.twiki_openid_ucon_form_body { }
+.twiki_openid_ucon_form_button { display: block; margin-top: 1em; margin-bottom 1em; }
 .twiki_openid_ucon_attrs { padding: 5px; border-left: 1px solid #efefef; vertical-align: top; display: inline-block; }
 .twiki_openid_ucon_attrs_heading { text-decoration: underline; }
 .twiki_openid_ucon_id   { padding: 3px; font-weight: bold; font-size: 1.17em; background-color: #efefef; }
 .twiki_openid_ucon_attr { }
+.twiki_openid_ucon_add_id_list_intro { text-align: center; }
+.twiki_openid_ucon_add_id_url { text-align: center; border-top: 1px solid #efefef; padding: 3px; }
 </style>
 %TMPL:END%
 
-<!-- openid_ucon - User console, params:%OPENID_USER%  -->
+<!-- openid_ucon - User console, params: %OPENID_USER% %OPENID_USER_INFO% %OPENID_USER_ID_ADD% -->
 %TMPL:DEF{"openid_ucon"}%<div class="twiki_openid_ucon">
 <div class="twiki_openid_ucon_heading">
 User console for %OPENID_USER%
 </div>
 %OPENID_USER_INFO%
+%OPENID_USER_ID_ADD%
 </div>%TMPL:END%
 
-<!--openid_ucon_recs - User OpenID list wrapper, params: %OPENID_USER_RECS%  -->
+<!-- openid_ucon_add - Form to add OpenID identities, params: none -->
+%TMPL:DEF{"openid_ucon_add"}%
+<div class="twiki_openid_ucon_add_id">
+<div class="twiki_openid_ucon_id">
+Add an !OpenID identity to your account
+</div>
+<form action="%TOPICURL%"  method="post">
+<input type="hidden" name="action" value="user">
+<div class="twiki_openid_ucon_add_id_list">
+<div class="twiki_openid_ucon_add_id_list_intro">
+Select a provider where you have an account
+</div>
+%OPENIDPROVIDERS%
+</div>
+<div class="twiki_openid_ucon_add_id_url">
+or enter your !OpenID identity URL
+<input type="text" name="openid.claimed_id" value="" size="60">
+<button name="claim" value="1">Claim ID</button>
+</div>
+</form>
+</div>
+%TMPL:END%
+
+<!--openid_ucon_recs - User OpenID list wrapper, params: %OPENID_USER_RECS% -->
 %TMPL:DEF{"openid_ucon_recs"}%<div class="twiki_openid_ucon_rec">
 %OPENID_USER_RECS%
 </div>%TMPL:END%
 
-<!-- openid_ucon_rec - User OpenID list entry, params: %OPENID_USER_ID_COUNT% %OPENID_USER_ID% %OPENID_USER_ID_ATTRS% -->
+<!-- openid_ucon_rec - User OpenID list entry, params: %OPENID_USER_ID_COUNT% %OPENID_USER_ID% %OPENID_USER_ID_ATTRS% %OPENID_IDENTITY_NUM% -->
 %TMPL:DEF{"openid_ucon_rec"}%<div class="twiki_openid_ucon_rec">
 <div class="twiki_openid_ucon_id"><nop>OpenID identity #%OPENID_USER_ID_COUNT%: <nop>%OPENID_USER_ID%</div>
 <div class="twiki_openid_ucon_form">
 <div class="twiki_openid_ucon_form_heading">Actions</div>
-form goes here
+<div class="twiki_openid_ucon_form_body">
+<form action="%TOPICURL%"  method="post">
+<input type="hidden" name="action" value="user">
+<button type="submit" class="twiki_openid_ucon_form_button" name="update" title="Update this identity from provider" value="%OPENID_USER_ID_COUNT%">Update</button>
+<button type="submit" class="twiki_openid_ucon_form_button" name="delete" title="Delete this identity" value="%OPENID_USER_ID_COUNT%">Delete</button>
+</form>
+</div>
 </div>
 <div class="twiki_openid_ucon_attrs">
-<div class="twiki_openid_ucon_attrs_heading">Attributes</div>
+<div class="twiki_openid_ucon_attrs_heading">Attributes received from this !OpenID Provider</div>
 %OPENID_USER_ID_ATTRS%
 </div>
 </div>%TMPL:END%
