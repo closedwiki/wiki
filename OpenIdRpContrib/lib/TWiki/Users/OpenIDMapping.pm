@@ -73,9 +73,6 @@ sub new {
     $this->{session} = $session;
     $this->{mapping_id} = $OPENID_MAPPING_ID;
 
-	# register tag handler for %OPENIDCONSOLE% user & admin console interface
-    TWiki::registerTagHandler('OPENIDCONSOLE', \&_OPENIDCONSOLE);
-
     return $this;
 }
 
@@ -467,129 +464,6 @@ sub _userReallyExists
 		or ( exists $this->{W2U}{$login})
 		or ( exists $this->{U2W}{$login})
 		or SUPER::_userReallyExists( $this, $login );
-}
-
-# internal function to handle administrator console interface
-sub _admin_console
-{
-	my $twiki = shift;
-	my $params = shift;
-	my $topic = shift;
-	my $web = shift;
-
-	$twiki->{templates}->readTemplate('openid_ctrl_admin');
-	
-	return "admin console";
-}
-
-# internal function to handle user console interface
-sub _user_console
-{
-	my $twiki = shift;
-	my $params = shift;
-	my $topic = shift;
-	my $web = shift;
-	my $user = $twiki->{user};
-	my $wn = $twiki->{users}{mapping}->getWikiName( $user );
-
-	# read template
-	$twiki->templates->readTemplate('openidlogin');
-
-	my $mapping = $twiki->{users}{mapping};
-    my $attr_recs = ( exists $mapping->{U2A}{$user})
-		? $mapping->{U2A}{$user} : "";
-	my @openids = cUID2openid( $twiki, $user );
-	my @recs_str;
-	my @recs = split ( $openid_rec_delim, $attr_recs );
-	my $rec_count = 1;
-	my $attr_count = 1;
-	my $recs;
-	if ( @recs ) {
-		foreach my $rec ( @recs ) {
-			my %attr = split ( $openid_attr_delim, $rec );
-			my @vis_keys = sort grep( /^(sreg|ax|ext[0-9]+)\./, keys %attr );
-			my @attr_strs;
-			foreach my $key ( "FirstName", "LastName", "WikiName", "Email",
-					@vis_keys )
-			{
-				exists $attr{$key} or next;
-				my $odd_even = ($attr_count++ % 2 ) ? "odd" : "even";
-				my $attr_str = $twiki->templates->expandTemplate('openid_ucon_attr');
-				$attr_str =~ s/%OPENID_ATTR_ODDEVEN%/$odd_even/g;
-				$attr_str =~ s/%OPENID_ATTR_KEY%/$key/g;
-				$attr_str =~ s/%OPENID_ATTR_VAL%/$attr{$key}/g;
-				push @attr_strs, $attr_str;
-			}
-			my $rec_str = $twiki->templates->expandTemplate('openid_ucon_rec');
-			my $attrs = join( "\n", @attr_strs );
-			$rec_str =~ s/%OPENID_USER_ID_COUNT%/$rec_count/g;
-			$rec_str =~ s/%OPENID_USER_ID%/$attr{identity}/g;
-			$rec_str =~ s/%OPENID_USER_ID_ATTRS%/$attrs/g;
-			$rec_count++;
-			push @recs_str, $rec_str;
-		}
-		my $recs_str = join( "\n", @recs_str );
-		$recs = $twiki->templates->expandTemplate('openid_ucon_recs');
-		$recs =~ s/%OPENID_USER_RECS%/$recs_str/g;
-	} else {
-		$recs = $twiki->templates->expandTemplate('openid_ucon_recs_empty');
-	}
-
-	# expand and fill in console
-
-	my $add_form = "";
-	if ( 1 ) { #TODO: add config variable after move to LoginManager code
-		$add_form = $twiki->templates->expandTemplate('openid_ucon_add');
-	}
-	my $console = $twiki->templates->expandTemplate('openid_ucon');
-	$console =~ s/%OPENID_USER%/$wn/g;
-	$console =~ s/%OPENID_USER_INFO%/$recs/g;
-	$console =~ s/%OPENID_USER_ID_ADD%/$add_form/g;
-
-	# insert CSS in header
-    my $head = $twiki->templates->expandTemplate('openidcss')
-		.$twiki->templates->expandTemplate('openidconsolecss');
-    $twiki->addToHEAD('OpenIdRpContrib-console', $head );
-
-	# return text
-	return $console;
-}
-
-=pod
-
----++ ObjectMethod _OPENIDCONSOLE ($twiki, $params, $topic, $web)
-
-The is the handler function for the OPENIDCONSOLE tag. It generates
-HTML for the user and admin console interfaces.
-
-=cut
-
-sub _OPENIDCONSOLE
-{
-	my $twiki = shift;
-	my $params = shift;
-	my $logmgr = $twiki->{users}->{loginManager};
-
-	# make sure user is logged in
-	if ( !defined $twiki->{user}) {
-		return "not logged in";
-	}
-
-	# get parameters
-	my $disable_admin = (( exists $params->{disable_admin})
-		and $params->{disable_admin}) ? $params->{disable_admin} : 0;
-
-	# determine if user is an admin
-	my $isAdmin = ( $twiki->{users}->isAdmin( $logmgr->{user})
-		and !$disable_admin );
-
-	# present user or admin interfaces
-	if ( $isAdmin ) {
-		return _admin_console( $twiki, $params, @_ );
-	} else {
-		return _user_console( $twiki, $params, @_ );
-	}
-	
 }
 
 1;
