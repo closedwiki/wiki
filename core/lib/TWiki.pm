@@ -3780,6 +3780,10 @@ sub _encode {
     } elsif ( $type =~ /^(off|none)$/i ) {
         # no encoding
         return $text;
+    } elsif ($type =~ /^moderate$/i) {
+        # entity encode ' " < and >
+        $text =~ s/([<>'"])/'&#'.ord($1).';'/ge;
+        return $text;
     } else { # safe or default
         # entity encode ' " < > and %
         $text =~ s/([<>%'"])/'&#'.ord($1).';'/ge;
