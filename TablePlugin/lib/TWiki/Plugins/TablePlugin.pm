@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2001-2003 John Talintyre, jet@cheerful.com
-# Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2001-2010 Peter Thoeny, peter@thoeny.org
 # Copyright (C) 2005-2007 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
@@ -38,7 +38,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.036';
+$RELEASE = '1.1';
 
 sub initPlugin {
     my( $web, $user );

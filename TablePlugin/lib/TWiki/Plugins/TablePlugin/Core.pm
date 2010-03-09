@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2001-2003 John Talintyre, jet@cheerful.com
-# Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2001-2010 Peter Thoeny, peter@thoeny.org
 # Copyright (C) 2005-2006 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
@@ -533,17 +533,11 @@ m|^\s*([0-9]{1,2})[-\s/]*([A-Z][a-z][a-z])[-\s/]*([0-9]{4})\s*-\s*([0-9][0-9]):(
         $year += 2000 if ( length($year) == 2 );
         $date = timegm( 0, 0, 0, $1, $mon2num{$2}, $year - 1900 );
     }
-    elsif ( $text =~ /^\s*([0-9]+)(\.([0-9]))*(.?)*$/ ) {
+    elsif ( $text =~ /^\s*(([0-9]+)(\.([0-9]))?).*$/ ) {
 
         # for example for attachment sizes: 1.1 K
         # but also for other strings that start with a number
-        my $num1 = $1 || 0;
-        my $num2 = $2 || 0;
-        $num = scalar("$num1$num2");
-    }
-    elsif ( $text =~ /^\s*[0-9]+(\.[0-9]+)?\s*$/ ) {
-
-        $num = $text;
+        $num = $1;
     }
 
     return ( $num, $date );
