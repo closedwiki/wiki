@@ -3977,8 +3977,16 @@ sub URLPARAM {
         }
     }
     if( defined $value ) {
-        $value =~ s/\r?\n/$newLine/go if( defined $newLine );
-        $value = _encode( $encode, $value );
+        if( defined $newLine ) {
+            $newLine =~ s/(\$br\b|%BR%)/\0-br-\0/go;
+            $newLine =~ s/\$n\b/\0-n-\0/go;
+            $value =~ s/\r?\n/$newLine/go;
+            $value = _encode( $encode, $value );
+            $value =~ s/\0-br-\0/<br \/>/go;
+            $value =~ s/\0-n-\0/\n/go;
+        } else {
+            $value = _encode( $encode, $value );
+        }
     }
     unless( defined $value && $value ne '' ) {
         $value = $params->{default};

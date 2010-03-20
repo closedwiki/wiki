@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1267946623" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1269044131" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarURLPARAM
 ---+++ URLPARAM{"name"} -- get value of a URL parameter
@@ -8,7 +8,7 @@
      | *Parameter:* | *Description:* | *Default:* |
      | ="name"= | The name of a URL parameter | required |
      | =default="..."= | Default value in case parameter is empty or missing | empty string |
-     | =newline="&lt;br /&gt;"= | Convert newlines in textarea to other delimiters | no conversion |
+     | =newline="$br"= | Convert newlines in textarea to other delimiters. Variables =$br= (for =&lt;br /&gt;= tag), =$n= (for newline) are expanded. Other text is encoded based on =encode= parameter. | no conversion |
      | =encode="off"= | Turn off encoding. See important security note below | =encode="safe"= |
      | =encode="quote"= | Escape double quotes with backslashes (=\"=), does not change other characters; required when feeding URL parameters into other TWiki variables. This encoding does not protect against cross-site scripting. | =encode="safe"= |
      | =encode="moderate"= | Encode special characters into HTML entities for moderate cross-site scripting protection: ="<"=, =">"=, single quote (='=) and double quote (="=) are encoded. Useful to allow TWiki variables in comment boxes. | =encode="safe"= |
