@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1268094844" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1269153313" format="1.1" version="$Rev$"}%
 ---+ Table Plugin
 
 Gives extra control of table display:
@@ -129,8 +129,9 @@ This plugin is pre-installed with your TWiki release. You should not have to ins
 |  Plugin Author: | TWiki:Main/JohnTalintyre, TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2001-2010, TWiki:Main/JohnTalintyre, Peter[at]Thoeny.org ([[http://www.twiki.net/][Twiki, Inc.]]), TWiki Contributors |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 1.1 (2010-03-08) |
+|  Plugin Version: | 1.11 (2010-03-21) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-03-21 | 1.11 TWikibug:Item6406 Fix incorrect sorting for negative numbers. -- TWiki:Main/BryanKitts |
 |  2010-03-08 | 1.1 TWikibug:Item6405 Fix incorrect sorting for numbers with decimal places. -- Peter Thoeny |
 |  30 Sep 2008 | 1.035 Fix sorting of attachment date column.  |
 |  03 Aug 2008 | 1.034 TWiki 4.2.1 release version |

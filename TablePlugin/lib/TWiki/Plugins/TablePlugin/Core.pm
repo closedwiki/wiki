@@ -533,7 +533,7 @@ m|^\s*([0-9]{1,2})[-\s/]*([A-Z][a-z][a-z])[-\s/]*([0-9]{4})\s*-\s*([0-9][0-9]):(
         $year += 2000 if ( length($year) == 2 );
         $date = timegm( 0, 0, 0, $1, $mon2num{$2}, $year - 1900 );
     }
-    elsif ( $text =~ /^\s*(([0-9]+)(\.([0-9]))?).*$/ ) {
+    elsif ( $text =~ /^\s*((-?[0-9]+)(\.([0-9]))?).*$/ ) {
 
         # for example for attachment sizes: 1.1 K
         # but also for other strings that start with a number
