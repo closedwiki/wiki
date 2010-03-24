@@ -141,6 +141,7 @@ sub installModule {
         }
         closedir(D);
     }
+    return 1;
 }
 
 sub copy_in {
@@ -298,6 +299,7 @@ unless (scalar(@ARGV)) {
 }
 
 my @modules;
+my @processed_modules;
 
 if ($ARGV[0] eq "all") {
     foreach my $dir (@twikiplugins_path) {
@@ -320,10 +322,19 @@ print(($installing ? 'I' : 'Uni'), "nstalling extensions: ",
       join(", ", @modules), "\n");
 
 foreach my $module (@modules) {
-    installModule($module);
+    my $rv = installModule($module);
+    
+    if ( $rv ) {
+       push( @processed_modules, $module);
+    }
+    
     if ((!$installing || $autoenable) && $module =~ /Plugin$/) {
         enablePlugin($module, $installing);
     }
 }
 
-print join(", ", @modules), ' ', ($installing ? 'i' : 'uni'), "nstalled\n";
+if ( scalar(@processed_modules) ) {
+   print join(", ", @modules), ' ', ($installing ? 'i' : 'uni'), "nstalled.\n";
+} else {
+   printf ("No modules were %snstalled.\n", ($installing ? 'i' : 'uni') );
+}
