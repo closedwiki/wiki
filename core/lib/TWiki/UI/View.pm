@@ -451,10 +451,7 @@ sub viewfile {
             if ($webName =~ /\/([^\/]+)$/) {$topic = $1;}  #topic name redefined here
             $webName =~ s/$topic$//o;
             $webName =~ s/\/$//o;
-
         }
-
-
     }
 
 
@@ -477,6 +474,16 @@ sub viewfile {
                                     topic => $topic,
                                     params => [ 'viewfile', $fileName||'?' ] );
     }
+
+    my $logEntry = $fileName;
+    if( $rev ) {
+        $logEntry .= ", r$rev";
+    }
+    if( $TWiki::cfg{Log}{viewfile} ) {
+        $session->writeLog( 'viewfile', $webName.'.'.$topic, $logEntry );
+    }
+
+
 # TSA SMELL: Maybe could be less memory hungry if get a file handle
 # and set response body to it. This way engines could send data the
 # best way possible to each one

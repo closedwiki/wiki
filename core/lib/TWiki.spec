@@ -628,6 +628,8 @@ $TWiki::cfg{AntiSpam}{RobotsAreWelcome} = $TRUE;
 # and is useful as an audit trail of TWiki activity.
 $TWiki::cfg{Log}{view}     = $TRUE; # very frequent, every page view
 # **BOOLEAN EXPERT**
+$TWiki::cfg{Log}{viewfile} = $TRUE; # when an attachment is viewed via viewfile
+# **BOOLEAN EXPERT**
 $TWiki::cfg{Log}{search}   = $TRUE;
 # **BOOLEAN EXPERT**
 $TWiki::cfg{Log}{changes}  = $TRUE; # infrequent if you use WebChanges
