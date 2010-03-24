@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 use strict;
+use warnings;
 
 use File::Path;
 use File::Copy;
@@ -101,13 +102,20 @@ sub installModule {
             last;
         }
     }
-    $moduleDir =~ s#/+$##;
-
-    unless (-d $moduleDir) {
-        print STDERR "--> Could not find $module\n";
-        return;
+    
+    if ( defined $moduleDir ) {
+       $moduleDir =~ s#/+$##;
+       
+       unless (-d $moduleDir) {
+           print STDERR "--> Could not find $module\n";
+           return;
+       }
+              
+    } else {
+       print STDERR "--> Could not find $module\n";
+       return;
     }
-
+    
     my $manifest = findRelativeTo("$moduleDir/lib/TWiki/$subdir/$module/",'MANIFEST');
 
     if( -e "$manifest" ) {
