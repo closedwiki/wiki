@@ -326,13 +326,13 @@ sub mapper_setEmails {
 
 =pod
 
----++ StaticMethod _mapper_get ($session, $table, $key)
+---++ StaticMethod mapper_get ($session, $table, $key)
 
 looks up data in mapping tables
 
 =cut
 
-sub _mapper_get {
+sub mapper_get {
     my $session = shift;
     my $table = shift;
 	my $key = shift;
@@ -342,6 +342,24 @@ sub _mapper_get {
 	( exists $mapping->{$table}) or return undef;	# exact table name exists
 	( exists $mapping->{$table}{$key}) or return undef;	# entry name exists
 	return $mapping->{$table}{$key};
+}
+
+=pod
+
+---++ StaticMethod mapper_keys ($session, $table )
+
+get keys from a mapping table
+
+=cut
+
+sub mapper_keys {
+    my $session = shift;
+    my $table = shift;
+	
+	my $mapping = $session->{users}{mapping};
+	( $table =~ /^[LOUW]2[AUW]$/ ) or return undef; # no snooping elsewhere
+	( exists $mapping->{$table}) or return undef;	# exact table name exists
+	return keys %{$mapping->{$table}};
 }
 
 =pod
@@ -383,34 +401,211 @@ sub save_openid_attrs {
 
 =pod
 
----++ StaticMethod add_openid_alias ($session, $cUID, $identity )
+---++ StaticMethod add_openid_identity ($session, $cUID, $attrs )
 
-Save an additional OpenID identity as an alias for the user
-
-This overrides TWiki::Users::TWikiUserMapping::mapper_getEmails in order
-to use the DB_File infrastructure of OpenIdRpContrib to access user OpenID
-attributes.
+Save an OpenID identity for the user
 
 =cut
 
-sub add_openid_alias {
+sub add_openid_identity {
     my $session = shift;
     my $cUID = shift;
 	my $attrs = shift;
 
-	# save OpenID mapping
-	my $identity = $attrs->{identity};
+	# check if other acct was using or pre-approved for that OpenID identity
 	my $mapping = $session->{users}{mapping};
+	my $identity = $attrs->{identity};
+	if ( exists $mapping->{O2U}{$identity}) {
+		# if it was in use, remove it first to maintain referential integrity
+		my $old_cUID = $mapping->{O2U}{$identity};
+		del_openid_identity( $session, $old_cUID, { identity => $identity });
+	}
+
+	# save OpenID mapping
 	$mapping->{O2U}{$identity} = $cUID;
 
-	# append OpenID attrs to existing records
+	# get OpenID identity records
 	my $attr_recs = $mapping->{U2A}{$cUID};
 	if ( ! defined $attr_recs ) {
 		$attr_recs = "";
 	}
 	my @recs = split ( $openid_rec_delim, $attr_recs );
+
+	# delete any existing records which contain the same identity
+	my $i;
+	for ( $i = 0; $i < scalar @recs; $i++ ) {
+		my %attr = split ( $openid_attr_delim, $recs[$i] );
+		if ( $attr{identity} eq $identity ) {
+			delete $recs[$i];
+			$i--;
+		}
+	}
+
+	# append OpenID attrs to existing records
 	push @recs, join( $openid_attr_delim, %$attrs );
+
+	# write modified attributes back
 	$mapping->{U2A}{$cUID} = join ( $openid_rec_delim, @recs );
+
+	# verify contents from tied DB and return status
+	my $test_u2a = $mapping->{U2A}{$cUID};
+	if ( !defined $test_u2a ) {
+		return 0;
+	}
+	my @test_recs = split ( $openid_rec_delim, $test_u2a );
+	for ( $i = 0; $i < scalar @test_recs; $i++ ) {
+		my %attr = split ( $openid_attr_delim, $recs[$i] );
+		if ( $attr{identity} eq $identity ) {
+			return 1;
+		}
+	}
+	return 0;
+}
+
+=pod
+
+---++ StaticMethod del_openid_user ($session, $cUID )
+
+Delete/purge an OpenID user from the system
+
+=cut
+
+sub del_openid_user {
+    my $session = shift;
+    my $cUID = shift;
+
+	# delete all the DB records associated with this user
+	my $mapping = $session->{users}{mapping};
+	my $wn = $mapping->getWikiName( $cUID );
+	my $login = lc($wn);
+	if ( exists $mapping->{L2U}{$login}) {
+		delete $mapping->{L2U}{$login};
+	}
+	if ( exists $mapping->{U2A}{$cUID}) {
+		delete $mapping->{U2A}{$cUID};
+	}
+	if ( exists $mapping->{U2W}{$cUID}) {
+		delete $mapping->{U2W}{$cUID};
+	}
+	if ( exists $mapping->{W2U}{$wn}) {
+		delete $mapping->{W2U}{$wn};
+	}
+
+	# make sure there are no stray O2U OpenID identities pointing to this cUID
+	my $key;
+	my $done = 0;
+	foreach $key ( keys %{$mapping->{O2U}}) {
+		if ( $mapping->{O2U}{$key} eq $cUID ) {
+			delete $mapping->{O2U}{$key};
+			$done = 1;
+			last;
+		}
+	}
+
+	# verify and return result
+	if ( $done and !exists $mapping->{O2U}{$key}) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+=pod
+
+---++ StaticMethod del_openid_identity ($session, $cUID, $params )
+
+Delete an OpenID identity for the user
+
+returns 0 for error, 1 for success removing record, 2 if last record was
+removed and user was deleted from the OpenID records.
+
+=cut
+
+sub del_openid_identity {
+    my $session = shift;
+    my $cUID = shift;
+	my $params = shift;
+
+	# get OpenID records
+	my $mapping = $session->{users}{mapping};
+	my $attr_recs = $mapping->{U2A}{$cUID};
+	if ( ! defined $attr_recs ) {
+		throw TWiki::OopsException( 'generic',
+			web => $session->{web}, topic => $session->{topic},
+			params => [ "no OpenID records found for this account",
+			"There are no OpenID records to delete.",
+			"cUID = $cUID", "" ]);
+	}
+	my @recs = split ( $openid_rec_delim, $attr_recs );
+
+	# determine index within user record of identity to delete
+	my ( $index, $identity );
+	if ( exists $params->{identity}) {
+		# check if the identity is known to this system at all
+		$identity = $params->{identity};
+		if ( !exists $mapping->{O2U}{$identity}) {
+			throw TWiki::OopsException( 'generic',
+				web => $session->{web}, topic => $session->{topic},
+				params => [ "OpenID identity does not match any account",
+				"There are no OpenID records to delete.",
+				"", "" ]);
+			
+		}
+
+		my $i;
+		for ( $i=0; $i < scalar @recs; $i++ ) {
+			my %attr = split ( $openid_attr_delim, $recs[$i] );
+			if ( $attr{identity} eq $identity ) {
+				$index = $i;
+				last;
+			}
+		}
+		if ( !defined $index ) {
+			throw TWiki::OopsException( 'generic',
+				web => $session->{web}, topic => $session->{topic},
+				params => [ "no OpenID found in $cUID matching $identity",
+				"There are no OpenID records to delete.",
+				"", "" ]);
+		}
+	} elsif ( exists $params->{index}) {
+		$index = $params->{index} - 1;
+	}
+
+	# delete OpenID identity by index
+	if ( !defined $identity ) {
+		my %attrs = split ( $openid_attr_delim, $recs[$index] );
+		$identity = $attrs{identity};
+	}
+	delete $recs[$index];
+	delete $mapping->{O2U}{$identity};
+
+	# if that was the last record, delete user from OpenID
+	# this maintains referential integrity of the data structures
+	if ( ! @recs ) {
+		if ( del_openid_user( $session, $cUID )) {
+			return 2;
+		} else {
+			return 0;
+		}
+	}
+
+	# write remaining records back
+	$mapping->{U2A}{$cUID} = join ( $openid_rec_delim, @recs );
+
+	# verify contents from tied DB and return status
+	my $test_u2a = $mapping->{U2A}{$cUID};
+	if ( !defined $test_u2a ) {
+		return 0;
+	}
+	my @test_recs = split ( $openid_rec_delim, $test_u2a );
+	my $i;
+	for ( $i = 0; $i < scalar @test_recs; $i++ ) {
+		my %attr = split ( $openid_attr_delim, $recs[$i] );
+		if ( $attr{identity} eq $identity ) {
+			return 0;
+		}
+	}
+	return 1;
 }
 
 # initialize the DB mapping data between OpenID and TWiki users
