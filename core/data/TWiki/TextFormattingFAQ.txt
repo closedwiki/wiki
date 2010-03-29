@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1197351701" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1269905591" format="1.1" version="$Rev$"}%
 ---++ Text Formatting FAQ
 
 The most frequently asked questions about text formatting are answered. Also, TextFormattingRules contains the complete TWiki shorthand system on one quick reference page.
@@ -31,9 +31,9 @@ If you want to display angle brackets, enter them as HTML codes instead of typin
      __Result:__ =(a &gt; 0)=
 
 ---
----+++ Some words appear highlighted, with a "?" link at the end. How can I prevent that?
+---+++ Some words appear highlighted with a red-link. How can I prevent that?
 
-A question mark after a word is a link to a topic that doesn't yet exist - click it to create the new page. This is a TWiki feature - typing a MeaningfulTitle in a comment is an invitation for someone else to add a new branch to the topic.  
+A red-link points to a topic that doesn't exist yet - click on it to create the new page. This is a TWiki feature - typing a MeaningfulTitle in a comment is an invitation for someone else to add a new branch to the topic.  
 
 To prevent auto-linking - say you want to enter a word like <nop>JavaScript - prefix the WikiStyleWord with an exclamation point: 
 
