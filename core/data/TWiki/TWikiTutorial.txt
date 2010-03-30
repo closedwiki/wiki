@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1269906577" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ 20-Minute TWiki Tutorial
 
@@ -46,8 +46,8 @@ Go to the [[Sandbox.%HOMETOPIC%][Sandbox]]. This is the sandbox web, where you c
    * Now, create a new topic - your own test page:
       1. In edit mode, enter a new text with a WikiWord, for example: <br />
          =This is <nop>%WIKINAME%Sandbox topic.=
-      1. Preview and save the topic. The name appears, highlighted, with a linked question mark at the end. This means that the topic doesn't exist yet.
-      1. Click on the question mark. Now you're in edit mode of the new topic.
+      1. Preview and save the topic. The name appears highlighted with a red-link. This means that the topic doesn't exist yet.
+      1. Click on the red-link. Now you're in edit mode of the new topic.
       1. Type some text, basically, like you write an e-mail.
       1. A signature with your name is already entered by default. __NOTE:__ The =%USERSWEB%.= in front of your name means that you have a link from the current web to your personal topic located in the %USERSWEB% web.
       1. Preview and save the topic...

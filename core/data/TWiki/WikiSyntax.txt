@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1269906285" format="1.1" version="$Rev$"}%
 ---+ TWiki Shorthand Basics
 
 If you can enter text, you're ready for TWiki. With a few simple, intuitive TextFormattingRules, you'll be able to use plain text to create well-styled postings, instantly. Here's a fast-track guide to shorthand basics...
@@ -15,8 +15,8 @@ If you can enter text, you're ready for TWiki. With a few simple, intuitive Text
 
    * To link to another Wiki topic, type the WikiWord for that topic. To link to a Wiki topic in another web, type the name of the web, and a dot, first: =Sandbox.<nop>%HOMETOPIC%=.
 
-   * If you enter a WikiWord for a topic that doesn't exist, it'll appear highlighted, with question mark at the end, prompting you (or someone else) to start off the new topic by clicking the *?* - NewTopic (click the *?*, but don't save, to preserve the example!).
-   
+   * If you enter a WikiWord for a topic that doesn't exist, it'll appear highlighted with a red-link, prompting you (or someone else) to start off the new topic by clicking the link - NewTopic (click the link, but don't save, to preserve the example!).
+
    * When entering <nop>WikiName signatures - like, <nop>%USERNAME% - include "%USERSWEB%." as a prefix, since all TWiki member pages are in the %USERSWEB% web: =%USERSWEB%.YourName=.
 
    * For an external link, type the full URL: =http://twiki.org/=.
