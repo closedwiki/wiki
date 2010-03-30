@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1141756239" format="1.1" version="$Rev$"}%
----++ Using HTML
+%META:TOPICINFO{author="TWikiContributor" date="1269909319" format="1.1" version="$Rev$"}%
+---++ Using HTML, CSS and !JavaScript
 
 %STARTINCLUDE%
 You can use most HTML tags in TWiki topics without a problem. This is useful where you want to
@@ -24,4 +24,30 @@ Recommendations when pasting HTML from other sources (using the plain-text edito
 When using a WYSIWYG editor, you can just copy-paste directly into the editor, and the content will
 be converted to [[#TWikiShorthand][TWiki shorthand]] automatically when you save.
 
+It is also possible to add Cascading Style Sheets ([[http://en.wikipedia.org/wiki/Cascading_Style_Sheets][CSS]]) and [[http://en.wikipedia.org/wiki/JavaScript][JavaScript]] code to TWiki pages, which can be used to make TWiki application more interactive. To prevent TWiki from interpreting some text as markup, it can be enclosed in HTML-escaped <tt>&lt;pre&gt;</tt>-tags.
+
+<table border="0" cellpadding="5" cellspacing="10">
+<tr bgcolor="#DDDDDD"><th valign="top">
+CSS Example:
+</th><th valign="top">
+!JavaScript Example:
+<tr bgcolor="#EEEEEE"><td valign="top">
+<verbatim>
+<!-- <pre> -->
+<script language="javascript">
+<!--
+  // put your JavaScript code here
+//-->
+</script>
+<!-- </pre> -->
+</verbatim>
+</td><td valign="top">
+<verbatim>
+<!-- <pre> -->
+<style type="text/css">
+  /* put your CSS code here */
+</style>
+<!-- </pre> -->
+</verbatim>
+</td></tr></table>
 %STOPINCLUDE%

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1141756708" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1269909452" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 ---+ TWiki Text Formatting
 
@@ -11,7 +11,7 @@ Working in TWiki is as easy as typing in text. You don't need to know HTML, thou
 
 %INCLUDE{"TWikiEditingShorthand"}%
 
----++ Using HTML
+---++ Using HTML, CSS and !JavaScript
 
 %INCLUDE{"UsingHTML"}%
 
@@ -23,7 +23,7 @@ Being able to create links without any special formatting is a core TWiki featur
 
    * GoodStyle is a WikiWord that links to the <nop>GoodStyle topic located in the current web.
 
-   * NotExistingYet is a topic waiting to be written. Create the topic by clicking on the *?*. (Try clicking, but then, *Cancel* - creating the topic would wreck this example!)
+   * NotExistingYet is a topic waiting to be written because it is a red-link. Create the topic by clicking on the link. (Try clicking, but then, *Cancel* - creating the topic would wreck this example!)
 
 ---+++ External Links
 
