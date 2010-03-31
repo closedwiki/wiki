@@ -328,6 +328,10 @@ $query = new CGI;
 my $url = $query->url();
 my $action = $query->param('action') || 'Configure';
 my $expertsMode = defined($query->param('expert'));
+my $confirm = defined($query->param('confirm')) || 0;
+my $cfgAccess = $query->param('cfgAccess');
+
+
 
 # Handle serving an image embedded in the configure page, before generating
 # any other output
@@ -420,6 +424,12 @@ if ($sanityUI->insane() || $query->param('abort')) {
     print $sanityStatement;
 } else {
 
+
+if (!defined $cfgAccess) {
+       $action = 'PromptPassword';
+}
+     
+
     $action =~ s/\W//g;
     my $method = '_action'.$action;
 
@@ -479,8 +489,17 @@ sub _actionNext {
     # create the root of the UI
     my $root = new TWiki::Configure::Root();
     my $ui;
-    if (!TWiki::Configure::UI::authorised()) {
-        print CGI::h2('Authorisation is required to save.');
+   if(!TWiki::Configure::UI::authorised()) {
+        $ui = _checkLoadUI('PromptPASS', $root);
+        return 1 unless $ui;
+        print $ui->ui(1, 'Configure');
+        return 1;
+   } #Here i am authenticated user
+
+
+#TODO - if authorisation fails - redirect to authentication form
+    if (!$confirm) {
+        print CGI::h2('Please confirm the following Changes');
         print CGI::div($modified.' configuration item'.
                          ($modified==1?' was':'s were').' changed');
         if ($modified) {
@@ -489,6 +508,7 @@ sub _actionNext {
         $ui = _checkLoadUI('AUTH', $root);
         return 1 unless $ui;
         print $ui->ui(1, 'Save');
+        
     } else {
         # Load the specs from the .spec files and generate the UI template
         TWiki::Configure::TWikiCfg::load($root, 1);
@@ -498,6 +518,72 @@ sub _actionNext {
         print $ui->ui($root, $valuer, \%updated);
     }
     return 1;
+}
+# Action invoked for prompting the Password on the main screen
+sub _actionPromptPassword{
+
+
+my $root =  new TWiki::Configure::Root();
+my $valuer = new TWiki::Configure::Valuer( $TWiki::defaultCfg, \%TWiki::cfg);
+
+
+print <<HERE;
+
+ <div class="explanation">
+   <ul>
+    <li><b>If your TWiki site is already working</b>, continue to
+     <a rel="nofollow" href="$TWiki::cfg{ScriptUrlPath}/view$TWiki::cfg{ScriptSuffix}/$TWiki::cfg{SystemWebName}/WebHome">
+browse to the TWiki WebHome</a>.
+     <ul>
+      <li>You will now need to consider how you are going to manage
+       authentication and access control. See the reference manual
+       sections on <a rel="nofollow" href="$TWiki::cfg{ScriptUrlPath}/view$TWiki::cfg{ScriptSuffix}/$TWiki::cfg{SystemWebName}/TWikiUserAuthentication">
+ authentication</a>
+       and
+       <a rel="nofollow" href="$TWiki::cfg{ScriptUrlPath}/view$TWiki::cfg{ScriptSuffix}/$TWiki::cfg{SystemWebName}/TWikiAccessControl">
+        access control</a>, and the
+       <a rel="nofollow" href="#" onclick="foldBlock('SecuritySetup'); return false;">Security Setup</a>
+       section below.
+      </li>
+     </ul>
+    </li>
+    <li><b>To become an administrator</b> you need to first <a rel="nofollow" href="$TWiki::cfg{ScriptUrlPath}/view$TWiki::cfg{ScriptSuffix}/$TWiki::cfg{SystemWebName}/TWikiRegistration">
+register</a> as a normal user first and then add your wikiname to the <a rel="nofollow" href="$TWiki::cfg{ScriptUrlPath}/view$TWiki::cfg{ScriptSuffix}/$TWiki::cfg{UsersWebName}/$TWiki::cfg{SuperAdminGroup}">
+ $TWiki::cfg{SuperAdminGroup}</a> (follow the text in yellow).
+    </li>
+    <li>
+     <b>If you are on a non-standard platform or environment</b> there are a lot of
+     <a href="http://twiki.org/cgi-bin/view/TWiki/SupplementalDocument">supplemental documents</a>
+     on TWiki.org describing how to
+     <a href="http://twiki.org/cgi-bin/view/TWiki/InstallingTWiki">install</a>,
+     <a href="http://twiki.org/cgi-bin/view/TWiki/UpgradingTWiki">upgrade</a>,
+     <a href="http://twiki.org/cgi-bin/view/TWiki/InternationalizationSupplement">internationalize</a> and
+     <a href="http://twiki.org/cgi-bin/view/TWiki/SecuringTWikiSite">secure</a>
+     your installation.
+    </li>
+    <li>
+      <b>If you get stuck</b> there is a lot of support available at the
+      <a href="http://twiki.org/cgi-bin/view/Support/WebHome">TWiki:Support</a>
+      forum and on
+      <a href="http://twiki.org/cgi-bin/view/Codev/TWikiIRC">TWikiIRC</a>
+      (irc.freenode.net, channel #twiki). <a href="http://www.twiki.net">Twiki, Inc.</a> provides commercial support and hosting solutions.
+     </li>
+    </ul>
+   </div>
+HERE
+   
+        if(!TWiki::Configure::UI::authorised()) {
+          ## TODO...Add meaningful line
+         
+        my $ui = _checkLoadUI('PromptPASS', $root);
+        return 1 unless $ui;
+        print $ui->ui(1, 'Configure');
+        return 1;
+      }else {
+     ## Password is verified and is correct...
+    
+   }
+
 }
 
 # Invoked by "find more extensions" button in the Extensions section
@@ -532,6 +618,15 @@ sub _actionInstallExtension {
 # This is the default screen
 sub _actionConfigure {
 
+
+   my $root = new TWiki::Configure::Root();
+   if(!TWiki::Configure::UI::authorised()) {
+        my $ui = _checkLoadUI('PromptPASS', $root);
+        return 1 unless $ui;
+        print $ui->ui(1, 'Configure');
+        return 1;
+   } #Here i am authenticate
+
     $TWiki::Configure::UI::toterrors = 0;
     $TWiki::Configure::UI::totwarnings = 0;
 
@@ -552,7 +647,7 @@ sub _actionConfigure {
     my $cgiui = TWiki::Configure::UI::loadChecker('CGISetup', $stub);
 
     # Use a separate root for the _saveable_ sections
-    my $root = new TWiki::Configure::Root();
+    # my $root = new TWiki::Configure::Root();
     my $valuer = new TWiki::Configure::Valuer(
         $TWiki::defaultCfg, \%TWiki::cfg);
     # Load the config structures.
@@ -678,7 +773,7 @@ HERE
               ($TWiki::Configure::UI::totwarnings==1?'':'s');
         print CGI::div($mess);
     }
-
+    print CGI::hidden('cfgAccess', $cfgAccess); 
     print CGI::p(CGI::submit(-class=>'twikiSubmit',
                              -name=>'action',
                              -value=>'Next',
