@@ -1,0 +1,12 @@
+%META:TOPICINFO{author="TWikiContributor" date="1270075721" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarTWISTY
+---+++ TWISTY{ _attributes_ } -- dynamically open and close sections of content
+   * The =%<nop>TWISTY{}%= variable is handled by the TwistyPlugin. 
+   * Syntax: =%<nop>TWISTY{}% ... %<nop>ENDTWISTY%=
+   * See plugin topic for explanation of variables and attributes
+   * Example:%BR%
+     =%<nop>TWISTY{}%= %BR%
+     =my twisty content= %BR%
+     =%<nop>ENDTWISTY%=
+   * Related: TwistyPlugin, TwistyContrib
