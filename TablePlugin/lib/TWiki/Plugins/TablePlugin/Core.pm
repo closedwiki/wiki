@@ -514,27 +514,23 @@ sub _convertToNumberAndDate {
         $date = 0;
     }
 
-    if ( $text =~
-m|^\s*([0-9]{1,2})[-\s/]*([A-Z][a-z][a-z])[-\s/]*([0-9]{4})\s*-\s*([0-9][0-9]):([0-9][0-9])|
-      )
-    {
+    if ( $text =~ m|^\s*([0-9]{4})[-\s/]0?([0-9]{1,2})[-\s/]0?([0-9]{1,2})| ) {
+        # ISO date "2010-03-31", "2010/3/31"
+        $date = timegm( 0, 0, 0, $3, $2 - 1, $1 - 1900 );
 
+    } elsif ( $text =~ m|^\s*([0-9]{1,2})[-\s/]*([A-Z][a-z][a-z])[-\s/]*([0-9]{4})\s*-\s*([0-9][0-9]):([0-9][0-9])| ) {
         # "31 Dec 2003 - 23:59", "31-Dec-2003 - 23:59",
         # "31 Dec 2003 - 23:59 - any suffix"
         $date = timegm( 0, $5, $4, $1, $mon2num{$2}, $3 - 1900 );
-    }
-    elsif ( $text =~
-        m|^\s*([0-9]{1,2})[-\s/]([A-Z][a-z][a-z])[-\s/]([0-9]{2,4})\s*$| )
-    {
 
+    } elsif ( $text =~ m|^\s*([0-9]{1,2})[-\s/]([A-Z][a-z][a-z])[-\s/]([0-9]{2,4})\s*$| ) {
         # "31 Dec 2003", "31 Dec 03", "31-Dec-2003", "31/Dec/2003"
         my $year = $3;
         $year += 1900 if ( length($year) == 2 && $year > 80 );
         $year += 2000 if ( length($year) == 2 );
         $date = timegm( 0, 0, 0, $1, $mon2num{$2}, $year - 1900 );
-    }
-    elsif ( $text =~ /^\s*((-?[0-9]+)(\.([0-9]))?).*$/ ) {
 
+    } elsif ( $text =~ /^\s*(([\+\-]?[0-9]+)(\.([0-9]))?).*$/ ) {
         # for example for attachment sizes: 1.1 K
         # but also for other strings that start with a number
         $num = $1;
