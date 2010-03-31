@@ -23,7 +23,7 @@ use TWiki::Configure::UI;
 use base 'TWiki::Configure::UI';
 
 my %nonos = (
-    cfgAccess=>1,
+#    cfgAccess=>1, 
     newCfgP=>1,
     confCfgP=>1,
    );
@@ -49,13 +49,9 @@ sub ui {
     $output .= "<div id ='twikiPassword'><div class='twikiFormSteps'>\n";
 
     $output .= CGI::div({ class=>'twikiFormStep' },
-                   CGI::h3('Enter the configuration password'));
-
-    $output .= CGI::div({ class=>'twikiFormStep' },
-                   CGI::h3(CGI::strong("Your Password:")).
-                       CGI::p(CGI::password_field(
-                           'cfgAccess', '', 20, 80 ) . '&nbsp;' .
+                       CGI::p(
                              CGI::submit(-class=>'twikiSubmit',
+                                          -name=>'confirm',
                                          -value=>$actionMess)));
 
     if ($TWiki::cfg{Password} ne '') {
@@ -67,6 +63,9 @@ To reset the password, log in to the server and delete the
 <code>lib/LocalSite.cfg</code>
 HERE
     }
+
+
+##TODO - need to remove following form from this location
 
     $output .= '</div><!--/twikiFormSteps--></div><!--/twikiPassword-->';
 
