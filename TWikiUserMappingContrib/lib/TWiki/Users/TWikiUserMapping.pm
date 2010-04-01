@@ -1,8 +1,9 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2007 Sven Dowideit, SvenDowideit@distributedINFORMATION.com
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
+# Copyright (C) 2007-2010 TWiki Contributors. All Rights Reserved. 
+# TWiki Contributors are listed in the AUTHORS file in the root of this
+# distribution.
 # NOTE: Please extend that file, not this notice.
 #
 # This program is free software; you can redistribute it and/or
@@ -157,6 +158,10 @@ sub handlesUser {
 
     # Check the login id to see if we know it
 	return 1 if ($login && $this->_userReallyExists( $login ));
+
+    # FIXME: Hack to make PasswordManager 'TWiki::Users::LdapUser' work with
+    # UserMappingManager 'TWiki::Users::TWikiUserMapping'
+    return 1 if ( $TWiki::cfg{PasswordManager} eq 'TWiki::Users::LdapUser' );
 
     # Or the wiki name
 	if ($wikiname) {
