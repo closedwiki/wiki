@@ -1,6 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2007 - 2008 Andrew Jones, andrewjones86@googlemail.com
+# Copyright (C) 2007-2008 Andrew Jones, andrewjones86@googlemail.com
+# Copyright (C) 2007-2010 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,8 +21,8 @@ use strict;
 
 use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $debug $pluginName $NO_PREFS_IN_TOPIC $id $doneYui $doneStyle @loadedData);
 
-$VERSION = '$Rev: 14277 (24 Jun 2007) $';
-$RELEASE = 'TWiki-4.2';
+$VERSION = '$Rev: 14277$';
+$RELEASE = '2010-04-01';
 $SHORTDESCRIPTION = 'Provides an Autocomplete input field based on Yahoo\'s User Interface Library';
 
 $NO_PREFS_IN_TOPIC = 1;

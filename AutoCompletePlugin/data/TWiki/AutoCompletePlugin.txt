@@ -1,11 +1,19 @@
+%META:TOPICINFO{author="TWikiContributor" date="1270145370" format="1.1" version="$Rev$"}%
+<!--
+   Contributions to this plugin are appreciated. Please update the plugin page at
+   http://twiki.org/cgi-bin/view/Plugins/AutoCompletePlugin or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/AutoCompletePluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
 ---+!! !AutoCompletePlugin
 <!--
 One line description, required for extensions repository catalog.
-    * Set SHORTDESCRIPTION = Provides an Autocomplete input field based on Yahoo's User Interface Library
+    * Set SHORTDESCRIPTION = Autocomplete input field with select options as you type
 -->
-This plugin allows you to create an autocomplete input field based on Yahoo's User Interface Library.
 
-All this plugin does is implement Arthur Clemens' TWiki:Plugins/AutoCompleteAddOn as a plugin, which allows users to provide an autocomplete text box using the =%<nop>AUTOCOMPLETE%= syntax, and also in %TWIKIWEB%.TWikiForms (shown below).
+This plugin provides [[http://en.wikipedia.org/wiki/Autocomplete][autocomplete]] functionality for input field with select options as you type. It is based on Yahoo's User Interface Library.
+
+All this plugin does is implement Arthur Clemens' TWiki:Plugins/AutoCompleteAddOn as a plugin, which allows users to provide an autocomplete text box using the =%<nop>AUTOCOMPLETE%= syntax, and also in %SYSTEMWEB%.TWikiForms (shown below).
 
 <img src="%ATTACHURLPATH%/AutoCompletePluginScreenshot.png" alt="screenshot.png" />
 
@@ -21,7 +29,7 @@ This plugin expands the =%<nop>AUTOCOMPLETE{...}%= variable, which takes the par
 
 ---+++ In !TWikiForms
 
-To use this plugin in %TWIKIWEB%.TWikiForms, create a form template as descibed in %TWIKIWEB%.TWikiForms#Defining_a_Form. This plugin adds the =autocomplete= type of field. To pass the parameters required by the plugin, place them in the =Values= column. An example is shown below:
+To use this plugin in %SYSTEMWEB%.TWikiForms, create a form template as descibed in %SYSTEMWEB%.TWikiForms#Defining_a_Form. This plugin adds the =autocomplete= type of field. To pass the parameters required by the plugin, place them in the =Values= column. An example is shown below:
 
 | *Name* | *Type* | *Size* | *Values* | *Tooltip message* | *Attributes* |
 | Username | autocomplete | 25em | datatopic="Sandbox.AutoCompletePluginTestData" datasection="usernames" delimchar="," itemformat="item[0] + ' (' + item[1] + ')'" | |  | 
@@ -82,26 +90,25 @@ var SubmitJump = function(sType, aArgs) {
 
 ---++ Plugin Info
 
-|  Plugin Author(s): | TWiki:Main.AndrewRJones |
+|  Plugin Author: | TWiki:Main.AndrewRJones |
 |  Copyright: | &copy; 2007 - 2008, TWiki:Main.AndrewRJones |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  12 Sept 2008 | Bugs:Item5745 - Updated to use latest YUI (2.5.2); Fixed forms for 4.2; Fixed Jump Form example for 4.2 |
-|  14585 | Bugs:Item4469 - Removed extra self-closing div-tag tail; Fixed Jump Form example |
-|  14413 | Bugs:Item4369 - Allow users to define their own item select handler |
-|  14391 | Bugs:Item4356 - Class names not being added |
-|  14382 | Bugs:Item4346 - Added Javascript parameters (=onblur=, =onfocus=, etc) |
-|  14381 | Bugs:Item4345 - Was adding 'null' after input if =delimchar= not set |
-|  14379 | Bugs:Item4342 - Only sets correct size for one texfield in topic |
-|  14290 | Bugs:Item4304 - Various bug fixes and enhancements |
-|  14277 | Bugs:Item4301 - Initial release |
+|  2010-04-01 | TWikibug:Item6415 - Added VarAUTOCOMPLETE variable documentation topic -- TWiki:Main/PeterThoeny |
+|  2008-09-12 | TWikibug:Item5745 - Updated to use latest YUI (2.5.2); Fixed forms for 4.2; Fixed Jump Form example for 4.2 |
+|  14585 | TWikibug:Item4469 - Removed extra self-closing div-tag tail; Fixed Jump Form example |
+|  14413 | TWikibug:Item4369 - Allow users to define their own item select handler |
+|  14391 | TWikibug:Item4356 - Class names not being added |
+|  14382 | TWikibug:Item4346 - Added Javascript parameters (=onblur=, =onfocus=, etc) |
+|  14381 | TWikibug:Item4345 - Was adding 'null' after input if =delimchar= not set |
+|  14379 | TWikibug:Item4342 - Only sets correct size for one textfield in topic |
+|  14290 | TWikibug:Item4304 - Various bug fixes and enhancements |
+|  14277 | TWikibug:Item4301 - Initial release |
 |  Dependencies: | %$DEPENDENCIES% |
-|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, AutoCompletePlugin nn% |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %SYSTEMWEB%.GoodStyle nn%, %SYSTEMWEB%.FormattedSearch nn%, AutoCompletePlugin nn% |
 |  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/AutoCompletePlugin |
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/AutoCompletePluginDev |
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/AutoCompletePluginAppraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
-
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the feedback topic on twiki.org instead. -->
+__Related Topics:__ VarAUTOCOMPLETE, %SYSTEMWEB%.TWikiPlugins, %SYSTEMWEB%.DeveloperDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory, %SYSTEMWEB%.TWikiPreferences

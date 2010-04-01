@@ -1,0 +1,14 @@
+%META:TOPICINFO{author="TWikiContributor" date="1270144785" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarAUTOCOMPLETE
+---+++ AUTOCOMPLETE{ _attributes_ } -- autocomplete input field with select options as you type
+   * This adds autocomplete to HTML forms and %SYSTEMWEB%.TWikiForms. The =%<nop>AUTOCOMPLETE{}%= variable is handled by the AutoCompletePlugin. See plugin topic for documentation. 
+   * Syntax: =%<nop>AUTOCOMPLETE{ _attributes_ }%=
+   * Example autocomplete field for HTML form: %BR%
+     =&lt;form name="myJumpForm" action="%<nop>SCRIPTURLPATH{"view"}%/%<nop>BASEWEB%/%<nop>BASETOPIC%"&gt;= %BR%
+     =%<nop>AUTOCOMPLETE{name="topic" datatopic="Sandbox.AutoCompletePluginTestData" onfocus="twiki.Form.clearBeforeFocusText(this);" onblur="twiki.Form.restoreBeforeFocusText(this);" datasection="topiclist" value="Jump" formname="myJumpForm" class="twikiInputField twikiInputFieldBeforeFocus" }%= %BR%
+     =&lt;/form&gt;=
+   * Example autocomplete field definition of a !TWikiForm: %BR%
+     =| <nop>*Name* | <nop>*Type* | <nop>*Size* | <nop>*Values* | <nop>*Tooltip message* | <nop>*Attributes* |= %BR%
+     =| Username | autocomplete | 25em | datatopic="Sandbox.AutoCompletePluginTestData" datasection="usernames" delimchar="," itemformat="item[0] + ' (' + item[1] + ')'" | |  |=
+   * Related: AutoCompletePlugin
