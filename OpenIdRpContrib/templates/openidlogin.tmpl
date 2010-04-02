@@ -156,18 +156,17 @@ Enter the !OpenID identity URL
 
 <!-- openid_acon_panel_heading -->
 %TMPL:DEF{"openid_acon_panel_heading"}%<div class="twiki_openid_acon_panel_heading">
-%OPENID_USER_COUNT% !OpenID user records
+%USER_COUNT_TOTAL% user records: %USER_COUNT_OPENID% !OpenID, %USER_COUNT_NONOPENID% other
 <div class="twiki_openid_acon_panel_heading_note">
-This console only displays users who have !OpenID records.
 </div></div>%TMPL:END%
 
 <!-- openid_acon_upanel_heading -->
 %TMPL:DEF{"openid_acon_upanel_heading"}%<div class="twiki_openid_acon_panel_heading">
-Edit !OpenID user [[%USERSWEB%.%user%][%user%]]
+Edit user [[%USERSWEB%.%user%][%user%]]
 <div class="twiki_openid_acon_upanel_heading_form">
 <form action="%TOPICURL%"  method="post">
 <input type="hidden" name="user" value="%user%">
-<button type="submit" class="twiki_openid_acon_heading_form_button" name="deleteuser" title="Delete this TWiki user's !OpenID records" value="%user%"><img src="%PUBURL%/TWiki/OpenIdRpContrib/Crystal_Clear_action_edit_delete_16.png" width="16" height="16" border="0" alt="">Delete user</button>
+<button type="submit" class="twiki_openid_acon_heading_form_button" name="deleteuser" title="Delete this TWiki user's !OpenID records" value="%user%"><img src="%PUBURL%/TWiki/OpenIdRpContrib/Crystal_Clear_action_edit_delete_16.png" width="16" height="16" border="0" alt="">Delete <nop>OpenID data for <nop>%user%</button>
 </form>
 </div></div>
 <div class="twiki_openid_acon_upanel_heading_info">
@@ -236,8 +235,9 @@ Select from accounts starting with: %OPENID_ACON_ULINKS%
 %TMPL:DEF{"openid_acon_attr"}%<div class="twiki_openid_acon_attr twiki_openid_acon_attr_%OPENID_ATTR_ODDEVEN%"><nop>%OPENID_ATTR_KEY%: <nop>%OPENID_ATTR_VAL%</div>%TMPL:END%
 
 <!-- openid_acon_recs_empty - string to explain no OpenID entries -->
-%TMPL:DEF{"openid_acon_recs_empty"}%<div class="twiki_openid_acon_err">no <nop>OpenID identities are attached to this account</div>
-%TMPL:END%
+%TMPL:DEF{"openid_acon_recs_empty"}%<div class="twiki_openid_acon_rec">
+<div class="twiki_openid_acon_id"><img src="%PUBURL%/TWiki/OpenIdRpContrib/Crystal_Clear_action_identity_16.png" width="16" height="16" border="0" alt="">No <nop>OpenID identities are attached to this account</div>
+There is no <nop>OpenID identity for this user until an admin pre-approves it or the user logs in by a non-<nop>OpenID method and adds it</div>%TMPL:END%
 
 <!-- openid_ucon - User console -->
 %TMPL:DEF{"openid_ucon"}%<div class="twiki_openid_ucon">

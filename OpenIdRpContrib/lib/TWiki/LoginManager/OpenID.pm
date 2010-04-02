@@ -53,7 +53,7 @@ our ( $debug, @op_list, $no_user_add_id, $no_user_del_id, $ua_class,
 	$op_dom_whitelist, $op_dom_blacklist, @req_fields1, @opt_fields1,
 	@policy_url1, @req_fields2, @opt_fields2, $auto_register_user,
 	$auto_create_user, $user_menu_thresh1, $user_menu_thresh2, $reg_web,
-	$reg_page );
+	$reg_page, $forbidden_accounts );
 
 =pod
 
@@ -155,6 +155,12 @@ sub new {
 	$reg_page = ( exists $TWiki::cfg{OpenIdRpContrib}{TWikiRegistrationTopic})
 		? $TWiki::cfg{OpenIdRpContrib}{TWikiRegistrationTopic}
 		: "TWikiRegistration";
+
+	# make hash keyed w/ names of forbidden accounts for OpenID
+	$forbidden_accounts =
+		( exists $TWiki::cfg{OpenIdRpContrib}{ForbiddenAccounts})
+		? ( $TWiki::cfg{OpenIdRpContrib}{ForbiddenAccounts})
+		: "TWikiContributor,TWikiGuest,TWikiRegistrationAgent,UnknownUser";
 
     # override TWiki::LoginManager's LOGIN tag handler with OpenID-specific one
     TWiki::registerTagHandler('LOGIN', \&_LOGIN);
@@ -684,6 +690,7 @@ sub openid_provider_login
 					}
 				);
 			}
+			$query->delete( 'username', 'password' );
             my $check_url = $claimed_id->check_url (
 				# The place we go back to.
 				return_to  => $query->self_url,
@@ -834,9 +841,17 @@ sub login {
 		# a redirect command was output - all done, let it happen
 		return;
 	}
+	if ( ! exists $openid_res->{vident}) {
+		debug "openid_provider_login returned without vident:", ( %openid_p );
+		throw TWiki::OopsException( 'generic',
+			web => $session->{web}, topic => $session->{topic},
+			params => [ "OpenID login failed",
+			"Data is missing from OP server response - this is unexpected",
+			"The admins can find more details in the server logs", "" ]);
+	}
 
 	#
-	# We only get here if the OpenID exchange completed successfully
+	# We should only get here if the OpenID exchange completed successfully
 	#
 
 	# check URL to redirect now-logged-in user to
@@ -1362,7 +1377,7 @@ sub _admin_console
 	}
 
 	# generate admin console content
-	my $wn_count;
+	my ( $wn_count_total, $wn_count_openid, $wn_count_nonopenid );
 	if ( exists $vars->{user}) {
 		# admin console for editing a user
 		$vars->{cuid} = TWiki::Users::OpenIDMapping::mapper_get( $twiki, "W2U",
@@ -1372,31 +1387,36 @@ sub _admin_console
 	} else {
 		# admin console for menu of users to edit
 
+		# stuff list of forbidden accounts into a hash for quick lookup
+		my %forbidden_accounts;
+		foreach ( split /,\s*/, $forbidden_accounts ) {
+			$forbidden_accounts{$_} = 1;
+		}
+
 		# read user list for menu
+		my ( @wn, $wn );
 		my $mapping_id = $TWiki::Users::OpenIDMapping::OPENID_MAPPING_ID;
 		my $filter = lc($vars->{filter});
 		$filter =~ s/\W//g;
-		my @ukeys;
+		my @raw_wn = grep { ! exists $forbidden_accounts{$_}}
+			keys %{$mapping->{W2U}};
 		if (( defined $filter ) and ( length $filter )) {
-			@ukeys = grep /^$mapping_id$filter/i,
-				( TWiki::Users::OpenIDMapping::mapper_keys( $twiki, "U2A" ));
+			@wn = sort grep /^$filter/i, @raw_wn;
 		} else {
-			@ukeys = TWiki::Users::OpenIDMapping::mapper_keys( $twiki, "U2A" );
+			@wn = sort @raw_wn;
 		}
-		my ( @wn, $wn );
-		foreach my $ukey ( @ukeys ) {
-			$wn = TWiki::Users::OpenIDMapping::mapper_get( $twiki, "U2W", $ukey );
-			push @wn, $wn if defined $wn;
-		}
-		@wn = sort @wn;
 
 		# count the total number of OpenID users
-		$wn_count = scalar keys %{$mapping->{U2A}};
+		$wn_count_openid = scalar grep { ! exists $forbidden_accounts{$_}}
+			keys %{$mapping->{U2A}};
+		$wn_count_total = scalar grep { ! exists $forbidden_accounts{$_}}
+			keys %{$mapping->{W2U}};
+		$wn_count_nonopenid = $wn_count_total - $wn_count_openid;
 
 		# generate different levels of menus based on how many users there are
 		my $level = 1;
-		$level++ if ( $wn_count > $user_menu_thresh1 );
-		$level++ if ( $wn_count > $user_menu_thresh2 );
+		$level++ if ( $wn_count_total > $user_menu_thresh1 );
+		$level++ if ( $wn_count_total > $user_menu_thresh2 );
 		$level -= length $filter;
 		if ( $level > 1 ) {
 			# generate links to query down to smaller lists of accounts
@@ -1441,7 +1461,9 @@ sub _admin_console
 		$vars->{OPENID_ADMIN_PANEL_HEADING} = "%openid_acon_panel_heading%";
 	}
 	$vars->{OPENID_USER} = $admin_user;
-	$vars->{OPENID_USER_COUNT} = $wn_count;
+	$vars->{USER_COUNT_TOTAL} = $wn_count_total;
+	$vars->{USER_COUNT_OPENID} = $wn_count_openid;
+	$vars->{USER_COUNT_NONOPENID} = $wn_count_nonopenid;
 	my $console =  _resolve_console_vars( $twiki, '%openid_acon%', $vars );
 	
 	# insert CSS in header
@@ -1548,7 +1570,7 @@ sub  _user_console_claim
 	}
 
     # collect OpenID parameters
-    my @openid_keys = "openid.claimed_id";
+    my @openid_keys = ( "openid.claimed_id" );
     my %openid_p = ( claimed_id => $claimed_id );
 	my $o_ref = { keys => \@openid_keys, params => \%openid_p };
 
@@ -1560,6 +1582,18 @@ sub  _user_console_claim
 		# a redirect command was output - all done, let it happen
 		return -1;
 	}
+	if ( ! exists $openid_res->{vident}) {
+		debug "openid_provider_login returned without vident:", ( %openid_p );
+		throw TWiki::OopsException( 'generic',
+			web => $twiki->{web}, topic => $twiki->{topic},
+			params => [ "OpenID login failed",
+			"Data is missing from OP server response - this is unexpected",
+			"The admins can find more details in the server logs", "" ]);
+	}
+
+	#
+	# We should only get here if the OpenID exchange completed successfully
+	#
 
 	# collect user info from OpenID Provider
 	my ( $first_name, $last_name, $email, $country );
@@ -1634,7 +1668,7 @@ sub _user_console
 	if ( $res == -1 ) {
 		# a redirect was issued in the call - bail out
 		return;
-	} elsif ( !exists $vars->{message}) {
+	} elsif (( defined $res ) and !exists $vars->{message}) {
 		$vars->{message} = $action." ".( $res ? "succeeded" : "failed" );
 	}
 
