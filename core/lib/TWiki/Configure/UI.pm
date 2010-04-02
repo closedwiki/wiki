@@ -198,10 +198,15 @@ sub hidden {
 # the configuration file is actually saved.
 sub authorised {
     my $pass = $TWiki::query->param('cfgAccess');
+    my $newPass = $TWiki::query->param('newCfgP');
 
     # The first time we get here is after the "next" button is hit. A password
     # won't have been defined yet; so the authorisation must fail to force
     # a prompt.
+    if (defined ($newPass)) {
+          $pass = $newPass;
+    }    
+
     if (!defined($pass)) {
         return 0;
     }
@@ -225,7 +230,6 @@ HERE
 
     # Password is correct, or no password defined
     # Change the password if so requested
-    my $newPass = $TWiki::query->param('newCfgP');
 
     if ($newPass) {
         my $confPass = $TWiki::query->param('confCfgP') || '';

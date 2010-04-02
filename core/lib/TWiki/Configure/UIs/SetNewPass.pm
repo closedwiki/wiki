@@ -53,9 +53,12 @@ sub ui {
 								 CGI::p( CGI::password_field( 
                                      'confCfgP', '', 20, 80 )
                                   ));
-        $submitStr = 'Change Password and '.$submitStr;
+        $submitStr = $submitStr;
         $output .= CGI::div( { class=>'twikiFormStep twikiLast' },
-                             CGI::submit( -class=>'twikiSubmit', -value=>$submitStr ));
+                             CGI::submit( 
+                                  -name=>'action',
+                                  -class=>'twikiSubmit',
+                                  -value=>$submitStr ));
         $output .= "</div><!--/twikiFormSteps--></div><!--/twikiPasswordChange-->";
 
     return $output.CGI::end_form();

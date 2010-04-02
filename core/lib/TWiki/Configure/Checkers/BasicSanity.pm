@@ -94,7 +94,7 @@ write a new configuration file due to these errors:
 <pre/>$errs<pre>
 You can view the default configuration, but you will not be able to save.
 HERE
-            $badLSC = 1;
+            $badLSC = 2;
         } else {
             $result .= <<HERE;
 Could not find existing configuration file $this->{LocalSiteDotCfg}.
@@ -107,7 +107,7 @@ General path settings</a> section below and click 'Next' to save before returnin
 <p />
 If you previously ran configure and saved the configuration, then please check for the existence of lib/LocalSite.cfg, and make sure the webserver user can read it.
 HERE
-            $badLSC = 1;
+            $badLSC = 3;
         }
     }
 
