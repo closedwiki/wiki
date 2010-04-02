@@ -330,6 +330,8 @@ my $action = $query->param('action') || 'Configure';
 my $expertsMode = defined($query->param('expert'));
 my $confirm = defined($query->param('confirm')) || 0;
 my $cfgAccess = $query->param('cfgAccess');
+my $newCfgP = $query->param('newCfgP');
+my $confCfgP = $query->param('confCfgP');
 
 
 
@@ -420,15 +422,21 @@ my ($sanityStatement, $badLSC) = $sanityUI->ui();
 # this is concatenated to _action to determine the name of the procedure.
 # Dispatcher methods return a boolean to indicate whether to generate a
 # link back to the main page at the end.
+
 if ($sanityUI->insane() || $query->param('abort')) {
     print $sanityStatement;
 } else {
 
 
 if (!defined $cfgAccess) {
-       $action = 'PromptPassword';
+      
+    my $newPass = $query->param('newCfgP'); 
+    if (!defined($newPass)) {
+   $action = 'PromptPassword';
+   }else {$cfgAccess = $newPass;}
 }
-     
+
+
 
     $action =~ s/\W//g;
     my $method = '_action'.$action;
@@ -490,6 +498,7 @@ sub _actionNext {
     my $root = new TWiki::Configure::Root();
     my $ui;
    if(!TWiki::Configure::UI::authorised()) {
+
         $ui = _checkLoadUI('PromptPASS', $root);
         return 1 unless $ui;
         print $ui->ui(1, 'Configure');
@@ -507,6 +516,9 @@ sub _actionNext {
         }
         $ui = _checkLoadUI('AUTH', $root);
         return 1 unless $ui;
+        $ui->{newCfgP} = 
+    $ui->{newCfgP} = $newCfgP if defined $newCfgP;
+    $ui->{confCfgP}= $confCfgP if defined $confCfgP;
         print $ui->ui(1, 'Save');
         
     } else {
@@ -523,9 +535,13 @@ sub _actionNext {
 sub _actionPromptPassword{
 
 
+print  $sanityStatement ;  ## printing this in any case..
+
 my $root =  new TWiki::Configure::Root();
 my $valuer = new TWiki::Configure::Valuer( $TWiki::defaultCfg, \%TWiki::cfg);
 
+my %updated;
+my $modified = $valuer->loadCGIParams($TWiki::query, \%updated);
 
 print <<HERE;
 
@@ -571,19 +587,51 @@ register</a> as a normal user first and then add your wikiname to the <a rel="no
     </ul>
    </div>
 HERE
-   
-        if(!TWiki::Configure::UI::authorised()) {
-          ## TODO...Add meaningful line
-         
-        my $ui = _checkLoadUI('PromptPASS', $root);
+       my $ui; 
+
+if ( $badLSC ge 1 ) {
+      
+      # Load the specs from the .spec files and generate the UI template
+        TWiki::Configure::TWikiCfg::load($root, 1);
+
+
+        my  $newPass = $query->param('newCfgP');
+        if ($newPass) {
+
+        if (!TWiki::Configure::UI::authorised()) {
+        $ui = _checkLoadUI('SetNewPass', $root);
         return 1 unless $ui;
         print $ui->ui(1, 'Configure');
-        return 1;
+       }else {
+        $ui = _checkLoadUI('AUTH', $root);
+        return 1 unless $ui; 
+        print $ui->ui(1, 'Configure');
+       
+   }  
+
+   }else {
+        $ui = _checkLoadUI('SetNewPass', $root);
+        return 1 unless $ui;
+        print $ui->ui(1, 'Configure');
+ } 
+return 1;
+
+}
+ 
+     ## Password is verified and is correct...
+
+if(!TWiki::Configure::UI::authorised()) {
+          ## TODO...Add meaningful line
+         
+        $ui = _checkLoadUI('PromptPASS', $root);
+        return 1 unless $ui;
+        print $ui->ui(1, 'Configure');
       }else {
+
      ## Password is verified and is correct...
     
    }
-
+  return 1;
 }
 
 # Invoked by "find more extensions" button in the Extensions section
@@ -620,6 +668,7 @@ sub _actionConfigure {
 
 
    my $root = new TWiki::Configure::Root();
+
    if(!TWiki::Configure::UI::authorised()) {
         my $ui = _checkLoadUI('PromptPASS', $root);
         return 1 unless $ui;
@@ -773,7 +822,10 @@ HERE
               ($TWiki::Configure::UI::totwarnings==1?'':'s');
         print CGI::div($mess);
     }
+
     print CGI::hidden('cfgAccess', $cfgAccess); 
+    print CGI::hidden('newCfgP', $newCfgP) if defined $newCfgP;
+    print CGI::hidden('confCfgP', $confCfgP) if defined $confCfgP;
     print CGI::p(CGI::submit(-class=>'twikiSubmit',
                              -name=>'action',
                              -value=>'Next',
