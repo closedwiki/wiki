@@ -135,6 +135,15 @@ HERE
     $ENV{PATH} = $TWiki::cfg{SafeEnvPath};
     delete @ENV{ qw( IFS CDPATH ENV BASH_ENV ) };
 
+
+if ($TWiki::cfg{'Password'} eq '' || !defined $TWiki::cfg{'Password'}) {
+     $badLSC = 3;
+     $result .=<<HERE;
+ Resetting the admin Password for the TWiki
+HERE
+
+}
+
     return ($result, $badLSC);
 }
 
