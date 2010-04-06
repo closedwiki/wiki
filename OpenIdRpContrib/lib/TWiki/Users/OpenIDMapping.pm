@@ -188,6 +188,23 @@ sub getWikiName {
 
 =pod
 
+---++ ObjectMethod userExists ($this, $cUID ) -> boolean
+
+Override TWiki::Users::TWikiUserMapping::userExists so that
+OpenID users can be found whether AllowLoginName is set or not.
+
+=cut
+
+sub userExists {
+	my $this = shift;
+	my $cUID = shift;
+
+	return 1 if $this->_userReallyExists( $cUID );
+	return $this->SUPER::userExists( $cUID );
+}
+
+=pod
+
 ---++ ObjectMethod login2cUID ($login, $dontcheck) -> $cUID
 
 Override TWiki::Users::TWikiUserMapping::login2cUID()
@@ -322,6 +339,28 @@ sub mapper_setEmails {
 	my %attr = split $openid_attr_delim, $attr;
 	$attr{Email} = $mails;
 	$session->{users}{mapping}{U2A}{$cUID} = join( $openid_attr_delim, %attr );
+}
+
+=pod
+
+---++ ObjectMethod findUserByWikiName ($wikiname) -> list of cUIDs associated with that wikiname
+
+This overrides TWiki::Users::TWikiUserMapping::findUserByWikiName in order
+to let OpenID users be found whether AllowLoginName is set or not
+
+=cut
+
+sub findUserByWikiName
+{
+	my $this = shift;
+	my $wn = shift;
+	my $skipExistanceCheck = shift; # sic/spelling error from parent
+
+	my $cUID = mapper_get( $this->{session}, "W2U", $wn );
+	if ( defined $cUID ) {
+		return [ $cUID ];
+	}
+	return $this->SUPER::findUserByWikiName( $wn, $skipExistanceCheck );
 }
 
 =pod
