@@ -835,6 +835,8 @@ sub searchWeb {
                 my $wikiusername = $users->webDotWikiName($cUID);
                 $wikiusername = "$TWiki::cfg{UsersWebName}.UnknownUser"
                     unless defined $wikiusername;
+                my $wikiname = $users->getWikiName($cUID);
+                $wikiname = 'UnknownUser' unless defined $wikiname;
 
                 if ($format) {
                     $out = $format;
@@ -848,9 +850,6 @@ sub searchWeb {
                     $out =~ s/\$wikiusername/$wikiusername/ges;
                     $out =~ s/\$ntopics/$ntopics/gs;
                     $out =~ s/\$nhits/$nhits/gs;
-
-                    my $wikiname = $users->getWikiName($cUID);
-                    $wikiname = 'UnknownUser' unless defined $wikiname;
                     $out =~ s/\$wikiname/$wikiname/ges;
                     
                     my $username = $users->getLoginName($cUID);
@@ -893,7 +892,7 @@ sub searchWeb {
                         ( $this->{session}->i18n->maketext('NEW') ) );
                 }
                 $out =~ s/%REVISION%/$srev/o;
-                $out =~ s/%AUTHOR%/$wikiusername/e;
+                $out =~ s/%AUTHOR%/[[$wikiusername][$wikiname]]/;
 
                 if ($doBookView) {
 
