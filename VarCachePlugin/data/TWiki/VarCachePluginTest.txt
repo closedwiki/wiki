@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1089948386" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1270579032" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="VarCachePlugin"}%
 ---+ <nop>VarCachePlugin Test
 
@@ -6,11 +6,10 @@ This topic contains a nested search, used to test the VarCachePlugin. The cache 
 
 Here is the output of the =%<nop>VARCACHE{ refresh="0.1" }%= variable:
 
-	* %VARCACHE{ refresh="0.1" }%
+   * %VARCACHE{ refresh="0.1" }%
 
 Here is the nested search:
 
-%SEARCH{ "culture" format="	* $topic is referenced by:$n		* $percntSEARCH{ \"$topic\" format=\"	$dollartopic\" nosearch=\"on\" nototal=\"on\" }$nop%" nosearch="on" nototal="on" }%
+%SEARCH{ "culture" format="   * $topic is referenced by:$n      * $percntSEARCH{ \"$topic\" format=\"   $dollartopic\" nosearch=\"on\" nototal=\"on\" }$nop%" nosearch="on" nototal="on" }%
 
--- TWiki:Main.PeterThoeny - 15 Jul 2004
-
+-- TWiki:Main.PeterThoeny - 2010-04-06

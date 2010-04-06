@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2004-2006 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2004-2010 Peter Thoeny, peter@thoeny.org, Twiki Inc.
 #
 # For licensing info read LICENSE file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = '2010-04-06';
 
 $pluginName = 'VarCachePlugin';  # Name of this Plugin
 
@@ -67,7 +67,8 @@ sub beforeCommonTagsHandler
 
     $_[0] =~ s/%VARCACHE{(.*?)}%/_handleVarCache( $_[2], $_[1], $1 )/ge;
 
-    $_[0] =~ s/^.*(%--VARCACHE\:read\:.*?--%).*$/$1/os; # remove all text if "read cache"
+    # if "read cache", replace all text with marker, to be filled in afterCommonTagsHandler
+    $_[0] =~ s/^.*(%--VARCACHE\:read\:.*?--%).*$/$1/os;
 }
 
 # =========================
@@ -90,6 +91,19 @@ sub afterCommonTagsHandler
             $msg = _formatMsg( $_[2], $_[1] );
             $_[0] =~ s/%--VARCACHE\:.*?--%/$msg/go;
 
+            # cache addToHEAD info
+            # FIXME: Enhance the TWiki::Func API to get the head info cleanly
+            $cacheFilename = _cacheFileName( $_[2], $_[1], 0, 1 );
+            my $htmlHeader = '';
+            TWiki::Func::saveFile( $cacheFilename, '' ); # clear
+            my $session = $TWiki::Plugins::SESSION;
+            if( $session && $session->{_HTMLHEADERS} ) {
+                $htmlHeader = join( "\n",
+                  map { '<!--VARCACHE_HEAD_'.$_.'-->'.$session->{_HTMLHEADERS}{$_} }
+                  keys %{$session->{_HTMLHEADERS}} );
+            }
+            TWiki::Func::saveFile( $cacheFilename, $htmlHeader );
+
         } else {
             # read cache
             my $text = TWiki::Func::readFile( $cacheFilename );
@@ -97,6 +111,15 @@ sub afterCommonTagsHandler
             $msg =~ s/\$age/_formatAge($age)/geo;
             $text =~ s/%--VARCACHE.*?--%/$msg/go;
             $_[0] = $text;
+
+            # restore addToHEAD info from cache
+            $cacheFilename = _cacheFileName( $_[2], $_[1], 0, 1 );
+            my $htmlHeader = TWiki::Func::readFile( $cacheFilename );
+            foreach ( split /<!--VARCACHE_HEAD_/, $htmlHeader ) {
+                if( /^(.*?)-->(.+)$/s ) {
+                    TWiki::Func::addToHEAD( $1, $2 );
+                }
+            }
         }
     }
 }
@@ -108,7 +131,7 @@ sub _formatMsg
 
     my $msg = $paramMsg; # FIXME: Global variable not reliable in mod_perl
     $msg =~ s|<nop>||go;
-    $msg =~ s|\$link|%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?varcache=refresh|go;
+    $msg =~ s|\$link|%SCRIPTURL{view}%/%WEB%/%TOPIC%?varcache=refresh|go;
     $msg =~ s|%ATTACHURL%|%PUBURL%/$installWeb/$pluginName|go;
     $msg =~ s|%ATTACHURLPATH%|%PUBURLPATH%/$installWeb/$pluginName|go;
     $msg = TWiki::Func::expandCommonVariables( $msg, $theTopic, $theWeb );
@@ -127,8 +150,12 @@ sub _formatAge
     } elsif( $age < 1 ) {
         $age *= 60;
         $unit = "min";
+        if( $age < 1 ) {
+            $age *= 60;
+            $unit = "sec";
+        }
     }
-    if( $age >= 3 ) {
+    if( $age >= 3 || $unit eq "sec" ) {
         $age = int( $age );
         return "$age $unit";
     }
@@ -159,7 +186,8 @@ sub _handleVarCache
             # CODE_SMELL: Assume file system for topics
             $filename = TWiki::Func::getDataDir() . "/$theWeb/$theTopic.txt";
             my $topicTime = (stat $filename)[9] || 10000000000;
-            my $refresh = TWiki::Func::extractNameValuePair( $theArgs, "refresh" )
+            my $refresh = TWiki::Func::extractNameValuePair( $theArgs )
+                       || TWiki::Func::extractNameValuePair( $theArgs, "refresh" )
                        || TWiki::Func::getPreferencesValue( "\U$pluginName\E_REFRESH" ) || 24;
             $refresh *= 3600;
             if( ( ( $refresh == 0 ) || ( $cacheTime >= $now - $refresh ) )
@@ -180,6 +208,7 @@ sub _handleVarCache
         $paramMsg = TWiki::Func::extractNameValuePair( $theArgs, "updatemsg" )
                  || TWiki::Func::getPreferencesValue( "\U$pluginName\E_UPDATEMSG" )
                  || 'This topic is now cached ([[$link][refresh]])';
+        
         return "%--VARCACHE\:save--%";
     }
 
@@ -190,7 +219,7 @@ sub _handleVarCache
 # =========================
 sub _cacheFileName
 {
-    my ( $web, $topic, $mkDir ) = @_;
+    my ( $web, $topic, $mkDir, $isHead ) = @_;
 
     # Create web directory "pub/$web" if needed
     my $dir = TWiki::Func::getPubDir() . "/$web";
@@ -204,7 +233,9 @@ sub _cacheFileName
         umask( 002 );
         mkdir( $dir, 0775 );
     }
-    return "$dir/_${pluginName}_cache.txt";
+    my $fileName = '_cache.txt';
+    $fileName    = '_cache.head' if( $isHead );
+    return "$dir/_${pluginName}${fileName}";
 }
 
 # =========================
