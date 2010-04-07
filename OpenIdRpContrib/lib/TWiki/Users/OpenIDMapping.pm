@@ -168,7 +168,37 @@ sub handlesUser {
 
 =pod
 
+---++ ObjectMethod getLoginName ($cUID) -> $login
+
+Override TWiki::Users::TWikiUserMapping::getLoginName.
+
+Converts an internal cUID to that user's login (undef on failure)
+
+=cut
+
+sub getLoginName
+{
+	my $this = shift;
+	my $cUID = shift;
+
+    # Remove the mapping id in case this is a subclass
+	my $login = $cUID;
+    $login =~ s/$this->{mapping_id}// if $this->{mapping_id};
+
+	# if it's in the OpenID mapping data, we'll take control
+    if ( exists $this->{L2U}{$login}) {
+		return $login;
+	} else {
+		# otherwise let the superclass handle it
+		return $this->SUPER::getLoginName( $cUID );
+	}
+}
+
+=pod
+
 ---++ ObjectMethod getWikiName ($cUID) -> $wikiname
+
+Override TWiki::Users::TWikiUserMapping::getWikiName.
 
 Map a canonical user name to a wikiname. 
 
