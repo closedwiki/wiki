@@ -181,12 +181,11 @@ sub getLoginName
 	my $this = shift;
 	my $cUID = shift;
 
-    # Remove the mapping id in case this is a subclass
-	my $login = $cUID;
-    $login =~ s/$this->{mapping_id}// if $this->{mapping_id};
+    # for the OpenID mapping, we use the wikiname for the login name
+	my $login = $this->getWikiName( $cUID );
 
 	# if it's in the OpenID mapping data, we'll take control
-    if ( exists $this->{L2U}{$login}) {
+	if ( defined $login ) {
 		return $login;
 	} else {
 		# otherwise let the superclass handle it
