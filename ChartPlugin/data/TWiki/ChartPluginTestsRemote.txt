@@ -24,4 +24,4 @@ This topic just contains two tables which are referenced from the ChartPluginTes
 
 __Related topics:__ ChartPlugin, ChartPluginTests, VarCHART
 
--- __Contributors:__ TWiki:Main/TaitCyrus, TWiki:Main/PeterThoeny - 2010-06-07
+-- __Contributors:__ TWiki:Main/TaitCyrus, TWiki:Main/PeterThoeny - 2010-04-07
