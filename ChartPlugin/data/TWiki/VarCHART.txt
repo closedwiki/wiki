@@ -1,0 +1,8 @@
+%META:TOPICINFO{author="TWikiContributor" date="1270687363" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarCHART
+---+++ CHART{ _attributes_ } -- create area, bar, line and scatter charts to visualize TWiki tables
+   * The =%<nop>CHART{}%= variable is handled by the ChartPlugin. 
+   * Syntax: =%<nop>CHART{ _attributes_ }%= - supported attributes are documented in ChartPlugin
+   * Example: =%<nop>CHART{ type="bar" name="bar1" table="monthly_sales" data="R3:C2..R5:C4" xaxis="R1:C2..R1:C4" legend="R3:C1..R5:C1" ymin="0" width="225" height="200" }%=
+   * Related: ChartPlugin, ChartPluginTests, SpreadSheetPlugin

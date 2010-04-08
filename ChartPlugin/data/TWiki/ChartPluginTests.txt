@@ -1,6 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1093918806" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="TWikiContributor" date="1270685545" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="ChartPlugin"}%
-*Chart Plugin tests*
+---+ Chart Plugin Tests
 
 This page attempts to demonstrate/test many of the possible combinations of various parameters of the ChartPlugin.  There are too many combinations of parameters to test all possible combinations, so only a few are shown here.
 
@@ -38,16 +38,16 @@ This table is used for showing =scatter= graphs.
 
 %TABLE{name="table3"}%
 | *A* | *B* | *C* | *D* | *E* |
-| 1	| 3	| 6	| 33 | 2 |
-| 1.4	| 6	| 22	| 2 | 4 |
-| 1.8	| 2	| 5	|  | 6 |
-| 2.5	| 4	| 3	|  | 8 |
-| 4	| 7	| 6	| 43 | 10 |
-| 5	| 13	| 44	| 25 | 12 |
-| 7	| 8	| 1	| 4 | 14 |
-| 6	| 35	| 3	| 8 | 16 |
-| 8	| 2	| 22	| 4 | 18 |
-| 9	| 7	| 6	| 13 | 20 |
+| 1   | 3   | 6   | 33 | 2  |
+| 1.4 | 6   | 22  | 2  | 4  |
+| 1.8 | 2   | 5   |    | 6  |
+| 2.5 | 4   | 3   |    | 8  |
+| 4   | 7   | 6   | 43 | 10 |
+| 5   | 13  | 44  | 25 | 12 |
+| 7   | 8   | 1   | 4  | 14 |
+| 6   | 35  | 3   | 8  | 16 |
+| 8   | 2   | 22  | 4  | 18 |
+| 9   | 7   | 6   | 13 | 20 |
 
 ---++ Table #4
 This table is used for various legend placement tests as well as logarithmic data.
@@ -228,6 +228,4 @@ This table is used for various legend placement tests as well as logarithmic dat
 | Use an invalid =legend= range <p /> =%<nop>CHART{data="R2:C4..R7:C7" legend="R1:C4" name="err1"}%= | ChartPlugin error: parameter *legend* contains an invalid value 'R1:C4'. </ p> | %CHART{data="R2:C4..R7:C7" legend="R1:C4" name="err1"}% |
 | =scale=semilog= and data &lt;= 0 <p /> =%<nop>CHART{data="R2:C3..R7:C7" name="err1" scale="semilog"}%= | ChartPlugin error: data (0) &lt;= 0 not valid when scale=semilog </ p> | %CHART{data="R2:C3..R7:C7" name="err1" scale="semilog"}% |
 
--- TWiki:Main.TaitCyrus - 3 June 2004 <br />
--- TWiki:Main.PeterThoeny - 14 Sept 2002
-
+-- __Contributors:__ TWiki:Main/TaitCyrus, TWiki:Main/PeterThoeny - 2010-06-07

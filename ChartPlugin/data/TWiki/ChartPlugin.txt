@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1256366943" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1270686470" format="1.1" version="$Rev$"}%
 ---+!! Chart Plugin
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page
@@ -29,7 +29,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 __NOTE:__ Do not change the settings here, overload them in the [[%LOCALSITEPREFS%]]. Prefix a setting with ==CHARTPLUGIN_==, e.g. to overload ==AREA_COLORS== define a ==CHARTPLUGIN_AREA_COLORS== setting in the <nop>%LOCALSITEPREFS%.
 
    * Short description:
-      * Set SHORTDESCRIPTION = Create PNG or GIF charts to visualize TWiki tables
+      * Set SHORTDESCRIPTION = Create area, bar, line and scatter  charts to visualize TWiki tables
 
    * Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
       * Set DEBUG = 0
@@ -184,9 +184,12 @@ If the required parameters are not defined, then an error message is returned or
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.TaitCyrus |
-|  Plugin Version: | 23 Oct 2009 (v%$VERSION%) |
+|  Plugin Version: | 2010-06-07 (v%$VERSION%) |
+|  Copyright: | &copy; 2002-2010, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|   23 Oct 2009: | Item6355: Fixed bug where chart not drawn if table at end of topic; Item6329: Added input validation for all parameters expected to be integers or real numbers - TWiki:Main.PeterThoeny |
+|   2010-06-07: | TWikibug:Item6160 - fixed taint issue with certain combination of Perl/GD; TWikibug:Item6329 - input validation for chart width and height; added VarCHART variable documentation page -- TWiki:Main/PeterThoeny |
+|   2009-10-23: | TWikibug:Item6355 - fixed bug where chart not drawn if table at end of topic; Item6329: Added input validation for all parameters expected to be integers or real numbers - TWiki:Main/PeterThoeny |
 |   18 May 2007: | Added discontinuous ranges - TWiki:Main.CrawfordCurrie |
 |   16 Nov 2004: | V1.401 - Added benchmarks (no code changes) |
 |   30 Aug 2004: | V1.400 - Added support for =subtype="bar"= (includes various global bar settings), updated =gridcolor= to not only define the grid color but allowing the user to define the line style (for drawing user defined dotted lines), add a global for how wide lines are drawn instead of a hard coded value, change the order of how things are drawn so now the order is: areas, grid lines and X/Y axis labels, bars, lines/points/plines, rectangle around chart, data point labels, chart title/X/Y labels, and finally the legends. |
@@ -198,27 +201,26 @@ If the required parameters are not defined, then an error message is returned or
 |  13 Sept 2002: | V1.002 - Add support for better placement of legends so they don't overlap, add auto ymin/ymax determination if not specified, add =bgcolor= and =numygrids= options |
 |  27 Jun 2002: | V1.001 - Data range specified is clipped to actual table size; more forgiving data parsing by extracting first numeral from a table cell, e.g. extract =25= from =&lt;u&gt;25%&lt;/u&gt;= |
 |  20 Jun 2002: | Initial version (V1.000) |
-|  Dependencies: | gd |
-| CPAN Dependencies | GD, POSIX |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 96%, %TWIKIWEB%.FormattedSearch 97%, ChartPlugin 69% |
+|  Dependencies: | gd (see http://www.libgd.org/) |
+|  CPAN Dependencies | CPAN:GD, CPAN:POSIX |
+|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle 96%, %SYSTEMWEB%.FormattedSearch 97%, ChartPlugin 69% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+__Related Topics:__ VarCHART, ChartPluginTests, ChartPluginTestsRemote, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
--- TWiki:Main.TaitCyrus - 3 June 2004 <br />
--- TWiki:Main.PeterThoeny - 23 Oct 2009
+-- TWiki:Main/TaitCyrus, TWiki:Main/PeterThoeny - 2010-06-07
 
-%META:FILEATTACHMENT{name="line1.png" attr="h" comment="" date="1093917753" path="line1.png" size="1220" user="PeterThoeny" version="1.4"}%
-%META:FILEATTACHMENT{name="line2.png" attr="h" comment="" date="1093917765" path="line2.png" size="1993" user="PeterThoeny" version="1.4"}%
-%META:FILEATTACHMENT{name="lineexample.png" attr="h" comment="" date="1084659332" path="C:\DATA\MyTWiki\Plugins\ChartPlugin\pub\TWiki\ChartPlugin\lineexample.png" size="2462" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="areaexample.png" attr="h" comment="" date="1024533210" path="C:\Data\MyTWiki\Plugins\ChartPlugin\pub\TWiki\ChartPlugin\areaexample.png" size="3370" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="combo1.png" attr="h" comment="" date="1093917959" path="combo1.png" size="1696" user="PeterThoeny" version="1.2"}%
-%META:FILEATTACHMENT{name="comboexample.png" attr="h" comment="" date="1084659314" path="C:\DATA\MyTWiki\Plugins\ChartPlugin\pub\TWiki\ChartPlugin\comboexample.png" size="3071" user="PeterThoeny" version="1.2"}%
-%META:FILEATTACHMENT{name="scatter1.png" attr="h" comment="" date="1093917951" path="scatter1.png" size="2071" user="PeterThoeny" version="1.2"}%
-%META:FILEATTACHMENT{name="scatterexample.png" attr="h" comment="" date="1093918171" path="scatterexample.png" size="1858" user="PeterThoeny" version="1.2"}%
-%META:FILEATTACHMENT{name="area1.png" attr="h" comment="" date="1093917730" path="area1.png" size="1774" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="bar1.png" attr="h" comment="" date="1093917742" path="bar1.png" size="1041" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="combo2.png" attr="h" comment="" date="1093917971" path="combo2.png" size="1583" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="barexample.png" attr="h" comment="" date="1093918158" path="barexample.png" size="1886" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="line1.png" attr="h" comment="" date="1093917753" path="line1.png" size="1220" user="TWikiContributor" version="1.4"}%
+%META:FILEATTACHMENT{name="line2.png" attr="h" comment="" date="1093917765" path="line2.png" size="1993" user="TWikiContributor" version="1.4"}%
+%META:FILEATTACHMENT{name="lineexample.png" attr="h" comment="" date="1084659332" path="lineexample.png" size="2462" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="areaexample.png" attr="h" comment="" date="1024533210" path="areaexample.png" size="3370" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="combo1.png" attr="h" comment="" date="1093917959" path="combo1.png" size="1696" user="TWikiContributor" version="1.2"}%
+%META:FILEATTACHMENT{name="comboexample.png" attr="h" comment="" date="1084659314" path="comboexample.png" size="3071" user="TWikiContributor" version="1.2"}%
+%META:FILEATTACHMENT{name="scatter1.png" attr="h" comment="" date="1093917951" path="scatter1.png" size="2071" user="TWikiContributor" version="1.2"}%
+%META:FILEATTACHMENT{name="scatterexample.png" attr="h" comment="" date="1093918171" path="scatterexample.png" size="1858" user="TWikiContributor" version="1.2"}%
+%META:FILEATTACHMENT{name="area1.png" attr="h" comment="" date="1093917730" path="area1.png" size="1774" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="bar1.png" attr="h" comment="" date="1093917742" path="bar1.png" size="1041" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="combo2.png" attr="h" comment="" date="1093917971" path="combo2.png" size="1583" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="barexample.png" attr="h" comment="" date="1093918158" path="barexample.png" size="1886" user="TWikiContributor" version="1.1"}%

@@ -1,6 +1,6 @@
 # ChartPlugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2004-2009 Peter Thoeny, Peter@Thoeny.org
+# Copyright (C) 2002-2010 Peter Thoeny, Peter@Thoeny.org
 # Plugin written by http://TWiki.org/cgi-bin/view/Main/TaitCyrus
 #
 # For licensing info read LICENSE file in the TWiki root.
@@ -168,6 +168,8 @@ package TWiki::Plugins::ChartPlugin::Chart;
 
 use Exporter;
 use GD;
+gdBrushed; gdDashSize; gdMaxColors; gdStyled; gdStyledBrushed; gdTiled; gdTransparent;
+gdTinyFont; gdSmallFont; gdMediumBoldFont; gdLargeFont; gdGiantFont;
 use POSIX;
 @ISA = ();
 @EXPORT = qw(
@@ -360,10 +362,10 @@ sub getDataLabels { my ($this) = @_; return @{$$this{DATA_LABELS}}; }
 sub setLegend { my ($this, @legend) = @_; $$this{LEGEND} = \@legend; }
 sub getLegend { my ($this) = @_; return @{$$this{LEGEND}}; }
 
-sub setImageWidth { my ($this, $imageWidth) = @_; $$this{IMAGE_WIDTH} = $imageWidth; }
+sub setImageWidth { my ($this, $imageWidth) = @_; $$this{IMAGE_WIDTH} = _getInt( $imageWidth ); }
 sub getImageWidth { my ($this) = @_; return $$this{IMAGE_WIDTH}; }
 
-sub setImageHeight { my ($this, $imageHeight) = @_; $$this{IMAGE_HEIGHT} = $imageHeight; }
+sub setImageHeight { my ($this, $imageHeight) = @_; $$this{IMAGE_HEIGHT} = _getInt( $imageHeight ); }
 sub getImageHeight { my ($this) = @_; return $$this{IMAGE_HEIGHT}; }
 
 sub setAreaColors
@@ -1749,6 +1751,17 @@ sub _scale
     return $value if ($scale ne "semilog");
     # Assume semilog
     return log10($value);
+}
+
+# Return first integer number found in a string
+sub _getInt
+{
+    my ( $str ) = @_;
+    $str = '0' unless( $str );
+    if( $str =~ s/^.*?(\-?)0*([0-9]+).*$/$1$2/o ) {
+        return int( $str );
+    }
+    return 0;
 }
 
 1;

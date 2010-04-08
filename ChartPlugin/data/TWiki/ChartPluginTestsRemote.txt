@@ -1,6 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1093920050" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1270685716" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="ChartPluginTests"}%
----+ ChartPlugin Tests with Remote Data
+---+ !ChartPlugin Tests with Remote Data
 
 This topic just contains two tables which are referenced from the ChartPluginTests topic.  To distinguish the data on this page from other data, the *actual* values have been increased by 0.51 and 0.52 to denote table 1 and table 2 respectively. 
 
@@ -22,6 +22,6 @@ This topic just contains two tables which are referenced from the ChartPluginTes
 | *Test:Averages* | %CALC{"$EVAL($SUM(xR3:C2..R7:C2)/5)"}% | %CALC{"$AVERAGE(R3:C3..R7:C3)"}%| %CALC{"$AVERAGE(R3:C4..R7:C4)"}%| %CALC{"$AVERAGE(R3:C5..R7:C5)"}%| %CALC{"$AVERAGE(R3:C6..R7:C6)"}%| %CALC{"$AVERAGE(R3:C7..R7:C7)"}%|
 | *Remote:Comment* | initial measure | | | | | |
 
--- TWiki:Main.TaitCyrus - 3 June 2004 <br />
--- TWiki:Main.PeterThoeny - 20 Jun 2002
+__Related topics:__ ChartPlugin, ChartPluginTests, VarCHART
 
+-- __Contributors:__ TWiki:Main/TaitCyrus, TWiki:Main/PeterThoeny - 2010-06-07
