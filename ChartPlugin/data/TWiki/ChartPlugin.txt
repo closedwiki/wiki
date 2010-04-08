@@ -184,9 +184,9 @@ If the required parameters are not defined, then an error message is returned or
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.TaitCyrus |
-|  Plugin Version: | 2010-04-07 (v%$VERSION%) |
 |  Copyright: | &copy; 2002-2010, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2010-04-07 (v%$VERSION%) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
 |   2010-04-07: | TWikibug:Item6160 - fixed taint issue with certain combination of Perl/GD; TWikibug:Item6329 - input validation for chart width and height; added VarCHART variable documentation page -- TWiki:Main/PeterThoeny |
 |   2009-10-23: | TWikibug:Item6355 - fixed bug where chart not drawn if table at end of topic; Item6329: Added input validation for all parameters expected to be integers or real numbers - TWiki:Main/PeterThoeny |
