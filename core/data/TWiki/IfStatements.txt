@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1265780322" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1270776557" format="1.1" version="$Rev$"}%
 ---+ IF Statements
 
 The =%<nop>IF%= construct gives TWiki the power to include content in topics based on the value of simple expressions.
@@ -87,6 +87,15 @@ You %IF{"'%USERNAME%' ingroup 'TWikiAdminGroup'" then="are an admin" else="are a
 expands to: %BR%
 You %IF{"'%USERNAME%' ingroup 'TWikiAdminGroup'" then="are an admin" else="are a normal user"}% 
 
+11. Hide section of text conditionally using CSS visibility
+<verbatim>
+<div style="visibility: %IF{"'%USERNAME%' ingroup 'TWikiAdminGroup'" then="visible" else="hidden"}%">
+   * Conditional text enclosed in div tags here...
+   * ...can be as long as needed
+</div>
+</verbatim>
+Above text is only shown to users who are in the !TWikiAdminGroup.
+
 *Configuration items* are defined in [[%SCRIPTURLPATH{"configure"}%][configure]]. You cannot see the value of a configuration item, you can only see if the item is set or not.
 
 *Context identifiers* are used in TWiki to label various stages of the rendering process. They are especially useful for [[TWikiSkins][skin]] authors to find out where they are in the rendering process. The following context identifiers are available:
@@ -133,3 +142,5 @@ The =%<nop>IF%= statement is deliberately kept simple. In particular, note that 
 Note also that while the [[QuerySearch][query syntax]] can be used to access form fields, there are some contexts in which an IF statement may be used where there is no topic context, or the topic context is not what you expected.
 
 __Related Topics:__ QuerySearch, VarIF, VarSEARCH, FormattedSearch
+
+-- __Contributors:__ TWiki:Main/ArthurClemens, TWiki:Main/CrawfordCurrie, TWiki:Main/PeterThoeny, TWiki:Main/SopanShewale, TWiki:Main/SvenDowideit, TWiki:Main/WillNorris - 2010-04-09
