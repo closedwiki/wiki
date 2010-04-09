@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1051855680" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="TWikiContributor" date="1270702978" format="1.1" version="$Rev$"}%
 ---+ Gauge Plugin
 
 This plugin can be used to build dashboards that contain graphical images of gauges like %ATTACHURL%/tambar1.gif (target measure gauge) and %ATTACHURL%/trendup.gif (trend icons).
@@ -20,32 +20,32 @@ The =%<nop>GAUGE{...}%= variable gets expanded to an image representing the gaug
 Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
-	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Build dashboards that contain graphical images of gauges defined with =%<nop>GAUGE{}%= variables.
+   * One line description, shown in the %SYSTEMWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Create graphical images of gauges, typically used for dashboards
 
-	* Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
-		* Set DEBUG = 0
+   * Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
+      * Set DEBUG = 0
 
-	* Default gauge used: =tambar=, =trend=. Default: =tambar=
-		* Set TYPE = tambar
+   * Default gauge used: =tambar=, =trend=. Default: =tambar=
+      * Set TYPE = tambar
 
-	* Default dimensions, scale and colors for Target Measure Bar. See details in the syntax rules.
-		* Set TAMBAR_WIDTH = 60
-		* Set TAMBAR_HEIGHT = 16
-		* Set TAMBAR_SCALE = 0, 33, 67, 100
-		* Set TAMBAR_COLORS = #FF0000, #FFCCCC, #FFFF00, #FFFFCC, #00FF00, #CCFFCC
+   * Default dimensions, scale and colors for Target Measure Bar. See details in the syntax rules.
+      * Set TAMBAR_WIDTH = 60
+      * Set TAMBAR_HEIGHT = 16
+      * Set TAMBAR_SCALE = 0, 33, 67, 100
+      * Set TAMBAR_COLORS = #FF0000, #FFCCCC, #FFFF00, #FFFFCC, #00FF00, #CCFFCC
 
-	* Default dimensions for Trend Icon
-		* Set TREND_WIDTH = 16
-		* Set TREND_HEIGHT = 16
+   * Default dimensions for Trend Icon
+      * Set TREND_WIDTH = 16
+      * Set TREND_HEIGHT = 16
 
 ---++ Syntax Rules
 
 The =%<nop>GAUGE{...}%= variable gets expanded to an image representing the gauge. 
 
-| *%<nop>GAUGE% Parameter* | *Comment* | *Default* |
-| =type= | The type of gauge to be used, =tambar= or =trend= | Global =TYPE= setting |
-| =name= | Name to uniquely identify the gauge file that is auto-created. | None; is required for =tambar= (not required for =trend=)|
+| *%<nop>GAUGE{}%<br />Parameters* | *Comment* | *Default* |
+| =type="tambar"<br />type="trend"= | The type of gauge to be used, =tambar= for target measure bar, or =trend= for trend icon | Global =TYPE= setting |
+| =name= | Name to uniquely identify the gauge file that is auto-created. | None; required for =tambar= (not required for =trend=) |
 | =value= | For =tambar=: The actual value of the gauge<br /> For =trend=: Positive = arrow up, 0 = arrow right, negative = arrow down | None. Show "no data" if missing |
 | =alt= | Alternate text for image | Value is =value= parameter |
 | =width= | Defines the width of the gauge in pixels. | Global =&lt;type&gt;_WIDTH= setting |
@@ -63,8 +63,8 @@ The "if installed" column shows images instead of variables in case the plugin i
 
 ---++ Output
 
-	* A PNG graphics file is created containing the gauge results.  The file is placed in =%<nop>PUBURLPATH%/%<nop>WEB%/%<nop>TOPIC%/_GaugePlugin_&lt;type&gt;_&lt;name&gt;.png=
-	* =%<nop>GAUGE{...}%= gets expanded to an =&lt;img ... /&gt;= image tag.
+   * A PNG graphics file is created containing the gauge results.  The file is placed in =%<nop>PUBURLPATH%/%<nop>WEB%/%<nop>TOPIC%/_GaugePlugin_&lt;type&gt;_&lt;name&gt;.png=
+   * =%<nop>GAUGE{...}%= gets expanded to an =&lt;img ... /&gt;= image tag.
 
 ---++ Error Handling
 
@@ -74,45 +74,47 @@ If the required parameters are not defined, then an error message is returned or
 
 __Note:__ You do not need to install anything on your browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-	  | ==data/TWiki/GaugePluginTests.txt== | Test page containing many examples of the <nop>GaugePlugin in action.  Also shows various error conditions |
-	  | ==data/TWiki/GaugePluginTests.txt,v== | RCS file for above |
-	  | ==pub/TWiki/GaugePlugin/tambar1.gif== | Sample =tambar= image |
-	  | ==pub/TWiki/GaugePlugin/trenddn.gif== | =trend= down arrow |
-	  | ==pub/TWiki/GaugePlugin/trendeq.gif== | =trend= no change arrow |
-	  | ==pub/TWiki/GaugePlugin/trendup.gif== | =trend= up arrow |
-	  | ==pub/TWiki/GaugePlugin/trendnd.gif== | =trend= error message if =value= is not specified |
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-	* Test if the plugin is correctly installed:
-		* Check above examples if the "if installed" column shows images instead of variables.
-		* Check GaugePluginTests for some more test
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==data/TWiki/GaugePluginTests.txt== | Test page containing many examples of the <nop>GaugePlugin in action.  Also shows various error conditions |
+     | ==data/TWiki/VarGAUGE.txt== | Variable documentation topic |
+     | ==pub/TWiki/GaugePlugin/tambar1.gif== | Sample =tambar= image |
+     | ==pub/TWiki/GaugePlugin/trenddn.gif== | =trend= down arrow |
+     | ==pub/TWiki/GaugePlugin/trendeq.gif== | =trend= no change arrow |
+     | ==pub/TWiki/GaugePlugin/trendup.gif== | =trend= up arrow |
+     | ==pub/TWiki/GaugePlugin/trendnd.gif== | =trend= error message if =value= is not specified |
+   * TWiki 4 and up: Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * Test if the plugin is correctly installed:
+      * Check above examples if the "if installed" column shows images instead of variables.
+      * Check GaugePluginTests for some more test
 
 ---++ Plugin Info
 
-|  Plugin Author: | %TWIKIWEB%.PeterThoeny, TWiki:Main/TaitCyrus |
-|  Plugin Version: | 01 May 2003 |
+|  Plugin Author: | TWiki:Main/PeterThoeny, TWiki:Main/TaitCyrus |
+|  Copyright: | &copy; 2002-2010, Peter Thoeny |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2010-04-08 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-04-08: | TWikibug:Item6420 - Added VarGAUGE variable documentation page; other doc improvements -- TWiki:Main/PeterThoeny |
 |  01 May 2003: | Added time stamp to image to prevent browser from caching images; ignore non-numerical chars in value parameter; fixed warnings (V1.002) |
 |  08 Sep 2002: | Added missing binmode (for Windows); pass parameters also to error image (V1.001) |
 |  23 May 2002: | Initial version (V1.0) |
 |  16 May 2002: | Initial spec (V1.0) |
-|  CPAN Dependencies: | GD from http://stein.cshl.org/WWW/software/GD |
-|  Other Dependencies: | gd library from http://www.boutell.com/gd (Tested with 1.8.4)<br /> PNG graphics library from http://www.libpng.org/pub/png |
+|  Dependencies: | gd graphics library, http://www.libgd.org/ <br /> libpng PNG graphics library, http://www.libpng.org/pub/png/libpng.html |
+|  CPAN Dependencies | CPAN:GD, CPAN:POSIX |
 |  Perl Version: | 5.005 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+__Related Topics:__ VarGAUGE, %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
 
--- TWiki:Main/TaitCyrus - 23 May 2002 <br />
--- %TWIKIWEB%.PeterThoeny - 01 May 2003
-%META:FILEATTACHMENT{name="tambar1.gif" attr="h" comment="Target Measure Bar, 60x16 example" date="1021945424" path="C:\Data\MyTWiki\Plugins\GaugePlugin\pub\Plugins\GaugePlugin\tambar1.gif" size="932" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="trendup.gif" attr="h" comment="Trend Up Icon 16x16" date="1021945466" path="C:\Data\MyTWiki\Plugins\GaugePlugin\pub\Plugins\GaugePlugin\trendup.gif" size="877" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="trenddn.gif" attr="h" comment="Trend Down Icon 16x16" date="1021945479" path="C:\Data\MyTWiki\Plugins\GaugePlugin\pub\Plugins\GaugePlugin\trenddn.gif" size="875" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="trendeq.gif" attr="h" comment="Trend Equal Icon 16x16" date="1021945497" path="C:\Data\MyTWiki\Plugins\GaugePlugin\pub\Plugins\GaugePlugin\trendeq.gif" size="869" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="trendnd.gif" attr="h" comment="Trend No Data Icon 16x16" date="1021945521" path="C:\Data\MyTWiki\Plugins\GaugePlugin\pub\Plugins\GaugePlugin\trendnd.gif" size="875" user="PeterThoeny" version="1.1"}%
+-- TWiki:Main/TaitCyrus, TWiki:Main/PeterThoeny - 2010-04-08
+
+%META:FILEATTACHMENT{name="tambar1.gif" attr="h" comment="Target Measure Bar, 60x16 example" date="1021945424" path="tambar1.gif" size="932" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="trendup.gif" attr="h" comment="Trend Up Icon 16x16" date="1021945466" path="trendup.gif" size="877" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="trenddn.gif" attr="h" comment="Trend Down Icon 16x16" date="1021945479" path="trenddn.gif" size="875" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="trendeq.gif" attr="h" comment="Trend Equal Icon 16x16" date="1021945497" path="trendeq.gif" size="869" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="trendnd.gif" attr="h" comment="Trend No Data Icon 16x16" date="1021945521" path="trendnd.gif" size="875" user="TWikiContributor" version="1.1"}%

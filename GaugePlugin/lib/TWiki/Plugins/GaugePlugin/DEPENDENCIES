@@ -1,0 +1,4 @@
+gd,>0,c,Required. Available from http://www.libgd.org/
+libpng,>1.2.3,Required. PNG Library. Available from http://www.libpng.org/pub/png/libpng.html
+GD,>=1.41,cpan,Required. Available from the CPAN:GD archive.
+POSIX,>0,cpan,Required. Available from the CPAN:POSIX archive.

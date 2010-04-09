@@ -1,0 +1,20 @@
+%META:TOPICINFO{author="TWikiContributor" date="1270702735" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarGAUGE
+---+++ GAUGE{ _attributes_ } -- create graphical images of gauges, typically used for dashboards
+   * The =%<nop>GAUGE{}%= variable is handled by the GaugePlugin. 
+   * Syntax: =%<nop>GAUGE{ type="..." name="..." value="..." }%=
+   * Supported attributes:
+     | *Attribute* | *Comment* | *Default* |
+     | =type= | The type of gauge, =type="tambar"= for target measure bar, or =type="trend"= for trend icon | Global =TYPE= setting |
+     | =name= | Name to uniquely identify the gauge file that is auto-created. | None; required for =tambar= |
+     | =value= | For =tambar=: The actual value of the gauge<br /> For =trend=: Positive = arrow up, 0 = arrow right, negative = arrow down | None. Show "no data" if missing |
+     | =alt= | Alternate text for image | Value is =value= parameter |
+     | =width= | Defines the width of the gauge in pixels. | Global =&lt;type&gt;_WIDTH= setting |
+     | =height= | Defines the height of the gauge in pixels. | Global =&lt;type&gt;_HEIGHT= setting |
+     | =scale= | For =tambar=: Defines the number and position of the scales.  For example a value of ="5, 12, 35, 57"= denotes that there are three regions on the bar gauge, ="5...12"=, ="12...35"= and ="35...57"=. <br /> For =trend=: N/A | Global =&lt;type&gt;_SCALE= setting |
+     | =colors= | For =tambar=: List of colors, each region has two colors. For =trend=: N/A | Global =&lt;type&gt;_COLORS= setting |
+   * Examples:
+      * =%<nop>GAUGE{ type="tambar" name="t1" scale="0, 10, 20, 40" value="27" }%= shows <img src="%PUBURLPATH%/%WEB%/GaugePlugin/tambar1.gif" width="60" height="16" alt="27" />
+      * =%<nop>GAUGE{ type="trend" name="t2" value="-3" }%= shows <img src="%PUBURLPATH%/%WEB%/GaugePlugin/trenddn.gif" alt="down trend" width="16" height="16" />
+   * Related: GaugePlugin, GaugePluginTests
