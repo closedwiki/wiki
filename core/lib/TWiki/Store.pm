@@ -986,6 +986,8 @@ sub saveAttachment {
                 # The code below has proven to work for all. See Item5307
                 
                 use File::Temp;
+                use Errno qw/EINTR/;
+
                 my $fh;
                 
                 ( $fh, $tmpFile ) = File::Temp::tempfile();
@@ -994,14 +996,24 @@ sub saveAttachment {
                 my $transfer;
                 my $r;
                 while( $r = sysread( $opts->{stream}, $transfer, 0x80000 )) {
-                    syswrite( $fh, $transfer, $r );
-                }
-                close( $fh );
-                $attrs->{tmpFilename} = $tmpFile;
-                $plugins->dispatch('beforeAttachmentSaveHandler',
-                                   $attrs, $topic, $web );
-                open( $opts->{stream}, "<$tmpFile" );
-                binmode( $opts->{stream} );
+                     if ( !defined $r ) {
+                         next if( $! == EINTR );
+                         die "system read error: $! \n";
+                     }
+                my $offset = 0;
+                while( $r ) {
+                     my $w =  syswrite( $fh, $transfer, $r, $offset );
+                     die "system write error: $!\n" unless( defined $w );
+                     $offset += $w;
+                     $r -= $w;
+                  }    
+
+              }
+               select((select( $fh ), $| = 1)[0]);
+               seek( $fh, 0, 0 ) or die "can't seek temp: $! \n";
+               $opts->{stream} = $fh;   
+               $attrs->{tmpFilename} = $tmpFile;
+               $plugins->dispatch('beforeAttachmentSaveHandler', $attrs, $topic, $web );
             }
             my $error;
             try {
