@@ -1,0 +1,15 @@
+%META:TOPICINFO{author="TWikiContributor" date="1270865503" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TopMenuSkinDefaultWebTopMenu"}%
+---+ Home Menu of !TopMenuSkin
+
+This bullet list defines the Home menu with list of webs, used by the TopMenuSkin.
+
+-----
+%STARTINCLUDE%<nop>
+   * [[%WEBLOGOURL%][ %ICON{"twiki"}% <nop>%MAKETEXT{"Home"}% <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-dropdown.gif' alt='' width='14' height='16' />]]
+%WEBLIST{"      * <span style=\"white-space:nowrap\"><a href=\"%SCRIPTURLPATH{"view"}%/$name/%HOMETOPIC%\"><img src=\"%ICONURL{web-bg}%\" border=\"0\" alt=\"\" width=\"16\" height=\"16\" style=\"background-color:%$markerVAR{\"WEBBGCOLOR\" web=$qname}$marker%\" />&nbsp;<nop>$indentedname</a></span>"}%
+   * <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-arrow-right.gif' alt='' width='10' height='16' />
+<nop>%STOPINCLUDE%
+-----
+
+__Related topics:__ TopMenuSkin, TopMenuSkinTopBar, WebTopMenu, TopMenuSkinDefaultWebTopMenu, TopMenuSkinTopicMenu

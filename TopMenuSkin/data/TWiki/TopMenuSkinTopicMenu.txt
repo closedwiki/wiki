@@ -1,0 +1,25 @@
+%META:TOPICINFO{author="TWikiContributor" date="1270873988" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TopMenuSkinDefaultWebTopMenu"}%
+---+ Home Menu of !TopMenuSkin
+
+This bullet list defines the Topic menu with topic actions, used by the TopMenuSkin.
+
+-----
+%STARTINCLUDE%<nop>
+   * %META{
+ "parent"
+ nowebhome="on"
+ prefix="<img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-arrow-right.gif' alt='' width='10' height='16' />$n   * "
+ separator="$n   * <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-arrow-right.gif' alt='' width='10' height='16' />$n   * "
+ format="<a href='%SCRIPTURL{view}%/$web/$topic' alt='$topic' title='$topic (parent topic)'>P</a>"
+}%
+   * <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-arrow-right.gif' alt='' width='10' height='16' />
+   * <a href="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%" alt="%BASETOPIC%" title="%BASETOPIC%">%MAKETEXT{"Topic"}% <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-dropdown.gif' alt='' width='14' height='16' /></a>
+      * [[%SCRIPTURL{rdiff}%/%BASEWEB%/%BASETOPIC%?type=history][%MAKETEXT{"History"}%]]
+      * [[%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?raw=on][%MAKETEXT{"Raw view"}%]]
+      * [[%SCRIPTURL{edit}%/%BASEWEB%/%BASETOPIC%?t=%SERVERTIME{$epoch}%;nowysiwyg=1][%MAKETEXT{"Raw edit"}%]]
+      * [[%SCRIPTURL{oops}%/%BASEWEB%/%BASETOPIC%?template=oopsmore][%MAKETEXT{"More topic actions"}%]]
+<nop>%STOPINCLUDE%
+-----
+
+__Related topics:__ TopMenuSkin, TopMenuSkinTopBar, WebTopMenu, TopMenuSkinDefaultWebTopMenu, TopMenuSkinHomeMenu

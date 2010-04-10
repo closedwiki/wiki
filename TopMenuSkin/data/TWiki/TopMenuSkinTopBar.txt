@@ -1,0 +1,7 @@
+%META:TOPICINFO{author="TWikiContributor" date="1270862858" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TopMenuSkin"}%
+---+ Top Bar of !TopMenuSkin
+
+Placeholder for top menu bar, replacing WebTopBar.
+
+__Related topics:__ TopMenuSkin, TopMenuSkinTopBar, TopMenuSkinDefaultWebTopMenu, WebTopMenu

@@ -1,0 +1,55 @@
+%META:TOPICINFO{author="TWikiContributor" date="1270879939" format="1.1" version="$Rev$"}%
+---+!! !TopMenuSkin
+
+The !TopMenuSkin adds pulldown menus to the PatternSkin
+
+%TOC%
+
+---++ Screen Shot
+
+%SEARCH{ "%TOPIC%" scope="topic" nosearch="on" nototal="on" format="$pattern(.*\| *Screenshot\:[^\|]*\|([^\|]*).*)" }%
+
+---++ Tob Bar and Menu Structure
+
+   * TopMenuSkinTopBar - top bar with menu bar, logo and search boxes (replacing WebTopBar)
+
+   * WebTopMenu - bullet list defining menu bar for %WEB% web
+   * TopMenuSkinDefaultWebTopMenu - bullet list defining menu bar for webs that do not have a !WebTopMenu topic
+      * TopMenuSkinHomeMenu - "Home" pulldown menu with web list, included by !WebTopMenu
+      * TopMenuSkinTopicMenu - "Topic" pulldown menu with topic actions, included by !WebTopMenu
+
+---++ Installation
+
+*Note:* You do not need to install anything on the browser to use this skin. The following instructions are for the administrator who installs the skin on the server where TWiki is running.
+
+   * Download the ZIP file from the Skin homepage (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory
+   * To turn on the skin, write in !Main.TWikiPreferences: %BR%
+     =* Set SKIN = topmenu,pattern=
+   * [[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?skin=topmenu,pattern][Test if installed]]
+
+---++ Creating your own look
+
+This skin is based on PatternSkin, and the same rules for customization apply.
+
+---++ Skin Info
+
+   * Set SHORTDESCRIPTION = Skin with pulldown menus in top bar
+
+<!-- Note on Screenshot: Please attach a 600x130 pixel screenshot and a full screen shot to the Skin topic, then update the href and img src to reflect the names -->
+|  Skin Author: | TWiki:Main/PeterThoeny |
+|  Copyright: | &copy; 2010, TWiki:Main/PeterThoeny, [[http://twiki.net][Twiki, Inc.]] |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Description: | Top-menu skin |
+|  Screenshot: | <a href="%ATTACHURL%/fullscreen.png"><img src="%ATTACHURL%/screenshot.png" alt="Click for full screen image" width="600" height="130" /></a> |
+|  Preview: | [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=topmenu,pattern][Preview with this topic]] |
+|  Base Name: | topmenu,pattern |
+|  Skin Version: | 2010-04-10 (v1.0) |
+|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-04-10: | Initial release (v1.0) |
+|  Dependencies: | TWiki 4.2; TWiki:Plugins/PatternSkin; TWiki:Plugins/JQueryPlugin |
+|  Skin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related topics:__ WebTopMenu, TopMenuSkinDefaultWebTopMenu, TopMenuSkinHomeMenu, TopMenuSkinTopBar, TopMenuSkinTopicMenu, %SYSTEMWEB%.TWikiSkins, %SYSTEMWEB%.TWikiSkinBrowser, %SYSTEMWEB%.UserDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory

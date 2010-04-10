@@ -1,0 +1,23 @@
+%META:TOPICINFO{author="TWikiContributor" date="1270874211" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TopMenuSkin"}%
+---+ Default Web Top Menu of !TopMenuSkin
+
+This bullet list defines the default menu structure of a web. It is used by the TopMenuSkin in case the WebTopMenu topic is missing in a web.
+
+-----
+%STARTINCLUDE%
+%INCLUDE{%SYSTEMWEB%.TopMenuSkinHomeMenu}%
+   * [[%HOMETOPIC%][<img src="%ICONURL{web-bg}%" border="0" alt="" width="16" height="16" style="background-color:%WEBBGCOLOR%" /> <nop>%MAKETEXT{"[_1] Web" args="%INCLUDINGWEB%"}% <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-dropdown.gif' alt='' width='14' height='16' />]]
+      * [[%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebCreateNewTopic?topicparent=%BASETOPIC%][ %ICON{"newtopic"}% %MAKETEXT{"Create New Topic"}%]]
+      * [[WebTopicList][ %ICON{"index"}% %MAKETEXT{"Index"}%]]
+      * [[%INCLUDINGWEB%.WebSearch][ %ICON{"searchtopic"}% %MAKETEXT{"Search"}%]]
+      * [[WebChanges][ %ICON{"changes"}% %MAKETEXT{"Changes"}%]]
+      * [[WebNotify][ %ICON{"notify"}% %MAKETEXT{"Notifications"}%]]
+      * [[WebRss][ %ICON{"feed"}% %MAKETEXT{"RSS Feed"}%]]
+      * [[WebStatistics][ %ICON{"statistics"}% %MAKETEXT{"Statistics"}%]]
+      * [[WebPreferences][ %ICON{"wrench"}% %MAKETEXT{"Preferences"}%]]
+%INCLUDE{%SYSTEMWEB%.TopMenuSkinTopicMenu}%
+%STOPINCLUDE%
+-----
+
+__Related topics:__ TopMenuSkin, TopMenuSkinTopBar, WebTopMenu, TopMenuSkinHomeMenu, TopMenuSkinTopicMenu
