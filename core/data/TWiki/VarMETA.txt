@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1270874781" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarMETA
 ---+++ META -- displays meta-data
@@ -6,7 +6,7 @@
    * Syntax: =%<nop>META{ "item" ...}%=
    * Parameters:
      | *Item* | *Options* | *Description* |
-     | ="formfield"= | =name="..."=: name of the field. The field value can be shortened as described in %SYSTEMWEB%.FormattedSearch for =$formfield= %BR% \
+     | ="formfield"= | =name="..."=: name of the field. The field value can be shortened as described in %SYSTEMWEB%.FormattedSearch for =$formfield=. %BR% \
                        =newline="..."=: by default, each newline character will be rewritten to =&lt;br /&gt;= to allow metadata that contains newlines to be used in tables, etc. =$n= indicates a newline character. %BR% \
                        =bar="..."=: by default, each vertical bar is rewritten to an HTML entity so as to not be mistaken for a table separator. \
                     | Show a single form field |
@@ -23,5 +23,5 @@
 		    =suffix="..."=: Suffix, only appears if there are parents; default =""=. %BR% \
 		    =separator="..."=: Separator between parents; default =" &gt; "=. \
                   | Generates the parent link |
-   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarMETASEARCH][METASEARCH]]
-
+   * __Note:__ [[FormatTokens][Formatting tokens]] can be used for =newline=, =prefix=, =format=, =suffix= and =separator= options, such as =separator="$n   * "=
+   * Related: [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarMETASEARCH][METASEARCH]], [[%IF{"'%INCLUDINGTOPIC%'='TWikiVariables'" then="#"}%VarSEARCH][SEARCH]], FormattedSearch
