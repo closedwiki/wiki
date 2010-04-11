@@ -1,6 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="1270873988" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1270923218" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopMenuSkinDefaultWebTopMenu"}%
----+ Home Menu of !TopMenuSkin
+---+ Topic Menu of !TopMenuSkin
 
 This bullet list defines the Topic menu with topic actions, used by the TopMenuSkin.
 
