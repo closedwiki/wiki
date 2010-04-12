@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1270879939" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1271051437" format="1.1" version="$rev$"}%
 ---+!! !TopMenuSkin
 
 The !TopMenuSkin adds pulldown menus to the PatternSkin
@@ -17,6 +17,134 @@ The !TopMenuSkin adds pulldown menus to the PatternSkin
    * TopMenuSkinDefaultWebTopMenu - bullet list defining menu bar for webs that do not have a !WebTopMenu topic
       * TopMenuSkinHomeMenu - "Home" pulldown menu with web list, included by !WebTopMenu
       * TopMenuSkinTopicMenu - "Topic" pulldown menu with topic actions, included by !WebTopMenu
+
+---++ Use !TopMenuSkin Menu-Bar in Topics
+
+A menu-bar can be added anywhere in a topic:
+   * Include the "%SYSTEMWEB%.TopMenuSkin" topic - this pulls in the CSS and !JavaScript needed for the menu-bar.
+   * Create a nested bullet list with links. The top level represents the menu-bar items, the second level the options within a menu-bar item.
+   * Enclose the bullet list with a =&lt;div class="twTopMenuTab"&gt;= tag.
+
+Example:<verbatim>
+%INCLUDE{"%SYSTEMWEB%.TopMenuSkin"}%
+<div class="twTopMenuTab">
+   * [[WebHome][%ICON{home}% Home]]
+      * [[WebNotify][Subscribe]]
+      * [[WebStatistics][Statistics]]
+   * [[WebSearch][%ICON{searchtopic}% Search]]
+      * [[WebSearchAdvanced][Advanced search]]
+      * [[SearchHelp][Search help]]
+</div>
+</verbatim>
+
+Renders as:
+<div class="twTopMenuTab">
+   * [[WebHome][%ICON{home}% Home]]
+      * [[WebNotify][Subscribe]]
+      * [[WebStatistics][Statistics]]
+   * [[WebSearch][%ICON{searchtopic}% Search]]
+      * [[WebSearchAdvanced][Advanced search]]
+      * [[SearchHelp][Search help]]
+</div>
+
+---++ CSS and !JavaScript
+
+This section defines the CSS and !JavaScript. ([[%SCRIPTURL{view}%/%WEB%/%TOPIC%][View Raw]] to see the source.)
+
+%STARTINCLUDE%<!--<pre>-->
+<link rel="stylesheet" href="%PUBURLPATH%/TWiki/JQueryPlugin/jquery-all.css" type="text/css" media="all" />
+<script type="text/javascript" src="%PUBURLPATH%/TWiki/JQueryPlugin/jquery-all.js"></script>
+<script type="text/javascript">
+var twtimeout = 600;
+var twclosetimer = null;
+var twmenuitem = null;
+function twTopMenuOpen() {
+ twTopMenuCancelTimer();
+ twTopMenuClose();
+ twmenuitem = $(this).find('ul').css('visibility', 'visible'); 
+}
+function twTopMenuClose() {
+ if(twmenuitem) { twmenuitem.css('visibility', 'hidden'); } 
+}
+function twTopMenuTimer() {
+ twclosetimer = window.setTimeout(twTopMenuClose, twtimeout); 
+}
+function twTopMenuCancelTimer() {
+ if(twclosetimer) { window.clearTimeout(twclosetimer); twclosetimer = null; } 
+}
+$(document).ready(function() {
+ $('.twTopMenuTab > ul li').bind('mouseover', twTopMenuOpen);
+ $('.twTopMenuTab > ul').bind('mouseout',  twTopMenuTimer);
+});
+document.onclick = twTopMenuClose;
+</script>
+<style type="text/css" media="all">
+.twTopMenuTab
+{
+  height: 22px;
+  width: auto;
+  color: #111111;
+  background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/menu-gray-bg.png);
+  background-repeat: repeat-x;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.twTopMenuTab ul
+{
+  height: 22px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.twTopMenuTab ul li
+{
+  float: left;
+  font: 13px Tahoma, Arial;
+  vertical-align: middle;
+  width: auto;
+  white-space: nowrap;
+}
+.twTopMenuTab ul li a
+{
+  display: block;
+  padding: 2px 8px;
+  text-decoration: none;
+  color: #111111;
+}
+.twTopMenuTab ul li a:hover
+{
+  background: #CCCCCC;
+  color: #111111;
+  text-decoration: none;
+}
+.twTopMenuTab ul li ul
+{
+  margin: 1px 0 0 0;
+  padding: 0;
+  position: absolute;
+  visibility: hidden;
+  border-top: 1px solid white;
+  color: #111111;
+  z-index: 9000;
+}
+.twTopMenuTab ul li ul li
+{
+  float: none;
+  display: inline;
+}
+.twTopMenuTab ul li ul li a
+{
+  width: auto;
+  background: #EEEEEE;
+  padding: 3px 8px;
+}
+.twTopMenuTab ul li ul li a:hover
+{
+  background: #DDDDDD;
+}
+</style>
+<!--</pre>-->%STOPINCLUDE%
+
 
 ---++ Installation
 

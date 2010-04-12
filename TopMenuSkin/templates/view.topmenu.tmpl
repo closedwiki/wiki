@@ -1,97 +1,23 @@
 %TMPL:INCLUDE{"view"}%
 
-%TMPL:DEF{"script:skintemplate"}%%TMPL:P{"script:skintemplate:topmenu"}%%IF{"defined raw" then='%TMPL:P{"script:skintemplate:viewraw"}%'}%%TMPL:END%
-
-%TMPL:DEF{"script:skintemplate:topmenu"}%
-<link rel="stylesheet" href="%PUBURLPATH%/TWiki/JQueryPlugin/jquery-all.css" type="text/css" media="all" />
-<script type="text/javascript" src="%PUBURLPATH%/TWiki/JQueryPlugin/jquery-all.js"></script>
-<script type="text/javascript">
-var twtimeout = 600;
-var twclosetimer = null;
-var twmenuitem = null;
-function twTopMenuOpen() {
- twTopMenuCancelTimer();
- twTopMenuClose();
- twmenuitem = $(this).find('ul').css('visibility', 'visible'); 
-}
-function twTopMenuClose() {
- if(twmenuitem) { twmenuitem.css('visibility', 'hidden'); } 
-}
-function twTopMenuTimer() {
- twclosetimer = window.setTimeout(twTopMenuClose, twtimeout); 
-}
-function twTopMenuCancelTimer() {
- if(twclosetimer) { window.clearTimeout(twclosetimer); twclosetimer = null; } 
-}
-$(document).ready(function() {
- $('.twTopMenuTab > ul li').bind('mouseover', twTopMenuOpen);
- $('.twTopMenuTab > ul').bind('mouseout',  twTopMenuTimer);
-});
-document.onclick = twTopMenuClose;
-</script>
-<style>
-.twTopMenuTab
-{
-  height:27px;
-  color:#111111;
-  background-image:url(%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-gray-bg.png);
-  background-repeat:repeat-x;
-}
-.twTopMenuTab ul
-{
-  margin: 0;
-  padding: 0;
-}
-.twTopMenuTab ul li
-{
-  float: left;
-  list-style: none;
-  font: 13px Tahoma, Arial;
-  vertical-align: middle;
-  width: auto;
-  white-space: nowrap;
-}
-.twTopMenuTab ul li a
-{
-  display: block;
-  padding: 2px 8px;
-  text-decoration: none;
-  color: #111111;
-}
-.twTopMenuTab ul li a:hover
-{
-  background: #CCCCCC;
-  color: #111111;
-  text-decoration: none;
-}
-.twTopMenuTab ul li ul
-{
-  margin: 0;
-  padding: 0;
-  position: absolute;
-  visibility: hidden;
-  border-top: 1px solid white;
-  color: #111111;
-  z-index: 300;
-}
-.twTopMenuTab ul li ul li
-{
-  float: none;
-  display: inline;
-}
-.twTopMenuTab ul li ul li a
-{
-  width: auto;
-  background: #EEEEEE;
-  padding: 3px 8px;
-}
-.twTopMenuTab ul li ul li a:hover
-{
-  background: #DDDDDD;
-}
-</style>%TMPL:END%
+%TMPL:DEF{"topbar"}%<div id="twTopBar">%INCLUDE{"%SYSTEMWEB%.TopMenuSkinTopBar"}%</div><!-- /twTopBar-->%TMPL:END%
 
 %TMPL:DEF{"topbardimensions"}%
+#twTopBar
+{
+  z-index: 1;  /*** Critical value for Moz/Opera Background Column colors fudge to work ***/
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  height: 90px; /* top bar height; make room for header columns */
+/*
+  overflow: hidden;
+*/
+  background: #DFE2E8;
+}
+#twTopBar .twikiImage img {
+   background-color:transparent;
+}
 #patternTopBar,
 #patternClearHeaderCenter,
 #patternClearHeaderLeft,

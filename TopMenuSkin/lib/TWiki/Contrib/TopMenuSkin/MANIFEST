@@ -4,12 +4,11 @@ data/TWiki/TopMenuSkinDefaultWebTopMenu.txt 0644
 data/TWiki/TopMenuSkinHomeMenu.txt 0644
 data/TWiki/TopMenuSkinTopBar.txt 0644
 data/TWiki/TopMenuSkinTopicMenu.txt 0644
-pub/TWiki/TopMenuSkin/style.css 0644
-pub/TWiki/TopMenuSkin/menu.js 0644
 pub/TWiki/TopMenuSkin/screenshot.png 0644
 pub/TWiki/TopMenuSkin/fullscreen.png 0644
 pub/TWiki/TopMenuSkin/menu-arrow-right.gif 0644
 pub/TWiki/TopMenuSkin/menu-dropdown.gif 0644
 pub/TWiki/TopMenuSkin/menu-gray-bg.png 0644
+pub/TWiki/TopMenuSkin/spacer.gif 0644
 templates/twiki.topmenu.tmpl 0644
 templates/view.topmenu.tmpl 0644

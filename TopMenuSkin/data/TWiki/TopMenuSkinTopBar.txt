@@ -1,7 +1,41 @@
-%META:TOPICINFO{author="TWikiContributor" date="1270862858" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1271051030" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopMenuSkin"}%
 ---+ Top Bar of !TopMenuSkin
 
-Placeholder for top menu bar, replacing WebTopBar.
+Top bar of TopMenuSkin, replacing WebTopBar.
+
+-----
+%STARTINCLUDE%%INCLUDE{%SYSTEMWEB%.TopMenuSkin}%
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr style="background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/menu-gray-bg.png); background-repeat: repeat-x;">
+<td width="40"><img src="%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/spacer.gif" width="40" height="1" /></td>
+<td width="99%">
+<div class="twTopMenuTab">%INCLUDE{TWiki.TopMenuSkinDefaultWebTopMenu}%
+</div></td><td><div class="twTopMenuTab">
+   * [[%WIKIUSERNAME%][ %ICON{"person"}% %MAKETEXT{"Account"}% <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-dropdown.gif' alt='' width='14' height='16' />]]
+      * [[%BASEWEB%.WebTopicList][ %ICON{"index"}% %MAKETEXT{"Logout"}%]]
+</div></td>
+<td width="40"><img src="%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/spacer.gif" width="40" height="1" /></td>
+</tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr style="background:#DFE2E8"><td><img src="%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/spacer.gif" width="40" height="68" /></td>
+<td width="40%">
+<span id="twikiLogo" class="twikiImage"><a href="%WEBLOGOURL%"><img src="%WEBLOGOIMG%" border="0" alt="%WEBLOGOALT%" style="border:none;" /></a></span></td>
+<td width="55%" align="right" class="patternMetaMenu">
+<noautolink>
+   * <form name="jumpForm" action="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%"><input id="jumpFormField" type="text" class="twikiInputField" name="topic" value="" size="10" /><noscript>&nbsp;<input type="submit" class="twikiButton" size="5" name="submit" value="%MAKETEXT{"Jump"}%" />&nbsp;</noscript>
+   </form>
+   * <form name="quickSearchForm" action="%SCRIPTURLPATH{view}%/%INCLUDINGWEB%/WebSearch"><input type="text" class="twikiInputField" id="quickSearchBox" name="search" value="" size="10" /><input type="hidden" name="scope" value="all" /><input type="hidden" name="web" value="%BASEWEB%" /><noscript>&nbsp;<input type="submit" size="5" class="twikiButton" name="submit" value="%MAKETEXT{"Search"}%" />&nbsp;</noscript>
+   </form>
+   * %INCLUDE{%SYSTEMWEB%.LanguageSelector}%
+</noautolink>
+</span>
+</td>
+<td width="40"><img src="%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/spacer.gif" width="40" height="1" /></td>
+</tr>
+</table>%STOPINCLUDE%
+-----
+   * Set COVER = topmenu
 
 __Related topics:__ TopMenuSkin, TopMenuSkinTopBar, TopMenuSkinDefaultWebTopMenu, WebTopMenu
