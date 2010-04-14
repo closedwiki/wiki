@@ -1,11 +1,12 @@
-%META:TOPICINFO{author="TWikiContributor" date="1270923218" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1271131713" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopMenuSkinDefaultWebTopMenu"}%
 ---+ Topic Menu of !TopMenuSkin
 
-This bullet list defines the Topic menu with topic actions, used by the TopMenuSkin.
+This topic defines the Topic pulldown menu with topic actions, used by the TopMenuSkin.
 
 -----
-%STARTINCLUDE%<nop>
+%INCLUDE{"TopMenuSkin"}%
+<div class="twTopMenuTab">%STARTINCLUDE%<nop>
    * %META{
  "parent"
  nowebhome="on"
@@ -19,7 +20,7 @@ This bullet list defines the Topic menu with topic actions, used by the TopMenuS
       * [[%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?raw=on][%MAKETEXT{"Raw view"}%]]
       * [[%SCRIPTURL{edit}%/%BASEWEB%/%BASETOPIC%?t=%SERVERTIME{$epoch}%;nowysiwyg=1][%MAKETEXT{"Raw edit"}%]]
       * [[%SCRIPTURL{oops}%/%BASEWEB%/%BASETOPIC%?template=oopsmore][%MAKETEXT{"More topic actions"}%]]
-<nop>%STOPINCLUDE%
+<nop>%STOPINCLUDE%</div>
 -----
 
 __Related topics:__ TopMenuSkin, TopMenuSkinTopBar, WebTopMenu, TopMenuSkinDefaultWebTopMenu, TopMenuSkinHomeMenu
