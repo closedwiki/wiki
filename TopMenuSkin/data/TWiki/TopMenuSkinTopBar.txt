@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1271129564" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1271304562" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopMenuSkin"}%
 ---+ Top Bar of !TopMenuSkin
 
@@ -10,7 +10,11 @@ Top bar of TopMenuSkin, replacing WebTopBar.
 <tr style="background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/menu-gray-bg.png); background-repeat: repeat-x;">
 <td width="40"><img src="%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/spacer.gif" width="40" height="1" /></td>
 <td width="99%">
-<div class="twTopMenuTab">%INCLUDE{TWiki.TopMenuSkinDefaultWebTopMenu}%
+<div class="twTopMenuTab">%IF{
+ "istopic '%BASEWEB%.WebTopMenu'"
+ then="$percntINCLUDE{%BASEWEB%.WebTopMenu}$percnt"
+ else="$percntINCLUDE{%SYSTEMWEB%.TopMenuSkinDefaultWebTopMenu}$percnt"
+}%
 </div></td><td><div class="twTopMenuTab">
    * [[%WIKIUSERNAME%][ %ICON{"person"}% %MAKETEXT{"Account"}% <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-dropdown.gif' alt='' width='14' height='16' />]]
       * [[%BASEWEB%.WebTopicList][ %ICON{"index"}% %MAKETEXT{"Logout"}%]]
@@ -36,6 +40,5 @@ Top bar of TopMenuSkin, replacing WebTopBar.
 </tr>
 </table>%STOPINCLUDE%
 -----
-   * Set COVER = topmenu
 
 __Related topics:__ TopMenuSkin, TopMenuSkinTopBar, TopMenuSkinDefaultWebTopMenu, WebTopMenu
