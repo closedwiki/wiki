@@ -16,6 +16,7 @@
 !include ../TablePlugin/lib/TWiki/Plugins/TablePlugin
 !include ../TipsContrib/lib/TWiki/Contrib/TipsContrib
 !include ../TinyMCEPlugin/lib/TWiki/Plugins/TinyMCEPlugin
+!include ../TopMenuSkin/lib/TWiki/Contrib/TopMenuSkin
 !include ../TWikiUserMappingContrib/lib/TWiki/Contrib/TWikiUserMappingContrib
 !include ../TWikiNetSkin/lib/TWiki/Contrib/TWikiNetSkin
 !include ../TWikiNetSkinPlugin/lib/TWiki/Plugins/TWikiNetSkinPlugin
