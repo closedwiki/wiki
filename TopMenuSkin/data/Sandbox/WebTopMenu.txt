@@ -1,8 +1,8 @@
-%META:TOPICINFO{author="TWikiContributor" date="1271046448" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1271302596" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopMenuSkin"}%
----+ Default Web Top Menu of !TopMenuSkin
+---+ Top Menu of <nop>%WEB% Web
 
-This topic defines the default menu structure of a web. It is used by the TopMenuSkin in case the WebTopMenu topic is missing in a web.
+This topic defines the menu structure of the <nop>%WEB% web, used by the [[%SYSTEMWEB%.TopMenuSkin][TopMenuSkin]].
 
 -----
 %INCLUDE{"%SYSTEMWEB%.TopMenuSkin"}%
@@ -21,4 +21,4 @@ This topic defines the default menu structure of a web. It is used by the TopMen
 %STOPINCLUDE%</div>
 -----
 
-__Related topics:__ TopMenuSkin, TopMenuSkinTopBar, WebTopMenu, TopMenuSkinHomeMenu, TopMenuSkinTopicMenu
+__Related topics:__ [[%SYSTEMWEB%.TopMenuSkin][TopMenuSkin]], [[%SYSTEMWEB%.TopMenuSkinHomeMenu][TopMenuSkinHomeMenu]], [[%SYSTEMWEB%.TopMenuSkinTopicMenu][TopMenuSkinTopicMenu]]

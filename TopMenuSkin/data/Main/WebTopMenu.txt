@@ -1,15 +1,15 @@
-%META:TOPICINFO{author="TWikiContributor" date="1271046448" format="1.1" version="$Rev$"}%
-%META:TOPICPARENT{name="TopMenuSkin"}%
----+ Default Web Top Menu of !TopMenuSkin
+%META:TOPICINFO{author="TWikiContributor" date="1271302646" format="1.1" version="$Rev$"}%
+---+ Top Menu of <nop>%WEB% Web
 
-This topic defines the default menu structure of a web. It is used by the TopMenuSkin in case the WebTopMenu topic is missing in a web.
+This topic defines the menu structure of the <nop>%WEB% web, used by the [[%SYSTEMWEB%.TopMenuSkin][TopMenuSkin]].
 
 -----
 %INCLUDE{"%SYSTEMWEB%.TopMenuSkin"}%
 <div class="twTopMenuTab">%STARTINCLUDE%
 %INCLUDE{%SYSTEMWEB%.TopMenuSkinHomeMenu}%
    * [[%BASEWEB%.%HOMETOPIC%][<img src="%ICONURL{web-bg}%" border="0" alt="" width="16" height="16" style="background-color:%WEBBGCOLOR%" /> <nop>%MAKETEXT{"[_1] Web" args="%BASEWEB{noparents="on"}%"}% <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-dropdown.gif' alt='' width='14' height='16' />]]
-      * [[%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebCreateNewTopic?topicparent=%BASETOPIC%][ %ICON{"newtopic"}% %MAKETEXT{"Create New Topic"}%]]
+      * %IF{"istopic '%USERSWEB%.TWikiUsers'" else=" $percntICON{\"person\"}$percnt $percntMAKETEXT{\"Users\"}$percnt" then="[[$percntUSERSWEB$percnt.TWikiUsers][ $percntICON{\"person\"}$percnt $percntMAKETEXT{\"Users\"}$percnt]]"}%
+      * [[%USERSWEB%.TWikiGroups][ %ICON{"group"}% %MAKETEXT{"Groups"}%]]
       * [[%BASEWEB%.WebTopicList][ %ICON{"index"}% %MAKETEXT{"Index"}%]]
       * [[%BASEWEB%.WebSearch][ %ICON{"searchtopic"}% %MAKETEXT{"Search"}%]]
       * [[%BASEWEB%.WebChanges][ %ICON{"changes"}% %MAKETEXT{"Changes"}%]]
@@ -21,4 +21,4 @@ This topic defines the default menu structure of a web. It is used by the TopMen
 %STOPINCLUDE%</div>
 -----
 
-__Related topics:__ TopMenuSkin, TopMenuSkinTopBar, WebTopMenu, TopMenuSkinHomeMenu, TopMenuSkinTopicMenu
+__Related topics:__ [[%SYSTEMWEB%.TopMenuSkin][TopMenuSkin]], [[%SYSTEMWEB%.TopMenuSkinHomeMenu][TopMenuSkinHomeMenu]], [[%SYSTEMWEB%.TopMenuSkinTopicMenu][TopMenuSkinTopicMenu]]

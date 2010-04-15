@@ -1,9 +1,13 @@
 lib/TWiki/Contrib/TopMenuSkin.pm 0444
+data/_default/WebTopMenu.txt 0644
+data/Main/WebTopMenu.txt 0644
+data/Sandbox/WebTopMenu.txt 0644
 data/TWiki/TopMenuSkin.txt 0644
 data/TWiki/TopMenuSkinDefaultWebTopMenu.txt 0644
 data/TWiki/TopMenuSkinHomeMenu.txt 0644
 data/TWiki/TopMenuSkinTopBar.txt 0644
 data/TWiki/TopMenuSkinTopicMenu.txt 0644
+data/TWiki/WebTopMenu.txt 0644
 pub/TWiki/TopMenuSkin/banner-bg.png 0644
 pub/TWiki/TopMenuSkin/screenshot.png 0644
 pub/TWiki/TopMenuSkin/fullscreen.png 0644

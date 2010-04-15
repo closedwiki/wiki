@@ -1,0 +1,47 @@
+%META:TOPICINFO{author="TWikiContributor" date="1271046525" version="$Rev$"}%
+%META:TOPICPARENT{name="TopMenuSkin"}%
+---+ Top Menu of <nop>%WEB% Web
+
+This topic defines the menu structure of the <nop>%WEB% web, used by the [[TopMenuSkin]].
+
+-----
+%INCLUDE{"%SYSTEMWEB%.TopMenuSkin"}%
+<div class="twTopMenuTab">%STARTINCLUDE%
+%INCLUDE{%SYSTEMWEB%.TopMenuSkinHomeMenu}%
+   * [[%BASEWEB%.%HOMETOPIC%][ <img src="%ICONURL{web-bg}%" border="0" alt="" width="16" height="16" style="background-color:%WEBBGCOLOR%" /> <nop>%MAKETEXT{"[_1] Web" args="%BASEWEB%"}% <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-dropdown.gif' alt='' width='14' height='16' />]]
+      * %IF{"istopic '%USERSWEB%.TWikiUsers'" else=" $percntICON{\"person\"}$percnt $percntMAKETEXT{\"Users\"}$percnt" then="[[$percntUSERSWEB$percnt.TWikiUsers][ $percntICON{\"person\"}$percnt $percntMAKETEXT{\"Users\"}$percnt]]"}%
+      * [[%USERSWEB%.TWikiGroups][ %ICON{"group"}% %MAKETEXT{"Groups"}%]]
+      * [[%BASEWEB%.WebTopicList][ %ICON{"index"}% %MAKETEXT{"Index"}%]]
+      * [[%BASEWEB%.WebSearch][ %ICON{"searchtopic"}% %MAKETEXT{"Search"}%]]
+      * [[%BASEWEB%.WebChanges][ %ICON{"changes"}% %MAKETEXT{"Changes"}%]]
+      * [[%BASEWEB%.WebNotify][ %ICON{"notify"}% %MAKETEXT{"Notifications"}%]]
+      * [[%BASEWEB%.WebRss][ %ICON{"feed"}% %MAKETEXT{"RSS Feed"}%]]
+      * [[%BASEWEB%.WebStatistics][ %ICON{"statistics"}% %MAKETEXT{"Statistics"}%]]
+      * [[%BASEWEB%.WebPreferences][ %ICON{"wrench"}% %MAKETEXT{"Preferences"}%]]
+%INCLUDE{%SYSTEMWEB%.TopMenuSkinTopicMenu}%
+   * [[%HOMETOPIC%][%MAKETEXT{"User Reference"}% <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-dropdown.gif' alt='' width='14' height='16' />]]
+      * [[ATasteOfTWiki]]
+      * [[TextFormattingRules]]
+      * [[TWikiVariables]]
+      * [[FormattedSearch]]
+      * [[QuerySearch]]
+      * [[TWikiDocGraphics]]
+      * [[TWikiSkinBrowser]]
+      * [[InstalledPlugins]]
+   * [[AdminToolsCategory][%MAKETEXT{"Admin Maintenance"}% <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-dropdown.gif' alt='' width='14' height='16' />]]
+      * [[TWikiReferenceManual][Reference Manual]]
+      * [[InterWikis]]
+      * [[ManagingWebs]]
+      * [[TWikiSiteTools]]
+      * [[%WIKIPREFSTOPIC%]]
+      * [[%WEBPREFSTOPIC%]]
+   * [[%HOMETOPIC%][%MAKETEXT{"Categories"}% <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-dropdown.gif' alt='' width='14' height='16' />]]
+      * [[AdminDocumentationCategory][Admin Documentation]]
+      * [[AdminToolsCategory][Admin Tools]]
+      * [[DeveloperDocumentationCategory][Developer Doc]]
+      * [[UserDocumentationCategory][User Documentation]]
+      * [[UserToolsCategory][User Tools]]
+%STOPINCLUDE%</div>
+-----
+
+__Related topics:__ [[TopMenuSkin]], [[TopMenuSkinTopBar]], [[TopMenuSkinDefaultWebTopMenu]], [[TopMenuSkinHomeMenu]], [[TopMenuSkinTopicMenu]]
