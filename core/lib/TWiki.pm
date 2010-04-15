@@ -180,6 +180,8 @@ BEGIN {
         ALLVARIABLES      => \&ALLVARIABLES,
         ATTACHURL         => \&ATTACHURL,
         ATTACHURLPATH     => \&ATTACHURLPATH,
+        BASETOPIC         => \&BASETOPIC,
+        BASEWEB           => \&BASEWEB,
         CRYPTTOKEN        => \&CRYPTTOKEN,
         DATE              => \&DATE,
         DISPLAYTIME       => \&DISPLAYTIME,
@@ -196,6 +198,8 @@ BEGIN {
         ICONURLPATH       => \&ICONURLPATH,
         IF                => \&IF,
         INCLUDE           => \&INCLUDE,
+        INCLUDINGTOPIC    => \&INCLUDINGTOPIC,
+        INCLUDINGWEB      => \&INCLUDINGWEB,
         INTURLENCODE      => \&INTURLENCODE_deprecated,
         LANGUAGES         => \&LANGUAGES,
         MAKETEXT          => \&MAKETEXT,
@@ -224,6 +228,7 @@ BEGIN {
         SPACEDTOPIC       => \&SPACEDTOPIC_deprecated,
         SPACEOUT          => \&SPACEOUT,
         'TMPL:P'          => \&TMPLP,
+        TOPIC             => \&TOPIC,
         TOPICLIST         => \&TOPICLIST,
         URLENCODE         => \&ENCODE,
         URLPARAM          => \&URLPARAM,
@@ -231,6 +236,7 @@ BEGIN {
         USERINFO          => \&USERINFO,
         USERNAME          => \&USERNAME_deprecated,
         VAR               => \&VAR,
+        WEB               => \&WEB,
         WEBLIST           => \&WEBLIST,
         WIKINAME          => \&WIKINAME_deprecated,
         WIKIUSERNAME      => \&WIKIUSERNAME_deprecated,
@@ -2921,13 +2927,9 @@ sub _expandTagOnTopicRendering {
     require TWiki::Attrs;
 
     my $e = $this->{prefs}->getPreferencesValue( $tag );
-    unless( defined( $e )) {
-        $e = $this->{SESSION_TAGS}{$tag};
-        if( !defined( $e ) && defined( $functionTags{$tag} )) {
-            $e = &{$functionTags{$tag}}
-              ( $this, new TWiki::Attrs(
-                  $args, $contextFreeSyntax{$tag} ), @_ );
-        }
+    if( !defined( $e ) && defined( $functionTags{$tag} ) ) {
+        $e = &{$functionTags{$tag}}
+          ( $this, new TWiki::Attrs( $args, $contextFreeSyntax{$tag} ), @_ );
     }
     return $e;
 }
@@ -3393,6 +3395,41 @@ sub _includeWarning {
 #-------------------------------------------------------------------
 # Tag Handlers
 #-------------------------------------------------------------------
+
+sub BASETOPIC {
+    my $this = shift;
+    return $this->{SESSION_TAGS}{BASETOPIC};
+}
+
+sub BASEWEB {
+    my ( $this, $params ) = @_;
+    return _handleWebTag( $this->{SESSION_TAGS}{BASEWEB}, $params );
+}
+
+sub INCLUDINGTOPIC {
+    my $this = shift;
+    return $this->{SESSION_TAGS}{INCLUDINGTOPIC};
+}
+
+sub INCLUDINGWEB {
+    my ( $this, $params ) = @_;
+    return _handleWebTag( $this->{SESSION_TAGS}{INCLUDINGWEB}, $params );
+}
+
+sub TOPIC {
+    my $this = shift;
+    return $this->{SESSION_TAGS}{TOPIC};
+}
+
+sub WEB {
+    my ( $this, $params ) = @_;
+    return _handleWebTag( $this->{SESSION_TAGS}{WEB}, $params );
+}
+
+sub _handleWebTag {
+    my( $theWeb, $params ) = @_;
+    return $theWeb;
+}
 
 sub FORMFIELD {
     my ( $this, $params, $topic, $web ) = @_;	
