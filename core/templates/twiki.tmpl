@@ -25,16 +25,17 @@
 %TMPL:DEF{"windowtitle"}%<title>%TMPL:P{"titleaction"}% <nop>%TOPIC%%TMPL:P{"titlesep"}%%WEB%%TMPL:P{"titlesep"}%<nop>%WIKITOOLNAME%</title>%TMPL:END%
 
 %TMPL:DEF{"head"}%<head>
-	%TMPL:P{"windowtitle"}%
-	<meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" /> <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
-    <meta name="scripturl" content="%SCRIPTURL%" />
-    <meta name="scriptsuffix" content="%SCRIPTSUFFIX%" />
-	<link rel="icon" href="%FAVICON%" type="image/x-icon" /> <link rel="shortcut icon" href="%FAVICON%" type="image/x-icon" />
-	<link rel="alternate" href="%SCRIPTURL{edit}%/%BASEWEB%/%BASETOPIC%?_T=%DATE%" type="application/x-wiki" title="edit %BASETOPIC%" />
-	<meta name="description" content="%TOPIC%" />
-    <base href="%SCRIPTURL{%SCRIPTNAME%}%/%WEB%/%TOPIC%"></base>
-	%TMPL:P{"script"}%
-	%TMPL:P{"defaultstyle"}%
+%TMPL:P{"windowtitle"}%
+<meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" /> <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
+<meta name="scripturl" content="%SCRIPTURL%" />
+<meta name="scriptsuffix" content="%SCRIPTSUFFIX%" />
+<link rel="icon" href="%FAVICON%" type="image/x-icon" /> <link rel="shortcut icon" href="%FAVICON%" type="image/x-icon" />
+<link rel="alternate" href="%SCRIPTURL{edit}%/%BASEWEB%/%BASETOPIC%?t=%SERVERTIME{$epoch}%" type="application/x-wiki" title="edit %BASETOPIC%" />
+<link rel="edit" href="%SCRIPTURL{edit}%/%BASEWEB%/%BASETOPIC%?t=%SERVERTIME{$epoch}%" title="edit %BASETOPIC%" />
+<meta name="description" content="%TOPIC%" />
+<base href="%SCRIPTURL{%SCRIPTNAME%}%/%WEB%/%TOPIC%"></base>
+%TMPL:P{"script"}%
+%TMPL:P{"defaultstyle"}%
 </head>%TMPL:END%
 
 %TMPL:DEF{"titleaction"}%%TMPL:END%
