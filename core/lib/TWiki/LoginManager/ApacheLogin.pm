@@ -80,7 +80,7 @@ sub forceAuthentication {
 
     # See if there is an 'auth' version
     # of this script, may be a result of not being logged in.
-    my $scriptName = $twiki->{request}->action();
+    my $scriptName = $query->action();
     my $newAction = $scriptName.'auth'.$TWiki::cfg{ScriptSuffix};
 
     if( ! $query->remote_user() && exists $TWiki::cfg{SwitchBoard}{$newAction} ) {
@@ -88,7 +88,7 @@ sub forceAuthentication {
         # the path info, and the query string.  All three query
         # variables are in the list of the canonical request meta
         # variables in CGI 1.1 (also provided by TWiki::Request).
-        my $url = $query->request_uri();
+        my $url = $twiki->getScriptUrl(1, $scriptName);
         if( $url && $url =~ m!(.*/$scriptName)([^?]*)! ) {
             # $url should not contain query string as it gets appended
             # in TWiki::redirect. Script gets 'auth' appended.
