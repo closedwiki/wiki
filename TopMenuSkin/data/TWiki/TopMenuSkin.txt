@@ -49,7 +49,7 @@ Renders as:
 
 ---++ CSS and !JavaScript
 
-This section defines the CSS and !JavaScript. ([[%SCRIPTURL{view}%/%WEB%/%TOPIC%][View Raw]] to see the source.)
+This section defines the CSS and !JavaScript. ([[%SCRIPTURL{view}%/%WEB%/%TOPIC%?raw=on][View Raw]] to see the source.)
 
 %STARTINCLUDE%<!--<pre>-->
 <link rel="stylesheet" href="%PUBURLPATH%/TWiki/JQueryPlugin/jquery-all.css" type="text/css" media="all" />

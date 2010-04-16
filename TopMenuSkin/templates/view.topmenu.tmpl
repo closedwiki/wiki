@@ -12,18 +12,60 @@
   height: 80px; /* top bar height; make room for header columns */
   background: #DFE2E8;
 }
-#twTopBar .twikiImage img {
-   background-color:transparent;
+#twTopBar img {
+  background-color: transparent;
+}
+#twTopBarButtons {
+  width: 165px;
+  height: 35px;
+  background-color: transparent;
+  background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/action-button-area.gif);
+  background-repeat: no-repeat;
+}
+#twTopBarButtons ul {
+  padding: 0px;
+  margin: 10px;
+  list-style: none;
+}
+#twTopBarButtons ul li {
+  margin: 11px 5px 0 6px;
+  float: left;
+  font: 15px Tahoma, Arial;
+  width: 60px;
+  height: 24px;
+  text-align: center;
+  white-space: nowrap;
+  background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/button-round-disabled.gif);
+  color: #888888;
+}
+#twTopBarButtons ul li a
+{
+  display: block;
+  margin: 0;
+  width: 60px;
+  height: 24px;
+  text-decoration: none;
+  background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/button-round-normal.gif);
+  color: #333333;
+}
+#twTopBarButtons ul li a:hover
+{
+  background-color: transparent;
+  background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/button-round-hover.gif);
 }
 #patternTopBar,
 #patternClearHeaderCenter,
 #patternClearHeaderLeft,
 #patternClearHeaderRight,
 #patternTopBarContentsOuter {
-   height:80px; /* top bar height; make room for header columns */
-   overflow:hidden;
+  height: 80px; /* top bar height; make room for header columns */
+  overflow: hidden;
+}
+#patternOuter {
+  background: #fff;
 }
 %TMPL:END%
 
+%TMPL:DEF{"top"}%%TMPL:END%
 %TMPL:DEF{"leftbar"}%%TMPL:END%
 %TMPL:DEF{"leftbardimensions"}%%TMPL:END%
