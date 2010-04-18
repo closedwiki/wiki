@@ -3881,14 +3881,16 @@ sub SEARCH {
 
 sub WEBLIST {
     my( $this, $params ) = @_;
-    my $format = $params->{_DEFAULT} || $params->{'format'} || '$name';
+    my $format    = $params->{_DEFAULT} || $params->{'format'} || '$name';
     $format ||= '$name';
     my $separator = $params->{separator} || "\n";
     $separator =~ s/\$n/\n/;
-    my $web = $params->{web} || '';
-    my $webs = $params->{webs} || 'public';
+    my $web       = $params->{web} || '';
+    my $webs      = $params->{webs} || 'public';
     my $selection = $params->{selection} || '';
-    my $showWeb = $params->{subwebs} || '';
+    my $showWeb   = $params->{subwebs} || '';
+    my $limit     = $params->{limit} || '32000';
+    my $overlimit = $params->{overlimit} || '';
     $selection =~ s/\,/ /g;
     $selection = " $selection ";
     my $marker = $params->{marker} || 'selected="selected"';
@@ -3908,7 +3910,12 @@ sub WEBLIST {
 
     my @items;
     my $indent = CGI::span({class=>'twikiWebIndent'},'');
+    my $i = 0;
     foreach my $item ( @list ) {
+        if( $i++ >= $limit ) {
+            push( @items, $overlimit ) if $overlimit;
+            last;
+        }
         my $line = $format;
         $line =~ s/\$web\b/$web/g;
         $line =~ s/\$name\b/$item/g;
@@ -3919,7 +3926,7 @@ sub WEBLIST {
         $line =~ s/\$indentedname/$indenteditem/g;
         my $mark = ( $selection =~ / \Q$item\E / ) ? $marker : '';
         $line =~ s/\$marker/$mark/g;
-        push(@items, $line);
+        push( @items, $line );
     }
     return join( $separator, @items);
 }
