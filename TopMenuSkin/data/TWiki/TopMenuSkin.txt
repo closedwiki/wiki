@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1271129731" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1271564754" format="1.1" version="$Rev$"}%
 ---+!! !TopMenuSkin
 
 The !TopMenuSkin adds pulldown menus to the PatternSkin
@@ -22,7 +22,11 @@ The !TopMenuSkin adds pulldown menus to the PatternSkin
 
 A menu-bar can be added anywhere in a topic:
    * Include the "%SYSTEMWEB%.TopMenuSkin" topic - this pulls in the CSS and !JavaScript needed for the menu-bar.
-   * Create a nested bullet list with links. The top level represents the menu-bar items, the second level the options within a menu-bar item.
+   * Create a nested bullet list with links:
+      * The top level bullets define the menu-bar items. Bullets with/without links are supported.
+      * Second level bullets define the pulldown options within a menu-bar item.
+         * A second level bullet must contain exactly one link (format =[<nop>[...][...]]= or =&lt;a href="..."&gt;...&lt;/a&gt;=) without any text next to the link.
+      * Third level bullets are not supported.
    * Enclose the bullet list with a =&lt;div class="twTopMenuTab"&gt;= tag.
 
 Example:<verbatim>
