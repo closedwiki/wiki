@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1261618807" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1271304562" format="1.1" version="$Rev$"}%
 ---+!! <nop>%WIKITOOLNAME% Site-Level Preferences
 
 This topic defines __site-level__ settings that apply to all users and webs on this TWikiSite.
@@ -119,8 +119,8 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
 
    * Image, URL and alternate tooltip text of the logo *for this installation*: you should change these settings for your site, or they can be overwridden in !WebPreferences for individual webs by defining these variables there.
       * Set WIKILOGOIMG = %PUBURL%/%SYSTEMWEB%/TWikiLogos/T-logo-140x40-t.gif
-      * Set WIKILOGOURL = http://TWiki.org/
-      * Set WIKILOGOALT = Powered by <nop>%WIKITOOLNAME%
+      * Set WIKILOGOURL = %SCRIPTURL{view}%/%USERSWEB%/%HOMETOPIC%
+      * Set WIKILOGOALT = Home - this site is powered by TWiki(R)
 
    * Home page of this site
       * Set WIKIHOMEURL = %SCRIPTURLPATH{"view"}%
@@ -180,7 +180,7 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
 ---++ Skin Settings
 
    * Skin overriding the default TWiki templates: (can be overwritten by WebPreferences and user preferences) 
-      * Set SKIN = pattern
+      * Set SKIN = topmenu, pattern
 
    * __Note:__ See TWikiSkinBrowser for currently installed skins
 
