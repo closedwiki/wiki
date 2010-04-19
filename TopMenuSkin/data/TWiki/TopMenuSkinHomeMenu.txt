@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1271574909" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1271653047" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="TopMenuSkinDefaultWebTopMenu"}%
 ---+ Home Menu of !TopMenuSkin
 
@@ -8,8 +8,9 @@ This topic defines the Home pulldown menu, used by the TopMenuSkin.
 %INCLUDE{"TopMenuSkin"}%
 <div class="twTopMenuTab">%STARTINCLUDE%<nop>
    * [[%WEBLOGOURL%][ %ICON{"twiki"}% <nop>%MAKETEXT{"Home"}% <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-dropdown.gif' alt='' width='14' height='16' />]]
+      * [[%SYSTEMWEB%.SiteMap][%ICON{sitetree}% %MAKETEXT{"Site map"}%]]
 %WEBLIST{
- "      * <span style=\"white-space:nowrap\"><a href=\"%SCRIPTURLPATH{"view"}%/$name/%HOMETOPIC%\"><img src=\"%ICONURL{web-bg}%\" border=\"0\" alt=\"\" width=\"16\" height=\"16\" style=\"background-color:%$markerVAR{\"WEBBGCOLOR\" web=$qname}$marker%\" />&nbsp;<nop>$indentedname</a></span>"
+ "      * <span style=\"white-space:nowrap\"><a href=\"%SCRIPTURLPATH{"view"}%/$name/%HOMETOPIC%\"><img src=\"%ICONURL{web-bg}%\" border=\"0\" alt=\"\" width=\"16\" height=\"16\" style=\"background-color:%$markerVAR{\"WEBBGCOLOR\" web=$qname}$marker%\" />&nbsp;<nop>$indentedname %MAKETEXT{web}%</a></span>"
  limit="30"
  overlimit="      * [[%SYSTEMWEB%.SiteMap][<img src=\"%ICONURL{dot_ur}%\" border=\"0\" alt=\"\" width=\"16\" height=\"16\" /> %MAKETEXT{"More..."}%]]"
 }%
