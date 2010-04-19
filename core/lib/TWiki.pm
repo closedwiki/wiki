@@ -3428,6 +3428,20 @@ sub WEB {
 
 sub _handleWebTag {
     my( $theWeb, $params ) = @_;
+    my $format = $params->{format};
+    if( $format ) {
+        my $web = $theWeb;
+        my $current = $theWeb;
+        my $parents = '';
+        if( $theWeb =~ /^(.*)[\/\.](.*)$/ ) {
+            $parents = $1;
+            $current = $2;
+        }
+        $theWeb = $format;
+        $theWeb =~ s/\$web/$web/go;
+        $theWeb =~ s/\$parents?/$parents/go;  
+        $theWeb =~ s/\$current/$current/go;  
+    }
     return $theWeb;
 }
 
