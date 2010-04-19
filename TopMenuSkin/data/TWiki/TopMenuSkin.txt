@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1271655293" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1271719989" format="1.1" version="$Rev$"}%
 ---+!! !TopMenuSkin
 
 The !TopMenuSkin adds pulldown menus to the PatternSkin.
@@ -165,7 +165,9 @@ document.onclick = twTopMenuClose;
    * To turn on the skin, write in !Main.TWikiPreferences: %BR%
      =* Set SKIN = topmenu, pattern=
    * [[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?skin=topmenu,pattern][Test if installed]]
-   * Note for using this skin on TWiki 4.2 and 4.3: This skin depends on TWiki 5.0 specific feature =%<nop>WEB{format="$current"}%= to show the current web in the Web menu. To use this skin on TWiki 4.2 or 4.3, remove the parameter from the WEB variable (to show only =%<nop>WEB%=), or apply patch TWiki:Item6424 (to add the format parameter feature).
+   * *Notes:*
+      * Upgrading existing TWiki: This skin automatically shows a [[TopMenuSkinDefaultWebTopMenu][default menu]] in each web. If you have customized WebLeftBar topics you can create WebTopMenu topics in those webs to get the same top menu navigation as the in the left bar. Base WebTopMenu on [[_default.WebTopMenu]] and add bullets as needed. Bullets must be of format =[<nop>[...][...]]= or =&lt;a href="..."&gt;...&lt;/a&gt;=, without any text next to the link.
+      * Using this skin on TWiki 4.2 and 4.3: This skin depends on TWiki 5.0 specific feature =%<nop>WEB{format="$current"}%= to show the current web in the Web menu. To use this skin on TWiki 4.2 or 4.3, remove the parameter from the WEB variable (to show only =%<nop>WEB%=), or apply patch TWiki:Item6424 (to add the format parameter feature).
 
 ---++ Creating your own look
 
@@ -183,12 +185,15 @@ This skin is based on PatternSkin, and the same rules for customization apply.
 |  Screenshot: | <a href="%ATTACHURL%/fullscreen.png"><img src="%ATTACHURL%/screenshot.png" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=topmenu,pattern][Preview with this topic]] |
 |  Base Name: | topmenu,pattern |
-|  Skin Version: | 2010-04-12 (v1.0) |
+|  Skin Version: | 2010-04-19 (v1.0) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  2010-04-12: | Initial release (v1.0) |
-|  Dependencies: | TWiki 4.2; TWiki:Plugins/PatternSkin; TWiki:Plugins/JQueryPlugin |
+|  2010-04-19: | Initial release (v1.0) |
+|  Dependencies: | TWiki 4.2 or later; TWiki:Plugins/PatternSkin; TWiki:Plugins/JQueryPlugin |
 |  Skin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related topics:__ WebTopMenu, TopMenuSkinDefaultWebTopMenu, TopMenuSkinHomeMenu, TopMenuSkinTopBar, TopMenuSkinTopicMenu, %SYSTEMWEB%.TWikiSkins, %SYSTEMWEB%.TWikiSkinBrowser, %SYSTEMWEB%.UserDocumentationCategory, %SYSTEMWEB%.AdminDocumentationCategory
+
+%META:FILEATTACHMENT{name="fullscreen.png" attachment="fullscreen.png" attr="h" comment="" date="1271719988" path="fullscreen.png" size="36985" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="screenshot.png" attachment="screenshot.png" attr="h" comment="" date="1271719875" path="screenshot.png" size="15762" user="TWikiContributor" version="1"}%
