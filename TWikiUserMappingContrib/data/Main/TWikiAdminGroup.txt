@@ -1,4 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1260396834" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1271712397" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiGroups"}%
 ---+ TWiki Administrator Group
 
    * Member list (comma-separated list):
