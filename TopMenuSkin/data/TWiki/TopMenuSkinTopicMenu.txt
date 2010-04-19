@@ -15,7 +15,7 @@ This topic defines the Topic pulldown menu with topic actions, used by the TopMe
  format="<a href='%SCRIPTURL{view}%/$web/$topic' alt='$topic' title='$topic (parent topic)'>P</a>"
 }%
    * <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-arrow-right.gif' alt='' width='10' height='16' />
-   * <a href="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%" alt="%BASETOPIC%" title="%BASETOPIC%">%MAKETEXT{"View"}% <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-dropdown.gif' alt='' width='14' height='16' /></a>
+   * <a href="%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%" alt="%BASETOPIC%" title="%MAKETEXT{"View"}% <nop>%BASETOPIC%">%MAKETEXT{"View"}% <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-dropdown.gif' alt='' width='14' height='16' /></a>
       * [[%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?raw=on][%MAKETEXT{"Raw view"}%]]
       * [[%SCRIPTURL{view}%/%BASEWEB%/%BASETOPIC%?cover=print][%MAKETEXT{"Print version"}%]]
       * [[%SCRIPTURL{oops}%/%BASEWEB%/%BASETOPIC%?template=backlinksweb][%MAKETEXT{"Find backlinks"}%]]
