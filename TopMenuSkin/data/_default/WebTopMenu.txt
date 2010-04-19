@@ -8,7 +8,7 @@ This topic defines the menu structure of the <nop>%WEB% web, used by the [[%SYST
 %INCLUDE{"%SYSTEMWEB%.TopMenuSkin"}%
 <div class="twTopMenuTab">%STARTINCLUDE%
 %INCLUDE{%SYSTEMWEB%.TopMenuSkinHomeMenu}%
-   * [[%BASEWEB%.%HOMETOPIC%][<img src="%ICONURL{web-bg}%" border="0" alt="" width="16" height="16" style="background-color:%WEBBGCOLOR%" /> <nop>%MAKETEXT{"[_1] Web" args="%BASEWEB{noparents="on"}%"}% <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-dropdown.gif' alt='' width='14' height='16' />]]
+   * [[%BASEWEB%.%HOMETOPIC%][<img src="%ICONURL{web-bg}%" border="0" alt="" width="16" height="16" style="background-color:%WEBBGCOLOR%" /> <nop>%MAKETEXT{"[_1] Web" args="%BASEWEB{format="$current"}%"}% <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-dropdown.gif' alt='' width='14' height='16' />]]
       * [[%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebCreateNewTopic?topicparent=%BASETOPIC%][ %ICON{"newtopic"}% %MAKETEXT{"Create New Topic"}%]]
       * [[%BASEWEB%.WebTopicList][ %ICON{"index"}% %MAKETEXT{"Index"}%]]
       * [[%BASEWEB%.WebSearch][ %ICON{"searchtopic"}% %MAKETEXT{"Search"}%]]
