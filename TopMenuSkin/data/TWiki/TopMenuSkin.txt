@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1271564754" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1271655293" format="1.1" version="$Rev$"}%
 ---+!! !TopMenuSkin
 
-The !TopMenuSkin adds pulldown menus to the PatternSkin
+The !TopMenuSkin adds pulldown menus to the PatternSkin.
 
 %TOC%
 
@@ -17,6 +17,8 @@ The !TopMenuSkin adds pulldown menus to the PatternSkin
    * TopMenuSkinDefaultWebTopMenu - bullet list defining menu bar for webs that do not have a !WebTopMenu topic
       * TopMenuSkinHomeMenu - "Home" pulldown menu with web list, included by !WebTopMenu
       * TopMenuSkinTopicMenu - "Topic" pulldown menu with topic actions, included by !WebTopMenu
+
+__NOTE:__ The skin is designed to incorporate the "you are here" breadcrumb into the pulldown menus:%BR% "Home" menu => "Web" menu => List of parent topics, if any (shown as "P"s) => Current topic ("View" menu).
 
 ---++ Use !TopMenuSkin Menu-Bar in Topics
 
@@ -50,6 +52,8 @@ Renders as:
       * [[WebSearchAdvanced][Advanced search]]
       * [[SearchHelp][Search help]]
 </div>
+
+__NOTE:__ The pulldown menus only work if the TWiki:Plugins/JQueryPlugin is installed.
 
 ---++ CSS and !JavaScript
 
@@ -159,8 +163,9 @@ document.onclick = twTopMenuClose;
    * Download the ZIP file from the Skin homepage (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory
    * To turn on the skin, write in !Main.TWikiPreferences: %BR%
-     =* Set SKIN = topmenu,pattern=
+     =* Set SKIN = topmenu, pattern=
    * [[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?skin=topmenu,pattern][Test if installed]]
+   * Note for using this skin on TWiki 4.2 and 4.3: This skin depends on TWiki 5.0 specific feature =%<nop>WEB{format="$current"}%= to show the current web in the Web menu. To use this skin on TWiki 4.2 or 4.3, remove the parameter from the WEB variable (to show only =%<nop>WEB%=), or apply patch TWiki:Item6424 (to add the format parameter feature).
 
 ---++ Creating your own look
 
