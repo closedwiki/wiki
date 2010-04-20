@@ -1,5 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1271302596" format="1.1" version="$Rev$"}%
-%META:TOPICPARENT{name="TopMenuSkin"}%
 ---+ Top Menu of <nop>%WEB% Web
 
 This topic defines the menu structure of the <nop>%WEB% web, used by the [[%SYSTEMWEB%.TopMenuSkin][TopMenuSkin]].
