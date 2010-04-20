@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1271728587" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1271739774" format="1.1" version="$Rev$"}%
 ---+!! !TopMenuSkin
 
 The !TopMenuSkin adds pulldown menus to the PatternSkin.
@@ -19,6 +19,38 @@ The !TopMenuSkin adds pulldown menus to the PatternSkin.
       * TopMenuSkinTopicMenu - "Topic" pulldown menu with topic actions, included by !WebTopMenu
 
 __NOTE:__ The skin is designed to incorporate the "you are here" breadcrumb into the pulldown menus:%BR% "Home" menu => "Web" menu => List of parent topics, if any (shown as "P"s) => Current topic ("View" menu).
+
+#WebSpecific
+---++ Web-specific Menu-Bars
+
+The TopMenuSkinDefaultWebTopMenu defines the default menu structure used in any web. A !WebTopMenu topic in a web can redefine the default menu structure. If the !WebTopMenu topic is missing in a web, create one with content of [[_default.WebTopMenu]] and customize it. Bullets must be of format =[<nop>[...][...]]= or =&lt;a href="..."&gt;...&lt;/a&gt;=, and may not contain any text next to the link.
+
+To preserve the "you are here" breadcrumb, it is important to add additional pulldown menus _after_ the INCLUDE of !%SYSTEMWEB%.TopMenuSkinTopicMenu. The top level menu-bar should have this structure:
+
+   * INCLUDE of !%SYSTEMWEB%.TopMenuSkinHomeMenu
+   * Current Web menu
+   * INCLUDE of !%SYSTEMWEB%.TopMenuSkinTopicMenu
+   * Additional pulldown menu(s) as needed (optional)
+
+Example !WebTopBar menu structure with extra "Bugs" pulldown menu:
+<verbatim>
+%INCLUDE{%SYSTEMWEB%.TopMenuSkinHomeMenu}%
+   * [[%BASEWEB%.%HOMETOPIC%][<img src="%ICONURL{web-bg}%" border="0" alt="" width="16" height="16" style="background-color:%WEBBGCOLOR%" /> <nop>%MAKETEXT{"[_1] Web" args="%BASEWEB{format="$current"}%"}% <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-dropdown.gif' alt='' width='14' height='16' />]]
+      * [[%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebCreateNewTopic?topicparent=%BASETOPIC%][ %ICON{"newtopic"}% %MAKETEXT{"Create New Topic"}%]]
+      * [[%BASEWEB%.WebTopicList][ %ICON{"index"}% %MAKETEXT{"Index"}%]]
+      * [[%BASEWEB%.WebSearch][ %ICON{"searchtopic"}% %MAKETEXT{"Search"}%]]
+      * [[%BASEWEB%.WebChanges][ %ICON{"changes"}% %MAKETEXT{"Changes"}%]]
+      * [[%BASEWEB%.WebNotify][ %ICON{"notify"}% %MAKETEXT{"Notifications"}%]]
+      * [[%BASEWEB%.WebRss][ %ICON{"feed"}% %MAKETEXT{"RSS Feed"}%]]
+      * [[%BASEWEB%.WebStatistics][ %ICON{"statistics"}% %MAKETEXT{"Statistics"}%]]
+      * [[%BASEWEB%.WebPreferences][ %ICON{"wrench"}% %MAKETEXT{"Preferences"}%]]
+%INCLUDE{%SYSTEMWEB%.TopMenuSkinTopicMenu}%
+   * [[BugTracker][%ICON{bug}% Bugs <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-dropdown.gif' alt='' width='14' height='16' />]]
+      * [[NewReport][Create bug report]]
+      * [[OpenBugs][Open bugs]]
+      * [[ConfirmedBugs][Confirmed bugs]]
+      * [[FixedBugs][Fixed bugs]]
+</verbatim>
 
 ---++ Use !TopMenuSkin Menu-Bar in Topics
 
@@ -165,12 +197,12 @@ document.onclick = twTopMenuClose;
    * To turn on the skin, write in !Main.TWikiPreferences: %BR%
      =* Set SKIN = topmenu, pattern=
    * [[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?skin=topmenu,pattern][Test if installed]]
-   * *Notes:*
-      * Upgrading existing TWiki: This skin automatically shows a [[TopMenuSkinDefaultWebTopMenu][default menu]] in each web. If you have customized WebLeftBar topics you can create WebTopMenu topics in those webs to get the same top menu navigation as the in the left bar. Base WebTopMenu on [[_default.WebTopMenu]] and add bullets as needed. Bullets must be of format =[<nop>[...][...]]= or =&lt;a href="..."&gt;...&lt;/a&gt;=, without any text next to the link.
-      * Using this skin on TWiki 4.2 and 4.3:
-         * This skin depends on TWiki 5.0 specific feature =%<nop>WEB{format="$current"}%= to show the current web in the Web menu. To use this skin on TWiki 4.2 or 4.3, remove the parameter from the WEB variable (to show only =%<nop>WEB%=), or apply patch TWiki:Item6424 (to add the format parameter feature).
-         * Apply patch TWikibug:Item6430 so that Edit and Attach buttons point to the current topic instead of !TopMenuSkinTopBar.
-         * If you have more than 30 webs, apply TWikibug:Item6429 to limit the number of webs shown in the "Home" menu.
+   * *Note* on upgrading existing TWiki:
+      * See [[#WebSpecific][Web-specific Menu-Bars]] above on how to retrofit and customize menu-bars.
+   * *Note* on using this skin on TWiki 4.2 and 4.3:
+      * This skin depends on TWiki 5.0 specific feature =%<nop>WEB{format="$current"}%= to show the current web in the Web menu. To use this skin on TWiki 4.2 or 4.3, remove the parameter from the WEB variable (to show only =%<nop>WEB%=), or apply patch TWiki:Item6424 (to add the format parameter feature).
+      * Apply patch TWikibug:Item6430 so that Edit and Attach buttons point to the current topic instead of !TopMenuSkinTopBar.
+      * If you have more than 30 webs, apply TWikibug:Item6429 to limit the number of webs shown in the "Home" menu.
 
 ---++ Creating your own look
 
