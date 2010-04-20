@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1271739774" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="PeterThoeny" date="1271747963" format="1.1" version="1.14"}%
 ---+!! !TopMenuSkin
 
 The !TopMenuSkin adds pulldown menus to the PatternSkin.
@@ -175,14 +175,14 @@ document.onclick = twTopMenuClose;
 .twTopMenuTab ul li ul li a
 {
   width: auto;
-  background: #F7F8F8;
+  background-color: #F7F8F8;
   background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/menu-pulldown-bg.png);
   background-repeat: repeat-y;
   padding: 3px 8px;
 }
 .twTopMenuTab ul li ul li a:hover
 {
-  background: #AFB3C5;
+  background-color: #AFB3C5;
 }
 </style>
 <!--</pre>-->%STOPINCLUDE%
