@@ -183,6 +183,7 @@ document.onclick = twTopMenuClose;
 .twTopMenuTab ul li ul li a:hover
 {
   background-color: #AFB3C5;
+  background-repeat: repeat;
 }
 </style>
 <!--</pre>-->%STOPINCLUDE%
