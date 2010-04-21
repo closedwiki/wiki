@@ -2,7 +2,10 @@
 ---+!! !TopMenuSkin
 
 The !TopMenuSkin adds pulldown menus to the PatternSkin.
-
+<div style="float: right; text-align: center; padding: 10px; background-color: #f0f0f8">
+This skin is%BR% sponsored by:%BR%
+[[http://twiki.net/?ref=twiki.org/topmenuskin.logo][<img src="%ATTACHURL%/twiki-logo-80x40-t.gif" width="80" height="40" border="0" alt="Twiki, Inc." title="Twiki, Inc." />]]
+</div>
 %TOC%
 
 ---++ Screen Shot
@@ -221,10 +224,10 @@ This skin is based on PatternSkin, and the same rules for customization apply.
 |  Screenshot: | <a href="%ATTACHURL%/fullscreen.png"><img src="%ATTACHURL%/screenshot.png" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=topmenu,pattern][Preview with this topic]] |
 |  Base Name: | topmenu,pattern |
-|  Skin Version: | 2010-04-20 (v1.1) |
+|  Skin Version: | 2010-04-21 (v1.1) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
 |  2010-04-19: | TWikibug:Item6413 - initial release (v1.0) |
-|  2010-04-20: | TWikibug:Item6431 - fix hardcoded reference to !JQueryPlugin CSS and JS; doc improvements |
+|  2010-04-21: | TWikibug:Item6431 - fix hardcoded reference to !JQueryPlugin CSS and JS; doc improvements |
 |  Dependencies: | TWiki 4.2 or later; TWiki:Plugins/PatternSkin; TWiki:Plugins/JQueryPlugin |
 |  Skin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |

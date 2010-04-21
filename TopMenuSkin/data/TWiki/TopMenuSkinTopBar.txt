@@ -6,6 +6,7 @@ Top bar of TopMenuSkin, replacing WebTopBar.
 
 -----
 %STARTINCLUDE%%INCLUDE{%SYSTEMWEB%.TopMenuSkin}%
+<div style="position: absolute; margin-left: 217px; margin-top: 30px; z-index: 1"><a href="http://www.twiki.net/?ref=twiki.org/topmenuskin.topbar" style="display: block; width: 100px; height: 48px;"><div></div></a></div>
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr style="background-image: url(%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/menu-gray-bg.png); background-repeat: repeat-x;">
 <td width="40"><img src="%PUBURLPATH%/%SYSTEMWEB%/TopMenuSkin/spacer.gif" width="40" height="1" /></td>
