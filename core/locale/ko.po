@@ -1,7 +1,6 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: TWiki $Id\n"
-"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Justin Kim <jst.kim@gmail.com>\n"
@@ -9,3334 +8,3715 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 "X-Poedit-Language: Korean\n"
 "X-Poedit-Country: Korea\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: ../core/data/TWiki/TWikiPreferences.txt:318
+msgid "$text (this topic does not yet exist; you can create it)"
+msgstr ""
+
 #. ($days)
-#: lib/TWiki/Time.pm:292
+#: ../core/lib/TWiki/Time.pm:292
 msgid "%*(%1,day) "
 msgstr "%*(%1,일)"
 
 #. ($hours)
-#: lib/TWiki/Time.pm:295
+#: ../core/lib/TWiki/Time.pm:295
 msgid "%*(%1,hour) "
 msgstr "%*(%1,시간) "
 
 #. ($mins)
-#: lib/TWiki/Time.pm:298
+#: ../core/lib/TWiki/Time.pm:298
 msgid "%*(%1,minute) "
 msgstr "%*(%1,분)"
 
 #. ($secs)
-#: lib/TWiki/Time.pm:301
+#: ../core/lib/TWiki/Time.pm:301
 msgid "%*(%1,second) "
 msgstr "%*(%1,초) "
 
-#: templates/oopsgeneric.tmpl:12
-#: templates/oopsgeneric.tmpl:14
-#: templates/oopsgeneric.tmpl:16
-#: templates/oopsgeneric.tmpl:7
+#: ../core/templates/oopsgeneric.tmpl:12 ../core/templates/oopsgeneric.tmpl:14
+#: ../core/templates/oopsgeneric.tmpl:16 ../core/templates/oopsgeneric.tmpl:7
 msgid "%1"
 msgstr "%1"
 
-#: templates/registernotify.tmpl:3
-#: templates/registernotifyadmin.tmpl:3
-#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:3
-#: twikiplugins/ClassicSkin/templates/registernotifyadmin.classic.tmpl:3
+#: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:116
+#: ../core/templates/registernotify.tmpl:3
+#: ../core/templates/registernotifyadmin.tmpl:3
 msgid "%1 - Registration for %2 (%3)"
 msgstr "%1 -  %2 (%3) 등록"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:68
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:62
 msgid "%1 - complete TWiki documentation, Quick Start to Reference"
 msgstr ""
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:70
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:64
 msgid "%1 - just for me"
 msgstr "%1 - 나만을 위한 내용입니다."
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:67
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:61
 msgid "%1 - starting points on TWiki"
 msgstr "%1 - TWiki 시작 포인트"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:69
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:63
 msgid "%1 - try out TWiki on your own"
 msgstr ""
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:66
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:60
 msgid "%1 - view a short introductory presentation on TWiki for beginners"
 msgstr ""
 
-#: data/TWiki/WebChanges.txt:2
+#: ../core/data/TWiki/WebChanges.txt:2
 msgid "%1 Recent Changes in %2 Web"
 msgstr "웹 %2의 최근 변경 내역  %1"
 
-#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:4
-#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:4
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:4
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:2
-#: twikiplugins/PatternSkin/data/Trash/WebLeftBar.txt:3
-#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:3
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:43
+#: ../PatternSkin/data/Main/WebLeftBar.txt:4
+#: ../PatternSkin/data/Sandbox/WebLeftBar.txt:4
+#: ../PatternSkin/data/TWiki/WebLeftBar.txt:4
+#: ../PatternSkin/data/TWiki/WebLeftBarExample.txt:2
+#: ../PatternSkin/data/Trash/WebLeftBar.txt:3
+#: ../PatternSkin/data/_default/WebLeftBar.txt:3
+#: ../PatternSkin/templates/view.pattern.tmpl:43
+#: ../TWikiNetSkin/templates/view.twikinet.tmpl:21
+#: ../TopMenuSkin/data/Main/WebTopMenu.txt:10
+#: ../TopMenuSkin/data/Sandbox/WebTopMenu.txt:10
+#: ../TopMenuSkin/data/TWiki/TopMenuSkin.txt:38
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinDefaultWebTopMenu.txt:11
+#: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:11
+#: ../TopMenuSkin/data/Trash/WebTopMenu.txt:10
+#: ../TopMenuSkin/data/_default/WebTopMenu.txt:10
 msgid "%1 Web"
 msgstr "웹 %1"
 
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:3
+#: ../PatternSkin/data/TWiki/WebLeftBarExample.txt:3
 msgid "%1 Web Home"
 msgstr "%1 웹 홈"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:84
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:78
 msgid "%1 for changing your email address"
 msgstr ""
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:83
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:77
 msgid "%1 for changing your password"
 msgstr ""
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:47
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:37
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:85
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:38
+#: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:47
+#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:37
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:79
+#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:38
 msgid "%1 has a list of other TWiki users"
 msgstr "%1 페이지에는 다른 TWiki 사용자의 목록이 있습니다."
 
-#: templates/messages.tmpl:423
-msgid "%1 has been editing the topic for %2 and the lease is still active for another %3."
+#: ../core/templates/messages.tmpl:433
+msgid ""
+"%1 has been editing the topic for %2 and the lease is still active for "
+"another %3."
 msgstr ""
 
-#: templates/registernotifyadmin.tmpl:10
-#: twikiplugins/ClassicSkin/templates/registernotifyadmin.classic.tmpl:10
+#: ../core/templates/registernotifyadmin.tmpl:10
 msgid "%1 has been registered with e-mail %2"
 msgstr ""
 
-#: templates/messages.tmpl:23
+#: ../core/templates/messages.tmpl:23
 msgid "%1 home"
 msgstr "홈 %1"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:86
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:80
 msgid "%1 is a list of TWiki user documentation"
 msgstr "%1은 TWiki 사용자 문서의 리스트 입니다."
 
-#: templates/messages.tmpl:106
+#: ../core/templates/messages.tmpl:106
 msgid "%1 is an invalid name for a new web"
 msgstr ""
 
-#: templates/login.sudo.tmpl:4
-#: templates/login.tmpl:6
+#: ../core/templates/login.sudo.tmpl:4 ../core/templates/login.tmpl:6
 msgid "%1 is currently logged in"
 msgstr ""
 
-#: templates/messages.tmpl:404
+#: ../core/templates/messages.tmpl:404
 msgid "%1 is currently set to %2"
 msgstr ""
 
-#: templates/messages.tmpl:421
+#: ../core/templates/messages.tmpl:431
 msgid "%1 is editing %2."
 msgstr ""
 
-#: templates/messages.tmpl:49
+#: ../core/templates/messages.tmpl:49
 msgid "%1 is in at least one group and cannot be removed"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:40
+#: ../PatternSkin/templates/renameattachmentdelete.pattern.tmpl:40
 msgid "%1 is the default topic for deleted attachments."
 msgstr ""
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:87
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:81
 msgid "%1 lists all TWiki user tools"
 msgstr ""
 
-#: templates/messages.tmpl:429
+#: ../core/templates/messages.tmpl:439
 msgid "%1 may still be editing %2."
 msgstr "%1은 여전히 %2를 수정하고 있습니다."
 
 #. ("<nop>$toWeb.<nop>$toTopic",                                             "<nop>$fromWeb.<nop>$fromTopic",                                             $date,                                             $by)
-#: lib/TWiki/Render.pm:200
+#: ../core/lib/TWiki/Render.pm:203
 msgid "%1 moved from %2 on %3 by %4"
 msgstr ""
 
-#: templates/messages.tmpl:22
+#: ../core/templates/messages.tmpl:22
 msgid "%1 to create another web"
 msgstr ""
 
-#: templates/messages.tmpl:21
+#: ../core/templates/messages.tmpl:21
 msgid "%1 to customize the web specific preferences"
 msgstr ""
 
-#: templates/messages.tmpl:20
+#: ../core/templates/messages.tmpl:20
 msgid "%1 to start working on the new web"
 msgstr ""
 
-#: templates/messages.tmpl:493
-#: templates/messages.tmpl:504
+#: ../core/templates/messages.tmpl:503 ../core/templates/messages.tmpl:514
 msgid "%1 topic does not exist"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:11
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:24
+#, fuzzy
+msgid "&Attach"
+msgstr "첨부하기"
+
+#: ../PatternSkin/templates/twiki.pattern.tmpl:9
 msgid "&Cancel"
 msgstr "취소(%C)"
 
-#: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:14
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:12
+#, fuzzy
+msgid "&Edit"
+msgstr "수정"
+
+#: ../PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:14
 msgid "&Edit text"
 msgstr "본문 편집(&E)"
 
-#: templates/twiki.tmpl:101
-#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:158
+#: ../ClassicSkin/templates/twiki.classic.tmpl:159
+#: ../core/templates/twiki.tmpl:102
 msgid "&History"
 msgstr "이력(&H)"
 
-#: templates/messages.tmpl:262
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:36
+msgid "&Print version"
+msgstr ""
+
+#: ../core/templates/messages.tmpl:262
 msgid "'%1' is not a valid %2 "
 msgstr "'%1'은 유효하지 않은 %2 입니다."
 
-#: data/TWiki/WebTopicCreator.txt:2
+#: ../core/data/TWiki/WebTopicCreator.txt:2
 msgid "'Create New Topic' page has moved"
 msgstr "'새로운 주제 만들기' 페이지는 이동되었습니다."
 
-#: templates/login.tmpl:12
+#: ../core/templates/login.tmpl:12
 msgid "(%1 login)"
 msgstr "(%1 로그인)"
 
-#: templates/rdiff.tmpl:4
-#: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:6
+#: ../PatternSkin/templates/rdiff.pattern.tmpl:6
+#: ../core/templates/rdiff.tmpl:4
 msgid "(%1 vs. %2)"
 msgstr "(%1 과 %2)"
 
-#: data/TWiki/WebSearchAdvanced.txt:75
+#: ../core/data/TWiki/WebSearchAdvanced.txt:75
 msgid "(=all= to show all topics)"
 msgstr "(=all= 모든 주제 보기)"
 
-#: data/Sandbox/WebHome.txt:9
+#: ../core/data/Sandbox/WebHome.txt:9
 msgid "(Use a topic name in TWiki.WikiNotation)"
 msgstr "(TWiki.WikiNotation의 주제 이름 사용)"
 
-#: templates/messages.tmpl:156
+#: ../core/templates/messages.tmpl:156
 msgid "(__Suggestion:__ How about uploading your picture to your topic?)"
 msgstr ""
 
-#: templates/oopsaccessdenied.tmpl:4
+#: ../core/templates/oopsaccessdenied.tmpl:4
 msgid "(access denied)"
 msgstr "(접근 제한)"
 
-#: templates/attachnew.tmpl:2
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:8
+#: ../PatternSkin/templates/attach.pattern.tmpl:8
+#: ../core/templates/attachnew.tmpl:2
 msgid "(attach)"
 msgstr "(첨부하기)"
 
-#: templates/backlinksweb.tmpl:4
+#: ../core/templates/backlinksweb.tmpl:4
 msgid "(backlinks in %1 Web)"
 msgstr ""
 
-#: templates/backlinksallwebs.tmpl:4
+#: ../core/templates/backlinksallwebs.tmpl:4
 msgid "(backlinks in all Webs)"
 msgstr ""
 
-#: templates/searchbookview.tmpl:3
+#: ../core/templates/searchbookview.tmpl:3
 msgid "(book view)"
 msgstr ""
 
-#: templates/changeform.tmpl:4
+#: ../core/templates/changeform.tmpl:4
 msgid "(change form)"
 msgstr ""
 
-#: templates/oopschangelanguage.tmpl:2
-#: templates/oopslanguagechanged.tmpl:3
+#: ../core/templates/oopschangelanguage.tmpl:2
+#: ../core/templates/oopslanguagechanged.tmpl:3
 msgid "(change language)"
 msgstr "(언어 변경)"
 
-#: templates/changes.tmpl:5
-#: twikiplugins/PatternSkin/templates/changes.pattern.tmpl:4
+#: ../PatternSkin/templates/changes.pattern.tmpl:4
+#: ../core/templates/changes.tmpl:5
 msgid "(changes)"
 msgstr "(변경내용)"
 
-#: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:5
+#: ../PatternSkin/templates/renameattachmentdelete.pattern.tmpl:5
 msgid "(delete attachment)"
 msgstr "(첨부파일 삭제)"
 
-#: templates/renamedelete.tmpl:4
+#: ../core/templates/renamedelete.tmpl:4
 msgid "(delete)"
 msgstr "(삭제)"
 
-#: templates/editform.tmpl:4
-#: templates/editform.tmpl:5
+#: ../core/templates/editform.tmpl:4 ../core/templates/editform.tmpl:5
 msgid "(edit form)"
 msgstr "(폼 수정)"
 
-#: templates/edittext.tmpl:4
-#: templates/edittext.tmpl:7
+#: ../core/templates/edittext.tmpl:4 ../core/templates/edittext.tmpl:7
 msgid "(edit text)"
 msgstr "(본문 수정)"
 
-#: templates/edit.tmpl:10
-#: templates/edit.tmpl:4
+#: ../core/templates/edit.tmpl:10 ../core/templates/edit.tmpl:4
 msgid "(edit)"
 msgstr "(수정)"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:105
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:106
 msgid "(how you log in) LoginName:"
 msgstr "(어떻게 로그인을 할것인가?) 로그인 이름:"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:100
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:101
 msgid "(identifies you to others) WikiName:"
 msgstr "(다른이와 구별가능한) 위키이름(WikiName):"
 
-#: templates/login.tmpl:4
+#: ../core/templates/login.tmpl:4
 msgid "(login)"
 msgstr "(로그인)"
 
-#: templates/oopsmore.tmpl:3
+#: ../core/templates/oopsmore.tmpl:3
 msgid "(more)"
 msgstr "(더)"
 
-#: templates/moveattachment.tmpl:4
+#: ../core/templates/moveattachment.tmpl:4
 msgid "(move attachment)"
 msgstr "(첨부파일 이동)"
 
-#: data/TWiki/WebCreateNewTopicTemplate.txt:56
+#: ../core/data/TWiki/WebCreateNewTopicTemplate.txt:56
 msgid "(no parent, orphaned topic)"
 msgstr "(상위 주제 없음, 고립된 주제)"
 
-#: lib/TWiki/UI/Manage.pm:1027
-#: lib/TWiki/UI/Manage.pm:1030
-#: lib/TWiki/UI/Manage.pm:1033
-#: lib/TWiki/UI/Manage.pm:1067
-#: lib/TWiki/UI/Manage.pm:1090
-#: lib/TWiki/UI/Manage.pm:643
-#: lib/TWiki/UI/Manage.pm:647
-#: lib/TWiki/UI/Manage.pm:651
-#: lib/TWiki/UI/Manage.pm:655
-#: lib/TWiki/UI/Manage.pm:896
-#: lib/TWiki/UI/Manage.pm:921
+#: ../core/lib/TWiki/UI/Manage.pm:1071 ../core/lib/TWiki/UI/Manage.pm:1074
+#: ../core/lib/TWiki/UI/Manage.pm:1077 ../core/lib/TWiki/UI/Manage.pm:1111
+#: ../core/lib/TWiki/UI/Manage.pm:1134 ../core/lib/TWiki/UI/Manage.pm:685
+#: ../core/lib/TWiki/UI/Manage.pm:689 ../core/lib/TWiki/UI/Manage.pm:693
+#: ../core/lib/TWiki/UI/Manage.pm:697 ../core/lib/TWiki/UI/Manage.pm:940
+#: ../core/lib/TWiki/UI/Manage.pm:965
 msgid "(none)"
 msgstr "(없음)"
 
-#: twikiplugins/ClassicSkin/templates/oopsaccessdenied.classic.tmpl:3
-#: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:3
+#: ../ClassicSkin/templates/oopsaccessdenied.classic.tmpl:3
+#: ../ClassicSkin/templates/oopsleaseconflict.classic.tmpl:3
 msgid "(oops)"
 msgstr "(이런!)"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:276
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:322
 msgid "(optional)"
 msgstr ""
 
-#: data/TWiki/WebSearch.txt:33
-#: data/TWiki/WebSearchAdvanced.txt:42
+#: ../core/data/TWiki/WebSearch.txt:33
+#: ../core/data/TWiki/WebSearchAdvanced.txt:42
 msgid "(otherwise search %1 Web only)"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:45
+#: ../PatternSkin/templates/view.pattern.tmpl:45
+#: ../TWikiNetSkin/templates/view.twikinet.tmpl:23
 msgid "(raw view)"
 msgstr "(가공없이 보기)"
 
-#: templates/oopsmore.tmpl:21
-#: templates/oopsmore.tmpl:30
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:13
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:7
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:13
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:7
+#: ../core/templates/oopsmore.tmpl:21 ../core/templates/oopsmore.tmpl:30
 msgid "(recommended)"
 msgstr "(추천)"
 
-#: templates/rename.tmpl:4
-#: templates/renameconfirm.tmpl:4
-#: templates/renameweb.tmpl:4
-#: templates/renamewebconfirm.tmpl:4
+#: ../core/templates/rename.tmpl:4 ../core/templates/renameconfirm.tmpl:4
+#: ../core/templates/renameweb.tmpl:4
+#: ../core/templates/renamewebconfirm.tmpl:4
 msgid "(rename)"
 msgstr "(이름변경)"
 
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:45
+#: ../PatternSkin/templates/view.pattern.tmpl:45
+#: ../TWikiNetSkin/templates/view.twikinet.tmpl:23
 msgid "(revision %1)"
 msgstr "(리비전 %1)"
 
-#: templates/oopssaveerr.tmpl:8
+#: ../core/templates/oopssaveerr.tmpl:8
 msgid "(save error)"
 msgstr "(저장 에러)"
 
-#: templates/searchformat.tmpl:3
+#: ../core/templates/searchformat.tmpl:3
 msgid "(search result)"
 msgstr "(검색 결과)"
 
-#: templates/search.tmpl:3
-#: templates/search.tmpl:6
-#: twikiplugins/PatternSkin/templates/search.pattern.tmpl:9
+#: ../PatternSkin/templates/search.pattern.tmpl:9
+#: ../core/templates/search.tmpl:3 ../core/templates/search.tmpl:6
 msgid "(search results)"
 msgstr "(검색 결과)"
 
-#: data/TWiki/WebSearchAdvanced.txt:58
+#: ../core/data/TWiki/WebSearchAdvanced.txt:58
 msgid "(semicolon =;= for and)"
 msgstr ""
 
-#: templates/settings.tmpl:4
-#: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:4
+#: ../PatternSkin/templates/settings.pattern.tmpl:10
+#: ../core/templates/settings.tmpl:4
 msgid "(set preferences)"
 msgstr ""
 
-#: templates/messages.tmpl:275
+#: ../core/templates/messages.tmpl:275
 msgid "(single character first name)"
 msgstr ""
 
-#: templates/messages.tmpl:274
+#: ../core/templates/messages.tmpl:274
 msgid "(single character last name)"
 msgstr ""
 
-#: lib/TWiki/UI/Manage.pm:878
+#: ../core/lib/TWiki/UI/Manage.pm:922
 msgid "(skipped)"
 msgstr ""
 
-#: templates/attachagain.tmpl:18
-msgid "*Change comment:* If you use _Change Properties_ to change a comment, the comment shown in the topic will change, but the comment shown against the attachment history will be the comment when the file was uploaded."
+#: ../core/templates/attachagain.tmpl:18
+msgid ""
+"*Change comment:* If you use _Change Properties_ to change a comment, the "
+"comment shown in the topic will change, but the comment shown against the "
+"attachment history will be the comment when the file was uploaded."
 msgstr ""
 
-#: data/TWiki/WikiSyntaxSummary.txt:8
+#: ../core/data/TWiki/WikiSyntaxSummary.txt:8
 msgid "*Formatting help:*"
 msgstr ""
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:15
-msgid "*Important:* the information provided in this form will be stored in a database on the TWiki server. This database is accessible to anyone who can access the server through the web (though passwords will be encrypted, and e-mail addresses will be obfusticated to help prevent spamming). Your country, or the country where the server is hosted, may have Data Protection laws governing the maintenance of such databases. If you are in doubt, you should contact %1 for details of the Data Protection Policy of this TWiki server before registering."
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:15
+msgid ""
+"*Important:* the information provided in this form will be stored in a "
+"database on the TWiki server. This database is accessible to anyone who can "
+"access the server through the web (though passwords will be encrypted, and e-"
+"mail addresses will be obfusticated to help prevent spamming). Your country, "
+"or the country where the server is hosted, may have Data Protection laws "
+"governing the maintenance of such databases. If you are in doubt, you should "
+"contact %1 for details of the Data Protection Policy of this TWiki server "
+"before registering."
 msgstr ""
 
-#: templates/attachagain.tmpl:19
-msgid "*Local file:* If you select a different file in _Local file:_, it is this that will be updated or added."
+#: ../core/templates/attachagain.tmpl:19
+msgid ""
+"*Local file:* If you select a different file in _Local file:_, it is this "
+"that will be updated or added."
 msgstr ""
 
-#: templates/attachagain.tmpl:17
-msgid "*Properties:* The comment and visibility (i.e. is attachment hidden) can be changed without uploading a file by pressing \"Change Properties only\"; see %1."
+#: ../core/templates/attachagain.tmpl:17
+msgid ""
+"*Properties:* The comment and visibility (i.e. is attachment hidden) can be "
+"changed without uploading a file by pressing \"Change Properties only\"; see "
+"%1."
 msgstr ""
 
-#: data/TWiki/WikiSyntaxSummary.txt:9
+#: ../core/data/TWiki/WikiSyntaxSummary.txt:9
 msgid "*bold* put word/phrase in asterisks: =<nop>*your phrase*="
 msgstr ""
 
-#: data/TWiki/WikiSyntaxSummary.txt:10
-msgid "*bullet list* 3 spaces, asterisk, 1 space: =&&nbsp;&&nbsp;&&nbsp;*&&nbsp;your text="
+#: ../core/data/TWiki/WikiSyntaxSummary.txt:10
+msgid ""
+"*bullet list* 3 spaces, asterisk, 1 space: =&&nbsp;&&nbsp;&&nbsp;*&&nbsp;"
+"your text="
 msgstr ""
 
-#: data/TWiki/WikiSyntaxSummary.txt:14
-msgid "*external links* =http://yahoo.com= or =[<nop>[http://yahoo.com/][link to Yahoo]]="
+#: ../core/data/TWiki/WikiSyntaxSummary.txt:14
+msgid ""
+"*external links* =http://yahoo.com= or =[<nop>[http://yahoo.com/][link to "
+"Yahoo]]="
 msgstr ""
 
-#: data/TWiki/WikiSyntaxSummary.txt:11
+#: ../core/data/TWiki/WikiSyntaxSummary.txt:11
 msgid "*headings* 3 dashes, 1 to 6 pluses, 1 space: =---++&&nbsp;Your Heading="
 msgstr ""
 
-#: data/TWiki/WikiSyntaxSummary.txt:12
+#: ../core/data/TWiki/WikiSyntaxSummary.txt:12
 msgid "*italic* put word/phrase in underscores: =_<nop>your words_="
 msgstr ""
 
-#: data/TWiki/WikiSyntaxSummary.txt:15
+#: ../core/data/TWiki/WikiSyntaxSummary.txt:15
 msgid "*monospaced* put word/phrase in equal signs: =<nop>=your words=="
 msgstr ""
 
-#: data/TWiki/WikiSyntaxSummary.txt:16
+#: ../core/data/TWiki/WikiSyntaxSummary.txt:16
 msgid "*paragraphs* separate with blank line"
 msgstr ""
 
-#: data/TWiki/WikiSyntaxSummary.txt:13
+#: ../core/data/TWiki/WikiSyntaxSummary.txt:13
 msgid "*site links* use topic name: =%1= or =[<nop>[%1][Our homepage]]="
 msgstr ""
 
-#: lib/TWiki/I18N/Extract.pm:104
+#: ../core/lib/TWiki/I18N/Extract.pm:104
 msgid "..."
 msgstr ""
 
-#: templates/oopsmore.tmpl:14
+#: ../core/templates/oopsmore.tmpl:14
 msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
 msgstr ""
 
-#: data/TWiki/WebChanges.txt:8
-msgid "<a href='%1'>RSS feed</a>, recent changes with <a href='%2'>50</a>, <a href='%3' rel='nofollow'>100</a>, <a href='%4' rel='nofollow'>200</a>, <a href='%5' rel='nofollow'>500</a>, <a href='%6' rel='nofollow'>1000</a> topics, <a href='%7' rel='nofollow'>all changes</a>"
+#: ../core/data/TWiki/WebChanges.txt:8
+msgid ""
+"<a href='%1'>RSS feed</a>, recent changes with <a href='%2'>50</a>, <a "
+"href='%3' rel='nofollow'>100</a>, <a href='%4' rel='nofollow'>200</a>, <a "
+"href='%5' rel='nofollow'>500</a>, <a href='%6' rel='nofollow'>1000</a> "
+"topics, <a href='%7' rel='nofollow'>all changes</a>"
 msgstr ""
 
-#: templates/oopsmore.tmpl:41
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:21
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:21
+#: ../core/templates/oopsmore.tmpl:41
 msgid "<em>in %1 web</em> only"
 msgstr ""
 
-#: templates/oopsmore.tmpl:39
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:19
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:19
+#: ../core/templates/oopsmore.tmpl:39
 msgid "<em>in all public webs</em>"
 msgstr ""
 
-#: templates/messages.tmpl:476
-msgid "A %1 is divided into webs; each one represents one subject, one area of collaboration. You are trying to %2 in a web that does not exist."
+#: ../core/templates/messages.tmpl:486
+msgid ""
+"A %1 is divided into webs; each one represents one subject, one area of "
+"collaboration. You are trying to %2 in a web that does not exist."
 msgstr ""
 
-#: templates/messages.tmpl:354
+#: ../core/templates/messages.tmpl:354
 msgid "A =.txt= extension is appended to some filenames for security reasons"
 msgstr ""
 
-#: templates/messages.tmpl:123
-msgid "A color starts with a # sign, followed by 6 hexadecimal numbers, e.g. =#FFFF00=."
+#: ../core/templates/messages.tmpl:123
+msgid ""
+"A color starts with a # sign, followed by 6 hexadecimal numbers, e.g. "
+"=#FFFF00=."
 msgstr ""
 
 #. ($data->{Email})
-#: lib/TWiki/UI/Register.pm:831
+#: ../core/lib/TWiki/UI/Register.pm:862
 msgid "A confirmation e-mail has been sent to %1"
 msgstr "확인을 위한 이메일이 %1님께 전송되었습니다."
 
-#: templates/messages.tmpl:480
-msgid "A link to a topic located in another web is written like %1. Make sure that the name of the web is not spelt wrongly on the previous page; fix the link if necessary."
+#: ../core/templates/messages.tmpl:490
+msgid ""
+"A link to a topic located in another web is written like %1. Make sure that "
+"the name of the web is not spelt wrongly on the previous page; fix the link "
+"if necessary."
 msgstr ""
 
-#: data/Sandbox/WebHome.txt:25
+#: ../core/data/Sandbox/WebHome.txt:25
 msgid "A more extensive changes list is available via [[%1][Recent Changes]]."
 msgstr ""
 
-#: templates/messages.tmpl:452
-msgid "A new system-generated password for your login name %1 (!WikiName %2) has been sent to your registered e-mail address. If your e-mail address is no longer valid, please contact %3"
+#: ../core/templates/messages.tmpl:462
+msgid ""
+"A new system-generated password for your login name %1 (!WikiName %2) has "
+"been sent to your registered e-mail address. If your e-mail address is no "
+"longer valid, please contact %3"
 msgstr ""
 
-#: data/TWiki/WebTemplateTopics.txt:4
+#: ../core/data/TWiki/WebTemplateTopics.txt:4
 msgid "A topic template defines the initial content of a newly created topic."
 msgstr "주제 템플릿은 새롭게 생성되는 주제의 초기 컨텐츠를 정으합니다."
 
-#: templates/oopsaccessdenied.tmpl:6
-#: twikiplugins/ClassicSkin/templates/oopsaccessdenied.classic.tmpl:5
+#: ../ClassicSkin/templates/oopsaccessdenied.classic.tmpl:5
+#: ../core/templates/oopsaccessdenied.tmpl:6
 msgid "Access Denied"
 msgstr "접근 제한"
 
-#: templates/messages.tmpl:460
+#: ../core/templates/messages.tmpl:470
 msgid "Access check on %1 failed"
 msgstr "%1 에 대한 접근 검사가 실패하였습니다."
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:50
-#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:14
-#: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:19
+#: ../PatternSkin/templates/edit.pattern.tmpl:53
+#: ../PatternSkin/templates/preview.pattern.tmpl:14
+#: ../PatternSkin/templates/settings.pattern.tmpl:25
 msgid "Access keys"
 msgstr "접근 키"
 
-#: templates/attachtables.tmpl:37
-#: templates/attachtables.tmpl:4
-#: templates/changeform.tmpl:10
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopBar.txt:19
+msgid "Account"
+msgstr ""
+
+#: ../core/templates/attachtables.tmpl:37
+#: ../core/templates/attachtables.tmpl:4 ../core/templates/changeform.tmpl:10
 msgid "Action"
 msgstr ""
 
-#: templates/messages.tmpl:461
+#: ../core/templates/messages.tmpl:471
 msgid "Action %1: %2."
 msgstr ""
 
-#: templates/addform.tmpl:1
-#: twikiplugins/ClassicSkin/templates/addform.classic.tmpl:1
+#: ../ClassicSkin/templates/addform.classic.tmpl:1
+#: ../core/templates/addform.tmpl:1
 msgid "Add form"
 msgstr "폼 추가"
 
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:174
+#: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:180
 msgid "Add row"
 msgstr "행 추가"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:285
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:331
 msgid "Add your name to the list of users in the %1 topic in the %2 web."
 msgstr "웹 %2, %1 주제의 사용자 리스트에 추가합니다."
 
-#: templates/messages.tmpl:342
+#: ../core/templates/messages.tmpl:342
 msgid "Adding a %1 variable in WebPreferences"
 msgstr "웹 속성에 %1 변수를 추가"
 
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:24
+#: ../PatternSkin/data/TWiki/WebLeftBar.txt:25
+#: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:32
 msgid "Admin Maintenance"
 msgstr "유지보수 관리"
 
-#: templates/login.sudo.tmpl:3
+#: ../core/templates/login.sudo.tmpl:3
 msgid "Admin TWiki User Authentication"
 msgstr "TWiki 사용자 권한 관리"
 
-#: data/TWiki/WebSearchAdvanced.txt:3
+#: ../core/data/TWiki/WebSearchAdvanced.txt:3
 msgid "Advanced Search"
 msgstr "고급 검색"
 
-#: data/TWiki/WebSearch.txt:24
+#: ../core/data/TWiki/WebSearch.txt:24
 msgid "Advanced search"
 msgstr "고급 검색"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:20
-msgid "After submitting this form your e-mail will be changed, and you will be returned to this form."
-msgstr "해당 폼을 제출한 뒤에, 이메일 주소가 변경되고 이 폼으로 다시 돌아오게 됩니다."
+#: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:20
+msgid ""
+"After submitting this form your e-mail will be changed, and you will be "
+"returned to this form."
+msgstr ""
+"해당 폼을 제출한 뒤에, 이메일 주소가 변경되고 이 폼으로 다시 돌아오게 됩니다."
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:12
+#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:12
 msgid "After submitting this form your password will be changed."
 msgstr "이 폼을 제출하면, 비밀번호가 변경됩니다."
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:15
-msgid "After submitting this form, you will receive an e-mail with your new, *system-generated* password, and a link to a page where you can change it."
-msgstr "이 폼을 제출하면, *시스템이 생성한* 새로운 비밀번호를 이메일로 받게되고, 해당 링크를 따라서 비밀번호를 변경할 수 있게 됩니다."
+#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:15
+msgid ""
+"After submitting this form, you will receive an e-mail with your new, "
+"*system-generated* password, and a link to a page where you can change it."
+msgstr ""
+"이 폼을 제출하면, *시스템이 생성한* 새로운 비밀번호를 이메일로 받게되고, 해"
+"당 링크를 따라서 비밀번호를 변경할 수 있게 됩니다."
 
-#: data/TWiki/WebSearch.txt:33
-#: data/TWiki/WebSearchAdvanced.txt:42
+#: ../core/data/TWiki/WebSearch.txt:33
+#: ../core/data/TWiki/WebSearchAdvanced.txt:42
 msgid "All public webs"
 msgstr "모든 공개된 웹"
 
-#: templates/twiki.tmpl:7
+#: ../core/templates/twiki.tmpl:7
 msgid "Allow non <nop>WikiWord for the new topic name"
 msgstr ""
 
-#: templates/messages.tmpl:256
-msgid "Alternatively hit back to go back to TWiki.TWikiRegistration and choose a different username."
+#: ../core/templates/messages.tmpl:256
+msgid ""
+"Alternatively hit back to go back to TWiki.TWikiRegistration and choose a "
+"different username."
 msgstr ""
 
-#: templates/messages.tmpl:243
-msgid "An e-mail could not be delivered. Please notify your %1 administrator, %2"
+#: ../core/templates/messages.tmpl:243
+msgid ""
+"An e-mail could not be delivered. Please notify your %1 administrator, %2"
 msgstr ""
 
-#: templates/moveattachment.tmpl:30
-msgid "An error page will be shown if either of the topics are locked by another user."
+#: ../core/templates/moveattachment.tmpl:30
+msgid ""
+"An error page will be shown if either of the topics are locked by another "
+"user."
 msgstr ""
 
-#: templates/messages.tmpl:17
+#: ../core/templates/messages.tmpl:17
 msgid "And populated with topics from the base web"
 msgstr ""
 
-#: templates/changeform.tmpl:28
-msgid "Any changes you made to the topic before coming to this page are preserved."
+#: ../core/templates/changeform.tmpl:28
+msgid ""
+"Any changes you made to the topic before coming to this page are preserved."
 msgstr ""
 
-#: templates/viewtopicactionbuttons.tmpl:66
+#: ../TWikiNetSkin/templates/viewtopbar.twikinet.tmpl:111
+#: ../core/templates/viewtopicactionbuttons.tmpl:66
 msgid "Attach"
 msgstr "첨부하기"
 
-#: templates/attachnew.tmpl:4
-#: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:4
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:26
+#, fuzzy
+msgid "Attach file or image"
+msgstr "%1에 첨부된 파일"
+
+#: ../PatternSkin/templates/attachnew.pattern.tmpl:4
+#: ../core/templates/attachnew.tmpl:4
 msgid "Attach file to %1"
 msgstr "%1에 첨부된 파일"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:11
+#: ../PatternSkin/templates/attach.pattern.tmpl:11
 msgid "Attach image or document on %1"
 msgstr "%1에 첨부된 이미지 혹은 문서"
 
-#: templates/attach.tmpl:17
-#: templates/attachnew.tmpl:6
-#: templates/attachnew.tmpl:8
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:37
+#: ../PatternSkin/templates/attach.pattern.tmpl:37
+#: ../core/templates/attach.tmpl:17 ../core/templates/attachnew.tmpl:6
+#: ../core/templates/attachnew.tmpl:8
 msgid "Attach new file"
 msgstr "새로운 파일 첨부"
 
-#: templates/attachtables.tmpl:4
+#: ../core/templates/attachtables.tmpl:4
 msgid "Attachment"
 msgstr "첨부"
 
-#: templates/messages.tmpl:510
+#: ../core/templates/messages.tmpl:520
 msgid "Attachment '%1' does not exist"
 msgstr "첨부 파일 '%1'은 존재하지 않습니다."
 
-#: lib/TWiki/UI/Manage.pm:346
+#: ../core/lib/TWiki/UI/Manage.pm:386
 msgid "Attachment already exists in new topic"
 msgstr "새로운 주제에 첨부파일은 이미 존재합니다."
 
-#: templates/messages.tmpl:62
+#: ../core/templates/messages.tmpl:62
 msgid "Attachment delete failed"
 msgstr "첨부 파일 삭제에 실패하였습니다."
 
-#: lib/TWiki/UI/Manage.pm:327
+#: ../core/lib/TWiki/UI/Manage.pm:367
 msgid "Attachment does not exist"
 msgstr "첨부 파일이 존재하지 않습니다."
 
-#: templates/messages.tmpl:54
+#: ../core/templates/messages.tmpl:54
 msgid "Attachment move failed"
 msgstr "첨부 파일의 이동에 실패하였습니다."
 
-#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:7
+#: ../PatternSkin/templates/attachtables.pattern.tmpl:7
 msgid "Attachments"
 msgstr "첨부 파일"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:14
+#: ../PatternSkin/templates/attach.pattern.tmpl:14
 msgid "Attachments help"
 msgstr "첨부 파일 도움말"
 
-#: templates/attach.tmpl:7
+#: ../core/templates/attach.tmpl:7
 msgid "Attachments of %1"
 msgstr "%1의 첨부 파일"
 
-#: templates/attach.tmpl:47
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:58
+#: ../PatternSkin/templates/attach.pattern.tmpl:58
+#: ../core/templates/attach.tmpl:47
 msgid "Attachments will not be shown in topic view page."
 msgstr "첨부파일은 주제 보기 페이지에서 출력되지 않습니다."
 
-#: templates/oopsaccessdenied.tmpl:5
-#: templates/oopsattention.tmpl:5
-#: templates/oopslanguagechanged.tmpl:13
-#: templates/oopsleaseconflict.tmpl:4
-#: templates/oopssaveerr.tmpl:10
-#: twikiplugins/ClassicSkin/templates/oopsaccessdenied.classic.tmpl:4
-#: twikiplugins/ClassicSkin/templates/oopsattention.classic.tmpl:4
-#: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:4
+#: ../ClassicSkin/templates/oopsaccessdenied.classic.tmpl:4
+#: ../ClassicSkin/templates/oopsattention.classic.tmpl:4
+#: ../ClassicSkin/templates/oopsleaseconflict.classic.tmpl:4
+#: ../core/templates/oopsaccessdenied.tmpl:5
+#: ../core/templates/oopsattention.tmpl:5
+#: ../core/templates/oopslanguagechanged.tmpl:13
+#: ../core/templates/oopsleaseconflict.tmpl:4
+#: ../core/templates/oopssaveerr.tmpl:10
 msgid "Attention"
 msgstr "주의"
 
-#: templates/attachtables.tmpl:26
+#: ../core/templates/attachtables.tmpl:26
 msgid "Attribute"
 msgstr "속성"
 
-#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:62
+#: ../MailerContrib/templates/mailnotify.tmpl:62
 msgid "Automated notification of topic changes"
 msgstr "주제 변경 자동 알림"
 
-#: data/_default/WebHome.txt:4
+#: ../core/data/_default/WebHome.txt:4
 msgid "Available Information"
 msgstr "사용 가능한 정보"
 
-#: templates/changeform.tmpl:34
-#: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:13
+#: ../PatternSkin/templates/changeform.pattern.tmpl:13
+#: ../core/templates/changeform.tmpl:34
 msgid "Available form templates"
 msgstr "사용가능한 폼 템플릿"
 
-#: data/TWiki/WebTemplateTopics.txt:6
+#: ../core/data/TWiki/WebTemplateTopics.txt:6
 msgid "Available templates in %1 Web:"
 msgstr "웹 %1의 사용가능한 템플릿"
 
-#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:11
+#: ../PatternSkin/templates/twiki.pattern.tmpl:9
 msgid "Back to topic"
 msgstr "주제로 돌아가기"
 
-#: templates/oopsmore.tmpl:37
-#: templates/viewtopicactionbuttons.tmpl:89
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:17
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:17
+#: ../core/templates/oopsmore.tmpl:37
+#: ../core/templates/viewtopicactionbuttons.tmpl:89
 msgid "Backlinks"
 msgstr "돌아가기 링크"
 
-#: templates/backlinksweb.tmpl:7
+#: ../core/templates/backlinksweb.tmpl:7
 msgid "Backlinks to %1 in %2 Web"
 msgstr "웹 %2의 %1로 돌아가기 링크"
 
-#: templates/backlinksallwebs.tmpl:7
+#: ../core/templates/backlinksallwebs.tmpl:7
 msgid "Backlinks to %1 in all Webs"
 msgstr "모든 웹의 %1로 돌아가기 링크"
 
-#: templates/messages.tmpl:280
+#: ../core/templates/messages.tmpl:280
 msgid "Bad password"
 msgstr "잘못된 비밀번호"
 
-#: templates/messages.tmpl:118
+#: ../core/templates/messages.tmpl:118
 msgid "Base web %1 is missing or does not exist"
 msgstr "기본 웹 %1은 존재하지 않거나 누락 되었습니다."
 
-#: data/TWiki/WebSearch.txt:31
-#: data/TWiki/WebSearchAdvanced.txt:40
+#: ../core/data/TWiki/WebSearch.txt:31
+#: ../core/data/TWiki/WebSearchAdvanced.txt:40
 msgid "Both body and title"
 msgstr ""
 
-#: templates/changeform.tmpl:29
-msgid "But existing form data will be lost (you can always retrieve this data through the topic history)"
+#: ../core/templates/changeform.tmpl:29
+msgid ""
+"But existing form data will be lost (you can always retrieve this data "
+"through the topic history)"
 msgstr ""
 
-#: data/Trash/WebHome.txt:7
-msgid "By default, viewing the Trash web is restricted to %1. If you would like to allow all users to view the Trash web, remove the =ALLOWWEBVIEW= restriction in WebPreferences."
+#: ../core/data/Trash/WebHome.txt:8
+msgid ""
+"By default, viewing the Trash web is restricted to %1. If you would like to "
+"allow all users to view the Trash web, remove the =ALLOWWEBVIEW= restriction "
+"in WebPreferences."
 msgstr ""
 
-#: templates/messages.tmpl:44
-#: templates/messages.tmpl:450
+#: ../core/templates/messages.tmpl:44 ../core/templates/messages.tmpl:460
 msgid "Can't find user %1"
 msgstr "사용자 %1을 찾을 수 없습니다"
 
-#: templates/messages.tmpl:451
+#: ../core/templates/messages.tmpl:461
 msgid "Can't get an e-mail address for %1 (required for password reset)"
-msgstr "%1을 위한 이메일 주소를 가져올 수 없습니다(패스워드 초기화에 필요합니다)"
+msgstr ""
+"%1을 위한 이메일 주소를 가져올 수 없습니다(패스워드 초기화에 필요합니다)"
 
-#: templates/twiki.tmpl:79
-#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:67
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:176
+#: ../ClassicSkin/templates/twiki.classic.tmpl:68
+#: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:182
+#: ../core/templates/twiki.tmpl:80
 msgid "Cancel"
 msgstr "취소"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:44
+#: ../PatternSkin/templates/edit.pattern.tmpl:47
 msgid "Cancel editing and discard changes"
 msgstr "편집 취소 혹은 변경 내용 삭제"
 
-#: templates/messages.tmpl:69
+#: ../core/templates/messages.tmpl:69
 msgid "Cannot create %1 because it already exists."
 msgstr "이미 존재하기 때문에 %1을 생성할 수 없습니다."
 
-#: templates/messages.tmpl:114
+#: ../core/templates/messages.tmpl:114
 msgid "Cannot create web %1 because it already exists"
 msgstr "웹 %1은 이미 존재하기 때문에 생성할 수 없습니다."
 
-#: templates/messages.tmpl:75
-#: templates/messages.tmpl:81
+#: ../core/templates/messages.tmpl:75 ../core/templates/messages.tmpl:81
 msgid "Cannot rename %1 to %2 because it already exists."
 msgstr "이미 존재하기 때문에 %1에서 %2로 변경이 불가능합니다."
 
-#: data/TWiki/WebSearchAdvanced.txt:57
+#: ../core/data/TWiki/WebSearchAdvanced.txt:57
 msgid "Case sensitive"
 msgstr "대/소문자 구분"
 
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:33
+#: ../PatternSkin/data/TWiki/WebLeftBar.txt:34
+#: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:39
 msgid "Categories"
 msgstr "카테고리"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:2
+#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:2
 msgid "Change Password"
 msgstr "비밀번호 면경"
 
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:16
+#: ../PatternSkin/templates/attachagain.pattern.tmpl:16
 msgid "Change comment and properties only"
 msgstr ""
 
-#: templates/renamebase.tmpl:15
+#: ../core/templates/renamebase.tmpl:15
 msgid "Change from:"
 msgstr "다음으로부터 변경됨:"
 
-#: data/TWiki/LanguageSelector.txt:16
-#: templates/oopschangelanguage.tmpl:20
-#: templates/oopschangelanguage.tmpl:4
-#: templates/oopslanguagechanged.tmpl:5
+#: ../core/data/TWiki/LanguageSelector.txt:16
+#: ../core/templates/oopschangelanguage.tmpl:20
+#: ../core/templates/oopschangelanguage.tmpl:4
+#: ../core/templates/oopslanguagechanged.tmpl:5
 msgid "Change language"
 msgstr "언어 변경"
 
-#: templates/renamewebbase.tmpl:43
+#: ../core/templates/renamewebbase.tmpl:43
 msgid "Change links in topics that refer to !%1 in any Web:"
 msgstr ""
 
-#: templates/renamewebbase.tmpl:40
+#: ../core/templates/renamewebbase.tmpl:40
 msgid "Change links in topics that refer to !%1 in the %2 Web:"
 msgstr ""
 
-#: templates/renamebase.tmpl:56
+#: ../core/templates/renamebase.tmpl:56
 msgid "Change links in topics that refer to %1 in any Web:"
 msgstr ""
 
-#: templates/renamebase.tmpl:53
+#: ../core/templates/renamebase.tmpl:53
 msgid "Change links in topics that refer to %1 in the %2 Web:"
 msgstr ""
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:30
+#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:30
 msgid "Change password"
 msgstr "비밀번호 변경"
 
-#: templates/attachagain.tmpl:21
+#: ../core/templates/attachagain.tmpl:21
 msgid "Change properties only"
 msgstr ""
 
-#: templates/edit.tmpl:7
+#: ../core/templates/edit.tmpl:7
 msgid "Change topic"
 msgstr "주제 변경"
 
-#: templates/search.tmpl:15
+#: ../core/templates/search.tmpl:15
 msgid "Changed"
 msgstr "변경됨"
 
-#: templates/search.tmpl:16
-#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:18
+#: ../MailerContrib/templates/mailnotify.tmpl:18
+#: ../core/templates/search.tmpl:16
 msgid "Changed by"
 msgstr ""
 
-#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:16
+#: ../MailerContrib/templates/mailnotify.tmpl:16
 msgid "Changed:"
 msgstr "변경됨:"
 
-#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:8
-#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:8
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:9
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:4
-#: twikiplugins/PatternSkin/data/Trash/WebLeftBar.txt:6
-#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:7
+#: ../PatternSkin/data/Main/WebLeftBar.txt:8
+#: ../PatternSkin/data/Sandbox/WebLeftBar.txt:8
+#: ../PatternSkin/data/TWiki/WebLeftBar.txt:9
+#: ../PatternSkin/data/TWiki/WebLeftBarExample.txt:4
+#: ../PatternSkin/data/Trash/WebLeftBar.txt:6
+#: ../PatternSkin/data/_default/WebLeftBar.txt:7
+#: ../TopMenuSkin/data/Main/WebTopMenu.txt:15
+#: ../TopMenuSkin/data/Sandbox/WebTopMenu.txt:14
+#: ../TopMenuSkin/data/TWiki/TopMenuSkin.txt:42
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinDefaultWebTopMenu.txt:15
+#: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:17
+#: ../TopMenuSkin/data/Trash/WebTopMenu.txt:14
+#: ../TopMenuSkin/data/_default/WebTopMenu.txt:14
 msgid "Changes"
 msgstr "변경 내용"
 
 #. ($r2, $r1)
-#: lib/TWiki/UI/RDiff.pm:484
+#: ../core/lib/TWiki/UI/RDiff.pm:484
 msgid "Changes from r%1 to r%2"
 msgstr "r%1에서 r%2로 변경된 내용"
 
-#: templates/messages.tmpl:402
-msgid "Check your configuration settings for {TemplateDir} and {TemplatePath}. If that's not the problem, it may be because you have a setting of %1 that is pointing to a template that doesn't exist."
+#: ../core/templates/messages.tmpl:402
+msgid ""
+"Check your configuration settings for {TemplateDir} and {TemplatePath}. If "
+"that's not the problem, it may be because you have a setting of %1 that is "
+"pointing to a template that doesn't exist."
 msgstr ""
 
-#: templates/renamebase.tmpl:42
-#: templates/renamedelete.tmpl:31
+#: ../core/templates/renamebase.tmpl:42 ../core/templates/renamedelete.tmpl:31
 msgid "Checked topics will be updated to point to the new topic location."
 msgstr ""
 
-#: templates/renameweb.tmpl:29
+#: ../core/templates/renameweb.tmpl:29
 msgid "Checked topics will be updated to point to the new web name."
 msgstr ""
 
-#: templates/oopsmore.tmpl:112
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:23
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:23
+#: ../core/templates/oopsmore.tmpl:113
 msgid "Child topics in %1 web"
 msgstr "웹 %1의 하위 주제"
 
-#: templates/changeform.tmpl:7
+#: ../core/templates/changeform.tmpl:7
 msgid "Choose a new form for %1"
 msgstr "%1에 이용할 새로운 폼 선택하기"
 
-#: lib/TWiki/Form/Checkbox.pm:39
-#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:33
+#: ../PatternSkin/templates/renamebase.pattern.tmpl:33
+#: ../core/lib/TWiki/Form/Checkbox.pm:39
 msgid "Clear all"
 msgstr "모두 깨끗이하기"
 
-#: lib/TWiki/Render.pm:183
-msgid "Click to move topic back to previous location, with option to change references."
+#: ../core/lib/TWiki/Render.pm:186
+msgid ""
+"Click to move topic back to previous location, with option to change "
+"references."
 msgstr ""
 
-#: twikiplugins/TwistyPlugin/data/TWiki/TwistyPlugin.txt:548
+#: ../TwistyPlugin/data/TWiki/TwistyPlugin.txt:550
 msgid "Close"
 msgstr "닫기"
 
-#: templates/messages.tmpl:122
+#: ../core/templates/messages.tmpl:122
 msgid "Color %1 has an invalid format"
 msgstr "색상 %1은 잘못된 포맷입니다."
 
-#: templates/attach.tmpl:26
-#: templates/attachtables.tmpl:37
-#: templates/attachtables.tmpl:4
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:46
+#: ../PatternSkin/templates/attach.pattern.tmpl:46
+#: ../core/templates/attach.tmpl:26 ../core/templates/attachtables.tmpl:37
+#: ../core/templates/attachtables.tmpl:4
 msgid "Comment"
 msgstr "주석"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:276
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:322
 msgid "Comments:"
 msgstr "주석:"
 
-#: templates/oopsmore.tmpl:93
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:44
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:44
+#: ../core/templates/oopsmore.tmpl:94
 msgid "Compare revisions"
 msgstr "리비전 비교"
 
-#: templates/renameconfirm.tmpl:7
-#: templates/renamewebconfirm.tmpl:7
+#: ../core/templates/messages.tmpl:199
+#, fuzzy
+msgid "Confirm registration"
+msgstr "등록하기"
+
+#: ../core/templates/renameconfirm.tmpl:7
+#: ../core/templates/renamewebconfirm.tmpl:7
 msgid "Confirm rename or move"
 msgstr "이름 변경 혹은 이동 확인"
 
-#: templates/messages.tmpl:31
-msgid "Confirm your changes using TWiki's [[%1][topic history comparison tool (diff)]]."
+#: ../core/templates/messages.tmpl:31
+msgid ""
+"Confirm your changes using TWiki's [[%1][topic history comparison tool "
+"(diff)]]."
 msgstr ""
 
-#: templates/oopsleaseconflict.tmpl:6
-#: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:5
+#: ../ClassicSkin/templates/oopsleaseconflict.classic.tmpl:5
+#: ../core/templates/oopsleaseconflict.tmpl:6
 msgid "Conflict"
 msgstr "충돌"
 
-#: templates/messages.tmpl:463
-#: templates/messages.tmpl:469
-#: templates/messages.tmpl:490
-#: templates/messages.tmpl:501
-#: templates/messages.tmpl:507
-#: templates/messages.tmpl:513
-#: templates/messages.tmpl:522
+#: ../core/templates/messages.tmpl:473 ../core/templates/messages.tmpl:479
+#: ../core/templates/messages.tmpl:500 ../core/templates/messages.tmpl:511
+#: ../core/templates/messages.tmpl:517 ../core/templates/messages.tmpl:523
+#: ../core/templates/messages.tmpl:532
 msgid "Contact %1 if you have any questions."
 msgstr "질문이 있으면 %1 에게 연락하세요"
 
-#: templates/messages.tmpl:394
+#: ../core/templates/messages.tmpl:394
 msgid "Continue and try to rename web?"
 msgstr "웹 이름 변경을 계속 시도하시겠습니까?"
 
-#: data/TWiki/WebTopicCreator.txt:4
+#: ../core/data/TWiki/WebTopicCreator.txt:4
 msgid "Continue to create the new page"
 msgstr "새로운 페이지 생성을 계속하기"
 
-#: data/TWiki/TWikiPreferences.txt:40
-#: data/TWiki/WebPreferences.txt:33
-msgid "Copyright &&copy; by the contributing authors. All material on this collaboration platform is the property of the contributing authors."
-msgstr "모든 저작권은 기고한 제작자에게 귀속됩니다. 이 협업 플랫폼에 있는 모든 저작물은 기고한 제작자들의 자산입니다."
+#: ../core/data/TWiki/TWikiPreferences.txt:40
+#: ../core/data/TWiki/WebPreferences.txt:35
+msgid ""
+"Copyright &&copy; by the contributing authors. All material on this "
+"collaboration platform is the property of the contributing authors."
+msgstr ""
+"모든 저작권은 기고한 제작자에게 귀속됩니다. 이 협업 플랫폼에 있는 모든 저작물"
+"은 기고한 제작자들의 자산입니다."
 
-#: templates/messages.tmpl:132
+#: ../core/templates/messages.tmpl:132
 msgid "Could not create the new web %1"
 msgstr "새로운 웹 %1을 생성할 수 없음"
 
-#: templates/messages.tmpl:400
+#: ../core/templates/messages.tmpl:400
 msgid "Could not find template"
 msgstr "템플릿을 찾을 수 없습니다."
 
-#: templates/messages.tmpl:455
+#: ../core/templates/messages.tmpl:465
 msgid "Could not perform search. Error was: %1"
 msgstr ""
 
-#: templates/messages.tmpl:312
+#: ../core/templates/messages.tmpl:312
 msgid "Could not save %1."
 msgstr "%1을 저장할 수 없스니다."
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:125
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:126
 msgid "Country:"
 msgstr "국가"
 
-#: data/TWiki/WebTopicViewTemplate.txt:27
+#: ../core/data/TWiki/WebTopicViewTemplate.txt:27
 msgid "Create '%1'"
 msgstr "'%1' 생성하기"
 
-#: data/Sandbox/WebHome.txt:18
+#: ../core/data/Sandbox/WebHome.txt:18
 msgid "Create <nop>TestTopic###"
 msgstr ""
 
-#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:5
-#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:5
-#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:4
+#: ../PatternSkin/data/Main/WebLeftBar.txt:5
+#: ../PatternSkin/data/Sandbox/WebLeftBar.txt:5
+#: ../PatternSkin/data/_default/WebLeftBar.txt:4
+#: ../TopMenuSkin/data/Sandbox/WebTopMenu.txt:11
+#: ../TopMenuSkin/data/TWiki/TopMenuSkin.txt:39
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinDefaultWebTopMenu.txt:12
+#: ../TopMenuSkin/data/_default/WebTopMenu.txt:11
 msgid "Create New Topic"
 msgstr "새로운 주제 생성하기"
 
-#: data/TWiki/WebCreateNewTopicTemplate.txt:6
-#: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebCreateNewTopicTemplate.txt:43
+#: ../PatternSkin/data/TWiki/PatternSkinWebCreateNewTopicTemplate.txt:43
+#: ../core/data/TWiki/WebCreateNewTopicTemplate.txt:6
 msgid "Create New Topic in %1 Web"
 msgstr "웹 %1에 새로운 주제 생성하기"
 
-#: templates/attach.tmpl:39
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:56
+#: ../PatternSkin/templates/attach.pattern.tmpl:56
+#: ../core/templates/attach.tmpl:39
 msgid "Create a link to the attached file"
 msgstr "첨부파일에 대한 새로운 링크 생성하기"
 
-#: data/Sandbox/WebHome.txt:16
+#: ../core/data/Sandbox/WebHome.txt:16
 msgid "Create a new auto-numbered test topic:"
 msgstr "자동으로 번호가 부여되는 테스트용 주제 생성하기:"
 
-#: data/Sandbox/WebHome.txt:9
+#: ../core/data/Sandbox/WebHome.txt:9
 msgid "Create a new document by name:"
 msgstr "이름으로 새로운 문서 생성하기"
 
-#: data/Sandbox/WebHome.txt:10
+#: ../core/data/Sandbox/WebHome.txt:10
 msgid "Create by Name"
 msgstr "이름으로 생성하기"
 
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:11
+#: ../PatternSkin/data/TWiki/WebLeftBarExample.txt:11
 msgid "Create personal sidebar"
 msgstr "맞춤형 사이드바 생성하기"
 
-#: templates/messages.tmpl:488
+#: ../core/templates/messages.tmpl:498
 msgid "Create the topic"
 msgstr "새로운 주제 생성하기"
 
-#: data/TWiki/TWikiPreferences.txt:314
-#: data/TWiki/TWikiPreferences.txt:316
-#: data/TWiki/WebCreateNewTopicTemplate.txt:60
-#: lib/TWiki/Render.pm:89
+#: ../core/data/TWiki/TWikiPreferences.txt:321
+#: ../core/data/TWiki/TWikiPreferences.txt:323
+#: ../core/data/TWiki/WebCreateNewTopicTemplate.txt:60
+#: ../core/lib/TWiki/Render.pm:92
 msgid "Create this topic"
 msgstr "새로운 주제 생성하기"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:284
-msgid "Create your personal %1 topic using your WikiName as topic name, and add the data you submitted to the topic."
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:330
+msgid ""
+"Create your personal %1 topic using your WikiName as topic name, and add the "
+"data you submitted to the topic."
 msgstr ""
 
-#: templates/messages.tmpl:341
+#: ../core/templates/messages.tmpl:341
 msgid "Creating a suitable Form Definition topic"
 msgstr ""
 
-#: templates/renamedelete.tmpl:10
-#: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:9
+#: ../PatternSkin/templates/renameattachmentdelete.pattern.tmpl:9
+#: ../core/templates/renamedelete.tmpl:10
 msgid "Current location:"
 msgstr "현재 위치:"
 
-#: templates/oopsmore.tmpl:51
+#: ../core/templates/oopsmore.tmpl:52
 msgid "Current parent:"
 msgstr "현재 상위 주제:"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:23
+#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:23
 msgid "Current password"
 msgstr "현재 패스워드"
 
-#: templates/attachtables.tmpl:37
-#: templates/attachtables.tmpl:4
+#: ../core/templates/attachtables.tmpl:37
+#: ../core/templates/attachtables.tmpl:4
 msgid "Date"
 msgstr "일"
 
-#: templates/mailresetpassword.tmpl:5
-#: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:5
+#: ../ClassicSkin/templates/mailresetpassword.classic.tmpl:5
+#: ../core/templates/mailresetpassword.tmpl:5
 msgid "Dear %1"
 msgstr "안녕하세요. %1 님."
 
-#: templates/oopsmore.tmpl:97
+#: ../core/templates/oopsmore.tmpl:98
 msgid "Debug"
 msgstr "디버그"
 
-#: data/TWiki/WebCreateNewTopicTemplate.txt:58
+#: ../core/data/TWiki/WebCreateNewTopicTemplate.txt:58
 msgid "Default template"
 msgstr "기본 템플릿"
 
-#: templates/renamedelete.tmpl:34
-#: templates/renamedelete.tmpl:7
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:24
-#: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:25
+#: ../PatternSkin/templates/attachagain.pattern.tmpl:24
+#: ../PatternSkin/templates/renameattachmentdelete.pattern.tmpl:25
+#: ../core/templates/renamedelete.tmpl:34
+#: ../core/templates/renamedelete.tmpl:7
 msgid "Delete"
 msgstr "삭제"
 
-#: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:28
+#: ../PatternSkin/templates/renameattachmentdelete.pattern.tmpl:28
 msgid "Delete attachment"
 msgstr "첨부 파일 삭제"
 
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:175
+#: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:181
 msgid "Delete last row"
 msgstr "마지막 행 삭제"
 
-#: templates/oopsmore.tmpl:19
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:5
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:5
+#: ../core/templates/oopsmore.tmpl:19
 msgid "Delete topic"
 msgstr "주제 삭제"
 
-#: templates/oopsmore.tmpl:20
-#: templates/oopsmore.tmpl:22
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:6
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:8
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:6
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:8
+#: ../core/templates/oopsmore.tmpl:20 ../core/templates/oopsmore.tmpl:22
 msgid "Delete topic..."
 msgstr "주제 삭제..."
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:48
+#: ../PatternSkin/templates/attach.pattern.tmpl:48
 msgid "Describe the file so other people know what it is."
 msgstr "다른 사용자가 알수 있게 파일에 대한 설명을 부탁드립니다."
 
-#: lib/TWiki/Form.pm:261
+#: ../core/lib/TWiki/Form.pm:271
 msgid "Details in separate window"
 msgstr ""
 
-#: data/TWiki/WebTopicViewTemplate.txt:11
+#: ../core/data/TWiki/WebTopicViewTemplate.txt:11
 msgid "Did you spell the %1 correctly?"
 msgstr "%1의 철자가 확실합니까?"
 
-#: data/TWiki/VarMAKETEXT.txt:19
+#: ../core/data/TWiki/VarMAKETEXT.txt:19
 msgid "Did you want to [[%1][reset %2's password]]?"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:14
+#: ../PatternSkin/templates/rdiff.pattern.tmpl:14
 msgid "Difference:"
 msgstr "차이점:"
 
-#: templates/preview.tmpl:11
+#: ../core/templates/preview.tmpl:11
 msgid "Do not forget to save your changes"
 msgstr "변경한 내역을 저장하는 것을 잊지 마세요."
 
-#: templates/attach.tmpl:47
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:58
+#: ../PatternSkin/templates/attach.pattern.tmpl:58
+#: ../core/templates/attach.tmpl:47
 msgid "Do not show attachment in table"
 msgstr "테이블 안에 첨부파일을 노출하지 않습니다."
 
-#: data/TWiki/WebSearchAdvanced.txt:69
+#: ../core/data/TWiki/WebSearchAdvanced.txt:69
 msgid "Do show:"
 msgstr ""
 
-#: data/TWiki/WebTopicViewTemplate.txt:26
+#: ../core/data/TWiki/WebTopicViewTemplate.txt:26
 msgid "Do you wish to create the topic %1?"
 msgstr "주제 %1의 생성을 원하십니까?"
 
-#: data/TWiki/WebTopicViewTemplate.txt:18
+#: ../core/data/TWiki/WebTopicViewTemplate.txt:18
 msgid "Do you wish to navigate quickly to a similar topic?"
 msgstr "유사한 주제로 빠르게 이동하기를 원하십니까?"
 
-#: data/TWiki/WebSearchAdvanced.txt:62
+#: ../core/data/TWiki/WebSearchAdvanced.txt:62
 msgid "Don't show:"
 msgstr ""
 
-#: templates/messages.tmpl:63
-msgid "During deletion of attachment =%1= an error was found. Please notify your %2 administrator."
+#: ../core/templates/messages.tmpl:63
+msgid ""
+"During deletion of attachment =%1= an error was found. Please notify your %2 "
+"administrator."
 msgstr ""
 
-#: templates/messages.tmpl:55
-msgid "During move of attachment %1 to %2 an error was found. Please notify your %3 administrator."
+#: ../core/templates/messages.tmpl:55
+msgid ""
+"During move of attachment %1 to %2 an error was found. Please notify your %3 "
+"administrator."
 msgstr ""
 
-#: templates/messages.tmpl:91
-msgid "During rename of topic %1 to %2 an error (%3) was found. Please notify your %4 administrator."
+#: ../core/templates/messages.tmpl:91
+msgid ""
+"During rename of topic %1 to %2 an error (%3) was found. Please notify your %"
+"4 administrator."
 msgstr ""
 
-#: templates/messages.tmpl:94
-msgid "During rename of web %1 to %2 an error (%3) was found. Please notify your %4 administrator."
+#: ../core/templates/messages.tmpl:94
+msgid ""
+"During rename of web %1 to %2 an error (%3) was found. Please notify your %4 "
+"administrator."
 msgstr ""
 
-#: templates/messages.tmpl:371
-#: templates/oopssaveerr.tmpl:17
-msgid "During save of %1 an error was found by the version control system. Please notify your %2 administrator."
+#: ../core/templates/messages.tmpl:371 ../core/templates/oopssaveerr.tmpl:17
+msgid ""
+"During save of %1 an error was found by the version control system. Please "
+"notify your %2 administrator."
 msgstr ""
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:109
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:110
 msgid "E-mail address:"
 msgstr "이메일 주소:"
 
-#: templates/messages.tmpl:183
+#: ../core/templates/messages.tmpl:183
 msgid "E-mail changed successfully!"
 msgstr "이메일 주소 변경에 성공하였습니다!"
 
-#: templates/settings.tmpl:27
+#: ../core/templates/settings.tmpl:27
 msgid "Each preference has the syntax"
 msgstr ""
 
-#: templates/viewtopicactionbuttons.tmpl:45
+#: ../TWikiNetSkin/templates/viewtopbar.twikinet.tmpl:97
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:24
+#: ../core/templates/viewtopicactionbuttons.tmpl:45
 msgid "Edit"
 msgstr "수정"
 
-#: templates/oopsleaseconflict.tmpl:25
-#: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:27
+#: ../ClassicSkin/templates/oopsleaseconflict.classic.tmpl:27
+#: ../core/templates/oopsleaseconflict.tmpl:25
 msgid "Edit Anyway"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:13
+#: ../PatternSkin/templates/edit.pattern.tmpl:16
 msgid "Edit help"
 msgstr "수정하기 도움말"
 
-#: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:5
+#: ../PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:5
 msgid "Edit personal data"
 msgstr "개인 데이터 수정하기"
 
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:170
+#: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:176
 msgid "Edit table"
 msgstr "테이블 수정하기"
 
-#: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:10
+#: ../PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:10
 msgid "Edit text"
 msgstr "본문 수정하기"
 
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:171
+#: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:177
 msgid "Edit this table"
 msgstr "해당 테이블 수정하기"
 
-#: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:18
+#: ../PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:18
 msgid "Edit this topic text"
 msgstr "해당 주제 본문 수정하기"
 
-#: templates/oopsmore.tmpl:13
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:60
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:60
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:27
+#: ../core/templates/oopsmore.tmpl:13
 msgid "Edit topic preference settings"
 msgstr "주제 속성 정보 수정하기"
 
-#: templates/messages.tmpl:297
-msgid "Either the code is not valid, or you have already confirmed your registration using it."
+#: ../core/templates/messages.tmpl:297
+msgid ""
+"Either the code is not valid, or you have already confirmed your "
+"registration using it."
 msgstr "코드가 유효하지 않거나 등록상태가 이미 확인되었습니다."
 
-#: templates/messages.tmpl:362
-msgid "Either you did not specify a file name, or the file you are trying to upload %1 has no content. You may not upload an empty file."
+#: ../core/templates/messages.tmpl:362
+msgid ""
+"Either you did not specify a file name, or the file you are trying to upload "
+"%1 has no content. You may not upload an empty file."
 msgstr ""
 
-#: lib/TWiki/UI/Register.pm:417
-#: lib/TWiki/UI/Register.pm:454
+#: ../core/lib/TWiki/UI/Register.pm:432 ../core/lib/TWiki/UI/Register.pm:479
 msgid "Email has been disabled for this TWiki installation"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:79
+#: ../PatternSkin/templates/twiki.pattern.tmpl:76
 msgid "Enlarge edit box"
 msgstr "수정 박스 확장"
 
-#: templates/login.tmpl:7
+#: ../core/templates/login.tmpl:7
 msgid "Enter a new username and password to change identity"
 msgstr "새로운 이름과 비밀번호를 입력하세요."
 
-#: templates/login.sudo.tmpl:18
+#: ../core/templates/login.sudo.tmpl:18
 msgid "Enter the TWiki Administrator user or login as set in %1"
 msgstr "TWiki 관리자 혹은 %1에 관리자로 설정된 사용자를 입력하세요."
 
-#: twikiplugins/ClassicSkin/templates/login.classic.tmpl:21
-msgid "Enter your TWiki.LoginName. (Typically First name and last name, no space, no dots, capitalized, e.g. !JohnSmith, unless you chose otherwise). Visit %TWIKIWEB%.TWikiRegistration if you do not have one."
-msgstr "TWiki.LoginName 을 입력하세요. (일반적으로 이름과 성으로, 공백 문자와 구두점 없이, 대문자로 구성됩니다. 예, !JohnSmith). 등록하지 않은 상태라면 %TWIKIWEB%.TWikiRegistration 페이지를 방문하십시오."
+#: ../ClassicSkin/templates/login.classic.tmpl:21
+msgid ""
+"Enter your TWiki.LoginName. (Typically First name and last name, no space, "
+"no dots, capitalized, e.g. !JohnSmith, unless you chose otherwise). Visit %"
+"TWIKIWEB%.TWikiRegistration if you do not have one."
+msgstr ""
+"TWiki.LoginName 을 입력하세요. (일반적으로 이름과 성으로, 공백 문자와 구두점 "
+"없이, 대문자로 구성됩니다. 예, !JohnSmith). 등록하지 않은 상태라면 %TWIKIWEB"
+"%.TWikiRegistration 페이지를 방문하십시오."
 
-#: templates/messages.tmpl:233
+#: ../core/templates/messages.tmpl:233
 msgid "Error registering new user"
 msgstr "새로운 사용자 등록중 에러 발생"
 
-#: templates/messages.tmpl:224
+#: ../core/templates/messages.tmpl:224
 msgid "Error registering user %1"
 msgstr "사용자 %1 등록 중 에러 발생"
 
-#: templates/messages.tmpl:370
+#: ../core/templates/messages.tmpl:370
 msgid "Error saving topic"
 msgstr "주제 저장 중 에러 발생"
 
-#: templates/login.tmpl:29
+#: ../core/templates/login.tmpl:29
 msgid "Error: %1"
 msgstr "에러: %1"
 
-#: templates/messages.tmpl:443
+#: ../core/templates/messages.tmpl:453
 msgid "Error: File attachment at %1,%2 does not exist"
 msgstr "에러: %1에 대한 파일 첨부에서 %2 가 존재하지 않습니다."
 
-#: templates/messages.tmpl:445
-msgid "Error: Unsupported content type: %1 (Must be =text/html=, =text/plain= or =text/css=)"
+#: ../core/templates/messages.tmpl:455
+msgid ""
+"Error: Unsupported content type: %1 (Must be =text/html=, =text/plain= or "
+"=text/css=)"
 msgstr ""
 
-#: templates/messages.tmpl:444
+#: ../core/templates/messages.tmpl:454
 msgid "Error: Unsupported protocol. (Must be 'http://domain/...')"
 msgstr ""
 
-#: templates/messages.tmpl:247
+#: ../core/templates/messages.tmpl:247
 msgid "Errors"
 msgstr "에러"
 
-#: templates/messages.tmpl:453
+#: ../core/templates/messages.tmpl:411
+#, fuzzy
+msgid "Example:"
+msgstr "좋은 예:"
+
+#: ../core/templates/messages.tmpl:463
 msgid "Failed to include URL %1"
 msgstr ""
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:32
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:21
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:26
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:90
+#: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:32
+#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:21
+#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:26
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:91
 msgid "Fields marked %1 are required"
 msgstr "다음 항목 중 %1 로 표시된 항목은 필수 항목입니다."
 
-#: templates/messages.tmpl:347
+#: ../core/templates/messages.tmpl:347
 msgid "File has been uploaded with different name"
 msgstr "다른 이름으로 파일을 업로드 하였습니다."
 
-#: templates/oopsmore.tmpl:38
-#: templates/oopsmore.tmpl:40
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:18
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:20
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:21
+#, fuzzy
+msgid "Find backlinks"
+msgstr "돌아가기 링크"
+
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:18
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:20
+#: ../core/templates/oopsmore.tmpl:38 ../core/templates/oopsmore.tmpl:40
 msgid "Find topics that link to %1 ..."
 msgstr "%1에 연결된 주제 찾기 ..."
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:283
-msgid "Finish creating an account for you, so that you can start editing pages using your WikiName."
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:329
+msgid ""
+"Finish creating an account for you, so that you can start editing pages "
+"using your WikiName."
 msgstr ""
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:93
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:94
 msgid "First Name:"
 msgstr "이름(First Name):"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:27
+#: ../PatternSkin/templates/edit.pattern.tmpl:30
 msgid "Force new revision"
 msgstr "강제로 새 리비전 만들기"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:5
+#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:5
 msgid "Forgotten your password?"
 msgstr "비밀번호를 잊었습니까?"
 
-#: templates/messages.tmpl:319
+#: ../PatternSkin/data/TWiki/PatternSkinCustomization.txt:432
+#, fuzzy
+msgid "Form"
+msgstr "혹은"
+
+#: ../core/templates/messages.tmpl:319
 msgid "Form Definition %1 missing"
 msgstr "%1 폼에 대한 정의가 누락되었습니다"
 
-#: templates/messages.tmpl:324
+#: ../core/templates/messages.tmpl:324
 msgid "Form definition missing"
 msgstr "폼에 대한 정의가 누락되었습니다."
 
-#: templates/renamebase.tmpl:66
-msgid "Get help on <a target='ManagingTopics' class='twikiPopUp' href='%1' rel='nofollow'>Renaming and moving topics</a>."
+#: ../core/templates/renamebase.tmpl:66
+msgid ""
+"Get help on <a target='ManagingTopics' class='twikiPopUp' href='%1' "
+"rel='nofollow'>Renaming and moving topics</a>."
 msgstr ""
 
-#: templates/renamewebbase.tmpl:50
-msgid "Get help on <a target='ManagingWebs' class='twikiPopUp' href='%1' rel='nofollow'>Renaming and moving webs</a>."
+#: ../core/templates/renamewebbase.tmpl:50
+msgid ""
+"Get help on <a target='ManagingWebs' class='twikiPopUp' href='%1' "
+"rel='nofollow'>Renaming and moving webs</a>."
 msgstr ""
 
-#: templates/settings.tmpl:26
-msgid "Get help on <a target='TWikiVariables' class='twikiPopUp' href='%1' rel='nofollow'>Setting topic preferences</a>."
+#: ../core/templates/settings.tmpl:26
+msgid ""
+"Get help on <a target='TWikiVariables' class='twikiPopUp' href='%1' "
+"rel='nofollow'>Setting topic preferences</a>."
 msgstr ""
 
-#: data/TWiki/WebSearch.txt:5
-#: data/TWiki/WebSearchAdvanced.txt:5
+#: ../core/data/TWiki/WebSearch.txt:5
+#: ../core/data/TWiki/WebSearchAdvanced.txt:5
 msgid "Get notified on changes on this search"
 msgstr ""
 
-#: templates/twiki.tmpl:81
-#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:69
+#: ../ClassicSkin/templates/twiki.classic.tmpl:70
+#: ../core/templates/twiki.tmpl:82
 msgid "Go back"
 msgstr "뒤로 돌아가기"
 
-#: templates/messages.tmpl:316
-msgid "Go back in your browser and insert information for all mandatory fields."
+#: ../core/templates/messages.tmpl:316
+msgid ""
+"Go back in your browser and insert information for all mandatory fields."
 msgstr "브라우져의 돌아가기를 누르고 모든 필수 입력 항목을 채워주세요."
 
-#: templates/messages.tmpl:377
-#: templates/oopssaveerr.tmpl:21
+#: ../core/templates/messages.tmpl:377 ../core/templates/oopssaveerr.tmpl:21
 msgid "Go back in your browser and save your changes locally."
 msgstr "브라우져의 돌아가기를 누르고 변경 내역을 별도로 저장하세요."
 
-#: templates/messages.tmpl:271
+#: ../core/templates/messages.tmpl:271
 msgid "Good examples:"
 msgstr "좋은 예:"
 
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:6
+#: ../PatternSkin/data/TWiki/WebLeftBar.txt:6
+#: ../TopMenuSkin/data/Main/WebTopMenu.txt:12
+#: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:14
 msgid "Groups"
 msgstr "그룹"
 
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
+#: ../PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
 msgid "Hello %1"
 msgstr "안녕하세요 %1님"
 
-#: templates/twiki.tmpl:105
-#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:9
+#: ../ClassicSkin/templates/twiki.classic.tmpl:9
+#: ../core/templates/twiki.tmpl:106
 msgid "Hello %1!"
 msgstr "안녕하세요 %1님!"
 
-#: data/TWiki/WebSearch.txt:24
-#: data/TWiki/WebSearchAdvanced.txt:31
-#: templates/login.tmpl:50
+#: ../core/data/TWiki/WebSearch.txt:24
+#: ../core/data/TWiki/WebSearchAdvanced.txt:31 ../core/templates/login.tmpl:50
 msgid "Help"
 msgstr "도움말"
 
-#: templates/attach.tmpl:45
+#: ../core/templates/attach.tmpl:45
 msgid "Hide file"
 msgstr "파일 숨기기"
 
-#: templates/login.tmpl:50
+#: ../core/templates/login.tmpl:50
 msgid "Hide help"
 msgstr "도움말 숨기기"
 
-#: templates/messages.tmpl:109
+#: ../core/templates/messages.tmpl:109
 msgid "Hierarchical Webs is currently disabled, you cannot create Nested webs."
 msgstr ""
 
-#: templates/registernotify.tmpl:16
-#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:16
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:22
+#, fuzzy
+msgid "History"
+msgstr "이력(&H)"
+
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinHomeMenu.txt:10
+msgid "Home"
+msgstr ""
+
+#: ../core/templates/registernotify.tmpl:16
 msgid "How about attaching your photo?"
 msgstr "당신의 사진을 추가하는 것은 어때요?"
 
-#: templates/registerconfirm.tmpl:4
-#: twikiplugins/ClassicSkin/templates/registerconfirm.classic.tmpl:4
+#: ../core/templates/registerconfirm.tmpl:4
 msgid "How to activate your %1 registration"
 msgstr "%1 등록을 활성화 하는 방법"
 
-#: templates/messages.tmpl:349
-msgid "However, the filename has been changed from %1 to %2. Please make a note of it."
-msgstr "그러나 파일이름은 %1에서 %2로 변경되었습니다. 이것에 대한 설명을 만들어주세요."
+#: ../core/templates/messages.tmpl:349
+msgid ""
+"However, the filename has been changed from %1 to %2. Please make a note of "
+"it."
+msgstr ""
+"그러나 파일이름은 %1에서 %2로 변경되었습니다. 이것에 대한 설명을 만들어주세"
+"요."
 
-#: templates/login.tmpl:63
+#: ../core/templates/login.tmpl:65
 msgid "I forgot my password"
 msgstr "내 비밀번호를 잊었습니다."
 
-#: data/TWiki/TWikiPreferences.txt:40
-#: data/TWiki/WebPreferences.txt:33
+#: ../core/data/TWiki/TWikiPreferences.txt:40
+#: ../core/data/TWiki/WebPreferences.txt:35
 msgid "Ideas, requests, problems regarding %1? <a href='%2'>Send feedback</a>"
-msgstr "%1에 관련한 아이디어, 요구사항, 문제점이 있으신가요? <a href='%2'>피드백을 보내주세요</a>"
+msgstr ""
+"%1에 관련한 아이디어, 요구사항, 문제점이 있으신가요? <a href='%2'>피드백을 보"
+"내주세요</a>"
 
-#: templates/messages.tmpl:333
+#: ../core/templates/messages.tmpl:333
 msgid "If this line isn't present see _upgrade_ section below"
 msgstr ""
 
-#: templates/messages.tmpl:327
+#: ../core/templates/messages.tmpl:327
 msgid "If this topic is missing create it, otherwise check it for errors."
 msgstr ""
 
-#: data/TWiki/WebSearch.txt:43
-#: data/TWiki/WebSearchAdvanced.txt:85
-msgid "If you already know the name of the topic, enter the name of the topic into the [[%1][Jump box]] at the top"
+#: ../core/data/TWiki/WebSearch.txt:43
+#: ../core/data/TWiki/WebSearchAdvanced.txt:85
+msgid ""
+"If you already know the name of the topic, enter the name of the topic into "
+"the [[%1][Jump box]] at the top"
 msgstr ""
 
-#: templates/messages.tmpl:414
-msgid "If you are developing a <nop>TWikiApplication, see %1 for a description of the correct parameters."
+#: ../core/templates/messages.tmpl:415 ../core/templates/messages.tmpl:424
+msgid ""
+"If you are developing a <nop>TWikiApplication, see %1 for a description of "
+"the correct parameters."
 msgstr ""
 
-#: templates/messages.tmpl:478
+#: ../core/templates/messages.tmpl:488
 msgid "If you came here by clicking on a question mark link"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:40
+#: ../PatternSkin/templates/renameattachmentdelete.pattern.tmpl:40
 msgid "If you enter a different name, make sure the topic does  exist."
 msgstr ""
 
-#: templates/registerconfirm.tmpl:14
-#: templates/registernotify.tmpl:23
-#: twikiplugins/ClassicSkin/templates/registerconfirm.classic.tmpl:14
-#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:23
-msgid "If you got this e-mail by mistake: Somebody (%1) registered at the %2 site using your mail address %3. Contact %4 if this is in error."
+#: ../core/templates/registerconfirm.tmpl:14
+#: ../core/templates/registernotify.tmpl:23
+msgid ""
+"If you got this e-mail by mistake: Somebody (%1) registered at the %2 site "
+"using your mail address %3. Contact %4 if this is in error."
 msgstr ""
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:303
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:349
 msgid "If you have any questions about registration, send an e-mail to %1."
 msgstr ""
 
-#: templates/login.tmpl:74
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:46
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:36
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:39
+#: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:46
+#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:36
+#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:39
+#: ../core/templates/login.tmpl:76
 msgid "If you have any questions, please contact %1"
 msgstr "질문이 있으면 %1 에게 연락하십시오."
 
-#: data/TWiki/VarMAKETEXT.txt:16
-#: templates/mailresetpassword.tmpl:14
-#: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:14
+#: ../ClassicSkin/templates/mailresetpassword.classic.tmpl:14
+#: ../core/data/TWiki/VarMAKETEXT.txt:16
+#: ../core/templates/mailresetpassword.tmpl:14
 msgid "If you have any questions, please contact %1."
 msgstr "질문이 있으면 %1 에 연락하십시오."
 
-#: templates/registernotify.tmpl:25
-#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:25
+#: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:146
+#: ../core/templates/registernotify.tmpl:25
 msgid "If you haven't set a password yet or you want to reset it, go to: %1"
 msgstr ""
 
-#: templates/messages.tmpl:412
-msgid "If you received a link to this topic in an e-mail or just want to look at the topic, [[%1][cancel save]] to go to %2."
+#: ../core/templates/messages.tmpl:422
+msgid ""
+"If you received a link to this topic in an e-mail or just want to look at "
+"the topic, [[%1][cancel save]] to go to %2."
 msgstr ""
 
-#: templates/messages.tmpl:487
+#: ../core/templates/messages.tmpl:497
 msgid "If you want to create the topic"
 msgstr ""
 
-#: templates/messages.tmpl:483
+#: ../core/templates/messages.tmpl:493
 msgid "If you would like to create this web"
 msgstr ""
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:13
-msgid "If your old e-mail addresses are all invalid (you can't receive mail there any more) and you have forgotten your password, please contact %1 for help."
+#: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:13
+msgid ""
+"If your old e-mail addresses are all invalid (you can't receive mail there "
+"any more) and you have forgotten your password, please contact %1 for help."
 msgstr ""
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:11
-msgid "If your user topic is not protected from changes by other people, and you don't register an e-mail address using this form, then your user account could be hijacked by someone else."
+#: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:11
+msgid ""
+"If your user topic is not protected from changes by other people, and you "
+"don't register an e-mail address using this form, then your user account "
+"could be hijacked by someone else."
 msgstr ""
 
-#: templates/attach.tmpl:39
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:56
+#: ../PatternSkin/templates/attach.pattern.tmpl:56
+#: ../core/templates/attach.tmpl:39
 msgid "Images will be displayed, for other attachments a link will be created."
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:52
+#: ../core/data/TWiki/WebSearchAdvanced.txt:52
 msgid "In reversed order"
 msgstr ""
 
-#: templates/messages.tmpl:352
-msgid "In some cases, TWiki changes the name of the uploaded file to make it safe and accessible across all platforms:"
+#: ../core/templates/messages.tmpl:352
+msgid ""
+"In some cases, TWiki changes the name of the uploaded file to make it safe "
+"and accessible across all platforms:"
 msgstr ""
 
-#: templates/messages.tmpl:261
-#: templates/messages.tmpl:268
+#: ../core/templates/messages.tmpl:261 ../core/templates/messages.tmpl:268
 msgid "Incorrect %1"
 msgstr ""
 
-#: templates/messages.tmpl:271
+#: ../core/templates/messages.tmpl:271
 msgid "Incorrect %1.WikiNames:"
 msgstr ""
 
-#: templates/messages.tmpl:97
+#: ../core/templates/messages.tmpl:97
 msgid "Incorrect Password"
 msgstr ""
 
-#: templates/messages.tmpl:410
+#: ../core/templates/messages.tmpl:420
 msgid "Incorrect parameters to the =%1= script"
 msgstr ""
 
-#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:6
-#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:6
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:7
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:5
-#: twikiplugins/PatternSkin/data/Trash/WebLeftBar.txt:4
-#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:5
+#: ../PatternSkin/data/Main/WebLeftBar.txt:6
+#: ../PatternSkin/data/Sandbox/WebLeftBar.txt:6
+#: ../PatternSkin/data/TWiki/WebLeftBar.txt:7
+#: ../PatternSkin/data/TWiki/WebLeftBarExample.txt:5
+#: ../PatternSkin/data/Trash/WebLeftBar.txt:4
+#: ../PatternSkin/data/_default/WebLeftBar.txt:5
+#: ../TopMenuSkin/data/Main/WebTopMenu.txt:13
+#: ../TopMenuSkin/data/Sandbox/WebTopMenu.txt:12
+#: ../TopMenuSkin/data/TWiki/TopMenuSkin.txt:40
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinDefaultWebTopMenu.txt:13
+#: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:15
+#: ../TopMenuSkin/data/Trash/WebTopMenu.txt:12
+#: ../TopMenuSkin/data/_default/WebTopMenu.txt:12
 msgid "Index"
 msgstr "색인"
 
-#: templates/messages.tmpl:235
+#: ../core/templates/messages.tmpl:235
 msgid "Internal error when sending email to %1."
 msgstr "이메일을 %1로 보내는 중에 내부 에러가 발생"
 
-#: templates/messages.tmpl:356
-msgid "International (8-bit) characters are removed (replaced by US-ASCII equivalents for Latin-1)"
-msgstr "국제화 규격 문자(8-bit)가 삭제되었습니다(Latin-1과 동등한 US-ASCII로 교체되었습니다)."
+#: ../core/templates/messages.tmpl:356
+msgid ""
+"International (8-bit) characters are removed (replaced by US-ASCII "
+"equivalents for Latin-1)"
+msgstr ""
+"국제화 규격 문자(8-bit)가 삭제되었습니다(Latin-1과 동등한 US-ASCII로 교체되었"
+"습니다)."
 
-#: templates/messages.tmpl:294
+#: ../core/templates/messages.tmpl:294
 msgid "Invalid Activation Code"
 msgstr "유효하지 않은 활성 코드"
 
-#: templates/messages.tmpl:286
+#: ../core/templates/messages.tmpl:286
 msgid "Invalid e-mail address"
 msgstr "유효하지 않은 이메일 주소"
 
-#: templates/messages.tmpl:425
-msgid "It is probably OK to go ahead and edit - unless you intend to change data in a form attached to the topic. If %1 actually _does_ save the topic while you are editing, your changes will be merged, and nothing will be lost. Form data cannot easily be merged though, so in this case you are recommended to check with %1 first."
+#: ../core/templates/messages.tmpl:435
+msgid ""
+"It is probably OK to go ahead and edit - unless you intend to change data in "
+"a form attached to the topic. If %1 actually _does_ save the topic while you "
+"are editing, your changes will be merged, and nothing will be lost. Form "
+"data cannot easily be merged though, so in this case you are recommended to "
+"check with %1 first."
 msgstr ""
 
-#: templates/twiki.tmpl:9
-msgid "It's usually best to choose a <a target='WikiWord' class='twikiPopUp' href='%1' rel='nofollow'>WikiWord</a> for the new topic name, otherwise automatic linking may not work. Characters not allowed in topic names, such as spaces will automatically be removed."
+#: ../core/templates/twiki.tmpl:9
+msgid ""
+"It's usually best to choose a <a target='WikiWord' class='twikiPopUp' href='%"
+"1' rel='nofollow'>WikiWord</a> for the new topic name, otherwise automatic "
+"linking may not work. Characters not allowed in topic names, such as spaces "
+"will automatically be removed."
 msgstr ""
 
-#: templates/renameweb.tmpl:17
-msgid "It's usually best to choose a short name for the new web, as it is easier to link to them later on. Characters not allowed in web names, such as spaces will automatically be removed."
+#: ../core/templates/renameweb.tmpl:17
+msgid ""
+"It's usually best to choose a short name for the new web, as it is easier to "
+"link to them later on. Characters not allowed in web names, such as spaces "
+"will automatically be removed."
 msgstr ""
 
-#: data/TWiki/WebTopicViewTemplate.txt:11
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarSearch.txt:2
-#: twikiplugins/PatternSkin/data/TWiki/WebTopBar.txt:7
-#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:37
+#: ../PatternSkin/data/TWiki/WebLeftBarSearch.txt:2
+#: ../PatternSkin/data/TWiki/WebTopBar.txt:7
+#: ../PatternSkin/templates/twiki.pattern.tmpl:36
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopBar.txt:55
+#: ../core/data/TWiki/WebTopicViewTemplate.txt:11
 msgid "Jump"
 msgstr "점프"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:97
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:98
 msgid "Last Name:"
 msgstr "성(Last Name):"
 
-#: data/TWiki/WebSearchAdvanced.txt:50
+#: ../core/data/TWiki/WebSearchAdvanced.txt:50
 msgid "Last editor"
 msgstr "마지막 편집자"
 
-#: data/TWiki/WebSearchAdvanced.txt:49
+#: ../core/data/TWiki/WebSearchAdvanced.txt:49
 msgid "Last modified time"
 msgstr "마지막 수정 시각"
 
-#: data/TWiki/WebSearchAdvanced.txt:74
+#: ../core/data/TWiki/WebSearchAdvanced.txt:74
 msgid "Limit results to:"
 msgstr "제한된 결과:"
 
 #. ($left)
 #. ($right)
-#: lib/TWiki/UI/RDiff.pm:158
-#: lib/TWiki/UI/RDiff.pm:160
+#: ../core/lib/TWiki/UI/RDiff.pm:158 ../core/lib/TWiki/UI/RDiff.pm:160
 msgid "Line: %1"
 msgstr "라인: %1"
 
 #. ($left,$right)
-#: lib/TWiki/UI/RDiff.pm:299
+#: ../core/lib/TWiki/UI/RDiff.pm:299
 msgid "Line: %1 to %2"
 msgstr "라인: %1 에서 %2"
 
-#: templates/attach.tmpl:37
+#: ../core/templates/attach.tmpl:37
 msgid "Link"
 msgstr "링크"
 
-#: data/TWiki/WebSearch.txt:44
-#: data/TWiki/WebSearchAdvanced.txt:86
+#: ../core/data/TWiki/WebSearch.txt:44
+#: ../core/data/TWiki/WebSearchAdvanced.txt:86
 msgid "List all topics in the %1 web in alphabetical order"
 msgstr ""
 
-#: data/TWiki/WebTopicViewTemplate.txt:23
+#: ../core/data/TWiki/WebTopicViewTemplate.txt:23
 msgid "List more similar topic in this web"
 msgstr "이 웹의 비슷한 주제 목록"
 
-#: data/TWiki/WebSearch.txt:45
-#: data/TWiki/WebSearchAdvanced.txt:87
+#: ../core/data/TWiki/WebSearch.txt:45
+#: ../core/data/TWiki/WebSearchAdvanced.txt:87
 msgid "List topics that start with the letter:"
 msgstr ""
 
-#: data/Main/TWikiPreferences.txt:2
+#: ../core/data/Main/TWikiPreferences.txt:2
 msgid "Local customisations of site-wide preferences"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:6
+#: ../PatternSkin/templates/twiki.pattern.tmpl:4
 msgid "Log In"
 msgstr "로그인"
 
-#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:7
+#: ../PatternSkin/templates/twiki.pattern.tmpl:5
 msgid "Log Out"
 msgstr "로그아웃"
 
-#: templates/mailresetpassword.tmpl:9
-#: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:9
+#: ../ClassicSkin/templates/mailresetpassword.classic.tmpl:9
+#: ../core/templates/mailresetpassword.tmpl:9
 msgid "Login name %1"
 msgstr "로그인 이름 %1"
 
-#: templates/login.tmpl:69
-#: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:193
+#: ../PatternSkin/data/TWiki/PatternSkinElements.txt:193
+#: ../core/templates/login.tmpl:71
 msgid "Logon"
 msgstr "로그온"
 
-#: templates/messages.tmpl:245
+#: ../core/templates/messages.tmpl:245
 msgid "Mail to"
 msgstr "메일 보내기"
 
-#: data/TWiki/WebSearchAdvanced.txt:56
+#: ../core/data/TWiki/WebSearchAdvanced.txt:56
 msgid "Make search:"
 msgstr "검색 만들기:"
 
-#: templates/messages.tmpl:212
+#: ../core/templates/messages.tmpl:212
 msgid "Missing Fields"
 msgstr "누락된 항목"
 
-#: templates/messages.tmpl:36
+#: ../core/templates/messages.tmpl:36
 msgid "Missing action command"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:40
+#: ../PatternSkin/templates/twiki.pattern.tmpl:39
 msgid "Modify search"
 msgstr ""
 
-#: templates/oopsmore.tmpl:7
+#: ../core/templates/oopsmore.tmpl:7
 msgid "More Actions on Topic %1"
 msgstr ""
 
-#: data/TWiki/WikiSyntaxSummary.txt:17
+#: ../core/data/TWiki/WikiSyntaxSummary.txt:17
 msgid "More formatting help"
 msgstr ""
 
-#: templates/viewtopicactionbuttons.tmpl:76
-#: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:29
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:23
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:29
+#, fuzzy
+msgid "More topic actions"
+msgstr "주제를 웹으로 이동:"
+
+#: ../PatternSkin/templates/rdiff.pattern.tmpl:29
+#: ../core/templates/viewtopicactionbuttons.tmpl:76
 msgid "More topic actions..."
 msgstr ""
 
-#: twikiplugins/TwistyPlugin/data/TWiki/TwistyPlugin.txt:546
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinHomeMenu.txt:15
+#: ../TwistyPlugin/data/TWiki/TwistyPlugin.txt:548
 msgid "More..."
 msgstr "더..."
 
-#: templates/moveattachment.tmpl:36
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:24
+#: ../PatternSkin/templates/attachagain.pattern.tmpl:24
+#: ../core/templates/moveattachment.tmpl:36
 msgid "Move"
 msgstr "이동"
 
-#: templates/moveattachment.tmpl:10
+#: ../core/templates/moveattachment.tmpl:10
 msgid "Move attachment"
 msgstr "첨부 파일 이동"
 
-#: templates/moveattachment.tmpl:22
+#: ../core/templates/moveattachment.tmpl:22
 msgid "Move attachment to web:"
 msgstr "첨부 파일 웹으로 이동하기:"
 
-#: templates/moveattachment.tmpl:7
+#: ../core/templates/moveattachment.tmpl:7
 msgid "Move file attachment"
 msgstr "첨부파일 이동"
 
-#: templates/attachagain.tmpl:21
+#: ../core/templates/attachagain.tmpl:21
 msgid "Move or delete attachment"
 msgstr "첨부파일 이동 혹은 삭제"
 
-#: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:21
+#: ../PatternSkin/templates/renameattachmentdelete.pattern.tmpl:21
 msgid "Move to web:"
 msgstr "웹으로 이동:"
 
-#: templates/renamedelete.tmpl:16
+#: ../core/templates/renamedelete.tmpl:16
 msgid "Move topic to web:"
 msgstr "주제를 웹으로 이동:"
 
-#: lib/TWiki/UI/Manage.pm:1040
+#: ../core/lib/TWiki/UI/Manage.pm:1084
 msgid "Move/Rename"
 msgstr "이동/이름변경"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:64
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:58
 msgid "My Links"
 msgstr "나의 링크"
 
-#: lib/TWiki/Search.pm:857
+#: ../core/lib/TWiki/Search.pm:892
 msgid "NEW"
 msgstr ""
 
-#: templates/messages.tmpl:103
+#: ../core/templates/messages.tmpl:103
 msgid "Name of new web is missing"
 msgstr "새로운 웹의 이름이 누락되었습니다."
 
-#: templates/messages.tmpl:145
+#: ../core/templates/messages.tmpl:145
 msgid "New User Registration disabled"
 msgstr "새로운 사용자 등록이 보류 되었습니다."
 
-#: templates/messages.tmpl:136
+#: ../core/templates/messages.tmpl:136
 msgid "New User Registration not supported"
 msgstr "새로운 사용자 등록은 지원하지 않습니다."
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:35
+#: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:35
 msgid "New e-mails (space-separated list)"
 msgstr "새로운 이메일 주소 (공백 문자로 분리된 목록)"
 
-#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:73
-#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:9
+#: ../MailerContrib/templates/mailnotify.tmpl:73
+#: ../MailerContrib/templates/mailnotify.tmpl:9
 msgid "New or changed topics in %1, since %2:"
 msgstr "%2 이후에 %1에서 새롭게 만들어지거나 변경된 주제:"
 
-#: templates/renamewebbase.tmpl:10
+#: ../core/templates/renamewebbase.tmpl:10
 msgid "New parent web:"
 msgstr "새로운 상위 웹:"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:24
+#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:24
 msgid "New password"
 msgstr "새로운 비밀번호"
 
-#: templates/messages.tmpl:87
+#: ../core/templates/messages.tmpl:87
 msgid "New topic name %1 is not a %2"
 msgstr "새로운 주제 이름 %1은 %2가 아닙니다."
 
-#: templates/renamewebbase.tmpl:7
+#: ../core/templates/renamewebbase.tmpl:7
 msgid "New web name:"
 msgstr "새로운 웹 이름:"
 
-#: templates/oopsmore.tmpl:96
+#: ../core/templates/oopsmore.tmpl:97
 msgid "Newer revision:"
 msgstr "새로운 리비전:"
 
-#: templates/oopsmore.tmpl:113
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:24
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:24
+#: ../core/templates/oopsmore.tmpl:114
 msgid "No child topics"
 msgstr "하위 주제 없음"
 
-#: templates/messages.tmpl:442
+#: ../core/templates/messages.tmpl:452
 msgid "No permission to view %1"
 msgstr "%1의 보기 권한 없음"
 
-#: templates/oopsmore.tmpl:108
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:57
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:57
+#: ../core/templates/oopsmore.tmpl:109
 msgid "No previous revision exists."
 msgstr "이전 리비전이 존재하지 않습니다."
 
-#: templates/messages.tmpl:205
+#: ../core/templates/messages.tmpl:205
 msgid "No users to reset passwords for."
 msgstr ""
 
-#: templates/renamedelete.tmpl:31
+#: ../core/templates/renamedelete.tmpl:31
 msgid "Not recommended when deleting a topic."
 msgstr ""
 
-#: templates/moveattachment.tmpl:31
-msgid "Note that any URLs that refer to the attachment will be broken after this move."
+#: ../core/templates/moveattachment.tmpl:31
+msgid ""
+"Note that any URLs that refer to the attachment will be broken after this "
+"move."
 msgstr ""
 
-#: templates/messages.tmpl:299
-#: templates/messages.tmpl:351
-#: templates/registerconfirm.tmpl:13
-#: templates/registernotify.tmpl:22
-#: twikiplugins/ClassicSkin/templates/registerconfirm.classic.tmpl:13
-#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:22
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:13
+#: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:144
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:13
+#: ../core/templates/messages.tmpl:299 ../core/templates/messages.tmpl:351
+#: ../core/templates/registerconfirm.tmpl:13
+#: ../core/templates/registernotify.tmpl:22
 msgid "Note:"
 msgstr ""
 
-#: data/TWiki/WebTopicViewTemplate.txt:2
+#: ../core/data/TWiki/WebTopicViewTemplate.txt:2
 msgid "Note: This topic does not exist"
 msgstr ""
 
-#: data/TWiki/VarMAKETEXT.txt:13
+#: ../core/data/TWiki/VarMAKETEXT.txt:13
 msgid "Notes:"
 msgstr ""
 
-#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:9
-#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:9
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:10
-#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:8
+#: ../PatternSkin/data/Main/WebLeftBar.txt:9
+#: ../PatternSkin/data/Sandbox/WebLeftBar.txt:9
+#: ../PatternSkin/data/TWiki/WebLeftBar.txt:10
+#: ../PatternSkin/data/_default/WebLeftBar.txt:8
+#: ../TopMenuSkin/data/Main/WebTopMenu.txt:16
+#: ../TopMenuSkin/data/Sandbox/WebTopMenu.txt:15
+#: ../TopMenuSkin/data/TWiki/TopMenuSkin.txt:43
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinDefaultWebTopMenu.txt:16
+#: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:18
+#: ../TopMenuSkin/data/_default/WebTopMenu.txt:15
 msgid "Notifications"
 msgstr "알림"
 
-#: templates/search.text.tmpl:15
-#: templates/searchformat.tmpl:10
-#: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:5
-#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:39
+#: ../PatternSkin/templates/searchbase.pattern.tmpl:5
+#: ../PatternSkin/templates/twiki.pattern.tmpl:38
+#: ../core/templates/search.text.tmpl:15
+#: ../core/templates/searchformat.tmpl:10
 msgid "Number of topics:"
 msgstr "주제 갯수:"
 
-#: templates/messages.tmpl:173
-#: templates/messages.tmpl:180
-#: templates/oopsaccessdenied.tmpl:7
-#: templates/oopssaveerr.tmpl:14
-#: templates/twiki.tmpl:80
-#: twikiplugins/ClassicSkin/templates/oopsaccessdenied.classic.tmpl:6
-#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:68
+#: ../ClassicSkin/templates/oopsaccessdenied.classic.tmpl:6
+#: ../ClassicSkin/templates/twiki.classic.tmpl:69
+#: ../core/templates/messages.tmpl:173 ../core/templates/messages.tmpl:180
+#: ../core/templates/oopsaccessdenied.tmpl:7
+#: ../core/templates/oopssaveerr.tmpl:14 ../core/templates/twiki.tmpl:81
 msgid "OK"
 msgstr "확인"
 
-#: templates/oopsmore.tmpl:96
+#: ../core/templates/oopsmore.tmpl:97
 msgid "Older revision:"
 msgstr "오래된 리비전"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:291
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:337
 msgid "Once registered you can login using your %1 and password."
 msgstr ""
 
-#: templates/messages.tmpl:467
+#: ../core/templates/messages.tmpl:477
 msgid "Only members of the %1 are allowed to perform this action."
 msgstr ""
 
-#: templates/login.tmpl:8
-msgid "Oops: we could not recognize you. Try again or [[%1][reset your password]]."
+#: ../core/templates/login.tmpl:8
+msgid ""
+"Oops: we could not recognize you. Try again or [[%1][reset your password]]."
 msgstr ""
 
-#: twikiplugins/ClassicSkin/templates/preview.classic.tmpl:10
+#: ../ClassicSkin/templates/preview.classic.tmpl:10
 msgid "Opens page in new window"
 msgstr "새창에서 페이지 열기"
 
-#: templates/renamedelete.tmpl:19
+#: ../core/templates/renamedelete.tmpl:19
 msgid "Optionally change topic name:"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:32
+#: ../PatternSkin/templates/renameattachmentdelete.pattern.tmpl:32
 msgid "Optionally enter a different topic name:"
 msgstr ""
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:122
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:123
 msgid "Organisation URL:"
 msgstr "기관 URL"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:119
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:120
 msgid "Organisation name:"
 msgstr "기관 이름"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:271
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:317
 msgid "Other Country"
 msgstr "다른 국가"
 
-#: data/TWiki/WebSearch.txt:42
-#: data/TWiki/WebSearchAdvanced.txt:84
+#: ../core/data/TWiki/WebSearch.txt:42
+#: ../core/data/TWiki/WebSearchAdvanced.txt:84
 msgid "Other search options:"
 msgstr "다른 검색 옵션:"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:5
+#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:5
 msgid "Otherwise, use this form to get a new one e-mailed to you."
 msgstr "하지만 이 폼을 사용하면 새로운 이메일을 받게 됩니다."
 
-#: templates/login.tmpl:58
-#: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:188
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:34
+#: ../PatternSkin/data/TWiki/PatternSkinElements.txt:188
+#: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:34
+#: ../core/templates/login.tmpl:60
 msgid "Password"
 msgstr "비밀번호"
 
-#: templates/messages.tmpl:166
+#: ../core/templates/messages.tmpl:166
 msgid "Password changed successfully!"
 msgstr "비밀번호가 성공적으로 변경되었습니다!"
 
-#: templates/messages.tmpl:176
+#: ../core/templates/messages.tmpl:176
 msgid "Password could not be changed"
 msgstr "비밀번호를 변경할 수 없습니다."
 
-#: templates/messages.tmpl:204
-#: templates/messages.tmpl:208
+#: ../core/templates/messages.tmpl:204 ../core/templates/messages.tmpl:208
 msgid "Password reset failed"
 msgstr "비밀번호 초기화 실패"
 
-#: templates/messages.tmpl:218
+#: ../core/templates/messages.tmpl:218
 msgid "Passwords do not match"
 msgstr "비밀번호가 일치하지 않습니다."
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:60
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:74
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:54
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:68
 msgid "Personal Preferences"
 msgstr "개인화 속성"
 
-#: data/TWiki/WebCreateNewTopicTemplate.txt:56
-#: templates/oopsmore.tmpl:55
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:30
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:30
+#: ../core/data/TWiki/WebCreateNewTopicTemplate.txt:56
+#: ../core/templates/oopsmore.tmpl:56
 msgid "Pick from a list"
 msgstr "목록에서 가져오기"
 
-#: templates/messages.tmpl:125
+#: ../core/templates/messages.tmpl:125
 msgid "Pick one of the %1."
 msgstr "%1에서 하나 가져오기"
 
-#: data/Trash/TrashAttachment.txt:3
+#: ../core/data/Trash/TrashAttachment.txt:3
 msgid "Placeholder for trashed attachments"
 msgstr ""
 
-#: templates/messages.tmpl:258
-#: templates/messages.tmpl:308
+#: ../core/templates/messages.tmpl:258 ../core/templates/messages.tmpl:308
 msgid "Please contact %1 if you have any questions."
 msgstr "질문이 있으면 %1 에게 연락하십시오."
 
-#: templates/messages.tmpl:140
-#: templates/messages.tmpl:149
-#: templates/messages.tmpl:228
-#: templates/messages.tmpl:237
+#: ../core/templates/messages.tmpl:140 ../core/templates/messages.tmpl:149
+#: ../core/templates/messages.tmpl:228 ../core/templates/messages.tmpl:237
 msgid "Please contact %1."
 msgstr "%1 에 연락주십시오."
 
-#: templates/login.sudo.tmpl:7
+#: ../core/templates/login.sudo.tmpl:7
 msgid "Please enter the TWiki admin password"
 msgstr "TWiki 관리자 비밀번호를 입력하십시오"
 
-#: templates/login.tmpl:14
+#: ../core/templates/login.tmpl:14
 msgid "Please enter your username and password"
 msgstr "사용자 이름과 비밀번호를 입력하십시오"
 
-#: templates/messages.tmpl:71
-#: templates/messages.tmpl:77
-#: templates/messages.tmpl:83
+#: ../core/templates/messages.tmpl:71 ../core/templates/messages.tmpl:77
+#: ../core/templates/messages.tmpl:83
 msgid "Please go _back_ in your browser and try a new name."
 msgstr "브라우져의 뒤로가기를 이용하여 새로운 이름을 입력하세요"
 
-#: templates/messages.tmpl:363
+#: ../core/templates/messages.tmpl:363
 msgid "Please go back in your browser and check again."
 msgstr "브라우져의 뒤로가기를 이용하여 다시 한번 체크 박스를 선택하여주세요."
 
-#: templates/messages.tmpl:88
-msgid "Please go back in your browser and choose a topic name that is a %1.WikiWord or check the allow non-Wiki Word box"
-msgstr "브라우져의 뒤로가기를 이용하여 %1.WikiWord의 조건을 만족하는 주제 이름을 선택하거나, non-Wiki Word 박스를 선택하여 주세요."
+#: ../core/templates/messages.tmpl:88
+msgid ""
+"Please go back in your browser and choose a topic name that is a %1.WikiWord "
+"or check the allow non-Wiki Word box"
+msgstr ""
+"브라우져의 뒤로가기를 이용하여 %1.WikiWord의 조건을 만족하는 주제 이름을 선택"
+"하거나, non-Wiki Word 박스를 선택하여 주세요."
 
-#: templates/messages.tmpl:100
-#: templates/messages.tmpl:104
-#: templates/messages.tmpl:111
-#: templates/messages.tmpl:115
-#: templates/messages.tmpl:119
-#: templates/messages.tmpl:129
-#: templates/messages.tmpl:215
-#: templates/messages.tmpl:221
-#: templates/messages.tmpl:265
-#: templates/messages.tmpl:277
-#: templates/messages.tmpl:283
-#: templates/messages.tmpl:291
-#: templates/messages.tmpl:37
-#: templates/messages.tmpl:41
-#: templates/messages.tmpl:59
+#: ../core/templates/messages.tmpl:100 ../core/templates/messages.tmpl:104
+#: ../core/templates/messages.tmpl:111 ../core/templates/messages.tmpl:115
+#: ../core/templates/messages.tmpl:119 ../core/templates/messages.tmpl:129
+#: ../core/templates/messages.tmpl:215 ../core/templates/messages.tmpl:221
+#: ../core/templates/messages.tmpl:265 ../core/templates/messages.tmpl:277
+#: ../core/templates/messages.tmpl:283 ../core/templates/messages.tmpl:291
+#: ../core/templates/messages.tmpl:37 ../core/templates/messages.tmpl:41
+#: ../core/templates/messages.tmpl:59
 msgid "Please go back in your browser and try again."
 msgstr "브라우져의 뒤로가기를 이용하여 다시 시도해주십시오."
 
-#: templates/messages.tmpl:45
-msgid "Please make sure you spelled the %1 correctly and try again. If you get stuck, please mail %2."
+#: ../core/templates/messages.tmpl:45
+msgid ""
+"Please make sure you spelled the %1 correctly and try again. If you get "
+"stuck, please mail %2."
 msgstr ""
 
-#: templates/mailresetpassword.tmpl:12
-#: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:12
-msgid "Please visit %1 to change your password to something more memorable for you."
+#: ../ClassicSkin/templates/mailresetpassword.classic.tmpl:12
+#: ../core/templates/mailresetpassword.tmpl:12
+msgid ""
+"Please visit %1 to change your password to something more memorable for you."
 msgstr ""
 
-#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:12
-#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:12
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:13
-#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:11
+#: ../PatternSkin/data/Main/WebLeftBar.txt:12
+#: ../PatternSkin/data/Sandbox/WebLeftBar.txt:12
+#: ../PatternSkin/data/TWiki/WebLeftBar.txt:13
+#: ../PatternSkin/data/_default/WebLeftBar.txt:11
+#: ../TopMenuSkin/data/Main/WebTopMenu.txt:19
+#: ../TopMenuSkin/data/Sandbox/WebTopMenu.txt:18
+#: ../TopMenuSkin/data/TWiki/TopMenuSkin.txt:46
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinDefaultWebTopMenu.txt:19
+#: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:21
+#: ../TopMenuSkin/data/_default/WebTopMenu.txt:18
 msgid "Preferences"
 msgstr ""
 
-#: templates/settings.tmpl:7
-#: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:7
+#: ../PatternSkin/templates/settings.pattern.tmpl:13
+#: ../core/templates/settings.tmpl:7
 msgid "Preferences for"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:54
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:20
+msgid "Print version"
+msgstr ""
+
+#: ../PatternSkin/templates/attach.pattern.tmpl:54
 msgid "Properties"
 msgstr "속성"
 
-#: data/Main/TWikiPreferences.txt:7
-msgid "Quick edit of existing preferences (edit the topic text to set new preferences)"
+#: ../core/data/Main/TWikiPreferences.txt:7
+msgid ""
+"Quick edit of existing preferences (edit the topic text to set new "
+"preferences)"
 msgstr ""
 
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:173
+#: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:179
 msgid "Quiet save"
 msgstr "조용히 저장하기"
 
-#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:10
-#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:10
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:11
-#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:9
+#: ../PatternSkin/data/Main/WebLeftBar.txt:10
+#: ../PatternSkin/data/Sandbox/WebLeftBar.txt:10
+#: ../PatternSkin/data/TWiki/WebLeftBar.txt:11
+#: ../PatternSkin/data/_default/WebLeftBar.txt:9
+#: ../TopMenuSkin/data/Main/WebTopMenu.txt:17
+#: ../TopMenuSkin/data/Sandbox/WebTopMenu.txt:16
+#: ../TopMenuSkin/data/TWiki/TopMenuSkin.txt:44
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinDefaultWebTopMenu.txt:17
+#: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:19
+#: ../TopMenuSkin/data/_default/WebTopMenu.txt:16
 msgid "RSS Feed"
 msgstr "RSS 알림"
 
-#: templates/viewtopicactionbuttons.tmpl:61
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:25
+#: ../core/templates/viewtopicactionbuttons.tmpl:61
 msgid "Raw edit"
 msgstr "그냥 편집하기"
 
-#: templates/registernotify.tmpl:10
-#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:10
-msgid "Read %1 to get a quick overview of this collaboration platform. To learn more, study the TWikiTutorial, which is accessible from the same link."
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:19
+#, fuzzy
+msgid "Raw view"
+msgstr "(가공없이 보기)"
+
+#: ../core/templates/registernotify.tmpl:10
+msgid ""
+"Read %1 to get a quick overview of this collaboration platform. To learn "
+"more, study the TWikiTutorial, which is accessible from the same link."
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:27
+#: ../PatternSkin/templates/edit.pattern.tmpl:30
 msgid "Read new revision help text in new window"
 msgstr "새창에서 새 리비전 도움말 읽기"
 
-#: twikiplugins/TipsContrib/data/TWiki/TWikiTipsOfTheDayInclude.txt:12
+#: ../TipsContrib/data/TWiki/TWikiTipsOfTheDayInclude.txt:12
 msgid "Read on"
 msgstr "읽기"
 
-#: data/Sandbox/WebHome.txt:21
-#: data/TWiki/WebSearch.txt:46
-#: data/TWiki/WebSearchAdvanced.txt:88
+#: ../core/data/Trash/WebHome.txt:10
+#, fuzzy
+msgid "Recently Deleted Topics"
+msgstr "최근에 변경된 주제"
+
+#: ../core/data/Sandbox/WebHome.txt:21 ../core/data/TWiki/WebSearch.txt:46
+#: ../core/data/TWiki/WebSearchAdvanced.txt:88
 msgid "Recently changed topics"
 msgstr "최근에 변경된 주제"
 
-#: lib/TWiki/UI/Manage.pm:1039
+#: ../core/lib/TWiki/UI/Manage.pm:1083
 msgid "Refresh"
 msgstr "새로고침"
 
-#: templates/twiki.tmpl:105
-#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:9
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
+#: ../ClassicSkin/templates/twiki.classic.tmpl:9
+#: ../PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopBar.txt:37
+#: ../core/templates/twiki.tmpl:106
 msgid "Register"
 msgstr "등록하기"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:13
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:13
 msgid "Registered users can [[%1][change]] and [[%2][reset]] their passwords."
 msgstr ""
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:2
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:2
 msgid "Registration"
 msgstr "등록하기"
 
-#: templates/messages.tmpl:297
+#: ../core/templates/messages.tmpl:297
 msgid "Registration codes can only be used once."
 msgstr "등록 코드는 한번만 사용할 수 있습니다."
 
-#: data/TWiki/WebSearchAdvanced.txt:58
+#: ../core/data/TWiki/WebSearchAdvanced.txt:58
 msgid "Regular expression search"
 msgstr "정규표현식 검색"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:81
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:75
 msgid "Related Topics"
 msgstr "관련 주제"
 
-#: data/Sandbox/WebNotify.txt:10
-#: data/Trash/WebNotify.txt:9
-#: data/_default/WebNotify.txt:8
-#: templates/messages.tmpl:465
-#: templates/messages.tmpl:472
-#: twikiplugins/TWikiUserMappingContrib/data/Main/TWikiGroupTemplate.txt:10
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:52
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:42
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:43
+#: ../TWikiUserMappingContrib/data/Main/TWikiGroupTemplate.txt:10
+#: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:52
+#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:42
+#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:43
+#: ../core/data/Sandbox/WebNotify.txt:10 ../core/data/Trash/WebNotify.txt:9
+#: ../core/data/_default/WebNotify.txt:8 ../core/templates/messages.tmpl:475
+#: ../core/templates/messages.tmpl:482
 msgid "Related topics:"
 msgstr "관련 주제:"
 
-#: twikiplugins/ClassicSkin/templates/login.classic.tmpl:10
+#: ../ClassicSkin/templates/login.classic.tmpl:10
 msgid "Remember me"
 msgstr "나를 기억하기"
 
-#: templates/login.tmpl:65
+#: ../core/templates/login.tmpl:67
 msgid "Remember me on this computer"
 msgstr "이 컴퓨터에서 나를 기억하기"
 
-#: templates/messages.tmpl:185
-msgid "Remember to update your user topic if you want your e-mail change to be reflected there as well."
+#: ../core/templates/messages.tmpl:185
+msgid ""
+"Remember to update your user topic if you want your e-mail change to be "
+"reflected there as well."
 msgstr ""
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:5
+#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:5
 msgid "Remember your password?"
 msgstr "비밀번호를 기억하고 계십니까?"
 
-#: data/TWiki/WebTopicViewTemplate.txt:11
+#: ../core/data/TWiki/WebTopicViewTemplate.txt:11
 msgid "Remember, a %1 is case sensitive."
 msgstr "%1은 대소문자를 구분하는 것을 잊지마십시오."
 
-#: templates/messages.tmpl:51
+#: ../core/templates/messages.tmpl:51
 msgid "Remove the user from the group(s) %1 first."
 msgstr ""
 
-#: templates/rename.tmpl:7
-#: templates/renameweb.tmpl:7
+#: ../core/templates/rename.tmpl:7 ../core/templates/renameweb.tmpl:7
 msgid "Rename"
 msgstr "이름 변경"
 
-#: templates/messages.tmpl:74
-#: templates/messages.tmpl:80
+#: ../core/templates/messages.tmpl:74 ../core/templates/messages.tmpl:80
 msgid "Rename failed"
 msgstr "이름 변경 실패"
 
-#: templates/oopsmore.tmpl:28
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:11
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:11
+#: ../core/templates/oopsmore.tmpl:28
 msgid "Rename or move topic"
 msgstr "주제 이름 변경 혹은 이동"
 
-#: data/TWiki/RenameWeb.txt:1
+#: ../core/data/TWiki/RenameWeb.txt:2
 msgid "Rename, move or delete this web:"
 msgstr "이 웹의 이름 변경, 이동 혹은 삭제:"
 
-#: templates/rename.tmpl:20
-#: templates/renameconfirm.tmpl:29
-#: templates/renameweb.tmpl:33
+#: ../core/templates/rename.tmpl:20 ../core/templates/renameconfirm.tmpl:29
+#: ../core/templates/renameweb.tmpl:33
 msgid "Rename/Move"
 msgstr "이름 변경/이동"
 
-#: templates/oopsmore.tmpl:29
-#: templates/oopsmore.tmpl:31
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:12
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:14
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:12
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:14
+#: ../core/templates/oopsmore.tmpl:29 ../core/templates/oopsmore.tmpl:31
 msgid "Rename/move topic..."
 msgstr "주제 이름 변경/이동 ..."
 
-#: data/TWiki/RenameWeb.txt:2
+#: ../core/data/TWiki/RenameWeb.txt:3
 msgid "Rename/move/delete web..."
 msgstr "웹 이름 변경/이동/삭제..."
 
-#: templates/form.tmpl:1
-#: twikiplugins/ClassicSkin/templates/form.classic.tmpl:1
-#: twikiplugins/PatternSkin/templates/form.pattern.tmpl:2
+#: ../ClassicSkin/templates/form.classic.tmpl:1
+#: ../PatternSkin/templates/form.pattern.tmpl:2 ../core/templates/form.tmpl:1
 msgid "Replace form..."
 msgstr "폼 교체..."
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:3
+#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:3
 msgid "Reset Password"
 msgstr "비밀번호 초기화"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:32
+#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:32
 msgid "Reset password"
 msgstr "비밀번호 초기화"
 
-#: templates/oopsmore.tmpl:105
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:53
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:53
+#: ../core/templates/oopsmore.tmpl:106
 msgid "Restore"
 msgstr "복원"
 
-#: templates/oopsmore.tmpl:100
+#: ../core/templates/oopsmore.tmpl:101
 msgid "Restore topic"
 msgstr "주제 복원"
 
-#: templates/oopsmore.tmpl:102
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:51
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:51
+#: ../core/templates/oopsmore.tmpl:103
 msgid "Restore topic to revision:"
 msgstr "주제를 다음 리비전으로 복원:"
 
-#: templates/oopsmore.tmpl:105
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:53
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:53
+#: ../core/templates/oopsmore.tmpl:106
 msgid "Restore topic to this revision"
 msgstr "주제를 이 리비전으로 복원"
 
-#: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:12
+#: ../PatternSkin/templates/searchbase.pattern.tmpl:12
 msgid "Results from %1 web"
 msgstr "웹 %1로부터 가져온 결과"
 
-#: templates/messages.tmpl:189
+#: ../core/templates/messages.tmpl:189
 msgid "Return to %1."
 msgstr "%1로 돌아가기"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:25
+#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:25
 msgid "Retype new password"
 msgstr "새로운 비밀번호 다시 입력"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:115
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:116
 msgid "Retype password:"
 msgstr "비밀번호 다시 입력:"
 
-#: templates/messages.tmpl:27
+#: ../core/templates/messages.tmpl:27
 msgid "Rev %1 was saved by %2, while you were still editing."
 msgstr "당신이 수정하는 동안에, 리비전 %1이 %2에 의해 저장되었습니다."
 
-#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:44
-#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:76
+#: ../MailerContrib/templates/mailnotify.tmpl:44
+#: ../MailerContrib/templates/mailnotify.tmpl:76
 msgid "Review recent changes in:"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:19
+#: ../PatternSkin/templates/rdiff.pattern.tmpl:19
 msgid "Revision"
 msgstr "리비전"
 
-#: templates/oopsmore.tmpl:87
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:56
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:56
+#: ../core/templates/oopsmore.tmpl:88
 msgid "Revisions"
 msgstr "리비전"
 
-#: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:19
+#: ../PatternSkin/templates/settings.pattern.tmpl:25
 msgid "S = Save, C = Cancel"
 msgstr "S = 저장(S), C = 취소(C)"
 
-#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:14
+#: ../PatternSkin/templates/preview.pattern.tmpl:14
 msgid "S = Save, Q = Quiet save, K = Save and Continue, D = Discard"
 msgstr "S = 저장(S), Q = 조용히 저장(Q), K = 저장하고 계혹하기(K), D = 폐기(D)"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:50
-msgid "S = Save, Q = Quiet save, K = Save and Continue, P = Preview, C = Cancel"
-msgstr "S = 저장(S), Q = 조용히 저장(Q), K = 저장하고 계혹하기(K), P = 미리보기(P), C = 취소(C)"
+#: ../PatternSkin/templates/edit.pattern.tmpl:53
+msgid ""
+"S = Save, Q = Quiet save, K = Save and Continue, P = Preview, C = Cancel"
+msgstr ""
+"S = 저장(S), Q = 조용히 저장(Q), K = 저장하고 계혹하기(K), P = 미리보기(P), "
+"C = 취소(C)"
 
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:172
+#: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:178
 msgid "Save table"
 msgstr "테이블 저장"
 
-#: templates/registernotifyadmin.tmpl:16
-#: twikiplugins/ClassicSkin/templates/registernotifyadmin.classic.tmpl:16
+#: ../core/templates/registernotifyadmin.tmpl:16
 msgid "Saved to:"
 msgstr "다음으로 저장됨:"
 
-#: data/TWiki/WebSearch.txt:24
-#: data/TWiki/WebSearchAdvanced.txt:31
-#: data/_default/WebHome.txt:11
-#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:7
-#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:7
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:8
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:6
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarSearch.txt:3
-#: twikiplugins/PatternSkin/data/TWiki/WebTopBar.txt:9
-#: twikiplugins/PatternSkin/data/Trash/WebLeftBar.txt:5
-#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:6
-#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:38
+#: ../PatternSkin/data/Main/WebLeftBar.txt:7
+#: ../PatternSkin/data/Sandbox/WebLeftBar.txt:7
+#: ../PatternSkin/data/TWiki/WebLeftBar.txt:8
+#: ../PatternSkin/data/TWiki/WebLeftBarExample.txt:6
+#: ../PatternSkin/data/TWiki/WebLeftBarSearch.txt:3
+#: ../PatternSkin/data/TWiki/WebTopBar.txt:9
+#: ../PatternSkin/data/Trash/WebLeftBar.txt:5
+#: ../PatternSkin/data/_default/WebLeftBar.txt:6
+#: ../PatternSkin/templates/twiki.pattern.tmpl:37
+#: ../TopMenuSkin/data/Main/WebTopMenu.txt:14
+#: ../TopMenuSkin/data/Sandbox/WebTopMenu.txt:13
+#: ../TopMenuSkin/data/TWiki/TopMenuSkin.txt:41
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinDefaultWebTopMenu.txt:14
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopBar.txt:57
+#: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:16
+#: ../TopMenuSkin/data/Trash/WebTopMenu.txt:13
+#: ../TopMenuSkin/data/_default/WebTopMenu.txt:13
+#: ../core/data/TWiki/WebSearch.txt:24
+#: ../core/data/TWiki/WebSearchAdvanced.txt:31
+#: ../core/data/_default/WebHome.txt:11
 msgid "Search"
 msgstr "검색"
 
-#: templates/backlinksallwebs.tmpl:7
+#: ../core/templates/backlinksallwebs.tmpl:7
 msgid "Search %1 Web only"
 msgstr "웹 %1에서만 검색"
 
-#: templates/backlinksweb.tmpl:7
+#: ../core/templates/backlinksweb.tmpl:7
 msgid "Search all webs"
 msgstr "모든 웹 검색"
 
-#: templates/backlinksallwebs.tmpl:7
-#: templates/backlinksweb.tmpl:7
-#: templates/oopsmore.tmpl:38
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:18
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:18
+#: ../core/templates/backlinksallwebs.tmpl:7
+#: ../core/templates/backlinksweb.tmpl:7 ../core/templates/oopsmore.tmpl:38
 msgid "Search all webs for topics that link to here"
 msgstr ""
 
-#: data/TWiki/WebTopicViewTemplate.txt:24
+#: ../core/data/TWiki/WebTopicViewTemplate.txt:24
 msgid "Search similar topics in all public webs"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:63
+#: ../core/data/TWiki/WebSearchAdvanced.txt:63
 msgid "Search string"
 msgstr "검색 문자열"
 
-#: templates/oopsmore.tmpl:40
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:20
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:20
+#: ../core/templates/oopsmore.tmpl:40
 msgid "Search the %1 Web for topics that link to here"
 msgstr ""
 
-#: data/TWiki/WebSearch.txt:29
-#: data/TWiki/WebSearchAdvanced.txt:36
+#: ../core/data/TWiki/WebSearch.txt:29
+#: ../core/data/TWiki/WebSearchAdvanced.txt:36
 msgid "Search where:"
 msgstr ""
 
-#: templates/search.tmpl:10
-#: templates/searchformat.tmpl:9
-#: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:1
+#: ../PatternSkin/templates/searchbase.pattern.tmpl:1
+#: ../core/templates/search.tmpl:10 ../core/templates/searchformat.tmpl:9
 msgid "Searched:"
 msgstr ""
 
-#: data/Trash/WebHome.txt:5
+#: ../core/data/Trash/WebHome.txt:6
 msgid "Security Note:"
 msgstr ""
 
-#: templates/messages.tmpl:47
+#: ../core/templates/messages.tmpl:47
 msgid "See %1 for a list of existing users or register as new user in %2."
 msgstr ""
 
-#: templates/messages.tmpl:320
+#: ../core/templates/messages.tmpl:320
 msgid "See %1 for information about Form Definitions."
 msgstr ""
 
-#: data/TWiki/WebIndex.txt:4
+#: ../core/data/TWiki/WebIndex.txt:4
 msgid "See also the faster %1"
 msgstr ""
 
-#: data/TWiki/WebTopicList.txt:4
+#: ../core/data/TWiki/WebTopicList.txt:4
 msgid "See also the verbose %1."
 msgstr ""
 
-#: data/TWiki/RenameWeb.txt:3
-#: data/TWiki/WebChanges.txt:6
+#: ../core/data/TWiki/RenameWeb.txt:3 ../core/data/TWiki/WebChanges.txt:6
 msgid "See also:"
 msgstr ""
 
-#: templates/edit.tmpl:59
+#: ../core/templates/edit.tmpl:59
 msgid "See below for help in editing this page."
 msgstr ""
 
-#: templates/changeform.tmpl:13
+#: ../core/templates/changeform.tmpl:13
 msgid "Select"
 msgstr "선택"
 
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:20
+#: ../PatternSkin/templates/attachagain.pattern.tmpl:20
 msgid "Select a new local file to update attachment"
 msgstr "첨부파일을 업데이트하기 위한 로컬 파일 선택"
 
-#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:33
+#: ../PatternSkin/templates/renamebase.pattern.tmpl:33
 msgid "Select all"
 msgstr "모두 선택"
 
-#: templates/oopsmore.tmpl:54
+#: ../core/templates/oopsmore.tmpl:55
 msgid "Select topic parent:"
 msgstr "부모 주제 선택하기:"
 
-#: templates/edit.tmpl:48
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:68
+#: ../PatternSkin/templates/edit.pattern.tmpl:71
+#: ../core/templates/edit.tmpl:48
 msgid "Select, copy and paste your signature text to the bottom of your entry"
 msgstr ""
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:286
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:332
 msgid "Send you a confirmation of your registration by e-mail."
 msgstr ""
 
-#: templates/oopsmore.tmpl:97
+#: ../core/templates/oopsmore.tmpl:98
 msgid "Sequential"
 msgstr ""
 
-#: lib/TWiki/Form/Checkbox.pm:34
+#: ../core/lib/TWiki/Form/Checkbox.pm:34
 msgid "Set all"
 msgstr ""
 
-#: templates/oopsmore.tmpl:58
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:28
+#: ../core/templates/oopsmore.tmpl:59
 msgid "Set new parent"
 msgstr "새로운 부모 설정하기"
 
-#: templates/oopsmore.tmpl:47
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:28
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:28
+#: ../core/templates/oopsmore.tmpl:47
 msgid "Set new topic parent"
 msgstr "새로운 부모 주제 설정하기"
 
-#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:10
+#: ../PatternSkin/templates/renamebase.pattern.tmpl:10
 msgid "Show help"
 msgstr "도움말 보기"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:78
+#: ../TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:70
 msgid "Show tool-tip topic info on mouse-over of %1 links, on or off:"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:79
+#: ../PatternSkin/templates/twiki.pattern.tmpl:76
 msgid "Shrink edit box"
 msgstr ""
 
-#: templates/oopsmore.tmpl:97
+#: ../core/templates/oopsmore.tmpl:98
 msgid "Side by side"
 msgstr ""
 
-#: data/TWiki/WebTopicViewTemplate.txt:21
+#: ../core/data/TWiki/WebTopicViewTemplate.txt:21
 msgid "Similar topics in this web (if any):"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:31
+#: ../core/data/TWiki/WebSearchAdvanced.txt:31
 msgid "Simple search"
 msgstr "단순 검색"
 
-#: data/Main/TWikiPreferences.txt:4
-msgid "Site-level preferences are located in %1, however this %2 prefs topic has override priority and should be used for local customisations. This allows for easier upgrades as you don't need to worry about the shipped preferences clobbering yours. It's easier to keep a handle on if you only copy over the settings you actually change."
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinHomeMenu.txt:11
+msgid "Site map"
 msgstr ""
 
-#: templates/attachtables.tmpl:4
+#: ../core/data/Main/TWikiPreferences.txt:4
+msgid ""
+"Site-level preferences are located in %1, however this %2 prefs topic has "
+"override priority and should be used for local customisations. This allows "
+"for easier upgrades as you don't need to worry about the shipped preferences "
+"clobbering yours. It's easier to keep a handle on if you only copy over the "
+"settings you actually change."
+msgstr ""
+
+#: ../core/templates/attachtables.tmpl:4
 msgid "Size"
 msgstr "사이즈"
 
-#: templates/registernotify.tmpl:15
-#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:15
+#: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:137
+#: ../core/templates/registernotify.tmpl:15
 msgid "Some add schedule information and vacation notice."
 msgstr ""
 
-#: templates/messages.tmpl:355
+#: ../core/templates/messages.tmpl:355
 msgid "Some characters such as =&#126;=, =$=, =@=, =%= are removed"
 msgstr ""
 
-#: templates/messages.tmpl:300
-msgid "Some mail tools have an error that causes them to send the same request twice when you click on a link. It you did this, it is possible that you actually *have* registered successfully."
+#: ../core/templates/messages.tmpl:300
+msgid ""
+"Some mail tools have an error that causes them to send the same request "
+"twice when you click on a link. It you did this, it is possible that you "
+"actually *have* registered successfully."
 msgstr ""
 
-#: templates/registernotify.tmpl:14
-#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:14
-msgid "Some people turn it into a personal portal with favorite links, what they work on, what help they'd like, etc."
+#: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:136
+#: ../core/templates/registernotify.tmpl:14
+msgid ""
+"Some people turn it into a personal portal with favorite links, what they "
+"work on, what help they'd like, etc."
 msgstr ""
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:5
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:5
 msgid "Sorry, Registration has been temporarily disabled"
 msgstr ""
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/BulkRegistration.txt:83
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/BulkResetPassword.txt:17
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:21
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:13
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:16
+#: ../TWikiUserMappingContrib/data/TWiki/BulkRegistration.txt:83
+#: ../TWikiUserMappingContrib/data/TWiki/BulkResetPassword.txt:17
+#: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:21
+#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:13
+#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:16
 msgid "Sorry, the password system is currently read only, please contact %1"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:46
+#: ../core/data/TWiki/WebSearchAdvanced.txt:46
 msgid "Sort results by:"
 msgstr ""
 
-#: templates/messages.tmpl:353
+#: ../core/templates/messages.tmpl:353
 msgid "Spaces are replaced by underscores"
 msgstr ""
 
-#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:11
-#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:11
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:12
-#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:10
+#: ../PatternSkin/data/Main/WebLeftBar.txt:11
+#: ../PatternSkin/data/Sandbox/WebLeftBar.txt:11
+#: ../PatternSkin/data/TWiki/WebLeftBar.txt:12
+#: ../PatternSkin/data/_default/WebLeftBar.txt:10
+#: ../TopMenuSkin/data/Main/WebTopMenu.txt:18
+#: ../TopMenuSkin/data/Sandbox/WebTopMenu.txt:17
+#: ../TopMenuSkin/data/TWiki/TopMenuSkin.txt:45
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinDefaultWebTopMenu.txt:18
+#: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:20
+#: ../TopMenuSkin/data/_default/WebTopMenu.txt:17
 msgid "Statistics"
 msgstr "통계"
 
-#: templates/messages.tmpl:199
-#: templates/messages.tmpl:305
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:297
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:343
+#: ../core/templates/messages.tmpl:305
 msgid "Submit"
 msgstr "제출"
 
-#: templates/registernotify.tmpl:18
-#: templates/registernotifyadmin.tmpl:12
-#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:18
-#: twikiplugins/ClassicSkin/templates/registernotifyadmin.classic.tmpl:12
+#: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:148
+#: ../core/templates/registernotify.tmpl:18
+#: ../core/templates/registernotifyadmin.tmpl:12
 msgid "Submitted content:"
 msgstr "제출된 컨텐츠:"
 
-#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:47
-#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:79
-#: twikiplugins/MailerContrib/templates/newsletter.tmpl:20
+#: ../MailerContrib/templates/mailnotify.tmpl:47
+#: ../MailerContrib/templates/mailnotify.tmpl:79
+#: ../MailerContrib/templates/newsletter.tmpl:20
 msgid "Subscribe / Unsubscribe in:"
 msgstr "구독 / 구독 취소:"
 
-#: data/TWiki/WebSearchAdvanced.txt:64
+#: ../core/data/TWiki/WebSearchAdvanced.txt:64
 msgid "Summaries"
 msgstr "요약"
 
-#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:79
+#: ../PatternSkin/templates/twiki.pattern.tmpl:76
 msgid "Switch to monotype or propotional font"
 msgstr ""
 
-#: data/TWiki/WebSearch.txt:25
-#: data/TWiki/WebSearchAdvanced.txt:32
-msgid "TIP: to search for all topics that contain =\"SOAP\"=, =\"WSDL\"=, a literal =\"web service\"=, but not =\"shampoo\"=, write:"
-msgstr "팁:  =\"web service\"= 와 관련되어있지만 =\"shampoo\"=와는 관련없는 =\"SOAP\"=, =\"WSDL\"=을 포함하는 주제를 검색하기 위해서는 다음과 같이 하십시오:"
+#: ../core/data/TWiki/WebSearch.txt:25
+#: ../core/data/TWiki/WebSearchAdvanced.txt:32
+msgid ""
+"TIP: to search for all topics that contain =\"SOAP\"=, =\"WSDL\"=, a literal "
+"=\"web service\"=, but not =\"shampoo\"=, write:"
+msgstr ""
+"팁:  =\"web service\"= 와 관련되어있지만 =\"shampoo\"=와는 관련없는 =\"SOAP"
+"\"=, =\"WSDL\"=을 포함하는 주제를 검색하기 위해서는 다음과 같이 하십시오:"
 
-#: templates/login.tmpl:3
+#: ../core/templates/login.tmpl:3
 msgid "TWiki User Authentication"
 msgstr ""
 
-#: templates/mailresetpassword.tmpl:3
-#: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:3
+#: ../ClassicSkin/templates/mailresetpassword.classic.tmpl:3
+#: ../core/templates/mailresetpassword.tmpl:3
 msgid "TWiki password reset for %1"
 msgstr ""
 
-#: templates/oopschangelanguage.tmpl:12
-msgid "TWiki's user interface is available in several languages. If you want to change the language for this session, choose one of the following and hit \"Change language\". Otherwise, follow the \"Cancel\" link on the bottom of the page to return to the previous topic."
+#: ../core/templates/oopschangelanguage.tmpl:12
+msgid ""
+"TWiki's user interface is available in several languages. If you want to "
+"change the language for this session, choose one of the following and hit "
+"\"Change language\". Otherwise, follow the \"Cancel\" link on the bottom of "
+"the page to return to the previous topic."
 msgstr ""
 
-#: templates/messages.tmpl:498
+#: ../core/templates/messages.tmpl:508
 msgid "Template %1 does not exist"
 msgstr ""
 
-#: data/Sandbox/WebHome.txt:6
+#: ../core/data/Sandbox/WebHome.txt:6
 msgid "Test Topics"
 msgstr "테스트 주제"
 
-#: data/TWiki/WebSearch.txt:31
-#: data/TWiki/WebSearchAdvanced.txt:38
+#: ../core/data/TWiki/WebSearch.txt:31
+#: ../core/data/TWiki/WebSearchAdvanced.txt:38
 msgid "Text body"
 msgstr "본문"
 
-#: templates/messages.tmpl:154
-#: templates/messages.tmpl:192
+#: ../core/templates/messages.tmpl:154 ../core/templates/messages.tmpl:192
 msgid "Thank you for registering"
 msgstr "등록을 환영합니다."
 
-#: templates/registernotify.tmpl:8
-#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:8
-msgid "Thank you for registering in the %1 collaboration platform. Please save this e-mail for future reference."
+#: ../core/templates/registernotify.tmpl:8
+msgid ""
+"Thank you for registering in the %1 collaboration platform. Please save this "
+"e-mail for future reference."
 msgstr ""
 
-#: templates/registerconfirm.tmpl:9
-#: twikiplugins/ClassicSkin/templates/registerconfirm.classic.tmpl:9
-msgid "Thank you for registering in the %1 collaboration platform. Your verification code is %2."
+#: ../core/templates/registerconfirm.tmpl:9
+msgid ""
+"Thank you for registering in the %1 collaboration platform. Your "
+"verification code is %2."
 msgstr ""
 
-#: templates/messages.tmpl:516
+#: ../core/templates/messages.tmpl:526
 msgid "That user has already been activated "
 msgstr "해당 사용자는 이미 활성화 되어있습니다."
 
-#: templates/messages.tmpl:269
-msgid "The %1 field must be your first and last name in %2, e.g. your capitalized first and last name with spaces removed."
+#: ../core/templates/messages.tmpl:269
+msgid ""
+"The %1 field must be your first and last name in %2, e.g. your capitalized "
+"first and last name with spaces removed."
 msgstr ""
 
-#: templates/messages.tmpl:263
+#: ../core/templates/messages.tmpl:263
 msgid "The %1 field must match the {LoginNameFilterIn} filter for this site"
 msgstr ""
 
-#: templates/messages.tmpl:68
+#: ../core/templates/messages.tmpl:68
 msgid "The %1 topic already exists"
 msgstr ""
 
-#: templates/messages.tmpl:475
+#: ../core/data/TWiki/RenameWeb.txt:3
+#, fuzzy
+msgid "The %1 web cannot be renamed."
+msgstr "새로운 웹이 생성되었습니다."
+
+#: ../core/templates/messages.tmpl:485
 msgid "The %1 web does not exist"
 msgstr "웹 %1은 존재하지 않습니다."
 
-#: data/Sandbox/WebHome.txt:4
-msgid "The %1 web is the sandbox you can use for testing. Everybody is welcome to add or delete some stuff. It is recommended to walk through the %2 to get a jumpstart on the %3 tool. A good rule of thumb is to add at the end of the page and sign and date it with your %4."
+#: ../core/data/Sandbox/WebHome.txt:4
+msgid ""
+"The %1 web is the sandbox you can use for testing. Everybody is welcome to "
+"add or delete some stuff. It is recommended to walk through the %2 to get a "
+"jumpstart on the %3 tool. A good rule of thumb is to add at the end of the "
+"page and sign and date it with your %4."
 msgstr ""
 
-#: data/Sandbox/WebRss.txt:5
-#: data/Trash/WebRss.txt:5
-#: data/_default/WebAtom.txt:3
-#: data/_default/WebRss.txt:5
-msgid "The %1 web of TWiki. TWiki is a Web-Based Collaboration Platform for the Enterprise."
+#: ../core/data/Sandbox/WebRss.txt:5 ../core/data/Trash/WebRss.txt:5
+#: ../core/data/_default/WebAtom.txt:3 ../core/data/_default/WebRss.txt:5
+msgid ""
+"The %1 web of TWiki. TWiki is a Web-Based Collaboration Platform for the "
+"Enterprise."
 msgstr ""
 
-#: templates/messages.tmpl:147
+#: ../core/templates/messages.tmpl:410
+msgid "The =%1= script can only be called with POST method."
+msgstr ""
+
+#: ../core/templates/messages.tmpl:147
 msgid "The Administrator has disabled new user registration."
 msgstr ""
 
-#: templates/messages.tmpl:295
+#: ../core/templates/messages.tmpl:295
 msgid "The activation code %1 is invalid."
 msgstr ""
 
-#: templates/moveattachment.tmpl:29
+#: ../core/templates/moveattachment.tmpl:29
 msgid "The attachment and any history will be moved to the new topic."
 msgstr ""
 
-#: templates/messages.tmpl:433
-msgid "The chances are good that %1 has simply navigated away from the edit page without saving."
+#: ../core/templates/messages.tmpl:443
+msgid ""
+"The chances are good that %1 has simply navigated away from the edit page "
+"without saving."
 msgstr ""
 
-#: templates/renamebase.tmpl:70
-msgid "The checkmarked topics will be updated (another form will appear which will _eventually_ allow you to rename any topics that were locked)"
+#: ../core/templates/renamebase.tmpl:70
+msgid ""
+"The checkmarked topics will be updated (another form will appear which will "
+"_eventually_ allow you to rename any topics that were locked)"
 msgstr ""
 
-#: templates/messages.tmpl:287
+#: ../core/templates/messages.tmpl:287
 msgid "The e-mail address for this account is not valid."
 msgstr ""
 
-#: templates/messages.tmpl:449
+#: ../core/templates/messages.tmpl:459
 msgid "The entry for user %1 was missing in the password system."
 msgstr ""
 
-#: templates/messages.tmpl:348
+#: ../core/templates/messages.tmpl:348
 msgid "The file has been uploaded and attached properly to the %1 topic."
 msgstr ""
 
-#: templates/messages.tmpl:384
+#: ../core/templates/messages.tmpl:384
 msgid "The following topics are locked for edit, and cannot be moved:"
 msgstr ""
 
-#: templates/messages.tmpl:390
+#: ../core/templates/messages.tmpl:390
 msgid "The following topics refer to topics in this web, but are being edited:"
 msgstr ""
 
-#: templates/messages.tmpl:387
-msgid "The following topics refer to topics in this web, but you are denied access to them:"
+#: ../core/templates/messages.tmpl:387
+msgid ""
+"The following topics refer to topics in this web, but you are denied access "
+"to them:"
 msgstr ""
 
-#: templates/messages.tmpl:326
+#: ../core/templates/messages.tmpl:326
 msgid "The form should be defined in the topic %1"
 msgstr ""
 
-#: templates/messages.tmpl:431
+#: ../core/templates/messages.tmpl:441
 msgid "The lease on this topic expired %1 ago."
 msgstr ""
 
-#: templates/moveattachment.tmpl:16
+#: ../core/templates/moveattachment.tmpl:16
 msgid "The new topic chosen must already exist."
 msgstr "선택된 새로운 주제는 반드시 존재해야합니다."
 
-#: templates/messages.tmpl:16
+#: ../core/templates/messages.tmpl:16
 msgid "The new web has been created"
 msgstr "새로운 웹이 생성되었습니다."
 
-#: templates/messages.tmpl:98
+#: ../core/templates/messages.tmpl:98
 msgid "The password you entered in the *old password* field is incorrect."
 msgstr "*이전 비밀번호* 항목에 입력한 비밀번호가 정확하지 않습니다."
 
-#: templates/messages.tmpl:314
+#: ../core/templates/messages.tmpl:314
 msgid "The required field %1 was not filled in."
 msgstr "필수 항목인 %1이 입력되지 않았습니다."
 
-#: templates/messages.tmpl:138
+#: ../core/templates/messages.tmpl:138
 msgid "The selected User System does not support new user registration."
 msgstr ""
 
-#: data/TWiki/WebTopicViewTemplate.txt:4
+#: ../core/data/TWiki/WebTopicViewTemplate.txt:4
 msgid "The topic %1 you are trying to access does not exist, yet."
 msgstr ""
 
-#: templates/messages.tmpl:329
+#: ../core/templates/messages.tmpl:329
 msgid "The topic is in an old format"
 msgstr "주제가 오래된 포맷으로 되어있습니다."
 
-#: templates/messages.tmpl:219
+#: ../core/templates/messages.tmpl:219
 msgid "The two passwords you entered do not match."
 msgstr ""
 
-#: templates/messages.tmpl:518
+#: ../core/templates/messages.tmpl:528
 msgid "The user %1 has already been activated, and should be able to log in."
 msgstr ""
 
-#: templates/messages.tmpl:380
+#: ../core/templates/messages.tmpl:380
 msgid "There are problems with renaming this web:"
 msgstr ""
 
-#: templates/messages.tmpl:226
+#: ../core/templates/messages.tmpl:226
 msgid "There has been a problem adding your user id to the Password system."
 msgstr ""
 
-#: templates/messages.tmpl:332
+#: ../core/templates/messages.tmpl:332
 msgid "There should be a line that includes %1, look for %2 (or %3)"
 msgstr ""
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:6
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:6
 msgid "This TWiki does _not_ support new User Registration"
 msgstr ""
 
-#: templates/messages.tmpl:339
+#: ../core/templates/messages.tmpl:339
 msgid "This can be automatically upgraded by:"
 msgstr "이것은 다음에 의해 자동으로 업그레이드될 수 있습니다."
 
-#: templates/messages.tmpl:322
+#: ../core/templates/messages.tmpl:322
 msgid "This could be for several reasons:"
 msgstr ""
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:5
-msgid "This form is used to change your registered e-mail addresses. Your registered e-mails are used by TWiki for sending you e-mails, include notifications of password changes. The addresses you register via this form are kept secret and will *not* be published anywhere on this site."
+#: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:5
+msgid ""
+"This form is used to change your registered e-mail addresses. Your "
+"registered e-mails are used by TWiki for sending you e-mails, include "
+"notifications of password changes. The addresses you register via this form "
+"are kept secret and will *not* be published anywhere on this site."
 msgstr ""
 
-#: data/Sandbox/WebNotify.txt:4
-#: data/Trash/WebNotify.txt:3
-#: data/_default/WebNotify.txt:2
-msgid "This is a subscription service to be automatically notified by e-mail when topics change in this %1 web. This is a convenient service, so you do not have to come back and check all the time if something has changed. To subscribe, please add a bullet with your %2 in alphabetical order to this list:"
+#: ../core/data/Sandbox/WebNotify.txt:4 ../core/data/Trash/WebNotify.txt:3
+#: ../core/data/_default/WebNotify.txt:2
+msgid ""
+"This is a subscription service to be automatically notified by e-mail when "
+"topics change in this %1 web. This is a convenient service, so you do not "
+"have to come back and check all the time if something has changed. To "
+"subscribe, please add a bullet with your %2 in alphabetical order to this "
+"list:"
 msgstr ""
 
-#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:7
-#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:71
+#: ../MailerContrib/templates/mailnotify.tmpl:7
+#: ../MailerContrib/templates/mailnotify.tmpl:71
 msgid "This is an automated e-mail from %1."
 msgstr "이것은 %1로부터 자동으로 발송된 이메일입니다."
 
-#: templates/registernotifyadmin.tmpl:8
-#: twikiplugins/ClassicSkin/templates/registernotifyadmin.classic.tmpl:8
+#: ../core/templates/registernotifyadmin.tmpl:8
 msgid "This is an automated e-mail notification of user registration in %1."
 msgstr ""
 
-#: data/Trash/WebHome.txt:2
-msgid "This is the Trash. Here you can undelete topics; deleted attachments are in TrashAttachment."
+#: ../core/data/Trash/WebHome.txt:3
+msgid ""
+"This is the Trash. Here you can undelete topics; deleted attachments are in "
+"TrashAttachment."
 msgstr ""
 
-#: templates/renamedelete.tmpl:25
-msgid "This name has been chosen so it doesn't conflict with any other topics already in the %1 web."
+#: ../core/templates/renamedelete.tmpl:25
+msgid ""
+"This name has been chosen so it doesn't conflict with any other topics "
+"already in the %1 web."
 msgstr ""
 
-#: templates/messages.tmpl:337
+#: ../core/templates/messages.tmpl:337
 msgid "This requires the form definition to be present."
 msgstr ""
 
-#: templates/messages.tmpl:281
+#: ../core/templates/messages.tmpl:281
 msgid "This site requires at least %1 character passwords"
 msgstr ""
 
-#: data/TWiki/WebTopicViewTemplate.txt:19
+#: ../core/data/TWiki/WebTopicViewTemplate.txt:19
 msgid "This topic has moved to %1."
 msgstr "이 주제는 %1로 이동되었습니다."
 
-#: data/TWiki/WebTopicNonWikiTemplate.txt:6
-msgid "This topic name is not recommended because it will not be linked automatically. See %1 for details"
+#: ../core/data/TWiki/WebTopicNonWikiTemplate.txt:6
+msgid ""
+"This topic name is not recommended because it will not be linked "
+"automatically. See %1 for details"
 msgstr ""
 
-#: templates/viewprint.tmpl:13
-#: twikiplugins/ClassicSkin/templates/viewprint.classic.tmpl:11
+#: ../ClassicSkin/templates/viewprint.classic.tmpl:11
+#: ../core/templates/viewprint.tmpl:13
 msgid "This topic:"
 msgstr ""
 
-#: templates/messages.tmpl:29
-msgid "Those changes have been merged with yours to create Rev %1. Text fields will have been merged, but other data such as form fields may have overwritten the other users changes. Please inspect the topic to make sure it is OK, especially if you made any changes to form fields."
+#: ../core/templates/messages.tmpl:29
+msgid ""
+"Those changes have been merged with yours to create Rev %1. Text fields will "
+"have been merged, but other data such as form fields may have overwritten "
+"the other users changes. Please inspect the topic to make sure it is OK, "
+"especially if you made any changes to form fields."
 msgstr ""
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:5
-msgid "To edit pages on this TWikiSite, you must have a registered user name and password."
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:5
+msgid ""
+"To edit pages on this TWikiSite, you must have a registered user name and "
+"password."
 msgstr ""
 
-#: templates/oopsleaseconflict.tmpl:20
-#: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:22
+#: ../ClassicSkin/templates/oopsleaseconflict.classic.tmpl:22
+#: ../core/templates/oopsleaseconflict.tmpl:20
 msgid "To edit the topic anyway, click "
 msgstr ""
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:84
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:85
 msgid "To register as a new user, simply fill out this form:"
 msgstr ""
 
-#: templates/oopsleaseconflict.tmpl:16
-#: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:18
+#: ../ClassicSkin/templates/oopsleaseconflict.classic.tmpl:18
+#: ../core/templates/oopsleaseconflict.tmpl:16
 msgid "To see if %1 has finished editing yet, click "
 msgstr ""
 
-#: templates/renamebase.tmpl:29
-#: templates/renameconfirm.tmpl:14
+#: ../core/templates/renamebase.tmpl:29
+#: ../core/templates/renameconfirm.tmpl:14
 msgid "To topic:"
 msgstr ""
 
-#: templates/renamebase.tmpl:22
-#: templates/renameconfirm.tmpl:10
+#: ../core/templates/renamebase.tmpl:22
+#: ../core/templates/renameconfirm.tmpl:10
 msgid "To web:"
 msgstr ""
 
-#: templates/messages.tmpl:311
+#: ../core/templates/messages.tmpl:311
 msgid "Topic Save Error"
 msgstr "주제 저장 에러"
 
-#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:15
+#: ../PatternSkin/templates/attachtables.pattern.tmpl:15
 msgid "Topic attachments"
 msgstr "주제 첨부파일"
 
-#: templates/messages.tmpl:335
+#: ../core/templates/messages.tmpl:335
 msgid "Topic can not be upgraded from old style category table"
-msgstr "주제는 오래된 스타일의 카테고리 테이블로부터 업그레이드 할 수 없습니다."
+msgstr ""
+"주제는 오래된 스타일의 카테고리 테이블로부터 업그레이드 할 수 없습니다."
 
-#: data/TWiki/WebSearchAdvanced.txt:48
+#: ../core/data/TWiki/WebSearchAdvanced.txt:48
 msgid "Topic name"
 msgstr "주제 이름"
 
-#: data/TWiki/WebCreateNewTopicTemplate.txt:29
-#: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebCreateNewTopicTemplate.txt:47
+#: ../PatternSkin/data/TWiki/PatternSkinWebCreateNewTopicTemplate.txt:47
+#: ../core/data/TWiki/WebCreateNewTopicTemplate.txt:29
 msgid "Topic name:"
 msgstr "주제 이름:"
 
-#: data/TWiki/WebCreateNewTopicTemplate.txt:34
-#: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebCreateNewTopicTemplate.txt:54
+#: ../PatternSkin/data/TWiki/PatternSkinWebCreateNewTopicTemplate.txt:54
+#: ../core/data/TWiki/WebCreateNewTopicTemplate.txt:34
 msgid "Topic parent:"
 msgstr "상위 주제:"
 
-#: templates/viewprint.tmpl:14
-#: twikiplugins/ClassicSkin/templates/viewprint.classic.tmpl:12
-#: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:19
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:47
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:72
+#: ../ClassicSkin/templates/viewprint.classic.tmpl:12
+#: ../PatternSkin/templates/rdiff.pattern.tmpl:19
+#: ../PatternSkin/templates/view.pattern.tmpl:47
+#: ../PatternSkin/templates/view.pattern.tmpl:72
+#: ../TWikiNetSkin/templates/view.twikinet.tmpl:25
+#: ../core/templates/viewprint.tmpl:14
 msgid "Topic revision:"
 msgstr ""
 
-#: templates/oopssaveerr.tmpl:12
+#: ../core/templates/oopssaveerr.tmpl:12
 msgid "Topic save error"
 msgstr "주제 저장 에러"
 
-#: data/TWiki/WebTemplateTopics.txt:2
+#: ../core/data/TWiki/WebTemplateTopics.txt:2
 msgid "Topic templates in %1 Web"
 msgstr ""
 
-#: data/TWiki/WebSearch.txt:31
-#: data/TWiki/WebSearchAdvanced.txt:39
+#: ../core/data/TWiki/WebSearch.txt:31
+#: ../core/data/TWiki/WebSearchAdvanced.txt:39
 msgid "Topic title"
 msgstr "주제 제목"
 
-#: templates/messages.tmpl:26
+#: ../core/templates/messages.tmpl:26
 msgid "Topic was merged"
 msgstr "주제가 통합되었습니다."
 
-#: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebCreateNewTopicTemplate.txt:28
+#: ../PatternSkin/data/TWiki/PatternSkinWebCreateNewTopicTemplate.txt:28
 msgid "Topic will be named: "
 msgstr ""
 
-#: templates/search.tmpl:14
+#: ../core/templates/search.tmpl:14
 msgid "Topics in %1 web"
 msgstr ""
 
-#: templates/search.text.tmpl:4
-#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:14
+#: ../MailerContrib/templates/mailnotify.tmpl:14
+#: ../core/templates/search.text.tmpl:4
 msgid "Topics in %1 web:"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:75
+#: ../core/data/TWiki/WebSearchAdvanced.txt:75
 msgid "Topics per web"
 msgstr ""
 
-#: templates/renamewebbase.tmpl:29
+#: ../core/templates/renamewebbase.tmpl:29
 msgid "Topics which are currently being edited by other users in the %1 Web:"
 msgstr ""
 
-#: templates/renamewebbase.tmpl:32
-msgid "Topics which refer to this web and are are currently being edited by other users:"
+#: ../core/templates/renamewebbase.tmpl:32
+msgid ""
+"Topics which refer to this web and are are currently being edited by other "
+"users:"
 msgstr ""
 
-#: templates/renamewebbase.tmpl:35
-msgid "Topics which refer to this web that you do not have permission to change:"
+#: ../core/templates/renamewebbase.tmpl:35
+msgid ""
+"Topics which refer to this web that you do not have permission to change:"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:65
+#: ../core/data/TWiki/WebSearchAdvanced.txt:65
 msgid "Total matches"
 msgstr ""
 
-#: templates/oopsleaseconflict.tmpl:17
-#: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:19
+#: ../ClassicSkin/templates/oopsleaseconflict.classic.tmpl:19
+#: ../core/templates/oopsleaseconflict.tmpl:17
 msgid "Try Again"
 msgstr "다시시도"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/NewUserTemplate.txt:76
-msgid "Uncomment preferences variables to activate them (remove the #-sign). Help and details on preferences variables are available in %1."
-msgstr ""
-
-#: templates/login.sudo.tmpl:5
+#: ../core/templates/login.sudo.tmpl:5
 msgid "Unrecognised user and/or password"
 msgstr ""
 
-#: templates/messages.tmpl:40
+#: ../core/templates/messages.tmpl:40
 msgid "Unrecognized action command %1"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:4
+#: ../PatternSkin/templates/attachagain.pattern.tmpl:4
 msgid "Update attachment %1 on %2"
 msgstr ""
 
-#: templates/renamebase.tmpl:49
-#: templates/renamewebbase.tmpl:27
+#: ../core/templates/renamebase.tmpl:49
+#: ../core/templates/renamewebbase.tmpl:27
 msgid "Update links"
 msgstr "링크 수정"
 
-#: templates/attachagain.tmpl:21
-#: templates/attachnew.tmpl:9
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:28
-#: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:7
+#: ../PatternSkin/templates/attachagain.pattern.tmpl:28
+#: ../PatternSkin/templates/attachnew.pattern.tmpl:7
+#: ../core/templates/attachagain.tmpl:21 ../core/templates/attachnew.tmpl:9
 msgid "Upload file"
 msgstr "파일 업로드"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:39
+#: ../PatternSkin/templates/attach.pattern.tmpl:39
 msgid "Upload up to %1 KB."
 msgstr ""
 
-#: templates/messages.tmpl:367
+#: ../core/templates/messages.tmpl:367
 msgid "Uploaded file %1 exceeds limit of %2 KB"
 msgstr "파일 %1 은 %2 KB 제한을 초과하였습니다."
 
-#: templates/messages.tmpl:366
+#: ../core/templates/messages.tmpl:366
 msgid "Uploaded file is too big"
 msgstr "파일이 너무 큽니다."
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:5
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:5
+#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:5
+#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:5
 msgid "Use %1 instead."
 msgstr "그렇다면 %1를 사용하십시오."
 
-#: data/TWiki/WebCreateNewTopicTemplate.txt:39
-#: twikiplugins/PatternSkin/data/TWiki/PatternSkinWebCreateNewTopicTemplate.txt:61
+#: ../PatternSkin/data/TWiki/PatternSkinWebCreateNewTopicTemplate.txt:61
+#: ../core/data/TWiki/WebCreateNewTopicTemplate.txt:39
 msgid "Use template:"
 msgstr "템플릿 사용하기:"
 
-#: templates/messages.tmpl:10
+#: ../core/templates/messages.tmpl:10
 msgid "User Account %1 Deleted"
 msgstr "사용자 계정 %1은 삭제되었습니다."
 
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:15
+#: ../PatternSkin/data/TWiki/WebLeftBar.txt:15
+#: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:23
 msgid "User Reference"
 msgstr "사용자 레퍼런스"
 
-#: templates/login.tmpl:42
-#: twikiplugins/PatternSkin/data/TWiki/PatternSkinElements.txt:182
+#: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:12
+#, fuzzy
+msgid "User registration"
+msgstr "등록하기"
+
+#: ../PatternSkin/data/TWiki/PatternSkinElements.txt:182
+#: ../core/templates/login.tmpl:42
 msgid "Username"
 msgstr "사용자 이름"
 
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:5
+#: ../PatternSkin/data/TWiki/WebLeftBar.txt:5
+#: ../TopMenuSkin/data/Main/WebTopMenu.txt:11
+#: ../TopMenuSkin/data/TWiki/WebTopMenu.txt:13
 msgid "Users"
 msgstr "사용자"
 
-#: templates/messages.tmpl:163
-msgid "Users with automatically generated passwords should proceed immediately to [[%1][change password]] to change their password to something memorable."
+#: ../core/templates/messages.tmpl:163
+msgid ""
+"Users with automatically generated passwords should proceed immediately to "
+"[[%1][change password]] to change their password to something memorable."
 msgstr ""
 
-#: templates/attachtables.tmpl:37
+#: ../core/templates/attachtables.tmpl:37
 msgid "Version"
 msgstr "버전"
 
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:10
+#: ../PatternSkin/templates/attachagain.pattern.tmpl:10
 msgid "Version history"
 msgstr "버전 이력"
 
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:8
+#: ../PatternSkin/templates/attachagain.pattern.tmpl:8
 msgid "Version history of %1"
 msgstr "%1의 버전 이력"
 
-#: templates/oopsmore.tmpl:91
+#: ../TopMenuSkin/data/TWiki/TopMenuSkinTopicMenu.txt:18
+#: ../core/templates/oopsmore.tmpl:92
 msgid "View"
 msgstr "보기"
 
-#: templates/oopsmore.tmpl:98
+#: ../core/templates/oopsmore.tmpl:99
 msgid "View difference"
 msgstr "차이점 보기"
 
-#: templates/oopsmore.tmpl:88
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:37
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:37
+#: ../core/templates/oopsmore.tmpl:89
 msgid "View previous topic revision"
 msgstr "이전 주제 리비전 보기"
 
-#: templates/oopsleaseconflict.tmpl:28
-#: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:33
+#: ../ClassicSkin/templates/oopsleaseconflict.classic.tmpl:33
+#: ../core/templates/oopsleaseconflict.tmpl:28
 msgid "View raw text without formatting"
 msgstr "포맷없이 가공되지 않은 본문 보기"
 
-#: templates/oopsmore.tmpl:90
+#: ../core/templates/oopsmore.tmpl:91
 msgid "View revision:"
 msgstr "리비전 보기:"
 
-#: data/TWiki/WebCreateNewTopicTemplate.txt:58
+#: ../core/data/TWiki/WebCreateNewTopicTemplate.txt:58
 msgid "View templates"
 msgstr "템플릿 보기"
 
-#: templates/oopsleaseconflict.tmpl:28
-#: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:33
-#: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:10
-#: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:29
+#: ../ClassicSkin/templates/oopsleaseconflict.classic.tmpl:33
+#: ../PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:10
+#: ../PatternSkin/templates/rdiff.pattern.tmpl:29
+#: ../core/templates/oopsleaseconflict.tmpl:28
 msgid "View topic"
 msgstr "주제 보기"
 
-#: templates/twiki.tmpl:101
-#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:158
+#: ../ClassicSkin/templates/twiki.classic.tmpl:159
+#: ../core/templates/twiki.tmpl:102
 msgid "View total topic history"
 msgstr "모든 주제 이력 보기"
 
-#: data/TWiki/WebTopicNonWikiTemplate.txt:6
+#: ../core/data/TWiki/WebTopicNonWikiTemplate.txt:6
 msgid "WARNING:"
 msgstr "경고:"
 
-#: twikiplugins/EditTablePlugin/data/TWiki/EditTablePlugin.txt:179
+#: ../EditTablePlugin/data/TWiki/EditTablePlugin.txt:185
 msgid "Warning: 'include' topic does not exist!"
 msgstr ""
 
-#: templates/messages.tmpl:447
+#: ../core/templates/messages.tmpl:457
 msgid "Warning: Can't INCLUDE %1 repeatedly, topic is already included. %2"
 msgstr ""
 
-#: templates/messages.tmpl:446
+#: ../core/templates/messages.tmpl:456
 msgid "Warning: Can't find topic %1.%2"
 msgstr ""
 
-#: lib/TWiki/UI/Register.pm:828
+#: ../core/lib/TWiki/UI/Register.pm:859
 msgid "Warning: Could not send confirmation email"
 msgstr "경고: 확인 이메일을 전송할 수 없습니다."
 
-#: lib/TWiki/UI/Register.pm:835
+#: ../core/lib/TWiki/UI/Register.pm:866
 msgid "Warning: Could not send confirmation email, email has been disabled"
-msgstr "경고: 확인 이메일을 전송할 수 없으며, 이메일이 사용 불가능한 상태입니다."
+msgstr ""
+"경고: 확인 이메일을 전송할 수 없으며, 이메일이 사용 불가능한 상태입니다."
 
-#: templates/messages.tmpl:454
+#: ../core/templates/messages.tmpl:464
 msgid "Warning: This site does not allow %<nop>INCLUDE% of URLs"
 msgstr "경고: 이 사이트는 다음 URL을 허용하지 않습니다 %<nop>INCLUDE% "
 
-#: data/TWiki/WebSearch.txt:3
+#: ../core/data/TWiki/WebSearch.txt:3
 msgid "Web Search"
 msgstr "웹 검색"
 
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:8
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarWebsList.txt:2
+#: ../PatternSkin/data/TWiki/WebLeftBarExample.txt:8
+#: ../PatternSkin/data/TWiki/WebLeftBarWebsList.txt:2
 msgid "Webs"
 msgstr "웹"
 
-#: data/Sandbox/WebHome.txt:2
-#: data/_default/WebHome.txt:2
+#: ../core/data/Sandbox/WebHome.txt:2 ../core/data/_default/WebHome.txt:2
 msgid "Welcome to the %1 web"
 msgstr "웹 %1입니다."
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:282
-msgid "When %1 receives the form, it will mail an account activation code to the e-mail address you gave above. Enter that activation code in the following screen, or follow the link in the e-mail, to activate your account. Once your account is activated, %1 will:"
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:328
+msgid ""
+"When %1 receives the form, it will mail an account activation code to the e-"
+"mail address you gave above. Enter that activation code in the following "
+"screen, or follow the link in the e-mail, to activate your account. Once "
+"your account is activated, %1 will:"
 msgstr ""
 
-#: templates/attachtables.tmpl:37
-#: templates/attachtables.tmpl:4
+#: ../core/templates/attachtables.tmpl:37
+#: ../core/templates/attachtables.tmpl:4
 msgid "Who"
 msgstr "누구"
 
-#: templates/messages.tmpl:19
+#: ../core/templates/messages.tmpl:19
 msgid "Would you like to go to:"
 msgstr "다음으로 이동합니다:"
 
-#: templates/messages.tmpl:251
+#: ../core/templates/messages.tmpl:251
 msgid "You are already registered"
 msgstr "이미 등록되어있습니다."
 
-#: templates/messages.tmpl:157
+#: ../core/templates/messages.tmpl:157
 msgid "You are also listed in the %1 topic"
 msgstr ""
 
-#: templates/messages.tmpl:381
+#: ../core/templates/messages.tmpl:381
 msgid "You are denied access to the following topics in the web:"
 msgstr "당신은 해당 웹의 다음 주제에 대해서 접근이 차단되어있습니다:"
 
-#: templates/messages.tmpl:435
-msgid "You are encouraged to go ahead and edit - unless you intend to change data in a form attached to the topic. If %1 actually _does_ save while you are editing, your changes will be merged, and nothing will be lost. Form data cannot easily be merged though, so in this case you are recommended to check with %1 first."
+#: ../core/templates/messages.tmpl:445
+msgid ""
+"You are encouraged to go ahead and edit - unless you intend to change data "
+"in a form attached to the topic. If %1 actually _does_ save while you are "
+"editing, your changes will be merged, and nothing will be lost. Form data "
+"cannot easily be merged though, so in this case you are recommended to check "
+"with %1 first."
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:39
+#: ../PatternSkin/templates/view.pattern.tmpl:39
+#: ../TWikiNetSkin/templates/view.twikinet.tmpl:17
 msgid "You are here:"
 msgstr "현재위치:"
 
-#: templates/messages.tmpl:107
-msgid "You are recommended to choose short names, preferably less than 10 characters, starting with an upper-case alphabetic character and using only alphanumeric characters. If you want to create a template web (a web just used as a base to create new webs) choose a name that starts with an underscore and has only alphanumeric characters."
-msgstr "알파벳 대문자로 시작하는 영문 10 글자 이내의 짧은 이름을 사용할 것을 권장합니다. 새로운 템플릿 웹을 생성하기를 원하는 경우라면(새로운 웹을 생성하기 위한 기본 웹이 되는 경우), 해당 이름은 언더스코어로 시작하고 반드시 알파벳 혹은 숫자로 구성되어있어야 합니다."
+#: ../core/templates/messages.tmpl:107
+msgid ""
+"You are recommended to choose short names, preferably less than 10 "
+"characters, starting with an upper-case alphabetic character and using only "
+"alphanumeric characters. If you want to create a template web (a web just "
+"used as a base to create new webs) choose a name that starts with an "
+"underscore and has only alphanumeric characters."
+msgstr ""
+"알파벳 대문자로 시작하는 영문 10 글자 이내의 짧은 이름을 사용할 것을 권장합니"
+"다. 새로운 템플릿 웹을 생성하기를 원하는 경우라면(새로운 웹을 생성하기 위한 "
+"기본 웹이 되는 경우), 해당 이름은 언더스코어로 시작하고 반드시 알파벳 혹은 숫"
+"자로 구성되어있어야 합니다."
 
-#: templates/messages.tmpl:511
+#: ../core/templates/messages.tmpl:521
 msgid "You are trying to %1 an attachment that does not exist."
 msgstr "존재하지 않는 첨부파일 %1을 추가하고 있습니다."
 
-#: templates/messages.tmpl:499
+#: ../core/templates/messages.tmpl:509
 msgid "You are trying to create a topic from a template that does not exist."
 msgstr "존재하지 않는 템플릿으로 부터 새로운 주제를 생성하고 있습니다."
 
-#: templates/messages.tmpl:494
-msgid "You are trying to perform an action on a topic that does not exist (action '%1')."
+#: ../core/templates/messages.tmpl:504
+msgid ""
+"You are trying to perform an action on a topic that does not exist (action '%"
+"1')."
 msgstr ""
 
-#: templates/messages.tmpl:505
+#: ../core/templates/messages.tmpl:515
 msgid "You are trying to rename a topic that does not exist."
 msgstr "존재하지 않는 주제로 이름을 변경하려하고 있습니다."
 
-#: templates/messages.tmpl:484
-msgid "You can [[%1][create a new web]] if you have permission. Contact %2 if you have any questions."
+#: ../core/templates/messages.tmpl:494
+msgid ""
+"You can [[%1][create a new web]] if you have permission. Contact %2 if you "
+"have any questions."
 msgstr ""
 
-#: templates/messages.tmpl:127
-msgid "You can also use the names of the standard HTML colors (black, silver, gray, white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, blue, teal, or aqua)"
+#: ../core/templates/messages.tmpl:127
+msgid ""
+"You can also use the names of the standard HTML colors (black, silver, gray, "
+"white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, blue, "
+"teal, or aqua)"
 msgstr ""
 
-#: templates/registernotify.tmpl:24
-#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:24
+#: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:145
+#: ../core/templates/registernotify.tmpl:24
 msgid "You can change your password at via %1"
 msgstr "%1을 경유하여 비밀번호 변경을 할 수 있습니다."
 
-#: templates/renameweb.tmpl:21
+#: ../core/templates/renameweb.tmpl:21
 msgid "You can give this web a different name."
 msgstr "이 웹에 다른 이름을 부여할 수 있습니다."
 
-#: templates/oopschangelanguage.tmpl:7
-msgid "You can set your favorite language permanently by setting the %1 variable in your user topic."
+#: ../core/templates/oopschangelanguage.tmpl:7
+msgid ""
+"You can set your favorite language permanently by setting the %1 variable in "
+"your user topic."
 msgstr ""
 
-#: templates/messages.tmpl:252
+#: ../core/templates/messages.tmpl:252
 msgid "You cannot register twice, the name %1 is already registered."
 msgstr ""
 
-#: templates/messages.tmpl:142
-#: templates/messages.tmpl:151
-#: templates/messages.tmpl:230
-#: templates/messages.tmpl:239
+#: ../core/templates/messages.tmpl:142 ../core/templates/messages.tmpl:151
+#: ../core/templates/messages.tmpl:230 ../core/templates/messages.tmpl:239
 msgid "You have *not* been registered."
 msgstr "등록한 적이 *없는* 사용자 입니다."
 
-#: templates/messages.tmpl:357
-msgid "You may be able to get your TWiki administrator to change the settings if they are inappropriate for your environment."
-msgstr "적절하지 않은 환경이 구성되어있다면 TWiki 관리자에게 설정 변경을 요구할 수 있습니다."
+#: ../core/templates/messages.tmpl:357
+msgid ""
+"You may be able to get your TWiki administrator to change the settings if "
+"they are inappropriate for your environment."
+msgstr ""
+"적절하지 않은 환경이 구성되어있다면 TWiki 관리자에게 설정 변경을 요구할 수 있"
+"습니다."
 
-#: templates/messages.tmpl:520
-msgid "You may have clicked a registration verification link that you had already visited."
+#: ../core/templates/messages.tmpl:530
+msgid ""
+"You may have clicked a registration verification link that you had already "
+"visited."
 msgstr "이미 방문한적이 있는 유효성 검사 링크를 다시 클릭할 수 있을 것입니다."
 
-#: templates/messages.tmpl:170
+#: ../core/templates/messages.tmpl:170
 msgid "You may need to close your browser to make this change take effect."
 msgstr ""
 
-#: templates/registerconfirm.tmpl:11
-#: twikiplugins/ClassicSkin/templates/registerconfirm.classic.tmpl:11
-msgid "You now need to verify your e-mail address. You can do so by entering %1 in the form presented to you when this e-mail was sent, or by visiting %2"
+#: ../core/templates/registerconfirm.tmpl:11
+msgid ""
+"You now need to verify your e-mail address. You can do so by entering %1 in "
+"the form presented to you when this e-mail was sent, or by visiting %2"
 msgstr ""
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:7
-msgid "You really ought to register a valid e-mail address. If TWiki can't find a registered e-mail for you in the secret database, it will look in your user topic for a line like this:"
+#: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:7
+msgid ""
+"You really ought to register a valid e-mail address. If TWiki can't find a "
+"registered e-mail for you in the secret database, it will look in your user "
+"topic for a line like this:"
 msgstr ""
 
-#: templates/oopsmore.tmpl:105
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:53
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:53
+#: ../core/templates/oopsmore.tmpl:106
 msgid "You will be able to review the topic before saving it to a new revision"
 msgstr ""
 
-#: templates/messages.tmpl:344
+#: ../core/templates/messages.tmpl:344
 msgid "You will probably have to ask your administrator, %1, to do this."
 msgstr ""
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:33
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:22
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:27
+#: ../TWikiUserMappingContrib/data/TWiki/ChangeEmailAddress.txt:33
+#: ../TWikiUserMappingContrib/data/TWiki/ChangePassword.txt:22
+#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:27
 msgid "Your %1.LoginName"
 msgstr "당신의 %1.LoginName"
 
-#: templates/messages.tmpl:194
-msgid "Your activation code has been sent to %1.  Either click on the link in your e-mail or enter the code in the box below to activate your membership. (This code is of the form \"YourName.xxxxxxxxxx\")"
+#: ../core/templates/messages.tmpl:194
+msgid ""
+"Your activation code has been sent to %1.  Either click on the link in your "
+"e-mail or enter the code in the box below to activate your membership. (This "
+"code is of the form \"YourName.xxxxxxxxxx\")"
 msgstr ""
 
-#: templates/oopslanguagechanged.tmpl:16
-msgid "Your language will be changed to %1 from the next screen. You will be redirected to there right now. If you aren't, [[%2][click to proceed]]."
-msgstr "당신의 언어가 %1로 변경되어 다음 화면부터 적용됩니다. 잠시후 변경된 곳으로 이동될 것입니다. 이동되지 않으면 [[%2][를 클릭하세요]]."
+#: ../core/templates/oopslanguagechanged.tmpl:16
+msgid ""
+"Your language will be changed to %1 from the next screen. You will be "
+"redirected to there right now. If you aren't, [[%2][click to proceed]]."
+msgstr ""
+"당신의 언어가 %1로 변경되어 다음 화면부터 적용됩니다. 잠시후 변경된 곳으로 이"
+"동될 것입니다. 이동되지 않으면 [[%2][를 클릭하세요]]."
 
-#: templates/mailresetpassword.tmpl:10
-#: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:10
+#: ../ClassicSkin/templates/mailresetpassword.classic.tmpl:10
+#: ../core/templates/mailresetpassword.tmpl:10
 msgid "Your password has been changed to %1."
 msgstr "비밀번호가 %1로 변경되었습니다."
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:114
+#: ../TWikiUserMappingContrib/data/TWiki/TWikiRegistration.txt:115
 msgid "Your password:"
 msgstr "비밀번호:"
 
-#: templates/registernotify.tmpl:12
-#: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:12
-msgid "Your personal %1 topic is located at %2. You can customize it as you like:"
+#: ../TWikiUserMappingContrib/data/TWiki/ManagingUsers.txt:134
+#: ../core/templates/registernotify.tmpl:12
+msgid ""
+"Your personal %1 topic is located at %2. You can customize it as you like:"
 msgstr ""
 
-#: templates/messages.tmpl:155
+#: ../core/templates/messages.tmpl:155
 msgid "Your personal TWiki topic %1 has been created"
 msgstr ""
 
-#: templates/messages.tmpl:187
+#: ../core/templates/messages.tmpl:187
 msgid "Your registered e-mail address(es) are updated to: %1."
 msgstr ""
 
-#: templates/edit.tmpl:48
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:68
+#: ../PatternSkin/templates/edit.pattern.tmpl:71
+#: ../core/templates/edit.tmpl:48
 msgid "Your signature to copy/paste:"
 msgstr "시그니쳐 입력(복사/붙이기):"
 
-#: templates/messages.tmpl:178
-msgid "Your system may not support changing passwords through TWiki. Check with your TWiki administrator."
-msgstr "이 시스템은 TWiki를 이용하여 비밀번호를 변경하는 기능을 제공하지 못할 수도 있습니다. 이 시스템의 TWiki 관리자에게 문의하십시오."
+#: ../core/templates/messages.tmpl:178
+msgid ""
+"Your system may not support changing passwords through TWiki. Check with "
+"your TWiki administrator."
+msgstr ""
+"이 시스템은 TWiki를 이용하여 비밀번호를 변경하는 기능을 제공하지 못할 수도 있"
+"습니다. 이 시스템의 TWiki 관리자에게 문의하십시오."
 
-#: templates/messages.tmpl:11
+#: ../core/templates/messages.tmpl:11
 msgid "Your user name has been removed from the Authentication System."
 msgstr "당신의 사용자 이름은 사용자 권한 시스템에서 제거되었습니다."
 
-#: templates/messages.tmpl:13
+#: ../core/templates/messages.tmpl:13
 msgid "Your user topic has not been renamed. Please e-mail %1 to request this."
-msgstr "당신의 주제의 이름변경이 되지 않습니다. 이 작업을 요청하기 위해 %1님께 메일을 보내십시오."
+msgstr ""
+"당신의 주제의 이름변경이 되지 않습니다. 이 작업을 요청하기 위해 %1님께 메일"
+"을 보내십시오."
 
-#: templates/messages.tmpl:331
+#: ../core/templates/messages.tmpl:331
 msgid "[[%1][Debug topic text]]."
 msgstr ""
 
-#: templates/settings.tmpl:28
-msgid "[multiple of 3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]"
+#: ../core/templates/settings.tmpl:28
+msgid ""
+"[multiple of 3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]"
 msgstr ""
 
-#: lib/TWiki/I18N.pm:292
+#: ../core/data/TWiki/RenameWeb.txt:3
+msgid "__Note:__"
+msgstr ""
+
+#: ../core/lib/TWiki/I18N.pm:292
 msgid "_language_name"
 msgstr "한글"
 
-#: data/TWiki/WebSearchAdvanced.txt:70
+#: ../core/data/TWiki/WebSearchAdvanced.txt:70
 msgid "about !BookView"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:58
+#: ../core/data/TWiki/WebSearchAdvanced.txt:58
 msgid "about regular expression search"
 msgstr ""
 
-#: lib/TWiki/Access.pm:188
+#: ../core/lib/TWiki/Access.pm:188
 msgid "access denied on root"
 msgstr ""
 
-#: lib/TWiki/Access.pm:135
+#: ../core/lib/TWiki/Access.pm:135
 msgid "access denied on topic"
 msgstr ""
 
-#: lib/TWiki/Access.pm:164
+#: ../core/lib/TWiki/Access.pm:164
 msgid "access denied on web"
 msgstr ""
 
-#: lib/TWiki/Access.pm:197
+#: ../core/lib/TWiki/Access.pm:197
 msgid "access not allowed on root"
 msgstr ""
 
-#: lib/TWiki/Access.pm:152
+#: ../core/lib/TWiki/Access.pm:152
 msgid "access not allowed on topic"
 msgstr ""
 
-#: lib/TWiki/Access.pm:176
+#: ../core/lib/TWiki/Access.pm:176
 msgid "access not allowed on web"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:11
+#: ../PatternSkin/templates/twiki.pattern.tmpl:9
 msgid "accesskey='c'"
 msgstr ""
 
-#: data/_default/WebHome.txt:11
+#: ../core/data/_default/WebHome.txt:11
 msgid "advanced search"
 msgstr "고급 검색"
 
-#: data/TWiki/WikiSyntaxSummary.txt:17
+#: ../core/data/TWiki/WikiSyntaxSummary.txt:17
 msgid "and"
 msgstr "그리고"
 
-#: templates/attachtables.tmpl:12
+#: ../core/templates/attachtables.tmpl:12
 msgid "change, update, previous revisions, move, delete..."
 msgstr "변경, 수정, 이전 리비전, 이동, 삭제..."
 
-#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:33
+#: ../PatternSkin/templates/renamebase.pattern.tmpl:33
 msgid "checkboxes of referenced topics"
 msgstr ""
 
-#: templates/messages.tmpl:406
+#: ../core/templates/messages.tmpl:406
 msgid "don't forget to check your Topic Settings"
 msgstr "주제 설정을 체크하는 것을 잊지 마십시오"
 
-#: templates/messages.tmpl:213
+#: ../core/templates/messages.tmpl:213
 msgid "fields are required."
 msgstr "항목들은 필수 사항입니다."
 
-#: templates/attach.tmpl:5
+#: ../core/templates/attach.tmpl:5
 msgid "has more information about attaching files."
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:24
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:27
+#: ../PatternSkin/templates/edit.pattern.tmpl:27
+#: ../PatternSkin/templates/edit.pattern.tmpl:30
 msgid "help"
 msgstr "도움말"
 
-#: data/TWiki/WikiSyntaxSummary.txt:17
+#: ../core/data/TWiki/WikiSyntaxSummary.txt:17
 msgid "hints on good style"
 msgstr "좋은 스타일을 위한 힌트"
 
-#: templates/oopsmore.tmpl:91
+#: ../core/templates/oopsmore.tmpl:92
 msgid "in raw text format"
 msgstr "가공하지 않은 포맷"
 
-#: templates/form.tmpl:3
-#: twikiplugins/ClassicSkin/templates/form.classic.tmpl:3
+#: ../ClassicSkin/templates/form.classic.tmpl:3 ../core/templates/form.tmpl:3
 msgid "indicates mandatory fields"
 msgstr ""
 
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:15
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:9
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:15
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:9
 msgid "looking for references in _%1 web_ only"
 msgstr "_웹 %1_ 내에서만 레퍼런스 찾기"
 
-#: data/TWiki/RenameWeb.txt:3
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:13
-#: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:7
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:13
+#: ../ClassicSkin/templates/oopsmore.classic.tmpl:7
+#: ../core/data/TWiki/RenameWeb.txt:3
 msgid "looking for references in _all public webs_"
 msgstr "_모든 공개된 웹_ 에서 레퍼런스 찾기"
 
-#: templates/attachtables.tmpl:12
+#: ../core/templates/attachtables.tmpl:12
 msgid "manage"
 msgstr "관리하기"
 
-#: data/Trash/WebHome.txt:10
+#: ../core/data/Trash/WebHome.txt:12
 msgid "more..."
 msgstr "더..."
 
-#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:16
+#: ../MailerContrib/templates/mailnotify.tmpl:16
 msgid "now %1"
 msgstr ""
 
-#: templates/changeform.tmpl:13
-#: templates/moveattachment.tmpl:36
-#: templates/preview.tmpl:18
-#: templates/rename.tmpl:20
-#: templates/renameconfirm.tmpl:29
-#: templates/renamedelete.tmpl:34
-#: templates/renameweb.tmpl:33
-#: templates/renamewebconfirm.tmpl:16
-#: templates/twiki.tmpl:105
-#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:9
-#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:24
-#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:28
-#: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:7
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:33
-#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:10
-#: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:25
-#: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:16
+#: ../ClassicSkin/templates/twiki.classic.tmpl:9
+#: ../PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
+#: ../PatternSkin/templates/attachagain.pattern.tmpl:24
+#: ../PatternSkin/templates/attachagain.pattern.tmpl:28
+#: ../PatternSkin/templates/attachnew.pattern.tmpl:7
+#: ../PatternSkin/templates/edit.pattern.tmpl:36
+#: ../PatternSkin/templates/preview.pattern.tmpl:10
+#: ../PatternSkin/templates/renameattachmentdelete.pattern.tmpl:25
+#: ../PatternSkin/templates/settings.pattern.tmpl:22
+#: ../core/templates/changeform.tmpl:13
+#: ../core/templates/moveattachment.tmpl:36 ../core/templates/preview.tmpl:18
+#: ../core/templates/rename.tmpl:20 ../core/templates/renameconfirm.tmpl:29
+#: ../core/templates/renamedelete.tmpl:34 ../core/templates/renameweb.tmpl:33
+#: ../core/templates/renamewebconfirm.tmpl:16 ../core/templates/twiki.tmpl:106
 msgid "or"
 msgstr "혹은"
 
-#: templates/preview.tmpl:13
-#: templates/preview.tmpl:9
+#: ../core/templates/preview.tmpl:13 ../core/templates/preview.tmpl:9
 msgid "preview"
 msgstr "미리보기"
 
-#: lib/TWiki/Render.pm:193
+#: ../core/lib/TWiki/Render.pm:196
 msgid "put it back"
 msgstr ""
 
-#: data/TWiki/WebChanges.txt:2
-#: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:12
+#: ../PatternSkin/templates/searchbase.pattern.tmpl:12
+#: ../core/data/TWiki/WebChanges.txt:2
 msgid "retrieved at %1"
 msgstr ""
 
-#: templates/oopsmore.tmpl:23
-#: templates/oopsmore.tmpl:32
+#: ../core/templates/oopsmore.tmpl:23 ../core/templates/oopsmore.tmpl:32
 msgid "scans links in _%1 web_ only"
 msgstr ""
 
-#: templates/oopsmore.tmpl:21
-#: templates/oopsmore.tmpl:30
+#: ../core/templates/oopsmore.tmpl:21 ../core/templates/oopsmore.tmpl:30
 msgid "scans links in _all public webs_"
 msgstr ""
 
-#: templates/viewtopicactionbuttons.tmpl:14
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:22
+msgid "title='Attach an image or document to this topic' accesskey='a'"
+msgstr ""
+
+#: ../core/templates/viewtopicactionbuttons.tmpl:14
 msgid "title='Attach an image or document to this topic' accesskey='a'>&Attach"
 msgstr ""
 
-#: templates/viewtopicactionbuttons.tmpl:4
+#: ../core/templates/viewtopicactionbuttons.tmpl:4
 msgid "title='Create new topic' accesskey='c'>&Create"
 msgstr ""
 
-#: templates/viewtopicactionbuttons.tmpl:17
-msgid "title='Delete or rename this topic; set parent topic; view and compare revisions' accesskey='m'>&More topic actions"
+#: ../core/templates/viewtopicactionbuttons.tmpl:17
+msgid ""
+"title='Delete or rename this topic; set parent topic; view and compare "
+"revisions' accesskey='m'>&More topic actions"
 msgstr ""
 
-#: templates/viewtopicactionbuttons.tmpl:7
-msgid "title='Edit this topic text' accesskey='e'>&Edit"
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:10
+#, fuzzy
+msgid "title='Edit this topic text' accesskey='e'"
+msgstr "해당 주제 본문 수정하기"
+
+#: ../core/templates/viewtopicactionbuttons.tmpl:7
+msgid "title='Edit this topic text' accesskey='e'>%1 &Edit"
 msgstr ""
 
-#: templates/viewtopicactionbuttons.tmpl:21
+#: ../TWikiNetSkin/templates/viewtopicactionbuttons.twikinet.tmpl:34
+msgid "title='Printable version of this topic' accesskey='p'"
+msgstr ""
+
+#: ../core/templates/viewtopicactionbuttons.tmpl:21
 msgid "title='Printable version of this topic' accesskey='p'>&Print version"
 msgstr ""
 
-#: templates/viewtopicactionbuttons.tmpl:9
+#: ../core/templates/viewtopicactionbuttons.tmpl:9
 msgid "title='Raw Edit this topic text' accesskey='w'>Ra&w edit"
 msgstr ""
 
-#: templates/viewtopicactionbuttons.tmpl:28
-msgid "title='Search all webs for topics that link to here' accesskey='l'>A&ll Webs"
+#: ../core/templates/viewtopicactionbuttons.tmpl:28
+msgid ""
+"title='Search all webs for topics that link to here' accesskey='l'>A&ll Webs"
 msgstr ""
 
-#: templates/viewtopicactionbuttons.tmpl:30
-msgid "title='Search the %1 Web for topics that link to here' accesskey='b'>&Backlinks"
+#: ../core/templates/viewtopicactionbuttons.tmpl:30
+msgid ""
+"title='Search the %1 Web for topics that link to here' "
+"accesskey='b'>&Backlinks"
 msgstr ""
 
-#: templates/viewtopicactionbuttons.tmpl:26
-msgid "title='Search the %1 Web for topics that link to here' accesskey='b'>We&b"
+#: ../core/templates/viewtopicactionbuttons.tmpl:26
+msgid ""
+"title='Search the %1 Web for topics that link to here' accesskey='b'>We&b"
 msgstr ""
 
-#: templates/viewtopicactionbuttons.tmpl:38
+#: ../core/templates/viewtopicactionbuttons.tmpl:38
 msgid "title='View raw text without formatting' accesskey='r'>&Raw View"
 msgstr ""
 
-#: templates/viewtopicactionbuttons.tmpl:11
+#: ../core/templates/viewtopicactionbuttons.tmpl:11
 msgid "title='View topic' accesskey='v'>&View topic"
 msgstr ""
 
-#: templates/viewtopicactionbuttons.tmpl:33
-#: templates/viewtopicactionbuttons.tmpl:35
+#: ../core/templates/viewtopicactionbuttons.tmpl:33
+#: ../core/templates/viewtopicactionbuttons.tmpl:35
 msgid "title='View total topic history' accesskey='h'>&History"
 msgstr ""
 
-#: lib/TWiki.pm:3976
+#: ../core/lib/TWiki.pm:4415
 msgid "user list truncated"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:44
+#: ../PatternSkin/templates/edit.pattern.tmpl:47
 msgid "value='Cancel' accesskey='c'"
 msgstr "value='취소(C)' accesskey='c'"
 
-#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:12
+#: ../PatternSkin/templates/preview.pattern.tmpl:12
 msgid "value='Discard' accesskey='d'"
 msgstr "value='폐기(D)' accesskey='d'"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
+#: ../PatternSkin/templates/edit.pattern.tmpl:45
 msgid "value='Preview' accesskey='p'"
 msgstr "value='미리보기(P)' accesskey='p'"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:38
+#: ../PatternSkin/templates/edit.pattern.tmpl:41
 msgid "value='Quiet save' accesskey='q'"
 msgstr "value='조용히 저장하기(Q)' accesskey='q'"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:40
+#: ../PatternSkin/templates/edit.pattern.tmpl:43
 msgid "value='Save and Continue' accesskey='k'"
 msgstr "value='저장후 계속하기(K)' accesskey='k'"
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:36
+#: ../PatternSkin/templates/edit.pattern.tmpl:39
 msgid "value='Save' accesskey='s'"
 msgstr "value='저장하기(S)' accesskey='s'"
 
-#: templates/attachtables.tmpl:42
-#: twikiplugins/ClassicSkin/templates/attachtables.classic.tmpl:42
+#: ../ClassicSkin/templates/attachtables.classic.tmpl:42
+#: ../core/templates/attachtables.tmpl:42
 msgid "view"
 msgstr "보기"
 
-#: twikiplugins/TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:22
-msgid "you *must* have at least one valid registered e-mail to be able to reset your password. If none of your registered e-mail addresses is valid, and you have forgotten your password, contact %1."
-msgstr "비밀번호 초기화를 위해서 반드시 최소한 하나의 유효한 이메일 주소를 가지고 있어야 합니다. 유효한 이메일 주소를 등록하지 않고, 패스워드를 잃어버렸다면, %1 에게 연락하십시오."
-
+#: ../TWikiUserMappingContrib/data/TWiki/ResetPassword.txt:22
+msgid ""
+"you *must* have at least one valid registered e-mail to be able to reset "
+"your password. If none of your registered e-mail addresses is valid, and you "
+"have forgotten your password, contact %1."
+msgstr ""
+"비밀번호 초기화를 위해서 반드시 최소한 하나의 유효한 이메일 주소를 가지고 있"
+"어야 합니다. 유효한 이메일 주소를 등록하지 않고, 패스워드를 잃어버렸다면, %1 "
+"에게 연락하십시오."
