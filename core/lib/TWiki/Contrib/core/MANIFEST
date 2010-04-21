@@ -51,7 +51,7 @@ bin/save 0555
 bin/search 0555
 bin/setlib.cfg 0444
 bin/statistics 0555
-bin/twiki_cgi.pl 0555
+bin/twiki_cgi 0555
 bin/upload 0555
 bin/view 0555
 bin/viewauth 0555
