@@ -40,12 +40,12 @@ sub read_MANIFEST {
     foreach my $source (<R>) {
         chomp($source);
 
-        if ($source =~ m#^!include (twikiplugins/(\w+)/.*)$#) { 
+        if ($source =~ m#^!include ((../\w+)/.*)$#) { 
             my $included = $2;
-            my $included_manifest = $1 . '/MANIFEST';
+            my $included_manifest = "$1/MANIFEST";
             print "I: including: $included, from $included_manifest \n";
 
-            push(@files, read_MANIFEST($included_manifest, "twikiplugins/$included/"));
+            push(@files, read_MANIFEST($included_manifest, "$included/"));
         }
 
         my @fields = split(/\s/, $source);
