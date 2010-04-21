@@ -2927,9 +2927,13 @@ sub _expandTagOnTopicRendering {
     require TWiki::Attrs;
 
     my $e = $this->{prefs}->getPreferencesValue( $tag );
-    if( !defined( $e ) && defined( $functionTags{$tag} ) ) {
-        $e = &{$functionTags{$tag}}
-          ( $this, new TWiki::Attrs( $args, $contextFreeSyntax{$tag} ), @_ );
+    unless( defined( $e )) {
+        $e = $this->{SESSION_TAGS}{$tag} unless( $args );
+        if( !defined( $e ) && defined( $functionTags{$tag} )) {
+            $e = &{$functionTags{$tag}}
+              ( $this, new TWiki::Attrs(
+                  $args, $contextFreeSyntax{$tag} ), @_ );
+        }
     }
     return $e;
 }
