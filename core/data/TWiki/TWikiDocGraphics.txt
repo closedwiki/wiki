@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1266707337" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1271904862" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and File Type Icons
 
 This is the TWiki icon library. The graphics can be used in topics and by web applications. Doc graphics are defined at %CALC{$SET(icontopics, $LISTIF($NOT($EXACT($item,)), $LISTMAP($IF($EXISTS($item), [[$item]], ), %ICONTOPIC%)))$GET(icontopics)}%.
@@ -294,6 +294,7 @@ Documentation graphics defined in this topic are listed in the tables below. Eac
 | %ICON{toggleclose-mini}% | =%<nop>ICON{toggleclose-mini}%= | Close toggle, Twisty close toggle | gif | 7x9 |  |
 | %ICON{toggleopenleft}% | =%<nop>ICON{toggleopenleft}%= | Open toggle, Twisty open toggle | gif | 16x16 |  |
 | %ICON{toggleopenleft-small}% | =%<nop>ICON{toggleopenleft-small}%= | Open toggle, Twisty open toggle | gif | 16x16 |  |
+| %ICON{remove}% | =%<nop>ICON{remove}%= | Remove button, small | gif | 12x12 |  |
 | %ICON{web-bg}% | =%<nop>ICON{web-bg}%= | Web background | gif | 16x16 |  |
 | %ICON{web-bg-small}% | =%<nop>ICON{web-bg-small}%= | Web background | gif | 13x13 |  |
 
@@ -684,6 +685,7 @@ __Contributors:__ Most icons on this page are designed by TWiki:Main.PeterThoeny
 %META:FILEATTACHMENT{name="reddit.gif" attr="h" comment="" date="1262417730" path="reddit.gif" size="600" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="refreshtopic.gif" attr="h" comment="" date="1169565034" path="refreshtopic.gif" size="229" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="reg.gif" attr="h" comment="" date="1169565034" path="reg.gif" size="377" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="remove.gif" attr="h" comment="" date="1271904862" path="remove.gif" size="556" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="rfc.gif" attr="h" comment="" date="1169565034" path="rfc.gif" size="369" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="right.gif" attr="h" comment="" date="1169565034" path="right.gif" size="194" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="rss.gif" attr="h" comment="" date="1260079118" path="rss.gif" size="394" user="TWikiContributor" version=""}%
