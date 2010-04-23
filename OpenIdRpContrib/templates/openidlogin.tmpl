@@ -68,7 +68,7 @@ or
 
 %TMPL:DEF{"form"}%<div id="twikiLogin">
 <div class="twikiFormSteps openidLoginBox"><div class="openidLoginSide openidLeftSide">
-%TMPL:P{"formstart"}%%TMPL:P{"titlestep"}%%TMPL:P{"openidstep"}%
+%TMPL:P{"formstart"}%%TMPL:P{"titlestep"}%<!-- invisible default login button --><div style="display:none"><button type="submit" name="openid.provider" value='%MAKETEXT{"Logon"}%' /></div>%TMPL:P{"openidstep"}%
 </div><!-- /openidLoginSide--><div class="openidLoginSide openidRightSide">
 %TMPL:P{"orloginstep"}%%TMPL:P{"usernamestep"}%%TMPL:P{"passwordstep"}%%TMPL:P{"submitstep"}%
 %TMPL:P{"formend"}%
