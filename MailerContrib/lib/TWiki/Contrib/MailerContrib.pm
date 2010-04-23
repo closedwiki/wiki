@@ -46,7 +46,7 @@ require TWiki::Contrib::MailerContrib::UpData;
 use vars qw ( $VERSION $RELEASE $verbose );
 
 $VERSION = '$Rev$';
-$RELEASE = '15 Oct 2008';
+$RELEASE = '2010-04-22';
 
 # PROTECTED STATIC ensure the contrib is initernally initialised
 sub initContrib {

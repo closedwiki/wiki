@@ -12,5 +12,3 @@ data/TWiki/MailerContrib.txt 0644
 tools/mailnotify 0555
 templates/mailnotify.tmpl 0444
 templates/newsletter.tmpl 0444
-pub/TWiki/MailerContrib/wikiringlogo20x20.png 0660
-pub/TWiki/MailerContrib/logo.gif 0660

@@ -1,22 +1,16 @@
+%META:TOPICINFO{author="TWikiContributor" date="1272002871" format="1.1" version="$Rev$"}%
 ---+!! Mailer Contrib
-<a href="http://wikiring.com"><img src="%ATTACHURL%/logo.gif" style="float:right" /></a>
-
-Allows users to "subscribe" to regularly scheduled e-mails containing either:
+<!--
+   Contributions to this TWiki extension are appreciated. Please update the page
+   at http://twiki.org/cgi-bin/view/Plugins/MailerContrib or provide feedback
+   at http://twiki.org/cgi-bin/view/Plugins/MailerContribDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
+The Mailer Contrib allows users to "subscribe" to regularly scheduled e-mails containing either:
    * A report on changes to all topics that have changed within a particular TWiki web.
    * A report on changes to a specific topic or set of topics the user can define flexibly.
    * The entire content of a specific topic or set of topics. This is referred to as "news mode."
    * The companion plugin (TWiki:Plugins.SubscribePlugin) lets you trivially add a "Subscribe to changes" button to topics
-
-<!--
-
-   PLEASE DO NOT EDIT THIS TOPIC
-
-   It is automatically generated from the subversion repository, and any changes
-   you make will simply be overwritten the next time a release is generated.
-
-   Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
--->
-
 
 <div class="twikiBroadcastMessage">WARNING: TWiki-4 only. If you want to use this extension with an earlier version of TWiki, please use [[http://twiki.org/cgi-bin/attach/Plugins/%TOPIC%?filename=%TOPIC%.zip&revInfo=1][revision 17 of the zip]].</div>
 
@@ -137,8 +131,8 @@ will generate newsletters from *all* webs every week on midnight Saturday.
 %X% Note: Multiple instances of mailnotify script are not allowed to be executed simutaneously. If you need to run the script multiple times with different options, make sure the cron jobs are scheduled so a previous run has finished before the next starts. You can also write a small script that runs mailnotify in sequence as described in TWiki:Support.DuplicateNotificationsFromMailerCon.
 
 <!--
-	* Set STUB = TWiki::Contrib::Mailer
-	* Set SHORTDESCRIPTION = Supports e-mail notification of changes.
+   * Set STUB = TWiki::Contrib::Mailer
+   * Set SHORTDESCRIPTION = Send e-mail notification of changes to topics in TWiki webs
 -->
 ---++ Developer Notes
 The changes mails sent to subscribers are based on a TWiki template called =mailnotify=. This template must contain the following definitions. 
@@ -155,8 +149,6 @@ Newsletters are sent after formatting using the standard =view= template, using 
 
 ---+++ Contrib Info
 
-Another great TWiki extension from the <a style="text-decoration:none" href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiring.png" alt="" /> *WikiRing* </a> - working together to improve your wiki experience!
-
 Many thanks to the following sponsors for supporting this work:
    * [[http://www.windriver.com][Wind River]]
    * [[http://wikigardens.com][WikiGardens]]
@@ -165,7 +157,8 @@ Many thanks to the following sponsors for supporting this work:
 |  Copyright &copy;: | 2004, Wind River Systems; 2008, http://WikiRing.com |
 |  License: | GPL |
 |  Version: | %$VERSION% |
-|  Change History: | |
+|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010 | TWikibug:Item6433 - doc fixes, no code changes |
 |  15 Oct 2008 | TWikibug:Item: generalised code to enable TWiki:Codev.SubscribePlugin to delegate parsing to %TOPIC% - TWiki:Main.SvenDowideit |
 |  14 Oct 2008 | TWikibug:Item6066: fixed issue for user mappings where cuid != login  - TWiki:Main.SvenDowideit |
 |  27 Aug 2008 | TWikibug:Item5949: fixed problem with unsubscribe that should result in an empty subscription |
@@ -217,5 +210,3 @@ Many thanks to the following sponsors for supporting this work:
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="" version="1"}%
-%META:FILEATTACHMENT{name="logo.gif" attr="h" comment="" version="1"}%
