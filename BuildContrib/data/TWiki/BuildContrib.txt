@@ -1,53 +1,35 @@
+%META:TOPICINFO{author="TWikiContributor" date="1272048832" format="1.1" version="$Rev$"}%
 ---+!! TWiki Developer Environment
-<div style="float:right">
-<a href="http://wikiring.com"><img src="%ATTACHURLPATH%/logo.gif" title="WikiRing: Professional Wiki Innovation and Support" /></a>
-</div>
 <!--
-
-   PLEASE DO NOT EDIT THIS TOPIC
-
-   It is automatically generated from the subversion repository, and any changes
-   you make will simply be overwritten the next time a release is generated.
-
-   Instead, you could check your fix in, raise a bug in the Bugs web, or mail thge author.
+   Contributions to this TWiki extension are appreciated. Please update the page
+   at http://twiki.org/cgi-bin/view/Plugins/BuildContrib or provide feedback
+   at http://twiki.org/cgi-bin/view/Plugins/BuildContribDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
-
 Automates build and packaging process, including installer generation, for TWiki extension modules.
 
 %TOC%
 
 ---++ Summary of Contents
 
-!BuildContrib can be used to create a build script for your TWiki extension.
-It is inspired by the Java ANT build tool developed by the Apache project,
-but is targeted specifically at building TWiki extensions. It is also
-used for TWiki release builds. The advantage of using !BuildContrib is that it
-dictates a standard structure and build procedure, which makes your extension
-easier for you, and others, to build and maintain.
+The !BuildContrib can be used to create a build script for your TWiki extension. It is inspired by the Java ANT build tool developed by the Apache project, but is targeted specifically at building TWiki extensions. It is also used for TWiki release builds. The advantage of using !BuildContrib is that it dictates a standard structure and build procedure, which makes your extension easier for you, and others, to build and maintain.
 
 Features:
-   * not just for building code modules, can also be used
-     to package !TWikiApplications, and even pure documentation packages.
-   * automatically generates an installer script that can help simplify
-     end-user installation.
+   * not just for building code modules, can also be used to package !TWikiApplications, and even pure documentation packages.
+   * automatically generates an installer script that can help simplify end-user installation.
    * includes a wizard script for creating a new extension.
    * supports creating collections of extensions.
 
 __Notes__
-   * This is a _build and packaging_ module for use by _developers_, *not*
-     an _install_ module for _end users_ (though it does _build_ an installer
-     script, among other things).
-   * The module has *only been tested on Linux*, but *should* work with
-     Cygwin OK.
-   * !BuildContrib has *only been tested with TWiki-4*. It *might* work
-     with earlier TWiki versions.
+   * This is a _build and packaging_ module for use by _developers_, *not* an _install_ module for _end users_ (though it does _build_ an installer script, among other things).
+   * The module has *only been tested on Linux*, but *should* work with Cygwin OK.
+   * !BuildContrib has *only been tested with TWiki-4*. It *might* work with earlier TWiki versions.
 
 ---++ Fast Start
 If you don't like reading documentation, and just want a fast route to creating a new TWiki extension, then:
    1 Install the contrib using the instructions below
    1 =cd= to the root of your twiki installation
-   1 =perl create_new_extension.pl= <i>extension_name</i>
-then modify the extension files as required (including MANIFEST). Then when you are ready to create archives:
+   1 =perl create_new_extension.pl= <i>extension_name</i> then modify the extension files as required (including MANIFEST). Then when you are ready to create archives:
    1 =perl build.pl <i>extension_name</i> release=
       * Archives (.zip, .tgz) will be created in =<i>extension_name</i>=
 
@@ -56,37 +38,20 @@ then modify the extension files as required (including MANIFEST). Then when you 
 The build module assumes:
    1 two kinds of extension modules; 'Plugins' (as in %TWIKIWEB%.TWikiPlugins) and 'Contribs' (everything else e.g Skins, !TWikiApplications etc),
    1 you have some passing familiarity with build tools such as =make=,
-   1 you are *not* developing your extension in a 'production' TWiki
-     installation (something that is usually a really bad idea), but are
-     instead doing the sensible thing and developing in a separate directory
-     tree
+   1 you are *not* developing your extension in a 'production' TWiki installation (something that is usually a really bad idea), but are instead doing the sensible thing and developing in a separate directory tree
       * usually - but not always - a subversion checkout area.
 
 ---++ Standard directory structure
-!BuildContrib is used to build the TWiki core, as well as most extensions. This
-document will focus on its use for building extensions. See the
-=tools/build.pl= file in a subversion checkout for information on building
-the core.
+!BuildContrib is used to build the TWiki core, as well as most extensions. This document will focus on its use for building extensions. See the =tools/build.pl= file in a subversion checkout for information on building the core.
 
-A TWiki used for development must have a top-level directory called
-=twikiplugins=. This is already there in a subversion checkout, or you
-can create it yourself.
+Extensions are developed in a subdirectory below SVN trunk. For example, !BathPlugin will be developed in =trunk/BathPlugin=. This directory is called the _root directory_ for the extension.
 
-Extensions are developed in subdirectories of the =twikiplugins= directory.
-For example, !BathPlugin will be developed in =twikiplugins/BathPlugin=.
-This directory is called the _root directory_ for the extension.
-
-The standard directory structure under a root directory mirrors a TWiki
-installation tree. Every plugin has some _key files_:
+The standard directory structure under a root directory mirrors a TWiki installation tree. Every plugin has some _key files_:
    * =lib/=
       * =TWiki/=
          * =Plugins/=
-            * <code><i>name</i>.pm</code> - code file for the plugin, usually derived
-              from !EmptyPlugin
-            * <code><i>name</i>/</code> - directory containing sub-modules
-              used by your plugin, and for storing your =build.pl= script
-              and other support files. It is referred to as the _module
-              directory_
+            * <code><i>name</i>.pm</code> - code file for the plugin, usually derived from !EmptyPlugin
+            * <code><i>name</i>/</code> - directory containing sub-modules used by your plugin, and for storing your =build.pl= script and other support files. It is referred to as the _module directory_
                * =build.pl= - build script for this extension
                * =MANIFEST= - list of files to be installed
                * =DEPENDENCIES= - list of modules this extension depends on
@@ -100,32 +65,20 @@ installation tree. Every plugin has some _key files_:
            extension
    * =pub/=
       * =TWiki/=
-         * <code><i>name</i>/</code> - directory where all your images, css, and Javascript files should go
-Contribs are held in the =lib/TWiki/Contrib= directory instead of =lib/TWiki/Plugins= but otherwise in exactly work the same way.
+         * <code><i>name</i>/</code> - directory where all your images, css, and Javascript files should go Contribs are held in the =lib/TWiki/Contrib= directory instead of =lib/TWiki/Plugins= but otherwise in exactly work the same way.
 
-Other directories normally found in a TWiki installation may also exist under
-a root directory e.g. =bin=, =templates= etc.
-
-While development in a subversion checkout is *strongly* recommended, it is also possible to develop in a normal TWiki install. To do this, simply create a =twikiplugins= directory in the install, and install the !BuildContrib.
+Other directories normally found in a TWiki installation may also exist under a root directory e.g. =bin=, =templates= etc.
 
 ---++ Setting up for Development
 The first thing to do is to either
    * check out a TWiki development environment from subversion, or
-   * create a separate TWiki install and create a =twikiplugins= directory within it.
-Configure this install so it's a running TWiki; we'll refer to this as your
-_development TWiki_.
+   * create a separate TWiki install. Configure this install so it's a running TWiki; we'll refer to this as your _development TWiki_.
 
-Now install the !BuildContrib. In a subversion checkout, =cd= to the TWiki root
-and =perl pseudo-install.pl BuildContrib=. In a non-subversion environment,
-install the =BuildContrib= package from TWiki.org.
+Now install the !BuildContrib. In a subversion checkout, =cd= to the TWiki root and =perl pseudo-install.pl BuildContrib=. In a non-subversion environment, install the =BuildContrib= package from TWiki.org.
 
 ---+++ Environment Variables
 
-Your build script has to know how to find the TWiki libraries, so it can
-pick up the components of the build system. Set =TWIKI_LIBS= (which is a
-path, same as =PERL5LIB=) to point to your =lib= directory in your development
-TWiki. =$TWIKI_LIBS= is used to extend @INC _for the duration of the build
-only_, so it won't mask problems during testing.
+Your build script has to know how to find the TWiki libraries, so it can pick up the components of the build system. Set =TWIKI_LIBS= (which is a path, same as =PERL5LIB=) to point to your =lib= directory in your development TWiki. =$TWIKI_LIBS= is used to extend @INC _for the duration of the build only_, so it won't mask problems during testing.
 
 The approach we _recommend_ is to set =TWIKI_LIBS= in your login script (e.g. =.login=, =.csh=, =.profile= depending on what shell you prefer).
 
@@ -134,19 +87,14 @@ The approach we _recommend_ is to set =TWIKI_LIBS= in your login script (e.g. =.
 </blockquote>
 
 ---++ Build script
-Each individual extension has its own build script, called =build.pl=, in its
-module directory. A build script is a perl script that takes a number of
- _targets_ as its parameters. For example, =perl build.pl test= will run unit
-tests, and =perl build.pl release= will build a new release.
+Each individual extension has its own build script, called =build.pl=, in its module directory. A build script is a perl script that takes a number of _targets_ as its parameters. For example, =perl build.pl test= will run unit tests, and =perl build.pl release= will build a new release.
 
 The build script also accepts the following options:
 | =-n= | Do nothing; just print what you would have done |
 | =-v= | Be verbose |
 | =-topiconly= | with target =upload=, only upload the topic (not the archives) |
 
-Build targets are Perl functions, which operate on various data defined
-in control files to build the various targets. Perl is used rather than
-=make= for portability reasons.
+Build targets are Perl functions, which operate on various data defined in control files to build the various targets. Perl is used rather than =make= for portability reasons.
 
 The targets you will normally use are:
 | =build= | perform basic build steps |
@@ -161,7 +109,7 @@ The targets you will normally use are:
 
 The default target is =test=. The !BuildContrib is designed so that most common behaviour is catered for. It is also easy to _override_ any of the default targets in your =build.pl= and add extra behaviours.
 
-Note that there is a shortcut script, =twikiplugins/build.pl=, that can be very helpful when you are building several extensions in one session. Run the script without parameters for documentation.
+Note that there is a shortcut script, =core/build.pl=, that can be very helpful when you are building several extensions in one session. Run the script without parameters for documentation.
 
 ---+++ The =build= target
 Does nothing by default. This is the first target executed, and can be overridden by your build.pl to do something unusual - for example, executing an ANT file to build some Java.
@@ -174,9 +122,7 @@ Also works on CSS files, for the file extensions =.css=. Compression improves th
 Uses CPAN:JavaScript::Minifier and CPAN:CSS::Minifier to perform the compression
 
 ---+++ The =tidy= target
-This target runs Perl::Tidy (with default formatting options) over your
-source code. This reformats the code consistently with the TWiki
-coding standards.
+This target runs Perl::Tidy (with default formatting options) over your source code. This reformats the code consistently with the TWiki coding standards.
 
 ---+++ The =test= target
 The test target is designed for use with extensions that have unit tests written using the !UnitTestContrib. It automatically runs the unit tests found in the =test/unit/<i>extension_name</i>= directory.
@@ -202,23 +148,16 @@ You can control what server the upload is done to. This lets you - for example -
 These are used when you are unsure of the correct contents of MANIFEST and DEPENDENCIES. They make a best-guess at the required contents for these files.
 
 ---++ MANIFEST
-The =MANIFEST= file contains a list of all the files that are wanted in the
-package. Each line is a file path, relative to the root of the installation.
-Wildcards may NOT be used.
-If the path contains spaces it must be enclosed in double-quotes.
+The =MANIFEST= file contains a list of all the files that are wanted in the package. Each line is a file path, relative to the root of the installation. Wildcards may NOT be used. If the path contains spaces it must be enclosed in double-quotes.
 
-Each file path has an optional octal permissions mask and a description.
-For example,
+Each file path has an optional octal permissions mask and a description. For example,
 <verbatim>
 data/TWiki/BathPlugin.txt 0664 Plugin description topic
 lib/TWiki/Plugins/BathPlugin.pm 0444 Plugin code module
 </verbatim>
-If no permissions are given, permissions are guessed from the permissions on
-the file in the source tree. These permissions are used by the installer
-script to set file permissions in the installation.
+If no permissions are given, permissions are guessed from the permissions on the file in the source tree. These permissions are used by the installer script to set file permissions in the installation.
 
-The following permissions are recommended, and will be applied by default if
-you don't specify anything different:
+The following permissions are recommended, and will be applied by default if you don't specify anything different:
 | *File type* | *Permissions* | *Meaning* |
 | =.pm= file | 0444 | Anyone can read, but cannot write or execute |
 | =.pl= file | 0554 | Anyone can read, user and group can also execute |
@@ -236,15 +175,14 @@ Do *not* include:
 MANIFESTs can also include other extensions that have been packages using
 !BuildContrib. For example,
 <verbatim>
-!include twikiplugins/WysiwygPlugin/lib/TWiki/Plugins/WysiwygPlugin
+!include ../WysiwygPlugin/lib/TWiki/Plugins/WysiwygPlugin
 </verbatim>
 This will include the !WysiwygPlugin in the release package.
 
 Note that there is a script in the TWiki =tools= directory (TWiki 4.2 and later) called =check_manifest.pl= that can be run at any time to check the contents of your MANIFEST against what is checked into Subversion.
 
 ---++ DEPENDENCIES
-The =DEPENDENCIES= file specifies dependencies on other extensions and
-perl modules. Each line of the file is a single dependency:
+The =DEPENDENCIES= file specifies dependencies on other extensions and perl modules. Each line of the file is a single dependency:
 <verbatim>
 name, version, type, description
 </verbatim>
@@ -253,11 +191,8 @@ where
    * version is the version constraint (e.g. ">1.5"),
    * type is its type (cpan, perl, C etc) and
    * description is a short description of the module and where to get it.
-The installer script written by the build process uses the dependency type
-to decide how to install dependant modules. 'cpan' means 'get the module
-from CPAN' and 'perl' means 'get the module from the Plugins web on TWiki.org'
-(or whatever other repositories the admin has specified using =$TWIKI_PACKAGES=
-or =$PLUGINS_URL=).
+
+The installer script written by the build process uses the dependency type to decide how to install dependant modules. 'cpan' means 'get the module from CPAN' and 'perl' means 'get the module from the Plugins web on TWiki.org' (or whatever other repositories the admin has specified using =$TWIKI_PACKAGES= or =$PLUGINS_URL=).
 
 ---+++ Calculating DEPENDENCIES
 When your module (the _depender_) depends on another module (a _dependee_), it is important to think carefully about what version of the dependee your module requires.
@@ -275,61 +210,39 @@ File::Find,>0,cpan,This module is shipped as part of standard perl from perl 5.8
 </code>
 
 ---+++ ONLYIF
-A dependency may optionally be preceded by a condition that limits the cases
-where the dependency applies. The condition is specified using a line that
-contans <code>ONLYIF ( _condition_ )</code>, where _condition_ is a Perl
-conditional. This is most useful for enabling dependencies only for certain
-versions of TWiki. For example,
+A dependency may optionally be preceded by a condition that limits the cases where the dependency applies. The condition is specified using a line that contans <code>ONLYIF ( _condition_ )</code>, where _condition_ is a Perl conditional. This is most useful for enabling dependencies only for certain versions of TWiki. For example,
+
 <verbatim>
 TWiki::Rhinos,>=1.000,perl,Required. Download from TWiki:Plugins/RhinosContrib and install.
 ONLYIF ($TWiki::Plugins::VERSION < 1.025)
 TWiki::Plugins::CairoContrib, >=1.000, perl, Optional, only required if the plugin is to be run with versions of TWiki before Cairo. Available from the TWiki:Plugins/CairoContrib repository.
 </verbatim>
-Thus <nop>CairoContrib is only a dependency if the installation is being done
-on a TWiki where the =TWiki::Plugins::VERSION= is less than 1.025.
-The =ONLYIF= only applies to the next dependency in the file.
+
+Thus <nop>CairoContrib is only a dependency if the installation is being done on a TWiki where the =TWiki::Plugins::VERSION= is less than 1.025. The =ONLYIF= only applies to the next dependency in the file.
 
 ---++ Writing a build script
-The easiest way to write a new build script is to use the
-=create_new_extension.pl= script, which is part of the !BuildContrib.
-   1 Create your plugin source tree under =twikiplugins=:
-      * =cd twikiplugins=
-      * =perl create-new-extension.pl BathPlugin=
-   1 Edit =lib/TWiki/Plugins/BathPlugin.pm= as required to create your
-     plugin functionality
-   1 Edit =lib/TWiki/Plugins/BathPlugin/MANIFEST= and make sure it lists
-     all the files you want to include in the release package
-During development we recommend you use the =pseudo-install.pl= script to
-soft-link your plugin code into your development TWiki. This script uses the
-MANIFEST you write and creates softlinks in your development TWiki that allow
-you to run your test code without having to do a full re-install each time you
-make a change.
+The easiest way to write a new build script is to use the =create_new_extension.pl= script, which is part of the !BuildContrib.
+   1 Create your plugin source tree under =trunk=:
+      * =cd core=
+      * =perl create-new-extension.pl !BathPlugin=
+   1 Edit =lib/TWiki/Plugins/BathPlugin.pm= as required to create your plugin functionality
+   1 Edit =lib/TWiki/Plugins/BathPlugin/MANIFEST= and make sure it lists all the files you want to include in the release package
+During development we recommend you use the =pseudo-install.pl= script to soft-link your plugin code into your development TWiki. This script uses the MANIFEST you write and creates softlinks in your development TWiki that allow you to run your test code without having to do a full re-install each time you make a change.
 
-If you have a pre-existing extension, and you want to package it for use with
-!BuildContrib, then you need to create the module directory and write the
-=build.pl=, =MANIFEST= and =DEPENDENCIES= files. The easiest way to do this
-is to copy those files from an existing extension in subversion, and modify
+If you have a pre-existing extension, and you want to package it for use with !BuildContrib, then you need to create the module directory and write the =build.pl=, =MANIFEST= and =DEPENDENCIES= files. The easiest way to do this is to copy those files from an existing extension in subversion, and modify
 them for your extension.
 
 #InstallScripts
 ---++ Preparing the Installer
 The installer script generated by the builder when target =release= is used is based on a template. This template is populated with lists of files and dependencies needed to make the extension-specific installer script.
 
-You can extend this script by providing =PREINSTALL=, =POSTINSTALL=,
-=PREUNINSTALL=, and/or =POSTUNINSTALL= files in the module directory.
-These optional files are embedded into the template install script
-at the appropriate stage of the installation. Read
-=lib/TWiki/Contrib/BuildContrib/TEMPLATE_installer.pl= (in the !BuildContrib)
-to see how they fit in. The POD comments in that module indicate the functions
-that are most likely to be useful to anyone writing a script extension.
+You can extend this script by providing =PREINSTALL=, =POSTINSTALL=, =PREUNINSTALL=, and/or =POSTUNINSTALL= files in the module directory. These optional files are embedded into the template install script at the appropriate stage of the installation. Read =lib/TWiki/Contrib/BuildContrib/TEMPLATE_installer.pl= (in the !BuildContrib) to see how they fit in. The POD comments in that module indicate the functions that are most likely to be useful to anyone writing a script extension.
 
 #UnitTesting
 ---++ Testing
-You are stongly recommended to develop a unit test suite for your extension.
-Unit tests are kept in the =test/unit/&lt;name>= directory for each extension.
+You are stongly recommended to develop a unit test suite for your extension. Unit tests are kept in the =test/unit/&lt;name>= directory for each extension.
 
-To run the unit tests you will need to set up the test environment described
-in http://twiki.org/cgi-bin/view/Codev/TestCasesTutorial#SettingUpATestEnvironment. That page also includes extensive information on writing testcases.
+To run the unit tests you will need to set up the test environment described in TWiki:Codev/TestCasesTutorial#SettingUpATestEnvironment. That page also includes extensive information on writing testcases.
 
 The easiest way to generate tests for your extension is to copy the approach taken in another extension. See for example !ActionTrackerPlugin and !CommentPlugin, which both have extensive test suites.
 
@@ -339,19 +252,18 @@ Tests are run using
 ---++ Building a release
 When you are almost ready to release, you should 
    1 Build a release package and installer
-      * =cd twikiplugins/BathPlugin/lib/TWiki/Plugins/BathPlugin=
+      * =cd ../BathPlugin/lib/TWiki/Plugins/BathPlugin=
       * =perl build.pl release=
    1 Remove the softlinked version from your development TWiki
       * =cd= _development TWiki_
-      * =perl pseudo-install.pl -uninstall BathPlugin=
+      * =perl pseudo-install.pl -uninstall !BathPlugin=
    1 Install the release package you just built:
       * =cd= _development TWiki_
-      * =perl twikiplugins/BathPlugin/BathPlugin_installer=
+      * =perl !BathPlugin/BathPlugin_installer=
    1 Test.
 
 ---+++ Token expansion
-The =release= target automatically expands certain tokens in =.txt= files
-and in the installer script. The following tokens are supported:
+The =release= target automatically expands certain tokens in =.txt= files and in the installer script. The following tokens are supported:
    * =%$<nop>MANIFEST%= - TWiki table of files in MANIFEST
    * =%$<nop>FILES%= - hash keyed on file name mapping to permissions i.e. 'data/TWiki/ThsiTopic.txt' => 0664, 'lib/TWiki/Plugins/BlahPlugin.pm' => 0775
    * =%$<nop>DEPENDENCIES%= - list of dependencies from DEPENDENCIES
@@ -364,32 +276,21 @@ and in the installer script. The following tokens are supported:
    * =%$<nop>POSTUNINSTALL%= - contents of POSTINSTALL
    * =%$<nop>BUGSURL%= - URL of bugs web
    * =%$<nop>INSTALL_INSTRUCTIONS%= - basic instructions for installing
-You can also create other tokens to be expanded by adding them in your
-=build.pl=. For example,
+
+You can also create other tokens to be expanded by adding them in your =build.pl=. For example,
 
 TODO: add code sample here?
 
 ---++ Upload
-When you are happy the release package is built correctly, you can
-upload it.
-   * =cd twikiplugins/BathPlugin/lib/TWiki/Plugins/BathPlugin=
+When you are happy the release package is built correctly, you can upload it.
+   * =cd !BathPlugin/lib/TWiki/Plugins/BathPlugin=
    * =perl build.pl upload=
-By default the =upload= target will upload to TWiki.org. You will be prompted
-to enter an alternate upload target, should you require it (e.g. to upload to
-private corporate repository). The upload updates the topic and any associated
-Var topics published by the extension, and uploads zip, tgz, md5 and installer
-files.
+By default the =upload= target will upload to TWiki.org. You will be prompted to enter an alternate upload target, should you require it (e.g. to upload to private corporate repository). The upload updates the topic and any associated Var topics published by the extension, and uploads zip, tgz, md5 and installer files.
 
 ---++ Install support
-Installer scripts build by !BuildContrib are important for the full
-functioning of the extensions installer in =configure=.
+Installer scripts build by !BuildContrib are important for the full functioning of the extensions installer in =configure=.
 
-The installer script shipped with the package is very simple. By default all
-it does is to check the dependencies you list, and if necessary download and
-install any missing TWiki and CPAN modules. Other dependencies are simply
-checked. In TWiki-4.0 and later releases, TWiki topics shipped with the
-module are automatically merged into any existing local copies, ensuring
-histories are preserved.
+The installer script shipped with the package is very simple. By default all it does is to check the dependencies you list, and if necessary download and install any missing TWiki and CPAN modules. Other dependencies are simply checked. In TWiki-4.0 and later releases, TWiki topics shipped with the module are automatically merged into any existing local copies, ensuring histories are preserved.
 
 If you want your installer to do anything else then you will need to write a [[#InstallScripts][POSTINSTALL script]].
 
@@ -403,13 +304,13 @@ You are strongly recommended to use this Contrib to help split your code develop
 %$INSTALL_INSTRUCTIONS%
 
 ---++ Contrib Info
-Another great TWiki extension from the <a style="text-decoration:none" href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiringlogo20x20.png" alt="" /> *WikiRing* </a> - __Working together to improve your wiki experience__!
 
 |  Authors: | TWiki:Main.CrawfordCurrie |
-|  Copyright &copy;: | 2004-2008, Crawford Currie http://wikiring.com |
+|  Copyright &copy;: | 2004-2008, Crawford Currie http://wikiring.com, 2004-2010 TWiki:Main/TWikiContributors |
 |  License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 |  Version: | %$VERSION% |
-| Change&nbsp;History: | |
+|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2010-04-23 | TWikibug:Item6434 - use ISO dates for builds; doc fixes |
 |  31 Aug 2008 | TWikibug:Item5971 BuildContrib broken upload on 4.2.2 with template login. Also adding query to optionally skip topic attachment upload. |
 |  22 Apr 2008 | TWikibug:Item5556 BuildContrib defaults all unspecified permissions to 664 && TWikibug:Item5455  	 BuildContrib doesn't cope with larger numbers of files - TWiki:Main.SvenDowideit|
 |  31 Jan 2008 | TWikibug:Item4751 support spaces in MANIFEST TWikibug:Item4990 removed dependency on external md5sum program TWikibug:Item5309 added tidy target |
@@ -465,7 +366,3 @@ Another great TWiki extension from the <a style="text-decoration:none" href="htt
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences
 
--- TWiki:Main/CrawfordCurrie - %$DATE% %BR%
-
-%META:FILEATTACHMENT{name="logo.gif" comment="logo" attr="h" path="logo.gif"}%
-%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="" version="1"}%

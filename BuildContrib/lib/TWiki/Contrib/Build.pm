@@ -58,7 +58,7 @@ my $TWIKIORGSUFFIX = '';
 my $TWIKIORGBUGS   = 'http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs';
 my $TWIKIORGEXTENSIONSWEB = "Plugins";
 
-my $GLACIERMELT = 10;    # number of seconds to sleep between uploads,
+my $GLACIERMELT = 5;     # number of seconds to sleep between uploads,
                          # to reduce average load on server
 
 my $collector;           # general purpose handle for collecting stuff
@@ -267,8 +267,8 @@ sub new {
 
     $this->{VERSION} =
       $this->_get_svn_version() . ' ('
-      . POSIX::strftime( '%d %b %Y', localtime ) . ')';
-    $this->{DATE} = POSIX::strftime( '%T %d %B %Y', localtime );
+      . POSIX::strftime( '%Y-%m-%d', localtime ) . ')';
+    $this->{DATE} = POSIX::strftime( '%Y-%m-%d %T', localtime );
 
     local $/ = undef;
     my $stage;
