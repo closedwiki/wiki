@@ -28,7 +28,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = '0.80'; 
+$RELEASE = '1.0'; 
 $SHORTDESCRIPTION = 'jQuery <nop>JavaScript library for TWiki';
 $NO_PREFS_IN_TOPIC = 1;
 

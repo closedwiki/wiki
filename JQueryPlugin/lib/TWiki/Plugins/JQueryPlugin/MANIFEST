@@ -264,6 +264,5 @@ pub/TWiki/JQueryPlugin/ui.sortable.js 0644
 pub/TWiki/JQueryPlugin/ui.sortable.uncompressed.js 0644
 pub/TWiki/JQueryPlugin/ui.tabs.js 0644
 pub/TWiki/JQueryPlugin/ui.tabs.uncompressed.js 0644
-pub/TWiki/JQueryPlugin/wikiringlogo40x40.png 0644
 tools/minifycss 0755
 tools/minifyjs 0755

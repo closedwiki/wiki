@@ -1,6 +1,11 @@
-%META:TOPICINFO{author="TWikiContributor" date="1209548528" format="1.1" reprev="1.1" version="$Rev$"}%
----+!! %TOPIC%
+%META:TOPICINFO{author="TWikiContributor" date="1272001526" format="1.1" version="$Rev$"}%
+---+!! <nop>%TOPIC%
 <!--
+   Contributions to this plugin are appreciated. Please update the plugin page
+   at http://twiki.org/cgi-bin/view/Plugins/JQueryPlugin or provide feedback
+   at http://twiki.org/cgi-bin/view/Plugins/JQueryPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+
    * Set SHORTDESCRIPTION = jQuery <nop>JavaScript library for TWiki
 -->
 %SHORTDESCRIPTION%
@@ -8,14 +13,6 @@
 %TOC%
 
 ---++ Description
-<table style="float:right">
-<tr>
-  <td><img src="%ATTACHURLPATH%/wikiringlogo40x40.png"></td>
-  <td><a href="http://wikiring.de" title="Make your Wiki ring!" style="text-decoration:none">
-      Powered by <br /> <nop>WikiRing Consultants </a>
-  </td>
-</tr>
-</table>
 This plugin contains the latest version of the [[http://jquery.com][jQuery]]
 <nop>JavaScript library. 
 
@@ -71,7 +68,6 @@ See the Sandbox.JQueryPluginExamples page for a demo of a couple of widgets used
 =%<nop>JQIMAGESURLPATH{"myimage.png"}%= : Expand to the specified image path.<br />
 =%<nop>JQIMAGESURLPATH%/myimage.png= : Same result as the above.<br />
 
-
 ---++ Themes
 
 The following themes are provided:
@@ -80,21 +76,42 @@ The following themes are provided:
 
 ---++ Examples
 
-   * Sandbox.PluginTestJQueryPlugin.txt 	 	
-   * Sandbox.JQueryPluginExamples.txt
+   * Sandbox.PluginTestJQueryPlugin 	 	
+   * Sandbox.JQueryPluginExamples
 
 ---++ Installation Instructions
    * Download the ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
-%$MANIFEST%
+     | data/Sandbox/JQueryPluginExamples.txt | Example topic |
+     | data/Sandbox/PluginTestJQueryPlugin.txt | Test topic |
+     | data/TWiki/JQueryPlugin.txt | Plugin documentation topic |
+     | lib/CPAN/lib/CSS/Minifier.pm | Perl module |
+     | lib/CPAN/lib/JavaScript/Minifier.pm | Perl module |
+     | lib/TWiki/Plugins/JQueryPlugin/Core.pm | Perl module |
+     | lib/TWiki/Plugins/JQueryPlugin.pm | Perl module |
+     | pub/TWiki/JQueryPlugin/Makefile | Makefile |
+     | pub/TWiki/JQueryPlugin/jquery-all.css | Main stylesheet file |
+     | pub/TWiki/JQueryPlugin/jquery-all.js | Main Javascript file |
+     | pub/TWiki/JQueryPlugin/jquery-all.js.gz | Main Javascript file, compressed |
+     | pub/TWiki/JQueryPlugin/*.js | Javascript files |
+     | pub/TWiki/JQueryPlugin/*.gif | Image files |
+     | pub/TWiki/JQueryPlugin/*.png | Image files |
+     | pub/TWiki/JQueryPlugin/i18n/*.js | Style sheets for internationalization |
+     | pub/TWiki/JQueryPlugin/images/*.gif | Image library |
+     | pub/TWiki/JQueryPlugin/themes/* | Themes |
+     | tools/minifycss | Utility |
+     | tools/minifyjs | Utility |
+   * TWiki 4 and up: Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * Test [[Sandbox.JQueryPluginExamples]] for functionality.
 
 ---++ Plugin Info
 |  Plugin Author(s): | TWiki:Main/MichaelDaum |
 |  Copyright: | 2007-2008 Michael Daum http://michaeldaumconsulting.com |
 |  License: | GPL |
-|  Plugin Version: | v0.9 |
+|  Plugin Version: | 2010-04-22 v1.0 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-04-22: | Doc improvements, no code changes |
 |  15 Jul 2008: | updated to ui-1.5.2; added async treeview; added async options to tabpane |
 |  03 Jul 2008: | updated to ui-1.5.1 |
 |  05 Jun 2008: | updated to jquery-1.2.6 and ui-1.5-RC1 |
@@ -112,8 +129,3 @@ The following themes are provided:
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/JQueryPluginDev |
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/JQueryPluginAppraisal |
 
-
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add
-comments/questions/remarks to the feedback topic on twiki.org instead. -->
-
-%META:FILEATTACHMENT{name="wikiringlogo40x40.png" attachment="wikiringlogo40x40.png" attr="h" comment="" date="1189787359" path="wikiringlogo40x40.png" size="2571" stream="wikiringlogo40x40.png" tmpFilename="" user="TWikiContributor" version="1"}%
