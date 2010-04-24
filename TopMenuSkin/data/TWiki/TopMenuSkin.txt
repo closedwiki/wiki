@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1271747963" format="1.1" version="1.14"}%
+%META:TOPICINFO{author="TWikiContributor" date="1272139928" format="1.1" version="$Rev$"}%
 ---+!! !TopMenuSkin
 
 The !TopMenuSkin adds pulldown menus to the PatternSkin.
@@ -35,7 +35,7 @@ To preserve the "you are here" breadcrumb, it is important to add additional pul
    * INCLUDE of !%SYSTEMWEB%.TopMenuSkinTopicMenu
    * Additional pulldown menu(s) as needed (optional)
 
-Example !WebTopBar menu structure with extra "Bugs" pulldown menu:
+Example !WebTopBar menu structure with additional "Bugs" pulldown menu:
 <verbatim>
 %INCLUDE{%SYSTEMWEB%.TopMenuSkinHomeMenu}%
    * [[%BASEWEB%.%HOMETOPIC%][<img src="%ICONURL{web-bg}%" border="0" alt="" width="16" height="16" style="background-color:%WEBBGCOLOR%" /> <nop>%MAKETEXT{"[_1] Web" args="%BASEWEB{format="$current"}%"}% <img src='%PUBURL%/%SYSTEMWEB%/TopMenuSkin/menu-dropdown.gif' alt='' width='14' height='16' />]]
@@ -212,6 +212,8 @@ document.onclick = twTopMenuClose;
 
 This skin is based on PatternSkin, and the same rules for customization apply.
 
+The !TopMenuSkin disables the sidebar and activates a different top bar in =twiki/templates/view.topmenu.tmpl=. Details in PatternSkinCustomization and PatternSkinCssCookbook.
+
 ---++ Skin Info
 
    * Set SHORTDESCRIPTION = Skin with pulldown menus in top bar
@@ -224,10 +226,11 @@ This skin is based on PatternSkin, and the same rules for customization apply.
 |  Screenshot: | <a href="%ATTACHURL%/fullscreen.png"><img src="%ATTACHURL%/screenshot.png" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Preview: | [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=topmenu,pattern][Preview with this topic]] |
 |  Base Name: | topmenu,pattern |
-|  Skin Version: | 2010-04-21 (v1.1) |
+|  Skin Version: | 2010-04-26 (v1.2) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  2010-04-19: | TWikibug:Item6413 - initial release (v1.0) |
+|  2010-04-26: | TWikibug:Item6435 - doc improvements |
 |  2010-04-21: | TWikibug:Item6431 - fix hardcoded reference to !JQueryPlugin CSS and JS; doc improvements |
+|  2010-04-19: | TWikibug:Item6413 - initial release (v1.0) |
 |  Dependencies: | TWiki 4.2 or later; TWiki:Plugins/PatternSkin; TWiki:Plugins/JQueryPlugin |
 |  Skin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
