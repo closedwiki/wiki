@@ -2,8 +2,9 @@
 #
 # Copyright (C) Evolved Media Network 2005
 # Copyright (C) Spanlink Communications 2006
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
+# Copyright (C) 2006-2010 TWiki:Main/TWikiContributors
+# All Rights Reserved. TWiki Contributors are listed in the AUTHORS
+# file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
 #
 # This program is free software; you can redistribute it and/or
@@ -37,8 +38,7 @@ use Error;
 $pluginName = 'WebPermissionsPlugin';
 
 $VERSION = '$Rev: 160$';
-
-$RELEASE = '1.120';
+$RELEASE = '2010-04-24';
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
