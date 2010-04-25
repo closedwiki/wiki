@@ -5,4 +5,3 @@ lib/TWiki/Contrib/MailInContrib.pm 0444 perl module
 lib/TWiki/Contrib/MailInContrib/Config.spec 0444 configure spec
 lib/CPAN/lib/Email/Delete/IMAP.pm 0444 Extension to incomplete CPAN module
 lib/CPAN/lib/Email/Delete/POP3.pm 0444 Extension to incomplete CPAN module
-pub/TWiki/MailInContrib/wikiringlogo20x20.png 0660

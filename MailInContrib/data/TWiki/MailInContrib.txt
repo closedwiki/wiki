@@ -1,17 +1,15 @@
+%META:TOPICINFO{author="TWikiContibutor" date="1272236908" format="1.1" version="$Rev$"}%
 ---+!! <nop>MailInContrib for TWiki
-%SHORTDESCRIPTION%
-<a href="http://wikiring.com"><img src="%ATTACHURL%/logo.gif" style="float:right" /></a>
-This Contrib supports the submission of content to TWiki topics via e-mail.
-
 <!--
-
-   PLEASE DO NOT EDIT THIS TOPIC
-
-   It is automatically generated from the subversion repository, and any changes
-   you make will simply be overwritten the next time a release is generated.
-
-   Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
+   contributions to this plugin are appreciated. Please update the extension page at
+   http://twiki.org/cgi-bin/view/Plugins/MailInContrib or provide feedback at
+   http://twiki.org/cgi-bin/view/Plugins/MailInContribDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
 -->
+%SHORTDESCRIPTION%
+%TOC%
+
+---++ Introduction
 
 <div class="twikiBroadcastMessage" style="background-color:#ffc;">WARNING: TWiki-4 only. If you want to use this extension with an earlier version of TWiki, please use [[http://twiki.org/cgi-bin/attach/Plugins/%TOPIC%?filename=%TOPIC%.zip&revInfo=1][revision 7 of the zip]].</div>
 
@@ -41,7 +39,8 @@ Attachments to the mail get treated as attachments by TWiki, and attached to the
 
 Note that =mailincron= will only process messages that have arrived since the last time it ran. So if there was an error adding a mail, it won't attempt to add it again even if it is still in the inbox.
 
----+ Where the mail gets added
+--++ Where the mail gets added
+
 The target topic for a mail is normally specified in the =Subject:= of the mail. You just put Web.Topic as the first thing on the subject line, optionally followed by a colon and other subject text. Alternatively you can configure the module to examine the =To:= field in the mail and get the topic name from there instead.
    * If a topic is specified, but doesn't exist, it will be created.
    * If there is no web name specified, then you can configure a default web to accept those mails.
@@ -52,13 +51,14 @@ The module can use special HTML comments in the topic to decide where to insert 
 
 If it sees the comment =&lt;!--MAIL--&gt;= it will insert the incoming mail immediately *below* the comment. =MAIL= is rather ike a TWikiVariable; you can give it parameters. For example, =&lt;!--MAIL{where="below"}--&gt;=. The following options are available:
    * =where= - can be =above=, =below= (relative to the comment) =top=, =bottom= (of the topic)
-   * =template= set to the name of one of the templates in %TWIKIWEB%.MailInContribTemplate to change the formatting of comments. The default format is "below" format.
+   * =template= set to the name of one of the templates in %SYSTEMWEB%.MailInContribTemplate to change the formatting of comments. The default format is "below" format.
 
 If there is no such comment in the topic, then it just appends it to the end. If there is more than one, only the first is recognised.
 
 Any attachments in the mail get added to the target topic as TWiki attachments. Attachments are also listed immediately below the mail body in the topic.
 
----+ How the contributor is identified
+---++ How the contributor is identified
+
 The user identity is used for access control checks on the target topic, so you can use TWiki access controls to protect target topics.
 
 You can configure the module to look at the =From:= entry in the email, and if a registered user has set that email (see ChangeEmailAddress), then they are identified as the contributor. Note that there is a security risk here, as the =From:= address in e-mail can easily be spoofed.
@@ -66,10 +66,11 @@ You can configure the module to look at the =From:= entry in the email, and if a
 You can also optionally set a default user for an inbox, so if the user can't be identified from the mail, it will fall back to the default.
 
 <!--
-      * Set SHORTDESCRIPTION = Supports submissions to TWiki via e-mail
+   * Set SHORTDESCRIPTION = Add content to TWiki topics via e-mail
 -->
 
 ---++ Installation
+
 %$INSTALL_INSTRUCTIONS%
 
 __Note__: The CPAN =Email= modules uses *many* pluggable modules to support different folder types. It's impossible to cover all the options here; all we can suggest is that you try running the script from the command-line and resolve missing modules as you find them.
@@ -90,17 +91,16 @@ This is a brand-new development, not related in any to the original TWiki:Plugin
 
 ---++ Contrib Info
 
-Another great TWiki extension from the <a style="text-decoration:none" href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiringlogo20x20.png" alt="" /> *WikiRing* </a> - working together to improve your wiki experience!
-
 Many thanks to the following sponsors for supporting this work:
-   * [[http://www.evolvedmedianetwork.com][Evolved Media Network]]
+   * [[http://www.evolvedmedia.com/][Evolved Media]]
 
 |  Author: | TWiki:Main/CrawfordCurrie (http://c-dot.co.uk) |
-|  Copyright &copy;: | 2005, TWiki Contributors |
+|  Copyright: | &copy; 2005-2010 TWiki:TWiki/TWikiContributor |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
-| Change History: | |
+| Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-04-25 | TWikibug:Item6433 - doc improvements |
 |  1 Aug 2008 | Bugs:Item5450: minor doc fix |
 |  8 Sep 2007 | Bugs:Item4575 various ideas from Dev topic, tested against 4.2.0 |
 |  12412 | Fixed Bugs:Item3334 by removing dependency on !FuncUsersContrib |
@@ -121,7 +121,4 @@ Many thanks to the following sponsors for supporting this work:
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences
-
-%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="" version="1"}%
-%META:FILEATTACHMENT{name="logo.gif" attr="h" comment="" version="1"}%
+__Related Topics:__ MailInContribTemplate, %SYSTEMWEB%.TWikiPreferences
