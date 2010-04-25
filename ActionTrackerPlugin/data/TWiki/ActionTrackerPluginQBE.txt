@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="TWikiContributor" date="1272235705" format="1.1" version="$rev$"}%
 ---+ Query-by-example action search
 
 <form name="searchaction" action="%SCRIPTURL{view}%/%WEB%/%TOPIC%#QueryByExample">
@@ -11,3 +12,5 @@
 </form>
 Result:
 %ACTIONSEARCH{ %IF{"$qwho!=''" then="who='%URLPARAM{qwho}%'"}% %IF{"$qnotify!=''" then="notify='%URLPARAM{qnotify}%'"}% %IF{"$qstate!=''" then="state='%URLPARAM{qstate}%'"}}% %IF{"$qwithin!=''" then="within='%URLPARAM{qwithin}%'"}% %IF{"$qweb!=''" then="web='%URLPARAM{qweb}%'"}% %IF{"$qtopic!=''" then="topic='%URLPARAM{qtopic}%'"}% }%
+
+__Related topic:__ ActionTrackerPlugin

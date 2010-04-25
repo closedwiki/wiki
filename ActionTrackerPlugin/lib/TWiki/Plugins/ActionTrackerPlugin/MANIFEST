@@ -4,8 +4,6 @@ pub/TWiki/ActionTrackerPlugin/styles_src.css 0660 Style sheet source
 pub/TWiki/ActionTrackerPlugin/styles.css 0660 Style sheet
 pub/TWiki/ActionTrackerPlugin/atp_src.js 0660 Javascript source
 pub/TWiki/ActionTrackerPlugin/atp.js 0660 Javascript
-pub/TWiki/ActionTrackerPlugin/juggle.gif 0660 Image
-pub/TWiki/ActionTrackerPlugin/wikiringlogo20x20.png 0660
 tools/actionnotify 0555 Mailer script
 templates/actionnotify.tmpl 0440 Page template for notify message
 templates/edit.action.tmpl 0440 Action editor page template
