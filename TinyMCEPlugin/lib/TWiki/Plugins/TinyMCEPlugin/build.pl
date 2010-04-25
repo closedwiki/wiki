@@ -1,4 +1,3 @@
-
 #!/usr/bin/perl -w
 BEGIN {
     unshift @INC, split( /:/, $ENV{TWIKI_LIBS} );
@@ -22,4 +21,3 @@ $build->{UPLOADTARGETSUFFIX} = '';
 
 # Build the target on the command line, or the default target
 $build->build($build->{target});
-
