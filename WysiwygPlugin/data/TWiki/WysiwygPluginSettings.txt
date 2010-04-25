@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="TWikiContributor" date="1272178845" format="1.1" version="$Rev$"}%
 ---+ Settings for WysiwygPlugin that are common to most editor integrations
 %STARTINCLUDE%
 The *global* TWiki Variable =WYSIWYG_EXCLUDE= can be set to make the plugin sensitive to what is in a topic, before allowing it to be edited. You can set it up to veto an edit if the topic contains:
@@ -10,19 +11,11 @@ If the plugin detects an excluded construct in the topic, it will refuse to allo
 
 If you excluded =calls= in =WYSIWYG_EXCLUDE=, you can still define a subset of TWiki variables that do *not* block edits. this is done in the *global* TWiki variable =WYSIWYG_EDITABLE_CALLS=, which should be a list of TWiki variable names separated by vertical bars, with no spaces, e.g: =* Set WYSIWYG_EDITABLE_CALLS = COMMENT|CALENDAR|INCLUDE=
 
-You should set =WYSIWYG_EXCLUDE= and =WYSIWYG_EDITABLE_CALLS= in %MAINWEB%.TWikiPreferences, or in %WEBPREFSTOPIC% for each web.
+You should set =WYSIWYG_EXCLUDE= and =WYSIWYG_EDITABLE_CALLS= in %USERSWEB%.TWikiPreferences, or in %WEBPREFSTOPIC% for each web.
 
-You can define the global variable =WYSIWYGPLUGIN_STICKYBITS= to stop the
-plugin from ever trying to convert specific HTML tags into
-HTML when certain specific attributes are present on the tag. This is most
-useful when you have styling or alignment information in tags that must be
-preserved.
+You can define the global variable =WYSIWYGPLUGIN_STICKYBITS= to stop the plugin from ever trying to convert specific HTML tags into HTML when certain specific attributes are present on the tag. This is most useful when you have styling or alignment information in tags that must be preserved.
 
-This variable is used to tell the translator which attributes, when present
-on a tag, make it "stick" i.e. block conversion. For example, setting it to
-=table=background,lang;tr=valign= will stop the translator from trying to
-handle any =table= tag that has =background= or =lang= attributes, and any
-=tr= tag that has a =valign= attribute.
+This variable is used to tell the translator which attributes, when present on a tag, make it "stick" i.e. block conversion. For example, setting it to =table=background,lang;tr=valign= will stop the translator from trying to handle any =table= tag that has =background= or =lang= attributes, and any =tr= tag that has a =valign= attribute.
 
 You can use perl regular expressions to match tag and attribute names, so =.*=id,on.*= will ensure that any tag with an =on*= event handler is kept as HTML.
 
@@ -58,5 +51,6 @@ The default setting for this variable is:
 </verbatim>
 
 If you edit using the plain-text editor, you can use the &lt;sticky&gt;..&lt;/sticky&gt; tags to delimit HTML (or TML) that you do *not* want to be WYSIWYG edited.
-
 %STOPINCLUDE%
+
+__Related topics:__ WysiwygPlugin, WysiwygPluginTopicLister
