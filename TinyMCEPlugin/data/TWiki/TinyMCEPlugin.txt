@@ -1,13 +1,18 @@
+%META:TOPICINFO{author="TWikiContributor" date="1272172865" format="1.1" version="$Rev$"}%
 ---+!! !TinyMCEPlugin
 <!--
-One line description, required for extensions repository catalog.
+   Contributions to this plugin are appreciated. Please update the plugin page
+   at http://twiki.org/cgi-bin/view/Plugins/TinyMCEPlugin or provide feedback
+   at http://twiki.org/cgi-bin/view/Plugins/TinyMCEPluginDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+
    * Set SHORTDESCRIPTION = Integration of the !TinyMCE WYSIWYG Editor
 -->
+<img src="%ATTACHURL%/screenshot.gif" align="right" />
 %SHORTDESCRIPTION%
 
-<img src="%ATTACHURL%/screenshot.gif"/>
-
 %TOC%
+
 This is an integration of the <a href="http://tinymce.moxiecode.com?id=powered_by_tinymce_mini"><img src="http://tinymce.sourceforge.net/buttons/tinymce_button.png" border="0" width="80" height="15" alt="TinyMCE" /></a> WYSIWYG editor. This is great little editor, fast and highly functional, and supporting a wide range of browsers, including Firefox, IE and Safari. At the time of writing it doesn't work with Opera or Konqueror.
 
 The integration uses the TWiki:Plugins.WysiwygPlugin to translate text to and from a format that !TinyMCE can edit.
@@ -38,8 +43,7 @@ First follow the installation instructions to install the Plugin:
 You can override this setting by defining TINYMCEPLUGIN_DEBUG to enable some simple debug features.
    * Set DEBUG = 0
 
-This setting contains all the options passed to the TinyMCE editor on startup. 
-For a full explanation of the available options, and guidance on reconfiguring TinyMCE, see the [[http://wiki.moxiecode.com/index.php/TinyMCE:Configuration][Moxicode TinyMCE Wiki]]. Note the inclusion of the Pattern Skin standard CSS files in the =content_css= setting.
+This setting contains all the options passed to the !TinyMCE editor on startup. For a full explanation of the available options, and guidance on reconfiguring !TinyMCE, see the [[http://wiki.moxiecode.com/index.php/TinyMCE:Configuration][Moxicode TinyMCE Wiki]]. Note the inclusion of the Pattern Skin standard CSS files in the =content_css= setting.
 <verbatim>
    * Set INIT = mode:"textareas",
    editor_selector : "twikiTextarea",
@@ -111,14 +115,18 @@ When installed on TWiki versions before 4.2.0, this plugin *replaces* the old te
 
 ---++ Plugin Info
 
-Another great TWiki extension from the <a style="text-decoration:none" href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiringlogo20x20.png" alt="" /> *WikiRing* </a> - working together to improve your wiki experience!
+Many thanks to the following sponsors for supporting this work:
+   * [[http://ilog.fr][ILOG]]
+   * [[http://www.carrier.com][Carrier Corporation]]
+   * [[http://twiki.net][TWIKI.NET]]
 
-|  Plugin Author(s): | TWiki:Main.CrawfordCurrie |
-|  Plugin Version: | 03 Aug 2008 %$VERSION% |
-|  Copyright: | &copy; 2007-2008 Crawford Currie http://c-dot.co.uk |
+|  Plugin Author: | TWiki:Main.CrawfordCurrie |
+|  Copyright: | &copy; 2007-2008 Crawford Currie http://c-dot.co.uk, 2007-2010 TWiki:Main/TWikiContributors |
 |             | This package also includes the complete sources for version 2.1.1.1 of the !TinyMCE editor |
 |  License: | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
+|  Plugin Version: | 2010-04-24 %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-04-24 | Doc improvements, prepare for TWiki 5.0 release |
 |  03 Aug 2008 | TWiki 4.2.1 release version |
 |  04 May 2008 | TWikibug:Item5547: Change mechanism by which TMCE recognises textareas to camp on. Use class instead of element name. |
 |  12 Apr 2008 | TWikibug:Item4946: I think I have finally fixed non-iso-8859-1 character sets. Painful. |
@@ -129,7 +137,7 @@ Another great TWiki extension from the <a style="text-decoration:none" href="htt
 |  20 Dec 2007 | TWikibug:Item5047: disable save and preview during page load TWikibug:Item5111: make the entry in the format menu sensitive to where the cursor is TWikibug:Item5022: made TT font size same as verbatim. Had to add a new style to do it, as TMCE didn't want to play with TT or CODE tags. |
 |  19 Nov 2007 | TWikibug:Item4742: auto-disable if Wysiwyg is not enabled TWikibug:Item4820: validate mandatory fields on save TWikibug:Item4747: add &lt;sticky&gt; TWikibug:Item4811: noautolink *looks* like an HTML construct but in fact is not; the tag is infact an "on-off" switch and does not imply any HTML structure, so cannot be converted to a DIV or a span, so has to be removed. TWikibug:Item4817: added typewriter text button TWikibug:Item4850: added font colour controls TWikibug:Item4645: added attachment management features TWikibug:Item4945: added switch to raw and back |
 |  16 Sep 2007 | TWikibug:Item4630: polished up the way the secret string is done, to ensure synch between perl and JS. TWikibug:Item4622: added UTF-8 handling steps that fixup malformed UTF8 strings before presenting them to the editor (saves Moz) and stops the editor passing them back to TWiki (saves IE). TWikibug:Item4603: added the draft help, so we can at least build the beta without the nasty warning |
-|  13 Sep 2007 | TWikibug:Item4613 fixed navigate-away prompt when unchanged TWikibug:Item4583 TWikibug:Item4604 TWikibug:Item4614 TWikibug:Item4616 A clutch of issues caused by use of the wrong encoding function when passing UTF8 parameters to REST using XMLHttpRequest. |
+|  13 Sep 2007 | TWikibug:Item4613 fixed navigate-away prompt when unchanged TWikibug:Item4583 TWikibug:Item4604 TWikibug:Item4614 TWikibug:Item4616 A clutch of issues caused by use of the wrong encoding function when passing UTF8 parameters to REST using !XMLHttpRequest. |
 |  12 Sep 2007 | TWikibug:Item4604 Converted to REST call for content conversion, to provide safe callback if JS is disabled in the browser TWikibug:Item4583 relaxed regex to try and make it work for UTF-8 topic names |
 |  11 Sep 2007 | TWikibug:Item4535 refinements to link handling to improve topic name recognition |
 |  7 Sep 2007 | TWikibug:Item4503 excess empty lines TWikibug:Item4486 no toc headers with unofficial syntax TWikibug:Item4560: empty lines lost TWikibug:Item4566: corrupted table on save |
@@ -144,13 +152,5 @@ Another great TWiki extension from the <a style="text-decoration:none" href="htt
 |  Feedback: | http://twiki.org/cgi-bin/view/Plugins/TinyMCEPluginDev |
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/TinyMCEPluginAppraisal |
 
-Many thanks to the following sponsors for supporting this work:
-   * [[http://ilog.fr][ILOG]]
-   * [[http://www.carrier.com][Carrier Corporation]]
-   * [[http://twiki.net][TWIKI.NET]]
-
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
-
-%META:FILEATTACHMENT{name="tinymce.gif" attr="h" comment="screenshot"}%
-%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" comment="" version="1"}%
+%META:FILEATTACHMENT{name="tinymce.gif" attr="h" comment="screenshot" version="1"}%
 %META:FILEATTACHMENT{name="screenshot.gif" attr="h" comment="" version="1"}%
