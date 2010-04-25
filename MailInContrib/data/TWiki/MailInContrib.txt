@@ -49,7 +49,7 @@ You can also define a 'spambox' for each mail folder. A spambox is a topic that 
 
 The module can use special HTML comments in the topic to decide where to insert new emails within the text.
 
-If it sees the comment =&lt;!--MAIL--&gt;= it will insert the incoming mail immediately *below* the comment. =MAIL= is rather ike a TWikiVariable; you can give it parameters. For example, =&lt;!--MAIL{where="below"}--&gt;=. The following options are available:
+If it sees the comment =&lt;!--MAIL--&gt;= it will insert the incoming mail immediately *below* the comment. =MAIL= is rather ike a [[%SYSTEMWEB%.TWikiVariables][TWikiVariable]]; you can give it parameters. For example, =&lt;!--MAIL{where="below"}--&gt;=. The following options are available:
    * =where= - can be =above=, =below= (relative to the comment) =top=, =bottom= (of the topic)
    * =template= set to the name of one of the templates in %SYSTEMWEB%.MailInContribTemplate to change the formatting of comments. The default format is "below" format.
 
@@ -110,12 +110,12 @@ Many thanks to the following sponsors for supporting this work:
 |  9427 | Added Email::Delete::POP3 and Email::Delete::IMAP implementations, and solved a curious problem with IMAP folders, where the MIME parser couldn't parse messages coming from them. |
 |  8969 | TWikibug:Item1665 - TWikibug:Item1666: Now configurable to accept mail only from registered users. Automatically maps the user and signs the contribution. Also configurable to parse the topic from the To: line. Also improved error reporting and recovery. |
 |  7205 | TWikibug:Item788 - updated CPAN dependencies for MailInContrib |
-|  7196 | TWikibug:Item784 - Added POP3 support for delete. Don't understand why it was working before; though I suspect it must have been using MailDir |
+|  7196 | TWikibug:Item784 - Added POP3 support for delete. Don't understand why it was working before; though I suspect it must have been using !MailDir |
 |  6993 | TWikibug:Item143 - Cairo compatibility in MailInContrib |
 |  5980 | TWikibug:Item181 - added dependendcy on Error for Cairo installs; split contributions using a blank line to stop them crushing together |
 |  5961 | TWikibug:Item181 - minor formatting issue fixed |
 |  5960 | TWikibug:Item181 - new version, supports DEVELOP and Cairo, and adds support for attachments (you can now mail attachments to topics) |
-|  31 July 2005 | 1.001 Back-ported to Cairo, added spambox (work generously supported by the [[http://www.evolvedmedianetwork.com/][Evolved Media Network]]) |
+|  31 July 2005 | 1.001 Back-ported to Cairo, added spambox (work generously supported by the [[http://www.evolvedmedia.com/][Evolved Media]]) |
 |  10 Mar 2005 | 1.000 Initial version |
 |  Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
