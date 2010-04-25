@@ -2,10 +2,8 @@
 data/TWiki/TinyMCEQuickHelp.txt 0644
 data/TWiki/TinyMCEPlugin.txt 0644
 lib/TWiki/Plugins/TinyMCEPlugin.pm 0644
-lib/TWiki/Plugins/TinyMCEPlugin/NEWMANIFIEST 0644
 lib/TWiki/Plugins/TinyMCEPlugin/build.pl 0644
 lib/TWiki/Plugins/TinyMCEPlugin/DEPENDENCIES 0644
-lib/TWiki/Plugins/TinyMCEPlugin/MANIFEST.save1 0644
 lib/TWiki/Plugins/TinyMCEPlugin/MANIFEST 0644
 pub/TWiki/TinyMCEQuickHelp/Format_Drop_Down.gif 0644
 pub/TWiki/TinyMCEPlugin/twiki_tiny_src.js 0644
