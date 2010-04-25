@@ -36,7 +36,7 @@ If you don't like reading documentation, and just want a fast route to creating 
 #DevelopmentModel
 ---++ Development Model
 The build module assumes:
-   1 two kinds of extension modules; 'Plugins' (as in %TWIKIWEB%.TWikiPlugins) and 'Contribs' (everything else e.g Skins, !TWikiApplications etc),
+   1 two kinds of extension modules; 'Plugins' (as in %SYSTEMWEB%.TWikiPlugins) and 'Contribs' (everything else e.g Skins, !TWikiApplications etc),
    1 you have some passing familiarity with build tools such as =make=,
    1 you are *not* developing your extension in a 'production' TWiki installation (something that is usually a really bad idea), but are instead doing the sensible thing and developing in a separate directory tree
       * usually - but not always - a subversion checkout area.
@@ -310,7 +310,7 @@ You are strongly recommended to use this Contrib to help split your code develop
 |  License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  2010-04-23 | TWikibug:Item6434 - use ISO dates for builds; doc fixes |
+|  2010-04-25 | TWikibug:Item6434 - use ISO dates for builds; doc fixes |
 |  31 Aug 2008 | TWikibug:Item5971 BuildContrib broken upload on 4.2.2 with template login. Also adding query to optionally skip topic attachment upload. |
 |  22 Apr 2008 | TWikibug:Item5556 BuildContrib defaults all unspecified permissions to 664 && TWikibug:Item5455  	 BuildContrib doesn't cope with larger numbers of files - TWiki:Main.SvenDowideit|
 |  31 Jan 2008 | TWikibug:Item4751 support spaces in MANIFEST TWikibug:Item4990 removed dependency on external md5sum program TWikibug:Item5309 added tidy target |

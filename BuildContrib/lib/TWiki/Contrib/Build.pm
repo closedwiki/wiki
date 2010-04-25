@@ -43,11 +43,7 @@ our $buildpldir;
 our $libpath;
 
 our $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-our $RELEASE = 'TWiki-4';
+our $RELEASE = '2010-04-25';
 
 our $SHORTDESCRIPTION =
   'Automate build process for Plugins, Add-ons and Contrib modules';
