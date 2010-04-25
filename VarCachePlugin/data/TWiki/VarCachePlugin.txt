@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1270578875" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1272178101" format="1.1" version="$Rev$"}%
 ---+ Variable Cache Plugin 
 
 This Plugin caches TWiki variables in selected topics for faster page rendering.
 
-Most topics in a typical TWiki installation are rendered within a small deviation in terms of speed. Exceptions are topics that contain a lot of dynamic content. This is mainly caused by CPU or I/O intensive %TWIKIWEB%.TWikiVariables, such as =%<nop>SEARCH{}%= and =%<nop>INCLUDE{}%=. 
+Most topics in a typical TWiki installation are rendered within a small deviation in terms of speed. Exceptions are topics that contain a lot of dynamic content. This is mainly caused by CPU or I/O intensive %SYSTEMWEB%.TWikiVariables, such as =%<nop>SEARCH{}%= and =%<nop>INCLUDE{}%=. 
 
 This Plugin caches all =%<nop>VARIABLES%= located in a topic so that the topic can get rendered as quickly as one without variables. An outdated cache gets refreshed when a user is looking at a topic; in which case it will take longer to render the page. Time-based refresh can also be disabled in favor of an on-demand cache update.
 
@@ -36,7 +36,7 @@ The rendering of TWiki markup to HTML is not cached. That is, user specific HTML
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>VARCACHEPLUGIN_SHORTDESCRIPTION%==
 
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+   * One line description, is shown in the %SYSTEMWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = Cache TWiki variables in selected topics for faster page rendering
 
    * Debug plugin: (See output in =data/debug.txt=)
@@ -74,9 +74,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/PeterThoeny |
 |  Copyright: | &copy; 2004-2010, Peter Thoeny, [[http://www.twiki.net/][Twiki, Inc.]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 2010-04-06 |
+|  Plugin Version: | 2010-04-25 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  2010-04-06: | Support for plugins that dynamically add !JavaScript and CSS using TWiki::Func::addToHEAD(); added !VarVARCACHE variable documentation topic; support nameless parameter for refresh time; fixed typo in UPDATEMSG plugin setting name |
+|  2010-04-25: | TWikibug:Item6433 - doc fix: Changing TWIKIWEB to SYSTEMWEB |
+|  2010-04-06: | TWikibug:Item5414 - support for plugins that dynamically add !JavaScript and CSS using TWiki::Func::addToHEAD(); added !VarVARCACHE variable documentation topic; support nameless parameter for refresh time; fixed typo in UPDATEMSG plugin setting name |
 |  2006-01-06: | Small fix for TWiki 4.0 |
 |  2004-07-16: | Doc improvements (no code change) |
 |  2004-07-15: | Initial version |
@@ -84,7 +85,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 99%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC%Test 208% |
+|  TWiki:Plugins/Benchmark: | %SYSTEMWEB%.GoodStyle 99%, %SYSTEMWEB%.FormattedSearch 99%, %TOPIC%Test 208% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
