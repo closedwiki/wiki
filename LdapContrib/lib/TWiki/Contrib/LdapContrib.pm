@@ -29,7 +29,7 @@ use TWiki::Func;
 use vars qw($VERSION $RELEASE %sharedLdapContrib);
 
 $VERSION = '$Rev$';
-$RELEASE = 'v2.99.5';
+$RELEASE = 'v2.99.7';
 
 =begin text
 
