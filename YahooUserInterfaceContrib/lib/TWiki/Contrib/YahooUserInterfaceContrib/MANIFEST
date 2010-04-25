@@ -1,6 +1,5 @@
 data/TWiki/YahooUserInterfaceContrib.txt
 lib/TWiki/Contrib/YahooUserInterfaceContrib.pm
-
 pub/
 pub/TWiki
 pub/TWiki/YahooUserInterfaceContrib
@@ -2160,7 +2159,6 @@ pub/TWiki/YahooUserInterfaceContrib/as-src/charts/com/yahoo/astra/utils/NumberUt
 pub/TWiki/YahooUserInterfaceContrib/as-src/charts/charts.swc
 pub/TWiki/YahooUserInterfaceContrib/as-src/uploader
 pub/TWiki/YahooUserInterfaceContrib/as-src/uploader/Uploader.as
-pub/TWiki/YahooUserInterfaceContrib/wikiringlogo20x20.png
 pub/TWiki/YahooUserInterfaceContrib/assets
 pub/TWiki/YahooUserInterfaceContrib/assets/bg_hd.gif
 pub/TWiki/YahooUserInterfaceContrib/assets/title_h_bg.gif

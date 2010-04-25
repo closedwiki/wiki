@@ -1,5 +1,11 @@
----+!! YahooUserInterfaceContrib Contrib Package
-
+%META:TOPICINFO{author="TWikiContributor" date="1272185342" format="1.1" version="$Rev$"}%
+---+!! <nop>YahooUserInterfaceContrib Contrib Package
+<!--
+   contributions to this plugin are appreciated. Please update the plugin page
+   at http://twiki.org/cgi-bin/view/Plugins/YahooUserInterfaceContrib or provide feedback
+   at http://twiki.org/cgi-bin/view/Plugins/YahooUserInterfaceContribDev.
+   If you are a TWiki contributor please update the plugin in the SVN repository.
+-->
 %SHORTDESCRIPTION%
 
 %TOC%
@@ -7,8 +13,7 @@
 ---++ Summary of Contents
 Contains an un-archived and ready for use copy of YUI 2.5.2 - see http://developer.yahoo.com/yui
 
-If you get the contrib using svn, it will contain all the examples and
-documentation that is in the original archive. 
+If you get the contrib using svn, it will contain all the examples and documentation that is in the original archive.
 
 ---++ Documentation
    * [[%ATTACHURL%/docs/index.html][YUI API]]
@@ -41,21 +46,30 @@ documentation that is in the original archive.
 -->
 
 ---++ Installation Instructions
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	| *File:* | *Description:* |
-%$MANIFEST%
-	* Run ==%TOPIC%_installer.pl== to automatically check and install other modules that this module depends on. You can also do this step manually. Dependencies:
-	%$DEPENDENCIES%
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | =data/TWiki/YahooUserInterfaceContrib.txt= | Documentation topic |
+     | =lib/TWiki/Contrib/YahooUserInterfaceContrib.pm= | Contrib Perl module |
+     | =pub/TWiki/YahooUserInterfaceContrib/as-docs/*= | YUI as-docs |
+     | =pub/TWiki/YahooUserInterfaceContrib/as-src/*= | YUI as-src |
+     | =pub/TWiki/YahooUserInterfaceContrib/assets/*= | YUI assets |
+     | =pub/TWiki/YahooUserInterfaceContrib/build/*= | YUI build files |
+     | =pub/TWiki/YahooUserInterfaceContrib/docs/*= | YUI documentation |
+     | =pub/TWiki/YahooUserInterfaceContrib/examples/*= | YUI examples |
+     | =pub/TWiki/YahooUserInterfaceContrib/tests/*= | YUI tests |
+   * Run ==%TOPIC%_installer.pl== to automatically check and install other modules that this module depends on. You can also do this step manually. Dependencies:
+     %$DEPENDENCIES%
 
 ---++ Contrib Info
 
-|  Plugin Author: | TWiki:Main.SvenDowideit - SvenDowideit@DistributedINFORMATION.com [[http://DistributedINFORMATION.com][DistributedINFORMATION]] - a <img src="%ATTACHURLPATH%/wikiringlogo20x20.png" /> [[http://www.wikiring.com][WikiRing.com]] partner |
-|  Copyright &copy;: | Copyright Yahoo INC |
-|  License: | GPL ([[http://developer.yahoo.com/yui/license.txt][Yahoo BSD License]]) |
+|  Plugin Author: | TWiki:Main/SvenDowideit - SvenDowideit@DistributedINFORMATION.com [[http://DistributedINFORMATION.com][DistributedINFORMATION]] - a [[http://www.wikiring.com][WikiRing.com]] partner |
+|  Copyright: | &copy; Copyright Yahoo INC, &copy; 2006-2010 TWiki:TWiki/TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]), [[http://developer.yahoo.com/yui/license.txt][Yahoo BSD License]] |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-04-25 | TWikibug:Item6433 - doc improvements |
 |  06 Aug 2008: | update to v2.5.2 |
 |  10 Jul 2007: | update to v2.2.2 |
 |  16 Mar 2007: | update to v2.2.0a version |
@@ -64,6 +78,4 @@ documentation that is in the original archive.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences
-
-%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attr="h" autoattached="1" comment="wikiringlogo20x20.png" date="1161688837" path="wikiringlogo20x20.png" size="1343" user="Main.SvenDowideit" version="1"}%
+__Related Topics:__ %SYSTEMWEB%.TWikiPreferences
