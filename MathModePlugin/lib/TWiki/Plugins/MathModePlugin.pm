@@ -29,9 +29,9 @@ use vars qw(
   $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
 );
 $VERSION = '$Rev$';
-$RELEASE = '2.96';
+$RELEASE = '2.97';
 $NO_PREFS_IN_TOPIC = 1;
-$SHORTDESCRIPTION = 'Include <nop>LaTeX formatted math in your TWiki pages';
+$SHORTDESCRIPTION = 'Add math formulas to TWiki topics using <nop>LaTeX markup language';
 $TWikiCompatibility{endRenderingHandler} = 1.1;
 
 ###############################################################################
