@@ -1,12 +1,12 @@
-%META:TOPICINFO{author="TWikiContributor" date="1181772687" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1272178101" format="1.1" version="1.1"}%
 ---+!! Autocomplete test data
 
-Test data topic for %TWIKIWEB%.AutoCompletePlugin.
+Test data topic for %SYSTEMWEB%.AutoCompletePlugin.
 
 ---++ usernames
 Data is returned as an array of arrays. %BR%
 
-%STARTSECTION{"usernames"}%%SEARCH{ "[F]irstName.*value=.*()" web="%MAINWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="[\"$topic\", \"$formfield(FirstName) $formfield(LastName)\"]" separator=","}%%ENDSECTION{"usernames"}%
+%STARTSECTION{"usernames"}%%SEARCH{ "[F]irstName.*value=.*()" web="%USERSWEB%" type="regex" nonoise="on" excludetopic="UserForm,PersonalInfo,PersonalInfoDocumentation,TWikiContributor,TWikiGuest,UnknownUser" format="[\"$topic\", \"$formfield(FirstName) $formfield(LastName)\"]" separator=","}%%ENDSECTION{"usernames"}%
 
 ---++ topiclist
 
