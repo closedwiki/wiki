@@ -1,6 +1,7 @@
 # Copyright (C) 2005 ILOG http://www.ilog.fr
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
+# Copyright (C) 2005-2010 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution.
 # NOTE: Please extend that file, not this notice.
 #
 # This program is free software; you can redistribute it and/or
@@ -55,8 +56,7 @@ use vars qw( %TWikiCompatibility @refs );
 $SHORTDESCRIPTION = 'Translator framework for Wysiwyg editors';
 $NO_PREFS_IN_TOPIC = 1;
 $VERSION = '$Rev$';
-
-$RELEASE = '18 Apr 2009';
+$RELEASE = '2010-04-24';
 
 $SECRET_ID = 'WYSIWYG content - do not remove this comment, and never use this identical text in your topics';
 

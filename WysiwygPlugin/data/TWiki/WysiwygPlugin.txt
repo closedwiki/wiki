@@ -1,17 +1,16 @@
-%META:TOPICINFO{author="TWikiContributor" date="1240096942" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1272176422" format="1.1" version="$Rev$"}%
 ---+!! Wysiwyg Plugin
-<!--
-   * Set SHORTDESCRIPTION = Translator framework for Wysiwyg editors
--->
-%SHORTDESCRIPTION%
 <!--
    Contributions to this plugin are appreciated. Please update the plugin page
    at http://twiki.org/cgi-bin/view/Plugins/WysiwygPlugin or provide feedback
    at http://twiki.org/cgi-bin/view/Plugins/WysiwygPluginDev.
    If you are a TWiki contributor please update the plugin in the SVN repository.
--->
 
-Support for the integration of WYSIWYG (What-You-See-Is-What-You-Get) editors. On its own, the only thing this plugin gives you is a stand-alone HTML to TWiki translator script. For WYSIWYG editing in TWiki, you will also need to install a specific editor package such as TWiki:Plugins.KupuEditorContrib or TWiki:Plugins.WikiwygContrib.
+   * Set SHORTDESCRIPTION = Translator framework for Wysiwyg editors
+-->
+%SHORTDESCRIPTION%
+
+Support for the integration of WYSIWYG (What-You-See-Is-What-You-Get) editors. On its own, the only thing this plugin gives you is a stand-alone HTML to TWiki translator script. For WYSIWYG editing in TWiki, you will also need to install a specific editor package such as TWiki:Plugins/KupuEditorContrib or TWiki:Plugins/WikiwygContrib.
 
 This plugin provides a generic framework that supports editing of TWiki topics using any browser-based HTML editor. It works by transforming TML (TWiki Meta Language) into HTML for the editor, and then transforming HTML back into TML on save.
 
@@ -159,18 +158,17 @@ which is correct by construction, but does not render correctly in TWiki. This p
 
 ---++ Plugin Info
 
-This plugin is brought to you by a [[http://wikiring.com][WikiRing <a href="http://wikiring.com"><img src="%ATTACHURLPATH%/wikiringlogo20x20.png" title="WikiRing: Professional Wiki Innovation and Support" /></a>]] partner - working together to improve your wiki experience!
-
 Many thanks to the following sponsors for supporting this work:
    * [[http://ilog.fr][ILOG]]
    * [[http://www.carrier.com][Carrier Corporation]]
    * [[http://twiki.net][TWIKI.NET]]
 
-|  Plugin Author(s): | TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk |
-|  Copyright | &copy; ILOG 2005 http://www.ilog.fr, 2007 [[http://www.twiki.net/][TWIKI.NET]] |
+|  Plugin Author: | TWiki:Main/CrawfordCurrie http://www.c-dot.co.uk |
+|  Copyright | &copy; ILOG 2005 http://www.ilog.fr, 2007 [[http://www.twiki.net/][Twiki, Inc.]], 2005-2010 TWiki:Main/TWikiContributors |
 |  License | [[http://www.gnu.org/licenses/gpl.html][GPL (Gnu General Public License)]] |
-|  Plugin Version: | %$VERSION% |
-|  Change History: | |
+|  Plugin Version: | 2010-04-24 %$VERSION% |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2010-04-24 | TWikibug:Item6433 - doc improvements, prepare for TWiki 5.0 release |
 |  18 Apr 2009 | Fixed TWikibug:Item6251 (require http post for REST upload) |
 |  22 Oct 2008 | Fixed TWikibug:Item5961 (emphasis), TWikibug:Item6089 (backslash in verbatim) |
 |  7 Aug 2008 | Fixed TWikibug:Item5707 (mod_perl) |
@@ -181,7 +179,7 @@ Many thanks to the following sponsors for supporting this work:
 |  28 Mar 2008 | TWikibug:Item5294: fixed angle brackets in plain text and promoted sticky to be higher priority than any other tag, solving several problems in one go |
 |  24 Jan 2008 | TWikibug:Item5257: remove extra spaces at end of Set lines |
 |  20 Dec 2007 | TWikibug:Item5022: made TT font size same as verbatim. Had to add a new style to do it, as TMCE didn't want to play with TT or CODE tags. TWikibug:Item5138: post-conversion of 8-bit entities to characters to aid searching etc. |
-| 19 Dec 2007 | TWikibug:Item4836: make the parser tolerant of META, so pasting OO docs works TWikibug:Item4969: autoclose BR and HR tags TWikibug:Item5132: fixed IMG tags TWikibug:Item5076: fixed line-sensitive TML embedded in tables |
+|  19 Dec 2007 | TWikibug:Item4836: make the parser tolerant of META, so pasting OO docs works TWikibug:Item4969: autoclose BR and HR tags TWikibug:Item5132: fixed IMG tags TWikibug:Item5076: fixed line-sensitive TML embedded in tables |
 |  8 Nov 2007 | TWikibug:Item4923: fixed blocking of table conversion due to empty attributes TWikibug:Item4936: An em embedded in an em was getting eaten TWikibug:Item4817: added typewriter text button TWikibug:Item4850: added font colour controls TWikibug:Item4645: added REST handlers for upload and fetching lists of attachments |
 |  2 Nov 2007 | TWikibug:Item4903: corrected over-enthusiastive interpretation of ! as an escape |
 |  21 Oct 2007 | TWikibug:Item4788: fixed unbalanced protect, which could cause loss of protected status TWikibug:Item4811: noautolink *looks* like an HTML construct but in fact is not; the tag is infact an "on-off" switch and does not imply any HTML structure, so cannot be converted to a DIV or a span, so has to be removed. TWikibug:Item4747: added &lt;sticky&gt; to try to overcome limitations in translation TWikibug:Item4831: added increased flexibility in deciding what HTML get converted to TML, and what does not. Analysed all the HTML4 tags to establish initial settings. TWikibug:Item4847: don't call non-existent function with older HTML::Parser releases TWikibug:Item4844: Saving a table from IE didn't convert it back to TML TWikibug:Item4855: table rows generated from TWiki variables were being eaten |
@@ -189,13 +187,13 @@ Many thanks to the following sponsors for supporting this work:
 |  17 Sep 2007 | TWikibug:Item4647: TWikibug:Item4652: problems related to DIV fixed. TWikibug:Item4653: fixed multi-line twiki variables |
 |  16 Sep 2007 | TWikibug:Item4630: polished up the way the secret string is done, to ensure synch between perl and JS. Item4622: added UTF-8 handling steps that fixup malformed UTF8 strings before presenting them to the editor (saves Moz) and stops the editor passing them back to TWiki (saves IE). Removed extra entity decoding steps that were causing problems. TWikibug:Item4629: fixed issues with verbatim, highlighted by previous mangling of this topic |
 |  13 Sep 2007 | TWikibug:Item4613 cleaned up spurious message when navigating away TWikibug:Item4615 fixed incorrect rendering of emphasis next to br |
-|  12 Sep 2007 | TWikibug:Item4604 Fixes to REST handler, and add ability to trigger HTML2TML conversion from a content comment alone (required for some editors) TWikibug:Item4588 fixes to conversion of double-character emphases |
+|  12 Sep 2007 | TWikibug:Item4604 Fixes to REST handler, and add ability to trigger !HTML2TML conversion from a content comment alone (required for some editors) TWikibug:Item4588 fixes to conversion of double-character emphases |
 |  7 Sep 2007 | TWikibug:Item4503 excess empty lines TWikibug:Item4486 no toc headers with unofficial syntax TWikibug:Item4560: empty lines lost TWikibug:Item4566: corrupted table on save TWikibug:Item4550 section tags being eaten |
 |  4 Sep 2007 | TWikibug:Item4534 TWikibug:Item4535 fixed |
-| See Subversion logs for earlier revisions ||
+|  | See Subversion logs for earlier revisions |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/%TOPIC% |
-|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
+|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %SYSTEMWEB%.TWikiPreferences, %SYSTEMWEB%.TWikiPlugins
